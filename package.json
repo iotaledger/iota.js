@@ -1,0 +1,11 @@
+{
+  "name": "iota-node-library",
+  "version": "0.0.1",
+  "description": "NodeJS Libarary for the IOTA API.",
+  "main": "./lib/iota.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "IOTA Foundation",
+  "license": "MIT"
+}
