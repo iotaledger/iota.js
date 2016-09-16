@@ -1,11 +1,29 @@
 {
   "name": "iota-node-library",
   "version": "0.0.1",
-  "description": "NodeJS Libarary for the IOTA API.",
+  "description": "NodeJS Library for the IOTA API.",
   "main": "./lib/iota.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "IOTA Foundation",
-  "license": "MIT"
+  "author": {
+    "name": "IOTA Foundation",
+    "website": "https://iotatoken.com"
+  },
+  "keywords": [
+    "iota",
+    "library",
+    "browser",
+    "javascript",
+    "nodejs",
+    "API"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/iotaledger/iotajs-lib.git"
+  },
+  "dependencies": {
+    "xmlhttprequest": "^1.8.0"
+  }
 }
