@@ -1,5 +1,5 @@
 {
-  "name": "iota-node-library",
+  "name": "iotajs-lib",
   "version": "0.0.1",
   "description": "NodeJS Library for the IOTA API.",
   "main": "./lib/iota.js",
