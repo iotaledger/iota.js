@@ -24,6 +24,7 @@
     "url": "git://github.com/iotaledger/iotajs-lib.git"
   },
   "dependencies": {
+    "async": "^2.1.2",
     "xmlhttprequest": "^1.8.0"
   }
 }
