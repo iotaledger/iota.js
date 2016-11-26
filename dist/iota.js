@@ -331,7 +331,7 @@ api.prototype.getTips = function(callback) {
 **/
 api.prototype.getTransactionsToApprove = function(depth, callback) {
 
-    var command = apiCommands.getTransactionsToApprove(milestone);
+    var command = apiCommands.getTransactionsToApprove(depth);
 
     this.sendCommand(command, function(error, success) {
 
@@ -564,6 +564,8 @@ api.prototype.sendTrytes = function(trytes, depth, minWeightMagnitude, callback)
 *   @param {int} minWeightMagnitude
 *   @param {array} transfer
 *   @param {object} options
+*       @property {array} inputs List of inputs used for funding the transfer
+*       @property {string} address if defined, this address wil be used for sending the remainder value to
 *   @param {function} callback
 *   @returns {object} analyzed Transaction objects
 **/
@@ -611,6 +613,31 @@ api.prototype.replayTransfer = function(tail, callback) {
     })
 }
 
+/**
+*   Re-Broadcasts a transfer
+*
+*   @method replayTransfer
+*   @param {string} tail
+*   @param {function} callback
+*   @returns {object} analyzed Transaction objects
+**/
+api.prototype.broadcastTransfer = function(tail, callback) {
+
+    var self = this;
+    self.getBundle(tail, function(error, bundle) {
+
+        if (error) return callback(error);
+
+        // Get the trytes of all the bundle objects
+        var bundleTrytes = [];
+        bundle[0].forEach(function(bundleTx) {
+            bundleTrytes.push(Utils.transactionTrytes(bundleTx));
+        })
+
+        self.broadcastTransactions(bundleTrytes.reverse(), callback);
+    })
+}
+
 
 /**
 *   Generates a new address
@@ -643,7 +670,7 @@ api.prototype._newAddress = function(seed, index, checksum) {
 *   @param {object} options
 *       @property {int} index Key index to start search from
 *       @property {bool} checksum
-*       @property {int} total Total number of addresses to return
+*       @property {int} total Total number o f addresses to return
 *       @property {bool} returnAll return all searched addresses or not
 *   @param {function} callback
 *   @returns {array} address List of addresses
