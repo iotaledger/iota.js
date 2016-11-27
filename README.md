@@ -71,20 +71,21 @@ iota.api.getNodeInfo(function(error, success) {
     - **[Standard API](#standard-api)**
     - **[getTransactionsObjects](#gettransactionsobjects)**
     - **[broadcastAndStore](#broadcastandstore)**
-    - **[getNewAddress](#getNewAddress)**
-    - **[getInputs](#getInputs)**
-    - **[prepareTransfers](#prepareTransfers)**
-    - **[sendTrytes](#sendTrytes)**
-    - **[sendTransfer](#sendTransfer)**
-    - **[replayTransfer](#replayTransfer)**
-    - **[broadcastTransfer](#broadcastTransfer)**
-    - **[getBundle](#getBundle)**
-    - **[getTransfers](#getTransfers)**
+    - **[getNewAddress](#getnewaddress)**
+    - **[getInputs](#getinputs)**
+    - **[prepareTransfers](#preparetransfers)**
+    - **[sendTrytes](#sendtrytes)**
+    - **[sendTransfer](#sendtransfer)**
+    - **[replayTransfer](#replaytransfer)**
+    - **[broadcastTransfer](#broadcasttransfer)**
+    - **[getBundle](#getbundle)**
+    - **[getTransfers](#gettransfers)**
 - **[utils](#utils)**
-    - **[](#)**
-    - **[](#)**
-    - **[](#)**
-    - **[](#)**
+    - **[convertUnits](#convertunits)**
+    - **[getChecksum](#getchecksum)**
+    - **[noChecksum](#noChecksum)**
+    - **[transactionObject](#transactionObject)**
+    - **[transactionTrytes](#transactionTrytes)**
 - **[changeNode](#changeNode)**
 
 ---
@@ -334,3 +335,114 @@ getTransfers(seed [, options], callback)
 ---
 
 ## `iota.utils`
+
+All utils function are done synchronously.
+
+---
+
+### `convertUnits`
+
+IOTA utilizes the Standard system of Units. See below for all available units:
+
+```
+'i'   :   1,
+'Ki'  :   1000,
+'Mi'  :   1000000,
+'Gi'  :   1000000000,
+'Ti'  :   1000000000000,
+'Pi'  :   1000000000000000
+```
+
+#### Input
+```
+iota.api.convertUnits(value, fromUnit, toUnit)
+```
+
+1. **`value`**: `Integer` Value to be converted
+2. **`fromUnit`**: `String` Current unit of the value. See above for the available units to utilize for conversion.
+2. **`toUnit`**: `String` Unit to convert the from value into.
+
+#### Returns
+`Integer` - returns the converted unit (fromUnit => toUnit).
+
+---
+
+### `getChecksum`
+
+Takes an 81-trytes address as input and calculates the 9-trytes checksum of the address.
+
+#### Input
+```
+iota.api.getChecksum(address)
+```
+
+1. **`address`**: `String` 81-trytes address  
+
+#### Returns
+`String` - returns the 90-trytes address (81-trytes address + 9-trytes checksum)
+
+---
+
+### `noChecksum`
+
+Takes an 90-trytes address as input and simply removes the checksum.
+
+#### Input
+```
+iota.api.getChecksum(address)
+```
+
+1. **`address`**: `String` 90-trytes address  
+
+#### Returns
+`String` - returns an 81-tryte address
+
+---
+
+### `isValidChecksum`
+
+Takes an 90-trytes checksummed address and returns a true / false if it is valid.
+
+#### Input
+```
+iota.api.isValidChecksum(addressWithChecksum)
+```
+
+1. **`addressWithChecksum`**: `String` 90-trytes address  
+
+#### Returns
+`Bool` - True / False whether the checksum is valid or not
+
+---
+
+### `transactionObject`
+
+Converts the trytes of a transaction into its transaction object.
+
+#### Input
+```
+iota.api.transactionObject(trytes)
+```
+
+1. **`trytes`**: `String` 2673-trytes of a transaction  
+
+#### Returns
+`Object` - Transaction object
+
+---
+
+### `transactionTrytes`
+
+Converts a valid transaction object into trytes. Please refer to [TODO] for more information what a valid transaction object looks like.
+
+#### Input
+```
+iota.api.transactionTrytes(transactionObject)
+```
+
+1. **`transactionObject`**: `Object` valid transaction object  
+
+#### Returns
+`trytes` - converted trytes of
+
+---
