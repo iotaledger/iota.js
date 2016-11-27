@@ -40,4 +40,4 @@ gulp.task('dist', function() {
         .pipe(gulp.dest(DEST));
 });
 
-gulp.task('default', [ 'lint', 'clean', 'dist']);
+gulp.task('default', ['lint', 'clean', 'dist']);

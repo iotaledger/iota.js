@@ -1,13 +1,6 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 
-var IOTA = require('./lib/iota.js');
-
-// dont override global variable
-if (typeof window !== 'undefined' && typeof window.IOTA === 'undefined') {
-    window.IOTA = IOTA;
-}
-
-module.exports = IOTA;
+window.IOTA = require('./lib/iota.js');
 
 },{"./lib/iota.js":10}],2:[function(require,module,exports){
 var apiCommands = require('./apiCommands')
@@ -21,12 +14,13 @@ var Bundle = require("../crypto/bundle");
 var Utils = require("../utils/utils");
 var async = require("async");
 
+'use strict';
 
 /**
 *  Making API requests, including generalized wrapper functions
 **/
 function api(provider) {
-    this.makeRequest = provider;
+    this._makeRequest = provider;
 }
 
 /**
@@ -39,7 +33,7 @@ function api(provider) {
 **/
 api.prototype.sendCommand = function(command, callback) {
 
-    this.makeRequest.send(command, function(error, success) {
+    this._makeRequest.send(command, function(error, success) {
 
         if (callback) {
             return callback(error, success)
@@ -1447,21 +1441,6 @@ api.prototype.getTransfers = function(seed, options, callback) {
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //
 //  bundle hash, transaction hash,
 //
@@ -2378,40 +2357,41 @@ module.exports = {
 
 },{}],10:[function(require,module,exports){
 var utils = require("./utils/utils");
-var api = require("./api/api");
 var makeRequest = require('./utils/makeRequest');
+var api = require("./api/api");
 
 
 function IOTA(settings) {
 
-  // IF NO SETTINGS, SET DEFAULT TO localhost:14265
-  settings = settings || {};
-  this.host = settings.host ? settings.host : "http://localhost";
-  this.port = settings.port ? settings.port : 14265;
-  this.provider = this.host + ":" + this.port;
+    // IF NO SETTINGS, SET DEFAULT TO localhost:14265
+    settings = settings || {};
+    this.host = settings.host ? settings.host : "http://localhost";
+    this.port = settings.port ? settings.port : 14265;
+    this.provider = this.host + ":" + this.port;
 
-  this.version = null;
-  this._makeRequest = new makeRequest(this.provider);
-  this.api = new api(this._makeRequest);
-  // this.mam
-  // this.flash
-  this.utils = utils;
+    this._makeRequest = new makeRequest(this.provider);
+    this.api = new api(this._makeRequest);
+    // this.mam
+    // this.flash
+    this.utils = utils;
 }
 
+
+
 /**
-  *   Change the Node the user connects to
-  *
-  *   @method setProvider
-  *   @param {Object} settings
+*   Change the Node the user connects to
+*
+*   @method setProvider
+*   @param {Object} settings
 **/
 IOTA.prototype.changeNode = function(settings) {
 
-  settings = settings || {};
-  this.host = settings.host ? settings.host : "http://localhost";
-  this.port = settings.port ? settings.port : 14265;
-  this.provider = this.host + ":" + this.port;
+    settings = settings || {};
+    this.host = settings.host ? settings.host : "http://localhost";
+    this.port = settings.port ? settings.port : 14265;
+    this.provider = this.host + ":" + this.port;
 
-  this._makeRequest.setProvider(this.provider);
+    this._makeRequest.setProvider(this.provider);
 };
 
 module.exports = IOTA;
@@ -2865,7 +2845,7 @@ makeRequest.prototype.open = function() {
 
   var request = new XMLHttpRequest();
   request.open('POST', this.provider, true);
-  request.setRequestHeader('Content-Type','application/json');
+  //request.setRequestHeader('Content-Type','application/json');
   return request;
 }
 
