@@ -1,8 +1,8 @@
 {
     "name": "iota.lib.js",
-    "version": "0.0.2.1",
+    "version": "0.0.3",
     "description": "Javascript Library for the IOTA API.",
-    "main": "./dist/iota.js",
+    "main": "./dist/iota.min.js",
     "authors": [
         {
             "name": "Dominik Schiener (IOTA Foundation)",
@@ -32,7 +32,7 @@
         "lib",
         "package.json",
         "gulpfile.js",
-        "iota-browser.js"
+        "iota-browser.js",
         ".gitignore"
     ]
 }
