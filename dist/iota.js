@@ -439,35 +439,6 @@ WRAPPER FUNCTIONS
 
 **************************************/
 
-/**
-*   Broadcasts and stores transaction trytes
-*
-*   @method broadcastAndStore
-*   @param {array} trytes
-*   @returns {function} callback
-*   @returns {object} success
-**/
-api.prototype.broadcastAndStore = function(trytes, callback) {
-
-    var self = this;
-
-    self.broadcastTransactions(trytes, function(error, success) {
-
-        if (!error) {
-
-            self.storeTransactions(trytes, function(error, stored) {
-
-                // TODO Better error checking
-
-                if (callback) {
-                    return callback(error, stored)
-                } else {
-                    return success;
-                }
-            })
-        }
-    })
-}
 
 /**
 *   Wrapper function for getTrytes and transactionObjects
@@ -504,6 +475,36 @@ api.prototype.getTransactionsObjects = function(hashes, callback) {
         })
 
         return callback(null, transactionObjects);
+    })
+}
+
+/**
+*   Broadcasts and stores transaction trytes
+*
+*   @method broadcastAndStore
+*   @param {array} trytes
+*   @returns {function} callback
+*   @returns {object} success
+**/
+api.prototype.broadcastAndStore = function(trytes, callback) {
+
+    var self = this;
+
+    self.broadcastTransactions(trytes, function(error, success) {
+
+        if (!error) {
+
+            self.storeTransactions(trytes, function(error, stored) {
+
+                // TODO Better error checking
+
+                if (callback) {
+                    return callback(error, stored)
+                } else {
+                    return success;
+                }
+            })
+        }
     })
 }
 
@@ -2934,39 +2935,6 @@ var unitMap = {
 }
 
 /**
-*   Sends getNodeInfo request to host to check if connected
-*
-*   @method isConnected
-*   @param {string} host
-*   @param {function} callback
-*   @returns {bool}
-**/
-var isConnected = function(host, callback) {
-
-    var command = {
-        'command':'getNodeInfo'
-    }
-
-    var request = new makeRequest(host);
-
-    if (callback) {
-        request.send(command, callback);
-    } else {
-        request.send(command, function(error, success) {
-
-            if (!error) {
-
-                return true;
-            } else {
-
-                return false;
-            }
-        })
-    }
-
-}
-
-/**
 *   converts IOTA units
 *
 *   @method convertUnits
@@ -2994,16 +2962,6 @@ var convertUnits = function(value, fromUnit, toUnit) {
 
     return converted;
 }
-
-/**
-*   Check if a valid trytes
-*
-*   @method validateTrytes
-*   @param {string} trytes
-*   @param {integer} length
-*   @returns {bool}
-**/
-var isTrytes = inputValidator.isTrytes;
 
 /**
 *   Generates the 9-tryte checksum of an address
@@ -3045,6 +3003,25 @@ var noChecksum = function(address) {
 
     else return null;
 }
+
+/**
+*   Validates the checksum of an address
+*
+*   @method isValidChecksum
+*   @param {string} addressWithChecksum
+*   @returns {bool}
+**/
+var isValidChecksum = function(addressWithChecksum) {
+
+    var addressWithoutChecksum = noChecksum(addressWithChecksum);
+
+    console.log("100", addressWithoutChecksum);
+
+    var newChecksum = getChecksum(addressWithoutChecksum);
+
+    return newChecksum === addressWithChecksum;
+}
+
 
 /**
 *   Convert bytes to trytes
@@ -3163,11 +3140,10 @@ var transactionTrytes = function(transactionObject) {
 
 
 module.exports = {
-    isConnected         : isConnected,
     convertUnits        : convertUnits,
-    isTrytes            : isTrytes,
     getChecksum         : getChecksum,
     noChecksum          : noChecksum,
+    isValidChecksum     : isValidChecksum,
     toTrytes            : toTrytes,
     fromTrytes          : fromTrytes,
     transactionObject   : transactionObject,

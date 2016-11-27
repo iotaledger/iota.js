@@ -2,6 +2,8 @@
 
 This is the official Javascript library for the IOTA Core. It implements both the [official API](https://iota.readme.io/), as well as newly proposed functionality (such as signing, bundles, utilities and conversion).
 
+It should be noted that the Javascript Library as it stands right now is an **early beta release**. As such, there might be some unexpected results. Please join the community (see links below) and post [issues on here](https://github.com/iotaledger/iota.lib.js/issues), to ensure that the developers of the library can improve it. 
+
 > **Join the Discussion**
 
 > If you want to get involved in the community, need help with getting setup, have any issues related with the library or just want to discuss Blockchain, Distributed Ledgers and IoT with other people, feel free to join our Slack. [Slack](http://slack.iotatoken.com/) You can also ask questions on our dedicated forum at: [IOTA Forum](http://forum.iotatoken.com/).
@@ -83,9 +85,9 @@ iota.api.getNodeInfo(function(error, success) {
 - **[utils](#utils)**
     - **[convertUnits](#convertunits)**
     - **[getChecksum](#getchecksum)**
-    - **[noChecksum](#noChecksum)**
-    - **[transactionObject](#transactionObject)**
-    - **[transactionTrytes](#transactionTrytes)**
+    - **[noChecksum](#nochecksum)**
+    - **[transactionObject](#transactionobject)**
+    - **[transactionTrytes](#transactiontrytes)**
 - **[changeNode](#changeNode)**
 
 ---
