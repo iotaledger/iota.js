@@ -303,6 +303,8 @@ iota.api.replayBundle(transaction [, callback])
 ```
 
 1. **`transaction`**: `String` Transaction hash, has to be tail.
+2. **`depth`** `Int` depth
+3. **`minWeightMagnitude`** `Int` minWeightMagnitude
 2. **`callback`**: `Function` Optional callback
 
 ---
@@ -381,7 +383,7 @@ IOTA utilizes the Standard system of Units. See below for all available units:
 
 #### Input
 ```
-iota.api.convertUnits(value, fromUnit, toUnit)
+iota.utils.convertUnits(value, fromUnit, toUnit)
 ```
 
 1. **`value`**: `Integer` Value to be converted
@@ -399,7 +401,7 @@ Takes an 81-trytes address as input and calculates the 9-trytes checksum of the 
 
 #### Input
 ```
-iota.api.getChecksum(address)
+iota.utils.getChecksum(address)
 ```
 
 1. **`address`**: `String` 81-trytes address  
@@ -415,7 +417,7 @@ Takes an 90-trytes address as input and simply removes the checksum.
 
 #### Input
 ```
-iota.api.noChecksum(address)
+iota.utils.noChecksum(address)
 ```
 
 1. **`address`**: `String` 90-trytes address  
@@ -431,7 +433,7 @@ Takes an 90-trytes checksummed address and returns a true / false if it is valid
 
 #### Input
 ```
-iota.api.isValidChecksum(addressWithChecksum)
+iota.utils.isValidChecksum(addressWithChecksum)
 ```
 
 1. **`addressWithChecksum`**: `String` 90-trytes address  
@@ -447,7 +449,7 @@ Converts the trytes of a transaction into its transaction object.
 
 #### Input
 ```
-iota.api.transactionObject(trytes)
+iota.utils.transactionObject(trytes)
 ```
 
 1. **`trytes`**: `String` 2673-trytes of a transaction  
@@ -463,7 +465,7 @@ Converts a valid transaction object into trytes. Please refer to [TODO] for more
 
 #### Input
 ```
-iota.api.transactionTrytes(transactionObject)
+iota.utils.transactionTrytes(transactionObject)
 ```
 
 1. **`transactionObject`**: `Object` valid transaction object  

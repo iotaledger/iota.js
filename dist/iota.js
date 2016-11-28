@@ -496,7 +496,7 @@ api.prototype.getLatestInclusion = function(hashes, callback) {
 
         var latestMilestone = nodeInfo.latestSolidSubtangleMilestone;
 
-        return self.getInclusionStates(hashes, latestMilestone, callback);
+        return self.getInclusionStates(hashes, Array(latestMilestone), callback);
     })
 }
 
@@ -562,9 +562,13 @@ api.prototype.sendTrytes = function(trytes, depth, minWeightMagnitude, callback)
 
                 if (!error) {
 
-                    Utils.transactionObject(attached.trytes, function(error, analyzed) {
-                        return callback(null, analyzed);
+                    var finalTxs = [];
+
+                    attached.trytes.forEach(function(trytes) {
+                        finalTxs.push(Utils.transactionObject(trytes));
                     })
+
+                    return callback(null, finalTxs);
                 }
             })
         })
@@ -579,26 +583,32 @@ api.prototype.sendTrytes = function(trytes, depth, minWeightMagnitude, callback)
 *   @param {string} seed
 *   @param {int} depth
 *   @param {int} minWeightMagnitude
-*   @param {array} transfer
+*   @param {array} transfers
 *   @param {object} options
 *       @property {array} inputs List of inputs used for funding the transfer
 *       @property {string} address if defined, this address wil be used for sending the remainder value to
 *   @param {function} callback
 *   @returns {object} analyzed Transaction objects
 **/
-api.prototype.sendTransfer = function(seed, depth, minWeightMagnitude, transfer, options, callback) {
+api.prototype.sendTransfer = function(seed, depth, minWeightMagnitude, transfers, options, callback) {
 
     var self = this;
+
+    // Validity check for number of arguments
+    if (arguments.length < 5) {
+        return callback(new Error("Invalid number of arguments"));
+    }
+
+    // Validity check for number of arguments
+    if (arguments.length < 5) {
+        throw new Error("Invalid number of arguments");
+        return
+    }
 
     // If no options provided, switch arguments
     if (arguments.length === 5 && Object.prototype.toString.call(options) === "[object Function]") {
         callback = options;
         options = {};
-    }
-
-    if (!inputValidator.isTransfersArray(transfer)) {
-
-        return callback(errors.invalidTrytes());
     }
 
     self.prepareTransfers(seed, transfers, options, function(error, trytes) {
@@ -616,23 +626,27 @@ api.prototype.sendTransfer = function(seed, depth, minWeightMagnitude, transfer,
 *
 *   @method replayBundle
 *   @param {string} tail
+*   @param {int} depth
+*   @param {int} minWeightMagnitude
 *   @param {function} callback
 *   @returns {object} analyzed Transaction objects
 **/
-api.prototype.replayBundle = function(tail, callback) {
+api.prototype.replayBundle = function(tail, depth, minWeightMagnitude, callback) {
 
     var self = this;
+
     self.getBundle(tail, function(error, bundle) {
 
         if (error) return callback(error);
 
         // Get the trytes of all the bundle objects
         var bundleTrytes = [];
-        bundle[0].forEach(function(bundleTx) {
+
+        bundle.forEach(function(bundleTx) {
             bundleTrytes.push(Utils.transactionTrytes(bundleTx));
         })
 
-        self.sendTrytes(bundleTrytes.reverse(), callback);
+        return self.sendTrytes(bundleTrytes.reverse(), depth, minWeightMagnitude, callback);
     })
 }
 
@@ -647,6 +661,7 @@ api.prototype.replayBundle = function(tail, callback) {
 api.prototype.broadcastBundle = function(tail, callback) {
 
     var self = this;
+
     self.getBundle(tail, function(error, bundle) {
 
         if (error) return callback(error);
@@ -657,7 +672,7 @@ api.prototype.broadcastBundle = function(tail, callback) {
             bundleTrytes.push(Utils.transactionTrytes(bundleTx));
         })
 
-        self.broadcastTransactions(bundleTrytes.reverse(), callback);
+        return self.broadcastTransactions(bundleTrytes.reverse(), callback);
     })
 }
 
@@ -915,6 +930,12 @@ api.prototype.prepareTransfers = function(seed, transfers, options, callback) {
         options = {};
     }
 
+    // If message or tag is not supplied, provide it
+    transfers.forEach(function(thisTransfer) {
+        thisTransfer.message = thisTransfer.message ? thisTransfer.message : '';
+        thisTransfer.tag = thisTransfer.tag ? thisTransfer.tag : '';
+    })
+
     // Input validation of transfers object
     if (!inputValidator.isTransfersArray(transfers)) {
         return callback(errors.invalidTransfers());
@@ -925,7 +946,7 @@ api.prototype.prepareTransfers = function(seed, transfers, options, callback) {
         return callback(errors.invalidInputs());
     }
 
-    var remainder = options.address || null;
+    var remainderAddress = options.address || null;
     var chosenInputs = options.inputs || [];
 
 
@@ -1033,7 +1054,7 @@ api.prototype.prepareTransfers = function(seed, transfers, options, callback) {
                     return callback("Not enough balance");
                 }
 
-                signInputsAndReturn(confirmedInputs);
+                addRemainder(confirmedInputs);
             });
 
         }
@@ -1049,7 +1070,7 @@ api.prototype.prepareTransfers = function(seed, transfers, options, callback) {
                 // If inputs with enough balance
                 if (!error) {
 
-                    signInputsAndReturn(inputs.inputs);
+                    addRemainder(inputs.inputs);
                 } else {
 
                     return callback(error);
@@ -1072,7 +1093,7 @@ api.prototype.prepareTransfers = function(seed, transfers, options, callback) {
 
 
 
-    function signInputsAndReturn(inputs) {
+    function addRemainder(inputs) {
 
         for (var i = 0; i < inputs.length; i++) {
 
@@ -1091,10 +1112,13 @@ api.prototype.prepareTransfers = function(seed, transfers, options, callback) {
 
                 // If user has provided remainder address
                 // Use it to send remaining funds to
-                if (remainder) {
+                if (remainderAddress) {
 
                     // Remainder bundle entry
-                    bundle.addEntry(1, remainder, remainder, tag, timestamp);
+                    bundle.addEntry(1, remainderAddress, remainder, tag, timestamp);
+
+                    // Final function for signing inputs
+                    signInputsAndReturn(inputs);
                 } else {
 
                     // Generate a new Address by calling getNewAddress
@@ -1103,7 +1127,10 @@ api.prototype.prepareTransfers = function(seed, transfers, options, callback) {
                         var timestamp = Math.floor(Date.now() / 1000);
 
                         // Remainder bundle entry
-                        bundle.addEntry(1, address[0], remainder, tag, timestamp);
+                        bundle.addEntry(1, address, remainder, tag, timestamp);
+
+                        // Final function for signing inputs
+                        signInputsAndReturn(inputs);
                     })
                 }
             } else {
@@ -1111,6 +1138,9 @@ api.prototype.prepareTransfers = function(seed, transfers, options, callback) {
                 totalValue -= thisBalance;
             }
         }
+    }
+
+    function signInputsAndReturn(inputs) {
 
         bundle.finalize();
         bundle.addTrytes(signatureFragments);
@@ -1171,7 +1201,7 @@ api.prototype.prepareTransfers = function(seed, transfers, options, callback) {
                         var secondBundleFragment = normalizedBundleHash.slice(27, 27 * 2);
 
                         //  Calculate the new signature
-                        var secondSignedFragment = Utils.signatureFragment(secondBundleFragment, secondFragment);
+                        var secondSignedFragment = Signing.signatureFragment(secondBundleFragment, secondFragment);
 
                         //  Convert signature to trytes and assign it again to this bundle entry
                         bundle.bundle[j].signatureMessageFragment = Converter.trytes(secondSignedFragment);
@@ -1443,7 +1473,7 @@ api.prototype.getTransfers = function(seed, options, callback) {
                                 // If error, return it to original caller
                                 if (error) return callback(error);
 
-                                cb(null, states);
+                                cb(null, states.states);
                             })
                         } else {
                             cb(null, []);
@@ -3017,11 +3047,11 @@ var convertUnits = function(value, fromUnit, toUnit) {
     if (!inputValidator.isValue(value)) {
 
         // Should we actually return an error?
-        return null;
+        throw new Error("Invalid value input");
     }
 
     if (unitMap[fromUnit] === undefined || unitMap[toUnit] === undefined) {
-        return null;
+        throw new Error("Invalid unit provided");
     }
 
     if (typeof value === 'string') value = parseInt(value);
@@ -3039,6 +3069,8 @@ var convertUnits = function(value, fromUnit, toUnit) {
 *   @returns {string} address (with checksum)
 **/
 var getChecksum = function(address) {
+
+    if (address.length !== 81) throw new Error("Invalid address input");
 
     // create new Curl instance
     var curl = new Curl();
@@ -3082,8 +3114,6 @@ var noChecksum = function(address) {
 var isValidChecksum = function(addressWithChecksum) {
 
     var addressWithoutChecksum = noChecksum(addressWithChecksum);
-
-    console.log("100", addressWithoutChecksum);
 
     var newChecksum = getChecksum(addressWithoutChecksum);
 
@@ -3129,16 +3159,18 @@ var fromTrytes = function(trytes, type) {
 *   @param {string} trytes
 *   @returns {String} transactionObject
 **/
-var transactionObject = function(transactionTrytes) {
+var transactionObject = function(trytes) {
+
+    if (!trytes) return
 
     // validity check
     for (var i = 2279; i < 2295; i++) {
-        if (transactionTrytes.charAt(i) != "9") {
+        if (trytes.charAt(i) !== "9") {
             return null;
         }
     }
-    var transactionObject = new Object();
-    var transactionTrits = Converter.trits(transactionTrytes);
+    var thisTransaction = new Object();
+    var transactionTrits = Converter.trits(trytes);
     var hash = [];
 
     var curl = new Curl();
@@ -3148,62 +3180,62 @@ var transactionObject = function(transactionTrytes) {
     curl.absorb(transactionTrits);
     curl.squeeze(hash);
 
-    transactionObject.hash = Converter.trytes(hash);
-    transactionObject.signatureMessageFragment = transactionTrytes.slice(0, 2187);
-    transactionObject.address = transactionTrytes.slice(2187, 2268);
-    transactionObject.value = Converter.value(transactionTrits.slice(6804, 6837));
-    transactionObject.tag = transactionTrytes.slice(2295, 2322);
-    transactionObject.timestamp = Converter.value(transactionTrits.slice(6966, 6993));
-    transactionObject.currentIndex = Converter.value(transactionTrits.slice(6993, 7020));
-    transactionObject.lastIndex = Converter.value(transactionTrits.slice(7020, 7047));
-    transactionObject.bundle = transactionTrytes.slice(2349, 2430);
-    transactionObject.trunkTransaction = transactionTrytes.slice(2430, 2511);
-    transactionObject.branchTransaction = transactionTrytes.slice(2511, 2592);
-    transactionObject.nonce = transactionTrytes.slice(2592, 2673);
+    thisTransaction.hash = Converter.trytes(hash);
+    thisTransaction.signatureMessageFragment = trytes.slice(0, 2187);
+    thisTransaction.address = trytes.slice(2187, 2268);
+    thisTransaction.value = Converter.value(transactionTrits.slice(6804, 6837));
+    thisTransaction.tag = trytes.slice(2295, 2322);
+    thisTransaction.timestamp = Converter.value(transactionTrits.slice(6966, 6993));
+    thisTransaction.currentIndex = Converter.value(transactionTrits.slice(6993, 7020));
+    thisTransaction.lastIndex = Converter.value(transactionTrits.slice(7020, 7047));
+    thisTransaction.bundle = trytes.slice(2349, 2430);
+    thisTransaction.trunkTransaction = trytes.slice(2430, 2511);
+    thisTransaction.branchTransaction = trytes.slice(2511, 2592);
+    thisTransaction.nonce = trytes.slice(2592, 2673);
 
-    return transactionObject;
+    return thisTransaction;
 }
 
 /**
 *   Converts a transaction object into trytes
 *
 *   @method transactionTrytes
-*   @param {object} transactionObject
+*   @param {object} transactionTrytes
 *   @returns {String} trytes
 **/
-var transactionTrytes = function(transactionObject) {
+var transactionTrytes = function(transaction) {
 
-    var valueTrits = Converter.trits(transactionObject.value);
+    var valueTrits = Converter.trits(transaction.value);
     while (valueTrits.length < 81) {
         valueTrits[valueTrits.length] = 0;
     }
 
-    var timestampTrits = Converter.trits(transactionObject.timestamp);
+    var timestampTrits = Converter.trits(transaction.timestamp);
     while (timestampTrits.length < 27) {
         timestampTrits[timestampTrits.length] = 0;
     }
 
-    var currentIndexTrits = Converter.trits(transactionObject.currentIndex);
+    var currentIndexTrits = Converter.trits(transaction.currentIndex);
     while (currentIndexTrits.length < 27) {
         currentIndexTrits[currentIndexTrits.length] = 0;
     }
 
-    var lastIndexTrits = Converter.trits(transactionObject.lastIndex);
+    var lastIndexTrits = Converter.trits(transaction.lastIndex);
     while (lastIndexTrits.length < 27) {
         lastIndexTrits[lastIndexTrits.length] = 0;
     }
 
-    return transactionObject.signatureMessageFragment
-            + transactionObject.address
+    return transaction.signatureMessageFragment
+            + transaction.address
             + Converter.trytes(valueTrits)
-            + transactionObject.tag
+            + transaction.tag
             + Converter.trytes(timestampTrits)
             + Converter.trytes(currentIndexTrits)
             + Converter.trytes(lastIndexTrits)
-            + transactionObject.bundle
-            + transactionObject.trunkTransaction
-            + transactionObject.branchTransaction
-            + transactionObject.nonce;
+            + transaction.bundle
+            + transaction.trunkTransaction
+            + transaction.branchTransaction
+            + transaction.nonce;
 }
 
 
