@@ -82,8 +82,8 @@ iota.api.getNodeInfo(function(error, success) {
     - **[prepareTransfers](#preparetransfers)**
     - **[sendTrytes](#sendtrytes)**
     - **[sendTransfer](#sendtransfer)**
-    - **[replayTransfer](#replaytransfer)**
-    - **[broadcastTransfer](#broadcasttransfer)**
+    - **[replayBundle](#replaybundle)**
+    - **[broadcastBundle](#broadcastbundle)**
     - **[getBundle](#getbundle)**
     - **[getTransfers](#gettransfers)**
 - **[utils](#utils)**
@@ -293,13 +293,13 @@ iota.api.sendTransfer(seed, depth, minWeightMagnitude, transfers [, options], ca
 
 ---
 
-### `replayTransfer`
+### `replayBundle`
 
 Takes a tail transaction hash as input, gets the bundle associated with the transaction and then replays the bundle by attaching it to the tangle.
 
 #### Input
 ```
-iota.api.replayTransfer(transaction [, callback])
+iota.api.replayBundle(transaction [, callback])
 ```
 
 1. **`transaction`**: `String` Transaction hash, has to be tail.
@@ -307,13 +307,13 @@ iota.api.replayTransfer(transaction [, callback])
 
 ---
 
-### `broadcastTransfer`
+### `broadcastBundle`
 
 Takes a tail transaction hash as input, gets the bundle associated with the transaction and then rebroadcasts the entire bundle.
 
 #### Input
 ```
-iota.api.broadcastTransfer(transaction [, callback])
+iota.api.broadcastBundle(transaction [, callback])
 ```
 
 1. **`transaction`**: `String` Transaction hash, has to be tail.
@@ -415,7 +415,7 @@ Takes an 90-trytes address as input and simply removes the checksum.
 
 #### Input
 ```
-iota.api.getChecksum(address)
+iota.api.noChecksum(address)
 ```
 
 1. **`address`**: `String` 90-trytes address  
