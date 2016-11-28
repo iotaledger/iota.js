@@ -435,7 +435,7 @@ api.prototype.storeTransactions = function(trytes, callback) {
 
 /*************************************
 
-WRAPPER FUNCTIONS
+WRAPPER AND CUSTOM  FUNCTIONS
 
 **************************************/
 
@@ -475,6 +475,28 @@ api.prototype.getTransactionsObjects = function(hashes, callback) {
         })
 
         return callback(null, transactionObjects);
+    })
+}
+
+/**
+*   Wrapper function for getNodeInfo and getInclusionStates
+*
+*   @method getLatestInclusion
+*   @param {array} hashes
+*   @returns {function} callback
+*   @returns {object} success
+**/
+api.prototype.getLatestInclusion = function(hashes, callback) {
+
+    var self = this;
+
+    self.getNodeInfo(function(e, nodeInfo) {
+
+        if (e) return callback(e);
+
+        var latestMilestone = nodeInfo.latestSolidSubtangleMilestone;
+
+        return self.getInclusionStates(hashes, latestMilestone, callback);
     })
 }
 
@@ -664,11 +686,11 @@ api.prototype._newAddress = function(seed, index, checksum) {
 *   @param {string} seed
 *   @param {object} options
 *       @property {int} index Key index to start search from
-*       @property {bool} checksum
-*       @property {int} total Total number o f addresses to return
-*       @property {bool} returnAll return all searched addresses or not
+*       @property {bool} checksum add 9-tryte checksum
+*       @property {int} total Total number of addresses to return
+*       @property {bool} returnAll return all searched addresses
 *   @param {function} callback
-*   @returns {array} address List of addresses
+*   @returns {string | array} address List of addresses
 **/
 api.prototype.getNewAddress = function(seed, options, callback) {
 
@@ -742,7 +764,7 @@ api.prototype.getNewAddress = function(seed, options, callback) {
 
                 // If returnAll, return list of allAddresses
                 // else return the last address that was generated
-                var addressToReturn = options.returnAll ? allAddresses : Array(address);
+                var addressToReturn = options.returnAll ? allAddresses : address;
 
                 return callback(null, addressToReturn);
             }
@@ -1322,16 +1344,13 @@ api.prototype.getBundle = function(transaction, callback) {
 }
 
 
-
-
-
 /**
 *   @method getTransfers
 *   @param {string} seed
 *   @param {object} options
 *       @property {int} start Starting key index
 *       @property {int} end Ending key index
-*       @property {bool} inclusionStates
+*       @property {bool} inclusionStates returns confirmation status of all transactions
 *   @param {function} callback
 *   @returns {object} success
 **/
@@ -1355,11 +1374,9 @@ api.prototype.getTransfers = function(seed, options, callback) {
         return callback(new Error("Invalid inputs provided"))
     }
 
-
     // first call findTransactions
     // If a transaction is non tail, get the tail transactions associated with it
     // add it to the list of tail transactions
-
 
     var addressOptions = {
         index: start,
@@ -1403,26 +1420,72 @@ api.prototype.getTransfers = function(seed, options, callback) {
                 var finalBundles = [];
                 var tailTxArray = Array.from(tailTransactions);
 
-                async.map(tailTxArray, function(tailTx, cb) {
 
-                     self.getBundle(tailTx, function(error, bundle) {
+                // If inclusionStates, get the confirmation status
+                // of the tail transactions, and thus the bundles
+                async.waterfall([
 
-                         if (!error) {
-                             finalBundles.push(bundle);
-                         }
-                         cb(null, true);
-                     })
-                }, function(error, results) {
+                    //
+                    // 1. Function
+                    //
+                    function(cb) {
 
-                    // credit: http://stackoverflow.com/a/8837505
-                    // Sort by timestamp
-                    finalBundles.sort(function(a, b) {
-                        var x = parseInt(a[0]['timestamp']); var y = parseInt(b[0]['timestamp']);
-                        return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-                    });
+                        if (inclusionStates) {
 
-                    return callback(error, finalBundles);
-                })
+                            self.getLatestInclusion(tailTxArray, function(error, states) {
+
+                                // If error, return it to original caller
+                                if (error) return callback(error);
+
+                                cb(null, states);
+                            })
+                        } else {
+                            cb(null, []);
+                        }
+                    },
+
+                    //
+                    // 2. Function
+                    //
+                    function(tailTxStates, cb) {
+
+                        // Map each tail transaction to the getBundle function
+                        // format the returned bundles and add inclusion states if necessary
+                        async.map(tailTxArray, function(tailTx, cb2) {
+
+                             self.getBundle(tailTx, function(error, bundle) {
+
+                                 // If error returned from getBundle, simply ignore it
+                                 // because the bundle was most likely incorrect
+                                 if (!error) {
+
+                                     // If inclusion states, add to each bundle entry
+                                     if (inclusionStates) {
+                                         var thisInclusion = tailTxStates[tailTxArray.indexOf(tailTx)];
+
+                                         bundle.forEach(function(bundleTx) {
+
+                                             bundleTx['persistence'] = thisInclusion;
+                                         })
+                                     }
+
+                                     finalBundles.push(bundle);
+                                 }
+                                 cb2(null, true);
+                             })
+                        }, function(error, results) {
+
+                            // credit: http://stackoverflow.com/a/8837505
+                            // Sort bundles by timestamp
+                            finalBundles.sort(function(a, b) {
+                                var x = parseInt(a[0]['timestamp']); var y = parseInt(b[0]['timestamp']);
+                                return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+                            });
+
+                            return callback(error, finalBundles);
+                        })
+                    }
+                ])
             })
         })
     })
@@ -2556,7 +2619,7 @@ var isTransfersArray = function(transfersArray) {
 
     if (!isArray(transfersArray)) return false;
 
-    for (var i = 0; i < hashesArray.length; i++) {
+    for (var i = 0; i < transfersArray.length; i++) {
 
         var transfer = transfersArray[i];
 
@@ -2583,7 +2646,6 @@ var isTransfersArray = function(transfersArray) {
         if (!isTrytes(tag, "0,27")) {
             return false;
         }
-
     }
 
     return true;
@@ -2722,7 +2784,7 @@ var isInputs = function(inputs) {
 
         var input = inputs[i];
 
-        // If input does not have keyIndex and address, return false 
+        // If input does not have keyIndex and address, return false
         if (!input.hasOwnProperty('keyIndex') || !input.hasOwnProperty('address')) return false;
     }
 
