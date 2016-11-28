@@ -2,7 +2,7 @@
 
 This is the official Javascript library for the IOTA Core. It implements both the [official API](https://iota.readme.io/), as well as newly proposed functionality (such as signing, bundles, utilities and conversion).
 
-It should be noted that the Javascript Library as it stands right now is an **early beta release**. As such, there might be some unexpected results. Please join the community (see links below) and post [issues on here](https://github.com/iotaledger/iota.lib.js/issues), to ensure that the developers of the library can improve it. 
+It should be noted that the Javascript Library as it stands right now is an **early beta release**. As such, there might be some unexpected results. Please join the community (see links below) and post [issues on here](https://github.com/iotaledger/iota.lib.js/issues), to ensure that the developers of the library can improve it.
 
 > **Join the Discussion**
 
@@ -33,11 +33,14 @@ It should be noted that this is a temporary home for the official documentation.
 
 ## Getting Started
 
-After you've successfully installed the library, it is fairly easy to get started by simply launching a new instance of the IOTA object:
+After you've successfully installed the library, it is fairly easy to get started by simply launching a new instance of the IOTA object. When instantiating the object you have the option to decide the `host` and `port` that are used for sending the requests to, as can be seen in the example below:
 
 ```
 // Create IOTA instance
-var iota = new IOTA();
+var iota = new IOTA({
+    'host': 'http://localhost',
+    'port': 14265
+});
 
 // now you can start using all of the functions
 iota.api.getNodeInfo();
@@ -72,6 +75,7 @@ iota.api.getNodeInfo(function(error, success) {
 - **[api](#api)**
     - **[Standard API](#standard-api)**
     - **[getTransactionsObjects](#gettransactionsobjects)**
+    - **[getLatestInclusion](#getlatestinclusion)**
     - **[broadcastAndStore](#broadcastandstore)**
     - **[getNewAddress](#getnewaddress)**
     - **[getInputs](#getinputs)**
@@ -124,6 +128,25 @@ iota.api.getTransactionsObjects(hashes, callback)
 #### Return Value
 
 1. **`Array`** - list of all the transaction objects from the corresponding hashes.
+
+---
+
+### `getLatestInclusion`
+
+Wrapper function for `getNodeInfo` and `getInclusionStates`. It simply takes the most recent solid milestone as returned by getNodeInfo, and uses it to get the inclusion states of a list of transaction hashes.
+
+
+#### Input
+```
+iota.api.getLatestInclusion(hashes, callback)
+```
+
+1. **`hashes`**: `Array` List of transaction hashes
+2. **`callback`**: `Function` callback.
+
+#### Return Value
+
+1. **`Array`** - list of all the inclusion states of the transaction hashes
 
 ---
 
@@ -318,7 +341,7 @@ iota.api.getBundle(transaction, callback)
 
 ### `getTransfers`
 
-Returns the transfers which are associated with a seed. The transfers are determined by either calculating deterministically which addresses were already used, or by providing a list of indexes to get the transfers from.
+Returns the transfers which are associated with a seed. The transfers are determined by either calculating deterministically which addresses were already used, or by providing a list of indexes to get the addresses and the associated transfers from. The transfers are sorted by their timestamp. It should be noted that, because timestamps are not enforced in IOTA, that this may lead to incorrectly sorted bundles (meaning that their chronological ordering in the Tangle is different).
 
 #### Input
 ```
@@ -327,7 +350,8 @@ getTransfers(seed [, options], callback)
 
 1. **`seed`**: `String` tryte-encoded seed. It should be noted that this seed is not transferred
 2. **`options`**: `Object` which is optional:
-  - **`indexes`**: `Array` - optional. If the index of addresses is provided, it will be used to get all transfers associated with the addresses.
+  - **`start`**: `Int` Starting key index for search
+  - **`end`**: `Int` Ending key index for search
   - **`inclusionStates`**: `Bool` If True, it gets the inclusion states of the transfers.
 3. **`callback`**: `Function` Optional callback.
 
