@@ -57,25 +57,25 @@ api.prototype.attachToTangle = function(trunkTransaction, branchTransaction, min
     // inputValidator: Check if correct hash
     if (!inputValidator.isHash(trunkTransaction)) {
 
-        throw errors.invalidTrunkOrBranch(trunkTransaction);
+        return callback(errors.invalidTrunkOrBranch(trunkTransaction));
     }
 
     // inputValidator: Check if correct hash
     if (!inputValidator.isHash(branchTransaction)) {
 
-        throw errors.invalidTrunkOrBranch(branchTransaction);
+        return callback(errors.invalidTrunkOrBranch(branchTransaction));
     }
 
     // inputValidator: Check if int
     if (!inputValidator.isInt(minWeightMagnitude)) {
 
-        throw errors.notInt();
+        return callback(errors.notInt());
     }
 
     // inputValidator: Check if array of trytes
     if (!inputValidator.isArrayOfTrytes(trytes)) {
 
-        throw errors.invalidTrytes();
+        return callback(errors.invalidTrytes());
     }
 
 
@@ -99,9 +99,9 @@ api.prototype.attachToTangle = function(trunkTransaction, branchTransaction, min
 **/
 api.prototype.findTransactions = function(searchValues, callback) {
 
-    // If not an object, throw error
+    // If not an object, return error
     if (!inputValidator.isObject(searchValues)) {
-        throw errors.invalidKey();
+        return callback(errors.invalidKey());
     }
 
     // Get search key from input object
@@ -111,7 +111,7 @@ api.prototype.findTransactions = function(searchValues, callback) {
     searchKeys.forEach(function(key) {
         if (availableKeys.indexOf(key) === -1) {
 
-            throw errors.invalidKey();
+            return callback(errors.invalidKey());
         }
 
 
@@ -130,7 +130,7 @@ api.prototype.findTransactions = function(searchValues, callback) {
                 // validate hashes
                 if (!inputValidator.isTrytes(hash, 27)) {
 
-                    throw errors.invalidTrytes();
+                    return callback(errors.invalidTrytes());
                 }
             })
 
@@ -141,7 +141,7 @@ api.prototype.findTransactions = function(searchValues, callback) {
             // Check if correct array of hashes
             if (!inputValidator.isArrayOfHashes(hashes)) {
 
-                throw errors.invalidTrytes();
+                return callback(errors.invalidTrytes());
             }
         }
 
@@ -172,7 +172,7 @@ api.prototype.getBalances = function(addresses, threshold, callback) {
     // Check if correct transaction hashes
     if (!inputValidator.isArrayOfHashes(addresses)) {
 
-        throw errors.invalidTrytes();
+        return callback(errors.invalidTrytes());
     }
 
     var command = apiCommands.getBalances(addresses, threshold);
@@ -199,13 +199,13 @@ api.prototype.getInclusionStates = function(transactions, tips, callback) {
     // Check if correct transaction hashes
     if (!inputValidator.isArrayOfHashes(transactions)) {
 
-        throw errors.invalidTrytes();
+        return callback(errors.invalidTrytes());
     }
 
     // Check if correct tips
     if (!inputValidator.isArrayOfHashes(tips)) {
 
-        throw errors.invalidTrytes();
+        return callback(errors.invalidTrytes());
     }
 
     var command = apiCommands.getInclusionStates(transactions, tips);
@@ -347,7 +347,7 @@ api.prototype.getTrytes = function(hashes, callback) {
 
     if (!inputValidator.isArrayOfHashes(hashes)) {
 
-        throw errors.invalidTrytes();
+        return callback(errors.invalidTrytes());
     }
 
     var command = apiCommands.getTrytes(hashes);
@@ -391,7 +391,7 @@ api.prototype.broadcastTransactions = function(trytes, callback) {
 
     if (!inputValidator.isArrayOfAttachedTrytes(trytes)) {
 
-        throw errors.invalidAttachedTrytes();
+        return callback(errors.invalidAttachedTrytes());
     }
 
     var command = apiCommands.broadcastTransactions(trytes);
@@ -416,7 +416,7 @@ api.prototype.storeTransactions = function(trytes, callback) {
 
     if (!inputValidator.isArrayOfAttachedTrytes(trytes)) {
 
-        throw errors.invalidAttachedTrytes();
+        return callback(errors.invalidAttachedTrytes());
     }
 
     var command = apiCommands.storeTransactions(trytes);
@@ -575,7 +575,7 @@ api.prototype.sendTrytes = function(trytes, depth, minWeightMagnitude, callback)
 *   Prepares Transfer, gets transactions to approve
 *   attaches to Tangle, broadcasts and stores
 *
-*   @method sendTrytes
+*   @method sendTransfer
 *   @param {string} seed
 *   @param {int} depth
 *   @param {int} minWeightMagnitude
@@ -590,9 +590,15 @@ api.prototype.sendTransfer = function(seed, depth, minWeightMagnitude, transfer,
 
     var self = this;
 
+    // If no options provided, switch arguments
+    if (arguments.length === 5 && Object.prototype.toString.call(options) === "[object Function]") {
+        callback = options;
+        options = {};
+    }
+
     if (!inputValidator.isTransfersArray(transfer)) {
 
-        throw errors.invalidTrytes()
+        return callback(errors.invalidTrytes());
     }
 
     self.prepareTransfers(seed, transfers, options, function(error, trytes) {
@@ -608,12 +614,12 @@ api.prototype.sendTransfer = function(seed, depth, minWeightMagnitude, transfer,
 /**
 *   Replays a transfer by doing Proof of Work again
 *
-*   @method replayTransfer
+*   @method replayBundle
 *   @param {string} tail
 *   @param {function} callback
 *   @returns {object} analyzed Transaction objects
 **/
-api.prototype.replayTransfer = function(tail, callback) {
+api.prototype.replayBundle = function(tail, callback) {
 
     var self = this;
     self.getBundle(tail, function(error, bundle) {
@@ -633,12 +639,12 @@ api.prototype.replayTransfer = function(tail, callback) {
 /**
 *   Re-Broadcasts a transfer
 *
-*   @method replayTransfer
+*   @method broadcastBundle
 *   @param {string} tail
 *   @param {function} callback
 *   @returns {object} analyzed Transaction objects
 **/
-api.prototype.broadcastTransfer = function(tail, callback) {
+api.prototype.broadcastBundle = function(tail, callback) {
 
     var self = this;
     self.getBundle(tail, function(error, bundle) {
