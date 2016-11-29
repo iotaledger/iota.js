@@ -224,6 +224,16 @@ Main purpose of this function is to get an array of transfer objects as input, a
 
 You can provide multiple transfer objects, which means that your prepared bundle will have multiple outputs to the same, or different recipients. As single transfer object takes the values of: `address`, `value`, `message`, `tag`. The message and tag values are required to be tryte-encoded.
 
+For the options, you can provide a list of `inputs`, that can be utilized for signing the transfer. It should be noted that these inputs should have the following format:
+```
+var inputs = [{
+    'keyIndex': //VALUE,
+    'address': //VALUE
+}]
+```
+
+The library validates these inputs then and ensures that you have sufficient balance. The `address` parameter can be used to define the address to which a remainder balance (if that is the case), will be sent to. So if all your inputs have a combined balance of 2000, and your spending 1800 of them, 200 of your tokens will be sent to that remainder address. If you do not supply the `address`, the library will simply generate a new one from your seed.
+
 #### Input
 ```
 iota.api.prepareTransfers(seed, transfersArray [, options], callback)
