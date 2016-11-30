@@ -668,7 +668,7 @@ api.prototype.broadcastBundle = function(tail, callback) {
 
         // Get the trytes of all the bundle objects
         var bundleTrytes = [];
-        bundle[0].forEach(function(bundleTx) {
+        bundle.forEach(function(bundleTx) {
             bundleTrytes.push(Utils.transactionTrytes(bundleTx));
         })
 
@@ -2923,7 +2923,7 @@ module.exports = {
 }
 
 },{}],13:[function(require,module,exports){
-var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+ var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 var errors = require("../errors/requestErrors");
 
 
