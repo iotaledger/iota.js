@@ -369,7 +369,7 @@ api.prototype.getTrytes = function(hashes, callback) {
 **/
 api.prototype.interruptAttachingToTangle = function(callback) {
 
-    var command = apiCommands.interruptAttachingToTangle
+    var command = apiCommands.interruptAttachingToTangle();
 
     this.sendCommand(command, function(error, success) {
 
@@ -2613,6 +2613,7 @@ IOTA.prototype.changeNode = function(settings) {
     this._makeRequest.setProvider(this.provider);
 };
 
+
 module.exports = IOTA;
 
 },{"./api/api":2,"./utils/makeRequest":13,"./utils/utils":14}],11:[function(require,module,exports){
@@ -3183,28 +3184,44 @@ var convertUnits = function(value, fromUnit, toUnit) {
 /**
 *   Generates the 9-tryte checksum of an address
 *
-*   @method getChecksum
-*   @param {string} address
-*   @returns {string} address (with checksum)
+*   @method addChecksum
+*   @param {string | list} address
+*   @returns {string | list} address (with checksum)
 **/
-var getChecksum = function(address) {
+var addChecksum = function(address) {
 
-    if (address.length !== 81) throw new Error("Invalid address input");
+    var isSingleAddress = inputValidator.isString(address)
 
-    // create new Curl instance
-    var curl = new Curl();
+    // If only single address, turn it into an array
+    if (isSingleAddress) address = Array(address);
 
-    // initialize curl empty trits state
-    curl.initialize();
+    var addressesWithChecksum = [];
 
-    // convert address into trits and map it into the state
-    curl.state = Converter.trits(address, curl.state);
+    address.forEach(function(thisAddress) {
 
-    curl.transform();
+        if (thisAddress.length !== 81) throw new Error("Invalid address input");
 
-    var checksum = Converter.trytes(curl.state).substring(0, 9);
+        // create new Curl instance
+        var curl = new Curl();
 
-    return address + checksum;
+        // initialize curl empty trits state
+        curl.initialize();
+
+        // convert address into trits and map it into the state
+        curl.state = Converter.trits(thisAddress, curl.state);
+
+        curl.transform();
+
+        var checksum = Converter.trytes(curl.state).substring(0, 9);
+
+        addressesWithChecksum.push(thisAddress + checksum);
+    });
+
+    if (isSingleAddress) {
+        return addressesWithChecksum[0];
+    } else {
+        return addressesWithChecksum;
+    }
 }
 
 /**
@@ -3412,7 +3429,7 @@ var categorizeTransfers = function(transfers, addresses) {
 
 module.exports = {
     convertUnits        : convertUnits,
-    getChecksum         : getChecksum,
+    addChecksum         : addChecksum,
     noChecksum          : noChecksum,
     isValidChecksum     : isValidChecksum,
     toTrytes            : toTrytes,
