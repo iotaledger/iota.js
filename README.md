@@ -90,7 +90,7 @@ iota.api.getNodeInfo(function(error, success) {
     - **[getAccountData](#getaccountdata)**
 - **[utils](#utils)**
     - **[convertUnits](#convertunits)**
-    - **[getChecksum](#getchecksum)**
+    - **[addChecksum](#addchecksum)**
     - **[noChecksum](#nochecksum)**
     - **[transactionObject](#transactionobject)**
     - **[transactionTrytes](#transactiontrytes)**
@@ -456,19 +456,19 @@ iota.utils.convertUnits(value, fromUnit, toUnit)
 
 ---
 
-### `getChecksum`
+### `addChecksum`
 
-Takes an 81-trytes address as input and calculates the 9-trytes checksum of the address.
+Takes an 81-trytes address or a list of addresses as input and calculates the 9-trytes checksum of the address(es).
 
 #### Input
 ```
-iota.utils.getChecksum(address)
+iota.utils.addChecksum(address)
 ```
 
-1. **`address`**: `String` 81-trytes address  
+1. **`address`**: `String | List` Either an individual address, or a list of addresses.
 
 #### Returns
-`String` - returns the 90-trytes address (81-trytes address + 9-trytes checksum)
+`String | List` - returns the 90-trytes addresses (81-trytes address + 9-trytes checksum) either as a string or list, depending on the input.
 
 ---
 
