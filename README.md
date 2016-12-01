@@ -75,6 +75,7 @@ iota.api.getNodeInfo(function(error, success) {
 - **[api](#api)**
     - **[Standard API](#standard-api)**
     - **[getTransactionsObjects](#gettransactionsobjects)**
+    - **[findTransactionObjects](#findtransactionobjects)**
     - **[getLatestInclusion](#getlatestinclusion)**
     - **[broadcastAndStore](#broadcastandstore)**
     - **[getNewAddress](#getnewaddress)**
@@ -86,12 +87,14 @@ iota.api.getNodeInfo(function(error, success) {
     - **[broadcastBundle](#broadcastbundle)**
     - **[getBundle](#getbundle)**
     - **[getTransfers](#gettransfers)**
+    - **[getAccountData](#getaccountdata)**
 - **[utils](#utils)**
     - **[convertUnits](#convertunits)**
     - **[getChecksum](#getchecksum)**
     - **[noChecksum](#nochecksum)**
     - **[transactionObject](#transactionobject)**
     - **[transactionTrytes](#transactiontrytes)**
+    - **[categorizeTransfers](#categorizetransfers)**
 - **[changeNode](#changeNode)**
 
 ---
@@ -120,6 +123,25 @@ Wrapper function for `getTrytes` and the Utility function `transactionObjects`. 
 #### Input
 ```
 iota.api.getTransactionsObjects(hashes, callback)
+```
+
+1. **`hashes`**: `Array` List of transaction hashes
+2. **`callback`**: `Function` callback.
+
+#### Return Value
+
+1. **`Array`** - list of all the transaction objects from the corresponding hashes.
+
+---
+
+### `findTransactionObjects`
+
+Wrapper function for `getTrytes` and the Utility function `transactionObjects`. This function basically returns the entire transaction objects for a list of transaction hashes.
+
+
+#### Input
+```
+iota.api.findTransactionObjects(hashes, callback)
 ```
 
 1. **`hashes`**: `Array` List of transaction hashes
@@ -224,7 +246,7 @@ Main purpose of this function is to get an array of transfer objects as input, a
 
 You can provide multiple transfer objects, which means that your prepared bundle will have multiple outputs to the same, or different recipients. As single transfer object takes the values of: `address`, `value`, `message`, `tag`. The message and tag values are required to be tryte-encoded.
 
-For the options, you can provide a list of `inputs`, that can be utilized for signing the transfer. It should be noted that these inputs should have the following format:
+For the options, you can provide a list of `inputs`, that will be used for signing the transfer's inputs. It should be noted that these inputs (an array of objects) should have the provided `keyIndex` and `address` values:
 ```
 var inputs = [{
     'keyIndex': //VALUE,
@@ -355,6 +377,8 @@ iota.api.getBundle(transaction, callback)
 
 Returns the transfers which are associated with a seed. The transfers are determined by either calculating deterministically which addresses were already used, or by providing a list of indexes to get the addresses and the associated transfers from. The transfers are sorted by their timestamp. It should be noted that, because timestamps are not enforced in IOTA, that this may lead to incorrectly sorted bundles (meaning that their chronological ordering in the Tangle is different).
 
+If you want to have your transfers split into received / sent, you can use the utility function `categorizeTransfers`
+
 #### Input
 ```
 getTransfers(seed [, options], callback)
@@ -369,6 +393,33 @@ getTransfers(seed [, options], callback)
 
 #### Returns
 `Array` - returns an array of transfers. Each array is a bundle for the entire transfer.
+
+---
+
+### `getAccountData`
+
+Similar to `getTransfers`, just a bit more comprehensive in the sense that it also returns the `balance` and `addresses` that are associated with your account (seed). This function is useful in getting all the relevant information of your account. If you want to have your transfers split into received / sent, you can use the utility function `categorizeTransfers`
+
+#### Input
+```
+getAccountData(seed [, options], callback)
+```
+
+1. **`seed`**: `String` tryte-encoded seed. It should be noted that this seed is not transferred
+2. **`options`**: `Object` which is optional:
+  - **`start`**: `Int` Starting key index for search
+  - **`end`**: `Int` Ending key index for search
+3. **`callback`**: `Function` Optional callback.
+
+#### Returns
+`Object` - returns an object of your account data in the following format:
+```
+{
+    'addresses': [],
+    'transfers': [],
+    'balance': 0
+}
+```
 
 ---
 
@@ -482,5 +533,22 @@ iota.utils.transactionTrytes(transactionObject)
 
 #### Returns
 `trytes` - converted trytes of
+
+---
+
+### `categorizeTransfers`
+
+Categorizes a list of transfers into `sent` and `received`. It is important to note that zero value transfers (which for example, is being used for storing addresses in the Tangle), are seen as `received` in this function.
+
+#### Input
+```
+iota.utils.categorizeTransfers(transfers, addresses)
+```
+
+1. **`transfers`**: `List` A list of bundles. Basically is an array, of arrays (bundles), as is returned from getTransfers or getAccountData
+2. **`addresses`**: 'List' List of addresses that belong to you. With these addresses as input, it's determined whether it's a sent or a receive transaction.
+
+#### Returns
+`object` - the transfers categorized into `sent` and `received`
 
 ---
