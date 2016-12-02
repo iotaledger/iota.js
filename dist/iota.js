@@ -717,7 +717,7 @@ api.prototype._newAddress = function(seed, index, checksum) {
     var address = Converter.trytes(addressTrits)
 
     if (checksum) {
-        address = Utils.getChecksum(address);
+        address = Utils.addChecksum(address);
     }
 
     return address;
@@ -3251,7 +3251,7 @@ var isValidChecksum = function(addressWithChecksum) {
 
     var addressWithoutChecksum = noChecksum(addressWithChecksum);
 
-    var newChecksum = getChecksum(addressWithoutChecksum);
+    var newChecksum = addChecksum(addressWithoutChecksum);
 
     return newChecksum === addressWithChecksum;
 }
