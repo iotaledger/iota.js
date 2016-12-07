@@ -746,6 +746,12 @@ api.prototype.getNewAddress = function(seed, options, callback) {
         options = {};
     }
 
+    // validate the seed
+    if (!inputValidator.isTrytes(seed)) {
+
+        return callback(errors.invalidSeed());
+    }
+
     var index = options.index || 0;
     var checksum = options.checksum || false;
     var total = options.total || null;
@@ -835,6 +841,12 @@ api.prototype.getInputs = function(seed, options, callback) {
     if (arguments.length === 2 && Object.prototype.toString.call(options) === "[object Function]") {
         callback = options;
         options = {};
+    }
+
+    // validate the seed
+    if (!inputValidator.isTrytes(seed)) {
+
+        return callback(errors.invalidSeed());
     }
 
     var start = options.start || 0;
@@ -951,6 +963,12 @@ api.prototype.prepareTransfers = function(seed, transfers, options, callback) {
     if (arguments.length === 3 && Object.prototype.toString.call(options) === "[object Function]") {
         callback = options;
         options = {};
+    }
+
+    // validate the seed
+    if (!inputValidator.isTrytes(seed)) {
+
+        return callback(errors.invalidSeed());
     }
 
     // If message or tag is not supplied, provide it
@@ -2539,6 +2557,9 @@ module.exports = {
     invalidTrytes: function() {
         return new Error("Invalid Trytes provided");
     },
+    invalidSeed: function() {
+        return new Error("Invalid Seed provided");
+    },
     invalidAttachedTrytes: function() {
         return new Error("Invalid attached Trytes provided");
     },
@@ -2600,7 +2621,7 @@ function IOTA(settings) {
 /**
 *   Change the Node the user connects to
 *
-*   @method setProvider
+*   @method changeNode
 *   @param {Object} settings
 **/
 IOTA.prototype.changeNode = function(settings) {
@@ -2613,10 +2634,18 @@ IOTA.prototype.changeNode = function(settings) {
     this._makeRequest.setProvider(this.provider);
 };
 
+/**
+*   Validator functions from utils
+*
+*   @method validate
+*   @param {Object} settings
+**/
+IOTA.prototype.validate = require("./utils/inputValidator");
+
 
 module.exports = IOTA;
 
-},{"./api/api":2,"./utils/makeRequest":13,"./utils/utils":14}],11:[function(require,module,exports){
+},{"./api/api":2,"./utils/inputValidator":12,"./utils/makeRequest":13,"./utils/utils":14}],11:[function(require,module,exports){
 //
 //  Conversion of ascii encoded bytes to trytes.
 //  Input is a string (can be stringified JSON object), return value is Trytes
@@ -2730,6 +2759,24 @@ var isAddress = function(address) {
     }
 
     return true;
+}
+
+/**
+*   checks if input is correct trytes consisting of A-Z9
+*   optionally validate length
+*
+*   @method isTrytes
+*   @param {string} trytes
+*   @param {integer} length optional
+*   @returns {boolean}
+**/
+var isTrytes = function(trytes, length) {
+
+    // If no length specified, just validate the trytes
+    if (!length) length = "0,"
+
+    var regexTrytes = new RegExp("^[9A-Z]{" + length +"}$");
+    return regexTrytes.test(trytes);
 }
 
 /**
@@ -2942,27 +2989,13 @@ var isInputs = function(inputs) {
 
         // If input does not have keyIndex and address, return false
         if (!input.hasOwnProperty('keyIndex') || !input.hasOwnProperty('address')) return false;
+
+        if (!isAddress(address)) {
+            return false;
+        }
     }
 
     return true;
-}
-
-/**
-*   checks if input is correct trytes consisting of A-Z9
-*   optionally validate length
-*
-*   @method isTrytes
-*   @param {string} trytes
-*   @param {integer} length
-*   @returns {boolean}
-**/
-var isTrytes = function(trytes, length) {
-
-    // If no length specified, just validate the trytes
-    if (!length) length = "0,"
-
-    var regexTrytes = new RegExp("^[9A-Z]{" + length +"}$");
-    return regexTrytes.test(trytes);
 }
 
 /**
@@ -3017,6 +3050,7 @@ var isObject = function(object) {
 
 module.exports = {
     isAddress: isAddress,
+    isTrytes: isTrytes,
     isValue: isValue,
     isHash: isHash,
     isTransfersArray: isTransfersArray,
@@ -3024,7 +3058,6 @@ module.exports = {
     isArrayOfTrytes: isArrayOfTrytes,
     isArrayOfAttachedTrytes: isArrayOfAttachedTrytes,
     isInputs: isInputs,
-    isTrytes: isTrytes,
     isString: isString,
     isInt: isInt,
     isArray: isArray,
@@ -3133,7 +3166,7 @@ makeRequest.prototype.prepareResult = function(result, callback) {
 
 module.exports = makeRequest;
 
-},{"../errors/requestErrors":9,"xmlhttprequest":52}],14:[function(require,module,exports){
+},{"../errors/requestErrors":9,"xmlhttprequest":51}],14:[function(require,module,exports){
 var inputValidator = require("./inputValidator");
 var makeRequest = require("./makeRequest");
 var Curl = require("../crypto/curl");
@@ -3228,16 +3261,28 @@ var addChecksum = function(address) {
 *   Removes the 9-tryte checksum of an address
 *
 *   @method noChecksum
-*   @param {string} address
-*   @returns {string} address (without checksum)
+*   @param {string | list} address
+*   @returns {string | list} address (without checksum)
 **/
 var noChecksum = function(address) {
 
-    if (address.length === 81) return address;
+    var isSingleAddress = inputValidator.isString(address)
 
-    else if (address.length === 90) return address.slice(0, 81);
+    // If only single address, turn it into an array
+    if (isSingleAddress) address = Array(address);
 
-    else return null;
+    var addressesWithChecksum = [];
+
+    address.forEach(function(thisAddress) {
+        addressesWithChecksum.push(thisAddress.slice(0, 81))
+    })
+
+    // return either string or the list
+    if (isSingleAddress) {
+        return addressesWithChecksum[0];
+    } else {
+        return addressesWithChecksum;
+    }
 }
 
 /**
@@ -3389,7 +3434,6 @@ var categorizeTransfers = function(transfers, addresses) {
         'received'  : []
     }
 
-
     // Iterate over all bundles and sort them between incoming and outgoing transfers
     transfers.forEach(function(bundle) {
 
@@ -3448,26 +3492,6 @@ module.exports = {
 }(this, (function (exports) { 'use strict';
 
 /**
- * This method returns the first argument it receives.
- *
- * @static
- * @since 0.1.0
- * @memberOf _
- * @category Util
- * @param {*} value Any value.
- * @returns {*} Returns `value`.
- * @example
- *
- * var object = { 'a': 1 };
- *
- * console.log(_.identity(object) === object);
- * // => true
- */
-function identity(value) {
-  return value;
-}
-
-/**
  * A faster alternative to `Function#apply`, this function invokes `func`
  * with the `this` binding of `thisArg` and the arguments of `args`.
  *
@@ -3499,7 +3523,7 @@ var nativeMax = Math.max;
  * @param {Function} transform The rest array transform.
  * @returns {Function} Returns the new function.
  */
-function overRest(func, start, transform) {
+function overRest$1(func, start, transform) {
   start = nativeMax(start === undefined ? (func.length - 1) : start, 0);
   return function() {
     var args = arguments,
@@ -3521,28 +3545,152 @@ function overRest(func, start, transform) {
 }
 
 /**
- * Creates a function that returns `value`.
+ * This method returns the first argument it receives.
  *
  * @static
+ * @since 0.1.0
  * @memberOf _
- * @since 2.4.0
  * @category Util
- * @param {*} value The value to return from the new function.
- * @returns {Function} Returns the new constant function.
+ * @param {*} value Any value.
+ * @returns {*} Returns `value`.
  * @example
  *
- * var objects = _.times(2, _.constant({ 'a': 1 }));
+ * var object = { 'a': 1 };
  *
- * console.log(objects);
- * // => [{ 'a': 1 }, { 'a': 1 }]
- *
- * console.log(objects[0] === objects[1]);
+ * console.log(_.identity(object) === object);
  * // => true
  */
-function constant(value) {
-  return function() {
-    return value;
-  };
+function identity(value) {
+  return value;
+}
+
+// Lodash rest function without function.toString()
+// remappings
+function rest(func, start) {
+    return overRest$1(func, start, identity);
+}
+
+var initialParams = function (fn) {
+    return rest(function (args /*..., callback*/) {
+        var callback = args.pop();
+        fn.call(this, args, callback);
+    });
+};
+
+function applyEach$1(eachfn) {
+    return rest(function (fns, args) {
+        var go = initialParams(function (args, callback) {
+            var that = this;
+            return eachfn(fns, function (fn, cb) {
+                fn.apply(that, args.concat([cb]));
+            }, callback);
+        });
+        if (args.length) {
+            return go.apply(this, args);
+        } else {
+            return go;
+        }
+    });
+}
+
+/** Detect free variable `global` from Node.js. */
+var freeGlobal = typeof global == 'object' && global && global.Object === Object && global;
+
+/** Detect free variable `self`. */
+var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
+
+/** Used as a reference to the global object. */
+var root = freeGlobal || freeSelf || Function('return this')();
+
+/** Built-in value references. */
+var Symbol$1 = root.Symbol;
+
+/** Used for built-in method references. */
+var objectProto = Object.prototype;
+
+/** Used to check objects for own properties. */
+var hasOwnProperty = objectProto.hasOwnProperty;
+
+/**
+ * Used to resolve the
+ * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
+ * of values.
+ */
+var nativeObjectToString = objectProto.toString;
+
+/** Built-in value references. */
+var symToStringTag$1 = Symbol$1 ? Symbol$1.toStringTag : undefined;
+
+/**
+ * A specialized version of `baseGetTag` which ignores `Symbol.toStringTag` values.
+ *
+ * @private
+ * @param {*} value The value to query.
+ * @returns {string} Returns the raw `toStringTag`.
+ */
+function getRawTag(value) {
+  var isOwn = hasOwnProperty.call(value, symToStringTag$1),
+      tag = value[symToStringTag$1];
+
+  try {
+    value[symToStringTag$1] = undefined;
+    var unmasked = true;
+  } catch (e) {}
+
+  var result = nativeObjectToString.call(value);
+  if (unmasked) {
+    if (isOwn) {
+      value[symToStringTag$1] = tag;
+    } else {
+      delete value[symToStringTag$1];
+    }
+  }
+  return result;
+}
+
+/** Used for built-in method references. */
+var objectProto$1 = Object.prototype;
+
+/**
+ * Used to resolve the
+ * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
+ * of values.
+ */
+var nativeObjectToString$1 = objectProto$1.toString;
+
+/**
+ * Converts `value` to a string using `Object.prototype.toString`.
+ *
+ * @private
+ * @param {*} value The value to convert.
+ * @returns {string} Returns the converted string.
+ */
+function objectToString(value) {
+  return nativeObjectToString$1.call(value);
+}
+
+/** `Object#toString` result references. */
+var nullTag = '[object Null]';
+var undefinedTag = '[object Undefined]';
+
+/** Built-in value references. */
+var symToStringTag = Symbol$1 ? Symbol$1.toStringTag : undefined;
+
+/**
+ * The base implementation of `getTag` without fallbacks for buggy environments.
+ *
+ * @private
+ * @param {*} value The value to query.
+ * @returns {string} Returns the `toStringTag`.
+ */
+function baseGetTag(value) {
+  if (value == null) {
+    return value === undefined ? undefinedTag : nullTag;
+  }
+  value = Object(value);
+  return (symToStringTag && symToStringTag in value)
+    ? getRawTag(value)
+    : objectToString(value);
 }
 
 /**
@@ -3576,19 +3724,10 @@ function isObject(value) {
 }
 
 /** `Object#toString` result references. */
+var asyncTag = '[object AsyncFunction]';
 var funcTag = '[object Function]';
 var genTag = '[object GeneratorFunction]';
 var proxyTag = '[object Proxy]';
-
-/** Used for built-in method references. */
-var objectProto$1 = Object.prototype;
-
-/**
- * Used to resolve the
- * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
- * of values.
- */
-var objectToString = objectProto$1.toString;
 
 /**
  * Checks if `value` is classified as a `Function` object.
@@ -3608,236 +3747,13 @@ var objectToString = objectProto$1.toString;
  * // => false
  */
 function isFunction(value) {
-  // The use of `Object#toString` avoids issues with the `typeof` operator
-  // in Safari 9 which returns 'object' for typed array and other constructors.
-  var tag = isObject(value) ? objectToString.call(value) : '';
-  return tag == funcTag || tag == genTag || tag == proxyTag;
-}
-
-/** Detect free variable `global` from Node.js. */
-var freeGlobal = typeof global == 'object' && global && global.Object === Object && global;
-
-/** Detect free variable `self`. */
-var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
-
-/** Used as a reference to the global object. */
-var root = freeGlobal || freeSelf || Function('return this')();
-
-/** Used to detect overreaching core-js shims. */
-var coreJsData = root['__core-js_shared__'];
-
-/** Used to detect methods masquerading as native. */
-var maskSrcKey = (function() {
-  var uid = /[^.]+$/.exec(coreJsData && coreJsData.keys && coreJsData.keys.IE_PROTO || '');
-  return uid ? ('Symbol(src)_1.' + uid) : '';
-}());
-
-/**
- * Checks if `func` has its source masked.
- *
- * @private
- * @param {Function} func The function to check.
- * @returns {boolean} Returns `true` if `func` is masked, else `false`.
- */
-function isMasked(func) {
-  return !!maskSrcKey && (maskSrcKey in func);
-}
-
-/** Used for built-in method references. */
-var funcProto$1 = Function.prototype;
-
-/** Used to resolve the decompiled source of functions. */
-var funcToString$1 = funcProto$1.toString;
-
-/**
- * Converts `func` to its source code.
- *
- * @private
- * @param {Function} func The function to process.
- * @returns {string} Returns the source code.
- */
-function toSource(func) {
-  if (func != null) {
-    try {
-      return funcToString$1.call(func);
-    } catch (e) {}
-    try {
-      return (func + '');
-    } catch (e) {}
-  }
-  return '';
-}
-
-/**
- * Used to match `RegExp`
- * [syntax characters](http://ecma-international.org/ecma-262/7.0/#sec-patterns).
- */
-var reRegExpChar = /[\\^$.*+?()[\]{}|]/g;
-
-/** Used to detect host constructors (Safari). */
-var reIsHostCtor = /^\[object .+?Constructor\]$/;
-
-/** Used for built-in method references. */
-var funcProto = Function.prototype;
-var objectProto = Object.prototype;
-
-/** Used to resolve the decompiled source of functions. */
-var funcToString = funcProto.toString;
-
-/** Used to check objects for own properties. */
-var hasOwnProperty = objectProto.hasOwnProperty;
-
-/** Used to detect if a method is native. */
-var reIsNative = RegExp('^' +
-  funcToString.call(hasOwnProperty).replace(reRegExpChar, '\\$&')
-  .replace(/hasOwnProperty|(function).*?(?=\\\()| for .+?(?=\\\])/g, '$1.*?') + '$'
-);
-
-/**
- * The base implementation of `_.isNative` without bad shim checks.
- *
- * @private
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is a native function,
- *  else `false`.
- */
-function baseIsNative(value) {
-  if (!isObject(value) || isMasked(value)) {
+  if (!isObject(value)) {
     return false;
   }
-  var pattern = isFunction(value) ? reIsNative : reIsHostCtor;
-  return pattern.test(toSource(value));
-}
-
-/**
- * Gets the value at `key` of `object`.
- *
- * @private
- * @param {Object} [object] The object to query.
- * @param {string} key The key of the property to get.
- * @returns {*} Returns the property value.
- */
-function getValue(object, key) {
-  return object == null ? undefined : object[key];
-}
-
-/**
- * Gets the native function at `key` of `object`.
- *
- * @private
- * @param {Object} object The object to query.
- * @param {string} key The key of the method to get.
- * @returns {*} Returns the function if it's native, else `undefined`.
- */
-function getNative(object, key) {
-  var value = getValue(object, key);
-  return baseIsNative(value) ? value : undefined;
-}
-
-var defineProperty = (function() {
-  try {
-    var func = getNative(Object, 'defineProperty');
-    func({}, '', {});
-    return func;
-  } catch (e) {}
-}());
-
-/**
- * The base implementation of `setToString` without support for hot loop shorting.
- *
- * @private
- * @param {Function} func The function to modify.
- * @param {Function} string The `toString` result.
- * @returns {Function} Returns `func`.
- */
-var baseSetToString = !defineProperty ? identity : function(func, string) {
-  return defineProperty(func, 'toString', {
-    'configurable': true,
-    'enumerable': false,
-    'value': constant(string),
-    'writable': true
-  });
-};
-
-/** Used to detect hot functions by number of calls within a span of milliseconds. */
-var HOT_COUNT = 500;
-var HOT_SPAN = 16;
-
-/* Built-in method references for those with the same name as other `lodash` methods. */
-var nativeNow = Date.now;
-
-/**
- * Creates a function that'll short out and invoke `identity` instead
- * of `func` when it's called `HOT_COUNT` or more times in `HOT_SPAN`
- * milliseconds.
- *
- * @private
- * @param {Function} func The function to restrict.
- * @returns {Function} Returns the new shortable function.
- */
-function shortOut(func) {
-  var count = 0,
-      lastCalled = 0;
-
-  return function() {
-    var stamp = nativeNow(),
-        remaining = HOT_SPAN - (stamp - lastCalled);
-
-    lastCalled = stamp;
-    if (remaining > 0) {
-      if (++count >= HOT_COUNT) {
-        return arguments[0];
-      }
-    } else {
-      count = 0;
-    }
-    return func.apply(undefined, arguments);
-  };
-}
-
-/**
- * Sets the `toString` method of `func` to return `string`.
- *
- * @private
- * @param {Function} func The function to modify.
- * @param {Function} string The `toString` result.
- * @returns {Function} Returns `func`.
- */
-var setToString = shortOut(baseSetToString);
-
-/**
- * The base implementation of `_.rest` which doesn't validate or coerce arguments.
- *
- * @private
- * @param {Function} func The function to apply a rest parameter to.
- * @param {number} [start=func.length-1] The start position of the rest parameter.
- * @returns {Function} Returns the new function.
- */
-function baseRest$1(func, start) {
-  return setToString(overRest(func, start, identity), func + '');
-}
-
-var initialParams = function (fn) {
-    return baseRest$1(function (args /*..., callback*/) {
-        var callback = args.pop();
-        fn.call(this, args, callback);
-    });
-};
-
-function applyEach$1(eachfn) {
-    return baseRest$1(function (fns, args) {
-        var go = initialParams(function (args, callback) {
-            var that = this;
-            return eachfn(fns, function (fn, cb) {
-                fn.apply(that, args.concat([cb]));
-            }, callback);
-        });
-        if (args.length) {
-            return go.apply(this, args);
-        } else {
-            return go;
-        }
-    });
+  // The use of `Object#toString` avoids issues with the `typeof` operator
+  // in Safari 9 which returns 'object' for typed arrays and other constructors.
+  var tag = baseGetTag(value);
+  return tag == funcTag || tag == genTag || tag == asyncTag || tag == proxyTag;
 }
 
 /** Used as references for various `Number` constants. */
@@ -3984,16 +3900,6 @@ function isObjectLike(value) {
 /** `Object#toString` result references. */
 var argsTag = '[object Arguments]';
 
-/** Used for built-in method references. */
-var objectProto$4 = Object.prototype;
-
-/**
- * Used to resolve the
- * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
- * of values.
- */
-var objectToString$1 = objectProto$4.toString;
-
 /**
  * The base implementation of `_.isArguments`.
  *
@@ -4002,7 +3908,7 @@ var objectToString$1 = objectProto$4.toString;
  * @returns {boolean} Returns `true` if `value` is an `arguments` object,
  */
 function baseIsArguments(value) {
-  return isObjectLike(value) && objectToString$1.call(value) == argsTag;
+  return isObjectLike(value) && baseGetTag(value) == argsTag;
 }
 
 /** Used for built-in method references. */
@@ -4177,16 +4083,6 @@ typedArrayTags[objectTag] = typedArrayTags[regexpTag] =
 typedArrayTags[setTag] = typedArrayTags[stringTag] =
 typedArrayTags[weakMapTag] = false;
 
-/** Used for built-in method references. */
-var objectProto$5 = Object.prototype;
-
-/**
- * Used to resolve the
- * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
- * of values.
- */
-var objectToString$2 = objectProto$5.toString;
-
 /**
  * The base implementation of `_.isTypedArray` without Node.js optimizations.
  *
@@ -4196,7 +4092,7 @@ var objectToString$2 = objectProto$5.toString;
  */
 function baseIsTypedArray(value) {
   return isObjectLike(value) &&
-    isLength(value.length) && !!typedArrayTags[objectToString$2.call(value)];
+    isLength(value.length) && !!typedArrayTags[baseGetTag(value)];
 }
 
 /**
@@ -4295,7 +4191,7 @@ function arrayLikeKeys(value, inherited) {
 }
 
 /** Used for built-in method references. */
-var objectProto$7 = Object.prototype;
+var objectProto$5 = Object.prototype;
 
 /**
  * Checks if `value` is likely a prototype object.
@@ -4306,7 +4202,7 @@ var objectProto$7 = Object.prototype;
  */
 function isPrototype(value) {
   var Ctor = value && value.constructor,
-      proto = (typeof Ctor == 'function' && Ctor.prototype) || objectProto$7;
+      proto = (typeof Ctor == 'function' && Ctor.prototype) || objectProto$5;
 
   return value === proto;
 }
@@ -4329,10 +4225,10 @@ function overArg(func, transform) {
 var nativeKeys = overArg(Object.keys, Object);
 
 /** Used for built-in method references. */
-var objectProto$6 = Object.prototype;
+var objectProto$4 = Object.prototype;
 
 /** Used to check objects for own properties. */
-var hasOwnProperty$3 = objectProto$6.hasOwnProperty;
+var hasOwnProperty$3 = objectProto$4.hasOwnProperty;
 
 /**
  * The base implementation of `_.keys` which doesn't treat sparse arrays as dense.
@@ -4589,7 +4485,7 @@ function doParallel(fn) {
 }
 
 function _asyncMap(eachfn, arr, iteratee, callback) {
-    callback = once(callback || noop);
+    callback = callback || noop;
     arr = arr || [];
     var results = [];
     var counter = 0;
@@ -4790,8 +4686,8 @@ var applyEachSeries = applyEach$1(mapSeries);
  * two
  * three
  */
-var apply$2 = baseRest$1(function (fn, args) {
-    return baseRest$1(function (callArgs) {
+var apply$2 = rest(function (fn, args) {
+    return rest(function (callArgs) {
         return fn.apply(null, args.concat(callArgs));
     });
 });
@@ -4883,7 +4779,7 @@ function asyncify(func) {
  */
 function arrayEach(array, iteratee) {
   var index = -1,
-      length = array ? array.length : 0;
+      length = array == null ? 0 : array.length;
 
   while (++index < length) {
     if (iteratee(array[index], index, array) === false) {
@@ -5190,7 +5086,7 @@ var auto = function (tasks, concurrency, callback) {
     function runTask(key, task) {
         if (hasError) return;
 
-        var taskCallback = onlyOnce(baseRest$1(function (err, args) {
+        var taskCallback = onlyOnce(rest(function (err, args) {
             runningTasks--;
             if (args.length <= 1) {
                 args = args[0];
@@ -5263,7 +5159,7 @@ var auto = function (tasks, concurrency, callback) {
  */
 function arrayMap(array, iteratee) {
   var index = -1,
-      length = array ? array.length : 0,
+      length = array == null ? 0 : array.length,
       result = Array(length);
 
   while (++index < length) {
@@ -5272,40 +5168,8 @@ function arrayMap(array, iteratee) {
   return result;
 }
 
-/**
- * Copies the values of `source` to `array`.
- *
- * @private
- * @param {Array} source The array to copy values from.
- * @param {Array} [array=[]] The array to copy values to.
- * @returns {Array} Returns `array`.
- */
-function copyArray(source, array) {
-  var index = -1,
-      length = source.length;
-
-  array || (array = Array(length));
-  while (++index < length) {
-    array[index] = source[index];
-  }
-  return array;
-}
-
-/** Built-in value references. */
-var Symbol$1 = root.Symbol;
-
 /** `Object#toString` result references. */
 var symbolTag = '[object Symbol]';
-
-/** Used for built-in method references. */
-var objectProto$8 = Object.prototype;
-
-/**
- * Used to resolve the
- * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
- * of values.
- */
-var objectToString$3 = objectProto$8.toString;
 
 /**
  * Checks if `value` is classified as a `Symbol` primitive or object.
@@ -5326,7 +5190,7 @@ var objectToString$3 = objectProto$8.toString;
  */
 function isSymbol(value) {
   return typeof value == 'symbol' ||
-    (isObjectLike(value) && objectToString$3.call(value) == symbolTag);
+    (isObjectLike(value) && baseGetTag(value) == symbolTag);
 }
 
 /** Used as references for various `Number` constants. */
@@ -5692,8 +5556,8 @@ function autoInject(tasks, callback) {
         var params;
 
         if (isArray(taskFn)) {
-            params = copyArray(taskFn);
-            taskFn = params.pop();
+            params = taskFn.slice(0, -1);
+            taskFn = taskFn[taskFn.length - 1];
 
             newTasks[key] = params.concat(params.length > 0 ? newTask : taskFn);
         } else if (taskFn.length === 1) {
@@ -5730,7 +5594,7 @@ function fallback(fn) {
 }
 
 function wrap(defer) {
-    return baseRest$1(function (fn, args) {
+    return rest(function (fn, args) {
         defer(function () {
             fn.apply(null, args);
         });
@@ -5844,7 +5708,7 @@ function queue(worker, concurrency, payload) {
     }
 
     function _next(tasks) {
-        return baseRest$1(function (args) {
+        return rest(function (args) {
             workers -= 1;
 
             for (var i = 0, l = tasks.length; i < l; i++) {
@@ -6146,8 +6010,8 @@ function reduce(coll, memo, iteratee, callback) {
  *     });
  * });
  */
-var seq$1 = baseRest$1(function seq(functions) {
-    return baseRest$1(function (args) {
+var seq$1 = rest(function seq(functions) {
+    return rest(function (args) {
         var that = this;
 
         var cb = args[args.length - 1];
@@ -6158,7 +6022,7 @@ var seq$1 = baseRest$1(function seq(functions) {
         }
 
         reduce(functions, args, function (newargs, fn, cb) {
-            fn.apply(that, newargs.concat([baseRest$1(function (err, nextargs) {
+            fn.apply(that, newargs.concat([rest(function (err, nextargs) {
                 cb(err, nextargs);
             })]));
         }, function (err, results) {
@@ -6202,7 +6066,7 @@ var seq$1 = baseRest$1(function seq(functions) {
  *     // result now equals 15
  * });
  */
-var compose = baseRest$1(function (args) {
+var compose = rest(function (args) {
   return seq$1.apply(null, args.reverse());
 });
 
@@ -6316,7 +6180,7 @@ var concatSeries = doSeries(concat$1);
  *     //...
  * }, callback);
  */
-var constant$2 = baseRest$1(function (values) {
+var constant = rest(function (values) {
     var args = [null].concat(values);
     return initialParams(function (ignoredArgs, callback) {
         return callback.apply(this, args);
@@ -6444,8 +6308,8 @@ var detectLimit = _createTester(eachOfLimit, identity, _findGetResult);
 var detectSeries = _createTester(eachOfSeries, identity, _findGetResult);
 
 function consoleFunc(name) {
-    return baseRest$1(function (fn, args) {
-        fn.apply(null, args.concat([baseRest$1(function (err, args) {
+    return rest(function (fn, args) {
+        fn.apply(null, args.concat([rest(function (err, args) {
             if (typeof console === 'object') {
                 if (err) {
                     if (console.error) {
@@ -6515,7 +6379,7 @@ var dir = consoleFunc('dir');
 function doDuring(fn, test, callback) {
     callback = onlyOnce(callback || noop);
 
-    var next = baseRest$1(function (err, args) {
+    var next = rest(function (err, args) {
         if (err) return callback(err);
         args.push(check);
         test.apply(this, args);
@@ -6555,7 +6419,7 @@ function doDuring(fn, test, callback) {
  */
 function doWhilst(iteratee, test, callback) {
     callback = onlyOnce(callback || noop);
-    var next = baseRest$1(function (err, args) {
+    var next = rest(function (err, args) {
         if (err) return callback(err);
         if (test.apply(this, args)) return iteratee(next);
         callback.apply(null, [null].concat(args));
@@ -6901,10 +6765,26 @@ function baseProperty(key) {
   };
 }
 
-function _filter(eachfn, arr, iteratee, callback) {
-    callback = once(callback || noop);
-    var results = [];
+function filterArray(eachfn, arr, iteratee, callback) {
+    var truthValues = new Array(arr.length);
     eachfn(arr, function (x, index, callback) {
+        iteratee(x, function (err, v) {
+            truthValues[index] = !!v;
+            callback(err);
+        });
+    }, function (err) {
+        if (err) return callback(err);
+        var results = [];
+        for (var i = 0; i < arr.length; i++) {
+            if (truthValues[i]) results.push(arr[i]);
+        }
+        callback(null, results);
+    });
+}
+
+function filterGeneric(eachfn, coll, iteratee, callback) {
+    var results = [];
+    eachfn(coll, function (x, index, callback) {
         iteratee(x, function (err, v) {
             if (err) {
                 callback(err);
@@ -6924,6 +6804,11 @@ function _filter(eachfn, arr, iteratee, callback) {
             }), baseProperty('value')));
         }
     });
+}
+
+function _filter(eachfn, coll, iteratee, callback) {
+    var filter = isArrayLike(coll) ? filterArray : filterGeneric;
+    filter(eachfn, coll, iteratee, callback || noop);
 }
 
 /**
@@ -7222,7 +7107,7 @@ function memoize(fn, hasher) {
             queues[key].push(callback);
         } else {
             queues[key] = [callback];
-            fn.apply(null, args.concat([baseRest$1(function (args) {
+            fn.apply(null, args.concat([rest(function (args) {
                 memo[key] = args;
                 var q = queues[key];
                 delete queues[key];
@@ -7285,7 +7170,7 @@ function _parallel(eachfn, tasks, callback) {
     var results = isArrayLike(tasks) ? [] : {};
 
     eachfn(tasks, function (task, key, callback) {
-        task(baseRest$1(function (err, args) {
+        task(rest(function (err, args) {
             if (args.length <= 1) {
                 args = args[0];
             }
@@ -7686,7 +7571,7 @@ function reduceRight(array, memo, iteratee, callback) {
  */
 function reflect(fn) {
     return initialParams(function reflectOn(args, reflectCallback) {
-        args.push(baseRest$1(function callback(err, cbArgs) {
+        args.push(rest(function callback(err, cbArgs) {
             if (err) {
                 reflectCallback(null, {
                     error: err
@@ -7711,11 +7596,7 @@ function reflect(fn) {
 function reject$1(eachfn, arr, iteratee, callback) {
     _filter(eachfn, arr, function (value, cb) {
         iteratee(value, function (err, v) {
-            if (err) {
-                cb(err);
-            } else {
-                cb(null, !v);
-            }
+            cb(err, !v);
         });
     }, callback);
 }
@@ -7866,6 +7747,31 @@ var rejectLimit = doParallelLimit(reject$1);
 var rejectSeries = doLimit(rejectLimit, 1);
 
 /**
+ * Creates a function that returns `value`.
+ *
+ * @static
+ * @memberOf _
+ * @since 2.4.0
+ * @category Util
+ * @param {*} value The value to return from the new function.
+ * @returns {Function} Returns the new constant function.
+ * @example
+ *
+ * var objects = _.times(2, _.constant({ 'a': 1 }));
+ *
+ * console.log(objects);
+ * // => [{ 'a': 1 }, { 'a': 1 }]
+ *
+ * console.log(objects[0] === objects[1]);
+ * // => true
+ */
+function constant$1(value) {
+  return function() {
+    return value;
+  };
+}
+
+/**
  * Attempts to get a successful response from `task` no more than `times` times
  * before returning an error. If the task is successful, the `callback` will be
  * passed the result of the successful task. If all attempts fail, the callback
@@ -7957,14 +7863,14 @@ function retry(opts, task, callback) {
 
     var options = {
         times: DEFAULT_TIMES,
-        intervalFunc: constant(DEFAULT_INTERVAL)
+        intervalFunc: constant$1(DEFAULT_INTERVAL)
     };
 
     function parseTimes(acc, t) {
         if (typeof t === 'object') {
             acc.times = +t.times || DEFAULT_TIMES;
 
-            acc.intervalFunc = typeof t.interval === 'function' ? t.interval : constant(+t.interval || DEFAULT_INTERVAL);
+            acc.intervalFunc = typeof t.interval === 'function' ? t.interval : constant$1(+t.interval || DEFAULT_INTERVAL);
 
             acc.errorFilter = t.errorFilter;
         } else if (typeof t === 'number' || typeof t === 'string') {
@@ -8533,7 +8439,7 @@ function unmemoize(fn) {
 function whilst(test, iteratee, callback) {
     callback = onlyOnce(callback || noop);
     if (!test()) return callback(null);
-    var next = baseRest$1(function (err, args) {
+    var next = rest(function (err, args) {
         if (err) return callback(err);
         if (test()) return iteratee(next);
         callback.apply(null, [null].concat(args));
@@ -8638,7 +8544,7 @@ var waterfall = function (tasks, callback) {
             return callback.apply(null, [null].concat(args));
         }
 
-        var taskCallback = onlyOnce(baseRest$1(function (err, args) {
+        var taskCallback = onlyOnce(rest(function (err, args) {
             if (err) {
                 return callback.apply(null, [err].concat(args));
             }
@@ -8688,7 +8594,7 @@ var index = {
   compose: compose,
   concat: concat,
   concatSeries: concatSeries,
-  constant: constant$2,
+  constant: constant,
   detect: detect,
   detectLimit: detectLimit,
   detectSeries: detectSeries,
@@ -8780,7 +8686,7 @@ exports.cargo = cargo;
 exports.compose = compose;
 exports.concat = concat;
 exports.concatSeries = concatSeries;
-exports.constant = constant$2;
+exports.constant = constant;
 exports.detect = detect;
 exports.detectLimit = detectLimit;
 exports.detectSeries = detectSeries;
@@ -10895,14 +10801,7 @@ function isnan (val) {
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"base64-js":16,"ieee754":26,"isarray":21}],21:[function(require,module,exports){
-var toString = {}.toString;
-
-module.exports = Array.isArray || function (arr) {
-  return toString.call(arr) == '[object Array]';
-};
-
-},{}],22:[function(require,module,exports){
+},{"base64-js":16,"ieee754":25,"isarray":28}],21:[function(require,module,exports){
 module.exports = {
   "100": "Continue",
   "101": "Switching Protocols",
@@ -10967,7 +10866,7 @@ module.exports = {
   "511": "Network Authentication Required"
 }
 
-},{}],23:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 (function (Buffer){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -11078,7 +10977,7 @@ function objectToString(o) {
 }
 
 }).call(this,{"isBuffer":require("../../is-buffer/index.js")})
-},{"../../is-buffer/index.js":28}],24:[function(require,module,exports){
+},{"../../is-buffer/index.js":27}],23:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -11382,7 +11281,7 @@ function isUndefined(arg) {
   return arg === void 0;
 }
 
-},{}],25:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 var http = require('http');
 
 var https = module.exports;
@@ -11398,7 +11297,7 @@ https.request = function (params, cb) {
     return http.request.call(this, params, cb);
 }
 
-},{"http":35}],26:[function(require,module,exports){
+},{"http":42}],25:[function(require,module,exports){
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
   var e, m
   var eLen = nBytes * 8 - mLen - 1
@@ -11484,7 +11383,7 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
   buffer[offset + i - d] |= s * 128
 }
 
-},{}],27:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 if (typeof Object.create === 'function') {
   // implementation from standard node.js 'util' module
   module.exports = function inherits(ctor, superCtor) {
@@ -11509,7 +11408,7 @@ if (typeof Object.create === 'function') {
   }
 }
 
-},{}],28:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 /*!
  * Determine if an object is a Buffer
  *
@@ -11531,6 +11430,13 @@ function isBuffer (obj) {
 function isSlowBuffer (obj) {
   return typeof obj.readFloatLE === 'function' && typeof obj.slice === 'function' && isBuffer(obj.slice(0, 0))
 }
+
+},{}],28:[function(require,module,exports){
+var toString = {}.toString;
+
+module.exports = Array.isArray || function (arr) {
+  return toString.call(arr) == '[object Array]';
+};
 
 },{}],29:[function(require,module,exports){
 (function (process){
@@ -12478,604 +12384,6 @@ exports.decode = exports.parse = require('./decode');
 exports.encode = exports.stringify = require('./encode');
 
 },{"./decode":32,"./encode":33}],35:[function(require,module,exports){
-(function (global){
-var ClientRequest = require('./lib/request')
-var extend = require('xtend')
-var statusCodes = require('builtin-status-codes')
-var url = require('url')
-
-var http = exports
-
-http.request = function (opts, cb) {
-	if (typeof opts === 'string')
-		opts = url.parse(opts)
-	else
-		opts = extend(opts)
-
-	// Normally, the page is loaded from http or https, so not specifying a protocol
-	// will result in a (valid) protocol-relative url. However, this won't work if
-	// the protocol is something else, like 'file:'
-	var defaultProtocol = global.location.protocol.search(/^https?:$/) === -1 ? 'http:' : ''
-
-	var protocol = opts.protocol || defaultProtocol
-	var host = opts.hostname || opts.host
-	var port = opts.port
-	var path = opts.path || '/'
-
-	// Necessary for IPv6 addresses
-	if (host && host.indexOf(':') !== -1)
-		host = '[' + host + ']'
-
-	// This may be a relative url. The browser should always be able to interpret it correctly.
-	opts.url = (host ? (protocol + '//' + host) : '') + (port ? ':' + port : '') + path
-	opts.method = (opts.method || 'GET').toUpperCase()
-	opts.headers = opts.headers || {}
-
-	// Also valid opts.auth, opts.mode
-
-	var req = new ClientRequest(opts)
-	if (cb)
-		req.on('response', cb)
-	return req
-}
-
-http.get = function get (opts, cb) {
-	var req = http.request(opts, cb)
-	req.end()
-	return req
-}
-
-http.Agent = function () {}
-http.Agent.defaultMaxSockets = 4
-
-http.STATUS_CODES = statusCodes
-
-http.METHODS = [
-	'CHECKOUT',
-	'CONNECT',
-	'COPY',
-	'DELETE',
-	'GET',
-	'HEAD',
-	'LOCK',
-	'M-SEARCH',
-	'MERGE',
-	'MKACTIVITY',
-	'MKCOL',
-	'MOVE',
-	'NOTIFY',
-	'OPTIONS',
-	'PATCH',
-	'POST',
-	'PROPFIND',
-	'PROPPATCH',
-	'PURGE',
-	'PUT',
-	'REPORT',
-	'SEARCH',
-	'SUBSCRIBE',
-	'TRACE',
-	'UNLOCK',
-	'UNSUBSCRIBE'
-]
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./lib/request":37,"builtin-status-codes":22,"url":49,"xtend":53}],36:[function(require,module,exports){
-(function (global){
-exports.fetch = isFunction(global.fetch) && isFunction(global.ReadableStream)
-
-exports.blobConstructor = false
-try {
-	new Blob([new ArrayBuffer(1)])
-	exports.blobConstructor = true
-} catch (e) {}
-
-var xhr = new global.XMLHttpRequest()
-// If XDomainRequest is available (ie only, where xhr might not work
-// cross domain), use the page location. Otherwise use example.com
-xhr.open('GET', global.XDomainRequest ? '/' : 'https://example.com')
-
-function checkTypeSupport (type) {
-	try {
-		xhr.responseType = type
-		return xhr.responseType === type
-	} catch (e) {}
-	return false
-}
-
-// For some strange reason, Safari 7.0 reports typeof global.ArrayBuffer === 'object'.
-// Safari 7.1 appears to have fixed this bug.
-var haveArrayBuffer = typeof global.ArrayBuffer !== 'undefined'
-var haveSlice = haveArrayBuffer && isFunction(global.ArrayBuffer.prototype.slice)
-
-exports.arraybuffer = haveArrayBuffer && checkTypeSupport('arraybuffer')
-// These next two tests unavoidably show warnings in Chrome. Since fetch will always
-// be used if it's available, just return false for these to avoid the warnings.
-exports.msstream = !exports.fetch && haveSlice && checkTypeSupport('ms-stream')
-exports.mozchunkedarraybuffer = !exports.fetch && haveArrayBuffer &&
-	checkTypeSupport('moz-chunked-arraybuffer')
-exports.overrideMimeType = isFunction(xhr.overrideMimeType)
-exports.vbArray = isFunction(global.VBArray)
-
-function isFunction (value) {
-  return typeof value === 'function'
-}
-
-xhr = null // Help gc
-
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],37:[function(require,module,exports){
-(function (process,global,Buffer){
-var capability = require('./capability')
-var inherits = require('inherits')
-var response = require('./response')
-var stream = require('readable-stream')
-var toArrayBuffer = require('to-arraybuffer')
-
-var IncomingMessage = response.IncomingMessage
-var rStates = response.readyStates
-
-function decideMode (preferBinary, useFetch) {
-	if (capability.fetch && useFetch) {
-		return 'fetch'
-	} else if (capability.mozchunkedarraybuffer) {
-		return 'moz-chunked-arraybuffer'
-	} else if (capability.msstream) {
-		return 'ms-stream'
-	} else if (capability.arraybuffer && preferBinary) {
-		return 'arraybuffer'
-	} else if (capability.vbArray && preferBinary) {
-		return 'text:vbarray'
-	} else {
-		return 'text'
-	}
-}
-
-var ClientRequest = module.exports = function (opts) {
-	var self = this
-	stream.Writable.call(self)
-
-	self._opts = opts
-	self._body = []
-	self._headers = {}
-	if (opts.auth)
-		self.setHeader('Authorization', 'Basic ' + new Buffer(opts.auth).toString('base64'))
-	Object.keys(opts.headers).forEach(function (name) {
-		self.setHeader(name, opts.headers[name])
-	})
-
-	var preferBinary
-	var useFetch = true
-	if (opts.mode === 'disable-fetch') {
-		// If the use of XHR should be preferred and includes preserving the 'content-type' header
-		useFetch = false
-		preferBinary = true
-	} else if (opts.mode === 'prefer-streaming') {
-		// If streaming is a high priority but binary compatibility and
-		// the accuracy of the 'content-type' header aren't
-		preferBinary = false
-	} else if (opts.mode === 'allow-wrong-content-type') {
-		// If streaming is more important than preserving the 'content-type' header
-		preferBinary = !capability.overrideMimeType
-	} else if (!opts.mode || opts.mode === 'default' || opts.mode === 'prefer-fast') {
-		// Use binary if text streaming may corrupt data or the content-type header, or for speed
-		preferBinary = true
-	} else {
-		throw new Error('Invalid value for opts.mode')
-	}
-	self._mode = decideMode(preferBinary, useFetch)
-
-	self.on('finish', function () {
-		self._onFinish()
-	})
-}
-
-inherits(ClientRequest, stream.Writable)
-
-ClientRequest.prototype.setHeader = function (name, value) {
-	var self = this
-	var lowerName = name.toLowerCase()
-	// This check is not necessary, but it prevents warnings from browsers about setting unsafe
-	// headers. To be honest I'm not entirely sure hiding these warnings is a good thing, but
-	// http-browserify did it, so I will too.
-	if (unsafeHeaders.indexOf(lowerName) !== -1)
-		return
-
-	self._headers[lowerName] = {
-		name: name,
-		value: value
-	}
-}
-
-ClientRequest.prototype.getHeader = function (name) {
-	var self = this
-	return self._headers[name.toLowerCase()].value
-}
-
-ClientRequest.prototype.removeHeader = function (name) {
-	var self = this
-	delete self._headers[name.toLowerCase()]
-}
-
-ClientRequest.prototype._onFinish = function () {
-	var self = this
-
-	if (self._destroyed)
-		return
-	var opts = self._opts
-
-	var headersObj = self._headers
-	var body
-	if (opts.method === 'POST' || opts.method === 'PUT' || opts.method === 'PATCH' || opts.method === 'MERGE') {
-		if (capability.blobConstructor) {
-			body = new global.Blob(self._body.map(function (buffer) {
-				return toArrayBuffer(buffer)
-			}), {
-				type: (headersObj['content-type'] || {}).value || ''
-			})
-		} else {
-			// get utf8 string
-			body = Buffer.concat(self._body).toString()
-		}
-	}
-
-	if (self._mode === 'fetch') {
-		var headers = Object.keys(headersObj).map(function (name) {
-			return [headersObj[name].name, headersObj[name].value]
-		})
-
-		global.fetch(self._opts.url, {
-			method: self._opts.method,
-			headers: headers,
-			body: body,
-			mode: 'cors',
-			credentials: opts.withCredentials ? 'include' : 'same-origin'
-		}).then(function (response) {
-			self._fetchResponse = response
-			self._connect()
-		}, function (reason) {
-			self.emit('error', reason)
-		})
-	} else {
-		var xhr = self._xhr = new global.XMLHttpRequest()
-		try {
-			xhr.open(self._opts.method, self._opts.url, true)
-		} catch (err) {
-			process.nextTick(function () {
-				self.emit('error', err)
-			})
-			return
-		}
-
-		// Can't set responseType on really old browsers
-		if ('responseType' in xhr)
-			xhr.responseType = self._mode.split(':')[0]
-
-		if ('withCredentials' in xhr)
-			xhr.withCredentials = !!opts.withCredentials
-
-		if (self._mode === 'text' && 'overrideMimeType' in xhr)
-			xhr.overrideMimeType('text/plain; charset=x-user-defined')
-
-		Object.keys(headersObj).forEach(function (name) {
-			xhr.setRequestHeader(headersObj[name].name, headersObj[name].value)
-		})
-
-		self._response = null
-		xhr.onreadystatechange = function () {
-			switch (xhr.readyState) {
-				case rStates.LOADING:
-				case rStates.DONE:
-					self._onXHRProgress()
-					break
-			}
-		}
-		// Necessary for streaming in Firefox, since xhr.response is ONLY defined
-		// in onprogress, not in onreadystatechange with xhr.readyState = 3
-		if (self._mode === 'moz-chunked-arraybuffer') {
-			xhr.onprogress = function () {
-				self._onXHRProgress()
-			}
-		}
-
-		xhr.onerror = function () {
-			if (self._destroyed)
-				return
-			self.emit('error', new Error('XHR error'))
-		}
-
-		try {
-			xhr.send(body)
-		} catch (err) {
-			process.nextTick(function () {
-				self.emit('error', err)
-			})
-			return
-		}
-	}
-}
-
-/**
- * Checks if xhr.status is readable and non-zero, indicating no error.
- * Even though the spec says it should be available in readyState 3,
- * accessing it throws an exception in IE8
- */
-function statusValid (xhr) {
-	try {
-		var status = xhr.status
-		return (status !== null && status !== 0)
-	} catch (e) {
-		return false
-	}
-}
-
-ClientRequest.prototype._onXHRProgress = function () {
-	var self = this
-
-	if (!statusValid(self._xhr) || self._destroyed)
-		return
-
-	if (!self._response)
-		self._connect()
-
-	self._response._onXHRProgress()
-}
-
-ClientRequest.prototype._connect = function () {
-	var self = this
-
-	if (self._destroyed)
-		return
-
-	self._response = new IncomingMessage(self._xhr, self._fetchResponse, self._mode)
-	self.emit('response', self._response)
-}
-
-ClientRequest.prototype._write = function (chunk, encoding, cb) {
-	var self = this
-
-	self._body.push(chunk)
-	cb()
-}
-
-ClientRequest.prototype.abort = ClientRequest.prototype.destroy = function () {
-	var self = this
-	self._destroyed = true
-	if (self._response)
-		self._response._destroyed = true
-	if (self._xhr)
-		self._xhr.abort()
-	// Currently, there isn't a way to truly abort a fetch.
-	// If you like bikeshedding, see https://github.com/whatwg/fetch/issues/27
-}
-
-ClientRequest.prototype.end = function (data, encoding, cb) {
-	var self = this
-	if (typeof data === 'function') {
-		cb = data
-		data = undefined
-	}
-
-	stream.Writable.prototype.end.call(self, data, encoding, cb)
-}
-
-ClientRequest.prototype.flushHeaders = function () {}
-ClientRequest.prototype.setTimeout = function () {}
-ClientRequest.prototype.setNoDelay = function () {}
-ClientRequest.prototype.setSocketKeepAlive = function () {}
-
-// Taken from http://www.w3.org/TR/XMLHttpRequest/#the-setrequestheader%28%29-method
-var unsafeHeaders = [
-	'accept-charset',
-	'accept-encoding',
-	'access-control-request-headers',
-	'access-control-request-method',
-	'connection',
-	'content-length',
-	'cookie',
-	'cookie2',
-	'date',
-	'dnt',
-	'expect',
-	'host',
-	'keep-alive',
-	'origin',
-	'referer',
-	'te',
-	'trailer',
-	'transfer-encoding',
-	'upgrade',
-	'user-agent',
-	'via'
-]
-
-}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer)
-},{"./capability":36,"./response":38,"_process":30,"buffer":20,"inherits":27,"readable-stream":46,"to-arraybuffer":48}],38:[function(require,module,exports){
-(function (process,global,Buffer){
-var capability = require('./capability')
-var inherits = require('inherits')
-var stream = require('readable-stream')
-
-var rStates = exports.readyStates = {
-	UNSENT: 0,
-	OPENED: 1,
-	HEADERS_RECEIVED: 2,
-	LOADING: 3,
-	DONE: 4
-}
-
-var IncomingMessage = exports.IncomingMessage = function (xhr, response, mode) {
-	var self = this
-	stream.Readable.call(self)
-
-	self._mode = mode
-	self.headers = {}
-	self.rawHeaders = []
-	self.trailers = {}
-	self.rawTrailers = []
-
-	// Fake the 'close' event, but only once 'end' fires
-	self.on('end', function () {
-		// The nextTick is necessary to prevent the 'request' module from causing an infinite loop
-		process.nextTick(function () {
-			self.emit('close')
-		})
-	})
-
-	if (mode === 'fetch') {
-		self._fetchResponse = response
-
-		self.url = response.url
-		self.statusCode = response.status
-		self.statusMessage = response.statusText
-		
-		response.headers.forEach(function(header, key){
-			self.headers[key.toLowerCase()] = header
-			self.rawHeaders.push(key, header)
-		})
-
-
-		// TODO: this doesn't respect backpressure. Once WritableStream is available, this can be fixed
-		var reader = response.body.getReader()
-		function read () {
-			reader.read().then(function (result) {
-				if (self._destroyed)
-					return
-				if (result.done) {
-					self.push(null)
-					return
-				}
-				self.push(new Buffer(result.value))
-				read()
-			})
-		}
-		read()
-
-	} else {
-		self._xhr = xhr
-		self._pos = 0
-
-		self.url = xhr.responseURL
-		self.statusCode = xhr.status
-		self.statusMessage = xhr.statusText
-		var headers = xhr.getAllResponseHeaders().split(/\r?\n/)
-		headers.forEach(function (header) {
-			var matches = header.match(/^([^:]+):\s*(.*)/)
-			if (matches) {
-				var key = matches[1].toLowerCase()
-				if (key === 'set-cookie') {
-					if (self.headers[key] === undefined) {
-						self.headers[key] = []
-					}
-					self.headers[key].push(matches[2])
-				} else if (self.headers[key] !== undefined) {
-					self.headers[key] += ', ' + matches[2]
-				} else {
-					self.headers[key] = matches[2]
-				}
-				self.rawHeaders.push(matches[1], matches[2])
-			}
-		})
-
-		self._charset = 'x-user-defined'
-		if (!capability.overrideMimeType) {
-			var mimeType = self.rawHeaders['mime-type']
-			if (mimeType) {
-				var charsetMatch = mimeType.match(/;\s*charset=([^;])(;|$)/)
-				if (charsetMatch) {
-					self._charset = charsetMatch[1].toLowerCase()
-				}
-			}
-			if (!self._charset)
-				self._charset = 'utf-8' // best guess
-		}
-	}
-}
-
-inherits(IncomingMessage, stream.Readable)
-
-IncomingMessage.prototype._read = function () {}
-
-IncomingMessage.prototype._onXHRProgress = function () {
-	var self = this
-
-	var xhr = self._xhr
-
-	var response = null
-	switch (self._mode) {
-		case 'text:vbarray': // For IE9
-			if (xhr.readyState !== rStates.DONE)
-				break
-			try {
-				// This fails in IE8
-				response = new global.VBArray(xhr.responseBody).toArray()
-			} catch (e) {}
-			if (response !== null) {
-				self.push(new Buffer(response))
-				break
-			}
-			// Falls through in IE8	
-		case 'text':
-			try { // This will fail when readyState = 3 in IE9. Switch mode and wait for readyState = 4
-				response = xhr.responseText
-			} catch (e) {
-				self._mode = 'text:vbarray'
-				break
-			}
-			if (response.length > self._pos) {
-				var newData = response.substr(self._pos)
-				if (self._charset === 'x-user-defined') {
-					var buffer = new Buffer(newData.length)
-					for (var i = 0; i < newData.length; i++)
-						buffer[i] = newData.charCodeAt(i) & 0xff
-
-					self.push(buffer)
-				} else {
-					self.push(newData, self._charset)
-				}
-				self._pos = response.length
-			}
-			break
-		case 'arraybuffer':
-			if (xhr.readyState !== rStates.DONE || !xhr.response)
-				break
-			response = xhr.response
-			self.push(new Buffer(new Uint8Array(response)))
-			break
-		case 'moz-chunked-arraybuffer': // take whole
-			response = xhr.response
-			if (xhr.readyState !== rStates.LOADING || !response)
-				break
-			self.push(new Buffer(new Uint8Array(response)))
-			break
-		case 'ms-stream':
-			response = xhr.response
-			if (xhr.readyState !== rStates.LOADING)
-				break
-			var reader = new global.MSStreamReader()
-			reader.onprogress = function () {
-				if (reader.result.byteLength > self._pos) {
-					self.push(new Buffer(new Uint8Array(reader.result.slice(self._pos))))
-					self._pos = reader.result.byteLength
-				}
-			}
-			reader.onload = function () {
-				self.push(null)
-			}
-			// reader.onerror = ??? // TODO: this
-			reader.readAsArrayBuffer(response)
-			break
-	}
-
-	// The ms-stream case handles end separately in reader.onload()
-	if (self._xhr.readyState === rStates.DONE && self._mode !== 'ms-stream') {
-		self.push(null)
-	}
-}
-
-}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer)
-},{"./capability":36,"_process":30,"buffer":20,"inherits":27,"readable-stream":46}],39:[function(require,module,exports){
-arguments[4][21][0].apply(exports,arguments)
-},{"dup":21}],40:[function(require,module,exports){
 // a duplex stream is just a stream that is both readable and writable.
 // Since JS doesn't have multiple prototypal inheritance, this class
 // prototypally inherits from Readable, and then parasitically from
@@ -13151,7 +12459,7 @@ function forEach(xs, f) {
     f(xs[i], i);
   }
 }
-},{"./_stream_readable":42,"./_stream_writable":44,"core-util-is":23,"inherits":27,"process-nextick-args":29}],41:[function(require,module,exports){
+},{"./_stream_readable":37,"./_stream_writable":39,"core-util-is":22,"inherits":26,"process-nextick-args":29}],36:[function(require,module,exports){
 // a passthrough stream.
 // basically just the most minimal sort of Transform stream.
 // Every written chunk gets output as-is.
@@ -13178,7 +12486,7 @@ function PassThrough(options) {
 PassThrough.prototype._transform = function (chunk, encoding, cb) {
   cb(null, chunk);
 };
-},{"./_stream_transform":43,"core-util-is":23,"inherits":27}],42:[function(require,module,exports){
+},{"./_stream_transform":38,"core-util-is":22,"inherits":26}],37:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -14122,7 +13430,7 @@ function indexOf(xs, x) {
   return -1;
 }
 }).call(this,require('_process'))
-},{"./_stream_duplex":40,"./internal/streams/BufferList":45,"_process":30,"buffer":20,"buffer-shims":19,"core-util-is":23,"events":24,"inherits":27,"isarray":39,"process-nextick-args":29,"string_decoder/":47,"util":17}],43:[function(require,module,exports){
+},{"./_stream_duplex":35,"./internal/streams/BufferList":40,"_process":30,"buffer":20,"buffer-shims":19,"core-util-is":22,"events":23,"inherits":26,"isarray":28,"process-nextick-args":29,"string_decoder/":46,"util":17}],38:[function(require,module,exports){
 // a transform stream is a readable/writable stream where you do
 // something with the data.  Sometimes it's called a "filter",
 // but that's not a great name for it, since that implies a thing where
@@ -14305,7 +13613,7 @@ function done(stream, er, data) {
 
   return stream.push(null);
 }
-},{"./_stream_duplex":40,"core-util-is":23,"inherits":27}],44:[function(require,module,exports){
+},{"./_stream_duplex":35,"core-util-is":22,"inherits":26}],39:[function(require,module,exports){
 (function (process){
 // A bit simpler than readable streams.
 // Implement an async ._write(chunk, encoding, cb), and it'll handle all
@@ -14862,7 +14170,7 @@ function CorkedRequest(state) {
   };
 }
 }).call(this,require('_process'))
-},{"./_stream_duplex":40,"_process":30,"buffer":20,"buffer-shims":19,"core-util-is":23,"events":24,"inherits":27,"process-nextick-args":29,"util-deprecate":51}],45:[function(require,module,exports){
+},{"./_stream_duplex":35,"_process":30,"buffer":20,"buffer-shims":19,"core-util-is":22,"events":23,"inherits":26,"process-nextick-args":29,"util-deprecate":50}],40:[function(require,module,exports){
 'use strict';
 
 var Buffer = require('buffer').Buffer;
@@ -14927,7 +14235,7 @@ BufferList.prototype.concat = function (n) {
   }
   return ret;
 };
-},{"buffer":20,"buffer-shims":19}],46:[function(require,module,exports){
+},{"buffer":20,"buffer-shims":19}],41:[function(require,module,exports){
 (function (process){
 var Stream = (function (){
   try {
@@ -14947,7 +14255,603 @@ if (!process.browser && process.env.READABLE_STREAM === 'disable' && Stream) {
 }
 
 }).call(this,require('_process'))
-},{"./lib/_stream_duplex.js":40,"./lib/_stream_passthrough.js":41,"./lib/_stream_readable.js":42,"./lib/_stream_transform.js":43,"./lib/_stream_writable.js":44,"_process":30}],47:[function(require,module,exports){
+},{"./lib/_stream_duplex.js":35,"./lib/_stream_passthrough.js":36,"./lib/_stream_readable.js":37,"./lib/_stream_transform.js":38,"./lib/_stream_writable.js":39,"_process":30}],42:[function(require,module,exports){
+(function (global){
+var ClientRequest = require('./lib/request')
+var extend = require('xtend')
+var statusCodes = require('builtin-status-codes')
+var url = require('url')
+
+var http = exports
+
+http.request = function (opts, cb) {
+	if (typeof opts === 'string')
+		opts = url.parse(opts)
+	else
+		opts = extend(opts)
+
+	// Normally, the page is loaded from http or https, so not specifying a protocol
+	// will result in a (valid) protocol-relative url. However, this won't work if
+	// the protocol is something else, like 'file:'
+	var defaultProtocol = global.location.protocol.search(/^https?:$/) === -1 ? 'http:' : ''
+
+	var protocol = opts.protocol || defaultProtocol
+	var host = opts.hostname || opts.host
+	var port = opts.port
+	var path = opts.path || '/'
+
+	// Necessary for IPv6 addresses
+	if (host && host.indexOf(':') !== -1)
+		host = '[' + host + ']'
+
+	// This may be a relative url. The browser should always be able to interpret it correctly.
+	opts.url = (host ? (protocol + '//' + host) : '') + (port ? ':' + port : '') + path
+	opts.method = (opts.method || 'GET').toUpperCase()
+	opts.headers = opts.headers || {}
+
+	// Also valid opts.auth, opts.mode
+
+	var req = new ClientRequest(opts)
+	if (cb)
+		req.on('response', cb)
+	return req
+}
+
+http.get = function get (opts, cb) {
+	var req = http.request(opts, cb)
+	req.end()
+	return req
+}
+
+http.Agent = function () {}
+http.Agent.defaultMaxSockets = 4
+
+http.STATUS_CODES = statusCodes
+
+http.METHODS = [
+	'CHECKOUT',
+	'CONNECT',
+	'COPY',
+	'DELETE',
+	'GET',
+	'HEAD',
+	'LOCK',
+	'M-SEARCH',
+	'MERGE',
+	'MKACTIVITY',
+	'MKCOL',
+	'MOVE',
+	'NOTIFY',
+	'OPTIONS',
+	'PATCH',
+	'POST',
+	'PROPFIND',
+	'PROPPATCH',
+	'PURGE',
+	'PUT',
+	'REPORT',
+	'SEARCH',
+	'SUBSCRIBE',
+	'TRACE',
+	'UNLOCK',
+	'UNSUBSCRIBE'
+]
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"./lib/request":44,"builtin-status-codes":21,"url":48,"xtend":52}],43:[function(require,module,exports){
+(function (global){
+exports.fetch = isFunction(global.fetch) && isFunction(global.ReadableStream)
+
+exports.blobConstructor = false
+try {
+	new Blob([new ArrayBuffer(1)])
+	exports.blobConstructor = true
+} catch (e) {}
+
+var xhr = new global.XMLHttpRequest()
+// If XDomainRequest is available (ie only, where xhr might not work
+// cross domain), use the page location. Otherwise use example.com
+xhr.open('GET', global.XDomainRequest ? '/' : 'https://example.com')
+
+function checkTypeSupport (type) {
+	try {
+		xhr.responseType = type
+		return xhr.responseType === type
+	} catch (e) {}
+	return false
+}
+
+// For some strange reason, Safari 7.0 reports typeof global.ArrayBuffer === 'object'.
+// Safari 7.1 appears to have fixed this bug.
+var haveArrayBuffer = typeof global.ArrayBuffer !== 'undefined'
+var haveSlice = haveArrayBuffer && isFunction(global.ArrayBuffer.prototype.slice)
+
+exports.arraybuffer = haveArrayBuffer && checkTypeSupport('arraybuffer')
+// These next two tests unavoidably show warnings in Chrome. Since fetch will always
+// be used if it's available, just return false for these to avoid the warnings.
+exports.msstream = !exports.fetch && haveSlice && checkTypeSupport('ms-stream')
+exports.mozchunkedarraybuffer = !exports.fetch && haveArrayBuffer &&
+	checkTypeSupport('moz-chunked-arraybuffer')
+exports.overrideMimeType = isFunction(xhr.overrideMimeType)
+exports.vbArray = isFunction(global.VBArray)
+
+function isFunction (value) {
+  return typeof value === 'function'
+}
+
+xhr = null // Help gc
+
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{}],44:[function(require,module,exports){
+(function (process,global,Buffer){
+var capability = require('./capability')
+var inherits = require('inherits')
+var response = require('./response')
+var stream = require('readable-stream')
+var toArrayBuffer = require('to-arraybuffer')
+
+var IncomingMessage = response.IncomingMessage
+var rStates = response.readyStates
+
+function decideMode (preferBinary, useFetch) {
+	if (capability.fetch && useFetch) {
+		return 'fetch'
+	} else if (capability.mozchunkedarraybuffer) {
+		return 'moz-chunked-arraybuffer'
+	} else if (capability.msstream) {
+		return 'ms-stream'
+	} else if (capability.arraybuffer && preferBinary) {
+		return 'arraybuffer'
+	} else if (capability.vbArray && preferBinary) {
+		return 'text:vbarray'
+	} else {
+		return 'text'
+	}
+}
+
+var ClientRequest = module.exports = function (opts) {
+	var self = this
+	stream.Writable.call(self)
+
+	self._opts = opts
+	self._body = []
+	self._headers = {}
+	if (opts.auth)
+		self.setHeader('Authorization', 'Basic ' + new Buffer(opts.auth).toString('base64'))
+	Object.keys(opts.headers).forEach(function (name) {
+		self.setHeader(name, opts.headers[name])
+	})
+
+	var preferBinary
+	var useFetch = true
+	if (opts.mode === 'disable-fetch') {
+		// If the use of XHR should be preferred and includes preserving the 'content-type' header
+		useFetch = false
+		preferBinary = true
+	} else if (opts.mode === 'prefer-streaming') {
+		// If streaming is a high priority but binary compatibility and
+		// the accuracy of the 'content-type' header aren't
+		preferBinary = false
+	} else if (opts.mode === 'allow-wrong-content-type') {
+		// If streaming is more important than preserving the 'content-type' header
+		preferBinary = !capability.overrideMimeType
+	} else if (!opts.mode || opts.mode === 'default' || opts.mode === 'prefer-fast') {
+		// Use binary if text streaming may corrupt data or the content-type header, or for speed
+		preferBinary = true
+	} else {
+		throw new Error('Invalid value for opts.mode')
+	}
+	self._mode = decideMode(preferBinary, useFetch)
+
+	self.on('finish', function () {
+		self._onFinish()
+	})
+}
+
+inherits(ClientRequest, stream.Writable)
+
+ClientRequest.prototype.setHeader = function (name, value) {
+	var self = this
+	var lowerName = name.toLowerCase()
+	// This check is not necessary, but it prevents warnings from browsers about setting unsafe
+	// headers. To be honest I'm not entirely sure hiding these warnings is a good thing, but
+	// http-browserify did it, so I will too.
+	if (unsafeHeaders.indexOf(lowerName) !== -1)
+		return
+
+	self._headers[lowerName] = {
+		name: name,
+		value: value
+	}
+}
+
+ClientRequest.prototype.getHeader = function (name) {
+	var self = this
+	return self._headers[name.toLowerCase()].value
+}
+
+ClientRequest.prototype.removeHeader = function (name) {
+	var self = this
+	delete self._headers[name.toLowerCase()]
+}
+
+ClientRequest.prototype._onFinish = function () {
+	var self = this
+
+	if (self._destroyed)
+		return
+	var opts = self._opts
+
+	var headersObj = self._headers
+	var body
+	if (opts.method === 'POST' || opts.method === 'PUT' || opts.method === 'PATCH' || opts.method === 'MERGE') {
+		if (capability.blobConstructor) {
+			body = new global.Blob(self._body.map(function (buffer) {
+				return toArrayBuffer(buffer)
+			}), {
+				type: (headersObj['content-type'] || {}).value || ''
+			})
+		} else {
+			// get utf8 string
+			body = Buffer.concat(self._body).toString()
+		}
+	}
+
+	if (self._mode === 'fetch') {
+		var headers = Object.keys(headersObj).map(function (name) {
+			return [headersObj[name].name, headersObj[name].value]
+		})
+
+		global.fetch(self._opts.url, {
+			method: self._opts.method,
+			headers: headers,
+			body: body,
+			mode: 'cors',
+			credentials: opts.withCredentials ? 'include' : 'same-origin'
+		}).then(function (response) {
+			self._fetchResponse = response
+			self._connect()
+		}, function (reason) {
+			self.emit('error', reason)
+		})
+	} else {
+		var xhr = self._xhr = new global.XMLHttpRequest()
+		try {
+			xhr.open(self._opts.method, self._opts.url, true)
+		} catch (err) {
+			process.nextTick(function () {
+				self.emit('error', err)
+			})
+			return
+		}
+
+		// Can't set responseType on really old browsers
+		if ('responseType' in xhr)
+			xhr.responseType = self._mode.split(':')[0]
+
+		if ('withCredentials' in xhr)
+			xhr.withCredentials = !!opts.withCredentials
+
+		if (self._mode === 'text' && 'overrideMimeType' in xhr)
+			xhr.overrideMimeType('text/plain; charset=x-user-defined')
+
+		Object.keys(headersObj).forEach(function (name) {
+			xhr.setRequestHeader(headersObj[name].name, headersObj[name].value)
+		})
+
+		self._response = null
+		xhr.onreadystatechange = function () {
+			switch (xhr.readyState) {
+				case rStates.LOADING:
+				case rStates.DONE:
+					self._onXHRProgress()
+					break
+			}
+		}
+		// Necessary for streaming in Firefox, since xhr.response is ONLY defined
+		// in onprogress, not in onreadystatechange with xhr.readyState = 3
+		if (self._mode === 'moz-chunked-arraybuffer') {
+			xhr.onprogress = function () {
+				self._onXHRProgress()
+			}
+		}
+
+		xhr.onerror = function () {
+			if (self._destroyed)
+				return
+			self.emit('error', new Error('XHR error'))
+		}
+
+		try {
+			xhr.send(body)
+		} catch (err) {
+			process.nextTick(function () {
+				self.emit('error', err)
+			})
+			return
+		}
+	}
+}
+
+/**
+ * Checks if xhr.status is readable and non-zero, indicating no error.
+ * Even though the spec says it should be available in readyState 3,
+ * accessing it throws an exception in IE8
+ */
+function statusValid (xhr) {
+	try {
+		var status = xhr.status
+		return (status !== null && status !== 0)
+	} catch (e) {
+		return false
+	}
+}
+
+ClientRequest.prototype._onXHRProgress = function () {
+	var self = this
+
+	if (!statusValid(self._xhr) || self._destroyed)
+		return
+
+	if (!self._response)
+		self._connect()
+
+	self._response._onXHRProgress()
+}
+
+ClientRequest.prototype._connect = function () {
+	var self = this
+
+	if (self._destroyed)
+		return
+
+	self._response = new IncomingMessage(self._xhr, self._fetchResponse, self._mode)
+	self.emit('response', self._response)
+}
+
+ClientRequest.prototype._write = function (chunk, encoding, cb) {
+	var self = this
+
+	self._body.push(chunk)
+	cb()
+}
+
+ClientRequest.prototype.abort = ClientRequest.prototype.destroy = function () {
+	var self = this
+	self._destroyed = true
+	if (self._response)
+		self._response._destroyed = true
+	if (self._xhr)
+		self._xhr.abort()
+	// Currently, there isn't a way to truly abort a fetch.
+	// If you like bikeshedding, see https://github.com/whatwg/fetch/issues/27
+}
+
+ClientRequest.prototype.end = function (data, encoding, cb) {
+	var self = this
+	if (typeof data === 'function') {
+		cb = data
+		data = undefined
+	}
+
+	stream.Writable.prototype.end.call(self, data, encoding, cb)
+}
+
+ClientRequest.prototype.flushHeaders = function () {}
+ClientRequest.prototype.setTimeout = function () {}
+ClientRequest.prototype.setNoDelay = function () {}
+ClientRequest.prototype.setSocketKeepAlive = function () {}
+
+// Taken from http://www.w3.org/TR/XMLHttpRequest/#the-setrequestheader%28%29-method
+var unsafeHeaders = [
+	'accept-charset',
+	'accept-encoding',
+	'access-control-request-headers',
+	'access-control-request-method',
+	'connection',
+	'content-length',
+	'cookie',
+	'cookie2',
+	'date',
+	'dnt',
+	'expect',
+	'host',
+	'keep-alive',
+	'origin',
+	'referer',
+	'te',
+	'trailer',
+	'transfer-encoding',
+	'upgrade',
+	'user-agent',
+	'via'
+]
+
+}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer)
+},{"./capability":43,"./response":45,"_process":30,"buffer":20,"inherits":26,"readable-stream":41,"to-arraybuffer":47}],45:[function(require,module,exports){
+(function (process,global,Buffer){
+var capability = require('./capability')
+var inherits = require('inherits')
+var stream = require('readable-stream')
+
+var rStates = exports.readyStates = {
+	UNSENT: 0,
+	OPENED: 1,
+	HEADERS_RECEIVED: 2,
+	LOADING: 3,
+	DONE: 4
+}
+
+var IncomingMessage = exports.IncomingMessage = function (xhr, response, mode) {
+	var self = this
+	stream.Readable.call(self)
+
+	self._mode = mode
+	self.headers = {}
+	self.rawHeaders = []
+	self.trailers = {}
+	self.rawTrailers = []
+
+	// Fake the 'close' event, but only once 'end' fires
+	self.on('end', function () {
+		// The nextTick is necessary to prevent the 'request' module from causing an infinite loop
+		process.nextTick(function () {
+			self.emit('close')
+		})
+	})
+
+	if (mode === 'fetch') {
+		self._fetchResponse = response
+
+		self.url = response.url
+		self.statusCode = response.status
+		self.statusMessage = response.statusText
+		
+		response.headers.forEach(function(header, key){
+			self.headers[key.toLowerCase()] = header
+			self.rawHeaders.push(key, header)
+		})
+
+
+		// TODO: this doesn't respect backpressure. Once WritableStream is available, this can be fixed
+		var reader = response.body.getReader()
+		function read () {
+			reader.read().then(function (result) {
+				if (self._destroyed)
+					return
+				if (result.done) {
+					self.push(null)
+					return
+				}
+				self.push(new Buffer(result.value))
+				read()
+			})
+		}
+		read()
+
+	} else {
+		self._xhr = xhr
+		self._pos = 0
+
+		self.url = xhr.responseURL
+		self.statusCode = xhr.status
+		self.statusMessage = xhr.statusText
+		var headers = xhr.getAllResponseHeaders().split(/\r?\n/)
+		headers.forEach(function (header) {
+			var matches = header.match(/^([^:]+):\s*(.*)/)
+			if (matches) {
+				var key = matches[1].toLowerCase()
+				if (key === 'set-cookie') {
+					if (self.headers[key] === undefined) {
+						self.headers[key] = []
+					}
+					self.headers[key].push(matches[2])
+				} else if (self.headers[key] !== undefined) {
+					self.headers[key] += ', ' + matches[2]
+				} else {
+					self.headers[key] = matches[2]
+				}
+				self.rawHeaders.push(matches[1], matches[2])
+			}
+		})
+
+		self._charset = 'x-user-defined'
+		if (!capability.overrideMimeType) {
+			var mimeType = self.rawHeaders['mime-type']
+			if (mimeType) {
+				var charsetMatch = mimeType.match(/;\s*charset=([^;])(;|$)/)
+				if (charsetMatch) {
+					self._charset = charsetMatch[1].toLowerCase()
+				}
+			}
+			if (!self._charset)
+				self._charset = 'utf-8' // best guess
+		}
+	}
+}
+
+inherits(IncomingMessage, stream.Readable)
+
+IncomingMessage.prototype._read = function () {}
+
+IncomingMessage.prototype._onXHRProgress = function () {
+	var self = this
+
+	var xhr = self._xhr
+
+	var response = null
+	switch (self._mode) {
+		case 'text:vbarray': // For IE9
+			if (xhr.readyState !== rStates.DONE)
+				break
+			try {
+				// This fails in IE8
+				response = new global.VBArray(xhr.responseBody).toArray()
+			} catch (e) {}
+			if (response !== null) {
+				self.push(new Buffer(response))
+				break
+			}
+			// Falls through in IE8	
+		case 'text':
+			try { // This will fail when readyState = 3 in IE9. Switch mode and wait for readyState = 4
+				response = xhr.responseText
+			} catch (e) {
+				self._mode = 'text:vbarray'
+				break
+			}
+			if (response.length > self._pos) {
+				var newData = response.substr(self._pos)
+				if (self._charset === 'x-user-defined') {
+					var buffer = new Buffer(newData.length)
+					for (var i = 0; i < newData.length; i++)
+						buffer[i] = newData.charCodeAt(i) & 0xff
+
+					self.push(buffer)
+				} else {
+					self.push(newData, self._charset)
+				}
+				self._pos = response.length
+			}
+			break
+		case 'arraybuffer':
+			if (xhr.readyState !== rStates.DONE || !xhr.response)
+				break
+			response = xhr.response
+			self.push(new Buffer(new Uint8Array(response)))
+			break
+		case 'moz-chunked-arraybuffer': // take whole
+			response = xhr.response
+			if (xhr.readyState !== rStates.LOADING || !response)
+				break
+			self.push(new Buffer(new Uint8Array(response)))
+			break
+		case 'ms-stream':
+			response = xhr.response
+			if (xhr.readyState !== rStates.LOADING)
+				break
+			var reader = new global.MSStreamReader()
+			reader.onprogress = function () {
+				if (reader.result.byteLength > self._pos) {
+					self.push(new Buffer(new Uint8Array(reader.result.slice(self._pos))))
+					self._pos = reader.result.byteLength
+				}
+			}
+			reader.onload = function () {
+				self.push(null)
+			}
+			// reader.onerror = ??? // TODO: this
+			reader.readAsArrayBuffer(response)
+			break
+	}
+
+	// The ms-stream case handles end separately in reader.onload()
+	if (self._xhr.readyState === rStates.DONE && self._mode !== 'ms-stream') {
+		self.push(null)
+	}
+}
+
+}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer)
+},{"./capability":43,"_process":30,"buffer":20,"inherits":26,"readable-stream":41}],46:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -15170,7 +15074,7 @@ function base64DetectIncompleteChar(buffer) {
   this.charLength = this.charReceived ? 3 : 0;
 }
 
-},{"buffer":20}],48:[function(require,module,exports){
+},{"buffer":20}],47:[function(require,module,exports){
 var Buffer = require('buffer').Buffer
 
 module.exports = function (buf) {
@@ -15199,7 +15103,7 @@ module.exports = function (buf) {
 	}
 }
 
-},{"buffer":20}],49:[function(require,module,exports){
+},{"buffer":20}],48:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -15933,7 +15837,7 @@ Url.prototype.parseHost = function() {
   if (host) this.hostname = host;
 };
 
-},{"./util":50,"punycode":31,"querystring":34}],50:[function(require,module,exports){
+},{"./util":49,"punycode":31,"querystring":34}],49:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -15951,7 +15855,7 @@ module.exports = {
   }
 };
 
-},{}],51:[function(require,module,exports){
+},{}],50:[function(require,module,exports){
 (function (global){
 
 /**
@@ -16022,7 +15926,7 @@ function config (name) {
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],52:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
 (function (process,Buffer){
 /**
  * Wrapper for built-in http.js to emulate the browser XMLHttpRequest object.
@@ -16646,7 +16550,7 @@ exports.XMLHttpRequest = function() {
 };
 
 }).call(this,require('_process'),require("buffer").Buffer)
-},{"_process":30,"buffer":20,"child_process":18,"fs":18,"http":35,"https":25,"url":49}],53:[function(require,module,exports){
+},{"_process":30,"buffer":20,"child_process":18,"fs":18,"http":42,"https":24,"url":48}],52:[function(require,module,exports){
 module.exports = extend
 
 var hasOwnProperty = Object.prototype.hasOwnProperty;

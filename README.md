@@ -46,9 +46,10 @@ var iota = new IOTA({
 iota.api.getNodeInfo();
 ```
 
-Overall, there are currently two subclasses that are accessible from the IOTA object:
+Overall, there are currently three subclasses that are accessible from the IOTA object:
 - **`api`**: Core API functionality for interacting with the IOTA core.
 - **`utils`**: Utility related functions for conversions, validation and so on  
+- **`validate`**: Validator functions that can help with determining whether the inputs or results that you get are valid.
 
 In the future new IOTA Core modules (such as Flash, MAM) and all IXI related functionality will be available.
 
@@ -95,7 +96,21 @@ iota.api.getNodeInfo(function(error, success) {
     - **[transactionObject](#transactionobject)**
     - **[transactionTrytes](#transactiontrytes)**
     - **[categorizeTransfers](#categorizetransfers)**
-- **[changeNode](#changeNode)**
+- **[validate](#validate)**
+    - **[isAddress](#isaddress)**
+    - **[isTrytes](#istrytes)**
+    - **[isValue](#isvalue)**
+    - **[isHash](#ishash)**
+    - **[isTransfersArray](#istransfersarray)**
+    - **[isArrayOfHashes](#isarrayofhashes)**
+    - **[isArrayOfTrytes](#isarrayoftrytes)**    
+    - **[isArrayOfAttachedTrytes](#isarrayofattachedtrytes)**
+    - **[isUri](#isuri)**
+    - **[isInputs](#isinputs)**
+    - **[isString](#isstring)**
+    - **[isInt](#isint)**
+    - **[isArray](#isarray)**
+    - **[isObject](#isobject)**
 
 ---
 
@@ -481,10 +496,10 @@ Takes an 90-trytes address as input and simply removes the checksum.
 iota.utils.noChecksum(address)
 ```
 
-1. **`address`**: `String` 90-trytes address  
+1. **`address`**: `String | List` 90-trytes address. Either string or a list
 
 #### Returns
-`String` - returns an 81-tryte address
+`String | List` - returns the 81-tryte address(es)
 
 ---
 
@@ -552,3 +567,198 @@ iota.utils.categorizeTransfers(transfers, addresses)
 `object` - the transfers categorized into `sent` and `received`
 
 ---
+
+
+## `iota.validate`
+
+Validator functions. Return either true / false.
+
+---
+
+### `isAddress`
+
+Checks if the provided input is a valid 81-tryte (non-checksum), or 90-tryte (with checksum) address.
+
+#### Input
+```
+iota.validate.isAddress(address)
+```
+
+1. **`address`**: `String` A single address
+
+---
+
+### `isTrytes`
+
+Determines if the provided input is valid trytes. Valid trytes are: `ABCDEFGHIJKLMNOPQRSTUVWXYZ9`. If you specify the length parameter, you can also validate the input length.
+
+#### Input
+```
+iota.validate.isTrytes(trytes [, length])
+```
+
+1. **`trytes`**: `String`
+2. **`length`**: `int || string` optional
+
+---
+
+### `isValue`
+
+Validates the value input, checks if it's decimal number and an integer.
+
+#### Input
+```
+iota.validate.isValue(value)
+```
+
+1. **`value`**: `Integer`
+
+---
+
+### `isHash`
+
+Checks if correct hash consisting of 81-trytes.
+
+#### Input
+```
+iota.validate.isHash(hash)
+```
+
+1. **`hash`**: `String`
+
+---
+
+### `isTransfersArray`
+
+Checks if it's a correct array of transfer objects. A transfer object consists of the following values:
+```
+{
+    'address': // STRING (trytes encoded, 81 or 90 trytes)
+    'value': // INT
+    'mesage': // STRING (trytes encoded)
+    'tag': // STRING (trytes encoded, maximum 27 trytes)
+}
+```
+
+#### Input
+```
+iota.validate.isTransfersArray(transfersArray)
+```
+
+1. **`transfersArray`**: `array`
+
+---
+
+### `isArrayOfHashes`
+
+Array of valid 81 or 90-trytes hashes.
+
+#### Input
+```
+iota.validate.isArrayOfHashes(hashesArray)
+```
+
+1. **`hashesArray`**: `Array`
+
+---
+
+### `isArrayOfTrytes`
+
+Checks if it's an array of correct 2673-trytes. These are trytes either returned by prepareTransfers, attachToTangle or similar call. A single transaction object is encoded 2673 trytes.
+
+#### Input
+```
+iota.validate.isArrayOfTrytes(trytesArray)
+```
+
+1. **`trytesArray`**: `Array`
+
+---
+
+### `isArrayOfAttachedTrytes`
+
+Similar to `isArrayOfTrytes`, just that in addition this function also validates that the last 243 trytes are non-zero (meaning that they don't equal 9). The last 243 trytes consist of:  `trunkTransaction` + `branchTransaction` + `nonce`. As such, this function determines whether the provided trytes have been attached to the tangle successfully. For example this validator can be used for trytes returned by `attachToTangle`.
+
+#### Input
+```
+iota.validate.isArrayOfAttachedTrytes(trytesArray)
+```
+
+1. **`trytesArray`**: `Array`
+
+---
+
+### `isUri`
+
+Work in progress. If this is still here while you're reading the documentation, tell either Dominik or someone else from Core to move their asses.
+
+#### Input
+```
+iota.validate.isUri(uris)
+```
+
+1. **`uris`**: `Array`
+
+---
+
+### `isInputs`
+
+Validates if it's an array of correct input objects. These inputs are provided to either `prepareTransfers` or `sendTransfer`. An input objects consists of the following:
+
+```
+{
+    'keyIndex': // INT
+    'address': // STRING
+}
+```
+
+#### Input
+```
+iota.validate.isInputs(inputsArray)
+```
+
+1. **`inputsArray`**: `Array`
+
+---
+
+### `isString`
+
+Self explanatory.
+
+#### Input
+```
+iota.validate.isString(string)
+```
+
+---
+
+### `isInt`
+
+Self explanatory.
+
+#### Input
+```
+iota.validate.isInt(int)
+```
+
+---
+
+### `isArray`
+
+Self explanatory.
+
+#### Input
+```
+iota.validate.isArray(array)
+```
+
+---
+
+### `isObject`
+
+Self explanatory.
+
+#### Input
+```
+iota.validate.isObject(array)
+```
