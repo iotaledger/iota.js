@@ -100,6 +100,7 @@ iota.api.getNodeInfo(function(error, success) {
     - **[isAddress](#isaddress)**
     - **[isTrytes](#istrytes)**
     - **[isValue](#isvalue)**
+    - **[isDecimal](#isdecimal)**
     - **[isHash](#ishash)**
     - **[isTransfersArray](#istransfersarray)**
     - **[isArrayOfHashes](#isarrayofhashes)**
@@ -462,7 +463,7 @@ IOTA utilizes the Standard system of Units. See below for all available units:
 iota.utils.convertUnits(value, fromUnit, toUnit)
 ```
 
-1. **`value`**: `Integer` Value to be converted
+1. **`value`**: `Integer || String` Value to be converted. Can be string, an integer or float.
 2. **`fromUnit`**: `String` Current unit of the value. See above for the available units to utilize for conversion.
 2. **`toUnit`**: `String` Unit to convert the from value into.
 
@@ -604,7 +605,7 @@ iota.validate.isTrytes(trytes [, length])
 
 ### `isValue`
 
-Validates the value input, checks if it's decimal number and an integer.
+Validates the value input, checks if it's integer.
 
 #### Input
 ```
@@ -612,6 +613,19 @@ iota.validate.isValue(value)
 ```
 
 1. **`value`**: `Integer`
+
+---
+
+### `isDecimal`
+
+Checks if it's a decimal value
+
+#### Input
+```
+iota.validate.isDecimal(value)
+```
+
+1. **`value`**: `Integer || String`
 
 ---
 

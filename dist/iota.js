@@ -2793,6 +2793,19 @@ var isValue = function(value) {
 }
 
 /**
+*   checks if decimal
+*
+*   @method isDecimal
+*   @param {string} value
+*   @returns {boolean}
+**/
+var isDecimal = function(value) {
+
+    // check if correct number
+    return /^(\d+\.?\d{0,9}|\.\d{0,9})$/.test(value);
+}
+
+/**
 *   checks if input is correct hash
 *
 *   @method isHash
@@ -3052,6 +3065,7 @@ module.exports = {
     isAddress: isAddress,
     isTrytes: isTrytes,
     isValue: isValue,
+    isDecimal: isDecimal,
     isHash: isHash,
     isTransfersArray: isTransfersArray,
     isArrayOfHashes: isArrayOfHashes,
@@ -3189,27 +3203,29 @@ var unitMap = {
 *   converts IOTA units
 *
 *   @method convertUnits
-*   @param {string} value
+*   @param {string || int || float} value
 *   @param {string} fromUnit
 *   @param {string} toUnit
 *   @returns {integer} converted
 **/
 var convertUnits = function(value, fromUnit, toUnit) {
 
-    // If not valid value, return null
-    if (!inputValidator.isValue(value)) {
 
-        // Should we actually return an error?
+    // If not valid value, throw error
+    if (!isDecimal(value)) {
+
         throw new Error("Invalid value input");
     }
 
+    // Check if wrong unit provided
     if (unitMap[fromUnit] === undefined || unitMap[toUnit] === undefined) {
+
         throw new Error("Invalid unit provided");
     }
 
-    if (typeof value === 'string') value = parseInt(value);
+    var floatValue = parseFloat(value);
 
-    var converted = (value * unitMap[fromUnit]) / unitMap[toUnit];
+    var converted = (floatValue * unitMap[fromUnit]) / unitMap[toUnit];
 
     return converted;
 }
