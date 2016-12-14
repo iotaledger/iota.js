@@ -1293,9 +1293,9 @@ api.prototype.traverseBundle = function(trunkTx, bundleHash, bundle, callback) {
     // Get trytes of transaction hash
     self.getTrytes(Array(trunkTx), function(error, trytesList) {
 
-        var trytes = trytesList.trytes[0]
-
         if (error) return callback(error);
+
+        var trytes = trytesList.trytes[0]
 
         if (trytes === null) return callback(new Error("Bundle transactions not visible"))
 
@@ -1509,7 +1509,7 @@ api.prototype._bundlesFromAddresses = function(addresses, inclusionStates, callb
 
                     // Map each tail transaction to the getBundle function
                     // format the returned bundles and add inclusion states if necessary
-                    async.map(tailTxArray, function(tailTx, cb2) {
+                    async.mapSeries(tailTxArray, function(tailTx, cb2) {
 
                          self.getBundle(tailTx, function(error, bundle) {
 
