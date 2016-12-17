@@ -1299,12 +1299,12 @@ api.prototype.traverseBundle = function(trunkTx, bundleHash, bundle, callback) {
 
         var trytes = trytesList.trytes[0]
 
-        if (trytes === null) return callback(new Error("Bundle transactions not visible"))
+        if (!trytes) return callback(new Error("Bundle transactions not visible"))
 
         // get the transaction object
         var txObject = Utils.transactionObject(trytes);
 
-        if (error) return callback(error);
+        if (!txObject) return callback(new Error("Invalid trytes, could not create object"));
 
         // If first transaction to search is not a tail, return error
         if (!bundleHash && txObject.currentIndex !== 0) {
@@ -1320,11 +1320,13 @@ api.prototype.traverseBundle = function(trunkTx, bundleHash, bundle, callback) {
 
         // If different bundle hash, return with bundle
         if (bundleHash !== txObject.bundle) {
+
             return callback(null, bundle);
         }
 
         // If only one bundle element, return
         if (txObject.lastIndex === 0 && txObject.currentIndex === 0) {
+
             return callback(null, Array(txObject));
         }
 
