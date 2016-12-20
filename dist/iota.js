@@ -467,7 +467,7 @@ api.prototype.getTransactionsObjects = function(hashes, callback) {
         trytes.trytes.forEach(function(thisTrytes) {
 
             // If no trytes returned, simply push null as placeholder
-            if (thisTrytes === null) {
+            if (!thisTrytes) {
                 transactionObject.push(null);
             } else {
                 transactionObjects.push(Utils.transactionObject(thisTrytes));
@@ -3216,7 +3216,7 @@ var convertUnits = function(value, fromUnit, toUnit) {
 
 
     // If not valid value, throw error
-    if (!isDecimal(value)) {
+    if (!inputValidator.isDecimal(value)) {
 
         throw new Error("Invalid value input");
     }
