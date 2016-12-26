@@ -96,7 +96,8 @@ iota.api.getNodeInfo(function(error, success) {
     - **[transactionObject](#transactionobject)**
     - **[transactionTrytes](#transactiontrytes)**
     - **[categorizeTransfers](#categorizetransfers)**
-- **[validate](#validate)**
+    - **[isUri](#isuri)**
+- **[validate](#iota.validate)**
     - **[isAddress](#isaddress)**
     - **[isTrytes](#istrytes)**
     - **[isValue](#isvalue)**
@@ -562,10 +563,34 @@ iota.utils.categorizeTransfers(transfers, addresses)
 ```
 
 1. **`transfers`**: `List` A list of bundles. Basically is an array, of arrays (bundles), as is returned from getTransfers or getAccountData
-2. **`addresses`**: 'List' List of addresses that belong to you. With these addresses as input, it's determined whether it's a sent or a receive transaction.
+2. **`addresses`**: 'List' List of addresses that belong to you. With these addresses as input, it's determined whether it's a sent or a receive transaction. Therefore make sure that these addresses actually belong to you.
 
 #### Returns
 `object` - the transfers categorized into `sent` and `received`
+
+---
+
+### `isUri`
+
+Validates a given string to check if it's a valid IPv6, IPv4 or hostname format. The string must have a `udp://` prefix, and it may or may not have a port. Here are some example inputs:
+
+```
+udp://[2001:db8:a0b:12f0::1]:14265
+udp://[2001:db8:a0b:12f0::1]
+udp://8.8.8.8:14265
+udp://domain.com
+udp://domain2.com:14265
+```
+
+#### Input
+```
+iota.utils.isUri(node)
+```
+
+1. **`node`**: `String` IPv6, IPv4 or Hostname with or without a port.
+
+#### Returns
+`bool` - true/false if valid node format.
 
 ---
 

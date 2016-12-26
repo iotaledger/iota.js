@@ -1139,10 +1139,10 @@ api.prototype.prepareTransfers = function(seed, transfers, options, callback) {
 
     function addRemainder(inputs) {
 
+        var totalTransferValue = totalValue;
         for (var i = 0; i < inputs.length; i++) {
 
             var thisBalance = inputs[i].balance;
-            var totalTransferValue = totalValue;
             var toSubtract = 0 - thisBalance;
             var timestamp = Math.floor(Date.now() / 1000);
 
@@ -1450,6 +1450,8 @@ api.prototype._bundlesFromAddresses = function(addresses, inclusionStates, callb
 
     // call wrapper function to get txs associated with addresses
     self.findTransactionObjects({'addresses': addresses}, function(error, transactionObjects) {
+
+        if (error) return callback(error);
 
         // set of tail transactions
         var tailTransactions = new Set();
@@ -3427,16 +3429,16 @@ var transactionTrytes = function(transaction) {
     }
 
     return transaction.signatureMessageFragment
-            + transaction.address
-            + Converter.trytes(valueTrits)
-            + transaction.tag
-            + Converter.trytes(timestampTrits)
-            + Converter.trytes(currentIndexTrits)
-            + Converter.trytes(lastIndexTrits)
-            + transaction.bundle
-            + transaction.trunkTransaction
-            + transaction.branchTransaction
-            + transaction.nonce;
+    + transaction.address
+    + Converter.trytes(valueTrits)
+    + transaction.tag
+    + Converter.trytes(timestampTrits)
+    + Converter.trytes(currentIndexTrits)
+    + Converter.trytes(lastIndexTrits)
+    + transaction.bundle
+    + transaction.trunkTransaction
+    + transaction.branchTransaction
+    + transaction.nonce;
 }
 
 /**
@@ -3490,6 +3492,34 @@ var categorizeTransfers = function(transfers, addresses) {
     return categorized;
 }
 
+/**
+*   Checks that a given uri is valid
+*
+*   Valid Examples:
+*   udp://[2001:db8:a0b:12f0::1]:14265
+*   udp://[2001:db8:a0b:12f0::1]
+*   udp://8.8.8.8:14265
+*   udp://domain.com
+*   udp://domain2.com:14265
+*
+*   @method isUri
+*   @param {string} node
+*   @returns {bool} valid
+**/
+var isUri = function(node) {
+
+    var getInside = /^udp:\/\/([\[][^\]\.]*[\]]|[^\[\]:]*)[:]{0,1}([0-9]{1,}$|$)/i;
+
+    var stripBrackets = /[\[]{0,1}([^\[\]]*)[\]]{0,1}/;
+
+    var uriTest = /((^\s*((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))\s*$)|(^\s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(%.+)?\s*$))|(^\s*((?=.{1,255}$)(?=.*[A-Za-z].*)[0-9A-Za-z](?:(?:[0-9A-Za-z]|\b-){0,61}[0-9A-Za-z])?(?:\.[0-9A-Za-z](?:(?:[0-9A-Za-z]|\b-){0,61}[0-9A-Za-z])?)*)\s*$)/;
+
+    if(!getInside.test(node)) {
+        return false;
+    }
+
+    return uriTest.test(stripBrackets.exec(getInside.exec(node)[1])[1]);
+}
 
 module.exports = {
     convertUnits        : convertUnits,
@@ -3500,7 +3530,8 @@ module.exports = {
     fromTrytes          : fromTrytes,
     transactionObject   : transactionObject,
     transactionTrytes   : transactionTrytes,
-    categorizeTransfers : categorizeTransfers
+    categorizeTransfers : categorizeTransfers,
+    isUri               : isUri
 }
 
 },{"../crypto/converter":5,"../crypto/curl":6,"./asciiToTrytes":11,"./inputValidator":12,"./makeRequest":13}],15:[function(require,module,exports){
