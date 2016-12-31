@@ -96,7 +96,6 @@ iota.api.getNodeInfo(function(error, success) {
     - **[transactionObject](#transactionobject)**
     - **[transactionTrytes](#transactiontrytes)**
     - **[categorizeTransfers](#categorizetransfers)**
-    - **[isUri](#isuri)**
 - **[validate](#iota.validate)**
     - **[isAddress](#isaddress)**
     - **[isTrytes](#istrytes)**
@@ -113,6 +112,7 @@ iota.api.getNodeInfo(function(error, success) {
     - **[isInt](#isint)**
     - **[isArray](#isarray)**
     - **[isObject](#isobject)**
+    - **[isUri](#isuri)**
 
 ---
 
@@ -570,31 +570,6 @@ iota.utils.categorizeTransfers(transfers, addresses)
 
 ---
 
-### `isUri`
-
-Validates a given string to check if it's a valid IPv6, IPv4 or hostname format. The string must have a `udp://` prefix, and it may or may not have a port. Here are some example inputs:
-
-```
-udp://[2001:db8:a0b:12f0::1]:14265
-udp://[2001:db8:a0b:12f0::1]
-udp://8.8.8.8:14265
-udp://domain.com
-udp://domain2.com:14265
-```
-
-#### Input
-```
-iota.utils.isUri(node)
-```
-
-1. **`node`**: `String` IPv6, IPv4 or Hostname with or without a port.
-
-#### Returns
-`bool` - true/false if valid node format.
-
----
-
-
 ## `iota.validate`
 
 Validator functions. Return either true / false.
@@ -801,3 +776,29 @@ Self explanatory.
 ```
 iota.validate.isObject(array)
 ```
+
+---
+
+### `isUri`
+
+Validates a given string to check if it's a valid IPv6, IPv4 or hostname format. The string must have a `udp://` prefix, and it may or may not have a port. Here are some example inputs:
+
+```
+udp://[2001:db8:a0b:12f0::1]:14265
+udp://[2001:db8:a0b:12f0::1]
+udp://8.8.8.8:14265
+udp://domain.com
+udp://domain2.com:14265
+```
+
+#### Input
+```
+iota.utils.isUri(node)
+```
+
+1. **`node`**: `String` IPv6, IPv4 or Hostname with or without a port.
+
+#### Returns
+`bool` - true/false if valid node format.
+
+---
