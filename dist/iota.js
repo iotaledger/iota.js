@@ -44,6 +44,101 @@ api.prototype.sendCommand = function(command, callback) {
 }
 
 /**
+*   Simply batches the requested command and then aggregates the results
+*   This API call is only meant for the following Core API calls:
+*           - getTrytes
+*           - getInclusionStates
+*           - getBalances
+*
+*   @method batchedSend
+*   @param {object} command
+*   @param {function} callback
+*   @returns {object} success
+**/
+api.prototype.batchedSend = function(command, callback) {
+
+    var self = this;
+
+    var availableKeys = [
+        'addresses',
+        'hashes',
+        'transactions'
+    ];
+
+    // Basic key mapping to know the results that we need to modify
+    var keyMapping = {
+        'getTrytes': 'trytes',
+        'getInclusionStates': 'inclusionStates',
+        'getBalances': 'balances'
+    }
+
+    var searchKeys = Object.keys(command);
+    var thisCommand = command.command;
+
+    searchKeys.forEach(function(key) {
+
+        if (availableKeys.indexOf(key) > -1) {
+
+            // If the requested command has more than 50 items, batch them
+            if (command[key].length > 50) {
+
+                var aggregatedResults = [];
+                var latestResponse;
+                var currentIndex = 0;
+                // Do whilst loop to basically create and iterate over the batches
+                // get the results from sendCommand function and aggregate the results
+                async.doWhilst(function(cb) {
+                    // Iteratee function
+
+                    var newBatch = command[key].slice(currentIndex, currentIndex + 50);
+
+                    // re-assign the batches values
+                    var newCommand = command;
+                    newCommand[key] = newBatch;
+
+                    self.sendCommand(newCommand, function(error, results) {
+
+                        if (error) {
+                            return cb(error);
+                        }
+
+                        cb(null, newBatch.length, results)
+                    })
+
+                }, function(address, batchLength, transactions) {
+                    // Test function with validity check
+
+                    latestResponse = results;
+                    // Get the correct key value pair of the search command
+                    aggregatedResults.push(results[keyMapping[thisCommand]]);
+
+                    currentIndex += 50;
+
+                    // Validity check
+                    return batchLength > 50;
+
+                }, function(err) {
+                    // Final callback
+
+                    if (err) {
+                        return callback(err);
+                    } else {
+
+                        latestResponse[keyMapping[thisCommand]] = aggregatedResults;
+
+                        return callback(null, latestResponse);
+                    }
+                })
+            } else {
+
+                self.sendCommand(command, callback);
+            }
+        }
+
+    })
+}
+
+/**
 *   @method attachToTangle
 *   @param {string} trunkTransaction
 *   @param {string} branchTransaction
@@ -352,7 +447,7 @@ api.prototype.getTrytes = function(hashes, callback) {
 
     var command = apiCommands.getTrytes(hashes);
 
-    this.sendCommand(command, function(error, success) {
+    this.batchedSend(command, function(error, success) {
 
         if (callback) {
             return callback(error, success)
@@ -2436,6 +2531,23 @@ var digests = function(key) {
 *
 *
 **/
+var address = function(digests) {
+
+    var addressTrits = [];
+
+    var curl = new Curl();
+
+    curl.initialize();
+    curl.absorb(digests);
+    curl.squeeze(addressTrits);
+
+    return addressTrits;
+}
+
+/**
+*
+*
+**/
 var digest = function(normalizedBundleFragment, signatureFragment) {
 
     var buffer = []
@@ -2529,23 +2641,6 @@ var validateSignatures = function(expectedAddress, signatureFragments, bundleHas
     return (expectedAddress === address);
 }
 
-/**
-*
-*
-**/
-var address = function(digests) {
-
-    var address = [];
-
-    var curl = new Curl();
-    
-    curl.initialize();
-    curl.absorb(digests);
-    curl.squeeze(address);
-
-    return address;
-}
-
 
 module.exports = {
     key                 : key,
@@ -2620,6 +2715,7 @@ function IOTA(settings) {
     // this.mam
     // this.flash
     this.utils = utils;
+    this.validate = require("./utils/inputValidator");
 }
 
 
@@ -2639,14 +2735,6 @@ IOTA.prototype.changeNode = function(settings) {
 
     this._makeRequest.setProvider(this.provider);
 };
-
-/**
-*   Validator functions from utils
-*
-*   @method validate
-*   @param {Object} settings
-**/
-IOTA.prototype.validate = require("./utils/inputValidator");
 
 
 module.exports = IOTA;
@@ -2782,7 +2870,7 @@ var isTrytes = function(trytes, length) {
     if (!length) length = "0,"
 
     var regexTrytes = new RegExp("^[9A-Z]{" + length +"}$");
-    return regexTrytes.test(trytes);
+    return regexTrytes.test(trytes) && isString(trytes);
 }
 
 /**
@@ -2960,38 +3048,6 @@ var isArrayOfAttachedTrytes = function(trytesArray) {
 }
 
 /**
-*   checks if correct IPv6 or IPv4 address
-*
-*   @method isUri
-*   @param {string} uri
-*   @returns {boolean}
-**/
-var isUri = function(node) {
-
-
-    // TODO
-
-    // Split URI into 3 parts
-    var result = /^udp:\/\/(.*)?:([0-9]*)$/i.exec(node);
-
-    if (!result) {
-        return false;
-    }
-
-    console.log(result);
-
-    // Credit: http://stackoverflow.com/a/9221063
-    // Regex for ipv6, ipv4 and hostnames
-    var IP_REGEX = /((^\s*((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))\s*$)|(^\s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(%.+)?\s*$))|(^\s*((?=.{1,255}$)(?=.*[A-Za-z].*)[0-9A-Za-z](?:(?:[0-9A-Za-z]|\b-){0,61}[0-9A-Za-z])?(?:\.[0-9A-Za-z](?:(?:[0-9A-Za-z]|\b-){0,61}[0-9A-Za-z])?)*)\s*$)/;
-
-    //
-
-    var valid = IP_REGEX.test(result[1]);
-
-    return valid;
-}
-
-/**
 *   checks if correct inputs list
 *
 *   @method isInputs
@@ -3067,6 +3123,35 @@ var isObject = function(object) {
     return typeof object === 'object';
 }
 
+/**
+*   Checks that a given uri is valid
+*
+*   Valid Examples:
+*   udp://[2001:db8:a0b:12f0::1]:14265
+*   udp://[2001:db8:a0b:12f0::1]
+*   udp://8.8.8.8:14265
+*   udp://domain.com
+*   udp://domain2.com:14265
+*
+*   @method isUri
+*   @param {string} node
+*   @returns {bool} valid
+**/
+var isUri = function(node) {
+
+    var getInside = /^udp:\/\/([\[][^\]\.]*[\]]|[^\[\]:]*)[:]{0,1}([0-9]{1,}$|$)/i;
+
+    var stripBrackets = /[\[]{0,1}([^\[\]]*)[\]]{0,1}/;
+
+    var uriTest = /((^\s*((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))\s*$)|(^\s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(%.+)?\s*$))|(^\s*((?=.{1,255}$)(?=.*[A-Za-z].*)[0-9A-Za-z](?:(?:[0-9A-Za-z]|\b-){0,61}[0-9A-Za-z])?(?:\.[0-9A-Za-z](?:(?:[0-9A-Za-z]|\b-){0,61}[0-9A-Za-z])?)*)\s*$)/;
+
+    if(!getInside.test(node)) {
+        return false;
+    }
+
+    return uriTest.test(stripBrackets.exec(getInside.exec(node)[1])[1]);
+}
+
 module.exports = {
     isAddress: isAddress,
     isTrytes: isTrytes,
@@ -3081,7 +3166,8 @@ module.exports = {
     isString: isString,
     isInt: isInt,
     isArray: isArray,
-    isObject: isObject
+    isObject: isObject,
+    isUri: isUri
 }
 
 },{}],13:[function(require,module,exports){
@@ -3333,7 +3419,7 @@ var isValidChecksum = function(addressWithChecksum) {
 *   @returns {string} address (without checksum)
 **/
 var toTrytes = function(string, type) {
-
+    // TODO !!!!!
     if (type === "ascii") {
         return ascii.toTrytes(trytes);
     }
@@ -3348,7 +3434,7 @@ var toTrytes = function(string, type) {
 *   @returns {string} address (without checksum)
 **/
 var fromTrytes = function(trytes, type) {
-
+    //TODO !!!!!
     if (type === "ascii") {
         return ascii.fromTrytes(trytes);
     }
@@ -3492,35 +3578,6 @@ var categorizeTransfers = function(transfers, addresses) {
     return categorized;
 }
 
-/**
-*   Checks that a given uri is valid
-*
-*   Valid Examples:
-*   udp://[2001:db8:a0b:12f0::1]:14265
-*   udp://[2001:db8:a0b:12f0::1]
-*   udp://8.8.8.8:14265
-*   udp://domain.com
-*   udp://domain2.com:14265
-*
-*   @method isUri
-*   @param {string} node
-*   @returns {bool} valid
-**/
-var isUri = function(node) {
-
-    var getInside = /^udp:\/\/([\[][^\]\.]*[\]]|[^\[\]:]*)[:]{0,1}([0-9]{1,}$|$)/i;
-
-    var stripBrackets = /[\[]{0,1}([^\[\]]*)[\]]{0,1}/;
-
-    var uriTest = /((^\s*((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))\s*$)|(^\s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(%.+)?\s*$))|(^\s*((?=.{1,255}$)(?=.*[A-Za-z].*)[0-9A-Za-z](?:(?:[0-9A-Za-z]|\b-){0,61}[0-9A-Za-z])?(?:\.[0-9A-Za-z](?:(?:[0-9A-Za-z]|\b-){0,61}[0-9A-Za-z])?)*)\s*$)/;
-
-    if(!getInside.test(node)) {
-        return false;
-    }
-
-    return uriTest.test(stripBrackets.exec(getInside.exec(node)[1])[1]);
-}
-
 module.exports = {
     convertUnits        : convertUnits,
     addChecksum         : addChecksum,
@@ -3530,8 +3587,7 @@ module.exports = {
     fromTrytes          : fromTrytes,
     transactionObject   : transactionObject,
     transactionTrytes   : transactionTrytes,
-    categorizeTransfers : categorizeTransfers,
-    isUri               : isUri
+    categorizeTransfers : categorizeTransfers
 }
 
 },{"../crypto/converter":5,"../crypto/curl":6,"./asciiToTrytes":11,"./inputValidator":12,"./makeRequest":13}],15:[function(require,module,exports){
