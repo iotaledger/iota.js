@@ -2647,7 +2647,7 @@ var validateSignatures = function(expectedAddress, signatureFragments, bundleHas
     }
 
     var address = Converter.trytes(self.address(digests));
-    console.log("205", address);
+
     return (expectedAddress === address);
 }
 

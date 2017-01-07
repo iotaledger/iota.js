@@ -587,7 +587,7 @@ Multi signature related functions.
 
 > **VERY IMPORTANT NOTICE**
 
-> Before using these functions, please make sure that you have thoroughly read our guidelines for multi-signature. It is of utmost importance that you follow these rules, else it can potentially lead to financial losses.
+> Before using these functions, please make sure that you have thoroughly read our [guidelines for multi-signature](https://github.com/iotaledger/wiki/blob/master/multisigs.md). It is of utmost importance that you follow these rules, else it can potentially lead to financial losses.
 
 ---
 
@@ -718,13 +718,13 @@ iota.multisig.addSignature(bundleToSign, cosignerIndex, inputAddress, key, callb
 
 ---
 
-### `validateSignature`
+### `validateSignatures`
 
 This function makes it possible for each of the co-signers in the multi-signature to independently verify that a generated transaction with the corresponding signatures of the co-signers is valid. This function is safe to use and does not require any sharing of digests or key values.
 
 #### Input
 ```
-iota.multisig.validateSignature(signedBundle, inputAddress, numCosigners)
+iota.multisig.validateSignatures(signedBundle, inputAddress, numCosigners)
 ```
 
 1. **`signedBundle`**: `Array` signed bundle by all of the co-signers
