@@ -33,13 +33,18 @@ It should be noted that this is a temporary home for the official documentation.
 
 ## Getting Started
 
-After you've successfully installed the library, it is fairly easy to get started by simply launching a new instance of the IOTA object. When instantiating the object you have the option to decide the `host` and `port` that are used for sending the requests to, as can be seen in the example below:
+After you've successfully installed the library, it is fairly easy to get started by simply launching a new instance of the IOTA object. When instantiating the object you have the option to decide the API provider that is used to send the reuqests to. You can either supply this directly via the `provider` option, or individually with `host` and `port`, as can be seen in the example below:
 
 ```
-// Create IOTA instance
+// Create IOTA instance with host and port as provider
 var iota = new IOTA({
     'host': 'http://localhost',
     'port': 14265
+});
+
+// Create IOTA instance directly with provider
+var iota = new IOTA({
+    'provider': 'http://api.iotatoken.com' // this is just an example
 });
 
 // now you can start using all of the functions

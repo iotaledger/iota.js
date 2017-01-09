@@ -2719,7 +2719,7 @@ function IOTA(settings) {
     settings = settings || {};
     this.host = settings.host ? settings.host : "http://localhost";
     this.port = settings.port ? settings.port : 14265;
-    this.provider = this.host + ":" + this.port;
+    this.provider = settings.provider || this.host + ":" + this.port;
 
     this._makeRequest = new makeRequest(this.provider);
     this.api = new api(this._makeRequest);
@@ -2743,7 +2743,7 @@ IOTA.prototype.changeNode = function(settings) {
     settings = settings || {};
     this.host = settings.host ? settings.host : "http://localhost";
     this.port = settings.port ? settings.port : 14265;
-    this.provider = this.host + ":" + this.port;
+    this.provider = settings.provider || this.host + ":" + this.port;
 
     this._makeRequest.setProvider(this.provider);
 };
