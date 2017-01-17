@@ -33,7 +33,16 @@ It should be noted that this is a temporary home for the official documentation.
 
 ## Getting Started
 
-After you've successfully installed the library, it is fairly easy to get started by simply launching a new instance of the IOTA object. When instantiating the object you have the option to decide the API provider that is used to send the reuqests to. You can either supply this directly via the `provider` option, or individually with `host` and `port`, as can be seen in the example below:
+After you've successfully installed the library, it is fairly easy to get started by simply launching a new instance of the IOTA object with an optional settings object. When instantiating the object you have the option to decide the API provider that is used to send the requests to and you can also connect directly to the Sandbox environment.
+
+The optional settings object can have the following values:
+
+1. **`host`**: `String` Host you want to connect to. Can be DNS, IPv4 or IPv6. Defaults to `localhost `
+2. **`port`**: `Int` port of the host you want to connect to. Defaults to 14265.
+3. **`provider`**: `String` If you don't provide host and port, you can supply the full provider value to connect to
+4. **`sandbox`**: `Bool` Optional value to determine if your provider is the IOTA Sandbox or not.
+
+You can either supply the remote node directly via the `provider` option, or individually with `host` and `port`, as can be seen in the example below:
 
 ```
 // Create IOTA instance with host and port as provider
@@ -44,7 +53,7 @@ var iota = new IOTA({
 
 // Create IOTA instance directly with provider
 var iota = new IOTA({
-    'provider': 'http://api.iotatoken.com' // this is just an example
+    'provider': 'http://localhost:14265'
 });
 
 // now you can start using all of the functions
