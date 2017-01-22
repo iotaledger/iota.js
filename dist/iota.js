@@ -746,7 +746,7 @@ api.prototype.sendTrytes = function(trytes, depth, minWeightMagnitude, callback)
                         return callback(new Error("No connection to Sandbox, failed with job: ", job));
                     }
 
-                }, 15000)
+                }, 5000)
             } else {
 
                 // Broadcast and store tx
@@ -2790,6 +2790,7 @@ function IOTA(settings) {
     this.port = settings.port ? settings.port : 14265;
     this.provider = settings.provider || this.host.replace(/\/$/, '') + ":" + this.port;
     this.sandbox = settings.sandbox || false;
+    this.token = settings.token || false;
 
     if (this.sandbox) {
 
@@ -2798,7 +2799,7 @@ function IOTA(settings) {
         this.provider = this.sandbox + '/commands';
     }
 
-    this._makeRequest = new makeRequest(this.provider);
+    this._makeRequest = new makeRequest(this.provider, this.token);
     this.api = new api(this._makeRequest, this.sandbox);
     // this.mam
     // this.flash
@@ -3663,9 +3664,10 @@ var errors = require("../errors/requestErrors");
 
 
 
-function makeRequest(provider) {
+function makeRequest(provider, token) {
 
   this.provider = provider || "http://localhost:14265";
+  this.token = token;
 }
 
 /**
@@ -3691,6 +3693,12 @@ makeRequest.prototype.open = function() {
   var request = new XMLHttpRequest();
   request.open('POST', this.provider, true);
   request.setRequestHeader('Content-Type','application/json');
+
+  if (this.token) {
+      request.withCredentials = true;
+      request.setRequestHeader('Authorization', 'token ' + this.token);
+  }
+
   return request;
 }
 
