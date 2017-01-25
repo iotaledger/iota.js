@@ -18,8 +18,10 @@ var async = require("async");
 /**
 *  Making API requests, including generalized wrapper functions
 **/
-function api(provider) {
+function api(provider, isSandbox) {
+
     this._makeRequest = provider;
+    this.sandbox = isSandbox;
 }
 
 /**
@@ -677,24 +679,91 @@ api.prototype.sendTrytes = function(trytes, depth, minWeightMagnitude, callback)
 
         // attach to tangle - do pow
         self.attachToTangle(toApprove.trunkTransaction, toApprove.branchTransaction, minWeightMagnitude, trytes, function(error, attached) {
+
             if (error) {
                 return callback(error)
             }
 
-            // Broadcast and store tx
-            self.broadcastAndStore(attached.trytes, function(error, success) {
+            // If the user is connected to the sandbox, we have to monitor the POW queue
+            // to check if the POW job was completed
+            if (self.sandbox) {
 
-                if (!error) {
+                var job = self.sandbox + '/jobs/' + attached.id;
 
-                    var finalTxs = [];
+                // Check every 15 seconds if the job finished or not
+                // If failed, return error
+                var newInterval = setInterval(function() {
 
-                    attached.trytes.forEach(function(trytes) {
-                        finalTxs.push(Utils.transactionObject(trytes));
-                    })
+                    var request = new XMLHttpRequest();
 
-                    return callback(null, finalTxs);
-                }
-            })
+                    request.onreadystatechange = function() {
+
+                        if (request.readyState === 4) {
+
+                            var result;
+
+                            // Prepare the result, check that it's JSON
+                            try {
+
+                                result = JSON.parse(request.responseText);
+                            } catch(e) {
+
+                                return callback(errors.invalidResponse(result));
+                            }
+
+                            if (result.status === "FINISHED") {
+
+                                var attachedTrytes = result.attachToTangleResponse.trytes;
+
+                                self.broadcastAndStore(attachedTrytes, function(error, success) {
+
+                                    if (!error) {
+
+                                        var finalTxs = [];
+
+                                        attachedTrytes.forEach(function(trytes) {
+                                            finalTxs.push(Utils.transactionObject(trytes));
+                                        })
+
+                                        clearInterval(newInterval);
+                                        return callback(null, finalTxs);
+                                    }
+                                })
+                            }
+                            else if (result.status === "FAILED") {
+
+                                clearInterval(newInterval);
+                                return callback(new Error("Sandbox transaction processing failed. Please retry."))
+                            }
+                        }
+                    }
+
+                    try {
+                        request.open('GET', job, true);
+                        request.send(JSON.stringify());
+                    } catch(error) {
+
+                        return callback(new Error("No connection to Sandbox, failed with job: ", job));
+                    }
+
+                }, 5000)
+            } else {
+
+                // Broadcast and store tx
+                self.broadcastAndStore(attached.trytes, function(error, success) {
+
+                    if (!error) {
+
+                        var finalTxs = [];
+
+                        attached.trytes.forEach(function(trytes) {
+                            finalTxs.push(Utils.transactionObject(trytes));
+                        })
+
+                        return callback(null, finalTxs);
+                    }
+                })
+            }
         })
     })
 }
@@ -2719,10 +2788,19 @@ function IOTA(settings) {
     settings = settings || {};
     this.host = settings.host ? settings.host : "http://localhost";
     this.port = settings.port ? settings.port : 14265;
-    this.provider = settings.provider || this.host + ":" + this.port;
+    this.provider = settings.provider || this.host.replace(/\/$/, '') + ":" + this.port;
+    this.sandbox = settings.sandbox || false;
+    this.token = settings.token || false;
 
-    this._makeRequest = new makeRequest(this.provider);
-    this.api = new api(this._makeRequest);
+    if (this.sandbox) {
+
+        // remove backslash character
+        this.sandbox = this.provider.replace(/\/$/, '');
+        this.provider = this.sandbox + '/commands';
+    }
+
+    this._makeRequest = new makeRequest(this.provider, this.token);
+    this.api = new api(this._makeRequest, this.sandbox);
     // this.mam
     // this.flash
     this.utils = utils;
@@ -2733,7 +2811,7 @@ function IOTA(settings) {
 
 
 /**
-*   Change the Node the user connects to
+*   Change the Node the user connects to (won't work with sandbox)
 *
 *   @method changeNode
 *   @param {Object} settings
@@ -3586,9 +3664,10 @@ var errors = require("../errors/requestErrors");
 
 
 
-function makeRequest(provider) {
+function makeRequest(provider, token) {
 
   this.provider = provider || "http://localhost:14265";
+  this.token = token;
 }
 
 /**
@@ -3613,7 +3692,13 @@ makeRequest.prototype.open = function() {
 
   var request = new XMLHttpRequest();
   request.open('POST', this.provider, true);
-  //request.setRequestHeader('Content-Type','application/json');
+  request.setRequestHeader('Content-Type','application/json');
+
+  if (this.token) {
+      request.withCredentials = true;
+      request.setRequestHeader('Authorization', 'token ' + this.token);
+  }
+
   return request;
 }
 
