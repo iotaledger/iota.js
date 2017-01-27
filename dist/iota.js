@@ -11,6 +11,7 @@ var Converter = require("../crypto/converter");
 var Signing = require("../crypto/signing");
 var Bundle = require("../crypto/bundle");
 var Utils = require("../utils/utils");
+var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 var async = require("async");
 
 'use strict';
@@ -687,7 +688,7 @@ api.prototype.sendTrytes = function(trytes, depth, minWeightMagnitude, callback)
             // If the user is connected to the sandbox, we have to monitor the POW queue
             // to check if the POW job was completed
             if (self.sandbox) {
-
+                console.log("686", attached);
                 var job = self.sandbox + '/jobs/' + attached.id;
 
                 // Check every 15 seconds if the job finished or not
@@ -899,10 +900,10 @@ api.prototype._newAddress = function(seed, index, checksum) {
 *   @method getNewAddress
 *   @param {string} seed
 *   @param {object} options
-*       @property {int} index Key index to start search from
-*       @property {bool} checksum add 9-tryte checksum
-*       @property {int} total Total number of addresses to return
-*       @property {bool} returnAll return all searched addresses
+*       @property   {int}     index Key index to start search from
+*       @property   {bool}    checksum add 9-tryte checksum
+*       @property   {int}     total Total number of addresses to return
+*       @property   {bool}    returnAll return all searched addresses
 *   @param {function} callback
 *   @returns {string | array} address List of addresses
 **/
@@ -1884,7 +1885,7 @@ api.prototype.readMessage = function(options, callback) {
 
 module.exports = api;
 
-},{"../crypto/bundle":4,"../crypto/converter":5,"../crypto/curl":6,"../crypto/signing":7,"../errors/inputErrors":8,"../utils/inputValidator":13,"../utils/utils":15,"./apiCommands":3,"async":16}],3:[function(require,module,exports){
+},{"../crypto/bundle":4,"../crypto/converter":5,"../crypto/curl":6,"../crypto/signing":7,"../errors/inputErrors":8,"../utils/inputValidator":13,"../utils/utils":15,"./apiCommands":3,"async":16,"xmlhttprequest":52}],3:[function(require,module,exports){
 /**
 *   @method attachToTangle
 *   @param {string} trunkTransaction
@@ -2825,7 +2826,6 @@ IOTA.prototype.changeNode = function(settings) {
 
     this._makeRequest.setProvider(this.provider);
 };
-
 
 module.exports = IOTA;
 
@@ -3778,7 +3778,14 @@ makeRequest.prototype.prepareResult = function(result, requestCommand, callback)
     // If correct result and we want to prepare the result
     if (result && resultMap.hasOwnProperty(requestCommand)) {
 
-        result = result[resultMap[requestCommand]];
+        // ugly fix, but whatever 
+        if (requestCommand === 'attachToTangle' && result.hasOwnProperty('id')) {
+
+            result = result;
+        } else {
+
+            result = result[resultMap[requestCommand]];
+        }
     }
 
     return callback(error, result);
@@ -11474,7 +11481,6 @@ module.exports = {
   "428": "Precondition Required",
   "429": "Too Many Requests",
   "431": "Request Header Fields Too Large",
-  "451": "Unavailable For Legal Reasons",
   "500": "Internal Server Error",
   "501": "Not Implemented",
   "502": "Bad Gateway",
@@ -14970,34 +14976,12 @@ try {
 	exports.blobConstructor = true
 } catch (e) {}
 
-// The xhr request to example.com may violate some restrictive CSP configurations,
-// so if we're running in a browser that supports `fetch`, avoid calling getXHR()
-// and assume support for certain features below.
-var xhr
-function getXHR () {
-	// Cache the xhr value
-	if (xhr !== undefined) return xhr
-
-	if (global.XMLHttpRequest) {
-		xhr = new global.XMLHttpRequest()
-		// If XDomainRequest is available (ie only, where xhr might not work
-		// cross domain), use the page location. Otherwise use example.com
-		// Note: this doesn't actually make an http request.
-		try {
-			xhr.open('GET', global.XDomainRequest ? '/' : 'https://example.com')
-		} catch(e) {
-			xhr = null
-		}
-	} else {
-		// Service workers don't have XHR
-		xhr = null
-	}
-	return xhr
-}
+var xhr = new global.XMLHttpRequest()
+// If XDomainRequest is available (ie only, where xhr might not work
+// cross domain), use the page location. Otherwise use example.com
+xhr.open('GET', global.XDomainRequest ? '/' : 'https://example.com')
 
 function checkTypeSupport (type) {
-	var xhr = getXHR()
-	if (!xhr) return false
 	try {
 		xhr.responseType = type
 		return xhr.responseType === type
@@ -15010,24 +14994,17 @@ function checkTypeSupport (type) {
 var haveArrayBuffer = typeof global.ArrayBuffer !== 'undefined'
 var haveSlice = haveArrayBuffer && isFunction(global.ArrayBuffer.prototype.slice)
 
-// If fetch is supported, then arraybuffer will be supported too. Skip calling
-// checkTypeSupport(), since that calls getXHR().
-exports.arraybuffer = exports.fetch || (haveArrayBuffer && checkTypeSupport('arraybuffer'))
-
+exports.arraybuffer = haveArrayBuffer && checkTypeSupport('arraybuffer')
 // These next two tests unavoidably show warnings in Chrome. Since fetch will always
 // be used if it's available, just return false for these to avoid the warnings.
 exports.msstream = !exports.fetch && haveSlice && checkTypeSupport('ms-stream')
 exports.mozchunkedarraybuffer = !exports.fetch && haveArrayBuffer &&
 	checkTypeSupport('moz-chunked-arraybuffer')
-
-// If fetch is supported, then overrideMimeType will be supported too. Skip calling
-// getXHR().
-exports.overrideMimeType = exports.fetch || (getXHR() ? isFunction(getXHR().overrideMimeType) : false)
-
+exports.overrideMimeType = isFunction(xhr.overrideMimeType)
 exports.vbArray = isFunction(global.VBArray)
 
 function isFunction (value) {
-	return typeof value === 'function'
+  return typeof value === 'function'
 }
 
 xhr = null // Help gc
@@ -15075,9 +15052,8 @@ var ClientRequest = module.exports = function (opts) {
 
 	var preferBinary
 	var useFetch = true
-	if (opts.mode === 'disable-fetch' || 'timeout' in opts) {
-		// If the use of XHR should be preferred and includes preserving the 'content-type' header.
-		// Force XHR to be used since the Fetch API does not yet support timeouts.
+	if (opts.mode === 'disable-fetch') {
+		// If the use of XHR should be preferred and includes preserving the 'content-type' header
 		useFetch = false
 		preferBinary = true
 	} else if (opts.mode === 'prefer-streaming') {
@@ -15135,7 +15111,7 @@ ClientRequest.prototype._onFinish = function () {
 	var opts = self._opts
 
 	var headersObj = self._headers
-	var body = null
+	var body
 	if (opts.method === 'POST' || opts.method === 'PUT' || opts.method === 'PATCH' || opts.method === 'MERGE') {
 		if (capability.blobConstructor) {
 			body = new global.Blob(self._body.map(function (buffer) {
@@ -15157,7 +15133,7 @@ ClientRequest.prototype._onFinish = function () {
 		global.fetch(self._opts.url, {
 			method: self._opts.method,
 			headers: headers,
-			body: body || undefined,
+			body: body,
 			mode: 'cors',
 			credentials: opts.withCredentials ? 'include' : 'same-origin'
 		}).then(function (response) {
@@ -15186,13 +15162,6 @@ ClientRequest.prototype._onFinish = function () {
 
 		if (self._mode === 'text' && 'overrideMimeType' in xhr)
 			xhr.overrideMimeType('text/plain; charset=x-user-defined')
-
-		if ('timeout' in opts) {
-			xhr.timeout = opts.timeout
-			xhr.ontimeout = function () {
-				self.emit('timeout')
-			}
-		}
 
 		Object.keys(headersObj).forEach(function (name) {
 			xhr.setRequestHeader(headersObj[name].name, headersObj[name].value)
@@ -15265,10 +15234,6 @@ ClientRequest.prototype._connect = function () {
 		return
 
 	self._response = new IncomingMessage(self._xhr, self._fetchResponse, self._mode)
-	self._response.on('error', function(err) {
-		self.emit('error', err)
-	})
-
 	self.emit('response', self._response)
 }
 
@@ -15388,8 +15353,6 @@ var IncomingMessage = exports.IncomingMessage = function (xhr, response, mode) {
 				}
 				self.push(new Buffer(result.value))
 				read()
-			}).catch(function(err) {
-				self.emit('error', err)
 			})
 		}
 		read()
