@@ -567,7 +567,7 @@ api.prototype.getTransactionsObjects = function(hashes, callback) {
         var transactionObjects = [];
 
         // call transactionObjects for each trytes
-        trytes.trytes.forEach(function(thisTrytes) {
+        trytes.forEach(function(thisTrytes) {
 
             // If no trytes returned, simply push null as placeholder
             if (!thisTrytes) {
@@ -600,7 +600,7 @@ api.prototype.findTransactionObjects = function(input, callback) {
         if (error) return callback(error);
 
         // get the transaction objects of the transactions
-        self.getTransactionsObjects(transactions.hashes, callback);
+        self.getTransactionsObjects(transactions, callback);
     })
 }
 
@@ -750,7 +750,7 @@ api.prototype.sendTrytes = function(trytes, depth, minWeightMagnitude, callback)
             } else {
 
                 // Broadcast and store tx
-                self.broadcastAndStore(attached.trytes, function(error, success) {
+                self.broadcastAndStore(attached, function(error, success) {
 
                     if (!error) {
 
@@ -974,7 +974,7 @@ api.prototype.getNewAddress = function(seed, options, callback) {
             index += 1;
 
             // Validity check
-            return transactions.hashes.length > 0;
+            return transactions.length > 0;
         }, function(err, address) {
             // Final callback
 
@@ -1467,7 +1467,7 @@ api.prototype.traverseBundle = function(trunkTx, bundleHash, bundle, callback) {
 
         if (error) return callback(error);
 
-        var trytes = trytesList.trytes[0]
+        var trytes = trytesList[0]
 
         if (!trytes) return callback(new Error("Bundle transactions not visible"))
 
@@ -1671,7 +1671,7 @@ api.prototype._bundlesFromAddresses = function(addresses, inclusionStates, callb
                             // If error, return it to original caller
                             if (error) return callback(error);
 
-                            cb(null, states.states);
+                            cb(null, states);
                         })
                     } else {
                         cb(null, []);
@@ -3663,105 +3663,125 @@ var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 var errors = require("../errors/requestErrors");
 
 
-
 function makeRequest(provider, token) {
 
-  this.provider = provider || "http://localhost:14265";
-  this.token = token;
+    this.provider = provider || "http://localhost:14265";
+    this.token = token;
 }
 
 /**
-  *   Change the HTTP provider
-  *
-  *   @method setProvider
-  *   @param {String} provider
+*   Change the HTTP provider
+*
+*   @method setProvider
+*   @param {String} provider
 **/
 makeRequest.prototype.setProvider = function(provider) {
 
-  this.provider = provider || "http://localhost:14265";
+    this.provider = provider || "http://localhost:14265";
 }
 
 /**
-  *   creates an XMLHttpRequest Object
-  *
-  *   @method open
-  *   @param {object} command
-  *   @returns {object} request
+*   creates an XMLHttpRequest Object
+*
+*   @method open
+*   @param {object} command
+*   @returns {object} request
 **/
 makeRequest.prototype.open = function() {
 
-  var request = new XMLHttpRequest();
-  request.open('POST', this.provider, true);
-  request.setRequestHeader('Content-Type','application/json');
+    var request = new XMLHttpRequest();
+    request.open('POST', this.provider, true);
+    request.setRequestHeader('Content-Type','application/json');
 
-  if (this.token) {
-      request.withCredentials = true;
-      request.setRequestHeader('Authorization', 'token ' + this.token);
-  }
+    if (this.token) {
+        request.withCredentials = true;
+        request.setRequestHeader('Authorization', 'token ' + this.token);
+    }
 
-  return request;
+    return request;
 }
 
 /**
-  *   sends an http request to a specified host
-  *
-  *   @method send
-  *   @param {object} command
-  *   @param {function} callback
+*   sends an http request to a specified host
+*
+*   @method send
+*   @param {object} command
+*   @param {function} callback
 **/
 makeRequest.prototype.send = function(command, callback) {
 
-  var self = this;
-  var request = this.open();
+    var self = this;
+    var request = this.open();
 
-  request.onreadystatechange = function() {
-      if (request.readyState === 4) {
-          var result = request.responseText;
-          // Prepare the result
-          return self.prepareResult(result, callback);
-      }
-  }
+    request.onreadystatechange = function() {
 
-  try {
-      request.send(JSON.stringify(command));
-  } catch(error) {
-      // INCORRECTLY THROWS NO CONNECTION ERROR
-      callback(errors.noConnection(self.provider));
-  }
+        if (request.readyState === 4) {
+
+            var result = request.responseText;
+            // Prepare the result
+            return self.prepareResult(result, command.command, callback);
+        }
+    }
+
+    try {
+
+        request.send(JSON.stringify(command));
+    } catch(error) {
+
+        return callback(errors.invalidResponse(error));
+    }
 }
 
 /**
-  *   prepares the returned values from the request
-  *
-  *   @method prepareResult
-  *   @param {string} result
-  *   @param {function} callback
+*   prepares the returned values from the request
+*
+*   @method prepareResult
+*   @param {string} result
+*   @param {function} callback
 **/
-makeRequest.prototype.prepareResult = function(result, callback) {
+makeRequest.prototype.prepareResult = function(result, requestCommand, callback) {
 
-  var error;
+    // Result map of the commands we want to format
+    var resultMap = {
+        'getNeighbors'          :   'neighbors',
+        'addNeighbors'          :   'addedNeighbors',
+        'removeNeighbors'       :   'removedNeighbors',
+        'getTips'               :   'hashes',
+        'findTransactions'      :   'hashes',
+        'getTrytes'             :   'trytes',
+        'getInclusionStates'    :   'states',
+        'attachToTangle'        :   'trytes'
+    }
 
-  try {
-      result = JSON.parse(result);
-  } catch(e) {
-      error = errors.invalidResponse(result);
-      result = null;
-  }
+    var error;
 
-  //
-  //    TODO: PREPARE ERROR MESSAGES BETTER
-  //
-  if (!error && result.error) {
-    error = errors.requestError(result.error);
-    result = null;
-  }
+    try {
+        result = JSON.parse(result);
+    } catch(e) {
+        error = errors.invalidResponse(result);
+        result = null;
+    }
 
-  if (!error && result.exception) {
-    error = errors.requestError(result.exception);
-    result = null;
-  }
+    //
+    //    TODO: PREPARE ERROR MESSAGES BETTER
+    //
+    if (!error && result.error) {
+        error = errors.requestError(result.error);
+        result = null;
+    }
 
-  return callback(error, result);
+    if (!error && result.exception) {
+        error = errors.requestError(result.exception);
+        result = null;
+    }
+
+    // If correct result and we want to prepare the result
+    if (result && resultMap.hasOwnProperty(requestCommand)) {
+
+        result = result[resultMap[requestCommand]];
+    }
+
+    return callback(error, result);
 }
 
 
@@ -11454,6 +11474,7 @@ module.exports = {
   "428": "Precondition Required",
   "429": "Too Many Requests",
   "431": "Request Header Fields Too Large",
+  "451": "Unavailable For Legal Reasons",
   "500": "Internal Server Error",
   "501": "Not Implemented",
   "502": "Bad Gateway",
@@ -14949,12 +14970,34 @@ try {
 	exports.blobConstructor = true
 } catch (e) {}
 
-var xhr = new global.XMLHttpRequest()
-// If XDomainRequest is available (ie only, where xhr might not work
-// cross domain), use the page location. Otherwise use example.com
-xhr.open('GET', global.XDomainRequest ? '/' : 'https://example.com')
+// The xhr request to example.com may violate some restrictive CSP configurations,
+// so if we're running in a browser that supports `fetch`, avoid calling getXHR()
+// and assume support for certain features below.
+var xhr
+function getXHR () {
+	// Cache the xhr value
+	if (xhr !== undefined) return xhr
+
+	if (global.XMLHttpRequest) {
+		xhr = new global.XMLHttpRequest()
+		// If XDomainRequest is available (ie only, where xhr might not work
+		// cross domain), use the page location. Otherwise use example.com
+		// Note: this doesn't actually make an http request.
+		try {
+			xhr.open('GET', global.XDomainRequest ? '/' : 'https://example.com')
+		} catch(e) {
+			xhr = null
+		}
+	} else {
+		// Service workers don't have XHR
+		xhr = null
+	}
+	return xhr
+}
 
 function checkTypeSupport (type) {
+	var xhr = getXHR()
+	if (!xhr) return false
 	try {
 		xhr.responseType = type
 		return xhr.responseType === type
@@ -14967,17 +15010,24 @@ function checkTypeSupport (type) {
 var haveArrayBuffer = typeof global.ArrayBuffer !== 'undefined'
 var haveSlice = haveArrayBuffer && isFunction(global.ArrayBuffer.prototype.slice)
 
-exports.arraybuffer = haveArrayBuffer && checkTypeSupport('arraybuffer')
+// If fetch is supported, then arraybuffer will be supported too. Skip calling
+// checkTypeSupport(), since that calls getXHR().
+exports.arraybuffer = exports.fetch || (haveArrayBuffer && checkTypeSupport('arraybuffer'))
+
 // These next two tests unavoidably show warnings in Chrome. Since fetch will always
 // be used if it's available, just return false for these to avoid the warnings.
 exports.msstream = !exports.fetch && haveSlice && checkTypeSupport('ms-stream')
 exports.mozchunkedarraybuffer = !exports.fetch && haveArrayBuffer &&
 	checkTypeSupport('moz-chunked-arraybuffer')
-exports.overrideMimeType = isFunction(xhr.overrideMimeType)
+
+// If fetch is supported, then overrideMimeType will be supported too. Skip calling
+// getXHR().
+exports.overrideMimeType = exports.fetch || (getXHR() ? isFunction(getXHR().overrideMimeType) : false)
+
 exports.vbArray = isFunction(global.VBArray)
 
 function isFunction (value) {
-  return typeof value === 'function'
+	return typeof value === 'function'
 }
 
 xhr = null // Help gc
@@ -15025,8 +15075,9 @@ var ClientRequest = module.exports = function (opts) {
 
 	var preferBinary
 	var useFetch = true
-	if (opts.mode === 'disable-fetch') {
-		// If the use of XHR should be preferred and includes preserving the 'content-type' header
+	if (opts.mode === 'disable-fetch' || 'timeout' in opts) {
+		// If the use of XHR should be preferred and includes preserving the 'content-type' header.
+		// Force XHR to be used since the Fetch API does not yet support timeouts.
 		useFetch = false
 		preferBinary = true
 	} else if (opts.mode === 'prefer-streaming') {
@@ -15084,7 +15135,7 @@ ClientRequest.prototype._onFinish = function () {
 	var opts = self._opts
 
 	var headersObj = self._headers
-	var body
+	var body = null
 	if (opts.method === 'POST' || opts.method === 'PUT' || opts.method === 'PATCH' || opts.method === 'MERGE') {
 		if (capability.blobConstructor) {
 			body = new global.Blob(self._body.map(function (buffer) {
@@ -15106,7 +15157,7 @@ ClientRequest.prototype._onFinish = function () {
 		global.fetch(self._opts.url, {
 			method: self._opts.method,
 			headers: headers,
-			body: body,
+			body: body || undefined,
 			mode: 'cors',
 			credentials: opts.withCredentials ? 'include' : 'same-origin'
 		}).then(function (response) {
@@ -15135,6 +15186,13 @@ ClientRequest.prototype._onFinish = function () {
 
 		if (self._mode === 'text' && 'overrideMimeType' in xhr)
 			xhr.overrideMimeType('text/plain; charset=x-user-defined')
+
+		if ('timeout' in opts) {
+			xhr.timeout = opts.timeout
+			xhr.ontimeout = function () {
+				self.emit('timeout')
+			}
+		}
 
 		Object.keys(headersObj).forEach(function (name) {
 			xhr.setRequestHeader(headersObj[name].name, headersObj[name].value)
@@ -15207,6 +15265,10 @@ ClientRequest.prototype._connect = function () {
 		return
 
 	self._response = new IncomingMessage(self._xhr, self._fetchResponse, self._mode)
+	self._response.on('error', function(err) {
+		self.emit('error', err)
+	})
+
 	self.emit('response', self._response)
 }
 
@@ -15326,6 +15388,8 @@ var IncomingMessage = exports.IncomingMessage = function (xhr, response, mode) {
 				}
 				self.push(new Buffer(result.value))
 				read()
+			}).catch(function(err) {
+				self.emit('error', err)
 			})
 		}
 		read()
