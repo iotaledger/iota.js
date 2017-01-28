@@ -3257,27 +3257,28 @@ module.exports = Multisig;
 //        The ASCII char "Z" is represented as "IC" in trytes.
 //
 function toTrytes(inputString) {
-  var TRYTE_VALUES = "9ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  var trytes = "";
 
-  for (var i = 0; i < inputString.length; i++) {
-    var char = inputString[i];
-    var asciiValue = char.charCodeAt(0);
+    var TRYTE_VALUES = "9ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    var trytes = "";
 
-    // If not recognizable ASCII character, replace with space
-    if (asciiValue > 255) {
-      asciiValue = 32
+    for (var i = 0; i < inputString.length; i++) {
+        var char = inputString[i];
+        var asciiValue = char.charCodeAt(0);
+
+        // If not recognizable ASCII character, replace with space
+        if (asciiValue > 255) {
+            asciiValue = 32
+        }
+
+        var firstValue = asciiValue % 27;
+        var secondValue = (asciiValue - firstValue) / 27;
+
+        var trytesValue = TRYTE_VALUES[firstValue] + TRYTE_VALUES[secondValue];
+
+        trytes += trytesValue;
     }
 
-    var firstValue = asciiValue % 27;
-    var secondValue = (asciiValue - firstValue) / 27;
-
-    var trytesValue = TRYTE_VALUES[firstValue] + TRYTE_VALUES[secondValue];
-
-    trytes += trytesValue;
-  }
-
-  return trytes;
+    return trytes;
 }
 
 
@@ -3291,29 +3292,30 @@ function toTrytes(inputString) {
 //    Everything after that is 9's padding
 //
 function fromTrytes(inputTrytes) {
-  var TRYTE_VALUES = "9ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  var outputString = "";
 
-  for (var i = 0; i < inputTrytes.length; i += 2) {
-    // get a trytes pair
-    var trytes = inputTrytes[i] + inputTrytes[i + 1];
+    var TRYTE_VALUES = "9ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    var outputString = "";
 
-    var firstValue = TRYTE_VALUES.indexOf(trytes[0]);
-    var secondValue = TRYTE_VALUES.indexOf(trytes[1]);
+    for (var i = 0; i < inputTrytes.length; i += 2) {
+        // get a trytes pair
+        var trytes = inputTrytes[i] + inputTrytes[i + 1];
 
-    var decimalValue = firstValue + secondValue * 27;
+        var firstValue = TRYTE_VALUES.indexOf(trytes[0]);
+        var secondValue = TRYTE_VALUES.indexOf(trytes[1]);
 
-    var character = String.fromCharCode(decimalValue);
+        var decimalValue = firstValue + secondValue * 27;
 
-    outputString += character;
-  }
+        var character = String.fromCharCode(decimalValue);
 
-  return outputString;
+        outputString += character;
+    }
+
+    return outputString;
 }
 
 module.exports = {
-  toTrytes: toTrytes,
-  fromTrytes: fromTrytes
+    toTrytes: toTrytes,
+    fromTrytes: fromTrytes
 }
 
 },{}],13:[function(require,module,exports){
@@ -4100,6 +4102,7 @@ var categorizeTransfers = function(transfers, addresses) {
     return categorized;
 }
 
+
 module.exports = {
     convertUnits        : convertUnits,
     addChecksum         : addChecksum,
@@ -4109,7 +4112,9 @@ module.exports = {
     fromTrytes          : fromTrytes,
     transactionObject   : transactionObject,
     transactionTrytes   : transactionTrytes,
-    categorizeTransfers : categorizeTransfers
+    categorizeTransfers : categorizeTransfers,
+    toTrytes            : ascii.toTrytes,
+    fromTrytes          : ascii.fromTrytes
 }
 
 },{"../crypto/converter":5,"../crypto/curl":6,"./asciiToTrytes":12,"./inputValidator":13,"./makeRequest":14}],16:[function(require,module,exports){

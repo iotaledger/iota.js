@@ -111,6 +111,8 @@ iota.api.getNodeInfo(function(error, success) {
     - **[transactionObject](#transactionobject)**
     - **[transactionTrytes](#transactiontrytes)**
     - **[categorizeTransfers](#categorizetransfers)**
+    - **[toTrytes](#totrytes)**
+    - **[fromTrytes](#fromtrytes)**
 - **[multisig](#iota.multisig)**
     - **[getKey](#getkey)**
     - **[getDigest](#getdigest)**
@@ -594,6 +596,39 @@ iota.utils.categorizeTransfers(transfers, addresses)
 
 
 ---
+
+### `toTrytes`
+
+Converts ASCII characters into trytes according to our encoding schema (read the source code for more info as to how it works). Currently only works with ASCII. In case you want to convert JSON data, stringify it first.
+
+#### Input
+```
+iota.utils.toTrytes(string)
+```
+
+1. **`string`**: `String` String you want to convert into trytes.
+
+#### Returns
+`string` - trytes
+
+---
+
+### `fromTrytes`
+
+Reverse of toTrytes.
+
+#### Input
+```
+iota.utils.fromTrytes(trytes)
+```
+
+1. **`trytes`**: `String` Trytes you want to convert to string
+
+#### Returns
+`string` - string
+
+---
+
 
 ## `iota.multisig`
 
