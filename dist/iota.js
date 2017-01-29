@@ -11,6 +11,7 @@ var Converter = require("../crypto/converter");
 var Signing = require("../crypto/signing");
 var Bundle = require("../crypto/bundle");
 var Utils = require("../utils/utils");
+var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 var async = require("async");
 
 'use strict';
@@ -899,10 +900,10 @@ api.prototype._newAddress = function(seed, index, checksum) {
 *   @method getNewAddress
 *   @param {string} seed
 *   @param {object} options
-*       @property {int} index Key index to start search from
-*       @property {bool} checksum add 9-tryte checksum
-*       @property {int} total Total number of addresses to return
-*       @property {bool} returnAll return all searched addresses
+*       @property   {int}     index Key index to start search from
+*       @property   {bool}    checksum add 9-tryte checksum
+*       @property   {int}     total Total number of addresses to return
+*       @property   {bool}    returnAll return all searched addresses
 *   @param {function} callback
 *   @returns {string | array} address List of addresses
 **/
@@ -1884,7 +1885,7 @@ api.prototype.readMessage = function(options, callback) {
 
 module.exports = api;
 
-},{"../crypto/bundle":4,"../crypto/converter":5,"../crypto/curl":6,"../crypto/signing":7,"../errors/inputErrors":8,"../utils/inputValidator":13,"../utils/utils":15,"./apiCommands":3,"async":16}],3:[function(require,module,exports){
+},{"../crypto/bundle":4,"../crypto/converter":5,"../crypto/curl":6,"../crypto/signing":7,"../errors/inputErrors":8,"../utils/inputValidator":13,"../utils/utils":15,"./apiCommands":3,"async":16,"xmlhttprequest":52}],3:[function(require,module,exports){
 /**
 *   @method attachToTangle
 *   @param {string} trunkTransaction
@@ -2826,7 +2827,6 @@ IOTA.prototype.changeNode = function(settings) {
     this._makeRequest.setProvider(this.provider);
 };
 
-
 module.exports = IOTA;
 
 },{"./api/api":2,"./multisig/multisig":11,"./utils/inputValidator":13,"./utils/makeRequest":14,"./utils/utils":15}],11:[function(require,module,exports){
@@ -3257,27 +3257,28 @@ module.exports = Multisig;
 //        The ASCII char "Z" is represented as "IC" in trytes.
 //
 function toTrytes(inputString) {
-  var TRYTE_VALUES = "9ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  var trytes = "";
 
-  for (var i = 0; i < inputString.length; i++) {
-    var char = inputString[i];
-    var asciiValue = char.charCodeAt(0);
+    var TRYTE_VALUES = "9ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    var trytes = "";
 
-    // If not recognizable ASCII character, replace with space
-    if (asciiValue > 255) {
-      asciiValue = 32
+    for (var i = 0; i < inputString.length; i++) {
+        var char = inputString[i];
+        var asciiValue = char.charCodeAt(0);
+
+        // If not recognizable ASCII character, replace with space
+        if (asciiValue > 255) {
+            asciiValue = 32
+        }
+
+        var firstValue = asciiValue % 27;
+        var secondValue = (asciiValue - firstValue) / 27;
+
+        var trytesValue = TRYTE_VALUES[firstValue] + TRYTE_VALUES[secondValue];
+
+        trytes += trytesValue;
     }
 
-    var firstValue = asciiValue % 27;
-    var secondValue = (asciiValue - firstValue) / 27;
-
-    var trytesValue = TRYTE_VALUES[firstValue] + TRYTE_VALUES[secondValue];
-
-    trytes += trytesValue;
-  }
-
-  return trytes;
+    return trytes;
 }
 
 
@@ -3291,29 +3292,30 @@ function toTrytes(inputString) {
 //    Everything after that is 9's padding
 //
 function fromTrytes(inputTrytes) {
-  var TRYTE_VALUES = "9ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  var outputString = "";
 
-  for (var i = 0; i < inputTrytes.length; i += 2) {
-    // get a trytes pair
-    var trytes = inputTrytes[i] + inputTrytes[i + 1];
+    var TRYTE_VALUES = "9ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    var outputString = "";
 
-    var firstValue = TRYTE_VALUES.indexOf(trytes[0]);
-    var secondValue = TRYTE_VALUES.indexOf(trytes[1]);
+    for (var i = 0; i < inputTrytes.length; i += 2) {
+        // get a trytes pair
+        var trytes = inputTrytes[i] + inputTrytes[i + 1];
 
-    var decimalValue = firstValue + secondValue * 27;
+        var firstValue = TRYTE_VALUES.indexOf(trytes[0]);
+        var secondValue = TRYTE_VALUES.indexOf(trytes[1]);
 
-    var character = String.fromCharCode(decimalValue);
+        var decimalValue = firstValue + secondValue * 27;
 
-    outputString += character;
-  }
+        var character = String.fromCharCode(decimalValue);
 
-  return outputString;
+        outputString += character;
+    }
+
+    return outputString;
 }
 
 module.exports = {
-  toTrytes: toTrytes,
-  fromTrytes: fromTrytes
+    toTrytes: toTrytes,
+    fromTrytes: fromTrytes
 }
 
 },{}],13:[function(require,module,exports){
@@ -3778,7 +3780,14 @@ makeRequest.prototype.prepareResult = function(result, requestCommand, callback)
     // If correct result and we want to prepare the result
     if (result && resultMap.hasOwnProperty(requestCommand)) {
 
-        result = result[resultMap[requestCommand]];
+        // ugly fix, but whatever
+        if (requestCommand === 'attachToTangle' && result.hasOwnProperty('id')) {
+
+            result = result;
+        } else {
+            
+            result = result[resultMap[requestCommand]];
+        }
     }
 
     return callback(error, result);
@@ -4093,6 +4102,7 @@ var categorizeTransfers = function(transfers, addresses) {
     return categorized;
 }
 
+
 module.exports = {
     convertUnits        : convertUnits,
     addChecksum         : addChecksum,
@@ -4102,7 +4112,9 @@ module.exports = {
     fromTrytes          : fromTrytes,
     transactionObject   : transactionObject,
     transactionTrytes   : transactionTrytes,
-    categorizeTransfers : categorizeTransfers
+    categorizeTransfers : categorizeTransfers,
+    toTrytes            : ascii.toTrytes,
+    fromTrytes          : ascii.fromTrytes
 }
 
 },{"../crypto/converter":5,"../crypto/curl":6,"./asciiToTrytes":12,"./inputValidator":13,"./makeRequest":14}],16:[function(require,module,exports){
