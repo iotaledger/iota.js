@@ -35,116 +35,7 @@ function api(provider, isSandbox) {
 **/
 api.prototype.sendCommand = function(command, callback) {
 
-    this._makeRequest.send(command, function(error, success) {
-
-        if (callback) {
-            return callback(error, success)
-        } else {
-            return success;
-        }
-    })
-}
-
-/**
-*   Simply batches the requested command and then aggregates the results
-*   This API call is only meant for the following Core API calls:
-*           - getTrytes
-*           - getInclusionStates
-*           - getBalances
-*
-*   @method batchedSend
-*   @param {object} command
-*   @param {function} callback
-*   @returns {object} success
-**/
-api.prototype.batchedSend = function(command, callback) {
-
-    var self = this;
-
-    var availableKeys = [
-        'addresses',
-        'hashes',
-        'transactions'
-    ];
-
-    // Basic key mapping to know the results that we need to modify
-    var keyMapping = {
-        'getTrytes': 'trytes',
-        'getInclusionStates': 'inclusionStates',
-        'getBalances': 'balances'
-    }
-
-    var searchKeys = Object.keys(command);
-    var thisCommand = command.command;
-
-    // If invalid command provided, simply forward to sendCommand
-    if (!keyMapping[thisCommand]) {
-        return self.sendCommand(command, callback);
-    }
-
-    searchKeys.forEach(function(key) {
-
-        if (availableKeys.indexOf(key) > -1) {
-
-            var batchSize = 50;
-
-            // If the requested command has more than 50 items, batch them
-            if (command[key].length > batchSize) {
-
-                var aggregatedResults = [];
-                var latestResponse;
-                var currentIndex = 0;
-                // Do whilst loop to basically create and iterate over the batches
-                // get the results from sendCommand function and aggregate the results
-                async.doWhilst(function(cb) {
-                    // Iteratee function
-
-                    var newBatch = command[key].slice(currentIndex, currentIndex + batchSize);
-
-                    // re-assign the batches values
-                    var newCommand = command;
-                    newCommand[key] = newBatch;
-
-                    self.sendCommand(newCommand, function(error, results) {
-
-                        if (error) {
-                            return cb(error);
-                        }
-
-                        cb(null, newBatch.length, results)
-                    })
-
-                }, function(address, batchLength, transactions) {
-                    // Test function with validity check
-
-                    latestResponse = results;
-                    // Get the correct key value pair of the search command
-                    aggregatedResults.push(results[keyMapping[thisCommand]]);
-
-                    currentIndex += batchSize;
-
-                    // Validity check
-                    return batchLength > batchSize;
-
-                }, function(err) {
-                    // Final callback
-
-                    if (err) {
-                        return callback(err);
-                    } else {
-
-                        latestResponse[keyMapping[thisCommand]] = aggregatedResults;
-
-                        return callback(null, latestResponse);
-                    }
-                })
-            } else {
-
-                self.sendCommand(command, callback);
-            }
-        }
-
-    })
+    return this._makeRequest.send(command, callback);
 }
 
 /**
@@ -185,14 +76,7 @@ api.prototype.attachToTangle = function(trunkTransaction, branchTransaction, min
 
     var command = apiCommands.attachToTangle(trunkTransaction, branchTransaction, minWeightMagnitude, trytes)
 
-    this.sendCommand(command, function(error, success) {
-
-        if (callback) {
-            return callback(error, success)
-        } else {
-            return success;
-        }
-    })
+    return this.sendCommand(command, callback)
 }
 
 /**
@@ -254,14 +138,7 @@ api.prototype.findTransactions = function(searchValues, callback) {
 
     var command = apiCommands.findTransactions(searchValues);
 
-    this.sendCommand(command, function(error, success) {
-
-        if (callback) {
-            return callback(error, success)
-        } else {
-            return success;
-        }
-    })
+    return this.sendCommand(command, callback)
 }
 
 /**
@@ -281,14 +158,7 @@ api.prototype.getBalances = function(addresses, threshold, callback) {
 
     var command = apiCommands.getBalances(addresses, threshold);
 
-    this.sendCommand(command, function(error, success) {
-
-        if (callback) {
-            return callback(error, success)
-        } else {
-            return success;
-        }
-    })
+    return this.sendCommand(command, callback)
 }
 
 /**
@@ -314,14 +184,7 @@ api.prototype.getInclusionStates = function(transactions, tips, callback) {
 
     var command = apiCommands.getInclusionStates(transactions, tips);
 
-    this.sendCommand(command, function(error, success) {
-
-        if (callback) {
-            return callback(error, success)
-        } else {
-            return success;
-        }
-    })
+    return this.sendCommand(command, callback)
 }
 
 /**
@@ -333,14 +196,7 @@ api.prototype.getNodeInfo = function(callback) {
 
     var command = apiCommands.getNodeInfo();
 
-    this.sendCommand(command, function(error, success) {
-
-        if (callback) {
-            return callback(error, success)
-        } else {
-            return success;
-        }
-    })
+    return this.sendCommand(command, callback)
 }
 
 /**
@@ -352,14 +208,7 @@ api.prototype.getNeighbors = function(callback) {
 
     var command = apiCommands.getNeighbors();
 
-    this.sendCommand(command, function(error, success) {
-
-        if (callback) {
-            return callback(error, success)
-        } else {
-            return success;
-        }
-    })
+    return this.sendCommand(command, callback)
 }
 
 /**
@@ -372,14 +221,7 @@ api.prototype.addNeighbors = function(uris, callback) {
 
     var command = apiCommands.addNeighbors();
 
-    this.sendCommand(command, function(error, success) {
-
-        if (callback) {
-            return callback(error, success)
-        } else {
-            return success;
-        }
-    })
+    return this.sendCommand(command, callback)
 }
 
 /**
@@ -392,14 +234,7 @@ api.prototype.removeNeighbors = function(uris, callback) {
 
     var command = apiCommands.removeNeighbors();
 
-    this.sendCommand(command, function(error, success) {
-
-        if (callback) {
-            return callback(error, success)
-        } else {
-            return success;
-        }
-    })
+    return this.sendCommand(command, callback)
 }
 
 /**
@@ -411,14 +246,7 @@ api.prototype.getTips = function(callback) {
 
     var command = apiCommands.getTips();
 
-    this.sendCommand(command, function(error, success) {
-
-        if (callback) {
-            return callback(error, success)
-        } else {
-            return success;
-        }
-    })
+    return this.sendCommand(command, callback)
 }
 
 /**
@@ -431,14 +259,7 @@ api.prototype.getTransactionsToApprove = function(depth, callback) {
 
     var command = apiCommands.getTransactionsToApprove(depth);
 
-    this.sendCommand(command, function(error, success) {
-
-        if (callback) {
-            return callback(error, success)
-        } else {
-            return success;
-        }
-    })
+    return this.sendCommand(command, callback)
 }
 
 /**
@@ -456,14 +277,7 @@ api.prototype.getTrytes = function(hashes, callback) {
 
     var command = apiCommands.getTrytes(hashes);
 
-    this.sendCommand(command, function(error, success) {
-
-        if (callback) {
-            return callback(error, success)
-        } else {
-            return success;
-        }
-    })
+    return this.sendCommand(command, callback)
 }
 
 /**
@@ -475,14 +289,7 @@ api.prototype.interruptAttachingToTangle = function(callback) {
 
     var command = apiCommands.interruptAttachingToTangle();
 
-    this.sendCommand(command, function(error, success) {
-
-        if (callback) {
-            return callback(error, success)
-        } else {
-            return success;
-        }
-    })
+    return this.sendCommand(command, callback)
 }
 
 /**
@@ -500,14 +307,7 @@ api.prototype.broadcastTransactions = function(trytes, callback) {
 
     var command = apiCommands.broadcastTransactions(trytes);
 
-    this.sendCommand(command, function(error, success) {
-
-        if (callback) {
-            return callback(error, success)
-        } else {
-            return success;
-        }
-    })
+    return this.sendCommand(command, callback)
 }
 
 /**
@@ -525,14 +325,7 @@ api.prototype.storeTransactions = function(trytes, callback) {
 
     var command = apiCommands.storeTransactions(trytes);
 
-    this.sendCommand(command, function(error, success) {
-
-        if (callback) {
-            return callback(error, success)
-        } else {
-            return success;
-        }
-    })
+    return this.sendCommand(command, callback)
 }
 
 
@@ -757,7 +550,7 @@ api.prototype.sendTrytes = function(trytes, depth, minWeightMagnitude, callback)
 
                         var finalTxs = [];
 
-                        attached.trytes.forEach(function(trytes) {
+                        attached.forEach(function(trytes) {
                             finalTxs.push(Utils.transactionObject(trytes));
                         })
 
@@ -875,14 +668,15 @@ api.prototype.broadcastBundle = function(tail, callback) {
 *   Generates a new address
 *
 *   @method newAddress
-*   @param {string} seed
-*   @param {int} index
-*   @param {bool} checksum
-*   @returns {String} address Transaction objects
+*   @param      {string} seed
+*   @param      {int} index
+*   @param      {int} security      Security level of the private key
+*   @param      {bool} checksum
+*   @returns    {string} address     Transaction objects
 **/
-api.prototype._newAddress = function(seed, index, checksum) {
+api.prototype._newAddress = function(seed, index, security, checksum) {
 
-    var key = Signing.key(Converter.trits(seed), index, 2);
+    var key = Signing.key(Converter.trits(seed), index, security);
     var digests = Signing.digests(key);
     var addressTrits = Signing.address(digests);
     var address = Converter.trytes(addressTrits)
@@ -900,10 +694,11 @@ api.prototype._newAddress = function(seed, index, checksum) {
 *   @method getNewAddress
 *   @param {string} seed
 *   @param {object} options
-*       @property   {int}     index Key index to start search from
-*       @property   {bool}    checksum add 9-tryte checksum
-*       @property   {int}     total Total number of addresses to return
-*       @property   {bool}    returnAll return all searched addresses
+*       @property   {int} index         Key index to start search from
+*       @property   {bool} checksum     add 9-tryte checksum
+*       @property   {int} total         Total number of addresses to return
+*       @property   {int} security      Security level to be used for the private key / address. Can be 1, 2 or 3
+*       @property   {bool} returnAll    return all searched addresses
 *   @param {function} callback
 *   @returns {string | array} address List of addresses
 **/
@@ -926,6 +721,8 @@ api.prototype.getNewAddress = function(seed, options, callback) {
     var index = options.index || 0;
     var checksum = options.checksum || false;
     var total = options.total || null;
+    // If no user defined security, use the standard value of 2
+    var security = options.security ? options.security : 2;
     var allAddresses = [];
 
 
@@ -938,7 +735,7 @@ api.prototype.getNewAddress = function(seed, options, callback) {
         // Increase index with each iteration
         for (var i = 0; i < total; i++, index++) {
 
-            var address = self._newAddress(seed, index, checksum);
+            var address = self._newAddress(seed, index, security, checksum);
             allAddresses.push(address);
         }
 
@@ -954,7 +751,7 @@ api.prototype.getNewAddress = function(seed, options, callback) {
         async.doWhilst(function(callback) {
             // Iteratee function
 
-            var newAddress = self._newAddress(seed, index, checksum);
+            var newAddress = self._newAddress(seed, index, security, checksum);
 
             self.findTransactions({'addresses': Array(newAddress)}, function(error, transactions) {
 
@@ -996,12 +793,13 @@ api.prototype.getNewAddress = function(seed, options, callback) {
 /**
 *   Gets the inputs of a seed
 *
-*   @method getNewAddress
+*   @method getInputs
 *   @param {string} seed
 *   @param {object} options
 *       @property {int} start Starting key index
 *       @property {int} end Ending key index
 *       @property {int} threshold Min balance required
+*       @property {int} security secuirty level of private key / seed
 *   @param {function} callback
 **/
 api.prototype.getInputs = function(seed, options, callback) {
@@ -1023,6 +821,8 @@ api.prototype.getInputs = function(seed, options, callback) {
     var start = options.start || 0;
     var end = options.end || null;
     var threshold = options.threshold || null;
+    // If no user defined security, use the standard value of 2
+    var security = options.security ? options.security : 2;
 
     // If start value bigger than end, return error
     // or if difference between end and start is bigger than 500 keys
@@ -1040,7 +840,7 @@ api.prototype.getInputs = function(seed, options, callback) {
 
         for (var i = start; i < end; i++) {
 
-            var address = self._newAddress(seed, i, false);
+            var address = self._newAddress(seed, i, security, false);
             allAddresses.push(address);
         }
 
@@ -1053,7 +853,7 @@ api.prototype.getInputs = function(seed, options, callback) {
     //  We then do getBalance, format the output and return it
     else {
 
-        self.getNewAddress(seed, {'index': start, 'returnAll': true}, function(error, addresses) {
+        self.getNewAddress(seed, {'index': start, 'returnAll': true, 'security': security}, function(error, addresses) {
 
             if (error) {
                 return callback(error);
@@ -1088,7 +888,8 @@ api.prototype.getInputs = function(seed, options, callback) {
                     var newEntry = {
                         'address': addresses[i],
                         'balance': balance,
-                        'keyIndex': start + i
+                        'keyIndex': start + i,
+                        'security': security
                     }
 
                     // Add entry to inputs
@@ -1121,8 +922,9 @@ api.prototype.getInputs = function(seed, options, callback) {
 *   @param {string} seed
 *   @param {object} transfers
 *   @param {object} options
-*       @property {array} inputs Inputs used for signing. Needs to have correct keyIndex and address value
+*       @property {array} inputs Inputs used for signing. Needs to have correct security, keyIndex and address value
 *       @property {string} address Remainder address
+*       @property {int} security security level to be used for getting inputs and addresses
 *   @param {function} callback
 *   @returns {array} trytes Returns bundle trytes
 **/
@@ -1162,7 +964,7 @@ api.prototype.prepareTransfers = function(seed, transfers, options, callback) {
 
     var remainderAddress = options.address || null;
     var chosenInputs = options.inputs || [];
-
+    var security = options.security ? options.security : 2;
 
     // Create a new bundle
     var bundle = new Bundle();
@@ -1253,14 +1055,21 @@ api.prototype.prepareTransfers = function(seed, transfers, options, callback) {
                 var totalBalance = 0;
                 for (var i = 0; i < balances.balances.length; i++) {
                     var thisBalance = parseInt(balances.balances[i]);
-                    totalBalance += thisBalance;
 
                     // If input has balance, add it to confirmedInputs
                     if (thisBalance > 0) {
+                        totalBalance += thisBalance;
+
                         var inputEl = options.inputs[i];
                         inputEl.balance = thisBalance;
 
                         confirmedInputs.push(inputEl);
+
+                        // if we've already reached the intended input value, break out of loop
+                        if (totalBalance >= totalValue) {
+                            console.log("Total balance already reached ")
+                            break;
+                        }
                     }
                 }
 
@@ -1280,7 +1089,7 @@ api.prototype.prepareTransfers = function(seed, transfers, options, callback) {
         //  confirm that the inputs exceed the threshold
         else {
 
-            self.getInputs(seed, {'threshold': totalValue}, function(error, inputs) {
+            self.getInputs(seed, { 'threshold': totalValue, 'security': security }, function(error, inputs) {
 
                 // If inputs with enough balance
                 if (!error) {
@@ -1318,7 +1127,7 @@ api.prototype.prepareTransfers = function(seed, transfers, options, callback) {
             var timestamp = Math.floor(Date.now() / 1000);
 
             // Add input as bundle entry
-            bundle.addEntry(2, inputs[i].address, toSubtract, tag, timestamp);
+            bundle.addEntry(inputs[i].security, inputs[i].address, toSubtract, tag, timestamp);
 
             // If there is a remainder value
             // Add extra output to send remaining funds to
@@ -1339,7 +1148,7 @@ api.prototype.prepareTransfers = function(seed, transfers, options, callback) {
                 else if (remainder > 0) {
 
                     // Generate a new Address by calling getNewAddress
-                    self.getNewAddress(seed, {}, function(error, address) {
+                    self.getNewAddress(seed, {'security': security}, function(error, address) {
 
                         var timestamp = Math.floor(Date.now() / 1000);
 
@@ -1381,13 +1190,15 @@ api.prototype.prepareTransfers = function(seed, transfers, options, callback) {
 
                 var thisAddress = bundle.bundle[i].address;
 
-                // Get the corresponding keyIndex of the address
+                // Get the corresponding keyIndex and security of the address
                 var keyIndex;
+                var keySecurity;
                 for (var k = 0; k < inputs.length; k++) {
 
                     if (inputs[k].address === thisAddress) {
 
                         keyIndex = inputs[k].keyIndex;
+                        keySecurity = inputs[k].security ? inputs[k].security : security;
                         break;
                     }
                 }
@@ -1395,16 +1206,22 @@ api.prototype.prepareTransfers = function(seed, transfers, options, callback) {
                 var bundleHash = bundle.bundle[i].bundle;
 
                 // Get corresponding private key of address
-                var key = Signing.key(Converter.trits(seed), keyIndex, 2);
+                var key = Signing.key(Converter.trits(seed), keyIndex, keySecurity);
+
+                //  Get the normalized bundle hash
+                var normalizedBundleHash = bundle.normalizedBundle(bundleHash);
+                var normalizedBundleFragments = [];
+
+                // Split hash into 3 fragments
+                for (var l = 0; l < 3; l++) {
+                    normalizedBundleFragments[l] = normalizedBundleHash.slice(l * 27, (l + 1) * 27);
+                }
 
                 //  First 6561 trits for the firstFragment
                 var firstFragment = key.slice(0, 6561);
 
-                //  Get the normalized bundle hash
-                var normalizedBundleHash = bundle.normalizedBundle(bundleHash);
-
-                //  First bundle fragment uses 27 trytes
-                var firstBundleFragment = normalizedBundleHash.slice(0, 27);
+                //  First bundle fragment uses the first 27 trytes
+                var firstBundleFragment = normalizedBundleFragments[0];
 
                 //  Calculate the new signatureFragment with the first bundle fragment
                 var firstSignedFragment = Signing.signatureFragment(firstBundleFragment, firstFragment);
@@ -1412,24 +1229,28 @@ api.prototype.prepareTransfers = function(seed, transfers, options, callback) {
                 //  Convert signature to trytes and assign the new signatureFragment
                 bundle.bundle[i].signatureMessageFragment = Converter.trytes(firstSignedFragment);
 
-                //  Because the signature is > 2187 trytes, we need to
-                //  find the second transaction to add the remainder of the signature
-                for (var j = 0; j < bundle.bundle.length; j++) {
+                // if user chooses higher than 27-tryte security
+                // for each security level, add an additional signature
+                for (var j = 1; j < keySecurity; j++) {
 
+                    //  Because the signature is > 2187 trytes, we need to
+                    //  find the subsequent transaction to add the remainder of the signature
+                    var nextBundleEntry = bundle.bundle[i + j];
+
+                    // Validity check
                     //  Same address as well as value = 0 (as we already spent the input)
-                    if (bundle.bundle[j].address === thisAddress && bundle.bundle[j].value === 0) {
+                    if (nextBundleEntry.address === thisAddress && nextBundleEntry.value === 0) {
 
-                        // Use the second 6562 trits
-                        var secondFragment = key.slice(6561,  2 * 6561);
+                        // Use the subsequent 6562 trits
+                        var additionalFragment = key.slice(6561 * j,  (j + 1) * 6561);
 
-                        // The second 27 to 54 trytes of the bundle hash
-                        var secondBundleFragment = normalizedBundleHash.slice(27, 27 * 2);
+                        var additionalBundleFragment = normalizedBundleFragments[j];
 
                         //  Calculate the new signature
-                        var secondSignedFragment = Signing.signatureFragment(secondBundleFragment, secondFragment);
+                        var additionalSignedFragment = Signing.signatureFragment(additionalBundleFragment, additionalFragment);
 
                         //  Convert signature to trytes and assign it again to this bundle entry
-                        bundle.bundle[j].signatureMessageFragment = Converter.trytes(secondSignedFragment);
+                        bundle.bundle[i + j].signatureMessageFragment = Converter.trytes(additionalSignedFragment);
                     }
                 }
             }
@@ -1438,11 +1259,11 @@ api.prototype.prepareTransfers = function(seed, transfers, options, callback) {
         var bundleTrytes = []
 
         // Convert all bundle entries into trytes
-        bundle.bundle.forEach(function(tx) {
-            bundleTrytes.push(Utils.transactionTrytes(tx))
-        })
+        //bundle.bundle.forEach(function(tx) {
+        //    bundleTrytes.push(Utils.transactionTrytes(tx))
+        //})
 
-        return callback(null, bundleTrytes.reverse());
+        return callback(null, bundle.bundle);
     }
 }
 
@@ -1852,35 +1673,6 @@ api.prototype.getAccountData = function(seed, options, callback) {
             })
         })
     })
-}
-
-
-//
-//  bundle hash, transaction hash,
-//
-
-/**
-*   @method readMessage
-*   @param {Object} options
-*       @property {string} hash
-*       @property {string} bundle
-*   @returns {function} callback
-*   @returns {object} success
-**/
-api.prototype.readMessage = function(options, callback) {
-
-    //  If it's a single transaction hash, first get
-    if (options.hash) {
-
-
-    }
-    // First get the bundle
-
-    // If the bundle only contains 1 transaction, it does not contain a message
-    if (data.transactions.length < 2) {
-        processedTxs += 1;
-        return
-    }
 }
 
 module.exports = api;
@@ -3221,7 +3013,6 @@ Multisig.prototype.validateSignatures = function(signedBundle, inputAddress, num
         }
     }
 
-
     return Signing.validateSignatures(inputAddress, signatureFragments, bundleHash);
 }
 
@@ -3553,9 +3344,17 @@ var isInputs = function(inputs) {
         var input = inputs[i];
 
         // If input does not have keyIndex and address, return false
-        if (!input.hasOwnProperty('keyIndex') || !input.hasOwnProperty('address')) return false;
+        if (!input.hasOwnProperty('security') || !input.hasOwnProperty('keyIndex') || !input.hasOwnProperty('address')) return false;
 
-        if (!isAddress(address)) {
+        if (!isAddress(input.address)) {
+            return false;
+        }
+
+        if (!isInt(input.security)) {
+            return false;
+        }
+
+        if (!isInt(input.keyIndex)) {
             return false;
         }
     }
@@ -3780,12 +3579,12 @@ makeRequest.prototype.prepareResult = function(result, requestCommand, callback)
     // If correct result and we want to prepare the result
     if (result && resultMap.hasOwnProperty(requestCommand)) {
 
-        // ugly fix, but whatever
+        // If the response is from the sandbox, don't prepare the result 
         if (requestCommand === 'attachToTangle' && result.hasOwnProperty('id')) {
 
             result = result;
         } else {
-            
+
             result = result[resultMap[requestCommand]];
         }
     }

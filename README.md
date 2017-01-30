@@ -132,7 +132,6 @@ iota.api.getNodeInfo(function(error, success) {
     - **[isArrayOfHashes](#isarrayofhashes)**
     - **[isArrayOfTrytes](#isarrayoftrytes)**    
     - **[isArrayOfAttachedTrytes](#isarrayofattachedtrytes)**
-    - **[isUri](#isuri)**
     - **[isInputs](#isinputs)**
     - **[isString](#isstring)**
     - **[isInt](#isint)**
@@ -235,7 +234,15 @@ iota.api.broadcastAndStore(trytes, callback)
 
 ### `getNewAddress`
 
-Generates a new address from a seed and returns the address. This is either done deterministically, or by providing the index of the new address to be generated.
+Generates a new address from a seed and returns the address. This is either done deterministically, or by providing the index of the new address to be generated. When generating an address, you have the option to choose different `security` levels for your private keys. A different security level with the same key index, means that you will get a different address obviously (as such, you could argue that single seed has 3 different accounts, depending on the security level chosen).
+
+In total, there are 3 different security options available to choose from:
+
+Input | Security Level | Security
+--- | --- | ---
+1 | Low | 81-trits
+2 | Medium | 162-trits
+3 | High | 243-trits
 
 #### Input
 ```
@@ -247,6 +254,7 @@ iota.api.getNewAddress(seed [, options], callback)
   - **`index`**: `Int` If the index is provided, the generation of the address is not deterministic.
   - **`checksum`**: `Bool` Adds 9-tryte address checksum
   - **`total`**: `Int` Total number of addresses to generate.
+  - **`security`**: `Int`  Security level to be used for the private key / address. Can be 1, 2 or 3
   - **`returnAll`**: `Bool` If true, it returns all addresses which were deterministically generated (until findTransactions returns null)
 3. **`callback`**: `Function` Optional callback.
 
@@ -271,6 +279,7 @@ iota.api.getInputs(seed, [, options], callback)
 2. **`options`**: `Object` which is optional:
   - **`start`**: `int` Starting key index  
   - **`end`**: `int` Ending key index
+  - **`security`**: `Int`  Security level to be used for the private key / address. Can be 1, 2 or 3
   - **`threshold`**: `int` Minimum threshold of accumulated balances from the inputs that is requested
 4. **`callback`**: `Function` Optional callback.
 
@@ -289,15 +298,40 @@ Main purpose of this function is to get an array of transfer objects as input, a
 
 You can provide multiple transfer objects, which means that your prepared bundle will have multiple outputs to the same, or different recipients. As single transfer object takes the values of: `address`, `value`, `message`, `tag`. The message and tag values are required to be tryte-encoded.
 
-For the options, you can provide a list of `inputs`, that will be used for signing the transfer's inputs. It should be noted that these inputs (an array of objects) should have the provided `keyIndex` and `address` values:
+For the options, you can provide a list of `inputs`, that will be used for signing the transfer's inputs. It should be noted that these inputs (an array of objects) should have the provided 'security', `keyIndex` and `address` values:
 ```
 var inputs = [{
     'keyIndex': //VALUE,
-    'address': //VALUE
+    'address': //VALUE,
+    'security': //VALUE
 }]
 ```
 
-The library validates these inputs then and ensures that you have sufficient balance. The `address` parameter can be used to define the address to which a remainder balance (if that is the case), will be sent to. So if all your inputs have a combined balance of 2000, and your spending 1800 of them, 200 of your tokens will be sent to that remainder address. If you do not supply the `address`, the library will simply generate a new one from your seed.
+The library validates these inputs then and ensures that you have sufficient balance. When defining these inputs, you can also provide multiple inputs on different security levels. The library will correctly sign these inputs using your seed and the corresponding private keys. Here is an example using security level 3 and 2 for a transfer:
+
+```
+iota.api.prepareTransfers(seed, [{'address': 'SSEWOZSDXOVIURQRBTBDLQXWIXOLEUXHYBGAVASVPZ9HBTYJJEWBR9PDTGMXZGKPTGSUDW9QLFPJHTIEQZNXDGNRJE', 'value': 10000}], {
+    'inputs': [
+        {
+            address: 'XB9IBINADVMP9K9FEIIR9AYEOFUU9DP9EBCKOTPSDVSNRRNVSJOPTFUHSKSLPDJLEHUBOVEIOJFPDCZS9',
+            balance: 1500,
+            keyIndex: 0,
+            security: 3
+        }, {
+            address: 'W9AZFNWZZZNTAQIOOGYZHKYJHSVMALVTWJSSZDDRVEIXXWPNWEALONZLPQPTCDZRZLHNIHSUKZRSZAZ9W',
+            balance: 8500,
+            keyIndex: 7,
+            security: 2
+        }
+    ],'security': 2}, function(e, s) {
+
+
+        console.log(e,s);
+})
+```
+
+
+The `address` option can be used to define the address to which a remainder balance (if that is the case), will be sent to. So if all your inputs have a combined balance of 2000, and your spending 1800 of them, 200 of your tokens will be sent to that remainder address. If you do not supply the `address`, the library will simply generate a new one from your seed (taking `security` into account, or using the standard security value of `2` (medium)).
 
 #### Input
 ```
@@ -313,6 +347,7 @@ iota.api.prepareTransfers(seed, transfersArray [, options], callback)
 3. **`options`**: `Object` which is optional:
   - **`inputs`**: `Array` List of inputs used for funding the transfer
   - **`address`**: `String` if defined, this address will be used for sending the remainder value (of the inputs) to.
+  - **`security`**: `Int`  Security level to be used for the private key / addresses. This is for inputs and generating of the remainder address in case you did not specify it. Can be 1, 2 or 3
 4. **`callback`**: `Function` Optional callback.
 
 #### Return Value
@@ -865,7 +900,7 @@ Checks if it's a correct array of transfer objects. A transfer object consists o
 {
     'address': // STRING (trytes encoded, 81 or 90 trytes)
     'value': // INT
-    'mesage': // STRING (trytes encoded)
+    'message': // STRING (trytes encoded)
     'tag': // STRING (trytes encoded, maximum 27 trytes)
 }
 ```
@@ -915,19 +950,6 @@ iota.validate.isArrayOfAttachedTrytes(trytesArray)
 ```
 
 1. **`trytesArray`**: `Array`
-
----
-
-### `isUri`
-
-Work in progress. If this is still here while you're reading the documentation, tell either Dominik or someone else from Core to move their asses.
-
-#### Input
-```
-iota.validate.isUri(uris)
-```
-
-1. **`uris`**: `Array`
 
 ---
 
