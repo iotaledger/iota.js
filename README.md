@@ -310,7 +310,11 @@ var inputs = [{
 The library validates these inputs then and ensures that you have sufficient balance. When defining these inputs, you can also provide multiple inputs on different security levels. The library will correctly sign these inputs using your seed and the corresponding private keys. Here is an example using security level 3 and 2 for a transfer:
 
 ```
-iota.api.prepareTransfers(seed, [{'address': 'SSEWOZSDXOVIURQRBTBDLQXWIXOLEUXHYBGAVASVPZ9HBTYJJEWBR9PDTGMXZGKPTGSUDW9QLFPJHTIEQZNXDGNRJE', 'value': 10000}], {
+iota.api.prepareTransfers(seed,
+    [{
+        'address': 'SSEWOZSDXOVIURQRBTBDLQXWIXOLEUXHYBGAVASVPZ9HBTYJJEWBR9PDTGMXZGKPTGSUDW9QLFPJHTIEQZNXDGNRJE',
+        'value': 10000
+    }], {
     'inputs': [
         {
             address: 'XB9IBINADVMP9K9FEIIR9AYEOFUU9DP9EBCKOTPSDVSNRRNVSJOPTFUHSKSLPDJLEHUBOVEIOJFPDCZS9',
@@ -323,7 +327,7 @@ iota.api.prepareTransfers(seed, [{'address': 'SSEWOZSDXOVIURQRBTBDLQXWIXOLEUXHYB
             keyIndex: 7,
             security: 2
         }
-    ],'security': 2}, function(e, s) {
+    ], function(e, s) {
 
 
         console.log(e,s);
