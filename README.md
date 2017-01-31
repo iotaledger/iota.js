@@ -108,6 +108,7 @@ iota.api.getNodeInfo(function(error, success) {
     - **[convertUnits](#convertunits)**
     - **[addChecksum](#addchecksum)**
     - **[noChecksum](#nochecksum)**
+    - **[isValidChecksum](#isvalidchecksum)**
     - **[transactionObject](#transactionobject)**
     - **[transactionTrytes](#transactiontrytes)**
     - **[categorizeTransfers](#categorizetransfers)**
@@ -812,12 +813,11 @@ This function makes it possible for each of the co-signers in the multi-signatur
 
 #### Input
 ```
-iota.multisig.validateSignatures(signedBundle, inputAddress, numCosigners)
+iota.multisig.validateSignatures(signedBundle, inputAddress)
 ```
 
 1. **`signedBundle`**: `Array` signed bundle by all of the co-signers
-2. **`inputAddress`**: 'String' input address as provided to `initiateTransfer`.
-4. **`numCosigners`**: `Int` total number of co-signers
+2. **`inputAddress`**: `String` input address as provided to `initiateTransfer`.
 
 #### Returns
 `bool` - true / false  
