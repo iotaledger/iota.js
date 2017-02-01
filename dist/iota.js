@@ -757,7 +757,7 @@ api.prototype.sendTrytes = function(trytes, depth, minWeightMagnitude, callback)
 
                         var finalTxs = [];
 
-                        attached.trytes.forEach(function(trytes) {
+                        attached.forEach(function(trytes) {
                             finalTxs.push(Utils.transactionObject(trytes));
                         })
 
