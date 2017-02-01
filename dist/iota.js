@@ -11,7 +11,6 @@ var Converter = require("../crypto/converter");
 var Signing = require("../crypto/signing");
 var Bundle = require("../crypto/bundle");
 var Utils = require("../utils/utils");
-var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 var async = require("async");
 
 'use strict';
@@ -470,7 +469,7 @@ api.prototype.sendTrytes = function(trytes, depth, minWeightMagnitude, callback)
         if (error) {
             return callback(error)
         }
-
+        console.log(toApprove);
         // attach to tangle - do pow
         self.attachToTangle(toApprove.trunkTransaction, toApprove.branchTransaction, minWeightMagnitude, trytes, function(error, attached) {
 
@@ -478,69 +477,39 @@ api.prototype.sendTrytes = function(trytes, depth, minWeightMagnitude, callback)
                 return callback(error)
             }
 
+            console.log(error, attached);
+
             // If the user is connected to the sandbox, we have to monitor the POW queue
             // to check if the POW job was completed
             if (self.sandbox) {
 
                 var job = self.sandbox + '/jobs/' + attached.id;
+                console.log(job);
 
-                // Check every 15 seconds if the job finished or not
-                // If failed, return error
-                var newInterval = setInterval(function() {
+                // Do the Sandbox send function
+                self._makeRequest.sandboxSend(job, function(e, attachedTrytes) {
 
-                    var request = new XMLHttpRequest();
+                    if (e) {
 
-                    request.onreadystatechange = function() {
+                        return callback(e);
+                    } else {
 
-                        if (request.readyState === 4) {
+                        self.broadcastAndStore(attachedTrytes, function(error, success) {
 
-                            var result;
+                            if (!error) {
 
-                            // Prepare the result, check that it's JSON
-                            try {
+                                var finalTxs = [];
 
-                                result = JSON.parse(request.responseText);
-                            } catch(e) {
-
-                                return callback(errors.invalidResponse(result));
-                            }
-
-                            if (result.status === "FINISHED") {
-
-                                var attachedTrytes = result.attachToTangleResponse.trytes;
-
-                                self.broadcastAndStore(attachedTrytes, function(error, success) {
-
-                                    if (!error) {
-
-                                        var finalTxs = [];
-
-                                        attachedTrytes.forEach(function(trytes) {
-                                            finalTxs.push(Utils.transactionObject(trytes));
-                                        })
-
-                                        clearInterval(newInterval);
-                                        return callback(null, finalTxs);
-                                    }
+                                attachedTrytes.forEach(function(trytes) {
+                                    finalTxs.push(Utils.transactionObject(trytes));
                                 })
+
+
+                                return callback(null, finalTxs);
                             }
-                            else if (result.status === "FAILED") {
-
-                                clearInterval(newInterval);
-                                return callback(new Error("Sandbox transaction processing failed. Please retry."))
-                            }
-                        }
+                        })
                     }
-
-                    try {
-                        request.open('GET', job, true);
-                        request.send(JSON.stringify());
-                    } catch(error) {
-
-                        return callback(new Error("No connection to Sandbox, failed with job: ", job));
-                    }
-
-                }, 5000)
+                });
             } else {
 
                 // Broadcast and store tx
@@ -722,7 +691,7 @@ api.prototype.getNewAddress = function(seed, options, callback) {
     var checksum = options.checksum || false;
     var total = options.total || null;
     // If no user defined security, use the standard value of 2
-    var security = options.security ? options.security : 2;
+    var security = options.security || 2;
     var allAddresses = [];
 
 
@@ -822,7 +791,7 @@ api.prototype.getInputs = function(seed, options, callback) {
     var end = options.end || null;
     var threshold = options.threshold || null;
     // If no user defined security, use the standard value of 2
-    var security = options.security ? options.security : 2;
+    var security = options.security || 2;
 
     // If start value bigger than end, return error
     // or if difference between end and start is bigger than 500 keys
@@ -870,45 +839,50 @@ api.prototype.getInputs = function(seed, options, callback) {
 
         self.getBalances(addresses, 100, function(error, balances) {
 
-            var inputsObject = {
-                'inputs': [],
-                'totalBalance': 0
-            }
+            if (error) {
+                return callback(error);
+            } else {
 
-            // If threshold defined, keep track of whether reached or not
-            // else set default to true
-            var thresholdReached = threshold ? false : true;
+                var inputsObject = {
+                    'inputs': [],
+                    'totalBalance': 0
+                }
+                console.log(balances);
+                // If threshold defined, keep track of whether reached or not
+                // else set default to true
+                var thresholdReached = threshold ? false : true;
 
-            for (var i = 0; i < addresses.length; i++) {
+                for (var i = 0; i < addresses.length; i++) {
 
-                var balance = parseInt(balances.balances[i]);
+                    var balance = parseInt(balances.balances[i]);
 
-                if (balance > 0) {
+                    if (balance > 0) {
 
-                    var newEntry = {
-                        'address': addresses[i],
-                        'balance': balance,
-                        'keyIndex': start + i,
-                        'security': security
-                    }
+                        var newEntry = {
+                            'address': addresses[i],
+                            'balance': balance,
+                            'keyIndex': start + i,
+                            'security': security
+                        }
 
-                    // Add entry to inputs
-                    inputsObject.inputs.push(newEntry);
-                    // Increase totalBalance of all aggregated inputs
-                    inputsObject.totalBalance += balance;
+                        // Add entry to inputs
+                        inputsObject.inputs.push(newEntry);
+                        // Increase totalBalance of all aggregated inputs
+                        inputsObject.totalBalance += balance;
 
-                    if (threshold && inputsObject.totalBalance >= threshold) {
+                        if (threshold && inputsObject.totalBalance >= threshold) {
 
-                        thresholdReached = true;
-                        break;
+                            thresholdReached = true;
+                            break;
+                        }
                     }
                 }
-            }
 
-            if (thresholdReached) {
-                return callback(null, inputsObject);
-            } else {
-                return callback(new Error("Not enough balance"));
+                if (thresholdReached) {
+                    return callback(null, inputsObject);
+                } else {
+                    return callback(new Error("Not enough balance"));
+                }
             }
         })
     }
@@ -964,7 +938,7 @@ api.prototype.prepareTransfers = function(seed, transfers, options, callback) {
 
     var remainderAddress = options.address || null;
     var chosenInputs = options.inputs || [];
-    var security = options.security ? options.security : 2;
+    var security = options.security || 2;
 
     // Create a new bundle
     var bundle = new Bundle();
@@ -1067,7 +1041,6 @@ api.prototype.prepareTransfers = function(seed, transfers, options, callback) {
 
                         // if we've already reached the intended input value, break out of loop
                         if (totalBalance >= totalValue) {
-                            console.log("Total balance already reached ")
                             break;
                         }
                     }
@@ -1075,7 +1048,7 @@ api.prototype.prepareTransfers = function(seed, transfers, options, callback) {
 
                 // Return not enough balance error
                 if (totalValue > totalBalance) {
-                    return callback("Not enough balance");
+                    return callback(new Error("Not enough balance"));
                 }
 
                 addRemainder(confirmedInputs);
@@ -1235,22 +1208,19 @@ api.prototype.prepareTransfers = function(seed, transfers, options, callback) {
 
                     //  Because the signature is > 2187 trytes, we need to
                     //  find the subsequent transaction to add the remainder of the signature
-                    var nextBundleEntry = bundle.bundle[i + j];
-
-                    // Validity check
                     //  Same address as well as value = 0 (as we already spent the input)
-                    if (nextBundleEntry.address === thisAddress && nextBundleEntry.value === 0) {
+                    if (bundle.bundle[i + j].address === thisAddress && bundle.bundle[i + j].value === 0) {
 
-                        // Use the subsequent 6562 trits
-                        var additionalFragment = key.slice(6561 * j,  (j + 1) * 6561);
+                        // Use the next 6561 trits
+                        var nextFragment = key.slice(6561 * j,  (j + 1) * 6561);
 
-                        var additionalBundleFragment = normalizedBundleFragments[j];
+                        var nextBundleFragment = normalizedBundleFragments[j];
 
                         //  Calculate the new signature
-                        var additionalSignedFragment = Signing.signatureFragment(additionalBundleFragment, additionalFragment);
+                        var nextSignedFragment = Signing.signatureFragment(nextBundleFragment, nextFragment);
 
                         //  Convert signature to trytes and assign it again to this bundle entry
-                        bundle.bundle[i + j].signatureMessageFragment = Converter.trytes(additionalSignedFragment);
+                        bundle.bundle[i + j].signatureMessageFragment = Converter.trytes(nextSignedFragment);
                     }
                 }
             }
@@ -1259,11 +1229,11 @@ api.prototype.prepareTransfers = function(seed, transfers, options, callback) {
         var bundleTrytes = []
 
         // Convert all bundle entries into trytes
-        //bundle.bundle.forEach(function(tx) {
-        //    bundleTrytes.push(Utils.transactionTrytes(tx))
-        //})
+        bundle.bundle.forEach(function(tx) {
+            bundleTrytes.push(Utils.transactionTrytes(tx))
+        })
 
-        return callback(null, bundle.bundle);
+        return callback(null, bundleTrytes);
     }
 }
 
@@ -1552,6 +1522,7 @@ api.prototype._bundlesFromAddresses = function(addresses, inclusionStates, callb
 *   @param {object} options
 *       @property {int} start Starting key index
 *       @property {int} end Ending key index
+*       @property {int} security security level to be used for getting inputs and addresses
 *       @property {bool} inclusionStates returns confirmation status of all transactions
 *   @param {function} callback
 *   @returns {object} success
@@ -1569,6 +1540,7 @@ api.prototype.getTransfers = function(seed, options, callback) {
     var start = options.start || 0;
     var end = options.end || null;
     var inclusionStates = options.inclusionStates || null;
+    var security = options.security || 2;
 
     // If start value bigger than end, return error
     // or if difference between end and start is bigger than 500 keys
@@ -1583,7 +1555,8 @@ api.prototype.getTransfers = function(seed, options, callback) {
     var addressOptions = {
         index: start,
         total: end ? end - start : null,
-        returnAll: true
+        returnAll: true,
+        security: security
     }
 
     //  Get a list of all addresses associated with the users seed
@@ -1603,6 +1576,7 @@ api.prototype.getTransfers = function(seed, options, callback) {
 *   @param {string} seed
 *   @param {object} options
 *       @property {int} start Starting key index
+*       @property {int} security security level to be used for getting inputs and addresses
 *       @property {int} end Ending key index
 *   @param {function} callback
 *   @returns {object} success
@@ -1619,6 +1593,7 @@ api.prototype.getAccountData = function(seed, options, callback) {
 
     var start = options.start || 0;
     var end = options.end || null;
+    var security = options.security || 2;
 
     // If start value bigger than end, return error
     // or if difference between end and start is bigger than 500 keys
@@ -1642,7 +1617,8 @@ api.prototype.getAccountData = function(seed, options, callback) {
     var addressOptions = {
         index: start,
         total: end ? end - start : null,
-        returnAll: true
+        returnAll: true,
+        security: security
     }
 
     //  Get a list of all addresses associated with the users seed
@@ -1677,7 +1653,7 @@ api.prototype.getAccountData = function(seed, options, callback) {
 
 module.exports = api;
 
-},{"../crypto/bundle":4,"../crypto/converter":5,"../crypto/curl":6,"../crypto/signing":7,"../errors/inputErrors":8,"../utils/inputValidator":13,"../utils/utils":15,"./apiCommands":3,"async":16,"xmlhttprequest":52}],3:[function(require,module,exports){
+},{"../crypto/bundle":4,"../crypto/converter":5,"../crypto/curl":6,"../crypto/signing":7,"../errors/inputErrors":8,"../utils/inputValidator":13,"../utils/utils":15,"./apiCommands":3,"async":16}],3:[function(require,module,exports){
 /**
 *   @method attachToTangle
 *   @param {string} trunkTransaction
@@ -1931,7 +1907,7 @@ function Bundle() {
 *
 *
 **/
-Bundle.prototype.addEntry = function(signatureMessageLength, address, value, tag, timestamp) {
+Bundle.prototype.addEntry = function(signatureMessageLength, address, value, tag, timestamp, index) {
 
     for (var i = 0; i < signatureMessageLength; i++) {
 
@@ -2644,9 +2620,9 @@ function Multisig(provider) {
 *   @param {int} index
 *   @returns {string} digest trytes
 **/
-Multisig.prototype.getKey = function(seed, index) {
+Multisig.prototype.getKey = function(seed, index, security) {
 
-    return Converter.trytes(Signing.key(Converter.trits(seed), index, 2));
+    return Converter.trytes(Signing.key(Converter.trits(seed), index, security));
 }
 
 /**
@@ -2657,9 +2633,9 @@ Multisig.prototype.getKey = function(seed, index) {
 *   @param {int} index
 *   @returns {string} digest trytes
 **/
-Multisig.prototype.getDigest = function(seed, index) {
+Multisig.prototype.getDigest = function(seed, index, security) {
 
-    var key = Signing.key(Converter.trits(seed), index, 2);
+    var key = Signing.key(Converter.trits(seed), index, security);
     return Converter.trytes(Signing.digests(key));
 }
 
@@ -2745,14 +2721,14 @@ Multisig.prototype.validateAddress = function(multisigAddress, digests) {
 *   Does not contain signatures
 *
 *   @method initiateTransfer
-*   @param {string} inputAddress Currently only works with a single input
-*   @param {string} remainderAddress Has to be generated by the cosigners before initiating the transfer
-*   @param {int} numCosigners total number of multisig signers
+*   @param {int} securitySum sum of security levels used by all co-signers
+*   @param {array} inputAddress array of input addresses as well as the securitySum
+*   @param {string} remainderAddress Has to be generated by the cosigners before initiating the transfer, can be null if fully spent
 *   @param {object} transfers
 *   @param {function} callback
 *   @returns {array} Array of transaction objects
 **/
-Multisig.prototype.initiateTransfer = function(inputAddress, remainderAddress, numCosigners, transfers, callback) {
+Multisig.prototype.initiateTransfer = function(securitySum, inputAddress, remainderAddress, transfers, callback) {
 
     var self = this;
 
@@ -2769,11 +2745,18 @@ Multisig.prototype.initiateTransfer = function(inputAddress, remainderAddress, n
         return callback(errors.invalidTransfers());
     }
 
-    if (!inputValidator.isAddress(inputAddress)) {
+    // check if int
+    if (!inputValidator.isInt(securitySum)) {
         return callback(errors.invalidInputs());
     }
 
-    if (!inputValidator.isAddress(remainderAddress)) {
+    // validate input address
+    if (!inputValidator.isAddress(inputAddress)) {
+        return callback(errors.invalidTrytes());
+    }
+
+    // validate remainder address
+    if (remainderAddress && !inputValidator.isAddress(remainderAddress)) {
         return callback(errors.invalidTrytes());
     }
 
@@ -2842,7 +2825,8 @@ Multisig.prototype.initiateTransfer = function(inputAddress, remainderAddress, n
 
         // Add first entries to the bundle
         // Slice the address in case the user provided a checksummed one
-        bundle.addEntry(signatureMessageLength, transfers[i].address.slice(0, 81), transfers[i].value, tag, timestamp)
+        bundle.addEntry(signatureMessageLength, transfers[i].address.slice(0, 81), transfers[i].value, tag, timestamp);
+
         // Sum up total value
         totalValue += parseInt(transfers[i].value);
     }
@@ -2852,54 +2836,53 @@ Multisig.prototype.initiateTransfer = function(inputAddress, remainderAddress, n
 
         var command = {
             'command': 'getBalances',
-            'addresses': Array(inputAddress),
+            'addresses': new Array(inputAddress),
             'threshold': 100
         }
 
-        self._makeRequest.send(command, function(e, balance) {
+        self._makeRequest.send(command, function(e, balances) {
 
-            var thisBalance = parseInt(balance.balances[0]);
 
-            if (thisBalance > 0) {
+            var totalBalance = 1000 // parseInt(balances.balances[0]);
 
-                var toSubtract = 0 - thisBalance;
+            if (totalBalance > 0) {
+
+                var toSubtract = 0 - totalBalance;
                 var timestamp = Math.floor(Date.now() / 1000);
 
                 // Add input as bundle entry
-                bundle.addEntry(2, inputAddress, toSubtract, tag, timestamp);
-
-                // For each cosigner in the multisig, add 2 bundle entries
-                // This will then later be used for the signature
-                for (var i = 1; i < numCosigners; i++) {
-                    bundle.addEntry(2, inputAddress, 0, tag, timestamp);
-                }
-
-                // If there is a remainder value
-                // Add extra output to send remaining funds to
-                if (thisBalance > totalValue) {
-
-                    var remainder = thisBalance - totalValue;
-
-                    // Remainder bundle entry
-                    bundle.addEntry(1, remainderAddress, remainder, tag, timestamp);
-
-                }
-
-                // If no input required, don't sign and simply finalize the bundle
-                bundle.finalize();
-                bundle.addTrytes(signatureFragments);
-
-                return callback(null, bundle.bundle);
-
-            } else {
-
-                throw new Error("Not enough balance");
+                // Only a single entry, signatures will be added later
+                bundle.addEntry(securitySum, inputAddress, toSubtract, tag, timestamp);
             }
+
+            if (totalValue > totalBalance) {
+                return callback(new Error("Not enough balance."));
+            }
+
+
+            // If there is a remainder value
+            // Add extra output to send remaining funds to
+            if (totalBalance > totalValue) {
+
+                var remainder = totalBalance - totalValue;
+
+                // Remainder bundle entry if necessary
+                if (!remainderAddress) {
+                    return callback(new Error("No remainder address defined"));
+                }
+
+                bundle.addEntry(1, remainderAddress, remainder, tag, timestamp);
+            }
+
+            bundle.finalize();
+            bundle.addTrytes(signatureFragments);
+
+            return callback(null, bundle.bundle);
         })
 
     } else {
 
-        throw new Error("Invalid value transfer: the transfer does not require a signature.");
+        return callback(new Error("Invalid value transfer: the transfer does not require a signature."));
     }
 
 }
@@ -2909,111 +2892,88 @@ Multisig.prototype.initiateTransfer = function(inputAddress, remainderAddress, n
 *   Adds the cosigner signatures to the corresponding bundle transaction
 *
 *   @method addSignature
-*   @param {array} bundleToSign
+*   @param {array} bundleToSign
 *   @param {int} cosignerIndex
 *   @param {string} inputAddress
 *   @param {string} key
 *   @param {function} callback
 *   @returns {array} trytes Returns bundle trytes
 **/
-Multisig.prototype.addSignature = function(bundleToSign, cosignerIndex, inputAddress, key, callback) {
+Multisig.prototype.addSignature = function(bundleToSign, inputAddress, key, callback) {
 
     var bundle = new Bundle();
     bundle.bundle = bundleToSign;
 
+    // Get the security used for the private key
+    // 1 security level = 2187 trytes
+    var security = (key.length / 2187);
+
+    // convert private key trytes into trits
     var key = Converter.trits(key);
 
-    //  SIGNING OF INPUTS
-    //
-    //  Here we do the actual signing of the inputs
-    //  Iterate over all bundle transactions, find the inputs
-    //  Get the corresponding private key and calculate the signatureFragment
+
+    // First get the total number of already signed transactions
+    // use that for the bundle hash calculation as well as knowing
+    // where to add the signature
+    var numSignedTxs = 0;
+
     for (var i = 0; i < bundle.bundle.length; i++) {
 
-        if (bundle.bundle[i].value < 0 && bundle.bundle[i].address === inputAddress) {
+        if (bundle.bundle[i].address === inputAddress) {
 
-            var bundleEntryToSign = i + (cosignerIndex * 2);
-            var thisAddress = bundle.bundle[bundleEntryToSign].address;
-            var bundleHash = bundle.bundle[bundleEntryToSign].bundle;
+            // If transaction is already signed, increase counter
+            if (!inputValidator.isNinesTrytes(bundle.bundle[i].signatureMessageFragment)) {
 
-            //  First 6561 trits for the firstFragment
-            var firstFragment = key.slice(0, 6561);
-
-            //  Get the normalized bundle hash
-            var normalizedBundleHash = bundle.normalizedBundle(bundleHash);
-            var normalizedBundleFragments = [];
-
-            // Split hash into 3 fragments
-            for (var i = 0; i < 3; i++) {
-                normalizedBundleFragments[i] = normalizedBundleHash.slice(i * 27, (i + 1) * 27);
+                numSignedTxs++;
             }
+            // Else sign the transactionse
+            else {
 
-            //  First bundle fragment uses 27 trytes
-            var firstBundleFragment = normalizedBundleFragments[(cosignerIndex * 2) % 3];
+                var bundleHash = bundle.bundle[i].bundle;
 
-            //  Calculate the new signatureFragment with the first bundle fragment
-            var firstSignedFragment = Signing.signatureFragment(firstBundleFragment, firstFragment);
+                //  First 6561 trits for the firstFragment
+                var firstFragment = key.slice(0, 6561);
 
+                //  Get the normalized bundle hash
+                var normalizedBundleHash = bundle.normalizedBundle(bundleHash);
+                var normalizedBundleFragments = [];
 
-            //  Convert signature to trytes and assign the new signatureFragment
-            bundle.bundle[bundleEntryToSign].signatureMessageFragment = Converter.trytes(firstSignedFragment);
+                // Split hash into 3 fragments
+                for (var k = 0; k < 3; k++) {
+                    normalizedBundleFragments[k] = normalizedBundleHash.slice(k * 27, (k + 1) * 27);
+                }
 
-            //  Because the signature is > 2187 trytes, we need to
-            //  find the second transaction to add the remainder of the signature
-            if (bundle.bundle[bundleEntryToSign + 1].address === inputAddress && bundle.bundle[bundleEntryToSign + 1].value === 0) {
+                //  First bundle fragment uses 27 trytes
+                var firstBundleFragment = normalizedBundleFragments[numSignedTxs % 3];
 
-                // Use the second 6562 trits
-                var secondFragment = key.slice(6561,  2 * 6561);
+                //  Calculate the new signatureFragment with the first bundle fragment
+                var firstSignedFragment = Signing.signatureFragment(firstBundleFragment, firstFragment);
 
-                // The second 27 to 54 trytes of the bundle hash
-                var secondBundleFragment = normalizedBundleFragments[(cosignerIndex * 2 + 1) % 3];
+                //  Convert signature to trytes and assign the new signatureFragment
+                bundle.bundle[i].signatureMessageFragment = Converter.trytes(firstSignedFragment);
 
-                //  Calculate the new signature
-                var secondSignedFragment = Signing.signatureFragment(secondBundleFragment, secondFragment);
+                for (var j = 1; j < security; j++) {
 
-                //  Convert signature to trytes and assign it again to this bundle entry
-                bundle.bundle[bundleEntryToSign + 1].signatureMessageFragment = Converter.trytes(secondSignedFragment);
+                    //  Next 6561 trits for the firstFragment
+                    var nextFragment = key.slice(6561 * j, (j + 1) * 6561);
 
-                // Exit the for loop
+                    //  Use the next 27 trytes
+                    var nextBundleFragment = normalizedBundleFragments[(numSignedTxs + j) % 3];
+
+                    //  Calculate the new signatureFragment with the first bundle fragment
+                    var nextSignedFragment = Signing.signatureFragment(nextBundleFragment, nextFragment);
+
+                    //  Convert signature to trytes and add new bundle entry at i + j position
+                    // Assign the signature fragment
+                    bundle.bundle[i + j].signatureMessageFragment = Converter.trytes(nextSignedFragment);
+                }
+
                 break;
             }
         }
     }
 
     return callback(null, bundle.bundle);
-}
-
-/**
-*   Validates the signatures
-*
-*   @method validateSignatures
-*   @param {array} signedBundle
-*   @param {string} inputAddress
-*   @param {int} numCosigners
-*   @returns {bool}
-**/
-Multisig.prototype.validateSignatures = function(signedBundle, inputAddress, numCosigners) {
-
-
-    var bundleHash;
-    var signatureFragments = [];
-
-    for (var i = 0; i < signedBundle.length; i++) {
-
-        if (signedBundle[i].value < 0 && signedBundle[i].address === inputAddress) {
-
-            bundleHash = signedBundle[i].bundle;
-
-            for (var j = 0; j < numCosigners * 2; j++) {
-
-                signatureFragments.push(signedBundle[j + i].signatureMessageFragment)
-            }
-
-            break;
-        }
-    }
-
-    return Signing.validateSignatures(inputAddress, signatureFragments, bundleHash);
 }
 
 module.exports = Multisig;
@@ -3152,6 +3112,19 @@ var isTrytes = function(trytes, length) {
 
     var regexTrytes = new RegExp("^[9A-Z]{" + length +"}$");
     return regexTrytes.test(trytes) && isString(trytes);
+}
+
+/**
+*   checks if input is correct trytes consisting of A-Z9
+*   optionally validate length
+*
+*   @method isNinesTrytes
+*   @param {string} trytes
+*   @returns {boolean}
+**/
+var isNinesTrytes = function(trytes) {
+
+    return /^[9]+$/.test(trytes) && isString(trytes);
 }
 
 /**
@@ -3444,6 +3417,7 @@ var isUri = function(node) {
 module.exports = {
     isAddress: isAddress,
     isTrytes: isTrytes,
+    isNinesTrytes: isNinesTrytes,
     isValue: isValue,
     isDecimal: isDecimal,
     isHash: isHash,
@@ -3534,6 +3508,71 @@ makeRequest.prototype.send = function(command, callback) {
 }
 
 /**
+*   sends an http request to a specified host
+*
+*   @method sandboxSend
+*   @param {object} command
+*   @param {function} callback
+**/
+makeRequest.prototype.sandboxSend = function(job, callback) {
+
+    // Check every 15 seconds if the job finished or not
+    // If failed, return error
+
+    var newInterval = setInterval(function() {
+
+        console.log("CHECKING JOB: ", job);
+
+        var request = new XMLHttpRequest();
+
+        request.onreadystatechange = function() {
+
+            if (request.readyState === 4) {
+
+                var result;
+
+                // Prepare the result, check that it's JSON
+                try {
+
+                    result = JSON.parse(request.responseText);
+                } catch(e) {
+
+                    return callback(errors.invalidResponse(result));
+                }
+
+                if (result.status === "FINISHED") {
+
+                    var attachedTrytes = result.attachToTangleResponse.trytes;
+                    clearInterval(newInterval);
+
+                    console.log("FINISHED JOB: ", job);
+
+                    return callback(null, attachedTrytes);
+
+                }
+                else if (result.status === "FAILED") {
+
+                    console.log("FAILED JOB: ", job);
+
+                    clearInterval(newInterval);
+                    return callback(new Error("Sandbox transaction processing failed. Please retry."))
+                }
+            }
+        }
+
+        try {
+            request.open('GET', job, true);
+            request.send(JSON.stringify());
+        } catch(error) {
+
+            return callback(new Error("No connection to Sandbox, failed with job: ", job));
+        }
+
+    }, 5000)
+
+}
+
+/**
 *   prepares the returned values from the request
 *
 *   @method prepareResult
@@ -3579,7 +3618,7 @@ makeRequest.prototype.prepareResult = function(result, requestCommand, callback)
     // If correct result and we want to prepare the result
     if (result && resultMap.hasOwnProperty(requestCommand)) {
 
-        // If the response is from the sandbox, don't prepare the result 
+        // If the response is from the sandbox, don't prepare the result
         if (requestCommand === 'attachToTangle' && result.hasOwnProperty('id')) {
 
             result = result;
@@ -3601,6 +3640,7 @@ var makeRequest = require("./makeRequest");
 var Curl = require("../crypto/curl");
 var Converter = require("../crypto/converter");
 var ascii = require("./asciiToTrytes");
+var Signing = require("../crypto/signing");
 
 /**
 *   Table of IOTA Units based off of the standard System of Units
@@ -3902,21 +3942,53 @@ var categorizeTransfers = function(transfers, addresses) {
 }
 
 
+/**
+*   Validates the signatures
+*
+*   @method validateSignatures
+*   @param {array} signedBundle
+*   @param {string} inputAddress
+*   @returns {bool}
+**/
+var validateSignatures = function(signedBundle, inputAddress) {
+
+
+    var bundleHash;
+    var signatureFragments = [];
+
+    for (var i = 0; i < signedBundle.length; i++) {
+
+        if (signedBundle[i].address === inputAddress) {
+
+            bundleHash = signedBundle[i].bundle;
+
+            // if we reached remainder bundle
+            if (inputValidator.isNinesTrytes(signedBundle[i].signatureMessageFragment)) {
+                break;
+            }
+
+            signatureFragments.push(signedBundle[i].signatureMessageFragment)
+        }
+    }
+
+    return Signing.validateSignatures(inputAddress, signatureFragments, bundleHash);
+}
+
+
 module.exports = {
     convertUnits        : convertUnits,
     addChecksum         : addChecksum,
     noChecksum          : noChecksum,
     isValidChecksum     : isValidChecksum,
-    toTrytes            : toTrytes,
-    fromTrytes          : fromTrytes,
     transactionObject   : transactionObject,
     transactionTrytes   : transactionTrytes,
     categorizeTransfers : categorizeTransfers,
     toTrytes            : ascii.toTrytes,
-    fromTrytes          : ascii.fromTrytes
+    fromTrytes          : ascii.fromTrytes,
+    validateSignatures  : validateSignatures
 }
 
-},{"../crypto/converter":5,"../crypto/curl":6,"./asciiToTrytes":12,"./inputValidator":13,"./makeRequest":14}],16:[function(require,module,exports){
+},{"../crypto/converter":5,"../crypto/curl":6,"../crypto/signing":7,"./asciiToTrytes":12,"./inputValidator":13,"./makeRequest":14}],16:[function(require,module,exports){
 (function (process,global){
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
@@ -6843,7 +6915,7 @@ function doDuring(fn, test, callback) {
  * passes. The function is passed a `callback(err)`, which must be called once
  * it has completed with an optional `err` argument. Invoked with (callback).
  * @param {Function} test - synchronous truth test to perform after each
- * execution of `iteratee`. Invoked with the non-error callback results of 
+ * execution of `iteratee`. Invoked with the non-error callback results of
  * `iteratee`.
  * @param {Function} [callback] - A callback which is called after the test
  * function has failed and repeated execution of `iteratee` has stopped.
@@ -15180,7 +15252,7 @@ var IncomingMessage = exports.IncomingMessage = function (xhr, response, mode) {
 		self.url = response.url
 		self.statusCode = response.status
 		self.statusMessage = response.statusText
-		
+
 		response.headers.forEach(function(header, key){
 			self.headers[key.toLowerCase()] = header
 			self.rawHeaders.push(key, header)
@@ -15268,7 +15340,7 @@ IncomingMessage.prototype._onXHRProgress = function () {
 				self.push(new Buffer(response))
 				break
 			}
-			// Falls through in IE8	
+			// Falls through in IE8
 		case 'text':
 			try { // This will fail when readyState = 3 in IE9. Switch mode and wait for readyState = 4
 				response = xhr.responseText
@@ -16518,7 +16590,7 @@ exports.XMLHttpRequest = function() {
   this.responseXML = "";
   this.status = null;
   this.statusText = null;
-  
+
   // Whether cross-site Access-Control requests should be made using
   // credentials such as cookies or authorization headers
   this.withCredentials = false;
