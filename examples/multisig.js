@@ -5,33 +5,55 @@ var iota = new IOTA({
     'port': 14265
 });
 
-var digestOne = iota.multisig.getDigest('ABCDFG', 0);
+// First co-signer uses index 0 and security level 3
+var digestOne = iota.multisig.getDigest('ABCDFG', 0, 3);
 
+// We initiate the multisig address generation by absorbing the key digest
 var initiatedMultisigAddress = iota.multisig.addAddressDigest(digestOne);
 
-var digestTwo = iota.multisig.getDigest('FDSAG', 0);
+// Second cosigner also uses index 0 and security level 3 for the private key
+var digestTwo = iota.multisig.getDigest('FDSAG', 0, 3);
 
+// Add the multisig by absorbing the second cosigners key digest
 var finalMultisig = iota.multisig.addAddressDigest(digestTwo, initiatedMultisigAddress);
 
+// and finally we generate the address itself
 var address = iota.multisig.finalizeAddress(finalMultisig);
 
 console.log("MULTISIG ADDRESS: ", address);
 
-console.log("VALIDATED MULTISIG: ", iota.multisig.validateAddress(address, [digestOne, digestTwo]));
+// Simple validation if the multisig was created correctly
+// Can be called by each cosigner independently
+var isValid = iota.multisig.validateAddress(address, [digestOne, digestTwo]);
+console.log("IS VALID MULTISIG:", isValid);
 
-iota.multisig.initiateTransfer(address, 'ABCFYSUQFVBFGNHOJMLWBHMGASFGBPAUMRZRRCJFCCOJHJKZVUOCEYSCLXAGDABCEWSUXCILJCGQWI9SF', 2, [{'address': 'GWXMZADCDEWEAVRKTAIWOGE9RDX9QPKJHPPQ9IDDOINY9TUWJGKCWF9GSOW9QBPNRVSVFLBMLPAHWDNSB', 'value': 15}], function(e, unsignedBundle) {
+//  SIGNING EXAMPLE
+//
+//  Even though these functions are c alled subsequently, the addSignature functions have to be called by each
+//  cosigner independently. With the previous signer sharing the output (bundle with the transaction objects)
+//
+//  When it comes to defining the remainder address, you have to generate that address before making a transfer
+//  Important to know here is the total sum of the security levels used by the cosigners.
+iota.multisig.initiateTransfer(6, address, "NZRALDYNVGJWUVLKDWFKJVNYLWQGCWYCURJIIZRLJIKSAIVZSGEYKTZRDBGJLOA9AWYJQB9IPWRAKUC9FBDRZJZXZG", [{'address': 'ZGHXPZYDKXPEOSQTAQOIXEEI9K9YKFKCWKYYTYAUWXK9QZAVMJXWAIZABOXHHNNBJIEBEUQRTBWGLYMTX', 'value': 999}], function(e, initiatedBundle) {
 
-    var firstKey = iota.multisig.getKey('ABCDFG', 0);
+    if (e) {
+        console.log(e);
+    } else {
 
-    iota.multisig.addSignature(unsignedBundle, 0, 'JUIFYSUQFVBFGNHOJMLWBHMGASFGBPAUMRZRRCJFCCOJHJKZVUOCEYSCLXAGDABCEWSUXCILJCGQWI9SF', firstKey, function(e, bundleWithOneSig) {
 
-        var secondKey = iota.multisig.getKey('FDSAG', 0);
+        iota.multisig.addSignature(initiatedBundle, address, iota.multisig.getKey('ABCDFG', 0, 3), function(e,firstSignedBundle) {
 
-        iota.multisig.addSignature(bundleWithOneSig, 1, 'JUIFYSUQFVBFGNHOJMLWBHMGASFGBPAUMRZRRCJFCCOJHJKZVUOCEYSCLXAGDABCEWSUXCILJCGQWI9SF', secondKey, function(e, finalBundle) {
+            if (e) {
+                console.log(e);
+            } else {
 
-            console.log("FINAL BUNDLE", finalBundle);
+                iota.multisig.addSignature(firstSignedBundle, address, iota.multisig.getKey('FDSAG', 0, 3), function(e,finalBundle) {
 
-            console.log(iota.multisig.validateSignatures(finalBundle, address, 2))
-        })
-    })
+                    if (!e) {
+                        console.log("IS VALID SIGNATURE: ", iota.utils.validateSignatures(finalBundle, address));
+                    }
+                });
+            }
+        });
+    }
 })

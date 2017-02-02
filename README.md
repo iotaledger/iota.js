@@ -108,6 +108,7 @@ iota.api.getNodeInfo(function(error, success) {
     - **[convertUnits](#convertunits)**
     - **[addChecksum](#addchecksum)**
     - **[noChecksum](#nochecksum)**
+    - **[isValidChecksum](#isvalidchecksum)**
     - **[transactionObject](#transactionobject)**
     - **[transactionTrytes](#transactiontrytes)**
     - **[categorizeTransfers](#categorizetransfers)**
@@ -132,7 +133,6 @@ iota.api.getNodeInfo(function(error, success) {
     - **[isArrayOfHashes](#isarrayofhashes)**
     - **[isArrayOfTrytes](#isarrayoftrytes)**    
     - **[isArrayOfAttachedTrytes](#isarrayofattachedtrytes)**
-    - **[isUri](#isuri)**
     - **[isInputs](#isinputs)**
     - **[isString](#isstring)**
     - **[isInt](#isint)**
@@ -235,7 +235,15 @@ iota.api.broadcastAndStore(trytes, callback)
 
 ### `getNewAddress`
 
-Generates a new address from a seed and returns the address. This is either done deterministically, or by providing the index of the new address to be generated.
+Generates a new address from a seed and returns the address. This is either done deterministically, or by providing the index of the new address to be generated. When generating an address, you have the option to choose different `security` levels for your private keys. A different security level with the same key index, means that you will get a different address obviously (as such, you could argue that single seed has 3 different accounts, depending on the security level chosen).
+
+In total, there are 3 different security options available to choose from:
+
+Input | Security Level | Security
+--- | --- | ---
+1 | Low | 81-trits
+2 | Medium | 162-trits
+3 | High | 243-trits
 
 #### Input
 ```
@@ -247,6 +255,7 @@ iota.api.getNewAddress(seed [, options], callback)
   - **`index`**: `Int` If the index is provided, the generation of the address is not deterministic.
   - **`checksum`**: `Bool` Adds 9-tryte address checksum
   - **`total`**: `Int` Total number of addresses to generate.
+  - **`security`**: `Int`  Security level to be used for the private key / address. Can be 1, 2 or 3
   - **`returnAll`**: `Bool` If true, it returns all addresses which were deterministically generated (until findTransactions returns null)
 3. **`callback`**: `Function` Optional callback.
 
@@ -271,6 +280,7 @@ iota.api.getInputs(seed, [, options], callback)
 2. **`options`**: `Object` which is optional:
   - **`start`**: `int` Starting key index  
   - **`end`**: `int` Ending key index
+  - **`security`**: `Int`  Security level to be used for the private key / address. Can be 1, 2 or 3
   - **`threshold`**: `int` Minimum threshold of accumulated balances from the inputs that is requested
 4. **`callback`**: `Function` Optional callback.
 
@@ -289,15 +299,44 @@ Main purpose of this function is to get an array of transfer objects as input, a
 
 You can provide multiple transfer objects, which means that your prepared bundle will have multiple outputs to the same, or different recipients. As single transfer object takes the values of: `address`, `value`, `message`, `tag`. The message and tag values are required to be tryte-encoded.
 
-For the options, you can provide a list of `inputs`, that will be used for signing the transfer's inputs. It should be noted that these inputs (an array of objects) should have the provided `keyIndex` and `address` values:
+For the options, you can provide a list of `inputs`, that will be used for signing the transfer's inputs. It should be noted that these inputs (an array of objects) should have the provided 'security', `keyIndex` and `address` values:
 ```
 var inputs = [{
     'keyIndex': //VALUE,
-    'address': //VALUE
+    'address': //VALUE,
+    'security': //VALUE
 }]
 ```
 
-The library validates these inputs then and ensures that you have sufficient balance. The `address` parameter can be used to define the address to which a remainder balance (if that is the case), will be sent to. So if all your inputs have a combined balance of 2000, and your spending 1800 of them, 200 of your tokens will be sent to that remainder address. If you do not supply the `address`, the library will simply generate a new one from your seed.
+The library validates these inputs then and ensures that you have sufficient balance. When defining these inputs, you can also provide multiple inputs on different security levels. The library will correctly sign these inputs using your seed and the corresponding private keys. Here is an example using security level 3 and 2 for a transfer:
+
+```
+iota.api.prepareTransfers(seed,
+    [{
+        'address': 'SSEWOZSDXOVIURQRBTBDLQXWIXOLEUXHYBGAVASVPZ9HBTYJJEWBR9PDTGMXZGKPTGSUDW9QLFPJHTIEQZNXDGNRJE',
+        'value': 10000
+    }], {
+    'inputs': [
+        {
+            address: 'XB9IBINADVMP9K9FEIIR9AYEOFUU9DP9EBCKOTPSDVSNRRNVSJOPTFUHSKSLPDJLEHUBOVEIOJFPDCZS9',
+            balance: 1500,
+            keyIndex: 0,
+            security: 3
+        }, {
+            address: 'W9AZFNWZZZNTAQIOOGYZHKYJHSVMALVTWJSSZDDRVEIXXWPNWEALONZLPQPTCDZRZLHNIHSUKZRSZAZ9W',
+            balance: 8500,
+            keyIndex: 7,
+            security: 2
+        }
+    ], function(e, s) {
+
+
+        console.log(e,s);
+})
+```
+
+
+The `address` option can be used to define the address to which a remainder balance (if that is the case), will be sent to. So if all your inputs have a combined balance of 2000, and your spending 1800 of them, 200 of your tokens will be sent to that remainder address. If you do not supply the `address`, the library will simply generate a new one from your seed (taking `security` into account, or using the standard security value of `2` (medium)).
 
 #### Input
 ```
@@ -313,6 +352,7 @@ iota.api.prepareTransfers(seed, transfersArray [, options], callback)
 3. **`options`**: `Object` which is optional:
   - **`inputs`**: `Array` List of inputs used for funding the transfer
   - **`address`**: `String` if defined, this address will be used for sending the remainder value (of the inputs) to.
+  - **`security`**: `Int`  Security level to be used for the private key / addresses. This is for inputs and generating of the remainder address in case you did not specify it. Can be 1, 2 or 3
 4. **`callback`**: `Function` Optional callback.
 
 #### Return Value
@@ -431,6 +471,7 @@ getTransfers(seed [, options], callback)
 2. **`options`**: `Object` which is optional:
   - **`start`**: `Int` Starting key index for search
   - **`end`**: `Int` Ending key index for search
+  - **`security`**: `Int`  Security level to be used for the private key / addresses, which is used for getting all associated transfers.
   - **`inclusionStates`**: `Bool` If True, it gets the inclusion states of the transfers.
 3. **`callback`**: `Function` Optional callback.
 
@@ -452,6 +493,7 @@ getAccountData(seed [, options], callback)
 2. **`options`**: `Object` which is optional:
   - **`start`**: `Int` Starting key index for search
   - **`end`**: `Int` Ending key index for search
+  - **`security`**: `Int`  Security level to be used for the private key / addresses, which is used for getting all associated transfers.
 3. **`callback`**: `Function` Optional callback.
 
 #### Returns
@@ -629,6 +671,23 @@ iota.utils.fromTrytes(trytes)
 
 ---
 
+### `validateSignatures`
+
+This function makes it possible for each of the co-signers in the multi-signature to independently verify that a generated transaction with the corresponding signatures of the co-signers is valid. This function is safe to use and does not require any sharing of digests or key values.
+
+#### Input
+```
+iota.utils.validateSignatures(signedBundle, inputAddress)
+```
+
+1. **`signedBundle`**: `Array` signed bundle by all of the co-signers
+2. **`inputAddress`**: `String` input address as provided to `initiateTransfer`.
+
+#### Returns
+`bool` - true / false  
+
+---
+
 
 ## `iota.multisig`
 
@@ -642,15 +701,16 @@ Multi signature related functions.
 
 ### `getKey`
 
-Generates the corresponding private key of a seed.
+Generates the corresponding private key (depending on the `security` chosen) of a seed.
 
 #### Input
 ```
-iota.multisig.getKey(seed, index)
+iota.multisig.getKey(seed, index, security)
 ```
 
 1. **`seed`**: `String` Tryte encoded seed
 2. **`index`**: 'Int' Index of the private key.
+3. **`security`**: `Int`  Security level to be used for the private key
 
 #### Returns
 `String` - private key represented in trytes.
@@ -669,6 +729,7 @@ iota.multisig.getDigest(seed, index)
 
 1. **`seed`**: `String` Tryte encoded seed
 2. **`index`**: 'Int' Index of the private key.
+3. **`security`**: `Int`  Security level to be used for the private key
 
 #### Returns
 `String` - digest represented in trytes.
@@ -731,14 +792,16 @@ iota.multisig.validateAddress(multisigAddress, digests)
 
 Initiates the creation of a new transfer by generating an empty bundle with the correct number of bundle entries to be later used for the signing process. It should be noted that currently, only a single input (via `inputAddress`) is possible. The `remainderAddress` also has to be provided and should be generated by the co-signers of the multi-signature before initiating the transfer.
 
+The `securitySum` input is basically the sum of the `security` levels from all cosigners chosen during the private key generation (getKey / getDigest). e.g. when creating a new multisig, Bob has chosen security level 2, whereas Charles has chosen security level 3. Their securitySum is 5.
+
 #### Input
 ```
-iota.multisig.initiateTransfer(inputAddress, remainderAddress, numCosigners, transfers, callback)
+iota.multisig.initiateTransfer(securitySum, inputAddress, remainderAddress, transfers, callback)
 ```
 
-1. **`inputAddress`**: `String` input address which has sufficient balance and is controlled by the co-signers
-2. **`remainderAddress`**: 'String' in case there is a remainder balance, send the funds to this address.
-3. **`numCosigners`**: `Int` the number of co-signers for the multi-sig
+1. **`securitySum`**: `Int` The sum of the security levels chosen by all cosigners when generating the private keys.
+2. **`inputAddress`**: `String` input address which has sufficient balance and is controlled by the co-signers
+3. **`remainderAddress`**: `String` in case there is a remainder balance, send the funds to this address. If you do not have a remainder balance, you can simply put `null`
 4. **`transfers`**: `Array` Transfers object
 5. **`callback`**: `Function`
 
@@ -751,38 +814,20 @@ iota.multisig.initiateTransfer(inputAddress, remainderAddress, numCosigners, tra
 
 This function is called by each of the co-signers individually to add their signature to the bundle. Here too, order is important. This function returns the bundle, which should be shared with each of the participants of the multi-signature.
 
+After having added all signatures, you can validate the signature with the `utils.validateSignature()` function.
+
 #### Input
 ```
-iota.multisig.addSignature(bundleToSign, cosignerIndex, inputAddress, key, callback)
+iota.multisig.addSignature(bundleToSign, inputAddress, key, callback)
 ```
 
 1. **`bundleToSign`**: `Array` bundle to sign
-2. **`cosignerIndex`**: `Int` total order index of the current signer in the multi-signature. Index starts at 0. e.g. If there are 4 co-signers, and you are the 3rd in order to add your signature, then your index is `2`.
-3. **`inputAddress`**: 'String' input address as provided to `initiateTransfer`.
-4. **`key`**: `String` private key trytes as returned by `getKey`
-5. **`callback`**: `Function`
+2. **`inputAddress`**: `String` input address as provided to `initiateTransfer`.
+3. **`key`**: `String` private key trytes as returned by `getKey`
+4. **`callback`**: `Function`
 
 #### Returns
 `Array` - bundle
-
----
-
-### `validateSignatures`
-
-This function makes it possible for each of the co-signers in the multi-signature to independently verify that a generated transaction with the corresponding signatures of the co-signers is valid. This function is safe to use and does not require any sharing of digests or key values.
-
-#### Input
-```
-iota.multisig.validateSignatures(signedBundle, inputAddress, numCosigners)
-```
-
-1. **`signedBundle`**: `Array` signed bundle by all of the co-signers
-2. **`inputAddress`**: 'String' input address as provided to `initiateTransfer`.
-4. **`numCosigners`**: `Int` total number of co-signers
-
-#### Returns
-`bool` - true / false  
-
 
 ---
 
@@ -865,7 +910,7 @@ Checks if it's a correct array of transfer objects. A transfer object consists o
 {
     'address': // STRING (trytes encoded, 81 or 90 trytes)
     'value': // INT
-    'mesage': // STRING (trytes encoded)
+    'message': // STRING (trytes encoded)
     'tag': // STRING (trytes encoded, maximum 27 trytes)
 }
 ```
@@ -915,19 +960,6 @@ iota.validate.isArrayOfAttachedTrytes(trytesArray)
 ```
 
 1. **`trytesArray`**: `Array`
-
----
-
-### `isUri`
-
-Work in progress. If this is still here while you're reading the documentation, tell either Dominik or someone else from Core to move their asses.
-
-#### Input
-```
-iota.validate.isUri(uris)
-```
-
-1. **`uris`**: `Array`
 
 ---
 
