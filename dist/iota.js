@@ -469,7 +469,7 @@ api.prototype.sendTrytes = function(trytes, depth, minWeightMagnitude, callback)
         if (error) {
             return callback(error)
         }
-        console.log(toApprove);
+
         // attach to tangle - do pow
         self.attachToTangle(toApprove.trunkTransaction, toApprove.branchTransaction, minWeightMagnitude, trytes, function(error, attached) {
 
@@ -477,14 +477,11 @@ api.prototype.sendTrytes = function(trytes, depth, minWeightMagnitude, callback)
                 return callback(error)
             }
 
-            console.log(error, attached);
-
             // If the user is connected to the sandbox, we have to monitor the POW queue
             // to check if the POW job was completed
             if (self.sandbox) {
 
                 var job = self.sandbox + '/jobs/' + attached.id;
-                console.log(job);
 
                 // Do the Sandbox send function
                 self._makeRequest.sandboxSend(job, function(e, attachedTrytes) {
@@ -847,7 +844,7 @@ api.prototype.getInputs = function(seed, options, callback) {
                     'inputs': [],
                     'totalBalance': 0
                 }
-                console.log(balances);
+
                 // If threshold defined, keep track of whether reached or not
                 // else set default to true
                 var thresholdReached = threshold ? false : true;
@@ -1233,7 +1230,7 @@ api.prototype.prepareTransfers = function(seed, transfers, options, callback) {
             bundleTrytes.push(Utils.transactionTrytes(tx))
         })
 
-        return callback(null, bundleTrytes);
+        return callback(null, bundleTrytes.reverse());
     }
 }
 
@@ -2560,7 +2557,7 @@ function IOTA(settings) {
     this.provider = settings.provider || this.host.replace(/\/$/, '') + ":" + this.port;
     this.sandbox = settings.sandbox || false;
     this.token = settings.token || false;
-
+    
     if (this.sandbox) {
 
         // remove backslash character
@@ -2618,6 +2615,7 @@ function Multisig(provider) {
 *   @method getKey
 *   @param {string} seed
 *   @param {int} index
+*   @param {int} security Security level to be used for the private key / address. Can be 1, 2 or 3
 *   @returns {string} digest trytes
 **/
 Multisig.prototype.getKey = function(seed, index, security) {
@@ -2631,6 +2629,7 @@ Multisig.prototype.getKey = function(seed, index, security) {
 *   @method getDigest
 *   @param {string} seed
 *   @param {int} index
+*   @param {int} security Security level to be used for the private key / address. Can be 1, 2 or 3
 *   @returns {string} digest trytes
 **/
 Multisig.prototype.getDigest = function(seed, index, security) {
@@ -3466,7 +3465,8 @@ makeRequest.prototype.open = function() {
 
     var request = new XMLHttpRequest();
     request.open('POST', this.provider, true);
-    request.setRequestHeader('Content-Type','application/json');
+    // temporarily disabled until IRI fix 
+    //request.setRequestHeader('Content-Type','application/json');
 
     if (this.token) {
         request.withCredentials = true;
@@ -3521,8 +3521,6 @@ makeRequest.prototype.sandboxSend = function(job, callback) {
 
     var newInterval = setInterval(function() {
 
-        console.log("CHECKING JOB: ", job);
-
         var request = new XMLHttpRequest();
 
         request.onreadystatechange = function() {
@@ -3537,7 +3535,7 @@ makeRequest.prototype.sandboxSend = function(job, callback) {
                     result = JSON.parse(request.responseText);
                 } catch(e) {
 
-                    return callback(errors.invalidResponse(result));
+                    return callback(errors.invalidResponse(e));
                 }
 
                 if (result.status === "FINISHED") {
@@ -3545,14 +3543,10 @@ makeRequest.prototype.sandboxSend = function(job, callback) {
                     var attachedTrytes = result.attachToTangleResponse.trytes;
                     clearInterval(newInterval);
 
-                    console.log("FINISHED JOB: ", job);
-
                     return callback(null, attachedTrytes);
 
                 }
                 else if (result.status === "FAILED") {
-
-                    console.log("FAILED JOB: ", job);
 
                     clearInterval(newInterval);
                     return callback(new Error("Sandbox transaction processing failed. Please retry."))
@@ -6915,7 +6909,7 @@ function doDuring(fn, test, callback) {
  * passes. The function is passed a `callback(err)`, which must be called once
  * it has completed with an optional `err` argument. Invoked with (callback).
  * @param {Function} test - synchronous truth test to perform after each
- * execution of `iteratee`. Invoked with the non-error callback results of
+ * execution of `iteratee`. Invoked with the non-error callback results of 
  * `iteratee`.
  * @param {Function} [callback] - A callback which is called after the test
  * function has failed and repeated execution of `iteratee` has stopped.
@@ -15252,7 +15246,7 @@ var IncomingMessage = exports.IncomingMessage = function (xhr, response, mode) {
 		self.url = response.url
 		self.statusCode = response.status
 		self.statusMessage = response.statusText
-
+		
 		response.headers.forEach(function(header, key){
 			self.headers[key.toLowerCase()] = header
 			self.rawHeaders.push(key, header)
@@ -15340,7 +15334,7 @@ IncomingMessage.prototype._onXHRProgress = function () {
 				self.push(new Buffer(response))
 				break
 			}
-			// Falls through in IE8
+			// Falls through in IE8	
 		case 'text':
 			try { // This will fail when readyState = 3 in IE9. Switch mode and wait for readyState = 4
 				response = xhr.responseText
@@ -16590,7 +16584,7 @@ exports.XMLHttpRequest = function() {
   this.responseXML = "";
   this.status = null;
   this.statusText = null;
-
+  
   // Whether cross-site Access-Control requests should be made using
   // credentials such as cookies or authorization headers
   this.withCredentials = false;
