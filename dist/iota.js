@@ -218,7 +218,12 @@ api.prototype.getNeighbors = function(callback) {
 **/
 api.prototype.addNeighbors = function(uris, callback) {
 
-    var command = apiCommands.addNeighbors();
+    // Validate URIs
+    for (var i = 0; i < uris.length; i++) {
+        if (!inputValidator.isUri(uris[i])) return callback(errors.invalidUri(uris[i]));
+    }
+
+    var command = apiCommands.addNeighbors(uris);
 
     return this.sendCommand(command, callback)
 }
@@ -231,7 +236,12 @@ api.prototype.addNeighbors = function(uris, callback) {
 **/
 api.prototype.removeNeighbors = function(uris, callback) {
 
-    var command = apiCommands.removeNeighbors();
+    // Validate URIs
+    for (var i = 0; i < uris.length; i++) {
+        if (!inputValidator.isUri(uris[i])) return callback(errors.invalidUri(uris[i]));
+    }
+
+    var command = apiCommands.removeNeighbors(uris);
 
     return this.sendCommand(command, callback)
 }
@@ -2518,6 +2528,9 @@ module.exports = {
     invalidTrunkOrBranch: function(hash) {
         return new Error("You have provided an invalid hash as a trunk/branch: " + hash);
     },
+    invalidUri: function(uri) {
+        return new Error("You have provided an invalid URI for your Neighbor: " + uri)
+    },
     notInt: function() {
         return new Error("One of your inputs is not an integer");
     },
@@ -2557,7 +2570,7 @@ function IOTA(settings) {
     this.provider = settings.provider || this.host.replace(/\/$/, '') + ":" + this.port;
     this.sandbox = settings.sandbox || false;
     this.token = settings.token || false;
-    
+
     if (this.sandbox) {
 
         // remove backslash character
@@ -3465,7 +3478,6 @@ makeRequest.prototype.open = function() {
 
     var request = new XMLHttpRequest();
     request.open('POST', this.provider, true);
-    // temporarily disabled until IRI fix 
     //request.setRequestHeader('Content-Type','application/json');
 
     if (this.token) {
@@ -3765,38 +3777,6 @@ var isValidChecksum = function(addressWithChecksum) {
 
     return newChecksum === addressWithChecksum;
 }
-
-
-/**
-*   Convert bytes to trytes
-*
-*   @method toTrytes
-*   @param {string} string
-*   @param {string} type
-*   @returns {string} address (without checksum)
-**/
-var toTrytes = function(string, type) {
-    // TODO !!!!!
-    if (type === "ascii") {
-        return ascii.toTrytes(trytes);
-    }
-}
-
-/**
-*   Convert trytes to bytes
-*
-*   @method fromTrytes
-*   @param {string} trytes
-*   @param {string} type
-*   @returns {string} address (without checksum)
-**/
-var fromTrytes = function(trytes, type) {
-    //TODO !!!!!
-    if (type === "ascii") {
-        return ascii.fromTrytes(trytes);
-    }
-}
-
 
 /**
 *   Converts transaction trytes of 2673 trytes into a transaction object
