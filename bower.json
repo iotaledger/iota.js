@@ -1,12 +1,12 @@
 {
     "name": "iota.lib.js",
-    "version": "0.1.5",
+    "version": "0.2.0",
     "description": "Javascript Library for the IOTA API.",
     "main": "./dist/iota.js",
     "authors": [
         {
             "name": "Dominik Schiener (IOTA Foundation)",
-            "website": "https://iotatoken.com"
+            "website": "https://iota.org"
         }
     ],
     "license": "MIT",
@@ -16,7 +16,7 @@
         "library",
         "browser",
         "javascript",
-        "nodejs",
+        "micropayments",
         "API"
     ],
     "bugs": {

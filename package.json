@@ -1,15 +1,15 @@
 {
     "name": "iota.lib.js",
-    "version": "0.1.5",
+    "version": "0.2.0",
     "description": "Javascript Library for the IOTA API.",
     "main": "./lib/iota.js",
     "scripts": {
         "build": "gulp",
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "mocha"
     },
     "author": {
         "name": "Dominik Schiener (IOTA Foundation)",
-        "website": "https://iotatoken.com"
+        "website": "https://iota.org"
     },
     "keywords": [
         "iota",
@@ -31,7 +31,6 @@
     "dependencies": {
         "async": "^2.1.2",
         "browserify": "^13.3.0",
-        "gulp-uglify": "^2.0.1",
         "xmlhttprequest": "^1.8.0"
     },
     "devDependencies": {
@@ -43,7 +42,7 @@
         "gulp-jshint": "^2.0.2",
         "gulp-rename": "^1.2.2",
         "gulp-replace": "^0.5.4",
-        "gulp-uglify": "^2.0.0",
+        "gulp-uglify": "^2.1.0",
         "jshint": "^2.9.4",
         "mocha": "^3.2.0",
         "vinyl-buffer": "^1.0.0",
