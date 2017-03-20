@@ -114,6 +114,7 @@ iota.api.getNodeInfo(function(error, success) {
     - **[categorizeTransfers](#categorizetransfers)**
     - **[toTrytes](#totrytes)**
     - **[fromTrytes](#fromtrytes)**
+    - **[extractJson](#extractjson)**
 - **[multisig](#iota.multisig)**
     - **[getKey](#getkey)**
     - **[getDigest](#getdigest)**
@@ -641,17 +642,17 @@ iota.utils.categorizeTransfers(transfers, addresses)
 
 ### `toTrytes`
 
-Converts ASCII characters into trytes according to our encoding schema (read the source code for more info as to how it works). Currently only works with ASCII. In case you want to convert JSON data, stringify it first.
+Converts ASCII characters into trytes according to our encoding schema (read the source code for more info as to how it works). Currently only works with valid ASCII characters. As such, if you provide invalid characters the function will return `null`. In case you want to convert JSON data, stringify it first.
 
 #### Input
 ```
-iota.utils.toTrytes(string)
+iota.utils.toTrytes(input)
 ```
 
-1. **`string`**: `String` String you want to convert into trytes.
+1. **`input`**: `String` String you want to convert into trytes. All non-string values should be converted into strings first.
 
 #### Returns
-`string` - trytes
+`string || null` - trytes, or null in case you provided an invalid ASCII character
 
 ---
 
@@ -668,6 +669,22 @@ iota.utils.fromTrytes(trytes)
 
 #### Returns
 `string` - string
+
+---
+
+### `extractJson`
+
+This function takes a bundle as input and from the signatureMessageFragments extracts the JSON encoded data which was sent with the transfer. This currently only works with the `toTrytes` and `fromTrytes` function that use the ASCII <-> Trytes encoding scheme. In case there is no JSON data, or invalid one, this function will return `null`
+
+#### Input
+```
+iota.utils.extractJson(bundle)
+```
+
+1. **`bundle`**: `Array` bundle from which you want to extract the JSON data.
+
+#### Returns
+`String` - Stringified JSON object which was extracted from the transactions. 
 
 ---
 
