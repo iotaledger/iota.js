@@ -115,6 +115,7 @@ iota.api.getNodeInfo(function(error, success) {
     - **[toTrytes](#totrytes)**
     - **[fromTrytes](#fromtrytes)**
     - **[extractJson](#extractjson)**
+    - **[validateSignatures](#validatesignatures)**
 - **[multisig](#iota.multisig)**
     - **[getKey](#getkey)**
     - **[getDigest](#getdigest)**
@@ -123,7 +124,6 @@ iota.api.getNodeInfo(function(error, success) {
     - **[validateAddress](#validateaddress)**
     - **[initiateTransfer](#initiatetransfer)**
     - **[addSignature](#addsignature)**
-    - **[validateSignatures](#validatesignatures)**
 - **[validate](#iota.validate)**
     - **[isAddress](#isaddress)**
     - **[isTrytes](#istrytes)**
@@ -684,7 +684,7 @@ iota.utils.extractJson(bundle)
 1. **`bundle`**: `Array` bundle from which you want to extract the JSON data.
 
 #### Returns
-`String` - Stringified JSON object which was extracted from the transactions. 
+`String` - Stringified JSON object which was extracted from the transactions.
 
 ---
 
