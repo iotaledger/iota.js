@@ -1,6 +1,6 @@
 # IOTA Javascript LIBRARY
 
-[![Build Status](https://travis-ci.org/iotaledger/iota.lib.js.svg?branch=master)](https://travis-ci.org/iotaledger/iota.lib.js)
+[![Build Status](https://travis-ci.org/iotaledger/iota.lib.js.svg?branch=master)](https://travis-ci.org/iotaledger/iota.lib.js) [![NSP Status](https://nodesecurity.io/orgs/iota-foundation/projects/7c0214b5-e36a-4178-92bc-164c536cfd6c/badge)](https://nodesecurity.io/orgs/iota-foundation/projects/7c0214b5-e36a-4178-92bc-164c536cfd6c)
 
 This is the official Javascript library for the IOTA Core. It implements both the [official API](https://iota.readme.io/), as well as newly proposed functionality (such as signing, bundles, utilities and conversion).
 

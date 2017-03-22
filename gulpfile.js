@@ -5,7 +5,9 @@ var gulp       = require('gulp'),
     source     = require("vinyl-source-stream"),
     buffer     = require("vinyl-buffer"),
     browserify = require('browserify'),
-    del        = require('del');
+    del        = require('del'),
+    gulpNSP    = require('gulp-nsp');
+
 
 
 var DEST = './dist/'
@@ -26,6 +28,11 @@ gulp.task('clean', ['lint'], function(cb) {
     del([DEST]).then(cb.bind(null, null));
 });
 
+//To check your package.json
+gulp.task('nsp', function (cb) {
+  gulpNSP({package: __dirname + '/package.json'}, cb);
+});
+
 /**
     Build for the browser
 **/
@@ -40,4 +47,4 @@ gulp.task('dist', function() {
         .pipe(gulp.dest(DEST));
 });
 
-gulp.task('default', ['lint', 'clean', 'dist']);
+gulp.task('default', ['lint', 'clean', 'nsp', 'dist']);
