@@ -1,6 +1,6 @@
 var chai = require('chai');
 var assert = chai.assert;
-var valid = require('../lib/utils/inputValidator');
+var valid = require('../../lib/utils/inputValidator');
 
 
 describe('valid.isUri', function() {
@@ -14,36 +14,35 @@ describe('valid.isUri', function() {
     ]
 
     // 0 test
-    it('should be valid isUri: 0', function() {
+    it('should be valid isUri: ' + tests[0], function() {
 
         var isUri = valid.isUri(tests[0]);
         assert.isTrue(isUri);
     })
 
     // 1 test
-    it('should be valid isUri: 1', function() {
+    it('should be valid isUri: ' + tests[1], function() {
 
         var isUri = valid.isUri(tests[1]);
         assert.isTrue(isUri);
     })
 
     // 2 test
-    it('should be valid isUri: 2', function() {
+    it('should be valid isUri: ' + tests[2], function() {
 
         var isUri = valid.isUri(tests[2]);
         assert.isTrue(isUri);
     })
 
     // 3 test
-    it('should be invalid isUri: 2', function() {
+    it('should be invalid isUri: ' + tests[3], function() {
 
         var isUri = valid.isUri(tests[3]);
         assert.isFalse(isUri);
     })
 
-
     // 3 test
-    it('should be invalid isUri: 2', function() {
+    it('should be invalid isUri: ' + tests[4], function() {
 
         var isUri = valid.isUri(tests[4]);
         assert.isFalse(isUri);

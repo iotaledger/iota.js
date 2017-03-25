@@ -1,6 +1,6 @@
 var chai = require('chai');
 var assert = chai.assert;
-var Utils = require('../lib/utils/utils.js');
+var Utils = require('../../lib/utils/utils.js');
 
 describe('utils.extractJson', function() {
 
@@ -90,7 +90,7 @@ describe('utils.extractJson', function() {
         it('should get JSON: : ' + test.expectedJson, function() {
 
             var message = Utils.extractJson( test.bundle );
-            console.log("Message", test.bundle, message);
+
             if (test.expectedJson) {
 
                 assert.strictEqual( message, test.expectedJson );

@@ -1,6 +1,6 @@
 var chai = require('chai');
 var assert = chai.assert;
-var Utils = require('../lib/utils/utils.js');
+var Utils = require('../../lib/utils/utils.js');
 
 describe('utils.checksum', function() {
 

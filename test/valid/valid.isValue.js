@@ -1,6 +1,6 @@
 var chai = require('chai');
 var assert = chai.assert;
-var valid = require('../lib/utils/inputValidator');
+var valid = require('../../lib/utils/inputValidator');
 
 
 describe('valid.isValue', function() {

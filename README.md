@@ -66,7 +66,7 @@ Overall, there are currently four subclasses that are accessible from the IOTA o
 - **`api`**: Core API functionality for interacting with the IOTA core.
 - **`utils`**: Utility related functions for conversions, validation and so on  
 - **`multisig`**: Functions for creating and signing multi-signature addresses and transactions.
-- **`validate`**: Validator functions that can help with determining whether the inputs or results that you get are valid.
+- **`valid`**: Validator functions that can help with determining whether the inputs or results that you get are valid.
 
 In the future new IOTA Core modules (such as Flash, MAM) and all IXI related functionality will be available.
 
@@ -118,6 +118,7 @@ iota.api.getNodeInfo(function(error, success) {
     - **[fromTrytes](#fromtrytes)**
     - **[extractJson](#extractjson)**
     - **[validateSignatures](#validatesignatures)**
+    - **[isBundle](#isbundle)**
 - **[multisig](#iota.multisig)**
     - **[getKey](#getkey)**
     - **[getDigest](#getdigest)**
@@ -126,7 +127,7 @@ iota.api.getNodeInfo(function(error, success) {
     - **[validateAddress](#validateaddress)**
     - **[initiateTransfer](#initiatetransfer)**
     - **[addSignature](#addsignature)**
-- **[validate](#iota.validate)**
+- **[valid](#iota.valid)**
     - **[isAddress](#isaddress)**
     - **[isTrytes](#istrytes)**
     - **[isValue](#isvalue)**
@@ -136,6 +137,7 @@ iota.api.getNodeInfo(function(error, success) {
     - **[isArrayOfHashes](#isarrayofhashes)**
     - **[isArrayOfTrytes](#isarrayoftrytes)**    
     - **[isArrayOfAttachedTrytes](#isarrayofattachedtrytes)**
+    - **[isArrayOfTxObjects](#isarrayoftxobjects)**
     - **[isInputs](#isinputs)**
     - **[isString](#isstring)**
     - **[isInt](#isint)**
@@ -707,6 +709,28 @@ iota.utils.validateSignatures(signedBundle, inputAddress)
 
 ---
 
+### `isBundle`
+
+Checks if the provided bundle is valid. The provided bundle has to be ordered tail (i.e. `currentIndex`: 0) first. A bundle is deemed valid if it has:
+
+- Valid transaction structure
+- Correct `currentIndex`, `lastIndex` and number of bundle transactions
+- The sum of all `value` fields is 0
+- The bundle hash is correct
+- Valid signature
+
+#### Input
+```
+iota.utils.isBundle(bundle)
+```
+
+1. **`bundle`**: `Array` bundle to test
+
+#### Returns
+`bool` - true / false  
+
+---
+
 
 ## `iota.multisig`
 
@@ -850,7 +874,7 @@ iota.multisig.addSignature(bundleToSign, inputAddress, key, callback)
 
 ---
 
-## `iota.validate`
+## `iota.valid`
 
 Validator functions. Return either true / false.
 
@@ -862,7 +886,7 @@ Checks if the provided input is a valid 81-tryte (non-checksum), or 90-tryte (wi
 
 #### Input
 ```
-iota.validate.isAddress(address)
+iota.valid.isAddress(address)
 ```
 
 1. **`address`**: `String` A single address
@@ -875,7 +899,7 @@ Determines if the provided input is valid trytes. Valid trytes are: `ABCDEFGHIJK
 
 #### Input
 ```
-iota.validate.isTrytes(trytes [, length])
+iota.valid.isTrytes(trytes [, length])
 ```
 
 1. **`trytes`**: `String`
@@ -889,7 +913,7 @@ Validates the value input, checks if it's integer.
 
 #### Input
 ```
-iota.validate.isValue(value)
+iota.valid.isValue(value)
 ```
 
 1. **`value`**: `Integer`
@@ -902,7 +926,7 @@ Checks if it's a decimal value
 
 #### Input
 ```
-iota.validate.isDecimal(value)
+iota.valid.isDecimal(value)
 ```
 
 1. **`value`**: `Integer || String`
@@ -915,7 +939,7 @@ Checks if correct hash consisting of 81-trytes.
 
 #### Input
 ```
-iota.validate.isHash(hash)
+iota.valid.isHash(hash)
 ```
 
 1. **`hash`**: `String`
@@ -936,7 +960,7 @@ Checks if it's a correct array of transfer objects. A transfer object consists o
 
 #### Input
 ```
-iota.validate.isTransfersArray(transfersArray)
+iota.valid.isTransfersArray(transfersArray)
 ```
 
 1. **`transfersArray`**: `array`
@@ -949,7 +973,7 @@ Array of valid 81 or 90-trytes hashes.
 
 #### Input
 ```
-iota.validate.isArrayOfHashes(hashesArray)
+iota.valid.isArrayOfHashes(hashesArray)
 ```
 
 1. **`hashesArray`**: `Array`
@@ -962,7 +986,7 @@ Checks if it's an array of correct 2673-trytes. These are trytes either returned
 
 #### Input
 ```
-iota.validate.isArrayOfTrytes(trytesArray)
+iota.valid.isArrayOfTrytes(trytesArray)
 ```
 
 1. **`trytesArray`**: `Array`
@@ -975,10 +999,39 @@ Similar to `isArrayOfTrytes`, just that in addition this function also validates
 
 #### Input
 ```
-iota.validate.isArrayOfAttachedTrytes(trytesArray)
+iota.valid.isArrayOfAttachedTrytes(trytesArray)
 ```
 
 1. **`trytesArray`**: `Array`
+
+---
+
+### `isArrayOfTxObjects`
+
+Checks if the provided bundle is an array of correct transaction objects. Basically validates if each entry in the array has all of the following keys:
+```
+var keys = [
+    'hash',
+    'signatureMessageFragment',
+    'address',
+    'value',
+    'tag',
+    'timestamp',
+    'currentIndex',
+    'lastIndex',
+    'bundle',
+    'trunkTransaction',
+    'branchTransaction',
+    'nonce'
+]
+```
+
+#### Input
+```
+iota.valid.isArrayOfTxObjects(bundle)
+```
+
+1. **`bundle`**: `Array`
 
 ---
 
@@ -995,7 +1048,7 @@ Validates if it's an array of correct input objects. These inputs are provided t
 
 #### Input
 ```
-iota.validate.isInputs(inputsArray)
+iota.valid.isInputs(inputsArray)
 ```
 
 1. **`inputsArray`**: `Array`
@@ -1008,7 +1061,7 @@ Self explanatory.
 
 #### Input
 ```
-iota.validate.isString(string)
+iota.valid.isString(string)
 ```
 
 ---
@@ -1019,7 +1072,7 @@ Self explanatory.
 
 #### Input
 ```
-iota.validate.isInt(int)
+iota.valid.isInt(int)
 ```
 
 ---
@@ -1030,7 +1083,7 @@ Self explanatory.
 
 #### Input
 ```
-iota.validate.isArray(array)
+iota.valid.isArray(array)
 ```
 
 ---
@@ -1041,7 +1094,7 @@ Self explanatory.
 
 #### Input
 ```
-iota.validate.isObject(array)
+iota.valid.isObject(array)
 ```
 
 ---

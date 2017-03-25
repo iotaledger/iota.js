@@ -1320,81 +1320,16 @@ api.prototype.getBundle = function(transaction, callback) {
 
         if (error) return callback(error);
 
-        /********
+        if (!Utils.isBundle(bundle)) {
 
-        Validity Check Functions
+            return callback(new Error("Invalid Bundle provided"))
 
-        ********/
+        } else {
 
-        var totalSum = 0, lastIndex, bundleHash = bundle[0].bundle;
+            // Return bundle element
+            return callback(null, bundle);
 
-        // Prepare to absorb txs and get bundleHash
-        var bundleFromTxs = [];
-
-        var curl = new Curl();
-        curl.initialize();
-
-        // Prepare for signature validation
-        var signaturesToValidate = [];
-
-        bundle.forEach(function(bundleTx, index) {
-
-            totalSum += bundleTx.value;
-
-            // currentIndex has to be equal to the index in the array
-            if (bundleTx.currentIndex !== index) return callback(new Error("Invalid Bundle"));
-
-            // Get the transaction trytes
-            var thisTxTrytes = Utils.transactionTrytes(bundleTx);
-
-            // Absorb bundle hash + value + timestamp + lastIndex + currentIndex trytes.
-            curl.absorb(Converter.trits(thisTxTrytes.slice(2187, 2187 + 162)))
-
-            // Check if input transaction
-            if (bundleTx.value < 0) {
-                var thisAddress = bundleTx.address;
-
-                var newSignatureToValidate = {
-                    'address': thisAddress,
-                    'signatureFragments': Array(bundleTx.signatureMessageFragment)
-                }
-
-                // Find the subsequent txs with the remaining signature fragment
-                for (var i = index; i < bundle.length - 1; i++) {
-                    var newBundleTx = bundle[i + 1];
-
-                    // Check if new tx is part of the signature fragment
-                    if (newBundleTx.address === thisAddress && newBundleTx.value === 0) {
-                        newSignatureToValidate.signatureFragments.push(newBundleTx.signatureMessageFragment);
-                    }
-                }
-
-                signaturesToValidate.push(newSignatureToValidate);
-            }
-        });
-
-        // Check for total sum, if not equal 0 return error
-        if (totalSum !== 0) return callback(new Error("Invalid Bundle Sum"));
-
-        curl.squeeze(bundleFromTxs);
-        var bundleFromTxs = Converter.trytes(bundleFromTxs);
-
-        // Check if bundle hash is the same as returned by tx object
-        if (bundleFromTxs !== bundleHash) return callback(new Error("Invalid Bundle Hash"));
-
-        // Last tx in the bundle should have currentIndex === lastIndex
-        if (bundle[bundle.length - 1].currentIndex !== bundle[bundle.length - 1].lastIndex) return callback(new Error("Invalid Bundle"));
-
-        // Validate the signatures
-        for (var i = 0; i < signaturesToValidate.length; i++) {
-
-            var isValidSignature = Signing.validateSignatures(signaturesToValidate[i].address, signaturesToValidate[i].signatureFragments, bundleHash);
-
-            if (!isValidSignature) return callback(new Error("Invalid Signatures!"));
         }
-
-        // Return bundle element
-        return callback(null, bundle);
     })
 }
 
@@ -2577,7 +2512,7 @@ function IOTA(settings) {
     // this.mam
     // this.flash
     this.utils = utils;
-    this.validate = require("./utils/inputValidator");
+    this.valid = require("./utils/inputValidator");
     this.multisig = new Multisig(this._makeRequest);
 }
 
@@ -3114,7 +3049,6 @@ function extractJson(bundle) {
 
     while (index < bundle.length && notEnded) {
 
-        console.log("here", index, bundle.length);
         var messageChunk = bundle[index].signatureMessageFragment;
 
         // We iterate over the message chunk, reading 9 trytes at a time
@@ -3166,7 +3100,6 @@ function extractJson(bundle) {
         // If we have not reached the end of the message yet, we continue with the next
         // transaction in the bundle
         index += 1;
-        console.log("down", ( index + 1 ) < bundle.length)
 
     }
 
@@ -3417,6 +3350,52 @@ var isArrayOfAttachedTrytes = function(trytesArray) {
 }
 
 /**
+*   checks if correct bundle with transaction object
+*
+*   @method isArrayOfTxObjects
+*   @param {array} bundle
+*   @returns {boolean}
+**/
+var isArrayOfTxObjects = function(bundle) {
+
+    if (!isArray(bundle) || bundle.length === 0) return false;
+
+    var validArray = true;
+
+    bundle.forEach(function(txObject) {
+
+        var keys = [
+            'hash',
+            'signatureMessageFragment',
+            'address',
+            'value',
+            'tag',
+            'timestamp',
+            'currentIndex',
+            'lastIndex',
+            'bundle',
+            'trunkTransaction',
+            'branchTransaction',
+            'nonce'
+        ]
+
+        for (var i = 0; i < keys.length; i++) {
+
+            var key = keys[i];
+
+            // If input does not have keyIndex and address, return false
+            if (!txObject.hasOwnProperty(key)) {
+                validArray = false;
+                break;
+            }
+
+        }
+    })
+
+    return validArray;
+}
+
+/**
 *   checks if correct inputs list
 *
 *   @method isInputs
@@ -3540,6 +3519,7 @@ module.exports = {
     isArrayOfHashes: isArrayOfHashes,
     isArrayOfTrytes: isArrayOfTrytes,
     isArrayOfAttachedTrytes: isArrayOfAttachedTrytes,
+    isArrayOfTxObjects: isArrayOfTxObjects,
     isInputs: isInputs,
     isString: isString,
     isInt: isInt,
@@ -4053,6 +4033,89 @@ var validateSignatures = function(signedBundle, inputAddress) {
 }
 
 
+/**
+*   Checks is a Bundle is valid. Validates signatures and overall structure. Has to be tail tx first.
+*
+*   @method isValidBundle
+*   @param {array} bundle
+*   @returns {bool} valid
+**/
+var isBundle = function(bundle) {
+
+    // If not correct bundle
+    if (!inputValidator.isArrayOfTxObjects(bundle)) return false;
+
+    var totalSum = 0, lastIndex, bundleHash = bundle[0].bundle;
+
+    // Prepare to absorb txs and get bundleHash
+    var bundleFromTxs = [];
+
+    var curl = new Curl();
+    curl.initialize();
+
+    // Prepare for signature validation
+    var signaturesToValidate = [];
+
+    bundle.forEach(function(bundleTx, index) {
+
+        totalSum += bundleTx.value;
+
+        // currentIndex has to be equal to the index in the array
+        if (bundleTx.currentIndex !== index) return false;
+
+        // Get the transaction trytes
+        var thisTxTrytes = transactionTrytes(bundleTx);
+
+        // Absorb bundle hash + value + timestamp + lastIndex + currentIndex trytes.
+        curl.absorb(Converter.trits(thisTxTrytes.slice(2187, 2187 + 162)))
+
+        // Check if input transaction
+        if (bundleTx.value < 0) {
+            var thisAddress = bundleTx.address;
+
+            var newSignatureToValidate = {
+                'address': thisAddress,
+                'signatureFragments': Array(bundleTx.signatureMessageFragment)
+            }
+
+            // Find the subsequent txs with the remaining signature fragment
+            for (var i = index; i < bundle.length - 1; i++) {
+                var newBundleTx = bundle[i + 1];
+
+                // Check if new tx is part of the signature fragment
+                if (newBundleTx.address === thisAddress && newBundleTx.value === 0) {
+                    newSignatureToValidate.signatureFragments.push(newBundleTx.signatureMessageFragment);
+                }
+            }
+
+            signaturesToValidate.push(newSignatureToValidate);
+        }
+    });
+
+    // Check for total sum, if not equal 0 return error
+    if (totalSum !== 0) return false;
+
+    // get the bundle hash from the bundle transactions
+    curl.squeeze(bundleFromTxs);
+    var bundleFromTxs = Converter.trytes(bundleFromTxs);
+
+    // Check if bundle hash is the same as returned by tx object
+    if (bundleFromTxs !== bundleHash) return false;
+
+    // Last tx in the bundle should have currentIndex === lastIndex
+    if (bundle[bundle.length - 1].currentIndex !== bundle[bundle.length - 1].lastIndex) return false;
+
+    // Validate the signatures
+    for (var i = 0; i < signaturesToValidate.length; i++) {
+
+        var isValidSignature = Signing.validateSignatures(signaturesToValidate[i].address, signaturesToValidate[i].signatureFragments, bundleHash);
+
+        if (!isValidSignature) return false;
+    }
+
+    return true;
+}
+
 module.exports = {
     convertUnits        : convertUnits,
     addChecksum         : addChecksum,
@@ -4064,7 +4127,8 @@ module.exports = {
     toTrytes            : ascii.toTrytes,
     fromTrytes          : ascii.fromTrytes,
     extractJson         : extractJson,
-    validateSignatures  : validateSignatures
+    validateSignatures  : validateSignatures,
+    isBundle            : isBundle
 }
 
 },{"../crypto/converter":5,"../crypto/curl":6,"../crypto/signing":7,"./asciiToTrytes":12,"./extractJson":13,"./inputValidator":14,"./makeRequest":15}],17:[function(require,module,exports){
