@@ -30,12 +30,11 @@
   },
   "dependencies": {
     "async": "^2.1.2",
-    "browserify": "^13.3.0",
     "xmlhttprequest": "^1.8.0"
   },
   "devDependencies": {
     "bower": "^1.8.0",
-    "browserify": "^13.1.1",
+    "browserify": "^14.1.0",
     "chai": "^3.5.0",
     "del": "^2.2.2",
     "gulp": "^3.9.1",
@@ -43,7 +42,7 @@
     "gulp-nsp": "^2.4.2",
     "gulp-rename": "^1.2.2",
     "gulp-replace": "^0.5.4",
-    "gulp-uglify": "^2.1.0",
+    "gulp-uglify": "^2.1.2",
     "jshint": "^2.9.4",
     "mocha": "^3.2.0",
     "vinyl-buffer": "^1.0.0",
