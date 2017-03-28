@@ -9,6 +9,7 @@ describe('valid.isValue', function() {
         1234432,
         '12344321',
         11234.0001,
+        -130500,
         '12432.04321'
 
     ]
@@ -38,6 +39,13 @@ describe('valid.isValue', function() {
     it('should be invalid isValue: ' + tests[3], function() {
 
         var isValid = valid.isValue(tests[3]);
+        assert.isTrue(isValid);
+    })
+
+    // 4 test
+    it('should be invalid isValue: ' + tests[4], function() {
+
+        var isValid = valid.isValue(tests[4]);
         assert.isFalse(isValid);
     })
 

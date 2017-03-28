@@ -61,7 +61,7 @@ api.prototype.attachToTangle = function(trunkTransaction, branchTransaction, min
     }
 
     // inputValidator: Check if int
-    if (!inputValidator.isInt(minWeightMagnitude)) {
+    if (!inputValidator.isValue(minWeightMagnitude)) {
 
         return callback(errors.notInt());
     }
@@ -265,6 +265,12 @@ api.prototype.getTips = function(callback) {
 *   @returns {object} success
 **/
 api.prototype.getTransactionsToApprove = function(depth, callback) {
+
+    // Check if correct depth
+    if (!inputValidator.isValue(depth)) {
+
+        return callback(errors.invalidInputs());
+    }
 
     var command = apiCommands.getTransactionsToApprove(depth);
 
@@ -473,6 +479,12 @@ api.prototype.sendTrytes = function(trytes, depth, minWeightMagnitude, callback)
 
     var self = this;
 
+    // Check if correct depth and minWeightMagnitude
+    if (!inputValidator.isValue(depth) && !inputValidator.isValue(minWeightMagnitude)) {
+
+        return callback(errors.invalidInputs());
+    }
+
     // Get branch and trunk
     self.getTransactionsToApprove(depth, function(error, toApprove) {
 
@@ -568,6 +580,12 @@ api.prototype.sendTransfer = function(seed, depth, minWeightMagnitude, transfers
         options = {};
     }
 
+    // Check if correct depth and minWeightMagnitude
+    if (!inputValidator.isValue(depth) && !inputValidator.isValue(minWeightMagnitude)) {
+
+        return callback(errors.invalidInputs());
+    }
+
     self.prepareTransfers(seed, transfers, options, function(error, trytes) {
 
         if (error) {
@@ -591,6 +609,20 @@ api.prototype.sendTransfer = function(seed, depth, minWeightMagnitude, transfers
 api.prototype.replayBundle = function(tail, depth, minWeightMagnitude, callback) {
 
     var self = this;
+
+    // Check if correct tail hash
+    if (!inputValidator.isHash(tail)) {
+
+        return callback(errors.invalidTrytes());
+    }
+
+
+    // Check if correct depth and minWeightMagnitude
+    if (!inputValidator.isValue(depth) && !inputValidator.isValue(minWeightMagnitude)) {
+
+        return callback(errors.invalidInputs());
+    }
+
 
     self.getBundle(tail, function(error, bundle) {
 
@@ -618,6 +650,12 @@ api.prototype.replayBundle = function(tail, depth, minWeightMagnitude, callback)
 api.prototype.broadcastBundle = function(tail, callback) {
 
     var self = this;
+
+    // Check if correct tail hash
+    if (!inputValidator.isHash(tail)) {
+
+        return callback(errors.invalidTrytes());
+    }
 
     self.getBundle(tail, function(error, bundle) {
 
@@ -743,6 +781,7 @@ api.prototype.getNewAddress = function(seed, options, callback) {
 
             // Validity check
             return transactions.length > 0;
+
         }, function(err, address) {
             // Final callback
 
@@ -920,10 +959,21 @@ api.prototype.prepareTransfers = function(seed, transfers, options, callback) {
     }
 
     // If message or tag is not supplied, provide it
-    // Also remove the checksum of the address if it's there
+    // Also remove the checksum of the address if it's there after validating it
     transfers.forEach(function(thisTransfer) {
         thisTransfer.message = thisTransfer.message ? thisTransfer.message : '';
         thisTransfer.tag = thisTransfer.tag ? thisTransfer.tag : '';
+
+        // If address with checksum, validate it
+        if (thisTransfer.address.length === 90) {
+
+            if (!Utils.isValidChecksum(thisTransfer.address)) {
+
+                return callback(errors.invalidChecksum(thisTransfer.address));
+
+            }
+        }
+
         thisTransfer.address = Utils.noChecksum(thisTransfer.address);
     })
 
@@ -1005,7 +1055,7 @@ api.prototype.prepareTransfers = function(seed, transfers, options, callback) {
 
         // Add first entries to the bundle
         // Slice the address in case the user provided a checksummed one
-        bundle.addEntry(signatureMessageLength, transfers[i].address.slice(0, 81), transfers[i].value, tag, timestamp)
+        bundle.addEntry(signatureMessageLength, transfers[i].address, transfers[i].value, tag, timestamp)
         // Sum up total value
         totalValue += parseInt(transfers[i].value);
     }
@@ -1316,6 +1366,13 @@ api.prototype.getBundle = function(transaction, callback) {
 
     var self = this;
 
+    // inputValidator: Check if correct hash
+    if (!inputValidator.isHash(transaction)) {
+
+        return callback(errors.invalidInputs(transaction));
+    }
+
+    // Initiate traverseBundle
     self.traverseBundle(transaction, null, Array(), function(error, bundle) {
 
         if (error) return callback(error);
@@ -1473,6 +1530,12 @@ api.prototype.getTransfers = function(seed, options, callback) {
         options = {};
     }
 
+    // inputValidator: Check if correct seed
+    if (!inputValidator.isTrytes(seed)) {
+
+        return callback(errors.invalidSeed(seed));
+    }
+
     var start = options.start || 0;
     var end = options.end || null;
     var inclusionStates = options.inclusionStates || null;
@@ -1525,6 +1588,12 @@ api.prototype.getAccountData = function(seed, options, callback) {
     if (arguments.length === 2 && Object.prototype.toString.call(options) === "[object Function]") {
         callback = options;
         options = {};
+    }
+
+    // inputValidator: Check if correct seed
+    if (!inputValidator.isTrytes(seed)) {
+
+        return callback(errors.invalidSeed(seed));
     }
 
     var start = options.start || 0;
@@ -1583,6 +1652,50 @@ api.prototype.getAccountData = function(seed, options, callback) {
 
                 return callback(null, valuesToReturn);
             })
+        })
+    })
+}
+
+/**
+*   Determines whether you should replay a transaction
+*   or make a new one (either with the same input, or a different one)
+*
+*   @method shouldYouReplay
+*   @param {String} inputAddress Input address you want to have tested
+*   @returns {Bool}
+**/
+api.prototype.shouldYouReplay = function(inputAddress) {
+
+    var self = this;
+
+    var inputAddress = Utils.noChecksum(inputAddress);
+
+    self.findTransactions( { 'address': inputAddress }, function( e, transactions ) {
+
+        self.getTrytes(transactions, function(e, txTrytes) {
+
+            var valueTransactions = [];
+
+            txTrytes.forEach(function(trytes) {
+                var thisTransaction = Utils.transactionObject(txTrytes);
+
+                if (thisTransaction.value < 0) {
+
+                    valueTransactions.push(thisTransaction.hash);
+
+                }
+            })
+
+            if ( valueTransactions.length > 0 ) {
+
+                self.getLatestInclusion( valueTransactions, function( e, inclusionStates ) {
+
+                    return inclusionStates.indexOf(true) === -1;
+                })
+            } else {
+
+                return true;
+            }
         })
     })
 }
@@ -2445,6 +2558,9 @@ module.exports = {
     invalidSeed: function() {
         return new Error("Invalid Seed provided");
     },
+    invalidChecksum: function(address) {
+        return new Error("Invalid Checksum supplied for address: " + address)
+    },
     invalidAttachedTrytes: function() {
         return new Error("Invalid attached Trytes provided");
     },
@@ -2784,7 +2900,7 @@ Multisig.prototype.initiateTransfer = function(securitySum, inputAddress, remain
         self._makeRequest.send(command, function(e, balances) {
 
 
-            var totalBalance = 1000 // parseInt(balances.balances[0]);
+            var totalBalance = parseInt(balances.balances[0]);
 
             if (totalBalance > 0) {
 
@@ -3176,7 +3292,7 @@ var isNinesTrytes = function(trytes) {
 }
 
 /**
-*   checks if value
+*   checks if integer value
 *
 *   @method isValue
 *   @param {string} value
@@ -3185,20 +3301,19 @@ var isNinesTrytes = function(trytes) {
 var isValue = function(value) {
 
     // check if correct number
-    return /^[0-9]+$/.test(value) && isInt(value);
+    return Number.isInteger(value)
 }
 
 /**
-*   checks if decimal
+*   checks whether input is a value or not. Can be a string, float or integer
 *
-*   @method isDecimal
-*   @param {string} value
+*   @method isNum
+*   @param {int}
 *   @returns {boolean}
 **/
-var isDecimal = function(value) {
+var isNum = function(input) {
 
-    // check if correct number
-    return /^(\d+\.?\d{0,9}|\.\d{0,9})$/.test(value);
+    return /^(\d+\.?\d{0,9}|\.\d{0,9})$/.test(input);
 }
 
 /**
@@ -3218,6 +3333,45 @@ var isHash = function(hash) {
 
     return true;
 }
+
+/**
+*   checks whether input is a string or not
+*
+*   @method isString
+*   @param {string}
+*   @returns {boolean}
+**/
+var isString = function(string) {
+
+    return typeof string === 'string';
+}
+
+
+/**
+*   checks whether input is an array or not
+*
+*   @method isArray
+*   @param {object}
+*   @returns {boolean}
+**/
+var isArray = function(array) {
+
+    return array instanceof Array;
+}
+
+
+/**
+*   checks whether input is object or not
+*
+*   @method isObject
+*   @param {object}
+*   @returns {boolean}
+**/
+var isObject = function(object) {
+
+    return typeof object === 'object';
+}
+
 
 
 /**
@@ -3364,24 +3518,63 @@ var isArrayOfTxObjects = function(bundle) {
 
     bundle.forEach(function(txObject) {
 
-        var keys = [
-            'hash',
-            'signatureMessageFragment',
-            'address',
-            'value',
-            'tag',
-            'timestamp',
-            'currentIndex',
-            'lastIndex',
-            'bundle',
-            'trunkTransaction',
-            'branchTransaction',
-            'nonce'
+        var keysToValidate = [
+            {
+                key: 'hash',
+                validator: isHash,
+                args: null
+            }, {
+                key: 'signatureMessageFragment',
+                validator: isTrytes,
+                args: 2187
+            }, {
+                key: 'address',
+                validator: isHash,
+                args: null
+            }, {
+                key: 'value',
+                validator: isValue,
+                args: null
+            }, {
+                key: 'tag',
+                validator: isTrytes,
+                args: 27
+            }, {
+                key: 'timestamp',
+                validator: isValue,
+                args: null
+            }, {
+                key: 'currentIndex',
+                validator: isValue,
+                args: null
+            },{
+                key: 'lastIndex',
+                validator: isValue,
+                args: null
+            }, {
+                key: 'bundle',
+                validator: isHash,
+                args: null
+            }, {
+                key: 'trunkTransaction',
+                validator: isHash,
+                args: null
+            }, {
+                key: 'branchTransaction',
+                validator: isHash,
+                args: null
+            }, {
+                key: 'nonce',
+                validator: isHash,
+                args: null
+            }
         ]
 
-        for (var i = 0; i < keys.length; i++) {
+        for (var i = 0; i < keysToValidate.length; i++) {
 
-            var key = keys[i];
+            var key = keysToValidate[i].key;
+            var validator = keysToValidate[i].validator;
+            var args = keysToValidate[i].args
 
             // If input does not have keyIndex and address, return false
             if (!txObject.hasOwnProperty(key)) {
@@ -3389,6 +3582,11 @@ var isArrayOfTxObjects = function(bundle) {
                 break;
             }
 
+            // If input validator function does not return true, exit
+            if (!validator(txObject[key], args)) {
+                validArray = false;
+                break;
+            }
         }
     })
 
@@ -3417,66 +3615,16 @@ var isInputs = function(inputs) {
             return false;
         }
 
-        if (!isInt(input.security)) {
+        if (!isValue(input.security)) {
             return false;
         }
 
-        if (!isInt(input.keyIndex)) {
+        if (!isValue(input.keyIndex)) {
             return false;
         }
     }
 
     return true;
-}
-
-/**
-*   checks whether input is a string or not
-*
-*   @method isString
-*   @param {string}
-*   @returns {boolean}
-**/
-var isString = function(string) {
-
-    return typeof string === 'string';
-}
-
-
-/**
-*   checks whether input is an integer or not
-*
-*   @method isInt
-*   @param {int}
-*   @returns {boolean}
-**/
-var isInt = function(integer) {
-
-    return typeof integer === 'number';
-}
-
-/**
-*   checks whether input is an array or not
-*
-*   @method isArray
-*   @param {object}
-*   @returns {boolean}
-**/
-var isArray = function(array) {
-
-    return array instanceof Array;
-}
-
-
-/**
-*   checks whether input is object or not
-*
-*   @method isObject
-*   @param {object}
-*   @returns {boolean}
-**/
-var isObject = function(object) {
-
-    return typeof object === 'object';
 }
 
 /**
@@ -3513,7 +3661,6 @@ module.exports = {
     isTrytes: isTrytes,
     isNinesTrytes: isNinesTrytes,
     isValue: isValue,
-    isDecimal: isDecimal,
     isHash: isHash,
     isTransfersArray: isTransfersArray,
     isArrayOfHashes: isArrayOfHashes,
@@ -3522,7 +3669,7 @@ module.exports = {
     isArrayOfTxObjects: isArrayOfTxObjects,
     isInputs: isInputs,
     isString: isString,
-    isInt: isInt,
+    isNum: isNum,
     isArray: isArray,
     isObject: isObject,
     isUri: isUri
@@ -3757,7 +3904,7 @@ var convertUnits = function(value, fromUnit, toUnit) {
 
 
     // If not valid value, throw error
-    if (!inputValidator.isDecimal(value)) {
+    if (!inputValidator.isNum(value)) {
 
         throw new Error("Invalid value input");
     }
@@ -3812,9 +3959,13 @@ var addChecksum = function(address) {
     });
 
     if (isSingleAddress) {
+
         return addressesWithChecksum[0];
+
     } else {
+        
         return addressesWithChecksum;
+
     }
 }
 
@@ -3840,9 +3991,13 @@ var noChecksum = function(address) {
 
     // return either string or the list
     if (isSingleAddress) {
+
         return addressesWithChecksum[0];
+
     } else {
+
         return addressesWithChecksum;
+
     }
 }
 

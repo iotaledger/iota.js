@@ -106,6 +106,7 @@ iota.api.getNodeInfo(function(error, success) {
     - **[getBundle](#getbundle)**
     - **[getTransfers](#gettransfers)**
     - **[getAccountData](#getaccountdata)**
+    - **[shouldYouReplay](#shouldyoureplay)**
 - **[utils](#iota.utils)**
     - **[convertUnits](#convertunits)**
     - **[addChecksum](#addchecksum)**
@@ -131,7 +132,7 @@ iota.api.getNodeInfo(function(error, success) {
     - **[isAddress](#isaddress)**
     - **[isTrytes](#istrytes)**
     - **[isValue](#isvalue)**
-    - **[isDecimal](#isdecimal)**
+    - **[isNum](#isnum)**
     - **[isHash](#ishash)**
     - **[isTransfersArray](#istransfersarray)**
     - **[isArrayOfHashes](#isarrayofhashes)**
@@ -140,7 +141,6 @@ iota.api.getNodeInfo(function(error, success) {
     - **[isArrayOfTxObjects](#isarrayoftxobjects)**
     - **[isInputs](#isinputs)**
     - **[isString](#isstring)**
-    - **[isInt](#isint)**
     - **[isArray](#isarray)**
     - **[isObject](#isobject)**
     - **[isUri](#isuri)**
@@ -302,7 +302,9 @@ iota.api.getInputs(seed, [, options], callback)
 
 Main purpose of this function is to get an array of transfer objects as input, and then prepare the transfer by **generating the correct bundle**, as well as **choosing and signing the inputs** if necessary (if it's a value transfer). The output of this function is an array of the raw transaction data (trytes).
 
-You can provide multiple transfer objects, which means that your prepared bundle will have multiple outputs to the same, or different recipients. As single transfer object takes the values of: `address`, `value`, `message`, `tag`. The message and tag values are required to be tryte-encoded.
+You can provide multiple transfer objects, which means that your prepared bundle will have multiple outputs to the same, or different recipients. As single transfer object takes the values of: `address`, `value`, `message`, `tag`. The message and tag values are required to be tryte-encoded. If you do not supply a message or a tag, the library will automatically enter empty ones for you. As such the only required fields in each transfers object are `address` and `value`.
+
+If you provide an address with a checksum, this function will automatically validate the address for you with the Utils function `isValidChecksum`.
 
 For the options, you can provide a list of `inputs`, that will be used for signing the transfer's inputs. It should be noted that these inputs (an array of objects) should have the provided 'security', `keyIndex` and `address` values:
 ```
@@ -469,7 +471,7 @@ If you want to have your transfers split into received / sent, you can use the u
 
 #### Input
 ```
-getTransfers(seed [, options], callback)
+iota.api.getTransfers(seed [, options], callback)
 ```
 
 1. **`seed`**: `String` tryte-encoded seed. It should be noted that this seed is not transferred
@@ -491,7 +493,23 @@ Similar to `getTransfers`, just a bit more comprehensive in the sense that it al
 
 #### Input
 ```
-getAccountData(seed [, options], callback)
+iota.api.getAccountData(inputAddress)
+```
+
+1. **`inputAddress`**: `String` address used as input in a transaction
+
+#### Returns
+`Bool` - true / false 
+
+---
+
+### `shouldYouReplay`
+
+This API function helps you to determine whether you should replay a transaction or make a completely new transaction with a different seed. What this function does, is it takes an input address (i.e. from a spent transaction) as input and then checks whether any transactions with a value transferred are confirmed. If yes, it means that this input address has already been successfully used in a different transaction and as such you should no longer replay the transaction.
+
+#### Input
+```
+iota.api.shouldYouReplay(seed [, options], callback)
 ```
 
 1. **`seed`**: `String` tryte-encoded seed. It should be noted that this seed is not transferred
@@ -920,16 +938,16 @@ iota.valid.isValue(value)
 
 ---
 
-### `isDecimal`
+### `isNum`
 
-Checks if it's a decimal value
+Checks if the input value is a number, can be a string, float or integer.
 
 #### Input
 ```
-iota.valid.isDecimal(value)
+iota.valid.isNum(value)
 ```
 
-1. **`value`**: `Integer || String`
+1. **`value`**: `Integer`
 
 ---
 
@@ -1062,17 +1080,6 @@ Self explanatory.
 #### Input
 ```
 iota.valid.isString(string)
-```
-
----
-
-### `isInt`
-
-Self explanatory.
-
-#### Input
-```
-iota.valid.isInt(int)
 ```
 
 ---
