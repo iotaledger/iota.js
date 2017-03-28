@@ -1,4 +1,4 @@
-# IOTA Javascript LIBRARY
+# IOTA Javascript Library
 
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/iotaledger/iota.lib.js/master/LICENSE) [![Build Status](https://travis-ci.org/iotaledger/iota.lib.js.svg?branch=master)](https://travis-ci.org/iotaledger/iota.lib.js) [![dependencies Status](https://david-dm.org/iotaledger/iota.lib.js/status.svg)](https://david-dm.org/iotaledger/iota.lib.js)  [![devDependencies Status](https://david-dm.org/iotaledger/iota.lib.js/dev-status.svg)](https://david-dm.org/iotaledger/iota.lib.js?type=dev) [![NSP Status](https://nodesecurity.io/orgs/iota-foundation/projects/7c0214b5-e36a-4178-92bc-164c536cfd6c/badge)](https://nodesecurity.io/orgs/iota-foundation/projects/7c0214b5-e36a-4178-92bc-164c536cfd6c)
 
@@ -493,23 +493,7 @@ Similar to `getTransfers`, just a bit more comprehensive in the sense that it al
 
 #### Input
 ```
-iota.api.getAccountData(inputAddress)
-```
-
-1. **`inputAddress`**: `String` address used as input in a transaction
-
-#### Returns
-`Bool` - true / false 
-
----
-
-### `shouldYouReplay`
-
-This API function helps you to determine whether you should replay a transaction or make a completely new transaction with a different seed. What this function does, is it takes an input address (i.e. from a spent transaction) as input and then checks whether any transactions with a value transferred are confirmed. If yes, it means that this input address has already been successfully used in a different transaction and as such you should no longer replay the transaction.
-
-#### Input
-```
-iota.api.shouldYouReplay(seed [, options], callback)
+iota.api.getAccountData(seed [, options], callback)
 ```
 
 1. **`seed`**: `String` tryte-encoded seed. It should be noted that this seed is not transferred
@@ -528,6 +512,22 @@ iota.api.shouldYouReplay(seed [, options], callback)
     'balance': 0
 }
 ```
+
+---
+
+### `shouldYouReplay`
+
+This API function helps you to determine whether you should replay a transaction or make a completely new transaction with a different seed. What this function does, is it takes an input address (i.e. from a spent transaction) as input and then checks whether any transactions with a value transferred are confirmed. If yes, it means that this input address has already been successfully used in a different transaction and as such you should no longer replay the transaction.
+
+#### Input
+```
+iota.api.shouldYouReplay(inputAddress)
+```
+
+1. **`inputAddress`**: `String` address used as input in a transaction
+
+#### Returns
+`Bool` - true / false 
 
 ---
 
