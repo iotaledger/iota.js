@@ -60,6 +60,9 @@ var iota = new IOTA({
 
 // now you can start using all of the functions
 iota.api.getNodeInfo();
+
+// you can also get the version
+iota.version
 ```
 
 Overall, there are currently four subclasses that are accessible from the IOTA object:
@@ -67,6 +70,9 @@ Overall, there are currently four subclasses that are accessible from the IOTA o
 - **`utils`**: Utility related functions for conversions, validation and so on  
 - **`multisig`**: Functions for creating and signing multi-signature addresses and transactions.
 - **`valid`**: Validator functions that can help with determining whether the inputs or results that you get are valid.
+
+You also have access to the `version` of the library 
+- **`version`**: Current version of the library
 
 In the future new IOTA Core modules (such as Flash, MAM) and all IXI related functionality will be available.
 
@@ -489,7 +495,7 @@ iota.api.getTransfers(seed [, options], callback)
 
 ### `getAccountData`
 
-Similar to `getTransfers`, just a bit more comprehensive in the sense that it also returns the `balance` and `addresses` that are associated with your account (seed). This function is useful in getting all the relevant information of your account. If you want to have your transfers split into received / sent, you can use the utility function `categorizeTransfers`
+Similar to `getTransfers`, just a bit more comprehensive in the sense that it also returns the `addresses`, `transfers`, `inputs` and `balance` that are associated and have been used with your account (seed). This function is useful in getting all the relevant information of your account. If you want to have your transfers split into received / sent, you can use the utility function `categorizeTransfers`
 
 #### Input
 ```
@@ -507,9 +513,11 @@ iota.api.getAccountData(seed [, options], callback)
 `Object` - returns an object of your account data in the following format:
 ```
 {
-    'addresses': [],
-    'transfers': [],
-    'balance': 0
+    'latestAddress': '', // Latest, unused address which has no transactions in the tangle
+    'addresses': [], // List of all used addresses which have transactions associated with them
+    'transfers': [], // List of all transfers associated with the addresses
+    'inputs': [], // List of all inputs available for the seed. Follows the getInputs format of `address`, `balance`, `security` and `keyIndex`
+    'balance': 0 // latest confirmed balance
 }
 ```
 
@@ -521,13 +529,14 @@ This API function helps you to determine whether you should replay a transaction
 
 #### Input
 ```
-iota.api.shouldYouReplay(inputAddress)
+iota.api.shouldYouReplay(inputAddress, callback)
 ```
 
 1. **`inputAddress`**: `String` address used as input in a transaction
+2. **`callback`**: `Function` callback function
 
 #### Returns
-`Bool` - true / false 
+`Bool` - true / false
 
 ---
 

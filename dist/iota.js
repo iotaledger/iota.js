@@ -739,7 +739,6 @@ api.prototype.getNewAddress = function(seed, options, callback) {
     // If total number of addresses to generate is supplied, simply generate
     // and return the list of all addresses
     if (total) {
-
         // Increase index with each iteration
         for (var i = 0; i < total; i++, index++) {
 
@@ -1601,19 +1600,23 @@ api.prototype.getAccountData = function(seed, options, callback) {
     var security = options.security || 2;
 
     // If start value bigger than end, return error
-    // or if difference between end and start is bigger than 500 keys
-    if (start > end || end > (start + 500)) {
+    // or if difference between end and start is bigger than 1000 keys
+    if (start > end || end > (start + 1000)) {
         return callback(new Error("Invalid inputs provided"))
     }
 
     //  These are the values that will be returned to the original caller
-    //  @addresses all addresses associated with this seed
-    //  @transfers all sent / received transfers
-    //  @balance the confirmed balance
+    //  @latestAddress: latest unused address
+    //  @addresses:     all addresses associated with this seed that have been used
+    //  @transfers:     all sent / received transfers
+    //  @inputs:        all inputs of the account
+    //  @balance:       the confirmed balance
     var valuesToReturn = {
-        'addresses' : [],
-        'transfers' : [],
-        'balance'   : 0
+        'latestAddress' : '',
+        'addresses'     : [],
+        'transfers'     : [],
+        'inputs'        : [],
+        'balance'       : 0
     }
 
     // first call findTransactions
@@ -1631,8 +1634,12 @@ api.prototype.getAccountData = function(seed, options, callback) {
 
         if (error) return callback(error);
 
+        // assign the last address as the latest address
+        // since it has no transactions associated with it
+        valuesToReturn.latestAddress = addresses[addresses.length - 1];
+
         // Add all returned addresses to the lsit of addresses
-        // remove the last element as that is the most recent
+        // remove the last element as that is the most recent address
         valuesToReturn.addresses = addresses.slice(0, -1);
 
         // get all bundles from a list of addresses
@@ -1646,8 +1653,24 @@ api.prototype.getAccountData = function(seed, options, callback) {
             // Get the correct balance count of all addresses
             self.getBalances(valuesToReturn.addresses, 100, function(error, balances) {
 
-                balances.balances.forEach(function(balance) {
-                    valuesToReturn.balance += parseInt(balance);
+                balances.balances.forEach(function(balance, index) {
+
+                    var balance = parseInt(balance);
+
+                    valuesToReturn.balance += balance;
+
+                    if (balance > 0) {
+
+                        var newInput = {
+                            'address': valuesToReturn.addresses[index],
+                            'keyIndex': index,
+                            'security': security,
+                            'balance': balance
+                        }
+
+                        valuesToReturn.inputs.push(newInput);
+
+                    }
                 })
 
                 return callback(null, valuesToReturn);
@@ -1664,39 +1687,45 @@ api.prototype.getAccountData = function(seed, options, callback) {
 *   @param {String} inputAddress Input address you want to have tested
 *   @returns {Bool}
 **/
-api.prototype.shouldYouReplay = function(inputAddress) {
+api.prototype.shouldYouReplay = function(inputAddress, callback) {
 
     var self = this;
 
+    if (!inputValidator.isAddress(inputAddress)) {
+
+        return callback(errors.invalidInputs());
+
+    }
+
     var inputAddress = Utils.noChecksum(inputAddress);
 
-    self.findTransactions( { 'address': inputAddress }, function( e, transactions ) {
+    self.findTransactionObjects( { 'addresses': new Array(inputAddress) }, function( e, transactions ) {
 
-        self.getTrytes(transactions, function(e, txTrytes) {
+        if (e) return callback(e);
 
-            var valueTransactions = [];
+        var valueTransactions = [];
 
-            txTrytes.forEach(function(trytes) {
-                var thisTransaction = Utils.transactionObject(txTrytes);
+        transactions.forEach(function(thisTransaction) {
 
-                if (thisTransaction.value < 0) {
+            if (thisTransaction.value < 0) {
 
-                    valueTransactions.push(thisTransaction.hash);
+                valueTransactions.push(thisTransaction.hash);
 
-                }
-            })
-
-            if ( valueTransactions.length > 0 ) {
-
-                self.getLatestInclusion( valueTransactions, function( e, inclusionStates ) {
-
-                    return inclusionStates.indexOf(true) === -1;
-                })
-            } else {
-
-                return true;
             }
         })
+
+        if ( valueTransactions.length > 0 ) {
+
+            self.getLatestInclusion( valueTransactions, function( e, inclusionStates ) {
+
+                return callback(null, inclusionStates.indexOf( true ) === -1);
+
+            })
+
+        } else {
+
+            return callback(null, true);
+        }
     })
 }
 
@@ -2610,6 +2639,7 @@ function IOTA(settings) {
 
     // IF NO SETTINGS, SET DEFAULT TO localhost:14265
     settings = settings || {};
+    this.version = require('../package.json').version;
     this.host = settings.host ? settings.host : "http://localhost";
     this.port = settings.port ? settings.port : 14265;
     this.provider = settings.provider || this.host.replace(/\/$/, '') + ":" + this.port;
@@ -2652,7 +2682,7 @@ IOTA.prototype.changeNode = function(settings) {
 
 module.exports = IOTA;
 
-},{"./api/api":2,"./multisig/multisig":11,"./utils/inputValidator":14,"./utils/makeRequest":15,"./utils/utils":16}],11:[function(require,module,exports){
+},{"../package.json":55,"./api/api":2,"./multisig/multisig":11,"./utils/inputValidator":14,"./utils/makeRequest":15,"./utils/utils":16}],11:[function(require,module,exports){
 var Signing = require('../crypto/signing');
 var Converter = require('../crypto/converter');
 var Curl = require('../crypto/curl');
@@ -17328,6 +17358,59 @@ function extend() {
     }
 
     return target
+}
+
+},{}],55:[function(require,module,exports){
+module.exports={
+  "name": "iota.lib.js",
+  "version": "0.2.5",
+  "description": "Javascript Library for IOTA",
+  "main": "./lib/iota.js",
+  "scripts": {
+    "build": "gulp",
+    "test": "mocha"
+  },
+  "author": {
+    "name": "Dominik Schiener (IOTA Foundation)",
+    "website": "https://iota.org"
+  },
+  "keywords": [
+    "iota",
+    "tangle",
+    "library",
+    "browser",
+    "javascript",
+    "nodejs",
+    "API"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/iotaledger/iota.lib.js/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/iotaledger/iota.lib.js.git"
+  },
+  "dependencies": {
+    "async": "^2.1.2",
+    "xmlhttprequest": "^1.8.0"
+  },
+  "devDependencies": {
+    "bower": "^1.8.0",
+    "browserify": "^14.1.0",
+    "chai": "^3.5.0",
+    "del": "^2.2.2",
+    "gulp": "^3.9.1",
+    "gulp-jshint": "^2.0.2",
+    "gulp-nsp": "^2.4.2",
+    "gulp-rename": "^1.2.2",
+    "gulp-replace": "^0.5.4",
+    "gulp-uglify": "^2.1.2",
+    "jshint": "^2.9.4",
+    "mocha": "^3.2.0",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0"
+  }
 }
 
 },{}]},{},[1]);
