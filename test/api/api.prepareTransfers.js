@@ -37,12 +37,12 @@ describe('api.prepareTransfers', function() {
             api.prepareTransfers(test.seed, copyTransfers(test.transfers), test.options, (error, result) => {
                 console.log(error);
                 console.log(result);
-                assert.notEqual(null, result);
                 test.options.hmacKey = undefined;
                 api.prepareTransfers(test.seed, copyTransfers(test.transfers), test.options, (err, res) => {
                     console.log(err);
                     console.log(res);
-                    assert.notEqual(null, res);
+                    assert.notEqual(result[1].substr(0,81), res[1].substr(0,81));
+                    assert.equal(result[1].substr(81,81), res[1].substr(0,81));
                 });
             });
         });
