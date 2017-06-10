@@ -30,14 +30,20 @@ describe('api.prepareTransfers', function() {
 
         it('should create transfers with hmac key: ' + test.options.hmacKey, function() {
             var api = new Api();
-            api.getBalances = (inputs, limit, callback) => 
-                callback(null, {
-                    balances: test.transfers.map(t => t.value)
-                })
-            api.prepareTransfers(test.seed, test.transfers, test.options, (error, result) => {
+            api.getBalances = (inputs, limit, callback) => callback(null, {balances: test.transfers.map(t => t.value)})
+            var copyTransfers = (transfers) => transfers.map(t => {
+                return {address:t.address, value: t.value, message: t.message, tag: t.tag}
+            });
+            api.prepareTransfers(test.seed, copyTransfers(test.transfers), test.options, (error, result) => {
                 console.log(error);
                 console.log(result);
                 assert.notEqual(null, result);
+                test.options.hmacKey = undefined;
+                api.prepareTransfers(test.seed, copyTransfers(test.transfers), test.options, (err, res) => {
+                    console.log(err);
+                    console.log(res);
+                    assert.notEqual(null, res);
+                });
             });
         });
     })
