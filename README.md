@@ -532,11 +532,11 @@ This API function helps you to determine whether you should replay a transaction
 iota.api.isReattachable(inputAddress, callback)
 ```
 
-1. **`inputAddress`**: `String` address used as input in a transaction
+1. **`inputAddress`**: `String | Array` address used as input in a transaction. Either string or array.
 2. **`callback`**: `Function` callback function
 
 #### Returns
-`Bool` - true / false
+`Bool` - true / false (if you provided an array, it's an array of bools)
 
 ---
 
