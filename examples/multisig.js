@@ -1,7 +1,7 @@
 var IOTA = require('../lib/iota');
 
 var iota = new IOTA({
-    'host': 'http://85.93.93.110',
+    'host': 'http://localhost',
     'port': 14265
 });
 

@@ -71,7 +71,7 @@ Overall, there are currently four subclasses that are accessible from the IOTA o
 - **`multisig`**: Functions for creating and signing multi-signature addresses and transactions.
 - **`valid`**: Validator functions that can help with determining whether the inputs or results that you get are valid.
 
-You also have access to the `version` of the library 
+You also have access to the `version` of the library
 - **`version`**: Current version of the library
 
 In the future new IOTA Core modules (such as Flash, MAM) and all IXI related functionality will be available.
@@ -112,7 +112,7 @@ iota.api.getNodeInfo(function(error, success) {
     - **[getBundle](#getbundle)**
     - **[getTransfers](#gettransfers)**
     - **[getAccountData](#getaccountdata)**
-    - **[shouldYouReplay](#shouldyoureplay)**
+    - **[isReattachable](#isreattachable)**
 - **[utils](#iota.utils)**
     - **[convertUnits](#convertunits)**
     - **[addChecksum](#addchecksum)**
@@ -523,13 +523,13 @@ iota.api.getAccountData(seed [, options], callback)
 
 ---
 
-### `shouldYouReplay`
+### `isReattachable`
 
 This API function helps you to determine whether you should replay a transaction or make a completely new transaction with a different seed. What this function does, is it takes an input address (i.e. from a spent transaction) as input and then checks whether any transactions with a value transferred are confirmed. If yes, it means that this input address has already been successfully used in a different transaction and as such you should no longer replay the transaction.
 
 #### Input
 ```
-iota.api.shouldYouReplay(inputAddress, callback)
+iota.api.isReattachable(inputAddress, callback)
 ```
 
 1. **`inputAddress`**: `String` address used as input in a transaction

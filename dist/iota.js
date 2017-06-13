@@ -94,10 +94,14 @@ api.prototype.findTransactions = function(searchValues, callback) {
     var searchKeys = Object.keys(searchValues);
     var availableKeys = ['bundles', 'addresses', 'tags', 'approvees'];
 
+    var keyError = false;
+
     searchKeys.forEach(function(key) {
+
         if (availableKeys.indexOf(key) === -1) {
 
-            return callback(errors.invalidKey());
+            keyError = errors.invalidKey();
+            return
         }
 
 
@@ -106,33 +110,40 @@ api.prototype.findTransactions = function(searchValues, callback) {
         // If tags, append to 27 trytes
         if (key === 'tags') {
 
-            hashes.forEach(function(hash) {
+            searchValues.tags = hashes.map(function(hash) {
 
                 // Simple padding to 27 trytes
                 while (hash.length < 27) {
-                    hash += '9'
+                    hash += '9';
                 }
 
-                // validate hashes
+                // validate hash
                 if (!inputValidator.isTrytes(hash, 27)) {
 
-                    return callback(errors.invalidTrytes());
+                    keyError = errors.invalidTrytes();
+                    return
                 }
+                return hash;
             })
 
-            // Reassign padded tags so that it can be used for findTransactions
-            searchValues[key] = hashes;
         } else {
 
             // Check if correct array of hashes
             if (!inputValidator.isArrayOfHashes(hashes)) {
 
-                return callback(errors.invalidTrytes());
+                keyError = errors.invalidTrytes();
+                return
             }
         }
 
 
     })
+
+    // If invalid key found, return
+    if (keyError) {
+        callback(keyError);
+        return
+    }
 
     var command = apiCommands.findTransactions(searchValues);
 
@@ -437,22 +448,22 @@ api.prototype.getLatestInclusion = function(hashes, callback) {
 /**
 *   Broadcasts and stores transaction trytes
 *
-*   @method broadcastAndStore
+*   @method storeAndBroadcast
 *   @param {array} trytes
 *   @returns {function} callback
 *   @returns {object} success
 **/
-api.prototype.broadcastAndStore = function(trytes, callback) {
+api.prototype.storeAndBroadcast = function(trytes, callback) {
 
     var self = this;
 
-    self.broadcastTransactions(trytes, function(error, success) {
+    self.storeTransactions(trytes, function(error, success) {
 
 
         if (error) return callback(error);
 
         // If no error
-        return self.storeTransactions(trytes, callback)
+        return self.broadcastTransactions(trytes, callback)
     })
 }
 
@@ -500,44 +511,42 @@ api.prototype.sendTrytes = function(trytes, depth, minWeightMagnitude, callback)
                 self._makeRequest.sandboxSend(job, function(e, attachedTrytes) {
 
                     if (e) {
-
                         return callback(e);
-                    } else {
-
-                        self.broadcastAndStore(attachedTrytes, function(error, success) {
-
-                            if (!error) {
-
-                                var finalTxs = [];
-
-                                attachedTrytes.forEach(function(trytes) {
-                                    finalTxs.push(Utils.transactionObject(trytes));
-                                })
-
-
-                                return callback(null, finalTxs);
-                            }
-                        })
                     }
-                });
-            } else {
 
-                // Broadcast and store tx
-                self.broadcastAndStore(attached, function(error, success) {
+                    self.storeAndBroadcast(attachedTrytes, function(error, success) {
 
-                    if (!error) {
+                        if (error) {
+                            return callback(error);
+                        }
 
                         var finalTxs = [];
 
-                        attached.forEach(function(trytes) {
+                        attachedTrytes.forEach(function(trytes) {
                             finalTxs.push(Utils.transactionObject(trytes));
                         })
 
                         return callback(null, finalTxs);
-                    } else {
 
+                    })
+                })
+            } else {
+
+                // Broadcast and store tx
+                self.storeAndBroadcast(attached, function(error, success) {
+
+                    if (error) {
                         return callback(error);
                     }
+
+                    var finalTxs = [];
+
+                    attached.forEach(function(trytes) {
+                        finalTxs.push(Utils.transactionObject(trytes));
+                    })
+
+                    return callback(null, finalTxs);
+
                 })
             }
         })
@@ -1677,25 +1686,42 @@ api.prototype.getAccountData = function(seed, options, callback) {
 *   Determines whether you should replay a transaction
 *   or make a new one (either with the same input, or a different one)
 *
-*   @method shouldYouReplay
-*   @param {String} inputAddress Input address you want to have tested
+*   @method isReattachable
+*   @param {String || Array} inputAddresses Input address you want to have tested
 *   @returns {Bool}
 **/
-api.prototype.shouldYouReplay = function(inputAddress, callback) {
+api.prototype.isReattachable = function(inputAddresses, callback) {
 
     var self = this;
 
-    if (!inputValidator.isAddress(inputAddress)) {
+    // if string provided, make array
+    if (inputValidator.isString(inputAddresses)) inputAddresses = new Array(inputAddresses)
 
-        return callback(errors.invalidInputs());
+    // Categorized value transactions
+    // hash -> txarray map
+    var addressTxsMap = {};
+    var addresses = [];
 
+    for (var i = 0; i < inputAddresses.length; i++) {
+
+        var address = inputAddresses[i];
+
+        if (!inputValidator.isAddress(address)) {
+
+            return callback(errors.invalidInputs());
+
+        }
+
+        var address = Utils.noChecksum(address);
+
+        addressTxsMap[address] = new Array();
+        addresses.push(address);
     }
 
-    var inputAddress = Utils.noChecksum(inputAddress);
-
-    self.findTransactionObjects( { 'addresses': new Array(inputAddress) }, function( e, transactions ) {
+    self.findTransactionObjects( { 'addresses': addresses }, function( e, transactions ) {
 
         if (e) return callback(e);
+
 
         var valueTransactions = [];
 
@@ -1703,22 +1729,68 @@ api.prototype.shouldYouReplay = function(inputAddress, callback) {
 
             if (thisTransaction.value < 0) {
 
-                valueTransactions.push(thisTransaction.hash);
+                var txAddress = thisTransaction.address;
+                var txHash = thisTransaction.hash;
+
+                // push hash to map
+                addressTxsMap[txAddress].push(txHash)
+
+                valueTransactions.push(txHash);
 
             }
         })
 
         if ( valueTransactions.length > 0 ) {
 
+            // get the includion states of all the transactions
             self.getLatestInclusion( valueTransactions, function( e, inclusionStates ) {
 
-                return callback(null, inclusionStates.indexOf( true ) === -1);
+                // bool array
+                var results = addresses.map(function(address) {
+
+                    var txs = addressTxsMap[address];
+
+                    if (txs.length === 0) {
+                        return true;
+                    }
+
+                    var shouldReattach = true;
+                    txs.forEach(function(tx) {
+
+                        var txIndex = valueTransactions.indexOf(tx);
+                        shouldReattach = inclusionStates[txIndex] ? false : true;
+                    })
+
+                    return shouldReattach;
+
+                })
+
+                // If only one entry, return first
+                if (results.length === 1) {
+                    results = results[0];
+                }
+
+                return callback(null, results);
 
             })
 
         } else {
 
-            return callback(null, true);
+            var results = [];
+            var numAddresses = addresses.length;
+
+            // prepare results array if multiple addresses
+            if ( numAddresses > 1 ) {
+
+                for ( var i = 0; i < numAddresses; i++ ) {
+                    results.push(true);
+                }
+
+            } else {
+                results = true;
+            }
+
+            return callback(null, results);
         }
     })
 }
@@ -9186,34 +9258,33 @@ function sortBy (coll, iteratee, callback) {
  * });
  */
 function timeout(asyncFn, milliseconds, info) {
-    var originalCallback, timer;
-    var timedOut = false;
-
-    function injectedCallback() {
-        if (!timedOut) {
-            originalCallback.apply(null, arguments);
-            clearTimeout(timer);
-        }
-    }
-
-    function timeoutCallback() {
-        var name = asyncFn.name || 'anonymous';
-        var error  = new Error('Callback function "' + name + '" timed out.');
-        error.code = 'ETIMEDOUT';
-        if (info) {
-            error.info = info;
-        }
-        timedOut = true;
-        originalCallback(error);
-    }
-
     var fn = wrapAsync(asyncFn);
 
-    return initialParams(function (args, origCallback) {
-        originalCallback = origCallback;
+    return initialParams(function (args, callback) {
+        var timedOut = false;
+        var timer;
+
+        function timeoutCallback() {
+            var name = asyncFn.name || 'anonymous';
+            var error  = new Error('Callback function "' + name + '" timed out.');
+            error.code = 'ETIMEDOUT';
+            if (info) {
+                error.info = info;
+            }
+            timedOut = true;
+            callback(error);
+        }
+
+        args.push(function () {
+            if (!timedOut) {
+                callback.apply(null, arguments);
+                clearTimeout(timer);
+            }
+        });
+
         // setup timer and call original function
         timer = setTimeout(timeoutCallback, milliseconds);
-        fn.apply(null, args.concat(injectedCallback));
+        fn.apply(null, args);
     });
 }
 
@@ -17654,55 +17725,58 @@ function extend() {
 
 },{}],55:[function(require,module,exports){
 module.exports={
-    "name": "iota.lib.js",
-    "version": "0.2.7",
-    "description": "Javascript Library for IOTA",
-    "main": "./lib/iota.js",
-    "scripts": {
-        "build": "gulp",
-        "test": "mocha"
-    },
-    "author": {
-        "name": "Dominik Schiener (IOTA Foundation)",
-        "website": "https://iota.org"
-    },
-    "keywords": [
-        "iota",
-        "tangle",
-        "library",
-        "browser",
-        "javascript",
-        "nodejs",
-        "API"
-    ],
-    "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/iotaledger/iota.lib.js/issues"
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/iotaledger/iota.lib.js.git"
-    },
-    "dependencies": {
-        "async": "^2.1.2",
-        "xmlhttprequest": "^1.8.0"
-    },
-    "devDependencies": {
-        "bower": "^1.8.0",
-        "browserify": "^14.1.0",
-        "chai": "^3.5.0",
-        "del": "^2.2.2",
-        "gulp": "^3.9.1",
-        "gulp-jshint": "^2.0.2",
-        "gulp-nsp": "^2.4.2",
-        "gulp-rename": "^1.2.2",
-        "gulp-replace": "^0.5.4",
-        "gulp-uglify": "^2.1.2",
-        "jshint": "^2.9.4",
-        "mocha": "^3.2.0",
-        "vinyl-buffer": "^1.0.0",
-        "vinyl-source-stream": "^1.1.0"
-    }
+  "name": "iota.lib.js",
+  "version": "0.3.0",
+  "description": "Javascript Library for IOTA",
+  "main": "./lib/iota.js",
+  "scripts": {
+    "build": "gulp",
+    "test": "mocha"
+  },
+  "author": {
+    "name": "Dominik Schiener (IOTA Foundation)",
+    "website": "https://iota.org"
+  },
+  "keywords": [
+    "iota",
+    "tangle",
+    "library",
+    "browser",
+    "javascript",
+    "nodejs",
+    "API"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/iotaledger/iota.lib.js/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/iotaledger/iota.lib.js.git"
+  },
+  "dependencies": {
+    "async": "^2.4.1",
+    "big.js": "^3.1.3",
+    "browserify": "^14.4.0",
+    "mocha": "^3.4.2",
+    "xmlhttprequest": "^1.8.0"
+  },
+  "devDependencies": {
+    "bower": "^1.8.0",
+    "browserify": "^14.1.0",
+    "chai": "^3.5.0",
+    "del": "^2.2.2",
+    "gulp": "^3.9.1",
+    "gulp-jshint": "^2.0.2",
+    "gulp-nsp": "^2.4.2",
+    "gulp-rename": "^1.2.2",
+    "gulp-replace": "^0.5.4",
+    "gulp-uglify": "^2.1.2",
+    "jshint": "^2.9.4",
+    "mocha": "^3.2.0",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0"
+  }
 }
 
 },{}]},{},[1]);
