@@ -190,15 +190,20 @@ iota.api.getTransactionsObjects(hashes, callback)
 
 ### `findTransactionObjects`
 
-Wrapper function for `getTrytes` and the Utility function `transactionObjects`. This function basically returns the entire transaction objects for a list of transaction hashes.
+Wrapper function for `findTransactions`, `getTrytes` and the Utility function `transactionObjects`. This function basically returns the entire transaction objects for a list of key values which you would usually use for `findTransactions`. Acceptable key values are: 
+
+- *`bundles`*: List of bundle hashes
+- *`addresses`*: List of addresses
+- *`tags`*: List of transaction tags (27 trytes length)
+- *`approvees`*: List of approvees 
 
 
 #### Input
 ```
-iota.api.findTransactionObjects(hashes, callback)
+iota.api.findTransactionObjects(searchValues, callback)
 ```
 
-1. **`hashes`**: `Array` List of transaction hashes
+1. **`searchValues`**: `Object` List of transaction hashes. e.g. `{'hashes': ['ABCD']}`
 2. **`callback`**: `Function` callback.
 
 #### Return Value
