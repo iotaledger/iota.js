@@ -1,14 +1,13 @@
 var IOTA = require('../lib/iota');
 
 var iota = new IOTA({
-    'host': 'http://localhost',
+    'host': 'http://85.93.93.110',
     'port': 14265
 });
 
 // First co-signer uses index 0 and security level 3
+// We initiate the multisig address generation by absorbing the key address digest
 var digestOne = iota.multisig.getDigest('ABCDFG', 0, 3);
-
-// We initiate the multisig address generation by absorbing the key digest
 var initiatedMultisigAddress = iota.multisig.addAddressDigest(digestOne);
 
 // Second cosigner also uses index 0 and security level 3 for the private key
@@ -25,7 +24,7 @@ console.log("MULTISIG ADDRESS: ", address);
 // Simple validation if the multisig was created correctly
 // Can be called by each cosigner independently
 var isValid = iota.multisig.validateAddress(address, [digestOne, digestTwo]);
-console.log("IS VALID MULTISIG:", isValid);
+console.log("IS VALID MULTISIG ADDRESS:", isValid);
 
 //  SIGNING EXAMPLE
 //
@@ -38,22 +37,20 @@ iota.multisig.initiateTransfer(6, address, "NZRALDYNVGJWUVLKDWFKJVNYLWQGCWYCURJI
 
     if (e) {
         console.log(e);
-    } else {
+    }
 
+    iota.multisig.addSignature(initiatedBundle, address, iota.multisig.getKey('ABCDFG', 0, 3), function(e,firstSignedBundle) {
 
-        iota.multisig.addSignature(initiatedBundle, address, iota.multisig.getKey('ABCDFG', 0, 3), function(e,firstSignedBundle) {
+        if (e) {
+            console.log(e);
+        }
 
-            if (e) {
-                console.log(e);
-            } else {
+        iota.multisig.addSignature(firstSignedBundle, address, iota.multisig.getKey('FDSAG', 0, 3), function(e,finalBundle) {
 
-                iota.multisig.addSignature(firstSignedBundle, address, iota.multisig.getKey('FDSAG', 0, 3), function(e,finalBundle) {
-
-                    if (!e) {
-                        console.log("IS VALID SIGNATURE: ", iota.utils.validateSignatures(finalBundle, address));
-                    }
-                });
+            if (!e) {
+                console.log("IS VALID SIGNATURE: ", iota.utils.validateSignatures(finalBundle, address));
             }
         });
-    }
+    });
+
 })

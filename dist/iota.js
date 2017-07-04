@@ -6,7 +6,6 @@ window.IOTA = require('./lib/iota.js');
 var apiCommands = require('./apiCommands')
 var errors = require('../errors/inputErrors');
 var inputValidator = require('../utils/inputValidator');
-var Curl = require("../crypto/curl");
 var Converter = require("../crypto/converter");
 var Signing = require("../crypto/signing");
 var Bundle = require("../crypto/bundle");
@@ -61,7 +60,7 @@ api.prototype.attachToTangle = function(trunkTransaction, branchTransaction, min
     }
 
     // inputValidator: Check if int
-    if (!inputValidator.isInt(minWeightMagnitude)) {
+    if (!inputValidator.isValue(minWeightMagnitude)) {
 
         return callback(errors.notInt());
     }
@@ -218,7 +217,12 @@ api.prototype.getNeighbors = function(callback) {
 **/
 api.prototype.addNeighbors = function(uris, callback) {
 
-    var command = apiCommands.addNeighbors();
+    // Validate URIs
+    for (var i = 0; i < uris.length; i++) {
+        if (!inputValidator.isUri(uris[i])) return callback(errors.invalidUri(uris[i]));
+    }
+
+    var command = apiCommands.addNeighbors(uris);
 
     return this.sendCommand(command, callback)
 }
@@ -231,7 +235,12 @@ api.prototype.addNeighbors = function(uris, callback) {
 **/
 api.prototype.removeNeighbors = function(uris, callback) {
 
-    var command = apiCommands.removeNeighbors();
+    // Validate URIs
+    for (var i = 0; i < uris.length; i++) {
+        if (!inputValidator.isUri(uris[i])) return callback(errors.invalidUri(uris[i]));
+    }
+
+    var command = apiCommands.removeNeighbors(uris);
 
     return this.sendCommand(command, callback)
 }
@@ -255,6 +264,12 @@ api.prototype.getTips = function(callback) {
 *   @returns {object} success
 **/
 api.prototype.getTransactionsToApprove = function(depth, callback) {
+
+    // Check if correct depth
+    if (!inputValidator.isValue(depth)) {
+
+        return callback(errors.invalidInputs());
+    }
 
     var command = apiCommands.getTransactionsToApprove(depth);
 
@@ -433,19 +448,11 @@ api.prototype.broadcastAndStore = function(trytes, callback) {
 
     self.broadcastTransactions(trytes, function(error, success) {
 
-        if (!error) {
 
-            self.storeTransactions(trytes, function(error, stored) {
+        if (error) return callback(error);
 
-                // TODO Better error checking
-
-                if (callback) {
-                    return callback(error, stored)
-                } else {
-                    return success;
-                }
-            })
-        }
+        // If no error
+        return self.storeTransactions(trytes, callback)
     })
 }
 
@@ -462,6 +469,12 @@ api.prototype.broadcastAndStore = function(trytes, callback) {
 api.prototype.sendTrytes = function(trytes, depth, minWeightMagnitude, callback) {
 
     var self = this;
+
+    // Check if correct depth and minWeightMagnitude
+    if (!inputValidator.isValue(depth) && !inputValidator.isValue(minWeightMagnitude)) {
+
+        return callback(errors.invalidInputs());
+    }
 
     // Get branch and trunk
     self.getTransactionsToApprove(depth, function(error, toApprove) {
@@ -521,6 +534,9 @@ api.prototype.sendTrytes = function(trytes, depth, minWeightMagnitude, callback)
                         })
 
                         return callback(null, finalTxs);
+                    } else {
+
+                        return callback(error);
                     }
                 })
             }
@@ -552,16 +568,16 @@ api.prototype.sendTransfer = function(seed, depth, minWeightMagnitude, transfers
         return callback(new Error("Invalid number of arguments"));
     }
 
-    // Validity check for number of arguments
-    if (arguments.length < 5) {
-        throw new Error("Invalid number of arguments");
-        return
-    }
-
     // If no options provided, switch arguments
     if (arguments.length === 5 && Object.prototype.toString.call(options) === "[object Function]") {
         callback = options;
         options = {};
+    }
+
+    // Check if correct depth and minWeightMagnitude
+    if (!inputValidator.isValue(depth) && !inputValidator.isValue(minWeightMagnitude)) {
+
+        return callback(errors.invalidInputs());
     }
 
     self.prepareTransfers(seed, transfers, options, function(error, trytes) {
@@ -587,6 +603,20 @@ api.prototype.sendTransfer = function(seed, depth, minWeightMagnitude, transfers
 api.prototype.replayBundle = function(tail, depth, minWeightMagnitude, callback) {
 
     var self = this;
+
+    // Check if correct tail hash
+    if (!inputValidator.isHash(tail)) {
+
+        return callback(errors.invalidTrytes());
+    }
+
+
+    // Check if correct depth and minWeightMagnitude
+    if (!inputValidator.isValue(depth) && !inputValidator.isValue(minWeightMagnitude)) {
+
+        return callback(errors.invalidInputs());
+    }
+
 
     self.getBundle(tail, function(error, bundle) {
 
@@ -614,6 +644,12 @@ api.prototype.replayBundle = function(tail, depth, minWeightMagnitude, callback)
 api.prototype.broadcastBundle = function(tail, callback) {
 
     var self = this;
+
+    // Check if correct tail hash
+    if (!inputValidator.isHash(tail)) {
+
+        return callback(errors.invalidTrytes());
+    }
 
     self.getBundle(tail, function(error, bundle) {
 
@@ -697,7 +733,6 @@ api.prototype.getNewAddress = function(seed, options, callback) {
     // If total number of addresses to generate is supplied, simply generate
     // and return the list of all addresses
     if (total) {
-
         // Increase index with each iteration
         for (var i = 0; i < total; i++, index++) {
 
@@ -739,6 +774,7 @@ api.prototype.getNewAddress = function(seed, options, callback) {
 
             // Validity check
             return transactions.length > 0;
+
         }, function(err, address) {
             // Final callback
 
@@ -916,10 +952,21 @@ api.prototype.prepareTransfers = function(seed, transfers, options, callback) {
     }
 
     // If message or tag is not supplied, provide it
-    // Also remove the checksum of the address if it's there
+    // Also remove the checksum of the address if it's there after validating it
     transfers.forEach(function(thisTransfer) {
         thisTransfer.message = thisTransfer.message ? thisTransfer.message : '';
         thisTransfer.tag = thisTransfer.tag ? thisTransfer.tag : '';
+
+        // If address with checksum, validate it
+        if (thisTransfer.address.length === 90) {
+
+            if (!Utils.isValidChecksum(thisTransfer.address)) {
+
+                return callback(errors.invalidChecksum(thisTransfer.address));
+
+            }
+        }
+
         thisTransfer.address = Utils.noChecksum(thisTransfer.address);
     })
 
@@ -1001,7 +1048,7 @@ api.prototype.prepareTransfers = function(seed, transfers, options, callback) {
 
         // Add first entries to the bundle
         // Slice the address in case the user provided a checksummed one
-        bundle.addEntry(signatureMessageLength, transfers[i].address.slice(0, 81), transfers[i].value, tag, timestamp)
+        bundle.addEntry(signatureMessageLength, transfers[i].address, transfers[i].value, tag, timestamp)
         // Sum up total value
         totalValue += parseInt(transfers[i].value);
     }
@@ -1312,85 +1359,27 @@ api.prototype.getBundle = function(transaction, callback) {
 
     var self = this;
 
+    // inputValidator: Check if correct hash
+    if (!inputValidator.isHash(transaction)) {
+
+        return callback(errors.invalidInputs(transaction));
+    }
+
+    // Initiate traverseBundle
     self.traverseBundle(transaction, null, Array(), function(error, bundle) {
 
         if (error) return callback(error);
 
-        /********
+        if (!Utils.isBundle(bundle)) {
 
-        Validity Check Functions
+            return callback(new Error("Invalid Bundle provided"))
 
-        ********/
+        } else {
 
-        var totalSum = 0, lastIndex, bundleHash = bundle[0].bundle;
+            // Return bundle element
+            return callback(null, bundle);
 
-        // Prepare to absorb txs and get bundleHash
-        var bundleFromTxs = [];
-
-        var curl = new Curl();
-        curl.initialize();
-
-        // Prepare for signature validation
-        var signaturesToValidate = [];
-
-        bundle.forEach(function(bundleTx, index) {
-
-            totalSum += bundleTx.value;
-
-            // currentIndex has to be equal to the index in the array
-            if (bundleTx.currentIndex !== index) return callback(new Error("Invalid Bundle"));
-
-            // Get the transaction trytes
-            var thisTxTrytes = Utils.transactionTrytes(bundleTx);
-
-            // Absorb bundle hash + value + timestamp + lastIndex + currentIndex trytes.
-            curl.absorb(Converter.trits(thisTxTrytes.slice(2187, 2187 + 162)))
-
-            // Check if input transaction
-            if (bundleTx.value < 0) {
-                var thisAddress = bundleTx.address;
-
-                var newSignatureToValidate = {
-                    'address': thisAddress,
-                    'signatureFragments': Array(bundleTx.signatureMessageFragment)
-                }
-
-                // Find the subsequent txs with the remaining signature fragment
-                for (var i = index; i < bundle.length - 1; i++) {
-                    var newBundleTx = bundle[i + 1];
-
-                    // Check if new tx is part of the signature fragment
-                    if (newBundleTx.address === thisAddress && newBundleTx.value === 0) {
-                        newSignatureToValidate.signatureFragments.push(newBundleTx.signatureMessageFragment);
-                    }
-                }
-
-                signaturesToValidate.push(newSignatureToValidate);
-            }
-        });
-
-        // Check for total sum, if not equal 0 return error
-        if (totalSum !== 0) return callback(new Error("Invalid Bundle Sum"));
-
-        curl.squeeze(bundleFromTxs);
-        var bundleFromTxs = Converter.trytes(bundleFromTxs);
-
-        // Check if bundle hash is the same as returned by tx object
-        if (bundleFromTxs !== bundleHash) return callback(new Error("Invalid Bundle Hash"));
-
-        // Last tx in the bundle should have currentIndex === lastIndex
-        if (bundle[bundle.length - 1].currentIndex !== bundle[bundle.length - 1].lastIndex) return callback(new Error("Invalid Bundle"));
-
-        // Validate the signatures
-        for (var i = 0; i < signaturesToValidate.length; i++) {
-
-            var isValidSignature = Signing.validateSignatures(signaturesToValidate[i].address, signaturesToValidate[i].signatureFragments, bundleHash);
-
-            if (!isValidSignature) return callback(new Error("Invalid Signatures!"));
         }
-
-        // Return bundle element
-        return callback(null, bundle);
     })
 }
 
@@ -1534,6 +1523,12 @@ api.prototype.getTransfers = function(seed, options, callback) {
         options = {};
     }
 
+    // inputValidator: Check if correct seed
+    if (!inputValidator.isTrytes(seed)) {
+
+        return callback(errors.invalidSeed(seed));
+    }
+
     var start = options.start || 0;
     var end = options.end || null;
     var inclusionStates = options.inclusionStates || null;
@@ -1588,24 +1583,34 @@ api.prototype.getAccountData = function(seed, options, callback) {
         options = {};
     }
 
+    // inputValidator: Check if correct seed
+    if (!inputValidator.isTrytes(seed)) {
+
+        return callback(errors.invalidSeed(seed));
+    }
+
     var start = options.start || 0;
     var end = options.end || null;
     var security = options.security || 2;
 
     // If start value bigger than end, return error
-    // or if difference between end and start is bigger than 500 keys
-    if (start > end || end > (start + 500)) {
+    // or if difference between end and start is bigger than 1000 keys
+    if (start > end || end > (start + 1000)) {
         return callback(new Error("Invalid inputs provided"))
     }
 
     //  These are the values that will be returned to the original caller
-    //  @addresses all addresses associated with this seed
-    //  @transfers all sent / received transfers
-    //  @balance the confirmed balance
+    //  @latestAddress: latest unused address
+    //  @addresses:     all addresses associated with this seed that have been used
+    //  @transfers:     all sent / received transfers
+    //  @inputs:        all inputs of the account
+    //  @balance:       the confirmed balance
     var valuesToReturn = {
-        'addresses' : [],
-        'transfers' : [],
-        'balance'   : 0
+        'latestAddress' : '',
+        'addresses'     : [],
+        'transfers'     : [],
+        'inputs'        : [],
+        'balance'       : 0
     }
 
     // first call findTransactions
@@ -1623,8 +1628,12 @@ api.prototype.getAccountData = function(seed, options, callback) {
 
         if (error) return callback(error);
 
+        // assign the last address as the latest address
+        // since it has no transactions associated with it
+        valuesToReturn.latestAddress = addresses[addresses.length - 1];
+
         // Add all returned addresses to the lsit of addresses
-        // remove the last element as that is the most recent
+        // remove the last element as that is the most recent address
         valuesToReturn.addresses = addresses.slice(0, -1);
 
         // get all bundles from a list of addresses
@@ -1638,8 +1647,24 @@ api.prototype.getAccountData = function(seed, options, callback) {
             // Get the correct balance count of all addresses
             self.getBalances(valuesToReturn.addresses, 100, function(error, balances) {
 
-                balances.balances.forEach(function(balance) {
-                    valuesToReturn.balance += parseInt(balance);
+                balances.balances.forEach(function(balance, index) {
+
+                    var balance = parseInt(balance);
+
+                    valuesToReturn.balance += balance;
+
+                    if (balance > 0) {
+
+                        var newInput = {
+                            'address': valuesToReturn.addresses[index],
+                            'keyIndex': index,
+                            'security': security,
+                            'balance': balance
+                        }
+
+                        valuesToReturn.inputs.push(newInput);
+
+                    }
                 })
 
                 return callback(null, valuesToReturn);
@@ -1648,9 +1673,59 @@ api.prototype.getAccountData = function(seed, options, callback) {
     })
 }
 
+/**
+*   Determines whether you should replay a transaction
+*   or make a new one (either with the same input, or a different one)
+*
+*   @method shouldYouReplay
+*   @param {String} inputAddress Input address you want to have tested
+*   @returns {Bool}
+**/
+api.prototype.shouldYouReplay = function(inputAddress, callback) {
+
+    var self = this;
+
+    if (!inputValidator.isAddress(inputAddress)) {
+
+        return callback(errors.invalidInputs());
+
+    }
+
+    var inputAddress = Utils.noChecksum(inputAddress);
+
+    self.findTransactionObjects( { 'addresses': new Array(inputAddress) }, function( e, transactions ) {
+
+        if (e) return callback(e);
+
+        var valueTransactions = [];
+
+        transactions.forEach(function(thisTransaction) {
+
+            if (thisTransaction.value < 0) {
+
+                valueTransactions.push(thisTransaction.hash);
+
+            }
+        })
+
+        if ( valueTransactions.length > 0 ) {
+
+            self.getLatestInclusion( valueTransactions, function( e, inclusionStates ) {
+
+                return callback(null, inclusionStates.indexOf( true ) === -1);
+
+            })
+
+        } else {
+
+            return callback(null, true);
+        }
+    })
+}
+
 module.exports = api;
 
-},{"../crypto/bundle":4,"../crypto/converter":5,"../crypto/curl":6,"../crypto/signing":7,"../errors/inputErrors":8,"../utils/inputValidator":13,"../utils/utils":15,"./apiCommands":3,"async":16}],3:[function(require,module,exports){
+},{"../crypto/bundle":4,"../crypto/converter":5,"../crypto/signing":7,"../errors/inputErrors":8,"../utils/inputValidator":14,"../utils/utils":16,"./apiCommands":3,"async":17}],3:[function(require,module,exports){
 /**
 *   @method attachToTangle
 *   @param {string} trunkTransaction
@@ -2206,7 +2281,7 @@ function Curl() {
 **/
 Curl.prototype.initialize = function(state) {
 
-    if (state && state.length === 729) {
+    if (state) {
 
         this.state = state;
 
@@ -2506,6 +2581,9 @@ module.exports = {
     invalidSeed: function() {
         return new Error("Invalid Seed provided");
     },
+    invalidChecksum: function(address) {
+        return new Error("Invalid Checksum supplied for address: " + address)
+    },
     invalidAttachedTrytes: function() {
         return new Error("Invalid attached Trytes provided");
     },
@@ -2517,6 +2595,9 @@ module.exports = {
     },
     invalidTrunkOrBranch: function(hash) {
         return new Error("You have provided an invalid hash as a trunk/branch: " + hash);
+    },
+    invalidUri: function(uri) {
+        return new Error("You have provided an invalid URI for your Neighbor: " + uri)
     },
     notInt: function() {
         return new Error("One of your inputs is not an integer");
@@ -2552,12 +2633,13 @@ function IOTA(settings) {
 
     // IF NO SETTINGS, SET DEFAULT TO localhost:14265
     settings = settings || {};
+    this.version = require('../package.json').version;
     this.host = settings.host ? settings.host : "http://localhost";
     this.port = settings.port ? settings.port : 14265;
     this.provider = settings.provider || this.host.replace(/\/$/, '') + ":" + this.port;
     this.sandbox = settings.sandbox || false;
     this.token = settings.token || false;
-    
+
     if (this.sandbox) {
 
         // remove backslash character
@@ -2570,7 +2652,7 @@ function IOTA(settings) {
     // this.mam
     // this.flash
     this.utils = utils;
-    this.validate = require("./utils/inputValidator");
+    this.valid = require("./utils/inputValidator");
     this.multisig = new Multisig(this._makeRequest);
 }
 
@@ -2594,7 +2676,7 @@ IOTA.prototype.changeNode = function(settings) {
 
 module.exports = IOTA;
 
-},{"./api/api":2,"./multisig/multisig":11,"./utils/inputValidator":13,"./utils/makeRequest":14,"./utils/utils":15}],11:[function(require,module,exports){
+},{"../package.json":55,"./api/api":2,"./multisig/multisig":11,"./utils/inputValidator":14,"./utils/makeRequest":15,"./utils/utils":16}],11:[function(require,module,exports){
 var Signing = require('../crypto/signing');
 var Converter = require('../crypto/converter');
 var Curl = require('../crypto/curl');
@@ -2652,7 +2734,7 @@ Multisig.prototype.addAddressDigest = function(digestTrytes, curlStateTrytes) {
 
     // If curlStateTrytes is provided, convert into trits
     // else use empty state and initiate the creation of a new address
-    var curlState = curlStateTrytes ? Converter.trits(curlStateTrytes) : [];
+    var curlState = curlStateTrytes ? Converter.trits(curlStateTrytes) : null;
 
     var curl = new Curl();
 
@@ -2745,7 +2827,7 @@ Multisig.prototype.initiateTransfer = function(securitySum, inputAddress, remain
     }
 
     // check if int
-    if (!inputValidator.isInt(securitySum)) {
+    if (!inputValidator.isValue(securitySum)) {
         return callback(errors.invalidInputs());
     }
 
@@ -2841,8 +2923,9 @@ Multisig.prototype.initiateTransfer = function(securitySum, inputAddress, remain
 
         self._makeRequest.send(command, function(e, balances) {
 
+            if (e) return callback(e);
 
-            var totalBalance = 1000 // parseInt(balances.balances[0]);
+            var totalBalance = parseInt(balances.balances[0]);
 
             if (totalBalance > 0) {
 
@@ -2977,7 +3060,7 @@ Multisig.prototype.addSignature = function(bundleToSign, inputAddress, key, call
 
 module.exports = Multisig;
 
-},{"../crypto/bundle":4,"../crypto/converter":5,"../crypto/curl":6,"../crypto/signing":7,"../errors/inputErrors":8,"../utils/inputValidator":13,"../utils/utils":15}],12:[function(require,module,exports){
+},{"../crypto/bundle":4,"../crypto/converter":5,"../crypto/curl":6,"../crypto/signing":7,"../errors/inputErrors":8,"../utils/inputValidator":14,"../utils/utils":16}],12:[function(require,module,exports){
 //
 //  Conversion of ascii encoded bytes to trytes.
 //  Input is a string (can be stringified JSON object), return value is Trytes
@@ -3006,18 +3089,22 @@ module.exports = Multisig;
 //      RESULT:
 //        The ASCII char "Z" is represented as "IC" in trytes.
 //
-function toTrytes(inputString) {
+function toTrytes(input) {
+
+    // If input is not a string, return null
+    if ( typeof input !== 'string' ) return null
 
     var TRYTE_VALUES = "9ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     var trytes = "";
 
-    for (var i = 0; i < inputString.length; i++) {
-        var char = inputString[i];
+    for (var i = 0; i < input.length; i++) {
+        var char = input[i];
         var asciiValue = char.charCodeAt(0);
 
-        // If not recognizable ASCII character, replace with space
+        // If not recognizable ASCII character, return null
         if (asciiValue > 255) {
-            asciiValue = 32
+            //asciiValue = 32
+            return null;
         }
 
         var firstValue = asciiValue % 27;
@@ -3042,6 +3129,12 @@ function toTrytes(inputString) {
 //    Everything after that is 9's padding
 //
 function fromTrytes(inputTrytes) {
+
+    // If input is not a string, return null
+    if ( typeof inputTrytes !== 'string' ) return null
+
+    // If input length is odd, return null
+    if ( inputTrytes.length % 2 ) return null
 
     var TRYTE_VALUES = "9ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     var outputString = "";
@@ -3069,6 +3162,106 @@ module.exports = {
 }
 
 },{}],13:[function(require,module,exports){
+var ascii = require("./asciiToTrytes");
+var inputValidator = require("./inputValidator");
+
+/**
+*   extractJson takes a bundle as input and from the signatureMessageFragments extracts the correct JSON
+*   data which was encoded and sent with the transaction.
+*
+*   @method extractJson
+*   @param {array} bundle
+*   @returns {Object}
+**/
+function extractJson(bundle) {
+
+    // if wrong input return null
+    if ( !inputValidator.isArray(bundle) || bundle[0] === undefined ) return null;
+
+
+    // Sanity check: if the first tryte pair is not opening bracket, it's not a message
+    var firstTrytePair = bundle[0].signatureMessageFragment[0] + bundle[0].signatureMessageFragment[1];
+
+    if (firstTrytePair !== "OD") return null;
+
+    var index = 0;
+    var notEnded = true;
+    var trytesChunk = '';
+    var trytesChecked = 0;
+    var preliminaryStop = false;
+    var finalJson = '';
+
+    while (index < bundle.length && notEnded) {
+
+        var messageChunk = bundle[index].signatureMessageFragment;
+
+        // We iterate over the message chunk, reading 9 trytes at a time
+        for (var i = 0; i < messageChunk.length; i += 9) {
+
+            // get 9 trytes
+            var trytes = messageChunk.slice(i, i + 9);
+            trytesChunk += trytes;
+
+            // Get the upper limit of the tytes that need to be checked
+            // because we only check 2 trytes at a time, there is sometimes a leftover
+            var upperLimit = trytesChunk.length - trytesChunk.length % 2;
+
+            var trytesToCheck = trytesChunk.slice(trytesChecked, upperLimit);
+
+            // We read 2 trytes at a time and check if it equals the closing bracket character
+            for (var j = 0; j < trytesToCheck.length; j += 2) {
+
+                var trytePair = trytesToCheck[j] + trytesToCheck[j + 1];
+
+                // If closing bracket char was found, and there are only trailing 9's
+                // we quit and remove the 9's from the trytesChunk.
+                if ( preliminaryStop && trytePair === '99' ) {
+
+                    notEnded = false;
+                    // TODO: Remove the trailing 9's from trytesChunk
+                    //var closingBracket = trytesToCheck.indexOf('QD') + 1;
+
+                    //trytesChunk = trytesChunk.slice( 0, ( trytesChunk.length - trytesToCheck.length ) + ( closingBracket % 2 === 0 ? closingBracket : closingBracket + 1 ) );
+
+                    break;
+                }
+
+                finalJson += ascii.fromTrytes(trytePair);
+
+                // If tryte pair equals closing bracket char, we set a preliminary stop
+                // the preliminaryStop is useful when we have a nested JSON object
+                if (trytePair === "QD") {
+                    preliminaryStop = true;
+                }
+            }
+
+            if (!notEnded)
+                break;
+
+            trytesChecked += trytesToCheck.length;
+        }
+
+        // If we have not reached the end of the message yet, we continue with the next
+        // transaction in the bundle
+        index += 1;
+
+    }
+
+    // If we did not find any JSON, return null
+    if (notEnded) {
+
+        return null;
+
+    } else {
+
+        return finalJson;
+
+    }
+}
+
+module.exports = extractJson;
+
+},{"./asciiToTrytes":12,"./inputValidator":14}],14:[function(require,module,exports){
 /**
 *   checks if input is correct address
 *
@@ -3127,7 +3320,7 @@ var isNinesTrytes = function(trytes) {
 }
 
 /**
-*   checks if value
+*   checks if integer value
 *
 *   @method isValue
 *   @param {string} value
@@ -3136,20 +3329,19 @@ var isNinesTrytes = function(trytes) {
 var isValue = function(value) {
 
     // check if correct number
-    return /^[0-9]+$/.test(value) && isInt(value);
+    return Number.isInteger(value)
 }
 
 /**
-*   checks if decimal
+*   checks whether input is a value or not. Can be a string, float or integer
 *
-*   @method isDecimal
-*   @param {string} value
+*   @method isNum
+*   @param {int}
 *   @returns {boolean}
 **/
-var isDecimal = function(value) {
+var isNum = function(input) {
 
-    // check if correct number
-    return /^(\d+\.?\d{0,9}|\.\d{0,9})$/.test(value);
+    return /^(\d+\.?\d{0,9}|\.\d{0,9})$/.test(input);
 }
 
 /**
@@ -3169,6 +3361,45 @@ var isHash = function(hash) {
 
     return true;
 }
+
+/**
+*   checks whether input is a string or not
+*
+*   @method isString
+*   @param {string}
+*   @returns {boolean}
+**/
+var isString = function(string) {
+
+    return typeof string === 'string';
+}
+
+
+/**
+*   checks whether input is an array or not
+*
+*   @method isArray
+*   @param {object}
+*   @returns {boolean}
+**/
+var isArray = function(array) {
+
+    return array instanceof Array;
+}
+
+
+/**
+*   checks whether input is object or not
+*
+*   @method isObject
+*   @param {object}
+*   @returns {boolean}
+**/
+var isObject = function(object) {
+
+    return typeof object === 'object';
+}
+
 
 
 /**
@@ -3301,6 +3532,96 @@ var isArrayOfAttachedTrytes = function(trytesArray) {
 }
 
 /**
+*   checks if correct bundle with transaction object
+*
+*   @method isArrayOfTxObjects
+*   @param {array} bundle
+*   @returns {boolean}
+**/
+var isArrayOfTxObjects = function(bundle) {
+
+    if (!isArray(bundle) || bundle.length === 0) return false;
+
+    var validArray = true;
+
+    bundle.forEach(function(txObject) {
+
+        var keysToValidate = [
+            {
+                key: 'hash',
+                validator: isHash,
+                args: null
+            }, {
+                key: 'signatureMessageFragment',
+                validator: isTrytes,
+                args: 2187
+            }, {
+                key: 'address',
+                validator: isHash,
+                args: null
+            }, {
+                key: 'value',
+                validator: isValue,
+                args: null
+            }, {
+                key: 'tag',
+                validator: isTrytes,
+                args: 27
+            }, {
+                key: 'timestamp',
+                validator: isValue,
+                args: null
+            }, {
+                key: 'currentIndex',
+                validator: isValue,
+                args: null
+            },{
+                key: 'lastIndex',
+                validator: isValue,
+                args: null
+            }, {
+                key: 'bundle',
+                validator: isHash,
+                args: null
+            }, {
+                key: 'trunkTransaction',
+                validator: isHash,
+                args: null
+            }, {
+                key: 'branchTransaction',
+                validator: isHash,
+                args: null
+            }, {
+                key: 'nonce',
+                validator: isHash,
+                args: null
+            }
+        ]
+
+        for (var i = 0; i < keysToValidate.length; i++) {
+
+            var key = keysToValidate[i].key;
+            var validator = keysToValidate[i].validator;
+            var args = keysToValidate[i].args
+
+            // If input does not have keyIndex and address, return false
+            if (!txObject.hasOwnProperty(key)) {
+                validArray = false;
+                break;
+            }
+
+            // If input validator function does not return true, exit
+            if (!validator(txObject[key], args)) {
+                validArray = false;
+                break;
+            }
+        }
+    })
+
+    return validArray;
+}
+
+/**
 *   checks if correct inputs list
 *
 *   @method isInputs
@@ -3322,66 +3643,16 @@ var isInputs = function(inputs) {
             return false;
         }
 
-        if (!isInt(input.security)) {
+        if (!isValue(input.security)) {
             return false;
         }
 
-        if (!isInt(input.keyIndex)) {
+        if (!isValue(input.keyIndex)) {
             return false;
         }
     }
 
     return true;
-}
-
-/**
-*   checks whether input is a string or not
-*
-*   @method isString
-*   @param {string}
-*   @returns {boolean}
-**/
-var isString = function(string) {
-
-    return typeof string === 'string';
-}
-
-
-/**
-*   checks whether input is an integer or not
-*
-*   @method isInt
-*   @param {int}
-*   @returns {boolean}
-**/
-var isInt = function(integer) {
-
-    return typeof integer === 'number';
-}
-
-/**
-*   checks whether input is an array or not
-*
-*   @method isArray
-*   @param {object}
-*   @returns {boolean}
-**/
-var isArray = function(array) {
-
-    return array instanceof Array;
-}
-
-
-/**
-*   checks whether input is object or not
-*
-*   @method isObject
-*   @param {object}
-*   @returns {boolean}
-**/
-var isObject = function(object) {
-
-    return typeof object === 'object';
 }
 
 /**
@@ -3400,7 +3671,7 @@ var isObject = function(object) {
 **/
 var isUri = function(node) {
 
-    var getInside = /^udp:\/\/([\[][^\]\.]*[\]]|[^\[\]:]*)[:]{0,1}([0-9]{1,}$|$)/i;
+    var getInside = /^(udp|tcp):\/\/([\[][^\]\.]*[\]]|[^\[\]:]*)[:]{0,1}([0-9]{1,}$|$)/i;
 
     var stripBrackets = /[\[]{0,1}([^\[\]]*)[\]]{0,1}/;
 
@@ -3418,21 +3689,21 @@ module.exports = {
     isTrytes: isTrytes,
     isNinesTrytes: isNinesTrytes,
     isValue: isValue,
-    isDecimal: isDecimal,
     isHash: isHash,
     isTransfersArray: isTransfersArray,
     isArrayOfHashes: isArrayOfHashes,
     isArrayOfTrytes: isArrayOfTrytes,
     isArrayOfAttachedTrytes: isArrayOfAttachedTrytes,
+    isArrayOfTxObjects: isArrayOfTxObjects,
     isInputs: isInputs,
     isString: isString,
-    isInt: isInt,
+    isNum: isNum,
     isArray: isArray,
     isObject: isObject,
     isUri: isUri
 }
 
-},{}],14:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 var errors = require("../errors/requestErrors");
 
@@ -3465,7 +3736,6 @@ makeRequest.prototype.open = function() {
 
     var request = new XMLHttpRequest();
     request.open('POST', this.provider, true);
-    // temporarily disabled until IRI fix 
     //request.setRequestHeader('Content-Type','application/json');
 
     if (this.token) {
@@ -3628,13 +3898,14 @@ makeRequest.prototype.prepareResult = function(result, requestCommand, callback)
 
 module.exports = makeRequest;
 
-},{"../errors/requestErrors":9,"xmlhttprequest":52}],15:[function(require,module,exports){
-var inputValidator = require("./inputValidator");
-var makeRequest = require("./makeRequest");
-var Curl = require("../crypto/curl");
-var Converter = require("../crypto/converter");
-var ascii = require("./asciiToTrytes");
-var Signing = require("../crypto/signing");
+},{"../errors/requestErrors":9,"xmlhttprequest":53}],16:[function(require,module,exports){
+var inputValidator  =   require("./inputValidator");
+var makeRequest     =   require("./makeRequest");
+var Curl            =   require("../crypto/curl");
+var Converter       =   require("../crypto/converter");
+var ascii           =   require("./asciiToTrytes");
+var extractJson     =   require("./extractJson");
+var Signing         =   require("../crypto/signing");
 
 /**
 *   Table of IOTA Units based off of the standard System of Units
@@ -3661,7 +3932,7 @@ var convertUnits = function(value, fromUnit, toUnit) {
 
 
     // If not valid value, throw error
-    if (!inputValidator.isDecimal(value)) {
+    if (!inputValidator.isNum(value)) {
 
         throw new Error("Invalid value input");
     }
@@ -3716,9 +3987,13 @@ var addChecksum = function(address) {
     });
 
     if (isSingleAddress) {
+
         return addressesWithChecksum[0];
+
     } else {
+        
         return addressesWithChecksum;
+
     }
 }
 
@@ -3744,9 +4019,13 @@ var noChecksum = function(address) {
 
     // return either string or the list
     if (isSingleAddress) {
+
         return addressesWithChecksum[0];
+
     } else {
+
         return addressesWithChecksum;
+
     }
 }
 
@@ -3765,38 +4044,6 @@ var isValidChecksum = function(addressWithChecksum) {
 
     return newChecksum === addressWithChecksum;
 }
-
-
-/**
-*   Convert bytes to trytes
-*
-*   @method toTrytes
-*   @param {string} string
-*   @param {string} type
-*   @returns {string} address (without checksum)
-**/
-var toTrytes = function(string, type) {
-    // TODO !!!!!
-    if (type === "ascii") {
-        return ascii.toTrytes(trytes);
-    }
-}
-
-/**
-*   Convert trytes to bytes
-*
-*   @method fromTrytes
-*   @param {string} trytes
-*   @param {string} type
-*   @returns {string} address (without checksum)
-**/
-var fromTrytes = function(trytes, type) {
-    //TODO !!!!!
-    if (type === "ascii") {
-        return ascii.fromTrytes(trytes);
-    }
-}
-
 
 /**
 *   Converts transaction trytes of 2673 trytes into a transaction object
@@ -3969,6 +4216,89 @@ var validateSignatures = function(signedBundle, inputAddress) {
 }
 
 
+/**
+*   Checks is a Bundle is valid. Validates signatures and overall structure. Has to be tail tx first.
+*
+*   @method isValidBundle
+*   @param {array} bundle
+*   @returns {bool} valid
+**/
+var isBundle = function(bundle) {
+
+    // If not correct bundle
+    if (!inputValidator.isArrayOfTxObjects(bundle)) return false;
+
+    var totalSum = 0, lastIndex, bundleHash = bundle[0].bundle;
+
+    // Prepare to absorb txs and get bundleHash
+    var bundleFromTxs = [];
+
+    var curl = new Curl();
+    curl.initialize();
+
+    // Prepare for signature validation
+    var signaturesToValidate = [];
+
+    bundle.forEach(function(bundleTx, index) {
+
+        totalSum += bundleTx.value;
+
+        // currentIndex has to be equal to the index in the array
+        if (bundleTx.currentIndex !== index) return false;
+
+        // Get the transaction trytes
+        var thisTxTrytes = transactionTrytes(bundleTx);
+
+        // Absorb bundle hash + value + timestamp + lastIndex + currentIndex trytes.
+        curl.absorb(Converter.trits(thisTxTrytes.slice(2187, 2187 + 162)))
+
+        // Check if input transaction
+        if (bundleTx.value < 0) {
+            var thisAddress = bundleTx.address;
+
+            var newSignatureToValidate = {
+                'address': thisAddress,
+                'signatureFragments': Array(bundleTx.signatureMessageFragment)
+            }
+
+            // Find the subsequent txs with the remaining signature fragment
+            for (var i = index; i < bundle.length - 1; i++) {
+                var newBundleTx = bundle[i + 1];
+
+                // Check if new tx is part of the signature fragment
+                if (newBundleTx.address === thisAddress && newBundleTx.value === 0) {
+                    newSignatureToValidate.signatureFragments.push(newBundleTx.signatureMessageFragment);
+                }
+            }
+
+            signaturesToValidate.push(newSignatureToValidate);
+        }
+    });
+
+    // Check for total sum, if not equal 0 return error
+    if (totalSum !== 0) return false;
+
+    // get the bundle hash from the bundle transactions
+    curl.squeeze(bundleFromTxs);
+    var bundleFromTxs = Converter.trytes(bundleFromTxs);
+
+    // Check if bundle hash is the same as returned by tx object
+    if (bundleFromTxs !== bundleHash) return false;
+
+    // Last tx in the bundle should have currentIndex === lastIndex
+    if (bundle[bundle.length - 1].currentIndex !== bundle[bundle.length - 1].lastIndex) return false;
+
+    // Validate the signatures
+    for (var i = 0; i < signaturesToValidate.length; i++) {
+
+        var isValidSignature = Signing.validateSignatures(signaturesToValidate[i].address, signaturesToValidate[i].signatureFragments, bundleHash);
+
+        if (!isValidSignature) return false;
+    }
+
+    return true;
+}
+
 module.exports = {
     convertUnits        : convertUnits,
     addChecksum         : addChecksum,
@@ -3979,117 +4309,210 @@ module.exports = {
     categorizeTransfers : categorizeTransfers,
     toTrytes            : ascii.toTrytes,
     fromTrytes          : ascii.fromTrytes,
-    validateSignatures  : validateSignatures
+    extractJson         : extractJson,
+    validateSignatures  : validateSignatures,
+    isBundle            : isBundle
 }
 
-},{"../crypto/converter":5,"../crypto/curl":6,"../crypto/signing":7,"./asciiToTrytes":12,"./inputValidator":13,"./makeRequest":14}],16:[function(require,module,exports){
+},{"../crypto/converter":5,"../crypto/curl":6,"../crypto/signing":7,"./asciiToTrytes":12,"./extractJson":13,"./inputValidator":14,"./makeRequest":15}],17:[function(require,module,exports){
 (function (process,global){
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
-    typeof define === 'function' && define.amd ? define(['exports'], factory) :
-    (factory((global.async = global.async || {})));
+  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+  typeof define === 'function' && define.amd ? define(['exports'], factory) :
+  (factory((global.async = global.async || {})));
 }(this, (function (exports) { 'use strict';
 
-/**
- * A faster alternative to `Function#apply`, this function invokes `func`
- * with the `this` binding of `thisArg` and the arguments of `args`.
- *
- * @private
- * @param {Function} func The function to invoke.
- * @param {*} thisArg The `this` binding of `func`.
- * @param {Array} args The arguments to invoke `func` with.
- * @returns {*} Returns the result of `func`.
- */
-function apply(func, thisArg, args) {
-  switch (args.length) {
-    case 0: return func.call(thisArg);
-    case 1: return func.call(thisArg, args[0]);
-    case 2: return func.call(thisArg, args[0], args[1]);
-    case 3: return func.call(thisArg, args[0], args[1], args[2]);
-  }
-  return func.apply(thisArg, args);
-}
-
-/* Built-in method references for those with the same name as other `lodash` methods. */
-var nativeMax = Math.max;
-
-/**
- * A specialized version of `baseRest` which transforms the rest array.
- *
- * @private
- * @param {Function} func The function to apply a rest parameter to.
- * @param {number} [start=func.length-1] The start position of the rest parameter.
- * @param {Function} transform The rest array transform.
- * @returns {Function} Returns the new function.
- */
-function overRest$1(func, start, transform) {
-  start = nativeMax(start === undefined ? (func.length - 1) : start, 0);
-  return function() {
-    var args = arguments,
-        index = -1,
-        length = nativeMax(args.length - start, 0),
-        array = Array(length);
-
-    while (++index < length) {
-      array[index] = args[start + index];
+function slice(arrayLike, start) {
+    start = start|0;
+    var newLen = Math.max(arrayLike.length - start, 0);
+    var newArr = Array(newLen);
+    for(var idx = 0; idx < newLen; idx++)  {
+        newArr[idx] = arrayLike[start + idx];
     }
-    index = -1;
-    var otherArgs = Array(start + 1);
-    while (++index < start) {
-      otherArgs[index] = args[index];
-    }
-    otherArgs[start] = transform(array);
-    return apply(func, this, otherArgs);
-  };
-}
-
-/**
- * This method returns the first argument it receives.
- *
- * @static
- * @since 0.1.0
- * @memberOf _
- * @category Util
- * @param {*} value Any value.
- * @returns {*} Returns `value`.
- * @example
- *
- * var object = { 'a': 1 };
- *
- * console.log(_.identity(object) === object);
- * // => true
- */
-function identity(value) {
-  return value;
-}
-
-// Lodash rest function without function.toString()
-// remappings
-function rest(func, start) {
-    return overRest$1(func, start, identity);
+    return newArr;
 }
 
 var initialParams = function (fn) {
-    return rest(function (args /*..., callback*/) {
+    return function (/*...args, callback*/) {
+        var args = slice(arguments);
         var callback = args.pop();
         fn.call(this, args, callback);
-    });
+    };
 };
 
+/**
+ * Checks if `value` is the
+ * [language type](http://www.ecma-international.org/ecma-262/7.0/#sec-ecmascript-language-types)
+ * of `Object`. (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is an object, else `false`.
+ * @example
+ *
+ * _.isObject({});
+ * // => true
+ *
+ * _.isObject([1, 2, 3]);
+ * // => true
+ *
+ * _.isObject(_.noop);
+ * // => true
+ *
+ * _.isObject(null);
+ * // => false
+ */
+function isObject(value) {
+  var type = typeof value;
+  return value != null && (type == 'object' || type == 'function');
+}
+
+var hasSetImmediate = typeof setImmediate === 'function' && setImmediate;
+var hasNextTick = typeof process === 'object' && typeof process.nextTick === 'function';
+
+function fallback(fn) {
+    setTimeout(fn, 0);
+}
+
+function wrap(defer) {
+    return function (fn/*, ...args*/) {
+        var args = slice(arguments, 1);
+        defer(function () {
+            fn.apply(null, args);
+        });
+    };
+}
+
+var _defer;
+
+if (hasSetImmediate) {
+    _defer = setImmediate;
+} else if (hasNextTick) {
+    _defer = process.nextTick;
+} else {
+    _defer = fallback;
+}
+
+var setImmediate$1 = wrap(_defer);
+
+/**
+ * Take a sync function and make it async, passing its return value to a
+ * callback. This is useful for plugging sync functions into a waterfall,
+ * series, or other async functions. Any arguments passed to the generated
+ * function will be passed to the wrapped function (except for the final
+ * callback argument). Errors thrown will be passed to the callback.
+ *
+ * If the function passed to `asyncify` returns a Promise, that promises's
+ * resolved/rejected state will be used to call the callback, rather than simply
+ * the synchronous return value.
+ *
+ * This also means you can asyncify ES2017 `async` functions.
+ *
+ * @name asyncify
+ * @static
+ * @memberOf module:Utils
+ * @method
+ * @alias wrapSync
+ * @category Util
+ * @param {Function} func - The synchronous function, or Promise-returning
+ * function to convert to an {@link AsyncFunction}.
+ * @returns {AsyncFunction} An asynchronous wrapper of the `func`. To be
+ * invoked with `(args..., callback)`.
+ * @example
+ *
+ * // passing a regular synchronous function
+ * async.waterfall([
+ *     async.apply(fs.readFile, filename, "utf8"),
+ *     async.asyncify(JSON.parse),
+ *     function (data, next) {
+ *         // data is the result of parsing the text.
+ *         // If there was a parsing error, it would have been caught.
+ *     }
+ * ], callback);
+ *
+ * // passing a function returning a promise
+ * async.waterfall([
+ *     async.apply(fs.readFile, filename, "utf8"),
+ *     async.asyncify(function (contents) {
+ *         return db.model.create(contents);
+ *     }),
+ *     function (model, next) {
+ *         // `model` is the instantiated model object.
+ *         // If there was an error, this function would be skipped.
+ *     }
+ * ], callback);
+ *
+ * // es2017 example, though `asyncify` is not needed if your JS environment
+ * // supports async functions out of the box
+ * var q = async.queue(async.asyncify(async function(file) {
+ *     var intermediateStep = await processFile(file);
+ *     return await somePromise(intermediateStep)
+ * }));
+ *
+ * q.push(files);
+ */
+function asyncify(func) {
+    return initialParams(function (args, callback) {
+        var result;
+        try {
+            result = func.apply(this, args);
+        } catch (e) {
+            return callback(e);
+        }
+        // if result is Promise object
+        if (isObject(result) && typeof result.then === 'function') {
+            result.then(function(value) {
+                invokeCallback(callback, null, value);
+            }, function(err) {
+                invokeCallback(callback, err.message ? err : new Error(err));
+            });
+        } else {
+            callback(null, result);
+        }
+    });
+}
+
+function invokeCallback(callback, error, value) {
+    try {
+        callback(error, value);
+    } catch (e) {
+        setImmediate$1(rethrow, e);
+    }
+}
+
+function rethrow(error) {
+    throw error;
+}
+
+var supportsSymbol = typeof Symbol === 'function';
+
+function isAsync(fn) {
+    return supportsSymbol && fn[Symbol.toStringTag] === 'AsyncFunction';
+}
+
+function wrapAsync(asyncFn) {
+    return isAsync(asyncFn) ? asyncify(asyncFn) : asyncFn;
+}
+
 function applyEach$1(eachfn) {
-    return rest(function (fns, args) {
-        var go = initialParams(function (args, callback) {
+    return function(fns/*, ...args*/) {
+        var args = slice(arguments, 1);
+        var go = initialParams(function(args, callback) {
             var that = this;
             return eachfn(fns, function (fn, cb) {
-                fn.apply(that, args.concat([cb]));
+                wrapAsync(fn).apply(that, args.concat(cb));
             }, callback);
         });
         if (args.length) {
             return go.apply(this, args);
-        } else {
+        }
+        else {
             return go;
         }
-    });
+    };
 }
 
 /** Detect free variable `global` from Node.js. */
@@ -4192,36 +4615,6 @@ function baseGetTag(value) {
     : objectToString(value);
 }
 
-/**
- * Checks if `value` is the
- * [language type](http://www.ecma-international.org/ecma-262/7.0/#sec-ecmascript-language-types)
- * of `Object`. (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
- *
- * @static
- * @memberOf _
- * @since 0.1.0
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is an object, else `false`.
- * @example
- *
- * _.isObject({});
- * // => true
- *
- * _.isObject([1, 2, 3]);
- * // => true
- *
- * _.isObject(_.noop);
- * // => true
- *
- * _.isObject(null);
- * // => false
- */
-function isObject(value) {
-  var type = typeof value;
-  return value != null && (type == 'object' || type == 'function');
-}
-
 /** `Object#toString` result references. */
 var asyncTag = '[object AsyncFunction]';
 var funcTag = '[object Function]';
@@ -4317,6 +4710,10 @@ function isLength(value) {
 function isArrayLike(value) {
   return value != null && isLength(value.length) && !isFunction(value);
 }
+
+// A temporary value used to identify if the loop should be broken.
+// See #1064, #1293
+var breakLoop = {};
 
 /**
  * This method returns `undefined`.
@@ -4785,18 +5182,19 @@ function createArrayIterator(coll) {
     var i = -1;
     var len = coll.length;
     return function next() {
-        return ++i < len ? { value: coll[i], key: i } : null;
-    };
+        return ++i < len ? {value: coll[i], key: i} : null;
+    }
 }
 
 function createES2015Iterator(iterator) {
     var i = -1;
     return function next() {
         var item = iterator.next();
-        if (item.done) return null;
+        if (item.done)
+            return null;
         i++;
-        return { value: item.value, key: i };
-    };
+        return {value: item.value, key: i};
+    }
 }
 
 function createObjectIterator(obj) {
@@ -4805,7 +5203,7 @@ function createObjectIterator(obj) {
     var len = okeys.length;
     return function next() {
         var key = okeys[++i];
-        return i < len ? { value: obj[key], key: key } : null;
+        return i < len ? {value: obj[key], key: key} : null;
     };
 }
 
@@ -4819,17 +5217,13 @@ function iterator(coll) {
 }
 
 function onlyOnce(fn) {
-    return function () {
+    return function() {
         if (fn === null) throw new Error("Callback was already called.");
         var callFn = fn;
         fn = null;
         callFn.apply(this, arguments);
     };
 }
-
-// A temporary value used to identify if the loop should be broken.
-// See #1064, #1293
-var breakLoop = {};
 
 function _eachOfLimit(limit) {
     return function (obj, iteratee, callback) {
@@ -4846,15 +5240,17 @@ function _eachOfLimit(limit) {
             if (err) {
                 done = true;
                 callback(err);
-            } else if (value === breakLoop || done && running <= 0) {
+            }
+            else if (value === breakLoop || (done && running <= 0)) {
                 done = true;
                 return callback(null);
-            } else {
+            }
+            else {
                 replenish();
             }
         }
 
-        function replenish() {
+        function replenish () {
             while (running < limit && !done) {
                 var elem = nextElem();
                 if (elem === null) {
@@ -4886,17 +5282,15 @@ function _eachOfLimit(limit) {
  * @category Collection
  * @param {Array|Iterable|Object} coll - A collection to iterate over.
  * @param {number} limit - The maximum number of async operations at a time.
- * @param {Function} iteratee - A function to apply to each
+ * @param {AsyncFunction} iteratee - An async function to apply to each
  * item in `coll`. The `key` is the item's key, or index in the case of an
- * array. The iteratee is passed a `callback(err)` which must be called once it
- * has completed. If no error has occurred, the callback should be run without
- * arguments or with an explicit `null` argument. Invoked with
- * (item, key, callback).
+ * array.
+ * Invoked with (item, key, callback).
  * @param {Function} [callback] - A callback which is called when all
  * `iteratee` functions have finished, or an error occurs. Invoked with (err).
  */
 function eachOfLimit(coll, limit, iteratee, callback) {
-  _eachOfLimit(limit)(coll, iteratee, callback);
+    _eachOfLimit(limit)(coll, wrapAsync(iteratee), callback);
 }
 
 function doLimit(fn, limit) {
@@ -4915,10 +5309,10 @@ function eachOfArrayLike(coll, iteratee, callback) {
         callback(null);
     }
 
-    function iteratorCallback(err) {
+    function iteratorCallback(err, value) {
         if (err) {
             callback(err);
-        } else if (++completed === length) {
+        } else if ((++completed === length) || value === breakLoop) {
             callback(null);
         }
     }
@@ -4943,12 +5337,10 @@ var eachOfGeneric = doLimit(eachOfLimit, Infinity);
  * @category Collection
  * @see [async.each]{@link module:Collections.each}
  * @param {Array|Iterable|Object} coll - A collection to iterate over.
- * @param {Function} iteratee - A function to apply to each
- * item in `coll`. The `key` is the item's key, or index in the case of an
- * array. The iteratee is passed a `callback(err)` which must be called once it
- * has completed. If no error has occurred, the callback should be run without
- * arguments or with an explicit `null` argument. Invoked with
- * (item, key, callback).
+ * @param {AsyncFunction} iteratee - A function to apply to each
+ * item in `coll`.
+ * The `key` is the item's key, or index in the case of an array.
+ * Invoked with (item, key, callback).
  * @param {Function} [callback] - A callback which is called when all
  * `iteratee` functions have finished, or an error occurs. Invoked with (err).
  * @example
@@ -4972,14 +5364,14 @@ var eachOfGeneric = doLimit(eachOfLimit, Infinity);
  *     doSomethingWith(configs);
  * });
  */
-var eachOf = function (coll, iteratee, callback) {
+var eachOf = function(coll, iteratee, callback) {
     var eachOfImplementation = isArrayLike(coll) ? eachOfArrayLike : eachOfGeneric;
-    eachOfImplementation(coll, iteratee, callback);
+    eachOfImplementation(coll, wrapAsync(iteratee), callback);
 };
 
 function doParallel(fn) {
     return function (obj, iteratee, callback) {
-        return fn(eachOf, obj, iteratee, callback);
+        return fn(eachOf, obj, wrapAsync(iteratee), callback);
     };
 }
 
@@ -4988,10 +5380,11 @@ function _asyncMap(eachfn, arr, iteratee, callback) {
     arr = arr || [];
     var results = [];
     var counter = 0;
+    var _iteratee = wrapAsync(iteratee);
 
     eachfn(arr, function (value, _, callback) {
         var index = counter++;
-        iteratee(value, function (err, v) {
+        _iteratee(value, function (err, v) {
             results[index] = v;
             callback(err);
         });
@@ -5015,7 +5408,7 @@ function _asyncMap(eachfn, arr, iteratee, callback) {
  *
  * If `map` is passed an Object, the results will be an Array.  The results
  * will roughly be in the order of the original Objects' keys (but this can
- * vary across JavaScript engines)
+ * vary across JavaScript engines).
  *
  * @name map
  * @static
@@ -5023,10 +5416,10 @@ function _asyncMap(eachfn, arr, iteratee, callback) {
  * @method
  * @category Collection
  * @param {Array|Iterable|Object} coll - A collection to iterate over.
- * @param {Function} iteratee - A function to apply to each item in `coll`.
- * The iteratee is passed a `callback(err, transformed)` which must be called
- * once it has completed with an error (which can be `null`) and a
- * transformed item. Invoked with (item, callback).
+ * @param {AsyncFunction} iteratee - An async function to apply to each item in
+ * `coll`.
+ * The iteratee should complete with the transformed item.
+ * Invoked with (item, callback).
  * @param {Function} [callback] - A callback which is called when all `iteratee`
  * functions have finished, or an error occurs. Results is an Array of the
  * transformed items from the `coll`. Invoked with (err, results).
@@ -5050,7 +5443,7 @@ var map = doParallel(_asyncMap);
  * @memberOf module:ControlFlow
  * @method
  * @category Control Flow
- * @param {Array|Iterable|Object} fns - A collection of asynchronous functions
+ * @param {Array|Iterable|Object} fns - A collection of {@link AsyncFunction}s
  * to all call with the same arguments
  * @param {...*} [args] - any number of separate arguments to pass to the
  * function.
@@ -5075,7 +5468,7 @@ var applyEach = applyEach$1(map);
 
 function doParallelLimit(fn) {
     return function (obj, limit, iteratee, callback) {
-        return fn(_eachOfLimit(limit), obj, iteratee, callback);
+        return fn(_eachOfLimit(limit), obj, wrapAsync(iteratee), callback);
     };
 }
 
@@ -5090,10 +5483,10 @@ function doParallelLimit(fn) {
  * @category Collection
  * @param {Array|Iterable|Object} coll - A collection to iterate over.
  * @param {number} limit - The maximum number of async operations at a time.
- * @param {Function} iteratee - A function to apply to each item in `coll`.
- * The iteratee is passed a `callback(err, transformed)` which must be called
- * once it has completed with an error (which can be `null`) and a transformed
- * item. Invoked with (item, callback).
+ * @param {AsyncFunction} iteratee - An async function to apply to each item in
+ * `coll`.
+ * The iteratee should complete with the transformed item.
+ * Invoked with (item, callback).
  * @param {Function} [callback] - A callback which is called when all `iteratee`
  * functions have finished, or an error occurs. Results is an array of the
  * transformed items from the `coll`. Invoked with (err, results).
@@ -5110,10 +5503,10 @@ var mapLimit = doParallelLimit(_asyncMap);
  * @see [async.map]{@link module:Collections.map}
  * @category Collection
  * @param {Array|Iterable|Object} coll - A collection to iterate over.
- * @param {Function} iteratee - A function to apply to each item in `coll`.
- * The iteratee is passed a `callback(err, transformed)` which must be called
- * once it has completed with an error (which can be `null`) and a
- * transformed item. Invoked with (item, callback).
+ * @param {AsyncFunction} iteratee - An async function to apply to each item in
+ * `coll`.
+ * The iteratee should complete with the transformed item.
+ * Invoked with (item, callback).
  * @param {Function} [callback] - A callback which is called when all `iteratee`
  * functions have finished, or an error occurs. Results is an array of the
  * transformed items from the `coll`. Invoked with (err, results).
@@ -5129,7 +5522,7 @@ var mapSeries = doLimit(mapLimit, 1);
  * @method
  * @see [async.applyEach]{@link module:ControlFlow.applyEach}
  * @category Control Flow
- * @param {Array|Iterable|Object} fns - A collection of asynchronous functions to all
+ * @param {Array|Iterable|Object} fns - A collection of {@link AsyncFunction}s to all
  * call with the same arguments
  * @param {...*} [args] - any number of separate arguments to pass to the
  * function.
@@ -5153,10 +5546,11 @@ var applyEachSeries = applyEach$1(mapSeries);
  * @memberOf module:Utils
  * @method
  * @category Util
- * @param {Function} function - The function you want to eventually apply all
+ * @param {Function} fn - The function you want to eventually apply all
  * arguments to. Invokes with (arguments...).
  * @param {...*} arguments... - Any number of arguments to automatically apply
  * when the continuation is called.
+ * @returns {Function} the partially-applied function
  * @example
  *
  * // using apply
@@ -5185,87 +5579,13 @@ var applyEachSeries = applyEach$1(mapSeries);
  * two
  * three
  */
-var apply$2 = rest(function (fn, args) {
-    return rest(function (callArgs) {
+var apply = function(fn/*, ...args*/) {
+    var args = slice(arguments, 1);
+    return function(/*callArgs*/) {
+        var callArgs = slice(arguments);
         return fn.apply(null, args.concat(callArgs));
-    });
-});
-
-/**
- * Take a sync function and make it async, passing its return value to a
- * callback. This is useful for plugging sync functions into a waterfall,
- * series, or other async functions. Any arguments passed to the generated
- * function will be passed to the wrapped function (except for the final
- * callback argument). Errors thrown will be passed to the callback.
- *
- * If the function passed to `asyncify` returns a Promise, that promises's
- * resolved/rejected state will be used to call the callback, rather than simply
- * the synchronous return value.
- *
- * This also means you can asyncify ES2016 `async` functions.
- *
- * @name asyncify
- * @static
- * @memberOf module:Utils
- * @method
- * @alias wrapSync
- * @category Util
- * @param {Function} func - The synchronous function to convert to an
- * asynchronous function.
- * @returns {Function} An asynchronous wrapper of the `func`. To be invoked with
- * (callback).
- * @example
- *
- * // passing a regular synchronous function
- * async.waterfall([
- *     async.apply(fs.readFile, filename, "utf8"),
- *     async.asyncify(JSON.parse),
- *     function (data, next) {
- *         // data is the result of parsing the text.
- *         // If there was a parsing error, it would have been caught.
- *     }
- * ], callback);
- *
- * // passing a function returning a promise
- * async.waterfall([
- *     async.apply(fs.readFile, filename, "utf8"),
- *     async.asyncify(function (contents) {
- *         return db.model.create(contents);
- *     }),
- *     function (model, next) {
- *         // `model` is the instantiated model object.
- *         // If there was an error, this function would be skipped.
- *     }
- * ], callback);
- *
- * // es6 example
- * var q = async.queue(async.asyncify(async function(file) {
- *     var intermediateStep = await processFile(file);
- *     return await somePromise(intermediateStep)
- * }));
- *
- * q.push(files);
- */
-function asyncify(func) {
-    return initialParams(function (args, callback) {
-        var result;
-        try {
-            result = func.apply(this, args);
-        } catch (e) {
-            return callback(e);
-        }
-        // if result is Promise object
-        if (isObject(result) && typeof result.then === 'function') {
-            result.then(function (value) {
-                callback(null, value);
-            }, function (err) {
-                callback(err.message ? err : new Error(err));
-            });
-        } else {
-            callback(null, result);
-        }
-    });
-}
+    };
+};
 
 /**
  * A specialized version of `_.forEach` for arrays without support for
@@ -5409,17 +5729,17 @@ function baseIndexOf(array, value, fromIndex) {
 }
 
 /**
- * Determines the best order for running the functions in `tasks`, based on
+ * Determines the best order for running the {@link AsyncFunction}s in `tasks`, based on
  * their requirements. Each function can optionally depend on other functions
  * being completed first, and each function is run as soon as its requirements
  * are satisfied.
  *
- * If any of the functions pass an error to their callback, the `auto` sequence
+ * If any of the {@link AsyncFunction}s pass an error to their callback, the `auto` sequence
  * will stop. Further tasks will not execute (so any other functions depending
  * on it will not run), and the main `callback` is immediately called with the
  * error.
  *
- * Functions also receive an object containing the results of functions which
+ * {@link AsyncFunction}s also receive an object containing the results of functions which
  * have completed so far as the first argument, if they have dependencies. If a
  * task function has no dependencies, it will only be passed a callback.
  *
@@ -5429,7 +5749,7 @@ function baseIndexOf(array, value, fromIndex) {
  * @method
  * @category Control Flow
  * @param {Object} tasks - An object. Each of its properties is either a
- * function or an array of requirements, with the function itself the last item
+ * function or an array of requirements, with the {@link AsyncFunction} itself the last item
  * in the array. The object's key of a property serves as the name of the task
  * defined by that property, i.e. can be used when specifying requirements for
  * other tasks. The function receives one or two arguments:
@@ -5507,7 +5827,7 @@ var auto = function (tasks, concurrency, callback) {
     var runningTasks = 0;
     var hasError = false;
 
-    var listeners = {};
+    var listeners = Object.create(null);
 
     var readyTasks = [];
 
@@ -5535,7 +5855,10 @@ var auto = function (tasks, concurrency, callback) {
 
         arrayEach(dependencies, function (dependencyName) {
             if (!tasks[dependencyName]) {
-                throw new Error('async.auto task `' + key + '` has a non-existent dependency in ' + dependencies.join(', '));
+                throw new Error('async.auto task `' + key +
+                    '` has a non-existent dependency `' +
+                    dependencyName + '` in ' +
+                    dependencies.join(', '));
             }
             addListener(dependencyName, function () {
                 remainingDependencies--;
@@ -5559,10 +5882,11 @@ var auto = function (tasks, concurrency, callback) {
         if (readyTasks.length === 0 && runningTasks === 0) {
             return callback(null, results);
         }
-        while (readyTasks.length && runningTasks < concurrency) {
+        while(readyTasks.length && runningTasks < concurrency) {
             var run = readyTasks.shift();
             run();
         }
+
     }
 
     function addListener(taskName, fn) {
@@ -5582,32 +5906,33 @@ var auto = function (tasks, concurrency, callback) {
         processQueue();
     }
 
+
     function runTask(key, task) {
         if (hasError) return;
 
-        var taskCallback = onlyOnce(rest(function (err, args) {
+        var taskCallback = onlyOnce(function(err, result) {
             runningTasks--;
-            if (args.length <= 1) {
-                args = args[0];
+            if (arguments.length > 2) {
+                result = slice(arguments, 1);
             }
             if (err) {
                 var safeResults = {};
-                baseForOwn(results, function (val, rkey) {
+                baseForOwn(results, function(val, rkey) {
                     safeResults[rkey] = val;
                 });
-                safeResults[key] = args;
+                safeResults[key] = result;
                 hasError = true;
-                listeners = [];
+                listeners = Object.create(null);
 
                 callback(err, safeResults);
             } else {
-                results[key] = args;
+                results[key] = result;
                 taskComplete(key);
             }
-        }));
+        });
 
         runningTasks++;
-        var taskFn = task[task.length - 1];
+        var taskFn = wrapAsync(task[task.length - 1]);
         if (task.length > 1) {
             taskFn(results, taskCallback);
         } else {
@@ -5632,7 +5957,9 @@ var auto = function (tasks, concurrency, callback) {
         }
 
         if (counter !== numTasks) {
-            throw new Error('async.auto cannot execute tasks due to a recursive dependency');
+            throw new Error(
+                'async.auto cannot execute tasks due to a recursive dependency'
+            );
         }
     }
 
@@ -5951,7 +6278,7 @@ function trim(string, chars, guard) {
   return castSlice(strSymbols, start, end).join('');
 }
 
-var FN_ARGS = /^(function)?\s*[^\(]*\(\s*([^\)]*)\)/m;
+var FN_ARGS = /^(?:async\s+)?(function)?\s*[^\(]*\(\s*([^\)]*)\)/m;
 var FN_ARG_SPLIT = /,/;
 var FN_ARG = /(=.+)?(\s*)$/;
 var STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
@@ -5960,7 +6287,7 @@ function parseParams(func) {
     func = func.toString().replace(STRIP_COMMENTS, '');
     func = func.match(FN_ARGS)[2].replace(' ', '');
     func = func ? func.split(FN_ARG_SPLIT) : [];
-    func = func.map(function (arg) {
+    func = func.map(function (arg){
         return trim(arg.replace(FN_ARG, ''));
     });
     return func;
@@ -5985,7 +6312,7 @@ function parseParams(func) {
  * @method
  * @see [async.auto]{@link module:ControlFlow.auto}
  * @category Control Flow
- * @param {Object} tasks - An object, each of whose properties is a function of
+ * @param {Object} tasks - An object, each of whose properties is an {@link AsyncFunction} of
  * the form 'func([dependencies...], callback). The object's key of a property
  * serves as the name of the task defined by that property, i.e. can be used
  * when specifying requirements for other tasks.
@@ -6053,22 +6380,27 @@ function autoInject(tasks, callback) {
 
     baseForOwn(tasks, function (taskFn, key) {
         var params;
+        var fnIsAsync = isAsync(taskFn);
+        var hasNoDeps =
+            (!fnIsAsync && taskFn.length === 1) ||
+            (fnIsAsync && taskFn.length === 0);
 
         if (isArray(taskFn)) {
             params = taskFn.slice(0, -1);
             taskFn = taskFn[taskFn.length - 1];
 
             newTasks[key] = params.concat(params.length > 0 ? newTask : taskFn);
-        } else if (taskFn.length === 1) {
+        } else if (hasNoDeps) {
             // no dependencies, use the function as-is
             newTasks[key] = taskFn;
         } else {
             params = parseParams(taskFn);
-            if (taskFn.length === 0 && params.length === 0) {
+            if (taskFn.length === 0 && !fnIsAsync && params.length === 0) {
                 throw new Error("autoInject task functions require explicit parameters.");
             }
 
-            params.pop();
+            // remove callback param
+            if (!fnIsAsync) params.pop();
 
             newTasks[key] = params.concat(newTask);
         }
@@ -6078,39 +6410,12 @@ function autoInject(tasks, callback) {
                 return results[name];
             });
             newArgs.push(taskCb);
-            taskFn.apply(null, newArgs);
+            wrapAsync(taskFn).apply(null, newArgs);
         }
     });
 
     auto(newTasks, callback);
 }
-
-var hasSetImmediate = typeof setImmediate === 'function' && setImmediate;
-var hasNextTick = typeof process === 'object' && typeof process.nextTick === 'function';
-
-function fallback(fn) {
-    setTimeout(fn, 0);
-}
-
-function wrap(defer) {
-    return rest(function (fn, args) {
-        defer(function () {
-            fn.apply(null, args);
-        });
-    });
-}
-
-var _defer;
-
-if (hasSetImmediate) {
-    _defer = setImmediate;
-} else if (hasNextTick) {
-    _defer = process.nextTick;
-} else {
-    _defer = fallback;
-}
-
-var setImmediate$1 = wrap(_defer);
 
 // Simple doubly linked list (https://en.wikipedia.org/wiki/Doubly_linked_list) implementation
 // used for queues. This implementation assumes that the node provided by the user can be modified
@@ -6126,55 +6431,91 @@ function setInitial(dll, node) {
     dll.head = dll.tail = node;
 }
 
-DLL.prototype.removeLink = function (node) {
-    if (node.prev) node.prev.next = node.next;else this.head = node.next;
-    if (node.next) node.next.prev = node.prev;else this.tail = node.prev;
+DLL.prototype.removeLink = function(node) {
+    if (node.prev) node.prev.next = node.next;
+    else this.head = node.next;
+    if (node.next) node.next.prev = node.prev;
+    else this.tail = node.prev;
 
     node.prev = node.next = null;
     this.length -= 1;
     return node;
 };
 
-DLL.prototype.empty = DLL;
+DLL.prototype.empty = function () {
+    while(this.head) this.shift();
+    return this;
+};
 
-DLL.prototype.insertAfter = function (node, newNode) {
+DLL.prototype.insertAfter = function(node, newNode) {
     newNode.prev = node;
     newNode.next = node.next;
-    if (node.next) node.next.prev = newNode;else this.tail = newNode;
+    if (node.next) node.next.prev = newNode;
+    else this.tail = newNode;
     node.next = newNode;
     this.length += 1;
 };
 
-DLL.prototype.insertBefore = function (node, newNode) {
+DLL.prototype.insertBefore = function(node, newNode) {
     newNode.prev = node.prev;
     newNode.next = node;
-    if (node.prev) node.prev.next = newNode;else this.head = newNode;
+    if (node.prev) node.prev.next = newNode;
+    else this.head = newNode;
     node.prev = newNode;
     this.length += 1;
 };
 
-DLL.prototype.unshift = function (node) {
-    if (this.head) this.insertBefore(this.head, node);else setInitial(this, node);
+DLL.prototype.unshift = function(node) {
+    if (this.head) this.insertBefore(this.head, node);
+    else setInitial(this, node);
 };
 
-DLL.prototype.push = function (node) {
-    if (this.tail) this.insertAfter(this.tail, node);else setInitial(this, node);
+DLL.prototype.push = function(node) {
+    if (this.tail) this.insertAfter(this.tail, node);
+    else setInitial(this, node);
 };
 
-DLL.prototype.shift = function () {
+DLL.prototype.shift = function() {
     return this.head && this.removeLink(this.head);
 };
 
-DLL.prototype.pop = function () {
+DLL.prototype.pop = function() {
     return this.tail && this.removeLink(this.tail);
+};
+
+DLL.prototype.toArray = function () {
+    var arr = Array(this.length);
+    var curr = this.head;
+    for(var idx = 0; idx < this.length; idx++) {
+        arr[idx] = curr.data;
+        curr = curr.next;
+    }
+    return arr;
+};
+
+DLL.prototype.remove = function (testFn) {
+    var curr = this.head;
+    while(!!curr) {
+        var next = curr.next;
+        if (testFn(curr)) {
+            this.removeLink(curr);
+        }
+        curr = next;
+    }
+    return this;
 };
 
 function queue(worker, concurrency, payload) {
     if (concurrency == null) {
         concurrency = 1;
-    } else if (concurrency === 0) {
+    }
+    else if(concurrency === 0) {
         throw new Error('Concurrency must not be zero');
     }
+
+    var _worker = wrapAsync(worker);
+    var numRunning = 0;
+    var workersList = [];
 
     function _insert(data, insertAtFront, callback) {
         if (callback != null && typeof callback !== 'function') {
@@ -6186,7 +6527,7 @@ function queue(worker, concurrency, payload) {
         }
         if (data.length === 0 && q.idle()) {
             // call drain immediately if there are no tasks
-            return setImmediate$1(function () {
+            return setImmediate$1(function() {
                 q.drain();
             });
         }
@@ -6207,8 +6548,8 @@ function queue(worker, concurrency, payload) {
     }
 
     function _next(tasks) {
-        return rest(function (args) {
-            workers -= 1;
+        return function(err){
+            numRunning -= 1;
 
             for (var i = 0, l = tasks.length; i < l; i++) {
                 var task = tasks[i];
@@ -6217,14 +6558,14 @@ function queue(worker, concurrency, payload) {
                     workersList.splice(index);
                 }
 
-                task.callback.apply(task, args);
+                task.callback.apply(task, arguments);
 
-                if (args[0] != null) {
-                    q.error(args[0], task.data);
+                if (err != null) {
+                    q.error(err, task.data);
                 }
             }
 
-            if (workers <= q.concurrency - q.buffer) {
+            if (numRunning <= (q.concurrency - q.buffer) ) {
                 q.unsaturated();
             }
 
@@ -6232,17 +6573,16 @@ function queue(worker, concurrency, payload) {
                 q.drain();
             }
             q.process();
-        });
+        };
     }
 
-    var workers = 0;
-    var workersList = [];
+    var isProcessing = false;
     var q = {
         _tasks: new DLL(),
         concurrency: concurrency,
         payload: payload,
         saturated: noop,
-        unsaturated: noop,
+        unsaturated:noop,
         buffer: concurrency / 4,
         empty: noop,
         drain: noop,
@@ -6259,10 +6599,18 @@ function queue(worker, concurrency, payload) {
         unshift: function (data, callback) {
             _insert(data, true, callback);
         },
+        remove: function (testFn) {
+            q._tasks.remove(testFn);
+        },
         process: function () {
-            while (!q.paused && workers < q.concurrency && q._tasks.length) {
-                var tasks = [],
-                    data = [];
+            // Avoid trying to start too many processing operations. This can occur
+            // when callbacks resolve synchronously (#1267).
+            if (isProcessing) {
+                return;
+            }
+            isProcessing = true;
+            while(!q.paused && numRunning < q.concurrency && q._tasks.length){
+                var tasks = [], data = [];
                 var l = q._tasks.length;
                 if (q.payload) l = Math.min(l, q.payload);
                 for (var i = 0; i < l; i++) {
@@ -6271,46 +6619,41 @@ function queue(worker, concurrency, payload) {
                     data.push(node.data);
                 }
 
+                numRunning += 1;
+                workersList.push(tasks[0]);
+
                 if (q._tasks.length === 0) {
                     q.empty();
                 }
-                workers += 1;
-                workersList.push(tasks[0]);
 
-                if (workers === q.concurrency) {
+                if (numRunning === q.concurrency) {
                     q.saturated();
                 }
 
                 var cb = onlyOnce(_next(tasks));
-                worker(data, cb);
+                _worker(data, cb);
             }
+            isProcessing = false;
         },
         length: function () {
             return q._tasks.length;
         },
         running: function () {
-            return workers;
+            return numRunning;
         },
         workersList: function () {
             return workersList;
         },
-        idle: function () {
-            return q._tasks.length + workers === 0;
+        idle: function() {
+            return q._tasks.length + numRunning === 0;
         },
         pause: function () {
             q.paused = true;
         },
         resume: function () {
-            if (q.paused === false) {
-                return;
-            }
+            if (q.paused === false) { return; }
             q.paused = false;
-            var resumeCount = Math.min(q.concurrency, q._tasks.length);
-            // Need to call q.process once per concurrent
-            // worker to preserve full concurrency after pause
-            for (var w = 1; w <= resumeCount; w++) {
-                setImmediate$1(q.process);
-            }
+            setImmediate$1(q.process);
         }
     };
     return q;
@@ -6364,9 +6707,8 @@ function queue(worker, concurrency, payload) {
  * @method
  * @see [async.queue]{@link module:ControlFlow.queue}
  * @category Control Flow
- * @param {Function} worker - An asynchronous function for processing an array
- * of queued tasks, which must call its `callback(err)` argument when finished,
- * with an optional `err` argument. Invoked with `(tasks, callback)`.
+ * @param {AsyncFunction} worker - An asynchronous function for processing an array
+ * of queued tasks. Invoked with `(tasks, callback)`.
  * @param {number} [payload=Infinity] - An optional `integer` for determining
  * how many tasks should be processed per round; if omitted, the default is
  * unlimited.
@@ -6395,7 +6737,7 @@ function queue(worker, concurrency, payload) {
  * });
  */
 function cargo(worker, payload) {
-  return queue(worker, 1, payload);
+    return queue(worker, 1, payload);
 }
 
 /**
@@ -6409,11 +6751,9 @@ function cargo(worker, payload) {
  * @alias forEachOfSeries
  * @category Collection
  * @param {Array|Iterable|Object} coll - A collection to iterate over.
- * @param {Function} iteratee - A function to apply to each item in `coll`. The
- * `key` is the item's key, or index in the case of an array. The iteratee is
- * passed a `callback(err)` which must be called once it has completed. If no
- * error has occurred, the callback should be run without arguments or with an
- * explicit `null` argument. Invoked with (item, key, callback).
+ * @param {AsyncFunction} iteratee - An async function to apply to each item in
+ * `coll`.
+ * Invoked with (item, key, callback).
  * @param {Function} [callback] - A callback which is called when all `iteratee`
  * functions have finished, or an error occurs. Invoked with (err).
  */
@@ -6439,12 +6779,12 @@ var eachOfSeries = doLimit(eachOfLimit, 1);
  * @category Collection
  * @param {Array|Iterable|Object} coll - A collection to iterate over.
  * @param {*} memo - The initial state of the reduction.
- * @param {Function} iteratee - A function applied to each item in the
- * array to produce the next step in the reduction. The `iteratee` is passed a
- * `callback(err, reduction)` which accepts an optional error as its first
- * argument, and the state of the reduction as the second. If an error is
- * passed to the callback, the reduction is stopped and the main `callback` is
- * immediately called with the error. Invoked with (memo, item, callback).
+ * @param {AsyncFunction} iteratee - A function applied to each item in the
+ * array to produce the next step in the reduction.
+ * The `iteratee` should complete with the next state of the reduction.
+ * If the iteratee complete with an error, the reduction is stopped and the
+ * main `callback` is immediately called with the error.
+ * Invoked with (memo, item, callback).
  * @param {Function} [callback] - A callback which is called after all the
  * `iteratee` functions have finished. Result is the reduced value. Invoked with
  * (err, result).
@@ -6461,12 +6801,13 @@ var eachOfSeries = doLimit(eachOfLimit, 1);
  */
 function reduce(coll, memo, iteratee, callback) {
     callback = once(callback || noop);
-    eachOfSeries(coll, function (x, i, callback) {
-        iteratee(memo, x, function (err, v) {
+    var _iteratee = wrapAsync(iteratee);
+    eachOfSeries(coll, function(x, i, callback) {
+        _iteratee(memo, x, function(err, v) {
             memo = v;
             callback(err);
         });
-    }, function (err) {
+    }, function(err) {
         callback(err, memo);
     });
 }
@@ -6484,7 +6825,7 @@ function reduce(coll, memo, iteratee, callback) {
  * @method
  * @see [async.compose]{@link module:ControlFlow.compose}
  * @category Control Flow
- * @param {...Function} functions - the asynchronous functions to compose
+ * @param {...AsyncFunction} functions - the asynchronous functions to compose
  * @returns {Function} a function that composes the `functions` in order
  * @example
  *
@@ -6509,8 +6850,10 @@ function reduce(coll, memo, iteratee, callback) {
  *     });
  * });
  */
-var seq$1 = rest(function seq(functions) {
-    return rest(function (args) {
+function seq(/*...functions*/) {
+    var _functions = arrayMap(arguments, wrapAsync);
+    return function(/*...args*/) {
+        var args = slice(arguments);
         var that = this;
 
         var cb = args[args.length - 1];
@@ -6520,15 +6863,17 @@ var seq$1 = rest(function seq(functions) {
             cb = noop;
         }
 
-        reduce(functions, args, function (newargs, fn, cb) {
-            fn.apply(that, newargs.concat([rest(function (err, nextargs) {
+        reduce(_functions, args, function(newargs, fn, cb) {
+            fn.apply(that, newargs.concat(function(err/*, ...nextargs*/) {
+                var nextargs = slice(arguments, 1);
                 cb(err, nextargs);
-            })]));
-        }, function (err, results) {
+            }));
+        },
+        function(err, results) {
             cb.apply(that, [err].concat(results));
         });
-    });
-});
+    };
+}
 
 /**
  * Creates a function which is a composition of the passed asynchronous
@@ -6543,7 +6888,7 @@ var seq$1 = rest(function seq(functions) {
  * @memberOf module:ControlFlow
  * @method
  * @category Control Flow
- * @param {...Function} functions - the asynchronous functions to compose
+ * @param {...AsyncFunction} functions - the asynchronous functions to compose
  * @returns {Function} an asynchronous function that is the composed
  * asynchronous `functions`
  * @example
@@ -6565,9 +6910,9 @@ var seq$1 = rest(function seq(functions) {
  *     // result now equals 15
  * });
  */
-var compose = rest(function (args) {
-  return seq$1.apply(null, args.reverse());
-});
+var compose = function(/*...args*/) {
+    return seq.apply(null, slice(arguments).reverse());
+};
 
 function concat$1(eachfn, arr, fn, callback) {
     var result = [];
@@ -6594,10 +6939,8 @@ function concat$1(eachfn, arr, fn, callback) {
  * @method
  * @category Collection
  * @param {Array|Iterable|Object} coll - A collection to iterate over.
- * @param {Function} iteratee - A function to apply to each item in `coll`.
- * The iteratee is passed a `callback(err, results)` which must be called once
- * it has completed with an error (which can be `null`) and an array of results.
- * Invoked with (item, callback).
+ * @param {AsyncFunction} iteratee - A function to apply to each item in `coll`,
+ * which should use an array as its result. Invoked with (item, callback).
  * @param {Function} [callback(err)] - A callback which is called after all the
  * `iteratee` functions have finished, or an error occurs. Results is an array
  * containing the concatenated results of the `iteratee` function. Invoked with
@@ -6612,7 +6955,7 @@ var concat = doParallel(concat$1);
 
 function doSeries(fn) {
     return function (obj, iteratee, callback) {
-        return fn(eachOfSeries, obj, iteratee, callback);
+        return fn(eachOfSeries, obj, wrapAsync(iteratee), callback);
     };
 }
 
@@ -6626,9 +6969,8 @@ function doSeries(fn) {
  * @see [async.concat]{@link module:Collections.concat}
  * @category Collection
  * @param {Array|Iterable|Object} coll - A collection to iterate over.
- * @param {Function} iteratee - A function to apply to each item in `coll`.
- * The iteratee is passed a `callback(err, results)` which must be called once
- * it has completed with an error (which can be `null`) and an array of results.
+ * @param {AsyncFunction} iteratee - A function to apply to each item in `coll`.
+ * The iteratee should complete with an array an array of results.
  * Invoked with (item, callback).
  * @param {Function} [callback(err)] - A callback which is called after all the
  * `iteratee` functions have finished, or an error occurs. Results is an array
@@ -6649,7 +6991,7 @@ var concatSeries = doSeries(concat$1);
  * @category Util
  * @param {...*} arguments... - Any number of arguments to automatically invoke
  * callback with.
- * @returns {Function} Returns a function that when invoked, automatically
+ * @returns {AsyncFunction} Returns a function that when invoked, automatically
  * invokes the callback with the previous given arguments.
  * @example
  *
@@ -6679,43 +7021,59 @@ var concatSeries = doSeries(concat$1);
  *     //...
  * }, callback);
  */
-var constant = rest(function (values) {
+var constant = function(/*...values*/) {
+    var values = slice(arguments);
     var args = [null].concat(values);
-    return initialParams(function (ignoredArgs, callback) {
+    return function (/*...ignoredArgs, callback*/) {
+        var callback = arguments[arguments.length - 1];
         return callback.apply(this, args);
-    });
-});
+    };
+};
 
-function _createTester(eachfn, check, getResult) {
-    return function (arr, limit, iteratee, cb) {
-        function done() {
-            if (cb) {
-                cb(null, getResult(false));
-            }
-        }
-        function wrappedIteratee(x, _, callback) {
-            if (!cb) return callback();
-            iteratee(x, function (err, v) {
-                // Check cb as another iteratee may have resolved with a
-                // value or error since we started this iteratee
-                if (cb && (err || check(v))) {
-                    if (err) cb(err);else cb(err, getResult(true, x));
-                    cb = iteratee = false;
-                    callback(err, breakLoop);
+/**
+ * This method returns the first argument it receives.
+ *
+ * @static
+ * @since 0.1.0
+ * @memberOf _
+ * @category Util
+ * @param {*} value Any value.
+ * @returns {*} Returns `value`.
+ * @example
+ *
+ * var object = { 'a': 1 };
+ *
+ * console.log(_.identity(object) === object);
+ * // => true
+ */
+function identity(value) {
+  return value;
+}
+
+function _createTester(check, getResult) {
+    return function(eachfn, arr, iteratee, cb) {
+        cb = cb || noop;
+        var testPassed = false;
+        var testResult;
+        eachfn(arr, function(value, _, callback) {
+            iteratee(value, function(err, result) {
+                if (err) {
+                    callback(err);
+                } else if (check(result) && !testResult) {
+                    testPassed = true;
+                    testResult = getResult(true, value);
+                    callback(null, breakLoop);
                 } else {
                     callback();
                 }
             });
-        }
-        if (arguments.length > 3) {
-            cb = cb || noop;
-            eachfn(arr, limit, wrappedIteratee, done);
-        } else {
-            cb = iteratee;
-            cb = cb || noop;
-            iteratee = limit;
-            eachfn(arr, wrappedIteratee, done);
-        }
+        }, function(err) {
+            if (err) {
+                cb(err);
+            } else {
+                cb(null, testPassed ? testResult : getResult(false));
+            }
+        });
     };
 }
 
@@ -6740,9 +7098,9 @@ function _findGetResult(v, x) {
  * @alias find
  * @category Collections
  * @param {Array|Iterable|Object} coll - A collection to iterate over.
- * @param {Function} iteratee - A truth test to apply to each item in `coll`.
- * The iteratee is passed a `callback(err, truthValue)` which must be called
- * with a boolean argument once it has completed. Invoked with (item, callback).
+ * @param {AsyncFunction} iteratee - A truth test to apply to each item in `coll`.
+ * The iteratee must complete with a boolean value as its result.
+ * Invoked with (item, callback).
  * @param {Function} [callback] - A callback which is called as soon as any
  * iteratee returns `true`, or after all the `iteratee` functions have finished.
  * Result will be the first item in the array that passes the truth test
@@ -6758,7 +7116,7 @@ function _findGetResult(v, x) {
  *     // result now equals the first file in the list that exists
  * });
  */
-var detect = _createTester(eachOf, identity, _findGetResult);
+var detect = doParallel(_createTester(identity, _findGetResult));
 
 /**
  * The same as [`detect`]{@link module:Collections.detect} but runs a maximum of `limit` async operations at a
@@ -6773,16 +7131,16 @@ var detect = _createTester(eachOf, identity, _findGetResult);
  * @category Collections
  * @param {Array|Iterable|Object} coll - A collection to iterate over.
  * @param {number} limit - The maximum number of async operations at a time.
- * @param {Function} iteratee - A truth test to apply to each item in `coll`.
- * The iteratee is passed a `callback(err, truthValue)` which must be called
- * with a boolean argument once it has completed. Invoked with (item, callback).
+ * @param {AsyncFunction} iteratee - A truth test to apply to each item in `coll`.
+ * The iteratee must complete with a boolean value as its result.
+ * Invoked with (item, callback).
  * @param {Function} [callback] - A callback which is called as soon as any
  * iteratee returns `true`, or after all the `iteratee` functions have finished.
  * Result will be the first item in the array that passes the truth test
  * (iteratee) or the value `undefined` if none passed. Invoked with
  * (err, result).
  */
-var detectLimit = _createTester(eachOfLimit, identity, _findGetResult);
+var detectLimit = doParallelLimit(_createTester(identity, _findGetResult));
 
 /**
  * The same as [`detect`]{@link module:Collections.detect} but runs only a single async operation at a time.
@@ -6795,20 +7153,22 @@ var detectLimit = _createTester(eachOfLimit, identity, _findGetResult);
  * @alias findSeries
  * @category Collections
  * @param {Array|Iterable|Object} coll - A collection to iterate over.
- * @param {Function} iteratee - A truth test to apply to each item in `coll`.
- * The iteratee is passed a `callback(err, truthValue)` which must be called
- * with a boolean argument once it has completed. Invoked with (item, callback).
+ * @param {AsyncFunction} iteratee - A truth test to apply to each item in `coll`.
+ * The iteratee must complete with a boolean value as its result.
+ * Invoked with (item, callback).
  * @param {Function} [callback] - A callback which is called as soon as any
  * iteratee returns `true`, or after all the `iteratee` functions have finished.
  * Result will be the first item in the array that passes the truth test
  * (iteratee) or the value `undefined` if none passed. Invoked with
  * (err, result).
  */
-var detectSeries = _createTester(eachOfSeries, identity, _findGetResult);
+var detectSeries = doLimit(detectLimit, 1);
 
 function consoleFunc(name) {
-    return rest(function (fn, args) {
-        fn.apply(null, args.concat([rest(function (err, args) {
+    return function (fn/*, ...args*/) {
+        var args = slice(arguments, 1);
+        args.push(function (err/*, ...args*/) {
+            var args = slice(arguments, 1);
             if (typeof console === 'object') {
                 if (err) {
                     if (console.error) {
@@ -6820,15 +7180,17 @@ function consoleFunc(name) {
                     });
                 }
             }
-        })]));
-    });
+        });
+        wrapAsync(fn).apply(null, args);
+    };
 }
 
 /**
- * Logs the result of an `async` function to the `console` using `console.dir`
- * to display the properties of the resulting object. Only works in Node.js or
- * in browsers that support `console.dir` and `console.error` (such as FF and
- * Chrome). If multiple arguments are returned from the async function,
+ * Logs the result of an [`async` function]{@link AsyncFunction} to the
+ * `console` using `console.dir` to display the properties of the resulting object.
+ * Only works in Node.js or in browsers that support `console.dir` and
+ * `console.error` (such as FF and Chrome).
+ * If multiple arguments are returned from the async function,
  * `console.dir` is called on each argument in order.
  *
  * @name dir
@@ -6836,8 +7198,8 @@ function consoleFunc(name) {
  * @memberOf module:Utils
  * @method
  * @category Util
- * @param {Function} function - The function you want to eventually apply all
- * arguments to.
+ * @param {AsyncFunction} function - The function you want to eventually apply
+ * all arguments to.
  * @param {...*} arguments... - Any number of arguments to apply to the function.
  * @example
  *
@@ -6865,32 +7227,35 @@ var dir = consoleFunc('dir');
  * @method
  * @see [async.during]{@link module:ControlFlow.during}
  * @category Control Flow
- * @param {Function} fn - A function which is called each time `test` passes.
- * The function is passed a `callback(err)`, which must be called once it has
- * completed with an optional `err` argument. Invoked with (callback).
- * @param {Function} test - asynchronous truth test to perform before each
+ * @param {AsyncFunction} fn - An async function which is called each time
+ * `test` passes. Invoked with (callback).
+ * @param {AsyncFunction} test - asynchronous truth test to perform before each
  * execution of `fn`. Invoked with (...args, callback), where `...args` are the
  * non-error args from the previous callback of `fn`.
  * @param {Function} [callback] - A callback which is called after the test
  * function has failed and repeated execution of `fn` has stopped. `callback`
- * will be passed an error if one occured, otherwise `null`.
+ * will be passed an error if one occurred, otherwise `null`.
  */
 function doDuring(fn, test, callback) {
     callback = onlyOnce(callback || noop);
+    var _fn = wrapAsync(fn);
+    var _test = wrapAsync(test);
 
-    var next = rest(function (err, args) {
+    function next(err/*, ...args*/) {
         if (err) return callback(err);
+        var args = slice(arguments, 1);
         args.push(check);
-        test.apply(this, args);
-    });
+        _test.apply(this, args);
+    }
 
     function check(err, truth) {
         if (err) return callback(err);
         if (!truth) return callback(null);
-        fn(next);
+        _fn(next);
     }
 
     check(null, true);
+
 }
 
 /**
@@ -6905,11 +7270,10 @@ function doDuring(fn, test, callback) {
  * @method
  * @see [async.whilst]{@link module:ControlFlow.whilst}
  * @category Control Flow
- * @param {Function} iteratee - A function which is called each time `test`
- * passes. The function is passed a `callback(err)`, which must be called once
- * it has completed with an optional `err` argument. Invoked with (callback).
+ * @param {AsyncFunction} iteratee - A function which is called each time `test`
+ * passes. Invoked with (callback).
  * @param {Function} test - synchronous truth test to perform after each
- * execution of `iteratee`. Invoked with the non-error callback results of 
+ * execution of `iteratee`. Invoked with any non-error callback results of
  * `iteratee`.
  * @param {Function} [callback] - A callback which is called after the test
  * function has failed and repeated execution of `iteratee` has stopped.
@@ -6918,12 +7282,14 @@ function doDuring(fn, test, callback) {
  */
 function doWhilst(iteratee, test, callback) {
     callback = onlyOnce(callback || noop);
-    var next = rest(function (err, args) {
+    var _iteratee = wrapAsync(iteratee);
+    var next = function(err/*, ...args*/) {
         if (err) return callback(err);
-        if (test.apply(this, args)) return iteratee(next);
+        var args = slice(arguments, 1);
+        if (test.apply(this, args)) return _iteratee(next);
         callback.apply(null, [null].concat(args));
-    });
-    iteratee(next);
+    };
+    _iteratee(next);
 }
 
 /**
@@ -6936,18 +7302,18 @@ function doWhilst(iteratee, test, callback) {
  * @method
  * @see [async.doWhilst]{@link module:ControlFlow.doWhilst}
  * @category Control Flow
- * @param {Function} fn - A function which is called each time `test` fails.
- * The function is passed a `callback(err)`, which must be called once it has
- * completed with an optional `err` argument. Invoked with (callback).
+ * @param {AsyncFunction} iteratee - An async function which is called each time
+ * `test` fails. Invoked with (callback).
  * @param {Function} test - synchronous truth test to perform after each
- * execution of `fn`. Invoked with the non-error callback results of `fn`.
+ * execution of `iteratee`. Invoked with any non-error callback results of
+ * `iteratee`.
  * @param {Function} [callback] - A callback which is called after the test
- * function has passed and repeated execution of `fn` has stopped. `callback`
- * will be passed an error and any arguments passed to the final `fn`'s
+ * function has passed and repeated execution of `iteratee` has stopped. `callback`
+ * will be passed an error and any arguments passed to the final `iteratee`'s
  * callback. Invoked with (err, [results]);
  */
-function doUntil(fn, test, callback) {
-    doWhilst(fn, function () {
+function doUntil(iteratee, test, callback) {
+    doWhilst(iteratee, function() {
         return !test.apply(this, arguments);
     }, callback);
 }
@@ -6964,14 +7330,13 @@ function doUntil(fn, test, callback) {
  * @method
  * @see [async.whilst]{@link module:ControlFlow.whilst}
  * @category Control Flow
- * @param {Function} test - asynchronous truth test to perform before each
+ * @param {AsyncFunction} test - asynchronous truth test to perform before each
  * execution of `fn`. Invoked with (callback).
- * @param {Function} fn - A function which is called each time `test` passes.
- * The function is passed a `callback(err)`, which must be called once it has
- * completed with an optional `err` argument. Invoked with (callback).
+ * @param {AsyncFunction} fn - An async function which is called each time
+ * `test` passes. Invoked with (callback).
  * @param {Function} [callback] - A callback which is called after the test
  * function has failed and repeated execution of `fn` has stopped. `callback`
- * will be passed an error, if one occured, otherwise `null`.
+ * will be passed an error, if one occurred, otherwise `null`.
  * @example
  *
  * var count = 0;
@@ -6991,19 +7356,21 @@ function doUntil(fn, test, callback) {
  */
 function during(test, fn, callback) {
     callback = onlyOnce(callback || noop);
+    var _fn = wrapAsync(fn);
+    var _test = wrapAsync(test);
 
     function next(err) {
         if (err) return callback(err);
-        test(check);
+        _test(check);
     }
 
     function check(err, truth) {
         if (err) return callback(err);
         if (!truth) return callback(null);
-        fn(next);
+        _fn(next);
     }
 
-    test(check);
+    _test(check);
 }
 
 function _withoutIndex(iteratee) {
@@ -7029,12 +7396,10 @@ function _withoutIndex(iteratee) {
  * @alias forEach
  * @category Collection
  * @param {Array|Iterable|Object} coll - A collection to iterate over.
- * @param {Function} iteratee - A function to apply to each item
- * in `coll`. The iteratee is passed a `callback(err)` which must be called once
- * it has completed. If no error has occurred, the `callback` should be run
- * without arguments or with an explicit `null` argument. The array index is not
- * passed to the iteratee. Invoked with (item, callback). If you need the index,
- * use `eachOf`.
+ * @param {AsyncFunction} iteratee - An async function to apply to
+ * each item in `coll`. Invoked with (item, callback).
+ * The array index is not passed to the iteratee.
+ * If you need the index, use `eachOf`.
  * @param {Function} [callback] - A callback which is called when all
  * `iteratee` functions have finished, or an error occurs. Invoked with (err).
  * @example
@@ -7072,7 +7437,7 @@ function _withoutIndex(iteratee) {
  * });
  */
 function eachLimit(coll, iteratee, callback) {
-  eachOf(coll, _withoutIndex(iteratee), callback);
+    eachOf(coll, _withoutIndex(wrapAsync(iteratee)), callback);
 }
 
 /**
@@ -7087,17 +7452,16 @@ function eachLimit(coll, iteratee, callback) {
  * @category Collection
  * @param {Array|Iterable|Object} coll - A collection to iterate over.
  * @param {number} limit - The maximum number of async operations at a time.
- * @param {Function} iteratee - A function to apply to each item in `coll`. The
- * iteratee is passed a `callback(err)` which must be called once it has
- * completed. If no error has occurred, the `callback` should be run without
- * arguments or with an explicit `null` argument. The array index is not passed
- * to the iteratee. Invoked with (item, callback). If you need the index, use
- * `eachOfLimit`.
+ * @param {AsyncFunction} iteratee - An async function to apply to each item in
+ * `coll`.
+ * The array index is not passed to the iteratee.
+ * If you need the index, use `eachOfLimit`.
+ * Invoked with (item, callback).
  * @param {Function} [callback] - A callback which is called when all
  * `iteratee` functions have finished, or an error occurs. Invoked with (err).
  */
 function eachLimit$1(coll, limit, iteratee, callback) {
-  _eachOfLimit(limit)(coll, _withoutIndex(iteratee), callback);
+    _eachOfLimit(limit)(coll, _withoutIndex(wrapAsync(iteratee)), callback);
 }
 
 /**
@@ -7111,12 +7475,11 @@ function eachLimit$1(coll, limit, iteratee, callback) {
  * @alias forEachSeries
  * @category Collection
  * @param {Array|Iterable|Object} coll - A collection to iterate over.
- * @param {Function} iteratee - A function to apply to each
- * item in `coll`. The iteratee is passed a `callback(err)` which must be called
- * once it has completed. If no error has occurred, the `callback` should be run
- * without arguments or with an explicit `null` argument. The array index is
- * not passed to the iteratee. Invoked with (item, callback). If you need the
- * index, use `eachOfSeries`.
+ * @param {AsyncFunction} iteratee - An async function to apply to each
+ * item in `coll`.
+ * The array index is not passed to the iteratee.
+ * If you need the index, use `eachOfSeries`.
+ * Invoked with (item, callback).
  * @param {Function} [callback] - A callback which is called when all
  * `iteratee` functions have finished, or an error occurs. Invoked with (err).
  */
@@ -7128,16 +7491,17 @@ var eachSeries = doLimit(eachLimit$1, 1);
  * no extra deferral is added. This is useful for preventing stack overflows
  * (`RangeError: Maximum call stack size exceeded`) and generally keeping
  * [Zalgo](http://blog.izs.me/post/59142742143/designing-apis-for-asynchrony)
- * contained.
+ * contained. ES2017 `async` functions are returned as-is -- they are immune
+ * to Zalgo's corrupting influences, as they always resolve on a later tick.
  *
  * @name ensureAsync
  * @static
  * @memberOf module:Utils
  * @method
  * @category Util
- * @param {Function} fn - an async function, one that expects a node-style
+ * @param {AsyncFunction} fn - an async function, one that expects a node-style
  * callback as its last argument.
- * @returns {Function} Returns a wrapped function with the exact same call
+ * @returns {AsyncFunction} Returns a wrapped function with the exact same call
  * signature as the function passed in.
  * @example
  *
@@ -7157,6 +7521,7 @@ var eachSeries = doLimit(eachLimit$1, 1);
  * async.mapSeries(args, async.ensureAsync(sometimesAsync), done);
  */
 function ensureAsync(fn) {
+    if (isAsync(fn)) return fn;
     return initialParams(function (args, callback) {
         var sync = true;
         args.push(function () {
@@ -7189,10 +7554,10 @@ function notId(v) {
  * @alias all
  * @category Collection
  * @param {Array|Iterable|Object} coll - A collection to iterate over.
- * @param {Function} iteratee - A truth test to apply to each item in the
- * collection in parallel. The iteratee is passed a `callback(err, truthValue)`
- * which must be called with a  boolean argument once it has completed. Invoked
- * with (item, callback).
+ * @param {AsyncFunction} iteratee - An async truth test to apply to each item
+ * in the collection in parallel.
+ * The iteratee must complete with a boolean result value.
+ * Invoked with (item, callback).
  * @param {Function} [callback] - A callback which is called after all the
  * `iteratee` functions have finished. Result will be either `true` or `false`
  * depending on the values of the async tests. Invoked with (err, result).
@@ -7206,7 +7571,7 @@ function notId(v) {
  *     // if result is true then every file exists
  * });
  */
-var every = _createTester(eachOf, notId, notId);
+var every = doParallel(_createTester(notId, notId));
 
 /**
  * The same as [`every`]{@link module:Collections.every} but runs a maximum of `limit` async operations at a time.
@@ -7220,15 +7585,15 @@ var every = _createTester(eachOf, notId, notId);
  * @category Collection
  * @param {Array|Iterable|Object} coll - A collection to iterate over.
  * @param {number} limit - The maximum number of async operations at a time.
- * @param {Function} iteratee - A truth test to apply to each item in the
- * collection in parallel. The iteratee is passed a `callback(err, truthValue)`
- * which must be called with a  boolean argument once it has completed. Invoked
- * with (item, callback).
+ * @param {AsyncFunction} iteratee - An async truth test to apply to each item
+ * in the collection in parallel.
+ * The iteratee must complete with a boolean result value.
+ * Invoked with (item, callback).
  * @param {Function} [callback] - A callback which is called after all the
  * `iteratee` functions have finished. Result will be either `true` or `false`
  * depending on the values of the async tests. Invoked with (err, result).
  */
-var everyLimit = _createTester(eachOfLimit, notId, notId);
+var everyLimit = doParallelLimit(_createTester(notId, notId));
 
 /**
  * The same as [`every`]{@link module:Collections.every} but runs only a single async operation at a time.
@@ -7241,10 +7606,10 @@ var everyLimit = _createTester(eachOfLimit, notId, notId);
  * @alias allSeries
  * @category Collection
  * @param {Array|Iterable|Object} coll - A collection to iterate over.
- * @param {Function} iteratee - A truth test to apply to each item in the
- * collection in parallel. The iteratee is passed a `callback(err, truthValue)`
- * which must be called with a  boolean argument once it has completed. Invoked
- * with (item, callback).
+ * @param {AsyncFunction} iteratee - An async truth test to apply to each item
+ * in the collection in series.
+ * The iteratee must complete with a boolean result value.
+ * Invoked with (item, callback).
  * @param {Function} [callback] - A callback which is called after all the
  * `iteratee` functions have finished. Result will be either `true` or `false`
  * depending on the values of the async tests. Invoked with (err, result).
@@ -7289,7 +7654,7 @@ function filterGeneric(eachfn, coll, iteratee, callback) {
                 callback(err);
             } else {
                 if (v) {
-                    results.push({ index: index, value: x });
+                    results.push({index: index, value: x});
                 }
                 callback();
             }
@@ -7307,7 +7672,7 @@ function filterGeneric(eachfn, coll, iteratee, callback) {
 
 function _filter(eachfn, coll, iteratee, callback) {
     var filter = isArrayLike(coll) ? filterArray : filterGeneric;
-    filter(eachfn, coll, iteratee, callback || noop);
+    filter(eachfn, coll, wrapAsync(iteratee), callback || noop);
 }
 
 /**
@@ -7383,16 +7748,16 @@ var filterSeries = doLimit(filterLimit, 1);
  * Calls the asynchronous function `fn` with a callback parameter that allows it
  * to call itself again, in series, indefinitely.
 
- * If an error is passed to the
- * callback then `errback` is called with the error, and execution stops,
- * otherwise it will never be called.
+ * If an error is passed to the callback then `errback` is called with the
+ * error, and execution stops, otherwise it will never be called.
  *
  * @name forever
  * @static
  * @memberOf module:ControlFlow
  * @method
  * @category Control Flow
- * @param {Function} fn - a function to call repeatedly. Invoked with (next).
+ * @param {AsyncFunction} fn - an async function to call repeatedly.
+ * Invoked with (next).
  * @param {Function} [errback] - when `fn` passes an error to it's callback,
  * this function will be called, and execution stops. Invoked with (err).
  * @example
@@ -7410,7 +7775,7 @@ var filterSeries = doLimit(filterLimit, 1);
  */
 function forever(fn, errback) {
     var done = onlyOnce(errback || noop);
-    var task = ensureAsync(fn);
+    var task = wrapAsync(ensureAsync(fn));
 
     function next(err) {
         if (err) return done(err);
@@ -7418,6 +7783,114 @@ function forever(fn, errback) {
     }
     next();
 }
+
+/**
+ * The same as [`groupBy`]{@link module:Collections.groupBy} but runs a maximum of `limit` async operations at a time.
+ *
+ * @name groupByLimit
+ * @static
+ * @memberOf module:Collections
+ * @method
+ * @see [async.groupBy]{@link module:Collections.groupBy}
+ * @category Collection
+ * @param {Array|Iterable|Object} coll - A collection to iterate over.
+ * @param {number} limit - The maximum number of async operations at a time.
+ * @param {AsyncFunction} iteratee - An async function to apply to each item in
+ * `coll`.
+ * The iteratee should complete with a `key` to group the value under.
+ * Invoked with (value, callback).
+ * @param {Function} [callback] - A callback which is called when all `iteratee`
+ * functions have finished, or an error occurs. Result is an `Object` whoses
+ * properties are arrays of values which returned the corresponding key.
+ */
+var groupByLimit = function(coll, limit, iteratee, callback) {
+    callback = callback || noop;
+    var _iteratee = wrapAsync(iteratee);
+    mapLimit(coll, limit, function(val, callback) {
+        _iteratee(val, function(err, key) {
+            if (err) return callback(err);
+            return callback(null, {key: key, val: val});
+        });
+    }, function(err, mapResults) {
+        var result = {};
+        // from MDN, handle object having an `hasOwnProperty` prop
+        var hasOwnProperty = Object.prototype.hasOwnProperty;
+
+        for (var i = 0; i < mapResults.length; i++) {
+            if (mapResults[i]) {
+                var key = mapResults[i].key;
+                var val = mapResults[i].val;
+
+                if (hasOwnProperty.call(result, key)) {
+                    result[key].push(val);
+                } else {
+                    result[key] = [val];
+                }
+            }
+        }
+
+        return callback(err, result);
+    });
+};
+
+/**
+ * Returns a new object, where each value corresponds to an array of items, from
+ * `coll`, that returned the corresponding key. That is, the keys of the object
+ * correspond to the values passed to the `iteratee` callback.
+ *
+ * Note: Since this function applies the `iteratee` to each item in parallel,
+ * there is no guarantee that the `iteratee` functions will complete in order.
+ * However, the values for each key in the `result` will be in the same order as
+ * the original `coll`. For Objects, the values will roughly be in the order of
+ * the original Objects' keys (but this can vary across JavaScript engines).
+ *
+ * @name groupBy
+ * @static
+ * @memberOf module:Collections
+ * @method
+ * @category Collection
+ * @param {Array|Iterable|Object} coll - A collection to iterate over.
+ * @param {AsyncFunction} iteratee - An async function to apply to each item in
+ * `coll`.
+ * The iteratee should complete with a `key` to group the value under.
+ * Invoked with (value, callback).
+ * @param {Function} [callback] - A callback which is called when all `iteratee`
+ * functions have finished, or an error occurs. Result is an `Object` whoses
+ * properties are arrays of values which returned the corresponding key.
+ * @example
+ *
+ * async.groupBy(['userId1', 'userId2', 'userId3'], function(userId, callback) {
+ *     db.findById(userId, function(err, user) {
+ *         if (err) return callback(err);
+ *         return callback(null, user.age);
+ *     });
+ * }, function(err, result) {
+ *     // result is object containing the userIds grouped by age
+ *     // e.g. { 30: ['userId1', 'userId3'], 42: ['userId2']};
+ * });
+ */
+var groupBy = doLimit(groupByLimit, Infinity);
+
+/**
+ * The same as [`groupBy`]{@link module:Collections.groupBy} but runs only a single async operation at a time.
+ *
+ * @name groupBySeries
+ * @static
+ * @memberOf module:Collections
+ * @method
+ * @see [async.groupBy]{@link module:Collections.groupBy}
+ * @category Collection
+ * @param {Array|Iterable|Object} coll - A collection to iterate over.
+ * @param {number} limit - The maximum number of async operations at a time.
+ * @param {AsyncFunction} iteratee - An async function to apply to each item in
+ * `coll`.
+ * The iteratee should complete with a `key` to group the value under.
+ * Invoked with (value, callback).
+ * @param {Function} [callback] - A callback which is called when all `iteratee`
+ * functions have finished, or an error occurs. Result is an `Object` whoses
+ * properties are arrays of values which returned the corresponding key.
+ */
+var groupBySeries = doLimit(groupByLimit, 1);
 
 /**
  * Logs the result of an `async` function to the `console`. Only works in
@@ -7430,8 +7903,8 @@ function forever(fn, errback) {
  * @memberOf module:Utils
  * @method
  * @category Util
- * @param {Function} function - The function you want to eventually apply all
- * arguments to.
+ * @param {AsyncFunction} function - The function you want to eventually apply
+ * all arguments to.
  * @param {...*} arguments... - Any number of arguments to apply to the function.
  * @example
  *
@@ -7460,10 +7933,10 @@ var log = consoleFunc('log');
  * @category Collection
  * @param {Object} obj - A collection to iterate over.
  * @param {number} limit - The maximum number of async operations at a time.
- * @param {Function} iteratee - A function to apply to each value in `obj`.
- * The iteratee is passed a `callback(err, transformed)` which must be called
- * once it has completed with an error (which can be `null`) and a
- * transformed value. Invoked with (value, key, callback).
+ * @param {AsyncFunction} iteratee - A function to apply to each value and key
+ * in `coll`.
+ * The iteratee should complete with the transformed value as its result.
+ * Invoked with (value, key, callback).
  * @param {Function} [callback] - A callback which is called when all `iteratee`
  * functions have finished, or an error occurs. `result` is a new object consisting
  * of each key from `obj`, with each transformed value on the right-hand side.
@@ -7472,8 +7945,9 @@ var log = consoleFunc('log');
 function mapValuesLimit(obj, limit, iteratee, callback) {
     callback = once(callback || noop);
     var newObj = {};
-    eachOfLimit(obj, limit, function (val, key, next) {
-        iteratee(val, key, function (err, result) {
+    var _iteratee = wrapAsync(iteratee);
+    eachOfLimit(obj, limit, function(val, key, next) {
+        _iteratee(val, key, function (err, result) {
             if (err) return next(err);
             newObj[key] = result;
             next();
@@ -7502,10 +7976,10 @@ function mapValuesLimit(obj, limit, iteratee, callback) {
  * @method
  * @category Collection
  * @param {Object} obj - A collection to iterate over.
- * @param {Function} iteratee - A function to apply to each value and key in
- * `coll`. The iteratee is passed a `callback(err, transformed)` which must be
- * called once it has completed with an error (which can be `null`) and a
- * transformed value. Invoked with (value, key, callback).
+ * @param {AsyncFunction} iteratee - A function to apply to each value and key
+ * in `coll`.
+ * The iteratee should complete with the transformed value as its result.
+ * Invoked with (value, key, callback).
  * @param {Function} [callback] - A callback which is called when all `iteratee`
  * functions have finished, or an error occurs. `result` is a new object consisting
  * of each key from `obj`, with each transformed value on the right-hand side.
@@ -7540,10 +8014,10 @@ var mapValues = doLimit(mapValuesLimit, Infinity);
  * @see [async.mapValues]{@link module:Collections.mapValues}
  * @category Collection
  * @param {Object} obj - A collection to iterate over.
- * @param {Function} iteratee - A function to apply to each value in `obj`.
- * The iteratee is passed a `callback(err, transformed)` which must be called
- * once it has completed with an error (which can be `null`) and a
- * transformed value. Invoked with (value, key, callback).
+ * @param {AsyncFunction} iteratee - A function to apply to each value and key
+ * in `coll`.
+ * The iteratee should complete with the transformed value as its result.
+ * Invoked with (value, key, callback).
  * @param {Function} [callback] - A callback which is called when all `iteratee`
  * functions have finished, or an error occurs. `result` is a new object consisting
  * of each key from `obj`, with each transformed value on the right-hand side.
@@ -7556,7 +8030,7 @@ function has(obj, key) {
 }
 
 /**
- * Caches the results of an `async` function. When creating a hash to store
+ * Caches the results of an async function. When creating a hash to store
  * function results against, the callback is omitted from the hash and an
  * optional hash function can be used.
  *
@@ -7574,11 +8048,11 @@ function has(obj, key) {
  * @memberOf module:Utils
  * @method
  * @category Util
- * @param {Function} fn - The function to proxy and cache results from.
+ * @param {AsyncFunction} fn - The async function to proxy and cache results from.
  * @param {Function} hasher - An optional function for generating a custom hash
  * for storing results. It has all the arguments applied to it apart from the
  * callback, and must be synchronous.
- * @returns {Function} a memoized version of `fn`
+ * @returns {AsyncFunction} a memoized version of `fn`
  * @example
  *
  * var slow_fn = function(name, callback) {
@@ -7596,24 +8070,26 @@ function memoize(fn, hasher) {
     var memo = Object.create(null);
     var queues = Object.create(null);
     hasher = hasher || identity;
+    var _fn = wrapAsync(fn);
     var memoized = initialParams(function memoized(args, callback) {
         var key = hasher.apply(null, args);
         if (has(memo, key)) {
-            setImmediate$1(function () {
+            setImmediate$1(function() {
                 callback.apply(null, memo[key]);
             });
         } else if (has(queues, key)) {
             queues[key].push(callback);
         } else {
             queues[key] = [callback];
-            fn.apply(null, args.concat([rest(function (args) {
+            _fn.apply(null, args.concat(function(/*args*/) {
+                var args = slice(arguments);
                 memo[key] = args;
                 var q = queues[key];
                 delete queues[key];
                 for (var i = 0, l = q.length; i < l; i++) {
                     q[i].apply(null, args);
                 }
-            })]));
+            }));
         }
     });
     memoized.memo = memo;
@@ -7669,13 +8145,13 @@ function _parallel(eachfn, tasks, callback) {
     var results = isArrayLike(tasks) ? [] : {};
 
     eachfn(tasks, function (task, key, callback) {
-        task(rest(function (err, args) {
-            if (args.length <= 1) {
-                args = args[0];
+        wrapAsync(task)(function (err, result) {
+            if (arguments.length > 2) {
+                result = slice(arguments, 1);
             }
-            results[key] = args;
+            results[key] = result;
             callback(err);
-        }));
+        });
     }, function (err) {
         callback(err, results);
     });
@@ -7694,6 +8170,9 @@ function _parallel(eachfn, tasks, callback) {
  * sections for each task will happen one after the other.  JavaScript remains
  * single-threaded.
  *
+ * **Hint:** Use [`reflect`]{@link module:Utils.reflect} to continue the
+ * execution of other tasks when a task fails.
+ *
  * It is also possible to use an object instead of an array. Each property will
  * be run as a function and the results will be passed to the final `callback`
  * as an object instead of an array. This can be a more readable way of handling
@@ -7704,14 +8183,14 @@ function _parallel(eachfn, tasks, callback) {
  * @memberOf module:ControlFlow
  * @method
  * @category Control Flow
- * @param {Array|Iterable|Object} tasks - A collection containing functions to run.
- * Each function is passed a `callback(err, result)` which it must call on
- * completion with an error `err` (which can be `null`) and an optional `result`
- * value.
+ * @param {Array|Iterable|Object} tasks - A collection of
+ * [async functions]{@link AsyncFunction} to run.
+ * Each async function can complete with any number of optional `result` values.
  * @param {Function} [callback] - An optional callback to run once all the
  * functions have completed successfully. This function gets a results array
  * (or object) containing all the result arguments passed to the task callbacks.
  * Invoked with (err, results).
+ *
  * @example
  * async.parallel([
  *     function(callback) {
@@ -7748,7 +8227,7 @@ function _parallel(eachfn, tasks, callback) {
  * });
  */
 function parallelLimit(tasks, callback) {
-  _parallel(eachOf, tasks, callback);
+    _parallel(eachOf, tasks, callback);
 }
 
 /**
@@ -7761,10 +8240,9 @@ function parallelLimit(tasks, callback) {
  * @method
  * @see [async.parallel]{@link module:ControlFlow.parallel}
  * @category Control Flow
- * @param {Array|Collection} tasks - A collection containing functions to run.
- * Each function is passed a `callback(err, result)` which it must call on
- * completion with an error `err` (which can be `null`) and an optional `result`
- * value.
+ * @param {Array|Iterable|Object} tasks - A collection of
+ * [async functions]{@link AsyncFunction} to run.
+ * Each async function can complete with any number of optional `result` values.
  * @param {number} limit - The maximum number of async operations at a time.
  * @param {Function} [callback] - An optional callback to run once all the
  * functions have completed successfully. This function gets a results array
@@ -7772,7 +8250,7 @@ function parallelLimit(tasks, callback) {
  * Invoked with (err, results).
  */
 function parallelLimit$1(tasks, limit, callback) {
-  _parallel(_eachOfLimit(limit), tasks, callback);
+    _parallel(_eachOfLimit(limit), tasks, callback);
 }
 
 /**
@@ -7798,6 +8276,12 @@ function parallelLimit$1(tasks, limit, callback) {
  * task in the list. Invoke with `queue.push(task, [callback])`,
  * @property {Function} unshift - add a new task to the front of the `queue`.
  * Invoke with `queue.unshift(task, [callback])`.
+ * @property {Function} remove - remove items from the queue that match a test
+ * function.  The test function will be passed an object with a `data` property,
+ * and a `priority` property, if this is a
+ * [priorityQueue]{@link module:ControlFlow.priorityQueue} object.
+ * Invoked with `queue.remove(testFn)`, where `testFn` is of the form
+ * `function ({data, priority}) {}` and returns a Boolean.
  * @property {Function} saturated - a callback that is called when the number of
  * running workers hits the `concurrency` limit, and further tasks will be
  * queued.
@@ -7833,11 +8317,9 @@ function parallelLimit$1(tasks, limit, callback) {
  * @memberOf module:ControlFlow
  * @method
  * @category Control Flow
- * @param {Function} worker - An asynchronous function for processing a queued
- * task, which must call its `callback(err)` argument when finished, with an
- * optional `error` as an argument.  If you want to handle errors from an
- * individual task, pass a callback to `q.push()`. Invoked with
- * (task, callback).
+ * @param {AsyncFunction} worker - An async function for processing a queued task.
+ * If you want to handle errors from an individual task, pass a callback to
+ * `q.push()`. Invoked with (task, callback).
  * @param {number} [concurrency=1] - An `integer` for determining how many
  * `worker` functions should be run in parallel.  If omitted, the concurrency
  * defaults to `1`.  If the concurrency is `0`, an error is thrown.
@@ -7876,9 +8358,10 @@ function parallelLimit$1(tasks, limit, callback) {
  * });
  */
 var queue$1 = function (worker, concurrency) {
-  return queue(function (items, cb) {
-    worker(items[0], cb);
-  }, concurrency, 1);
+    var _worker = wrapAsync(worker);
+    return queue(function (items, cb) {
+        _worker(items[0], cb);
+    }, concurrency, 1);
 };
 
 /**
@@ -7891,11 +8374,10 @@ var queue$1 = function (worker, concurrency) {
  * @method
  * @see [async.queue]{@link module:ControlFlow.queue}
  * @category Control Flow
- * @param {Function} worker - An asynchronous function for processing a queued
- * task, which must call its `callback(err)` argument when finished, with an
- * optional `error` as an argument.  If you want to handle errors from an
- * individual task, pass a callback to `q.push()`. Invoked with
- * (task, callback).
+ * @param {AsyncFunction} worker - An async function for processing a queued task.
+ * If you want to handle errors from an individual task, pass a callback to
+ * `q.push()`.
+ * Invoked with (task, callback).
  * @param {number} concurrency - An `integer` for determining how many `worker`
  * functions should be run in parallel.  If omitted, the concurrency defaults to
  * `1`.  If the concurrency is `0`, an error is thrown.
@@ -7905,12 +8387,12 @@ var queue$1 = function (worker, concurrency) {
  *   array of `tasks` is given, all tasks will be assigned the same priority.
  * * The `unshift` method was removed.
  */
-var priorityQueue = function (worker, concurrency) {
+var priorityQueue = function(worker, concurrency) {
     // Start with a normal queue
     var q = queue$1(worker, concurrency);
 
     // Override push to accept second parameter representing priority
-    q.push = function (data, priority, callback) {
+    q.push = function(data, priority, callback) {
         if (callback == null) callback = noop;
         if (typeof callback !== 'function') {
             throw new Error('task callback must be a function');
@@ -7921,7 +8403,7 @@ var priorityQueue = function (worker, concurrency) {
         }
         if (data.length === 0) {
             // call drain immediately if there are no tasks
-            return setImmediate$1(function () {
+            return setImmediate$1(function() {
                 q.drain();
             });
         }
@@ -7965,9 +8447,8 @@ var priorityQueue = function (worker, concurrency) {
  * @memberOf module:ControlFlow
  * @method
  * @category Control Flow
- * @param {Array} tasks - An array containing functions to run. Each function
- * is passed a `callback(err, result)` which it must call on completion with an
- * error `err` (which can be `null`) and an optional `result` value.
+ * @param {Array} tasks - An array containing [async functions]{@link AsyncFunction}
+ * to run. Each function can complete with an optional `result` value.
  * @param {Function} callback - A callback to run once any of the functions have
  * completed. This function gets an error or result from the first function that
  * completed. Invoked with (err, result).
@@ -7996,11 +8477,9 @@ function race(tasks, callback) {
     if (!isArray(tasks)) return callback(new TypeError('First argument to race must be an array of functions'));
     if (!tasks.length) return callback();
     for (var i = 0, l = tasks.length; i < l; i++) {
-        tasks[i](callback);
+        wrapAsync(tasks[i])(callback);
     }
 }
-
-var slice = Array.prototype.slice;
 
 /**
  * Same as [`reduce`]{@link module:Collections.reduce}, only operates on `array` in reverse order.
@@ -8014,33 +8493,33 @@ var slice = Array.prototype.slice;
  * @category Collection
  * @param {Array} array - A collection to iterate over.
  * @param {*} memo - The initial state of the reduction.
- * @param {Function} iteratee - A function applied to each item in the
- * array to produce the next step in the reduction. The `iteratee` is passed a
- * `callback(err, reduction)` which accepts an optional error as its first
- * argument, and the state of the reduction as the second. If an error is
- * passed to the callback, the reduction is stopped and the main `callback` is
- * immediately called with the error. Invoked with (memo, item, callback).
+ * @param {AsyncFunction} iteratee - A function applied to each item in the
+ * array to produce the next step in the reduction.
+ * The `iteratee` should complete with the next state of the reduction.
+ * If the iteratee complete with an error, the reduction is stopped and the
+ * main `callback` is immediately called with the error.
+ * Invoked with (memo, item, callback).
  * @param {Function} [callback] - A callback which is called after all the
  * `iteratee` functions have finished. Result is the reduced value. Invoked with
  * (err, result).
  */
-function reduceRight(array, memo, iteratee, callback) {
-  var reversed = slice.call(array).reverse();
-  reduce(reversed, memo, iteratee, callback);
+function reduceRight (array, memo, iteratee, callback) {
+    var reversed = slice(array).reverse();
+    reduce(reversed, memo, iteratee, callback);
 }
 
 /**
- * Wraps the function in another function that always returns data even when it
- * errors.
+ * Wraps the async function in another function that always completes with a
+ * result object, even when it errors.
  *
- * The object returned has either the property `error` or `value`.
+ * The result object has either the property `error` or `value`.
  *
  * @name reflect
  * @static
  * @memberOf module:Utils
  * @method
  * @category Util
- * @param {Function} fn - The function you want to wrap
+ * @param {AsyncFunction} fn - The async function you want to wrap
  * @returns {Function} - A function that always passes null to it's callback as
  * the error. The second argument to the callback will be an `object` with
  * either an `error` or a `value` property.
@@ -8069,32 +8548,29 @@ function reduceRight(array, memo, iteratee, callback) {
  * });
  */
 function reflect(fn) {
+    var _fn = wrapAsync(fn);
     return initialParams(function reflectOn(args, reflectCallback) {
-        args.push(rest(function callback(err, cbArgs) {
-            if (err) {
-                reflectCallback(null, {
-                    error: err
-                });
+        args.push(function callback(error, cbArg) {
+            if (error) {
+                reflectCallback(null, { error: error });
             } else {
-                var value = null;
-                if (cbArgs.length === 1) {
-                    value = cbArgs[0];
-                } else if (cbArgs.length > 1) {
-                    value = cbArgs;
+                var value;
+                if (arguments.length <= 2) {
+                    value = cbArg;
+                } else {
+                    value = slice(arguments, 1);
                 }
-                reflectCallback(null, {
-                    value: value
-                });
+                reflectCallback(null, { value: value });
             }
-        }));
+        });
 
-        return fn.apply(this, args);
+        return _fn.apply(this, args);
     });
 }
 
 function reject$1(eachfn, arr, iteratee, callback) {
-    _filter(eachfn, arr, function (value, cb) {
-        iteratee(value, function (err, v) {
+    _filter(eachfn, arr, function(value, cb) {
+        iteratee(value, function(err, v) {
             cb(err, !v);
         });
     }, callback);
@@ -8110,9 +8586,10 @@ function reject$1(eachfn, arr, iteratee, callback) {
  * @see [async.filter]{@link module:Collections.filter}
  * @category Collection
  * @param {Array|Iterable|Object} coll - A collection to iterate over.
- * @param {Function} iteratee - A truth test to apply to each item in `coll`.
- * The `iteratee` is passed a `callback(err, truthValue)`, which must be called
- * with a boolean argument once it has completed. Invoked with (item, callback).
+ * @param {Function} iteratee - An async truth test to apply to each item in
+ * `coll`.
+ * The should complete with a boolean value as its `result`.
+ * Invoked with (item, callback).
  * @param {Function} [callback] - A callback which is called after all the
  * `iteratee` functions have finished. Invoked with (err, results).
  * @example
@@ -8129,7 +8606,7 @@ function reject$1(eachfn, arr, iteratee, callback) {
 var reject = doParallel(reject$1);
 
 /**
- * A helper function that wraps an array or an object of functions with reflect.
+ * A helper function that wraps an array or an object of functions with `reflect`.
  *
  * @name reflectAll
  * @static
@@ -8137,8 +8614,9 @@ var reject = doParallel(reject$1);
  * @method
  * @see [async.reflect]{@link module:Utils.reflect}
  * @category Util
- * @param {Array} tasks - The array of functions to wrap in `async.reflect`.
- * @returns {Array} Returns an array of functions, each function wrapped in
+ * @param {Array|Object|Iterable} tasks - The collection of
+ * [async functions]{@link AsyncFunction} to wrap in `async.reflect`.
+ * @returns {Array} Returns an array of async functions, each wrapped in
  * `async.reflect`
  * @example
  *
@@ -8200,7 +8678,7 @@ function reflectAll(tasks) {
         results = arrayMap(tasks, reflect);
     } else {
         results = {};
-        baseForOwn(tasks, function (task, key) {
+        baseForOwn(tasks, function(task, key) {
             results[key] = reflect.call(this, task);
         });
     }
@@ -8219,9 +8697,10 @@ function reflectAll(tasks) {
  * @category Collection
  * @param {Array|Iterable|Object} coll - A collection to iterate over.
  * @param {number} limit - The maximum number of async operations at a time.
- * @param {Function} iteratee - A truth test to apply to each item in `coll`.
- * The `iteratee` is passed a `callback(err, truthValue)`, which must be called
- * with a boolean argument once it has completed. Invoked with (item, callback).
+ * @param {Function} iteratee - An async truth test to apply to each item in
+ * `coll`.
+ * The should complete with a boolean value as its `result`.
+ * Invoked with (item, callback).
  * @param {Function} [callback] - A callback which is called after all the
  * `iteratee` functions have finished. Invoked with (err, results).
  */
@@ -8237,9 +8716,10 @@ var rejectLimit = doParallelLimit(reject$1);
  * @see [async.reject]{@link module:Collections.reject}
  * @category Collection
  * @param {Array|Iterable|Object} coll - A collection to iterate over.
- * @param {Function} iteratee - A truth test to apply to each item in `coll`.
- * The `iteratee` is passed a `callback(err, truthValue)`, which must be called
- * with a boolean argument once it has completed. Invoked with (item, callback).
+ * @param {Function} iteratee - An async truth test to apply to each item in
+ * `coll`.
+ * The should complete with a boolean value as its `result`.
+ * Invoked with (item, callback).
  * @param {Function} [callback] - A callback which is called after all the
  * `iteratee` functions have finished. Invoked with (err, results).
  */
@@ -8281,6 +8761,7 @@ function constant$1(value) {
  * @memberOf module:ControlFlow
  * @method
  * @category Control Flow
+ * @see [async.retryable]{@link module:ControlFlow.retryable}
  * @param {Object|number} [opts = {times: 5, interval: 0}| 5] - Can be either an
  * object with `times` and `interval` or a number.
  * * `times` - The number of attempts to make before giving up.  The default
@@ -8295,16 +8776,13 @@ function constant$1(value) {
  *   Invoked with (err).
  * * If `opts` is a number, the number specifies the number of times to retry,
  *   with the default interval of `0`.
- * @param {Function} task - A function which receives two arguments: (1) a
- * `callback(err, result)` which must be called when finished, passing `err`
- * (which can be `null`) and the `result` of the function's execution, and (2)
- * a `results` object, containing the results of the previously executed
- * functions (if nested inside another control flow). Invoked with
- * (callback, results).
+ * @param {AsyncFunction} task - An async function to retry.
+ * Invoked with (callback).
  * @param {Function} [callback] - An optional callback which is called when the
  * task has succeeded, or after the final failed attempt. It receives the `err`
  * and `result` arguments of the last attempt at completing the `task`. Invoked
  * with (err, results).
+ *
  * @example
  *
  * // The `retry` function can be used as a stand-alone control flow by passing
@@ -8350,7 +8828,7 @@ function constant$1(value) {
  * // individual methods that are not as reliable, like this:
  * async.auto({
  *     users: api.getUsers.bind(api),
- *     payments: async.retry(3, api.getPayments.bind(api))
+ *     payments: async.retryable(3, api.getPayments.bind(api))
  * }, function(err, results) {
  *     // do something with the results
  * });
@@ -8369,7 +8847,9 @@ function retry(opts, task, callback) {
         if (typeof t === 'object') {
             acc.times = +t.times || DEFAULT_TIMES;
 
-            acc.intervalFunc = typeof t.interval === 'function' ? t.interval : constant$1(+t.interval || DEFAULT_INTERVAL);
+            acc.intervalFunc = typeof t.interval === 'function' ?
+                t.interval :
+                constant$1(+t.interval || DEFAULT_INTERVAL);
 
             acc.errorFilter = t.errorFilter;
         } else if (typeof t === 'number' || typeof t === 'string') {
@@ -8391,10 +8871,14 @@ function retry(opts, task, callback) {
         throw new Error("Invalid arguments for async.retry");
     }
 
+    var _task = wrapAsync(task);
+
     var attempt = 1;
     function retryAttempt() {
-        task(function (err) {
-            if (err && attempt++ < options.times && (typeof options.errorFilter != 'function' || options.errorFilter(err))) {
+        _task(function(err) {
+            if (err && attempt++ < options.times &&
+                (typeof options.errorFilter != 'function' ||
+                    options.errorFilter(err))) {
                 setTimeout(retryAttempt, options.intervalFunc(attempt));
             } else {
                 callback.apply(null, arguments);
@@ -8406,8 +8890,9 @@ function retry(opts, task, callback) {
 }
 
 /**
- * A close relative of [`retry`]{@link module:ControlFlow.retry}.  This method wraps a task and makes it
- * retryable, rather than immediately calling it with retries.
+ * A close relative of [`retry`]{@link module:ControlFlow.retry}.  This method
+ * wraps a task and makes it retryable, rather than immediately calling it
+ * with retries.
  *
  * @name retryable
  * @static
@@ -8417,9 +8902,12 @@ function retry(opts, task, callback) {
  * @category Control Flow
  * @param {Object|number} [opts = {times: 5, interval: 0}| 5] - optional
  * options, exactly the same as from `retry`
- * @param {Function} task - the asynchronous function to wrap
- * @returns {Functions} The wrapped function, which when invoked, will retry on
- * an error, based on the parameters specified in `opts`.
+ * @param {AsyncFunction} task - the asynchronous function to wrap.
+ * This function will be passed any arguments passed to the returned wrapper.
+ * Invoked with (...args, callback).
+ * @returns {AsyncFunction} The wrapped function, which when invoked, will
+ * retry on an error, based on the parameters specified in `opts`.
+ * This function will accept the same parameters as `task`.
  * @example
  *
  * async.auto({
@@ -8434,12 +8922,15 @@ var retryable = function (opts, task) {
         task = opts;
         opts = null;
     }
+    var _task = wrapAsync(task);
     return initialParams(function (args, callback) {
         function taskFn(cb) {
-            task.apply(null, args.concat([cb]));
+            _task.apply(null, args.concat(cb));
         }
 
-        if (opts) retry(opts, taskFn, callback);else retry(taskFn, callback);
+        if (opts) retry(opts, taskFn, callback);
+        else retry(taskFn, callback);
+
     });
 };
 
@@ -8469,9 +8960,9 @@ var retryable = function (opts, task) {
  * @memberOf module:ControlFlow
  * @method
  * @category Control Flow
- * @param {Array|Iterable|Object} tasks - A collection containing functions to run, each
- * function is passed a `callback(err, result)` it must call on completion with
- * an error `err` (which can be `null`) and an optional `result` value.
+ * @param {Array|Iterable|Object} tasks - A collection containing
+ * [async functions]{@link AsyncFunction} to run in series.
+ * Each function can complete with any number of optional `result` values.
  * @param {Function} [callback] - An optional callback to run once all the
  * functions have completed. This function gets a results array (or object)
  * containing all the result arguments passed to the `task` callbacks. Invoked
@@ -8508,7 +8999,7 @@ var retryable = function (opts, task) {
  * });
  */
 function series(tasks, callback) {
-  _parallel(eachOfSeries, tasks, callback);
+    _parallel(eachOfSeries, tasks, callback);
 }
 
 /**
@@ -8523,10 +9014,10 @@ function series(tasks, callback) {
  * @alias any
  * @category Collection
  * @param {Array|Iterable|Object} coll - A collection to iterate over.
- * @param {Function} iteratee - A truth test to apply to each item in the array
- * in parallel. The iteratee is passed a `callback(err, truthValue)` which must
- * be called with a boolean argument once it has completed. Invoked with
- * (item, callback).
+ * @param {AsyncFunction} iteratee - An async truth test to apply to each item
+ * in the collections in parallel.
+ * The iteratee should complete with a boolean `result` value.
+ * Invoked with (item, callback).
  * @param {Function} [callback] - A callback which is called as soon as any
  * iteratee returns `true`, or after all the iteratee functions have finished.
  * Result will be either `true` or `false` depending on the values of the async
@@ -8541,7 +9032,7 @@ function series(tasks, callback) {
  *     // if result is true then at least one of the files exists
  * });
  */
-var some = _createTester(eachOf, Boolean, identity);
+var some = doParallel(_createTester(Boolean, identity));
 
 /**
  * The same as [`some`]{@link module:Collections.some} but runs a maximum of `limit` async operations at a time.
@@ -8555,16 +9046,16 @@ var some = _createTester(eachOf, Boolean, identity);
  * @category Collection
  * @param {Array|Iterable|Object} coll - A collection to iterate over.
  * @param {number} limit - The maximum number of async operations at a time.
- * @param {Function} iteratee - A truth test to apply to each item in the array
- * in parallel. The iteratee is passed a `callback(err, truthValue)` which must
- * be called with a boolean argument once it has completed. Invoked with
- * (item, callback).
+ * @param {AsyncFunction} iteratee - An async truth test to apply to each item
+ * in the collections in parallel.
+ * The iteratee should complete with a boolean `result` value.
+ * Invoked with (item, callback).
  * @param {Function} [callback] - A callback which is called as soon as any
  * iteratee returns `true`, or after all the iteratee functions have finished.
  * Result will be either `true` or `false` depending on the values of the async
  * tests. Invoked with (err, result).
  */
-var someLimit = _createTester(eachOfLimit, Boolean, identity);
+var someLimit = doParallelLimit(_createTester(Boolean, identity));
 
 /**
  * The same as [`some`]{@link module:Collections.some} but runs only a single async operation at a time.
@@ -8577,10 +9068,10 @@ var someLimit = _createTester(eachOfLimit, Boolean, identity);
  * @alias anySeries
  * @category Collection
  * @param {Array|Iterable|Object} coll - A collection to iterate over.
- * @param {Function} iteratee - A truth test to apply to each item in the array
- * in parallel. The iteratee is passed a `callback(err, truthValue)` which must
- * be called with a boolean argument once it has completed. Invoked with
- * (item, callback).
+ * @param {AsyncFunction} iteratee - An async truth test to apply to each item
+ * in the collections in series.
+ * The iteratee should complete with a boolean `result` value.
+ * Invoked with (item, callback).
  * @param {Function} [callback] - A callback which is called as soon as any
  * iteratee returns `true`, or after all the iteratee functions have finished.
  * Result will be either `true` or `false` depending on the values of the async
@@ -8598,10 +9089,11 @@ var someSeries = doLimit(someLimit, 1);
  * @method
  * @category Collection
  * @param {Array|Iterable|Object} coll - A collection to iterate over.
- * @param {Function} iteratee - A function to apply to each item in `coll`.
- * The iteratee is passed a `callback(err, sortValue)` which must be called once
- * it has completed with an error (which can be `null`) and a value to use as
- * the sort criteria. Invoked with (item, callback).
+ * @param {AsyncFunction} iteratee - An async function to apply to each item in
+ * `coll`.
+ * The iteratee should complete with a value to use as the sort criteria as
+ * its `result`.
+ * Invoked with (item, callback).
  * @param {Function} callback - A callback which is called after all the
  * `iteratee` functions have finished, or an error occurs. Results is the items
  * from the original `coll` sorted by the values returned by the `iteratee`
@@ -8634,11 +9126,12 @@ var someSeries = doLimit(someLimit, 1);
  *     // result callback
  * });
  */
-function sortBy(coll, iteratee, callback) {
+function sortBy (coll, iteratee, callback) {
+    var _iteratee = wrapAsync(iteratee);
     map(coll, function (x, callback) {
-        iteratee(x, function (err, criteria) {
+        _iteratee(x, function (err, criteria) {
             if (err) return callback(err);
-            callback(null, { value: x, criteria: criteria });
+            callback(null, {value: x, criteria: criteria});
         });
     }, function (err, results) {
         if (err) return callback(err);
@@ -8646,8 +9139,7 @@ function sortBy(coll, iteratee, callback) {
     });
 
     function comparator(left, right) {
-        var a = left.criteria,
-            b = right.criteria;
+        var a = left.criteria, b = right.criteria;
         return a < b ? -1 : a > b ? 1 : 0;
     }
 }
@@ -8662,14 +9154,13 @@ function sortBy(coll, iteratee, callback) {
  * @memberOf module:Utils
  * @method
  * @category Util
- * @param {Function} asyncFn - The asynchronous function you want to set the
- * time limit.
+ * @param {AsyncFunction} asyncFn - The async function to limit in time.
  * @param {number} milliseconds - The specified time limit.
  * @param {*} [info] - Any variable you want attached (`string`, `object`, etc)
  * to timeout Error for more information..
- * @returns {Function} Returns a wrapped function that can be used with any of
- * the control flow functions. Invoke this function with the same
- * parameters as you would `asyncFunc`.
+ * @returns {AsyncFunction} Returns a wrapped function that can be used with any
+ * of the control flow functions.
+ * Invoke this function with the same parameters as you would `asyncFunc`.
  * @example
  *
  * function myFunction(foo, callback) {
@@ -8707,7 +9198,7 @@ function timeout(asyncFn, milliseconds, info) {
 
     function timeoutCallback() {
         var name = asyncFn.name || 'anonymous';
-        var error = new Error('Callback function "' + name + '" timed out.');
+        var error  = new Error('Callback function "' + name + '" timed out.');
         error.code = 'ETIMEDOUT';
         if (info) {
             error.info = info;
@@ -8716,17 +9207,19 @@ function timeout(asyncFn, milliseconds, info) {
         originalCallback(error);
     }
 
+    var fn = wrapAsync(asyncFn);
+
     return initialParams(function (args, origCallback) {
         originalCallback = origCallback;
         // setup timer and call original function
         timer = setTimeout(timeoutCallback, milliseconds);
-        asyncFn.apply(null, args.concat(injectedCallback));
+        fn.apply(null, args.concat(injectedCallback));
     });
 }
 
 /* Built-in method references for those with the same name as other `lodash` methods. */
 var nativeCeil = Math.ceil;
-var nativeMax$1 = Math.max;
+var nativeMax = Math.max;
 
 /**
  * The base implementation of `_.range` and `_.rangeRight` which doesn't
@@ -8741,7 +9234,7 @@ var nativeMax$1 = Math.max;
  */
 function baseRange(start, end, step, fromRight) {
   var index = -1,
-      length = nativeMax$1(nativeCeil((end - start) / (step || 1)), 0),
+      length = nativeMax(nativeCeil((end - start) / (step || 1)), 0),
       result = Array(length);
 
   while (length--) {
@@ -8763,12 +9256,13 @@ function baseRange(start, end, step, fromRight) {
  * @category Control Flow
  * @param {number} count - The number of times to run the function.
  * @param {number} limit - The maximum number of async operations at a time.
- * @param {Function} iteratee - The function to call `n` times. Invoked with the
- * iteration index and a callback (n, next).
+ * @param {AsyncFunction} iteratee - The async function to call `n` times.
+ * Invoked with the iteration index and a callback: (n, next).
  * @param {Function} callback - see [async.map]{@link module:Collections.map}.
  */
 function timeLimit(count, limit, iteratee, callback) {
-  mapLimit(baseRange(0, count, 1), limit, iteratee, callback);
+    var _iteratee = wrapAsync(iteratee);
+    mapLimit(baseRange(0, count, 1), limit, _iteratee, callback);
 }
 
 /**
@@ -8782,8 +9276,8 @@ function timeLimit(count, limit, iteratee, callback) {
  * @see [async.map]{@link module:Collections.map}
  * @category Control Flow
  * @param {number} n - The number of times to run the function.
- * @param {Function} iteratee - The function to call `n` times. Invoked with the
- * iteration index and a callback (n, next).
+ * @param {AsyncFunction} iteratee - The async function to call `n` times.
+ * Invoked with the iteration index and a callback: (n, next).
  * @param {Function} callback - see {@link module:Collections.map}.
  * @example
  *
@@ -8815,8 +9309,8 @@ var times = doLimit(timeLimit, Infinity);
  * @see [async.times]{@link module:ControlFlow.times}
  * @category Control Flow
  * @param {number} n - The number of times to run the function.
- * @param {Function} iteratee - The function to call `n` times. Invoked with the
- * iteration index and a callback (n, next).
+ * @param {AsyncFunction} iteratee - The async function to call `n` times.
+ * Invoked with the iteration index and a callback: (n, next).
  * @param {Function} callback - see {@link module:Collections.map}.
  */
 var timesSeries = doLimit(timeLimit, 1);
@@ -8834,11 +9328,8 @@ var timesSeries = doLimit(timeLimit, 1);
  * @param {Array|Iterable|Object} coll - A collection to iterate over.
  * @param {*} [accumulator] - The initial state of the transform.  If omitted,
  * it will default to an empty Object or Array, depending on the type of `coll`
- * @param {Function} iteratee - A function applied to each item in the
- * collection that potentially modifies the accumulator. The `iteratee` is
- * passed a `callback(err)` which accepts an optional error as its first
- * argument. If an error is passed to the callback, the transform is stopped
- * and the main `callback` is immediately called with the error.
+ * @param {AsyncFunction} iteratee - A function applied to each item in the
+ * collection that potentially modifies the accumulator.
  * Invoked with (accumulator, item, key, callback).
  * @param {Function} [callback] - A callback which is called after all the
  * `iteratee` functions have finished. Result is the transformed accumulator.
@@ -8866,18 +9357,75 @@ var timesSeries = doLimit(timeLimit, 1);
  *     // result is equal to {a: 2, b: 4, c: 6}
  * })
  */
-function transform(coll, accumulator, iteratee, callback) {
-    if (arguments.length === 3) {
+function transform (coll, accumulator, iteratee, callback) {
+    if (arguments.length <= 3) {
         callback = iteratee;
         iteratee = accumulator;
         accumulator = isArray(coll) ? [] : {};
     }
     callback = once(callback || noop);
+    var _iteratee = wrapAsync(iteratee);
 
-    eachOf(coll, function (v, k, cb) {
-        iteratee(accumulator, v, k, cb);
-    }, function (err) {
+    eachOf(coll, function(v, k, cb) {
+        _iteratee(accumulator, v, k, cb);
+    }, function(err) {
         callback(err, accumulator);
+    });
+}
+
+/**
+ * It runs each task in series but stops whenever any of the functions were
+ * successful. If one of the tasks were successful, the `callback` will be
+ * passed the result of the successful task. If all tasks fail, the callback
+ * will be passed the error and result (if any) of the final attempt.
+ *
+ * @name tryEach
+ * @static
+ * @memberOf module:ControlFlow
+ * @method
+ * @category Control Flow
+ * @param {Array|Iterable|Object} tasks - A collection containing functions to
+ * run, each function is passed a `callback(err, result)` it must call on
+ * completion with an error `err` (which can be `null`) and an optional `result`
+ * value.
+ * @param {Function} [callback] - An optional callback which is called when one
+ * of the tasks has succeeded, or all have failed. It receives the `err` and
+ * `result` arguments of the last attempt at completing the `task`. Invoked with
+ * (err, results).
+ * @example
+ * async.try([
+ *     function getDataFromFirstWebsite(callback) {
+ *         // Try getting the data from the first website
+ *         callback(err, data);
+ *     },
+ *     function getDataFromSecondWebsite(callback) {
+ *         // First website failed,
+ *         // Try getting the data from the backup website
+ *         callback(err, data);
+ *     }
+ * ],
+ * // optional callback
+ * function(err, results) {
+ *     Now do something with the data.
+ * });
+ *
+ */
+function tryEach(tasks, callback) {
+    var error = null;
+    var result;
+    callback = callback || noop;
+    eachSeries(tasks, function(task, callback) {
+        wrapAsync(task)(function (err, res/*, ...args*/) {
+            if (arguments.length > 2) {
+                result = slice(arguments, 1);
+            } else {
+                result = res;
+            }
+            error = err;
+            callback(!err);
+        });
+    }, function () {
+        callback(error, result);
     });
 }
 
@@ -8891,8 +9439,8 @@ function transform(coll, accumulator, iteratee, callback) {
  * @method
  * @see [async.memoize]{@link module:Utils.memoize}
  * @category Util
- * @param {Function} fn - the memoized function
- * @returns {Function} a function that calls the original unmemoized function
+ * @param {AsyncFunction} fn - the memoized function
+ * @returns {AsyncFunction} a function that calls the original unmemoized function
  */
 function unmemoize(fn) {
     return function () {
@@ -8911,9 +9459,8 @@ function unmemoize(fn) {
  * @category Control Flow
  * @param {Function} test - synchronous truth test to perform before each
  * execution of `iteratee`. Invoked with ().
- * @param {Function} iteratee - A function which is called each time `test` passes.
- * The function is passed a `callback(err)`, which must be called once it has
- * completed with an optional `err` argument. Invoked with (callback).
+ * @param {AsyncFunction} iteratee - An async function which is called each time
+ * `test` passes. Invoked with (callback).
  * @param {Function} [callback] - A callback which is called after the test
  * function has failed and repeated execution of `iteratee` has stopped. `callback`
  * will be passed an error and any arguments passed to the final `iteratee`'s
@@ -8937,19 +9484,21 @@ function unmemoize(fn) {
  */
 function whilst(test, iteratee, callback) {
     callback = onlyOnce(callback || noop);
+    var _iteratee = wrapAsync(iteratee);
     if (!test()) return callback(null);
-    var next = rest(function (err, args) {
+    var next = function(err/*, ...args*/) {
         if (err) return callback(err);
-        if (test()) return iteratee(next);
+        if (test()) return _iteratee(next);
+        var args = slice(arguments, 1);
         callback.apply(null, [null].concat(args));
-    });
-    iteratee(next);
+    };
+    _iteratee(next);
 }
 
 /**
- * Repeatedly call `fn` until `test` returns `true`. Calls `callback` when
+ * Repeatedly call `iteratee` until `test` returns `true`. Calls `callback` when
  * stopped, or an error occurs. `callback` will be passed an error and any
- * arguments passed to the final `fn`'s callback.
+ * arguments passed to the final `iteratee`'s callback.
  *
  * The inverse of [whilst]{@link module:ControlFlow.whilst}.
  *
@@ -8960,19 +9509,18 @@ function whilst(test, iteratee, callback) {
  * @see [async.whilst]{@link module:ControlFlow.whilst}
  * @category Control Flow
  * @param {Function} test - synchronous truth test to perform before each
- * execution of `fn`. Invoked with ().
- * @param {Function} fn - A function which is called each time `test` fails.
- * The function is passed a `callback(err)`, which must be called once it has
- * completed with an optional `err` argument. Invoked with (callback).
+ * execution of `iteratee`. Invoked with ().
+ * @param {AsyncFunction} iteratee - An async function which is called each time
+ * `test` fails. Invoked with (callback).
  * @param {Function} [callback] - A callback which is called after the test
- * function has passed and repeated execution of `fn` has stopped. `callback`
- * will be passed an error and any arguments passed to the final `fn`'s
+ * function has passed and repeated execution of `iteratee` has stopped. `callback`
+ * will be passed an error and any arguments passed to the final `iteratee`'s
  * callback. Invoked with (err, [results]);
  */
-function until(test, fn, callback) {
-    whilst(function () {
+function until(test, iteratee, callback) {
+    whilst(function() {
         return !test.apply(this, arguments);
-    }, fn, callback);
+    }, iteratee, callback);
 }
 
 /**
@@ -8986,10 +9534,10 @@ function until(test, fn, callback) {
  * @memberOf module:ControlFlow
  * @method
  * @category Control Flow
- * @param {Array} tasks - An array of functions to run, each function is passed
- * a `callback(err, result1, result2, ...)` it must call on completion. The
- * first argument is an error (which can be `null`) and any further arguments
- * will be passed as arguments in order to the next task.
+ * @param {Array} tasks - An array of [async functions]{@link AsyncFunction}
+ * to run.
+ * Each function should complete with any number of `result` values.
+ * The `result` values will be passed as arguments, in order, to the next task.
  * @param {Function} [callback] - An optional callback to run once all the
  * functions have completed. This will be passed the results of the last task's
  * callback. Invoked with (err, [results]).
@@ -9032,32 +9580,66 @@ function until(test, fn, callback) {
  *     callback(null, 'done');
  * }
  */
-var waterfall = function (tasks, callback) {
+var waterfall = function(tasks, callback) {
     callback = once(callback || noop);
     if (!isArray(tasks)) return callback(new Error('First argument to waterfall must be an array of functions'));
     if (!tasks.length) return callback();
     var taskIndex = 0;
 
     function nextTask(args) {
-        if (taskIndex === tasks.length) {
-            return callback.apply(null, [null].concat(args));
-        }
-
-        var taskCallback = onlyOnce(rest(function (err, args) {
-            if (err) {
-                return callback.apply(null, [err].concat(args));
-            }
-            nextTask(args);
-        }));
-
-        args.push(taskCallback);
-
-        var task = tasks[taskIndex++];
+        var task = wrapAsync(tasks[taskIndex++]);
+        args.push(onlyOnce(next));
         task.apply(null, args);
+    }
+
+    function next(err/*, ...args*/) {
+        if (err || taskIndex === tasks.length) {
+            return callback.apply(null, arguments);
+        }
+        nextTask(slice(arguments, 1));
     }
 
     nextTask([]);
 };
+
+/**
+ * An "async function" in the context of Async is an asynchronous function with
+ * a variable number of parameters, with the final parameter being a callback.
+ * (`function (arg1, arg2, ..., callback) {}`)
+ * The final callback is of the form `callback(err, results...)`, which must be
+ * called once the function is completed.  The callback should be called with a
+ * Error as its first argument to signal that an error occurred.
+ * Otherwise, if no error occurred, it should be called with `null` as the first
+ * argument, and any additional `result` arguments that may apply, to signal
+ * successful completion.
+ * The callback must be called exactly once, ideally on a later tick of the
+ * JavaScript event loop.
+ *
+ * This type of function is also referred to as a "Node-style async function",
+ * or a "continuation passing-style function" (CPS). Most of the methods of this
+ * library are themselves CPS/Node-style async functions, or functions that
+ * return CPS/Node-style async functions.
+ *
+ * Wherever we accept a Node-style async function, we also directly accept an
+ * [ES2017 `async` function]{@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function}.
+ * In this case, the `async` function will not be passed a final callback
+ * argument, and any thrown error will be used as the `err` argument of the
+ * implicit callback, and the return value will be used as the `result` value.
+ * (i.e. a `rejected` of the returned Promise becomes the `err` callback
+ * argument, and a `resolved` value becomes the `result`.)
+ *
+ * Note, due to JavaScript limitations, we can only detect native `async`
+ * functions and not transpilied implementations.
+ * Your environment must have `async`/`await` support for this to work.
+ * (e.g. Node > v7.6, or a recent version of a modern browser).
+ * If you are using `async` functions through a transpiler (e.g. Babel), you
+ * must still wrap the function with [asyncify]{@link module:Utils.asyncify},
+ * because the `async function` will be compiled to an ordinary function that
+ * returns a promise.
+ *
+ * @typedef {Function} AsyncFunction
+ * @static
+ */
 
 /**
  * Async is a utility module which provides straight-forward, powerful functions
@@ -9065,7 +9647,9 @@ var waterfall = function (tasks, callback) {
  * use with [Node.js](http://nodejs.org) and installable via
  * `npm install --save async`, it can also be used directly in the browser.
  * @module async
+ * @see AsyncFunction
  */
+
 
 /**
  * A collection of `async` functions for manipulating collections, such as
@@ -9082,102 +9666,107 @@ var waterfall = function (tasks, callback) {
  * A collection of `async` utility functions.
  * @module Utils
  */
-var index = {
-  applyEach: applyEach,
-  applyEachSeries: applyEachSeries,
-  apply: apply$2,
-  asyncify: asyncify,
-  auto: auto,
-  autoInject: autoInject,
-  cargo: cargo,
-  compose: compose,
-  concat: concat,
-  concatSeries: concatSeries,
-  constant: constant,
-  detect: detect,
-  detectLimit: detectLimit,
-  detectSeries: detectSeries,
-  dir: dir,
-  doDuring: doDuring,
-  doUntil: doUntil,
-  doWhilst: doWhilst,
-  during: during,
-  each: eachLimit,
-  eachLimit: eachLimit$1,
-  eachOf: eachOf,
-  eachOfLimit: eachOfLimit,
-  eachOfSeries: eachOfSeries,
-  eachSeries: eachSeries,
-  ensureAsync: ensureAsync,
-  every: every,
-  everyLimit: everyLimit,
-  everySeries: everySeries,
-  filter: filter,
-  filterLimit: filterLimit,
-  filterSeries: filterSeries,
-  forever: forever,
-  log: log,
-  map: map,
-  mapLimit: mapLimit,
-  mapSeries: mapSeries,
-  mapValues: mapValues,
-  mapValuesLimit: mapValuesLimit,
-  mapValuesSeries: mapValuesSeries,
-  memoize: memoize,
-  nextTick: nextTick,
-  parallel: parallelLimit,
-  parallelLimit: parallelLimit$1,
-  priorityQueue: priorityQueue,
-  queue: queue$1,
-  race: race,
-  reduce: reduce,
-  reduceRight: reduceRight,
-  reflect: reflect,
-  reflectAll: reflectAll,
-  reject: reject,
-  rejectLimit: rejectLimit,
-  rejectSeries: rejectSeries,
-  retry: retry,
-  retryable: retryable,
-  seq: seq$1,
-  series: series,
-  setImmediate: setImmediate$1,
-  some: some,
-  someLimit: someLimit,
-  someSeries: someSeries,
-  sortBy: sortBy,
-  timeout: timeout,
-  times: times,
-  timesLimit: timeLimit,
-  timesSeries: timesSeries,
-  transform: transform,
-  unmemoize: unmemoize,
-  until: until,
-  waterfall: waterfall,
-  whilst: whilst,
 
-  // aliases
-  all: every,
-  any: some,
-  forEach: eachLimit,
-  forEachSeries: eachSeries,
-  forEachLimit: eachLimit$1,
-  forEachOf: eachOf,
-  forEachOfSeries: eachOfSeries,
-  forEachOfLimit: eachOfLimit,
-  inject: reduce,
-  foldl: reduce,
-  foldr: reduceRight,
-  select: filter,
-  selectLimit: filterLimit,
-  selectSeries: filterSeries,
-  wrapSync: asyncify
+var index = {
+    applyEach: applyEach,
+    applyEachSeries: applyEachSeries,
+    apply: apply,
+    asyncify: asyncify,
+    auto: auto,
+    autoInject: autoInject,
+    cargo: cargo,
+    compose: compose,
+    concat: concat,
+    concatSeries: concatSeries,
+    constant: constant,
+    detect: detect,
+    detectLimit: detectLimit,
+    detectSeries: detectSeries,
+    dir: dir,
+    doDuring: doDuring,
+    doUntil: doUntil,
+    doWhilst: doWhilst,
+    during: during,
+    each: eachLimit,
+    eachLimit: eachLimit$1,
+    eachOf: eachOf,
+    eachOfLimit: eachOfLimit,
+    eachOfSeries: eachOfSeries,
+    eachSeries: eachSeries,
+    ensureAsync: ensureAsync,
+    every: every,
+    everyLimit: everyLimit,
+    everySeries: everySeries,
+    filter: filter,
+    filterLimit: filterLimit,
+    filterSeries: filterSeries,
+    forever: forever,
+    groupBy: groupBy,
+    groupByLimit: groupByLimit,
+    groupBySeries: groupBySeries,
+    log: log,
+    map: map,
+    mapLimit: mapLimit,
+    mapSeries: mapSeries,
+    mapValues: mapValues,
+    mapValuesLimit: mapValuesLimit,
+    mapValuesSeries: mapValuesSeries,
+    memoize: memoize,
+    nextTick: nextTick,
+    parallel: parallelLimit,
+    parallelLimit: parallelLimit$1,
+    priorityQueue: priorityQueue,
+    queue: queue$1,
+    race: race,
+    reduce: reduce,
+    reduceRight: reduceRight,
+    reflect: reflect,
+    reflectAll: reflectAll,
+    reject: reject,
+    rejectLimit: rejectLimit,
+    rejectSeries: rejectSeries,
+    retry: retry,
+    retryable: retryable,
+    seq: seq,
+    series: series,
+    setImmediate: setImmediate$1,
+    some: some,
+    someLimit: someLimit,
+    someSeries: someSeries,
+    sortBy: sortBy,
+    timeout: timeout,
+    times: times,
+    timesLimit: timeLimit,
+    timesSeries: timesSeries,
+    transform: transform,
+    tryEach: tryEach,
+    unmemoize: unmemoize,
+    until: until,
+    waterfall: waterfall,
+    whilst: whilst,
+
+    // aliases
+    all: every,
+    any: some,
+    forEach: eachLimit,
+    forEachSeries: eachSeries,
+    forEachLimit: eachLimit$1,
+    forEachOf: eachOf,
+    forEachOfSeries: eachOfSeries,
+    forEachOfLimit: eachOfLimit,
+    inject: reduce,
+    foldl: reduce,
+    foldr: reduceRight,
+    select: filter,
+    selectLimit: filterLimit,
+    selectSeries: filterSeries,
+    wrapSync: asyncify
 };
 
 exports['default'] = index;
 exports.applyEach = applyEach;
 exports.applyEachSeries = applyEachSeries;
-exports.apply = apply$2;
+exports.apply = apply;
 exports.asyncify = asyncify;
 exports.auto = auto;
 exports.autoInject = autoInject;
@@ -9208,6 +9797,9 @@ exports.filter = filter;
 exports.filterLimit = filterLimit;
 exports.filterSeries = filterSeries;
 exports.forever = forever;
+exports.groupBy = groupBy;
+exports.groupByLimit = groupByLimit;
+exports.groupBySeries = groupBySeries;
 exports.log = log;
 exports.map = map;
 exports.mapLimit = mapLimit;
@@ -9231,7 +9823,7 @@ exports.rejectLimit = rejectLimit;
 exports.rejectSeries = rejectSeries;
 exports.retry = retry;
 exports.retryable = retryable;
-exports.seq = seq$1;
+exports.seq = seq;
 exports.series = series;
 exports.setImmediate = setImmediate$1;
 exports.some = some;
@@ -9243,6 +9835,7 @@ exports.times = times;
 exports.timesLimit = timeLimit;
 exports.timesSeries = timesSeries;
 exports.transform = transform;
+exports.tryEach = tryEach;
 exports.unmemoize = unmemoize;
 exports.until = until;
 exports.waterfall = waterfall;
@@ -9275,7 +9868,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 })));
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":31}],17:[function(require,module,exports){
+},{"_process":32}],18:[function(require,module,exports){
 'use strict'
 
 exports.byteLength = byteLength
@@ -9391,11 +9984,11 @@ function fromByteArray (uint8) {
   return parts.join('')
 }
 
-},{}],18:[function(require,module,exports){
-
 },{}],19:[function(require,module,exports){
-arguments[4][18][0].apply(exports,arguments)
-},{"dup":18}],20:[function(require,module,exports){
+
+},{}],20:[function(require,module,exports){
+arguments[4][19][0].apply(exports,arguments)
+},{"dup":19}],21:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -9507,8 +10100,7 @@ exports.allocUnsafeSlow = function allocUnsafeSlow(size) {
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"buffer":21}],21:[function(require,module,exports){
-(function (global){
+},{"buffer":22}],22:[function(require,module,exports){
 /*!
  * The buffer module from node.js, for the browser.
  *
@@ -9521,80 +10113,57 @@ exports.allocUnsafeSlow = function allocUnsafeSlow(size) {
 
 var base64 = require('base64-js')
 var ieee754 = require('ieee754')
-var isArray = require('isarray')
 
 exports.Buffer = Buffer
 exports.SlowBuffer = SlowBuffer
 exports.INSPECT_MAX_BYTES = 50
 
+var K_MAX_LENGTH = 0x7fffffff
+exports.kMaxLength = K_MAX_LENGTH
+
 /**
  * If `Buffer.TYPED_ARRAY_SUPPORT`:
  *   === true    Use Uint8Array implementation (fastest)
- *   === false   Use Object implementation (most compatible, even IE6)
+ *   === false   Print warning and recommend using `buffer` v4.x which has an Object
+ *               implementation (most compatible, even IE6)
  *
  * Browsers that support typed arrays are IE 10+, Firefox 4+, Chrome 7+, Safari 5.1+,
  * Opera 11.6+, iOS 4.2+.
  *
- * Due to various browser bugs, sometimes the Object implementation will be used even
- * when the browser supports typed arrays.
- *
- * Note:
- *
- *   - Firefox 4-29 lacks support for adding new properties to `Uint8Array` instances,
- *     See: https://bugzilla.mozilla.org/show_bug.cgi?id=695438.
- *
- *   - Chrome 9-10 is missing the `TypedArray.prototype.subarray` function.
- *
- *   - IE10 has a broken `TypedArray.prototype.subarray` function which returns arrays of
- *     incorrect length in some situations.
-
- * We detect these buggy browsers and set `Buffer.TYPED_ARRAY_SUPPORT` to `false` so they
- * get the Object implementation, which is slower but behaves correctly.
+ * We report that the browser does not support typed arrays if the are not subclassable
+ * using __proto__. Firefox 4-29 lacks support for adding new properties to `Uint8Array`
+ * (See: https://bugzilla.mozilla.org/show_bug.cgi?id=695438). IE 10 lacks support
+ * for __proto__ and has a buggy typed array implementation.
  */
-Buffer.TYPED_ARRAY_SUPPORT = global.TYPED_ARRAY_SUPPORT !== undefined
-  ? global.TYPED_ARRAY_SUPPORT
-  : typedArraySupport()
+Buffer.TYPED_ARRAY_SUPPORT = typedArraySupport()
 
-/*
- * Export kMaxLength after typed array support is determined.
- */
-exports.kMaxLength = kMaxLength()
+if (!Buffer.TYPED_ARRAY_SUPPORT && typeof console !== 'undefined' &&
+    typeof console.error === 'function') {
+  console.error(
+    'This browser lacks typed array (Uint8Array) support which is required by ' +
+    '`buffer` v5.x. Use `buffer` v4.x if you require old browser support.'
+  )
+}
 
 function typedArraySupport () {
+  // Can typed array instances can be augmented?
   try {
     var arr = new Uint8Array(1)
     arr.__proto__ = {__proto__: Uint8Array.prototype, foo: function () { return 42 }}
-    return arr.foo() === 42 && // typed array instances can be augmented
-        typeof arr.subarray === 'function' && // chrome 9-10 lack `subarray`
-        arr.subarray(1, 1).byteLength === 0 // ie10 has broken `subarray`
+    return arr.foo() === 42
   } catch (e) {
     return false
   }
 }
 
-function kMaxLength () {
-  return Buffer.TYPED_ARRAY_SUPPORT
-    ? 0x7fffffff
-    : 0x3fffffff
-}
-
-function createBuffer (that, length) {
-  if (kMaxLength() < length) {
+function createBuffer (length) {
+  if (length > K_MAX_LENGTH) {
     throw new RangeError('Invalid typed array length')
   }
-  if (Buffer.TYPED_ARRAY_SUPPORT) {
-    // Return an augmented `Uint8Array` instance, for best performance
-    that = new Uint8Array(length)
-    that.__proto__ = Buffer.prototype
-  } else {
-    // Fallback: Return an object instance of the Buffer class
-    if (that === null) {
-      that = new Buffer(length)
-    }
-    that.length = length
-  }
-
-  return that
+  // Return an augmented `Uint8Array` instance
+  var buf = new Uint8Array(length)
+  buf.__proto__ = Buffer.prototype
+  return buf
 }
 
 /**
@@ -9608,10 +10177,6 @@ function createBuffer (that, length) {
  */
 
 function Buffer (arg, encodingOrOffset, length) {
-  if (!Buffer.TYPED_ARRAY_SUPPORT && !(this instanceof Buffer)) {
-    return new Buffer(arg, encodingOrOffset, length)
-  }
-
   // Common case.
   if (typeof arg === 'number') {
     if (typeof encodingOrOffset === 'string') {
@@ -9619,33 +10184,38 @@ function Buffer (arg, encodingOrOffset, length) {
         'If encoding is specified then the first argument must be a string'
       )
     }
-    return allocUnsafe(this, arg)
+    return allocUnsafe(arg)
   }
-  return from(this, arg, encodingOrOffset, length)
+  return from(arg, encodingOrOffset, length)
+}
+
+// Fix subarray() in ES2016. See: https://github.com/feross/buffer/pull/97
+if (typeof Symbol !== 'undefined' && Symbol.species &&
+    Buffer[Symbol.species] === Buffer) {
+  Object.defineProperty(Buffer, Symbol.species, {
+    value: null,
+    configurable: true,
+    enumerable: false,
+    writable: false
+  })
 }
 
 Buffer.poolSize = 8192 // not used by this implementation
 
-// TODO: Legacy, not needed anymore. Remove in next major version.
-Buffer._augment = function (arr) {
-  arr.__proto__ = Buffer.prototype
-  return arr
-}
-
-function from (that, value, encodingOrOffset, length) {
+function from (value, encodingOrOffset, length) {
   if (typeof value === 'number') {
     throw new TypeError('"value" argument must not be a number')
   }
 
-  if (typeof ArrayBuffer !== 'undefined' && value instanceof ArrayBuffer) {
-    return fromArrayBuffer(that, value, encodingOrOffset, length)
+  if (value instanceof ArrayBuffer) {
+    return fromArrayBuffer(value, encodingOrOffset, length)
   }
 
   if (typeof value === 'string') {
-    return fromString(that, value, encodingOrOffset)
+    return fromString(value, encodingOrOffset)
   }
 
-  return fromObject(that, value)
+  return fromObject(value)
 }
 
 /**
@@ -9657,21 +10227,13 @@ function from (that, value, encodingOrOffset, length) {
  * Buffer.from(arrayBuffer[, byteOffset[, length]])
  **/
 Buffer.from = function (value, encodingOrOffset, length) {
-  return from(null, value, encodingOrOffset, length)
+  return from(value, encodingOrOffset, length)
 }
 
-if (Buffer.TYPED_ARRAY_SUPPORT) {
-  Buffer.prototype.__proto__ = Uint8Array.prototype
-  Buffer.__proto__ = Uint8Array
-  if (typeof Symbol !== 'undefined' && Symbol.species &&
-      Buffer[Symbol.species] === Buffer) {
-    // Fix subarray() in ES2016. See: https://github.com/feross/buffer/pull/97
-    Object.defineProperty(Buffer, Symbol.species, {
-      value: null,
-      configurable: true
-    })
-  }
-}
+// Note: Change prototype *after* Buffer.from is defined to workaround Chrome bug:
+// https://github.com/feross/buffer/pull/148
+Buffer.prototype.__proto__ = Uint8Array.prototype
+Buffer.__proto__ = Uint8Array
 
 function assertSize (size) {
   if (typeof size !== 'number') {
@@ -9681,20 +10243,20 @@ function assertSize (size) {
   }
 }
 
-function alloc (that, size, fill, encoding) {
+function alloc (size, fill, encoding) {
   assertSize(size)
   if (size <= 0) {
-    return createBuffer(that, size)
+    return createBuffer(size)
   }
   if (fill !== undefined) {
     // Only pay attention to encoding if it's a string. This
     // prevents accidentally sending in a number that would
     // be interpretted as a start offset.
     return typeof encoding === 'string'
-      ? createBuffer(that, size).fill(fill, encoding)
-      : createBuffer(that, size).fill(fill)
+      ? createBuffer(size).fill(fill, encoding)
+      : createBuffer(size).fill(fill)
   }
-  return createBuffer(that, size)
+  return createBuffer(size)
 }
 
 /**
@@ -9702,34 +10264,28 @@ function alloc (that, size, fill, encoding) {
  * alloc(size[, fill[, encoding]])
  **/
 Buffer.alloc = function (size, fill, encoding) {
-  return alloc(null, size, fill, encoding)
+  return alloc(size, fill, encoding)
 }
 
-function allocUnsafe (that, size) {
+function allocUnsafe (size) {
   assertSize(size)
-  that = createBuffer(that, size < 0 ? 0 : checked(size) | 0)
-  if (!Buffer.TYPED_ARRAY_SUPPORT) {
-    for (var i = 0; i < size; ++i) {
-      that[i] = 0
-    }
-  }
-  return that
+  return createBuffer(size < 0 ? 0 : checked(size) | 0)
 }
 
 /**
  * Equivalent to Buffer(num), by default creates a non-zero-filled Buffer instance.
  * */
 Buffer.allocUnsafe = function (size) {
-  return allocUnsafe(null, size)
+  return allocUnsafe(size)
 }
 /**
  * Equivalent to SlowBuffer(num), by default creates a non-zero-filled Buffer instance.
  */
 Buffer.allocUnsafeSlow = function (size) {
-  return allocUnsafe(null, size)
+  return allocUnsafe(size)
 }
 
-function fromString (that, string, encoding) {
+function fromString (string, encoding) {
   if (typeof encoding !== 'string' || encoding === '') {
     encoding = 'utf8'
   }
@@ -9739,32 +10295,30 @@ function fromString (that, string, encoding) {
   }
 
   var length = byteLength(string, encoding) | 0
-  that = createBuffer(that, length)
+  var buf = createBuffer(length)
 
-  var actual = that.write(string, encoding)
+  var actual = buf.write(string, encoding)
 
   if (actual !== length) {
     // Writing a hex string, for example, that contains invalid characters will
     // cause everything after the first invalid character to be ignored. (e.g.
     // 'abxxcd' will be treated as 'ab')
-    that = that.slice(0, actual)
+    buf = buf.slice(0, actual)
   }
 
-  return that
+  return buf
 }
 
-function fromArrayLike (that, array) {
+function fromArrayLike (array) {
   var length = array.length < 0 ? 0 : checked(array.length) | 0
-  that = createBuffer(that, length)
+  var buf = createBuffer(length)
   for (var i = 0; i < length; i += 1) {
-    that[i] = array[i] & 255
+    buf[i] = array[i] & 255
   }
-  return that
+  return buf
 }
 
-function fromArrayBuffer (that, array, byteOffset, length) {
-  array.byteLength // this throws if `array` is not a valid ArrayBuffer
-
+function fromArrayBuffer (array, byteOffset, length) {
   if (byteOffset < 0 || array.byteLength < byteOffset) {
     throw new RangeError('\'offset\' is out of bounds')
   }
@@ -9773,49 +10327,43 @@ function fromArrayBuffer (that, array, byteOffset, length) {
     throw new RangeError('\'length\' is out of bounds')
   }
 
+  var buf
   if (byteOffset === undefined && length === undefined) {
-    array = new Uint8Array(array)
+    buf = new Uint8Array(array)
   } else if (length === undefined) {
-    array = new Uint8Array(array, byteOffset)
+    buf = new Uint8Array(array, byteOffset)
   } else {
-    array = new Uint8Array(array, byteOffset, length)
+    buf = new Uint8Array(array, byteOffset, length)
   }
 
-  if (Buffer.TYPED_ARRAY_SUPPORT) {
-    // Return an augmented `Uint8Array` instance, for best performance
-    that = array
-    that.__proto__ = Buffer.prototype
-  } else {
-    // Fallback: Return an object instance of the Buffer class
-    that = fromArrayLike(that, array)
-  }
-  return that
+  // Return an augmented `Uint8Array` instance
+  buf.__proto__ = Buffer.prototype
+  return buf
 }
 
-function fromObject (that, obj) {
+function fromObject (obj) {
   if (Buffer.isBuffer(obj)) {
     var len = checked(obj.length) | 0
-    that = createBuffer(that, len)
+    var buf = createBuffer(len)
 
-    if (that.length === 0) {
-      return that
+    if (buf.length === 0) {
+      return buf
     }
 
-    obj.copy(that, 0, 0, len)
-    return that
+    obj.copy(buf, 0, 0, len)
+    return buf
   }
 
   if (obj) {
-    if ((typeof ArrayBuffer !== 'undefined' &&
-        obj.buffer instanceof ArrayBuffer) || 'length' in obj) {
-      if (typeof obj.length !== 'number' || isnan(obj.length)) {
-        return createBuffer(that, 0)
+    if (isArrayBufferView(obj) || 'length' in obj) {
+      if (typeof obj.length !== 'number' || numberIsNaN(obj.length)) {
+        return createBuffer(0)
       }
-      return fromArrayLike(that, obj)
+      return fromArrayLike(obj)
     }
 
-    if (obj.type === 'Buffer' && isArray(obj.data)) {
-      return fromArrayLike(that, obj.data)
+    if (obj.type === 'Buffer' && Array.isArray(obj.data)) {
+      return fromArrayLike(obj.data)
     }
   }
 
@@ -9823,11 +10371,11 @@ function fromObject (that, obj) {
 }
 
 function checked (length) {
-  // Note: cannot use `length < kMaxLength()` here because that fails when
+  // Note: cannot use `length < K_MAX_LENGTH` here because that fails when
   // length is NaN (which is otherwise coerced to zero.)
-  if (length >= kMaxLength()) {
+  if (length >= K_MAX_LENGTH) {
     throw new RangeError('Attempt to allocate Buffer larger than maximum ' +
-                         'size: 0x' + kMaxLength().toString(16) + ' bytes')
+                         'size: 0x' + K_MAX_LENGTH.toString(16) + ' bytes')
   }
   return length | 0
 }
@@ -9840,7 +10388,7 @@ function SlowBuffer (length) {
 }
 
 Buffer.isBuffer = function isBuffer (b) {
-  return !!(b != null && b._isBuffer)
+  return b != null && b._isBuffer === true
 }
 
 Buffer.compare = function compare (a, b) {
@@ -9886,7 +10434,7 @@ Buffer.isEncoding = function isEncoding (encoding) {
 }
 
 Buffer.concat = function concat (list, length) {
-  if (!isArray(list)) {
+  if (!Array.isArray(list)) {
     throw new TypeError('"list" argument must be an Array of Buffers')
   }
 
@@ -9919,8 +10467,7 @@ function byteLength (string, encoding) {
   if (Buffer.isBuffer(string)) {
     return string.length
   }
-  if (typeof ArrayBuffer !== 'undefined' && typeof ArrayBuffer.isView === 'function' &&
-      (ArrayBuffer.isView(string) || string instanceof ArrayBuffer)) {
+  if (isArrayBufferView(string) || string instanceof ArrayBuffer) {
     return string.byteLength
   }
   if (typeof string !== 'string') {
@@ -10030,8 +10577,12 @@ function slowToString (encoding, start, end) {
   }
 }
 
-// The property is used by `Buffer.isBuffer` and `is-buffer` (in Safari 5-7) to detect
-// Buffer instances.
+// This property is used by `Buffer.isBuffer` (and the `is-buffer` npm package)
+// to detect a Buffer instance. It's not possible to use `instanceof Buffer`
+// reliably in a browserify context because there could be multiple different
+// copies of the 'buffer' package in use. This method works even for Buffer
+// instances that were created from another copy of the `buffer` package.
+// See: https://github.com/feross/buffer/issues/154
 Buffer.prototype._isBuffer = true
 
 function swap (b, n, m) {
@@ -10078,7 +10629,7 @@ Buffer.prototype.swap64 = function swap64 () {
 }
 
 Buffer.prototype.toString = function toString () {
-  var length = this.length | 0
+  var length = this.length
   if (length === 0) return ''
   if (arguments.length === 0) return utf8Slice(this, 0, length)
   return slowToString.apply(this, arguments)
@@ -10182,7 +10733,7 @@ function bidirectionalIndexOf (buffer, val, byteOffset, encoding, dir) {
     byteOffset = -0x80000000
   }
   byteOffset = +byteOffset  // Coerce to Number.
-  if (isNaN(byteOffset)) {
+  if (numberIsNaN(byteOffset)) {
     // byteOffset: it it's undefined, null, NaN, "foo", etc, search whole buffer
     byteOffset = dir ? 0 : (buffer.length - 1)
   }
@@ -10211,8 +10762,7 @@ function bidirectionalIndexOf (buffer, val, byteOffset, encoding, dir) {
     return arrayIndexOf(buffer, val, byteOffset, encoding, dir)
   } else if (typeof val === 'number') {
     val = val & 0xFF // Search for a byte value [0-255]
-    if (Buffer.TYPED_ARRAY_SUPPORT &&
-        typeof Uint8Array.prototype.indexOf === 'function') {
+    if (typeof Uint8Array.prototype.indexOf === 'function') {
       if (dir) {
         return Uint8Array.prototype.indexOf.call(buffer, val, byteOffset)
       } else {
@@ -10314,7 +10864,7 @@ function hexWrite (buf, string, offset, length) {
   }
   for (var i = 0; i < length; ++i) {
     var parsed = parseInt(string.substr(i * 2, 2), 16)
-    if (isNaN(parsed)) return i
+    if (numberIsNaN(parsed)) return i
     buf[offset + i] = parsed
   }
   return i
@@ -10353,15 +10903,14 @@ Buffer.prototype.write = function write (string, offset, length, encoding) {
     offset = 0
   // Buffer#write(string, offset[, length][, encoding])
   } else if (isFinite(offset)) {
-    offset = offset | 0
+    offset = offset >>> 0
     if (isFinite(length)) {
-      length = length | 0
+      length = length >>> 0
       if (encoding === undefined) encoding = 'utf8'
     } else {
       encoding = length
       length = undefined
     }
-  // legacy write(string, encoding, offset, length) - remove in v0.13
   } else {
     throw new Error(
       'Buffer.write(string, encoding, offset[, length]) is no longer supported'
@@ -10560,7 +11109,7 @@ function utf16leSlice (buf, start, end) {
   var bytes = buf.slice(start, end)
   var res = ''
   for (var i = 0; i < bytes.length; i += 2) {
-    res += String.fromCharCode(bytes[i] + bytes[i + 1] * 256)
+    res += String.fromCharCode(bytes[i] + (bytes[i + 1] * 256))
   }
   return res
 }
@@ -10586,18 +11135,9 @@ Buffer.prototype.slice = function slice (start, end) {
 
   if (end < start) end = start
 
-  var newBuf
-  if (Buffer.TYPED_ARRAY_SUPPORT) {
-    newBuf = this.subarray(start, end)
-    newBuf.__proto__ = Buffer.prototype
-  } else {
-    var sliceLen = end - start
-    newBuf = new Buffer(sliceLen, undefined)
-    for (var i = 0; i < sliceLen; ++i) {
-      newBuf[i] = this[i + start]
-    }
-  }
-
+  var newBuf = this.subarray(start, end)
+  // Return an augmented `Uint8Array` instance
+  newBuf.__proto__ = Buffer.prototype
   return newBuf
 }
 
@@ -10610,8 +11150,8 @@ function checkOffset (offset, ext, length) {
 }
 
 Buffer.prototype.readUIntLE = function readUIntLE (offset, byteLength, noAssert) {
-  offset = offset | 0
-  byteLength = byteLength | 0
+  offset = offset >>> 0
+  byteLength = byteLength >>> 0
   if (!noAssert) checkOffset(offset, byteLength, this.length)
 
   var val = this[offset]
@@ -10625,8 +11165,8 @@ Buffer.prototype.readUIntLE = function readUIntLE (offset, byteLength, noAssert)
 }
 
 Buffer.prototype.readUIntBE = function readUIntBE (offset, byteLength, noAssert) {
-  offset = offset | 0
-  byteLength = byteLength | 0
+  offset = offset >>> 0
+  byteLength = byteLength >>> 0
   if (!noAssert) {
     checkOffset(offset, byteLength, this.length)
   }
@@ -10641,21 +11181,25 @@ Buffer.prototype.readUIntBE = function readUIntBE (offset, byteLength, noAssert)
 }
 
 Buffer.prototype.readUInt8 = function readUInt8 (offset, noAssert) {
+  offset = offset >>> 0
   if (!noAssert) checkOffset(offset, 1, this.length)
   return this[offset]
 }
 
 Buffer.prototype.readUInt16LE = function readUInt16LE (offset, noAssert) {
+  offset = offset >>> 0
   if (!noAssert) checkOffset(offset, 2, this.length)
   return this[offset] | (this[offset + 1] << 8)
 }
 
 Buffer.prototype.readUInt16BE = function readUInt16BE (offset, noAssert) {
+  offset = offset >>> 0
   if (!noAssert) checkOffset(offset, 2, this.length)
   return (this[offset] << 8) | this[offset + 1]
 }
 
 Buffer.prototype.readUInt32LE = function readUInt32LE (offset, noAssert) {
+  offset = offset >>> 0
   if (!noAssert) checkOffset(offset, 4, this.length)
 
   return ((this[offset]) |
@@ -10665,6 +11209,7 @@ Buffer.prototype.readUInt32LE = function readUInt32LE (offset, noAssert) {
 }
 
 Buffer.prototype.readUInt32BE = function readUInt32BE (offset, noAssert) {
+  offset = offset >>> 0
   if (!noAssert) checkOffset(offset, 4, this.length)
 
   return (this[offset] * 0x1000000) +
@@ -10674,8 +11219,8 @@ Buffer.prototype.readUInt32BE = function readUInt32BE (offset, noAssert) {
 }
 
 Buffer.prototype.readIntLE = function readIntLE (offset, byteLength, noAssert) {
-  offset = offset | 0
-  byteLength = byteLength | 0
+  offset = offset >>> 0
+  byteLength = byteLength >>> 0
   if (!noAssert) checkOffset(offset, byteLength, this.length)
 
   var val = this[offset]
@@ -10692,8 +11237,8 @@ Buffer.prototype.readIntLE = function readIntLE (offset, byteLength, noAssert) {
 }
 
 Buffer.prototype.readIntBE = function readIntBE (offset, byteLength, noAssert) {
-  offset = offset | 0
-  byteLength = byteLength | 0
+  offset = offset >>> 0
+  byteLength = byteLength >>> 0
   if (!noAssert) checkOffset(offset, byteLength, this.length)
 
   var i = byteLength
@@ -10710,24 +11255,28 @@ Buffer.prototype.readIntBE = function readIntBE (offset, byteLength, noAssert) {
 }
 
 Buffer.prototype.readInt8 = function readInt8 (offset, noAssert) {
+  offset = offset >>> 0
   if (!noAssert) checkOffset(offset, 1, this.length)
   if (!(this[offset] & 0x80)) return (this[offset])
   return ((0xff - this[offset] + 1) * -1)
 }
 
 Buffer.prototype.readInt16LE = function readInt16LE (offset, noAssert) {
+  offset = offset >>> 0
   if (!noAssert) checkOffset(offset, 2, this.length)
   var val = this[offset] | (this[offset + 1] << 8)
   return (val & 0x8000) ? val | 0xFFFF0000 : val
 }
 
 Buffer.prototype.readInt16BE = function readInt16BE (offset, noAssert) {
+  offset = offset >>> 0
   if (!noAssert) checkOffset(offset, 2, this.length)
   var val = this[offset + 1] | (this[offset] << 8)
   return (val & 0x8000) ? val | 0xFFFF0000 : val
 }
 
 Buffer.prototype.readInt32LE = function readInt32LE (offset, noAssert) {
+  offset = offset >>> 0
   if (!noAssert) checkOffset(offset, 4, this.length)
 
   return (this[offset]) |
@@ -10737,6 +11286,7 @@ Buffer.prototype.readInt32LE = function readInt32LE (offset, noAssert) {
 }
 
 Buffer.prototype.readInt32BE = function readInt32BE (offset, noAssert) {
+  offset = offset >>> 0
   if (!noAssert) checkOffset(offset, 4, this.length)
 
   return (this[offset] << 24) |
@@ -10746,21 +11296,25 @@ Buffer.prototype.readInt32BE = function readInt32BE (offset, noAssert) {
 }
 
 Buffer.prototype.readFloatLE = function readFloatLE (offset, noAssert) {
+  offset = offset >>> 0
   if (!noAssert) checkOffset(offset, 4, this.length)
   return ieee754.read(this, offset, true, 23, 4)
 }
 
 Buffer.prototype.readFloatBE = function readFloatBE (offset, noAssert) {
+  offset = offset >>> 0
   if (!noAssert) checkOffset(offset, 4, this.length)
   return ieee754.read(this, offset, false, 23, 4)
 }
 
 Buffer.prototype.readDoubleLE = function readDoubleLE (offset, noAssert) {
+  offset = offset >>> 0
   if (!noAssert) checkOffset(offset, 8, this.length)
   return ieee754.read(this, offset, true, 52, 8)
 }
 
 Buffer.prototype.readDoubleBE = function readDoubleBE (offset, noAssert) {
+  offset = offset >>> 0
   if (!noAssert) checkOffset(offset, 8, this.length)
   return ieee754.read(this, offset, false, 52, 8)
 }
@@ -10773,8 +11327,8 @@ function checkInt (buf, value, offset, ext, max, min) {
 
 Buffer.prototype.writeUIntLE = function writeUIntLE (value, offset, byteLength, noAssert) {
   value = +value
-  offset = offset | 0
-  byteLength = byteLength | 0
+  offset = offset >>> 0
+  byteLength = byteLength >>> 0
   if (!noAssert) {
     var maxBytes = Math.pow(2, 8 * byteLength) - 1
     checkInt(this, value, offset, byteLength, maxBytes, 0)
@@ -10792,8 +11346,8 @@ Buffer.prototype.writeUIntLE = function writeUIntLE (value, offset, byteLength, 
 
 Buffer.prototype.writeUIntBE = function writeUIntBE (value, offset, byteLength, noAssert) {
   value = +value
-  offset = offset | 0
-  byteLength = byteLength | 0
+  offset = offset >>> 0
+  byteLength = byteLength >>> 0
   if (!noAssert) {
     var maxBytes = Math.pow(2, 8 * byteLength) - 1
     checkInt(this, value, offset, byteLength, maxBytes, 0)
@@ -10811,89 +11365,57 @@ Buffer.prototype.writeUIntBE = function writeUIntBE (value, offset, byteLength, 
 
 Buffer.prototype.writeUInt8 = function writeUInt8 (value, offset, noAssert) {
   value = +value
-  offset = offset | 0
+  offset = offset >>> 0
   if (!noAssert) checkInt(this, value, offset, 1, 0xff, 0)
-  if (!Buffer.TYPED_ARRAY_SUPPORT) value = Math.floor(value)
   this[offset] = (value & 0xff)
   return offset + 1
 }
 
-function objectWriteUInt16 (buf, value, offset, littleEndian) {
-  if (value < 0) value = 0xffff + value + 1
-  for (var i = 0, j = Math.min(buf.length - offset, 2); i < j; ++i) {
-    buf[offset + i] = (value & (0xff << (8 * (littleEndian ? i : 1 - i)))) >>>
-      (littleEndian ? i : 1 - i) * 8
-  }
-}
-
 Buffer.prototype.writeUInt16LE = function writeUInt16LE (value, offset, noAssert) {
   value = +value
-  offset = offset | 0
+  offset = offset >>> 0
   if (!noAssert) checkInt(this, value, offset, 2, 0xffff, 0)
-  if (Buffer.TYPED_ARRAY_SUPPORT) {
-    this[offset] = (value & 0xff)
-    this[offset + 1] = (value >>> 8)
-  } else {
-    objectWriteUInt16(this, value, offset, true)
-  }
+  this[offset] = (value & 0xff)
+  this[offset + 1] = (value >>> 8)
   return offset + 2
 }
 
 Buffer.prototype.writeUInt16BE = function writeUInt16BE (value, offset, noAssert) {
   value = +value
-  offset = offset | 0
+  offset = offset >>> 0
   if (!noAssert) checkInt(this, value, offset, 2, 0xffff, 0)
-  if (Buffer.TYPED_ARRAY_SUPPORT) {
-    this[offset] = (value >>> 8)
-    this[offset + 1] = (value & 0xff)
-  } else {
-    objectWriteUInt16(this, value, offset, false)
-  }
+  this[offset] = (value >>> 8)
+  this[offset + 1] = (value & 0xff)
   return offset + 2
-}
-
-function objectWriteUInt32 (buf, value, offset, littleEndian) {
-  if (value < 0) value = 0xffffffff + value + 1
-  for (var i = 0, j = Math.min(buf.length - offset, 4); i < j; ++i) {
-    buf[offset + i] = (value >>> (littleEndian ? i : 3 - i) * 8) & 0xff
-  }
 }
 
 Buffer.prototype.writeUInt32LE = function writeUInt32LE (value, offset, noAssert) {
   value = +value
-  offset = offset | 0
+  offset = offset >>> 0
   if (!noAssert) checkInt(this, value, offset, 4, 0xffffffff, 0)
-  if (Buffer.TYPED_ARRAY_SUPPORT) {
-    this[offset + 3] = (value >>> 24)
-    this[offset + 2] = (value >>> 16)
-    this[offset + 1] = (value >>> 8)
-    this[offset] = (value & 0xff)
-  } else {
-    objectWriteUInt32(this, value, offset, true)
-  }
+  this[offset + 3] = (value >>> 24)
+  this[offset + 2] = (value >>> 16)
+  this[offset + 1] = (value >>> 8)
+  this[offset] = (value & 0xff)
   return offset + 4
 }
 
 Buffer.prototype.writeUInt32BE = function writeUInt32BE (value, offset, noAssert) {
   value = +value
-  offset = offset | 0
+  offset = offset >>> 0
   if (!noAssert) checkInt(this, value, offset, 4, 0xffffffff, 0)
-  if (Buffer.TYPED_ARRAY_SUPPORT) {
-    this[offset] = (value >>> 24)
-    this[offset + 1] = (value >>> 16)
-    this[offset + 2] = (value >>> 8)
-    this[offset + 3] = (value & 0xff)
-  } else {
-    objectWriteUInt32(this, value, offset, false)
-  }
+  this[offset] = (value >>> 24)
+  this[offset + 1] = (value >>> 16)
+  this[offset + 2] = (value >>> 8)
+  this[offset + 3] = (value & 0xff)
   return offset + 4
 }
 
 Buffer.prototype.writeIntLE = function writeIntLE (value, offset, byteLength, noAssert) {
   value = +value
-  offset = offset | 0
+  offset = offset >>> 0
   if (!noAssert) {
-    var limit = Math.pow(2, 8 * byteLength - 1)
+    var limit = Math.pow(2, (8 * byteLength) - 1)
 
     checkInt(this, value, offset, byteLength, limit - 1, -limit)
   }
@@ -10914,9 +11436,9 @@ Buffer.prototype.writeIntLE = function writeIntLE (value, offset, byteLength, no
 
 Buffer.prototype.writeIntBE = function writeIntBE (value, offset, byteLength, noAssert) {
   value = +value
-  offset = offset | 0
+  offset = offset >>> 0
   if (!noAssert) {
-    var limit = Math.pow(2, 8 * byteLength - 1)
+    var limit = Math.pow(2, (8 * byteLength) - 1)
 
     checkInt(this, value, offset, byteLength, limit - 1, -limit)
   }
@@ -10937,9 +11459,8 @@ Buffer.prototype.writeIntBE = function writeIntBE (value, offset, byteLength, no
 
 Buffer.prototype.writeInt8 = function writeInt8 (value, offset, noAssert) {
   value = +value
-  offset = offset | 0
+  offset = offset >>> 0
   if (!noAssert) checkInt(this, value, offset, 1, 0x7f, -0x80)
-  if (!Buffer.TYPED_ARRAY_SUPPORT) value = Math.floor(value)
   if (value < 0) value = 0xff + value + 1
   this[offset] = (value & 0xff)
   return offset + 1
@@ -10947,58 +11468,42 @@ Buffer.prototype.writeInt8 = function writeInt8 (value, offset, noAssert) {
 
 Buffer.prototype.writeInt16LE = function writeInt16LE (value, offset, noAssert) {
   value = +value
-  offset = offset | 0
+  offset = offset >>> 0
   if (!noAssert) checkInt(this, value, offset, 2, 0x7fff, -0x8000)
-  if (Buffer.TYPED_ARRAY_SUPPORT) {
-    this[offset] = (value & 0xff)
-    this[offset + 1] = (value >>> 8)
-  } else {
-    objectWriteUInt16(this, value, offset, true)
-  }
+  this[offset] = (value & 0xff)
+  this[offset + 1] = (value >>> 8)
   return offset + 2
 }
 
 Buffer.prototype.writeInt16BE = function writeInt16BE (value, offset, noAssert) {
   value = +value
-  offset = offset | 0
+  offset = offset >>> 0
   if (!noAssert) checkInt(this, value, offset, 2, 0x7fff, -0x8000)
-  if (Buffer.TYPED_ARRAY_SUPPORT) {
-    this[offset] = (value >>> 8)
-    this[offset + 1] = (value & 0xff)
-  } else {
-    objectWriteUInt16(this, value, offset, false)
-  }
+  this[offset] = (value >>> 8)
+  this[offset + 1] = (value & 0xff)
   return offset + 2
 }
 
 Buffer.prototype.writeInt32LE = function writeInt32LE (value, offset, noAssert) {
   value = +value
-  offset = offset | 0
+  offset = offset >>> 0
   if (!noAssert) checkInt(this, value, offset, 4, 0x7fffffff, -0x80000000)
-  if (Buffer.TYPED_ARRAY_SUPPORT) {
-    this[offset] = (value & 0xff)
-    this[offset + 1] = (value >>> 8)
-    this[offset + 2] = (value >>> 16)
-    this[offset + 3] = (value >>> 24)
-  } else {
-    objectWriteUInt32(this, value, offset, true)
-  }
+  this[offset] = (value & 0xff)
+  this[offset + 1] = (value >>> 8)
+  this[offset + 2] = (value >>> 16)
+  this[offset + 3] = (value >>> 24)
   return offset + 4
 }
 
 Buffer.prototype.writeInt32BE = function writeInt32BE (value, offset, noAssert) {
   value = +value
-  offset = offset | 0
+  offset = offset >>> 0
   if (!noAssert) checkInt(this, value, offset, 4, 0x7fffffff, -0x80000000)
   if (value < 0) value = 0xffffffff + value + 1
-  if (Buffer.TYPED_ARRAY_SUPPORT) {
-    this[offset] = (value >>> 24)
-    this[offset + 1] = (value >>> 16)
-    this[offset + 2] = (value >>> 8)
-    this[offset + 3] = (value & 0xff)
-  } else {
-    objectWriteUInt32(this, value, offset, false)
-  }
+  this[offset] = (value >>> 24)
+  this[offset + 1] = (value >>> 16)
+  this[offset + 2] = (value >>> 8)
+  this[offset + 3] = (value & 0xff)
   return offset + 4
 }
 
@@ -11008,6 +11513,8 @@ function checkIEEE754 (buf, value, offset, ext, max, min) {
 }
 
 function writeFloat (buf, value, offset, littleEndian, noAssert) {
+  value = +value
+  offset = offset >>> 0
   if (!noAssert) {
     checkIEEE754(buf, value, offset, 4, 3.4028234663852886e+38, -3.4028234663852886e+38)
   }
@@ -11024,6 +11531,8 @@ Buffer.prototype.writeFloatBE = function writeFloatBE (value, offset, noAssert) 
 }
 
 function writeDouble (buf, value, offset, littleEndian, noAssert) {
+  value = +value
+  offset = offset >>> 0
   if (!noAssert) {
     checkIEEE754(buf, value, offset, 8, 1.7976931348623157E+308, -1.7976931348623157E+308)
   }
@@ -11072,7 +11581,7 @@ Buffer.prototype.copy = function copy (target, targetStart, start, end) {
     for (i = len - 1; i >= 0; --i) {
       target[i + targetStart] = this[i + start]
     }
-  } else if (len < 1000 || !Buffer.TYPED_ARRAY_SUPPORT) {
+  } else if (len < 1000) {
     // ascending copy from start
     for (i = 0; i < len; ++i) {
       target[i + targetStart] = this[i + start]
@@ -11141,7 +11650,7 @@ Buffer.prototype.fill = function fill (val, start, end, encoding) {
   } else {
     var bytes = Buffer.isBuffer(val)
       ? val
-      : utf8ToBytes(new Buffer(val, encoding).toString())
+      : new Buffer(val, encoding)
     var len = bytes.length
     for (i = 0; i < end - start; ++i) {
       this[i + start] = bytes[i % len]
@@ -11154,11 +11663,11 @@ Buffer.prototype.fill = function fill (val, start, end, encoding) {
 // HELPER FUNCTIONS
 // ================
 
-var INVALID_BASE64_RE = /[^+\/0-9A-Za-z-_]/g
+var INVALID_BASE64_RE = /[^+/0-9A-Za-z-_]/g
 
 function base64clean (str) {
   // Node strips out invalid characters like \n and \t from the string, base64-js does not
-  str = stringtrim(str).replace(INVALID_BASE64_RE, '')
+  str = str.trim().replace(INVALID_BASE64_RE, '')
   // Node converts strings with length < 2 to ''
   if (str.length < 2) return ''
   // Node allows for non-padded base64 strings (missing trailing ===), base64-js does not
@@ -11166,11 +11675,6 @@ function base64clean (str) {
     str = str + '='
   }
   return str
-}
-
-function stringtrim (str) {
-  if (str.trim) return str.trim()
-  return str.replace(/^\s+|\s+$/g, '')
 }
 
 function toHex (n) {
@@ -11295,12 +11799,16 @@ function blitBuffer (src, dst, offset, length) {
   return i
 }
 
-function isnan (val) {
-  return val !== val // eslint-disable-line no-self-compare
+// Node 0.10 supports `ArrayBuffer` but lacks `ArrayBuffer.isView`
+function isArrayBufferView (obj) {
+  return (typeof ArrayBuffer.isView === 'function') && ArrayBuffer.isView(obj)
 }
 
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"base64-js":17,"ieee754":26,"isarray":29}],22:[function(require,module,exports){
+function numberIsNaN (obj) {
+  return obj !== obj // eslint-disable-line no-self-compare
+}
+
+},{"base64-js":18,"ieee754":27}],23:[function(require,module,exports){
 module.exports = {
   "100": "Continue",
   "101": "Switching Protocols",
@@ -11366,7 +11874,7 @@ module.exports = {
   "511": "Network Authentication Required"
 }
 
-},{}],23:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 (function (Buffer){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -11477,7 +11985,7 @@ function objectToString(o) {
 }
 
 }).call(this,{"isBuffer":require("../../is-buffer/index.js")})
-},{"../../is-buffer/index.js":28}],24:[function(require,module,exports){
+},{"../../is-buffer/index.js":29}],25:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -11781,23 +12289,40 @@ function isUndefined(arg) {
   return arg === void 0;
 }
 
-},{}],25:[function(require,module,exports){
-var http = require('http');
+},{}],26:[function(require,module,exports){
+var http = require('http')
+var url = require('url')
 
-var https = module.exports;
+var https = module.exports
 
 for (var key in http) {
-    if (http.hasOwnProperty(key)) https[key] = http[key];
-};
-
-https.request = function (params, cb) {
-    if (!params) params = {};
-    params.scheme = 'https';
-    params.protocol = 'https:';
-    return http.request.call(this, params, cb);
+  if (http.hasOwnProperty(key)) https[key] = http[key]
 }
 
-},{"http":43}],26:[function(require,module,exports){
+https.request = function (params, cb) {
+  params = validateParams(params)
+  return http.request.call(this, params, cb)
+}
+
+https.get = function (params, cb) {
+  params = validateParams(params)
+  return http.get.call(this, params, cb)
+}
+
+function validateParams (params) {
+  if (typeof params === 'string') {
+    params = url.parse(params)
+  }
+  if (!params.protocol) {
+    params.protocol = 'https:'
+  }
+  if (params.protocol !== 'https:') {
+    throw new Error('Protocol "' + params.protocol + '" not supported. Expected "https:"')
+  }
+  return params
+}
+
+},{"http":44,"url":50}],27:[function(require,module,exports){
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
   var e, m
   var eLen = nBytes * 8 - mLen - 1
@@ -11883,7 +12408,7 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
   buffer[offset + i - d] |= s * 128
 }
 
-},{}],27:[function(require,module,exports){
+},{}],28:[function(require,module,exports){
 if (typeof Object.create === 'function') {
   // implementation from standard node.js 'util' module
   module.exports = function inherits(ctor, superCtor) {
@@ -11908,7 +12433,7 @@ if (typeof Object.create === 'function') {
   }
 }
 
-},{}],28:[function(require,module,exports){
+},{}],29:[function(require,module,exports){
 /*!
  * Determine if an object is a Buffer
  *
@@ -11931,14 +12456,14 @@ function isSlowBuffer (obj) {
   return typeof obj.readFloatLE === 'function' && typeof obj.slice === 'function' && isBuffer(obj.slice(0, 0))
 }
 
-},{}],29:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 var toString = {}.toString;
 
 module.exports = Array.isArray || function (arr) {
   return toString.call(arr) == '[object Array]';
 };
 
-},{}],30:[function(require,module,exports){
+},{}],31:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -11985,7 +12510,7 @@ function nextTick(fn, arg1, arg2, arg3) {
 }
 
 }).call(this,require('_process'))
-},{"_process":31}],31:[function(require,module,exports){
+},{"_process":32}],32:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 
@@ -12156,6 +12681,10 @@ process.off = noop;
 process.removeListener = noop;
 process.removeAllListeners = noop;
 process.emit = noop;
+process.prependListener = noop;
+process.prependOnceListener = noop;
+
+process.listeners = function (name) { return [] }
 
 process.binding = function (name) {
     throw new Error('process.binding is not supported');
@@ -12167,7 +12696,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],32:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 (function (global){
 /*! https://mths.be/punycode v1.4.1 by @mathias */
 ;(function(root) {
@@ -12704,7 +13233,7 @@ process.umask = function() { return 0; };
 }(this));
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],33:[function(require,module,exports){
+},{}],34:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -12790,7 +13319,7 @@ var isArray = Array.isArray || function (xs) {
   return Object.prototype.toString.call(xs) === '[object Array]';
 };
 
-},{}],34:[function(require,module,exports){
+},{}],35:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -12877,13 +13406,13 @@ var objectKeys = Object.keys || function (obj) {
   return res;
 };
 
-},{}],35:[function(require,module,exports){
+},{}],36:[function(require,module,exports){
 'use strict';
 
 exports.decode = exports.parse = require('./decode');
 exports.encode = exports.stringify = require('./encode');
 
-},{"./decode":33,"./encode":34}],36:[function(require,module,exports){
+},{"./decode":34,"./encode":35}],37:[function(require,module,exports){
 // a duplex stream is just a stream that is both readable and writable.
 // Since JS doesn't have multiple prototypal inheritance, this class
 // prototypally inherits from Readable, and then parasitically from
@@ -12959,7 +13488,7 @@ function forEach(xs, f) {
     f(xs[i], i);
   }
 }
-},{"./_stream_readable":38,"./_stream_writable":40,"core-util-is":23,"inherits":27,"process-nextick-args":30}],37:[function(require,module,exports){
+},{"./_stream_readable":39,"./_stream_writable":41,"core-util-is":24,"inherits":28,"process-nextick-args":31}],38:[function(require,module,exports){
 // a passthrough stream.
 // basically just the most minimal sort of Transform stream.
 // Every written chunk gets output as-is.
@@ -12986,7 +13515,7 @@ function PassThrough(options) {
 PassThrough.prototype._transform = function (chunk, encoding, cb) {
   cb(null, chunk);
 };
-},{"./_stream_transform":39,"core-util-is":23,"inherits":27}],38:[function(require,module,exports){
+},{"./_stream_transform":40,"core-util-is":24,"inherits":28}],39:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -13082,7 +13611,7 @@ function ReadableState(options, stream) {
   this.highWaterMark = hwm || hwm === 0 ? hwm : defaultHwm;
 
   // cast to ints.
-  this.highWaterMark = ~ ~this.highWaterMark;
+  this.highWaterMark = ~~this.highWaterMark;
 
   // A linked list is used to store data chunks instead of an array because the
   // linked list can remove elements from the beginning faster than
@@ -13930,7 +14459,7 @@ function indexOf(xs, x) {
   return -1;
 }
 }).call(this,require('_process'))
-},{"./_stream_duplex":36,"./internal/streams/BufferList":41,"_process":31,"buffer":21,"buffer-shims":20,"core-util-is":23,"events":24,"inherits":27,"isarray":29,"process-nextick-args":30,"string_decoder/":47,"util":18}],39:[function(require,module,exports){
+},{"./_stream_duplex":37,"./internal/streams/BufferList":42,"_process":32,"buffer":22,"buffer-shims":21,"core-util-is":24,"events":25,"inherits":28,"isarray":30,"process-nextick-args":31,"string_decoder/":48,"util":19}],40:[function(require,module,exports){
 // a transform stream is a readable/writable stream where you do
 // something with the data.  Sometimes it's called a "filter",
 // but that's not a great name for it, since that implies a thing where
@@ -14113,7 +14642,7 @@ function done(stream, er, data) {
 
   return stream.push(null);
 }
-},{"./_stream_duplex":36,"core-util-is":23,"inherits":27}],40:[function(require,module,exports){
+},{"./_stream_duplex":37,"core-util-is":24,"inherits":28}],41:[function(require,module,exports){
 (function (process){
 // A bit simpler than readable streams.
 // Implement an async ._write(chunk, encoding, cb), and it'll handle all
@@ -14194,7 +14723,7 @@ function WritableState(options, stream) {
   this.highWaterMark = hwm || hwm === 0 ? hwm : defaultHwm;
 
   // cast to ints.
-  this.highWaterMark = ~ ~this.highWaterMark;
+  this.highWaterMark = ~~this.highWaterMark;
 
   // drain event flag.
   this.needDrain = false;
@@ -14349,20 +14878,16 @@ function writeAfterEnd(stream, cb) {
   processNextTick(cb, er);
 }
 
-// If we get something that is not a buffer, string, null, or undefined,
-// and we're not in objectMode, then that's an error.
-// Otherwise stream chunks are all considered to be of length=1, and the
-// watermarks determine how many objects to keep in the buffer, rather than
-// how many bytes or characters.
+// Checks that a user-supplied chunk is valid, especially for the particular
+// mode the stream is in. Currently this means that `null` is never accepted
+// and undefined/non-string values are only allowed in object mode.
 function validChunk(stream, state, chunk, cb) {
   var valid = true;
   var er = false;
-  // Always throw error if a null is written
-  // if we are not in object mode then throw
-  // if it is not a buffer, string, or undefined.
+
   if (chunk === null) {
     er = new TypeError('May not write null values to stream');
-  } else if (!Buffer.isBuffer(chunk) && typeof chunk !== 'string' && chunk !== undefined && !state.objectMode) {
+  } else if (typeof chunk !== 'string' && chunk !== undefined && !state.objectMode) {
     er = new TypeError('Invalid non-string/buffer chunk');
   }
   if (er) {
@@ -14376,19 +14901,20 @@ function validChunk(stream, state, chunk, cb) {
 Writable.prototype.write = function (chunk, encoding, cb) {
   var state = this._writableState;
   var ret = false;
+  var isBuf = Buffer.isBuffer(chunk);
 
   if (typeof encoding === 'function') {
     cb = encoding;
     encoding = null;
   }
 
-  if (Buffer.isBuffer(chunk)) encoding = 'buffer';else if (!encoding) encoding = state.defaultEncoding;
+  if (isBuf) encoding = 'buffer';else if (!encoding) encoding = state.defaultEncoding;
 
   if (typeof cb !== 'function') cb = nop;
 
-  if (state.ended) writeAfterEnd(this, cb);else if (validChunk(this, state, chunk, cb)) {
+  if (state.ended) writeAfterEnd(this, cb);else if (isBuf || validChunk(this, state, chunk, cb)) {
     state.pendingcb++;
-    ret = writeOrBuffer(this, state, chunk, encoding, cb);
+    ret = writeOrBuffer(this, state, isBuf, chunk, encoding, cb);
   }
 
   return ret;
@@ -14428,10 +14954,11 @@ function decodeChunk(state, chunk, encoding) {
 // if we're already writing something, then just put this
 // in the queue, and wait our turn.  Otherwise, call _write
 // If we return false, then we need a drain event, so set that flag.
-function writeOrBuffer(stream, state, chunk, encoding, cb) {
-  chunk = decodeChunk(state, chunk, encoding);
-
-  if (Buffer.isBuffer(chunk)) encoding = 'buffer';
+function writeOrBuffer(stream, state, isBuf, chunk, encoding, cb) {
+  if (!isBuf) {
+    chunk = decodeChunk(state, chunk, encoding);
+    if (Buffer.isBuffer(chunk)) encoding = 'buffer';
+  }
   var len = state.objectMode ? 1 : chunk.length;
 
   state.length += len;
@@ -14500,8 +15027,8 @@ function onwrite(stream, er) {
       asyncWrite(afterWrite, stream, state, finished, cb);
       /*</replacement>*/
     } else {
-        afterWrite(stream, state, finished, cb);
-      }
+      afterWrite(stream, state, finished, cb);
+    }
   }
 }
 
@@ -14652,7 +15179,6 @@ function CorkedRequest(state) {
 
   this.next = null;
   this.entry = null;
-
   this.finish = function (err) {
     var entry = _this.entry;
     _this.entry = null;
@@ -14670,7 +15196,7 @@ function CorkedRequest(state) {
   };
 }
 }).call(this,require('_process'))
-},{"./_stream_duplex":36,"_process":31,"buffer":21,"buffer-shims":20,"core-util-is":23,"events":24,"inherits":27,"process-nextick-args":30,"util-deprecate":51}],41:[function(require,module,exports){
+},{"./_stream_duplex":37,"_process":32,"buffer":22,"buffer-shims":21,"core-util-is":24,"events":25,"inherits":28,"process-nextick-args":31,"util-deprecate":52}],42:[function(require,module,exports){
 'use strict';
 
 var Buffer = require('buffer').Buffer;
@@ -14735,7 +15261,7 @@ BufferList.prototype.concat = function (n) {
   }
   return ret;
 };
-},{"buffer":21,"buffer-shims":20}],42:[function(require,module,exports){
+},{"buffer":22,"buffer-shims":21}],43:[function(require,module,exports){
 (function (process){
 var Stream = (function (){
   try {
@@ -14755,7 +15281,7 @@ if (!process.browser && process.env.READABLE_STREAM === 'disable' && Stream) {
 }
 
 }).call(this,require('_process'))
-},{"./lib/_stream_duplex.js":36,"./lib/_stream_passthrough.js":37,"./lib/_stream_readable.js":38,"./lib/_stream_transform.js":39,"./lib/_stream_writable.js":40,"_process":31}],43:[function(require,module,exports){
+},{"./lib/_stream_duplex.js":37,"./lib/_stream_passthrough.js":38,"./lib/_stream_readable.js":39,"./lib/_stream_transform.js":40,"./lib/_stream_writable.js":41,"_process":32}],44:[function(require,module,exports){
 (function (global){
 var ClientRequest = require('./lib/request')
 var extend = require('xtend')
@@ -14837,7 +15363,7 @@ http.METHODS = [
 	'UNSUBSCRIBE'
 ]
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./lib/request":45,"builtin-status-codes":22,"url":49,"xtend":53}],44:[function(require,module,exports){
+},{"./lib/request":46,"builtin-status-codes":23,"url":50,"xtend":54}],45:[function(require,module,exports){
 (function (global){
 exports.fetch = isFunction(global.fetch) && isFunction(global.ReadableStream)
 
@@ -14910,7 +15436,7 @@ function isFunction (value) {
 xhr = null // Help gc
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],45:[function(require,module,exports){
+},{}],46:[function(require,module,exports){
 (function (process,global,Buffer){
 var capability = require('./capability')
 var inherits = require('inherits')
@@ -14995,8 +15521,10 @@ ClientRequest.prototype.setHeader = function (name, value) {
 }
 
 ClientRequest.prototype.getHeader = function (name) {
-	var self = this
-	return self._headers[name.toLowerCase()].value
+	var header = this._headers[name.toLowerCase()]
+	if (header)
+		return header.value
+	return null
 }
 
 ClientRequest.prototype.removeHeader = function (name) {
@@ -15013,7 +15541,7 @@ ClientRequest.prototype._onFinish = function () {
 
 	var headersObj = self._headers
 	var body = null
-	if (opts.method === 'POST' || opts.method === 'PUT' || opts.method === 'PATCH' || opts.method === 'MERGE') {
+	if (opts.method !== 'GET' && opts.method !== 'HEAD') {
 		if (capability.blobConstructor) {
 			body = new global.Blob(self._body.map(function (buffer) {
 				return toArrayBuffer(buffer)
@@ -15026,14 +15554,24 @@ ClientRequest.prototype._onFinish = function () {
 		}
 	}
 
-	if (self._mode === 'fetch') {
-		var headers = Object.keys(headersObj).map(function (name) {
-			return [headersObj[name].name, headersObj[name].value]
-		})
+	// create flattened list of headers
+	var headersList = []
+	Object.keys(headersObj).forEach(function (keyName) {
+		var name = headersObj[keyName].name
+		var value = headersObj[keyName].value
+		if (Array.isArray(value)) {
+			value.forEach(function (v) {
+				headersList.push([name, v])
+			})
+		} else {
+			headersList.push([name, value])
+		}
+	})
 
+	if (self._mode === 'fetch') {
 		global.fetch(self._opts.url, {
 			method: self._opts.method,
-			headers: headers,
+			headers: headersList,
 			body: body || undefined,
 			mode: 'cors',
 			credentials: opts.withCredentials ? 'include' : 'same-origin'
@@ -15071,8 +15609,8 @@ ClientRequest.prototype._onFinish = function () {
 			}
 		}
 
-		Object.keys(headersObj).forEach(function (name) {
-			xhr.setRequestHeader(headersObj[name].name, headersObj[name].value)
+		headersList.forEach(function (header) {
+			xhr.setRequestHeader(header[0], header[1])
 		})
 
 		self._response = null
@@ -15208,7 +15746,7 @@ var unsafeHeaders = [
 ]
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer)
-},{"./capability":44,"./response":46,"_process":31,"buffer":21,"inherits":27,"readable-stream":42,"to-arraybuffer":48}],46:[function(require,module,exports){
+},{"./capability":45,"./response":47,"_process":32,"buffer":22,"inherits":28,"readable-stream":43,"to-arraybuffer":49}],47:[function(require,module,exports){
 (function (process,global,Buffer){
 var capability = require('./capability')
 var inherits = require('inherits')
@@ -15394,7 +15932,7 @@ IncomingMessage.prototype._onXHRProgress = function () {
 }
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer)
-},{"./capability":44,"_process":31,"buffer":21,"inherits":27,"readable-stream":42}],47:[function(require,module,exports){
+},{"./capability":45,"_process":32,"buffer":22,"inherits":28,"readable-stream":43}],48:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -15617,7 +16155,7 @@ function base64DetectIncompleteChar(buffer) {
   this.charLength = this.charReceived ? 3 : 0;
 }
 
-},{"buffer":21}],48:[function(require,module,exports){
+},{"buffer":22}],49:[function(require,module,exports){
 var Buffer = require('buffer').Buffer
 
 module.exports = function (buf) {
@@ -15646,7 +16184,7 @@ module.exports = function (buf) {
 	}
 }
 
-},{"buffer":21}],49:[function(require,module,exports){
+},{"buffer":22}],50:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -16380,7 +16918,7 @@ Url.prototype.parseHost = function() {
   if (host) this.hostname = host;
 };
 
-},{"./util":50,"punycode":32,"querystring":35}],50:[function(require,module,exports){
+},{"./util":51,"punycode":33,"querystring":36}],51:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -16398,7 +16936,7 @@ module.exports = {
   }
 };
 
-},{}],51:[function(require,module,exports){
+},{}],52:[function(require,module,exports){
 (function (global){
 
 /**
@@ -16469,7 +17007,7 @@ function config (name) {
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],52:[function(require,module,exports){
+},{}],53:[function(require,module,exports){
 (function (process,Buffer){
 /**
  * Wrapper for built-in http.js to emulate the browser XMLHttpRequest object.
@@ -17093,7 +17631,7 @@ exports.XMLHttpRequest = function() {
 };
 
 }).call(this,require('_process'),require("buffer").Buffer)
-},{"_process":31,"buffer":21,"child_process":19,"fs":19,"http":43,"https":25,"url":49}],53:[function(require,module,exports){
+},{"_process":32,"buffer":22,"child_process":20,"fs":20,"http":44,"https":26,"url":50}],54:[function(require,module,exports){
 module.exports = extend
 
 var hasOwnProperty = Object.prototype.hasOwnProperty;
@@ -17112,6 +17650,59 @@ function extend() {
     }
 
     return target
+}
+
+},{}],55:[function(require,module,exports){
+module.exports={
+    "name": "iota.lib.js",
+    "version": "0.2.7",
+    "description": "Javascript Library for IOTA",
+    "main": "./lib/iota.js",
+    "scripts": {
+        "build": "gulp",
+        "test": "mocha"
+    },
+    "author": {
+        "name": "Dominik Schiener (IOTA Foundation)",
+        "website": "https://iota.org"
+    },
+    "keywords": [
+        "iota",
+        "tangle",
+        "library",
+        "browser",
+        "javascript",
+        "nodejs",
+        "API"
+    ],
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/iotaledger/iota.lib.js/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/iotaledger/iota.lib.js.git"
+    },
+    "dependencies": {
+        "async": "^2.1.2",
+        "xmlhttprequest": "^1.8.0"
+    },
+    "devDependencies": {
+        "bower": "^1.8.0",
+        "browserify": "^14.1.0",
+        "chai": "^3.5.0",
+        "del": "^2.2.2",
+        "gulp": "^3.9.1",
+        "gulp-jshint": "^2.0.2",
+        "gulp-nsp": "^2.4.2",
+        "gulp-rename": "^1.2.2",
+        "gulp-replace": "^0.5.4",
+        "gulp-uglify": "^2.1.2",
+        "jshint": "^2.9.4",
+        "mocha": "^3.2.0",
+        "vinyl-buffer": "^1.0.0",
+        "vinyl-source-stream": "^1.1.0"
+    }
 }
 
 },{}]},{},[1]);

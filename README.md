@@ -1,4 +1,6 @@
-# IOTA Javascript LIBRARY
+# IOTA Javascript Library
+
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/iotaledger/iota.lib.js/master/LICENSE) [![Build Status](https://travis-ci.org/iotaledger/iota.lib.js.svg?branch=master)](https://travis-ci.org/iotaledger/iota.lib.js) [![dependencies Status](https://david-dm.org/iotaledger/iota.lib.js/status.svg)](https://david-dm.org/iotaledger/iota.lib.js)  [![devDependencies Status](https://david-dm.org/iotaledger/iota.lib.js/dev-status.svg)](https://david-dm.org/iotaledger/iota.lib.js?type=dev) [![NSP Status](https://nodesecurity.io/orgs/iota-foundation/projects/7c0214b5-e36a-4178-92bc-164c536cfd6c/badge)](https://nodesecurity.io/orgs/iota-foundation/projects/7c0214b5-e36a-4178-92bc-164c536cfd6c)
 
 This is the official Javascript library for the IOTA Core. It implements both the [official API](https://iota.readme.io/), as well as newly proposed functionality (such as signing, bundles, utilities and conversion).
 
@@ -58,13 +60,19 @@ var iota = new IOTA({
 
 // now you can start using all of the functions
 iota.api.getNodeInfo();
+
+// you can also get the version
+iota.version
 ```
 
 Overall, there are currently four subclasses that are accessible from the IOTA object:
 - **`api`**: Core API functionality for interacting with the IOTA core.
 - **`utils`**: Utility related functions for conversions, validation and so on  
 - **`multisig`**: Functions for creating and signing multi-signature addresses and transactions.
-- **`validate`**: Validator functions that can help with determining whether the inputs or results that you get are valid.
+- **`valid`**: Validator functions that can help with determining whether the inputs or results that you get are valid.
+
+You also have access to the `version` of the library 
+- **`version`**: Current version of the library
 
 In the future new IOTA Core modules (such as Flash, MAM) and all IXI related functionality will be available.
 
@@ -104,6 +112,7 @@ iota.api.getNodeInfo(function(error, success) {
     - **[getBundle](#getbundle)**
     - **[getTransfers](#gettransfers)**
     - **[getAccountData](#getaccountdata)**
+    - **[shouldYouReplay](#shouldyoureplay)**
 - **[utils](#iota.utils)**
     - **[convertUnits](#convertunits)**
     - **[addChecksum](#addchecksum)**
@@ -114,6 +123,9 @@ iota.api.getNodeInfo(function(error, success) {
     - **[categorizeTransfers](#categorizetransfers)**
     - **[toTrytes](#totrytes)**
     - **[fromTrytes](#fromtrytes)**
+    - **[extractJson](#extractjson)**
+    - **[validateSignatures](#validatesignatures)**
+    - **[isBundle](#isbundle)**
 - **[multisig](#iota.multisig)**
     - **[getKey](#getkey)**
     - **[getDigest](#getdigest)**
@@ -122,20 +134,19 @@ iota.api.getNodeInfo(function(error, success) {
     - **[validateAddress](#validateaddress)**
     - **[initiateTransfer](#initiatetransfer)**
     - **[addSignature](#addsignature)**
-    - **[validateSignatures](#validatesignatures)**
-- **[validate](#iota.validate)**
+- **[valid](#iota.valid)**
     - **[isAddress](#isaddress)**
     - **[isTrytes](#istrytes)**
     - **[isValue](#isvalue)**
-    - **[isDecimal](#isdecimal)**
+    - **[isNum](#isnum)**
     - **[isHash](#ishash)**
     - **[isTransfersArray](#istransfersarray)**
     - **[isArrayOfHashes](#isarrayofhashes)**
     - **[isArrayOfTrytes](#isarrayoftrytes)**    
     - **[isArrayOfAttachedTrytes](#isarrayofattachedtrytes)**
+    - **[isArrayOfTxObjects](#isarrayoftxobjects)**
     - **[isInputs](#isinputs)**
     - **[isString](#isstring)**
-    - **[isInt](#isint)**
     - **[isArray](#isarray)**
     - **[isObject](#isobject)**
     - **[isUri](#isuri)**
@@ -297,7 +308,9 @@ iota.api.getInputs(seed, [, options], callback)
 
 Main purpose of this function is to get an array of transfer objects as input, and then prepare the transfer by **generating the correct bundle**, as well as **choosing and signing the inputs** if necessary (if it's a value transfer). The output of this function is an array of the raw transaction data (trytes).
 
-You can provide multiple transfer objects, which means that your prepared bundle will have multiple outputs to the same, or different recipients. As single transfer object takes the values of: `address`, `value`, `message`, `tag`. The message and tag values are required to be tryte-encoded.
+You can provide multiple transfer objects, which means that your prepared bundle will have multiple outputs to the same, or different recipients. As single transfer object takes the values of: `address`, `value`, `message`, `tag`. The message and tag values are required to be tryte-encoded. If you do not supply a message or a tag, the library will automatically enter empty ones for you. As such the only required fields in each transfers object are `address` and `value`.
+
+If you provide an address with a checksum, this function will automatically validate the address for you with the Utils function `isValidChecksum`.
 
 For the options, you can provide a list of `inputs`, that will be used for signing the transfer's inputs. It should be noted that these inputs (an array of objects) should have the provided 'security', `keyIndex` and `address` values:
 ```
@@ -464,7 +477,7 @@ If you want to have your transfers split into received / sent, you can use the u
 
 #### Input
 ```
-getTransfers(seed [, options], callback)
+iota.api.getTransfers(seed [, options], callback)
 ```
 
 1. **`seed`**: `String` tryte-encoded seed. It should be noted that this seed is not transferred
@@ -482,11 +495,11 @@ getTransfers(seed [, options], callback)
 
 ### `getAccountData`
 
-Similar to `getTransfers`, just a bit more comprehensive in the sense that it also returns the `balance` and `addresses` that are associated with your account (seed). This function is useful in getting all the relevant information of your account. If you want to have your transfers split into received / sent, you can use the utility function `categorizeTransfers`
+Similar to `getTransfers`, just a bit more comprehensive in the sense that it also returns the `addresses`, `transfers`, `inputs` and `balance` that are associated and have been used with your account (seed). This function is useful in getting all the relevant information of your account. If you want to have your transfers split into received / sent, you can use the utility function `categorizeTransfers`
 
 #### Input
 ```
-getAccountData(seed [, options], callback)
+iota.api.getAccountData(seed [, options], callback)
 ```
 
 1. **`seed`**: `String` tryte-encoded seed. It should be noted that this seed is not transferred
@@ -500,11 +513,30 @@ getAccountData(seed [, options], callback)
 `Object` - returns an object of your account data in the following format:
 ```
 {
-    'addresses': [],
-    'transfers': [],
-    'balance': 0
+    'latestAddress': '', // Latest, unused address which has no transactions in the tangle
+    'addresses': [], // List of all used addresses which have transactions associated with them
+    'transfers': [], // List of all transfers associated with the addresses
+    'inputs': [], // List of all inputs available for the seed. Follows the getInputs format of `address`, `balance`, `security` and `keyIndex`
+    'balance': 0 // latest confirmed balance
 }
 ```
+
+---
+
+### `shouldYouReplay`
+
+This API function helps you to determine whether you should replay a transaction or make a completely new transaction with a different seed. What this function does, is it takes an input address (i.e. from a spent transaction) as input and then checks whether any transactions with a value transferred are confirmed. If yes, it means that this input address has already been successfully used in a different transaction and as such you should no longer replay the transaction.
+
+#### Input
+```
+iota.api.shouldYouReplay(inputAddress, callback)
+```
+
+1. **`inputAddress`**: `String` address used as input in a transaction
+2. **`callback`**: `Function` callback function
+
+#### Returns
+`Bool` - true / false
 
 ---
 
@@ -641,17 +673,17 @@ iota.utils.categorizeTransfers(transfers, addresses)
 
 ### `toTrytes`
 
-Converts ASCII characters into trytes according to our encoding schema (read the source code for more info as to how it works). Currently only works with ASCII. In case you want to convert JSON data, stringify it first.
+Converts ASCII characters into trytes according to our encoding schema (read the source code for more info as to how it works). Currently only works with valid ASCII characters. As such, if you provide invalid characters the function will return `null`. In case you want to convert JSON data, stringify it first.
 
 #### Input
 ```
-iota.utils.toTrytes(string)
+iota.utils.toTrytes(input)
 ```
 
-1. **`string`**: `String` String you want to convert into trytes.
+1. **`input`**: `String` String you want to convert into trytes. All non-string values should be converted into strings first.
 
 #### Returns
-`string` - trytes
+`string || null` - trytes, or null in case you provided an invalid ASCII character
 
 ---
 
@@ -671,6 +703,22 @@ iota.utils.fromTrytes(trytes)
 
 ---
 
+### `extractJson`
+
+This function takes a bundle as input and from the signatureMessageFragments extracts the JSON encoded data which was sent with the transfer. This currently only works with the `toTrytes` and `fromTrytes` function that use the ASCII <-> Trytes encoding scheme. In case there is no JSON data, or invalid one, this function will return `null`
+
+#### Input
+```
+iota.utils.extractJson(bundle)
+```
+
+1. **`bundle`**: `Array` bundle from which you want to extract the JSON data.
+
+#### Returns
+`String` - Stringified JSON object which was extracted from the transactions.
+
+---
+
 ### `validateSignatures`
 
 This function makes it possible for each of the co-signers in the multi-signature to independently verify that a generated transaction with the corresponding signatures of the co-signers is valid. This function is safe to use and does not require any sharing of digests or key values.
@@ -682,6 +730,28 @@ iota.utils.validateSignatures(signedBundle, inputAddress)
 
 1. **`signedBundle`**: `Array` signed bundle by all of the co-signers
 2. **`inputAddress`**: `String` input address as provided to `initiateTransfer`.
+
+#### Returns
+`bool` - true / false  
+
+---
+
+### `isBundle`
+
+Checks if the provided bundle is valid. The provided bundle has to be ordered tail (i.e. `currentIndex`: 0) first. A bundle is deemed valid if it has:
+
+- Valid transaction structure
+- Correct `currentIndex`, `lastIndex` and number of bundle transactions
+- The sum of all `value` fields is 0
+- The bundle hash is correct
+- Valid signature
+
+#### Input
+```
+iota.utils.isBundle(bundle)
+```
+
+1. **`bundle`**: `Array` bundle to test
 
 #### Returns
 `bool` - true / false  
@@ -831,7 +901,7 @@ iota.multisig.addSignature(bundleToSign, inputAddress, key, callback)
 
 ---
 
-## `iota.validate`
+## `iota.valid`
 
 Validator functions. Return either true / false.
 
@@ -843,7 +913,7 @@ Checks if the provided input is a valid 81-tryte (non-checksum), or 90-tryte (wi
 
 #### Input
 ```
-iota.validate.isAddress(address)
+iota.valid.isAddress(address)
 ```
 
 1. **`address`**: `String` A single address
@@ -856,7 +926,7 @@ Determines if the provided input is valid trytes. Valid trytes are: `ABCDEFGHIJK
 
 #### Input
 ```
-iota.validate.isTrytes(trytes [, length])
+iota.valid.isTrytes(trytes [, length])
 ```
 
 1. **`trytes`**: `String`
@@ -870,23 +940,23 @@ Validates the value input, checks if it's integer.
 
 #### Input
 ```
-iota.validate.isValue(value)
+iota.valid.isValue(value)
 ```
 
 1. **`value`**: `Integer`
 
 ---
 
-### `isDecimal`
+### `isNum`
 
-Checks if it's a decimal value
+Checks if the input value is a number, can be a string, float or integer.
 
 #### Input
 ```
-iota.validate.isDecimal(value)
+iota.valid.isNum(value)
 ```
 
-1. **`value`**: `Integer || String`
+1. **`value`**: `Integer`
 
 ---
 
@@ -896,7 +966,7 @@ Checks if correct hash consisting of 81-trytes.
 
 #### Input
 ```
-iota.validate.isHash(hash)
+iota.valid.isHash(hash)
 ```
 
 1. **`hash`**: `String`
@@ -917,7 +987,7 @@ Checks if it's a correct array of transfer objects. A transfer object consists o
 
 #### Input
 ```
-iota.validate.isTransfersArray(transfersArray)
+iota.valid.isTransfersArray(transfersArray)
 ```
 
 1. **`transfersArray`**: `array`
@@ -930,7 +1000,7 @@ Array of valid 81 or 90-trytes hashes.
 
 #### Input
 ```
-iota.validate.isArrayOfHashes(hashesArray)
+iota.valid.isArrayOfHashes(hashesArray)
 ```
 
 1. **`hashesArray`**: `Array`
@@ -943,7 +1013,7 @@ Checks if it's an array of correct 2673-trytes. These are trytes either returned
 
 #### Input
 ```
-iota.validate.isArrayOfTrytes(trytesArray)
+iota.valid.isArrayOfTrytes(trytesArray)
 ```
 
 1. **`trytesArray`**: `Array`
@@ -956,10 +1026,39 @@ Similar to `isArrayOfTrytes`, just that in addition this function also validates
 
 #### Input
 ```
-iota.validate.isArrayOfAttachedTrytes(trytesArray)
+iota.valid.isArrayOfAttachedTrytes(trytesArray)
 ```
 
 1. **`trytesArray`**: `Array`
+
+---
+
+### `isArrayOfTxObjects`
+
+Checks if the provided bundle is an array of correct transaction objects. Basically validates if each entry in the array has all of the following keys:
+```
+var keys = [
+    'hash',
+    'signatureMessageFragment',
+    'address',
+    'value',
+    'tag',
+    'timestamp',
+    'currentIndex',
+    'lastIndex',
+    'bundle',
+    'trunkTransaction',
+    'branchTransaction',
+    'nonce'
+]
+```
+
+#### Input
+```
+iota.valid.isArrayOfTxObjects(bundle)
+```
+
+1. **`bundle`**: `Array`
 
 ---
 
@@ -976,7 +1075,7 @@ Validates if it's an array of correct input objects. These inputs are provided t
 
 #### Input
 ```
-iota.validate.isInputs(inputsArray)
+iota.valid.isInputs(inputsArray)
 ```
 
 1. **`inputsArray`**: `Array`
@@ -989,18 +1088,7 @@ Self explanatory.
 
 #### Input
 ```
-iota.validate.isString(string)
-```
-
----
-
-### `isInt`
-
-Self explanatory.
-
-#### Input
-```
-iota.validate.isInt(int)
+iota.valid.isString(string)
 ```
 
 ---
@@ -1011,7 +1099,7 @@ Self explanatory.
 
 #### Input
 ```
-iota.validate.isArray(array)
+iota.valid.isArray(array)
 ```
 
 ---
@@ -1022,7 +1110,7 @@ Self explanatory.
 
 #### Input
 ```
-iota.validate.isObject(array)
+iota.valid.isObject(array)
 ```
 
 ---
