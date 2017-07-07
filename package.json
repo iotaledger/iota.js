@@ -45,6 +45,8 @@
     "gulp-uglify": "^3.0.0",
     "jshint": "^2.9.4",
     "mocha": "^3.2.0",
+    "proxyquire": "^1.8.0",
+    "sinon": "^2.3.6",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0"
   }
