@@ -8,7 +8,7 @@ It should be noted that the Javascript Library as it stands right now is an **ea
 
 > **Join the Discussion**
 
-> If you want to get involved in the community, need help with getting setup, have any issues related with the library or just want to discuss Blockchain, Distributed Ledgers and IoT with other people, feel free to join our Slack. [Slack](http://slack.iotatoken.com/) You can also ask questions on our dedicated forum at: [IOTA Forum](http://forum.iotatoken.com/).
+> If you want to get involved in the community, need help with getting setup, have any issues related with the library or just want to discuss Blockchain, Distributed Ledgers and IoT with other people, feel free to join our Slack. [Slack](http://slack.iota.org/) You can also ask questions on our dedicated forum at: [IOTA Forum](https://forum.iota.org/).
 
 ## Installation
 
@@ -190,15 +190,20 @@ iota.api.getTransactionsObjects(hashes, callback)
 
 ### `findTransactionObjects`
 
-Wrapper function for `getTrytes` and the Utility function `transactionObjects`. This function basically returns the entire transaction objects for a list of transaction hashes.
+Wrapper function for `findTransactions`, `getTrytes` and the Utility function `transactionObjects`. This function basically returns the entire transaction objects for a list of key values which you would usually use for `findTransactions`. Acceptable key values are: 
+
+- *`bundles`*: List of bundle hashes
+- *`addresses`*: List of addresses
+- *`tags`*: List of transaction tags (27 trytes length)
+- *`approvees`*: List of approvees 
 
 
 #### Input
 ```
-iota.api.findTransactionObjects(hashes, callback)
+iota.api.findTransactionObjects(searchValues, callback)
 ```
 
-1. **`hashes`**: `Array` List of transaction hashes
+1. **`searchValues`**: `Object` List of transaction hashes. e.g. `{'hashes': ['ABCD']}`
 2. **`callback`**: `Function` callback.
 
 #### Return Value
