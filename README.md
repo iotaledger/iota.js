@@ -588,8 +588,8 @@ iota.utils.addChecksum(inputValue, checksumLength, isAddress)
 ```
 
 1. **`inputValue`**: `String | List` Either an individual tryte value, or a list of tryte values.
-2. **`checksumLength`**: `Int` Checksum length
-3. **`isAddress`**: `Bool` indicates whether the input value should be validated as an address (81-trytes)
+2. **`checksumLength`**: `Int` Checksum length. Default is 9 trytes
+3. **`isAddress`**: `Bool` indicates whether the input value should be validated as an address (81-trytes). Default is true.
 
 #### Returns
 `String | List` - returns the input value + checksum either as a string or list, depending on the input.

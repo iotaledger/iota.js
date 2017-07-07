@@ -4128,14 +4128,14 @@ var convertUnits = function(value, fromUnit, toUnit) {
 *   @method addChecksum
 *   @param {string | list} inputValue
 *   @param {int} checksumLength
-@   @param {bool} isAddress
+@   @param {bool} isAddress default is true 
 *   @returns {string | list} address (with checksum)
 **/
 var addChecksum = function(inputValue, checksumLength, isAddress) {
 
     // checksum length is either user defined, or 9 trytes
     var checksumLength = checksumLength || 9;
-    var isAddress = isAddress || false;
+    var isAddress = isAddress || true;
 
     // the length of the trytes to be validated
     var validationLength = isAddress ? 81 : null;
@@ -4149,7 +4149,7 @@ var addChecksum = function(inputValue, checksumLength, isAddress) {
 
     inputValue.forEach(function(thisValue) {
 
-        // check if correct trytes 
+        // check if correct trytes
         if (!inputValidator.isTrytes(thisValue, validationLength)) {
             throw new Error("Invalid input");
         }
@@ -17864,7 +17864,7 @@ function extend() {
 },{}],56:[function(require,module,exports){
 module.exports={
   "name": "iota.lib.js",
-  "version": "0.3.4",
+  "version": "0.3.5",
   "description": "Javascript Library for IOTA",
   "main": "./lib/iota.js",
   "scripts": {
