@@ -731,11 +731,38 @@ api.prototype.getNewAddress = function(seed, options, callback) {
         return callback(errors.invalidSeed());
     }
 
-    var index = options.index || 0;
+    // default index value
+    var index = 0;
+
+    if ('index' in options) {
+    
+        index = options.index;
+      
+        // validate the index option
+        if (!inputValidator.isValue(index) || index < 0) {
+        
+            return callback(errors.invalidIndex());
+        }
+    }
+
     var checksum = options.checksum || false;
     var total = options.total || null;
+  
     // If no user defined security, use the standard value of 2
-    var security = options.security || 2;
+    var security = 2;
+
+    if ('security' in options) {
+      
+      security = options.security;
+
+      // validate the security option
+      if (!inputValidator.isValue(security) || security < 1 || security > 3) {
+        
+        return callback(errors.invalidSecurity());
+      }
+    }
+    
+    
     var allAddresses = [];
 
 
@@ -810,7 +837,7 @@ api.prototype.getNewAddress = function(seed, options, callback) {
 *   @param {string} seed
 *   @param {object} options
 *       @property {int} start Starting key index
-*       @property {int} end Ending key index
+*       @property {int} end Ending key index
 *       @property {int} threshold Min balance required
 *       @property {int} security secuirty level of private key / seed
 *   @param {function} callback
@@ -1097,6 +1124,8 @@ api.prototype.prepareTransfers = function(seed, transfers, options, callback) {
 
             self.getBalances(inputsAddresses, 100, function(error, balances) {
 
+                if (error) return callback(error);
+
                 var confirmedInputs = [];
                 var totalBalance = 0;
                 for (var i = 0; i < balances.balances.length; i++) {
@@ -1195,6 +1224,8 @@ api.prototype.prepareTransfers = function(seed, transfers, options, callback) {
                     // Generate a new Address by calling getNewAddress
                     self.getNewAddress(seed, {'security': security}, function(error, address) {
 
+                        // No callback for error handler?..
+                        
                         var timestamp = Math.floor(Date.now() / 1000);
 
                         // Remainder bundle entry
@@ -1540,7 +1571,7 @@ api.prototype._bundlesFromAddresses = function(addresses, inclusionStates, callb
 *   @param {string} seed
 *   @param {object} options
 *       @property {int} start Starting key index
-*       @property {int} end Ending key index
+*       @property {int} end Ending key index
 *       @property {int} security security level to be used for getting inputs and addresses
 *       @property {bool} inclusionStates returns confirmation status of all transactions
 *   @param {function} callback
@@ -1602,7 +1633,7 @@ api.prototype.getTransfers = function(seed, options, callback) {
 *   @param {object} options
 *       @property {int} start Starting key index
 *       @property {int} security security level to be used for getting inputs and addresses
-*       @property {int} end Ending key index
+*       @property {int} end Ending key index
 *   @param {function} callback
 *   @returns {object} success
 **/
@@ -1679,6 +1710,8 @@ api.prototype.getAccountData = function(seed, options, callback) {
 
             // Get the correct balance count of all addresses
             self.getBalances(valuesToReturn.addresses, 100, function(error, balances) {
+
+                if (error) return callback(error);
 
                 balances.balances.forEach(function(balance, index) {
 
@@ -2704,6 +2737,12 @@ module.exports = {
     invalidSeed: function() {
         return new Error("Invalid Seed provided");
     },
+    invalidIndex: function() {
+        return new Error("Invalid Index option provided");
+    }, 
+    invalidSecurity: function() {
+        return new Error("Invalid Security option provided");
+    },
     invalidChecksum: function(address) {
         return new Error("Invalid Checksum supplied for address: " + address)
     },
@@ -2753,7 +2792,17 @@ var Multisig = require('./multisig/multisig');
 
 
 function IOTA(settings) {
+    this.setSettings(settings);
+}
 
+
+/**
+*   Reset the libraries settings and internal objects
+*
+*   @method setSettings
+*   @param {Object} settings
+**/
+IOTA.prototype.setSettings = function(settings) {
     // IF NO SETTINGS, SET DEFAULT TO localhost:14265
     settings = settings || {};
     this.version = require('../package.json').version;
@@ -2764,7 +2813,6 @@ function IOTA(settings) {
     this.token = settings.token || false;
 
     if (this.sandbox) {
-
         // remove backslash character
         this.sandbox = this.provider.replace(/\/$/, '');
         this.provider = this.sandbox + '/commands';
@@ -2777,24 +2825,17 @@ function IOTA(settings) {
     this.utils = utils;
     this.valid = require("./utils/inputValidator");
     this.multisig = new Multisig(this._makeRequest);
-}
-
+};
 
 
 /**
-*   Change the Node the user connects to (won't work with sandbox)
+*   Change the Node the user connects to
 *
 *   @method changeNode
 *   @param {Object} settings
 **/
 IOTA.prototype.changeNode = function(settings) {
-
-    settings = settings || {};
-    this.host = settings.host ? settings.host : "http://localhost";
-    this.port = settings.port ? settings.port : 14265;
-    this.provider = settings.provider || this.host + ":" + this.port;
-
-    this._makeRequest.setProvider(this.provider);
+    this.setSettings(settings);
 };
 
 module.exports = IOTA;
@@ -3464,7 +3505,7 @@ var isValue = function(value) {
 **/
 var isNum = function(input) {
 
-    return /^(\d+\.?\d{0,9}|\.\d{0,9})$/.test(input);
+    return /^(\d+\.?\d{0,15}|\.\d{0,15})$/.test(input);
 }
 
 /**
@@ -4054,18 +4095,25 @@ var unitMap = {
 **/
 var convertUnits = function(value, fromUnit, toUnit) {
 
-
-    // If not valid value, throw error
-    if (!inputValidator.isNum(value)) {
-
-        throw new Error("Invalid value input");
-    }
-
     // Check if wrong unit provided
     if (unitMap[fromUnit] === undefined || unitMap[toUnit] === undefined) {
 
         throw new Error("Invalid unit provided");
     }
+
+    var afterComma = String(value).match(/\.([\d]+)$/);
+
+    if (afterComma && afterComma[1].length > String(unitMap[fromUnit]).length - 1) {
+
+        throw new Error("Too many digits after comma");
+    }
+
+    // If not valid value, throw error
+    if (!inputValidator.isNum(value)) {
+
+        throw new Error("Invalid value");
+    }
+
 
     var floatValue = parseFloat(value);
 
@@ -4078,21 +4126,33 @@ var convertUnits = function(value, fromUnit, toUnit) {
 *   Generates the 9-tryte checksum of an address
 *
 *   @method addChecksum
-*   @param {string | list} address
+*   @param {string | list} inputValue
+*   @param {int} checksumLength
+@   @param {bool} isAddress
 *   @returns {string | list} address (with checksum)
 **/
-var addChecksum = function(address) {
+var addChecksum = function(inputValue, checksumLength, isAddress) {
 
-    var isSingleAddress = inputValidator.isString(address)
+    // checksum length is either user defined, or 9 trytes
+    var checksumLength = checksumLength || 9;
+    var isAddress = isAddress || false;
+
+    // the length of the trytes to be validated
+    var validationLength = isAddress ? 81 : null;
+
+    var isSingleInput = inputValidator.isString(inputValue)
 
     // If only single address, turn it into an array
-    if (isSingleAddress) address = Array(address);
+    if (isSingleInput) inputValue = Array(inputValue);
 
-    var addressesWithChecksum = [];
+    var inputsWithChecksum = [];
 
-    address.forEach(function(thisAddress) {
+    inputValue.forEach(function(thisValue) {
 
-        if (thisAddress.length !== 81) throw new Error("Invalid address input");
+        // check if correct trytes 
+        if (!inputValidator.isTrytes(thisValue, validationLength)) {
+            throw new Error("Invalid input");
+        }
 
         // create new Curl instance
         var curl = new Curl();
@@ -4101,22 +4161,22 @@ var addChecksum = function(address) {
         curl.initialize();
 
         // convert address into trits and map it into the state
-        curl.state = Converter.trits(thisAddress, curl.state);
+        curl.state = Converter.trits(thisValue, curl.state);
 
         curl.transform();
 
-        var checksum = Converter.trytes(curl.state).substring(0, 9);
+        var checksum = Converter.trytes(curl.state).substring(0, checksumLength);
 
-        addressesWithChecksum.push(thisAddress + checksum);
+        inputsWithChecksum.push(thisValue + checksum);
     });
 
-    if (isSingleAddress) {
+    if (isSingleInput) {
 
-        return addressesWithChecksum[0];
+        return inputsWithChecksum[0];
 
     } else {
 
-        return addressesWithChecksum;
+        return inputsWithChecksum;
 
     }
 }
@@ -6677,9 +6737,10 @@ function queue(worker, concurrency, payload) {
 
             for (var i = 0, l = tasks.length; i < l; i++) {
                 var task = tasks[i];
+
                 var index = baseIndexOf(workersList, task, 0);
                 if (index >= 0) {
-                    workersList.splice(index);
+                    workersList.splice(index, 1);
                 }
 
                 task.callback.apply(task, arguments);
@@ -6740,11 +6801,11 @@ function queue(worker, concurrency, payload) {
                 for (var i = 0; i < l; i++) {
                     var node = q._tasks.shift();
                     tasks.push(node);
+                    workersList.push(node);
                     data.push(node.data);
                 }
 
                 numRunning += 1;
-                workersList.push(tasks[0]);
 
                 if (q._tasks.length === 0) {
                     q.empty();
@@ -7038,17 +7099,45 @@ var compose = function(/*...args*/) {
     return seq.apply(null, slice(arguments).reverse());
 };
 
-function concat$1(eachfn, arr, fn, callback) {
-    var result = [];
-    eachfn(arr, function (x, index, cb) {
-        fn(x, function (err, y) {
-            result = result.concat(y || []);
-            cb(err);
+var _concat = Array.prototype.concat;
+
+/**
+ * The same as [`concat`]{@link module:Collections.concat} but runs a maximum of `limit` async operations at a time.
+ *
+ * @name concatLimit
+ * @static
+ * @memberOf module:Collections
+ * @method
+ * @see [async.concat]{@link module:Collections.concat}
+ * @category Collection
+ * @param {Array|Iterable|Object} coll - A collection to iterate over.
+ * @param {number} limit - The maximum number of async operations at a time.
+ * @param {AsyncFunction} iteratee - A function to apply to each item in `coll`,
+ * which should use an array as its result. Invoked with (item, callback).
+ * @param {Function} [callback] - A callback which is called after all the
+ * `iteratee` functions have finished, or an error occurs. Results is an array
+ * containing the concatenated results of the `iteratee` function. Invoked with
+ * (err, results).
+ */
+var concatLimit = function(coll, limit, iteratee, callback) {
+    callback = callback || noop;
+    var _iteratee = wrapAsync(iteratee);
+    mapLimit(coll, limit, function(val, callback) {
+        _iteratee(val, function(err /*, ...args*/) {
+            if (err) return callback(err);
+            return callback(null, slice(arguments, 1));
         });
-    }, function (err) {
-        callback(err, result);
+    }, function(err, mapResults) {
+        var result = [];
+        for (var i = 0; i < mapResults.length; i++) {
+            if (mapResults[i]) {
+                result = _concat.apply(result, mapResults[i]);
+            }
+        }
+
+        return callback(err, result);
     });
-}
+};
 
 /**
  * Applies `iteratee` to each item in `coll`, concatenating the results. Returns
@@ -7075,13 +7164,7 @@ function concat$1(eachfn, arr, fn, callback) {
  *     // files is now a list of filenames that exist in the 3 directories
  * });
  */
-var concat = doParallel(concat$1);
-
-function doSeries(fn) {
-    return function (obj, iteratee, callback) {
-        return fn(eachOfSeries, obj, wrapAsync(iteratee), callback);
-    };
-}
+var concat = doLimit(concatLimit, Infinity);
 
 /**
  * The same as [`concat`]{@link module:Collections.concat} but runs only a single async operation at a time.
@@ -7101,7 +7184,7 @@ function doSeries(fn) {
  * containing the concatenated results of the `iteratee` function. Invoked with
  * (err, results).
  */
-var concatSeries = doSeries(concat$1);
+var concatSeries = doLimit(concatLimit, 1);
 
 /**
  * Returns a function that when called, calls-back with the values provided.
@@ -8427,7 +8510,8 @@ function parallelLimit$1(tasks, limit, callback) {
  * @property {Function} resume - a function that resumes the processing of
  * queued tasks when the queue is paused. Invoke with `queue.resume()`.
  * @property {Function} kill - a function that removes the `drain` callback and
- * empties remaining tasks from the queue forcing it to go idle. Invoke with `queue.kill()`.
+ * empties remaining tasks from the queue forcing it to go idle. No more tasks
+ * should be pushed to the queue after calling this function. Invoke with `queue.kill()`.
  */
 
 /**
@@ -9800,6 +9884,7 @@ var index = {
     cargo: cargo,
     compose: compose,
     concat: concat,
+    concatLimit: concatLimit,
     concatSeries: concatSeries,
     constant: constant,
     detect: detect,
@@ -9896,6 +9981,7 @@ exports.autoInject = autoInject;
 exports.cargo = cargo;
 exports.compose = compose;
 exports.concat = concat;
+exports.concatLimit = concatLimit;
 exports.concatSeries = concatSeries;
 exports.constant = constant;
 exports.detect = detect;
@@ -17778,7 +17864,7 @@ function extend() {
 },{}],56:[function(require,module,exports){
 module.exports={
   "name": "iota.lib.js",
-  "version": "0.3.2",
+  "version": "0.3.4",
   "description": "Javascript Library for IOTA",
   "main": "./lib/iota.js",
   "scripts": {
@@ -17807,23 +17893,24 @@ module.exports={
     "url": "https://github.com/iotaledger/iota.lib.js.git"
   },
   "dependencies": {
-    "async": "^2.4.1",
+    "async": "^2.5.0",
     "big.js": "^3.1.3",
     "browserify": "^14.4.0",
+    "jshint": "^2.9.5",
     "mocha": "^3.4.2",
     "xmlhttprequest": "^1.8.0"
   },
   "devDependencies": {
-    "bower": "^1.8.0",
-    "browserify": "^14.1.0",
-    "chai": "^3.5.0",
-    "del": "^2.2.2",
+    "bower": ">=1.8.0",
+    "browserify": ">=14.1.0",
+    "chai": "^4.0.2",
+    "del": "^3.0.0",
     "gulp": "^3.9.1",
     "gulp-jshint": "^2.0.2",
-    "gulp-nsp": "^2.4.2",
-    "gulp-rename": "^1.2.2",
-    "gulp-replace": "^0.5.4",
-    "gulp-uglify": "^2.1.2",
+    "gulp-nsp": ">=2.4.2",
+    "gulp-rename": ">=1.2.2",
+    "gulp-replace": "^0.6.1",
+    "gulp-uglify": "^3.0.0",
     "jshint": "^2.9.4",
     "mocha": "^3.2.0",
     "vinyl-buffer": "^1.0.0",
