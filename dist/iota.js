@@ -810,7 +810,7 @@ api.prototype.getNewAddress = function(seed, options, callback) {
 *   @param {string} seed
 *   @param {object} options
 *       @property {int} start Starting key index
-*       @property {int} end Ending key index
+*       @property {int} end Ending key index
 *       @property {int} threshold Min balance required
 *       @property {int} security secuirty level of private key / seed
 *   @param {function} callback
@@ -1540,7 +1540,7 @@ api.prototype._bundlesFromAddresses = function(addresses, inclusionStates, callb
 *   @param {string} seed
 *   @param {object} options
 *       @property {int} start Starting key index
-*       @property {int} end Ending key index
+*       @property {int} end Ending key index
 *       @property {int} security security level to be used for getting inputs and addresses
 *       @property {bool} inclusionStates returns confirmation status of all transactions
 *   @param {function} callback
@@ -1602,7 +1602,7 @@ api.prototype.getTransfers = function(seed, options, callback) {
 *   @param {object} options
 *       @property {int} start Starting key index
 *       @property {int} security security level to be used for getting inputs and addresses
-*       @property {int} end Ending key index
+*       @property {int} end Ending key index
 *   @param {function} callback
 *   @returns {object} success
 **/
