@@ -190,12 +190,12 @@ iota.api.getTransactionsObjects(hashes, callback)
 
 ### `findTransactionObjects`
 
-Wrapper function for `findTransactions`, `getTrytes` and the Utility function `transactionObjects`. This function basically returns the entire transaction objects for a list of key values which you would usually use for `findTransactions`. Acceptable key values are: 
+Wrapper function for `findTransactions`, `getTrytes` and the Utility function `transactionObjects`. This function basically returns the entire transaction objects for a list of key values which you would usually use for `findTransactions`. Acceptable key values are:
 
 - *`bundles`*: List of bundle hashes
 - *`addresses`*: List of addresses
 - *`tags`*: List of transaction tags (27 trytes length)
-- *`approvees`*: List of approvees 
+- *`approvees`*: List of approvees
 
 
 #### Input
@@ -580,17 +580,19 @@ iota.utils.convertUnits(value, fromUnit, toUnit)
 
 ### `addChecksum`
 
-Takes an 81-trytes address or a list of addresses as input and calculates the 9-trytes checksum of the address(es).
+Takes a tryte-encoded input value and adds a checksum (length is user defined). Standard checksum length is 9 trytes. If `isAddress` is defined as true, it will validate if it's a correct 81-tryte enocded address.
 
 #### Input
 ```
-iota.utils.addChecksum(address)
+iota.utils.addChecksum(inputValue, checksumLength, isAddress)
 ```
 
-1. **`address`**: `String | List` Either an individual address, or a list of addresses.
+1. **`inputValue`**: `String | List` Either an individual tryte value, or a list of tryte values.
+2. **`checksumLength`**: `Int` Checksum length
+3. **`isAddress`**: `Bool` indicates whether the input value should be validated as an address (81-trytes)
 
 #### Returns
-`String | List` - returns the 90-trytes addresses (81-trytes address + 9-trytes checksum) either as a string or list, depending on the input.
+`String | List` - returns the input value + checksum either as a string or list, depending on the input.
 
 ---
 
@@ -750,6 +752,8 @@ Checks if the provided bundle is valid. The provided bundle has to be ordered ta
 - The sum of all `value` fields is 0
 - The bundle hash is correct
 - Valid signature
+
+---
 
 #### Input
 ```
