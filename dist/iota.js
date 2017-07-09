@@ -735,34 +735,34 @@ api.prototype.getNewAddress = function(seed, options, callback) {
     var index = 0;
 
     if ('index' in options) {
-    
+
         index = options.index;
-      
+
         // validate the index option
         if (!inputValidator.isValue(index) || index < 0) {
-        
+
             return callback(errors.invalidIndex());
         }
     }
 
     var checksum = options.checksum || false;
     var total = options.total || null;
-  
+
     // If no user defined security, use the standard value of 2
     var security = 2;
 
     if ('security' in options) {
-      
+
       security = options.security;
 
       // validate the security option
       if (!inputValidator.isValue(security) || security < 1 || security > 3) {
-        
+
         return callback(errors.invalidSecurity());
       }
     }
-    
-    
+
+
     var allAddresses = [];
 
 
@@ -1224,8 +1224,8 @@ api.prototype.prepareTransfers = function(seed, transfers, options, callback) {
                     // Generate a new Address by calling getNewAddress
                     self.getNewAddress(seed, {'security': security}, function(error, address) {
 
-                        // No callback for error handler?..
-                        
+                        if (error) return callback(error)
+
                         var timestamp = Math.floor(Date.now() / 1000);
 
                         // Remainder bundle entry
@@ -4128,14 +4128,14 @@ var convertUnits = function(value, fromUnit, toUnit) {
 *   @method addChecksum
 *   @param {string | list} inputValue
 *   @param {int} checksumLength
-@   @param {bool} isAddress default is true 
+@   @param {bool} isAddress default is true
 *   @returns {string | list} address (with checksum)
 **/
 var addChecksum = function(inputValue, checksumLength, isAddress) {
 
     // checksum length is either user defined, or 9 trytes
     var checksumLength = checksumLength || 9;
-    var isAddress = isAddress || true;
+    var isAddress = isAddress === false ? false : true
 
     // the length of the trytes to be validated
     var validationLength = isAddress ? 81 : null;
@@ -17864,7 +17864,7 @@ function extend() {
 },{}],56:[function(require,module,exports){
 module.exports={
   "name": "iota.lib.js",
-  "version": "0.3.5",
+  "version": "0.3.6",
   "description": "Javascript Library for IOTA",
   "main": "./lib/iota.js",
   "scripts": {
