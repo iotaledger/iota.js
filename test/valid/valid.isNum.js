@@ -5,39 +5,39 @@ var valid = require('../../lib/utils/inputValidator');
 
 describe('valid.isNum', function() {
 
-    var tests = [
-        'AFDS',
-        '1234',
-        432.4321,
-        1234
+    var validNumbers = [
+      10.190,
+      '102.91',
+      1234,
+      432.4321,
+      -100,
+      -10.29,
+      '-10.2111'
     ]
 
-    // 0 test
-    it('should be invalid isNum: 0', function() {
+    var invalidNumbers = [
+      'AFDS',
+      '-100-11.100',
+      '100.-01',
+      '10-1'
+    ]
 
-        var isNum = valid.isNum(tests[0]);
-        assert.isFalse(isNum);
-    })
+    for(n of invalidNumbers) {
+      (function(n) {
+        it('should be invalid: ' + n, function() {
+            var isNum = valid.isNum(n);
+            assert.isFalse(isNum);
+        })
+      })(n)
+    }
 
-    // 1 test
-    it('should be invalid isNum: 1', function() {
-
-        var isNum = valid.isNum(tests[1]);
-        assert.isTrue(isNum);
-    })
-
-    // 2 test
-    it('should be valid isNum: 2', function() {
-
-        var isNum = valid.isNum(tests[2]);
-        assert.isTrue(isNum);
-    })
-
-    // 3 test
-    it('should be valid isNum: 2', function() {
-
-        var isNum = valid.isNum(tests[3]);
-        assert.isTrue(isNum);
-    })
+    for(n of validNumbers) {
+      (function(n) {
+        it('should be valid: ' + n, function() {
+            var isNum = valid.isNum(n);
+            assert.isTrue(isNum);
+        })
+      })(n)
+    }
 
 });
