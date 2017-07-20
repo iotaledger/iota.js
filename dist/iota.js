@@ -1806,17 +1806,27 @@ api.prototype.isReattachable = function(inputAddresses, callback) {
                 var results = addresses.map(function(address) {
 
                     var txs = addressTxsMap[address];
+                    var numTxs = txs.length;
 
-                    if (txs.length === 0) {
+                    if (numTxs === 0) {
                         return true;
                     }
 
                     var shouldReattach = true;
-                    txs.forEach(function(tx) {
+
+                    for (var i = 0; i < numTxs; i++) {
+
+                        var tx = txs[i];
 
                         var txIndex = valueTransactions.indexOf(tx);
-                        shouldReattach = inclusionStates[txIndex] ? false : true;
-                    })
+                        var isConfirmed = inclusionStates[txIndex];
+                        shouldReattach = isConfirmed ? false : true;
+
+                        // if tx confirmed, break
+                        if (isConfirmed)
+                            break;
+                    }
+
 
                     return shouldReattach;
 
@@ -17933,7 +17943,7 @@ function extend() {
 },{}],57:[function(require,module,exports){
 module.exports={
   "name": "iota.lib.js",
-  "version": "0.3.7",
+  "version": "0.3.8",
   "description": "Javascript Library for IOTA",
   "main": "./lib/iota.js",
   "scripts": {
