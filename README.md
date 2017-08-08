@@ -129,8 +129,9 @@ iota.api.getNodeInfo(function(error, success) {
 - **[multisig](#iota.multisig)**
     - **[getKey](#getkey)**
     - **[getDigest](#getdigest)**
-    - **[addAddressDigest](#addaddressdigest)**
-    - **[finalizeAddress](#finalizeaddress)**
+    - **[Address](#Address)**
+    - **[Address.absorb](#Address.absorb)**
+    - **[Address.finalize](#Address.finalize)**
     - **[validateAddress](#validateaddress)**
     - **[initiateTransfer](#initiatetransfer)**
     - **[addSignature](#addsignature)**
@@ -669,8 +670,8 @@ Categorizes a list of transfers into `sent` and `received`. It is important to n
 iota.utils.categorizeTransfers(transfers, addresses)
 ```
 
-1. **`transfers`**: `List` A list of bundles. Basically is an array, of arrays (bundles), as is returned from getTransfers or getAccountData
-2. **`addresses`**: 'List' List of addresses that belong to you. With these addresses as input, it's determined whether it's a sent or a receive transaction. Therefore make sure that these addresses actually belong to you.
+1. **`transfers`**: `Array` A list of bundles. Basically is an array, of arrays (bundles), as is returned from getTransfers or getAccountData
+2. **`addresses`**: `Array` List of addresses that belong to you. With these addresses as input, it's determined whether it's a sent or a receive transaction. Therefore make sure that these addresses actually belong to you.
 
 #### Returns
 `object` - the transfers categorized into `sent` and `received`
@@ -815,37 +816,49 @@ iota.multisig.getDigest(seed, index)
 
 ---
 
-### `addAddressDigest`
+### `address`
 
-This function is used to initiate the creation of a new multisig address. The way that it works is that the first participant of the multi-signature initiates this function with an empty curl state, and then shares the newly generated state with the other participants of the multisig address, who then basically add their key digest. Then finally, once the last co-signer added their digest, `finalizeAddress` can be used to get the actual 81-tryte address value. `validateAddress` can be used to actually validate the multi-signature.
+This function is used to initiate the creation of a new multisig address. Once all digests were added with `addDigest()`, `finalize()` can be used to get the actual 81-tryte address value. `validateAddress()` can be used to actually validate the multi-signature.
 
 #### Input
 ```
-iota.multisig.addAddressDigest(digestTrytes, curlStateTrytes)
+var address = new iota.multisig.address(digests);
 ```
 
-1. **`digestTrytes`**: `String` digest trytes as returned by `getDigest`
-2. **`curlStateTrytes`**: 'String' curl state trytes to continue modifying (which are returned by this function)
+1. **`digestTrytes`**: `String || Array` Optional string or array of digest trytes as returned by `getDigest`
 
 #### Returns
-`String` - curl state trytes
-
+`Object` - multisig address instance
 
 ---
 
-### `finalizeAddress`
+### `address.absorb`
+
+Absorbs the digests of co-signers
+
+#### Input
+```
+address.addDigest(digest);
+```
+
+1. **`digest`**: `String || Array` String or array of digest trytes as returned by `getDigest`
+
+#### Returns
+`Object` - multisig address instance
+
+---
+
+### `address.finalize`
 
 Finalizes the multisig address generation process and returns the correct 81-tryte address.
 
 #### Input
 ```
-iota.multisig.finalizeAddress(curlStateTrytes)
+address.finalize()
 ```
 
-1. **`curlStateTrytes`**: 'String' curl state trytes to continue modifying (which are returned by this function)
-
 #### Returns
-`String` - curl state trytes
+`String` - 81-tryte multisig address
 
 
 ---
