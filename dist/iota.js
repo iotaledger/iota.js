@@ -2,16 +2,17 @@
 
 window.IOTA = require('./lib/iota.js');
 
-},{"./lib/iota.js":15}],2:[function(require,module,exports){
+},{"./lib/iota.js":4}],2:[function(require,module,exports){
 var apiCommands     =   require('./apiCommands')
-var errors          =   require('../errors/inputErrors');
-var inputValidator  =   require('../utils/inputValidator');
-var HMAC            =   require("../crypto/hmac/hmac");
-var Converter       =   require("../crypto/converter/converter");
-var Signing         =   require("../crypto/signing/signing");
-var Bundle          =   require("../crypto/bundle/bundle");
-var Utils           =   require("../utils/utils");
 var async           =   require("async");
+var iotaCrypto      =   require('iota.crypto.js');
+var errors          =   iotaCrypto.valid;
+var inputValidator  =   iotaCrypto.utils.inputValidator;
+var HMAC            =   iotaCrypto.hmac;
+var Converter       =   iotaCrypto.converter;
+var Signing         =   iotaCrypto.signing;
+var Bundle          =   iotaCrypto.bundle;
+var Utils           =   iotaCrypto.utils;
 
 'use strict';
 var nullHashTrytes = (new Array(244).join('9'));
@@ -1864,7 +1865,7 @@ api.prototype.isReattachable = function(inputAddresses, callback) {
 
 module.exports = api;
 
-},{"../crypto/bundle/bundle":4,"../crypto/converter/converter":5,"../crypto/hmac/hmac":9,"../crypto/signing/signing":12,"../errors/inputErrors":13,"../utils/inputValidator":20,"../utils/utils":22,"./apiCommands":3,"async":23}],3:[function(require,module,exports){
+},{"./apiCommands":3,"async":7,"iota.crypto.js":62}],3:[function(require,module,exports){
 /**
 *   @method attachToTangle
 *   @param {string} trunkTransaction
@@ -2101,1430 +2102,10 @@ module.exports = {
 }
 
 },{}],4:[function(require,module,exports){
-var Kerl = require("../kerl/kerl");
-var Converter = require("../converter/converter");
-
-/**
-*
-*   @constructor bundle
-**/
-function Bundle() {
-
-    // Declare empty bundle
-    this.bundle = [];
-}
-
-/**
-*
-*
-**/
-
-Bundle.prototype.addEntry = function(signatureMessageLength, address, value, tag, timestamp, index) {
-
-    for (var i = 0; i < signatureMessageLength; i++) {
-
-        var transactionObject = new Object();
-        transactionObject.address = address;
-        transactionObject.value = i == 0 ? value : 0;
-        transactionObject.tag = tag;
-        transactionObject.timestamp = timestamp;
-
-        this.bundle[this.bundle.length] = transactionObject;
-    }
-}
-
-/**
-*
-*
-**/
-Bundle.prototype.addTrytes = function(signatureFragments) {
-
-    var emptySignatureFragment = '';
-    var emptyHash = '999999999999999999999999999999999999999999999999999999999999999999999999999999999';
-
-    for (var j = 0; emptySignatureFragment.length < 2187; j++) {
-        emptySignatureFragment += '9';
-    }
-
-    for (var i = 0; i < this.bundle.length; i++) {
-
-        // Fill empty signatureMessageFragment
-        this.bundle[i].signatureMessageFragment = signatureFragments[i] ? signatureFragments[i] : emptySignatureFragment;
-
-        // Fill empty trunkTransaction
-        this.bundle[i].trunkTransaction = emptyHash;
-
-        // Fill empty branchTransaction
-        this.bundle[i].branchTransaction = emptyHash;
-
-        // Fill empty nonce
-        this.bundle[i].nonce = emptyHash;
-    }
-}
-
-
-/**
-*
-*
-**/
-Bundle.prototype.finalize = function() {
-
-    var kerl = new Kerl();
-    kerl.initialize();
-
-    for (var i = 0; i < this.bundle.length; i++) {
-
-        var valueTrits = Converter.trits(this.bundle[i].value);
-        while (valueTrits.length < 81) {
-            valueTrits[valueTrits.length] = 0;
-        }
-
-        var timestampTrits = Converter.trits(this.bundle[i].timestamp);
-        while (timestampTrits.length < 27) {
-            timestampTrits[timestampTrits.length] = 0;
-        }
-
-        var currentIndexTrits = Converter.trits(this.bundle[i].currentIndex = i);
-        while (currentIndexTrits.length < 27) {
-            currentIndexTrits[currentIndexTrits.length] = 0;
-        }
-
-        var lastIndexTrits = Converter.trits(this.bundle[i].lastIndex = this.bundle.length - 1);
-        while (lastIndexTrits.length < 27) {
-            lastIndexTrits[lastIndexTrits.length] = 0;
-        }
-
-        var bundleEssence = Converter.trits(this.bundle[i].address + Converter.trytes(valueTrits) + this.bundle[i].tag + Converter.trytes(timestampTrits) + Converter.trytes(currentIndexTrits) + Converter.trytes(lastIndexTrits));
-        kerl.absorb(bundleEssence, 0, bundleEssence.length);
-    }
-
-    var hash = [];
-    kerl.squeeze(hash, 0, kerl.HASH_LENGTH);
-    hash = Converter.trytes(hash);
-
-    for (var i = 0; i < this.bundle.length; i++) {
-
-        this.bundle[i].bundle = hash;
-    }
-}
-
-/**
-*   Normalizes the bundle hash
-*
-**/
-Bundle.prototype.normalizedBundle = function(bundleHash) {
-
-    var normalizedBundle = [];
-
-    for (var i = 0; i < 3; i++) {
-
-        var sum = 0;
-        for (var j = 0; j < 27; j++) {
-
-            sum += (normalizedBundle[i * 27 + j] = Converter.value(Converter.trits(bundleHash.charAt(i * 27 + j))));
-        }
-
-        if (sum >= 0) {
-
-            while (sum-- > 0) {
-
-                for (var j = 0; j < 27; j++) {
-
-                    if (normalizedBundle[i * 27 + j] > -13) {
-
-                        normalizedBundle[i * 27 + j]--;
-                        break;
-                    }
-                }
-            }
-        } else {
-
-            while (sum++ < 0) {
-
-                for (var j = 0; j < 27; j++) {
-
-                    if (normalizedBundle[i * 27 + j] < 13) {
-
-                        normalizedBundle[i * 27 + j]++;
-                        break;
-                    }
-                }
-            }
-        }
-    }
-
-    return normalizedBundle;
-}
-
-module.exports = Bundle;
-
-},{"../converter/converter":5,"../kerl/kerl":10}],5:[function(require,module,exports){
-/**
- *
- *   Conversion functions
- *
- **/
-
-var RADIX = 3;
-var RADIX_BYTES = 256;
-var MAX_TRIT_VALUE = 1;
-var MIN_TRIT_VALUE = -1;
-var BYTE_HASH_LENGTH = 48;
-
-// All possible tryte values
-var trytesAlphabet = "9ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-
-// map of all trits representations
-var trytesTrits = [
-    [ 0,  0,  0],
-    [ 1,  0,  0],
-    [-1,  1,  0],
-    [ 0,  1,  0],
-    [ 1,  1,  0],
-    [-1, -1,  1],
-    [ 0, -1,  1],
-    [ 1, -1,  1],
-    [-1,  0,  1],
-    [ 0,  0,  1],
-    [ 1,  0,  1],
-    [-1,  1,  1],
-    [ 0,  1,  1],
-    [ 1,  1,  1],
-    [-1, -1, -1],
-    [ 0, -1, -1],
-    [ 1, -1, -1],
-    [-1,  0, -1],
-    [ 0,  0, -1],
-    [ 1,  0, -1],
-    [-1,  1, -1],
-    [ 0,  1, -1],
-    [ 1,  1, -1],
-    [-1, -1,  0],
-    [ 0, -1,  0],
-    [ 1, -1,  0],
-    [-1,  0,  0]
-];
-
-/**
- *   Converts trytes into trits
- *
- *   @method trits
- *   @param {String|Int} input Tryte value to be converted. Can either be string or int
- *   @param {Array} state (optional) state to be modified
- *   @returns {Array} trits
- **/
-var trits = function( input, state ) {
-
-    var trits = state || [];
-
-    if (Number.isInteger(input)) {
-
-        var absoluteValue = input < 0 ? -input : input;
-
-        while (absoluteValue > 0) {
-
-            var remainder = absoluteValue % 3;
-            absoluteValue = Math.floor(absoluteValue / 3);
-
-            if (remainder > 1) {
-                remainder = -1;
-                absoluteValue++;
-            }
-
-            trits[trits.length] = remainder;
-        }
-        if (input < 0) {
-
-            for (var i = 0; i < trits.length; i++) {
-
-                trits[i] = -trits[i];
-            }
-        }
-    } else {
-
-        for (var i = 0; i < input.length; i++) {
-
-            var index = trytesAlphabet.indexOf(input.charAt(i));
-            trits[i * 3] = trytesTrits[index][0];
-            trits[i * 3 + 1] = trytesTrits[index][1];
-            trits[i * 3 + 2] = trytesTrits[index][2];
-        }
-    }
-
-    return trits;
-}
-
-/**
- *   Converts trits into trytes
- *
- *   @method trytes
- *   @param {Array} trits
- *   @returns {String} trytes
- **/
-var trytes = function(trits) {
-
-    var trytes = "";
-
-    for ( var i = 0; i < trits.length; i += 3 ) {
-
-        // Iterate over all possible tryte values to find correct trit representation
-        for ( var j = 0; j < trytesAlphabet.length; j++ ) {
-
-            if ( trytesTrits[ j ][ 0 ] === trits[ i ] && trytesTrits[ j ][ 1 ] === trits[ i + 1 ] && trytesTrits[ j ][ 2 ] === trits[ i + 2 ] ) {
-
-                trytes += trytesAlphabet.charAt( j );
-                break;
-
-            }
-
-        }
-
-    }
-
-    return trytes;
-}
-
-/**
- *   Converts trits into an integer value
- *
- *   @method value
- *   @param {Array} trits
- *   @returns {int} value
- **/
-var value = function(trits) {
-
-    var returnValue = 0;
-
-    for ( var i = trits.length; i-- > 0; ) {
-
-        returnValue = returnValue * 3 + trits[ i ];
-    }
-
-    return returnValue;
-}
-
-/**
- *   Converts an integer value to trits
- *
- *   @method value
- *   @param {Int} value
- *   @returns {Array} trits
- **/
-var fromValue = function(value) {
-
-    var destination = [];
-    var absoluteValue = value < 0 ? -value : value;
-    var i = 0;
-
-    while( absoluteValue > 0 ) {
-
-        var remainder = ( absoluteValue % RADIX );
-        absoluteValue = Math.floor( absoluteValue / RADIX );
-
-        if ( remainder > MAX_TRIT_VALUE ) {
-
-            remainder = MIN_TRIT_VALUE;
-            absoluteValue++;
-
-        }
-
-        destination[ i ] = remainder;
-        i++;
-
-    }
-
-    if ( value < 0 ) {
-
-        for ( var j = 0; j < destination.length; j++ ) {
-
-            // switch values
-            destination[ j ] = destination[ j ] === 0 ? 0: -destination[ j ];
-
-        }
-
-    }
-
-    return destination;
-}
-
-module.exports = {
-    trits           : trits,
-    trytes          : trytes,
-    value           : value,
-    fromValue       : fromValue
-};
-
-},{}],6:[function(require,module,exports){
-var INT_LENGTH = 12;
-var BYTE_LENGTH = 48;
-var RADIX = 3;
-/// hex representation of (3^242)/2
-var HALF_3 = Uint32Array.from([
-    0xa5ce8964,
-    0x9f007669,
-    0x1484504f,
-    0x3ade00d9,
-    0x0c24486e,
-    0x50979d57,
-    0x79a4c702,
-    0x48bbae36,
-    0xa9f6808b,
-    0xaa06a805,
-    0xa87fabdf,
-    0x5e69ebef
-]);
-
-/// negates the (unsigned) input array
-var bigint_not = function(arr) {
-    for (var i = 0; i < arr.length; i++) {
-        arr[i] = (~arr[i]) >>> 0;
-    }
-};
-
-/// rshift that works with up to 53
-/// JS's shift operators only work on 32 bit integers
-/// ours is up to 33 or 34 bits though, so
-/// we need to implement shifting manually
-var rshift = function(number, shift) {
-    return (number / Math.pow(2, shift)) >>> 0;
-};
-
-/// swaps endianness
-var swap32 = function(val) {
-    return ((val & 0xFF) << 24) |
-        ((val & 0xFF00) << 8) |
-        ((val >> 8) & 0xFF00) |
-        ((val >> 24) & 0xFF);
-}
-
-/// add with carry
-var full_add = function(lh, rh, carry) {
-    var v = lh + rh;
-    var l = (rshift(v, 32)) & 0xFFFFFFFF;
-    var r = (v & 0xFFFFFFFF) >>> 0;
-    var carry1 = l != 0;
-
-    if (carry) {
-        v = r + 1;
-    }
-    l = (rshift(v, 32)) & 0xFFFFFFFF;
-    r = (v & 0xFFFFFFFF) >>> 0;
-    var carry2 = l != 0;
-
-    return [r, carry1 || carry2];
-};
-
-/// subtracts rh from base
-var bigint_sub = function(base, rh) {
-    var noborrow = true;
-
-    for (var i = 0; i < base.length; i++) {
-        var vc = full_add(base[i], (~rh[i] >>> 0), noborrow);
-        base[i] = vc[0];
-        noborrow = vc[1];
-    }
-
-    if (!noborrow) {
-        throw "noborrow";
-    }
-};
-
-/// compares two (unsigned) big integers
-var bigint_cmp = function(lh, rh) {
-    for (var i = lh.length; i-- > 0;) {
-        var a = lh[i] >>> 0;
-        var b = rh[i] >>> 0;
-        if (a < b) {
-            return -1;
-        } else if (a > b) {
-            return 1;
-        }
-    }
-    return 0;
-};
-
-/// adds rh to base in place
-var bigint_add = function(base, rh) {
-    var carry = false;
-    for (var i = 0; i < base.length; i++) {
-        var vc = full_add(base[i], rh[i], carry);
-        base[i] = vc[0];
-        carry = vc[1];
-    }
-};
-
-/// adds a small (i.e. <32bit) number to base
-var bigint_add_small = function(base, other) {
-    var vc = full_add(base[0], other, false);
-    base[0] = vc[0];
-    var carry = vc[1];
-
-    var i = 1;
-    while (carry && i < base.length) {
-        var vc = full_add(base[i], 0, carry);
-        base[i] = vc[0];
-        carry = vc[1];
-        i += 1;
-    }
-
-    return i;
-};
-
-/// converts the given byte array to trits
-var words_to_trits = function(words) {
-    if (words.length != INT_LENGTH) {
-        throw "Invalid words length";
-    }
-
-    var trits = new Int8Array(243);
-    var base = Uint32Array.from(words);
-
-    base.reverse();
-
-    var flip_trits = false;
-    if (base[INT_LENGTH - 1] >> 31 == 0) {
-        // positive two's complement number.
-        // add HALF_3 to move it to the right place.
-        bigint_add(base, HALF_3);
-    } else {
-        // negative number.
-        bigint_not(base);
-        if (bigint_cmp(base, HALF_3) > 0) {
-            bigint_sub(base, HALF_3);
-            flip_trits = true;
-        } else {
-            /// bigint is between (unsigned) HALF_3 and (2**384 - 3**242/2).
-            bigint_add_small(base, 1);
-            var tmp = HALF_3.slice(0);
-            bigint_sub(tmp, base);
-            base = tmp;
-        }
-    }
-
-
-    var rem = 0;
-
-    for (var i = 0; i < 242; i++) {
-        rem = 0;
-        for (var j = INT_LENGTH - 1; j >= 0; j--) {
-            var lhs = (rem != 0 ? rem * 0xFFFFFFFF + rem : 0) + base[j];
-            var rhs = RADIX;
-
-            var q = (lhs / rhs) >>> 0;
-            var r = (lhs % rhs) >>> 0;
-
-            base[j] = q;
-            rem = r;
-        }
-
-        trits[i] = rem - 1;
-    }
-
-    if (flip_trits) {
-        for (var i = 0; i < trits.length; i++) {
-            trits[i] = -trits[i];
-        }
-    }
-
-    return trits;
-}
-
-var is_null = function(arr) {
-    for (var i = 0; i < arr.length; i++) {
-        if (arr[i] != 0) {
-            return false;
-            break;
-        }
-    }
-    return true;
-}
-
-var trits_to_words = function(trits) {
-    if (trits.length != 243) {
-        throw "Invalid trits length";
-    }
-
-    var base = new Uint32Array(INT_LENGTH);
-
-    if (trits.slice(0, 242).every(function(a) {a == -1})) {
-        base = HALF_3.slice(0);
-        bigint_not(base);
-        bigint_add_small(base, 1);
-    } else {
-        var size = 1;
-        for (var i = trits.length - 1; i-- > 0;) {
-            var trit = trits[i] + 1;
-
-            //multiply by radix
-            {
-                var sz = size;
-                var carry = 0;
-
-                for (var j = 0; j < sz; j++) {
-                    var v = base[j] * RADIX + carry;
-                    carry = rshift(v, 32);
-                    base[j] = (v & 0xFFFFFFFF) >>> 0;
-                }
-
-                if (carry > 0) {
-                    base[sz] = carry;
-                    size += 1;
-                }
-            }
-
-            //addition
-            {
-                var sz = bigint_add_small(base, trit);
-                if (sz > size) {
-                    size = sz;
-                }
-            }
-        }
-
-        if (!is_null(base)) {
-            if (bigint_cmp(HALF_3, base) <= 0) {
-                // base >= HALF_3
-                // just do base - HALF_3
-                bigint_sub(base, HALF_3);
-            } else {
-                // base < HALF_3
-                // so we need to transform it to a two's complement representation
-                // of (base - HALF_3).
-                // as we don't have a wrapping (-), we need to use some bit magic
-                var tmp = HALF_3.slice(0);
-                bigint_sub(tmp, base);
-                bigint_not(tmp);
-                bigint_add_small(tmp, 1);
-                base = tmp;
-            }
-        }
-    }
-
-    base.reverse();
-
-    for (var i = 0; i < base.length; i++) {
-        base[i] = swap32(base[i]);
-    }
-
-    return base;
-};
-
-module.exports = {
-    trits_to_words: trits_to_words,
-    words_to_trits: words_to_trits
-};
-
-},{}],7:[function(require,module,exports){
-var Converter = require("../converter/converter");
-
-/**
-**      Cryptographic related functions to IOTA's Curl (sponge function)
-**/
-
-function Curl() {
-
-    // truth table
-    this.truthTable = [1, 0, -1, 1, -1, 0, -1, 1, 0];
-    this.HASH_LENGTH = 243;
-}
-
-/**
-*   Initializes the state with 729 trits
-*
-*   @method initialize
-**/
-Curl.prototype.initialize = function(state, length) {
-
-    if (state) {
-
-        this.state = state;
-
-    } else {
-
-        this.state = [];
-
-        for (var i = 0; i < 729; i++) {
-
-            this.state[i] = 0;
-
-        }
-    }
-}
-
-/**
-*   Sponge absorb function
-*
-*   @method absorb
-**/
-Curl.prototype.absorb = function(trits, offset, length) {
-
-    do {
-
-        var i = 0;
-        var limit = (length < 243 ? length : 243);
-
-        while (i < limit) {
-
-            this.state[i++] = trits[offset++];
-        }
-
-        this.transform();
-
-    } while (( length -= 243 ) > 0)
-
-}
-
-/**
-*   Sponge squeeze function
-*
-*   @method squeeze
-**/
-Curl.prototype.squeeze = function(trits, offset, length) {
-
-    do {
-
-        var i = 0;
-        var limit = (length < 243 ? length : 243);
-
-        while (i < limit) {
-
-            trits[offset++] = this.state[i++];
-        }
-
-        this.transform();
-
-    } while (( length -= 243 ) > 0)
-}
-
-/**
-*   Sponge transform function
-*
-*   @method transform
-**/
-Curl.prototype.transform = function() {
-
-    var stateCopy = [], index = 0;
-
-    for (var round = 0; round < 27; round++) {
-
-        stateCopy = this.state.slice();
-
-        for (var i = 0; i < 729; i++) {
-
-            this.state[i] = this.truthTable[stateCopy[index] + stateCopy[index += (index < 365 ? 364 : -365)] * 3 + 4];
-        }
-    }
-}
-
-module.exports = Curl
-
-},{"../converter/converter":5}],8:[function(require,module,exports){
-/* copyright Paul Handy, 2017 */
-
-function sum( a, b ) {
-
-    var s = a + b;
-
-    switch( s ) {
-
-        case 2: return -1;
-        case -2: return 1;
-        default: return s;
-
-    }
-}
-
-function cons( a, b ) {
-
-    if( a === b ) {
-
-        return a;
-
-    }
-
-    return 0;
-}
-
-function any( a, b ) {
-
-    var s = a + b;
-
-    if ( s > 0 ) {
-
-        return 1;
-
-    } else if ( s < 0 ) {
-
-        return -1;
-
-    }
-
-    return 0;
-}
-
-function full_add( a, b, c ) {
-
-    var s_a     =   sum( a, b );
-    var c_a     =   cons( a, b );
-    var c_b     =   cons( s_a, c );
-    var c_out   =   any( c_a, c_b );
-    var s_out   =   sum( s_a, c );
-
-    return [ s_out, c_out ];
-
-}
-
-function add( a, b ) {
-
-    var out = new Array( Math.max( a.length, b.length ) );
-    var carry = 0;
-    var a_i, b_i;
-
-    for( var i = 0; i < out.length; i++ ) {
-
-        a_i = i < a.length ? a[ i ] : 0;
-        b_i = i < b.length ? b[ i ] : 0;
-        var f_a = full_add( a_i, b_i, carry );
-        out[ i ] = f_a[ 0 ];
-        carry = f_a[ 1 ];
-
-    }
-
-    return out;
-
-}
-
-module.exports = add;
-
-},{}],9:[function(require,module,exports){
-var Curl = require("../curl/curl");
-var Converter = require("../converter/converter");
-
-function hmac(key) {
-    this._key = Converter.trits(key);
-}
-
-hmac.prototype.addHMAC = function(bundle) {
-    var curl = new Curl();
-    var key = this._key;
-    for(var i = 0; i < bundle.bundle.length; i++) {
-        if (bundle.bundle[i].value > 0) {
-            var bundleHashTrits = Converter.trits(bundle.bundle[i].bundle);
-            var hmac = new Int32Array(243);
-            curl.initialize();
-            curl.absorb(key);
-            curl.absorb(bundleHashTrits);
-            curl.squeeze(hmac);
-            var hmacTrytes = Converter.trytes(hmac);
-            bundle.bundle[i].signatureMessageFragment = hmacTrytes + bundle.bundle[i].signatureMessageFragment.substring(81, 2187);
-        }
-    }
-}
-
-module.exports = hmac;
-
-},{"../converter/converter":5,"../curl/curl":7}],10:[function(require,module,exports){
-var CryptoJS = require("crypto-js");
-var Converter = require("../converter/converter");
-var WConverter = require("../converter/words");
-
-function Kerl() {
-
-    this.HASH_LENGTH = 243;
-    this.BIT_HASH_LENGTH = 384;
-
-    this.k = CryptoJS.algo.SHA3.create();
-    this.k.init({
-        outputLength: this.BIT_HASH_LENGTH
-    });
-}
-
-Kerl.prototype.initialize = function(state) {}
-
-Kerl.prototype.reset = function() {
-
-    this.k.reset();
-
-}
-
-Kerl.prototype.absorb = function(trits, offset, length) {
-
-
-    if (length && ((length % 243) !== 0)) {
-
-        throw new Error('Illegal length provided');
-
-    }
-
-    do {
-        var limit = (length < this.HASH_LENGTH ? length : this.HASH_LENGTH);
-
-        var trit_state = trits.slice(offset, offset + limit);
-        offset += limit;
-
-        // convert trit state to words
-        var wordsToAbsorb = WConverter.trits_to_words(trit_state);
-
-        // absorb the trit stat as wordarray
-        this.k.update(
-            CryptoJS.lib.WordArray.create(wordsToAbsorb));
-
-    } while ((length -= this.HASH_LENGTH) > 0);
-
-}
-
-
-
-Kerl.prototype.squeeze = function(trits, offset, length) {
-
-    if (length && ((length % 243) !== 0)) {
-
-        throw new Error('Illegal length provided');
-
-    }
-    do {
-
-        // get the hash digest
-        var kCopy = this.k.clone();
-        var final = kCopy.finalize();
-
-        // Convert words to trits and then map it into the internal state
-        var trit_state = WConverter.words_to_trits(final.words);
-
-        var i = 0;
-        var limit = (length < this.HASH_LENGTH ? length : this.HASH_LENGTH);
-
-        while (i < limit) {
-            trits[offset++] = trit_state[i++];
-        }
-
-        this.reset();
-
-        for (i = 0; i < final.words.length; i++) {
-            final.words[i] = final.words[i] ^ 0xFFFFFFFF;
-        }
-
-        this.k.update(final);
-
-    } while ((length -= this.HASH_LENGTH) > 0);
-}
-
-module.exports = Kerl;
-
-},{"../converter/converter":5,"../converter/words":6,"crypto-js":39}],11:[function(require,module,exports){
-var Curl = require("../curl/curl");
-var Converter = require("../converter/converter");
-var Bundle = require("../bundle/bundle");
-var add = require("../helpers/adder");
-
-/**
-*           Signing related functions
-*
-**/
-var key = function(seed, index, length) {
-
-    while ((seed.length % 243) !== 0) {
-      seed.push(0);
-    }
-
-    var indexTrits = Converter.fromValue( index );
-    var subseed = add( seed.slice( ), indexTrits );
-
-    var curl = new Curl( );
-
-    curl.initialize( );
-    curl.absorb(subseed, 0, subseed.length);
-    curl.squeeze(subseed, 0, subseed.length);
-
-    curl.reset( );
-    curl.absorb(subseed, 0, subseed.length);
-
-    var key = [], offset = 0, buffer = [];
-
-    while (length-- > 0) {
-
-        for (var i = 0; i < 27; i++) {
-
-            curl.squeeze(buffer, 0, subseed.length);
-            for (var j = 0; j < 243; j++) {
-
-                key[offset++] = buffer[j];
-            }
-        }
-    }
-    return key;
-}
-
-/**
-*
-*
-**/
-var digests = function(key) {
-
-    var digests = [], buffer = [];
-
-    for (var i = 0; i < Math.floor(key.length / 6561); i++) {
-
-        var keyFragment = key.slice(i * 6561, (i + 1) * 6561);
-
-        for (var j = 0; j < 27; j++) {
-
-            buffer = keyFragment.slice(j * 243, (j + 1) * 243);
-
-            for (var k = 0; k < 26; k++) {
-
-                var kCurl = new Curl();
-                kCurl.initialize();
-                kCurl.absorb(buffer, 0, buffer.length);
-                kCurl.squeeze(buffer, 0, kCurl.HASH_LENGTH);
-            }
-
-            for (var k = 0; k < 243; k++) {
-
-                keyFragment[j * 243 + k] = buffer[k];
-            }
-        }
-
-        var curl = new Curl()
-
-        curl.initialize();
-        curl.absorb(keyFragment, 0, keyFragment.length);
-        curl.squeeze(buffer, 0, curl.HASH_LENGTH);
-
-        for (var j = 0; j < 243; j++) {
-
-            digests[i * 243 + j] = buffer[j];
-        }
-    }
-    return digests;
-}
-
-/**
-*
-*
-**/
-var address = function(digests) {
-
-    var addressTrits = [];
-
-    var curl = new Curl();
-
-    curl.initialize();
-    curl.absorb(digests, 0, digests.length);
-    curl.squeeze(addressTrits, 0, curl.HASH_LENGTH);
-
-    return addressTrits;
-}
-
-/**
-*
-*
-**/
-var digest = function(normalizedBundleFragment, signatureFragment) {
-
-    var buffer = []
-
-    var curl = new Curl();
-
-    curl.initialize();
-
-    for (var i = 0; i< 27; i++) {
-        buffer = signatureFragment.slice(i * 243, (i + 1) * 243);
-
-        for (var j = normalizedBundleFragment[i] + 13; j-- > 0; ) {
-
-            var jCurl = new Curl();
-
-            jCurl.initialize();
-            jCurl.absorb(buffer, 0, buffer.length);
-            jCurl.squeeze(buffer, 0, jCurl.HASH_LENGTH);
-        }
-
-        curl.absorb(buffer, 0, buffer.length);
-    }
-
-    curl.squeeze(buffer, 0, curl.HASH_LENGTH);
-    return buffer;
-}
-
-/**
-*
-*
-**/
-var signatureFragment = function(normalizedBundleFragment, keyFragment) {
-
-    var signatureFragment = keyFragment.slice(), hash = [];
-
-    var curl = new Curl();
-
-    for (var i = 0; i < 27; i++) {
-
-        hash = signatureFragment.slice(i * 243, (i + 1) * 243);
-
-        for (var j = 0; j < 13 - normalizedBundleFragment[i]; j++) {
-
-            curl.initialize();
-            curl.reset();
-            curl.absorb(hash, 0, hash.length);
-            curl.squeeze(hash, 0, curl.HASH_LENGTH);
-        }
-
-        for (var j = 0; j < 243; j++) {
-
-            signatureFragment[i * 243 + j] = hash[j];
-        }
-    }
-
-    return signatureFragment;
-}
-
-/**
-*
-*
-**/
-var validateSignatures = function(expectedAddress, signatureFragments, bundleHash) {
-
-    var self = this;
-    var bundle = new Bundle();
-
-    var normalizedBundleFragments = [];
-    var normalizedBundleHash = bundle.normalizedBundle(bundleHash);
-
-    // Split hash into 3 fragments
-    for (var i = 0; i < 3; i++) {
-        normalizedBundleFragments[i] = normalizedBundleHash.slice(i * 27, (i + 1) * 27);
-    }
-
-    // Get digests
-    var digests = [];
-
-    for (var i = 0; i < signatureFragments.length; i++) {
-
-        var digestBuffer = digest(normalizedBundleFragments[i % 3], Converter.trits(signatureFragments[i]));
-
-        for (var j = 0; j < 243; j++) {
-
-            digests[i * 243 + j] = digestBuffer[j]
-        }
-    }
-
-    var address = Converter.trytes(self.address(digests));
-
-    return (expectedAddress === address);
-}
-
-
-module.exports = {
-    key                 : key,
-    digests             : digests,
-    address             : address,
-    digest              : digest,
-    signatureFragment   : signatureFragment,
-    validateSignatures  : validateSignatures
-}
-
-},{"../bundle/bundle":4,"../converter/converter":5,"../curl/curl":7,"../helpers/adder":8}],12:[function(require,module,exports){
-var Kerl = require("../kerl/kerl");
-var Converter = require("../converter/converter");
-var Bundle = require("../bundle/bundle");
-var add = require("../helpers/adder");
-var oldSigning = require("./oldSigning");
-
-/**
-*           Signing related functions
-*
-**/
-var key = function(seed, index, length) {
-
-    while ((seed.length % 243) !== 0) {
-      seed.push(0);
-    }
-
-    var indexTrits = Converter.fromValue( index );
-    var subseed = add( seed.slice( ), indexTrits );
-
-    var kerl = new Kerl( );
-
-    kerl.initialize( );
-    kerl.absorb(subseed, 0, subseed.length);
-    kerl.squeeze(subseed, 0, subseed.length);
-
-    kerl.reset( );
-    kerl.absorb(subseed, 0, subseed.length);
-
-    var key = [], offset = 0, buffer = [];
-
-    while (length-- > 0) {
-
-        for (var i = 0; i < 27; i++) {
-
-            kerl.squeeze(buffer, 0, subseed.length);
-            for (var j = 0; j < 243; j++) {
-
-                key[offset++] = buffer[j];
-            }
-        }
-    }
-    return key;
-}
-
-/**
-*
-*
-**/
-var digests = function(key) {
-
-    var digests = [], buffer = [];
-
-    for (var i = 0; i < Math.floor(key.length / 6561); i++) {
-
-        var keyFragment = key.slice(i * 6561, (i + 1) * 6561);
-
-        for (var j = 0; j < 27; j++) {
-
-            buffer = keyFragment.slice(j * 243, (j + 1) * 243);
-
-            for (var k = 0; k < 26; k++) {
-
-                var kKerl = new Kerl();
-                kKerl.initialize();
-                kKerl.absorb(buffer, 0, buffer.length);
-                kKerl.squeeze(buffer, 0, kKerl.HASH_LENGTH);
-            }
-
-            for (var k = 0; k < 243; k++) {
-
-                keyFragment[j * 243 + k] = buffer[k];
-            }
-        }
-
-        var kerl = new Kerl()
-
-        kerl.initialize();
-        kerl.absorb(keyFragment, 0, keyFragment.length);
-        kerl.squeeze(buffer, 0, kerl.HASH_LENGTH);
-
-        for (var j = 0; j < 243; j++) {
-
-            digests[i * 243 + j] = buffer[j];
-        }
-    }
-    return digests;
-}
-
-/**
-*
-*
-**/
-var address = function(digests) {
-
-    var addressTrits = [];
-
-    var kerl = new Kerl();
-
-    kerl.initialize();
-    kerl.absorb(digests, 0, digests.length);
-    kerl.squeeze(addressTrits, 0, kerl.HASH_LENGTH);
-
-    return addressTrits;
-}
-
-/**
-*
-*
-**/
-var digest = function(normalizedBundleFragment, signatureFragment) {
-
-    var buffer = []
-
-    var kerl = new Kerl();
-
-    kerl.initialize();
-
-    for (var i = 0; i< 27; i++) {
-        buffer = signatureFragment.slice(i * 243, (i + 1) * 243);
-
-        for (var j = normalizedBundleFragment[i] + 13; j-- > 0; ) {
-
-            var jKerl = new Kerl();
-
-            jKerl.initialize();
-            jKerl.absorb(buffer, 0, buffer.length);
-            jKerl.squeeze(buffer, 0, jKerl.HASH_LENGTH);
-        }
-
-        kerl.absorb(buffer, 0, buffer.length);
-    }
-
-    kerl.squeeze(buffer, 0, kerl.HASH_LENGTH);
-    return buffer;
-}
-
-/**
-*
-*
-**/
-var signatureFragment = function(normalizedBundleFragment, keyFragment) {
-
-    var signatureFragment = keyFragment.slice(), hash = [];
-
-    var kerl = new Kerl();
-
-    for (var i = 0; i < 27; i++) {
-
-        hash = signatureFragment.slice(i * 243, (i + 1) * 243);
-
-        for (var j = 0; j < 13 - normalizedBundleFragment[i]; j++) {
-
-            kerl.initialize();
-            kerl.reset();
-            kerl.absorb(hash, 0, hash.length);
-            kerl.squeeze(hash, 0, kerl.HASH_LENGTH);
-        }
-
-        for (var j = 0; j < 243; j++) {
-
-            signatureFragment[i * 243 + j] = hash[j];
-        }
-    }
-
-    return signatureFragment;
-}
-
-/**
-*
-*
-**/
-var validateSignatures = function(expectedAddress, signatureFragments, bundleHash) {
-
-    var self = this;
-    var bundle = new Bundle();
-
-    var normalizedBundleFragments = [];
-    var normalizedBundleHash = bundle.normalizedBundle(bundleHash);
-
-    // Split hash into 3 fragments
-    for (var i = 0; i < 3; i++) {
-        normalizedBundleFragments[i] = normalizedBundleHash.slice(i * 27, (i + 1) * 27);
-    }
-
-    // Get digests
-    var digests = [];
-
-    for (var i = 0; i < signatureFragments.length; i++) {
-
-        var digestBuffer = digest(normalizedBundleFragments[i % 3], Converter.trits(signatureFragments[i]));
-
-        for (var j = 0; j < 243; j++) {
-
-            digests[i * 243 + j] = digestBuffer[j]
-        }
-    }
-
-    var address = Converter.trytes(self.address(digests));
-
-    var validAddress = (expectedAddress === address);
-
-    // if signature is valid, return already 
-    if (validAddress) return validAddress;
-
-
-    /**
-
-        Validate Curl-based signatures as failover
-
-    **/
-
-    // Get digests
-    var curlDigests = [];
-
-    for (var i = 0; i < signatureFragments.length; i++) {
-
-        var digestBuffer = oldSigning.digest(normalizedBundleFragments[i % 3], Converter.trits(signatureFragments[i]));
-
-        for (var j = 0; j < 243; j++) {
-
-            curlDigests[i * 243 + j] = digestBuffer[j]
-        }
-    }
-
-    var curlAddress = Converter.trytes(oldSigning.address(curlDigests));
-
-    return (expectedAddress === curlAddress);
-}
-
-
-module.exports = {
-    key                 : key,
-    digests             : digests,
-    address             : address,
-    digest              : digest,
-    signatureFragment   : signatureFragment,
-    validateSignatures  : validateSignatures
-}
-
-},{"../bundle/bundle":4,"../converter/converter":5,"../helpers/adder":8,"../kerl/kerl":10,"./oldSigning":11}],13:[function(require,module,exports){
-
-module.exports = {
-
-    invalidTrytes: function() {
-        return new Error("Invalid Trytes provided");
-    },
-    invalidSeed: function() {
-        return new Error("Invalid Seed provided");
-    },
-    invalidIndex: function() {
-        return new Error("Invalid Index option provided");
-    }, 
-    invalidSecurity: function() {
-        return new Error("Invalid Security option provided");
-    },
-    invalidChecksum: function(address) {
-        return new Error("Invalid Checksum supplied for address: " + address)
-    },
-    invalidAttachedTrytes: function() {
-        return new Error("Invalid attached Trytes provided");
-    },
-    invalidTransfers: function() {
-        return new Error("Invalid transfers object");
-    },
-    invalidKey: function() {
-        return new Error("You have provided an invalid key value");
-    },
-    invalidTrunkOrBranch: function(hash) {
-        return new Error("You have provided an invalid hash as a trunk/branch: " + hash);
-    },
-    invalidUri: function(uri) {
-        return new Error("You have provided an invalid URI for your Neighbor: " + uri)
-    },
-    notInt: function() {
-        return new Error("One of your inputs is not an integer");
-    },
-    invalidInputs: function() {
-        return new Error("Invalid inputs provided");
-    }
-}
-
-},{}],14:[function(require,module,exports){
-
-module.exports = {
-
-  invalidResponse: function(response) {
-    return new Error("Invalid Response: " + response);
-  },
-  noConnection: function(host) {
-    return new Error("No connection to host: " + host);
-  },
-  requestError: function(error) {
-    return new Error("Request Error: " + error);
-  }
-}
-
-},{}],15:[function(require,module,exports){
-var utils = require("./utils/utils");
-var makeRequest = require('./utils/makeRequest');
-var api = require("./api/api");
-var Multisig = require('./multisig/multisig');
+var iotaCrypto = require('iota.crypto.js');
+var utils = iotaCrypto.utils;
+var makeRequest = require('./makeRequest');
+var api = require("./api");
 
 
 function IOTA(settings) {
@@ -3559,8 +2140,7 @@ IOTA.prototype.setSettings = function(settings) {
     // this.mam
     // this.flash
     this.utils = utils;
-    this.valid = require("./utils/inputValidator");
-    this.multisig = new Multisig(this._makeRequest);
+    this.valid = iotaCrypto.valid;
 };
 
 
@@ -3576,1082 +2156,9 @@ IOTA.prototype.changeNode = function(settings) {
 
 module.exports = IOTA;
 
-},{"../package.json":95,"./api/api":2,"./multisig/multisig":17,"./utils/inputValidator":20,"./utils/makeRequest":21,"./utils/utils":22}],16:[function(require,module,exports){
-var Converter      =  require('../crypto/converter/converter');
-var Kerl           =  require('../crypto/kerl/kerl');
-var Signing        =  require('../crypto/signing/signing');
-var Utils          =  require('../utils/utils');
-var inputValidator =  require('../utils/inputValidator');
-
-
-/**
-*   Initializes a new multisig address
-*
-*   @method addDigest
-*   @param {string|array} digest digest trytes
-*   @return {object} address instance
-*
-**/
-function Address(digests) {
-
-  if (!(this instanceof Address)) {
-    return new Address(digests);
-  }
-
-  // Initialize kerl instance
-  this._kerl = new Kerl();
-  this._kerl.initialize();
-
-
-  // Add digests if any
-  if (digests) {
-
-    this.absorb(digests);
-  }
-}
-
-/**
-*   Absorbs key digests
-*
-*   @method absorb
-*   @param {string|array} digest digest trytes
-*   @return {object} address instance
-*
-**/
-Address.prototype.absorb = function (digest) {
-
-  // Construct array
-  var digests = Array.isArray(digest) ? digest : [digest];
-
-  // Add digests
-  for (var i = 0; i < digests.length; i++) {
-
-    // Get trits of digest
-    var digestTrits = Converter.trits(digests[i]);
-
-    // Absorb digest
-    this._kerl.absorb(digestTrits, 0, digestTrits.length);
-  }
-
-  return this;
-}
-
-/**
-*   Finalizes and returns the multisig address in trytes
-*
-*   @method finalize
-*   @param {string} digest digest trytes, optional
-*   @return {string} address trytes
-*
-**/
-Address.prototype.finalize = function (digest) {
-
-    // Absorb last digest if provided
-    if (digest) {
-      this.absorb(digest);
-    }
-
-    // Squeeze the address trits
-    var addressTrits = [];
-    this._kerl.squeeze(addressTrits, 0, this._kerl.HASH_LENGTH);
-
-    // Convert trits into trytes and return the address
-    return Converter.trytes(addressTrits);
-}
-
-
-module.exports = Address;
-
-},{"../crypto/converter/converter":5,"../crypto/kerl/kerl":10,"../crypto/signing/signing":12,"../utils/inputValidator":20,"../utils/utils":22}],17:[function(require,module,exports){
-var Signing         =  require('../crypto/signing/signing');
-var Converter       =  require('../crypto/converter/converter');
-var Kerl            =  require('../crypto/kerl/kerl');
-var Bundle          =  require('../crypto/bundle/bundle');
-var Utils           =  require('../utils/utils');
-var inputValidator  =  require('../utils/inputValidator');
-var errors          =  require('../errors/inputErrors');
-var Address         =  require('./address');
-
-function Multisig(provider) {
-
-    this._makeRequest = provider;
-}
-
-
-/**
-*   Gets the key value of a seed
-*
-*   @method getKey
-*   @param {string} seed
-*   @param {int} index
-*   @param {int} security Security level to be used for the private key / address. Can be 1, 2 or 3
-*   @returns {string} digest trytes
-**/
-Multisig.prototype.getKey = function(seed, index, security) {
-
-    return Converter.trytes(Signing.key(Converter.trits(seed), index, security));
-}
-
-/**
-*   Gets the digest value of a seed
-*
-*   @method getDigest
-*   @param {string} seed
-*   @param {int} index
-*   @param {int} security Security level to be used for the private key / address. Can be 1, 2 or 3
-*   @returns {string} digest trytes
-**/
-Multisig.prototype.getDigest = function(seed, index, security) {
-
-    var key = Signing.key(Converter.trits(seed), index, security);
-    return Converter.trytes(Signing.digests(key));
-}
-
-/**
-*   Multisig address constructor
-*/
-Multisig.prototype.address = Address;
-
-/**
-*   Validates  a generated multisig address
-*
-*   @method validateAddress
-*   @param {string} multisigAddress
-*   @param {array} digests
-*   @returns {bool}
-**/
-Multisig.prototype.validateAddress = function(multisigAddress, digests) {
-
-    var kerl = new Kerl();
-
-    // initialize Kerl with the provided state
-    kerl.initialize();
-
-    // Absorb all key digests
-    digests.forEach(function(keyDigest) {
-        var trits = Converter.trits(keyDigest);
-        kerl.absorb(Converter.trits(keyDigest), 0, trits.length);
-    })
-
-    // Squeeze address trits
-    var addressTrits = [];
-    kerl.squeeze(addressTrits, 0, kerl.HASH_LENGTH);
-
-    // Convert trits into trytes and return the address
-    return Converter.trytes(addressTrits) === multisigAddress;
-}
-
-
-/**
-*   Prepares transfer by generating the bundle with the corresponding cosigner transactions
-*   Does not contain signatures
-*
-*   @method initiateTransfer
-*   @param {int} securitySum sum of security levels used by all co-signers
-*   @param {array} inputAddress array of input addresses as well as the securitySum
-*   @param {string} remainderAddress Has to be generated by the cosigners before initiating the transfer, can be null if fully spent
-*   @param {object} transfers
-*   @param {function} callback
-*   @returns {array} Array of transaction objects
-**/
-Multisig.prototype.initiateTransfer = function(securitySum, inputAddress, remainderAddress, transfers, callback) {
-
-    var self = this;
-
-    // If message or tag is not supplied, provide it
-    // Also remove the checksum of the address if it's there
-    transfers.forEach(function(thisTransfer) {
-        thisTransfer.message = thisTransfer.message ? thisTransfer.message : '';
-        thisTransfer.tag = thisTransfer.tag ? thisTransfer.tag : '';
-        thisTransfer.address = Utils.noChecksum(thisTransfer.address);
-    })
-
-    // Input validation of transfers object
-    if (!inputValidator.isTransfersArray(transfers)) {
-        return callback(errors.invalidTransfers());
-    }
-
-    // check if int
-    if (!inputValidator.isValue(securitySum)) {
-        return callback(errors.invalidInputs());
-    }
-
-    // validate input address
-    if (!inputValidator.isAddress(inputAddress)) {
-        return callback(errors.invalidTrytes());
-    }
-
-    // validate remainder address
-    if (remainderAddress && !inputValidator.isAddress(remainderAddress)) {
-        return callback(errors.invalidTrytes());
-    }
-
-    // Create a new bundle
-    var bundle = new Bundle();
-
-    var totalValue = 0;
-    var signatureFragments = [];
-    var tag;
-
-    //
-    //  Iterate over all transfers, get totalValue
-    //  and prepare the signatureFragments, message and tag
-    //
-    for (var i = 0; i < transfers.length; i++) {
-
-        var signatureMessageLength = 1;
-
-        // If message longer than 2187 trytes, increase signatureMessageLength (add multiple transactions)
-        if (transfers[i].message.length > 2187) {
-
-            // Get total length, message / maxLength (2187 trytes)
-            signatureMessageLength += Math.floor(transfers[i].message.length / 2187);
-
-            var msgCopy = transfers[i].message;
-
-            // While there is still a message, copy it
-            while (msgCopy) {
-
-                var fragment = msgCopy.slice(0, 2187);
-                msgCopy = msgCopy.slice(2187, msgCopy.length);
-
-                // Pad remainder of fragment
-                for (var j = 0; fragment.length < 2187; j++) {
-                    fragment += '9';
-                }
-
-                signatureFragments.push(fragment);
-            }
-
-        } else {
-            // Else, get single fragment with 2187 of 9's trytes
-            var fragment = '';
-
-            if (transfers[i].message) {
-                fragment = transfers[i].message.slice(0, 2187)
-            }
-
-            for (var j = 0; fragment.length < 2187; j++) {
-                fragment += '9';
-            }
-
-            signatureFragments.push(fragment);
-        }
-
-        // get current timestamp in seconds
-        var timestamp = Math.floor(Date.now() / 1000);
-
-        // If no tag defined, get 27 tryte tag.
-        tag = transfers[i].tag ? transfers[i].tag : '999999999999999999999999999';
-
-        // Pad for required 27 tryte length
-        for (var j = 0; tag.length < 27; j++) {
-            tag += '9';
-        }
-
-        // Add first entries to the bundle
-        // Slice the address in case the user provided a checksummed one
-        bundle.addEntry(signatureMessageLength, transfers[i].address.slice(0, 81), transfers[i].value, tag, timestamp);
-
-        // Sum up total value
-        totalValue += parseInt(transfers[i].value);
-    }
-
-    // Get inputs if we are sending tokens
-    if (totalValue) {
-
-        var command = {
-            'command': 'getBalances',
-            'addresses': new Array(inputAddress),
-            'threshold': 100
-        }
-
-        self._makeRequest.send(command, function(e, balances) {
-
-            if (e) return callback(e);
-
-            var totalBalance = parseInt(balances.balances[0]);
-
-            if (totalBalance > 0) {
-
-                var toSubtract = 0 - totalBalance;
-                var timestamp = Math.floor(Date.now() / 1000);
-
-                // Add input as bundle entry
-                // Only a single entry, signatures will be added later
-                bundle.addEntry(securitySum, inputAddress, toSubtract, tag, timestamp);
-            }
-
-            if (totalValue > totalBalance) {
-                return callback(new Error("Not enough balance."));
-            }
-
-
-            // If there is a remainder value
-            // Add extra output to send remaining funds to
-            if (totalBalance > totalValue) {
-
-                var remainder = totalBalance - totalValue;
-
-                // Remainder bundle entry if necessary
-                if (!remainderAddress) {
-                    return callback(new Error("No remainder address defined"));
-                }
-
-                bundle.addEntry(1, remainderAddress, remainder, tag, timestamp);
-            }
-
-            bundle.finalize();
-            bundle.addTrytes(signatureFragments);
-
-            return callback(null, bundle.bundle);
-        })
-
-    } else {
-
-        return callback(new Error("Invalid value transfer: the transfer does not require a signature."));
-    }
-
-}
-
-
-/**
-*   Adds the cosigner signatures to the corresponding bundle transaction
-*
-*   @method addSignature
-*   @param {array} bundleToSign
-*   @param {int} cosignerIndex
-*   @param {string} inputAddress
-*   @param {string} key
-*   @param {function} callback
-*   @returns {array} trytes Returns bundle trytes
-**/
-Multisig.prototype.addSignature = function(bundleToSign, inputAddress, key, callback) {
-
-    var bundle = new Bundle();
-    bundle.bundle = bundleToSign;
-
-    // Get the security used for the private key
-    // 1 security level = 2187 trytes
-    var security = (key.length / 2187);
-
-    // convert private key trytes into trits
-    var key = Converter.trits(key);
-
-
-    // First get the total number of already signed transactions
-    // use that for the bundle hash calculation as well as knowing
-    // where to add the signature
-    var numSignedTxs = 0;
-
-    for (var i = 0; i < bundle.bundle.length; i++) {
-
-        if (bundle.bundle[i].address === inputAddress) {
-
-            // If transaction is already signed, increase counter
-            if (!inputValidator.isNinesTrytes(bundle.bundle[i].signatureMessageFragment)) {
-
-                numSignedTxs++;
-            }
-            // Else sign the transactionse
-            else {
-
-                var bundleHash = bundle.bundle[i].bundle;
-
-                //  First 6561 trits for the firstFragment
-                var firstFragment = key.slice(0, 6561);
-
-                //  Get the normalized bundle hash
-                var normalizedBundleHash = bundle.normalizedBundle(bundleHash);
-                var normalizedBundleFragments = [];
-
-                // Split hash into 3 fragments
-                for (var k = 0; k < 3; k++) {
-                    normalizedBundleFragments[k] = normalizedBundleHash.slice(k * 27, (k + 1) * 27);
-                }
-
-                //  First bundle fragment uses 27 trytes
-                var firstBundleFragment = normalizedBundleFragments[numSignedTxs % 3];
-
-                //  Calculate the new signatureFragment with the first bundle fragment
-                var firstSignedFragment = Signing.signatureFragment(firstBundleFragment, firstFragment);
-
-                //  Convert signature to trytes and assign the new signatureFragment
-                bundle.bundle[i].signatureMessageFragment = Converter.trytes(firstSignedFragment);
-
-                for (var j = 1; j < security; j++) {
-
-                    //  Next 6561 trits for the firstFragment
-                    var nextFragment = key.slice(6561 * j, (j + 1) * 6561);
-
-                    //  Use the next 27 trytes
-                    var nextBundleFragment = normalizedBundleFragments[(numSignedTxs + j) % 3];
-
-                    //  Calculate the new signatureFragment with the first bundle fragment
-                    var nextSignedFragment = Signing.signatureFragment(nextBundleFragment, nextFragment);
-
-                    //  Convert signature to trytes and add new bundle entry at i + j position
-                    // Assign the signature fragment
-                    bundle.bundle[i + j].signatureMessageFragment = Converter.trytes(nextSignedFragment);
-                }
-
-                break;
-            }
-        }
-    }
-
-    return callback(null, bundle.bundle);
-}
-
-module.exports = Multisig;
-
-},{"../crypto/bundle/bundle":4,"../crypto/converter/converter":5,"../crypto/kerl/kerl":10,"../crypto/signing/signing":12,"../errors/inputErrors":13,"../utils/inputValidator":20,"../utils/utils":22,"./address":16}],18:[function(require,module,exports){
-//
-//  Conversion of ascii encoded bytes to trytes.
-//  Input is a string (can be stringified JSON object), return value is Trytes
-//
-//  How the conversion works:
-//    2 Trytes === 1 Byte
-//    There are a total of 27 different tryte values: 9ABCDEFGHIJKLMNOPQRSTUVWXYZ
-//
-//    1. We get the decimal value of an individual ASCII character
-//    2. From the decimal value, we then derive the two tryte values by basically calculating the tryte equivalent (e.g. 100 === 19 + 3 * 27)
-//      a. The first tryte value is the decimal value modulo 27 (27 trytes)
-//      b. The second value is the remainder (decimal value - first value), divided by 27
-//    3. The two values returned from Step 2. are then input as indices into the available values list ('9ABCDEFGHIJKLMNOPQRSTUVWXYZ') to get the correct tryte value
-//
-//   EXAMPLES
-//      Lets say we want to convert the ASCII character "Z".
-//        1. 'Z' has a decimal value of 90.
-//        2. 90 can be represented as 9 + 3 * 27. To make it simpler:
-//           a. First value: 90 modulo 27 is 9. This is now our first value
-//           b. Second value: (90 - 9) / 27 is 3. This is our second value.
-//        3. Our two values are now 9 and 3. To get the tryte value now we simply insert it as indices into '9ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-//           a. The first tryte value is '9ABCDEFGHIJKLMNOPQRSTUVWXYZ'[9] === "I"
-//           b. The second tryte value is '9ABCDEFGHIJKLMNOPQRSTUVWXYZ'[3] === "C"
-//        Our tryte pair is "IC"
-//
-//      RESULT:
-//        The ASCII char "Z" is represented as "IC" in trytes.
-//
-function toTrytes(input) {
-
-    // If input is not a string, return null
-    if ( typeof input !== 'string' ) return null
-
-    var TRYTE_VALUES = "9ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    var trytes = "";
-
-    for (var i = 0; i < input.length; i++) {
-        var char = input[i];
-        var asciiValue = char.charCodeAt(0);
-
-        // If not recognizable ASCII character, return null
-        if (asciiValue > 255) {
-            //asciiValue = 32
-            return null;
-        }
-
-        var firstValue = asciiValue % 27;
-        var secondValue = (asciiValue - firstValue) / 27;
-
-        var trytesValue = TRYTE_VALUES[firstValue] + TRYTE_VALUES[secondValue];
-
-        trytes += trytesValue;
-    }
-
-    return trytes;
-}
-
-
-//
-//  Trytes to bytes
-//  Reverse operation from the byteToTrytes function in send.js
-//  2 Trytes == 1 Byte
-//  We assume that the trytes are a JSON encoded object thus for our encoding:
-//    First character = {
-//    Last character = }
-//    Everything after that is 9's padding
-//
-function fromTrytes(inputTrytes) {
-
-    // If input is not a string, return null
-    if ( typeof inputTrytes !== 'string' ) return null
-
-    // If input length is odd, return null
-    if ( inputTrytes.length % 2 ) return null
-
-    var TRYTE_VALUES = "9ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    var outputString = "";
-
-    for (var i = 0; i < inputTrytes.length; i += 2) {
-        // get a trytes pair
-        var trytes = inputTrytes[i] + inputTrytes[i + 1];
-
-        var firstValue = TRYTE_VALUES.indexOf(trytes[0]);
-        var secondValue = TRYTE_VALUES.indexOf(trytes[1]);
-
-        var decimalValue = firstValue + secondValue * 27;
-
-        var character = String.fromCharCode(decimalValue);
-
-        outputString += character;
-    }
-
-    return outputString;
-}
-
-module.exports = {
-    toTrytes: toTrytes,
-    fromTrytes: fromTrytes
-}
-
-},{}],19:[function(require,module,exports){
-var ascii = require("./asciiToTrytes");
-var inputValidator = require("./inputValidator");
-
-/**
-*   extractJson takes a bundle as input and from the signatureMessageFragments extracts the correct JSON
-*   data which was encoded and sent with the transaction.
-*
-*   @method extractJson
-*   @param {array} bundle
-*   @returns {Object}
-**/
-function extractJson(bundle) {
-
-    // if wrong input return null
-    if ( !inputValidator.isArray(bundle) || bundle[0] === undefined ) return null;
-
-
-    // Sanity check: if the first tryte pair is not opening bracket, it's not a message
-    var firstTrytePair = bundle[0].signatureMessageFragment[0] + bundle[0].signatureMessageFragment[1];
-
-    if (firstTrytePair !== "OD") return null;
-
-    var index = 0;
-    var notEnded = true;
-    var trytesChunk = '';
-    var trytesChecked = 0;
-    var preliminaryStop = false;
-    var finalJson = '';
-
-    while (index < bundle.length && notEnded) {
-
-        var messageChunk = bundle[index].signatureMessageFragment;
-
-        // We iterate over the message chunk, reading 9 trytes at a time
-        for (var i = 0; i < messageChunk.length; i += 9) {
-
-            // get 9 trytes
-            var trytes = messageChunk.slice(i, i + 9);
-            trytesChunk += trytes;
-
-            // Get the upper limit of the tytes that need to be checked
-            // because we only check 2 trytes at a time, there is sometimes a leftover
-            var upperLimit = trytesChunk.length - trytesChunk.length % 2;
-
-            var trytesToCheck = trytesChunk.slice(trytesChecked, upperLimit);
-
-            // We read 2 trytes at a time and check if it equals the closing bracket character
-            for (var j = 0; j < trytesToCheck.length; j += 2) {
-
-                var trytePair = trytesToCheck[j] + trytesToCheck[j + 1];
-
-                // If closing bracket char was found, and there are only trailing 9's
-                // we quit and remove the 9's from the trytesChunk.
-                if ( preliminaryStop && trytePair === '99' ) {
-
-                    notEnded = false;
-                    // TODO: Remove the trailing 9's from trytesChunk
-                    //var closingBracket = trytesToCheck.indexOf('QD') + 1;
-
-                    //trytesChunk = trytesChunk.slice( 0, ( trytesChunk.length - trytesToCheck.length ) + ( closingBracket % 2 === 0 ? closingBracket : closingBracket + 1 ) );
-
-                    break;
-                }
-
-                finalJson += ascii.fromTrytes(trytePair);
-
-                // If tryte pair equals closing bracket char, we set a preliminary stop
-                // the preliminaryStop is useful when we have a nested JSON object
-                if (trytePair === "QD") {
-                    preliminaryStop = true;
-                }
-            }
-
-            if (!notEnded)
-                break;
-
-            trytesChecked += trytesToCheck.length;
-        }
-
-        // If we have not reached the end of the message yet, we continue with the next
-        // transaction in the bundle
-        index += 1;
-
-    }
-
-    // If we did not find any JSON, return null
-    if (notEnded) {
-
-        return null;
-
-    } else {
-
-        return finalJson;
-
-    }
-}
-
-module.exports = extractJson;
-
-},{"./asciiToTrytes":18,"./inputValidator":20}],20:[function(require,module,exports){
-/**
-*   checks if input is correct address
-*
-*   @method isAddress
-*   @param {string} address
-*   @returns {boolean}
-**/
-var isAddress = function(address) {
-    // TODO: In the future check checksum
-
-    // Check if address with checksum
-    if (address.length === 90) {
-
-        if (!isTrytes(address, 90)) {
-            return false;
-        }
-    } else {
-
-        if (!isTrytes(address, 81)) {
-            return false;
-        }
-    }
-
-    return true;
-}
-
-/**
-*   checks if input is correct trytes consisting of A-Z9
-*   optionally validate length
-*
-*   @method isTrytes
-*   @param {string} trytes
-*   @param {integer} length optional
-*   @returns {boolean}
-**/
-var isTrytes = function(trytes, length) {
-
-    // If no length specified, just validate the trytes
-    if (!length) length = "0,"
-
-    var regexTrytes = new RegExp("^[9A-Z]{" + length +"}$");
-    return regexTrytes.test(trytes) && isString(trytes);
-}
-
-/**
-*   checks if input is correct trytes consisting of A-Z9
-*   optionally validate length
-*
-*   @method isNinesTrytes
-*   @param {string} trytes
-*   @returns {boolean}
-**/
-var isNinesTrytes = function(trytes) {
-
-    return /^[9]+$/.test(trytes) && isString(trytes);
-}
-
-/**
-*   checks if integer value
-*
-*   @method isValue
-*   @param {string} value
-*   @returns {boolean}
-**/
-var isValue = function(value) {
-
-    // check if correct number
-    return Number.isInteger(value)
-}
-
-/**
-*   checks whether input is a value or not. Can be a string, float or integer
-*
-*   @method isNum
-*   @param {int}
-*   @returns {boolean}
-**/
-var isNum = function(input) {
-
-    return /^(\d+\.?\d{0,15}|\.\d{0,15})$/.test(input);
-}
-
-/**
-*   checks if input is correct hash
-*
-*   @method isHash
-*   @param {string} hash
-*   @returns {boolean}
-**/
-var isHash = function(hash) {
-
-    // Check if valid, 81 trytes
-    if (!isTrytes(hash, 81)) {
-
-        return false;
-    }
-
-    return true;
-}
-
-/**
-*   checks whether input is a string or not
-*
-*   @method isString
-*   @param {string}
-*   @returns {boolean}
-**/
-var isString = function(string) {
-
-    return typeof string === 'string';
-}
-
-
-/**
-*   checks whether input is an array or not
-*
-*   @method isArray
-*   @param {object}
-*   @returns {boolean}
-**/
-var isArray = function(array) {
-
-    return array instanceof Array;
-}
-
-
-/**
-*   checks whether input is object or not
-*
-*   @method isObject
-*   @param {object}
-*   @returns {boolean}
-**/
-var isObject = function(object) {
-
-    return typeof object === 'object';
-}
-
-
-
-/**
-*   checks if input is correct hash
-*
-*   @method isTransfersArray
-*   @param {array} hash
-*   @returns {boolean}
-**/
-var isTransfersArray = function(transfersArray) {
-
-    if (!isArray(transfersArray)) return false;
-
-    for (var i = 0; i < transfersArray.length; i++) {
-
-        var transfer = transfersArray[i];
-
-        // Check if valid address
-        var address = transfer.address;
-        if (!isAddress(address)) {
-            return false;
-        }
-
-        // Validity check for value
-        var value = transfer.value;
-        if (!isValue(value)) {
-            return false;
-        }
-
-        // Check if message is correct trytes of any length
-        var message = transfer.message;
-        if (!isTrytes(message, "0,")) {
-            return false;
-        }
-
-        // Check if tag is correct trytes of {0,27} trytes
-        var tag = transfer.tag;
-        if (!isTrytes(tag, "0,27")) {
-            return false;
-        }
-
-    }
-
-    return true;
-}
-
-/**
-*   checks if input is list of correct trytes
-*
-*   @method isArrayOfHashes
-*   @param {list} hashesArray
-*   @returns {boolean}
-**/
-var isArrayOfHashes = function(hashesArray) {
-
-    if (!isArray(hashesArray)) return false;
-
-    for (var i = 0; i < hashesArray.length; i++) {
-
-        var hash = hashesArray[i];
-
-        // Check if address with checksum
-        if (hash.length === 90) {
-
-            if (!isTrytes(hash, 90)) {
-                return false;
-            }
-        } else {
-
-            if (!isTrytes(hash, 81)) {
-                return false;
-            }
-        }
-    }
-
-    return true;
-}
-
-/**
-*   checks if input is list of correct trytes
-*
-*   @method isArrayOfTrytes
-*   @param {list} trytesArray
-*   @returns {boolean}
-**/
-var isArrayOfTrytes = function(trytesArray) {
-
-    if (!isArray(trytesArray)) return false;
-
-    for (var i = 0; i < trytesArray.length; i++) {
-
-        var tryteValue = trytesArray[i];
-
-        // Check if correct 2673 trytes
-        if (!isTrytes(tryteValue, 2673)) {
-            return false;
-        }
-    }
-
-    return true;
-}
-
-/**
-*   checks if attached trytes if last 241 trytes are non-zero
-*
-*   @method isArrayOfAttachedTrytes
-*   @param {array} trytesArray
-*   @returns {boolean}
-**/
-var isArrayOfAttachedTrytes = function(trytesArray) {
-
-    if (!isArray(trytesArray)) return false;
-
-    for (var i = 0; i < trytesArray.length; i++) {
-
-        var tryteValue = trytesArray[i];
-
-        // Check if correct 2673 trytes
-        if (!isTrytes(tryteValue, 2673)) {
-            return false;
-        }
-
-        var lastTrytes = tryteValue.slice(2673 - (3 * 81));
-
-        if (/^[9]+$/.test(lastTrytes)) {
-            return false;
-        }
-    }
-
-    return true;
-}
-
-/**
-*   checks if correct bundle with transaction object
-*
-*   @method isArrayOfTxObjects
-*   @param {array} bundle
-*   @returns {boolean}
-**/
-var isArrayOfTxObjects = function(bundle) {
-
-    if (!isArray(bundle) || bundle.length === 0) return false;
-
-    var validArray = true;
-
-    bundle.forEach(function(txObject) {
-
-        var keysToValidate = [
-            {
-                key: 'hash',
-                validator: isHash,
-                args: null
-            }, {
-                key: 'signatureMessageFragment',
-                validator: isTrytes,
-                args: 2187
-            }, {
-                key: 'address',
-                validator: isHash,
-                args: null
-            }, {
-                key: 'value',
-                validator: isValue,
-                args: null
-            }, {
-                key: 'tag',
-                validator: isTrytes,
-                args: 27
-            }, {
-                key: 'timestamp',
-                validator: isValue,
-                args: null
-            }, {
-                key: 'currentIndex',
-                validator: isValue,
-                args: null
-            },{
-                key: 'lastIndex',
-                validator: isValue,
-                args: null
-            }, {
-                key: 'bundle',
-                validator: isHash,
-                args: null
-            }, {
-                key: 'trunkTransaction',
-                validator: isHash,
-                args: null
-            }, {
-                key: 'branchTransaction',
-                validator: isHash,
-                args: null
-            }, {
-                key: 'nonce',
-                validator: isHash,
-                args: null
-            }
-        ]
-
-        for (var i = 0; i < keysToValidate.length; i++) {
-
-            var key = keysToValidate[i].key;
-            var validator = keysToValidate[i].validator;
-            var args = keysToValidate[i].args
-
-            // If input does not have keyIndex and address, return false
-            if (!txObject.hasOwnProperty(key)) {
-                validArray = false;
-                break;
-            }
-
-            // If input validator function does not return true, exit
-            if (!validator(txObject[key], args)) {
-                validArray = false;
-                break;
-            }
-        }
-    })
-
-    return validArray;
-}
-
-/**
-*   checks if correct inputs list
-*
-*   @method isInputs
-*   @param {array} inputs
-*   @returns {boolean}
-**/
-var isInputs = function(inputs) {
-
-    if (!isArray(inputs)) return false;
-
-    for (var i = 0; i < inputs.length; i++) {
-
-        var input = inputs[i];
-
-        // If input does not have keyIndex and address, return false
-        if (!input.hasOwnProperty('security') || !input.hasOwnProperty('keyIndex') || !input.hasOwnProperty('address')) return false;
-
-        if (!isAddress(input.address)) {
-            return false;
-        }
-
-        if (!isValue(input.security)) {
-            return false;
-        }
-
-        if (!isValue(input.keyIndex)) {
-            return false;
-        }
-    }
-
-    return true;
-}
-
-/**
-*   Checks that a given uri is valid
-*
-*   Valid Examples:
-*   udp://[2001:db8:a0b:12f0::1]:14265
-*   udp://[2001:db8:a0b:12f0::1]
-*   udp://8.8.8.8:14265
-*   udp://domain.com
-*   udp://domain2.com:14265
-*
-*   @method isUri
-*   @param {string} node
-*   @returns {bool} valid
-**/
-var isUri = function(node) {
-
-    var getInside = /^(udp|tcp):\/\/([\[][^\]\.]*[\]]|[^\[\]:]*)[:]{0,1}([0-9]{1,}$|$)/i;
-
-    var stripBrackets = /[\[]{0,1}([^\[\]]*)[\]]{0,1}/;
-
-    var uriTest = /((^\s*((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))\s*$)|(^\s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(%.+)?\s*$))|(^\s*((?=.{1,255}$)(?=.*[A-Za-z].*)[0-9A-Za-z](?:(?:[0-9A-Za-z]|\b-){0,61}[0-9A-Za-z])?(?:\.[0-9A-Za-z](?:(?:[0-9A-Za-z]|\b-){0,61}[0-9A-Za-z])?)*)\s*$)/;
-
-    if(!getInside.test(node)) {
-        return false;
-    }
-
-    return uriTest.test(stripBrackets.exec(getInside.exec(node)[1])[1]);
-}
-
-module.exports = {
-    isAddress: isAddress,
-    isTrytes: isTrytes,
-    isNinesTrytes: isNinesTrytes,
-    isValue: isValue,
-    isHash: isHash,
-    isTransfersArray: isTransfersArray,
-    isArrayOfHashes: isArrayOfHashes,
-    isArrayOfTrytes: isArrayOfTrytes,
-    isArrayOfAttachedTrytes: isArrayOfAttachedTrytes,
-    isArrayOfTxObjects: isArrayOfTxObjects,
-    isInputs: isInputs,
-    isString: isString,
-    isNum: isNum,
-    isArray: isArray,
-    isObject: isObject,
-    isUri: isUri
-}
-
-},{}],21:[function(require,module,exports){
+},{"../package.json":97,"./api":2,"./makeRequest":5,"iota.crypto.js":62}],5:[function(require,module,exports){
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
-var errors = require("../errors/requestErrors");
+var errors = require("./requestErrors");
 
 
 function makeRequest(provider, token) {
@@ -4844,454 +2351,22 @@ makeRequest.prototype.prepareResult = function(result, requestCommand, callback)
 
 module.exports = makeRequest;
 
-},{"../errors/requestErrors":14,"xmlhttprequest":93}],22:[function(require,module,exports){
-var inputValidator  =   require("./inputValidator");
-var makeRequest     =   require("./makeRequest");
-var Curl            =   require("../crypto/curl/curl");
-var Kerl            =   require("../crypto/kerl/kerl");
-var Converter       =   require("../crypto/converter/converter");
-var Signing         =   require("../crypto/signing/signing");
-var CryptoJS        =   require("crypto-js");
-var ascii           =   require("./asciiToTrytes");
-var extractJson     =   require("./extractJson");
-
-
-/**
-*   Table of IOTA Units based off of the standard System of Units
-**/
-var unitMap = {
-    'i'   :   1,
-    'Ki'  :   1000,
-    'Mi'  :   1000000,
-    'Gi'  :   1000000000,
-    'Ti'  :   1000000000000,
-    'Pi'  :   1000000000000000  // For the very, very rich
-}
-
-/**
-*   converts IOTA units
-*
-*   @method convertUnits
-*   @param {string || int || float} value
-*   @param {string} fromUnit
-*   @param {string} toUnit
-*   @returns {integer} converted
-**/
-var convertUnits = function(value, fromUnit, toUnit) {
-
-    // Check if wrong unit provided
-    if (unitMap[fromUnit] === undefined || unitMap[toUnit] === undefined) {
-
-        throw new Error("Invalid unit provided");
-    }
-
-    var afterComma = String(value).match(/\.([\d]+)$/);
-
-    if (afterComma && afterComma[1].length > String(unitMap[fromUnit]).length - 1) {
-
-        throw new Error("Too many digits after comma");
-    }
-
-    // If not valid value, throw error
-    if (!inputValidator.isNum(value)) {
-
-        throw new Error("Invalid value");
-    }
-
-
-    var floatValue = parseFloat(value);
-
-    var converted = (floatValue * unitMap[fromUnit]) / unitMap[toUnit];
-
-    return converted;
-}
-
-/**
-*   Generates the 9-tryte checksum of an address
-*
-*   @method addChecksum
-*   @param {string | list} inputValue
-*   @param {int} checksumLength
-@   @param {bool} isAddress default is true
-*   @returns {string | list} address (with checksum)
-**/
-var addChecksum = function(inputValue, checksumLength, isAddress) {
-
-    // checksum length is either user defined, or 9 trytes
-    var checksumLength = checksumLength || 9;
-    var isAddress = (isAddress !== false);
-
-    // the length of the trytes to be validated
-    var validationLength = isAddress ? 81 : null;
-
-    var isSingleInput = inputValidator.isString( inputValue );
-
-    // If only single address, turn it into an array
-    if ( isSingleInput ) inputValue = new Array( inputValue );
-
-    var inputsWithChecksum = [];
-
-    inputValue.forEach(function(thisValue) {
-
-        // check if correct trytes
-        if (!inputValidator.isTrytes(thisValue, validationLength)) {
-            throw new Error("Invalid input");
-        }
-
-        var kerl = new Kerl();
-        kerl.initialize();
-
-        // Address trits
-        var addressTrits = Converter.trits(thisValue);
-
-        // Checksum trits
-        var checksumTrits = [];
-
-        // Absorb address trits
-        kerl.absorb(addressTrits, 0, addressTrits.length);
-
-        // Squeeze checksum trits
-        kerl.squeeze(checksumTrits, 0, kerl.HASH_LENGTH);
-
-        // First 9 trytes as checksum
-        var checksum = Converter.trytes( checksumTrits ).substring( 81 - checksumLength, 81 );
-        inputsWithChecksum.push( thisValue + checksum );
-    });
-
-    if (isSingleInput) {
-
-        return inputsWithChecksum[ 0 ];
-
-    } else {
-
-        return inputsWithChecksum;
-
-    }
-}
-
-/**
-*   Removes the 9-tryte checksum of an address
-*
-*   @method noChecksum
-*   @param {string | list} address
-*   @returns {string | list} address (without checksum)
-**/
-var noChecksum = function(address) {
-
-    var isSingleAddress = inputValidator.isString(address)
-
-    // If only single address, turn it into an array
-    if (isSingleAddress) address = new Array(address);
-
-    var addressesWithChecksum = [];
-
-    address.forEach(function(thisAddress) {
-        addressesWithChecksum.push(thisAddress.slice(0, 81))
-    })
-
-    // return either string or the list
-    if (isSingleAddress) {
-
-        return addressesWithChecksum[0];
-
-    } else {
-
-        return addressesWithChecksum;
-
-    }
-}
-
-/**
-*   Validates the checksum of an address
-*
-*   @method isValidChecksum
-*   @param {string} addressWithChecksum
-*   @returns {bool}
-**/
-var isValidChecksum = function(addressWithChecksum) {
-
-    var addressWithoutChecksum = noChecksum(addressWithChecksum);
-
-    var newChecksum = addChecksum(addressWithoutChecksum);
-
-    return newChecksum === addressWithChecksum;
-}
-
-/**
-*   Converts transaction trytes of 2673 trytes into a transaction object
-*
-*   @method transactionObject
-*   @param {string} trytes
-*   @returns {String} transactionObject
-**/
-var transactionObject = function(trytes) {
-
-    if (!trytes) return;
-
-    // validity check
-    for (var i = 2279; i < 2295; i++) {
-
-        if (trytes.charAt(i) !== "9") {
-
-            return null;
-
-        }
-    }
-
-    var thisTransaction = {};
-    var transactionTrits = Converter.trits(trytes);
-    var hash = [];
-
-    var curl = new Curl();
-
-    // generate the correct transaction hash
-    curl.initialize();
-    curl.absorb(transactionTrits, 0, transactionTrits.length);
-    curl.squeeze(hash, 0, 243);
-
-    thisTransaction.hash = Converter.trytes(hash);
-    thisTransaction.signatureMessageFragment = trytes.slice(0, 2187);
-    thisTransaction.address = trytes.slice(2187, 2268);
-    thisTransaction.value = Converter.value(transactionTrits.slice(6804, 6837));
-    thisTransaction.tag = trytes.slice(2295, 2322);
-    thisTransaction.timestamp = Converter.value(transactionTrits.slice(6966, 6993));
-    thisTransaction.currentIndex = Converter.value(transactionTrits.slice(6993, 7020));
-    thisTransaction.lastIndex = Converter.value(transactionTrits.slice(7020, 7047));
-    thisTransaction.bundle = trytes.slice(2349, 2430);
-    thisTransaction.trunkTransaction = trytes.slice(2430, 2511);
-    thisTransaction.branchTransaction = trytes.slice(2511, 2592);
-    thisTransaction.nonce = trytes.slice(2592, 2673);
-
-    return thisTransaction;
-}
-
-/**
-*   Converts a transaction object into trytes
-*
-*   @method transactionTrytes
-*   @param {object} transactionTrytes
-*   @returns {String} trytes
-**/
-var transactionTrytes = function(transaction) {
-
-    var valueTrits = Converter.trits(transaction.value);
-    while (valueTrits.length < 81) {
-        valueTrits[valueTrits.length] = 0;
-    }
-
-    var timestampTrits = Converter.trits(transaction.timestamp);
-    while (timestampTrits.length < 27) {
-        timestampTrits[timestampTrits.length] = 0;
-    }
-
-    var currentIndexTrits = Converter.trits(transaction.currentIndex);
-    while (currentIndexTrits.length < 27) {
-        currentIndexTrits[currentIndexTrits.length] = 0;
-    }
-
-    var lastIndexTrits = Converter.trits(transaction.lastIndex);
-    while (lastIndexTrits.length < 27) {
-        lastIndexTrits[lastIndexTrits.length] = 0;
-    }
-
-    return transaction.signatureMessageFragment
-    + transaction.address
-    + Converter.trytes(valueTrits)
-    + transaction.tag
-    + Converter.trytes(timestampTrits)
-    + Converter.trytes(currentIndexTrits)
-    + Converter.trytes(lastIndexTrits)
-    + transaction.bundle
-    + transaction.trunkTransaction
-    + transaction.branchTransaction
-    + transaction.nonce;
-}
-
-/**
-*   Categorizes a list of transfers between sent and received
-*
-*   @method categorizeTransfers
-*   @param {object} transfers Transfers (bundles)
-*   @param {list} addresses List of addresses that belong to the user
-*   @returns {String} trytes
-**/
-var categorizeTransfers = function(transfers, addresses) {
-
-    var categorized = {
-        'sent'      : [],
-        'received'  : []
-    }
-
-    // Iterate over all bundles and sort them between incoming and outgoing transfers
-    transfers.forEach(function(bundle) {
-
-        var spentAlreadyAdded = false;
-
-        // Iterate over every bundle entry
-        bundle.forEach(function(bundleEntry, bundleIndex) {
-
-            // If bundle address in the list of addresses associated with the seed
-            // add the bundle to the
-            if (addresses.indexOf(bundleEntry.address) > -1) {
-
-                // Check if it's a remainder address
-                var isRemainder = (bundleEntry.currentIndex === bundleEntry.lastIndex) && bundleEntry.lastIndex !== 0;
-
-                // check if sent transaction
-                if (bundleEntry.value < 0 && !spentAlreadyAdded && !isRemainder) {
-
-                    categorized.sent.push(bundle);
-
-                    // too make sure we do not add transactions twice
-                    spentAlreadyAdded = true;
-                }
-                // check if received transaction, or 0 value (message)
-                // also make sure that this is not a 2nd tx for spent inputs
-                else if (bundleEntry.value >= 0 && !spentAlreadyAdded && !isRemainder) {
-
-                    categorized.received.push(bundle);
-                }
-            }
-        })
-    })
-
-    return categorized;
-}
-
-
-/**
-*   Validates the signatures
-*
-*   @method validateSignatures
-*   @param {array} signedBundle
-*   @param {string} inputAddress
-*   @returns {bool}
-**/
-var validateSignatures = function(signedBundle, inputAddress) {
-
-
-    var bundleHash;
-    var signatureFragments = [];
-
-    for (var i = 0; i < signedBundle.length; i++) {
-
-        if (signedBundle[i].address === inputAddress) {
-
-            bundleHash = signedBundle[i].bundle;
-
-            // if we reached remainder bundle
-            if (inputValidator.isNinesTrytes(signedBundle[i].signatureMessageFragment)) {
-                break;
-            }
-
-            signatureFragments.push(signedBundle[i].signatureMessageFragment)
-        }
-    }
-
-    return Signing.validateSignatures(inputAddress, signatureFragments, bundleHash);
-}
-
-
-/**
-*   Checks is a Bundle is valid. Validates signatures and overall structure. Has to be tail tx first.
-*
-*   @method isValidBundle
-*   @param {array} bundle
-*   @returns {bool} valid
-**/
-var isBundle = function(bundle) {
-
-    // If not correct bundle
-    if (!inputValidator.isArrayOfTxObjects(bundle)) return false;
-
-    var totalSum = 0, lastIndex, bundleHash = bundle[0].bundle;
-
-    // Prepare to absorb txs and get bundleHash
-    var bundleFromTxs = [];
-
-    var kerl = new Kerl();
-    kerl.initialize();
-
-    // Prepare for signature validation
-    var signaturesToValidate = [];
-
-    bundle.forEach(function(bundleTx, index) {
-
-        totalSum += bundleTx.value;
-
-        // currentIndex has to be equal to the index in the array
-        if (bundleTx.currentIndex !== index) return false;
-
-        // Get the transaction trytes
-        var thisTxTrytes = transactionTrytes(bundleTx);
-
-        // Absorb bundle hash + value + timestamp + lastIndex + currentIndex trytes.
-        var thisTxTrits = Converter.trits(thisTxTrytes.slice(2187, 2187 + 162));
-        kerl.absorb(thisTxTrits, 0, thisTxTrits.length);
-
-        // Check if input transaction
-        if (bundleTx.value < 0) {
-            var thisAddress = bundleTx.address;
-
-            var newSignatureToValidate = {
-                'address': thisAddress,
-                'signatureFragments': Array(bundleTx.signatureMessageFragment)
-            }
-
-            // Find the subsequent txs with the remaining signature fragment
-            for (var i = index; i < bundle.length - 1; i++) {
-                var newBundleTx = bundle[i + 1];
-
-                // Check if new tx is part of the signature fragment
-                if (newBundleTx.address === thisAddress && newBundleTx.value === 0) {
-                    newSignatureToValidate.signatureFragments.push(newBundleTx.signatureMessageFragment);
-                }
-            }
-
-            signaturesToValidate.push(newSignatureToValidate);
-        }
-    });
-
-    // Check for total sum, if not equal 0 return error
-    if (totalSum !== 0) return false;
-
-    // get the bundle hash from the bundle transactions
-    kerl.squeeze(bundleFromTxs, 0, kerl.HASH_LENGTH);
-    var bundleFromTxs = Converter.trytes(bundleFromTxs);
-
-    // Check if bundle hash is the same as returned by tx object
-    if (bundleFromTxs !== bundleHash) return false;
-
-    // Last tx in the bundle should have currentIndex === lastIndex
-    if (bundle[bundle.length - 1].currentIndex !== bundle[bundle.length - 1].lastIndex) return false;
-
-    // Validate the signatures
-    for (var i = 0; i < signaturesToValidate.length; i++) {
-
-        var isValidSignature = Signing.validateSignatures(signaturesToValidate[i].address, signaturesToValidate[i].signatureFragments, bundleHash);
-
-        if (!isValidSignature) return false;
-    }
-
-    return true;
-}
+},{"./requestErrors":6,"xmlhttprequest":95}],6:[function(require,module,exports){
 
 module.exports = {
-    convertUnits        : convertUnits,
-    addChecksum         : addChecksum,
-    noChecksum          : noChecksum,
-    isValidChecksum     : isValidChecksum,
-    transactionObject   : transactionObject,
-    transactionTrytes   : transactionTrytes,
-    categorizeTransfers : categorizeTransfers,
-    toTrytes            : ascii.toTrytes,
-    fromTrytes          : ascii.fromTrytes,
-    extractJson         : extractJson,
-    validateSignatures  : validateSignatures,
-    isBundle            : isBundle
-}
 
-},{"../crypto/converter/converter":5,"../crypto/curl/curl":7,"../crypto/kerl/kerl":10,"../crypto/signing/signing":12,"./asciiToTrytes":18,"./extractJson":19,"./inputValidator":20,"./makeRequest":21,"crypto-js":39}],23:[function(require,module,exports){
+  invalidResponse: function(response) {
+    return new Error("Invalid Response: " + response);
+  },
+  noConnection: function(host) {
+    return new Error("No connection to host: " + host);
+  },
+  requestError: function(error) {
+    return new Error("Request Error: " + error);
+  }
+};
+
+},{}],7:[function(require,module,exports){
 (function (process,global){
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
@@ -10870,7 +7945,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 })));
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":72}],24:[function(require,module,exports){
+},{"_process":72}],8:[function(require,module,exports){
 'use strict'
 
 exports.byteLength = byteLength
@@ -10986,123 +8061,11 @@ function fromByteArray (uint8) {
   return parts.join('')
 }
 
-},{}],25:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 
-},{}],26:[function(require,module,exports){
-arguments[4][25][0].apply(exports,arguments)
-},{"dup":25}],27:[function(require,module,exports){
-(function (global){
-'use strict';
-
-var buffer = require('buffer');
-var Buffer = buffer.Buffer;
-var SlowBuffer = buffer.SlowBuffer;
-var MAX_LEN = buffer.kMaxLength || 2147483647;
-exports.alloc = function alloc(size, fill, encoding) {
-  if (typeof Buffer.alloc === 'function') {
-    return Buffer.alloc(size, fill, encoding);
-  }
-  if (typeof encoding === 'number') {
-    throw new TypeError('encoding must not be number');
-  }
-  if (typeof size !== 'number') {
-    throw new TypeError('size must be a number');
-  }
-  if (size > MAX_LEN) {
-    throw new RangeError('size is too large');
-  }
-  var enc = encoding;
-  var _fill = fill;
-  if (_fill === undefined) {
-    enc = undefined;
-    _fill = 0;
-  }
-  var buf = new Buffer(size);
-  if (typeof _fill === 'string') {
-    var fillBuf = new Buffer(_fill, enc);
-    var flen = fillBuf.length;
-    var i = -1;
-    while (++i < size) {
-      buf[i] = fillBuf[i % flen];
-    }
-  } else {
-    buf.fill(_fill);
-  }
-  return buf;
-}
-exports.allocUnsafe = function allocUnsafe(size) {
-  if (typeof Buffer.allocUnsafe === 'function') {
-    return Buffer.allocUnsafe(size);
-  }
-  if (typeof size !== 'number') {
-    throw new TypeError('size must be a number');
-  }
-  if (size > MAX_LEN) {
-    throw new RangeError('size is too large');
-  }
-  return new Buffer(size);
-}
-exports.from = function from(value, encodingOrOffset, length) {
-  if (typeof Buffer.from === 'function' && (!global.Uint8Array || Uint8Array.from !== Buffer.from)) {
-    return Buffer.from(value, encodingOrOffset, length);
-  }
-  if (typeof value === 'number') {
-    throw new TypeError('"value" argument must not be a number');
-  }
-  if (typeof value === 'string') {
-    return new Buffer(value, encodingOrOffset);
-  }
-  if (typeof ArrayBuffer !== 'undefined' && value instanceof ArrayBuffer) {
-    var offset = encodingOrOffset;
-    if (arguments.length === 1) {
-      return new Buffer(value);
-    }
-    if (typeof offset === 'undefined') {
-      offset = 0;
-    }
-    var len = length;
-    if (typeof len === 'undefined') {
-      len = value.byteLength - offset;
-    }
-    if (offset >= value.byteLength) {
-      throw new RangeError('\'offset\' is out of bounds');
-    }
-    if (len > value.byteLength - offset) {
-      throw new RangeError('\'length\' is out of bounds');
-    }
-    return new Buffer(value.slice(offset, offset + len));
-  }
-  if (Buffer.isBuffer(value)) {
-    var out = new Buffer(value.length);
-    value.copy(out, 0, 0, value.length);
-    return out;
-  }
-  if (value) {
-    if (Array.isArray(value) || (typeof ArrayBuffer !== 'undefined' && value.buffer instanceof ArrayBuffer) || 'length' in value) {
-      return new Buffer(value);
-    }
-    if (value.type === 'Buffer' && Array.isArray(value.data)) {
-      return new Buffer(value.data);
-    }
-  }
-
-  throw new TypeError('First argument must be a string, Buffer, ' + 'ArrayBuffer, Array, or array-like object.');
-}
-exports.allocUnsafeSlow = function allocUnsafeSlow(size) {
-  if (typeof Buffer.allocUnsafeSlow === 'function') {
-    return Buffer.allocUnsafeSlow(size);
-  }
-  if (typeof size !== 'number') {
-    throw new TypeError('size must be a number');
-  }
-  if (size >= MAX_LEN) {
-    throw new RangeError('size is too large');
-  }
-  return new SlowBuffer(size);
-}
-
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"buffer":28}],28:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
+arguments[4][9][0].apply(exports,arguments)
+},{"dup":9}],11:[function(require,module,exports){
 /*!
  * The buffer module from node.js, for the browser.
  *
@@ -12810,7 +9773,7 @@ function numberIsNaN (obj) {
   return obj !== obj // eslint-disable-line no-self-compare
 }
 
-},{"base64-js":24,"ieee754":67}],29:[function(require,module,exports){
+},{"base64-js":8,"ieee754":50}],12:[function(require,module,exports){
 module.exports = {
   "100": "Continue",
   "101": "Switching Protocols",
@@ -12876,7 +9839,7 @@ module.exports = {
   "511": "Network Authentication Required"
 }
 
-},{}],30:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 (function (Buffer){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -12987,7 +9950,7 @@ function objectToString(o) {
 }
 
 }).call(this,{"isBuffer":require("../../is-buffer/index.js")})
-},{"../../is-buffer/index.js":69}],31:[function(require,module,exports){
+},{"../../is-buffer/index.js":69}],14:[function(require,module,exports){
 ;(function (root, factory, undef) {
 	if (typeof exports === "object") {
 		// CommonJS
@@ -13220,7 +10183,7 @@ function objectToString(o) {
 	return CryptoJS.AES;
 
 }));
-},{"./cipher-core":32,"./core":33,"./enc-base64":34,"./evpkdf":36,"./md5":41}],32:[function(require,module,exports){
+},{"./cipher-core":15,"./core":16,"./enc-base64":17,"./evpkdf":19,"./md5":24}],15:[function(require,module,exports){
 ;(function (root, factory, undef) {
 	if (typeof exports === "object") {
 		// CommonJS
@@ -14101,7 +11064,7 @@ function objectToString(o) {
 
 
 }));
-},{"./core":33,"./evpkdf":36}],33:[function(require,module,exports){
+},{"./core":16,"./evpkdf":19}],16:[function(require,module,exports){
 ;(function (root, factory) {
 	if (typeof exports === "object") {
 		// CommonJS
@@ -14862,7 +11825,7 @@ function objectToString(o) {
 	return CryptoJS;
 
 }));
-},{}],34:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 ;(function (root, factory) {
 	if (typeof exports === "object") {
 		// CommonJS
@@ -14998,7 +11961,7 @@ function objectToString(o) {
 	return CryptoJS.enc.Base64;
 
 }));
-},{"./core":33}],35:[function(require,module,exports){
+},{"./core":16}],18:[function(require,module,exports){
 ;(function (root, factory) {
 	if (typeof exports === "object") {
 		// CommonJS
@@ -15148,7 +12111,7 @@ function objectToString(o) {
 	return CryptoJS.enc.Utf16;
 
 }));
-},{"./core":33}],36:[function(require,module,exports){
+},{"./core":16}],19:[function(require,module,exports){
 ;(function (root, factory, undef) {
 	if (typeof exports === "object") {
 		// CommonJS
@@ -15281,7 +12244,7 @@ function objectToString(o) {
 	return CryptoJS.EvpKDF;
 
 }));
-},{"./core":33,"./hmac":38,"./sha1":57}],37:[function(require,module,exports){
+},{"./core":16,"./hmac":21,"./sha1":40}],20:[function(require,module,exports){
 ;(function (root, factory, undef) {
 	if (typeof exports === "object") {
 		// CommonJS
@@ -15348,7 +12311,7 @@ function objectToString(o) {
 	return CryptoJS.format.Hex;
 
 }));
-},{"./cipher-core":32,"./core":33}],38:[function(require,module,exports){
+},{"./cipher-core":15,"./core":16}],21:[function(require,module,exports){
 ;(function (root, factory) {
 	if (typeof exports === "object") {
 		// CommonJS
@@ -15492,7 +12455,7 @@ function objectToString(o) {
 
 
 }));
-},{"./core":33}],39:[function(require,module,exports){
+},{"./core":16}],22:[function(require,module,exports){
 ;(function (root, factory, undef) {
 	if (typeof exports === "object") {
 		// CommonJS
@@ -15511,7 +12474,7 @@ function objectToString(o) {
 	return CryptoJS;
 
 }));
-},{"./aes":31,"./cipher-core":32,"./core":33,"./enc-base64":34,"./enc-utf16":35,"./evpkdf":36,"./format-hex":37,"./hmac":38,"./lib-typedarrays":40,"./md5":41,"./mode-cfb":42,"./mode-ctr":44,"./mode-ctr-gladman":43,"./mode-ecb":45,"./mode-ofb":46,"./pad-ansix923":47,"./pad-iso10126":48,"./pad-iso97971":49,"./pad-nopadding":50,"./pad-zeropadding":51,"./pbkdf2":52,"./rabbit":54,"./rabbit-legacy":53,"./rc4":55,"./ripemd160":56,"./sha1":57,"./sha224":58,"./sha256":59,"./sha3":60,"./sha384":61,"./sha512":62,"./tripledes":63,"./x64-core":64}],40:[function(require,module,exports){
+},{"./aes":14,"./cipher-core":15,"./core":16,"./enc-base64":17,"./enc-utf16":18,"./evpkdf":19,"./format-hex":20,"./hmac":21,"./lib-typedarrays":23,"./md5":24,"./mode-cfb":25,"./mode-ctr":27,"./mode-ctr-gladman":26,"./mode-ecb":28,"./mode-ofb":29,"./pad-ansix923":30,"./pad-iso10126":31,"./pad-iso97971":32,"./pad-nopadding":33,"./pad-zeropadding":34,"./pbkdf2":35,"./rabbit":37,"./rabbit-legacy":36,"./rc4":38,"./ripemd160":39,"./sha1":40,"./sha224":41,"./sha256":42,"./sha3":43,"./sha384":44,"./sha512":45,"./tripledes":46,"./x64-core":47}],23:[function(require,module,exports){
 ;(function (root, factory) {
 	if (typeof exports === "object") {
 		// CommonJS
@@ -15588,7 +12551,7 @@ function objectToString(o) {
 	return CryptoJS.lib.WordArray;
 
 }));
-},{"./core":33}],41:[function(require,module,exports){
+},{"./core":16}],24:[function(require,module,exports){
 ;(function (root, factory) {
 	if (typeof exports === "object") {
 		// CommonJS
@@ -15857,7 +12820,7 @@ function objectToString(o) {
 	return CryptoJS.MD5;
 
 }));
-},{"./core":33}],42:[function(require,module,exports){
+},{"./core":16}],25:[function(require,module,exports){
 ;(function (root, factory, undef) {
 	if (typeof exports === "object") {
 		// CommonJS
@@ -15936,7 +12899,7 @@ function objectToString(o) {
 	return CryptoJS.mode.CFB;
 
 }));
-},{"./cipher-core":32,"./core":33}],43:[function(require,module,exports){
+},{"./cipher-core":15,"./core":16}],26:[function(require,module,exports){
 ;(function (root, factory, undef) {
 	if (typeof exports === "object") {
 		// CommonJS
@@ -16053,7 +13016,7 @@ function objectToString(o) {
 	return CryptoJS.mode.CTRGladman;
 
 }));
-},{"./cipher-core":32,"./core":33}],44:[function(require,module,exports){
+},{"./cipher-core":15,"./core":16}],27:[function(require,module,exports){
 ;(function (root, factory, undef) {
 	if (typeof exports === "object") {
 		// CommonJS
@@ -16112,7 +13075,7 @@ function objectToString(o) {
 	return CryptoJS.mode.CTR;
 
 }));
-},{"./cipher-core":32,"./core":33}],45:[function(require,module,exports){
+},{"./cipher-core":15,"./core":16}],28:[function(require,module,exports){
 ;(function (root, factory, undef) {
 	if (typeof exports === "object") {
 		// CommonJS
@@ -16153,7 +13116,7 @@ function objectToString(o) {
 	return CryptoJS.mode.ECB;
 
 }));
-},{"./cipher-core":32,"./core":33}],46:[function(require,module,exports){
+},{"./cipher-core":15,"./core":16}],29:[function(require,module,exports){
 ;(function (root, factory, undef) {
 	if (typeof exports === "object") {
 		// CommonJS
@@ -16208,7 +13171,7 @@ function objectToString(o) {
 	return CryptoJS.mode.OFB;
 
 }));
-},{"./cipher-core":32,"./core":33}],47:[function(require,module,exports){
+},{"./cipher-core":15,"./core":16}],30:[function(require,module,exports){
 ;(function (root, factory, undef) {
 	if (typeof exports === "object") {
 		// CommonJS
@@ -16258,7 +13221,7 @@ function objectToString(o) {
 	return CryptoJS.pad.Ansix923;
 
 }));
-},{"./cipher-core":32,"./core":33}],48:[function(require,module,exports){
+},{"./cipher-core":15,"./core":16}],31:[function(require,module,exports){
 ;(function (root, factory, undef) {
 	if (typeof exports === "object") {
 		// CommonJS
@@ -16303,7 +13266,7 @@ function objectToString(o) {
 	return CryptoJS.pad.Iso10126;
 
 }));
-},{"./cipher-core":32,"./core":33}],49:[function(require,module,exports){
+},{"./cipher-core":15,"./core":16}],32:[function(require,module,exports){
 ;(function (root, factory, undef) {
 	if (typeof exports === "object") {
 		// CommonJS
@@ -16344,7 +13307,7 @@ function objectToString(o) {
 	return CryptoJS.pad.Iso97971;
 
 }));
-},{"./cipher-core":32,"./core":33}],50:[function(require,module,exports){
+},{"./cipher-core":15,"./core":16}],33:[function(require,module,exports){
 ;(function (root, factory, undef) {
 	if (typeof exports === "object") {
 		// CommonJS
@@ -16375,7 +13338,7 @@ function objectToString(o) {
 	return CryptoJS.pad.NoPadding;
 
 }));
-},{"./cipher-core":32,"./core":33}],51:[function(require,module,exports){
+},{"./cipher-core":15,"./core":16}],34:[function(require,module,exports){
 ;(function (root, factory, undef) {
 	if (typeof exports === "object") {
 		// CommonJS
@@ -16421,7 +13384,7 @@ function objectToString(o) {
 	return CryptoJS.pad.ZeroPadding;
 
 }));
-},{"./cipher-core":32,"./core":33}],52:[function(require,module,exports){
+},{"./cipher-core":15,"./core":16}],35:[function(require,module,exports){
 ;(function (root, factory, undef) {
 	if (typeof exports === "object") {
 		// CommonJS
@@ -16567,7 +13530,7 @@ function objectToString(o) {
 	return CryptoJS.PBKDF2;
 
 }));
-},{"./core":33,"./hmac":38,"./sha1":57}],53:[function(require,module,exports){
+},{"./core":16,"./hmac":21,"./sha1":40}],36:[function(require,module,exports){
 ;(function (root, factory, undef) {
 	if (typeof exports === "object") {
 		// CommonJS
@@ -16758,7 +13721,7 @@ function objectToString(o) {
 	return CryptoJS.RabbitLegacy;
 
 }));
-},{"./cipher-core":32,"./core":33,"./enc-base64":34,"./evpkdf":36,"./md5":41}],54:[function(require,module,exports){
+},{"./cipher-core":15,"./core":16,"./enc-base64":17,"./evpkdf":19,"./md5":24}],37:[function(require,module,exports){
 ;(function (root, factory, undef) {
 	if (typeof exports === "object") {
 		// CommonJS
@@ -16951,7 +13914,7 @@ function objectToString(o) {
 	return CryptoJS.Rabbit;
 
 }));
-},{"./cipher-core":32,"./core":33,"./enc-base64":34,"./evpkdf":36,"./md5":41}],55:[function(require,module,exports){
+},{"./cipher-core":15,"./core":16,"./enc-base64":17,"./evpkdf":19,"./md5":24}],38:[function(require,module,exports){
 ;(function (root, factory, undef) {
 	if (typeof exports === "object") {
 		// CommonJS
@@ -17091,7 +14054,7 @@ function objectToString(o) {
 	return CryptoJS.RC4;
 
 }));
-},{"./cipher-core":32,"./core":33,"./enc-base64":34,"./evpkdf":36,"./md5":41}],56:[function(require,module,exports){
+},{"./cipher-core":15,"./core":16,"./enc-base64":17,"./evpkdf":19,"./md5":24}],39:[function(require,module,exports){
 ;(function (root, factory) {
 	if (typeof exports === "object") {
 		// CommonJS
@@ -17359,7 +14322,7 @@ function objectToString(o) {
 	return CryptoJS.RIPEMD160;
 
 }));
-},{"./core":33}],57:[function(require,module,exports){
+},{"./core":16}],40:[function(require,module,exports){
 ;(function (root, factory) {
 	if (typeof exports === "object") {
 		// CommonJS
@@ -17510,7 +14473,7 @@ function objectToString(o) {
 	return CryptoJS.SHA1;
 
 }));
-},{"./core":33}],58:[function(require,module,exports){
+},{"./core":16}],41:[function(require,module,exports){
 ;(function (root, factory, undef) {
 	if (typeof exports === "object") {
 		// CommonJS
@@ -17591,7 +14554,7 @@ function objectToString(o) {
 	return CryptoJS.SHA224;
 
 }));
-},{"./core":33,"./sha256":59}],59:[function(require,module,exports){
+},{"./core":16,"./sha256":42}],42:[function(require,module,exports){
 ;(function (root, factory) {
 	if (typeof exports === "object") {
 		// CommonJS
@@ -17791,7 +14754,7 @@ function objectToString(o) {
 	return CryptoJS.SHA256;
 
 }));
-},{"./core":33}],60:[function(require,module,exports){
+},{"./core":16}],43:[function(require,module,exports){
 ;(function (root, factory, undef) {
 	if (typeof exports === "object") {
 		// CommonJS
@@ -18115,7 +15078,7 @@ function objectToString(o) {
 	return CryptoJS.SHA3;
 
 }));
-},{"./core":33,"./x64-core":64}],61:[function(require,module,exports){
+},{"./core":16,"./x64-core":47}],44:[function(require,module,exports){
 ;(function (root, factory, undef) {
 	if (typeof exports === "object") {
 		// CommonJS
@@ -18199,7 +15162,7 @@ function objectToString(o) {
 	return CryptoJS.SHA384;
 
 }));
-},{"./core":33,"./sha512":62,"./x64-core":64}],62:[function(require,module,exports){
+},{"./core":16,"./sha512":45,"./x64-core":47}],45:[function(require,module,exports){
 ;(function (root, factory, undef) {
 	if (typeof exports === "object") {
 		// CommonJS
@@ -18523,7 +15486,7 @@ function objectToString(o) {
 	return CryptoJS.SHA512;
 
 }));
-},{"./core":33,"./x64-core":64}],63:[function(require,module,exports){
+},{"./core":16,"./x64-core":47}],46:[function(require,module,exports){
 ;(function (root, factory, undef) {
 	if (typeof exports === "object") {
 		// CommonJS
@@ -19294,7 +16257,7 @@ function objectToString(o) {
 	return CryptoJS.TripleDES;
 
 }));
-},{"./cipher-core":32,"./core":33,"./enc-base64":34,"./evpkdf":36,"./md5":41}],64:[function(require,module,exports){
+},{"./cipher-core":15,"./core":16,"./enc-base64":17,"./evpkdf":19,"./md5":24}],47:[function(require,module,exports){
 ;(function (root, factory) {
 	if (typeof exports === "object") {
 		// CommonJS
@@ -19599,7 +16562,7 @@ function objectToString(o) {
 	return CryptoJS;
 
 }));
-},{"./core":33}],65:[function(require,module,exports){
+},{"./core":16}],48:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -19903,7 +16866,7 @@ function isUndefined(arg) {
   return arg === void 0;
 }
 
-},{}],66:[function(require,module,exports){
+},{}],49:[function(require,module,exports){
 var http = require('http')
 var url = require('url')
 
@@ -19936,7 +16899,7 @@ function validateParams (params) {
   return params
 }
 
-},{"http":84,"url":90}],67:[function(require,module,exports){
+},{"http":86,"url":92}],50:[function(require,module,exports){
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
   var e, m
   var eLen = nBytes * 8 - mLen - 1
@@ -20022,7 +16985,7 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
   buffer[offset + i - d] |= s * 128
 }
 
-},{}],68:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
 if (typeof Object.create === 'function') {
   // implementation from standard node.js 'util' module
   module.exports = function inherits(ctor, superCtor) {
@@ -20047,7 +17010,2929 @@ if (typeof Object.create === 'function') {
   }
 }
 
-},{}],69:[function(require,module,exports){
+},{}],52:[function(require,module,exports){
+var Kerl = require("../kerl/kerl");
+var Converter = require("../converter/converter");
+
+/**
+*
+*   @constructor bundle
+**/
+function Bundle() {
+
+    // Declare empty bundle
+    this.bundle = [];
+}
+
+/**
+*
+*
+**/
+
+Bundle.prototype.addEntry = function(signatureMessageLength, address, value, tag, timestamp, index) {
+
+    for (var i = 0; i < signatureMessageLength; i++) {
+
+        var transactionObject = new Object();
+        transactionObject.address = address;
+        transactionObject.value = i == 0 ? value : 0;
+        transactionObject.tag = tag;
+        transactionObject.timestamp = timestamp;
+
+        this.bundle[this.bundle.length] = transactionObject;
+    }
+}
+
+/**
+*
+*
+**/
+Bundle.prototype.addTrytes = function(signatureFragments) {
+
+    var emptySignatureFragment = '';
+    var emptyHash = '999999999999999999999999999999999999999999999999999999999999999999999999999999999';
+
+    for (var j = 0; emptySignatureFragment.length < 2187; j++) {
+        emptySignatureFragment += '9';
+    }
+
+    for (var i = 0; i < this.bundle.length; i++) {
+
+        // Fill empty signatureMessageFragment
+        this.bundle[i].signatureMessageFragment = signatureFragments[i] ? signatureFragments[i] : emptySignatureFragment;
+
+        // Fill empty trunkTransaction
+        this.bundle[i].trunkTransaction = emptyHash;
+
+        // Fill empty branchTransaction
+        this.bundle[i].branchTransaction = emptyHash;
+
+        // Fill empty nonce
+        this.bundle[i].nonce = emptyHash;
+    }
+}
+
+
+/**
+*
+*
+**/
+Bundle.prototype.finalize = function() {
+
+    var kerl = new Kerl();
+    kerl.initialize();
+
+    for (var i = 0; i < this.bundle.length; i++) {
+
+        var valueTrits = Converter.trits(this.bundle[i].value);
+        while (valueTrits.length < 81) {
+            valueTrits[valueTrits.length] = 0;
+        }
+
+        var timestampTrits = Converter.trits(this.bundle[i].timestamp);
+        while (timestampTrits.length < 27) {
+            timestampTrits[timestampTrits.length] = 0;
+        }
+
+        var currentIndexTrits = Converter.trits(this.bundle[i].currentIndex = i);
+        while (currentIndexTrits.length < 27) {
+            currentIndexTrits[currentIndexTrits.length] = 0;
+        }
+
+        var lastIndexTrits = Converter.trits(this.bundle[i].lastIndex = this.bundle.length - 1);
+        while (lastIndexTrits.length < 27) {
+            lastIndexTrits[lastIndexTrits.length] = 0;
+        }
+
+        var bundleEssence = Converter.trits(this.bundle[i].address + Converter.trytes(valueTrits) + this.bundle[i].tag + Converter.trytes(timestampTrits) + Converter.trytes(currentIndexTrits) + Converter.trytes(lastIndexTrits));
+        kerl.absorb(bundleEssence, 0, bundleEssence.length);
+    }
+
+    var hash = [];
+    kerl.squeeze(hash, 0, kerl.HASH_LENGTH);
+    hash = Converter.trytes(hash);
+
+    for (var i = 0; i < this.bundle.length; i++) {
+
+        this.bundle[i].bundle = hash;
+    }
+}
+
+/**
+*   Normalizes the bundle hash
+*
+**/
+Bundle.prototype.normalizedBundle = function(bundleHash) {
+
+    var normalizedBundle = [];
+
+    for (var i = 0; i < 3; i++) {
+
+        var sum = 0;
+        for (var j = 0; j < 27; j++) {
+
+            sum += (normalizedBundle[i * 27 + j] = Converter.value(Converter.trits(bundleHash.charAt(i * 27 + j))));
+        }
+
+        if (sum >= 0) {
+
+            while (sum-- > 0) {
+
+                for (var j = 0; j < 27; j++) {
+
+                    if (normalizedBundle[i * 27 + j] > -13) {
+
+                        normalizedBundle[i * 27 + j]--;
+                        break;
+                    }
+                }
+            }
+        } else {
+
+            while (sum++ < 0) {
+
+                for (var j = 0; j < 27; j++) {
+
+                    if (normalizedBundle[i * 27 + j] < 13) {
+
+                        normalizedBundle[i * 27 + j]++;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    return normalizedBundle;
+}
+
+module.exports = Bundle;
+
+},{"../converter/converter":53,"../kerl/kerl":58}],53:[function(require,module,exports){
+/**
+ *
+ *   Conversion functions
+ *
+ **/
+
+var RADIX = 3;
+var RADIX_BYTES = 256;
+var MAX_TRIT_VALUE = 1;
+var MIN_TRIT_VALUE = -1;
+var BYTE_HASH_LENGTH = 48;
+
+// All possible tryte values
+var trytesAlphabet = "9ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+// map of all trits representations
+var trytesTrits = [
+    [ 0,  0,  0],
+    [ 1,  0,  0],
+    [-1,  1,  0],
+    [ 0,  1,  0],
+    [ 1,  1,  0],
+    [-1, -1,  1],
+    [ 0, -1,  1],
+    [ 1, -1,  1],
+    [-1,  0,  1],
+    [ 0,  0,  1],
+    [ 1,  0,  1],
+    [-1,  1,  1],
+    [ 0,  1,  1],
+    [ 1,  1,  1],
+    [-1, -1, -1],
+    [ 0, -1, -1],
+    [ 1, -1, -1],
+    [-1,  0, -1],
+    [ 0,  0, -1],
+    [ 1,  0, -1],
+    [-1,  1, -1],
+    [ 0,  1, -1],
+    [ 1,  1, -1],
+    [-1, -1,  0],
+    [ 0, -1,  0],
+    [ 1, -1,  0],
+    [-1,  0,  0]
+];
+
+/**
+ *   Converts trytes into trits
+ *
+ *   @method trits
+ *   @param {String|Int} input Tryte value to be converted. Can either be string or int
+ *   @param {Array} state (optional) state to be modified
+ *   @returns {Array} trits
+ **/
+var trits = function( input, state ) {
+
+    var trits = state || [];
+
+    if (Number.isInteger(input)) {
+
+        var absoluteValue = input < 0 ? -input : input;
+
+        while (absoluteValue > 0) {
+
+            var remainder = absoluteValue % 3;
+            absoluteValue = Math.floor(absoluteValue / 3);
+
+            if (remainder > 1) {
+                remainder = -1;
+                absoluteValue++;
+            }
+
+            trits[trits.length] = remainder;
+        }
+        if (input < 0) {
+
+            for (var i = 0; i < trits.length; i++) {
+
+                trits[i] = -trits[i];
+            }
+        }
+    } else {
+
+        for (var i = 0; i < input.length; i++) {
+
+            var index = trytesAlphabet.indexOf(input.charAt(i));
+            trits[i * 3] = trytesTrits[index][0];
+            trits[i * 3 + 1] = trytesTrits[index][1];
+            trits[i * 3 + 2] = trytesTrits[index][2];
+        }
+    }
+
+    return trits;
+}
+
+/**
+ *   Converts trits into trytes
+ *
+ *   @method trytes
+ *   @param {Array} trits
+ *   @returns {String} trytes
+ **/
+var trytes = function(trits) {
+
+    var trytes = "";
+
+    for ( var i = 0; i < trits.length; i += 3 ) {
+
+        // Iterate over all possible tryte values to find correct trit representation
+        for ( var j = 0; j < trytesAlphabet.length; j++ ) {
+
+            if ( trytesTrits[ j ][ 0 ] === trits[ i ] && trytesTrits[ j ][ 1 ] === trits[ i + 1 ] && trytesTrits[ j ][ 2 ] === trits[ i + 2 ] ) {
+
+                trytes += trytesAlphabet.charAt( j );
+                break;
+
+            }
+
+        }
+
+    }
+
+    return trytes;
+}
+
+/**
+ *   Converts trits into an integer value
+ *
+ *   @method value
+ *   @param {Array} trits
+ *   @returns {int} value
+ **/
+var value = function(trits) {
+
+    var returnValue = 0;
+
+    for ( var i = trits.length; i-- > 0; ) {
+
+        returnValue = returnValue * 3 + trits[ i ];
+    }
+
+    return returnValue;
+}
+
+/**
+ *   Converts an integer value to trits
+ *
+ *   @method value
+ *   @param {Int} value
+ *   @returns {Array} trits
+ **/
+var fromValue = function(value) {
+
+    var destination = [];
+    var absoluteValue = value < 0 ? -value : value;
+    var i = 0;
+
+    while( absoluteValue > 0 ) {
+
+        var remainder = ( absoluteValue % RADIX );
+        absoluteValue = Math.floor( absoluteValue / RADIX );
+
+        if ( remainder > MAX_TRIT_VALUE ) {
+
+            remainder = MIN_TRIT_VALUE;
+            absoluteValue++;
+
+        }
+
+        destination[ i ] = remainder;
+        i++;
+
+    }
+
+    if ( value < 0 ) {
+
+        for ( var j = 0; j < destination.length; j++ ) {
+
+            // switch values
+            destination[ j ] = destination[ j ] === 0 ? 0: -destination[ j ];
+
+        }
+
+    }
+
+    return destination;
+}
+
+module.exports = {
+    trits           : trits,
+    trytes          : trytes,
+    value           : value,
+    fromValue       : fromValue
+};
+
+},{}],54:[function(require,module,exports){
+var INT_LENGTH = 12;
+var BYTE_LENGTH = 48;
+var RADIX = 3;
+/// hex representation of (3^242)/2
+var HALF_3 = Uint32Array.from([
+    0xa5ce8964,
+    0x9f007669,
+    0x1484504f,
+    0x3ade00d9,
+    0x0c24486e,
+    0x50979d57,
+    0x79a4c702,
+    0x48bbae36,
+    0xa9f6808b,
+    0xaa06a805,
+    0xa87fabdf,
+    0x5e69ebef
+]);
+
+/// negates the (unsigned) input array
+var bigint_not = function(arr) {
+    for (var i = 0; i < arr.length; i++) {
+        arr[i] = (~arr[i]) >>> 0;
+    }
+};
+
+/// rshift that works with up to 53
+/// JS's shift operators only work on 32 bit integers
+/// ours is up to 33 or 34 bits though, so
+/// we need to implement shifting manually
+var rshift = function(number, shift) {
+    return (number / Math.pow(2, shift)) >>> 0;
+};
+
+/// swaps endianness
+var swap32 = function(val) {
+    return ((val & 0xFF) << 24) |
+        ((val & 0xFF00) << 8) |
+        ((val >> 8) & 0xFF00) |
+        ((val >> 24) & 0xFF);
+}
+
+/// add with carry
+var full_add = function(lh, rh, carry) {
+    var v = lh + rh;
+    var l = (rshift(v, 32)) & 0xFFFFFFFF;
+    var r = (v & 0xFFFFFFFF) >>> 0;
+    var carry1 = l != 0;
+
+    if (carry) {
+        v = r + 1;
+    }
+    l = (rshift(v, 32)) & 0xFFFFFFFF;
+    r = (v & 0xFFFFFFFF) >>> 0;
+    var carry2 = l != 0;
+
+    return [r, carry1 || carry2];
+};
+
+/// subtracts rh from base
+var bigint_sub = function(base, rh) {
+    var noborrow = true;
+
+    for (var i = 0; i < base.length; i++) {
+        var vc = full_add(base[i], (~rh[i] >>> 0), noborrow);
+        base[i] = vc[0];
+        noborrow = vc[1];
+    }
+
+    if (!noborrow) {
+        throw "noborrow";
+    }
+};
+
+/// compares two (unsigned) big integers
+var bigint_cmp = function(lh, rh) {
+    for (var i = lh.length; i-- > 0;) {
+        var a = lh[i] >>> 0;
+        var b = rh[i] >>> 0;
+        if (a < b) {
+            return -1;
+        } else if (a > b) {
+            return 1;
+        }
+    }
+    return 0;
+};
+
+/// adds rh to base in place
+var bigint_add = function(base, rh) {
+    var carry = false;
+    for (var i = 0; i < base.length; i++) {
+        var vc = full_add(base[i], rh[i], carry);
+        base[i] = vc[0];
+        carry = vc[1];
+    }
+};
+
+/// adds a small (i.e. <32bit) number to base
+var bigint_add_small = function(base, other) {
+    var vc = full_add(base[0], other, false);
+    base[0] = vc[0];
+    var carry = vc[1];
+
+    var i = 1;
+    while (carry && i < base.length) {
+        var vc = full_add(base[i], 0, carry);
+        base[i] = vc[0];
+        carry = vc[1];
+        i += 1;
+    }
+
+    return i;
+};
+
+/// converts the given byte array to trits
+var words_to_trits = function(words) {
+    if (words.length != INT_LENGTH) {
+        throw "Invalid words length";
+    }
+
+    var trits = new Int8Array(243);
+    var base = Uint32Array.from(words);
+
+    base.reverse();
+
+    var flip_trits = false;
+    if (base[INT_LENGTH - 1] >> 31 == 0) {
+        // positive two's complement number.
+        // add HALF_3 to move it to the right place.
+        bigint_add(base, HALF_3);
+    } else {
+        // negative number.
+        bigint_not(base);
+        if (bigint_cmp(base, HALF_3) > 0) {
+            bigint_sub(base, HALF_3);
+            flip_trits = true;
+        } else {
+            /// bigint is between (unsigned) HALF_3 and (2**384 - 3**242/2).
+            bigint_add_small(base, 1);
+            var tmp = HALF_3.slice(0);
+            bigint_sub(tmp, base);
+            base = tmp;
+        }
+    }
+
+
+    var rem = 0;
+
+    for (var i = 0; i < 242; i++) {
+        rem = 0;
+        for (var j = INT_LENGTH - 1; j >= 0; j--) {
+            var lhs = (rem != 0 ? rem * 0xFFFFFFFF + rem : 0) + base[j];
+            var rhs = RADIX;
+
+            var q = (lhs / rhs) >>> 0;
+            var r = (lhs % rhs) >>> 0;
+
+            base[j] = q;
+            rem = r;
+        }
+
+        trits[i] = rem - 1;
+    }
+
+    if (flip_trits) {
+        for (var i = 0; i < trits.length; i++) {
+            trits[i] = -trits[i];
+        }
+    }
+
+    return trits;
+}
+
+var is_null = function(arr) {
+    for (var i = 0; i < arr.length; i++) {
+        if (arr[i] != 0) {
+            return false;
+            break;
+        }
+    }
+    return true;
+}
+
+var trits_to_words = function(trits) {
+    if (trits.length != 243) {
+        throw "Invalid trits length";
+    }
+
+    var base = new Uint32Array(INT_LENGTH);
+
+    if (trits.slice(0, 242).every(function(a) {a == -1})) {
+        base = HALF_3.slice(0);
+        bigint_not(base);
+        bigint_add_small(base, 1);
+    } else {
+        var size = 1;
+        for (var i = trits.length - 1; i-- > 0;) {
+            var trit = trits[i] + 1;
+
+            //multiply by radix
+            {
+                var sz = size;
+                var carry = 0;
+
+                for (var j = 0; j < sz; j++) {
+                    var v = base[j] * RADIX + carry;
+                    carry = rshift(v, 32);
+                    base[j] = (v & 0xFFFFFFFF) >>> 0;
+                }
+
+                if (carry > 0) {
+                    base[sz] = carry;
+                    size += 1;
+                }
+            }
+
+            //addition
+            {
+                var sz = bigint_add_small(base, trit);
+                if (sz > size) {
+                    size = sz;
+                }
+            }
+        }
+
+        if (!is_null(base)) {
+            if (bigint_cmp(HALF_3, base) <= 0) {
+                // base >= HALF_3
+                // just do base - HALF_3
+                bigint_sub(base, HALF_3);
+            } else {
+                // base < HALF_3
+                // so we need to transform it to a two's complement representation
+                // of (base - HALF_3).
+                // as we don't have a wrapping (-), we need to use some bit magic
+                var tmp = HALF_3.slice(0);
+                bigint_sub(tmp, base);
+                bigint_not(tmp);
+                bigint_add_small(tmp, 1);
+                base = tmp;
+            }
+        }
+    }
+
+    base.reverse();
+
+    for (var i = 0; i < base.length; i++) {
+        base[i] = swap32(base[i]);
+    }
+
+    return base;
+};
+
+module.exports = {
+    trits_to_words: trits_to_words,
+    words_to_trits: words_to_trits
+};
+
+},{}],55:[function(require,module,exports){
+var Converter = require("../converter/converter");
+
+/**
+**      Cryptographic related functions to IOTA's Curl (sponge function)
+**/
+
+function Curl() {
+
+    // truth table
+    this.truthTable = [1, 0, -1, 1, -1, 0, -1, 1, 0];
+    this.HASH_LENGTH = 243;
+}
+
+/**
+*   Initializes the state with 729 trits
+*
+*   @method initialize
+**/
+Curl.prototype.initialize = function(state, length) {
+
+    if (state) {
+
+        this.state = state;
+
+    } else {
+
+        this.state = [];
+
+        for (var i = 0; i < 729; i++) {
+
+            this.state[i] = 0;
+
+        }
+    }
+}
+
+/**
+*   Sponge absorb function
+*
+*   @method absorb
+**/
+Curl.prototype.absorb = function(trits, offset, length) {
+
+    do {
+
+        var i = 0;
+        var limit = (length < 243 ? length : 243);
+
+        while (i < limit) {
+
+            this.state[i++] = trits[offset++];
+        }
+
+        this.transform();
+
+    } while (( length -= 243 ) > 0)
+
+}
+
+/**
+*   Sponge squeeze function
+*
+*   @method squeeze
+**/
+Curl.prototype.squeeze = function(trits, offset, length) {
+
+    do {
+
+        var i = 0;
+        var limit = (length < 243 ? length : 243);
+
+        while (i < limit) {
+
+            trits[offset++] = this.state[i++];
+        }
+
+        this.transform();
+
+    } while (( length -= 243 ) > 0)
+}
+
+/**
+*   Sponge transform function
+*
+*   @method transform
+**/
+Curl.prototype.transform = function() {
+
+    var stateCopy = [], index = 0;
+
+    for (var round = 0; round < 27; round++) {
+
+        stateCopy = this.state.slice();
+
+        for (var i = 0; i < 729; i++) {
+
+            this.state[i] = this.truthTable[stateCopy[index] + stateCopy[index += (index < 365 ? 364 : -365)] * 3 + 4];
+        }
+    }
+}
+
+module.exports = Curl
+
+},{"../converter/converter":53}],56:[function(require,module,exports){
+/* copyright Paul Handy, 2017 */
+
+function sum( a, b ) {
+
+    var s = a + b;
+
+    switch( s ) {
+
+        case 2: return -1;
+        case -2: return 1;
+        default: return s;
+
+    }
+}
+
+function cons( a, b ) {
+
+    if( a === b ) {
+
+        return a;
+
+    }
+
+    return 0;
+}
+
+function any( a, b ) {
+
+    var s = a + b;
+
+    if ( s > 0 ) {
+
+        return 1;
+
+    } else if ( s < 0 ) {
+
+        return -1;
+
+    }
+
+    return 0;
+}
+
+function full_add( a, b, c ) {
+
+    var s_a     =   sum( a, b );
+    var c_a     =   cons( a, b );
+    var c_b     =   cons( s_a, c );
+    var c_out   =   any( c_a, c_b );
+    var s_out   =   sum( s_a, c );
+
+    return [ s_out, c_out ];
+
+}
+
+function add( a, b ) {
+
+    var out = new Array( Math.max( a.length, b.length ) );
+    var carry = 0;
+    var a_i, b_i;
+
+    for( var i = 0; i < out.length; i++ ) {
+
+        a_i = i < a.length ? a[ i ] : 0;
+        b_i = i < b.length ? b[ i ] : 0;
+        var f_a = full_add( a_i, b_i, carry );
+        out[ i ] = f_a[ 0 ];
+        carry = f_a[ 1 ];
+
+    }
+
+    return out;
+
+}
+
+module.exports = add;
+
+},{}],57:[function(require,module,exports){
+var Curl = require("../curl/curl");
+var Converter = require("../converter/converter");
+
+function hmac(key) {
+    this._key = Converter.trits(key);
+}
+
+hmac.prototype.addHMAC = function(bundle) {
+    var curl = new Curl();
+    var key = this._key;
+    for(var i = 0; i < bundle.bundle.length; i++) {
+        if (bundle.bundle[i].value > 0) {
+            var bundleHashTrits = Converter.trits(bundle.bundle[i].bundle);
+            var hmac = new Int32Array(243);
+            curl.initialize();
+            curl.absorb(key);
+            curl.absorb(bundleHashTrits);
+            curl.squeeze(hmac);
+            var hmacTrytes = Converter.trytes(hmac);
+            bundle.bundle[i].signatureMessageFragment = hmacTrytes + bundle.bundle[i].signatureMessageFragment.substring(81, 2187);
+        }
+    }
+}
+
+module.exports = hmac;
+
+},{"../converter/converter":53,"../curl/curl":55}],58:[function(require,module,exports){
+var CryptoJS = require("crypto-js");
+var Converter = require("../converter/converter");
+var WConverter = require("../converter/words");
+
+function Kerl() {
+
+    this.HASH_LENGTH = 243;
+    this.BIT_HASH_LENGTH = 384;
+
+    this.k = CryptoJS.algo.SHA3.create();
+    this.k.init({
+        outputLength: this.BIT_HASH_LENGTH
+    });
+}
+
+Kerl.prototype.initialize = function(state) {}
+
+Kerl.prototype.reset = function() {
+
+    this.k.reset();
+
+}
+
+Kerl.prototype.absorb = function(trits, offset, length) {
+
+
+    if (length && ((length % 243) !== 0)) {
+
+        throw new Error('Illegal length provided');
+
+    }
+
+    do {
+        var limit = (length < this.HASH_LENGTH ? length : this.HASH_LENGTH);
+
+        var trit_state = trits.slice(offset, offset + limit);
+        offset += limit;
+
+        // convert trit state to words
+        var wordsToAbsorb = WConverter.trits_to_words(trit_state);
+
+        // absorb the trit stat as wordarray
+        this.k.update(
+            CryptoJS.lib.WordArray.create(wordsToAbsorb));
+
+    } while ((length -= this.HASH_LENGTH) > 0);
+
+}
+
+
+
+Kerl.prototype.squeeze = function(trits, offset, length) {
+
+    if (length && ((length % 243) !== 0)) {
+
+        throw new Error('Illegal length provided');
+
+    }
+    do {
+
+        // get the hash digest
+        var kCopy = this.k.clone();
+        var final = kCopy.finalize();
+
+        // Convert words to trits and then map it into the internal state
+        var trit_state = WConverter.words_to_trits(final.words);
+
+        var i = 0;
+        var limit = (length < this.HASH_LENGTH ? length : this.HASH_LENGTH);
+
+        while (i < limit) {
+            trits[offset++] = trit_state[i++];
+        }
+
+        this.reset();
+
+        for (i = 0; i < final.words.length; i++) {
+            final.words[i] = final.words[i] ^ 0xFFFFFFFF;
+        }
+
+        this.k.update(final);
+
+    } while ((length -= this.HASH_LENGTH) > 0);
+}
+
+module.exports = Kerl;
+
+},{"../converter/converter":53,"../converter/words":54,"crypto-js":22}],59:[function(require,module,exports){
+var Curl = require("../curl/curl");
+var Converter = require("../converter/converter");
+var Bundle = require("../bundle/bundle");
+var add = require("../helpers/adder");
+
+/**
+*           Signing related functions
+*
+**/
+var key = function(seed, index, length) {
+
+    while ((seed.length % 243) !== 0) {
+      seed.push(0);
+    }
+
+    var indexTrits = Converter.fromValue( index );
+    var subseed = add( seed.slice( ), indexTrits );
+
+    var curl = new Curl( );
+
+    curl.initialize( );
+    curl.absorb(subseed, 0, subseed.length);
+    curl.squeeze(subseed, 0, subseed.length);
+
+    curl.reset( );
+    curl.absorb(subseed, 0, subseed.length);
+
+    var key = [], offset = 0, buffer = [];
+
+    while (length-- > 0) {
+
+        for (var i = 0; i < 27; i++) {
+
+            curl.squeeze(buffer, 0, subseed.length);
+            for (var j = 0; j < 243; j++) {
+
+                key[offset++] = buffer[j];
+            }
+        }
+    }
+    return key;
+}
+
+/**
+*
+*
+**/
+var digests = function(key) {
+
+    var digests = [], buffer = [];
+
+    for (var i = 0; i < Math.floor(key.length / 6561); i++) {
+
+        var keyFragment = key.slice(i * 6561, (i + 1) * 6561);
+
+        for (var j = 0; j < 27; j++) {
+
+            buffer = keyFragment.slice(j * 243, (j + 1) * 243);
+
+            for (var k = 0; k < 26; k++) {
+
+                var kCurl = new Curl();
+                kCurl.initialize();
+                kCurl.absorb(buffer, 0, buffer.length);
+                kCurl.squeeze(buffer, 0, kCurl.HASH_LENGTH);
+            }
+
+            for (var k = 0; k < 243; k++) {
+
+                keyFragment[j * 243 + k] = buffer[k];
+            }
+        }
+
+        var curl = new Curl()
+
+        curl.initialize();
+        curl.absorb(keyFragment, 0, keyFragment.length);
+        curl.squeeze(buffer, 0, curl.HASH_LENGTH);
+
+        for (var j = 0; j < 243; j++) {
+
+            digests[i * 243 + j] = buffer[j];
+        }
+    }
+    return digests;
+}
+
+/**
+*
+*
+**/
+var address = function(digests) {
+
+    var addressTrits = [];
+
+    var curl = new Curl();
+
+    curl.initialize();
+    curl.absorb(digests, 0, digests.length);
+    curl.squeeze(addressTrits, 0, curl.HASH_LENGTH);
+
+    return addressTrits;
+}
+
+/**
+*
+*
+**/
+var digest = function(normalizedBundleFragment, signatureFragment) {
+
+    var buffer = []
+
+    var curl = new Curl();
+
+    curl.initialize();
+
+    for (var i = 0; i< 27; i++) {
+        buffer = signatureFragment.slice(i * 243, (i + 1) * 243);
+
+        for (var j = normalizedBundleFragment[i] + 13; j-- > 0; ) {
+
+            var jCurl = new Curl();
+
+            jCurl.initialize();
+            jCurl.absorb(buffer, 0, buffer.length);
+            jCurl.squeeze(buffer, 0, jCurl.HASH_LENGTH);
+        }
+
+        curl.absorb(buffer, 0, buffer.length);
+    }
+
+    curl.squeeze(buffer, 0, curl.HASH_LENGTH);
+    return buffer;
+}
+
+/**
+*
+*
+**/
+var signatureFragment = function(normalizedBundleFragment, keyFragment) {
+
+    var signatureFragment = keyFragment.slice(), hash = [];
+
+    var curl = new Curl();
+
+    for (var i = 0; i < 27; i++) {
+
+        hash = signatureFragment.slice(i * 243, (i + 1) * 243);
+
+        for (var j = 0; j < 13 - normalizedBundleFragment[i]; j++) {
+
+            curl.initialize();
+            curl.reset();
+            curl.absorb(hash, 0, hash.length);
+            curl.squeeze(hash, 0, curl.HASH_LENGTH);
+        }
+
+        for (var j = 0; j < 243; j++) {
+
+            signatureFragment[i * 243 + j] = hash[j];
+        }
+    }
+
+    return signatureFragment;
+}
+
+/**
+*
+*
+**/
+var validateSignatures = function(expectedAddress, signatureFragments, bundleHash) {
+
+    var self = this;
+    var bundle = new Bundle();
+
+    var normalizedBundleFragments = [];
+    var normalizedBundleHash = bundle.normalizedBundle(bundleHash);
+
+    // Split hash into 3 fragments
+    for (var i = 0; i < 3; i++) {
+        normalizedBundleFragments[i] = normalizedBundleHash.slice(i * 27, (i + 1) * 27);
+    }
+
+    // Get digests
+    var digests = [];
+
+    for (var i = 0; i < signatureFragments.length; i++) {
+
+        var digestBuffer = digest(normalizedBundleFragments[i % 3], Converter.trits(signatureFragments[i]));
+
+        for (var j = 0; j < 243; j++) {
+
+            digests[i * 243 + j] = digestBuffer[j]
+        }
+    }
+
+    var address = Converter.trytes(self.address(digests));
+
+    return (expectedAddress === address);
+}
+
+
+module.exports = {
+    key                 : key,
+    digests             : digests,
+    address             : address,
+    digest              : digest,
+    signatureFragment   : signatureFragment,
+    validateSignatures  : validateSignatures
+}
+
+},{"../bundle/bundle":52,"../converter/converter":53,"../curl/curl":55,"../helpers/adder":56}],60:[function(require,module,exports){
+var Kerl = require("../kerl/kerl");
+var Converter = require("../converter/converter");
+var Bundle = require("../bundle/bundle");
+var add = require("../helpers/adder");
+var oldSigning = require("./oldSigning");
+
+/**
+*           Signing related functions
+*
+**/
+var key = function(seed, index, length) {
+
+    while ((seed.length % 243) !== 0) {
+      seed.push(0);
+    }
+
+    var indexTrits = Converter.fromValue( index );
+    var subseed = add( seed.slice( ), indexTrits );
+
+    var kerl = new Kerl( );
+
+    kerl.initialize( );
+    kerl.absorb(subseed, 0, subseed.length);
+    kerl.squeeze(subseed, 0, subseed.length);
+
+    kerl.reset( );
+    kerl.absorb(subseed, 0, subseed.length);
+
+    var key = [], offset = 0, buffer = [];
+
+    while (length-- > 0) {
+
+        for (var i = 0; i < 27; i++) {
+
+            kerl.squeeze(buffer, 0, subseed.length);
+            for (var j = 0; j < 243; j++) {
+
+                key[offset++] = buffer[j];
+            }
+        }
+    }
+    return key;
+}
+
+/**
+*
+*
+**/
+var digests = function(key) {
+
+    var digests = [], buffer = [];
+
+    for (var i = 0; i < Math.floor(key.length / 6561); i++) {
+
+        var keyFragment = key.slice(i * 6561, (i + 1) * 6561);
+
+        for (var j = 0; j < 27; j++) {
+
+            buffer = keyFragment.slice(j * 243, (j + 1) * 243);
+
+            for (var k = 0; k < 26; k++) {
+
+                var kKerl = new Kerl();
+                kKerl.initialize();
+                kKerl.absorb(buffer, 0, buffer.length);
+                kKerl.squeeze(buffer, 0, kKerl.HASH_LENGTH);
+            }
+
+            for (var k = 0; k < 243; k++) {
+
+                keyFragment[j * 243 + k] = buffer[k];
+            }
+        }
+
+        var kerl = new Kerl()
+
+        kerl.initialize();
+        kerl.absorb(keyFragment, 0, keyFragment.length);
+        kerl.squeeze(buffer, 0, kerl.HASH_LENGTH);
+
+        for (var j = 0; j < 243; j++) {
+
+            digests[i * 243 + j] = buffer[j];
+        }
+    }
+    return digests;
+}
+
+/**
+*
+*
+**/
+var address = function(digests) {
+
+    var addressTrits = [];
+
+    var kerl = new Kerl();
+
+    kerl.initialize();
+    kerl.absorb(digests, 0, digests.length);
+    kerl.squeeze(addressTrits, 0, kerl.HASH_LENGTH);
+
+    return addressTrits;
+}
+
+/**
+*
+*
+**/
+var digest = function(normalizedBundleFragment, signatureFragment) {
+
+    var buffer = []
+
+    var kerl = new Kerl();
+
+    kerl.initialize();
+
+    for (var i = 0; i< 27; i++) {
+        buffer = signatureFragment.slice(i * 243, (i + 1) * 243);
+
+        for (var j = normalizedBundleFragment[i] + 13; j-- > 0; ) {
+
+            var jKerl = new Kerl();
+
+            jKerl.initialize();
+            jKerl.absorb(buffer, 0, buffer.length);
+            jKerl.squeeze(buffer, 0, jKerl.HASH_LENGTH);
+        }
+
+        kerl.absorb(buffer, 0, buffer.length);
+    }
+
+    kerl.squeeze(buffer, 0, kerl.HASH_LENGTH);
+    return buffer;
+}
+
+/**
+*
+*
+**/
+var signatureFragment = function(normalizedBundleFragment, keyFragment) {
+
+    var signatureFragment = keyFragment.slice(), hash = [];
+
+    var kerl = new Kerl();
+
+    for (var i = 0; i < 27; i++) {
+
+        hash = signatureFragment.slice(i * 243, (i + 1) * 243);
+
+        for (var j = 0; j < 13 - normalizedBundleFragment[i]; j++) {
+
+            kerl.initialize();
+            kerl.reset();
+            kerl.absorb(hash, 0, hash.length);
+            kerl.squeeze(hash, 0, kerl.HASH_LENGTH);
+        }
+
+        for (var j = 0; j < 243; j++) {
+
+            signatureFragment[i * 243 + j] = hash[j];
+        }
+    }
+
+    return signatureFragment;
+}
+
+/**
+*
+*
+**/
+var validateSignatures = function(expectedAddress, signatureFragments, bundleHash) {
+
+    var self = this;
+    var bundle = new Bundle();
+
+    var normalizedBundleFragments = [];
+    var normalizedBundleHash = bundle.normalizedBundle(bundleHash);
+
+    // Split hash into 3 fragments
+    for (var i = 0; i < 3; i++) {
+        normalizedBundleFragments[i] = normalizedBundleHash.slice(i * 27, (i + 1) * 27);
+    }
+
+    // Get digests
+    var digests = [];
+
+    for (var i = 0; i < signatureFragments.length; i++) {
+
+        var digestBuffer = digest(normalizedBundleFragments[i % 3], Converter.trits(signatureFragments[i]));
+
+        for (var j = 0; j < 243; j++) {
+
+            digests[i * 243 + j] = digestBuffer[j]
+        }
+    }
+
+    var address = Converter.trytes(self.address(digests));
+
+    var validAddress = (expectedAddress === address);
+
+    // if signature is valid, return already 
+    if (validAddress) return validAddress;
+
+
+    /**
+
+        Validate Curl-based signatures as failover
+
+    **/
+
+    // Get digests
+    var curlDigests = [];
+
+    for (var i = 0; i < signatureFragments.length; i++) {
+
+        var digestBuffer = oldSigning.digest(normalizedBundleFragments[i % 3], Converter.trits(signatureFragments[i]));
+
+        for (var j = 0; j < 243; j++) {
+
+            curlDigests[i * 243 + j] = digestBuffer[j]
+        }
+    }
+
+    var curlAddress = Converter.trytes(oldSigning.address(curlDigests));
+
+    return (expectedAddress === curlAddress);
+}
+
+
+module.exports = {
+    key                 : key,
+    digests             : digests,
+    address             : address,
+    digest              : digest,
+    signatureFragment   : signatureFragment,
+    validateSignatures  : validateSignatures
+}
+
+},{"../bundle/bundle":52,"../converter/converter":53,"../helpers/adder":56,"../kerl/kerl":58,"./oldSigning":59}],61:[function(require,module,exports){
+
+module.exports = {
+
+    invalidTrytes: function() {
+        return new Error("Invalid Trytes provided");
+    },
+    invalidSeed: function() {
+        return new Error("Invalid Seed provided");
+    },
+    invalidIndex: function() {
+        return new Error("Invalid Index option provided");
+    }, 
+    invalidSecurity: function() {
+        return new Error("Invalid Security option provided");
+    },
+    invalidChecksum: function(address) {
+        return new Error("Invalid Checksum supplied for address: " + address)
+    },
+    invalidAttachedTrytes: function() {
+        return new Error("Invalid attached Trytes provided");
+    },
+    invalidTransfers: function() {
+        return new Error("Invalid transfers object");
+    },
+    invalidKey: function() {
+        return new Error("You have provided an invalid key value");
+    },
+    invalidTrunkOrBranch: function(hash) {
+        return new Error("You have provided an invalid hash as a trunk/branch: " + hash);
+    },
+    invalidUri: function(uri) {
+        return new Error("You have provided an invalid URI for your Neighbor: " + uri)
+    },
+    notInt: function() {
+        return new Error("One of your inputs is not an integer");
+    },
+    invalidInputs: function() {
+        return new Error("Invalid inputs provided");
+    }
+}
+
+},{}],62:[function(require,module,exports){
+module.exports = {
+  curl: require('./crypto/curl/curl'),
+  kerl: require('./crypto/kerl/kerl'),
+  bundle: require('./crypto/bundle/bundle'),
+  converter: require('./crypto/converter/converter'),
+  signing: require('./crypto/signing/signing'),
+  hmac: require('./crypto/hmac/hmac'),
+  multisig: require('./multisig/multisig'),
+  utils: require("./utils/utils"),
+  valid: require("./errors/inputErrors")
+}
+
+},{"./crypto/bundle/bundle":52,"./crypto/converter/converter":53,"./crypto/curl/curl":55,"./crypto/hmac/hmac":57,"./crypto/kerl/kerl":58,"./crypto/signing/signing":60,"./errors/inputErrors":61,"./multisig/multisig":64,"./utils/utils":68}],63:[function(require,module,exports){
+var Converter      =  require('../crypto/converter/converter');
+var Kerl           =  require('../crypto/kerl/kerl');
+var Signing        =  require('../crypto/signing/signing');
+var Utils          =  require('../utils/utils');
+var inputValidator =  require('../utils/inputValidator');
+
+
+/**
+*   Initializes a new multisig address
+*
+*   @method addDigest
+*   @param {string|array} digest digest trytes
+*   @return {object} address instance
+*
+**/
+function Address(digests) {
+
+  if (!(this instanceof Address)) {
+    return new Address(digests);
+  }
+
+  // Initialize kerl instance
+  this._kerl = new Kerl();
+  this._kerl.initialize();
+
+
+  // Add digests if any
+  if (digests) {
+
+    this.absorb(digests);
+  }
+}
+
+/**
+*   Absorbs key digests
+*
+*   @method absorb
+*   @param {string|array} digest digest trytes
+*   @return {object} address instance
+*
+**/
+Address.prototype.absorb = function (digest) {
+
+  // Construct array
+  var digests = Array.isArray(digest) ? digest : [digest];
+
+  // Add digests
+  for (var i = 0; i < digests.length; i++) {
+
+    // Get trits of digest
+    var digestTrits = Converter.trits(digests[i]);
+
+    // Absorb digest
+    this._kerl.absorb(digestTrits, 0, digestTrits.length);
+  }
+
+  return this;
+}
+
+/**
+*   Finalizes and returns the multisig address in trytes
+*
+*   @method finalize
+*   @param {string} digest digest trytes, optional
+*   @return {string} address trytes
+*
+**/
+Address.prototype.finalize = function (digest) {
+
+    // Absorb last digest if provided
+    if (digest) {
+      this.absorb(digest);
+    }
+
+    // Squeeze the address trits
+    var addressTrits = [];
+    this._kerl.squeeze(addressTrits, 0, this._kerl.HASH_LENGTH);
+
+    // Convert trits into trytes and return the address
+    return Converter.trytes(addressTrits);
+}
+
+
+module.exports = Address;
+
+},{"../crypto/converter/converter":53,"../crypto/kerl/kerl":58,"../crypto/signing/signing":60,"../utils/inputValidator":67,"../utils/utils":68}],64:[function(require,module,exports){
+var Signing         =  require('../crypto/signing/signing');
+var Converter       =  require('../crypto/converter/converter');
+var Kerl            =  require('../crypto/kerl/kerl');
+var Bundle          =  require('../crypto/bundle/bundle');
+var Utils           =  require('../utils/utils');
+var inputValidator  =  require('../utils/inputValidator');
+var errors          =  require('../errors/inputErrors');
+var Address         =  require('./address');
+
+var Multisig = {};
+
+/**
+*   Gets the key value of a seed
+*
+*   @method getKey
+*   @param {string} seed
+*   @param {int} index
+*   @param {int} security Security level to be used for the private key / address. Can be 1, 2 or 3
+*   @returns {string} digest trytes
+**/
+Multisig.getKey = function(seed, index, security) {
+
+    return Converter.trytes(Signing.key(Converter.trits(seed), index, security));
+}
+
+/**
+*   Gets the digest value of a seed
+*
+*   @method getDigest
+*   @param {string} seed
+*   @param {int} index
+*   @param {int} security Security level to be used for the private key / address. Can be 1, 2 or 3
+*   @returns {string} digest trytes
+**/
+Multisig.getDigest = function(seed, index, security) {
+
+    var key = Signing.key(Converter.trits(seed), index, security);
+    return Converter.trytes(Signing.digests(key));
+}
+
+/**
+*   Multisig address constructor
+*/
+Multisig.address = Address;
+
+/**
+*   Validates  a generated multisig address
+*
+*   @method validateAddress
+*   @param {string} multisigAddress
+*   @param {array} digests
+*   @returns {bool}
+**/
+Multisig.validateAddress = function(multisigAddress, digests) {
+
+    var kerl = new Kerl();
+
+    // initialize Kerl with the provided state
+    kerl.initialize();
+
+    // Absorb all key digests
+    digests.forEach(function(keyDigest) {
+        var trits = Converter.trits(keyDigest);
+        kerl.absorb(Converter.trits(keyDigest), 0, trits.length);
+    })
+
+    // Squeeze address trits
+    var addressTrits = [];
+    kerl.squeeze(addressTrits, 0, kerl.HASH_LENGTH);
+
+    // Convert trits into trytes and return the address
+    return Converter.trytes(addressTrits) === multisigAddress;
+}
+
+
+/**
+*   Prepares transfer by generating the bundle with the corresponding cosigner transactions
+*   Does not contain signatures
+*
+*   @method initiateTransfer
+*   @param {object} input the input addresses as well as the securitySum, and balance
+*                   where `address` is the input multisig address
+*                   and `securitySum` is the sum of security levels used by all co-signers
+*                   and `balance` is the expected balance, if you wish to override getBalances
+*   @param {string} remainderAddress Has to be generated by the cosigners before initiating the transfer, can be null if fully spent
+*   @param {object} transfers
+*   @param {function} callback
+*   @returns {array} Array of transaction objects
+**/
+Multisig.initiateTransfer = function(input, remainderAddress, transfers, callback) {
+
+    var self = this;
+
+    // If message or tag is not supplied, provide it
+    // Also remove the checksum of the address if it's there
+    transfers.forEach(function(thisTransfer) {
+        thisTransfer.message = thisTransfer.message ? thisTransfer.message : '';
+        thisTransfer.tag = thisTransfer.tag ? thisTransfer.tag : '';
+        thisTransfer.address = Utils.noChecksum(thisTransfer.address);
+    })
+
+    // Input validation of transfers object
+    if (!inputValidator.isTransfersArray(transfers)) {
+        return callback(errors.invalidTransfers());
+    }
+
+    // check if int
+    if (!inputValidator.isValue(input.securitySum)) {
+        return callback(errors.invalidInputs());
+    }
+
+    // validate input address
+    if (!inputValidator.isAddress(input.address)) {
+        return callback(errors.invalidTrytes());
+    }
+
+    // validate remainder address
+    if (remainderAddress && !inputValidator.isAddress(remainderAddress)) {
+        return callback(errors.invalidTrytes());
+    }
+
+    // Create a new bundle
+    var bundle = new Bundle();
+
+    var totalValue = 0;
+    var signatureFragments = [];
+    var tag;
+
+    //
+    //  Iterate over all transfers, get totalValue
+    //  and prepare the signatureFragments, message and tag
+    //
+    for (var i = 0; i < transfers.length; i++) {
+
+        var signatureMessageLength = 1;
+
+        // If message longer than 2187 trytes, increase signatureMessageLength (add multiple transactions)
+        if (transfers[i].message.length > 2187) {
+
+            // Get total length, message / maxLength (2187 trytes)
+            signatureMessageLength += Math.floor(transfers[i].message.length / 2187);
+
+            var msgCopy = transfers[i].message;
+
+            // While there is still a message, copy it
+            while (msgCopy) {
+
+                var fragment = msgCopy.slice(0, 2187);
+                msgCopy = msgCopy.slice(2187, msgCopy.length);
+
+                // Pad remainder of fragment
+                for (var j = 0; fragment.length < 2187; j++) {
+                    fragment += '9';
+                }
+
+                signatureFragments.push(fragment);
+            }
+
+        } else {
+            // Else, get single fragment with 2187 of 9's trytes
+            var fragment = '';
+
+            if (transfers[i].message) {
+                fragment = transfers[i].message.slice(0, 2187)
+            }
+
+            for (var j = 0; fragment.length < 2187; j++) {
+                fragment += '9';
+            }
+
+            signatureFragments.push(fragment);
+        }
+
+        // get current timestamp in seconds
+        var timestamp = Math.floor(Date.now() / 1000);
+
+        // If no tag defined, get 27 tryte tag.
+        tag = transfers[i].tag ? transfers[i].tag : '999999999999999999999999999';
+
+        // Pad for required 27 tryte length
+        for (var j = 0; tag.length < 27; j++) {
+            tag += '9';
+        }
+
+        // Add first entries to the bundle
+        // Slice the address in case the user provided a checksummed one
+        bundle.addEntry(signatureMessageLength, transfers[i].address.slice(0, 81), transfers[i].value, tag, timestamp);
+
+        // Sum up total value
+        totalValue += parseInt(transfers[i].value);
+    }
+
+    // Get inputs if we are sending tokens
+    if (totalValue) {
+
+        if (input.balance > 0) {
+
+            var toSubtract = 0 - input.balance;
+            var timestamp = Math.floor(Date.now() / 1000);
+
+            // Add input as bundle entry
+            // Only a single entry, signatures will be added later
+            bundle.addEntry(input.securitySum, input.address, toSubtract, tag, timestamp);
+        }
+
+        if (totalValue > input.balance) {
+            return callback(new Error("Not enough balance."));
+        }
+
+
+        // If there is a remainder value
+        // Add extra output to send remaining funds to
+        if (input.balance > totalValue) {
+
+            var remainder = input.balance - totalValue;
+
+            // Remainder bundle entry if necessary
+            if (!remainderAddress) {
+                return callback(new Error("No remainder address defined"));
+            }
+
+            bundle.addEntry(1, remainderAddress, remainder, tag, timestamp);
+        }
+
+        bundle.finalize();
+        bundle.addTrytes(signatureFragments);
+
+        return callback(null, bundle.bundle);
+    } else {
+
+        return callback(new Error("Invalid value transfer: the transfer does not require a signature."));
+    }
+
+}
+
+
+/**
+*   Adds the cosigner signatures to the corresponding bundle transaction
+*
+*   @method addSignature
+*   @param {array} bundleToSign
+*   @param {int} cosignerIndex
+*   @param {string} inputAddress
+*   @param {string} key
+*   @param {function} callback
+*   @returns {array} trytes Returns bundle trytes
+**/
+Multisig.addSignature = function(bundleToSign, inputAddress, key, callback) {
+
+    var bundle = new Bundle();
+    bundle.bundle = bundleToSign;
+
+    // Get the security used for the private key
+    // 1 security level = 2187 trytes
+    var security = (key.length / 2187);
+
+    // convert private key trytes into trits
+    var key = Converter.trits(key);
+
+
+    // First get the total number of already signed transactions
+    // use that for the bundle hash calculation as well as knowing
+    // where to add the signature
+    var numSignedTxs = 0;
+
+    for (var i = 0; i < bundle.bundle.length; i++) {
+
+        if (bundle.bundle[i].address === inputAddress) {
+
+            // If transaction is already signed, increase counter
+            if (!inputValidator.isNinesTrytes(bundle.bundle[i].signatureMessageFragment)) {
+
+                numSignedTxs++;
+            }
+            // Else sign the transactionse
+            else {
+
+                var bundleHash = bundle.bundle[i].bundle;
+
+                //  First 6561 trits for the firstFragment
+                var firstFragment = key.slice(0, 6561);
+
+                //  Get the normalized bundle hash
+                var normalizedBundleHash = bundle.normalizedBundle(bundleHash);
+                var normalizedBundleFragments = [];
+
+                // Split hash into 3 fragments
+                for (var k = 0; k < 3; k++) {
+                    normalizedBundleFragments[k] = normalizedBundleHash.slice(k * 27, (k + 1) * 27);
+                }
+
+                //  First bundle fragment uses 27 trytes
+                var firstBundleFragment = normalizedBundleFragments[numSignedTxs % 3];
+
+                //  Calculate the new signatureFragment with the first bundle fragment
+                var firstSignedFragment = Signing.signatureFragment(firstBundleFragment, firstFragment);
+
+                //  Convert signature to trytes and assign the new signatureFragment
+                bundle.bundle[i].signatureMessageFragment = Converter.trytes(firstSignedFragment);
+
+                for (var j = 1; j < security; j++) {
+
+                    //  Next 6561 trits for the firstFragment
+                    var nextFragment = key.slice(6561 * j, (j + 1) * 6561);
+
+                    //  Use the next 27 trytes
+                    var nextBundleFragment = normalizedBundleFragments[(numSignedTxs + j) % 3];
+
+                    //  Calculate the new signatureFragment with the first bundle fragment
+                    var nextSignedFragment = Signing.signatureFragment(nextBundleFragment, nextFragment);
+
+                    //  Convert signature to trytes and add new bundle entry at i + j position
+                    // Assign the signature fragment
+                    bundle.bundle[i + j].signatureMessageFragment = Converter.trytes(nextSignedFragment);
+                }
+
+                break;
+            }
+        }
+    }
+
+    return callback(null, bundle.bundle);
+}
+
+module.exports = Multisig;
+
+},{"../crypto/bundle/bundle":52,"../crypto/converter/converter":53,"../crypto/kerl/kerl":58,"../crypto/signing/signing":60,"../errors/inputErrors":61,"../utils/inputValidator":67,"../utils/utils":68,"./address":63}],65:[function(require,module,exports){
+//
+//  Conversion of ascii encoded bytes to trytes.
+//  Input is a string (can be stringified JSON object), return value is Trytes
+//
+//  How the conversion works:
+//    2 Trytes === 1 Byte
+//    There are a total of 27 different tryte values: 9ABCDEFGHIJKLMNOPQRSTUVWXYZ
+//
+//    1. We get the decimal value of an individual ASCII character
+//    2. From the decimal value, we then derive the two tryte values by basically calculating the tryte equivalent (e.g. 100 === 19 + 3 * 27)
+//      a. The first tryte value is the decimal value modulo 27 (27 trytes)
+//      b. The second value is the remainder (decimal value - first value), divided by 27
+//    3. The two values returned from Step 2. are then input as indices into the available values list ('9ABCDEFGHIJKLMNOPQRSTUVWXYZ') to get the correct tryte value
+//
+//   EXAMPLES
+//      Lets say we want to convert the ASCII character "Z".
+//        1. 'Z' has a decimal value of 90.
+//        2. 90 can be represented as 9 + 3 * 27. To make it simpler:
+//           a. First value: 90 modulo 27 is 9. This is now our first value
+//           b. Second value: (90 - 9) / 27 is 3. This is our second value.
+//        3. Our two values are now 9 and 3. To get the tryte value now we simply insert it as indices into '9ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+//           a. The first tryte value is '9ABCDEFGHIJKLMNOPQRSTUVWXYZ'[9] === "I"
+//           b. The second tryte value is '9ABCDEFGHIJKLMNOPQRSTUVWXYZ'[3] === "C"
+//        Our tryte pair is "IC"
+//
+//      RESULT:
+//        The ASCII char "Z" is represented as "IC" in trytes.
+//
+function toTrytes(input) {
+
+    // If input is not a string, return null
+    if ( typeof input !== 'string' ) return null
+
+    var TRYTE_VALUES = "9ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    var trytes = "";
+
+    for (var i = 0; i < input.length; i++) {
+        var char = input[i];
+        var asciiValue = char.charCodeAt(0);
+
+        // If not recognizable ASCII character, return null
+        if (asciiValue > 255) {
+            //asciiValue = 32
+            return null;
+        }
+
+        var firstValue = asciiValue % 27;
+        var secondValue = (asciiValue - firstValue) / 27;
+
+        var trytesValue = TRYTE_VALUES[firstValue] + TRYTE_VALUES[secondValue];
+
+        trytes += trytesValue;
+    }
+
+    return trytes;
+}
+
+
+//
+//  Trytes to bytes
+//  Reverse operation from the byteToTrytes function in send.js
+//  2 Trytes == 1 Byte
+//  We assume that the trytes are a JSON encoded object thus for our encoding:
+//    First character = {
+//    Last character = }
+//    Everything after that is 9's padding
+//
+function fromTrytes(inputTrytes) {
+
+    // If input is not a string, return null
+    if ( typeof inputTrytes !== 'string' ) return null
+
+    // If input length is odd, return null
+    if ( inputTrytes.length % 2 ) return null
+
+    var TRYTE_VALUES = "9ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    var outputString = "";
+
+    for (var i = 0; i < inputTrytes.length; i += 2) {
+        // get a trytes pair
+        var trytes = inputTrytes[i] + inputTrytes[i + 1];
+
+        var firstValue = TRYTE_VALUES.indexOf(trytes[0]);
+        var secondValue = TRYTE_VALUES.indexOf(trytes[1]);
+
+        var decimalValue = firstValue + secondValue * 27;
+
+        var character = String.fromCharCode(decimalValue);
+
+        outputString += character;
+    }
+
+    return outputString;
+}
+
+module.exports = {
+    toTrytes: toTrytes,
+    fromTrytes: fromTrytes
+}
+
+},{}],66:[function(require,module,exports){
+var ascii = require("./asciiToTrytes");
+var inputValidator = require("./inputValidator");
+
+/**
+*   extractJson takes a bundle as input and from the signatureMessageFragments extracts the correct JSON
+*   data which was encoded and sent with the transaction.
+*
+*   @method extractJson
+*   @param {array} bundle
+*   @returns {Object}
+**/
+function extractJson(bundle) {
+
+    // if wrong input return null
+    if ( !inputValidator.isArray(bundle) || bundle[0] === undefined ) return null;
+
+
+    // Sanity check: if the first tryte pair is not opening bracket, it's not a message
+    var firstTrytePair = bundle[0].signatureMessageFragment[0] + bundle[0].signatureMessageFragment[1];
+
+    if (firstTrytePair !== "OD") return null;
+
+    var index = 0;
+    var notEnded = true;
+    var trytesChunk = '';
+    var trytesChecked = 0;
+    var preliminaryStop = false;
+    var finalJson = '';
+
+    while (index < bundle.length && notEnded) {
+
+        var messageChunk = bundle[index].signatureMessageFragment;
+
+        // We iterate over the message chunk, reading 9 trytes at a time
+        for (var i = 0; i < messageChunk.length; i += 9) {
+
+            // get 9 trytes
+            var trytes = messageChunk.slice(i, i + 9);
+            trytesChunk += trytes;
+
+            // Get the upper limit of the tytes that need to be checked
+            // because we only check 2 trytes at a time, there is sometimes a leftover
+            var upperLimit = trytesChunk.length - trytesChunk.length % 2;
+
+            var trytesToCheck = trytesChunk.slice(trytesChecked, upperLimit);
+
+            // We read 2 trytes at a time and check if it equals the closing bracket character
+            for (var j = 0; j < trytesToCheck.length; j += 2) {
+
+                var trytePair = trytesToCheck[j] + trytesToCheck[j + 1];
+
+                // If closing bracket char was found, and there are only trailing 9's
+                // we quit and remove the 9's from the trytesChunk.
+                if ( preliminaryStop && trytePair === '99' ) {
+
+                    notEnded = false;
+                    // TODO: Remove the trailing 9's from trytesChunk
+                    //var closingBracket = trytesToCheck.indexOf('QD') + 1;
+
+                    //trytesChunk = trytesChunk.slice( 0, ( trytesChunk.length - trytesToCheck.length ) + ( closingBracket % 2 === 0 ? closingBracket : closingBracket + 1 ) );
+
+                    break;
+                }
+
+                finalJson += ascii.fromTrytes(trytePair);
+
+                // If tryte pair equals closing bracket char, we set a preliminary stop
+                // the preliminaryStop is useful when we have a nested JSON object
+                if (trytePair === "QD") {
+                    preliminaryStop = true;
+                }
+            }
+
+            if (!notEnded)
+                break;
+
+            trytesChecked += trytesToCheck.length;
+        }
+
+        // If we have not reached the end of the message yet, we continue with the next
+        // transaction in the bundle
+        index += 1;
+
+    }
+
+    // If we did not find any JSON, return null
+    if (notEnded) {
+
+        return null;
+
+    } else {
+
+        return finalJson;
+
+    }
+}
+
+module.exports = extractJson;
+
+},{"./asciiToTrytes":65,"./inputValidator":67}],67:[function(require,module,exports){
+/**
+*   checks if input is correct address
+*
+*   @method isAddress
+*   @param {string} address
+*   @returns {boolean}
+**/
+var isAddress = function(address) {
+    // TODO: In the future check checksum
+
+    // Check if address with checksum
+    if (address.length === 90) {
+
+        if (!isTrytes(address, 90)) {
+            return false;
+        }
+    } else {
+
+        if (!isTrytes(address, 81)) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+/**
+*   checks if input is correct trytes consisting of A-Z9
+*   optionally validate length
+*
+*   @method isTrytes
+*   @param {string} trytes
+*   @param {integer} length optional
+*   @returns {boolean}
+**/
+var isTrytes = function(trytes, length) {
+
+    // If no length specified, just validate the trytes
+    if (!length) length = "0,"
+
+    var regexTrytes = new RegExp("^[9A-Z]{" + length +"}$");
+    return regexTrytes.test(trytes) && isString(trytes);
+}
+
+/**
+*   checks if input is correct trytes consisting of A-Z9
+*   optionally validate length
+*
+*   @method isNinesTrytes
+*   @param {string} trytes
+*   @returns {boolean}
+**/
+var isNinesTrytes = function(trytes) {
+
+    return /^[9]+$/.test(trytes) && isString(trytes);
+}
+
+/**
+*   checks if integer value
+*
+*   @method isValue
+*   @param {string} value
+*   @returns {boolean}
+**/
+var isValue = function(value) {
+
+    // check if correct number
+    return Number.isInteger(value)
+}
+
+/**
+*   checks whether input is a value or not. Can be a string, float or integer
+*
+*   @method isNum
+*   @param {int}
+*   @returns {boolean}
+**/
+var isNum = function(input) {
+
+    return /^(\d+\.?\d{0,15}|\.\d{0,15})$/.test(input);
+}
+
+/**
+*   checks if input is correct hash
+*
+*   @method isHash
+*   @param {string} hash
+*   @returns {boolean}
+**/
+var isHash = function(hash) {
+
+    // Check if valid, 81 trytes
+    if (!isTrytes(hash, 81)) {
+
+        return false;
+    }
+
+    return true;
+}
+
+/**
+*   checks whether input is a string or not
+*
+*   @method isString
+*   @param {string}
+*   @returns {boolean}
+**/
+var isString = function(string) {
+
+    return typeof string === 'string';
+}
+
+
+/**
+*   checks whether input is an array or not
+*
+*   @method isArray
+*   @param {object}
+*   @returns {boolean}
+**/
+var isArray = function(array) {
+
+    return array instanceof Array;
+}
+
+
+/**
+*   checks whether input is object or not
+*
+*   @method isObject
+*   @param {object}
+*   @returns {boolean}
+**/
+var isObject = function(object) {
+
+    return typeof object === 'object';
+}
+
+
+
+/**
+*   checks if input is correct hash
+*
+*   @method isTransfersArray
+*   @param {array} hash
+*   @returns {boolean}
+**/
+var isTransfersArray = function(transfersArray) {
+
+    if (!isArray(transfersArray)) return false;
+
+    for (var i = 0; i < transfersArray.length; i++) {
+
+        var transfer = transfersArray[i];
+
+        // Check if valid address
+        var address = transfer.address;
+        if (!isAddress(address)) {
+            return false;
+        }
+
+        // Validity check for value
+        var value = transfer.value;
+        if (!isValue(value)) {
+            return false;
+        }
+
+        // Check if message is correct trytes of any length
+        var message = transfer.message;
+        if (!isTrytes(message, "0,")) {
+            return false;
+        }
+
+        // Check if tag is correct trytes of {0,27} trytes
+        var tag = transfer.tag;
+        if (!isTrytes(tag, "0,27")) {
+            return false;
+        }
+
+    }
+
+    return true;
+}
+
+/**
+*   checks if input is list of correct trytes
+*
+*   @method isArrayOfHashes
+*   @param {list} hashesArray
+*   @returns {boolean}
+**/
+var isArrayOfHashes = function(hashesArray) {
+
+    if (!isArray(hashesArray)) return false;
+
+    for (var i = 0; i < hashesArray.length; i++) {
+
+        var hash = hashesArray[i];
+
+        // Check if address with checksum
+        if (hash.length === 90) {
+
+            if (!isTrytes(hash, 90)) {
+                return false;
+            }
+        } else {
+
+            if (!isTrytes(hash, 81)) {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
+/**
+*   checks if input is list of correct trytes
+*
+*   @method isArrayOfTrytes
+*   @param {list} trytesArray
+*   @returns {boolean}
+**/
+var isArrayOfTrytes = function(trytesArray) {
+
+    if (!isArray(trytesArray)) return false;
+
+    for (var i = 0; i < trytesArray.length; i++) {
+
+        var tryteValue = trytesArray[i];
+
+        // Check if correct 2673 trytes
+        if (!isTrytes(tryteValue, 2673)) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+/**
+*   checks if attached trytes if last 241 trytes are non-zero
+*
+*   @method isArrayOfAttachedTrytes
+*   @param {array} trytesArray
+*   @returns {boolean}
+**/
+var isArrayOfAttachedTrytes = function(trytesArray) {
+
+    if (!isArray(trytesArray)) return false;
+
+    for (var i = 0; i < trytesArray.length; i++) {
+
+        var tryteValue = trytesArray[i];
+
+        // Check if correct 2673 trytes
+        if (!isTrytes(tryteValue, 2673)) {
+            return false;
+        }
+
+        var lastTrytes = tryteValue.slice(2673 - (3 * 81));
+
+        if (/^[9]+$/.test(lastTrytes)) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+/**
+*   checks if correct bundle with transaction object
+*
+*   @method isArrayOfTxObjects
+*   @param {array} bundle
+*   @returns {boolean}
+**/
+var isArrayOfTxObjects = function(bundle) {
+
+    if (!isArray(bundle) || bundle.length === 0) return false;
+
+    var validArray = true;
+
+    bundle.forEach(function(txObject) {
+
+        var keysToValidate = [
+            {
+                key: 'hash',
+                validator: isHash,
+                args: null
+            }, {
+                key: 'signatureMessageFragment',
+                validator: isTrytes,
+                args: 2187
+            }, {
+                key: 'address',
+                validator: isHash,
+                args: null
+            }, {
+                key: 'value',
+                validator: isValue,
+                args: null
+            }, {
+                key: 'tag',
+                validator: isTrytes,
+                args: 27
+            }, {
+                key: 'timestamp',
+                validator: isValue,
+                args: null
+            }, {
+                key: 'currentIndex',
+                validator: isValue,
+                args: null
+            },{
+                key: 'lastIndex',
+                validator: isValue,
+                args: null
+            }, {
+                key: 'bundle',
+                validator: isHash,
+                args: null
+            }, {
+                key: 'trunkTransaction',
+                validator: isHash,
+                args: null
+            }, {
+                key: 'branchTransaction',
+                validator: isHash,
+                args: null
+            }, {
+                key: 'nonce',
+                validator: isHash,
+                args: null
+            }
+        ]
+
+        for (var i = 0; i < keysToValidate.length; i++) {
+
+            var key = keysToValidate[i].key;
+            var validator = keysToValidate[i].validator;
+            var args = keysToValidate[i].args
+
+            // If input does not have keyIndex and address, return false
+            if (!txObject.hasOwnProperty(key)) {
+                validArray = false;
+                break;
+            }
+
+            // If input validator function does not return true, exit
+            if (!validator(txObject[key], args)) {
+                validArray = false;
+                break;
+            }
+        }
+    })
+
+    return validArray;
+}
+
+/**
+*   checks if correct inputs list
+*
+*   @method isInputs
+*   @param {array} inputs
+*   @returns {boolean}
+**/
+var isInputs = function(inputs) {
+
+    if (!isArray(inputs)) return false;
+
+    for (var i = 0; i < inputs.length; i++) {
+
+        var input = inputs[i];
+
+        // If input does not have keyIndex and address, return false
+        if (!input.hasOwnProperty('security') || !input.hasOwnProperty('keyIndex') || !input.hasOwnProperty('address')) return false;
+
+        if (!isAddress(input.address)) {
+            return false;
+        }
+
+        if (!isValue(input.security)) {
+            return false;
+        }
+
+        if (!isValue(input.keyIndex)) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+/**
+*   Checks that a given uri is valid
+*
+*   Valid Examples:
+*   udp://[2001:db8:a0b:12f0::1]:14265
+*   udp://[2001:db8:a0b:12f0::1]
+*   udp://8.8.8.8:14265
+*   udp://domain.com
+*   udp://domain2.com:14265
+*
+*   @method isUri
+*   @param {string} node
+*   @returns {bool} valid
+**/
+var isUri = function(node) {
+
+    var getInside = /^(udp|tcp):\/\/([\[][^\]\.]*[\]]|[^\[\]:]*)[:]{0,1}([0-9]{1,}$|$)/i;
+
+    var stripBrackets = /[\[]{0,1}([^\[\]]*)[\]]{0,1}/;
+
+    var uriTest = /((^\s*((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))\s*$)|(^\s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(%.+)?\s*$))|(^\s*((?=.{1,255}$)(?=.*[A-Za-z].*)[0-9A-Za-z](?:(?:[0-9A-Za-z]|\b-){0,61}[0-9A-Za-z])?(?:\.[0-9A-Za-z](?:(?:[0-9A-Za-z]|\b-){0,61}[0-9A-Za-z])?)*)\s*$)/;
+
+    if(!getInside.test(node)) {
+        return false;
+    }
+
+    return uriTest.test(stripBrackets.exec(getInside.exec(node)[1])[1]);
+}
+
+module.exports = {
+    isAddress: isAddress,
+    isTrytes: isTrytes,
+    isNinesTrytes: isNinesTrytes,
+    isValue: isValue,
+    isHash: isHash,
+    isTransfersArray: isTransfersArray,
+    isArrayOfHashes: isArrayOfHashes,
+    isArrayOfTrytes: isArrayOfTrytes,
+    isArrayOfAttachedTrytes: isArrayOfAttachedTrytes,
+    isArrayOfTxObjects: isArrayOfTxObjects,
+    isInputs: isInputs,
+    isString: isString,
+    isNum: isNum,
+    isArray: isArray,
+    isObject: isObject,
+    isUri: isUri
+}
+
+},{}],68:[function(require,module,exports){
+var inputValidator  =   require("./inputValidator");
+var Curl            =   require("../crypto/curl/curl");
+var Kerl            =   require("../crypto/kerl/kerl");
+var Converter       =   require("../crypto/converter/converter");
+var Signing         =   require("../crypto/signing/signing");
+var CryptoJS        =   require("crypto-js");
+var ascii           =   require("./asciiToTrytes");
+var extractJson     =   require("./extractJson");
+
+
+/**
+*   Table of IOTA Units based off of the standard System of Units
+**/
+var unitMap = {
+    'i'   :   1,
+    'Ki'  :   1000,
+    'Mi'  :   1000000,
+    'Gi'  :   1000000000,
+    'Ti'  :   1000000000000,
+    'Pi'  :   1000000000000000  // For the very, very rich
+}
+
+/**
+*   converts IOTA units
+*
+*   @method convertUnits
+*   @param {string || int || float} value
+*   @param {string} fromUnit
+*   @param {string} toUnit
+*   @returns {integer} converted
+**/
+var convertUnits = function(value, fromUnit, toUnit) {
+
+    // Check if wrong unit provided
+    if (unitMap[fromUnit] === undefined || unitMap[toUnit] === undefined) {
+
+        throw new Error("Invalid unit provided");
+    }
+
+    var afterComma = String(value).match(/\.([\d]+)$/);
+
+    if (afterComma && afterComma[1].length > String(unitMap[fromUnit]).length - 1) {
+
+        throw new Error("Too many digits after comma");
+    }
+
+    // If not valid value, throw error
+    if (!inputValidator.isNum(value)) {
+
+        throw new Error("Invalid value");
+    }
+
+
+    var floatValue = parseFloat(value);
+
+    var converted = (floatValue * unitMap[fromUnit]) / unitMap[toUnit];
+
+    return converted;
+}
+
+/**
+*   Generates the 9-tryte checksum of an address
+*
+*   @method addChecksum
+*   @param {string | list} inputValue
+*   @param {int} checksumLength
+@   @param {bool} isAddress default is true
+*   @returns {string | list} address (with checksum)
+**/
+var addChecksum = function(inputValue, checksumLength, isAddress) {
+
+    // checksum length is either user defined, or 9 trytes
+    var checksumLength = checksumLength || 9;
+    var isAddress = (isAddress !== false);
+
+    // the length of the trytes to be validated
+    var validationLength = isAddress ? 81 : null;
+
+    var isSingleInput = inputValidator.isString( inputValue );
+
+    // If only single address, turn it into an array
+    if ( isSingleInput ) inputValue = new Array( inputValue );
+
+    var inputsWithChecksum = [];
+
+    inputValue.forEach(function(thisValue) {
+
+        // check if correct trytes
+        if (!inputValidator.isTrytes(thisValue, validationLength)) {
+            throw new Error("Invalid input");
+        }
+
+        var kerl = new Kerl();
+        kerl.initialize();
+
+        // Address trits
+        var addressTrits = Converter.trits(thisValue);
+
+        // Checksum trits
+        var checksumTrits = [];
+
+        // Absorb address trits
+        kerl.absorb(addressTrits, 0, addressTrits.length);
+
+        // Squeeze checksum trits
+        kerl.squeeze(checksumTrits, 0, kerl.HASH_LENGTH);
+
+        // First 9 trytes as checksum
+        var checksum = Converter.trytes( checksumTrits ).substring( 81 - checksumLength, 81 );
+        inputsWithChecksum.push( thisValue + checksum );
+    });
+
+    if (isSingleInput) {
+
+        return inputsWithChecksum[ 0 ];
+
+    } else {
+
+        return inputsWithChecksum;
+
+    }
+}
+
+/**
+*   Removes the 9-tryte checksum of an address
+*
+*   @method noChecksum
+*   @param {string | list} address
+*   @returns {string | list} address (without checksum)
+**/
+var noChecksum = function(address) {
+
+    var isSingleAddress = inputValidator.isString(address)
+
+    // If only single address, turn it into an array
+    if (isSingleAddress) address = new Array(address);
+
+    var addressesWithChecksum = [];
+
+    address.forEach(function(thisAddress) {
+        addressesWithChecksum.push(thisAddress.slice(0, 81))
+    })
+
+    // return either string or the list
+    if (isSingleAddress) {
+
+        return addressesWithChecksum[0];
+
+    } else {
+
+        return addressesWithChecksum;
+
+    }
+}
+
+/**
+*   Validates the checksum of an address
+*
+*   @method isValidChecksum
+*   @param {string} addressWithChecksum
+*   @returns {bool}
+**/
+var isValidChecksum = function(addressWithChecksum) {
+
+    var addressWithoutChecksum = noChecksum(addressWithChecksum);
+
+    var newChecksum = addChecksum(addressWithoutChecksum);
+
+    return newChecksum === addressWithChecksum;
+}
+
+/**
+*   Converts transaction trytes of 2673 trytes into a transaction object
+*
+*   @method transactionObject
+*   @param {string} trytes
+*   @returns {String} transactionObject
+**/
+var transactionObject = function(trytes) {
+
+    if (!trytes) return;
+
+    // validity check
+    for (var i = 2279; i < 2295; i++) {
+
+        if (trytes.charAt(i) !== "9") {
+
+            return null;
+
+        }
+    }
+
+    var thisTransaction = {};
+    var transactionTrits = Converter.trits(trytes);
+    var hash = [];
+
+    var curl = new Curl();
+
+    // generate the correct transaction hash
+    curl.initialize();
+    curl.absorb(transactionTrits, 0, transactionTrits.length);
+    curl.squeeze(hash, 0, 243);
+
+    thisTransaction.hash = Converter.trytes(hash);
+    thisTransaction.signatureMessageFragment = trytes.slice(0, 2187);
+    thisTransaction.address = trytes.slice(2187, 2268);
+    thisTransaction.value = Converter.value(transactionTrits.slice(6804, 6837));
+    thisTransaction.tag = trytes.slice(2295, 2322);
+    thisTransaction.timestamp = Converter.value(transactionTrits.slice(6966, 6993));
+    thisTransaction.currentIndex = Converter.value(transactionTrits.slice(6993, 7020));
+    thisTransaction.lastIndex = Converter.value(transactionTrits.slice(7020, 7047));
+    thisTransaction.bundle = trytes.slice(2349, 2430);
+    thisTransaction.trunkTransaction = trytes.slice(2430, 2511);
+    thisTransaction.branchTransaction = trytes.slice(2511, 2592);
+    thisTransaction.nonce = trytes.slice(2592, 2673);
+
+    return thisTransaction;
+}
+
+/**
+*   Converts a transaction object into trytes
+*
+*   @method transactionTrytes
+*   @param {object} transactionTrytes
+*   @returns {String} trytes
+**/
+var transactionTrytes = function(transaction) {
+
+    var valueTrits = Converter.trits(transaction.value);
+    while (valueTrits.length < 81) {
+        valueTrits[valueTrits.length] = 0;
+    }
+
+    var timestampTrits = Converter.trits(transaction.timestamp);
+    while (timestampTrits.length < 27) {
+        timestampTrits[timestampTrits.length] = 0;
+    }
+
+    var currentIndexTrits = Converter.trits(transaction.currentIndex);
+    while (currentIndexTrits.length < 27) {
+        currentIndexTrits[currentIndexTrits.length] = 0;
+    }
+
+    var lastIndexTrits = Converter.trits(transaction.lastIndex);
+    while (lastIndexTrits.length < 27) {
+        lastIndexTrits[lastIndexTrits.length] = 0;
+    }
+
+    return transaction.signatureMessageFragment
+    + transaction.address
+    + Converter.trytes(valueTrits)
+    + transaction.tag
+    + Converter.trytes(timestampTrits)
+    + Converter.trytes(currentIndexTrits)
+    + Converter.trytes(lastIndexTrits)
+    + transaction.bundle
+    + transaction.trunkTransaction
+    + transaction.branchTransaction
+    + transaction.nonce;
+}
+
+/**
+*   Categorizes a list of transfers between sent and received
+*
+*   @method categorizeTransfers
+*   @param {object} transfers Transfers (bundles)
+*   @param {list} addresses List of addresses that belong to the user
+*   @returns {String} trytes
+**/
+var categorizeTransfers = function(transfers, addresses) {
+
+    var categorized = {
+        'sent'      : [],
+        'received'  : []
+    }
+
+    // Iterate over all bundles and sort them between incoming and outgoing transfers
+    transfers.forEach(function(bundle) {
+
+        var spentAlreadyAdded = false;
+
+        // Iterate over every bundle entry
+        bundle.forEach(function(bundleEntry, bundleIndex) {
+
+            // If bundle address in the list of addresses associated with the seed
+            // add the bundle to the
+            if (addresses.indexOf(bundleEntry.address) > -1) {
+
+                // Check if it's a remainder address
+                var isRemainder = (bundleEntry.currentIndex === bundleEntry.lastIndex) && bundleEntry.lastIndex !== 0;
+
+                // check if sent transaction
+                if (bundleEntry.value < 0 && !spentAlreadyAdded && !isRemainder) {
+
+                    categorized.sent.push(bundle);
+
+                    // too make sure we do not add transactions twice
+                    spentAlreadyAdded = true;
+                }
+                // check if received transaction, or 0 value (message)
+                // also make sure that this is not a 2nd tx for spent inputs
+                else if (bundleEntry.value >= 0 && !spentAlreadyAdded && !isRemainder) {
+
+                    categorized.received.push(bundle);
+                }
+            }
+        })
+    })
+
+    return categorized;
+}
+
+
+/**
+*   Validates the signatures
+*
+*   @method validateSignatures
+*   @param {array} signedBundle
+*   @param {string} inputAddress
+*   @returns {bool}
+**/
+var validateSignatures = function(signedBundle, inputAddress) {
+
+
+    var bundleHash;
+    var signatureFragments = [];
+
+    for (var i = 0; i < signedBundle.length; i++) {
+
+        if (signedBundle[i].address === inputAddress) {
+
+            bundleHash = signedBundle[i].bundle;
+
+            // if we reached remainder bundle
+            if (inputValidator.isNinesTrytes(signedBundle[i].signatureMessageFragment)) {
+                break;
+            }
+
+            signatureFragments.push(signedBundle[i].signatureMessageFragment)
+        }
+    }
+
+    return Signing.validateSignatures(inputAddress, signatureFragments, bundleHash);
+}
+
+
+/**
+*   Checks is a Bundle is valid. Validates signatures and overall structure. Has to be tail tx first.
+*
+*   @method isValidBundle
+*   @param {array} bundle
+*   @returns {bool} valid
+**/
+var isBundle = function(bundle) {
+
+    // If not correct bundle
+    if (!inputValidator.isArrayOfTxObjects(bundle)) return false;
+
+    var totalSum = 0, lastIndex, bundleHash = bundle[0].bundle;
+
+    // Prepare to absorb txs and get bundleHash
+    var bundleFromTxs = [];
+
+    var kerl = new Kerl();
+    kerl.initialize();
+
+    // Prepare for signature validation
+    var signaturesToValidate = [];
+
+    bundle.forEach(function(bundleTx, index) {
+
+        totalSum += bundleTx.value;
+
+        // currentIndex has to be equal to the index in the array
+        if (bundleTx.currentIndex !== index) return false;
+
+        // Get the transaction trytes
+        var thisTxTrytes = transactionTrytes(bundleTx);
+
+        // Absorb bundle hash + value + timestamp + lastIndex + currentIndex trytes.
+        var thisTxTrits = Converter.trits(thisTxTrytes.slice(2187, 2187 + 162));
+        kerl.absorb(thisTxTrits, 0, thisTxTrits.length);
+
+        // Check if input transaction
+        if (bundleTx.value < 0) {
+            var thisAddress = bundleTx.address;
+
+            var newSignatureToValidate = {
+                'address': thisAddress,
+                'signatureFragments': Array(bundleTx.signatureMessageFragment)
+            }
+
+            // Find the subsequent txs with the remaining signature fragment
+            for (var i = index; i < bundle.length - 1; i++) {
+                var newBundleTx = bundle[i + 1];
+
+                // Check if new tx is part of the signature fragment
+                if (newBundleTx.address === thisAddress && newBundleTx.value === 0) {
+                    newSignatureToValidate.signatureFragments.push(newBundleTx.signatureMessageFragment);
+                }
+            }
+
+            signaturesToValidate.push(newSignatureToValidate);
+        }
+    });
+
+    // Check for total sum, if not equal 0 return error
+    if (totalSum !== 0) return false;
+
+    // get the bundle hash from the bundle transactions
+    kerl.squeeze(bundleFromTxs, 0, kerl.HASH_LENGTH);
+    var bundleFromTxs = Converter.trytes(bundleFromTxs);
+
+    // Check if bundle hash is the same as returned by tx object
+    if (bundleFromTxs !== bundleHash) return false;
+
+    // Last tx in the bundle should have currentIndex === lastIndex
+    if (bundle[bundle.length - 1].currentIndex !== bundle[bundle.length - 1].lastIndex) return false;
+
+    // Validate the signatures
+    for (var i = 0; i < signaturesToValidate.length; i++) {
+
+        var isValidSignature = Signing.validateSignatures(signaturesToValidate[i].address, signaturesToValidate[i].signatureFragments, bundleHash);
+
+        if (!isValidSignature) return false;
+    }
+
+    return true;
+}
+
+module.exports = {
+    convertUnits        : convertUnits,
+    addChecksum         : addChecksum,
+    noChecksum          : noChecksum,
+    isValidChecksum     : isValidChecksum,
+    transactionObject   : transactionObject,
+    transactionTrytes   : transactionTrytes,
+    categorizeTransfers : categorizeTransfers,
+    toTrytes            : ascii.toTrytes,
+    fromTrytes          : ascii.fromTrytes,
+    extractJson         : extractJson,
+    validateSignatures  : validateSignatures,
+    isBundle            : isBundle,
+    inputValidator      : inputValidator
+}
+
+},{"../crypto/converter/converter":53,"../crypto/curl/curl":55,"../crypto/kerl/kerl":58,"../crypto/signing/signing":60,"./asciiToTrytes":65,"./extractJson":66,"./inputValidator":67,"crypto-js":22}],69:[function(require,module,exports){
 /*!
  * Determine if an object is a Buffer
  *
@@ -21102,7 +20987,7 @@ function forEach(xs, f) {
     f(xs[i], i);
   }
 }
-},{"./_stream_readable":79,"./_stream_writable":81,"core-util-is":30,"inherits":68,"process-nextick-args":71}],78:[function(require,module,exports){
+},{"./_stream_readable":79,"./_stream_writable":81,"core-util-is":13,"inherits":51,"process-nextick-args":71}],78:[function(require,module,exports){
 // a passthrough stream.
 // basically just the most minimal sort of Transform stream.
 // Every written chunk gets output as-is.
@@ -21129,7 +21014,7 @@ function PassThrough(options) {
 PassThrough.prototype._transform = function (chunk, encoding, cb) {
   cb(null, chunk);
 };
-},{"./_stream_transform":80,"core-util-is":30,"inherits":68}],79:[function(require,module,exports){
+},{"./_stream_transform":80,"core-util-is":13,"inherits":51}],79:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -21158,19 +21043,11 @@ var EElistenerCount = function (emitter, type) {
 /*</replacement>*/
 
 /*<replacement>*/
-var Stream;
-(function () {
-  try {
-    Stream = require('st' + 'ream');
-  } catch (_) {} finally {
-    if (!Stream) Stream = require('events').EventEmitter;
-  }
-})();
+var Stream = require('./internal/streams/stream');
 /*</replacement>*/
 
-var Buffer = require('buffer').Buffer;
 /*<replacement>*/
-var bufferShim = require('buffer-shims');
+var Buffer = require('safe-buffer').Buffer;
 /*</replacement>*/
 
 /*<replacement>*/
@@ -21192,6 +21069,8 @@ var BufferList = require('./internal/streams/BufferList');
 var StringDecoder;
 
 util.inherits(Readable, Stream);
+
+var kProxyEvents = ['error', 'close', 'destroy', 'pause', 'resume'];
 
 function prependListener(emitter, event, fn) {
   // Sadly this is not cacheable as some libraries bundle their own
@@ -21301,7 +21180,7 @@ Readable.prototype.push = function (chunk, encoding) {
   if (!state.objectMode && typeof chunk === 'string') {
     encoding = encoding || state.defaultEncoding;
     if (encoding !== state.encoding) {
-      chunk = bufferShim.from(chunk, encoding);
+      chunk = Buffer.from(chunk, encoding);
       encoding = '';
     }
   }
@@ -21621,7 +21500,7 @@ Readable.prototype.pipe = function (dest, pipeOpts) {
 
   var doEnd = (!pipeOpts || pipeOpts.end !== false) && dest !== process.stdout && dest !== process.stderr;
 
-  var endFn = doEnd ? onend : cleanup;
+  var endFn = doEnd ? onend : unpipe;
   if (state.endEmitted) processNextTick(endFn);else src.once('end', endFn);
 
   dest.on('unpipe', onunpipe);
@@ -21654,7 +21533,7 @@ Readable.prototype.pipe = function (dest, pipeOpts) {
     dest.removeListener('error', onerror);
     dest.removeListener('unpipe', onunpipe);
     src.removeListener('end', onend);
-    src.removeListener('end', cleanup);
+    src.removeListener('end', unpipe);
     src.removeListener('data', ondata);
 
     cleanedUp = true;
@@ -21917,10 +21796,9 @@ Readable.prototype.wrap = function (stream) {
   }
 
   // proxy certain important events.
-  var events = ['error', 'close', 'destroy', 'pause', 'resume'];
-  forEach(events, function (ev) {
-    stream.on(ev, self.emit.bind(self, ev));
-  });
+  for (var n = 0; n < kProxyEvents.length; n++) {
+    stream.on(kProxyEvents[n], self.emit.bind(self, kProxyEvents[n]));
+  }
 
   // when we try to consume some more bytes, simply unpause the
   // underlying stream.
@@ -22012,7 +21890,7 @@ function copyFromBufferString(n, list) {
 // This function is designed to be inlinable, so please take care when making
 // changes to the function body.
 function copyFromBuffer(n, list) {
-  var ret = bufferShim.allocUnsafe(n);
+  var ret = Buffer.allocUnsafe(n);
   var p = list.head;
   var c = 1;
   p.data.copy(ret);
@@ -22073,7 +21951,7 @@ function indexOf(xs, x) {
   return -1;
 }
 }).call(this,require('_process'))
-},{"./_stream_duplex":77,"./internal/streams/BufferList":82,"_process":72,"buffer":28,"buffer-shims":27,"core-util-is":30,"events":65,"inherits":68,"isarray":70,"process-nextick-args":71,"string_decoder/":88,"util":25}],80:[function(require,module,exports){
+},{"./_stream_duplex":77,"./internal/streams/BufferList":82,"./internal/streams/stream":83,"_process":72,"core-util-is":13,"events":48,"inherits":51,"isarray":70,"process-nextick-args":71,"safe-buffer":85,"string_decoder/":90,"util":9}],80:[function(require,module,exports){
 // a transform stream is a readable/writable stream where you do
 // something with the data.  Sometimes it's called a "filter",
 // but that's not a great name for it, since that implies a thing where
@@ -22256,7 +22134,7 @@ function done(stream, er, data) {
 
   return stream.push(null);
 }
-},{"./_stream_duplex":77,"core-util-is":30,"inherits":68}],81:[function(require,module,exports){
+},{"./_stream_duplex":77,"core-util-is":13,"inherits":51}],81:[function(require,module,exports){
 (function (process){
 // A bit simpler than readable streams.
 // Implement an async ._write(chunk, encoding, cb), and it'll handle all
@@ -22292,19 +22170,11 @@ var internalUtil = {
 /*</replacement>*/
 
 /*<replacement>*/
-var Stream;
-(function () {
-  try {
-    Stream = require('st' + 'ream');
-  } catch (_) {} finally {
-    if (!Stream) Stream = require('events').EventEmitter;
-  }
-})();
+var Stream = require('./internal/streams/stream');
 /*</replacement>*/
 
-var Buffer = require('buffer').Buffer;
 /*<replacement>*/
-var bufferShim = require('buffer-shims');
+var Buffer = require('safe-buffer').Buffer;
 /*</replacement>*/
 
 util.inherits(Writable, Stream);
@@ -22560,7 +22430,7 @@ Writable.prototype.setDefaultEncoding = function setDefaultEncoding(encoding) {
 
 function decodeChunk(state, chunk, encoding) {
   if (!state.objectMode && state.decodeStrings !== false && typeof chunk === 'string') {
-    chunk = bufferShim.from(chunk, encoding);
+    chunk = Buffer.from(chunk, encoding);
   }
   return chunk;
 }
@@ -22810,12 +22680,12 @@ function CorkedRequest(state) {
   };
 }
 }).call(this,require('_process'))
-},{"./_stream_duplex":77,"_process":72,"buffer":28,"buffer-shims":27,"core-util-is":30,"events":65,"inherits":68,"process-nextick-args":71,"util-deprecate":92}],82:[function(require,module,exports){
+},{"./_stream_duplex":77,"./internal/streams/stream":83,"_process":72,"core-util-is":13,"inherits":51,"process-nextick-args":71,"safe-buffer":85,"util-deprecate":94}],82:[function(require,module,exports){
 'use strict';
 
-var Buffer = require('buffer').Buffer;
 /*<replacement>*/
-var bufferShim = require('buffer-shims');
+
+var Buffer = require('safe-buffer').Buffer;
 /*</replacement>*/
 
 module.exports = BufferList;
@@ -22863,9 +22733,9 @@ BufferList.prototype.join = function (s) {
 };
 
 BufferList.prototype.concat = function (n) {
-  if (this.length === 0) return bufferShim.alloc(0);
+  if (this.length === 0) return Buffer.alloc(0);
   if (this.length === 1) return this.head.data;
-  var ret = bufferShim.allocUnsafe(n >>> 0);
+  var ret = Buffer.allocUnsafe(n >>> 0);
   var p = this.head;
   var i = 0;
   while (p) {
@@ -22875,27 +22745,22 @@ BufferList.prototype.concat = function (n) {
   }
   return ret;
 };
-},{"buffer":28,"buffer-shims":27}],83:[function(require,module,exports){
-(function (process){
-var Stream = (function (){
-  try {
-    return require('st' + 'ream'); // hack to fix a circular dependency issue when used with browserify
-  } catch(_){}
-}());
+},{"safe-buffer":85}],83:[function(require,module,exports){
+module.exports = require('events').EventEmitter;
+
+},{"events":48}],84:[function(require,module,exports){
 exports = module.exports = require('./lib/_stream_readable.js');
-exports.Stream = Stream || exports;
+exports.Stream = exports;
 exports.Readable = exports;
 exports.Writable = require('./lib/_stream_writable.js');
 exports.Duplex = require('./lib/_stream_duplex.js');
 exports.Transform = require('./lib/_stream_transform.js');
 exports.PassThrough = require('./lib/_stream_passthrough.js');
 
-if (!process.browser && process.env.READABLE_STREAM === 'disable' && Stream) {
-  module.exports = Stream;
-}
+},{"./lib/_stream_duplex.js":77,"./lib/_stream_passthrough.js":78,"./lib/_stream_readable.js":79,"./lib/_stream_transform.js":80,"./lib/_stream_writable.js":81}],85:[function(require,module,exports){
+module.exports = require('buffer')
 
-}).call(this,require('_process'))
-},{"./lib/_stream_duplex.js":77,"./lib/_stream_passthrough.js":78,"./lib/_stream_readable.js":79,"./lib/_stream_transform.js":80,"./lib/_stream_writable.js":81,"_process":72}],84:[function(require,module,exports){
+},{"buffer":11}],86:[function(require,module,exports){
 (function (global){
 var ClientRequest = require('./lib/request')
 var extend = require('xtend')
@@ -22977,7 +22842,7 @@ http.METHODS = [
 	'UNSUBSCRIBE'
 ]
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./lib/request":86,"builtin-status-codes":29,"url":90,"xtend":94}],85:[function(require,module,exports){
+},{"./lib/request":88,"builtin-status-codes":12,"url":92,"xtend":96}],87:[function(require,module,exports){
 (function (global){
 exports.fetch = isFunction(global.fetch) && isFunction(global.ReadableStream)
 
@@ -23050,7 +22915,7 @@ function isFunction (value) {
 xhr = null // Help gc
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],86:[function(require,module,exports){
+},{}],88:[function(require,module,exports){
 (function (process,global,Buffer){
 var capability = require('./capability')
 var inherits = require('inherits')
@@ -23360,7 +23225,7 @@ var unsafeHeaders = [
 ]
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer)
-},{"./capability":85,"./response":87,"_process":72,"buffer":28,"inherits":68,"readable-stream":83,"to-arraybuffer":89}],87:[function(require,module,exports){
+},{"./capability":87,"./response":89,"_process":72,"buffer":11,"inherits":51,"readable-stream":84,"to-arraybuffer":91}],89:[function(require,module,exports){
 (function (process,global,Buffer){
 var capability = require('./capability')
 var inherits = require('inherits')
@@ -23546,230 +23411,280 @@ IncomingMessage.prototype._onXHRProgress = function () {
 }
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer)
-},{"./capability":85,"_process":72,"buffer":28,"inherits":68,"readable-stream":83}],88:[function(require,module,exports){
-// Copyright Joyent, Inc. and other Node contributors.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a
-// copy of this software and associated documentation files (the
-// "Software"), to deal in the Software without restriction, including
-// without limitation the rights to use, copy, modify, merge, publish,
-// distribute, sublicense, and/or sell copies of the Software, and to permit
-// persons to whom the Software is furnished to do so, subject to the
-// following conditions:
-//
-// The above copyright notice and this permission notice shall be included
-// in all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
-// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-// USE OR OTHER DEALINGS IN THE SOFTWARE.
+},{"./capability":87,"_process":72,"buffer":11,"inherits":51,"readable-stream":84}],90:[function(require,module,exports){
+'use strict';
 
-var Buffer = require('buffer').Buffer;
+var Buffer = require('safe-buffer').Buffer;
 
-var isBufferEncoding = Buffer.isEncoding
-  || function(encoding) {
-       switch (encoding && encoding.toLowerCase()) {
-         case 'hex': case 'utf8': case 'utf-8': case 'ascii': case 'binary': case 'base64': case 'ucs2': case 'ucs-2': case 'utf16le': case 'utf-16le': case 'raw': return true;
-         default: return false;
-       }
-     }
-
-
-function assertEncoding(encoding) {
-  if (encoding && !isBufferEncoding(encoding)) {
-    throw new Error('Unknown encoding: ' + encoding);
+var isEncoding = Buffer.isEncoding || function (encoding) {
+  encoding = '' + encoding;
+  switch (encoding && encoding.toLowerCase()) {
+    case 'hex':case 'utf8':case 'utf-8':case 'ascii':case 'binary':case 'base64':case 'ucs2':case 'ucs-2':case 'utf16le':case 'utf-16le':case 'raw':
+      return true;
+    default:
+      return false;
   }
+};
+
+function _normalizeEncoding(enc) {
+  if (!enc) return 'utf8';
+  var retried;
+  while (true) {
+    switch (enc) {
+      case 'utf8':
+      case 'utf-8':
+        return 'utf8';
+      case 'ucs2':
+      case 'ucs-2':
+      case 'utf16le':
+      case 'utf-16le':
+        return 'utf16le';
+      case 'latin1':
+      case 'binary':
+        return 'latin1';
+      case 'base64':
+      case 'ascii':
+      case 'hex':
+        return enc;
+      default:
+        if (retried) return; // undefined
+        enc = ('' + enc).toLowerCase();
+        retried = true;
+    }
+  }
+};
+
+// Do not cache `Buffer.isEncoding` when checking encoding names as some
+// modules monkey-patch it to support additional encodings
+function normalizeEncoding(enc) {
+  var nenc = _normalizeEncoding(enc);
+  if (typeof nenc !== 'string' && (Buffer.isEncoding === isEncoding || !isEncoding(enc))) throw new Error('Unknown encoding: ' + enc);
+  return nenc || enc;
 }
 
 // StringDecoder provides an interface for efficiently splitting a series of
 // buffers into a series of JS strings without breaking apart multi-byte
-// characters. CESU-8 is handled as part of the UTF-8 encoding.
-//
-// @TODO Handling all encodings inside a single object makes it very difficult
-// to reason about this code, so it should be split up in the future.
-// @TODO There should be a utf8-strict encoding that rejects invalid UTF-8 code
-// points as used by CESU-8.
-var StringDecoder = exports.StringDecoder = function(encoding) {
-  this.encoding = (encoding || 'utf8').toLowerCase().replace(/[-_]/, '');
-  assertEncoding(encoding);
+// characters.
+exports.StringDecoder = StringDecoder;
+function StringDecoder(encoding) {
+  this.encoding = normalizeEncoding(encoding);
+  var nb;
   switch (this.encoding) {
-    case 'utf8':
-      // CESU-8 represents each of Surrogate Pair by 3-bytes
-      this.surrogateSize = 3;
-      break;
-    case 'ucs2':
     case 'utf16le':
-      // UTF-16 represents each of Surrogate Pair by 2-bytes
-      this.surrogateSize = 2;
-      this.detectIncompleteChar = utf16DetectIncompleteChar;
+      this.text = utf16Text;
+      this.end = utf16End;
+      nb = 4;
+      break;
+    case 'utf8':
+      this.fillLast = utf8FillLast;
+      nb = 4;
       break;
     case 'base64':
-      // Base-64 stores 3 bytes in 4 chars, and pads the remainder.
-      this.surrogateSize = 3;
-      this.detectIncompleteChar = base64DetectIncompleteChar;
+      this.text = base64Text;
+      this.end = base64End;
+      nb = 3;
       break;
     default:
-      this.write = passThroughWrite;
+      this.write = simpleWrite;
+      this.end = simpleEnd;
       return;
   }
-
-  // Enough space to store all bytes of a single character. UTF-8 needs 4
-  // bytes, but CESU-8 may require up to 6 (3 bytes per surrogate).
-  this.charBuffer = new Buffer(6);
-  // Number of bytes received for the current incomplete multi-byte character.
-  this.charReceived = 0;
-  // Number of bytes expected for the current incomplete multi-byte character.
-  this.charLength = 0;
-};
-
-
-// write decodes the given buffer and returns it as JS string that is
-// guaranteed to not contain any partial multi-byte characters. Any partial
-// character found at the end of the buffer is buffered up, and will be
-// returned when calling write again with the remaining bytes.
-//
-// Note: Converting a Buffer containing an orphan surrogate to a String
-// currently works, but converting a String to a Buffer (via `new Buffer`, or
-// Buffer#write) will replace incomplete surrogates with the unicode
-// replacement character. See https://codereview.chromium.org/121173009/ .
-StringDecoder.prototype.write = function(buffer) {
-  var charStr = '';
-  // if our last write ended with an incomplete multibyte character
-  while (this.charLength) {
-    // determine how many remaining bytes this buffer has to offer for this char
-    var available = (buffer.length >= this.charLength - this.charReceived) ?
-        this.charLength - this.charReceived :
-        buffer.length;
-
-    // add the new bytes to the char buffer
-    buffer.copy(this.charBuffer, this.charReceived, 0, available);
-    this.charReceived += available;
-
-    if (this.charReceived < this.charLength) {
-      // still not enough chars in this buffer? wait for more ...
-      return '';
-    }
-
-    // remove bytes belonging to the current character from the buffer
-    buffer = buffer.slice(available, buffer.length);
-
-    // get the character that was split
-    charStr = this.charBuffer.slice(0, this.charLength).toString(this.encoding);
-
-    // CESU-8: lead surrogate (D800-DBFF) is also the incomplete character
-    var charCode = charStr.charCodeAt(charStr.length - 1);
-    if (charCode >= 0xD800 && charCode <= 0xDBFF) {
-      this.charLength += this.surrogateSize;
-      charStr = '';
-      continue;
-    }
-    this.charReceived = this.charLength = 0;
-
-    // if there are no more bytes in this buffer, just emit our char
-    if (buffer.length === 0) {
-      return charStr;
-    }
-    break;
-  }
-
-  // determine and set charLength / charReceived
-  this.detectIncompleteChar(buffer);
-
-  var end = buffer.length;
-  if (this.charLength) {
-    // buffer the incomplete character bytes we got
-    buffer.copy(this.charBuffer, 0, buffer.length - this.charReceived, end);
-    end -= this.charReceived;
-  }
-
-  charStr += buffer.toString(this.encoding, 0, end);
-
-  var end = charStr.length - 1;
-  var charCode = charStr.charCodeAt(end);
-  // CESU-8: lead surrogate (D800-DBFF) is also the incomplete character
-  if (charCode >= 0xD800 && charCode <= 0xDBFF) {
-    var size = this.surrogateSize;
-    this.charLength += size;
-    this.charReceived += size;
-    this.charBuffer.copy(this.charBuffer, size, 0, size);
-    buffer.copy(this.charBuffer, 0, 0, size);
-    return charStr.substring(0, end);
-  }
-
-  // or just emit the charStr
-  return charStr;
-};
-
-// detectIncompleteChar determines if there is an incomplete UTF-8 character at
-// the end of the given buffer. If so, it sets this.charLength to the byte
-// length that character, and sets this.charReceived to the number of bytes
-// that are available for this character.
-StringDecoder.prototype.detectIncompleteChar = function(buffer) {
-  // determine how many bytes we have to check at the end of this buffer
-  var i = (buffer.length >= 3) ? 3 : buffer.length;
-
-  // Figure out if one of the last i bytes of our buffer announces an
-  // incomplete char.
-  for (; i > 0; i--) {
-    var c = buffer[buffer.length - i];
-
-    // See http://en.wikipedia.org/wiki/UTF-8#Description
-
-    // 110XXXXX
-    if (i == 1 && c >> 5 == 0x06) {
-      this.charLength = 2;
-      break;
-    }
-
-    // 1110XXXX
-    if (i <= 2 && c >> 4 == 0x0E) {
-      this.charLength = 3;
-      break;
-    }
-
-    // 11110XXX
-    if (i <= 3 && c >> 3 == 0x1E) {
-      this.charLength = 4;
-      break;
-    }
-  }
-  this.charReceived = i;
-};
-
-StringDecoder.prototype.end = function(buffer) {
-  var res = '';
-  if (buffer && buffer.length)
-    res = this.write(buffer);
-
-  if (this.charReceived) {
-    var cr = this.charReceived;
-    var buf = this.charBuffer;
-    var enc = this.encoding;
-    res += buf.slice(0, cr).toString(enc);
-  }
-
-  return res;
-};
-
-function passThroughWrite(buffer) {
-  return buffer.toString(this.encoding);
+  this.lastNeed = 0;
+  this.lastTotal = 0;
+  this.lastChar = Buffer.allocUnsafe(nb);
 }
 
-function utf16DetectIncompleteChar(buffer) {
-  this.charReceived = buffer.length % 2;
-  this.charLength = this.charReceived ? 2 : 0;
+StringDecoder.prototype.write = function (buf) {
+  if (buf.length === 0) return '';
+  var r;
+  var i;
+  if (this.lastNeed) {
+    r = this.fillLast(buf);
+    if (r === undefined) return '';
+    i = this.lastNeed;
+    this.lastNeed = 0;
+  } else {
+    i = 0;
+  }
+  if (i < buf.length) return r ? r + this.text(buf, i) : this.text(buf, i);
+  return r || '';
+};
+
+StringDecoder.prototype.end = utf8End;
+
+// Returns only complete characters in a Buffer
+StringDecoder.prototype.text = utf8Text;
+
+// Attempts to complete a partial non-UTF-8 character using bytes from a Buffer
+StringDecoder.prototype.fillLast = function (buf) {
+  if (this.lastNeed <= buf.length) {
+    buf.copy(this.lastChar, this.lastTotal - this.lastNeed, 0, this.lastNeed);
+    return this.lastChar.toString(this.encoding, 0, this.lastTotal);
+  }
+  buf.copy(this.lastChar, this.lastTotal - this.lastNeed, 0, buf.length);
+  this.lastNeed -= buf.length;
+};
+
+// Checks the type of a UTF-8 byte, whether it's ASCII, a leading byte, or a
+// continuation byte.
+function utf8CheckByte(byte) {
+  if (byte <= 0x7F) return 0;else if (byte >> 5 === 0x06) return 2;else if (byte >> 4 === 0x0E) return 3;else if (byte >> 3 === 0x1E) return 4;
+  return -1;
 }
 
-function base64DetectIncompleteChar(buffer) {
-  this.charReceived = buffer.length % 3;
-  this.charLength = this.charReceived ? 3 : 0;
+// Checks at most 3 bytes at the end of a Buffer in order to detect an
+// incomplete multi-byte UTF-8 character. The total number of bytes (2, 3, or 4)
+// needed to complete the UTF-8 character (if applicable) are returned.
+function utf8CheckIncomplete(self, buf, i) {
+  var j = buf.length - 1;
+  if (j < i) return 0;
+  var nb = utf8CheckByte(buf[j]);
+  if (nb >= 0) {
+    if (nb > 0) self.lastNeed = nb - 1;
+    return nb;
+  }
+  if (--j < i) return 0;
+  nb = utf8CheckByte(buf[j]);
+  if (nb >= 0) {
+    if (nb > 0) self.lastNeed = nb - 2;
+    return nb;
+  }
+  if (--j < i) return 0;
+  nb = utf8CheckByte(buf[j]);
+  if (nb >= 0) {
+    if (nb > 0) {
+      if (nb === 2) nb = 0;else self.lastNeed = nb - 3;
+    }
+    return nb;
+  }
+  return 0;
 }
 
-},{"buffer":28}],89:[function(require,module,exports){
+// Validates as many continuation bytes for a multi-byte UTF-8 character as
+// needed or are available. If we see a non-continuation byte where we expect
+// one, we "replace" the validated continuation bytes we've seen so far with
+// UTF-8 replacement characters ('\ufffd'), to match v8's UTF-8 decoding
+// behavior. The continuation byte check is included three times in the case
+// where all of the continuation bytes for a character exist in the same buffer.
+// It is also done this way as a slight performance increase instead of using a
+// loop.
+function utf8CheckExtraBytes(self, buf, p) {
+  if ((buf[0] & 0xC0) !== 0x80) {
+    self.lastNeed = 0;
+    return '\ufffd'.repeat(p);
+  }
+  if (self.lastNeed > 1 && buf.length > 1) {
+    if ((buf[1] & 0xC0) !== 0x80) {
+      self.lastNeed = 1;
+      return '\ufffd'.repeat(p + 1);
+    }
+    if (self.lastNeed > 2 && buf.length > 2) {
+      if ((buf[2] & 0xC0) !== 0x80) {
+        self.lastNeed = 2;
+        return '\ufffd'.repeat(p + 2);
+      }
+    }
+  }
+}
+
+// Attempts to complete a multi-byte UTF-8 character using bytes from a Buffer.
+function utf8FillLast(buf) {
+  var p = this.lastTotal - this.lastNeed;
+  var r = utf8CheckExtraBytes(this, buf, p);
+  if (r !== undefined) return r;
+  if (this.lastNeed <= buf.length) {
+    buf.copy(this.lastChar, p, 0, this.lastNeed);
+    return this.lastChar.toString(this.encoding, 0, this.lastTotal);
+  }
+  buf.copy(this.lastChar, p, 0, buf.length);
+  this.lastNeed -= buf.length;
+}
+
+// Returns all complete UTF-8 characters in a Buffer. If the Buffer ended on a
+// partial character, the character's bytes are buffered until the required
+// number of bytes are available.
+function utf8Text(buf, i) {
+  var total = utf8CheckIncomplete(this, buf, i);
+  if (!this.lastNeed) return buf.toString('utf8', i);
+  this.lastTotal = total;
+  var end = buf.length - (total - this.lastNeed);
+  buf.copy(this.lastChar, 0, end);
+  return buf.toString('utf8', i, end);
+}
+
+// For UTF-8, a replacement character for each buffered byte of a (partial)
+// character needs to be added to the output.
+function utf8End(buf) {
+  var r = buf && buf.length ? this.write(buf) : '';
+  if (this.lastNeed) return r + '\ufffd'.repeat(this.lastTotal - this.lastNeed);
+  return r;
+}
+
+// UTF-16LE typically needs two bytes per character, but even if we have an even
+// number of bytes available, we need to check if we end on a leading/high
+// surrogate. In that case, we need to wait for the next two bytes in order to
+// decode the last character properly.
+function utf16Text(buf, i) {
+  if ((buf.length - i) % 2 === 0) {
+    var r = buf.toString('utf16le', i);
+    if (r) {
+      var c = r.charCodeAt(r.length - 1);
+      if (c >= 0xD800 && c <= 0xDBFF) {
+        this.lastNeed = 2;
+        this.lastTotal = 4;
+        this.lastChar[0] = buf[buf.length - 2];
+        this.lastChar[1] = buf[buf.length - 1];
+        return r.slice(0, -1);
+      }
+    }
+    return r;
+  }
+  this.lastNeed = 1;
+  this.lastTotal = 2;
+  this.lastChar[0] = buf[buf.length - 1];
+  return buf.toString('utf16le', i, buf.length - 1);
+}
+
+// For UTF-16LE we do not explicitly append special replacement characters if we
+// end on a partial character, we simply let v8 handle that.
+function utf16End(buf) {
+  var r = buf && buf.length ? this.write(buf) : '';
+  if (this.lastNeed) {
+    var end = this.lastTotal - this.lastNeed;
+    return r + this.lastChar.toString('utf16le', 0, end);
+  }
+  return r;
+}
+
+function base64Text(buf, i) {
+  var n = (buf.length - i) % 3;
+  if (n === 0) return buf.toString('base64', i);
+  this.lastNeed = 3 - n;
+  this.lastTotal = 3;
+  if (n === 1) {
+    this.lastChar[0] = buf[buf.length - 1];
+  } else {
+    this.lastChar[0] = buf[buf.length - 2];
+    this.lastChar[1] = buf[buf.length - 1];
+  }
+  return buf.toString('base64', i, buf.length - n);
+}
+
+function base64End(buf) {
+  var r = buf && buf.length ? this.write(buf) : '';
+  if (this.lastNeed) return r + this.lastChar.toString('base64', 0, 3 - this.lastNeed);
+  return r;
+}
+
+// Pass bytes on through for single-byte encodings (e.g. ascii, latin1, hex)
+function simpleWrite(buf) {
+  return buf.toString(this.encoding);
+}
+
+function simpleEnd(buf) {
+  return buf && buf.length ? this.write(buf) : '';
+}
+},{"safe-buffer":85}],91:[function(require,module,exports){
 var Buffer = require('buffer').Buffer
 
 module.exports = function (buf) {
@@ -23798,7 +23713,7 @@ module.exports = function (buf) {
 	}
 }
 
-},{"buffer":28}],90:[function(require,module,exports){
+},{"buffer":11}],92:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -24532,7 +24447,7 @@ Url.prototype.parseHost = function() {
   if (host) this.hostname = host;
 };
 
-},{"./util":91,"punycode":73,"querystring":76}],91:[function(require,module,exports){
+},{"./util":93,"punycode":73,"querystring":76}],93:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -24550,7 +24465,7 @@ module.exports = {
   }
 };
 
-},{}],92:[function(require,module,exports){
+},{}],94:[function(require,module,exports){
 (function (global){
 
 /**
@@ -24621,7 +24536,7 @@ function config (name) {
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],93:[function(require,module,exports){
+},{}],95:[function(require,module,exports){
 (function (process,Buffer){
 /**
  * Wrapper for built-in http.js to emulate the browser XMLHttpRequest object.
@@ -25245,7 +25160,7 @@ exports.XMLHttpRequest = function() {
 };
 
 }).call(this,require('_process'),require("buffer").Buffer)
-},{"_process":72,"buffer":28,"child_process":26,"fs":26,"http":84,"https":66,"url":90}],94:[function(require,module,exports){
+},{"_process":72,"buffer":11,"child_process":10,"fs":10,"http":86,"https":49,"url":92}],96:[function(require,module,exports){
 module.exports = extend
 
 var hasOwnProperty = Object.prototype.hasOwnProperty;
@@ -25266,7 +25181,7 @@ function extend() {
     return target
 }
 
-},{}],95:[function(require,module,exports){
+},{}],97:[function(require,module,exports){
 module.exports={
   "name": "iota.lib.js",
   "version": "0.4.0",
@@ -25300,6 +25215,7 @@ module.exports={
   "dependencies": {
     "async": "^2.5.0",
     "crypto-js": "^3.1.9-1",
+    "iota.crypto.js": "iotaledger/iota.crypto.js",
     "xmlhttprequest": "^1.8.0"
   },
   "devDependencies": {
