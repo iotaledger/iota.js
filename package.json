@@ -1,5 +1,5 @@
 {
-  "name": "iota.api.js",
+  "name": "iota.lib.js",
   "version": "0.4.0",
   "description": "Javascript Library for IOTA",
   "main": "./lib/iota.js",
@@ -22,16 +22,16 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/iotaledger/iota.api.js/issues"
+    "url": "https://github.com/iotaledger/iota.lib.js/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/iotaledger/iota.api.js.git"
+    "url": "https://github.com/iotaledger/iota.lib.js.git"
   },
   "dependencies": {
     "async": "^2.5.0",
     "crypto-js": "^3.1.9-1",
-    "iota.lib.js": "iotaledger/iota.lib.js",
+    "iota.crypto.js": "iotaledger/iota.crypto.js",
     "xmlhttprequest": "^1.8.0"
   },
   "devDependencies": {
