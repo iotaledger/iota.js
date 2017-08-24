@@ -1,9 +1,6 @@
 var IOTA = require('../lib/iota');
 
-var iota = new IOTA({
-    'host': 'http://iota.bitfinex.com',
-    'port': 80
-});
+var iota = new IOTA();
 
 // First co-signer uses index 0 and security level 3
 var digestOne = iota.multisig.getDigest('ABCDFG', 0, 3);
