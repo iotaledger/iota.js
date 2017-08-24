@@ -94,9 +94,9 @@ iota.api.getNodeInfo(function(error, success) {
 
 ---
 
-## API Table of Contents		
+## API Table of Contents
 
-- **[api](#api)**
+- **[api](#iotaapi)**
     - **[Standard API](#standard-api)**
     - **[getTransactionsObjects](#gettransactionsobjects)**
     - **[findTransactionObjects](#findtransactionobjects)**
@@ -113,7 +113,7 @@ iota.api.getNodeInfo(function(error, success) {
     - **[getTransfers](#gettransfers)**
     - **[getAccountData](#getaccountdata)**
     - **[isReattachable](#isreattachable)**
-- **[utils](#iota.utils)**
+- **[utils](#iotautils)**
     - **[convertUnits](#convertunits)**
     - **[addChecksum](#addchecksum)**
     - **[noChecksum](#nochecksum)**
@@ -126,7 +126,7 @@ iota.api.getNodeInfo(function(error, success) {
     - **[extractJson](#extractjson)**
     - **[validateSignatures](#validatesignatures)**
     - **[isBundle](#isbundle)**
-- **[multisig](#iota.multisig)**
+- **[multisig](#iotamultisig)**
     - **[getKey](#getkey)**
     - **[getDigest](#getdigest)**
     - **[Address](#Address)**
@@ -135,7 +135,7 @@ iota.api.getNodeInfo(function(error, success) {
     - **[validateAddress](#validateaddress)**
     - **[initiateTransfer](#initiatetransfer)**
     - **[addSignature](#addsignature)**
-- **[valid](#iota.valid)**
+- **[valid](#iotavalid)**
     - **[isAddress](#isaddress)**
     - **[isTrytes](#istrytes)**
     - **[isValue](#isvalue)**
@@ -143,7 +143,7 @@ iota.api.getNodeInfo(function(error, success) {
     - **[isHash](#ishash)**
     - **[isTransfersArray](#istransfersarray)**
     - **[isArrayOfHashes](#isarrayofhashes)**
-    - **[isArrayOfTrytes](#isarrayoftrytes)**    
+    - **[isArrayOfTrytes](#isarrayoftrytes)**
     - **[isArrayOfAttachedTrytes](#isarrayofattachedtrytes)**
     - **[isArrayOfTxObjects](#isarrayoftxobjects)**
     - **[isInputs](#isinputs)**
