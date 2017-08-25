@@ -434,7 +434,7 @@ Takes a tail transaction hash as input, gets the bundle associated with the tran
 
 #### Input
 ```
-iota.api.replayBundle(transaction [, callback])
+iota.api.replayBundle(transaction, depth, minWeightMagnitude [, callback])
 ```
 
 1. **`transaction`**: `String` Transaction hash, has to be tail.
