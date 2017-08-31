@@ -92,6 +92,12 @@ iota.api.getNodeInfo(function(error, success) {
 })
 ```
 
+## FAQ
+
+### Trying to send a transaction fails with Request Error: COMMAND attachToTangle is not available on this node
+
+For sending a transaction you either need to run your own full node where you don't disallow this command, or you can use [iotaproxy](https://github.com/TimSamshuijzen/iotaproxy) to produce a proof of work for you.
+
 ---
 
 ## API Table of Contents		
