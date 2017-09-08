@@ -1,7 +1,17 @@
 declare class IotaClass {
 
-   constructor(settings: { provider: string })
-   constructor(settings: { host: string, port?: number })
+   constructor(settings: {
+      provider: string
+      sandbox?: boolean
+      token?: boolean
+   })
+
+   constructor(settings: {
+      host: string
+      port: number
+      sandbox?: boolean
+      token?: boolean
+   })
 
    api: IotaApi
    utils: IotaUtils
@@ -9,7 +19,7 @@ declare class IotaClass {
    valid: IotaValid
 
    version: string
-   
+
 }
 
 declare module "iota.lib.js" {
@@ -382,6 +392,10 @@ interface IotaUtils {
       inputAddress: string
    ): boolean
 
+   isBundle(
+      bundle: TransactionObject[]
+   ): boolean
+
 }
 
 /** 
@@ -461,6 +475,8 @@ interface IotaValid {
    isTransfersArray(transfers: any): boolean
 
    isArrayOfHashes(hashes: any): boolean
+
+   isArrayOfTrytes(trytes: any): boolean
 
    isArrayOfAttachedTrytes(trytes: any): boolean
 
