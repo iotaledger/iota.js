@@ -2972,6 +2972,7 @@ function Kerl() {
 }
 
 Kerl.BIT_HASH_LENGTH = BIT_HASH_LENGTH;
+Kerl.HASH_LENGTH = Curl.HASH_LENGTH;
 
 Kerl.prototype.initialize = function(state) {}
 
