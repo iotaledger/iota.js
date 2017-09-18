@@ -1097,7 +1097,7 @@ api.prototype.prepareTransfers = function(seed, transfers, options, callback) {
         tag = transfers[i].obsoleteTag ? transfers[i].obsoleteTag : '999999999999999999999999999';
 
         // Pad for required 27 tryte length
-        for (var j = 0; obsoleteTag.length < 27; j++) {
+        for (var j = 0; tag.length < 27; j++) {
             tag += '9';
         }
 
