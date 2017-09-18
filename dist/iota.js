@@ -484,7 +484,7 @@ api.prototype.sendTrytes = function(trytes, depth, minWeightMagnitude, callback)
     var self = this;
 
     // Check if correct depth and minWeightMagnitude
-    if (!inputValidator.isValue(depth) && !inputValidator.isValue(minWeightMagnitude)) {
+    if (!inputValidator.isValue(depth) || !inputValidator.isValue(minWeightMagnitude)) {
 
         return callback(errors.invalidInputs());
     }
@@ -586,7 +586,7 @@ api.prototype.sendTransfer = function(seed, depth, minWeightMagnitude, transfers
     }
 
     // Check if correct depth and minWeightMagnitude
-    if (!inputValidator.isValue(depth) && !inputValidator.isValue(minWeightMagnitude)) {
+    if (!inputValidator.isValue(depth) || !inputValidator.isValue(minWeightMagnitude)) {
 
         return callback(errors.invalidInputs());
     }
@@ -623,7 +623,7 @@ api.prototype.replayBundle = function(tail, depth, minWeightMagnitude, callback)
 
 
     // Check if correct depth and minWeightMagnitude
-    if (!inputValidator.isValue(depth) && !inputValidator.isValue(minWeightMagnitude)) {
+    if (!inputValidator.isValue(depth) || !inputValidator.isValue(minWeightMagnitude)) {
 
         return callback(errors.invalidInputs());
     }
@@ -2142,6 +2142,8 @@ Bundle.prototype.addTrytes = function(signatureFragments) {
 
     var emptySignatureFragment = '';
     var emptyHash = '999999999999999999999999999999999999999999999999999999999999999999999999999999999';
+    var emptyTag = '9'.repeat(27);
+    var emptyTimestamp = '9'.repeat(9);
 
     for (var j = 0; emptySignatureFragment.length < 2187; j++) {
         emptySignatureFragment += '9';
@@ -2158,8 +2160,14 @@ Bundle.prototype.addTrytes = function(signatureFragments) {
         // Fill empty branchTransaction
         this.bundle[i].branchTransaction = emptyHash;
 
+        // Fill empty tag
+        this.bundle[i].tag = emptyTag;
+
+        this.bundle[i].attachmentTimestamp = emptyTimestamp;
+        this.bundle[i].attachmentTimestampLowerBound = emptyTimestamp;
+        this.bundle[i].attachmentTimestampUpperBound = emptyTimestamp;
         // Fill empty nonce
-        this.bundle[i].nonce = emptyHash;
+        this.bundle[i].nonce = emptyTag;
     }
 }
 
@@ -4401,7 +4409,7 @@ var isTransfersArray = function(transfersArray) {
         }
 
         // Check if tag is correct trytes of {0,27} trytes
-        var tag = transfer.tag;
+        var tag = transfer.tag || transfer.obsoleteTag;
         if (!isTrytes(tag, "0,27")) {
             return false;
         }
@@ -4721,7 +4729,7 @@ makeRequest.prototype.open = function() {
     //request.setRequestHeader('Content-Type','application/json');
 
     if (this.token) {
-        request.withCredentials = true;
+        //request.withCredentials = true;
         request.setRequestHeader('Authorization', 'token ' + this.token);
     }
 
@@ -25701,7 +25709,7 @@ function extend() {
 },{}],97:[function(require,module,exports){
 module.exports={
   "name": "iota.lib.js",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Javascript Library for IOTA",
   "main": "./lib/iota.js",
   "scripts": {
