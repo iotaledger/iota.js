@@ -2127,7 +2127,7 @@ Bundle.prototype.addEntry = function(signatureMessageLength, address, value, tag
         var transactionObject = new Object();
         transactionObject.address = address;
         transactionObject.value = i == 0 ? value : 0;
-        transactionObject.tag = tag;
+        transactionObject.obsoleteTag = tag;
         transactionObject.timestamp = timestamp;
 
         this.bundle[this.bundle.length] = transactionObject;
@@ -2195,7 +2195,7 @@ Bundle.prototype.finalize = function() {
             lastIndexTrits[lastIndexTrits.length] = 0;
         }
 
-        var bundleEssence = Converter.trits(this.bundle[i].address + Converter.trytes(valueTrits) + this.bundle[i].tag + Converter.trytes(timestampTrits) + Converter.trytes(currentIndexTrits) + Converter.trytes(lastIndexTrits));
+        var bundleEssence = Converter.trits(this.bundle[i].address + Converter.trytes(valueTrits) + this.bundle[i].obsoleteTag + Converter.trytes(timestampTrits) + Converter.trytes(currentIndexTrits) + Converter.trytes(lastIndexTrits));
         kerl.absorb(bundleEssence, 0, bundleEssence.length);
     }
 
