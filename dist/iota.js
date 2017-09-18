@@ -5135,20 +5135,22 @@ var transactionTrytes = function(transaction) {
         lastIndexTrits[lastIndexTrits.length] = 0;
     }
 
-    var attachmentTimestampTrits = Converter.trits(transaction.attachmentTimestamp);
+    var attachmentTimestampTrits = Converter.trits(transaction.attachmentTimestamp || 0);
     while (attachmentTimestampTrits.length < 27) {
         attachmentTimestampTrits[attachmentTimestampTrits.length] = 0;
     }
 
-    var attachmentTimestampLowerBoundTrits = Converter.trits(transaction.attachmentTimestampLowerBound);
+    var attachmentTimestampLowerBoundTrits = Converter.trits(transaction.attachmentTimestampLowerBound || 0);
     while (attachmentTimestampLowerBoundTrits.length < 27) {
         attachmentTimestampLowerBoundTrits[attachmentTimestampLowerBoundTrits.length] = 0;
     }
 
-    var attachmentTimestampUpperBoundTrits = Converter.trits(transaction.attachmentTimestampUpperBound);
+    var attachmentTimestampUpperBoundTrits = Converter.trits(transaction.attachmentTimestampUpperBound || 0);
     while (attachmentTimestampUpperBoundTrits.length < 27) {
         attachmentTimestampUpperBoundTrits[attachmentTimestampUpperBoundTrits.length] = 0;
     }
+
+    transaction.tag = transaction.tag || transaction.obsoleteTag;
 
     return transaction.signatureMessageFragment
     + transaction.address
