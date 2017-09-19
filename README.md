@@ -92,7 +92,26 @@ iota.api.getNodeInfo(function(error, success) {
 })
 ```
 
----
+You can also use promises in preference to callbacks, all promise versions of the callback functions have "Async" appended to the function name.
+
+Here is a simple example of how to use the promise version of the `getNodeInfo` function, called `getNodeInfoAsync`. This example produces the same result as the previous example:
+
+```
+iota.api.getNodeInfoAsync()
+    .then(console.log, console.error)
+```
+
+This also allows you to use the new ES8 `await` and `async` features. Shown in this short example:
+
+```
+try {
+    var info = await iota.api.getNodeInfoAsync();
+    ...
+} catch (err) {
+    console.error(err)
+}
+```
+
 
 ## API Table of Contents		
 
