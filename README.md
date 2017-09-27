@@ -43,6 +43,7 @@ The optional settings object can have the following values:
 2. **`port`**: `Int` port of the host you want to connect to. Defaults to 14265.
 3. **`provider`**: `String` If you don't provide host and port, you can supply the full provider value to connect to
 4. **`sandbox`**: `Bool` Optional value to determine if your provider is the IOTA Sandbox or not.
+5. **`token`**: `String` Token string used for authenticating with the IOTA Sandbox if `sandbox` is set to `true`.
 
 You can either supply the remote node directly via the `provider` option, or individually with `host` and `port`, as can be seen in the example below:
 
