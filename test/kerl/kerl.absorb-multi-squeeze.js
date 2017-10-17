@@ -18,7 +18,7 @@ describe('kerl.absorb-multi-squeeze', function() {
       kerl.initialize();
       kerl.absorb(trits, 0, trits.length);
       var hashTrits = [];
-      kerl.squeeze(hashTrits, 0, kerl.HASH_LENGTH * 2);
+      kerl.squeeze(hashTrits, 0, Kerl.HASH_LENGTH * 2);
       var hash = Converter.trytes(hashTrits);
       assert.deepEqual(test.expected, hash);
     });
