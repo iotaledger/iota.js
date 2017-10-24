@@ -41,6 +41,12 @@ describe('utils.convertUnits', function() {
             fromUnit: 'Gi',
             toUnit: 'Ti',
             expected: 1
+        },
+        {
+            value: 133.999111111,
+            fromUnit: 'Gi',
+            toUnit: 'i',
+            expected: 133999111111
         }
     ]
 
