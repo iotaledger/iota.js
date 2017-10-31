@@ -43,13 +43,28 @@ console.log("IS VALID MULTISIG ADDRESS:", isValid);
 //
 //  When it comes to defining the remainder address, you have to generate that address before making a transfer
 //  Important to know here is the total sum of the security levels used by the cosigners.
-var multisigTransfer = [
-  {'address': 'ZGHXPZYDKXPEOSQTAQOIXEEI9K9YKFKCWKYYTYAUWXK9QZAVMJXWAIZABOXHHNNBJIEBEUQRTBWGLYMTX', 'value': 999}
-];
-// Define remainder address
-var remainderAddress = 'NZRALDYNVGJWUVLKDWFKJVNYLWQGCWYCURJIIZRLJIKSAIVZSGEYKTZRDBGJLOA9AWYJQB9IPWRAKUC9FBDRZJZXZG';
 
-iota.multisig.initiateTransfer(6, address, remainderAddress, multisigTransfer, function(e, initiatedBundle) {
+// Transfers object
+var multisigTransfer = [
+  {
+    address: iota.utils.noChecksum('ZGHXPZYDKXPEOSQTAQOIXEEI9K9YKFKCWKYYTYAUWXK9QZAVMJXWAIZABOXHHNNBJIEBEUQRTBWGLYMTX'),
+    value: 999,
+    message: '',
+    tag: '9'.repeat(27)
+  }
+];
+
+// Multisig address object, used as input
+var input = {
+  address: address,
+  securitySum: 6,
+  balance: 1000
+}
+
+// Define remainder address
+var remainderAddress = iota.utils.noChecksum('NZRALDYNVGJWUVLKDWFKJVNYLWQGCWYCURJIIZRLJIKSAIVZSGEYKTZRDBGJLOA9AWYJQB9IPWRAKUC9FBDRZJZXZG');
+
+iota.multisig.initiateTransfer(input, remainderAddress, multisigTransfer, function(e, initiatedBundle) {
 
     if (e) {
         console.log(e);
