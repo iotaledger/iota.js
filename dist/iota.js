@@ -106,6 +106,13 @@ api.prototype.findTransactions = function(searchValues, callback) {
             return
         }
 
+        if (key === 'addresses') {
+
+          searchValues.addresses = searchValues.addresses.map(function(address) {
+
+              return Utils.noChecksum(address)
+          });
+        }
 
         var hashes = searchValues[key];
 
@@ -167,7 +174,10 @@ api.prototype.getBalances = function(addresses, threshold, callback) {
         return callback(errors.invalidTrytes());
     }
 
-    var command = apiCommands.getBalances(addresses, threshold);
+    var command = apiCommands.getBalances(addresses.map(function(address) {
+
+      return Utils.noChecksum(address)
+    }), threshold);
 
     return this.sendCommand(command, callback)
 }
@@ -5045,6 +5055,11 @@ var addChecksum = function(inputValue, checksumLength, isAddress) {
 var noChecksum = function(address) {
 
     var isSingleAddress = inputValidator.isString(address)
+
+    if (isSingleAddress && address.length === 81) {
+
+      return address
+    }
 
     // If only single address, turn it into an array
     if (isSingleAddress) address = new Array(address);
@@ -28467,7 +28482,7 @@ function extend() {
 },{}],98:[function(require,module,exports){
 module.exports={
   "name": "iota.lib.js",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "description": "Javascript Library for IOTA",
   "main": "./lib/iota.js",
   "scripts": {
