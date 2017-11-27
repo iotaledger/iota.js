@@ -1,0 +1,55 @@
+{
+    "extends": [
+      "airbnb-base"
+    ],
+    "plugins": [
+      "import",
+      "mocha"
+    ],
+    "globals": {
+      "describe": true,
+      "it": true,
+      "beforeEach": true,
+      "afterEach": true,
+      "PRODUCTION": true,
+      "TEST": true
+    },
+    "env": {
+      "browser": true,
+      "node": true
+    },
+    "rules": {
+      "mocha/no-exclusive-tests": "error",
+      "func-names": "off",
+      "global-require": "off",
+      "new-cap": ["error", {
+        "newIsCapExceptions": [],
+        "capIsNewExceptions" : [
+          "When",
+          "Then",
+          "Given",
+          "After",
+          "Before"
+        ]
+      }],
+  
+      "no-plusplus": "off",
+      "no-underscore-dangle": "off",
+      "import/no-extraneous-dependencies": ["error", {
+        "devDependencies": [
+          "./examples/*.js",
+          "./lib/**/*.js",
+          "./test/**/*js"
+          ]
+        }
+      ],
+      "linebreak-style": 0,
+      "no-param-reassign": "off"
+    },
+    "settings": {
+      "mocha/additionalTestFunctions": [
+        "describeModule"
+      ]
+    }
+  }
+  
