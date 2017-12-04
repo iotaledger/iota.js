@@ -43,6 +43,7 @@ The optional settings object can have the following values:
 2. **`port`**: `Int` port of the host you want to connect to. Defaults to 14265.
 3. **`provider`**: `String` If you don't provide host and port, you can supply the full provider value to connect to
 4. **`sandbox`**: `Bool` Optional value to determine if your provider is the IOTA Sandbox or not.
+5. **`token`**: `String` Token string used for authenticating with the IOTA Sandbox if `sandbox` is set to `true`.
 
 You can either supply the remote node directly via the `provider` option, or individually with `host` and `port`, as can be seen in the example below:
 
@@ -94,9 +95,9 @@ iota.api.getNodeInfo(function(error, success) {
 
 ---
 
-## API Table of Contents		
+## API Table of Contents
 
-- **[api](#api)**
+- **[api](#iotaapi)**
     - **[Standard API](#standard-api)**
     - **[getTransactionsObjects](#gettransactionsobjects)**
     - **[findTransactionObjects](#findtransactionobjects)**
@@ -113,7 +114,7 @@ iota.api.getNodeInfo(function(error, success) {
     - **[getTransfers](#gettransfers)**
     - **[getAccountData](#getaccountdata)**
     - **[isReattachable](#isreattachable)**
-- **[utils](#iota.utils)**
+- **[utils](#iotautils)**
     - **[convertUnits](#convertunits)**
     - **[addChecksum](#addchecksum)**
     - **[noChecksum](#nochecksum)**
@@ -126,15 +127,16 @@ iota.api.getNodeInfo(function(error, success) {
     - **[extractJson](#extractjson)**
     - **[validateSignatures](#validatesignatures)**
     - **[isBundle](#isbundle)**
-- **[multisig](#iota.multisig)**
+- **[multisig](#iotamultisig)**
     - **[getKey](#getkey)**
     - **[getDigest](#getdigest)**
-    - **[addAddressDigest](#addaddressdigest)**
-    - **[finalizeAddress](#finalizeaddress)**
+    - **[Address](#Address)**
+    - **[Address.absorb](#Address.absorb)**
+    - **[Address.finalize](#Address.finalize)**
     - **[validateAddress](#validateaddress)**
     - **[initiateTransfer](#initiatetransfer)**
     - **[addSignature](#addsignature)**
-- **[valid](#iota.valid)**
+- **[valid](#iotavalid)**
     - **[isAddress](#isaddress)**
     - **[isTrytes](#istrytes)**
     - **[isValue](#isvalue)**
@@ -142,7 +144,7 @@ iota.api.getNodeInfo(function(error, success) {
     - **[isHash](#ishash)**
     - **[isTransfersArray](#istransfersarray)**
     - **[isArrayOfHashes](#isarrayofhashes)**
-    - **[isArrayOfTrytes](#isarrayoftrytes)**    
+    - **[isArrayOfTrytes](#isarrayoftrytes)**
     - **[isArrayOfAttachedTrytes](#isarrayofattachedtrytes)**
     - **[isArrayOfTxObjects](#isarrayoftxobjects)**
     - **[isInputs](#isinputs)**
@@ -432,7 +434,7 @@ Takes a tail transaction hash as input, gets the bundle associated with the tran
 
 #### Input
 ```
-iota.api.replayBundle(transaction [, callback])
+iota.api.replayBundle(transaction, depth, minWeightMagnitude [, callback])
 ```
 
 1. **`transaction`**: `String` Transaction hash, has to be tail.
@@ -669,8 +671,8 @@ Categorizes a list of transfers into `sent` and `received`. It is important to n
 iota.utils.categorizeTransfers(transfers, addresses)
 ```
 
-1. **`transfers`**: `List` A list of bundles. Basically is an array, of arrays (bundles), as is returned from getTransfers or getAccountData
-2. **`addresses`**: 'List' List of addresses that belong to you. With these addresses as input, it's determined whether it's a sent or a receive transaction. Therefore make sure that these addresses actually belong to you.
+1. **`transfers`**: `Array` A list of bundles. Basically is an array, of arrays (bundles), as is returned from getTransfers or getAccountData
+2. **`addresses`**: `Array` List of addresses that belong to you. With these addresses as input, it's determined whether it's a sent or a receive transaction. Therefore make sure that these addresses actually belong to you.
 
 #### Returns
 `object` - the transfers categorized into `sent` and `received`
@@ -815,37 +817,49 @@ iota.multisig.getDigest(seed, index)
 
 ---
 
-### `addAddressDigest`
+### `address`
 
-This function is used to initiate the creation of a new multisig address. The way that it works is that the first participant of the multi-signature initiates this function with an empty curl state, and then shares the newly generated state with the other participants of the multisig address, who then basically add their key digest. Then finally, once the last co-signer added their digest, `finalizeAddress` can be used to get the actual 81-tryte address value. `validateAddress` can be used to actually validate the multi-signature.
+This function is used to initiate the creation of a new multisig address. Once all digests were added with `addDigest()`, `finalize()` can be used to get the actual 81-tryte address value. `validateAddress()` can be used to actually validate the multi-signature.
 
 #### Input
 ```
-iota.multisig.addAddressDigest(digestTrytes, curlStateTrytes)
+var address = new iota.multisig.address(digests);
 ```
 
-1. **`digestTrytes`**: `String` digest trytes as returned by `getDigest`
-2. **`curlStateTrytes`**: 'String' curl state trytes to continue modifying (which are returned by this function)
+1. **`digestTrytes`**: `String || Array` Optional string or array of digest trytes as returned by `getDigest`
 
 #### Returns
-`String` - curl state trytes
-
+`Object` - multisig address instance
 
 ---
 
-### `finalizeAddress`
+### `address.absorb`
+
+Absorbs the digests of co-signers
+
+#### Input
+```
+address.addDigest(digest);
+```
+
+1. **`digest`**: `String || Array` String or array of digest trytes as returned by `getDigest`
+
+#### Returns
+`Object` - multisig address instance
+
+---
+
+### `address.finalize`
 
 Finalizes the multisig address generation process and returns the correct 81-tryte address.
 
 #### Input
 ```
-iota.multisig.finalizeAddress(curlStateTrytes)
+address.finalize()
 ```
 
-1. **`curlStateTrytes`**: 'String' curl state trytes to continue modifying (which are returned by this function)
-
 #### Returns
-`String` - curl state trytes
+`String` - 81-tryte multisig address
 
 
 ---
