@@ -4738,12 +4738,14 @@ module.exports = {
 
 },{}],21:[function(require,module,exports){
 var errors = require("../errors/requestErrors");
-var XMLHttpRequest = null;
 
-try {
-  XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
-} catch (e) {
-    throw new Error('Cannot import XMLHttpRequest.');
+function XMLHttpRequest() {
+    if (typeof XMLHttpRequest !== 'undefined') {
+        return new XMLHttpRequest();
+    }
+
+    var request = require("xmlhttprequest").XMLHttpRequest;
+    return new request();
 }
 
 function makeRequest(provider, token) {
@@ -4772,7 +4774,7 @@ makeRequest.prototype.setProvider = function(provider) {
 **/
 makeRequest.prototype.open = function() {
 
-    var request = new XMLHttpRequest();
+    var request = XMLHttpRequest();
     request.open('POST', this.provider, true);
     request.setRequestHeader('Content-Type','application/json');
     request.setRequestHeader('X-IOTA-API-Version', '1');
@@ -4830,7 +4832,7 @@ makeRequest.prototype.sandboxSend = function(job, callback) {
 
     var newInterval = setInterval(function() {
 
-        var request = new XMLHttpRequest();
+        var request = XMLHttpRequest();
 
         request.onreadystatechange = function() {
 
