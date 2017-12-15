@@ -4738,9 +4738,10 @@ module.exports = {
 
 },{}],21:[function(require,module,exports){
 var errors = require("../errors/requestErrors");
+var XMLHttpRequest = null;
 
 try {
-  var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+  XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 } catch (e) {
     throw new Error('Cannot import XMLHttpRequest.');
 }
