@@ -124,6 +124,8 @@ iota.api.getNodeInfo(function(error, success) {
     - **[categorizeTransfers](#categorizetransfers)**
     - **[toTrytes](#totrytes)**
     - **[fromTrytes](#fromtrytes)**
+    - **[unicodeToTrytes](#unicodeToTrytes)**
+    - **[unicodeFromTrytes](#unicodeFromTrytes)**
     - **[extractJson](#extractjson)**
     - **[validateSignatures](#validatesignatures)**
     - **[isBundle](#isbundle)**
@@ -703,6 +705,38 @@ Reverse of toTrytes.
 #### Input
 ```
 iota.utils.fromTrytes(trytes)
+```
+
+1. **`trytes`**: `String` Trytes you want to convert to string
+
+#### Returns
+`string` - string
+
+---
+
+### `unicodeToTrytes`
+
+Converts Unicode characters into trytes according to our encoding schema (read the source code for more info as to how it works). If you want to convert JSON data, stringify it first.
+
+#### Input
+```
+iota.utils.unicodeToTrytes(input)
+```
+
+1. **`input`**: `String` String you want to convert into trytes. All non-string values should be converted into strings first.
+
+#### Returns
+`string || null` - trytes, or null in case you provided an invalid string
+
+---
+
+### `unicodeFromTrytes`
+
+Reverse of unicodeToTrytes.
+
+#### Input
+```
+iota.utils.unicodeFromTrytes(trytes)
 ```
 
 1. **`trytes`**: `String` Trytes you want to convert to string
