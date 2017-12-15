@@ -53,6 +53,22 @@ describe('utils.toTrytes', function() {
         {
             message: "你好",
             expected: true
+        },
+        {
+            message: 'こんにちは',
+            expected: true
+        },
+        {
+            message: '여보세요',
+            expected: true
+        },
+        {
+            message: 'Olá',
+            expected: true
+        },
+        {
+            message: 'Здравствуйте',
+            expected: true
         }
     ]
 
