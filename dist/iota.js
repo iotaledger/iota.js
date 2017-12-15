@@ -4739,7 +4739,7 @@ module.exports = {
 },{}],21:[function(require,module,exports){
 var errors = require("../errors/requestErrors");
 
-function XMLHttpRequest() {
+function xmlHttpRequest() {
     if (typeof XMLHttpRequest !== 'undefined') {
         return new XMLHttpRequest();
     }
@@ -4774,7 +4774,7 @@ makeRequest.prototype.setProvider = function(provider) {
 **/
 makeRequest.prototype.open = function() {
 
-    var request = XMLHttpRequest();
+    var request = xmlHttpRequest();
     request.open('POST', this.provider, true);
     request.setRequestHeader('Content-Type','application/json');
     request.setRequestHeader('X-IOTA-API-Version', '1');
@@ -4832,7 +4832,7 @@ makeRequest.prototype.sandboxSend = function(job, callback) {
 
     var newInterval = setInterval(function() {
 
-        var request = XMLHttpRequest();
+        var request = xmlHttpRequest();
 
         request.onreadystatechange = function() {
 
