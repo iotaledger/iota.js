@@ -7,28 +7,44 @@ describe('utils.fromTrytes', function() {
 
     var tests = [
         {
-            message: " ASDFDSAFDSAja9fd",
-            expected: true
+            message: "KB",
+            expected: "A"
         },
         {
-            message: "994239432",
-            expected: true
+            message: "KBB",
+            expected: false
         },
         {
-            message: "{ 'a' : 'b', 'c': 'd', 'e': '#asdfd?$' }",
-            expected: true
+            message: "KBZZ",
+            expected: "A˘"
         },
         {
-            message: "{ 'a' : 'b', 'c': {'nested': 'json', 'much': 'wow', 'array': [ true, false, 'yes' ] } }",
-            expected: true
+            message: "EAKBBCNBPBNBBCKBPBNBBCKBYCPCCBUCSC",
+            expected: " ASDFDSAFDSAja9fd"
+        },
+        {
+            message: "CBCBYAWAXACBYAXAWA",
+            expected: "994239432"
+        },
+        {
+            message: "ODEALAPCLAEADBEALAQCLAQAEALARCLADBEALASCLAQAEALATCLADBEALAHAPCGDSCUCSCIBIALAEAQD",
+            expected: "{ 'a' : 'b', 'c': 'd', 'e': '#asdfd?$' }"
+        },
+        {
+            message: "ODEALAPCLAEADBEALAQCLAQAEALARCLADBEAODLABDTCGDHDTCSCLADBEALAYCGDCDBDLAQAEALAADIDRCWCLADBEALAKDCDKDLAQAEALAPCFDFDPCMDLADBEAJCEAHDFDIDTCQAEAUCPC9DGDTCQAEALAMDTCGDLAEALCEAQDEAQD",
+            expected: "{ 'a' : 'b', 'c': {'nested': 'json', 'much': 'wow', 'array': [ true, false, 'yes' ] } }"
+        },
+        {
+            message: "AC1234",
+            expected: false
         },
         {
             message: 994239432,
             expected: false
         },
         {
-            message: 'true',
-            expected: true
+            message: 'HDFDIDTC',
+            expected: "true"
         },
         {
             message: Array(9, 'yes', true),
@@ -42,15 +58,16 @@ describe('utils.fromTrytes', function() {
 
     tests.forEach(function(test) {
 
-        it('should convert trytes to string and back. Test: ' + test.message + ' with result: ' + test.expected, function() {
+        it('should convert from trytes to string and back. Test: ' + test.message + ', expecting result: ' + test.expected, function() {
 
-            var trytes = Utils.toTrytes(test.message);
+            var toString = Utils.fromTrytes(test.message);
 
-            var toString = Utils.fromTrytes(trytes);
+            var trytes = Utils.toTrytes(toString);
 
             if (test.expected) {
 
-                assert.strictEqual(toString, test.message);
+                assert.strictEqual(toString, test.expected);
+                assert.strictEqual(trytes, test.message);
 
             } else {
 
