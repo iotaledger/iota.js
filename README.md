@@ -108,11 +108,13 @@ iota.api.getNodeInfo(function(error, success) {
     - **[prepareTransfers](#preparetransfers)**
     - **[sendTrytes](#sendtrytes)**
     - **[sendTransfer](#sendtransfer)**
+    - **[promoteTransaction](#promotetransaction)**
     - **[replayBundle](#replaybundle)**
     - **[broadcastBundle](#broadcastbundle)**
     - **[getBundle](#getbundle)**
     - **[getTransfers](#gettransfers)**
     - **[getAccountData](#getaccountdata)**
+    - **[isPromotable](#ispromotable)**
     - **[isReattachable](#isreattachable)**
 - **[utils](#iotautils)**
     - **[convertUnits](#convertunits)**
@@ -428,6 +430,27 @@ iota.api.sendTransfer(seed, depth, minWeightMagnitude, transfers [, options], ca
 
 ---
 
+### `promoteTransaction`
+
+Promotes a transaction by adding spam on top of it, as long as it is promotable.
+Will promote by adding transfers on top of the current one with `delay` interval.
+Use `params.interrupt` to terminate the promotion. If `params.delay` is set to `0` only one promotion transfer will be sent.
+
+#### Input
+```js
+iota.api.promoteTransaction(depth, minWeightMagnitude, transfers [, params], callback)
+```
+
+1. **`depth`** `Int` depth
+2. **`minWeightMagnitude`** `Int` minWeightMagnitude
+3. **`transfer`** `Array` Promotion transfer
+4. **`params`** `Object` Params
+  - **`delay`** `int` Delay between promotion transfers
+  - **`interrupt`** `Boolean` Flag to terminate promotion
+5. **`callback`** `Function` Callback
+
+---
+
 ### `replayBundle`
 
 Takes a tail transaction hash as input, gets the bundle associated with the transaction and then replays the bundle by attaching it to the tangle.
@@ -527,6 +550,22 @@ iota.api.getAccountData(seed [, options], callback)
     'balance': 0 // latest confirmed balance
 }
 ```
+
+---
+
+### `isPromotable`
+
+Checks if tail transaction is promotable by calling `checkConsistency` API call.
+
+#### Input
+```js
+iota.api.isPromotable(tail)
+```
+
+1. **`tail`** {String} Tail transaction hash
+
+#### Returns
+`Promise` - resolves to true / false
 
 ---
 
