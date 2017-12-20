@@ -629,7 +629,7 @@ api.prototype.sendTransfer = function(seed, depth, minWeightMagnitude, transfers
             return callback(error)
         }
 
-        self.sendTrytes(trytes, depth, minWeightMagnitude, callback);
+      self.sendTrytes(trytes, depth, minWeightMagnitude, options, callback);
     })
 }
 
@@ -657,9 +657,8 @@ api.prototype.promoteTransaction = function(tail, depth, minWeightMagnitude, tra
         return callback(errors.inconsistentSubtangle(tail));
       }
 
-      if (params.interrupt === true) {
-          return callback(null, tail);
-      }
+      if (params.interrupt === true || (typeof(params.interrupt) === 'function' && params.interrupt()))
+        return callback(null, tail);
 
       self.sendTransfer(transfer[0].address, depth, minWeightMagnitude, transfer, {reference: tail}, function(err, res) {
           if (err == null && params.delay > 0) {
@@ -20768,7 +20767,7 @@ process.umask = function() { return 0; };
 },{}],60:[function(require,module,exports){
 module.exports={
   "name": "iota.lib.js",
-  "version": "0.4.5",
+  "version": "0.4.6",
   "description": "Javascript Library for IOTA",
   "main": "./lib/iota.js",
   "scripts": {
