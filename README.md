@@ -438,16 +438,21 @@ Use `params.interrupt` to terminate the promotion. If `params.delay` is set to `
 
 #### Input
 ```js
-iota.api.promoteTransaction(depth, minWeightMagnitude, transfers [, params], callback)
+iota.api.promoteTransaction(transaction, depth, minWeightMagnitude, transfers [, params], callback)
 ```
 
-1. **`depth`** `Int` depth
-2. **`minWeightMagnitude`** `Int` minWeightMagnitude
-3. **`transfer`** `Array` Promotion transfer
-4. **`params`** `Object` Params
+1. **`transaction`**: `String` Transaction hash, has to be tail.
+2. **`depth`** `Int` depth
+3. **`minWeightMagnitude`** `Int` minWeightMagnitude
+4. **`transfers`**: `Array` of transfer objects:
+  - **`address`**: `String` 81-tryte encoded address of recipient
+  - **`value`**: `Int` value to be transferred.
+  - **`message`**: `String` tryte-encoded message to be included in the bundle.
+  - **`tag`**: `String` 27-tryte encoded tag.
+5. **`params`** `Object` Params
   - **`delay`** `int` Delay between promotion transfers
   - **`interrupt`** `Boolean` Flag to terminate promotion
-5. **`callback`** `Function` Callback
+6. **`callback`** `Function` Callback
 
 ---
 
