@@ -451,8 +451,11 @@ iota.api.promoteTransaction(transaction, depth, minWeightMagnitude, transfers [,
   - **`tag`**: `String` 27-tryte encoded tag.
 5. **`params`** `Object` Params
   - **`delay`** `int` Delay between promotion transfers
-  - **`interrupt`** `Boolean` Flag to terminate promotion
+  - **`interrupt`** `Boolean || Function` Flag to terminate promotion, can be boolean or a function returning a boolean
 6. **`callback`** `Function` Callback
+
+#### Returns
+`Array` - returns an array of the Promotion transfer (transaction object).
 
 ---
 
