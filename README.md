@@ -267,7 +267,7 @@ Input | Security Level | Security
 
 #### Input
 ```js
-iota.api.getNewAddress(seed [, options], callback)
+iota.api.getNewAddress(seed, [options], callback)
 ```
 
 1. **`seed`**: `String` tryte-encoded seed. It should be noted that this seed is not transferred
