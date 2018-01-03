@@ -38,7 +38,7 @@ console.log("IS VALID MULTISIG ADDRESS:", isValid);
 
 //  SIGNING EXAMPLE
 //
-//  Even though these functions are c alled subsequently, the addSignature functions have to be called by each
+//  Even though these functions are called subsequently, the addSignature functions have to be called by each
 //  cosigner independently. With the previous signer sharing the output (bundle with the transaction objects)
 //
 //  When it comes to defining the remainder address, you have to generate that address before making a transfer
