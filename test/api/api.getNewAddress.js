@@ -1,7 +1,9 @@
 var { assert } = require('chai')
 var API = require('../../lib/api/api')
 
-describe('api.getNewAddress', () => {
+describe('api.getNewAddress', function () {
+  this.timeout(10000)
+
   var seed = 'SEED'
   var addresses = [
     'FJHSSHBZTAKQNDTIKJYCZBOZDGSZANCZSWCNWUOCZXFADNOQSYAHEJPXRLOVPNOQFQXXGEGVDGICLMOXX',
