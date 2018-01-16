@@ -1,53 +1,55 @@
 {
-  "name": "iota.lib.js",
-  "version": "0.4.7",
-  "description": "Javascript Library for IOTA",
-  "main": "./lib/iota.js",
-  "scripts": {
-    "build": "gulp",
-    "test": "mocha"
-  },
-  "author": {
-    "name": "Dominik Schiener (IOTA Foundation)",
-    "website": "https://iota.org"
-  },
-  "keywords": [
-    "iota",
-    "tangle",
-    "library",
-    "browser",
-    "javascript",
-    "nodejs",
-    "API"
-  ],
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/iotaledger/iota.lib.js/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/iotaledger/iota.lib.js.git"
-  },
-  "dependencies": {
-    "async": "^2.5.0",
-    "bignumber.js": "^4.1.0",
-    "crypto-js": "^3.1.9-1",
-    "xmlhttprequest": "^1.8.0"
-  },
-  "devDependencies": {
-    "bower": ">=1.8.0",
-    "browserify": ">=14.1.0",
-    "chai": "^4.0.2",
-    "del": "^3.0.0",
-    "gulp": "^3.9.1",
-    "gulp-jshint": "^2.0.2",
-    "gulp-nsp": ">=2.4.2",
-    "gulp-rename": ">=1.2.2",
-    "gulp-replace": "^0.6.1",
-    "gulp-uglify": "^3.0.0",
-    "jshint": "^2.9.4",
-    "mocha": "^3.2.0",
-    "vinyl-buffer": "^1.0.0",
-    "vinyl-source-stream": "^1.1.0"
-  }
+    "name": "iota.lib.js",
+    "version": "1.0.0-alpha1",
+    "description": "Javascript Library for IOTA",
+    "main": "./lib/iota.js",
+    "scripts": {
+        "build": "gulp",
+        "format": "prettier",
+        "test": "mocha"
+    },
+    "contributors": [
+        "Dominik Schiener <dom@iota.org> (https://iota.org)",
+        "Edward Greve <edward@iota.org> (https://github.com/anyong)",
+        "Chris Dukakis <chris.dukakis@iota.org> (https://github.com/chrisdukakis)"
+    ],
+    "keywords": ["iota", "tangle", "library", "browser", "javascript", "nodejs", "API"],
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/iotaledger/iota.lib.js/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/iotaledger/iota.lib.js.git"
+    },
+    "dependencies": {
+        "@types/async": "^2.0.47",
+        "@types/bignumber.js": "^5.0.0",
+        "@types/crypto-js": "^3.1.38",
+        "async": "^2.5.0",
+        "bignumber.js": "^4.1.0",
+        "crypto-js": "^3.1.9-1",
+        "whatwg-fetch": "^2.0.3",
+        "xmlhttprequest": "^1.8.0"
+    },
+    "devDependencies": {
+        "bower": ">=1.8.0",
+        "browserify": ">=14.1.0",
+        "chai": "^4.0.2",
+        "del": "^3.0.0",
+        "gulp": "^3.9.1",
+        "gulp-jshint": "^2.0.2",
+        "gulp-nsp": ">=2.4.2",
+        "gulp-rename": ">=1.2.2",
+        "gulp-replace": "^0.6.1",
+        "gulp-uglify": "^3.0.0",
+        "jshint": "^2.9.4",
+        "mocha": "^3.2.0",
+        "prettier": "^1.10.2",
+        "tslint": "^5.9.1",
+        "tslint-config-prettier": "^1.6.0",
+        "typescript": "^2.6.2",
+        "vinyl-buffer": "^1.0.0",
+        "vinyl-source-stream": "^1.1.0"
+    }
 }
