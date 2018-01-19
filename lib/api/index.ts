@@ -2,14 +2,16 @@ import errors from '../errors/inputErrors'
 import inputValidator from '../utils/inputValidator'
 import * as core from './core'
 import * as extended from './extended'
-
-export interface API extends BaseAPI {}
+import { BaseCommand, Callback } from './types/commands'
 
 export interface BaseAPI {
-  getSettings: () => Settings,
-  setSettings: (settings: Settings) => API
-  /// ...
+    getSettings: () => Settings
+    setSettings: (settings: Settings) => API
+    sendCommand: <C extends BaseCommand, R = void>(command: C, callback?: Callback<R>) => Promise<R>
+    /// ...
 }
+
+export interface API extends BaseAPI {}
 
 export interface Settings {
     host?: string // deprecate
@@ -20,7 +22,7 @@ export interface Settings {
 }
 
 interface Properties {
-  settings: Settings
+    settings: Settings
 }
 
 export const defaultSettings = {
@@ -28,21 +30,21 @@ export const defaultSettings = {
     port: 14265, // deprecate
     provider: 'http://localhost:14265',
     sandbox: false, // deprecate
-    token: undefined // r/ w/ sandboxToken ?
+    token: undefined, // r/ w/ sandboxToken ?
 }
 
 /**
  * Composes API object from it's components
  **/
-export function composeApi (this: API, settings: Settings = defaultSettings, extensions: object[]): API {
+export function composeApi(this: API, settings: Settings = defaultSettings, extensions: object[]): API {
     const props: Properties = {
-        settings: defaultSettings 
+        settings: defaultSettings,
     }
-    
+
     const invalidArgs = extensions.filter(ext => typeof ext !== 'object')
     if (invalidArgs.length) {
         throw new Error(`
-          Illegal composition arguments: ${ invalidArgs.map(a => typeof a).join(', ') }. \n
+          Illegal composition arguments: ${invalidArgs.map(a => typeof a).join(', ')}. \n
           Expected object(s).
         `)
     }
@@ -52,16 +54,16 @@ export function composeApi (this: API, settings: Settings = defaultSettings, ext
         ...extended,
         ...extensions,
 
-        getSettings (): Settings {
+        getSettings(): Settings {
             return props.settings
         },
 
-        setSettings ({ provider, host, port, sandbox, token }: Settings): API {
+        setSettings({ provider, host, port, sandbox, token }: Settings): API {
             if (host) {
                 host = host.replace(/\/$/, '')
             }
-            
-            provider = provider || (`${ host || defaultSettings.host }:${ port || defaultSettings.port }`)
+
+            provider = provider || `${host || defaultSettings.host}:${port || defaultSettings.port}`
 
             if (!inputValidator.isUri(provider)) {
                 throw errors.INVALID_URI
@@ -75,6 +77,6 @@ export function composeApi (this: API, settings: Settings = defaultSettings, ext
             }
 
             return this
-        }
+        },
     }).setSettings(settings)
 }
