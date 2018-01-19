@@ -1,7 +1,7 @@
 import errors from '../../errors/inputErrors'
 import inputValidator from '../../utils/inputValidator'
 
-import { Callback, FindTransactionsSearchValues, keysOf } from '../types/commands'
+import { Callback, FindTransactionsQuery, keysOf } from '../types/commands'
 import { FindTransactionsResponse } from '../types/responses'
 
 import commandBuilder from '../commandBuilder'
@@ -13,7 +13,7 @@ import sendCommand from './sendCommand'
  *   @returns {function} callback
  *   @returns {object} success
  **/
-function findTransactions(searchValues: FindTransactionsSearchValues, callback: Callback<FindTransactionsResponse>) {
+function findTransactions(query: FindTransactionsQuery, callback: Callback<FindTransactionsResponse>) {
     // If not an object, return error
     if (!inputValidator.isObject(searchValues)) {
         return callback(errors.invalidKey())

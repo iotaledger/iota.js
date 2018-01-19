@@ -1,77 +1,33 @@
-import API from './api/API'
-import Multisig from './multisig/multisig'
+import { API, composeApi, Settings } from './api'
+import errors from './errors/inputErrors'
+import multisig from './multisig/multisig'
 import { default as valid } from './utils/inputValidator'
-import Request from './utils/makeRequest'
 import utils from './utils/utils'
 
-export interface Settings {
-    host: string
-    port: number
-    provider: string
-    sandbox: boolean
-    token: string | null
+//
+//  *Depreactions are aimed for v1.0.0
+
+interface IOTA extends API {
+    api: object // deprecate api namespace
+    utils: object
+    valid: object
+    multisig: object // deprecate & grab it with composition
+    version: string // deprecate
+    // TODO: add rest of methods
 }
 
-const defaultSettings = {
-    host: 'http://localhost',
-    port: 14265,
-    provider: 'http://localhost:14265',
-    sandbox: false,
-    token: null,
-}
+function IOTA (settings: Settings, ...extensions: object[]):IOTA {
+    const api = composeApi(settings, extensions)
 
-export default class IOTA {
-    public API?: API
-    public multisig?: Multisig
-    public utils = utils
-    public valid = valid
-
-    private version: string = '0.4.6'
-    private host: string = 'http://localhost'
-    private port: number = 14265
-    private provider: string = 'http://localhost:14265'
-    private sandbox: boolean | string = false
-    private token: string | null = null
-
-    private makeRequest?: Request
-
-    constructor(settings: Partial<Settings>) {
-        this.setSettings(settings)
-    }
-
-    /**
-     *   Reset the libraries settings and internal objects
-     *
-     *   @method setSettings
-     *   @param {Object} settings
-     **/
-    public setSettings(settings: Partial<Settings>) {
-        this.host = settings.host || 'http://localhost'
-        this.port = settings.port || 14265
-        this.provider = settings.provider || this.host.replace(/\/$/, '') + ':' + this.port
-        this.sandbox = settings.sandbox || false
-        this.token = settings.token || null
-
-        if (this.sandbox) {
-            // remove backslash character
-            this.sandbox = this.provider.replace(/\/$/, '')
-            this.provider = this.sandbox + '/commands'
-        }
-
-        this.makeRequest = new Request(this.provider, this.token)
-        this.API = new API(this.makeRequest!, this.sandbox)
-        // this.mam
-        // this.flash
-        this.multisig = new Multisig(this.makeRequest!)
-    }
-
-    /**
-     *   Change the Node the user connects to
-     *
-     *   @method changeNode
-     *   @param {Object} settings
-     **/
-    public changeNode(settings: Settings) {
-        this.setSettings(settings)
+    return {
+        ...api,
+        api, // deprecate
+        utils,
+        valid,
+        multisig: multisig.bind(api), // deprecate
+        version: '0.5.0', // deprecate
     }
 }
+
+export { IOTA as default, utils, valid, errors }
+

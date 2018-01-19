@@ -4,7 +4,7 @@ import inputValidator from '../../utils/inputValidator'
 import { Callback } from '../types/commands'
 import { BroadcastTransactionsResponse } from '../types/responses'
 
-import commandBuilder from '../commandBuilder'
+import { broadcastTransactionsCommand } from './commands'
 import sendCommand from './sendCommand'
 
 /**
@@ -13,12 +13,21 @@ import sendCommand from './sendCommand'
  *   @returns {function} callback
  *   @returns {object} success
  **/
-function broadcastTransactions(trytes: string[], callback: Callback<BroadcastTransactionsResponse>) {
-    if (!inputValidator.isArrayOfAttachedTrytes(trytes)) {
-        return callback(errors.invalidAttachedTrytes())
+function broadcastTransactions(this: any, trytes: string[], callback: Callback<BroadcastTransactionsResponse>): Promise<BroadcastTransactionsResponse> {
+    const promise: Promise<BroadcastTransactionsResponse> = new Promise((resolve, reject) => {
+      if (!inputValidator.isArrayOfAttachedTrytes(trytes)) {
+        reject(callback(errors.INVALID_ATTACHED_TRYTES))
+      } else {
+        resolve(this.sendCommand(broadcastTransactionsCommand(trytes)))
+      }    
+    })
+
+    if (typeof callback === 'function') {
+      promise.then(
+        res => callback(null, res),
+        err => callback(err)
+      )
     }
 
-    const command = commandBuilder.broadcastTransactions(trytes)
-
-    return sendCommand(command, callback)
+    return promise
 }

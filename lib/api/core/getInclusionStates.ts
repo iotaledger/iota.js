@@ -5,7 +5,7 @@ import Utils from '../../utils/utils'
 import { Callback, keysOf } from '../types/commands'
 import { GetInclusionStatesResponse } from '../types/responses'
 
-import commandBuilder from '../commandBuilder'
+import { getInclusionStatesCommand } from './commands'
 import sendCommand from './sendCommand'
 
 /**
@@ -15,18 +15,29 @@ import sendCommand from './sendCommand'
  *   @returns {function} callback
  *   @returns {object} success
  **/
-function getInclusionStates(transactions: string[], tips: string[], callback: Callback<GetInclusionStatesResponse>) {
-    // Check if correct transaction hashes
-    if (!inputValidator.isArrayOfHashes(transactions)) {
-        return callback(errors.invalidTrytes())
+function getInclusionStates(this: any, transactions: string[], tips: string[], callback: Callback<boolean[]>): Promise<boolean[]> {
+    const promise: Promise<boolean[]> = new Promise((resolve, reject) => {
+      // Check if correct transaction hashes
+      if (!inputValidator.isArrayOfHashes(transactions)) {
+          return reject(errors.INVALID_TRYTES)
+      }
+
+      // Check if correct tips
+      if (!inputValidator.isArrayOfHashes(tips)) {
+          return reject(errors.INVALID_TRYTES)
+      }
+
+      resolve(this.sendCommand(getInclusionStatesCommand(transactions, tips)).then(
+        (res) => ({res.states})
+      ))
+    })
+  
+    if (typeof callback === 'function') {
+      promise.then(
+        res => callback(null, res),
+        err => callback(err)  
+      )
     }
 
-    // Check if correct tips
-    if (!inputValidator.isArrayOfHashes(tips)) {
-        return callback(errors.invalidTrytes())
-    }
-
-    const command = commandBuilder.getInclusionStates(transactions, tips)
-
-    return sendCommand(command, callback)
+    return promise
 }

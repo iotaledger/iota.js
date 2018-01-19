@@ -5,7 +5,7 @@ import Utils from '../../utils/utils'
 import { Callback, keysOf } from '../types/commands'
 import { GetBalancesResponse } from '../types/responses'
 
-import commandBuilder from '../commandBuilder'
+import { getBalancesCommand } from './commands'
 import sendCommand from './sendCommand'
 
 /**
@@ -15,13 +15,26 @@ import sendCommand from './sendCommand'
  *   @returns {function} callback
  *   @returns {object} success
  **/
-function getBalances(addresses: string[], threshold: number, callback: Callback<GetBalancesResponse>) {
+function getBalances(this: any, addresses: string[], threshold: number, callback: Callback<GetBalancesResponse>): Promise<GetBalancesResponse> {
+  const promise: Promise<GetBalancesResponse> = new Promise((resolve, reject) => {
     // Check if correct transaction hashes
     if (!inputValidator.isArrayOfHashes(addresses)) {
-        return callback(errors.invalidTrytes())
+      reject(errors.INVALID_TRYTES)
+    } else {
+      resolve(
+        this.sendCommand(
+          getBalancesCommand(addresses.map(address => Utils.noChecksum(address)), threshold)
+        )
+      )
     }
+  })
 
-    const command = commandBuilder.getBalances(addresses.map(address => Utils.noChecksum(address)), threshold)
-
-    return sendCommand(command, callback)
+  if (typeof callback === 'function') {
+    promise.then(
+      res => callback(null, res),
+      err => callback(err)
+    )
+  }
+  
+  return promise
 }

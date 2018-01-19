@@ -82,8 +82,12 @@ export interface GetTrytesCommand extends BaseCommand {
     hashes: string[]
 }
 
-export interface FindTransactionsCommand extends BaseCommand, FindTransactionsSearchValues {
-    command: IRICommand.FIND_TRANSACTIONS
+export interface FindTransactionsCommand extends BaseCommand, FindTransactionsQuery {
+    command: IRICommand.FIND_TRANSACTIONS,
+    addresses?: string[],
+    hashes?: string[],
+    bundles?: string[],
+    approvees?: string[]
 }
 
 export interface InterruptAttachingToTangleCommand extends BaseCommand {
@@ -138,21 +142,17 @@ export function isBatchableCommand(cmd: BaseCommand): cmd is BatchableCommand {
     return (
         cmd.command === IRICommand.FIND_TRANSACTIONS ||
         cmd.command === IRICommand.GET_BALANCES ||
-        cmd.command === IRICommand.GET_INCLUSION_STATES ||
+        // cmd.command === IRICommand.GET_INCLUSION_STATES ||
         cmd.command === IRICommand.GET_TRYTES
     )
 }
 
-export interface FindTransactionsSearchValues {
+export interface FindTransactionsQuery {
     bundles?: string[]
     addresses?: string[]
     tags?: string[]
     approvees?: string[]
 }
-
-export type FindTransactionsSearchKeys = Array<keyof FindTransactionsSearchValues>
-
-export const findTxValidSearchKeys: FindTransactionsSearchKeys = ['bundles', 'addresses', 'tags', 'approvees']
 
 export type Callback<R = any> = (err: Error | null, res?: R) => void
 

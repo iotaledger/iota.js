@@ -1,27 +1,30 @@
 import errors from '../../errors/inputErrors'
 import inputValidator from '../../utils/inputValidator'
-
-import commandBuilder from '../commandBuilder'
 import { Callback } from '../types/commands'
 import { AddNeighborsResponse } from '../types/responses'
+import { addNeighborsCommand } from './commands'
 
-import sendCommand from './sendCommand'
 
 /**
  *   @method addNeighbors
  *   @param {Array} uris List of URI's
- *   @returns {function} callback
- *   @returns {object} success
+ *   @returns {Promise}
  **/
-function addNeighbors(uris: string[], callback: Callback<AddNeighborsResponse>) {
-    // Validate URIs
-    for (let i = 0; i < uris.length; i++) {
-        if (!inputValidator.isUri(uris[i])) {
-            return callback(errors.invalidUri(uris[i]))
-        }
+function addNeighbors(this: any, uris: string[], callback: Callback<AddNeighborsResponse>): Promise<AddNeighborsResponse> {
+  const promise: Promise<AddNeighborsResponse> = new Promise((resolve, reject) => {
+    if (!uris.every(uri => inputValidator.isUri(uri))) {
+      reject(errors.INVALID_URI)
+    } else {
+      resolve(this.sendCommand(addNeighborsCommand(uris)))
     }
+  })
 
-    const command = commandBuilder.addNeighbors(uris)
+  if (typeof callback === 'function') {
+    promise.then(
+      res => callback(null, res),
+      err => callback(err)
+    )
+  }
 
-    return sendCommand(command, callback)
+  return promise
 }

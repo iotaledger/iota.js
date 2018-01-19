@@ -1,4 +1,4 @@
-import { Input, Transaction, Transfer } from './types'
+import { Input, Transaction, Transfer } from '../../types'
 
 const isArray = Array.isArray
 
