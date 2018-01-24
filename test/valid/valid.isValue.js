@@ -36,7 +36,7 @@ describe('valid.isValue', function() {
     })
 
     // 3 test
-    it('should be invalid isValue: ' + tests[3], function() {
+    it('should be valid isValue: ' + tests[3], function() {
 
         var isValid = valid.isValue(tests[3]);
         assert.isTrue(isValid);
