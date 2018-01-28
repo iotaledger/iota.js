@@ -855,37 +855,43 @@ api.prototype.getNewAddress = function(seed, options, callback) {
     }
     //  Case 2: no total provided
     //
-    //  Continue calling findTransactions to see if address was already created
+    //  Continue calling wasAddressSpenFrom & findTransactions to see if address was already created
     //  if null, return list of addresses
     //
     else {
 
         async.doWhilst(function(callback) {
-            // Iteratee function
+          // Iteratee function
+          var newAddress = self._newAddress(seed, index, security, checksum)
 
-            var newAddress = self._newAddress(seed, index, security, checksum);
+          if (options.returnAll) {
+            allAddresses.push(newAddress)
+          }
 
-            self.findTransactions({'addresses': Array(newAddress)}, function(error, transactions) {
+          // Increase the index
+          index += 1
 
-                if (error) {
-                    return callback(error);
-                }
-                callback(null, newAddress, transactions)
-            })
-
-        }, function(address, transactions) {
-            // Test function with validity check
-
-            if (options.returnAll) {
-                allAddresses.push(address)
+          self.wereAddressesSpentFrom(newAddress, function (err, res) {
+            if (err) {
+              return callback(err)
             }
 
-            // Increase the index
-            index += 1;
-
             // Validity check
-            return transactions.length > 0;
+            if (res[0]) {
+              callback(null, newAddress, true)
+            } else { // Check for txs if address isn't spent
+              self.findTransactions({'addresses': [newAddress]}, function (err, transactions) {
+                if (err) {
+                  return callback(err)
+                }
 
+                callback(err, newAddress, transactions.length > 0)
+              })
+            }
+          })
+
+        }, function (address, isUsed) {
+          return isUsed
         }, function(err, address) {
             // Final callback
 
@@ -1960,7 +1966,7 @@ api.prototype.isPromotable = function(tail) {
             if (err) {
               rej(err)
             }
-            res(isConsistent.state);
+            res(isConsistent);
         });
     });
     return promise.then(function(val) {
@@ -1968,7 +1974,32 @@ api.prototype.isPromotable = function(tail) {
     });
 }
 
-module.exports = api;
+/**
+ *  Check if an address or list of addresses have been sepnt from
+ *  @method wereAddressesSpentFrom
+ *  @param {string|array} addresses Address or addresses
+ *  @param {function} callback
+ *  @return
+ */
+api.prototype.wereAddressesSpentFrom = function (addresses, callback) {
+  var self = this
+
+  if (!Array.isArray(addresses)) {
+    addresses = [addresses]
+  }
+
+  if (addresses.some(function (address) {
+    return !inputValidator.isAddress(address)
+  })) {
+    return callback(errors.invalidAddress())
+  }
+
+  return self.sendCommand(apiCommands.wereAddressesSpentFrom(addresses.map(function (address) {
+    return Utils.noChecksum(address)
+  })), callback)
+}
+
+module.exports = api
 
 },{"../crypto/bundle/bundle":4,"../crypto/converter/converter":5,"../crypto/hmac/hmac":9,"../crypto/signing/signing":12,"../errors/inputErrors":13,"../utils/inputValidator":20,"../utils/utils":22,"./apiCommands":3,"async":23}],3:[function(require,module,exports){
 /**
@@ -2197,9 +2228,9 @@ var storeTransactions = function(trytes) {
 }
 
 /**
-* @method  returns whether the given tail is consistent
-* @param tail bundle tail hash
-* @returns   {object} command
+*   @method returns whether the given tail is consistent
+*   @param {string} tail bundle tail hash
+*   @returns {object} command
 */
 var checkConsistency = function(hashes) {
 
@@ -2211,6 +2242,20 @@ var checkConsistency = function(hashes) {
     return command;
 }
 
+/**
+*   @method wereAddressesSpentFrom
+*   @param {array} addresses Addresses to check
+*   @returns {object} command
+*/
+var wereAddressesSpentFrom = function (addresses) {
+
+    var command = {
+        'command': 'wereAddressesSpentFrom',
+        'addresses': addresses
+    }
+
+    return command
+}
 
 module.exports = {
     attachToTangle              : attachToTangle,
@@ -2227,7 +2272,8 @@ module.exports = {
     interruptAttachingToTangle  : interruptAttachingToTangle,
     checkConsistency            : checkConsistency,
     broadcastTransactions       : broadcastTransactions,
-    storeTransactions           : storeTransactions
+    storeTransactions           : storeTransactions,
+    wereAddressesSpentFrom      : wereAddressesSpentFrom
 }
 
 },{}],4:[function(require,module,exports){
@@ -3647,6 +3693,9 @@ module.exports = {
 
 module.exports = {
 
+    invalidAddress: function () {
+        return new Error("Invalid address provided");
+    },
     invalidTrytes: function() {
         return new Error("Invalid Trytes provided");
     },
@@ -3725,8 +3774,8 @@ IOTA.prototype.setSettings = function(settings) {
     // IF NO SETTINGS, SET DEFAULT TO localhost:14265
     settings = settings || {};
     this.version = require('../package.json').version;
-    this.host = settings.host ? settings.host : "http://localhost";
-    this.port = settings.port ? settings.port : 14265;
+    this.host = settings.host || "http://localhost";
+    this.port = settings.port || 14265;
     this.provider = settings.provider || this.host.replace(/\/$/, '') + ":" + this.port;
     this.sandbox = settings.sandbox || false;
     this.token = settings.token || false;
@@ -4535,10 +4584,11 @@ var isArray = function(array) {
 *   @returns {boolean}
 **/
 var isObject = function(object) {
+    var isArray = Array.isArray(object);
+    var isNull = object === null;
 
-    return typeof object === 'object';
-}
-
+    return !isArray && !isNull && typeof object === 'object';
+};
 
 
 /**
@@ -4867,9 +4917,9 @@ function xmlHttpRequest() {
   if (typeof XMLHttpRequest !== 'undefined') {
     return new XMLHttpRequest();
   }
-
+  pretendingNotToRequire = require;
   var module = 'xmlhttprequest';
-  var request = require(module).XMLHttpRequest;
+  var request = pretendingNotToRequire(module).XMLHttpRequest;
   return new request();
 }
 
@@ -5134,7 +5184,9 @@ makeRequest.prototype.prepareResult = function(result, requestCommand, callback)
         'findTransactions'      :   'hashes',
         'getTrytes'             :   'trytes',
         'getInclusionStates'    :   'states',
-        'attachToTangle'        :   'trytes'
+        'attachToTangle'        :   'trytes',
+        'wereAddressesSpentFrom':   'states',
+        'checkConsistency'      :   'state'
     }
 
     var error;
@@ -20767,7 +20819,7 @@ process.umask = function() { return 0; };
 },{}],60:[function(require,module,exports){
 module.exports={
   "name": "iota.lib.js",
-  "version": "0.4.6",
+  "version": "0.4.7",
   "description": "Javascript Library for IOTA",
   "main": "./lib/iota.js",
   "scripts": {
