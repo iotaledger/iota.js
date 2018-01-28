@@ -60,10 +60,16 @@ var iota = new IOTA({
 });
 
 // now you can start using all of the functions
-iota.api.getNodeInfo();
+iota.api.getNodeInfo(function(error, success) {
+    if (error) {
+        console.error(error);
+    } else {
+        console.log(success);
+    }
+});
 
 // you can also get the version
-iota.version
+console.log(iota.version);
 ```
 
 Overall, there are currently four subclasses that are accessible from the IOTA object:
@@ -267,7 +273,7 @@ Input | Security Level | Security
 
 #### Input
 ```js
-iota.api.getNewAddress(seed [, options], callback)
+iota.api.getNewAddress(seed, [options], callback)
 ```
 
 1. **`seed`**: `String` tryte-encoded seed. It should be noted that this seed is not transferred
