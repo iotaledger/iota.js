@@ -1,4 +1,5 @@
-var { assert } = require('chai')
+var chai = require('chai');
+var assert = chai.assert;
 var API = require('../../lib/api/api')
 
 describe('api.getNewAddress', function () {
