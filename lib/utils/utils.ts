@@ -1,13 +1,14 @@
 import BigNumber from 'bignumber.js'
-import * as CryptoJS from 'crypto-js'
+
+import errors from '../errors'
 
 import { Converter, Curl, Kerl, Signing } from '../crypto'
-import { TritArray } from '../crypto/types'
 
 import ascii from './asciiToTrytes'
 import extractJson from './extractJson'
-import inputValidator from './inputValidator'
-import { Transaction, Transfer } from './types'
+import { isArrayOfTxObjects, isNinesTrytes, isTrytes } from './inputValidator'
+
+import { Transaction, Transfer } from '../api/types'
 
 enum Unit {
     i = 'i',
@@ -21,8 +22,8 @@ enum Unit {
 /**
  *   Table of IOTA Units based off of the standard System of Units
  **/
-const unitMap = {
-    i: { val: new BigNumber(10).pow(0), dp: 0 },
+export const unitMap = {
+    i:  { val: new BigNumber(10).pow(0), dp: 0 },
     Ki: { val: new BigNumber(10).pow(3), dp: 3 },
     Mi: { val: new BigNumber(10).pow(6), dp: 6 },
     Gi: { val: new BigNumber(10).pow(9), dp: 9 },
@@ -39,7 +40,7 @@ const unitMap = {
  *   @param {string} toUnit
  *   @returns {integer} converted
  **/
-function convertUnits(value: string | number, fromUnit: Unit, toUnit: Unit) {
+export function convertUnits(value: string | number, fromUnit: Unit, toUnit: Unit) {
     // Check if wrong unit provided
     if (unitMap[fromUnit] === undefined || unitMap[toUnit] === undefined) {
         throw new Error('Invalid unit provided')
@@ -66,11 +67,11 @@ function convertUnits(value: string | number, fromUnit: Unit, toUnit: Unit) {
 @   @param {bool} isAddress default is true
 *   @returns {string | list} address (with checksum)
 **/
-function addChecksum(inputValue: string, checksumLength?: number, isAddress?: boolean): string
-function addChecksum(inputValue: string[], checksumLength?: number, isAddress?: boolean): string[]
-function addChecksum(inputValue: string | string[], checksumLength: number = 9, isAddress: boolean = true) {
+export function addChecksum(inputValue: string, checksumLength?: number, isAddress?: boolean): string
+export function addChecksum(inputValue: string[], checksumLength?: number, isAddress?: boolean): string[]
+export function addChecksum(inputValue: string | string[], checksumLength: number = 9, isAddress: boolean = true) {
     // the length of the trytes to be validated
-    const validationLength = isAddress ? '81' : '0'
+    const validationLength = isAddress ? 81 : 0
 
     // If only single address, turn it into an array
     if (typeof inputValue === 'string') {
@@ -81,7 +82,7 @@ function addChecksum(inputValue: string | string[], checksumLength: number = 9, 
 
     inputValue.forEach(thisValue => {
         // check if correct trytes
-        if (!inputValidator.isTrytes(thisValue, validationLength)) {
+        if (!isTrytes(thisValue, validationLength)) {
             throw new Error('Invalid input')
         }
 
@@ -92,7 +93,7 @@ function addChecksum(inputValue: string | string[], checksumLength: number = 9, 
         const addressTrits = Converter.trits(thisValue)
 
         // Checksum trits
-        const checksumTrits: number[] = []
+        const checksumTrits: Int8Array = new Int8Array(Curl.HASH_LENGTH)
 
         // Absorb address trits
         kerl.absorb(addressTrits, 0, addressTrits.length)
@@ -119,9 +120,9 @@ function addChecksum(inputValue: string | string[], checksumLength: number = 9, 
  *   @param {string | list} address
  *   @returns {string | list} address (without checksum)
  **/
-function noChecksum(address: string): string
-function noChecksum(address: string[]): string[]
-function noChecksum(address: string | string[]) {
+export function noChecksum(address: string): string
+export function noChecksum(address: string[]): string[]
+export function noChecksum(address: string | string[]) {
     if (typeof address === 'string' && address.length === 81) {
         return address
     }
@@ -152,12 +153,8 @@ function noChecksum(address: string | string[]) {
  *   @param {string} addressWithChecksum
  *   @returns {bool}
  **/
-function isValidChecksum(addressWithChecksum: string) {
-    const addressWithoutChecksum = noChecksum(addressWithChecksum)
-    const newChecksum = addChecksum(addressWithoutChecksum)
-
-    return newChecksum === addressWithChecksum
-}
+export const isValidChecksum = (addressWithChecksum: string): boolean =>
+  addressWithChecksum === addChecksum(noChecksum(addressWithChecksum))
 
 /**
  *   Converts transaction trytes of 2673 trytes into a transaction object
@@ -166,20 +163,20 @@ function isValidChecksum(addressWithChecksum: string) {
  *   @param {string} trytes
  *   @returns {String} transactionObject
  **/
-function transactionObject(trytes: string): Transaction | null {
+export function transactionObject(trytes: string): Transaction {
     if (!trytes) {
-        return null
+        throw new Error(errors.INVALID_TRYTES)
     }
 
     // validity check
     for (let i = 2279; i < 2295; i++) {
         if (trytes.charAt(i) !== '9') {
-            return null
+            throw new Error(errors.INVALID_TRYTES)
         }
     }
 
     const transactionTrits = Converter.trits(trytes)
-    const hash: number[] = []
+    const hash: Int8Array = new Int8Array(Curl.HASH_LENGTH)
 
     const curl = new Curl()
 
@@ -215,7 +212,7 @@ function transactionObject(trytes: string): Transaction | null {
  *   @param {object} transactionTrytes
  *   @returns {String} trytes
  **/
-function transactionTrytes(transaction: Transaction): string {
+export function transactionTrytes(transaction: Transaction): string {
     const valueTrits = Converter.trits(transaction.value)
     while (valueTrits.length < 81) {
         valueTrits[valueTrits.length] = 0
@@ -280,7 +277,7 @@ function transactionTrytes(transaction: Transaction): string {
  *   @param {list} addresses List of addresses that belong to the user
  *   @returns {String} trytes
  **/
-function categorizeTransfers(transfers: Transaction[][], addresses: string[]) {
+export function categorizeTransfers(transfers: Transaction[][], addresses: string[]) {
     const categorized: {
         sent: Transaction[][]
         received: Transaction[][]
@@ -327,7 +324,7 @@ function categorizeTransfers(transfers: Transaction[][], addresses: string[]) {
  *   @param {string} inputAddress
  *   @returns {bool}
  **/
-function validateSignatures(signedBundle: Transaction[], inputAddress: string) {
+export function validateSignatures(signedBundle: Transaction[], inputAddress: string) {
     let bundleHash
     const signatureFragments: string[] = []
 
@@ -336,7 +333,7 @@ function validateSignatures(signedBundle: Transaction[], inputAddress: string) {
             bundleHash = signedBundle[i].bundle
 
             // if we reached remainder bundle
-            if (inputValidator.isNinesTrytes(signedBundle[i].signatureMessageFragment)) {
+            if (isNinesTrytes(signedBundle[i].signatureMessageFragment)) {
                 break
             }
 
@@ -358,9 +355,9 @@ function validateSignatures(signedBundle: Transaction[], inputAddress: string) {
  *   @param {array} bundle
  *   @returns {bool} valid
  **/
-function isBundle(bundle: Transaction[]) {
+export function isBundle(bundle: Transaction[]) {
     // If not correct bundle
-    if (!inputValidator.isArrayOfTxObjects(bundle)) {
+    if (!isArrayOfTxObjects(bundle)) {
         return false
     }
 
@@ -368,7 +365,7 @@ function isBundle(bundle: Transaction[]) {
     const bundleHash = bundle[0].bundle
 
     // Prepare to absorb txs and get bundleHash
-    const bundleFromTxs: number[] = []
+    const bundleFromTxs: Int8Array = new Int8Array(Curl.HASH_LENGTH)
 
     const kerl = new Kerl()
     kerl.initialize()
@@ -451,19 +448,4 @@ function isBundle(bundle: Transaction[]) {
     }
 
     return true
-}
-
-export default {
-    convertUnits,
-    addChecksum,
-    noChecksum,
-    isValidChecksum,
-    transactionObject,
-    transactionTrytes,
-    categorizeTransfers,
-    toTrytes: ascii.toTrytes,
-    fromTrytes: ascii.fromTrytes,
-    extractJson,
-    validateSignatures,
-    isBundle,
 }

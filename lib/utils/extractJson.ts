@@ -1,18 +1,17 @@
+import { Transaction } from '../api/types'
 import ascii from './asciiToTrytes'
-import inputValidator from './inputValidator'
-import { Transaction } from './types'
 
 /**
- *   extractJson takes a bundle as input and from the signatureMessageFragments extracts the correct JSON
- *   data which was encoded and sent with the transaction.
+ * Takes a bundle as input and from the signatureMessageFragments extracts the correct JSON
+ * data which was encoded and sent with the transaction.
  *
- *   @method extractJson
- *   @param {array} bundle
- *   @returns {Object}
- **/
-function extractJson(bundle: Transaction[]): string | null {
+ * @method extractJson
+ * @param {array} bundle
+ * @returns {Object}
+ */
+export default function extractJson(bundle: Transaction[]): string | null {
     // if wrong input return null
-    if (!inputValidator.isArray(bundle) || bundle[0] === undefined) {
+    if (!Array.isArray(bundle) || bundle[0] === undefined) {
         return null
     }
 
@@ -89,5 +88,3 @@ function extractJson(bundle: Transaction[]): string | null {
         return finalJson
     }
 }
-
-export default extractJson

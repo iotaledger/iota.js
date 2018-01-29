@@ -1,27 +1,48 @@
-import errors from '../../errors/inputErrors'
-import inputValidator from '../../utils/inputValidator'
+import errors from '../../errors'
+import { isUri } from '../../utils'
 
-import { Callback } from '../types/commands'
-import { RemoveNeighborsResponse } from '../types/responses'
+import { API, BaseCommand, Callback, IRICommand } from '../types'
 
-import commandBuilder from '../commandBuilder'
-import sendCommand from './sendCommand'
+export interface RemoveNeighborsCommand extends BaseCommand {
+    command: IRICommand.REMOVE_NEIGHBORS
+    uris: string[]
+}
+
+export interface RemoveNeighborsResponse {
+    removedNeighbors: number
+    duration: number
+}
 
 /**
  *   @method removeNeighbors
  *   @param {Array} uris List of URI's
- *   @returns {function} callback
+ *   @param {function} callback
  *   @returns {object} success
  **/
-function removeNeighbors(uris: string[], callback: Callback<RemoveNeighborsResponse>) {
-    // Validate URIs
-    for (let i = 0; i < uris.length; i++) {
-        if (!inputValidator.isUri(uris[i])) {
-            return callback(errors.invalidUri(uris[i]))
+export default function removeNeighbors(
+    this: API, 
+    uris: string[],
+    callback?: Callback<number>): Promise<number> {
+        
+    const promise: Promise<number> = new Promise((resolve, reject) => {
+        if (uris.some(uri => !isUri(uri))) {
+            reject(new Error(errors.INVALID_URI))
         }
+
+        resolve(
+            this.sendCommand<RemoveNeighborsCommand, RemoveNeighborsResponse>(
+                {
+                    command: IRICommand.REMOVE_NEIGHBORS,
+                    uris 
+                }
+            )
+                .then(res => res.removedNeighbors)
+        )
+    })
+
+    if (typeof callback === 'function') {
+        promise.then(callback.bind(null, null), callback)
     }
 
-    const command = commandBuilder.removeNeighbors(uris)
-
-    return sendCommand(command, callback)
+    return promise
 }

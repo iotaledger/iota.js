@@ -2,16 +2,17 @@
 
 import * as CryptoJS from 'crypto-js'
 
+import errors from '../errors'
+
 import Converter from './Converter'
-import Curl from './Curl'
-import { TritArray } from './types'
 import WConverter from './WConverter'
 
 const BIT_HASH_LENGTH = 384
+const HASH_LENGTH = 243
 
 export default class Kerl {
     public static BIT_HASH_LENGTH = BIT_HASH_LENGTH
-    public static HASH_LENGTH = Curl.HASH_LENGTH
+    public static HASH_LENGTH = HASH_LENGTH
 
     private k: any
 
@@ -30,13 +31,13 @@ export default class Kerl {
         this.k.reset()
     }
 
-    public absorb(trits: TritArray, offset: number, length: number) {
+    public absorb(trits: Int8Array, offset: number, length: number) {
         if (length && length % 243 !== 0) {
-            throw new Error('Illegal length provided')
+            throw new Error(errors.ILLEGAL_LENGTH)
         }
 
         do {
-            const limit = length < Curl.HASH_LENGTH ? length : Curl.HASH_LENGTH
+            const limit = length < Kerl.HASH_LENGTH ? length : Kerl.HASH_LENGTH
 
             const trit_state = trits.slice(offset, offset + limit)
             offset += limit
@@ -46,12 +47,12 @@ export default class Kerl {
 
             // absorb the trit stat as wordarray
             this.k.update(CryptoJS.lib.WordArray.create(wordsToAbsorb))
-        } while ((length -= Curl.HASH_LENGTH) > 0)
+        } while ((length -= Kerl.HASH_LENGTH) > 0)
     }
 
-    public squeeze(trits: TritArray, offset: number, length: number) {
+    public squeeze(trits: Int8Array, offset: number, length: number) {
         if (length && length % 243 !== 0) {
-            throw new Error('Illegal length provided')
+            throw new Error(errors.ILLEGAL_LENGTH)
         }
         do {
             // get the hash digest
@@ -62,7 +63,7 @@ export default class Kerl {
             const trit_state = WConverter.words_to_trits(final.words)
 
             let i = 0
-            const limit = length < Curl.HASH_LENGTH ? length : Curl.HASH_LENGTH
+            const limit = length < Kerl.HASH_LENGTH ? length : Kerl.HASH_LENGTH
 
             while (i < limit) {
                 trits[offset++] = trit_state[i++]
@@ -75,6 +76,6 @@ export default class Kerl {
             }
 
             this.k.update(final)
-        } while ((length -= Curl.HASH_LENGTH) > 0)
+        } while ((length -= Kerl.HASH_LENGTH) > 0)
     }
 }

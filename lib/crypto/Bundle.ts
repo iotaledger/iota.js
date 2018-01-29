@@ -12,7 +12,7 @@ export default class Bundle {
         this.bundle = []
     }
 
-    public addEntry(signatureMessageLength: number, address: string, value: number, tag: string, timestamp: number) {
+    public addEntry(signatureMessageLength: number, address: string, value: number, tag: string, timestamp: number): Bundle {
         for (let i = 0; i < signatureMessageLength; i++) {
             const transactionObject = {
                 address,
@@ -24,9 +24,10 @@ export default class Bundle {
 
             this.bundle[this.bundle.length] = transactionObject
         }
+        return this
     }
 
-    public addTrytes(signatureFragments: string[]) {
+    public addTrytes(signatureFragments: string[]): Bundle {
         let emptySignatureFragment = ''
         const emptyHash = '9'.repeat(81)
         const emptyTag = '9'.repeat(27)
@@ -54,11 +55,13 @@ export default class Bundle {
             // Fill empty nonce
             this.bundle[i].nonce = emptyTag
         }
+        return this
     }
 
-    public finalize() {
+    public finalize(): Bundle {
         let validBundle = false
-
+        let obsoleteTagTrits = this.bundle[0].obsoleteTag ? Converter.trits(this.bundle[0].obsoleteTag!) : new Int8Array(81).fill(0)
+        
         while (!validBundle) {
             const kerl = new Kerl()
             kerl.initialize()
@@ -95,7 +98,7 @@ export default class Bundle {
                 kerl.absorb(bundleEssence, 0, bundleEssence.length)
             }
 
-            const trits: number[] = []
+            const trits = new Int8Array(Curl.HASH_LENGTH)
             kerl.squeeze(trits, 0, Curl.HASH_LENGTH)
             const hash = Converter.trytes(trits)
 
@@ -107,17 +110,18 @@ export default class Bundle {
 
             if (normalizedHash.indexOf(13 /* = M */) !== -1) {
                 // Insecure bundle. Increment Tag and recompute bundle hash.
-                const increasedTag = add(Converter.trits(this.bundle[0].obsoleteTag!), [1])
-
-                this.bundle[0].obsoleteTag = Converter.trytes(increasedTag)
+                obsoleteTagTrits = add(obsoleteTagTrits, new Int8Array(1).fill(1))
             } else {
                 validBundle = true
             }
         }
+
+        this.bundle[0].obsoleteTag = Converter.trytes(obsoleteTagTrits)
+        return this        
     }
 
-    public normalizedBundle(bundleHash: string) {
-        const normalizedBundle: number[] = []
+    public normalizedBundle(bundleHash: string): Int8Array {
+        const normalizedBundle = new Int8Array(81)
 
         for (let i = 0; i < 3; i++) {
             let sum = 0

@@ -1,23 +1,19 @@
-import errors from '../errors/inputErrors'
+import errors from '../errors'
 
 import add from './add'
 import Bundle from './Bundle'
 import Converter from './Converter'
 import Curl from './Curl'
 import Kerl from './Kerl'
-import { TritArray } from './types'
 
 /**
- *           Signing related functions
- *
- **/
-function key(seed: TritArray, index: number, length: number) {
-    const filledSeed = new Int8Array(243)
-
-    for (let i = 0; i < seed.length; i++) {
-        filledSeed[i] = seed[i]
-    }
-
+ * @method key
+ * @param {Int8Array} seed - seed trits
+ * @param {number} index - key index
+ * @param {numebr} length - key length
+ * @return {Int8Array}
+ */
+function key(seed: Int8Array, index: number, length: number): Int8Array {
     const indexTrits = Converter.fromValue(index)
     const subseed = add(seed.slice(), indexTrits)
 
@@ -30,9 +26,9 @@ function key(seed: TritArray, index: number, length: number) {
     kerl.reset()
     kerl.absorb(subseed, 0, subseed.length)
 
-    const result = []
+    const buffer = new Int8Array(Curl.HASH_LENGTH)
+    const result = new Int8Array(length * 27 * 243)
     let offset = 0
-    const buffer: number[] = []
 
     while (length-- > 0) {
         for (let i = 0; i < 27; i++) {
@@ -46,15 +42,17 @@ function key(seed: TritArray, index: number, length: number) {
 }
 
 /**
- *
- *
- **/
+ * @method digests
+ * @param {Int8Array} key - private key trits
+ * @return {Int8Array} 
+ */
 // tslint:disable-next-line no-shadowed-variable
-function digests(key: number[]) {
-    const result = []
-    let buffer: number[] = []
+function digests(key: Int8Array): Int8Array {
+    const l = Math.floor(key.length / 6561)
+    const result = new Int8Array(l * 243)
+    let buffer = new Int8Array(Curl.HASH_LENGTH)
 
-    for (let i = 0; i < Math.floor(key.length / 6561); i++) {
+    for (let i = 0; i < l; i++) {
         const keyFragment = key.slice(i * 6561, (i + 1) * 6561)
 
         for (let j = 0; j < 27; j++) {
@@ -87,12 +85,13 @@ function digests(key: number[]) {
 }
 
 /**
- *
- *
+ * @method address
+ * @param {Int8Array} digests - digests trits
+ * @return {Int8Array}
  **/
 // tslint:disable-next-line no-shadowed-variable
-function address(digests: number[]) {
-    const addressTrits: number[] = []
+function address(digests: Int8Array): Int8Array {
+    const addressTrits = new Int8Array(Curl.HASH_LENGTH)
     const kerl = new Kerl()
 
     kerl.initialize()
@@ -103,12 +102,14 @@ function address(digests: number[]) {
 }
 
 /**
- *
- *
+ * @method digest
+ * @param {array} normalizedBundleFragment - normalized bundle fragment
+ * @param {Int8Array} signatureFragment - signature fragment trits
+ * @return {Int8Array}
  **/
 // tslint:disable-next-line no-shadowed-variable
-function digest(normalizedBundleFragment: number[], signatureFragment: TritArray) {
-    let buffer: TritArray = []
+function digest(normalizedBundleFragment: Int8Array, signatureFragment: Int8Array): Int8Array {
+    let buffer = new Int8Array(Curl.HASH_LENGTH)
     const kerl = new Kerl()
 
     kerl.initialize()
@@ -120,11 +121,11 @@ function digest(normalizedBundleFragment: number[], signatureFragment: TritArray
             const jKerl = new Kerl()
 
             jKerl.initialize()
-            jKerl.absorb(buffer, 0, buffer.length)
+            jKerl.absorb(buffer, 0, Curl.HASH_LENGTH)
             jKerl.squeeze(buffer, 0, Curl.HASH_LENGTH)
         }
 
-        kerl.absorb(buffer, 0, buffer.length)
+        kerl.absorb(buffer, 0, Curl.HASH_LENGTH)
     }
 
     kerl.squeeze(buffer, 0, Curl.HASH_LENGTH)
@@ -132,12 +133,14 @@ function digest(normalizedBundleFragment: number[], signatureFragment: TritArray
 }
 
 /**
- *
- *
- **/
-function signatureFragment(normalizedBundleFragment: number[], keyFragment: number[]) {
-    const sigFragment = keyFragment.slice()
-    let hash = []
+ * @method signatureFragment
+ * @param {array} normalizeBundleFragment - normalized bundle fragment
+ * @param {keyFragment} keyFragment - key fragment trits
+ * @return {Int8Array}
+ */
+function signatureFragment(normalizedBundleFragment: Int8Array, keyFragment: Int8Array): Int8Array {
+    const sigFragment: Int8Array = keyFragment.slice()
+    let hash: Int8Array = new Int8Array(Curl.HASH_LENGTH)
 
     const kerl = new Kerl()
 
@@ -147,7 +150,7 @@ function signatureFragment(normalizedBundleFragment: number[], keyFragment: numb
         for (let j = 0; j < 13 - normalizedBundleFragment[i]; j++) {
             kerl.initialize()
             kerl.reset()
-            kerl.absorb(hash, 0, hash.length)
+            kerl.absorb(hash, 0, Curl.HASH_LENGTH)
             kerl.squeeze(hash, 0, Curl.HASH_LENGTH)
         }
 
@@ -160,12 +163,15 @@ function signatureFragment(normalizedBundleFragment: number[], keyFragment: numb
 }
 
 /**
- *
- *
- **/
-function validateSignatures(expectedAddress: string, signatureFragments: string[], bundleHash: string) {
+ * @method validateSignatures
+ * @param {string} expectedAddress - expected address in trytes
+ * @param {array} signatureFragments - array of signatureFragments in trytes
+ * @param {string} bundleHash - bundle hash in trytes
+ * @return {boolean}
+ */
+export function validateSignatures(expectedAddress: string, signatureFragments: string[], bundleHash: string): boolean {
     if (!bundleHash) {
-        throw errors.invalidBundleHash()
+        throw new Error(errors.INVALID_BUNDLE_HASH)
     }
 
     const bundle = new Bundle()
@@ -180,7 +186,7 @@ function validateSignatures(expectedAddress: string, signatureFragments: string[
 
     // Get digests
     // tslint:disable-next-line no-shadowed-variable
-    const digests: number[] = []
+    const digests: Int8Array = new Int8Array(signatureFragments.length * 243)
 
     for (let i = 0; i < signatureFragments.length; i++) {
         const digestBuffer = digest(normalizedBundleFragments[i % 3], Converter.trits(signatureFragments[i]))

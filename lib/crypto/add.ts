@@ -1,8 +1,6 @@
-import { TritArray } from './types'
-
-/* tslint:disable variable-name */
 /* copyright Paul Handy, 2017 */
 
+/* tslint:disable variable-name */
 function sum(a: number, b: number) {
     const s = a + b
 
@@ -46,8 +44,8 @@ function full_add(a: number, b: number, c: number) {
     return [s_out, c_out]
 }
 
-export default function add(a: TritArray, b: TritArray) {
-    const out = new Array(Math.max(a.length, b.length))
+export default function add(a: Int8Array, b: Int8Array): Int8Array {
+    const out = new Int8Array(Math.max(a.length, b.length))
     let carry = 0
     let a_i
     let b_i

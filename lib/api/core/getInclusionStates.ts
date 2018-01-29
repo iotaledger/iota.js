@@ -1,14 +1,18 @@
-import errors from '../../errors/inputErrors'
-import inputValidator from '../../utils/inputValidator'
-import Utils from '../../utils/utils'
+import errors from '../../errors'
+import { isArrayOfHashes } from '../../utils'
 
-import { API } from '../index'
-import { Callback, GetInclusionStatesCommand, keysOf } from '../types/commands'
-import { GetInclusionStatesResponse } from '../types/response'
+import { API, BaseCommand, Callback, IRICommand } from '../types'
 
-import { getInclusionStatesCommand } from './commands'
-import { parseGetInclusionStates } from './parsers'
-import sendCommand from './sendCommand'
+export interface GetInclusionStatesCommand extends BaseCommand {
+    command: IRICommand.GET_INCLUSION_STATES
+    transactions: string[]
+    tips: string[]
+}
+
+export interface GetInclusionStatesResponse {
+    states: boolean[]
+    duration: number
+}
 
 /**
  *   @method getInclusionStates
@@ -17,27 +21,35 @@ import sendCommand from './sendCommand'
  *   @returns {function} callback
  *   @returns {object} success
  **/
-function getInclusionStates(this: API, transactions: string[], tips: string[], callback: Callback): Promise<boolean[]> {
+export default function getInclusionStates(
+    this: API,
+    transactions: string[], 
+    tips: string[], 
+    callback?: Callback<boolean[]>): Promise<boolean[]> {
+
     const promise = new Promise<boolean[]>((resolve, reject) => {
-        // Check if correct transaction hashes
-        if (!inputValidator.isArrayOfHashes(transactions)) {
+        if (!isArrayOfHashes(transactions)) {
             return reject(errors.INVALID_TRYTES)
         }
 
-        // Check if correct tips
-        if (!inputValidator.isArrayOfHashes(tips)) {
+        if (!isArrayOfHashes(tips)) {
             return reject(errors.INVALID_TRYTES)
         }
 
         resolve(
             this.sendCommand<GetInclusionStatesCommand, GetInclusionStatesResponse>(
-                getInclusionStatesCommand(transactions, tips)
-            ).then(parseGetInclusionStates)
+                {
+                    command: IRICommand.GET_INCLUSION_STATES,
+                    transactions,
+                    tips,
+                }
+            )
+                .then(res => res.states)
         )
     })
 
     if (typeof callback === 'function') {
-        promise.then(res => callback(null, res), err => callback(err))
+        promise.then(callback.bind(null, null), callback)
     }
 
     return promise

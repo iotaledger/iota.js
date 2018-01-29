@@ -1,10 +1,4 @@
-import { TritArray } from './types'
-
-/**
- *
- *   Conversion functions
- *
- **/
+import errors from '../errors'
 
 const RADIX = 3
 const RADIX_BYTES = 256
@@ -15,7 +9,7 @@ const BYTE_HASH_LENGTH = 48
 // All possible tryte values
 const trytesAlphabet = '9ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
-// map of all trits representations
+// Trytes to trits LUT
 const trytesTrits = [
     [0, 0, 0],
     [1, 0, 0],
@@ -47,20 +41,24 @@ const trytesTrits = [
 ]
 
 /**
- *   Converts trytes into trits
+ * Converts trytes into trits
  *
- *   @method trits
- *   @param {String|Int} input Tryte value to be converted. Can either be string or int
- *   @param {Array} state (optional) state to be modified
- *   @returns {Array} trits
- **/
-function trits(input: string | number, state?: TritArray): TritArray {
-    const result = state || []
+ * @method trits
+ * @param {String|Int} input Tryte value to be converted. Can either be string or int
+ * @param {Array} state (optional) state to be modified
+ * @return {Int8Array} trits
+ */
+function trits(input: string | number, state?: Int8Array): Int8Array {
+    if (typeof input !== 'string' || (typeof input === 'number' && !Number.isInteger(input))) {
+        throw new Error(errors.ILLEGAL_TRIT_CONVERSION_INPUT)
+    }
 
+    const result = state || new Int8Array(
+        typeof input === 'number'
+            ? (input as number).toString(2).length * Math.log(2) / Math.log(3)
+            : input.length * 3)
+    
     if (typeof input === 'number') {
-        if (!Number.isInteger(input)) {
-            throw new Error('Illegal input: must be tryte string or integer')
-        }
 
         let absoluteValue = input < 0 ? -input : input
 
@@ -93,14 +91,18 @@ function trits(input: string | number, state?: TritArray): TritArray {
 }
 
 /**
- *   Converts trits into trytes
+ * Converts trits into trytes
  *
- *   @method trytes
- *   @param {Array} trits
- *   @returns {String} trytes
- **/
+ * @method trytes
+ * @param {Int8Array} trits
+ * @returns {String} trytes
+ */
 // tslint:disable-next-line no-shadowed-variable
-function trytes(trits: TritArray): string {
+function trytes(trits: Int8Array): string {
+    if (!(trits instanceof Int8Array)) {
+        throw new Error(errors.ILLEGAL_TRYTE_CONVERSION_INPUT)
+    }
+    
     let result = ''
 
     for (let i = 0; i < trits.length; i += 3) {
@@ -121,14 +123,14 @@ function trytes(trits: TritArray): string {
 }
 
 /**
- *   Converts trits into an integer value
+ * Converts trits into an integer value
  *
- *   @method value
- *   @param {Array} trits
- *   @returns {int} value
- **/
+ * @method value
+ * @param {Int8Array} trits
+ * @returns {int} value
+ */
 // tslint:disable-next-line no-shadowed-variable
-function value(trits: TritArray): number {
+function value(trits: Int8Array): number {
     let returnValue = 0
 
     for (let i = trits.length; i-- > 0; ) {
@@ -141,12 +143,12 @@ function value(trits: TritArray): number {
 /**
  *   Converts an integer value to trits
  *
- *   @method value
- *   @param {Int} val
- *   @returns {Array} trits
- **/
-function fromValue(val: number): TritArray {
-    const destination = []
+ * @method value
+ * @param {Int} val
+ * @returns {Int8Array} trits
+ */
+function fromValue(val: number): Int8Array {
+    const destination = new Int8Array(val.toString(2).length * Math.log(2) / Math.log(3))
     let absoluteValue = val < 0 ? -val : val
     let i = 0
 

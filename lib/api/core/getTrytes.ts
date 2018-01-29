@@ -1,11 +1,16 @@
-import errors from '../../errors/inputErrors'
-import inputValidator from '../../utils/inputValidator'
+import errors from '../../errors'
+import { isArrayOfHashes } from '../../utils/inputValidator'
 
-import { Callback } from '../types/commands'
-import { GetTrytesResponse } from '../types/responses'
+import { API, BaseCommand, Callback, IRICommand } from '../types'
 
-import commandBuilder from '../commandBuilder'
-import sendCommand from './sendCommand'
+export interface GetTrytesCommand extends BaseCommand {
+    command: IRICommand.GET_TRYTES
+    hashes: string[]
+}
+
+export interface GetTrytesResponse {
+    trytes: string[]
+}
 
 /**
  *   @method getTrytes
@@ -13,12 +18,26 @@ import sendCommand from './sendCommand'
  *   @returns {function} callback
  *   @returns {object} success
  **/
-function getTrytes(hashes: string[], callback: Callback<GetTrytesResponse>) {
-    if (!inputValidator.isArrayOfHashes(hashes)) {
-        return callback(errors.invalidTrytes())
+export default function getTrytes (this: API, hashes: string[], callback?: Callback<string[]>): Promise<string[]> {
+    const promise: Promise<string[]> = new Promise((resolve, reject) => {
+        if (!isArrayOfHashes(hashes)) {
+            reject(new Error(errors.INVALID_TRYTES))
+        }
+
+        resolve(
+            this.sendCommand<GetTrytesCommand, GetTrytesResponse>(
+                {
+                    command: IRICommand.GET_TRYTES,
+                    hashes
+                }
+            )
+              .then(res => res.trytes)
+        )
+    })
+
+    if (typeof callback === 'function') {
+        promise.then(callback.bind(null, null), callback)
     }
 
-    const command = commandBuilder.getTrytes(hashes)
-
-    return sendCommand(command, callback)
+    return promise
 }

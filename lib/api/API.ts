@@ -1,6 +1,5 @@
 import * as async from 'async'
 import { Bundle, Converter, HMAC, Signing } from '../crypto'
-import { TritArray } from '../crypto/types'
 import errors from '../errors/inputErrors'
 import inputValidator from '../utils/inputValidator'
 import Request from '../utils/makeRequest'

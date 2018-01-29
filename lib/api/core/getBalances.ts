@@ -1,40 +1,86 @@
-import errors from '../../errors/inputErrors'
-import inputValidator from '../../utils/inputValidator'
-import Utils from '../../utils/utils'
+import errors from '../../errors'
 
-import { Callback, keysOf } from '../types/commands'
-import { GetBalancesResponse } from '../types/responses'
+import {
+    Address,
+    Addresses,
+    Balance,
+    BaseCommand, 
+    Callback,
+    Normalized,
+    Settings,
+} from '../types'
 
-import { getBalancesCommand } from './commands'
-import sendCommand from './sendCommand'
+import {
+    invokeCallback,
+    keys,
+    normalize, 
+    removeChecksum,
+    validate,
+    validateAddresses, 
+    validateThreshold,
+} from '../utils'
 
-/**
- *   @method getBalances
- *   @param {array} addresses
- *   @param {int} threshold
- *   @returns {function} callback
- *   @returns {object} success
- **/
-function getBalances(this: any, addresses: string[], threshold: number, callback: Callback<GetBalancesResponse>): Promise<GetBalancesResponse> {
-  const promise: Promise<GetBalancesResponse> = new Promise((resolve, reject) => {
-    // Check if correct transaction hashes
-    if (!inputValidator.isArrayOfHashes(addresses)) {
-      reject(errors.INVALID_TRYTES)
-    } else {
-      resolve(
-        this.sendCommand(
-          getBalancesCommand(addresses.map(address => Utils.noChecksum(address)), threshold)
-        )
-      )
-    }
-  })
+import { sendCommand } from './sendCommand'
 
-  if (typeof callback === 'function') {
-    promise.then(
-      res => callback(null, res),
-      err => callback(err)
-    )
-  }
-  
-  return promise
+import { getSettings } from './settings'
+
+export interface GetBalancesCommand extends BaseCommand {
+    command: string 
+    addresses: string[]
+    threshold: number
 }
+
+export interface GetBalancesResponse {
+    balances: string[]
+    duration: number
+    milestone: string
+    milestoneIndex: number
+}
+
+export interface NormalizedGetBalancesResponse {
+    balances: Normalized<Balance>
+    duration: number
+    milestone: string,
+    milestoneIndex: number
+}
+
+export const makeGetBalancesCommand = (
+    addresses: string[],
+    threshold: number
+): GetBalancesCommand => ({
+    command: 'getBalances',
+    addresses,
+    threshold
+}) 
+
+export const normalizeBalances = (addresses: string[]) => 
+    normalize<string, Balance>(addresses, (address, balance) => ({
+        [address]: { balance }
+    }))
+
+export const formatGetBalancesResponse = (addresses: string[], normalizeOutput: boolean = true) =>
+    (res: GetBalancesResponse): GetBalancesResponse | NormalizedGetBalancesResponse =>
+        normalizeOutput
+            ? { ...res, balances: normalizeBalances(addresses)(res.balances) }
+            : res
+
+export const getBalances = (
+    addresses: Addresses | string[],
+    threshold: number,
+    callback?: Callback<GetBalancesResponse | NormalizedGetBalancesResponse>
+): Promise<GetBalancesResponse | NormalizedGetBalancesResponse> =>
+    Promise.resolve()
+        .then(() => validate({
+          address: validateAddresses(addresses),
+          threshold: validateThreshold(threshold)
+        }))
+        .then(() => keys(addresses))
+        .then(removeChecksum)
+        .then((addressesArray) =>
+            Promise.resolve(makeGetBalancesCommand(addressesArray as string[], threshold))
+                .then((command) => sendCommand<GetBalancesCommand, GetBalancesResponse>(command))
+                .then(formatGetBalancesResponse(addressesArray as string[], getSettings().normalizeOutput))
+                .then(invokeCallback(callback)))
+
+export const getBalancesCurried = (settings: Settings) => (threshold: number) =>
+    (addresses: Addresses) => getBalances(addresses, threshold)

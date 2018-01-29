@@ -1,8 +1,5 @@
-import * as Converter from './Converter'
-import { TritArray } from './types'
-
 /**
- **      Cryptographic related functions to IOTA's Curl (sponge function)
+ ** Cryptographic related functions to IOTA's Curl (sponge function)
  **/
 
 const NUMBER_OF_ROUNDS = 81
@@ -13,18 +10,23 @@ const TRUTH_TABLE = [1, 0, -1, 2, 1, -1, 0, 2, -1, 1, 0]
 export default class Curl {
     public static HASH_LENGTH = HASH_LENGTH
 
-    public state: number[]
+    public state: Int8Array
 
+    /**
+     * @constructor
+     * @param {number} rounds - default is 81 rounds
+     */
     constructor(public rounds: number = NUMBER_OF_ROUNDS) {
-        this.state = []
+        this.state = new Int8Array(STATE_LENGTH)
     }
 
     /**
-     *   Initializes the state with STATE_LENGTH trits
+     * Initializes the state with STATE_LENGTH trits
      *
-     *   @method initialize
-     **/
-    public initialize(state: number[] = []) {
+     * @method initialize
+     * @param {Int8Array} state
+     */
+    public initialize(state: Int8Array = new Int8Array(STATE_LENGTH)) {
         this.state = state
 
         for (let i = 0; i < STATE_LENGTH; i++) {
@@ -32,16 +34,24 @@ export default class Curl {
         }
     }
 
+    /**
+     * Reset state
+     *
+     * @method reset
+     */
     public reset() {
         this.initialize()
     }
 
     /**
-     *   Sponge absorb function
+     * Sponge absorb function
      *
-     *   @method absorb
+     * @method absorb
+     * @param {Int8Array} trits
+     * @param {number} offset
+     * @param {number} length
      **/
-    public absorb(trits: TritArray, offset: number, length: number) {
+    public absorb(trits: Int8Array, offset: number, length: number) {
         do {
             let i = 0
             const limit = length < HASH_LENGTH ? length : HASH_LENGTH
@@ -56,11 +66,14 @@ export default class Curl {
     }
 
     /**
-     *   Sponge squeeze function
+     * Sponge squeeze function
      *
-     *   @method squeeze
+     * @method squeeze
+     * @param {Int8Array} trits
+     * @param {number} offset
+     * @param {number} length
      **/
-    public squeeze(trits: TritArray, offset: number, length: number) {
+    public squeeze(trits: Int8Array, offset: number, length: number) {
         do {
             let i = 0
             const limit = length < HASH_LENGTH ? length : HASH_LENGTH
@@ -75,12 +88,12 @@ export default class Curl {
     }
 
     /**
-     *   Sponge transform function
+     * Sponge transform function
      *
-     *   @method transform
-     **/
+     * @method transform
+     */
     public transform() {
-        let stateCopy = []
+        let stateCopy = new Int8Array(STATE_LENGTH)
         let index = 0
 
         for (let round = 0; round < this.rounds; round++) {

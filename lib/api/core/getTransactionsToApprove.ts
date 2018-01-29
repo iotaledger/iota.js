@@ -1,30 +1,56 @@
-import errors from '../../errors/inputErrors'
-import inputValidator from '../../utils/inputValidator'
+import errors from '../../errors'
 
-import { Callback } from '../types/commands'
-import { GetTransactionsToApproveResponse } from '../types/responses'
+import { API, BaseCommand, Callback, IRICommand } from '../types'
 
-import commandBuilder from '../commandBuilder'
-import sendCommand from './sendCommand'
+export interface GetTransactionsToApproveResponse {
+    trunkTransaction: string
+    branchTransaction: string
+    duration?: number
+}
+
+export interface GetTransactionsToApproveCommand extends BaseCommand {
+    command: IRICommand.GET_TRANSACTIONS_TO_APPROVE
+    depth: number
+    reference?: string
+}
 
 /**
- *   @method getTransactionsToApprove
- *   @param {int} depth
- *   @param {string} reference
- *   @returns {function} callback
- *   @returns {object} success
+ * @method getTransactionsToApprove
+ * @param {int} depth
+ * @param {string} reference
+ * @returns {function} callback
+ * @returns {object} success
  **/
-function getTransactionsToApprove(
+export default function getTransactionsToApprove(
+    this: API,
     depth: number,
-    reference: string,
-    callback: Callback<GetTransactionsToApproveResponse>
-) {
-    // Check if correct depth
-    if (!inputValidator.isValue(depth)) {
-        return callback(errors.invalidInputs())
+    reference?: string,
+    callback?: Callback<GetTransactionsToApproveResponse>): Promise<GetTransactionsToApproveResponse> {
+
+      const promise: Promise<GetTransactionsToApproveResponse> = new Promise((resolve, reject) => {
+
+        if (!Number.isInteger(depth)) {
+            reject(new Error(errors.INVALID_DEPTH))
+        }
+
+        resolve(
+            this.sendCommand<GetTransactionsToApproveCommand, GetTransactionsToApproveResponse>(
+                {
+                    command: IRICommand.GET_TRANSACTIONS_TO_APPROVE,
+                    depth,
+                    reference
+                }
+            )
+                .then(({trunkTransaction, branchTransaction}) => ({
+                    trunkTransaction,
+                    branchTransaction
+                }))
+        )
+    })
+
+    if (typeof callback === 'function') {
+        promise.then(callback.bind(null, null), callback)
     }
 
-    const command = commandBuilder.getTransactionsToApprove(depth, reference)
-
-    return sendCommand(command, callback)
+    return promise
 }

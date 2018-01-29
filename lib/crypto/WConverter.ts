@@ -1,10 +1,9 @@
-import { TritArray } from './types'
-
 /* tslint:disable variable-name */
 const INT_LENGTH = 12
 const BYTE_LENGTH = 48
 const RADIX = 3
-/// hex representation of (3^242)/2
+
+// hex representation of (3^242)/2
 const HALF_3 = new Uint32Array([
     0xa5ce8964,
     0x9f007669,
@@ -52,27 +51,27 @@ function ta_reverse(array: Uint32Array) {
     }
 }
 
-/// negates the (unsigned) input array
+// negates the (unsigned) input array
 function bigint_not(arr: Uint32Array) {
     for (let i = 0; i < arr.length; i++) {
         arr[i] = ~arr[i] >>> 0
     }
 }
 
-/// rshift that works with up to 53
-/// JS's shift operators only work on 32 bit integers
-/// ours is up to 33 or 34 bits though, so
-/// we need to implement shifting manually
+// rshift that works with up to 53
+// JS's shift operators only work on 32 bit integers
+// ours is up to 33 or 34 bits though, so
+// we need to implement shifting manually
 function rshift(num: number, shift: number) {
     return (num / Math.pow(2, shift)) >>> 0
 }
 
-/// swaps endianness
+// swaps endianness
 function swap32(val: number) {
     return ((val & 0xff) << 24) | ((val & 0xff00) << 8) | ((val >> 8) & 0xff00) | ((val >> 24) & 0xff)
 }
 
-/// add with carry
+// add with carry
 function full_add(lh: number, rh: number, carry: boolean): [number, boolean] {
     let v = lh + rh
     let l = rshift(v, 32) & 0xffffffff
@@ -91,7 +90,7 @@ function full_add(lh: number, rh: number, carry: boolean): [number, boolean] {
     return [r, carry1 || carry2]
 }
 
-/// subtracts rh from base
+// subtracts rh from base
 function bigint_sub(base: Uint32Array, rh: Uint32Array) {
     let noborrow = true
 
@@ -107,7 +106,7 @@ function bigint_sub(base: Uint32Array, rh: Uint32Array) {
     }
 }
 
-/// compares two (unsigned) big integers
+// compares two (unsigned) big integers
 function bigint_cmp(lh: Uint32Array, rh: Uint32Array) {
     for (let i = lh.length; i-- > 0; ) {
         const a = lh[i] >>> 0
@@ -122,7 +121,7 @@ function bigint_cmp(lh: Uint32Array, rh: Uint32Array) {
     return 0
 }
 
-/// adds rh to base in place
+// adds rh to base in place
 function bigint_add(base: Uint32Array, rh: Uint32Array) {
     let carry = false
 
@@ -133,7 +132,7 @@ function bigint_add(base: Uint32Array, rh: Uint32Array) {
     }
 }
 
-/// adds a small (i.e. <32bit) number to base
+// adds a small (i.e. <32bit) number to base
 function bigint_add_small(base: Uint32Array, other: number) {
     const vc = full_add(base[0], other, false)
     let carry: boolean
@@ -152,8 +151,14 @@ function bigint_add_small(base: Uint32Array, other: number) {
     return i
 }
 
-/// converts the given byte array to trits
-function words_to_trits(words: Uint32Array) {
+/**
+ * Converts the given byte array to trits
+ *
+ * @method words_to_trits
+ * @param {Uint32Array} words
+ * @return {Int8Array} trits
+ */
+function words_to_trits(words: Uint32Array): Int8Array {
     if (words.length !== INT_LENGTH) {
         throw new Error('Invalid words length')
     }
@@ -221,7 +226,14 @@ function is_null(arr: Uint32Array) {
     return true
 }
 
-function trits_to_words(trits: TritArray) {
+/**
+ * Converts the given trits to byte array
+ *
+ * @method trits_to_words
+ * @param {Int8Array} trits
+ * @return {Uint32Array} words
+ */
+function trits_to_words(trits: Int8Array): Uint32Array {
     if (trits.length !== 243) {
         throw new Error('Invalid trits length')
     }

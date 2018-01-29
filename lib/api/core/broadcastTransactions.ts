@@ -1,11 +1,14 @@
-import errors from '../../errors/inputErrors'
-import inputValidator from '../../utils/inputValidator'
+import errors from '../../errors'
+import { isArrayOfAttachedTrytes } from '../../utils'
 
-import { Callback } from '../types/commands'
-import { BroadcastTransactionsResponse } from '../types/responses'
+import { API, BaseCommand, Callback, IRICommand } from '../types'
 
-import { broadcastTransactionsCommand } from './commands'
-import sendCommand from './sendCommand'
+export interface BroadcastTransactionsCommand extends BaseCommand {
+    command: IRICommand.BROADCAST_TRANSACTIONS
+    trytes: string[]
+}
+
+export type BroadcastTransactionsResponse = void
 
 /**
  *   @method broadcastTransactions
@@ -13,20 +16,29 @@ import sendCommand from './sendCommand'
  *   @returns {function} callback
  *   @returns {object} success
  **/
-function broadcastTransactions(this: any, trytes: string[], callback: Callback<BroadcastTransactionsResponse>): Promise<BroadcastTransactionsResponse> {
-    const promise: Promise<BroadcastTransactionsResponse> = new Promise((resolve, reject) => {
-      if (!inputValidator.isArrayOfAttachedTrytes(trytes)) {
-        reject(callback(errors.INVALID_ATTACHED_TRYTES))
-      } else {
-        resolve(this.sendCommand(broadcastTransactionsCommand(trytes)))
-      }    
+export default function broadcastTransactions(
+    this: API, 
+    trytes: string[], 
+    callback?: Callback<void>): Promise<void> {
+
+    const promise: Promise<void> = new Promise((resolve, reject) => {
+        if (!isArrayOfAttachedTrytes(trytes)) {
+            return reject(errors.INVALID_ATTACHED_TRYTES)
+        }
+
+        resolve(
+            this.sendCommand(
+                {
+                    command: IRICommand.BROADCAST_TRANSACTIONS,
+                    trytes
+                }
+            )
+        )
     })
 
+    // Invoke callback
     if (typeof callback === 'function') {
-      promise.then(
-        res => callback(null, res),
-        err => callback(err)
-      )
+        promise.then(callback.bind(null, null), callback)
     }
 
     return promise

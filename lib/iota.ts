@@ -1,29 +1,30 @@
-import { API, composeApi, Settings } from './api'
-import errors from './errors/inputErrors'
+import { composeApi } from './api'
+import { API, Settings } from './api/types'
+import errors from './errors'
 import multisig from './multisig/multisig'
-import { default as valid } from './utils/inputValidator'
-import utils from './utils/utils'
+import { * as valid } from './valid'
+import utils from './utils'
 
 //
-//  *Depreactions are aimed for v1.0.0
+//  * Depreactions are aimed for v1.0.0
 
 interface IOTA extends API {
     api: object // deprecate api namespace
-    utils: object
-    valid: object
+    utils: object // deprecate
+    valid: object // deprecate
     multisig: object // deprecate & grab it with composition
     version: string // deprecate
-    // TODO: add rest of methods
+    [key: string]: any
 }
 
-function IOTA (settings: Settings, ...extensions: object[]):IOTA {
-    const api = composeApi(settings, extensions)
+function IOTA (this: API, settings: Settings, ...extensions: object[]):IOTA {
+    const api = composeApi.call(composeApi, settings, ...extensions)
 
     return {
         ...api,
         api, // deprecate
-        utils,
-        valid,
+        utils, // deprecate
+        valid, // deprecate
         multisig: multisig.bind(api), // deprecate
         version: '0.5.0', // deprecate
     }

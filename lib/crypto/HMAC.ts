@@ -1,13 +1,12 @@
 import Converter from './Converter'
 import Curl from './Curl'
-import { TritArray } from './types'
 
 const HMAC_ROUNDS = 27
 
 export default class HMAC {
-    constructor(private key: TritArray) {}
+    constructor(private key: Int8Array) {}
 
-    public addHMAC(bundle) {
+    public addHMAC(bundle: any) {
         const curl = new Curl(HMAC_ROUNDS)
         const key = this.key
 
