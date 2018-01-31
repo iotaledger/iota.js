@@ -8,7 +8,7 @@ It should be noted that the Javascript Library as it stands right now is an **ea
 
 > **Join the Discussion**
 
-> If you want to get involved in the community, need help with getting setup, have any issues related with the library or just want to discuss Blockchain, Distributed Ledgers and IoT with other people, feel free to join our Slack. [Slack](http://slack.iota.org/) You can also ask questions on our dedicated forum at: [IOTA Forum](https://forum.iota.org/).
+> If you want to get involved in the community, need help with getting setup, have any issues related with the library or just want to discuss Blockchain, Distributed Ledgers and IoT with other people, feel free to join our [Discord community](https://discord.gg/7Gu2mG5). You can also ask questions on our dedicated forum at: [IOTA Forum](https://forum.iota.org/).
 
 ## Installation
 
