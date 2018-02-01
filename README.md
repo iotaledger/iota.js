@@ -122,6 +122,7 @@ iota.api.getNodeInfo(function(error, success) {
     - **[getAccountData](#getaccountdata)**
     - **[isPromotable](#ispromotable)**
     - **[isReattachable](#isreattachable)**
+    - **[wereAddressesSpentFrom](#wereaddressesspentfrom)**
 - **[utils](#iotautils)**
     - **[convertUnits](#convertunits)**
     - **[addChecksum](#addchecksum)**
@@ -593,6 +594,23 @@ iota.api.isReattachable(inputAddress, callback)
 ```
 
 1. **`inputAddress`**: `String | Array` address used as input in a transaction. Either string or array.
+2. **`callback`**: `Function` callback function
+
+#### Returns
+`Bool` - true / false (if you provided an array, it's an array of bools)
+
+---
+
+### `wereAddressesSpentFrom`
+
+This API function determines whether an address has been spent from (i.e. an outgoing transfer has been sent from the address). It can even check if the address was spent in the previous epoch.
+
+#### Input
+```js
+iota.api.wereAddressesSpentFrom(inputAddress, callback)
+```
+
+1. **`inputAddress`**: `String | Array` address to be checked, or an array of addresses.
 2. **`callback`**: `Function` callback function
 
 #### Returns
