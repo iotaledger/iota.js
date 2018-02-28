@@ -1,6 +1,8 @@
-import errors from '../../errors'
-
-import { API, BaseCommand, Callback, IRICommand } from '../types'
+import * as Promise from 'bluebird'
+import * as errors from '../../errors'
+import { depthValidator, validate } from '../../utils'
+import { BaseCommand, Callback, IRICommand } from '../types'
+import { sendCommand } from './sendCommand'
 
 export interface GetTransactionsToApproveResponse {
     trunkTransaction: string
@@ -14,6 +16,8 @@ export interface GetTransactionsToApproveCommand extends BaseCommand {
     reference?: string
 }
 
+export const validateGetTransactionsToApprove = (depth: number) => validate([depthValidator(depth)])
+
 /**
  * @method getTransactionsToApprove
  * @param {int} depth
@@ -21,36 +25,21 @@ export interface GetTransactionsToApproveCommand extends BaseCommand {
  * @returns {function} callback
  * @returns {object} success
  **/
-export default function getTransactionsToApprove(
-    this: API,
+export const getTransactionsToApprove = (
     depth: number,
-    reference?: string,
-    callback?: Callback<GetTransactionsToApproveResponse>): Promise<GetTransactionsToApproveResponse> {
-
-      const promise: Promise<GetTransactionsToApproveResponse> = new Promise((resolve, reject) => {
-
-        if (!Number.isInteger(depth)) {
-            reject(new Error(errors.INVALID_DEPTH))
-        }
-
-        resolve(
-            this.sendCommand<GetTransactionsToApproveCommand, GetTransactionsToApproveResponse>(
-                {
-                    command: IRICommand.GET_TRANSACTIONS_TO_APPROVE,
-                    depth,
-                    reference
-                }
-            )
-                .then(({trunkTransaction, branchTransaction}) => ({
-                    trunkTransaction,
-                    branchTransaction
-                }))
+    reference?: string, // this is missing in IRI docs?
+    callback?: Callback<GetTransactionsToApproveResponse>
+): Promise<GetTransactionsToApproveResponse> =>
+    Promise.try(() => validateGetTransactionsToApprove(depth))
+        .then(() =>
+            sendCommand<GetTransactionsToApproveCommand, GetTransactionsToApproveResponse>({
+                command: IRICommand.GET_TRANSACTIONS_TO_APPROVE,
+                depth,
+                reference,
+            })
         )
-    })
-
-    if (typeof callback === 'function') {
-        promise.then(callback.bind(null, null), callback)
-    }
-
-    return promise
-}
+        .then(({ trunkTransaction, branchTransaction }) => ({
+            trunkTransaction,
+            branchTransaction,
+        }))
+        .asCallback(callback)

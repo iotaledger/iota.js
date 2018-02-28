@@ -1,46 +1,30 @@
-import errors from '../../errors'
-import { isArrayOfHashes } from '../../utils'
-
-import { API, BaseCommand, Callback, IRICommand } from '../types'
+import * as Promise from 'bluebird'
+import * as errors from '../../errors'
+import { asArray, hashArrayValidator, validate } from '../../utils'
+import { BaseCommand, Callback, IRICommand, Trytes } from '../types'
+import { sendCommand } from './sendCommand'
 
 export interface CheckConsistencyCommand extends BaseCommand {
     command: IRICommand.CHECK_CONSISTENCY
-    tails: string[]
+    transactions: Trytes[]
 }
 
 export interface CheckConsistencyResponse {
     state: boolean
 }
 
-export default function checkConsistency (
-    this: API,
-    transactions: string | string[],
-    callback?: Callback<boolean>
-): Promise<boolean> {
+export const validateCheckConsistency = (transactions: string[]) => validate([hashArrayValidator(transactions)])
 
-    if (!Array.isArray(transactions)) {
-      transactions = [transactions]
-    }
+export const checkConsistency = (transactions: string | string[], callback?: Callback<boolean>): Promise<boolean> => {
+    const transactionsArray = asArray(transactions)
 
-    const promise: Promise<boolean> = new Promise((resolve, reject) => {
-        if (!isArrayOfHashes(transactions as string[])) {
-            return reject(new Error(errors.INVALID_TRYTES))
-        }
-        resolve(
-            this.sendCommand<CheckConsistencyCommand, CheckConsistencyResponse>(
-                {
-                    command: IRICommand.CHECK_CONSISTENCY,
-                    transactions
-                }  
-            )
-              .then(res => res.state)
+    return Promise.try(() => validateCheckConsistency(transactionsArray))
+        .then(() =>
+            sendCommand<CheckConsistencyCommand, CheckConsistencyResponse>({
+                command: IRICommand.CHECK_CONSISTENCY,
+                transactions: transactionsArray,
+            })
         )
-    })
-
-    if (typeof callback === 'function') {
-      promise.then(callback.bind(null, null), callback)
-    }
-
-    return promise
+        .then(res => res.state)
+        .asCallback(callback)
 }
-

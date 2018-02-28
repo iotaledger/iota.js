@@ -1,4 +1,6 @@
-import { API, BaseCommand, Callback, IRICommand } from '../types'
+import * as Promise from 'bluebird'
+import { BaseCommand, Callback, IRICommand } from '../types'
+import { sendCommand } from './sendCommand'
 
 export interface GetNodeInfoCommand extends BaseCommand {
     command: IRICommand.GET_NODE_INFO
@@ -28,11 +30,7 @@ export interface GetNodeInfoResponse {
  *   @returns {function} callback
  *   @returns {object} success
  **/
-export default function getNodeInfo(this: API, callback?: Callback<GetNodeInfoResponse>): Promise<GetNodeInfoResponse> {
-    return this.sendCommand<GetNodeInfoCommand, GetNodeInfoResponse>(
-        {
-            command: IRICommand.GET_NODE_INFO
-        },
-        callback
-    )
-}
+export const getNodeInfo = (callback?: Callback<GetNodeInfoResponse>): Promise<GetNodeInfoResponse> =>
+    sendCommand<GetNodeInfoCommand, GetNodeInfoResponse>({
+        command: IRICommand.GET_NODE_INFO,
+    }).asCallback(callback)

@@ -1,14 +1,10 @@
 import BigNumber from 'bignumber.js'
-
-import errors from '../errors'
-
+import { Tag, Transaction, Transfer, Trytes } from '../api/types'
 import { Converter, Curl, Kerl, Signing } from '../crypto'
-
+import * as errors from '../errors'
 import ascii from './asciiToTrytes'
 import extractJson from './extractJson'
-import { isArrayOfTxObjects, isNinesTrytes, isTrytes } from './inputValidator'
-
-import { Transaction, Transfer } from '../api/types'
+import { isArrayOfTxObjects, isNinesTrytes, isTrytes } from './guards'
 
 enum Unit {
     i = 'i',
@@ -19,11 +15,24 @@ enum Unit {
     Pi = 'Pi',
 }
 
+export const asArray = (x: any) => (Array.isArray(x) ? x : [x])
+
+export const pad9s = (length: number) => (trytes: Trytes) => {
+    if (trytes.length > length) {
+        return trytes
+    }
+
+    return trytes.concat('9').repeat(27 - trytes.length)
+}
+
+export const padTag = pad9s(27)
+export const padTagArray = (tags: Tag[]) => tags.map(padTag)
+
 /**
  *   Table of IOTA Units based off of the standard System of Units
  **/
 export const unitMap = {
-    i:  { val: new BigNumber(10).pow(0), dp: 0 },
+    i: { val: new BigNumber(10).pow(0), dp: 0 },
     Ki: { val: new BigNumber(10).pow(3), dp: 3 },
     Mi: { val: new BigNumber(10).pow(6), dp: 6 },
     Gi: { val: new BigNumber(10).pow(9), dp: 9 },
@@ -120,29 +129,21 @@ export function addChecksum(inputValue: string | string[], checksumLength: numbe
  *   @param {string | list} address
  *   @returns {string | list} address (without checksum)
  **/
-export function noChecksum(address: string): string
-export function noChecksum(address: string[]): string[]
-export function noChecksum(address: string | string[]) {
+export function removeChecksum(address: string): string
+export function removeChecksum(address: string[]): string[]
+export function removeChecksum(address: string | string[]) {
     if (typeof address === 'string' && address.length === 81) {
         return address
     }
 
-    // If only single address, turn it into an array
-    if (typeof address === 'string') {
-        address = new Array(address)
-    }
-
-    const addressesWithChecksum: string[] = []
-
-    address.forEach(thisAddress => {
-        addressesWithChecksum.push(thisAddress.slice(0, 81))
-    })
+    const addresses = asArray(address)
+    const addressesNoChecksum = addresses.map(addr => addr.slice(0, 81))
 
     // return either string or the list
     if (typeof address === 'string') {
-        return addressesWithChecksum[0]
+        return addressesNoChecksum[0]
     } else {
-        return addressesWithChecksum
+        return addressesNoChecksum
     }
 }
 
@@ -154,7 +155,7 @@ export function noChecksum(address: string | string[]) {
  *   @returns {bool}
  **/
 export const isValidChecksum = (addressWithChecksum: string): boolean =>
-  addressWithChecksum === addChecksum(noChecksum(addressWithChecksum))
+    addressWithChecksum === addChecksum(removeChecksum(addressWithChecksum))
 
 /**
  *   Converts transaction trytes of 2673 trytes into a transaction object

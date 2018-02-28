@@ -1,7 +1,9 @@
-import errors from '../../errors'
-import { isArrayOfHashes } from '../../utils'
+import * as Promise from 'bluebird'
+import * as errors from '../../errors'
+import { hashArrayValidator, validate } from '../../utils'
 
-import { API, BaseCommand, Callback, IRICommand } from '../types'
+import { BaseCommand, Callback, Hash, IRICommand } from '../types'
+import { sendCommand } from './index'
 
 export interface GetInclusionStatesCommand extends BaseCommand {
     command: IRICommand.GET_INCLUSION_STATES
@@ -14,6 +16,9 @@ export interface GetInclusionStatesResponse {
     duration: number
 }
 
+export const validateGetInclusionStates = (transactions: Hash[], tips: Hash[]) =>
+    validate([hashArrayValidator(transactions), hashArrayValidator(tips)])
+
 /**
  *   @method getInclusionStates
  *   @param {array} transactions
@@ -21,36 +26,18 @@ export interface GetInclusionStatesResponse {
  *   @returns {function} callback
  *   @returns {object} success
  **/
-export default function getInclusionStates(
-    this: API,
-    transactions: string[], 
-    tips: string[], 
-    callback?: Callback<boolean[]>): Promise<boolean[]> {
-
-    const promise = new Promise<boolean[]>((resolve, reject) => {
-        if (!isArrayOfHashes(transactions)) {
-            return reject(errors.INVALID_TRYTES)
-        }
-
-        if (!isArrayOfHashes(tips)) {
-            return reject(errors.INVALID_TRYTES)
-        }
-
-        resolve(
-            this.sendCommand<GetInclusionStatesCommand, GetInclusionStatesResponse>(
-                {
-                    command: IRICommand.GET_INCLUSION_STATES,
-                    transactions,
-                    tips,
-                }
-            )
-                .then(res => res.states)
+export const getInclusionStates = (
+    transactions: string[],
+    tips: string[],
+    callback?: Callback<boolean[]>
+): Promise<boolean[]> =>
+    Promise.try(() => validateGetInclusionStates(transactions, tips))
+        .then(() =>
+            sendCommand<GetInclusionStatesCommand, GetInclusionStatesResponse>({
+                command: IRICommand.GET_INCLUSION_STATES,
+                transactions,
+                tips,
+            })
         )
-    })
-
-    if (typeof callback === 'function') {
-        promise.then(callback.bind(null, null), callback)
-    }
-
-    return promise
-}
+        .then(res => res.states)
+        .asCallback(callback)

@@ -3,7 +3,7 @@
         "lib": ["dom", "es2015"],
         "noImplicitThis": true,
         "strict": true,
-        "outFile": "out/iota.lib.js"
+        "outDir": "out"
     },
     "include": ["lib"]
 }

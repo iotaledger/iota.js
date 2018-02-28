@@ -1,6 +1,8 @@
+import 'isomorphic-fetch'
+
 import { composeApi } from './api'
 import { API, Settings } from './api/types'
-import errors from './errors'
+import * as errors from './errors'
 import multisig from './multisig/multisig'
 import { * as valid } from './valid'
 import utils from './utils'

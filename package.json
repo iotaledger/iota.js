@@ -24,10 +24,13 @@
     },
     "dependencies": {
         "@types/bignumber.js": "^5.0.0",
+        "@types/bluebird": "^3.5.20",
         "@types/crypto-js": "^3.1.38",
+        "@types/isomorphic-fetch": "^0.0.34",
         "bignumber.js": "^4.1.0",
+        "bluebird": "^3.5.1",
         "crypto-js": "^3.1.9-1",
-        "whatwg-fetch": "^2.0.3"
+        "isomorphic-fetch": "^2.2.1"
     },
     "devDependencies": {
         "ava": "^0.25.0",

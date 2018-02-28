@@ -1,11 +1,8 @@
-import errors from '../../errors'
-import { isAddress, noChecksum } from '../../utils'
-
-import { Address, Addresses, BaseCommand, Callback, IRICommand, Normalized, Settings } from '../types'
-
-import { sendCommand } from '../core/sendCommand'
-
-import { invokeCallback, isAddresses, keys, normalize, removeChecksum } from '../utils'
+import * as Promise from 'bluebird'
+import * as errors from '../../errors'
+import { hashArrayValidator, removeChecksum, validate } from '../../utils'
+import { BaseCommand, Callback, Hash, IRICommand } from '../types'
+import { sendCommand } from './sendCommand'
 
 export interface WereAddressesSpentFromCommand extends BaseCommand {
     command: string
@@ -18,35 +15,27 @@ export interface WereAddressesSpentFromResponse {
 
 export const makeWereAddressesSpentFromCommand = (addresses: string[]) => ({
     command: 'wereAddressesSpentFrom',
-    addresses
+    addresses,
 })
 
-export const normalizeSpentStates = (addresses: string[]) =>
-    normalize<boolean, Normalized<boolean>>(addresses, (address, spent) => ({
-        [address]: { spent }
-    }))
+export const validateWereAddressesSpentFrom = (addresses: Hash[]) => validate([hashArrayValidator(addresses)])
 
-export const formatWereAddressesSpentFromResponse = (addresses: string[], normalizeOutput: boolean = true) =>
-    (res: WereAddressesSpentFromResponse): Normalized<{[key: string]: boolean}> | boolean[] =>
-        normalizeOutput
-            ? normalizeSpentStates(addresses)(res.states)
-            : res.states 
+/**
+ * Check whether addresses have already been spent from, to prevent re-using a one-time signature
+ *
+ * @param addresses
+ * @param callback
+ */
+export const wereAddressesSpentFrom = (addresses: Hash[], callback?: Callback<boolean[]>): Promise<boolean[]> => {
+    addresses = removeChecksum(addresses)
 
-export const wereAddressesSpentFrom = ({
-    provider,
-    normalizeOutput = true
-}: Settings = {}) => (
-    addresses: string[] | Addresses,
-    callback?: Callback<boolean[]>
-): Promise<boolean[] | Normalized<boolean>> =>
-    Promise.resolve(
-        isAddresses(addresses) 
-    )
-        .then(() => keys(addresses))
-        .then(removeChecksum)
-        .then((addressesArray) => Promise.resolve(
-            makeWereAddressesSpentFromCommand(addressesArray)
+    return Promise.try(() => validateWereAddressesSpentFrom(addresses))
+        .then(() =>
+            sendCommand<WereAddressesSpentFromCommand, WereAddressesSpentFromResponse>({
+                command: IRICommand.WERE_ADDRESSES_SPENT_FROM,
+                addresses,
+            })
         )
-            .then(sendCommand<WereAddressesSpentFromCommand, WereAddressesSpentFromResponse>(provider))
-            .then(formatWereAddressesSpentFromResponse(addressesArray))
-            .then(invokeCallback(callback)))
+        .then(res => res.states)
+        .asCallback(callback)
+}

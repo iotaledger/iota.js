@@ -8,7 +8,6 @@ import {
     GetNodeInfoResponse,
     GetTransactionsToApproveResponse,
     GetTrytesCommand,
-    NormalizedGetBalancesResponse
 } from './core'
 
 import {
@@ -19,7 +18,7 @@ import {
     GetTransfersOptions,
     Inputs,
     NormalizedInputs,
-    PromoteTransactionOptions
+    PromoteTransactionOptions,
 } from './extended'
 
 export {
@@ -31,7 +30,7 @@ export {
     GetNeighborsResponse,
     GetNodeInfoResponse,
     GetTransactionsToApproveResponse,
-    GetTrytesCommand
+    GetTrytesCommand,
 } from './core'
 
 export {
@@ -42,18 +41,22 @@ export {
     GetTransfersOptions,
     Inputs,
     NormalizedInputs,
-    PromoteTransactionOptions
+    PromoteTransactionOptions,
 } from './extended'
 
 export interface Normalized<T> {
     [key: string]: T
 }
 
+export type Hash = string
+export type Tag = string
+export type Trytes = string
+
 /* Address object */
 export interface Address extends Balance, SpentStatus {
-    address: string,
-    keyIndex: number,
-    security: number,
+    address: string
+    keyIndex: number
+    security: number
 }
 
 export interface SpentStatus {
@@ -61,11 +64,8 @@ export interface SpentStatus {
 }
 
 export interface Balance {
-    balance: string 
+    balance: string
 }
-
-/* Normalized addresses */
-export type Addresses = Normalized<Address>
 
 /* Transfer object */
 export interface Transfer {
@@ -101,9 +101,9 @@ export type Bundle = Transaction[]
 
 /* Neighbor object */
 export interface Neighbor {
-    address: string,
-    numberOfAllTransactions: number,
-    numberOfInvalidTransactions: number,
+    address: string
+    numberOfAllTransactions: number
+    numberOfInvalidTransactions: number
     numberOfNewTransactions: number
 }
 
@@ -127,7 +127,7 @@ export enum IRICommand {
     BROADCAST_TRANSACTIONS = 'broadcastTransactions',
     STORE_TRANSACTIONS = 'storeTransactions',
     CHECK_CONSISTENCY = 'checkConsistency',
-    WERE_ADDRESSES_SPENT_FROM = 'wereAddressesSpentFrom'
+    WERE_ADDRESSES_SPENT_FROM = 'wereAddressesSpentFrom',
 }
 
 /* Known batchable commands */
@@ -144,7 +144,9 @@ export interface BatchableKeys {
 
 /** Batchable keys for each command */
 export const batchableKeys: BatchableKeys = {
-    [IRICommand.FIND_TRANSACTIONS]: ['addresses', 'approvees', 'bundles', 'tags'] as Array<keyof FindTransactionsCommand>,
+    [IRICommand.FIND_TRANSACTIONS]: ['addresses', 'approvees', 'bundles', 'tags'] as Array<
+        keyof FindTransactionsCommand
+    >,
     [IRICommand.GET_BALANCES]: ['addresses'] as Array<keyof GetBalancesCommand>,
     [IRICommand.GET_INCLUSION_STATES]: ['tips', 'transactions'] as Array<keyof GetInclusionStatesCommand>,
     [IRICommand.GET_TRYTES]: ['hashes'] as Array<keyof GetTrytesCommand>,
@@ -152,8 +154,7 @@ export const batchableKeys: BatchableKeys = {
 
 /* IRI Command objects extend from this interface */
 export interface BaseCommand {
-    command: string,
-    [key: string]: string[] | number[] | boolean[] | string | number | boolean
+    command: string
 }
 
 /* Connection settings object */
@@ -171,18 +172,14 @@ export interface API {
      * API util methods
      */
     getSettings: () => Settings
-    
+
     setSettings: (settings: Settings) => API
 
     /**
      * Core API methods
      */
-    sendCommand: <C extends BaseCommand, R = any>(
-        this: API,
-        command: BaseCommand,
-        callback?: Callback<R>
-    ) => Promise<R>
-          
+    sendCommand: <C extends BaseCommand, R = any>(this: API, command: BaseCommand, callback?: Callback<R>) => Promise<R>
+
     attachToTangle: (
         this: API,
         trunkTransaction: string,
@@ -192,101 +189,55 @@ export interface API {
         callback?: Callback<string[]>
     ) => Promise<string[]>
 
-    findTransactions: (
-        this: API,
-        query: FindTransactionsQuery,
-        callback?: Callback<string[]>
-    ) => Promise<string[]>
-      
+    findTransactions: (this: API, query: FindTransactionsQuery, callback?: Callback<string[]>) => Promise<string[]>
+
     getBalances: (
         this: API,
         addresses: string[],
         threshold: number,
         callback?: Callback<GetBalancesResponse>
-    )  => Promise<GetBalancesResponse>
-        
+    ) => Promise<GetBalancesResponse>
+
     getInclusionStates: (
         this: API,
         transactions: string[],
         tips: string[],
         callback?: Callback<string[]>
     ) => Promise<string[]>
-        
-    getNodeInfo: (
-        this: API,
-        callback?: Callback<GetNodeInfoResponse>
-    ) => Promise<GetNodeInfoResponse>
-        
-    getNeighbors: (
-        this: API,
-        callback?: Callback<GetNeighborsResponse>
-    ) => Promise<Neighbor[]>
-        
-    addNeighbors: (
-        this: API,
-        callback?: Callback<number>
-    ) => Promise<number>
-        
-    removeNeighbors: (
-        this: API,
-        callback?: Callback<number>
-    ) => Promise<number>
-        
-    getTips: (
-        this: API,
-        callback?: Callback<string[]>
-    ) => Promise<string[]>
-        
+
+    getNodeInfo: (this: API, callback?: Callback<GetNodeInfoResponse>) => Promise<GetNodeInfoResponse>
+
+    getNeighbors: (this: API, callback?: Callback<GetNeighborsResponse>) => Promise<Neighbor[]>
+
+    addNeighbors: (this: API, callback?: Callback<number>) => Promise<number>
+
+    removeNeighbors: (this: API, callback?: Callback<number>) => Promise<number>
+
+    getTips: (this: API, callback?: Callback<string[]>) => Promise<string[]>
+
     getTransactionsToApprove: (
         this: API,
         depth: number,
         reference?: string,
         callback?: Callback<GetTransactionsToApproveResponse>
     ) => Promise<GetTransactionsToApproveResponse>
-        
-    getTrytes: (
-        this: API,
-        hashes: string[],
-        callback?: Callback<string[]>
-    ) => Promise<string[]>
-        
-    interruptAttachingToTangle: (
-        this: API,
-        callback?: Callback<void>
-    ) => Promise<void> 
-        
-    checkConsistency: (
-        this: API,
-        transactions: string | string[],
-        callback?: Callback<boolean>
-    ) => Promise<boolean>
-        
-    broadcastTransactions: (
-        this: API,
-        trytes: string[],
-        callback?: Callback<void>
-    ) => Promise<void> 
-        
-    storeTransactions: (
-        this: API,
-        trytes: string[],
-        callback?: Callback<void>
-    ) => Promise<void>
-        
-    wereAddressesSpentFrom: (
-        this: API,
-        addresses: string[],
-        callback?: Callback<boolean[]>
-    ) => Promise<boolean[]>
+
+    getTrytes: (this: API, hashes: string[], callback?: Callback<string[]>) => Promise<string[]>
+
+    interruptAttachingToTangle: (this: API, callback?: Callback<void>) => Promise<void>
+
+    checkConsistency: (this: API, transactions: string | string[], callback?: Callback<boolean>) => Promise<boolean>
+
+    broadcastTransactions: (this: API, trytes: string[], callback?: Callback<void>) => Promise<void>
+
+    storeTransactions: (this: API, trytes: string[], callback?: Callback<void>) => Promise<void>
+
+    wereAddressesSpentFrom: (this: API, addresses: string[], callback?: Callback<boolean[]>) => Promise<boolean[]>
 
     /**
      * Extended API methods
      */
-    broadcastBundle: (
-        this: API,
-        tailTransaction: string,
-        callback?: Callback<void>
-    ) => Promise<void>
+    broadcastBundle: (this: API, tailTransaction: string, callback?: Callback<void>) => Promise<void>
 
     findTransactionObjects: (
         this: API,
@@ -301,11 +252,7 @@ export interface API {
         callback?: Callback<AccountData>
     ) => Promise<AccountData>
 
-    getBundle: (
-        this: API,
-        tailTransaction: string,
-        callback?: Callback<Bundle | void>
-    ) => Promise<Bundle | void>
+    getBundle: (this: API, tailTransaction: string, callback?: Callback<Bundle | void>) => Promise<Bundle | void>
 
     getBundlesFromAddresses: (
         this: API,
@@ -314,24 +261,11 @@ export interface API {
         callback?: Callback<Bundle[]>
     ) => Promise<Bundle[]>
 
-    getInputs: (
-        this: API,
-        seed: string,
-        options?: GetInputsOptions,
-        callback?: Callback
-    ) => Promise<Inputs>
+    getInputs: (this: API, seed: string, options?: GetInputsOptions, callback?: Callback) => Promise<Inputs>
 
-    getLatestInclusion: (
-        this: API,
-        transactions: string[],
-        callback?: Callback<boolean[]>
-    ) => Promise<boolean[]>
+    getLatestInclusion: (this: API, transactions: string[], callback?: Callback<boolean[]>) => Promise<boolean[]>
 
-    getNewAddress: (
-        this: API,
-        seed: string,
-        options: GetNewAddressOptions
-    ) => Promise<string[] | string>
+    getNewAddress: (this: API, seed: string, options: GetNewAddressOptions) => Promise<string[] | string>
 
     getTransactionObjects: (
         this: API,
@@ -339,7 +273,8 @@ export interface API {
         callback?: Callback<Transaction[]>
     ) => Promise<Transaction[]>
 
-    isPromotable: ( // Deprecated
+    isPromotable: (
+        // Deprecated
         this: API,
         transactions: string | string[],
         callback?: Callback<boolean>
@@ -390,11 +325,7 @@ export interface API {
         callback?: Callback<Bundle | void>
     ) => Promise<Bundle | void>
 
-    storeAndBroadcast: (
-        this: API,
-        trytes: string[],
-        callback?: Callback<void>
-    ) => Promise<void>
+    storeAndBroadcast: (this: API, trytes: string[], callback?: Callback<void>) => Promise<void>
 
     [key: string]: any
 }

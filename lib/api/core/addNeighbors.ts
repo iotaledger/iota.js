@@ -1,7 +1,8 @@
-import errors from '../../errors'
-import { isUri } from '../../utils'
-
-import { API, BaseCommand, Callback, IRICommand } from '../types'
+import * as Promise from 'bluebird'
+import * as errors from '../../errors'
+import { uriArrayValidator, validate } from '../../utils'
+import { BaseCommand, Callback, IRICommand } from '../types'
+import { sendCommand } from './sendCommand'
 
 export interface AddNeighborsCommand extends BaseCommand {
     command: IRICommand.ADD_NEIGHBORS
@@ -13,35 +14,20 @@ export interface AddNeighborsResponse {
     duration: number
 }
 
+export const validateAddNeighbors = (uris: string[]) => validate([uriArrayValidator(uris)])
+
 /**
  *   @method addNeighbors
  *   @param {Array} uris List of URI's
  *   @returns {Promise}
  **/
-export default function addNeighbors(
-    this: API,
-    uris: string[],
-    callback?: Callback<number>): Promise<number> {
-    
-    const promise: Promise<number> = new Promise((resolve, reject) => {
-        if (!uris.every(uri => isUri(uri))) {
-            reject(new Error(errors.INVALID_URI))
-        }
-
-        resolve(
-            this.sendCommand<AddNeighborsCommand, AddNeighborsResponse>(
-                {
-                    command: IRICommand.ADD_NEIGHBORS,
-                    uris
-                }
-            )
-                .then(res => res.addedNeighbors)
+export const addNeighbors = (uris: string[], callback?: Callback<number>): Promise<number> =>
+    Promise.try(() => validateAddNeighbors(uris))
+        .then(() =>
+            sendCommand<AddNeighborsCommand, AddNeighborsResponse>({
+                command: IRICommand.ADD_NEIGHBORS,
+                uris,
+            })
         )
-    })
-
-    if (typeof callback === 'function') {
-        promise.then(callback.bind(null, null), callback)
-    }
-
-    return promise
-}
+        .then(res => res.addedNeighbors)
+        .asCallback(callback)

@@ -1,19 +1,33 @@
-import errors from '../../errors'
-import { isArrayOfTrytes, isHash } from '../../utils'
-
-import { API, BaseCommand, Callback, IRICommand } from '../types'
+import * as Promise from 'bluebird'
+import * as errors from '../../errors'
+import { hashValidator, mwmValidator, trytesArrayValidator, validate } from '../../utils'
+import { API, BaseCommand, Callback, Hash, IRICommand, Trytes } from '../types'
+import { sendCommand } from './sendCommand'
 
 export interface AttachToTangleCommand extends BaseCommand {
     command: IRICommand.ATTACH_TO_TANGLE
-    trunkTransaction: string
-    branchTransaction: string
+    trunkTransaction: Hash
+    branchTransaction: Hash
     minWeightMagnitude: number
-    trytes: string[]
+    trytes: Trytes[]
 }
 
 export interface AttachToTangleResponse {
-    trytes: string[]
+    trytes: Trytes[]
 }
+
+export const validateAttachToTangle = (
+    trunkTransaction: Hash,
+    branchTransaction: Hash,
+    minWeightMagnitude: number,
+    trytes: Trytes[]
+) =>
+    validate([
+        hashValidator(trunkTransaction),
+        hashValidator(branchTransaction),
+        mwmValidator(minWeightMagnitude),
+        trytesArrayValidator(trytes),
+    ])
 
 /**
  *   @method attachToTangle
@@ -24,53 +38,22 @@ export interface AttachToTangleResponse {
  *   @returns {function} callback
  *   @returns {object} success
  **/
-export default function attachToTangle(
-    this: API,
-    trunkTransaction: string,
-    branchTransaction: string,
+export const attachToTangle = (
+    trunkTransaction: Hash,
+    branchTransaction: Hash,
     minWeightMagnitude: number,
-    trytes: string[],
-    callback?: Callback<string[]>): Promise<string[]> {
-        
-    const promise: Promise<string[]> = new Promise((resolve, reject) => {
-        // Check if correct hash
-        if (!isHash(trunkTransaction)) {
-            return reject(errors.INVALID_TRUNK_TRANSACTION)
-        }
-
-        // Check if correct hash
-        if (!isHash(branchTransaction)) {
-            return reject(errors.INVALID_BRANCH_TRANSACTION)
-        }
-
-        // Check if int
-        if (!Number.isInteger(minWeightMagnitude)) {
-            return reject(errors.INVALID_MIN_WEIGHT_MAGNITUDE)
-        }
-
-        // Check if array of trytes
-        if (!isArrayOfTrytes(trytes)) {
-            return reject(errors.INVALID_TRYTES)
-        }
-
-        resolve(
-            this.sendCommand<AttachToTangleCommand, AttachToTangleResponse>(
-                {
-                    command: IRICommand.ATTACH_TO_TANGLE,
-                    trunkTransaction,
-                    branchTransaction,
-                    minWeightMagnitude,
-                    trytes,
-                }
-            )
-            .then(res => res.trytes)
+    trytes: Trytes[],
+    callback?: Callback<string[]>
+): Promise<string[]> =>
+    Promise.try(() => validateAttachToTangle(trunkTransaction, branchTransaction, minWeightMagnitude, trytes))
+        .then(() =>
+            sendCommand<AttachToTangleCommand, AttachToTangleResponse>({
+                command: IRICommand.ATTACH_TO_TANGLE,
+                trunkTransaction,
+                branchTransaction,
+                minWeightMagnitude,
+                trytes,
+            })
         )
-    })
-
-    // Invoke callback if present
-    if (typeof callback === 'function') {
-        promise.then(callback.bind(null, null), callback)
-    } 
-  
-    return promise
-}
+        .then(res => res.trytes)
+        .asCallback(callback)

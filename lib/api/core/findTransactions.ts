@@ -1,22 +1,19 @@
-import errors from '../../errors'
-import { isArrayOfHashes, isTrytes, noChecksum } from '../../utils'
+import * as Promise from 'bluebird'
+import * as errors from '../../errors'
+import { hashArrayValidator, isArray, padTagArray, removeChecksum, tagArrayValidator, validate } from '../../utils'
 
 import { API, BaseCommand, Callback, IRICommand } from '../types'
+import { sendCommand } from './sendCommand'
 
 export interface FindTransactionsQuery {
-    bundles?: string[]
     addresses?: string[]
-    tags?: string[]
     approvees?: string[]
-    [key: string]: string[] | undefined
+    bundles?: string[]
+    tags?: string[]
 }
 
 export interface FindTransactionsCommand extends BaseCommand, FindTransactionsQuery {
     command: IRICommand.FIND_TRANSACTIONS
-    addresses?: string[]
-    hashes?: string[]
-    bundles?: string[]
-    approvees?: string[]
 }
 
 export interface FindTransactionsResponse {
@@ -24,6 +21,39 @@ export interface FindTransactionsResponse {
 }
 
 const keysOf = <T>(o: T): Array<keyof T> => Object.keys(o) as Array<keyof T>
+const validKeys = ['bundles', 'addresses', 'tags', 'approvees']
+const hasValidKeys = (query: FindTransactionsQuery) => {
+    for (const key of keysOf(query)) {
+        if (validKeys.indexOf(key) === -1 || !isArray(query[key])) {
+            throw new Error(errors.INVALID_KEY)
+        }
+    }
+}
+
+const validateFindTransactions = (query: FindTransactionsQuery) => {
+    hasValidKeys(query)
+
+    const { addresses, approvees, bundles, tags } = query
+    const validators = []
+
+    if (addresses) {
+        validators.push(hashArrayValidator(addresses))
+    }
+
+    if (approvees) {
+        validators.push(hashArrayValidator(approvees))
+    }
+
+    if (bundles) {
+        validators.push(hashArrayValidator(bundles))
+    }
+
+    if (tags) {
+        validators.push(tagArrayValidator(tags))
+    }
+
+    validate(validators)
+}
 
 /**
  *   @method findTransactions
@@ -31,52 +61,18 @@ const keysOf = <T>(o: T): Array<keyof T> => Object.keys(o) as Array<keyof T>
  *   @returns {function} callback
  *   @returns {object} success
  **/
-export default function findTransactions(
-    this: API,
-    query: FindTransactionsQuery,
-    callback?: Callback<string[]>): Promise<string[]> {
-
-    const validKeys = ['bundles', 'addresses', 'tags', 'approvees']
-
-    const promise: Promise<string[]> = new Promise((resolve, reject) => {
-        if (keysOf(query).some(key => validKeys.indexOf(key) === -1 || !Array.isArray(query[key]))) {
-            return reject(new Error(errors.INVALID_SEARCH_KEYS))
-        }
-
-        for (const key of Object.keys(query)) {
-            if (key === 'tags' && (query.tags as Array<keyof FindTransactionsQuery>).some(tag => !isTrytes(tag, 27))) {
-                return reject(new Error(errors.INVALID_TAG))
-            }
-            
-            if (!isArrayOfHashes(query[key] as Array<keyof FindTransactionsQuery>)) {
-                return reject(new Error(errors.INVALID_TRYTES))
-            }
-        }
-
-        if (query.tags) {
-            query.tags = query.tags
-                .map(tag => tag.concat('9').repeat(27 - tag.length))
-        }
-
-        if (query.addresses) {
-            query.addresses = query.addresses
-                .map(address => noChecksum(address))
-        } 
-        
-        resolve(
-            this.sendCommand<FindTransactionsCommand, FindTransactionsResponse>(
-                {
-                    command: IRICommand.FIND_TRANSACTIONS,
-                    ...query
-                }
-            )
-                .then(res => res.hashes)
-        )
-    })
-
-    if (typeof callback === 'function') {
-        promise.then(callback.bind(null, null), callback)
+export const findTransactions = (query: FindTransactionsQuery, callback?: Callback<string[]>): Promise<string[]> => {
+    if (query.tags) {
+        query.tags = padTagArray(query.tags)
     }
 
-    return promise
+    return Promise.try(() => validateFindTransactions(query))
+        .then(() =>
+            sendCommand<FindTransactionsCommand, FindTransactionsResponse>({
+                command: IRICommand.FIND_TRANSACTIONS,
+                ...query,
+            })
+        )
+        .then(res => res.hashes)
+        .asCallback(callback)
 }
