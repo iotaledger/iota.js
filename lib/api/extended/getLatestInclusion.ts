@@ -1,4 +1,6 @@
-import { API, Callback, GetNodeInfoResponse } from '../types'
+import * as Promise from 'bluebird'
+import { getInclusionStates, getNodeInfo } from '../core'
+import { Callback, GetNodeInfoResponse } from '../types'
 
 /**
  *   Wrapper function for getNodeInfo and getInclusionStates
@@ -8,24 +10,14 @@ import { API, Callback, GetNodeInfoResponse } from '../types'
  *   @returns {function} callback
  *   @returns {object} success
  */
-export default function getLatestInclusion(
-    this: API,
+export const getLatestInclusion = (
     transactions: string[],
     callback?: Callback<boolean[]>
-): Promise<boolean[]> {
-
-    // 1. Call getNodeInfo to get latest solid subtangle milestone
-    const promise: Promise<any> = this.getNodeInfo()
-
-        // 2. Query for inclusion states based of that latest mileston
-        .then(nodeInfo => this.getInclusionStates(
+): Promise<boolean[]> =>
+    getNodeInfo()
+        .then(nodeInfo => getInclusionStates(
             transactions, 
             [nodeInfo.latestSolidSubtangleMilestone]
         ))
-  
-    if (typeof callback === 'function') {
-        promise.then(callback.bind(null, null), callback)
-    }
+        .asCallback(callback) 
 
-    return promise 
-}

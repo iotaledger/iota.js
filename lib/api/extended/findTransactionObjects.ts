@@ -1,4 +1,7 @@
-import { API, Callback, FindTransactionsQuery, Transaction } from '../types'
+import * as Promise from 'bluebird'
+import { findTransactions } from '../core'
+import { Callback, FindTransactionsQuery, Transaction } from '../types'
+import { getTransactionObjects } from './'
 
 /**
  *   Wrapper function for findTransactions, getTrytes and transactionObjects
@@ -10,20 +13,10 @@ import { API, Callback, FindTransactionsQuery, Transaction } from '../types'
  *   @returns {function} callback
  *   @returns {object} success
  **/
-export default function findTransactionObjects(
-    this: API,    
+export const findTransactionObjects = (
     query: FindTransactionsQuery,
     callback: Callback<Transaction[]>
-): Promise<Transaction[]> {
-    // Find transaction hashes
-    const promise: Promise<Transaction[]> = this.findTransactions(query)
-
-        // Get the full transaction objects 
-        .then(hashes => this.getTransactionObjects(hashes))
-
-    if (typeof callback === 'function') {
-        promise.then(callback.bind(null, null), callback)
-    }
-
-    return promise
-}
+): Promise<Transaction[]> =>
+    findTransactions(query)
+        .then(getTransactionObjects)
+        .asCallback(callback)

@@ -2,7 +2,7 @@ import * as Promise from 'bluebird'
 import * as errors from '../../errors'
 import { hashArrayValidator, isArray, padTagArray, removeChecksum, tagArrayValidator, validate } from '../../utils'
 
-import { API, BaseCommand, Callback, IRICommand } from '../types'
+import { BaseCommand, Callback, IRICommand } from '../types'
 import { sendCommand } from './sendCommand'
 
 export interface FindTransactionsQuery {
@@ -52,7 +52,7 @@ const validateFindTransactions = (query: FindTransactionsQuery) => {
         validators.push(tagArrayValidator(tags))
     }
 
-    validate(validators)
+    validate(...validators)
 }
 
 /**

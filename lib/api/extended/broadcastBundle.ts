@@ -1,7 +1,9 @@
-import errors from '../../errors'
-import { isHash,  transactionTrytes } from '../../utils'
-
-import { API, Bundle, Callback, Transaction } from '../types'
+import * as Promise from 'bluebird'
+import * as erros from '../../errors'
+import { hashValidator, isHash, transactionsToFinalTrytes, validate } from '../../utils'
+import { broadcastTransactions } from '../core'
+import { Callback, Transaction } from '../types'
+import { getBundle } from './'
 
 /**
  *   Re-broadcasts a transfer by tail transaction
@@ -11,33 +13,13 @@ import { API, Bundle, Callback, Transaction } from '../types'
  *   @param {function} [callback]
  *   @returns {object} Transaction objects
  **/
-export default function broadcastBundle(
-  this: API,
-  tailTransaction: string,
+export const broadcastBundle = (
+  tailTransactionHash: string,
   callback: Callback<void>
-): Promise<void> | void {
-
-    const promise: Promise<void> = new Promise((resolve, reject) => {
-        if (!isHash(tailTransaction)) {
-            return reject(errors.INVALID_TRYTES)
-        }
-
-        resolve(
-            this.getBundle(tailTransaction)
-                .then((bundle: Bundle) =>
-                    this.broadcastTransactions(
-                        bundle
-                            .map((transaction: Transaction) => transactionTrytes(transaction))
-                            .reverse()
-                    )
-                )
-        )
-    })
-
-    if (typeof callback === 'function') {
-        promise.then(callback.bind(null, null), callback)
-        return    
-    }
-
-    return promise
-}
+): Promise<void> =>
+    Promise
+        .try(() => validate(hashValidator(tailTransactionHash)))
+        .then(() => getBundle(tailTransactionHash))
+        .then(transactionsToFinalTrytes)
+        .then(broadcastTransactions)
+        .asCallback(callback) 

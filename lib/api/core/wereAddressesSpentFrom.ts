@@ -18,7 +18,7 @@ export const makeWereAddressesSpentFromCommand = (addresses: string[]) => ({
     addresses,
 })
 
-export const validateWereAddressesSpentFrom = (addresses: Hash[]) => validate([hashArrayValidator(addresses)])
+export const validateWereAddressesSpentFrom = (addresses: Hash[]) => validate(hashArrayValidator(addresses))
 
 /**
  * Check whether addresses have already been spent from, to prevent re-using a one-time signature

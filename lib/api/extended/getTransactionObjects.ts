@@ -1,7 +1,11 @@
+import * as Promise from 'bluebird'
 import * as errors from '../../errors'
-import { isHashArray, transactionObject } from '../../utils'
+import { hashArrayValidator, transactionObject, validate } from '../../utils'
+import { getTrytes } from '../core'
+import { Callback, Transaction } from '../types'
 
-import { API, Callback, Transaction } from '../types'
+export const trytesToTransactionObjects = (trytes: string[]) =>
+    trytes.map((trytesString: string) => transactionObject(trytesString))
 
 /**
  *   Gets the transaction objects, given an array of transaction hashes.
@@ -11,27 +15,14 @@ import { API, Callback, Transaction } from '../types'
  *   @param {function} [callback] - Optional callback
  *   @returns {promise<object[]>}
  */
-export default function getTransactionObjects(
-    this: API,
+export const getTransactionObjects = (
     hashes: string[],
     callback?: Callback<Transaction[]>
-): Promise<Transaction[]> {
-    const promise: Promise<Transaction[]> = new Promise((resolve, reject) => {
-        if (!isHashArray(hashes)) {
-            return reject(errors.INVALID_INPUTS)
-        }
-
-        // Get the transaction trytes and map to transaction objects
-        resolve(
-            this.getTrytes(hashes).then((trytes: string[]) =>
-                trytes.map((transactionTrytes: string) => transactionObject(transactionTrytes))
-            )
-        )
-    })
-
-    if (typeof callback === 'function') {
-        promise.then(callback.bind(null, null), callback)
-    }
-
-    return promise
-}
+): Promise<Transaction[]> =>
+    Promise
+        .try(validate(
+            hashArrayValidator(hashes)
+        ))
+        .then(() => getTrytes(hashes))
+        .then(trytesToTransactionObjects)
+        .asCallback(callback)

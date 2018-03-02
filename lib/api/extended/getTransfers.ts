@@ -1,7 +1,8 @@
-import errors from '../../errors'
-import { isTrytes } from '../../utils'
-
-import { API, Bundle, Callback } from '../types'
+import * as Promise from 'bluebird'
+import * as errors from '../../errors'
+import { indexValidator, securityLevelValidator, seedValidator, startEndOptionsValidator, validate } from '../../utils'
+import { Bundle, Callback, GetNewAddressOptions } from '../types'
+import { getBundlesFromAddresses, getNewAddress } from './'
 
 export interface GetTransfersOptions {
     start?: number
@@ -9,6 +10,17 @@ export interface GetTransfersOptions {
     inclusionStates?: boolean
     security?: number
 }
+
+export const getNewAddressOptions = (
+    start: number,
+    end: number,
+    security: number = 2
+): GetNewAddressOptions => ({
+    index: start,
+    total: end ? end - start : undefined,
+    returnAll: true,
+    security,
+})
 
 /**
  *   @method getTransfers
@@ -21,8 +33,7 @@ export interface GetTransfersOptions {
  *   @param {function} callback
  *   @returns {object} success
  */
-export default function getTransfers(
-    this: API,
+export const getTransfers = (
     seed: string,
     {
       start = 0,
@@ -31,35 +42,15 @@ export default function getTransfers(
       security = 2
     }: GetTransfersOptions = {},
     callback?: Callback<Bundle[]>
-): Promise<Bundle[]> {
-
-    const promise: Promise<Bundle[]> = new Promise((resolve, reject) => { 
-        if (!isTrytes(seed)) {
-            return reject(errors.INVALID_SEED)
-        }
-
-        // Reject if start value bigger than end, 
-        // or if difference between end and start is bigger than 500 keys
-        if (end && (start > end! || end! > start + 500)) {
-            return reject(errors.INVALID_INPUTS)
-        }
-
-        // 1. Get all addresses associated with the given seed
-        resolve(
-            this.getNewAddress(seed, {
-                index: start,
-                total: end ? end - start : undefined,
-                returnAll: true,
-                security,
-            })
-                // 2. Get the associated bundles 
-                .then((addresses) => this.bundlesFromAddresses(addresses, inclusionStates, callback))
-        )
-    })
-    
-    if (typeof callback === 'function') {
-        promise.then(callback.bind(null, null), callback)
-    }
-    
-    return promise
-}
+): Promise<Bundle[]> =>
+    Promise
+        .try(validate(
+            seedValidator(seed),
+            securityLevelValidator(security),
+            indexValidator(start),
+            startEndOptionsValidator({start, end})
+        ))
+        .then(() => getNewAddressOptions(start, end, security))
+        .then((options) => getNewAddress(seed, options))
+        .then((addresses) => getBundlesFromAddresses(addresses as string[], inclusionStates))
+        .asCallback(callback)

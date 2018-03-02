@@ -1,7 +1,10 @@
-import errors from '../../errors'
-import { isBundle, isHash } from '../../utils'
+import * as Promise from 'bluebird'
+import * as errors from '../../errors'
+import { bundleValidator, hashValidator, validate } from '../../utils'
+import { Bundle, Callback, Transaction } from '../types' 
+import { traverseBundle } from './'
 
-import { API, Bundle, Callback, Transaction } from '../types' 
+export const validateBundle = (bundle: Bundle) => validate(bundleValidator(bundle))
 
 /**
  *   Gets and validates the bundle of a given the tail transaction.
@@ -10,31 +13,17 @@ import { API, Bundle, Callback, Transaction } from '../types'
  *   @param {string} transaction Hash of a tail transaction
  *   @returns {list} bundle Transaction objects
  **/
-export default function getBundle(
-    this: API,
-    tailTransaction: string,
-    callback?: Callback<Bundle[] | void>
-): Promise<Bundle | void> {
-
-    const promise: Promise<Bundle | void> = new Promise((resolve, reject) => {
-        if (!isHash(tailTransaction)) {
-            return reject(errors.INVALID_INPUTS)
-        }
-
-        resolve(
-            this.traverseBundle(tailTransaction, null, [])
-            .then((bundle: Bundle | void) => {
-                    if (bundle && !isBundle(bundle)) {
-                        return reject(errors.INVALID_BUNDLE)
-                    }
-                    resolve(bundle)
-                })
-        )
-    })
-   
-    if (typeof callback === 'function') {
-        promise.then(callback.bind(null, null), callback)
-    }
-
-    return promise
-}
+export const getBundle = (
+    tailTransactionHash: string,
+    callback?: Callback<Bundle[]>
+): Promise<Bundle> =>
+    Promise
+        .try(() => validate(
+            hashValidator(tailTransactionHash)
+        ))
+        .then(() => traverseBundle(tailTransactionHash))
+        .then((bundle) => {
+            validateBundle(bundle)
+            return bundle
+        })
+        .asCallback(callback)

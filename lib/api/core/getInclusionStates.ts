@@ -17,7 +17,7 @@ export interface GetInclusionStatesResponse {
 }
 
 export const validateGetInclusionStates = (transactions: Hash[], tips: Hash[]) =>
-    validate([hashArrayValidator(transactions), hashArrayValidator(tips)])
+    validate(hashArrayValidator(transactions), hashArrayValidator(tips))
 
 /**
  *   @method getInclusionStates

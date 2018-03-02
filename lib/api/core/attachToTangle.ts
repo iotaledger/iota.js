@@ -22,12 +22,12 @@ export const validateAttachToTangle = (
     minWeightMagnitude: number,
     trytes: Trytes[]
 ) =>
-    validate([
+    validate(
         hashValidator(trunkTransaction),
         hashValidator(branchTransaction),
         mwmValidator(minWeightMagnitude),
         trytesArrayValidator(trytes),
-    ])
+    )
 
 /**
  *   @method attachToTangle

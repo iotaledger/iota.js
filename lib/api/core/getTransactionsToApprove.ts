@@ -16,7 +16,7 @@ export interface GetTransactionsToApproveCommand extends BaseCommand {
     reference?: string
 }
 
-export const validateGetTransactionsToApprove = (depth: number) => validate([depthValidator(depth)])
+export const validateGetTransactionsToApprove = (depth: number) => validate(depthValidator(depth))
 
 /**
  * @method getTransactionsToApprove

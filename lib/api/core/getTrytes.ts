@@ -13,7 +13,7 @@ export interface GetTrytesResponse {
     trytes: string[]
 }
 
-export const validateGetTrytes = (hashes: Hash[]) => validate([hashArrayValidator(hashes)])
+export const validateGetTrytes = (hashes: Hash[]) => validate(hashArrayValidator(hashes))
 
 /**
  *   @method getTrytes

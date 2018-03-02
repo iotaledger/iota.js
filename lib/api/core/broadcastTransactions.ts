@@ -11,7 +11,8 @@ export interface BroadcastTransactionsCommand extends BaseCommand {
 
 export type BroadcastTransactionsResponse = void
 
-export const validateBroadcastTransactions = (trytes: Trytes[]) => validate([attachedTrytesArrayValidator(trytes)])
+export const validateBroadcastTransactions = (trytes: Trytes[]) =>
+    validate(attachedTrytesArrayValidator(trytes))
 
 /**
  *   @method broadcastTransactions
@@ -20,7 +21,8 @@ export const validateBroadcastTransactions = (trytes: Trytes[]) => validate([att
  *   @returns {object} success
  **/
 export const broadcastTransactions = (trytes: Trytes[], callback?: Callback<void>): Promise<void> =>
-    Promise.try(() => validateBroadcastTransactions(trytes))
+    Promise
+        .try(() => validateBroadcastTransactions(trytes))
         .then(() =>
             sendCommand<BroadcastTransactionsCommand, BroadcastTransactionsResponse>({
                 command: IRICommand.BROADCAST_TRANSACTIONS,

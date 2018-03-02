@@ -11,7 +11,7 @@ export interface StoreTransactionsCommand extends BaseCommand {
 
 export type StoreTransactionsResponse = void
 
-export const validateStoreTransactions = (trytes: Trytes[]) => validate([attachedTrytesArrayValidator(trytes)])
+export const validateStoreTransactions = (trytes: Trytes[]) => validate(attachedTrytesArrayValidator(trytes))
 
 /**
  *   @method storeTransactions

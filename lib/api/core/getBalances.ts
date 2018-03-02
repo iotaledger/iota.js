@@ -18,7 +18,10 @@ export interface GetBalancesResponse {
 }
 
 export const validateGetBalances = (addresses: Hash[], threshold: number) =>
-    validate([hashArrayValidator(addresses), thresholdValidator(threshold)])
+    validate(
+        hashArrayValidator(addresses),
+        thresholdValidator(threshold)
+    )
 
 export const getBalances = (
     addresses: Hash[],

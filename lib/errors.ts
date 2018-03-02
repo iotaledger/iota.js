@@ -32,5 +32,6 @@ export const ILLEGAL_TRIT_CONVERSION_INPUT = 'Illegal conversion input. Expected
 export const ILLEGAL_TRYTE_CONVERSION_INPUT = 'Illegal conversion input. Expected trits as Int8Array.'
 export const ILLEGAL_LENGTH = 'Illegal trits length'
 export const INSUFFICIENT_BALANCE = 'Insufficient balance'
+export const INVALID_TAIL_TRANSACTION = 'Invalid tail transaction'
 
 export const requestError = (statusText: string) => `Request Error: ${statusText}`

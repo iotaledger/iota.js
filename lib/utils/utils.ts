@@ -450,3 +450,8 @@ export function isBundle(bundle: Transaction[]) {
 
     return true
 }
+
+export const transactionsToFinalTrytes = (transactions: Transaction[]) =>
+    transactions
+        .map(transactionTrytes)
+        .reverse()

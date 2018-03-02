@@ -14,7 +14,7 @@ export interface AddNeighborsResponse {
     duration: number
 }
 
-export const validateAddNeighbors = (uris: string[]) => validate([uriArrayValidator(uris)])
+export const validateAddNeighbors = (uris: string[]) => validate(uriArrayValidator(uris))
 
 /**
  *   @method addNeighbors

@@ -106,8 +106,12 @@ export const isUri = (uri: string): boolean => {
 export const isUriArray = (uris: string[]): boolean => isArray(uris) && uris.every(isUri)
 
 /* Check if start & end options are valid */
-export const isStartEndOptions = (start: number, end: number): boolean => !!(end && (start > end || end > start + 500))
+export const isStartEndOptions = ({ start, end }: {start: number, end: number}): boolean => !!(end && (start > end || end > start + 500))
 
 export const isTag = (tag: string): tag is Tag => isTrytes(tag, TAG_SIZE)
 
 export const isTagArray = (tags: string[]): tags is Tag[] => tags.every(isTag)
+
+export const isSecurityLevel = (security: number): boolean => Number.isInteger(security) && security > 0
+
+export const isTailTransaction = (transaction: Transaction): boolean => transaction.currentIndex !== 0

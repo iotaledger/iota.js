@@ -13,7 +13,7 @@ export interface CheckConsistencyResponse {
     state: boolean
 }
 
-export const validateCheckConsistency = (transactions: string[]) => validate([hashArrayValidator(transactions)])
+export const validateCheckConsistency = (transactions: string[]) => validate(hashArrayValidator(transactions))
 
 export const checkConsistency = (transactions: string | string[], callback?: Callback<boolean>): Promise<boolean> => {
     const transactionsArray = asArray(transactions)

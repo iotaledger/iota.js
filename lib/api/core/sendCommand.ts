@@ -1,5 +1,5 @@
 import * as Promise from 'bluebird'
-import { API, BaseCommand, BatchableCommand, batchableKeys, Callback, IRICommand, Settings } from '../types'
+import { BaseCommand, BatchableCommand, batchableKeys, Callback, IRICommand, Settings } from '../types'
 
 import { defaultSettings } from '../'
 import { batchedSend, send } from '../../utils'

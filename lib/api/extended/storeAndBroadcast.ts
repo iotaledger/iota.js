@@ -1,4 +1,7 @@
-import { API, Callback } from '../types'
+import * as Promise from 'bluebird'
+import { broadcastTransactions, storeTransactions } from '../core'
+import { Callback } from '../types'
+
 /**
  *   Broadcasts and stores transaction trytes
  *
@@ -7,18 +10,10 @@ import { API, Callback } from '../types'
  *   @returns {function} callback
  *   @returns {object} success
  **/
-export default function storeAndBroadcast(
-    this: API,
+export const storeAndBroadcast = (
     trytes: string[],
     callback?: Callback<void>
-): Promise<void> {
-
-    const promise: Promise<void> = this.storeTransactions(trytes)
-        .then(() => this.broadcastTransactions(trytes, callback))
-
-    if (typeof callback === 'function') {
-        promise.then(callback.bind(null, null), callback)
-    }
-
-    return promise
-}
+): Promise<void> =>
+      storeTransactions(trytes)
+      .then(() => broadcastTransactions(trytes))
+      .asCallback(callback)

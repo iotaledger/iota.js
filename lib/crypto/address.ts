@@ -1,6 +1,6 @@
+import { addChecksum } from '../utils'
 import Converter from './Converter'
 import Signing from './Signing'
-import { addChecksum } from '../../utils'
 
 /**
  *  Generates a new address
@@ -23,5 +23,5 @@ export const generateAddress = (
     const address = Converter.trytes(Signing.address(digests))
    	return checksum
 				? addChecksum(address)
-				: address
+        : address
 }

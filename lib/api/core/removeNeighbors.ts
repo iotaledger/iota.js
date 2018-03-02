@@ -14,7 +14,7 @@ export interface RemoveNeighborsResponse {
     duration: number
 }
 
-export const validateRemoveNeighbors = (uris: string[]) => validate([uriArrayValidator(uris)])
+export const validateRemoveNeighbors = (uris: string[]) => validate(uriArrayValidator(uris))
 
 /**
  *   @method removeNeighbors
