@@ -18,10 +18,7 @@ export interface GetBalancesResponse {
 }
 
 export const validateGetBalances = (addresses: Hash[], threshold: number) =>
-    validate(
-        hashArrayValidator(addresses),
-        thresholdValidator(threshold)
-    )
+    validate(hashArrayValidator(addresses), thresholdValidator(threshold))
 
 export const getBalances = (
     addresses: Hash[],
@@ -31,9 +28,7 @@ export const getBalances = (
     // Addresses passed to IRI should not have the checksum
     addresses = removeChecksum(addresses)
 
-    return Promise.try(() => {
-        validateGetBalances(addresses, threshold)
-    })
+    return Promise.resolve(validateGetBalances(addresses, threshold))
         .then(() => {
             return sendCommand<GetBalancesCommand, GetBalancesResponse>({
                 command: IRICommand.GET_BALANCES,

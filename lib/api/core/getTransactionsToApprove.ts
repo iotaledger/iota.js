@@ -30,7 +30,7 @@ export const getTransactionsToApprove = (
     reference?: string, // this is missing in IRI docs?
     callback?: Callback<GetTransactionsToApproveResponse>
 ): Promise<GetTransactionsToApproveResponse> =>
-    Promise.try(() => validateGetTransactionsToApprove(depth))
+    Promise.resolve(validateGetTransactionsToApprove(depth))
         .then(() =>
             sendCommand<GetTransactionsToApproveCommand, GetTransactionsToApproveResponse>({
                 command: IRICommand.GET_TRANSACTIONS_TO_APPROVE,

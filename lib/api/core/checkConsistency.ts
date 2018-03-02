@@ -18,7 +18,7 @@ export const validateCheckConsistency = (transactions: string[]) => validate(has
 export const checkConsistency = (transactions: string | string[], callback?: Callback<boolean>): Promise<boolean> => {
     const transactionsArray = asArray(transactions)
 
-    return Promise.try(() => validateCheckConsistency(transactionsArray))
+    return Promise.resolve(validateCheckConsistency(transactionsArray))
         .then(() =>
             sendCommand<CheckConsistencyCommand, CheckConsistencyResponse>({
                 command: IRICommand.CHECK_CONSISTENCY,

@@ -1,14 +1,11 @@
-import { API, Callback } from '../types'
+import * as Promise from 'bluebird'
+import { checkConsistency } from '../core'
+import { Callback } from '../types'
 
 /**
  *  @method isPromotable
  *  @deprecated
  *  @alias checkConsistency
  */
-export default function isPromotable(
-    this: API,
-    transactions: string | string[],
-    callback?: Callback<boolean>
-): Promise<boolean> {
-    return this.checkConsistency(transactions, callback)
-} 
+export const isPromotable = (transactions: string | string[], callback?: Callback<boolean>): Promise<boolean> =>
+    checkConsistency(transactions, callback)

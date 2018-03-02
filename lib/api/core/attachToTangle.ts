@@ -26,7 +26,7 @@ export const validateAttachToTangle = (
         hashValidator(trunkTransaction),
         hashValidator(branchTransaction),
         mwmValidator(minWeightMagnitude),
-        trytesArrayValidator(trytes),
+        trytesArrayValidator(trytes)
     )
 
 /**
@@ -45,7 +45,7 @@ export const attachToTangle = (
     trytes: Trytes[],
     callback?: Callback<string[]>
 ): Promise<string[]> =>
-    Promise.try(() => validateAttachToTangle(trunkTransaction, branchTransaction, minWeightMagnitude, trytes))
+    Promise.resolve(validateAttachToTangle(trunkTransaction, branchTransaction, minWeightMagnitude, trytes))
         .then(() =>
             sendCommand<AttachToTangleCommand, AttachToTangleResponse>({
                 command: IRICommand.ATTACH_TO_TANGLE,

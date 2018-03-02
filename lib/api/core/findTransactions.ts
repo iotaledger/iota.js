@@ -66,7 +66,7 @@ export const findTransactions = (query: FindTransactionsQuery, callback?: Callba
         query.tags = padTagArray(query.tags)
     }
 
-    return Promise.try(() => validateFindTransactions(query))
+    return Promise.resolve(validateFindTransactions(query))
         .then(() =>
             sendCommand<FindTransactionsCommand, FindTransactionsResponse>({
                 command: IRICommand.FIND_TRANSACTIONS,

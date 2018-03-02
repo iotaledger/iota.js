@@ -22,7 +22,7 @@ export const validateAddNeighbors = (uris: string[]) => validate(uriArrayValidat
  *   @returns {Promise}
  **/
 export const addNeighbors = (uris: string[], callback?: Callback<number>): Promise<number> =>
-    Promise.try(() => validateAddNeighbors(uris))
+    Promise.resolve(validateAddNeighbors(uris))
         .then(() =>
             sendCommand<AddNeighborsCommand, AddNeighborsResponse>({
                 command: IRICommand.ADD_NEIGHBORS,

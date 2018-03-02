@@ -31,7 +31,7 @@ export const getInclusionStates = (
     tips: string[],
     callback?: Callback<boolean[]>
 ): Promise<boolean[]> =>
-    Promise.try(() => validateGetInclusionStates(transactions, tips))
+    Promise.resolve(validateGetInclusionStates(transactions, tips))
         .then(() =>
             sendCommand<GetInclusionStatesCommand, GetInclusionStatesResponse>({
                 command: IRICommand.GET_INCLUSION_STATES,

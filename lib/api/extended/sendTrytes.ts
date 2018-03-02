@@ -1,7 +1,9 @@
-import errors from '../../errors'
-import { transactionObject } from '../../utils'
-
-import { API, Bundle, Callback } from '../types'
+import * as Promise from 'bluebird'
+import * as errors from '../../errors'
+import { asTransactionObject, depthValidator, mwmValidator, validate } from '../../utils'
+import { attachToTangle, getTransactionsToApprove } from '../core'
+import { Bundle, Callback } from '../types'
+import { storeAndBroadcast } from './index'
 
 /**
  *   Gets transactions to approve, attaches to Tangle, broadcasts and stores
@@ -14,53 +16,25 @@ import { API, Bundle, Callback } from '../types'
  *   @param {function} callback
  *   @returns {object} analyzed Transaction objects
  **/
-export default function sendTrytes(
-    this: API,
+export const sendTrytes = (
     trytes: string[],
     depth: number,
     minWeightMagnitude: number,
     options?: any,
     callback?: Callback<Bundle>
-): Promise<Bundle> {
+): Promise<Bundle> => {
     // If no options provided, switch arguments
-    if (arguments.length === 4 && typeof options === 'function') {
+    if (options && typeof options === 'function') {
         callback = options
         options = {}
     }
 
-    const promise: Promise<Bundle> = new Promise((resolve, reject) => {
-        if (!Number.isInteger(depth)) {
-            return reject(errors.INVALID_DEPTH)
-        }
-        
-        if (!Number.isInteger(minWeightMagnitude)) {
-            return reject(errors.INVALID_MIN_WEIGHT_MAGNITUDE)
-        }
-
-        resolve(
-            // 1. Tip selection: Get a pair of transactions to approve
-            this.getTransactionsToApprove(depth, options.reference)
-
-                // 2. Do Proof-of-Work and attach transactions to tangle
-                .then(({ trunkTransaction, branchTransaction }) => this.attachToTangle(
-                    trunkTransaction,
-                    branchTransaction,
-                    minWeightMagnitude,
-                    trytes
-                ))
-
-                // 3. Broadcast and store transactions
-                .then(attachedTrytes => this.storeAndBroadcast(attachedTrytes)
-                    .then(() => attachedTrytes
-                        .map(tryteString => transactionObject(tryteString))
-                    )
-                )
+    return Promise.resolve(validate(depthValidator(depth), mwmValidator(minWeightMagnitude)))
+        .then(() => getTransactionsToApprove(depth, options.reference))
+        .then(({ trunkTransaction, branchTransaction }) =>
+            attachToTangle(trunkTransaction, branchTransaction, minWeightMagnitude, trytes)
         )
-    })
-
-    if (typeof callback === 'function') {
-        promise.then(callback.bind(null, null), callback)
-    }
-
-    return promise
+        .tap(storeAndBroadcast)
+        .then(attachedTrytes => attachedTrytes.map(asTransactionObject))
+        .asCallback(callback)
 }

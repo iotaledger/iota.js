@@ -22,7 +22,7 @@ export const validateGetTrytes = (hashes: Hash[]) => validate(hashArrayValidator
  *   @returns {object} success
  **/
 export const getTrytes = (hashes: string[], callback?: Callback<string[]>): Promise<string[]> =>
-    Promise.try(() => validateGetTrytes(hashes))
+    Promise.resolve(validateGetTrytes(hashes))
         .then(() =>
             sendCommand<GetTrytesCommand, GetTrytesResponse>({
                 command: IRICommand.GET_TRYTES,

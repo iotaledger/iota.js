@@ -20,7 +20,7 @@ export const validateStoreTransactions = (trytes: Trytes[]) => validate(attached
  *   @returns {object} success
  **/
 export const storeTransactions = (trytes: Trytes[], callback?: Callback<void>): Promise<void> =>
-    Promise.try(() => validateStoreTransactions(trytes))
+    Promise.resolve(validateStoreTransactions(trytes))
         .then(() =>
             sendCommand<StoreTransactionsCommand, StoreTransactionsResponse>({
                 command: IRICommand.STORE_TRANSACTIONS,

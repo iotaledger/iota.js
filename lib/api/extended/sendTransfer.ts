@@ -1,6 +1,8 @@
-import errors from '../../errors'
-
-import { API, Bundle, Callback, Transfer } from '../types'
+import * as Promise from 'bluebird'
+import * as errors from '../../errors'
+import { depthValidator, mwmValidator, seedValidator, validate } from '../../utils'
+import { Bundle, Callback, Transfer, Trytes } from '../types'
+import { prepareTransfers, sendTrytes } from './index'
 
 /**
  *   Prepares Transfer, gets transactions to approve
@@ -17,43 +19,22 @@ import { API, Bundle, Callback, Transfer } from '../types'
  *   @param {function} callback
  *   @returns {object} analyzed Transaction objects
  **/
-export default function sendTransfer(
-    this: API,
+export const sendTransfer = (
     seed: string,
     depth: number,
     minWeightMagnitude: number,
     transfers: Transfer[],
     options?: any,
     callback?: Callback<Bundle>
-): Promise<Bundle> {
-
+): Promise<Bundle> => {
     // If no options provided, switch arguments
-    if (arguments.length === 5 && Object.prototype.toString.call(options) === '[object Function]') {
+    if (options && typeof options === 'function') {
         callback = options
         options = {}
     }
 
-    const promise: Promise<Bundle> = new Promise((resolve, reject) => {
-        if (!Number.isInteger(depth)) {
-            return reject(errors.INVALID_DEPTH)
-        }
-
-        if (!Number.isInteger(minWeightMagnitude)) {
-            return reject(errors.INVALID_MIN_WEIGHT_MAGNITUDE)
-        }
-
-        resolve(
-            // 1. Prepare transfers: Check balances & inputs, sign and return the transaction trytes
-            this.prepareTransfers(seed, transfers, options)
-           
-                // 2. Attach transactions to tangle
-                .then((trytes: string[]) => this.sendTrytes(trytes, depth, minWeightMagnitude, options))
-        )
-    })
-
-    if (typeof callback === 'function') {
-        promise.then(callback.bind(null, null), callback)
-    }
-
-    return promise
+    return Promise.resolve(validate(depthValidator(depth), seedValidator(seed), mwmValidator(minWeightMagnitude)))
+        .then(() => prepareTransfers(seed, transfers, options))
+        .then((trytes: Trytes[]) => sendTrytes(trytes, depth, minWeightMagnitude, options))
+        .asCallback(callback)
 }

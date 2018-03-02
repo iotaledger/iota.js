@@ -1,4 +1,4 @@
-import errors from '../../errors'
+import * as errors from '../../errors'
 import { isHash, isTransfersArray } from '../../utils'
 
 import { API, Callback, Transaction, Transfer } from '../types'

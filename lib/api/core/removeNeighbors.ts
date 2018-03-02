@@ -23,7 +23,7 @@ export const validateRemoveNeighbors = (uris: string[]) => validate(uriArrayVali
  *   @returns {object} success
  **/
 export const removeNeighbors = (uris: string[], callback?: Callback<number>): Promise<number> =>
-    Promise.try(() => validateRemoveNeighbors(uris))
+    Promise.resolve(validateRemoveNeighbors(uris))
         .then(() =>
             sendCommand<RemoveNeighborsCommand, RemoveNeighborsResponse>({
                 command: IRICommand.REMOVE_NEIGHBORS,

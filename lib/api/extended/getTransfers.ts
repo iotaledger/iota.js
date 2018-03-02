@@ -2,7 +2,7 @@ import * as Promise from 'bluebird'
 import * as errors from '../../errors'
 import { indexValidator, securityLevelValidator, seedValidator, startEndOptionsValidator, validate } from '../../utils'
 import { Bundle, Callback, GetNewAddressOptions } from '../types'
-import { getBundlesFromAddresses, getNewAddress } from './'
+import { getBundlesFromAddresses, getNewAddress } from './index'
 
 export interface GetTransfersOptions {
     start?: number
@@ -11,11 +11,11 @@ export interface GetTransfersOptions {
     security?: number
 }
 
-export const getNewAddressOptions = (
+export const getNewAddressOptions2 = (
     start: number,
     end: number,
     security: number = 2
-): GetNewAddressOptions => ({
+): Partial<GetNewAddressOptions> => ({
     index: start,
     total: end ? end - start : undefined,
     returnAll: true,
@@ -35,22 +35,18 @@ export const getNewAddressOptions = (
  */
 export const getTransfers = (
     seed: string,
-    {
-      start = 0,
-      end,
-      inclusionStates = false,
-      security = 2
-    }: GetTransfersOptions = {},
+    { start = 0, end, inclusionStates = false, security = 2 }: GetTransfersOptions = {},
     callback?: Callback<Bundle[]>
 ): Promise<Bundle[]> =>
-    Promise
-        .try(validate(
+    Promise.resolve(
+        validate(
             seedValidator(seed),
             securityLevelValidator(security),
             indexValidator(start),
-            startEndOptionsValidator({start, end})
-        ))
-        .then(() => getNewAddressOptions(start, end, security))
-        .then((options) => getNewAddress(seed, options))
-        .then((addresses) => getBundlesFromAddresses(addresses as string[], inclusionStates))
+            startEndOptionsValidator({ start, end })
+        )
+    )
+        .then(() => getNewAddressOptions2(start, end, security))
+        .then(options => getNewAddress(seed, options))
+        .then(addresses => getBundlesFromAddresses(addresses as string[], inclusionStates))
         .asCallback(callback)

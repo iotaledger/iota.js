@@ -94,6 +94,7 @@ export interface Transaction {
     attachmentTimestampLowerBound: number
     attachmentTimestampUpperBound: number
     nonce: string
+    persistence?: boolean
 }
 
 /* Bundle object */

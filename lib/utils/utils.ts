@@ -15,7 +15,7 @@ enum Unit {
     Pi = 'Pi',
 }
 
-export const asArray = (x: any) => (Array.isArray(x) ? x : [x])
+export const asArray = <T>(x: T | T[]): T[] => (Array.isArray(x) ? x : [x])
 
 export const pad9s = (length: number) => (trytes: Trytes) => {
     if (trytes.length > length) {
@@ -129,9 +129,9 @@ export function addChecksum(inputValue: string | string[], checksumLength: numbe
  *   @param {string | list} address
  *   @returns {string | list} address (without checksum)
  **/
-export function removeChecksum(address: string): string
-export function removeChecksum(address: string[]): string[]
-export function removeChecksum(address: string | string[]) {
+export function removeChecksum(address: Trytes): Trytes
+export function removeChecksum(address: Trytes[]): Trytes[]
+export function removeChecksum(address: Trytes | Trytes[]) {
     if (typeof address === 'string' && address.length === 81) {
         return address
     }
@@ -154,7 +154,7 @@ export function removeChecksum(address: string | string[]) {
  *   @param {string} addressWithChecksum
  *   @returns {bool}
  **/
-export const isValidChecksum = (addressWithChecksum: string): boolean =>
+export const isValidChecksum = (addressWithChecksum: Trytes): boolean =>
     addressWithChecksum === addChecksum(removeChecksum(addressWithChecksum))
 
 /**
@@ -164,7 +164,7 @@ export const isValidChecksum = (addressWithChecksum: string): boolean =>
  *   @param {string} trytes
  *   @returns {String} transactionObject
  **/
-export function transactionObject(trytes: string): Transaction {
+export function asTransactionObject(trytes: Trytes): Transaction {
     if (!trytes) {
         throw new Error(errors.INVALID_TRYTES)
     }
@@ -451,7 +451,4 @@ export function isBundle(bundle: Transaction[]) {
     return true
 }
 
-export const transactionsToFinalTrytes = (transactions: Transaction[]) =>
-    transactions
-        .map(transactionTrytes)
-        .reverse()
+export const transactionsToFinalTrytes = (transactions: Transaction[]) => transactions.map(transactionTrytes).reverse()

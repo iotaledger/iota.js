@@ -1,8 +1,8 @@
-import * as Promise form 'bluebird'
+import * as Promise from 'bluebird'
 import * as errors from '../../errors'
 import { hashValidator, integerValidator, mwmValidator, transactionTrytes, validate } from '../../utils'
 import { Bundle, Callback } from '../types'
-import { getBundle, sendTrytes } from './'
+import { getBundle, sendTrytes } from './index'
 
 /**
  *   Replays a transfer by doing Proof of Work again
@@ -20,15 +20,8 @@ export const replayBundle = (
     minWeightMagnitude: number,
     callback?: Callback<Bundle>
 ): Promise<Bundle> =>
-    Promise
-        .try(
-            validate(
-                hashValidator(tail),
-                integerValidator(depth),
-                mwmValidator(minWeightMagnitude)
-            )
-        )
+    Promise.resolve(validate(hashValidator(tail), integerValidator(depth), mwmValidator(minWeightMagnitude)))
         .then(() => getBundle(tail))
-        .then((bundle: Bundle) => bundle.map((transaction) => transactionTrytes(transaction)).reverse())
+        .then((bundle: Bundle) => bundle.map(transaction => transactionTrytes(transaction)).reverse())
         .then((trytes: string) => sendTrytes(trytes, depth, minWeightMagnitude))
         .asCallback(callback)

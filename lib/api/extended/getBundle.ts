@@ -1,7 +1,7 @@
 import * as Promise from 'bluebird'
 import * as errors from '../../errors'
 import { bundleValidator, hashValidator, validate } from '../../utils'
-import { Bundle, Callback, Transaction } from '../types' 
+import { Bundle, Callback, Transaction } from '../types'
 import { traverseBundle } from './'
 
 export const validateBundle = (bundle: Bundle) => validate(bundleValidator(bundle))
@@ -13,17 +13,8 @@ export const validateBundle = (bundle: Bundle) => validate(bundleValidator(bundl
  *   @param {string} transaction Hash of a tail transaction
  *   @returns {list} bundle Transaction objects
  **/
-export const getBundle = (
-    tailTransactionHash: string,
-    callback?: Callback<Bundle[]>
-): Promise<Bundle> =>
-    Promise
-        .try(() => validate(
-            hashValidator(tailTransactionHash)
-        ))
+export const getBundle = (tailTransactionHash: string, callback?: Callback<Bundle[]>): Promise<Bundle> =>
+    Promise.resolve(validate(hashValidator(tailTransactionHash)))
         .then(() => traverseBundle(tailTransactionHash))
-        .then((bundle) => {
-            validateBundle(bundle)
-            return bundle
-        })
+        .tap(validateBundle)
         .asCallback(callback)

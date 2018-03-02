@@ -1,4 +1,5 @@
 export * from './asciiToTrytes'
+export * from './constants'
 export * from './extractJson'
 export * from './guards'
 export * from './request'

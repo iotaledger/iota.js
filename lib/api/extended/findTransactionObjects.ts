@@ -1,7 +1,7 @@
 import * as Promise from 'bluebird'
 import { findTransactions } from '../core'
 import { Callback, FindTransactionsQuery, Transaction } from '../types'
-import { getTransactionObjects } from './'
+import { getTransactionObjects } from './getTransactionObjects'
 
 /**
  *   Wrapper function for findTransactions, getTrytes and transactionObjects
@@ -15,7 +15,7 @@ import { getTransactionObjects } from './'
  **/
 export const findTransactionObjects = (
     query: FindTransactionsQuery,
-    callback: Callback<Transaction[]>
+    callback?: Callback<Transaction[]>
 ): Promise<Transaction[]> =>
     findTransactions(query)
         .then(getTransactionObjects)
