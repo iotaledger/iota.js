@@ -1,4 +1,4 @@
-import { Bundle, Transaction } from '../api/types'
+import { Bundle, Transaction, Transfer } from '../api/types'
 import * as errors from '../errors'
 import { isBundle } from './'
 import {
@@ -11,6 +11,7 @@ import {
     isTag,
     isTagArray,
     isTailTransaction,
+    isTransfersArray,
     isTrytes,
     isTrytesArray,
     isUriArray,
@@ -18,7 +19,7 @@ import {
 
 export type Validatable<T = any> = [T, (x: T) => boolean, string]
 
-type Validator<T> = (x: T) => Validatable<T>
+export type Validator<T> = (x: T) => Validatable<T>
 
 /**
  * Runs each validator in sequence, and throws on the first occurence of invalid data
@@ -72,3 +73,8 @@ export const thresholdValidator: Validator<number> = threshold => [threshold, is
 export const trytesValidator: Validator<string> = trytes => [trytes, isTrytes, errors.INVALID_TRYTES]
 export const trytesArrayValidator: Validator<string[]> = trytes => [trytes, isTrytesArray, errors.INVALID_TRYTES_ARRAY]
 export const uriArrayValidator: Validator<string[]> = uris => [uris, isUriArray, errors.INVALID_URI]
+export const remainderAddressValidator: Validator<string | undefined> = remainderAddress =>
+    [remainderAddress, (address: string | undefined): boolean => !address || isHash(address), errors.INVALID_ADDRESS]
+export const transferArrayValidator: Validator<Transfer[]> = transfers => [transfers, isTransfersArray, errors.INVALID_TRANSFERS]
+
+

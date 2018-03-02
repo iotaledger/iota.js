@@ -1,9 +1,8 @@
-import errors from '../errors'
+import * as errors from '../errors'
 
 import add from './add'
 import Bundle from './Bundle'
 import Converter from './Converter'
-import Curl from './Curl'
 import Kerl from './Kerl'
 
 /**
@@ -26,7 +25,7 @@ function key(seed: Int8Array, index: number, length: number): Int8Array {
     kerl.reset()
     kerl.absorb(subseed, 0, subseed.length)
 
-    const buffer = new Int8Array(Curl.HASH_LENGTH)
+    const buffer = new Int8Array(Kerl.HASH_LENGTH)
     const result = new Int8Array(length * 27 * 243)
     let offset = 0
 
@@ -50,7 +49,7 @@ function key(seed: Int8Array, index: number, length: number): Int8Array {
 function digests(key: Int8Array): Int8Array {
     const l = Math.floor(key.length / 6561)
     const result = new Int8Array(l * 243)
-    let buffer = new Int8Array(Curl.HASH_LENGTH)
+    let buffer = new Int8Array(Kerl.HASH_LENGTH)
 
     for (let i = 0; i < l; i++) {
         const keyFragment = key.slice(i * 6561, (i + 1) * 6561)
@@ -63,7 +62,7 @@ function digests(key: Int8Array): Int8Array {
 
                 kKerl.initialize()
                 kKerl.absorb(buffer, 0, buffer.length)
-                kKerl.squeeze(buffer, 0, Curl.HASH_LENGTH)
+                kKerl.squeeze(buffer, 0, Kerl.HASH_LENGTH)
             }
 
             for (let k = 0; k < 243; k++) {
@@ -75,7 +74,7 @@ function digests(key: Int8Array): Int8Array {
 
         kerl.initialize()
         kerl.absorb(keyFragment, 0, keyFragment.length)
-        kerl.squeeze(buffer, 0, Curl.HASH_LENGTH)
+        kerl.squeeze(buffer, 0, Kerl.HASH_LENGTH)
 
         for (let j = 0; j < 243; j++) {
             result[i * 243 + j] = buffer[j]
@@ -91,12 +90,12 @@ function digests(key: Int8Array): Int8Array {
  **/
 // tslint:disable-next-line no-shadowed-variable
 function address(digests: Int8Array): Int8Array {
-    const addressTrits = new Int8Array(Curl.HASH_LENGTH)
+    const addressTrits = new Int8Array(Kerl.HASH_LENGTH)
     const kerl = new Kerl()
 
     kerl.initialize()
     kerl.absorb(digests, 0, digests.length)
-    kerl.squeeze(addressTrits, 0, Curl.HASH_LENGTH)
+    kerl.squeeze(addressTrits, 0, Kerl.HASH_LENGTH)
 
     return addressTrits
 }
@@ -109,7 +108,7 @@ function address(digests: Int8Array): Int8Array {
  **/
 // tslint:disable-next-line no-shadowed-variable
 function digest(normalizedBundleFragment: Int8Array, signatureFragment: Int8Array): Int8Array {
-    let buffer = new Int8Array(Curl.HASH_LENGTH)
+    let buffer = new Int8Array(Kerl.HASH_LENGTH)
     const kerl = new Kerl()
 
     kerl.initialize()
@@ -121,14 +120,14 @@ function digest(normalizedBundleFragment: Int8Array, signatureFragment: Int8Arra
             const jKerl = new Kerl()
 
             jKerl.initialize()
-            jKerl.absorb(buffer, 0, Curl.HASH_LENGTH)
-            jKerl.squeeze(buffer, 0, Curl.HASH_LENGTH)
+            jKerl.absorb(buffer, 0, Kerl.HASH_LENGTH)
+            jKerl.squeeze(buffer, 0, Kerl.HASH_LENGTH)
         }
 
-        kerl.absorb(buffer, 0, Curl.HASH_LENGTH)
+        kerl.absorb(buffer, 0, Kerl.HASH_LENGTH)
     }
 
-    kerl.squeeze(buffer, 0, Curl.HASH_LENGTH)
+    kerl.squeeze(buffer, 0, Kerl.HASH_LENGTH)
     return buffer
 }
 
@@ -140,7 +139,7 @@ function digest(normalizedBundleFragment: Int8Array, signatureFragment: Int8Arra
  */
 function signatureFragment(normalizedBundleFragment: Int8Array, keyFragment: Int8Array): Int8Array {
     const sigFragment: Int8Array = keyFragment.slice()
-    let hash: Int8Array = new Int8Array(Curl.HASH_LENGTH)
+    let hash: Int8Array = new Int8Array(Kerl.HASH_LENGTH)
 
     const kerl = new Kerl()
 
@@ -150,8 +149,8 @@ function signatureFragment(normalizedBundleFragment: Int8Array, keyFragment: Int
         for (let j = 0; j < 13 - normalizedBundleFragment[i]; j++) {
             kerl.initialize()
             kerl.reset()
-            kerl.absorb(hash, 0, Curl.HASH_LENGTH)
-            kerl.squeeze(hash, 0, Curl.HASH_LENGTH)
+            kerl.absorb(hash, 0, Kerl.HASH_LENGTH)
+            kerl.squeeze(hash, 0, Kerl.HASH_LENGTH)
         }
 
         for (let j = 0; j < 243; j++) {

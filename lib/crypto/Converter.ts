@@ -1,4 +1,4 @@
-import errors from '../errors'
+import * as errors from '../errors'
 
 const RADIX = 3
 const RADIX_BYTES = 256

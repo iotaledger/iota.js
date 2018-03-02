@@ -1,13 +1,18 @@
-import { getBalances } from '../api/apiCommands'
-import { Callback } from '../api/types'
-import { Bundle, Converter, Curl, Kerl, Signing } from '../crypto'
-
-import errors from '../errors/inputErrors'
-import inputValidator from '../utils/inputValidator'
-import Request from '../utils/makeRequest'
-import { Transaction, Transfer } from '../utils/types'
-import Utils from '../utils/utils'
-
+import * as Promise from 'bluebird' 
+import { getBalances } from '../api/core'
+import { Address as AddressType, Callback, GetBalancesResponse, Transaction, Transfer } from '../api/types'
+import { Bundle, Converter, Kerl, Signing } from '../crypto'
+import * as errors from '../errors'
+import {
+    isAddress,
+    isNinesTrytes,
+    isSecurityLevel,
+    remainderAddressValidator,
+    removeChecksum,
+    transferArrayValidator,
+    validate,
+    Validator
+} from '../utils'
 import Address from './address'
 
 export interface MultisigInput {
@@ -16,13 +21,131 @@ export interface MultisigInput {
     securitySum: number
 }
 
+export const multisigInputValidator: Validator<MultisigInput> = (multisigInput) => [
+    multisigInput,
+    ({ address, balance, securitySum }: MultisigInput) => (
+        isSecurityLevel(securitySum) &&
+        isAddress(address) &&
+        Number.isInteger(balance) && balance > 0
+    ),
+    errors.INVALID_INPUTS
+]
+
+export const sanitizeTransfers = (transfers: Transfer[]) =>
+    transfers.map(transfer => ({
+        ...transfer,
+        message: transfer.message || '',
+        tag: transfer.tag || '',
+        address: removeChecksum(transfer.address)
+    }))
+
+export const createBundle = (
+    input: MultisigInput,
+    transfers: Transfer[],
+    remainderAddress?: string
+): Array<Partial<Transaction>> => {
+    // Create a new bundle
+    const bundle: Bundle = new Bundle()
+
+    const signatureFragments: string[] = []
+    const totalBalance: number = input.balance
+    let totalValue = 0
+    let tag: string = '9'.repeat(27)
+
+    //  Iterate over all transfers, get totalValue
+    //  and prepare the signatureFragments, message and tag
+    for (let i = 0; i < transfers.length; i++) {
+        let signatureMessageLength = 1
+
+        // If message longer than 2187 trytes, increase signatureMessageLength (add multiple transactions)
+        if (transfers[i].message.length > 2187) {
+            // Get total length, message / maxLength (2187 trytes)
+            signatureMessageLength += Math.floor(transfers[i].message.length / 2187)
+
+            let msgCopy = transfers[i].message
+
+            // While there is still a message, copy it
+            while (msgCopy) {
+                let fragment = msgCopy.slice(0, 2187)
+                msgCopy = msgCopy.slice(2187, msgCopy.length)
+
+                // Pad remainder of fragment
+                for (let j = 0; fragment.length < 2187; j++) {
+                    fragment += '9'
+                }
+
+                signatureFragments.push(fragment)
+            }
+        } else {
+            // Else, get single fragment with 2187 of 9's trytes
+            let fragment = ''
+
+            if (transfers[i].message) {
+                fragment = transfers[i].message.slice(0, 2187)
+            }
+
+            for (let j = 0; fragment.length < 2187; j++) {
+                fragment += '9'
+            }
+
+            signatureFragments.push(fragment)
+        }
+
+        // If no tag defined, get 27 tryte tag.
+        tag = transfers[i].tag ? transfers[i].tag : '999999999999999999999999999'
+
+        // Pad for required 27 tryte length
+        for (let j = 0; tag.length < 27; j++) {
+            tag += '9'
+        }
+
+        // Add first entries to the bundle
+        // Slice the address in case the user provided a checksummed one
+        bundle.addEntry(
+            signatureMessageLength,
+            transfers[i].address.slice(0, 81),
+            transfers[i].value,
+            tag,
+            Math.floor(Date.now() / 1000)
+        )
+
+        // Sum up total value
+        totalValue += transfers[i].value
+    }
+   
+    if (totalBalance > 0) {
+        const toSubtract = 0 - totalBalance
+
+        // Add input as bundle entry
+        // Only a single entry, signatures will be added later
+        bundle.addEntry(input.securitySum, input.address, toSubtract, tag, Math.floor(Date.now() / 1000))
+    }
+
+    if (totalValue > totalBalance) {
+        throw new Error('Not enough balance.')
+    }
+
+    // If there is a remainder value
+    // Add extra output to send remaining funds to
+    if (totalBalance > totalValue) {
+        const remainder = totalBalance - totalValue
+
+        // Remainder bundle entry if necessary
+        if (!remainderAddress) {
+            throw new Error('No remainder address defined')
+        }
+
+        bundle.addEntry(1, remainderAddress, remainder, tag, Math.floor(Date.now() / 1000))
+    }
+
+    bundle.finalize()
+    bundle.addTrytes(signatureFragments)
+
+    return bundle.bundle
+}
+
 export default class Multisig {
     public address = Address
-    private provider: Request
-
-    constructor(provider: Request) {
-        this.provider = provider
-    }
 
     /**
      *   Gets the key value of a seed
@@ -73,8 +196,8 @@ export default class Multisig {
         })
 
         // Squeeze address trits
-        const addressTrits: number[] = []
-        kerl.squeeze(addressTrits, 0, Curl.HASH_LENGTH)
+        const addressTrits: Int8Array = new Int8Array(Kerl.HASH_LENGTH)
+        kerl.squeeze(addressTrits, 0, Kerl.HASH_LENGTH)
 
         // Convert trits into trytes and return the address
         return Converter.trytes(addressTrits) === multisigAddress
@@ -96,161 +219,31 @@ export default class Multisig {
      **/
     public initiateTransfer(
         input: MultisigInput,
-        remainderAddress: string,
         transfers: Transfer[],
-        callback: Callback<Transaction[]>
-    ) {
-        // If message or tag is not supplied, provide it
-        // Also remove the checksum of the address if it's there
-        transfers.forEach(thisTransfer => {
-            thisTransfer.message = thisTransfer.message ? thisTransfer.message : ''
-            thisTransfer.tag = thisTransfer.tag ? thisTransfer.tag : ''
-            thisTransfer.address = Utils.noChecksum(thisTransfer.address)
-        })
-
-        // Input validation of transfers object
-        if (!inputValidator.isTransfersArray(transfers)) {
-            return callback(errors.invalidTransfers())
-        }
-
-        // check if int
-        if (!inputValidator.isValue(input.securitySum)) {
-            return callback(errors.invalidInputs())
-        }
-
-        // validate input address
-        if (!inputValidator.isAddress(input.address)) {
-            return callback(errors.invalidTrytes())
-        }
-
-        // validate remainder address
-        if (remainderAddress && !inputValidator.isAddress(remainderAddress)) {
-            return callback(errors.invalidTrytes())
-        }
-
-        // Create a new bundle
-        const bundle = new Bundle()
-
-        let totalValue = 0
-        const signatureFragments: string[] = []
-        let tag: string
-
-        //
-        //  Iterate over all transfers, get totalValue
-        //  and prepare the signatureFragments, message and tag
-        //
-        for (let i = 0; i < transfers.length; i++) {
-            let signatureMessageLength = 1
-
-            // If message longer than 2187 trytes, increase signatureMessageLength (add multiple transactions)
-            if (transfers[i].message.length > 2187) {
-                // Get total length, message / maxLength (2187 trytes)
-                signatureMessageLength += Math.floor(transfers[i].message.length / 2187)
-
-                let msgCopy = transfers[i].message
-
-                // While there is still a message, copy it
-                while (msgCopy) {
-                    let fragment = msgCopy.slice(0, 2187)
-                    msgCopy = msgCopy.slice(2187, msgCopy.length)
-
-                    // Pad remainder of fragment
-                    for (let j = 0; fragment.length < 2187; j++) {
-                        fragment += '9'
-                    }
-
-                    signatureFragments.push(fragment)
-                }
-            } else {
-                // Else, get single fragment with 2187 of 9's trytes
-                let fragment = ''
-
-                if (transfers[i].message) {
-                    fragment = transfers[i].message.slice(0, 2187)
-                }
-
-                for (let j = 0; fragment.length < 2187; j++) {
-                    fragment += '9'
-                }
-
-                signatureFragments.push(fragment)
-            }
-
-            // get current timestamp in seconds
-            const timestamp = Math.floor(Date.now() / 1000)
-
-            // If no tag defined, get 27 tryte tag.
-            tag = transfers[i].tag ? transfers[i].tag : '999999999999999999999999999'
-
-            // Pad for required 27 tryte length
-            for (let j = 0; tag.length < 27; j++) {
-                tag += '9'
-            }
-
-            // Add first entries to the bundle
-            // Slice the address in case the user provided a checksummed one
-            bundle.addEntry(
-                signatureMessageLength,
-                transfers[i].address.slice(0, 81),
-                transfers[i].value,
-                tag,
-                timestamp
+        remainderAddress?: string,
+        callback?: Callback<Transaction[]>
+    ): Promise<Array<Partial<Transaction>>> {
+        return Promise.resolve(
+            validate(
+                multisigInputValidator(input),
+                transferArrayValidator(transfers),
+                remainderAddressValidator(remainderAddress)
             )
-
-            // Sum up total value
-            totalValue += parseInt(transfers[i].value, 10)
-        }
-
-        // Get inputs if we are sending tokens
-        if (!totalValue) {
-            return callback(new Error('Invalid value transfer: the transfer does not require a signature.'))
-        }
-
-        const createBundle = (totalBalance: number, createCallback: Callback) => {
-            if (totalBalance > 0) {
-                const toSubtract = 0 - totalBalance
-                const timestamp = Math.floor(Date.now() / 1000)
-
-                // Add input as bundle entry
-                // Only a single entry, signatures will be added later
-                bundle.addEntry(input.securitySum, input.address, toSubtract, tag, timestamp)
-            }
-
-            if (totalValue > totalBalance) {
-                return createCallback(new Error('Not enough balance.'))
-            }
-
-            // If there is a remainder value
-            // Add extra output to send remaining funds to
-            if (totalBalance > totalValue) {
-                const remainder = totalBalance - totalValue
-
-                // Remainder bundle entry if necessary
-                if (!remainderAddress) {
-                    return createCallback(new Error('No remainder address defined'))
-                }
-
-                bundle.addEntry(1, remainderAddress, remainder, tag, timestamp)
-            }
-
-            bundle.finalize()
-            bundle.addTrytes(signatureFragments)
-
-            return createCallback(null, bundle.bundle)
-        }
-
-        if (input.balance) {
-            createBundle(input.balance, callback)
-        } else {
-            const command = getBalances([input.address], 100)
-
-            this.provider.send(command, (e, balances) => {
-                if (e) {
-                    return callback(e)
-                }
-                createBundle(parseInt(balances.balances[0], 10), callback)
-            })
-        }
+        )
+            .then(() => sanitizeTransfers(transfers))
+            .then((sanitizedTransfers: Transfer[]) => input.balance
+                ? createBundle(input, transfers, remainderAddress)
+                : getBalances([input.address], 100)
+                    .then((res: GetBalancesResponse): MultisigInput => ({
+                        ...input,
+                        balance: parseInt(res.balances[0], 10)
+                    }))
+                    .then((inputWithBalance: MultisigInput) => createBundle(
+                        inputWithBalance,
+                        sanitizedTransfers,
+                        remainderAddress
+                    )))
+            .asCallback(callback)
     }
 
     /**
@@ -283,7 +276,7 @@ export default class Multisig {
         for (let i = 0; i < bundle.bundle.length; i++) {
             if (bundle.bundle[i].address === inputAddress) {
                 // If transaction is already signed, increase counter
-                if (!inputValidator.isNinesTrytes(bundle.bundle[i].signatureMessageFragment)) {
+                if (!isNinesTrytes(bundle.bundle[i].signatureMessageFragment as string)) {
                     numSignedTxs++
                 } else {
                     // Else sign the transactionse
@@ -293,7 +286,7 @@ export default class Multisig {
                     const firstFragment = key.slice(0, 6561)
 
                     //  Get the normalized bundle hash
-                    const normalizedBundleHash = bundle.normalizedBundle(bundleHash)
+                    const normalizedBundleHash = bundle.normalizedBundle(bundleHash as string)
                     const normalizedBundleFragments = []
 
                     // Split hash into 3 fragments
@@ -338,3 +331,4 @@ export default class Multisig {
  *   Multisig address constructor
  */
 Multisig.prototype.address = Address
+ 

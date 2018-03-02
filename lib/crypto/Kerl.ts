@@ -2,7 +2,7 @@
 
 import * as CryptoJS from 'crypto-js'
 
-import errors from '../errors'
+import * as errors from '../errors'
 
 import Converter from './Converter'
 import WConverter from './WConverter'

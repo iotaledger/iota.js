@@ -1,8 +1,7 @@
-import { Transaction } from '../utils/types'
+import { Transaction } from '../api/types'
 
 import add from './add'
 import Converter from './Converter'
-import Curl from './Curl'
 import Kerl from './Kerl'
 
 export default class Bundle {
@@ -98,8 +97,8 @@ export default class Bundle {
                 kerl.absorb(bundleEssence, 0, bundleEssence.length)
             }
 
-            const trits = new Int8Array(Curl.HASH_LENGTH)
-            kerl.squeeze(trits, 0, Curl.HASH_LENGTH)
+            const trits = new Int8Array(Kerl.HASH_LENGTH)
+            kerl.squeeze(trits, 0, Kerl.HASH_LENGTH)
             const hash = Converter.trytes(trits)
 
             for (const tx of this.bundle) {

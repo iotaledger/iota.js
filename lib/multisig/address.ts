@@ -1,6 +1,5 @@
-import { Converter, Curl, Kerl, Signing } from '../crypto'
-import inputValidator from '../utils/inputValidator'
-import Utils from '../utils/utils'
+import { Converter, Kerl, Signing } from '../crypto'
+import { asArray } from '../utils'
 
 export default class Address {
     private kerl: Kerl
@@ -22,14 +21,14 @@ export default class Address {
      *   @return {object} address instance
      *
      **/
-    public absorb(digest: string | string[]) {
+    public absorb(digests: string | string[]) {
         // Construct array
-        const digests = Array.isArray(digest) ? digest : [digest]
+        const digestsArray = asArray(digests)
 
         // Add digests
-        for (let i = 0; i < digests.length; i++) {
+        for (let i = 0; i < digestsArray.length; i++) {
             // Get trits of digest
-            const digestTrits = Converter.trits(digests[i])
+            const digestTrits = Converter.trits(digestsArray[i])
 
             // Absorb digest
             this.kerl.absorb(digestTrits, 0, digestTrits.length)
@@ -52,10 +51,11 @@ export default class Address {
         }
 
         // Squeeze the address trits
-        const addressTrits: number[] = []
-        this.kerl.squeeze(addressTrits, 0, Curl.HASH_LENGTH)
+        const addressTrits: Int8Array = new Int8Array(Kerl.HASH_LENGTH)
+        this.kerl.squeeze(addressTrits, 0, Kerl.HASH_LENGTH)
 
         // Convert trits into trytes and return the address
         return Converter.trytes(addressTrits)
     }
 }
+
