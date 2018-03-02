@@ -1,71 +1,115 @@
-import errors from '../errors'
-import { isUri } from '../utils'
+import * as Bluebird from 'bluebird'
 
-import * as core from './core'
-import * as extended from './extended'
+import {
+    addNeighbors,
+    broadcastTransactions,
+    checkConsistency,
+    curlViaNode,
+    findTransactions,
+    FindTransactionsQuery,
+    getBalances,
+    GetBalancesResponse,
+    getInclusionStates,
+    getNeighbors,
+    getNodeInfo,
+    GetNodeInfoResponse,
+    getTips,
+    getTransactionsToApprove,
+    GetTransactionsToApproveResponse,
+    getTrytes,
+    interruptAttachingToTangle,
+    makeAttachToTangle,
+    removeNeighbors,
+    sendCommand,
+    storeTransactions,
+    wereAddressesSpentFrom,
+} from './core'
 
-import { API, BaseCommand, Callback, Settings } from './types'
+import {
+    AccountData,
+    broadcastBundle,
+    findTransactionObjects,
+    getAccountData,
+    GetAccountDataOptions,
+    getBundle,
+    getBundlesFromAddresses,
+    getInputs,
+    GetInputsOptions,
+    getLatestInclusion,
+    getNewAddress,
+    GetNewAddressOptions,
+    getTransactionObjects,
+    getTransfers,
+    GetTransfersOptions,
+    isPromotable,
+    isReattachable,
+    makePromoteTransaction,
+    makeReplayBundle,
+    makeSendTransfer,
+    makeSendTrytes,
+    prepareTransfers,
+    PrepareTransfersOptions,
+    PromoteTransactionOptions,
+    storeAndBroadcast,
+    traverseBundle,
+} from './extended'
 
-/**
- * Default network configuration
- */
-export const defaultSettings: Settings = {
-    host: 'http://localhost', // deprecate
-    port: 14265, // deprecate
-    provider: 'http://localhost:14265',
-    sandbox: false, // deprecate
-    token: undefined, // r/ w/ sandboxToken ?
-}
+import { setSettings, Settings } from './settings'
+
+import { BaseCommand, Inputs, Neighbor, Transaction, Transfer } from './types'
 
 /**
  * Composes API object from it's components
- * 
+ *
  * @method composeApi
  * @param {object} [settings] - connection settings
- * @param {object} [...extensions] - components extending base API
  **/
-export function composeApi (this: API, settings: Settings = defaultSettings, ...extensions: object[]): API {
-    const props: {[key: string]: any} = {
-        settings: defaultSettings,
+export const composeApi = (settings: Partial<Settings> = {}) => {
+    const curl = settings.curl || curlViaNode
+    const api = {
+        // core
+        addNeighbors,
+        attachToTangle: makeAttachToTangle(curl),
+        broadcastTransactions,
+        checkConsistency,
+        findTransactions,
+        getBalances,
+        getInclusionStates,
+        getNeighbors,
+        getNodeInfo,
+        getTips,
+        getTransactionsToApprove,
+        getTrytes,
+        interruptAttachingToTangle,
+        removeNeighbors,
+        sendCommand,
+        storeTransactions,
+        wereAddressesSpentFrom,
+
+        // extended
+        broadcastBundle,
+        findTransactionObjects,
+        getAccountData,
+        getBundle,
+        getBundlesFromAddresses,
+        getInputs,
+        getLatestInclusion,
+        getNewAddress,
+        getTransactionObjects,
+        getTransfers,
+        isPromotable,
+        isReattachable,
+        prepareTransfers,
+        promoteTransaction: makePromoteTransaction(curl),
+        replayBundle: makeReplayBundle(curl),
+        sendTransfer: makeSendTransfer(curl),
+        sendTrytes: makeSendTrytes(curl),
+        setSettings,
+        storeAndBroadcast,
+        traverseBundle,
     }
-    
-    const invalidArgs = extensions.filter(ext => typeof ext !== 'object')
-    
-    if (invalidArgs.length) {
-        throw new Error(
-            `Illegal composition arguments: ${invalidArgs.map(a => typeof a).join(', ')}. \n
-            Expected object(s).`
-        )
-    }
 
-    return Object.assign(this, {
-        ...core,
-        ...extended,
-        ...extensions,
+    api.setSettings(settings)
 
-        getSettings(): Settings {
-            return props.settings
-        },
-
-        setSettings(this: API, { provider, host, port, sandbox, token }: Settings) {
-            if (host) {
-                host = host.replace(/\/$/, '')
-            }
-
-            provider = provider || `${host || defaultSettings.host}:${port || defaultSettings.port}`
-
-            if (!isUri(provider)) {
-                throw errors.INVALID_URI
-            }
-
-            props.settings.provider = provider
-
-            if (settings.sandbox && settings.token) {
-                props.settings.sandbox = true
-                props.settings.token = settings.token
-            }
-
-            return this
-        },
-    }).setSettings(settings)
+    return api
 }

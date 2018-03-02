@@ -1,26 +1,39 @@
 import * as Promise from 'bluebird'
 import * as errors from '../../errors'
-import { indexValidator, securityLevelValidator, seedValidator, startEndOptionsValidator, validate } from '../../utils'
-import { Bundle, Callback, GetNewAddressOptions } from '../types'
-import { getBundlesFromAddresses, getNewAddress } from './index'
+import {
+    getOptionsWithDefaults,
+    indexValidator,
+    securityLevelValidator,
+    seedValidator,
+    startEndOptionsValidator,
+    validate,
+} from '../../utils'
+import { Bundle, Callback, Transaction } from '../types'
+import { getBundlesFromAddresses, getNewAddress, getNewAddressOptions, GetNewAddressOptions } from './index'
 
 export interface GetTransfersOptions {
-    start?: number
-    end?: number
-    inclusionStates?: boolean
-    security?: number
+    start: number
+    end: number
+    inclusionStates: boolean
+    security: number
 }
 
-export const getNewAddressOptions2 = (
-    start: number,
-    end: number,
-    security: number = 2
-): Partial<GetNewAddressOptions> => ({
-    index: start,
-    total: end ? end - start : undefined,
-    returnAll: true,
-    security,
-})
+const defaults: GetTransfersOptions = {
+    start: 0,
+    end: 0,
+    inclusionStates: false,
+    security: 2,
+}
+
+export const transferToAddressOptions = (start: number, end: number, security: number) =>
+    getNewAddressOptions({
+        index: start,
+        total: end ? end - start : undefined,
+        security,
+        returnAll: true,
+    })
+
+export const getTransfersOptions = getOptionsWithDefaults(defaults)
 
 /**
  *   @method getTransfers
@@ -35,10 +48,12 @@ export const getNewAddressOptions2 = (
  */
 export const getTransfers = (
     seed: string,
-    { start = 0, end, inclusionStates = false, security = 2 }: GetTransfersOptions = {},
+    options: Partial<GetTransfersOptions> = {},
     callback?: Callback<Bundle[]>
-): Promise<Bundle[]> =>
-    Promise.resolve(
+): Promise<Bundle[]> => {
+    const { start, end, security, inclusionStates } = getTransfersOptions(options)
+
+    return Promise.resolve(
         validate(
             seedValidator(seed),
             securityLevelValidator(security),
@@ -46,7 +61,8 @@ export const getTransfers = (
             startEndOptionsValidator({ start, end })
         )
     )
-        .then(() => getNewAddressOptions2(start, end, security))
-        .then(options => getNewAddress(seed, options))
+        .then(() => transferToAddressOptions(start, end, security))
+        .then(addrOptions => getNewAddress(seed, addrOptions))
         .then(addresses => getBundlesFromAddresses(addresses as string[], inclusionStates))
         .asCallback(callback)
+}

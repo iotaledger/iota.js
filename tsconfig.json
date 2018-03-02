@@ -3,8 +3,9 @@
         "lib": ["dom", "es2015"],
         "noImplicitThis": true,
         "strict": true,
-        "outDir": "out"
+        "outDir": "out",
+        "declaration": true,
+        "declarationDir": "typings"
     },
-    "files": ["lib/global.d.ts"],
     "include": ["lib"]
 }

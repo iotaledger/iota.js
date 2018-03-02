@@ -51,20 +51,26 @@ export function send<C extends BaseCommand, R = any>(command: BaseCommand): Prom
  *   @param {object} command
  *   @param {function} callback
  **/
-export function batchedSend<C extends BaseCommand, R = any>(
+export function batchedSend<C extends BatchableCommand, R = any>(
     command: C,
-    keysToBatch: string[],
+    keysToBatch: Array<keyof C>,
     batchSize: number
 ): Promise<R> {
-    const allKeys = Object.keys(command) as Array<keyof C>
+    const allKeys: Array<keyof C> = Object.keys(command)
     const requestStack: C[] = []
 
     keysToBatch.forEach(keyToBatch => {
-        while ((command[keyToBatch] as string[]).length) {
-            const batch: C[] = (command[keyToBatch] as any[]).splice(0, batchSize)
-            const params: C = allKeys
-                .filter(key => key === keyToBatch || keysToBatch.indexOf(key) === -1)
-                .forEach(key => (params[key] = batch))
+        const dataToBatch = command[keyToBatch]
+
+        while (dataToBatch.length) {
+            const batch = dataToBatch.splice(0, batchSize)
+            const params: C = allKeys.filter(key => key === keyToBatch || keysToBatch.indexOf(key) === -1).reduce(
+                (acc, key) => {
+                    acc[key] = batch
+                    return acc
+                },
+                {} as C // tslint:disable-line no-object-literal-type-assertion
+            )
 
             requestStack.push(params)
         }

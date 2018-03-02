@@ -18,14 +18,14 @@ export const isTrytes = (trytes: string, length?: number): trytes is Trytes => {
 
 // Checks if input is correct hash (81 trytes)
 export const isHash = (hash: string): hash is Hash => isTrytes(hash, HASH_SIZE)
-export const isAddress = isHash // deprecated
+export const isAddressTrytes = isHash // deprecated
 
 // Deprecated
 export const isNinesTrytes = (trytes: string): boolean => typeof trytes === 'string' && /^[9]+$/.test(trytes)
 
 // Checks if input is correct hash
 export const isTransfer = (transfer: any): transfer is Transfer =>
-    isAddress(transfer.address) &&
+    isHash(transfer.address) &&
     isInteger(transfer.value) &&
     isTrytes(transfer.message) &&
     isTrytes(transfer.tag || transfer.obsoleteTag, TAG_SIZE)
@@ -66,18 +66,14 @@ export const isTransaction = (tx: any): tx is Transaction =>
     isTrytes(tx.nonce, 27)
 
 // Checks if correct bundle with transaction object
-export const isArrayOfTxObjects = (bundle: any[]): bundle is Transaction[] =>
+export const isTransactionArray = (bundle: any[]): bundle is Transaction[] =>
     Array.isArray(bundle) && bundle.length > 0 && bundle.every(isTransaction)
 
-export const isAddressObject = (input: any): input is Address =>
-    isAddress(input.address) &&
-    isInteger(input.security) &&
-    input.security > 0 &&
-    isInteger(input.keyIndex) &&
-    input.keyIndex > -1
+export const isAddress = (input: any): input is Address =>
+    isHash(input.address) && isSecurityLevel(input.security) && isInteger(input.keyIndex) && input.keyIndex >= 0
 
-export const isAddressObjectArray = (inputs: any[]): inputs is Address[] =>
-    Array.isArray(inputs) && inputs.length > 0 && inputs.every(isAddressObject)
+export const isAddressArray = (inputs: any[]): inputs is Address[] =>
+    Array.isArray(inputs) && inputs.length > 0 && inputs.every(isAddress)
 
 /**
  * Checks that a given uri is valid
@@ -106,7 +102,8 @@ export const isUri = (uri: string): boolean => {
 export const isUriArray = (uris: string[]): boolean => isArray(uris) && uris.every(isUri)
 
 /* Check if start & end options are valid */
-export const isStartEndOptions = ({ start, end }: {start: number, end: number}): boolean => !!(end && (start > end || end > start + 500))
+export const isStartEndOptions = ({ start, end }: { start: number; end: number }): boolean =>
+    !!(end && (start > end || end > start + 500))
 
 export const isTag = (tag: string): tag is Tag => isTrytes(tag, TAG_SIZE)
 

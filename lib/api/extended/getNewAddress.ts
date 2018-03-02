@@ -4,6 +4,7 @@ import * as errors from '../../errors'
 import {
     addChecksum,
     asArray,
+    getOptionsWithDefaults,
     indexValidator,
     integerValidator,
     securityLevelValidator,
@@ -23,14 +24,6 @@ export interface GetNewAddressOptions {
 }
 
 export type GetNewAddressResult = Hash | Hash[]
-
-const defaultOptions = {
-    index: 0,
-    security: 2,
-    checksum: false,
-    total: 0,
-    returnAll: false,
-}
 
 export const isAddressUsed = (address: Hash) => {
     const addresses = asArray(address)
@@ -97,20 +90,27 @@ export const applyChecksumOption = (checksum: boolean) => (addresses: Trytes[]):
 export const applyReturnAllOption = (returnAll: boolean) => (addresses: Trytes[]): Trytes | Trytes[] =>
     returnAll ? addresses : addresses[addresses.length - 1]
 
+export const getNewAddressOptions = getOptionsWithDefaults<GetNewAddressOptions>({
+    index: 0,
+    security: 2,
+    checksum: false,
+    total: 0,
+    returnAll: false,
+})
+
 export const getNewAddress = (
     seed: Trytes,
-    options: Partial<GetNewAddressOptions> = defaultOptions,
+    options: Partial<GetNewAddressOptions> = {},
     callback?: Callback<GetNewAddressResult>
 ): Promise<Trytes | Trytes[]> => {
-    validateGetNewAddress(seed, options as GetNewAddressOptions)
+    const { index, security, total, returnAll, checksum } = getNewAddressOptions(options)
 
-    // All options are set as default, so we can safely coerce (!) below
-    const { index, security, total, returnAll, checksum } = options
+    validateGetNewAddress(seed, { index, security, total, returnAll, checksum })
 
     const promise: Promise<Trytes[]> =
         total! > 0
-            ? generateAddresses(seed, index!, security!, total!)
-            : Promise.try(getUntilFirstUnusedAddress(seed, index!, security!, returnAll!))
+            ? generateAddresses(seed, index, security, total)
+            : Promise.try(getUntilFirstUnusedAddress(seed, index, security, returnAll))
 
     return promise
         .then(applyChecksumOption(checksum!))

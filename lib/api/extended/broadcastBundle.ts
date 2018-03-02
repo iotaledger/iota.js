@@ -13,7 +13,7 @@ import { getBundle } from './index'
  *   @param {function} [callback]
  *   @returns {object} Transaction objects
  **/
-export const broadcastBundle = (tailTransactionHash: string, callback: Callback<void>): Promise<void> =>
+export const broadcastBundle = (tailTransactionHash: string, callback?: Callback<void>): Promise<void> =>
     Promise.resolve(validate(hashValidator(tailTransactionHash)))
         .then(() => getBundle(tailTransactionHash))
         .then(transactionsToFinalTrytes)

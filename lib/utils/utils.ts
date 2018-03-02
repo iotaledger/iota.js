@@ -4,9 +4,9 @@ import { Converter, Curl, Kerl, Signing } from '../crypto'
 import * as errors from '../errors'
 import ascii from './asciiToTrytes'
 import extractJson from './extractJson'
-import { isArrayOfTxObjects, isNinesTrytes, isTrytes } from './guards'
+import { isNinesTrytes, isTransactionArray, isTrytes } from './guards'
 
-enum Unit {
+export enum Unit {
     i = 'i',
     Ki = 'Ki',
     Mi = 'Mi',
@@ -14,6 +14,9 @@ enum Unit {
     Ti = 'Ti',
     Pi = 'Pi',
 }
+
+export const getOptionsWithDefaults = <T>(defaults: T) => (options: Partial<T>): T =>
+    Object.assign({}, defaults, options) // tslint:disable-line prefer-object-spread
 
 export const asArray = <T>(x: T | T[]): T[] => (Array.isArray(x) ? x : [x])
 
@@ -358,7 +361,7 @@ export function validateSignatures(signedBundle: Transaction[], inputAddress: st
  **/
 export function isBundle(bundle: Transaction[]) {
     // If not correct bundle
-    if (!isArrayOfTxObjects(bundle)) {
+    if (!isTransactionArray(bundle)) {
         return false
     }
 
@@ -452,3 +455,12 @@ export function isBundle(bundle: Transaction[]) {
 }
 
 export const transactionsToFinalTrytes = (transactions: Transaction[]) => transactions.map(transactionTrytes).reverse()
+
+export const spammer = (): Transfer => ({
+    address: '9'.repeat(81),
+    value: 0,
+    tag: '9'.repeat(27),
+    message: '9'.repeat(27 * 81),
+})
+
+export const generateSpam = (n: number = 1) => new Array(n).map(spammer)

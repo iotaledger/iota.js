@@ -1,56 +1,80 @@
 import * as Promise from 'bluebird'
 import * as errors from '../../errors'
-
-import { validate } from '../../utils'
-
-import { Address, Balance, Callback, Normalized, Settings } from '../types'
-
+import {
+    asArray,
+    getOptionsWithDefaults,
+    securityLevelValidator,
+    seedValidator,
+    startEndOptionsValidator,
+    startOptionValidator,
+    thresholdValidator,
+    validate,
+} from '../../utils'
 import { getBalances } from '../core/getBalances'
-
-import { getNewAddressCurried as getNewAddress, GetNewAddressOptions } from './getNewAddress'
-
-export interface Inputs {
-    inputs: Address[]
-    totalBalance: number
-}
-
-export interface NormalizedInputs {
-    inputs: Addresses
-    totalBalance: number
-}
+import { Address, Balance, Callback, Hash, Inputs, makeAddress, Maybe } from '../types'
+import { getNewAddress, getNewAddressOptions, GetNewAddressOptions } from './getNewAddress'
 
 export interface GetInputsOptions {
-    start?: number
-    end?: number
-    threshold?: number
-    security?: number
+    start: number
+    end: number
+    threshold: number
+    security: number
 }
 
-export const getNewAddressOptions = ({ start = 0, end, security = 2 }: GetInputsOptions = {}): GetNewAddressOptions =>
-    Number.isInteger(end) ? { index: start, total: end - start, security } : { index: start, returnAll: true, security }
+const defaults: GetInputsOptions = {
+    start: 0,
+    end: 0,
+    threshold: 0,
+    security: 2,
+}
 
-export const calculateTotalBalance = (balances: Balance): number =>
-    keys(balances).reduce((acc, k) => acc + (parseInt(balances[k].balance, 10) || 0), 0)
+export const inputsToAddressOptions = ({ start, end, security }: GetInputsOptions) =>
+    Number.isInteger(end)
+        ? getNewAddressOptions({ index: start, total: end - start, security })
+        : getNewAddressOptions({ index: start, security, returnAll: true })
 
-export const formatInputs = (addresses: Addresses) => (
-    balancesResponse: NormalizedGetBalancesResponse
-): NormalizedInputs => ({
-    inputs: merge(addresses)(balancesResponse.balances),
-    totalBalance: calculateTotalBalance(balancesResponse.balances),
-})
+export const validateGetInputs = (seed: string, options: GetInputsOptions) => {
+    const { start, end, threshold, security } = options
+}
+
+export const makeInputsObject = (addresses: Hash[], balances: string[], start: number, security: number): Inputs => {
+    const inputs = addresses.map((address, i) => makeAddress(address, balances[i], start + i, security))
+    const totalBalance = inputs.reduce((acc, addr) => (acc += parseInt(addr.balance, 10)), 0)
+
+    return { inputs, totalBalance }
+}
+
+export const checkSufficientBalance = ({ totalBalance }: Inputs, threshold: number) => {
+    if (totalBalance < threshold) {
+        throw new Error(errors.INSUFFICIENT_BALANCE)
+    }
+}
+
+export const getInputsOptions = getOptionsWithDefaults(defaults)
 
 export const getInputs = (
     seed: string,
-    { start = 0, end, threshold, security = 2 }: GetInputsOptions = {},
-    callback?: Callback<Inputs | void>
-): Promise<Maybe<Inputs>> =>
-    Promise.resolve(
-        isSeed(seed) && isSecurity(security) && isStart(start) && isStartEnd({ start, end }) && isThreshold(threshold)
+    options: Partial<GetInputsOptions> = {},
+    callback?: Callback<Maybe<Inputs>>
+): Promise<Maybe<Inputs>> => {
+    const { security, start, end, threshold } = getInputsOptions(options)
+    let addresses: Hash[] = []
+
+    return Promise.resolve(
+        validate(
+            seedValidator(seed),
+            securityLevelValidator(security),
+            startOptionValidator(start),
+            startEndOptionsValidator({ start, end }),
+            thresholdValidator(threshold)
+        )
     )
-        .then(() => ({ start, end, security }))
-        .then(getNewAddressOptions)
-        .then(getNewAddress(seed))
-        .then((addresses: Addresses) => getBalances(addresses, 100))
-        .then(formatInputs(addresses))
-        .then(isSufficientBalance(threshold))
-        .asCallback(callback)
+        .then(() => inputsToAddressOptions({ start, end, security, threshold }))
+        .then(newAddressOptions => getNewAddress(seed, newAddressOptions))
+        .then(addrs => {
+            addresses = asArray(addrs)
+            return getBalances(addresses, 100)
+        })
+        .then(res => makeInputsObject(addresses, res.balances, start, security))
+        .tap(inputs => checkSufficientBalance(inputs, threshold))
+}

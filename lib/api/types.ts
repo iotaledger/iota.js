@@ -1,4 +1,7 @@
+import * as Promise from 'bluebird'
+
 import {
+    AttachToTangleCommand,
     FindTransactionsCommand,
     FindTransactionsQuery,
     GetBalancesCommand,
@@ -16,55 +19,36 @@ import {
     GetInputsOptions,
     GetNewAddressOptions,
     GetTransfersOptions,
-    Inputs,
-    NormalizedInputs,
     PromoteTransactionOptions,
 } from './extended'
 
-export {
-    FindTransactionsCommand,
-    FindTransactionsQuery,
-    GetBalancesCommand,
-    GetBalancesResponse,
-    GetInclusionStatesCommand,
-    GetNeighborsResponse,
-    GetNodeInfoResponse,
-    GetTransactionsToApproveResponse,
-    GetTrytesCommand,
-} from './core'
-
-export {
-    AccountData,
-    GetAccountDataOptions,
-    GetInputsOptions,
-    GetNewAddressOptions,
-    GetTransfersOptions,
-    Inputs,
-    NormalizedInputs,
-    PromoteTransactionOptions,
-} from './extended'
-
-export interface Normalized<T> {
-    [key: string]: T
-}
+export type Maybe<T> = T | void
 
 export type Hash = string
 export type Tag = string
 export type Trytes = string
 
 /* Address object */
-export interface Address extends Balance, SpentStatus {
-    address: string
+export interface Address extends Balance {
+    address: Hash
     keyIndex: number
     security: number
 }
 
-export interface SpentStatus {
-    spent: boolean
-}
+export const makeAddress = (address: Hash, balance: string, keyIndex: number, security: number): Address => ({
+    address,
+    keyIndex,
+    security,
+    balance,
+})
 
 export interface Balance {
     balance: string
+}
+
+export interface Inputs {
+    inputs: Address[]
+    totalBalance: number
 }
 
 /* Transfer object */
@@ -94,7 +78,7 @@ export interface Transaction {
     attachmentTimestampLowerBound: number
     attachmentTimestampUpperBound: number
     nonce: string
-    persistence?: boolean
+    confirmed?: boolean
 }
 
 /* Bundle object */
@@ -131,23 +115,31 @@ export enum IRICommand {
     WERE_ADDRESSES_SPENT_FROM = 'wereAddressesSpentFrom',
 }
 
+export const isBatchableCommand = (command: BaseCommand): command is BatchableCommand =>
+    command.command === IRICommand.FIND_TRANSACTIONS ||
+    command.command === IRICommand.GET_BALANCES ||
+    command.command === IRICommand.GET_INCLUSION_STATES ||
+    command.command === IRICommand.GET_TRYTES
+
+export interface MapsToArrays {
+    [key: string]: any[]
+}
+
 /* Known batchable commands */
-export type BatchableCommand =
-    | FindTransactionsCommand
-    | GetBalancesCommand
-    | GetInclusionStatesCommand
-    | GetTrytesCommand
+export type BatchableCommand = MapsToArrays &
+    (FindTransactionsCommand | GetBalancesCommand | GetInclusionStatesCommand | GetTrytesCommand)
 
 /* Keys to batch object */
 export interface BatchableKeys {
     [key: string]: string[]
 }
 
+type FindTransactionKeys = keyof FindTransactionsCommand
+const findTransactionKeys: Array<keyof FindTransactionsCommand> = ['addresses', 'approvees', 'bundles', 'tags']
+
 /** Batchable keys for each command */
 export const batchableKeys: BatchableKeys = {
-    [IRICommand.FIND_TRANSACTIONS]: ['addresses', 'approvees', 'bundles', 'tags'] as Array<
-        keyof FindTransactionsCommand
-    >,
+    [IRICommand.FIND_TRANSACTIONS]: ['addresses', 'approvees', 'bundles', 'tags'] as FindTransactionKeys[],
     [IRICommand.GET_BALANCES]: ['addresses'] as Array<keyof GetBalancesCommand>,
     [IRICommand.GET_INCLUSION_STATES]: ['tips', 'transactions'] as Array<keyof GetInclusionStatesCommand>,
     [IRICommand.GET_TRYTES]: ['hashes'] as Array<keyof GetTrytesCommand>,
@@ -167,166 +159,173 @@ export interface Settings {
 /* Callback */
 export type Callback<R = any> = (err: Error | null, res?: R) => void
 
-/* API, Core + Extended */
-export interface API {
-    /**
-     * API util methods
-     */
-    getSettings: () => Settings
+export type CurlFunction = (
+    trunkTransaction: Hash,
+    branchTransaction: Hash,
+    minWeightMagnitude: number,
+    trytes: Trytes[]
+) => Promise<Trytes[]>
 
-    setSettings: (settings: Settings) => API
+// /* API, Core + Extended */
+// export interface API {
+//     /**
+//      * API util methods
+//      */
+//     getSettings: () => Settings
 
-    /**
-     * Core API methods
-     */
-    sendCommand: <C extends BaseCommand, R = any>(this: API, command: BaseCommand, callback?: Callback<R>) => Promise<R>
+//     setSettings: (settings: Settings) => API
 
-    attachToTangle: (
-        this: API,
-        trunkTransaction: string,
-        branchTransaction: string,
-        minWeightMagnitude: number,
-        trytes: string[],
-        callback?: Callback<string[]>
-    ) => Promise<string[]>
+//     /**
+//      * Core API methods
+//      */
+//     sendCommand: <C extends BaseCommand, R = any>(this: API, command: BaseCommand, callback?: Callback<R>) => Promise<R>
 
-    findTransactions: (this: API, query: FindTransactionsQuery, callback?: Callback<string[]>) => Promise<string[]>
+//     attachToTangle: (
+//         this: API,
+//         trunkTransaction: string,
+//         branchTransaction: string,
+//         minWeightMagnitude: number,
+//         trytes: string[],
+//         callback?: Callback<string[]>
+//     ) => Promise<string[]>
 
-    getBalances: (
-        this: API,
-        addresses: string[],
-        threshold: number,
-        callback?: Callback<GetBalancesResponse>
-    ) => Promise<GetBalancesResponse>
+//     findTransactions: (this: API, query: FindTransactionsQuery, callback?: Callback<string[]>) => Promise<string[]>
 
-    getInclusionStates: (
-        this: API,
-        transactions: string[],
-        tips: string[],
-        callback?: Callback<string[]>
-    ) => Promise<string[]>
+//     getBalances: (
+//         this: API,
+//         addresses: string[],
+//         threshold: number,
+//         callback?: Callback<GetBalancesResponse>
+//     ) => Promise<GetBalancesResponse>
 
-    getNodeInfo: (this: API, callback?: Callback<GetNodeInfoResponse>) => Promise<GetNodeInfoResponse>
+//     getInclusionStates: (
+//         this: API,
+//         transactions: string[],
+//         tips: string[],
+//         callback?: Callback<string[]>
+//     ) => Promise<string[]>
 
-    getNeighbors: (this: API, callback?: Callback<GetNeighborsResponse>) => Promise<Neighbor[]>
+//     getNodeInfo: (this: API, callback?: Callback<GetNodeInfoResponse>) => Promise<GetNodeInfoResponse>
 
-    addNeighbors: (this: API, callback?: Callback<number>) => Promise<number>
+//     getNeighbors: (this: API, callback?: Callback<GetNeighborsResponse>) => Promise<Neighbor[]>
 
-    removeNeighbors: (this: API, callback?: Callback<number>) => Promise<number>
+//     addNeighbors: (this: API, callback?: Callback<number>) => Promise<number>
 
-    getTips: (this: API, callback?: Callback<string[]>) => Promise<string[]>
+//     removeNeighbors: (this: API, callback?: Callback<number>) => Promise<number>
 
-    getTransactionsToApprove: (
-        this: API,
-        depth: number,
-        reference?: string,
-        callback?: Callback<GetTransactionsToApproveResponse>
-    ) => Promise<GetTransactionsToApproveResponse>
+//     getTips: (this: API, callback?: Callback<string[]>) => Promise<string[]>
 
-    getTrytes: (this: API, hashes: string[], callback?: Callback<string[]>) => Promise<string[]>
+//     getTransactionsToApprove: (
+//         this: API,
+//         depth: number,
+//         reference?: string,
+//         callback?: Callback<GetTransactionsToApproveResponse>
+//     ) => Promise<GetTransactionsToApproveResponse>
 
-    interruptAttachingToTangle: (this: API, callback?: Callback<void>) => Promise<void>
+//     getTrytes: (this: API, hashes: string[], callback?: Callback<string[]>) => Promise<string[]>
 
-    checkConsistency: (this: API, transactions: string | string[], callback?: Callback<boolean>) => Promise<boolean>
+//     interruptAttachingToTangle: (this: API, callback?: Callback<void>) => Promise<void>
 
-    broadcastTransactions: (this: API, trytes: string[], callback?: Callback<void>) => Promise<void>
+//     checkConsistency: (this: API, transactions: string | string[], callback?: Callback<boolean>) => Promise<boolean>
 
-    storeTransactions: (this: API, trytes: string[], callback?: Callback<void>) => Promise<void>
+//     broadcastTransactions: (this: API, trytes: string[], callback?: Callback<void>) => Promise<void>
 
-    wereAddressesSpentFrom: (this: API, addresses: string[], callback?: Callback<boolean[]>) => Promise<boolean[]>
+//     storeTransactions: (this: API, trytes: string[], callback?: Callback<void>) => Promise<void>
 
-    /**
-     * Extended API methods
-     */
-    broadcastBundle: (this: API, tailTransaction: string, callback?: Callback<void>) => Promise<void>
+//     wereAddressesSpentFrom: (this: API, addresses: string[], callback?: Callback<boolean[]>) => Promise<boolean[]>
 
-    findTransactionObjects: (
-        this: API,
-        query: FindTransactionsQuery,
-        callback?: Callback<Transaction[]>
-    ) => Promise<Transaction[]>
+//     /**
+//      * Extended API methods
+//      */
+//     broadcastBundle: (this: API, tailTransaction: string, callback?: Callback<void>) => Promise<void>
 
-    getAccountData: (
-        this: API,
-        seed: string,
-        options: GetAccountDataOptions,
-        callback?: Callback<AccountData>
-    ) => Promise<AccountData>
+//     findTransactionObjects: (
+//         this: API,
+//         query: FindTransactionsQuery,
+//         callback?: Callback<Transaction[]>
+//     ) => Promise<Transaction[]>
 
-    getBundle: (this: API, tailTransaction: string, callback?: Callback<Bundle | void>) => Promise<Bundle | void>
+//     getAccountData: (
+//         this: API,
+//         seed: string,
+//         options: GetAccountDataOptions,
+//         callback?: Callback<AccountData>
+//     ) => Promise<AccountData>
 
-    getBundlesFromAddresses: (
-        this: API,
-        addresses: string[],
-        inclusionState?: boolean,
-        callback?: Callback<Bundle[]>
-    ) => Promise<Bundle[]>
+//     getBundle: (this: API, tailTransaction: string, callback?: Callback<Bundle | void>) => Promise<Bundle | void>
 
-    getInputs: (this: API, seed: string, options?: GetInputsOptions, callback?: Callback) => Promise<Inputs>
+//     getBundlesFromAddresses: (
+//         this: API,
+//         addresses: string[],
+//         inclusionState?: boolean,
+//         callback?: Callback<Bundle[]>
+//     ) => Promise<Bundle[]>
 
-    getLatestInclusion: (this: API, transactions: string[], callback?: Callback<boolean[]>) => Promise<boolean[]>
+//     getInputs: (this: API, seed: string, options?: GetInputsOptions, callback?: Callback) => Promise<Inputs>
 
-    getNewAddress: (this: API, seed: string, options: GetNewAddressOptions) => Promise<string[] | string>
+//     getLatestInclusion: (this: API, transactions: string[], callback?: Callback<boolean[]>) => Promise<boolean[]>
 
-    getTransactionObjects: (
-        this: API,
-        transactions: string[],
-        callback?: Callback<Transaction[]>
-    ) => Promise<Transaction[]>
+//     getNewAddress: (this: API, seed: string, options: GetNewAddressOptions) => Promise<string[] | string>
 
-    isPromotable: (
-        // Deprecated
-        this: API,
-        transactions: string | string[],
-        callback?: Callback<boolean>
-    ) => Promise<boolean>
+//     getTransactionObjects: (
+//         this: API,
+//         transactions: string[],
+//         callback?: Callback<Transaction[]>
+//     ) => Promise<Transaction[]>
 
-    promoteTransaction: (
-        this: API,
-        tailTransaction: string,
-        depth: number,
-        minWeightMagnitude: number,
-        transfers?: Transfer[],
-        options?: PromoteTransactionOptions,
-        callback?: Callback<Transaction[]>
-    ) => Promise<Transaction[]>
+//     isPromotable: (
+//         // Deprecated
+//         this: API,
+//         transactions: string | string[],
+//         callback?: Callback<boolean>
+//     ) => Promise<boolean>
 
-    replaybundle: (
-        this: API,
-        tailTransaction: string,
-        depth: number,
-        minWeightMagnitude: number,
-        callback?: Callback<Bundle>
-    ) => Promise<Bundle>
+//     promoteTransaction: (
+//         this: API,
+//         tailTransaction: string,
+//         depth: number,
+//         minWeightMagnitude: number,
+//         transfers?: Transfer[],
+//         options?: PromoteTransactionOptions,
+//         callback?: Callback<Transaction[]>
+//     ) => Promise<Transaction[]>
 
-    sendTransfer: (
-        this: API,
-        seed: string,
-        depth: number,
-        minWeightMagnitude: number,
-        transfers: Transfer[],
-        options?: any,
-        callback?: Callback<Bundle>
-    ) => Promise<Bundle>
+//     replaybundle: (
+//         this: API,
+//         tailTransaction: string,
+//         depth: number,
+//         minWeightMagnitude: number,
+//         callback?: Callback<Bundle>
+//     ) => Promise<Bundle>
 
-    sendTrytes: (
-        this: API,
-        trytes: string[],
-        depth: number,
-        minWeightMagnitude: number,
-        options?: any,
-        callback?: Callback<Bundle>
-    ) => Promise<Bundle>
+//     sendTransfer: (
+//         this: API,
+//         seed: string,
+//         depth: number,
+//         minWeightMagnitude: number,
+//         transfers: Transfer[],
+//         options?: any,
+//         callback?: Callback<Bundle>
+//     ) => Promise<Bundle>
 
-    traverseBundle: (
-        this: API,
-        trunkTransaction: string,
-        bundleHash: string | null,
-        bundle: Bundle,
-        callback?: Callback<Bundle | void>
-    ) => Promise<Bundle | void>
+//     sendTrytes: (
+//         this: API,
+//         trytes: string[],
+//         depth: number,
+//         minWeightMagnitude: number,
+//         options?: any,
+//         callback?: Callback<Bundle>
+//     ) => Promise<Bundle>
 
-    storeAndBroadcast: (this: API, trytes: string[], callback?: Callback<void>) => Promise<void>
+//     traverseBundle: (
+//         this: API,
+//         trunkTransaction: string,
+//         bundleHash: string | null,
+//         bundle: Bundle,
+//         callback?: Callback<Bundle | void>
+//     ) => Promise<Bundle | void>
 
-    [key: string]: any
-}
+//     storeAndBroadcast: (this: API, trytes: string[], callback?: Callback<void>) => Promise<void>
+
+//     [key: string]: any
+// }

@@ -1,17 +1,17 @@
-import * as Promise from 'bluebird' 
-import { getBalances } from '../api/core'
-import { Address as AddressType, Callback, GetBalancesResponse, Transaction, Transfer } from '../api/types'
+import * as Promise from 'bluebird'
+import { getBalances, GetBalancesResponse } from '../api/core'
+import { Address as AddressType, Callback, Transaction, Transfer } from '../api/types'
 import { Bundle, Converter, Kerl, Signing } from '../crypto'
 import * as errors from '../errors'
 import {
-    isAddress,
+    isAddressTrytes,
     isNinesTrytes,
     isSecurityLevel,
     remainderAddressValidator,
     removeChecksum,
     transferArrayValidator,
     validate,
-    Validator
+    Validator,
 } from '../utils'
 import Address from './address'
 
@@ -21,14 +21,11 @@ export interface MultisigInput {
     securitySum: number
 }
 
-export const multisigInputValidator: Validator<MultisigInput> = (multisigInput) => [
+export const multisigInputValidator: Validator<MultisigInput> = multisigInput => [
     multisigInput,
-    ({ address, balance, securitySum }: MultisigInput) => (
-        isSecurityLevel(securitySum) &&
-        isAddress(address) &&
-        Number.isInteger(balance) && balance > 0
-    ),
-    errors.INVALID_INPUTS
+    ({ address, balance, securitySum }: MultisigInput) =>
+        isSecurityLevel(securitySum) && isAddressTrytes(address) && Number.isInteger(balance) && balance > 0,
+    errors.INVALID_INPUTS,
 ]
 
 export const sanitizeTransfers = (transfers: Transfer[]) =>
@@ -36,7 +33,7 @@ export const sanitizeTransfers = (transfers: Transfer[]) =>
         ...transfer,
         message: transfer.message || '',
         tag: transfer.tag || '',
-        address: removeChecksum(transfer.address)
+        address: removeChecksum(transfer.address),
     }))
 
 export const createBundle = (
@@ -112,7 +109,7 @@ export const createBundle = (
         // Sum up total value
         totalValue += transfers[i].value
     }
-   
+
     if (totalBalance > 0) {
         const toSubtract = 0 - totalBalance
 
@@ -231,18 +228,19 @@ export default class Multisig {
             )
         )
             .then(() => sanitizeTransfers(transfers))
-            .then((sanitizedTransfers: Transfer[]) => input.balance
-                ? createBundle(input, transfers, remainderAddress)
-                : getBalances([input.address], 100)
-                    .then((res: GetBalancesResponse): MultisigInput => ({
-                        ...input,
-                        balance: parseInt(res.balances[0], 10)
-                    }))
-                    .then((inputWithBalance: MultisigInput) => createBundle(
-                        inputWithBalance,
-                        sanitizedTransfers,
-                        remainderAddress
-                    )))
+            .then(
+                (sanitizedTransfers: Transfer[]) =>
+                    input.balance
+                        ? createBundle(input, transfers, remainderAddress)
+                        : getBalances([input.address], 100)
+                              .then((res: GetBalancesResponse): MultisigInput => ({
+                                  ...input,
+                                  balance: parseInt(res.balances[0], 10),
+                              }))
+                              .then((inputWithBalance: MultisigInput) =>
+                                  createBundle(inputWithBalance, sanitizedTransfers, remainderAddress)
+                              )
+            )
             .asCallback(callback)
     }
 
@@ -331,4 +329,3 @@ export default class Multisig {
  *   Multisig address constructor
  */
 Multisig.prototype.address = Address
- 

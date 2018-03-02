@@ -35,4 +35,5 @@ export const INVALID_TRYTES_ARRAY = 'Invalid array of trytes'
 export const INVALID_URI = 'Invalid uri'
 export const NOT_INT = 'One of the inputs is not integer'
 
+export const invalidChecksum = (address: string) => `Invalid Checksum: ${address}`
 export const requestError = (statusText: string) => `Request Error: ${statusText}`

@@ -1,5 +1,5 @@
 import * as Promise from 'bluebird'
-import { API, BaseCommand, Callback, IRICommand } from '../types'
+import { BaseCommand, Callback, IRICommand } from '../types'
 import { sendCommand } from './sendCommand'
 
 export interface InterruptAttachingToTangleCommand extends BaseCommand {

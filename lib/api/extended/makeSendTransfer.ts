@@ -1,8 +1,8 @@
 import * as Promise from 'bluebird'
 import * as errors from '../../errors'
-import { depthValidator, mwmValidator, seedValidator, validate } from '../../utils'
-import { Bundle, Callback, Transfer, Trytes } from '../types'
-import { prepareTransfers, sendTrytes } from './index'
+import { depthValidator, mwmValidator, seedValidator, transferArrayValidator, validate } from '../../utils'
+import { Bundle, Callback, CurlFunction, Transaction, Transfer, Trytes } from '../types'
+import { makeSendTrytes, prepareTransfers } from './index'
 
 /**
  *   Prepares Transfer, gets transactions to approve
@@ -19,7 +19,7 @@ import { prepareTransfers, sendTrytes } from './index'
  *   @param {function} callback
  *   @returns {object} analyzed Transaction objects
  **/
-export const sendTransfer = (
+export const makeSendTransfer = (curl: CurlFunction) => (
     seed: string,
     depth: number,
     minWeightMagnitude: number,
@@ -33,8 +33,15 @@ export const sendTransfer = (
         options = {}
     }
 
-    return Promise.resolve(validate(depthValidator(depth), seedValidator(seed), mwmValidator(minWeightMagnitude)))
+    return Promise.resolve(
+        validate(
+            depthValidator(depth),
+            seedValidator(seed),
+            mwmValidator(minWeightMagnitude),
+            transferArrayValidator(transfers)
+        )
+    )
         .then(() => prepareTransfers(seed, transfers, options))
-        .then((trytes: Trytes[]) => sendTrytes(trytes, depth, minWeightMagnitude, options))
+        .then((trytes: Trytes[]) => makeSendTrytes(curl)(trytes, depth, minWeightMagnitude, options))
         .asCallback(callback)
 }

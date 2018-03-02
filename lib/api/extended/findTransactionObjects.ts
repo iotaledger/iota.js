@@ -1,6 +1,6 @@
 import * as Promise from 'bluebird'
-import { findTransactions } from '../core'
-import { Callback, FindTransactionsQuery, Transaction } from '../types'
+import { findTransactions, FindTransactionsQuery } from '../core'
+import { Callback, Transaction } from '../types'
 import { getTransactionObjects } from './getTransactionObjects'
 
 /**

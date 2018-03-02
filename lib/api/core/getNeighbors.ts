@@ -1,5 +1,5 @@
 import * as Promise from 'bluebird'
-import { BaseCommand, Callback, IRICommand, Neighbors } from '../types'
+import { BaseCommand, Callback, IRICommand, Neighbor, Neighbors } from '../types'
 import { sendCommand } from './sendCommand'
 
 export interface GetNeighborsCommand extends BaseCommand {

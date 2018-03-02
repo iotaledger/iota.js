@@ -1,7 +1,7 @@
 import * as Promise from 'bluebird'
 import * as errors from '../../errors'
 import { hashValidator, mwmValidator, trytesArrayValidator, validate } from '../../utils'
-import { API, BaseCommand, Callback, Hash, IRICommand, Trytes } from '../types'
+import { BaseCommand, Callback, CurlFunction, Hash, IRICommand, Trytes } from '../types'
 import { sendCommand } from './sendCommand'
 
 export interface AttachToTangleCommand extends BaseCommand {
@@ -29,6 +29,15 @@ export const validateAttachToTangle = (
         trytesArrayValidator(trytes)
     )
 
+export const curlViaNode: CurlFunction = (trunkTransaction, branchTransaction, minWeightMagnitude, trytes) =>
+    sendCommand<AttachToTangleCommand, AttachToTangleResponse>({
+        command: IRICommand.ATTACH_TO_TANGLE,
+        trunkTransaction,
+        branchTransaction,
+        minWeightMagnitude,
+        trytes,
+    }).then(res => res.trytes)
+
 /**
  *   @method attachToTangle
  *   @param {string} trunkTransaction
@@ -38,7 +47,7 @@ export const validateAttachToTangle = (
  *   @returns {function} callback
  *   @returns {object} success
  **/
-export const attachToTangle = (
+export const makeAttachToTangle = (curl: CurlFunction) => (
     trunkTransaction: Hash,
     branchTransaction: Hash,
     minWeightMagnitude: number,
@@ -46,14 +55,5 @@ export const attachToTangle = (
     callback?: Callback<string[]>
 ): Promise<string[]> =>
     Promise.resolve(validateAttachToTangle(trunkTransaction, branchTransaction, minWeightMagnitude, trytes))
-        .then(() =>
-            sendCommand<AttachToTangleCommand, AttachToTangleResponse>({
-                command: IRICommand.ATTACH_TO_TANGLE,
-                trunkTransaction,
-                branchTransaction,
-                minWeightMagnitude,
-                trytes,
-            })
-        )
-        .then(res => res.trytes)
+        .then(() => curl(trunkTransaction, branchTransaction, minWeightMagnitude, trytes))
         .asCallback(callback)
