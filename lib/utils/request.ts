@@ -1,6 +1,5 @@
 /* tslint:disable no-console */
 
-import { getSettings } from '../api/settings'
 import { BaseCommand, BatchableCommand, Callback, IRICommand, Transaction } from '../api/types'
 import * as errors from '../errors'
 
@@ -15,9 +14,8 @@ export interface RequestOptions {
  *   @method send
  *   @param {object} command
  *   @param {function} callback
- **/
-export function send<C extends BaseCommand, R = any>(command: BaseCommand): Promise<R> {
-    const provider = getSettings().provider
+ */
+export function send<C extends BaseCommand, R = any>(provider: string, command: BaseCommand): Promise<R> {
     const headers: HeadersInit = {
         'Content-Type': 'application/json',
         'X-IOTA-API-Version': '1',
@@ -50,8 +48,9 @@ export function send<C extends BaseCommand, R = any>(command: BaseCommand): Prom
  *   @method batchedSend
  *   @param {object} command
  *   @param {function} callback
- **/
+ */
 export function batchedSend<C extends BatchableCommand, R = any>(
+    provider: string,
     command: C,
     keysToBatch: Array<keyof C>,
     batchSize: number
@@ -76,7 +75,7 @@ export function batchedSend<C extends BatchableCommand, R = any>(
         }
     })
 
-    return Promise.all(requestStack.map(cmd => send(cmd))).then(res => {
+    return Promise.all(requestStack.map(cmd => send(provider, cmd))).then(res => {
         switch (command.command) {
             case IRICommand.GET_BALANCES:
                 const balances = res.reduce((acc, b) => acc.concat(b.balances), [])

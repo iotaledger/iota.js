@@ -20,17 +20,17 @@ const BATCH_SIZE = 1000
  *   @param {function} callback
  *   @returns {object} success
  **/
-export const sendCommand = <C extends BaseCommand, R>(command: C): Promise<R> =>
+export const sendCommand = <C extends BaseCommand, R>(provider: string, command: C): Promise<R> =>
     Promise.try(() => {
         if (isBatchableCommand(command)) {
             const keysToBatch: string[] = getKeysToBatch(command, BATCH_SIZE)
 
             if (keysToBatch.length) {
-                return batchedSend(command, keysToBatch, BATCH_SIZE)
+                return batchedSend(provider, command, keysToBatch, BATCH_SIZE)
             }
         }
 
-        return send(command)
+        return send(provider, command)
     })
 
 export const getKeysToBatch = <C extends BatchableCommand, K = keyof C[]>(

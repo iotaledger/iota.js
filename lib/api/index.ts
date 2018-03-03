@@ -1,62 +1,69 @@
 import * as Bluebird from 'bluebird'
 
 import {
-    addNeighbors,
-    broadcastTransactions,
-    checkConsistency,
-    curlViaNode,
-    findTransactions,
+    createAddNeighbors,
+    createAttachToTangle,
+    createBroadcastTransactions,
+    createCheckConsistency,
+    createFindTransactions,
+    createGetBalances,
+    createGetInclusionStates,
+    createGetNeighbors,
+    createGetNodeInfo,
+    createGetTips,
+    createGetTransactionsToApprove,
+    createGetTrytes,
+    createInterruptAttachingToTangle,
+    createRemoveNeighbors,
+    createStoreTransactions,
+    createWereAddressesSpentFrom,
+    defaultAttachFn,
     FindTransactionsQuery,
-    getBalances,
     GetBalancesResponse,
-    getInclusionStates,
-    getNeighbors,
-    getNodeInfo,
     GetNodeInfoResponse,
-    getTips,
-    getTransactionsToApprove,
     GetTransactionsToApproveResponse,
-    getTrytes,
-    interruptAttachingToTangle,
-    makeAttachToTangle,
-    removeNeighbors,
     sendCommand,
-    storeTransactions,
-    wereAddressesSpentFrom,
+    validateAttachToTangle,
 } from './core'
 
 import {
     AccountData,
-    broadcastBundle,
-    findTransactionObjects,
-    getAccountData,
+    createBroadcastBundle,
+    createFindTransactionObjects,
+    createGetAccountData,
+    createGetBundle,
+    createGetBundlesFromAddresses,
+    createGetInputs,
+    createGetLatestInclusion,
+    createGetNewAddress,
+    createGetTransactionObjects,
+    createGetTransfers,
+    createIsPromotable,
+    createIsReattachable,
+    createPrepareTransfers,
+    createPromoteTransaction,
+    createReplayBundle,
+    createSendTransfer,
+    createSendTrytes,
+    createStoreAndBroadcast,
+    createTraverseBundle,
     GetAccountDataOptions,
-    getBundle,
-    getBundlesFromAddresses,
-    getInputs,
     GetInputsOptions,
-    getLatestInclusion,
-    getNewAddress,
     GetNewAddressOptions,
-    getTransactionObjects,
-    getTransfers,
     GetTransfersOptions,
-    isPromotable,
-    isReattachable,
-    makePromoteTransaction,
-    makeReplayBundle,
-    makeSendTransfer,
-    makeSendTrytes,
-    prepareTransfers,
     PrepareTransfersOptions,
     PromoteTransactionOptions,
-    storeAndBroadcast,
-    traverseBundle,
 } from './extended'
 
-import { setSettings, Settings } from './settings'
+import { validateSettings } from './settings'
 
-import { BaseCommand, Inputs, Neighbor, Transaction, Transfer } from './types'
+import { AttachToTangle, BaseCommand, Inputs, Neighbor, Settings, Transaction, Transfer } from './types'
+
+export type Func<T> = ([...args]: any) => T
+
+export function returnType<T>(func: Func<T>) {
+    return {} as T // tslint:disable-line no-object-literal-type-assertion
+}
 
 /**
  * Composes API object from it's components
@@ -65,51 +72,63 @@ import { BaseCommand, Inputs, Neighbor, Transaction, Transfer } from './types'
  * @param {object} [settings] - connection settings
  **/
 export const composeApi = (settings: Partial<Settings> = {}) => {
-    const curl = settings.curl || curlViaNode
+    const _settings: Settings = validateSettings(settings) // tslint:disable-line variable-name
+    let _attachFn = defaultAttachFn(_settings) // tslint:disable-line variable-name
+
     const api = {
         // core
-        addNeighbors,
-        attachToTangle: makeAttachToTangle(curl),
-        broadcastTransactions,
-        checkConsistency,
-        findTransactions,
-        getBalances,
-        getInclusionStates,
-        getNeighbors,
-        getNodeInfo,
-        getTips,
-        getTransactionsToApprove,
-        getTrytes,
-        interruptAttachingToTangle,
-        removeNeighbors,
+        addNeighbors: createAddNeighbors(_settings),
+        attachToTangle: createAttachToTangle(_attachFn),
+        broadcastTransactions: createBroadcastTransactions(_settings),
+        checkConsistency: createCheckConsistency(_settings),
+        findTransactions: createFindTransactions(_settings),
+        getBalances: createGetBalances(_settings),
+        getInclusionStates: createGetInclusionStates(_settings),
+        getNeighbors: createGetNeighbors(_settings),
+        getNodeInfo: createGetNodeInfo(_settings),
+        getTips: createGetTips(_settings),
+        getTransactionsToApprove: createGetTransactionsToApprove(_settings),
+        getTrytes: createGetTrytes(_settings),
+        interruptAttachingToTangle: createInterruptAttachingToTangle(_settings),
+        removeNeighbors: createRemoveNeighbors(_settings),
+        storeTransactions: createStoreTransactions(_settings),
+        wereAddressesSpentFrom: createWereAddressesSpentFrom(_settings),
         sendCommand,
-        storeTransactions,
-        wereAddressesSpentFrom,
 
         // extended
-        broadcastBundle,
-        findTransactionObjects,
-        getAccountData,
-        getBundle,
-        getBundlesFromAddresses,
-        getInputs,
-        getLatestInclusion,
-        getNewAddress,
-        getTransactionObjects,
-        getTransfers,
-        isPromotable,
-        isReattachable,
-        prepareTransfers,
-        promoteTransaction: makePromoteTransaction(curl),
-        replayBundle: makeReplayBundle(curl),
-        sendTransfer: makeSendTransfer(curl),
-        sendTrytes: makeSendTrytes(curl),
-        setSettings,
-        storeAndBroadcast,
-        traverseBundle,
-    }
+        broadcastBundle: createBroadcastBundle(_settings),
+        createGetAccountData: createGetAccountData(_settings),
+        createGetBundle: createGetBundle(_settings),
+        createGetBundlesFromAddresses: createGetBundlesFromAddresses(_settings),
+        createGetLatestInclusion: createGetLatestInclusion(_settings),
+        createGetNewAddress: createGetNewAddress(_settings),
+        createGetTransactionObjects: createGetTransactionObjects(_settings),
+        findTransactionObjects: createFindTransactionObjects(_settings),
+        getInputs: createGetInputs(_settings),
+        getTransfers: createGetTransfers(_settings),
+        isPromotable: createIsPromotable(_settings),
+        isReattachable: createIsReattachable(_settings),
+        prepareTransfers: createPrepareTransfers(_settings),
+        promoteTransaction: createPromoteTransaction(_settings),
+        replayBundle: createReplayBundle(_settings),
+        sendTransfer: createSendTransfer(_settings),
+        sendTrytes: createSendTrytes(_settings),
+        storeAndBroadcast: createStoreAndBroadcast(_settings),
+        traverseBundle: createTraverseBundle(_settings),
 
-    api.setSettings(settings)
+        // settings
+        setSettings: (newSettings: Partial<Settings> = {}) => {
+            Object.assign(_settings, validateSettings(newSettings))
+        },
+
+        overrideAttachToTangle: (attachFn: AttachToTangle) => {
+            _attachFn = attachFn
+        },
+    }
 
     return api
 }
+
+export const apiType = returnType(composeApi)
+
+export type Api = typeof apiType

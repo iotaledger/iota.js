@@ -150,21 +150,25 @@ export interface BaseCommand {
     command: string
 }
 
-/* Connection settings object */
-export interface Settings {
-    provider?: string
-    normalizeOutput?: boolean
-}
-
 /* Callback */
 export type Callback<R = any> = (err: Error | null, res?: R) => void
 
-export type CurlFunction = (
+export type AttachToTangle = (
     trunkTransaction: Hash,
     branchTransaction: Hash,
     minWeightMagnitude: number,
     trytes: Trytes[]
 ) => Promise<Trytes[]>
+
+export interface Settings {
+    provider: string
+    attachToTangle: AttachToTangle
+    host?: string // deprecated
+    port?: string // deprecated
+    sandbox?: string // deprecated
+    token?: string // deprecated
+}
+
 
 // /* API, Core + Extended */
 // export interface API {
@@ -252,9 +256,9 @@ export type CurlFunction = (
 //         callback?: Callback<AccountData>
 //     ) => Promise<AccountData>
 
-//     getBundle: (this: API, tailTransaction: string, callback?: Callback<Bundle | void>) => Promise<Bundle | void>
+//     createGetBundle: (this: API, tailTransaction: string, callback?: Callback<Bundle | void>) => Promise<Bundle | void>
 
-//     getBundlesFromAddresses: (
+//     createGetBundlesFromAddresses: (
 //         this: API,
 //         addresses: string[],
 //         inclusionState?: boolean,
