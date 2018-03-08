@@ -1,3 +1,5 @@
+import * as errors from '../errors'
+import { isTrytes } from './'
 /**
  * Conversion of ascii encoded bytes to trytes.
  * Input is a string (can be stringified JSON object), return value is Trytes
@@ -30,10 +32,10 @@
  * @param {string} input - ascii input
  * @return {string | null} string of trytes or null
  */
-function toTrytes(input: string): string | null {
-    // If input is not a string, return null
-    if (typeof input !== 'string') {
-        return null
+export const toTrytes = (input: string): string | null => {
+    // If input is not an ascii string, return null
+    if (!/^[\x00-\x7F]*$/.test(input)) {
+        throw new Error(errors.INVALID_ASCII_INPUT)
     }
 
     const TRYTE_VALUES = '9ABCDEFGHIJKLMNOPQRSTUVWXYZ'
@@ -73,15 +75,15 @@ function toTrytes(input: string): string | null {
  * @param {string} inputTrytes trytes
  * @return {string | null} string in ascii or null
  */
-function fromTrytes(inputTrytes: string): string | null {
-    // If input is not a string, return null
-    if (typeof inputTrytes !== 'string') {
-        return null
+export const fromTrytes = (inputTrytes: string): string | null => {
+    // If input is not trytes, return null
+    if (!isTrytes(inputTrytes)) {
+        throw new Error(errors.INVALID_TRYTES)
     }
 
     // If input length is odd, return null
     if (inputTrytes.length % 2) {
-        return null
+        throw new Error(errors.INVALID_ODD_LENGTH)
     }
 
     const TRYTE_VALUES = '9ABCDEFGHIJKLMNOPQRSTUVWXYZ'
@@ -102,9 +104,4 @@ function fromTrytes(inputTrytes: string): string | null {
     }
 
     return outputString
-}
-
-export default {
-    toTrytes,
-    fromTrytes,
 }

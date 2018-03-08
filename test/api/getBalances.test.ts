@@ -1,5 +1,5 @@
 import test from 'ava'
-
+  /*
 import {
     formatGetBalancesResponse,
     makeGetBalancesCommand,
@@ -71,4 +71,4 @@ test('formatGetBalancesResponse() outputs balances in array format', t => {
     }
     const actual = formatGetBalancesResponse(addresses, normalizeOutput)(getBalancesResponse)
     t.deepEqual(actual, expected)
-})
+})*/

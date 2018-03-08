@@ -1,19 +1,20 @@
 import * as Promise from 'bluebird'
 import { Bundle, Converter, HMAC, Signing } from '../../crypto'
 import * as errors from '../../errors'
-
 import {
     addressObjectArrayValidator,
+    asFinalTransactionTrytes,
+    asTransactionTrytes,
     getOptionsWithDefaults,
     hashValidator,
     isValidChecksum,
     NULL_HASH_TRYTES,
+    pad,
+    padTag,
     remainderAddressValidator,
     removeChecksum,
     securityLevelValidator,
     seedValidator,
-    transactionsToFinalTrytes,
-    transactionTrytes,
     transferArrayValidator,
     trytesValidator,
     validate,
@@ -45,10 +46,9 @@ const HASH_LENGTH: number = 81
 const SIGNATURE_MESSAGE_FRAGMENT_LENGTH: number = 2187
 const KEY_FRAGMENT_LENGTH: number = 6561
 
-export const pad = (str: Trytes, l: number): Trytes => str + '9'.repeat(l - str.length)
 export const getTritsFragment = (a: Int8Array, i: number, l: number) => a.slice(i * l, (i + 1) * l)
 export const getTrytesFragment = (a: Trytes, i: number, l: number) => a.slice(i * l, (i + 1) * l)
-export const getTag = (transfer: Transfer) => pad(transfer.tag || transfer.obsoleteTag || '9'.repeat(27), 27)
+export const getTag = (transfer: Transfer) => padTag(transfer.tag || transfer.obsoleteTag || '')
 
 export const addTransfers = (bundle: Bundle, signatureMessageFragments: Trytes[], transfers: Transfer[]) => {
     let offset = 0
@@ -70,9 +70,8 @@ export const addTransfers = (bundle: Bundle, signatureMessageFragments: Trytes[]
 
         for (let i = 0; i < fragmentsLength; i++) {
             signatureMessageFragments.push(
-                pad(
+                pad(SIGNATURE_MESSAGE_FRAGMENT_LENGTH)(
                     getTrytesFragment(transfer.message, i, SIGNATURE_MESSAGE_FRAGMENT_LENGTH),
-                    SIGNATURE_MESSAGE_FRAGMENT_LENGTH
                 )
             )
         }
@@ -216,6 +215,6 @@ export const prepareTransfers = (
             bundle.addTrytes(signatureMessageFragments)
         })
         .then(() => addHMAC(bundle, transfers, hmacKey))
-        .then(() => transactionsToFinalTrytes(bundle.bundle as Transaction[]))
+        .then(() => asFinalTransactionTrytes(bundle.bundle as Transaction[]))
         .asCallback(callback)
 }

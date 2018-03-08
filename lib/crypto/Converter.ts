@@ -49,16 +49,13 @@ const trytesTrits = [
  * @return {Int8Array} trits
  */
 function trits(input: string | number, state?: Int8Array): Int8Array {
-    if (typeof input !== 'string' || (typeof input === 'number' && !Number.isInteger(input))) {
-        throw new Error(errors.ILLEGAL_TRIT_CONVERSION_INPUT)
-    }
-
     const result = state || new Int8Array(
         typeof input === 'number'
-            ? (input as number).toString(2).length * Math.log(2) / Math.log(3)
-            : input.length * 3)
+            ? input.toString(2).length * Math.log(2) / Math.log(3)
+            : input.length * 3
+    )
     
-    if (typeof input === 'number') {
+    if (typeof input === 'number' && Number.isInteger(input)) {
 
         let absoluteValue = input < 0 ? -input : input
 
@@ -78,15 +75,16 @@ function trits(input: string | number, state?: Int8Array): Int8Array {
                 result[i] = -result[i]
             }
         }
-    } else {
+    } else if (typeof input === 'string') {
         for (let i = 0; i < input.length; i++) {
             const index = trytesAlphabet.indexOf(input.charAt(i))
             result[i * 3] = trytesTrits[index][0]
             result[i * 3 + 1] = trytesTrits[index][1]
             result[i * 3 + 2] = trytesTrits[index][2]
         }
+    } else {
+        throw new Error(errors.ILLEGAL_TRIT_CONVERSION_INPUT)
     }
-
     return result
 }
 

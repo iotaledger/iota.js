@@ -1,79 +1,92 @@
 import { Address, Hash, Tag, Transaction, Transfer, Trytes } from '../api/types'
-import { HASH_SIZE, TAG_SIZE, TRYTES_SIZE } from './constants'
+import { HASH_SIZE, TAG_SIZE, TRANSACTION_TRYTES_SIZE } from './constants'
 
-export const isArray = Array.isArray
-export const isInteger = Number.isInteger
+export const isArray = Array.isArray  // deprecated
+export const isInteger = Number.isInteger // deprecated
 
-export const isTrytesOfLength = (trytes: string, length: number) =>
-    typeof trytes === 'string' && new RegExp(`^[9A-Z]{${length}}$`).test(trytes)
+export const isTrytesOfExactLength = (trytes: string, length: number) =>
+    typeof trytes === 'string' && new RegExp(`^[9A-Z]{${ length }}$`).test(trytes)
+
+export const isTrytesOfMaxLength = (trytes: string, length: number) =>
+    typeof trytes === 'string' && new RegExp(`^[9A-Z]{1, ${ length }}$`).test(trytes)
 
 // Checks if input is correct trytes consisting of [9A-Z]; optionally validate length
-export const isTrytes = (trytes: string, length?: number): trytes is Trytes => {
-    if (length && length > 0) {
-        return isTrytesOfLength(trytes, length)
-    }
-
-    return typeof trytes === 'string' && new RegExp(`^[9A-Z]$`).test(trytes)
-}
+export const isTrytes = (trytes: string, length: string | number = '1,'): trytes is Trytes =>
+  typeof trytes === 'string' && new RegExp(`^[9A-Z]{${ length }}$`).test(trytes)
 
 // Checks if input is correct hash (81 trytes)
-export const isHash = (hash: string): hash is Hash => isTrytes(hash, HASH_SIZE)
-export const isAddressTrytes = isHash // deprecated
+export const isHash = (hash: any): hash is Hash =>
+    isTrytesOfExactLength(hash, HASH_SIZE) || isTrytesOfExactLength(hash, HASH_SIZE + 9)
 
-// Deprecated
-export const isNinesTrytes = (trytes: string): boolean => typeof trytes === 'string' && /^[9]+$/.test(trytes)
+export const isAddressTrytes = isHash // Deprecated
+
+export const isEmpty = (trytes: any): trytes is Trytes => typeof trytes === 'string' && /^[9]+$/.test(trytes)
+export const isNinesTrytes = isEmpty // Deprecated
 
 // Checks if input is correct hash
-export const isTransfer = (transfer: any): transfer is Transfer =>
+export const isTransfer = (transfer: Transfer): transfer is Transfer =>
     isHash(transfer.address) &&
-    isInteger(transfer.value) &&
+    Number.isInteger(transfer.value) &&
     isTrytes(transfer.message) &&
-    isTrytes(transfer.tag || transfer.obsoleteTag, TAG_SIZE)
+    isTrytes(transfer.tag) &&
+    transfer.tag.length <= 27
 
 export const isTransfersArray = (transfers: any[]): transfers is Transfer[] =>
-    isArray(transfers) && transfers.every(isTransfer)
+    Array.isArray(transfers) &&
+    transfers.every(isTransfer)
 
-export const isHashArray = (hashes: string[]): boolean => Array.isArray(hashes) && hashes.every(isHash)
+export const isHashArray = (hashes: any[]): hashes is Hash[] =>
+    Array.isArray(hashes) &&
+    hashes.every(isHash)
 
 // Checks if input is list of correct trytes
-export const isTrytesArray = (trytesArray: string[]): trytesArray is Trytes[] =>
-    isArray(trytesArray) && trytesArray.every(trytes => isTrytes(trytes, TRYTES_SIZE))
+export const isTrytesArray = (trytesArray: any[]): trytesArray is Trytes[] =>
+    isArray(trytesArray) &&
+    trytesArray.every(trytes => isTrytes(trytes, TRANSACTION_TRYTES_SIZE))
 
 // Checks if attached trytes if last 241 trytes are non-zero
-export const isAttachedTrytesArray = (trytesArray: string[]): trytesArray is Trytes[] =>
-    isArray(trytesArray) &&
+export const isAttachedTrytesArray = (trytesArray: any[]): trytesArray is Trytes[] =>
+    Array.isArray(trytesArray) &&
     trytesArray.length > 0 &&
-    trytesArray.every(
-        trytes => isTrytes(trytes, TRYTES_SIZE) && /^[9]+$/.test(trytes.slice(TRYTES_SIZE - 3 * HASH_SIZE))
+    trytesArray.every(trytes => 
+        isTrytesOfExactLength(trytes, TRANSACTION_TRYTES_SIZE) &&
+        !(/^[9]+$/.test(trytes.slice(TRANSACTION_TRYTES_SIZE - 3 * HASH_SIZE)))
     )
 
 export const isTransaction = (tx: any): tx is Transaction =>
     isHash(tx.hash) &&
-    isTrytes(tx.signatureMessageFragment, 2187) &&
+    isTrytesOfExactLength(tx.signatureMessageFragment, 2187) &&
     isHash(tx.address) &&
     isInteger(tx.value) &&
-    isTrytes(tx.obsoleteTag, 27) &&
+    isTrytesOfExactLength(tx.obsoleteTag, 27) &&
     isInteger(tx.timestamp) &&
     isInteger(tx.currentIndex) &&
     isInteger(tx.lastIndex) &&
     isHash(tx.bundle) &&
     isHash(tx.trunkTransaction) &&
     isHash(tx.branchTransaction) &&
-    isTrytes(tx.tag, 27) &&
+    isTrytesOfExactLength(tx.tag, 27) &&
     isInteger(tx.attachmentTimestamp) &&
     isInteger(tx.attachmentTimestampLowerBound) &&
     isInteger(tx.attachmentTimestampUpperBound) &&
-    isTrytes(tx.nonce, 27)
+    isTrytesOfExactLength(tx.nonce, 27)
 
 // Checks if correct bundle with transaction object
 export const isTransactionArray = (bundle: any[]): bundle is Transaction[] =>
-    Array.isArray(bundle) && bundle.length > 0 && bundle.every(isTransaction)
+    Array.isArray(bundle) &&
+    bundle.length > 0 &&
+    bundle.every(isTransaction)
 
-export const isAddress = (input: any): input is Address =>
-    isHash(input.address) && isSecurityLevel(input.security) && isInteger(input.keyIndex) && input.keyIndex >= 0
+export const isAddress = (address: any): address is Address =>
+    isHash(address.address) &&
+    isSecurityLevel(address.security) &&
+    Number.isInteger(address.keyIndex) &&
+    address.keyIndex >= 0
 
-export const isAddressArray = (inputs: any[]): inputs is Address[] =>
-    Array.isArray(inputs) && inputs.length > 0 && inputs.every(isAddress)
+export const isAddressArray = (addresses: any[]): addresses is Address[] =>
+    Array.isArray(addresses) &&
+    addresses.length > 0 &&
+    addresses.every(isAddress)
 
 /**
  * Checks that a given uri is valid
@@ -85,7 +98,7 @@ export const isAddressArray = (inputs: any[]): inputs is Address[] =>
  * udp://domain.com
  * udp://domain2.com:14265
  */
-export const isUri = (uri: string): boolean => {
+export const isUri = (uri: any): uri is Trytes => {
     if (typeof uri !== 'string') {
         return false
     }
@@ -99,16 +112,25 @@ export const isUri = (uri: string): boolean => {
     return getInside.test(uri) && uriTest.test(stripBrackets.exec(getInside.exec(uri)![1])![1])
 }
 
-export const isUriArray = (uris: string[]): boolean => isArray(uris) && uris.every(isUri)
+export const isUriArray = (uris: any[]): uris is string[] =>
+    Array.isArray(uris) &&
+    uris.every(isUri)
 
 /* Check if start & end options are valid */
 export const isStartEndOptions = ({ start, end }: { start: number; end: number }): boolean =>
     !!(end && (start > end || end > start + 500))
 
-export const isTag = (tag: string): tag is Tag => isTrytes(tag, TAG_SIZE)
+export const isTag = (tag: any): tag is Tag =>
+    isTrytesOfMaxLength(tag, TAG_SIZE)
 
-export const isTagArray = (tags: string[]): tags is Tag[] => tags.every(isTag)
+export const isTagArray = (tags: any[]): tags is Tag[] =>
+    Array.isArray(tags) &&
+    tags.every(isTag)
 
-export const isSecurityLevel = (security: number): boolean => Number.isInteger(security) && security > 0
+export const isSecurityLevel = (security: any): security is number =>
+    Number.isInteger(security) &&
+    security > 0
 
-export const isTailTransaction = (transaction: Transaction): boolean => transaction.currentIndex !== 0
+export const isTailTransaction = (transaction: any): transaction is Transaction =>
+    isTransaction(transaction) &&
+    transaction.currentIndex !== 0

@@ -13,6 +13,14 @@
         "Edward Greve <edward@iota.org> (https://github.com/anyong)",
         "Chris Dukakis <chris.dukakis@iota.org> (https://github.com/chrisdukakis)"
     ],
+    "ava": {
+        "files": "out/test/**/*.test.js",
+        "concurrency": 5,
+        "failFast": true,
+        "failWithoutAssertions": false,
+        "compileEnhancements": false,
+        "verbose": true
+    },
     "keywords": ["iota", "tangle", "library", "browser", "javascript", "nodejs", "API"],
     "license": "MIT",
     "bugs": {

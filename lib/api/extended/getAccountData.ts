@@ -8,7 +8,7 @@ import {
     trytesValidator,
     validate,
 } from '../../utils'
-import { getBalances, GetBalancesResponse } from '../core'
+import { getBalances, GetBalancesResponse, wereAddressesSpentFrom } from '../core'
 import { Address, Bundle, Callback, Maybe, Transaction, Trytes } from '../types'
 import { getBundlesFromAddresses } from './getBundlesFromAddresses'
 import { getNewAddress } from './getNewAddress'
@@ -106,7 +106,6 @@ export const getAccountData = (
         .then((bundles: Bundle[]) => {
             // Add bundles to account data
             accountData.transfers = bundles
-
             // 5. Get balances for all addresses
             return getBalances(accountData.addresses, 100)
         })
@@ -125,4 +124,10 @@ export const getAccountData = (
                 }
             })
         })
+        .then(() => wereAddressesSpentFrom(accountData.inputs.map(input => input.address)))
+        .then((states: boolean[]) => {
+            accountData.inputs = accountData.inputs.filter((input, i) => !states[i])
+            return accountData
+        })
+        .asCallback(callback)
 }

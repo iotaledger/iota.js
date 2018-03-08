@@ -89,7 +89,7 @@ export const createBundle = (
         }
 
         // If no tag defined, get 27 tryte tag.
-        tag = transfers[i].tag ? transfers[i].tag : '999999999999999999999999999'
+        tag = transfers[i].tag ? transfers[i].tag : '9'.repeat(27)
 
         // Pad for required 27 tryte length
         for (let j = 0; tag.length < 27; j++) {

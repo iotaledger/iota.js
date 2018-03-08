@@ -1,5 +1,5 @@
 import { Transaction } from '../api/types'
-import ascii from './asciiToTrytes'
+import { fromTrytes } from './asciiToTrytes'
 
 /**
  * Takes a bundle as input and from the signatureMessageFragments extracts the correct JSON
@@ -9,7 +9,7 @@ import ascii from './asciiToTrytes'
  * @param {array} bundle
  * @returns {Object}
  */
-export default function extractJson(bundle: Transaction[]): string | null {
+export const extractJson = (bundle: Transaction[]): string | null => {
     // if wrong input return null
     if (!Array.isArray(bundle) || bundle[0] === undefined) {
         return null
@@ -60,7 +60,7 @@ export default function extractJson(bundle: Transaction[]): string | null {
                     break
                 }
 
-                finalJson += ascii.fromTrytes(trytePair)
+                finalJson += fromTrytes(trytePair)
 
                 // If tryte pair equals closing bracket char, we set a preliminary stop
                 // the preliminaryStop is useful when we have a nested JSON object

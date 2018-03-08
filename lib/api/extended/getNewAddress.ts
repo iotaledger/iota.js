@@ -29,7 +29,7 @@ export const isAddressUsed = (address: Hash) => {
     const addresses = asArray(address)
 
     return wereAddressesSpentFrom(addresses).then(spent => {
-        if (spent) {
+        if (spent[0]) {
             return true
         }
 

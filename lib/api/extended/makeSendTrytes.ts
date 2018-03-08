@@ -2,7 +2,7 @@ import * as Promise from 'bluebird'
 import * as errors from '../../errors'
 import { asTransactionObject, depthValidator, mwmValidator, validate } from '../../utils'
 import { getTransactionsToApprove, makeAttachToTangle } from '../core'
-import { Bundle, Callback, CurlFunction, Transaction } from '../types'
+import { Bundle, Callback, CurlFunction, Transaction, Trytes } from '../types'
 import { storeAndBroadcast } from './index'
 
 /**
@@ -17,7 +17,7 @@ import { storeAndBroadcast } from './index'
  *   @returns {object} analyzed Transaction objects
  **/
 export const makeSendTrytes = (curl: CurlFunction) => (
-    trytes: string[],
+    trytes: Trytes[],
     depth: number,
     minWeightMagnitude: number,
     options?: any,
@@ -35,6 +35,6 @@ export const makeSendTrytes = (curl: CurlFunction) => (
             makeAttachToTangle(curl)(trunkTransaction, branchTransaction, minWeightMagnitude, trytes)
         )
         .tap(storeAndBroadcast)
-        .then(attachedTrytes => attachedTrytes.map(asTransactionObject))
+        .then(attachedTrytes => attachedTrytes.map((tryteString: Trytes) => asTransactionObject(tryteString)))
         .asCallback(callback)
 }

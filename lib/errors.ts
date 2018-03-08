@@ -1,6 +1,6 @@
 export const ILLEGAL_LENGTH = 'Illegal trits length'
-export const ILLEGAL_TRIT_CONVERSION_INPUT = 'Illegal conversion input. Expected trytes string or integer.'
-export const ILLEGAL_TRYTE_CONVERSION_INPUT = 'Illegal conversion input. Expected trits as Int8Array.'
+export const ILLEGAL_TRIT_CONVERSION_INPUT = 'Illegal conversion input. Expected trits as Int8Array.' 
+export const ILLEGAL_TRYTE_CONVERSION_INPUT = 'Illegal conversion input. Expected trytes string or integer.'
 export const INCONSISTENT_SUBTANGLE = 'Inconsistent subtangle'
 export const INSUFFICIENT_BALANCE = 'Insufficient balance'
 export const INVALID_ADDRESS = 'Invalid address'
@@ -33,6 +33,9 @@ export const INVALID_TRUNK_TRANSACTION = 'Invalid trunk transaction'
 export const INVALID_TRYTES = 'Invalid trytes'
 export const INVALID_TRYTES_ARRAY = 'Invalid array of trytes'
 export const INVALID_URI = 'Invalid uri'
+export const INVALID_ASCII_INPUT = 'Conversion to trytes requires type of input to be encoded in ascii.'
+export const INVALID_ODD_LENGTH = 'Conversion from trytes requires length of trytes to be even.'
+export const INVALID_TRYTE_ENCODED_JSON = 'Invalid tryte encoded JSON message'
 export const NOT_INT = 'One of the inputs is not integer'
 
 export const invalidChecksum = (address: string) => `Invalid Checksum: ${address}`

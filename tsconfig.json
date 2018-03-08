@@ -5,7 +5,11 @@
         "strict": true,
         "outDir": "out",
         "declaration": true,
-        "declarationDir": "typings"
+        "declarationDir": "typings",
+        "sourceMap": true
     },
-    "include": ["lib"]
+    "include": [
+        "lib",
+        "test"
+    ]
 }
