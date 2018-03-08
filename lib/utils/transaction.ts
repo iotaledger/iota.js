@@ -13,8 +13,8 @@ import { asArray, pad } from './'
 export function asTransactionTrytes(transactions: Transaction): Trytes
 export function asTransactionTrytes(transactions: Transaction[]): Trytes[]
 export function asTransactionTrytes(transactions: Transaction | Transaction[]) {
-    const trytes = asArray(transactions)
-        .map(transaction => [ 
+    const trytes = asArray(transactions).map(transaction =>
+        [
             transaction.signatureMessageFragment,
             transaction.address,
             pad(27)(Converter.trytes(Converter.trits(transaction.value))),
@@ -29,9 +29,10 @@ export function asTransactionTrytes(transactions: Transaction | Transaction[]) {
             pad(9)(Converter.trytes(Converter.trits(transaction.attachmentTimestamp))),
             pad(9)(Converter.trytes(Converter.trits(transaction.attachmentTimestampLowerBound))),
             pad(9)(Converter.trytes(Converter.trits(transaction.attachmentTimestampUpperBound))),
-            transaction.nonce
-        ].join(''))
-          
+            transaction.nonce,
+        ].join('')
+    )
+
     return Array.isArray(transactions) ? trytes : trytes[0]
 }
 
@@ -43,15 +44,15 @@ export function asTransactionTrytes(transactions: Transaction | Transaction[]) {
  *   @returns {Transaction} transactionObject
  **/
 export const transactionHash = (transactionTrits: Int8Array): Hash => {
-      const hashTrits: Int8Array = new Int8Array(Curl.HASH_LENGTH)
-      const curl = new Curl()
+    const hashTrits: Int8Array = new Int8Array(Curl.HASH_LENGTH)
+    const curl = new Curl()
 
-      // generate the correct transaction hash
-      curl.initialize()
-      curl.absorb(transactionTrits, 0, transactionTrits.length)
-      curl.squeeze(hashTrits, 0, 243)
+    // generate the correct transaction hash
+    curl.initialize()
+    curl.absorb(transactionTrits, 0, transactionTrits.length)
+    curl.squeeze(hashTrits, 0, 243)
 
-      return Converter.trytes(hashTrits)
+    return Converter.trytes(hashTrits)
 }
 
 /**
@@ -99,7 +100,7 @@ export const asTransactionObjects = (hashes: Hash[]) => (trytes: Trytes[]) =>
     trytes.map((tryteString, i) => asTransactionObject(tryteString, hashes[i]))
 
 export const asFinalTransactionTrytes = (transactions: Transaction[]) =>
-    transactions.map((transaction) => asTransactionTrytes(transaction)).reverse()
+    transactions.map(transaction => asTransactionTrytes(transaction)).reverse()
 
 /* Legacy conversion methods - Deprecated */
 // export const transactionObject = (trytes: Trytes): Transaction => asTransactionObject(trytes)
