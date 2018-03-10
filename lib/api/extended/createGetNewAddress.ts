@@ -13,7 +13,7 @@ import {
     validate,
 } from '../../utils'
 import { createFindTransactions, createWereAddressesSpentFrom } from '../core'
-import { Callback, Hash, Settings, Trytes } from '../types'
+import { Callback, Hash, Provider, Trytes } from '../types'
 
 export interface GetNewAddressOptions {
     index: number
@@ -25,20 +25,20 @@ export interface GetNewAddressOptions {
 
 export type GetNewAddressResult = Hash | Hash[]
 
-export const isAddressUsed = (settings: Settings, address: Hash) => {
+export const isAddressUsed = (provider: Provider, address: Hash) => {
     const addresses = asArray(address)
 
-    return createWereAddressesSpentFrom(settings)(addresses).then(spent => {
+    return createWereAddressesSpentFrom(provider)(addresses).then(spent => {
         if (spent[0]) {
             return true
         }
 
-        return createFindTransactions(settings)({ addresses }).then(transactions => transactions.length > 0)
+        return createFindTransactions(provider)({ addresses }).then(transactions => transactions.length > 0)
     })
 }
 
 export const getUntilFirstUnusedAddress = (
-    settings: Settings,
+    provider: Provider,
     seed: Trytes,
     index: number,
     security: number,
@@ -53,7 +53,7 @@ export const getUntilFirstUnusedAddress = (
             addressList.push(nextAddress)
         }
 
-        return isAddressUsed(settings, nextAddress).then(used => {
+        return isAddressUsed(provider, nextAddress).then(used => {
             if (used) {
                 return iterate()
             }
@@ -104,31 +104,22 @@ export const getNewAddressOptions = getOptionsWithDefaults<GetNewAddressOptions>
     returnAll: false,
 })
 
-export const createGetNewAddress = (settings: Settings) => {
-    const getNewAddress = (
-        seed: Trytes,
-        options: Partial<GetNewAddressOptions> = {},
-        callback?: Callback<GetNewAddressResult>
-    ): Promise<Trytes | Trytes[]> => {
-        const { index, security, total, returnAll, checksum } = getNewAddressOptions(options)
+export const createGetNewAddress = (provider: Provider) => (
+    seed: Trytes,
+    options: Partial<GetNewAddressOptions> = {},
+    callback?: Callback<GetNewAddressResult>
+): Promise<Trytes | Trytes[]> => {
+    const { index, security, total, returnAll, checksum } = getNewAddressOptions(options)
 
-        validateGetNewAddress(seed, { index, security, total, returnAll, checksum })
+    validateGetNewAddress(seed, { index, security, total, returnAll, checksum })
 
-        const promise: Promise<Trytes[]> =
-            total! > 0
-                ? generateAddresses(seed, index, security, total)
-                : Promise.try(getUntilFirstUnusedAddress(settings, seed, index, security, returnAll))
+    const promise: Promise<Trytes[]> =
+        total! > 0
+            ? generateAddresses(seed, index, security, total)
+            : Promise.try(getUntilFirstUnusedAddress(provider, seed, index, security, returnAll))
 
-        return promise
-            .then(applyChecksumOption(checksum!))
-            .then(applyReturnAllOption(returnAll!))
-            .asCallback(callback)
-    }
-
-    const setSettings = (newSettings: Settings) => {
-        settings = newSettings
-    }
-
-    // tslint:disable-next-line prefer-object-spread
-    return Object.assign(getNewAddress, { setSettings })
+    return promise
+        .then(applyChecksumOption(checksum!))
+        .then(applyReturnAllOption(returnAll!))
+        .asCallback(callback)
 }

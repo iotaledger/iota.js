@@ -28,6 +28,11 @@ export type Hash = string
 export type Tag = string
 export type Trytes = string
 
+export interface Provider {
+    sendCommand: <C extends BaseCommand, R>(command: C, callback?: Callback<R>) => Promise<R>
+    setSettings: (settings: Settings) => void
+}
+
 /* Address object */
 export interface Address extends Balance {
     address: Hash
@@ -162,174 +167,9 @@ export type AttachToTangle = (
 
 export interface Settings {
     provider: string
-    attachToTangle: AttachToTangle
+    attachToTangle?: AttachToTangle
     host?: string // deprecated
     port?: string // deprecated
     sandbox?: string // deprecated
     token?: string // deprecated
 }
-
-
-// /* API, Core + Extended */
-// export interface API {
-//     /**
-//      * API util methods
-//      */
-//     getSettings: () => Settings
-
-//     setSettings: (settings: Settings) => API
-
-//     /**
-//      * Core API methods
-//      */
-//     sendCommand: <C extends BaseCommand, R = any>(this: API, command: BaseCommand, callback?: Callback<R>) => Promise<R>
-
-//     attachToTangle: (
-//         this: API,
-//         trunkTransaction: string,
-//         branchTransaction: string,
-//         minWeightMagnitude: number,
-//         trytes: string[],
-//         callback?: Callback<string[]>
-//     ) => Promise<string[]>
-
-//     findTransactions: (this: API, query: FindTransactionsQuery, callback?: Callback<string[]>) => Promise<string[]>
-
-//     getBalances: (
-//         this: API,
-//         addresses: string[],
-//         threshold: number,
-//         callback?: Callback<GetBalancesResponse>
-//     ) => Promise<GetBalancesResponse>
-
-//     getInclusionStates: (
-//         this: API,
-//         transactions: string[],
-//         tips: string[],
-//         callback?: Callback<string[]>
-//     ) => Promise<string[]>
-
-//     getNodeInfo: (this: API, callback?: Callback<GetNodeInfoResponse>) => Promise<GetNodeInfoResponse>
-
-//     getNeighbors: (this: API, callback?: Callback<GetNeighborsResponse>) => Promise<Neighbor[]>
-
-//     addNeighbors: (this: API, callback?: Callback<number>) => Promise<number>
-
-//     removeNeighbors: (this: API, callback?: Callback<number>) => Promise<number>
-
-//     getTips: (this: API, callback?: Callback<string[]>) => Promise<string[]>
-
-//     getTransactionsToApprove: (
-//         this: API,
-//         depth: number,
-//         reference?: string,
-//         callback?: Callback<GetTransactionsToApproveResponse>
-//     ) => Promise<GetTransactionsToApproveResponse>
-
-//     getTrytes: (this: API, hashes: string[], callback?: Callback<string[]>) => Promise<string[]>
-
-//     interruptAttachingToTangle: (this: API, callback?: Callback<void>) => Promise<void>
-
-//     checkConsistency: (this: API, transactions: string | string[], callback?: Callback<boolean>) => Promise<boolean>
-
-//     broadcastTransactions: (this: API, trytes: string[], callback?: Callback<void>) => Promise<void>
-
-//     storeTransactions: (this: API, trytes: string[], callback?: Callback<void>) => Promise<void>
-
-//     wereAddressesSpentFrom: (this: API, addresses: string[], callback?: Callback<boolean[]>) => Promise<boolean[]>
-
-//     /**
-//      * Extended API methods
-//      */
-//     broadcastBundle: (this: API, tailTransaction: string, callback?: Callback<void>) => Promise<void>
-
-//     findTransactionObjects: (
-//         this: API,
-//         query: FindTransactionsQuery,
-//         callback?: Callback<Transaction[]>
-//     ) => Promise<Transaction[]>
-
-//     getAccountData: (
-//         this: API,
-//         seed: string,
-//         options: GetAccountDataOptions,
-//         callback?: Callback<AccountData>
-//     ) => Promise<AccountData>
-
-//     createGetBundle: (this: API, tailTransaction: string, callback?: Callback<Bundle | void>) => Promise<Bundle | void>
-
-//     createGetBundlesFromAddresses: (
-//         this: API,
-//         addresses: string[],
-//         inclusionState?: boolean,
-//         callback?: Callback<Bundle[]>
-//     ) => Promise<Bundle[]>
-
-//     getInputs: (this: API, seed: string, options?: GetInputsOptions, callback?: Callback) => Promise<Inputs>
-
-//     getLatestInclusion: (this: API, transactions: string[], callback?: Callback<boolean[]>) => Promise<boolean[]>
-
-//     getNewAddress: (this: API, seed: string, options: GetNewAddressOptions) => Promise<string[] | string>
-
-//     getTransactionObjects: (
-//         this: API,
-//         transactions: string[],
-//         callback?: Callback<Transaction[]>
-//     ) => Promise<Transaction[]>
-
-//     isPromotable: (
-//         // Deprecated
-//         this: API,
-//         transactions: string | string[],
-//         callback?: Callback<boolean>
-//     ) => Promise<boolean>
-
-//     promoteTransaction: (
-//         this: API,
-//         tailTransaction: string,
-//         depth: number,
-//         minWeightMagnitude: number,
-//         transfers?: Transfer[],
-//         options?: PromoteTransactionOptions,
-//         callback?: Callback<Transaction[]>
-//     ) => Promise<Transaction[]>
-
-//     replaybundle: (
-//         this: API,
-//         tailTransaction: string,
-//         depth: number,
-//         minWeightMagnitude: number,
-//         callback?: Callback<Bundle>
-//     ) => Promise<Bundle>
-
-//     sendTransfer: (
-//         this: API,
-//         seed: string,
-//         depth: number,
-//         minWeightMagnitude: number,
-//         transfers: Transfer[],
-//         options?: any,
-//         callback?: Callback<Bundle>
-//     ) => Promise<Bundle>
-
-//     sendTrytes: (
-//         this: API,
-//         trytes: string[],
-//         depth: number,
-//         minWeightMagnitude: number,
-//         options?: any,
-//         callback?: Callback<Bundle>
-//     ) => Promise<Bundle>
-
-//     traverseBundle: (
-//         this: API,
-//         trunkTransaction: string,
-//         bundleHash: string | null,
-//         bundle: Bundle,
-//         callback?: Callback<Bundle | void>
-//     ) => Promise<Bundle | void>
-
-//     storeAndBroadcast: (this: API, trytes: string[], callback?: Callback<void>) => Promise<void>
-
-//     [key: string]: any
-// }

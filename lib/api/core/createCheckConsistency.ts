@@ -1,8 +1,7 @@
 import * as Promise from 'bluebird'
 import * as errors from '../../errors'
 import { asArray, hashArrayValidator, validate } from '../../utils'
-import { BaseCommand, Callback, IRICommand, Settings, Trytes } from '../types'
-import { sendCommand } from './sendCommand'
+import { BaseCommand, Callback, IRICommand, Provider, Trytes } from '../types'
 
 export interface CheckConsistencyCommand extends BaseCommand {
     command: IRICommand.CHECK_CONSISTENCY
@@ -15,15 +14,13 @@ export interface CheckConsistencyResponse {
 
 export const validateCheckConsistency = (transactions: string[]) => validate(hashArrayValidator(transactions))
 
-export const createCheckConsistency = (settings: Settings) => {
-    let { provider } = settings
-
-    const checkConsistency = (transactions: string | string[], callback?: Callback<boolean>): Promise<boolean> => {
+export const createCheckConsistency = (provider: Provider) =>
+    (transactions: string | string[], callback?: Callback<boolean>): Promise<boolean> => {
         const transactionsArray = asArray(transactions)
 
         return Promise.resolve(validateCheckConsistency(transactionsArray))
             .then(() =>
-                sendCommand<CheckConsistencyCommand, CheckConsistencyResponse>(provider, {
+                provider.sendCommand<CheckConsistencyCommand, CheckConsistencyResponse>({
                     command: IRICommand.CHECK_CONSISTENCY,
                     transactions: transactionsArray,
                 })
@@ -31,11 +28,3 @@ export const createCheckConsistency = (settings: Settings) => {
             .then(res => res.state)
             .asCallback(callback)
     }
-
-    const setSettings = (newSettings: Settings) => {
-        provider = newSettings.provider
-    }
-
-    // tslint:disable-next-line prefer-object-spread
-    return Object.assign(checkConsistency, { setSettings })
-}

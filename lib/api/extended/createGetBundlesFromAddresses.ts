@@ -1,6 +1,6 @@
 import * as Promise from 'bluebird'
 import * as errors from '../../errors'
-import { Bundle, Callback, Settings, Transaction } from '../types'
+import { Bundle, Callback, Provider, Transaction } from '../types'
 
 import { createFindTransactionObjects, createGetLatestInclusion } from './index'
 
@@ -77,46 +77,37 @@ export const sortByTimestamp = (bundles: Bundle[]) =>
  *   @param {bool} inclusionStates - Flag to include persistence status
  *   @returns {array} bundles - Array of bundles
  */
-export const createGetBundlesFromAddresses = (settings: Settings) => {
-    const getBundlesFromAddresses = (
-        addresses: string[],
-        inclusionStates?: boolean,
-        callback?: Callback<Bundle[]>
-    ): Promise<Bundle[]> => {
-        const findTransactionObjects = createFindTransactionObjects(settings)
-        const getLatestInclusion = createGetLatestInclusion(settings)
+export const createGetBundlesFromAddresses = (provider: Provider) => (
+    addresses: string[],
+    inclusionStates?: boolean,
+    callback?: Callback<Bundle[]>
+): Promise<Bundle[]> => {
+    const findTransactionObjects = createFindTransactionObjects(provider)
+    const getLatestInclusion = createGetLatestInclusion(provider)
 
-        // 1. Get txs associated with addresses
-        return (
-            findTransactionObjects({ addresses })
-                // 2. Get all transactions by bundle hashes
-                .then(transactions =>
-                    findTransactionObjects({
-                        bundles: transactions.filter(tx => tx.currentIndex === 0).map(tx => tx.bundle),
-                    })
-                )
-
-                // 3. Group transactions into bundles
-                .then(groupTransactionsIntoBundles)
-
-                // 4. If requested, add persistence status to each bundle
-                .then(bundles => {
-                    if (!inclusionStates) {
-                        return bundles
-                    }
-
-                    return addPersistence(getLatestInclusion, bundles)
+    // 1. Get txs associated with addresses
+    return (
+        findTransactionObjects({ addresses })
+            // 2. Get all transactions by bundle hashes
+            .then(transactions =>
+                findTransactionObjects({
+                    bundles: transactions.filter(tx => tx.currentIndex === 0).map(tx => tx.bundle),
                 })
+            )
 
-                // 5. Sort bundles by timestamp
-                .then(sortByTimestamp)
-        )
-    }
+            // 3. Group transactions into bundles
+            .then(groupTransactionsIntoBundles)
 
-    const setSettings = (newSettings: Settings) => {
-        settings = newSettings
-    }
+            // 4. If requested, add persistence status to each bundle
+            .then(bundles => {
+                if (!inclusionStates) {
+                    return bundles
+                }
 
-    // tslint:disable-next-line prefer-object-spread
-    return Object.assign(getBundlesFromAddresses, { setSettings })
+                return addPersistence(getLatestInclusion, bundles)
+            })
+
+            // 5. Sort bundles by timestamp
+            .then(sortByTimestamp)
+    )
 }

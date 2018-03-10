@@ -1,8 +1,7 @@
 import * as Promise from 'bluebird'
 import * as errors from '../../errors'
 import { uriArrayValidator, validate } from '../../utils'
-import { BaseCommand, Callback, IRICommand, Settings } from '../types'
-import { sendCommand } from './sendCommand'
+import { BaseCommand, Callback, IRICommand, Provider } from '../types'
 
 export interface RemoveNeighborsCommand extends BaseCommand {
     command: IRICommand.REMOVE_NEIGHBORS
@@ -22,24 +21,14 @@ export const validateRemoveNeighbors = (uris: string[]) => validate(uriArrayVali
  *   @param {function} callback
  *   @returns {object} success
  **/
-export const createRemoveNeighbors = (settings: Settings) => {
-    let { provider } = settings
-
-    const removeNeighbors = (uris: string[], callback?: Callback<number>): Promise<number> =>
+export const createRemoveNeighbors = (provider: Provider) =>
+    (uris: string[], callback?: Callback<number>): Promise<number> =>
         Promise.resolve(validateRemoveNeighbors(uris))
             .then(() =>
-                sendCommand<RemoveNeighborsCommand, RemoveNeighborsResponse>(provider, {
+                provider.sendCommand<RemoveNeighborsCommand, RemoveNeighborsResponse>({
                     command: IRICommand.REMOVE_NEIGHBORS,
                     uris,
                 })
             )
             .then(res => res.removedNeighbors)
             .asCallback(callback)
-
-    const setSettings = (newSettings: Settings) => {
-        provider = newSettings.provider
-    }
-
-    // tslint:disable-next-line prefer-object-spread
-    return Object.assign(removeNeighbors, { setSettings })
-}

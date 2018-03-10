@@ -1,6 +1,6 @@
 import * as Promise from 'bluebird'
 import { createBroadcastTransactions, createStoreTransactions } from '../core'
-import { Callback, Settings } from '../types'
+import { Callback, Provider } from '../types'
 
 /**
  *   Broadcasts and stores transaction trytes
@@ -10,19 +10,12 @@ import { Callback, Settings } from '../types'
  *   @returns {function} callback
  *   @returns {object} success
  **/
-export const createStoreAndBroadcast = (settings: Settings) => {
-    const storeTransactions = createStoreTransactions(settings)
-    const broadcastTransactions = createBroadcastTransactions(settings)
+export const createStoreAndBroadcast = (provider: Provider) => {
+    const storeTransactions = createStoreTransactions(provider)
+    const broadcastTransactions = createBroadcastTransactions(provider)
 
-    const storeAndBroadcast = (trytes: string[], callback?: Callback<void>): Promise<void> =>
+    return (trytes: string[], callback?: Callback<void>): Promise<void> =>
         storeTransactions(trytes)
             .then(() => broadcastTransactions(trytes))
             .asCallback(callback)
-
-    const setSettings = (newSettings: Settings) => {
-        settings = newSettings
-    }
-
-    // tslint:disable-next-line prefer-object-spread
-    return Object.assign(storeAndBroadcast, { setSettings })
 }

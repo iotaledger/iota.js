@@ -1,6 +1,6 @@
 import * as Promise from 'bluebird'
-import { getBalances, GetBalancesResponse } from '../api/core'
-import { Address as AddressType, Callback, Transaction, Transfer } from '../api/types'
+import { createGetBalances, GetBalancesResponse } from '../api/core'
+import { Address as AddressType, Callback, Provider, Transaction, Transfer } from '../api/types'
 import { Bundle, Converter, Kerl, Signing } from '../crypto'
 import * as errors from '../errors'
 import {
@@ -143,6 +143,11 @@ export const createBundle = (
 
 export default class Multisig {
     public address = Address
+    private provider: Provider // tslint:disable-line variable-name
+
+    constructor(provider: Provider) {
+        this.provider = provider 
+    }
 
     /**
      *   Gets the key value of a seed
@@ -232,7 +237,7 @@ export default class Multisig {
                 (sanitizedTransfers: Transfer[]) =>
                     input.balance
                         ? createBundle(input, transfers, remainderAddress)
-                        : getBalances([input.address], 100)
+                        : createGetBalances(this.provider)([input.address], 100)
                               .then((res: GetBalancesResponse): MultisigInput => ({
                                   ...input,
                                   balance: parseInt(res.balances[0], 10),

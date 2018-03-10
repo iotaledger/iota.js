@@ -15,13 +15,17 @@ export interface RequestOptions {
  *   @param {object} command
  *   @param {function} callback
  */
-export function send<C extends BaseCommand, R = any>(provider: string, command: BaseCommand): Promise<R> {
+export const send = <C extends BaseCommand, R = any>(url: string, command: BaseCommand): Promise<R> => {
     const headers: HeadersInit = {
         'Content-Type': 'application/json',
         'X-IOTA-API-Version': '1',
     }
 
-    return fetch(provider, { method: 'POST', headers })
+    return fetch(url, { 
+        method: 'POST',
+        headers,
+        body: JSON.stringify(command)
+    })
         .then((res: any) => {
             if (!res.ok) {
                 throw errors.requestError(res.statusText)
@@ -49,12 +53,12 @@ export function send<C extends BaseCommand, R = any>(provider: string, command: 
  *   @param {object} command
  *   @param {function} callback
  */
-export function batchedSend<C extends BatchableCommand, R = any>(
-    provider: string,
+export const batchedSend = <C extends BatchableCommand, R = any>(
+    uri: string,
     command: C,
     keysToBatch: Array<keyof C>,
     batchSize: number
-): Promise<R> {
+): Promise<R> => {
     const allKeys: Array<keyof C> = Object.keys(command)
     const requestStack: C[] = []
 
@@ -75,7 +79,7 @@ export function batchedSend<C extends BatchableCommand, R = any>(
         }
     })
 
-    return Promise.all(requestStack.map(cmd => send(provider, cmd))).then(res => {
+    return Promise.all(requestStack.map(cmd => send(uri, cmd))).then(res => {
         switch (command.command) {
             case IRICommand.GET_BALANCES:
                 const balances = res.reduce((acc, b) => acc.concat(b.balances), [])
@@ -123,3 +127,4 @@ export function batchedSend<C extends BatchableCommand, R = any>(
         }
     })
 }
+

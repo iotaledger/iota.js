@@ -17,12 +17,10 @@ import {
     createRemoveNeighbors,
     createStoreTransactions,
     createWereAddressesSpentFrom,
-    defaultAttachFn,
     FindTransactionsQuery,
     GetBalancesResponse,
     GetNodeInfoResponse,
     GetTransactionsToApproveResponse,
-    sendCommand,
     validateAttachToTangle,
 } from './core'
 
@@ -57,7 +55,9 @@ import {
 
 import { validateSettings } from './settings'
 
-import { AttachToTangle, BaseCommand, Inputs, Neighbor, Settings, Transaction, Transfer } from './types'
+import { provider } from '../utils'
+
+import { AttachToTangle, BaseCommand, Inputs, Neighbor, Provider, Settings, Transaction, Transfer } from './types'
 
 export type Func<T> = ([...args]: any) => T
 
@@ -73,48 +73,49 @@ export function returnType<T>(func: Func<T>) {
  **/
 export const composeApi = (settings: Partial<Settings> = {}) => {
     const _settings: Settings = validateSettings(settings) // tslint:disable-line variable-name
-    let _attachFn = defaultAttachFn(_settings) // tslint:disable-line variable-name
+    const _provider: Provider = provider(_settings) // tslint:disable-line variable-name
+    let _attachFn = settings.attachToTangle || createAttachToTangle(_provider) // tslint:disable-line variable-name
 
     const api = {
         // core
-        addNeighbors: createAddNeighbors(_settings),
-        attachToTangle: createAttachToTangle(_attachFn),
-        broadcastTransactions: createBroadcastTransactions(_settings),
-        checkConsistency: createCheckConsistency(_settings),
-        findTransactions: createFindTransactions(_settings),
-        getBalances: createGetBalances(_settings),
-        getInclusionStates: createGetInclusionStates(_settings),
-        getNeighbors: createGetNeighbors(_settings),
-        getNodeInfo: createGetNodeInfo(_settings),
-        getTips: createGetTips(_settings),
-        getTransactionsToApprove: createGetTransactionsToApprove(_settings),
-        getTrytes: createGetTrytes(_settings),
-        interruptAttachingToTangle: createInterruptAttachingToTangle(_settings),
-        removeNeighbors: createRemoveNeighbors(_settings),
-        storeTransactions: createStoreTransactions(_settings),
-        wereAddressesSpentFrom: createWereAddressesSpentFrom(_settings),
-        sendCommand,
+        addNeighbors: createAddNeighbors(_provider),
+        attachToTangle: _attachFn,
+        broadcastTransactions: createBroadcastTransactions(_provider),
+        checkConsistency: createCheckConsistency(_provider),
+        findTransactions: createFindTransactions(_provider),
+        getBalances: createGetBalances(_provider),
+        getInclusionStates: createGetInclusionStates(_provider),
+        getNeighbors: createGetNeighbors(_provider),
+        getNodeInfo: createGetNodeInfo(_provider),
+        getTips: createGetTips(_provider),
+        getTransactionsToApprove: createGetTransactionsToApprove(_provider),
+        getTrytes: createGetTrytes(_provider),
+        interruptAttachingToTangle: createInterruptAttachingToTangle(_provider),
+        removeNeighbors: createRemoveNeighbors(_provider),
+        storeTransactions: createStoreTransactions(_provider),
+        wereAddressesSpentFrom: createWereAddressesSpentFrom(_provider),
+        sendCommand: _provider.sendCommand,
 
         // extended
-        broadcastBundle: createBroadcastBundle(_settings),
-        createGetAccountData: createGetAccountData(_settings),
-        createGetBundle: createGetBundle(_settings),
-        createGetBundlesFromAddresses: createGetBundlesFromAddresses(_settings),
-        createGetLatestInclusion: createGetLatestInclusion(_settings),
-        createGetNewAddress: createGetNewAddress(_settings),
-        createGetTransactionObjects: createGetTransactionObjects(_settings),
-        findTransactionObjects: createFindTransactionObjects(_settings),
-        getInputs: createGetInputs(_settings),
-        getTransfers: createGetTransfers(_settings),
-        isPromotable: createIsPromotable(_settings),
-        isReattachable: createIsReattachable(_settings),
-        prepareTransfers: createPrepareTransfers(_settings),
-        promoteTransaction: createPromoteTransaction(_settings),
-        replayBundle: createReplayBundle(_settings),
-        sendTransfer: createSendTransfer(_settings),
-        sendTrytes: createSendTrytes(_settings),
-        storeAndBroadcast: createStoreAndBroadcast(_settings),
-        traverseBundle: createTraverseBundle(_settings),
+        broadcastBundle: createBroadcastBundle(_provider),
+        createGetAccountData: createGetAccountData(_provider),
+        createGetBundle: createGetBundle(_provider),
+        createGetBundlesFromAddresses: createGetBundlesFromAddresses(_provider),
+        createGetLatestInclusion: createGetLatestInclusion(_provider),
+        createGetNewAddress: createGetNewAddress(_provider),
+        createGetTransactionObjects: createGetTransactionObjects(_provider),
+        findTransactionObjects: createFindTransactionObjects(_provider),
+        getInputs: createGetInputs(_provider),
+        getTransfers: createGetTransfers(_provider),
+        isPromotable: createIsPromotable(_provider),
+        isReattachable: createIsReattachable(_provider),
+        prepareTransfers: createPrepareTransfers(_provider),
+        promoteTransaction: createPromoteTransaction(_provider, _attachFn),
+        replayBundle: createReplayBundle(_provider, _attachFn),
+        sendTransfer: createSendTransfer(_provider, _attachFn),
+        sendTrytes: createSendTrytes(_provider, _attachFn),
+        storeAndBroadcast: createStoreAndBroadcast(_provider),
+        traverseBundle: createTraverseBundle(_provider),
 
         // settings
         setSettings: (newSettings: Partial<Settings> = {}) => {

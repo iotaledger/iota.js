@@ -1,7 +1,7 @@
 import * as Promise from 'bluebird'
 import { createFindTransactions, FindTransactionsQuery } from '../core'
-import { Callback, Settings, Transaction } from '../types'
-import { createGetTransactionObjects } from './index'
+import { Callback, Provider, Transaction } from '../types'
+import { createGetTransactionObjects } from './'
 
 /**
  *   Wrapper function for findTransactions, getTrytes and transactionObjects
@@ -13,22 +13,15 @@ import { createGetTransactionObjects } from './index'
  *   @returns {function} callback
  *   @returns {object} success
  **/
-export const createFindTransactionObjects = (settings: Settings) => {
-    const findTransactions = createFindTransactions(settings)
-    const getTransactionsObjects = createGetTransactionObjects(settings)
+export const createFindTransactionObjects = (provider: Provider) => {
+    const findTransactions = createFindTransactions(provider)
+    const getTransactionsObjects = createGetTransactionObjects(provider)
 
-    const findTransactionObjects = (
+    return (
         query: FindTransactionsQuery,
         callback?: Callback<Transaction[]>
     ): Promise<Transaction[]> =>
         findTransactions(query)
             .then(getTransactionsObjects)
             .asCallback(callback)
-
-    const setSettings = (newSettings: Settings) => {
-        settings = newSettings
-    }
-
-    // tslint:disable-next-line prefer-object-spread
-    return Object.assign(findTransactionObjects, { setSettings })
 }

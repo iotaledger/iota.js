@@ -20,7 +20,7 @@ import {
     validate,
 } from '../../utils'
 import { createGetBalances } from '../core'
-import { Address, Callback, Inputs, Maybe, Settings, Transaction, Transfer, Trytes } from '../types'
+import { Address, Callback, Inputs, Maybe, Provider, Transaction, Transfer, Trytes } from '../types'
 import { createGetInputs, createGetNewAddress } from './index'
 
 export interface PrepareTransfersOptions {
@@ -78,7 +78,7 @@ export const addTransfers = (bundle: Bundle, signatureMessageFragments: Trytes[]
 }
 
 const getInputs = (
-    settings: Settings,
+    provider: Provider,
     inputs: Inputs,
     totalValue: number,
     seed: Trytes,
@@ -89,7 +89,7 @@ const getInputs = (
         return Promise.resolve(inputs)
     }
 
-    return createGetInputs(settings)(seed, { security })
+    return createGetInputs(provider)(seed, { security })
 }
 
 export const addInputs = (bundle: Bundle, inputs: Address[], tag: Trytes) =>
@@ -101,7 +101,7 @@ export const getRemainderAddressStartIndex = (inputs: Address[]) =>
     [...inputs].sort((a, b) => a.keyIndex - b.keyIndex)[0].keyIndex
 
 export const addRemainder = (
-    settings: Settings,
+    provider: Provider,
     bundle: Bundle,
     inputs: Inputs,
     totalValue: number,
@@ -118,7 +118,7 @@ export const addRemainder = (
 
     return Promise.resolve(
         remainderAddress ||
-            createGetNewAddress(settings)(seed, {
+            createGetNewAddress(provider)(seed, {
                 index: getRemainderAddressStartIndex(inputs.inputs),
                 security,
             })
@@ -180,55 +180,46 @@ export const getPrepareTransfersOptions = getOptionsWithDefaults(defaults)
  *   @param {function} callback
  *   @returns {array} trytes Returns bundle trytes
  **/
-export const createPrepareTransfers = (settings: Settings) => {
-    const prepareTransfers = (
-        seed: Trytes,
-        transfers: Transfer[],
-        options: Partial<PrepareTransfersOptions> = {},
-        callback?: Callback<Trytes[]>
-    ): Promise<Trytes[]> => {
-        const { inputs, hmacKey, address, remainderAddress, security } = getPrepareTransfersOptions(options)
-        const remainder = remainderAddress || address
-        const bundle = new Bundle()
-        const timestamp = Math.floor(Date.now() / 1000)
-        const totalBalance = inputs ? inputs.reduce((acc, input) => acc + parseInt(input.balance, 10), 0) : 0
-        const totalValue = transfers.reduce((acc, transfer) => acc + transfer.value, 0)
-        const signatureMessageFragments: Trytes[] = []
-        const tag = getTag(transfers[transfers.length - 1])
+export const createPrepareTransfers = (provider: Provider) => (
+    seed: Trytes,
+    transfers: Transfer[],
+    options: Partial<PrepareTransfersOptions> = {},
+    callback?: Callback<Trytes[]>
+): Promise<Trytes[]> => {
+    const { inputs, hmacKey, address, remainderAddress, security } = getPrepareTransfersOptions(options)
+    const remainder = remainderAddress || address
+    const bundle = new Bundle()
+    const timestamp = Math.floor(Date.now() / 1000)
+    const totalBalance = inputs ? inputs.reduce((acc, input) => acc + parseInt(input.balance, 10), 0) : 0
+    const totalValue = transfers.reduce((acc, transfer) => acc + transfer.value, 0)
+    const signatureMessageFragments: Trytes[] = []
+    const tag = getTag(transfers[transfers.length - 1])
 
-        return Promise.resolve(
-            validate(
-                seedValidator(seed),
-                addressObjectArrayValidator(inputs),
-                transferArrayValidator(transfers),
-                remainderAddressValidator(remainder)
-            )
+    return Promise.resolve(
+        validate(
+            seedValidator(seed),
+            addressObjectArrayValidator(inputs),
+            transferArrayValidator(transfers),
+            remainderAddressValidator(remainder)
         )
-            .then(() => addHMACPlaceholder(transfers, hmacKey))
-            .then(() => addTransfers(bundle, signatureMessageFragments, transfers))
-            .then((offset: number) =>
-                getInputs(settings, { inputs, totalBalance }, totalValue, seed, security)
-                    .tap(() => addInputs(bundle, inputs, tag))
-                    .then((newInputs: Maybe<Inputs>) => {
-                        if (newInputs) {
-                            addRemainder(settings, bundle, newInputs, totalValue, tag, seed, security, remainder)
-                        }
-                    })
-                    .then(() => addSignatures(bundle, inputs, seed, offset))
-            )
-            .then(() => {
-                bundle.finalize()
-                bundle.addTrytes(signatureMessageFragments)
-            })
-            .then(() => addHMAC(bundle, transfers, hmacKey))
-            .then(() => asFinalTransactionTrytes(bundle.bundle as Transaction[]))
-            .asCallback(callback)
-    }
-
-    const setSettings = (newSettings: Settings) => {
-        settings = newSettings
-    }
-
-    // tslint:disable-next-line prefer-object-spread
-    return Object.assign(prepareTransfers, { setSettings })
+    )
+        .then(() => addHMACPlaceholder(transfers, hmacKey))
+        .then(() => addTransfers(bundle, signatureMessageFragments, transfers))
+        .then((offset: number) =>
+            getInputs(provider, { inputs, totalBalance }, totalValue, seed, security)
+                .tap(() => addInputs(bundle, inputs, tag))
+                .then((newInputs: Maybe<Inputs>) => {
+                    if (newInputs) {
+                        addRemainder(provider, bundle, newInputs, totalValue, tag, seed, security, remainder)
+                    }
+                })
+                .then(() => addSignatures(bundle, inputs, seed, offset))
+        )
+        .then(() => {
+            bundle.finalize()
+            bundle.addTrytes(signatureMessageFragments)
+        })
+        .then(() => addHMAC(bundle, transfers, hmacKey))
+        .then(() => asFinalTransactionTrytes(bundle.bundle as Transaction[]))
+        .asCallback(callback)
 }

@@ -1,8 +1,7 @@
 import * as Promise from 'bluebird'
 import * as errors from '../../errors'
 import { attachedTrytesArrayValidator, validate } from '../../utils'
-import { BaseCommand, Callback, IRICommand, Settings, Trytes } from '../types'
-import { sendCommand } from './sendCommand'
+import { BaseCommand, Callback, IRICommand, Provider, Trytes } from '../types'
 
 export interface StoreTransactionsCommand extends BaseCommand {
     command: IRICommand.STORE_TRANSACTIONS
@@ -19,23 +18,13 @@ export const validateStoreTransactions = (trytes: Trytes[]) => validate(attached
  *   @returns {function} callback
  *   @returns {object} success
  **/
-export const createStoreTransactions = (settings: Settings) => {
-    let { provider } = settings
-
-    const storeTransactions = (trytes: Trytes[], callback?: Callback<void>): Promise<void> =>
+export const createStoreTransactions = (provider: Provider) =>
+    (trytes: Trytes[], callback?: Callback<void>): Promise<void> =>
         Promise.resolve(validateStoreTransactions(trytes))
             .then(() =>
-                sendCommand<StoreTransactionsCommand, StoreTransactionsResponse>(provider, {
+                provider.sendCommand<StoreTransactionsCommand, StoreTransactionsResponse>({
                     command: IRICommand.STORE_TRANSACTIONS,
                     trytes,
                 })
             )
             .asCallback(callback)
-
-    const setSettings = (newSettings: Settings) => {
-        provider = newSettings.provider
-    }
-
-    // tslint:disable-next-line prefer-object-spread
-    return Object.assign(storeTransactions, { setSettings })
-}

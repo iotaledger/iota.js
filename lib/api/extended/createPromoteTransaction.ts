@@ -1,6 +1,6 @@
 import * as errors from '../../errors'
 import { generateSpam, getOptionsWithDefaults, hashValidator, transferArrayValidator, validate } from '../../utils'
-import { AttachToTangle, Callback, Maybe, Settings, Transaction, Transfer } from '../types'
+import { AttachToTangle, Callback, Maybe, Provider, Transaction, Transfer } from '../types'
 import { createIsPromotable, createSendTransfer } from './index'
 
 export interface PromoteTransactionOptions {
@@ -27,9 +27,9 @@ export const getPromoteTransactionOptions = getOptionsWithDefaults(defaults)
  * @param {function} [callback]
  * @returns {Promise<string>}
  */
-export const createPromoteTransaction = (settings: Settings) => {
-    const isPromotable = createIsPromotable(settings)
-    const sendTransfer = createSendTransfer(settings)
+export const createPromoteTransaction = (provider: Provider, attachFn?: AttachToTangle) => {
+    const isPromotable = createIsPromotable(provider)
+    const sendTransfer = createSendTransfer(provider, attachFn)
 
     const promoteTransaction = (
         tailTransaction: string,
@@ -81,10 +81,5 @@ export const createPromoteTransaction = (settings: Settings) => {
             })
     }
 
-    const setSettings = (newSettings: Settings) => {
-        settings = newSettings
-    }
-
-    // tslint:disable-next-line prefer-object-spread
-    return Object.assign(promoteTransaction, { setSettings })
+    return promoteTransaction
 }

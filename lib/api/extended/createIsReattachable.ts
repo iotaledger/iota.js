@@ -1,6 +1,6 @@
 import * as Promise from 'bluebird'
 import { asArray, hashArrayValidator, isArray, removeChecksum, trytesArrayValidator, validate } from '../../utils'
-import { Callback, Hash, Settings, Transaction, Trytes } from '../types'
+import { Callback, Hash, Provider, Transaction, Trytes } from '../types'
 import { createFindTransactionObjects, createGetLatestInclusion } from './index'
 
 /**
@@ -16,8 +16,8 @@ const filterSpendingTransactions = (transactions: Transaction[]) => transactions
  *
  * @param transactions
  */
-const withInclusionState = (settings: Settings, transactions: Transaction[]) =>
-    createGetLatestInclusion(settings)(transactions.map(tx => tx.hash)).then(states =>
+const withInclusionState = (provider: Provider, transactions: Transaction[]) =>
+    createGetLatestInclusion(provider)(transactions.map(tx => tx.hash)).then(states =>
         transactions.map((tx, i) => ({
             ...tx,
             confirmed: states[i],
@@ -40,10 +40,9 @@ const hasConfirmedTxs = (addresses: Hash[], transactions: Transaction[]) =>
  *
  * @param inputAddresses
  */
-export const createIsReattachable = (settings: Settings) => {
-    const findTransactionObjects = createFindTransactionObjects(settings)
-
-    const isReattachable = (
+export const createIsReattachable = (provider: Provider) => {
+    const findTransactionObjects = createFindTransactionObjects(provider)
+    return (
         inputAddresses: Trytes | Trytes[],
         callback?: Callback<boolean | boolean[]>
     ): Promise<boolean | boolean[]> => {
@@ -74,7 +73,7 @@ export const createIsReattachable = (settings: Settings) => {
 
                     // 5. Add the inclusion state for value-transactions
                     return (
-                        withInclusionState(settings, spendingTransactions)
+                        withInclusionState(provider, spendingTransactions)
                             // 6. Map addresses to inclusion state
                             .then(txsWithInclusionState => hasConfirmedTxs(addresses, txsWithInclusionState))
 
@@ -87,13 +86,6 @@ export const createIsReattachable = (settings: Settings) => {
                 .asCallback(callback)
         )
     }
-
-    const setSettings = (newSettings: Settings) => {
-        settings = newSettings
-    }
-
-    // tslint:disable-next-line prefer-object-spread
-    return Object.assign(isReattachable, { setSettings })
 }
 // /**
 //  *   Determines whether you should replay a transaction

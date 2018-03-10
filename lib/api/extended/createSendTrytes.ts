@@ -2,7 +2,7 @@ import * as Promise from 'bluebird'
 import * as errors from '../../errors'
 import { asTransactionObject, depthValidator, mwmValidator, validate } from '../../utils'
 import { createAttachToTangle, createGetTransactionsToApprove } from '../core'
-import { AttachToTangle, Bundle, Callback, Settings, Transaction } from '../types'
+import { AttachToTangle, Bundle, Callback, Provider, Transaction } from '../types'
 import { createStoreAndBroadcast } from './index'
 
 /**
@@ -16,12 +16,11 @@ import { createStoreAndBroadcast } from './index'
  *   @param {function} callback
  *   @returns {object} analyzed Transaction objects
  **/
-export const createSendTrytes = (settings: Settings) => {
-    const getTransactionsToApprove = createGetTransactionsToApprove(settings)
-    const attachToTangle = createAttachToTangle(settings.attachToTangle)
-    const storeAndBroadcast = createStoreAndBroadcast(settings)
-
-    const sendTrytes = (
+export const createSendTrytes = (provider: Provider, attachFn?: AttachToTangle) => {
+    const getTransactionsToApprove = createGetTransactionsToApprove(provider)
+    const storeAndBroadcast = createStoreAndBroadcast(provider)
+    const attachToTangle = attachFn || createAttachToTangle(provider)
+    return (
         trytes: string[],
         depth: number,
         minWeightMagnitude: number,
@@ -43,11 +42,4 @@ export const createSendTrytes = (settings: Settings) => {
             .then(attachedTrytes => attachedTrytes.map(t => asTransactionObject(t)))
             .asCallback(callback)
     }
-
-    const setSettings = (newSettings: Settings) => {
-        settings = newSettings
-    }
-
-    // tslint:disable-next-line prefer-object-spread
-    return Object.assign(sendTrytes, { setSettings })
 }

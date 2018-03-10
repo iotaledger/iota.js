@@ -1,9 +1,7 @@
 import * as Promise from 'bluebird'
 import * as errors from '../../errors'
 import { hashArrayValidator, isArray, padTagArray, removeChecksum, tagArrayValidator, validate } from '../../utils'
-
-import { BaseCommand, Callback, IRICommand, Settings } from '../types'
-import { sendCommand } from './sendCommand'
+import { BaseCommand, Callback, Hash, IRICommand, Provider } from '../types'
 
 export interface FindTransactionsQuery {
     addresses?: string[]
@@ -61,29 +59,15 @@ const validateFindTransactions = (query: FindTransactionsQuery) => {
  *   @returns {function} callback
  *   @returns {object} success
  **/
-export const createFindTransactions = (settings: Settings) => {
-    let { provider } = settings
-
-    const findTransactions = (query: FindTransactionsQuery, callback?: Callback<string[]>): Promise<string[]> => {
-        if (query.tags) {
-            query.tags = padTagArray(query.tags)
-        }
-
-        return Promise.resolve(validateFindTransactions(query))
+export const createFindTransactions = (provider: Provider) =>
+    (query: FindTransactionsQuery, callback?: Callback<Hash[]>): Promise<Hash[]> =>
+        Promise.resolve(validateFindTransactions(query))
             .then(() =>
-                sendCommand<FindTransactionsCommand, FindTransactionsResponse>(provider, {
+                provider.sendCommand<FindTransactionsCommand, FindTransactionsResponse>({
                     command: IRICommand.FIND_TRANSACTIONS,
-                    ...query,
+                    ...(query.tags ? { ...query, tags: padTagArray(query.tags) } : query)
                 })
             )
             .then(res => res.hashes)
             .asCallback(callback)
-    }
 
-    const setSettings = (newSettings: Settings) => {
-        provider = newSettings.provider
-    }
-
-    // tslint:disable-next-line prefer-object-spread
-    return Object.assign(findTransactions, { setSettings })
-}

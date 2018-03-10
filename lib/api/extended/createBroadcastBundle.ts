@@ -2,7 +2,7 @@ import * as Promise from 'bluebird'
 import * as erros from '../../errors'
 import { asFinalTransactionTrytes, hashValidator, validate } from '../../utils'
 import { createBroadcastTransactions } from '../core'
-import { Callback, Settings, Transaction } from '../types'
+import { Callback, Provider, Transaction } from '../types'
 import { createGetBundle } from './index'
 
 /**
@@ -13,9 +13,9 @@ import { createGetBundle } from './index'
  *   @param {function} [callback]
  *   @returns {object} Transaction objects
  **/
-export const createBroadcastBundle = (settings: Settings) => {
-    const broadcastTransactions = createBroadcastTransactions(settings)
-    const getBundle = createGetBundle(settings)
+export const createBroadcastBundle = (provider: Provider) => {
+    const broadcastTransactions = createBroadcastTransactions(provider)
+    const getBundle = createGetBundle(provider)
 
     const broadcastBundle = (tailTransactionHash: string, callback?: Callback<void>): Promise<void> =>
         Promise.resolve(validate(hashValidator(tailTransactionHash)))
@@ -23,11 +23,4 @@ export const createBroadcastBundle = (settings: Settings) => {
             .then(asFinalTransactionTrytes)
             .then(broadcastTransactions)
             .asCallback(callback)
-
-    const setSettings = (newSettings: Settings) => {
-        settings = newSettings
-    }
-
-    // tslint:disable-next-line prefer-object-spread
-    return Object.assign(broadcastBundle, { setSettings })
 }

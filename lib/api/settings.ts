@@ -1,6 +1,5 @@
 /* tslint:disable no-console */
-import { defaultAttachFn } from './core'
-import { AttachToTangle, Settings } from './types'
+import { Settings } from './types'
 
 const defaultProvider = 'http://localhost:14265'
 
@@ -29,7 +28,5 @@ export const validateSettings = (settings: Partial<Settings> = {}): Settings => 
         provider = settings.provider
     }
 
-    const curl = settings.attachToTangle || defaultAttachFn(provider)
-
-    return { attachToTangle, provider }
+    return { provider, attachToTangle: settings.attachToTangle }
 }

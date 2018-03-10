@@ -2,7 +2,7 @@ import * as Promise from 'bluebird'
 import * as errors from '../../errors'
 
 import { asFinalTransactionTrytes, hashValidator, integerValidator, mwmValidator, validate } from '../../utils'
-import { AttachToTangle, Bundle, Callback, Settings, Transaction, Trytes } from '../types'
+import { AttachToTangle, Bundle, Callback, Provider, Transaction, Trytes } from '../types'
 import { createGetBundle, createSendTrytes } from './index'
 
 /**
@@ -15,9 +15,9 @@ import { createGetBundle, createSendTrytes } from './index'
  *   @param {function} callback
  *   @returns {object} analyzed Transaction objects
  **/
-export const createReplayBundle = (settings: Settings) => {
-    const getBundle = createGetBundle(settings)
-    const sendTrytes = createSendTrytes(settings)
+export const createReplayBundle = (provider: Provider, attachFn: AttachToTangle) => {
+    const getBundle = createGetBundle(provider)
+    const sendTrytes = createSendTrytes(provider, attachFn)
 
     const replayBundle = (
         tail: string,
@@ -30,11 +30,4 @@ export const createReplayBundle = (settings: Settings) => {
             .then((bundle: Bundle) => asFinalTransactionTrytes(bundle))
             .then((trytes: Trytes[]) => sendTrytes(trytes, depth, minWeightMagnitude))
             .asCallback(callback)
-
-    const setSettings = (newSettings: Settings) => {
-        settings = newSettings
-    }
-
-    // tslint:disable-next-line prefer-object-spread
-    return Object.assign(replayBundle, { setSettings })
 }

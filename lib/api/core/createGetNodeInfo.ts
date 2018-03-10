@@ -1,6 +1,5 @@
 import * as Promise from 'bluebird'
-import { BaseCommand, Callback, IRICommand, Settings } from '../types'
-import { sendCommand } from './sendCommand'
+import { BaseCommand, Callback, IRICommand, Provider } from '../types'
 
 export interface GetNodeInfoCommand extends BaseCommand {
     command: IRICommand.GET_NODE_INFO
@@ -30,18 +29,8 @@ export interface GetNodeInfoResponse {
  *   @returns {function} callback
  *   @returns {object} success
  **/
-export const createGetNodeInfo = (settings: Settings) => {
-    let { provider } = settings
-
-    const getNodeInfo = (callback?: Callback<GetNodeInfoResponse>): Promise<GetNodeInfoResponse> =>
-        sendCommand<GetNodeInfoCommand, GetNodeInfoResponse>(provider, {
+export const createGetNodeInfo = (provider: Provider) =>
+    (callback?: Callback<GetNodeInfoResponse>): Promise<GetNodeInfoResponse> =>
+        provider.sendCommand<GetNodeInfoCommand, GetNodeInfoResponse>({
             command: IRICommand.GET_NODE_INFO,
         }).asCallback(callback)
-
-    const setSettings = (newSettings: Settings) => {
-        provider = newSettings.provider
-    }
-
-    // tslint:disable-next-line prefer-object-spread
-    return Object.assign(getNodeInfo, { setSettings })
-}

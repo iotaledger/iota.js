@@ -1,8 +1,7 @@
 import * as Promise from 'bluebird'
 import * as errors from '../../errors'
 import { hashArrayValidator, removeChecksum, validate } from '../../utils'
-import { BaseCommand, Callback, Hash, IRICommand, Settings } from '../types'
-import { sendCommand } from './sendCommand'
+import { BaseCommand, Callback, Hash, IRICommand, Provider } from '../types'
 
 export interface WereAddressesSpentFromCommand extends BaseCommand {
     command: string
@@ -26,15 +25,13 @@ export const validateWereAddressesSpentFrom = (addresses: Hash[]) => validate(ha
  * @param addresses
  * @param callback
  */
-export const createWereAddressesSpentFrom = (settings: Settings) => {
-    let { provider } = settings
-
-    const wereAddressesSpentFrom = (addresses: Hash[], callback?: Callback<boolean[]>): Promise<boolean[]> => {
+export const createWereAddressesSpentFrom = (provider: Provider) =>
+    (addresses: Hash[], callback?: Callback<boolean[]>): Promise<boolean[]> => {
         addresses = removeChecksum(addresses)
 
         return Promise.resolve(validateWereAddressesSpentFrom(addresses))
             .then(() =>
-                sendCommand<WereAddressesSpentFromCommand, WereAddressesSpentFromResponse>(provider, {
+                provider.sendCommand<WereAddressesSpentFromCommand, WereAddressesSpentFromResponse>({
                     command: IRICommand.WERE_ADDRESSES_SPENT_FROM,
                     addresses,
                 })
@@ -42,10 +39,3 @@ export const createWereAddressesSpentFrom = (settings: Settings) => {
             .then(res => res.states)
             .asCallback(callback)
     }
-    const setSettings = (newSettings: Settings) => {
-        provider = newSettings.provider
-    }
-
-    // tslint:disable-next-line prefer-object-spread
-    return Object.assign(wereAddressesSpentFrom, { setSettings })
-}

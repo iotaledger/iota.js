@@ -1,8 +1,7 @@
 import * as Promise from 'bluebird'
 import * as errors from '../../errors'
 import { attachedTrytesArrayValidator, validate } from '../../utils'
-import { BaseCommand, Callback, IRICommand, Settings, Trytes } from '../types'
-import { getKeysToBatch, sendCommand } from './sendCommand'
+import { BaseCommand, Callback, IRICommand, Provider, Trytes } from '../types'
 
 export interface BroadcastTransactionsCommand extends BaseCommand {
     command: IRICommand.BROADCAST_TRANSACTIONS
@@ -19,23 +18,13 @@ export const validateBroadcastTransactions = (trytes: Trytes[]) => validate(atta
  *   @returns {function} callback
  *   @returns {object} success
  **/
-export const createBroadcastTransactions = (settings: Settings) => {
-    let { provider } = settings
-
-    const broadcastTransactions = (trytes: Trytes[], callback?: Callback<void>): Promise<void> =>
+export const createBroadcastTransactions = (provider: Provider) =>
+    (trytes: Trytes[], callback?: Callback<void>): Promise<void> =>
         Promise.resolve(validateBroadcastTransactions(trytes))
             .then(() =>
-                sendCommand<BroadcastTransactionsCommand, BroadcastTransactionsResponse>(provider, {
+                provider.sendCommand<BroadcastTransactionsCommand, BroadcastTransactionsResponse>({
                     command: IRICommand.BROADCAST_TRANSACTIONS,
                     trytes,
                 })
             )
             .asCallback(callback)
-
-    const setSettings = (newSettings: Settings) => {
-        provider = newSettings.provider
-    }
-
-    // tslint:disable-next-line prefer-object-spread
-    return Object.assign(broadcastTransactions, { setSettings })
-}

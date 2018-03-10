@@ -1,6 +1,5 @@
 import * as Promise from 'bluebird'
-import { BaseCommand, Callback, IRICommand, Neighbor, Neighbors, Settings } from '../types'
-import { sendCommand } from './sendCommand'
+import { BaseCommand, Callback, IRICommand, Neighbor, Neighbors, Provider } from '../types'
 
 export interface GetNeighborsCommand extends BaseCommand {
     command: IRICommand.GET_NEIGHBORS
@@ -16,20 +15,10 @@ export interface GetNeighborsResponse {
  *   @returns {function} callback
  *   @returns {object} success
  **/
-export const createGetNeighbors = (settings: Settings) => {
-    let { provider } = settings
-
-    const getNeighbors = (callback?: Callback<Neighbors>): Promise<Neighbors> =>
-        sendCommand<GetNeighborsCommand, GetNeighborsResponse>(provider, {
+export const createGetNeighbors = (provider: Provider) =>
+    (callback?: Callback<Neighbors>): Promise<Neighbors> =>
+        provider.sendCommand<GetNeighborsCommand, GetNeighborsResponse>({
             command: IRICommand.GET_NEIGHBORS,
         })
             .then(res => res.neighbors)
             .asCallback(callback)
-
-    const setSettings = (newSettings: Settings) => {
-        provider = newSettings.provider
-    }
-
-    // tslint:disable-next-line prefer-object-spread
-    return Object.assign(getNeighbors, { setSettings })
-}

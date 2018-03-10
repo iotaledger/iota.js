@@ -11,7 +11,7 @@ import {
     validate,
 } from '../../utils'
 import { createGetBalances } from '../core'
-import { Address, Balance, Callback, Hash, Inputs, makeAddress, Maybe, Settings } from '../types'
+import { Address, Balance, Callback, Hash, Inputs, makeAddress, Provider } from '../types'
 import { createGetNewAddress, getNewAddressOptions, GetNewAddressOptions } from './createGetNewAddress'
 
 export interface GetInputsOptions {
@@ -52,17 +52,16 @@ export const checkSufficientBalance = ({ totalBalance }: Inputs, threshold: numb
 
 export const getInputsOptions = getOptionsWithDefaults(defaults)
 
-export const createGetInputs = (settings: Settings) => {
-    const getNewAddress = createGetNewAddress(settings)
-    const getBalances = createGetBalances(settings)
+export const createGetInputs = (provider: Provider) => {
+    const getNewAddress = createGetNewAddress(provider)
+    const getBalances = createGetBalances(provider)
 
-    const getInputs = (
+    return (
         seed: string,
         options: Partial<GetInputsOptions> = {},
-        callback?: Callback<Maybe<Inputs>>
-    ): Promise<Maybe<Inputs>> => {
+        callback?: Callback<Inputs>
+    ): Promise<Inputs> => {
         const { security, start, end, threshold } = getInputsOptions(options)
-        let addresses: Hash[] = []
 
         return Promise.resolve(
             validate(
@@ -75,18 +74,10 @@ export const createGetInputs = (settings: Settings) => {
         )
             .then(() => inputsToAddressOptions({ start, end, security, threshold }))
             .then(newAddressOptions => getNewAddress(seed, newAddressOptions))
-            .then(addrs => {
-                addresses = asArray(addrs)
-                return getBalances(addresses, 100)
-            })
-            .then(res => makeInputsObject(addresses, res.balances, start, security))
-            .tap(inputs => checkSufficientBalance(inputs, threshold))
-    }
-
-    const setSettings = (newSettings: Settings) => {
-        settings = newSettings
-    }
-
-    // tslint:disable-next-line prefer-object-spread
-    return Object.assign(getInputs, { setSettings })
+            .then(allAddresses => asArray(allAddresses))
+            .then(allAddresses => getBalances(allAddresses, 100)
+                .then(res => makeInputsObject(allAddresses, res.balances, start, security))
+                .tap(inputs => checkSufficientBalance(inputs, threshold))
+            )
+    } 
 }

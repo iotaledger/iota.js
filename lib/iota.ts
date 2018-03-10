@@ -1,5 +1,4 @@
 import 'isomorphic-fetch'
-
 import { composeApi } from './api'
 import { Settings } from './api/types'
 import * as errors from './errors'

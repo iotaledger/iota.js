@@ -8,7 +8,7 @@ import {
     startEndOptionsValidator,
     validate,
 } from '../../utils'
-import { Bundle, Callback, Settings, Transaction } from '../types'
+import { Bundle, Callback, Provider, Transaction } from '../types'
 import { createGetBundlesFromAddresses, createGetNewAddress, getNewAddressOptions, GetNewAddressOptions } from './index'
 
 export interface GetTransfersOptions {
@@ -46,11 +46,11 @@ export const getTransfersOptions = getOptionsWithDefaults(defaults)
  *   @param {function} callback
  *   @returns {object} success
  */
-export const createGetTransfers = (settings: Settings) => {
-    const getNewAddress = createGetNewAddress(settings)
-    const getBundlesFromAddresses = createGetBundlesFromAddresses(settings)
+export const createGetTransfers = (provider: Provider) => {
+    const getNewAddress = createGetNewAddress(provider)
+    const getBundlesFromAddresses = createGetBundlesFromAddresses(provider)
 
-    const getTransfers = (
+    return (
         seed: string,
         options: Partial<GetTransfersOptions> = {},
         callback?: Callback<Bundle[]>
@@ -70,11 +70,4 @@ export const createGetTransfers = (settings: Settings) => {
             .then(addresses => getBundlesFromAddresses(addresses as string[], inclusionStates))
             .asCallback(callback)
     }
-
-    const setSettings = (newSettings: Settings) => {
-        settings = newSettings
-    }
-
-    // tslint:disable-next-line prefer-object-spread
-    return Object.assign(getTransfers, { setSettings })
 }

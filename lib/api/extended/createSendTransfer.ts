@@ -1,7 +1,7 @@
 import * as Promise from 'bluebird'
 import * as errors from '../../errors'
 import { depthValidator, mwmValidator, seedValidator, transferArrayValidator, validate } from '../../utils'
-import { Bundle, Callback, Settings, Transaction, Transfer, Trytes } from '../types'
+import { AttachToTangle, Bundle, Callback, Provider, Transaction, Transfer, Trytes } from '../types'
 import { createPrepareTransfers, createSendTrytes } from './index'
 
 /**
@@ -19,11 +19,11 @@ import { createPrepareTransfers, createSendTrytes } from './index'
  *   @param {function} callback
  *   @returns {object} analyzed Transaction objects
  **/
-export const createSendTransfer = (settings: Settings) => {
-    const prepareTransfers = createPrepareTransfers(settings)
-    const sendTrytes = createSendTrytes(settings)
+export const createSendTransfer = (provider: Provider, attachFn?: AttachToTangle) => {
+    const prepareTransfers = createPrepareTransfers(provider)
+    const sendTrytes = createSendTrytes(provider, attachFn)
 
-    const sendTransfer = (
+    return ( 
         seed: string,
         depth: number,
         minWeightMagnitude: number,
@@ -49,11 +49,4 @@ export const createSendTransfer = (settings: Settings) => {
             .then((trytes: Trytes[]) => sendTrytes(trytes, depth, minWeightMagnitude, options))
             .asCallback(callback)
     }
-
-    const setSettings = (newSettings: Settings) => {
-        settings = newSettings
-    }
-
-    // tslint:disable-next-line prefer-object-spread
-    return Object.assign(sendTransfer, { setSettings })
 }

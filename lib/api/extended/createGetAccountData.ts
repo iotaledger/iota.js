@@ -9,7 +9,7 @@ import {
     validate,
 } from '../../utils'
 import { createGetBalances, createWereAddressesSpentFrom, GetBalancesResponse } from '../core'
-import { Address, Bundle, Callback, Maybe, Settings, Transaction, Trytes } from '../types'
+import { Address, Bundle, Callback, Maybe, Provider, Settings, Transaction, Trytes } from '../types'
 import { createGetBundlesFromAddresses, createGetNewAddress } from './index'
 
 /**
@@ -73,11 +73,11 @@ export const getAccountDataOptions = getOptionsWithDefaults(defaults)
  *   @param {function} callback
  *   @returns {object} success
  */
-export const createGetAccountData = (settings: Settings) => {
-    const getNewAddress = createGetNewAddress(settings)
-    const getBundlesFromAddresses = createGetBundlesFromAddresses(settings)
-    const getBalances = createGetBalances(settings)
-    const wereAddressesSpentFrom = createWereAddressesSpentFrom(settings)
+export const createGetAccountData = (provider: Provider) => {
+    const getNewAddress = createGetNewAddress(provider)
+    const getBundlesFromAddresses = createGetBundlesFromAddresses(provider)
+    const getBalances = createGetBalances(provider)
+    const wereAddressesSpentFrom = createWereAddressesSpentFrom(provider)
 
     const getAccountData = (
         seed: string,

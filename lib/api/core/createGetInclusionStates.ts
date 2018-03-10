@@ -2,8 +2,7 @@ import * as Promise from 'bluebird'
 import * as errors from '../../errors'
 import { hashArrayValidator, validate } from '../../utils'
 
-import { BaseCommand, Callback, Hash, IRICommand, Settings } from '../types'
-import { sendCommand } from './index'
+import { BaseCommand, Callback, Hash, IRICommand, Provider } from '../types'
 
 export interface GetInclusionStatesCommand extends BaseCommand {
     command: IRICommand.GET_INCLUSION_STATES
@@ -26,29 +25,18 @@ export const validateGetInclusionStates = (transactions: Hash[], tips: Hash[]) =
  *   @returns {function} callback
  *   @returns {object} success
  **/
-export const createGetInclusionStates = (settings: Settings) => {
-    let { provider } = settings
-
-    const getInclusionStates = (
-        transactions: string[],
-        tips: string[],
-        callback?: Callback<boolean[]>
-    ): Promise<boolean[]> =>
-        Promise.resolve(validateGetInclusionStates(transactions, tips))
-            .then(() =>
-                sendCommand<GetInclusionStatesCommand, GetInclusionStatesResponse>(provider, {
-                    command: IRICommand.GET_INCLUSION_STATES,
-                    transactions,
-                    tips,
-                })
-            )
-            .then(res => res.states)
-            .asCallback(callback)
-
-    const setSettings = (newSettings: Settings) => {
-        provider = newSettings.provider
-    }
-
-    // tslint:disable-next-line prefer-object-spread
-    return Object.assign(getInclusionStates, { setSettings })
-}
+export const createGetInclusionStates = (provider: Provider) => ( 
+    transactions: string[],
+    tips: string[],
+    callback?: Callback<boolean[]>
+): Promise<boolean[]> =>
+    Promise.resolve(validateGetInclusionStates(transactions, tips))
+        .then(() =>
+            provider.sendCommand<GetInclusionStatesCommand, GetInclusionStatesResponse>({
+                command: IRICommand.GET_INCLUSION_STATES,
+                transactions,
+                tips,
+            })
+        )
+        .then(res => res.states)
+        .asCallback(callback)
