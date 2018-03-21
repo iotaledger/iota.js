@@ -1,7 +1,7 @@
 import test from 'ava'
 import { convertUnits, Unit } from '../../lib/utils'
 
-test('convertUnits()', t => {
+test('convertUnits() converts units correctly', t => {
 
     const tests: Array<{
         value: string | number,

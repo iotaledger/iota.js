@@ -158,7 +158,7 @@ function bigint_add_small(base: Uint32Array, other: number) {
  * @param {Uint32Array} words
  * @return {Int8Array} trits
  */
-function words_to_trits(words: Uint32Array): Int8Array {
+export function wordsToTrits(words: Uint32Array): Int8Array {
     if (words.length !== INT_LENGTH) {
         throw new Error('Invalid words length')
     }
@@ -233,7 +233,7 @@ function is_null(arr: Uint32Array) {
  * @param {Int8Array} trits
  * @return {Uint32Array} words
  */
-function trits_to_words(trits: Int8Array): Uint32Array {
+export function tritsToWords(trits: Int8Array): Uint32Array {
     if (trits.length !== 243) {
         throw new Error('Invalid trits length')
     }
@@ -313,9 +313,4 @@ function trits_to_words(trits: Int8Array): Uint32Array {
     }
 
     return base
-}
-
-export default {
-    words_to_trits,
-    trits_to_words,
 }

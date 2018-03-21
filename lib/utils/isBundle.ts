@@ -1,37 +1,9 @@
-import { Transaction, Trytes } from '../api/types'
-import { Converter, Kerl, Signing } from '../crypto'
-import { asTransactionTrytes, isEmpty, isTransactionArray } from './'
-
-interface SignatureFragments { [key: string]: Trytes[] } 
+import { Hash, Transaction, Trytes } from '../api/types'
+import { Kerl, trits, trytes } from '../crypto'
+import { asTransactionTrytes, isEmpty, isTransactionArray, validateSignatures } from './'
 
 /**
- *   Validates the signatures
- *
- *   @method validateSignatures
- *   @param {array} signedBundle
- *   @param {string} inputAddress
- *   @returns {bool}
- **/
-export function validateSignatures(bundle: Transaction[]) {
-    const signatures: SignatureFragments = bundle
-        .reduce((acc: SignatureFragments, tx) => {
-            if (tx.value < 0) {
-                if (!acc.hasOwnProperty(tx.address)) {
-                    acc[tx.address] = []
-                }
-                acc[tx.address].push(tx.signatureMessageFragment)
-            }
-
-            return acc
-        }, {})
-    
-    return Object.keys(signatures).every((address) =>
-        Signing.validateSignatures(address, signatures[address], bundle[0].bundle)
-    )
-}
-
-/**
- *   Checks is a Bundle is valid. Validates signatures and overall structure. Has to be tail tx first.
+ *   Checks is a Bundle is valid. Validates signatures and overall structure.
  *
  *   @method isValidBundle
  *   @param {array} bundle
@@ -46,16 +18,13 @@ export function isBundle(bundle: Transaction[]) {
     let totalSum = 0
     const bundleHash = bundle[0].bundle
 
-    // Prepare to absorb txs and get bundleHash
-    const bundleFromTxs: Int8Array = new Int8Array(Kerl.HASH_LENGTH)
-
     const kerl = new Kerl()
     kerl.initialize()
 
     // Prepare for signature validation
     const signaturesToValidate: Array<{
-        address: string
-        signatureFragments: string[]
+        address: Hash 
+        signatureFragments: Trytes[]
     }> = []
 
     bundle.forEach((bundleTx, index) => {
@@ -69,7 +38,7 @@ export function isBundle(bundle: Transaction[]) {
         // Get the transaction trytes
         const thisTxTrytes = asTransactionTrytes(bundleTx)
 
-        const thisTxTrits = Converter.trits(thisTxTrytes.slice(2187, 2187 + 162))
+        const thisTxTrits = trits(thisTxTrytes.slice(2187, 2187 + 162))
         kerl.absorb(thisTxTrits, 0, thisTxTrits.length)
 
         // Check if input transaction
@@ -99,15 +68,17 @@ export function isBundle(bundle: Transaction[]) {
     if (totalSum !== 0) {
         return false
     }
+    // Prepare to absorb txs and get bundleHash
+    const bundleFromTxs: Int8Array = new Int8Array(Kerl.HASH_LENGTH)
 
     // get the bundle hash from the bundle transactions
     kerl.squeeze(bundleFromTxs, 0, Kerl.HASH_LENGTH)
 
-    const bundleHashFromTxs = Converter.trytes(bundleFromTxs)
+    const bundleHashFromTxs = trytes(bundleFromTxs)
 
     // Check if bundle hash is the same as returned by tx object
     if (bundleHashFromTxs !== bundleHash) {
-        return false
+        return false 
     }
 
     // Last tx in the bundle should have currentIndex === lastIndex

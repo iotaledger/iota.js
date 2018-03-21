@@ -27,4 +27,5 @@ export const createStoreTransactions = (provider: Provider) =>
                     trytes,
                 })
             )
+            .then(() => undefined)
             .asCallback(callback)

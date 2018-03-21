@@ -51,6 +51,8 @@ import {
     GetTransfersOptions,
     PrepareTransfersOptions,
     PromoteTransactionOptions,
+    SendTransferOptions,
+    SendTrytesOptions
 } from './extended'
 
 import { validateSettings } from './settings'

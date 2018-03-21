@@ -4,6 +4,7 @@ export const ILLEGAL_TRYTE_CONVERSION_INPUT = 'Illegal conversion input. Expecte
 export const INCONSISTENT_SUBTANGLE = 'Inconsistent subtangle'
 export const INSUFFICIENT_BALANCE = 'Insufficient balance'
 export const INVALID_ADDRESS = 'Invalid address'
+export const INVALID_REMAINDER_ADDRESS = 'Invalid remainder address'
 export const INVALID_ADDRESSES = 'Invalid addresses'
 export const INVALID_ATTACHED_TRYTES = 'Invalid attached trytes'
 export const INVALID_BRANCH_TRANSACTION = 'Invalid branch transaction'
@@ -37,6 +38,6 @@ export const INVALID_ASCII_INPUT = 'Conversion to trytes requires type of input 
 export const INVALID_ODD_LENGTH = 'Conversion from trytes requires length of trytes to be even.'
 export const INVALID_TRYTE_ENCODED_JSON = 'Invalid tryte encoded JSON message'
 export const NOT_INT = 'One of the inputs is not integer'
-
+export const SENDING_BACK_TO_INPUTS = 'One of the transaction inputs is used as output.'
 export const invalidChecksum = (address: string) => `Invalid Checksum: ${address}`
 export const requestError = (statusText: string) => `Request Error: ${statusText}`

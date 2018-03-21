@@ -4,8 +4,7 @@ import * as CryptoJS from 'crypto-js'
 
 import * as errors from '../errors'
 
-import Converter from './Converter'
-import WConverter from './WConverter'
+import { tritsToWords, wordsToTrits } from './WConverter'
 
 const BIT_HASH_LENGTH = 384
 const HASH_LENGTH = 243
@@ -43,7 +42,7 @@ export default class Kerl {
             offset += limit
 
             // convert trit state to words
-            const wordsToAbsorb = WConverter.trits_to_words(trit_state)
+            const wordsToAbsorb = tritsToWords(trit_state)
 
             // absorb the trit stat as wordarray
             this.k.update(CryptoJS.lib.WordArray.create(wordsToAbsorb))
@@ -60,7 +59,7 @@ export default class Kerl {
             const final = kCopy.finalize()
 
             // Convert words to trits and then map it into the internal state
-            const trit_state = WConverter.words_to_trits(final.words)
+            const trit_state = wordsToTrits(final.words)
 
             let i = 0
             const limit = length < Kerl.HASH_LENGTH ? length : Kerl.HASH_LENGTH

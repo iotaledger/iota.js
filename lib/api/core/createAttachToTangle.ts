@@ -22,8 +22,8 @@ export const validateAttachToTangle = (
     trytes: Trytes[]
 ) =>
     validate(
-        hashValidator(trunkTransaction),
-        hashValidator(branchTransaction),
+        hashValidator(trunkTransaction, errors.INVALID_TRUNK_TRANSACTION),
+        hashValidator(branchTransaction, errors.INVALID_BRANCH_TRANSACTION),
         mwmValidator(minWeightMagnitude),
         trytesArrayValidator(trytes)
     )
@@ -47,12 +47,12 @@ export const createAttachToTangle = (provider: Provider) => (
     callback?: Callback<string[]>
 ): Promise<string[]> =>
     Promise.resolve(validateAttachToTangle(trunkTransaction, branchTransaction, minWeightMagnitude, trytes))
-      .then(() => provider.sendCommand<AttachToTangleCommand, AttachToTangleResponse>({
-          command: IRICommand.ATTACH_TO_TANGLE,
-          trunkTransaction,
-          branchTransaction,
-          minWeightMagnitude,
-          trytes,
-      }))
-      .then(res => res.trytes) 
-      .asCallback(callback)
+        .then(() => provider.sendCommand<AttachToTangleCommand, AttachToTangleResponse>({
+            command: IRICommand.ATTACH_TO_TANGLE,
+            trunkTransaction,
+            branchTransaction,
+            minWeightMagnitude,
+            trytes,
+        }))
+        .then(res => res.trytes)
+        .asCallback(callback)

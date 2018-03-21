@@ -1,7 +1,7 @@
 import * as errors from '../../errors'
 import { generateSpam, getOptionsWithDefaults, hashValidator, transferArrayValidator, validate } from '../../utils'
 import { AttachToTangle, Callback, Maybe, Provider, Transaction, Transfer } from '../types'
-import { createIsPromotable, createSendTransfer } from './index'
+import { createIsPromotable, createSendTransfer, getPrepareTransfersOptions } from './index'
 
 export interface PromoteTransactionOptions {
     delay: number
@@ -49,6 +49,10 @@ export const createPromoteTransaction = (provider: Provider, attachFn?: AttachTo
 
         const { delay, interrupt } = getPromoteTransactionOptions(options)
         const spamTransactions: Transaction[] = []
+        const sendTransferOptions = {
+          ...getPrepareTransfersOptions({}),
+          reference: tailTransaction
+        }
 
         return Promise.resolve(validate(hashValidator(tailTransaction), transferArrayValidator(spamTransfers)))
             .then(() => isPromotable(tailTransaction))
@@ -57,9 +61,7 @@ export const createPromoteTransaction = (provider: Provider, attachFn?: AttachTo
                     throw new Error(errors.INCONSISTENT_SUBTANGLE)
                 }
 
-                return sendTransfer(spamTransfers[0].address, depth, minWeightMagnitude, spamTransfers, {
-                    reference: tailTransaction,
-                })
+                return sendTransfer(spamTransfers[0].address, depth, minWeightMagnitude, spamTransfers, sendTransferOptions)
             })
             .then(async (transactions: Transaction[]) => {
                 if (

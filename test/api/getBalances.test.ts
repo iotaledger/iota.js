@@ -1,74 +1,75 @@
 import test from 'ava'
-  /*
-import {
-    formatGetBalancesResponse,
-    makeGetBalancesCommand,
-    normalizeBalances
-} from '../../lib/api/core/getBalances'
+import { createGetBalances } from '../../lib/api/core'
+import { INVALID_HASH_ARRAY, INVALID_THRESHOLD } from '../../lib/errors'
+import { provider } from '../../lib/utils'
+import { getBalancesCommand, getBalancesResponse } from '../nocks/getBalances'
 
-const getBalancesResponse = {
-    balances: ['1', '2', '3'],
-    duration: 10,
-    milestone: 'M',
-    milestoneIndex: 1
-}
+const getBalances = createGetBalances(provider())
 
-test('normalizeBalances()', t => {
-    const addresses = ['A', 'B', 'C']
-    const balances = ['1', '2', '3']
-    const expected = {
-        A: { balance: '1' },
-        B: { balance: '2' },
-        C: { balance: '3' }
-    }
-    const actual = normalizeBalances(addresses)(balances)
-    t.deepEqual(actual, expected)
+const addressesWithChecksum = getBalancesCommand.addresses.map(address => address.concat('9'.repeat(9)))
+
+test('getBalances() resolves to correct balances response', async t => { 
+    t.deepEqual(
+        await getBalances(getBalancesCommand.addresses, getBalancesCommand.threshold),
+        getBalancesResponse,
+        'getBalances() should resolve to correct balances'    
+    )
 })
 
-test('makeGetBalancesCommand()', t => {
-    const addresses = ['A', 'B', 'C']
-    const expected = {
-        command: 'getBalances',
-        addresses: ['A', 'B', 'C'],
-        threshold: 100
-    }
-    const actual = makeGetBalancesCommand(addresses, 100)
-    t.deepEqual(actual, expected)
+test('getBalances() removes checksum from addresses', async t => {
+    t.deepEqual(
+        await getBalances([...addressesWithChecksum], getBalancesCommand.threshold),
+        getBalancesResponse,
+        'getBalances() by addresses should remove checksum from addresses'    
+    )
 })
 
-test('formatGetBalancesResponse() defaults to normalized format', t => {
-    const addresses = ['A', 'B', 'C']
-    const expected = 'object'
-    const actual = typeof formatGetBalancesResponse(addresses)(getBalancesResponse)
-    t.deepEqual(actual, expected)
+test('getBalances() does not mutate original addresses', async t => {
+    const addresses = [...addressesWithChecksum]
+    
+    await getBalances(addresses, 100)
+    
+    t.deepEqual(
+        addresses,
+        addressesWithChecksum,
+        'getBalances() should not mutate original addresses'
+    )
 })
 
-test('formatGetBalancesResponse() ouputs balances in normalized format', t => {
-    const addresses = ['A', 'B', 'C']
-    const normalizeOutput = true
-    const expected = {
-        balances: {
-            A: { balance: '1' },
-            B: { balance: '2' },
-            C: { balance: '3' }
-        },
-        duration: 10,
-        milestone: 'M',
-        milestoneIndex: 1
-    }
-    const actual = formatGetBalancesResponse(addresses, normalizeOutput)(getBalancesResponse)
-    t.deepEqual(actual, expected)
+test('getBalances() rejects with correct errors for invalid input', t => {
+    const invalidAddresses = ['asdasDSFDAFD'] 
+
+    t.is(
+        t.throws(() => getBalances(invalidAddresses, getBalancesCommand.threshold), Error).message,
+        `${ INVALID_HASH_ARRAY }: ${ invalidAddresses[0] }`,
+        'getBalances() should throw error for invalid addresses' 
+    )
+
+    t.is(
+        t.throws(() => getBalances(getBalancesCommand.addresses, 101), Error).message,
+        `${ INVALID_THRESHOLD }: 101`,
+        'getBalances() should throw error for invalid threshold'
+    )
 })
 
-test('formatGetBalancesResponse() outputs balances in array format', t => {
-    const addresses = ['A', 'B', 'C']
-    const normalizeOutput = false
-    const expected = {
-        balances: ['1', '2', '3'],
-        duration: 10,
-        milestone: 'M',
-        milestoneIndex: 1
-    }
-    const actual = formatGetBalancesResponse(addresses, normalizeOutput)(getBalancesResponse)
-    t.deepEqual(actual, expected)
-})*/
+test.cb('getBalances() invokes callback', t => {
+    getBalances(getBalancesCommand.addresses, getBalancesCommand.threshold, t.end)
+})
+
+test.cb('getBalances() passes correct arguments to callback', t => {
+    getBalances(getBalancesCommand.addresses, getBalancesCommand.threshold, (err, res) => {
+        t.is(
+            err,
+            null,
+            'getBalances() should pass null as first argument in callback for successuful requests'
+        )
+      
+        t.deepEqual(
+            res,
+            getBalancesResponse,
+            'getBalances() should pass the correct response as second argument in callback'
+        )
+      
+        t.end()  
+    })
+})

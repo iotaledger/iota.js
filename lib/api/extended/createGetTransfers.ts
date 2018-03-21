@@ -2,30 +2,30 @@ import * as Promise from 'bluebird'
 import * as errors from '../../errors'
 import {
     getOptionsWithDefaults,
-    indexValidator,
     securityLevelValidator,
     seedValidator,
     startEndOptionsValidator,
+    startOptionValidator,
     validate,
 } from '../../utils'
-import { Bundle, Callback, Provider, Transaction } from '../types'
+import { Callback, Provider, Transaction } from '../types'
 import { createGetBundlesFromAddresses, createGetNewAddress, getNewAddressOptions, GetNewAddressOptions } from './index'
 
 export interface GetTransfersOptions {
     start: number
-    end: number
+    end?: number
     inclusionStates: boolean
     security: number
 }
 
 const defaults: GetTransfersOptions = {
     start: 0,
-    end: 0,
+    end: undefined,
     inclusionStates: false,
     security: 2,
 }
 
-export const transferToAddressOptions = (start: number, end: number, security: number) =>
+export const transferToAddressOptions = (start: number, end: number | undefined, security: number) =>
     getNewAddressOptions({
         index: start,
         total: end ? end - start : undefined,
@@ -53,15 +53,15 @@ export const createGetTransfers = (provider: Provider) => {
     return (
         seed: string,
         options: Partial<GetTransfersOptions> = {},
-        callback?: Callback<Bundle[]>
-    ): Promise<Bundle[]> => {
+        callback?: Callback<Transaction[][]>
+    ): Promise<Transaction[][]> => {
         const { start, end, security, inclusionStates } = getTransfersOptions(options)
 
         return Promise.resolve(
             validate(
                 seedValidator(seed),
                 securityLevelValidator(security),
-                indexValidator(start),
+                startOptionValidator(start),
                 startEndOptionsValidator({ start, end })
             )
         )

@@ -1,5 +1,5 @@
-import { Hash } from '../api/types'
-import { Converter, Kerl } from '../crypto'
+import { Trytes } from '../api/types'
+import { Kerl, trits, trytes } from '../crypto'
 import * as errors from '../errors'
 import { asArray, isTrytes } from './'
 
@@ -12,32 +12,37 @@ import { asArray, isTrytes } from './'
 @   @param {bool} isAddress default is true
 *   @returns {string | list} address (with checksum)
 **/
-export function addChecksum(addresses: Hash, checksumLength?: number, isAddress?: boolean): Hash
-export function addChecksum(addresses: Hash[], checksumLength?: number, isAddress?: boolean): Hash[]
-export function addChecksum(addresses: Hash | Hash[], checksumLength: number = 9, isAddress: boolean = true) {
+export function addChecksum(addresses: Trytes, checksumLength?: number, isAddress?: boolean): Trytes
+export function addChecksum(addresses: Trytes[], checksumLength?: number, isAddress?: boolean): Trytes[]
+export function addChecksum(addresses: Trytes | Trytes[], checksumLength: number = 9, isAddress: boolean = true) {
     const addressesWithChecksum = asArray(addresses)
-        .map(trytes => {
-            const hasChecksum = isTrytes(trytes, 90)
+        .map(address => {
+            const hasChecksum = isTrytes(address, 90)
 
-            if (!(hasChecksum || isTrytes(trytes, 81))) {
+            if (!(hasChecksum || isTrytes(address, 81)) && isAddress) {
                 throw new Error(errors.INVALID_ADDRESS)
             }
 
             if (hasChecksum) {
-                return trytes
+                return address 
             }
           
             const kerl = new Kerl()
             kerl.initialize()
+        
+            let paddedTrytes = address 
+          
+            while (paddedTrytes.length % 81 !== 0) {
+                paddedTrytes = paddedTrytes.concat('9')
+            }
 
-            const addressTrits: Int8Array = Converter.trits(trytes)
+            const addressTrits: Int8Array = trits(paddedTrytes)
             const checksumTrits: Int8Array = new Int8Array(Kerl.HASH_LENGTH)
           
             kerl.absorb(addressTrits, 0, addressTrits.length)
             kerl.squeeze(checksumTrits, 0, Kerl.HASH_LENGTH)
-          
-            // First 9 trytes as checksum            
-            return trytes.concat(Converter.trytes(checksumTrits.slice(243 - checksumLength * 3, 243)))
+                    
+            return address.concat(trytes(checksumTrits.slice(243 - checksumLength * 3, 243)))
         })
     
     return Array.isArray(addresses) ? addressesWithChecksum : addressesWithChecksum[0]
@@ -50,16 +55,16 @@ export function addChecksum(addresses: Hash | Hash[], checksumLength: number = 9
  *   @param {string | list} address
  *   @returns {string | list} address (without checksum)
  **/
-export function removeChecksum(addresses: Hash): Hash
-export function removeChecksum(addresses: Hash[]): Hash[]
-export function removeChecksum(addresses: Hash | Hash[]) {
+export function removeChecksum(addresses: Trytes): Trytes
+export function removeChecksum(addresses: Trytes[]): Trytes[]
+export function removeChecksum(addresses: Trytes | Trytes[]) {
     const addressesNoChecksum = asArray(addresses)
-        .map(trytes => {
-            if (!(isTrytes(trytes, 90) || isTrytes(trytes, 81))) {
+        .map(address => {
+            if (!(isTrytes(address, 90) || isTrytes(address, 81))) {
                 throw new Error(errors.INVALID_ADDRESS)
             }
 
-            return trytes.slice(0, 81)
+            return address.slice(0, 81)
         })
 
     // return either string or the list
@@ -77,7 +82,7 @@ export function removeChecksum(addresses: Hash | Hash[]) {
  *   @param {string} addressWithChecksum
  *   @returns {bool}
  **/
-export const isValidChecksum = (addressWithChecksum: Hash): boolean =>
+export const isValidChecksum = (addressWithChecksum: Trytes): boolean =>
     addressWithChecksum === addChecksum(removeChecksum(addressWithChecksum))
 
 /* removeChecksum() alias */

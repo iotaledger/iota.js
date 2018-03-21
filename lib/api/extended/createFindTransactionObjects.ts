@@ -15,13 +15,13 @@ import { createGetTransactionObjects } from './'
  **/
 export const createFindTransactionObjects = (provider: Provider) => {
     const findTransactions = createFindTransactions(provider)
-    const getTransactionsObjects = createGetTransactionObjects(provider)
+    const getTransactionObjects = createGetTransactionObjects(provider)
 
     return (
         query: FindTransactionsQuery,
         callback?: Callback<Transaction[]>
     ): Promise<Transaction[]> =>
         findTransactions(query)
-            .then(getTransactionsObjects)
+            .then(getTransactionObjects)
             .asCallback(callback)
 }

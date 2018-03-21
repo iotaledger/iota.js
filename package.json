@@ -6,7 +6,8 @@
     "scripts": {
         "build": "gulp",
         "format": "prettier",
-        "test": "tsc && ava"
+        "test": "tsc && ava",
+        "watch": "tsc && ava -w -u"
     },
     "contributors": [
         "Dominik Schiener <dom@iota.org> (https://iota.org)",
@@ -15,7 +16,6 @@
     ],
     "ava": {
         "files": "out/test/**/*.test.js",
-        "concurrency": 5,
         "failFast": true,
         "failWithoutAssertions": false,
         "compileEnhancements": false,
@@ -41,6 +41,7 @@
         "isomorphic-fetch": "^2.2.1"
     },
     "devDependencies": {
+        "@types/nock": "^9.1.2",
         "ava": "^0.25.0",
         "bower": ">=1.8.0",
         "browserify": ">=14.1.0",
@@ -54,6 +55,7 @@
         "gulp-uglify": "^3.0.0",
         "jshint": "^2.9.4",
         "mocha": "^3.2.0",
+        "nock": "^9.2.3",
         "prettier": "^1.10.2",
         "tslint": "^5.9.1",
         "tslint-config-prettier": "^1.6.0",

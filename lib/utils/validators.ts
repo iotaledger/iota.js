@@ -6,12 +6,15 @@ import {
     isAttachedTrytesArray,
     isHash,
     isHashArray,
+    isInputArray,
     isInteger,
     isSecurityLevel,
     isStartEndOptions,
     isTag,
     isTagArray,
     isTailTransaction,
+    isTransactionHash,
+    isTransactionHashArray,
     isTransfersArray,
     isTrytes,
     isTrytesArray,
@@ -20,7 +23,7 @@ import {
 
 export type Validatable<T = any> = [T, (x: T) => boolean, string]
 
-export type Validator<T> = (x: T) => Validatable<T>
+export type Validator<T> = (x: T, err?: string) => Validatable<T>
 
 /**
  * Runs each validator in sequence, and throws on the first occurence of invalid data
@@ -39,69 +42,152 @@ export const validate = (...validators: Validatable[]) => {
 /**
  * Data type validators
  */
+export const hashValidator: Validator<string> = (hash, error?: string) => [
+    hash,
+    isHash,
+    error || errors.INVALID_HASH
+]
+
+export const hashArrayValidator: Validator<string[]> = hashes => [
+    hashes,
+    isHashArray,
+    errors.INVALID_HASH_ARRAY
+]
+
+export const transactionHashValidator: Validator<string> = hash => [
+    hash,
+    isTransactionHash,
+    errors.INVALID_HASH
+]
+
+export const transactionHashArrayValidator: Validator<string[]> = hashes => [
+    hashes,
+    isTransactionHashArray,
+    errors.INVALID_HASH_ARRAY
+]
+
+export const trytesValidator: Validator<string> = trytes => [
+    trytes,
+    isTrytes,
+    errors.INVALID_TRYTES
+]
+
+export const trytesArrayValidator: Validator<string[]> = trytes => [
+    trytes,
+    isTrytesArray,
+    errors.INVALID_TRYTES_ARRAY
+]
+
+export const integerValidator: Validator<number> = integer => [
+    integer,
+    isInteger,
+    errors.NOT_INT
+]
+
+export const depthValidator: Validator<number> = depth => [
+    depth,
+    isInteger,
+    errors.INVALID_DEPTH
+]
+
+export const mwmValidator: Validator<number> = mwm => [
+    mwm,
+    isInteger,
+    errors.INVALID_MIN_WEIGHT_MAGNITUDE
+]
 
 export const addressObjectArrayValidator: Validator<Address[]> = (addresses: Address[]) => [
     addresses,
     isAddressArray,
     errors.INVALID_INPUTS,
 ]
+
 export const attachedTrytesArrayValidator: Validator<string[]> = (trytes: string[]) => [
     trytes,
     isAttachedTrytesArray,
     errors.INVALID_ATTACHED_TRYTES,
 ]
-export const bundleValidator: Validator<Bundle> = bundle => [bundle, isBundle, errors.INVALID_BUNDLE]
-export const depthValidator: Validator<number> = depth => [depth, isInteger, errors.INVALID_DEPTH]
-export const hashArrayValidator: Validator<string[]> = hashes => [hashes, isHashArray, errors.INVALID_HASH_ARRAY]
-export const hashValidator: Validator<string> = hash => [hash, isHash, errors.INVALID_HASH]
-export const indexValidator: Validator<number> = security => [security, isInteger, errors.INVALID_INDEX]
-export const integerValidator: Validator<number> = integer => [integer, isInteger, errors.NOT_INT]
-export const mwmValidator: Validator<number> = n => [n, isInteger, errors.INVALID_MIN_WEIGHT_MAGNITUDE]
-export const securityLevelValidator: Validator<number> = security => [
-    security,
-    isSecurityLevel,
-    errors.INVALID_SECURITY_LEVEL,
+
+export const bundleValidator: Validator<Bundle> = bundle => [
+    bundle,
+    isBundle,
+    errors.INVALID_BUNDLE
 ]
-export const seedValidator: Validator<string> = seed => [seed, isTrytes, errors.INVALID_SEED]
-export const startOptionValidator: Validator<number> = start => [
-    start,
-    s => isInteger(s) && s > 0,
-    errors.INVALID_START_OPTION,
-]
-export const startEndOptionsValidator: Validator<{ start: number; end: number }> = options => [
-    options,
-    isStartEndOptions,
-    errors.INVALID_START_END_OPTIONS,
-]
-export const tagArrayValidator: Validator<string[]> = tags => [tags, isTagArray, errors.INVALID_TAG]
+
 export const tailTransactionValidator: Validator<Transaction> = transaction => [
     transaction,
     isTailTransaction,
     errors.INVALID_TAIL_TRANSACTION,
 ]
-export const thresholdValidator: Validator<number> = threshold => [threshold, isInteger, errors.INVALID_THRESHOLD]
+
+export const seedValidator: Validator<string> = seed => [
+    seed,
+    isTrytes,
+    errors.INVALID_SEED
+]
+
+export const indexValidator: Validator<number> = index => [
+    index,
+    isInteger,
+    errors.INVALID_INDEX
+]
+
+export const securityLevelValidator: Validator<number> = security => [
+    security,
+    isSecurityLevel,
+    errors.INVALID_SECURITY_LEVEL,
+]
+
+export const startOptionValidator: Validator<number> = start => [
+    start,
+    s => isInteger(s) && s >= 0,
+    errors.INVALID_START_OPTION,
+]
+
+export const getInputsThresholdValidator: Validator<number> = threshold => [
+    threshold,
+    s => isInteger(s) && s >= 0,
+    errors.INVALID_THRESHOLD,
+]
+
+export const startEndOptionsValidator: Validator<any> = options => [
+    options,
+    isStartEndOptions,
+    errors.INVALID_START_END_OPTIONS,
+]
+
+export const getBalancesThresholdValidator: Validator<number> = threshold => [
+    threshold,
+    t => Number.isInteger(t) && t <= 100,
+    errors.INVALID_THRESHOLD
+]
+
+export const tagArrayValidator: Validator<string[]> = tags => [
+    tags,
+    isTagArray,
+    errors.INVALID_TAG
+]
+
 export const transferArrayValidator: Validator<Transfer[]> = transfers => [
     transfers,
     isTransfersArray,
     errors.INVALID_TRANSFERS,
 ]
-export const trytesValidator: Validator<string> = trytes => [trytes, isTrytes, errors.INVALID_TRYTES]
-export const trytesArrayValidator: Validator<string[]> = trytes => [trytes, isTrytesArray, errors.INVALID_TRYTES_ARRAY]
-export const uriArrayValidator: Validator<string[]> = uris => [uris, isUriArray, errors.INVALID_URI]
+
+export const uriArrayValidator: Validator<string[]> = uris => [
+    uris,
+    isUriArray,
+    errors.INVALID_URI
+]
+
+export const inputValidator: Validator<Address[]> = inputs => [
+    inputs,
+    isInputArray,
+    errors.INVALID_INPUTS,
+]
+
 export const remainderAddressValidator: Validator<string | undefined> = remainderAddress => [
     remainderAddress,
     (address: string | undefined): boolean => !address || isHash(address),
     errors.INVALID_ADDRESS,
-]
-export const inputValidator: Validator<Address[]> = inputs => [
-    inputs,
-    (ins: Address[]): boolean =>
-        ins.every(
-            input =>
-                isHash(input.address) &&
-                isInteger(input.keyIndex) &&
-                input.keyIndex >= 0 &&
-                isSecurityLevel(input.security)
-        ),
-    errors.INVALID_INPUTS,
 ]

@@ -15,11 +15,11 @@ import { createGetBundle, createSendTrytes } from './index'
  *   @param {function} callback
  *   @returns {object} analyzed Transaction objects
  **/
-export const createReplayBundle = (provider: Provider, attachFn: AttachToTangle) => {
+export const createReplayBundle = (provider: Provider, attachFn?: AttachToTangle) => {
     const getBundle = createGetBundle(provider)
     const sendTrytes = createSendTrytes(provider, attachFn)
 
-    const replayBundle = (
+    return (
         tail: string,
         depth: number,
         minWeightMagnitude: number,

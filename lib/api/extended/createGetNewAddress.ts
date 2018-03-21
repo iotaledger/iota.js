@@ -13,7 +13,7 @@ import {
     validate,
 } from '../../utils'
 import { createFindTransactions, createWereAddressesSpentFrom } from '../core'
-import { Callback, Hash, Provider, Trytes } from '../types'
+import { Callback, Provider, Trytes } from '../types'
 
 export interface GetNewAddressOptions {
     index: number
@@ -23,22 +23,22 @@ export interface GetNewAddressOptions {
     returnAll: boolean
 }
 
-export type GetNewAddressResult = Hash | Hash[]
+export type GetNewAddressResult = Trytes | Trytes[]
 
-export const isAddressUsed = (provider: Provider, address: Hash) => {
-    const addresses = asArray(address)
+export const createIsAddressUsed = (provider: Provider) => {
+    const wereAddressesSpentFrom = createWereAddressesSpentFrom(provider)
+    const findTransactions = createFindTransactions(provider)
 
-    return createWereAddressesSpentFrom(provider)(addresses).then(spent => {
-        if (spent[0]) {
-            return true
-        }
-
-        return createFindTransactions(provider)({ addresses }).then(transactions => transactions.length > 0)
-    })
+    return (address: Trytes) => wereAddressesSpentFrom(asArray(address))
+        .then(([spent]) =>
+            spent ||
+            findTransactions({ addresses: asArray(address) })
+              .then(transactions => transactions.length > 0)
+        )
 }
 
 export const getUntilFirstUnusedAddress = (
-    provider: Provider,
+    isAddressUsed: (address: Trytes) => Promise<boolean>,
     seed: Trytes,
     index: number,
     security: number,
@@ -53,7 +53,7 @@ export const getUntilFirstUnusedAddress = (
             addressList.push(nextAddress)
         }
 
-        return isAddressUsed(provider, nextAddress).then(used => {
+        return isAddressUsed(nextAddress).then(used => {
             if (used) {
                 return iterate()
             }
@@ -70,31 +70,14 @@ export const getUntilFirstUnusedAddress = (
     return iterate
 }
 
-export const generateAddresses = (seed: Trytes, index: number, security: number, total: number) => {
-    const addressList: Trytes[] = new Array(total)
+export const generateAddresses = (seed: Trytes, index: number, security: number, total: number): Trytes[] => 
+    Array(total).fill('').map(() => generateAddress(seed, index++, security))
 
-    return addressList
-        .reduce((p, _) => {
-            return p.then(() => {
-                addressList.push(generateAddress(seed, index++, security))
-            })
-        }, Promise.resolve())
-        .then(() => addressList)
-}
+export const applyChecksumOption = (checksum: boolean) => (addresses: Trytes | Trytes[]): Trytes | Trytes[] =>
+    checksum ? addChecksum(addresses as any) : addresses
 
-export const validateGetNewAddress = (seed: Trytes, options: GetNewAddressOptions) =>
-    validate(
-        seedValidator(seed),
-        indexValidator(options.index),
-        securityLevelValidator(options.security),
-        integerValidator(options.total)
-    )
-
-export const applyChecksumOption = (checksum: boolean) => (addresses: Trytes[]): Trytes[] =>
-    checksum ? addresses.map(a => addChecksum(a)) : addresses
-
-export const applyReturnAllOption = (returnAll: boolean) => (addresses: Trytes[]): Trytes | Trytes[] =>
-    returnAll ? addresses : addresses[addresses.length - 1]
+export const applyReturnAllOption = (returnAll: boolean, total: number) => (addresses: Trytes[]): Trytes | Trytes[] =>
+    (returnAll || total) ? addresses : addresses[addresses.length - 1]
 
 export const getNewAddressOptions = getOptionsWithDefaults<GetNewAddressOptions>({
     index: 0,
@@ -104,22 +87,37 @@ export const getNewAddressOptions = getOptionsWithDefaults<GetNewAddressOptions>
     returnAll: false,
 })
 
-export const createGetNewAddress = (provider: Provider) => (
-    seed: Trytes,
-    options: Partial<GetNewAddressOptions> = {},
-    callback?: Callback<GetNewAddressResult>
-): Promise<Trytes | Trytes[]> => {
-    const { index, security, total, returnAll, checksum } = getNewAddressOptions(options)
+export const validateGetNewAddressArguments = (seed: string, index: number, security: number, total?: number) => {
+  const validators = [
+      seedValidator(seed),
+      indexValidator(index),
+      securityLevelValidator(security),
+  ]
 
-    validateGetNewAddress(seed, { index, security, total, returnAll, checksum })
+  if (total) {
+      validators.push(integerValidator(total))
+  }
 
-    const promise: Promise<Trytes[]> =
-        total! > 0
-            ? generateAddresses(seed, index, security, total)
-            : Promise.try(getUntilFirstUnusedAddress(provider, seed, index, security, returnAll))
+  validate(...validators)
+}
 
-    return promise
-        .then(applyChecksumOption(checksum!))
-        .then(applyReturnAllOption(returnAll!))
-        .asCallback(callback)
+export const createGetNewAddress = (provider: Provider) => { 
+    const isAddressUsed = createIsAddressUsed(provider)
+
+    return (
+        seed: Trytes,
+        options: Partial<GetNewAddressOptions> = {},
+        callback?: Callback<GetNewAddressResult>
+    ): Promise<Trytes | Trytes[]> => {
+        const { index, security, total, returnAll, checksum } = getNewAddressOptions(options)
+
+        return Promise.resolve(validateGetNewAddressArguments(seed, index, security, total))
+            .then(() => total! > 0
+                ? generateAddresses(seed, index, security, total)
+                : Promise.try(getUntilFirstUnusedAddress(isAddressUsed, seed, index, security, returnAll))
+            )
+            .then(applyReturnAllOption(returnAll!, total))
+            .then(applyChecksumOption(checksum!))
+            .asCallback(callback)
+    }
 }

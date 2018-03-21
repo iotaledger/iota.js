@@ -1,32 +1,42 @@
 import test from 'ava'
 import { isTrytes } from '../../lib/utils'
 
-test('isTrytes', t => {
+test('isTrytes() returns true for valid trytes.', t => {
     const validTrytes = 'JALLWDUOSTSJVL9EEHKW9YQFPBVBJAGLNKRVGSQZCGHQWEMIIILJMTHVAGVDXJVZMBAMOZTSBQNRVNLLS'
-    const invalidTrytes = '123adfdsafLWDUOSTSJVL9EEHKW9YQFPBVBJAGLNKRVGSQZCGHQWEMIIILJMTHVAGVDXJVZMBAMOZTSBQNRVNLLASD'
-    const trytesOfLengthNine = 'ABCDEFGHI'
 
     t.is(
         isTrytes(validTrytes),
         true,
         'isTrytes() should return true for valid trytes.'
     )
+})
 
+test('isTrytes() returns true for valid trytes and length.', t => {
+    const trytes = 'ABCDEFGHI'
+
+    t.is(
+        isTrytes(trytes, 9),
+        true,
+        'isTrytes() should return true for valid trytes and valid length.'
+    )
+})
+
+test('isTrytes() returns false for trytes of invalid length.', t => {
+    const trytes = 'ABCDEFGHI'
+
+    t.is(
+        isTrytes(trytes, 10),
+        false,
+        'isTrytes() should return false for trytes of invalid length.'
+    )
+})
+
+test('isTrytes() returns false for invalid trytes.', t => {
+    const invalidTrytes = '134asdfLWDUOSTSJVL9EEHKW9YQFPBVBJAGLNKRVGSQZCGHQWEMIIILJMTHVAGVDXJVZMBAMOZTSBQNRVNLLASD'
+  
     t.is(
         isTrytes(invalidTrytes),
         false,
         'isTrytes() should return false for invalid trytes.'
     )
-
-    t.is(
-        isTrytes(trytesOfLengthNine, 9),
-        true,
-        'isTrytes() should return true for valid trytes and valid length.'
-    )
-
-    t.is(
-        isTrytes(trytesOfLengthNine, 10),
-        false,
-        'isTrytes() should return false for valid trytes but invalid length.'
-    )
-});
+})

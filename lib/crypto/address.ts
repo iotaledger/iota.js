@@ -1,6 +1,6 @@
 import { addChecksum } from '../utils'
-import Converter from './Converter'
-import Signing from './Signing'
+import { trits, trytes } from './Converter'
+import { address, digests, key } from './Signing'
 
 /**
  *  Generates a new address
@@ -18,9 +18,13 @@ export const generateAddress = (
     security: number = 2,
     checksum: boolean = false
 ): string => {
-    const key = Signing.key(Converter.trits(seed), index, security)
-    const digests = Signing.digests(key)
-    const address = Converter.trytes(Signing.address(digests))
+    while (seed.length % 81 !== 0) {
+        seed += 9
+    }
 
-    return checksum ? addChecksum(address) : address
+    const keyTrits = key(trits(seed), index, security)
+    const digestsTrits = digests(keyTrits)
+    const addressTrytes = trytes(address(digestsTrits))
+
+    return checksum ? addChecksum(addressTrytes) : addressTrytes
 }

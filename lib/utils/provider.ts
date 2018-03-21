@@ -1,4 +1,5 @@
 import * as Promise from 'bluebird'
+import { validateSettings } from '../api/settings'
 import {
     BaseCommand,
     BatchableCommand,
@@ -25,11 +26,12 @@ export const getKeysToBatch = <C extends BatchableCommand, K = keyof C[]>(
     command[key].length > BATCH_SIZE
 )
 
-export const provider = (settings: Partial<Settings>): Provider => ({
+export const provider = (settings?: Partial<Settings>): Provider => ({
     sendCommand: <C extends BaseCommand, R>(
         command: C,
         callback?: Callback<R>
     ): Promise<R> => Promise.try(() => {
+        settings = validateSettings(settings)
         if (isBatchableCommand(command)) {
             const keysToBatch: string[] = getKeysToBatch(command, BATCH_SIZE)
 
@@ -40,7 +42,7 @@ export const provider = (settings: Partial<Settings>): Provider => ({
 
         return send(settings.provider || '', command)
     }),
-    setSettings: (newSettings: Settings): void => {
-        settings = newSettings
+    setSettings: (newSettings?: Partial<Settings>): void => {
+        settings = validateSettings(newSettings)
     }
 })

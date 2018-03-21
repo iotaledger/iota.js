@@ -3,12 +3,15 @@ import { isTransactionArray } from '../../lib/utils'
 
 import { invalidTransactionObject, transactionObject } from '../samples/transactionObjects'
 
-test('isTransactionArray()', t => {
+test('isTransactionArray() returns true for valid trasnaction array.', t => {
     t.is(
         isTransactionArray([transactionObject]),
         true, 
         'isTransactionsArray() returns for valid transaction array.'
     )
+})
+
+test('isTransactionArray() returns false for invalid transaction array.', t => {
     t.is(
         isTransactionArray([invalidTransactionObject]),
         false,

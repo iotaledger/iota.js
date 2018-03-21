@@ -1,24 +1,13 @@
-import { Hash, Tag, Transaction, Transfer, Trytes } from '../api/types'
-import { Converter, Curl, Kerl, Signing } from '../crypto'
-import * as errors from '../errors'
-import { toTrytes }  from './'
-import { isNinesTrytes, isTransactionArray, isTrytes } from './guards'
+import * as Promise from 'bluebird'
+import { Tag, Transfer, Trytes } from '../api/types'
+
+export const asyncPipe = <T>(...fns: Array<(x: T) => T | Promise<T>>): (x: T | Promise<T>) => Promise<T> => 
+    (x: T | Promise<T>) => fns.reduce((m, f) => m.then(f), Promise.resolve(x))
 
 export const getOptionsWithDefaults = <T>(defaults: T) => (options: Partial<T>): T =>
     Object.assign({}, defaults, options) // tslint:disable-line prefer-object-spread
 
 export const asArray = <T>(x: T | T[]): T[] => (Array.isArray(x) ? x : [x])
-
-export const pad = (length: number) => (trytes: Trytes) => {
-    if (trytes.length > length) {
-        return trytes
-    }
-
-    return trytes.concat('9'.repeat(length - trytes.length))
-}
-
-export const padTag = pad(27)
-export const padTagArray = (tags: Tag[]) => tags.map(padTag)
 
 export const spammer = (): Transfer => ({
     address: '9'.repeat(81),

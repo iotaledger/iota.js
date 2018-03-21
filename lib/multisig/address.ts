@@ -1,4 +1,4 @@
-import { Converter, Kerl, Signing } from '../crypto'
+import { Kerl, trits, trytes  } from '../crypto'
 import { asArray } from '../utils'
 
 export default class Address {
@@ -28,7 +28,7 @@ export default class Address {
         // Add digests
         for (let i = 0; i < digestsArray.length; i++) {
             // Get trits of digest
-            const digestTrits = Converter.trits(digestsArray[i])
+            const digestTrits = trits(digestsArray[i])
 
             // Absorb digest
             this.kerl.absorb(digestTrits, 0, digestTrits.length)
@@ -55,7 +55,7 @@ export default class Address {
         this.kerl.squeeze(addressTrits, 0, Kerl.HASH_LENGTH)
 
         // Convert trits into trytes and return the address
-        return Converter.trytes(addressTrits)
+        return trytes(addressTrits)
     }
 }
 

@@ -1,7 +1,18 @@
 import * as Promise from 'bluebird'
 import { createGetBalances, GetBalancesResponse } from '../api/core'
 import { Address as AddressType, Callback, Provider, Transaction, Transfer } from '../api/types'
-import { Bundle, Converter, Kerl, Signing } from '../crypto'
+import {
+    addEntry,
+    addTrytes,
+    digests,
+    finalizeBundle,
+    Kerl,
+    key,
+    normalizedBundleHash, 
+    signatureFragment,
+    trits,
+    trytes
+} from '../crypto'
 import * as errors from '../errors'
 import {
     isAddressTrytes,
@@ -42,7 +53,7 @@ export const createBundle = (
     remainderAddress?: string
 ): Array<Partial<Transaction>> => {
     // Create a new bundle
-    const bundle: Bundle = new Bundle()
+    let bundle: Transaction[] = []
 
     const signatureFragments: string[] = []
     const totalBalance: number = input.balance
@@ -98,13 +109,13 @@ export const createBundle = (
 
         // Add first entries to the bundle
         // Slice the address in case the user provided a checksummed one
-        bundle.addEntry(
-            signatureMessageLength,
-            transfers[i].address.slice(0, 81),
-            transfers[i].value,
+        bundle = addEntry(bundle, {  
+            length: signatureMessageLength,
+            address: transfers[i].address.slice(0, 81),
+            value: transfers[i].value,
             tag,
-            Math.floor(Date.now() / 1000)
-        )
+            timestamp: Math.floor(Date.now() / 1000)
+        })
 
         // Sum up total value
         totalValue += transfers[i].value
@@ -115,7 +126,13 @@ export const createBundle = (
 
         // Add input as bundle entry
         // Only a single entry, signatures will be added later
-        bundle.addEntry(input.securitySum, input.address, toSubtract, tag, Math.floor(Date.now() / 1000))
+        bundle = addEntry(bundle, {
+            length: input.securitySum,
+            address: input.address,
+            value: toSubtract,
+            tag,
+            timestamp: Math.floor(Date.now() / 1000)
+        })
     }
 
     if (totalValue > totalBalance) {
@@ -132,13 +149,16 @@ export const createBundle = (
             throw new Error('No remainder address defined')
         }
 
-        bundle.addEntry(1, remainderAddress, remainder, tag, Math.floor(Date.now() / 1000))
+        bundle = addEntry(bundle, {
+            length: 1,
+            address: remainderAddress,
+            value: remainder,
+            tag,
+            timestamp: Math.floor(Date.now() / 1000)
+        })
     }
 
-    bundle.finalize()
-    bundle.addTrytes(signatureFragments)
-
-    return bundle.bundle
+    return addTrytes(finalizeBundle(bundle), signatureFragments, bundle.findIndex(tx => tx.value < 0))
 }
 
 export default class Multisig {
@@ -159,7 +179,7 @@ export default class Multisig {
      *   @returns {string} digest trytes
      **/
     public getKey(seed: string, index: number, security: number) {
-        return Converter.trytes(Signing.key(Converter.trits(seed), index, security))
+        return trytes(key(trits(seed), index, security))
     }
 
     /**
@@ -172,9 +192,9 @@ export default class Multisig {
      *   @returns {string} digest trytes
      **/
     public getDigest(seed: string, index: number, security: number) {
-        const key = Signing.key(Converter.trits(seed), index, security)
+        const keyTrits = key(trits(seed), index, security)
 
-        return Converter.trytes(Signing.digests(key))
+        return trytes(digests(keyTrits))
     }
 
     /**
@@ -185,16 +205,16 @@ export default class Multisig {
      *   @param {array} digests
      *   @returns {bool}
      **/
-    public validateAddress(multisigAddress: string, digests: string[]) {
+    public validateAddress(multisigAddress: string, digestsArr: string[]) {
         const kerl = new Kerl()
 
         // initialize Kerl with the provided state
         kerl.initialize()
 
         // Absorb all key digests
-        digests.forEach(keyDigest => {
-            const trits = Converter.trits(keyDigest)
-            kerl.absorb(Converter.trits(keyDigest), 0, trits.length)
+        digestsArr.forEach(keyDigest => {
+            const digestTrits = trits(keyDigest)
+            kerl.absorb(trits(keyDigest), 0, digestTrits.length)
         })
 
         // Squeeze address trits
@@ -202,7 +222,7 @@ export default class Multisig {
         kerl.squeeze(addressTrits, 0, Kerl.HASH_LENGTH)
 
         // Convert trits into trytes and return the address
-        return Converter.trytes(addressTrits) === multisigAddress
+        return trytes(addressTrits) === multisigAddress
     }
 
     /**
@@ -261,64 +281,63 @@ export default class Multisig {
      *   @returns {array} trytes Returns bundle trytes
      **/
     public addSignature(bundleToSign: Transaction[], inputAddress: string, keyTrytes: string, callback: Callback) {
-        const bundle = new Bundle()
-        bundle.bundle = bundleToSign
+        const bundle = bundleToSign
 
         // Get the security used for the private key
         // 1 security level = 2187 trytes
         const security = keyTrytes.length / 2187
 
         // convert private key trytes into trits
-        const key = Converter.trits(keyTrytes)
+        const keyTrits = trits(keyTrytes)
 
         // First get the total number of already signed transactions
         // use that for the bundle hash calculation as well as knowing
         // where to add the signature
         let numSignedTxs = 0
 
-        for (let i = 0; i < bundle.bundle.length; i++) {
-            if (bundle.bundle[i].address === inputAddress) {
+        for (let i = 0; i < bundle.length; i++) {
+            if (bundle[i].address === inputAddress) {
                 // If transaction is already signed, increase counter
-                if (!isNinesTrytes(bundle.bundle[i].signatureMessageFragment as string)) {
+                if (!isNinesTrytes(bundle[i].signatureMessageFragment as string)) {
                     numSignedTxs++
                 } else {
                     // Else sign the transactionse
-                    const bundleHash = bundle.bundle[i].bundle
+                    const bundleHash = bundle[i].bundle
 
                     //  First 6561 trits for the firstFragment
-                    const firstFragment = key.slice(0, 6561)
+                    const firstFragment = keyTrits.slice(0, 6561)
 
                     //  Get the normalized bundle hash
-                    const normalizedBundleHash = bundle.normalizedBundle(bundleHash as string)
+                    const normalizedBundle = normalizedBundleHash(bundleHash as string)
                     const normalizedBundleFragments = []
 
                     // Split hash into 3 fragments
                     for (let k = 0; k < 3; k++) {
-                        normalizedBundleFragments[k] = normalizedBundleHash.slice(k * 27, (k + 1) * 27)
+                        normalizedBundleFragments[k] = normalizedBundle.slice(k * 27, (k + 1) * 27)
                     }
 
                     //  First bundle fragment uses 27 trytes
                     const firstBundleFragment = normalizedBundleFragments[numSignedTxs % 3]
 
                     //  Calculate the new signatureFragment with the first bundle fragment
-                    const firstSignedFragment = Signing.signatureFragment(firstBundleFragment, firstFragment)
+                    const firstSignedFragment = signatureFragment(firstBundleFragment, firstFragment)
 
                     //  Convert signature to trytes and assign the new signatureFragment
-                    bundle.bundle[i].signatureMessageFragment = Converter.trytes(firstSignedFragment)
+                    bundle[i].signatureMessageFragment = trytes(firstSignedFragment)
 
                     for (let j = 1; j < security; j++) {
                         //  Next 6561 trits for the firstFragment
-                        const nextFragment = key.slice(6561 * j, (j + 1) * 6561)
+                        const nextFragment = keyTrits.slice(6561 * j, (j + 1) * 6561)
 
                         //  Use the next 27 trytes
                         const nextBundleFragment = normalizedBundleFragments[(numSignedTxs + j) % 3]
 
                         //  Calculate the new signatureFragment with the first bundle fragment
-                        const nextSignedFragment = Signing.signatureFragment(nextBundleFragment, nextFragment)
+                        const nextSignedFragment = signatureFragment(nextBundleFragment, nextFragment)
 
                         //  Convert signature to trytes and add new bundle entry at i + j position
                         // Assign the signature fragment
-                        bundle.bundle[i + j].signatureMessageFragment = Converter.trytes(nextSignedFragment)
+                        bundle[i + j].signatureMessageFragment = trytes(nextSignedFragment)
                     }
 
                     break
@@ -326,7 +345,7 @@ export default class Multisig {
             }
         }
 
-        return callback(null, bundle.bundle)
+        return callback(null, bundle)
     }
 }
 

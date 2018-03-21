@@ -1,7 +1,7 @@
 import { Hash, Transaction, Trytes } from '../api/types'
-import { Converter, Curl } from '../crypto'
+import { Curl, trits, trytes, value } from '../crypto'
 import * as errors from '../errors'
-import { asArray, pad } from './'
+import { asArray, padTrits, padTrytes } from './'
 
 /**
  *   Converts a transaction object into trytes
@@ -13,27 +13,27 @@ import { asArray, pad } from './'
 export function asTransactionTrytes(transactions: Transaction): Trytes
 export function asTransactionTrytes(transactions: Transaction[]): Trytes[]
 export function asTransactionTrytes(transactions: Transaction | Transaction[]) {
-    const trytes = asArray(transactions).map(transaction =>
+    const txTrytes = asArray(transactions).map(transaction =>
         [
             transaction.signatureMessageFragment,
             transaction.address,
-            pad(27)(Converter.trytes(Converter.trits(transaction.value))),
-            pad(27)(transaction.obsoleteTag),
-            pad(9)(Converter.trytes(Converter.trits(transaction.timestamp))),
-            pad(9)(Converter.trytes(Converter.trits(transaction.currentIndex))),
-            pad(9)(Converter.trytes(Converter.trits(transaction.lastIndex))),
+            trytes(padTrits(81)(trits(transaction.value))),
+            padTrytes(27)(transaction.obsoleteTag),
+            trytes(padTrits(27)(trits(transaction.timestamp))),
+            trytes(padTrits(27)(trits(transaction.currentIndex))),
+            trytes(padTrits(27)(trits(transaction.lastIndex))),
             transaction.bundle,
             transaction.trunkTransaction,
             transaction.branchTransaction,
-            pad(27)(transaction.tag || transaction.obsoleteTag),
-            pad(9)(Converter.trytes(Converter.trits(transaction.attachmentTimestamp))),
-            pad(9)(Converter.trytes(Converter.trits(transaction.attachmentTimestampLowerBound))),
-            pad(9)(Converter.trytes(Converter.trits(transaction.attachmentTimestampUpperBound))),
+            padTrytes(27)(transaction.tag || transaction.obsoleteTag),
+            trytes(padTrits(27)(trits(transaction.attachmentTimestamp))),
+            trytes(padTrits(27)(trits(transaction.attachmentTimestampLowerBound))),
+            trytes(padTrits(27)(trits(transaction.attachmentTimestampUpperBound))),
             transaction.nonce,
         ].join('')
     )
 
-    return Array.isArray(transactions) ? trytes : trytes[0]
+    return Array.isArray(transactions) ? txTrytes : txTrytes[0]
 }
 
 /**
@@ -50,9 +50,9 @@ export const transactionHash = (transactionTrits: Int8Array): Hash => {
     // generate the correct transaction hash
     curl.initialize()
     curl.absorb(transactionTrits, 0, transactionTrits.length)
-    curl.squeeze(hashTrits, 0, 243)
+    curl.squeeze(hashTrits, 0, Curl.HASH_LENGTH)
 
-    return Converter.trytes(hashTrits)
+    return trytes(hashTrits)
 }
 
 /**
@@ -62,46 +62,46 @@ export const transactionHash = (transactionTrits: Int8Array): Hash => {
  *   @param {string} trytes
  *   @returns {String} transactionObject
  **/
-export const asTransactionObject = (trytes: Trytes, hash?: Hash): Transaction => {
+export const asTransactionObject = (txTrytes: Trytes, hash?: Hash): Transaction => {
     if (!trytes) {
         throw new Error(errors.INVALID_TRYTES)
     }
 
     // validity check
     for (let i = 2279; i < 2295; i++) {
-        if (trytes.charAt(i) !== '9') {
+        if (txTrytes.charAt(i) !== '9') {
             throw new Error(errors.INVALID_TRYTES)
         }
     }
 
-    const transactionTrits = Converter.trits(trytes)
+    const transactionTrits = trits(txTrytes)
 
     return {
         hash: hash || transactionHash(transactionTrits),
-        signatureMessageFragment: trytes.slice(0, 2187),
-        address: trytes.slice(2187, 2268),
-        value: Converter.value(transactionTrits.slice(6804, 6837)),
-        obsoleteTag: trytes.slice(2295, 2322),
-        timestamp: Converter.value(transactionTrits.slice(6966, 6993)),
-        currentIndex: Converter.value(transactionTrits.slice(6993, 7020)),
-        lastIndex: Converter.value(transactionTrits.slice(7020, 7047)),
-        bundle: trytes.slice(2349, 2430),
-        trunkTransaction: trytes.slice(2430, 2511),
-        branchTransaction: trytes.slice(2511, 2592),
-        tag: trytes.slice(2592, 2619),
-        attachmentTimestamp: Converter.value(transactionTrits.slice(7857, 7884)),
-        attachmentTimestampLowerBound: Converter.value(transactionTrits.slice(7884, 7911)),
-        attachmentTimestampUpperBound: Converter.value(transactionTrits.slice(7911, 7938)),
-        nonce: trytes.slice(2646, 2673),
+        signatureMessageFragment: txTrytes.slice(0, 2187),
+        address: txTrytes.slice(2187, 2268),
+        value: value(transactionTrits.slice(6804, 6837)),
+        obsoleteTag: txTrytes.slice(2295, 2322),
+        timestamp: value(transactionTrits.slice(6966, 6993)),
+        currentIndex: value(transactionTrits.slice(6993, 7020)),
+        lastIndex: value(transactionTrits.slice(7020, 7047)),
+        bundle: txTrytes.slice(2349, 2430),
+        trunkTransaction: txTrytes.slice(2430, 2511),
+        branchTransaction: txTrytes.slice(2511, 2592),
+        tag: txTrytes.slice(2592, 2619),
+        attachmentTimestamp: value(transactionTrits.slice(7857, 7884)),
+        attachmentTimestampLowerBound: value(transactionTrits.slice(7884, 7911)),
+        attachmentTimestampUpperBound: value(transactionTrits.slice(7911, 7938)),
+        nonce: txTrytes.slice(2646, 2673),
     }
 }
 
-export const asTransactionObjects = (hashes: Hash[]) => (trytes: Trytes[]) =>
-    trytes.map((tryteString, i) => asTransactionObject(tryteString, hashes[i]))
+export const asTransactionObjects = (hashes?: Hash[]) => (txTrytes: Trytes[]) =>
+    txTrytes.map((tryteString, i) => asTransactionObject(tryteString, hashes ? hashes[i] : undefined))
 
 export const asFinalTransactionTrytes = (transactions: Transaction[]) =>
     transactions.map(transaction => asTransactionTrytes(transaction)).reverse()
 
 /* Legacy conversion methods - Deprecated */
-// export const transactionObject = (trytes: Trytes): Transaction => asTransactionObject(trytes)
-// export const transactionTrytes = (transaction: Transaction): Trytes => asTransactionTrytes(transaction)
+export const transactionObject = (txTrytes: Trytes): Transaction => asTransactionObject(txTrytes)
+export const transactionTrytes = (transaction: Transaction): Trytes => asTransactionTrytes(transaction)

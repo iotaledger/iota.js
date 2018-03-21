@@ -1,5 +1,5 @@
 /* tslint:disable no-console */
-
+import 'isomorphic-fetch'
 import { BaseCommand, BatchableCommand, Callback, IRICommand, Transaction } from '../api/types'
 import * as errors from '../errors'
 

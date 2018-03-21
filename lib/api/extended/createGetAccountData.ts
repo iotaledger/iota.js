@@ -3,9 +3,10 @@ import * as errors from '../../errors'
 import {
     asArray,
     getOptionsWithDefaults,
-    MAX_INDEX_DIFF,
     securityLevelValidator,
-    trytesValidator,
+    seedValidator,
+    startEndOptionsValidator,
+    startOptionValidator,
     validate,
 } from '../../utils'
 import { createGetBalances, createWereAddressesSpentFrom, GetBalancesResponse } from '../core'
@@ -25,13 +26,12 @@ export interface AccountData {
 
 export interface GetAccountDataOptions {
     start: number
-    end: number
+    end?: number
     security: number
 }
 
 const defaults: GetAccountDataOptions = {
     start: 0,
-    end: 0,
     security: 2,
 }
 
@@ -44,19 +44,19 @@ export const blankAccountData = (): AccountData => ({
 })
 
 export const verifyGetAccountData = (seed: Trytes, opts: GetAccountDataOptions) => {
-    validate(trytesValidator(seed), securityLevelValidator(opts.security!))
+    const validators = [seedValidator(seed), securityLevelValidator(opts.security!)]
 
-    const { start, end, security } = opts
+    const { start, end } = opts
 
-    if (start && end) {
-        if (start > end) {
-            throw new Error(errors.INVALID_START_OPTION)
-        }
-
-        if (end - start > MAX_INDEX_DIFF) {
-            throw new Error(errors.INVALID_START_END_OPTIONS)
-        }
+    if (start) {
+        validators.push(startOptionValidator(start)) 
     }
+
+    if (typeof end === 'number') {
+        validators.push(startEndOptionsValidator({ start, end }))
+    }
+
+    validate(...validators)
 }
 
 export const getAccountDataOptions = getOptionsWithDefaults(defaults)
@@ -79,7 +79,7 @@ export const createGetAccountData = (provider: Provider) => {
     const getBalances = createGetBalances(provider)
     const wereAddressesSpentFrom = createWereAddressesSpentFrom(provider)
 
-    const getAccountData = (
+    return ( 
         seed: string,
         options: Partial<GetAccountDataOptions> = {},
         callback?: Callback<Maybe<AccountData>>
@@ -91,7 +91,7 @@ export const createGetAccountData = (provider: Provider) => {
             .then(() =>
                 getNewAddress(seed, {
                     index: start,
-                    total: end > 0 ? end - start : undefined,
+                    total: end ? end - start : 0,
                     returnAll: true,
                     security,
                 })
@@ -104,7 +104,7 @@ export const createGetAccountData = (provider: Provider) => {
 
                 // 3. Add all returned addresses to the list of addresses
                 // remove the last element as that is the most recent address
-                accountData.addresses = (addresses as string[]).slice(0, -1)
+                accountData.addresses = addresses 
 
                 return getBundlesFromAddresses(addresses, true)
             })

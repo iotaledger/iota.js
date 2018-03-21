@@ -3,12 +3,13 @@ import { HASH_SIZE, TAG_SIZE, TRANSACTION_TRYTES_SIZE } from './constants'
 
 export const isArray = Array.isArray  // deprecated
 export const isInteger = Number.isInteger // deprecated
+export const isValue = isInteger // deprecated
 
 export const isTrytesOfExactLength = (trytes: string, length: number) =>
     typeof trytes === 'string' && new RegExp(`^[9A-Z]{${ length }}$`).test(trytes)
 
 export const isTrytesOfMaxLength = (trytes: string, length: number) =>
-    typeof trytes === 'string' && new RegExp(`^[9A-Z]{1, ${ length }}$`).test(trytes)
+    typeof trytes === 'string' && new RegExp(`^[9A-Z]{1,${ length }}$`).test(trytes)
 
 // Checks if input is correct trytes consisting of [9A-Z]; optionally validate length
 export const isTrytes = (trytes: string, length: string | number = '1,'): trytes is Trytes =>
@@ -16,19 +17,24 @@ export const isTrytes = (trytes: string, length: string | number = '1,'): trytes
 
 // Checks if input is correct hash (81 trytes)
 export const isHash = (hash: any): hash is Hash =>
-    isTrytesOfExactLength(hash, HASH_SIZE) || isTrytesOfExactLength(hash, HASH_SIZE + 9)
+    isTrytesOfExactLength(hash, HASH_SIZE) ||
+    isTrytesOfExactLength(hash, HASH_SIZE + 9) // address w/ checksum is valid hash
+
+export const isTransactionHash = (hash: any): hash is Hash =>
+    isTrytesOfExactLength(hash, HASH_SIZE)
 
 export const isAddressTrytes = isHash // Deprecated
 
 export const isEmpty = (trytes: any): trytes is Trytes => typeof trytes === 'string' && /^[9]+$/.test(trytes)
-export const isNinesTrytes = isEmpty // Deprecated
+export const isNinesTrytes = isEmpty 
 
 // Checks if input is correct hash
 export const isTransfer = (transfer: Transfer): transfer is Transfer =>
     isHash(transfer.address) &&
     Number.isInteger(transfer.value) &&
-    isTrytes(transfer.message) &&
-    isTrytes(transfer.tag) &&
+    transfer.value >= 0 &&
+    (!transfer.message.length || isTrytes(transfer.message)) &&
+    (!transfer.tag.length || isTrytes(transfer.tag)) &&
     transfer.tag.length <= 27
 
 export const isTransfersArray = (transfers: any[]): transfers is Transfer[] =>
@@ -38,6 +44,10 @@ export const isTransfersArray = (transfers: any[]): transfers is Transfer[] =>
 export const isHashArray = (hashes: any[]): hashes is Hash[] =>
     Array.isArray(hashes) &&
     hashes.every(isHash)
+
+export const isTransactionHashArray = (hashes: any[]): hashes is Hash[] =>
+    Array.isArray(hashes) &&
+    hashes.every(isTransactionHash)
 
 // Checks if input is list of correct trytes
 export const isTrytesArray = (trytesArray: any[]): trytesArray is Trytes[] =>
@@ -117,8 +127,8 @@ export const isUriArray = (uris: any[]): uris is string[] =>
     uris.every(isUri)
 
 /* Check if start & end options are valid */
-export const isStartEndOptions = ({ start, end }: { start: number; end: number }): boolean =>
-    !!(end && (start > end || end > start + 500))
+export const isStartEndOptions = ({ start, end }: { start: number, end: number }): boolean =>
+    !end || (start <= end && end < start + 500)
 
 export const isTag = (tag: any): tag is Tag =>
     isTrytesOfMaxLength(tag, TAG_SIZE)
@@ -133,4 +143,11 @@ export const isSecurityLevel = (security: any): security is number =>
 
 export const isTailTransaction = (transaction: any): transaction is Transaction =>
     isTransaction(transaction) &&
-    transaction.currentIndex !== 0
+    transaction.currentIndex === 0
+
+export const isInputArray = (ins: Address[]): boolean => ins.every(input =>
+    isHash(input.address) &&
+    isInteger(input.keyIndex) &&
+    input.keyIndex >= 0 &&
+    isSecurityLevel(input.security)
+)

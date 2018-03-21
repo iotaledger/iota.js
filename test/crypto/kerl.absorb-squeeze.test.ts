@@ -1,19 +1,18 @@
 import test from 'ava'
-import Converter from '../../lib/crypto/Converter'
-import Kerl from '../../lib/crypto/kerl'
+import { Kerl, trits, trytes } from '../../lib/crypto'
 
 test('Kerl: absorb()/squeeze(), Converter: trits()/trytes()', t => {
     const input = 'GYOMKVTSNHVJNCNFBBAH9AAMXLPLLLROQY99QN9DLSJUHDPBLCFFAIQXZA9BKMBJCYSFHFPXAHDWZFEIZ'
     const expected = 'OXJCNFHUNAHWDLKKPELTBFUCVW9KLXKOGWERKTJXQMXTKFKNWNNXYD9DMJJABSEIONOSJTTEVKVDQEWTW'
 
-    const absorbSqueeze = (trytes: string): string => {
-        const trits: Int8Array = Converter.trits(input)
+    const absorbSqueeze = (inputTrytes: string): string => {
+        const inputTrits: Int8Array = trits(inputTrytes)
         const kerl: Kerl = new Kerl()
         kerl.initialize()
-        kerl.absorb(trits, 0, trits.length)
+        kerl.absorb(inputTrits, 0, inputTrits.length)
         const hashTrits = new Int8Array(Kerl.HASH_LENGTH)
         kerl.squeeze(hashTrits, 0, Kerl.HASH_LENGTH)
-        return Converter.trytes(hashTrits)
+        return trytes(hashTrits)
     }
 
     t.is(

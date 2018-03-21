@@ -30,7 +30,7 @@ export type Trytes = string
 
 export interface Provider {
     sendCommand: <C extends BaseCommand, R>(command: C, callback?: Callback<R>) => Promise<R>
-    setSettings: (settings: Settings) => void
+    setSettings: (settings?: Partial<Settings>) => void
 }
 
 /* Address object */

@@ -1,154 +1,153 @@
 import { Transaction } from '../api/types'
+import { padTag, padTrits, padTrytes } from '../utils'  
 
 import add from './add'
-import Converter from './Converter'
+import { trits, trytes, value } from './Converter'
 import Kerl from './Kerl'
 
-export default class Bundle {
-    public bundle: Array<Partial<Transaction>>
+export interface BundleEntry {
+    length: number,
+    address: string,
+    value: number,
+    tag: string,
+    timestamp: number,
+    signatureMessageFragments: string[]
+}
 
-    constructor() {
-        this.bundle = []
-    }
+const NULL_HASH = '9'.repeat(81)
+const NULL_TAG = '9'.repeat(27)
+const NULL_NONCE = '9'.repeat(27)
+const NULL_FRAGMENT = '9'.repeat(2187)
 
-    public addEntry(signatureMessageLength: number, address: string, value: number, tag: string, timestamp: number): Bundle {
-        for (let i = 0; i < signatureMessageLength; i++) {
-            const transactionObject = {
-                address,
-                value: i === 0 ? value : 0,
-                obsoleteTag: tag,
-                tag,
-                timestamp,
-            }
+export const getEntryWithDefaults = (entry: Partial<BundleEntry>): BundleEntry => ({
+    length: entry.length || 1,
+    address: entry.address || NULL_HASH,
+    value: entry.value || 0,
+    tag: entry.tag || NULL_TAG,
+    timestamp: entry.timestamp || Math.floor(Date.now() - 1000),
+    signatureMessageFragments: (
+        entry.signatureMessageFragments ||
+        Array(entry.length || 1).fill(NULL_FRAGMENT)
+    ).map((fragment) => padTrytes(2187)(fragment))
+})
 
-            this.bundle[this.bundle.length] = transactionObject
-        }
-        return this
-    }
+export const createBundle = (entries: Array<Partial<BundleEntry>> = []): Transaction[] =>
+    entries.reduce((transactions: Transaction[], entry) => addEntry(transactions, entry), [])
 
-    public addTrytes(signatureFragments: string[]): Bundle {
-        let emptySignatureFragment = ''
-        const emptyHash = '9'.repeat(81)
-        const emptyTag = '9'.repeat(27)
-        const emptyTimestamp = 0
+export const addEntry = (transactions: Transaction[], entry: Partial<BundleEntry>): Transaction[] => {
+    const entryWithDefaults = getEntryWithDefaults(entry)
+    const { length, address, timestamp, signatureMessageFragments } = entryWithDefaults
+    const lastIndex = transactions.length - 1 + length
+    const tag = padTag(entryWithDefaults.tag) 
+    const obsoleteTag = tag
 
-        for (let j = 0; emptySignatureFragment.length < 2187; j++) {
-            emptySignatureFragment += '9'
-        }
+    return transactions
+        .map((transaction: Transaction) => ({
+            ...transaction,
+            lastIndex 
+        }))
+        .concat(Array(length).fill(null).map((_, i) => ({
+            address,
+            value: i === 0 ? entryWithDefaults.value : 0,
+            tag,
+            obsoleteTag,
+            currentIndex: transactions.length + i,
+            lastIndex,
+            timestamp,
+            signatureMessageFragment: signatureMessageFragments[i],
+            trunkTransaction: NULL_HASH,
+            branchTransaction: NULL_HASH,
+            attachmentTimestamp: 0,
+            attachmentTimestampLowerBound: 0,
+            attachmentTimestampUpperBound: 0,
+            bundle: NULL_HASH,
+            nonce: NULL_NONCE,
+            hash: NULL_HASH
+        })))
+}
 
-        for (let i = 0; i < this.bundle.length; i++) {
-            // Fill empty signatureMessageFragment
-            this.bundle[i].signatureMessageFragment = signatureFragments[i]
-                ? signatureFragments[i]
-                : emptySignatureFragment
+export const addTrytes = (transactions: Transaction[], tryteFragments: string[], offset = 0): Transaction[] => 
+    transactions.map((transaction, i) => (i >= offset && i < (offset + tryteFragments.length))
+        ? { ...transaction, signatureMessageFragment: padTrytes(27 * 81)(tryteFragments[i - offset] || '') }
+        : transaction
+    )
 
-            // Fill empty trunkTransaction
-            this.bundle[i].trunkTransaction = emptyHash
+export const finalizeBundle = (transactions: Transaction[]): Transaction[] => {
+    const valueTrits = transactions.map(tx => padTrits(81)(trits(tx.value)))
+    const timestampTrits = transactions.map(tx => padTrits(27)(trits(tx.timestamp)))
+    const currentIndexTrits = transactions.map(tx => padTrits(27)(trits(tx.currentIndex)))
+    const lastIndexTrits = padTrits(27)(trits(transactions[0].lastIndex))
 
-            // Fill empty branchTransaction
-            this.bundle[i].branchTransaction = emptyHash
+    const obsoleteTagTrits = transactions.map(tx => padTrits(81)(trits(tx.obsoleteTag)))
 
-            this.bundle[i].attachmentTimestamp = emptyTimestamp
-            this.bundle[i].attachmentTimestampLowerBound = emptyTimestamp
-            this.bundle[i].attachmentTimestampUpperBound = emptyTimestamp
-            // Fill empty nonce
-            this.bundle[i].nonce = emptyTag
-        }
-        return this
-    }
+    let bundleHash: string
+    let validBundle: boolean = false
+ 
+    while (!validBundle) {
+        const kerl = new Kerl()
+        kerl.initialize()
 
-    public finalize(): Bundle {
-        let validBundle = false
-        let obsoleteTagTrits = this.bundle[0].obsoleteTag ? Converter.trits(this.bundle[0].obsoleteTag!) : new Int8Array(81).fill(0)
-        
-        while (!validBundle) {
-            const kerl = new Kerl()
-            kerl.initialize()
-
-            for (let i = 0; i < this.bundle.length; i++) {
-                const valueTrits = Converter.trits(this.bundle[i].value!)
-                while (valueTrits.length < 81) {
-                    valueTrits[valueTrits.length] = 0
-                }
-
-                const timestampTrits = Converter.trits(this.bundle[i].timestamp!)
-                while (timestampTrits.length < 27) {
-                    timestampTrits[timestampTrits.length] = 0
-                }
-
-                const currentIndexTrits = Converter.trits((this.bundle[i].currentIndex = i))
-                while (currentIndexTrits.length < 27) {
-                    currentIndexTrits[currentIndexTrits.length] = 0
-                }
-
-                const lastIndexTrits = Converter.trits((this.bundle[i].lastIndex = this.bundle.length - 1))
-                while (lastIndexTrits.length < 27) {
-                    lastIndexTrits[lastIndexTrits.length] = 0
-                }
-
-                const bundleEssence = Converter.trits(
-                    this.bundle[i].address +
-                        Converter.trytes(valueTrits) +
-                        this.bundle[i].obsoleteTag +
-                        Converter.trytes(timestampTrits) +
-                        Converter.trytes(currentIndexTrits) +
-                        Converter.trytes(lastIndexTrits)
-                )
-                kerl.absorb(bundleEssence, 0, bundleEssence.length)
-            }
-
-            const trits = new Int8Array(Kerl.HASH_LENGTH)
-            kerl.squeeze(trits, 0, Kerl.HASH_LENGTH)
-            const hash = Converter.trytes(trits)
-
-            for (const tx of this.bundle) {
-                tx.bundle = hash
-            }
-
-            const normalizedHash = this.normalizedBundle(hash)
-
-            if (normalizedHash.indexOf(13 /* = M */) !== -1) {
-                // Insecure bundle. Increment Tag and recompute bundle hash.
-                obsoleteTagTrits = add(obsoleteTagTrits, new Int8Array(1).fill(1))
-            } else {
-                validBundle = true
-            }
+        for (let i = 0; i < transactions.length; i++) {
+            const essence = trits(
+                  transactions[i].address +
+                  trytes(valueTrits[i]) +
+                  trytes(obsoleteTagTrits[i]) +
+                  trytes(timestampTrits[i]) +
+                  trytes(currentIndexTrits[i]) +
+                  trytes(lastIndexTrits)
+            )
+            kerl.absorb(essence, 0, essence.length)
         }
 
-        this.bundle[0].obsoleteTag = Converter.trytes(obsoleteTagTrits)
-        return this        
+        const bundleHashTrits = new Int8Array(Kerl.HASH_LENGTH)
+        kerl.squeeze(bundleHashTrits, 0, Kerl.HASH_LENGTH)
+        bundleHash = trytes(bundleHashTrits)
+
+        if (normalizedBundleHash(bundleHash).indexOf(13) !== -1) {
+            // Insecure bundle, increment obsoleteTag and recompute bundle hash
+            obsoleteTagTrits[0] = add(obsoleteTagTrits[0], new Int8Array(1).fill(1))
+        } else {
+            validBundle = true
+        }
     }
 
-    public normalizedBundle(bundleHash: string): Int8Array {
-        const normalizedBundle = new Int8Array(81)
+    return transactions.map((transaction, i) => ({
+        ...transaction,
+        // overwrite obsoleteTag in first entry
+        obsoleteTag: i === 0 ? trytes(obsoleteTagTrits[0]) : transaction.obsoleteTag, 
+        bundle: bundleHash 
+    }))
+}
 
-        for (let i = 0; i < 3; i++) {
-            let sum = 0
-            for (let j = 0; j < 27; j++) {
-                sum += normalizedBundle[i * 27 + j] = Converter.value(Converter.trits(bundleHash.charAt(i * 27 + j)))
-            }
+export const normalizedBundleHash = (bundleHash: string): Int8Array => {
+    const n = new Int8Array(81)
 
-            if (sum >= 0) {
-                while (sum-- > 0) {
-                    for (let j = 0; j < 27; j++) {
-                        if (normalizedBundle[i * 27 + j] > -13) {
-                            normalizedBundle[i * 27 + j]--
-                            break
-                        }
-                    }
-                }
-            } else {
-                while (sum++ < 0) {
-                    for (let j = 0; j < 27; j++) {
-                        if (normalizedBundle[i * 27 + j] < 13) {
-                            normalizedBundle[i * 27 + j]++
-                            break
-                        }
+    for (let i = 0; i < 3; i++) {
+        let sum = 0
+        for (let j = 0; j < 27; j++) {
+            sum += n[i * 27 + j] = value(trits(bundleHash.charAt(i * 27 + j)))
+        }
+
+        if (sum >= 0) {
+            while (sum-- > 0) {
+                for (let j = 0; j < 27; j++) {
+                    if (n[i * 27 + j] > -13) {
+                        n[i * 27 + j]--
+                        break
                     }
                 }
             }
+        } else {
+            while (sum++ < 0) {
+                for (let j = 0; j < 27; j++) {
+                    if (n[i * 27 + j] < 13) {
+                        n[i * 27 + j]++
+                        break
+                    }
+                }
+            }
         }
-
-        return normalizedBundle
     }
+
+    return n
 }

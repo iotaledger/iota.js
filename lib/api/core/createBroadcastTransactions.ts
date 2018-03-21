@@ -27,4 +27,5 @@ export const createBroadcastTransactions = (provider: Provider) =>
                     trytes,
                 })
             )
+            .then(() => undefined)
             .asCallback(callback)

@@ -1,6 +1,6 @@
 import * as Promise from 'bluebird'
 import * as errors from '../../errors'
-import { hashArrayValidator, isInteger, removeChecksum, thresholdValidator, validate } from '../../utils'
+import { getBalancesThresholdValidator, hashArrayValidator, removeChecksum, validate } from '../../utils'
 import { BaseCommand, Callback, Hash, IRICommand, Maybe, Provider } from '../types'
 
 export interface GetBalancesCommand extends BaseCommand {
@@ -17,7 +17,7 @@ export interface GetBalancesResponse {
 }
 
 export const validateGetBalances = (addresses: Hash[], threshold: number) =>
-    validate(hashArrayValidator(addresses), thresholdValidator(threshold))
+    validate(hashArrayValidator(addresses), getBalancesThresholdValidator(threshold))
 
 export const createGetBalances = (provider: Provider) => (
     addresses: Hash[],

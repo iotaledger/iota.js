@@ -2,7 +2,9 @@ import * as Promise from 'bluebird'
 import * as errors from '../../errors'
 import { depthValidator, mwmValidator, seedValidator, transferArrayValidator, validate } from '../../utils'
 import { AttachToTangle, Bundle, Callback, Provider, Transaction, Transfer, Trytes } from '../types'
-import { createPrepareTransfers, createSendTrytes } from './index'
+import { createPrepareTransfers, createSendTrytes, getPrepareTransfersOptions, PrepareTransfersOptions, SendTrytesOptions } from './index'
+
+export interface SendTransferOptions extends PrepareTransfersOptions, SendTrytesOptions {}
 
 /**
  *   Prepares Transfer, gets transactions to approve
@@ -28,13 +30,13 @@ export const createSendTransfer = (provider: Provider, attachFn?: AttachToTangle
         depth: number,
         minWeightMagnitude: number,
         transfers: Transfer[],
-        options?: any,
+        options?: SendTransferOptions,
         callback?: Callback<Bundle>
     ): Promise<Bundle> => {
         // If no options provided, switch arguments
         if (options && typeof options === 'function') {
             callback = options
-            options = {}
+            options = getPrepareTransfersOptions({})
         }
 
         return Promise.resolve(

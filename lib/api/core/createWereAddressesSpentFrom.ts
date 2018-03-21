@@ -26,16 +26,13 @@ export const validateWereAddressesSpentFrom = (addresses: Hash[]) => validate(ha
  * @param callback
  */
 export const createWereAddressesSpentFrom = (provider: Provider) =>
-    (addresses: Hash[], callback?: Callback<boolean[]>): Promise<boolean[]> => {
-        addresses = removeChecksum(addresses)
-
-        return Promise.resolve(validateWereAddressesSpentFrom(addresses))
+    (addresses: Hash[], callback?: Callback<boolean[]>): Promise<boolean[]> =>
+        Promise.resolve(validateWereAddressesSpentFrom(addresses))
             .then(() =>
                 provider.sendCommand<WereAddressesSpentFromCommand, WereAddressesSpentFromResponse>({
                     command: IRICommand.WERE_ADDRESSES_SPENT_FROM,
-                    addresses,
+                    addresses: removeChecksum(addresses),
                 })
             )
             .then(res => res.states)
             .asCallback(callback)
-    }

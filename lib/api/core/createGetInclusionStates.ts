@@ -25,7 +25,7 @@ export const validateGetInclusionStates = (transactions: Hash[], tips: Hash[]) =
  *   @returns {function} callback
  *   @returns {object} success
  **/
-export const createGetInclusionStates = (provider: Provider) => ( 
+export const createGetInclusionStates = (provider: Provider) => (
     transactions: string[],
     tips: string[],
     callback?: Callback<boolean[]>

@@ -65,7 +65,9 @@ export const createFindTransactions = (provider: Provider) =>
             .then(() =>
                 provider.sendCommand<FindTransactionsCommand, FindTransactionsResponse>({
                     command: IRICommand.FIND_TRANSACTIONS,
-                    ...(query.tags ? { ...query, tags: padTagArray(query.tags) } : query)
+                    ...query,
+                    addresses: query.addresses ? removeChecksum(query.addresses) : undefined,
+                    tags: query.tags ? padTagArray(query.tags) : undefined
                 })
             )
             .then(res => res.hashes)
