@@ -20,7 +20,6 @@ var nullHashTrytes = (new Array(244).join('9'));
 *  Making API requests, including generalized wrapper functions
 **/
 function api(provider, isSandbox) {
-
     this._makeRequest = provider;
     this.sandbox = isSandbox;
 }
@@ -20854,11 +20853,14 @@ module.exports={
     "xmlhttprequest": "^1.8.0"
   },
   "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
     "bower": ">=1.8.0",
     "browserify": ">=14.1.0",
     "chai": "^4.0.2",
     "del": "^3.0.0",
     "gulp": "^3.9.1",
+    "gulp-babel": "^7.0.1",
     "gulp-jshint": "^2.0.2",
     "gulp-nsp": ">=2.4.2",
     "gulp-rename": ">=1.2.2",

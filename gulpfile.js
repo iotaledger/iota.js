@@ -6,7 +6,8 @@ var gulp       = require('gulp'),
     buffer     = require("vinyl-buffer"),
     browserify = require('browserify'),
     del        = require('del'),
-    gulpNSP    = require('gulp-nsp');
+    gulpNSP    = require('gulp-nsp'),
+    babel      = require('gulp-babel');
 
 
 
@@ -43,6 +44,9 @@ gulp.task('dist', function() {
         .pipe(gulp.dest(DEST))
         .pipe(rename('iota.min.js'))
         .pipe(buffer())
+        .pipe(babel({
+            "presets": ["env"]
+        }))
         .pipe(uglify())
         .pipe(gulp.dest(DEST));
 });
