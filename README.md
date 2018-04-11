@@ -47,7 +47,7 @@ The optional settings object can have the following values:
 
 You can either supply the remote node directly via the `provider` option, or individually with `host` and `port`, as can be seen in the example below:
 
-```
+```js
 // Create IOTA instance with host and port as provider
 var iota = new IOTA({
     'host': 'http://localhost',
@@ -60,10 +60,16 @@ var iota = new IOTA({
 });
 
 // now you can start using all of the functions
-iota.api.getNodeInfo();
+iota.api.getNodeInfo(function(error, success) {
+    if (error) {
+        console.error(error);
+    } else {
+        console.log(success);
+    }
+});
 
 // you can also get the version
-iota.version
+console.log(iota.version);
 ```
 
 Overall, there are currently four subclasses that are accessible from the IOTA object:
@@ -83,7 +89,7 @@ It should be noted that most API calls are done asynchronously. What this means 
 
 Here is a simple example of how to access the `getNodeInfo` function:
 
-```
+```js
 iota.api.getNodeInfo(function(error, success) {
     if (error) {
         console.error(error);
@@ -108,11 +114,13 @@ iota.api.getNodeInfo(function(error, success) {
     - **[prepareTransfers](#preparetransfers)**
     - **[sendTrytes](#sendtrytes)**
     - **[sendTransfer](#sendtransfer)**
+    - **[promoteTransaction](#promotetransaction)**
     - **[replayBundle](#replaybundle)**
     - **[broadcastBundle](#broadcastbundle)**
     - **[getBundle](#getbundle)**
     - **[getTransfers](#gettransfers)**
     - **[getAccountData](#getaccountdata)**
+    - **[isPromotable](#ispromotable)**
     - **[isReattachable](#isreattachable)**
 - **[utils](#iotautils)**
     - **[convertUnits](#convertunits)**
@@ -163,7 +171,7 @@ This Javascript library has implemented all of the core API calls that are made 
 
 You can simply use any of the available options from the `api` object then. For example, if you want to use the `getTips` function, you would simply do it as such:
 
-```
+```js
 iota.api.getTips(function(error, success) {
     // do stuff here
 })
@@ -177,7 +185,7 @@ Wrapper function for `getTrytes` and the Utility function `transactionObjects`. 
 
 
 #### Input
-```
+```js
 iota.api.getTransactionsObjects(hashes, callback)
 ```
 
@@ -201,7 +209,7 @@ Wrapper function for `findTransactions`, `getTrytes` and the Utility function `t
 
 
 #### Input
-```
+```js
 iota.api.findTransactionObjects(searchValues, callback)
 ```
 
@@ -220,7 +228,7 @@ Wrapper function for `getNodeInfo` and `getInclusionStates`. It simply takes the
 
 
 #### Input
-```
+```js
 iota.api.getLatestInclusion(hashes, callback)
 ```
 
@@ -238,7 +246,7 @@ iota.api.getLatestInclusion(hashes, callback)
 Wrapper function for `broadcastTransactions` and `storeTransactions`.
 
 #### Input
-```
+```js
 iota.api.broadcastAndStore(trytes, callback)
 ```
 
@@ -264,8 +272,8 @@ Input | Security Level | Security
 3 | High | 243-trits
 
 #### Input
-```
-iota.api.getNewAddress(seed [, options], callback)
+```js
+iota.api.getNewAddress(seed, [options], callback)
 ```
 
 1. **`seed`**: `String` tryte-encoded seed. It should be noted that this seed is not transferred
@@ -290,7 +298,7 @@ You can also define the minimum `threshold` that is required. This means that if
 
 
 #### Input
-```
+```js
 iota.api.getInputs(seed, [, options], callback)
 ```
 
@@ -320,7 +328,7 @@ You can provide multiple transfer objects, which means that your prepared bundle
 If you provide an address with a checksum, this function will automatically validate the address for you with the Utils function `isValidChecksum`.
 
 For the options, you can provide a list of `inputs`, that will be used for signing the transfer's inputs. It should be noted that these inputs (an array of objects) should have the provided 'security', `keyIndex` and `address` values:
-```
+```js
 var inputs = [{
     'keyIndex': //VALUE,
     'address': //VALUE,
@@ -330,7 +338,7 @@ var inputs = [{
 
 The library validates these inputs then and ensures that you have sufficient balance. When defining these inputs, you can also provide multiple inputs on different security levels. The library will correctly sign these inputs using your seed and the corresponding private keys. Here is an example using security level 3 and 2 for a transfer:
 
-```
+```js
 iota.api.prepareTransfers(seed,
     [{
         'address': 'SSEWOZSDXOVIURQRBTBDLQXWIXOLEUXHYBGAVASVPZ9HBTYJJEWBR9PDTGMXZGKPTGSUDW9QLFPJHTIEQZNXDGNRJE',
@@ -359,7 +367,7 @@ iota.api.prepareTransfers(seed,
 The `address` option can be used to define the address to which a remainder balance (if that is the case), will be sent to. So if all your inputs have a combined balance of 2000, and your spending 1800 of them, 200 of your tokens will be sent to that remainder address. If you do not supply the `address`, the library will simply generate a new one from your seed (taking `security` into account, or using the standard security value of `2` (medium)).
 
 #### Input
-```
+```js
 iota.api.prepareTransfers(seed, transfersArray [, options], callback)
 ```
 
@@ -386,7 +394,7 @@ iota.api.prepareTransfers(seed, transfersArray [, options], callback)
 Wrapper function that does `attachToTangle` and finally, it broadcasts and stores the transactions.
 
 #### Input
-```
+```js
 iota.api.sendTrytes(trytes, depth, minWeightMagnitude, callback)
 ```
 
@@ -405,7 +413,7 @@ iota.api.sendTrytes(trytes, depth, minWeightMagnitude, callback)
 Wrapper function that basically does `prepareTransfers`, as well as `attachToTangle` and finally, it broadcasts and stores the transactions locally.
 
 #### Input
-```
+```js
 iota.api.sendTransfer(seed, depth, minWeightMagnitude, transfers [, options], callback)
 ```
 
@@ -428,12 +436,41 @@ iota.api.sendTransfer(seed, depth, minWeightMagnitude, transfers [, options], ca
 
 ---
 
+### `promoteTransaction`
+
+Promotes a transaction by adding spam on top of it, as long as it is promotable.
+Will promote by adding transfers on top of the current one with `delay` interval.
+Use `params.interrupt` to terminate the promotion. If `params.delay` is set to `0` only one promotion transfer will be sent.
+
+#### Input
+```js
+iota.api.promoteTransaction(transaction, depth, minWeightMagnitude, transfers [, params], callback)
+```
+
+1. **`transaction`**: `String` Transaction hash, has to be tail.
+2. **`depth`** `Int` depth
+3. **`minWeightMagnitude`** `Int` minWeightMagnitude
+4. **`transfers`**: `Array` of transfer objects:
+  - **`address`**: `String` 81-tryte encoded address of recipient
+  - **`value`**: `Int` value to be transferred.
+  - **`message`**: `String` tryte-encoded message to be included in the bundle.
+  - **`tag`**: `String` 27-tryte encoded tag.
+5. **`params`** `Object` Params
+  - **`delay`** `int` Delay between promotion transfers
+  - **`interrupt`** `Boolean || Function` Flag to terminate promotion, can be boolean or a function returning a boolean
+6. **`callback`** `Function` Callback
+
+#### Returns
+`Array` - returns an array of the Promotion transfer (transaction object).
+
+---
+
 ### `replayBundle`
 
 Takes a tail transaction hash as input, gets the bundle associated with the transaction and then replays the bundle by attaching it to the tangle.
 
 #### Input
-```
+```js
 iota.api.replayBundle(transaction, depth, minWeightMagnitude [, callback])
 ```
 
@@ -449,7 +486,7 @@ iota.api.replayBundle(transaction, depth, minWeightMagnitude [, callback])
 Takes a tail transaction hash as input, gets the bundle associated with the transaction and then rebroadcasts the entire bundle.
 
 #### Input
-```
+```js
 iota.api.broadcastBundle(transaction [, callback])
 ```
 
@@ -463,7 +500,7 @@ iota.api.broadcastBundle(transaction [, callback])
 This function returns the bundle which is associated with a transaction. Input has to be a tail transaction (i.e. currentIndex = 0). If there are conflicting bundles (because of a replay for example) it will return multiple bundles. It also does important validation checking (signatures, sum, order) to ensure that the correct bundle is returned.
 
 #### Input
-```
+```js
 iota.api.getBundle(transaction, callback)
 ```
 
@@ -483,7 +520,7 @@ Returns the transfers which are associated with a seed. The transfers are determ
 If you want to have your transfers split into received / sent, you can use the utility function `categorizeTransfers`
 
 #### Input
-```
+```js
 iota.api.getTransfers(seed [, options], callback)
 ```
 
@@ -505,7 +542,7 @@ iota.api.getTransfers(seed [, options], callback)
 Similar to `getTransfers`, just a bit more comprehensive in the sense that it also returns the `addresses`, `transfers`, `inputs` and `balance` that are associated and have been used with your account (seed). This function is useful in getting all the relevant information of your account. If you want to have your transfers split into received / sent, you can use the utility function `categorizeTransfers`
 
 #### Input
-```
+```js
 iota.api.getAccountData(seed [, options], callback)
 ```
 
@@ -518,7 +555,7 @@ iota.api.getAccountData(seed [, options], callback)
 
 #### Returns
 `Object` - returns an object of your account data in the following format:
-```
+```js
 {
     'latestAddress': '', // Latest, unused address which has no transactions in the tangle
     'addresses': [], // List of all used addresses which have transactions associated with them
@@ -530,12 +567,28 @@ iota.api.getAccountData(seed [, options], callback)
 
 ---
 
+### `isPromotable`
+
+Checks if tail transaction is promotable by calling `checkConsistency` API call.
+
+#### Input
+```js
+iota.api.isPromotable(tail)
+```
+
+1. **`tail`** {String} Tail transaction hash
+
+#### Returns
+`Promise` - resolves to true / false
+
+---
+
 ### `isReattachable`
 
 This API function helps you to determine whether you should replay a transaction or make a completely new transaction with a different seed. What this function does, is it takes an input address (i.e. from a spent transaction) as input and then checks whether any transactions with a value transferred are confirmed. If yes, it means that this input address has already been successfully used in a different transaction and as such you should no longer replay the transaction.
 
 #### Input
-```
+```js
 iota.api.isReattachable(inputAddress, callback)
 ```
 
@@ -567,7 +620,7 @@ IOTA utilizes the Standard system of Units. See below for all available units:
 ```
 
 #### Input
-```
+```js
 iota.utils.convertUnits(value, fromUnit, toUnit)
 ```
 
@@ -585,7 +638,7 @@ iota.utils.convertUnits(value, fromUnit, toUnit)
 Takes a tryte-encoded input value and adds a checksum (length is user defined). Standard checksum length is 9 trytes. If `isAddress` is defined as true, it will validate if it's a correct 81-tryte enocded address.
 
 #### Input
-```
+```js
 iota.utils.addChecksum(inputValue, checksumLength, isAddress)
 ```
 
@@ -603,7 +656,7 @@ iota.utils.addChecksum(inputValue, checksumLength, isAddress)
 Takes an 90-trytes address as input and simply removes the checksum.
 
 #### Input
-```
+```js
 iota.utils.noChecksum(address)
 ```
 
@@ -619,7 +672,7 @@ iota.utils.noChecksum(address)
 Takes an 90-trytes checksummed address and returns a true / false if it is valid.
 
 #### Input
-```
+```js
 iota.utils.isValidChecksum(addressWithChecksum)
 ```
 
@@ -635,7 +688,7 @@ iota.utils.isValidChecksum(addressWithChecksum)
 Converts the trytes of a transaction into its transaction object.
 
 #### Input
-```
+```js
 iota.utils.transactionObject(trytes)
 ```
 
@@ -651,7 +704,7 @@ iota.utils.transactionObject(trytes)
 Converts a valid transaction object into trytes. Please refer to [TODO] for more information what a valid transaction object looks like.
 
 #### Input
-```
+```js
 iota.utils.transactionTrytes(transactionObject)
 ```
 
@@ -667,7 +720,7 @@ iota.utils.transactionTrytes(transactionObject)
 Categorizes a list of transfers into `sent` and `received`. It is important to note that zero value transfers (which for example, is being used for storing addresses in the Tangle), are seen as `received` in this function.
 
 #### Input
-```
+```js
 iota.utils.categorizeTransfers(transfers, addresses)
 ```
 
@@ -685,7 +738,7 @@ iota.utils.categorizeTransfers(transfers, addresses)
 Converts ASCII characters into trytes according to our encoding schema (read the source code for more info as to how it works). Currently only works with valid ASCII characters. As such, if you provide invalid characters the function will return `null`. In case you want to convert JSON data, stringify it first.
 
 #### Input
-```
+```js
 iota.utils.toTrytes(input)
 ```
 
@@ -701,7 +754,7 @@ iota.utils.toTrytes(input)
 Reverse of toTrytes.
 
 #### Input
-```
+```js
 iota.utils.fromTrytes(trytes)
 ```
 
@@ -717,7 +770,7 @@ iota.utils.fromTrytes(trytes)
 This function takes a bundle as input and from the signatureMessageFragments extracts the JSON encoded data which was sent with the transfer. This currently only works with the `toTrytes` and `fromTrytes` function that use the ASCII <-> Trytes encoding scheme. In case there is no JSON data, or invalid one, this function will return `null`
 
 #### Input
-```
+```js
 iota.utils.extractJson(bundle)
 ```
 
@@ -733,7 +786,7 @@ iota.utils.extractJson(bundle)
 This function makes it possible for each of the co-signers in the multi-signature to independently verify that a generated transaction with the corresponding signatures of the co-signers is valid. This function is safe to use and does not require any sharing of digests or key values.
 
 #### Input
-```
+```js
 iota.utils.validateSignatures(signedBundle, inputAddress)
 ```
 
@@ -758,7 +811,7 @@ Checks if the provided bundle is valid. The provided bundle has to be ordered ta
 ---
 
 #### Input
-```
+```js
 iota.utils.isBundle(bundle)
 ```
 
@@ -785,7 +838,7 @@ Multi signature related functions.
 Generates the corresponding private key (depending on the `security` chosen) of a seed.
 
 #### Input
-```
+```js
 iota.multisig.getKey(seed, index, security)
 ```
 
@@ -804,7 +857,7 @@ iota.multisig.getKey(seed, index, security)
 Generates the digest value of a key.
 
 #### Input
-```
+```js
 iota.multisig.getDigest(seed, index)
 ```
 
@@ -822,7 +875,7 @@ iota.multisig.getDigest(seed, index)
 This function is used to initiate the creation of a new multisig address. Once all digests were added with `addDigest()`, `finalize()` can be used to get the actual 81-tryte address value. `validateAddress()` can be used to actually validate the multi-signature.
 
 #### Input
-```
+```js
 var address = new iota.multisig.address(digests);
 ```
 
@@ -838,7 +891,7 @@ var address = new iota.multisig.address(digests);
 Absorbs the digests of co-signers
 
 #### Input
-```
+```js
 address.addDigest(digest);
 ```
 
@@ -854,7 +907,7 @@ address.addDigest(digest);
 Finalizes the multisig address generation process and returns the correct 81-tryte address.
 
 #### Input
-```
+```js
 address.finalize()
 ```
 
@@ -869,7 +922,7 @@ address.finalize()
 Validates a generated multi-sig address by getting the corresponding key digests of each of the co-signers. The order of the digests is of essence in getting correct results.
 
 #### Input
-```
+```js
 iota.multisig.validateAddress(multisigAddress, digests)
 ```
 
@@ -888,7 +941,7 @@ Initiates the creation of a new transfer by generating an empty bundle with the 
 The `securitySum` input is basically the sum of the `security` levels from all cosigners chosen during the private key generation (getKey / getDigest). e.g. when creating a new multisig, Bob has chosen security level 2, whereas Charles has chosen security level 3. Their securitySum is 5.
 
 #### Input
-```
+```js
 iota.multisig.initiateTransfer(securitySum, inputAddress, remainderAddress, transfers, callback)
 ```
 
@@ -910,7 +963,7 @@ This function is called by each of the co-signers individually to add their sign
 After having added all signatures, you can validate the signature with the `utils.validateSignature()` function.
 
 #### Input
-```
+```js
 iota.multisig.addSignature(bundleToSign, inputAddress, key, callback)
 ```
 
@@ -935,7 +988,7 @@ Validator functions. Return either true / false.
 Checks if the provided input is a valid 81-tryte (non-checksum), or 90-tryte (with checksum) address.
 
 #### Input
-```
+```js
 iota.valid.isAddress(address)
 ```
 
@@ -948,7 +1001,7 @@ iota.valid.isAddress(address)
 Determines if the provided input is valid trytes. Valid trytes are: `ABCDEFGHIJKLMNOPQRSTUVWXYZ9`. If you specify the length parameter, you can also validate the input length.
 
 #### Input
-```
+```js
 iota.valid.isTrytes(trytes [, length])
 ```
 
@@ -962,7 +1015,7 @@ iota.valid.isTrytes(trytes [, length])
 Validates the value input, checks if it's integer.
 
 #### Input
-```
+```js
 iota.valid.isValue(value)
 ```
 
@@ -975,7 +1028,7 @@ iota.valid.isValue(value)
 Checks if the input value is a number, can be a string, float or integer.
 
 #### Input
-```
+```js
 iota.valid.isNum(value)
 ```
 
@@ -988,7 +1041,7 @@ iota.valid.isNum(value)
 Checks if correct hash consisting of 81-trytes.
 
 #### Input
-```
+```js
 iota.valid.isHash(hash)
 ```
 
@@ -999,7 +1052,7 @@ iota.valid.isHash(hash)
 ### `isTransfersArray`
 
 Checks if it's a correct array of transfer objects. A transfer object consists of the following values:
-```
+```js
 {
     'address': // STRING (trytes encoded, 81 or 90 trytes)
     'value': // INT
@@ -1009,7 +1062,7 @@ Checks if it's a correct array of transfer objects. A transfer object consists o
 ```
 
 #### Input
-```
+```js
 iota.valid.isTransfersArray(transfersArray)
 ```
 
@@ -1022,7 +1075,7 @@ iota.valid.isTransfersArray(transfersArray)
 Array of valid 81 or 90-trytes hashes.
 
 #### Input
-```
+```js
 iota.valid.isArrayOfHashes(hashesArray)
 ```
 
@@ -1035,7 +1088,7 @@ iota.valid.isArrayOfHashes(hashesArray)
 Checks if it's an array of correct 2673-trytes. These are trytes either returned by prepareTransfers, attachToTangle or similar call. A single transaction object is encoded 2673 trytes.
 
 #### Input
-```
+```js
 iota.valid.isArrayOfTrytes(trytesArray)
 ```
 
@@ -1048,7 +1101,7 @@ iota.valid.isArrayOfTrytes(trytesArray)
 Similar to `isArrayOfTrytes`, just that in addition this function also validates that the last 243 trytes are non-zero (meaning that they don't equal 9). The last 243 trytes consist of:  `trunkTransaction` + `branchTransaction` + `nonce`. As such, this function determines whether the provided trytes have been attached to the tangle successfully. For example this validator can be used for trytes returned by `attachToTangle`.
 
 #### Input
-```
+```js
 iota.valid.isArrayOfAttachedTrytes(trytesArray)
 ```
 
@@ -1059,7 +1112,7 @@ iota.valid.isArrayOfAttachedTrytes(trytesArray)
 ### `isArrayOfTxObjects`
 
 Checks if the provided bundle is an array of correct transaction objects. Basically validates if each entry in the array has all of the following keys:
-```
+```js
 var keys = [
     'hash',
     'signatureMessageFragment',
@@ -1077,7 +1130,7 @@ var keys = [
 ```
 
 #### Input
-```
+```js
 iota.valid.isArrayOfTxObjects(bundle)
 ```
 
@@ -1089,7 +1142,7 @@ iota.valid.isArrayOfTxObjects(bundle)
 
 Validates if it's an array of correct input objects. These inputs are provided to either `prepareTransfers` or `sendTransfer`. An input objects consists of the following:
 
-```
+```js
 {
     'keyIndex': // INT
     'address': // STRING
@@ -1097,7 +1150,7 @@ Validates if it's an array of correct input objects. These inputs are provided t
 ```
 
 #### Input
-```
+```js
 iota.valid.isInputs(inputsArray)
 ```
 
@@ -1110,7 +1163,7 @@ iota.valid.isInputs(inputsArray)
 Self explanatory.
 
 #### Input
-```
+```js
 iota.valid.isString(string)
 ```
 
@@ -1121,7 +1174,7 @@ iota.valid.isString(string)
 Self explanatory.
 
 #### Input
-```
+```js
 iota.valid.isArray(array)
 ```
 
@@ -1132,7 +1185,7 @@ iota.valid.isArray(array)
 Self explanatory.
 
 #### Input
-```
+```js
 iota.valid.isObject(array)
 ```
 
@@ -1151,7 +1204,7 @@ udp://domain2.com:14265
 ```
 
 #### Input
-```
+```js
 iota.utils.isUri(node)
 ```
 
