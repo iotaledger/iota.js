@@ -168,6 +168,7 @@ export type AttachToTangle = (
 export interface Settings {
     provider: string
     attachToTangle?: AttachToTangle
+    timeout?: number
     host?: string // deprecated
     port?: string // deprecated
     sandbox?: string // deprecated

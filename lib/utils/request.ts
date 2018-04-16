@@ -15,16 +15,17 @@ export interface RequestOptions {
  *   @param {object} command
  *   @param {function} callback
  */
-export const send = <C extends BaseCommand, R = any>(url: string, command: BaseCommand): Promise<R> => {
+export const send = <C extends BaseCommand, R = any>(url: string, command: BaseCommand, abortSignal?: AbortSignal): Promise<R> => {
     const headers: HeadersInit = {
         'Content-Type': 'application/json',
         'X-IOTA-API-Version': '1',
     }
 
-    return fetch(url, { 
+    return fetch(url, {
         method: 'POST',
         headers,
-        body: JSON.stringify(command)
+        body: JSON.stringify(command),
+        signal: abortSignal
     })
         .then((res: any) => {
             if (!res.ok) {
@@ -127,4 +128,3 @@ export const batchedSend = <C extends BatchableCommand, R = any>(
         }
     })
 }
-

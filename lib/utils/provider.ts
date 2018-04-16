@@ -40,7 +40,17 @@ export const provider = (settings?: Partial<Settings>): Provider => ({
             }
         }
 
-        return send(settings.provider || '', command)
+        let abortSignal = undefined
+        if (settings.timeout) {
+            const controller = new AbortController()
+            abortSignal = controller.signal
+
+            setTimeout(() => {
+                controller.abort()
+            }, settings.timeout)
+        }
+
+        return send(settings.provider || '', command, abortSignal)
     }),
     setSettings: (newSettings?: Partial<Settings>): void => {
         settings = validateSettings(newSettings)

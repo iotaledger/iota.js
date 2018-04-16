@@ -28,5 +28,5 @@ export const validateSettings = (settings: Partial<Settings> = {}): Settings => 
         provider = settings.provider
     }
 
-    return { provider, attachToTangle: settings.attachToTangle }
+    return { provider, attachToTangle: settings.attachToTangle, timeout: settings.timeout }
 }
