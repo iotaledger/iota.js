@@ -1,5 +1,5 @@
 import test from 'ava'
-import { addEntry, addTrytes, createBundle, finalizeBundle, normalizedBundleHash } from '../../lib/crypto/bundle'
+import { addEntry, addTrytes, createBundle, finalizeBundle, normalizedBundleHash } from '../../lib/crypto/Bundle'
 
 const NULL_HASH = '9'.repeat(81)
 const NULL_NONCE = '9'.repeat(27)
@@ -42,7 +42,7 @@ const bundle = [{
     nonce: NULL_NONCE,
     hash: NULL_HASH
 
-},{
+}, {
     address: addresses[1],
     value: 0,
     tag,
@@ -110,9 +110,9 @@ test('addTrytes() adds trytes and returns correct transactions.', t => {
 })
 
 test('finalizeBundle() adds correct bundle hash.', t => {
-    const bundleHash =  'DEJVGJNGJSDCD9ECJJTRAZQJKORH9XKGXUHULNHLXNHIFBEXJBBXWPCJ9SLD9NGIE9FVTTDFUJLKIVR9B'
-    const incrObsoleteTag =  'VHG'.concat('9'.repeat(24))
-  
+    const bundleHash = 'DEJVGJNGJSDCD9ECJJTRAZQJKORH9XKGXUHULNHLXNHIFBEXJBBXWPCJ9SLD9NGIE9FVTTDFUJLKIVR9B'
+    const incrObsoleteTag = 'VHG'.concat('9'.repeat(24))
+
     const expected = bundle.map((transaction, i) => ({
         ...transaction,
         obsoleteTag: i === 0 ? incrObsoleteTag : transaction.obsoleteTag,
