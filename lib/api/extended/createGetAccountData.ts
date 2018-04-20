@@ -124,7 +124,7 @@ export const createGetAccountData = (provider: Provider) => {
                         if (balance > 0) {
                             accountData.inputs.push({
                                 address: accountData.addresses[index],
-                                keyIndex: index,
+                                keyIndex: start + index,
                                 security,
                                 balance: balance.toString(),
                             })

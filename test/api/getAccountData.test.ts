@@ -49,6 +49,22 @@ test('getAccountData() resolves to correct account data', async t => {
     )
 })
 
+test('getAccountData() with start > 0 resolves to correct account data.', async t => {
+    const expected = {
+        ...accountData,
+        addresses: accountData.addresses.slice(1, 3),
+        balance: getBalancesResponse.balances
+          .slice(1, 3)
+          .reduce((acc, balance) => acc + parseInt(balance, 10), 0)
+    }
+
+    t.deepEqual(
+        await getAccountData(seed, { start: 1 }),
+        expected,
+        'getAccountData() with start > 0 should resolve to correct account data'
+    )
+})
+
 test('getAccountData() rejects with correct errors for invalid inputs', t => {
     const invalidSeed = 'asdasDSFDAFD'
     const invalidStartEndOptions = {

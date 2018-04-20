@@ -54,3 +54,16 @@ nock('http://localhost:14265', headers)
     .reply(200, {
         states: [false]
     })
+
+nock('http://localhost:14265', headers)
+    .persist()
+    .post('/', {
+        command: IRICommand.WERE_ADDRESSES_SPENT_FROM,
+        addresses: [
+            '9DZXPFSVCSSWXXQPFMWLGFKPBAFTHYMKMZCPFHBVHXPFNJEIJIEEPKXAUBKBNNLIKWHJIYQDFWQVELOCB',
+            'OTSZGTNPKFSGJLUPUNGGXFBYF9GVUEHOADZZTDEOJPWNEIVBLHOMUWPILAHTQHHVSBKTDVQIAEQOZXGFB'
+        ]
+    })
+    .reply(200, {
+        states: [false, false]
+    })
