@@ -15,10 +15,21 @@ export interface RequestOptions {
  *   @param {object} command
  *   @param {function} callback
  */
-export const send = <C extends BaseCommand, R = any>(url: string, command: BaseCommand, abortSignal?: AbortSignal): Promise<R> => {
+export const send = <C extends BaseCommand, R = any>(url: string, command: BaseCommand, timeout?: number): Promise<R> => {
     const headers: HeadersInit = {
         'Content-Type': 'application/json',
         'X-IOTA-API-Version': '1',
+    }
+
+    // set timeout if provided
+    let abortSignal = undefined
+    if (timeout) {
+        const controller = new AbortController()
+        abortSignal = controller.signal
+
+        setTimeout(() => {
+            controller.abort()
+        }, timeout)
     }
 
     return fetch(url, {
