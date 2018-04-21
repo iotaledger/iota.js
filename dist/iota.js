@@ -26,6 +26,16 @@ function api(provider, isSandbox) {
 }
 
 /**
+*   Set the request timeout (-1 for no timeout)
+*
+*   @method setTimeout
+*   @param {int} timeout
+**/
+api.prototype.setApiTimeout = function(timeout) {
+    this._makeRequest.setApiTimeout(timeout);
+}
+
+/**
 *   General function that makes an HTTP request to the local node
 *
 *   @method sendCommand
@@ -1278,9 +1288,10 @@ api.prototype.prepareTransfers = function(seed, transfers, options, callback) {
             var thisBalance = inputs[i].balance;
             var toSubtract = 0 - thisBalance;
             var timestamp = Math.floor(Date.now() / 1000);
+            var address = Utils.noChecksum(inputs[i].address);
 
             // Add input as bundle entry
-            bundle.addEntry(inputs[i].security, inputs[i].address, toSubtract, tag, timestamp);
+            bundle.addEntry(inputs[i].security, address, toSubtract, tag, timestamp);
 
             // If there is a remainder value
             // Add extra output to send remaining funds to
@@ -1809,7 +1820,7 @@ api.prototype.getAccountData = function(seed, options, callback) {
 
                         var newInput = {
                             'address': valuesToReturn.addresses[index],
-                            'keyIndex': index,
+                            'keyIndex': start + index,
                             'security': security,
                             'balance': balance
                         }
@@ -3157,9 +3168,9 @@ hmac.prototype.addHMAC = function(bundle) {
             var bundleHashTrits = Converter.trits(bundle.bundle[i].bundle);
             var hmac = new Int8Array(243);
             curl.initialize();
-            curl.absorb(key);
-            curl.absorb(bundleHashTrits);
-            curl.squeeze(hmac);
+            curl.absorb(key, 0, key.length);
+            curl.absorb(bundleHashTrits, 0, bundleHashTrits.length);
+            curl.squeeze(hmac, 0, hmac.length);
             var hmacTrytes = Converter.trytes(hmac);
             bundle.bundle[i].signatureMessageFragment = hmacTrytes + bundle.bundle[i].signatureMessageFragment.substring(81, 2187);
         }
@@ -4927,6 +4938,17 @@ function makeRequest(provider, token) {
 
     this.provider = provider || "http://localhost:14265";
     this.token = token;
+    this.timeout = -1;
+}
+
+/**
+*   Set the request timeout (-1 for no timeout)
+*
+*   @method setTimeout
+*   @param {integer} timeout
+**/
+makeRequest.prototype.setApiTimeout = function(timeout) {
+    this.timeout = timeout;
 }
 
 /**
@@ -4957,6 +4979,21 @@ makeRequest.prototype.open = function() {
     if (this.token) {
         //request.withCredentials = true;
         request.setRequestHeader('Authorization', 'token ' + this.token);
+    }
+
+    if (this.timeout > 0) {
+        if (request.timeout === undefined) {
+            // timeout is not implemented in nodejs xhr
+            setTimeout(function() {
+              if (request.readyState !== 4) {
+                request.abort();
+              }
+            }, timeout);
+        } else {
+            // in browsers, xmr has timeout property
+            request.timeout = this.timeout;
+        }
+
     }
 
     return request;
@@ -20819,7 +20856,7 @@ process.umask = function() { return 0; };
 },{}],60:[function(require,module,exports){
 module.exports={
   "name": "iota.lib.js",
-  "version": "0.4.7",
+  "version": "0.4.8",
   "description": "Javascript Library for IOTA",
   "main": "./lib/iota.js",
   "scripts": {
@@ -20860,7 +20897,7 @@ module.exports={
     "del": "^3.0.0",
     "gulp": "^3.9.1",
     "gulp-jshint": "^2.0.2",
-    "gulp-nsp": ">=2.4.2",
+    "gulp-nsp": ">=2.4.2 <3.0.0",
     "gulp-rename": ">=1.2.2",
     "gulp-replace": "^0.6.1",
     "gulp-uglify": "^3.0.0",
