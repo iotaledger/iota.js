@@ -41,13 +41,13 @@
     "del": "^3.0.0",
     "gulp": "^3.9.1",
     "gulp-jshint": "^2.0.2",
-    "gulp-nsp": ">=2.4.2 <3.0.0",
+    "gulp-nsp": "^3.0.1",
     "gulp-rename": ">=1.2.2",
     "gulp-replace": "^0.6.1",
     "gulp-uglify": "^3.0.0",
     "jshint": "^2.9.4",
-    "mocha": "^3.2.0",
+    "mocha": "^3.5.3",
     "vinyl-buffer": "^1.0.0",
-    "vinyl-source-stream": "^1.1.0"
+    "vinyl-source-stream": "^1.1.2"
   }
 }
