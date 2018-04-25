@@ -16,21 +16,42 @@ const defaults: PromoteTransactionOptions = {
 export const getPromoteTransactionOptions = getOptionsWithDefaults(defaults)
 
 /**
- * Promotes a transaction by adding spam on top of it.
- * Will promote {maximum} transfers on top of the current one with {delay} interval.
+ * @method createPromoteTransaction 
+ * 
+ * @param {Provider} provider - Network provider
  *
- * @param {string} tail
- * @param {int} depth
- * @param {int} minWeightMagnitude
- * @param {array} transfer
- * @param {object} params
- * @param {function} [callback]
- * @returns {Promise<string>}
+ * @param {Function} [attachFn] - Optional {@link AttachToTangle} function to override the
+ * [default method]{@link attachToTangle}.
+ * 
+ * @return {Function} {@link promoteTransaction}
  */
 export const createPromoteTransaction = (provider: Provider, attachFn?: AttachToTangle) => {
     const isPromotable = createIsPromotable(provider)
     const sendTransfer = createSendTransfer(provider, attachFn)
 
+    /**
+     * Promotes a transaction by adding other transactions (spam by default) on top of it.
+     * Will promote `maximum` transfers on top of the current one with `delay` interval. Promotion
+     * is interruptable through `interrupt` option.
+     *
+     * @method promoteTransaction
+     * 
+     * @param {string} tail
+     * @param {int} depth
+     * @param {int} minWeightMagnitude
+     * @param {array} transfer
+     * @param {object} [options]
+     * @param {number} [options.delay] - Delay between spam transactions in ms
+     * @param {boolean|function} [options.interrupt] - Interrupt signal, which can be a function that evaluates
+     * to boolean
+     * @param {function} [callback]
+     *
+     * @returns {Promise}
+     * @fulfil {Transaction[]}
+     * @reject {Error}
+     * - `INCONSISTENT SUBTANGLE`: In this case promotion has no effect and reatchment is required.
+     * - Fetch error
+     */
     const promoteTransaction = (
         tailTransaction: string,
         depth: number,
@@ -50,8 +71,8 @@ export const createPromoteTransaction = (provider: Provider, attachFn?: AttachTo
         const { delay, interrupt } = getPromoteTransactionOptions(options)
         const spamTransactions: Transaction[] = []
         const sendTransferOptions = {
-          ...getPrepareTransfersOptions({}),
-          reference: tailTransaction
+            ...getPrepareTransfersOptions({}),
+            reference: tailTransaction
         }
 
         return Promise.resolve(validate(hashValidator(tailTransaction), transferArrayValidator(spamTransfers)))

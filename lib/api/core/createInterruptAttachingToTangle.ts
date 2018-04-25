@@ -7,11 +7,6 @@ export interface InterruptAttachingToTangleCommand extends BaseCommand {
 
 export type InterruptAttachingToTangleResponse = void
 
-/**
- *   @method interruptAttachingToTangle
- *   @returns {function} callback
- *   @returns {object} success
- **/
 export const createInterruptAttachingToTangle = (provider: Provider) =>
     (callback?: Callback<void>): Promise<void> =>
         provider.sendCommand<InterruptAttachingToTangleCommand, InterruptAttachingToTangleResponse>({

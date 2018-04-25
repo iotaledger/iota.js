@@ -49,7 +49,7 @@ export const verifyGetAccountData = (seed: Trytes, opts: GetAccountDataOptions) 
     const { start, end } = opts
 
     if (start) {
-        validators.push(startOptionValidator(start)) 
+        validators.push(startOptionValidator(start))
     }
 
     if (typeof end === 'number') {
@@ -61,17 +61,12 @@ export const verifyGetAccountData = (seed: Trytes, opts: GetAccountDataOptions) 
 
 export const getAccountDataOptions = getOptionsWithDefaults(defaults)
 
-/**
- *   Similar to getTransfers, just that it returns additional account data
+/**  
+ * @method createGetAccountData
  *
- *   @method getAccountData
- *   @param {string} seed
- *   @param {object} options
- *   @param {int} [options.start=0] - Starting key index
- *   @param {int} [options.security=0] - Security level to be used for getting inputs and addresses
- *   @param {int} [options.end] - Ending key index
- *   @param {function} callback
- *   @returns {object} success
+ * @param {Provider} provider - Network provider for accessing IRI
+ * 
+ * @return {function} {@link getAccountData}
  */
 export const createGetAccountData = (provider: Provider) => {
     const getNewAddress = createGetNewAddress(provider)
@@ -79,7 +74,42 @@ export const createGetAccountData = (provider: Provider) => {
     const getBalances = createGetBalances(provider)
     const wereAddressesSpentFrom = createWereAddressesSpentFrom(provider)
 
-    return ( 
+    /**
+     * Returns an {@link AccountData} object, containg account information about `addresses`, `transfers` and `inputs`.
+     * Returned `transfers` field containg a list of bundles has been deprecated. Prefer to use `transactions` field
+     * which contains all transactions directly associated to account's addresses.
+     *
+     * @example
+     * getAccountData(seed, {
+     *    start: 0,
+     *    security: 2
+     * })
+     *    .then(accountData => {
+     *        const { addresses, inputs, transfers, balance } = accountData
+     *        // ...
+     *    })
+     *    .catch(err => {
+     *        // handle errors
+     *    })
+     *
+     * @method getAccountData
+     * 
+     * @param {string} seed
+     * @param {object} options
+     * @param {number} [options.start=0] - Starting key index
+     * @param {number} [options.security = 0] - Security level to be used for getting inputs and addresses
+     * @param {number} [options.end] - Ending key index
+     * @param {Callback} [callback] - Optional callback
+     *
+     * @returns {Promise}
+     * @fulfil {AccountData}
+     * @reject {Error}
+     * - `INVALID_SEED`
+     * - `INVALID_START_OPTION`
+     * - `INVALID_START_END_OPTIONS`: Invalid combination of start & end options`
+     * - Fetch error
+     */
+    return (
         seed: string,
         options: Partial<GetAccountDataOptions> = {},
         callback?: Callback<Maybe<AccountData>>
@@ -104,7 +134,7 @@ export const createGetAccountData = (provider: Provider) => {
 
                 // 3. Add all returned addresses to the list of addresses
                 // remove the last element as that is the most recent address
-                accountData.addresses = addresses 
+                accountData.addresses = addresses
 
                 return getBundlesFromAddresses(addresses, true)
             })

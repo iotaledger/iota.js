@@ -4,15 +4,7 @@ import { Bundle, Callback, Provider, Transaction } from '../types'
 
 import { createFindTransactionObjects, createGetLatestInclusion } from './index'
 
-/**
- *   Gets an array of bundles given a list of associated addresses
- *
- *   @method bundlesFromAddresses
- *   @param {array} addresses - Array of addresses
- *   @param {bool} inclusionStates - Flag to include persistence status
- *   @returns {array} bundles - Array of bundles
- */
-export const createGetBundlesFromAddresses = (provider: Provider) => function(
+export const createGetBundlesFromAddresses = (provider: Provider) => function (
     addresses: string[],
     inclusionStates?: boolean,
     callback?: Callback<Bundle[]>
@@ -24,7 +16,7 @@ export const createGetBundlesFromAddresses = (provider: Provider) => function(
     return (
         findTransactionObjects({ addresses })
             // 2. Get all transactions by bundle hashes
-            .then(transactions =>
+            .then((transactions: Transaction[]) =>
                 findTransactionObjects({
                     bundles: transactions.filter(tx => tx.currentIndex === 0).map(tx => tx.bundle),
                 })
@@ -34,7 +26,7 @@ export const createGetBundlesFromAddresses = (provider: Provider) => function(
             .then(groupTransactionsIntoBundles)
 
             // 4. If requested, add persistence status to each bundle
-            .then(bundles => {
+            .then((bundles: Transaction[][]) => {
                 if (!inclusionStates) {
                     return bundles
                 }
@@ -47,33 +39,19 @@ export const createGetBundlesFromAddresses = (provider: Provider) => function(
     ).asCallback((arguments.length === 2 && typeof arguments[1] === 'function') ? arguments[1] : callback)
 }
 
-/**
- *  Groups an array of transaction objects into array of bundles
- *
- *  @method groupTransactionsIntoBundles
- *  @param {array} transactions
- *  @return {array} bundles
- */
+// Groups an array of transaction objects into array of bundles
 export const groupTransactionsIntoBundles = (transactions: Transaction[]): Bundle[] =>
     transactions.reduce(
-      (acc: Bundle[], transaction: Transaction) => {
-          if (transaction.currentIndex === 0) {
-              acc.push(getBundleSync(transactions, transaction))
-          }
-          return acc
-      }, []
+        (acc: Bundle[], transaction: Transaction) => {
+            if (transaction.currentIndex === 0) {
+                acc.push(getBundleSync(transactions, transaction))
+            }
+            return acc
+        }, []
     )
 
-/**
- *  Collects all transactions of a bundle starting from a given tail
- *  and traversing through trunk.
- *
- *  @method createGetBundle
- *  @param {array} transaction - Array of transaction objects
- *  @param {object} transaction - Trunk transaction
- *  @param {array} bundle - Array of transactions in the bundle 
- *  @return {array} bundle - Array of all transactions in the bundle
- */
+
+// Collects all transactions of a bundle starting from a given tail and traversing through trunk.
 export const getBundleSync = (
     transactions: Transaction[],
     transaction: Transaction,

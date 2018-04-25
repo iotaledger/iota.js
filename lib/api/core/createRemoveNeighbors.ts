@@ -15,13 +15,33 @@ export interface RemoveNeighborsResponse {
 
 export const validateRemoveNeighbors = (uris: string[]) => validate(uriArrayValidator(uris))
 
-/**
- *   @method removeNeighbors
- *   @param {Array} uris List of URI's
- *   @param {function} callback
- *   @returns {object} success
- **/
+/**  
+ * @method createRemoveNeighbors
+ * 
+ * @param {Provider} provider - Network provider
+ * 
+ * @return {function} {@link removeNeighbors}
+ */
 export const createRemoveNeighbors = (provider: Provider) =>
+
+    /**
+     * Removes a list of neighbors from the connected IRI node by calling
+     * [`removeNeighbors`]{@link https://docs.iota.works/iri/api#endpoints/removeNeighbors} command. 
+     * Assumes `removeNeighbors` command is available on the node.
+     * 
+     * This method has temporary effect until your IRI node relaunches.
+     *
+     * @method removeNeighbors
+     *
+     * @param {Array} uris - List of URI's
+     * @param {Callback} [callback] - Optional callback
+     *
+     * @return {Promise}
+     * @fulfil {number} Number of neighbors that were removed
+     * @reject {Error}
+     * - `INVALID URI`: Invalid uri(s)
+     * - Fetch error
+     */
     (uris: string[], callback?: Callback<number>): Promise<number> =>
         Promise.resolve(validateRemoveNeighbors(uris))
             .then(() =>

@@ -29,10 +29,61 @@ const defaults: GetInputsOptions = {
     security: 2,
 }
 
+/**  
+ * @method createGetInputs
+ *
+ * @param {Provider} provider - Network provider for accessing IRI
+ *
+ * @return {function} {@link getInputs}
+ */
 export const createGetInputs = (provider: Provider) => {
     const getNewAddress = createGetNewAddress(provider)
     const getBalances = createGetBalances(provider)
 
+    /**  
+     * Creates and returns an `{@link Inputs}` objects by generating addresses and fetching their latest balance.
+     *
+     * @example
+     * import iota from '@iota/core'
+     * import errors from '@iota/core'
+     *
+     * const { getInputs } = iota()
+     * 
+     * const seed = 'SEED'
+     * const threshold = 999
+     *
+     * getInputs(seed, { start: 0, threhold })
+     *    .then(({ inputs, totalBalance }) => {
+     *        // ...
+     *    })
+     *    .catch(err => {
+     *        if (err.message === errors.INSUFFICIENT_BALANCE) {
+     *            // handle insufficient balance case
+     *        }
+     *        // ...
+     *    })
+     *
+     * @method getInputs 
+     *
+     * @param {string} seed
+     * @param {object} [options]
+     * @param {number} [options.start=0] - Index offset indicating from which address we start scanning for balance
+     * @param {number} [options.end] - Last index up to which we stop scanning
+     * @param {number} [options.security=2] - Security level of inputs
+     * @param {threshold} [options.threshold] - Minimum amount of balance required
+     *
+     * @return {Promise}
+     *
+     * @fulfil {Inputs} Inputs object containg a list of `{@Address}` objects and `totalBalance` field
+     * @reject {Error}
+     * - `INVALID_SEED`
+     * - `INVALID_SECURITY_LEVEL`
+     * - `INVALID_START_OPTION`
+     * - `INVALID_START_END_OPTIONS`
+     * - `INVALID_THRESHOLD`
+     * - `INSUFFICIENT_BALANCE`
+     * - Fetch error
+     */
     return (
         seed: Trytes,
         options: Partial<GetInputsOptions> = {},
@@ -50,14 +101,14 @@ export const createGetInputs = (provider: Provider) => {
                 .tap(inputs => checkSufficientBalance(inputs, threshold))
             )
             .asCallback(callback)
-    } 
+    }
 }
 
 export const getInputsOptions = getOptionsWithDefaults(defaults)
 
 export const validateGetInputsOptions = (seed: Trytes, options: GetInputsOptions) => {
     const { security, start, end, threshold } = options
-  
+
     const validators = [
         seedValidator(seed),
         securityLevelValidator(security),
@@ -71,11 +122,11 @@ export const validateGetInputsOptions = (seed: Trytes, options: GetInputsOptions
     if (threshold) {
         validators.push(getInputsThresholdValidator(threshold))
     }
-    
+
     validate(...validators)
 }
 
-export const inputsToAddressOptions = ({ start, end, security }: GetInputsOptions) => end 
+export const inputsToAddressOptions = ({ start, end, security }: GetInputsOptions) => end
     ? getNewAddressOptions({ index: start, total: end - start + 1, security, returnAll: true })
     : getNewAddressOptions({ index: start, security, returnAll: true })
 

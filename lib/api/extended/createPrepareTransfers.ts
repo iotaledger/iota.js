@@ -56,7 +56,7 @@ const defaults: PrepareTransfersOptions = {
 
 export const getPrepareTransfersOptions = (options: Partial<PrepareTransfersOptions>) => {
     const optionsWithDefaults = getOptionsWithDefaults(defaults)(options)
-    
+
     return {
         ...optionsWithDefaults,
         remainderAddress: options.address || options.remainderAddress || undefined
@@ -76,23 +76,53 @@ export interface PrepareTransfersProps {
 }
 
 /**
- *   Prepares transfer by generating bundle, finding and signing inputs
+ * Create a `{@link prepareTransfers}` function by passing an optional `{@link Provider}`.
+ * It is possible to prepare the transfers and do the signing offline, by omiting the provider option.
  *
- *   @method prepareTransfers
- *   @param {string} seed
- *   @param {object} transfers
- *   @param {object} options
- *       @property {array} inputs Inputs used for signing. Needs to have correct security, keyIndex and address value
- *       @property {string} address Remainder address
- *       @property {int} security security level to be used for getting inputs and addresses
- *       @property {string} hmacKey HMAC key used for attaching an HMAC
- *   @param {function} callback
- *   @returns {array} trytes Returns bundle trytes
- **/
+ * @method createPrepareTransfers
+ * 
+ * @param {Provider} [provider] - Optional network provider, which is used to fetch inputs and remainder address.
+ * In case this is omitted, proper input objects and remainder should be passed in `{@link prepareTransfers}`, if required.
+ * 
+ * @return {Function} {@link prepareTransfers}
+ */
 export const createPrepareTransfers = (provider?: Provider, now: () => number = () => Date.now()) => {
     const addInputs = createAddInputs(provider)
     const addRemainder = createAddRemainder(provider)
 
+    /**
+     * Prepares the transaction trytes by generating a bundle, filling in transfers and inputs,
+     * adding remainder and signing.
+     *
+     * It can be used to generate and sign bundles either online or offline.
+     * For offline usage, please see {@createPrepareTransfers} which creates a `prepareTransfers`
+     * without a network provider.
+     *
+     * @method prepareTransfers
+     * 
+     * @param {string} seed
+     * 
+     * @param {object} transfers
+     * 
+     * @param {object} options
+     * @property {Input[]} [inputs] Inputs used for signing. Needs to have correct security, keyIndex and address value
+     * @property {Hash} [address] Remainder address
+     * @property {Number} [security] security level to be used for getting inputs and addresses
+     * @property {Hash} [hmacKey] HMAC key used for attaching an HMAC
+     * 
+     * @param {function} callback
+     * 
+     * @return {Promise}
+     * @fulfil {array} trytes Returns bundle trytes
+     * @reject {Error}
+     * - `INVALID_SEED`
+     * - `INVALID_TRANSFER_ARRAY`
+     * - `INVALID_INPUTS`
+     * - `INVALID_REMAINDER_ADDRESS`
+     * - `INSUFFICIENT_BALANCE`
+     * - `SENDING_BACK_TO_INPUTS`
+     * - Fetch error, if connected to network
+     */
     return (
         seed: Trytes,
         transfers: Transfer[],
@@ -142,7 +172,7 @@ export const validatePrepareTransfersProps = (props: PrepareTransfersProps) => {
     }
 
     validate(...validators)
-  
+
     return props
 }
 
@@ -150,7 +180,7 @@ export const addHMACPlaceholder = (props: PrepareTransfersProps) => {
     const { transfers, hmacKey } = props
 
     if (!hmacKey) {
-        return props 
+        return props
     }
 
     const index = transfers.findIndex(transfer => transfer.value > 0)
@@ -166,12 +196,12 @@ export const addHMACPlaceholder = (props: PrepareTransfersProps) => {
 
 export const addTransfers = (props: PrepareTransfersProps) => {
     const { transactions, transfers, timestamp } = props
-  
+
     return {
         ...props,
         transactions: transfers.reduce((acc, { address, value, tag, message }) => {
             const length = message.length ? Math.ceil(message.length / SIGNATURE_MESSAGE_FRAGMENT_LENGTH) : 1
-            const signatureMessageFragments = Array(length).fill(null).map((_, i) => 
+            const signatureMessageFragments = Array(length).fill(null).map((_, i) =>
                 message.slice(i * KEY_FRAGMENT_LENGTH, (i + 1) * KEY_FRAGMENT_LENGTH))
 
             return addEntry(acc, {
@@ -190,7 +220,7 @@ export const createAddInputs = (provider?: Provider) => {
     const getInputs = provider ? createGetInputs(provider) : undefined
 
     return (props: PrepareTransfersProps) => {
-        const { transactions, transfers, inputs, timestamp, seed, security } = props 
+        const { transactions, transfers, inputs, timestamp, seed, security } = props
         const threshold = transfers.reduce((sum, { value }) => sum += value, 0)
 
         if (!getInputs &&
@@ -201,7 +231,7 @@ export const createAddInputs = (provider?: Provider) => {
 
         return (
             inputs.length
-                ? Promise.resolve(inputs) 
+                ? Promise.resolve(inputs)
                 : getInputs!(seed, { security, threshold }).then(response => response.inputs)
         )
             .then((res) => ({
@@ -219,9 +249,9 @@ export const createAddInputs = (provider?: Provider) => {
 
 export const createAddRemainder = (provider?: Provider) => {
     const getNewAddress = provider ? createGetNewAddress(provider) : undefined
-  
+
     return (props: PrepareTransfersProps) => {
-        const { transactions, remainderAddress, seed, security, inputs, timestamp } = props 
+        const { transactions, remainderAddress, seed, security, inputs, timestamp } = props
         const value = transactions.reduce((acc, transaction) => acc += transaction.value, 0)
 
         if (value > 0) {
@@ -271,7 +301,7 @@ export const verifyNotSendingToInputs = (props: PrepareTransfersProps) => {
     if (outputs.some(output => (inputs as any).indexOf((input: any) => input.address === output.address) !== -1)) {
         throw new Error(errors.SENDING_BACK_TO_INPUTS)
     }
-    
+
     return props
 }
 
@@ -283,7 +313,7 @@ export const finalize = (props: PrepareTransfersProps) => ({
 export const addSignatures = (props: PrepareTransfersProps) => {
     const { transactions, inputs, seed } = props
     const normalizedBundle = normalizedBundleHash(transactions[0].bundle)
-  
+
     return {
         ...props,
         transactions: addTrytes(
@@ -314,7 +344,7 @@ export const addHMAC = (props: PrepareTransfersProps) => {
             transactions: HMAC(transactions, trits(hmacKey))
         }
     }
-    
+
     return props
 }
 

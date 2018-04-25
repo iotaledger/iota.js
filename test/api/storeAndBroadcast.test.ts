@@ -9,21 +9,23 @@ import '../nocks/broadcastTransactions'
 
 const storeAndBroadcast = createStoreAndBroadcast(provider())
 
-test('storeAndBroadcast() stores and broadcasts transactions.', async t => { 
+test('storeAndBroadcast() stores and broadcasts transactions.', async t => {
+    const { trytes } = storeTransactionsCommand
+
     t.deepEqual(
         await storeAndBroadcast(
-            [...storeTransactionsCommand.trytes]
+            [...trytes]
         ),
-        undefined, 
-        'storeAndBroadcast() should store and bradcast transactions.'    
+        trytes,
+        'storeAndBroadcast() should store and bradcast transactions.'
     )
 })
 
 test('storeAndBroadcast() does not mutate original trytes.', async t => {
-    const trytes = [...storeTransactionsCommand.trytes]
-    
+    const { trytes } = storeTransactionsCommand
+
     await storeAndBroadcast(trytes)
-    
+
     t.deepEqual(
         trytes,
         storeTransactionsCommand.trytes,
@@ -32,26 +34,26 @@ test('storeAndBroadcast() does not mutate original trytes.', async t => {
 })
 
 test('storeAndBroadcast() rejects with correct error for invalid attached trytes.', t => {
-    const invalidTrytes = ['asdasDSFDAFD'] 
+    const invalidTrytes = ['asdasDSFDAFD']
 
     t.is(
         t.throws(() => storeAndBroadcast(
             invalidTrytes
         ), Error).message,
-        `${ INVALID_ATTACHED_TRYTES }: ${ invalidTrytes[0] }`,
-        'storeAndBroadcast() should throw error for invalid attached trytes.' 
+        `${INVALID_ATTACHED_TRYTES}: ${invalidTrytes[0]}`,
+        'storeAndBroadcast() should throw error for invalid attached trytes.'
     )
 })
 
 test('storeAndBroadcast() rejects with correct errors for attached trytes of invalid length.', t => {
-    const invalidTrytes = ['asdasDSFDAFD'] 
+    const invalidTrytes = ['asdasDSFDAFD']
 
     t.is(
         t.throws(() => storeAndBroadcast(
-           attachedTrytesOfInvalidLength 
+            attachedTrytesOfInvalidLength
         ), Error).message,
-        `${ INVALID_ATTACHED_TRYTES }: ${ attachedTrytesOfInvalidLength[0] }`,
-        'storeAndBroadcast() should throw error for attached trytes of invalid length.' 
+        `${INVALID_ATTACHED_TRYTES}: ${attachedTrytesOfInvalidLength[0]}`,
+        'storeAndBroadcast() should throw error for attached trytes of invalid length.'
     )
 })
 
@@ -64,22 +66,23 @@ test.cb('storeAndBroadcast() invokes callback', t => {
 })
 
 test.cb('storeAndBroadcast() passes correct arguments to callback', t => {
+    const { trytes } = storeTransactionsCommand
     storeAndBroadcast(
-        [...storeTransactionsCommand.trytes],
+        [...trytes],
         (err, res) => {
             t.is(
                 err,
                 null,
                 'storeAndBroadcast() should pass null as first argument in callback for successuful requests'
             )
-          
+
             t.deepEqual(
                 res,
-                undefined,
+                trytes,
                 'storeAndBroadcast() should pass the correct response as second argument in callback'
             )
-          
-            t.end()  
+
+            t.end()
         }
     )
 })

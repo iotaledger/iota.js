@@ -36,20 +36,36 @@ export const transferToAddressOptions = (start: number, end: number | undefined,
 export const getTransfersOptions = getOptionsWithDefaults(defaults)
 
 /**
- *   @method getTransfers
- *   @param {string} seed
- *   @param {object} [options]
- *   @param {int} [options.start=0] Starting key index
- *   @param {int} [options.end] Ending key index
- *   @param {int} [options.security=2] - security level to be used for getting inputs and addresses
- *   @param {bool} [options.inclusionStates=false] - returns confirmation status of all transactions
- *   @param {function} callback
- *   @returns {object} success
+ * @method createGetTransfers
+ * 
+ * @param {Provider} provider - Network provider
+ * 
+ * @return {Function} {@link getTransfers}
  */
 export const createGetTransfers = (provider: Provider) => {
     const getNewAddress = createGetNewAddress(provider)
     const getBundlesFromAddresses = createGetBundlesFromAddresses(provider)
 
+    /**
+     * @method getTransfers
+     * 
+     * @param {String} seed
+     * @param {Object} [options]
+     * @param {Number} [options.start=0] Starting key index
+     * @param {Number} [options.end] Ending key index
+     * @param {Number} [options.security=2] - Security level to be used for generating addresses
+     * @param {Boolean} [options.inclusionStates=false] - returns confirmation status of all transactions
+     * @param {Function} [callback] - optional callback
+     * 
+     * @returns {Promise}
+     * @fulfil {Transaction[][]}
+     * @reject {Error}
+     * - `INVALID_SEED`
+     * - `INVALID_SECURITY_LEVEL`
+     * - `INVALID_START_OPTION`
+     * - `INVALID_START_END_OPTIONS`
+     * - Fetch error
+     */
     return (
         seed: string,
         options: Partial<GetTransfersOptions> = {},

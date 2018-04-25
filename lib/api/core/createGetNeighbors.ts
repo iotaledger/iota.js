@@ -10,15 +10,30 @@ export interface GetNeighborsResponse {
     neighbors: Neighbors
 }
 
-/**
- *   @method getNeighbors
- *   @returns {function} callback
- *   @returns {object} success
- **/
+/**  
+ * @method createGetNeighbors 
+ * 
+ * @param {Provider} provider - Network provider
+ * 
+ * @return {function} {@link getNeighbors}
+ */
 export const createGetNeighbors = (provider: Provider) =>
+
+    /**  
+     * Returns list of connected neighbors. 
+     *
+     * @method getNeighbors
+     * 
+     * @param {Callback} callback - Optional callback
+     *
+     * @return {Promise}
+     * @fulfil {Neighbors}
+     * @reject {Error}
+     * - Fetch error
+     */
     (callback?: Callback<Neighbors>): Promise<Neighbors> =>
         provider.sendCommand<GetNeighborsCommand, GetNeighborsResponse>({
             command: IRICommand.GET_NEIGHBORS,
         })
-            .then(res => res.neighbors)
+            .then((res: GetNeighborsResponse) => res.neighbors)
             .asCallback(callback)

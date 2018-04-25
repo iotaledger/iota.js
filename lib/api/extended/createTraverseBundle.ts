@@ -1,41 +1,70 @@
 import * as Promise from 'bluebird'
 import { asTransactionObject, tailTransactionValidator, transactionHashValidator, validate } from '../../utils'
 import { createGetTrytes } from '../core'
-import { Bundle, Callback, Provider, Transaction } from '../types'
+import { Callback, Hash, Provider, Transaction } from '../types'
 
-export const validateTailTransaction = (
-    transaction: Transaction,
-    bundleHash: string | undefined
-): Transaction | never | void => (!bundleHash ? validate(tailTransactionValidator(transaction)) : transaction)
-
+/**
+ * @method createTraverseBundle
+ * 
+ * @param {Provider} provider
+ * 
+ * @return {@link traverseBundle} 
+ */
 export const createTraverseBundle = (provider: Provider) => {
     const getTrytes = createGetTrytes(provider)
 
     const traverseToNextTransaction = (
         transaction: Transaction,
-        bundleHash: string | undefined,
-        bundle: Bundle
-    ): Bundle | Promise<Bundle> =>
-        bundleHash !== transaction.bundle || transaction.currentIndex === transaction.lastIndex
+        bundle: Transaction[]
+    ): Transaction[] | Promise<Transaction[]> =>
+        transaction.currentIndex === transaction.lastIndex
             ? bundle.concat([transaction])
-            : traverseBundle(transaction.trunkTransaction, transaction.bundle, bundle.concat([transaction]))
+            : traverseBundle(transaction.trunkTransaction, bundle.concat([transaction]))
 
-    const traverseBundle = function(
-        trunkTransaction: string,
-        bundleHash?: string | undefined,
-        bundle: Bundle = [],
-        callback?: Callback<Bundle>
-    ): Promise<Bundle> {
+    /**
+     * Fetches the bundle of a given the _tail_ transaction hash, by traversing through `trunkTransaction`.
+     * It does not validate the bundle.
+     *
+     * @example
+     * traverseBundle(tail)
+     *    .then(bundle => {
+     *        // ...
+     *    })
+     *    .catch(err => {
+     *        // handle errors
+     *    })
+     *
+     * @method traverseBundle
+     * 
+     * @param {Hash} trunkTransaction - Trunk transaction, should be tail (`currentIndex == 0`)
+     * @param {Hash} bundle - List of accumulated transactions
+     * @param {Callback} [callback] - Optional callback
+     * 
+     * @returns {Promise}
+     * @fulfil {Transaction[]} Bundle as array of transaction objects
+     * @reject {Error}
+     * - `INVALID_HASH`
+     * - `INVALID_TAIL_HASH`: Provided transaction is not tail (`currentIndex !== 0`) 
+     * - `INVALID_BUNDLE`: Bundle is syntactically invalid
+     * - Fetch error
+     */
+    const traverseBundle = function (
+        trunkTransaction: Hash,
+        bundle: Transaction[] = [],
+        callback?: Callback<Transaction[]>
+    ): Promise<Transaction[]> {
         const args = arguments
         return Promise.resolve(validate(transactionHashValidator(trunkTransaction)))
             .then(() => getTrytes([trunkTransaction])
-                .then(trytes => asTransactionObject(trytes[0], trunkTransaction))
+                .then(([trytes]) => asTransactionObject(trytes, trunkTransaction))
                 .then(transaction => {
-                    validateTailTransaction(transaction, bundleHash)
+                    if (bundle.length === 0) {
+                        validate(tailTransactionValidator(transaction))
+                    }
                     return transaction
                 })
-                .then(transaction => traverseToNextTransaction(transaction, bundleHash || transaction.bundle, bundle))
-                .asCallback(args.length !== 4 && typeof args[args.length - 1] === 'function'
+                .then(transaction => traverseToNextTransaction(transaction, bundle))
+                .asCallback(args.length !== 3 && typeof args[args.length - 1] === 'function'
                     ? args[length - 1]
                     : callback
                 )

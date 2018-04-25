@@ -28,31 +28,67 @@ export const validateAttachToTangle = (
         trytesArrayValidator(trytes)
     )
 
-/**
- *   By default, attachToTangle sends the `attachToTangle` command to an IRI
- *   node. This can be replaced with a remote PoWbox, for example. 
- *   @method attachToTangle
- *   @param {string} trunkTransaction
- *   @param {string} branchTransaction
- *   @param {integer} minWeightMagnitude
- *   @param {array} trytes
- *   @returns {function} callback
- *   @returns {object} success
+/**  
+ * @method createAttachToTangle
+ * 
+ * @param {Provider} provider - Network provider
+ * 
+ * @return {Function} {@link attachToTangle}
  */
-export const createAttachToTangle = (provider: Provider) => (
-    trunkTransaction: Hash,
-    branchTransaction: Hash,
-    minWeightMagnitude: number,
-    trytes: Trytes[],
-    callback?: Callback<string[]>
-): Promise<string[]> =>
-    Promise.resolve(validateAttachToTangle(trunkTransaction, branchTransaction, minWeightMagnitude, trytes))
-        .then(() => provider.sendCommand<AttachToTangleCommand, AttachToTangleResponse>({
-            command: IRICommand.ATTACH_TO_TANGLE,
-            trunkTransaction,
-            branchTransaction,
-            minWeightMagnitude,
-            trytes,
-        }))
-        .then(res => res.trytes)
-        .asCallback(callback)
+export const createAttachToTangle = (provider: Provider) =>
+
+    /**
+     * Performs the Proof-of-Work required to attach a transaction to the tangle by
+     * calling [`attachToTangle`]{@link https://docs.iota.works/iri/api#endpoints/attachToTangle} command
+     * to an IRI node. It returns a new array of transaction trytes with `hash`, `nonce` and `attachment timestamps`.
+     *
+     * This method can be replaced with a local equivelant such as
+     * [`@iota/pearldiver-webgl`]({@link https://github.com/iotaledger/curl.lib.js}) 
+     * or [`@iota/pearldiver-node`]({@link https://github.com/iotaledger/ccurl.interface.js}),
+     * or remote [`PoWbox`]{@link https://powbox.testnet.iota.org/}.
+     *
+     * It requires to pass `trunkTransaction` and `branchTransaction` as returned by
+     * `{@link getTransactionsToApprove}`
+     *
+     * @example
+     * attachToTanlge(trunkTransaction, branchTransaction, minWightMagnitude, trytes)
+     *    .then(attachedTrytes => {
+     *        //...
+     *    })
+     *    .catch(err => {
+     *        // handle error
+     *    })
+     *
+     * @method attachToTangle
+     *
+     * @param {Hash} trunkTransaction - Trunk transaction hash to reference
+     * @param {Hash} branchTransaction - Branch transaction hash to reference
+     * @param {number} minWeightMagnitude - Number of minimun trailing zeros in tail transaction hash
+     * @param {Trytes[]} trytes - Array of transaction trytes
+     * @param {Callback} [callback] - Optional callback
+     *  
+     * @return {Promise}
+     * @fulfil {Trytes[]} Array of transaction trytes with hash, nonce and attachment timestamps
+     * @reject {Error}
+     * - `INVALID_HASH`: Invalid `trunkTransaction` or `branchTransaction`
+     * - `INVALID_MIN_WEIGHT_MAGNITUDE`: Invalid `minWeightMagnitude` argument
+     * - `INVALID_TRYTES_ARRAY`: Invalid array of trytes
+     * - Fetch error
+     */
+    (
+        trunkTransaction: Hash,
+        branchTransaction: Hash,
+        minWeightMagnitude: number,
+        trytes: Trytes[],
+        callback?: Callback<Trytes[]>
+    ): Promise<Trytes[]> =>
+        Promise.resolve(validateAttachToTangle(trunkTransaction, branchTransaction, minWeightMagnitude, trytes))
+            .then(() => provider.sendCommand<AttachToTangleCommand, AttachToTangleResponse>({
+                command: IRICommand.ATTACH_TO_TANGLE,
+                trunkTransaction,
+                branchTransaction,
+                minWeightMagnitude,
+                trytes,
+            }))
+            .then(res => res.trytes)
+            .asCallback(callback)
