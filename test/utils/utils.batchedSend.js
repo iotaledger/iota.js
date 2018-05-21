@@ -15,22 +15,18 @@ describe('utils.makeRequest', function () {
       resIndex: 0,
       res: [
         [
-          {hash: '9'.repeat(81)},
-          {hash: '9'.repeat(81)},
-          {hash: 'A'.repeat(81)}
+          '9'.repeat(81),
+          '9'.repeat(81),
+          'A'.repeat(81)
         ], [
-          {hash: 'B'.repeat(81)}
+          'B'.repeat(81)
         ]
       ],
       expected: [
         '9'.repeat(81),
         'A'.repeat(81),
         'B'.repeat(81)
-      ].map(function (hash) {
-        return {
-          hash: hash
-        }
-      })
+      ]
     }, {
       command: {
         command: 'getBalances',
@@ -72,12 +68,13 @@ describe('utils.makeRequest', function () {
     }
   ]
 
-  var testIntersection = {
+  var testIntersectionWithMultipleKeys = {
     command: {
       command: 'findTransactions',
       addresses: ['A', 'B', 'C', 'D', 'E'],
       tags: ['A', 'B', 'C'],
-      testIntersection: true
+      testIntersection: true,
+      withMultipleKeys: true
     },
     keys: ['addresses', 'tags'],
     resIndex: 0,
@@ -114,9 +111,35 @@ describe('utils.makeRequest', function () {
     ]
   }
 
-  Request.prototype.send = function (command, callback) {
-    var test = command.testIntersection
-      ? testIntersection : tests.find(test => test.command.command === command.command)
+  var testIntersectionWithSingleKey = {
+      command: {
+          command: 'findTransactions',
+          addresses: ['A', 'B', 'C', 'D', 'E'],
+          testIntersection: true,
+          withMultipleKeys: false
+      },
+      resIndex: 0,
+      keys: ['addresses'],
+      res: [
+          ['A', 'B', 'C'],
+          ['D', 'E'],
+          ['A', 'B', 'C', 'H', 'I'],
+      ],
+      expected: ['A', 'B', 'C', 'D', 'E', 'H', 'I']
+    }
+
+    Request.prototype.send = function (command, callback) {
+    var test = {};
+
+    if (command.testIntersection ) {
+      if (command.withMultipleKeys) {
+        test = testIntersectionWithMultipleKeys;
+      } else {
+        test = testIntersectionWithSingleKey;
+      }
+    } else {
+      test = tests.find(test => test.command.command === command.command)
+    }
 
     var res = test.res[test.resIndex]
     test.resIndex++
@@ -136,11 +159,23 @@ describe('utils.makeRequest', function () {
     })
   })
 
-  it('Should intersect results in findTransactions', function () {
-    request.batchedSend(testIntersection.command, testIntersection.keys, batchSize, function (err, res) {
-      if (!err) {
-        assert.deepEqual(res, testIntersection.expected)
-      }
+  describe('when input keys length is greater than one', function () {
+    it('Should intersect results in findTransactions', function () {
+       request.batchedSend(testIntersectionWithMultipleKeys.command, testIntersectionWithMultipleKeys.keys, batchSize, function (err, res) {
+          if (!err) {
+              assert.deepEqual(res, testIntersectionWithMultipleKeys.expected)
+          }
+        })
+    })
+  })
+
+  describe('when input keys length is equal to one', function () {
+    it('Should intersect results in findTransactions', function () {
+        request.batchedSend(testIntersectionWithSingleKey.command, testIntersectionWithSingleKey.keys, batchSize, function (err, res) {
+          if (!err) {
+              assert.deepEqual(res, testIntersectionWithSingleKey.expected)
+          }
+        })
     })
   })
 })
