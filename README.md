@@ -108,7 +108,7 @@ iota.api.getNodeInfo(function(error, success) {
     - **[getTransactionsObjects](#gettransactionsobjects)**
     - **[findTransactionObjects](#findtransactionobjects)**
     - **[getLatestInclusion](#getlatestinclusion)**
-    - **[broadcastAndStore](#broadcastandstore)**
+    - **[storeAndBroadcast](#storeandbroadcast)**
     - **[getNewAddress](#getnewaddress)**
     - **[getInputs](#getinputs)**
     - **[prepareTransfers](#preparetransfers)**
@@ -241,16 +241,16 @@ iota.api.getLatestInclusion(hashes, callback)
 
 ---
 
-### `broadcastAndStore`
+### `storeAndBroadcast`
 
-Wrapper function for `broadcastTransactions` and `storeTransactions`.
+Wrapper function for `storeTransactions` and `broadcastTransactions`.
 
 #### Input
 ```js
-iota.api.broadcastAndStore(trytes, callback)
+iota.api.storeAndBroadcast(trytes, callback)
 ```
 
-1. **`trytes`**: `Array` List of transaction trytes to be broadcast and stored. Has to be trytes that were returned from `attachToTangle`
+1. **`trytes`**: `Array` List of transaction trytes to be stored and broadcasted. Has to be trytes that were returned from `attachToTangle`
 2. **`callback`**: `Function` callback.
 
 #### Return Value
