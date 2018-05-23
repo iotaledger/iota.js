@@ -39,15 +39,14 @@
     "browserify": ">=14.1.0",
     "chai": "^4.0.2",
     "del": "^3.0.0",
-    "gulp": "^3.9.1",
+    "gulp": "^4.0.0",
+    "gulp-buffer": "0.0.2",
     "gulp-jshint": "^2.0.2",
     "gulp-nsp": "^3.0.1",
-    "gulp-rename": ">=1.2.2",
-    "gulp-replace": "^0.6.1",
+    "gulp-sourcemaps": "^2.6.4",
+    "gulp-tap": "^1.0.1",
     "gulp-uglify": "^3.0.0",
     "jshint": "^2.9.4",
-    "mocha": "^3.5.3",
-    "vinyl-buffer": "^1.0.0",
-    "vinyl-source-stream": "^1.1.2"
+    "mocha": "^5.2.0"
   }
 }
