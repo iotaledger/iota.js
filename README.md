@@ -138,9 +138,9 @@ iota.api.getNodeInfo(function(error, success) {
 - **[multisig](#iotamultisig)**
     - **[getKey](#getkey)**
     - **[getDigest](#getdigest)**
-    - **[Address](#Address)**
-    - **[Address.absorb](#Address.absorb)**
-    - **[Address.finalize](#Address.finalize)**
+    - **[Address](#address)**
+    - **[Address.absorb](#addressabsorb)**
+    - **[Address.finalize](#addressfinalize)**
     - **[validateAddress](#validateaddress)**
     - **[initiateTransfer](#initiatetransfer)**
     - **[addSignature](#addsignature)**
@@ -872,7 +872,7 @@ iota.multisig.getDigest(seed, index)
 
 ### `address`
 
-This function is used to initiate the creation of a new multisig address. Once all digests were added with `addDigest()`, `finalize()` can be used to get the actual 81-tryte address value. `validateAddress()` can be used to actually validate the multi-signature.
+This function is used to initiate the creation of a new multisig address. Once all digests were absorbed with `address.absorb()`, `address.finalize()` can be used to get the actual 81-tryte address value. `validateAddress()` can be used to actually validate the multi-signature.
 
 #### Input
 ```js
@@ -892,7 +892,7 @@ Absorbs the digests of co-signers
 
 #### Input
 ```js
-address.addDigest(digest);
+address.absorb(digest);
 ```
 
 1. **`digest`**: `String || Array` String or array of digest trytes as returned by `getDigest`
