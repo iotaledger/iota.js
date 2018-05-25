@@ -23,11 +23,12 @@ export const send = <C extends BaseCommand, R = any>(url: string, command: BaseC
 
     // set timeout if provided
     let abortSignal = undefined
+    let abtimeout = undefined
     if (timeout) {
         const controller = new AbortController()
         abortSignal = controller.signal
 
-        setTimeout(() => {
+        abtimeout = setTimeout(() => {
             controller.abort()
         }, timeout)
     }
@@ -39,12 +40,21 @@ export const send = <C extends BaseCommand, R = any>(url: string, command: BaseC
         signal: abortSignal
     })
         .then((res: any) => {
+            if (abtimeout) {
+                clearTimeout(abtimeout)
+            }
+
             if (!res.ok) {
                 throw errors.requestError(res.statusText)
             }
+
             return res.json()
         })
-        .then((json: any) => {
+        .then((json: any) => {        
+            if (abtimeout) {
+                clearTimeout(abtimeout)
+            }
+
             if (json.error) {
                 throw errors.requestError(json.error)
             } else if (json.exception) {
