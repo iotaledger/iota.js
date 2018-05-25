@@ -50,11 +50,7 @@ export const send = <C extends BaseCommand, R = any>(url: string, command: BaseC
 
             return res.json()
         })
-        .then((json: any) => {        
-            if (abtimeout) {
-                clearTimeout(abtimeout)
-            }
-
+        .then((json: any) => {
             if (json.error) {
                 throw errors.requestError(json.error)
             } else if (json.exception) {
