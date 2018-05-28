@@ -16,7 +16,7 @@ var DEST = './dist/'
     Lint the JS code
 **/
 function lint () {
-    return gulp.src(['./lib/*.js'])
+    return gulp.src(['iota-browser.js'])
         .pipe(jshint())
         .pipe(jshint.reporter('default'))
 }
@@ -37,7 +37,7 @@ function nsp (cb) {
     Build for the browser
 **/
 function dist () {
-    return gulp.src(['./lib/*.js'], { read: false })
+    return gulp.src(['iota-browser.js'], { read: false })
         .pipe(tap(function (file) {
             console.log('bundling ' + file.path)
             file.contents = browserify(file.path, { debug: true }).bundle()
