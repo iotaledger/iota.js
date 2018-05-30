@@ -1,0 +1,136 @@
+import * as Bluebird from 'bluebird'
+import { httpClient, HttpClientSettings } from '@iota/http-client'
+import {
+    createAddNeighbors,
+    createAttachToTangle,
+    createBroadcastTransactions,
+    createCheckConsistency,
+    createFindTransactions,
+    createGetBalances,
+    createGetInclusionStates,
+    createGetNeighbors,
+    createGetNodeInfo,
+    createGetTips,
+    createGetTransactionsToApprove,
+    createGetTrytes,
+    createInterruptAttachingToTangle,
+    createRemoveNeighbors,
+    createStoreTransactions,
+    // createWereAddressesSpentFrom,
+    FindTransactionsQuery,
+    GetBalancesResponse,
+    GetNodeInfoResponse,
+    GetTransactionsToApproveResponse,
+    AccountData,
+    createBroadcastBundle,
+    createFindTransactionObjects,
+    createGetAccountData,
+    createGetBundle,
+    createGetInputs,
+    createGetLatestInclusion,
+    createGetNewAddress,
+    createGetTransactionObjects,
+    createIsPromotable,
+    createIsReattachable,
+    createPrepareTransfers,
+    createPromoteTransaction,
+    createReplayBundle,
+    // createSendTransfer,
+    createSendTrytes,
+    createStoreAndBroadcast,
+    createTraverseBundle,
+    GetAccountDataOptions,
+    GetInputsOptions,
+    GetNewAddressOptions,
+    GetTransfersOptions,
+    PrepareTransfersOptions,
+    PromoteTransactionOptions,
+    SendTrytesOptions
+} from './'
+import { createGetTransfers } from './createGetTransfers'
+import { createGetBundlesFromAddresses } from './createGetBundlesFromAddresses'
+import { AttachToTangle, BaseCommand, Inputs, Neighbor, Provider, Transaction, Transfer } from './types'
+
+export interface Settings extends HttpClientSettings {
+    attachToTangle?: AttachToTangle
+}
+
+export type Func<T> = (...args: any[]) => T
+
+export function returnType<T>(func: Func<T>) {
+    return {} as T // tslint:disable-line no-object-literal-type-assertion
+}
+
+/**
+ * Composes API object from it's components
+ *
+ * @method composeApi
+ * 
+ * @param {Settings} [settings] - connection settings
+ * 
+ * @return {API}
+ */
+export const composeAPI = (settings: Partial<Settings> = {}) => {
+    const _provider: Provider = httpClient(settings) // tslint:disable-line variable-name
+    let _attachFn = settings.attachToTangle || createAttachToTangle(_provider) // tslint:disable-line variable-name
+
+    return {
+        // IRI commands
+        addNeighbors: createAddNeighbors(_provider),
+        attachToTangle: _attachFn,
+        broadcastTransactions: createBroadcastTransactions(_provider),
+        checkConsistency: createCheckConsistency(_provider),
+        findTransactions: createFindTransactions(_provider),
+        getBalances: createGetBalances(_provider),
+        getInclusionStates: createGetInclusionStates(_provider),
+        getNeighbors: createGetNeighbors(_provider),
+        getNodeInfo: createGetNodeInfo(_provider),
+        getTips: createGetTips(_provider),
+        getTransactionsToApprove: createGetTransactionsToApprove(_provider),
+        getTrytes: createGetTrytes(_provider),
+        interruptAttachingToTangle: createInterruptAttachingToTangle(_provider),
+        removeNeighbors: createRemoveNeighbors(_provider),
+        storeTransactions: createStoreTransactions(_provider),
+        // wereAddressesSpentFrom: createWereAddressesSpentFrom(_provider),
+        sendCommand: _provider.send,
+
+        // Wrapper methods
+        broadcastBundle: createBroadcastBundle(_provider),
+        getAccountData: createGetAccountData(_provider),
+        getBundle: createGetBundle(_provider),
+        getBundlesFromAddresses: createGetBundlesFromAddresses(_provider),
+        getLatestInclusion: createGetLatestInclusion(_provider),
+        getNewAddress: createGetNewAddress(_provider),
+        getTransactionObjects: createGetTransactionObjects(_provider),
+        findTransactionObjects: createFindTransactionObjects(_provider),
+        getInputs: createGetInputs(_provider),
+        getTransfers: createGetTransfers(_provider), // Deprecated
+        isPromotable: createIsPromotable(_provider),
+        isReattachable: createIsReattachable(_provider), // Deprecated
+        prepareTransfers: createPrepareTransfers(_provider),
+        promoteTransaction: createPromoteTransaction(_provider, _attachFn),
+        replayBundle: createReplayBundle(_provider, _attachFn),
+        // sendTransfer: createSendTransfer(_provider, _attachFn),
+        sendTrytes: createSendTrytes(_provider, _attachFn),
+        storeAndBroadcast: createStoreAndBroadcast(_provider),
+        traverseBundle: createTraverseBundle(_provider),
+
+        // Update settings
+        setSettings: (newSettings: Partial<Settings> = {}) => {
+            _provider.setSettings(newSettings)
+
+            if (newSettings.attachToTangle) {
+                _attachFn = newSettings.attachToTangle
+            }
+        },
+
+        // Overides default attachToTangles with a local equivalent or PoWBox
+        overrideAttachToTangle: (attachFn: AttachToTangle) => {
+            _attachFn = attachFn
+        }
+    }
+}
+
+export const apiType = returnType(composeAPI)
+
+export type API = typeof apiType

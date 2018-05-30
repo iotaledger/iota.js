@@ -1,0 +1,49 @@
+{
+    "name": "@iota/core",
+    "version": "1.0.0-alpha.1",
+    "description": "Methods to generate addresses, create, broadcast and monitor transactions.",
+    "main": "./out/index.js",
+    "scripts": {
+        "prepublish": "tsc",
+        "format": "prettier",
+        "test": "tsc && ava"
+    },
+    "contributors": [
+        "Dominik Schiener <dom@iota.org> (https://iota.org)",
+        "Edward Greve <edward@iota.org> (https://github.com/anyong)",
+        "Chris Dukakis <chris.dukakis@iota.org> (https://github.com/chrisdukakis)"
+    ],
+    "ava": {
+        "files": "out/test/**/*.test.js",
+        "failFast": true,
+        "failWithoutAssertions": false,
+        "compileEnhancements": false,
+        "verbose": true
+    },
+    "keywords": [
+        "iota",
+        "tangle",
+        "library",
+        "browser",
+        "javascript",
+        "nodejs",
+        "API"
+    ],
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/iotaledger/iota.js/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/iotaledger/iota.js.git"
+    },
+    "dependencies": {
+        "@iota/utils": "^1.0.0-alpha.1",
+        "@types/bluebird": "^3.5.20",
+        "bluebird": "^3.5.1"
+    },
+    "devDependencies": {
+        "@types/nock": "^9.1.2",
+        "nock": "^9.2.3"
+    }
+}

@@ -1,10 +1,13 @@
 node_modules
-bower_modules
+/packages/*/node_modules
+/packages/*/out
+/packages/*/typings
 .DS_Store
 */**/.DS_Store
-
-## idea
 .idea
 *.iml
 .git
 .vscode
+*.log
+*.cache
+package-lock.json

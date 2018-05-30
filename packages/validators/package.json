@@ -1,0 +1,41 @@
+{
+  "name": "@iota/validators",
+  "version": "1.0.0-alpha.1",
+  "description": "Collection of guards and validators, useful in IOTA development.",
+  "main": "./out/validators/src/index.js",
+  "typings": "./out/validators/src",
+  "scripts": {
+    "prepublish": "tsc",
+    "format": "prettier",
+    "test": "tsc && ava"
+  },
+  "contributors": [
+    "Dominik Schiener <dom@iota.org> (https://iota.org)",
+    "Edward Greve <edward@iota.org> (https://github.com/anyong)",
+    "Chris Dukakis <chris.dukakis@iota.org> (https://github.com/chrisdukakis)"
+  ],
+  "ava": {
+    "files": "out/validators/test/*.test.js",
+    "failFast": true,
+    "failWithoutAssertions": false,
+    "compileEnhancements": false,
+    "verbose": true
+  },
+  "keywords": [
+    "iota",
+    "tangle",
+    "library",
+    "browser",
+    "javascript",
+    "nodejs",
+    "API"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/iotaledger/iota.js/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/iotaledger/iota.js.git/tree/develop/packages/crypto"
+  }
+}

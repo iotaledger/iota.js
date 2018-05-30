@@ -1,0 +1,56 @@
+{
+  "name": "@iota/bundle-validator",
+  "version": "1.0.0-alpha.1",
+  "description": "Validates bundle structure and signatures.",
+  "main": "./out/bundle-validator/src/index.js",
+  "typings": "./out/bundle-validator/src",
+  "scripts": {
+    "prepublish": "tsc",
+    "format": "prettier",
+    "test": "tsc && ava"
+  },
+  "contributors": [
+    "Dominik Schiener <dom@iota.org> (https://iota.org)",
+    "Edward Greve <edward@iota.org> (https://github.com/anyong)",
+    "Chris Dukakis <chris.dukakis@iota.org> (https://github.com/chrisdukakis)"
+  ],
+  "ava": {
+    "files": "out/test/*.test.js",
+    "failFast": true,
+    "failWithoutAssertions": false,
+    "compileEnhancements": false,
+    "verbose": true
+  },
+  "keywords": [
+    "iota",
+    "tangle",
+    "library",
+    "browser",
+    "javascript",
+    "nodejs",
+    "API"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/iotaledger/iota.js/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/iotaledger/iota.js.git/tree/develop/packages/crypto"
+  },
+  "dependencies": {
+    "@iota/converter": "^1.0.0-alpha.1",
+    "@iota/kerl": "^1.0.0-alpha.1",
+    "@iota/signing": "^1.0.0-alpha.1",
+    "@iota/transaction-converter": "^1.0.0-alpha.1",
+    "@iota/validators": "^1.0.0-alpha.1"
+  },
+  "devDependencies": {
+    "@iota/converter": "^1.0.0-alpha.1",
+    "@iota/kerl": "^1.0.0-alpha.1",
+    "@iota/samples": "^1.0.0-alpha.1",
+    "@iota/signing": "^1.0.0-alpha.1",
+    "@iota/transaction-converter": "^1.0.0-alpha.1",
+    "@iota/validators": "^1.0.0-alpha.1"
+  }
+}

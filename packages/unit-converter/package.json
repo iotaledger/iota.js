@@ -1,0 +1,45 @@
+{
+  "name": "@iota/unit-converter",
+  "version": "1.0.0-alpha.1",
+  "description": "Converts value across different units.",
+  "main": "./out/src/index.js",
+  "typings": "./out/src",
+  "scripts": {
+    "prepublish": "tsc",
+    "format": "prettier",
+    "test": "tsc && ava"
+  },
+  "contributors": [
+    "Dominik Schiener <dom@iota.org> (https://iota.org)",
+    "Edward Greve <edward@iota.org> (https://github.com/anyong)",
+    "Chris Dukakis <chris.dukakis@iota.org> (https://github.com/chrisdukakis)"
+  ],
+  "ava": {
+    "files": "out/test/*.test.js",
+    "failFast": true,
+    "failWithoutAssertions": false,
+    "compileEnhancements": false,
+    "verbose": true
+  },
+  "keywords": [
+    "iota",
+    "tangle",
+    "library",
+    "browser",
+    "javascript",
+    "nodejs",
+    "API"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/iotaledger/iota.js/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/iotaledger/iota.js.git/tree/develop/packages/crypto"
+  },
+  "dependencies": {
+    "@types/bignumber.js": "^5.0.0",
+    "bignumber.js": "^4.1.0"
+  }
+}

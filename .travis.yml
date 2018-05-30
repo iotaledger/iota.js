@@ -1,11 +1,9 @@
-
 language: node_js
 node_js:
-    - "node"
-    - "4.1"
+    - '8'
+    - '6'
+    - '4'
 before_script:
     - npm install
-    - npm install -g gulp
 script:
-    - gulp
-    - npm test
+    - npm run bootstrap
