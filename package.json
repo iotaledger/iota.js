@@ -42,7 +42,6 @@
     "gulp": "^4.0.0",
     "gulp-buffer": "0.0.2",
     "gulp-jshint": "^2.0.2",
-    "gulp-nsp": "^3.0.1",
     "gulp-sourcemaps": "^2.6.4",
     "gulp-tap": "^1.0.1",
     "gulp-uglify": "^3.0.0",

@@ -5,8 +5,7 @@ var gulp       = require('gulp'),
     sourcemaps = require("gulp-sourcemaps"),
     buffer     = require("gulp-buffer"),
     browserify = require('browserify'),
-    del        = require('del'),
-    gulpNSP    = require('gulp-nsp');
+    del        = require('del');
 
 
 
@@ -28,11 +27,6 @@ function clean (cb) {
     return del([DEST]).then(cb.bind(null, null))
 }
 
-//To check your package.json
-function nsp (cb) {
-    return gulpNSP({package: __dirname + '/package.json'}, cb)
-}
-
 /**
     Build for the browser
 **/
@@ -49,7 +43,7 @@ function dist () {
         .pipe(gulp.dest('dist'))
 }
 
-var build = gulp.series(lint, clean, nsp, dist)
+var build = gulp.series(lint, clean, dist)
 
 gulp.task('build', build)
 
