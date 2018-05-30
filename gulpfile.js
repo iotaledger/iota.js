@@ -5,8 +5,7 @@ var gulp       = require('gulp'),
     sourcemaps = require("gulp-sourcemaps"),
     buffer     = require("gulp-buffer"),
     browserify = require('browserify'),
-    del        = require('del'),
-    gulpNSP    = require('gulp-nsp');
+    del        = require('del');
 
 
 
@@ -16,7 +15,7 @@ var DEST = './dist/'
     Lint the JS code
 **/
 function lint () {
-    return gulp.src(['./lib/*.js'])
+    return gulp.src(['iota-browser.js'])
         .pipe(jshint())
         .pipe(jshint.reporter('default'))
 }
@@ -28,16 +27,11 @@ function clean (cb) {
     return del([DEST]).then(cb.bind(null, null))
 }
 
-//To check your package.json
-function nsp (cb) {
-    return gulpNSP({package: __dirname + '/package.json'}, cb)
-}
-
 /**
     Build for the browser
 **/
 function dist () {
-    return gulp.src(['./lib/*.js'], { read: false })
+    return gulp.src(['iota-browser.js'], { read: false })
         .pipe(tap(function (file) {
             console.log('bundling ' + file.path)
             file.contents = browserify(file.path, { debug: true }).bundle()
@@ -49,7 +43,7 @@ function dist () {
         .pipe(gulp.dest('dist'))
 }
 
-var build = gulp.series(lint, clean, nsp, dist)
+var build = gulp.series(lint, clean, dist)
 
 gulp.task('build', build)
 
