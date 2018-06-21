@@ -1,11 +1,9 @@
 import test from 'ava'
-import { errors } from '@iota/validators'
 import {
     addresses, addressesWithChecksum, addressWithChecksum, addressWithInvalidChecksum
 } from '@iota/samples'
-import { addChecksum, isValidChecksum, removeChecksum } from '../src'
+import { addChecksum, errors, isValidChecksum, removeChecksum } from '../src'
 
-const { INVALID_ADDRESS } = errors
 const invalidAddress = 'UYEEERFQYTPFAHIPXDQAQYWYMSMCLMGBTYAXLWFRFFWPYFOICOVLK9A9VYNCKK9TQUNBTARCEQXJHD'
 
 test('addChecksum() adds 9-trytes checksum', t => {
@@ -37,7 +35,7 @@ test('addChecksum() throws error for invalid addresses', t => {
         'addChecksum() should throw error if address is invalid.'
     )
 
-    t.is(error.message, INVALID_ADDRESS, 'addChecksum() should throw correct error message.')
+    t.is(error.message, errors.INVALID_ADDRESS, 'addChecksum() should throw correct error message.')
 })
 
 test('addChecksum() does not mutate the original array', t => {
@@ -53,8 +51,8 @@ test('addChecksum() does not mutate the original array', t => {
 })
 
 test('addChecksum() adds checksum of arbitrary length', t => {
-    const trytes = 'TRYTES'
-    const trytesWithChecksum = 'TRYTESNYZ'
+    const trytes = '9'.repeat(81)
+    const trytesWithChecksum = trytes + 'KZW'
 
     t.is(
         addChecksum(trytes, 3, false),
@@ -64,12 +62,6 @@ test('addChecksum() adds checksum of arbitrary length', t => {
 })
 
 test('isValidChecksum() correctly validates the checksum', t => {
-    t.is(
-        isValidChecksum(addressesWithChecksum[0]),
-        true,
-        'isValidChecksum() should return true for address with valid checksum.'
-    )
-
     t.is(
         isValidChecksum(addressWithInvalidChecksum),
         false,
@@ -90,7 +82,7 @@ test('isValidChecksum() throws error for invalid address', t => {
         'isValidChecksum() should throw error if invalid address was passed.'
     )
 
-    t.is(error.message, INVALID_ADDRESS, 'isValidChecksum() should throw correct error message.')
+    t.is(error.message, errors.INVALID_ADDRESS, 'isValidChecksum() should throw correct error message.')
 })
 
 test('removeChecksum() removes checksum from addresses with checksum', t => {
@@ -134,5 +126,5 @@ test('removeChecksum() throws error for invalid addresses', t => {
         'removeChecksum() should throw error if invalid address was passed.'
     )
 
-    t.is(error.message, INVALID_ADDRESS, 'removeChecksum() should throw correct error message.')
+    t.is(error.message, errors.INVALID_ADDRESS, 'removeChecksum() should throw correct error message.')
 })

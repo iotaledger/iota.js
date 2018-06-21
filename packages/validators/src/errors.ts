@@ -39,4 +39,5 @@ export const INVALID_ODD_LENGTH = 'Conversion from trytes requires length of try
 export const INVALID_TRYTE_ENCODED_JSON = 'Invalid tryte encoded JSON message'
 export const NOT_INT = 'One of the inputs is not integer'
 export const SENDING_BACK_TO_INPUTS = 'One of the transaction inputs is used as output.'
+export const INVALID_TRANSACTIONS_TO_APPROVE = 'Invalid transactions to approve.'
 export const invalidChecksum = (address: string) => `Invalid Checksum: ${address}`

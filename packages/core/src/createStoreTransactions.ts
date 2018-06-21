@@ -1,15 +1,13 @@
 import * as Promise from 'bluebird'
-import { attachedTrytesArrayValidator, validate } from '@iota/utils'
-import { BaseCommand, Callback, IRICommand, Provider, Trytes } from './types'
-
-export interface StoreTransactionsCommand extends BaseCommand {
-    command: IRICommand.STORE_TRANSACTIONS
-    trytes: string[]
-}
-
-export type StoreTransactionsResponse = void
-
-export const validateStoreTransactions = (trytes: Trytes[]) => validate(attachedTrytesArrayValidator(trytes))
+import { attachedTrytesArrayValidator, validate } from '@iota/validators'
+import {
+    Callback,
+    IRICommand,
+    Provider,
+    StoreTransactionsCommand,
+    StoreTransactionsResponse,
+    Trytes
+} from '../../types'
 
 /**  
  * @method createStoreTransactions 
@@ -43,13 +41,11 @@ export const createStoreTransactions = ({ send }: Provider) =>
      * - `INVALID_ATTACHED_TRYTES`: Invalid attached trytes array
      * - Fetch error
      */
-    (trytes: Trytes[], callback?: Callback<Trytes[]>): Promise<Trytes[]> =>
-        Promise.resolve(validateStoreTransactions(trytes))
-            .then(() =>
-                send<StoreTransactionsCommand, StoreTransactionsResponse>({
-                    command: IRICommand.STORE_TRANSACTIONS,
-                    trytes,
-                })
-            )
+    (trytes: ReadonlyArray<Trytes>, callback?: Callback<ReadonlyArray<Trytes>>): Promise<ReadonlyArray<Trytes>> =>
+        Promise.resolve(validate(attachedTrytesArrayValidator(trytes)))
+            .then(() => send<StoreTransactionsCommand, StoreTransactionsResponse>({
+                command: IRICommand.STORE_TRANSACTIONS,
+                trytes,
+            }))
             .then(() => trytes)
             .asCallback(callback)

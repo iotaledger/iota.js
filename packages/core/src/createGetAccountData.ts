@@ -6,58 +6,42 @@ import {
     startOptionValidator,
     validate,
 } from '@iota/validators'
-import { createGetBalances, createGetNewAddress, GetBalancesResponse } from './'
+import { createGetBalances, createGetNewAddress } from './'
 import { createGetBundlesFromAddresses } from './createGetBundlesFromAddresses'
 import { createWereAddressesSpentFrom } from './createWereAddressesSpentFrom'
 import {
-    Address, asArray, Bundle, getOptionsWithDefaults, Hash, Callback,
-    Maybe, Provider, Transaction, Trytes
+    Address,
+    asArray,
+    Bundle,
+    Callback,
+    getOptionsWithDefaults,
+    Hash,
+    makeAddress,
+    Provider,
+    Transaction
 } from '../../types'
 
 /**
  * Account data object
  */
 export interface AccountData {
-    addresses: Hash[]
-    inputs: Address[]
-    transfers: Bundle[]
-    latestAddress: Hash
-    balance: number
+    readonly addresses: ReadonlyArray<Hash>
+    readonly inputs: ReadonlyArray<Address>
+    readonly transfers: ReadonlyArray<Bundle>
+    readonly transactions: ReadonlyArray<Transaction>
+    readonly latestAddress: Hash
+    readonly balance: number
 }
 
 export interface GetAccountDataOptions {
-    start: number
-    end?: number
-    security: number
+    readonly start: number
+    readonly end?: number
+    readonly security: number
 }
 
 const defaults: GetAccountDataOptions = {
     start: 0,
     security: 2,
-}
-
-export const blankAccountData = (): AccountData => ({
-    latestAddress: '',
-    addresses: [],
-    transfers: [],
-    inputs: [],
-    balance: 0,
-})
-
-export const verifyGetAccountData = (seed: Trytes, opts: GetAccountDataOptions) => {
-    const validators = [seedValidator(seed), securityLevelValidator(opts.security!)]
-
-    const { start, end } = opts
-
-    if (start) {
-        validators.push(startOptionValidator(start))
-    }
-
-    if (typeof end === 'number') {
-        validators.push(startEndOptionsValidator({ start, end }))
-    }
-
-    validate(...validators)
 }
 
 export const getAccountDataOptions = getOptionsWithDefaults(defaults)
@@ -69,28 +53,30 @@ export const getAccountDataOptions = getOptionsWithDefaults(defaults)
  * 
  * @return {function} {@link getAccountData}
  */
-export const createGetAccountData = (provider: Provider) => {
-    const getNewAddress = createGetNewAddress(provider)
-    const getBundlesFromAddresses = createGetBundlesFromAddresses(provider)
+export const createGetAccountData = (provider: Provider, caller?: string) => {
+    const getNewAddress = createGetNewAddress(provider, /* Called by */ 'lib')
+    const getBundlesFromAddresses = createGetBundlesFromAddresses(provider, /* Called by */ 'lib')
     const getBalances = createGetBalances(provider)
-    const wereAddressesSpentFrom = createWereAddressesSpentFrom(provider)
+    const wereAddressesSpentFrom = createWereAddressesSpentFrom(provider, /* Called by */ 'lib')
 
     /**
-     * Returns an {@link AccountData} object, containing account information about `addresses`, `transactions`
-     * and `inputs`.
+     * Returns an {@link AccountData} object, containing account information about `addresses`, `transactions`, 
+     * `inputs` and total account balance.
      *
-     * @example
+     * ### Example
+     * ```js
      * getAccountData(seed, {
      *    start: 0,
      *    security: 2
      * })
-     *    .then(accountData => {
-     *        const { addresses, inputs, transfers, balance } = accountData
-     *        // ...
-     *    })
-     *    .catch(err => {
-     *        // handle errors
-     *    })
+     *   .then(accountData => {
+     *     const { addresses, inputs, transactions, balance } = accountData
+     *     // ...
+     *   })
+     *   .catch(err => {
+     *     // ...
+     *   })
+     * ```
      *
      * @method getAccountData
      * 
@@ -112,60 +98,73 @@ export const createGetAccountData = (provider: Provider) => {
     return (
         seed: string,
         options: Partial<GetAccountDataOptions> = {},
-        callback?: Callback<Maybe<AccountData>>
-    ): Promise<Maybe<AccountData>> => {
+        callback?: Callback<AccountData>
+    ): Promise<AccountData> => {
         const { start, end, security } = getAccountDataOptions(options)
-        const accountData = blankAccountData()
 
-        return Promise.resolve(verifyGetAccountData(seed, { start, end, security }))
-            .then(() =>
-                getNewAddress(seed, {
-                    index: start,
-                    total: end ? end - start : 0,
-                    returnAll: true,
-                    security,
-                })
+        if (caller !== 'lib') {
+            console.warn(
+                '`AccountData.transfers` field is deprecated, and `AccountData.transactions` field should be used instead.\n' +
+                'Fetching of full bundles should be done lazily.'
             )
-            .then(address => {
-                const addresses = asArray(address)
+        }
 
+        return Promise.resolve(
+            validate(
+                seedValidator(seed),
+                securityLevelValidator(security),
+                !!start && startOptionValidator(start),
+                !!start && !!end && startEndOptionsValidator({ start, end })
+            )
+        )
+            // 1. Generate addresses up to first unused address
+            .then(() => getNewAddress(seed, {
+                index: start,
+                total: end ? end - start : 0,
+                returnAll: true,
+                security,
+            }))
+            // In case getNewAddress returned string, depends on options...
+            .then(addresses => asArray(addresses))
+            // 2. Query to fetch the complete bundles, balances and spending states of addresses
+            // Bundle fetching is intensive task networking wise, and will be removed in v.2.0.0
+            .then(addresses => Promise.all([
+                getBundlesFromAddresses(addresses, true),
+                getBalances(addresses, 100),
+                wereAddressesSpentFrom(addresses),
+                addresses
+            ]))
+            .then(([transfers, { balances }, spentStates, addresses]) => ({
                 // 2. Assign the last address as the latest address
-                accountData.latestAddress = addresses[addresses.length - 1]
+                latestAddress: addresses[addresses.length - 1],
 
-                // 3. Add all returned addresses to the list of addresses
-                // remove the last element as that is the most recent address
-                accountData.addresses = addresses
+                // 3. Add bundles to account data
+                transfers,
 
-                return getBundlesFromAddresses(addresses, true)
-            })
-            .then((bundles: Bundle[]) => {
-                // Add bundles to account data
-                accountData.transfers = bundles
-                // 5. Get balances for all addresses
-                return getBalances(accountData.addresses, 100)
-            })
-            .then((res: GetBalancesResponse) => {
-                res.balances
-                    .map((balance: string) => parseInt(balance, 10))
-                    .forEach((balance: number, index: number) => {
-                        accountData.balance += balance
+                // 4. As replacement for `transfers` field, `transactions` contains transactions directly
+                // related to account addresses. Use of `getBundlesFromAddresses(addresses)` will be replaced by
+                // `findTransactions({ address })` in v2.0.0.
+                // Full bundles should be fetched lazily if there are relevant use cases...
+                transactions: transfers.reduce((acc, bundle) => acc.concat(
+                    bundle.filter(({ address }) => addresses.indexOf(address) > -1)
+                ), []),
 
-                        // 6. Mark all addresses with balance as inputs
-                        if (balance > 0) {
-                            accountData.inputs.push({
-                                address: accountData.addresses[index],
-                                keyIndex: index,
-                                security,
-                                balance: balance.toString(),
-                            })
-                        }
-                    })
-            })
-            .then(() => wereAddressesSpentFrom(accountData.inputs.map(input => input.address)))
-            .then((states: boolean[]) => {
-                accountData.inputs = accountData.inputs.filter((input, i) => !states[i])
-                return accountData
-            })
+                // 5. Add balances and extract inputs
+                inputs: addresses
+                    // We mark unspent addresses with balance as inputs
+                    .reduce((acc: ReadonlyArray<Address>, address, i) => ((!spentStates[i] && balances[i] > 0) ?
+                        acc.concat(makeAddress(address, balances[i], start + i, security)) : acc
+                    ), []),
+
+                // List of all account addresses
+                addresses,
+
+                // Calculate total balance
+                // Don't count balance of spent addresses!
+                balance: balances.reduce((acc, balance, i) => spentStates[i] ?
+                    acc : acc += balance, 0
+                )
+            }))
             .asCallback(callback)
     }
 }

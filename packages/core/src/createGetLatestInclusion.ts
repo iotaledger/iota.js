@@ -1,6 +1,6 @@
 import * as Promise from 'bluebird'
-import { createGetInclusionStates, createGetNodeInfo, GetNodeInfoResponse } from './'
-import { Callback, Provider } from '../../types'
+import { createGetInclusionStates, createGetNodeInfo } from './'
+import { Callback, Hash, Provider } from '../../types'
 
 /**  
  * @method createGetLatestInclusion 
@@ -38,8 +38,12 @@ export const createGetLatestInclusion = (provider: Provider) => {
      * - `INVALID_HASHES_ARRAY`: Invalid transaction hashes
      * - Fetch error
      */
-    return (transactions: string[], callback?: Callback<boolean[]>): Promise<boolean[]> =>
-        getNodeInfo()
+    return function getLatestInclusion(
+        transactions: ReadonlyArray<Hash>,
+        callback?: Callback<ReadonlyArray<boolean>>
+    ): Promise<ReadonlyArray<boolean>> {
+        return getNodeInfo()
             .then(nodeInfo => getInclusionStates(transactions, [nodeInfo.latestSolidSubtangleMilestone]))
             .asCallback(callback)
+    }
 }

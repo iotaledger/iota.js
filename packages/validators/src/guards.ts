@@ -1,15 +1,21 @@
 import { Address, Hash, Tag, Transaction, Transfer, Trytes } from '../../types'
 import { HASH_SIZE, TAG_SIZE, TRANSACTION_TRYTES_SIZE } from './constants'
 
+export const isInteger = Number.isInteger
+export const isArray = Array.isArray
+
 export const isTrytesOfExactLength = (trytes: string, length: number) =>
-    typeof trytes === 'string' && new RegExp(`^[9A-Z]{${length}}$`).test(trytes)
+    typeof trytes === 'string' &&
+    new RegExp(`^[9A-Z]{${length}}$`).test(trytes)
 
 export const isTrytesOfMaxLength = (trytes: string, length: number) =>
-    typeof trytes === 'string' && new RegExp(`^[9A-Z]{1,${length}}$`).test(trytes)
+    typeof trytes === 'string' &&
+    new RegExp(`^[9A-Z]{1,${length}}$`).test(trytes)
 
 // Checks if input is correct trytes consisting of [9A-Z]; optionally validate length
 export const isTrytes = (trytes: string, length: string | number = '1,'): trytes is Trytes =>
-    typeof trytes === 'string' && new RegExp(`^[9A-Z]{${length}}$`).test(trytes)
+    typeof trytes === 'string' &&
+    new RegExp(`^[9A-Z]{${length}}$`).test(trytes)
 
 // Checks if input is correct hash (81 trytes)
 export const isHash = (hash: any): hash is Hash =>
@@ -25,32 +31,32 @@ export const isNinesTrytes = isEmpty
 // Checks if input is correct hash
 export const isTransfer = (transfer: Transfer): transfer is Transfer =>
     isHash(transfer.address) &&
-    Number.isInteger(transfer.value) &&
+    isInteger(transfer.value) &&
     transfer.value >= 0 &&
     (!transfer.message.length || isTrytes(transfer.message)) &&
     (!transfer.tag.length || isTrytes(transfer.tag)) &&
     transfer.tag.length <= 27
 
-export const isTransfersArray = (transfers: any[]): transfers is Transfer[] =>
-    Array.isArray(transfers) &&
+export const isTransfersArray = (transfers: ReadonlyArray<any>): transfers is ReadonlyArray<Transfer> =>
+    isArray(transfers) &&
     transfers.every(isTransfer)
 
-export const isHashArray = (hashes: any[]): hashes is Hash[] =>
-    Array.isArray(hashes) &&
+export const isHashArray = (hashes: ReadonlyArray<any>): hashes is ReadonlyArray<Hash> =>
+    isArray(hashes) &&
     hashes.every(isHash)
 
-export const isTransactionHashArray = (hashes: any[]): hashes is Hash[] =>
-    Array.isArray(hashes) &&
+export const isTransactionHashArray = (hashes: ReadonlyArray<any>): hashes is ReadonlyArray<Hash> =>
+    isArray(hashes) &&
     hashes.every(isTransactionHash)
 
 // Checks if input is list of correct trytes
-export const isTrytesArray = (trytesArray: any[]): trytesArray is Trytes[] =>
+export const isTrytesArray = (trytesArray: ReadonlyArray<any>): trytesArray is ReadonlyArray<Trytes> =>
     isArray(trytesArray) &&
     trytesArray.every(trytes => isTrytes(trytes, TRANSACTION_TRYTES_SIZE))
 
 // Checks if attached trytes if last 241 trytes are non-zero
-export const isAttachedTrytesArray = (trytesArray: any[]): trytesArray is Trytes[] =>
-    Array.isArray(trytesArray) &&
+export const isAttachedTrytesArray = (trytesArray: ReadonlyArray<any>): trytesArray is ReadonlyArray<Trytes> =>
+    isArray(trytesArray) &&
     trytesArray.length > 0 &&
     trytesArray.every(trytes =>
         isTrytesOfExactLength(trytes, TRANSACTION_TRYTES_SIZE) &&
@@ -76,19 +82,19 @@ export const isTransaction = (tx: any): tx is Transaction =>
     isTrytesOfExactLength(tx.nonce, 27)
 
 // Checks if correct bundle with transaction object
-export const isTransactionArray = (bundle: any[]): bundle is Transaction[] =>
-    Array.isArray(bundle) &&
+export const isTransactionArray = (bundle: ReadonlyArray<any>): bundle is ReadonlyArray<Transaction> =>
+    isArray(bundle) &&
     bundle.length > 0 &&
     bundle.every(isTransaction)
 
 export const isAddress = (address: any): address is Address =>
     isHash(address.address) &&
     isSecurityLevel(address.security) &&
-    Number.isInteger(address.keyIndex) &&
+    isInteger(address.keyIndex) &&
     address.keyIndex >= 0
 
-export const isAddressArray = (addresses: any[]): addresses is Address[] =>
-    Array.isArray(addresses) &&
+export const isAddressArray = (addresses: ReadonlyArray<any>): addresses is ReadonlyArray<Address> =>
+    isArray(addresses) &&
     addresses.length > 0 &&
     addresses.every(isAddress)
 
@@ -116,30 +122,38 @@ export const isUri = (uri: any): uri is Trytes => {
     return getInside.test(uri) && uriTest.test(stripBrackets.exec(getInside.exec(uri)![1])![1])
 }
 
-export const isUriArray = (uris: any[]): uris is string[] =>
-    Array.isArray(uris) &&
+export const isUriArray = (uris: ReadonlyArray<any>): uris is ReadonlyArray<string> =>
+    isArray(uris) &&
     uris.every(isUri)
 
 /* Check if start & end options are valid */
-export const isStartEndOptions = ({ start, end }: { start: number, end: number }): boolean =>
-    !end || (start <= end && end < start + 500)
+export const isStartEndOptions = (
+    { start, end }: {
+        start: number,
+        end: number
+    }
+): boolean =>
+    !end || (
+        start <= end &&
+        end < start + 500
+    )
 
 export const isTag = (tag: any): tag is Tag =>
     isTrytesOfMaxLength(tag, TAG_SIZE)
 
-export const isTagArray = (tags: any[]): tags is Tag[] =>
-    Array.isArray(tags) &&
+export const isTagArray = (tags: ReadonlyArray<any>): tags is ReadonlyArray<Tag> =>
+    isArray(tags) &&
     tags.every(isTag)
 
 export const isSecurityLevel = (security: any): security is number =>
-    Number.isInteger(security) &&
+    isInteger(security) &&
     security > 0
 
 export const isTailTransaction = (transaction: any): transaction is Transaction =>
     isTransaction(transaction) &&
     transaction.currentIndex === 0
 
-export const isInputArray = (inputs: any): inputs is Address[] =>
+export const isInputArray = (inputs: any): inputs is ReadonlyArray<Address> =>
     inputs.every((input: Address) =>
         isHash(input.address) &&
         isInteger(input.keyIndex) &&

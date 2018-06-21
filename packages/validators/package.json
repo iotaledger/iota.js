@@ -3,7 +3,7 @@
   "version": "1.0.0-alpha.1",
   "description": "Collection of guards and validators, useful in IOTA development.",
   "main": "./out/validators/src/index.js",
-  "typings": "./out/validators/src",
+  "typings": "./typings/validators/src",
   "scripts": {
     "prepublish": "tsc",
     "format": "prettier",
@@ -20,6 +20,9 @@
     "failWithoutAssertions": false,
     "compileEnhancements": false,
     "verbose": true
+  },
+  "devDependencies": {
+    "@iota/samples": "^1.0.0-alpha.1"
   },
   "keywords": [
     "iota",

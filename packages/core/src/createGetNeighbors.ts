@@ -1,14 +1,13 @@
 import * as Promise from 'bluebird'
-import { BaseCommand, Callback, IRICommand, Neighbors, Provider } from '../../types'
-
-export interface GetNeighborsCommand extends BaseCommand {
-    command: IRICommand.GET_NEIGHBORS
-}
-
-export interface GetNeighborsResponse {
-    duration: number
-    neighbors: Neighbors
-}
+import {
+    Callback,
+    GetNeighborsCommand,
+    GetNeighborsResponse,
+    IRICommand,
+    Neighbor,
+    Neighbors,
+    Provider
+} from '../../types'
 
 /**  
  * @method createGetNeighbors 
@@ -31,12 +30,11 @@ export const createGetNeighbors = ({ send }: Provider) => {
      * @reject {Error}
      * - Fetch error
      */
-    const getNeighbors = (callback?: Callback<Neighbors>): Promise<Neighbors> =>
-        send<GetNeighborsCommand, GetNeighborsResponse>({
+    return function getNeighbors(callback?: Callback<Neighbors>): Promise<Neighbors> {
+        return send<GetNeighborsCommand, GetNeighborsResponse>({
             command: IRICommand.GET_NEIGHBORS,
         })
             .then(({ neighbors }) => neighbors)
             .asCallback(callback)
-
-    return getNeighbors
+    }
 }

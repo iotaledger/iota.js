@@ -1,7 +1,25 @@
 import { trits, trytes } from '@iota/converter'
 import Kerl from '@iota/kerl'
-import { errors, isTrytes } from '@iota/validators'
+import {
+    errors as _errors,
+    isHash,
+    isHashArray,
+    isTrytes,
+    isInteger,
+} from '@iota/validators'
 import { asArray, Trytes } from '../../types'
+
+export const errors = {
+    INVALID_ADDRESS: _errors.INVALID_ADDRESS,
+    INVALID_CHECKSUM: _errors.INVALID_CHECKSUM,
+    INVALID_TRYTES: _errors.INVALID_TRYTES,
+    INVALID_CHECKSUM_LENGTH: 'Invalid checksum length'
+}
+
+const HASH_TRYTES_LENGTH = 81
+const ADDRESS_CHECKSUM_TRYTES_LENGTH = 9
+const MIN_CHECKSUM_TRYTES_LENGTH = 3
+
 
 /**
 * Generates and appends the 9-tryte checksum of the given trytes, usually an address.
@@ -16,32 +34,52 @@ import { asArray, Trytes } from '../../types'
 *
 * @returns {string | list} address (with checksum)
 */
-export function addChecksum(input: Trytes, checksumLength?: number, isAddress?: boolean): Trytes
-export function addChecksum(input: Trytes[], checksumLength?: number, isAddress?: boolean): Trytes[]
-export function addChecksum(input: Trytes | Trytes[], checksumLength: number = 9, isAddress: boolean = true) {
-    const withChecksum = asArray(input)
+export function addChecksum(
+    input: Trytes,
+    checksumLength?: number,
+    isAddress?: boolean
+): Trytes
+export function addChecksum(
+    input: ReadonlyArray<Trytes>,
+    checksumLength?: number,
+    isAddress?: boolean
+): ReadonlyArray<Trytes>
+export function addChecksum(
+    input: Trytes | ReadonlyArray<Trytes>,
+    checksumLength = ADDRESS_CHECKSUM_TRYTES_LENGTH,
+    isAddress = true
+) {
+    const withChecksum: ReadonlyArray<Trytes> = asArray(input)
         .map(inputTrytes => {
-            const hasChecksum = isTrytes(inputTrytes, 90)
+            if (!isTrytes(inputTrytes)) {
+                throw new Error(errors.INVALID_TRYTES)
+            }
 
-            if (!(hasChecksum || isTrytes(inputTrytes, 81)) && isAddress) {
+            if (isAddress && inputTrytes.length !== HASH_TRYTES_LENGTH) {
+                if (inputTrytes.length == (HASH_TRYTES_LENGTH + ADDRESS_CHECKSUM_TRYTES_LENGTH)) {
+                    return inputTrytes
+                }
+
                 throw new Error(errors.INVALID_ADDRESS)
             }
 
-            if (hasChecksum) {
-                return inputTrytes
+            if (!isInteger(checksumLength) ||
+                checksumLength < MIN_CHECKSUM_TRYTES_LENGTH ||
+                (isAddress && checksumLength !== ADDRESS_CHECKSUM_TRYTES_LENGTH)) {
+                throw new Error(errors.INVALID_CHECKSUM_LENGTH)
             }
+
+            let _inputTrytes = inputTrytes
+
+            while (_inputTrytes.length % (HASH_TRYTES_LENGTH) !== 0) {
+                _inputTrytes += '9'
+            }
+
+            const inputTrits = trits(_inputTrytes)
+            const checksumTrits = new Int8Array(Kerl.HASH_LENGTH)
 
             const kerl = new Kerl()
             kerl.initialize()
-
-            let paddedTrytes = inputTrytes
-
-            while (paddedTrytes.length % 81 !== 0) {
-                paddedTrytes = paddedTrytes.concat('9')
-            }
-
-            const inputTrits: Int8Array = trits(paddedTrytes)
-            const checksumTrits: Int8Array = new Int8Array(Kerl.HASH_LENGTH)
 
             kerl.absorb(inputTrits, 0, inputTrits.length)
             kerl.squeeze(checksumTrits, 0, Kerl.HASH_LENGTH)
@@ -62,19 +100,20 @@ export function addChecksum(input: Trytes | Trytes[], checksumLength: number = 9
  * @return {string | string[]} Trytes without checksum
  */
 export function removeChecksum(input: Trytes): Trytes
-export function removeChecksum(input: Trytes[]): Trytes[]
-export function removeChecksum(input: Trytes | Trytes[]) {
-    const noChecksum = asArray(input)
-        .map(inputTrytes => {
-            if (!(isTrytes(inputTrytes, 90) || isTrytes(inputTrytes, 81))) {
-                throw new Error(errors.INVALID_ADDRESS)
-            }
+export function removeChecksum(input: ReadonlyArray<Trytes>): ReadonlyArray<Trytes>
+export function removeChecksum(input: Trytes | ReadonlyArray<Trytes>) {
+    const tryteArray = asArray(input)
 
-            return inputTrytes.slice(0, 81)
-        })
+    if (!isHashArray(tryteArray)) {
+        throw new Error(errors.INVALID_ADDRESS)
+    }
+
+    const noChecksum: ReadonlyArray<Trytes> = tryteArray.map(
+        inputTrytes => inputTrytes.slice(0, HASH_TRYTES_LENGTH)
+    )
 
     // return either string or the list
-    return Array.isArray(input) ? noChecksum[0] : noChecksum
+    return Array.isArray(input) ? noChecksum : noChecksum[0]
 }
 
 /**

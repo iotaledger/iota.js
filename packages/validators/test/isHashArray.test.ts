@@ -19,8 +19,8 @@ test('isHashArray', t => {
     )
 
     t.is(
-        isHashArray(hashes),
-        true,
+        isHashArray(invalidHashes),
+        false,
         'isHashArray() should return false for invalid hashes'
     )
 })

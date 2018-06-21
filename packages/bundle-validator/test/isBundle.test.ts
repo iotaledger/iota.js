@@ -18,9 +18,9 @@ test('isBundle() returns true for valid bundle.', t => {
     )
 })
 
-test('isBundlel() returns true for valid zero-value bundle', t => {
+test('isBundle() returns true for valid zero-value bundle', t => {
     t.is(
-        isBundle(bundle),
+        isBundle(bundleWithZeroValue),
         true,
         'isBundle() should return true for valid zero-value bundle'
     )

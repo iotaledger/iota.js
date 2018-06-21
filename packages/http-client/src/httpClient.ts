@@ -1,10 +1,11 @@
 import * as Promise from 'bluebird'
 import { getSettingsWithDefaults, Settings } from './settings'
-import { /* batchedSend, */ send } from './request'
+import { batchedSend, send } from './request'
 import {
-    BaseCommand, Callback, IRICommand, FindTransactionsCommand, GetBalancesCommand,
+    BaseCommand, IRICommand, FindTransactionsCommand, GetBalancesCommand,
     GetInclusionStatesCommand, GetTrytesCommand, Provider
 } from '../../types'
+
 const BATCH_SIZE = 1000
 
 export interface MapsToArrays {
@@ -12,11 +13,11 @@ export interface MapsToArrays {
 }
 
 /* Known batchable commands */
-export type BatchableCommand = MapsToArrays &
+export type BatchableCommand<C> = C & MapsToArrays &
     (FindTransactionsCommand | GetBalancesCommand | GetInclusionStatesCommand | GetTrytesCommand)
 
 export interface BatchableKeys {
-    [key: string]: string[]
+    readonly [key: string]: string[]
 }
 
 export type BatchableKey = 'addresses' | 'approvees' | 'bundles' | 'tags' | 'tips' | 'transactions' | 'hashes'
@@ -29,19 +30,19 @@ export const batchableKeys: BatchableKeys = {
     [IRICommand.GET_TRYTES]: ['hashes'],
 }
 
-export const isBatchableCommand = (command: BaseCommand): command is BatchableCommand =>
+export const isBatchableCommand = <C>(command: BaseCommand): command is BatchableCommand<C> =>
     command.command === IRICommand.FIND_TRANSACTIONS ||
     command.command === IRICommand.GET_BALANCES ||
     command.command === IRICommand.GET_INCLUSION_STATES ||
     command.command === IRICommand.GET_TRYTES
 
-export const getKeysToBatch = <C extends BatchableCommand>(
-    command: C,
+export const getKeysToBatch = <C>(
+    command: BatchableCommand<C>,
     batchSize: number = BATCH_SIZE
-): Array<string> => Object.keys(command).filter((key: string) =>
+): ReadonlyArray<string> => Object.keys(command).filter(key =>
     batchableKeys[command.command].indexOf(key) > -1 &&
     Array.isArray(command[key]) &&
-    command[key].length > BATCH_SIZE
+    command[key].length > batchSize
 )
 
 /**
@@ -51,23 +52,21 @@ export const getKeysToBatch = <C extends BatchableCommand>(
 export const createHttpClient = (settings?: Partial<Settings>): Provider => {
     let _settings = getSettingsWithDefaults({ ...settings })
     return {
-        send: <C extends BaseCommand, R>(
-            command: C,
-            callback?: Callback<R>
-        ): Promise<R> => Promise.try(() => {
+        send: <C extends BaseCommand, R>(command: Readonly<C>): Promise<Readonly<R>> => Promise.try(() => {
             const { provider, requestBatchSize, apiVersion } = _settings
-            /*if (isBatchableCommand(command)) {
+
+            if (isBatchableCommand(command)) {
                 const keysToBatch = getKeysToBatch(command, requestBatchSize)
 
                 if (keysToBatch.length) {
                     return batchedSend<C, R>(command, keysToBatch, requestBatchSize, provider, apiVersion)
                 }
-            }*/
+            }
 
             return send<C, R>(command, provider, apiVersion)
-        }).asCallback(callback),
+        }),
         setSettings: (newSettings?: Partial<Settings>): void => {
-            _settings = getSettingsWithDefaults({ ...newSettings })
+            _settings = getSettingsWithDefaults({ ..._settings, ...newSettings })
         }
     }
 }

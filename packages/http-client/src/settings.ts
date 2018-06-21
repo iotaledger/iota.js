@@ -1,11 +1,12 @@
+import { getOptionsWithDefaults } from '../../types'
 export interface Settings {
-    provider: string
-    host?: string // deprecated
-    port?: number | string // deprecated
-    sandbox?: string // removed
-    token?: string // removed
-    requestBatchSize: number
-    apiVersion: number | string
+    readonly provider: string
+    readonly host?: string // deprecated
+    readonly port?: number | string // deprecated
+    readonly sandbox?: string // removed
+    readonly token?: string // removed
+    readonly requestBatchSize: number
+    readonly apiVersion: number | string
 }
 
 export const DEFAULT_PORT = 14265
@@ -22,7 +23,10 @@ const defaults: Settings = {
 
 /* tslint:disable no-console */
 export const getSettingsWithDefaults = (settings: Partial<Settings> = {}): Settings => {
-    const { provider, host, port, sandbox, token, requestBatchSize, apiVersion } = { ...defaults, ...settings }
+    const {
+        provider, host, port, sandbox, token, requestBatchSize, apiVersion
+    } = getOptionsWithDefaults(defaults)(settings)
+
     let _provider: string = provider
 
     if (sandbox || token) {

@@ -1,6 +1,6 @@
 import * as Promise from 'bluebird'
 import { createFindTransactions, createGetTransactionObjects, FindTransactionsQuery } from './'
-import { Callback, Provider, Transaction } from './types'
+import { Callback, Provider, Transaction } from '../../types'
 
 /**  
  * @method createFindTransactionObjects
@@ -14,21 +14,22 @@ export const createFindTransactionObjects = (provider: Provider) => {
     const getTransactionObjects = createGetTransactionObjects(provider)
 
     /**
-     * Wrapper function for `{@link findTransactions}` and `{@link getTrytes}`. Trytes are being converted and returned as
-     * transaction objects.
-     * It allows to search for transactions by passing a `query` object with `addresses`, `tags`, `approvees` and `bundles` fields.
-     * Multiple query fields are supported and `findTransactions` returns intersection of results.
+     * Wrapper function for `{@link findTransactions}` and `{@link getTrytes}`.
+     * Searches for transactions given a `query` object with `addresses`, `tags` and `approvees` fields.
+     * Multiple query fields are supported and `findTransactionObjects` returns intersection of results.
      *
-     * Currently transactions are not searchable by `tag` field. Support will be restored by next snapshot.
-     *
-     * @example
-     * findTransactionObjects({ addresses: ['ADRR...'] })
+     * ### Example
+     * Searching for transactions by address:
+     * 
+     * ```js
+     * findTransactionObjects({ addresses: ['ADR...'] })
      *    .then(transactions => {
      *        // ...
      *    })
      *    .catch(err => { 
-     *        // handle errors here
+     *        // ...
      *    })
+     * ```
      *
      * @method findTransactionObjects
      *
@@ -43,8 +44,12 @@ export const createFindTransactionObjects = (provider: Provider) => {
      * - `INVALID_TAG_ARRAY`: Invalid tags
      * - Fetch error
      */
-    return (query: FindTransactionsQuery, callback?: Callback<Transaction[]>): Promise<Transaction[]> =>
-        findTransactions(query)
+    return function findTransactionObjects(
+        query: FindTransactionsQuery,
+        callback?: Callback<ReadonlyArray<Transaction>>
+    ): Promise<ReadonlyArray<Transaction>> {
+        return findTransactions(query)
             .then(getTransactionObjects)
             .asCallback(callback)
+    }
 }

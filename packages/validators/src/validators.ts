@@ -1,5 +1,5 @@
 import * as errors from './errors'
-import { Address, Transaction, Transfer, Trytes } from '../../types'
+import { Address, Transaction, Transfer } from '../../types'
 import {
     isAddressArray,
     isAttachedTrytesArray,
@@ -31,15 +31,20 @@ export type Validator<T> = (x: T, err?: string) => Validatable<T>
  * @param validators
  * 
  * @throws {Error} error
+ * @return {boolean} - Returns true for valid input
  */
-export const validate = (...validators: Validatable[]) => {
-    for (const v of validators) {
-        const [val, isValid, errorMsg] = v
+export const validate = (...validators: Array<Validatable | false>) => {
+    validators.forEach(validator => {
+        if (Array.isArray(validator)) {
+            const [value, isValid, msg] = validator
 
-        if (!isValid(val)) {
-            throw new Error(`${errorMsg}: ${val}`)
+            if (!isValid(value)) {
+                throw new Error(`${msg}: ${value}`)
+            }
         }
-    }
+    })
+
+    return true
 }
 
 /**
@@ -51,19 +56,19 @@ export const hashValidator: Validator<string> = (hash, error?: string) => [
     error || errors.INVALID_HASH
 ]
 
-export const hashArrayValidator: Validator<string[]> = hashes => [
+export const hashArrayValidator: Validator<ReadonlyArray<string>> = (hashes, error?: string) => [
     hashes,
     isHashArray,
-    errors.INVALID_HASH_ARRAY
+    error || errors.INVALID_HASH_ARRAY
 ]
 
-export const transactionHashValidator: Validator<string> = hash => [
+export const transactionHashValidator: Validator<string> = (hash, error?: string) => [
     hash,
     isTransactionHash,
-    errors.INVALID_HASH
+    error || errors.INVALID_HASH
 ]
 
-export const transactionHashArrayValidator: Validator<string[]> = hashes => [
+export const transactionHashArrayValidator: Validator<ReadonlyArray<string>> = hashes => [
     hashes,
     isTransactionHashArray,
     errors.INVALID_HASH_ARRAY
@@ -75,7 +80,7 @@ export const trytesValidator: Validator<string> = trytes => [
     errors.INVALID_TRYTES
 ]
 
-export const trytesArrayValidator: Validator<string[]> = trytes => [
+export const trytesArrayValidator: Validator<ReadonlyArray<string>> = trytes => [
     trytes,
     isTrytesArray,
     errors.INVALID_TRYTES_ARRAY
@@ -99,13 +104,13 @@ export const mwmValidator: Validator<number> = mwm => [
     errors.INVALID_MIN_WEIGHT_MAGNITUDE
 ]
 
-export const addressObjectArrayValidator: Validator<Address[]> = (addresses: Address[]) => [
+export const addressObjectArrayValidator: Validator<ReadonlyArray<Address>> = (addresses: ReadonlyArray<Address>) => [
     addresses,
     isAddressArray,
     errors.INVALID_INPUTS,
 ]
 
-export const attachedTrytesArrayValidator: Validator<string[]> = (trytes: string[]) => [
+export const attachedTrytesArrayValidator: Validator<ReadonlyArray<string>> = (trytes: ReadonlyArray<string>) => [
     trytes,
     isAttachedTrytesArray,
     errors.INVALID_ATTACHED_TRYTES,
@@ -159,25 +164,31 @@ export const getBalancesThresholdValidator: Validator<number> = threshold => [
     errors.INVALID_THRESHOLD
 ]
 
-export const tagArrayValidator: Validator<string[]> = tags => [
+export const tagArrayValidator: Validator<ReadonlyArray<string>> = tags => [
     tags,
     isTagArray,
+    errors.INVALID_TAGS
+]
+
+export const tagValidator: Validator<ReadonlyArray<string>> = tag => [
+    tag,
+    isTag,
     errors.INVALID_TAG
 ]
 
-export const transferArrayValidator: Validator<Transfer[]> = transfers => [
+export const transferArrayValidator: Validator<ReadonlyArray<Transfer>> = transfers => [
     transfers,
     isTransfersArray,
     errors.INVALID_TRANSFERS,
 ]
 
-export const uriArrayValidator: Validator<string[]> = uris => [
+export const uriArrayValidator: Validator<ReadonlyArray<string>> = uris => [
     uris,
     isUriArray,
     errors.INVALID_URI
 ]
 
-export const inputValidator: Validator<Address[]> = inputs => [
+export const inputValidator: Validator<ReadonlyArray<Address>> = inputs => [
     inputs,
     isInputArray,
     errors.INVALID_INPUTS,

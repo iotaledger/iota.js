@@ -1,14 +1,12 @@
 import * as Promise from 'bluebird'
-import { BaseCommand, Callback, Hash, IRICommand, Provider } from './types'
-
-export interface GetTipsCommand extends BaseCommand {
-    command: IRICommand.GET_TIPS
-}
-
-export interface GetTipsResponse {
-    hashes: string[]
-    duration: number
-}
+import {
+    Callback,
+    GetTipsCommand,
+    GetTipsResponse,
+    Hash,
+    IRICommand,
+    Provider
+} from '../../types'
 
 /**  
  * @method createGetTips 
@@ -23,16 +21,27 @@ export const createGetTips = ({ send }: Provider) =>
      * Returns a list of tips (transactions not referenced by other transactions),
      * as seen by the connected node.
      * 
+     * ### Example
+     * ```js
+     * getTips()
+     *   .then(tips => {
+     *     // ...
+     *   })
+     *   .catch(err => {
+     *     // ...
+     *   })
+     * ```
+     * 
      * @method getTips
      *
      * @param {Callback} [callback] - Optional callback
      * 
-     * @return {Promise} 
-     * @fulfil {Hash[]} List of tip hashess
+     * @return {Promise}
+     * @fulfil {Hash[]} List of tip hashes
      * @reject {Error}
      * - Fetch error
      */
-    (callback?: Callback<Hash[]>): Promise<Hash[]> =>
+    (callback?: Callback<ReadonlyArray<Hash>>): Promise<ReadonlyArray<Hash>> =>
         send<GetTipsCommand, GetTipsResponse>({ command: IRICommand.GET_TIPS })
             .then(({ hashes }) => hashes)
             .asCallback(callback)

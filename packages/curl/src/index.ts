@@ -35,7 +35,8 @@ export default class Curl {
         if (state.length !== STATE_LENGTH) {
             throw new Error('Illegal state length. ')
         }
-        this.state = state
+
+        this.state = state.slice()
 
         for (let i = 0; i < STATE_LENGTH; i++) {
             this.state[i] = 0

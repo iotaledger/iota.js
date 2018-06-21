@@ -2,12 +2,12 @@
     "name": "@iota/curl",
     "version": "1.0.0-alpha.1",
     "description": "Curl sponge function",
-    "main": "./out/src/index.js",
-    "typings": "typings/src",
+    "main": "./out/index.js",
+    "typings": "typings",
     "scripts": {
         "prepublish": "tsc",
         "format": "prettier",
-        "test": "tsc && ava"
+        "test": "tsc"
     },
     "contributors": [
         "Dominik Schiener <dom@iota.org> (https://iota.org)",

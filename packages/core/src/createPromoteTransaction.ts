@@ -1,13 +1,21 @@
-import * as Promise from 'bluebird'
-import { getOptionsWithDefaults, hashValidator, transferArrayValidator, validate } from '@iota/utils'
+import * as Bluebird from 'bluebird'
+import { hashValidator, transferArrayValidator, validate } from '@iota/validators'
 import { createCheckConsistency } from './'
 import { getPrepareTransfersOptions } from './createPrepareTransfers'
 import { createSendTransfer } from './createSendTransfer'
 import * as errors from './errors'
-import { AttachToTangle, Callback, Maybe, Provider, Transaction, Transfer } from './types'
+import {
+    AttachToTangle,
+    Callback,
+    getOptionsWithDefaults,
+    Maybe,
+    Provider,
+    Transaction,
+    Transfer
+} from '../../types'
 
 export interface PromoteTransactionOptions {
-    delay: number
+    readonly delay: number
     interrupt: boolean | (() => void)
 }
 
@@ -64,14 +72,14 @@ export const createPromoteTransaction = (provider: Provider, attachFn?: AttachTo
      * - `INCONSISTENT SUBTANGLE`: In this case promotion has no effect and reatchment is required.
      * - Fetch error
      */
-    const promoteTransaction = (
+    return function promoteTransaction(
         tailTransaction: string,
         depth: number,
         minWeightMagnitude: number,
         spamTransfers: Transfer[] = generateSpam(),
         options?: Partial<PromoteTransactionOptions>,
         callback?: Callback<Transaction[]>
-    ): Promise<Maybe<Transaction[]>> => {
+    ): Bluebird<Maybe<Transaction[]>> {
         // Switch arguments
         if (typeof options === 'undefined') {
             options = {}
@@ -87,7 +95,7 @@ export const createPromoteTransaction = (provider: Provider, attachFn?: AttachTo
             reference: tailTransaction
         }
 
-        return Promise.resolve(validate(hashValidator(tailTransaction), transferArrayValidator(spamTransfers)))
+        return Bluebird.resolve(validate(hashValidator(tailTransaction), transferArrayValidator(spamTransfers)))
             .then(() => checkConsistency(tailTransaction))
             .then(consistent => {
                 if (!consistent) {
@@ -96,13 +104,13 @@ export const createPromoteTransaction = (provider: Provider, attachFn?: AttachTo
 
                 return sendTransfer(spamTransfers[0].address, depth, minWeightMagnitude, spamTransfers, sendTransferOptions)
             })
-            .then(async (transactions: Transaction[]) => {
+            .then(async (transactions) => {
                 if (
                     (delay && delay > 0) ||
                     interrupt === true ||
                     (typeof interrupt === 'function' && (await interrupt()))
                 ) {
-                    spamTransactions.concat(transactions)
+                    spamTransactions.push(...transactions)
 
                     setTimeout(() => {
                         promoteTransaction(tailTransaction, depth, minWeightMagnitude, spamTransfers, {
@@ -114,7 +122,6 @@ export const createPromoteTransaction = (provider: Provider, attachFn?: AttachTo
                     return spamTransactions
                 }
             })
+            .asCallback(typeof arguments[4] === 'function' ? arguments[4] : callback)
     }
-
-    return promoteTransaction
 }

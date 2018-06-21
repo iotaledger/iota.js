@@ -1,21 +1,16 @@
 import * as Promise from 'bluebird'
-import { asTransactionObject, depthValidator, hashValidator, integerValidator, validate } from '@iota/utils'
+import { depthValidator, hashValidator, validate } from '@iota/validators'
+import { asTransactionObject } from '@iota/transaction-converter'
 import { createCheckConsistency, createGetTrytes } from './'
-import { Callback, Hash, Provider } from './types'
+import { Callback, Hash, Provider } from '../../types'
 
 const MILESTONE_INTERVAL = 2 * 60 * 1000
 const ONE_WAY_DELAY = 1 * 60 * 1000
-const MAX_DEPTH = 6
+const DEPTH = 6
 
-export const isAboveMaxDepth = (
-    attachmentTimestamp: number,
-    maxDepth = 6
-) => {
-    validate(integerValidator(attachmentTimestamp), depthValidator(maxDepth))
-
-    return (attachmentTimestamp < Date.now()) &&
-        ((Date.now() - attachmentTimestamp) < (maxDepth * (MILESTONE_INTERVAL - ONE_WAY_DELAY)))
-}
+export const isAboveMaxDepth = (attachmentTimestamp: number, depth = DEPTH) =>
+    (attachmentTimestamp < Date.now()) &&
+    ((Date.now() - attachmentTimestamp) < (depth * MILESTONE_INTERVAL - ONE_WAY_DELAY))
 
 /**
  *  
@@ -23,87 +18,74 @@ export const isAboveMaxDepth = (
  * 
  * @param {Provider} provider - Network provider
  * 
- * @param {number} [maxDepth=6]
+ * @param {number} [depth=6]
  * 
  * @param maxDepth 
  */
-export const createIsPromotable = (provider: Provider, maxDepth?: number) => {
+export const createIsPromotable = (provider: Provider, depth = DEPTH) => {
     const checkConsistency = createCheckConsistency(provider)
     const getTrytes = createGetTrytes(provider)
 
     /**
-     * Checks if a transaction _consistent_, by calling 
-     * [`checkConsistency`]{@link https://docs.iota.org/iri/api#endpoints/checkConsistency} command and 
-     * verifying that promotion can be applied
-     * It accepts hashes of _tail_ transactions. A tail is the transaction in the bundle with `currentIndex=0`.
+     * Checks if a transaction is _promotable_, by calling {@link checkConsistency} and
+     * verifying that `attachmentTimestamp` is above a lower bound.
+     * Lower bound is calculated based on number of milestones issued
+     * since transaction attachment.
      *
-     * As long as a transaction is consistent it is able to be accepted by the network.
-     * In case the transaction is inconsistent, it will not be accepted, and a reattachment is required 
-     * by calling `{@link replayBundle}`.
-     *
-     * _Co-consistent_ transactions and the transactions that they approove (directly or inderectly), are not
-     * conflicting with each other and rest of the ledger.
-     *
-     * This method is particularly usefull for promoting pending transactions, which increases their chances
-     * of getting accepted. Use it to check if a transaction can be [`promoted`]{@link promoteTransaction}
-     * or requires [`reattachment`]{@link replayBundle}.
-     *
-     * @example
-     * ```js
-     * import iota from '@iota/core'
-     *
-     * const { checkConsistency, promoteTransaction } = iota({ provider })
+     * ### Example with promotion and reattachments
      * 
-     * checkConsistency(tailHash)
-     *    .then(isConsistent => isConsistent
-     *        ? promoteTransaction(tailHash)
-     *        : replayBundle(tailHash)
-     *            .then(([reattachedTailHash]) => {
-     *                // promote the new reattachment
-     *            })
-     *    )
-     *    .catch(err => {
-     *        // handle errors here
-     *    })
-     * ```
-     *
-     * Note that consistent transactions might be left behind due to networking issues, or if 
-     * not referenced by recent milestones issued by
-     * [Coordinator]{@link https://docs.iota.org/introduction/tangle/consensus}. 
-     * Therefore `checkConsistency` should be used together with a time heuristic to determine
-     * if a transaction should be promoted or reattached.
-     *
+     * Using `isPromotable` to determine if transaction can be [promoted]{@link promoteTransaction}
+     * or should be [reattached]{@link replayBundle}
+     * 
      * ```js
-     * const isAboveMaxDepth = attachmentTimestamp =>
-     *    // Check against future timestamps
-     *    attachmentTimestamp < Date.now() &&
-     *    // Check if transaction wasn't issued before last 6 milestones
-     *    // Milestones are being issued every ~2mins
-     *    Date.now() - attachmentTimestamp < 11 * 60 * 1000
+     * // We need to monitor inclusion states of all tail transactions (original tail & reattachments)
+     * const tails = [tail]
      *
-     * checkConsistency(tailHash)
-     *    .then(isConsistent => (isConsistent && isAboveMaxDepth)
-     *        ? promoteTransaction(tailHash)
-     *        : replayBundle(tailHash)
-     *    )
+     * getLatestInclusion(tails)
+     *   .then(states => { 
+     *     // Check if none of transactions confirmed
+     *     if (states.indexOf(true) === -1) {
+     *       const tail = tails[tails.length - 1] // Get latest tail hash
+     *
+     *       return isPromotable(tail)
+     *         .then(isPromotable => isPromotable
+     *           ? promoteTransaction(tail, 3, 14)
+     *           : replayBundle(tail, 3, 14)
+     *             .then(([reattached]) => {
+     *               const newTail = reattached.hash
+     *               
+     *               // Keeping track of all tail hashes to check confirmation
+     *               tails.push(newTail)
+     *               
+     *               // Promote the new tail...
+     *             })
+     *     }
+     *   }).catch(err => {
+     *     // ...
+     *   })
      * ```
      *
-     * @method checkConsistency
+     * @method isPromotable
      *
-     * @param {Hash|Hash[]} transactions - Tail transaction hash, or array of tail transaction hashes
+     * @param {Hash} tail - Tail transaction hash
      * @param {Callback} [callback] - Optional callback
      *
      * @return {Promise}
      * @fulfil {boolean} Consistency state of transaction or co-consistency of transactions
      * @reject {Error}
-     * - `IVNALID_HASH_ARRAY`: Invalid array of hashes
+     * - `INVALID_HASH`: Invalid hash
+     * - `INVALID_DEPTH`: Invalid depth
      * - Fetch error
      */
-    return (tail: Hash, maxDepth?: number) =>
-        Promise.resolve(validate(hashValidator(tail), depthValidator(maxDepth)))
-            .then(Promise.all(checkConsistency(tail), getTrytes([tail])))
-            .then(([isConsistent, trytes]) => {
-                const { attachmentTimestamp } = asTransactionObject(trytes, tail)
-                return isConsistent && isAboveMaxDepth(attachmentTimestamp, maxDepth)
-            })
+    return (tail: Hash, callback?: Callback<boolean>): Promise<boolean> =>
+        Promise.resolve(validate(hashValidator(tail), depthValidator(depth)))
+            .then(() => Promise.all([
+                checkConsistency(tail),
+                getTrytes([tail]).then(([trytes]) => asTransactionObject(trytes, tail).attachmentTimestamp)
+            ]))
+            .then(([isConsistent, attachmentTimestamp]) => (
+                isConsistent &&
+                isAboveMaxDepth(attachmentTimestamp, depth)
+            ))
+            .asCallback(callback)
 }

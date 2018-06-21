@@ -8,7 +8,7 @@ const MIN_TRIT_VALUE = -1
 export const TRYTE_ALPHABET = '9ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
 // Trytes to trits look up table
-export const TRYTES_TRITS_LUT = [
+export const TRYTES_TRITS_LUT: ReadonlyArray<ReadonlyArray<number>> = [
     [0, 0, 0],
     [1, 0, 0],
     [-1, 1, 0],

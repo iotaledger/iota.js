@@ -1,8 +1,8 @@
 import * as Promise from 'bluebird'
-import { asFinalTransactionTrytes, hashValidator, integerValidator, mwmValidator, validate } from '@iota/utils'
+import { asFinalTransactionTrytes } from '@iota/transaction-converter'
+import { hashValidator, integerValidator, mwmValidator, validate } from '@iota/validators'
 import { createGetBundle, createSendTrytes } from './'
-import * as errors from './errors'
-import { AttachToTangle, Bundle, Callback, Provider, Transaction, Trytes } from './types'
+import { AttachToTangle, Bundle, Callback, Hash, Provider, Transaction } from '../../types'
 
 /**
  * @method createReplayBundle 
@@ -16,18 +16,21 @@ export const createReplayBundle = (provider: Provider, attachFn?: AttachToTangle
     const sendTrytes = createSendTrytes(provider, attachFn)
 
     /**
-     * Replays a transfer by doing Proof of Work again
+     * Reattaches a transfer to tangle by selecting tips & performing the Proof-of-Work again.
+     * Reattachments are usefull in case original transactions are pending, and can be done securely
+     * as many times as needed.
      * 
-     * @example
-     * 
+     * ### Example
+     * ```js
      * replayBundle(tail)
-     *      .then(transactions => {
-     *          // ...
-     *      })
-     *      .catch(err => {
-     *          // handle errors
-     *      })
+     *   .then(transactions => {
+     *     // ...
+     *   })
+     *   .catch(err => {
+     *     // ...
+     *   })
      * })
+     * ```
      * 
      * @method replayBundle
      *
@@ -52,15 +55,19 @@ export const createReplayBundle = (provider: Provider, attachFn?: AttachToTangle
      * - `INVALID_BUNDLE`
      * - Fetch error
      */
-    return (
-        tail: string,
+    return function replayBundle(
+        tail: Hash,
         depth: number,
         minWeightMagnitude: number,
+        reference?: Hash,
         callback?: Callback<Bundle>
-    ): Promise<Bundle> =>
-        Promise.resolve(validate(hashValidator(tail), integerValidator(depth), mwmValidator(minWeightMagnitude)))
+    ): Promise<Bundle> {
+        return Promise.resolve(
+            validate(hashValidator(tail), integerValidator(depth), mwmValidator(minWeightMagnitude))
+        )
             .then(() => getBundle(tail))
             .then(bundle => asFinalTransactionTrytes(bundle))
-            .then(trytes => sendTrytes(trytes, depth, minWeightMagnitude))
-            .asCallback(callback)
+            .then(trytes => sendTrytes(trytes, depth, minWeightMagnitude, reference))
+            .asCallback(typeof arguments[3] === 'function' ? arguments[3] : callback)
+    }
 }

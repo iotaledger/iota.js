@@ -2,7 +2,6 @@ import * as errors from './errors'
 
 /* tslint:disable variable-name */
 const INT_LENGTH = 12
-const BYTE_LENGTH = 48
 const RADIX = 3
 
 // hex representation of (3^242)/2

@@ -2,11 +2,12 @@
   "name": "@iota/multisig",
   "version": "1.0.0-alpha.1",
   "description": "Methods for generating multisig addresses and co-signing transactions.",
-  "main": "./out/index.js",
+  "main": "./out/multisig/src/index.js",
+  "typings": "typings/multisig/src",
   "scripts": {
     "prepublish": "tsc",
     "format": "prettier",
-    "test": "tsc && ava"
+    "test": "tsc"
   },
   "contributors": [
     "Dominik Schiener <dom@iota.org> (https://iota.org)",
@@ -14,7 +15,7 @@
     "Chris Dukakis <chris.dukakis@iota.org> (https://github.com/chrisdukakis)"
   ],
   "ava": {
-    "files": "out/test/*.test.js",
+    "files": "out/multisig/test/*.test.js",
     "failFast": true,
     "failWithoutAssertions": false,
     "compileEnhancements": false,
@@ -38,8 +39,13 @@
     "url": "https://github.com/iotaledger/iota.js.git"
   },
   "dependencies": {
-    "@iota/crypto": "^1.0.0-alpha.1",
-    "@iota/utils": "^1.0.0-alpha.1",
+    "@iota/bundle": "^1.0.0-alpha.1",
+    "@iota/checksum": "^1.0.0-alpha.1",
+    "@iota/converter": "^1.0.0-alpha.1",
+    "@iota/core": "^1.0.0-alpha.1",
+    "@iota/kerl": "^1.0.0-alpha.1",
+    "@iota/signing": "^1.0.0-alpha.1",
+    "@iota/validators": "^1.0.0-alpha.1",
     "@types/bluebird": "^3.5.20",
     "bluebird": "^3.5.1",
     "isomorphic-fetch": "^2.2.1"

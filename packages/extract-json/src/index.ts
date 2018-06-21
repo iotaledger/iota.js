@@ -1,5 +1,10 @@
-import { trytesToAscii } from '@iota/converter'
+import { trytesToAscii, asciiToTrytes } from '@iota/converter'
 import { Transaction } from '../../types'
+
+export const errors = {
+    'INVALID_JSON': 'Invalid JSON encoded message',
+    'INVALID_BUNDLE': 'Invalid bundle'
+}
 
 /**
  * Takes a bundle as input and from the signatureMessageFragments extracts the correct JSON
@@ -10,16 +15,29 @@ import { Transaction } from '../../types'
  * @returns {Object}
  */
 export const extractJson = (bundle: Transaction[]): string | null => {
-    // if wrong input return null
     if (!Array.isArray(bundle) || bundle[0] === undefined) {
-        return null
+        throw new Error(errors.INVALID_BUNDLE)
     }
 
     // Sanity check: if the first tryte pair is not opening bracket, it's not a message
     const firstTrytePair = bundle[0].signatureMessageFragment[0] + bundle[0].signatureMessageFragment[1]
 
-    if (firstTrytePair !== 'OD') {
-        return null
+    let lastTrytePair = ''
+
+    if (firstTrytePair === 'OD') {
+        lastTrytePair = 'QD'
+    } else if (firstTrytePair == 'GA') {
+        lastTrytePair = 'GA'
+    } else if (firstTrytePair === 'JC') {
+        lastTrytePair = 'LC'
+    } else if (bundle[0].signatureMessageFragment.slice(0, 10) === 'UCPC9DGDTC') {
+        return "false"
+    } else if (bundle[0].signatureMessageFragment.slice(0, 8) === 'HDFDIDTC') {
+        return "true"
+    } else if (bundle[0].signatureMessageFragment.slice(0, 8) === 'BDID9D9D') {
+        return "null"
+    } else {
+        throw new Error(errors.INVALID_JSON)
     }
 
     let index = 0
@@ -64,7 +82,7 @@ export const extractJson = (bundle: Transaction[]): string | null => {
 
                 // If tryte pair equals closing bracket char, we set a preliminary stop
                 // the preliminaryStop is useful when we have a nested JSON object
-                if (trytePair === 'QD') {
+                if (trytePair === lastTrytePair) {
                     preliminaryStop = true
                 }
             }
@@ -83,7 +101,7 @@ export const extractJson = (bundle: Transaction[]): string | null => {
 
     // If we did not find any JSON, return null
     if (notEnded) {
-        return null
+        throw new Error(errors.INVALID_JSON)
     } else {
         return finalJson
     }

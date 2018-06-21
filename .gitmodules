@@ -1,0 +1,3 @@
+[submodule "packages/core/test/functional/iri"]
+	path = packages/core/test/functional/iri
+	url = https://github.com/iotaledger/iri

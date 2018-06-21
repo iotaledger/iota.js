@@ -1,7 +1,9 @@
 import test from 'ava'
 import {
-    attachedTrytes, attachedTrytesOfInvalidChars, attachedTrytesOfInvalidLength
-} from '../../core/test/samples/attachedTrytes'
+    attachedTrytes,
+    attachedTrytesOfInvalidChars,
+    attachedTrytesOfInvalidLength
+} from '@iota/samples'
 import { isAttachedTrytesArray } from '../src'
 
 test('isAttachedTrytesArray()', t => {

@@ -1,23 +1,25 @@
 import * as Promise from 'bluebird'
-import { depthValidator, mwmValidator, seedValidator, transferArrayValidator, validate } from '@iota/utils'
-import { createPrepareTransfers, createSendTrytes, SendTrytesOptions } from './'
+import { depthValidator, mwmValidator, seedValidator, transferArrayValidator, validate } from '@iota/validators'
+import { createPrepareTransfers, createSendTrytes } from './'
 import { getPrepareTransfersOptions, PrepareTransfersOptions } from './createPrepareTransfers'
-import { AttachToTangle, Bundle, Callback, Provider, Transaction, Transfer, Trytes } from './types'
+import { AttachToTangle, Bundle, Callback, Hash, Provider, Transfer, Transaction } from '../../types'
 
-export interface SendTransferOptions extends PrepareTransfersOptions, SendTrytesOptions { }
+export interface SendTransferOptions extends PrepareTransfersOptions {
+    readonly reference?: Hash
+}
 
 export const createSendTransfer = (provider: Provider, attachFn?: AttachToTangle) => {
     const prepareTransfers = createPrepareTransfers(provider)
     const sendTrytes = createSendTrytes(provider, attachFn)
 
-    return (
+    return function sendTransfer(
         seed: string,
         depth: number,
         minWeightMagnitude: number,
         transfers: Transfer[],
         options?: SendTransferOptions,
         callback?: Callback<Bundle>
-    ): Promise<Bundle> => {
+    ): Promise<Bundle> {
         // If no options provided, switch arguments
         if (options && typeof options === 'function') {
             callback = options
@@ -33,7 +35,9 @@ export const createSendTransfer = (provider: Provider, attachFn?: AttachToTangle
             )
         )
             .then(() => prepareTransfers(seed, transfers, options))
-            .then((trytes: Trytes[]) => sendTrytes(trytes, depth, minWeightMagnitude, options))
+            .then(trytes => sendTrytes(trytes, depth, minWeightMagnitude, options ?
+                options.reference : undefined
+            ))
             .asCallback(callback)
     }
 }

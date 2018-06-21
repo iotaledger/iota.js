@@ -1,50 +1,51 @@
 import * as Promise from 'bluebird'
+
+import { trits, trytes } from '@iota/converter'
 import {
     addEntry,
-    addHMAC as HMAC,
     addTrytes,
     finalizeBundle,
-    key,
-    normalizedBundleHash,
-    signatureFragment,
-    trits,
-    trytes,
-} from '@iota/crypto'
+} from '@iota/bundle'
+import { isValidChecksum, removeChecksum } from '@iota/checksum'
+import { key, normalizedBundleHash, signatureFragment, subseed } from '@iota/signing'
+import { asFinalTransactionTrytes } from '@iota/transaction-converter'
 import {
     addressObjectArrayValidator,
-    asArray,
-    asFinalTransactionTrytes,
-    asyncPipe,
-    getOptionsWithDefaults,
-    hashValidator,
-    isValidChecksum,
-    NULL_HASH_TRYTES,
-    padTag,
-    padTrytes,
+    isTrytes,
     remainderAddressValidator,
-    removeChecksum,
     securityLevelValidator,
     seedValidator,
     transferArrayValidator,
-    trytesValidator,
     validate,
-} from '@iota/utils'
+} from '@iota/validators'
 
-import { createGetBalances, createGetInputs, createGetNewAddress, GetInputsOptions } from './'
+import { createGetInputs, createGetNewAddress } from './'
 import * as errors from './errors'
-import { Address, Callback, Inputs, Maybe, Provider, Transaction, Transfer, Trytes } from './types'
+import HMAC from './hmac'
+import {
+    asArray,
+    Address,
+    Callback,
+    getOptionsWithDefaults,
+    Provider,
+    Transaction,
+    Transfer,
+    Trytes
+} from '../../types'
+import { asyncPipe } from '../../utils'
+
+const HASH_LENGTH = 81
+const SIGNATURE_MESSAGE_FRAGMENT_LENGTH = 2187
+const KEY_FRAGMENT_LENGTH = 6561
+const NULL_HASH_TRYTES = '9'.repeat(HASH_LENGTH)
 
 export interface PrepareTransfersOptions {
-    inputs: Address[]
-    address?: Trytes // Deprecate
-    remainderAddress?: Trytes
-    security: number
-    hmacKey?: Trytes
+    readonly inputs: ReadonlyArray<Address>
+    readonly address?: Trytes // Deprecate
+    readonly remainderAddress?: Trytes
+    readonly security: number
+    readonly hmacKey?: Trytes
 }
-
-const HASH_LENGTH: number = 81
-const SIGNATURE_MESSAGE_FRAGMENT_LENGTH: number = 2187
-const KEY_FRAGMENT_LENGTH: number = 6561
 
 const defaults: PrepareTransfersOptions = {
     inputs: [],
@@ -54,39 +55,37 @@ const defaults: PrepareTransfersOptions = {
     hmacKey: undefined,
 }
 
-export const getPrepareTransfersOptions = (options: Partial<PrepareTransfersOptions>) => {
-    const optionsWithDefaults = getOptionsWithDefaults(defaults)(options)
-
-    return {
-        ...optionsWithDefaults,
-        remainderAddress: options.address || options.remainderAddress || undefined
-    }
-}
+export const getPrepareTransfersOptions = (options: Partial<PrepareTransfersOptions>) => ({
+    ...getOptionsWithDefaults(defaults)(options),
+    remainderAddress: options.address || options.remainderAddress || undefined
+})
 
 export interface PrepareTransfersProps {
-    transactions: Transaction[],
-    trytes: Trytes[],
-    transfers: Transfer[],
-    seed: Trytes, security: number,
-    inputs: Address[],
-    timestamp: number,
-    remainderAddress?: Trytes,
-    address?: Trytes,
-    hmacKey?: Trytes
+    readonly transactions: ReadonlyArray<Transaction>,
+    readonly trytes: ReadonlyArray<Trytes>,
+    readonly transfers: ReadonlyArray<Transfer>,
+    readonly seed: Trytes,
+    readonly security: number,
+    readonly inputs: ReadonlyArray<Address>,
+    readonly timestamp: number,
+    readonly remainderAddress?: Trytes,
+    readonly address?: Trytes,
+    readonly hmacKey?: Trytes
 }
 
 /**
  * Create a `{@link prepareTransfers}` function by passing an optional `{@link Provider}`.
- * It is possible to prepare the transfers and do the signing offline, by omiting the provider option.
+ * It is possible to prepare and sign transactions offline, by omitting the provider option.
  *
  * @method createPrepareTransfers
  * 
- * @param {Provider} [provider] - Optional network provider, which is used to fetch inputs and remainder address.
- * In case this is omitted, proper input objects and remainder should be passed in `{@link prepareTransfers}`, if required.
+ * @param {Provider} [provider] - Optional network provider to fetch inputs and remainder address.
+ * In case this is omitted, proper input objects and remainder should be passed
+ * in `{@link prepareTransfers}`, if required.
  * 
  * @return {Function} {@link prepareTransfers}
  */
-export const createPrepareTransfers = (provider?: Provider, now: () => number = () => Date.now()) => {
+export const createPrepareTransfers = (provider?: Provider, now: () => number = () => Date.now(), caller?: string) => {
     const addInputs = createAddInputs(provider)
     const addRemainder = createAddRemainder(provider)
 
@@ -123,20 +122,38 @@ export const createPrepareTransfers = (provider?: Provider, now: () => number = 
      * - `SENDING_BACK_TO_INPUTS`
      * - Fetch error, if connected to network
      */
-    return (
+    return function prepareTransfers(
         seed: Trytes,
-        transfers: Transfer[],
+        transfers: ReadonlyArray<Transfer>,
         options: Partial<PrepareTransfersOptions> = {},
-        callback?: Callback<Trytes[]>
-    ): Promise<Trytes[]> => {
-        const props = Promise.resolve(validatePrepareTransfersProps({
-            transactions: [],
-            trytes: [],
-            seed,
-            transfers,
-            timestamp: Math.floor((typeof now === 'function' ? now() : Date.now()) / 1000),
-            ...getPrepareTransfersOptions(options),
-        }))
+        callback?: Callback<ReadonlyArray<Trytes>>
+    ): Promise<ReadonlyArray<Trytes>> {
+        if (caller !== 'lib') {
+            if (options.address) {
+                console.warn(
+                    '`options.address` is deprecated and will be removed in v2.0.0. \n' +
+                    'Use `options.remainderAddress` instead.'
+                )
+            }
+
+            if (isTrytes(seed) && seed.length < 81) {
+                console.warn(
+                    'WARNING: Seeds with less length than 81 trytes are not secure! \n' +
+                    'Use a random, 81-trytes long seed!'
+                )
+            }
+        }
+
+        const props = Promise.resolve(
+            validatePrepareTransfers({
+                transactions: [],
+                trytes: [],
+                seed,
+                transfers,
+                timestamp: Math.floor((typeof now === 'function' ? now() : Date.now()) / 1000),
+                ...getPrepareTransfersOptions(options)
+            })
+        )
 
         return asyncPipe<PrepareTransfersProps>(
             addHMACPlaceholder,
@@ -149,67 +166,60 @@ export const createPrepareTransfers = (provider?: Provider, now: () => number = 
             addHMAC,
             asTransactionTrytes
         )(props)
-            .then(({ trytes }) => trytes)
+            .then(({ trytes }: PrepareTransfersProps) => trytes)
             .asCallback(callback)
     }
 }
 
-export const validatePrepareTransfersProps = (props: PrepareTransfersProps) => {
-    const { seed, transfers, inputs, address, remainderAddress, security } = props
-    const validators = [
+export const validatePrepareTransfers = (props: PrepareTransfersProps) => {
+    const { seed, transfers, inputs, security } = props
+    const remainderAddress = props.address || props.remainderAddress
+
+    validate(
         seedValidator(seed),
         securityLevelValidator(security),
         transferArrayValidator(transfers),
-    ]
-
-    if (remainderAddress || address) {
-        remainderAddressValidator(remainderAddress || address)
-    }
-
-    if (inputs.length) {
-        addressObjectArrayValidator(inputs)
-    }
-
-    validate(...validators)
+        !!remainderAddress && remainderAddressValidator(remainderAddress),
+        (inputs.length > 0) && addressObjectArrayValidator(inputs)
+    )
 
     return props
 }
 
-export const addHMACPlaceholder = (props: PrepareTransfersProps) => {
-    const { transfers, hmacKey } = props
+export const addHMACPlaceholder = (props: PrepareTransfersProps): PrepareTransfersProps => {
+    const { hmacKey, transfers } = props
 
-    if (!hmacKey) {
-        return props
-    }
-
-    const index = transfers.findIndex(transfer => transfer.value > 0)
-
-    return {
+    return hmacKey ? {
         ...props,
-        transfers: transfers.map((transfer, i) => i === index
-            ? { ...transfer, message: NULL_HASH_TRYTES + transfer.message }
-            : transfer
+        transfers: transfers.map((transfer, i) =>
+            transfer.value > 0 ? {
+                ...transfer,
+                message: NULL_HASH_TRYTES + transfer.message
+            } : transfer
         )
-    }
+    } : props
 }
 
-export const addTransfers = (props: PrepareTransfersProps) => {
+export const addTransfers = (props: PrepareTransfersProps): PrepareTransfersProps => {
     const { transactions, transfers, timestamp } = props
 
     return {
         ...props,
         transactions: transfers.reduce((acc, { address, value, tag, message }) => {
-            const length = message.length ? Math.ceil(message.length / SIGNATURE_MESSAGE_FRAGMENT_LENGTH) : 1
-            const signatureMessageFragments = Array(length).fill(null).map((_, i) =>
-                message.slice(i * KEY_FRAGMENT_LENGTH, (i + 1) * KEY_FRAGMENT_LENGTH))
+            const length = Math.ceil((message.length || 1) / SIGNATURE_MESSAGE_FRAGMENT_LENGTH)
 
             return addEntry(acc, {
-                length,
                 address: removeChecksum(address),
                 value,
                 tag,
                 timestamp,
-                signatureMessageFragments
+                length,
+                signatureMessageFragments: Array(length)
+                    .fill('')
+                    .map((_, i) => message.slice(
+                        i * SIGNATURE_MESSAGE_FRAGMENT_LENGTH,
+                        (i + 1) * SIGNATURE_MESSAGE_FRAGMENT_LENGTH
+                    ))
             })
         }, transactions)
     }
@@ -218,18 +228,19 @@ export const addTransfers = (props: PrepareTransfersProps) => {
 export const createAddInputs = (provider?: Provider) => {
     const getInputs = provider ? createGetInputs(provider) : undefined
 
-    return (props: PrepareTransfersProps) => {
+    return (props: PrepareTransfersProps): Promise<PrepareTransfersProps> => {
         const { transactions, transfers, inputs, timestamp, seed, security } = props
         const threshold = transfers.reduce((sum, { value }) => sum += value, 0)
 
-        if (!getInputs && threshold > inputs.reduce((acc, input) => acc += parseInt(input.balance, 10), 0)) {
+        if (inputs.length && threshold > inputs.reduce((acc, input) => acc += input.balance, 0)) {
             throw new Error(inputs.length ? errors.INSUFFICIENT_BALANCE : errors.INVALID_INPUTS)
         }
 
         return (
-            inputs.length
+            (!getInputs || inputs.length)
                 ? Promise.resolve(inputs)
-                : getInputs!(seed, { security, threshold }).then(response => response.inputs)
+                : getInputs(seed, { security, threshold })
+                    .then(response => response.inputs)
         )
             .then((res) => ({
                 ...props,
@@ -245,9 +256,9 @@ export const createAddInputs = (provider?: Provider) => {
 }
 
 export const createAddRemainder = (provider?: Provider) => {
-    const getNewAddress = provider ? createGetNewAddress(provider) : undefined
+    const getNewAddress = provider ? createGetNewAddress(provider, 'lib') : undefined
 
-    return (props: PrepareTransfersProps) => {
+    return (props: PrepareTransfersProps): PrepareTransfersProps | Promise<PrepareTransfersProps> => {
         const { transactions, remainderAddress, seed, security, inputs, timestamp } = props
 
         // Values of transactions in the bundle should sum up to 0.
@@ -292,27 +303,33 @@ export const createAddRemainder = (provider?: Provider) => {
     }
 }
 
-export const getRemainderAddressStartIndex = (inputs: Address[]): number =>
+export const getRemainderAddressStartIndex = (inputs: ReadonlyArray<Address>): number =>
     [...inputs].sort((a, b) => a.keyIndex - b.keyIndex)[0].keyIndex
 
-export const verifyNotSendingToInputs = (props: PrepareTransfersProps) => {
+export const verifyNotSendingToInputs = (props: PrepareTransfersProps): PrepareTransfersProps => {
     const { transactions } = props
-    const outputs = transactions.filter(transaction => transaction.value > 0)
-    const inputs = asArray(transactions).filter(transaction => transaction.value < 0)
+    const isSendingToInputs = transactions
+        .filter(({ value }) => value < 0)
+        .some(output => transactions
+            .findIndex(input => (
+                input.value > 0 &&
+                input.address === output.address
+            )) > -1
+        )
 
-    if (outputs.some(output => inputs.indexOf(input => input.address === output.address) !== -1)) {
+    if (isSendingToInputs) {
         throw new Error(errors.SENDING_BACK_TO_INPUTS)
     }
 
     return props
 }
 
-export const finalize = (props: PrepareTransfersProps) => ({
+export const finalize = (props: PrepareTransfersProps): PrepareTransfersProps => ({
     ...props,
     transactions: finalizeBundle(props.transactions)
 })
 
-export const addSignatures = (props: PrepareTransfersProps) => {
+export const addSignatures = (props: PrepareTransfersProps): PrepareTransfersProps => {
     const { transactions, inputs, seed } = props
     const normalizedBundle = normalizedBundleHash(transactions[0].bundle)
 
@@ -320,8 +337,8 @@ export const addSignatures = (props: PrepareTransfersProps) => {
         ...props,
         transactions: addTrytes(
             transactions,
-            inputs.reduce((acc, { keyIndex, security }) => {
-                const keyTrits = key(trits(seed), keyIndex, security)
+            inputs.reduce((acc: ReadonlyArray<Trytes>, { keyIndex, security }) => {
+                const keyTrits = key(subseed(trits(seed), keyIndex), security)
 
                 return acc.concat(
                     Array(security).fill(null).map((_, i) => trytes(
@@ -337,7 +354,7 @@ export const addSignatures = (props: PrepareTransfersProps) => {
     }
 }
 
-export const addHMAC = (props: PrepareTransfersProps) => {
+export const addHMAC = (props: PrepareTransfersProps): PrepareTransfersProps => {
     const { hmacKey, transactions } = props
 
     return hmacKey
@@ -345,7 +362,7 @@ export const addHMAC = (props: PrepareTransfersProps) => {
         : props
 }
 
-export const asTransactionTrytes = (props: PrepareTransfersProps) => ({
+export const asTransactionTrytes = (props: PrepareTransfersProps): PrepareTransfersProps => ({
     ...props,
     trytes: asFinalTransactionTrytes(props.transactions)
 })

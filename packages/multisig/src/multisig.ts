@@ -1,45 +1,37 @@
 import * as Promise from 'bluebird'
-import { createGetBalances, GetBalancesResponse } from '@iota/core'
+import { createGetBalances, Balances } from '@iota/core'
+import { trits, trytes } from '@iota/converter'
+import { removeChecksum } from '@iota/checksum'
+import { addEntry, addTrytes, finalizeBundle } from '@iota/bundle'
+import Kerl from '@iota/kerl'
+import { digests, key, normalizedBundleHash, signatureFragment, subseed } from '@iota/signing'
 import {
-    addEntry,
-    addTrytes,
-    digests,
-    finalizeBundle,
-    Kerl,
-    key,
-    normalizedBundleHash,
-    signatureFragment,
-    trits,
-    trytes
-} from '@iota/crypto'
-import {
-    isAddressTrytes,
+    isHash,
     isNinesTrytes,
     isSecurityLevel,
+    errors,
     remainderAddressValidator,
-    removeChecksum,
     transferArrayValidator,
     validate,
     Validator,
-} from '@iota/utils'
-import * as errors from '../../core/src/errors'
-import { Address as AddressType, Callback, Provider, Transaction, Transfer } from '../../core/src/types'
+} from '@iota/validators'
+import { Bundle, Callback, Provider, Transaction, Transfer } from '../../types'
 import Address from './address'
 
 export interface MultisigInput {
-    address: string
-    balance: number
-    securitySum: number
+    readonly address: string
+    readonly balance: number
+    readonly securitySum: number
 }
 
-export const multisigInputValidator: Validator<MultisigInput> = multisigInput => [
+export const multisigInputValidator: Validator<MultisigInput> = (multisigInput: any) => [
     multisigInput,
     ({ address, balance, securitySum }: MultisigInput) =>
-        isSecurityLevel(securitySum) && isAddressTrytes(address) && Number.isInteger(balance) && balance > 0,
+        isSecurityLevel(securitySum) && isHash(address) && Number.isInteger(balance) && balance > 0,
     errors.INVALID_INPUTS,
 ]
 
-export const sanitizeTransfers = (transfers: Transfer[]) =>
+export const sanitizeTransfers = (transfers: ReadonlyArray<Transfer>): ReadonlyArray<Transfer> =>
     transfers.map(transfer => ({
         ...transfer,
         message: transfer.message || '',
@@ -49,9 +41,9 @@ export const sanitizeTransfers = (transfers: Transfer[]) =>
 
 export const createBundle = (
     input: MultisigInput,
-    transfers: Transfer[],
+    transfers: ReadonlyArray<Transfer>,
     remainderAddress?: string
-): Array<Partial<Transaction>> => {
+): Bundle => {
     // Create a new bundle
     let bundle: Transaction[] = []
 
@@ -109,13 +101,15 @@ export const createBundle = (
 
         // Add first entries to the bundle
         // Slice the address in case the user provided a checksummed one
-        bundle = addEntry(bundle, {
+        const _bundle = addEntry(bundle, {
             length: signatureMessageLength,
             address: transfers[i].address.slice(0, 81),
             value: transfers[i].value,
             tag,
             timestamp: Math.floor(Date.now() / 1000)
         })
+
+        bundle = _bundle.slice()
 
         // Sum up total value
         totalValue += transfers[i].value
@@ -126,13 +120,15 @@ export const createBundle = (
 
         // Add input as bundle entry
         // Only a single entry, signatures will be added later
-        bundle = addEntry(bundle, {
+        const _bundle = addEntry(bundle, {
             length: input.securitySum,
             address: input.address,
             value: toSubtract,
             tag,
             timestamp: Math.floor(Date.now() / 1000)
         })
+
+        bundle = _bundle.slice()
     }
 
     if (totalValue > totalBalance) {
@@ -149,13 +145,14 @@ export const createBundle = (
             throw new Error('No remainder address defined')
         }
 
-        bundle = addEntry(bundle, {
+        const _bundle = addEntry(bundle, {
             length: 1,
             address: remainderAddress,
             value: remainder,
             tag,
             timestamp: Math.floor(Date.now() / 1000)
         })
+        bundle = _bundle.slice()
     }
 
     return addTrytes(finalizeBundle(bundle), signatureFragments, bundle.findIndex(tx => tx.value < 0))
@@ -179,7 +176,7 @@ export default class Multisig {
      *   @returns {string} digest trytes
      **/
     public getKey(seed: string, index: number, security: number) {
-        return trytes(key(trits(seed), index, security))
+        return trytes(key(subseed(trits(seed), index), security))
     }
 
     /**
@@ -192,7 +189,7 @@ export default class Multisig {
      *   @returns {string} digest trytes
      **/
     public getDigest(seed: string, index: number, security: number) {
-        const keyTrits = key(trits(seed), index, security)
+        const keyTrits = key(subseed(trits(seed), index), security)
 
         return trytes(digests(keyTrits))
     }
@@ -205,7 +202,7 @@ export default class Multisig {
      *   @param {array} digests
      *   @returns {bool}
      **/
-    public validateAddress(multisigAddress: string, digestsArr: string[]) {
+    public validateAddress(multisigAddress: string, digestsArr: ReadonlyArray<string>) {
         const kerl = new Kerl()
 
         // initialize Kerl with the provided state
@@ -241,10 +238,10 @@ export default class Multisig {
      **/
     public initiateTransfer(
         input: MultisigInput,
-        transfers: Transfer[],
+        transfers: ReadonlyArray<Transfer>,
         remainderAddress?: string,
-        callback?: Callback<Transaction[]>
-    ): Promise<Array<Partial<Transaction>>> {
+        callback?: Callback<Bundle>
+    ): Promise<Bundle> {
         return Promise.resolve(
             validate(
                 multisigInputValidator(input),
@@ -253,19 +250,20 @@ export default class Multisig {
             )
         )
             .then(() => sanitizeTransfers(transfers))
-            .then(
-                (sanitizedTransfers: Transfer[]) =>
-                    input.balance
-                        ? createBundle(input, transfers, remainderAddress)
-                        : createGetBalances(this.provider)([input.address], 100)
-                            .then((res: GetBalancesResponse): MultisigInput => ({
-                                ...input,
-                                balance: parseInt(res.balances[0], 10),
-                            }))
-                            .then((inputWithBalance: MultisigInput) =>
-                                createBundle(inputWithBalance, sanitizedTransfers, remainderAddress)
-                            )
-            )
+            .then((sanitizedTransfers: ReadonlyArray<Transfer>) => {
+                if (input.balance) {
+                    return createBundle(input, sanitizedTransfers, remainderAddress)
+                } else {
+                    return createGetBalances(this.provider)([input.address], 100)
+                        .then((res: Balances): MultisigInput => ({
+                            ...input,
+                            balance: res.balances[0],
+                        }))
+                        .then((inputWithBalance: MultisigInput) =>
+                            createBundle(inputWithBalance, sanitizedTransfers, remainderAddress)
+                        )
+                }
+            })
             .asCallback(callback)
     }
 
@@ -280,8 +278,9 @@ export default class Multisig {
      *   @param {function} callback
      *   @returns {array} trytes Returns bundle trytes
      **/
-    public addSignature(bundleToSign: Transaction[], inputAddress: string, keyTrytes: string, callback: Callback) {
+    public addSignature(bundleToSign: Bundle, inputAddress: string, keyTrytes: string, callback: Callback) {
         const bundle = bundleToSign
+        const _bundle: Partial<Transaction>[] = []
 
         // Get the security used for the private key
         // 1 security level = 2187 trytes
@@ -323,7 +322,7 @@ export default class Multisig {
                     const firstSignedFragment = signatureFragment(firstBundleFragment, firstFragment)
 
                     //  Convert signature to trytes and assign the new signatureFragment
-                    bundle[i].signatureMessageFragment = trytes(firstSignedFragment)
+                    _bundle.push({ signatureMessageFragment: trytes(firstSignedFragment) })
 
                     for (let j = 1; j < security; j++) {
                         //  Next 6561 trits for the firstFragment
@@ -337,7 +336,7 @@ export default class Multisig {
 
                         //  Convert signature to trytes and add new bundle entry at i + j position
                         // Assign the signature fragment
-                        bundle[i + j].signatureMessageFragment = trytes(nextSignedFragment)
+                        _bundle.push({ signatureMessageFragment: trytes(nextSignedFragment) })
                     }
 
                     break
@@ -345,7 +344,7 @@ export default class Multisig {
             }
         }
 
-        return callback(null, bundle)
+        return callback(null, _bundle.slice())
     }
 }
 

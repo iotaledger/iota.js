@@ -8,9 +8,9 @@ test('validate() does not throw error for valid input.', t => {
         'error'
     ]
 
-    t.is(
-        validate(validator('test')),
-        undefined,
+
+    t.notThrows(
+        () => validate(validator('test')),
         'validate() should not throw error for valid input.'
     )
 })

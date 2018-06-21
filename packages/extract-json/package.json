@@ -15,7 +15,7 @@
     "Chris Dukakis <chris.dukakis@iota.org> (https://github.com/chrisdukakis)"
   ],
   "ava": {
-    "files": "out/test/*.test.js",
+    "files": "out/extract-json/test/*.test.js",
     "failFast": true,
     "failWithoutAssertions": false,
     "compileEnhancements": false,

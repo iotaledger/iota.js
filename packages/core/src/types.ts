@@ -52,6 +52,10 @@ export interface Provider {
     setSettings: <S>(settings?: Partial<S>) => void
 }
 
+export interface Balance {
+    balance: number
+}
+
 /* Address object */
 export interface Address extends Balance {
     address: Hash
@@ -59,16 +63,12 @@ export interface Address extends Balance {
     security: number
 }
 
-export const makeAddress = (address: Hash, balance: string, keyIndex: number, security: number): Address => ({
+export const makeAddress = (address: Hash, balance: number, keyIndex: number, security: number): Address => ({
     address,
     keyIndex,
     security,
     balance,
 })
-
-export interface Balance {
-    balance: string
-}
 
 export interface Inputs {
     inputs: Address[]

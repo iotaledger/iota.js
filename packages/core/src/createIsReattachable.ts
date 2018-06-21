@@ -1,14 +1,15 @@
 import * as Promise from 'bluebird'
-import { asArray, hashArrayValidator, isArray, removeChecksum, trytesArrayValidator, validate } from '@iota/utils'
+import { removeChecksum } from '@iota/checksum'
+import { hashArrayValidator, trytesArrayValidator, validate } from '@iota/validators'
 import { createFindTransactionObjects, createGetLatestInclusion } from './'
-import { Callback, Hash, Provider, Transaction, Trytes } from './types'
+import { asArray, Callback, Hash, Provider, Transaction, Trytes } from '../../types'
 
 // Filters out all receiving or 0-value transactions
 // Note: Transaction value < 0 is a tx-out (spending transaction)
-const filterSpendingTransactions = (transactions: Transaction[]) => transactions.filter(tx => tx.value < 0)
+const filterSpendingTransactions = (transactions: ReadonlyArray<Transaction>) => transactions.filter(tx => tx.value < 0)
 
 // Appends the confirmation status to each transaction
-const withInclusionState = (provider: Provider, transactions: Transaction[]) =>
+const withInclusionState = (provider: Provider, transactions: ReadonlyArray<Transaction>) =>
     createGetLatestInclusion(provider)(transactions.map(tx => tx.hash)).then(states =>
         transactions.map((tx, i) => ({
             ...tx,
@@ -17,7 +18,7 @@ const withInclusionState = (provider: Provider, transactions: Transaction[]) =>
     )
 
 // Checks whether any address in the list has at least one confirmed transaction
-const hasConfirmedTxs = (addresses: Hash[], transactions: Transaction[]) =>
+const hasConfirmedTxs = (addresses: ReadonlyArray<Hash>, transactions: ReadonlyArray<Transaction>) =>
     addresses.map(addr => transactions.some(tx => !!tx.confirmed && tx.address === addr))
 
 // An address may be considered "reattachable" if it has either:
@@ -25,13 +26,15 @@ const hasConfirmedTxs = (addresses: Hash[], transactions: Transaction[]) =>
 // (B) No _confirmed_ spending transactions
 export const createIsReattachable = (provider: Provider) => {
     const findTransactionObjects = createFindTransactionObjects(provider)
-    return (
-        inputAddresses: Trytes | Trytes[],
-        callback?: Callback<boolean | boolean[]>
-    ): Promise<boolean | boolean[]> => {
+    return function isReattachable(
+        inputAddresses: Trytes | ReadonlyArray<Trytes>,
+        callback?: Callback<boolean | ReadonlyArray<boolean>>
+    ): Promise<boolean | ReadonlyArray<boolean>> {
         const useArray = Array.isArray(inputAddresses)
         const inputAddressArray = asArray(inputAddresses)
         let addresses: Hash[]
+
+        console.warn('`isReattachable()` has been deprecated and will be removed in v2.0.0.')
 
         return (
             Promise.try(() => {

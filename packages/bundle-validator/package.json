@@ -3,7 +3,7 @@
   "version": "1.0.0-alpha.1",
   "description": "Validates bundle structure and signatures.",
   "main": "./out/bundle-validator/src/index.js",
-  "typings": "./out/bundle-validator/src",
+  "typings": "typings/bundle-validator/src",
   "scripts": {
     "prepublish": "tsc",
     "format": "prettier",
@@ -15,7 +15,7 @@
     "Chris Dukakis <chris.dukakis@iota.org> (https://github.com/chrisdukakis)"
   ],
   "ava": {
-    "files": "out/test/*.test.js",
+    "files": "out/bundle-validator/test/*.test.js",
     "failFast": true,
     "failWithoutAssertions": false,
     "compileEnhancements": false,

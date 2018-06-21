@@ -9,8 +9,15 @@ export enum Unit {
     Pi = 'Pi',
 }
 
+export interface UnitMap {
+    readonly [unit: string]: {
+        readonly val: BigNumber,
+        readonly dp: number
+    }
+}
+
 // Map of IOTA Units based off of the standard System of Units
-export const unitMap = {
+export const unitMap: UnitMap = {
     i: { val: new BigNumber(10).pow(0), dp: 0 },
     Ki: { val: new BigNumber(10).pow(3), dp: 3 },
     Mi: { val: new BigNumber(10).pow(6), dp: 6 },
@@ -24,7 +31,7 @@ export const unitMap = {
  *
  * @method convertUnits
  * 
- * @param {string || int || float} value
+ * @param {string | int | float} value
  * 
  * @param {string} fromUnit
  * 
@@ -34,8 +41,8 @@ export const unitMap = {
  */
 export const convertUnits = (value: string | number, fromUnit: Unit, toUnit: Unit) => {
     // Check if wrong unit provided
-    if (unitMap[fromUnit] === undefined || unitMap[toUnit] === undefined) {
-        throw new Error('Invalid unit provided')
+    if (!unitMap[fromUnit] || !unitMap[toUnit]) {
+        throw new Error('Invalid unit provided.')
     }
 
     const valueBn = new BigNumber(value)
@@ -44,8 +51,8 @@ export const convertUnits = (value: string | number, fromUnit: Unit, toUnit: Uni
         throw new Error('Input value exceeded max fromUnit precision.')
     }
 
-    const valueRaw = valueBn.times(unitMap[fromUnit].val)
-    const valueScaled = valueRaw.dividedBy(unitMap[toUnit].val)
-
-    return valueScaled.toNumber()
+    return valueBn
+        .times(unitMap[fromUnit].val)
+        .dividedBy(unitMap[toUnit].val)
+        .toNumber()
 }

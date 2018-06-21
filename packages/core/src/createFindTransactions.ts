@@ -1,67 +1,57 @@
 import * as Promise from 'bluebird'
+import { removeChecksum } from '@iota/checksum'
 import { padTagArray } from '@iota/pad'
 import {
-    hashArrayValidator, isArray, removeChecksum, tagArrayValidator, validate
+    errors, hashArrayValidator, tagArrayValidator, validate
 } from '@iota/validators'
-import * as errors from './errors'
-import { BaseCommand, Callback, Hash, IRICommand, Tag, Provider } from './types'
+import {
+    Callback,
+    FindTransactionsCommand,
+    FindTransactionsQuery,
+    FindTransactionsResponse,
+    Hash,
+    IRICommand,
+    Provider
+} from '../../types'
 
-export interface FindTransactionsQuery {
-    addresses?: Hash[]
-    approvees?: Hash[]
-    bundles?: Hash[]
-    tags?: Tag[]
-}
+const keysOf = <T>(o: T): ReadonlyArray<keyof T> => Object.keys(o) as Array<keyof T>
 
-export interface FindTransactionsCommand extends BaseCommand, FindTransactionsQuery {
-    command: IRICommand.FIND_TRANSACTIONS
-}
-
-export interface FindTransactionsResponse {
-    hashes: Hash[]
-}
-
-const keysOf = <T>(o: T): Array<keyof T> => Object.keys(o) as Array<keyof T>
-
-const validKeys = ['bundles', 'addresses', 'tags', 'approvees']
+const validKeys: ReadonlyArray<keyof FindTransactionsQuery> = ['bundles', 'addresses', 'tags', 'approvees']
 
 const hasValidKeys = (query: FindTransactionsQuery) => {
     for (const key of keysOf(query)) {
-        if (validKeys.indexOf(key) === -1 || !isArray(query[key])) {
-            throw new Error(errors.INVALID_KEY)
+        if (validKeys.indexOf(key) === -1) {
+            throw new Error(`${errors.INVALID_KEY}: ${key}`)
         }
     }
 }
 
-const validateFindTransactions = (query: FindTransactionsQuery) => {
-    hasValidKeys(query)
-
+export const validateFindTransactions = (query: FindTransactionsQuery) => {
     const { addresses, approvees, bundles, tags } = query
 
-    if (addresses) {
-        validate(hashArrayValidator(addresses))
-    }
+    hasValidKeys(query)
 
-    if (approvees) {
-        validate(hashArrayValidator(approvees))
-    }
-
-    if (bundles) {
-        validate(hashArrayValidator(bundles))
-    }
-
-    if (tags) {
-        validate(tagArrayValidator(tags))
-    }
-
-    return query
+    validate(
+        !!addresses && hashArrayValidator(addresses, errors.INVALID_ADDRESS),
+        !!tags && tagArrayValidator(tags),
+        !!approvees && hashArrayValidator(approvees),
+        !!bundles && hashArrayValidator(bundles)
+    )
 }
 
-const removeAddressChecksum = (query: FindTransactionsQuery): FindTransactionsQuery =>
-    query.addresses ? { ...query, addresses: removeChecksum(query.addresses) } : query
+export const removeAddressChecksum = (query: FindTransactionsQuery) => (
+    query.addresses ? {
+        ...query,
+        addresses: removeChecksum(query.addresses)
+    } : query
+)
 
-const padTags = (query: FindTransactionsQuery): FindTransactionsQuery =>
-    query.tags ? { ...query, tags: padTagArray(query.tags) } : query
+export const padTags = (query: FindTransactionsQuery) => (
+    query.tags ? {
+        ...query,
+        tags: padTagArray(query.tags)
+    } : query
+)
 
 /**  
  * @method createFindTransactions 
@@ -70,17 +60,15 @@ const padTags = (query: FindTransactionsQuery): FindTransactionsQuery =>
  *
  * @return {function} {@link findTransactions}
  */
-export const createFindTransactions = ({ send }: Provider) =>
+export const createFindTransactions = ({ send }: Provider) => {
 
     /**
-     * Performs a search for transaction `hashes`  by calling
-     * [`findTransactions`]{@link https://docs.iota.org/iri/api#endpoints/findTransactions} command.
-     * It allows to search for transactions by passing a `query` object with `addresses`, `tags`, `approvees` and `bundles` fields.
+     * Searches for transaction `hashes`  by calling
+     * [`findTransactions`](https://docs.iota.org/iri/api#endpoints/findTransactions) command.
+     * It allows to search for transactions by passing a `query` object with `addresses`, `tags` and `approvees` fields.
      * Multiple query fields are supported and `findTransactions` returns intersection of results.
      *
-     * Currently transactions are not searchable by `tag` field. Support will be restored by next snapshot. 
-     *
-     * @example
+     * ### Example
      * ```js
      * findTransactions({ addresses: ['ADRR...'] })
      *    .then(hashes => {
@@ -107,15 +95,18 @@ export const createFindTransactions = ({ send }: Provider) =>
      * - `INVALID_TAG_ARRAY`: Invalid tags
      * - Fetch error
      */
-    (query: FindTransactionsQuery, callback?: Callback<Hash[]>): Promise<Hash[]> =>
-        Promise.resolve(validateFindTransactions(query))
-            .then(removeAddressChecksum)
+    return function findTransactions(
+        query: FindTransactionsQuery,
+        callback?: Callback<ReadonlyArray<Hash>>
+    ): Promise<ReadonlyArray<Hash>> {
+        return Promise.resolve(validateFindTransactions(query))
+            .then(() => removeAddressChecksum(query))
             .then(padTags)
-            .then(query =>
-                send<FindTransactionsCommand, FindTransactionsResponse>({
-                    ...query,
-                    command: IRICommand.FIND_TRANSACTIONS,
-                })
-            )
-            .then(({ hashes }: FindTransactionsResponse) => hashes)
+            .then(query => send<FindTransactionsCommand, FindTransactionsResponse>({
+                ...query,
+                command: IRICommand.FIND_TRANSACTIONS,
+            }))
+            .then(({ hashes }) => hashes)
             .asCallback(callback)
+    }
+}

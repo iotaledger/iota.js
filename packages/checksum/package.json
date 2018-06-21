@@ -3,7 +3,7 @@
   "version": "1.0.0-alpha.1",
   "description": "Add, remove and validate checksums",
   "main": "./out/checksum/src/index.js",
-  "typings": "./out/checksum/src",
+  "typings": "typings/checksum/src",
   "scripts": {
     "prepublish": "tsc",
     "format": "prettier",
@@ -15,7 +15,7 @@
     "Chris Dukakis <chris.dukakis@iota.org> (https://github.com/chrisdukakis)"
   ],
   "ava": {
-    "files": "out/test/*.test.js",
+    "files": "out/checksum/test/*.test.js",
     "failFast": true,
     "failWithoutAssertions": false,
     "compileEnhancements": false,

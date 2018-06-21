@@ -2,7 +2,7 @@ import * as Promise from 'bluebird'
 import { hashValidator, validate } from '@iota/validators'
 import { asFinalTransactionTrytes, asTransactionObjects } from '@iota/transaction-converter'
 import { createBroadcastTransactions, createGetBundle } from './'
-import { Callback, Hash, Provider, Transaction, Trytes, GetTrytesCommand } from './types'
+import { Callback, Hash, Provider, Trytes } from '../../types'
 
 /**
  * @method createBroadcastBundle
@@ -18,8 +18,19 @@ export const createBroadcastBundle = (provider: Provider) => {
     /**
      * Re-broadcasts all transactions in a bundle given the tail transaction hash.
      * It might be useful when transactions did not properly propagate, 
-     * particularly in the case of long bundles.
+     * particularly in the case of large bundles.
      * 
+     * ### Example
+     * ```js
+     * broadcastTransactions(tailHash)
+     *   .then(transactions => {
+     *      // ...
+     *   })
+     *   .catch(err => {
+     *     // ...
+     *   })
+     * ```
+     *  
      * @method broadcastBundle
      *
      * @param {Hash} tailTransactionHash - Tail transaction hash 
@@ -32,14 +43,14 @@ export const createBroadcastBundle = (provider: Provider) => {
      * - `INVALID_BUNDLE`: Invalid bundle
      * - Fetch error
      */
-    const broadcastBundle = (
+    return function broadcastBundle(
         tailTransactionHash: Hash,
-        callback?: Callback<Trytes[]>
-    ): Promise<Trytes[]> =>
-        Promise.resolve(validate(hashValidator(tailTransactionHash)))
+        callback?: Callback<ReadonlyArray<Trytes>>
+    ): Promise<ReadonlyArray<Trytes>> {
+        return Promise.resolve(validate(hashValidator(tailTransactionHash)))
             .then(() => getBundle(tailTransactionHash))
             .then(asFinalTransactionTrytes)
             .then(broadcastTransactions)
-            .then(asTransactionObjects)
             .asCallback(callback)
+    }
 }

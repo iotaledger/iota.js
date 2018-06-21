@@ -1,2 +1,3 @@
 export { createHttpClient } from './httpClient'
-export { batchedSend, send } from './request'
+export { Settings as HttpClientSettings } from './settings'
+export { /* batchedSend, */ send } from './request'

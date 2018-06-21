@@ -1,10 +1,11 @@
-import { Kerl, trits, trytes } from '@iota/crypto'
-import { asArray } from '@iota/utils'
+import { trits, trytes } from '@iota/converter'
+import Kerl from '@iota/kerl'
+import { asArray } from '../../types'
 
 export default class Address {
     private kerl: Kerl
 
-    constructor(digests?: string | string[]) {
+    constructor(digests?: string | ReadonlyArray<string>) {
         this.kerl = new Kerl()
         this.kerl.initialize()
 
@@ -21,7 +22,7 @@ export default class Address {
      *   @return {object} address instance
      *
      **/
-    public absorb(digests: string | string[]) {
+    public absorb(digests: string | ReadonlyArray<string>) {
         // Construct array
         const digestsArray = asArray(digests)
 

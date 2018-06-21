@@ -1,18 +1,8 @@
 import * as Promise from 'bluebird'
 import { uriArrayValidator, validate } from '@iota/validators'
-import { BaseCommand, Callback, IRICommand, Provider } from '../../types'
+import { AddNeighborsCommand, AddNeighborsResponse, Callback, IRICommand, Provider } from '../../types'
 
-export interface AddNeighborsCommand extends BaseCommand {
-    command: IRICommand.ADD_NEIGHBORS
-    uris: string[]
-}
 
-export interface AddNeighborsResponse {
-    addedNeighbors: number
-    duration: number
-}
-
-export const validateAddNeighbors = (uris: string[]) => validate(uriArrayValidator(uris))
 
 /**  
  * @method createAddNeighbors
@@ -25,10 +15,20 @@ export const createAddNeighbors = ({ send }: Provider) =>
 
     /**
      * Adds a list of neighbors to the connected IRI node by calling 
-     * [`addNeighbors`]{@link https://docs.iota.works/iri/api#endpoints/addNeighbors} command. 
+     * [`addNeighbors`]{https://docs.iota.works/iri/api#endpoints/addNeighbors} command. 
      * Assumes `addNeighbors` command is available on the node.
      * 
-     * This method has temporary effect until your node relaunches.
+     * `addNeighbors` has temporary effect until your node relaunches.
+     * 
+     * ### Example
+     * ```js
+     * addNeighbors([udp://148.148.148.148:14265])
+     *   .then(numAdded => {
+     *     // ...
+     *   }).catch(err => {
+     *     // ...
+     *   })
+     * ```
      *
      * @method addNeighbors
      *
@@ -41,13 +41,12 @@ export const createAddNeighbors = ({ send }: Provider) =>
      * - `INVALID_URI`: Invalid uri
      * - Fetch error
      */
-    (uris: string[], callback?: Callback<number>): Promise<number> =>
-        Promise.resolve(validateAddNeighbors(uris))
-            .then(() =>
-                send<AddNeighborsCommand, AddNeighborsResponse>({
-                    command: IRICommand.ADD_NEIGHBORS,
-                    uris,
-                })
-            )
+    function addedNeighbors(uris: ReadonlyArray<string>, callback?: Callback<number>): Promise<number> {
+        return Promise.resolve(validate(uriArrayValidator(uris)))
+            .then(() => send<AddNeighborsCommand, AddNeighborsResponse>({
+                command: IRICommand.ADD_NEIGHBORS,
+                uris,
+            }))
             .then(res => res.addedNeighbors)
             .asCallback(callback)
+    }

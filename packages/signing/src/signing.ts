@@ -5,7 +5,7 @@ import add from './add'
 import * as errors from './errors'
 import { Hash } from '../../types'
 
-export function subseed(seed: Int8Array, index: number) {
+export function subseed(seed: Int8Array, index: number): Int8Array {
     if (index < 0) {
         throw new Error(errors.ILLEGAL_KEY_INDEX)
     }
@@ -15,7 +15,7 @@ export function subseed(seed: Int8Array, index: number) {
     }
 
     const indexTrits = fromValue(index)
-    let subseed = add(seed.slice(), indexTrits)
+    let subseed: Int8Array = add(seed, indexTrits)
 
     while (subseed.length % 243 !== 0) {
         subseed = padTrits(subseed.length + 3)(subseed)
@@ -122,7 +122,7 @@ export function address(digests: Int8Array): Int8Array {
     const kerl = new Kerl()
 
     kerl.initialize()
-    kerl.absorb(digests, 0, digests.length)
+    kerl.absorb(digests.slice(), 0, digests.length)
     kerl.squeeze(addressTrits, 0, Kerl.HASH_LENGTH)
 
     return addressTrits
@@ -137,7 +137,10 @@ export function address(digests: Int8Array): Int8Array {
  * @return {Int8Array}
  */
 // tslint:disable-next-line no-shadowed-variable
-export function digest(normalizedBundleFragment: Int8Array, signatureFragment: Int8Array): Int8Array {
+export function digest(
+    normalizedBundleFragment: Int8Array,
+    signatureFragment: Int8Array
+): Int8Array {
     const digestKerl = new Kerl()
 
     digestKerl.initialize()
@@ -170,8 +173,11 @@ export function digest(normalizedBundleFragment: Int8Array, signatureFragment: I
  * 
  * @return {Int8Array}
  */
-export function signatureFragment(normalizedBundleFragment: Int8Array, keyFragment: Int8Array): Int8Array {
-    const sigFragment: Int8Array = keyFragment.slice()
+export function signatureFragment(
+    normalizedBundleFragment: Int8Array,
+    keyFragment: Int8Array
+): Int8Array {
+    const sigFragment = keyFragment.slice()
 
     const kerl = new Kerl()
 
@@ -202,7 +208,11 @@ export function signatureFragment(normalizedBundleFragment: Int8Array, keyFragme
  * 
  * @return {boolean}
  */
-export function validateSignatures(expectedAddress: string, signatureFragments: string[], bundleHash: string): boolean {
+export function validateSignatures(
+    expectedAddress: string,
+    signatureFragments: ReadonlyArray<string>,
+    bundleHash: string
+): boolean {
     if (!bundleHash) {
         throw new Error(errors.INVALID_BUNDLE_HASH)
     }
@@ -217,7 +227,7 @@ export function validateSignatures(expectedAddress: string, signatureFragments: 
 
     // Get digests
     // tslint:disable-next-line no-shadowed-variable
-    const digests: Int8Array = new Int8Array(signatureFragments.length * 243)
+    const digests = new Int8Array(signatureFragments.length * 243)
 
     for (let i = 0; i < signatureFragments.length; i++) {
         const digestBuffer = digest(normalizedBundleFragments[i % 3], trits(signatureFragments[i]))

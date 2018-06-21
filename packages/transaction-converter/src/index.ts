@@ -14,10 +14,10 @@ import { asArray, Hash, Transaction, Trytes } from '../../types'
  * @returns {Trytes | Trytes[]} - Transaction trytes
  */
 export function asTransactionTrytes(transactions: Transaction): Trytes
-export function asTransactionTrytes(transactions: Transaction[]): Trytes[]
-export function asTransactionTrytes(transactions: Transaction | Transaction[]) {
-    const txTrytes = asArray(transactions).map(transaction =>
-        [
+export function asTransactionTrytes(transactions: ReadonlyArray<Transaction>): ReadonlyArray<Trytes>
+export function asTransactionTrytes(transactions: Transaction | ReadonlyArray<Transaction>): Trytes | ReadonlyArray<Trytes> {
+    const txTrytes = asArray(transactions)
+        .map(transaction => [
             transaction.signatureMessageFragment,
             transaction.address,
             tritsToTrytes(padTrits(81)(trytesToTrits(transaction.value))),
@@ -33,8 +33,7 @@ export function asTransactionTrytes(transactions: Transaction | Transaction[]) {
             tritsToTrytes(padTrits(27)(trytesToTrits(transaction.attachmentTimestampLowerBound))),
             tritsToTrytes(padTrits(27)(trytesToTrits(transaction.attachmentTimestampUpperBound))),
             transaction.nonce,
-        ].join('')
-    )
+        ].join(''))
 
     return Array.isArray(transactions) ? txTrytes : txTrytes[0]
 }
@@ -104,41 +103,34 @@ export const asTransactionObject = (trytes: Trytes, hash?: Hash): Transaction =>
 
 /**
  * Converts a list of transaction trytes into list of transaction objects.
- * It's a curried method which accepts a list of hashes and returns a mapper.
- * In cases hashes are given, the mapper function will apply them to each converted object.
+ * Accepts a list of hashes and returns a mapper. In cases hashes are given,
+ * the mapper function map them to converted objects.
  *
  * @method asTransactionObjects
  *
- * @param {Hash[]} [hashes] - Optional list of known hashes. Known hashes are directly mapped
- * to transaction objects, otherwise all hashes are being recalculated.
+ * @param {Hash[]} [hashes] - Optional list of known hashes.
+ * Known hashes are directly mapped to transaction objects,
+ * otherwise all hashes are being recalculated.
  * 
  * @return {Function} - Returns a {@link transactionObjectsMapper} 
  */
-export const asTransactionObjects = (hashes?: Hash[]) =>
+export const asTransactionObjects = (hashes?: ReadonlyArray<Hash>) =>
+    (trytes: ReadonlyArray<Trytes>) => trytes.map((tryteString, i) => asTransactionObject(
+        tryteString,
+        hashes![i]
+    ))
 
-    /**
-     * @method transactionObjectsMapper
-     * 
-     * @param {Trytes[]} trytes - List of transaction trytes
-     * 
-     * @return {Transaction[]} - List of transaction objects
-     */
-    (trytes: Trytes[]) =>
-        trytes.map((tryteString, i) => asTransactionObject(tryteString, hashes ? hashes[i] : undefined))
+export const asFinalTransactionTrytes = (transactions: ReadonlyArray<Transaction>) =>
+    [...asTransactionTrytes(transactions)].reverse()
 
-export const asFinalTransactionTrytes = (transactions: Transaction[]) =>
-    transactions.map(transaction => asTransactionTrytes(transaction)).reverse()
+export const transactionObject = (trytes: Trytes): Transaction => {
+    console.warn('`transactionObject` has been renamed to `asTransactionObject`')
 
-/**
- * @method transactionObject
- * 
- * @deprecated
- */
-export const transactionObject = (trytes: Trytes): Transaction => asTransactionObject(trytes)
+    return asTransactionObject(trytes)
+}
 
-/**
- * @method transactionTrytes
- * 
- * @deprecated
- */
-export const transactionTrytes = (transaction: Transaction): Trytes => asTransactionTrytes(transaction)
+export const transactionTrytes = (transaction: Transaction): Trytes => {
+    console.warn('`transactionTrytes` has been renamed to `asTransactionTrytes`')
+
+    return asTransactionTrytes(transaction)
+}

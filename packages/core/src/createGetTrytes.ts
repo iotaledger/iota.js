@@ -1,17 +1,14 @@
 import * as Promise from 'bluebird'
 import { hashArrayValidator, validate } from '@iota/validators'
-import { BaseCommand, Callback, Hash, IRICommand, Provider } from './types'
-
-export interface GetTrytesCommand extends BaseCommand {
-    command: IRICommand.GET_TRYTES
-    hashes: string[]
-}
-
-export interface GetTrytesResponse {
-    trytes: string[]
-}
-
-export const validateGetTrytes = (hashes: Hash[]) => validate(hashArrayValidator(hashes))
+import {
+    Callback,
+    GetTrytesCommand,
+    GetTrytesResponse,
+    Hash,
+    IRICommand,
+    Provider,
+    Trytes
+} from '../../types'
 
 /**
  * @method createGetTrytes 
@@ -26,18 +23,19 @@ export const createGetTrytes = ({ send }: Provider) =>
      * Fetches the transaction trytes given a list of transaction hashes, by calling
      * [`getTrytes`]{@link https://docs.iota.works/iri/api#endpoints/getTrytes} command.
      *  
-     * @example
-     * import { iota } from '@iota/core'
-     * import { asTransactionObjects } from '@iota/utils'
-     *
-     * const { getTrytes } = iota({ provider })
-     *
+     * ### Example
+     * ```js
      * getTrytes(hashes)
-     *    // Parsing as transaction objects
-     *    .then(trytes => asTransactionObjects(hashes)(trytes))
-     *    .then(transactions => {
-     *        // ...
-     *    })
+     *   // Parsing as transaction objects
+     *   .then(trytes => asTransactionObjects(hashes)(trytes))
+     *   .then(transactions => {
+     *     // ...
+     *   })
+     *   .catch(err => {
+     *     // ...
+     *   })
+     * ```
+     *   
      *
      * @method getTrytes 
      *
@@ -50,13 +48,15 @@ export const createGetTrytes = ({ send }: Provider) =>
      * - `INVALID_HASH_ARRAY`: Invalid array of hashes
      * - Fetch error
      */
-    (hashes: string[], callback?: Callback<string[]>): Promise<string[]> =>
-        Promise.resolve(validateGetTrytes(hashes))
-            .then(() =>
-                send<GetTrytesCommand, GetTrytesResponse>({
-                    command: IRICommand.GET_TRYTES,
-                    hashes,
-                })
-            )
-            .then(res => res.trytes)
+    function getTrytes(
+        hashes: ReadonlyArray<Hash>,
+        callback?: Callback<ReadonlyArray<Trytes>>
+    ): Promise<ReadonlyArray<Trytes>> {
+        return Promise.resolve(validate(hashArrayValidator(hashes)))
+            .then(() => send<GetTrytesCommand, GetTrytesResponse>({
+                command: IRICommand.GET_TRYTES,
+                hashes,
+            }))
+            .then(({ trytes }) => trytes)
             .asCallback(callback)
+    }

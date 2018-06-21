@@ -1,7 +1,6 @@
 import * as Promise from 'bluebird'
 import {
     getInputsThresholdValidator,
-    isInteger,
     securityLevelValidator,
     seedValidator,
     startEndOptionsValidator,
@@ -13,14 +12,14 @@ import { createGetNewAddress, getNewAddressOptions, GetNewAddressOptions } from 
 import * as errors from './errors'
 import {
     asArray, getOptionsWithDefaults,
-    Address, Balance, Callback, Hash, Inputs, makeAddress, Provider, Trytes,
+    Address, Callback, Hash, Inputs, makeAddress, Provider, Trytes,
 } from '../../types'
 
 export interface GetInputsOptions {
-    start: number
-    end?: number
-    threshold?: number
-    security: number
+    readonly start: number
+    readonly end?: number
+    readonly threshold?: number
+    readonly security: number
 }
 
 const defaults: GetInputsOptions = {
@@ -38,31 +37,25 @@ const defaults: GetInputsOptions = {
  * @return {function} {@link getInputs}
  */
 export const createGetInputs = (provider: Provider) => {
-    const getNewAddress = createGetNewAddress(provider)
+    const getNewAddress = createGetNewAddress(provider, 'lib')
     const getBalances = createGetBalances(provider)
 
     /**  
-     * Creates and returns an `{@link Inputs}` objects by generating addresses and fetching their latest balance.
+     * Creates and returns an `{@link Inputs}` object by generating addresses and fetching their latest balance.
      *
-     * @example
-     * import iota from '@iota/core'
-     * import errors from '@iota/core'
-     *
-     * const { getInputs } = iota()
-     * 
-     * const seed = 'SEED'
-     * const threshold = 999
-     *
+     * ### Example
+     * ```js
      * getInputs(seed, { start: 0, threhold })
-     *    .then(({ inputs, totalBalance }) => {
+     *   .then(({ inputs, totalBalance }) => {
+     *     // ...
+     *   })
+     *   .catch(err => {
+     *     if (err.message === errors.INSUFFICIENT_BALANCE) {
      *        // ...
-     *    })
-     *    .catch(err => {
-     *        if (err.message === errors.INSUFFICIENT_BALANCE) {
-     *            // handle insufficient balance case
-     *        }
-     *        // ...
-     *    })
+     *     }
+     *     // ...
+     *   })
+     * ```
      *
      * @method getInputs 
      *
@@ -75,7 +68,7 @@ export const createGetInputs = (provider: Provider) => {
      *
      * @return {Promise}
      *
-     * @fulfil {Inputs} Inputs object containg a list of `{@Address}` objects and `totalBalance` field
+     * @fulfil {Inputs} Inputs object containg a list of `{@link Address}` objects and `totalBalance` field
      * @reject {Error}
      * - `INVALID_SEED`
      * - `INVALID_SECURITY_LEVEL`
@@ -110,41 +103,36 @@ export const getInputsOptions = getOptionsWithDefaults(defaults)
 export const validateGetInputsOptions = (seed: Trytes, options: GetInputsOptions) => {
     const { security, start, end, threshold } = options
 
-    const validators = [
+    return validate(
         seedValidator(seed),
         securityLevelValidator(security),
         startOptionValidator(start),
-    ]
-
-    if (end || typeof end === 'number') {
-        validators.push(startEndOptionsValidator({ start, end }))
-    }
-
-    if (threshold || typeof threshold === 'number') {
-        validators.push(getInputsThresholdValidator(threshold))
-    }
-
-    validate(...validators)
+        typeof end !== undefined && startEndOptionsValidator({ start, end }),
+        !!threshold && getInputsThresholdValidator(threshold)
+    )
 }
 
-export const inputsToAddressOptions = ({ start, end, security }: GetInputsOptions) => end
+export const inputsToAddressOptions = ({ start, end, security }: GetInputsOptions): GetNewAddressOptions => end
     ? getNewAddressOptions({ index: start, total: end - start + 1, security, returnAll: true })
     : getNewAddressOptions({ index: start, security, returnAll: true })
 
-export const createInputsObject = (addresses: Hash[], balances: string[], start: number, security: number): Inputs => {
+export const createInputsObject = (
+    addresses: ReadonlyArray<Hash>,
+    balances: ReadonlyArray<number>,
+    start: number,
+    security: number
+): Inputs => {
     const inputs = addresses.map((address, i) => makeAddress(address, balances[i], start + i, security))
-    const totalBalance = inputs.reduce((acc, addr) => (acc += parseInt(addr.balance, 10)), 0)
+    const totalBalance = inputs.reduce((acc, addr) => acc += addr.balance, 0)
     return { inputs, totalBalance }
 }
 
 export const filterByThreshold = ({ inputs, totalBalance }: Inputs, threshold?: number): Inputs =>
-    threshold
-        ? inputs.reduce((acc: Inputs, input: Address) => (
-            acc.totalBalance < threshold
-                ? { inputs: [...acc.inputs, input], totalBalance: acc.totalBalance + parseInt(input.balance, 10) }
-                : acc
-        ), { inputs: [], totalBalance: 0 })
-        : { inputs, totalBalance }
+    threshold ? inputs.reduce((acc: Inputs, input: Address) => (
+        acc.totalBalance < threshold
+            ? { inputs: [...acc.inputs, input], totalBalance: acc.totalBalance + input.balance }
+            : acc
+    ), { inputs: [], totalBalance: 0 }) : { inputs, totalBalance }
 
 export const hasSufficientBalance = ({ totalBalance }: Inputs, threshold?: number) => {
     if (threshold && totalBalance < threshold) {

@@ -1,20 +1,13 @@
 import * as Promise from 'bluebird'
 import { hashArrayValidator, validate } from '@iota/validators'
-import { BaseCommand, Callback, Hash, IRICommand, Provider } from '../../types'
-
-export interface GetInclusionStatesCommand extends BaseCommand {
-    command: IRICommand.GET_INCLUSION_STATES
-    transactions: string[]
-    tips: string[]
-}
-
-export interface GetInclusionStatesResponse {
-    states: boolean[]
-    duration: number
-}
-
-export const validateGetInclusionStates = (transactions: Hash[], tips: Hash[]) =>
-    validate(hashArrayValidator(transactions), hashArrayValidator(tips))
+import {
+    Callback,
+    Hash,
+    IRICommand,
+    Provider,
+    GetInclusionStatesCommand,
+    GetInclusionStatesResponse
+} from '../../types'
 
 /**
  * @method createGetInclusionStates
@@ -26,17 +19,17 @@ export const validateGetInclusionStates = (transactions: Hash[], tips: Hash[]) =
 export const createGetInclusionStates = ({ send }: Provider) =>
 
     /**
-     * Fetches inclusion states of given list of transactions and tips, by calling
-     * [`getInclusionStates`]{@link https://docs.iota.works/iri/api#endpoints/getInclusionsStates} command.
+     * Fetches inclusion states of given list of transactions, by calling
+     * [`getInclusionStates`](https://docs.iota.works/iri/api#endpoints/getInclusionsStates) command.
      *
-     * @example
+     * ### Example
      * getInclusionStates(transactions)
-     *    .then(state => {
-     *        // ...
-     *    })
-     *    .catch(err => {
-     *        // handle errors
-     *    })
+     *   .then(states => {
+     *     // ...   
+     *   })
+     *   .catch(err => {
+     *     // ...
+     *   })
      *
      * @method getInclusionStates
      * 
@@ -51,17 +44,15 @@ export const createGetInclusionStates = ({ send }: Provider) =>
      * - Fetch error
      */
     (
-        transactions: Hash[],
-        tips: Hash[],
-        callback?: Callback<boolean[]>
-    ): Promise<boolean[]> =>
-        Promise.resolve(validateGetInclusionStates(transactions, tips))
-            .then(() =>
-                send<GetInclusionStatesCommand, GetInclusionStatesResponse>({
-                    command: IRICommand.GET_INCLUSION_STATES,
-                    transactions,
-                    tips,
-                })
-            )
-            .then((res: GetInclusionStatesResponse) => res.states)
+        transactions: ReadonlyArray<Hash>,
+        tips: ReadonlyArray<Hash>,
+        callback?: Callback<ReadonlyArray<boolean>>
+    ): Promise<ReadonlyArray<boolean>> =>
+        Promise.resolve(validate(hashArrayValidator(transactions), hashArrayValidator(tips)))
+            .then(() => send<GetInclusionStatesCommand, GetInclusionStatesResponse>({
+                command: IRICommand.GET_INCLUSION_STATES,
+                transactions,
+                tips,
+            }))
+            .then(({ states }) => states)
             .asCallback(callback)

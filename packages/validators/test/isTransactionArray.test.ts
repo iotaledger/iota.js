@@ -1,5 +1,5 @@
 import test from 'ava'
-import { invalidTransactionObject, transactionObject } from '../../core/test/samples'
+import { invalidTransactionObject, transactionObject } from '@iota/samples'
 import { isTransactionArray } from '../src'
 
 test('isTransactionArray() returns true for valid trasnaction array.', t => {

@@ -2,7 +2,8 @@
   "name": "@iota/http-client",
   "version": "1.0.0-alpha.1",
   "description": "Sends commands to IRI over HTTP.",
-  "main": "./out/index.js",
+  "main": "./out/http-client/src/index.js",
+  "typings": "typings/http-client/src",
   "scripts": {
     "prepublish": "tsc",
     "format": "prettier",
@@ -14,7 +15,7 @@
     "Chris Dukakis <chris.dukakis@iota.org> (https://github.com/chrisdukakis)"
   ],
   "ava": {
-    "files": "out/test/*.test.js",
+    "files": "out/http-client/test/*.test.js",
     "failFast": true,
     "failWithoutAssertions": false,
     "compileEnhancements": false,
@@ -45,6 +46,6 @@
   },
   "devDependencies": {
     "@types/nock": "^9.1.2",
-    "nock": "^9.2.3"
+    "nock": "^9.3.3"
   }
 }

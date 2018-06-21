@@ -1,18 +1,15 @@
 import * as Promise from 'bluebird'
-import * as errors from './errors'
+import { addChecksum } from '@iota/checksum'
 import {
-    addChecksum,
-    asArray,
-    getOptionsWithDefaults,
     indexValidator,
     integerValidator,
     securityLevelValidator,
     seedValidator,
-    startEndOptionsValidator,
     validate,
-} from '@iota/utils'
-import { createFindTransactions, generateAddress, Callback, Provider, Trytes } from './'
+} from '@iota/validators'
+import { createFindTransactions, generateAddress } from './'
 import { createWereAddressesSpentFrom } from './createWereAddressesSpentFrom'
+import { asArray, Callback, getOptionsWithDefaults, Provider, Trytes } from '../../types'
 
 export interface GetNewAddressOptions {
     index: number
@@ -22,10 +19,10 @@ export interface GetNewAddressOptions {
     returnAll: boolean
 }
 
-export type GetNewAddressResult = Trytes | Trytes[]
+export type GetNewAddressResult = Trytes | ReadonlyArray<Trytes>
 
 export const createIsAddressUsed = (provider: Provider) => {
-    const wereAddressesSpentFrom = createWereAddressesSpentFrom(provider)
+    const wereAddressesSpentFrom = createWereAddressesSpentFrom(provider, 'lib')
     const findTransactions = createFindTransactions(provider)
 
     return (address: Trytes) => wereAddressesSpentFrom(asArray(address))
@@ -38,15 +35,6 @@ export const createIsAddressUsed = (provider: Provider) => {
 
 /**
  * Generates and returns all addresses up to the first unused addresses including it.
- *
- * @example
- * getUpToFirstUnusedAddress(seed, {start, security})
- *    .then(addresses => {
- *        // ...
- *    })
- *    .catch(err => {
- *        // handle errors
- *    })
  *
  * @method getUntilFirstUnusedAddress
  *
@@ -72,7 +60,7 @@ export const getUntilFirstUnusedAddress = (
 ) => {
     const addressList: Trytes[] = []
 
-    const iterate = (): Promise<Trytes[]> => {
+    const iterate = (): Promise<ReadonlyArray<Trytes>> => {
         const nextAddress = generateAddress(seed, index++, security)
 
         if (returnAll) {
@@ -96,14 +84,22 @@ export const getUntilFirstUnusedAddress = (
     return iterate
 }
 
-export const generateAddresses = (seed: Trytes, index: number, security: number, total: number): Trytes[] =>
+export const generateAddresses = (seed: Trytes, index: number, security: number, total: number) =>
     Array(total).fill('').map(() => generateAddress(seed, index++, security))
 
-export const applyChecksumOption = (checksum: boolean) => (addresses: Trytes | Trytes[]): Trytes | Trytes[] =>
-    checksum ? addChecksum(addresses as any) : addresses
+export const applyChecksumOption = (checksum: boolean) =>
+    (addresses: Trytes | ReadonlyArray<Trytes>) => (
+        checksum
+            ? Array.isArray(addresses)
+                ? addChecksum(addresses)
+                : addChecksum(asArray(addresses))[0]
+            : addresses
+    )
 
-export const applyReturnAllOption = (returnAll: boolean, total: number) => (addresses: Trytes[]): Trytes | Trytes[] =>
-    (returnAll || total) ? addresses : addresses[addresses.length - 1]
+export const applyReturnAllOption = (returnAll: boolean, total: number) =>
+    (addresses: ReadonlyArray<Trytes>) => (
+        (returnAll || total) ? addresses : addresses[addresses.length - 1]
+    )
 
 export const getNewAddressOptions = getOptionsWithDefaults<GetNewAddressOptions>({
     index: 0,
@@ -113,19 +109,6 @@ export const getNewAddressOptions = getOptionsWithDefaults<GetNewAddressOptions>
     returnAll: false,
 })
 
-export const validateGetNewAddressArguments = (seed: string, index: number, security: number, total?: number) => {
-    const validators = [
-        seedValidator(seed),
-        indexValidator(index),
-        securityLevelValidator(security),
-    ]
-
-    if (total) {
-        validators.push(integerValidator(total))
-    }
-
-    validate(...validators)
-}
 
 /**
  * @method createGetNewAddress
@@ -134,21 +117,23 @@ export const validateGetNewAddressArguments = (seed: string, index: number, secu
  * 
  * @return {function} {@link getNewAddress}
  */
-export const createGetNewAddress = (provider: Provider) => {
+export const createGetNewAddress = (provider: Provider, caller?: string) => {
     const isAddressUsed = createIsAddressUsed(provider)
 
     /**
      * Generates and returns a new address by calling `{@link findTransactions}`
      * until the first unused address is detected. This stops working after a snapshot.
      *
-     * @example 
+     * ### Example
+     * ```js
      * getNewAddress(seed, { index })
-     *    .then(address => {
-     *        // ...
-     *     })
-     *     .catch(err => {
-     *        // handle errors
-     *     })
+     *   .then(address => {
+     *     // ...
+     *   })
+     *   .catch(err => {
+     *     // ...
+     *   })
+     * ```
      *
      * @method getNewAddress
      *
@@ -156,9 +141,9 @@ export const createGetNewAddress = (provider: Provider) => {
      * @param {object} [options]
      * @param {number} [options.index=0] - Key index to start search at
      * @param {number} [options.security=2] - Security level
-     * @param {boolean} [options.checksum=false] 
-     * @param {number} [options.total]
-     * @param {boolean} [options.returnAll=false]
+     * @param {boolean} [options.checksum=false] - `Deprecated` Flag to include 9-trytes checksum or not
+     * @param {number} [options.total] - `Deprecated` Number of addresses to generate.
+     * @param {boolean} [options.returnAll=false] - `Deprecated` Flag to return all addresses, from start up to new address.
      * @param {Callback} [callback] - Optional callback
      *
      * @return {Promise}
@@ -169,20 +154,43 @@ export const createGetNewAddress = (provider: Provider) => {
      * - `INVALID_SECURITY`
      * - Fetch error
      */
-    return (
+    return function getNewAddress(
         seed: Trytes,
         options: Partial<GetNewAddressOptions> = {},
-        callback?: Callback<GetNewAddressResult>
-    ): Promise<Trytes | Trytes[]> => {
+        callback?: Callback<Trytes | ReadonlyArray<Trytes>>
+    ): Promise<Trytes | ReadonlyArray<Trytes>> {
+        if (caller !== 'lib') {
+            let deprecated = []
+            if (options.total !== undefined) {
+                deprecated.push(options.total)
+            }
+            if (options.returnAll !== undefined) {
+                deprecated.push(options.returnAll)
+            }
+            if (options.checksum !== undefined) {
+                deprecated.push(options.checksum)
+            }
+            console.warn(
+                `\`GetNewAddressOptions\`: ${deprecated.join(',')} options are deprecated and will be removed in v.2.0.0. \n`
+            )
+        }
+
         const { index, security, total, returnAll, checksum } = getNewAddressOptions(options)
 
-        return Promise.resolve(validateGetNewAddressArguments(seed, index, security, total))
+        return Promise.resolve(
+            validate(
+                seedValidator(seed),
+                indexValidator(index),
+                securityLevelValidator(security),
+                !!total && integerValidator(total),
+            )
+        )
             .then(() => total! > 0
                 ? generateAddresses(seed, index, security, total)
                 : Promise.try(getUntilFirstUnusedAddress(isAddressUsed, seed, index, security, returnAll))
             )
-            .then(applyReturnAllOption(returnAll!, total))
-            .then(applyChecksumOption(checksum!))
+            .then(applyReturnAllOption(returnAll, total))
+            .then(applyChecksumOption(checksum))
             .asCallback(callback)
     }
 }

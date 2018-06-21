@@ -2,11 +2,11 @@ import { trits, trytes } from '@iota/converter'
 import Kerl from '@iota/kerl'
 import { validateSignatures } from '@iota/signing'
 import { asTransactionTrytes } from '@iota/transaction-converter'
-import { isTransactionArray, Validator, validate, errors } from '@iota/validators'
-import { Hash, Transaction, Trytes } from '../../types'
+import { isTransactionArray, Validator, errors } from '@iota/validators'
+import { Bundle, Hash, Transaction, Trytes } from '../../types'
 
 interface SignatureFragments {
-    [key: string]: Trytes[]
+    readonly [key: string]: ReadonlyArray<Trytes>
 }
 
 /**
@@ -20,24 +20,25 @@ interface SignatureFragments {
  * 
  * @return {bool}
  */
-export function validateBundleSignatures(bundle: Transaction[]): boolean {
+export const validateBundleSignatures = (bundle: Bundle): boolean => {
     const signatures: SignatureFragments = [...bundle]
         .sort((a, b) => a.currentIndex - b.currentIndex)
-        .reduce((acc: SignatureFragments, { address, signatureMessageFragment, value }) => (
-            value < 0
-                ? { ...acc, [address]: [] }
-                : (value === 0 && acc.hasOwnProperty(address))
-                    ? { ...acc, [address]: acc[address].concat(signatureMessageFragment) }
-                    : acc
+        .reduce((acc: SignatureFragments, { address, signatureMessageFragment, value }, i) => (
+            value < 0 ? {
+                ...acc,
+                [address]: [signatureMessageFragment]
+            } : (value === 0 && acc.hasOwnProperty(address) && address === bundle[i - 1].address) ? {
+                ...acc,
+                [address]: acc[address].concat(signatureMessageFragment)
+            } : acc
         ), {})
 
-    return Object.keys(signatures).every(address =>
-        validateSignatures(address, signatures[address], bundle[0].bundle)
-    )
+    return Object.keys(signatures)
+        .every(address => validateSignatures(address, signatures[address], bundle[0].bundle))
 }
 
 /**
- * Checks is a bundle is _syntactically_ valid.
+ * Checks if a bundle is _syntactically_ valid.
  * Validates signatures and overall structure.
  *
  * @method isBundle
@@ -46,7 +47,7 @@ export function validateBundleSignatures(bundle: Transaction[]): boolean {
  * 
  * @returns {Boolean}
  */
-export default function isBundle(bundle: Transaction[]) {
+export default function isBundle(bundle: Bundle) {
     if (!isTransactionArray(bundle)) {
         return false
     }
@@ -104,6 +105,7 @@ export default function isBundle(bundle: Transaction[]) {
     if (totalSum !== 0) {
         return false
     }
+
     // Prepare to absorb txs and get bundleHash
     const bundleFromTxs: Int8Array = new Int8Array(Kerl.HASH_LENGTH)
 
@@ -125,7 +127,7 @@ export default function isBundle(bundle: Transaction[]) {
     return validateBundleSignatures(bundle)
 }
 
-export const bundleValidator: Validator<Transaction[]> = bundle => [
+export const bundleValidator: Validator<Bundle> = (bundle: Bundle) => [
     bundle,
     isBundle,
     errors.INVALID_BUNDLE

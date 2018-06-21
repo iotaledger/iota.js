@@ -1,16 +1,13 @@
 import * as Promise from 'bluebird'
-import { attachedTrytesArrayValidator, validate } from '@iota/validator'
-import { BaseCommand, Callback, IRICommand, Provider, Trytes } from './types'
-
-export interface BroadcastTransactionsCommand extends BaseCommand {
-    command: IRICommand.BROADCAST_TRANSACTIONS
-    trytes: Trytes[]
-}
-
-export type BroadcastTransactionsResponse = void
-
-export const validateBroadcastTransactions = (trytes: Trytes[]) =>
-    validate(attachedTrytesArrayValidator(trytes))
+import { attachedTrytesArrayValidator, validate } from '@iota/validators'
+import {
+    BroadcastTransactionsCommand,
+    BroadcastTransactionsResponse,
+    Callback,
+    IRICommand,
+    Provider,
+    Trytes
+} from '../../types'
 
 /**  
  * @method createBroadcastTransactions
@@ -33,6 +30,17 @@ export const createBroadcastTransactions = ({ send }: Provider) =>
      * Persist the transaction trytes in local storage **before** calling this command for first time, to ensure
      * that reattachment is possible, until your bundle has been included.
      * 
+     * ### Example
+     * ```js
+     * broadcastTransactions(trytes)
+     *   .then(trytes => {
+     *      // ...
+     *   })
+     *   .catch(err => {
+     *     // ...
+     *   })
+     * ```
+     * 
      * @method broadcastTransactions
      * 
      * @param {TransactionTrytes[]} trytes - Attached Transaction trytes 
@@ -44,8 +52,8 @@ export const createBroadcastTransactions = ({ send }: Provider) =>
      * - `INVALID_ATTACHED_TRYTES`: Invalid array of attached trytes
      * - Fetch error
      */
-    (trytes: Trytes[], callback?: Callback<Trytes[]>): Promise<Trytes[]> =>
-        Promise.resolve(validateBroadcastTransactions(trytes))
+    (trytes: ReadonlyArray<Trytes>, callback?: Callback<ReadonlyArray<Trytes>>): Promise<ReadonlyArray<Trytes>> =>
+        Promise.resolve(validate(attachedTrytesArrayValidator(trytes)))
             .then(() => send<BroadcastTransactionsCommand, BroadcastTransactionsResponse>({
                 command: IRICommand.BROADCAST_TRANSACTIONS,
                 trytes,

@@ -1,8 +1,8 @@
 /* tslint:disable no-console */
 import 'isomorphic-fetch'
 import { API_VERSION, DEFAULT_URI, MAX_REQUEST_BATCH_SIZE } from './settings'
-import { BaseCommand, FindTransactionsResponse, GetBalancesResponse, IRICommand, Transaction } from '../../types'
-import { BatchableCommand, BatchableKeys, BatchableKey } from './httpClient';
+import { BaseCommand, FindTransactionsResponse, GetBalancesResponse, IRICommand } from '../../types'
+import { BatchableCommand } from './httpClient'
 
 const requestError = (statusText: string) => Promise.reject(`Request error: ${statusText}`)
 
@@ -25,24 +25,21 @@ export const send = <C extends BaseCommand, R = any>(
     command: C,
     uri: string = DEFAULT_URI,
     apiVersion: string | number = API_VERSION
-): Promise<R> => fetch(uri, {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json',
-        'X-IOTA-API-Version': apiVersion.toString()
-    },
-    body: JSON.stringify(command)
-})
-    .then(({ ok, json, statusText }) => ok
-        ? json()
-        : requestError(statusText)
-    )
-    .then((json: any) => {
-        const { error, exception } = json
-        return (error || exception)
-            ? requestError(error || exception)
-            : json
+): Promise<R> =>
+    fetch(uri, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-IOTA-API-Version': apiVersion.toString()
+        },
+        body: JSON.stringify(command)
     })
+        .then(res => res.ok ?
+            res.json() : requestError(res.statusText)
+        )
+        .then(json => (json.error || json.exception) ?
+            requestError(json.error || json.exception) : json
+        )
 
 /**
  * Sends a batched http request to a specified host
@@ -66,81 +63,51 @@ export const send = <C extends BaseCommand, R = any>(
  * @fulil {Object} - Response
  * @reject {Error} - Request error
  */
-
- /*
 export const batchedSend = <C extends BaseCommand, R = any>(
-    command: C,
-    keysToBatch: string[],
+    command: BatchableCommand<C>,
+    keysToBatch: ReadonlyArray<string>,
     requestBatchSize = MAX_REQUEST_BATCH_SIZE,
     uri: string = DEFAULT_URI,
     apiVersion: string | number = API_VERSION
-): Promise<R> => {
-    const allKeys: Array<string> = Object.keys(command)
-    const requestStack: C[] = []
-
-    keysToBatch.forEach(keyToBatch => {
-        const dataToBatch = [...command[keyToBatch]]
-
-        while (dataToBatch.length) {
-            const batch = dataToBatch.splice(0, requestBatchSize)
-            const params: C = allKeys.filter(key => key === keyToBatch || keysToBatch.indexOf(key) === -1).reduce(
-                (acc, key) => {
-                    acc[key] = batch
-                    return acc
-                },
-                {} as C // tslint:disable-line no-object-literal-type-assertion
-            )
-
-            requestStack.push(params)
-        }
-    })
-
-    return Promise.all(requestStack.map(cmd => send(command, uri, ))).then(res => {
+): Promise<any> =>
+    Promise.all(
+        keysToBatch.map(key => {
+            return Promise.all(
+                command[key].reduce((acc, _, i) => (
+                    (i < Math.ceil(command[key].length / requestBatchSize)) ?
+                        acc.concat({
+                            command: command.command,
+                            [key]: command[key].slice(i * requestBatchSize, (1 + i) * requestBatchSize)
+                        }) : acc
+                ), [])
+                    .map((batchedCommand: BatchableCommand<C>) => send(batchedCommand, uri, apiVersion))
+            ).then(res => res.reduce((acc: ReadonlyArray<R>, batch: Object) => acc.concat(<R>batch), []))
+        })
+    ).then((responses: ReadonlyArray<ReadonlyArray<R>>) => {
         switch (command.command) {
-            case IRICommand.GET_BALANCES:
-                const balances = res.reduce((acc, b) => acc.concat(b.balances), [])
-                return {
-                    ...res.sort((a, b) => a.milestoneIndex - b.milestoneIndex).shift(),
-                    balances,
-                }
-
             case IRICommand.FIND_TRANSACTIONS:
-                const seenTxs = new Set()
-
-                if (keysToBatch.length === 1) {
-                    return res
-                        .reduce((a, b) => a.concat(b), [])
-                        .filter((tx: Transaction) => (seenTxs.has(tx.hash) ? false : seenTxs.add(tx.hash)))
-                }
-
-                const keysToTxFields: { [k: string]: keyof Transaction } = {
-                    bundles: 'bundle',
-                    addresses: 'address',
-                    hashes: 'hash',
-                    tags: 'tag',
-                }
-
-                return res
-                    .map(batch =>
-                        batch.filter((tx: Transaction) =>
-                            keysToBatch.every(key =>
-                                requestStack.some(
-                                    cmd =>
-                                        cmd.hasOwnProperty(key) &&
-                                        cmd[key].findIndex(
-                                            (value: keyof Transaction) => value === tx[keysToTxFields[key]]
-                                        ) !== -1
-                                )
+                return {
+                    hashes: (responses[0][0] as any).hashes
+                        .filter((hash: string) => responses
+                            .every(_response => _response
+                                .findIndex((res: Object) => (<FindTransactionsResponse>res).hashes
+                                    .indexOf(hash) > -1) > -1
                             )
                         )
-                    )
-
-                    .reduce((a, b) => a.concat(b), [])
-                    .filter((tx: Transaction) => (seenTxs.has(tx.hash) ? false : seenTxs.add(tx.hash)))
-
+                }
+            case IRICommand.GET_BALANCES:
+                return {
+                    ...responses[0].slice().sort((a: any, b: any) => a.milestoneIndex - b.milestoneIndex).slice(-1),
+                    balances: responses[0].reduce((acc, response: any) => acc.concat(
+                        response.balances
+                    ), [])
+                }
+            case IRICommand.GET_INCLUSION_STATES:
+                return {
+                    ...(responses[0][0] as Object),
+                    states: responses[0].reduce((acc: any, response: any) => acc.conact(response.states))
+                }
             default:
-                return res.reduce((a, b) => a.concat(b), [])
+                requestError('Invalid batched request.')
         }
     })
-}
-*/

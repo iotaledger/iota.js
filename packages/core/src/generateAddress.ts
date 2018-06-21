@@ -1,6 +1,7 @@
-import { addChecksum } from '@iota/utils'
-import { address, digests, key, trits, trytes } from '@iota/crypto'
-import { Hash } from './'
+import { addChecksum } from '@iota/checksum'
+import { trits, trytes } from '@iota/converter'
+import { address, digests, key, subseed } from '@iota/signing'
+import { Hash } from '../../types'
 
 /**
  * Generates a new address
@@ -24,9 +25,9 @@ export const generateAddress = (
         seed += 9
     }
 
-    const keyTrits = key(trits(seed), index, security)
+    const keyTrits = key(subseed(trits(seed), index), security)
     const digestsTrits = digests(keyTrits)
     const addressTrytes = trytes(address(digestsTrits))
 
-    return checksum ? addChecksum(addressTrytes) : addressTrytes
+    return checksum ? <Hash>addChecksum(addressTrytes) : addressTrytes
 }

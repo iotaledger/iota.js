@@ -1,5 +1,5 @@
 import * as Bluebird from 'bluebird'
-import { httpClient, HttpClientSettings } from '@iota/http-client'
+import { createHttpClient, HttpClientSettings } from '@iota/http-client'
 import {
     createAddNeighbors,
     createAttachToTangle,
@@ -17,11 +17,6 @@ import {
     createRemoveNeighbors,
     createStoreTransactions,
     // createWereAddressesSpentFrom,
-    FindTransactionsQuery,
-    GetBalancesResponse,
-    GetNodeInfoResponse,
-    GetTransactionsToApproveResponse,
-    AccountData,
     createBroadcastBundle,
     createFindTransactionObjects,
     createGetAccountData,
@@ -39,20 +34,32 @@ import {
     createSendTrytes,
     createStoreAndBroadcast,
     createTraverseBundle,
+    // Types
+    AccountData,
+    Balances,
+    FindTransactionsQuery,
     GetAccountDataOptions,
     GetInputsOptions,
     GetNewAddressOptions,
-    GetTransfersOptions,
+    GetNodeInfoResponse,
     PrepareTransfersOptions,
     PromoteTransactionOptions,
-    SendTrytesOptions
+    TransactionsToApprove
 } from './'
-import { createGetTransfers } from './createGetTransfers'
+import { createGetTransfers, GetTransfersOptions } from './createGetTransfers'
 import { createGetBundlesFromAddresses } from './createGetBundlesFromAddresses'
-import { AttachToTangle, BaseCommand, Inputs, Neighbor, Provider, Transaction, Transfer } from './types'
+import {
+    AttachToTangle,
+    Provider,
+    BaseCommand,
+    Inputs,
+    Neighbor,
+    Transaction,
+    Transfer
+} from '../../types'
 
 export interface Settings extends HttpClientSettings {
-    attachToTangle?: AttachToTangle
+    readonly attachToTangle?: AttachToTangle
 }
 
 export type Func<T> = (...args: any[]) => T
@@ -71,7 +78,7 @@ export function returnType<T>(func: Func<T>) {
  * @return {API}
  */
 export const composeAPI = (settings: Partial<Settings> = {}) => {
-    const _provider: Provider = httpClient(settings) // tslint:disable-line variable-name
+    const _provider: Provider = createHttpClient(settings) // tslint:disable-line variable-name
     let _attachFn = settings.attachToTangle || createAttachToTangle(_provider) // tslint:disable-line variable-name
 
     return {

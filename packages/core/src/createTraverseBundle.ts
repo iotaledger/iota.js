@@ -1,7 +1,8 @@
 import * as Promise from 'bluebird'
-import { asTransactionObject, tailTransactionValidator, transactionHashValidator, validate } from '@iota/utils'
+import { asTransactionObject } from '@iota/transaction-converter'
+import { tailTransactionValidator, transactionHashValidator, validate } from '@iota/validators'
 import { createGetTrytes } from './'
-import { Callback, Hash, Provider, Transaction } from './types'
+import { Callback, Hash, Provider, Transaction } from '../../types'
 
 /**
  * @method createTraverseBundle
@@ -12,14 +13,6 @@ import { Callback, Hash, Provider, Transaction } from './types'
  */
 export const createTraverseBundle = (provider: Provider) => {
     const getTrytes = createGetTrytes(provider)
-
-    const traverseToNextTransaction = (
-        transaction: Transaction,
-        bundle: Transaction[]
-    ): Transaction[] | Promise<Transaction[]> =>
-        transaction.currentIndex === transaction.lastIndex
-            ? bundle.concat([transaction])
-            : traverseBundle(transaction.trunkTransaction, bundle.concat([transaction]))
 
     /**
      * Fetches the bundle of a given the _tail_ transaction hash, by traversing through `trunkTransaction`.
@@ -37,7 +30,7 @@ export const createTraverseBundle = (provider: Provider) => {
      * @method traverseBundle
      * 
      * @param {Hash} trunkTransaction - Trunk transaction, should be tail (`currentIndex == 0`)
-     * @param {Hash} bundle - List of accumulated transactions
+     * @param {Hash} [bundle=[]] - List of accumulated transactions
      * @param {Callback} [callback] - Optional callback
      * 
      * @returns {Promise}
@@ -48,26 +41,19 @@ export const createTraverseBundle = (provider: Provider) => {
      * - `INVALID_BUNDLE`: Bundle is syntactically invalid
      * - Fetch error
      */
-    const traverseBundle = function (
+    return function traverseBundle(
         trunkTransaction: Hash,
-        bundle: Transaction[] = [],
-        callback?: Callback<Transaction[]>
-    ): Promise<Transaction[]> {
-        const args = arguments
+        bundle: ReadonlyArray<Transaction> = [],
+        callback?: Callback<ReadonlyArray<Transaction>>
+    ): Promise<ReadonlyArray<Transaction>> {
         return Promise.resolve(validate(transactionHashValidator(trunkTransaction)))
-            .then(() => getTrytes([trunkTransaction])
-                .then(([trytes]) => asTransactionObject(trytes, trunkTransaction))
-                .then(transaction => bundle.length === 0
-                    ? validate(tailTransactionValidator(transaction))
-                    : transaction
-                )
-                .then(transaction => traverseToNextTransaction(transaction, bundle))
-                .asCallback(args.length !== 3 && typeof args[args.length - 1] === 'function'
-                    ? args[length - 1]
-                    : callback
-                )
+            .then(() => getTrytes([trunkTransaction]))
+            .then(([trytes]) => asTransactionObject(trytes, trunkTransaction))
+            .tap(transaction => validate(bundle.length === 0 && tailTransactionValidator(transaction)))
+            .then(transaction => transaction.currentIndex === transaction.lastIndex
+                ? bundle.concat(transaction)
+                : traverseBundle(transaction.trunkTransaction, bundle.concat(transaction))
             )
+            .asCallback(arguments[1] === 'function' ? arguments[1] : callback)
     }
-
-    return traverseBundle
 }

@@ -1,22 +1,20 @@
 import * as Promise from 'bluebird'
 import {
-    getOptionsWithDefaults,
     securityLevelValidator,
     seedValidator,
     startEndOptionsValidator,
     startOptionValidator,
     validate,
-} from '@iota/utils'
+} from '@iota/validators'
 import { createGetBundlesFromAddresses } from './createGetBundlesFromAddresses'
 import { createGetNewAddress, getNewAddressOptions, GetNewAddressOptions } from './createGetNewAddress'
-import * as errors from './errors'
-import { Callback, Provider, Transaction } from './types'
+import { asArray, Bundle, Callback, Provider, getOptionsWithDefaults, Transaction } from '../../types'
 
 export interface GetTransfersOptions {
-    start: number
-    end?: number
-    inclusionStates: boolean
-    security: number
+    readonly start: number
+    readonly end?: number
+    readonly inclusionStates: boolean
+    readonly security: number
 }
 
 const defaults: GetTransfersOptions = {
@@ -26,7 +24,7 @@ const defaults: GetTransfersOptions = {
     security: 2,
 }
 
-export const transferToAddressOptions = (start: number, end: number | undefined, security: number) =>
+export const transferToAddressOptions = (start: number, end: number | undefined, security: number): GetNewAddressOptions =>
     getNewAddressOptions({
         index: start,
         total: end ? end - start : undefined,
@@ -37,17 +35,21 @@ export const transferToAddressOptions = (start: number, end: number | undefined,
 export const getTransfersOptions = getOptionsWithDefaults(defaults)
 
 /**
+ * @ignore
+ *
  * @method createGetTransfers
  * 
  * @param {Provider} provider - Network provider
  * 
  * @return {Function} {@link getTransfers}
  */
-export const createGetTransfers = (provider: Provider) => {
-    const getNewAddress = createGetNewAddress(provider)
-    const getBundlesFromAddresses = createGetBundlesFromAddresses(provider)
+export const createGetTransfers = (provider: Provider, caller?: string) => {
+    const getNewAddress = createGetNewAddress(provider, 'lib')
+    const getBundlesFromAddresses = createGetBundlesFromAddresses(provider, 'lib')
 
     /**
+     * @ignore
+     * 
      * @method getTransfers
      * 
      * @param {String} seed
@@ -68,12 +70,17 @@ export const createGetTransfers = (provider: Provider) => {
      * - `INVALID_START_END_OPTIONS`
      * - Fetch error
      */
-    return (
+    return function getTransfers(
         seed: string,
         options: Partial<GetTransfersOptions> = {},
-        callback?: Callback<Transaction[][]>
-    ): Promise<Transaction[][]> => {
-        console.warn('`getTransfers()` is deprecated. Prefer to use `findTransactions()` instead.')
+        callback?: Callback<ReadonlyArray<Bundle>>
+    ): Promise<ReadonlyArray<Bundle>> {
+        if (caller !== 'lib') {
+            console.warn(
+                '`getTransfers()` is deprecated and will be removed in v2.0.0. ' +
+                '`findTransactions()` should be used instead.'
+            )
+        }
 
         const { start, end, security, inclusionStates } = getTransfersOptions(options)
 
@@ -87,7 +94,7 @@ export const createGetTransfers = (provider: Provider) => {
         )
             .then(() => transferToAddressOptions(start, end, security))
             .then(addrOptions => getNewAddress(seed, addrOptions))
-            .then(addresses => getBundlesFromAddresses(addresses as string[], inclusionStates))
+            .then(addresses => getBundlesFromAddresses(asArray(addresses), inclusionStates))
             .asCallback(callback)
     }
 }

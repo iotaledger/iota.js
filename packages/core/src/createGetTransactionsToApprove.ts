@@ -1,31 +1,18 @@
 import * as Promise from 'bluebird'
-import { depthValidator, transactionHashValidator, Validatable, validate } from '@iota/utils'
-import { BaseCommand, Callback, IRICommand, Provider } from './types'
-
-export interface GetTransactionsToApproveResponse {
-    trunkTransaction: string
-    branchTransaction: string
-    duration?: number
-}
-
-export interface GetTransactionsToApproveCommand extends BaseCommand {
-    command: IRICommand.GET_TRANSACTIONS_TO_APPROVE
-    depth: number
-    reference?: string
-}
-
-export const validateGetTransactionsToApprove = (depth: number, reference?: string) => {
-    const validators: Validatable[] = [depthValidator(depth)]
-
-    if (reference) {
-        validators.push(transactionHashValidator(reference))
-    }
-
-    validate(...validators)
-}
+import { depthValidator, transactionHashValidator, validate } from '@iota/validators'
+import {
+    Callback,
+    GetTransactionsToApproveCommand,
+    GetTransactionsToApproveResponse,
+    Hash,
+    IRICommand,
+    TransactionsToApprove,
+    Provider
+} from '../../types'
+import { INVALID_REFERENCE_HASH } from './errors'
 
 /**
- * @method createGetTransactionsToApprove 
+ * @method createGetTransactionsToApprove
  * 
  * @param {Provider} provider - Network provider
  * 
@@ -35,52 +22,31 @@ export const createGetTransactionsToApprove = ({ send }: Provider) =>
 
     /**
      * Does the _tip selection_ by calling
-     * [`getTransactionsToApprove`]{@link https://docs.iota.works/iri/api#endpoints/getTransactionsToApprove} command.
-     * It returns a pair of approved transactions, which are chosen randomly after validating the transaction trytes,
+     * [`getTransactionsToApprove`]{https://docs.iota.works/iri/api#endpoints/getTransactionsToApprove} command.
+     * Returns a pair of approved transactions, which are chosen randomly after validating the transaction trytes,
      * the signatures and cross-checking for conflicting transactions.
      *
-     * Tip selection is executed by a Random Walk (RW) starting at some random point in given `depth`
+     * Tip selection is executed by a Random Walk (RW) starting at random point in given `depth`
      * ending up to the pair of selected tips. For more information about tip selection please refer to the
-     * [`whitepaper`]{@link http://iotatoken.com/IOTA_Whitepaper.pdf}.
+     * [whitepaper]{http://iotatoken.com/IOTA_Whitepaper.pdf}.
      *
      * The `reference` option allows to select tips in a way that the reference transaction is being approved too. 
-     * This is particularly useful for promoting transactions, for example with `{@link promoteTransaction}`.
-     * 
-     * `getTransactionsToApprove` can be used along with `{@link prepareTransfers}`. The transaction trytes
-     * and approved transactions can be passed to an `{@link attachToTangle}` method.
-     * Finally the attached trytes can be stored and broadcasted by calling {@link storeAndBroadCast}.
+     * This is useful for promoting transactions, for example with `{@link promoteTransaction}`.
      *
-     * @example
-     *
-     * const seed = 'SEED'
-     *
-     * const transfers = [{
-     *    address: generateAddress(seed, 0, 2),
-     *    value: 0,
-     *    tag: '',
-     *    message: ''
-     * }]
-     *
+     * ### Example
+     * ```js
      * const depth = 3
      * const minWeightMagnitude = 14
      *
-     * Promise.all(
-     *    prepareTransfers(seed, transfers),
-     *    getTransactionsToApprove(depth)
-     * )
-     *    .then(([trytes, tips]) => {
-     *        // Extract approved tips
-     *        const { trunkTransaction, branchTransaction } = tips
-     *
-     *        // Persit the transaction trytes in storage before broadcasting 
-     *        
-     *        // Do the proof of work
-     *        return attachToTangle(trunkTransaction, branchTransaction, minWeightMagnitude, trytes)
-     *    })
-     *    .then(storeAndBroadcast)
-     *    .catch(err => {
-     *        // handle errors here
-     *    })
+     * getTransactionsToApprove(depth)
+     *   .then(transactionsToApprove =>
+     *      attachToTanle(minWightMagnitude, trytes, { transactionsToApprove })
+     *   )
+     *   .then(storeAndBroadcast)
+     *   .catch(err => {
+     *     // handle errors here
+     *   })
+     * ```
      *
      * @method getTransactionsToApprove 
      *
@@ -93,23 +59,27 @@ export const createGetTransactionsToApprove = ({ send }: Provider) =>
      * @fulfil {trunkTransaction, branchTransaction} A pair of approved transactions
      * @reject {Error}
      * - `INVALID_DEPTH`
-     * - `INVALID_HASH`: Invalid reference hash
+     * - `INVALID_REFERENCE_HASH`: Invalid reference hash
      * - Fetch error
      */
-    function (
+    function attachToTangle(
         depth: number,
-        reference?: string,
-        callback?: Callback<GetTransactionsToApproveResponse>
-    ): Promise<GetTransactionsToApproveResponse> {
-        return Promise.resolve(validateGetTransactionsToApprove(depth, reference))
+        reference?: Hash,
+        callback?: Callback<TransactionsToApprove>
+    ): Promise<TransactionsToApprove> {
+        return Promise.resolve(
+            validate(
+                depthValidator(depth),
+                !!reference && transactionHashValidator(reference, INVALID_REFERENCE_HASH)
+            )
+        )
             .then(() => send<GetTransactionsToApproveCommand, GetTransactionsToApproveResponse>({
                 command: IRICommand.GET_TRANSACTIONS_TO_APPROVE,
                 depth,
                 reference,
             }))
             .then(({ trunkTransaction, branchTransaction }: GetTransactionsToApproveResponse) => ({
-                trunkTransaction,
-                branchTransaction,
+                trunkTransaction, branchTransaction
             }))
-            .asCallback(arguments.length === 2 && typeof arguments[1] === 'function' ? arguments[1] : callback)
+            .asCallback(typeof arguments[1] === 'function' ? arguments[1] : callback)
     }

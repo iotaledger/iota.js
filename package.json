@@ -4,7 +4,7 @@
     "description": "IOTA Client Reference Implementation",
     "scripts": {
         "format": "prettier",
-        "test": "lerna run test"
+        "test": "lerna run test --stream"
     },
     "contributors": [
         "Dominik Schiener <dom@iota.org> (https://iota.org)",
@@ -12,7 +12,10 @@
         "Chris Dukakis <chris.dukakis@iota.org> (https://github.com/chrisdukakis)"
     ],
     "ava": {
-        "files": "out/test/**/*.test.js",
+        "files": [
+            "packages/**/out/**/test/*.test.js",
+            "packages/**/out/**/test/integration/*.test.js"
+        ],
         "failFast": true,
         "failWithoutAssertions": false,
         "compileEnhancements": false,
@@ -22,7 +25,6 @@
         "iota",
         "tangle",
         "library",
-        "browser",
         "javascript",
         "nodejs",
         "API"
@@ -40,7 +42,7 @@
     },
     "devDependencies": {
         "ava": "^0.25.0",
-        "lerna": "^2.10.1",
+        "lerna": "^2.11.0",
         "prettier": "^1.10.2",
         "tslint": "^5.9.1",
         "tslint-config-prettier": "^1.6.0",

@@ -1,30 +1,15 @@
 import * as Promise from 'bluebird'
 import { removeChecksum } from '@iota/checksum'
 import { getBalancesThresholdValidator, hashArrayValidator, validate } from '@iota/validators'
-import { BaseCommand, Callback, Hash, IRICommand, Provider } from './types'
-
-export interface GetBalancesCommand extends BaseCommand {
-    command: string
-    addresses: string[]
-    threshold: number
-}
-
-/**
- * @typedef {object} GetBalancesResponse
- *
- * @prop {Array<string>} balances - Array of balances
- * @prop {Hash} milestone - Milestone transaction hash
- * @prop {number} milestoneIndex - Milestone index
- */
-export interface GetBalancesResponse {
-    balances: string[]
-    duration: number
-    milestone: string
-    milestoneIndex: number
-}
-
-export const validateGetBalances = (addresses: Hash[], threshold: number) =>
-    validate(hashArrayValidator(addresses), getBalancesThresholdValidator(threshold))
+import {
+    Callback,
+    Balances,
+    GetBalancesCommand,
+    GetBalancesResponse,
+    Hash,
+    IRICommand,
+    Provider
+} from '../../types'
 
 /**
  * @method createGetBalances
@@ -36,24 +21,18 @@ export const validateGetBalances = (addresses: Hash[], threshold: number) =>
 export const createGetBalances = ({ send }: Provider) =>
     /**
      * Fetches _confirmed_ balances of given addresses at the latest solid milestone,
-     * by calling [`getBalances`]{@link https://docs.iota.works/iri/api#endpoints/getBalances} command.
+     * by calling [`getBalances`](https://docs.iota.works/iri/api#endpoints/getBalances) command.
      *
-     * @example
-     * import { generateAddress } from '@iota/crypto'
-     * import iota from '@iota/core'
-     *
-     * const { getBalances } = iota()
-     *
-     * const address = generateAddress('SEED', 0, 2)
-     *  
+     * ### Example
+     * ```js
      * getBalances([address], 100)
-     *    .then(({ balances }) => balances.map(parseInt)
-     *    .then(balances => {
-     *        //...
-     *    })
-     *    .catch(err => {
-     *        // handle errors here
-     *    })
+     *   .then(({ balances }) => {
+     *     // ...
+     *   })
+     *   .catch(err => {
+     *     // ...
+     *   })
+     * ```
      *
      * @method getBalances
      *
@@ -62,21 +41,25 @@ export const createGetBalances = ({ send }: Provider) =>
      * @param {Callback} [callback] - Optional callback
      * 
      * @return {Promise}
-     * @fulfil {GetBalancesResponse} Object with list of balances and corresponding `milestone`
+     * @fulfil {Balances} Object with list of `balances` and corresponding `milestone`
      * @reject {Error}
      * - `INVALID_HASH_ARRAY`: Invalid addresses array
      * - `INVALID_THRESHOLD`: Invalid `threshold`
      * - Fetch error
      */
     (
-        addresses: Hash[],
+        addresses: ReadonlyArray<Hash>,
         threshold: number,
-        callback?: Callback<GetBalancesResponse>
-    ): Promise<GetBalancesResponse> =>
-        Promise.resolve(validateGetBalances(addresses, threshold))
+        callback?: Callback<Balances>
+    ): Promise<Balances> =>
+        Promise.resolve(validate(hashArrayValidator(addresses), getBalancesThresholdValidator(threshold)))
             .then(() => send<GetBalancesCommand, GetBalancesResponse>({
                 command: IRICommand.GET_BALANCES,
                 addresses: removeChecksum(addresses), // Addresses passed to IRI should not have the checksum
                 threshold,
+            }))
+            .then(res => ({
+                ...res,
+                balances: res.balances.map(balance => parseInt(balance, 10))
             }))
             .asCallback(callback)

@@ -1,5 +1,5 @@
 import test from 'ava'
-import { bundle } from '../../core/test/samples'
+import { bundle } from '@iota/samples'
 import { isTailTransaction } from '../src'
 
 test('isTailTransaction() returns true for valid tail transaction.', t => {

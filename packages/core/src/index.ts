@@ -1,94 +1,69 @@
 // IRI commands
 export {
-    createAddNeighbors,
     AddNeighborsCommand,
-    AddNeighborsResponse
-} from './createAddNeighbors'
-
-export {
-    createAttachToTangle,
+    AddNeighborsResponse,
     AttachToTangleCommand,
-    AttachToTangleResponse
-} from './createAttachToTangle'
-
-export {
-    createBroadcastTransactions,
+    AttachToTangleResponse,
     BroadcastTransactionsCommand,
-    BroadcastTransactionsResponse
-} from './createBroadcastTransactions'
-
-export {
-    createCheckConsistency,
+    BroadcastTransactionsResponse,
     CheckConsistencyCommand,
-    CheckConsistencyResponse
-} from './createCheckConsistency'
-
-export {
-    createFindTransactions,
+    CheckConsistencyResponse,
     FindTransactionsQuery,
     FindTransactionsCommand,
-    FindTransactionsResponse
-} from './createFindTransactions'
-
-export {
-    createGetBalances,
+    FindTransactionsResponse,
     GetBalancesCommand,
-    GetBalancesResponse
-} from './createGetBalances'
-
-export {
-    createGetInclusionStates,
+    GetBalancesResponse,
+    Balances,
     GetInclusionStatesCommand,
-    GetInclusionStatesResponse
-} from './createGetInclusionStates'
-
-export {
-    createGetNeighbors,
+    GetInclusionStatesResponse,
     GetNeighborsCommand,
-    GetNeighborsResponse
-} from './createGetNeighbors'
-
-export {
-    createGetNodeInfo,
+    GetNeighborsResponse,
     GetNodeInfoCommand,
-    GetNodeInfoResponse
-} from './createGetNodeInfo'
-
-export {
-    createGetTips,
+    GetNodeInfoResponse,
     GetTipsCommand,
-    GetTipsResponse
-} from './createGetTips'
-
-export {
-    createGetTransactionsToApprove,
+    GetTipsResponse,
     GetTransactionsToApproveCommand,
-    GetTransactionsToApproveResponse
-} from './createGetTransactionsToApprove'
-
-export {
-    createGetTrytes,
+    GetTransactionsToApproveResponse,
+    TransactionsToApprove,
     GetTrytesCommand,
-    GetTrytesResponse
-} from './createGetTrytes'
-
-export {
-    createInterruptAttachingToTangle,
+    GetTrytesResponse,
     InterruptAttachingToTangleCommand,
-    InterruptAttachingToTangleResponse
-} from './createInterruptAttachingToTangle'
-
-export {
-    createRemoveNeighbors,
+    InterruptAttachingToTangleResponse,
     RemoveNeighborsCommand,
-    RemoveNeighborsResponse
-} from './createRemoveNeighbors'
-
-export {
-    createStoreTransactions,
+    RemoveNeighborsResponse,
     StoreTransactionsCommand,
-    StoreTransactionsResponse
-} from './createStoreTransactions'
+    StoreTransactionsResponse,
+} from '../../types'
+
+export { createAddNeighbors } from './createAddNeighbors'
+
+export { createAttachToTangle } from './createAttachToTangle'
+
+export { createBroadcastTransactions } from './createBroadcastTransactions'
+
+export { createCheckConsistency } from './createCheckConsistency'
+
+export { createFindTransactions } from './createFindTransactions'
+
+export { createGetBalances } from './createGetBalances'
+
+export { createGetInclusionStates } from './createGetInclusionStates'
+
+export { createGetNeighbors } from './createGetNeighbors'
+
+export { createGetNodeInfo } from './createGetNodeInfo'
+
+export { createGetTips } from './createGetTips'
+
+export { createGetTransactionsToApprove } from './createGetTransactionsToApprove'
+
+export { createGetTrytes } from './createGetTrytes'
+
+export { createInterruptAttachingToTangle } from './createInterruptAttachingToTangle'
+
+export { createRemoveNeighbors } from './createRemoveNeighbors'
+
+export { createStoreTransactions } from './createStoreTransactions'
 
 // `wereAddressesSpentFrom` command is a temporary measure to prevent loss of funds,
 // when security assumptions are ignored by developers or wallet users.
@@ -158,7 +133,7 @@ export {
 
 export { createReplayBundle } from './createReplayBundle'
 
-export { createSendTrytes, SendTrytesOptions } from './createSendTrytes'
+export { createSendTrytes } from './createSendTrytes'
 
 export { createPrepareTransfers, PrepareTransfersOptions } from './createPrepareTransfers'
 
@@ -167,9 +142,6 @@ export { createStoreAndBroadcast } from './createStoreAndBroadcast'
 export { createTraverseBundle } from './createTraverseBundle'
 
 export { generateAddress } from './generateAddress'
-
-// Types
-export * from './types'
 
 // Errors
 import * as errors from './errors'
