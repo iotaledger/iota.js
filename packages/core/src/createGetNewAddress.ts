@@ -7,16 +7,16 @@ import {
     seedValidator,
     validate,
 } from '@iota/validators'
-import { createFindTransactions, generateAddress } from './'
+import { createFindTransactions, generateAddress, errors } from './'
 import { createWereAddressesSpentFrom } from './createWereAddressesSpentFrom'
 import { asArray, Callback, getOptionsWithDefaults, Provider, Trytes } from '../../types'
 
 export interface GetNewAddressOptions {
-    index: number
-    security: number
-    checksum: boolean
-    total: number
-    returnAll: boolean
+    readonly index: number
+    readonly security: number
+    readonly checksum: boolean
+    readonly total?: number
+    readonly returnAll: boolean
 }
 
 export type GetNewAddressResult = Trytes | ReadonlyArray<Trytes>
@@ -88,7 +88,7 @@ export const getUntilFirstUnusedAddress = (
     return iterate
 }
 
-export const generateAddresses = (seed: Trytes, index: number, security: number, total: number) =>
+export const generateAddresses = (seed: Trytes, index: number, security: number, total: number = 1) =>
     Array(total).fill('').map(() => generateAddress(seed, index++, security))
 
 export const applyChecksumOption = (checksum: boolean) =>
@@ -100,7 +100,7 @@ export const applyChecksumOption = (checksum: boolean) =>
             : addresses
     )
 
-export const applyReturnAllOption = (returnAll: boolean, total: number) =>
+export const applyReturnAllOption = (returnAll: boolean, total?: number) =>
     (addresses: ReadonlyArray<Trytes>) => (
         (returnAll || total) ? addresses : addresses[addresses.length - 1]
     )
@@ -109,7 +109,7 @@ export const getNewAddressOptions = getOptionsWithDefaults<GetNewAddressOptions>
     index: 0,
     security: 2,
     checksum: false,
-    total: 0,
+    total: undefined,
     returnAll: false,
 })
 
@@ -190,10 +190,11 @@ export const createGetNewAddress = (provider: Provider, caller?: string) => {
                 seedValidator(seed),
                 indexValidator(index),
                 securityLevelValidator(security),
-                !!total && integerValidator(total),
+                !!total && integerValidator(total, errors.INVALID_TOTAL_OPTION),
+                [total, t => t !== 0, errors.INVALID_TOTAL_OPTION]
             )
         )
-            .then(() => total! > 0
+            .then(() => (total && total > 0)
                 ? generateAddresses(seed, index, security, total)
                 : Promise.try(getUntilFirstUnusedAddress(isAddressUsed, seed, index, security, returnAll))
             )

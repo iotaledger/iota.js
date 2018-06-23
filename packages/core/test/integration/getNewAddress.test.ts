@@ -7,7 +7,7 @@ import {
     createIsAddressUsed,
     getUntilFirstUnusedAddress
 } from '../../src/createGetNewAddress'
-import { INVALID_SEED } from '../../src/errors'
+import { INVALID_SEED, INVALID_TOTAL_OPTION } from '../../src/errors'
 import './nocks/findTransactions'
 import './nocks/wereAddressesSpentFrom'
 
@@ -74,6 +74,16 @@ test('getNewAddress() rejects with correct errors for invalid arguments', t => {
         t.throws(() => getNewAddress(invalidSeed, { index: 0 }), Error).message,
         `${INVALID_SEED}: ${invalidSeed}`,
         'getNewAddress() should throw correct error for invalid seed'
+    )
+})
+
+test('getNewAddress() rejects with correct errors for `total=0`', t => {
+    const invalidSeed = 'asdasDSFDAFD'
+
+    t.is(
+        t.throws(() => getNewAddress(seed, { index: 0, total: 0 }), Error).message,
+        `${INVALID_TOTAL_OPTION}: ${0}`,
+        'getNewAddress() should throw correct error for `total=0`'
     )
 })
 

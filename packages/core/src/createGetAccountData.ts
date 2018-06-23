@@ -125,7 +125,7 @@ export const createGetAccountData = (provider: Provider, caller?: string) => {
             // 1. Generate addresses up to first unused address
             .then(() => getNewAddress(seed, {
                 index: start,
-                total: end ? end - start : 0,
+                total: end ? end - start : undefined,
                 returnAll: true,
                 security,
             }))
