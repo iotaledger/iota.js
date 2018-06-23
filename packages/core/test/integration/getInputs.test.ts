@@ -71,7 +71,7 @@ test('inputsToAddressOptions() translates getInputs() options to compatible getN
         }),
         {
             index: 3,
-            total: 0,
+            total: undefined,
             security: 2,
             returnAll: true,
             checksum: false
