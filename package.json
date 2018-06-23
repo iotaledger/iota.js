@@ -6,8 +6,10 @@
         "init": "yarn && lerna bootstrap",
         "test": "lerna run test --stream",
         "test-ci": "yarn init && lerna run test-ci --stream",
+        "precommit": "lint-staged",
         "format": "prettier",
-        "docs": "lerna run docs && jsdoc2md --no-cache --plugin dmd-clear --files './packages/*/out/**/*.js' > api_reference.md"
+        "docs":
+            "lerna run docs && jsdoc2md --no-cache --plugin dmd-clear --files './packages/*/out/**/*.js' > api_reference.md"
     },
     "contributors": [
         "Dominik Schiener <dom@iota.org> (https://iota.org)",
@@ -15,23 +17,16 @@
         "Chris Dukakis <chris.dukakis@iota.org> (https://github.com/chrisdukakis)"
     ],
     "ava": {
-        "files": [
-            "packages/**/out/**/test/*.test.js",
-            "packages/**/out/**/test/integration/*.test.js"
-        ],
+        "files": ["packages/**/out/**/test/*.test.js", "packages/**/out/**/test/integration/*.test.js"],
         "failFast": true,
         "failWithoutAssertions": false,
         "compileEnhancements": false,
         "verbose": true
     },
-    "keywords": [
-        "iota",
-        "tangle",
-        "library",
-        "javascript",
-        "nodejs",
-        "API"
-    ],
+    "lint-staged": {
+        "*.{js,json}": ["prettier --write", "git add"]
+    },
+    "keywords": ["iota", "tangle", "library", "javascript", "nodejs", "API"],
     "license": "MIT",
     "bugs": {
         "url": "https://github.com/iotaledger/iota.lib.js/issues"
@@ -46,8 +41,10 @@
     "devDependencies": {
         "ava": "^0.25.0",
         "dmd-clear": "^0.1.2",
+        "husky": "^0.14.3",
         "jsdoc-babel": "^0.4.0",
         "lerna": "^2.11.0",
+        "lint-staged": "^7.2.0",
         "nyc": "^12.0.2",
         "prettier": "^1.10.2",
         "tslint": "^5.9.1",
