@@ -7,9 +7,11 @@ import { Callback, Hash, Provider, Trytes } from '../../types'
 /**
  * @method createBroadcastBundle
  * 
+ * @memberof module:core
+ * 
  * @param {Provider} provider - Network provider
  *
- * @return {function} {@link broadcastBundle}
+ * @return {function} {@link #module_core.broadcastBundle `broadcastBundle`}
  */
 export const createBroadcastBundle = (provider: Provider) => {
     const broadcastTransactions = createBroadcastTransactions(provider)
@@ -20,7 +22,8 @@ export const createBroadcastBundle = (provider: Provider) => {
      * It might be useful when transactions did not properly propagate, 
      * particularly in the case of large bundles.
      * 
-     * ### Example
+     * @example
+     *
      * ```js
      * broadcastTransactions(tailHash)
      *   .then(transactions => {
@@ -32,6 +35,8 @@ export const createBroadcastBundle = (provider: Provider) => {
      * ```
      *  
      * @method broadcastBundle
+     * 
+     * @memberof module:core
      *
      * @param {Hash} tailTransactionHash - Tail transaction hash 
      * @param {Callback} [callback] - Optional callback

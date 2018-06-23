@@ -11,9 +11,11 @@ import {
 /**  
  * @method createRemoveNeighbors
  * 
+ * @memberof module:core
+ * 
  * @param {Provider} provider - Network provider
  * 
- * @return {function} {@link removeNeighbors}
+ * @return {function} {@link #module_core.removeNeighbors `removeNeighbors`}
  */
 export const createRemoveNeighbors = ({ send }: Provider) =>
 
@@ -25,6 +27,8 @@ export const createRemoveNeighbors = ({ send }: Provider) =>
      * This method has temporary effect until your IRI node relaunches.
      *
      * @method removeNeighbors
+     * 
+     * @memberof module:core
      *
      * @param {Array} uris - List of URI's
      * @param {Callback} [callback] - Optional callback

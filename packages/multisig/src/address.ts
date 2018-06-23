@@ -2,6 +2,10 @@ import { trits, trytes } from '@iota/converter'
 import Kerl from '@iota/kerl'
 import { asArray } from '../../types'
 
+/**
+ * @class Address
+ * @memberof module:multisig
+ */
 export default class Address {
     private kerl: Kerl
 
@@ -15,13 +19,16 @@ export default class Address {
     }
 
     /**
-     *   Absorbs key digests
+     * Absorbs key digests
      *
-     *   @method absorb
-     *   @param {string|array} digest digest trytes
-     *   @return {object} address instance
-     *
-     **/
+     * @member absorb
+     * 
+     * @memberof Address
+     * 
+     * @param {string|array} digest digest trytes
+     * 
+     * @return {object} address instance
+     */
     public absorb(digests: string | ReadonlyArray<string>) {
         // Construct array
         const digestsArray = asArray(digests)
@@ -38,13 +45,16 @@ export default class Address {
         return this
     }
     /**
-     *   Finalizes and returns the multisig address in trytes
+     * Finalizes and returns the multisig address in trytes
      *
-     *   @method finalize
-     *   @param {string} digest digest trytes, optional
-     *   @return {string} address trytes
+     * @member finalize
+     * 
+     * @memberof Address
      *
-     **/
+     * @param {string} digest digest trytes, optional
+     *
+     * @return {string} address trytes
+     */
     public finalize(digest?: string) {
         // Absorb last digest if provided
         if (digest) {

@@ -38,12 +38,14 @@ export const generateSpam = (n: number = 1) => new Array(n).map(spammer)
 /**
  * @method createPromoteTransaction 
  * 
+ * @memberof module:core
+ * 
  * @param {Provider} provider - Network provider
  *
- * @param {Function} [attachFn] - Optional {@link AttachToTangle} function to override the
- * [default method]{@link attachToTangle}.
+ * @param {Function} [attachFn] - Optional `AttachToTangle` function to override the
+ * [default method]{@link #module_core.attachToTangle}.
  * 
- * @return {Function} {@link promoteTransaction}
+ * @return {Function} {@link #module_core.promoteTransaction `promoteTransaction`}
  */
 export const createPromoteTransaction = (provider: Provider, attachFn?: AttachToTangle) => {
     const checkConsistency = createCheckConsistency(provider)
@@ -56,12 +58,14 @@ export const createPromoteTransaction = (provider: Provider, attachFn?: AttachTo
      *
      * @method promoteTransaction
      * 
+     * @memberof module:core
+     * 
      * @param {string} tail
      * @param {int} depth
      * @param {int} minWeightMagnitude
      * @param {array} transfer
      * @param {object} [options]
-     * @param {number} [options.delay] - Delay between spam transactions in ms
+     * @param {number} [options.delay] - Delay between spam transactions in `ms`
      * @param {boolean|function} [options.interrupt] - Interrupt signal, which can be a function that evaluates
      * to boolean
      * @param {function} [callback]

@@ -21,16 +21,25 @@ import {
     Trytes
 } from '../../types'
 
+/**
+ * @method createSendTrytes
+ * 
+ * @memberof module:core
+ * 
+ * @param {Provider} provider - Network provider
+ * 
+ * @return {Function} {@link #module_core.sendTrytes `sendTrytes`}
+ */
 export const createSendTrytes = (provider: Provider, attachFn?: AttachToTangle) => {
     const getTransactionsToApprove = createGetTransactionsToApprove(provider)
     const storeAndBroadcast = createStoreAndBroadcast(provider)
     const attachToTangle = attachFn || createAttachToTangle(provider)
 
     /**
-     * [Attaches to tanlge]{@link attachToTangle}, [stores]{@link storeTransactions}
-     * and [broadcasts]{@link broadcastTransaction} a list of transaction trytes.
+     * [Attaches to tanlge]{@link #module_core.attachToTangle}, [stores]{@link #module_core.storeTransactions}
+     * and [broadcasts]{@link #module_core.broadcastTransactions} a list of transaction trytes.
      * 
-     * ### Example
+     * @example
      * ```js
      * prepareTransfers(seed, transfers)
      *   .then(trytes => sendTrytes(trytes, depth, minWeightMagnitude))
@@ -44,10 +53,13 @@ export const createSendTrytes = (provider: Provider, attachFn?: AttachToTangle) 
      * 
      * @method sendTrytes
      * 
+     * @memberof module:core
+     * 
      * @param {Trytes[]} - List of trytes to attach, store & broadcast
      * @param {number} depth - Depth
      * @param {number} minWeightMagnitude - Min weight magnitude
      * @param {string} [reference] - Optional reference hash
+     * @param {Callback} [callback] - Optional callback
      * 
      * @return {Promise}
      * @fulfil {Transaction[]}  Returns list of attached transactions

@@ -49,9 +49,11 @@ export const getAccountDataOptions = getOptionsWithDefaults(defaults)
 /**  
  * @method createGetAccountData
  *
+ * @memberof module:core
+ * 
  * @param {Provider} provider - Network provider for accessing IRI
  * 
- * @return {function} {@link getAccountData}
+ * @return {function} {@link #module_core.getAccountData `getAccountData`}
  */
 export const createGetAccountData = (provider: Provider, caller?: string) => {
     const getNewAddress = createGetNewAddress(provider, /* Called by */ 'lib')
@@ -60,10 +62,11 @@ export const createGetAccountData = (provider: Provider, caller?: string) => {
     const wereAddressesSpentFrom = createWereAddressesSpentFrom(provider, /* Called by */ 'lib')
 
     /**
-     * Returns an {@link AccountData} object, containing account information about `addresses`, `transactions`, 
+     * Returns an `AccountData` object, containing account information about `addresses`, `transactions`, 
      * `inputs` and total account balance.
      *
-     * ### Example
+     * @example
+     *
      * ```js
      * getAccountData(seed, {
      *    start: 0,
@@ -79,6 +82,8 @@ export const createGetAccountData = (provider: Provider, caller?: string) => {
      * ```
      *
      * @method getAccountData
+     * 
+     * @memberof module:core
      * 
      * @param {string} seed
      * @param {object} options

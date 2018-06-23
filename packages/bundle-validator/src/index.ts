@@ -1,3 +1,5 @@
+/** @module bundle-validator */
+
 import { trits, trytes } from '@iota/converter'
 import Kerl from '@iota/kerl'
 import { validateSignatures } from '@iota/signing'
@@ -14,11 +16,9 @@ interface SignatureFragments {
  *
  * @method validateSignatures
  * 
- * @param {array} signedBundle
+ * @param {Transaction[]} bundle
  *
- * @param {string} inputAddress
- * 
- * @return {bool}
+ * @return {boolean}
  */
 export const validateBundleSignatures = (bundle: Bundle): boolean => {
     const signatures: SignatureFragments = [...bundle]
@@ -45,7 +45,7 @@ export const validateBundleSignatures = (bundle: Bundle): boolean => {
  *
  * @param {Transaction[]} bundle
  * 
- * @returns {Boolean}
+ * @returns {boolean}
  */
 export default function isBundle(bundle: Bundle) {
     if (!isTransactionArray(bundle)) {

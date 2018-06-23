@@ -1,13 +1,13 @@
 {
   "name": "@iota/http-client",
   "version": "1.0.0-alpha.1",
-  "description": "Sends commands to IRI over HTTP.",
+  "description": "Send commands to IRI over HTTP.",
   "main": "./out/http-client/src/index.js",
   "typings": "typings/http-client/src",
   "scripts": {
     "prepublish": "tsc",
     "format": "prettier",
-    "test": "tsc && ava"
+    "docs": "tsc && jsdoc2md --no-cache --plugin dmd-clear -t README_tpl.hbs --files './out/**/*.js' > README.md"
   },
   "contributors": [
     "Dominik Schiener <dom@iota.org> (https://iota.org)",

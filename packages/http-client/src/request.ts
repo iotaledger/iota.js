@@ -7,13 +7,15 @@ import { BatchableCommand } from './httpClient'
 const requestError = (statusText: string) => Promise.reject(`Request error: ${statusText}`)
 
 /**
- * Sends an http request to a specified host
+ * Sends an http request to a specified host.
  *
  * @method send
  * 
+ * @memberof module:http-client
+ * 
  * @param {Command} command
  * 
- * @param {String} [uri='http://localhost:14265']
+ * @param {String} [uri=http://localhost:14265]
  * 
  * @param {String|Number} [apiVersion=1]
  * 
@@ -45,8 +47,6 @@ export const send = <C extends BaseCommand, R = any>(
  * Sends a batched http request to a specified host
  * supports findTransactions, getBalances & getTrytes commands
  *
- * TODO: implement batched requests for getInclusionStates
- *
  * @method batchedSend
  * 
  * @param {Command} command
@@ -59,6 +59,8 @@ export const send = <C extends BaseCommand, R = any>(
  * 
  * @param {String|Number} [apiVersion=1]
  *
+ * @ignore
+ * 
  * @return Promise
  * @fulil {Object} - Response
  * @reject {Error} - Request error

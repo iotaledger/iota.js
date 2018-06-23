@@ -12,15 +12,18 @@ import {
  * 
  * @param {Provider} provider - Network provider
  * 
- * @return {function} {@link getNodeInfo}
+ * @memberof module:core
+ * 
+ * @return {function} {@link #module_core.getNodeInfo `getNodeInfo`}
  */
 export const createGetNodeInfo = ({ send }: Provider) =>
 
     /**
      * Returns information about connected node by calling
-     * [`getNodeInfo`]{@link https://docs.iota.works/iri/api#endpoints/getNodeInfo} command.
+     * [`getNodeInfo`](https://docs.iota.works/iri/api#endpoints/getNodeInfo) command.
      *
-     * ### Example
+     * @example
+     *
      * ```js
      * getNodeInfo()
      *   .then(info => console.log(info))
@@ -30,6 +33,8 @@ export const createGetNodeInfo = ({ send }: Provider) =>
      * ```
      * 
      * @method getNodeInfo
+     * 
+     * @memberof module:core
      *
      * @param {Callback} [callback] - Optional callback
      *

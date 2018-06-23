@@ -8,6 +8,7 @@ const HASH_LENGTH = 243
 
 /**
  * @class kerl
+ * @ignore
  */
 export default class Kerl {
     public static BIT_HASH_LENGTH = BIT_HASH_LENGTH
@@ -17,6 +18,7 @@ export default class Kerl {
 
     /**
      * @constructor
+     * @ignore
      */
     constructor() {
         this.k = (CryptoJS.algo as any).SHA3.create()
@@ -33,6 +35,8 @@ export default class Kerl {
      * Resets the internal state
      *
      * @method reset
+     * 
+     * @ignore
      */
     public reset() {
         this.k.reset()
@@ -42,6 +46,8 @@ export default class Kerl {
      * Absorbs trits given an offset and length
      *
      * @method absorb
+     * 
+     * @ignore
      *
      * @param {Int8Array} trits
      * @param {number} offset
@@ -70,6 +76,8 @@ export default class Kerl {
      * Squeezes trits given an offset and length
      *
      * @method squeeze
+     * 
+     * @ignore
      *
      * @param {Int8Array} trits
      * @param {number} offset

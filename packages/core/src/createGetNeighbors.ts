@@ -12,9 +12,11 @@ import {
 /**  
  * @method createGetNeighbors 
  * 
+ * @memberof module:core
+ * 
  * @param {Provider} provider Network provider
  * 
- * @return {function} {@link getNeighbors}
+ * @return {function} {@link #module_core.getNeighbors `getNeighbors`}
  */
 export const createGetNeighbors = ({ send }: Provider) => {
 
@@ -23,7 +25,9 @@ export const createGetNeighbors = ({ send }: Provider) => {
      *
      * @method getNeighbors
      * 
-     * @param {Callback} callback - Optional callback
+     * @memberof module:core
+     * 
+     * @param {Callback} [callback] - Optional callback
      *
      * @return {Promise}
      * @fulfil {Neighbors}

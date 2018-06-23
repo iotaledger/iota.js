@@ -5,11 +5,13 @@ import { createGetBundle, createSendTrytes } from './'
 import { AttachToTangle, Bundle, Callback, Hash, Provider, Transaction } from '../../types'
 
 /**
- * @method createReplayBundle 
+ * @method createReplayBundle
+ * 
+ * @memberof module:core
  * 
  * @param {Provider} provider - Network provider
  * 
- * @return {Function} {@link replayBundle}
+ * @return {Function} {@link #module_core.replayBundle `replayBundle`}
  */
 export const createReplayBundle = (provider: Provider, attachFn?: AttachToTangle) => {
     const getBundle = createGetBundle(provider)
@@ -20,7 +22,7 @@ export const createReplayBundle = (provider: Provider, attachFn?: AttachToTangle
      * Reattachments are usefull in case original transactions are pending, and can be done securely
      * as many times as needed.
      * 
-     * ### Example
+     * @example
      * ```js
      * replayBundle(tail)
      *   .then(transactions => {
@@ -33,6 +35,8 @@ export const createReplayBundle = (provider: Provider, attachFn?: AttachToTangle
      * ```
      * 
      * @method replayBundle
+     * 
+     * @memberof module:core
      *
      * @param {Hash} tail - Tail transaction hash. Tail transaction is the transaction in the bundle with
      * `currentIndex == 0`.
@@ -41,8 +45,8 @@ export const createReplayBundle = (provider: Provider, attachFn?: AttachToTangle
      * meaning that RW starts 3 milestones back.
      * 
      * @param {number} minWeightMagnitude - Minimum number of trailing zeros in transaction hash. This is used by
-     * {@link AttachToTangle} function to search for a valid `nonce`.
-     * Currently is `14` on mainnet and `9` on testnet. 
+     * [`attachToTangle`]{@link #module_core.attachToTangle} function to search for a valid `nonce`.
+     * Currently is `14` on mainnet & spamnnet and `9` on most other testnets. 
      * 
      * @param {Callback} [callback] - Optional callback
      * 

@@ -7,9 +7,11 @@ import { Callback, Hash, Provider, Transaction } from '../../types'
 /**
  * @method createTraverseBundle
  * 
+ * @memberof module:core
+ * 
  * @param {Provider} provider
  * 
- * @return {@link traverseBundle} 
+ * @return {function} {@link #module_core.traverseBundle `traverseBundle`} 
  */
 export const createTraverseBundle = (provider: Provider) => {
     const getTrytes = createGetTrytes(provider)
@@ -19,6 +21,8 @@ export const createTraverseBundle = (provider: Provider) => {
      * It does not validate the bundle.
      *
      * @example
+     *
+     * ```js
      * traverseBundle(tail)
      *    .then(bundle => {
      *        // ...
@@ -26,8 +30,11 @@ export const createTraverseBundle = (provider: Provider) => {
      *    .catch(err => {
      *        // handle errors
      *    })
+     * ```
      *
      * @method traverseBundle
+     * 
+     * @memberof module:core
      * 
      * @param {Hash} trunkTransaction - Trunk transaction, should be tail (`currentIndex == 0`)
      * @param {Hash} [bundle=[]] - List of accumulated transactions

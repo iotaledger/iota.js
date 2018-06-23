@@ -1,3 +1,5 @@
+/** @module checksum */
+
 import { trits, trytes } from '@iota/converter'
 import Kerl from '@iota/kerl'
 import {
@@ -20,19 +22,18 @@ const HASH_TRYTES_LENGTH = 81
 const ADDRESS_CHECKSUM_TRYTES_LENGTH = 9
 const MIN_CHECKSUM_TRYTES_LENGTH = 3
 
-
 /**
 * Generates and appends the 9-tryte checksum of the given trytes, usually an address.
 *
 * @method addChecksum
-* 
+*
 * @param {string | string[]} input - Input trytes
 * 
-* @param {number} [checksumLength] - Checksum trytes length
+* @param {number} [checksumLength=9] - Checksum trytes length
 * 
-* @param {boolean} [isAddress] - default is true
+* @param {boolean} [isAddress=true] - Flag to denote if given input is address. Defaults to `true`.
 *
-* @returns {string | list} address (with checksum)
+* @returns {string | string[]} Address (with checksum)
 */
 export function addChecksum(
     input: Trytes,
@@ -91,9 +92,9 @@ export function addChecksum(
 }
 
 /**
- * Removes the 9-tryte checksum of the given input
+ * Removes the 9-trytes checksum of the given input.
  *
- * @method noChecksum
+ * @method removeChecksum
  * 
  * @param {string | string[]} input - Input trytes
  * 
@@ -117,14 +118,7 @@ export function removeChecksum(input: Trytes | ReadonlyArray<Trytes>) {
 }
 
 /**
- * @method noChecksum
- * 
- * @alias removeChecksum
- */
-export const noChecksum = removeChecksum
-
-/**
- * Validates the checksum of the given trytes
+ * Validates the checksum of the given address trytes.
  *
  * @method isValidChecksum
  * 

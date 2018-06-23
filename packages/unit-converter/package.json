@@ -1,13 +1,13 @@
 {
   "name": "@iota/unit-converter",
   "version": "1.0.0-alpha.1",
-  "description": "Converts value across different units.",
+  "description": "Converts value across different IOTA units.",
   "main": "./out/src/index.js",
   "typings": "./out/src",
   "scripts": {
     "prepublish": "tsc",
     "format": "prettier",
-    "test": "tsc && ava"
+    "docs": "tsc && jsdoc2md --no-cache --plugin dmd-clear -t README_tpl.hbs --files './out/**/*.js' > README.md"
   },
   "contributors": [
     "Dominik Schiener <dom@iota.org> (https://iota.org)",

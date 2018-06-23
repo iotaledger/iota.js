@@ -42,6 +42,8 @@ export const TRYTES_TRITS_LUT: ReadonlyArray<ReadonlyArray<number>> = [
  * Converts trytes or values to trits
  *
  * @method trits
+ * 
+ * @memberof module:converter
  *
  * @param {String|Number} input - Tryte string or value to be converted.
  * 
@@ -70,6 +72,10 @@ export function trits(input: string | number): Int8Array {
 /**
  * @method trytesToTrits
  * 
+ * @memberof module:converter
+ * 
+ * @ignore
+ * 
  * @alias trits
  */
 export const trytesToTrits = trits
@@ -78,6 +84,8 @@ export const trytesToTrits = trits
  * Converts trits to trytes
  *
  * @method trytes
+ * 
+ * @memberof module:converter
  *
  * @param {Int8Array} trits
  * 
@@ -111,6 +119,10 @@ export function trytes(trits: Int8Array): string {
 /**
  * @method tritsToTrytes
  * 
+ * @memberof module:converter
+ * 
+ * @ignore
+ * 
  * @alias trytes
  */
 export const tritsToTrytes = trytes
@@ -119,6 +131,8 @@ export const tritsToTrytes = trytes
  * Converts trits into an integer value
  *
  * @method value
+ * 
+ * @memberof module:converter
  *
  * @param {Int8Array} trits
  * 
@@ -138,6 +152,10 @@ export function value(trits: Int8Array): number {
 /**
  * @method tritsToValue
  * 
+ * @memberof module:converter
+ * 
+ * @ignore
+ * 
  * @alias value
  */
 export const tritsToValue = value
@@ -147,9 +165,11 @@ export const tritsToValue = value
  *
  * @method fromValue
  * 
+ * @memberof module:converter
+ * 
  * @param {Number} value
  * 
- * @returns {Int8Array} trits
+ * @return {Int8Array} trits
  */
 // tslint:disable-next-line no-shadowed-variable
 export function fromValue(value: number): Int8Array {
@@ -183,6 +203,10 @@ export function fromValue(value: number): Int8Array {
 /**
  * @method valueToTrits
  * 
+ * @memberof module:converter
+ * 
+ * @ignore
+ * 
  * @alias fromValue
  */
-export const valueToTrits = trytes
+export const valueToTrits = fromValue

@@ -2,27 +2,28 @@ import * as Promise from 'bluebird'
 import { uriArrayValidator, validate } from '@iota/validators'
 import { AddNeighborsCommand, AddNeighborsResponse, Callback, IRICommand, Provider } from '../../types'
 
-
-
-/**  
+/**
  * @method createAddNeighbors
  *
+ * @memberof module:core
+ * 
  * @param {Provider} provider - Network provider
  * 
- * @return {Function} {@link addNeighbors}
+ * @return {Function} {@link #module_core.addNeighbors `addNeighbors`}
  */
 export const createAddNeighbors = ({ send }: Provider) =>
 
     /**
      * Adds a list of neighbors to the connected IRI node by calling 
-     * [`addNeighbors`]{https://docs.iota.works/iri/api#endpoints/addNeighbors} command. 
+     * [`addNeighbors`](https://docs.iota.works/iri/api#endpoints/addNeighbors) command. 
      * Assumes `addNeighbors` command is available on the node.
      * 
      * `addNeighbors` has temporary effect until your node relaunches.
      * 
-     * ### Example
+     * @example
+     * 
      * ```js
-     * addNeighbors([udp://148.148.148.148:14265])
+     * addNeighbors(['udp://148.148.148.148:14265'])
      *   .then(numAdded => {
      *     // ...
      *   }).catch(err => {
@@ -31,6 +32,8 @@ export const createAddNeighbors = ({ send }: Provider) =>
      * ```
      *
      * @method addNeighbors
+     * 
+     * @memberof module:core
      *
      * @param {Array} uris - List of URI's
      * @param {Callback} [callback] - Optional callback

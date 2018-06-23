@@ -1,13 +1,13 @@
 {
   "name": "@iota/bundle-validator",
   "version": "1.0.0-alpha.1",
-  "description": "Validates bundle structure and signatures.",
+  "description": "Syntactically validates bundle structure and signatures.",
   "main": "./out/bundle-validator/src/index.js",
   "typings": "typings/bundle-validator/src",
   "scripts": {
     "prepublish": "tsc",
     "format": "prettier",
-    "test": "tsc && ava"
+    "docs": "tsc && jsdoc2md --no-cache --plugin dmd-clear -t README_tpl.hbs --files './out/**/*.js' > README.md"
   },
   "contributors": [
     "Dominik Schiener <dom@iota.org> (https://iota.org)",

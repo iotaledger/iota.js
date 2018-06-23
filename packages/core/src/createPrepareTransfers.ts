@@ -74,16 +74,18 @@ export interface PrepareTransfersProps {
 }
 
 /**
- * Create a `{@link prepareTransfers}` function by passing an optional `{@link Provider}`.
+ * Create a [`prepareTransfers`]{@link #module_core.prepareTransfers} function by passing an optional newtowrk `provider`.
  * It is possible to prepare and sign transactions offline, by omitting the provider option.
  *
  * @method createPrepareTransfers
  * 
+ * @memberof module:core
+ * 
  * @param {Provider} [provider] - Optional network provider to fetch inputs and remainder address.
  * In case this is omitted, proper input objects and remainder should be passed
- * in `{@link prepareTransfers}`, if required.
+ * to [`prepareTransfers`]{@link #module_core.prepareTransfers}, if required.
  * 
- * @return {Function} {@link prepareTransfers}
+ * @return {Function} {@link #module_core.prepareTransfers `prepareTransfers`}
  */
 export const createPrepareTransfers = (provider?: Provider, now: () => number = () => Date.now(), caller?: string) => {
     const addInputs = createAddInputs(provider)
@@ -91,25 +93,25 @@ export const createPrepareTransfers = (provider?: Provider, now: () => number = 
 
     /**
      * Prepares the transaction trytes by generating a bundle, filling in transfers and inputs,
-     * adding remainder and signing.
-     *
-     * It can be used to generate and sign bundles either online or offline.
-     * For offline usage, please see {@createPrepareTransfers} which creates a `prepareTransfers`
-     * without a network provider.
+     * adding remainder and signing. It can be used to generate and sign bundles either online or offline.
+     * For offline usage, please see [`createPrepareTransfers`]{@link #module_core.createPrepareTransfers}
+     * which creates a `prepareTransfers` without a network provider.
      *
      * @method prepareTransfers
+     * 
+     * @memberof module:core
      * 
      * @param {string} seed
      * 
      * @param {object} transfers
      * 
-     * @param {object} options
-     * @property {Input[]} [inputs] Inputs used for signing. Needs to have correct security, keyIndex and address value
-     * @property {Hash} [address] Remainder address
-     * @property {Number} [security] security level to be used for getting inputs and addresses
-     * @property {Hash} [hmacKey] HMAC key used for attaching an HMAC
+     * @param {object} [options]
+     * @param {Input[]} [options.inputs] Inputs used for signing. Needs to have correct security, keyIndex and address value
+     * @param {Hash} [options.address] Remainder address
+     * @param {Number} [options.security] Security level to be used for getting inputs and reminder address
+     * @property {Hash} [options.hmacKey] HMAC key used for attaching an HMAC
      * 
-     * @param {function} callback
+     * @param {function} [callback] Optional callback
      * 
      * @return {Promise}
      * @fulfil {array} trytes Returns bundle trytes

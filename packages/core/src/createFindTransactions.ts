@@ -55,10 +55,12 @@ export const padTags = (query: FindTransactionsQuery) => (
 
 /**  
  * @method createFindTransactions 
+ * 
+ * @memberof module:core
  *
  * @param {Provider} provider - Network provider for accessing IRI
  *
- * @return {function} {@link findTransactions}
+ * @return {function} {@link #module_core.findTransactions `findTransactionObjects`}
  */
 export const createFindTransactions = ({ send }: Provider) => {
 
@@ -68,7 +70,8 @@ export const createFindTransactions = ({ send }: Provider) => {
      * It allows to search for transactions by passing a `query` object with `addresses`, `tags` and `approvees` fields.
      * Multiple query fields are supported and `findTransactions` returns intersection of results.
      *
-     * ### Example
+     * @example
+     *
      * ```js
      * findTransactions({ addresses: ['ADRR...'] })
      *    .then(hashes => {
@@ -80,6 +83,8 @@ export const createFindTransactions = ({ send }: Provider) => {
      * ```
      *
      * @method findTransactions
+     * 
+     * @memberof module:core
      *
      * @param {object} query
      * @param {Hash[]} [query.addresses] - List of addresses

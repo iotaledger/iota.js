@@ -3,8 +3,11 @@
     "version": "1.0.0-alpha.1",
     "description": "IOTA Client Reference Implementation",
     "scripts": {
+        "init": "yarn && lerna bootstrap",
+        "test": "lerna run test --stream",
+        "test-ci": "yarn init && lerna run test-ci --stream",
         "format": "prettier",
-        "test": "lerna run test --stream"
+        "docs": "lerna run docs && jsdoc2md --no-cache --plugin dmd-clear --files './packages/*/out/**/*.js' > api_reference.md"
     },
     "contributors": [
         "Dominik Schiener <dom@iota.org> (https://iota.org)",
@@ -42,6 +45,8 @@
     },
     "devDependencies": {
         "ava": "^0.25.0",
+        "dmd-clear": "^0.1.2",
+        "jsdoc-babel": "^0.4.0",
         "lerna": "^2.11.0",
         "prettier": "^1.10.2",
         "tslint": "^5.9.1",

@@ -13,17 +13,19 @@ import {
 
 /**
  * @method createGetBalances
+ * 
+ * @memberof module:core
  *
  * @param {Provider} provider - Network provider
  *
- * @return {function} {@link getBalances}
+ * @return {function} {@link #module_core.getBalances `getBalances`}
  */
 export const createGetBalances = ({ send }: Provider) =>
     /**
      * Fetches _confirmed_ balances of given addresses at the latest solid milestone,
      * by calling [`getBalances`](https://docs.iota.works/iri/api#endpoints/getBalances) command.
      *
-     * ### Example
+     * @example
      * ```js
      * getBalances([address], 100)
      *   .then(({ balances }) => {
@@ -35,6 +37,8 @@ export const createGetBalances = ({ send }: Provider) =>
      * ```
      *
      * @method getBalances
+     * 
+     * @memberof module:core
      *
      * @param {Hash[]} addresses - List of addresses 
      * @param {number} threshold - Confirmation threshold, currently `100` should be used

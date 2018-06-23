@@ -14,26 +14,30 @@ import { INVALID_REFERENCE_HASH } from './errors'
 /**
  * @method createGetTransactionsToApprove
  * 
+ * @memberof module:core
+ * 
  * @param {Provider} provider - Network provider
  * 
- * @return {function} {@link getTransactionsToApprove}
+ * @return {function} {@link #module_core.getTransactionsToApprove `getTransactionsToApprove`}
  */
 export const createGetTransactionsToApprove = ({ send }: Provider) =>
 
     /**
      * Does the _tip selection_ by calling
-     * [`getTransactionsToApprove`]{https://docs.iota.works/iri/api#endpoints/getTransactionsToApprove} command.
+     * [`getTransactionsToApprove`](https://docs.iota.works/iri/api#endpoints/getTransactionsToApprove) command.
      * Returns a pair of approved transactions, which are chosen randomly after validating the transaction trytes,
      * the signatures and cross-checking for conflicting transactions.
      *
      * Tip selection is executed by a Random Walk (RW) starting at random point in given `depth`
      * ending up to the pair of selected tips. For more information about tip selection please refer to the
-     * [whitepaper]{http://iotatoken.com/IOTA_Whitepaper.pdf}.
+     * [whitepaper](http://iotatoken.com/IOTA_Whitepaper.pdf).
      *
      * The `reference` option allows to select tips in a way that the reference transaction is being approved too. 
-     * This is useful for promoting transactions, for example with `{@link promoteTransaction}`.
+     * This is useful for promoting transactions, for example with
+     * [`promoteTransaction`]{@link #module_core.promoteTransaction}.
+     * 
+     * @example
      *
-     * ### Example
      * ```js
      * const depth = 3
      * const minWeightMagnitude = 14
@@ -48,7 +52,9 @@ export const createGetTransactionsToApprove = ({ send }: Provider) =>
      *   })
      * ```
      *
-     * @method getTransactionsToApprove 
+     * @method getTransactionsToApprove
+     * 
+     * @memberof module:core
      *
      * @param {number} depth - The depth at which Random Walk starts. A value of `3` is typically used by wallets,
      * meaning that RW starts 3 milestones back.

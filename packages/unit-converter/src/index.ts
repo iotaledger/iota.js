@@ -1,3 +1,4 @@
+/** @module unit-converter */
 import BigNumber from 'bignumber.js'
 
 export enum Unit {
@@ -27,15 +28,16 @@ export const unitMap: UnitMap = {
 }
 
 /**
- * Converts IOTA units
+ * Converts accross IOTA units. Valid unit names are:
+ * `i`, `Ki`, `Mi`, `Gi`, `Ti`, `Pi`
  *
  * @method convertUnits
  * 
  * @param {string | int | float} value
  * 
- * @param {string} fromUnit
+ * @param {string} fromUnit - Name of original value unit
  * 
- * @param {string} toUnit
+ * @param {string} toUnit - Name of unit wich we convert to
  * 
  * @return {Number}
  */

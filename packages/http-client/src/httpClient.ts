@@ -1,3 +1,5 @@
+/** @module http-client */
+
 import * as Promise from 'bluebird'
 import { getSettingsWithDefaults, Settings } from './settings'
 import { batchedSend, send } from './request'
@@ -22,7 +24,7 @@ export interface BatchableKeys {
 
 export type BatchableKey = 'addresses' | 'approvees' | 'bundles' | 'tags' | 'tips' | 'transactions' | 'hashes'
 
-/** Batchable keys for each command */
+/* Batchable keys for each command */
 export const batchableKeys: BatchableKeys = {
     [IRICommand.FIND_TRANSACTIONS]: ['addresses', 'approvees', 'bundles', 'tags'],
     [IRICommand.GET_BALANCES]: ['addresses'],
@@ -46,12 +48,26 @@ export const getKeysToBatch = <C>(
 )
 
 /**
+ * Create an http client to access IRI http API.
  * 
- * @param settings 
+ * @method createHttpClient
+ * 
+ * @param {object} [settings={}]
+ * @param {string} [settings.provider=http://localhost:14265] Uri of IRI node
+ * @param {string | number} [apiVersion=1] - IOTA Api version to be sent as `X-IOTA-API-Version` header. 
+ * @param {number} [requestBatchSize=1000] - Number of search values per request.
+ * @return Object
  */
 export const createHttpClient = (settings?: Partial<Settings>): Provider => {
     let _settings = getSettingsWithDefaults({ ...settings })
     return {
+        /**
+         * @member send
+         * 
+         * @param {object} command
+         * 
+         * @return {object} response
+         */
         send: <C extends BaseCommand, R>(command: Readonly<C>): Promise<Readonly<R>> => Promise.try(() => {
             const { provider, requestBatchSize, apiVersion } = _settings
 
@@ -65,6 +81,15 @@ export const createHttpClient = (settings?: Partial<Settings>): Provider => {
 
             return send<C, R>(command, provider, apiVersion)
         }),
+
+        /**
+         * @member setSettings
+         *
+         * @param {object} [settings={}]
+         * @param {string} [settings.provider=http://localhost:14265] Uri of IRI node
+         * @param {string | number} [apiVersion=1] - IOTA Api version to be sent as `X-IOTA-API-Version` header. 
+         * @param {number} [requestBatchSize=1000] - Number of search values per request.
+         */
         setSettings: (newSettings?: Partial<Settings>): void => {
             _settings = getSettingsWithDefaults({ ..._settings, ...newSettings })
         }

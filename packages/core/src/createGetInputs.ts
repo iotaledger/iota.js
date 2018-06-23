@@ -31,19 +31,22 @@ const defaults: GetInputsOptions = {
 
 /**  
  * @method createGetInputs
+ * 
+ * @memberof module:core
  *
  * @param {Provider} provider - Network provider for accessing IRI
  *
- * @return {function} {@link getInputs}
+ * @return {function} {@link #module_core.getInputs `getInputs`}
  */
 export const createGetInputs = (provider: Provider) => {
     const getNewAddress = createGetNewAddress(provider, 'lib')
     const getBalances = createGetBalances(provider)
 
     /**  
-     * Creates and returns an `{@link Inputs}` object by generating addresses and fetching their latest balance.
+     * Creates and returns an `Inputs` object by generating addresses and fetching their latest balance.
      *
-     * ### Example
+     * @example
+     *
      * ```js
      * getInputs(seed, { start: 0, threhold })
      *   .then(({ inputs, totalBalance }) => {
@@ -57,7 +60,9 @@ export const createGetInputs = (provider: Provider) => {
      *   })
      * ```
      *
-     * @method getInputs 
+     * @method getInputs
+     * 
+     * @memberof module:core
      *
      * @param {string} seed
      * @param {object} [options]
@@ -65,6 +70,7 @@ export const createGetInputs = (provider: Provider) => {
      * @param {number} [options.end] - Last index up to which we stop scanning
      * @param {number} [options.security=2] - Security level of inputs
      * @param {threshold} [options.threshold] - Minimum amount of balance required
+     * @param {Callback} [callback] - Optional callback
      *
      * @return {Promise}
      *

@@ -12,9 +12,11 @@ import {
 /**
  * @method createGetInclusionStates
  * 
+ * @memberof module:core
+ * 
  * @param {Provider} provider - Network provider for accessing IRI 
  * 
- * @return {function} {@link getInclusionStates}
+ * @return {function} {@link #module_core.getInclusionStates `getInclusionStates`}
  */
 export const createGetInclusionStates = ({ send }: Provider) =>
 
@@ -22,7 +24,8 @@ export const createGetInclusionStates = ({ send }: Provider) =>
      * Fetches inclusion states of given list of transactions, by calling
      * [`getInclusionStates`](https://docs.iota.works/iri/api#endpoints/getInclusionsStates) command.
      *
-     * ### Example
+     * @example
+     * ```js
      * getInclusionStates(transactions)
      *   .then(states => {
      *     // ...   
@@ -30,8 +33,11 @@ export const createGetInclusionStates = ({ send }: Provider) =>
      *   .catch(err => {
      *     // ...
      *   })
+     * ```
      *
      * @method getInclusionStates
+     * 
+     * @memberof module:core
      * 
      * @param {Hash[]} transactions - List of transaction hashes 
      * @param {Hash[]} tips - List of tips to check if transactions are referenced by

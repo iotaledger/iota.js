@@ -23,9 +23,11 @@ import {
 /**  
  * @method createAttachToTangle
  * 
+ * @memberof module:core
+ * 
  * @param {Provider} provider - Network provider
  * 
- * @return {Function} {@link attachToTangle}
+ * @return {Function} {@link #module_core.attachToTangle `attachToTangle`}
  */
 export const createAttachToTangle = ({ send }: Provider): AttachToTangle => {
 
@@ -40,14 +42,15 @@ export const createAttachToTangle = ({ send }: Provider): AttachToTangle => {
      *  - `attachmentTimestampUpperBound`
      *
      * This method can be replaced with a local equivelant such as
-     * [`@iota/pearldiver-webgl`](https://github.com/iotaledger/curl.lib.js) 
-     * or [`@iota/pearldiver-node`](https://github.com/iotaledger/ccurl.interface.js),
+     * [`ccurl.interface.js`](https://github.com/iotaledger/ccurl.interface.js) in node.js,
+     * [`curl.lib.js`](https://github.com/iotaledger/curl.lib.js) which works on WebGL 2 enabled browsers
      * or remote [`PoWbox`](https://powbox.testnet.iota.org/).
      *
      * `trunkTransaction` and `branchTransaction` hashes are given by
-     * `{@link getTransactionsToApprove}`.
+     * {@link #module_core.getTransactionsToApprove `getTransactionToApprove`}.
      *
-     * ### Example
+     * @example
+     * 
      * ```js
      * getTransactionsToApprove(depth)
      *   .then(({ trunkTransaction, branchTransaction }) =>
@@ -62,9 +65,13 @@ export const createAttachToTangle = ({ send }: Provider): AttachToTangle => {
      * ```
      *
      * @method attachToTangle
+     * 
+     * @memberof module:core
      *
-     * @param {Hash} trunkTransaction - Trunk transaction as returned by {@link getTransactionsToApprove}
-     * @param {Hash} branchTransaction - Branch transaction as returned by {@link getTransactionsToApprove}
+     * @param {Hash} trunkTransaction - Trunk transaction as returned by 
+     * [`getTransactionsToApprove`]{@link #module_core.getTransactionsToApprove}
+     * @param {Hash} branchTransaction - Branch transaction as returned by 
+     * [`getTransactionsToApprove`]{@link #module_core.getTransactionsToApprove}
      * @param {number} minWeightMagnitude - Number of minimun trailing zeros in tail transaction hash
      * @param {TransactionTrytes[]} trytes - List of transaction trytes
      * @param {Callback} [callback] - Optional callback

@@ -6,7 +6,7 @@ import {
     hasSufficientBalance,
     inputsToAddressOptions
 } from '../../src/createGetInputs'
-import { Inputs } from '../../src/types'
+import { Inputs } from '../../../types'
 import { INSUFFICIENT_BALANCE, INVALID_SEED, INVALID_START_END_OPTIONS } from '../../src/errors'
 import { getBalancesCommand, balancesResponse } from './nocks/getBalances'
 import './nocks/findTransactions'

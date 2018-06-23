@@ -9,11 +9,13 @@ import {
 } from '../../types'
 
 /**  
- * @method createGetTips 
+ * @method createGetTips
+ * 
+ * @memberof module:core
  * 
  * @param {Provider} provider - Network provider
  * 
- * @return {function} {@link getTips}
+ * @return {function} {@link #module_core.getTips `getTips`} 
  */
 export const createGetTips = ({ send }: Provider) =>
 
@@ -21,7 +23,8 @@ export const createGetTips = ({ send }: Provider) =>
      * Returns a list of tips (transactions not referenced by other transactions),
      * as seen by the connected node.
      * 
-     * ### Example
+     * @example
+     *
      * ```js
      * getTips()
      *   .then(tips => {
@@ -33,6 +36,8 @@ export const createGetTips = ({ send }: Provider) =>
      * ```
      * 
      * @method getTips
+     * 
+     * @memberof module:core
      *
      * @param {Callback} [callback] - Optional callback
      * 

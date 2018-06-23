@@ -166,6 +166,8 @@ function bigint_add_small(base: Uint32Array, other: number) {
  * Converts the given byte array to trits
  *
  * @method wordsToTrits
+ * 
+ * @ignore
  *
  * @param {Uint32Array} words
  *
@@ -233,6 +235,8 @@ export function wordsToTrits(words: Uint32Array): Int8Array {
  * Converts the given trits to byte array
  *
  * @method tritsToWords
+ * 
+ * @ignore
  *
  * @param {Int8Array} trits
  *

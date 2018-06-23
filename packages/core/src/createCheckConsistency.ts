@@ -12,24 +12,26 @@ import {
 
 /**  
  * @method createCheckConsistency
+ * 
+ * @memberof module:core
  *
  * @param {Provider} provider - Network provider
  * 
- * @return {function} {@link checkConsistency}
+ * @return {function} {@link #module_core.checkConsistency `checkConsistency`}
  */
 export const createCheckConsistency = ({ send }: Provider) =>
 
     /**
      * Checks if a transaction is _consistent_ or a set of transactions are _co-consistent_, by calling 
-     * [`checkConsistency`]{@link https://docs.iota.org/iri/api#endpoints/checkConsistency} command.
+     * [`checkConsistency`](https://docs.iota.org/iri/api#endpoints/checkConsistency) command.
      * _Co-consistent_ transactions and the transactions that they approve (directly or inderectly),
      * are not conflicting with each other and rest of the ledger.
      *
      * As long as a transaction is consistent it might be accepted by the network.
      * In case transaction is inconsistent, it will not be accepted, and a reattachment
-     * is required by calling `{@link replayBundle}`.
+     * is required by calling [`replaybundle`]{@link #module_core.replayBundle}.
      *
-     * ### Example
+     * @example
      *
      * ```js
      * checkConsistency(tailHash)
@@ -41,15 +43,16 @@ export const createCheckConsistency = ({ send }: Provider) =>
      *   })
      * ```
      *
-     * ### Example with `checkConsistency` & `isPromotable`
+     * @example
+     * ##### Example with `checkConsistency` & `isPromotable`
      * 
      * Consistent transactions might remain pending due to networking issues,
      * or if not referenced by recent milestones issued by
-     * [Coordinator]{@link https://docs.iota.org/introduction/tangle/consensus}. 
+     * [Coordinator](https://docs.iota.org/introduction/tangle/consensus).
      * Therefore `checkConsistency` with a time heuristic can determine
      * if a transaction should be [_promoted_]{@link promoteTransaction}
      * or [_reattached_]{@link replayBundle}.
-     * This functionality is abstracted in {@link isPromotable}.
+     * This functionality is abstracted in [`isPromotable`]{@link isPromotable}.
      * 
      * ```js
      * const isAboveMaxDepth = attachmentTimestamp => (
@@ -60,15 +63,19 @@ export const createCheckConsistency = ({ send }: Provider) =>
      *    Date.now() - attachmentTimestamp < 11 * 60 * 1000
      * )
      * 
-     * const isPromotable = ({ hash, attachmentTimestamp }) =>
+     * const isPromotable = ({ hash, attachmentTimestamp }) => (
      *   checkConsistency(hash)
      *      .then(isConsistent => (
      *        isConsistent &&
      *        isAboveMaxDepth(attachmentTimestamp)
      *      ))
+     * )
      * ```
      *
      * @method checkConsistency
+     * 
+     * @memberof module:core
+     * 
      * @param {Hash|Hash[]} transactions - Tail transaction hash (hash of transaction
      * with `currentIndex=0`), or array of tail transaction hashes.
      * @param {Callback} [callback] - Optional callback.

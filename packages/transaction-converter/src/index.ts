@@ -1,9 +1,13 @@
+/** @module transaction-converter */
+
 import { tritsToTrytes, trytesToTrits, value } from '@iota/converter'
 import Curl from '@iota/curl'
 import { padTrits, padTrytes } from '@iota/pad'
 import { errors, isTrytesOfExactLength } from '@iota/validators'
 import { asArray, Hash, Transaction, Trytes } from '../../types'
 
+export function asTransactionTrytes(transactions: Transaction): Trytes
+export function asTransactionTrytes(transactions: ReadonlyArray<Transaction>): ReadonlyArray<Trytes>
 /**
  * Converts a transaction object or a list of those into transaction trytes.
  *
@@ -11,10 +15,8 @@ import { asArray, Hash, Transaction, Trytes } from '../../types'
  * 
  * @param {Transaction | Transaction[]} transactions - Transaction object(s)
  * 
- * @returns {Trytes | Trytes[]} - Transaction trytes
+ * @return {Trytes | Trytes[]} Transaction trytes
  */
-export function asTransactionTrytes(transactions: Transaction): Trytes
-export function asTransactionTrytes(transactions: ReadonlyArray<Transaction>): ReadonlyArray<Trytes>
 export function asTransactionTrytes(transactions: Transaction | ReadonlyArray<Transaction>): Trytes | ReadonlyArray<Trytes> {
     const txTrytes = asArray(transactions)
         .map(transaction => [
@@ -45,7 +47,7 @@ export function asTransactionTrytes(transactions: Transaction | ReadonlyArray<Tr
  * 
  * @param {Int8Array} transactionTrits - Int8Array of 8019 transaction trits
  * 
- * @return {Hash} - transactionObject
+ * @return {Hash} Transaction hash
  */
 export const transactionHash = (trits: Int8Array): Hash => {
     const hash: Int8Array = new Int8Array(Curl.HASH_LENGTH)
@@ -66,7 +68,7 @@ export const transactionHash = (trits: Int8Array): Hash => {
  *
  * @param {Trytes} trytes - Transaction trytes
  *
- * @return {Transaction} - Transaction object
+ * @return {Transaction} Transaction object
  */
 export const asTransactionObject = (trytes: Trytes, hash?: Hash): Transaction => {
     if (!isTrytesOfExactLength(trytes, 2673)) {
@@ -105,20 +107,34 @@ export const asTransactionObject = (trytes: Trytes, hash?: Hash): Transaction =>
  * Converts a list of transaction trytes into list of transaction objects.
  * Accepts a list of hashes and returns a mapper. In cases hashes are given,
  * the mapper function map them to converted objects.
- *
+ * 
  * @method asTransactionObjects
  *
  * @param {Hash[]} [hashes] - Optional list of known hashes.
  * Known hashes are directly mapped to transaction objects,
  * otherwise all hashes are being recalculated.
  * 
- * @return {Function} - Returns a {@link transactionObjectsMapper} 
+ * @return {Function} {@link #module_transaction.transactionObjectsMapper `transactionObjectsMapper`} 
  */
-export const asTransactionObjects = (hashes?: ReadonlyArray<Hash>) =>
-    (trytes: ReadonlyArray<Trytes>) => trytes.map((tryteString, i) => asTransactionObject(
-        tryteString,
-        hashes![i]
-    ))
+export const asTransactionObjects = (hashes?: ReadonlyArray<Hash>) => {
+
+
+    /**
+     * Maps the list of given hashes to a list of converted transaction objects.
+     *
+     * @method transactionObjectsMapper
+     * 
+     * @param {Trytes[]} trytes - List of transaction trytes to convert
+     * 
+     * @return {Transaction[]} List of transaction objects with hashes
+     */
+    return function transactionObjectsMapper (trytes: ReadonlyArray<Trytes>) {
+        return trytes.map((tryteString, i) => asTransactionObject(
+            tryteString,
+            hashes![i]
+        ))
+    }
+}
 
 export const asFinalTransactionTrytes = (transactions: ReadonlyArray<Transaction>) =>
     [...asTransactionTrytes(transactions)].reverse()

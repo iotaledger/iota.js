@@ -1,4 +1,6 @@
-import { trytesToAscii, asciiToTrytes } from '@iota/converter'
+/** @module  extract-json */
+
+import { trytesToAscii } from '@iota/converter'
 import { Transaction } from '../../types'
 
 export const errors = {
@@ -9,9 +11,41 @@ export const errors = {
 /**
  * Takes a bundle as input and from the signatureMessageFragments extracts the correct JSON
  * data which was encoded and sent with the transaction.
+ * Supports the following forms of JSON encoded values:
+ * - `"{ \"message\": \"hello\" }"\`
+ * - `"[1, 2, 3]"`
+ * - `"true"`, `"false"` & `"null"`
+ * - `"\"hello\""`
+ * 
+ * @example
+ * ### Example
+ * 
+ * ```js
+ * try {
+ *   const msg = JSON.parse(extractJson(bundle))
+ * } catch (err) {
+ *   err.msg == errors.INVALID_BUNDLE
+ *   // Invalid bundle or invalid encoded JSON
+ * }
+ * ```
+ * 
+ * ### Example with `getBundle`:
+ * 
+ * ```js
+ * getBundle(tailHash)
+ *   .then(bunlde => {
+ *      const msg = JSON.parse(extractJson(bundle))
+ *      // ...
+ *   })
+ *   .catch((err) => {
+ *      // Handle network & extraction errors
+ *   })
+ * ```
  *
  * @method extractJson
+ * 
  * @param {array} bundle
+ * 
  * @returns {Object}
  */
 export const extractJson = (bundle: Transaction[]): string | null => {

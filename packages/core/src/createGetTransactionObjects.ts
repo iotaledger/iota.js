@@ -7,9 +7,11 @@ import { Callback, Hash, Provider, Transaction, Trytes } from '../../types'
 /**
  * @method createGetTransactionObjects
  * 
+ * @memberof module:core
+ * 
  * @param {Provider} provider - Network provider
  * 
- * @return {Function} {@link getTransactionObjects}
+ * @return {Function} {@link #module_core.getTransactionObjects `getTransactionObjects`}
  */
 export const createGetTransactionObjects = (provider: Provider) => {
     const getTrytes = createGetTrytes(provider)
@@ -18,6 +20,8 @@ export const createGetTransactionObjects = (provider: Provider) => {
      * Fetches the transaction objects, given an array of transaction hashes.
      *
      * @example
+     *
+     * ```js
      * getTransactionObjects(hashes)
      *   .then(transactions => {
      *     // ...
@@ -25,8 +29,11 @@ export const createGetTransactionObjects = (provider: Provider) => {
      *   .catch(err => {
      *     // handle errors
      *   })
+     * ```
      *
      * @method getTransactionObjects
+     * 
+     * @memberof module:core
      * 
      * @param {Hash[]} hashes - Array of transaction hashes
      * @param {Function} [callback] - Optional callback

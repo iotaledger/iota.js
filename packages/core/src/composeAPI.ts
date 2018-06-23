@@ -70,10 +70,15 @@ export function returnType<T>(func: Func<T>) {
 
 /**
  * Composes API object from it's components
- *
+ * 
  * @method composeApi
  * 
- * @param {Settings} [settings] - connection settings
+ * @memberof module:core
+ * 
+ * @param {object} [settings={}] - Connection settings
+ * @param {string} [settings.provider=http://localhost:14265] Uri of IRI node
+ * @param {string | number} [apiVersion=1] - IOTA Api version to be sent as `X-IOTA-API-Version` header. 
+ * @param {number} [requestBatchSize=1000] - Number of search values per request.
  * 
  * @return {API}
  */
@@ -81,6 +86,42 @@ export const composeAPI = (settings: Partial<Settings> = {}) => {
     const _provider: Provider = createHttpClient(settings) // tslint:disable-line variable-name
     let _attachFn = settings.attachToTangle || createAttachToTangle(_provider) // tslint:disable-line variable-name
 
+    /**
+     * Defines network provider configuration and [`attachToTangle`]{@link #module_core.attachToTangle} method.
+     *
+     * @method setSettings
+     * 
+     * @memberof API
+     * 
+     * @param {object} settings - Provider settings object
+     * @param {string} [settings.provider] - Http `uri` of IRI node
+     * @param {function} [settings.attachToTangle] - Function to override
+     * [`attachToTangle`]{@link #module_core.attachToTangle} with
+     */
+    function setSettings(newSettings: Partial<Settings> = {}) {
+        _provider.setSettings(newSettings)
+
+        if (newSettings.attachToTangle) {
+            _attachFn = newSettings.attachToTangle
+        }
+    }
+
+    /**
+     * Overides default [`attachToTangle`]{@link #module_core.attachToTangle} with a local equivalent or
+     * [`PoWBox`](https://powbox.testnet.iota.org/)
+     *
+     * @method overrideAttachToTangle
+     * 
+     * @memberof API
+     * 
+     * @param {function} attachToTangle - Function to override
+     * [`attachToTangle`]{@link #module_core.attachToTangle} with
+     */
+    function overrideAttachToTangle(attachFn: AttachToTangle) {
+        _attachFn = attachFn
+    }
+
+    /** @namespace API */
     return {
         // IRI commands
         addNeighbors: createAddNeighbors(_provider),
@@ -121,20 +162,8 @@ export const composeAPI = (settings: Partial<Settings> = {}) => {
         sendTrytes: createSendTrytes(_provider, _attachFn),
         storeAndBroadcast: createStoreAndBroadcast(_provider),
         traverseBundle: createTraverseBundle(_provider),
-
-        // Update settings
-        setSettings: (newSettings: Partial<Settings> = {}) => {
-            _provider.setSettings(newSettings)
-
-            if (newSettings.attachToTangle) {
-                _attachFn = newSettings.attachToTangle
-            }
-        },
-
-        // Overides default attachToTangles with a local equivalent or PoWBox
-        overrideAttachToTangle: (attachFn: AttachToTangle) => {
-            _attachFn = attachFn
-        }
+        setSettings,
+        overrideAttachToTangle
     }
 }
 

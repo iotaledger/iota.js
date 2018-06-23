@@ -11,19 +11,21 @@ import {
 } from '../../types'
 
 /**
- * @method createGetTrytes 
+ * @method createGetTrytes
+ * 
+ * @memberof module:core
  * 
  * @param {Provider} provider - Network provider
  * 
- * @return {function} {@link getTrytes}
+ * @return {function} {@link #module_core.getTrytes `getTrytes`}
  */
 export const createGetTrytes = ({ send }: Provider) =>
 
     /**
      * Fetches the transaction trytes given a list of transaction hashes, by calling
-     * [`getTrytes`]{@link https://docs.iota.works/iri/api#endpoints/getTrytes} command.
+     * [`getTrytes`](https://docs.iota.works/iri/api#endpoints/getTrytes) command.
      *  
-     * ### Example
+     * @example
      * ```js
      * getTrytes(hashes)
      *   // Parsing as transaction objects
@@ -35,9 +37,10 @@ export const createGetTrytes = ({ send }: Provider) =>
      *     // ...
      *   })
      * ```
-     *   
      *
-     * @method getTrytes 
+     * @method getTrytes
+     * 
+     * @memberof module:core
      *
      * @param {Array<Hash>} hashes - List of transaction hashes
      * @param {Callback} [callback] - Optional callback

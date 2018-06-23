@@ -16,26 +16,29 @@ export const isAboveMaxDepth = (attachmentTimestamp: number, depth = DEPTH) =>
  *  
  * @method createIsPromotable
  * 
+ * @memberof module:core
+ * 
  * @param {Provider} provider - Network provider
  * 
- * @param {number} [depth=6]
+ * @param {number} [depth=6] - Depth up to which promotion is effective.
  * 
- * @param maxDepth 
+ * @return {function} {@link #module_core.isPromotable `isPromotable`}
  */
 export const createIsPromotable = (provider: Provider, depth = DEPTH) => {
     const checkConsistency = createCheckConsistency(provider)
     const getTrytes = createGetTrytes(provider)
 
     /**
-     * Checks if a transaction is _promotable_, by calling {@link checkConsistency} and
+     * Checks if a transaction is _promotable_, by calling [`checkConsistency`]{@link #module_core.checkConsistency} and
      * verifying that `attachmentTimestamp` is above a lower bound.
      * Lower bound is calculated based on number of milestones issued
      * since transaction attachment.
      *
-     * ### Example with promotion and reattachments
+     * @example
+     * #### Example with promotion and reattachments
      * 
-     * Using `isPromotable` to determine if transaction can be [promoted]{@link promoteTransaction}
-     * or should be [reattached]{@link replayBundle}
+     * Using `isPromotable` to determine if transaction can be [_promoted_]{@link #module_core.promoteTransaction}
+     * or should be [_reattached_]{@link #module_core.replayBundle}
      * 
      * ```js
      * // We need to monitor inclusion states of all tail transactions (original tail & reattachments)
@@ -51,11 +54,11 @@ export const createIsPromotable = (provider: Provider, depth = DEPTH) => {
      *         .then(isPromotable => isPromotable
      *           ? promoteTransaction(tail, 3, 14)
      *           : replayBundle(tail, 3, 14)
-     *             .then(([reattached]) => {
-     *               const newTail = reattached.hash
+     *             .then(([reattachedTail]) => {
+     *               const newTailHash = reattachedTail.hash
      *               
      *               // Keeping track of all tail hashes to check confirmation
-     *               tails.push(newTail)
+     *               tails.push(newTailHash)
      *               
      *               // Promote the new tail...
      *             })
@@ -66,6 +69,8 @@ export const createIsPromotable = (provider: Provider, depth = DEPTH) => {
      * ```
      *
      * @method isPromotable
+     * 
+     * @memberof module:core
      *
      * @param {Hash} tail - Tail transaction hash
      * @param {Callback} [callback] - Optional callback

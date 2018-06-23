@@ -1,3 +1,5 @@
+/** @module core */
+
 // IRI commands
 export {
     AddNeighborsCommand,

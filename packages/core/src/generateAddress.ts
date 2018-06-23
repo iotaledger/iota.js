@@ -8,6 +8,8 @@ import { Hash } from '../../types'
  *
  * @method generateAddress
  * 
+ * @memberof module:core
+ * 
  * @param {string} seed
  * @param {number} index - Private key index
  * @param {number} [security=2] - Security level of the private key

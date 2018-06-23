@@ -37,6 +37,10 @@ export const createIsAddressUsed = (provider: Provider) => {
  * Generates and returns all addresses up to the first unused addresses including it.
  *
  * @method getUntilFirstUnusedAddress
+ * 
+ * @ignore
+ * 
+ * @memberof module:core
  *
  * @param {string} seed
  * @param {options} [options]
@@ -115,16 +119,18 @@ export const getNewAddressOptions = getOptionsWithDefaults<GetNewAddressOptions>
  * 
  * @param {Provider} provider - Network provider
  * 
- * @return {function} {@link getNewAddress}
+ * @memberof module:core
+ * 
+ * @return {function} {@link #module_core.getNewAddress `getNewAddress`}
  */
 export const createGetNewAddress = (provider: Provider, caller?: string) => {
     const isAddressUsed = createIsAddressUsed(provider)
 
     /**
-     * Generates and returns a new address by calling `{@link findTransactions}`
+     * Generates and returns a new address by calling [`findTransactions`]{@link #module_core.findTransactions}
      * until the first unused address is detected. This stops working after a snapshot.
      *
-     * ### Example
+     * @example
      * ```js
      * getNewAddress(seed, { index })
      *   .then(address => {
@@ -136,6 +142,8 @@ export const createGetNewAddress = (provider: Provider, caller?: string) => {
      * ```
      *
      * @method getNewAddress
+     * 
+     * @memberof module:core
      *
      * @param {string} seed - At least 81 trytes long seed
      * @param {object} [options]

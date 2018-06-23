@@ -5,9 +5,11 @@ import { Callback, Hash, Provider } from '../../types'
 /**  
  * @method createGetLatestInclusion 
  * 
+ * @memberof module:core
+ * 
  * @param {Provider} provider - Network provider for accessing IRI
  *
- * @return {function} {@link getLatestInclusion}
+ * @return {function} {@link #module_core.getLatestInclusion `getLatestInclusion`}
  */
 export const createGetLatestInclusion = (provider: Provider) => {
     const getInclusionStates = createGetInclusionStates(provider)
@@ -15,9 +17,11 @@ export const createGetLatestInclusion = (provider: Provider) => {
 
     /**
      * Fetches inclusion states of given transactions and a list of tips,
-     * by calling `{@link getInclusionStates}` on `latestSolidSubtangleMilestone`.
+     * by calling [`getInclusionStates`]{@link #module_core.getInclusionStates} on `latestSolidSubtangleMilestone`.
      *
      * @example
+     * 
+     * ```js
      * getLatestInclusion(hashes)
      *    .then(states => {
      *        // ...
@@ -25,8 +29,11 @@ export const createGetLatestInclusion = (provider: Provider) => {
      *    .catch(err => {
      *        // handle error
      *    })
+     * ```
      *
      * @method getLatestInclusion
+     * 
+     * @memberof module:core
      *
      * @param {Array<Hash>} transactions - List of transactions hashes 
      * @param {number} tips - List of tips to check if transactions are referenced by

@@ -1,3 +1,5 @@
+/** @module signing */
+
 import { fromValue, trits, trytes, value } from '@iota/converter'
 import Kerl from '@iota/kerl'
 import { padTrits } from '@iota/pad'
@@ -5,6 +7,14 @@ import add from './add'
 import * as errors from './errors'
 import { Hash } from '../../types'
 
+/**
+ * @method subseed
+ *
+ * @param {Int8Array} seed - Seed trits
+ * @param {number} index - Private key index
+ * 
+ * @return {Int8Array} subseed trits
+ */
 export function subseed(seed: Int8Array, index: number): Int8Array {
     if (index < 0) {
         throw new Error(errors.ILLEGAL_KEY_INDEX)
@@ -33,11 +43,10 @@ export function subseed(seed: Int8Array, index: number): Int8Array {
 /**
  * @method key
  *
- * @param {Int8Array} seed - Seed trits
- * @param {number} index - Private key index
+ * @param {Int8Array} subseed - Subseed trits
  * @param {number} length - Private key length
  *
- * @return {Int8Array}
+ * @return {Int8Array} Private key trits
  */
 export function key(subseed: Int8Array, length: number): Int8Array {
     if (subseed.length % 3 !== 0) {
@@ -114,7 +123,7 @@ export function digests(key: Int8Array): Int8Array {
  * 
  * @param {Int8Array} digests - Digests trits
  * 
- * @return {Int8Array}
+ * @return {Int8Array} Address trits
  */
 // tslint:disable-next-line no-shadowed-variable
 export function address(digests: Int8Array): Int8Array {
@@ -134,7 +143,7 @@ export function address(digests: Int8Array): Int8Array {
  * @param {array} normalizedBundleFragment - Normalized bundle fragment
  * @param {Int8Array} signatureFragment - Signature fragment trits
  * 
- * @return {Int8Array}
+ * @return {Int8Array} Digest trits
  */
 // tslint:disable-next-line no-shadowed-variable
 export function digest(
@@ -171,7 +180,7 @@ export function digest(
  * @param {array} normalizeBundleFragment - normalized bundle fragment
  * @param {keyFragment} keyFragment - key fragment trits
  * 
- * @return {Int8Array}
+ * @return {Int8Array} Signature Fragment trits
  */
 export function signatureFragment(
     normalizedBundleFragment: Int8Array,

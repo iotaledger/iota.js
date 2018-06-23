@@ -6,6 +6,7 @@ const TRUTH_TABLE = [1, 0, -1, 2, 1, -1, 0, 2, -1, 1, 0]
 
 /**
  * @class Curl
+ * @ignore
  */
 export default class Curl {
     public static HASH_LENGTH = HASH_LENGTH
@@ -13,6 +14,8 @@ export default class Curl {
 
     /**
      * @constructor
+     * 
+     * @ignore
      *
      * @param rounds
      */
@@ -28,6 +31,8 @@ export default class Curl {
      * Initializes the state with `STATE_LENGTH` trits
      *
      * @method initialize
+     * 
+     * @ignore
      *
      * @param {Int8Array} [state]
      */
@@ -45,6 +50,8 @@ export default class Curl {
 
     /**
      * Resets the state
+     * 
+     * @ignore
      *
      * @method reset
      */
@@ -56,6 +63,8 @@ export default class Curl {
      * Absorbs trits given an offset and length
      *
      * @method absorb
+     * 
+     * @ignore
      *
      * @param {Int8Array} trits
      * @param {number} offset
@@ -78,6 +87,8 @@ export default class Curl {
      * Squeezes trits given an offset and length
      *
      * @method squeeze
+     * 
+     * @ignore
      *
      * @param {Int8Array} trits
      * @param {number} offset
@@ -100,6 +111,8 @@ export default class Curl {
      * Sponge transform function
      *
      * @method transform
+     * 
+     * @ignore
      *
      * @private
      */

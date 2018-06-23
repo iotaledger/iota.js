@@ -1,13 +1,13 @@
 {
     "name": "@iota/core",
     "version": "1.0.0-alpha.1",
-    "description": "Methods to generate addresses, create, broadcast and monitor transactions.",
+    "description": "Core functionality to interact with the IOTA network: generate addresses, create, broadcast and monitor transactions.",
     "main": "./out/core/src/index.js",
     "typings": "typings/core/src",
     "scripts": {
         "prepublish": "tsc",
         "format": "prettier",
-        "test": "tsc && ava"
+        "docs": "tsc && jsdoc2md --no-cache --plugin dmd-clear -t README_tpl.hbs --files './out/**/*.js' > README.md"
     },
     "contributors": [
         "Dominik Schiener <dom@iota.org> (https://iota.org)",
