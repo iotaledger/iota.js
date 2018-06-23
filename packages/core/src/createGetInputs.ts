@@ -11,8 +11,15 @@ import { createGetBalances } from './'
 import { createGetNewAddress, getNewAddressOptions, GetNewAddressOptions } from './createGetNewAddress'
 import * as errors from './errors'
 import {
-    asArray, getOptionsWithDefaults,
-    Address, Callback, Hash, Inputs, makeAddress, Provider, Trytes,
+    asArray,
+    getOptionsWithDefaults,
+    Address,
+    Callback,
+    Hash,
+    Inputs,
+    makeAddress,
+    Provider,
+    Trytes,
 } from '../../types'
 
 export interface GetInputsOptions {
@@ -29,9 +36,9 @@ const defaults: GetInputsOptions = {
     security: 2,
 }
 
-/**  
+/**
  * @method createGetInputs
- * 
+ *
  * @memberof module:core
  *
  * @param {Provider} provider - Network provider for accessing IRI
@@ -42,7 +49,7 @@ export const createGetInputs = (provider: Provider) => {
     const getNewAddress = createGetNewAddress(provider, 'lib')
     const getBalances = createGetBalances(provider)
 
-    /**  
+    /**
      * Creates and returns an `Inputs` object by generating addresses and fetching their latest balance.
      *
      * @example
@@ -61,7 +68,7 @@ export const createGetInputs = (provider: Provider) => {
      * ```
      *
      * @method getInputs
-     * 
+     *
      * @memberof module:core
      *
      * @param {string} seed
@@ -84,21 +91,18 @@ export const createGetInputs = (provider: Provider) => {
      * - `INSUFFICIENT_BALANCE`
      * - Fetch error
      */
-    return (
-        seed: Trytes,
-        options: Partial<GetInputsOptions> = {},
-        callback?: Callback<Inputs>
-    ): Promise<Inputs> => {
+    return (seed: Trytes, options: Partial<GetInputsOptions> = {}, callback?: Callback<Inputs>): Promise<Inputs> => {
         const { start, end, security, threshold } = getInputsOptions(options)
 
         return Promise.resolve(validateGetInputsOptions(seed, { start, end, security, threshold }))
             .then(() => inputsToAddressOptions({ start, end, security, threshold }))
             .then(newAddressOptions => getNewAddress(seed, newAddressOptions))
             .then(allAddresses => asArray(allAddresses))
-            .then(allAddresses => getBalances(allAddresses, 100)
-                .then(({ balances }) => createInputsObject(allAddresses, balances, start, security))
-                .then(res => filterByThreshold(res, threshold))
-                .tap(inputs => hasSufficientBalance(inputs, threshold))
+            .then(allAddresses =>
+                getBalances(allAddresses, 100)
+                    .then(({ balances }) => createInputsObject(allAddresses, balances, start, security))
+                    .then(res => filterByThreshold(res, threshold))
+                    .tap(inputs => hasSufficientBalance(inputs, threshold))
             )
             .asCallback(callback)
     }
@@ -118,9 +122,10 @@ export const validateGetInputsOptions = (seed: Trytes, options: GetInputsOptions
     )
 }
 
-export const inputsToAddressOptions = ({ start, end, security }: GetInputsOptions): GetNewAddressOptions => end
-    ? getNewAddressOptions({ index: start, total: end - start + 1, security, returnAll: true })
-    : getNewAddressOptions({ index: start, security, returnAll: true })
+export const inputsToAddressOptions = ({ start, end, security }: GetInputsOptions): GetNewAddressOptions =>
+    end
+        ? getNewAddressOptions({ index: start, total: end - start + 1, security, returnAll: true })
+        : getNewAddressOptions({ index: start, security, returnAll: true })
 
 export const createInputsObject = (
     addresses: ReadonlyArray<Hash>,
@@ -129,19 +134,25 @@ export const createInputsObject = (
     security: number
 ): Inputs => {
     const inputs = addresses.map((address, i) => makeAddress(address, balances[i], start + i, security))
-    const totalBalance = inputs.reduce((acc, addr) => acc += addr.balance, 0)
+    const totalBalance = inputs.reduce((acc, addr) => (acc += addr.balance), 0)
     return { inputs, totalBalance }
 }
 
 export const filterByThreshold = ({ inputs, totalBalance }: Inputs, threshold?: number): Inputs =>
-    threshold ? inputs.reduce((acc: Inputs, input: Address) => (
-        acc.totalBalance < threshold
-            ? { inputs: [...acc.inputs, input], totalBalance: acc.totalBalance + input.balance }
-            : acc
-    ), { inputs: [], totalBalance: 0 }) : { inputs, totalBalance }
+    threshold
+        ? inputs.reduce(
+              (acc: Inputs, input: Address) =>
+                  acc.totalBalance < threshold
+                      ? { inputs: [...acc.inputs, input], totalBalance: acc.totalBalance + input.balance }
+                      : acc,
+              { inputs: [], totalBalance: 0 }
+          )
+        : { inputs, totalBalance }
 
-export const hasSufficientBalance = ({ totalBalance }: Inputs, threshold?: number) => {
-    if (threshold && totalBalance < threshold) {
+export const hasSufficientBalance = (inputs: Inputs, threshold?: number) => {
+    if (threshold && inputs.totalBalance < threshold) {
         throw new Error(errors.INSUFFICIENT_BALANCE)
     }
+
+    return inputs
 }
