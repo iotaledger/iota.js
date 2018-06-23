@@ -5,7 +5,7 @@
     "scripts": {
         "init": "yarn && lerna bootstrap",
         "test": "lerna run test --stream",
-        "test-ci": "yarn init && lerna run test-ci --stream",
+        "test-ci": "yarn run init && lerna run test-ci --stream",
         "precommit": "lint-staged",
         "format": "prettier",
         "docs":
