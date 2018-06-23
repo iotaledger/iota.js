@@ -48,6 +48,7 @@
         "dmd-clear": "^0.1.2",
         "jsdoc-babel": "^0.4.0",
         "lerna": "^2.11.0",
+        "nyc": "^12.0.2",
         "prettier": "^1.10.2",
         "tslint": "^5.9.1",
         "tslint-config-prettier": "^1.6.0",

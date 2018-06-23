@@ -4,6 +4,6 @@ node_js:
     - '6'
     - '4'
 before_script:
-    - npm install
+    - yarn
 script:
-    - npm run bootstrap
+    - yarn test-ci

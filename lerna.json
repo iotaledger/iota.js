@@ -8,7 +8,7 @@
     "license": "MIT"
   },
   "publish": {
-    "allowBranch": "next",
+    "allowBranch": "develop",
     "cdVersion": "prerelease",
     "conventionalCommits": true,
     "gitRemote": "upstream",

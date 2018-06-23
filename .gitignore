@@ -1,4 +1,5 @@
 node_modules
+coverage
 /packages/*/node_modules
 /packages/*/out
 /packages/*/typings
@@ -8,6 +9,7 @@ node_modules
 *.iml
 .git
 .vscode
+.nyc_output
 *.log
 *.cache
 package-lock.json

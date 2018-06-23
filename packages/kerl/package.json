@@ -6,8 +6,8 @@
     "typings": "typings/src",
     "scripts": {
         "prepublish": "tsc",
-        "format": "prettier",
-        "test": "tsc && ava"
+        "test": "tsc && ava",
+        "format": "prettier"
     },
     "contributors": [
         "Dominik Schiener <dom@iota.org> (https://iota.org)",

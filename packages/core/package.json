@@ -6,6 +6,8 @@
     "typings": "typings/core/src",
     "scripts": {
         "prepublish": "tsc",
+        "test": "tsc && nyc ava",
+        "test-ci": "nyc ava",
         "format": "prettier",
         "docs": "tsc && jsdoc2md --no-cache --plugin dmd-clear -t README_tpl.hbs --files './out/**/*.js' > README.md"
     },
@@ -22,6 +24,32 @@
         "failWithoutAssertions": false,
         "compileEnhancements": false,
         "verbose": true
+    },
+    "nyc": {
+        "watermarks": {
+            "functions": [
+                80,
+                95
+            ],
+            "branches": [
+                80,
+                95
+            ],
+            "statements": [
+                80,
+                95
+            ]
+        },
+        "include": [
+            "out/*/src/*.js",
+            "out/*/test/**/*.js"
+        ],
+        "exclude": [
+            "out/*/test/integration/nocks/*.js",
+            "out/**/createSendTransfer.js",
+            "out/**/createIsReattachable.js",
+            "out/**/createInterruptAttachingToTangle.js"
+        ]
     },
     "keywords": [
         "iota",
