@@ -126,3 +126,15 @@ nock('http://localhost:14265', headers)
         ]
     })
     .reply(200, findTransactionsResponse)
+
+
+nock('http://localhost:14265', headers)
+    .persist()
+    .post('/', {
+        command: IRICommand.FIND_TRANSACTIONS,
+        addresses: [
+            '9DZXPFSVCSSWXXQPFMWLGFKPBAFTHYMKMZCPFHBVHXPFNJEIJIEEPKXAUBKBNNLIKWHJIYQDFWQVELOCB',
+            'OTSZGTNPKFSGJLUPUNGGXFBYF9GVUEHOADZZTDEOJPWNEIVBLHOMUWPILAHTQHHVSBKTDVQIAEQOZXGFB'
+        ]
+    })
+    .reply(200, findTransactionsResponse)
