@@ -5,30 +5,20 @@ import {
     applyReturnAllOption,
     createGetNewAddress,
     createIsAddressUsed,
-    getUntilFirstUnusedAddress
+    getUntilFirstUnusedAddress,
 } from '../../src/createGetNewAddress'
 import { INVALID_SEED, INVALID_TOTAL_OPTION } from '../../src/errors'
 import './nocks/findTransactions'
 import './nocks/wereAddressesSpentFrom'
 
-import {
-    addresses,
-    addressesWithChecksum,
-    newAddress,
-    newAddressWithChecksum,
-    seed
-} from '@iota/samples'
+import { addresses, addressesWithChecksum, newAddress, newAddressWithChecksum, seed } from '@iota/samples'
 
 const client = createHttpClient()
 const getNewAddress = createGetNewAddress(client, 'lib')
 const isAddressUsed = createIsAddressUsed(client)
 
 test('getNewAddress() resolves to correct new address', async t => {
-    t.is(
-        await getNewAddress(seed, { index: 0 }),
-        newAddress,
-        'getNewAddress() should resolve to correct new address'
-    )
+    t.is(await getNewAddress(seed, { index: 0 }), newAddress, 'getNewAddress() should resolve to correct new address')
 })
 
 test('getNewAddress() with total option resolves to correct addresses', async t => {
@@ -78,8 +68,6 @@ test('getNewAddress() rejects with correct errors for invalid arguments', t => {
 })
 
 test('getNewAddress() rejects with correct errors for `total=0`', t => {
-    const invalidSeed = 'asdasDSFDAFD'
-
     t.is(
         t.throws(() => getNewAddress(seed, { index: 0, total: 0 }), Error).message,
         `${INVALID_TOTAL_OPTION}: ${0}`,
@@ -93,40 +81,20 @@ test.cb('getNewAddress() invokes callback', t => {
 
 test.cb('getNewAddress() passes correct arguments to callback', t => {
     getNewAddress(seed, { index: 0 }, (err, res) => {
-        t.is(
-            err,
-            null,
-            'getNewAddress() should pass null as first argument in callback for successuful requests'
-        )
+        t.is(err, null, 'getNewAddress() should pass null as first argument in callback for successuful requests')
 
-        t.is(
-            res,
-            newAddress,
-            'getNewAddress() should pass the correct response as second argument in callback'
-        )
+        t.is(res, newAddress, 'getNewAddress() should pass the correct response as second argument in callback')
 
         t.end()
     })
 })
 
 test('isAddressUsed() resolves to correct state', async t => {
-    t.is(
-        await isAddressUsed(addresses[0]),
-        true,
-        'isAddressUsed() resolves to `true` for spent address'
-    )
+    t.is(await isAddressUsed(addresses[0]), true, 'isAddressUsed() resolves to `true` for spent address')
 
-    t.is(
-        await isAddressUsed(addresses[1]),
-        true,
-        'isAddressUsed() resolves to `true` for address with transactions'
-    )
+    t.is(await isAddressUsed(addresses[1]), true, 'isAddressUsed() resolves to `true` for address with transactions')
 
-    t.is(
-        await isAddressUsed(addresses[1]),
-        true,
-        'isAddressUsed() resolves to `false` result for unused address'
-    )
+    t.is(await isAddressUsed(addresses[1]), true, 'isAddressUsed() resolves to `false` result for unused address')
 })
 
 test('getUntilFirstUnusedAddress() resolves to correct new address', async t => {
@@ -159,7 +127,6 @@ test('applyReturnAllOption() returns correct address or address array', t => {
         'applyReturnAllOption() should return new address string for `returnAll: false`'
     )
 
-
     t.deepEqual(
         applyReturnAllOption(false, 2)(addresses),
         addresses,
@@ -185,5 +152,4 @@ test('applyChecksumOption() resolves to correct addresses', async t => {
         newAddress,
         'applyChecksumOptions() with `checksum = false` should not add checksum'
     )
-
 })

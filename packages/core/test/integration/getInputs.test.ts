@@ -4,7 +4,7 @@ import {
     createGetInputs,
     createInputsObject,
     hasSufficientBalance,
-    inputsToAddressOptions
+    inputsToAddressOptions,
 } from '../../src/createGetInputs'
 import { Inputs } from '../../../types'
 import { INSUFFICIENT_BALANCE, INVALID_SEED, INVALID_START_END_OPTIONS } from '../../src/errors'
@@ -23,15 +23,16 @@ const inputs: Inputs = {
             address: getBalancesCommand.addresses[0],
             balance: balances[0],
             keyIndex: 0,
-            security: 2
-        }, {
+            security: 2,
+        },
+        {
             address: getBalancesCommand.addresses[1],
             balance: balances[1],
             keyIndex: 1,
-            security: 2
-        }
+            security: 2,
+        },
     ],
-    totalBalance: balances[0] + balances[1]
+    totalBalance: balances[0] + balances[1],
 }
 
 const allInputs: Inputs = {
@@ -39,9 +40,9 @@ const allInputs: Inputs = {
         address: getBalancesCommand.addresses[2],
         balance: balances[2],
         keyIndex: 2,
-        security: 2
+        security: 2,
     }),
-    totalBalance: inputs.totalBalance + balances[2]
+    totalBalance: inputs.totalBalance + balances[2],
 }
 
 test('inputsToAddressOptions() translates getInputs() options to compatible getNewAddress() options', t => {
@@ -50,14 +51,14 @@ test('inputsToAddressOptions() translates getInputs() options to compatible getN
             start: 3,
             end: 9,
             security: 2,
-            threshold: 100
+            threshold: 100,
         }),
         {
             index: 3,
             total: 7,
             security: 2,
             returnAll: true,
-            checksum: false
+            checksum: false,
         },
         'inputsToAddressOptions() should translate getInputs() options with `end`, to getNewAddress() compatible options'
     )
@@ -67,14 +68,14 @@ test('inputsToAddressOptions() translates getInputs() options to compatible getN
             start: 3,
             end: undefined,
             security: 2,
-            threshold: 100
+            threshold: 100,
         }),
         {
             index: 3,
             total: undefined,
             security: 2,
             returnAll: true,
-            checksum: false
+            checksum: false,
         },
         'inputsToAddressOptions() should translate getInputs() options without `end`, to getNewAddress() compatible options'
     )
@@ -108,7 +109,7 @@ test('getInputs() rejects with correct errors for invalid input', t => {
     const invalidSeed = 'asdasDSFDAFD'
     const invalidStartEndOptions = {
         start: 10,
-        end: 9
+        end: 9,
     }
 
     t.is(
@@ -124,32 +125,21 @@ test('getInputs() rejects with correct errors for invalid input', t => {
     )
 })
 
-/*
 test('getInputs() with threshold rejects with correct error if balance is insufficient', t => {
-    t.is(
-        t.throws(() => getInputs(seed, { start: 0, threshold: 110 }), Error).message,
-        `${ INSUFFICIENT_BALANCE }: 110`,
-        'getInputs() with threshold should reject with correct error if balance is insufficient'
+    return getInputs(seed, { start: 0, threshold: 110 }).catch((err: Error) =>
+        t.is(
+            err.message,
+            `${INSUFFICIENT_BALANCE}`,
+            'getInputs() with threshold should reject with correct error if balance is insufficient'
+        )
     )
-}) */
-
-test.cb('getInputs() invokes callback', t => {
-    getInputs(seed, { start: 0 }, t.end)
 })
 
 test.cb('getInputs() passes correct arguments to callback', t => {
     getInputs(seed, { start: 0, threshold: 100 }, (err, res) => {
-        t.is(
-            err,
-            null,
-            'getInputs() should pass null as first argument in callback for successuful requests'
-        )
+        t.is(err, null, 'getInputs() should pass null as first argument in callback for successuful requests')
 
-        t.deepEqual(
-            res,
-            inputs,
-            'getInputs() should pass the correct response as second argument in callback'
-        )
+        t.deepEqual(res, inputs, 'getInputs() should pass the correct response as second argument in callback')
 
         t.end()
     })
