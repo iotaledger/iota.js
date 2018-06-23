@@ -1,0 +1,65 @@
+import * as Promise from 'bluebird'
+import { hashArrayValidator, validate } from '@iota/validators'
+import {
+    Callback,
+    GetTrytesCommand,
+    GetTrytesResponse,
+    Hash,
+    IRICommand,
+    Provider,
+    Trytes
+} from '../../types'
+
+/**
+ * @method createGetTrytes
+ * 
+ * @memberof module:core
+ * 
+ * @param {Provider} provider - Network provider
+ * 
+ * @return {function} {@link #module_core.getTrytes `getTrytes`}
+ */
+export const createGetTrytes = ({ send }: Provider) =>
+
+    /**
+     * Fetches the transaction trytes given a list of transaction hashes, by calling
+     * [`getTrytes`](https://docs.iota.works/iri/api#endpoints/getTrytes) command.
+     *  
+     * @example
+     * ```js
+     * getTrytes(hashes)
+     *   // Parsing as transaction objects
+     *   .then(trytes => asTransactionObjects(hashes)(trytes))
+     *   .then(transactions => {
+     *     // ...
+     *   })
+     *   .catch(err => {
+     *     // ...
+     *   })
+     * ```
+     *
+     * @method getTrytes
+     * 
+     * @memberof module:core
+     *
+     * @param {Array<Hash>} hashes - List of transaction hashes
+     * @param {Callback} [callback] - Optional callback
+     * 
+     * @return {Promise}
+     * @fulfil {Trytes[]} - Transaction trytes
+     * @reject Error{}
+     * - `INVALID_HASH_ARRAY`: Invalid array of hashes
+     * - Fetch error
+     */
+    function getTrytes(
+        hashes: ReadonlyArray<Hash>,
+        callback?: Callback<ReadonlyArray<Trytes>>
+    ): Promise<ReadonlyArray<Trytes>> {
+        return Promise.resolve(validate(hashArrayValidator(hashes)))
+            .then(() => send<GetTrytesCommand, GetTrytesResponse>({
+                command: IRICommand.GET_TRYTES,
+                hashes,
+            }))
+            .then(({ trytes }) => trytes)
+            .asCallback(callback)
+    }

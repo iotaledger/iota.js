@@ -1,11 +1,8 @@
-
 language: node_js
 node_js:
-    - "node"
-    - "4.1"
+    - '8'
+    - '6'
 before_script:
-    - npm install
-    - npm install -g gulp
+    - yarn
 script:
-    - gulp
-    - npm test
+    - yarn test-ci

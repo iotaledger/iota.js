@@ -1,0 +1,11 @@
+{
+    "extends": ["tslint:latest", "tslint-config-prettier"],
+    "rules": {
+        "interface-name": false,
+        "jsdoc-format": false,
+        "no-bitwise": false,
+        "no-unused-variable": true,
+        "object-literal-sort-keys": false,
+        "prefer-for-of": false
+    }
+}

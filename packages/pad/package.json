@@ -1,0 +1,62 @@
+{
+  "name": "@iota/pad",
+  "version": "1.0.0-alpha.1",
+  "description": "Padding utility",
+  "main": "./out/pad/src/index.js",
+  "typings": "typings/pad/src",
+  "scripts": {
+    "prepublish": "tsc",
+    "test": "tsc && nyc ava",
+    "test-ci": "nyc ava",
+    "format": "prettier"
+  },
+  "contributors": [
+    "Dominik Schiener <dom@iota.org> (https://iota.org)",
+    "Edward Greve <edward@iota.org> (https://github.com/anyong)",
+    "Chris Dukakis <chris.dukakis@iota.org> (https://github.com/chrisdukakis)"
+  ],
+  "ava": {
+    "files": "out/pad/test/*.test.js",
+    "failFast": true,
+    "failWithoutAssertions": false,
+    "compileEnhancements": false,
+    "verbose": true
+  },
+  "nyc": {
+    "watermarks": {
+      "functions": [
+        80,
+        95
+      ],
+      "branches": [
+        80,
+        95
+      ],
+      "statements": [
+        80,
+        95
+      ]
+    },
+    "include": [
+      "out/*/src/*.js",
+      "out/*/test/*.js"
+    ]
+  },
+  "keywords": [
+    "iota",
+    "tangle",
+    "library",
+    "browser",
+    "javascript",
+    "nodejs",
+    "API"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/iotaledger/iota.js/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/iotaledger/iota.js.git/tree/develop/packages/crypto"
+  }
+}

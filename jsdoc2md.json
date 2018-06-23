@@ -1,0 +1,44 @@
+{
+  "source": {
+    "includePattern": "/packages/.+\\.(j|t)s(doc|x)?$",
+    "excludePattern": ".+\\.(test|spec).ts"
+  },
+  "plugins": [
+    "plugins/markdown",
+    "node_modules/jsdoc-babel",
+    "dmd-clear"
+  ],
+  "templates": {
+    "cleverLinks": true,
+    "monospaceLinks": false
+  },
+  "opts": {
+    "recurse": true,
+    "private": true
+  },
+  "babel": {
+    "extensions": [
+      "ts",
+      "tsx"
+    ],
+    "ignore": [
+      "**/*.(test|spec).ts"
+    ],
+    "babelrc": false,
+    "presets": [
+      [
+        "@babel/preset-env",
+        {
+          "targets": {
+            "node": "current"
+          }
+        }
+      ],
+      "@babel/typescript"
+    ],
+    "plugins": [
+      "@babel/proposal-class-properties",
+      "@babel/proposal-object-rest-spread"
+    ]
+  }
+}

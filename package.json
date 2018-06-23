@@ -1,13 +1,15 @@
 {
     "name": "iota.lib.js",
-    "version": "1.0.0-alpha1",
-    "description": "Javascript Library for IOTA",
-    "main": "./lib/iota.js",
+    "version": "1.0.0-alpha.1",
+    "description": "IOTA Client Reference Implementation",
     "scripts": {
-        "build": "gulp",
+        "init": "yarn && lerna bootstrap",
+        "test": "lerna run test --stream",
+        "test-ci": "yarn run init && lerna run test-ci --stream",
+        "precommit": "lint-staged",
         "format": "prettier",
-        "test": "tsc && ava",
-        "watch": "tsc && ava -w -u"
+        "docs":
+            "lerna run docs && jsdoc2md --no-cache --plugin dmd-clear --files './packages/*/out/**/*.js' > api_reference.md"
     },
     "contributors": [
         "Dominik Schiener <dom@iota.org> (https://iota.org)",
@@ -15,13 +17,16 @@
         "Chris Dukakis <chris.dukakis@iota.org> (https://github.com/chrisdukakis)"
     ],
     "ava": {
-        "files": "out/test/**/*.test.js",
+        "files": ["packages/**/out/**/test/*.test.js", "packages/**/out/**/test/integration/*.test.js"],
         "failFast": true,
         "failWithoutAssertions": false,
         "compileEnhancements": false,
         "verbose": true
     },
-    "keywords": ["iota", "tangle", "library", "browser", "javascript", "nodejs", "API"],
+    "lint-staged": {
+        "*.{js,json}": ["prettier --write", "git add"]
+    },
+    "keywords": ["iota", "tangle", "library", "javascript", "nodejs", "API"],
     "license": "MIT",
     "bugs": {
         "url": "https://github.com/iotaledger/iota.lib.js/issues"
@@ -31,36 +36,19 @@
         "url": "https://github.com/iotaledger/iota.lib.js.git"
     },
     "dependencies": {
-        "@types/bignumber.js": "^5.0.0",
-        "@types/bluebird": "^3.5.20",
-        "@types/crypto-js": "^3.1.38",
-        "@types/isomorphic-fetch": "^0.0.34",
-        "bignumber.js": "^4.1.0",
-        "bluebird": "^3.5.1",
-        "crypto-js": "^3.1.9-1",
-        "isomorphic-fetch": "^2.2.1"
+        "@types/bluebird": "^3.5.20"
     },
     "devDependencies": {
-        "@types/nock": "^9.1.2",
         "ava": "^0.25.0",
-        "bower": ">=1.8.0",
-        "browserify": ">=14.1.0",
-        "chai": "^4.0.2",
-        "del": "^3.0.0",
-        "gulp": "^3.9.1",
-        "gulp-jshint": "^2.0.2",
-        "gulp-nsp": ">=2.4.2",
-        "gulp-rename": ">=1.2.2",
-        "gulp-replace": "^0.6.1",
-        "gulp-uglify": "^3.0.0",
-        "jshint": "^2.9.4",
-        "mocha": "^3.2.0",
-        "nock": "^9.2.3",
+        "dmd-clear": "^0.1.2",
+        "husky": "^0.14.3",
+        "jsdoc-babel": "^0.4.0",
+        "lerna": "^2.11.0",
+        "lint-staged": "^7.2.0",
+        "nyc": "^12.0.2",
         "prettier": "^1.10.2",
         "tslint": "^5.9.1",
         "tslint-config-prettier": "^1.6.0",
-        "typescript": "^2.7.0",
-        "vinyl-buffer": "^1.0.0",
-        "vinyl-source-stream": "^1.1.0"
+        "typescript": "^2.7.0"
     }
 }

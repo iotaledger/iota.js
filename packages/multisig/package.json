@@ -1,0 +1,54 @@
+{
+  "name": "@iota/multisig",
+  "version": "1.0.0-alpha.1",
+  "description": "Methods for generating multisig addresses ansd co-signing transactions.",
+  "main": "./out/multisig/src/index.js",
+  "typings": "typings/multisig/src",
+  "scripts": {
+    "prepublish": "tsc",
+    "test": "tsc",
+    "format": "prettier",
+    "docs": "tsc && jsdoc2md --no-cache --plugin dmd-clear -t README_tpl.hbs --files './out/**/*.js' > README.md"
+  },
+  "contributors": [
+    "Dominik Schiener <dom@iota.org> (https://iota.org)",
+    "Edward Greve <edward@iota.org> (https://github.com/anyong)",
+    "Chris Dukakis <chris.dukakis@iota.org> (https://github.com/chrisdukakis)"
+  ],
+  "ava": {
+    "files": "out/multisig/test/*.test.js",
+    "failFast": true,
+    "failWithoutAssertions": false,
+    "compileEnhancements": false,
+    "verbose": true
+  },
+  "keywords": [
+    "iota",
+    "tangle",
+    "library",
+    "browser",
+    "javascript",
+    "nodejs",
+    "API"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/iotaledger/iota.js/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/iotaledger/iota.js.git"
+  },
+  "dependencies": {
+    "@iota/bundle": "^1.0.0-alpha.1",
+    "@iota/checksum": "^1.0.0-alpha.1",
+    "@iota/converter": "^1.0.0-alpha.1",
+    "@iota/core": "^1.0.0-alpha.1",
+    "@iota/kerl": "^1.0.0-alpha.1",
+    "@iota/signing": "^1.0.0-alpha.1",
+    "@iota/validators": "^1.0.0-alpha.1",
+    "@types/bluebird": "^3.5.20",
+    "bluebird": "^3.5.1",
+    "isomorphic-fetch": "^2.2.1"
+  }
+}
