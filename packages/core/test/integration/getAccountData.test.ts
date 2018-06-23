@@ -72,6 +72,22 @@ test('getAccountData() rejects with correct errors for invalid inputs', t => {
     )
 })
 
+test('getAccountData() with start > 0 resolves to correct account data.', async t => {
+    const expected = {
+        ...accountData,
+        addresses: accountData.addresses.slice(1, 3),
+        balance: balancesResponse.balances
+          .slice(1, 3)
+          .reduce((acc, balance) => acc + balance, 0)
+    }
+
+    t.deepEqual(
+        await getAccountData(seed, { start: 1 }),
+        expected,
+        'getAccountData() with start > 0 should resolve to correct account data'
+    )
+})
+
 test.cb('getAccountData() invokes callback', t => {
     getAccountData(seed, { start: 0 }, t.end)
 })
