@@ -34,8 +34,6 @@ Supports the following forms of JSON encoded values:
 - `"\"hello\""`
 
 **Example**  
-### Example
-
 ```js
 try {
   const msg = JSON.parse(extractJson(bundle))
@@ -44,8 +42,8 @@ try {
   // Invalid bundle or invalid encoded JSON
 }
 ```
-
-### Example with `getBundle`:
+**Example**  
+Example with `getBundle`:
 
 ```js
 getBundle(tailHash)

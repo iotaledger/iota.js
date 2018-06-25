@@ -1594,7 +1594,7 @@ traverseBundle(tail)
 | [security] | <code>number</code> | <code>2</code> | Security level of the private key |
 | [checksum] | <code>boolean</code> | <code>false</code> | Flag to add 9trytes checksum |
 
-Generates a new address
+Generates an address deterministically, according to the given seed, index and security level.
 
 **Returns**: <code>Hash</code> - Address trytes  
 <a name="module_extract-json"></a>
@@ -1617,8 +1617,6 @@ Supports the following forms of JSON encoded values:
 - `"\"hello\""`
 
 **Example**  
-### Example
-
 ```js
 try {
   const msg = JSON.parse(extractJson(bundle))
@@ -1627,8 +1625,8 @@ try {
   // Invalid bundle or invalid encoded JSON
 }
 ```
-
-### Example with `getBundle`:
+**Example**  
+Example with `getBundle`:
 
 ```js
 getBundle(tailHash)
@@ -1976,19 +1974,20 @@ Converts accross IOTA units. Valid unit names are:
 
 Runs each validator in sequence, and throws on the first occurence of invalid data.
 Validators are passed as arguments and executed in given order.
+You might want place `validate()` in promise chains before operations that require valid inputs,
+taking advantage of built-in promise branching.
 
 **Example**  
-### Example
-
 ```js
 try {
   validate([
-    value,
-    isTrytes,
-    'Invalid trytes'
+    value, // Given value
+    isTrytes, // Validator function
+    'Invalid trytes' // Error message
   ])
 } catch (err) {
   console.log(err.message) // 'Invalid trytes'
+}
 ```
 <a name="module_validators..isTrytesOfExactLength"></a>
 

@@ -76,19 +76,20 @@ yarn add @iota/validators
 
 Runs each validator in sequence, and throws on the first occurence of invalid data.
 Validators are passed as arguments and executed in given order.
+You might want place `validate()` in promise chains before operations that require valid inputs,
+taking advantage of built-in promise branching.
 
 **Example**  
-### Example
-
 ```js
 try {
   validate([
-    value,
-    isTrytes,
-    'Invalid trytes'
+    value, // Given value
+    isTrytes, // Validator function
+    'Invalid trytes' // Error message
   ])
 } catch (err) {
   console.log(err.message) // 'Invalid trytes'
+}
 ```
 <a name="module_validators..isTrytesOfExactLength"></a>
 

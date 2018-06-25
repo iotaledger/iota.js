@@ -6,7 +6,7 @@ Core functionality to interact with the IOTA network. Includes methods for:
 - Querying for transactions
 - Monitoring balances
 - Monitoring inclusion states and consistency of transactions
-- Promoting and reattaing pending transactions
+- Promoting and reattaching pending transactions
 
 ## Installation
 
@@ -1353,6 +1353,6 @@ traverseBundle(tail)
 | [security] | <code>number</code> | <code>2</code> | Security level of the private key |
 | [checksum] | <code>boolean</code> | <code>false</code> | Flag to add 9trytes checksum |
 
-Generates a new address
+Generates an address deterministically, according to the given seed, index and security level.
 
 **Returns**: <code>Hash</code> - Address trytes  

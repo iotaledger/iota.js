@@ -13,23 +13,25 @@ export type Validator<T> = (x: T, err?: string) => Validatable<T>
 /**
  * Runs each validator in sequence, and throws on the first occurence of invalid data.
  * Validators are passed as arguments and executed in given order.
- * 
+ * You might want place `validate()` in promise chains before operations that require valid inputs,
+ * taking advantage of built-in promise branching.
+ *
  * @example
- * ### Example
  *
  * ```js
  * try {
  *   validate([
- *     value,
- *     isTrytes,
- *     'Invalid trytes'
+ *     value, // Given value
+ *     isTrytes, // Validator function
+ *     'Invalid trytes' // Error message
  *   ])
  * } catch (err) {
  *   console.log(err.message) // 'Invalid trytes'
+ * }
  * ```
- * 
+ *
  * @method validate
- * 
+ *
  * @throws {Error} error
  * @return {boolean}
  */
@@ -54,72 +56,67 @@ export const isArray = Array.isArray
 
 /**
  * @method isTrytesOfExactLength
- * 
+ *
  * @param {string} trytes
  * @param {number} length
- * 
+ *
  * @return {boolean}
  */
 export const isTrytesOfExactLength = (trytes: string, length: number) =>
-    typeof trytes === 'string' &&
-    new RegExp(`^[9A-Z]{${length}}$`).test(trytes)
+    typeof trytes === 'string' && new RegExp(`^[9A-Z]{${length}}$`).test(trytes)
 
 /**
  * @method isTrytesOfMaxLength
- * 
+ *
  * @param {string} trytes
  * @param {number} length
- * 
+ *
  * @return {boolean}
  */
 export const isTrytesOfMaxLength = (trytes: string, length: number) =>
-    typeof trytes === 'string' &&
-    new RegExp(`^[9A-Z]{1,${length}}$`).test(trytes)
+    typeof trytes === 'string' && new RegExp(`^[9A-Z]{1,${length}}$`).test(trytes)
 
 /**
  * Checks if input is correct trytes consisting of [9A-Z]; optionally validate length
  * @method isTrytes
- * 
+ *
  * @param {string} trytes
  * @param {string | number} [length='1,']
- * 
+ *
  * @return {boolean}
  */
 export const isTrytes = (trytes: string, length: string | number = '1,'): trytes is Trytes =>
-    typeof trytes === 'string' &&
-    new RegExp(`^[9A-Z]{${length}}$`).test(trytes)
+    typeof trytes === 'string' && new RegExp(`^[9A-Z]{${length}}$`).test(trytes)
 
 /**
  * Checks if input is correct hash (81 trytes) or address with checksum (90 trytes)
- * 
+ *
  * @method isHash
- * 
+ *
  * @param {string} hash
- * 
+ *
  * @return {boolean}
  */
 export const isHash = (hash: any): hash is Hash =>
-    isTrytesOfExactLength(hash, HASH_SIZE) ||
-    isTrytesOfExactLength(hash, HASH_SIZE + 9) // address w/ checksum is valid hash
+    isTrytesOfExactLength(hash, HASH_SIZE) || isTrytesOfExactLength(hash, HASH_SIZE + 9) // address w/ checksum is valid hash
 
 /**
  * Checks if input is correct transaction hash (81 trytes)
- * 
+ *
  * @method isTransactionHash
- * 
+ *
  * @param {string} hash
- * 
+ *
  * @return {boolean}
  */
-export const isTransactionHash = (hash: any): hash is Hash =>
-    isTrytesOfExactLength(hash, HASH_SIZE)
+export const isTransactionHash = (hash: any): hash is Hash => isTrytesOfExactLength(hash, HASH_SIZE)
 
 /**
  * Checks if input contains `9`s only.
  * @method isEmpty
- * 
+ *
  * @param {string} hash
- * 
+ *
  * @return {boolean}
  */
 export const isEmpty = (trytes: any): trytes is Trytes => typeof trytes === 'string' && /^[9]+$/.test(trytes)
@@ -129,9 +126,9 @@ export const isNinesTrytes = isEmpty
  * Checks if input is valid `transfer` object.
  *
  * @method isTransfer
- * 
+ *
  * @param {Transfer} transfer
- * 
+ *
  * @return {boolean}
  */
 export const isTransfer = (transfer: Transfer): transfer is Transfer =>
@@ -146,84 +143,80 @@ export const isTransfer = (transfer: Transfer): transfer is Transfer =>
  * Checks if input is array of valid `transfer` objects.
  *
  * @method isTransfersArray
- * 
+ *
  * @param {Transfer[]} transfers
- * 
+ *
  * @return {boolean}
  */
 export const isTransfersArray = (transfers: ReadonlyArray<any>): transfers is ReadonlyArray<Transfer> =>
-    isArray(transfers) &&
-    transfers.every(isTransfer)
+    isArray(transfers) && transfers.every(isTransfer)
 
 /**
  * Checks if input is array of valid hashes.
  * Valid hashes are `81` trytes in length, or `90` trytes in case of addresses with checksum.
  *
  * @method isHashArray
- * 
+ *
  * @param {string[]} hashes
- * 
+ *
  * @return {boolean}
  */
 export const isHashArray = (hashes: ReadonlyArray<any>): hashes is ReadonlyArray<Hash> =>
-    isArray(hashes) &&
-    hashes.every(isHash)
+    isArray(hashes) && hashes.every(isHash)
 
 /**
  * Checks if input is array of valid transaction hashes.
  *
  * @method isTransactionHashArray
- * 
+ *
  * @param {string[]} hashes
- * 
+ *
  * @return {boolean}
  */
 export const isTransactionHashArray = (hashes: ReadonlyArray<any>): hashes is ReadonlyArray<Hash> =>
-    isArray(hashes) &&
-    hashes.every(isTransactionHash)
+    isArray(hashes) && hashes.every(isTransactionHash)
 
 /**
  * Checks if input is array of valid tranasction trytes.
  *
  * @method isTransactionTrytesArray
- * 
+ *
  * @param {string[]} trytes
- * 
+ *
  * @return {boolean}
  */
 export const isTransactionTrytesArray = (trytesArray: ReadonlyArray<any>): trytesArray is ReadonlyArray<Trytes> =>
-    isArray(trytesArray) &&
-    trytesArray.every(trytes => isTrytes(trytes, TRANSACTION_TRYTES_SIZE))
+    isArray(trytesArray) && trytesArray.every(trytes => isTrytes(trytes, TRANSACTION_TRYTES_SIZE))
 
 export const isTrytesArray = (trytesArray: ReadonlyArray<any>): trytesArray is ReadonlyArray<Trytes> =>
-    isArray(trytesArray) &&
-    trytesArray.every(trytes => isTrytes(trytes, TRANSACTION_TRYTES_SIZE))
+    isArray(trytesArray) && trytesArray.every(trytes => isTrytes(trytes, TRANSACTION_TRYTES_SIZE))
 
 /**
  * Checks if input is array of valid attached tranasction trytes.
  * For attached transactions last 241 trytes are non-zero.
  *
  * @method isAttachedTrytesArray
- * 
+ *
  * @param {string[]} trytes
- * 
+ *
  * @return {boolean}
  */
 export const isAttachedTrytesArray = (trytesArray: ReadonlyArray<any>): trytesArray is ReadonlyArray<Trytes> =>
     isArray(trytesArray) &&
     trytesArray.length > 0 &&
-    trytesArray.every(trytes =>
-        isTrytesOfExactLength(trytes, TRANSACTION_TRYTES_SIZE) &&
-        !(/^[9]+$/.test(trytes.slice(TRANSACTION_TRYTES_SIZE - 3 * HASH_SIZE)))
+    trytesArray.every(
+        trytes =>
+            isTrytesOfExactLength(trytes, TRANSACTION_TRYTES_SIZE) &&
+            !/^[9]+$/.test(trytes.slice(TRANSACTION_TRYTES_SIZE - 3 * HASH_SIZE))
     )
 
 /**
  * Checks if input is valid transaction object.
  *
  * @method isTransaction
- * 
+ *
  * @param {Object[]} tx
- * 
+ *
  * @return {boolean}
  */
 export const isTransaction = (tx: any): tx is Transaction =>
@@ -248,46 +241,39 @@ export const isTransaction = (tx: any): tx is Transaction =>
  * Checks if input is valid array of transaction objects.
  *
  * @method isTransactionArray
- * 
+ *
  * @param {Object[]} bundle
- * 
+ *
  * @return {boolean}
  */
 export const isTransactionArray = (bundle: ReadonlyArray<any>): bundle is ReadonlyArray<Transaction> =>
-    isArray(bundle) &&
-    bundle.length > 0 &&
-    bundle.every(isTransaction)
+    isArray(bundle) && bundle.length > 0 && bundle.every(isTransaction)
 
 /**
  * Checks if input is valid address. Address can be passed with or without checksum.
  * It does not validate the checksum.
  *
  * @method isAddress
- * 
+ *
  * @param {string} address
- * 
+ *
  * @return {boolean}
  */
 export const isAddress = (address: any): address is Address =>
-    isHash(address.address) &&
-    isSecurityLevel(address.security) &&
-    isInteger(address.keyIndex) &&
-    address.keyIndex >= 0
+    isHash(address.address) && isSecurityLevel(address.security) && isInteger(address.keyIndex) && address.keyIndex >= 0
 
 /**
- * Checks if input is valid array of address. Similarly to [`isAddress`]{@link #module_validators.isAddress}, 
+ * Checks if input is valid array of address. Similarly to [`isAddress`]{@link #module_validators.isAddress},
  * it does not validate the checksum.
  *
  * @method isAddresses
- * 
+ *
  * @param {string} address
- * 
+ *
  * @return {boolean}
  */
 export const isAddressArray = (addresses: ReadonlyArray<any>): addresses is ReadonlyArray<Address> =>
-    isArray(addresses) &&
-    addresses.length > 0 &&
-    addresses.every(isAddress)
+    isArray(addresses) && addresses.length > 0 && addresses.every(isAddress)
 
 /**
  * Checks that a given `URI` is valid
@@ -298,11 +284,11 @@ export const isAddressArray = (addresses: ReadonlyArray<any>): addresses is Read
  * - `udp://8.8.8.8:14265`
  * - `udp://domain.com`
  * - `udp://domain2.com:14265`
- * 
+ *
  * @method isUri
- * 
+ *
  * @param {string} uri
- * 
+ *
  * @return {boolean}
  */
 export const isUri = (uri: any): uri is Trytes => {
@@ -321,145 +307,107 @@ export const isUri = (uri: any): uri is Trytes => {
 
 /**
  * Checks that a given input is array of value `URI`s
- * 
+ *
  * @method isUriArray
- * 
+ *
  * @param {string[]} uris
- * 
+ *
  * @return {boolean}
  */
 export const isUriArray = (uris: ReadonlyArray<any>): uris is ReadonlyArray<string> =>
-    isArray(uris) &&
-    uris.every(isUri)
+    isArray(uris) && uris.every(isUri)
 
 /* Check if start & end options are valid */
-export const isStartEndOptions = (
-    { start, end }: {
-        start: number,
-        end: number
-    }
-): boolean =>
-    !end || (
-        start <= end &&
-        end < start + 500
-    )
+export const isStartEndOptions = ({ start, end }: { start: number; end: number }): boolean =>
+    !end || (start <= end && end < start + 500)
 
 /**
  * Checks that input is valid tag trytes.
- * 
+ *
  * @method isTag
- * 
+ *
  * @param {string} tag
- * 
+ *
  * @return {boolean}
  */
-export const isTag = (tag: any): tag is Tag =>
-    isTrytesOfMaxLength(tag, TAG_SIZE)
+export const isTag = (tag: any): tag is Tag => isTrytesOfMaxLength(tag, TAG_SIZE)
 
 /**
  * Checks that input is array of valid tag trytes.
- * 
+ *
  * @method isTagArray
- * 
+ *
  * @param {string[]} tags
- * 
+ *
  * @return {boolean}
  */
-export const isTagArray = (tags: ReadonlyArray<any>): tags is ReadonlyArray<Tag> =>
-    isArray(tags) &&
-    tags.every(isTag)
+export const isTagArray = (tags: ReadonlyArray<any>): tags is ReadonlyArray<Tag> => isArray(tags) && tags.every(isTag)
 
-export const isSecurityLevel = (security: any): security is number =>
-    isInteger(security) &&
-    security > 0
+export const isSecurityLevel = (security: any): security is number => isInteger(security) && security > 0
 
 /**
  * Checks if given transaction object is tail transaction.
  * A tail transaction is one with `currentIndex=0`.
- * 
+ *
  * @method isTailTransaction
- * 
+ *
  * @param {object} transaction
- * 
+ *
  * @return {boolean}
  */
 export const isTailTransaction = (transaction: any): transaction is Transaction =>
-    isTransaction(transaction) &&
-    transaction.currentIndex === 0
+    isTransaction(transaction) && transaction.currentIndex === 0
 
 /**
  * Checks if input is valid array of `input` objects.
  *
  * @method isInputArray
- * 
+ *
  * @param {object[]} inputs
- * 
+ *
  * @return {boolean}
  */
 export const isInputArray = (inputs: any): inputs is ReadonlyArray<Address> =>
-    inputs.every((input: Address) =>
-        isHash(input.address) &&
-        isInteger(input.keyIndex) &&
-        input.keyIndex >= 0 &&
-        isSecurityLevel(input.security)
+    inputs.every(
+        (input: Address) =>
+            isHash(input.address) && isInteger(input.keyIndex) && input.keyIndex >= 0 && isSecurityLevel(input.security)
     )
-
 
 /* Data type validators */
 
-export const hashValidator: Validator<string> = (hash, error?: string) => [
-    hash,
-    isHash,
-    error || errors.INVALID_HASH
-]
+export const hashValidator: Validator<string> = (hash, error?: string) => [hash, isHash, error || errors.INVALID_HASH]
 
 export const hashArrayValidator: Validator<ReadonlyArray<string>> = (hashes, error?: string) => [
     hashes,
     isHashArray,
-    error || errors.INVALID_HASH_ARRAY
+    error || errors.INVALID_HASH_ARRAY,
 ]
 
 export const transactionHashValidator: Validator<string> = (hash, error?: string) => [
     hash,
     isTransactionHash,
-    error || errors.INVALID_HASH
+    error || errors.INVALID_HASH,
 ]
 
 export const transactionHashArrayValidator: Validator<ReadonlyArray<string>> = hashes => [
     hashes,
     isTransactionHashArray,
-    errors.INVALID_HASH_ARRAY
+    errors.INVALID_HASH_ARRAY,
 ]
 
-export const trytesValidator: Validator<string> = trytes => [
-    trytes,
-    isTrytes,
-    errors.INVALID_TRYTES
-]
+export const trytesValidator: Validator<string> = trytes => [trytes, isTrytes, errors.INVALID_TRYTES]
 
 export const trytesArrayValidator: Validator<ReadonlyArray<string>> = trytes => [
     trytes,
     isTrytesArray,
-    errors.INVALID_TRYTES_ARRAY
+    errors.INVALID_TRYTES_ARRAY,
 ]
 
-export const integerValidator: Validator<number> = integer => [
-    integer,
-    Number.isInteger,
-    errors.NOT_INT
-]
+export const integerValidator: Validator<number> = integer => [integer, Number.isInteger, errors.NOT_INT]
 
-export const depthValidator: Validator<number> = depth => [
-    depth,
-    Number.isInteger,
-    errors.INVALID_DEPTH
-]
+export const depthValidator: Validator<number> = depth => [depth, Number.isInteger, errors.INVALID_DEPTH]
 
-export const mwmValidator: Validator<number> = mwm => [
-    mwm,
-    Number.isInteger,
-    errors.INVALID_MIN_WEIGHT_MAGNITUDE
-]
+export const mwmValidator: Validator<number> = mwm => [mwm, Number.isInteger, errors.INVALID_MIN_WEIGHT_MAGNITUDE]
 
 export const addressObjectArrayValidator: Validator<ReadonlyArray<Address>> = (addresses: ReadonlyArray<Address>) => [
     addresses,
@@ -479,17 +427,9 @@ export const tailTransactionValidator: Validator<Transaction> = transaction => [
     errors.INVALID_TAIL_TRANSACTION,
 ]
 
-export const seedValidator: Validator<string> = seed => [
-    seed,
-    isTrytes,
-    errors.INVALID_SEED
-]
+export const seedValidator: Validator<string> = seed => [seed, isTrytes, errors.INVALID_SEED]
 
-export const indexValidator: Validator<number> = index => [
-    index,
-    Number.isInteger,
-    errors.INVALID_INDEX
-]
+export const indexValidator: Validator<number> = index => [index, Number.isInteger, errors.INVALID_INDEX]
 
 export const securityLevelValidator: Validator<number> = security => [
     security,
@@ -518,20 +458,12 @@ export const startEndOptionsValidator: Validator<any> = options => [
 export const getBalancesThresholdValidator: Validator<number> = threshold => [
     threshold,
     t => Number.isInteger(t) && t <= 100,
-    errors.INVALID_THRESHOLD
+    errors.INVALID_THRESHOLD,
 ]
 
-export const tagArrayValidator: Validator<ReadonlyArray<string>> = tags => [
-    tags,
-    isTagArray,
-    errors.INVALID_TAGS
-]
+export const tagArrayValidator: Validator<ReadonlyArray<string>> = tags => [tags, isTagArray, errors.INVALID_TAGS]
 
-export const tagValidator: Validator<ReadonlyArray<string>> = tag => [
-    tag,
-    isTag,
-    errors.INVALID_TAG
-]
+export const tagValidator: Validator<ReadonlyArray<string>> = tag => [tag, isTag, errors.INVALID_TAG]
 
 export const transferArrayValidator: Validator<ReadonlyArray<Transfer>> = transfers => [
     transfers,
@@ -539,17 +471,9 @@ export const transferArrayValidator: Validator<ReadonlyArray<Transfer>> = transf
     errors.INVALID_TRANSFERS,
 ]
 
-export const uriArrayValidator: Validator<ReadonlyArray<string>> = uris => [
-    uris,
-    isUriArray,
-    errors.INVALID_URI
-]
+export const uriArrayValidator: Validator<ReadonlyArray<string>> = uris => [uris, isUriArray, errors.INVALID_URI]
 
-export const inputValidator: Validator<ReadonlyArray<Address>> = inputs => [
-    inputs,
-    isInputArray,
-    errors.INVALID_INPUTS,
-]
+export const inputValidator: Validator<ReadonlyArray<Address>> = inputs => [inputs, isInputArray, errors.INVALID_INPUTS]
 
 export const remainderAddressValidator: Validator<string | undefined> = remainderAddress => [
     remainderAddress,
