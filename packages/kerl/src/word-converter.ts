@@ -109,7 +109,7 @@ function bigint_sub(base: Uint32Array, rh: Uint32Array) {
 
 // compares two (unsigned) big integers
 function bigint_cmp(lh: Uint32Array, rh: Uint32Array) {
-    for (let i = lh.length; i-- > 0;) {
+    for (let i = lh.length; i-- > 0; ) {
         const a = lh[i] >>> 0
         const b = rh[i] >>> 0
 
@@ -166,7 +166,7 @@ function bigint_add_small(base: Uint32Array, other: number) {
  * Converts the given byte array to trits
  *
  * @method wordsToTrits
- * 
+ *
  * @ignore
  *
  * @param {Uint32Array} words
@@ -235,7 +235,7 @@ export function wordsToTrits(words: Uint32Array): Int8Array {
  * Converts the given trits to byte array
  *
  * @method tritsToWords
- * 
+ *
  * @ignore
  *
  * @param {Int8Array} trits
@@ -266,7 +266,7 @@ export function tritsToWords(trits: Int8Array): Uint32Array {
     } else {
         let size = 1
 
-        for (let i = trits.length - 1; i-- > 0;) {
+        for (let i = trits.length - 1; i-- > 0; ) {
             const trit = trits[i] + 1
 
             // multiply by radix

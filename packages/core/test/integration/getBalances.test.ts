@@ -29,11 +29,7 @@ test('getBalances() does not mutate original addresses', async t => {
 
     await getBalances(addresses, 100)
 
-    t.deepEqual(
-        addresses,
-        addressesWithChecksum,
-        'getBalances() should not mutate original addresses'
-    )
+    t.deepEqual(addresses, addressesWithChecksum, 'getBalances() should not mutate original addresses')
 })
 
 test('getBalances() rejects with correct errors for invalid input', t => {
@@ -58,11 +54,7 @@ test.cb('getBalances() invokes callback', t => {
 
 test.cb('getBalances() passes correct arguments to callback', t => {
     getBalances(getBalancesCommand.addresses, getBalancesCommand.threshold, (err, res) => {
-        t.is(
-            err,
-            null,
-            'getBalances() should pass null as first argument in callback for successuful requests'
-        )
+        t.is(err, null, 'getBalances() should pass null as first argument in callback for successuful requests')
 
         t.deepEqual(
             res,

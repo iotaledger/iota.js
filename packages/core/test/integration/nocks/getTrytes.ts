@@ -5,17 +5,11 @@ import headers from './headers'
 
 export const getTrytesCommand: GetTrytesCommand = {
     command: IRICommand.GET_TRYTES,
-    hashes: [
-        'A'.repeat(81),
-        'B'.repeat(81)
-    ]
+    hashes: ['A'.repeat(81), 'B'.repeat(81)],
 }
 
 export const getTrytesResponse: GetTrytesResponse = {
-    trytes: [
-        '9'.repeat(2673),
-        '9'.repeat(2673)
-    ]
+    trytes: ['9'.repeat(2673), '9'.repeat(2673)],
 }
 
 export const getBalancesNock = nock('http://localhost:14265', headers)
@@ -30,45 +24,45 @@ nock('http://localhost:14265', headers)
         hashes: [bundleWithZeroValue[0].hash],
     })
     .reply(200, {
-        trytes: bundleWithZeroValueTrytes
+        trytes: bundleWithZeroValueTrytes,
     })
 
 nock('http://localhost:14265', headers)
     .persist()
     .post('/', {
         command: IRICommand.GET_TRYTES,
-        hashes: [bundle[0].hash]
+        hashes: [bundle[0].hash],
     })
     .reply(200, {
-        trytes: [bundleTrytes[0]]
+        trytes: [bundleTrytes[0]],
     })
 
 nock('http://localhost:14265', headers)
     .persist()
     .post('/', {
         command: IRICommand.GET_TRYTES,
-        hashes: [bundle[1].hash]
+        hashes: [bundle[1].hash],
     })
     .reply(200, {
-        trytes: [bundleTrytes[1]]
+        trytes: [bundleTrytes[1]],
     })
 
 nock('http://localhost:14265', headers)
     .persist()
     .post('/', {
         command: IRICommand.GET_TRYTES,
-        hashes: [bundle[2].hash]
+        hashes: [bundle[2].hash],
     })
     .reply(200, {
-        trytes: [bundleTrytes[2]]
+        trytes: [bundleTrytes[2]],
     })
 
 nock('http://localhost:14265', headers)
     .persist()
     .post('/', {
         command: IRICommand.GET_TRYTES,
-        hashes: [bundle[3].hash]
+        hashes: [bundle[3].hash],
     })
     .reply(200, {
-        trytes: [bundleTrytes[3]]
+        trytes: [bundleTrytes[3]],
     })

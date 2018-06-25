@@ -4,7 +4,8 @@ import Kerl from '../src'
 
 test('Kerl: absorb()/multi-squeeze(), Converter: trits()/trytes()', t => {
     const input = '9MIDYNHBWMBCXVDEFOFWINXTERALUKYYPPHKP9JJFGJEIUY9MUDVNFZHMMWZUYUSWAIOWEVTHNWMHANBH'
-    const expected = 'G9JYBOMPUXHYHKSNRNMMSSZCSHOFYOYNZRSZMAAYWDYEIMVVOGKPJBVBM9TDPULSFUNMTVXRKFIDOHUXXVYDLFSZYZTWQYTE9SPYYWYTXJYQ9IFGYOLZXWZBKWZN9QOOTBQMWMUBLEWUEEASRHRTNIQWJQNDWRYLCA'
+    const expected =
+        'G9JYBOMPUXHYHKSNRNMMSSZCSHOFYOYNZRSZMAAYWDYEIMVVOGKPJBVBM9TDPULSFUNMTVXRKFIDOHUXXVYDLFSZYZTWQYTE9SPYYWYTXJYQ9IFGYOLZXWZBKWZN9QOOTBQMWMUBLEWUEEASRHRTNIQWJQNDWRYLCA'
 
     const absorbMultiSqueeze = (inputTrytes: string): string => {
         const inputTrits: Int8Array = trits(inputTrytes)
@@ -16,10 +17,5 @@ test('Kerl: absorb()/multi-squeeze(), Converter: trits()/trytes()', t => {
         return trytes(hashTrits)
     }
 
-    t.is(
-        absorbMultiSqueeze(input),
-        expected,
-        'Kerl should produce correct hash for absorb/multi-squeeze case.'
-    )
+    t.is(absorbMultiSqueeze(input), expected, 'Kerl should produce correct hash for absorb/multi-squeeze case.')
 })
-

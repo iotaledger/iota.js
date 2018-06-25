@@ -4,10 +4,7 @@ import headers from './headers'
 
 export const checkConsistencyCommand: CheckConsistencyCommand = {
     command: IRICommand.CHECK_CONSISTENCY,
-    transactions: [
-        'A'.repeat(81),
-        'B'.repeat(81)
-    ]
+    transactions: ['A'.repeat(81), 'B'.repeat(81)],
 }
 
 export const checkConsistencyResponse: CheckConsistencyResponse = {

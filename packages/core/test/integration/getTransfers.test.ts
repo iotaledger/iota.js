@@ -25,7 +25,7 @@ test('getTransfers() rejects with correct errors for invalid inputs', t => {
     const invalidSeed = 'asdasDSFDAFD'
     const invalidStartEndOptions = {
         start: 10,
-        end: 9
+        end: 9,
     }
 
     t.is(
@@ -59,17 +59,9 @@ test.cb('getTransfers() invokes callback', t => {
 
 test.cb('getTransfers() passes correct arguments to callback', t => {
     getTransfers(seed, { start: 0, inclusionStates: true }, (err, res) => {
-        t.is(
-            err,
-            null,
-            'getTransfers() should pass null as first argument in callback for successuful requests'
-        )
+        t.is(err, null, 'getTransfers() should pass null as first argument in callback for successuful requests')
 
-        t.deepEqual(
-            res,
-            transfers,
-            'getTransfers() should pass the correct response as second argument in callback'
-        )
+        t.deepEqual(res, transfers, 'getTransfers() should pass the correct response as second argument in callback')
 
         t.end()
     })

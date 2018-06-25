@@ -2,11 +2,11 @@ import * as Promise from 'bluebird'
 import { createGetInclusionStates, createGetNodeInfo } from './'
 import { Callback, Hash, Provider } from '../../types'
 
-/**  
- * @method createGetLatestInclusion 
- * 
+/**
+ * @method createGetLatestInclusion
+ *
  * @memberof module:core
- * 
+ *
  * @param {Provider} provider - Network provider for accessing IRI
  *
  * @return {function} {@link #module_core.getLatestInclusion `getLatestInclusion`}
@@ -20,7 +20,7 @@ export const createGetLatestInclusion = (provider: Provider) => {
      * by calling [`getInclusionStates`]{@link #module_core.getInclusionStates} on `latestSolidSubtangleMilestone`.
      *
      * @example
-     * 
+     *
      * ```js
      * getLatestInclusion(hashes)
      *    .then(states => {
@@ -32,10 +32,10 @@ export const createGetLatestInclusion = (provider: Provider) => {
      * ```
      *
      * @method getLatestInclusion
-     * 
+     *
      * @memberof module:core
      *
-     * @param {Array<Hash>} transactions - List of transactions hashes 
+     * @param {Array<Hash>} transactions - List of transactions hashes
      * @param {number} tips - List of tips to check if transactions are referenced by
      * @param {Callback} [callback] - Optional callback
      *

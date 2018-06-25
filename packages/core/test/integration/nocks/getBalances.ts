@@ -7,15 +7,15 @@ export const getBalancesCommand: GetBalancesCommand = {
     addresses: [
         'FJHSSHBZTAKQNDTIKJYCZBOZDGSZANCZSWCNWUOCZXFADNOQSYAHEJPXRLOVPNOQFQXXGEGVDGICLMOXX',
         '9DZXPFSVCSSWXXQPFMWLGFKPBAFTHYMKMZCPFHBVHXPFNJEIJIEEPKXAUBKBNNLIKWHJIYQDFWQVELOCB',
-        'OTSZGTNPKFSGJLUPUNGGXFBYF9GVUEHOADZZTDEOJPWNEIVBLHOMUWPILAHTQHHVSBKTDVQIAEQOZXGFB'
+        'OTSZGTNPKFSGJLUPUNGGXFBYF9GVUEHOADZZTDEOJPWNEIVBLHOMUWPILAHTQHHVSBKTDVQIAEQOZXGFB',
     ],
-    threshold: 100
+    threshold: 100,
 }
 
 export const balancesResponse: Balances = {
     balances: [99, 1, 9],
     milestone: 'M'.repeat(81),
-    milestoneIndex: 1
+    milestoneIndex: 1,
 }
 
 export const getBalancesNock = nock('http://localhost:14265', headers)
@@ -29,10 +29,10 @@ nock('http://localhost:14265', headers)
         ...getBalancesCommand,
         addresses: [
             '9DZXPFSVCSSWXXQPFMWLGFKPBAFTHYMKMZCPFHBVHXPFNJEIJIEEPKXAUBKBNNLIKWHJIYQDFWQVELOCB',
-            'OTSZGTNPKFSGJLUPUNGGXFBYF9GVUEHOADZZTDEOJPWNEIVBLHOMUWPILAHTQHHVSBKTDVQIAEQOZXGFB'
-        ]
+            'OTSZGTNPKFSGJLUPUNGGXFBYF9GVUEHOADZZTDEOJPWNEIVBLHOMUWPILAHTQHHVSBKTDVQIAEQOZXGFB',
+        ],
     })
     .reply(200, {
         ...balancesResponse,
-        balances: ['1', '9']
+        balances: ['1', '9'],
     })

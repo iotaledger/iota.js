@@ -12,7 +12,7 @@ export enum Unit {
 
 export interface UnitMap {
     readonly [unit: string]: {
-        readonly val: BigNumber,
+        readonly val: BigNumber
         readonly dp: number
     }
 }
@@ -32,13 +32,13 @@ export const unitMap: UnitMap = {
  * `i`, `Ki`, `Mi`, `Gi`, `Ti`, `Pi`
  *
  * @method convertUnits
- * 
+ *
  * @param {string | int | float} value
- * 
+ *
  * @param {string} fromUnit - Name of original value unit
- * 
+ *
  * @param {string} toUnit - Name of unit wich we convert to
- * 
+ *
  * @return {Number}
  */
 export const convertUnits = (value: string | number, fromUnit: Unit, toUnit: Unit) => {

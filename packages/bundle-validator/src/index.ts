@@ -15,26 +15,29 @@ interface SignatureFragments {
  * Validates all signatures of a bundle.
  *
  * @method validateSignatures
- * 
+ *
  * @param {Transaction[]} bundle
  *
  * @return {boolean}
  */
 export const validateBundleSignatures = (bundle: Bundle): boolean => {
-    const signatures: SignatureFragments = [...bundle]
-        .sort((a, b) => a.currentIndex - b.currentIndex)
-        .reduce((acc: SignatureFragments, { address, signatureMessageFragment, value }, i) => (
-            value < 0 ? {
-                ...acc,
-                [address]: [signatureMessageFragment]
-            } : (value === 0 && acc.hasOwnProperty(address) && address === bundle[i - 1].address) ? {
-                ...acc,
-                [address]: acc[address].concat(signatureMessageFragment)
-            } : acc
-        ), {})
+    const signatures: SignatureFragments = [...bundle].sort((a, b) => a.currentIndex - b.currentIndex).reduce(
+        (acc: SignatureFragments, { address, signatureMessageFragment, value }, i) =>
+            value < 0
+                ? {
+                      ...acc,
+                      [address]: [signatureMessageFragment],
+                  }
+                : value === 0 && acc.hasOwnProperty(address) && address === bundle[i - 1].address
+                  ? {
+                        ...acc,
+                        [address]: acc[address].concat(signatureMessageFragment),
+                    }
+                  : acc,
+        {}
+    )
 
-    return Object.keys(signatures)
-        .every(address => validateSignatures(address, signatures[address], bundle[0].bundle))
+    return Object.keys(signatures).every(address => validateSignatures(address, signatures[address], bundle[0].bundle))
 }
 
 /**
@@ -44,7 +47,7 @@ export const validateBundleSignatures = (bundle: Bundle): boolean => {
  * @method isBundle
  *
  * @param {Transaction[]} bundle
- * 
+ *
  * @returns {boolean}
  */
 export default function isBundle(bundle: Bundle) {
@@ -127,8 +130,4 @@ export default function isBundle(bundle: Bundle) {
     return validateBundleSignatures(bundle)
 }
 
-export const bundleValidator: Validator<Bundle> = (bundle: Bundle) => [
-    bundle,
-    isBundle,
-    errors.INVALID_BUNDLE
-]
+export const bundleValidator: Validator<Bundle> = (bundle: Bundle) => [bundle, isBundle, errors.INVALID_BUNDLE]

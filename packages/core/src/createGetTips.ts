@@ -1,28 +1,20 @@
 import * as Promise from 'bluebird'
-import {
-    Callback,
-    GetTipsCommand,
-    GetTipsResponse,
-    Hash,
-    IRICommand,
-    Provider
-} from '../../types'
+import { Callback, GetTipsCommand, GetTipsResponse, Hash, IRICommand, Provider } from '../../types'
 
-/**  
+/**
  * @method createGetTips
- * 
+ *
  * @memberof module:core
- * 
+ *
  * @param {Provider} provider - Network provider
- * 
- * @return {function} {@link #module_core.getTips `getTips`} 
+ *
+ * @return {function} {@link #module_core.getTips `getTips`}
  */
 export const createGetTips = ({ send }: Provider) =>
-
     /**
      * Returns a list of tips (transactions not referenced by other transactions),
      * as seen by the connected node.
-     * 
+     *
      * @example
      *
      * ```js
@@ -34,13 +26,13 @@ export const createGetTips = ({ send }: Provider) =>
      *     // ...
      *   })
      * ```
-     * 
+     *
      * @method getTips
-     * 
+     *
      * @memberof module:core
      *
      * @param {Callback} [callback] - Optional callback
-     * 
+     *
      * @return {Promise}
      * @fulfil {Hash[]} List of tip hashes
      * @reject {Error}

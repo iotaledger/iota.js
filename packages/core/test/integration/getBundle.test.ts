@@ -9,11 +9,7 @@ const getBundle = createGetBundle(createHttpClient())
 const tail = bundle[0].hash
 
 test('getBundle() resolves to correct bundle.', async t => {
-    t.deepEqual(
-        await getBundle(tail),
-        bundle,
-        'getBundle() should resolve to correct bundle.'
-    )
+    t.deepEqual(await getBundle(tail), bundle, 'getBundle() should resolve to correct bundle.')
 })
 
 test('getBundle() resolves to correct signle transaction bundle.', async t => {
@@ -40,17 +36,9 @@ test.cb('getBundle() invokes callback', t => {
 
 test.cb('getBundle() passes correct arguments to callback', t => {
     getBundle(tail, (err, res) => {
-        t.is(
-            err,
-            null,
-            'getBundle() should pass null as first argument in callback for successuful requests'
-        )
+        t.is(err, null, 'getBundle() should pass null as first argument in callback for successuful requests')
 
-        t.deepEqual(
-            res,
-            bundle,
-            'getBundle() should pass the correct response as second argument in callback'
-        )
+        t.deepEqual(res, bundle, 'getBundle() should pass the correct response as second argument in callback')
 
         t.end()
     })

@@ -18,14 +18,14 @@ export const API_VERSION = 1
 const defaults: Settings = {
     provider: DEFAULT_URI,
     requestBatchSize: MAX_REQUEST_BATCH_SIZE,
-    apiVersion: API_VERSION
+    apiVersion: API_VERSION,
 }
 
 /* tslint:disable no-console */
 export const getSettingsWithDefaults = (settings: Partial<Settings> = {}): Settings => {
-    const {
-        provider, host, port, sandbox, token, requestBatchSize, apiVersion
-    } = getOptionsWithDefaults(defaults)(settings)
+    const { provider, host, port, sandbox, token, requestBatchSize, apiVersion } = getOptionsWithDefaults(defaults)(
+        settings
+    )
 
     let _provider: string = provider
 

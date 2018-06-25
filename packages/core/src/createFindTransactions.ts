@@ -1,9 +1,7 @@
 import * as Promise from 'bluebird'
 import { removeChecksum } from '@iota/checksum'
 import { padTagArray } from '@iota/pad'
-import {
-    errors, hashArrayValidator, tagArrayValidator, validate
-} from '@iota/validators'
+import { errors, hashArrayValidator, tagArrayValidator, validate } from '@iota/validators'
 import {
     Callback,
     FindTransactionsCommand,
@@ -11,7 +9,7 @@ import {
     FindTransactionsResponse,
     Hash,
     IRICommand,
-    Provider
+    Provider,
 } from '../../types'
 
 const keysOf = <T>(o: T): ReadonlyArray<keyof T> => Object.keys(o) as Array<keyof T>
@@ -39,23 +37,25 @@ export const validateFindTransactions = (query: FindTransactionsQuery) => {
     )
 }
 
-export const removeAddressChecksum = (query: FindTransactionsQuery) => (
-    query.addresses ? {
-        ...query,
-        addresses: removeChecksum(query.addresses)
-    } : query
-)
+export const removeAddressChecksum = (query: FindTransactionsQuery) =>
+    query.addresses
+        ? {
+              ...query,
+              addresses: removeChecksum(query.addresses),
+          }
+        : query
 
-export const padTags = (query: FindTransactionsQuery) => (
-    query.tags ? {
-        ...query,
-        tags: padTagArray(query.tags)
-    } : query
-)
+export const padTags = (query: FindTransactionsQuery) =>
+    query.tags
+        ? {
+              ...query,
+              tags: padTagArray(query.tags),
+          }
+        : query
 
-/**  
- * @method createFindTransactions 
- * 
+/**
+ * @method createFindTransactions
+ *
  * @memberof module:core
  *
  * @param {Provider} provider - Network provider for accessing IRI
@@ -63,7 +63,6 @@ export const padTags = (query: FindTransactionsQuery) => (
  * @return {function} {@link #module_core.findTransactions `findTransactionObjects`}
  */
 export const createFindTransactions = ({ send }: Provider) => {
-
     /**
      * Searches for transaction `hashes`  by calling
      * [`findTransactions`](https://docs.iota.org/iri/api#endpoints/findTransactions) command.
@@ -77,13 +76,13 @@ export const createFindTransactions = ({ send }: Provider) => {
      *    .then(hashes => {
      *        // ...
      *    })
-     *    .catch(err => { 
+     *    .catch(err => {
      *        // handle errors here
      *    })
      * ```
      *
      * @method findTransactions
-     * 
+     *
      * @memberof module:core
      *
      * @param {object} query
@@ -107,10 +106,12 @@ export const createFindTransactions = ({ send }: Provider) => {
         return Promise.resolve(validateFindTransactions(query))
             .then(() => removeAddressChecksum(query))
             .then(padTags)
-            .then(query => send<FindTransactionsCommand, FindTransactionsResponse>({
-                ...query,
-                command: IRICommand.FIND_TRANSACTIONS,
-            }))
+            .then(query =>
+                send<FindTransactionsCommand, FindTransactionsResponse>({
+                    ...query,
+                    command: IRICommand.FIND_TRANSACTIONS,
+                })
+            )
             .then(({ hashes }) => hashes)
             .asCallback(callback)
     }

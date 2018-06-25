@@ -6,9 +6,9 @@ import { Bundle, Callback, Provider, Hash, Transaction } from '../../types'
 
 export const validateBundle = (bundle: Bundle) => validate(bundleValidator(bundle))
 
-/**  
+/**
  * @method createGetBundle
- * 
+ *
  * @memberof module:core
  *
  * @param {Provider} provider - Network provider for accessing IRI
@@ -35,17 +35,17 @@ export const createGetBundle = (provider: Provider) => {
      * ```
      *
      * @method getBundle
-     * 
+     *
      * @memberof module:core
-     * 
+     *
      * @param {Hash} tailTransactionHash - Tail transaction hash
      * @param {Callback} [callback] - Optional callback
-     * 
+     *
      * @returns {Promise}
      * @fulfil {Transaction[]} Bundle as array of transaction objects
      * @reject {Error}
      * - `INVALID_HASH`
-     * - `INVALID_TAIL_HASH`: Provided transaction is not tail (`currentIndex !== 0`) 
+     * - `INVALID_TAIL_HASH`: Provided transaction is not tail (`currentIndex !== 0`)
      * - `INVALID_BUNDLE`: Bundle is syntactically invalid
      * - Fetch error
      */

@@ -30,11 +30,7 @@ test.cb('checkConsistency() invokes callback', t => {
 
 test.cb('checkConsistency() passes correct arguments to callback', t => {
     checkConsistency(checkConsistencyCommand.transactions, (err, res) => {
-        t.is(
-            err,
-            null,
-            'checkConsistency() should pass null as first argument in callback for successuful requests'
-        )
+        t.is(err, null, 'checkConsistency() should pass null as first argument in callback for successuful requests')
 
         t.deepEqual(
             res,

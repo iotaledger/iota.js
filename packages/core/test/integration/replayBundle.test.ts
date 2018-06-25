@@ -38,17 +38,9 @@ test.cb('replayBundle() invokes callback', t => {
 
 test.cb('replayBundle() passes correct arguments to callback', t => {
     replayBundle(tail, depth, minWeightMagnitude, undefined, (err, res) => {
-        t.is(
-            err,
-            null,
-            'replayBundle() should pass null as first argument in callback for successuful requests'
-        )
+        t.is(err, null, 'replayBundle() should pass null as first argument in callback for successuful requests')
 
-        t.deepEqual(
-            res,
-            bundle,
-            'replayBundle() should pass the correct response as second argument in callback'
-        )
+        t.deepEqual(res, bundle, 'replayBundle() should pass the correct response as second argument in callback')
 
         t.end()
     })

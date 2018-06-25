@@ -1,12 +1,6 @@
 import * as Promise from 'bluebird'
 import { addChecksum } from '@iota/checksum'
-import {
-    indexValidator,
-    integerValidator,
-    securityLevelValidator,
-    seedValidator,
-    validate,
-} from '@iota/validators'
+import { indexValidator, integerValidator, securityLevelValidator, seedValidator, validate } from '@iota/validators'
 import { createFindTransactions, generateAddress, errors } from './'
 import { createWereAddressesSpentFrom } from './createWereAddressesSpentFrom'
 import { asArray, Callback, getOptionsWithDefaults, Provider, Trytes } from '../../types'
@@ -25,11 +19,10 @@ export const createIsAddressUsed = (provider: Provider) => {
     const wereAddressesSpentFrom = createWereAddressesSpentFrom(provider, 'lib')
     const findTransactions = createFindTransactions(provider)
 
-    return (address: Trytes) => wereAddressesSpentFrom(asArray(address))
-        .then(([spent]) =>
-            spent ||
-            findTransactions({ addresses: asArray(address) })
-                .then(transactions => transactions.length > 0)
+    return (address: Trytes) =>
+        wereAddressesSpentFrom(asArray(address)).then(
+            ([spent]) =>
+                spent || findTransactions({ addresses: asArray(address) }).then(transactions => transactions.length > 0)
         )
 }
 
@@ -37,9 +30,9 @@ export const createIsAddressUsed = (provider: Provider) => {
  * Generates and returns all addresses up to the first unused addresses including it.
  *
  * @method getUntilFirstUnusedAddress
- * 
+ *
  * @ignore
- * 
+ *
  * @memberof module:core
  *
  * @param {string} seed
@@ -89,21 +82,15 @@ export const getUntilFirstUnusedAddress = (
 }
 
 export const generateAddresses = (seed: Trytes, index: number, security: number, total: number = 1) =>
-    Array(total).fill('').map(() => generateAddress(seed, index++, security))
+    Array(total)
+        .fill('')
+        .map(() => generateAddress(seed, index++, security))
 
-export const applyChecksumOption = (checksum: boolean) =>
-    (addresses: Trytes | ReadonlyArray<Trytes>) => (
-        checksum
-            ? Array.isArray(addresses)
-                ? addChecksum(addresses)
-                : addChecksum(asArray(addresses))[0]
-            : addresses
-    )
+export const applyChecksumOption = (checksum: boolean) => (addresses: Trytes | ReadonlyArray<Trytes>) =>
+    checksum ? (Array.isArray(addresses) ? addChecksum(addresses) : addChecksum(asArray(addresses))[0]) : addresses
 
-export const applyReturnAllOption = (returnAll: boolean, total?: number) =>
-    (addresses: ReadonlyArray<Trytes>) => (
-        (returnAll || total) ? addresses : addresses[addresses.length - 1]
-    )
+export const applyReturnAllOption = (returnAll: boolean, total?: number) => (addresses: ReadonlyArray<Trytes>) =>
+    returnAll || total ? addresses : addresses[addresses.length - 1]
 
 export const getNewAddressOptions = getOptionsWithDefaults<GetNewAddressOptions>({
     index: 0,
@@ -113,14 +100,13 @@ export const getNewAddressOptions = getOptionsWithDefaults<GetNewAddressOptions>
     returnAll: false,
 })
 
-
 /**
  * @method createGetNewAddress
- * 
+ *
  * @param {Provider} provider - Network provider
- * 
+ *
  * @memberof module:core
- * 
+ *
  * @return {function} {@link #module_core.getNewAddress `getNewAddress`}
  */
 export const createGetNewAddress = (provider: Provider, caller?: string) => {
@@ -142,7 +128,7 @@ export const createGetNewAddress = (provider: Provider, caller?: string) => {
      * ```
      *
      * @method getNewAddress
-     * 
+     *
      * @memberof module:core
      *
      * @param {string} seed - At least 81 trytes long seed
@@ -179,7 +165,9 @@ export const createGetNewAddress = (provider: Provider, caller?: string) => {
                 deprecated.push(options.checksum)
             }
             console.warn(
-                `\`GetNewAddressOptions\`: ${deprecated.join(',')} options are deprecated and will be removed in v.2.0.0. \n`
+                `\`GetNewAddressOptions\`: ${deprecated.join(
+                    ','
+                )} options are deprecated and will be removed in v.2.0.0. \n`
             )
         }
 
@@ -194,9 +182,11 @@ export const createGetNewAddress = (provider: Provider, caller?: string) => {
                 [total, t => t !== 0, errors.INVALID_TOTAL_OPTION]
             )
         )
-            .then(() => (total && total > 0)
-                ? generateAddresses(seed, index, security, total)
-                : Promise.try(getUntilFirstUnusedAddress(isAddressUsed, seed, index, security, returnAll))
+            .then(
+                () =>
+                    total && total > 0
+                        ? generateAddresses(seed, index, security, total)
+                        : Promise.try(getUntilFirstUnusedAddress(isAddressUsed, seed, index, security, returnAll))
             )
             .then(applyReturnAllOption(returnAll, total))
             .then(applyChecksumOption(checksum))

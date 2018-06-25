@@ -24,7 +24,11 @@ const defaults: GetTransfersOptions = {
     security: 2,
 }
 
-export const transferToAddressOptions = (start: number, end: number | undefined, security: number): GetNewAddressOptions =>
+export const transferToAddressOptions = (
+    start: number,
+    end: number | undefined,
+    security: number
+): GetNewAddressOptions =>
     getNewAddressOptions({
         index: start,
         total: end ? end - start : undefined,
@@ -38,9 +42,9 @@ export const getTransfersOptions = getOptionsWithDefaults(defaults)
  * @ignore
  *
  * @method createGetTransfers
- * 
+ *
  * @param {Provider} provider - Network provider
- * 
+ *
  * @return {Function} {@link getTransfers}
  */
 export const createGetTransfers = (provider: Provider, caller?: string) => {
@@ -49,9 +53,9 @@ export const createGetTransfers = (provider: Provider, caller?: string) => {
 
     /**
      * @ignore
-     * 
+     *
      * @method getTransfers
-     * 
+     *
      * @param {String} seed
      * @param {Object} [options]
      * @param {Number} [options.start=0] Starting key index
@@ -60,7 +64,7 @@ export const createGetTransfers = (provider: Provider, caller?: string) => {
      * @param {Boolean} [options.inclusionStates=false] - Flag that enables fetching of inclusion states
      * for each transfer
      * @param {Function} [callback] - optional callback
-     * 
+     *
      * @returns {Promise}
      * @fulfil {Transaction[][]}
      * @reject {Error}
@@ -78,7 +82,7 @@ export const createGetTransfers = (provider: Provider, caller?: string) => {
         if (caller !== 'lib') {
             console.warn(
                 '`getTransfers()` is deprecated and will be removed in v2.0.0. ' +
-                '`findTransactions()` should be used instead.'
+                    '`findTransactions()` should be used instead.'
             )
         }
 

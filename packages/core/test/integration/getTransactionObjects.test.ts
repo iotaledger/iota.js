@@ -18,7 +18,6 @@ test('getTransactionObjects() resolves to correct transactions.', async t => {
     )
 })
 
-
 test('getTransactionObjects() rejects with correct error for invalid hash.', t => {
     const invalidHashes = ['asdasDSFDAFD']
 

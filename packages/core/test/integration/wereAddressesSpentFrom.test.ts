@@ -6,7 +6,9 @@ import { wereAddressesSpentFromCommand, wereAddressesSpentFromResponse } from '.
 
 const wereAddressesSpentFrom = createWereAddressesSpentFrom(createHttpClient(), 'lib')
 
-const addressesWithChecksum = wereAddressesSpentFromCommand.addresses.map((address: string) => address.concat('9'.repeat(9)))
+const addressesWithChecksum = wereAddressesSpentFromCommand.addresses.map((address: string) =>
+    address.concat('9'.repeat(9))
+)
 
 test('wereAddressesSpentFrom() resolves to correct balances response', async t => {
     t.deepEqual(
@@ -29,11 +31,7 @@ test('wereAddressesSpentFrom() does not mutate original addresses', async t => {
 
     await wereAddressesSpentFrom(addresses)
 
-    t.deepEqual(
-        addresses,
-        addressesWithChecksum,
-        'wereAddressesSpentFrom() should not mutate original addresses'
-    )
+    t.deepEqual(addresses, addressesWithChecksum, 'wereAddressesSpentFrom() should not mutate original addresses')
 })
 
 test('wereAddressesSpentFrom() rejects with correct error for invalid addresses', t => {

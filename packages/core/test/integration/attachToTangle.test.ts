@@ -29,45 +29,53 @@ test('attachToTangle() does not mutate original trytes', async t => {
         trytes
     )
 
-    t.deepEqual(
-        trytes,
-        attachToTangleCommand.trytes,
-        'attachToTangle() should not mutate original trytes'
-    )
+    t.deepEqual(trytes, attachToTangleCommand.trytes, 'attachToTangle() should not mutate original trytes')
 })
 
 test('attachToTangle() rejects with correct errors for invalid input', t => {
     const invalidTrytes = ['asdasDSFDAFD']
 
     t.is(
-        t.throws(() => attachToTangle(
-            invalidTrytes[0],
-            attachToTangleCommand.branchTransaction,
-            attachToTangleCommand.minWeightMagnitude,
-            attachToTangleCommand.trytes
-        ), Error).message,
+        t.throws(
+            () =>
+                attachToTangle(
+                    invalidTrytes[0],
+                    attachToTangleCommand.branchTransaction,
+                    attachToTangleCommand.minWeightMagnitude,
+                    attachToTangleCommand.trytes
+                ),
+            Error
+        ).message,
         `${INVALID_TRUNK_TRANSACTION}: ${invalidTrytes[0]}`,
         'attachToTangle() should throw error for invalid trunk transaction'
     )
 
     t.is(
-        t.throws(() => attachToTangle(
-            attachToTangleCommand.trunkTransaction,
-            invalidTrytes[0],
-            attachToTangleCommand.minWeightMagnitude,
-            attachToTangleCommand.trytes
-        ), Error).message,
+        t.throws(
+            () =>
+                attachToTangle(
+                    attachToTangleCommand.trunkTransaction,
+                    invalidTrytes[0],
+                    attachToTangleCommand.minWeightMagnitude,
+                    attachToTangleCommand.trytes
+                ),
+            Error
+        ).message,
         `${INVALID_BRANCH_TRANSACTION}: ${invalidTrytes[0]}`,
         'attachToTangle() should throw error for invalid branch transaction'
     )
 
     t.is(
-        t.throws(() => attachToTangle(
-            attachToTangleCommand.trunkTransaction,
-            attachToTangleCommand.branchTransaction,
-            attachToTangleCommand.minWeightMagnitude,
-            invalidTrytes
-        ), Error).message,
+        t.throws(
+            () =>
+                attachToTangle(
+                    attachToTangleCommand.trunkTransaction,
+                    attachToTangleCommand.branchTransaction,
+                    attachToTangleCommand.minWeightMagnitude,
+                    invalidTrytes
+                ),
+            Error
+        ).message,
         `${INVALID_TRYTES_ARRAY}: ${invalidTrytes[0]}`,
         'attachToTangle() should throw error for invalid trytes'
     )
@@ -90,11 +98,7 @@ test.cb('attachToTangle() passes correct arguments to callback', t => {
         attachToTangleCommand.minWeightMagnitude,
         attachToTangleCommand.trytes,
         (err, res) => {
-            t.is(
-                err,
-                null,
-                'attachToTangle() should pass null as first argument in callback for successuful requests'
-            )
+            t.is(err, null, 'attachToTangle() should pass null as first argument in callback for successuful requests')
 
             t.deepEqual(
                 res,

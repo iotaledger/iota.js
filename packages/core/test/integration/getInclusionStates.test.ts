@@ -34,11 +34,7 @@ test.cb('getInclusionStates() invokes callback', t => {
 
 test.cb('getInclusionStates() passes correct arguments to callback', t => {
     getInclusionStates(getInclusionStatesCommand.transactions, getInclusionStatesCommand.tips, (err, res) => {
-        t.is(
-            err,
-            null,
-            'getInclusionStates() should pass null as first argument in callback for successuful requests'
-        )
+        t.is(err, null, 'getInclusionStates() should pass null as first argument in callback for successuful requests')
 
         t.deepEqual(
             res,

@@ -5,7 +5,7 @@ import headers from './headers'
 
 export const storeTransactionsCommand: StoreTransactionsCommand = {
     command: IRICommand.STORE_TRANSACTIONS,
-    trytes: bundleTrytes
+    trytes: bundleTrytes,
 }
 
 export const storeTransactionsNock = nock('http://localhost:14265', headers)

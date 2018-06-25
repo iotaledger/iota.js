@@ -6,11 +6,11 @@ import { Callback, Hash, Provider, Transaction, Trytes } from '../../types'
 
 /**
  * @method createGetTransactionObjects
- * 
+ *
  * @memberof module:core
- * 
+ *
  * @param {Provider} provider - Network provider
- * 
+ *
  * @return {Function} {@link #module_core.getTransactionObjects `getTransactionObjects`}
  */
 export const createGetTransactionObjects = (provider: Provider) => {
@@ -32,12 +32,12 @@ export const createGetTransactionObjects = (provider: Provider) => {
      * ```
      *
      * @method getTransactionObjects
-     * 
+     *
      * @memberof module:core
-     * 
+     *
      * @param {Hash[]} hashes - Array of transaction hashes
      * @param {Function} [callback] - Optional callback
-     * 
+     *
      * @returns {Promise}
      * @fulfil {Transaction[]} - List of transaction objects
      * @reject {Error}

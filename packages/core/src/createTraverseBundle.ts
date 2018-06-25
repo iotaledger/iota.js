@@ -6,12 +6,12 @@ import { Callback, Hash, Provider, Transaction } from '../../types'
 
 /**
  * @method createTraverseBundle
- * 
+ *
  * @memberof module:core
- * 
+ *
  * @param {Provider} provider
- * 
- * @return {function} {@link #module_core.traverseBundle `traverseBundle`} 
+ *
+ * @return {function} {@link #module_core.traverseBundle `traverseBundle`}
  */
 export const createTraverseBundle = (provider: Provider) => {
     const getTrytes = createGetTrytes(provider)
@@ -33,18 +33,18 @@ export const createTraverseBundle = (provider: Provider) => {
      * ```
      *
      * @method traverseBundle
-     * 
+     *
      * @memberof module:core
-     * 
+     *
      * @param {Hash} trunkTransaction - Trunk transaction, should be tail (`currentIndex == 0`)
      * @param {Hash} [bundle=[]] - List of accumulated transactions
      * @param {Callback} [callback] - Optional callback
-     * 
+     *
      * @returns {Promise}
      * @fulfil {Transaction[]} Bundle as array of transaction objects
      * @reject {Error}
      * - `INVALID_HASH`
-     * - `INVALID_TAIL_HASH`: Provided transaction is not tail (`currentIndex !== 0`) 
+     * - `INVALID_TAIL_HASH`: Provided transaction is not tail (`currentIndex !== 0`)
      * - `INVALID_BUNDLE`: Bundle is syntactically invalid
      * - Fetch error
      */
@@ -57,9 +57,11 @@ export const createTraverseBundle = (provider: Provider) => {
             .then(() => getTrytes([trunkTransaction]))
             .then(([trytes]) => asTransactionObject(trytes, trunkTransaction))
             .tap(transaction => validate(bundle.length === 0 && tailTransactionValidator(transaction)))
-            .then(transaction => transaction.currentIndex === transaction.lastIndex
-                ? bundle.concat(transaction)
-                : traverseBundle(transaction.trunkTransaction, bundle.concat(transaction))
+            .then(
+                transaction =>
+                    transaction.currentIndex === transaction.lastIndex
+                        ? bundle.concat(transaction)
+                        : traverseBundle(transaction.trunkTransaction, bundle.concat(transaction))
             )
             .asCallback(arguments[1] === 'function' ? arguments[1] : callback)
     }

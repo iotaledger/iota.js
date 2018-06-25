@@ -1,7 +1,5 @@
 import test from 'ava'
-import {
-    addresses, addressesWithChecksum, addressWithChecksum, addressWithInvalidChecksum
-} from '@iota/samples'
+import { addresses, addressesWithChecksum, addressWithChecksum, addressWithInvalidChecksum } from '@iota/samples'
 import { addChecksum, errors, isValidChecksum, removeChecksum } from '../src'
 
 const invalidAddress = 'UYEEERFQYTPFAHIPXDQAQYWYMSMCLMGBTYAXLWFRFFWPYFOICOVLK9A9VYNCKK9TQUNBTARCEQXJHD'
@@ -43,22 +41,14 @@ test('addChecksum() does not mutate the original array', t => {
 
     addChecksum(arr)
 
-    t.deepEqual(
-        arr,
-        addresses.slice(0, 1),
-        'addChecksum() should not mutate the original array.'
-    )
+    t.deepEqual(arr, addresses.slice(0, 1), 'addChecksum() should not mutate the original array.')
 })
 
 test('addChecksum() adds checksum of arbitrary length', t => {
     const trytes = '9'.repeat(81)
     const trytesWithChecksum = trytes + 'KZW'
 
-    t.is(
-        addChecksum(trytes, 3, false),
-        trytesWithChecksum,
-        'addChecsum() should add checksum of arbitrary length.'
-    )
+    t.is(addChecksum(trytes, 3, false), trytesWithChecksum, 'addChecsum() should add checksum of arbitrary length.')
 })
 
 test('isValidChecksum() correctly validates the checksum', t => {
@@ -68,11 +58,7 @@ test('isValidChecksum() correctly validates the checksum', t => {
         'isValidChecksum() should return false for address with invalid checksum.'
     )
 
-    t.is(
-        isValidChecksum(addresses[0]),
-        false,
-        'isValidChecksum() should return false for address without checksum.'
-    )
+    t.is(isValidChecksum(addresses[0]), false, 'isValidChecksum() should return false for address without checksum.')
 })
 
 test('isValidChecksum() throws error for invalid address', t => {
@@ -112,11 +98,7 @@ test('removeChecksum() does not mutate the original array', t => {
 
     removeChecksum(arr)
 
-    t.deepEqual(
-        arr,
-        [addressWithChecksum],
-        'removeChecksum() should not mutate the original array.'
-    )
+    t.deepEqual(arr, [addressWithChecksum], 'removeChecksum() should not mutate the original array.')
 })
 
 test('removeChecksum() throws error for invalid addresses', t => {

@@ -35,7 +35,7 @@ export default class Kerl {
      * Resets the internal state
      *
      * @method reset
-     * 
+     *
      * @ignore
      */
     public reset() {
@@ -46,7 +46,7 @@ export default class Kerl {
      * Absorbs trits given an offset and length
      *
      * @method absorb
-     * 
+     *
      * @ignore
      *
      * @param {Int8Array} trits
@@ -76,7 +76,7 @@ export default class Kerl {
      * Squeezes trits given an offset and length
      *
      * @method squeeze
-     * 
+     *
      * @ignore
      *
      * @param {Int8Array} trits

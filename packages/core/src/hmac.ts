@@ -16,12 +16,15 @@ export default function addHMAC(transactions: Bundle, key: Int8Array): Bundle {
 
     const hmacTrytes = trytes(hmac)
 
-    return transactions.map((transaction) =>
-        transaction.value > 0 ? {
-            ...transaction,
-            signatureMessageFragment: hmacTrytes.concat(
-                transaction.signatureMessageFragment.substr(81, 2187)
-            )
-        } : transaction
+    return transactions.map(
+        transaction =>
+            transaction.value > 0
+                ? {
+                      ...transaction,
+                      signatureMessageFragment: hmacTrytes.concat(
+                          transaction.signatureMessageFragment.substr(81, 2187)
+                      ),
+                  }
+                : transaction
     )
 }

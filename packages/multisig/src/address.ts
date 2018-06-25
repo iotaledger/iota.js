@@ -22,11 +22,11 @@ export default class Address {
      * Absorbs key digests
      *
      * @member absorb
-     * 
+     *
      * @memberof Address
-     * 
+     *
      * @param {string|array} digest digest trytes
-     * 
+     *
      * @return {object} address instance
      */
     public absorb(digests: string | ReadonlyArray<string>) {
@@ -48,7 +48,7 @@ export default class Address {
      * Finalizes and returns the multisig address in trytes
      *
      * @member finalize
-     * 
+     *
      * @memberof Address
      *
      * @param {string} digest digest trytes, optional
@@ -69,4 +69,3 @@ export default class Address {
         return trytes(addressTrits)
     }
 }
-

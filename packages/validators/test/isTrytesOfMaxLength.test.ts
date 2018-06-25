@@ -30,9 +30,5 @@ test('isTrytesOfMaxLength() returns false for trytes of invalid length.', t => {
 test('isTrytesOfMaxLength() returns false for invalid trytes.', t => {
     const invalidTrytes = '134asdfLWDUOSTSJVL9EEHKW9YQFPBVBJAGLNKRVGSQZCGHQWEMIIILJMTHVAGVDXJVZMBAMOZTSBQNRVNLLASD'
 
-    t.is(
-        isTrytesOfMaxLength(invalidTrytes, 87),
-        false,
-        'isTrytesOfMaxLength() should return false for invalid trytes.'
-    )
+    t.is(isTrytesOfMaxLength(invalidTrytes, 87), false, 'isTrytesOfMaxLength() should return false for invalid trytes.')
 })

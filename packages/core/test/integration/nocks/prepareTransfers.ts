@@ -7,52 +7,46 @@ export const getBalancesCommand: GetBalancesCommand = {
     addresses: [
         'FJHSSHBZTAKQNDTIKJYCZBOZDGSZANCZSWCNWUOCZXFADNOQSYAHEJPXRLOVPNOQFQXXGEGVDGICLMOXX',
         '9DZXPFSVCSSWXXQPFMWLGFKPBAFTHYMKMZCPFHBVHXPFNJEIJIEEPKXAUBKBNNLIKWHJIYQDFWQVELOCB',
-        'OTSZGTNPKFSGJLUPUNGGXFBYF9GVUEHOADZZTDEOJPWNEIVBLHOMUWPILAHTQHHVSBKTDVQIAEQOZXGFB'
+        'OTSZGTNPKFSGJLUPUNGGXFBYF9GVUEHOADZZTDEOJPWNEIVBLHOMUWPILAHTQHHVSBKTDVQIAEQOZXGFB',
     ],
-    threshold: 100
+    threshold: 100,
 }
 
 const getBalancesResponse: GetBalancesResponse = {
     balances: ['3', '4', '10'],
     milestone: 'M'.repeat(81),
     milestoneIndex: 1,
-    duration: 10
+    duration: 10,
 }
 
 nock('http://localhost:14265', headers)
     .persist()
     .post('/', {
         command: IRICommand.WERE_ADDRESSES_SPENT_FROM,
-        addresses: [
-            'FJHSSHBZTAKQNDTIKJYCZBOZDGSZANCZSWCNWUOCZXFADNOQSYAHEJPXRLOVPNOQFQXXGEGVDGICLMOXX'
-        ]
+        addresses: ['FJHSSHBZTAKQNDTIKJYCZBOZDGSZANCZSWCNWUOCZXFADNOQSYAHEJPXRLOVPNOQFQXXGEGVDGICLMOXX'],
     })
     .reply(200, {
-        states: [true]
+        states: [true],
     })
 
 nock('http://localhost:14265', headers)
     .persist()
     .post('/', {
         command: IRICommand.WERE_ADDRESSES_SPENT_FROM,
-        addresses: [
-            '9DZXPFSVCSSWXXQPFMWLGFKPBAFTHYMKMZCPFHBVHXPFNJEIJIEEPKXAUBKBNNLIKWHJIYQDFWQVELOCB'
-        ]
+        addresses: ['9DZXPFSVCSSWXXQPFMWLGFKPBAFTHYMKMZCPFHBVHXPFNJEIJIEEPKXAUBKBNNLIKWHJIYQDFWQVELOCB'],
     })
     .reply(200, {
-        states: [false]
+        states: [false],
     })
 
 nock('http://localhost:14265', headers)
     .persist()
     .post('/', {
         command: IRICommand.WERE_ADDRESSES_SPENT_FROM,
-        addresses: [
-            'OTSZGTNPKFSGJLUPUNGGXFBYF9GVUEHOADZZTDEOJPWNEIVBLHOMUWPILAHTQHHVSBKTDVQIAEQOZXGFB'
-        ]
+        addresses: ['OTSZGTNPKFSGJLUPUNGGXFBYF9GVUEHOADZZTDEOJPWNEIVBLHOMUWPILAHTQHHVSBKTDVQIAEQOZXGFB'],
     })
     .reply(200, {
-        states: [false]
+        states: [false],
     })
 
 nock('http://localhost:14265', headers)
@@ -64,25 +58,18 @@ nock('http://localhost:14265', headers)
     .persist()
     .post('/', {
         command: IRICommand.FIND_TRANSACTIONS,
-        addresses: [
-            '9DZXPFSVCSSWXXQPFMWLGFKPBAFTHYMKMZCPFHBVHXPFNJEIJIEEPKXAUBKBNNLIKWHJIYQDFWQVELOCB'
-        ]
+        addresses: ['9DZXPFSVCSSWXXQPFMWLGFKPBAFTHYMKMZCPFHBVHXPFNJEIJIEEPKXAUBKBNNLIKWHJIYQDFWQVELOCB'],
     })
     .reply(200, {
-        hashes: [
-            'A'.repeat(81),
-        ]
+        hashes: ['A'.repeat(81)],
     })
 
 nock('http://localhost:14265', headers)
     .persist()
     .post('/', {
         command: IRICommand.FIND_TRANSACTIONS,
-        addresses: [
-            'OTSZGTNPKFSGJLUPUNGGXFBYF9GVUEHOADZZTDEOJPWNEIVBLHOMUWPILAHTQHHVSBKTDVQIAEQOZXGFB'
-        ]
+        addresses: ['OTSZGTNPKFSGJLUPUNGGXFBYF9GVUEHOADZZTDEOJPWNEIVBLHOMUWPILAHTQHHVSBKTDVQIAEQOZXGFB'],
     })
     .reply(200, {
-        hashes: []
+        hashes: [],
     })
-

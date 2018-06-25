@@ -9,11 +9,7 @@ const traverseBundle = createTraverseBundle(createHttpClient())
 const tail = bundle[0].hash
 
 test('traverseBundle() resolves to correct bundle.', async t => {
-    t.deepEqual(
-        await traverseBundle(tail),
-        bundle,
-        'traverseBundle() should resolve to correct bundle.'
-    )
+    t.deepEqual(await traverseBundle(tail), bundle, 'traverseBundle() should resolve to correct bundle.')
 })
 
 test('traverseBundle() resolves to correct signle transaction bundle.', async t => {
@@ -40,17 +36,9 @@ test.cb('traverseBundle() invokes callback', t => {
 
 test.cb('traverseBundle() passes correct arguments to callback', t => {
     traverseBundle(tail, undefined, (err, res) => {
-        t.is(
-            err,
-            null,
-            'traverseBundle() should pass null as first argument in callback for successuful requests'
-        )
+        t.is(err, null, 'traverseBundle() should pass null as first argument in callback for successuful requests')
 
-        t.deepEqual(
-            res,
-            bundle,
-            'traverseBundle() should pass the correct response as second argument in callback'
-        )
+        t.deepEqual(res, bundle, 'traverseBundle() should pass the correct response as second argument in callback')
 
         t.end()
     })

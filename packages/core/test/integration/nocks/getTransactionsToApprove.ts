@@ -1,9 +1,5 @@
 import * as nock from 'nock'
-import {
-    IRICommand,
-    GetTransactionsToApproveCommand,
-    GetTransactionsToApproveResponse
-} from '../../../../types'
+import { IRICommand, GetTransactionsToApproveCommand, GetTransactionsToApproveResponse } from '../../../../types'
 import { bundle } from '@iota/samples'
 import headers from './headers'
 
@@ -11,19 +7,19 @@ export const depth = 3
 
 export const getTransactionsToApproveCommand: GetTransactionsToApproveCommand = {
     command: IRICommand.GET_TRANSACTIONS_TO_APPROVE,
-    depth
+    depth,
 }
 
 export const getTransactionsToApproveWithReferenceCommand: GetTransactionsToApproveCommand = {
     command: IRICommand.GET_TRANSACTIONS_TO_APPROVE,
     depth,
-    reference: 'R'.repeat(81)
+    reference: 'R'.repeat(81),
 }
 
 export const getTransactionsToApproveResponse: GetTransactionsToApproveResponse = {
     trunkTransaction: bundle[bundle.length - 1].trunkTransaction,
     branchTransaction: bundle[bundle.length - 1].branchTransaction,
-    duration: 10
+    duration: 10,
 }
 
 export const getTransactionsToApproveWithReferenceResponse: GetTransactionsToApproveResponse = getTransactionsToApproveResponse

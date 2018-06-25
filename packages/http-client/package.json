@@ -1,73 +1,53 @@
 {
-  "name": "@iota/http-client",
-  "version": "1.0.0-alpha.1",
-  "description": "Send commands to IRI over HTTP.",
-  "main": "./out/http-client/src/index.js",
-  "typings": "typings/http-client/src",
-  "scripts": {
-    "prepublish": "tsc",
-    "test": "tsc && nyc ava",
-    "test-ci": "nyc ava",
-    "format": "prettier",
-    "docs": "tsc && jsdoc2md --no-cache --plugin dmd-clear -t README_tpl.hbs --files './out/**/*.js' > README.md"
-  },
-  "contributors": [
-    "Dominik Schiener <dom@iota.org> (https://iota.org)",
-    "Edward Greve <edward@iota.org> (https://github.com/anyong)",
-    "Chris Dukakis <chris.dukakis@iota.org> (https://github.com/chrisdukakis)"
-  ],
-  "ava": {
-    "files": "out/http-client/test/*.test.js",
-    "failFast": true,
-    "failWithoutAssertions": false,
-    "compileEnhancements": false,
-    "verbose": true
-  },
-  "nyc": {
-    "watermarks": {
-      "functions": [
-        80,
-        95
-      ],
-      "branches": [
-        80,
-        95
-      ],
-      "statements": [
-        80,
-        95
-      ]
+    "name": "@iota/http-client",
+    "version": "1.0.0-alpha.1",
+    "description": "Send commands to IRI over HTTP.",
+    "main": "./out/http-client/src/index.js",
+    "typings": "typings/http-client/src",
+    "scripts": {
+        "prepublish": "tsc",
+        "test": "tsc && nyc ava",
+        "test-ci": "nyc ava",
+        "format": "prettier",
+        "docs": "tsc && jsdoc2md --no-cache --plugin dmd-clear -t README_tpl.hbs --files './out/**/*.js' > README.md"
     },
-    "include": [
-      "out/*/src/*.js",
-      "out/*/test/*.js"
-    ]
-  },
-  "keywords": [
-    "iota",
-    "tangle",
-    "library",
-    "browser",
-    "javascript",
-    "nodejs",
-    "API"
-  ],
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/iotaledger/iota.js/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/iotaledger/iota.js.git"
-  },
-  "dependencies": {
-    "@types/bluebird": "^3.5.20",
-    "@types/isomorphic-fetch": "^0.0.34",
-    "bluebird": "^3.5.1",
-    "isomorphic-fetch": "^2.2.1"
-  },
-  "devDependencies": {
-    "@types/nock": "^9.1.2",
-    "nock": "^9.3.3"
-  }
+    "contributors": [
+        "Dominik Schiener <dom@iota.org> (https://iota.org)",
+        "Edward Greve <edward@iota.org> (https://github.com/anyong)",
+        "Chris Dukakis <chris.dukakis@iota.org> (https://github.com/chrisdukakis)"
+    ],
+    "ava": {
+        "files": "out/http-client/test/*.test.js",
+        "failFast": true,
+        "failWithoutAssertions": false,
+        "compileEnhancements": false,
+        "verbose": true
+    },
+    "nyc": {
+        "watermarks": {
+            "functions": [80, 95],
+            "branches": [80, 95],
+            "statements": [80, 95]
+        },
+        "include": ["out/*/src/*.js", "out/*/test/*.js"]
+    },
+    "keywords": ["iota", "tangle", "library", "browser", "javascript", "nodejs", "API"],
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/iotaledger/iota.js/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/iotaledger/iota.js.git"
+    },
+    "dependencies": {
+        "@types/bluebird": "^3.5.20",
+        "@types/isomorphic-fetch": "^0.0.34",
+        "bluebird": "^3.5.1",
+        "isomorphic-fetch": "^2.2.1"
+    },
+    "devDependencies": {
+        "@types/nock": "^9.1.2",
+        "nock": "^9.3.3"
+    }
 }

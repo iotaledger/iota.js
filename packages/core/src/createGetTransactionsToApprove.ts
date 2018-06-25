@@ -7,21 +7,20 @@ import {
     Hash,
     IRICommand,
     TransactionsToApprove,
-    Provider
+    Provider,
 } from '../../types'
 import { INVALID_REFERENCE_HASH } from './errors'
 
 /**
  * @method createGetTransactionsToApprove
- * 
+ *
  * @memberof module:core
- * 
+ *
  * @param {Provider} provider - Network provider
- * 
+ *
  * @return {function} {@link #module_core.getTransactionsToApprove `getTransactionsToApprove`}
  */
 export const createGetTransactionsToApprove = ({ send }: Provider) =>
-
     /**
      * Does the _tip selection_ by calling
      * [`getTransactionsToApprove`](https://docs.iota.works/iri/api#endpoints/getTransactionsToApprove) command.
@@ -32,10 +31,10 @@ export const createGetTransactionsToApprove = ({ send }: Provider) =>
      * ending up to the pair of selected tips. For more information about tip selection please refer to the
      * [whitepaper](http://iotatoken.com/IOTA_Whitepaper.pdf).
      *
-     * The `reference` option allows to select tips in a way that the reference transaction is being approved too. 
+     * The `reference` option allows to select tips in a way that the reference transaction is being approved too.
      * This is useful for promoting transactions, for example with
      * [`promoteTransaction`]{@link #module_core.promoteTransaction}.
-     * 
+     *
      * @example
      *
      * ```js
@@ -53,7 +52,7 @@ export const createGetTransactionsToApprove = ({ send }: Provider) =>
      * ```
      *
      * @method getTransactionsToApprove
-     * 
+     *
      * @memberof module:core
      *
      * @param {number} depth - The depth at which Random Walk starts. A value of `3` is typically used by wallets,
@@ -74,18 +73,18 @@ export const createGetTransactionsToApprove = ({ send }: Provider) =>
         callback?: Callback<TransactionsToApprove>
     ): Promise<TransactionsToApprove> {
         return Promise.resolve(
-            validate(
-                depthValidator(depth),
-                !!reference && transactionHashValidator(reference, INVALID_REFERENCE_HASH)
-            )
+            validate(depthValidator(depth), !!reference && transactionHashValidator(reference, INVALID_REFERENCE_HASH))
         )
-            .then(() => send<GetTransactionsToApproveCommand, GetTransactionsToApproveResponse>({
-                command: IRICommand.GET_TRANSACTIONS_TO_APPROVE,
-                depth,
-                reference,
-            }))
+            .then(() =>
+                send<GetTransactionsToApproveCommand, GetTransactionsToApproveResponse>({
+                    command: IRICommand.GET_TRANSACTIONS_TO_APPROVE,
+                    depth,
+                    reference,
+                })
+            )
             .then(({ trunkTransaction, branchTransaction }: GetTransactionsToApproveResponse) => ({
-                trunkTransaction, branchTransaction
+                trunkTransaction,
+                branchTransaction,
             }))
             .asCallback(typeof arguments[1] === 'function' ? arguments[1] : callback)
     }

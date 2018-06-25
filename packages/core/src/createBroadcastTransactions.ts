@@ -6,35 +6,34 @@ import {
     Callback,
     IRICommand,
     Provider,
-    Trytes
+    Trytes,
 } from '../../types'
 
-/**  
+/**
  * @method createBroadcastTransactions
- * 
+ *
  * @memberof module:core
  *
  * @param {Provider} provider - Network provider
- * 
+ *
  * @return {function} {@link #module_core.broadcastTransactions `broadcastTransactions`}
  */
 export const createBroadcastTransactions = ({ send }: Provider) =>
-
     /**
      * Broadcasts an list of _attached_ transaction trytes to the network by calling
      * [`boradcastTransactions`](https://docs.iota.org/iri/api#endpoints/broadcastTransactions) command.
      * Tip selection and Proof-of-Work must be done first, by calling
      * [`getTransactionsToApprove`]{@link #module_core.getTransactionsToApprove} and
-     * [`attachToTangle`]{@link #module_core.attachToTangle} or an equivalent attach method or remote 
+     * [`attachToTangle`]{@link #module_core.attachToTangle} or an equivalent attach method or remote
      * [`PoWbox`](https://powbox.testnet.iota.org/), which is a development tool.
      *
      * You may use this method to increase odds of effective transaction propagation.
      *
      * Persist the transaction trytes in local storage **before** calling this command for first time, to ensure
      * that reattachment is possible, until your bundle has been included.
-     * 
+     *
      * @example
-     * 
+     *
      * ```js
      * broadcastTransactions(trytes)
      *   .then(trytes => {
@@ -44,12 +43,12 @@ export const createBroadcastTransactions = ({ send }: Provider) =>
      *     // ...
      *   })
      * ```
-     * 
+     *
      * @method broadcastTransactions
-     * 
+     *
      * @memberof module:core
-     * 
-     * @param {TransactionTrytes[]} trytes - Attached Transaction trytes 
+     *
+     * @param {TransactionTrytes[]} trytes - Attached Transaction trytes
      * @param {Callback} [callback] - Optional callback
      *
      * @return {Promise}
@@ -60,9 +59,11 @@ export const createBroadcastTransactions = ({ send }: Provider) =>
      */
     (trytes: ReadonlyArray<Trytes>, callback?: Callback<ReadonlyArray<Trytes>>): Promise<ReadonlyArray<Trytes>> =>
         Promise.resolve(validate(attachedTrytesArrayValidator(trytes)))
-            .then(() => send<BroadcastTransactionsCommand, BroadcastTransactionsResponse>({
-                command: IRICommand.BROADCAST_TRANSACTIONS,
-                trytes,
-            }))
+            .then(() =>
+                send<BroadcastTransactionsCommand, BroadcastTransactionsResponse>({
+                    command: IRICommand.BROADCAST_TRANSACTIONS,
+                    trytes,
+                })
+            )
             .then(() => trytes)
             .asCallback(callback)
