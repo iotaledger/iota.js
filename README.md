@@ -56,8 +56,8 @@ const getNodeInfo = createGetNodeInfo(createHttpClient(settings))
 
 ### Creating &amp; broadcasting transactions
 
-Publish transfers by calling [`prepareTransfers`](core#module_core.preareTransfers) and piping the 
-prepared trytes to [`sendTrytes`](core#module_core.sendTrytes) command.
+Publish transfers by calling [`prepareTransfers`](packages/core#module_core.prepareTransfers) and piping the 
+prepared trytes to [`sendTrytes`](packages/core#module_core.sendTrytes) command.
 
 Feel free to use devnet and take advatage of [`PoWbox`](https://powbox.testnet.iota.org/) as well as 
 [`IOTA faucet`](https://faucet.testnet.iota.org/) during development.
