@@ -48,7 +48,16 @@ import {
 } from './'
 import { createGetTransfers, GetTransfersOptions } from './createGetTransfers'
 import { createGetBundlesFromAddresses } from './createGetBundlesFromAddresses'
-import { AttachToTangle, Provider, BaseCommand, Inputs, Neighbor, Transaction, Transfer } from '../../types'
+import {
+    AttachToTangle,
+    Provider,
+    BaseCommand,
+    Inputs,
+    Neighbor,
+    Transaction,
+    Transfer,
+    CreateProvider,
+} from '../../types'
 
 export interface Settings extends HttpClientSettings {
     readonly attachToTangle?: AttachToTangle
@@ -76,9 +85,10 @@ export function returnType<T>(func: Func<T>) {
  *
  * @return {API}
  */
-export const composeAPI = (input: Partial<Settings> | Provider = {}) => {
-    const settings: Partial<Settings> = typeof input === 'function' ? {} : <Partial<Settings>>input
-    const provider: Provider = typeof input === 'function' ? <Provider>input : createHttpClient(settings)
+export const composeAPI = (input: Partial<Settings> | CreateProvider = {}) => {
+    const isFn = typeof input === 'function'
+    const settings: Partial<Settings> = isFn ? {} : <Partial<Settings>>input
+    const provider: Provider = isFn ? (input as CreateProvider)() : createHttpClient(settings)
 
     let attachToTangle: AttachToTangle = settings.attachToTangle || createAttachToTangle(provider)
 
@@ -118,7 +128,7 @@ export const composeAPI = (input: Partial<Settings> | Provider = {}) => {
     }
 
     /** @namespace API */
-    return {
+    const api = {
         // IRI commands
         addNeighbors: createAddNeighbors(provider),
         attachToTangle,
@@ -161,6 +171,13 @@ export const composeAPI = (input: Partial<Settings> | Provider = {}) => {
         setSettings,
         overrideAttachToTangle,
     }
+
+    return isFn
+        ? (settings: Partial<Settings>) => {
+              setSettings(settings)
+              return api
+          }
+        : api
 }
 
 export const apiType = returnType(composeAPI)
