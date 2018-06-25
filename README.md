@@ -114,7 +114,7 @@ yarn run init
 
 This will install all dependencies, build and link the packages together. iota.js uses [Lerna](https://lernajs.io/) to manage multiple packages. You can re-bootstrap your setup at any point with `lerna bootstrap` command.
 
-#### Run the tests
+### Run the tests
 
 Make your changes on a single or across multiple packages and test the system in integration. Run from the _root directory_:
 
