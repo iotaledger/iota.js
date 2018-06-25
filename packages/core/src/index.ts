@@ -83,11 +83,7 @@ export { createBroadcastBundle } from './createBroadcastBundle'
 
 export { createFindTransactionObjects } from './createFindTransactionObjects'
 
-export {
-    createGetAccountData,
-    GetAccountDataOptions,
-    AccountData
-} from './createGetAccountData'
+export { createGetAccountData, GetAccountDataOptions, AccountData } from './createGetAccountData'
 
 export { createGetBundle } from './createGetBundle'
 
@@ -97,10 +93,7 @@ export { createGetBundle } from './createGetBundle'
 //
 // export { createGetBundlesFromAddresses } from './createGetBundlesFromAddresses'
 
-export {
-    createGetInputs,
-    GetInputsOptions
-} from './createGetInputs'
+export { createGetInputs, GetInputsOptions } from './createGetInputs'
 
 export { createGetLatestInclusion } from './createGetLatestInclusion'
 
@@ -128,10 +121,7 @@ export { isAboveMaxDepth, createIsPromotable } from './createIsPromotable'
 
 export { createIsReattachable } from './createIsReattachable'
 
-export {
-    createPromoteTransaction,
-    PromoteTransactionOptions
-} from './createPromoteTransaction'
+export { createPromoteTransaction, PromoteTransactionOptions } from './createPromoteTransaction'
 
 export { createReplayBundle } from './createReplayBundle'
 
@@ -150,4 +140,4 @@ import * as errors from './errors'
 export { errors }
 
 // export api factory with default provider
-export { API, composeAPI as default, Settings } from './composeAPI'
+export { API, composeAPI, Settings } from './composeAPI'

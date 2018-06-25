@@ -18,12 +18,7 @@ export interface Address extends Balance {
     readonly security: number
 }
 
-export const makeAddress = (
-    address: Hash,
-    balance: number,
-    keyIndex: number,
-    security: number
-): Address => ({
+export const makeAddress = (address: Hash, balance: number, keyIndex: number, security: number): Address => ({
     address,
     keyIndex,
     security,
@@ -288,6 +283,8 @@ export interface Provider {
     readonly setSettings: <S>(settings?: Readonly<Partial<S>>) => void
 }
 
+export type CreateProvider = (settings?: Partial<object>) => Provider
+
 /** Attach to tangle */
 export type AttachToTangle = (
     trunkTransaction: Hash,
@@ -298,12 +295,7 @@ export type AttachToTangle = (
 ) => Promise<ReadonlyArray<Trytes>>
 
 /* Util methods */
-export const asArray = <T>(
-    x: T | ReadonlyArray<T>
-): ReadonlyArray<T> => (
-        Array.isArray(x) ? x : [x]
-    )
+export const asArray = <T>(x: T | ReadonlyArray<T>): ReadonlyArray<T> => (Array.isArray(x) ? x : [x])
 
-export const getOptionsWithDefaults = <T>(defaults: Readonly<T>) =>
-    (options: Readonly<Partial<T>>): Readonly<T> =>
-        Object.assign({}, defaults, options) // tslint:disable-line prefer-object-spread
+export const getOptionsWithDefaults = <T>(defaults: Readonly<T>) => (options: Readonly<Partial<T>>): Readonly<T> =>
+    Object.assign({}, defaults, options) // tslint:disable-line prefer-object-spread
