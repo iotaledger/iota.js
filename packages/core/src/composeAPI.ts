@@ -44,19 +44,11 @@ import {
     GetNodeInfoResponse,
     PrepareTransfersOptions,
     PromoteTransactionOptions,
-    TransactionsToApprove
+    TransactionsToApprove,
 } from './'
 import { createGetTransfers, GetTransfersOptions } from './createGetTransfers'
 import { createGetBundlesFromAddresses } from './createGetBundlesFromAddresses'
-import {
-    AttachToTangle,
-    Provider,
-    BaseCommand,
-    Inputs,
-    Neighbor,
-    Transaction,
-    Transfer
-} from '../../types'
+import { AttachToTangle, Provider, BaseCommand, Inputs, Neighbor, Transaction, Transfer } from '../../types'
 
 export interface Settings extends HttpClientSettings {
     readonly attachToTangle?: AttachToTangle
@@ -70,39 +62,43 @@ export function returnType<T>(func: Func<T>) {
 
 /**
  * Composes API object from it's components
- * 
+ *
  * @method composeApi
- * 
+ *
  * @memberof module:core
- * 
- * @param {object} [settings={}] - Connection settings
+ *
+ * @param {object | Function} [settings={} | provider] - Connection settings or `provider` factory
  * @param {string} [settings.provider=http://localhost:14265] Uri of IRI node
- * @param {string | number} [apiVersion=1] - IOTA Api version to be sent as `X-IOTA-API-Version` header. 
- * @param {number} [requestBatchSize=1000] - Number of search values per request.
- * 
+ * @param {function} [settings.attachToTangle] - Function to override
+ * [`attachToTangle`]{@link #module_core.attachToTangle} with
+ * @param {string | number} [settings.apiVersion=1] - IOTA Api version to be sent as `X-IOTA-API-Version` header.
+ * @param {number} [settings.requestBatchSize=1000] - Number of search values per request.
+ *
  * @return {API}
  */
-export const composeAPI = (settings: Partial<Settings> = {}) => {
-    const _provider: Provider = createHttpClient(settings) // tslint:disable-line variable-name
-    let _attachFn = settings.attachToTangle || createAttachToTangle(_provider) // tslint:disable-line variable-name
+export const composeAPI = (input: Partial<Settings> | Provider = {}) => {
+    const settings: Partial<Settings> = typeof input === 'function' ? {} : <Partial<Settings>>input
+    const provider: Provider = typeof input === 'function' ? <Provider>input : createHttpClient(settings)
+
+    let attachToTangle: AttachToTangle = settings.attachToTangle || createAttachToTangle(provider)
 
     /**
      * Defines network provider configuration and [`attachToTangle`]{@link #module_core.attachToTangle} method.
      *
      * @method setSettings
-     * 
+     *
      * @memberof API
-     * 
+     *
      * @param {object} settings - Provider settings object
      * @param {string} [settings.provider] - Http `uri` of IRI node
      * @param {function} [settings.attachToTangle] - Function to override
      * [`attachToTangle`]{@link #module_core.attachToTangle} with
      */
     function setSettings(newSettings: Partial<Settings> = {}) {
-        _provider.setSettings(newSettings)
+        provider.setSettings(newSettings)
 
         if (newSettings.attachToTangle) {
-            _attachFn = newSettings.attachToTangle
+            attachToTangle = newSettings.attachToTangle
         }
     }
 
@@ -111,59 +107,59 @@ export const composeAPI = (settings: Partial<Settings> = {}) => {
      * [`PoWBox`](https://powbox.testnet.iota.org/)
      *
      * @method overrideAttachToTangle
-     * 
+     *
      * @memberof API
-     * 
+     *
      * @param {function} attachToTangle - Function to override
      * [`attachToTangle`]{@link #module_core.attachToTangle} with
      */
     function overrideAttachToTangle(attachFn: AttachToTangle) {
-        _attachFn = attachFn
+        attachToTangle = attachFn
     }
 
     /** @namespace API */
     return {
         // IRI commands
-        addNeighbors: createAddNeighbors(_provider),
-        attachToTangle: _attachFn,
-        broadcastTransactions: createBroadcastTransactions(_provider),
-        checkConsistency: createCheckConsistency(_provider),
-        findTransactions: createFindTransactions(_provider),
-        getBalances: createGetBalances(_provider),
-        getInclusionStates: createGetInclusionStates(_provider),
-        getNeighbors: createGetNeighbors(_provider),
-        getNodeInfo: createGetNodeInfo(_provider),
-        getTips: createGetTips(_provider),
-        getTransactionsToApprove: createGetTransactionsToApprove(_provider),
-        getTrytes: createGetTrytes(_provider),
-        interruptAttachingToTangle: createInterruptAttachingToTangle(_provider),
-        removeNeighbors: createRemoveNeighbors(_provider),
-        storeTransactions: createStoreTransactions(_provider),
-        // wereAddressesSpentFrom: createWereAddressesSpentFrom(_provider),
-        sendCommand: _provider.send,
+        addNeighbors: createAddNeighbors(provider),
+        attachToTangle,
+        broadcastTransactions: createBroadcastTransactions(provider),
+        checkConsistency: createCheckConsistency(provider),
+        findTransactions: createFindTransactions(provider),
+        getBalances: createGetBalances(provider),
+        getInclusionStates: createGetInclusionStates(provider),
+        getNeighbors: createGetNeighbors(provider),
+        getNodeInfo: createGetNodeInfo(provider),
+        getTips: createGetTips(provider),
+        getTransactionsToApprove: createGetTransactionsToApprove(provider),
+        getTrytes: createGetTrytes(provider),
+        interruptAttachingToTangle: createInterruptAttachingToTangle(provider),
+        removeNeighbors: createRemoveNeighbors(provider),
+        storeTransactions: createStoreTransactions(provider),
+        // wereAddressesSpentFrom: createWereAddressesSpentFrom(provider),
+        sendCommand: provider.send,
 
         // Wrapper methods
-        broadcastBundle: createBroadcastBundle(_provider),
-        getAccountData: createGetAccountData(_provider),
-        getBundle: createGetBundle(_provider),
-        getBundlesFromAddresses: createGetBundlesFromAddresses(_provider),
-        getLatestInclusion: createGetLatestInclusion(_provider),
-        getNewAddress: createGetNewAddress(_provider),
-        getTransactionObjects: createGetTransactionObjects(_provider),
-        findTransactionObjects: createFindTransactionObjects(_provider),
-        getInputs: createGetInputs(_provider),
-        getTransfers: createGetTransfers(_provider), // Deprecated
-        isPromotable: createIsPromotable(_provider),
-        isReattachable: createIsReattachable(_provider), // Deprecated
-        prepareTransfers: createPrepareTransfers(_provider),
-        promoteTransaction: createPromoteTransaction(_provider, _attachFn),
-        replayBundle: createReplayBundle(_provider, _attachFn),
-        // sendTransfer: createSendTransfer(_provider, _attachFn),
-        sendTrytes: createSendTrytes(_provider, _attachFn),
-        storeAndBroadcast: createStoreAndBroadcast(_provider),
-        traverseBundle: createTraverseBundle(_provider),
+        broadcastBundle: createBroadcastBundle(provider),
+        getAccountData: createGetAccountData(provider),
+        getBundle: createGetBundle(provider),
+        getBundlesFromAddresses: createGetBundlesFromAddresses(provider),
+        getLatestInclusion: createGetLatestInclusion(provider),
+        getNewAddress: createGetNewAddress(provider),
+        getTransactionObjects: createGetTransactionObjects(provider),
+        findTransactionObjects: createFindTransactionObjects(provider),
+        getInputs: createGetInputs(provider),
+        getTransfers: createGetTransfers(provider), // Deprecated
+        isPromotable: createIsPromotable(provider),
+        isReattachable: createIsReattachable(provider), // Deprecated
+        prepareTransfers: createPrepareTransfers(provider),
+        promoteTransaction: createPromoteTransaction(provider, attachToTangle),
+        replayBundle: createReplayBundle(provider, attachToTangle),
+        // sendTransfer: createSendTransfer(provider, attachToTangle),
+        sendTrytes: createSendTrytes(provider, attachToTangle),
+        storeAndBroadcast: createStoreAndBroadcast(provider),
+        traverseBundle: createTraverseBundle(provider),
         setSettings,
-        overrideAttachToTangle
+        overrideAttachToTangle,
     }
 }
 
