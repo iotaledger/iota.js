@@ -114,7 +114,7 @@ export const composeAPI = (input: Partial<Settings> | CreateProvider = {}) => {
 
     /**
      * Overides default [`attachToTangle`]{@link #module_core.attachToTangle} with a local equivalent or
-     * [`PoWBox`](https://powbox.testnet.iota.org/)
+     * [`PoWBox`](https://powbox.devnet.iota.org/)
      *
      * @method overrideAttachToTangle
      *

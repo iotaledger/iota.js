@@ -240,7 +240,7 @@ Returns list of transaction trytes and overwrites the following fields:
 This method can be replaced with a local equivelant such as
 [`ccurl.interface.js`](https://github.com/iotaledger/ccurl.interface.js) in node.js,
 [`curl.lib.js`](https://github.com/iotaledger/curl.lib.js) which works on WebGL 2 enabled browsers
-or remote [`PoWbox`](https://powbox.testnet.iota.org/).
+or remote [`PoWbox`](https://powbox.devnet.iota.org/).
 
 `trunkTransaction` and `branchTransaction` hashes are given by
 [`getTransactionToApprove`](#module_core.getTransactionsToApprove).
@@ -1297,7 +1297,7 @@ Persists a list of _attached_ transaction trytes in the store of connected node 
 Tip selection and Proof-of-Work must be done first, by calling
 [`getTransactionsToApprove`](#module_core.getTransactionsToApprove) and
 [`attachToTangle`](#module_core.attachToTangle) or an equivalent attach method or remote
-[`PoWbox`](https://powbox.testnet.iota.org/).
+[`PoWbox`](https://powbox.devnet.iota.org/).
 
 Persist the transaction trytes in local storage **before** calling this command, to ensure
 reattachment is possible, until your bundle has been included.

@@ -1,4 +1,4 @@
-# IOTA.js
+# iota.js
 
 IOTA Client Reference Implementation in Javascript
 
@@ -49,9 +49,11 @@ npm install @iota/http-client
 import { createHttpClient } from '@iota/http-client'
 import { createGetNodeInfo } from '@iota/core'
 
-const settings = { provider: 'http://localhost:14265' }
+const client = createHttpClient({
+    provider: 'http://localhost:14265'
+})
 
-const getNodeInfo = createGetNodeInfo(createHttpClient(settings))
+const getNodeInfo = createGetNodeInfo(client)
 ```
 
 ### Creating &amp; broadcasting transactions
@@ -59,11 +61,11 @@ const getNodeInfo = createGetNodeInfo(createHttpClient(settings))
 Publish transfers by calling [`prepareTransfers`](packages/core#module_core.prepareTransfers) and piping the 
 prepared trytes to [`sendTrytes`](packages/core#module_core.sendTrytes) command.
 
-Feel free to use devnet and take advatage of [`PoWbox`](https://powbox.testnet.iota.org/) as well as 
-[`IOTA faucet`](https://faucet.testnet.iota.org/) during development.
+Feel free to use devnet and take advatage of [`PoWbox`](https://powbox.devnet.iota.org/) as well as 
+[`IOTA faucet`](https://faucet.devnet.iota.org/) during development.
 
 ```js
-// must be trully random & 81-trytes long
+// must be truly random & 81-trytes long
 const seed = ' your seed here '
 
 // Array of transfers which defines transfer recipients and value transferred in IOTAs.
