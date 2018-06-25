@@ -22,7 +22,7 @@ export const getNodeInfoResponse: GetNodeInfoResponse = {
     packetsQueueSize: 23,
     time: 213213214,
     tips: 123,
-    transactionsToRequest: 10
+    transactionsToRequest: 10,
 }
 
 export const getBalancesNock = nock('http://localhost:14265', headers)

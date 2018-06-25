@@ -30,11 +30,7 @@ test.cb('getTrytes() invokes callback', t => {
 
 test.cb('getTrytes() passes correct arguments to callback', t => {
     getTrytes(getTrytesCommand.hashes, (err, res) => {
-        t.is(
-            err,
-            null,
-            'getTrytes() should pass null as first argument in callback for successuful requests'
-        )
+        t.is(err, null, 'getTrytes() should pass null as first argument in callback for successuful requests')
 
         t.deepEqual(
             res,

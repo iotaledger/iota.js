@@ -2,9 +2,9 @@ import * as Promise from 'bluebird'
 import { createFindTransactions, createGetTransactionObjects, FindTransactionsQuery } from './'
 import { Callback, Provider, Transaction } from '../../types'
 
-/**  
+/**
  * @method createFindTransactionObjects
- * 
+ *
  * @memberof module:core
  *
  * @param {Provider} provider - Network provider for accessing IRI
@@ -24,19 +24,19 @@ export const createFindTransactionObjects = (provider: Provider) => {
      * @example
      *
      * Searching for transactions by address:
-     * 
+     *
      * ```js
      * findTransactionObjects({ addresses: ['ADR...'] })
      *    .then(transactions => {
      *        // ...
      *    })
-     *    .catch(err => { 
+     *    .catch(err => {
      *        // ...
      *    })
      * ```
      *
      * @method findTransactionObjects
-     * 
+     *
      * @memberof module:core
      *
      * @param {object} query
@@ -45,9 +45,9 @@ export const createFindTransactionObjects = (provider: Provider) => {
      * @param {Tag[]} [query.tags] - List of tags
      * @param {Hash[]} [query.addresses] - List of approvees
      * @param {Callback} [callback] - Optional callback
-     * 
+     *
      * @returns {Promise}
-     * @fulfil {Transaction[]} Array of transaction objects 
+     * @fulfil {Transaction[]} Array of transaction objects
      * @reject {Error}
      * - `INVALID_HASH_ARRAY`: Invalid hashes of addresses, approvees of bundles
      * - `INVALID_TAG_ARRAY`: Invalid tags

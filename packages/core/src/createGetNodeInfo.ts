@@ -1,23 +1,16 @@
 import * as Promise from 'bluebird'
-import {
-    Callback,
-    IRICommand,
-    GetNodeInfoCommand,
-    GetNodeInfoResponse,
-    Provider
-} from '../../types'
+import { Callback, IRICommand, GetNodeInfoCommand, GetNodeInfoResponse, Provider } from '../../types'
 
 /**
  * @method createGetNodeInfo
- * 
+ *
  * @param {Provider} provider - Network provider
- * 
+ *
  * @memberof module:core
- * 
+ *
  * @return {function} {@link #module_core.getNodeInfo `getNodeInfo`}
  */
 export const createGetNodeInfo = ({ send }: Provider) =>
-
     /**
      * Returns information about connected node by calling
      * [`getNodeInfo`](https://docs.iota.works/iri/api#endpoints/getNodeInfo) command.
@@ -31,9 +24,9 @@ export const createGetNodeInfo = ({ send }: Provider) =>
      *     // ...
      *   })
      * ```
-     * 
+     *
      * @method getNodeInfo
-     * 
+     *
      * @memberof module:core
      *
      * @param {Callback} [callback] - Optional callback
@@ -46,6 +39,5 @@ export const createGetNodeInfo = ({ send }: Provider) =>
     function getNodeInfo(callback?: Callback<GetNodeInfoResponse>): Promise<GetNodeInfoResponse> {
         return send<GetNodeInfoCommand, GetNodeInfoResponse>({
             command: IRICommand.GET_NODE_INFO,
-        })
-            .asCallback(callback)
+        }).asCallback(callback)
     }

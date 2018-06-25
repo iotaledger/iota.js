@@ -11,19 +11,11 @@ import {
 import isBundle from '../src'
 
 test('isBundle() returns true for valid bundle.', t => {
-    t.is(
-        isBundle(bundle),
-        true,
-        'isBundle() should return true for valid bundle.'
-    )
+    t.is(isBundle(bundle), true, 'isBundle() should return true for valid bundle.')
 })
 
 test('isBundle() returns true for valid zero-value bundle', t => {
-    t.is(
-        isBundle(bundleWithZeroValue),
-        true,
-        'isBundle() should return true for valid zero-value bundle'
-    )
+    t.is(isBundle(bundleWithZeroValue), true, 'isBundle() should return true for valid zero-value bundle')
 })
 
 test('isBundle() returns false for bundle with invalid lastIndex.', t => {

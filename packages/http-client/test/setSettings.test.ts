@@ -18,13 +18,10 @@ test('setSettings() sets provider uri', async t => {
     const client = createHttpClient()
 
     client.setSettings({
-        provider: 'http://localhost:34265'
+        provider: 'http://localhost:34265',
     })
 
-    t.deepEqual(
-        await client.send(command),
-        response
-    )
+    t.deepEqual(await client.send(command), response)
 })
 
 test('setSettings() sets X-IOTA-API-Version', async t => {
@@ -32,28 +29,22 @@ test('setSettings() sets X-IOTA-API-Version', async t => {
 
     client.setSettings({
         provider: 'http://localhost:44265',
-        apiVersion: 2
+        apiVersion: 2,
     })
 
-    t.deepEqual(
-        await client.send(command),
-        response
-    )
+    t.deepEqual(await client.send(command), response)
 })
 
 test('setSettings() sets request batch size', async t => {
     const client = createHttpClient({
         provider: 'http://localhost:24265',
         requestBatchSize: 1000,
-        apiVersion: API_VERSION
+        apiVersion: API_VERSION,
     })
 
     client.setSettings({
-        requestBatchSize: 2
+        requestBatchSize: 2,
     })
 
-    t.deepEqual(
-        await client.send(batchedCommand),
-        batchedResponse
-    )
+    t.deepEqual(await client.send(batchedCommand), batchedResponse)
 })

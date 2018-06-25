@@ -9,19 +9,18 @@ const ONE_WAY_DELAY = 1 * 60 * 1000
 const DEPTH = 6
 
 export const isAboveMaxDepth = (attachmentTimestamp: number, depth = DEPTH) =>
-    (attachmentTimestamp < Date.now()) &&
-    ((Date.now() - attachmentTimestamp) < (depth * MILESTONE_INTERVAL - ONE_WAY_DELAY))
+    attachmentTimestamp < Date.now() && Date.now() - attachmentTimestamp < depth * MILESTONE_INTERVAL - ONE_WAY_DELAY
 
 /**
- *  
+ *
  * @method createIsPromotable
- * 
+ *
  * @memberof module:core
- * 
+ *
  * @param {Provider} provider - Network provider
- * 
+ *
  * @param {number} [depth=6] - Depth up to which promotion is effective.
- * 
+ *
  * @return {function} {@link #module_core.isPromotable `isPromotable`}
  */
 export const createIsPromotable = (provider: Provider, depth = DEPTH) => {
@@ -36,16 +35,16 @@ export const createIsPromotable = (provider: Provider, depth = DEPTH) => {
      *
      * @example
      * #### Example with promotion and reattachments
-     * 
+     *
      * Using `isPromotable` to determine if transaction can be [_promoted_]{@link #module_core.promoteTransaction}
      * or should be [_reattached_]{@link #module_core.replayBundle}
-     * 
+     *
      * ```js
      * // We need to monitor inclusion states of all tail transactions (original tail & reattachments)
      * const tails = [tail]
      *
      * getLatestInclusion(tails)
-     *   .then(states => { 
+     *   .then(states => {
      *     // Check if none of transactions confirmed
      *     if (states.indexOf(true) === -1) {
      *       const tail = tails[tails.length - 1] // Get latest tail hash
@@ -56,10 +55,10 @@ export const createIsPromotable = (provider: Provider, depth = DEPTH) => {
      *           : replayBundle(tail, 3, 14)
      *             .then(([reattachedTail]) => {
      *               const newTailHash = reattachedTail.hash
-     *               
+     *
      *               // Keeping track of all tail hashes to check confirmation
      *               tails.push(newTailHash)
-     *               
+     *
      *               // Promote the new tail...
      *             })
      *     }
@@ -69,7 +68,7 @@ export const createIsPromotable = (provider: Provider, depth = DEPTH) => {
      * ```
      *
      * @method isPromotable
-     * 
+     *
      * @memberof module:core
      *
      * @param {Hash} tail - Tail transaction hash
@@ -84,13 +83,12 @@ export const createIsPromotable = (provider: Provider, depth = DEPTH) => {
      */
     return (tail: Hash, callback?: Callback<boolean>): Promise<boolean> =>
         Promise.resolve(validate(hashValidator(tail), depthValidator(depth)))
-            .then(() => Promise.all([
-                checkConsistency(tail),
-                getTrytes([tail]).then(([trytes]) => asTransactionObject(trytes, tail).attachmentTimestamp)
-            ]))
-            .then(([isConsistent, attachmentTimestamp]) => (
-                isConsistent &&
-                isAboveMaxDepth(attachmentTimestamp, depth)
-            ))
+            .then(() =>
+                Promise.all([
+                    checkConsistency(tail),
+                    getTrytes([tail]).then(([trytes]) => asTransactionObject(trytes, tail).attachmentTimestamp),
+                ])
+            )
+            .then(([isConsistent, attachmentTimestamp]) => isConsistent && isAboveMaxDepth(attachmentTimestamp, depth))
             .asCallback(callback)
 }

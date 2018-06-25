@@ -4,15 +4,7 @@ import { createCheckConsistency } from './'
 import { getPrepareTransfersOptions } from './createPrepareTransfers'
 import { createSendTransfer } from './createSendTransfer'
 import * as errors from './errors'
-import {
-    AttachToTangle,
-    Callback,
-    getOptionsWithDefaults,
-    Maybe,
-    Provider,
-    Transaction,
-    Transfer
-} from '../../types'
+import { AttachToTangle, Callback, getOptionsWithDefaults, Maybe, Provider, Transaction, Transfer } from '../../types'
 
 export interface PromoteTransactionOptions {
     readonly delay: number
@@ -36,15 +28,15 @@ export const spammer = (): Transfer => ({
 export const generateSpam = (n: number = 1) => new Array(n).map(spammer)
 
 /**
- * @method createPromoteTransaction 
- * 
+ * @method createPromoteTransaction
+ *
  * @memberof module:core
- * 
+ *
  * @param {Provider} provider - Network provider
  *
  * @param {Function} [attachFn] - Optional `AttachToTangle` function to override the
  * [default method]{@link #module_core.attachToTangle}.
- * 
+ *
  * @return {Function} {@link #module_core.promoteTransaction `promoteTransaction`}
  */
 export const createPromoteTransaction = (provider: Provider, attachFn?: AttachToTangle) => {
@@ -57,9 +49,9 @@ export const createPromoteTransaction = (provider: Provider, attachFn?: AttachTo
      * is interruptable through `interrupt` option.
      *
      * @method promoteTransaction
-     * 
+     *
      * @memberof module:core
-     * 
+     *
      * @param {string} tail
      * @param {int} depth
      * @param {int} minWeightMagnitude
@@ -96,7 +88,7 @@ export const createPromoteTransaction = (provider: Provider, attachFn?: AttachTo
         const spamTransactions: Transaction[] = []
         const sendTransferOptions = {
             ...getPrepareTransfersOptions({}),
-            reference: tailTransaction
+            reference: tailTransaction,
         }
 
         return Bluebird.resolve(validate(hashValidator(tailTransaction), transferArrayValidator(spamTransfers)))
@@ -106,9 +98,15 @@ export const createPromoteTransaction = (provider: Provider, attachFn?: AttachTo
                     throw new Error(errors.INCONSISTENT_SUBTANGLE)
                 }
 
-                return sendTransfer(spamTransfers[0].address, depth, minWeightMagnitude, spamTransfers, sendTransferOptions)
+                return sendTransfer(
+                    spamTransfers[0].address,
+                    depth,
+                    minWeightMagnitude,
+                    spamTransfers,
+                    sendTransferOptions
+                )
             })
-            .then(async (transactions) => {
+            .then(async transactions => {
                 if (
                     (delay && delay > 0) ||
                     interrupt === true ||

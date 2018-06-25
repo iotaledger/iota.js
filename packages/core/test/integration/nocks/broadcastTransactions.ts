@@ -5,7 +5,7 @@ import headers from './headers'
 
 export const broadcastTransactionsCommand: BroadcastTransactionsCommand = {
     command: IRICommand.BROADCAST_TRANSACTIONS,
-    trytes: bundleTrytes
+    trytes: bundleTrytes,
 }
 
 export const broadcastTransactionsNock = nock('http://localhost:14265', headers)

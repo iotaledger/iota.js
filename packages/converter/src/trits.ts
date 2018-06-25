@@ -42,11 +42,11 @@ export const TRYTES_TRITS_LUT: ReadonlyArray<ReadonlyArray<number>> = [
  * Converts trytes or values to trits
  *
  * @method trits
- * 
+ *
  * @memberof module:converter
  *
  * @param {String|Number} input - Tryte string or value to be converted.
- * 
+ *
  * @return {Int8Array} trits
  */
 export function trits(input: string | number): Int8Array {
@@ -71,11 +71,11 @@ export function trits(input: string | number): Int8Array {
 
 /**
  * @method trytesToTrits
- * 
+ *
  * @memberof module:converter
- * 
+ *
  * @ignore
- * 
+ *
  * @alias trits
  */
 export const trytesToTrits = trits
@@ -84,11 +84,11 @@ export const trytesToTrits = trits
  * Converts trits to trytes
  *
  * @method trytes
- * 
+ *
  * @memberof module:converter
  *
  * @param {Int8Array} trits
- * 
+ *
  * @return {String} trytes
  */
 // tslint:disable-next-line no-shadowed-variable
@@ -118,11 +118,11 @@ export function trytes(trits: Int8Array): string {
 
 /**
  * @method tritsToTrytes
- * 
+ *
  * @memberof module:converter
- * 
+ *
  * @ignore
- * 
+ *
  * @alias trytes
  */
 export const tritsToTrytes = trytes
@@ -131,18 +131,18 @@ export const tritsToTrytes = trytes
  * Converts trits into an integer value
  *
  * @method value
- * 
+ *
  * @memberof module:converter
  *
  * @param {Int8Array} trits
- * 
- * @return {Number} 
+ *
+ * @return {Number}
  */
 // tslint:disable-next-line no-shadowed-variable
 export function value(trits: Int8Array): number {
     let returnValue = 0
 
-    for (let i = trits.length; i-- > 0;) {
+    for (let i = trits.length; i-- > 0; ) {
         returnValue = returnValue * 3 + trits[i]
     }
 
@@ -151,11 +151,11 @@ export function value(trits: Int8Array): number {
 
 /**
  * @method tritsToValue
- * 
+ *
  * @memberof module:converter
- * 
+ *
  * @ignore
- * 
+ *
  * @alias value
  */
 export const tritsToValue = value
@@ -164,16 +164,18 @@ export const tritsToValue = value
  * Converts an integer value to trits
  *
  * @method fromValue
- * 
+ *
  * @memberof module:converter
- * 
+ *
  * @param {Number} value
- * 
+ *
  * @return {Int8Array} trits
  */
 // tslint:disable-next-line no-shadowed-variable
 export function fromValue(value: number): Int8Array {
-    const destination = new Int8Array(value ? (1 + Math.floor(Math.log(2 * Math.max(1, Math.abs(value))) / Math.log(3))) : 0)
+    const destination = new Int8Array(
+        value ? 1 + Math.floor(Math.log(2 * Math.max(1, Math.abs(value))) / Math.log(3)) : 0
+    )
     let absoluteValue = value < 0 ? -value : value
     let i = 0
 
@@ -199,14 +201,13 @@ export function fromValue(value: number): Int8Array {
     return destination
 }
 
-
 /**
  * @method valueToTrits
- * 
+ *
  * @memberof module:converter
- * 
+ *
  * @ignore
- * 
+ *
  * @alias fromValue
  */
 export const valueToTrits = fromValue

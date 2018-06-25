@@ -6,22 +6,19 @@ import {
     getTransactionsToApproveCommand,
     getTransactionsToApproveResponse,
     getTransactionsToApproveWithReferenceCommand,
-    getTransactionsToApproveWithReferenceResponse
+    getTransactionsToApproveWithReferenceResponse,
 } from './nocks/getTransactionsToApprove'
 
 const getTransactionsToApprove = createGetTransactionsToApprove(createHttpClient())
 
-const addresses = [
-    'A'.repeat(81),
-    'B'.repeat(81)
-]
+const addresses = ['A'.repeat(81), 'B'.repeat(81)]
 
 test('getTransactionsToApprove() resolves to correct response', async t => {
     t.deepEqual(
         await getTransactionsToApprove(getTransactionsToApproveCommand.depth),
         {
             trunkTransaction: getTransactionsToApproveResponse.trunkTransaction,
-            branchTransaction: getTransactionsToApproveResponse.branchTransaction
+            branchTransaction: getTransactionsToApproveResponse.branchTransaction,
         },
         'getTransactionsToApprove() should resolve to correct reposne with trunk and branch transactions'
     )
@@ -35,7 +32,7 @@ test('getTransactionsToApprove() with reference option resolves to correct respo
         ),
         {
             trunkTransaction: getTransactionsToApproveWithReferenceResponse.trunkTransaction,
-            branchTransaction: getTransactionsToApproveWithReferenceResponse.branchTransaction
+            branchTransaction: getTransactionsToApproveWithReferenceResponse.branchTransaction,
         },
         'getTransactionsToApprove() with reference option should resolve to correct trunk and branch transactions'
     )
@@ -67,7 +64,7 @@ test.cb('getTransactionsToApprove() passes correct arguments to callback', t => 
             res,
             {
                 trunkTransaction: getTransactionsToApproveResponse.trunkTransaction,
-                branchTransaction: getTransactionsToApproveResponse.branchTransaction
+                branchTransaction: getTransactionsToApproveResponse.branchTransaction,
             },
             'getTransactionsToApprove() should pass the correct response as second argument in callback'
         )

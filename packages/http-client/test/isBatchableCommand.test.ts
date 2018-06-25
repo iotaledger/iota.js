@@ -1,10 +1,10 @@
 import { test } from 'ava'
 import { BaseCommand, FindTransactionsCommand, IRICommand } from '../../types'
-import { isBatchableCommand } from '../src/httpClient';
+import { isBatchableCommand } from '../src/httpClient'
 
 const batchableCommand: FindTransactionsCommand = {
     command: IRICommand.FIND_TRANSACTIONS,
-    addresses: ['A'.repeat(81), 'B'.repeat(81)]
+    addresses: ['A'.repeat(81), 'B'.repeat(81)],
 }
 
 interface CustomCommand extends BaseCommand {
@@ -13,7 +13,7 @@ interface CustomCommand extends BaseCommand {
 
 const nonBatchableCommand: CustomCommand = {
     command: 'command',
-    key: ['key']
+    key: ['key'],
 }
 
 test('isBatchableCommand() returns true for batchable commands.', t => {

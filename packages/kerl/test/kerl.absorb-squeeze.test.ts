@@ -16,10 +16,5 @@ test('Kerl: absorb()/squeeze(), Converter: trits()/trytes()', t => {
         return trytes(hashTrits)
     }
 
-    t.is(
-        absorbSqueeze(input),
-        expected,
-        'Kerl should produce correct hash for absorb/squeeze case.'
-    )
+    t.is(absorbSqueeze(input), expected, 'Kerl should produce correct hash for absorb/squeeze case.')
 })
-

@@ -8,14 +8,10 @@ test('trytesToAscii()', t => {
     const trytes = 'SBYBCCKB'
     const expected = 'IOTA'
 
-    const nonTrytes = "AAAfasds"
-    const trytesOfOddLength = "AAA"
+    const nonTrytes = 'AAAfasds'
+    const trytesOfOddLength = 'AAA'
 
-    t.is(
-        trytesToAscii(trytes),
-        expected,
-        'fromTrytes() should convert trytes to ascii.'
-    )
+    t.is(trytesToAscii(trytes), expected, 'fromTrytes() should convert trytes to ascii.')
 
     const invalidTrytesError = t.throws(
         () => trytesToAscii(nonTrytes),

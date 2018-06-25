@@ -12,7 +12,7 @@ import { Hash } from '../../types'
  *
  * @param {Int8Array} seed - Seed trits
  * @param {number} index - Private key index
- * 
+ *
  * @return {Int8Array} subseed trits
  */
 export function subseed(seed: Int8Array, index: number): Int8Array {
@@ -77,8 +77,8 @@ export function key(subseed: Int8Array, length: number): Int8Array {
  * @method digests
  *
  * @param {Int8Array} key - Private key trits
- * 
- * @return {Int8Array} 
+ *
+ * @return {Int8Array}
  */
 // tslint:disable-next-line no-shadowed-variable
 export function digests(key: Int8Array): Int8Array {
@@ -120,9 +120,9 @@ export function digests(key: Int8Array): Int8Array {
 
 /**
  * @method address
- * 
+ *
  * @param {Int8Array} digests - Digests trits
- * 
+ *
  * @return {Int8Array} Address trits
  */
 // tslint:disable-next-line no-shadowed-variable
@@ -142,14 +142,11 @@ export function address(digests: Int8Array): Int8Array {
  *
  * @param {array} normalizedBundleFragment - Normalized bundle fragment
  * @param {Int8Array} signatureFragment - Signature fragment trits
- * 
+ *
  * @return {Int8Array} Digest trits
  */
 // tslint:disable-next-line no-shadowed-variable
-export function digest(
-    normalizedBundleFragment: Int8Array,
-    signatureFragment: Int8Array
-): Int8Array {
+export function digest(normalizedBundleFragment: Int8Array, signatureFragment: Int8Array): Int8Array {
     const digestKerl = new Kerl()
 
     digestKerl.initialize()
@@ -159,7 +156,7 @@ export function digest(
     for (let i = 0; i < 27; i++) {
         buffer = signatureFragment.slice(i * 243, (i + 1) * 243)
 
-        for (let j = normalizedBundleFragment[i] + 13; j-- > 0;) {
+        for (let j = normalizedBundleFragment[i] + 13; j-- > 0; ) {
             const signatureFragmentKerl = new Kerl()
 
             signatureFragmentKerl.initialize()
@@ -179,13 +176,10 @@ export function digest(
  *
  * @param {array} normalizeBundleFragment - normalized bundle fragment
  * @param {keyFragment} keyFragment - key fragment trits
- * 
+ *
  * @return {Int8Array} Signature Fragment trits
  */
-export function signatureFragment(
-    normalizedBundleFragment: Int8Array,
-    keyFragment: Int8Array
-): Int8Array {
+export function signatureFragment(normalizedBundleFragment: Int8Array, keyFragment: Int8Array): Int8Array {
     const sigFragment = keyFragment.slice()
 
     const kerl = new Kerl()
@@ -214,7 +208,7 @@ export function signatureFragment(
  * @param {string} expectedAddress - Expected address trytes
  * @param {array} signatureFragments - Array of signatureFragments trytes
  * @param {string} bundleHash - Bundle hash trytes
- * 
+ *
  * @return {boolean}
  */
 export function validateSignatures(

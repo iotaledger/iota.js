@@ -6,15 +6,15 @@ export const createGetBundlesFromAddresses = (provider: Provider, caller?: strin
     const findTransactionObjects = createFindTransactionObjects(provider)
     const getLatestInclusion = createGetLatestInclusion(provider)
 
-    return function (
+    return function(
         addresses: ReadonlyArray<Hash>,
         inclusionStates?: boolean,
-        callback?: Callback<ReadonlyArray<Bundle>>,
+        callback?: Callback<ReadonlyArray<Bundle>>
     ): Promise<ReadonlyArray<Bundle>> {
         if (caller !== 'lib') {
             console.warn(
                 '`getBundlesFromAddresses()` has been deprecated and will be removed in v2.0.0' +
-                'Please use `findTransactionObjects()` and `getBundle()` as an alternative'
+                    'Please use `findTransactionObjects()` and `getBundle()` as an alternative'
             )
         }
 
@@ -22,11 +22,9 @@ export const createGetBundlesFromAddresses = (provider: Provider, caller?: strin
         return (
             findTransactionObjects({ addresses })
                 // 2. Get all transactions by bundle hashes
-                .then((transactions) =>
+                .then(transactions =>
                     findTransactionObjects({
-                        bundles: transactions
-                            .filter(tx => tx.currentIndex === 0)
-                            .map(tx => tx.bundle),
+                        bundles: transactions.filter(tx => tx.currentIndex === 0).map(tx => tx.bundle),
                     })
                 )
 
@@ -34,24 +32,25 @@ export const createGetBundlesFromAddresses = (provider: Provider, caller?: strin
                 .then(groupTransactionsIntoBundles)
 
                 // 4. If requested, add persistence status to each bundle
-                .then((bundles: ReadonlyArray<Bundle>) => inclusionStates ?
-                    addPersistence(getLatestInclusion, bundles) : bundles
+                .then(
+                    (bundles: ReadonlyArray<Bundle>) =>
+                        inclusionStates ? addPersistence(getLatestInclusion, bundles) : bundles
                 )
 
                 // 5. Sort bundles by timestamp
                 .then(sortByTimestamp)
+                .asCallback(typeof arguments[1] === 'function' ? arguments[1] : callback)
         )
-            .asCallback(typeof arguments[1] === 'function' ? arguments[1] : callback)
     }
 }
 
 // Groups an array of transaction objects into array of bundles
 export const groupTransactionsIntoBundles = (transactions: ReadonlyArray<Transaction>): ReadonlyArray<Bundle> =>
-    transactions.reduce((acc: ReadonlyArray<Bundle>, transaction: Transaction) => (
-        transaction.currentIndex === 0 ?
-            acc.concat([getBundleSync(transactions, transaction)]) : acc
-    ), [])
-
+    transactions.reduce(
+        (acc: ReadonlyArray<Bundle>, transaction: Transaction) =>
+            transaction.currentIndex === 0 ? acc.concat([getBundleSync(transactions, transaction)]) : acc,
+        []
+    )
 
 // Collects all transactions of a bundle starting from a given tail and traversing through trunk.
 export const getBundleSync = (
@@ -66,11 +65,12 @@ export const getBundleSync = (
     }
 
     if (transaction && transaction.currentIndex !== transaction.lastIndex) {
-        const nextTrunkTransaction = transactions.find((nextTransaction: Transaction) => (
-            nextTransaction.hash === transaction.trunkTransaction &&
-            nextTransaction.bundle === transaction.bundle &&
-            nextTransaction.currentIndex === transaction.currentIndex + 1
-        ))
+        const nextTrunkTransaction = transactions.find(
+            (nextTransaction: Transaction) =>
+                nextTransaction.hash === transaction.trunkTransaction &&
+                nextTransaction.bundle === transaction.bundle &&
+                nextTransaction.currentIndex === transaction.currentIndex + 1
+        )
 
         if (nextTrunkTransaction) {
             _bundle.push(nextTrunkTransaction)
@@ -86,7 +86,9 @@ export const zip2 = <A, B>(as: ReadonlyArray<A>, bs: ReadonlyArray<B>) =>
         return [a, bs[i]] as [A, B]
     })
 
-export const zipPersistence = (bundles: ReadonlyArray<Bundle>) => (states: ReadonlyArray<boolean>): ReadonlyArray<Bundle> =>
+export const zipPersistence = (bundles: ReadonlyArray<Bundle>) => (
+    states: ReadonlyArray<boolean>
+): ReadonlyArray<Bundle> =>
     // Since bundles are atomic, all transactions have the same state
     zip2(bundles, states).map(([bundle, state]) => bundle.map(tx => ({ ...tx, persistence: state })))
 

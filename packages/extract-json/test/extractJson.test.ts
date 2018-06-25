@@ -5,7 +5,7 @@ import {
     bundleWithJSON,
     bundleWithMultipleJSONMessageFragments,
     parsedJSON,
-    parsedJSONOfMultipleMessageFragments
+    parsedJSONOfMultipleMessageFragments,
 } from '@iota/samples'
 import { extractJson, errors } from '../src'
 
@@ -35,17 +35,20 @@ test('extractJson() parses empty JSON object.', t => {
 
 test('extraJson() parses boolean values.', t => {
     t.is(
-        extractJson(bundleWithEmptyJSON.map(tx =>
-            ({ ...tx, signatureMessageFragment: 'UCPC9DGDTC' + '9'.repeat(81 * 27 - 10) })
-        )),
+        extractJson(
+            bundleWithEmptyJSON.map(tx => ({
+                ...tx,
+                signatureMessageFragment: 'UCPC9DGDTC' + '9'.repeat(81 * 27 - 10),
+            }))
+        ),
         'false',
         'extractJson() should parse "false" boolean values.'
     )
 
     t.is(
-        extractJson(bundleWithEmptyJSON.map(tx =>
-            ({ ...tx, signatureMessageFragment: 'HDFDIDTC' + '9'.repeat(81 * 27 - 8) })
-        )),
+        extractJson(
+            bundleWithEmptyJSON.map(tx => ({ ...tx, signatureMessageFragment: 'HDFDIDTC' + '9'.repeat(81 * 27 - 8) }))
+        ),
         'true',
         'extractJson() should parse "true" boolean values.'
     )
@@ -53,19 +56,25 @@ test('extraJson() parses boolean values.', t => {
 
 test('extraJson() parses string values.', t => {
     t.is(
-        extractJson(bundleWithEmptyJSON.map(tx =>
-            ({ ...tx, signatureMessageFragment: 'GAWCTC9D9DCDFAGA' + '9'.repeat(81 * 27 - 16) })
-        )),
-        JSON.stringify("hello!"),
+        extractJson(
+            bundleWithEmptyJSON.map(tx => ({
+                ...tx,
+                signatureMessageFragment: 'GAWCTC9D9DCDFAGA' + '9'.repeat(81 * 27 - 16),
+            }))
+        ),
+        JSON.stringify('hello!'),
         'extractJson() should parse string values.'
     )
 })
 
 test('extraJson() parses JSON arrays.', t => {
     t.is(
-        extractJson(bundleWithEmptyJSON.map(tx =>
-            ({ ...tx, signatureMessageFragment: 'JCVAQAWAQAGAHDWCFDTCTCFAGALC' + '9'.repeat(81 * 27 - 28) })
-        )),
+        extractJson(
+            bundleWithEmptyJSON.map(tx => ({
+                ...tx,
+                signatureMessageFragment: 'JCVAQAWAQAGAHDWCFDTCTCFAGALC' + '9'.repeat(81 * 27 - 28),
+            }))
+        ),
         JSON.stringify([1, 2, 'three!']),
         'extractJson() should parse arrays.'
     )
@@ -73,9 +82,9 @@ test('extraJson() parses JSON arrays.', t => {
 
 test('extraJson() parses null.', t => {
     t.is(
-        extractJson(bundleWithEmptyJSON.map(tx =>
-            ({ ...tx, signatureMessageFragment: 'BDID9D9D' + '9'.repeat(81 * 27 - 8) })
-        )),
+        extractJson(
+            bundleWithEmptyJSON.map(tx => ({ ...tx, signatureMessageFragment: 'BDID9D9D' + '9'.repeat(81 * 27 - 8) }))
+        ),
         JSON.stringify(null),
         'extractJson() should parse null.'
     )

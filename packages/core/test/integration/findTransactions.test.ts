@@ -10,15 +10,15 @@ import {
     findTransactionsByBundlesCommand,
     findTransactionsByBundlesResponse,
     findTransactionsByTagsCommand,
-    findTransactionsByTagsResponse
+    findTransactionsByTagsResponse,
 } from './nocks/findTransactions'
 
 const findTransactions = createFindTransactions(createHttpClient())
 
 const invalidHashes = ['INVALID9HASh']
 
-const addressesWithChecksum = findTransactionsByAddressesCommand.addresses || []
-    .map((address: string) => address.concat('9'.repeat(9)))
+const addressesWithChecksum =
+    findTransactionsByAddressesCommand.addresses || [].map((address: string) => address.concat('9'.repeat(9)))
 
 test('findTransactions() by addresses resolves to correct response', async t => {
     t.deepEqual(
@@ -41,10 +41,7 @@ test('findTransactions() does not mutate original query object', async t => {
 
     await findTransactions({ addresses })
 
-    t.deepEqual(
-        addresses,
-        addressesWithChecksum
-    )
+    t.deepEqual(addresses, addressesWithChecksum)
 })
 
 test('findTransactions() rejects with correct error for invalid addresses', async t => {
@@ -109,11 +106,7 @@ test.cb('findTransactions() invokes callback', t => {
 
 test.cb('findTransactions() passes correct arguments to callback', t => {
     findTransactions({ addresses: findTransactionsByAddressesCommand.addresses }, (err, res) => {
-        t.is(
-            err,
-            null,
-            'findTransactions() should pass null as first argument in callback for successuful requests'
-        )
+        t.is(err, null, 'findTransactions() should pass null as first argument in callback for successuful requests')
 
         t.deepEqual(
             res,

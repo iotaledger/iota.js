@@ -35,9 +35,7 @@ export const createSendTransfer = (provider: Provider, attachFn?: AttachToTangle
             )
         )
             .then(() => prepareTransfers(seed, transfers, options))
-            .then(trytes => sendTrytes(trytes, depth, minWeightMagnitude, options ?
-                options.reference : undefined
-            ))
+            .then(trytes => sendTrytes(trytes, depth, minWeightMagnitude, options ? options.reference : undefined))
             .asCallback(callback)
     }
 }

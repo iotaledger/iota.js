@@ -18,7 +18,7 @@ const { balances } = balancesResponse
 const accountAddresses = [
     getBalancesCommand.addresses[0],
     getBalancesCommand.addresses[1],
-    getBalancesCommand.addresses[2]
+    getBalancesCommand.addresses[2],
 ]
 
 const accountData: AccountData = {
@@ -28,20 +28,22 @@ const accountData: AccountData = {
             address: getBalancesCommand.addresses[1],
             balance: balances[1],
             keyIndex: 1,
-            security: 2
-        }, {
+            security: 2,
+        },
+        {
             address: getBalancesCommand.addresses[2],
             balance: balances[2],
             keyIndex: 2,
-            security: 2
+            security: 2,
         },
     ],
     latestAddress: getBalancesCommand.addresses[2],
     transfers,
-    transactions: transfers.reduce((acc, bundle) => acc.concat(
-        bundle.filter(({ address }) => accountAddresses.indexOf(address) > -1)
-    ), []),
-    balance: 10
+    transactions: transfers.reduce(
+        (acc, bundle) => acc.concat(bundle.filter(({ address }) => accountAddresses.indexOf(address) > -1)),
+        []
+    ),
+    balance: 10,
 }
 
 test('getAccountData() resolves to correct account data', async t => {
@@ -56,7 +58,7 @@ test('getAccountData() rejects with correct errors for invalid inputs', t => {
     const invalidSeed = 'asdasDSFDAFD'
     const invalidStartEndOptions = {
         start: 10,
-        end: 9
+        end: 9,
     }
 
     t.is(
@@ -76,9 +78,7 @@ test('getAccountData() with start > 0 resolves to correct account data.', async 
     const expected = {
         ...accountData,
         addresses: accountData.addresses.slice(1, 3),
-        balance: balancesResponse.balances
-          .slice(1, 3)
-          .reduce((acc, balance) => acc + balance, 0)
+        balance: balancesResponse.balances.slice(1, 3).reduce((acc, balance) => acc + balance, 0),
     }
 
     t.deepEqual(
@@ -94,11 +94,7 @@ test.cb('getAccountData() invokes callback', t => {
 
 test.cb('getAccountData() passes correct arguments to callback', t => {
     getAccountData(seed, { start: 0 }, (err, res) => {
-        t.is(
-            err,
-            null,
-            'getAccountData() should pass null as first argument in callback for successuful requests'
-        )
+        t.is(err, null, 'getAccountData() should pass null as first argument in callback for successuful requests')
 
         t.deepEqual(
             res,

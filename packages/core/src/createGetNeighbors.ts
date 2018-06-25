@@ -6,27 +6,26 @@ import {
     IRICommand,
     Neighbor,
     Neighbors,
-    Provider
+    Provider,
 } from '../../types'
 
-/**  
- * @method createGetNeighbors 
- * 
+/**
+ * @method createGetNeighbors
+ *
  * @memberof module:core
- * 
+ *
  * @param {Provider} provider Network provider
- * 
+ *
  * @return {function} {@link #module_core.getNeighbors `getNeighbors`}
  */
 export const createGetNeighbors = ({ send }: Provider) => {
-
-    /**  
-     * Returns list of connected neighbors. 
+    /**
+     * Returns list of connected neighbors.
      *
      * @method getNeighbors
-     * 
+     *
      * @memberof module:core
-     * 
+     *
      * @param {Callback} [callback] - Optional callback
      *
      * @return {Promise}

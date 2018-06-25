@@ -24,7 +24,7 @@
         "verbose": true
     },
     "lint-staged": {
-        "*.{js,json}": ["prettier --write", "git add"]
+        "*.{js,ts,json}": ["prettier --write", "git add"]
     },
     "keywords": ["iota", "tangle", "library", "javascript", "nodejs", "API"],
     "license": "MIT",

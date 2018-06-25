@@ -1,14 +1,14 @@
 import * as nock from 'nock'
 import { createHttpClient } from '../src'
-import { FindTransactionsCommand, IRICommand, FindTransactionsResponse } from '../../types';
-import test from 'ava';
+import { FindTransactionsCommand, IRICommand, FindTransactionsResponse } from '../../types'
+import test from 'ava'
 
 const API_VERSION = 1
 
 const { send } = createHttpClient({
     provider: 'http://localhost:24265',
     requestBatchSize: 3,
-    apiVersion: API_VERSION
+    apiVersion: API_VERSION,
 })
 
 export const command: FindTransactionsCommand = {
@@ -22,11 +22,11 @@ export const headers = (version: string | number) => ({
     reqheaders: {
         'Content-Type': 'application/json',
         'X-IOTA-API-Version': version.toString(),
-    }
+    },
 })
 
 export const response: FindTransactionsResponse = {
-    hashes: ['H'.repeat(81)]
+    hashes: ['H'.repeat(81)],
 }
 
 export const validSendNock = nock('http://localhost:24265', headers(API_VERSION))
@@ -35,10 +35,7 @@ export const validSendNock = nock('http://localhost:24265', headers(API_VERSION)
     .reply(200, response)
 
 test('send() returns correct response.', async t => {
-    t.deepEqual(
-        await send(command),
-        response
-    )
+    t.deepEqual(await send(command), response)
 })
 
 export const invalidCommand: FindTransactionsCommand = {
@@ -53,10 +50,6 @@ export const badSendNock = nock('http://localhost:24265', headers(API_VERSION))
 
 test('send() returns correct error message for bad request.', t => {
     return send(invalidCommand).catch(error => {
-        t.is(
-            error,
-            'Request error: Bad Request',
-            'httpClient.send() should throw correct error for bad request.'
-        )
+        t.is(error, 'Request error: Bad Request', 'httpClient.send() should throw correct error for bad request.')
     })
 })

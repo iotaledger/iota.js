@@ -1,17 +1,9 @@
 import test from 'ava'
-import {
-    attachedTrytes,
-    attachedTrytesOfInvalidChars,
-    attachedTrytesOfInvalidLength
-} from '@iota/samples'
+import { attachedTrytes, attachedTrytesOfInvalidChars, attachedTrytesOfInvalidLength } from '@iota/samples'
 import { isAttachedTrytesArray } from '../src'
 
 test('isAttachedTrytesArray()', t => {
-    t.is(
-        isAttachedTrytesArray(attachedTrytes),
-        true,
-        'isAttachedTrytesArray() returns true for valid attached trytes'
-    )
+    t.is(isAttachedTrytesArray(attachedTrytes), true, 'isAttachedTrytesArray() returns true for valid attached trytes')
 
     t.is(
         isAttachedTrytesArray(attachedTrytesOfInvalidChars),

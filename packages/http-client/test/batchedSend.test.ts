@@ -9,7 +9,7 @@ const API_VERSION = 1
 const { send } = createHttpClient({
     provider: 'http://localhost:24265',
     requestBatchSize: 2,
-    apiVersion: API_VERSION
+    apiVersion: API_VERSION,
 })
 
 export const command: FindTransactionsCommand = {
@@ -35,32 +35,32 @@ export const command_3: FindTransactionsCommand = {
 
 export const command_4: FindTransactionsCommand = {
     command: IRICommand.FIND_TRANSACTIONS,
-    tags: ['C'.repeat(27)]
+    tags: ['C'.repeat(27)],
 }
 
 export const command_5: FindTransactionsCommand = {
     command: IRICommand.FIND_TRANSACTIONS,
-    approvees: ['D'.repeat(81)]
+    approvees: ['D'.repeat(81)],
 }
 
 export const response_1: FindTransactionsResponse = {
-    hashes: ['A'.repeat(81), 'C'.repeat(81)]
+    hashes: ['A'.repeat(81), 'C'.repeat(81)],
 }
 export const response_2: FindTransactionsResponse = {
     hashes: ['B'.repeat(81), 'D'.repeat(81)],
 }
 export const response_3: FindTransactionsResponse = {
-    hashes: ['A'.repeat(81), 'D'.repeat(81), 'E'.repeat(81)]
+    hashes: ['A'.repeat(81), 'D'.repeat(81), 'E'.repeat(81)],
 }
 export const response_4: FindTransactionsResponse = {
     hashes: ['B'.repeat(81), 'A'.repeat(81)],
 }
 export const response_5: FindTransactionsResponse = {
-    hashes: ['A'.repeat(81), 'C'.repeat(81)]
+    hashes: ['A'.repeat(81), 'C'.repeat(81)],
 }
 
 export const response: FindTransactionsResponse = {
-    hashes: ['A'.repeat(81)]
+    hashes: ['A'.repeat(81)],
 }
 
 export const batchedSendNock_1 = nock('http://localhost:24265', headers(API_VERSION))
@@ -88,10 +88,6 @@ export const batchedSendNock_5 = nock('http://localhost:24265', headers(API_VERS
     .post('/', command_5)
     .reply(200, response_5)
 
-
 test('batchedSend() returns correct response', async t => {
-    t.deepEqual(
-        await send(command),
-        response
-    )
+    t.deepEqual(await send(command), response)
 })

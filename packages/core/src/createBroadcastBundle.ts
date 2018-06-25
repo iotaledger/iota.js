@@ -6,9 +6,9 @@ import { Callback, Hash, Provider, Trytes } from '../../types'
 
 /**
  * @method createBroadcastBundle
- * 
+ *
  * @memberof module:core
- * 
+ *
  * @param {Provider} provider - Network provider
  *
  * @return {function} {@link #module_core.broadcastBundle `broadcastBundle`}
@@ -19,9 +19,9 @@ export const createBroadcastBundle = (provider: Provider) => {
 
     /**
      * Re-broadcasts all transactions in a bundle given the tail transaction hash.
-     * It might be useful when transactions did not properly propagate, 
+     * It might be useful when transactions did not properly propagate,
      * particularly in the case of large bundles.
-     * 
+     *
      * @example
      *
      * ```js
@@ -33,12 +33,12 @@ export const createBroadcastBundle = (provider: Provider) => {
      *     // ...
      *   })
      * ```
-     *  
+     *
      * @method broadcastBundle
-     * 
+     *
      * @memberof module:core
      *
-     * @param {Hash} tailTransactionHash - Tail transaction hash 
+     * @param {Hash} tailTransactionHash - Tail transaction hash
      * @param {Callback} [callback] - Optional callback
      *
      * @return {Promise}

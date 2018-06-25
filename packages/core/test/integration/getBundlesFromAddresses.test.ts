@@ -4,7 +4,7 @@ import { bundle, bundleWithZeroValue, transfers } from '@iota/samples'
 import {
     createGetBundlesFromAddresses,
     getBundleSync,
-    groupTransactionsIntoBundles
+    groupTransactionsIntoBundles,
 } from '../../src/createGetBundlesFromAddresses'
 import { INVALID_ADDRESS } from '../../src/errors'
 import { getBalancesCommand } from './nocks/getBalances'
@@ -15,12 +15,7 @@ import './nocks/getTrytes'
 
 const getBundlesFromAddresses = createGetBundlesFromAddresses(createHttpClient(), 'lib')
 
-const addresses = [
-    getBalancesCommand.addresses[0],
-    getBalancesCommand.addresses[1],
-    getBalancesCommand.addresses[2]
-]
-
+const addresses = [getBalancesCommand.addresses[0], getBalancesCommand.addresses[1], getBalancesCommand.addresses[2]]
 
 test('getBundlesFromAddresses() resolves to correct transactions.', async t => {
     t.deepEqual(
@@ -63,11 +58,7 @@ test.cb('getBundlesFromAddresses() passes correct arguments to callback', t => {
 })
 
 test('getBundleSync() returns correct bundle.', t => {
-    t.deepEqual(
-        getBundleSync(bundle, bundle[0]),
-        bundle,
-        'getBundleSync() should return correct bundle.'
-    )
+    t.deepEqual(getBundleSync(bundle, bundle[0]), bundle, 'getBundleSync() should return correct bundle.')
 })
 
 test('groupTransactionsIntoBundles() returns correct bundles.', t => {

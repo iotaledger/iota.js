@@ -8,11 +8,11 @@ export const attachToTangleCommand: AttachToTangleCommand = {
     trunkTransaction: bundle[bundle.length - 1].trunkTransaction,
     branchTransaction: bundle[bundle.length - 1].branchTransaction,
     minWeightMagnitude: 14,
-    trytes: [...bundleTrytes].reverse()
+    trytes: [...bundleTrytes].reverse(),
 }
 
 export const attachToTangleResponse: AttachToTangleResponse = {
-    trytes: bundleTrytes
+    trytes: bundleTrytes,
 }
 
 export const attachToTangleNock = nock('http://localhost:14265', headers)
