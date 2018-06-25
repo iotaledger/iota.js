@@ -4,6 +4,9 @@
     "description": "Collection of samples useful in testing IOTA modules.",
     "main": "./out/samples/src/index.js",
     "typings": "typings/samples/src",
+    "publishConfig": {
+        "access": "public"
+    },
     "scripts": {
         "prepublish": "tsc",
         "format": "prettier"
@@ -13,7 +16,15 @@
         "Edward Greve <edward@iota.org> (https://github.com/anyong)",
         "Chris Dukakis <chris.dukakis@iota.org> (https://github.com/chrisdukakis)"
     ],
-    "keywords": ["iota", "tangle", "library", "browser", "javascript", "nodejs", "API"],
+    "keywords": [
+        "iota",
+        "tangle",
+        "library",
+        "browser",
+        "javascript",
+        "nodejs",
+        "API"
+    ],
     "license": "MIT",
     "bugs": {
         "url": "https://github.com/iotaledger/iota.js/issues"

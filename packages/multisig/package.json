@@ -4,6 +4,9 @@
     "description": "Methods for generating multisig addresses ansd co-signing transactions.",
     "main": "./out/multisig/src/index.js",
     "typings": "typings/multisig/src",
+    "publishConfig": {
+        "access": "public"
+    },
     "scripts": {
         "prepublish": "tsc",
         "test": "tsc",
@@ -22,7 +25,15 @@
         "compileEnhancements": false,
         "verbose": true
     },
-    "keywords": ["iota", "tangle", "library", "browser", "javascript", "nodejs", "API"],
+    "keywords": [
+        "iota",
+        "tangle",
+        "library",
+        "browser",
+        "javascript",
+        "nodejs",
+        "API"
+    ],
     "license": "MIT",
     "bugs": {
         "url": "https://github.com/iotaledger/iota.js/issues"

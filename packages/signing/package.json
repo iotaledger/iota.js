@@ -4,6 +4,9 @@
     "description": "IOTA Signing Scheme",
     "main": "./out/signing/src/index.js",
     "typings": "typings/signing/src",
+    "publishConfig": {
+        "access": "public"
+    },
     "scripts": {
         "prepublish": "tsc",
         "test": "tsc",
@@ -22,7 +25,15 @@
         "compileEnhancements": false,
         "verbose": true
     },
-    "keywords": ["iota", "tangle", "library", "browser", "javascript", "nodejs", "API"],
+    "keywords": [
+        "iota",
+        "tangle",
+        "library",
+        "browser",
+        "javascript",
+        "nodejs",
+        "API"
+    ],
     "license": "MIT",
     "bugs": {
         "url": "https://github.com/iotaledger/iota.js/issues"

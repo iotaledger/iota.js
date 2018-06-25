@@ -4,6 +4,9 @@
     "description": "Curl sponge function",
     "main": "./out/index.js",
     "typings": "typings",
+    "publishConfig": {
+        "access": "public"
+    },
     "scripts": {
         "prepublish": "tsc",
         "test": "tsc",
@@ -21,7 +24,15 @@
         "compileEnhancements": false,
         "verbose": true
     },
-    "keywords": ["iota", "tangle", "library", "browser", "javascript", "nodejs", "API"],
+    "keywords": [
+        "iota",
+        "tangle",
+        "library",
+        "browser",
+        "javascript",
+        "nodejs",
+        "API"
+    ],
     "license": "MIT",
     "bugs": {
         "url": "https://github.com/iotaledger/iota.js/issues"

@@ -1,10 +1,12 @@
 {
     "name": "@iota/core",
     "version": "1.0.0-alpha.1",
-    "description":
-        "Core functionality to interact with the IOTA network: generate addresses, create, broadcast and monitor transactions.",
+    "description": "Core functionality to interact with the IOTA network: generate addresses, create, broadcast and monitor transactions.",
     "main": "./out/core/src/index.js",
     "typings": "typings/core/src",
+    "publishConfig": {
+        "access": "public"
+    },
     "scripts": {
         "prepublish": "tsc",
         "test": "tsc && nyc ava",
@@ -18,7 +20,9 @@
         "Chris Dukakis <chris.dukakis@iota.org> (https://github.com/chrisdukakis)"
     ],
     "ava": {
-        "files": ["out/core/test/integration/**/*.test.js"],
+        "files": [
+            "out/core/test/integration/**/*.test.js"
+        ],
         "failFast": true,
         "failWithoutAssertions": false,
         "compileEnhancements": false,
@@ -26,11 +30,23 @@
     },
     "nyc": {
         "watermarks": {
-            "functions": [80, 95],
-            "branches": [80, 95],
-            "statements": [80, 95]
+            "functions": [
+                80,
+                95
+            ],
+            "branches": [
+                80,
+                95
+            ],
+            "statements": [
+                80,
+                95
+            ]
         },
-        "include": ["out/*/src/*.js", "out/*/test/**/*.js"],
+        "include": [
+            "out/*/src/*.js",
+            "out/*/test/**/*.js"
+        ],
         "exclude": [
             "out/*/test/integration/nocks/*.js",
             "out/**/createSendTransfer.js",
@@ -38,7 +54,15 @@
             "out/**/createInterruptAttachingToTangle.js"
         ]
     },
-    "keywords": ["iota", "tangle", "library", "browser", "javascript", "nodejs", "API"],
+    "keywords": [
+        "iota",
+        "tangle",
+        "library",
+        "browser",
+        "javascript",
+        "nodejs",
+        "API"
+    ],
     "license": "MIT",
     "bugs": {
         "url": "https://github.com/iotaledger/iota.js/issues"
@@ -53,8 +77,8 @@
         "@iota/checksum": "^1.0.0-alpha.1",
         "@iota/converter": "^1.0.0-alpha.1",
         "@iota/curl": "^1.0.0-alpha.1",
-        "@iota/kerl": "^1.0.0-alpha.1",
         "@iota/http-client": "^1.0.0-alpha.1",
+        "@iota/kerl": "^1.0.0-alpha.1",
         "@iota/pad": "^1.0.0-alpha.1",
         "@iota/signing": "^1.0.0-alpha.1",
         "@iota/transaction-converter": "^1.0.0-alpha.1",

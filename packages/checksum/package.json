@@ -4,6 +4,9 @@
     "description": "Add, remove and validate checksums",
     "main": "./out/checksum/src/index.js",
     "typings": "typings/checksum/src",
+    "publishConfig": {
+        "access": "public"
+    },
     "scripts": {
         "prepublish": "tsc",
         "test": "tsc && nyc ava",
@@ -25,13 +28,30 @@
     },
     "nyc": {
         "watermarks": {
-            "functions": [80, 95],
-            "branches": [80, 95],
-            "statements": [80, 95]
+            "functions": [
+                80,
+                95
+            ],
+            "branches": [
+                80,
+                95
+            ],
+            "statements": [
+                80,
+                95
+            ]
         },
-        "include": ["out/*/src/*.js", "out/*/test/*.js"]
+        "include": [
+            "out/*/src/*.js",
+            "out/*/test/*.js"
+        ]
     },
-    "keywords": ["iota", "tangle", "address", "checksum"],
+    "keywords": [
+        "iota",
+        "tangle",
+        "address",
+        "checksum"
+    ],
     "license": "MIT",
     "bugs": {
         "url": "https://github.com/iotaledger/iota.js/issues"
