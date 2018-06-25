@@ -1,11 +1,7 @@
 import * as Promise from 'bluebird'
 
 import { trits, trytes } from '@iota/converter'
-import {
-    addEntry,
-    addTrytes,
-    finalizeBundle,
-} from '@iota/bundle'
+import { addEntry, addTrytes, finalizeBundle } from '@iota/bundle'
 import { isValidChecksum, removeChecksum } from '@iota/checksum'
 import { key, normalizedBundleHash, signatureFragment, subseed } from '@iota/signing'
 import { asFinalTransactionTrytes } from '@iota/transaction-converter'
@@ -30,7 +26,7 @@ import {
     Provider,
     Transaction,
     Transfer,
-    Trytes
+    Trytes,
 } from '../../types'
 import { asyncPipe } from '../../utils'
 
@@ -57,19 +53,19 @@ const defaults: PrepareTransfersOptions = {
 
 export const getPrepareTransfersOptions = (options: Partial<PrepareTransfersOptions>) => ({
     ...getOptionsWithDefaults(defaults)(options),
-    remainderAddress: options.address || options.remainderAddress || undefined
+    remainderAddress: options.address || options.remainderAddress || undefined,
 })
 
 export interface PrepareTransfersProps {
-    readonly transactions: ReadonlyArray<Transaction>,
-    readonly trytes: ReadonlyArray<Trytes>,
-    readonly transfers: ReadonlyArray<Transfer>,
-    readonly seed: Trytes,
-    readonly security: number,
-    readonly inputs: ReadonlyArray<Address>,
-    readonly timestamp: number,
-    readonly remainderAddress?: Trytes,
-    readonly address?: Trytes,
+    readonly transactions: ReadonlyArray<Transaction>
+    readonly trytes: ReadonlyArray<Trytes>
+    readonly transfers: ReadonlyArray<Transfer>
+    readonly seed: Trytes
+    readonly security: number
+    readonly inputs: ReadonlyArray<Address>
+    readonly timestamp: number
+    readonly remainderAddress?: Trytes
+    readonly address?: Trytes
     readonly hmacKey?: Trytes
 }
 
@@ -78,13 +74,13 @@ export interface PrepareTransfersProps {
  * It is possible to prepare and sign transactions offline, by omitting the provider option.
  *
  * @method createPrepareTransfers
- * 
+ *
  * @memberof module:core
- * 
+ *
  * @param {Provider} [provider] - Optional network provider to fetch inputs and remainder address.
  * In case this is omitted, proper input objects and remainder should be passed
  * to [`prepareTransfers`]{@link #module_core.prepareTransfers}, if required.
- * 
+ *
  * @return {Function} {@link #module_core.prepareTransfers `prepareTransfers`}
  */
 export const createPrepareTransfers = (provider?: Provider, now: () => number = () => Date.now(), caller?: string) => {
@@ -98,21 +94,25 @@ export const createPrepareTransfers = (provider?: Provider, now: () => number = 
      * which creates a `prepareTransfers` without a network provider.
      *
      * @method prepareTransfers
-     * 
+     *
      * @memberof module:core
-     * 
+     *
      * @param {string} seed
-     * 
+     *
      * @param {object} transfers
-     * 
+     *
      * @param {object} [options]
      * @param {Input[]} [options.inputs] Inputs used for signing. Needs to have correct security, keyIndex and address value
+     * @param {Hash} [options.inputs[].address] Input address trytes
+     * @param {number} [options.inputs[].keyIndex] Key index at which address was generated
+     * @param {number} [options.inputs[].security = 2] Security level
+     * @param {number} [options.inputs[].balance] Balance in iotas
      * @param {Hash} [options.address] Remainder address
      * @param {Number} [options.security] Security level to be used for getting inputs and reminder address
      * @property {Hash} [options.hmacKey] HMAC key used for attaching an HMAC
-     * 
+     *
      * @param {function} [callback] Optional callback
-     * 
+     *
      * @return {Promise}
      * @fulfil {array} trytes Returns bundle trytes
      * @reject {Error}
@@ -134,14 +134,14 @@ export const createPrepareTransfers = (provider?: Provider, now: () => number = 
             if (options.address) {
                 console.warn(
                     '`options.address` is deprecated and will be removed in v2.0.0. \n' +
-                    'Use `options.remainderAddress` instead.'
+                        'Use `options.remainderAddress` instead.'
                 )
             }
 
             if (isTrytes(seed) && seed.length < 81) {
                 console.warn(
                     'WARNING: Seeds with less length than 81 trytes are not secure! \n' +
-                    'Use a random, 81-trytes long seed!'
+                        'Use a random, 81-trytes long seed!'
                 )
             }
         }
@@ -153,7 +153,7 @@ export const createPrepareTransfers = (provider?: Provider, now: () => number = 
                 seed,
                 transfers,
                 timestamp: Math.floor((typeof now === 'function' ? now() : Date.now()) / 1000),
-                ...getPrepareTransfersOptions(options)
+                ...getPrepareTransfersOptions(options),
             })
         )
 
@@ -182,7 +182,7 @@ export const validatePrepareTransfers = (props: PrepareTransfersProps) => {
         securityLevelValidator(security),
         transferArrayValidator(transfers),
         !!remainderAddress && remainderAddressValidator(remainderAddress),
-        (inputs.length > 0) && addressObjectArrayValidator(inputs)
+        inputs.length > 0 && addressObjectArrayValidator(inputs)
     )
 
     return props
@@ -191,15 +191,20 @@ export const validatePrepareTransfers = (props: PrepareTransfersProps) => {
 export const addHMACPlaceholder = (props: PrepareTransfersProps): PrepareTransfersProps => {
     const { hmacKey, transfers } = props
 
-    return hmacKey ? {
-        ...props,
-        transfers: transfers.map((transfer, i) =>
-            transfer.value > 0 ? {
-                ...transfer,
-                message: NULL_HASH_TRYTES + transfer.message
-            } : transfer
-        )
-    } : props
+    return hmacKey
+        ? {
+              ...props,
+              transfers: transfers.map(
+                  (transfer, i) =>
+                      transfer.value > 0
+                          ? {
+                                ...transfer,
+                                message: NULL_HASH_TRYTES + transfer.message,
+                            }
+                          : transfer
+              ),
+          }
+        : props
 }
 
 export const addTransfers = (props: PrepareTransfersProps): PrepareTransfersProps => {
@@ -218,12 +223,14 @@ export const addTransfers = (props: PrepareTransfersProps): PrepareTransfersProp
                 length,
                 signatureMessageFragments: Array(length)
                     .fill('')
-                    .map((_, i) => message.slice(
-                        i * SIGNATURE_MESSAGE_FRAGMENT_LENGTH,
-                        (i + 1) * SIGNATURE_MESSAGE_FRAGMENT_LENGTH
-                    ))
+                    .map((_, i) =>
+                        message.slice(
+                            i * SIGNATURE_MESSAGE_FRAGMENT_LENGTH,
+                            (i + 1) * SIGNATURE_MESSAGE_FRAGMENT_LENGTH
+                        )
+                    ),
             })
-        }, transactions)
+        }, transactions),
     }
 }
 
@@ -232,28 +239,29 @@ export const createAddInputs = (provider?: Provider) => {
 
     return (props: PrepareTransfersProps): Promise<PrepareTransfersProps> => {
         const { transactions, transfers, inputs, timestamp, seed, security } = props
-        const threshold = transfers.reduce((sum, { value }) => sum += value, 0)
+        const threshold = transfers.reduce((sum, { value }) => (sum += value), 0)
 
-        if (inputs.length && threshold > inputs.reduce((acc, input) => acc += input.balance, 0)) {
+        if (inputs.length && threshold > inputs.reduce((acc, input) => (acc += input.balance), 0)) {
             throw new Error(inputs.length ? errors.INSUFFICIENT_BALANCE : errors.INVALID_INPUTS)
         }
 
-        return (
-            (!getInputs || inputs.length)
-                ? Promise.resolve(inputs)
-                : getInputs(seed, { security, threshold })
-                    .then(response => response.inputs)
-        )
-            .then((res) => ({
-                ...props,
-                inputs: res,
-                transactions: res.reduce((acc, input) => addEntry(acc, {
-                    length: input.security,
-                    address: removeChecksum(input.address),
-                    value: -input.balance,
-                    timestamp: timestamp || Math.floor(Date.now() / 1000)
-                }), transactions)
-            }))
+        return (!getInputs || inputs.length
+            ? Promise.resolve(inputs)
+            : getInputs(seed, { security, threshold }).then(response => response.inputs)
+        ).then(res => ({
+            ...props,
+            inputs: res,
+            transactions: res.reduce(
+                (acc, input) =>
+                    addEntry(acc, {
+                        length: input.security,
+                        address: removeChecksum(input.address),
+                        value: -input.balance,
+                        timestamp: timestamp || Math.floor(Date.now() / 1000),
+                    }),
+                transactions
+            ),
+        }))
     }
 }
 
@@ -264,7 +272,7 @@ export const createAddRemainder = (provider?: Provider) => {
         const { transactions, remainderAddress, seed, security, inputs, timestamp } = props
 
         // Values of transactions in the bundle should sum up to 0.
-        const value = transactions.reduce((acc, transaction) => acc += transaction.value, 0)
+        const value = transactions.reduce((acc, transaction) => (acc += transaction.value), 0)
 
         // Value > 0 indicates insufficient balance in inputs.
         if (value > 0) {
@@ -280,28 +288,26 @@ export const createAddRemainder = (provider?: Provider) => {
             throw new Error(errors.INVALID_REMAINDER_ADDRESS)
         }
 
-        return (
-            remainderAddress
-                ? Promise.resolve(remainderAddress)
-                : getNewAddress!(seed, {
-                    index: getRemainderAddressStartIndex(inputs),
-                    security
-                })
-        )
-            .then(address => {
-                address = asArray(address)[0]
+        return (remainderAddress
+            ? Promise.resolve(remainderAddress)
+            : getNewAddress!(seed, {
+                  index: getRemainderAddressStartIndex(inputs),
+                  security,
+              })
+        ).then(address => {
+            address = asArray(address)[0]
 
-                return {
-                    ...props,
-                    remainderAddress: address,
-                    transactions: addEntry(transactions, {
-                        length: 1,
-                        address,
-                        value: Math.abs(value),
-                        timestamp: timestamp || Math.floor(Date.now() / 1000)
-                    })
-                }
-            })
+            return {
+                ...props,
+                remainderAddress: address,
+                transactions: addEntry(transactions, {
+                    length: 1,
+                    address,
+                    value: Math.abs(value),
+                    timestamp: timestamp || Math.floor(Date.now() / 1000),
+                }),
+            }
+        })
     }
 }
 
@@ -312,12 +318,7 @@ export const verifyNotSendingToInputs = (props: PrepareTransfersProps): PrepareT
     const { transactions } = props
     const isSendingToInputs = transactions
         .filter(({ value }) => value < 0)
-        .some(output => transactions
-            .findIndex(input => (
-                input.value > 0 &&
-                input.address === output.address
-            )) > -1
-        )
+        .some(output => transactions.findIndex(input => input.value > 0 && input.address === output.address) > -1)
 
     if (isSendingToInputs) {
         throw new Error(errors.SENDING_BACK_TO_INPUTS)
@@ -328,7 +329,7 @@ export const verifyNotSendingToInputs = (props: PrepareTransfersProps): PrepareT
 
 export const finalize = (props: PrepareTransfersProps): PrepareTransfersProps => ({
     ...props,
-    transactions: finalizeBundle(props.transactions)
+    transactions: finalizeBundle(props.transactions),
 })
 
 export const addSignatures = (props: PrepareTransfersProps): PrepareTransfersProps => {
@@ -343,28 +344,30 @@ export const addSignatures = (props: PrepareTransfersProps): PrepareTransfersPro
                 const keyTrits = key(subseed(trits(seed), keyIndex), security)
 
                 return acc.concat(
-                    Array(security).fill(null).map((_, i) => trytes(
-                        signatureFragment(
-                            normalizedBundle.slice(i * HASH_LENGTH / 3, (i + 1) * HASH_LENGTH / 3),
-                            keyTrits.slice(i * KEY_FRAGMENT_LENGTH, (i + 1) * KEY_FRAGMENT_LENGTH)
+                    Array(security)
+                        .fill(null)
+                        .map((_, i) =>
+                            trytes(
+                                signatureFragment(
+                                    normalizedBundle.slice(i * HASH_LENGTH / 3, (i + 1) * HASH_LENGTH / 3),
+                                    keyTrits.slice(i * KEY_FRAGMENT_LENGTH, (i + 1) * KEY_FRAGMENT_LENGTH)
+                                )
+                            )
                         )
-                    ))
                 )
             }, []),
             transactions.findIndex(({ value }) => value < 0)
-        )
+        ),
     }
 }
 
 export const addHMAC = (props: PrepareTransfersProps): PrepareTransfersProps => {
     const { hmacKey, transactions } = props
 
-    return hmacKey
-        ? { ...props, transactions: HMAC(transactions, trits(hmacKey)) }
-        : props
+    return hmacKey ? { ...props, transactions: HMAC(transactions, trits(hmacKey)) } : props
 }
 
 export const asTransactionTrytes = (props: PrepareTransfersProps): PrepareTransfersProps => ({
     ...props,
-    trytes: asFinalTransactionTrytes(props.transactions)
+    trytes: asFinalTransactionTrytes(props.transactions),
 })

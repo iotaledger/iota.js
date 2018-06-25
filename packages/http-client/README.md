@@ -29,7 +29,7 @@ yarn add @iota/http-client
 
         * [~setSettings](#module_http-client..setSettings)
 
-        * [~createHttpClient([settings], [apiVersion], [requestBatchSize])](#module_http-client..createHttpClient)
+        * [~createHttpClient([settings])](#module_http-client..createHttpClient)
 
 
 <a name="module_http-client.send"></a>
@@ -64,19 +64,19 @@ Sends an http request to a specified host.
 | --- | --- | --- | --- |
 | [settings] | <code>object</code> | <code>{}</code> |  |
 | [settings.provider] | <code>string</code> | <code>&quot;http://localhost:14265&quot;</code> | Uri of IRI node |
-| [apiVersion] | <code>string</code> \| <code>number</code> | <code>1</code> | IOTA Api version to be sent as `X-IOTA-API-Version` header. |
-| [requestBatchSize] | <code>number</code> | <code>1000</code> | Number of search values per request. |
+| [settings.apiVersion] | <code>string</code> \| <code>number</code> | <code>1</code> | IOTA Api version to be sent as `X-IOTA-API-Version` header. |
+| [settings.requestBatchSize] | <code>number</code> | <code>1000</code> | Number of search values per request. |
 
 <a name="module_http-client..createHttpClient"></a>
 
-### *http-client*~createHttpClient([settings], [apiVersion], [requestBatchSize])
+### *http-client*~createHttpClient([settings])
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
 | [settings] | <code>object</code> | <code>{}</code> |  |
 | [settings.provider] | <code>string</code> | <code>&quot;http://localhost:14265&quot;</code> | Uri of IRI node |
-| [apiVersion] | <code>string</code> \| <code>number</code> | <code>1</code> | IOTA Api version to be sent as `X-IOTA-API-Version` header. |
-| [requestBatchSize] | <code>number</code> | <code>1000</code> | Number of search values per request. |
+| [settings.apiVersion] | <code>string</code> \| <code>number</code> | <code>1</code> | IOTA Api version to be sent as `X-IOTA-API-Version` header. |
+| [settings.requestBatchSize] | <code>number</code> | <code>1000</code> | Number of search values per request. |
 
 Create an http client to access IRI http API.
 

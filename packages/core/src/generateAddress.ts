@@ -4,25 +4,20 @@ import { address, digests, key, subseed } from '@iota/signing'
 import { Hash } from '../../types'
 
 /**
- * Generates a new address
+ * Generates an address deterministically, according to the given seed, index and security level.
  *
  * @method generateAddress
- * 
+ *
  * @memberof module:core
- * 
+ *
  * @param {string} seed
  * @param {number} index - Private key index
  * @param {number} [security=2] - Security level of the private key
  * @param {boolean} [checksum=false] - Flag to add 9trytes checksum
- * 
+ *
  * @returns {Hash} Address trytes
  */
-export const generateAddress = (
-    seed: string,
-    index: number,
-    security: number = 2,
-    checksum: boolean = false
-): Hash => {
+export const generateAddress = (seed: string, index: number, security: number = 2, checksum: boolean = false): Hash => {
     while (seed.length % 81 !== 0) {
         seed += 9
     }

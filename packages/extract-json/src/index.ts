@@ -4,8 +4,8 @@ import { trytesToAscii } from '@iota/converter'
 import { Transaction } from '../../types'
 
 export const errors = {
-    'INVALID_JSON': 'Invalid JSON encoded message',
-    'INVALID_BUNDLE': 'Invalid bundle'
+    INVALID_JSON: 'Invalid JSON encoded message',
+    INVALID_BUNDLE: 'Invalid bundle',
 }
 
 /**
@@ -16,10 +16,9 @@ export const errors = {
  * - `"[1, 2, 3]"`
  * - `"true"`, `"false"` & `"null"`
  * - `"\"hello\""`
- * 
+ *
  * @example
- * ### Example
- * 
+ *
  * ```js
  * try {
  *   const msg = JSON.parse(extractJson(bundle))
@@ -28,9 +27,10 @@ export const errors = {
  *   // Invalid bundle or invalid encoded JSON
  * }
  * ```
- * 
- * ### Example with `getBundle`:
- * 
+ *
+ * @example
+ * Example with `getBundle`:
+ *
  * ```js
  * getBundle(tailHash)
  *   .then(bunlde => {
@@ -43,9 +43,9 @@ export const errors = {
  * ```
  *
  * @method extractJson
- * 
+ *
  * @param {array} bundle
- * 
+ *
  * @returns {Object}
  */
 export const extractJson = (bundle: Transaction[]): string | null => {
@@ -65,11 +65,11 @@ export const extractJson = (bundle: Transaction[]): string | null => {
     } else if (firstTrytePair === 'JC') {
         lastTrytePair = 'LC'
     } else if (bundle[0].signatureMessageFragment.slice(0, 10) === 'UCPC9DGDTC') {
-        return "false"
+        return 'false'
     } else if (bundle[0].signatureMessageFragment.slice(0, 8) === 'HDFDIDTC') {
-        return "true"
+        return 'true'
     } else if (bundle[0].signatureMessageFragment.slice(0, 8) === 'BDID9D9D') {
-        return "null"
+        return 'null'
     } else {
         throw new Error(errors.INVALID_JSON)
     }
