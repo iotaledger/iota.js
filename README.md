@@ -129,7 +129,7 @@ Once building on save is setup, you can start watching tests with `yarn test --w
 
 ### Updating documentation
 
-Please update the documention when needed by editting [`JSDoc`](http://usejsdoc.org) annotations and running `yarn docs` from the _root directory_.
+Please update the documention when needed by editing [`JSDoc`](http://usejsdoc.org) annotations and running `yarn docs` from the _root directory_.
 
 
 ## Reporting Issues
