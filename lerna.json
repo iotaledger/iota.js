@@ -1,20 +1,19 @@
 {
-  "lerna": "2.10.1",
-  "packages": [
-    "packages/*"
-  ],
-  "create": {
-    "homepage": "https://github.com/iotaledger/iota.lib.js",
-    "license": "MIT"
-  },
-  "publish": {
-    "allowBranch": "develop",
-    "cdVersion": "prerelease",
-    "conventionalCommits": true,
-    "gitRemote": "upstream",
-    "preid": "alpha",
-    "message": "publish %s"
-  },
-  "version": "1.0.0-alpha.1",
-  "npmClient": "yarn"
+    "lerna": "2.10.1",
+    "packages": ["packages/*"],
+    "create": {
+        "homepage": "https://github.com/iotaledger/iota.lib.js",
+        "license": "MIT"
+    },
+    "publish": {
+        "allowBranch": "next",
+        "cdVersion": "prerelease",
+        "conventionalCommits": true,
+        "gitRemote": "upstream",
+        "preid": "alpha",
+        "message": "publish %s"
+    },
+    "version": "1.0.0-alpha.1",
+    "npmClient": "yarn",
+    "npmClientArgs": ["--no-lockfile"]
 }
