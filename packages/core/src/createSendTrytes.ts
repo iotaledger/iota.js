@@ -1,33 +1,16 @@
 import * as Promise from 'bluebird'
 import { asTransactionObject } from '@iota/transaction-converter'
-import {
-    depthValidator,
-    mwmValidator,
-    trytesArrayValidator,
-    validate,
-} from '@iota/validators'
-import {
-    createAttachToTangle,
-    createGetTransactionsToApprove,
-    createStoreAndBroadcast,
-} from './'
-import {
-    AttachToTangle,
-    Bundle,
-    Callback,
-    Hash,
-    Provider,
-    Transaction,
-    Trytes
-} from '../../types'
+import { depthValidator, mwmValidator, trytesArrayValidator, validate } from '@iota/validators'
+import { createAttachToTangle, createGetTransactionsToApprove, createStoreAndBroadcast } from './'
+import { AttachToTangle, Bundle, Callback, Hash, Provider, Transaction, Trytes } from '../../types'
 
 /**
  * @method createSendTrytes
- * 
+ *
  * @memberof module:core
- * 
+ *
  * @param {Provider} provider - Network provider
- * 
+ *
  * @return {Function} {@link #module_core.sendTrytes `sendTrytes`}
  */
 export const createSendTrytes = (provider: Provider, attachFn?: AttachToTangle) => {
@@ -38,7 +21,7 @@ export const createSendTrytes = (provider: Provider, attachFn?: AttachToTangle) 
     /**
      * [Attaches to tanlge]{@link #module_core.attachToTangle}, [stores]{@link #module_core.storeTransactions}
      * and [broadcasts]{@link #module_core.broadcastTransactions} a list of transaction trytes.
-     * 
+     *
      * @example
      * ```js
      * prepareTransfers(seed, transfers)
@@ -50,17 +33,17 @@ export const createSendTrytes = (provider: Provider, attachFn?: AttachToTangle) 
      *     // ...
      *   })
      * ```
-     * 
+     *
      * @method sendTrytes
-     * 
+     *
      * @memberof module:core
-     * 
-     * @param {Trytes[]} - List of trytes to attach, store & broadcast
+     *
+     * @param {Trytes[]} trytes - List of trytes to attach, store & broadcast
      * @param {number} depth - Depth
      * @param {number} minWeightMagnitude - Min weight magnitude
      * @param {string} [reference] - Optional reference hash
      * @param {Callback} [callback] - Optional callback
-     * 
+     *
      * @return {Promise}
      * @fulfil {Transaction[]}  Returns list of attached transactions
      * @reject {Error}

@@ -11,6 +11,7 @@ Core functionality to interact with the IOTA network. Includes methods for:
 ## Installation
 
 Install using [npm](https://www.npmjs.org/):
+
 ```
 npm install @iota/core
 ```
@@ -26,7 +27,7 @@ yarn add @iota/core
     
 * [core](#module_core)
 
-    * [.composeApi([settings], [apiVersion], [requestBatchSize])](#module_core.composeApi)
+    * [.composeApi([settings])](#module_core.composeApi)
 
     * [.createAddNeighbors(provider)](#module_core.createAddNeighbors)
 
@@ -130,7 +131,7 @@ yarn add @iota/core
 
     * [.createSendTrytes(provider)](#module_core.createSendTrytes)
 
-    * [.sendTrytes(depth, minWeightMagnitude, [reference], [callback])](#module_core.sendTrytes)
+    * [.sendTrytes(trytes, depth, minWeightMagnitude, [reference], [callback])](#module_core.sendTrytes)
 
     * [.createStoreAndBroadcast(provider)](#module_core.createStoreAndBroadcast)
 
@@ -149,14 +150,15 @@ yarn add @iota/core
 
 <a name="module_core.composeApi"></a>
 
-### *core*.composeApi([settings], [apiVersion], [requestBatchSize])
+### *core*.composeApi([settings])
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
-| [settings] | <code>object</code> | <code>{}</code> | Connection settings |
+| [settings] | <code>object</code> \| <code>function</code> | <code>{} | provider</code> | Connection settings or `provider` factory |
 | [settings.provider] | <code>string</code> | <code>&quot;http://localhost:14265&quot;</code> | Uri of IRI node |
-| [apiVersion] | <code>string</code> \| <code>number</code> | <code>1</code> | IOTA Api version to be sent as `X-IOTA-API-Version` header. |
-| [requestBatchSize] | <code>number</code> | <code>1000</code> | Number of search values per request. |
+| [settings.attachToTangle] | <code>function</code> |  | Function to override [`attachToTangle`](#module_core.attachToTangle) with |
+| [settings.apiVersion] | <code>string</code> \| <code>number</code> | <code>1</code> | IOTA Api version to be sent as `X-IOTA-API-Version` header. |
+| [settings.requestBatchSize] | <code>number</code> | <code>1000</code> | Number of search values per request. |
 
 Composes API object from it's components
 
@@ -1068,15 +1070,19 @@ It is possible to prepare and sign transactions offline, by omitting the provide
 - `SENDING_BACK_TO_INPUTS`
 - Fetch error, if connected to network  
 
-| Param | Type | Description |
-| --- | --- | --- |
-| seed | <code>string</code> |  |
-| transfers | <code>object</code> |  |
-| [options] | <code>object</code> |  |
-| [options.inputs] | <code>Array.&lt;Input&gt;</code> | Inputs used for signing. Needs to have correct security, keyIndex and address value |
-| [options.address] | <code>Hash</code> | Remainder address |
-| [options.security] | <code>Number</code> | Security level to be used for getting inputs and reminder address |
-| [callback] | <code>function</code> | Optional callback |
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| seed | <code>string</code> |  |  |
+| transfers | <code>object</code> |  |  |
+| [options] | <code>object</code> |  |  |
+| [options.inputs] | <code>Array.&lt;Input&gt;</code> |  | Inputs used for signing. Needs to have correct security, keyIndex and address value |
+| [options.inputs[].address] | <code>Hash</code> |  | Input address trytes |
+| [options.inputs[].keyIndex] | <code>number</code> |  | Key index at which address was generated |
+| [options.inputs[].security] | <code>number</code> | <code>2</code> | Security level |
+| [options.inputs[].balance] | <code>number</code> |  | Balance in iotas |
+| [options.address] | <code>Hash</code> |  | Remainder address |
+| [options.security] | <code>Number</code> |  | Security level to be used for getting inputs and reminder address |
+| [callback] | <code>function</code> |  | Optional callback |
 
 **Properties**
 
@@ -1203,7 +1209,7 @@ replayBundle(tail)
 **Returns**: <code>function</code> - [`sendTrytes`](#module_core.sendTrytes)  
 <a name="module_core.sendTrytes"></a>
 
-### *core*.sendTrytes(depth, minWeightMagnitude, [reference], [callback])
+### *core*.sendTrytes(trytes, depth, minWeightMagnitude, [reference], [callback])
 **Fulfil**: <code>Transaction[]</code>  Returns list of attached transactions  
 **Reject**: <code>Error</code>
 - `INVALID_TRYTES`
@@ -1213,7 +1219,7 @@ replayBundle(tail)
 
 | Param | Type | Description |
 | --- | --- | --- |
-|  | <code>Array.&lt;Trytes&gt;</code> | List of trytes to attach, store & broadcast |
+| trytes | <code>Array.&lt;Trytes&gt;</code> | List of trytes to attach, store & broadcast |
 | depth | <code>number</code> | Depth |
 | minWeightMagnitude | <code>number</code> | Min weight magnitude |
 | [reference] | <code>string</code> | Optional reference hash |

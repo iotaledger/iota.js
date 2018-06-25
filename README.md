@@ -2,7 +2,7 @@
 
 IOTA Client Reference Implementation in Javascript
 
-[![Build Status](https://travis-ci.org/iotaledger/iota.lib.js.svg?branch=develop)](https://travis-ci.org/iotaledger/iota.lib.js)
+[![Build Status](https://travis-ci.org/iotaledger/iota.lib.js.svg?branch=next)](https://travis-ci.org/iotaledger/iota.lib.js)
  [![dependencies Status](https://david-dm.org/iotaledger/iota.lib.js/status.svg)](https://david-dm.org/iotaledger/iota.lib.js)  [![devDependencies Status](https://david-dm.org/iotaledger/iota.lib.js/dev-status.svg)](https://david-dm.org/iotaledger/iota.lib.js?type=dev) [![NSP Status](https://nodesecurity.io/orgs/iota-foundation/projects/7c0214b5-e36a-4178-92bc-164c536cfd6c/badge)](https://nodesecurity.io/orgs/iota-foundation/projects/7c0214b5-e36a-4178-92bc-164c536cfd6c) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/iotaledger/iota.lib.js/master/LICENSE)  [![Discord](https://img.shields.io/discord/102860784329052160.svg)](https://discord.gg/DTbJufa)
 
 ---
@@ -60,7 +60,7 @@ Publish transfers by calling [`prepareTransfers`](core#module_core.preareTransfe
 prepared trytes to [`sendTrytes`](core#module_core.sendTrytes) command.
 
 Feel free to use devnet and take advatage of [`PoWbox`](https://powbox.testnet.iota.org/) as well as 
-[`IOTA faucet`]() during development.
+[`IOTA faucet`](https://faucet.testnet.iota.org/) during development.
 
 ```js
 // must be trully random & 81-trytes long
@@ -82,9 +82,9 @@ const depth = 3
 const minWeightMagnitude = 14
 
 iota.prepareTransfers(seed, transfers)
-    .then(trytes => iota.sendTrytes(depth, minWeightMagnitude, trytes))
+    .then(trytes => iota.sendTrytes(trytes, depth, minWeightMagnitude))
     .then(bundle => {
-        console.log(`Published trhansaction with tail hash: ${bundle[0].hash}`)
+        console.log(`Published transaction with tail hash: ${bundle[0].hash}`)
         console.log(`Bundle: ${bundle}`)
     })
     .catch(err => {
@@ -94,13 +94,47 @@ iota.prepareTransfers(seed, transfers)
 
 ## Documentation
 
-For details on all available api methods please see the [reference page](api_reference.md).
+For details on all available API methods please see the [reference page](api_reference.md).
 
 Documentation of IOTA protocol and [`IRI`](https://github.com/iotaledger/iri) http API can be found on [docs.iota.works](https://docs.iota.works).
 
+## Contributing
+
+We thank everyone for their contributions. Here is quick guide to get started with iota.js monorepo:
+
+### Clone and bootstrap
+
+1. Fork the repo with <kbd>Fork</kbd> button at top right corner.
+2. Clone your fork locally and `cd` in it.
+3. Bootstrap your environement with:
+
+```
+yarn run init
+```
+
+This will install all dependencies, build and link the packages together. iota.js uses [Lerna](https://lernajs.io/) to manage multiple packages. You can re-bootstrap your setup at any point with `lerna bootstrap` command.
+
+#### Run the tests
+
+Make your changes on a single or across multiple packages and test the system in integration. Run from the _root directory_:
+
+```
+yarn test
+```
+
+To run tests of specific package just `cd` to the package directory and run `yarn test` from there.
+
+You may also want to configure your editor to build the source uppon save and watch the tests running.
+Once building on save is setup, you can start watching tests with `yarn test --watch` from each package directory.
+
+### Updating documentation
+
+Please update the documention when needed by editting [`JSDoc`](http://usejsdoc.org) annotations and running `yarn docs` from the _root directory_.
+
+
 ## Reporting Issues
 
-Please report any problems you encouter during development by [opening an issue](issues/new).
+Please report any problems you encouter during development by [opening an issue](https://github.com/iotaledger/iota.lib.js/issues/new).
 
 ## Join the discussion
 
