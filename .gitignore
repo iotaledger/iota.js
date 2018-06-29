@@ -12,5 +12,3 @@ coverage
 .nyc_output
 *.log
 *.cache
-package-lock.json
-/packages/*/yarn.lock

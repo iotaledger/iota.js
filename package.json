@@ -3,9 +3,9 @@
     "version": "1.0.0-alpha.1",
     "description": "IOTA Client Reference Implementation",
     "scripts": {
-        "init": "yarn && lerna bootstrap",
+        "init": "npm i && lerna bootstrap",
         "test": "lerna run test --stream",
-        "test-ci": "yarn run init && lerna run test-ci --stream",
+        "test-ci": "lerna bootstrap && lerna run test-ci --stream",
         "precommit": "lint-staged",
         "format": "prettier",
         "docs":

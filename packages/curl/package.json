@@ -8,7 +8,7 @@
         "access": "public"
     },
     "scripts": {
-        "prepublish": "tsc",
+        "prepare": "tsc",
         "test": "tsc",
         "format": "prettier"
     },
@@ -24,15 +24,7 @@
         "compileEnhancements": false,
         "verbose": true
     },
-    "keywords": [
-        "iota",
-        "tangle",
-        "library",
-        "browser",
-        "javascript",
-        "nodejs",
-        "API"
-    ],
+    "keywords": ["iota", "tangle", "library", "browser", "javascript", "nodejs", "API"],
     "license": "MIT",
     "bugs": {
         "url": "https://github.com/iotaledger/iota.js/issues"
