@@ -5,7 +5,7 @@
   "main": "./lib/iota.js",
   "scripts": {
     "build": "gulp",
-    "test": "jest"
+    "test": "jest --coverage"
   },
   "author": {
     "name": "Dominik Schiener (IOTA Foundation)",
