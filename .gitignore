@@ -6,3 +6,5 @@ bower_modules
 ## idea
 .idea
 *.iml
+
+coverage
