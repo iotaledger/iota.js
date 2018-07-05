@@ -1,6 +1,6 @@
 {
     "name": "iota.lib.js",
-    "version": "0.4.7",
+    "version": "0.4.8",
     "description": "Javascript Library for IOTA",
     "main": "./dist/iota.js",
     "authors": [
