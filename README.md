@@ -356,7 +356,7 @@ iota.api.prepareTransfers(seed,
             keyIndex: 7,
             security: 2
         }
-    ], function(e, s) {
+    ]}, function(e, s) {
 
 
         console.log(e,s);
