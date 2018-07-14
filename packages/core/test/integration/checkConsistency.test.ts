@@ -8,7 +8,7 @@ const checkConsistency = createCheckConsistency(createHttpClient())
 
 test('checkConsistency() resolves to correct response', async t => {
     t.deepEqual(
-        await checkConsistency(checkConsistencyCommand.transactions),
+        await checkConsistency(checkConsistencyCommand.tails),
         checkConsistencyResponse.state,
         'checkConsistency() should resolve to correct response'
     )
@@ -25,11 +25,11 @@ test('checkConsistency() rejects with correct errors for invalid transaction has
 })
 
 test.cb('checkConsistency() invokes callback', t => {
-    checkConsistency(checkConsistencyCommand.transactions, t.end)
+    checkConsistency(checkConsistencyCommand.tails, t.end)
 })
 
 test.cb('checkConsistency() passes correct arguments to callback', t => {
-    checkConsistency(checkConsistencyCommand.transactions, (err, res) => {
+    checkConsistency(checkConsistencyCommand.tails, (err, res) => {
         t.is(err, null, 'checkConsistency() should pass null as first argument in callback for successuful requests')
 
         t.deepEqual(

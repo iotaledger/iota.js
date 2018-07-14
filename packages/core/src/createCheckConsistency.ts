@@ -93,7 +93,7 @@ export const createCheckConsistency = ({ send }: Provider) =>
             .then(() =>
                 send<CheckConsistencyCommand, CheckConsistencyResponse>({
                     command: IRICommand.CHECK_CONSISTENCY,
-                    transactions: asArray(transactions),
+                    tails: asArray(transactions),
                 })
             )
             .then(({ state }) => state)
