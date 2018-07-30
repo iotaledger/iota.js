@@ -17,7 +17,7 @@ describe('utils.isTransactionHash', function () {
     assert.strictEqual(isTritArray(new Int8Array(1).fill(2)), false)
   })
 
-  it('should return true for empty array', function () {
+  it('should return true for empty array and unspecified length', function () {
     assert.strictEqual(isTritArray([]), true)
   })
 
