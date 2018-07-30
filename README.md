@@ -25,9 +25,9 @@ yarn add @iota/core
 ### Connecting to network
 
 ```js
-import { composeApi } from '@iota/core'
+import { composeAPI } from '@iota/core'
 
-const iota = composeApi({
+const iota = composeAPI({
     provider: 'http://localhost:14265'
 })
 
