@@ -54,11 +54,6 @@ export const asciiToTrytes = (input: string): string => {
     for (let i = 0; i < input.length; i++) {
         const dec = input[i].charCodeAt(0)
 
-        // If not recognizable ASCII character, throw error
-        if (dec > 255) {
-            throw new Error(errors.INVALID_ASCII_CHARS)
-        }
-
         trytes += TRYTE_ALPHABET[dec % 27]
         trytes += TRYTE_ALPHABET[(dec - dec % 27) / 27]
     }
