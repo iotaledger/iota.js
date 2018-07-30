@@ -5,10 +5,19 @@ import {
     Callback,
     CheckConsistencyCommand,
     CheckConsistencyResponse,
+    getOptionsWithDefaults,
     Hash,
     IRICommand,
     Provider,
 } from '../../types'
+
+export interface CheckConsistencyOptions {
+    rejectWithReason?: boolean
+}
+
+const defaults = {
+    rejectWithReason: false,
+}
 
 /**
  * @method createCheckConsistency
@@ -77,6 +86,8 @@ export const createCheckConsistency = ({ send }: Provider) =>
      *
      * @param {Hash|Hash[]} transactions - Tail transaction hash (hash of transaction
      * with `currentIndex=0`), or array of tail transaction hashes.
+     * @param {object} [options] - Options
+     * @param {boolean} [options.rejectWithReason] - Enables rejection if state is `false`, with reason as error message
      * @param {Callback} [callback] - Optional callback.
      *
      * @return {Promise}
@@ -84,11 +95,15 @@ export const createCheckConsistency = ({ send }: Provider) =>
      * @reject {Error}
      * - `IVNALID_HASH_ARRAY`: Invalid array of hashes
      * - Fetch error
+     * - Reason for returning `false`, if called with `options.rejectWithReason`
      */
     function checkConsistency(
         transactions: Hash | ReadonlyArray<Hash>,
+        options?: CheckConsistencyOptions,
         callback?: Callback<boolean>
     ): Promise<boolean> {
+        const { rejectWithReason } = getOptionsWithDefaults(defaults)(options || {})
+
         return Promise.resolve(validate(hashArrayValidator(asArray(transactions))))
             .then(() =>
                 send<CheckConsistencyCommand, CheckConsistencyResponse>({
@@ -96,6 +111,12 @@ export const createCheckConsistency = ({ send }: Provider) =>
                     tails: asArray(transactions),
                 })
             )
-            .then(({ state }) => state)
-            .asCallback(callback)
+            .then(({ state, info }) => {
+                if (rejectWithReason && !state) {
+                    throw new Error(info)
+                }
+
+                return state
+            })
+            .asCallback(typeof arguments[1] === 'function' ? arguments[1] : callback)
     }

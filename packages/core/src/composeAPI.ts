@@ -37,6 +37,7 @@ import {
     // Types
     AccountData,
     Balances,
+    CheckConsistencyOptions,
     FindTransactionsQuery,
     GetAccountDataOptions,
     GetInputsOptions,

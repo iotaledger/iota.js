@@ -136,6 +136,7 @@ export interface CheckConsistencyCommand extends BaseCommand {
 
 export interface CheckConsistencyResponse {
     readonly state: boolean
+    readonly info: string
 }
 
 export interface FindTransactionsQuery {
