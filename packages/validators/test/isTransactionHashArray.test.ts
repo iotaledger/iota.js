@@ -10,7 +10,7 @@ test('isTransactionHashArray() returns true for valid transaction hashes.', t =>
     )
 })
 
-test('isTransactionHash() returns false for invalid transaction hashes.', t => {
+test('isTransactionHashArray() returns false for invalid transaction hashes.', t => {
     const invalidLength = ['OZQCYCGHUJHNLDUOKXUPEDCDJCPEWEDXFAFPCGKKDVHVTGUEKBW9VUYDUVEAPZZGPHYMVHABOWZHA9999ASDFASDFA']
     const invalidTrytes = ['sadfYCGHUJHNLDUOKXUPEDCDJCPEWEDXFAFPCGKKDVHVTGUEKBW9VUYDUVEAPZZGPHYMVHABOWZHA9999']
 
