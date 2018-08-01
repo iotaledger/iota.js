@@ -45,7 +45,7 @@
     "gulp-sourcemaps": "^2.6.4",
     "gulp-tap": "^1.0.1",
     "gulp-uglify": "^3.0.0",
-    "jshint": "^2.9.4",
+    "jshint": "^2.9.6",
     "mocha": "^5.2.0"
   }
 }
