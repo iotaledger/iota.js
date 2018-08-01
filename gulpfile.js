@@ -1,12 +1,11 @@
 var gulp       = require('gulp'),
     jshint     = require('gulp-jshint'),
     uglify     = require('gulp-uglify'),
-    rename     = require('gulp-rename'),
-    source     = require("vinyl-source-stream"),
-    buffer     = require("vinyl-buffer"),
+    tap        = require('gulp-tap'),
+    sourcemaps = require("gulp-sourcemaps"),
+    buffer     = require("gulp-buffer"),
     browserify = require('browserify'),
-    del        = require('del'),
-    gulpNSP    = require('gulp-nsp');
+    del        = require('del');
 
 
 
@@ -15,37 +14,37 @@ var DEST = './dist/'
 /**
     Lint the JS code
 **/
-gulp.task('lint', [], function(){
-    return gulp.src(['./lib/*.js'])
+function lint () {
+    return gulp.src(['iota-browser.js'])
         .pipe(jshint())
-        .pipe(jshint.reporter('default'));
-});
+        .pipe(jshint.reporter('default'))
+}
 
 /**
     Remove existing dist folder
 **/
-gulp.task('clean', ['lint'], function(cb) {
-    del([DEST]).then(cb.bind(null, null));
-});
-
-//To check your package.json
-gulp.task('nsp', function (cb) {
-  gulpNSP({package: __dirname + '/package.json'}, cb);
-});
+function clean (cb) {
+    return del([DEST]).then(cb.bind(null, null))
+}
 
 /**
     Build for the browser
 **/
-gulp.task('dist', function() {
-    return browserify("./iota-browser.js")
-        .bundle()
-        .pipe(source('iota.js'))
-        .pipe(gulp.dest(DEST))
-        .pipe(rename('iota.min.js'))
+function dist () {
+    return gulp.src(['iota-browser.js'], { read: false })
+        .pipe(tap(function (file) {
+            console.log('bundling ' + file.path)
+            file.contents = browserify(file.path, { debug: true }).bundle()
+        }))
         .pipe(buffer())
+        .pipe(sourcemaps.init({ loadMaps: true }))
         .pipe(uglify())
-        .pipe(gulp.dest(DEST));
-});
+        .pipe(sourcemaps.write('./'))
+        .pipe(gulp.dest('dist'))
+}
 
+var build = gulp.series(lint, clean, dist)
 
-gulp.task('default', ['lint', 'clean', 'nsp', 'dist']);
+gulp.task('build', build)
+
+gulp.task('default', build)

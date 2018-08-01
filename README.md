@@ -8,7 +8,7 @@ It should be noted that the Javascript Library as it stands right now is an **ea
 
 > **Join the Discussion**
 
-> If you want to get involved in the community, need help with getting setup, have any issues related with the library or just want to discuss Blockchain, Distributed Ledgers and IoT with other people, feel free to join our Slack. [Slack](http://slack.iota.org/) You can also ask questions on our dedicated forum at: [IOTA Forum](https://forum.iota.org/).
+> If you want to get involved in the community, need help with getting setup, have any issues related with the library or just want to discuss Blockchain, Distributed Ledgers and IoT with other people, feel free to join our [Discord community](https://discord.gg/7Gu2mG5). You can also ask questions on our dedicated forum at: [IOTA Forum](https://forum.iota.org/).
 
 ## Installation
 
@@ -108,7 +108,7 @@ iota.api.getNodeInfo(function(error, success) {
     - **[getTransactionsObjects](#gettransactionsobjects)**
     - **[findTransactionObjects](#findtransactionobjects)**
     - **[getLatestInclusion](#getlatestinclusion)**
-    - **[broadcastAndStore](#broadcastandstore)**
+    - **[storeAndBroadcast](#storeandbroadcast)**
     - **[getNewAddress](#getnewaddress)**
     - **[getInputs](#getinputs)**
     - **[prepareTransfers](#preparetransfers)**
@@ -138,9 +138,9 @@ iota.api.getNodeInfo(function(error, success) {
 - **[multisig](#iotamultisig)**
     - **[getKey](#getkey)**
     - **[getDigest](#getdigest)**
-    - **[Address](#Address)**
-    - **[Address.absorb](#Address.absorb)**
-    - **[Address.finalize](#Address.finalize)**
+    - **[Address](#address)**
+    - **[Address.absorb](#addressabsorb)**
+    - **[Address.finalize](#addressfinalize)**
     - **[validateAddress](#validateaddress)**
     - **[initiateTransfer](#initiatetransfer)**
     - **[addSignature](#addsignature)**
@@ -241,16 +241,16 @@ iota.api.getLatestInclusion(hashes, callback)
 
 ---
 
-### `broadcastAndStore`
+### `storeAndBroadcast`
 
-Wrapper function for `broadcastTransactions` and `storeTransactions`.
+Wrapper function for `storeTransactions` and `broadcastTransactions`.
 
 #### Input
 ```js
-iota.api.broadcastAndStore(trytes, callback)
+iota.api.storeAndBroadcast(trytes, callback)
 ```
 
-1. **`trytes`**: `Array` List of transaction trytes to be broadcast and stored. Has to be trytes that were returned from `attachToTangle`
+1. **`trytes`**: `Array` List of transaction trytes to be stored and broadcasted. Has to be trytes that were returned from `attachToTangle`
 2. **`callback`**: `Function` callback.
 
 #### Return Value
@@ -872,7 +872,7 @@ iota.multisig.getDigest(seed, index)
 
 ### `address`
 
-This function is used to initiate the creation of a new multisig address. Once all digests were added with `addDigest()`, `finalize()` can be used to get the actual 81-tryte address value. `validateAddress()` can be used to actually validate the multi-signature.
+This function is used to initiate the creation of a new multisig address. Once all digests were absorbed with `address.absorb()`, `address.finalize()` can be used to get the actual 81-tryte address value. `validateAddress()` can be used to actually validate the multi-signature.
 
 #### Input
 ```js
@@ -892,7 +892,7 @@ Absorbs the digests of co-signers
 
 #### Input
 ```js
-address.addDigest(digest);
+address.absorb(digest);
 ```
 
 1. **`digest`**: `String || Array` String or array of digest trytes as returned by `getDigest`
