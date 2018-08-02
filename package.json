@@ -7,9 +7,12 @@
         "test": "lerna run test --stream",
         "test-ci": "lerna bootstrap && lerna run test-ci --stream",
         "precommit": "lint-staged",
-        "format": "prettier",
         "docs":
-            "lerna run docs && jsdoc2md --no-cache --plugin dmd-clear --files './packages/*/out/**/*.js' > api_reference.md"
+            "lerna run docs && jsdoc2md --no-cache --plugin dmd-clear --files './packages/*/out/**/*.js' > api_reference.md",
+        "format": "prettier . --write",
+        "format:staged": "prettier --write",
+        "lint": "tslint . --fix",
+        "lint:staged": "tslint --fix"
     },
     "contributors": [
         "Dominik Schiener <dom@iota.org> (https://iota.org)",
@@ -24,7 +27,8 @@
         "verbose": true
     },
     "lint-staged": {
-        "*.{js,ts,json}": ["prettier --write", "git add"]
+        "*.{ts}": ["./scripts/check-partially-staged.sh lint:staged"],
+        "*.{js,ts,json,md}": ["./scripts/check-partially-staged.sh format:staged"]
     },
     "keywords": ["iota", "tangle", "library", "javascript", "nodejs", "API"],
     "license": "MIT",
