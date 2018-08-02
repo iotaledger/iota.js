@@ -1,3 +1,4 @@
+const sgf = require('staged-git-files')
 const path = require('path')
 const fs = require('fs')
 const { spawn } = require('child_process')
@@ -72,7 +73,7 @@ const getDeps = (root, depth = 100) => {
     }
 }
 
-sfg((err, results) => {
+sgf((err, results) => {
     if (err) {
         console.log(err) && process.exit(1)
     }
