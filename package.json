@@ -13,7 +13,6 @@
         "lint:test": "tslint -c ./tslint.json './packages/*/test/**/*.ts'",
         "lint": "npm-run-all --parallel lint:*",
         "lint-staged": "tslint --fix",
-        "format": "prettier . --write",
         "format-staged": "prettier --write"
     },
     "contributors": [
