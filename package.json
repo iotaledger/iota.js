@@ -5,15 +5,16 @@
     "scripts": {
         "init": "npm i && lerna bootstrap",
         "test": "lerna exec -- npm test",
-        "test-ci": "lerna bootstrap && lerna exec -- npm run test-ci && tslint . && prettier .",
+        "test-ci": "lerna bootstrap && lerna exec -- npm run test-ci && npm run lint",
         "test:staged": "node scripts/test-staged.js",
         "precommit": "lint-staged",
-        "docs":
-            "lerna run docs && jsdoc2md --no-cache --plugin dmd-clear --files './packages/*/out/**/*.js' > api_reference.md",
+        "docs": "lerna run docs && jsdoc2md --no-cache --plugin dmd-clear --files './packages/*/out/**/*.js' > api_reference.md",
+        "lint:src": "tslint -c ./tslint.json './packages/*/src/**/*.ts'",
+        "lint:test": "tslint -c ./tslint.json './packages/*/test/**/*.ts'",
+        "lint": "npm-run-all --parallel lint:*",
+        "lint-staged": "tslint --fix",
         "format": "prettier . --write",
-        "format:staged": "prettier --write",
-        "lint": "tslint . --fix",
-        "lint:staged": "tslint --fix"
+        "format-staged": "prettier --write"
     },
     "contributors": [
         "Dominik Schiener <dom@iota.org> (https://iota.org)",
@@ -28,8 +29,12 @@
         "verbose": true
     },
     "lint-staged": {
-        "*.{ts}": ["./scripts/check-partially-staged.sh lint:staged"],
-        "*.{js,ts,json,md}": ["./scripts/check-partially-staged.sh format:staged"]
+        "*.{ts}": [
+            "./scripts/check-partially-staged.sh lint-staged"
+        ],
+        "*.{js,ts,json,md}": [
+            "./scripts/check-partially-staged.sh format-staged"
+        ]
     },
     "keywords": ["iota", "tangle", "library", "javascript", "nodejs", "API"],
     "license": "MIT",
@@ -50,6 +55,7 @@
         "jsdoc-babel": "^0.4.0",
         "lerna": "^2.11.0",
         "lint-staged": "^7.2.0",
+        "npm-run-all": "^4.1.3",
         "nyc": "^12.0.2",
         "prettier": "^1.10.2",
         "staged-git-files": "^1.1.1",

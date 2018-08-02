@@ -7,6 +7,6 @@
         "no-unused-variable": true,
         "object-literal-sort-keys": false,
         "prefer-for-of": false,
-        "no-implicit-dependencies": [true, "dev"]
+        "no-implicit-dependencies": [false, "dev"]
     }
 }

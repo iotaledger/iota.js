@@ -10,7 +10,7 @@
     "scripts": {
         "prepare": "tsc",
         "test": "tsc",
-        "format": "prettier"
+        "test-ci": "echo \"Warning: no test specified\" && exit 0"
     },
     "contributors": [
         "Dominik Schiener <dom@iota.org> (https://iota.org)",

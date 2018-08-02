@@ -9,7 +9,8 @@
     },
     "scripts": {
         "prepare": "tsc",
-        "format": "prettier"
+        "test": "exit 0",
+        "test-ci": "exit 0"
     },
     "contributors": [
         "Dominik Schiener <dom@iota.org> (https://iota.org)",
