@@ -1,11 +1,12 @@
 {
-    "name": "iota.lib.js",
+    "name": "iota-js", 
     "version": "1.0.0-alpha.1",
     "description": "IOTA Client Reference Implementation",
     "scripts": {
         "init": "npm i && lerna bootstrap",
-        "test": "lerna run test --stream",
-        "test-ci": "lerna bootstrap && lerna run test-ci --stream",
+        "test": "lerna exec -- npm test",
+        "test-ci": "lerna bootstrap && lerna exec -- npm run test-ci && tslint . && prettier .",
+        "test:staged": "node scripts/test-staged.js",
         "precommit": "lint-staged",
         "docs":
             "lerna run docs && jsdoc2md --no-cache --plugin dmd-clear --files './packages/*/out/**/*.js' > api_reference.md",
@@ -51,6 +52,7 @@
         "lint-staged": "^7.2.0",
         "nyc": "^12.0.2",
         "prettier": "^1.10.2",
+        "staged-git-files": "^1.1.1",
         "tslint": "^5.9.1",
         "tslint-config-prettier": "^1.6.0",
         "typescript": "^2.7.0"
