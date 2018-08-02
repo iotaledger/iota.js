@@ -11,6 +11,10 @@ const prefix = `@${PREFIX}/`
 let staged = new Set()
 
 const getDeps = (root, depth = 100) => {
+    if (staged.has('*')) {
+        return
+    }
+
     let cd = path.join(path.resolve(__dirname, '../'), path.dirname(root))
     let i = 0
     let pkg
