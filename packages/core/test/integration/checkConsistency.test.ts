@@ -1,7 +1,7 @@
 import test from 'ava'
 import { createHttpClient } from '@iota/http-client'
 import { createCheckConsistency } from '../../src'
-import { INVALID_HASH_ARRAY } from '../../src/errors'
+import { inconsistentTransaction, INVALID_HASH_ARRAY } from '../../src/errors'
 import {
     checkConsistencyCommand,
     checkConsistencyResponse,
@@ -35,7 +35,7 @@ test.cb(
         checkConsistency(checkConsistencyWithInfoCommand.tails, { rejectWithReason: true }, (err, state) => {
             t.is(
                 (err as Error).message,
-                checkConsistencyWithInfoResponse.info,
+                inconsistentTransaction(checkConsistencyWithInfoResponse.info),
                 'checkConsistency() should reject with correct info if state is `false` and called with `options = { rejectWithReason: true }`'
             )
 

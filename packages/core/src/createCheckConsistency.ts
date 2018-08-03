@@ -10,6 +10,7 @@ import {
     IRICommand,
     Provider,
 } from '../../types'
+import { inconsistentTransaction } from './errors'
 
 export interface CheckConsistencyOptions {
     rejectWithReason?: boolean
@@ -113,7 +114,7 @@ export const createCheckConsistency = ({ send }: Provider) =>
             )
             .then(({ state, info }) => {
                 if (rejectWithReason && !state) {
-                    throw new Error(`Transaction is inconsistent. Reason: ${info}`)
+                    throw new Error(inconsistentTransaction(info))
                 }
 
                 return state
