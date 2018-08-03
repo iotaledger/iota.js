@@ -75,7 +75,8 @@ const getDeps = (root, depth = 100) => {
 
 sgf((err, results) => {
     if (err) {
-        console.log(err) && process.exit(1)
+        console.log(err)
+        process.exit(1)
     }
 
     results.forEach(item => getDeps(item.filename))
