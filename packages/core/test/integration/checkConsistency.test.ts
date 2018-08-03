@@ -1,14 +1,19 @@
 import test from 'ava'
 import { createHttpClient } from '@iota/http-client'
 import { createCheckConsistency } from '../../src'
-import { INVALID_HASH_ARRAY } from '../../src/errors'
-import { checkConsistencyCommand, checkConsistencyResponse } from './nocks/checkConsistency'
+import { inconsistentTransaction, INVALID_HASH_ARRAY } from '../../src/errors'
+import {
+    checkConsistencyCommand,
+    checkConsistencyResponse,
+    checkConsistencyWithInfoCommand,
+    checkConsistencyWithInfoResponse,
+} from './nocks/checkConsistency'
 
 const checkConsistency = createCheckConsistency(createHttpClient())
 
 test('checkConsistency() resolves to correct response', async t => {
     t.deepEqual(
-        await checkConsistency(checkConsistencyCommand.transactions),
+        await checkConsistency(checkConsistencyCommand.tails),
         checkConsistencyResponse.state,
         'checkConsistency() should resolve to correct response'
     )
@@ -24,12 +29,27 @@ test('checkConsistency() rejects with correct errors for invalid transaction has
     )
 })
 
+test.cb(
+    'checkConsistency() rejects with correct info if state is `false` and called with `options = { rejectWithReason: true }`',
+    t => {
+        checkConsistency(checkConsistencyWithInfoCommand.tails, { rejectWithReason: true }, (err, state) => {
+            t.is(
+                (err as Error).message,
+                inconsistentTransaction(checkConsistencyWithInfoResponse.info),
+                'checkConsistency() should reject with correct info if state is `false` and called with `options = { rejectWithReason: true }`'
+            )
+
+            t.end()
+        })
+    }
+)
+
 test.cb('checkConsistency() invokes callback', t => {
-    checkConsistency(checkConsistencyCommand.transactions, t.end)
+    checkConsistency(checkConsistencyCommand.tails, {}, t.end)
 })
 
 test.cb('checkConsistency() passes correct arguments to callback', t => {
-    checkConsistency(checkConsistencyCommand.transactions, (err, res) => {
+    checkConsistency(checkConsistencyCommand.tails, {}, (err, res) => {
         t.is(err, null, 'checkConsistency() should pass null as first argument in callback for successuful requests')
 
         t.deepEqual(

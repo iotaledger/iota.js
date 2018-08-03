@@ -92,7 +92,7 @@ export const createPromoteTransaction = (provider: Provider, attachFn?: AttachTo
         }
 
         return Bluebird.resolve(validate(hashValidator(tailTransaction), transferArrayValidator(spamTransfers)))
-            .then(() => checkConsistency(tailTransaction))
+            .then(() => checkConsistency(tailTransaction, { rejectWithReason: true }))
             .then(consistent => {
                 if (!consistent) {
                     throw new Error(errors.INCONSISTENT_SUBTANGLE)
