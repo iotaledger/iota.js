@@ -110,9 +110,9 @@ sgf((err, results) => {
 
     subprocesses.forEach((subprocess, i) =>
         subprocess.on('exit', code => {
-            if (code > 0 && !sigSent) {
-                codes.push(code)
+            codes.push(code)
 
+            if (code > 0 && !sigSent) {
                 sigSent = true
 
                 console.log(`\nTests failed! ${tasks[i]} exited code ${code}.`)
@@ -125,7 +125,6 @@ sgf((err, results) => {
             }
 
             if (codes.length === tasks.length) {
-                console.log(codes)
                 process.exit(codes.every(code => code === 0) ? 0 : 1)
             }
         })
