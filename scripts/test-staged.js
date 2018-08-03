@@ -85,7 +85,7 @@ sgf((err, results) => {
     const tasks =
         Array.from(staged).indexOf('*') > -1
             ? fs
-                  .readdirSync(path.resolve(__dirname, '../packages'))
+                  .readdirSync(path.resolve(__dirname, path.join('../', PACKAGES_DIR)))
                   .map(pkgDir => {
                       const pkgFile = path.resolve(__dirname, path.join('../', PACKAGES_DIR, pkgDir, 'package.json'))
 
