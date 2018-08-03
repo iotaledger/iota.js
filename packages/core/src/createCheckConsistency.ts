@@ -113,7 +113,7 @@ export const createCheckConsistency = ({ send }: Provider) =>
             )
             .then(({ state, info }) => {
                 if (rejectWithReason && !state) {
-                    throw new Error(info)
+                    throw new Error(`Transaction is inconsistent. Reason: ${info}`)
                 }
 
                 return state
