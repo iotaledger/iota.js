@@ -22,7 +22,7 @@ describe('valid.isSafeString', function() {
     })
 
     // 2 test
-    it('should be a safe string: ' + tests[2], function() {
+    it('should not be a safe string: ' + tests[2], function() {
 
         var isValid = valid.isSafeString(tests[2]);
         assert.isFalse(isValid);
