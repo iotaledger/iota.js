@@ -25,7 +25,7 @@ describe('valid.isSafeString', function() {
     it('should be a safe string: ' + tests[2], function() {
 
         var isValid = valid.isSafeString(tests[2]);
-        assert.isTrue(isValid);
+        assert.isFalse(isValid);
     })
 
     // 3 test
