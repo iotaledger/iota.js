@@ -34,8 +34,8 @@ export interface Inputs {
 export interface Transfer {
     readonly address: string
     readonly value: number
-    readonly message: string
-    readonly tag: string
+    readonly message?: string
+    readonly tag?: string
     readonly obsoleteTag?: string
 }
 

@@ -16,7 +16,7 @@ export const createSendTransfer = (provider: Provider, attachFn?: AttachToTangle
         seed: string,
         depth: number,
         minWeightMagnitude: number,
-        transfers: Transfer[],
+        transfers: ReadonlyArray<Transfer>,
         options?: SendTransferOptions,
         callback?: Callback<Bundle>
     ): Promise<Bundle> {
