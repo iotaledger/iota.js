@@ -401,7 +401,11 @@ iota.api.sendTrytes(trytes, depth, minWeightMagnitude, callback)
 1. **`trytes`** `Array` trytes
 2. **`depth`** `Int` depth value that determines how far to go for tip selection
 3. **`minWeightMagnitude`** `Int` minWeightMagnitude
-4. **`callback`**: `Function` Optional callback.
+4. **`options`** `Object` Optional parameters
+  - **`reference`**: `string` Reference transaction hash, to be used in tip selection.
+  - **`adjustDepth`**: `boolean` Flag to enable recovery by incrementing the `depth`, up to `maxDepth`, if original was too small.
+  - **`maxDepth`**: `number` Max depth, defaults to `15`
+5. **`callback`**: `Function` Optional callback.
 
 #### Returns
 `Array` - returns an array of the transfer (transaction objects).
@@ -428,6 +432,9 @@ iota.api.sendTransfer(seed, depth, minWeightMagnitude, transfers [, options], ca
 5. **`options`**: `Object` which is optional:
   - **`inputs`**: `Array` List of inputs used for funding the transfer
   - **`address`**: `String` if defined, this address will be used for sending the remainder value (of the inputs) to.
+  - **`reference`**: `String` Reference transaction hash, to be used in tip selection.
+  - **`adjustDepth`**: `boolean` Flag to enable recovery by incrementing the `depth`, up to `maxDepth`, if original was too small.
+  - **`maxDepth`**: `number` Max depth, defaults to `15`
 6. **`callback`**: `Function` Optional callback.
 
 
@@ -458,6 +465,7 @@ iota.api.promoteTransaction(transaction, depth, minWeightMagnitude, transfers [,
 5. **`params`** `Object` Params
   - **`delay`** `int` Delay between promotion transfers
   - **`interrupt`** `Boolean || Function` Flag to terminate promotion, can be boolean or a function returning a boolean
+  - **`maxDepth`** `number` Max depth, defaults to `15`
 6. **`callback`** `Function` Callback
 
 #### Returns
