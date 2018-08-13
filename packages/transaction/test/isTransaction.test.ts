@@ -90,14 +90,14 @@ test('isTransaction() returns false for transaction with non-integer currentInde
     )
 })
 
-test('isTransaction() returns false for transaction with currentIndex greater than lastIndex.', t => {
+test('isTransaction() returns false for transaction with negative currentIndex.', t => {
     t.is(
         isTransaction({
             ...transactionObject,
-            currentIndex: 3,
+            currentIndex: -2,
         }),
         false,
-        'isTransaction() should return false for transaction with currentIndex greater than lastIndex.'
+        'isTransaction() should return false for transaction with negative currentIndex.'
     )
 })
 

@@ -85,15 +85,12 @@ export const isTransactionHashArray = (hashes: ReadonlyArray<any>): hashes is Re
  */
 export const isTransactionTrytes = (trytes: any, mwm?: number): trytes is Trytes => {
     const hasCorrectTrytesLength = isTrytesOfExactLength(trytes, TRANSACTION_TRYTES_SIZE)
-    const isNotNineTrytes = !isNinesTrytes(trytes)
 
     if (mwm) {
-        return (
-            hasCorrectTrytesLength && isNotNineTrytes && isTransactionHash(transactionHash(trytesToTrits(trytes)), mwm)
-        )
+        return hasCorrectTrytesLength && isTransactionHash(transactionHash(trytesToTrits(trytes)), mwm)
     }
 
-    return hasCorrectTrytesLength && isNotNineTrytes
+    return hasCorrectTrytesLength
 }
 
 /**
@@ -145,7 +142,7 @@ export const isTransaction = (tx: any): tx is Transaction =>
     isInteger(tx.value) &&
     isTrytesOfExactLength(tx.obsoleteTag, OBSOLETE_TAG_TRYTES_SIZE) &&
     isInteger(tx.timestamp) &&
-    (isInteger(tx.currentIndex) && tx.currentIndex <= tx.lastIndex) &&
+    (isInteger(tx.currentIndex) && tx.currentIndex >= 0) &&
     isInteger(tx.lastIndex) &&
     isHash(tx.bundle) &&
     isHash(tx.trunkTransaction) &&
