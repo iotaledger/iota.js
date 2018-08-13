@@ -8,6 +8,8 @@ export const errors = {
     INVALID_BUNDLE: 'Invalid bundle',
 }
 
+const numericTrytesRegex = /^(RA|PA)?(UA|VA|WA|XA|YA|ZA|9B|AB|BB|CB)+((SA)(UA|VA|WA|XA|YA|ZA|9B|AB|BB|CB)+)?((TC|OB)(RA|PA)?(UA|VA|WA|XA|YA|ZA|9B|AB|BB|CB)+)?99/
+
 /**
  * Takes a bundle as input and from the signatureMessageFragments extracts the correct JSON
  * data which was encoded and sent with the transaction.
@@ -15,7 +17,8 @@ export const errors = {
  * - `"{ \"message\": \"hello\" }"\`
  * - `"[1, 2, 3]"`
  * - `"true"`, `"false"` & `"null"`
- * - `"\"hello\""`
+ * - `"\"hello\""
+ * - `123`
  *
  * @example
  *
@@ -46,9 +49,9 @@ export const errors = {
  *
  * @param {array} bundle
  *
- * @returns {Object}
+ * @returns {string | number | null}
  */
-export const extractJson = (bundle: Transaction[]): string | null => {
+export const extractJson = (bundle: Transaction[]): string | number | null => {
     if (!Array.isArray(bundle) || bundle[0] === undefined) {
         throw new Error(errors.INVALID_BUNDLE)
     }
@@ -60,7 +63,7 @@ export const extractJson = (bundle: Transaction[]): string | null => {
 
     if (firstTrytePair === 'OD') {
         lastTrytePair = 'QD'
-    } else if (firstTrytePair == 'GA') {
+    } else if (firstTrytePair === 'GA') {
         lastTrytePair = 'GA'
     } else if (firstTrytePair === 'JC') {
         lastTrytePair = 'LC'
@@ -70,6 +73,13 @@ export const extractJson = (bundle: Transaction[]): string | null => {
         return 'true'
     } else if (bundle[0].signatureMessageFragment.slice(0, 8) === 'BDID9D9D') {
         return 'null'
+    } else if (numericTrytesRegex.test(bundle[0].signatureMessageFragment)) {
+        // Parse numbers, source: https://github.com/iotaledger/iota.lib.js/issues/231#issuecomment-402383449
+        const num = bundle[0].signatureMessageFragment.match(/^(.*)99/)
+        if (num) {
+            return parseFloat(trytesToAscii(num[1].slice(0, -1)))
+        }
+        throw new Error(errors.INVALID_JSON)
     } else {
         throw new Error(errors.INVALID_JSON)
     }

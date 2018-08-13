@@ -31,7 +31,8 @@ Supports the following forms of JSON encoded values:
 - `"{ \"message\": \"hello\" }"\`
 - `"[1, 2, 3]"`
 - `"true"`, `"false"` & `"null"`
-- `"\"hello\""`
+- `"\"hello\""
+- `123`
 
 **Example**  
 ```js
