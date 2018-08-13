@@ -43,7 +43,7 @@ export { createAttachToTangle } from './createAttachToTangle'
 
 export { createBroadcastTransactions } from './createBroadcastTransactions'
 
-export { createCheckConsistency } from './createCheckConsistency'
+export { createCheckConsistency, CheckConsistencyOptions } from './createCheckConsistency'
 
 export { createFindTransactions } from './createFindTransactions'
 

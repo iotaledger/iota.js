@@ -25,7 +25,7 @@ export const spammer = (): Transfer => ({
     message: '9'.repeat(27 * 81),
 })
 
-export const generateSpam = (n: number = 1) => new Array(n).map(spammer)
+export const generateSpam = (n: number = 1): ReadonlyArray<Transfer> => new Array(n).map(spammer)
 
 /**
  * @method createPromoteTransaction
@@ -72,10 +72,10 @@ export const createPromoteTransaction = (provider: Provider, attachFn?: AttachTo
         tailTransaction: string,
         depth: number,
         minWeightMagnitude: number,
-        spamTransfers: Transfer[] = generateSpam(),
+        spamTransfers: ReadonlyArray<Transfer> = generateSpam(),
         options?: Partial<PromoteTransactionOptions>,
-        callback?: Callback<Transaction[]>
-    ): Bluebird<Maybe<Transaction[]>> {
+        callback?: Callback<ReadonlyArray<Transaction>>
+    ): Bluebird<Maybe<ReadonlyArray<Transaction>>> {
         // Switch arguments
         if (typeof options === 'undefined') {
             options = {}
@@ -92,7 +92,7 @@ export const createPromoteTransaction = (provider: Provider, attachFn?: AttachTo
         }
 
         return Bluebird.resolve(validate(hashValidator(tailTransaction), transferArrayValidator(spamTransfers)))
-            .then(() => checkConsistency(tailTransaction))
+            .then(() => checkConsistency(tailTransaction, { rejectWithReason: true }))
             .then(consistent => {
                 if (!consistent) {
                     throw new Error(errors.INCONSISTENT_SUBTANGLE)
@@ -121,7 +121,7 @@ export const createPromoteTransaction = (provider: Provider, attachFn?: AttachTo
                         })
                     }, delay)
                 } else {
-                    return spamTransactions
+                    return [...spamTransactions]
                 }
             })
             .asCallback(typeof arguments[4] === 'function' ? arguments[4] : callback)

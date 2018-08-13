@@ -135,9 +135,8 @@ export const isTransfer = (transfer: Transfer): transfer is Transfer =>
     isHash(transfer.address) &&
     isInteger(transfer.value) &&
     transfer.value >= 0 &&
-    (!transfer.message.length || isTrytes(transfer.message)) &&
-    (!transfer.tag.length || isTrytes(transfer.tag)) &&
-    transfer.tag.length <= 27
+    (!transfer.message || isTrytes(transfer.message, '0,')) &&
+    (!transfer.tag || isTag(transfer.tag))
 
 /**
  * Checks if input is array of valid `transfer` objects.

@@ -47,7 +47,7 @@ yarn add @iota/core
 
     * [.createCheckConsistency(provider)](#module_core.createCheckConsistency)
 
-    * [.checkConsistency(transactions, [callback])](#module_core.checkConsistency)
+    * [.checkConsistency(transactions, [options], [callback])](#module_core.checkConsistency)
 
     * [.createFindTransactionObjects(provider)](#module_core.createFindTransactionObjects)
 
@@ -350,15 +350,18 @@ broadcastTransactions(trytes)
 **Returns**: <code>function</code> - [`checkConsistency`](#module_core.checkConsistency)  
 <a name="module_core.checkConsistency"></a>
 
-### *core*.checkConsistency(transactions, [callback])
+### *core*.checkConsistency(transactions, [options], [callback])
 **Fulfil**: <code>boolean</code> Consistency state of given transaction or co-consistency of given transactions.  
 **Reject**: <code>Error</code>
 - `IVNALID_HASH_ARRAY`: Invalid array of hashes
-- Fetch error  
+- Fetch error
+- Reason for returning `false`, if called with `options.rejectWithReason`  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | transactions | <code>Hash</code> \| <code>Array.&lt;Hash&gt;</code> | Tail transaction hash (hash of transaction with `currentIndex=0`), or array of tail transaction hashes. |
+| [options] | <code>object</code> | Options |
+| [options.rejectWithReason] | <code>boolean</code> | Enables rejection if state is `false`, with reason as error message |
 | [callback] | <code>Callback</code> | Optional callback. |
 
 Checks if a transaction is _consistent_ or a set of transactions are _co-consistent_, by calling

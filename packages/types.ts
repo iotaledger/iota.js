@@ -34,8 +34,8 @@ export interface Inputs {
 export interface Transfer {
     readonly address: string
     readonly value: number
-    readonly message: string
-    readonly tag: string
+    readonly message?: string
+    readonly tag?: string
     readonly obsoleteTag?: string
 }
 
@@ -131,11 +131,12 @@ export type BroadcastTransactionsResponse = void
 
 export interface CheckConsistencyCommand extends BaseCommand {
     command: IRICommand.CHECK_CONSISTENCY
-    readonly transactions: ReadonlyArray<Hash>
+    readonly tails: ReadonlyArray<Hash>
 }
 
 export interface CheckConsistencyResponse {
     readonly state: boolean
+    readonly info: string
 }
 
 export interface FindTransactionsQuery {
