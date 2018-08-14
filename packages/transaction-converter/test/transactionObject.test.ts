@@ -1,7 +1,6 @@
 import test from 'ava'
-import { trits } from '@iota/converter'
 import { bundle, bundleTrytes } from '@iota/samples'
-import { asTransactionObject, asTransactionObjects, transactionHash, transactionObject } from '../src'
+import { asTransactionObject, asTransactionObjects, transactionObject } from '../src'
 
 test('asTransactionObject() converts transaction trytes to transaction object.', t => {
     t.deepEqual(
@@ -32,13 +31,5 @@ test('asTransactionObjects() converts array of transaction trytes to array of tr
         asTransactionObjects(bundle.map(tx => tx.hash))(bundleTrytes),
         bundle,
         'transactionObject() should convert array of transaction trytes to transaction objects.'
-    )
-})
-
-test('transactionHash() returns the correct transaction hash.', t => {
-    t.is(
-        transactionHash(trits(bundleTrytes[0])),
-        bundle[0].hash,
-        'transactionHash() should return the correct transaction hash.'
     )
 })
