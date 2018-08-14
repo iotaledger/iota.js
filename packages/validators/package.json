@@ -45,5 +45,9 @@
     "repository": {
         "type": "git",
         "url": "https://github.com/iotaledger/iota.js.git/tree/develop/packages/crypto"
+    },
+    "dependencies": {
+        "@iota/converter": "^1.0.0-alpha.1",
+        "@iota/transaction-converter": "^1.0.0-alpha.1"
     }
 }

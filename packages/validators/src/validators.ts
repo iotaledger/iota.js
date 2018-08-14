@@ -1,7 +1,8 @@
 /**
  * @module validators
  */
-
+import { tritsToTrytes, trytesToTrits, value, trytes } from '@iota/converter'
+import { transactionHash, asTransactionTrytes } from '@iota/transaction-converter'
 import { HASH_SIZE, TAG_SIZE, TRANSACTION_TRYTES_SIZE } from './constants'
 import * as errors from './errors'
 import { Address, Hash, Tag, Transaction, Transfer, Trytes } from '../../types'
@@ -105,11 +106,24 @@ export const isHash = (hash: any): hash is Hash =>
  *
  * @method isTransactionHash
  *
- * @param {string} hash
+ * @param {Hash|Transaction} input
  *
  * @return {boolean}
  */
-export const isTransactionHash = (hash: any): hash is Hash => isTrytesOfExactLength(hash, HASH_SIZE)
+export const isTransactionHash = (input: Hash | Transaction, mwm?: number): boolean => {
+    const hasCorrectMwm = (hash: Hash) =>
+        mwm
+            ? trytesToTrits(hash)
+                  .slice(-Math.abs(mwm))
+                  .every(trit => trit === 0)
+            : true
+
+    if (isTransaction(input)) {
+        return input.hash === transactionHash(trytesToTrits(asTransactionTrytes(input))) && hasCorrectMwm(input.hash)
+    }
+
+    return isTrytesOfExactLength(input, HASH_SIZE) && hasCorrectMwm(input)
+}
 
 /**
  * Checks if input contains `9`s only.
