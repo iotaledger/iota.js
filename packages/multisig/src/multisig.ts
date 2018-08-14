@@ -39,6 +39,7 @@ export const sanitizeTransfers = (transfers: ReadonlyArray<Transfer>): ReadonlyA
         address: removeChecksum(transfer.address),
     }))
 
+/* tslint:disable:variable-name */
 export const createBundle = (
     input: MultisigInput,
     transfers: ReadonlyArray<Transfer>,
@@ -58,9 +59,9 @@ export const createBundle = (
         let signatureMessageLength = 1
 
         // If message longer than 2187 trytes, increase signatureMessageLength (add multiple transactions)
-        if (transfers[i].message.length > 2187) {
+        if ((transfers[i].message || '').length > 2187) {
             // Get total length, message / maxLength (2187 trytes)
-            signatureMessageLength += Math.floor(transfers[i].message.length / 2187)
+            signatureMessageLength += Math.floor((transfers[i].message || '').length / 2187)
 
             let msgCopy = transfers[i].message
 
@@ -81,7 +82,7 @@ export const createBundle = (
             let fragment = ''
 
             if (transfers[i].message) {
-                fragment = transfers[i].message.slice(0, 2187)
+                fragment = (transfers[i].message || '').slice(0, 2187)
             }
 
             for (let j = 0; fragment.length < 2187; j++) {
@@ -92,7 +93,7 @@ export const createBundle = (
         }
 
         // If no tag defined, get 27 tryte tag.
-        tag = transfers[i].tag ? transfers[i].tag : '9'.repeat(27)
+        tag = transfers[i].tag || '9'.repeat(27)
 
         // Pad for required 27 tryte length
         for (let j = 0; tag.length < 27; j++) {
@@ -305,7 +306,7 @@ export default class Multisig {
      */
     public addSignature(bundleToSign: Bundle, inputAddress: string, keyTrytes: string, callback: Callback) {
         const bundle = bundleToSign
-        const _bundle: Partial<Transaction>[] = []
+        const _bundle: Array<Partial<Transaction>> = []
 
         // Get the security used for the private key
         // 1 security level = 2187 trytes

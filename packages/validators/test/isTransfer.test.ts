@@ -10,6 +10,26 @@ test('isTransfer() returns true for valid transfer.', t => {
     }
 
     t.is(isTransfer(transfer), true, 'isTransfer() should return true for valid transfer.')
+
+    t.is(
+        isTransfer({
+            ...transfer,
+            message: undefined,
+            tag: undefined,
+        }),
+        true,
+        'isTransfer() should return true for valid transfer with undefined optional fields.'
+    )
+
+    t.is(
+        isTransfer({
+            ...transfer,
+            message: '',
+            tag: '',
+        }),
+        true,
+        'isTransfer() should return true for valid transfer with empty optional fields.'
+    )
 })
 
 test('isTransfer() returns false for transfer with invalid address.', t => {

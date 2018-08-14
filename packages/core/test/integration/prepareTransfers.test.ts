@@ -33,7 +33,6 @@ const transfers: ReadonlyArray<Transfer> = [
         address: addChecksum('B'.repeat(81)),
         value: 3,
         tag: 'TAG',
-        message: '',
     },
 ]
 

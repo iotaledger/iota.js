@@ -90,6 +90,86 @@ test('extraJson() parses null.', t => {
     )
 })
 
+test('extractJson() parses numbers', t => {
+    t.is(
+        extractJson(
+            bundleWithEmptyJSON
+                .map(tx => ({
+                    ...tx,
+                    signatureMessageFragment: 'XA' + '9'.repeat(81 * 27 - 2),
+                }))
+                .slice(0, 1)
+        ),
+        3,
+        'extractJson() should parse integers'
+    )
+
+    t.is(
+        extractJson(
+            bundleWithEmptyJSON
+                .map(tx => ({
+                    ...tx,
+                    signatureMessageFragment: 'RAXA' + '9'.repeat(81 * 27 - 2),
+                }))
+                .slice(0, 1)
+        ),
+        -3,
+        'extractJson() should parse negative integers'
+    )
+
+    t.is(
+        extractJson(
+            bundleWithEmptyJSON
+                .map(tx => ({
+                    ...tx,
+                    signatureMessageFragment: 'XASAVAYA' + '9'.repeat(81 * 27 - 8),
+                }))
+                .slice(0, 1)
+        ),
+        3.14,
+        'extractJson() should parse positive floats'
+    )
+
+    t.is(
+        extractJson(
+            bundleWithEmptyJSON
+                .map(tx => ({
+                    ...tx,
+                    signatureMessageFragment: 'PAXASAVAYA' + '9'.repeat(81 * 27 - 10),
+                }))
+                .slice(0, 1)
+        ),
+        3.14,
+        'extractJson() should parse positive floats (with sign)'
+    )
+
+    t.is(
+        extractJson(
+            bundleWithEmptyJSON
+                .map(tx => ({
+                    ...tx,
+                    signatureMessageFragment: 'RAXASAVAYA' + '9'.repeat(81 * 27 - 10),
+                }))
+                .slice(0, 1)
+        ),
+        -3.14,
+        'extractJson() should parse negative floats'
+    )
+
+    t.is(
+        extractJson(
+            bundleWithEmptyJSON
+                .map(tx => ({
+                    ...tx,
+                    signatureMessageFragment: 'VASAWAXATCPAZA' + '9'.repeat(81 * 27 - 14),
+                }))
+                .slice(0, 1)
+        ),
+        123000,
+        'extractJson() should parse exponential'
+    )
+})
+
 test('extractJson() throws error for invalid bundle.', t => {
     t.is(
         t.throws(() => extractJson([]), Error).message,

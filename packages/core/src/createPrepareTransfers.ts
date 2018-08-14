@@ -132,16 +132,16 @@ export const createPrepareTransfers = (provider?: Provider, now: () => number = 
     ): Promise<ReadonlyArray<Trytes>> {
         if (caller !== 'lib') {
             if (options.address) {
+                /* tslint:disable-next-line:no-console */
                 console.warn(
-                    '`options.address` is deprecated and will be removed in v2.0.0. \n' +
-                        'Use `options.remainderAddress` instead.'
+                    '`options.address` is deprecated and will be removed in v2.0.0. Use `options.remainderAddress` instead.'
                 )
             }
 
             if (isTrytes(seed) && seed.length < 81) {
+                /* tslint:disable-next-line:no-console */
                 console.warn(
-                    'WARNING: Seeds with less length than 81 trytes are not secure! \n' +
-                        'Use a random, 81-trytes long seed!'
+                    'WARNING: Seeds with less length than 81 trytes are not secure! Use a random, 81-trytes long seed!'
                 )
             }
         }
@@ -151,7 +151,11 @@ export const createPrepareTransfers = (provider?: Provider, now: () => number = 
                 transactions: [],
                 trytes: [],
                 seed,
-                transfers,
+                transfers: transfers.map(transfer => ({
+                    ...transfer,
+                    message: transfer.message || '',
+                    tag: transfer.tag || '',
+                })),
                 timestamp: Math.floor((typeof now === 'function' ? now() : Date.now()) / 1000),
                 ...getPrepareTransfersOptions(options),
             })
@@ -213,7 +217,7 @@ export const addTransfers = (props: PrepareTransfersProps): PrepareTransfersProp
     return {
         ...props,
         transactions: transfers.reduce((acc, { address, value, tag, message }) => {
-            const length = Math.ceil((message.length || 1) / SIGNATURE_MESSAGE_FRAGMENT_LENGTH)
+            const length = Math.ceil(((message || '').length || 1) / SIGNATURE_MESSAGE_FRAGMENT_LENGTH)
 
             return addEntry(acc, {
                 address: removeChecksum(address),
@@ -224,7 +228,7 @@ export const addTransfers = (props: PrepareTransfersProps): PrepareTransfersProp
                 signatureMessageFragments: Array(length)
                     .fill('')
                     .map((_, i) =>
-                        message.slice(
+                        (message || '').slice(
                             i * SIGNATURE_MESSAGE_FRAGMENT_LENGTH,
                             (i + 1) * SIGNATURE_MESSAGE_FRAGMENT_LENGTH
                         )
