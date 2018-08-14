@@ -1,9 +1,9 @@
 {
-    "name": "@iota/transaction-converter",
+    "name": "@iota/transaction",
     "version": "1.0.0-alpha.1",
-    "description": "Converts transaction trytes to transaction objects and back.",
-    "main": "./out/transaction-converter/src/index.js",
-    "typings": "typings/transaction-converter/src",
+    "description": "Utilities and validators for transactions.",
+    "main": "./out/transaction/src/index.js",
+    "typings": "typings/transaction/src",
     "publishConfig": {
         "access": "public"
     },
@@ -11,16 +11,16 @@
         "prepare": "tsc",
         "test": "tsc && nyc ava",
         "test-ci": "nyc ava",
-        "format": "prettier",
         "docs": "tsc && jsdoc2md --no-cache --plugin dmd-clear -t README_tpl.hbs --files './out/**/*.js' > README.md"
     },
     "contributors": [
         "Dominik Schiener <dom@iota.org> (https://iota.org)",
         "Edward Greve <edward@iota.org> (https://github.com/anyong)",
-        "Chris Dukakis <chris.dukakis@iota.org> (https://github.com/chrisdukakis)"
+        "Chris Dukakis <chris.dukakis@iota.org> (https://github.com/chrisdukakis)",
+        "Umair Sarfraz <umair.sarfraz@iota.org> (https://github.com/laumair)"
     ],
     "ava": {
-        "files": "out/transaction-converter/test/*.test.js",
+        "files": "out/transaction/test/*.test.js",
         "failFast": true,
         "failWithoutAssertions": false,
         "compileEnhancements": false,
@@ -46,9 +46,7 @@
     "dependencies": {
         "@iota/converter": "^1.0.0-alpha.1",
         "@iota/curl": "^1.0.0-alpha.1",
-        "@iota/pad": "^1.0.0-alpha.1",
-        "@iota/validators": "^1.0.0-alpha.1",
-        "@iota/transaction": "^1.0.0-alpha.1"
+        "@iota/validators": "^1.0.0-alpha.1"
     },
     "devDependencies": {
         "@iota/samples": "^1.0.0-alpha.1"
