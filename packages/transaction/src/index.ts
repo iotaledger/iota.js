@@ -142,7 +142,7 @@ export const isTransaction = (tx: any): tx is Transaction =>
     isInteger(tx.value) &&
     isTrytesOfExactLength(tx.obsoleteTag, OBSOLETE_TAG_TRYTES_SIZE) &&
     isInteger(tx.timestamp) &&
-    (isInteger(tx.currentIndex) && tx.currentIndex >= 0) &&
+    (isInteger(tx.currentIndex) && tx.currentIndex >= 0 && tx.currentIndex <= tx.lastIndex) &&
     isInteger(tx.lastIndex) &&
     isHash(tx.bundle) &&
     isHash(tx.trunkTransaction) &&

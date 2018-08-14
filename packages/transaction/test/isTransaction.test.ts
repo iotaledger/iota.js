@@ -101,6 +101,17 @@ test('isTransaction() returns false for transaction with negative currentIndex.'
     )
 })
 
+test('isTransaction() returns false for transaction with currentIndex greater than lastIndex.', t => {
+    t.is(
+        isTransaction({
+            ...transactionObject,
+            currentIndex: 3,
+        }),
+        false,
+        'isTransaction() should return false for transaction with currentIndex greater than lastIndex.'
+    )
+})
+
 test('isTransaction() returns false for transaction with non-integer lastIndex.', t => {
     t.is(
         isTransaction({
