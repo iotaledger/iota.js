@@ -111,7 +111,7 @@ We thank everyone for their contributions. Here is quick guide to get started wi
 3. Bootstrap your environement with:
 
 ```
-yarn run init
+npm run init
 ```
 
 This will install all dependencies, build and link the packages together. iota.js uses [Lerna](https://lernajs.io/) to manage multiple packages. You can re-bootstrap your setup at any point with `lerna bootstrap` command.
@@ -121,17 +121,17 @@ This will install all dependencies, build and link the packages together. iota.j
 Make your changes on a single or across multiple packages and test the system in integration. Run from the _root directory_:
 
 ```
-yarn test
+npm test
 ```
 
-To run tests of specific package just `cd` to the package directory and run `yarn test` from there.
+To run tests of specific package just `cd` to the package directory and run `npm test` from there.
 
 You may also want to configure your editor to build the source uppon save and watch the tests running.
-Once building on save is setup, you can start watching tests with `yarn test --watch` from each package directory.
+Once building on save is setup, you can start watching tests with `npm test --watch` from each package directory.
 
 ### Updating documentation
 
-Please update the documention when needed by editing [`JSDoc`](http://usejsdoc.org) annotations and running `yarn docs` from the _root directory_.
+Please update the documention when needed by editing [`JSDoc`](http://usejsdoc.org) annotations and running `npm run docs` from the _root directory_.
 
 
 ## Reporting Issues
