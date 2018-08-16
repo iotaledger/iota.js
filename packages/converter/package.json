@@ -1,6 +1,6 @@
 {
     "name": "@iota/converter",
-    "version": "1.0.0-alpha.1",
+    "version": "1.0.0-beta.1",
     "description": "Convert values & trytes to trits and back",
     "main": "./out/src/index.js",
     "typings": "typings/src",
@@ -28,13 +28,33 @@
     },
     "nyc": {
         "watermarks": {
-            "functions": [80, 95],
-            "branches": [80, 95],
-            "statements": [80, 95]
+            "functions": [
+                80,
+                95
+            ],
+            "branches": [
+                80,
+                95
+            ],
+            "statements": [
+                80,
+                95
+            ]
         },
-        "include": ["out/src/*.js", "out/test/*.js"]
+        "include": [
+            "out/src/*.js",
+            "out/test/*.js"
+        ]
     },
-    "keywords": ["iota", "tangle", "library", "browser", "javascript", "nodejs", "API"],
+    "keywords": [
+        "iota",
+        "tangle",
+        "library",
+        "browser",
+        "javascript",
+        "nodejs",
+        "API"
+    ],
     "license": "MIT",
     "bugs": {
         "url": "https://github.com/iotaledger/iota.js/issues"
