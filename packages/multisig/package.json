@@ -1,7 +1,7 @@
 {
     "name": "@iota/multisig",
     "version": "1.0.0-alpha.1",
-    "description": "Methods for generating multisig addresses ansd co-signing transactions.",
+    "description": "Methods for generating multisig addresses and co-signing transactions.",
     "main": "./out/multisig/src/index.js",
     "typings": "typings/multisig/src",
     "publishConfig": {
