@@ -216,7 +216,7 @@ addNeighbors(['udp://148.148.148.148:14265'])
 - `INVALID_TRUNK_TRANSACTION`: Invalid `trunkTransaction`
 - `INVALID_BRANCH_TRANSACTION`: Invalid `branchTransaction`
 - `INVALID_MIN_WEIGHT_MAGNITUDE`: Invalid `minWeightMagnitude` argument
-- `INVALID_TRYTES_ARRAY`: Invalid array of trytes
+- `INVALID_TRANSACTION_TRYTES`: Invalid transaction trytes
 - `INVALID_TRANSACTIONS_TO_APPROVE`: Invalid transactions to approve
 - Fetch error  
 
@@ -353,7 +353,7 @@ broadcastTransactions(trytes)
 ### *core*.checkConsistency(transactions, [options], [callback])
 **Fulfil**: <code>boolean</code> Consistency state of given transaction or co-consistency of given transactions.  
 **Reject**: <code>Error</code>
-- `IVNALID_HASH_ARRAY`: Invalid array of hashes
+- `INVALID_TRANSACTION_HASH`: Invalid transaction hash
 - Fetch error
 - Reason for returning `false`, if called with `options.rejectWithReason`  
 
@@ -425,8 +425,11 @@ const isPromotable = ({ hash, attachmentTimestamp }) => (
 ### *core*.findTransactionObjects(query, [callback])
 **Fulfil**: <code>Transaction[]</code> Array of transaction objects  
 **Reject**: <code>Error</code>
-- `INVALID_HASH_ARRAY`: Invalid hashes of addresses, approvees of bundles
-- `INVALID_TAG_ARRAY`: Invalid tags
+- `INVALID_SEARCH_KEY`
+- `INVALID_HASH`: Invalid bundle hash
+- `INVALID_TRANSACTION_HASH`: Invalid approvee transaction hash
+- `INVALID_ADDRESS`: Invalid address
+- `INVALID_TAG`: Invalid tag
 - Fetch error  
 
 | Param | Type | Description |
@@ -469,8 +472,11 @@ findTransactionObjects({ addresses: ['ADR...'] })
 ### *core*.findTransactions(query, [callback])
 **Fulfil**: <code>Hash[]</code> Array of transaction hashes  
 **Reject**: <code>Error</code>
-- `INVALID_HASH_ARRAY`: Invalid hashes of addresses, approvees of bundles
-- `INVALID_TAG_ARRAY`: Invalid tags
+- `INVALID_SEARCH_KEY`
+- `INVALID_HASH`: Invalid bundle hash
+- `INVALID_TRANSACTION_HASH`: Invalid approvee transaction hash
+- `INVALID_ADDRESS`: Invalid address
+- `INVALID_TAG`: Invalid tag
 - Fetch error  
 
 | Param | Type | Description |
@@ -556,7 +562,7 @@ getAccountData(seed, {
 ### *core*.getBalances(addresses, threshold, [callback])
 **Fulfil**: <code>Balances</code> Object with list of `balances` and corresponding `milestone`  
 **Reject**: <code>Error</code>
-- `INVALID_HASH_ARRAY`: Invalid addresses array
+- `INVALID_HASH`: Invalid address
 - `INVALID_THRESHOLD`: Invalid `threshold`
 - Fetch error  
 
@@ -593,7 +599,7 @@ getBalances([address], 100)
 ### *core*.getBundle(tailTransactionHash, [callback])
 **Fulfil**: <code>Transaction[]</code> Bundle as array of transaction objects  
 **Reject**: <code>Error</code>
-- `INVALID_HASH`
+- `INVALID_TRANSACTION_HASH`
 - `INVALID_TAIL_HASH`: Provided transaction is not tail (`currentIndex !== 0`)
 - `INVALID_BUNDLE`: Bundle is syntactically invalid
 - Fetch error  
@@ -630,7 +636,7 @@ getBundle(tail)
 ### *core*.getInclusionStates(transactions, tips, [callback])
 **Fulfil**: <code>boolean[]</code> Array of inclusion state  
 **Reject**: <code>Error</code>
-- `INVALID_HASH_ARRAY`: Invalid `hashes` or `tips`
+- `INVALID_TRANSACTION_HASH`: Invalid `hashes` or `tips`
 - Fetch error  
 
 | Param | Type | Description |
@@ -713,7 +719,7 @@ getInputs(seed, { start: 0, threhold })
 ### *core*.getLatestInclusion(transactions, tips, [callback])
 **Fulfil**: <code>boolean[]</code> List of inclusion states  
 **Reject**: <code>Error</code>
-- `INVALID_HASHES_ARRAY`: Invalid transaction hashes
+- `INVALID_HASH`: Invalid transaction hash
 - Fetch error  
 
 | Param | Type | Description |
@@ -878,7 +884,7 @@ getTips()
 ### *core*.getTransactionObjects(hashes, [callback])
 **Fulfil**: <code>Transaction[]</code> - List of transaction objects  
 **Reject**: <code>Error</code>
-- `INVALID_HASH_ARRAY`
+- `INVALID_TRANSACTION_HASH`
 - Fetch error  
 
 | Param | Type | Description |
@@ -963,7 +969,7 @@ getTransactionsToApprove(depth)
 ### *core*.getTrytes(hashes, [callback])
 **Fulfil**: <code>Trytes[]</code> - Transaction trytes  
 **Reject**: Error{}
-- `INVALID_HASH_ARRAY`: Invalid array of hashes
+- `INVALID_TRANSACTION_HASH`: Invalid hash
 - Fetch error  
 
 | Param | Type | Description |
@@ -1067,9 +1073,10 @@ It is possible to prepare and sign transactions offline, by omitting the provide
 **Reject**: <code>Error</code>
 - `INVALID_SEED`
 - `INVALID_TRANSFER_ARRAY`
-- `INVALID_INPUTS`
+- `INVALID_INPUT`
 - `INVALID_REMAINDER_ADDRESS`
 - `INSUFFICIENT_BALANCE`
+- `NO_INPUTS`
 - `SENDING_BACK_TO_INPUTS`
 - Fetch error, if connected to network  
 
@@ -1145,7 +1152,7 @@ is interruptable through `interrupt` option.
 ### *core*.removeNeighbors(uris, [callback])
 **Fulfil**: <code>number</code> Number of neighbors that were removed  
 **Reject**: <code>Error</code>
-- `INVALID URI`: Invalid uri(s)
+- `INVALID_URI`: Invalid uri
 - Fetch error  
 
 | Param | Type | Description |
@@ -1175,7 +1182,7 @@ This method has temporary effect until your IRI node relaunches.
 **Reject**: <code>Error</code>
 - `INVALID_DEPTH`
 - `INVALID_MIN_WEIGHT_MAGNITUDE`
-- `INVALID_HASH`
+- `INVALID_TRANSACTION_HASH`
 - `INVALID_BUNDLE`
 - Fetch error  
 
@@ -1215,7 +1222,7 @@ replayBundle(tail)
 ### *core*.sendTrytes(trytes, depth, minWeightMagnitude, [reference], [callback])
 **Fulfil**: <code>Transaction[]</code>  Returns list of attached transactions  
 **Reject**: <code>Error</code>
-- `INVALID_TRYTES`
+- `INVALID_TRANSACTION_TRYTES`
 - `INVALID_DEPTH`
 - `INVALID_MIN_WEIGHT_MAGNITUDE`
 - Fetch error, if connected to network  
@@ -1256,7 +1263,7 @@ prepareTransfers(seed, transfers)
 ### *core*.storeAndBroadcast(trytes, [callback])
 **Fulfil**: <code>Trytes[]</code> Attached transaction trytes  
 **Reject**: <code>Error</code>
-- `INVALID_ATTACHED_TRYTES`: Invalid array of attached trytes
+- `INVALID_ATTACHED_TRYTES`: Invalid attached trytes
 - Fetch error  
 
 | Param | Type | Description |
@@ -1287,7 +1294,7 @@ Any transactions stored with this command will eventaully be erased, as a result
 ### *core*.storeTransactions(trytes, [callback])
 **Fullfil**: <code>Trytes[]</code> Attached transaction trytes  
 **Reject**: <code>Error</code>
-- `INVALID_ATTACHED_TRYTES`: Invalid attached trytes array
+- `INVALID_ATTACHED_TRYTES`: Invalid attached trytes
 - Fetch error  
 
 | Param | Type | Description |
@@ -1321,7 +1328,7 @@ Any transactions stored with this command will eventaully be erased, as a result
 ### *core*.traverseBundle(trunkTransaction, [bundle], [callback])
 **Fulfil**: <code>Transaction[]</code> Bundle as array of transaction objects  
 **Reject**: <code>Error</code>
-- `INVALID_HASH`
+- `INVALID_TRANSACTION_HASH`
 - `INVALID_TAIL_HASH`: Provided transaction is not tail (`currentIndex !== 0`)
 - `INVALID_BUNDLE`: Bundle is syntactically invalid
 - Fetch error  

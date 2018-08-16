@@ -22,8 +22,6 @@ yarn add @iota/transaction-converter
 
     * [~asTransactionTrytes(transactions)](#module_transaction-converter..asTransactionTrytes)
 
-    * [~transactionHash(transactionTrits)](#module_transaction-converter..transactionHash)
-
     * [~asTransactionObject(trytes)](#module_transaction-converter..asTransactionObject)
 
     * [~asTransactionObjects([hashes])](#module_transaction-converter..asTransactionObjects)
@@ -42,17 +40,6 @@ yarn add @iota/transaction-converter
 Converts a transaction object or a list of those into transaction trytes.
 
 **Returns**: <code>Trytes</code> \| <code>Array.&lt;Trytes&gt;</code> - Transaction trytes  
-<a name="module_transaction-converter..transactionHash"></a>
-
-### *transaction-converter*~transactionHash(transactionTrits)
-
-| Param | Type | Description |
-| --- | --- | --- |
-| transactionTrits | <code>Int8Array</code> | Int8Array of 8019 transaction trits |
-
-Calculates the transaction hash out of 8019 transaction trits.
-
-**Returns**: <code>Hash</code> - Transaction hash  
 <a name="module_transaction-converter..asTransactionObject"></a>
 
 ### *transaction-converter*~asTransactionObject(trytes)

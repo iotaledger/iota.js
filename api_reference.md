@@ -3,25 +3,41 @@
 <dl>
 <dt><a href="#module_bundle-validator">bundle-validator</a></dt>
 <dd></dd>
+<dt><a href="#module_validators">validators</a></dt>
+<dd></dd>
 <dt><a href="#module_bundle">bundle</a></dt>
 <dd></dd>
 <dt><a href="#module_checksum">checksum</a></dt>
+<dd></dd>
+<dt><a href="#module_validators">validators</a></dt>
 <dd></dd>
 <dt><a href="#module_converter">converter</a></dt>
 <dd></dd>
 <dt><a href="#module_core">core</a></dt>
 <dd></dd>
+<dt><a href="#module_validators">validators</a></dt>
+<dd></dd>
 <dt><a href="#module_extract-json">extract-json</a></dt>
 <dd></dd>
 <dt><a href="#module_http-client">http-client</a></dt>
+<dd></dd>
+<dt><a href="#module_validators">validators</a></dt>
 <dd></dd>
 <dt><a href="#module_multisig">multisig</a></dt>
 <dd></dd>
 <dt><a href="#module_signing">signing</a></dt>
 <dd></dd>
+<dt><a href="#module_validators">validators</a></dt>
+<dd></dd>
 <dt><a href="#module_transaction-converter">transaction-converter</a></dt>
 <dd></dd>
+<dt><a href="#module_validators">validators</a></dt>
+<dd></dd>
+<dt><a href="#module_transaction">transaction</a></dt>
+<dd></dd>
 <dt><a href="#module_unit-converter">unit-converter</a></dt>
+<dd></dd>
+<dt><a href="#module_validators">validators</a></dt>
 <dd></dd>
 <dt><a href="#module_validators">validators</a></dt>
 <dd></dd>
@@ -65,6 +81,1012 @@ Validates all signatures of a bundle.
 
 Checks if a bundle is _syntactically_ valid.
 Validates signatures and overall structure.
+
+<a name="module_validators"></a>
+
+## validators
+
+* [validators](#module_validators)
+
+    * [~isTrytes(trytes, [length])](#module_validators..isTrytes)
+
+    * [~isTrytesOfExactLength(trytes, length)](#module_validators..isTrytesOfExactLength)
+
+    * [~isTrytesOfMaxLength(trytes, length)](#module_validators..isTrytesOfMaxLength)
+
+    * [~isEmpty(hash)](#module_validators..isEmpty)
+
+    * [~isHash(hash)](#module_validators..isHash)
+
+    * [~isInput(address)](#module_validators..isInput)
+
+    * [~isTag(tag)](#module_validators..isTag)
+
+    * [~isTransfer(transfer)](#module_validators..isTransfer)
+
+    * [~isUri(uri)](#module_validators..isUri)
+
+    * [~validate()](#module_validators..validate)
+
+    * [~isTrytes(trytes, [length])](#module_validators..isTrytes)
+
+    * [~isTrytesOfExactLength(trytes, length)](#module_validators..isTrytesOfExactLength)
+
+    * [~isTrytesOfMaxLength(trytes, length)](#module_validators..isTrytesOfMaxLength)
+
+    * [~isEmpty(hash)](#module_validators..isEmpty)
+
+    * [~isHash(hash)](#module_validators..isHash)
+
+    * [~isInput(address)](#module_validators..isInput)
+
+    * [~isTag(tag)](#module_validators..isTag)
+
+    * [~isTransfer(transfer)](#module_validators..isTransfer)
+
+    * [~isUri(uri)](#module_validators..isUri)
+
+    * [~validate()](#module_validators..validate)
+
+    * [~isTrytes(trytes, [length])](#module_validators..isTrytes)
+
+    * [~isTrytesOfExactLength(trytes, length)](#module_validators..isTrytesOfExactLength)
+
+    * [~isTrytesOfMaxLength(trytes, length)](#module_validators..isTrytesOfMaxLength)
+
+    * [~isEmpty(hash)](#module_validators..isEmpty)
+
+    * [~isHash(hash)](#module_validators..isHash)
+
+    * [~isInput(address)](#module_validators..isInput)
+
+    * [~isTag(tag)](#module_validators..isTag)
+
+    * [~isTransfer(transfer)](#module_validators..isTransfer)
+
+    * [~isUri(uri)](#module_validators..isUri)
+
+    * [~validate()](#module_validators..validate)
+
+    * [~isTrytes(trytes, [length])](#module_validators..isTrytes)
+
+    * [~isTrytesOfExactLength(trytes, length)](#module_validators..isTrytesOfExactLength)
+
+    * [~isTrytesOfMaxLength(trytes, length)](#module_validators..isTrytesOfMaxLength)
+
+    * [~isEmpty(hash)](#module_validators..isEmpty)
+
+    * [~isHash(hash)](#module_validators..isHash)
+
+    * [~isInput(address)](#module_validators..isInput)
+
+    * [~isTag(tag)](#module_validators..isTag)
+
+    * [~isTransfer(transfer)](#module_validators..isTransfer)
+
+    * [~isUri(uri)](#module_validators..isUri)
+
+    * [~validate()](#module_validators..validate)
+
+    * [~isTrytes(trytes, [length])](#module_validators..isTrytes)
+
+    * [~isTrytesOfExactLength(trytes, length)](#module_validators..isTrytesOfExactLength)
+
+    * [~isTrytesOfMaxLength(trytes, length)](#module_validators..isTrytesOfMaxLength)
+
+    * [~isEmpty(hash)](#module_validators..isEmpty)
+
+    * [~isHash(hash)](#module_validators..isHash)
+
+    * [~isInput(address)](#module_validators..isInput)
+
+    * [~isTag(tag)](#module_validators..isTag)
+
+    * [~isTransfer(transfer)](#module_validators..isTransfer)
+
+    * [~isUri(uri)](#module_validators..isUri)
+
+    * [~validate()](#module_validators..validate)
+
+    * [~isTrytes(trytes, [length])](#module_validators..isTrytes)
+
+    * [~isTrytesOfExactLength(trytes, length)](#module_validators..isTrytesOfExactLength)
+
+    * [~isTrytesOfMaxLength(trytes, length)](#module_validators..isTrytesOfMaxLength)
+
+    * [~isEmpty(hash)](#module_validators..isEmpty)
+
+    * [~isHash(hash)](#module_validators..isHash)
+
+    * [~isInput(address)](#module_validators..isInput)
+
+    * [~isTag(tag)](#module_validators..isTag)
+
+    * [~isTransfer(transfer)](#module_validators..isTransfer)
+
+    * [~isUri(uri)](#module_validators..isUri)
+
+    * [~validate()](#module_validators..validate)
+
+    * [~isTrytes(trytes, [length])](#module_validators..isTrytes)
+
+    * [~isTrytesOfExactLength(trytes, length)](#module_validators..isTrytesOfExactLength)
+
+    * [~isTrytesOfMaxLength(trytes, length)](#module_validators..isTrytesOfMaxLength)
+
+    * [~isEmpty(hash)](#module_validators..isEmpty)
+
+    * [~isHash(hash)](#module_validators..isHash)
+
+    * [~isInput(address)](#module_validators..isInput)
+
+    * [~isTag(tag)](#module_validators..isTag)
+
+    * [~isTransfer(transfer)](#module_validators..isTransfer)
+
+    * [~isUri(uri)](#module_validators..isUri)
+
+    * [~validate()](#module_validators..validate)
+
+    * [~isAddress(address)](#module_validators..isAddress)
+
+
+<a name="module_validators..isTrytes"></a>
+
+### *validators*~isTrytes(trytes, [length])
+
+| Param | Type | Default |
+| --- | --- | --- |
+| trytes | <code>string</code> |  | 
+| [length] | <code>string</code> \| <code>number</code> | <code>&quot;&#x27;1,&#x27;&quot;</code> | 
+
+Checks if input is correct trytes consisting of [9A-Z]; optionally validate length
+
+<a name="module_validators..isTrytesOfExactLength"></a>
+
+### *validators*~isTrytesOfExactLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isTrytesOfMaxLength"></a>
+
+### *validators*~isTrytesOfMaxLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isEmpty"></a>
+
+### *validators*~isEmpty(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input contains `9`s only.
+
+<a name="module_validators..isHash"></a>
+
+### *validators*~isHash(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input is correct hash (81 trytes) or address with checksum (90 trytes)
+
+<a name="module_validators..isInput"></a>
+
+### *validators*~isInput(address)
+
+| Param | Type |
+| --- | --- |
+| address | <code>string</code> | 
+
+Checks if input is valid input object. Address can be passed with or without checksum.
+It does not validate the checksum.
+
+<a name="module_validators..isTag"></a>
+
+### *validators*~isTag(tag)
+
+| Param | Type |
+| --- | --- |
+| tag | <code>string</code> | 
+
+Checks that input is valid tag trytes.
+
+<a name="module_validators..isTransfer"></a>
+
+### *validators*~isTransfer(transfer)
+
+| Param | Type |
+| --- | --- |
+| transfer | <code>Transfer</code> | 
+
+Checks if input is valid `transfer` object.
+
+<a name="module_validators..isUri"></a>
+
+### *validators*~isUri(uri)
+
+| Param | Type |
+| --- | --- |
+| uri | <code>string</code> | 
+
+Checks that a given `URI` is valid
+
+Valid Examples:
+- `udp://[2001:db8:a0b:12f0::1]:14265`
+- `udp://[2001:db8:a0b:12f0::1]`
+- `udp://8.8.8.8:14265`
+- `udp://domain.com`
+- `udp://domain2.com:14265`
+
+<a name="module_validators..validate"></a>
+
+### *validators*~validate()
+**Throws**:
+
+- <code>Error</code> error
+
+Runs each validator in sequence, and throws on the first occurence of invalid data.
+Validators are passed as arguments and executed in given order.
+You might want place `validate()` in promise chains before operations that require valid inputs,
+taking advantage of built-in promise branching.
+
+**Example**  
+```js
+try {
+  validate([
+    value, // Given value
+    isTrytes, // Validator function
+    'Invalid trytes' // Error message
+  ])
+} catch (err) {
+  console.log(err.message) // 'Invalid trytes'
+}
+```
+<a name="module_validators..isTrytes"></a>
+
+### *validators*~isTrytes(trytes, [length])
+
+| Param | Type | Default |
+| --- | --- | --- |
+| trytes | <code>string</code> |  | 
+| [length] | <code>string</code> \| <code>number</code> | <code>&quot;&#x27;1,&#x27;&quot;</code> | 
+
+Checks if input is correct trytes consisting of [9A-Z]; optionally validate length
+
+<a name="module_validators..isTrytesOfExactLength"></a>
+
+### *validators*~isTrytesOfExactLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isTrytesOfMaxLength"></a>
+
+### *validators*~isTrytesOfMaxLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isEmpty"></a>
+
+### *validators*~isEmpty(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input contains `9`s only.
+
+<a name="module_validators..isHash"></a>
+
+### *validators*~isHash(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input is correct hash (81 trytes) or address with checksum (90 trytes)
+
+<a name="module_validators..isInput"></a>
+
+### *validators*~isInput(address)
+
+| Param | Type |
+| --- | --- |
+| address | <code>string</code> | 
+
+Checks if input is valid input object. Address can be passed with or without checksum.
+It does not validate the checksum.
+
+<a name="module_validators..isTag"></a>
+
+### *validators*~isTag(tag)
+
+| Param | Type |
+| --- | --- |
+| tag | <code>string</code> | 
+
+Checks that input is valid tag trytes.
+
+<a name="module_validators..isTransfer"></a>
+
+### *validators*~isTransfer(transfer)
+
+| Param | Type |
+| --- | --- |
+| transfer | <code>Transfer</code> | 
+
+Checks if input is valid `transfer` object.
+
+<a name="module_validators..isUri"></a>
+
+### *validators*~isUri(uri)
+
+| Param | Type |
+| --- | --- |
+| uri | <code>string</code> | 
+
+Checks that a given `URI` is valid
+
+Valid Examples:
+- `udp://[2001:db8:a0b:12f0::1]:14265`
+- `udp://[2001:db8:a0b:12f0::1]`
+- `udp://8.8.8.8:14265`
+- `udp://domain.com`
+- `udp://domain2.com:14265`
+
+<a name="module_validators..validate"></a>
+
+### *validators*~validate()
+**Throws**:
+
+- <code>Error</code> error
+
+Runs each validator in sequence, and throws on the first occurence of invalid data.
+Validators are passed as arguments and executed in given order.
+You might want place `validate()` in promise chains before operations that require valid inputs,
+taking advantage of built-in promise branching.
+
+**Example**  
+```js
+try {
+  validate([
+    value, // Given value
+    isTrytes, // Validator function
+    'Invalid trytes' // Error message
+  ])
+} catch (err) {
+  console.log(err.message) // 'Invalid trytes'
+}
+```
+<a name="module_validators..isTrytes"></a>
+
+### *validators*~isTrytes(trytes, [length])
+
+| Param | Type | Default |
+| --- | --- | --- |
+| trytes | <code>string</code> |  | 
+| [length] | <code>string</code> \| <code>number</code> | <code>&quot;&#x27;1,&#x27;&quot;</code> | 
+
+Checks if input is correct trytes consisting of [9A-Z]; optionally validate length
+
+<a name="module_validators..isTrytesOfExactLength"></a>
+
+### *validators*~isTrytesOfExactLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isTrytesOfMaxLength"></a>
+
+### *validators*~isTrytesOfMaxLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isEmpty"></a>
+
+### *validators*~isEmpty(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input contains `9`s only.
+
+<a name="module_validators..isHash"></a>
+
+### *validators*~isHash(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input is correct hash (81 trytes) or address with checksum (90 trytes)
+
+<a name="module_validators..isInput"></a>
+
+### *validators*~isInput(address)
+
+| Param | Type |
+| --- | --- |
+| address | <code>string</code> | 
+
+Checks if input is valid input object. Address can be passed with or without checksum.
+It does not validate the checksum.
+
+<a name="module_validators..isTag"></a>
+
+### *validators*~isTag(tag)
+
+| Param | Type |
+| --- | --- |
+| tag | <code>string</code> | 
+
+Checks that input is valid tag trytes.
+
+<a name="module_validators..isTransfer"></a>
+
+### *validators*~isTransfer(transfer)
+
+| Param | Type |
+| --- | --- |
+| transfer | <code>Transfer</code> | 
+
+Checks if input is valid `transfer` object.
+
+<a name="module_validators..isUri"></a>
+
+### *validators*~isUri(uri)
+
+| Param | Type |
+| --- | --- |
+| uri | <code>string</code> | 
+
+Checks that a given `URI` is valid
+
+Valid Examples:
+- `udp://[2001:db8:a0b:12f0::1]:14265`
+- `udp://[2001:db8:a0b:12f0::1]`
+- `udp://8.8.8.8:14265`
+- `udp://domain.com`
+- `udp://domain2.com:14265`
+
+<a name="module_validators..validate"></a>
+
+### *validators*~validate()
+**Throws**:
+
+- <code>Error</code> error
+
+Runs each validator in sequence, and throws on the first occurence of invalid data.
+Validators are passed as arguments and executed in given order.
+You might want place `validate()` in promise chains before operations that require valid inputs,
+taking advantage of built-in promise branching.
+
+**Example**  
+```js
+try {
+  validate([
+    value, // Given value
+    isTrytes, // Validator function
+    'Invalid trytes' // Error message
+  ])
+} catch (err) {
+  console.log(err.message) // 'Invalid trytes'
+}
+```
+<a name="module_validators..isTrytes"></a>
+
+### *validators*~isTrytes(trytes, [length])
+
+| Param | Type | Default |
+| --- | --- | --- |
+| trytes | <code>string</code> |  | 
+| [length] | <code>string</code> \| <code>number</code> | <code>&quot;&#x27;1,&#x27;&quot;</code> | 
+
+Checks if input is correct trytes consisting of [9A-Z]; optionally validate length
+
+<a name="module_validators..isTrytesOfExactLength"></a>
+
+### *validators*~isTrytesOfExactLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isTrytesOfMaxLength"></a>
+
+### *validators*~isTrytesOfMaxLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isEmpty"></a>
+
+### *validators*~isEmpty(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input contains `9`s only.
+
+<a name="module_validators..isHash"></a>
+
+### *validators*~isHash(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input is correct hash (81 trytes) or address with checksum (90 trytes)
+
+<a name="module_validators..isInput"></a>
+
+### *validators*~isInput(address)
+
+| Param | Type |
+| --- | --- |
+| address | <code>string</code> | 
+
+Checks if input is valid input object. Address can be passed with or without checksum.
+It does not validate the checksum.
+
+<a name="module_validators..isTag"></a>
+
+### *validators*~isTag(tag)
+
+| Param | Type |
+| --- | --- |
+| tag | <code>string</code> | 
+
+Checks that input is valid tag trytes.
+
+<a name="module_validators..isTransfer"></a>
+
+### *validators*~isTransfer(transfer)
+
+| Param | Type |
+| --- | --- |
+| transfer | <code>Transfer</code> | 
+
+Checks if input is valid `transfer` object.
+
+<a name="module_validators..isUri"></a>
+
+### *validators*~isUri(uri)
+
+| Param | Type |
+| --- | --- |
+| uri | <code>string</code> | 
+
+Checks that a given `URI` is valid
+
+Valid Examples:
+- `udp://[2001:db8:a0b:12f0::1]:14265`
+- `udp://[2001:db8:a0b:12f0::1]`
+- `udp://8.8.8.8:14265`
+- `udp://domain.com`
+- `udp://domain2.com:14265`
+
+<a name="module_validators..validate"></a>
+
+### *validators*~validate()
+**Throws**:
+
+- <code>Error</code> error
+
+Runs each validator in sequence, and throws on the first occurence of invalid data.
+Validators are passed as arguments and executed in given order.
+You might want place `validate()` in promise chains before operations that require valid inputs,
+taking advantage of built-in promise branching.
+
+**Example**  
+```js
+try {
+  validate([
+    value, // Given value
+    isTrytes, // Validator function
+    'Invalid trytes' // Error message
+  ])
+} catch (err) {
+  console.log(err.message) // 'Invalid trytes'
+}
+```
+<a name="module_validators..isTrytes"></a>
+
+### *validators*~isTrytes(trytes, [length])
+
+| Param | Type | Default |
+| --- | --- | --- |
+| trytes | <code>string</code> |  | 
+| [length] | <code>string</code> \| <code>number</code> | <code>&quot;&#x27;1,&#x27;&quot;</code> | 
+
+Checks if input is correct trytes consisting of [9A-Z]; optionally validate length
+
+<a name="module_validators..isTrytesOfExactLength"></a>
+
+### *validators*~isTrytesOfExactLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isTrytesOfMaxLength"></a>
+
+### *validators*~isTrytesOfMaxLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isEmpty"></a>
+
+### *validators*~isEmpty(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input contains `9`s only.
+
+<a name="module_validators..isHash"></a>
+
+### *validators*~isHash(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input is correct hash (81 trytes) or address with checksum (90 trytes)
+
+<a name="module_validators..isInput"></a>
+
+### *validators*~isInput(address)
+
+| Param | Type |
+| --- | --- |
+| address | <code>string</code> | 
+
+Checks if input is valid input object. Address can be passed with or without checksum.
+It does not validate the checksum.
+
+<a name="module_validators..isTag"></a>
+
+### *validators*~isTag(tag)
+
+| Param | Type |
+| --- | --- |
+| tag | <code>string</code> | 
+
+Checks that input is valid tag trytes.
+
+<a name="module_validators..isTransfer"></a>
+
+### *validators*~isTransfer(transfer)
+
+| Param | Type |
+| --- | --- |
+| transfer | <code>Transfer</code> | 
+
+Checks if input is valid `transfer` object.
+
+<a name="module_validators..isUri"></a>
+
+### *validators*~isUri(uri)
+
+| Param | Type |
+| --- | --- |
+| uri | <code>string</code> | 
+
+Checks that a given `URI` is valid
+
+Valid Examples:
+- `udp://[2001:db8:a0b:12f0::1]:14265`
+- `udp://[2001:db8:a0b:12f0::1]`
+- `udp://8.8.8.8:14265`
+- `udp://domain.com`
+- `udp://domain2.com:14265`
+
+<a name="module_validators..validate"></a>
+
+### *validators*~validate()
+**Throws**:
+
+- <code>Error</code> error
+
+Runs each validator in sequence, and throws on the first occurence of invalid data.
+Validators are passed as arguments and executed in given order.
+You might want place `validate()` in promise chains before operations that require valid inputs,
+taking advantage of built-in promise branching.
+
+**Example**  
+```js
+try {
+  validate([
+    value, // Given value
+    isTrytes, // Validator function
+    'Invalid trytes' // Error message
+  ])
+} catch (err) {
+  console.log(err.message) // 'Invalid trytes'
+}
+```
+<a name="module_validators..isTrytes"></a>
+
+### *validators*~isTrytes(trytes, [length])
+
+| Param | Type | Default |
+| --- | --- | --- |
+| trytes | <code>string</code> |  | 
+| [length] | <code>string</code> \| <code>number</code> | <code>&quot;&#x27;1,&#x27;&quot;</code> | 
+
+Checks if input is correct trytes consisting of [9A-Z]; optionally validate length
+
+<a name="module_validators..isTrytesOfExactLength"></a>
+
+### *validators*~isTrytesOfExactLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isTrytesOfMaxLength"></a>
+
+### *validators*~isTrytesOfMaxLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isEmpty"></a>
+
+### *validators*~isEmpty(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input contains `9`s only.
+
+<a name="module_validators..isHash"></a>
+
+### *validators*~isHash(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input is correct hash (81 trytes) or address with checksum (90 trytes)
+
+<a name="module_validators..isInput"></a>
+
+### *validators*~isInput(address)
+
+| Param | Type |
+| --- | --- |
+| address | <code>string</code> | 
+
+Checks if input is valid input object. Address can be passed with or without checksum.
+It does not validate the checksum.
+
+<a name="module_validators..isTag"></a>
+
+### *validators*~isTag(tag)
+
+| Param | Type |
+| --- | --- |
+| tag | <code>string</code> | 
+
+Checks that input is valid tag trytes.
+
+<a name="module_validators..isTransfer"></a>
+
+### *validators*~isTransfer(transfer)
+
+| Param | Type |
+| --- | --- |
+| transfer | <code>Transfer</code> | 
+
+Checks if input is valid `transfer` object.
+
+<a name="module_validators..isUri"></a>
+
+### *validators*~isUri(uri)
+
+| Param | Type |
+| --- | --- |
+| uri | <code>string</code> | 
+
+Checks that a given `URI` is valid
+
+Valid Examples:
+- `udp://[2001:db8:a0b:12f0::1]:14265`
+- `udp://[2001:db8:a0b:12f0::1]`
+- `udp://8.8.8.8:14265`
+- `udp://domain.com`
+- `udp://domain2.com:14265`
+
+<a name="module_validators..validate"></a>
+
+### *validators*~validate()
+**Throws**:
+
+- <code>Error</code> error
+
+Runs each validator in sequence, and throws on the first occurence of invalid data.
+Validators are passed as arguments and executed in given order.
+You might want place `validate()` in promise chains before operations that require valid inputs,
+taking advantage of built-in promise branching.
+
+**Example**  
+```js
+try {
+  validate([
+    value, // Given value
+    isTrytes, // Validator function
+    'Invalid trytes' // Error message
+  ])
+} catch (err) {
+  console.log(err.message) // 'Invalid trytes'
+}
+```
+<a name="module_validators..isTrytes"></a>
+
+### *validators*~isTrytes(trytes, [length])
+
+| Param | Type | Default |
+| --- | --- | --- |
+| trytes | <code>string</code> |  | 
+| [length] | <code>string</code> \| <code>number</code> | <code>&quot;&#x27;1,&#x27;&quot;</code> | 
+
+Checks if input is correct trytes consisting of [9A-Z]; optionally validate length
+
+<a name="module_validators..isTrytesOfExactLength"></a>
+
+### *validators*~isTrytesOfExactLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isTrytesOfMaxLength"></a>
+
+### *validators*~isTrytesOfMaxLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isEmpty"></a>
+
+### *validators*~isEmpty(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input contains `9`s only.
+
+<a name="module_validators..isHash"></a>
+
+### *validators*~isHash(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input is correct hash (81 trytes) or address with checksum (90 trytes)
+
+<a name="module_validators..isInput"></a>
+
+### *validators*~isInput(address)
+
+| Param | Type |
+| --- | --- |
+| address | <code>string</code> | 
+
+Checks if input is valid input object. Address can be passed with or without checksum.
+It does not validate the checksum.
+
+<a name="module_validators..isTag"></a>
+
+### *validators*~isTag(tag)
+
+| Param | Type |
+| --- | --- |
+| tag | <code>string</code> | 
+
+Checks that input is valid tag trytes.
+
+<a name="module_validators..isTransfer"></a>
+
+### *validators*~isTransfer(transfer)
+
+| Param | Type |
+| --- | --- |
+| transfer | <code>Transfer</code> | 
+
+Checks if input is valid `transfer` object.
+
+<a name="module_validators..isUri"></a>
+
+### *validators*~isUri(uri)
+
+| Param | Type |
+| --- | --- |
+| uri | <code>string</code> | 
+
+Checks that a given `URI` is valid
+
+Valid Examples:
+- `udp://[2001:db8:a0b:12f0::1]:14265`
+- `udp://[2001:db8:a0b:12f0::1]`
+- `udp://8.8.8.8:14265`
+- `udp://domain.com`
+- `udp://domain2.com:14265`
+
+<a name="module_validators..validate"></a>
+
+### *validators*~validate()
+**Throws**:
+
+- <code>Error</code> error
+
+Runs each validator in sequence, and throws on the first occurence of invalid data.
+Validators are passed as arguments and executed in given order.
+You might want place `validate()` in promise chains before operations that require valid inputs,
+taking advantage of built-in promise branching.
+
+**Example**  
+```js
+try {
+  validate([
+    value, // Given value
+    isTrytes, // Validator function
+    'Invalid trytes' // Error message
+  ])
+} catch (err) {
+  console.log(err.message) // 'Invalid trytes'
+}
+```
+<a name="module_validators..isAddress"></a>
+
+### *validators*~isAddress(address)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| address | <code>string</code> | Address trytes, with checksum |
+
+Checks integrity of given address by validating the checksum.
 
 <a name="module_bundle"></a>
 
@@ -146,6 +1168,1012 @@ Finalizes the bundle by calculating the bundle hash
 | addressWithChecksum | <code>string</code> | 
 
 Validates the checksum of the given address trytes.
+
+<a name="module_validators"></a>
+
+## validators
+
+* [validators](#module_validators)
+
+    * [~isTrytes(trytes, [length])](#module_validators..isTrytes)
+
+    * [~isTrytesOfExactLength(trytes, length)](#module_validators..isTrytesOfExactLength)
+
+    * [~isTrytesOfMaxLength(trytes, length)](#module_validators..isTrytesOfMaxLength)
+
+    * [~isEmpty(hash)](#module_validators..isEmpty)
+
+    * [~isHash(hash)](#module_validators..isHash)
+
+    * [~isInput(address)](#module_validators..isInput)
+
+    * [~isTag(tag)](#module_validators..isTag)
+
+    * [~isTransfer(transfer)](#module_validators..isTransfer)
+
+    * [~isUri(uri)](#module_validators..isUri)
+
+    * [~validate()](#module_validators..validate)
+
+    * [~isTrytes(trytes, [length])](#module_validators..isTrytes)
+
+    * [~isTrytesOfExactLength(trytes, length)](#module_validators..isTrytesOfExactLength)
+
+    * [~isTrytesOfMaxLength(trytes, length)](#module_validators..isTrytesOfMaxLength)
+
+    * [~isEmpty(hash)](#module_validators..isEmpty)
+
+    * [~isHash(hash)](#module_validators..isHash)
+
+    * [~isInput(address)](#module_validators..isInput)
+
+    * [~isTag(tag)](#module_validators..isTag)
+
+    * [~isTransfer(transfer)](#module_validators..isTransfer)
+
+    * [~isUri(uri)](#module_validators..isUri)
+
+    * [~validate()](#module_validators..validate)
+
+    * [~isTrytes(trytes, [length])](#module_validators..isTrytes)
+
+    * [~isTrytesOfExactLength(trytes, length)](#module_validators..isTrytesOfExactLength)
+
+    * [~isTrytesOfMaxLength(trytes, length)](#module_validators..isTrytesOfMaxLength)
+
+    * [~isEmpty(hash)](#module_validators..isEmpty)
+
+    * [~isHash(hash)](#module_validators..isHash)
+
+    * [~isInput(address)](#module_validators..isInput)
+
+    * [~isTag(tag)](#module_validators..isTag)
+
+    * [~isTransfer(transfer)](#module_validators..isTransfer)
+
+    * [~isUri(uri)](#module_validators..isUri)
+
+    * [~validate()](#module_validators..validate)
+
+    * [~isTrytes(trytes, [length])](#module_validators..isTrytes)
+
+    * [~isTrytesOfExactLength(trytes, length)](#module_validators..isTrytesOfExactLength)
+
+    * [~isTrytesOfMaxLength(trytes, length)](#module_validators..isTrytesOfMaxLength)
+
+    * [~isEmpty(hash)](#module_validators..isEmpty)
+
+    * [~isHash(hash)](#module_validators..isHash)
+
+    * [~isInput(address)](#module_validators..isInput)
+
+    * [~isTag(tag)](#module_validators..isTag)
+
+    * [~isTransfer(transfer)](#module_validators..isTransfer)
+
+    * [~isUri(uri)](#module_validators..isUri)
+
+    * [~validate()](#module_validators..validate)
+
+    * [~isTrytes(trytes, [length])](#module_validators..isTrytes)
+
+    * [~isTrytesOfExactLength(trytes, length)](#module_validators..isTrytesOfExactLength)
+
+    * [~isTrytesOfMaxLength(trytes, length)](#module_validators..isTrytesOfMaxLength)
+
+    * [~isEmpty(hash)](#module_validators..isEmpty)
+
+    * [~isHash(hash)](#module_validators..isHash)
+
+    * [~isInput(address)](#module_validators..isInput)
+
+    * [~isTag(tag)](#module_validators..isTag)
+
+    * [~isTransfer(transfer)](#module_validators..isTransfer)
+
+    * [~isUri(uri)](#module_validators..isUri)
+
+    * [~validate()](#module_validators..validate)
+
+    * [~isTrytes(trytes, [length])](#module_validators..isTrytes)
+
+    * [~isTrytesOfExactLength(trytes, length)](#module_validators..isTrytesOfExactLength)
+
+    * [~isTrytesOfMaxLength(trytes, length)](#module_validators..isTrytesOfMaxLength)
+
+    * [~isEmpty(hash)](#module_validators..isEmpty)
+
+    * [~isHash(hash)](#module_validators..isHash)
+
+    * [~isInput(address)](#module_validators..isInput)
+
+    * [~isTag(tag)](#module_validators..isTag)
+
+    * [~isTransfer(transfer)](#module_validators..isTransfer)
+
+    * [~isUri(uri)](#module_validators..isUri)
+
+    * [~validate()](#module_validators..validate)
+
+    * [~isTrytes(trytes, [length])](#module_validators..isTrytes)
+
+    * [~isTrytesOfExactLength(trytes, length)](#module_validators..isTrytesOfExactLength)
+
+    * [~isTrytesOfMaxLength(trytes, length)](#module_validators..isTrytesOfMaxLength)
+
+    * [~isEmpty(hash)](#module_validators..isEmpty)
+
+    * [~isHash(hash)](#module_validators..isHash)
+
+    * [~isInput(address)](#module_validators..isInput)
+
+    * [~isTag(tag)](#module_validators..isTag)
+
+    * [~isTransfer(transfer)](#module_validators..isTransfer)
+
+    * [~isUri(uri)](#module_validators..isUri)
+
+    * [~validate()](#module_validators..validate)
+
+    * [~isAddress(address)](#module_validators..isAddress)
+
+
+<a name="module_validators..isTrytes"></a>
+
+### *validators*~isTrytes(trytes, [length])
+
+| Param | Type | Default |
+| --- | --- | --- |
+| trytes | <code>string</code> |  | 
+| [length] | <code>string</code> \| <code>number</code> | <code>&quot;&#x27;1,&#x27;&quot;</code> | 
+
+Checks if input is correct trytes consisting of [9A-Z]; optionally validate length
+
+<a name="module_validators..isTrytesOfExactLength"></a>
+
+### *validators*~isTrytesOfExactLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isTrytesOfMaxLength"></a>
+
+### *validators*~isTrytesOfMaxLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isEmpty"></a>
+
+### *validators*~isEmpty(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input contains `9`s only.
+
+<a name="module_validators..isHash"></a>
+
+### *validators*~isHash(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input is correct hash (81 trytes) or address with checksum (90 trytes)
+
+<a name="module_validators..isInput"></a>
+
+### *validators*~isInput(address)
+
+| Param | Type |
+| --- | --- |
+| address | <code>string</code> | 
+
+Checks if input is valid input object. Address can be passed with or without checksum.
+It does not validate the checksum.
+
+<a name="module_validators..isTag"></a>
+
+### *validators*~isTag(tag)
+
+| Param | Type |
+| --- | --- |
+| tag | <code>string</code> | 
+
+Checks that input is valid tag trytes.
+
+<a name="module_validators..isTransfer"></a>
+
+### *validators*~isTransfer(transfer)
+
+| Param | Type |
+| --- | --- |
+| transfer | <code>Transfer</code> | 
+
+Checks if input is valid `transfer` object.
+
+<a name="module_validators..isUri"></a>
+
+### *validators*~isUri(uri)
+
+| Param | Type |
+| --- | --- |
+| uri | <code>string</code> | 
+
+Checks that a given `URI` is valid
+
+Valid Examples:
+- `udp://[2001:db8:a0b:12f0::1]:14265`
+- `udp://[2001:db8:a0b:12f0::1]`
+- `udp://8.8.8.8:14265`
+- `udp://domain.com`
+- `udp://domain2.com:14265`
+
+<a name="module_validators..validate"></a>
+
+### *validators*~validate()
+**Throws**:
+
+- <code>Error</code> error
+
+Runs each validator in sequence, and throws on the first occurence of invalid data.
+Validators are passed as arguments and executed in given order.
+You might want place `validate()` in promise chains before operations that require valid inputs,
+taking advantage of built-in promise branching.
+
+**Example**  
+```js
+try {
+  validate([
+    value, // Given value
+    isTrytes, // Validator function
+    'Invalid trytes' // Error message
+  ])
+} catch (err) {
+  console.log(err.message) // 'Invalid trytes'
+}
+```
+<a name="module_validators..isTrytes"></a>
+
+### *validators*~isTrytes(trytes, [length])
+
+| Param | Type | Default |
+| --- | --- | --- |
+| trytes | <code>string</code> |  | 
+| [length] | <code>string</code> \| <code>number</code> | <code>&quot;&#x27;1,&#x27;&quot;</code> | 
+
+Checks if input is correct trytes consisting of [9A-Z]; optionally validate length
+
+<a name="module_validators..isTrytesOfExactLength"></a>
+
+### *validators*~isTrytesOfExactLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isTrytesOfMaxLength"></a>
+
+### *validators*~isTrytesOfMaxLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isEmpty"></a>
+
+### *validators*~isEmpty(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input contains `9`s only.
+
+<a name="module_validators..isHash"></a>
+
+### *validators*~isHash(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input is correct hash (81 trytes) or address with checksum (90 trytes)
+
+<a name="module_validators..isInput"></a>
+
+### *validators*~isInput(address)
+
+| Param | Type |
+| --- | --- |
+| address | <code>string</code> | 
+
+Checks if input is valid input object. Address can be passed with or without checksum.
+It does not validate the checksum.
+
+<a name="module_validators..isTag"></a>
+
+### *validators*~isTag(tag)
+
+| Param | Type |
+| --- | --- |
+| tag | <code>string</code> | 
+
+Checks that input is valid tag trytes.
+
+<a name="module_validators..isTransfer"></a>
+
+### *validators*~isTransfer(transfer)
+
+| Param | Type |
+| --- | --- |
+| transfer | <code>Transfer</code> | 
+
+Checks if input is valid `transfer` object.
+
+<a name="module_validators..isUri"></a>
+
+### *validators*~isUri(uri)
+
+| Param | Type |
+| --- | --- |
+| uri | <code>string</code> | 
+
+Checks that a given `URI` is valid
+
+Valid Examples:
+- `udp://[2001:db8:a0b:12f0::1]:14265`
+- `udp://[2001:db8:a0b:12f0::1]`
+- `udp://8.8.8.8:14265`
+- `udp://domain.com`
+- `udp://domain2.com:14265`
+
+<a name="module_validators..validate"></a>
+
+### *validators*~validate()
+**Throws**:
+
+- <code>Error</code> error
+
+Runs each validator in sequence, and throws on the first occurence of invalid data.
+Validators are passed as arguments and executed in given order.
+You might want place `validate()` in promise chains before operations that require valid inputs,
+taking advantage of built-in promise branching.
+
+**Example**  
+```js
+try {
+  validate([
+    value, // Given value
+    isTrytes, // Validator function
+    'Invalid trytes' // Error message
+  ])
+} catch (err) {
+  console.log(err.message) // 'Invalid trytes'
+}
+```
+<a name="module_validators..isTrytes"></a>
+
+### *validators*~isTrytes(trytes, [length])
+
+| Param | Type | Default |
+| --- | --- | --- |
+| trytes | <code>string</code> |  | 
+| [length] | <code>string</code> \| <code>number</code> | <code>&quot;&#x27;1,&#x27;&quot;</code> | 
+
+Checks if input is correct trytes consisting of [9A-Z]; optionally validate length
+
+<a name="module_validators..isTrytesOfExactLength"></a>
+
+### *validators*~isTrytesOfExactLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isTrytesOfMaxLength"></a>
+
+### *validators*~isTrytesOfMaxLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isEmpty"></a>
+
+### *validators*~isEmpty(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input contains `9`s only.
+
+<a name="module_validators..isHash"></a>
+
+### *validators*~isHash(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input is correct hash (81 trytes) or address with checksum (90 trytes)
+
+<a name="module_validators..isInput"></a>
+
+### *validators*~isInput(address)
+
+| Param | Type |
+| --- | --- |
+| address | <code>string</code> | 
+
+Checks if input is valid input object. Address can be passed with or without checksum.
+It does not validate the checksum.
+
+<a name="module_validators..isTag"></a>
+
+### *validators*~isTag(tag)
+
+| Param | Type |
+| --- | --- |
+| tag | <code>string</code> | 
+
+Checks that input is valid tag trytes.
+
+<a name="module_validators..isTransfer"></a>
+
+### *validators*~isTransfer(transfer)
+
+| Param | Type |
+| --- | --- |
+| transfer | <code>Transfer</code> | 
+
+Checks if input is valid `transfer` object.
+
+<a name="module_validators..isUri"></a>
+
+### *validators*~isUri(uri)
+
+| Param | Type |
+| --- | --- |
+| uri | <code>string</code> | 
+
+Checks that a given `URI` is valid
+
+Valid Examples:
+- `udp://[2001:db8:a0b:12f0::1]:14265`
+- `udp://[2001:db8:a0b:12f0::1]`
+- `udp://8.8.8.8:14265`
+- `udp://domain.com`
+- `udp://domain2.com:14265`
+
+<a name="module_validators..validate"></a>
+
+### *validators*~validate()
+**Throws**:
+
+- <code>Error</code> error
+
+Runs each validator in sequence, and throws on the first occurence of invalid data.
+Validators are passed as arguments and executed in given order.
+You might want place `validate()` in promise chains before operations that require valid inputs,
+taking advantage of built-in promise branching.
+
+**Example**  
+```js
+try {
+  validate([
+    value, // Given value
+    isTrytes, // Validator function
+    'Invalid trytes' // Error message
+  ])
+} catch (err) {
+  console.log(err.message) // 'Invalid trytes'
+}
+```
+<a name="module_validators..isTrytes"></a>
+
+### *validators*~isTrytes(trytes, [length])
+
+| Param | Type | Default |
+| --- | --- | --- |
+| trytes | <code>string</code> |  | 
+| [length] | <code>string</code> \| <code>number</code> | <code>&quot;&#x27;1,&#x27;&quot;</code> | 
+
+Checks if input is correct trytes consisting of [9A-Z]; optionally validate length
+
+<a name="module_validators..isTrytesOfExactLength"></a>
+
+### *validators*~isTrytesOfExactLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isTrytesOfMaxLength"></a>
+
+### *validators*~isTrytesOfMaxLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isEmpty"></a>
+
+### *validators*~isEmpty(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input contains `9`s only.
+
+<a name="module_validators..isHash"></a>
+
+### *validators*~isHash(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input is correct hash (81 trytes) or address with checksum (90 trytes)
+
+<a name="module_validators..isInput"></a>
+
+### *validators*~isInput(address)
+
+| Param | Type |
+| --- | --- |
+| address | <code>string</code> | 
+
+Checks if input is valid input object. Address can be passed with or without checksum.
+It does not validate the checksum.
+
+<a name="module_validators..isTag"></a>
+
+### *validators*~isTag(tag)
+
+| Param | Type |
+| --- | --- |
+| tag | <code>string</code> | 
+
+Checks that input is valid tag trytes.
+
+<a name="module_validators..isTransfer"></a>
+
+### *validators*~isTransfer(transfer)
+
+| Param | Type |
+| --- | --- |
+| transfer | <code>Transfer</code> | 
+
+Checks if input is valid `transfer` object.
+
+<a name="module_validators..isUri"></a>
+
+### *validators*~isUri(uri)
+
+| Param | Type |
+| --- | --- |
+| uri | <code>string</code> | 
+
+Checks that a given `URI` is valid
+
+Valid Examples:
+- `udp://[2001:db8:a0b:12f0::1]:14265`
+- `udp://[2001:db8:a0b:12f0::1]`
+- `udp://8.8.8.8:14265`
+- `udp://domain.com`
+- `udp://domain2.com:14265`
+
+<a name="module_validators..validate"></a>
+
+### *validators*~validate()
+**Throws**:
+
+- <code>Error</code> error
+
+Runs each validator in sequence, and throws on the first occurence of invalid data.
+Validators are passed as arguments and executed in given order.
+You might want place `validate()` in promise chains before operations that require valid inputs,
+taking advantage of built-in promise branching.
+
+**Example**  
+```js
+try {
+  validate([
+    value, // Given value
+    isTrytes, // Validator function
+    'Invalid trytes' // Error message
+  ])
+} catch (err) {
+  console.log(err.message) // 'Invalid trytes'
+}
+```
+<a name="module_validators..isTrytes"></a>
+
+### *validators*~isTrytes(trytes, [length])
+
+| Param | Type | Default |
+| --- | --- | --- |
+| trytes | <code>string</code> |  | 
+| [length] | <code>string</code> \| <code>number</code> | <code>&quot;&#x27;1,&#x27;&quot;</code> | 
+
+Checks if input is correct trytes consisting of [9A-Z]; optionally validate length
+
+<a name="module_validators..isTrytesOfExactLength"></a>
+
+### *validators*~isTrytesOfExactLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isTrytesOfMaxLength"></a>
+
+### *validators*~isTrytesOfMaxLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isEmpty"></a>
+
+### *validators*~isEmpty(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input contains `9`s only.
+
+<a name="module_validators..isHash"></a>
+
+### *validators*~isHash(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input is correct hash (81 trytes) or address with checksum (90 trytes)
+
+<a name="module_validators..isInput"></a>
+
+### *validators*~isInput(address)
+
+| Param | Type |
+| --- | --- |
+| address | <code>string</code> | 
+
+Checks if input is valid input object. Address can be passed with or without checksum.
+It does not validate the checksum.
+
+<a name="module_validators..isTag"></a>
+
+### *validators*~isTag(tag)
+
+| Param | Type |
+| --- | --- |
+| tag | <code>string</code> | 
+
+Checks that input is valid tag trytes.
+
+<a name="module_validators..isTransfer"></a>
+
+### *validators*~isTransfer(transfer)
+
+| Param | Type |
+| --- | --- |
+| transfer | <code>Transfer</code> | 
+
+Checks if input is valid `transfer` object.
+
+<a name="module_validators..isUri"></a>
+
+### *validators*~isUri(uri)
+
+| Param | Type |
+| --- | --- |
+| uri | <code>string</code> | 
+
+Checks that a given `URI` is valid
+
+Valid Examples:
+- `udp://[2001:db8:a0b:12f0::1]:14265`
+- `udp://[2001:db8:a0b:12f0::1]`
+- `udp://8.8.8.8:14265`
+- `udp://domain.com`
+- `udp://domain2.com:14265`
+
+<a name="module_validators..validate"></a>
+
+### *validators*~validate()
+**Throws**:
+
+- <code>Error</code> error
+
+Runs each validator in sequence, and throws on the first occurence of invalid data.
+Validators are passed as arguments and executed in given order.
+You might want place `validate()` in promise chains before operations that require valid inputs,
+taking advantage of built-in promise branching.
+
+**Example**  
+```js
+try {
+  validate([
+    value, // Given value
+    isTrytes, // Validator function
+    'Invalid trytes' // Error message
+  ])
+} catch (err) {
+  console.log(err.message) // 'Invalid trytes'
+}
+```
+<a name="module_validators..isTrytes"></a>
+
+### *validators*~isTrytes(trytes, [length])
+
+| Param | Type | Default |
+| --- | --- | --- |
+| trytes | <code>string</code> |  | 
+| [length] | <code>string</code> \| <code>number</code> | <code>&quot;&#x27;1,&#x27;&quot;</code> | 
+
+Checks if input is correct trytes consisting of [9A-Z]; optionally validate length
+
+<a name="module_validators..isTrytesOfExactLength"></a>
+
+### *validators*~isTrytesOfExactLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isTrytesOfMaxLength"></a>
+
+### *validators*~isTrytesOfMaxLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isEmpty"></a>
+
+### *validators*~isEmpty(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input contains `9`s only.
+
+<a name="module_validators..isHash"></a>
+
+### *validators*~isHash(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input is correct hash (81 trytes) or address with checksum (90 trytes)
+
+<a name="module_validators..isInput"></a>
+
+### *validators*~isInput(address)
+
+| Param | Type |
+| --- | --- |
+| address | <code>string</code> | 
+
+Checks if input is valid input object. Address can be passed with or without checksum.
+It does not validate the checksum.
+
+<a name="module_validators..isTag"></a>
+
+### *validators*~isTag(tag)
+
+| Param | Type |
+| --- | --- |
+| tag | <code>string</code> | 
+
+Checks that input is valid tag trytes.
+
+<a name="module_validators..isTransfer"></a>
+
+### *validators*~isTransfer(transfer)
+
+| Param | Type |
+| --- | --- |
+| transfer | <code>Transfer</code> | 
+
+Checks if input is valid `transfer` object.
+
+<a name="module_validators..isUri"></a>
+
+### *validators*~isUri(uri)
+
+| Param | Type |
+| --- | --- |
+| uri | <code>string</code> | 
+
+Checks that a given `URI` is valid
+
+Valid Examples:
+- `udp://[2001:db8:a0b:12f0::1]:14265`
+- `udp://[2001:db8:a0b:12f0::1]`
+- `udp://8.8.8.8:14265`
+- `udp://domain.com`
+- `udp://domain2.com:14265`
+
+<a name="module_validators..validate"></a>
+
+### *validators*~validate()
+**Throws**:
+
+- <code>Error</code> error
+
+Runs each validator in sequence, and throws on the first occurence of invalid data.
+Validators are passed as arguments and executed in given order.
+You might want place `validate()` in promise chains before operations that require valid inputs,
+taking advantage of built-in promise branching.
+
+**Example**  
+```js
+try {
+  validate([
+    value, // Given value
+    isTrytes, // Validator function
+    'Invalid trytes' // Error message
+  ])
+} catch (err) {
+  console.log(err.message) // 'Invalid trytes'
+}
+```
+<a name="module_validators..isTrytes"></a>
+
+### *validators*~isTrytes(trytes, [length])
+
+| Param | Type | Default |
+| --- | --- | --- |
+| trytes | <code>string</code> |  | 
+| [length] | <code>string</code> \| <code>number</code> | <code>&quot;&#x27;1,&#x27;&quot;</code> | 
+
+Checks if input is correct trytes consisting of [9A-Z]; optionally validate length
+
+<a name="module_validators..isTrytesOfExactLength"></a>
+
+### *validators*~isTrytesOfExactLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isTrytesOfMaxLength"></a>
+
+### *validators*~isTrytesOfMaxLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isEmpty"></a>
+
+### *validators*~isEmpty(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input contains `9`s only.
+
+<a name="module_validators..isHash"></a>
+
+### *validators*~isHash(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input is correct hash (81 trytes) or address with checksum (90 trytes)
+
+<a name="module_validators..isInput"></a>
+
+### *validators*~isInput(address)
+
+| Param | Type |
+| --- | --- |
+| address | <code>string</code> | 
+
+Checks if input is valid input object. Address can be passed with or without checksum.
+It does not validate the checksum.
+
+<a name="module_validators..isTag"></a>
+
+### *validators*~isTag(tag)
+
+| Param | Type |
+| --- | --- |
+| tag | <code>string</code> | 
+
+Checks that input is valid tag trytes.
+
+<a name="module_validators..isTransfer"></a>
+
+### *validators*~isTransfer(transfer)
+
+| Param | Type |
+| --- | --- |
+| transfer | <code>Transfer</code> | 
+
+Checks if input is valid `transfer` object.
+
+<a name="module_validators..isUri"></a>
+
+### *validators*~isUri(uri)
+
+| Param | Type |
+| --- | --- |
+| uri | <code>string</code> | 
+
+Checks that a given `URI` is valid
+
+Valid Examples:
+- `udp://[2001:db8:a0b:12f0::1]:14265`
+- `udp://[2001:db8:a0b:12f0::1]`
+- `udp://8.8.8.8:14265`
+- `udp://domain.com`
+- `udp://domain2.com:14265`
+
+<a name="module_validators..validate"></a>
+
+### *validators*~validate()
+**Throws**:
+
+- <code>Error</code> error
+
+Runs each validator in sequence, and throws on the first occurence of invalid data.
+Validators are passed as arguments and executed in given order.
+You might want place `validate()` in promise chains before operations that require valid inputs,
+taking advantage of built-in promise branching.
+
+**Example**  
+```js
+try {
+  validate([
+    value, // Given value
+    isTrytes, // Validator function
+    'Invalid trytes' // Error message
+  ])
+} catch (err) {
+  console.log(err.message) // 'Invalid trytes'
+}
+```
+<a name="module_validators..isAddress"></a>
+
+### *validators*~isAddress(address)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| address | <code>string</code> | Address trytes, with checksum |
+
+Checks integrity of given address by validating the checksum.
 
 <a name="module_converter"></a>
 
@@ -457,7 +2485,7 @@ addNeighbors(['udp://148.148.148.148:14265'])
 - `INVALID_TRUNK_TRANSACTION`: Invalid `trunkTransaction`
 - `INVALID_BRANCH_TRANSACTION`: Invalid `branchTransaction`
 - `INVALID_MIN_WEIGHT_MAGNITUDE`: Invalid `minWeightMagnitude` argument
-- `INVALID_TRYTES_ARRAY`: Invalid array of trytes
+- `INVALID_TRANSACTION_TRYTES`: Invalid transaction trytes
 - `INVALID_TRANSACTIONS_TO_APPROVE`: Invalid transactions to approve
 - Fetch error  
 
@@ -594,7 +2622,7 @@ broadcastTransactions(trytes)
 ### *core*.checkConsistency(transactions, [options], [callback])
 **Fulfil**: <code>boolean</code> Consistency state of given transaction or co-consistency of given transactions.  
 **Reject**: <code>Error</code>
-- `IVNALID_HASH_ARRAY`: Invalid array of hashes
+- `INVALID_TRANSACTION_HASH`: Invalid transaction hash
 - Fetch error
 - Reason for returning `false`, if called with `options.rejectWithReason`  
 
@@ -666,8 +2694,11 @@ const isPromotable = ({ hash, attachmentTimestamp }) => (
 ### *core*.findTransactionObjects(query, [callback])
 **Fulfil**: <code>Transaction[]</code> Array of transaction objects  
 **Reject**: <code>Error</code>
-- `INVALID_HASH_ARRAY`: Invalid hashes of addresses, approvees of bundles
-- `INVALID_TAG_ARRAY`: Invalid tags
+- `INVALID_SEARCH_KEY`
+- `INVALID_HASH`: Invalid bundle hash
+- `INVALID_TRANSACTION_HASH`: Invalid approvee transaction hash
+- `INVALID_ADDRESS`: Invalid address
+- `INVALID_TAG`: Invalid tag
 - Fetch error  
 
 | Param | Type | Description |
@@ -710,8 +2741,11 @@ findTransactionObjects({ addresses: ['ADR...'] })
 ### *core*.findTransactions(query, [callback])
 **Fulfil**: <code>Hash[]</code> Array of transaction hashes  
 **Reject**: <code>Error</code>
-- `INVALID_HASH_ARRAY`: Invalid hashes of addresses, approvees of bundles
-- `INVALID_TAG_ARRAY`: Invalid tags
+- `INVALID_SEARCH_KEY`
+- `INVALID_HASH`: Invalid bundle hash
+- `INVALID_TRANSACTION_HASH`: Invalid approvee transaction hash
+- `INVALID_ADDRESS`: Invalid address
+- `INVALID_TAG`: Invalid tag
 - Fetch error  
 
 | Param | Type | Description |
@@ -797,7 +2831,7 @@ getAccountData(seed, {
 ### *core*.getBalances(addresses, threshold, [callback])
 **Fulfil**: <code>Balances</code> Object with list of `balances` and corresponding `milestone`  
 **Reject**: <code>Error</code>
-- `INVALID_HASH_ARRAY`: Invalid addresses array
+- `INVALID_HASH`: Invalid address
 - `INVALID_THRESHOLD`: Invalid `threshold`
 - Fetch error  
 
@@ -834,7 +2868,7 @@ getBalances([address], 100)
 ### *core*.getBundle(tailTransactionHash, [callback])
 **Fulfil**: <code>Transaction[]</code> Bundle as array of transaction objects  
 **Reject**: <code>Error</code>
-- `INVALID_HASH`
+- `INVALID_TRANSACTION_HASH`
 - `INVALID_TAIL_HASH`: Provided transaction is not tail (`currentIndex !== 0`)
 - `INVALID_BUNDLE`: Bundle is syntactically invalid
 - Fetch error  
@@ -871,7 +2905,7 @@ getBundle(tail)
 ### *core*.getInclusionStates(transactions, tips, [callback])
 **Fulfil**: <code>boolean[]</code> Array of inclusion state  
 **Reject**: <code>Error</code>
-- `INVALID_HASH_ARRAY`: Invalid `hashes` or `tips`
+- `INVALID_TRANSACTION_HASH`: Invalid `hashes` or `tips`
 - Fetch error  
 
 | Param | Type | Description |
@@ -954,7 +2988,7 @@ getInputs(seed, { start: 0, threhold })
 ### *core*.getLatestInclusion(transactions, tips, [callback])
 **Fulfil**: <code>boolean[]</code> List of inclusion states  
 **Reject**: <code>Error</code>
-- `INVALID_HASHES_ARRAY`: Invalid transaction hashes
+- `INVALID_HASH`: Invalid transaction hash
 - Fetch error  
 
 | Param | Type | Description |
@@ -1119,7 +3153,7 @@ getTips()
 ### *core*.getTransactionObjects(hashes, [callback])
 **Fulfil**: <code>Transaction[]</code> - List of transaction objects  
 **Reject**: <code>Error</code>
-- `INVALID_HASH_ARRAY`
+- `INVALID_TRANSACTION_HASH`
 - Fetch error  
 
 | Param | Type | Description |
@@ -1204,7 +3238,7 @@ getTransactionsToApprove(depth)
 ### *core*.getTrytes(hashes, [callback])
 **Fulfil**: <code>Trytes[]</code> - Transaction trytes  
 **Reject**: Error{}
-- `INVALID_HASH_ARRAY`: Invalid array of hashes
+- `INVALID_TRANSACTION_HASH`: Invalid hash
 - Fetch error  
 
 | Param | Type | Description |
@@ -1308,9 +3342,10 @@ It is possible to prepare and sign transactions offline, by omitting the provide
 **Reject**: <code>Error</code>
 - `INVALID_SEED`
 - `INVALID_TRANSFER_ARRAY`
-- `INVALID_INPUTS`
+- `INVALID_INPUT`
 - `INVALID_REMAINDER_ADDRESS`
 - `INSUFFICIENT_BALANCE`
+- `NO_INPUTS`
 - `SENDING_BACK_TO_INPUTS`
 - Fetch error, if connected to network  
 
@@ -1386,7 +3421,7 @@ is interruptable through `interrupt` option.
 ### *core*.removeNeighbors(uris, [callback])
 **Fulfil**: <code>number</code> Number of neighbors that were removed  
 **Reject**: <code>Error</code>
-- `INVALID URI`: Invalid uri(s)
+- `INVALID_URI`: Invalid uri
 - Fetch error  
 
 | Param | Type | Description |
@@ -1416,7 +3451,7 @@ This method has temporary effect until your IRI node relaunches.
 **Reject**: <code>Error</code>
 - `INVALID_DEPTH`
 - `INVALID_MIN_WEIGHT_MAGNITUDE`
-- `INVALID_HASH`
+- `INVALID_TRANSACTION_HASH`
 - `INVALID_BUNDLE`
 - Fetch error  
 
@@ -1456,7 +3491,7 @@ replayBundle(tail)
 ### *core*.sendTrytes(trytes, depth, minWeightMagnitude, [reference], [callback])
 **Fulfil**: <code>Transaction[]</code>  Returns list of attached transactions  
 **Reject**: <code>Error</code>
-- `INVALID_TRYTES`
+- `INVALID_TRANSACTION_TRYTES`
 - `INVALID_DEPTH`
 - `INVALID_MIN_WEIGHT_MAGNITUDE`
 - Fetch error, if connected to network  
@@ -1497,7 +3532,7 @@ prepareTransfers(seed, transfers)
 ### *core*.storeAndBroadcast(trytes, [callback])
 **Fulfil**: <code>Trytes[]</code> Attached transaction trytes  
 **Reject**: <code>Error</code>
-- `INVALID_ATTACHED_TRYTES`: Invalid array of attached trytes
+- `INVALID_ATTACHED_TRYTES`: Invalid attached trytes
 - Fetch error  
 
 | Param | Type | Description |
@@ -1528,7 +3563,7 @@ Any transactions stored with this command will eventaully be erased, as a result
 ### *core*.storeTransactions(trytes, [callback])
 **Fullfil**: <code>Trytes[]</code> Attached transaction trytes  
 **Reject**: <code>Error</code>
-- `INVALID_ATTACHED_TRYTES`: Invalid attached trytes array
+- `INVALID_ATTACHED_TRYTES`: Invalid attached trytes
 - Fetch error  
 
 | Param | Type | Description |
@@ -1562,7 +3597,7 @@ Any transactions stored with this command will eventaully be erased, as a result
 ### *core*.traverseBundle(trunkTransaction, [bundle], [callback])
 **Fulfil**: <code>Transaction[]</code> Bundle as array of transaction objects  
 **Reject**: <code>Error</code>
-- `INVALID_HASH`
+- `INVALID_TRANSACTION_HASH`
 - `INVALID_TAIL_HASH`: Provided transaction is not tail (`currentIndex !== 0`)
 - `INVALID_BUNDLE`: Bundle is syntactically invalid
 - Fetch error  
@@ -1600,6 +3635,1012 @@ traverseBundle(tail)
 Generates an address deterministically, according to the given seed, index and security level.
 
 **Returns**: <code>Hash</code> - Address trytes  
+<a name="module_validators"></a>
+
+## validators
+
+* [validators](#module_validators)
+
+    * [~isTrytes(trytes, [length])](#module_validators..isTrytes)
+
+    * [~isTrytesOfExactLength(trytes, length)](#module_validators..isTrytesOfExactLength)
+
+    * [~isTrytesOfMaxLength(trytes, length)](#module_validators..isTrytesOfMaxLength)
+
+    * [~isEmpty(hash)](#module_validators..isEmpty)
+
+    * [~isHash(hash)](#module_validators..isHash)
+
+    * [~isInput(address)](#module_validators..isInput)
+
+    * [~isTag(tag)](#module_validators..isTag)
+
+    * [~isTransfer(transfer)](#module_validators..isTransfer)
+
+    * [~isUri(uri)](#module_validators..isUri)
+
+    * [~validate()](#module_validators..validate)
+
+    * [~isTrytes(trytes, [length])](#module_validators..isTrytes)
+
+    * [~isTrytesOfExactLength(trytes, length)](#module_validators..isTrytesOfExactLength)
+
+    * [~isTrytesOfMaxLength(trytes, length)](#module_validators..isTrytesOfMaxLength)
+
+    * [~isEmpty(hash)](#module_validators..isEmpty)
+
+    * [~isHash(hash)](#module_validators..isHash)
+
+    * [~isInput(address)](#module_validators..isInput)
+
+    * [~isTag(tag)](#module_validators..isTag)
+
+    * [~isTransfer(transfer)](#module_validators..isTransfer)
+
+    * [~isUri(uri)](#module_validators..isUri)
+
+    * [~validate()](#module_validators..validate)
+
+    * [~isTrytes(trytes, [length])](#module_validators..isTrytes)
+
+    * [~isTrytesOfExactLength(trytes, length)](#module_validators..isTrytesOfExactLength)
+
+    * [~isTrytesOfMaxLength(trytes, length)](#module_validators..isTrytesOfMaxLength)
+
+    * [~isEmpty(hash)](#module_validators..isEmpty)
+
+    * [~isHash(hash)](#module_validators..isHash)
+
+    * [~isInput(address)](#module_validators..isInput)
+
+    * [~isTag(tag)](#module_validators..isTag)
+
+    * [~isTransfer(transfer)](#module_validators..isTransfer)
+
+    * [~isUri(uri)](#module_validators..isUri)
+
+    * [~validate()](#module_validators..validate)
+
+    * [~isTrytes(trytes, [length])](#module_validators..isTrytes)
+
+    * [~isTrytesOfExactLength(trytes, length)](#module_validators..isTrytesOfExactLength)
+
+    * [~isTrytesOfMaxLength(trytes, length)](#module_validators..isTrytesOfMaxLength)
+
+    * [~isEmpty(hash)](#module_validators..isEmpty)
+
+    * [~isHash(hash)](#module_validators..isHash)
+
+    * [~isInput(address)](#module_validators..isInput)
+
+    * [~isTag(tag)](#module_validators..isTag)
+
+    * [~isTransfer(transfer)](#module_validators..isTransfer)
+
+    * [~isUri(uri)](#module_validators..isUri)
+
+    * [~validate()](#module_validators..validate)
+
+    * [~isTrytes(trytes, [length])](#module_validators..isTrytes)
+
+    * [~isTrytesOfExactLength(trytes, length)](#module_validators..isTrytesOfExactLength)
+
+    * [~isTrytesOfMaxLength(trytes, length)](#module_validators..isTrytesOfMaxLength)
+
+    * [~isEmpty(hash)](#module_validators..isEmpty)
+
+    * [~isHash(hash)](#module_validators..isHash)
+
+    * [~isInput(address)](#module_validators..isInput)
+
+    * [~isTag(tag)](#module_validators..isTag)
+
+    * [~isTransfer(transfer)](#module_validators..isTransfer)
+
+    * [~isUri(uri)](#module_validators..isUri)
+
+    * [~validate()](#module_validators..validate)
+
+    * [~isTrytes(trytes, [length])](#module_validators..isTrytes)
+
+    * [~isTrytesOfExactLength(trytes, length)](#module_validators..isTrytesOfExactLength)
+
+    * [~isTrytesOfMaxLength(trytes, length)](#module_validators..isTrytesOfMaxLength)
+
+    * [~isEmpty(hash)](#module_validators..isEmpty)
+
+    * [~isHash(hash)](#module_validators..isHash)
+
+    * [~isInput(address)](#module_validators..isInput)
+
+    * [~isTag(tag)](#module_validators..isTag)
+
+    * [~isTransfer(transfer)](#module_validators..isTransfer)
+
+    * [~isUri(uri)](#module_validators..isUri)
+
+    * [~validate()](#module_validators..validate)
+
+    * [~isTrytes(trytes, [length])](#module_validators..isTrytes)
+
+    * [~isTrytesOfExactLength(trytes, length)](#module_validators..isTrytesOfExactLength)
+
+    * [~isTrytesOfMaxLength(trytes, length)](#module_validators..isTrytesOfMaxLength)
+
+    * [~isEmpty(hash)](#module_validators..isEmpty)
+
+    * [~isHash(hash)](#module_validators..isHash)
+
+    * [~isInput(address)](#module_validators..isInput)
+
+    * [~isTag(tag)](#module_validators..isTag)
+
+    * [~isTransfer(transfer)](#module_validators..isTransfer)
+
+    * [~isUri(uri)](#module_validators..isUri)
+
+    * [~validate()](#module_validators..validate)
+
+    * [~isAddress(address)](#module_validators..isAddress)
+
+
+<a name="module_validators..isTrytes"></a>
+
+### *validators*~isTrytes(trytes, [length])
+
+| Param | Type | Default |
+| --- | --- | --- |
+| trytes | <code>string</code> |  | 
+| [length] | <code>string</code> \| <code>number</code> | <code>&quot;&#x27;1,&#x27;&quot;</code> | 
+
+Checks if input is correct trytes consisting of [9A-Z]; optionally validate length
+
+<a name="module_validators..isTrytesOfExactLength"></a>
+
+### *validators*~isTrytesOfExactLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isTrytesOfMaxLength"></a>
+
+### *validators*~isTrytesOfMaxLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isEmpty"></a>
+
+### *validators*~isEmpty(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input contains `9`s only.
+
+<a name="module_validators..isHash"></a>
+
+### *validators*~isHash(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input is correct hash (81 trytes) or address with checksum (90 trytes)
+
+<a name="module_validators..isInput"></a>
+
+### *validators*~isInput(address)
+
+| Param | Type |
+| --- | --- |
+| address | <code>string</code> | 
+
+Checks if input is valid input object. Address can be passed with or without checksum.
+It does not validate the checksum.
+
+<a name="module_validators..isTag"></a>
+
+### *validators*~isTag(tag)
+
+| Param | Type |
+| --- | --- |
+| tag | <code>string</code> | 
+
+Checks that input is valid tag trytes.
+
+<a name="module_validators..isTransfer"></a>
+
+### *validators*~isTransfer(transfer)
+
+| Param | Type |
+| --- | --- |
+| transfer | <code>Transfer</code> | 
+
+Checks if input is valid `transfer` object.
+
+<a name="module_validators..isUri"></a>
+
+### *validators*~isUri(uri)
+
+| Param | Type |
+| --- | --- |
+| uri | <code>string</code> | 
+
+Checks that a given `URI` is valid
+
+Valid Examples:
+- `udp://[2001:db8:a0b:12f0::1]:14265`
+- `udp://[2001:db8:a0b:12f0::1]`
+- `udp://8.8.8.8:14265`
+- `udp://domain.com`
+- `udp://domain2.com:14265`
+
+<a name="module_validators..validate"></a>
+
+### *validators*~validate()
+**Throws**:
+
+- <code>Error</code> error
+
+Runs each validator in sequence, and throws on the first occurence of invalid data.
+Validators are passed as arguments and executed in given order.
+You might want place `validate()` in promise chains before operations that require valid inputs,
+taking advantage of built-in promise branching.
+
+**Example**  
+```js
+try {
+  validate([
+    value, // Given value
+    isTrytes, // Validator function
+    'Invalid trytes' // Error message
+  ])
+} catch (err) {
+  console.log(err.message) // 'Invalid trytes'
+}
+```
+<a name="module_validators..isTrytes"></a>
+
+### *validators*~isTrytes(trytes, [length])
+
+| Param | Type | Default |
+| --- | --- | --- |
+| trytes | <code>string</code> |  | 
+| [length] | <code>string</code> \| <code>number</code> | <code>&quot;&#x27;1,&#x27;&quot;</code> | 
+
+Checks if input is correct trytes consisting of [9A-Z]; optionally validate length
+
+<a name="module_validators..isTrytesOfExactLength"></a>
+
+### *validators*~isTrytesOfExactLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isTrytesOfMaxLength"></a>
+
+### *validators*~isTrytesOfMaxLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isEmpty"></a>
+
+### *validators*~isEmpty(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input contains `9`s only.
+
+<a name="module_validators..isHash"></a>
+
+### *validators*~isHash(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input is correct hash (81 trytes) or address with checksum (90 trytes)
+
+<a name="module_validators..isInput"></a>
+
+### *validators*~isInput(address)
+
+| Param | Type |
+| --- | --- |
+| address | <code>string</code> | 
+
+Checks if input is valid input object. Address can be passed with or without checksum.
+It does not validate the checksum.
+
+<a name="module_validators..isTag"></a>
+
+### *validators*~isTag(tag)
+
+| Param | Type |
+| --- | --- |
+| tag | <code>string</code> | 
+
+Checks that input is valid tag trytes.
+
+<a name="module_validators..isTransfer"></a>
+
+### *validators*~isTransfer(transfer)
+
+| Param | Type |
+| --- | --- |
+| transfer | <code>Transfer</code> | 
+
+Checks if input is valid `transfer` object.
+
+<a name="module_validators..isUri"></a>
+
+### *validators*~isUri(uri)
+
+| Param | Type |
+| --- | --- |
+| uri | <code>string</code> | 
+
+Checks that a given `URI` is valid
+
+Valid Examples:
+- `udp://[2001:db8:a0b:12f0::1]:14265`
+- `udp://[2001:db8:a0b:12f0::1]`
+- `udp://8.8.8.8:14265`
+- `udp://domain.com`
+- `udp://domain2.com:14265`
+
+<a name="module_validators..validate"></a>
+
+### *validators*~validate()
+**Throws**:
+
+- <code>Error</code> error
+
+Runs each validator in sequence, and throws on the first occurence of invalid data.
+Validators are passed as arguments and executed in given order.
+You might want place `validate()` in promise chains before operations that require valid inputs,
+taking advantage of built-in promise branching.
+
+**Example**  
+```js
+try {
+  validate([
+    value, // Given value
+    isTrytes, // Validator function
+    'Invalid trytes' // Error message
+  ])
+} catch (err) {
+  console.log(err.message) // 'Invalid trytes'
+}
+```
+<a name="module_validators..isTrytes"></a>
+
+### *validators*~isTrytes(trytes, [length])
+
+| Param | Type | Default |
+| --- | --- | --- |
+| trytes | <code>string</code> |  | 
+| [length] | <code>string</code> \| <code>number</code> | <code>&quot;&#x27;1,&#x27;&quot;</code> | 
+
+Checks if input is correct trytes consisting of [9A-Z]; optionally validate length
+
+<a name="module_validators..isTrytesOfExactLength"></a>
+
+### *validators*~isTrytesOfExactLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isTrytesOfMaxLength"></a>
+
+### *validators*~isTrytesOfMaxLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isEmpty"></a>
+
+### *validators*~isEmpty(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input contains `9`s only.
+
+<a name="module_validators..isHash"></a>
+
+### *validators*~isHash(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input is correct hash (81 trytes) or address with checksum (90 trytes)
+
+<a name="module_validators..isInput"></a>
+
+### *validators*~isInput(address)
+
+| Param | Type |
+| --- | --- |
+| address | <code>string</code> | 
+
+Checks if input is valid input object. Address can be passed with or without checksum.
+It does not validate the checksum.
+
+<a name="module_validators..isTag"></a>
+
+### *validators*~isTag(tag)
+
+| Param | Type |
+| --- | --- |
+| tag | <code>string</code> | 
+
+Checks that input is valid tag trytes.
+
+<a name="module_validators..isTransfer"></a>
+
+### *validators*~isTransfer(transfer)
+
+| Param | Type |
+| --- | --- |
+| transfer | <code>Transfer</code> | 
+
+Checks if input is valid `transfer` object.
+
+<a name="module_validators..isUri"></a>
+
+### *validators*~isUri(uri)
+
+| Param | Type |
+| --- | --- |
+| uri | <code>string</code> | 
+
+Checks that a given `URI` is valid
+
+Valid Examples:
+- `udp://[2001:db8:a0b:12f0::1]:14265`
+- `udp://[2001:db8:a0b:12f0::1]`
+- `udp://8.8.8.8:14265`
+- `udp://domain.com`
+- `udp://domain2.com:14265`
+
+<a name="module_validators..validate"></a>
+
+### *validators*~validate()
+**Throws**:
+
+- <code>Error</code> error
+
+Runs each validator in sequence, and throws on the first occurence of invalid data.
+Validators are passed as arguments and executed in given order.
+You might want place `validate()` in promise chains before operations that require valid inputs,
+taking advantage of built-in promise branching.
+
+**Example**  
+```js
+try {
+  validate([
+    value, // Given value
+    isTrytes, // Validator function
+    'Invalid trytes' // Error message
+  ])
+} catch (err) {
+  console.log(err.message) // 'Invalid trytes'
+}
+```
+<a name="module_validators..isTrytes"></a>
+
+### *validators*~isTrytes(trytes, [length])
+
+| Param | Type | Default |
+| --- | --- | --- |
+| trytes | <code>string</code> |  | 
+| [length] | <code>string</code> \| <code>number</code> | <code>&quot;&#x27;1,&#x27;&quot;</code> | 
+
+Checks if input is correct trytes consisting of [9A-Z]; optionally validate length
+
+<a name="module_validators..isTrytesOfExactLength"></a>
+
+### *validators*~isTrytesOfExactLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isTrytesOfMaxLength"></a>
+
+### *validators*~isTrytesOfMaxLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isEmpty"></a>
+
+### *validators*~isEmpty(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input contains `9`s only.
+
+<a name="module_validators..isHash"></a>
+
+### *validators*~isHash(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input is correct hash (81 trytes) or address with checksum (90 trytes)
+
+<a name="module_validators..isInput"></a>
+
+### *validators*~isInput(address)
+
+| Param | Type |
+| --- | --- |
+| address | <code>string</code> | 
+
+Checks if input is valid input object. Address can be passed with or without checksum.
+It does not validate the checksum.
+
+<a name="module_validators..isTag"></a>
+
+### *validators*~isTag(tag)
+
+| Param | Type |
+| --- | --- |
+| tag | <code>string</code> | 
+
+Checks that input is valid tag trytes.
+
+<a name="module_validators..isTransfer"></a>
+
+### *validators*~isTransfer(transfer)
+
+| Param | Type |
+| --- | --- |
+| transfer | <code>Transfer</code> | 
+
+Checks if input is valid `transfer` object.
+
+<a name="module_validators..isUri"></a>
+
+### *validators*~isUri(uri)
+
+| Param | Type |
+| --- | --- |
+| uri | <code>string</code> | 
+
+Checks that a given `URI` is valid
+
+Valid Examples:
+- `udp://[2001:db8:a0b:12f0::1]:14265`
+- `udp://[2001:db8:a0b:12f0::1]`
+- `udp://8.8.8.8:14265`
+- `udp://domain.com`
+- `udp://domain2.com:14265`
+
+<a name="module_validators..validate"></a>
+
+### *validators*~validate()
+**Throws**:
+
+- <code>Error</code> error
+
+Runs each validator in sequence, and throws on the first occurence of invalid data.
+Validators are passed as arguments and executed in given order.
+You might want place `validate()` in promise chains before operations that require valid inputs,
+taking advantage of built-in promise branching.
+
+**Example**  
+```js
+try {
+  validate([
+    value, // Given value
+    isTrytes, // Validator function
+    'Invalid trytes' // Error message
+  ])
+} catch (err) {
+  console.log(err.message) // 'Invalid trytes'
+}
+```
+<a name="module_validators..isTrytes"></a>
+
+### *validators*~isTrytes(trytes, [length])
+
+| Param | Type | Default |
+| --- | --- | --- |
+| trytes | <code>string</code> |  | 
+| [length] | <code>string</code> \| <code>number</code> | <code>&quot;&#x27;1,&#x27;&quot;</code> | 
+
+Checks if input is correct trytes consisting of [9A-Z]; optionally validate length
+
+<a name="module_validators..isTrytesOfExactLength"></a>
+
+### *validators*~isTrytesOfExactLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isTrytesOfMaxLength"></a>
+
+### *validators*~isTrytesOfMaxLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isEmpty"></a>
+
+### *validators*~isEmpty(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input contains `9`s only.
+
+<a name="module_validators..isHash"></a>
+
+### *validators*~isHash(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input is correct hash (81 trytes) or address with checksum (90 trytes)
+
+<a name="module_validators..isInput"></a>
+
+### *validators*~isInput(address)
+
+| Param | Type |
+| --- | --- |
+| address | <code>string</code> | 
+
+Checks if input is valid input object. Address can be passed with or without checksum.
+It does not validate the checksum.
+
+<a name="module_validators..isTag"></a>
+
+### *validators*~isTag(tag)
+
+| Param | Type |
+| --- | --- |
+| tag | <code>string</code> | 
+
+Checks that input is valid tag trytes.
+
+<a name="module_validators..isTransfer"></a>
+
+### *validators*~isTransfer(transfer)
+
+| Param | Type |
+| --- | --- |
+| transfer | <code>Transfer</code> | 
+
+Checks if input is valid `transfer` object.
+
+<a name="module_validators..isUri"></a>
+
+### *validators*~isUri(uri)
+
+| Param | Type |
+| --- | --- |
+| uri | <code>string</code> | 
+
+Checks that a given `URI` is valid
+
+Valid Examples:
+- `udp://[2001:db8:a0b:12f0::1]:14265`
+- `udp://[2001:db8:a0b:12f0::1]`
+- `udp://8.8.8.8:14265`
+- `udp://domain.com`
+- `udp://domain2.com:14265`
+
+<a name="module_validators..validate"></a>
+
+### *validators*~validate()
+**Throws**:
+
+- <code>Error</code> error
+
+Runs each validator in sequence, and throws on the first occurence of invalid data.
+Validators are passed as arguments and executed in given order.
+You might want place `validate()` in promise chains before operations that require valid inputs,
+taking advantage of built-in promise branching.
+
+**Example**  
+```js
+try {
+  validate([
+    value, // Given value
+    isTrytes, // Validator function
+    'Invalid trytes' // Error message
+  ])
+} catch (err) {
+  console.log(err.message) // 'Invalid trytes'
+}
+```
+<a name="module_validators..isTrytes"></a>
+
+### *validators*~isTrytes(trytes, [length])
+
+| Param | Type | Default |
+| --- | --- | --- |
+| trytes | <code>string</code> |  | 
+| [length] | <code>string</code> \| <code>number</code> | <code>&quot;&#x27;1,&#x27;&quot;</code> | 
+
+Checks if input is correct trytes consisting of [9A-Z]; optionally validate length
+
+<a name="module_validators..isTrytesOfExactLength"></a>
+
+### *validators*~isTrytesOfExactLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isTrytesOfMaxLength"></a>
+
+### *validators*~isTrytesOfMaxLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isEmpty"></a>
+
+### *validators*~isEmpty(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input contains `9`s only.
+
+<a name="module_validators..isHash"></a>
+
+### *validators*~isHash(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input is correct hash (81 trytes) or address with checksum (90 trytes)
+
+<a name="module_validators..isInput"></a>
+
+### *validators*~isInput(address)
+
+| Param | Type |
+| --- | --- |
+| address | <code>string</code> | 
+
+Checks if input is valid input object. Address can be passed with or without checksum.
+It does not validate the checksum.
+
+<a name="module_validators..isTag"></a>
+
+### *validators*~isTag(tag)
+
+| Param | Type |
+| --- | --- |
+| tag | <code>string</code> | 
+
+Checks that input is valid tag trytes.
+
+<a name="module_validators..isTransfer"></a>
+
+### *validators*~isTransfer(transfer)
+
+| Param | Type |
+| --- | --- |
+| transfer | <code>Transfer</code> | 
+
+Checks if input is valid `transfer` object.
+
+<a name="module_validators..isUri"></a>
+
+### *validators*~isUri(uri)
+
+| Param | Type |
+| --- | --- |
+| uri | <code>string</code> | 
+
+Checks that a given `URI` is valid
+
+Valid Examples:
+- `udp://[2001:db8:a0b:12f0::1]:14265`
+- `udp://[2001:db8:a0b:12f0::1]`
+- `udp://8.8.8.8:14265`
+- `udp://domain.com`
+- `udp://domain2.com:14265`
+
+<a name="module_validators..validate"></a>
+
+### *validators*~validate()
+**Throws**:
+
+- <code>Error</code> error
+
+Runs each validator in sequence, and throws on the first occurence of invalid data.
+Validators are passed as arguments and executed in given order.
+You might want place `validate()` in promise chains before operations that require valid inputs,
+taking advantage of built-in promise branching.
+
+**Example**  
+```js
+try {
+  validate([
+    value, // Given value
+    isTrytes, // Validator function
+    'Invalid trytes' // Error message
+  ])
+} catch (err) {
+  console.log(err.message) // 'Invalid trytes'
+}
+```
+<a name="module_validators..isTrytes"></a>
+
+### *validators*~isTrytes(trytes, [length])
+
+| Param | Type | Default |
+| --- | --- | --- |
+| trytes | <code>string</code> |  | 
+| [length] | <code>string</code> \| <code>number</code> | <code>&quot;&#x27;1,&#x27;&quot;</code> | 
+
+Checks if input is correct trytes consisting of [9A-Z]; optionally validate length
+
+<a name="module_validators..isTrytesOfExactLength"></a>
+
+### *validators*~isTrytesOfExactLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isTrytesOfMaxLength"></a>
+
+### *validators*~isTrytesOfMaxLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isEmpty"></a>
+
+### *validators*~isEmpty(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input contains `9`s only.
+
+<a name="module_validators..isHash"></a>
+
+### *validators*~isHash(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input is correct hash (81 trytes) or address with checksum (90 trytes)
+
+<a name="module_validators..isInput"></a>
+
+### *validators*~isInput(address)
+
+| Param | Type |
+| --- | --- |
+| address | <code>string</code> | 
+
+Checks if input is valid input object. Address can be passed with or without checksum.
+It does not validate the checksum.
+
+<a name="module_validators..isTag"></a>
+
+### *validators*~isTag(tag)
+
+| Param | Type |
+| --- | --- |
+| tag | <code>string</code> | 
+
+Checks that input is valid tag trytes.
+
+<a name="module_validators..isTransfer"></a>
+
+### *validators*~isTransfer(transfer)
+
+| Param | Type |
+| --- | --- |
+| transfer | <code>Transfer</code> | 
+
+Checks if input is valid `transfer` object.
+
+<a name="module_validators..isUri"></a>
+
+### *validators*~isUri(uri)
+
+| Param | Type |
+| --- | --- |
+| uri | <code>string</code> | 
+
+Checks that a given `URI` is valid
+
+Valid Examples:
+- `udp://[2001:db8:a0b:12f0::1]:14265`
+- `udp://[2001:db8:a0b:12f0::1]`
+- `udp://8.8.8.8:14265`
+- `udp://domain.com`
+- `udp://domain2.com:14265`
+
+<a name="module_validators..validate"></a>
+
+### *validators*~validate()
+**Throws**:
+
+- <code>Error</code> error
+
+Runs each validator in sequence, and throws on the first occurence of invalid data.
+Validators are passed as arguments and executed in given order.
+You might want place `validate()` in promise chains before operations that require valid inputs,
+taking advantage of built-in promise branching.
+
+**Example**  
+```js
+try {
+  validate([
+    value, // Given value
+    isTrytes, // Validator function
+    'Invalid trytes' // Error message
+  ])
+} catch (err) {
+  console.log(err.message) // 'Invalid trytes'
+}
+```
+<a name="module_validators..isAddress"></a>
+
+### *validators*~isAddress(address)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| address | <code>string</code> | Address trytes, with checksum |
+
+Checks integrity of given address by validating the checksum.
+
 <a name="module_extract-json"></a>
 
 ## extract-json
@@ -1708,6 +4749,1012 @@ Sends an http request to a specified host.
 Create an http client to access IRI http API.
 
 **Returns**: Object  
+<a name="module_validators"></a>
+
+## validators
+
+* [validators](#module_validators)
+
+    * [~isTrytes(trytes, [length])](#module_validators..isTrytes)
+
+    * [~isTrytesOfExactLength(trytes, length)](#module_validators..isTrytesOfExactLength)
+
+    * [~isTrytesOfMaxLength(trytes, length)](#module_validators..isTrytesOfMaxLength)
+
+    * [~isEmpty(hash)](#module_validators..isEmpty)
+
+    * [~isHash(hash)](#module_validators..isHash)
+
+    * [~isInput(address)](#module_validators..isInput)
+
+    * [~isTag(tag)](#module_validators..isTag)
+
+    * [~isTransfer(transfer)](#module_validators..isTransfer)
+
+    * [~isUri(uri)](#module_validators..isUri)
+
+    * [~validate()](#module_validators..validate)
+
+    * [~isTrytes(trytes, [length])](#module_validators..isTrytes)
+
+    * [~isTrytesOfExactLength(trytes, length)](#module_validators..isTrytesOfExactLength)
+
+    * [~isTrytesOfMaxLength(trytes, length)](#module_validators..isTrytesOfMaxLength)
+
+    * [~isEmpty(hash)](#module_validators..isEmpty)
+
+    * [~isHash(hash)](#module_validators..isHash)
+
+    * [~isInput(address)](#module_validators..isInput)
+
+    * [~isTag(tag)](#module_validators..isTag)
+
+    * [~isTransfer(transfer)](#module_validators..isTransfer)
+
+    * [~isUri(uri)](#module_validators..isUri)
+
+    * [~validate()](#module_validators..validate)
+
+    * [~isTrytes(trytes, [length])](#module_validators..isTrytes)
+
+    * [~isTrytesOfExactLength(trytes, length)](#module_validators..isTrytesOfExactLength)
+
+    * [~isTrytesOfMaxLength(trytes, length)](#module_validators..isTrytesOfMaxLength)
+
+    * [~isEmpty(hash)](#module_validators..isEmpty)
+
+    * [~isHash(hash)](#module_validators..isHash)
+
+    * [~isInput(address)](#module_validators..isInput)
+
+    * [~isTag(tag)](#module_validators..isTag)
+
+    * [~isTransfer(transfer)](#module_validators..isTransfer)
+
+    * [~isUri(uri)](#module_validators..isUri)
+
+    * [~validate()](#module_validators..validate)
+
+    * [~isTrytes(trytes, [length])](#module_validators..isTrytes)
+
+    * [~isTrytesOfExactLength(trytes, length)](#module_validators..isTrytesOfExactLength)
+
+    * [~isTrytesOfMaxLength(trytes, length)](#module_validators..isTrytesOfMaxLength)
+
+    * [~isEmpty(hash)](#module_validators..isEmpty)
+
+    * [~isHash(hash)](#module_validators..isHash)
+
+    * [~isInput(address)](#module_validators..isInput)
+
+    * [~isTag(tag)](#module_validators..isTag)
+
+    * [~isTransfer(transfer)](#module_validators..isTransfer)
+
+    * [~isUri(uri)](#module_validators..isUri)
+
+    * [~validate()](#module_validators..validate)
+
+    * [~isTrytes(trytes, [length])](#module_validators..isTrytes)
+
+    * [~isTrytesOfExactLength(trytes, length)](#module_validators..isTrytesOfExactLength)
+
+    * [~isTrytesOfMaxLength(trytes, length)](#module_validators..isTrytesOfMaxLength)
+
+    * [~isEmpty(hash)](#module_validators..isEmpty)
+
+    * [~isHash(hash)](#module_validators..isHash)
+
+    * [~isInput(address)](#module_validators..isInput)
+
+    * [~isTag(tag)](#module_validators..isTag)
+
+    * [~isTransfer(transfer)](#module_validators..isTransfer)
+
+    * [~isUri(uri)](#module_validators..isUri)
+
+    * [~validate()](#module_validators..validate)
+
+    * [~isTrytes(trytes, [length])](#module_validators..isTrytes)
+
+    * [~isTrytesOfExactLength(trytes, length)](#module_validators..isTrytesOfExactLength)
+
+    * [~isTrytesOfMaxLength(trytes, length)](#module_validators..isTrytesOfMaxLength)
+
+    * [~isEmpty(hash)](#module_validators..isEmpty)
+
+    * [~isHash(hash)](#module_validators..isHash)
+
+    * [~isInput(address)](#module_validators..isInput)
+
+    * [~isTag(tag)](#module_validators..isTag)
+
+    * [~isTransfer(transfer)](#module_validators..isTransfer)
+
+    * [~isUri(uri)](#module_validators..isUri)
+
+    * [~validate()](#module_validators..validate)
+
+    * [~isTrytes(trytes, [length])](#module_validators..isTrytes)
+
+    * [~isTrytesOfExactLength(trytes, length)](#module_validators..isTrytesOfExactLength)
+
+    * [~isTrytesOfMaxLength(trytes, length)](#module_validators..isTrytesOfMaxLength)
+
+    * [~isEmpty(hash)](#module_validators..isEmpty)
+
+    * [~isHash(hash)](#module_validators..isHash)
+
+    * [~isInput(address)](#module_validators..isInput)
+
+    * [~isTag(tag)](#module_validators..isTag)
+
+    * [~isTransfer(transfer)](#module_validators..isTransfer)
+
+    * [~isUri(uri)](#module_validators..isUri)
+
+    * [~validate()](#module_validators..validate)
+
+    * [~isAddress(address)](#module_validators..isAddress)
+
+
+<a name="module_validators..isTrytes"></a>
+
+### *validators*~isTrytes(trytes, [length])
+
+| Param | Type | Default |
+| --- | --- | --- |
+| trytes | <code>string</code> |  | 
+| [length] | <code>string</code> \| <code>number</code> | <code>&quot;&#x27;1,&#x27;&quot;</code> | 
+
+Checks if input is correct trytes consisting of [9A-Z]; optionally validate length
+
+<a name="module_validators..isTrytesOfExactLength"></a>
+
+### *validators*~isTrytesOfExactLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isTrytesOfMaxLength"></a>
+
+### *validators*~isTrytesOfMaxLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isEmpty"></a>
+
+### *validators*~isEmpty(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input contains `9`s only.
+
+<a name="module_validators..isHash"></a>
+
+### *validators*~isHash(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input is correct hash (81 trytes) or address with checksum (90 trytes)
+
+<a name="module_validators..isInput"></a>
+
+### *validators*~isInput(address)
+
+| Param | Type |
+| --- | --- |
+| address | <code>string</code> | 
+
+Checks if input is valid input object. Address can be passed with or without checksum.
+It does not validate the checksum.
+
+<a name="module_validators..isTag"></a>
+
+### *validators*~isTag(tag)
+
+| Param | Type |
+| --- | --- |
+| tag | <code>string</code> | 
+
+Checks that input is valid tag trytes.
+
+<a name="module_validators..isTransfer"></a>
+
+### *validators*~isTransfer(transfer)
+
+| Param | Type |
+| --- | --- |
+| transfer | <code>Transfer</code> | 
+
+Checks if input is valid `transfer` object.
+
+<a name="module_validators..isUri"></a>
+
+### *validators*~isUri(uri)
+
+| Param | Type |
+| --- | --- |
+| uri | <code>string</code> | 
+
+Checks that a given `URI` is valid
+
+Valid Examples:
+- `udp://[2001:db8:a0b:12f0::1]:14265`
+- `udp://[2001:db8:a0b:12f0::1]`
+- `udp://8.8.8.8:14265`
+- `udp://domain.com`
+- `udp://domain2.com:14265`
+
+<a name="module_validators..validate"></a>
+
+### *validators*~validate()
+**Throws**:
+
+- <code>Error</code> error
+
+Runs each validator in sequence, and throws on the first occurence of invalid data.
+Validators are passed as arguments and executed in given order.
+You might want place `validate()` in promise chains before operations that require valid inputs,
+taking advantage of built-in promise branching.
+
+**Example**  
+```js
+try {
+  validate([
+    value, // Given value
+    isTrytes, // Validator function
+    'Invalid trytes' // Error message
+  ])
+} catch (err) {
+  console.log(err.message) // 'Invalid trytes'
+}
+```
+<a name="module_validators..isTrytes"></a>
+
+### *validators*~isTrytes(trytes, [length])
+
+| Param | Type | Default |
+| --- | --- | --- |
+| trytes | <code>string</code> |  | 
+| [length] | <code>string</code> \| <code>number</code> | <code>&quot;&#x27;1,&#x27;&quot;</code> | 
+
+Checks if input is correct trytes consisting of [9A-Z]; optionally validate length
+
+<a name="module_validators..isTrytesOfExactLength"></a>
+
+### *validators*~isTrytesOfExactLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isTrytesOfMaxLength"></a>
+
+### *validators*~isTrytesOfMaxLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isEmpty"></a>
+
+### *validators*~isEmpty(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input contains `9`s only.
+
+<a name="module_validators..isHash"></a>
+
+### *validators*~isHash(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input is correct hash (81 trytes) or address with checksum (90 trytes)
+
+<a name="module_validators..isInput"></a>
+
+### *validators*~isInput(address)
+
+| Param | Type |
+| --- | --- |
+| address | <code>string</code> | 
+
+Checks if input is valid input object. Address can be passed with or without checksum.
+It does not validate the checksum.
+
+<a name="module_validators..isTag"></a>
+
+### *validators*~isTag(tag)
+
+| Param | Type |
+| --- | --- |
+| tag | <code>string</code> | 
+
+Checks that input is valid tag trytes.
+
+<a name="module_validators..isTransfer"></a>
+
+### *validators*~isTransfer(transfer)
+
+| Param | Type |
+| --- | --- |
+| transfer | <code>Transfer</code> | 
+
+Checks if input is valid `transfer` object.
+
+<a name="module_validators..isUri"></a>
+
+### *validators*~isUri(uri)
+
+| Param | Type |
+| --- | --- |
+| uri | <code>string</code> | 
+
+Checks that a given `URI` is valid
+
+Valid Examples:
+- `udp://[2001:db8:a0b:12f0::1]:14265`
+- `udp://[2001:db8:a0b:12f0::1]`
+- `udp://8.8.8.8:14265`
+- `udp://domain.com`
+- `udp://domain2.com:14265`
+
+<a name="module_validators..validate"></a>
+
+### *validators*~validate()
+**Throws**:
+
+- <code>Error</code> error
+
+Runs each validator in sequence, and throws on the first occurence of invalid data.
+Validators are passed as arguments and executed in given order.
+You might want place `validate()` in promise chains before operations that require valid inputs,
+taking advantage of built-in promise branching.
+
+**Example**  
+```js
+try {
+  validate([
+    value, // Given value
+    isTrytes, // Validator function
+    'Invalid trytes' // Error message
+  ])
+} catch (err) {
+  console.log(err.message) // 'Invalid trytes'
+}
+```
+<a name="module_validators..isTrytes"></a>
+
+### *validators*~isTrytes(trytes, [length])
+
+| Param | Type | Default |
+| --- | --- | --- |
+| trytes | <code>string</code> |  | 
+| [length] | <code>string</code> \| <code>number</code> | <code>&quot;&#x27;1,&#x27;&quot;</code> | 
+
+Checks if input is correct trytes consisting of [9A-Z]; optionally validate length
+
+<a name="module_validators..isTrytesOfExactLength"></a>
+
+### *validators*~isTrytesOfExactLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isTrytesOfMaxLength"></a>
+
+### *validators*~isTrytesOfMaxLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isEmpty"></a>
+
+### *validators*~isEmpty(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input contains `9`s only.
+
+<a name="module_validators..isHash"></a>
+
+### *validators*~isHash(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input is correct hash (81 trytes) or address with checksum (90 trytes)
+
+<a name="module_validators..isInput"></a>
+
+### *validators*~isInput(address)
+
+| Param | Type |
+| --- | --- |
+| address | <code>string</code> | 
+
+Checks if input is valid input object. Address can be passed with or without checksum.
+It does not validate the checksum.
+
+<a name="module_validators..isTag"></a>
+
+### *validators*~isTag(tag)
+
+| Param | Type |
+| --- | --- |
+| tag | <code>string</code> | 
+
+Checks that input is valid tag trytes.
+
+<a name="module_validators..isTransfer"></a>
+
+### *validators*~isTransfer(transfer)
+
+| Param | Type |
+| --- | --- |
+| transfer | <code>Transfer</code> | 
+
+Checks if input is valid `transfer` object.
+
+<a name="module_validators..isUri"></a>
+
+### *validators*~isUri(uri)
+
+| Param | Type |
+| --- | --- |
+| uri | <code>string</code> | 
+
+Checks that a given `URI` is valid
+
+Valid Examples:
+- `udp://[2001:db8:a0b:12f0::1]:14265`
+- `udp://[2001:db8:a0b:12f0::1]`
+- `udp://8.8.8.8:14265`
+- `udp://domain.com`
+- `udp://domain2.com:14265`
+
+<a name="module_validators..validate"></a>
+
+### *validators*~validate()
+**Throws**:
+
+- <code>Error</code> error
+
+Runs each validator in sequence, and throws on the first occurence of invalid data.
+Validators are passed as arguments and executed in given order.
+You might want place `validate()` in promise chains before operations that require valid inputs,
+taking advantage of built-in promise branching.
+
+**Example**  
+```js
+try {
+  validate([
+    value, // Given value
+    isTrytes, // Validator function
+    'Invalid trytes' // Error message
+  ])
+} catch (err) {
+  console.log(err.message) // 'Invalid trytes'
+}
+```
+<a name="module_validators..isTrytes"></a>
+
+### *validators*~isTrytes(trytes, [length])
+
+| Param | Type | Default |
+| --- | --- | --- |
+| trytes | <code>string</code> |  | 
+| [length] | <code>string</code> \| <code>number</code> | <code>&quot;&#x27;1,&#x27;&quot;</code> | 
+
+Checks if input is correct trytes consisting of [9A-Z]; optionally validate length
+
+<a name="module_validators..isTrytesOfExactLength"></a>
+
+### *validators*~isTrytesOfExactLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isTrytesOfMaxLength"></a>
+
+### *validators*~isTrytesOfMaxLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isEmpty"></a>
+
+### *validators*~isEmpty(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input contains `9`s only.
+
+<a name="module_validators..isHash"></a>
+
+### *validators*~isHash(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input is correct hash (81 trytes) or address with checksum (90 trytes)
+
+<a name="module_validators..isInput"></a>
+
+### *validators*~isInput(address)
+
+| Param | Type |
+| --- | --- |
+| address | <code>string</code> | 
+
+Checks if input is valid input object. Address can be passed with or without checksum.
+It does not validate the checksum.
+
+<a name="module_validators..isTag"></a>
+
+### *validators*~isTag(tag)
+
+| Param | Type |
+| --- | --- |
+| tag | <code>string</code> | 
+
+Checks that input is valid tag trytes.
+
+<a name="module_validators..isTransfer"></a>
+
+### *validators*~isTransfer(transfer)
+
+| Param | Type |
+| --- | --- |
+| transfer | <code>Transfer</code> | 
+
+Checks if input is valid `transfer` object.
+
+<a name="module_validators..isUri"></a>
+
+### *validators*~isUri(uri)
+
+| Param | Type |
+| --- | --- |
+| uri | <code>string</code> | 
+
+Checks that a given `URI` is valid
+
+Valid Examples:
+- `udp://[2001:db8:a0b:12f0::1]:14265`
+- `udp://[2001:db8:a0b:12f0::1]`
+- `udp://8.8.8.8:14265`
+- `udp://domain.com`
+- `udp://domain2.com:14265`
+
+<a name="module_validators..validate"></a>
+
+### *validators*~validate()
+**Throws**:
+
+- <code>Error</code> error
+
+Runs each validator in sequence, and throws on the first occurence of invalid data.
+Validators are passed as arguments and executed in given order.
+You might want place `validate()` in promise chains before operations that require valid inputs,
+taking advantage of built-in promise branching.
+
+**Example**  
+```js
+try {
+  validate([
+    value, // Given value
+    isTrytes, // Validator function
+    'Invalid trytes' // Error message
+  ])
+} catch (err) {
+  console.log(err.message) // 'Invalid trytes'
+}
+```
+<a name="module_validators..isTrytes"></a>
+
+### *validators*~isTrytes(trytes, [length])
+
+| Param | Type | Default |
+| --- | --- | --- |
+| trytes | <code>string</code> |  | 
+| [length] | <code>string</code> \| <code>number</code> | <code>&quot;&#x27;1,&#x27;&quot;</code> | 
+
+Checks if input is correct trytes consisting of [9A-Z]; optionally validate length
+
+<a name="module_validators..isTrytesOfExactLength"></a>
+
+### *validators*~isTrytesOfExactLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isTrytesOfMaxLength"></a>
+
+### *validators*~isTrytesOfMaxLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isEmpty"></a>
+
+### *validators*~isEmpty(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input contains `9`s only.
+
+<a name="module_validators..isHash"></a>
+
+### *validators*~isHash(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input is correct hash (81 trytes) or address with checksum (90 trytes)
+
+<a name="module_validators..isInput"></a>
+
+### *validators*~isInput(address)
+
+| Param | Type |
+| --- | --- |
+| address | <code>string</code> | 
+
+Checks if input is valid input object. Address can be passed with or without checksum.
+It does not validate the checksum.
+
+<a name="module_validators..isTag"></a>
+
+### *validators*~isTag(tag)
+
+| Param | Type |
+| --- | --- |
+| tag | <code>string</code> | 
+
+Checks that input is valid tag trytes.
+
+<a name="module_validators..isTransfer"></a>
+
+### *validators*~isTransfer(transfer)
+
+| Param | Type |
+| --- | --- |
+| transfer | <code>Transfer</code> | 
+
+Checks if input is valid `transfer` object.
+
+<a name="module_validators..isUri"></a>
+
+### *validators*~isUri(uri)
+
+| Param | Type |
+| --- | --- |
+| uri | <code>string</code> | 
+
+Checks that a given `URI` is valid
+
+Valid Examples:
+- `udp://[2001:db8:a0b:12f0::1]:14265`
+- `udp://[2001:db8:a0b:12f0::1]`
+- `udp://8.8.8.8:14265`
+- `udp://domain.com`
+- `udp://domain2.com:14265`
+
+<a name="module_validators..validate"></a>
+
+### *validators*~validate()
+**Throws**:
+
+- <code>Error</code> error
+
+Runs each validator in sequence, and throws on the first occurence of invalid data.
+Validators are passed as arguments and executed in given order.
+You might want place `validate()` in promise chains before operations that require valid inputs,
+taking advantage of built-in promise branching.
+
+**Example**  
+```js
+try {
+  validate([
+    value, // Given value
+    isTrytes, // Validator function
+    'Invalid trytes' // Error message
+  ])
+} catch (err) {
+  console.log(err.message) // 'Invalid trytes'
+}
+```
+<a name="module_validators..isTrytes"></a>
+
+### *validators*~isTrytes(trytes, [length])
+
+| Param | Type | Default |
+| --- | --- | --- |
+| trytes | <code>string</code> |  | 
+| [length] | <code>string</code> \| <code>number</code> | <code>&quot;&#x27;1,&#x27;&quot;</code> | 
+
+Checks if input is correct trytes consisting of [9A-Z]; optionally validate length
+
+<a name="module_validators..isTrytesOfExactLength"></a>
+
+### *validators*~isTrytesOfExactLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isTrytesOfMaxLength"></a>
+
+### *validators*~isTrytesOfMaxLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isEmpty"></a>
+
+### *validators*~isEmpty(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input contains `9`s only.
+
+<a name="module_validators..isHash"></a>
+
+### *validators*~isHash(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input is correct hash (81 trytes) or address with checksum (90 trytes)
+
+<a name="module_validators..isInput"></a>
+
+### *validators*~isInput(address)
+
+| Param | Type |
+| --- | --- |
+| address | <code>string</code> | 
+
+Checks if input is valid input object. Address can be passed with or without checksum.
+It does not validate the checksum.
+
+<a name="module_validators..isTag"></a>
+
+### *validators*~isTag(tag)
+
+| Param | Type |
+| --- | --- |
+| tag | <code>string</code> | 
+
+Checks that input is valid tag trytes.
+
+<a name="module_validators..isTransfer"></a>
+
+### *validators*~isTransfer(transfer)
+
+| Param | Type |
+| --- | --- |
+| transfer | <code>Transfer</code> | 
+
+Checks if input is valid `transfer` object.
+
+<a name="module_validators..isUri"></a>
+
+### *validators*~isUri(uri)
+
+| Param | Type |
+| --- | --- |
+| uri | <code>string</code> | 
+
+Checks that a given `URI` is valid
+
+Valid Examples:
+- `udp://[2001:db8:a0b:12f0::1]:14265`
+- `udp://[2001:db8:a0b:12f0::1]`
+- `udp://8.8.8.8:14265`
+- `udp://domain.com`
+- `udp://domain2.com:14265`
+
+<a name="module_validators..validate"></a>
+
+### *validators*~validate()
+**Throws**:
+
+- <code>Error</code> error
+
+Runs each validator in sequence, and throws on the first occurence of invalid data.
+Validators are passed as arguments and executed in given order.
+You might want place `validate()` in promise chains before operations that require valid inputs,
+taking advantage of built-in promise branching.
+
+**Example**  
+```js
+try {
+  validate([
+    value, // Given value
+    isTrytes, // Validator function
+    'Invalid trytes' // Error message
+  ])
+} catch (err) {
+  console.log(err.message) // 'Invalid trytes'
+}
+```
+<a name="module_validators..isTrytes"></a>
+
+### *validators*~isTrytes(trytes, [length])
+
+| Param | Type | Default |
+| --- | --- | --- |
+| trytes | <code>string</code> |  | 
+| [length] | <code>string</code> \| <code>number</code> | <code>&quot;&#x27;1,&#x27;&quot;</code> | 
+
+Checks if input is correct trytes consisting of [9A-Z]; optionally validate length
+
+<a name="module_validators..isTrytesOfExactLength"></a>
+
+### *validators*~isTrytesOfExactLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isTrytesOfMaxLength"></a>
+
+### *validators*~isTrytesOfMaxLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isEmpty"></a>
+
+### *validators*~isEmpty(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input contains `9`s only.
+
+<a name="module_validators..isHash"></a>
+
+### *validators*~isHash(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input is correct hash (81 trytes) or address with checksum (90 trytes)
+
+<a name="module_validators..isInput"></a>
+
+### *validators*~isInput(address)
+
+| Param | Type |
+| --- | --- |
+| address | <code>string</code> | 
+
+Checks if input is valid input object. Address can be passed with or without checksum.
+It does not validate the checksum.
+
+<a name="module_validators..isTag"></a>
+
+### *validators*~isTag(tag)
+
+| Param | Type |
+| --- | --- |
+| tag | <code>string</code> | 
+
+Checks that input is valid tag trytes.
+
+<a name="module_validators..isTransfer"></a>
+
+### *validators*~isTransfer(transfer)
+
+| Param | Type |
+| --- | --- |
+| transfer | <code>Transfer</code> | 
+
+Checks if input is valid `transfer` object.
+
+<a name="module_validators..isUri"></a>
+
+### *validators*~isUri(uri)
+
+| Param | Type |
+| --- | --- |
+| uri | <code>string</code> | 
+
+Checks that a given `URI` is valid
+
+Valid Examples:
+- `udp://[2001:db8:a0b:12f0::1]:14265`
+- `udp://[2001:db8:a0b:12f0::1]`
+- `udp://8.8.8.8:14265`
+- `udp://domain.com`
+- `udp://domain2.com:14265`
+
+<a name="module_validators..validate"></a>
+
+### *validators*~validate()
+**Throws**:
+
+- <code>Error</code> error
+
+Runs each validator in sequence, and throws on the first occurence of invalid data.
+Validators are passed as arguments and executed in given order.
+You might want place `validate()` in promise chains before operations that require valid inputs,
+taking advantage of built-in promise branching.
+
+**Example**  
+```js
+try {
+  validate([
+    value, // Given value
+    isTrytes, // Validator function
+    'Invalid trytes' // Error message
+  ])
+} catch (err) {
+  console.log(err.message) // 'Invalid trytes'
+}
+```
+<a name="module_validators..isAddress"></a>
+
+### *validators*~isAddress(address)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| address | <code>string</code> | Address trytes, with checksum |
+
+Checks integrity of given address by validating the checksum.
+
 <a name="module_multisig"></a>
 
 ## multisig
@@ -1826,6 +5873,1012 @@ Create an http client to access IRI http API.
 Normalizes the bundle hash, with resulting digits summing to zero.
 
 **Returns**: <code>Int8Array</code> - Normalized bundle hash  
+<a name="module_validators"></a>
+
+## validators
+
+* [validators](#module_validators)
+
+    * [~isTrytes(trytes, [length])](#module_validators..isTrytes)
+
+    * [~isTrytesOfExactLength(trytes, length)](#module_validators..isTrytesOfExactLength)
+
+    * [~isTrytesOfMaxLength(trytes, length)](#module_validators..isTrytesOfMaxLength)
+
+    * [~isEmpty(hash)](#module_validators..isEmpty)
+
+    * [~isHash(hash)](#module_validators..isHash)
+
+    * [~isInput(address)](#module_validators..isInput)
+
+    * [~isTag(tag)](#module_validators..isTag)
+
+    * [~isTransfer(transfer)](#module_validators..isTransfer)
+
+    * [~isUri(uri)](#module_validators..isUri)
+
+    * [~validate()](#module_validators..validate)
+
+    * [~isTrytes(trytes, [length])](#module_validators..isTrytes)
+
+    * [~isTrytesOfExactLength(trytes, length)](#module_validators..isTrytesOfExactLength)
+
+    * [~isTrytesOfMaxLength(trytes, length)](#module_validators..isTrytesOfMaxLength)
+
+    * [~isEmpty(hash)](#module_validators..isEmpty)
+
+    * [~isHash(hash)](#module_validators..isHash)
+
+    * [~isInput(address)](#module_validators..isInput)
+
+    * [~isTag(tag)](#module_validators..isTag)
+
+    * [~isTransfer(transfer)](#module_validators..isTransfer)
+
+    * [~isUri(uri)](#module_validators..isUri)
+
+    * [~validate()](#module_validators..validate)
+
+    * [~isTrytes(trytes, [length])](#module_validators..isTrytes)
+
+    * [~isTrytesOfExactLength(trytes, length)](#module_validators..isTrytesOfExactLength)
+
+    * [~isTrytesOfMaxLength(trytes, length)](#module_validators..isTrytesOfMaxLength)
+
+    * [~isEmpty(hash)](#module_validators..isEmpty)
+
+    * [~isHash(hash)](#module_validators..isHash)
+
+    * [~isInput(address)](#module_validators..isInput)
+
+    * [~isTag(tag)](#module_validators..isTag)
+
+    * [~isTransfer(transfer)](#module_validators..isTransfer)
+
+    * [~isUri(uri)](#module_validators..isUri)
+
+    * [~validate()](#module_validators..validate)
+
+    * [~isTrytes(trytes, [length])](#module_validators..isTrytes)
+
+    * [~isTrytesOfExactLength(trytes, length)](#module_validators..isTrytesOfExactLength)
+
+    * [~isTrytesOfMaxLength(trytes, length)](#module_validators..isTrytesOfMaxLength)
+
+    * [~isEmpty(hash)](#module_validators..isEmpty)
+
+    * [~isHash(hash)](#module_validators..isHash)
+
+    * [~isInput(address)](#module_validators..isInput)
+
+    * [~isTag(tag)](#module_validators..isTag)
+
+    * [~isTransfer(transfer)](#module_validators..isTransfer)
+
+    * [~isUri(uri)](#module_validators..isUri)
+
+    * [~validate()](#module_validators..validate)
+
+    * [~isTrytes(trytes, [length])](#module_validators..isTrytes)
+
+    * [~isTrytesOfExactLength(trytes, length)](#module_validators..isTrytesOfExactLength)
+
+    * [~isTrytesOfMaxLength(trytes, length)](#module_validators..isTrytesOfMaxLength)
+
+    * [~isEmpty(hash)](#module_validators..isEmpty)
+
+    * [~isHash(hash)](#module_validators..isHash)
+
+    * [~isInput(address)](#module_validators..isInput)
+
+    * [~isTag(tag)](#module_validators..isTag)
+
+    * [~isTransfer(transfer)](#module_validators..isTransfer)
+
+    * [~isUri(uri)](#module_validators..isUri)
+
+    * [~validate()](#module_validators..validate)
+
+    * [~isTrytes(trytes, [length])](#module_validators..isTrytes)
+
+    * [~isTrytesOfExactLength(trytes, length)](#module_validators..isTrytesOfExactLength)
+
+    * [~isTrytesOfMaxLength(trytes, length)](#module_validators..isTrytesOfMaxLength)
+
+    * [~isEmpty(hash)](#module_validators..isEmpty)
+
+    * [~isHash(hash)](#module_validators..isHash)
+
+    * [~isInput(address)](#module_validators..isInput)
+
+    * [~isTag(tag)](#module_validators..isTag)
+
+    * [~isTransfer(transfer)](#module_validators..isTransfer)
+
+    * [~isUri(uri)](#module_validators..isUri)
+
+    * [~validate()](#module_validators..validate)
+
+    * [~isTrytes(trytes, [length])](#module_validators..isTrytes)
+
+    * [~isTrytesOfExactLength(trytes, length)](#module_validators..isTrytesOfExactLength)
+
+    * [~isTrytesOfMaxLength(trytes, length)](#module_validators..isTrytesOfMaxLength)
+
+    * [~isEmpty(hash)](#module_validators..isEmpty)
+
+    * [~isHash(hash)](#module_validators..isHash)
+
+    * [~isInput(address)](#module_validators..isInput)
+
+    * [~isTag(tag)](#module_validators..isTag)
+
+    * [~isTransfer(transfer)](#module_validators..isTransfer)
+
+    * [~isUri(uri)](#module_validators..isUri)
+
+    * [~validate()](#module_validators..validate)
+
+    * [~isAddress(address)](#module_validators..isAddress)
+
+
+<a name="module_validators..isTrytes"></a>
+
+### *validators*~isTrytes(trytes, [length])
+
+| Param | Type | Default |
+| --- | --- | --- |
+| trytes | <code>string</code> |  | 
+| [length] | <code>string</code> \| <code>number</code> | <code>&quot;&#x27;1,&#x27;&quot;</code> | 
+
+Checks if input is correct trytes consisting of [9A-Z]; optionally validate length
+
+<a name="module_validators..isTrytesOfExactLength"></a>
+
+### *validators*~isTrytesOfExactLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isTrytesOfMaxLength"></a>
+
+### *validators*~isTrytesOfMaxLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isEmpty"></a>
+
+### *validators*~isEmpty(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input contains `9`s only.
+
+<a name="module_validators..isHash"></a>
+
+### *validators*~isHash(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input is correct hash (81 trytes) or address with checksum (90 trytes)
+
+<a name="module_validators..isInput"></a>
+
+### *validators*~isInput(address)
+
+| Param | Type |
+| --- | --- |
+| address | <code>string</code> | 
+
+Checks if input is valid input object. Address can be passed with or without checksum.
+It does not validate the checksum.
+
+<a name="module_validators..isTag"></a>
+
+### *validators*~isTag(tag)
+
+| Param | Type |
+| --- | --- |
+| tag | <code>string</code> | 
+
+Checks that input is valid tag trytes.
+
+<a name="module_validators..isTransfer"></a>
+
+### *validators*~isTransfer(transfer)
+
+| Param | Type |
+| --- | --- |
+| transfer | <code>Transfer</code> | 
+
+Checks if input is valid `transfer` object.
+
+<a name="module_validators..isUri"></a>
+
+### *validators*~isUri(uri)
+
+| Param | Type |
+| --- | --- |
+| uri | <code>string</code> | 
+
+Checks that a given `URI` is valid
+
+Valid Examples:
+- `udp://[2001:db8:a0b:12f0::1]:14265`
+- `udp://[2001:db8:a0b:12f0::1]`
+- `udp://8.8.8.8:14265`
+- `udp://domain.com`
+- `udp://domain2.com:14265`
+
+<a name="module_validators..validate"></a>
+
+### *validators*~validate()
+**Throws**:
+
+- <code>Error</code> error
+
+Runs each validator in sequence, and throws on the first occurence of invalid data.
+Validators are passed as arguments and executed in given order.
+You might want place `validate()` in promise chains before operations that require valid inputs,
+taking advantage of built-in promise branching.
+
+**Example**  
+```js
+try {
+  validate([
+    value, // Given value
+    isTrytes, // Validator function
+    'Invalid trytes' // Error message
+  ])
+} catch (err) {
+  console.log(err.message) // 'Invalid trytes'
+}
+```
+<a name="module_validators..isTrytes"></a>
+
+### *validators*~isTrytes(trytes, [length])
+
+| Param | Type | Default |
+| --- | --- | --- |
+| trytes | <code>string</code> |  | 
+| [length] | <code>string</code> \| <code>number</code> | <code>&quot;&#x27;1,&#x27;&quot;</code> | 
+
+Checks if input is correct trytes consisting of [9A-Z]; optionally validate length
+
+<a name="module_validators..isTrytesOfExactLength"></a>
+
+### *validators*~isTrytesOfExactLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isTrytesOfMaxLength"></a>
+
+### *validators*~isTrytesOfMaxLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isEmpty"></a>
+
+### *validators*~isEmpty(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input contains `9`s only.
+
+<a name="module_validators..isHash"></a>
+
+### *validators*~isHash(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input is correct hash (81 trytes) or address with checksum (90 trytes)
+
+<a name="module_validators..isInput"></a>
+
+### *validators*~isInput(address)
+
+| Param | Type |
+| --- | --- |
+| address | <code>string</code> | 
+
+Checks if input is valid input object. Address can be passed with or without checksum.
+It does not validate the checksum.
+
+<a name="module_validators..isTag"></a>
+
+### *validators*~isTag(tag)
+
+| Param | Type |
+| --- | --- |
+| tag | <code>string</code> | 
+
+Checks that input is valid tag trytes.
+
+<a name="module_validators..isTransfer"></a>
+
+### *validators*~isTransfer(transfer)
+
+| Param | Type |
+| --- | --- |
+| transfer | <code>Transfer</code> | 
+
+Checks if input is valid `transfer` object.
+
+<a name="module_validators..isUri"></a>
+
+### *validators*~isUri(uri)
+
+| Param | Type |
+| --- | --- |
+| uri | <code>string</code> | 
+
+Checks that a given `URI` is valid
+
+Valid Examples:
+- `udp://[2001:db8:a0b:12f0::1]:14265`
+- `udp://[2001:db8:a0b:12f0::1]`
+- `udp://8.8.8.8:14265`
+- `udp://domain.com`
+- `udp://domain2.com:14265`
+
+<a name="module_validators..validate"></a>
+
+### *validators*~validate()
+**Throws**:
+
+- <code>Error</code> error
+
+Runs each validator in sequence, and throws on the first occurence of invalid data.
+Validators are passed as arguments and executed in given order.
+You might want place `validate()` in promise chains before operations that require valid inputs,
+taking advantage of built-in promise branching.
+
+**Example**  
+```js
+try {
+  validate([
+    value, // Given value
+    isTrytes, // Validator function
+    'Invalid trytes' // Error message
+  ])
+} catch (err) {
+  console.log(err.message) // 'Invalid trytes'
+}
+```
+<a name="module_validators..isTrytes"></a>
+
+### *validators*~isTrytes(trytes, [length])
+
+| Param | Type | Default |
+| --- | --- | --- |
+| trytes | <code>string</code> |  | 
+| [length] | <code>string</code> \| <code>number</code> | <code>&quot;&#x27;1,&#x27;&quot;</code> | 
+
+Checks if input is correct trytes consisting of [9A-Z]; optionally validate length
+
+<a name="module_validators..isTrytesOfExactLength"></a>
+
+### *validators*~isTrytesOfExactLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isTrytesOfMaxLength"></a>
+
+### *validators*~isTrytesOfMaxLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isEmpty"></a>
+
+### *validators*~isEmpty(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input contains `9`s only.
+
+<a name="module_validators..isHash"></a>
+
+### *validators*~isHash(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input is correct hash (81 trytes) or address with checksum (90 trytes)
+
+<a name="module_validators..isInput"></a>
+
+### *validators*~isInput(address)
+
+| Param | Type |
+| --- | --- |
+| address | <code>string</code> | 
+
+Checks if input is valid input object. Address can be passed with or without checksum.
+It does not validate the checksum.
+
+<a name="module_validators..isTag"></a>
+
+### *validators*~isTag(tag)
+
+| Param | Type |
+| --- | --- |
+| tag | <code>string</code> | 
+
+Checks that input is valid tag trytes.
+
+<a name="module_validators..isTransfer"></a>
+
+### *validators*~isTransfer(transfer)
+
+| Param | Type |
+| --- | --- |
+| transfer | <code>Transfer</code> | 
+
+Checks if input is valid `transfer` object.
+
+<a name="module_validators..isUri"></a>
+
+### *validators*~isUri(uri)
+
+| Param | Type |
+| --- | --- |
+| uri | <code>string</code> | 
+
+Checks that a given `URI` is valid
+
+Valid Examples:
+- `udp://[2001:db8:a0b:12f0::1]:14265`
+- `udp://[2001:db8:a0b:12f0::1]`
+- `udp://8.8.8.8:14265`
+- `udp://domain.com`
+- `udp://domain2.com:14265`
+
+<a name="module_validators..validate"></a>
+
+### *validators*~validate()
+**Throws**:
+
+- <code>Error</code> error
+
+Runs each validator in sequence, and throws on the first occurence of invalid data.
+Validators are passed as arguments and executed in given order.
+You might want place `validate()` in promise chains before operations that require valid inputs,
+taking advantage of built-in promise branching.
+
+**Example**  
+```js
+try {
+  validate([
+    value, // Given value
+    isTrytes, // Validator function
+    'Invalid trytes' // Error message
+  ])
+} catch (err) {
+  console.log(err.message) // 'Invalid trytes'
+}
+```
+<a name="module_validators..isTrytes"></a>
+
+### *validators*~isTrytes(trytes, [length])
+
+| Param | Type | Default |
+| --- | --- | --- |
+| trytes | <code>string</code> |  | 
+| [length] | <code>string</code> \| <code>number</code> | <code>&quot;&#x27;1,&#x27;&quot;</code> | 
+
+Checks if input is correct trytes consisting of [9A-Z]; optionally validate length
+
+<a name="module_validators..isTrytesOfExactLength"></a>
+
+### *validators*~isTrytesOfExactLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isTrytesOfMaxLength"></a>
+
+### *validators*~isTrytesOfMaxLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isEmpty"></a>
+
+### *validators*~isEmpty(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input contains `9`s only.
+
+<a name="module_validators..isHash"></a>
+
+### *validators*~isHash(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input is correct hash (81 trytes) or address with checksum (90 trytes)
+
+<a name="module_validators..isInput"></a>
+
+### *validators*~isInput(address)
+
+| Param | Type |
+| --- | --- |
+| address | <code>string</code> | 
+
+Checks if input is valid input object. Address can be passed with or without checksum.
+It does not validate the checksum.
+
+<a name="module_validators..isTag"></a>
+
+### *validators*~isTag(tag)
+
+| Param | Type |
+| --- | --- |
+| tag | <code>string</code> | 
+
+Checks that input is valid tag trytes.
+
+<a name="module_validators..isTransfer"></a>
+
+### *validators*~isTransfer(transfer)
+
+| Param | Type |
+| --- | --- |
+| transfer | <code>Transfer</code> | 
+
+Checks if input is valid `transfer` object.
+
+<a name="module_validators..isUri"></a>
+
+### *validators*~isUri(uri)
+
+| Param | Type |
+| --- | --- |
+| uri | <code>string</code> | 
+
+Checks that a given `URI` is valid
+
+Valid Examples:
+- `udp://[2001:db8:a0b:12f0::1]:14265`
+- `udp://[2001:db8:a0b:12f0::1]`
+- `udp://8.8.8.8:14265`
+- `udp://domain.com`
+- `udp://domain2.com:14265`
+
+<a name="module_validators..validate"></a>
+
+### *validators*~validate()
+**Throws**:
+
+- <code>Error</code> error
+
+Runs each validator in sequence, and throws on the first occurence of invalid data.
+Validators are passed as arguments and executed in given order.
+You might want place `validate()` in promise chains before operations that require valid inputs,
+taking advantage of built-in promise branching.
+
+**Example**  
+```js
+try {
+  validate([
+    value, // Given value
+    isTrytes, // Validator function
+    'Invalid trytes' // Error message
+  ])
+} catch (err) {
+  console.log(err.message) // 'Invalid trytes'
+}
+```
+<a name="module_validators..isTrytes"></a>
+
+### *validators*~isTrytes(trytes, [length])
+
+| Param | Type | Default |
+| --- | --- | --- |
+| trytes | <code>string</code> |  | 
+| [length] | <code>string</code> \| <code>number</code> | <code>&quot;&#x27;1,&#x27;&quot;</code> | 
+
+Checks if input is correct trytes consisting of [9A-Z]; optionally validate length
+
+<a name="module_validators..isTrytesOfExactLength"></a>
+
+### *validators*~isTrytesOfExactLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isTrytesOfMaxLength"></a>
+
+### *validators*~isTrytesOfMaxLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isEmpty"></a>
+
+### *validators*~isEmpty(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input contains `9`s only.
+
+<a name="module_validators..isHash"></a>
+
+### *validators*~isHash(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input is correct hash (81 trytes) or address with checksum (90 trytes)
+
+<a name="module_validators..isInput"></a>
+
+### *validators*~isInput(address)
+
+| Param | Type |
+| --- | --- |
+| address | <code>string</code> | 
+
+Checks if input is valid input object. Address can be passed with or without checksum.
+It does not validate the checksum.
+
+<a name="module_validators..isTag"></a>
+
+### *validators*~isTag(tag)
+
+| Param | Type |
+| --- | --- |
+| tag | <code>string</code> | 
+
+Checks that input is valid tag trytes.
+
+<a name="module_validators..isTransfer"></a>
+
+### *validators*~isTransfer(transfer)
+
+| Param | Type |
+| --- | --- |
+| transfer | <code>Transfer</code> | 
+
+Checks if input is valid `transfer` object.
+
+<a name="module_validators..isUri"></a>
+
+### *validators*~isUri(uri)
+
+| Param | Type |
+| --- | --- |
+| uri | <code>string</code> | 
+
+Checks that a given `URI` is valid
+
+Valid Examples:
+- `udp://[2001:db8:a0b:12f0::1]:14265`
+- `udp://[2001:db8:a0b:12f0::1]`
+- `udp://8.8.8.8:14265`
+- `udp://domain.com`
+- `udp://domain2.com:14265`
+
+<a name="module_validators..validate"></a>
+
+### *validators*~validate()
+**Throws**:
+
+- <code>Error</code> error
+
+Runs each validator in sequence, and throws on the first occurence of invalid data.
+Validators are passed as arguments and executed in given order.
+You might want place `validate()` in promise chains before operations that require valid inputs,
+taking advantage of built-in promise branching.
+
+**Example**  
+```js
+try {
+  validate([
+    value, // Given value
+    isTrytes, // Validator function
+    'Invalid trytes' // Error message
+  ])
+} catch (err) {
+  console.log(err.message) // 'Invalid trytes'
+}
+```
+<a name="module_validators..isTrytes"></a>
+
+### *validators*~isTrytes(trytes, [length])
+
+| Param | Type | Default |
+| --- | --- | --- |
+| trytes | <code>string</code> |  | 
+| [length] | <code>string</code> \| <code>number</code> | <code>&quot;&#x27;1,&#x27;&quot;</code> | 
+
+Checks if input is correct trytes consisting of [9A-Z]; optionally validate length
+
+<a name="module_validators..isTrytesOfExactLength"></a>
+
+### *validators*~isTrytesOfExactLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isTrytesOfMaxLength"></a>
+
+### *validators*~isTrytesOfMaxLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isEmpty"></a>
+
+### *validators*~isEmpty(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input contains `9`s only.
+
+<a name="module_validators..isHash"></a>
+
+### *validators*~isHash(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input is correct hash (81 trytes) or address with checksum (90 trytes)
+
+<a name="module_validators..isInput"></a>
+
+### *validators*~isInput(address)
+
+| Param | Type |
+| --- | --- |
+| address | <code>string</code> | 
+
+Checks if input is valid input object. Address can be passed with or without checksum.
+It does not validate the checksum.
+
+<a name="module_validators..isTag"></a>
+
+### *validators*~isTag(tag)
+
+| Param | Type |
+| --- | --- |
+| tag | <code>string</code> | 
+
+Checks that input is valid tag trytes.
+
+<a name="module_validators..isTransfer"></a>
+
+### *validators*~isTransfer(transfer)
+
+| Param | Type |
+| --- | --- |
+| transfer | <code>Transfer</code> | 
+
+Checks if input is valid `transfer` object.
+
+<a name="module_validators..isUri"></a>
+
+### *validators*~isUri(uri)
+
+| Param | Type |
+| --- | --- |
+| uri | <code>string</code> | 
+
+Checks that a given `URI` is valid
+
+Valid Examples:
+- `udp://[2001:db8:a0b:12f0::1]:14265`
+- `udp://[2001:db8:a0b:12f0::1]`
+- `udp://8.8.8.8:14265`
+- `udp://domain.com`
+- `udp://domain2.com:14265`
+
+<a name="module_validators..validate"></a>
+
+### *validators*~validate()
+**Throws**:
+
+- <code>Error</code> error
+
+Runs each validator in sequence, and throws on the first occurence of invalid data.
+Validators are passed as arguments and executed in given order.
+You might want place `validate()` in promise chains before operations that require valid inputs,
+taking advantage of built-in promise branching.
+
+**Example**  
+```js
+try {
+  validate([
+    value, // Given value
+    isTrytes, // Validator function
+    'Invalid trytes' // Error message
+  ])
+} catch (err) {
+  console.log(err.message) // 'Invalid trytes'
+}
+```
+<a name="module_validators..isTrytes"></a>
+
+### *validators*~isTrytes(trytes, [length])
+
+| Param | Type | Default |
+| --- | --- | --- |
+| trytes | <code>string</code> |  | 
+| [length] | <code>string</code> \| <code>number</code> | <code>&quot;&#x27;1,&#x27;&quot;</code> | 
+
+Checks if input is correct trytes consisting of [9A-Z]; optionally validate length
+
+<a name="module_validators..isTrytesOfExactLength"></a>
+
+### *validators*~isTrytesOfExactLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isTrytesOfMaxLength"></a>
+
+### *validators*~isTrytesOfMaxLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isEmpty"></a>
+
+### *validators*~isEmpty(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input contains `9`s only.
+
+<a name="module_validators..isHash"></a>
+
+### *validators*~isHash(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input is correct hash (81 trytes) or address with checksum (90 trytes)
+
+<a name="module_validators..isInput"></a>
+
+### *validators*~isInput(address)
+
+| Param | Type |
+| --- | --- |
+| address | <code>string</code> | 
+
+Checks if input is valid input object. Address can be passed with or without checksum.
+It does not validate the checksum.
+
+<a name="module_validators..isTag"></a>
+
+### *validators*~isTag(tag)
+
+| Param | Type |
+| --- | --- |
+| tag | <code>string</code> | 
+
+Checks that input is valid tag trytes.
+
+<a name="module_validators..isTransfer"></a>
+
+### *validators*~isTransfer(transfer)
+
+| Param | Type |
+| --- | --- |
+| transfer | <code>Transfer</code> | 
+
+Checks if input is valid `transfer` object.
+
+<a name="module_validators..isUri"></a>
+
+### *validators*~isUri(uri)
+
+| Param | Type |
+| --- | --- |
+| uri | <code>string</code> | 
+
+Checks that a given `URI` is valid
+
+Valid Examples:
+- `udp://[2001:db8:a0b:12f0::1]:14265`
+- `udp://[2001:db8:a0b:12f0::1]`
+- `udp://8.8.8.8:14265`
+- `udp://domain.com`
+- `udp://domain2.com:14265`
+
+<a name="module_validators..validate"></a>
+
+### *validators*~validate()
+**Throws**:
+
+- <code>Error</code> error
+
+Runs each validator in sequence, and throws on the first occurence of invalid data.
+Validators are passed as arguments and executed in given order.
+You might want place `validate()` in promise chains before operations that require valid inputs,
+taking advantage of built-in promise branching.
+
+**Example**  
+```js
+try {
+  validate([
+    value, // Given value
+    isTrytes, // Validator function
+    'Invalid trytes' // Error message
+  ])
+} catch (err) {
+  console.log(err.message) // 'Invalid trytes'
+}
+```
+<a name="module_validators..isAddress"></a>
+
+### *validators*~isAddress(address)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| address | <code>string</code> | Address trytes, with checksum |
+
+Checks integrity of given address by validating the checksum.
+
 <a name="module_transaction-converter"></a>
 
 ## transaction-converter
@@ -1833,8 +6886,6 @@ Normalizes the bundle hash, with resulting digits summing to zero.
 * [transaction-converter](#module_transaction-converter)
 
     * [~asTransactionTrytes(transactions)](#module_transaction-converter..asTransactionTrytes)
-
-    * [~transactionHash(transactionTrits)](#module_transaction-converter..transactionHash)
 
     * [~asTransactionObject(trytes)](#module_transaction-converter..asTransactionObject)
 
@@ -1854,17 +6905,6 @@ Normalizes the bundle hash, with resulting digits summing to zero.
 Converts a transaction object or a list of those into transaction trytes.
 
 **Returns**: <code>Trytes</code> \| <code>Array.&lt;Trytes&gt;</code> - Transaction trytes  
-<a name="module_transaction-converter..transactionHash"></a>
-
-### *transaction-converter*~transactionHash(transactionTrits)
-
-| Param | Type | Description |
-| --- | --- | --- |
-| transactionTrits | <code>Int8Array</code> | Int8Array of 8019 transaction trits |
-
-Calculates the transaction hash out of 8019 transaction trits.
-
-**Returns**: <code>Hash</code> - Transaction hash  
 <a name="module_transaction-converter..asTransactionObject"></a>
 
 ### *transaction-converter*~asTransactionObject(trytes)
@@ -1900,74 +6940,251 @@ the mapper function map them to converted objects.
 Maps the list of given hashes to a list of converted transaction objects.
 
 **Returns**: <code>Array.&lt;Transaction&gt;</code> - List of transaction objects with hashes  
-<a name="module_unit-converter"></a>
-
-## unit-converter
-<a name="module_unit-converter..convertUnits"></a>
-
-### *unit-converter*~convertUnits(value, fromUnit, toUnit)
-
-| Param | Type | Description |
-| --- | --- | --- |
-| value | <code>string</code> \| <code>int</code> \| <code>float</code> |  |
-| fromUnit | <code>string</code> | Name of original value unit |
-| toUnit | <code>string</code> | Name of unit wich we convert to |
-
-Converts accross IOTA units. Valid unit names are:
-`i`, `Ki`, `Mi`, `Gi`, `Ti`, `Pi`
-
 <a name="module_validators"></a>
 
 ## validators
 
 * [validators](#module_validators)
 
-    * [~validate()](#module_validators..validate)
+    * [~isTrytes(trytes, [length])](#module_validators..isTrytes)
 
     * [~isTrytesOfExactLength(trytes, length)](#module_validators..isTrytesOfExactLength)
 
     * [~isTrytesOfMaxLength(trytes, length)](#module_validators..isTrytesOfMaxLength)
 
-    * [~isTrytes(trytes, [length])](#module_validators..isTrytes)
+    * [~isEmpty(hash)](#module_validators..isEmpty)
 
     * [~isHash(hash)](#module_validators..isHash)
 
-    * [~isTransactionHash(hash)](#module_validators..isTransactionHash)
-
-    * [~isEmpty(hash)](#module_validators..isEmpty)
-
-    * [~isTransfer(transfer)](#module_validators..isTransfer)
-
-    * [~isTransfersArray(transfers)](#module_validators..isTransfersArray)
-
-    * [~isHashArray(hashes)](#module_validators..isHashArray)
-
-    * [~isTransactionHashArray(hashes)](#module_validators..isTransactionHashArray)
-
-    * [~isTransactionTrytesArray(trytes)](#module_validators..isTransactionTrytesArray)
-
-    * [~isAttachedTrytesArray(trytes)](#module_validators..isAttachedTrytesArray)
-
-    * [~isTransaction(tx)](#module_validators..isTransaction)
-
-    * [~isTransactionArray(bundle)](#module_validators..isTransactionArray)
-
-    * [~isAddress(address)](#module_validators..isAddress)
-
-    * [~isAddresses(address)](#module_validators..isAddresses)
-
-    * [~isUri(uri)](#module_validators..isUri)
-
-    * [~isUriArray(uris)](#module_validators..isUriArray)
+    * [~isInput(address)](#module_validators..isInput)
 
     * [~isTag(tag)](#module_validators..isTag)
 
-    * [~isTagArray(tags)](#module_validators..isTagArray)
+    * [~isTransfer(transfer)](#module_validators..isTransfer)
 
-    * [~isTailTransaction(transaction)](#module_validators..isTailTransaction)
+    * [~isUri(uri)](#module_validators..isUri)
 
-    * [~isInputArray(inputs)](#module_validators..isInputArray)
+    * [~validate()](#module_validators..validate)
 
+    * [~isTrytes(trytes, [length])](#module_validators..isTrytes)
+
+    * [~isTrytesOfExactLength(trytes, length)](#module_validators..isTrytesOfExactLength)
+
+    * [~isTrytesOfMaxLength(trytes, length)](#module_validators..isTrytesOfMaxLength)
+
+    * [~isEmpty(hash)](#module_validators..isEmpty)
+
+    * [~isHash(hash)](#module_validators..isHash)
+
+    * [~isInput(address)](#module_validators..isInput)
+
+    * [~isTag(tag)](#module_validators..isTag)
+
+    * [~isTransfer(transfer)](#module_validators..isTransfer)
+
+    * [~isUri(uri)](#module_validators..isUri)
+
+    * [~validate()](#module_validators..validate)
+
+    * [~isTrytes(trytes, [length])](#module_validators..isTrytes)
+
+    * [~isTrytesOfExactLength(trytes, length)](#module_validators..isTrytesOfExactLength)
+
+    * [~isTrytesOfMaxLength(trytes, length)](#module_validators..isTrytesOfMaxLength)
+
+    * [~isEmpty(hash)](#module_validators..isEmpty)
+
+    * [~isHash(hash)](#module_validators..isHash)
+
+    * [~isInput(address)](#module_validators..isInput)
+
+    * [~isTag(tag)](#module_validators..isTag)
+
+    * [~isTransfer(transfer)](#module_validators..isTransfer)
+
+    * [~isUri(uri)](#module_validators..isUri)
+
+    * [~validate()](#module_validators..validate)
+
+    * [~isTrytes(trytes, [length])](#module_validators..isTrytes)
+
+    * [~isTrytesOfExactLength(trytes, length)](#module_validators..isTrytesOfExactLength)
+
+    * [~isTrytesOfMaxLength(trytes, length)](#module_validators..isTrytesOfMaxLength)
+
+    * [~isEmpty(hash)](#module_validators..isEmpty)
+
+    * [~isHash(hash)](#module_validators..isHash)
+
+    * [~isInput(address)](#module_validators..isInput)
+
+    * [~isTag(tag)](#module_validators..isTag)
+
+    * [~isTransfer(transfer)](#module_validators..isTransfer)
+
+    * [~isUri(uri)](#module_validators..isUri)
+
+    * [~validate()](#module_validators..validate)
+
+    * [~isTrytes(trytes, [length])](#module_validators..isTrytes)
+
+    * [~isTrytesOfExactLength(trytes, length)](#module_validators..isTrytesOfExactLength)
+
+    * [~isTrytesOfMaxLength(trytes, length)](#module_validators..isTrytesOfMaxLength)
+
+    * [~isEmpty(hash)](#module_validators..isEmpty)
+
+    * [~isHash(hash)](#module_validators..isHash)
+
+    * [~isInput(address)](#module_validators..isInput)
+
+    * [~isTag(tag)](#module_validators..isTag)
+
+    * [~isTransfer(transfer)](#module_validators..isTransfer)
+
+    * [~isUri(uri)](#module_validators..isUri)
+
+    * [~validate()](#module_validators..validate)
+
+    * [~isTrytes(trytes, [length])](#module_validators..isTrytes)
+
+    * [~isTrytesOfExactLength(trytes, length)](#module_validators..isTrytesOfExactLength)
+
+    * [~isTrytesOfMaxLength(trytes, length)](#module_validators..isTrytesOfMaxLength)
+
+    * [~isEmpty(hash)](#module_validators..isEmpty)
+
+    * [~isHash(hash)](#module_validators..isHash)
+
+    * [~isInput(address)](#module_validators..isInput)
+
+    * [~isTag(tag)](#module_validators..isTag)
+
+    * [~isTransfer(transfer)](#module_validators..isTransfer)
+
+    * [~isUri(uri)](#module_validators..isUri)
+
+    * [~validate()](#module_validators..validate)
+
+    * [~isTrytes(trytes, [length])](#module_validators..isTrytes)
+
+    * [~isTrytesOfExactLength(trytes, length)](#module_validators..isTrytesOfExactLength)
+
+    * [~isTrytesOfMaxLength(trytes, length)](#module_validators..isTrytesOfMaxLength)
+
+    * [~isEmpty(hash)](#module_validators..isEmpty)
+
+    * [~isHash(hash)](#module_validators..isHash)
+
+    * [~isInput(address)](#module_validators..isInput)
+
+    * [~isTag(tag)](#module_validators..isTag)
+
+    * [~isTransfer(transfer)](#module_validators..isTransfer)
+
+    * [~isUri(uri)](#module_validators..isUri)
+
+    * [~validate()](#module_validators..validate)
+
+    * [~isAddress(address)](#module_validators..isAddress)
+
+
+<a name="module_validators..isTrytes"></a>
+
+### *validators*~isTrytes(trytes, [length])
+
+| Param | Type | Default |
+| --- | --- | --- |
+| trytes | <code>string</code> |  | 
+| [length] | <code>string</code> \| <code>number</code> | <code>&quot;&#x27;1,&#x27;&quot;</code> | 
+
+Checks if input is correct trytes consisting of [9A-Z]; optionally validate length
+
+<a name="module_validators..isTrytesOfExactLength"></a>
+
+### *validators*~isTrytesOfExactLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isTrytesOfMaxLength"></a>
+
+### *validators*~isTrytesOfMaxLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isEmpty"></a>
+
+### *validators*~isEmpty(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input contains `9`s only.
+
+<a name="module_validators..isHash"></a>
+
+### *validators*~isHash(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input is correct hash (81 trytes) or address with checksum (90 trytes)
+
+<a name="module_validators..isInput"></a>
+
+### *validators*~isInput(address)
+
+| Param | Type |
+| --- | --- |
+| address | <code>string</code> | 
+
+Checks if input is valid input object. Address can be passed with or without checksum.
+It does not validate the checksum.
+
+<a name="module_validators..isTag"></a>
+
+### *validators*~isTag(tag)
+
+| Param | Type |
+| --- | --- |
+| tag | <code>string</code> | 
+
+Checks that input is valid tag trytes.
+
+<a name="module_validators..isTransfer"></a>
+
+### *validators*~isTransfer(transfer)
+
+| Param | Type |
+| --- | --- |
+| transfer | <code>Transfer</code> | 
+
+Checks if input is valid `transfer` object.
+
+<a name="module_validators..isUri"></a>
+
+### *validators*~isUri(uri)
+
+| Param | Type |
+| --- | --- |
+| uri | <code>string</code> | 
+
+Checks that a given `URI` is valid
+
+Valid Examples:
+- `udp://[2001:db8:a0b:12f0::1]:14265`
+- `udp://[2001:db8:a0b:12f0::1]`
+- `udp://8.8.8.8:14265`
+- `udp://domain.com`
+- `udp://domain2.com:14265`
 
 <a name="module_validators..validate"></a>
 
@@ -1993,6 +7210,17 @@ try {
   console.log(err.message) // 'Invalid trytes'
 }
 ```
+<a name="module_validators..isTrytes"></a>
+
+### *validators*~isTrytes(trytes, [length])
+
+| Param | Type | Default |
+| --- | --- | --- |
+| trytes | <code>string</code> |  | 
+| [length] | <code>string</code> \| <code>number</code> | <code>&quot;&#x27;1,&#x27;&quot;</code> | 
+
+Checks if input is correct trytes consisting of [9A-Z]; optionally validate length
+
 <a name="module_validators..isTrytesOfExactLength"></a>
 
 ### *validators*~isTrytesOfExactLength(trytes, length)
@@ -2011,16 +7239,15 @@ try {
 | trytes | <code>string</code> | 
 | length | <code>number</code> | 
 
-<a name="module_validators..isTrytes"></a>
+<a name="module_validators..isEmpty"></a>
 
-### *validators*~isTrytes(trytes, [length])
+### *validators*~isEmpty(hash)
 
-| Param | Type | Default |
-| --- | --- | --- |
-| trytes | <code>string</code> |  | 
-| [length] | <code>string</code> \| <code>number</code> | <code>&quot;&#x27;1,&#x27;&quot;</code> | 
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
 
-Checks if input is correct trytes consisting of [9A-Z]; optionally validate length
+Checks if input contains `9`s only.
 
 <a name="module_validators..isHash"></a>
 
@@ -2032,25 +7259,26 @@ Checks if input is correct trytes consisting of [9A-Z]; optionally validate leng
 
 Checks if input is correct hash (81 trytes) or address with checksum (90 trytes)
 
-<a name="module_validators..isTransactionHash"></a>
+<a name="module_validators..isInput"></a>
 
-### *validators*~isTransactionHash(hash)
-
-| Param | Type |
-| --- | --- |
-| hash | <code>string</code> | 
-
-Checks if input is correct transaction hash (81 trytes)
-
-<a name="module_validators..isEmpty"></a>
-
-### *validators*~isEmpty(hash)
+### *validators*~isInput(address)
 
 | Param | Type |
 | --- | --- |
-| hash | <code>string</code> | 
+| address | <code>string</code> | 
 
-Checks if input contains `9`s only.
+Checks if input is valid input object. Address can be passed with or without checksum.
+It does not validate the checksum.
+
+<a name="module_validators..isTag"></a>
+
+### *validators*~isTag(tag)
+
+| Param | Type |
+| --- | --- |
+| tag | <code>string</code> | 
+
+Checks that input is valid tag trytes.
 
 <a name="module_validators..isTransfer"></a>
 
@@ -2061,100 +7289,6 @@ Checks if input contains `9`s only.
 | transfer | <code>Transfer</code> | 
 
 Checks if input is valid `transfer` object.
-
-<a name="module_validators..isTransfersArray"></a>
-
-### *validators*~isTransfersArray(transfers)
-
-| Param | Type |
-| --- | --- |
-| transfers | <code>Array.&lt;Transfer&gt;</code> | 
-
-Checks if input is array of valid `transfer` objects.
-
-<a name="module_validators..isHashArray"></a>
-
-### *validators*~isHashArray(hashes)
-
-| Param | Type |
-| --- | --- |
-| hashes | <code>Array.&lt;string&gt;</code> | 
-
-Checks if input is array of valid hashes.
-Valid hashes are `81` trytes in length, or `90` trytes in case of addresses with checksum.
-
-<a name="module_validators..isTransactionHashArray"></a>
-
-### *validators*~isTransactionHashArray(hashes)
-
-| Param | Type |
-| --- | --- |
-| hashes | <code>Array.&lt;string&gt;</code> | 
-
-Checks if input is array of valid transaction hashes.
-
-<a name="module_validators..isTransactionTrytesArray"></a>
-
-### *validators*~isTransactionTrytesArray(trytes)
-
-| Param | Type |
-| --- | --- |
-| trytes | <code>Array.&lt;string&gt;</code> | 
-
-Checks if input is array of valid tranasction trytes.
-
-<a name="module_validators..isAttachedTrytesArray"></a>
-
-### *validators*~isAttachedTrytesArray(trytes)
-
-| Param | Type |
-| --- | --- |
-| trytes | <code>Array.&lt;string&gt;</code> | 
-
-Checks if input is array of valid attached tranasction trytes.
-For attached transactions last 241 trytes are non-zero.
-
-<a name="module_validators..isTransaction"></a>
-
-### *validators*~isTransaction(tx)
-
-| Param | Type |
-| --- | --- |
-| tx | <code>Array.&lt;Object&gt;</code> | 
-
-Checks if input is valid transaction object.
-
-<a name="module_validators..isTransactionArray"></a>
-
-### *validators*~isTransactionArray(bundle)
-
-| Param | Type |
-| --- | --- |
-| bundle | <code>Array.&lt;Object&gt;</code> | 
-
-Checks if input is valid array of transaction objects.
-
-<a name="module_validators..isAddress"></a>
-
-### *validators*~isAddress(address)
-
-| Param | Type |
-| --- | --- |
-| address | <code>string</code> | 
-
-Checks if input is valid address. Address can be passed with or without checksum.
-It does not validate the checksum.
-
-<a name="module_validators..isAddresses"></a>
-
-### *validators*~isAddresses(address)
-
-| Param | Type |
-| --- | --- |
-| address | <code>string</code> | 
-
-Checks if input is valid array of address. Similarly to [`isAddress`](#module_validators.isAddress),
-it does not validate the checksum.
 
 <a name="module_validators..isUri"></a>
 
@@ -2173,15 +7307,89 @@ Valid Examples:
 - `udp://domain.com`
 - `udp://domain2.com:14265`
 
-<a name="module_validators..isUriArray"></a>
+<a name="module_validators..validate"></a>
 
-### *validators*~isUriArray(uris)
+### *validators*~validate()
+**Throws**:
+
+- <code>Error</code> error
+
+Runs each validator in sequence, and throws on the first occurence of invalid data.
+Validators are passed as arguments and executed in given order.
+You might want place `validate()` in promise chains before operations that require valid inputs,
+taking advantage of built-in promise branching.
+
+**Example**  
+```js
+try {
+  validate([
+    value, // Given value
+    isTrytes, // Validator function
+    'Invalid trytes' // Error message
+  ])
+} catch (err) {
+  console.log(err.message) // 'Invalid trytes'
+}
+```
+<a name="module_validators..isTrytes"></a>
+
+### *validators*~isTrytes(trytes, [length])
+
+| Param | Type | Default |
+| --- | --- | --- |
+| trytes | <code>string</code> |  | 
+| [length] | <code>string</code> \| <code>number</code> | <code>&quot;&#x27;1,&#x27;&quot;</code> | 
+
+Checks if input is correct trytes consisting of [9A-Z]; optionally validate length
+
+<a name="module_validators..isTrytesOfExactLength"></a>
+
+### *validators*~isTrytesOfExactLength(trytes, length)
 
 | Param | Type |
 | --- | --- |
-| uris | <code>Array.&lt;string&gt;</code> | 
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
 
-Checks that a given input is array of value `URI`s
+<a name="module_validators..isTrytesOfMaxLength"></a>
+
+### *validators*~isTrytesOfMaxLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isEmpty"></a>
+
+### *validators*~isEmpty(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input contains `9`s only.
+
+<a name="module_validators..isHash"></a>
+
+### *validators*~isHash(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input is correct hash (81 trytes) or address with checksum (90 trytes)
+
+<a name="module_validators..isInput"></a>
+
+### *validators*~isInput(address)
+
+| Param | Type |
+| --- | --- |
+| address | <code>string</code> | 
+
+Checks if input is valid input object. Address can be passed with or without checksum.
+It does not validate the checksum.
 
 <a name="module_validators..isTag"></a>
 
@@ -2193,19 +7401,594 @@ Checks that a given input is array of value `URI`s
 
 Checks that input is valid tag trytes.
 
-<a name="module_validators..isTagArray"></a>
+<a name="module_validators..isTransfer"></a>
 
-### *validators*~isTagArray(tags)
+### *validators*~isTransfer(transfer)
 
 | Param | Type |
 | --- | --- |
-| tags | <code>Array.&lt;string&gt;</code> | 
+| transfer | <code>Transfer</code> | 
 
-Checks that input is array of valid tag trytes.
+Checks if input is valid `transfer` object.
 
-<a name="module_validators..isTailTransaction"></a>
+<a name="module_validators..isUri"></a>
 
-### *validators*~isTailTransaction(transaction)
+### *validators*~isUri(uri)
+
+| Param | Type |
+| --- | --- |
+| uri | <code>string</code> | 
+
+Checks that a given `URI` is valid
+
+Valid Examples:
+- `udp://[2001:db8:a0b:12f0::1]:14265`
+- `udp://[2001:db8:a0b:12f0::1]`
+- `udp://8.8.8.8:14265`
+- `udp://domain.com`
+- `udp://domain2.com:14265`
+
+<a name="module_validators..validate"></a>
+
+### *validators*~validate()
+**Throws**:
+
+- <code>Error</code> error
+
+Runs each validator in sequence, and throws on the first occurence of invalid data.
+Validators are passed as arguments and executed in given order.
+You might want place `validate()` in promise chains before operations that require valid inputs,
+taking advantage of built-in promise branching.
+
+**Example**  
+```js
+try {
+  validate([
+    value, // Given value
+    isTrytes, // Validator function
+    'Invalid trytes' // Error message
+  ])
+} catch (err) {
+  console.log(err.message) // 'Invalid trytes'
+}
+```
+<a name="module_validators..isTrytes"></a>
+
+### *validators*~isTrytes(trytes, [length])
+
+| Param | Type | Default |
+| --- | --- | --- |
+| trytes | <code>string</code> |  | 
+| [length] | <code>string</code> \| <code>number</code> | <code>&quot;&#x27;1,&#x27;&quot;</code> | 
+
+Checks if input is correct trytes consisting of [9A-Z]; optionally validate length
+
+<a name="module_validators..isTrytesOfExactLength"></a>
+
+### *validators*~isTrytesOfExactLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isTrytesOfMaxLength"></a>
+
+### *validators*~isTrytesOfMaxLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isEmpty"></a>
+
+### *validators*~isEmpty(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input contains `9`s only.
+
+<a name="module_validators..isHash"></a>
+
+### *validators*~isHash(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input is correct hash (81 trytes) or address with checksum (90 trytes)
+
+<a name="module_validators..isInput"></a>
+
+### *validators*~isInput(address)
+
+| Param | Type |
+| --- | --- |
+| address | <code>string</code> | 
+
+Checks if input is valid input object. Address can be passed with or without checksum.
+It does not validate the checksum.
+
+<a name="module_validators..isTag"></a>
+
+### *validators*~isTag(tag)
+
+| Param | Type |
+| --- | --- |
+| tag | <code>string</code> | 
+
+Checks that input is valid tag trytes.
+
+<a name="module_validators..isTransfer"></a>
+
+### *validators*~isTransfer(transfer)
+
+| Param | Type |
+| --- | --- |
+| transfer | <code>Transfer</code> | 
+
+Checks if input is valid `transfer` object.
+
+<a name="module_validators..isUri"></a>
+
+### *validators*~isUri(uri)
+
+| Param | Type |
+| --- | --- |
+| uri | <code>string</code> | 
+
+Checks that a given `URI` is valid
+
+Valid Examples:
+- `udp://[2001:db8:a0b:12f0::1]:14265`
+- `udp://[2001:db8:a0b:12f0::1]`
+- `udp://8.8.8.8:14265`
+- `udp://domain.com`
+- `udp://domain2.com:14265`
+
+<a name="module_validators..validate"></a>
+
+### *validators*~validate()
+**Throws**:
+
+- <code>Error</code> error
+
+Runs each validator in sequence, and throws on the first occurence of invalid data.
+Validators are passed as arguments and executed in given order.
+You might want place `validate()` in promise chains before operations that require valid inputs,
+taking advantage of built-in promise branching.
+
+**Example**  
+```js
+try {
+  validate([
+    value, // Given value
+    isTrytes, // Validator function
+    'Invalid trytes' // Error message
+  ])
+} catch (err) {
+  console.log(err.message) // 'Invalid trytes'
+}
+```
+<a name="module_validators..isTrytes"></a>
+
+### *validators*~isTrytes(trytes, [length])
+
+| Param | Type | Default |
+| --- | --- | --- |
+| trytes | <code>string</code> |  | 
+| [length] | <code>string</code> \| <code>number</code> | <code>&quot;&#x27;1,&#x27;&quot;</code> | 
+
+Checks if input is correct trytes consisting of [9A-Z]; optionally validate length
+
+<a name="module_validators..isTrytesOfExactLength"></a>
+
+### *validators*~isTrytesOfExactLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isTrytesOfMaxLength"></a>
+
+### *validators*~isTrytesOfMaxLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isEmpty"></a>
+
+### *validators*~isEmpty(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input contains `9`s only.
+
+<a name="module_validators..isHash"></a>
+
+### *validators*~isHash(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input is correct hash (81 trytes) or address with checksum (90 trytes)
+
+<a name="module_validators..isInput"></a>
+
+### *validators*~isInput(address)
+
+| Param | Type |
+| --- | --- |
+| address | <code>string</code> | 
+
+Checks if input is valid input object. Address can be passed with or without checksum.
+It does not validate the checksum.
+
+<a name="module_validators..isTag"></a>
+
+### *validators*~isTag(tag)
+
+| Param | Type |
+| --- | --- |
+| tag | <code>string</code> | 
+
+Checks that input is valid tag trytes.
+
+<a name="module_validators..isTransfer"></a>
+
+### *validators*~isTransfer(transfer)
+
+| Param | Type |
+| --- | --- |
+| transfer | <code>Transfer</code> | 
+
+Checks if input is valid `transfer` object.
+
+<a name="module_validators..isUri"></a>
+
+### *validators*~isUri(uri)
+
+| Param | Type |
+| --- | --- |
+| uri | <code>string</code> | 
+
+Checks that a given `URI` is valid
+
+Valid Examples:
+- `udp://[2001:db8:a0b:12f0::1]:14265`
+- `udp://[2001:db8:a0b:12f0::1]`
+- `udp://8.8.8.8:14265`
+- `udp://domain.com`
+- `udp://domain2.com:14265`
+
+<a name="module_validators..validate"></a>
+
+### *validators*~validate()
+**Throws**:
+
+- <code>Error</code> error
+
+Runs each validator in sequence, and throws on the first occurence of invalid data.
+Validators are passed as arguments and executed in given order.
+You might want place `validate()` in promise chains before operations that require valid inputs,
+taking advantage of built-in promise branching.
+
+**Example**  
+```js
+try {
+  validate([
+    value, // Given value
+    isTrytes, // Validator function
+    'Invalid trytes' // Error message
+  ])
+} catch (err) {
+  console.log(err.message) // 'Invalid trytes'
+}
+```
+<a name="module_validators..isTrytes"></a>
+
+### *validators*~isTrytes(trytes, [length])
+
+| Param | Type | Default |
+| --- | --- | --- |
+| trytes | <code>string</code> |  | 
+| [length] | <code>string</code> \| <code>number</code> | <code>&quot;&#x27;1,&#x27;&quot;</code> | 
+
+Checks if input is correct trytes consisting of [9A-Z]; optionally validate length
+
+<a name="module_validators..isTrytesOfExactLength"></a>
+
+### *validators*~isTrytesOfExactLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isTrytesOfMaxLength"></a>
+
+### *validators*~isTrytesOfMaxLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isEmpty"></a>
+
+### *validators*~isEmpty(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input contains `9`s only.
+
+<a name="module_validators..isHash"></a>
+
+### *validators*~isHash(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input is correct hash (81 trytes) or address with checksum (90 trytes)
+
+<a name="module_validators..isInput"></a>
+
+### *validators*~isInput(address)
+
+| Param | Type |
+| --- | --- |
+| address | <code>string</code> | 
+
+Checks if input is valid input object. Address can be passed with or without checksum.
+It does not validate the checksum.
+
+<a name="module_validators..isTag"></a>
+
+### *validators*~isTag(tag)
+
+| Param | Type |
+| --- | --- |
+| tag | <code>string</code> | 
+
+Checks that input is valid tag trytes.
+
+<a name="module_validators..isTransfer"></a>
+
+### *validators*~isTransfer(transfer)
+
+| Param | Type |
+| --- | --- |
+| transfer | <code>Transfer</code> | 
+
+Checks if input is valid `transfer` object.
+
+<a name="module_validators..isUri"></a>
+
+### *validators*~isUri(uri)
+
+| Param | Type |
+| --- | --- |
+| uri | <code>string</code> | 
+
+Checks that a given `URI` is valid
+
+Valid Examples:
+- `udp://[2001:db8:a0b:12f0::1]:14265`
+- `udp://[2001:db8:a0b:12f0::1]`
+- `udp://8.8.8.8:14265`
+- `udp://domain.com`
+- `udp://domain2.com:14265`
+
+<a name="module_validators..validate"></a>
+
+### *validators*~validate()
+**Throws**:
+
+- <code>Error</code> error
+
+Runs each validator in sequence, and throws on the first occurence of invalid data.
+Validators are passed as arguments and executed in given order.
+You might want place `validate()` in promise chains before operations that require valid inputs,
+taking advantage of built-in promise branching.
+
+**Example**  
+```js
+try {
+  validate([
+    value, // Given value
+    isTrytes, // Validator function
+    'Invalid trytes' // Error message
+  ])
+} catch (err) {
+  console.log(err.message) // 'Invalid trytes'
+}
+```
+<a name="module_validators..isTrytes"></a>
+
+### *validators*~isTrytes(trytes, [length])
+
+| Param | Type | Default |
+| --- | --- | --- |
+| trytes | <code>string</code> |  | 
+| [length] | <code>string</code> \| <code>number</code> | <code>&quot;&#x27;1,&#x27;&quot;</code> | 
+
+Checks if input is correct trytes consisting of [9A-Z]; optionally validate length
+
+<a name="module_validators..isTrytesOfExactLength"></a>
+
+### *validators*~isTrytesOfExactLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isTrytesOfMaxLength"></a>
+
+### *validators*~isTrytesOfMaxLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isEmpty"></a>
+
+### *validators*~isEmpty(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input contains `9`s only.
+
+<a name="module_validators..isHash"></a>
+
+### *validators*~isHash(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input is correct hash (81 trytes) or address with checksum (90 trytes)
+
+<a name="module_validators..isInput"></a>
+
+### *validators*~isInput(address)
+
+| Param | Type |
+| --- | --- |
+| address | <code>string</code> | 
+
+Checks if input is valid input object. Address can be passed with or without checksum.
+It does not validate the checksum.
+
+<a name="module_validators..isTag"></a>
+
+### *validators*~isTag(tag)
+
+| Param | Type |
+| --- | --- |
+| tag | <code>string</code> | 
+
+Checks that input is valid tag trytes.
+
+<a name="module_validators..isTransfer"></a>
+
+### *validators*~isTransfer(transfer)
+
+| Param | Type |
+| --- | --- |
+| transfer | <code>Transfer</code> | 
+
+Checks if input is valid `transfer` object.
+
+<a name="module_validators..isUri"></a>
+
+### *validators*~isUri(uri)
+
+| Param | Type |
+| --- | --- |
+| uri | <code>string</code> | 
+
+Checks that a given `URI` is valid
+
+Valid Examples:
+- `udp://[2001:db8:a0b:12f0::1]:14265`
+- `udp://[2001:db8:a0b:12f0::1]`
+- `udp://8.8.8.8:14265`
+- `udp://domain.com`
+- `udp://domain2.com:14265`
+
+<a name="module_validators..validate"></a>
+
+### *validators*~validate()
+**Throws**:
+
+- <code>Error</code> error
+
+Runs each validator in sequence, and throws on the first occurence of invalid data.
+Validators are passed as arguments and executed in given order.
+You might want place `validate()` in promise chains before operations that require valid inputs,
+taking advantage of built-in promise branching.
+
+**Example**  
+```js
+try {
+  validate([
+    value, // Given value
+    isTrytes, // Validator function
+    'Invalid trytes' // Error message
+  ])
+} catch (err) {
+  console.log(err.message) // 'Invalid trytes'
+}
+```
+<a name="module_validators..isAddress"></a>
+
+### *validators*~isAddress(address)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| address | <code>string</code> | Address trytes, with checksum |
+
+Checks integrity of given address by validating the checksum.
+
+<a name="module_transaction"></a>
+
+## transaction
+
+* [transaction](#module_transaction)
+
+    * [~transactionHash(trits)](#module_transaction..transactionHash)
+
+    * [~isTransaction(tx)](#module_transaction..isTransaction)
+
+    * [~isTailTransaction(transaction)](#module_transaction..isTailTransaction)
+
+    * [~isTransactionHash(hash, mwm)](#module_transaction..isTransactionHash)
+
+    * [~isTransactionTrytes(trytes, minWeightMagnitude)](#module_transaction..isTransactionTrytes)
+
+    * [~isAttachedTrytes(trytes)](#module_transaction..isAttachedTrytes)
+
+
+<a name="module_transaction..transactionHash"></a>
+
+### *transaction*~transactionHash(trits)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| trits | <code>Int8Array</code> | Int8Array of 8019 transaction trits |
+
+Calculates the transaction hash out of 8019 transaction trits.
+
+**Returns**: <code>Hash</code> - Transaction hash  
+<a name="module_transaction..isTransaction"></a>
+
+### *transaction*~isTransaction(tx)
+
+| Param | Type |
+| --- | --- |
+| tx | <code>object</code> | 
+
+Checks if input is valid transaction object.
+
+<a name="module_transaction..isTailTransaction"></a>
+
+### *transaction*~isTailTransaction(transaction)
 
 | Param | Type |
 | --- | --- |
@@ -2214,15 +7997,2066 @@ Checks that input is array of valid tag trytes.
 Checks if given transaction object is tail transaction.
 A tail transaction is one with `currentIndex=0`.
 
-<a name="module_validators..isInputArray"></a>
+<a name="module_transaction..isTransactionHash"></a>
 
-### *validators*~isInputArray(inputs)
+### *transaction*~isTransactionHash(hash, mwm)
 
 | Param | Type |
 | --- | --- |
-| inputs | <code>Array.&lt;object&gt;</code> | 
+| hash | <code>string</code> | 
+| mwm | <code>number</code> | 
 
-Checks if input is valid array of `input` objects.
+Checks if input is correct transaction hash (81 trytes)
+
+<a name="module_transaction..isTransactionTrytes"></a>
+
+### *transaction*~isTransactionTrytes(trytes, minWeightMagnitude)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| minWeightMagnitude | <code>number</code> | 
+
+Checks if input is correct transaction trytes (2673 trytes)
+
+<a name="module_transaction..isAttachedTrytes"></a>
+
+### *transaction*~isAttachedTrytes(trytes)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+
+Checks if input is valid attached transaction trytes.
+For attached transactions last 241 trytes are non-zero.
+
+<a name="module_unit-converter"></a>
+
+## unit-converter
+<a name="module_unit-converter..convertUnits"></a>
+
+### *unit-converter*~convertUnits(value, fromUnit, toUnit)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| value | <code>string</code> \| <code>int</code> \| <code>float</code> |  |
+| fromUnit | <code>string</code> | Name of original value unit |
+| toUnit | <code>string</code> | Name of unit wich we convert to |
+
+Converts accross IOTA units. Valid unit names are:
+`i`, `Ki`, `Mi`, `Gi`, `Ti`, `Pi`
+
+<a name="module_validators"></a>
+
+## validators
+
+* [validators](#module_validators)
+
+    * [~isTrytes(trytes, [length])](#module_validators..isTrytes)
+
+    * [~isTrytesOfExactLength(trytes, length)](#module_validators..isTrytesOfExactLength)
+
+    * [~isTrytesOfMaxLength(trytes, length)](#module_validators..isTrytesOfMaxLength)
+
+    * [~isEmpty(hash)](#module_validators..isEmpty)
+
+    * [~isHash(hash)](#module_validators..isHash)
+
+    * [~isInput(address)](#module_validators..isInput)
+
+    * [~isTag(tag)](#module_validators..isTag)
+
+    * [~isTransfer(transfer)](#module_validators..isTransfer)
+
+    * [~isUri(uri)](#module_validators..isUri)
+
+    * [~validate()](#module_validators..validate)
+
+    * [~isTrytes(trytes, [length])](#module_validators..isTrytes)
+
+    * [~isTrytesOfExactLength(trytes, length)](#module_validators..isTrytesOfExactLength)
+
+    * [~isTrytesOfMaxLength(trytes, length)](#module_validators..isTrytesOfMaxLength)
+
+    * [~isEmpty(hash)](#module_validators..isEmpty)
+
+    * [~isHash(hash)](#module_validators..isHash)
+
+    * [~isInput(address)](#module_validators..isInput)
+
+    * [~isTag(tag)](#module_validators..isTag)
+
+    * [~isTransfer(transfer)](#module_validators..isTransfer)
+
+    * [~isUri(uri)](#module_validators..isUri)
+
+    * [~validate()](#module_validators..validate)
+
+    * [~isTrytes(trytes, [length])](#module_validators..isTrytes)
+
+    * [~isTrytesOfExactLength(trytes, length)](#module_validators..isTrytesOfExactLength)
+
+    * [~isTrytesOfMaxLength(trytes, length)](#module_validators..isTrytesOfMaxLength)
+
+    * [~isEmpty(hash)](#module_validators..isEmpty)
+
+    * [~isHash(hash)](#module_validators..isHash)
+
+    * [~isInput(address)](#module_validators..isInput)
+
+    * [~isTag(tag)](#module_validators..isTag)
+
+    * [~isTransfer(transfer)](#module_validators..isTransfer)
+
+    * [~isUri(uri)](#module_validators..isUri)
+
+    * [~validate()](#module_validators..validate)
+
+    * [~isTrytes(trytes, [length])](#module_validators..isTrytes)
+
+    * [~isTrytesOfExactLength(trytes, length)](#module_validators..isTrytesOfExactLength)
+
+    * [~isTrytesOfMaxLength(trytes, length)](#module_validators..isTrytesOfMaxLength)
+
+    * [~isEmpty(hash)](#module_validators..isEmpty)
+
+    * [~isHash(hash)](#module_validators..isHash)
+
+    * [~isInput(address)](#module_validators..isInput)
+
+    * [~isTag(tag)](#module_validators..isTag)
+
+    * [~isTransfer(transfer)](#module_validators..isTransfer)
+
+    * [~isUri(uri)](#module_validators..isUri)
+
+    * [~validate()](#module_validators..validate)
+
+    * [~isTrytes(trytes, [length])](#module_validators..isTrytes)
+
+    * [~isTrytesOfExactLength(trytes, length)](#module_validators..isTrytesOfExactLength)
+
+    * [~isTrytesOfMaxLength(trytes, length)](#module_validators..isTrytesOfMaxLength)
+
+    * [~isEmpty(hash)](#module_validators..isEmpty)
+
+    * [~isHash(hash)](#module_validators..isHash)
+
+    * [~isInput(address)](#module_validators..isInput)
+
+    * [~isTag(tag)](#module_validators..isTag)
+
+    * [~isTransfer(transfer)](#module_validators..isTransfer)
+
+    * [~isUri(uri)](#module_validators..isUri)
+
+    * [~validate()](#module_validators..validate)
+
+    * [~isTrytes(trytes, [length])](#module_validators..isTrytes)
+
+    * [~isTrytesOfExactLength(trytes, length)](#module_validators..isTrytesOfExactLength)
+
+    * [~isTrytesOfMaxLength(trytes, length)](#module_validators..isTrytesOfMaxLength)
+
+    * [~isEmpty(hash)](#module_validators..isEmpty)
+
+    * [~isHash(hash)](#module_validators..isHash)
+
+    * [~isInput(address)](#module_validators..isInput)
+
+    * [~isTag(tag)](#module_validators..isTag)
+
+    * [~isTransfer(transfer)](#module_validators..isTransfer)
+
+    * [~isUri(uri)](#module_validators..isUri)
+
+    * [~validate()](#module_validators..validate)
+
+    * [~isTrytes(trytes, [length])](#module_validators..isTrytes)
+
+    * [~isTrytesOfExactLength(trytes, length)](#module_validators..isTrytesOfExactLength)
+
+    * [~isTrytesOfMaxLength(trytes, length)](#module_validators..isTrytesOfMaxLength)
+
+    * [~isEmpty(hash)](#module_validators..isEmpty)
+
+    * [~isHash(hash)](#module_validators..isHash)
+
+    * [~isInput(address)](#module_validators..isInput)
+
+    * [~isTag(tag)](#module_validators..isTag)
+
+    * [~isTransfer(transfer)](#module_validators..isTransfer)
+
+    * [~isUri(uri)](#module_validators..isUri)
+
+    * [~validate()](#module_validators..validate)
+
+    * [~isAddress(address)](#module_validators..isAddress)
+
+
+<a name="module_validators..isTrytes"></a>
+
+### *validators*~isTrytes(trytes, [length])
+
+| Param | Type | Default |
+| --- | --- | --- |
+| trytes | <code>string</code> |  | 
+| [length] | <code>string</code> \| <code>number</code> | <code>&quot;&#x27;1,&#x27;&quot;</code> | 
+
+Checks if input is correct trytes consisting of [9A-Z]; optionally validate length
+
+<a name="module_validators..isTrytesOfExactLength"></a>
+
+### *validators*~isTrytesOfExactLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isTrytesOfMaxLength"></a>
+
+### *validators*~isTrytesOfMaxLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isEmpty"></a>
+
+### *validators*~isEmpty(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input contains `9`s only.
+
+<a name="module_validators..isHash"></a>
+
+### *validators*~isHash(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input is correct hash (81 trytes) or address with checksum (90 trytes)
+
+<a name="module_validators..isInput"></a>
+
+### *validators*~isInput(address)
+
+| Param | Type |
+| --- | --- |
+| address | <code>string</code> | 
+
+Checks if input is valid input object. Address can be passed with or without checksum.
+It does not validate the checksum.
+
+<a name="module_validators..isTag"></a>
+
+### *validators*~isTag(tag)
+
+| Param | Type |
+| --- | --- |
+| tag | <code>string</code> | 
+
+Checks that input is valid tag trytes.
+
+<a name="module_validators..isTransfer"></a>
+
+### *validators*~isTransfer(transfer)
+
+| Param | Type |
+| --- | --- |
+| transfer | <code>Transfer</code> | 
+
+Checks if input is valid `transfer` object.
+
+<a name="module_validators..isUri"></a>
+
+### *validators*~isUri(uri)
+
+| Param | Type |
+| --- | --- |
+| uri | <code>string</code> | 
+
+Checks that a given `URI` is valid
+
+Valid Examples:
+- `udp://[2001:db8:a0b:12f0::1]:14265`
+- `udp://[2001:db8:a0b:12f0::1]`
+- `udp://8.8.8.8:14265`
+- `udp://domain.com`
+- `udp://domain2.com:14265`
+
+<a name="module_validators..validate"></a>
+
+### *validators*~validate()
+**Throws**:
+
+- <code>Error</code> error
+
+Runs each validator in sequence, and throws on the first occurence of invalid data.
+Validators are passed as arguments and executed in given order.
+You might want place `validate()` in promise chains before operations that require valid inputs,
+taking advantage of built-in promise branching.
+
+**Example**  
+```js
+try {
+  validate([
+    value, // Given value
+    isTrytes, // Validator function
+    'Invalid trytes' // Error message
+  ])
+} catch (err) {
+  console.log(err.message) // 'Invalid trytes'
+}
+```
+<a name="module_validators..isTrytes"></a>
+
+### *validators*~isTrytes(trytes, [length])
+
+| Param | Type | Default |
+| --- | --- | --- |
+| trytes | <code>string</code> |  | 
+| [length] | <code>string</code> \| <code>number</code> | <code>&quot;&#x27;1,&#x27;&quot;</code> | 
+
+Checks if input is correct trytes consisting of [9A-Z]; optionally validate length
+
+<a name="module_validators..isTrytesOfExactLength"></a>
+
+### *validators*~isTrytesOfExactLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isTrytesOfMaxLength"></a>
+
+### *validators*~isTrytesOfMaxLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isEmpty"></a>
+
+### *validators*~isEmpty(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input contains `9`s only.
+
+<a name="module_validators..isHash"></a>
+
+### *validators*~isHash(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input is correct hash (81 trytes) or address with checksum (90 trytes)
+
+<a name="module_validators..isInput"></a>
+
+### *validators*~isInput(address)
+
+| Param | Type |
+| --- | --- |
+| address | <code>string</code> | 
+
+Checks if input is valid input object. Address can be passed with or without checksum.
+It does not validate the checksum.
+
+<a name="module_validators..isTag"></a>
+
+### *validators*~isTag(tag)
+
+| Param | Type |
+| --- | --- |
+| tag | <code>string</code> | 
+
+Checks that input is valid tag trytes.
+
+<a name="module_validators..isTransfer"></a>
+
+### *validators*~isTransfer(transfer)
+
+| Param | Type |
+| --- | --- |
+| transfer | <code>Transfer</code> | 
+
+Checks if input is valid `transfer` object.
+
+<a name="module_validators..isUri"></a>
+
+### *validators*~isUri(uri)
+
+| Param | Type |
+| --- | --- |
+| uri | <code>string</code> | 
+
+Checks that a given `URI` is valid
+
+Valid Examples:
+- `udp://[2001:db8:a0b:12f0::1]:14265`
+- `udp://[2001:db8:a0b:12f0::1]`
+- `udp://8.8.8.8:14265`
+- `udp://domain.com`
+- `udp://domain2.com:14265`
+
+<a name="module_validators..validate"></a>
+
+### *validators*~validate()
+**Throws**:
+
+- <code>Error</code> error
+
+Runs each validator in sequence, and throws on the first occurence of invalid data.
+Validators are passed as arguments and executed in given order.
+You might want place `validate()` in promise chains before operations that require valid inputs,
+taking advantage of built-in promise branching.
+
+**Example**  
+```js
+try {
+  validate([
+    value, // Given value
+    isTrytes, // Validator function
+    'Invalid trytes' // Error message
+  ])
+} catch (err) {
+  console.log(err.message) // 'Invalid trytes'
+}
+```
+<a name="module_validators..isTrytes"></a>
+
+### *validators*~isTrytes(trytes, [length])
+
+| Param | Type | Default |
+| --- | --- | --- |
+| trytes | <code>string</code> |  | 
+| [length] | <code>string</code> \| <code>number</code> | <code>&quot;&#x27;1,&#x27;&quot;</code> | 
+
+Checks if input is correct trytes consisting of [9A-Z]; optionally validate length
+
+<a name="module_validators..isTrytesOfExactLength"></a>
+
+### *validators*~isTrytesOfExactLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isTrytesOfMaxLength"></a>
+
+### *validators*~isTrytesOfMaxLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isEmpty"></a>
+
+### *validators*~isEmpty(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input contains `9`s only.
+
+<a name="module_validators..isHash"></a>
+
+### *validators*~isHash(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input is correct hash (81 trytes) or address with checksum (90 trytes)
+
+<a name="module_validators..isInput"></a>
+
+### *validators*~isInput(address)
+
+| Param | Type |
+| --- | --- |
+| address | <code>string</code> | 
+
+Checks if input is valid input object. Address can be passed with or without checksum.
+It does not validate the checksum.
+
+<a name="module_validators..isTag"></a>
+
+### *validators*~isTag(tag)
+
+| Param | Type |
+| --- | --- |
+| tag | <code>string</code> | 
+
+Checks that input is valid tag trytes.
+
+<a name="module_validators..isTransfer"></a>
+
+### *validators*~isTransfer(transfer)
+
+| Param | Type |
+| --- | --- |
+| transfer | <code>Transfer</code> | 
+
+Checks if input is valid `transfer` object.
+
+<a name="module_validators..isUri"></a>
+
+### *validators*~isUri(uri)
+
+| Param | Type |
+| --- | --- |
+| uri | <code>string</code> | 
+
+Checks that a given `URI` is valid
+
+Valid Examples:
+- `udp://[2001:db8:a0b:12f0::1]:14265`
+- `udp://[2001:db8:a0b:12f0::1]`
+- `udp://8.8.8.8:14265`
+- `udp://domain.com`
+- `udp://domain2.com:14265`
+
+<a name="module_validators..validate"></a>
+
+### *validators*~validate()
+**Throws**:
+
+- <code>Error</code> error
+
+Runs each validator in sequence, and throws on the first occurence of invalid data.
+Validators are passed as arguments and executed in given order.
+You might want place `validate()` in promise chains before operations that require valid inputs,
+taking advantage of built-in promise branching.
+
+**Example**  
+```js
+try {
+  validate([
+    value, // Given value
+    isTrytes, // Validator function
+    'Invalid trytes' // Error message
+  ])
+} catch (err) {
+  console.log(err.message) // 'Invalid trytes'
+}
+```
+<a name="module_validators..isTrytes"></a>
+
+### *validators*~isTrytes(trytes, [length])
+
+| Param | Type | Default |
+| --- | --- | --- |
+| trytes | <code>string</code> |  | 
+| [length] | <code>string</code> \| <code>number</code> | <code>&quot;&#x27;1,&#x27;&quot;</code> | 
+
+Checks if input is correct trytes consisting of [9A-Z]; optionally validate length
+
+<a name="module_validators..isTrytesOfExactLength"></a>
+
+### *validators*~isTrytesOfExactLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isTrytesOfMaxLength"></a>
+
+### *validators*~isTrytesOfMaxLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isEmpty"></a>
+
+### *validators*~isEmpty(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input contains `9`s only.
+
+<a name="module_validators..isHash"></a>
+
+### *validators*~isHash(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input is correct hash (81 trytes) or address with checksum (90 trytes)
+
+<a name="module_validators..isInput"></a>
+
+### *validators*~isInput(address)
+
+| Param | Type |
+| --- | --- |
+| address | <code>string</code> | 
+
+Checks if input is valid input object. Address can be passed with or without checksum.
+It does not validate the checksum.
+
+<a name="module_validators..isTag"></a>
+
+### *validators*~isTag(tag)
+
+| Param | Type |
+| --- | --- |
+| tag | <code>string</code> | 
+
+Checks that input is valid tag trytes.
+
+<a name="module_validators..isTransfer"></a>
+
+### *validators*~isTransfer(transfer)
+
+| Param | Type |
+| --- | --- |
+| transfer | <code>Transfer</code> | 
+
+Checks if input is valid `transfer` object.
+
+<a name="module_validators..isUri"></a>
+
+### *validators*~isUri(uri)
+
+| Param | Type |
+| --- | --- |
+| uri | <code>string</code> | 
+
+Checks that a given `URI` is valid
+
+Valid Examples:
+- `udp://[2001:db8:a0b:12f0::1]:14265`
+- `udp://[2001:db8:a0b:12f0::1]`
+- `udp://8.8.8.8:14265`
+- `udp://domain.com`
+- `udp://domain2.com:14265`
+
+<a name="module_validators..validate"></a>
+
+### *validators*~validate()
+**Throws**:
+
+- <code>Error</code> error
+
+Runs each validator in sequence, and throws on the first occurence of invalid data.
+Validators are passed as arguments and executed in given order.
+You might want place `validate()` in promise chains before operations that require valid inputs,
+taking advantage of built-in promise branching.
+
+**Example**  
+```js
+try {
+  validate([
+    value, // Given value
+    isTrytes, // Validator function
+    'Invalid trytes' // Error message
+  ])
+} catch (err) {
+  console.log(err.message) // 'Invalid trytes'
+}
+```
+<a name="module_validators..isTrytes"></a>
+
+### *validators*~isTrytes(trytes, [length])
+
+| Param | Type | Default |
+| --- | --- | --- |
+| trytes | <code>string</code> |  | 
+| [length] | <code>string</code> \| <code>number</code> | <code>&quot;&#x27;1,&#x27;&quot;</code> | 
+
+Checks if input is correct trytes consisting of [9A-Z]; optionally validate length
+
+<a name="module_validators..isTrytesOfExactLength"></a>
+
+### *validators*~isTrytesOfExactLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isTrytesOfMaxLength"></a>
+
+### *validators*~isTrytesOfMaxLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isEmpty"></a>
+
+### *validators*~isEmpty(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input contains `9`s only.
+
+<a name="module_validators..isHash"></a>
+
+### *validators*~isHash(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input is correct hash (81 trytes) or address with checksum (90 trytes)
+
+<a name="module_validators..isInput"></a>
+
+### *validators*~isInput(address)
+
+| Param | Type |
+| --- | --- |
+| address | <code>string</code> | 
+
+Checks if input is valid input object. Address can be passed with or without checksum.
+It does not validate the checksum.
+
+<a name="module_validators..isTag"></a>
+
+### *validators*~isTag(tag)
+
+| Param | Type |
+| --- | --- |
+| tag | <code>string</code> | 
+
+Checks that input is valid tag trytes.
+
+<a name="module_validators..isTransfer"></a>
+
+### *validators*~isTransfer(transfer)
+
+| Param | Type |
+| --- | --- |
+| transfer | <code>Transfer</code> | 
+
+Checks if input is valid `transfer` object.
+
+<a name="module_validators..isUri"></a>
+
+### *validators*~isUri(uri)
+
+| Param | Type |
+| --- | --- |
+| uri | <code>string</code> | 
+
+Checks that a given `URI` is valid
+
+Valid Examples:
+- `udp://[2001:db8:a0b:12f0::1]:14265`
+- `udp://[2001:db8:a0b:12f0::1]`
+- `udp://8.8.8.8:14265`
+- `udp://domain.com`
+- `udp://domain2.com:14265`
+
+<a name="module_validators..validate"></a>
+
+### *validators*~validate()
+**Throws**:
+
+- <code>Error</code> error
+
+Runs each validator in sequence, and throws on the first occurence of invalid data.
+Validators are passed as arguments and executed in given order.
+You might want place `validate()` in promise chains before operations that require valid inputs,
+taking advantage of built-in promise branching.
+
+**Example**  
+```js
+try {
+  validate([
+    value, // Given value
+    isTrytes, // Validator function
+    'Invalid trytes' // Error message
+  ])
+} catch (err) {
+  console.log(err.message) // 'Invalid trytes'
+}
+```
+<a name="module_validators..isTrytes"></a>
+
+### *validators*~isTrytes(trytes, [length])
+
+| Param | Type | Default |
+| --- | --- | --- |
+| trytes | <code>string</code> |  | 
+| [length] | <code>string</code> \| <code>number</code> | <code>&quot;&#x27;1,&#x27;&quot;</code> | 
+
+Checks if input is correct trytes consisting of [9A-Z]; optionally validate length
+
+<a name="module_validators..isTrytesOfExactLength"></a>
+
+### *validators*~isTrytesOfExactLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isTrytesOfMaxLength"></a>
+
+### *validators*~isTrytesOfMaxLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isEmpty"></a>
+
+### *validators*~isEmpty(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input contains `9`s only.
+
+<a name="module_validators..isHash"></a>
+
+### *validators*~isHash(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input is correct hash (81 trytes) or address with checksum (90 trytes)
+
+<a name="module_validators..isInput"></a>
+
+### *validators*~isInput(address)
+
+| Param | Type |
+| --- | --- |
+| address | <code>string</code> | 
+
+Checks if input is valid input object. Address can be passed with or without checksum.
+It does not validate the checksum.
+
+<a name="module_validators..isTag"></a>
+
+### *validators*~isTag(tag)
+
+| Param | Type |
+| --- | --- |
+| tag | <code>string</code> | 
+
+Checks that input is valid tag trytes.
+
+<a name="module_validators..isTransfer"></a>
+
+### *validators*~isTransfer(transfer)
+
+| Param | Type |
+| --- | --- |
+| transfer | <code>Transfer</code> | 
+
+Checks if input is valid `transfer` object.
+
+<a name="module_validators..isUri"></a>
+
+### *validators*~isUri(uri)
+
+| Param | Type |
+| --- | --- |
+| uri | <code>string</code> | 
+
+Checks that a given `URI` is valid
+
+Valid Examples:
+- `udp://[2001:db8:a0b:12f0::1]:14265`
+- `udp://[2001:db8:a0b:12f0::1]`
+- `udp://8.8.8.8:14265`
+- `udp://domain.com`
+- `udp://domain2.com:14265`
+
+<a name="module_validators..validate"></a>
+
+### *validators*~validate()
+**Throws**:
+
+- <code>Error</code> error
+
+Runs each validator in sequence, and throws on the first occurence of invalid data.
+Validators are passed as arguments and executed in given order.
+You might want place `validate()` in promise chains before operations that require valid inputs,
+taking advantage of built-in promise branching.
+
+**Example**  
+```js
+try {
+  validate([
+    value, // Given value
+    isTrytes, // Validator function
+    'Invalid trytes' // Error message
+  ])
+} catch (err) {
+  console.log(err.message) // 'Invalid trytes'
+}
+```
+<a name="module_validators..isTrytes"></a>
+
+### *validators*~isTrytes(trytes, [length])
+
+| Param | Type | Default |
+| --- | --- | --- |
+| trytes | <code>string</code> |  | 
+| [length] | <code>string</code> \| <code>number</code> | <code>&quot;&#x27;1,&#x27;&quot;</code> | 
+
+Checks if input is correct trytes consisting of [9A-Z]; optionally validate length
+
+<a name="module_validators..isTrytesOfExactLength"></a>
+
+### *validators*~isTrytesOfExactLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isTrytesOfMaxLength"></a>
+
+### *validators*~isTrytesOfMaxLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isEmpty"></a>
+
+### *validators*~isEmpty(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input contains `9`s only.
+
+<a name="module_validators..isHash"></a>
+
+### *validators*~isHash(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input is correct hash (81 trytes) or address with checksum (90 trytes)
+
+<a name="module_validators..isInput"></a>
+
+### *validators*~isInput(address)
+
+| Param | Type |
+| --- | --- |
+| address | <code>string</code> | 
+
+Checks if input is valid input object. Address can be passed with or without checksum.
+It does not validate the checksum.
+
+<a name="module_validators..isTag"></a>
+
+### *validators*~isTag(tag)
+
+| Param | Type |
+| --- | --- |
+| tag | <code>string</code> | 
+
+Checks that input is valid tag trytes.
+
+<a name="module_validators..isTransfer"></a>
+
+### *validators*~isTransfer(transfer)
+
+| Param | Type |
+| --- | --- |
+| transfer | <code>Transfer</code> | 
+
+Checks if input is valid `transfer` object.
+
+<a name="module_validators..isUri"></a>
+
+### *validators*~isUri(uri)
+
+| Param | Type |
+| --- | --- |
+| uri | <code>string</code> | 
+
+Checks that a given `URI` is valid
+
+Valid Examples:
+- `udp://[2001:db8:a0b:12f0::1]:14265`
+- `udp://[2001:db8:a0b:12f0::1]`
+- `udp://8.8.8.8:14265`
+- `udp://domain.com`
+- `udp://domain2.com:14265`
+
+<a name="module_validators..validate"></a>
+
+### *validators*~validate()
+**Throws**:
+
+- <code>Error</code> error
+
+Runs each validator in sequence, and throws on the first occurence of invalid data.
+Validators are passed as arguments and executed in given order.
+You might want place `validate()` in promise chains before operations that require valid inputs,
+taking advantage of built-in promise branching.
+
+**Example**  
+```js
+try {
+  validate([
+    value, // Given value
+    isTrytes, // Validator function
+    'Invalid trytes' // Error message
+  ])
+} catch (err) {
+  console.log(err.message) // 'Invalid trytes'
+}
+```
+<a name="module_validators..isAddress"></a>
+
+### *validators*~isAddress(address)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| address | <code>string</code> | Address trytes, with checksum |
+
+Checks integrity of given address by validating the checksum.
+
+<a name="module_validators"></a>
+
+## validators
+
+* [validators](#module_validators)
+
+    * [~isTrytes(trytes, [length])](#module_validators..isTrytes)
+
+    * [~isTrytesOfExactLength(trytes, length)](#module_validators..isTrytesOfExactLength)
+
+    * [~isTrytesOfMaxLength(trytes, length)](#module_validators..isTrytesOfMaxLength)
+
+    * [~isEmpty(hash)](#module_validators..isEmpty)
+
+    * [~isHash(hash)](#module_validators..isHash)
+
+    * [~isInput(address)](#module_validators..isInput)
+
+    * [~isTag(tag)](#module_validators..isTag)
+
+    * [~isTransfer(transfer)](#module_validators..isTransfer)
+
+    * [~isUri(uri)](#module_validators..isUri)
+
+    * [~validate()](#module_validators..validate)
+
+    * [~isTrytes(trytes, [length])](#module_validators..isTrytes)
+
+    * [~isTrytesOfExactLength(trytes, length)](#module_validators..isTrytesOfExactLength)
+
+    * [~isTrytesOfMaxLength(trytes, length)](#module_validators..isTrytesOfMaxLength)
+
+    * [~isEmpty(hash)](#module_validators..isEmpty)
+
+    * [~isHash(hash)](#module_validators..isHash)
+
+    * [~isInput(address)](#module_validators..isInput)
+
+    * [~isTag(tag)](#module_validators..isTag)
+
+    * [~isTransfer(transfer)](#module_validators..isTransfer)
+
+    * [~isUri(uri)](#module_validators..isUri)
+
+    * [~validate()](#module_validators..validate)
+
+    * [~isTrytes(trytes, [length])](#module_validators..isTrytes)
+
+    * [~isTrytesOfExactLength(trytes, length)](#module_validators..isTrytesOfExactLength)
+
+    * [~isTrytesOfMaxLength(trytes, length)](#module_validators..isTrytesOfMaxLength)
+
+    * [~isEmpty(hash)](#module_validators..isEmpty)
+
+    * [~isHash(hash)](#module_validators..isHash)
+
+    * [~isInput(address)](#module_validators..isInput)
+
+    * [~isTag(tag)](#module_validators..isTag)
+
+    * [~isTransfer(transfer)](#module_validators..isTransfer)
+
+    * [~isUri(uri)](#module_validators..isUri)
+
+    * [~validate()](#module_validators..validate)
+
+    * [~isTrytes(trytes, [length])](#module_validators..isTrytes)
+
+    * [~isTrytesOfExactLength(trytes, length)](#module_validators..isTrytesOfExactLength)
+
+    * [~isTrytesOfMaxLength(trytes, length)](#module_validators..isTrytesOfMaxLength)
+
+    * [~isEmpty(hash)](#module_validators..isEmpty)
+
+    * [~isHash(hash)](#module_validators..isHash)
+
+    * [~isInput(address)](#module_validators..isInput)
+
+    * [~isTag(tag)](#module_validators..isTag)
+
+    * [~isTransfer(transfer)](#module_validators..isTransfer)
+
+    * [~isUri(uri)](#module_validators..isUri)
+
+    * [~validate()](#module_validators..validate)
+
+    * [~isTrytes(trytes, [length])](#module_validators..isTrytes)
+
+    * [~isTrytesOfExactLength(trytes, length)](#module_validators..isTrytesOfExactLength)
+
+    * [~isTrytesOfMaxLength(trytes, length)](#module_validators..isTrytesOfMaxLength)
+
+    * [~isEmpty(hash)](#module_validators..isEmpty)
+
+    * [~isHash(hash)](#module_validators..isHash)
+
+    * [~isInput(address)](#module_validators..isInput)
+
+    * [~isTag(tag)](#module_validators..isTag)
+
+    * [~isTransfer(transfer)](#module_validators..isTransfer)
+
+    * [~isUri(uri)](#module_validators..isUri)
+
+    * [~validate()](#module_validators..validate)
+
+    * [~isTrytes(trytes, [length])](#module_validators..isTrytes)
+
+    * [~isTrytesOfExactLength(trytes, length)](#module_validators..isTrytesOfExactLength)
+
+    * [~isTrytesOfMaxLength(trytes, length)](#module_validators..isTrytesOfMaxLength)
+
+    * [~isEmpty(hash)](#module_validators..isEmpty)
+
+    * [~isHash(hash)](#module_validators..isHash)
+
+    * [~isInput(address)](#module_validators..isInput)
+
+    * [~isTag(tag)](#module_validators..isTag)
+
+    * [~isTransfer(transfer)](#module_validators..isTransfer)
+
+    * [~isUri(uri)](#module_validators..isUri)
+
+    * [~validate()](#module_validators..validate)
+
+    * [~isTrytes(trytes, [length])](#module_validators..isTrytes)
+
+    * [~isTrytesOfExactLength(trytes, length)](#module_validators..isTrytesOfExactLength)
+
+    * [~isTrytesOfMaxLength(trytes, length)](#module_validators..isTrytesOfMaxLength)
+
+    * [~isEmpty(hash)](#module_validators..isEmpty)
+
+    * [~isHash(hash)](#module_validators..isHash)
+
+    * [~isInput(address)](#module_validators..isInput)
+
+    * [~isTag(tag)](#module_validators..isTag)
+
+    * [~isTransfer(transfer)](#module_validators..isTransfer)
+
+    * [~isUri(uri)](#module_validators..isUri)
+
+    * [~validate()](#module_validators..validate)
+
+    * [~isAddress(address)](#module_validators..isAddress)
+
+
+<a name="module_validators..isTrytes"></a>
+
+### *validators*~isTrytes(trytes, [length])
+
+| Param | Type | Default |
+| --- | --- | --- |
+| trytes | <code>string</code> |  | 
+| [length] | <code>string</code> \| <code>number</code> | <code>&quot;&#x27;1,&#x27;&quot;</code> | 
+
+Checks if input is correct trytes consisting of [9A-Z]; optionally validate length
+
+<a name="module_validators..isTrytesOfExactLength"></a>
+
+### *validators*~isTrytesOfExactLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isTrytesOfMaxLength"></a>
+
+### *validators*~isTrytesOfMaxLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isEmpty"></a>
+
+### *validators*~isEmpty(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input contains `9`s only.
+
+<a name="module_validators..isHash"></a>
+
+### *validators*~isHash(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input is correct hash (81 trytes) or address with checksum (90 trytes)
+
+<a name="module_validators..isInput"></a>
+
+### *validators*~isInput(address)
+
+| Param | Type |
+| --- | --- |
+| address | <code>string</code> | 
+
+Checks if input is valid input object. Address can be passed with or without checksum.
+It does not validate the checksum.
+
+<a name="module_validators..isTag"></a>
+
+### *validators*~isTag(tag)
+
+| Param | Type |
+| --- | --- |
+| tag | <code>string</code> | 
+
+Checks that input is valid tag trytes.
+
+<a name="module_validators..isTransfer"></a>
+
+### *validators*~isTransfer(transfer)
+
+| Param | Type |
+| --- | --- |
+| transfer | <code>Transfer</code> | 
+
+Checks if input is valid `transfer` object.
+
+<a name="module_validators..isUri"></a>
+
+### *validators*~isUri(uri)
+
+| Param | Type |
+| --- | --- |
+| uri | <code>string</code> | 
+
+Checks that a given `URI` is valid
+
+Valid Examples:
+- `udp://[2001:db8:a0b:12f0::1]:14265`
+- `udp://[2001:db8:a0b:12f0::1]`
+- `udp://8.8.8.8:14265`
+- `udp://domain.com`
+- `udp://domain2.com:14265`
+
+<a name="module_validators..validate"></a>
+
+### *validators*~validate()
+**Throws**:
+
+- <code>Error</code> error
+
+Runs each validator in sequence, and throws on the first occurence of invalid data.
+Validators are passed as arguments and executed in given order.
+You might want place `validate()` in promise chains before operations that require valid inputs,
+taking advantage of built-in promise branching.
+
+**Example**  
+```js
+try {
+  validate([
+    value, // Given value
+    isTrytes, // Validator function
+    'Invalid trytes' // Error message
+  ])
+} catch (err) {
+  console.log(err.message) // 'Invalid trytes'
+}
+```
+<a name="module_validators..isTrytes"></a>
+
+### *validators*~isTrytes(trytes, [length])
+
+| Param | Type | Default |
+| --- | --- | --- |
+| trytes | <code>string</code> |  | 
+| [length] | <code>string</code> \| <code>number</code> | <code>&quot;&#x27;1,&#x27;&quot;</code> | 
+
+Checks if input is correct trytes consisting of [9A-Z]; optionally validate length
+
+<a name="module_validators..isTrytesOfExactLength"></a>
+
+### *validators*~isTrytesOfExactLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isTrytesOfMaxLength"></a>
+
+### *validators*~isTrytesOfMaxLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isEmpty"></a>
+
+### *validators*~isEmpty(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input contains `9`s only.
+
+<a name="module_validators..isHash"></a>
+
+### *validators*~isHash(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input is correct hash (81 trytes) or address with checksum (90 trytes)
+
+<a name="module_validators..isInput"></a>
+
+### *validators*~isInput(address)
+
+| Param | Type |
+| --- | --- |
+| address | <code>string</code> | 
+
+Checks if input is valid input object. Address can be passed with or without checksum.
+It does not validate the checksum.
+
+<a name="module_validators..isTag"></a>
+
+### *validators*~isTag(tag)
+
+| Param | Type |
+| --- | --- |
+| tag | <code>string</code> | 
+
+Checks that input is valid tag trytes.
+
+<a name="module_validators..isTransfer"></a>
+
+### *validators*~isTransfer(transfer)
+
+| Param | Type |
+| --- | --- |
+| transfer | <code>Transfer</code> | 
+
+Checks if input is valid `transfer` object.
+
+<a name="module_validators..isUri"></a>
+
+### *validators*~isUri(uri)
+
+| Param | Type |
+| --- | --- |
+| uri | <code>string</code> | 
+
+Checks that a given `URI` is valid
+
+Valid Examples:
+- `udp://[2001:db8:a0b:12f0::1]:14265`
+- `udp://[2001:db8:a0b:12f0::1]`
+- `udp://8.8.8.8:14265`
+- `udp://domain.com`
+- `udp://domain2.com:14265`
+
+<a name="module_validators..validate"></a>
+
+### *validators*~validate()
+**Throws**:
+
+- <code>Error</code> error
+
+Runs each validator in sequence, and throws on the first occurence of invalid data.
+Validators are passed as arguments and executed in given order.
+You might want place `validate()` in promise chains before operations that require valid inputs,
+taking advantage of built-in promise branching.
+
+**Example**  
+```js
+try {
+  validate([
+    value, // Given value
+    isTrytes, // Validator function
+    'Invalid trytes' // Error message
+  ])
+} catch (err) {
+  console.log(err.message) // 'Invalid trytes'
+}
+```
+<a name="module_validators..isTrytes"></a>
+
+### *validators*~isTrytes(trytes, [length])
+
+| Param | Type | Default |
+| --- | --- | --- |
+| trytes | <code>string</code> |  | 
+| [length] | <code>string</code> \| <code>number</code> | <code>&quot;&#x27;1,&#x27;&quot;</code> | 
+
+Checks if input is correct trytes consisting of [9A-Z]; optionally validate length
+
+<a name="module_validators..isTrytesOfExactLength"></a>
+
+### *validators*~isTrytesOfExactLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isTrytesOfMaxLength"></a>
+
+### *validators*~isTrytesOfMaxLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isEmpty"></a>
+
+### *validators*~isEmpty(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input contains `9`s only.
+
+<a name="module_validators..isHash"></a>
+
+### *validators*~isHash(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input is correct hash (81 trytes) or address with checksum (90 trytes)
+
+<a name="module_validators..isInput"></a>
+
+### *validators*~isInput(address)
+
+| Param | Type |
+| --- | --- |
+| address | <code>string</code> | 
+
+Checks if input is valid input object. Address can be passed with or without checksum.
+It does not validate the checksum.
+
+<a name="module_validators..isTag"></a>
+
+### *validators*~isTag(tag)
+
+| Param | Type |
+| --- | --- |
+| tag | <code>string</code> | 
+
+Checks that input is valid tag trytes.
+
+<a name="module_validators..isTransfer"></a>
+
+### *validators*~isTransfer(transfer)
+
+| Param | Type |
+| --- | --- |
+| transfer | <code>Transfer</code> | 
+
+Checks if input is valid `transfer` object.
+
+<a name="module_validators..isUri"></a>
+
+### *validators*~isUri(uri)
+
+| Param | Type |
+| --- | --- |
+| uri | <code>string</code> | 
+
+Checks that a given `URI` is valid
+
+Valid Examples:
+- `udp://[2001:db8:a0b:12f0::1]:14265`
+- `udp://[2001:db8:a0b:12f0::1]`
+- `udp://8.8.8.8:14265`
+- `udp://domain.com`
+- `udp://domain2.com:14265`
+
+<a name="module_validators..validate"></a>
+
+### *validators*~validate()
+**Throws**:
+
+- <code>Error</code> error
+
+Runs each validator in sequence, and throws on the first occurence of invalid data.
+Validators are passed as arguments and executed in given order.
+You might want place `validate()` in promise chains before operations that require valid inputs,
+taking advantage of built-in promise branching.
+
+**Example**  
+```js
+try {
+  validate([
+    value, // Given value
+    isTrytes, // Validator function
+    'Invalid trytes' // Error message
+  ])
+} catch (err) {
+  console.log(err.message) // 'Invalid trytes'
+}
+```
+<a name="module_validators..isTrytes"></a>
+
+### *validators*~isTrytes(trytes, [length])
+
+| Param | Type | Default |
+| --- | --- | --- |
+| trytes | <code>string</code> |  | 
+| [length] | <code>string</code> \| <code>number</code> | <code>&quot;&#x27;1,&#x27;&quot;</code> | 
+
+Checks if input is correct trytes consisting of [9A-Z]; optionally validate length
+
+<a name="module_validators..isTrytesOfExactLength"></a>
+
+### *validators*~isTrytesOfExactLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isTrytesOfMaxLength"></a>
+
+### *validators*~isTrytesOfMaxLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isEmpty"></a>
+
+### *validators*~isEmpty(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input contains `9`s only.
+
+<a name="module_validators..isHash"></a>
+
+### *validators*~isHash(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input is correct hash (81 trytes) or address with checksum (90 trytes)
+
+<a name="module_validators..isInput"></a>
+
+### *validators*~isInput(address)
+
+| Param | Type |
+| --- | --- |
+| address | <code>string</code> | 
+
+Checks if input is valid input object. Address can be passed with or without checksum.
+It does not validate the checksum.
+
+<a name="module_validators..isTag"></a>
+
+### *validators*~isTag(tag)
+
+| Param | Type |
+| --- | --- |
+| tag | <code>string</code> | 
+
+Checks that input is valid tag trytes.
+
+<a name="module_validators..isTransfer"></a>
+
+### *validators*~isTransfer(transfer)
+
+| Param | Type |
+| --- | --- |
+| transfer | <code>Transfer</code> | 
+
+Checks if input is valid `transfer` object.
+
+<a name="module_validators..isUri"></a>
+
+### *validators*~isUri(uri)
+
+| Param | Type |
+| --- | --- |
+| uri | <code>string</code> | 
+
+Checks that a given `URI` is valid
+
+Valid Examples:
+- `udp://[2001:db8:a0b:12f0::1]:14265`
+- `udp://[2001:db8:a0b:12f0::1]`
+- `udp://8.8.8.8:14265`
+- `udp://domain.com`
+- `udp://domain2.com:14265`
+
+<a name="module_validators..validate"></a>
+
+### *validators*~validate()
+**Throws**:
+
+- <code>Error</code> error
+
+Runs each validator in sequence, and throws on the first occurence of invalid data.
+Validators are passed as arguments and executed in given order.
+You might want place `validate()` in promise chains before operations that require valid inputs,
+taking advantage of built-in promise branching.
+
+**Example**  
+```js
+try {
+  validate([
+    value, // Given value
+    isTrytes, // Validator function
+    'Invalid trytes' // Error message
+  ])
+} catch (err) {
+  console.log(err.message) // 'Invalid trytes'
+}
+```
+<a name="module_validators..isTrytes"></a>
+
+### *validators*~isTrytes(trytes, [length])
+
+| Param | Type | Default |
+| --- | --- | --- |
+| trytes | <code>string</code> |  | 
+| [length] | <code>string</code> \| <code>number</code> | <code>&quot;&#x27;1,&#x27;&quot;</code> | 
+
+Checks if input is correct trytes consisting of [9A-Z]; optionally validate length
+
+<a name="module_validators..isTrytesOfExactLength"></a>
+
+### *validators*~isTrytesOfExactLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isTrytesOfMaxLength"></a>
+
+### *validators*~isTrytesOfMaxLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isEmpty"></a>
+
+### *validators*~isEmpty(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input contains `9`s only.
+
+<a name="module_validators..isHash"></a>
+
+### *validators*~isHash(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input is correct hash (81 trytes) or address with checksum (90 trytes)
+
+<a name="module_validators..isInput"></a>
+
+### *validators*~isInput(address)
+
+| Param | Type |
+| --- | --- |
+| address | <code>string</code> | 
+
+Checks if input is valid input object. Address can be passed with or without checksum.
+It does not validate the checksum.
+
+<a name="module_validators..isTag"></a>
+
+### *validators*~isTag(tag)
+
+| Param | Type |
+| --- | --- |
+| tag | <code>string</code> | 
+
+Checks that input is valid tag trytes.
+
+<a name="module_validators..isTransfer"></a>
+
+### *validators*~isTransfer(transfer)
+
+| Param | Type |
+| --- | --- |
+| transfer | <code>Transfer</code> | 
+
+Checks if input is valid `transfer` object.
+
+<a name="module_validators..isUri"></a>
+
+### *validators*~isUri(uri)
+
+| Param | Type |
+| --- | --- |
+| uri | <code>string</code> | 
+
+Checks that a given `URI` is valid
+
+Valid Examples:
+- `udp://[2001:db8:a0b:12f0::1]:14265`
+- `udp://[2001:db8:a0b:12f0::1]`
+- `udp://8.8.8.8:14265`
+- `udp://domain.com`
+- `udp://domain2.com:14265`
+
+<a name="module_validators..validate"></a>
+
+### *validators*~validate()
+**Throws**:
+
+- <code>Error</code> error
+
+Runs each validator in sequence, and throws on the first occurence of invalid data.
+Validators are passed as arguments and executed in given order.
+You might want place `validate()` in promise chains before operations that require valid inputs,
+taking advantage of built-in promise branching.
+
+**Example**  
+```js
+try {
+  validate([
+    value, // Given value
+    isTrytes, // Validator function
+    'Invalid trytes' // Error message
+  ])
+} catch (err) {
+  console.log(err.message) // 'Invalid trytes'
+}
+```
+<a name="module_validators..isTrytes"></a>
+
+### *validators*~isTrytes(trytes, [length])
+
+| Param | Type | Default |
+| --- | --- | --- |
+| trytes | <code>string</code> |  | 
+| [length] | <code>string</code> \| <code>number</code> | <code>&quot;&#x27;1,&#x27;&quot;</code> | 
+
+Checks if input is correct trytes consisting of [9A-Z]; optionally validate length
+
+<a name="module_validators..isTrytesOfExactLength"></a>
+
+### *validators*~isTrytesOfExactLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isTrytesOfMaxLength"></a>
+
+### *validators*~isTrytesOfMaxLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isEmpty"></a>
+
+### *validators*~isEmpty(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input contains `9`s only.
+
+<a name="module_validators..isHash"></a>
+
+### *validators*~isHash(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input is correct hash (81 trytes) or address with checksum (90 trytes)
+
+<a name="module_validators..isInput"></a>
+
+### *validators*~isInput(address)
+
+| Param | Type |
+| --- | --- |
+| address | <code>string</code> | 
+
+Checks if input is valid input object. Address can be passed with or without checksum.
+It does not validate the checksum.
+
+<a name="module_validators..isTag"></a>
+
+### *validators*~isTag(tag)
+
+| Param | Type |
+| --- | --- |
+| tag | <code>string</code> | 
+
+Checks that input is valid tag trytes.
+
+<a name="module_validators..isTransfer"></a>
+
+### *validators*~isTransfer(transfer)
+
+| Param | Type |
+| --- | --- |
+| transfer | <code>Transfer</code> | 
+
+Checks if input is valid `transfer` object.
+
+<a name="module_validators..isUri"></a>
+
+### *validators*~isUri(uri)
+
+| Param | Type |
+| --- | --- |
+| uri | <code>string</code> | 
+
+Checks that a given `URI` is valid
+
+Valid Examples:
+- `udp://[2001:db8:a0b:12f0::1]:14265`
+- `udp://[2001:db8:a0b:12f0::1]`
+- `udp://8.8.8.8:14265`
+- `udp://domain.com`
+- `udp://domain2.com:14265`
+
+<a name="module_validators..validate"></a>
+
+### *validators*~validate()
+**Throws**:
+
+- <code>Error</code> error
+
+Runs each validator in sequence, and throws on the first occurence of invalid data.
+Validators are passed as arguments and executed in given order.
+You might want place `validate()` in promise chains before operations that require valid inputs,
+taking advantage of built-in promise branching.
+
+**Example**  
+```js
+try {
+  validate([
+    value, // Given value
+    isTrytes, // Validator function
+    'Invalid trytes' // Error message
+  ])
+} catch (err) {
+  console.log(err.message) // 'Invalid trytes'
+}
+```
+<a name="module_validators..isTrytes"></a>
+
+### *validators*~isTrytes(trytes, [length])
+
+| Param | Type | Default |
+| --- | --- | --- |
+| trytes | <code>string</code> |  | 
+| [length] | <code>string</code> \| <code>number</code> | <code>&quot;&#x27;1,&#x27;&quot;</code> | 
+
+Checks if input is correct trytes consisting of [9A-Z]; optionally validate length
+
+<a name="module_validators..isTrytesOfExactLength"></a>
+
+### *validators*~isTrytesOfExactLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isTrytesOfMaxLength"></a>
+
+### *validators*~isTrytesOfMaxLength(trytes, length)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| length | <code>number</code> | 
+
+<a name="module_validators..isEmpty"></a>
+
+### *validators*~isEmpty(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input contains `9`s only.
+
+<a name="module_validators..isHash"></a>
+
+### *validators*~isHash(hash)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+
+Checks if input is correct hash (81 trytes) or address with checksum (90 trytes)
+
+<a name="module_validators..isInput"></a>
+
+### *validators*~isInput(address)
+
+| Param | Type |
+| --- | --- |
+| address | <code>string</code> | 
+
+Checks if input is valid input object. Address can be passed with or without checksum.
+It does not validate the checksum.
+
+<a name="module_validators..isTag"></a>
+
+### *validators*~isTag(tag)
+
+| Param | Type |
+| --- | --- |
+| tag | <code>string</code> | 
+
+Checks that input is valid tag trytes.
+
+<a name="module_validators..isTransfer"></a>
+
+### *validators*~isTransfer(transfer)
+
+| Param | Type |
+| --- | --- |
+| transfer | <code>Transfer</code> | 
+
+Checks if input is valid `transfer` object.
+
+<a name="module_validators..isUri"></a>
+
+### *validators*~isUri(uri)
+
+| Param | Type |
+| --- | --- |
+| uri | <code>string</code> | 
+
+Checks that a given `URI` is valid
+
+Valid Examples:
+- `udp://[2001:db8:a0b:12f0::1]:14265`
+- `udp://[2001:db8:a0b:12f0::1]`
+- `udp://8.8.8.8:14265`
+- `udp://domain.com`
+- `udp://domain2.com:14265`
+
+<a name="module_validators..validate"></a>
+
+### *validators*~validate()
+**Throws**:
+
+- <code>Error</code> error
+
+Runs each validator in sequence, and throws on the first occurence of invalid data.
+Validators are passed as arguments and executed in given order.
+You might want place `validate()` in promise chains before operations that require valid inputs,
+taking advantage of built-in promise branching.
+
+**Example**  
+```js
+try {
+  validate([
+    value, // Given value
+    isTrytes, // Validator function
+    'Invalid trytes' // Error message
+  ])
+} catch (err) {
+  console.log(err.message) // 'Invalid trytes'
+}
+```
+<a name="module_validators..isAddress"></a>
+
+### *validators*~isAddress(address)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| address | <code>string</code> | Address trytes, with checksum |
+
+Checks integrity of given address by validating the checksum.
 
 <a name="API"></a>
 

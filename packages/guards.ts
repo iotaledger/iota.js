@@ -2,6 +2,11 @@ import { HASH_TRYTE_SIZE, MAX_INDEX_DIFF, TAG_TRYTE_SIZE } from './constants'
 import * as errors from './errors'
 import { Address, Hash, Tag, Transfer, Trytes } from './types'
 
+// Required for markdown generation with JSDoc
+/**
+ * @module validators
+ */
+
 /* Type guards */
 
 /**
