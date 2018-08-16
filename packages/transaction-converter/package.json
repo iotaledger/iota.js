@@ -47,7 +47,6 @@
         "@iota/converter": "^1.0.0-alpha.1",
         "@iota/curl": "^1.0.0-alpha.1",
         "@iota/pad": "^1.0.0-alpha.1",
-        "@iota/validators": "^1.0.0-alpha.1",
         "@iota/transaction": "^1.0.0-alpha.1"
     },
     "devDependencies": {

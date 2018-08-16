@@ -1,7 +1,7 @@
 import test from 'ava'
 import { createHttpClient } from '@iota/http-client'
+import { INVALID_TRANSACTION_HASH } from '../../../errors'
 import { createGetBundle } from '../../src'
-import { INVALID_HASH } from '../../src/errors'
 import { bundle, bundleWithZeroValue } from '@iota/samples'
 import './nocks/getTrytes'
 
@@ -25,7 +25,7 @@ test('getBundle() rejects with correct error for invalid hash.', t => {
 
     t.is(
         t.throws(() => getBundle(invalidHash), Error).message,
-        `${INVALID_HASH}: ${invalidHash}`,
+        `${INVALID_TRANSACTION_HASH}: ${invalidHash}`,
         'getBundle() should throw correct error for invalid hash.'
     )
 })

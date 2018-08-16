@@ -5,16 +5,17 @@ import { removeChecksum } from '@iota/checksum'
 import { addEntry, addTrytes, finalizeBundle } from '@iota/bundle'
 import Kerl from '@iota/kerl'
 import { digests, key, normalizedBundleHash, signatureFragment, subseed } from '@iota/signing'
+import * as errors from '../../errors'
 import {
+    arrayValidator,
     isHash,
     isNinesTrytes,
     isSecurityLevel,
-    errors,
     remainderAddressValidator,
-    transferArrayValidator,
+    transferValidator,
     validate,
     Validator,
-} from '@iota/validators'
+} from '../../guards'
 import { Bundle, Callback, Provider, Transaction, Transfer } from '../../types'
 import Address from './address'
 
@@ -28,7 +29,7 @@ export const multisigInputValidator: Validator<MultisigInput> = (multisigInput: 
     multisigInput,
     ({ address, balance, securitySum }: MultisigInput) =>
         isSecurityLevel(securitySum) && isHash(address) && Number.isInteger(balance) && balance > 0,
-    errors.INVALID_INPUTS,
+    errors.INVALID_INPUT,
 ]
 
 export const sanitizeTransfers = (transfers: ReadonlyArray<Transfer>): ReadonlyArray<Transfer> =>
@@ -267,8 +268,8 @@ export default class Multisig {
         return Promise.resolve(
             validate(
                 multisigInputValidator(input),
-                transferArrayValidator(transfers),
-                remainderAddressValidator(remainderAddress)
+                arrayValidator<Transfer>(transferValidator)(transfers),
+                !!remainderAddress && remainderAddressValidator(remainderAddress)
             )
         )
             .then(() => sanitizeTransfers(transfers))

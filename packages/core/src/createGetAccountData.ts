@@ -5,7 +5,7 @@ import {
     startEndOptionsValidator,
     startOptionValidator,
     validate,
-} from '@iota/validators'
+} from '../../guards'
 import { createGetBalances, createGetNewAddress } from './'
 import { createGetBundlesFromAddresses } from './createGetBundlesFromAddresses'
 import { createWereAddressesSpentFrom } from './createWereAddressesSpentFrom'

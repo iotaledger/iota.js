@@ -1,12 +1,12 @@
 import test from 'ava'
 import { createHttpClient } from '@iota/http-client'
+import { bundle } from '@iota/samples'
+import { INVALID_TRANSACTION_TRYTES } from '../../../errors'
 import { createSendTrytes } from '../../src'
-import { INVALID_TRYTES_ARRAY } from '../../src/errors'
 import { attachToTangleCommand } from './nocks/attachToTangle'
 import { getTransactionsToApproveCommand } from './nocks/getTransactionsToApprove'
 import './nocks/broadcastTransactions'
 import './nocks/storeTransactions'
-import { bundle } from '@iota/samples'
 
 const { minWeightMagnitude, trytes } = attachToTangleCommand
 const { depth } = getTransactionsToApproveCommand
@@ -34,7 +34,7 @@ test('sendTrytes() rejects with correct errors for invalid input.', t => {
 
     t.is(
         t.throws(() => sendTrytes(invalidTrytes, depth, minWeightMagnitude), Error).message,
-        `${INVALID_TRYTES_ARRAY}: ${invalidTrytes[0]}`,
+        `${INVALID_TRANSACTION_TRYTES}: ${invalidTrytes[0]}`,
         'sendTrytes() should throw correct error for invalid trytes.'
     )
 })

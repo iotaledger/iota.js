@@ -13,7 +13,7 @@ test('isStartEndOptions() returns false for invalid end option.', t => {
 
 test('isStartEndOptions() returns false if threshold is reached.', t => {
     t.is(
-        isStartEndOptions({ start: 0, end: 501 }),
+        isStartEndOptions({ start: 0, end: 1001 }),
         false,
         'isStartEndOptions() should return false if thresshold difference is reached.'
     )

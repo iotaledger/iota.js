@@ -2,7 +2,7 @@ import test from 'ava'
 import { invalidTransactionObject, transactionObject } from '@iota/samples'
 import { isTransactionArray } from '../src'
 
-test('isTransactionArray() returns true for valid transaction array.', t => {
+test('isTransactionArray() returns true for valid trasnaction array.', t => {
     t.is(isTransactionArray([transactionObject]), true, 'isTransactionsArray() returns for valid transaction array.')
 })
 

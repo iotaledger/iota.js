@@ -1,17 +1,19 @@
 import * as Promise from 'bluebird'
-import { createFindTransactionObjects, createGetLatestInclusion } from './'
 import { Bundle, Callback, Hash, Provider, Transaction } from '../../types'
+import { createFindTransactionObjects, createGetLatestInclusion } from './'
 
 export const createGetBundlesFromAddresses = (provider: Provider, caller?: string) => {
     const findTransactionObjects = createFindTransactionObjects(provider)
     const getLatestInclusion = createGetLatestInclusion(provider)
 
+    /* tslint:disable-next-line:only-arrow-functions */
     return function(
         addresses: ReadonlyArray<Hash>,
         inclusionStates?: boolean,
         callback?: Callback<ReadonlyArray<Bundle>>
     ): Promise<ReadonlyArray<Bundle>> {
         if (caller !== 'lib') {
+            /* tslint:disable-next-line:no-console */
             console.warn(
                 '`getBundlesFromAddresses()` has been deprecated and will be removed in v2.0.0' +
                     'Please use `findTransactionObjects()` and `getBundle()` as an alternative'
@@ -58,10 +60,10 @@ export const getBundleSync = (
     transaction: Transaction,
     bundle: ReadonlyArray<Transaction> = []
 ): Bundle => {
-    const _bundle = [...bundle]
+    const bundleCopy = [...bundle]
 
     if (transaction.currentIndex === 0) {
-        _bundle.push(transaction)
+        bundleCopy.push(transaction)
     }
 
     if (transaction && transaction.currentIndex !== transaction.lastIndex) {
@@ -73,12 +75,12 @@ export const getBundleSync = (
         )
 
         if (nextTrunkTransaction) {
-            _bundle.push(nextTrunkTransaction)
-            return getBundleSync(transactions, nextTrunkTransaction, _bundle)
+            bundleCopy.push(nextTrunkTransaction)
+            return getBundleSync(transactions, nextTrunkTransaction, bundleCopy)
         }
     }
 
-    return _bundle
+    return bundleCopy
 }
 
 export const zip2 = <A, B>(as: ReadonlyArray<A>, bs: ReadonlyArray<B>) =>

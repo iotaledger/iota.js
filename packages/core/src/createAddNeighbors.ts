@@ -1,5 +1,5 @@
 import * as Promise from 'bluebird'
-import { uriArrayValidator, validate } from '@iota/validators'
+import { arrayValidator, uriValidator, validate } from '../../guards'
 import { AddNeighborsCommand, AddNeighborsResponse, Callback, IRICommand, Provider } from '../../types'
 
 /**
@@ -44,7 +44,7 @@ export const createAddNeighbors = ({ send }: Provider) =>
      * - Fetch error
      */
     function addedNeighbors(uris: ReadonlyArray<string>, callback?: Callback<number>): Promise<number> {
-        return Promise.resolve(validate(uriArrayValidator(uris)))
+        return Promise.resolve(validate(arrayValidator<string>(uriValidator)(uris)))
             .then(() =>
                 send<AddNeighborsCommand, AddNeighborsResponse>({
                     command: IRICommand.ADD_NEIGHBORS,

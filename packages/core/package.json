@@ -60,8 +60,8 @@
         "@iota/kerl": "^1.0.0-alpha.1",
         "@iota/pad": "^1.0.0-alpha.1",
         "@iota/signing": "^1.0.0-alpha.1",
+        "@iota/transaction": "^1.0.0-alpha.1",
         "@iota/transaction-converter": "^1.0.0-alpha.1",
-        "@iota/validators": "^1.0.0-alpha.1",
         "@types/bluebird": "^3.5.20",
         "bluebird": "^3.5.1"
     },

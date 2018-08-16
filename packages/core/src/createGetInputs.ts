@@ -1,4 +1,5 @@
 import * as Promise from 'bluebird'
+import * as errors from '../../errors'
 import {
     getInputsThresholdValidator,
     securityLevelValidator,
@@ -6,21 +7,20 @@ import {
     startEndOptionsValidator,
     startOptionValidator,
     validate,
-} from '@iota/validators'
-import { createGetBalances } from './'
-import { createGetNewAddress, getNewAddressOptions, GetNewAddressOptions } from './createGetNewAddress'
-import * as errors from './errors'
+} from '../../guards'
 import {
-    asArray,
-    getOptionsWithDefaults,
     Address,
+    asArray,
     Callback,
+    getOptionsWithDefaults,
     Hash,
     Inputs,
     makeAddress,
     Provider,
     Trytes,
 } from '../../types'
+import { createGetBalances } from './'
+import { createGetNewAddress, getNewAddressOptions, GetNewAddressOptions } from './createGetNewAddress'
 
 export interface GetInputsOptions {
     readonly start: number

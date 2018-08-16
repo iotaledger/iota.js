@@ -22,21 +22,15 @@ yarn add @iota/transaction
 
     * [~transactionHash(trits)](#module_transaction..transactionHash)
 
-    * [~isTransactionHash(hash, mwm)](#module_transaction..isTransactionHash)
-
-    * [~isTransactionHashArray(hashes)](#module_transaction..isTransactionHashArray)
-
-    * [~isTransactionTrytes(trytes, mwm)](#module_transaction..isTransactionTrytes)
-
-    * [~isTransactionTrytesArray(trytesArray)](#module_transaction..isTransactionTrytesArray)
-
-    * [~isAttachedTrytesArray(trytesArray)](#module_transaction..isAttachedTrytesArray)
-
     * [~isTransaction(tx)](#module_transaction..isTransaction)
 
-    * [~isTransactionArray(bundle)](#module_transaction..isTransactionArray)
-
     * [~isTailTransaction(transaction)](#module_transaction..isTailTransaction)
+
+    * [~isTransactionHash(hash, mwm)](#module_transaction..isTransactionHash)
+
+    * [~isTransactionTrytes(trytes, minWeightMagnitude)](#module_transaction..isTransactionTrytes)
+
+    * [~isAttachedTrytes(trytes)](#module_transaction..isAttachedTrytes)
 
 
 <a name="module_transaction..transactionHash"></a>
@@ -50,59 +44,6 @@ yarn add @iota/transaction
 Calculates the transaction hash out of 8019 transaction trits.
 
 **Returns**: <code>Hash</code> - Transaction hash  
-<a name="module_transaction..isTransactionHash"></a>
-
-### *transaction*~isTransactionHash(hash, mwm)
-
-| Param | Type |
-| --- | --- |
-| hash | <code>string</code> | 
-| mwm | <code>number</code> | 
-
-Checks if input is correct transaction hash (81 trytes)
-
-<a name="module_transaction..isTransactionHashArray"></a>
-
-### *transaction*~isTransactionHashArray(hashes)
-
-| Param | Type |
-| --- | --- |
-| hashes | <code>Array.&lt;string&gt;</code> | 
-
-Checks if input is array of valid transaction hashes.
-
-<a name="module_transaction..isTransactionTrytes"></a>
-
-### *transaction*~isTransactionTrytes(trytes, mwm)
-
-| Param | Type |
-| --- | --- |
-| trytes | <code>string</code> | 
-| mwm | <code>number</code> | 
-
-Checks if input is correct transaction trytes (2673 trytes)
-
-<a name="module_transaction..isTransactionTrytesArray"></a>
-
-### *transaction*~isTransactionTrytesArray(trytesArray)
-
-| Param | Type |
-| --- | --- |
-| trytesArray | <code>Array.&lt;string&gt;</code> | 
-
-Checks if input is array of valid transaction trytes.
-
-<a name="module_transaction..isAttachedTrytesArray"></a>
-
-### *transaction*~isAttachedTrytesArray(trytesArray)
-
-| Param | Type |
-| --- | --- |
-| trytesArray | <code>Array.&lt;string&gt;</code> | 
-
-Checks if input is array of valid attached transaction trytes.
-For attached transactions last 241 trytes are non-zero.
-
 <a name="module_transaction..isTransaction"></a>
 
 ### *transaction*~isTransaction(tx)
@@ -112,16 +53,6 @@ For attached transactions last 241 trytes are non-zero.
 | tx | <code>object</code> | 
 
 Checks if input is valid transaction object.
-
-<a name="module_transaction..isTransactionArray"></a>
-
-### *transaction*~isTransactionArray(bundle)
-
-| Param | Type |
-| --- | --- |
-| bundle | <code>Array.&lt;object&gt;</code> | 
-
-Checks if input is valid array of transaction objects.
 
 <a name="module_transaction..isTailTransaction"></a>
 
@@ -133,4 +64,37 @@ Checks if input is valid array of transaction objects.
 
 Checks if given transaction object is tail transaction.
 A tail transaction is one with `currentIndex=0`.
+
+<a name="module_transaction..isTransactionHash"></a>
+
+### *transaction*~isTransactionHash(hash, mwm)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+| mwm | <code>number</code> | 
+
+Checks if input is correct transaction hash (81 trytes)
+
+<a name="module_transaction..isTransactionTrytes"></a>
+
+### *transaction*~isTransactionTrytes(trytes, minWeightMagnitude)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| minWeightMagnitude | <code>number</code> | 
+
+Checks if input is correct transaction trytes (2673 trytes)
+
+<a name="module_transaction..isAttachedTrytes"></a>
+
+### *transaction*~isAttachedTrytes(trytes)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+
+Checks if input is valid attached transaction trytes.
+For attached transactions last 241 trytes are non-zero.
 

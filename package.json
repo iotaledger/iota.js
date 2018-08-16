@@ -8,8 +8,7 @@
         "test-ci": "lerna bootstrap && lerna run test-ci --stream",
         "precommit": "lint-staged",
         "format": "prettier",
-        "docs":
-            "lerna run docs && jsdoc2md --no-cache --plugin dmd-clear --files './packages/*/out/**/*.js' > api_reference.md"
+        "docs": "lerna run docs"
     },
     "contributors": [
         "Dominik Schiener <dom@iota.org> (https://iota.org)",

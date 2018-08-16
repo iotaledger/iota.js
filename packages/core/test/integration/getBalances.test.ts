@@ -1,7 +1,7 @@
 import test from 'ava'
 import { createHttpClient } from '@iota/http-client'
+import { INVALID_ADDRESS, INVALID_THRESHOLD } from '../../../errors'
 import { createGetBalances } from '../../src'
-import { INVALID_HASH_ARRAY, INVALID_THRESHOLD } from '../../src/errors'
 import { getBalancesCommand, balancesResponse } from './nocks/getBalances'
 
 const getBalances = createGetBalances(createHttpClient())
@@ -37,7 +37,7 @@ test('getBalances() rejects with correct errors for invalid input', t => {
 
     t.is(
         t.throws(() => getBalances(invalidAddresses, getBalancesCommand.threshold), Error).message,
-        `${INVALID_HASH_ARRAY}: ${invalidAddresses[0]}`,
+        `${INVALID_ADDRESS}: ${invalidAddresses[0]}`,
         'getBalances() should throw error for invalid addresses'
     )
 

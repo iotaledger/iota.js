@@ -1,8 +1,9 @@
-import * as Promise from 'bluebird'
-import { depthValidator, hashValidator, validate } from '@iota/validators'
+import { transactionHashValidator } from '@iota/transaction'
 import { asTransactionObject } from '@iota/transaction-converter'
-import { createCheckConsistency, createGetTrytes } from './'
+import * as Promise from 'bluebird'
+import { depthValidator, hashValidator, validate } from '../../guards'
 import { Callback, Hash, Provider } from '../../types'
+import { createCheckConsistency, createGetTrytes } from './'
 
 const MILESTONE_INTERVAL = 2 * 60 * 1000
 const ONE_WAY_DELAY = 1 * 60 * 1000

@@ -1,8 +1,9 @@
-import * as Promise from 'bluebird'
+import { transactionTrytesValidator } from '@iota/transaction'
 import { asTransactionObject } from '@iota/transaction-converter'
-import { depthValidator, mwmValidator, trytesArrayValidator, validate } from '@iota/validators'
-import { createAttachToTangle, createGetTransactionsToApprove, createStoreAndBroadcast } from './'
+import * as Promise from 'bluebird'
+import { arrayValidator, depthValidator, minWeightMagnitudeValidator, validate } from '../../guards'
 import { AttachToTangle, Bundle, Callback, Hash, Provider, Transaction, Trytes } from '../../types'
+import { createAttachToTangle, createGetTransactionsToApprove, createStoreAndBroadcast } from './'
 
 /**
  * @method createSendTrytes
@@ -47,7 +48,7 @@ export const createSendTrytes = (provider: Provider, attachFn?: AttachToTangle) 
      * @return {Promise}
      * @fulfil {Transaction[]}  Returns list of attached transactions
      * @reject {Error}
-     * - `INVALID_TRYTES`
+     * - `INVALID_TRANSACTION_TRYTES`
      * - `INVALID_DEPTH`
      * - `INVALID_MIN_WEIGHT_MAGNITUDE`
      * - Fetch error, if connected to network
@@ -65,7 +66,11 @@ export const createSendTrytes = (provider: Provider, attachFn?: AttachToTangle) 
         }
 
         return Promise.resolve(
-            validate(trytesArrayValidator(trytes), depthValidator(depth), mwmValidator(minWeightMagnitude))
+            validate(
+                arrayValidator(transactionTrytesValidator)(trytes),
+                depthValidator(depth),
+                minWeightMagnitudeValidator(minWeightMagnitude)
+            )
         )
             .then(() => getTransactionsToApprove(depth, reference))
             .then(({ trunkTransaction, branchTransaction }) =>

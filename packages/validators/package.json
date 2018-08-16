@@ -34,6 +34,10 @@
         },
         "include": ["out/*/src/*.js", "out/*/test/*.js"]
     },
+    "dependencies": {
+        "@iota/checksum": "^1.0.0-alpha.1",
+        "@iota/transaction": "^1.0.0-alpha.1"
+    },
     "devDependencies": {
         "@iota/samples": "^1.0.0-alpha.1"
     },

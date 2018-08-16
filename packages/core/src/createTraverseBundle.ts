@@ -1,8 +1,9 @@
-import * as Promise from 'bluebird'
+import { tailTransactionValidator, transactionHashValidator } from '@iota/transaction'
 import { asTransactionObject } from '@iota/transaction-converter'
-import { tailTransactionValidator, transactionHashValidator, validate } from '@iota/validators'
-import { createGetTrytes } from './'
+import * as Promise from 'bluebird'
+import { validate } from '../../guards'
 import { Callback, Hash, Provider, Transaction } from '../../types'
+import { createGetTrytes } from './'
 
 /**
  * @method createTraverseBundle
@@ -43,7 +44,7 @@ export const createTraverseBundle = (provider: Provider) => {
      * @returns {Promise}
      * @fulfil {Transaction[]} Bundle as array of transaction objects
      * @reject {Error}
-     * - `INVALID_HASH`
+     * - `INVALID_TRANSACTION_HASH`
      * - `INVALID_TAIL_HASH`: Provided transaction is not tail (`currentIndex !== 0`)
      * - `INVALID_BUNDLE`: Bundle is syntactically invalid
      * - Fetch error

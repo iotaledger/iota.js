@@ -1,7 +1,6 @@
 import test from 'ava'
 import { createHttpClient } from '@iota/http-client'
 import { createGetTips } from '../../src'
-import { INVALID_HASH_ARRAY, INVALID_THRESHOLD } from '../../src/errors'
 import { getTipsResponse } from './nocks/getTips'
 
 const getTips = createGetTips(createHttpClient())
