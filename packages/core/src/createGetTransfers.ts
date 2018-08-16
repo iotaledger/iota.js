@@ -5,10 +5,10 @@ import {
     startEndOptionsValidator,
     startOptionValidator,
     validate,
-} from '@iota/validators'
+} from '../../guards'
+import { asArray, Bundle, Callback, Provider, getOptionsWithDefaults, Transaction } from '../../types'
 import { createGetBundlesFromAddresses } from './createGetBundlesFromAddresses'
 import { createGetNewAddress, getNewAddressOptions, GetNewAddressOptions } from './createGetNewAddress'
-import { asArray, Bundle, Callback, Provider, getOptionsWithDefaults, Transaction } from '../../types'
 
 export interface GetTransfersOptions {
     readonly start: number
@@ -80,6 +80,7 @@ export const createGetTransfers = (provider: Provider, caller?: string) => {
         callback?: Callback<ReadonlyArray<Bundle>>
     ): Promise<ReadonlyArray<Bundle>> {
         if (caller !== 'lib') {
+            /* tslint:disable-next-line:no-console */
             console.warn(
                 '`getTransfers()` is deprecated and will be removed in v2.0.0. ' +
                     '`findTransactions()` should be used instead.'

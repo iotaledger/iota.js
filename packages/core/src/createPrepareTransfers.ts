@@ -5,22 +5,20 @@ import { addEntry, addTrytes, finalizeBundle } from '@iota/bundle'
 import { isValidChecksum, removeChecksum } from '@iota/checksum'
 import { key, normalizedBundleHash, signatureFragment, subseed } from '@iota/signing'
 import { asFinalTransactionTrytes } from '@iota/transaction-converter'
+import * as errors from '../../errors'
 import {
-    addressObjectArrayValidator,
+    arrayValidator,
+    inputValidator,
     isTrytes,
     remainderAddressValidator,
     securityLevelValidator,
     seedValidator,
-    transferArrayValidator,
+    transferValidator,
     validate,
-} from '@iota/validators'
-
-import { createGetInputs, createGetNewAddress } from './'
-import * as errors from './errors'
-import HMAC from './hmac'
+} from '../../guards'
 import {
-    asArray,
     Address,
+    asArray,
     Callback,
     getOptionsWithDefaults,
     Provider,
@@ -29,6 +27,8 @@ import {
     Trytes,
 } from '../../types'
 import { asyncPipe } from '../../utils'
+import { createGetInputs, createGetNewAddress } from './'
+import HMAC from './hmac'
 
 const HASH_LENGTH = 81
 const SIGNATURE_MESSAGE_FRAGMENT_LENGTH = 2187
@@ -118,9 +118,10 @@ export const createPrepareTransfers = (provider?: Provider, now: () => number = 
      * @reject {Error}
      * - `INVALID_SEED`
      * - `INVALID_TRANSFER_ARRAY`
-     * - `INVALID_INPUTS`
+     * - `INVALID_INPUT`
      * - `INVALID_REMAINDER_ADDRESS`
      * - `INSUFFICIENT_BALANCE`
+     * - `NO_INPUTS`
      * - `SENDING_BACK_TO_INPUTS`
      * - Fetch error, if connected to network
      */
@@ -184,9 +185,9 @@ export const validatePrepareTransfers = (props: PrepareTransfersProps) => {
     validate(
         seedValidator(seed),
         securityLevelValidator(security),
-        transferArrayValidator(transfers),
+        arrayValidator(transferValidator)(transfers),
         !!remainderAddress && remainderAddressValidator(remainderAddress),
-        inputs.length > 0 && addressObjectArrayValidator(inputs)
+        inputs.length > 0 && arrayValidator(inputValidator)(inputs)
     )
 
     return props
@@ -246,7 +247,7 @@ export const createAddInputs = (provider?: Provider) => {
         const threshold = transfers.reduce((sum, { value }) => (sum += value), 0)
 
         if (inputs.length && threshold > inputs.reduce((acc, input) => (acc += input.balance), 0)) {
-            throw new Error(inputs.length ? errors.INSUFFICIENT_BALANCE : errors.INVALID_INPUTS)
+            throw new Error(inputs.length ? errors.INSUFFICIENT_BALANCE : errors.NO_INPUTS)
         }
 
         return (!getInputs || inputs.length

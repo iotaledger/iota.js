@@ -1,7 +1,8 @@
 import * as Promise from 'bluebird'
 import { addChecksum } from '@iota/checksum'
-import { indexValidator, integerValidator, securityLevelValidator, seedValidator, validate } from '@iota/validators'
-import { createFindTransactions, generateAddress, errors } from './'
+import * as errors from '../../errors'
+import { indexValidator, securityLevelValidator, seedValidator, validate } from '../../guards'
+import { createFindTransactions, generateAddress } from './'
 import { createWereAddressesSpentFrom } from './createWereAddressesSpentFrom'
 import { asArray, Callback, getOptionsWithDefaults, Provider, Trytes } from '../../types'
 
@@ -154,7 +155,7 @@ export const createGetNewAddress = (provider: Provider, caller?: string) => {
         callback?: Callback<Trytes | ReadonlyArray<Trytes>>
     ): Promise<Trytes | ReadonlyArray<Trytes>> {
         if (caller !== 'lib') {
-            let deprecated = []
+            const deprecated = []
             if (options.total !== undefined) {
                 deprecated.push(options.total)
             }
@@ -164,6 +165,7 @@ export const createGetNewAddress = (provider: Provider, caller?: string) => {
             if (options.checksum !== undefined) {
                 deprecated.push(options.checksum)
             }
+            /* tslint:disable-next-line:no-console */
             console.warn(
                 `\`GetNewAddressOptions\`: ${deprecated.join(
                     ','
@@ -178,8 +180,7 @@ export const createGetNewAddress = (provider: Provider, caller?: string) => {
                 seedValidator(seed),
                 indexValidator(index),
                 securityLevelValidator(security),
-                !!total && integerValidator(total, errors.INVALID_TOTAL_OPTION),
-                [total, t => t !== 0, errors.INVALID_TOTAL_OPTION]
+                (!!total || total === 0) && [total, t => Number.isInteger(t) && t > 0, errors.INVALID_TOTAL_OPTION]
             )
         )
             .then(

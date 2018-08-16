@@ -2,18 +2,20 @@
 
 import { trits, trytes } from '@iota/converter'
 import Kerl from '@iota/kerl'
-import { errors as _errors, isHash, isHashArray, isTrytes, isInteger } from '@iota/validators'
+import { INVALID_ADDRESS, INVALID_CHECKSUM, INVALID_TRYTES } from '../../errors'
+import { isHash, isTrytes } from '../../guards'
 import { asArray, Trytes } from '../../types'
 
 export const errors = {
-    INVALID_ADDRESS: _errors.INVALID_ADDRESS,
-    INVALID_CHECKSUM: _errors.INVALID_CHECKSUM,
-    INVALID_TRYTES: _errors.INVALID_TRYTES,
+    INVALID_ADDRESS,
+    INVALID_CHECKSUM,
+    INVALID_TRYTES,
     INVALID_CHECKSUM_LENGTH: 'Invalid checksum length',
 }
 
 const HASH_TRYTES_LENGTH = 81
 const ADDRESS_CHECKSUM_TRYTES_LENGTH = 9
+const ADDRESS_WITH_CHECKSUM_TRYTES_LENGTH = HASH_TRYTES_LENGTH + ADDRESS_CHECKSUM_TRYTES_LENGTH
 const MIN_CHECKSUM_TRYTES_LENGTH = 3
 
 /**
@@ -46,7 +48,7 @@ export function addChecksum(
         }
 
         if (isAddress && inputTrytes.length !== HASH_TRYTES_LENGTH) {
-            if (inputTrytes.length == HASH_TRYTES_LENGTH + ADDRESS_CHECKSUM_TRYTES_LENGTH) {
+            if (inputTrytes.length === ADDRESS_WITH_CHECKSUM_TRYTES_LENGTH) {
                 return inputTrytes
             }
 
@@ -54,20 +56,20 @@ export function addChecksum(
         }
 
         if (
-            !isInteger(checksumLength) ||
+            !Number.isInteger(checksumLength) ||
             checksumLength < MIN_CHECKSUM_TRYTES_LENGTH ||
             (isAddress && checksumLength !== ADDRESS_CHECKSUM_TRYTES_LENGTH)
         ) {
             throw new Error(errors.INVALID_CHECKSUM_LENGTH)
         }
 
-        let _inputTrytes = inputTrytes
+        let paddedInputTrytes = inputTrytes
 
-        while (_inputTrytes.length % HASH_TRYTES_LENGTH !== 0) {
-            _inputTrytes += '9'
+        while (paddedInputTrytes.length % HASH_TRYTES_LENGTH !== 0) {
+            paddedInputTrytes += '9'
         }
 
-        const inputTrits = trits(_inputTrytes)
+        const inputTrits = trits(paddedInputTrytes)
         const checksumTrits = new Int8Array(Kerl.HASH_LENGTH)
 
         const kerl = new Kerl()
@@ -96,7 +98,10 @@ export function removeChecksum(input: ReadonlyArray<Trytes>): ReadonlyArray<Tryt
 export function removeChecksum(input: Trytes | ReadonlyArray<Trytes>) {
     const tryteArray = asArray(input)
 
-    if (!isHashArray(tryteArray)) {
+    if (
+        tryteArray.length === 0 ||
+        !tryteArray.every(t => isTrytes(t, HASH_TRYTES_LENGTH) || isTrytes(t, ADDRESS_WITH_CHECKSUM_TRYTES_LENGTH))
+    ) {
         throw new Error(errors.INVALID_ADDRESS)
     }
 

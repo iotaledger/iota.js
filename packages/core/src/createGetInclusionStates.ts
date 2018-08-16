@@ -1,5 +1,6 @@
 import * as Promise from 'bluebird'
-import { hashArrayValidator, validate } from '@iota/validators'
+import { transactionHashValidator } from '@iota/transaction'
+import { arrayValidator, validate } from '../../guards'
 import {
     Callback,
     Hash,
@@ -45,7 +46,7 @@ export const createGetInclusionStates = ({ send }: Provider) =>
      * @return {Promise}
      * @fulfil {boolean[]} Array of inclusion state
      * @reject {Error}
-     * - `INVALID_HASH_ARRAY`: Invalid `hashes` or `tips`
+     * - `INVALID_TRANSACTION_HASH`: Invalid `hashes` or `tips`
      * - Fetch error
      */
     (
@@ -53,7 +54,12 @@ export const createGetInclusionStates = ({ send }: Provider) =>
         tips: ReadonlyArray<Hash>,
         callback?: Callback<ReadonlyArray<boolean>>
     ): Promise<ReadonlyArray<boolean>> =>
-        Promise.resolve(validate(hashArrayValidator(transactions), hashArrayValidator(tips)))
+        Promise.resolve(
+            validate(
+                arrayValidator(transactionHashValidator)(transactions),
+                arrayValidator(transactionHashValidator)(tips)
+            )
+        )
             .then(() =>
                 send<GetInclusionStatesCommand, GetInclusionStatesResponse>({
                     command: IRICommand.GET_INCLUSION_STATES,

@@ -1,7 +1,7 @@
 import test from 'ava'
 import { createHttpClient } from '@iota/http-client'
+import { INVALID_TRANSACTION_HASH } from '../../../errors'
 import { createGetTransactionObjects } from '../../src'
-import { INVALID_HASH_ARRAY } from '../../src/errors'
 import { bundle, bundleWithZeroValue } from '@iota/samples'
 
 import './nocks/getTrytes'
@@ -23,7 +23,7 @@ test('getTransactionObjects() rejects with correct error for invalid hash.', t =
 
     t.is(
         t.throws(() => getTransactionObjects(invalidHashes), Error).message,
-        `${INVALID_HASH_ARRAY}: ${invalidHashes[0]}`,
+        `${INVALID_TRANSACTION_HASH}: ${invalidHashes[0]}`,
         'getTransactionObjects() should throw correct error for invalid hash.'
     )
 })

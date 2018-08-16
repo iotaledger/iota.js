@@ -2,66 +2,29 @@ import test from 'ava'
 import { isAddressArray } from '../src'
 
 test('isAddressArray()', t => {
-    const addresses = [
-        {
-            address: 'JALLWDTSJVL9EEHKW9YQFPBVBJAGLNKRVGSQZCGHQWEMIIILJMTHVAGVDXJVZMBAMOZTSBQNRVNLLSJMP',
-            security: 2,
-            keyIndex: 1,
-            balance: '0',
-        },
-    ]
-
+    const addresses = ['JALLWDUOSTSJVL9EEHKW9YQFPBVBJAGLNKRVGSQZCGHQWEMIIILJMTHVAGVDXJVZMBAMOZTSBQNRVNLLS']
     const addressesWithChecksum = [
-        {
-            address: 'UYEEERFQYTPFAHIPXDQAQYWYMSMCLMGBTYAXLWFRFFWPYFOICOVLK9A9VYNCKK9TQUNBTARCEQXJHD9VYXOEDEOMRC',
-            security: 2,
-            keyIndex: 1,
-            balance: '0',
-        },
+        'UYEEERFQYTPFAHIPXDQAQYWYMSMCLMGBTYAXLWFRFFWPYFOICOVLK9A9VYNCKK9TQUNBTARCEQXJHD9VYXOEDEOMRC',
     ]
-
-    const addressesOfInvalidLength = [
-        {
-            address: 'SDFSDAFdasfaSDF',
-            security: 2,
-            keyIndex: 1,
-            balance: '0',
-        },
-    ]
-
-    const addressesOfInvalidTrytes = [
-        {
-            address: 'SDFSDAFdasfaSDF',
-            security: 2,
-            keyIndex: 1,
-            balance: '0',
-        },
-    ]
-
+    const addressesOfInvalidLength = ['SDFSDAFdasfaSDF']
+    const addressesOfInvalidTrytes = ['SDFSDAFdasfaSDF']
     const addressesOfInvalidSecurity = [
-        {
-            address: 'JALLWDTSJVL9EEHKW9YQFPBVBJAGLNKRVGSQZCGHQWEMIIILJMTHVAGVDXJVZMBAMOZTSBQNRVNLLSJMP',
-            security: -1,
-            keyIndex: 1,
-            balance: '0',
-        },
+        'JALLWDTSJVL9EEHKW9YQFPBVBJAGLNKRVGSQZCGHQWEMIIILJMTHVAGVDXJVZMBAMOZTSBQNRVNLLSJMP',
     ]
-
     const addressesOfInvalidIndex = [
-        {
-            address: 'JALLWDTSJVL9EEHKW9YQFPBVBJAGLNKRVGSQZCGHQWEMIIILJMTHVAGVDXJVZMBAMOZTSBQNRVNLLSJMP',
-            security: 2,
-            keyIndex: -1,
-            balance: '0',
-        },
+        'JALLWDTSJVL9EEHKW9YQFPBVBJAGLNKRVGSQZCGHQWEMIIILJMTHVAGVDXJVZMBAMOZTSBQNRVNLLSJMP',
     ]
 
-    t.is(isAddressArray(addresses), true, 'isAddressArray() should return true for valid address array.')
+    t.is(
+        isAddressArray(addresses),
+        false,
+        'isAddressArray() should return true for valid address array without checksum.'
+    )
 
     t.is(
         isAddressArray(addressesWithChecksum),
         true,
-        'isAddressArray() should return true for valid address with checksum.'
+        'isAddressArray() should return true for valid addresses with checksum.'
     )
 
     t.is(

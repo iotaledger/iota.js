@@ -1,13 +1,13 @@
 import test from 'ava'
 import { createHttpClient } from '@iota/http-client'
+import { INSUFFICIENT_BALANCE, INVALID_SEED, INVALID_START_END_OPTIONS } from '../../../errors'
+import { Inputs } from '../../../types'
 import {
     createGetInputs,
     createInputsObject,
     hasSufficientBalance,
     inputsToAddressOptions,
 } from '../../src/createGetInputs'
-import { Inputs } from '../../../types'
-import { INSUFFICIENT_BALANCE, INVALID_SEED, INVALID_START_END_OPTIONS } from '../../src/errors'
 import { getBalancesCommand, balancesResponse } from './nocks/getBalances'
 import './nocks/findTransactions'
 import './nocks/wereAddressesSpentFrom'

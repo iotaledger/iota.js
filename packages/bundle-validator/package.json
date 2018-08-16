@@ -48,14 +48,9 @@
         "@iota/kerl": "^1.0.0-alpha.1",
         "@iota/signing": "^1.0.0-alpha.1",
         "@iota/transaction-converter": "^1.0.0-alpha.1",
-        "@iota/validators": "^1.0.0-alpha.1"
+        "@iota/transaction": "^1.0.0-alpha.1"
     },
     "devDependencies": {
-        "@iota/converter": "^1.0.0-alpha.1",
-        "@iota/kerl": "^1.0.0-alpha.1",
-        "@iota/samples": "^1.0.0-alpha.1",
-        "@iota/signing": "^1.0.0-alpha.1",
-        "@iota/transaction-converter": "^1.0.0-alpha.1",
-        "@iota/validators": "^1.0.0-alpha.1"
+        "@iota/samples": "^1.0.0-alpha.1"
     }
 }

@@ -3,8 +3,10 @@
 import { trits, trytes } from '@iota/converter'
 import Kerl from '@iota/kerl'
 import { validateSignatures } from '@iota/signing'
+import { isTransaction } from '@iota/transaction'
 import { asTransactionTrytes } from '@iota/transaction-converter'
-import { isTransactionArray, Validator, errors } from '@iota/validators'
+import * as errors from '../../errors'
+import { isArray, Validator } from '../../guards'
 import { Bundle, Hash, Transaction, Trytes } from '../../types'
 
 interface SignatureFragments {
@@ -29,11 +31,11 @@ export const validateBundleSignatures = (bundle: Bundle): boolean => {
                       [address]: [signatureMessageFragment],
                   }
                 : value === 0 && acc.hasOwnProperty(address) && address === bundle[i - 1].address
-                  ? {
-                        ...acc,
-                        [address]: acc[address].concat(signatureMessageFragment),
-                    }
-                  : acc,
+                    ? {
+                          ...acc,
+                          [address]: acc[address].concat(signatureMessageFragment),
+                      }
+                    : acc,
         {}
     )
 
@@ -51,7 +53,7 @@ export const validateBundleSignatures = (bundle: Bundle): boolean => {
  * @returns {boolean}
  */
 export default function isBundle(bundle: Bundle) {
-    if (!isTransactionArray(bundle)) {
+    if (!isArray(isTransaction)(bundle)) {
         return false
     }
 

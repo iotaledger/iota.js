@@ -1,5 +1,6 @@
 import test from 'ava'
 import { createHttpClient } from '@iota/http-client'
+import { INVALID_SEED, INVALID_TOTAL_OPTION } from '../../../errors'
 import {
     applyChecksumOption,
     applyReturnAllOption,
@@ -7,7 +8,6 @@ import {
     createIsAddressUsed,
     getUntilFirstUnusedAddress,
 } from '../../src/createGetNewAddress'
-import { INVALID_SEED, INVALID_TOTAL_OPTION } from '../../src/errors'
 import './nocks/findTransactions'
 import './nocks/wereAddressesSpentFrom'
 

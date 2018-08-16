@@ -1,7 +1,7 @@
 import test from 'ava'
 import { createHttpClient } from '@iota/http-client'
+import { INVALID_TRANSACTION_HASH } from '../../../errors'
 import { createGetTrytes } from '../../src'
-import { INVALID_HASH_ARRAY } from '../../src/errors'
 import { getTrytesCommand, getTrytesResponse } from './nocks/getTrytes'
 
 const getTrytes = createGetTrytes(createHttpClient())
@@ -19,7 +19,7 @@ test('getTrytes() rejects with correct error for invalid hashes', t => {
 
     t.is(
         t.throws(() => getTrytes(invalidHashes), Error).message,
-        `${INVALID_HASH_ARRAY}: ${invalidHashes[0]}`,
+        `${INVALID_TRANSACTION_HASH}: ${invalidHashes[0]}`,
         'getTrytes() should throw error for invalid hashes'
     )
 })

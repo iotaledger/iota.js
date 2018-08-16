@@ -1,10 +1,10 @@
 import test from 'ava'
 import { createHttpClient } from '@iota/http-client'
+import { attachedTrytesOfInvalidLength } from '@iota/samples'
+import { INVALID_ATTACHED_TRYTES } from '../../../errors'
 import { createStoreAndBroadcast } from '../../src'
-import { INVALID_ATTACHED_TRYTES } from '../../src/errors'
 import { storeTransactionsCommand } from './nocks/storeTransactions'
 import './nocks/broadcastTransactions'
-import { attachedTrytesOfInvalidLength } from '@iota/samples'
 
 const storeAndBroadcast = createStoreAndBroadcast(createHttpClient())
 

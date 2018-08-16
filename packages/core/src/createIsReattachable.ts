@@ -1,8 +1,9 @@
 import * as Promise from 'bluebird'
 import { removeChecksum } from '@iota/checksum'
-import { hashArrayValidator, trytesArrayValidator, validate } from '@iota/validators'
-import { createFindTransactionObjects, createGetLatestInclusion } from './'
+import { INVALID_ADDRESS } from '../../errors'
+import { arrayValidator, hashValidator, trytesValidator, validate } from '../../guards'
 import { asArray, Callback, Hash, Provider, Transaction, Trytes } from '../../types'
+import { createFindTransactionObjects, createGetLatestInclusion } from './'
 
 // Filters out all receiving or 0-value transactions
 // Note: Transaction value < 0 is a tx-out (spending transaction)
@@ -34,16 +35,17 @@ export const createIsReattachable = (provider: Provider) => {
         const inputAddressArray = asArray(inputAddresses)
         let addresses: Hash[]
 
+        /* tslint:disable-next-line:no-console */
         console.warn('`isReattachable()` has been deprecated and will be removed in v2.0.0.')
 
         return (
             Promise.try(() => {
                 // 1. Remove checksum and validate addresses
-                validate(trytesArrayValidator(inputAddressArray))
+                validate(arrayValidator(trytesValidator)(inputAddressArray, INVALID_ADDRESS))
 
                 addresses = inputAddressArray.map(addr => removeChecksum(addr))
 
-                validate(hashArrayValidator(addresses))
+                validate(arrayValidator(hashValidator)(addresses))
             })
                 // 2. Find all transactions for these addresses
                 .then(() => findTransactionObjects({ addresses }))

@@ -1,10 +1,10 @@
 import * as Bluebird from 'bluebird'
-import { hashValidator, transferArrayValidator, validate } from '@iota/validators'
+import * as errors from '../../errors'
+import { arrayValidator, hashValidator, transferValidator, validate } from '../../guards'
+import { AttachToTangle, Callback, getOptionsWithDefaults, Maybe, Provider, Transaction, Transfer } from '../../types'
 import { createCheckConsistency } from './'
 import { getPrepareTransfersOptions } from './createPrepareTransfers'
 import { createSendTransfer } from './createSendTransfer'
-import * as errors from './errors'
-import { AttachToTangle, Callback, getOptionsWithDefaults, Maybe, Provider, Transaction, Transfer } from '../../types'
 
 export interface PromoteTransactionOptions {
     readonly delay: number
@@ -91,7 +91,9 @@ export const createPromoteTransaction = (provider: Provider, attachFn?: AttachTo
             reference: tailTransaction,
         }
 
-        return Bluebird.resolve(validate(hashValidator(tailTransaction), transferArrayValidator(spamTransfers)))
+        return Bluebird.resolve(
+            validate(hashValidator(tailTransaction), arrayValidator(transferValidator)(spamTransfers))
+        )
             .then(() => checkConsistency(tailTransaction, { rejectWithReason: true }))
             .then(consistent => {
                 if (!consistent) {

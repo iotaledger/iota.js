@@ -1,6 +1,7 @@
-import * as Promise from 'bluebird'
 import { removeChecksum } from '@iota/checksum'
-import { hashArrayValidator, validate } from '@iota/validators'
+import * as Promise from 'bluebird'
+import * as errors from '../../errors'
+import { arrayValidator, hashValidator, validate } from '../../guards'
 import { BaseCommand, Callback, Hash, IRICommand, Provider } from '../../types'
 
 export interface WereAddressesSpentFromCommand extends BaseCommand {
@@ -17,6 +18,7 @@ export const createWereAddressesSpentFrom = ({ send }: Provider, caller?: string
     callback?: Callback<ReadonlyArray<boolean>>
 ): Promise<ReadonlyArray<boolean>> => {
     if (caller !== 'lib') {
+        /* tslint:disable-next-line:no-console */
         console.warn(
             'Avoid using `wereAddressesSpentFrom()` instead of proper input management with a local database.\n' +
                 '`wereAddressesSpentFrom()` does not scale in IoT environment, hence it will be removed from the ' +
@@ -24,7 +26,7 @@ export const createWereAddressesSpentFrom = ({ send }: Provider, caller?: string
         )
     }
 
-    return Promise.resolve(validate(hashArrayValidator(addresses)))
+    return Promise.resolve(validate(arrayValidator(hashValidator)(addresses, errors.INVALID_ADDRESS)))
         .then(() =>
             send<WereAddressesSpentFromCommand, WereAddressesSpentFromResponse>({
                 command: IRICommand.WERE_ADDRESSES_SPENT_FROM,

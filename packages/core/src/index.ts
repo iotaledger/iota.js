@@ -136,7 +136,7 @@ export { createTraverseBundle } from './createTraverseBundle'
 export { generateAddress } from './generateAddress'
 
 // Errors
-import * as errors from './errors'
+import * as errors from '../../errors'
 export { errors }
 
 // export api factory with default provider

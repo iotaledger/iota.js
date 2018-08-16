@@ -1,8 +1,9 @@
-import * as Promise from 'bluebird'
+import { transactionHashValidator } from '@iota/transaction'
 import { asFinalTransactionTrytes } from '@iota/transaction-converter'
-import { hashValidator, integerValidator, mwmValidator, validate } from '@iota/validators'
-import { createGetBundle, createSendTrytes } from './'
+import * as Promise from 'bluebird'
+import { depthValidator, minWeightMagnitudeValidator, validate } from '../../guards'
 import { AttachToTangle, Bundle, Callback, Hash, Provider, Transaction } from '../../types'
+import { createGetBundle, createSendTrytes } from './'
 
 /**
  * @method createReplayBundle
@@ -55,7 +56,7 @@ export const createReplayBundle = (provider: Provider, attachFn?: AttachToTangle
      * @reject {Error}
      * - `INVALID_DEPTH`
      * - `INVALID_MIN_WEIGHT_MAGNITUDE`
-     * - `INVALID_HASH`
+     * - `INVALID_TRANSACTION_HASH`
      * - `INVALID_BUNDLE`
      * - Fetch error
      */
@@ -66,7 +67,13 @@ export const createReplayBundle = (provider: Provider, attachFn?: AttachToTangle
         reference?: Hash,
         callback?: Callback<Bundle>
     ): Promise<Bundle> {
-        return Promise.resolve(validate(hashValidator(tail), integerValidator(depth), mwmValidator(minWeightMagnitude)))
+        return Promise.resolve(
+            validate(
+                transactionHashValidator(tail),
+                depthValidator(depth),
+                minWeightMagnitudeValidator(minWeightMagnitude)
+            )
+        )
             .then(() => getBundle(tail))
             .then(bundle => asFinalTransactionTrytes(bundle))
             .then(trytes => sendTrytes(trytes, depth, minWeightMagnitude, reference))

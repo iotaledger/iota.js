@@ -35,7 +35,7 @@ export const createStoreAndBroadcast = (provider: Provider) => {
      * @return {Promise<Trytes[]>}
      * @fulfil {Trytes[]} Attached transaction trytes
      * @reject {Error}
-     * - `INVALID_ATTACHED_TRYTES`: Invalid array of attached trytes
+     * - `INVALID_ATTACHED_TRYTES`: Invalid attached trytes
      * - Fetch error
      */
     return (

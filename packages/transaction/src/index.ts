@@ -4,16 +4,17 @@
 
 import { tritsToTrytes, trytesToTrits } from '@iota/converter'
 import Curl from '@iota/curl'
-import { isArray, isHash, isInteger, isNinesTrytes, isTrytes, isTrytesOfExactLength } from '@iota/validators'
+import * as errors from '../../errors'
+import { isArray, isHash, isTrytesOfExactLength, validate, Validator } from '../../guards'
+import { Hash, Transaction, Trytes } from '../../types'
 import {
     HASH_SIZE,
-    TRANSACTION_TRYTES_SIZE,
-    SIGNATURE_MESSAGE_FRAGMENT_TRYTES_SIZE,
-    OBSOLETE_TAG_TRYTES_SIZE,
     NONCE_TRYTES_SIZE,
+    OBSOLETE_TAG_TRYTES_SIZE,
+    SIGNATURE_MESSAGE_FRAGMENT_TRYTES_SIZE,
     TAG_TRYTES_SIZE,
+    TRANSACTION_TRYTES_SIZE,
 } from './constants'
-import { Hash, Transaction, Trytes } from '../../types'
 
 /**
  * Calculates the transaction hash out of 8019 transaction trits.
@@ -36,95 +37,7 @@ export const transactionHash = (trits: Int8Array): Hash => {
     return tritsToTrytes(hash)
 }
 
-/**
- * Checks if input is correct transaction hash (81 trytes)
- *
- * @method isTransactionHash
- *
- * @param {string} hash
- * @param {number} mwm
- *
- * @return {boolean}
- */
-export const isTransactionHash = (hash: any, mwm?: number): hash is Hash => {
-    const hasCorrectHashLength = isTrytesOfExactLength(hash, HASH_SIZE)
-
-    if (mwm) {
-        return (
-            hasCorrectHashLength &&
-            trytesToTrits(hash)
-                .slice(-Math.abs(mwm))
-                .every(trit => trit === 0)
-        )
-    }
-
-    return hasCorrectHashLength
-}
-
-/**
- * Checks if input is array of valid transaction hashes.
- *
- * @method isTransactionHashArray
- *
- * @param {string[]} hashes
- *
- * @return {boolean}
- */
-export const isTransactionHashArray = (hashes: ReadonlyArray<any>): hashes is ReadonlyArray<Hash> =>
-    isArray(hashes) && !!hashes.length && hashes.every(isTransactionHash)
-
-/**
- * Checks if input is correct transaction trytes (2673 trytes)
- *
- * @method isTransactionTrytes
- *
- * @param {string} trytes
- * @param {number} mwm
- *
- * @return {boolean}
- */
-export const isTransactionTrytes = (trytes: any, mwm?: number): trytes is Trytes => {
-    const hasCorrectTrytesLength = isTrytesOfExactLength(trytes, TRANSACTION_TRYTES_SIZE)
-
-    if (mwm) {
-        return hasCorrectTrytesLength && isTransactionHash(transactionHash(trytesToTrits(trytes)), mwm)
-    }
-
-    return hasCorrectTrytesLength
-}
-
-/**
- * Checks if input is array of valid transaction trytes.
- *
- * @method isTransactionTrytesArray
- *
- * @param {string[]} trytesArray
- *
- * @return {boolean}
- */
-export const isTransactionTrytesArray = (trytesArray: ReadonlyArray<any>): trytesArray is ReadonlyArray<Trytes> =>
-    isArray(trytesArray) &&
-    !!trytesArray.length &&
-    trytesArray.every(trytes => isTrytes(trytes, TRANSACTION_TRYTES_SIZE))
-
-/**
- * Checks if input is array of valid attached transaction trytes.
- * For attached transactions last 241 trytes are non-zero.
- *
- * @method isAttachedTrytesArray
- *
- * @param {string[]} trytesArray
- *
- * @return {boolean}
- */
-export const isAttachedTrytesArray = (trytesArray: ReadonlyArray<any>): trytesArray is ReadonlyArray<Trytes> =>
-    isArray(trytesArray) &&
-    trytesArray.length > 0 &&
-    trytesArray.every(
-        trytes =>
-            isTrytesOfExactLength(trytes, TRANSACTION_TRYTES_SIZE) &&
-            !/^[9]+$/.test(trytes.slice(TRANSACTION_TRYTES_SIZE - 3 * HASH_SIZE))
-    )
+/* Type guards */
 
 /**
  * Checks if input is valid transaction object.
@@ -139,31 +52,19 @@ export const isTransaction = (tx: any): tx is Transaction =>
     isHash(tx.hash) &&
     isTrytesOfExactLength(tx.signatureMessageFragment, SIGNATURE_MESSAGE_FRAGMENT_TRYTES_SIZE) &&
     isHash(tx.address) &&
-    isInteger(tx.value) &&
+    Number.isInteger(tx.value) &&
     isTrytesOfExactLength(tx.obsoleteTag, OBSOLETE_TAG_TRYTES_SIZE) &&
-    isInteger(tx.timestamp) &&
-    (isInteger(tx.currentIndex) && tx.currentIndex >= 0 && tx.currentIndex <= tx.lastIndex) &&
-    isInteger(tx.lastIndex) &&
+    Number.isInteger(tx.timestamp) &&
+    (Number.isInteger(tx.currentIndex) && tx.currentIndex >= 0 && tx.currentIndex <= tx.lastIndex) &&
+    Number.isInteger(tx.lastIndex) &&
     isHash(tx.bundle) &&
     isHash(tx.trunkTransaction) &&
     isHash(tx.branchTransaction) &&
     isTrytesOfExactLength(tx.tag, TAG_TRYTES_SIZE) &&
-    isInteger(tx.attachmentTimestamp) &&
-    isInteger(tx.attachmentTimestampLowerBound) &&
-    isInteger(tx.attachmentTimestampUpperBound) &&
+    Number.isInteger(tx.attachmentTimestamp) &&
+    Number.isInteger(tx.attachmentTimestampLowerBound) &&
+    Number.isInteger(tx.attachmentTimestampUpperBound) &&
     isTrytesOfExactLength(tx.nonce, NONCE_TRYTES_SIZE)
-
-/**
- * Checks if input is valid array of transaction objects.
- *
- * @method isTransactionArray
- *
- * @param {object[]} bundle
- *
- * @return {boolean}
- */
-export const isTransactionArray = (bundle: ReadonlyArray<any>): bundle is ReadonlyArray<Transaction> =>
-    isArray(bundle) && bundle.length > 0 && bundle.every(isTransaction)
 
 /**
  * Checks if given transaction object is tail transaction.
@@ -177,3 +78,104 @@ export const isTransactionArray = (bundle: ReadonlyArray<any>): bundle is Readon
  */
 export const isTailTransaction = (transaction: any): transaction is Transaction =>
     isTransaction(transaction) && transaction.currentIndex === 0
+
+/**
+ * Checks if input is correct transaction hash (81 trytes)
+ *
+ * @method isTransactionHash
+ *
+ * @param {string} hash
+ * @param {number} mwm
+ *
+ * @return {boolean}
+ */
+export const isTransactionHash = (hash: any, minWeightMagnitude?: number): hash is Hash => {
+    const hasCorrectHashLength = isTrytesOfExactLength(hash, HASH_SIZE)
+
+    if (minWeightMagnitude) {
+        return (
+            hasCorrectHashLength &&
+            trytesToTrits(hash)
+                .slice(-Math.abs(minWeightMagnitude))
+                .every(trit => trit === 0)
+        )
+    }
+
+    return hasCorrectHashLength
+}
+
+/**
+ * Checks if input is correct transaction trytes (2673 trytes)
+ *
+ * @method isTransactionTrytes
+ *
+ * @param {string} trytes
+ * @param {number} minWeightMagnitude
+ *
+ * @return {boolean}
+ */
+export const isTransactionTrytes = (trytes: any, minWeightMagnitude?: number): trytes is Trytes => {
+    const hasCorrectTrytesLength = isTrytesOfExactLength(trytes, TRANSACTION_TRYTES_SIZE)
+
+    if (minWeightMagnitude) {
+        return hasCorrectTrytesLength && isTransactionHash(transactionHash(trytesToTrits(trytes)), minWeightMagnitude)
+    }
+
+    return hasCorrectTrytesLength
+}
+
+/**
+ * Checks if input is valid attached transaction trytes.
+ * For attached transactions last 241 trytes are non-zero.
+ *
+ * @method isAttachedTrytes
+ *
+ * @param {string} trytes
+ *
+ * @return {boolean}
+ */
+export const isAttachedTrytes = (trytes: any): trytes is Trytes =>
+    isTrytesOfExactLength(trytes, TRANSACTION_TRYTES_SIZE) &&
+    !/^[9]+$/.test(trytes.slice(TRANSACTION_TRYTES_SIZE - 3 * HASH_SIZE))
+
+export const isAttachedTrytesArray = isArray(isAttachedTrytes)
+export const isTransactionArray = isArray(isTransaction)
+export const isTransactionHashArray = isArray(isTransactionHash)
+
+/* Validators */
+
+export const transactionValidator: Validator<Transaction> = (transaction: any) => [
+    transaction,
+    isTransaction,
+    errors.INVALID_TRANSACTION,
+]
+
+export const tailTransactionValidator: Validator<Transaction> = (transaction: any) => [
+    transaction,
+    isTailTransaction,
+    errors.INVALID_TAIL_TRANSACTION,
+]
+
+export const transactionHashValidator: Validator<Hash> = (hash: any, msg?: string) => [
+    hash,
+    isTransactionHash,
+    msg || errors.INVALID_TRANSACTION_HASH,
+]
+
+export const transactionTrytesValidator: Validator<Trytes> = (trytes: any) => [
+    trytes,
+    isTransactionTrytes,
+    errors.INVALID_TRANSACTION_TRYTES,
+]
+
+export const attachedTrytesValidator: Validator<Trytes> = (trytes: any) => [
+    trytes,
+    isAttachedTrytes,
+    errors.INVALID_ATTACHED_TRYTES,
+]
+
+export const validateTransaction = (transaction: any) => validate(transactionValidator(transaction))
+export const validateTailTransaction = (transaction: any) => validate(tailTransactionValidator(transaction))
+export const validateTransactionHash = (hash: any, msg?: string) => validate(transactionHashValidator(hash, msg))
+export const validateTransactionTrytes = (trytes: any) => validate(transactionTrytesValidator(trytes))
+export const validateAttachedTrytes = (trytes: any) => validate(attachedTrytesValidator(trytes))

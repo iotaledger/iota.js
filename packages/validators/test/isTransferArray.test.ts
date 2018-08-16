@@ -1,7 +1,7 @@
 import test from 'ava'
-import { isTransfersArray } from '../src'
+import { isTransferArray } from '../src'
 
-test('isTransfersArray() returns true for valid transfer.', t => {
+test('isTransferArray() returns true for valid transfer.', t => {
     const transfers = [
         {
             address: 'JALLWDUOSTSJVL9EEHKW9YQFPBVBJAGLNKRVGSQZCGHQWEMIIILJMTHVAGVDXJVZMBAMOZTSBQNRVNLLSJMPIVGPNE',
@@ -11,10 +11,10 @@ test('isTransfersArray() returns true for valid transfer.', t => {
         },
     ]
 
-    t.is(isTransfersArray(transfers), true, 'isTransfersArray() should return true for valid transfer.')
+    t.is(isTransferArray(transfers), true, 'isTransferArray() should return true for valid transfer.')
 })
 
-test('isTransfersArray() returns false for transfer with invalid address.', t => {
+test('isTransferArray() returns false for transfer with invalid address.', t => {
     const transfers = [
         {
             address: 'JALLWDUOSTSJVL9EEHKW9YQFPBVBJAGLNKRVGSQZCGHQWEMIIILJMTHVAGVDXJVZMBAMOZTSBQNRVNLLSJMPIVGPNEFSAF',
@@ -24,14 +24,10 @@ test('isTransfersArray() returns false for transfer with invalid address.', t =>
         },
     ]
 
-    t.is(
-        isTransfersArray(transfers),
-        false,
-        'isTransfersArray() should return false for transfer with invalid address.'
-    )
+    t.is(isTransferArray(transfers), false, 'isTransferArray() should return false for transfer with invalid address.')
 })
 
-test('isTransfersArray() returns false for transfer with invalid value.', t => {
+test('isTransferArray() returns false for transfer with invalid value.', t => {
     const transfers = [
         {
             address: 'JALLWDUOSTSJVL9EEHKW9YQFPBVBJAGLNKRVGSQZCGHQWEMIIILJMTHVAGVDXJVZMBAMOZTSBQNRVNLLSJMPIVGPNE',
@@ -41,10 +37,10 @@ test('isTransfersArray() returns false for transfer with invalid value.', t => {
         },
     ]
 
-    t.is(isTransfersArray(transfers), false, 'isTransfersArray() should return false for transfer with invalid value.')
+    t.is(isTransferArray(transfers), false, 'isTransferArray() should return false for transfer with invalid value.')
 })
 
-test('isTransfersArray() returns false for message of invalid trytes.', t => {
+test('isTransferArray() returns false for message of invalid trytes.', t => {
     const transfers = [
         {
             address: 'JALLWDUOSTSJVL9EEHKW9YQFPBVBJAGLNKRVGSQZCGHQWEMIIILJMTHVAGVDXJVZMBAMOZTSBQNRVNLLSJMPIVGPNE',
@@ -54,10 +50,10 @@ test('isTransfersArray() returns false for message of invalid trytes.', t => {
         },
     ]
 
-    t.is(isTransfersArray(transfers), false, 'isTransfersArray() should return false for message of invalid trytes.')
+    t.is(isTransferArray(transfers), false, 'isTransferArray() should return false for message of invalid trytes.')
 })
 
-test('isTransfersArray() returns false for tag of invalid length.', t => {
+test('isTransferArray() returns false for tag of invalid length.', t => {
     const transfers = [
         {
             address: 'JALLWDUOSTSJVL9EEHKW9YQFPBVBJAGLNKRVGSQZCGHQWEMIIILJMTHVAGVDXJVZMBAMOZTSBQNRVNLLSJMPIVGPNE',
@@ -67,7 +63,7 @@ test('isTransfersArray() returns false for tag of invalid length.', t => {
         },
     ]
 
-    t.is(isTransfersArray(transfers), false, 'isTransferArray() should return false for tag of invalid length.')
+    t.is(isTransferArray(transfers), false, 'isTransferArray() should return false for tag of invalid length.')
 })
 
 test('isTransferArray() returns false for tag of invalid trytes.', t => {
@@ -80,5 +76,5 @@ test('isTransferArray() returns false for tag of invalid trytes.', t => {
         },
     ]
 
-    t.is(isTransfersArray(transfers), false, 'isTransfersArray() should return false for tag of invalid trytes.')
+    t.is(isTransferArray(transfers), false, 'isTransferArray() should return false for tag of invalid trytes.')
 })

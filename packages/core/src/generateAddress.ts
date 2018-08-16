@@ -26,5 +26,5 @@ export const generateAddress = (seed: string, index: number, security: number = 
     const digestsTrits = digests(keyTrits)
     const addressTrytes = trytes(address(digestsTrits))
 
-    return checksum ? <Hash>addChecksum(addressTrytes) : addressTrytes
+    return checksum ? addChecksum(addressTrytes) : addressTrytes
 }

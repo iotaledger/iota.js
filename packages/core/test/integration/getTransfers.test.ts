@@ -1,7 +1,7 @@
 import test from 'ava'
 import { createHttpClient } from '@iota/http-client'
+import { INVALID_SECURITY_LEVEL, INVALID_SEED, INVALID_START_END_OPTIONS, INVALID_START_OPTION } from '../../../errors'
 import { createGetTransfers } from '../../src/createGetTransfers'
-import { INVALID_SECURITY_LEVEL, INVALID_SEED, INVALID_START_END_OPTIONS, INVALID_START_OPTION } from '../../src/errors'
 import './nocks/findTransactions'
 import './nocks/getInclusionStates'
 import './nocks/getNodeInfo'

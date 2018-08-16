@@ -1,7 +1,7 @@
 import test from 'ava'
 import { createHttpClient } from '@iota/http-client'
+import { INVALID_ADDRESS, INVALID_HASH, INVALID_TAG, INVALID_TRANSACTION_HASH } from '../../../errors'
 import { createFindTransactions } from '../../src'
-import { INVALID_HASH_ARRAY, INVALID_ADDRESS, INVALID_TAGS } from '../../src/errors'
 import {
     findTransactionsByAddressesCommand,
     findTransactionsByAddressesResponse,
@@ -63,7 +63,7 @@ test('findTransactions() by bundle hashes resolves to correct response', async t
 test('findTransactions() rejects with correct error for invalid bundle hashes', async t => {
     t.is(
         t.throws(() => findTransactions({ bundles: invalidHashes }), Error).message,
-        `${INVALID_HASH_ARRAY}: ${invalidHashes[0]}`,
+        `${INVALID_HASH}: ${invalidHashes[0]}`,
         'findTransactions() should throw error for invalid bundle hashes'
     )
 })
@@ -79,7 +79,7 @@ test('findTransactions() by tags resolves to correct response', async t => {
 test('findTransactions() rejects with correct error for invalid tags', async t => {
     t.is(
         t.throws(() => findTransactions({ tags: invalidHashes }), Error).message,
-        `${INVALID_TAGS}: ${invalidHashes[0]}`,
+        `${INVALID_TAG}: ${invalidHashes[0]}`,
         'findTransactions() should throw error for invalid tags'
     )
 })
@@ -95,7 +95,7 @@ test('findTransactions() by approvees resolves to correct response', async t => 
 test('findTransactions() rejects with correct error for invalid approvees', async t => {
     t.is(
         t.throws(() => findTransactions({ approvees: invalidHashes }), Error).message,
-        `${INVALID_HASH_ARRAY}: ${invalidHashes[0]}`,
+        `${INVALID_TRANSACTION_HASH}: ${invalidHashes[0]}`,
         'findTransactions() should throw error for invalid apprvovees'
     )
 })

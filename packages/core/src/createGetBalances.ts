@@ -1,7 +1,8 @@
-import * as Promise from 'bluebird'
 import { removeChecksum } from '@iota/checksum'
-import { getBalancesThresholdValidator, hashArrayValidator, validate } from '@iota/validators'
-import { Callback, Balances, GetBalancesCommand, GetBalancesResponse, Hash, IRICommand, Provider } from '../../types'
+import * as Promise from 'bluebird'
+import * as errors from '../../errors'
+import { arrayValidator, getBalancesThresholdValidator, hashValidator, validate } from '../../guards'
+import { Balances, Callback, GetBalancesCommand, GetBalancesResponse, Hash, IRICommand, Provider } from '../../types'
 
 /**
  * @method createGetBalances
@@ -39,12 +40,17 @@ export const createGetBalances = ({ send }: Provider) =>
      * @return {Promise}
      * @fulfil {Balances} Object with list of `balances` and corresponding `milestone`
      * @reject {Error}
-     * - `INVALID_HASH_ARRAY`: Invalid addresses array
+     * - `INVALID_HASH`: Invalid address
      * - `INVALID_THRESHOLD`: Invalid `threshold`
      * - Fetch error
      */
     (addresses: ReadonlyArray<Hash>, threshold: number, callback?: Callback<Balances>): Promise<Balances> =>
-        Promise.resolve(validate(hashArrayValidator(addresses), getBalancesThresholdValidator(threshold)))
+        Promise.resolve(
+            validate(
+                arrayValidator(hashValidator)(addresses, errors.INVALID_ADDRESS),
+                getBalancesThresholdValidator(threshold)
+            )
+        )
             .then(() =>
                 send<GetBalancesCommand, GetBalancesResponse>({
                     command: IRICommand.GET_BALANCES,

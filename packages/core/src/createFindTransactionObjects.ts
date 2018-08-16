@@ -49,8 +49,11 @@ export const createFindTransactionObjects = (provider: Provider) => {
      * @returns {Promise}
      * @fulfil {Transaction[]} Array of transaction objects
      * @reject {Error}
-     * - `INVALID_HASH_ARRAY`: Invalid hashes of addresses, approvees of bundles
-     * - `INVALID_TAG_ARRAY`: Invalid tags
+     * - `INVALID_SEARCH_KEY`
+     * - `INVALID_HASH`: Invalid bundle hash
+     * - `INVALID_TRANSACTION_HASH`: Invalid approvee transaction hash
+     * - `INVALID_ADDRESS`: Invalid address
+     * - `INVALID_TAG`: Invalid tag
      * - Fetch error
      */
     return function findTransactionObjects(
