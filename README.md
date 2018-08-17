@@ -108,7 +108,7 @@ We thank everyone for their contributions. Here is quick guide to get started wi
 
 1. Fork the repo with <kbd>Fork</kbd> button at top right corner.
 2. Clone your fork locally and `cd` in it.
-3. Bootstrap your environement with:
+3. Bootstrap your environment with:
 
 ```
 npm run init
