@@ -26,7 +26,9 @@ export const createGetBundlesFromAddresses = (provider: Provider, caller?: strin
                 // 2. Get all transactions by bundle hashes
                 .then(transactions =>
                     findTransactionObjects({
-                        bundles: transactions.filter(tx => tx.currentIndex === 0).map(tx => tx.bundle),
+                        bundles: transactions
+                            .map(tx => tx.bundle)
+                            .filter((bundle, i, bundles) => bundles.indexOf(bundle) === i),
                     })
                 )
 

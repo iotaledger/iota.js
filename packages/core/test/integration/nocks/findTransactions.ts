@@ -92,7 +92,7 @@ nock('http://localhost:14265', headers)
     .persist()
     .post('/', {
         command: IRICommand.FIND_TRANSACTIONS,
-        bundles: ['9'.repeat(81), '9'.repeat(81)],
+        bundles: ['9'.repeat(81)],
     })
     .reply(200, findTransactionsResponse)
 
