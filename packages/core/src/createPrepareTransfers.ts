@@ -246,6 +246,10 @@ export const createAddInputs = (provider?: Provider) => {
         const { transactions, transfers, inputs, timestamp, seed, security } = props
         const threshold = transfers.reduce((sum, { value }) => (sum += value), 0)
 
+        if (threshold === 0) {
+            return Promise.resolve(props)
+        }
+
         if (inputs.length && threshold > inputs.reduce((acc, input) => (acc += input.balance), 0)) {
             throw new Error(inputs.length ? errors.INSUFFICIENT_BALANCE : errors.NO_INPUTS)
         }
