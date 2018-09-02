@@ -34,6 +34,7 @@ const HASH_LENGTH = 81
 const SIGNATURE_MESSAGE_FRAGMENT_LENGTH = 2187
 const KEY_FRAGMENT_LENGTH = 6561
 const NULL_HASH_TRYTES = '9'.repeat(HASH_LENGTH)
+const SECURITY_LEVEL = 2
 
 export interface PrepareTransfersOptions {
     readonly inputs: ReadonlyArray<Address>
@@ -350,7 +351,7 @@ export const addSignatures = (props: PrepareTransfersProps): PrepareTransfersPro
         transactions: addTrytes(
             transactions,
             inputs.reduce((acc: ReadonlyArray<Trytes>, { keyIndex, security }) => {
-                const keyTrits = key(subseed(trits(seed), keyIndex), security)
+                const keyTrits = key(subseed(trits(seed), keyIndex), security || SECURITY_LEVEL)
 
                 return acc.concat(
                     Array(security)

@@ -12,13 +12,13 @@ const inputs: ReadonlyArray<any> = [
         address: 'FJHSSHBZTAKQNDTIKJYCZBOZDGSZANCZSWCNWUOCZXFADNOQSYAHEJPXRLOVPNOQFQXXGEGVDGICLMOXX',
         keyIndex: 0,
         security: 2,
-        balance: '3',
+        balance: 3,
     },
     {
         address: '9DZXPFSVCSSWXXQPFMWLGFKPBAFTHYMKMZCPFHBVHXPFNJEIJIEEPKXAUBKBNNLIKWHJIYQDFWQVELOCB',
         keyIndex: 1,
         security: 2,
-        balance: '4',
+        balance: 4,
     },
 ]
 

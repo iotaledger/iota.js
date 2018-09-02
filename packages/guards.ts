@@ -79,11 +79,12 @@ export const isSecurityLevel = (security: any): security is number => Number.isI
  *
  * @return {boolean}
  */
-export const isInput = (address: any): address is Address =>
-    isHash(address.address) &&
-    isSecurityLevel(address.security) &&
-    Number.isInteger(address.keyIndex) &&
-    address.keyIndex >= 0
+export const isInput = (input: any): input is Address =>
+    isHash(input.address) &&
+    (typeof input.security === 'undefined' || isSecurityLevel(input.security)) &&
+    (typeof input.balance === 'undefined' || (Number.isInteger(input.balance) && input.balance > 0)) &&
+    Number.isInteger(input.keyIndex) &&
+    input.keyIndex >= 0
 
 /**
  * Checks that input is valid tag trytes.
