@@ -1,6 +1,6 @@
 {
     "name": "@iota/pad",
-    "version": "1.0.0-beta.3",
+    "version": "1.0.0-beta.4",
     "description": "Padding utility",
     "main": "./out/pad/src/index.js",
     "typings": "typings/pad/src",

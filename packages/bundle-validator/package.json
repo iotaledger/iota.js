@@ -1,6 +1,6 @@
 {
     "name": "@iota/bundle-validator",
-    "version": "1.0.0-beta.3",
+    "version": "1.0.0-beta.4",
     "description": "Syntactically validates bundle structure and signatures.",
     "main": "./out/bundle-validator/src/index.js",
     "typings": "typings/bundle-validator/src",
@@ -64,13 +64,13 @@
         "url": "https://github.com/iotaledger/iota.js.git/tree/develop/packages/crypto"
     },
     "dependencies": {
-        "@iota/converter": "^1.0.0-beta.3",
-        "@iota/kerl": "^1.0.0-beta.3",
-        "@iota/signing": "^1.0.0-beta.3",
-        "@iota/transaction": "^1.0.0-beta.3",
-        "@iota/transaction-converter": "^1.0.0-beta.3"
+        "@iota/converter": "^1.0.0-beta.4",
+        "@iota/kerl": "^1.0.0-beta.4",
+        "@iota/signing": "^1.0.0-beta.4",
+        "@iota/transaction": "^1.0.0-beta.4",
+        "@iota/transaction-converter": "^1.0.0-beta.4"
     },
     "devDependencies": {
-        "@iota/samples": "^1.0.0-beta.3"
+        "@iota/samples": "^1.0.0-beta.4"
     }
 }
