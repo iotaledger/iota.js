@@ -12,8 +12,8 @@ export const getBalancesCommand: GetBalancesCommand = {
     threshold: 100,
 }
 
-export const balancesResponse: Balances = {
-    balances: [99, 1, 9],
+export const balancesResponse = {
+    balances: [99, 0, 1],
     milestone: 'M'.repeat(81),
     milestoneIndex: 1,
 }
@@ -34,5 +34,5 @@ nock('http://localhost:14265', headers)
     })
     .reply(200, {
         ...balancesResponse,
-        balances: ['1', '9'],
+        balances: ['0', '1'],
     })

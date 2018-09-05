@@ -133,7 +133,9 @@ export const createInputsObject = (
     start: number,
     security: number
 ): Inputs => {
-    const inputs = addresses.map((address, i) => makeAddress(address, balances[i], start + i, security))
+    const inputs = addresses
+        .map((address, i) => makeAddress(address, balances[i], start + i, security))
+        .filter(address => address.balance > 0)
     const totalBalance = inputs.reduce((acc, addr) => (acc += addr.balance), 0)
     return { inputs, totalBalance }
 }
