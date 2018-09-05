@@ -26,12 +26,6 @@ const accountData: AccountData = {
     addresses: accountAddresses,
     inputs: [
         {
-            address: getBalancesCommand.addresses[1],
-            balance: balances[1],
-            keyIndex: 1,
-            security: 2,
-        },
-        {
             address: getBalancesCommand.addresses[2],
             balance: balances[2],
             keyIndex: 2,
@@ -49,7 +43,7 @@ const accountData: AccountData = {
             ),
         []
     ),
-    balance: 10,
+    balance: 1,
 }
 
 test('getAccountData() resolves to correct account data', async t => {
