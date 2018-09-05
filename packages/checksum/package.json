@@ -1,6 +1,6 @@
 {
     "name": "@iota/checksum",
-    "version": "1.0.0-beta.4",
+    "version": "1.0.0-beta.5",
     "description": "Add, remove and validate checksums",
     "main": "./out/checksum/src/index.js",
     "typings": "typings/checksum/src",
@@ -61,10 +61,10 @@
         "url": "https://github.com/iotaledger/iota.js.git/tree/develop/packages/crypto"
     },
     "dependencies": {
-        "@iota/converter": "^1.0.0-beta.4",
-        "@iota/kerl": "^1.0.0-beta.4"
+        "@iota/converter": "^1.0.0-beta.5",
+        "@iota/kerl": "^1.0.0-beta.5"
     },
     "devDependencies": {
-        "@iota/samples": "^1.0.0-beta.4"
+        "@iota/samples": "^1.0.0-beta.5"
     }
 }
