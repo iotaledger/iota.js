@@ -322,7 +322,7 @@ export const createAddRemainder = (provider?: Provider) => {
 }
 
 export const getRemainderAddressStartIndex = (inputs: ReadonlyArray<Address>): number =>
-    [...inputs].sort((a, b) => a.keyIndex - b.keyIndex)[0].keyIndex
+    [...inputs].sort((a, b) => b.keyIndex - a.keyIndex)[0].keyIndex + 1
 
 export const verifyNotSendingToInputs = (props: PrepareTransfersProps): PrepareTransfersProps => {
     const { transactions } = props
