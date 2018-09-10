@@ -5,7 +5,8 @@ var API = require('../../lib/api/api')
 describe('api.getNewAddress', function () {
   this.timeout(10000)
 
-  var seed = 'SEED'
+  var seedPlain = 'SEED'
+  var seedTrits = [1,0,-1,-1,-1,1,-1,-1,1,1,1,0]
   var addresses = [
     'FJHSSHBZTAKQNDTIKJYCZBOZDGSZANCZSWCNWUOCZXFADNOQSYAHEJPXRLOVPNOQFQXXGEGVDGICLMOXX',
     '9DZXPFSVCSSWXXQPFMWLGFKPBAFTHYMKMZCPFHBVHXPFNJEIJIEEPKXAUBKBNNLIKWHJIYQDFWQVELOCB',
@@ -53,6 +54,7 @@ describe('api.getNewAddress', function () {
 
   tests.forEach(function (t) {
     it(t.title, function () {
+      var seed = i ? seedTrits : seedPlain
       api.getNewAddress(seed, function (err, address) {
         assert.deepEqual(address, t.expected)
         i++
