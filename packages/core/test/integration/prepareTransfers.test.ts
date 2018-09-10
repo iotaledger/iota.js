@@ -1,9 +1,10 @@
-import test from 'ava'
-import { createHttpClient } from '@iota/http-client'
 import { addChecksum } from '@iota/checksum'
-import { createPrepareTransfers } from '../../src'
-import { Transfer, Trytes } from '../../../types'
+import { createHttpClient } from '@iota/http-client'
 import { addresses, trytes as expected } from '@iota/samples'
+import test from 'ava'
+import { Transfer, Trytes } from '../../../types'
+import { createPrepareTransfers } from '../../src'
+import { getRemainderAddressStartIndex } from '../../src/createPrepareTransfers'
 
 import './nocks/prepareTransfers'
 
@@ -21,6 +22,8 @@ const inputs: ReadonlyArray<any> = [
         balance: 4,
     },
 ]
+
+test('getRemainderAddressStartIndex', t => t.is(getRemainderAddressStartIndex(inputs), 2))
 
 const transfers: ReadonlyArray<Transfer> = [
     {
