@@ -1,7 +1,23 @@
+dist: trusty
+
 language: node_js
 node_js:
     - '10'
     - '8'
+
+addons:
+    apt:
+        sources:
+            - ubuntu-toolchain-r-test
+        packages:
+            - wget
+            - pkg-config
+
+before_install:
+    - wget https://github.com/bazelbuild/bazel/releases/download/0.17.2/bazel_0.17.2-linux-x86_64.deb
+    - sha256sum -c bazel.sha256
+    - sudo dpkg -i bazel_0.17.2-linux-x86_64.deb
+
 before_script:
     - npm i
 script:
