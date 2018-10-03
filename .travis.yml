@@ -15,6 +15,7 @@ matrix:
           - android-19
           - tools
           - platform-tools
+          - build-tools-26.0.1
           - extra-google-m2repository
           - extra-android-m2repository
       addons:
