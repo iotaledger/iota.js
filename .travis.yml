@@ -12,6 +12,7 @@ matrix:
     - language: android
       android:
         components:
+          - android-19
           - tools
           - platform-tools
           - extra-google-m2repository
