@@ -8,11 +8,14 @@
         "access": "public"
     },
     "scripts": {
-        "prepare": "tsc && npm run build",
+        "prepare": "tsc",
+        "prepublish-only": "npm run build",
         "build": "./scripts/build.sh",
         "build-clean": "./scripts/build.sh clean",
         "test": "tsc",
-        "test-ci": "exit 0"
+        "test-ci": "tsc",
+        "test-android": "tsc && npm run build",
+        "test-android-ci": "npm run build"
     },
     "keywords": [
         "iota",
@@ -40,7 +43,8 @@
     "dependencies": {
         "@iota/converter": "^1.0.0-beta.5",
         "@iota/transaction": "^1.0.0-beta.5",
-        "@iota/transaction-converter": "^1.0.0-beta.5"
+        "@iota/transaction-converter": "^1.0.0-beta.5",
+        "whatwg-fetch": "2.0.4"
     },
     "devDependencies": {
         "@types/react-native": "^0.57.0",
