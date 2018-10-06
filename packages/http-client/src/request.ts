@@ -1,5 +1,5 @@
 /* tslint:disable no-console */
-import 'isomorphic-fetch'
+import 'cross-fetch/polyfill'
 import { API_VERSION, DEFAULT_URI, MAX_REQUEST_BATCH_SIZE } from './settings'
 import { BaseCommand, FindTransactionsResponse, GetBalancesResponse, IRICommand } from '../../types'
 import { BatchableCommand } from './httpClient'

@@ -43,8 +43,7 @@
     "dependencies": {
         "@iota/converter": "^1.0.0-beta.5",
         "@iota/transaction": "^1.0.0-beta.5",
-        "@iota/transaction-converter": "^1.0.0-beta.5",
-        "whatwg-fetch": "2.0.4"
+        "@iota/transaction-converter": "^1.0.0-beta.5"
     },
     "devDependencies": {
         "@types/react-native": "^0.57.0",
