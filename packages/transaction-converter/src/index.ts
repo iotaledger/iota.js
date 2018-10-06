@@ -6,6 +6,7 @@ import Curl from '@iota/curl'
 import { padTrits, padTrytes } from '@iota/pad'
 import * as errors from '../../errors'
 import { isTrytesOfExactLength } from '../../guards'
+import '../../typed-array'
 import { asArray, Hash, Transaction, Trytes } from '../../types'
 
 export function asTransactionTrytes(transactions: Transaction): Trytes

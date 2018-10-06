@@ -3,9 +3,10 @@
 import { fromValue, trits, trytes, value } from '@iota/converter'
 import Kerl from '@iota/kerl'
 import { padTrits } from '@iota/pad'
+import '../../typed-array'
+import { Hash } from '../../types'
 import add from './add'
 import * as errors from './errors'
-import { Hash } from '../../types'
 
 /**
  * @method subseed
@@ -25,19 +26,19 @@ export function subseed(seed: Int8Array, index: number): Int8Array {
     }
 
     const indexTrits = fromValue(index)
-    let subseed: Int8Array = add(seed, indexTrits)
+    let subseedTrits: Int8Array = add(seed, indexTrits)
 
-    while (subseed.length % 243 !== 0) {
-        subseed = padTrits(subseed.length + 3)(subseed)
+    while (subseedTrits.length % 243 !== 0) {
+        subseedTrits = padTrits(subseedTrits.length + 3)(subseedTrits)
     }
 
     const kerl = new Kerl()
 
     kerl.initialize()
-    kerl.absorb(subseed, 0, subseed.length)
-    kerl.squeeze(subseed, 0, subseed.length)
+    kerl.absorb(subseedTrits, 0, subseedTrits.length)
+    kerl.squeeze(subseedTrits, 0, subseedTrits.length)
 
-    return subseed
+    return subseedTrits
 }
 
 /**
@@ -48,15 +49,15 @@ export function subseed(seed: Int8Array, index: number): Int8Array {
  *
  * @return {Int8Array} Private key trits
  */
-export function key(subseed: Int8Array, length: number): Int8Array {
-    if (subseed.length % 3 !== 0) {
+export function key(subseedTrits: Int8Array, length: number): Int8Array {
+    if (subseedTrits.length % 3 !== 0) {
         throw new Error(errors.ILLEGAL_SUBSEED_LENGTH)
     }
 
     const kerl = new Kerl()
 
     kerl.initialize()
-    kerl.absorb(subseed, 0, subseed.length)
+    kerl.absorb(subseedTrits, 0, subseedTrits.length)
 
     const buffer = new Int8Array(Kerl.HASH_LENGTH)
     const result = new Int8Array(length * 27 * 243)
@@ -64,7 +65,7 @@ export function key(subseed: Int8Array, length: number): Int8Array {
 
     while (length-- > 0) {
         for (let i = 0; i < 27; i++) {
-            kerl.squeeze(buffer, 0, subseed.length)
+            kerl.squeeze(buffer, 0, subseedTrits.length)
             for (let j = 0; j < 243; j++) {
                 result[offset++] = buffer[j]
             }

@@ -4,6 +4,7 @@ import { trits, trytes } from '@iota/converter'
 import Kerl from '@iota/kerl'
 import { padTag, padTrits, padTrytes } from '@iota/pad'
 import { add, normalizedBundleHash } from '@iota/signing'
+import '../../typed_array'
 import { Hash, Bundle, Transaction, Trytes } from '../../types'
 
 const NULL_HASH_TRYTES = '9'.repeat(81)
