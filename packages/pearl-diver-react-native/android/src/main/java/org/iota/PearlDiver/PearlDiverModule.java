@@ -1,5 +1,7 @@
 package org.iota.PearlDiver;
 
+import org.iota.mobile.*;
+
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
@@ -21,11 +23,11 @@ public class PearlDiverModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void doPoW(final String trytes, final int mwm, final Promise promise) {
+    public void doPOW(final String trytes, final int mwm, final Promise promise) {
         new GuardedResultAsyncTask<String>(mContext) {
             @Override
             protected String doInBackgroundGuarded() {
-                String nonce = Interface.doPoW(trytes, mwm);
+                String nonce = Interface.doPOW(trytes, mwm);
                 return nonce;
             }
 

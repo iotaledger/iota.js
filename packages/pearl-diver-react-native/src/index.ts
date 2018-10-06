@@ -42,7 +42,7 @@ export const attachToTangle = (
             attachmentTimestampUpperBound: (Math.pow(3, 27) - 1) / 2,
         }
 
-        return NativeModules.PearlDiver.doPoW(asTransactionTrytes(transaction), minWeightMagnitude).then(
+        return NativeModules.PearlDiver.doPOW(asTransactionTrytes(transaction), minWeightMagnitude).then(
             (nonce: Trytes) => {
                 const transactionTrytes = asTransactionTrytes({ ...transaction, nonce })
                 return search([...transactions, transactionTrytes], transactionHash(trytesToTrits(transactionTrytes)))
