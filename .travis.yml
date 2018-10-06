@@ -10,6 +10,7 @@ matrix:
       script:
         - npm run test-ci
     - language: android
+      name: Android
       android:
         components:
           - android-19
