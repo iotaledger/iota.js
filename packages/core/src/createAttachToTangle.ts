@@ -41,6 +41,9 @@ export const createAttachToTangle = ({ send }: Provider): AttachToTangle => {
      * `trunkTransaction` and `branchTransaction` hashes are given by
      * {@link #module_core.getTransactionsToApprove `getTransactionToApprove`}.
      *
+     * **Note:** Persist the transaction trytes in local storage __before__ calling this command, to ensure
+     * that reattachment is possible, until your bundle has been included.
+     *
      * @example
      *
      * ```js

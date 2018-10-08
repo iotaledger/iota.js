@@ -26,7 +26,7 @@ export const createBroadcastBundle = (provider: Provider) => {
      * @example
      *
      * ```js
-     * broadcastTransactions(tailHash)
+     * broadcastBundle(tailHash)
      *   .then(transactions => {
      *      // ...
      *   })

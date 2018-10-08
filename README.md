@@ -82,8 +82,16 @@ const depth = 3
 // Minimum value on mainnet & spamnet is `14`, `9` on devnet and other testnets.
 const minWeightMagnitude = 14
 
+// Prepare a bundle and signs it
 iota.prepareTransfers(seed, transfers)
-    .then(trytes => iota.sendTrytes(trytes, depth, minWeightMagnitude))
+    .then(trytes => {
+        // Persist trytes locally before sending to network.
+        // This allows for reattachments and prevents key reuse if trytes can't
+        // be recovered by querying the network after broadcasting.
+
+        // Does tip selection, attaches to tangle by doing PoW and broadcasts.
+        return iota.sendTrytes(trytes, depth, minWeightMagnitude)
+    })
     .then(bundle => {
         console.log(`Published transaction with tail hash: ${bundle[0].hash}`)
         console.log(`Bundle: ${bundle}`)
