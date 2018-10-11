@@ -12,21 +12,21 @@ import { Hash, Trytes } from '../../types'
  *
  * @method attachToTangle
  *
- * @param {Trytes} trytes
- *
  * @param {Hash} trunkTransaction
  *
  * @param {Hash} branchTransaction
  *
  * @param {number} minWeightMagnitude
  *
+ * @param {Trytes} trytes
+ *
  * @return {Promise<Trytes[]>} Attached trytes
  */
 export const attachToTangle = (
-    trytes: ReadonlyArray<Trytes>,
     trunkTransaction: Hash,
     branchTransaction: Hash,
-    minWeightMagnitude: number
+    minWeightMagnitude: number,
+    trytes: ReadonlyArray<Trytes>
 ): ReadonlyArray<Trytes> => {
     const search = (transactions: ReadonlyArray<Trytes> = [], trunk = trunkTransaction) => {
         if (transactions.length === trytes.length) {
