@@ -16,6 +16,12 @@ if (!Int8Array.prototype.every) {
     })
 }
 
+if (!Int8Array.prototype.indexOf) {
+    Object.defineProperty(Int8Array.prototype, 'indexOf', {
+        value: Array.prototype.indexOf,
+    })
+}
+
 // Source: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/fill#Polyfill
 // Any copyright is dedicated to the Public Domain. http://creativecommons.org/publicdomain/zero/1.0/
 if (!Int8Array.prototype.fill) {
