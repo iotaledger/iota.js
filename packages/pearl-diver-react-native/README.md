@@ -7,7 +7,7 @@ IOTA transaction nonce searcher for react native apps.
 
 `npm install @iota/pearl-diver-react-native`
 
-### Atomatic linking:
+### Automatic linking:
 `react-native link @iota/pearl-diver-react-native`
 
 ---
