@@ -9,7 +9,7 @@
     },
     "scripts": {
         "prepare": "tsc",
-        "prepublish-only": "npm run build",
+        "prepublishOnly": "npm run build",
         "build": "./scripts/build.sh",
         "build-clean": "./scripts/build.sh clean",
         "test": "tsc",
