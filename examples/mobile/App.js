@@ -30,6 +30,10 @@ const sendTransaction = () =>
                     address: 'A'.repeat(81), // test transfer
                     value: 0,
                 },
+                {
+                    address: 'B'.repeat(81),
+                    value: 0,
+                },
             ]
         )
         // sendTrytes now calls attachToTangle from native module

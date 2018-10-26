@@ -30,7 +30,7 @@ export const attachToTangle = (
 ): ReadonlyArray<Trytes> => {
     const search = (transactions: ReadonlyArray<Trytes> = [], trunk = trunkTransaction) => {
         if (transactions.length === trytes.length) {
-            return transactions
+            return [...transactions].reverse()
         }
 
         const transaction = {
