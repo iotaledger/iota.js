@@ -1,5 +1,6 @@
 import * as Promise from 'bluebird'
-import { attachedTrytesArrayValidator, validate } from '@iota/validators'
+import { attachedTrytesValidator } from '@iota/transaction'
+import { arrayValidator, validate } from '../../guards'
 import {
     BroadcastTransactionsCommand,
     BroadcastTransactionsResponse,
@@ -29,7 +30,7 @@ export const createBroadcastTransactions = ({ send }: Provider) =>
      *
      * You may use this method to increase odds of effective transaction propagation.
      *
-     * Persist the transaction trytes in local storage **before** calling this command for first time, to ensure
+     * **Note:** Persist the transaction trytes in local storage __before__ calling this command, to ensure
      * that reattachment is possible, until your bundle has been included.
      *
      * @example
@@ -58,7 +59,7 @@ export const createBroadcastTransactions = ({ send }: Provider) =>
      * - Fetch error
      */
     (trytes: ReadonlyArray<Trytes>, callback?: Callback<ReadonlyArray<Trytes>>): Promise<ReadonlyArray<Trytes>> =>
-        Promise.resolve(validate(attachedTrytesArrayValidator(trytes)))
+        Promise.resolve(validate(arrayValidator<Trytes>(attachedTrytesValidator)(trytes)))
             .then(() =>
                 send<BroadcastTransactionsCommand, BroadcastTransactionsResponse>({
                     command: IRICommand.BROADCAST_TRANSACTIONS,

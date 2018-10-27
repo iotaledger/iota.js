@@ -15,7 +15,7 @@ export interface Balance {
 export interface Address extends Balance {
     readonly address: Hash
     readonly keyIndex: number
-    readonly security: number
+    readonly security?: number
 }
 
 export const makeAddress = (address: Hash, balance: number, keyIndex: number, security: number): Address => ({

@@ -1,7 +1,7 @@
 {
     "name": "@iota/multisig",
-    "version": "1.0.0-alpha.1",
-    "description": "Methods for generating multisig addresses ansd co-signing transactions.",
+    "version": "1.0.0-beta.5",
+    "description": "Methods for generating multisig addresses and co-signing transactions.",
     "main": "./out/multisig/src/index.js",
     "typings": "typings/multisig/src",
     "publishConfig": {
@@ -25,7 +25,15 @@
         "compileEnhancements": false,
         "verbose": true
     },
-    "keywords": ["iota", "tangle", "library", "browser", "javascript", "nodejs", "API"],
+    "keywords": [
+        "iota",
+        "tangle",
+        "library",
+        "browser",
+        "javascript",
+        "nodejs",
+        "API"
+    ],
     "license": "MIT",
     "bugs": {
         "url": "https://github.com/iotaledger/iota.js/issues"
@@ -35,13 +43,12 @@
         "url": "https://github.com/iotaledger/iota.js.git"
     },
     "dependencies": {
-        "@iota/bundle": "^1.0.0-alpha.1",
-        "@iota/checksum": "^1.0.0-alpha.1",
-        "@iota/converter": "^1.0.0-alpha.1",
-        "@iota/core": "^1.0.0-alpha.1",
-        "@iota/kerl": "^1.0.0-alpha.1",
-        "@iota/signing": "^1.0.0-alpha.1",
-        "@iota/validators": "^1.0.0-alpha.1",
+        "@iota/bundle": "^1.0.0-beta.5",
+        "@iota/checksum": "^1.0.0-beta.5",
+        "@iota/converter": "^1.0.0-beta.5",
+        "@iota/core": "^1.0.0-beta.5",
+        "@iota/kerl": "^1.0.0-beta.5",
+        "@iota/signing": "^1.0.0-beta.5",
         "@types/bluebird": "^3.5.20",
         "bluebird": "^3.5.1",
         "isomorphic-fetch": "^2.2.1"

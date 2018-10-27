@@ -21,6 +21,8 @@
 <dd></dd>
 <dt><a href="#module_transaction-converter">transaction-converter</a></dt>
 <dd></dd>
+<dt><a href="#module_transaction">transaction</a></dt>
+<dd></dd>
 <dt><a href="#module_unit-converter">unit-converter</a></dt>
 <dd></dd>
 <dt><a href="#module_validators">validators</a></dt>
@@ -457,7 +459,7 @@ addNeighbors(['udp://148.148.148.148:14265'])
 - `INVALID_TRUNK_TRANSACTION`: Invalid `trunkTransaction`
 - `INVALID_BRANCH_TRANSACTION`: Invalid `branchTransaction`
 - `INVALID_MIN_WEIGHT_MAGNITUDE`: Invalid `minWeightMagnitude` argument
-- `INVALID_TRYTES_ARRAY`: Invalid array of trytes
+- `INVALID_TRANSACTION_TRYTES`: Invalid transaction trytes
 - `INVALID_TRANSACTIONS_TO_APPROVE`: Invalid transactions to approve
 - Fetch error  
 
@@ -485,6 +487,9 @@ or remote [`PoWbox`](https://powbox.devnet.iota.org/).
 
 `trunkTransaction` and `branchTransaction` hashes are given by
 [`getTransactionToApprove`](#module_core.getTransactionsToApprove).
+
+**Note:** Persist the transaction trytes in local storage __before__ calling this command, to ensure
+that reattachment is possible, until your bundle has been included.
 
 **Example**  
 ```js
@@ -528,7 +533,7 @@ particularly in the case of large bundles.
 
 **Example**  
 ```js
-broadcastTransactions(tailHash)
+broadcastBundle(tailHash)
   .then(transactions => {
      // ...
   })
@@ -567,7 +572,7 @@ Tip selection and Proof-of-Work must be done first, by calling
 
 You may use this method to increase odds of effective transaction propagation.
 
-Persist the transaction trytes in local storage **before** calling this command for first time, to ensure
+**Note:** Persist the transaction trytes in local storage __before__ calling this command, to ensure
 that reattachment is possible, until your bundle has been included.
 
 **Example**  
@@ -594,7 +599,7 @@ broadcastTransactions(trytes)
 ### *core*.checkConsistency(transactions, [options], [callback])
 **Fulfil**: <code>boolean</code> Consistency state of given transaction or co-consistency of given transactions.  
 **Reject**: <code>Error</code>
-- `IVNALID_HASH_ARRAY`: Invalid array of hashes
+- `INVALID_TRANSACTION_HASH`: Invalid transaction hash
 - Fetch error
 - Reason for returning `false`, if called with `options.rejectWithReason`  
 
@@ -666,8 +671,11 @@ const isPromotable = ({ hash, attachmentTimestamp }) => (
 ### *core*.findTransactionObjects(query, [callback])
 **Fulfil**: <code>Transaction[]</code> Array of transaction objects  
 **Reject**: <code>Error</code>
-- `INVALID_HASH_ARRAY`: Invalid hashes of addresses, approvees of bundles
-- `INVALID_TAG_ARRAY`: Invalid tags
+- `INVALID_SEARCH_KEY`
+- `INVALID_HASH`: Invalid bundle hash
+- `INVALID_TRANSACTION_HASH`: Invalid approvee transaction hash
+- `INVALID_ADDRESS`: Invalid address
+- `INVALID_TAG`: Invalid tag
 - Fetch error  
 
 | Param | Type | Description |
@@ -710,8 +718,11 @@ findTransactionObjects({ addresses: ['ADR...'] })
 ### *core*.findTransactions(query, [callback])
 **Fulfil**: <code>Hash[]</code> Array of transaction hashes  
 **Reject**: <code>Error</code>
-- `INVALID_HASH_ARRAY`: Invalid hashes of addresses, approvees of bundles
-- `INVALID_TAG_ARRAY`: Invalid tags
+- `INVALID_SEARCH_KEY`
+- `INVALID_HASH`: Invalid bundle hash
+- `INVALID_TRANSACTION_HASH`: Invalid approvee transaction hash
+- `INVALID_ADDRESS`: Invalid address
+- `INVALID_TAG`: Invalid tag
 - Fetch error  
 
 | Param | Type | Description |
@@ -797,7 +808,7 @@ getAccountData(seed, {
 ### *core*.getBalances(addresses, threshold, [callback])
 **Fulfil**: <code>Balances</code> Object with list of `balances` and corresponding `milestone`  
 **Reject**: <code>Error</code>
-- `INVALID_HASH_ARRAY`: Invalid addresses array
+- `INVALID_HASH`: Invalid address
 - `INVALID_THRESHOLD`: Invalid `threshold`
 - Fetch error  
 
@@ -834,7 +845,7 @@ getBalances([address], 100)
 ### *core*.getBundle(tailTransactionHash, [callback])
 **Fulfil**: <code>Transaction[]</code> Bundle as array of transaction objects  
 **Reject**: <code>Error</code>
-- `INVALID_HASH`
+- `INVALID_TRANSACTION_HASH`
 - `INVALID_TAIL_HASH`: Provided transaction is not tail (`currentIndex !== 0`)
 - `INVALID_BUNDLE`: Bundle is syntactically invalid
 - Fetch error  
@@ -871,7 +882,7 @@ getBundle(tail)
 ### *core*.getInclusionStates(transactions, tips, [callback])
 **Fulfil**: <code>boolean[]</code> Array of inclusion state  
 **Reject**: <code>Error</code>
-- `INVALID_HASH_ARRAY`: Invalid `hashes` or `tips`
+- `INVALID_TRANSACTION_HASH`: Invalid `hashes` or `tips`
 - Fetch error  
 
 | Param | Type | Description |
@@ -954,7 +965,7 @@ getInputs(seed, { start: 0, threhold })
 ### *core*.getLatestInclusion(transactions, tips, [callback])
 **Fulfil**: <code>boolean[]</code> List of inclusion states  
 **Reject**: <code>Error</code>
-- `INVALID_HASHES_ARRAY`: Invalid transaction hashes
+- `INVALID_HASH`: Invalid transaction hash
 - Fetch error  
 
 | Param | Type | Description |
@@ -1119,7 +1130,7 @@ getTips()
 ### *core*.getTransactionObjects(hashes, [callback])
 **Fulfil**: <code>Transaction[]</code> - List of transaction objects  
 **Reject**: <code>Error</code>
-- `INVALID_HASH_ARRAY`
+- `INVALID_TRANSACTION_HASH`
 - Fetch error  
 
 | Param | Type | Description |
@@ -1204,7 +1215,7 @@ getTransactionsToApprove(depth)
 ### *core*.getTrytes(hashes, [callback])
 **Fulfil**: <code>Trytes[]</code> - Transaction trytes  
 **Reject**: Error{}
-- `INVALID_HASH_ARRAY`: Invalid array of hashes
+- `INVALID_TRANSACTION_HASH`: Invalid hash
 - Fetch error  
 
 | Param | Type | Description |
@@ -1308,9 +1319,10 @@ It is possible to prepare and sign transactions offline, by omitting the provide
 **Reject**: <code>Error</code>
 - `INVALID_SEED`
 - `INVALID_TRANSFER_ARRAY`
-- `INVALID_INPUTS`
+- `INVALID_INPUT`
 - `INVALID_REMAINDER_ADDRESS`
 - `INSUFFICIENT_BALANCE`
+- `NO_INPUTS`
 - `SENDING_BACK_TO_INPUTS`
 - Fetch error, if connected to network  
 
@@ -1338,6 +1350,9 @@ Prepares the transaction trytes by generating a bundle, filling in transfers and
 adding remainder and signing. It can be used to generate and sign bundles either online or offline.
 For offline usage, please see [`createPrepareTransfers`](#module_core.createPrepareTransfers)
 which creates a `prepareTransfers` without a network provider.
+
+**Note:** After calling this method, persist the returned transaction trytes in local storage. Only then you should broadcast to netowrk.
+This will allow for reattachments and prevent key reuse if trytes can't be recovered by querying the netowrk after broadcasting.
 
 <a name="module_core.createPromoteTransaction"></a>
 
@@ -1386,7 +1401,7 @@ is interruptable through `interrupt` option.
 ### *core*.removeNeighbors(uris, [callback])
 **Fulfil**: <code>number</code> Number of neighbors that were removed  
 **Reject**: <code>Error</code>
-- `INVALID URI`: Invalid uri(s)
+- `INVALID_URI`: Invalid uri
 - Fetch error  
 
 | Param | Type | Description |
@@ -1416,7 +1431,7 @@ This method has temporary effect until your IRI node relaunches.
 **Reject**: <code>Error</code>
 - `INVALID_DEPTH`
 - `INVALID_MIN_WEIGHT_MAGNITUDE`
-- `INVALID_HASH`
+- `INVALID_TRANSACTION_HASH`
 - `INVALID_BUNDLE`
 - Fetch error  
 
@@ -1456,7 +1471,7 @@ replayBundle(tail)
 ### *core*.sendTrytes(trytes, depth, minWeightMagnitude, [reference], [callback])
 **Fulfil**: <code>Transaction[]</code>  Returns list of attached transactions  
 **Reject**: <code>Error</code>
-- `INVALID_TRYTES`
+- `INVALID_TRANSACTION_TRYTES`
 - `INVALID_DEPTH`
 - `INVALID_MIN_WEIGHT_MAGNITUDE`
 - Fetch error, if connected to network  
@@ -1472,10 +1487,19 @@ replayBundle(tail)
 [Attaches to tanlge](#module_core.attachToTangle), [stores](#module_core.storeTransactions)
 and [broadcasts](#module_core.broadcastTransactions) a list of transaction trytes.
 
+**Note:** Persist the transaction trytes in local storage __before__ calling this command, to ensure
+that reattachment is possible, until your bundle has been included.
+
 **Example**  
 ```js
 prepareTransfers(seed, transfers)
-  .then(trytes => sendTrytes(trytes, depth, minWeightMagnitude))
+  .then(trytes => {
+    // Persist trytes locally before sending to network.
+    // This allows for reattachments and prevents key reuse if trytes can't
+    // be recovered by querying the network after broadcasting.
+
+    return iota.sendTrytes(trytes, depth, minWeightMagnitude)
+  })
   .then(transactions => {
     // ...
   })
@@ -1497,7 +1521,7 @@ prepareTransfers(seed, transfers)
 ### *core*.storeAndBroadcast(trytes, [callback])
 **Fulfil**: <code>Trytes[]</code> Attached transaction trytes  
 **Reject**: <code>Error</code>
-- `INVALID_ATTACHED_TRYTES`: Invalid array of attached trytes
+- `INVALID_ATTACHED_TRYTES`: Invalid attached trytes
 - Fetch error  
 
 | Param | Type | Description |
@@ -1509,7 +1533,7 @@ Stores and broadcasts a list of _attached_ transaction trytes by calling
 [`storeTransactions`](#module_core.storeTransactions) and
 [`broadcastTransactions`](#module_core.broadcastTransactions).
 
-Note: Persist the transaction trytes in local storage **before** calling this command, to ensure
+**Note:** Persist the transaction trytes in local storage __before__ calling this command, to ensure
 that reattachment is possible, until your bundle has been included.
 
 Any transactions stored with this command will eventaully be erased, as a result of a snapshot.
@@ -1528,7 +1552,7 @@ Any transactions stored with this command will eventaully be erased, as a result
 ### *core*.storeTransactions(trytes, [callback])
 **Fullfil**: <code>Trytes[]</code> Attached transaction trytes  
 **Reject**: <code>Error</code>
-- `INVALID_ATTACHED_TRYTES`: Invalid attached trytes array
+- `INVALID_ATTACHED_TRYTES`: Invalid attached trytes
 - Fetch error  
 
 | Param | Type | Description |
@@ -1543,8 +1567,8 @@ Tip selection and Proof-of-Work must be done first, by calling
 [`attachToTangle`](#module_core.attachToTangle) or an equivalent attach method or remote
 [`PoWbox`](https://powbox.devnet.iota.org/).
 
-Persist the transaction trytes in local storage **before** calling this command, to ensure
-reattachment is possible, until your bundle has been included.
+**Note:** Persist the transaction trytes in local storage __before__ calling this command, to ensure
+that reattachment is possible, until your bundle has been included.
 
 Any transactions stored with this command will eventaully be erased, as a result of a snapshot.
 
@@ -1562,7 +1586,7 @@ Any transactions stored with this command will eventaully be erased, as a result
 ### *core*.traverseBundle(trunkTransaction, [bundle], [callback])
 **Fulfil**: <code>Transaction[]</code> Bundle as array of transaction objects  
 **Reject**: <code>Error</code>
-- `INVALID_HASH`
+- `INVALID_TRANSACTION_HASH`
 - `INVALID_TAIL_HASH`: Provided transaction is not tail (`currentIndex !== 0`)
 - `INVALID_BUNDLE`: Bundle is syntactically invalid
 - Fetch error  
@@ -1617,7 +1641,8 @@ Supports the following forms of JSON encoded values:
 - `"{ \"message\": \"hello\" }"\`
 - `"[1, 2, 3]"`
 - `"true"`, `"false"` & `"null"`
-- `"\"hello\""`
+- `"\"hello\""
+- `123`
 
 **Example**  
 ```js
@@ -1833,8 +1858,6 @@ Normalizes the bundle hash, with resulting digits summing to zero.
 
     * [~asTransactionTrytes(transactions)](#module_transaction-converter..asTransactionTrytes)
 
-    * [~transactionHash(transactionTrits)](#module_transaction-converter..transactionHash)
-
     * [~asTransactionObject(trytes)](#module_transaction-converter..asTransactionObject)
 
     * [~asTransactionObjects([hashes])](#module_transaction-converter..asTransactionObjects)
@@ -1853,17 +1876,6 @@ Normalizes the bundle hash, with resulting digits summing to zero.
 Converts a transaction object or a list of those into transaction trytes.
 
 **Returns**: <code>Trytes</code> \| <code>Array.&lt;Trytes&gt;</code> - Transaction trytes  
-<a name="module_transaction-converter..transactionHash"></a>
-
-### *transaction-converter*~transactionHash(transactionTrits)
-
-| Param | Type | Description |
-| --- | --- | --- |
-| transactionTrits | <code>Int8Array</code> | Int8Array of 8019 transaction trits |
-
-Calculates the transaction hash out of 8019 transaction trits.
-
-**Returns**: <code>Hash</code> - Transaction hash  
 <a name="module_transaction-converter..asTransactionObject"></a>
 
 ### *transaction-converter*~asTransactionObject(trytes)
@@ -1899,6 +1911,90 @@ the mapper function map them to converted objects.
 Maps the list of given hashes to a list of converted transaction objects.
 
 **Returns**: <code>Array.&lt;Transaction&gt;</code> - List of transaction objects with hashes  
+<a name="module_transaction"></a>
+
+## transaction
+
+* [transaction](#module_transaction)
+
+    * [~transactionHash(trits)](#module_transaction..transactionHash)
+
+    * [~isTransaction(tx)](#module_transaction..isTransaction)
+
+    * [~isTailTransaction(transaction)](#module_transaction..isTailTransaction)
+
+    * [~isTransactionHash(hash, mwm)](#module_transaction..isTransactionHash)
+
+    * [~isTransactionTrytes(trytes, minWeightMagnitude)](#module_transaction..isTransactionTrytes)
+
+    * [~isAttachedTrytes(trytes)](#module_transaction..isAttachedTrytes)
+
+
+<a name="module_transaction..transactionHash"></a>
+
+### *transaction*~transactionHash(trits)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| trits | <code>Int8Array</code> | Int8Array of 8019 transaction trits |
+
+Calculates the transaction hash out of 8019 transaction trits.
+
+**Returns**: <code>Hash</code> - Transaction hash  
+<a name="module_transaction..isTransaction"></a>
+
+### *transaction*~isTransaction(tx)
+
+| Param | Type |
+| --- | --- |
+| tx | <code>object</code> | 
+
+Checks if input is valid transaction object.
+
+<a name="module_transaction..isTailTransaction"></a>
+
+### *transaction*~isTailTransaction(transaction)
+
+| Param | Type |
+| --- | --- |
+| transaction | <code>object</code> | 
+
+Checks if given transaction object is tail transaction.
+A tail transaction is one with `currentIndex=0`.
+
+<a name="module_transaction..isTransactionHash"></a>
+
+### *transaction*~isTransactionHash(hash, mwm)
+
+| Param | Type |
+| --- | --- |
+| hash | <code>string</code> | 
+| mwm | <code>number</code> | 
+
+Checks if input is correct transaction hash (81 trytes)
+
+<a name="module_transaction..isTransactionTrytes"></a>
+
+### *transaction*~isTransactionTrytes(trytes, minWeightMagnitude)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+| minWeightMagnitude | <code>number</code> | 
+
+Checks if input is correct transaction trytes (2673 trytes)
+
+<a name="module_transaction..isAttachedTrytes"></a>
+
+### *transaction*~isAttachedTrytes(trytes)
+
+| Param | Type |
+| --- | --- |
+| trytes | <code>string</code> | 
+
+Checks if input is valid attached transaction trytes.
+For attached transactions last 241 trytes are non-zero.
+
 <a name="module_unit-converter"></a>
 
 ## unit-converter
@@ -1918,310 +2014,15 @@ Converts accross IOTA units. Valid unit names are:
 <a name="module_validators"></a>
 
 ## validators
-
-* [validators](#module_validators)
-
-    * [~validate()](#module_validators..validate)
-
-    * [~isTrytesOfExactLength(trytes, length)](#module_validators..isTrytesOfExactLength)
-
-    * [~isTrytesOfMaxLength(trytes, length)](#module_validators..isTrytesOfMaxLength)
-
-    * [~isTrytes(trytes, [length])](#module_validators..isTrytes)
-
-    * [~isHash(hash)](#module_validators..isHash)
-
-    * [~isTransactionHash(hash)](#module_validators..isTransactionHash)
-
-    * [~isEmpty(hash)](#module_validators..isEmpty)
-
-    * [~isTransfer(transfer)](#module_validators..isTransfer)
-
-    * [~isTransfersArray(transfers)](#module_validators..isTransfersArray)
-
-    * [~isHashArray(hashes)](#module_validators..isHashArray)
-
-    * [~isTransactionHashArray(hashes)](#module_validators..isTransactionHashArray)
-
-    * [~isTransactionTrytesArray(trytes)](#module_validators..isTransactionTrytesArray)
-
-    * [~isAttachedTrytesArray(trytes)](#module_validators..isAttachedTrytesArray)
-
-    * [~isTransaction(tx)](#module_validators..isTransaction)
-
-    * [~isTransactionArray(bundle)](#module_validators..isTransactionArray)
-
-    * [~isAddress(address)](#module_validators..isAddress)
-
-    * [~isAddresses(address)](#module_validators..isAddresses)
-
-    * [~isUri(uri)](#module_validators..isUri)
-
-    * [~isUriArray(uris)](#module_validators..isUriArray)
-
-    * [~isTag(tag)](#module_validators..isTag)
-
-    * [~isTagArray(tags)](#module_validators..isTagArray)
-
-    * [~isTailTransaction(transaction)](#module_validators..isTailTransaction)
-
-    * [~isInputArray(inputs)](#module_validators..isInputArray)
-
-
-<a name="module_validators..validate"></a>
-
-### *validators*~validate()
-**Throws**:
-
-- <code>Error</code> error
-
-Runs each validator in sequence, and throws on the first occurence of invalid data.
-Validators are passed as arguments and executed in given order.
-You might want place `validate()` in promise chains before operations that require valid inputs,
-taking advantage of built-in promise branching.
-
-**Example**  
-```js
-try {
-  validate([
-    value, // Given value
-    isTrytes, // Validator function
-    'Invalid trytes' // Error message
-  ])
-} catch (err) {
-  console.log(err.message) // 'Invalid trytes'
-}
-```
-<a name="module_validators..isTrytesOfExactLength"></a>
-
-### *validators*~isTrytesOfExactLength(trytes, length)
-
-| Param | Type |
-| --- | --- |
-| trytes | <code>string</code> | 
-| length | <code>number</code> | 
-
-<a name="module_validators..isTrytesOfMaxLength"></a>
-
-### *validators*~isTrytesOfMaxLength(trytes, length)
-
-| Param | Type |
-| --- | --- |
-| trytes | <code>string</code> | 
-| length | <code>number</code> | 
-
-<a name="module_validators..isTrytes"></a>
-
-### *validators*~isTrytes(trytes, [length])
-
-| Param | Type | Default |
-| --- | --- | --- |
-| trytes | <code>string</code> |  | 
-| [length] | <code>string</code> \| <code>number</code> | <code>&quot;&#x27;1,&#x27;&quot;</code> | 
-
-Checks if input is correct trytes consisting of [9A-Z]; optionally validate length
-
-<a name="module_validators..isHash"></a>
-
-### *validators*~isHash(hash)
-
-| Param | Type |
-| --- | --- |
-| hash | <code>string</code> | 
-
-Checks if input is correct hash (81 trytes) or address with checksum (90 trytes)
-
-<a name="module_validators..isTransactionHash"></a>
-
-### *validators*~isTransactionHash(hash)
-
-| Param | Type |
-| --- | --- |
-| hash | <code>string</code> | 
-
-Checks if input is correct transaction hash (81 trytes)
-
-<a name="module_validators..isEmpty"></a>
-
-### *validators*~isEmpty(hash)
-
-| Param | Type |
-| --- | --- |
-| hash | <code>string</code> | 
-
-Checks if input contains `9`s only.
-
-<a name="module_validators..isTransfer"></a>
-
-### *validators*~isTransfer(transfer)
-
-| Param | Type |
-| --- | --- |
-| transfer | <code>Transfer</code> | 
-
-Checks if input is valid `transfer` object.
-
-<a name="module_validators..isTransfersArray"></a>
-
-### *validators*~isTransfersArray(transfers)
-
-| Param | Type |
-| --- | --- |
-| transfers | <code>Array.&lt;Transfer&gt;</code> | 
-
-Checks if input is array of valid `transfer` objects.
-
-<a name="module_validators..isHashArray"></a>
-
-### *validators*~isHashArray(hashes)
-
-| Param | Type |
-| --- | --- |
-| hashes | <code>Array.&lt;string&gt;</code> | 
-
-Checks if input is array of valid hashes.
-Valid hashes are `81` trytes in length, or `90` trytes in case of addresses with checksum.
-
-<a name="module_validators..isTransactionHashArray"></a>
-
-### *validators*~isTransactionHashArray(hashes)
-
-| Param | Type |
-| --- | --- |
-| hashes | <code>Array.&lt;string&gt;</code> | 
-
-Checks if input is array of valid transaction hashes.
-
-<a name="module_validators..isTransactionTrytesArray"></a>
-
-### *validators*~isTransactionTrytesArray(trytes)
-
-| Param | Type |
-| --- | --- |
-| trytes | <code>Array.&lt;string&gt;</code> | 
-
-Checks if input is array of valid tranasction trytes.
-
-<a name="module_validators..isAttachedTrytesArray"></a>
-
-### *validators*~isAttachedTrytesArray(trytes)
-
-| Param | Type |
-| --- | --- |
-| trytes | <code>Array.&lt;string&gt;</code> | 
-
-Checks if input is array of valid attached tranasction trytes.
-For attached transactions last 241 trytes are non-zero.
-
-<a name="module_validators..isTransaction"></a>
-
-### *validators*~isTransaction(tx)
-
-| Param | Type |
-| --- | --- |
-| tx | <code>Array.&lt;Object&gt;</code> | 
-
-Checks if input is valid transaction object.
-
-<a name="module_validators..isTransactionArray"></a>
-
-### *validators*~isTransactionArray(bundle)
-
-| Param | Type |
-| --- | --- |
-| bundle | <code>Array.&lt;Object&gt;</code> | 
-
-Checks if input is valid array of transaction objects.
-
 <a name="module_validators..isAddress"></a>
 
 ### *validators*~isAddress(address)
 
-| Param | Type |
-| --- | --- |
-| address | <code>string</code> | 
+| Param | Type | Description |
+| --- | --- | --- |
+| address | <code>string</code> | Address trytes, with checksum |
 
-Checks if input is valid address. Address can be passed with or without checksum.
-It does not validate the checksum.
-
-<a name="module_validators..isAddresses"></a>
-
-### *validators*~isAddresses(address)
-
-| Param | Type |
-| --- | --- |
-| address | <code>string</code> | 
-
-Checks if input is valid array of address. Similarly to [`isAddress`](#module_validators.isAddress),
-it does not validate the checksum.
-
-<a name="module_validators..isUri"></a>
-
-### *validators*~isUri(uri)
-
-| Param | Type |
-| --- | --- |
-| uri | <code>string</code> | 
-
-Checks that a given `URI` is valid
-
-Valid Examples:
-- `udp://[2001:db8:a0b:12f0::1]:14265`
-- `udp://[2001:db8:a0b:12f0::1]`
-- `udp://8.8.8.8:14265`
-- `udp://domain.com`
-- `udp://domain2.com:14265`
-
-<a name="module_validators..isUriArray"></a>
-
-### *validators*~isUriArray(uris)
-
-| Param | Type |
-| --- | --- |
-| uris | <code>Array.&lt;string&gt;</code> | 
-
-Checks that a given input is array of value `URI`s
-
-<a name="module_validators..isTag"></a>
-
-### *validators*~isTag(tag)
-
-| Param | Type |
-| --- | --- |
-| tag | <code>string</code> | 
-
-Checks that input is valid tag trytes.
-
-<a name="module_validators..isTagArray"></a>
-
-### *validators*~isTagArray(tags)
-
-| Param | Type |
-| --- | --- |
-| tags | <code>Array.&lt;string&gt;</code> | 
-
-Checks that input is array of valid tag trytes.
-
-<a name="module_validators..isTailTransaction"></a>
-
-### *validators*~isTailTransaction(transaction)
-
-| Param | Type |
-| --- | --- |
-| transaction | <code>object</code> | 
-
-Checks if given transaction object is tail transaction.
-A tail transaction is one with `currentIndex=0`.
-
-<a name="module_validators..isInputArray"></a>
-
-### *validators*~isInputArray(inputs)
-
-| Param | Type |
-| --- | --- |
-| inputs | <code>Array.&lt;object&gt;</code> | 
-
-Checks if input is valid array of `input` objects.
+Checks integrity of given address by validating the checksum.
 
 <a name="API"></a>
 

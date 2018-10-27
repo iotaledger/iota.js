@@ -2,31 +2,15 @@ import test from 'ava'
 import { isAddress } from '../src'
 
 test('isAddress()', t => {
-    const validAddressWithChecksum = {
-        address: 'JALLWDUOSTSJVL9EEHKW9YQFPBVBJAGLNKRVGSQZCGHQWEMIIILJMTHVAGVDXJVZMBAMOZTSBQNRVNLLSJMPIVGPNE',
-        keyIndex: 1,
-        security: 2,
-    }
-    const validAddressWithoutChecksum = {
-        address: 'JALLWDUOSTSJVL9EEHKW9YQFPBVBJAGLNKRVGSQZCGHQWEMIIILJMTHVAGVDXJVZMBAMOZTSBQNRVNLLS',
-        keyIndex: 1,
-        security: 2,
-    }
-    const validAddressWithInvalidChecksum = {
-        address: 'JALLWDUOSTSJVL9EEHKW9YQFPBVBJAGLNKRVGSQZCGHQWEMIIILJMTHVAGVDXJVZMBAMOZTSBQNRVNLLSJMPIVGPNF',
-        keyIndex: 1,
-        security: 2,
-    }
-    const addressOfInvalidLength = {
-        address: 'JALLWDUOSTSJVL9EEHKW9YQFPBVBJAGLNKRVGSQZCGHQWEMIIILJMTHVAGVDXJVZMBAMOZTSBQNR',
-        keyIndex: 1,
-        security: 2,
-    }
-    const addressOfInvalidTrytes = {
-        address: '123adfdsafLWDUOSTSJVL9EEHKW9YQFPBVBJAGLNKRVGSQZCGHQWEMIIILJMTHVAGVDXJVZMBAMOZTSBQNRVNLLASD',
-        keyIndex: 1,
-        security: 2,
-    }
+    const validAddressWithChecksum =
+        'UYEEERFQYTPFAHIPXDQAQYWYMSMCLMGBTYAXLWFRFFWPYFOICOVLK9A9VYNCKK9TQUNBTARCEQXJHD9VYXOEDEOMRC'
+    const validAddressWithoutChecksum =
+        'JALLWDUOSTSJVL9EEHKW9YQFPBVBJAGLNKRVGSQZCGHQWEMIIILJMTHVAGVDXJVZMBAMOZTSBQNRVNLLS'
+    const validAddressWithInvalidChecksum =
+        'JALLWDUOSTSJVL9EEHKW9YQFPBVBJAGLNKRVGSQZCGHQWEMIIILJMTHVAGVDXJVZMBAMOZTSBQNRVNLLSJMPIVGPNF'
+    const addressOfInvalidLength = 'JALLWDUOSTSJVL9EEHKW9YQFPBVBJAGLNKRVGSQZCGHQWEMIIILJMTHVAGVDXJVZMBAMOZTSBQNR'
+    const addressOfInvalidTrytes =
+        '123adfdsafLWDUOSTSJVL9EEHKW9YQFPBVBJAGLNKRVGSQZCGHQWEMIIILJMTHVAGVDXJVZMBAMOZTSBQNRVNLLASD'
 
     t.is(
         isAddress(validAddressWithChecksum),
@@ -36,13 +20,13 @@ test('isAddress()', t => {
 
     t.is(
         isAddress(validAddressWithoutChecksum),
-        true,
-        'isAddress() should return true for valid address without checksum.'
+        false,
+        'isAddress() should return false for valid address without checksum.'
     )
 
     t.is(
         isAddress(validAddressWithInvalidChecksum),
-        true,
+        false,
         'isAddress() should return false for valid address with invalid checksum.'
     )
 

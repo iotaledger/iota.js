@@ -1,8 +1,9 @@
 import * as Promise from 'bluebird'
+import { transactionHashValidator } from '@iota/transaction'
 import { asTransactionObjects } from '@iota/transaction-converter'
-import { hashArrayValidator, validate } from '@iota/validators'
-import { createGetTrytes } from './'
+import { arrayValidator, validate } from '../../guards'
 import { Callback, Hash, Provider, Transaction, Trytes } from '../../types'
+import { createGetTrytes } from './'
 
 /**
  * @method createGetTransactionObjects
@@ -41,14 +42,14 @@ export const createGetTransactionObjects = (provider: Provider) => {
      * @returns {Promise}
      * @fulfil {Transaction[]} - List of transaction objects
      * @reject {Error}
-     * - `INVALID_HASH_ARRAY`
+     * - `INVALID_TRANSACTION_HASH`
      * - Fetch error
      */
     return function getTransactionObjects(
         hashes: ReadonlyArray<Hash>,
         callback?: Callback<ReadonlyArray<Transaction>>
     ): Promise<ReadonlyArray<Transaction>> {
-        return Promise.resolve(validate(hashArrayValidator(hashes)))
+        return Promise.resolve(validate(arrayValidator(transactionHashValidator)(hashes)))
             .then(() => getTrytes(hashes))
             .then(asTransactionObjects(hashes))
             .asCallback(callback)

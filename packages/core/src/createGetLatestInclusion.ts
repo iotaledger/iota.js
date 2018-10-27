@@ -42,7 +42,7 @@ export const createGetLatestInclusion = (provider: Provider) => {
      * @return {Promise}
      * @fulfil {boolean[]} List of inclusion states
      * @reject {Error}
-     * - `INVALID_HASHES_ARRAY`: Invalid transaction hashes
+     * - `INVALID_HASH`: Invalid transaction hash
      * - Fetch error
      */
     return function getLatestInclusion(

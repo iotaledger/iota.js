@@ -5,22 +5,20 @@ import { addEntry, addTrytes, finalizeBundle } from '@iota/bundle'
 import { isValidChecksum, removeChecksum } from '@iota/checksum'
 import { key, normalizedBundleHash, signatureFragment, subseed } from '@iota/signing'
 import { asFinalTransactionTrytes } from '@iota/transaction-converter'
+import * as errors from '../../errors'
 import {
-    addressObjectArrayValidator,
+    arrayValidator,
+    inputValidator,
     isTrytes,
     remainderAddressValidator,
     securityLevelValidator,
     seedValidator,
-    transferArrayValidator,
+    transferValidator,
     validate,
-} from '@iota/validators'
-
-import { createGetInputs, createGetNewAddress } from './'
-import * as errors from './errors'
-import HMAC from './hmac'
+} from '../../guards'
 import {
-    asArray,
     Address,
+    asArray,
     Callback,
     getOptionsWithDefaults,
     Provider,
@@ -29,11 +27,14 @@ import {
     Trytes,
 } from '../../types'
 import { asyncPipe } from '../../utils'
+import { createGetInputs, createGetNewAddress } from './'
+import HMAC from './hmac'
 
 const HASH_LENGTH = 81
 const SIGNATURE_MESSAGE_FRAGMENT_LENGTH = 2187
 const KEY_FRAGMENT_LENGTH = 6561
 const NULL_HASH_TRYTES = '9'.repeat(HASH_LENGTH)
+const SECURITY_LEVEL = 2
 
 export interface PrepareTransfersOptions {
     readonly inputs: ReadonlyArray<Address>
@@ -93,6 +94,9 @@ export const createPrepareTransfers = (provider?: Provider, now: () => number = 
      * For offline usage, please see [`createPrepareTransfers`]{@link #module_core.createPrepareTransfers}
      * which creates a `prepareTransfers` without a network provider.
      *
+     * **Note:** After calling this method, persist the returned transaction trytes in local storage. Only then you should broadcast to netowrk.
+     * This will allow for reattachments and prevent key reuse if trytes can't be recovered by querying the netowrk after broadcasting.
+     *
      * @method prepareTransfers
      *
      * @memberof module:core
@@ -118,9 +122,10 @@ export const createPrepareTransfers = (provider?: Provider, now: () => number = 
      * @reject {Error}
      * - `INVALID_SEED`
      * - `INVALID_TRANSFER_ARRAY`
-     * - `INVALID_INPUTS`
+     * - `INVALID_INPUT`
      * - `INVALID_REMAINDER_ADDRESS`
      * - `INSUFFICIENT_BALANCE`
+     * - `NO_INPUTS`
      * - `SENDING_BACK_TO_INPUTS`
      * - Fetch error, if connected to network
      */
@@ -184,9 +189,9 @@ export const validatePrepareTransfers = (props: PrepareTransfersProps) => {
     validate(
         seedValidator(seed),
         securityLevelValidator(security),
-        transferArrayValidator(transfers),
+        arrayValidator(transferValidator)(transfers),
         !!remainderAddress && remainderAddressValidator(remainderAddress),
-        inputs.length > 0 && addressObjectArrayValidator(inputs)
+        inputs.length > 0 && arrayValidator(inputValidator)(inputs)
     )
 
     return props
@@ -245,8 +250,12 @@ export const createAddInputs = (provider?: Provider) => {
         const { transactions, transfers, inputs, timestamp, seed, security } = props
         const threshold = transfers.reduce((sum, { value }) => (sum += value), 0)
 
+        if (threshold === 0) {
+            return Promise.resolve(props)
+        }
+
         if (inputs.length && threshold > inputs.reduce((acc, input) => (acc += input.balance), 0)) {
-            throw new Error(inputs.length ? errors.INSUFFICIENT_BALANCE : errors.INVALID_INPUTS)
+            throw new Error(inputs.length ? errors.INSUFFICIENT_BALANCE : errors.NO_INPUTS)
         }
 
         return (!getInputs || inputs.length
@@ -316,7 +325,7 @@ export const createAddRemainder = (provider?: Provider) => {
 }
 
 export const getRemainderAddressStartIndex = (inputs: ReadonlyArray<Address>): number =>
-    [...inputs].sort((a, b) => a.keyIndex - b.keyIndex)[0].keyIndex
+    [...inputs].sort((a, b) => b.keyIndex - a.keyIndex)[0].keyIndex + 1
 
 export const verifyNotSendingToInputs = (props: PrepareTransfersProps): PrepareTransfersProps => {
     const { transactions } = props
@@ -345,7 +354,7 @@ export const addSignatures = (props: PrepareTransfersProps): PrepareTransfersPro
         transactions: addTrytes(
             transactions,
             inputs.reduce((acc: ReadonlyArray<Trytes>, { keyIndex, security }) => {
-                const keyTrits = key(subseed(trits(seed), keyIndex), security)
+                const keyTrits = key(subseed(trits(seed), keyIndex), security || SECURITY_LEVEL)
 
                 return acc.concat(
                     Array(security)

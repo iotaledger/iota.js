@@ -1,5 +1,7 @@
 import * as Promise from 'bluebird'
-import { depthValidator, transactionHashValidator, validate } from '@iota/validators'
+import { transactionHashValidator } from '@iota/transaction'
+import { INVALID_REFERENCE_HASH } from '../../errors'
+import { depthValidator, validate } from '../../guards'
 import {
     Callback,
     GetTransactionsToApproveCommand,
@@ -9,7 +11,6 @@ import {
     TransactionsToApprove,
     Provider,
 } from '../../types'
-import { INVALID_REFERENCE_HASH } from './errors'
 
 /**
  * @method createGetTransactionsToApprove

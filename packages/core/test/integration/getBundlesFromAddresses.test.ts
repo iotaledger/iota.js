@@ -1,12 +1,12 @@
 import test from 'ava'
 import { createHttpClient } from '@iota/http-client'
 import { bundle, bundleWithZeroValue, transfers } from '@iota/samples'
+import { INVALID_ADDRESS } from '../../../errors'
 import {
     createGetBundlesFromAddresses,
     getBundleSync,
     groupTransactionsIntoBundles,
 } from '../../src/createGetBundlesFromAddresses'
-import { INVALID_ADDRESS } from '../../src/errors'
 import { getBalancesCommand } from './nocks/getBalances'
 import './nocks/findTransactions'
 import './nocks/getInclusionStates'

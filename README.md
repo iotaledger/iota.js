@@ -2,8 +2,7 @@
 
 IOTA Client Reference Implementation in Javascript
 
-[![Build Status](https://travis-ci.org/iotaledger/iota.lib.js.svg?branch=next)](https://travis-ci.org/iotaledger/iota.lib.js)
- [![dependencies Status](https://david-dm.org/iotaledger/iota.lib.js/status.svg)](https://david-dm.org/iotaledger/iota.lib.js)  [![devDependencies Status](https://david-dm.org/iotaledger/iota.lib.js/dev-status.svg)](https://david-dm.org/iotaledger/iota.lib.js?type=dev) [![NSP Status](https://nodesecurity.io/orgs/iota-foundation/projects/7c0214b5-e36a-4178-92bc-164c536cfd6c/badge)](https://nodesecurity.io/orgs/iota-foundation/projects/7c0214b5-e36a-4178-92bc-164c536cfd6c) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/iotaledger/iota.lib.js/master/LICENSE)  [![Discord](https://img.shields.io/discord/102860784329052160.svg)](https://discord.gg/DTbJufa)
+[![Build Status](https://travis-ci.org/iotaledger/iota.js.svg)](https://travis-ci.org/iotaledger/iota.js) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/iotaledger/iota.lib.js/master/LICENSE)  [![Discord](https://img.shields.io/discord/102860784329052160.svg)](https://discord.gg/DTbJufa) [![Greenkeeper badge](https://badges.greenkeeper.io/iotaledger/iota.js.svg)](https://greenkeeper.io/)
 
 ---
 
@@ -83,8 +82,16 @@ const depth = 3
 // Minimum value on mainnet & spamnet is `14`, `9` on devnet and other testnets.
 const minWeightMagnitude = 14
 
+// Prepare a bundle and signs it
 iota.prepareTransfers(seed, transfers)
-    .then(trytes => iota.sendTrytes(trytes, depth, minWeightMagnitude))
+    .then(trytes => {
+        // Persist trytes locally before sending to network.
+        // This allows for reattachments and prevents key reuse if trytes can't
+        // be recovered by querying the network after broadcasting.
+
+        // Does tip selection, attaches to tangle by doing PoW and broadcasts.
+        return iota.sendTrytes(trytes, depth, minWeightMagnitude)
+    })
     .then(bundle => {
         console.log(`Published transaction with tail hash: ${bundle[0].hash}`)
         console.log(`Bundle: ${bundle}`)
@@ -108,10 +115,10 @@ We thank everyone for their contributions. Here is quick guide to get started wi
 
 1. Fork the repo with <kbd>Fork</kbd> button at top right corner.
 2. Clone your fork locally and `cd` in it.
-3. Bootstrap your environement with:
+3. Bootstrap your environment with:
 
 ```
-yarn run init
+npm run init
 ```
 
 This will install all dependencies, build and link the packages together. iota.js uses [Lerna](https://lernajs.io/) to manage multiple packages. You can re-bootstrap your setup at any point with `lerna bootstrap` command.
@@ -121,17 +128,17 @@ This will install all dependencies, build and link the packages together. iota.j
 Make your changes on a single or across multiple packages and test the system in integration. Run from the _root directory_:
 
 ```
-yarn test
+npm test
 ```
 
-To run tests of specific package just `cd` to the package directory and run `yarn test` from there.
+To run tests of specific package just `cd` to the package directory and run `npm test` from there.
 
 You may also want to configure your editor to build the source uppon save and watch the tests running.
-Once building on save is setup, you can start watching tests with `yarn test --watch` from each package directory.
+Once building on save is setup, you can start watching tests with `npm test --watch` from each package directory.
 
 ### Updating documentation
 
-Please update the documention when needed by editing [`JSDoc`](http://usejsdoc.org) annotations and running `yarn docs` from the _root directory_.
+Please update the documention when needed by editing [`JSDoc`](http://usejsdoc.org) annotations and running `npm run docs` from the _root directory_.
 
 
 ## Reporting Issues

@@ -1,5 +1,5 @@
 import * as Promise from 'bluebird'
-import { uriArrayValidator, validate } from '@iota/validators'
+import { arrayValidator, uriValidator, validate } from '../../guards'
 import { Callback, IRICommand, Provider, RemoveNeighborsCommand, RemoveNeighborsResponse } from '../../types'
 
 /**
@@ -29,11 +29,11 @@ export const createRemoveNeighbors = ({ send }: Provider) =>
      * @return {Promise}
      * @fulfil {number} Number of neighbors that were removed
      * @reject {Error}
-     * - `INVALID URI`: Invalid uri(s)
+     * - `INVALID_URI`: Invalid uri
      * - Fetch error
      */
     (uris: ReadonlyArray<string>, callback?: Callback<number>): Promise<number> =>
-        Promise.resolve(validate(uriArrayValidator(uris)))
+        Promise.resolve(validate(arrayValidator(uriValidator)(uris)))
             .then(() =>
                 send<RemoveNeighborsCommand, RemoveNeighborsResponse>({
                     command: IRICommand.REMOVE_NEIGHBORS,

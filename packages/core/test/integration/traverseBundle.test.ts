@@ -1,8 +1,8 @@
 import test from 'ava'
 import { createHttpClient } from '@iota/http-client'
 import { bundle, bundleWithZeroValue } from '@iota/samples'
+import { INVALID_TRANSACTION_HASH } from '../../../errors'
 import { createTraverseBundle } from '../../src'
-import { INVALID_HASH } from '../../src/errors'
 import './nocks/getTrytes'
 
 const traverseBundle = createTraverseBundle(createHttpClient())
@@ -25,7 +25,7 @@ test('traverseBundle() rejects with correct error for invalid hash.', t => {
 
     t.is(
         t.throws(() => traverseBundle(invalidHash), Error).message,
-        `${INVALID_HASH}: ${invalidHash}`,
+        `${INVALID_TRANSACTION_HASH}: ${invalidHash}`,
         'traverseBundle() should throw correct error for invalid hash.'
     )
 })

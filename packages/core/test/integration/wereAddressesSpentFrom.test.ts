@@ -1,7 +1,7 @@
 import test from 'ava'
 import { createHttpClient } from '@iota/http-client'
+import { INVALID_ADDRESS } from '../../../errors'
 import { createWereAddressesSpentFrom } from '../../src/createWereAddressesSpentFrom'
-import { INVALID_HASH_ARRAY } from '../../src/errors'
 import { wereAddressesSpentFromCommand, wereAddressesSpentFromResponse } from './nocks/wereAddressesSpentFrom'
 
 const wereAddressesSpentFrom = createWereAddressesSpentFrom(createHttpClient(), 'lib')
@@ -39,7 +39,7 @@ test('wereAddressesSpentFrom() rejects with correct error for invalid addresses'
 
     t.is(
         t.throws(() => wereAddressesSpentFrom(invalidAddresses), Error).message,
-        `${INVALID_HASH_ARRAY}: ${invalidAddresses[0]}`,
+        `${INVALID_ADDRESS}: ${invalidAddresses[0]}`,
         'wereAddressesSpentFrom() should throw error for invalid addresses'
     )
 })

@@ -1,13 +1,13 @@
 import test from 'ava'
 import { createHttpClient } from '@iota/http-client'
+import { INSUFFICIENT_BALANCE, INVALID_SEED, INVALID_START_END_OPTIONS } from '../../../errors'
+import { Inputs } from '../../../types'
 import {
     createGetInputs,
     createInputsObject,
     hasSufficientBalance,
     inputsToAddressOptions,
 } from '../../src/createGetInputs'
-import { Inputs } from '../../../types'
-import { INSUFFICIENT_BALANCE, INVALID_SEED, INVALID_START_END_OPTIONS } from '../../src/errors'
 import { getBalancesCommand, balancesResponse } from './nocks/getBalances'
 import './nocks/findTransactions'
 import './nocks/wereAddressesSpentFrom'
@@ -26,23 +26,13 @@ const inputs: Inputs = {
             security: 2,
         },
         {
-            address: getBalancesCommand.addresses[1],
-            balance: balances[1],
-            keyIndex: 1,
+            address: getBalancesCommand.addresses[2],
+            balance: balances[2],
+            keyIndex: 2,
             security: 2,
         },
     ],
-    totalBalance: balances[0] + balances[1],
-}
-
-const allInputs: Inputs = {
-    inputs: [...inputs.inputs].concat({
-        address: getBalancesCommand.addresses[2],
-        balance: balances[2],
-        keyIndex: 2,
-        security: 2,
-    }),
-    totalBalance: inputs.totalBalance + balances[2],
+    totalBalance: balances[0] + balances[2],
 }
 
 test('inputsToAddressOptions() translates getInputs() options to compatible getNewAddress() options', t => {
@@ -84,7 +74,7 @@ test('inputsToAddressOptions() translates getInputs() options to compatible getN
 test('createInputsObject() aggregates addresses and balances', t => {
     t.deepEqual(
         createInputsObject(getBalancesCommand.addresses, balances, 0, 2),
-        allInputs,
+        inputs,
         'createInputsObject() should aggregate addresses and balances correctly'
     )
 })

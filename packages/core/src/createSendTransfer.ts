@@ -1,8 +1,15 @@
 import * as Promise from 'bluebird'
-import { depthValidator, mwmValidator, seedValidator, transferArrayValidator, validate } from '@iota/validators'
+import {
+    arrayValidator,
+    depthValidator,
+    minWeightMagnitudeValidator,
+    seedValidator,
+    transferValidator,
+    validate,
+} from '../../guards'
+import { AttachToTangle, Bundle, Callback, Hash, Provider, Transaction, Transfer } from '../../types'
 import { createPrepareTransfers, createSendTrytes } from './'
 import { getPrepareTransfersOptions, PrepareTransfersOptions } from './createPrepareTransfers'
-import { AttachToTangle, Bundle, Callback, Hash, Provider, Transfer, Transaction } from '../../types'
 
 export interface SendTransferOptions extends PrepareTransfersOptions {
     readonly reference?: Hash
@@ -30,8 +37,8 @@ export const createSendTransfer = (provider: Provider, attachFn?: AttachToTangle
             validate(
                 depthValidator(depth),
                 seedValidator(seed),
-                mwmValidator(minWeightMagnitude),
-                transferArrayValidator(transfers)
+                minWeightMagnitudeValidator(minWeightMagnitude),
+                arrayValidator(transferValidator)(transfers)
             )
         )
             .then(() => prepareTransfers(seed, transfers, options))

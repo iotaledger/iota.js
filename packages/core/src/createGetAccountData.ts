@@ -5,7 +5,7 @@ import {
     startEndOptionsValidator,
     startOptionValidator,
     validate,
-} from '@iota/validators'
+} from '../../guards'
 import { createGetBalances, createGetNewAddress } from './'
 import { createGetBundlesFromAddresses } from './createGetBundlesFromAddresses'
 import { createWereAddressesSpentFrom } from './createWereAddressesSpentFrom'
@@ -28,7 +28,7 @@ export interface AccountData {
     readonly addresses: ReadonlyArray<Hash>
     readonly inputs: ReadonlyArray<Address>
     readonly transfers: ReadonlyArray<Bundle>
-    readonly transactions: ReadonlyArray<Transaction>
+    readonly transactions: ReadonlyArray<Hash>
     readonly latestAddress: Hash
     readonly balance: number
 }
@@ -108,6 +108,7 @@ export const createGetAccountData = (provider: Provider, caller?: string) => {
         const { start, end, security } = getAccountDataOptions(options)
 
         if (caller !== 'lib') {
+            /* tslint:disable-next-line:no-console */
             console.warn(
                 '`AccountData.transfers` field is deprecated, and `AccountData.transactions` field should be used instead.\n' +
                     'Fetching of full bundles should be done lazily.'
@@ -139,12 +140,13 @@ export const createGetAccountData = (provider: Provider, caller?: string) => {
                 .then(addresses =>
                     Promise.all([
                         getBundlesFromAddresses(addresses, true),
+                        // findTransactions({ addresses }), // Find transactions instead of getBundlesFromAddress as of v2.0.0
                         getBalances(addresses, 100),
                         wereAddressesSpentFrom(addresses),
                         addresses,
                     ])
                 )
-                .then(([transfers, { balances }, spentStates, addresses]) => ({
+                .then(([transfers /* transactions */, { balances }, spentStates, addresses]) => ({
                     // 2. Assign the last address as the latest address
                     latestAddress: addresses[addresses.length - 1],
 
@@ -156,9 +158,16 @@ export const createGetAccountData = (provider: Provider, caller?: string) => {
                     // `findTransactions({ address })` in v2.0.0.
                     // Full bundles should be fetched lazily if there are relevant use cases...
                     transactions: transfers.reduce(
-                        (acc, bundle) => acc.concat(bundle.filter(({ address }) => addresses.indexOf(address) > -1)),
+                        (acc: ReadonlyArray<Hash>, bundle) =>
+                            acc.concat(
+                                bundle
+                                    .filter(({ address }) => addresses.indexOf(address) > -1)
+                                    .map(transaction => transaction.hash)
+                            ),
                         []
                     ),
+
+                    // transactions,
 
                     // 5. Add balances and extract inputs
                     inputs: addresses

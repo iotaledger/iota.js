@@ -1,9 +1,11 @@
 /** @module transaction-converter */
 
 import { tritsToTrytes, trytesToTrits, value } from '@iota/converter'
+import { transactionHash } from '@iota/transaction'
 import Curl from '@iota/curl'
 import { padTrits, padTrytes } from '@iota/pad'
-import { errors, isTrytesOfExactLength } from '@iota/validators'
+import * as errors from '../../errors'
+import { isTrytesOfExactLength } from '../../guards'
 import { asArray, Hash, Transaction, Trytes } from '../../types'
 
 export function asTransactionTrytes(transactions: Transaction): Trytes
@@ -41,27 +43,6 @@ export function asTransactionTrytes(
     )
 
     return Array.isArray(transactions) ? txTrytes : txTrytes[0]
-}
-
-/**
- * Calculates the transaction hash out of 8019 transaction trits.
- *
- * @method transactionHash
- *
- * @param {Int8Array} transactionTrits - Int8Array of 8019 transaction trits
- *
- * @return {Hash} Transaction hash
- */
-export const transactionHash = (trits: Int8Array): Hash => {
-    const hash: Int8Array = new Int8Array(Curl.HASH_LENGTH)
-    const curl = new Curl()
-
-    // generate the transaction hash
-    curl.initialize()
-    curl.absorb(trits, 0, trits.length)
-    curl.squeeze(hash, 0, Curl.HASH_LENGTH)
-
-    return tritsToTrytes(hash)
 }
 
 /**
@@ -138,12 +119,14 @@ export const asFinalTransactionTrytes = (transactions: ReadonlyArray<Transaction
     [...asTransactionTrytes(transactions)].reverse()
 
 export const transactionObject = (trytes: Trytes): Transaction => {
+    /* tslint:disable-next-line:no-console */
     console.warn('`transactionObject` has been renamed to `asTransactionObject`')
 
     return asTransactionObject(trytes)
 }
 
 export const transactionTrytes = (transaction: Transaction): Trytes => {
+    /* tslint:disable-next-line:no-console */
     console.warn('`transactionTrytes` has been renamed to `asTransactionTrytes`')
 
     return asTransactionTrytes(transaction)

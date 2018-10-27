@@ -1,7 +1,9 @@
 import * as Promise from 'bluebird'
 import { removeChecksum } from '@iota/checksum'
 import { padTagArray } from '@iota/pad'
-import { errors, hashArrayValidator, tagArrayValidator, validate } from '@iota/validators'
+import { transactionHashValidator } from '@iota/transaction'
+import * as errors from '../../errors'
+import { arrayValidator, hashValidator, tagValidator, validate } from '../../guards'
 import {
     Callback,
     FindTransactionsCommand,
@@ -19,7 +21,7 @@ const validKeys: ReadonlyArray<keyof FindTransactionsQuery> = ['bundles', 'addre
 const hasValidKeys = (query: FindTransactionsQuery) => {
     for (const key of keysOf(query)) {
         if (validKeys.indexOf(key) === -1) {
-            throw new Error(`${errors.INVALID_KEY}: ${key}`)
+            throw new Error(`${errors.INVALID_SEARCH_KEY}: ${key}`)
         }
     }
 }
@@ -30,10 +32,10 @@ export const validateFindTransactions = (query: FindTransactionsQuery) => {
     hasValidKeys(query)
 
     validate(
-        !!addresses && hashArrayValidator(addresses, errors.INVALID_ADDRESS),
-        !!tags && tagArrayValidator(tags),
-        !!approvees && hashArrayValidator(approvees),
-        !!bundles && hashArrayValidator(bundles)
+        !!addresses && arrayValidator(hashValidator)(addresses, errors.INVALID_ADDRESS),
+        !!tags && arrayValidator(tagValidator)(tags),
+        !!approvees && arrayValidator(transactionHashValidator)(approvees),
+        !!bundles && arrayValidator(hashValidator)(bundles)
     )
 }
 
@@ -95,8 +97,11 @@ export const createFindTransactions = ({ send }: Provider) => {
      * @returns {Promise}
      * @fulfil {Hash[]} Array of transaction hashes
      * @reject {Error}
-     * - `INVALID_HASH_ARRAY`: Invalid hashes of addresses, approvees of bundles
-     * - `INVALID_TAG_ARRAY`: Invalid tags
+     * - `INVALID_SEARCH_KEY`
+     * - `INVALID_HASH`: Invalid bundle hash
+     * - `INVALID_TRANSACTION_HASH`: Invalid approvee transaction hash
+     * - `INVALID_ADDRESS`: Invalid address
+     * - `INVALID_TAG`: Invalid tag
      * - Fetch error
      */
     return function findTransactions(

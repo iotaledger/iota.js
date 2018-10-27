@@ -1,6 +1,7 @@
 import * as Promise from 'bluebird'
-import { integerValidator, transactionHashValidator, trytesArrayValidator, validate } from '@iota/validators'
-import { INVALID_TRUNK_TRANSACTION, INVALID_BRANCH_TRANSACTION } from './errors'
+import { transactionHashValidator, transactionTrytesValidator } from '@iota/transaction'
+import { INVALID_BRANCH_TRANSACTION, INVALID_TRUNK_TRANSACTION } from '../../errors'
+import { arrayValidator, integerValidator, validate } from '../../guards'
 import {
     AttachToTangle,
     AttachToTangleCommand,
@@ -40,6 +41,9 @@ export const createAttachToTangle = ({ send }: Provider): AttachToTangle => {
      * `trunkTransaction` and `branchTransaction` hashes are given by
      * {@link #module_core.getTransactionsToApprove `getTransactionToApprove`}.
      *
+     * **Note:** Persist the transaction trytes in local storage __before__ calling this command, to ensure
+     * that reattachment is possible, until your bundle has been included.
+     *
      * @example
      *
      * ```js
@@ -73,7 +77,7 @@ export const createAttachToTangle = ({ send }: Provider): AttachToTangle => {
      * - `INVALID_TRUNK_TRANSACTION`: Invalid `trunkTransaction`
      * - `INVALID_BRANCH_TRANSACTION`: Invalid `branchTransaction`
      * - `INVALID_MIN_WEIGHT_MAGNITUDE`: Invalid `minWeightMagnitude` argument
-     * - `INVALID_TRYTES_ARRAY`: Invalid array of trytes
+     * - `INVALID_TRANSACTION_TRYTES`: Invalid transaction trytes
      * - `INVALID_TRANSACTIONS_TO_APPROVE`: Invalid transactions to approve
      * - Fetch error
      */
@@ -87,7 +91,7 @@ export const createAttachToTangle = ({ send }: Provider): AttachToTangle => {
         return Promise.resolve(
             validate(
                 integerValidator(minWeightMagnitude),
-                trytesArrayValidator(trytes),
+                arrayValidator<TransactionTrytes>(transactionTrytesValidator)(trytes),
                 transactionHashValidator(trunkTransaction, INVALID_TRUNK_TRANSACTION),
                 transactionHashValidator(branchTransaction, INVALID_BRANCH_TRANSACTION)
             )

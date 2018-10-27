@@ -1,8 +1,9 @@
 import test from 'ava'
 import { createHttpClient } from '@iota/http-client'
 import { transfers } from '@iota/samples'
+import { INVALID_SEED, INVALID_START_END_OPTIONS } from '../../../errors'
+import { Hash } from '../../../types'
 import { AccountData, createGetAccountData } from '../../src'
-import { INVALID_SEED, INVALID_START_END_OPTIONS } from '../../src/errors'
 import { getBalancesCommand, balancesResponse } from './nocks/getBalances'
 import './nocks/findTransactions'
 import './nocks/getInclusionStates'
@@ -25,12 +26,6 @@ const accountData: AccountData = {
     addresses: accountAddresses,
     inputs: [
         {
-            address: getBalancesCommand.addresses[1],
-            balance: balances[1],
-            keyIndex: 1,
-            security: 2,
-        },
-        {
             address: getBalancesCommand.addresses[2],
             balance: balances[2],
             keyIndex: 2,
@@ -40,10 +35,15 @@ const accountData: AccountData = {
     latestAddress: getBalancesCommand.addresses[2],
     transfers,
     transactions: transfers.reduce(
-        (acc, bundle) => acc.concat(bundle.filter(({ address }) => accountAddresses.indexOf(address) > -1)),
+        (acc: ReadonlyArray<Hash>, bundle) =>
+            acc.concat(
+                bundle
+                    .filter(({ address }) => accountAddresses.indexOf(address) > -1)
+                    .map(transaction => transaction.hash)
+            ),
         []
     ),
-    balance: 10,
+    balance: 1,
 }
 
 test('getAccountData() resolves to correct account data', async t => {

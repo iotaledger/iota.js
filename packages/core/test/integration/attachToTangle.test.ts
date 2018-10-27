@@ -1,7 +1,7 @@
 import test from 'ava'
 import { createHttpClient } from '@iota/http-client'
+import { INVALID_BRANCH_TRANSACTION, INVALID_TRANSACTION_TRYTES, INVALID_TRUNK_TRANSACTION } from '../../../errors'
 import { createAttachToTangle } from '../../src'
-import { INVALID_BRANCH_TRANSACTION, INVALID_TRUNK_TRANSACTION, INVALID_TRYTES_ARRAY } from '../../src/errors'
 import { attachToTangleCommand, attachToTangleResponse } from './nocks/attachToTangle'
 
 const attachToTangle = createAttachToTangle(createHttpClient())
@@ -76,7 +76,7 @@ test('attachToTangle() rejects with correct errors for invalid input', t => {
                 ),
             Error
         ).message,
-        `${INVALID_TRYTES_ARRAY}: ${invalidTrytes[0]}`,
+        `${INVALID_TRANSACTION_TRYTES}: ${invalidTrytes[0]}`,
         'attachToTangle() should throw error for invalid trytes'
     )
 })

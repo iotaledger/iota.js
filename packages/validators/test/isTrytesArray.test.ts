@@ -8,7 +8,7 @@ test('isTrytesArray()', t => {
         'fdsafBCDWDUOSTSJEEHKW9YQFPBVBJAGLNKRVGSQZCGHQWEMIIILJMTHVAGVDXJVZMBAMOZTSBQRVNLLSJ',
     ]
 
-    t.deepEqual(isTrytesArray(trytes), true, 'isTrytesArray() returns true for valid attached trytes')
+    t.deepEqual(isTrytesArray(trytes), true, 'isTrytesArray() returns true for valid trytes')
 
-    t.deepEqual(isTrytesArray(invalidTrytes), false, 'isTryte return false for invalid trytes')
+    t.deepEqual(isTrytesArray(invalidTrytes), false, 'isTrytesArray() return false for invalid trytes')
 })

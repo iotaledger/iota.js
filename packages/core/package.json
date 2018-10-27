@@ -1,8 +1,7 @@
 {
     "name": "@iota/core",
-    "version": "1.0.0-alpha.1",
-    "description":
-        "Core functionality to interact with the IOTA network: generate addresses, create, broadcast and monitor transactions.",
+    "version": "1.0.0-beta.5",
+    "description": "Core functionality to interact with the IOTA network: generate addresses, create, broadcast and monitor transactions.",
     "main": "./out/core/src/index.js",
     "typings": "typings/core/src",
     "publishConfig": {
@@ -20,7 +19,9 @@
         "Chris Dukakis <chris.dukakis@iota.org> (https://github.com/chrisdukakis)"
     ],
     "ava": {
-        "files": ["out/core/test/integration/**/*.test.js"],
+        "files": [
+            "out/core/test/integration/**/*.test.js"
+        ],
         "failFast": true,
         "failWithoutAssertions": false,
         "compileEnhancements": false,
@@ -28,11 +29,23 @@
     },
     "nyc": {
         "watermarks": {
-            "functions": [80, 95],
-            "branches": [80, 95],
-            "statements": [80, 95]
+            "functions": [
+                80,
+                95
+            ],
+            "branches": [
+                80,
+                95
+            ],
+            "statements": [
+                80,
+                95
+            ]
         },
-        "include": ["out/*/src/*.js", "out/*/test/**/*.js"],
+        "include": [
+            "out/*/src/*.js",
+            "out/*/test/**/*.js"
+        ],
         "exclude": [
             "out/*/test/integration/nocks/*.js",
             "out/**/createSendTransfer.js",
@@ -40,7 +53,15 @@
             "out/**/createInterruptAttachingToTangle.js"
         ]
     },
-    "keywords": ["iota", "tangle", "library", "browser", "javascript", "nodejs", "API"],
+    "keywords": [
+        "iota",
+        "tangle",
+        "library",
+        "browser",
+        "javascript",
+        "nodejs",
+        "API"
+    ],
     "license": "MIT",
     "bugs": {
         "url": "https://github.com/iotaledger/iota.js/issues"
@@ -50,29 +71,29 @@
         "url": "https://github.com/iotaledger/iota.js.git"
     },
     "dependencies": {
-        "@iota/bundle": "^1.0.0-alpha.1",
-        "@iota/bundle-validator": "^1.0.0-alpha.1",
-        "@iota/checksum": "^1.0.0-alpha.1",
-        "@iota/converter": "^1.0.0-alpha.1",
-        "@iota/curl": "^1.0.0-alpha.1",
-        "@iota/http-client": "^1.0.0-alpha.1",
-        "@iota/kerl": "^1.0.0-alpha.1",
-        "@iota/pad": "^1.0.0-alpha.1",
-        "@iota/signing": "^1.0.0-alpha.1",
-        "@iota/transaction-converter": "^1.0.0-alpha.1",
-        "@iota/validators": "^1.0.0-alpha.1",
+        "@iota/bundle": "^1.0.0-beta.5",
+        "@iota/bundle-validator": "^1.0.0-beta.5",
+        "@iota/checksum": "^1.0.0-beta.5",
+        "@iota/converter": "^1.0.0-beta.5",
+        "@iota/curl": "^1.0.0-beta.5",
+        "@iota/http-client": "^1.0.0-beta.5",
+        "@iota/kerl": "^1.0.0-beta.5",
+        "@iota/pad": "^1.0.0-beta.5",
+        "@iota/signing": "^1.0.0-beta.5",
+        "@iota/transaction": "^1.0.0-beta.5",
+        "@iota/transaction-converter": "^1.0.0-beta.5",
         "@types/bluebird": "^3.5.20",
         "bluebird": "^3.5.1"
     },
     "devDependencies": {
         "@babel/plugin-syntax-async-generators": "^7.0.0-beta.49",
-        "@iota/samples": "^1.0.0-alpha.1",
+        "@iota/samples": "^1.0.0-beta.5",
         "@types/nock": "^9.1.2",
         "babel-cli": "^6.26.0",
         "babel-core": "^6.26.0",
         "babel-plugin-transform-object-rest-spread": "^6.26.0",
         "babel-preset-es2015": "^6.24.1",
         "babel-preset-latest": "^6.24.1",
-        "nock": "^9.2.3"
+        "nock": "^10.0.1"
     }
 }

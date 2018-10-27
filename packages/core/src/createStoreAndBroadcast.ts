@@ -20,7 +20,7 @@ export const createStoreAndBroadcast = (provider: Provider) => {
      * [`storeTransactions`]{@link #module_core.storeTransactions} and
      * [`broadcastTransactions`]{@link #module_core.broadcastTransactions}.
      *
-     * Note: Persist the transaction trytes in local storage **before** calling this command, to ensure
+     * **Note:** Persist the transaction trytes in local storage __before__ calling this command, to ensure
      * that reattachment is possible, until your bundle has been included.
      *
      * Any transactions stored with this command will eventaully be erased, as a result of a snapshot.
@@ -35,7 +35,7 @@ export const createStoreAndBroadcast = (provider: Provider) => {
      * @return {Promise<Trytes[]>}
      * @fulfil {Trytes[]} Attached transaction trytes
      * @reject {Error}
-     * - `INVALID_ATTACHED_TRYTES`: Invalid array of attached trytes
+     * - `INVALID_ATTACHED_TRYTES`: Invalid attached trytes
      * - Fetch error
      */
     return (

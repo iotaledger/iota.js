@@ -1,8 +1,9 @@
-import * as Promise from 'bluebird'
+import { transactionTrytesValidator } from '@iota/transaction'
 import { asTransactionObject } from '@iota/transaction-converter'
-import { depthValidator, mwmValidator, trytesArrayValidator, validate } from '@iota/validators'
-import { createAttachToTangle, createGetTransactionsToApprove, createStoreAndBroadcast } from './'
+import * as Promise from 'bluebird'
+import { arrayValidator, depthValidator, minWeightMagnitudeValidator, validate } from '../../guards'
 import { AttachToTangle, Bundle, Callback, Hash, Provider, Transaction, Trytes } from '../../types'
+import { createAttachToTangle, createGetTransactionsToApprove, createStoreAndBroadcast } from './'
 
 /**
  * @method createSendTrytes
@@ -22,10 +23,19 @@ export const createSendTrytes = (provider: Provider, attachFn?: AttachToTangle) 
      * [Attaches to tanlge]{@link #module_core.attachToTangle}, [stores]{@link #module_core.storeTransactions}
      * and [broadcasts]{@link #module_core.broadcastTransactions} a list of transaction trytes.
      *
+     * **Note:** Persist the transaction trytes in local storage __before__ calling this command, to ensure
+     * that reattachment is possible, until your bundle has been included.
+     *
      * @example
      * ```js
      * prepareTransfers(seed, transfers)
-     *   .then(trytes => sendTrytes(trytes, depth, minWeightMagnitude))
+     *   .then(trytes => {
+     *      // Persist trytes locally before sending to network.
+     *      // This allows for reattachments and prevents key reuse if trytes can't
+     *      // be recovered by querying the network after broadcasting.
+     *
+     *      return iota.sendTrytes(trytes, depth, minWeightMagnitude)
+     *   })
      *   .then(transactions => {
      *     // ...
      *   })
@@ -47,7 +57,7 @@ export const createSendTrytes = (provider: Provider, attachFn?: AttachToTangle) 
      * @return {Promise}
      * @fulfil {Transaction[]}  Returns list of attached transactions
      * @reject {Error}
-     * - `INVALID_TRYTES`
+     * - `INVALID_TRANSACTION_TRYTES`
      * - `INVALID_DEPTH`
      * - `INVALID_MIN_WEIGHT_MAGNITUDE`
      * - Fetch error, if connected to network
@@ -65,7 +75,11 @@ export const createSendTrytes = (provider: Provider, attachFn?: AttachToTangle) 
         }
 
         return Promise.resolve(
-            validate(trytesArrayValidator(trytes), depthValidator(depth), mwmValidator(minWeightMagnitude))
+            validate(
+                arrayValidator(transactionTrytesValidator)(trytes),
+                depthValidator(depth),
+                minWeightMagnitudeValidator(minWeightMagnitude)
+            )
         )
             .then(() => getTransactionsToApprove(depth, reference))
             .then(({ trunkTransaction, branchTransaction }) =>

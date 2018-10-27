@@ -1,7 +1,7 @@
 import test from 'ava'
 import { createHttpClient } from '@iota/http-client'
+import { INVALID_REFERENCE_HASH } from '../../../errors'
 import { createGetTransactionsToApprove } from '../../src'
-import { INVALID_REFERENCE_HASH } from '../../src/errors'
 import {
     getTransactionsToApproveCommand,
     getTransactionsToApproveResponse,

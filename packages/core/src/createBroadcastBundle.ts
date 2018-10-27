@@ -1,8 +1,9 @@
 import * as Promise from 'bluebird'
-import { hashValidator, validate } from '@iota/validators'
+import { transactionHashValidator } from '@iota/transaction'
 import { asFinalTransactionTrytes, asTransactionObjects } from '@iota/transaction-converter'
-import { createBroadcastTransactions, createGetBundle } from './'
+import { validate } from '../../guards'
 import { Callback, Hash, Provider, Trytes } from '../../types'
+import { createBroadcastTransactions, createGetBundle } from './'
 
 /**
  * @method createBroadcastBundle
@@ -25,7 +26,7 @@ export const createBroadcastBundle = (provider: Provider) => {
      * @example
      *
      * ```js
-     * broadcastTransactions(tailHash)
+     * broadcastBundle(tailHash)
      *   .then(transactions => {
      *      // ...
      *   })
@@ -52,7 +53,7 @@ export const createBroadcastBundle = (provider: Provider) => {
         tailTransactionHash: Hash,
         callback?: Callback<ReadonlyArray<Trytes>>
     ): Promise<ReadonlyArray<Trytes>> {
-        return Promise.resolve(validate(hashValidator(tailTransactionHash)))
+        return Promise.resolve(validate(transactionHashValidator(tailTransactionHash)))
             .then(() => getBundle(tailTransactionHash))
             .then(asFinalTransactionTrytes)
             .then(broadcastTransactions)

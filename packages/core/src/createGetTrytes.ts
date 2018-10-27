@@ -1,5 +1,6 @@
 import * as Promise from 'bluebird'
-import { hashArrayValidator, validate } from '@iota/validators'
+import { transactionHashValidator } from '@iota/transaction'
+import { arrayValidator, validate } from '../../guards'
 import { Callback, GetTrytesCommand, GetTrytesResponse, Hash, IRICommand, Provider, Trytes } from '../../types'
 
 /**
@@ -39,14 +40,14 @@ export const createGetTrytes = ({ send }: Provider) =>
      * @return {Promise}
      * @fulfil {Trytes[]} - Transaction trytes
      * @reject Error{}
-     * - `INVALID_HASH_ARRAY`: Invalid array of hashes
+     * - `INVALID_TRANSACTION_HASH`: Invalid hash
      * - Fetch error
      */
     function getTrytes(
         hashes: ReadonlyArray<Hash>,
         callback?: Callback<ReadonlyArray<Trytes>>
     ): Promise<ReadonlyArray<Trytes>> {
-        return Promise.resolve(validate(hashArrayValidator(hashes)))
+        return Promise.resolve(validate(arrayValidator(transactionHashValidator)(hashes)))
             .then(() =>
                 send<GetTrytesCommand, GetTrytesResponse>({
                     command: IRICommand.GET_TRYTES,

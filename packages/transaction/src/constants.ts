@@ -1,0 +1,6 @@
+export const HASH_SIZE = 81
+export const TRANSACTION_TRYTES_SIZE = 2673
+export const SIGNATURE_MESSAGE_FRAGMENT_TRYTES_SIZE = 2187
+export const TAG_TRYTES_SIZE = 27
+export const OBSOLETE_TAG_TRYTES_SIZE = 27
+export const NONCE_TRYTES_SIZE = 27

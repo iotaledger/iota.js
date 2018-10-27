@@ -1,5 +1,6 @@
+import { attachedTrytesValidator } from '@iota/transaction'
 import * as Promise from 'bluebird'
-import { attachedTrytesArrayValidator, validate } from '@iota/validators'
+import { arrayValidator, validate } from '../../guards'
 import {
     Callback,
     IRICommand,
@@ -27,8 +28,8 @@ export const createStoreTransactions = ({ send }: Provider) =>
      * [`attachToTangle`]{@link #module_core.attachToTangle} or an equivalent attach method or remote
      * [`PoWbox`](https://powbox.devnet.iota.org/).
      *
-     * Persist the transaction trytes in local storage **before** calling this command, to ensure
-     * reattachment is possible, until your bundle has been included.
+     * **Note:** Persist the transaction trytes in local storage __before__ calling this command, to ensure
+     * that reattachment is possible, until your bundle has been included.
      *
      * Any transactions stored with this command will eventaully be erased, as a result of a snapshot.
      *
@@ -42,11 +43,11 @@ export const createStoreTransactions = ({ send }: Provider) =>
      * @return {Promise}
      * @fullfil {Trytes[]} Attached transaction trytes
      * @reject {Error}
-     * - `INVALID_ATTACHED_TRYTES`: Invalid attached trytes array
+     * - `INVALID_ATTACHED_TRYTES`: Invalid attached trytes
      * - Fetch error
      */
     (trytes: ReadonlyArray<Trytes>, callback?: Callback<ReadonlyArray<Trytes>>): Promise<ReadonlyArray<Trytes>> =>
-        Promise.resolve(validate(attachedTrytesArrayValidator(trytes)))
+        Promise.resolve(validate(arrayValidator(attachedTrytesValidator)(trytes)))
             .then(() =>
                 send<StoreTransactionsCommand, StoreTransactionsResponse>({
                     command: IRICommand.STORE_TRANSACTIONS,
