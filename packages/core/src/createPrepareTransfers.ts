@@ -94,6 +94,9 @@ export const createPrepareTransfers = (provider?: Provider, now: () => number = 
      * For offline usage, please see [`createPrepareTransfers`]{@link #module_core.createPrepareTransfers}
      * which creates a `prepareTransfers` without a network provider.
      *
+     * **Note:** After calling this method, persist the returned transaction trytes in local storage. Only then you should broadcast to netowrk.
+     * This will allow for reattachments and prevent key reuse if trytes can't be recovered by querying the netowrk after broadcasting.
+     *
      * @method prepareTransfers
      *
      * @memberof module:core

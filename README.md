@@ -2,7 +2,7 @@
 
 IOTA Client Reference Implementation in Javascript
 
-[![Build Status](https://travis-ci.org/iotaledger/iota.js.svg)](https://travis-ci.org/iotaledger/iota.js) [![NSP Status](https://nodesecurity.io/orgs/iota-foundation/projects/7c0214b5-e36a-4178-92bc-164c536cfd6c/badge)](https://nodesecurity.io/orgs/iota-foundation/projects/7c0214b5-e36a-4178-92bc-164c536cfd6c) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/iotaledger/iota.lib.js/master/LICENSE)  [![Discord](https://img.shields.io/discord/102860784329052160.svg)](https://discord.gg/DTbJufa)
+[![Build Status](https://travis-ci.org/iotaledger/iota.js.svg)](https://travis-ci.org/iotaledger/iota.js) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/iotaledger/iota.lib.js/master/LICENSE)  [![Discord](https://img.shields.io/discord/102860784329052160.svg)](https://discord.gg/DTbJufa) [![Greenkeeper badge](https://badges.greenkeeper.io/iotaledger/iota.js.svg)](https://greenkeeper.io/)
 
 ---
 
@@ -82,8 +82,16 @@ const depth = 3
 // Minimum value on mainnet & spamnet is `14`, `9` on devnet and other testnets.
 const minWeightMagnitude = 14
 
+// Prepare a bundle and signs it
 iota.prepareTransfers(seed, transfers)
-    .then(trytes => iota.sendTrytes(trytes, depth, minWeightMagnitude))
+    .then(trytes => {
+        // Persist trytes locally before sending to network.
+        // This allows for reattachments and prevents key reuse if trytes can't
+        // be recovered by querying the network after broadcasting.
+
+        // Does tip selection, attaches to tangle by doing PoW and broadcasts.
+        return iota.sendTrytes(trytes, depth, minWeightMagnitude)
+    })
     .then(bundle => {
         console.log(`Published transaction with tail hash: ${bundle[0].hash}`)
         console.log(`Bundle: ${bundle}`)
