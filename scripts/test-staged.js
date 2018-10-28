@@ -81,7 +81,7 @@ sgf((err, results) => {
 
     results.forEach(item => getDeps(item.filename))
 
-    const cmd = pkg => `lerna run test --scope ${pkg}`
+    const cmd = pkg => `lerna exec --scope ${prefix}${pkg} -- npm test`
 
     const tasks =
         Array.from(staged).indexOf('*') > -1
@@ -94,7 +94,7 @@ sgf((err, results) => {
                           const { scripts, name } = JSON.parse(fs.readFileSync(pkgFile, 'utf8'))
 
                           if (name.slice(0, prefix.length) === prefix && scripts.hasOwnProperty('test')) {
-                              return name
+                              return name.slice(prefix.length)
                           }
                       }
                       return null
