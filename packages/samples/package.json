@@ -10,7 +10,8 @@
     "scripts": {
         "prepare": "tsc",
         "test": "exit 0",
-        "test-ci": "exit 0"
+        "test-ci": "exit 0",
+        "lint": "tslint --project ."
     },
     "contributors": [
         "Dominik Schiener <dom@iota.org> (https://iota.org)",

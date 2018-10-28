@@ -10,7 +10,8 @@
     "scripts": {
         "prepare": "tsc",
         "test": "tsc && nyc ava",
-        "test-ci": "nyc ava"
+        "test-ci": "nyc ava",
+        "lint": "tslint --project ."
     },
     "contributors": [
         "Dominik Schiener <dom@iota.org> (https://iota.org)",
