@@ -3,7 +3,7 @@
 import { trits, trytes } from '@iota/converter'
 import Kerl from '@iota/kerl'
 import { INVALID_ADDRESS, INVALID_CHECKSUM, INVALID_TRYTES } from '../../errors'
-import { isHash, isTrytes } from '../../guards'
+import { isTrytes } from '../../guards'
 import { asArray, Trytes } from '../../types'
 
 export const errors = {

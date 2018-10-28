@@ -1,10 +1,10 @@
-import test from 'ava'
 import { createHttpClient } from '@iota/http-client'
 import { attachedTrytesOfInvalidLength } from '@iota/samples'
+import test from 'ava'
 import { INVALID_ATTACHED_TRYTES } from '../../../errors'
 import { createStoreAndBroadcast } from '../../src'
-import { storeTransactionsCommand } from './nocks/storeTransactions'
 import './nocks/broadcastTransactions'
+import { storeTransactionsCommand } from './nocks/storeTransactions'
 
 const storeAndBroadcast = createStoreAndBroadcast(createHttpClient())
 
@@ -37,8 +37,6 @@ test('storeAndBroadcast() rejects with correct error for invalid attached trytes
 })
 
 test('storeAndBroadcast() rejects with correct errors for attached trytes of invalid length.', t => {
-    const invalidTrytes = ['asdasDSFDAFD']
-
     t.is(
         t.throws(() => storeAndBroadcast(attachedTrytesOfInvalidLength), Error).message,
         `${INVALID_ATTACHED_TRYTES}: ${attachedTrytesOfInvalidLength[0]}`,

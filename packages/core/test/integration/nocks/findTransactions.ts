@@ -1,5 +1,5 @@
 import * as nock from 'nock'
-import { IRICommand, FindTransactionsCommand, FindTransactionsResponse } from '../../../../types'
+import { FindTransactionsCommand, FindTransactionsResponse, IRICommand } from '../../../../types'
 import headers from './headers'
 
 export const emptyFindTransactionsCommand: FindTransactionsCommand = {

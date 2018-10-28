@@ -1,8 +1,8 @@
-import test from 'ava'
 import { createHttpClient } from '@iota/http-client'
+import test from 'ava'
 import { INVALID_ADDRESS, INVALID_THRESHOLD } from '../../../errors'
 import { createGetBalances } from '../../src'
-import { getBalancesCommand, balancesResponse } from './nocks/getBalances'
+import { balancesResponse, getBalancesCommand } from './nocks/getBalances'
 
 const getBalances = createGetBalances(createHttpClient())
 

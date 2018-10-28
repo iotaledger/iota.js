@@ -1,8 +1,8 @@
-import * as nock from 'nock'
-import { createHttpClient } from '../src'
-import { FindTransactionsCommand, FindTransactionsResponse, IRICommand } from '../../types'
-import { headers } from './send.test'
 import test from 'ava'
+import * as nock from 'nock'
+import { FindTransactionsCommand, FindTransactionsResponse, IRICommand } from '../../types'
+import { createHttpClient } from '../src'
+import { headers } from './send.test'
 
 const API_VERSION = 1
 
@@ -19,43 +19,43 @@ export const command: FindTransactionsCommand = {
     approvees: ['D'.repeat(81)],
 }
 
-export const command_1: FindTransactionsCommand = {
+export const commandA: FindTransactionsCommand = {
     command: IRICommand.FIND_TRANSACTIONS,
     addresses: ['A'.repeat(81), 'B'.repeat(81)],
 }
-export const command_2: FindTransactionsCommand = {
+export const commandB: FindTransactionsCommand = {
     command: IRICommand.FIND_TRANSACTIONS,
     addresses: ['C'.repeat(81)],
 }
 
-export const command_3: FindTransactionsCommand = {
+export const commandC: FindTransactionsCommand = {
     command: IRICommand.FIND_TRANSACTIONS,
     tags: ['A'.repeat(27), 'B'.repeat(27)],
 }
 
-export const command_4: FindTransactionsCommand = {
+export const commandD: FindTransactionsCommand = {
     command: IRICommand.FIND_TRANSACTIONS,
     tags: ['C'.repeat(27)],
 }
 
-export const command_5: FindTransactionsCommand = {
+export const commandE: FindTransactionsCommand = {
     command: IRICommand.FIND_TRANSACTIONS,
     approvees: ['D'.repeat(81)],
 }
 
-export const response_1: FindTransactionsResponse = {
+export const responseA: FindTransactionsResponse = {
     hashes: ['A'.repeat(81), 'C'.repeat(81)],
 }
-export const response_2: FindTransactionsResponse = {
+export const responseB: FindTransactionsResponse = {
     hashes: ['B'.repeat(81), 'D'.repeat(81)],
 }
-export const response_3: FindTransactionsResponse = {
+export const responseC: FindTransactionsResponse = {
     hashes: ['A'.repeat(81), 'D'.repeat(81), 'E'.repeat(81)],
 }
-export const response_4: FindTransactionsResponse = {
+export const responseD: FindTransactionsResponse = {
     hashes: ['B'.repeat(81), 'A'.repeat(81)],
 }
-export const response_5: FindTransactionsResponse = {
+export const responseE: FindTransactionsResponse = {
     hashes: ['A'.repeat(81), 'C'.repeat(81)],
 }
 
@@ -63,30 +63,30 @@ export const response: FindTransactionsResponse = {
     hashes: ['A'.repeat(81)],
 }
 
-export const batchedSendNock_1 = nock('http://localhost:24265', headers(API_VERSION))
+export const batchedSendNockA = nock('http://localhost:24265', headers(API_VERSION))
     .persist()
-    .post('/', command_1)
-    .reply(200, response_1)
+    .post('/', commandA)
+    .reply(200, responseA)
 
-export const batchedSendNock_2 = nock('http://localhost:24265', headers(API_VERSION))
+export const batchedSendNockB = nock('http://localhost:24265', headers(API_VERSION))
     .persist()
-    .post('/', command_2)
-    .reply(200, response_2)
+    .post('/', commandB)
+    .reply(200, responseB)
 
-export const batchedSendNock_3 = nock('http://localhost:24265', headers(API_VERSION))
+export const batchedSendNockC = nock('http://localhost:24265', headers(API_VERSION))
     .persist()
-    .post('/', command_3)
-    .reply(200, response_3)
+    .post('/', commandC)
+    .reply(200, responseC)
 
-export const batchedSendNock_4 = nock('http://localhost:24265', headers(API_VERSION))
+export const batchedSendNockD = nock('http://localhost:24265', headers(API_VERSION))
     .persist()
-    .post('/', command_4)
-    .reply(200, response_4)
+    .post('/', commandD)
+    .reply(200, responseD)
 
-export const batchedSendNock_5 = nock('http://localhost:24265', headers(API_VERSION))
+export const batchedSendNockE = nock('http://localhost:24265', headers(API_VERSION))
     .persist()
-    .post('/', command_5)
-    .reply(200, response_5)
+    .post('/', commandE)
+    .reply(200, responseE)
 
 test('batchedSend() returns correct response', async t => {
     t.deepEqual(await send(command), response)

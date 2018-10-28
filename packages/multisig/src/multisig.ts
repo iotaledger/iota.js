@@ -1,10 +1,10 @@
-import * as Promise from 'bluebird'
-import { createGetBalances, Balances } from '@iota/core'
-import { trits, trytes } from '@iota/converter'
-import { removeChecksum } from '@iota/checksum'
 import { addEntry, addTrytes, finalizeBundle } from '@iota/bundle'
+import { removeChecksum } from '@iota/checksum'
+import { trits, trytes } from '@iota/converter'
+import { Balances, createGetBalances } from '@iota/core'
 import Kerl from '@iota/kerl'
 import { digests, key, normalizedBundleHash, signatureFragment, subseed } from '@iota/signing'
+import * as Promise from 'bluebird'
 import * as errors from '../../errors'
 import {
     arrayValidator,

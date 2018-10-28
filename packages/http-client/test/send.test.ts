@@ -1,7 +1,7 @@
-import * as nock from 'nock'
-import { createHttpClient } from '../src'
-import { FindTransactionsCommand, IRICommand, FindTransactionsResponse } from '../../types'
 import test from 'ava'
+import * as nock from 'nock'
+import { FindTransactionsCommand, FindTransactionsResponse, IRICommand } from '../../types'
+import { createHttpClient } from '../src'
 
 const API_VERSION = 1
 

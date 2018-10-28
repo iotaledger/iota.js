@@ -1,6 +1,6 @@
-import test from 'ava'
 import { createHttpClient } from '@iota/http-client'
-import { composeAPI, API } from '../../src'
+import test from 'ava'
+import { API, composeAPI } from '../../src'
 import { getNodeInfoResponse } from './nocks/getNodeInfo'
 
 test('composeAPI() composes API with provider factory', async t => {

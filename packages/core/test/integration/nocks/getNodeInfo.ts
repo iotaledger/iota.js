@@ -1,5 +1,5 @@
 import * as nock from 'nock'
-import { IRICommand, GetNodeInfoCommand, GetNodeInfoResponse } from '../../../../types'
+import { GetNodeInfoCommand, GetNodeInfoResponse, IRICommand } from '../../../../types'
 import headers from './headers'
 
 export const getNodeInfoCommand: GetNodeInfoCommand = {

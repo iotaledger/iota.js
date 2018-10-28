@@ -1,5 +1,5 @@
-import test from 'ava'
 import { createHttpClient } from '@iota/http-client'
+import test from 'ava'
 import { INVALID_TRANSACTION_HASH } from '../../../errors'
 import { createGetTrytes } from '../../src'
 import { getTrytesCommand, getTrytesResponse } from './nocks/getTrytes'

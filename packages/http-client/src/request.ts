@@ -1,8 +1,12 @@
-/* tslint:disable no-console */
 import 'isomorphic-fetch'
-import { API_VERSION, DEFAULT_URI, MAX_REQUEST_BATCH_SIZE } from './settings'
-import { BaseCommand, FindTransactionsResponse, GetBalancesResponse, IRICommand } from '../../types'
+import {
+    BaseCommand,
+    FindTransactionsResponse,
+    GetBalancesResponse, // tslint:disable-line no-unused-variable
+    IRICommand
+} from '../../types'
 import { BatchableCommand } from './httpClient'
+import { API_VERSION, DEFAULT_URI, MAX_REQUEST_BATCH_SIZE } from './settings'
 
 const requestError = (statusText: string) => Promise.reject(`Request error: ${statusText}`)
 
@@ -73,7 +77,7 @@ export const batchedSend = <C extends BaseCommand, R = any>(
             return Promise.all(
                 command[key]
                     .reduce(
-                        (acc, _, i) =>
+                        (acc, _, i) => // tslint:disable-line no-unused-variable
                             i < Math.ceil(command[key].length / requestBatchSize)
                                 ? acc.concat({
                                       command: command.command,
@@ -83,7 +87,7 @@ export const batchedSend = <C extends BaseCommand, R = any>(
                         []
                     )
                     .map((batchedCommand: BatchableCommand<C>) => send(batchedCommand, uri, apiVersion))
-            ).then(res => res.reduce((acc: ReadonlyArray<R>, batch: Object) => acc.concat(<R>batch), []))
+            ).then(res => res.reduce((acc: ReadonlyArray<R>, batch: Object) => acc.concat(batch as R), [])) // tslint:disable-line ban-types
         })
     ).then((responses: ReadonlyArray<ReadonlyArray<R>>) => {
         switch (command.command) {
@@ -91,9 +95,9 @@ export const batchedSend = <C extends BaseCommand, R = any>(
                 return {
                     hashes: (responses[0][0] as any).hashes.filter((hash: string) =>
                         responses.every(
-                            _response =>
-                                _response.findIndex(
-                                    (res: Object) => (<FindTransactionsResponse>res).hashes.indexOf(hash) > -1
+                            response =>
+                                response.findIndex(
+                                  (res: Object) => (res as FindTransactionsResponse).hashes.indexOf(hash) > -1 // tslint:disable-line ban-types
                                 ) > -1
                         )
                     ),
@@ -108,7 +112,7 @@ export const batchedSend = <C extends BaseCommand, R = any>(
                 }
             case IRICommand.GET_INCLUSION_STATES:
                 return {
-                    ...(responses[0][0] as Object),
+                    ...(responses[0][0] as Object), // tslint:disable-line ban-types
                     states: responses[0].reduce((acc: any, response: any) => acc.conact(response.states)),
                 }
             default:

@@ -1,6 +1,6 @@
 import * as Promise from 'bluebird'
-import { createBroadcastTransactions, createStoreTransactions } from './'
 import { Callback, Provider, Trytes } from '../../types'
+import { createBroadcastTransactions, createStoreTransactions } from './'
 
 /**
  * @method createStoreAndBroadcast

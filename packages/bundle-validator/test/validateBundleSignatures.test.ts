@@ -1,5 +1,5 @@
-import test from 'ava'
 import { bundle, bundleWithInvalidSignature, bundleWithInvalidTransactionOrder } from '@iota/samples'
+import test from 'ava'
 import { validateBundleSignatures } from '../src'
 
 test('validateSignatures() returns true for bundle with valid signatures.', t =>

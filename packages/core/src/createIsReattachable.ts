@@ -1,5 +1,5 @@
-import * as Promise from 'bluebird'
 import { removeChecksum } from '@iota/checksum'
+import * as Promise from 'bluebird'
 import { INVALID_ADDRESS } from '../../errors'
 import { arrayValidator, hashValidator, trytesValidator, validate } from '../../guards'
 import { asArray, Callback, Hash, Provider, Transaction, Trytes } from '../../types'

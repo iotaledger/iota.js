@@ -1,6 +1,6 @@
 import test from 'ava'
-import { INVALID_ASCII_CHARS } from '../src/errors'
 import { asciiToTrytes } from '../src'
+import { INVALID_ASCII_CHARS } from '../src/errors'
 
 test('asciiToTrytes()', t => {
     const ascii = 'IOTA'
