@@ -1,5 +1,5 @@
-import test from 'ava'
 import { bundle, bundleTrytes } from '@iota/samples'
+import test from 'ava'
 import { asTransactionObject, asTransactionObjects, transactionObject } from '../src'
 
 test('asTransactionObject() converts transaction trytes to transaction object.', t => {

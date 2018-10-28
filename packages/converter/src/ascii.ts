@@ -1,5 +1,5 @@
-import * as errors from './errors'
 import { TRYTE_ALPHABET } from './'
+import * as errors from './errors'
 
 /**
  * Converts an ascii encoded string to trytes.

@@ -1,5 +1,9 @@
 import * as nock from 'nock'
-import { IRICommand, GetBalancesCommand, Balances } from '../../../../types'
+import { 
+    Balances, // tslint:disable-line no-unused-variable
+    GetBalancesCommand,
+    IRICommand
+} from '../../../../types'
 import headers from './headers'
 
 export const getBalancesCommand: GetBalancesCommand = {

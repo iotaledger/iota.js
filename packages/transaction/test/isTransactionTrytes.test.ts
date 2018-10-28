@@ -1,5 +1,5 @@
-import test from 'ava'
 import { transactionTrytes } from '@iota/samples'
+import test from 'ava'
 import { isTransactionTrytes } from '../src'
 
 test('isTransactionTrytes() returns true for valid transaction trytes.', t => {

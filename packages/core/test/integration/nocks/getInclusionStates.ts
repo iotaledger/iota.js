@@ -1,5 +1,5 @@
 import * as nock from 'nock'
-import { IRICommand, GetInclusionStatesCommand, GetInclusionStatesResponse } from '../../../../types'
+import { GetInclusionStatesCommand, GetInclusionStatesResponse, IRICommand } from '../../../../types'
 import headers from './headers'
 
 export const getInclusionStatesCommand: GetInclusionStatesCommand = {

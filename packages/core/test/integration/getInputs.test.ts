@@ -1,5 +1,5 @@
-import test from 'ava'
 import { createHttpClient } from '@iota/http-client'
+import test from 'ava'
 import { INSUFFICIENT_BALANCE, INVALID_SEED, INVALID_START_END_OPTIONS } from '../../../errors'
 import { Inputs } from '../../../types'
 import {
@@ -8,8 +8,8 @@ import {
     hasSufficientBalance,
     inputsToAddressOptions,
 } from '../../src/createGetInputs'
-import { getBalancesCommand, balancesResponse } from './nocks/getBalances'
 import './nocks/findTransactions'
+import { balancesResponse, getBalancesCommand } from './nocks/getBalances'
 import './nocks/wereAddressesSpentFrom'
 
 const getInputs = createGetInputs(createHttpClient())

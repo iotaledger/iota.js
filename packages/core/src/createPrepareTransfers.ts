@@ -1,8 +1,8 @@
 import * as Promise from 'bluebird'
 
-import { trits, trytes } from '@iota/converter'
 import { addEntry, addTrytes, finalizeBundle } from '@iota/bundle'
-import { isValidChecksum, removeChecksum } from '@iota/checksum'
+import { removeChecksum } from '@iota/checksum'
+import { trits, trytes } from '@iota/converter'
 import { key, normalizedBundleHash, signatureFragment, subseed } from '@iota/signing'
 import { asFinalTransactionTrytes } from '@iota/transaction-converter'
 import * as errors from '../../errors'
@@ -22,7 +22,7 @@ import {
     Callback,
     getOptionsWithDefaults,
     Provider,
-    Transaction,
+    Transaction, // tslint:disable-line no-unused-variable
     Transfer,
     Trytes,
 } from '../../types'
@@ -177,7 +177,7 @@ export const createPrepareTransfers = (provider?: Provider, now: () => number = 
             addHMAC,
             asTransactionTrytes
         )(props)
-            .then(({ trytes }: PrepareTransfersProps) => trytes)
+            .then(res => res.trytes)
             .asCallback(callback)
     }
 }

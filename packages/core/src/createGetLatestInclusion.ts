@@ -1,6 +1,6 @@
 import * as Promise from 'bluebird'
-import { createGetInclusionStates, createGetNodeInfo } from './'
 import { Callback, Hash, Provider } from '../../types'
+import { createGetInclusionStates, createGetNodeInfo } from './'
 
 /**
  * @method createGetLatestInclusion

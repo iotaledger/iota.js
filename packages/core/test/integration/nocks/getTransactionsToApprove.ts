@@ -1,6 +1,6 @@
-import * as nock from 'nock'
-import { IRICommand, GetTransactionsToApproveCommand, GetTransactionsToApproveResponse } from '../../../../types'
 import { bundle } from '@iota/samples'
+import * as nock from 'nock'
+import { GetTransactionsToApproveCommand, GetTransactionsToApproveResponse, IRICommand } from '../../../../types'
 import headers from './headers'
 
 export const depth = 3

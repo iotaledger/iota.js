@@ -1,10 +1,10 @@
-import * as Promise from 'bluebird'
 import { addChecksum } from '@iota/checksum'
+import * as Promise from 'bluebird'
 import * as errors from '../../errors'
 import { indexValidator, securityLevelValidator, seedValidator, validate } from '../../guards'
+import { asArray, Callback, getOptionsWithDefaults, Provider, Trytes } from '../../types'
 import { createFindTransactions, generateAddress } from './'
 import { createWereAddressesSpentFrom } from './createWereAddressesSpentFrom'
-import { asArray, Callback, getOptionsWithDefaults, Provider, Trytes } from '../../types'
 
 export interface GetNewAddressOptions {
     readonly index: number

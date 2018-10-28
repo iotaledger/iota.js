@@ -1,5 +1,5 @@
-import test from 'ava'
 import { trits, trytes } from '@iota/converter'
+import test from 'ava'
 import Kerl from '../src'
 
 test('Kerl: absorb()/squeeze(), Converter: trits()/trytes()', t => {

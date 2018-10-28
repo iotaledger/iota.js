@@ -1,5 +1,5 @@
-import test from 'ava'
 import { createHttpClient } from '@iota/http-client'
+import test from 'ava'
 import { INVALID_ADDRESS, INVALID_HASH, INVALID_TAG, INVALID_TRANSACTION_HASH } from '../../../errors'
 import { createFindTransactions } from '../../src'
 import {

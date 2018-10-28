@@ -1,6 +1,6 @@
-import * as nock from 'nock'
-import { IRICommand, BroadcastTransactionsCommand } from '../../../../types'
 import { bundleTrytes } from '@iota/samples'
+import * as nock from 'nock'
+import { BroadcastTransactionsCommand, IRICommand } from '../../../../types'
 import headers from './headers'
 
 export const broadcastTransactionsCommand: BroadcastTransactionsCommand = {

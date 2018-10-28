@@ -1,5 +1,5 @@
-import test from 'ava'
 import { addresses, addressesWithChecksum, addressWithChecksum, addressWithInvalidChecksum } from '@iota/samples'
+import test from 'ava'
 import { addChecksum, errors, isValidChecksum, removeChecksum } from '../src'
 
 const invalidAddress = 'UYEEERFQYTPFAHIPXDQAQYWYMSMCLMGBTYAXLWFRFFWPYFOICOVLK9A9VYNCKK9TQUNBTARCEQXJHD'

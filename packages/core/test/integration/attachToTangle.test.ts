@@ -1,5 +1,5 @@
-import test from 'ava'
 import { createHttpClient } from '@iota/http-client'
+import test from 'ava'
 import { INVALID_BRANCH_TRANSACTION, INVALID_TRANSACTION_TRYTES, INVALID_TRUNK_TRANSACTION } from '../../../errors'
 import { createAttachToTangle } from '../../src'
 import { attachToTangleCommand, attachToTangleResponse } from './nocks/attachToTangle'

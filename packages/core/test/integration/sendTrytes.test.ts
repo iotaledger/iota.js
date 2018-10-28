@@ -1,11 +1,11 @@
-import test from 'ava'
 import { createHttpClient } from '@iota/http-client'
 import { bundle } from '@iota/samples'
+import test from 'ava'
 import { INVALID_TRANSACTION_TRYTES } from '../../../errors'
 import { createSendTrytes } from '../../src'
 import { attachToTangleCommand } from './nocks/attachToTangle'
-import { getTransactionsToApproveCommand } from './nocks/getTransactionsToApprove'
 import './nocks/broadcastTransactions'
+import { getTransactionsToApproveCommand } from './nocks/getTransactionsToApprove'
 import './nocks/storeTransactions'
 
 const { minWeightMagnitude, trytes } = attachToTangleCommand

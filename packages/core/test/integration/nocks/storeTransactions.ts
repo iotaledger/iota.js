@@ -1,6 +1,6 @@
+import { bundleTrytes } from '@iota/samples'
 import * as nock from 'nock'
 import { IRICommand, StoreTransactionsCommand } from '../../../../types'
-import { bundleTrytes } from '@iota/samples'
 import headers from './headers'
 
 export const storeTransactionsCommand: StoreTransactionsCommand = {

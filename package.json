@@ -1,14 +1,17 @@
 {
-    "name": "iota.lib.js",
+    "name": "iota-js",
     "version": "1.0.0-alpha.1",
     "description": "IOTA Client Reference Implementation",
     "scripts": {
         "init": "npm i && lerna bootstrap",
-        "test": "lerna run test --stream",
-        "test-ci": "lerna bootstrap && lerna run test-ci --stream",
-        "precommit": "lint-staged",
-        "format": "prettier",
-        "docs": "lerna run docs"
+        "test": "lerna exec -- npm test",
+        "test-ci": "lerna bootstrap && lerna exec -- npm run test-ci && npm run lint",
+        "test:staged": "node scripts/test-staged.js",
+        "precommit": "lint-staged && node ./scripts/test-staged.js",
+        "docs": "lerna run docs",
+        "lint": "tslint --project .",
+        "lint-staged": "tslint --fix",
+        "format-staged": "prettier --write"
     },
     "contributors": [
         "Dominik Schiener <dom@iota.org> (https://iota.org)",
@@ -23,7 +26,8 @@
         "verbose": true
     },
     "lint-staged": {
-        "*.{js,ts,json}": ["prettier --write", "git add"]
+        "*.{ts}": ["./scripts/check-partially-staged.sh lint-staged"],
+        "*.{js,ts,json,md}": ["./scripts/check-partially-staged.sh format-staged"]
     },
     "keywords": ["iota", "tangle", "library", "javascript", "nodejs", "API"],
     "license": "MIT",
@@ -46,6 +50,7 @@
         "lint-staged": "^7.2.0",
         "nyc": "^13.1.0",
         "prettier": "^1.10.2",
+        "staged-git-files": "^1.1.1",
         "tslint": "^5.9.1",
         "tslint-config-prettier": "^1.6.0",
         "typescript": "^3.1.3"

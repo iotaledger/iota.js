@@ -1,8 +1,8 @@
-import test from 'ava'
 import { createHttpClient } from '@iota/http-client'
+import { bundle, bundleWithZeroValue } from '@iota/samples'
+import test from 'ava'
 import { INVALID_TRANSACTION_HASH } from '../../../errors'
 import { createGetBundle } from '../../src'
-import { bundle, bundleWithZeroValue } from '@iota/samples'
 import './nocks/getTrytes'
 
 const getBundle = createGetBundle(createHttpClient())

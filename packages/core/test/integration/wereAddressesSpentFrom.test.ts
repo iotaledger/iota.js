@@ -1,5 +1,5 @@
-import test from 'ava'
 import { createHttpClient } from '@iota/http-client'
+import test from 'ava'
 import { INVALID_ADDRESS } from '../../../errors'
 import { createWereAddressesSpentFrom } from '../../src/createWereAddressesSpentFrom'
 import { wereAddressesSpentFromCommand, wereAddressesSpentFromResponse } from './nocks/wereAddressesSpentFrom'

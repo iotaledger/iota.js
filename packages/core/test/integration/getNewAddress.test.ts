@@ -1,5 +1,5 @@
-import test from 'ava'
 import { createHttpClient } from '@iota/http-client'
+import test from 'ava'
 import { INVALID_SEED, INVALID_TOTAL_OPTION } from '../../../errors'
 import {
     applyChecksumOption,

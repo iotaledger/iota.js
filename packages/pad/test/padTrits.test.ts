@@ -1,5 +1,5 @@
 import test from 'ava'
-import { padTrits, padTrytes } from '../src'
+import { padTrits } from '../src'
 
 test('padTrits() adds padding to trit array.', t => {
     const trits = new Int8Array([-1, 0, 1])

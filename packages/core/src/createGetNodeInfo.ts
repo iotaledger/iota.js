@@ -1,5 +1,5 @@
 import * as Promise from 'bluebird'
-import { Callback, IRICommand, GetNodeInfoCommand, GetNodeInfoResponse, Provider } from '../../types'
+import { Callback, GetNodeInfoCommand, GetNodeInfoResponse, IRICommand, Provider } from '../../types'
 
 /**
  * @method createGetNodeInfo
