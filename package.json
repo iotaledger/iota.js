@@ -9,9 +9,7 @@
         "test:staged": "node scripts/test-staged.js",
         "precommit": "lint-staged && node ./scripts/test-staged.js",
         "docs": "lerna run docs",
-        "lint": "tslint --project .",
-        "lint-staged": "tslint --fix",
-        "format-staged": "prettier --write"
+        "lint": "tslint --project ."
     },
     "contributors": [
         "Dominik Schiener <dom@iota.org> (https://iota.org)",
@@ -26,8 +24,8 @@
         "verbose": true
     },
     "lint-staged": {
-        "*.{ts}": ["./scripts/check-partially-staged.sh lint-staged"],
-        "*.{js,ts,json,md}": ["./scripts/check-partially-staged.sh format-staged"]
+        "*.{ts}": ["tslint --fix", "git add"],
+        "*.{js,ts,json,md}": ["prettier --write", "git add"]
     },
     "keywords": ["iota", "tangle", "library", "javascript", "nodejs", "API"],
     "license": "MIT",
