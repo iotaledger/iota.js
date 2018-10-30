@@ -300,3 +300,14 @@ export const asArray = <T>(x: T | ReadonlyArray<T>): ReadonlyArray<T> => (Array.
 
 export const getOptionsWithDefaults = <T>(defaults: Readonly<T>) => (options: Readonly<Partial<T>>): Readonly<T> =>
     Object.assign({}, defaults, options) // tslint:disable-line prefer-object-spread
+
+/* Storage adapter interface */
+export type IncrementKeyIndex = (store: any) => () => Promise<Int8Array /* as trit encoded integer */>
+
+export type ReadPendingTransactions = (store: any) => () => Promise<Int8Array /* as trit encoded transaction */>
+
+export type WritePendingTransactions = (store: any) => (transactions: Int8Array) => Promise<Int8Array>
+
+export type DeletePendingTransactions = (
+    store: any
+) => (transactions: Int8Array /* as hashes */) => Promise<Int8Array /* as transactions */>
