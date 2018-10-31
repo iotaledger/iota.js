@@ -18,17 +18,39 @@
         "Chris Dukakis <chris.dukakis@iota.org> (https://github.com/chrisdukakis)"
     ],
     "ava": {
-        "files": ["packages/**/out/**/test/*.test.js", "packages/**/out/**/test/integration/*.test.js"],
+        "files": [
+            "packages/**/out/**/test/*.test.js",
+            "packages/**/out/**/test/integration/*.test.js"
+        ],
         "failFast": true,
         "failWithoutAssertions": false,
         "compileEnhancements": false,
         "verbose": true
     },
     "lint-staged": {
-        "*.{ts}": ["tslint --fix", "git add"],
-        "*.{js,ts,json,md}": ["prettier --write", "git add"]
+        "linters": {
+            "*.{ts}": [
+                "tslint --fix",
+                "git add"
+            ],
+            "*.{js,ts,json,md}": [
+                "prettier --write",
+                "git add"
+            ]
+        },
+        "ignore": [
+            "package-lock.json",
+            "packages/**/package-lock.json"
+        ]
     },
-    "keywords": ["iota", "tangle", "library", "javascript", "nodejs", "API"],
+    "keywords": [
+        "iota",
+        "tangle",
+        "library",
+        "javascript",
+        "nodejs",
+        "API"
+    ],
     "license": "MIT",
     "bugs": {
         "url": "https://github.com/iotaledger/iota.lib.js/issues"
@@ -48,7 +70,7 @@
         "husky": "^1.1.2",
         "jsdoc-babel": "^0.5.0",
         "lerna": "^3.4.3",
-        "lint-staged": "^8.0.3",
+        "lint-staged": "^8.0.4",
         "nyc": "^13.1.0",
         "prettier": "^1.10.2",
         "staged-git-files": "^1.1.1",

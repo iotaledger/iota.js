@@ -83,7 +83,7 @@
         "@iota/signing": "^1.0.0-beta.5",
         "@iota/transaction": "^1.0.0-beta.5",
         "@iota/transaction-converter": "^1.0.0-beta.5",
-        "@types/bluebird": "^3.5.20",
+        "@types/bluebird": "^3.5.24",
         "bluebird": "^3.5.1"
     },
     "devDependencies": {

@@ -64,7 +64,7 @@
         "url": "https://github.com/iotaledger/iota.js.git"
     },
     "dependencies": {
-        "@types/bluebird": "^3.5.20",
+        "@types/bluebird": "^3.5.24",
         "@types/isomorphic-fetch": "^0.0.34",
         "bluebird": "^3.5.1",
         "isomorphic-fetch": "^2.2.1"
