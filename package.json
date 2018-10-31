@@ -18,17 +18,39 @@
         "Chris Dukakis <chris.dukakis@iota.org> (https://github.com/chrisdukakis)"
     ],
     "ava": {
-        "files": ["packages/**/out/**/test/*.test.js", "packages/**/out/**/test/integration/*.test.js"],
+        "files": [
+            "packages/**/out/**/test/*.test.js",
+            "packages/**/out/**/test/integration/*.test.js"
+        ],
         "failFast": true,
         "failWithoutAssertions": false,
         "compileEnhancements": false,
         "verbose": true
     },
     "lint-staged": {
-        "*.{ts}": ["tslint --fix", "git add"],
-        "*.{js,ts,json,md}": ["prettier --write", "git add"]
+        "linters": {
+            "*.{ts}": [
+                "tslint --fix",
+                "git add"
+            ],
+            "*.{js,ts,json,md}": [
+                "prettier --write",
+                "git add"
+            ]
+        },
+        "ignore": [
+            "package-lock.json",
+            "packages/**/package-lock.json"
+        ]
     },
-    "keywords": ["iota", "tangle", "library", "javascript", "nodejs", "API"],
+    "keywords": [
+        "iota",
+        "tangle",
+        "library",
+        "javascript",
+        "nodejs",
+        "API"
+    ],
     "license": "MIT",
     "bugs": {
         "url": "https://github.com/iotaledger/iota.lib.js/issues"
