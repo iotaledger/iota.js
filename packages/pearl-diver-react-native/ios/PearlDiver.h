@@ -1,11 +1,11 @@
+//
+//  Created by Rajiv Shah on 4/6/18.
+//
 
-#if __has_include("RCTBridgeModule.h")
-#import "RCTBridgeModule.h"
-#else
 #import <React/RCTBridgeModule.h>
-#endif
+#import <React/RCTEventEmitter.h>
+#import <EntangledKit/EntangledKit.h>
 
-@interface PearlDiver : NSObject <RCTBridgeModule>
+@interface PearlDiver: NSObject <RCTBridgeModule>
 
 @end
-  
