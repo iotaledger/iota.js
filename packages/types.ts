@@ -302,6 +302,8 @@ export const getOptionsWithDefaults = <T>(defaults: Readonly<T>) => (options: Re
     Object.assign({}, defaults, options) // tslint:disable-line prefer-object-spread
 
 /* Storage adapter interface */
+export type Store = (id: string, security: number) => Promise<any>
+
 export type IncrementKeyIndex = (store: any) => () => Promise<Int8Array /* as trit encoded integer */>
 
 export type ReadPendingTransactions = (store: any) => () => Promise<Int8Array /* as trit encoded transaction */>
