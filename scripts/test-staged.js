@@ -101,7 +101,9 @@ sgf((err, results) => {
                   })
                   .filter(pkgDir => pkgDir)
                   .map(cmd)
-            : Array.from(staged).map(cmd)
+            : Array.from(staged)
+                  .map(name => name.slice(prefix.length))
+                  .map(cmd)
 
     const codes = []
 
