@@ -44,7 +44,7 @@ export function subseed(seed: Int8Array, index: number): Int8Array {
 /**
  * @method key
  *
- * @param {Int8Array} subseed - Subseed trits
+ * @param {Int8Array} subseedTrits - Subseed trits
  * @param {number} length - Private key length
  *
  * @return {Int8Array} Private key trits

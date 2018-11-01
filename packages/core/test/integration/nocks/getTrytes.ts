@@ -1,6 +1,6 @@
-import * as nock from 'nock'
-import { IRICommand, GetTrytesCommand, GetTrytesResponse } from '../../../../types'
 import { bundle, bundleTrytes, bundleWithZeroValue, bundleWithZeroValueTrytes } from '@iota/samples'
+import * as nock from 'nock'
+import { GetTrytesCommand, GetTrytesResponse, IRICommand } from '../../../../types'
 import headers from './headers'
 
 export const getTrytesCommand: GetTrytesCommand = {

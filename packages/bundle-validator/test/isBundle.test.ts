@@ -1,4 +1,3 @@
-import test from 'ava'
 import {
     bundle,
     bundleWithInvalidBundleHash,
@@ -8,6 +7,7 @@ import {
     bundleWithInvalidValueSum,
     bundleWithZeroValue,
 } from '@iota/samples'
+import test from 'ava'
 import isBundle from '../src'
 
 test('isBundle() returns true for valid bundle.', t => {

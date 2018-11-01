@@ -60,24 +60,7 @@ export {
     Validator,
 } from '../../guards'
 
-import {
-    isAttachedTrytes,
-    isTailTransaction,
-    isTransaction,
-    isTransactionHash,
-    isTransactionTrytes,
-    tailTransactionValidator,
-    transactionHashValidator,
-    transactionTrytesValidator,
-    transactionValidator,
-    validateAttachedTrytes,
-    validateTailTransaction,
-    validateTransaction,
-    validateTransactionHash,
-    validateTransactionTrytes,
-} from '@iota/transaction'
-
-import { arrayValidator, isArray, isHash, isInput, isTag, isTransfer, isTrytes, isUri } from '../../guards'
+import { isArray, isHash, isInput, isTag, isTransfer, isTrytes, isUri } from '../../guards'
 
 export const isAddressArray = isArray(isAddress)
 export const isHashArray = isArray(isHash)

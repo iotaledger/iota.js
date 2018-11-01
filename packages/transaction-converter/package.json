@@ -11,7 +11,7 @@
         "prepare": "tsc",
         "test": "tsc && nyc ava",
         "test-ci": "nyc ava",
-        "format": "prettier",
+        "lint": "tslint --project .",
         "docs": "tsc && jsdoc2md --no-cache --plugin dmd-clear -t README_tpl.hbs --files './out/**/*.js' > README.md"
     },
     "contributors": [
@@ -65,7 +65,6 @@
     },
     "dependencies": {
         "@iota/converter": "^1.0.0-beta.5",
-        "@iota/curl": "^1.0.0-beta.5",
         "@iota/pad": "^1.0.0-beta.5",
         "@iota/transaction": "^1.0.0-beta.5"
     },

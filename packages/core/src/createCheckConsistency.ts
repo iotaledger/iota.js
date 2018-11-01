@@ -1,5 +1,5 @@
-import * as Promise from 'bluebird'
 import { transactionHashValidator } from '@iota/transaction'
+import * as Promise from 'bluebird'
 import { inconsistentTransaction } from '../../errors'
 import { arrayValidator, validate } from '../../guards'
 import {

@@ -1,5 +1,5 @@
-import test from 'ava'
 import { createHttpClient } from '@iota/http-client'
+import test from 'ava'
 import { INVALID_REFERENCE_HASH } from '../../../errors'
 import { createGetTransactionsToApprove } from '../../src'
 import {
@@ -10,8 +10,6 @@ import {
 } from './nocks/getTransactionsToApprove'
 
 const getTransactionsToApprove = createGetTransactionsToApprove(createHttpClient())
-
-const addresses = ['A'.repeat(81), 'B'.repeat(81)]
 
 test('getTransactionsToApprove() resolves to correct response', async t => {
     t.deepEqual(

@@ -1,5 +1,5 @@
-import * as Promise from 'bluebird'
 import { attachedTrytesValidator } from '@iota/transaction'
+import * as Promise from 'bluebird'
 import { arrayValidator, validate } from '../../guards'
 import {
     BroadcastTransactionsCommand,

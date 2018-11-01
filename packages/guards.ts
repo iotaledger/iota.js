@@ -200,7 +200,11 @@ export const arrayValidator = <T>(validator: Validator<T>, allowEmpty = false): 
     arr: ReadonlyArray<any>,
     customMsg?: string
 ) => {
-    const [_, isValid, msg] = validator(arr[0])
+    const [
+        _, // tslint:disable-line no-unused-variable
+        isValid,
+        msg,
+    ] = validator(arr[0])
 
     return [arr, (x: ReadonlyArray<any>): x is ReadonlyArray<T> => x.every(value => isValid(value)), customMsg || msg]
 }

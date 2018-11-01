@@ -1,6 +1,6 @@
-import * as Promise from 'bluebird'
 import { transactionHashValidator } from '@iota/transaction'
-import { asFinalTransactionTrytes, asTransactionObjects } from '@iota/transaction-converter'
+import { asFinalTransactionTrytes } from '@iota/transaction-converter'
+import * as Promise from 'bluebird'
 import { validate } from '../../guards'
 import { Callback, Hash, Provider, Trytes } from '../../types'
 import { createBroadcastTransactions, createGetBundle } from './'

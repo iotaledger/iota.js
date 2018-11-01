@@ -2,7 +2,14 @@ import { transactionHashValidator } from '@iota/transaction'
 import { asFinalTransactionTrytes } from '@iota/transaction-converter'
 import * as Promise from 'bluebird'
 import { depthValidator, minWeightMagnitudeValidator, validate } from '../../guards'
-import { AttachToTangle, Bundle, Callback, Hash, Provider, Transaction } from '../../types'
+import {
+    AttachToTangle,
+    Bundle,
+    Callback,
+    Hash,
+    Provider,
+    Transaction, // tslint:disable-line no-unused-variable
+} from '../../types'
 import { createGetBundle, createSendTrytes } from './'
 
 /**

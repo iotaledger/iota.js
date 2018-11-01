@@ -9,8 +9,9 @@
     },
     "scripts": {
         "prepare": "tsc",
-        "test": "tsc && ava",
-        "format": "prettier"
+        "test": "tsc && nyc ava",
+        "test-ci": "nyc ava",
+        "lint": "tslint --project ."
     },
     "contributors": [
         "Dominik Schiener <dom@iota.org> (https://iota.org)",
@@ -24,7 +25,15 @@
         "compileEnhancements": false,
         "verbose": true
     },
-    "keywords": ["iota", "tangle", "library", "browser", "javascript", "nodejs", "API"],
+    "keywords": [
+        "iota",
+        "tangle",
+        "library",
+        "browser",
+        "javascript",
+        "nodejs",
+        "API"
+    ],
     "license": "MIT",
     "bugs": {
         "url": "https://github.com/iotaledger/iota.js/issues"

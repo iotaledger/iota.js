@@ -27,7 +27,7 @@ export const getSettingsWithDefaults = (settings: Partial<Settings> = {}): Setti
         settings
     )
 
-    let _provider: string = provider
+    let providerUri: string = provider
 
     if (sandbox || token) {
         throw new Error(
@@ -41,7 +41,7 @@ export const getSettingsWithDefaults = (settings: Partial<Settings> = {}): Setti
             'Setting `host` and `port` is deprecated and will be removed in next version. Please use the `provider` option instead.'
         )
 
-        _provider = [host || DEFAULT_HOST, port || DEFAULT_PORT].join('/').replace('//', '/')
+        providerUri = [host || DEFAULT_HOST, port || DEFAULT_PORT].join('/').replace('//', '/')
     }
 
     if (settings.hasOwnProperty('requestBatchSize')) {
@@ -53,5 +53,5 @@ export const getSettingsWithDefaults = (settings: Partial<Settings> = {}): Setti
         }
     }
 
-    return { provider: _provider, requestBatchSize, apiVersion }
+    return { provider: providerUri, requestBatchSize, apiVersion }
 }

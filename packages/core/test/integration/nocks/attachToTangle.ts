@@ -1,6 +1,6 @@
-import * as nock from 'nock'
-import { IRICommand, AttachToTangleCommand, AttachToTangleResponse } from '../../../../types'
 import { bundle, bundleTrytes } from '@iota/samples'
+import * as nock from 'nock'
+import { AttachToTangleCommand, AttachToTangleResponse, IRICommand } from '../../../../types'
 import headers from './headers'
 
 export const attachToTangleCommand: AttachToTangleCommand = {
