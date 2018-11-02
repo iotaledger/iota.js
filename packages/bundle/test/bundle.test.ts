@@ -1,5 +1,5 @@
 import test from 'ava'
-import { addEntry, addTrytes, createBundle, finalizeBundle } from '../src/bundle'
+import { addEntry, addTrytes, createBundle, finalizeBundle } from '../src'
 
 const NULL_HASH = '9'.repeat(81)
 const NULL_NONCE = '9'.repeat(27)

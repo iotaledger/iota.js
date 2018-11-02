@@ -278,10 +278,12 @@ export default class Multisig {
                     return createBundle(input, sanitizedTransfers, remainderAddress)
                 } else {
                     return createGetBalances(this.provider)([input.address], 100)
-                        .then((res: Balances): MultisigInput => ({
-                            ...input,
-                            balance: res.balances[0],
-                        }))
+                        .then(
+                            (res: Balances): MultisigInput => ({
+                                ...input,
+                                balance: res.balances[0],
+                            })
+                        )
                         .then((inputWithBalance: MultisigInput) =>
                             createBundle(inputWithBalance, sanitizedTransfers, remainderAddress)
                         )

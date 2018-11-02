@@ -9,7 +9,7 @@ import {
     Hash,
     Provider,
     Transaction, // tslint:disable-line no-unused-variable
-    Trytes
+    Trytes,
 } from '../../types'
 import { createAttachToTangle, createGetTransactionsToApprove, createStoreAndBroadcast } from './'
 

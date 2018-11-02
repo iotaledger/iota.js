@@ -362,7 +362,7 @@ export const addSignatures = (props: PrepareTransfersProps): PrepareTransfersPro
                         .map((_, i) =>
                             trytes(
                                 signatureFragment(
-                                    normalizedBundle.slice(i * HASH_LENGTH / 3, (i + 1) * HASH_LENGTH / 3),
+                                    normalizedBundle.slice((i * HASH_LENGTH) / 3, ((i + 1) * HASH_LENGTH) / 3),
                                     keyTrits.slice(i * KEY_FRAGMENT_LENGTH, (i + 1) * KEY_FRAGMENT_LENGTH)
                                 )
                             )

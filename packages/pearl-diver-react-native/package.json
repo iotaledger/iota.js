@@ -1,0 +1,63 @@
+{
+    "name": "@iota/pearl-diver-react-native",
+    "version": "1.0.0-beta.5",
+    "description": "Transaction nonce searcher for IOTA apps built with react-native.",
+    "main": "./out/pearl-diver-react-native/src/index.js",
+    "typings": "typings/pearl-diver-react-native/src",
+    "publishConfig": {
+        "access": "public"
+    },
+    "scripts": {
+        "prepare": "tsc",
+        "prepublishOnly": "npm run build",
+        "build-android": "./scripts/build-android.sh",
+        "build-android-clean": "./scripts/build-android.sh clean",
+        "build-ios": "./scripts/build-ios.sh",
+        "build-ios-clean": "./scripts/build-ios.sh clean",
+        "build": "npm run build-android && npm run build-ios",
+        "build-clean": "npm run build-android-clean && npm run build-ios-clean",
+        "test": "tsc",
+        "test-ci": "tsc",
+        "test-android": "tsc && npm run build-android",
+        "test-android-ci": "npm run build-android",
+        "test-ios": "tsc && npm run build-ios"
+    },
+    "keywords": [
+        "iota",
+        "tangle",
+        "proof-of-work",
+        "PoW",
+        "local",
+        "attachToTangle",
+        "IoT",
+        "internet-of-things",
+        "mobile",
+        "react-native",
+        "android",
+        "iOS"
+    ],
+    "author": "Chris Dukakis<chris.dukakis@iota.org>",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/iotaledger/iota.js/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/iotaledger/iota.js.git"
+    },
+    "dependencies": {
+        "@iota/converter": "^1.0.0-beta.5",
+        "@iota/transaction": "^1.0.0-beta.5",
+        "@iota/transaction-converter": "^1.0.0-beta.5"
+    },
+    "devDependencies": {
+        "@types/react-native": "^0.57.0",
+        "babel-preset-react-native": "^4.0.1",
+        "react": "^16.5.0",
+        "react-native": "^0.57.1"
+    },
+    "peerDependencies": {
+        "react": "^16.5.0",
+        "react-native": "^0.57.1"
+    }
+}

@@ -1,4 +1,6 @@
 // tslint:disable no-conditional-assignment
+import '../../typed-array'
+
 const NUMBER_OF_ROUNDS = 81
 const HASH_LENGTH = 243
 const STATE_LENGTH = 3 * HASH_LENGTH

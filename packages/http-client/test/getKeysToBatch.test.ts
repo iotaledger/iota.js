@@ -25,5 +25,8 @@ test('getKeysToBatch() should return correct keys.', t => {
 })
 
 test('getKeysToBatch() should return no empty array for non-batchable keys.', t => {
-    t.deepEqual(getKeysToBatch(commandWithoutBatchableKeys as BatchableCommand<FindTransactionsCommand>, BATCH_SIZE), [])
+    t.deepEqual(
+        getKeysToBatch(commandWithoutBatchableKeys as BatchableCommand<FindTransactionsCommand>, BATCH_SIZE),
+        []
+    )
 })

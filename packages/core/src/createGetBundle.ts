@@ -7,7 +7,7 @@ import {
     Callback,
     Hash,
     Provider,
-    Transaction // tslint:disable-line no-unused-variable
+    Transaction, // tslint:disable-line no-unused-variable
 } from '../../types'
 import { createTraverseBundle } from './'
 

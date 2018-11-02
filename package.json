@@ -6,10 +6,10 @@
         "init": "npm i && lerna bootstrap",
         "test": "lerna exec -- npm test",
         "test-ci": "lerna bootstrap && lerna exec -- npm run test-ci && npm run lint",
-        "lint": "tslint --project .",
-        "commitmsg": "commitlint -E HUSKY_GIT_PARAMS",
-        "precommit": "lint-staged && node ./scripts/test-staged.js",
+        "test-android": "lerna bootstrap && lerna run test-android --stream",
+        "test-android-ci": "lerna bootstrap && lerna run test-android-ci --stream",
         "test:staged": "node scripts/test-staged.js",
+        "lint": "tslint --project .",
         "docs": "lerna run docs"
     },
     "contributors": [
@@ -26,6 +26,12 @@
         "failWithoutAssertions": false,
         "compileEnhancements": false,
         "verbose": true
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "lint-staged && node ./scripts/test-staged.js",
+            "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+        }
     },
     "lint-staged": {
         "linters": {

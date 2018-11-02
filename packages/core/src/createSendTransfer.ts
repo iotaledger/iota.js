@@ -8,13 +8,13 @@ import {
     validate,
 } from '../../guards'
 import {
-  AttachToTangle,
-  Bundle,
-  Callback,
-  Hash,
-  Provider,
-  Transaction, // tslint:disable-line no-unused-variable 
-  Transfer
+    AttachToTangle,
+    Bundle,
+    Callback,
+    Hash,
+    Provider,
+    Transaction, // tslint:disable-line no-unused-variable
+    Transfer,
 } from '../../types'
 import { createPrepareTransfers, createSendTrytes } from './'
 import { getPrepareTransfersOptions, PrepareTransfersOptions } from './createPrepareTransfers'

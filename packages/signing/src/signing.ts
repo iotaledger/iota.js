@@ -3,6 +3,7 @@
 import { fromValue, trits, trytes, value } from '@iota/converter'
 import Kerl from '@iota/kerl'
 import { padTrits } from '@iota/pad'
+import '../../typed-array'
 import { Hash } from '../../types'
 import add from './add'
 import * as errors from './errors'

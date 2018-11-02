@@ -5,6 +5,7 @@ import { padTrits, padTrytes } from '@iota/pad'
 import { transactionHash } from '@iota/transaction'
 import * as errors from '../../errors'
 import { isTrytesOfExactLength } from '../../guards'
+import '../../typed-array'
 import { asArray, Hash, Transaction, Trytes } from '../../types'
 
 export function asTransactionTrytes(transactions: Transaction): Trytes

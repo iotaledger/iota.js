@@ -1,9 +1,9 @@
-import 'isomorphic-fetch'
+import 'cross-fetch/polyfill' // tslint:disable-line no-submodule-imports
 import {
     BaseCommand,
     FindTransactionsResponse,
     GetBalancesResponse, // tslint:disable-line no-unused-variable
-    IRICommand
+    IRICommand,
 } from '../../types'
 import { BatchableCommand } from './httpClient'
 import { API_VERSION, DEFAULT_URI, MAX_REQUEST_BATCH_SIZE } from './settings'
@@ -77,7 +77,11 @@ export const batchedSend = <C extends BaseCommand, R = any>(
             return Promise.all(
                 command[key]
                     .reduce(
-                        (acc, _, i) => // tslint:disable-line no-unused-variable
+                        (
+                            acc,
+                            _,
+                            i // tslint:disable-line no-unused-variable
+                        ) =>
                             i < Math.ceil(command[key].length / requestBatchSize)
                                 ? acc.concat({
                                       command: command.command,
@@ -97,7 +101,7 @@ export const batchedSend = <C extends BaseCommand, R = any>(
                         responses.every(
                             response =>
                                 response.findIndex(
-                                  (res: Object) => (res as FindTransactionsResponse).hashes.indexOf(hash) > -1 // tslint:disable-line ban-types
+                                    (res: Object) => (res as FindTransactionsResponse).hashes.indexOf(hash) > -1 // tslint:disable-line ban-types
                                 ) > -1
                         )
                     ),

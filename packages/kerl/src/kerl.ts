@@ -1,5 +1,6 @@
 /* tslint:disable variable-name no-conditional-assignment */
 import * as CryptoJS from 'crypto-js'
+import '../../typed-array'
 import * as errors from './errors'
 import { tritsToWords, wordsToTrits } from './word-converter'
 
