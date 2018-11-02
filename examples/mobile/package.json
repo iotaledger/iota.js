@@ -4,7 +4,8 @@
     "private": true,
     "scripts": {
         "start": "node node_modules/react-native/local-cli/cli.js start",
-        "test": "jest"
+        "test": "jest",
+        "postinstall": "cd node_modules/react-native; exec ./scripts/ios-install-third-party.sh; cd third-party/glog-0.3.5; exec ./configure; cd ../../../.."
     },
     "dependencies": {
         "@iota/core": "^1.0.0-beta.b5365c47",
