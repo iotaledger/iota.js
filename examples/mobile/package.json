@@ -9,8 +9,8 @@
     },
     "dependencies": {
         "@iota/core": "^1.0.0-beta.b5365c47",
-        "@iota/pearl-diver-react-native": "^1.0.0-beta.b5365c47",
-        "@iota/signing": "^1.0.0-beta.b5365c47",
+        "@iota/pearl-diver-react-native": "^1.0.0-beta.84aa7305",
+        "@iota/signing": "^1.0.0-beta.84aa7305",
         "react": "16.6.0-alpha.8af6728",
         "react-native": "0.57.3"
     },
