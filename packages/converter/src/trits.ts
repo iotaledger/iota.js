@@ -93,7 +93,7 @@ export const trytesToTrits = trits
  */
 // tslint:disable-next-line no-shadowed-variable
 export function trytes(trits: Int8Array): string {
-    if (!(trits instanceof Int8Array)) {
+    if (!(trits instanceof Int8Array) && !Array.isArray(trits)) {
         throw new Error(errors.INVALID_TRITS)
     }
 

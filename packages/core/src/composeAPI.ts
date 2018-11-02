@@ -51,7 +51,7 @@ import {
     GetAccountDataOptions, // tslint:disable-line no-unused-variable
     GetInputsOptions, // tslint:disable-line no-unused-variable
     GetNewAddressOptions, // tslint:disable-line no-unused-variable
-    GetNodeInfoResponse, // tslint:disable-line no-unused-variable 
+    GetNodeInfoResponse, // tslint:disable-line no-unused-variable
     PrepareTransfersOptions, // tslint:disable-line no-unused-variable
     PromoteTransactionOptions, // tslint:disable-line no-unused-variable
     TransactionsToApprove, // tslint:disable-line no-unused-variable
@@ -59,7 +59,7 @@ import {
 import { createGetBundlesFromAddresses } from './createGetBundlesFromAddresses'
 import {
     createGetTransfers,
-    GetTransfersOptions // tslint:disable-line no-unused-variable
+    GetTransfersOptions, // tslint:disable-line no-unused-variable
 } from './createGetTransfers'
 
 export interface Settings extends HttpClientSettings {
@@ -90,7 +90,7 @@ export function returnType<T>(func: Func<T>) {
  */
 export const composeAPI = (input: Partial<Settings> | CreateProvider = {}) => {
     const isFn = typeof input === 'function'
-    const settings: Partial<Settings> = isFn ? {} : input as Partial<Settings>
+    const settings: Partial<Settings> = isFn ? {} : (input as Partial<Settings>)
     const provider: Provider = isFn ? (input as CreateProvider)() : createHttpClient(settings)
 
     let attachToTangle: AttachToTangle = settings.attachToTangle || createAttachToTangle(provider)

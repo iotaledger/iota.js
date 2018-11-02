@@ -2,8 +2,8 @@
     "name": "@iota/curl",
     "version": "1.0.0-beta.5",
     "description": "Curl sponge function",
-    "main": "./out/index.js",
-    "typings": "typings",
+    "main": "./out/curl/src/index.js",
+    "typings": "typings/curl/src",
     "publishConfig": {
         "access": "public"
     },
@@ -19,7 +19,7 @@
         "Chris Dukakis <chris.dukakis@iota.org> (https://github.com/chrisdukakis)"
     ],
     "ava": {
-        "files": "out/test/*.test.js",
+        "files": "out/curl/test/*.test.js",
         "failFast": true,
         "failWithoutAssertions": false,
         "compileEnhancements": false,

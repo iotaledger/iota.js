@@ -6,6 +6,7 @@ import { tritsToTrytes, trytesToTrits } from '@iota/converter'
 import Curl from '@iota/curl'
 import * as errors from '../../errors'
 import { isArray, isHash, isTrytesOfExactLength, validate, Validator } from '../../guards'
+import '../../typed-array'
 import { Hash, Transaction, Trytes } from '../../types'
 import {
     HASH_SIZE,
@@ -97,7 +98,7 @@ export const isTransactionHash = (hash: any, minWeightMagnitude?: number): hash 
             hasCorrectHashLength &&
             trytesToTrits(hash)
                 .slice(-Math.abs(minWeightMagnitude))
-                .every(trit => trit === 0)
+                .every((trit: number) => trit === 0)
         )
     }
 

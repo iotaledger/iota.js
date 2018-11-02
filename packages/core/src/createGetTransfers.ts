@@ -12,7 +12,7 @@ import {
     Callback,
     getOptionsWithDefaults,
     Provider,
-    Transaction // tslint:disable-line no-unused-variable
+    Transaction, // tslint:disable-line no-unused-variable
 } from '../../types'
 import { createGetBundlesFromAddresses } from './createGetBundlesFromAddresses'
 import { createGetNewAddress, getNewAddressOptions, GetNewAddressOptions } from './createGetNewAddress'

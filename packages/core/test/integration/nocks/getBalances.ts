@@ -1,8 +1,8 @@
 import * as nock from 'nock'
-import { 
+import {
     Balances, // tslint:disable-line no-unused-variable
     GetBalancesCommand,
-    IRICommand
+    IRICommand,
 } from '../../../../types'
 import headers from './headers'
 
