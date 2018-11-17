@@ -8,7 +8,7 @@ import {
 import { BatchableCommand } from './httpClient'
 import { API_VERSION, DEFAULT_URI, MAX_REQUEST_BATCH_SIZE } from './settings'
 
-const requestError = (statusText: string) => Promise.reject(`Request error: ${statusText}`)
+const requestError = (statusText: string) => `Request error: ${statusText}`
 
 /**
  * Sends an http request to a specified host.
@@ -46,13 +46,16 @@ export const send = <C extends BaseCommand, R = any>(
                 json =>
                     res.ok
                         ? json
-                        : requestError(json.error || json.exception ? json.error || json.exception : res.statusText)
+                        : Promise.reject(
+                              requestError(json.error || json.exception ? json.error || json.exception : res.statusText)
+                          )
             )
             .catch(error => {
                 if (!res.ok && error.type === 'invalid-json') {
-                    return requestError(res.statusText)
+                    throw requestError(res.statusText)
+                } else {
+                    throw error
                 }
-                throw error
             })
     )
 
@@ -133,6 +136,6 @@ export const batchedSend = <C extends BaseCommand, R = any>(
                     states: responses[0].reduce((acc: any, response: any) => acc.conact(response.states)),
                 }
             default:
-                requestError('Invalid batched request.')
+                throw requestError('Invalid batched request.')
         }
     })

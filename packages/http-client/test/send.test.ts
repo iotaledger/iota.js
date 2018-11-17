@@ -77,3 +77,18 @@ test('send() parses and returns json encoded error of bad request.', t => {
         )
     })
 })
+
+const invalidGetTransactionsToApproveCommandB = {
+    command: IRICommand.GET_TRANSACTIONS_TO_APPROVE,
+    depth: 42001,
+}
+export const badSendInvalidJSONResponseNock = nock('http://localhost:24265', headers(API_VERSION))
+    .persist()
+    .post('/', invalidGetTransactionsToApproveCommandB)
+    .reply(400, 'Invalid json')
+
+test('send() ignores invalid json of bad requests.', t => {
+    return send(invalidGetTransactionsToApproveCommandB).catch(error => {
+        t.is(error, 'Request error: Bad Request', 'httpClient.send() should ignore invalid json of bad requests.')
+    })
+})
