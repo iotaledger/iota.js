@@ -39,9 +39,22 @@ export const send = <C extends BaseCommand, R = any>(
             'X-IOTA-API-Version': apiVersion.toString(),
         },
         body: JSON.stringify(command),
-    })
-        .then(res => (res.ok ? res.json() : requestError(res.statusText)))
-        .then(json => (json.error || json.exception ? requestError(json.error || json.exception) : json))
+    }).then(res =>
+        res
+            .json()
+            .then(
+                json =>
+                    res.ok
+                        ? json
+                        : requestError(json.error || json.exception ? json.error || json.exception : res.statusText)
+            )
+            .catch(error => {
+                if (!res.ok && error.type === 'invalid-json') {
+                    return requestError(res.statusText)
+                }
+                throw error
+            })
+    )
 
 /**
  * Sends a batched http request to a specified host
