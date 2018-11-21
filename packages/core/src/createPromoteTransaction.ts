@@ -25,7 +25,7 @@ export const spammer = (): Transfer => ({
     message: '9'.repeat(27 * 81),
 })
 
-export const generateSpam = (n: number = 1): ReadonlyArray<Transfer> => new Array(n).map(spammer)
+export const generateSpam = (n: number = 1): ReadonlyArray<Transfer> => new Array(n).fill(spammer)
 
 /**
  * @method createPromoteTransaction
@@ -44,7 +44,7 @@ export const createPromoteTransaction = (provider: Provider, attachFn?: AttachTo
     const sendTransfer = createSendTransfer(provider, attachFn)
 
     /**
-     * Promotes a transaction by adding other transactions (spam by default) on top of it.
+     * Promotes a transaction by adding zero-value spam transactions on top of it.
      * Will promote `maximum` transfers on top of the current one with `delay` interval. Promotion
      * is interruptable through `interrupt` option.
      *
@@ -55,7 +55,8 @@ export const createPromoteTransaction = (provider: Provider, attachFn?: AttachTo
      * @param {string} tail
      * @param {int} depth
      * @param {int} minWeightMagnitude
-     * @param {array} transfer
+     * @param {array} [spamTransfers] - Array of spam transfers to promote with.
+     * By default it will issue an all-9s, zero-value transfer.
      * @param {object} [options]
      * @param {number} [options.delay] - Delay between spam transactions in `ms`
      * @param {boolean|function} [options.interrupt] - Interrupt signal, which can be a function that evaluates
