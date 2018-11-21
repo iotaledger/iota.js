@@ -8,7 +8,7 @@ import {
 import { BatchableCommand } from './httpClient'
 import { API_VERSION, DEFAULT_URI, MAX_REQUEST_BATCH_SIZE } from './settings'
 
-const requestError = (statusText: string) => Promise.reject(`Request error: ${statusText}`)
+const requestError = (statusText: string) => `Request error: ${statusText}`
 
 /**
  * Sends an http request to a specified host.
@@ -39,9 +39,25 @@ export const send = <C extends BaseCommand, R = any>(
             'X-IOTA-API-Version': apiVersion.toString(),
         },
         body: JSON.stringify(command),
-    })
-        .then(res => (res.ok ? res.json() : requestError(res.statusText)))
-        .then(json => (json.error || json.exception ? requestError(json.error || json.exception) : json))
+    }).then(res =>
+        res
+            .json()
+            .then(
+                json =>
+                    res.ok
+                        ? json
+                        : Promise.reject(
+                              requestError(json.error || json.exception ? json.error || json.exception : res.statusText)
+                          )
+            )
+            .catch(error => {
+                if (!res.ok && error.type === 'invalid-json') {
+                    throw requestError(res.statusText)
+                } else {
+                    throw error
+                }
+            })
+    )
 
 /**
  * Sends a batched http request to a specified host
@@ -120,6 +136,6 @@ export const batchedSend = <C extends BaseCommand, R = any>(
                     states: responses[0].reduce((acc: any, response: any) => acc.conact(response.states)),
                 }
             default:
-                requestError('Invalid batched request.')
+                throw requestError('Invalid batched request.')
         }
     })

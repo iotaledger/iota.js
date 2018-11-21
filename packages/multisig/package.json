@@ -1,6 +1,6 @@
 {
     "name": "@iota/multisig",
-    "version": "1.0.0-beta.5",
+    "version": "1.0.0-beta.6",
     "description": "Methods for generating multisig addresses and co-signing transactions.",
     "main": "./out/multisig/src/index.js",
     "typings": "typings/multisig/src",
@@ -44,12 +44,12 @@
         "url": "https://github.com/iotaledger/iota.js.git"
     },
     "dependencies": {
-        "@iota/bundle": "^1.0.0-beta.5",
-        "@iota/checksum": "^1.0.0-beta.5",
-        "@iota/converter": "^1.0.0-beta.5",
-        "@iota/core": "^1.0.0-beta.5",
-        "@iota/kerl": "^1.0.0-beta.5",
-        "@iota/signing": "^1.0.0-beta.5",
+        "@iota/bundle": "^1.0.0-beta.6",
+        "@iota/checksum": "^1.0.0-beta.6",
+        "@iota/converter": "^1.0.0-beta.6",
+        "@iota/core": "^1.0.0-beta.6",
+        "@iota/kerl": "^1.0.0-beta.6",
+        "@iota/signing": "^1.0.0-beta.6",
         "@types/bluebird": "^3.5.20",
         "bluebird": "^3.5.1",
         "isomorphic-fetch": "^2.2.1"
