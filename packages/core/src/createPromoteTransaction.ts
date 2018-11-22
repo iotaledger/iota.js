@@ -18,14 +18,14 @@ const defaults: PromoteTransactionOptions = {
 
 export const getPromoteTransactionOptions = getOptionsWithDefaults(defaults)
 
-export const spammer = (): Transfer => ({
+export const spam = {
     address: '9'.repeat(81),
     value: 0,
     tag: '9'.repeat(27),
     message: '9'.repeat(27 * 81),
-})
+}
 
-export const generateSpam = (n: number = 1): ReadonlyArray<Transfer> => new Array(n).fill(spammer)
+export const generateSpam = (n: number = 1): ReadonlyArray<Transfer> => new Array(n).fill(spam)
 
 /**
  * @method createPromoteTransaction
