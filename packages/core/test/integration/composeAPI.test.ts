@@ -3,13 +3,15 @@ import test from 'ava'
 import { API, composeAPI } from '../../src'
 import { getNodeInfoResponse } from './nocks/getNodeInfo'
 
-test.todo(
-    'composeAPI() composes API with network provider as argument' /*async t => {
+test('composeAPI() composes API with network provider as argument', async t => {
     const api: API = composeAPI({ network: createHttpClient() })
 
-    t.deepEqual(await api.getNodeInfo(), getNodeInfoResponse, 'composeAPI() should compose API with provider factory')
-}*/
-)
+    t.deepEqual(
+        await api.getNodeInfo(),
+        getNodeInfoResponse,
+        'composeAPI() should compose API with network provider as argument'
+    )
+})
 
 test('composeAPI() composes API with default provider', async t => {
     const api: any = composeAPI()

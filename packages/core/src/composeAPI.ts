@@ -3,7 +3,6 @@ import * as Bluebird from 'bluebird' // tslint:disable-line no-unused-variable
 import {
     AttachToTangle,
     BaseCommand, // tslint:disable-line no-unused-variable
-    CreateProvider,
     Inputs, // tslint:disable-line no-unused-variable
     Neighbor, // tslint:disable-line no-unused-variable
     Provider, // tslint:disable-line no-unused-variable
@@ -63,6 +62,7 @@ import {
 } from './createGetTransfers'
 
 export interface Settings extends HttpClientSettings {
+    readonly network?: Provider
     readonly attachToTangle?: AttachToTangle
 }
 
@@ -80,6 +80,7 @@ export function returnType<T>(func: Func<T>) {
  * @memberof module:core
  *
  * @param {object} [settings={}] - Connection settings
+ * @param {Provider} [settings.network] - Network provider defaults to `http-client`.
  * @param {string} [settings.provider=http://localhost:14265] Uri of IRI node
  * @param {function} [settings.attachToTangle] - Function to override
  * [`attachToTangle`]{@link #module_core.attachToTangle} with
@@ -101,15 +102,24 @@ export const composeAPI = (settings: Partial<Settings> = {}) => {
      *
      * @param {object} settings - Provider settings object
      * @param {string} [settings.provider] - Http `uri` of IRI node
-     * @param {function} [settings.attachToTangle] - Function to override
+     * @param {Provider} [settings.network] - Network provider to override with
+     * @param {function} [settings.attachToTangle] - AttachToTangle function to override with
      * [`attachToTangle`]{@link #module_core.attachToTangle} with
      */
     function setSettings(newSettings: Partial<Settings> = {}) {
-        provider.setSettings(newSettings)
-
         if (newSettings.attachToTangle) {
             attachToTangle = newSettings.attachToTangle
         }
+
+        if (newSettings.network) {
+            provider = newSettings.network
+        }
+
+        provider.setSettings(newSettings)
+    }
+
+    function overrideNetwork(network: Provider) {
+        provider = network
     }
 
     /**
@@ -170,6 +180,7 @@ export const composeAPI = (settings: Partial<Settings> = {}) => {
         traverseBundle: createTraverseBundle(provider),
         setSettings,
         overrideAttachToTangle,
+        overrideNetwork,
     }
 }
 

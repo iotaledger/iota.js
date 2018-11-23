@@ -284,8 +284,6 @@ export interface Provider {
     readonly setSettings: <S>(settings?: Readonly<Partial<S>>) => void
 }
 
-export type CreateProvider = (settings?: Partial<object>) => Provider
-
 /** Attach to tangle */
 export type AttachToTangle = (
     trunkTransaction: Hash,
