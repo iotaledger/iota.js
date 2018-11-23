@@ -79,7 +79,7 @@ export function returnType<T>(func: Func<T>) {
  *
  * @memberof module:core
  *
- * @param {object | Function} [settings={} | provider] - Connection settings or `provider` factory
+ * @param {object} [settings={}] - Connection settings
  * @param {string} [settings.provider=http://localhost:14265] Uri of IRI node
  * @param {function} [settings.attachToTangle] - Function to override
  * [`attachToTangle`]{@link #module_core.attachToTangle} with
@@ -88,11 +88,8 @@ export function returnType<T>(func: Func<T>) {
  *
  * @return {API}
  */
-export const composeAPI = (input: Partial<Settings> | CreateProvider = {}) => {
-    const isFn = typeof input === 'function'
-    const settings: Partial<Settings> = isFn ? {} : (input as Partial<Settings>)
-    const provider: Provider = isFn ? (input as CreateProvider)() : createHttpClient(settings)
-
+export const composeAPI = (settings: Partial<Settings> = {}) => {
+    let provider: Provider = createHttpClient(settings)
     let attachToTangle: AttachToTangle = settings.attachToTangle || createAttachToTangle(provider)
 
     /**
@@ -131,7 +128,7 @@ export const composeAPI = (input: Partial<Settings> | CreateProvider = {}) => {
     }
 
     /** @namespace API */
-    const api = {
+    return {
         // IRI commands
         addNeighbors: createAddNeighbors(provider),
         attachToTangle,
@@ -174,13 +171,6 @@ export const composeAPI = (input: Partial<Settings> | CreateProvider = {}) => {
         setSettings,
         overrideAttachToTangle,
     }
-
-    return isFn
-        ? (settingsB: Partial<Settings>) => {
-              setSettings(settingsB)
-              return api
-          }
-        : api
 }
 
 export const apiType = returnType(composeAPI)
