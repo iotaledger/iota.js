@@ -12,7 +12,7 @@ export interface PromoteTransactionOptions {
 }
 
 const defaults: PromoteTransactionOptions = {
-    delay: 1000,
+    delay: 0,
     interrupt: false,
 }
 
