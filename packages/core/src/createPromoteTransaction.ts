@@ -8,7 +8,7 @@ import { createSendTransfer } from './createSendTransfer'
 
 export interface PromoteTransactionOptions {
     readonly delay: number
-    interrupt: boolean | (() => void)
+    interrupt: boolean | (() => boolean)
 }
 
 const defaults: PromoteTransactionOptions = {
