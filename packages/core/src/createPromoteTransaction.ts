@@ -1,7 +1,7 @@
 import * as Bluebird from 'bluebird'
 import * as errors from '../../errors'
 import { arrayValidator, hashValidator, transferValidator, validate } from '../../guards'
-import { AttachToTangle, Callback, getOptionsWithDefaults, Maybe, Provider, Transaction, Transfer } from '../../types'
+import { AttachToTangle, Callback, Maybe, Provider, Transaction, Transfer } from '../../types'
 import { createCheckConsistency } from './'
 import { getPrepareTransfersOptions } from './createPrepareTransfers'
 import { createSendTransfer } from './createSendTransfer'
@@ -15,8 +15,6 @@ const defaults: PromoteTransactionOptions = {
     delay: 0,
     interrupt: false,
 }
-
-export const getPromoteTransactionOptions = getOptionsWithDefaults(defaults)
 
 export const spam = {
     address: '9'.repeat(81),
@@ -78,19 +76,19 @@ export const createPromoteTransaction = (provider: Provider, attachFn?: AttachTo
         callback?: Callback<ReadonlyArray<ReadonlyArray<Transaction>>>
     ): Bluebird<Maybe<ReadonlyArray<ReadonlyArray<Transaction>>>> {
         // Switch arguments
-        if (typeof options === 'undefined') {
-            options = {}
+        if (!options) {
+            options = { ...defaults }
         } else if (typeof options === 'function') {
             callback = options
-            options = {}
+            options = { ...defaults }
         }
 
-        const { delay, interrupt } = getPromoteTransactionOptions(options)
         const spamTransactions: Array<ReadonlyArray<Transaction>> = []
         const sendTransferOptions = {
             ...getPrepareTransfersOptions({}),
             reference: tailTransaction,
         }
+        const delay = options.delay
 
         return Bluebird.resolve(
             validate(
@@ -116,17 +114,16 @@ export const createPromoteTransaction = (provider: Provider, attachFn?: AttachTo
             .then(async transactions => {
                 spamTransactions.push([...transactions])
 
-                if (delay) {
-                    if (interrupt === true || (typeof interrupt === 'function' && (await interrupt()))) {
+                if (delay && options) {
+                    if (
+                        options.interrupt === true ||
+                        (typeof options.interrupt === 'function' && (await options.interrupt()))
+                    ) {
                         return [...spamTransactions]
                     }
 
                     setTimeout(
-                        () =>
-                            promoteTransaction(tailTransaction, depth, minWeightMagnitude, spamTransfers, {
-                                delay,
-                                interrupt,
-                            }),
+                        () => promoteTransaction(tailTransaction, depth, minWeightMagnitude, spamTransfers, options),
                         delay
                     )
                 } else {
