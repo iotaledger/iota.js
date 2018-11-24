@@ -90,46 +90,46 @@ export const createPromoteTransaction = (provider: Provider, attachFn?: AttachTo
         }
         const delay = options.delay
 
-        return Bluebird.resolve(
-            validate(
-                hashValidator(tailTransaction),
-                [delay, n => typeof n === 'function' || (typeof n === 'number' && n >= 0), errors.INVALID_DELAY],
-                !!spamTransfers && arrayValidator(transferValidator)(spamTransfers)
-            )
-        )
-            .then(() => checkConsistency(tailTransaction, { rejectWithReason: true }))
-            .then(consistent => {
-                if (!consistent) {
-                    throw new Error(errors.INCONSISTENT_SUBTANGLE)
-                }
-
-                return sendTransfer(
-                    spamTransfers[0].address,
-                    depth,
-                    minWeightMagnitude,
-                    spamTransfers,
-                    sendTransferOptions
+        const promote = () =>
+            Bluebird.resolve(
+                validate(
+                    hashValidator(tailTransaction),
+                    [delay, n => typeof n === 'function' || (typeof n === 'number' && n >= 0), errors.INVALID_DELAY],
+                    !!spamTransfers && arrayValidator(transferValidator)(spamTransfers)
                 )
-            })
-            .then(async transactions => {
-                spamTransactions.push([...transactions])
-
-                if (delay && options) {
-                    if (
-                        options.interrupt === true ||
-                        (typeof options.interrupt === 'function' && (await options.interrupt()))
-                    ) {
-                        return [...spamTransactions]
+            )
+                .then(() => checkConsistency(tailTransaction, { rejectWithReason: true }))
+                .then(consistent => {
+                    if (!consistent) {
+                        throw new Error(errors.INCONSISTENT_SUBTANGLE)
                     }
 
-                    setTimeout(
-                        () => promoteTransaction(tailTransaction, depth, minWeightMagnitude, spamTransfers, options),
-                        delay
+                    return sendTransfer(
+                        spamTransfers[0].address,
+                        depth,
+                        minWeightMagnitude,
+                        spamTransfers,
+                        sendTransferOptions
                     )
-                } else {
-                    return [...spamTransactions]
-                }
-            })
-            .asCallback(typeof arguments[4] === 'function' ? arguments[4] : callback)
+                })
+                .then(async transactions => {
+                    spamTransactions.push([...transactions])
+
+                    if (options && delay) {
+                        if (
+                            options.interrupt === true ||
+                            (typeof options.interrupt === 'function' && (await options.interrupt()))
+                        ) {
+                            return [...spamTransactions]
+                        }
+
+                        setTimeout(promote, delay)
+                    } else {
+                        return [...spamTransactions]
+                    }
+                })
+                .asCallback(callback)
+
+        return promote()
     }
 }
