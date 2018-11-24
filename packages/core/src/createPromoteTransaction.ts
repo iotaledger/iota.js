@@ -75,8 +75,8 @@ export const createPromoteTransaction = (provider: Provider, attachFn?: AttachTo
         minWeightMagnitude: number,
         spamTransfers: ReadonlyArray<Transfer> = generateSpam(),
         options?: Partial<PromoteTransactionOptions>,
-        callback?: Callback<ReadonlyArray<Transaction>>
-    ): Bluebird<Maybe<ReadonlyArray<Transaction>>> {
+        callback?: Callback<ReadonlyArray<ReadonlyArray<Transaction>>>
+    ): Bluebird<Maybe<ReadonlyArray<ReadonlyArray<Transaction>>>> {
         // Switch arguments
         if (typeof options === 'undefined') {
             options = {}
@@ -86,7 +86,7 @@ export const createPromoteTransaction = (provider: Provider, attachFn?: AttachTo
         }
 
         const { delay, interrupt } = getPromoteTransactionOptions(options)
-        const spamTransactions: Transaction[] = []
+        const spamTransactions: Array<ReadonlyArray<Transaction>> = []
         const sendTransferOptions = {
             ...getPrepareTransfersOptions({}),
             reference: tailTransaction,
@@ -114,7 +114,7 @@ export const createPromoteTransaction = (provider: Provider, attachFn?: AttachTo
                 )
             })
             .then(async transactions => {
-                spamTransactions.concat(transactions)
+                spamTransactions.push([...transactions])
 
                 if (delay) {
                     if (interrupt === true || (typeof interrupt === 'function' && (await interrupt()))) {
