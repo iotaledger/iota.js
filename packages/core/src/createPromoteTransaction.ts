@@ -113,19 +113,21 @@ export const createPromoteTransaction = (provider: Provider, attachFn?: AttachTo
                 )
             })
             .then(async transactions => {
-                if (
-                    (delay && delay > 0) ||
-                    interrupt === true ||
-                    (typeof interrupt === 'function' && (await interrupt()))
-                ) {
-                    spamTransactions.push(...transactions)
+                spamTransactions.concat(transactions)
 
-                    setTimeout(() => {
-                        promoteTransaction(tailTransaction, depth, minWeightMagnitude, spamTransfers, {
-                            delay,
-                            interrupt,
-                        })
-                    }, delay)
+                if (delay) {
+                    if (interrupt === true || (typeof interrupt === 'function' && (await interrupt()))) {
+                        return [...spamTransactions]
+                    }
+
+                    setTimeout(
+                        () =>
+                            promoteTransaction(tailTransaction, depth, minWeightMagnitude, spamTransfers, {
+                                delay,
+                                interrupt,
+                            }),
+                        delay
+                    )
                 } else {
                     return [...spamTransactions]
                 }
