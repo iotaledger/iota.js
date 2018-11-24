@@ -80,7 +80,7 @@ export function returnType<T>(func: Func<T>) {
  * @memberof module:core
  *
  * @param {object} [settings={}] - Connection settings
- * @param {Provider} [settings.network] - Network provider defaults to `http-client`.
+ * @param {Provider} [settings.network] - Network provider, defaults to `http-client`.
  * @param {string} [settings.provider=http://localhost:14265] Uri of IRI node
  * @param {function} [settings.attachToTangle] - Function to override
  * [`attachToTangle`]{@link #module_core.attachToTangle} with
