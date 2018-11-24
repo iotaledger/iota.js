@@ -95,6 +95,7 @@ export const createPromoteTransaction = (provider: Provider, attachFn?: AttachTo
         return Bluebird.resolve(
             validate(
                 hashValidator(tailTransaction),
+                [delay, n => typeof n === 'function' || (typeof n === 'number' && n >= 0), errors.INVALID_DELAY],
                 !!spamTransfers && arrayValidator(transferValidator)(spamTransfers)
             )
         )
