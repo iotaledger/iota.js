@@ -119,7 +119,7 @@ yarn add @iota/core
 
     -   [.createPromoteTransaction(provider, [attachFn])](#module_core.createPromoteTransaction)
 
-    -   [.promoteTransaction(tail, depth, minWeightMagnitude, transfer, [options], [callback])](#module_core.promoteTransaction)
+    -   [.promoteTransaction(tail, depth, minWeightMagnitude, [spamTransfers], [options], [callback])](#module_core.promoteTransaction)
 
     -   [.createRemoveNeighbors(provider)](#module_core.createRemoveNeighbors)
 
@@ -1202,7 +1202,7 @@ This will allow for reattachments and prevent key reuse if trytes can't be recov
 **Returns**: <code>function</code> - [`promoteTransaction`](#module_core.promoteTransaction)  
 <a name="module_core.promoteTransaction"></a>
 
-### _core_.promoteTransaction(tail, depth, minWeightMagnitude, transfer, [options], [callback])
+### _core_.promoteTransaction(tail, depth, minWeightMagnitude, [spamTransfers], [options], [callback])
 
 **Fulfil**: <code>Transaction[]</code>  
 **Reject**: <code>Error</code>
@@ -1210,18 +1210,18 @@ This will allow for reattachments and prevent key reuse if trytes can't be recov
 -   `INCONSISTENT SUBTANGLE`: In this case promotion has no effect and reatchment is required.
 -   Fetch error
 
-| Param               | Type                                          | Description                                                         |
-| ------------------- | --------------------------------------------- | ------------------------------------------------------------------- |
-| tail                | <code>string</code>                           |                                                                     |
-| depth               | <code>int</code>                              |                                                                     |
-| minWeightMagnitude  | <code>int</code>                              |                                                                     |
-| transfer            | <code>array</code>                            |                                                                     |
-| [options]           | <code>object</code>                           |                                                                     |
-| [options.delay]     | <code>number</code>                           | Delay between spam transactions in `ms`                             |
-| [options.interrupt] | <code>boolean</code> \| <code>function</code> | Interrupt signal, which can be a function that evaluates to boolean |
-| [callback]          | <code>function</code>                         |                                                                     |
+| Param               | Type                                          | Description                                                                                       |
+| ------------------- | --------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| tail                | <code>string</code>                           |                                                                                                   |
+| depth               | <code>int</code>                              |                                                                                                   |
+| minWeightMagnitude  | <code>int</code>                              |                                                                                                   |
+| [spamTransfers]     | <code>array</code>                            | Array of spam transfers to promote with. By default it will issue an all-9s, zero-value transfer. |
+| [options]           | <code>object</code>                           |                                                                                                   |
+| [options.delay]     | <code>number</code>                           | Delay between spam transactions in `ms`                                                           |
+| [options.interrupt] | <code>boolean</code> \| <code>function</code> | Interrupt signal, which can be a function that evaluates to boolean                               |
+| [callback]          | <code>function</code>                         |                                                                                                   |
 
-Promotes a transaction by adding other transactions (spam by default) on top of it.
+Promotes a transaction by adding zero-value spam transactions on top of it.
 Will promote `maximum` transfers on top of the current one with `delay` interval. Promotion
 is interruptable through `interrupt` option.
 

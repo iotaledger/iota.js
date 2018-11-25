@@ -1,31 +1,29 @@
 import * as Bluebird from 'bluebird'
 import * as errors from '../../errors'
 import { arrayValidator, hashValidator, transferValidator, validate } from '../../guards'
-import { AttachToTangle, Callback, getOptionsWithDefaults, Maybe, Provider, Transaction, Transfer } from '../../types'
+import { AttachToTangle, Callback, Maybe, Provider, Transaction, Transfer } from '../../types'
 import { createCheckConsistency } from './'
 import { getPrepareTransfersOptions } from './createPrepareTransfers'
 import { createSendTransfer } from './createSendTransfer'
 
 export interface PromoteTransactionOptions {
     readonly delay: number
-    interrupt: boolean | (() => void)
+    interrupt: boolean | (() => boolean)
 }
 
 const defaults: PromoteTransactionOptions = {
-    delay: 1000,
+    delay: 0,
     interrupt: false,
 }
 
-export const getPromoteTransactionOptions = getOptionsWithDefaults(defaults)
-
-export const spammer = (): Transfer => ({
+export const spam = {
     address: '9'.repeat(81),
     value: 0,
     tag: '9'.repeat(27),
     message: '9'.repeat(27 * 81),
-})
+}
 
-export const generateSpam = (n: number = 1): ReadonlyArray<Transfer> => new Array(n).map(spammer)
+export const generateSpam = (n: number = 1): ReadonlyArray<Transfer> => new Array(n).fill(spam)
 
 /**
  * @method createPromoteTransaction
@@ -44,7 +42,7 @@ export const createPromoteTransaction = (provider: Provider, attachFn?: AttachTo
     const sendTransfer = createSendTransfer(provider, attachFn)
 
     /**
-     * Promotes a transaction by adding other transactions (spam by default) on top of it.
+     * Promotes a transaction by adding zero-value spam transactions on top of it.
      * Will promote `maximum` transfers on top of the current one with `delay` interval. Promotion
      * is interruptable through `interrupt` option.
      *
@@ -55,7 +53,8 @@ export const createPromoteTransaction = (provider: Provider, attachFn?: AttachTo
      * @param {string} tail
      * @param {int} depth
      * @param {int} minWeightMagnitude
-     * @param {array} transfer
+     * @param {array} [spamTransfers] - Array of spam transfers to promote with.
+     * By default it will issue an all-9s, zero-value transfer.
      * @param {object} [options]
      * @param {number} [options.delay] - Delay between spam transactions in `ms`
      * @param {boolean|function} [options.interrupt] - Interrupt signal, which can be a function that evaluates
@@ -74,58 +73,66 @@ export const createPromoteTransaction = (provider: Provider, attachFn?: AttachTo
         minWeightMagnitude: number,
         spamTransfers: ReadonlyArray<Transfer> = generateSpam(),
         options?: Partial<PromoteTransactionOptions>,
-        callback?: Callback<ReadonlyArray<Transaction>>
-    ): Bluebird<Maybe<ReadonlyArray<Transaction>>> {
+        callback?: Callback<ReadonlyArray<ReadonlyArray<Transaction>>>
+    ): Bluebird<Maybe<ReadonlyArray<ReadonlyArray<Transaction>>>> {
         // Switch arguments
-        if (typeof options === 'undefined') {
-            options = {}
+        if (!options) {
+            options = { ...defaults }
         } else if (typeof options === 'function') {
             callback = options
-            options = {}
+            options = { ...defaults }
         }
 
-        const { delay, interrupt } = getPromoteTransactionOptions(options)
-        const spamTransactions: Transaction[] = []
+        const spamTransactions: Array<ReadonlyArray<Transaction>> = []
         const sendTransferOptions = {
             ...getPrepareTransfersOptions({}),
             reference: tailTransaction,
         }
 
+        const timeout = options.delay
+        const delay = () => new Promise(resolve => setTimeout(resolve, timeout))
+
+        const promote = (): Promise<ReadonlyArray<ReadonlyArray<Transaction>>> =>
+            delay()
+                .then(() => checkConsistency(tailTransaction, { rejectWithReason: true }))
+                .then(consistent => {
+                    if (!consistent) {
+                        throw new Error(errors.INCONSISTENT_SUBTANGLE)
+                    }
+
+                    return sendTransfer(
+                        spamTransfers[0].address,
+                        depth,
+                        minWeightMagnitude,
+                        spamTransfers,
+                        sendTransferOptions
+                    )
+                })
+                .then(async transactions => {
+                    spamTransactions.push([...transactions])
+
+                    if (options && timeout) {
+                        if (
+                            options.interrupt === true ||
+                            (typeof options.interrupt === 'function' && (await options.interrupt()))
+                        ) {
+                            return [...spamTransactions]
+                        }
+
+                        return promote()
+                    } else {
+                        return [...spamTransactions]
+                    }
+                })
+
         return Bluebird.resolve(
-            validate(hashValidator(tailTransaction), arrayValidator(transferValidator)(spamTransfers))
+            validate(
+                hashValidator(tailTransaction),
+                [delay, n => typeof n === 'function' || (typeof n === 'number' && n >= 0), errors.INVALID_DELAY],
+                !!spamTransfers && arrayValidator(transferValidator)(spamTransfers)
+            )
         )
-            .then(() => checkConsistency(tailTransaction, { rejectWithReason: true }))
-            .then(consistent => {
-                if (!consistent) {
-                    throw new Error(errors.INCONSISTENT_SUBTANGLE)
-                }
-
-                return sendTransfer(
-                    spamTransfers[0].address,
-                    depth,
-                    minWeightMagnitude,
-                    spamTransfers,
-                    sendTransferOptions
-                )
-            })
-            .then(async transactions => {
-                if (
-                    (delay && delay > 0) ||
-                    interrupt === true ||
-                    (typeof interrupt === 'function' && (await interrupt()))
-                ) {
-                    spamTransactions.push(...transactions)
-
-                    setTimeout(() => {
-                        promoteTransaction(tailTransaction, depth, minWeightMagnitude, spamTransfers, {
-                            delay,
-                            interrupt,
-                        })
-                    }, delay)
-                } else {
-                    return [...spamTransactions]
-                }
-            })
-            .asCallback(typeof arguments[4] === 'function' ? arguments[4] : callback)
+            .then(promote)
+            .asCallback(callback)
     }
 }

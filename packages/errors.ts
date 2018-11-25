@@ -30,7 +30,7 @@ export const INVALID_ATTACHED_TRYTES = 'Invalid attached trytes'
 export const INVALID_TRANSACTION_HASH = 'Invalid transaction hash'
 export const INVALID_TAIL_TRANSACTION = 'Invalid tail transaction'
 export const INVALID_THRESHOLD = 'Invalid threshold option'
-export const INVALID_TRANSFER = 'Invalid transfer object'
+export const INVALID_TRANSFER = 'Invalid transfer array'
 export const INVALID_TRUNK_TRANSACTION = 'Invalid trunk transaction'
 export const INVALID_REFERENCE_HASH = 'Invalid reference hash'
 export const INVALID_TRYTES = 'Invalid trytes'
@@ -44,3 +44,4 @@ export const INVALID_TRANSACTIONS_TO_APPROVE = 'Invalid transactions to approve.
 export const NO_INPUTS = 'Could not find any available inputs.'
 export const invalidChecksum = (address: string) => `Invalid Checksum: ${address}`
 export const inconsistentTransaction = (reason: string) => `Transaction is inconsistent. Reason: ${reason}`
+export const INVALID_DELAY = 'Invalid delay.'
