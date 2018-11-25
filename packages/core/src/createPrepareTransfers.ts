@@ -156,11 +156,7 @@ export const createPrepareTransfers = (provider?: Provider, now: () => number = 
                 transactions: [],
                 trytes: [],
                 seed,
-                transfers: transfers.map(transfer => ({
-                    ...transfer,
-                    message: transfer.message || '',
-                    tag: transfer.tag || '',
-                })),
+                transfers,
                 timestamp: Math.floor((typeof now === 'function' ? now() : Date.now()) / 1000),
                 ...getPrepareTransfersOptions(options),
             })
@@ -208,7 +204,7 @@ export const addHMACPlaceholder = (props: PrepareTransfersProps): PrepareTransfe
                       transfer.value > 0
                           ? {
                                 ...transfer,
-                                message: NULL_HASH_TRYTES + transfer.message,
+                                message: NULL_HASH_TRYTES + (transfer.message || ''),
                             }
                           : transfer
               ),
