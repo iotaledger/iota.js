@@ -88,16 +88,12 @@ export const createPromoteTransaction = (provider: Provider, attachFn?: AttachTo
             ...getPrepareTransfersOptions({}),
             reference: tailTransaction,
         }
-        const delay = options.delay
 
-        const promote = () =>
-            Bluebird.resolve(
-                validate(
-                    hashValidator(tailTransaction),
-                    [delay, n => typeof n === 'function' || (typeof n === 'number' && n >= 0), errors.INVALID_DELAY],
-                    !!spamTransfers && arrayValidator(transferValidator)(spamTransfers)
-                )
-            )
+        const timeout = options.delay
+        const delay = () => new Promise(resolve => setTimeout(resolve, timeout))
+
+        const promote = (): Promise<ReadonlyArray<ReadonlyArray<Transaction>>> =>
+            delay()
                 .then(() => checkConsistency(tailTransaction, { rejectWithReason: true }))
                 .then(consistent => {
                     if (!consistent) {
@@ -115,7 +111,7 @@ export const createPromoteTransaction = (provider: Provider, attachFn?: AttachTo
                 .then(async transactions => {
                     spamTransactions.push([...transactions])
 
-                    if (options && delay) {
+                    if (options && timeout) {
                         if (
                             options.interrupt === true ||
                             (typeof options.interrupt === 'function' && (await options.interrupt()))
@@ -123,13 +119,20 @@ export const createPromoteTransaction = (provider: Provider, attachFn?: AttachTo
                             return [...spamTransactions]
                         }
 
-                        setTimeout(promote, delay)
+                        return promote()
                     } else {
                         return [...spamTransactions]
                     }
                 })
-                .asCallback(callback)
 
-        return promote()
+        return Bluebird.resolve(
+            validate(
+                hashValidator(tailTransaction),
+                [delay, n => typeof n === 'function' || (typeof n === 'number' && n >= 0), errors.INVALID_DELAY],
+                !!spamTransfers && arrayValidator(transferValidator)(spamTransfers)
+            )
+        )
+            .then(promote)
+            .asCallback(callback)
     }
 }
