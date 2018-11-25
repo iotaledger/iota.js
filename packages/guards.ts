@@ -206,7 +206,11 @@ export const arrayValidator = <T>(validator: Validator<T>, allowEmpty = false): 
         msg,
     ] = validator(arr[0])
 
-    return [arr, (x: ReadonlyArray<any>): x is ReadonlyArray<T> => x.every(value => isValid(value)), customMsg || msg]
+    return [
+        arr,
+        (x: ReadonlyArray<any>): x is ReadonlyArray<T> => Array.isArray(x) && x.every(value => isValid(value)),
+        customMsg || msg,
+    ]
 }
 
 export const depthValidator: Validator<number> = depth => [
