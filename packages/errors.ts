@@ -44,3 +44,4 @@ export const INVALID_TRANSACTIONS_TO_APPROVE = 'Invalid transactions to approve.
 export const NO_INPUTS = 'Could not find any available inputs.'
 export const invalidChecksum = (address: string) => `Invalid Checksum: ${address}`
 export const inconsistentTransaction = (reason: string) => `Transaction is inconsistent. Reason: ${reason}`
+export const INVALID_DELAY = 'Invalid delay.'
