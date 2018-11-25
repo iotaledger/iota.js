@@ -151,6 +151,10 @@ export const createPrepareTransfers = (provider?: Provider, now: () => number = 
             }
         }
 
+        if (!(transfers instanceof Array)) {
+            throw new Error('Invalid transfers array')
+        }
+
         const props = Promise.resolve(
             validatePrepareTransfers({
                 transactions: [],

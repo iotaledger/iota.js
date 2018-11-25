@@ -101,3 +101,16 @@ test.cb('prepareTransfers() passes correct arguments to callback', t => {
         t.end()
     })
 })
+
+test('prepareTransfers() throws intuitive error when provided invalid transfers array', async t => {
+    const invalidTransfers = {
+        address: addChecksum('A'.repeat(81)),
+        value: 3,
+    } as any
+
+    t.is(
+        t.throws(() => prepareTransfers('SEED', invalidTransfers)).message,
+        'Invalid transfers array',
+        'prepareTransfers() should throw intuitive error when provided invalid transfers array'
+    )
+})
