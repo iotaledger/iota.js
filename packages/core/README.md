@@ -151,13 +151,14 @@ yarn add @iota/core
 
 ### _core_.composeApi([settings])
 
-| Param                       | Type                                         | Default                                         | Description                                                               |
-| --------------------------- | -------------------------------------------- | ----------------------------------------------- | ------------------------------------------------------------------------- |
-| [settings]                  | <code>object</code> \| <code>function</code> | <code>{}                                        | provider</code>                                                           | Connection settings or `provider` factory |
-| [settings.provider]         | <code>string</code>                          | <code>&quot;http://localhost:14265&quot;</code> | Uri of IRI node                                                           |
-| [settings.attachToTangle]   | <code>function</code>                        |                                                 | Function to override [`attachToTangle`](#module_core.attachToTangle) with |
-| [settings.apiVersion]       | <code>string</code> \| <code>number</code>   | <code>1</code>                                  | IOTA Api version to be sent as `X-IOTA-API-Version` header.               |
-| [settings.requestBatchSize] | <code>number</code>                          | <code>1000</code>                               | Number of search values per request.                                      |
+| Param                       | Type                                       | Default                                         | Description                                                               |
+| --------------------------- | ------------------------------------------ | ----------------------------------------------- | ------------------------------------------------------------------------- |
+| [settings]                  | <code>object</code>                        | <code>{}</code>                                 | Connection settings                                                       |
+| [settings.network]          | <code>Provider</code>                      |                                                 | Network provider, defaults to `http-client`.                              |
+| [settings.provider]         | <code>string</code>                        | <code>&quot;http://localhost:14265&quot;</code> | Uri of IRI node                                                           |
+| [settings.attachToTangle]   | <code>function</code>                      |                                                 | Function to override [`attachToTangle`](#module_core.attachToTangle) with |
+| [settings.apiVersion]       | <code>string</code> \| <code>number</code> | <code>1</code>                                  | IOTA Api version to be sent as `X-IOTA-API-Version` header.               |
+| [settings.requestBatchSize] | <code>number</code>                        | <code>1000</code>                               | Number of search values per request.                                      |
 
 Composes API object from it's components
 
