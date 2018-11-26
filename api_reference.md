@@ -684,7 +684,7 @@ const isPromotable = ({ hash, attachmentTimestamp }) => (
 | [query.addresses] | <code>Array.&lt;Hash&gt;</code> | List of addresses |
 | [query.bundles] | <code>Array.&lt;Hash&gt;</code> | List of bundle hashes |
 | [query.tags] | <code>Array.&lt;Tag&gt;</code> | List of tags |
-| [query.addresses] | <code>Array.&lt;Hash&gt;</code> | List of approvees |
+| [query.approvees] | <code>Array.&lt;Hash&gt;</code> | List of approvees |
 | [callback] | <code>Callback</code> | Optional callback |
 
 Wrapper function for [`findTransactions`](#module_core.findTransactions) and
