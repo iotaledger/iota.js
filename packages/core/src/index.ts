@@ -2,6 +2,19 @@
 
 // IRI commands
 export {
+    Address,
+    Transfer,
+    Bundle,
+    Transaction,
+    Inputs,
+    Balance,
+    Neighbor,
+    Neighbors,
+    BaseCommand,
+    IRICommand,
+    AttachToTangle,
+    Callback,
+    Provider,
     AddNeighborsCommand,
     AddNeighborsResponse,
     AttachToTangleCommand,

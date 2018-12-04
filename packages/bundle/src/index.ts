@@ -26,6 +26,8 @@ export interface BundleEntry {
     readonly signatureMessageFragments: ReadonlyArray<Trytes>
 }
 
+export { Transaction, Bundle }
+
 const getEntryWithDefaults = (entry: Partial<BundleEntry>): BundleEntry => ({
     length: entry.length || 1,
     address: entry.address || NULL_HASH_TRYTES,

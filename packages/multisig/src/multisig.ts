@@ -19,6 +19,8 @@ import {
 import { Bundle, Callback, Provider, Transaction, Transfer } from '../../types'
 import Address from './address'
 
+export { Bundle, Callback, Provider, Transaction, Transfer }
+
 export interface MultisigInput {
     readonly address: string
     readonly balance: number
