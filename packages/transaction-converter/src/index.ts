@@ -8,6 +8,8 @@ import { isTrytesOfExactLength } from '../../guards'
 import '../../typed-array'
 import { asArray, Hash, Transaction, Trytes } from '../../types'
 
+export { Transaction }
+
 export function asTransactionTrytes(transactions: Transaction): Trytes
 export function asTransactionTrytes(transactions: ReadonlyArray<Transaction>): ReadonlyArray<Trytes>
 /**

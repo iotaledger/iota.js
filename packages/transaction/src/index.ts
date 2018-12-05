@@ -17,6 +17,8 @@ import {
     TRANSACTION_TRYTES_SIZE,
 } from './constants'
 
+export { Transaction }
+
 /**
  * Calculates the transaction hash out of 8019 transaction trits.
  *
