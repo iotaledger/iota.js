@@ -9,6 +9,7 @@ matrix:
         - npm i
       script:
         - npm run test-ci
+        - commitlint-travis
     - language: android
       name: Android
       android:
