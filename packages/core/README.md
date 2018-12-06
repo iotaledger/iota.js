@@ -63,7 +63,7 @@ yarn add @iota/core
 
     -   [.createGetBalances(provider)](#module_core.createGetBalances)
 
-    -   [.getBalances(addresses, threshold, [callback])](#module_core.getBalances)
+    -   [.getBalances(addresses, threshold, [tips], [callback])](#module_core.getBalances)
 
     -   [.createGetBundle(provider)](#module_core.createGetBundle)
 
@@ -591,7 +591,7 @@ getAccountData(seed, {
 **Returns**: <code>function</code> - [`getBalances`](#module_core.getBalances)  
 <a name="module_core.getBalances"></a>
 
-### _core_.getBalances(addresses, threshold, [callback])
+### _core_.getBalances(addresses, threshold, [tips], [callback])
 
 **Fulfil**: <code>Balances</code> Object with list of `balances` and corresponding `milestone`  
 **Reject**: <code>Error</code>
@@ -600,11 +600,12 @@ getAccountData(seed, {
 -   `INVALID_THRESHOLD`: Invalid `threshold`
 -   Fetch error
 
-| Param      | Type                            | Description                                            |
-| ---------- | ------------------------------- | ------------------------------------------------------ |
-| addresses  | <code>Array.&lt;Hash&gt;</code> | List of addresses                                      |
-| threshold  | <code>number</code>             | Confirmation threshold, currently `100` should be used |
-| [callback] | <code>Callback</code>           | Optional callback                                      |
+| Param      | Type                            | Description                                                              |
+| ---------- | ------------------------------- | ------------------------------------------------------------------------ |
+| addresses  | <code>Array.&lt;Hash&gt;</code> | List of addresses                                                        |
+| threshold  | <code>number</code>             | Confirmation threshold, currently `100` should be used                   |
+| [tips]     | <code>Array.&lt;Hash&gt;</code> | List of tips to calculate the balance from the PoV of these transactions |
+| [callback] | <code>Callback</code>           | Optional callback                                                        |
 
 Fetches _confirmed_ balances of given addresses at the latest solid milestone,
 by calling [`getBalances`](https://docs.iota.works/iri/api#endpoints/getBalances) command.
