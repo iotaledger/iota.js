@@ -16,6 +16,8 @@ export const getBalancesCommand: GetBalancesCommand = {
     threshold: 100,
 }
 
+export const getBalancesCommandWithTips: GetBalancesCommand = { ...getBalancesCommand, tips: ['M'.repeat(81)] }
+
 export const balancesResponse = {
     balances: [99, 0, 1],
     milestone: 'M'.repeat(81),
@@ -25,6 +27,11 @@ export const balancesResponse = {
 export const getBalancesNock = nock('http://localhost:14265', headers)
     .persist()
     .post('/', getBalancesCommand)
+    .reply(200, balancesResponse)
+
+export const getBalancesNockWithTips = nock('http://localhost:14265', headers)
+    .persist()
+    .post('/', getBalancesCommandWithTips)
     .reply(200, balancesResponse)
 
 nock('http://localhost:14265', headers)

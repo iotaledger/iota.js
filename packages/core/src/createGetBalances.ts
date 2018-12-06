@@ -1,4 +1,5 @@
 import { removeChecksum } from '@iota/checksum'
+import { transactionHashValidator } from '@iota/transaction'
 import * as Promise from 'bluebird'
 import * as errors from '../../errors'
 import { arrayValidator, getBalancesThresholdValidator, hashValidator, validate } from '../../guards'
@@ -35,6 +36,7 @@ export const createGetBalances = ({ send }: Provider) =>
      *
      * @param {Hash[]} addresses - List of addresses
      * @param {number} threshold - Confirmation threshold, currently `100` should be used
+     * @param {Hash[]} [tips] - List of tips to calculate the balance from the PoV of these transactions
      * @param {Callback} [callback] - Optional callback
      *
      * @return {Promise}
@@ -44,11 +46,27 @@ export const createGetBalances = ({ send }: Provider) =>
      * - `INVALID_THRESHOLD`: Invalid `threshold`
      * - Fetch error
      */
-    (addresses: ReadonlyArray<Hash>, threshold: number, callback?: Callback<Balances>): Promise<Balances> =>
-        Promise.resolve(
+    (
+        addresses: ReadonlyArray<Hash>,
+        threshold: number,
+        tips?: Array<Hash>,
+        callback?: Callback<Balances>
+    ): Promise<Balances> => {
+        // If no tips are provided, switch arguments
+        if (tips && typeof tips === 'function') {
+            callback = tips
+            tips = []
+        }
+
+        return Promise.resolve(
             validate(
-                arrayValidator(hashValidator)(addresses, errors.INVALID_ADDRESS),
-                getBalancesThresholdValidator(threshold)
+                ...[
+                    ...[
+                        arrayValidator(hashValidator)(addresses, errors.INVALID_ADDRESS),
+                        getBalancesThresholdValidator(threshold),
+                    ],
+                    ...(tips && tips.length ? [arrayValidator(transactionHashValidator)(tips)] : []),
+                ]
             )
         )
             .then(() =>
@@ -56,6 +74,7 @@ export const createGetBalances = ({ send }: Provider) =>
                     command: IRICommand.GET_BALANCES,
                     addresses: removeChecksum(addresses), // Addresses passed to IRI should not have the checksum
                     threshold,
+                    ...(tips && tips.length && { tips }),
                 })
             )
             .then(res => ({
@@ -63,3 +82,4 @@ export const createGetBalances = ({ send }: Provider) =>
                 balances: res.balances.map(balance => parseInt(balance, 10)),
             }))
             .asCallback(callback)
+    }
