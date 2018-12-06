@@ -49,7 +49,7 @@ export const createGetBalances = ({ send }: Provider) =>
     (
         addresses: ReadonlyArray<Hash>,
         threshold: number,
-        tips?: Array<Hash>,
+        tips?: Hash[],
         callback?: Callback<Balances>
     ): Promise<Balances> => {
         // If no tips are provided, switch arguments
