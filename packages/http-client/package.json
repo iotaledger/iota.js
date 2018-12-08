@@ -70,6 +70,6 @@
     },
     "devDependencies": {
         "@types/nock": "^9.1.2",
-        "nock": "^10.0.1"
+        "nock": "^10.0.4"
     }
 }
