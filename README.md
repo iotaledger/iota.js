@@ -124,125 +124,125 @@ iota.prepareTransfers(seed, transfers)
 For details on all available API methods, see the [reference page](api_reference.md).
 
 
-    * [.composeApi([settings])](api-reference.md#module_core.composeApi)
+* [.composeApi([settings])](api-reference.md#module_core.composeApi)
 
-    * [.createAddNeighbors(provider)](api-reference.md#module_core.createAddNeighbors)
+* [.createAddNeighbors(provider)](api-reference.md#module_core.createAddNeighbors)
 
-    * [.addNeighbors(uris, [callback])](api-reference.md#module_core.addNeighbors)
+* [.addNeighbors(uris, [callback])](api-reference.md#module_core.addNeighbors)
 
-    * [.createAttachToTangle(provider)](api-reference.md#module_core.createAttachToTangle)
+* [.createAttachToTangle(provider)](api-reference.md#module_core.createAttachToTangle)
 
-    * [.attachToTangle(trunkTransaction, branchTransaction, minWeightMagnitude, trytes, [callback])](api-reference.md#module_core.attachToTangle)
+* [.attachToTangle(trunkTransaction, branchTransaction, minWeightMagnitude, trytes, [callback])](api-reference.md#module_core.attachToTangle)
 
-    * [.createBroadcastBundle(provider)](api-reference.md#module_core.createBroadcastBundle)
+* [.createBroadcastBundle(provider)](api-reference.md#module_core.createBroadcastBundle)
 
-    * [.broadcastBundle(tailTransactionHash, [callback])](api-reference.md#module_core.broadcastBundle)
+* [.broadcastBundle(tailTransactionHash, [callback])](api-reference.md#module_core.broadcastBundle)
 
-    * [.createBroadcastTransactions(provider)](api-reference.md#module_core.createBroadcastTransactions)
+* [.createBroadcastTransactions(provider)](api-reference.md#module_core.createBroadcastTransactions)
 
-    * [.broadcastTransactions(trytes, [callback])](api-reference.md#module_core.broadcastTransactions)
+* [.broadcastTransactions(trytes, [callback])](api-reference.md#module_core.broadcastTransactions)
 
-    * [.createCheckConsistency(provider)](api-reference.md#module_core.createCheckConsistency)
+* [.createCheckConsistency(provider)](api-reference.md#module_core.createCheckConsistency)
 
-    * [.checkConsistency(transactions, [options], [callback])](api-reference.md#module_core.checkConsistency)
+* [.checkConsistency(transactions, [options], [callback])](api-reference.md#module_core.checkConsistency)
 
-    * [.createFindTransactionObjects(provider)](api-reference.md#module_core.createFindTransactionObjects)
+* [.createFindTransactionObjects(provider)](api-reference.md#module_core.createFindTransactionObjects)
 
-    * [.findTransactionObjects(query, [callback])](api-reference.md#module_core.findTransactionObjects)
+* [.findTransactionObjects(query, [callback])](api-reference.md#module_core.findTransactionObjects)
 
-    * [.createFindTransactions(provider)](api-reference.md#module_core.createFindTransactions)
+* [.createFindTransactions(provider)](api-reference.md#module_core.createFindTransactions)
 
-    * [.findTransactions(query, [callback])](api-reference.md#module_core.findTransactions)
+* [.findTransactions(query, [callback])](api-reference.md#module_core.findTransactions)
 
-    * [.createGetAccountData(provider)](api-reference.md#module_core.createGetAccountData)
+* [.createGetAccountData(provider)](api-reference.md#module_core.createGetAccountData)
 
-    * [.getAccountData(seed, options, [callback])](api-reference.md#module_core.getAccountData)
+* [.getAccountData(seed, options, [callback])](api-reference.md#module_core.getAccountData)
 
-    * [.createGetBalances(provider)](api-reference.md#module_core.createGetBalances)
+* [.createGetBalances(provider)](api-reference.md#module_core.createGetBalances)
 
-    * [.getBalances(addresses, threshold, [callback])](api-reference.md#module_core.getBalances)
+* [.getBalances(addresses, threshold, [callback])](api-reference.md#module_core.getBalances)
 
-    * [.createGetBundle(provider)](api-reference.md#module_core.createGetBundle)
+* [.createGetBundle(provider)](api-reference.md#module_core.createGetBundle)
 
-    * [.getBundle(tailTransactionHash, [callback])](api-reference.md#module_core.getBundle)
+* [.getBundle(tailTransactionHash, [callback])](api-reference.md#module_core.getBundle)
 
-    * [.createGetInclusionStates(provider)](api-reference.md#module_core.createGetInclusionStates)
+* [.createGetInclusionStates(provider)](api-reference.md#module_core.createGetInclusionStates)
 
-    * [.getInclusionStates(transactions, tips, [callback])](api-reference.md#module_core.getInclusionStates)
+* [.getInclusionStates(transactions, tips, [callback])](api-reference.md#module_core.getInclusionStates)
 
-    * [.createGetInputs(provider)](api-reference.md#module_core.createGetInputs)
+* [.createGetInputs(provider)](api-reference.md#module_core.createGetInputs)
 
-    * [.getInputs(seed, [options], [callback])](api-reference.md#module_core.getInputs)
+* [.getInputs(seed, [options], [callback])](api-reference.md#module_core.getInputs)
 
-    * [.createGetLatestInclusion(provider)](api-reference.md#module_core.createGetLatestInclusion)
+* [.createGetLatestInclusion(provider)](api-reference.md#module_core.createGetLatestInclusion)
 
-    * [.getLatestInclusion(transactions, tips, [callback])](api-reference.md#module_core.getLatestInclusion)
+* [.getLatestInclusion(transactions, tips, [callback])](api-reference.md#module_core.getLatestInclusion)
 
-    * [.createGetNeighbors(provider)](api-reference.md#module_core.createGetNeighbors)
+* [.createGetNeighbors(provider)](api-reference.md#module_core.createGetNeighbors)
 
-    * [.getNeighbors([callback])](api-reference.md#module_core.getNeighbors)
+* [.getNeighbors([callback])](api-reference.md#module_core.getNeighbors)
 
-    * [.createGetNewAddress(provider)](api-reference.md#module_core.createGetNewAddress)
+* [.createGetNewAddress(provider)](api-reference.md#module_core.createGetNewAddress)
 
-    * [.getNewAddress(seed, [options], [callback])](api-reference.md#module_core.getNewAddress)
+* [.getNewAddress(seed, [options], [callback])](api-reference.md#module_core.getNewAddress)
 
-    * [.createGetNodeInfo(provider)](api-reference.md#module_core.createGetNodeInfo)
+* [.createGetNodeInfo(provider)](api-reference.md#module_core.createGetNodeInfo)
 
-    * [.getNodeInfo([callback])](api-reference.md#module_core.getNodeInfo)
+* [.getNodeInfo([callback])](api-reference.md#module_core.getNodeInfo)
 
-    * [.createGetTips(provider)](api-reference.md#module_core.createGetTips)
+* [.createGetTips(provider)](api-reference.md#module_core.createGetTips)
 
-    * [.getTips([callback])](api-reference.md#module_core.getTips)
+* [.getTips([callback])](api-reference.md#module_core.getTips)
 
-    * [.createGetTransactionObjects(provider)](api-reference.md#module_core.createGetTransactionObjects)
+* [.createGetTransactionObjects(provider)](api-reference.md#module_core.createGetTransactionObjects)
 
-    * [.getTransactionObjects(hashes, [callback])](api-reference.md#module_core.getTransactionObjects)
+* [.getTransactionObjects(hashes, [callback])](api-reference.md#module_core.getTransactionObjects)
 
-    * [.createGetTransactionsToApprove(provider)](api-reference.md#module_core.createGetTransactionsToApprove)
+* [.createGetTransactionsToApprove(provider)](api-reference.md#module_core.createGetTransactionsToApprove)
 
-    * [.getTransactionsToApprove(depth, [reference], [callback])](api-reference.md#module_core.getTransactionsToApprove)
+* [.getTransactionsToApprove(depth, [reference], [callback])](api-reference.md#module_core.getTransactionsToApprove)
 
-    * [.createGetTrytes(provider)](api-reference.md#module_core.createGetTrytes)
+* [.createGetTrytes(provider)](api-reference.md#module_core.createGetTrytes)
 
-    * [.getTrytes(hashes, [callback])](api-reference.md#module_core.getTrytes)
+* [.getTrytes(hashes, [callback])](api-reference.md#module_core.getTrytes)
 
-    * [.createIsPromotable(provider, [depth])](api-reference.md#module_core.createIsPromotable)
+* [.createIsPromotable(provider, [depth])](api-reference.md#module_core.createIsPromotable)
 
-    * [.isPromotable(tail, [callback])](api-reference.md#module_core.isPromotable)
+* [.isPromotable(tail, [callback])](api-reference.md#module_core.isPromotable)
 
-    * [.createPrepareTransfers([provider])](api-reference.md#module_core.createPrepareTransfers)
+* [.createPrepareTransfers([provider])](api-reference.md#module_core.createPrepareTransfers)
 
-    * [.prepareTransfers(seed, transfers, [options], [callback])](api-reference.md#module_core.prepareTransfers)
+* [.prepareTransfers(seed, transfers, [options], [callback])](api-reference.md#module_core.prepareTransfers)
 
-    * [.createPromoteTransaction(provider, [attachFn])](api-reference.md#module_core.createPromoteTransaction)
+* [.createPromoteTransaction(provider, [attachFn])](api-reference.md#module_core.createPromoteTransaction)
 
-    * [.promoteTransaction(tail, depth, minWeightMagnitude, transfer, [options], [callback])](api-reference.md#module_core.promoteTransaction)
+* [.promoteTransaction(tail, depth, minWeightMagnitude, transfer, [options], [callback])](api-reference.md#module_core.promoteTransaction)
 
-    * [.createRemoveNeighbors(provider)](api-reference.md#module_core.createRemoveNeighbors)
+* [.createRemoveNeighbors(provider)](api-reference.md#module_core.createRemoveNeighbors)
 
-    * [.removeNeighbors(uris, [callback])](api-reference.md#module_core.removeNeighbors)
+* [.removeNeighbors(uris, [callback])](api-reference.md#module_core.removeNeighbors)
 
-    * [.createReplayBundle(provider)](api-reference.md#module_core.createReplayBundle)
+* [.createReplayBundle(provider)](api-reference.md#module_core.createReplayBundle)
 
-    * [.replayBundle(tail, depth, minWeightMagnitude, [callback])](api-reference.md#module_core.replayBundle)
+* [.replayBundle(tail, depth, minWeightMagnitude, [callback])](api-reference.md#module_core.replayBundle)
 
-    * [.createSendTrytes(provider)](api-reference.md#module_core.createSendTrytes)
+* [.createSendTrytes(provider)](api-reference.md#module_core.createSendTrytes)
 
-    * [.sendTrytes(trytes, depth, minWeightMagnitude, [reference], [callback])](api-reference.md#module_core.sendTrytes)
+* [.sendTrytes(trytes, depth, minWeightMagnitude, [reference], [callback])](api-reference.md#module_core.sendTrytes)
 
-    * [.createStoreAndBroadcast(provider)](api-reference.md#module_core.createStoreAndBroadcast)
+* [.createStoreAndBroadcast(provider)](api-reference.md#module_core.createStoreAndBroadcast)
 
-    * [.storeAndBroadcast(trytes, [callback])](api-reference.md#module_core.storeAndBroadcast)
+* [.storeAndBroadcast(trytes, [callback])](api-reference.md#module_core.storeAndBroadcast)
 
-    * [.createStoreTransactions(provider)](api-reference.md#module_core.createStoreTransactions)
+* [.createStoreTransactions(provider)](api-reference.md#module_core.createStoreTransactions)
 
-    * [.storeTransactions(trytes, [callback])](api-reference.md#module_core.storeTransactions)
+* [.storeTransactions(trytes, [callback])](api-reference.md#module_core.storeTransactions)
 
-    * [.createTraverseBundle(provider)](api-reference.md#module_core.createTraverseBundle)
+* [.createTraverseBundle(provider)](api-reference.md#module_core.createTraverseBundle)
 
-    * [.traverseBundle(trunkTransaction, [bundle], [callback])](api-reference.md#module_core.traverseBundle)
+* [.traverseBundle(trunkTransaction, [bundle], [callback])](api-reference.md#module_core.traverseBundle)
 
-    * [.generateAddress(seed, index, [security], [checksum])](api-reference.md#module_core.generateAddress)
+* [.generateAddress(seed, index, [security], [checksum])](api-reference.md#module_core.generateAddress)
 
 ## Supporting the project
 
