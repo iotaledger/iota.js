@@ -3,24 +3,43 @@
 
 [![Build Status](https://travis-ci.org/iotaledger/iota.js.svg)](https://travis-ci.org/iotaledger/iota.js) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/iotaledger/iota.lib.js/master/LICENSE)  [![Discord](https://img.shields.io/discord/102860784329052160.svg)](https://discord.gg/DTbJufa) [![Greenkeeper badge](https://badges.greenkeeper.io/iotaledger/iota.js.svg)](https://greenkeeper.io/)
 
----
+This is the **official** JavaScript client library, which allows you to do the following:
+* Create transactions
+* Sign transactions
+* Interact with an IRI node
+
+This is beta software, so there may be performance and stability issues.
+Please report any issues in our [issue tracker](https://github.com/iotaledger/iota.js/issues/new).
+
+|Table of contents|
+|:----|
+| [Prerequisites](#prerequisites)
+| [Downloading the library](#downloading-the-library)|
+| [Getting started](#getting-started) |
+| [Examples](#examples)|
+| [API reference](#api-reference)
+|[Supporting the project](#supporting-the-project)|
+|[Joining the discussion](#joining-the-discussion)|
+| [License](#license)|
+
+## Downloading the library
+
+To download the IOTA Java client library and its dependencies, you can use one of the following options:
+
+* Download the library with [npm](https://www.npmjs.com/)
+    ```bash
+    npm install @iota/core
+    ```
+* Download the library with [Yarn](https://yarnpkg.com/)
+    ```bash
+    yarn add @iota/core
+    ```
 
 ## Getting started
 
-### Installation
+After you've [downloaded the library](#downloading-the-library), you can connect to an IRI node to send transactions to it and interact with the ledger.
 
-Install using [npm](https://www.npmjs.org/):
-```
-npm install @iota/core
-```
-
-or using [yarn](https://yarnpkg.com/):
-
-```
-yarn add @iota/core
-```
-
-### Connecting to network
+To connect to a local IRI node, do the following:
 
 ```js
 import { composeAPI } from '@iota/core'
@@ -33,34 +52,34 @@ iota.getNodeInfo()
     .then(info => console.log(info))
     .catch(err => {})
 ```
+## Examples
 
-Composing custom client methods with network provider:
+As well as the following examples, you can take a look at our [examples folder](https://github.com/iotaledger/iota.js/tree/next/examples) for more.
 
-1. Install an IRI http client:
+### Creating custom API methods
 
-```
-npm install @iota/http-client
-```
+1. Install an IRI HTTP client:
 
-2. Create an api method with custom provider:
-```js
-import { createHttpClient } from '@iota/http-client'
-import { createGetNodeInfo } from '@iota/core'
+    ```bash
+    npm install @iota/http-client
+    ```
 
-const client = createHttpClient({
-    provider: 'http://localhost:14265'
-})
+2. Create an API method:
 
-const getNodeInfo = createGetNodeInfo(client)
-```
+    ```js
+    import { createHttpClient } from '@iota/http-client'
+    import { createGetNodeInfo } from '@iota/core'
 
-### Creating &amp; broadcasting transactions
+    const client = createHttpClient({
+        provider: 'http://localhost:14265'
+    })
 
-Publish transfers by calling [`prepareTransfers`](packages/core#module_core.prepareTransfers) and piping the 
-prepared trytes to [`sendTrytes`](packages/core#module_core.sendTrytes) command.
+    const getNodeInfo = createGetNodeInfo(client)
+    ```
 
-Feel free to use devnet and take advatage of [`PoWbox`](https://powbox.devnet.iota.org/) as well as 
-[`IOTA faucet`](https://faucet.devnet.iota.org/) during development.
+### Creating and broadcasting transactions
+
+This example shows you how to create and send a transaction to an IRI node by calling the [`prepareTransfers`](packages/core#module_core.prepareTransfers) method and piping the prepared bundle to the [`sendTrytes`](packages/core#module_core.sendTrytes) method.
 
 ```js
 // must be truly random & 81-trytes long
@@ -100,51 +119,50 @@ iota.prepareTransfers(seed, transfers)
     })
 ```
 
-## Documentation
+## API reference
 
-For details on all available API methods please see the [reference page](api_reference.md).
+For details on all available API methods, see the [reference page](api_reference.md).
 
-Documentation of IOTA protocol and [`IRI`](https://github.com/iotaledger/iri) http API can be found on [docs.iota.works](https://docs.iota.works).
+## Supporting the project
 
-## Contributing
+If the IOTA JavaScript client library has been useful to you and you feel like contributing, consider posting a [bug report][new-issue], [feature request][new-issue] or a [pull request][new-pull-request].  
+We have some [basic contribution guidelines][contribution-guidelines] to keep our code base stable and consistent.
 
-We thank everyone for their contributions. Here is quick guide to get started with iota.js monorepo:
+### Cloning and bootstraping the repository on GitHub
 
-### Clone and bootstrap
+1. Click the <kbd>Fork</kbd> button in the top-right corner
+2. Clone your fork and change directory into it
+3. Bootstrap your environment by doing the following:
 
-1. Fork the repo with <kbd>Fork</kbd> button at top right corner.
-2. Clone your fork locally and `cd` in it.
-3. Bootstrap your environment with:
+    ```bash
+    npm run init
+    ```
 
-```
-npm run init
-```
+This step will download all dependencies, build and link the packages together. iota.js uses [Lerna](https://lernajs.io/) to manage multiple packages. You can re-bootstrap your setup at any point with `lerna bootstrap` command.
 
-This will install all dependencies, build and link the packages together. iota.js uses [Lerna](https://lernajs.io/) to manage multiple packages. You can re-bootstrap your setup at any point with `lerna bootstrap` command.
+### Running tests
 
-### Run the tests
+Make your changes on a single package or across multiple packages and test the system by running the following from the root directory:
 
-Make your changes on a single or across multiple packages and test the system in integration. Run from the _root directory_:
-
-```
+```bash
 npm test
 ```
 
-To run tests of specific package just `cd` to the package directory and run `npm test` from there.
+To configure your editor to watch the tests running, add the `--watch` flag:
 
-You may also want to configure your editor to build the source uppon save and watch the tests running.
-Once building on save is setup, you can start watching tests with `npm test --watch` from each package directory.
+```bash
+npm test --watch`
+```
 
 ### Updating documentation
 
-Please update the documention when needed by editing [`JSDoc`](http://usejsdoc.org) annotations and running `npm run docs` from the _root directory_.
+Please update the documention when needed by editing [`JSDoc`](http://usejsdoc.org) annotations and running `npm run docs` from the root directory.
 
+## Joining the discussion
 
-## Reporting Issues
+If you want to get involved in the community, need help with getting setup, have any issues related with the library or just want to discuss blockchain, distributed ledgers, and IoT with other people, feel free to join our [Discord][iota-discord].  
+You can also ask questions on our dedicated [IOTA Forum][iota-forum].
 
-Please report any problems you encouter during development by [opening an issue](https://github.com/iotaledger/iota.lib.js/issues/new).
+## License
 
-## Join the discussion
-
-Suggestions and discussion around specs, standardization and enhancements are highly encouraged.
-You are invited to join the discussion on [IOTA Discord](https://discord.gg/DTbJufa).
+The license can be found [here](LICENSE).
