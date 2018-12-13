@@ -16,8 +16,8 @@ Please report any issues in our [issue tracker](https://github.com/iotaledger/io
 | [Prerequisites](#prerequisites)
 | [Downloading the library](#downloading-the-library)|
 | [Getting started](#getting-started) |
-| [Examples](#examples)|
 | [API reference](#api-reference)
+| [Examples](#examples)|
 |[Supporting the project](#supporting-the-project)|
 |[Joining the discussion](#joining-the-discussion)|
 | [License](#license)|
@@ -52,72 +52,7 @@ iota.getNodeInfo()
     .then(info => console.log(info))
     .catch(err => {})
 ```
-## Examples
 
-As well as the following examples, you can take a look at our [examples folder](https://github.com/iotaledger/iota.js/tree/next/examples) for more.
-
-### Creating custom API methods
-
-1. Install an IRI HTTP client:
-
-    ```bash
-    npm install @iota/http-client
-    ```
-
-2. Create an API method:
-
-    ```js
-    import { createHttpClient } from '@iota/http-client'
-    import { createGetNodeInfo } from '@iota/core'
-
-    const client = createHttpClient({
-        provider: 'http://localhost:14265'
-    })
-
-    const getNodeInfo = createGetNodeInfo(client)
-    ```
-
-### Creating and broadcasting transactions
-
-This example shows you how to create and send a transaction to an IRI node by calling the [`prepareTransfers`](packages/core#module_core.prepareTransfers) method and piping the prepared bundle to the [`sendTrytes`](packages/core#module_core.sendTrytes) method.
-
-```js
-// must be truly random & 81-trytes long
-const seed = ' your seed here '
-
-// Array of transfers which defines transfer recipients and value transferred in IOTAs.
-const transfers = [{
-    address: ' recipient address here ',
-    value: 1000, // 1Ki
-    tag: '', // optional tag of `0-27` trytes
-    message: '' // optional message in trytes
-}]
-
-// Depth or how far to go for tip selection entry point
-const depth = 3 
-
-// Difficulty of Proof-of-Work required to attach transaction to tangle.
-// Minimum value on mainnet & spamnet is `14`, `9` on devnet and other testnets.
-const minWeightMagnitude = 14
-
-// Prepare a bundle and signs it
-iota.prepareTransfers(seed, transfers)
-    .then(trytes => {
-        // Persist trytes locally before sending to network.
-        // This allows for reattachments and prevents key reuse if trytes can't
-        // be recovered by querying the network after broadcasting.
-
-        // Does tip selection, attaches to tangle by doing PoW and broadcasts.
-        return iota.sendTrytes(trytes, depth, minWeightMagnitude)
-    })
-    .then(bundle => {
-        console.log(`Published transaction with tail hash: ${bundle[0].hash}`)
-        console.log(`Bundle: ${bundle}`)
-    })
-    .catch(err => {
-        // catch any errors
-    })
-```
 
 ## API reference
 
@@ -192,11 +127,11 @@ For details on all available API methods, see the [reference page](api_reference
 
 * [.createGetTips(provider)](api_reference.md#module_core.createGetTips)
 
-* [.getTips([callback])](api_reference.md#module_core.getTips)
+* [getTips](api_reference.md#module_core.getTips)
 
-* [.createGetTransactionObjects(provider)](api_reference.md#module_core.createGetTransactionObjects)
+* [createGetTransactionObjects](api_reference.md#module_core.createGetTransactionObjects)
 
-* [.getTransactionObjects(hashes, [callback])](api_reference.md#module_core.getTransactionObjects)
+* [getTransactionObjects](api_reference.md#module_core.getTransactionObjects)
 
 * [.createGetTransactionsToApprove(provider)](api_reference.md#module_core.createGetTransactionsToApprove)
 
@@ -243,6 +178,73 @@ For details on all available API methods, see the [reference page](api_reference
 * [.traverseBundle(trunkTransaction, [bundle], [callback])](api_reference.md#module_core.traverseBundle)
 
 * [.generateAddress(seed, index, [security], [checksum])](api_reference.md#module_core.generateAddress)
+
+## Examples
+
+As well as the following examples, you can take a look at our [examples folder](https://github.com/iotaledger/iota.js/tree/next/examples) for more.
+
+### Creating custom API methods
+
+1. Install an IRI HTTP client:
+
+    ```bash
+    npm install @iota/http-client
+    ```
+
+2. Create an API method:
+
+    ```js
+    import { createHttpClient } from '@iota/http-client'
+    import { createGetNodeInfo } from '@iota/core'
+
+    const client = createHttpClient({
+        provider: 'http://localhost:14265'
+    })
+
+    const getNodeInfo = createGetNodeInfo(client)
+    ```
+
+### Creating and broadcasting transactions
+
+This example shows you how to create and send a transaction to an IRI node by calling the [`prepareTransfers`](packages/core#module_core.prepareTransfers) method and piping the prepared bundle to the [`sendTrytes`](packages/core#module_core.sendTrytes) method.
+
+```js
+// must be truly random & 81-trytes long
+const seed = ' your seed here '
+
+// Array of transfers which defines transfer recipients and value transferred in IOTAs.
+const transfers = [{
+    address: ' recipient address here ',
+    value: 1000, // 1Ki
+    tag: '', // optional tag of `0-27` trytes
+    message: '' // optional message in trytes
+}]
+
+// Depth or how far to go for tip selection entry point
+const depth = 3 
+
+// Difficulty of Proof-of-Work required to attach transaction to tangle.
+// Minimum value on mainnet & spamnet is `14`, `9` on devnet and other testnets.
+const minWeightMagnitude = 14
+
+// Prepare a bundle and signs it
+iota.prepareTransfers(seed, transfers)
+    .then(trytes => {
+        // Persist trytes locally before sending to network.
+        // This allows for reattachments and prevents key reuse if trytes can't
+        // be recovered by querying the network after broadcasting.
+
+        // Does tip selection, attaches to tangle by doing PoW and broadcasts.
+        return iota.sendTrytes(trytes, depth, minWeightMagnitude)
+    })
+    .then(bundle => {
+        console.log(`Published transaction with tail hash: ${bundle[0].hash}`)
+        console.log(`Bundle: ${bundle}`)
+    })
+    .catch(err => {
+        // catch any errors
+    })
+```
 
 ## Supporting the project
 
