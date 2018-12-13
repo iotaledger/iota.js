@@ -50,7 +50,7 @@
         "@iota/core": "^1.0.0-beta.7",
         "@iota/kerl": "^1.0.0-beta.7",
         "@iota/signing": "^1.0.0-beta.7",
-        "@types/bluebird": "^3.5.20",
+        "@types/bluebird": "^3.5.25",
         "bluebird": "^3.5.1",
         "isomorphic-fetch": "^2.2.1"
     }
