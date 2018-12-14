@@ -22,11 +22,18 @@ Please report any issues in our [issue tracker](https://github.com/iotaledger/io
 |[Joining the discussion](#joining-the-discussion)|
 | [License](#license)|
 
+## Prerequisites
+
+To use the IOTA JavaScript client library, your computer must have one of the following package managers:
+
+[npm](https://www.npmjs.com/) (Node package manager)
+[Yarn](https://yarnpkg.com/)
+
 ## Downloading the library
 
 To download the IOTA JavaScript client library and its dependencies, you can use one of the following options:
 
-* Download the library with [npm](https://www.npmjs.com/)
+* Download the library with 
     ```bash
     npm install @iota/core
     ```
