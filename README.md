@@ -1,4 +1,4 @@
-# IOTA JavaScript client library 
+# iota.js
 
 
 [![Build Status](https://travis-ci.org/iotaledger/iota.js.svg)](https://travis-ci.org/iotaledger/iota.js) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/iotaledger/iota.lib.js/master/LICENSE)  [![Discord](https://img.shields.io/discord/102860784329052160.svg)](https://discord.gg/DTbJufa) [![Greenkeeper badge](https://badges.greenkeeper.io/iotaledger/iota.js.svg)](https://greenkeeper.io/)
@@ -24,7 +24,7 @@ Please report any issues in our [issue tracker](https://github.com/iotaledger/io
 
 ## Downloading the library
 
-To download the IOTA Java client library and its dependencies, you can use one of the following options:
+To download the IOTA JavaScript client library and its dependencies, you can use one of the following options:
 
 * Download the library with [npm](https://www.npmjs.com/)
     ```bash
@@ -61,119 +61,61 @@ For details on all available API methods, see the [reference page](api_reference
 
 * [.composeApi([settings])](api_reference.md#module_core.composeApi)
 
-* [.createAddNeighbors(provider)](api_reference.md#module_core.createAddNeighbors)
-
 * [.addNeighbors(uris, [callback])](api_reference.md#module_core.addNeighbors)
-
-* [.createAttachToTangle(provider)](api_reference.md#module_core.createAttachToTangle)
 
 * [.attachToTangle(trunkTransaction, branchTransaction, minWeightMagnitude, trytes, [callback])](api_reference.md#module_core.attachToTangle)
 
-* [.createBroadcastBundle(provider)](api_reference.md#module_core.createBroadcastBundle)
-
 * [.broadcastBundle(tailTransactionHash, [callback])](api_reference.md#module_core.broadcastBundle)
-
-* [.createBroadcastTransactions(provider)](api_reference.md#module_core.createBroadcastTransactions)
 
 * [.broadcastTransactions(trytes, [callback])](api_reference.md#module_core.broadcastTransactions)
 
-* [.createCheckConsistency(provider)](api_reference.md#module_core.createCheckConsistency)
-
 * [.checkConsistency(transactions, [options], [callback])](api_reference.md#module_core.checkConsistency)
-
-* [.createFindTransactionObjects(provider)](api_reference.md#module_core.createFindTransactionObjects)
 
 * [.findTransactionObjects(query, [callback])](api_reference.md#module_core.findTransactionObjects)
 
-* [.createFindTransactions(provider)](api_reference.md#module_core.createFindTransactions)
-
 * [.findTransactions(query, [callback])](api_reference.md#module_core.findTransactions)
-
-* [.createGetAccountData(provider)](api_reference.md#module_core.createGetAccountData)
 
 * [.getAccountData(seed, options, [callback])](api_reference.md#module_core.getAccountData)
 
-* [.createGetBalances(provider)](api_reference.md#module_core.createGetBalances)
-
 * [.getBalances(addresses, threshold, [callback])](api_reference.md#module_core.getBalances)
-
-* [.createGetBundle(provider)](api_reference.md#module_core.createGetBundle)
 
 * [.getBundle(tailTransactionHash, [callback])](api_reference.md#module_core.getBundle)
 
-* [.createGetInclusionStates(provider)](api_reference.md#module_core.createGetInclusionStates)
-
 * [.getInclusionStates(transactions, tips, [callback])](api_reference.md#module_core.getInclusionStates)
-
-* [.createGetInputs(provider)](api_reference.md#module_core.createGetInputs)
 
 * [.getInputs(seed, [options], [callback])](api_reference.md#module_core.getInputs)
 
-* [.createGetLatestInclusion(provider)](api_reference.md#module_core.createGetLatestInclusion)
-
 * [.getLatestInclusion(transactions, tips, [callback])](api_reference.md#module_core.getLatestInclusion)
-
-* [.createGetNeighbors(provider)](api_reference.md#module_core.createGetNeighbors)
 
 * [.getNeighbors([callback])](api_reference.md#module_core.getNeighbors)
 
-* [.createGetNewAddress(provider)](api_reference.md#module_core.createGetNewAddress)
-
 * [.getNewAddress(seed, [options], [callback])](api_reference.md#module_core.getNewAddress)
-
-* [.createGetNodeInfo(provider)](api_reference.md#module_core.createGetNodeInfo)
 
 * [.getNodeInfo([callback])](api_reference.md#module_core.getNodeInfo)
 
-* [.createGetTips(provider)](api_reference.md#module_core.createGetTips)
-
 * [getTips](api_reference.md#module_core.getTips)
-
-* [createGetTransactionObjects](api_reference.md#module_core.createGetTransactionObjects)
 
 * [getTransactionObjects](api_reference.md#module_core.getTransactionObjects)
 
-* [.createGetTransactionsToApprove(provider)](api_reference.md#module_core.createGetTransactionsToApprove)
-
 * [.getTransactionsToApprove(depth, [reference], [callback])](api_reference.md#module_core.getTransactionsToApprove)
-
-* [.createGetTrytes(provider)](api_reference.md#module_core.createGetTrytes)
 
 * [.getTrytes(hashes, [callback])](api_reference.md#module_core.getTrytes)
 
-* [.createIsPromotable(provider, [depth])](api_reference.md#module_core.createIsPromotable)
-
 * [.isPromotable(tail, [callback])](api_reference.md#module_core.isPromotable)
-
-* [.createPrepareTransfers([provider])](api_reference.md#module_core.createPrepareTransfers)
 
 * [.prepareTransfers(seed, transfers, [options], [callback])](api_reference.md#module_core.prepareTransfers)
 
-* [.createPromoteTransaction(provider, [attachFn])](api_reference.md#module_core.createPromoteTransaction)
-
 * [.promoteTransaction(tail, depth, minWeightMagnitude, transfer, [options], [callback])](api_reference.md#module_core.promoteTransaction)
-
-* [.createRemoveNeighbors(provider)](api_reference.md#module_core.createRemoveNeighbors)
 
 * [.removeNeighbors(uris, [callback])](api_reference.md#module_core.removeNeighbors)
 
-* [.createReplayBundle(provider)](api_reference.md#module_core.createReplayBundle)
-
 * [.replayBundle(tail, depth, minWeightMagnitude, [callback])](api_reference.md#module_core.replayBundle)
-
-* [.createSendTrytes(provider)](api_reference.md#module_core.createSendTrytes)
 
 * [.sendTrytes(trytes, depth, minWeightMagnitude, [reference], [callback])](api_reference.md#module_core.sendTrytes)
 
-* [.createStoreAndBroadcast(provider)](api_reference.md#module_core.createStoreAndBroadcast)
-
 * [.storeAndBroadcast(trytes, [callback])](api_reference.md#module_core.storeAndBroadcast)
 
-* [.createStoreTransactions(provider)](api_reference.md#module_core.createStoreTransactions)
-
 * [.storeTransactions(trytes, [callback])](api_reference.md#module_core.storeTransactions)
-
-* [.createTraverseBundle(provider)](api_reference.md#module_core.createTraverseBundle)
 
 * [.traverseBundle(trunkTransaction, [bundle], [callback])](api_reference.md#module_core.traverseBundle)
 
@@ -248,10 +190,9 @@ iota.prepareTransfers(seed, transfers)
 
 ## Supporting the project
 
-If the IOTA JavaScript client library has been useful to you and you feel like contributing, consider posting a [bug report][new-issue], [feature request][new-issue] or a [pull request][new-pull-request].  
-We have some [basic contribution guidelines][contribution-guidelines] to keep our code base stable and consistent.
+If the IOTA JavaScript client library has been useful to you and you feel like contributing, consider posting a [bug report][new-issue], [feature request](https://github.com/iotaledger/iota.js/issues/new-issue) or a [pull request](https://github.com/iotaledger/iota.js/pulls/).  
 
-### Cloning and bootstraping the repository on GitHub
+### Cloning and bootstrapping the repository on GitHub
 
 1. Click the <kbd>Fork</kbd> button in the top-right corner
 2. Clone your fork and change directory into it
@@ -270,12 +211,7 @@ Make your changes on a single package or across multiple packages and test the s
 ```bash
 npm test
 ```
-
-To configure your editor to watch the tests running, add the `--watch` flag:
-
-```bash
-npm test --watch`
-```
+To run tests of specific package, change directory into the package's directory and run `npm test` from there.
 
 ### Updating documentation
 
@@ -283,9 +219,8 @@ Please update the documention when needed by editing [`JSDoc`](http://usejsdoc.o
 
 ## Joining the discussion
 
-If you want to get involved in the community, need help with getting setup, have any issues related with the library or just want to discuss blockchain, distributed ledgers, and IoT with other people, feel free to join our [Discord][iota-discord].  
-You can also ask questions on our dedicated [IOTA Forum][iota-forum].
+If you want to get involved in the community, need help with getting setup, have any issues related with the library or just want to discuss blockchain, distributed ledgers, and IoT with other people, feel free to join our [Discord](https://discordapp.com/invite/fNGZXvh).
 
 ## License
 
-The license can be found [here](LICENSE).
+The MIT license can be found [here](LICENSE).
