@@ -66,10 +66,10 @@
     "dependencies": {
         "@types/bluebird": "^3.5.24",
         "bluebird": "^3.5.1",
-        "cross-fetch": "^2.2.2"
+        "cross-fetch": "^3.0.0"
     },
     "devDependencies": {
         "@types/nock": "^9.1.2",
-        "nock": "^10.0.1"
+        "nock": "^10.0.4"
     }
 }
