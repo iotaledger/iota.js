@@ -1,11 +1,12 @@
 # iota.js
-
+> IOTA JavaScript monorepo
 
 [![Build Status](https://travis-ci.org/iotaledger/iota.js.svg)](https://travis-ci.org/iotaledger/iota.js) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/iotaledger/iota.lib.js/master/LICENSE)  [![Discord](https://img.shields.io/discord/102860784329052160.svg)](https://discord.gg/DTbJufa) [![Greenkeeper badge](https://badges.greenkeeper.io/iotaledger/iota.js.svg)](https://greenkeeper.io/)
 
 This is the **official** JavaScript client library, which allows you to do the following:
 * Create transactions
 * Sign transactions
+* Generate addresses
 * Interact with an IRI node
 
 This is beta software, so there may be performance and stability issues.
@@ -14,7 +15,7 @@ Please report any issues in our [issue tracker](https://github.com/iotaledger/io
 |Table of contents|
 |:----|
 | [Prerequisites](#prerequisites)
-| [Downloading the library](#downloading-the-library)|
+| [Installing the library](#installing-the-library)|
 | [Getting started](#getting-started) |
 | [API reference](#api-reference)
 | [Examples](#examples)|
@@ -24,27 +25,33 @@ Please report any issues in our [issue tracker](https://github.com/iotaledger/io
 
 ## Prerequisites
 
-To use the IOTA JavaScript client library, your computer must have one of the following package managers:
+To use the library, your computer must have one of the following [supported](https://github.com/iotaledger/iota.js/blob/next/.travis.yml#L5) versions of [Node.js](https://nodejs.org):
+* Node.js 10 or higher. Recommended version is [latest LTS](https://nodejs.org/en/download/).
+* Node.js 8
 
-* [NPM](https://www.npmjs.com/) (Node package manager)
+To install [library packages](https://www.npmjs.com/org/iota), your computer must have one of the following package managers:
+
+* [npm](https://www.npmjs.com/) (Included in Node.js [downloads](https://nodejs.org/en/download/))
 * [Yarn](https://yarnpkg.com/)
 
-## Downloading the library
+A `package.json` file is required. It can be generated with [`npm init`](https://docs.npmjs.com/cli/init) or [`yarn init`](https://yarnpkg.com/lang/en/docs/cli/init/)
 
-To download the IOTA JavaScript client library and its dependencies, you can use one of the following options:
+## Installing the library
 
-* Download the library with NPM
+To install the IOTA JavaScript client library and its dependencies, you can use one of the following options:
+
+* Install the library with npm
     ```bash
     npm install @iota/core
     ```
-* Download the library with Yarn
+* Install the library with Yarn
     ```bash
     yarn add @iota/core
     ```
 
 ## Getting started
 
-After you've [downloaded the library](#downloading-the-library), you can connect to an IRI node to send transactions to it and interact with the ledger.
+After you've [installed the library](#installing-the-library), you can connect to an IRI and interface with it.
 
 To connect to a local IRI node, do the following:
 
@@ -57,7 +64,9 @@ const iota = composeAPI({
 
 iota.getNodeInfo()
     .then(info => console.log(info))
-    .catch(err => {})
+    .catch(err => {
+        console.log(`Request error: ${error.message}`)
+    })
 ```
 
 
@@ -100,9 +109,9 @@ For details on all available API methods, see the [reference page](api_reference
 
 * [.getNodeInfo([callback])](api_reference.md#module_core.getNodeInfo)
 
-* [getTips](api_reference.md#module_core.getTips)
+* [getTips([callback])](api_reference.md#module_core.getTips)
 
-* [getTransactionObjects](api_reference.md#module_core.getTransactionObjects)
+* [getTransactionObjects(hashes, [callback])](api_reference.md#module_core.getTransactionObjects)
 
 * [.getTransactionsToApprove(depth, [reference], [callback])](api_reference.md#module_core.getTransactionsToApprove)
 
@@ -130,7 +139,55 @@ For details on all available API methods, see the [reference page](api_reference
 
 ## Examples
 
-As well as the following examples, you can take a look at our [examples folder](https://github.com/iotaledger/iota.js/tree/next/examples) for more.
+As well as the following examples, you can take a look at our [examples directory](https://github.com/iotaledger/iota.js/tree/next/examples) for more.
+
+### Creating and broadcasting transactions
+
+This example shows you how to create and send a transaction to an IRI node by calling the [`prepareTransfers`](packages/core#module_core.prepareTransfers) method and piping the prepared bundle to the [`sendTrytes`](packages/core#module_core.sendTrytes) method.
+
+```js
+import { composeAPI } from '@iota/core'
+
+const iota = composeAPI({
+    provider: 'http://localhost:14265' // replace with your IRI node.
+})
+
+// Must be truly random & 81-trytes long.
+const seed = ' your seed here '
+
+// Array of transfers which defines transfer recipients and value transferred in IOTAs.
+const transfers = [{
+    address: ' recipient address here ',
+    value: 1000, // 1Ki
+    tag: '', // optional tag of `0-27` trytes
+    message: '' // optional message in trytes
+}]
+
+// Depth or how far to go for tip selection entry point.
+const depth = 3 
+
+// Difficulty of Proof-of-Work required to attach transaction to tangle.
+// Minimum value on mainnet & spamnet is `14`, `9` on devnet and other testnets.
+const minWeightMagnitude = 14
+
+// Prepare a bundle and signs it.
+iota.prepareTransfers(seed, transfers)
+    .then(trytes => {
+        // Persist trytes locally before sending to network.
+        // This allows for reattachments and prevents key reuse if trytes can't
+        // be recovered by querying the network after broadcasting.
+
+        // Does tip selection, attaches to tangle by doing PoW and broadcasts.
+        return iota.sendTrytes(trytes, depth, minWeightMagnitude)
+    })
+    .then(bundle => {
+        console.log(`Published transaction with tail hash: ${bundle[0].hash}`)
+        console.log(`Bundle: ${bundle}`)
+    })
+    .catch(err => {
+        // handle errors here
+    })
+```
 
 ### Creating custom API methods
 
@@ -153,51 +210,9 @@ As well as the following examples, you can take a look at our [examples folder](
     const getNodeInfo = createGetNodeInfo(client)
     ```
 
-### Creating and broadcasting transactions
-
-This example shows you how to create and send a transaction to an IRI node by calling the [`prepareTransfers`](packages/core#module_core.prepareTransfers) method and piping the prepared bundle to the [`sendTrytes`](packages/core#module_core.sendTrytes) method.
-
-```js
-// must be truly random & 81-trytes long
-const seed = ' your seed here '
-
-// Array of transfers which defines transfer recipients and value transferred in IOTAs.
-const transfers = [{
-    address: ' recipient address here ',
-    value: 1000, // 1Ki
-    tag: '', // optional tag of `0-27` trytes
-    message: '' // optional message in trytes
-}]
-
-// Depth or how far to go for tip selection entry point
-const depth = 3 
-
-// Difficulty of Proof-of-Work required to attach transaction to tangle.
-// Minimum value on mainnet & spamnet is `14`, `9` on devnet and other testnets.
-const minWeightMagnitude = 14
-
-// Prepare a bundle and signs it
-iota.prepareTransfers(seed, transfers)
-    .then(trytes => {
-        // Persist trytes locally before sending to network.
-        // This allows for reattachments and prevents key reuse if trytes can't
-        // be recovered by querying the network after broadcasting.
-
-        // Does tip selection, attaches to tangle by doing PoW and broadcasts.
-        return iota.sendTrytes(trytes, depth, minWeightMagnitude)
-    })
-    .then(bundle => {
-        console.log(`Published transaction with tail hash: ${bundle[0].hash}`)
-        console.log(`Bundle: ${bundle}`)
-    })
-    .catch(err => {
-        // catch any errors
-    })
-```
-
 ## Supporting the project
 
-If the IOTA JavaScript client library has been useful to you and you feel like contributing, consider posting a [bug report][new-issue], [feature request](https://github.com/iotaledger/iota.js/issues/new-issue) or a [pull request](https://github.com/iotaledger/iota.js/pulls/).  
+If the IOTA JavaScript client library has been useful to you and you feel like contributing, consider posting a [bug report](https://github.com/iotaledger/iota.js/issues/new), [feature request](https://github.com/iotaledger/iota.js/issues/new) or a [pull request](https://github.com/iotaledger/iota.js/pulls/).  
 
 ### Cloning and bootstrapping the repository on GitHub
 
@@ -226,7 +241,7 @@ Please update the documention when needed by editing [`JSDoc`](http://usejsdoc.o
 
 ## Joining the discussion
 
-If you want to get involved in the community, need help with getting setup, have any issues related with the library or just want to discuss blockchain, distributed ledgers, and IoT with other people, feel free to join our [Discord](https://discordapp.com/invite/fNGZXvh).
+If you want to get involved in the community, need help with getting setup, have any issues related with the library or just want to discuss IOTA, Distributed Registry Technology (DRT) and IoT with other people, feel free to join our [Discord](https://discordapp.com/invite/fNGZXvh).
 
 ## License
 
