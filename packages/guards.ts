@@ -66,8 +66,9 @@ export const isNinesTrytes = isEmpty
 export const isHash = (hash: any): hash is Hash =>
     isTrytesOfExactLength(hash, HASH_TRYTE_SIZE) || isTrytesOfExactLength(hash, HASH_TRYTE_SIZE + 9) // address w/ checksum is valid hash
 
-/* Check if security level is positive integer */
-export const isSecurityLevel = (security: any): security is number => Number.isInteger(security) && security > 0
+/* Check if security level is valid positive integer */
+export const isSecurityLevel = (security: any): security is number =>
+    Number.isInteger(security) && security > 0 && security < 4
 
 /**
  * Checks if input is valid input object. Address can be passed with or without checksum.
