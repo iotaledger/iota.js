@@ -81,7 +81,7 @@ export const isSecurityLevel = (security: any): security is number => Number.isI
  */
 export const isInput = (input: any): input is Address =>
     isHash(input.address) &&
-    (typeof input.security === 'undefined' || isSecurityLevel(input.security)) &&
+    isSecurityLevel(input.security) &&
     (typeof input.balance === 'undefined' || (Number.isInteger(input.balance) && input.balance > 0)) &&
     Number.isInteger(input.keyIndex) &&
     input.keyIndex >= 0
