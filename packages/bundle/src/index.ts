@@ -40,11 +40,11 @@ const getEntryWithDefaults = (entry: Partial<BundleEntry>): BundleEntry => ({
 })
 
 /**
- * Creates a bunlde with given transaction entries.
+ * Creates a bundle with given transaction entries.
  *
  * @method createBundle
  *
- * @param {BundleEntry[]} entries - Entries of signle or multiple transactions with the same address
+ * @param {BundleEntry[]} entries - Entries of single or multiple transactions with the same address
  *
  * @return {Transaction[]} List of transactions in the bundle
  */
@@ -52,21 +52,21 @@ export const createBundle = (entries: ReadonlyArray<Partial<BundleEntry>> = []):
     entries.reduce((bundle: Bundle, entry) => addEntry(bundle, entry), [])
 
 /**
- * Creates a bunlde with given transaction entries
+ * Adds given transaction entry to a bundle.
  *
  * @method addEntry
  *
  * @param {Transaction[]} transactions - List of transactions currently in the bundle
  *
- * @param {object} entry - Entry of single or multiple transactions with the same address
- * @param {number} [entry.length=1] - Entry length, which indicates how many transactions in the bundle will occupy
- * @param {string} [entry.address] - Address, defaults to all-9s
- * @param {number} [entry.value = 0] - Value to transfer in _IOTAs_
- * @param {string[]} [entry.signatureMessageFragments] - Array of signature message fragments trytes, defaults to all-9s
+ * @param {object} entry - Entry of a single or multiple transactions with the same address
+ * @param {number} [entry.length = 1] - Entry length, which indicates how many transactions in the bundle it will occupy
+ * @param {Hash} [entry.address] - Address, defaults to all-9s
+ * @param {number} [entry.value = 0] - Value to transfer in iotas
+ * @param {Trytes[]} [entry.signatureMessageFragments] - List of signature message fragments, defaults to all-9s
  * @param {number} [entry.timestamp] - Transaction timestamp, defaults to `Math.floor(Date.now() / 1000)`
  * @param {string} [entry.tag] - Optional Tag, defaults to null tag (all-9s)
  *
- * @return {Transaction[]} Bundle
+ * @return {Transaction[]} List of transactions in the updated bundle
  */
 export const addEntry = (transactions: Bundle, entry: Partial<BundleEntry>): Bundle => {
     const entryWithDefaults = getEntryWithDefaults(entry)
@@ -100,17 +100,17 @@ export const addEntry = (transactions: Bundle, entry: Partial<BundleEntry>): Bun
 }
 
 /**
- * Adds a list of trytes in the bundle starting at offset
+ * Adds signature message fragments to transactions in a bundle starting at offset.
  *
  * @method addTrytes
  *
- * @param {Transaction[]} transactions - Transactions in the bundle
+ * @param {Transaction[]} transactions - List of transactions in the bundle
  *
- * @param {Trytes[]} fragments - Message signature fragments to add
+ * @param {Trytes[]} fragments - List of signature message fragments to add
  *
- * @param {number} [offset=0] - Optional offset to start appending signature message fragments
+ * @param {number} [offset = 0] - Optional offset to start appending signature message fragments
  *
- * @return {Transaction[]} Transactions of finalized bundle
+ * @return {Transaction[]} List of transactions in the updated bundle
  */
 export const addTrytes = (transactions: Bundle, fragments: ReadonlyArray<Trytes>, offset = 0): Bundle =>
     transactions.map(
@@ -124,13 +124,13 @@ export const addTrytes = (transactions: Bundle, fragments: ReadonlyArray<Trytes>
     )
 
 /**
- * Finalizes the bundle by calculating the bundle hash
+ * Finalizes a bundle by calculating the bundle hash.
  *
  * @method finalizeBundle
  *
- * @param {Transaction[]} transactions - Transactions in the bundle
+ * @param {Transaction[]} transactions - List of transactions in the bundle
  *
- * @return {Transaction[]} Transactions of finalized bundle
+ * @return {Transaction[]} List of transactions in the finalized bundle
  */
 export const finalizeBundle = (transactions: Bundle): Bundle => {
     const valueTrits = transactions.map(tx => trits(tx.value)).map(padTrits(81))

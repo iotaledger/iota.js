@@ -32,7 +32,7 @@ export const generateSpam = (n: number = 1): ReadonlyArray<Transfer> => new Arra
  *
  * @param {Provider} provider - Network provider
  *
- * @param {Function} [attachFn] - Optional `AttachToTangle` function to override the
+ * @param {Function} [attachFn] - Optional `attachToTangle` function to override the
  * [default method]{@link #module_core.attachToTangle}.
  *
  * @return {Function} {@link #module_core.promoteTransaction `promoteTransaction`}
@@ -44,27 +44,38 @@ export const createPromoteTransaction = (provider: Provider, attachFn?: AttachTo
     /**
      * Promotes a transaction by adding zero-value spam transactions on top of it.
      * Will promote `maximum` transfers on top of the current one with `delay` interval. Promotion
-     * is interruptable through `interrupt` option.
+     * is interruptable through the `interrupt` option.
      *
      * @method promoteTransaction
      *
      * @memberof module:core
      *
-     * @param {string} tail
-     * @param {int} depth
-     * @param {int} minWeightMagnitude
+     * @param {Hash} tail - Tail transaction hash. Tail transaction is the transaction in the bundle with
+     * `currentIndex == 0`.
+     *
+     * @param {number} depth - The depth at which Random Walk starts. A value of `3` is typically used by wallets,
+     * meaning that RW starts 3 milestones back.
+     *
+     * @param {number} minWeightMagnitude - Minimum number of trailing zeros in transaction hash. This is used by
+     * [`attachToTangle`]{@link #module_core.attachToTangle} function to search for a valid `nonce`.
+     * Currently it is `14` on mainnet & spamnet and `9` on most other testnets.
+     *
      * @param {array} [spamTransfers] - Array of spam transfers to promote with.
      * By default it will issue an all-9s, zero-value transfer.
-     * @param {object} [options]
+     *
+     * @param {object} [options] - Options
+     *
      * @param {number} [options.delay] - Delay between spam transactions in `ms`
+     *
      * @param {boolean|function} [options.interrupt] - Interrupt signal, which can be a function that evaluates
      * to boolean
-     * @param {function} [callback]
+     *
+     * @param {Callback} [callback] - Optional callback
      *
      * @returns {Promise}
      * @fulfil {Transaction[]}
      * @reject {Error}
-     * - `INCONSISTENT SUBTANGLE`: In this case promotion has no effect and reatchment is required.
+     * - `INCONSISTENT_SUBTANGLE`: In this case promotion has no effect and a reattachment is required by calling [`replayBundle`]{@link #module_core.replayBundle}.
      * - Fetch error
      */
     return function promoteTransaction(
