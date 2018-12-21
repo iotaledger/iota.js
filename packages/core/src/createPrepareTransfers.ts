@@ -246,7 +246,7 @@ export const createAddInputs = (provider?: Provider) => {
         const { transactions, transfers, inputs, timestamp, seed, security } = props
         const threshold = transfers.reduce((sum, { value }) => (sum += value), 0)
 
-        if (threshold === 0) {
+        if (threshold === 0 && inputs.length === 0) {
             return Promise.resolve(props)
         }
 

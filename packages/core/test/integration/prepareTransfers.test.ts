@@ -1,6 +1,6 @@
 import { addChecksum } from '@iota/checksum'
 import { createHttpClient } from '@iota/http-client'
-import { addresses, trytes as expected } from '@iota/samples'
+import { addresses, sweepTrytes as expectedSweepTrytes, trytes as expected } from '@iota/samples'
 import test from 'ava'
 import { Transfer, Trytes } from '../../../types'
 import { createPrepareTransfers } from '../../src'
@@ -139,5 +139,29 @@ test('prepareTransfers() throws error for inputs without security level.', async
         ).message,
         `Invalid input: ${input}`,
         'prepareTransfers() should throw error for inputs without security level.'
+    )
+})
+
+test('prepareTransfers() sweeps inputs to new address given zero value transfers.', async t => {
+    const input = {
+        address: addresses[0],
+        keyIndex: 0,
+        security: 2,
+        balance: 1,
+    }
+
+    const transfer = {
+        address: 'A'.repeat(81),
+        value: 0,
+        message: 'TEST',
+        tag: 'TAG',
+    }
+
+    const actualSweepTrytes = await prepareTransfersWithNetwork('SEED', [transfer], { inputs: [input] })
+
+    t.deepEqual(
+        actualSweepTrytes,
+        expectedSweepTrytes,
+        'prepareTransfers() should sweep inputs to new address given zero value transfers.'
     )
 })
