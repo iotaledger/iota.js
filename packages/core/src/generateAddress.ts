@@ -1,6 +1,7 @@
 import { addChecksum } from '@iota/checksum'
 import { trits, trytes } from '@iota/converter'
 import { address, digests, key, subseed } from '@iota/signing'
+import { securityLevelValidator, seedValidator, validate } from '../../guards'
 import { Hash } from '../../types'
 
 /**
@@ -21,6 +22,8 @@ export const generateAddress = (seed: string, index: number, security: number = 
     while (seed.length % 81 !== 0) {
         seed += 9
     }
+
+    validate(seedValidator(seed), securityLevelValidator(security))
 
     const keyTrits = key(subseed(trits(seed), index), security)
     const digestsTrits = digests(keyTrits)
