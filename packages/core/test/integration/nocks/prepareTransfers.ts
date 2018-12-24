@@ -1,14 +1,11 @@
+import { addresses } from '@iota/samples'
 import * as nock from 'nock'
 import { GetBalancesCommand, GetBalancesResponse, IRICommand } from '../../../../types'
 import headers from './headers'
 
 export const getBalancesCommand: GetBalancesCommand = {
     command: IRICommand.GET_BALANCES,
-    addresses: [
-        'FJHSSHBZTAKQNDTIKJYCZBOZDGSZANCZSWCNWUOCZXFADNOQSYAHEJPXRLOVPNOQFQXXGEGVDGICLMOXX',
-        '9DZXPFSVCSSWXXQPFMWLGFKPBAFTHYMKMZCPFHBVHXPFNJEIJIEEPKXAUBKBNNLIKWHJIYQDFWQVELOCB',
-        'OTSZGTNPKFSGJLUPUNGGXFBYF9GVUEHOADZZTDEOJPWNEIVBLHOMUWPILAHTQHHVSBKTDVQIAEQOZXGFB',
-    ],
+    addresses,
     threshold: 100,
 }
 
@@ -23,7 +20,7 @@ nock('http://localhost:14265', headers)
     .persist()
     .post('/', {
         command: IRICommand.WERE_ADDRESSES_SPENT_FROM,
-        addresses: ['FJHSSHBZTAKQNDTIKJYCZBOZDGSZANCZSWCNWUOCZXFADNOQSYAHEJPXRLOVPNOQFQXXGEGVDGICLMOXX'],
+        addresses: [addresses[0]],
     })
     .reply(200, {
         states: [true],
@@ -33,7 +30,7 @@ nock('http://localhost:14265', headers)
     .persist()
     .post('/', {
         command: IRICommand.WERE_ADDRESSES_SPENT_FROM,
-        addresses: ['9DZXPFSVCSSWXXQPFMWLGFKPBAFTHYMKMZCPFHBVHXPFNJEIJIEEPKXAUBKBNNLIKWHJIYQDFWQVELOCB'],
+        addresses: [addresses[1]],
     })
     .reply(200, {
         states: [false],
@@ -43,7 +40,7 @@ nock('http://localhost:14265', headers)
     .persist()
     .post('/', {
         command: IRICommand.WERE_ADDRESSES_SPENT_FROM,
-        addresses: ['OTSZGTNPKFSGJLUPUNGGXFBYF9GVUEHOADZZTDEOJPWNEIVBLHOMUWPILAHTQHHVSBKTDVQIAEQOZXGFB'],
+        addresses: [addresses[2]],
     })
     .reply(200, {
         states: [false],
@@ -58,7 +55,7 @@ nock('http://localhost:14265', headers)
     .persist()
     .post('/', {
         command: IRICommand.FIND_TRANSACTIONS,
-        addresses: ['9DZXPFSVCSSWXXQPFMWLGFKPBAFTHYMKMZCPFHBVHXPFNJEIJIEEPKXAUBKBNNLIKWHJIYQDFWQVELOCB'],
+        addresses: [addresses[1]],
     })
     .reply(200, {
         hashes: ['A'.repeat(81)],
@@ -68,7 +65,7 @@ nock('http://localhost:14265', headers)
     .persist()
     .post('/', {
         command: IRICommand.FIND_TRANSACTIONS,
-        addresses: ['OTSZGTNPKFSGJLUPUNGGXFBYF9GVUEHOADZZTDEOJPWNEIVBLHOMUWPILAHTQHHVSBKTDVQIAEQOZXGFB'],
+        addresses: [addresses[2]],
     })
     .reply(200, {
         hashes: [],

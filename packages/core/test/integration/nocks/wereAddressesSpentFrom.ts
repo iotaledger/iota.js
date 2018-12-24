@@ -1,3 +1,4 @@
+import { addresses } from '@iota/samples'
 import * as nock from 'nock'
 import { IRICommand } from '../../../../types'
 import {
@@ -5,8 +6,6 @@ import {
     WereAddressesSpentFromResponse,
 } from '../../../src/createWereAddressesSpentFrom'
 import headers from './headers'
-
-import { addresses } from '@iota/samples'
 
 export const wereAddressesSpentFromCommand: WereAddressesSpentFromCommand = {
     command: IRICommand.WERE_ADDRESSES_SPENT_FROM,
@@ -26,7 +25,7 @@ nock('http://localhost:14265', headers)
     .persist()
     .post('/', {
         command: IRICommand.WERE_ADDRESSES_SPENT_FROM,
-        addresses: ['FJHSSHBZTAKQNDTIKJYCZBOZDGSZANCZSWCNWUOCZXFADNOQSYAHEJPXRLOVPNOQFQXXGEGVDGICLMOXX'],
+        addresses: [addresses[0]],
     })
     .reply(200, {
         states: [true],
@@ -36,7 +35,7 @@ nock('http://localhost:14265', headers)
     .persist()
     .post('/', {
         command: IRICommand.WERE_ADDRESSES_SPENT_FROM,
-        addresses: ['9DZXPFSVCSSWXXQPFMWLGFKPBAFTHYMKMZCPFHBVHXPFNJEIJIEEPKXAUBKBNNLIKWHJIYQDFWQVELOCB'],
+        addresses: [addresses[1]],
     })
     .reply(200, {
         states: [false],
@@ -46,7 +45,7 @@ nock('http://localhost:14265', headers)
     .persist()
     .post('/', {
         command: IRICommand.WERE_ADDRESSES_SPENT_FROM,
-        addresses: ['OTSZGTNPKFSGJLUPUNGGXFBYF9GVUEHOADZZTDEOJPWNEIVBLHOMUWPILAHTQHHVSBKTDVQIAEQOZXGFB'],
+        addresses: [addresses[2]],
     })
     .reply(200, {
         states: [false],
@@ -56,10 +55,7 @@ nock('http://localhost:14265', headers)
     .persist()
     .post('/', {
         command: IRICommand.WERE_ADDRESSES_SPENT_FROM,
-        addresses: [
-            '9DZXPFSVCSSWXXQPFMWLGFKPBAFTHYMKMZCPFHBVHXPFNJEIJIEEPKXAUBKBNNLIKWHJIYQDFWQVELOCB',
-            'OTSZGTNPKFSGJLUPUNGGXFBYF9GVUEHOADZZTDEOJPWNEIVBLHOMUWPILAHTQHHVSBKTDVQIAEQOZXGFB',
-        ],
+        addresses: [addresses[1], addresses[2]],
     })
     .reply(200, {
         states: [false, false],

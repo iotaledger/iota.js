@@ -1,10 +1,11 @@
+import { addresses } from '@iota/samples'
 import * as nock from 'nock'
 import { FindTransactionsCommand, FindTransactionsResponse, IRICommand } from '../../../../types'
 import headers from './headers'
 
 export const emptyFindTransactionsCommand: FindTransactionsCommand = {
     command: IRICommand.FIND_TRANSACTIONS,
-    addresses: ['OTSZGTNPKFSGJLUPUNGGXFBYF9GVUEHOADZZTDEOJPWNEIVBLHOMUWPILAHTQHHVSBKTDVQIAEQOZXGFB'],
+    addresses: [addresses[2]],
 }
 
 export const emptyFindTransactionsResponse: FindTransactionsResponse = {
@@ -13,7 +14,7 @@ export const emptyFindTransactionsResponse: FindTransactionsResponse = {
 
 export const findTransactionsByAddressesCommand: FindTransactionsCommand = {
     command: IRICommand.FIND_TRANSACTIONS,
-    addresses: ['9DZXPFSVCSSWXXQPFMWLGFKPBAFTHYMKMZCPFHBVHXPFNJEIJIEEPKXAUBKBNNLIKWHJIYQDFWQVELOCB'],
+    addresses: [addresses[1]],
 }
 
 export const findTransactionsByBundlesCommand: FindTransactionsCommand = {
@@ -80,11 +81,7 @@ nock('http://localhost:14265', headers)
     .persist()
     .post('/', {
         command: IRICommand.FIND_TRANSACTIONS,
-        addresses: [
-            'FJHSSHBZTAKQNDTIKJYCZBOZDGSZANCZSWCNWUOCZXFADNOQSYAHEJPXRLOVPNOQFQXXGEGVDGICLMOXX',
-            '9DZXPFSVCSSWXXQPFMWLGFKPBAFTHYMKMZCPFHBVHXPFNJEIJIEEPKXAUBKBNNLIKWHJIYQDFWQVELOCB',
-            'OTSZGTNPKFSGJLUPUNGGXFBYF9GVUEHOADZZTDEOJPWNEIVBLHOMUWPILAHTQHHVSBKTDVQIAEQOZXGFB',
-        ],
+        addresses,
     })
     .reply(200, findTransactionsResponse)
 
@@ -100,9 +97,6 @@ nock('http://localhost:14265', headers)
     .persist()
     .post('/', {
         command: IRICommand.FIND_TRANSACTIONS,
-        addresses: [
-            '9DZXPFSVCSSWXXQPFMWLGFKPBAFTHYMKMZCPFHBVHXPFNJEIJIEEPKXAUBKBNNLIKWHJIYQDFWQVELOCB',
-            'OTSZGTNPKFSGJLUPUNGGXFBYF9GVUEHOADZZTDEOJPWNEIVBLHOMUWPILAHTQHHVSBKTDVQIAEQOZXGFB',
-        ],
+        addresses: [addresses[1], addresses[2]],
     })
     .reply(200, findTransactionsResponse)

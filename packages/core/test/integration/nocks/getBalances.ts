@@ -1,3 +1,4 @@
+import { addresses } from '@iota/samples'
 import * as nock from 'nock'
 import {
     Balances, // tslint:disable-line no-unused-variable
@@ -8,11 +9,7 @@ import headers from './headers'
 
 export const getBalancesCommand: GetBalancesCommand = {
     command: IRICommand.GET_BALANCES,
-    addresses: [
-        'FJHSSHBZTAKQNDTIKJYCZBOZDGSZANCZSWCNWUOCZXFADNOQSYAHEJPXRLOVPNOQFQXXGEGVDGICLMOXX',
-        '9DZXPFSVCSSWXXQPFMWLGFKPBAFTHYMKMZCPFHBVHXPFNJEIJIEEPKXAUBKBNNLIKWHJIYQDFWQVELOCB',
-        'OTSZGTNPKFSGJLUPUNGGXFBYF9GVUEHOADZZTDEOJPWNEIVBLHOMUWPILAHTQHHVSBKTDVQIAEQOZXGFB',
-    ],
+    addresses,
     threshold: 100,
 }
 
@@ -31,10 +28,7 @@ nock('http://localhost:14265', headers)
     .persist()
     .post('/', {
         ...getBalancesCommand,
-        addresses: [
-            '9DZXPFSVCSSWXXQPFMWLGFKPBAFTHYMKMZCPFHBVHXPFNJEIJIEEPKXAUBKBNNLIKWHJIYQDFWQVELOCB',
-            'OTSZGTNPKFSGJLUPUNGGXFBYF9GVUEHOADZZTDEOJPWNEIVBLHOMUWPILAHTQHHVSBKTDVQIAEQOZXGFB',
-        ],
+        addresses: [addresses[1], addresses[2]],
     })
     .reply(200, {
         ...balancesResponse,
