@@ -1,13 +1,15 @@
 {
-    "name": "iota.lib.js",
+    "name": "iota-js",
     "version": "1.0.0-alpha.1",
     "description": "IOTA Client Reference Implementation",
     "scripts": {
         "init": "npm i && lerna bootstrap",
-        "test": "lerna run test --stream",
-        "test-ci": "lerna bootstrap && lerna run test-ci --stream",
-        "precommit": "lint-staged",
-        "format": "prettier",
+        "test": "lerna exec -- npm test",
+        "test-ci": "lerna bootstrap && lerna exec -- npm run test-ci && npm run lint",
+        "test-android": "lerna bootstrap && lerna run test-android --stream",
+        "test-android-ci": "lerna bootstrap && lerna run test-android-ci --stream",
+        "test:staged": "node scripts/test-staged.js",
+        "lint": "tslint --project .",
         "docs": "lerna run docs"
     },
     "contributors": [
@@ -16,16 +18,45 @@
         "Chris Dukakis <chris.dukakis@iota.org> (https://github.com/chrisdukakis)"
     ],
     "ava": {
-        "files": ["packages/**/out/**/test/*.test.js", "packages/**/out/**/test/integration/*.test.js"],
+        "files": [
+            "packages/**/out/**/test/*.test.js",
+            "packages/**/out/**/test/integration/*.test.js"
+        ],
         "failFast": true,
         "failWithoutAssertions": false,
         "compileEnhancements": false,
         "verbose": true
     },
-    "lint-staged": {
-        "*.{js,ts,json}": ["prettier --write", "git add"]
+    "husky": {
+        "hooks": {
+            "pre-commit": "lint-staged && node ./scripts/test-staged.js",
+            "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+        }
     },
-    "keywords": ["iota", "tangle", "library", "javascript", "nodejs", "API"],
+    "lint-staged": {
+        "linters": {
+            "*.{ts}": [
+                "tslint --fix",
+                "git add"
+            ],
+            "*.{js,ts,json}": [
+                "prettier --write",
+                "git add"
+            ]
+        },
+        "ignore": [
+            "package-lock.json",
+            "packages/**/package-lock.json"
+        ]
+    },
+    "keywords": [
+        "iota",
+        "tangle",
+        "library",
+        "javascript",
+        "nodejs",
+        "API"
+    ],
     "license": "MIT",
     "bugs": {
         "url": "https://github.com/iotaledger/iota.lib.js/issues"
@@ -35,19 +66,23 @@
         "url": "https://github.com/iotaledger/iota.lib.js.git"
     },
     "dependencies": {
-        "@types/bluebird": "^3.5.20"
+        "@types/bluebird": "^3.5.25"
     },
     "devDependencies": {
+        "@commitlint/cli": "^7.2.1",
+        "@commitlint/config-conventional": "^7.1.2",
+        "@commitlint/travis-cli": "^7.2.1",
         "ava": "^0.25.0",
         "dmd-clear": "^0.1.2",
-        "husky": "^0.14.3",
-        "jsdoc-babel": "^0.4.0",
-        "lerna": "^2.11.0",
-        "lint-staged": "^7.2.0",
-        "nyc": "^12.0.2",
+        "husky": "^1.1.2",
+        "jsdoc-babel": "^0.5.0",
+        "lerna": "^3.4.3",
+        "lint-staged": "^8.0.4",
+        "nyc": "^13.1.0",
         "prettier": "^1.10.2",
+        "staged-git-files": "^1.1.1",
         "tslint": "^5.9.1",
         "tslint-config-prettier": "^1.6.0",
-        "typescript": "^2.7.0"
+        "typescript": "^3.1.3"
     }
 }

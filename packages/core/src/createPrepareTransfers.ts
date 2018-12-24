@@ -1,8 +1,8 @@
 import * as Promise from 'bluebird'
 
-import { trits, trytes } from '@iota/converter'
 import { addEntry, addTrytes, finalizeBundle } from '@iota/bundle'
-import { isValidChecksum, removeChecksum } from '@iota/checksum'
+import { removeChecksum } from '@iota/checksum'
+import { trits, trytes } from '@iota/converter'
 import { key, normalizedBundleHash, signatureFragment, subseed } from '@iota/signing'
 import { asFinalTransactionTrytes } from '@iota/transaction-converter'
 import * as errors from '../../errors'
@@ -22,7 +22,7 @@ import {
     Callback,
     getOptionsWithDefaults,
     Provider,
-    Transaction,
+    Transaction, // tslint:disable-line no-unused-variable
     Transfer,
     Trytes,
 } from '../../types'
@@ -94,6 +94,9 @@ export const createPrepareTransfers = (provider?: Provider, now: () => number = 
      * For offline usage, please see [`createPrepareTransfers`]{@link #module_core.createPrepareTransfers}
      * which creates a `prepareTransfers` without a network provider.
      *
+     * **Note:** After calling this method, persist the returned transaction trytes in local storage. Only then you should broadcast to netowrk.
+     * This will allow for reattachments and prevent key reuse if trytes can't be recovered by querying the netowrk after broadcasting.
+     *
      * @method prepareTransfers
      *
      * @memberof module:core
@@ -153,11 +156,7 @@ export const createPrepareTransfers = (provider?: Provider, now: () => number = 
                 transactions: [],
                 trytes: [],
                 seed,
-                transfers: transfers.map(transfer => ({
-                    ...transfer,
-                    message: transfer.message || '',
-                    tag: transfer.tag || '',
-                })),
+                transfers,
                 timestamp: Math.floor((typeof now === 'function' ? now() : Date.now()) / 1000),
                 ...getPrepareTransfersOptions(options),
             })
@@ -174,7 +173,7 @@ export const createPrepareTransfers = (provider?: Provider, now: () => number = 
             addHMAC,
             asTransactionTrytes
         )(props)
-            .then(({ trytes }: PrepareTransfersProps) => trytes)
+            .then(res => res.trytes)
             .asCallback(callback)
     }
 }
@@ -205,7 +204,7 @@ export const addHMACPlaceholder = (props: PrepareTransfersProps): PrepareTransfe
                       transfer.value > 0
                           ? {
                                 ...transfer,
-                                message: NULL_HASH_TRYTES + transfer.message,
+                                message: NULL_HASH_TRYTES + (transfer.message || ''),
                             }
                           : transfer
               ),
@@ -322,7 +321,7 @@ export const createAddRemainder = (provider?: Provider) => {
 }
 
 export const getRemainderAddressStartIndex = (inputs: ReadonlyArray<Address>): number =>
-    [...inputs].sort((a, b) => a.keyIndex - b.keyIndex)[0].keyIndex
+    [...inputs].sort((a, b) => b.keyIndex - a.keyIndex)[0].keyIndex + 1
 
 export const verifyNotSendingToInputs = (props: PrepareTransfersProps): PrepareTransfersProps => {
     const { transactions } = props
@@ -359,7 +358,7 @@ export const addSignatures = (props: PrepareTransfersProps): PrepareTransfersPro
                         .map((_, i) =>
                             trytes(
                                 signatureFragment(
-                                    normalizedBundle.slice(i * HASH_LENGTH / 3, (i + 1) * HASH_LENGTH / 3),
+                                    normalizedBundle.slice((i * HASH_LENGTH) / 3, ((i + 1) * HASH_LENGTH) / 3),
                                     keyTrits.slice(i * KEY_FRAGMENT_LENGTH, (i + 1) * KEY_FRAGMENT_LENGTH)
                                 )
                             )

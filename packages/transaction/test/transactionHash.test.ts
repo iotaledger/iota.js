@@ -1,6 +1,6 @@
-import test from 'ava'
 import { trits } from '@iota/converter'
 import { bundle, bundleTrytes } from '@iota/samples'
+import test from 'ava'
 import { transactionHash } from '../src'
 
 test('transactionHash() returns the correct transaction hash.', t => {

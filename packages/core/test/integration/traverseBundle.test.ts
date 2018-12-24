@@ -1,6 +1,6 @@
-import test from 'ava'
 import { createHttpClient } from '@iota/http-client'
 import { bundle, bundleWithZeroValue } from '@iota/samples'
+import test from 'ava'
 import { INVALID_TRANSACTION_HASH } from '../../../errors'
 import { createTraverseBundle } from '../../src'
 import './nocks/getTrytes'

@@ -1,4 +1,3 @@
-import test from 'ava'
 import {
     bundleWithEmptyJSON,
     bundleWithInvalidJSON,
@@ -7,7 +6,8 @@ import {
     parsedJSON,
     parsedJSONOfMultipleMessageFragments,
 } from '@iota/samples'
-import { extractJson, errors } from '../src'
+import test from 'ava'
+import { errors, extractJson } from '../src'
 
 test('extractJson() parses JSON object.', t => {
     t.is(

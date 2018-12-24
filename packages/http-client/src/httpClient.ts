@@ -1,18 +1,17 @@
 /** @module http-client */
 
 import * as Promise from 'bluebird'
-import { getSettingsWithDefaults, Settings } from './settings'
-import { batchedSend, send } from './request'
 import {
     BaseCommand,
-    IRICommand,
     FindTransactionsCommand,
     GetBalancesCommand,
     GetInclusionStatesCommand,
     GetTrytesCommand,
+    IRICommand,
     Provider,
-    CreateProvider,
 } from '../../types'
+import { batchedSend, send } from './request'
+import { getSettingsWithDefaults, Settings } from './settings'
 
 const BATCH_SIZE = 1000
 
@@ -67,8 +66,8 @@ export const getKeysToBatch = <C>(
  * @param {number} [settings.requestBatchSize=1000] - Number of search values per request.
  * @return Object
  */
-export const createHttpClient: CreateProvider = (settings?: Partial<Settings>): Provider => {
-    let _settings = getSettingsWithDefaults({ ...settings })
+export const createHttpClient = (settings?: Partial<Settings>): Provider => {
+    let currentSettings = getSettingsWithDefaults({ ...settings })
     return {
         /**
          * @member send
@@ -79,7 +78,7 @@ export const createHttpClient: CreateProvider = (settings?: Partial<Settings>): 
          */
         send: <C extends BaseCommand, R>(command: Readonly<C>): Promise<Readonly<R>> =>
             Promise.try(() => {
-                const { provider, requestBatchSize, apiVersion } = _settings
+                const { provider, requestBatchSize, apiVersion } = currentSettings
 
                 if (isBatchableCommand(command)) {
                     const keysToBatch = getKeysToBatch(command, requestBatchSize)
@@ -101,7 +100,7 @@ export const createHttpClient: CreateProvider = (settings?: Partial<Settings>): 
          * @param {number} [settings.requestBatchSize=1000] - Number of search values per request.
          */
         setSettings: (newSettings?: Partial<Settings>): void => {
-            _settings = getSettingsWithDefaults({ ..._settings, ...newSettings })
+            currentSettings = getSettingsWithDefaults({ ...currentSettings, ...newSettings })
         },
     }
 }

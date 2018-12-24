@@ -1,12 +1,14 @@
 /** @module transaction-converter */
 
 import { tritsToTrytes, trytesToTrits, value } from '@iota/converter'
-import { transactionHash } from '@iota/transaction'
-import Curl from '@iota/curl'
 import { padTrits, padTrytes } from '@iota/pad'
+import { transactionHash } from '@iota/transaction'
 import * as errors from '../../errors'
 import { isTrytesOfExactLength } from '../../guards'
+import '../../typed-array'
 import { asArray, Hash, Transaction, Trytes } from '../../types'
+
+export { Transaction }
 
 export function asTransactionTrytes(transactions: Transaction): Trytes
 export function asTransactionTrytes(transactions: ReadonlyArray<Transaction>): ReadonlyArray<Trytes>

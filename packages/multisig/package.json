@@ -1,6 +1,6 @@
 {
     "name": "@iota/multisig",
-    "version": "1.0.0-beta.5",
+    "version": "1.0.0-beta.8",
     "description": "Methods for generating multisig addresses and co-signing transactions.",
     "main": "./out/multisig/src/index.js",
     "typings": "typings/multisig/src",
@@ -10,7 +10,8 @@
     "scripts": {
         "prepare": "tsc",
         "test": "tsc",
-        "format": "prettier",
+        "test-ci": "echo \"Warning: no test specified\" && exit 0",
+        "lint": "tslint --project .",
         "docs": "tsc && jsdoc2md --no-cache --plugin dmd-clear -t README_tpl.hbs --files './out/**/*.js' > README.md"
     },
     "contributors": [
@@ -43,13 +44,13 @@
         "url": "https://github.com/iotaledger/iota.js.git"
     },
     "dependencies": {
-        "@iota/bundle": "^1.0.0-beta.5",
-        "@iota/checksum": "^1.0.0-beta.5",
-        "@iota/converter": "^1.0.0-beta.5",
-        "@iota/core": "^1.0.0-beta.5",
-        "@iota/kerl": "^1.0.0-beta.5",
-        "@iota/signing": "^1.0.0-beta.5",
-        "@types/bluebird": "^3.5.20",
+        "@iota/bundle": "^1.0.0-beta.8",
+        "@iota/checksum": "^1.0.0-beta.8",
+        "@iota/converter": "^1.0.0-beta.8",
+        "@iota/core": "^1.0.0-beta.8",
+        "@iota/kerl": "^1.0.0-beta.8",
+        "@iota/signing": "^1.0.0-beta.8",
+        "@types/bluebird": "^3.5.25",
         "bluebird": "^3.5.1",
         "isomorphic-fetch": "^2.2.1"
     }

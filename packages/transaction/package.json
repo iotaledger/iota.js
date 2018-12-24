@@ -1,6 +1,6 @@
 {
     "name": "@iota/transaction",
-    "version": "1.0.0-beta.5",
+    "version": "1.0.0-beta.8",
     "description": "Utilities and validators for transactions.",
     "main": "./out/transaction/src/index.js",
     "typings": "typings/transaction/src",
@@ -11,6 +11,7 @@
         "prepare": "tsc",
         "test": "tsc && nyc ava",
         "test-ci": "nyc ava",
+        "lint": "tslint --project .",
         "docs": "tsc && jsdoc2md --no-cache --plugin dmd-clear -t README_tpl.hbs --files './out/**/*.js' > README.md"
     },
     "contributors": [
@@ -64,10 +65,10 @@
         "url": "https://github.com/iotaledger/iota.js.git/tree/develop/packages/crypto"
     },
     "dependencies": {
-        "@iota/converter": "^1.0.0-beta.5",
-        "@iota/curl": "^1.0.0-beta.5"
+        "@iota/converter": "^1.0.0-beta.8",
+        "@iota/curl": "^1.0.0-beta.8"
     },
     "devDependencies": {
-        "@iota/samples": "^1.0.0-beta.5"
+        "@iota/samples": "^1.0.0-beta.8"
     }
 }

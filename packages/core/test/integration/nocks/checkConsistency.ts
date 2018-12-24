@@ -1,5 +1,5 @@
 import * as nock from 'nock'
-import { IRICommand, CheckConsistencyCommand, CheckConsistencyResponse } from '../../../../types'
+import { CheckConsistencyCommand, CheckConsistencyResponse, IRICommand } from '../../../../types'
 import headers from './headers'
 
 export const checkConsistencyCommand: CheckConsistencyCommand = {

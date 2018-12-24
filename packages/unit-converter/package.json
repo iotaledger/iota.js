@@ -1,6 +1,6 @@
 {
     "name": "@iota/unit-converter",
-    "version": "1.0.0-beta.5",
+    "version": "1.0.0-beta.8",
     "description": "Converts value across different IOTA units.",
     "main": "./out/src/index.js",
     "typings": "./out/src",
@@ -11,7 +11,7 @@
         "prepare": "tsc",
         "test": "tsc && nyc ava",
         "test-ci": "nyc ava",
-        "format": "prettier",
+        "lint": "tslint --project .",
         "docs": "tsc && jsdoc2md --no-cache --plugin dmd-clear -t README_tpl.hbs --files './out/**/*.js' > README.md"
     },
     "contributors": [
@@ -65,6 +65,6 @@
     },
     "dependencies": {
         "@types/bignumber.js": "^5.0.0",
-        "bignumber.js": "^4.1.0"
+        "bignumber.js": "^7.2.1"
     }
 }

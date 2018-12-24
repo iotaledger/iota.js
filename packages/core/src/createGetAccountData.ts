@@ -6,9 +6,6 @@ import {
     startOptionValidator,
     validate,
 } from '../../guards'
-import { createGetBalances, createGetNewAddress } from './'
-import { createGetBundlesFromAddresses } from './createGetBundlesFromAddresses'
-import { createWereAddressesSpentFrom } from './createWereAddressesSpentFrom'
 import {
     Address,
     asArray,
@@ -18,8 +15,11 @@ import {
     Hash,
     makeAddress,
     Provider,
-    Transaction,
+    Transaction, // tslint:disable-line no-unused-variable
 } from '../../types'
+import { createGetBalances, createGetNewAddress } from './'
+import { createGetBundlesFromAddresses } from './createGetBundlesFromAddresses'
+import { createWereAddressesSpentFrom } from './createWereAddressesSpentFrom'
 
 /**
  * Account data object

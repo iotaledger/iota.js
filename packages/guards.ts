@@ -66,8 +66,9 @@ export const isNinesTrytes = isEmpty
 export const isHash = (hash: any): hash is Hash =>
     isTrytesOfExactLength(hash, HASH_TRYTE_SIZE) || isTrytesOfExactLength(hash, HASH_TRYTE_SIZE + 9) // address w/ checksum is valid hash
 
-/* Check if security level is positive integer */
-export const isSecurityLevel = (security: any): security is number => Number.isInteger(security) && security > 0
+/* Check if security level is valid positive integer */
+export const isSecurityLevel = (security: any): security is number =>
+    Number.isInteger(security) && security > 0 && security < 4
 
 /**
  * Checks if input is valid input object. Address can be passed with or without checksum.
@@ -81,7 +82,7 @@ export const isSecurityLevel = (security: any): security is number => Number.isI
  */
 export const isInput = (input: any): input is Address =>
     isHash(input.address) &&
-    (typeof input.security === 'undefined' || isSecurityLevel(input.security)) &&
+    isSecurityLevel(input.security) &&
     (typeof input.balance === 'undefined' || (Number.isInteger(input.balance) && input.balance > 0)) &&
     Number.isInteger(input.keyIndex) &&
     input.keyIndex >= 0
@@ -200,9 +201,17 @@ export const arrayValidator = <T>(validator: Validator<T>, allowEmpty = false): 
     arr: ReadonlyArray<any>,
     customMsg?: string
 ) => {
-    const [_, isValid, msg] = validator(arr[0])
+    const [
+        _, // tslint:disable-line no-unused-variable
+        isValid,
+        msg,
+    ] = validator(arr[0])
 
-    return [arr, (x: ReadonlyArray<any>): x is ReadonlyArray<T> => x.every(value => isValid(value)), customMsg || msg]
+    return [
+        arr,
+        (x: ReadonlyArray<any>): x is ReadonlyArray<T> => Array.isArray(x) && x.every(value => isValid(value)),
+        customMsg || msg,
+    ]
 }
 
 export const depthValidator: Validator<number> = depth => [

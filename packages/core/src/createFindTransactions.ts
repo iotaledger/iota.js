@@ -1,7 +1,7 @@
-import * as Promise from 'bluebird'
 import { removeChecksum } from '@iota/checksum'
 import { padTagArray } from '@iota/pad'
 import { transactionHashValidator } from '@iota/transaction'
+import * as Promise from 'bluebird'
 import * as errors from '../../errors'
 import { arrayValidator, hashValidator, tagValidator, validate } from '../../guards'
 import {
@@ -111,9 +111,9 @@ export const createFindTransactions = ({ send }: Provider) => {
         return Promise.resolve(validateFindTransactions(query))
             .then(() => removeAddressChecksum(query))
             .then(padTags)
-            .then(query =>
+            .then(formattedQuery =>
                 send<FindTransactionsCommand, FindTransactionsResponse>({
-                    ...query,
+                    ...formattedQuery,
                     command: IRICommand.FIND_TRANSACTIONS,
                 })
             )

@@ -488,6 +488,9 @@ or remote [`PoWbox`](https://powbox.devnet.iota.org/).
 `trunkTransaction` and `branchTransaction` hashes are given by
 [`getTransactionToApprove`](#module_core.getTransactionsToApprove).
 
+**Note:** Persist the transaction trytes in local storage __before__ calling this command, to ensure
+that reattachment is possible, until your bundle has been included.
+
 **Example**  
 ```js
 getTransactionsToApprove(depth)
@@ -530,7 +533,7 @@ particularly in the case of large bundles.
 
 **Example**  
 ```js
-broadcastTransactions(tailHash)
+broadcastBundle(tailHash)
   .then(transactions => {
      // ...
   })
@@ -569,7 +572,7 @@ Tip selection and Proof-of-Work must be done first, by calling
 
 You may use this method to increase odds of effective transaction propagation.
 
-Persist the transaction trytes in local storage **before** calling this command for first time, to ensure
+**Note:** Persist the transaction trytes in local storage __before__ calling this command, to ensure
 that reattachment is possible, until your bundle has been included.
 
 **Example**  
@@ -681,7 +684,7 @@ const isPromotable = ({ hash, attachmentTimestamp }) => (
 | [query.addresses] | <code>Array.&lt;Hash&gt;</code> | List of addresses |
 | [query.bundles] | <code>Array.&lt;Hash&gt;</code> | List of bundle hashes |
 | [query.tags] | <code>Array.&lt;Tag&gt;</code> | List of tags |
-| [query.addresses] | <code>Array.&lt;Hash&gt;</code> | List of approvees |
+| [query.approvees] | <code>Array.&lt;Hash&gt;</code> | List of approvees |
 | [callback] | <code>Callback</code> | Optional callback |
 
 Wrapper function for [`findTransactions`](#module_core.findTransactions) and
@@ -728,7 +731,7 @@ findTransactionObjects({ addresses: ['ADR...'] })
 | [query.addresses] | <code>Array.&lt;Hash&gt;</code> | List of addresses |
 | [query.bundles] | <code>Array.&lt;Hash&gt;</code> | List of bundle hashes |
 | [query.tags] | <code>Array.&lt;Tag&gt;</code> | List of tags |
-| [query.addresses] | <code>Array.&lt;Hash&gt;</code> | List of approvees |
+| [query.approvees] | <code>Array.&lt;Hash&gt;</code> | List of approvees |
 | [callback] | <code>Callback</code> | Optional callback |
 
 Searches for transaction `hashes`  by calling
@@ -1348,6 +1351,9 @@ adding remainder and signing. It can be used to generate and sign bundles either
 For offline usage, please see [`createPrepareTransfers`](#module_core.createPrepareTransfers)
 which creates a `prepareTransfers` without a network provider.
 
+**Note:** After calling this method, persist the returned transaction trytes in local storage. Only then you should broadcast to netowrk.
+This will allow for reattachments and prevent key reuse if trytes can't be recovered by querying the netowrk after broadcasting.
+
 <a name="module_core.createPromoteTransaction"></a>
 
 ### *core*.createPromoteTransaction(provider, [attachFn])
@@ -1481,10 +1487,19 @@ replayBundle(tail)
 [Attaches to tanlge](#module_core.attachToTangle), [stores](#module_core.storeTransactions)
 and [broadcasts](#module_core.broadcastTransactions) a list of transaction trytes.
 
+**Note:** Persist the transaction trytes in local storage __before__ calling this command, to ensure
+that reattachment is possible, until your bundle has been included.
+
 **Example**  
 ```js
 prepareTransfers(seed, transfers)
-  .then(trytes => sendTrytes(trytes, depth, minWeightMagnitude))
+  .then(trytes => {
+    // Persist trytes locally before sending to network.
+    // This allows for reattachments and prevents key reuse if trytes can't
+    // be recovered by querying the network after broadcasting.
+
+    return iota.sendTrytes(trytes, depth, minWeightMagnitude)
+  })
   .then(transactions => {
     // ...
   })
@@ -1518,7 +1533,7 @@ Stores and broadcasts a list of _attached_ transaction trytes by calling
 [`storeTransactions`](#module_core.storeTransactions) and
 [`broadcastTransactions`](#module_core.broadcastTransactions).
 
-Note: Persist the transaction trytes in local storage **before** calling this command, to ensure
+**Note:** Persist the transaction trytes in local storage __before__ calling this command, to ensure
 that reattachment is possible, until your bundle has been included.
 
 Any transactions stored with this command will eventaully be erased, as a result of a snapshot.
@@ -1552,8 +1567,8 @@ Tip selection and Proof-of-Work must be done first, by calling
 [`attachToTangle`](#module_core.attachToTangle) or an equivalent attach method or remote
 [`PoWbox`](https://powbox.devnet.iota.org/).
 
-Persist the transaction trytes in local storage **before** calling this command, to ensure
-reattachment is possible, until your bundle has been included.
+**Note:** Persist the transaction trytes in local storage __before__ calling this command, to ensure
+that reattachment is possible, until your bundle has been included.
 
 Any transactions stored with this command will eventaully be erased, as a result of a snapshot.
 

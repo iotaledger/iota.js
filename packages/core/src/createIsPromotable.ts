@@ -1,4 +1,3 @@
-import { transactionHashValidator } from '@iota/transaction'
 import { asTransactionObject } from '@iota/transaction-converter'
 import * as Promise from 'bluebird'
 import { depthValidator, hashValidator, validate } from '../../guards'

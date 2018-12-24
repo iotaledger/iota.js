@@ -1,5 +1,5 @@
-import * as Promise from 'bluebird'
 import { attachedTrytesValidator } from '@iota/transaction'
+import * as Promise from 'bluebird'
 import { arrayValidator, validate } from '../../guards'
 import {
     BroadcastTransactionsCommand,
@@ -30,7 +30,7 @@ export const createBroadcastTransactions = ({ send }: Provider) =>
      *
      * You may use this method to increase odds of effective transaction propagation.
      *
-     * Persist the transaction trytes in local storage **before** calling this command for first time, to ensure
+     * **Note:** Persist the transaction trytes in local storage __before__ calling this command, to ensure
      * that reattachment is possible, until your bundle has been included.
      *
      * @example

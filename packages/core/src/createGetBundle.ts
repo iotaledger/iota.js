@@ -1,8 +1,14 @@
-import * as Promise from 'bluebird'
 import { bundleValidator } from '@iota/bundle-validator'
 import { transactionHashValidator } from '@iota/transaction'
+import * as Promise from 'bluebird'
 import { validate } from '../../guards'
-import { Bundle, Callback, Hash, Provider, Transaction } from '../../types'
+import {
+    Bundle,
+    Callback,
+    Hash,
+    Provider,
+    Transaction, // tslint:disable-line no-unused-variable
+} from '../../types'
 import { createTraverseBundle } from './'
 
 export const validateBundle = (bundle: Bundle) => validate(bundleValidator(bundle))

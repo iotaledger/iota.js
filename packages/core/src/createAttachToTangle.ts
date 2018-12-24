@@ -1,5 +1,5 @@
-import * as Promise from 'bluebird'
 import { transactionHashValidator, transactionTrytesValidator } from '@iota/transaction'
+import * as Promise from 'bluebird'
 import { INVALID_BRANCH_TRANSACTION, INVALID_TRUNK_TRANSACTION } from '../../errors'
 import { arrayValidator, integerValidator, validate } from '../../guards'
 import {
@@ -40,6 +40,9 @@ export const createAttachToTangle = ({ send }: Provider): AttachToTangle => {
      *
      * `trunkTransaction` and `branchTransaction` hashes are given by
      * {@link #module_core.getTransactionsToApprove `getTransactionToApprove`}.
+     *
+     * **Note:** Persist the transaction trytes in local storage __before__ calling this command, to ensure
+     * that reattachment is possible, until your bundle has been included.
      *
      * @example
      *
@@ -102,7 +105,7 @@ export const createAttachToTangle = ({ send }: Provider): AttachToTangle => {
                     trytes,
                 })
             )
-            .then(({ trytes }) => trytes)
+            .then(res => res.trytes)
             .asCallback(typeof arguments[2] === 'function' ? arguments[2] : callback)
     }
 }

@@ -1,8 +1,8 @@
+import test from 'ava'
 import * as nock from 'nock'
 import { createHttpClient } from '../src'
 import { command as batchedCommand, response as batchedResponse } from './batchedSend.test'
 import { command, headers, response } from './send.test'
-import test from 'ava'
 
 const API_VERSION = 1
 

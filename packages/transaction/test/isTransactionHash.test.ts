@@ -1,5 +1,5 @@
-import test from 'ava'
 import { transactionObject } from '@iota/samples'
+import test from 'ava'
 import { isTransactionHash } from '../src'
 
 test('isTransactionHash() returns true for valid transaction hash.', t => {

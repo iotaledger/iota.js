@@ -1,6 +1,6 @@
 {
     "name": "@iota/samples",
-    "version": "1.0.0-beta.5",
+    "version": "1.0.0-beta.8",
     "description": "Collection of samples useful in testing IOTA modules.",
     "main": "./out/samples/src/index.js",
     "typings": "typings/samples/src",
@@ -9,7 +9,9 @@
     },
     "scripts": {
         "prepare": "tsc",
-        "format": "prettier"
+        "test": "exit 0",
+        "test-ci": "exit 0",
+        "lint": "tslint --project ."
     },
     "contributors": [
         "Dominik Schiener <dom@iota.org> (https://iota.org)",

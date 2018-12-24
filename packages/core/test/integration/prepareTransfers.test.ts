@@ -1,9 +1,10 @@
-import test from 'ava'
-import { createHttpClient } from '@iota/http-client'
 import { addChecksum } from '@iota/checksum'
-import { createPrepareTransfers } from '../../src'
-import { Transfer, Trytes } from '../../../types'
+import { createHttpClient } from '@iota/http-client'
 import { addresses, trytes as expected } from '@iota/samples'
+import test from 'ava'
+import { Transfer, Trytes } from '../../../types'
+import { createPrepareTransfers } from '../../src'
+import { getRemainderAddressStartIndex } from '../../src/createPrepareTransfers'
 
 import './nocks/prepareTransfers'
 
@@ -21,6 +22,8 @@ const inputs: ReadonlyArray<any> = [
         balance: 4,
     },
 ]
+
+test('getRemainderAddressStartIndex', t => t.is(getRemainderAddressStartIndex(inputs), 2))
 
 const transfers: ReadonlyArray<Transfer> = [
     {
@@ -97,4 +100,44 @@ test.cb('prepareTransfers() passes correct arguments to callback', t => {
 
         t.end()
     })
+})
+
+test('prepareTransfers() throws intuitive error when provided invalid transfers array', async t => {
+    const invalidTransfer = {
+        address: addChecksum('A'.repeat(81)),
+        value: 3,
+    } as any
+
+    t.is(
+        t.throws(() => prepareTransfers('SEED', invalidTransfer)).message,
+        `Invalid transfer array: ${invalidTransfer}`,
+        'prepareTransfers() should throw intuitive error when provided invalid transfers array'
+    )
+})
+
+test('prepareTransfers() throws error for inputs without security level.', async t => {
+    const input: any = {
+        address: 'I'.repeat(81),
+        keyIndex: 0,
+        balance: 1,
+    }
+
+    t.is(
+        t.throws(() =>
+            prepareTransfers(
+                'SEED',
+                [
+                    {
+                        address: 'A'.repeat(81),
+                        value: 1,
+                    },
+                ],
+                {
+                    inputs: [input],
+                }
+            )
+        ).message,
+        `Invalid input: ${input}`,
+        'prepareTransfers() should throw error for inputs without security level.'
+    )
 })

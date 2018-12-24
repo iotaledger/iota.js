@@ -15,7 +15,7 @@ export interface Balance {
 export interface Address extends Balance {
     readonly address: Hash
     readonly keyIndex: number
-    readonly security?: number
+    readonly security: number
 }
 
 export const makeAddress = (address: Hash, balance: number, keyIndex: number, security: number): Address => ({
@@ -283,8 +283,6 @@ export interface Provider {
     ) => Promise<Readonly<R>>
     readonly setSettings: <S>(settings?: Readonly<Partial<S>>) => void
 }
-
-export type CreateProvider = (settings?: Partial<object>) => Provider
 
 /** Attach to tangle */
 export type AttachToTangle = (

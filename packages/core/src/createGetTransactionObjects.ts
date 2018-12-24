@@ -1,8 +1,8 @@
-import * as Promise from 'bluebird'
 import { transactionHashValidator } from '@iota/transaction'
 import { asTransactionObjects } from '@iota/transaction-converter'
+import * as Promise from 'bluebird'
 import { arrayValidator, validate } from '../../guards'
-import { Callback, Hash, Provider, Transaction, Trytes } from '../../types'
+import { Callback, Hash, Provider, Transaction } from '../../types'
 import { createGetTrytes } from './'
 
 /**

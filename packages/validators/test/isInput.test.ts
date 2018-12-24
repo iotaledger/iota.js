@@ -18,14 +18,15 @@ test('isInput()', t => {
             keyIndex: 0,
             balance: 10,
         }),
-        true,
-        'isInput returns true for valid input without security level'
+        false,
+        'isInput returns false for input without security level'
     )
 
     t.is(
         isInput({
             address,
             keyIndex: 0,
+            security: 2,
         }),
         true,
         'isInput returns true for valid input without balance'

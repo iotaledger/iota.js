@@ -1,5 +1,5 @@
-import * as errors from './errors'
 import { TRYTE_ALPHABET } from './'
+import * as errors from './errors'
 
 /**
  * Converts an ascii encoded string to trytes.
@@ -55,7 +55,7 @@ export const asciiToTrytes = (input: string): string => {
         const dec = input[i].charCodeAt(0)
 
         trytes += TRYTE_ALPHABET[dec % 27]
-        trytes += TRYTE_ALPHABET[(dec - dec % 27) / 27]
+        trytes += TRYTE_ALPHABET[(dec - (dec % 27)) / 27]
     }
 
     return trytes

@@ -1,5 +1,5 @@
-import test from 'ava'
 import { trytes } from '@iota/samples'
+import test from 'ava'
 import { isTrytesArray } from '../src'
 
 test('isTrytesArray()', t => {

@@ -1,5 +1,5 @@
-import test from 'ava'
 import { createHttpClient } from '@iota/http-client'
+import test from 'ava'
 import { createGetNodeInfo } from '../../src'
 import { getNodeInfoResponse } from './nocks/getNodeInfo'
 

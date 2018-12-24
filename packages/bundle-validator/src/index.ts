@@ -5,13 +5,15 @@ import Kerl from '@iota/kerl'
 import { validateSignatures } from '@iota/signing'
 import { isTransaction } from '@iota/transaction'
 import { asTransactionTrytes } from '@iota/transaction-converter'
-import * as errors from '../../errors'
+import { INVALID_BUNDLE } from '../../errors'
 import { isArray, Validator } from '../../guards'
 import { Bundle, Hash, Transaction, Trytes } from '../../types'
 
 interface SignatureFragments {
     readonly [key: string]: ReadonlyArray<Trytes>
 }
+
+export { Transaction, Bundle, INVALID_BUNDLE }
 
 /**
  * Validates all signatures of a bundle.
@@ -132,4 +134,4 @@ export default function isBundle(bundle: Bundle) {
     return validateBundleSignatures(bundle)
 }
 
-export const bundleValidator: Validator<Bundle> = (bundle: Bundle) => [bundle, isBundle, errors.INVALID_BUNDLE]
+export const bundleValidator: Validator<Bundle> = (bundle: Bundle) => [bundle, isBundle, INVALID_BUNDLE]

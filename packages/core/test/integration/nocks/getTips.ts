@@ -1,5 +1,5 @@
 import * as nock from 'nock'
-import { IRICommand, GetTipsCommand, GetTipsResponse } from '../../../../types'
+import { GetTipsCommand, GetTipsResponse, IRICommand } from '../../../../types'
 import headers from './headers'
 
 export const getTipsCommand: GetTipsCommand = {

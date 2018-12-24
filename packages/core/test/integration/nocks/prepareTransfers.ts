@@ -1,5 +1,5 @@
 import * as nock from 'nock'
-import { IRICommand, GetBalancesCommand, GetBalancesResponse } from '../../../../types'
+import { GetBalancesCommand, GetBalancesResponse, IRICommand } from '../../../../types'
 import headers from './headers'
 
 export const getBalancesCommand: GetBalancesCommand = {

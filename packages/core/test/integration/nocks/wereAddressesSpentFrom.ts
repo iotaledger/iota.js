@@ -1,9 +1,9 @@
 import * as nock from 'nock'
+import { IRICommand } from '../../../../types'
 import {
     WereAddressesSpentFromCommand,
     WereAddressesSpentFromResponse,
 } from '../../../src/createWereAddressesSpentFrom'
-import { IRICommand } from '../../../../types'
 import headers from './headers'
 
 import { addresses } from '@iota/samples'

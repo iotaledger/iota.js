@@ -1,12 +1,14 @@
 /** @module  extract-json */
 
 import { trytesToAscii } from '@iota/converter'
-import { Transaction } from '../../types'
+import { Bundle, Transaction } from '../../types'
 
 export const errors = {
     INVALID_JSON: 'Invalid JSON encoded message',
     INVALID_BUNDLE: 'Invalid bundle',
 }
+
+export { Bundle, Transaction }
 
 const numericTrytesRegex = /^(RA|PA)?(UA|VA|WA|XA|YA|ZA|9B|AB|BB|CB)+((SA)(UA|VA|WA|XA|YA|ZA|9B|AB|BB|CB)+)?((TC|OB)(RA|PA)?(UA|VA|WA|XA|YA|ZA|9B|AB|BB|CB)+)?99/
 
@@ -51,7 +53,7 @@ const numericTrytesRegex = /^(RA|PA)?(UA|VA|WA|XA|YA|ZA|9B|AB|BB|CB)+((SA)(UA|VA
  *
  * @returns {string | number | null}
  */
-export const extractJson = (bundle: Transaction[]): string | number | null => {
+export const extractJson = (bundle: Bundle): string | number | null => {
     if (!Array.isArray(bundle) || bundle[0] === undefined) {
         throw new Error(errors.INVALID_BUNDLE)
     }
@@ -102,7 +104,7 @@ export const extractJson = (bundle: Transaction[]): string | number | null => {
 
             // Get the upper limit of the tytes that need to be checked
             // because we only check 2 trytes at a time, there is sometimes a leftover
-            const upperLimit = trytesChunk.length - trytesChunk.length % 2
+            const upperLimit = trytesChunk.length - (trytesChunk.length % 2)
 
             const trytesToCheck = trytesChunk.slice(trytesChecked, upperLimit)
 

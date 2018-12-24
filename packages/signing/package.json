@@ -1,6 +1,6 @@
 {
     "name": "@iota/signing",
-    "version": "1.0.0-beta.5",
+    "version": "1.0.0-beta.8",
     "description": "IOTA Signing Scheme",
     "main": "./out/signing/src/index.js",
     "typings": "typings/signing/src",
@@ -10,7 +10,8 @@
     "scripts": {
         "prepare": "tsc",
         "test": "tsc",
-        "format": "prettier",
+        "test-ci": "echo \"Warning: no test specified\" && exit 0",
+        "lint": "tslint --project .",
         "docs": "tsc && jsdoc2md --no-cache --plugin dmd-clear -t README_tpl.hbs --files './out/**/*.js' > README.md"
     },
     "contributors": [
@@ -43,8 +44,8 @@
         "url": "https://github.com/iotaledger/iota.js.git/tree/develop/packages/crypto"
     },
     "dependencies": {
-        "@iota/converter": "^1.0.0-beta.5",
-        "@iota/kerl": "^1.0.0-beta.5",
-        "@iota/pad": "^1.0.0-beta.5"
+        "@iota/converter": "^1.0.0-beta.8",
+        "@iota/kerl": "^1.0.0-beta.8",
+        "@iota/pad": "^1.0.0-beta.8"
     }
 }

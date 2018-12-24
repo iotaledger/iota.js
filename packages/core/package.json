@@ -1,6 +1,6 @@
 {
     "name": "@iota/core",
-    "version": "1.0.0-beta.5",
+    "version": "1.0.0-beta.8",
     "description": "Core functionality to interact with the IOTA network: generate addresses, create, broadcast and monitor transactions.",
     "main": "./out/core/src/index.js",
     "typings": "typings/core/src",
@@ -11,7 +11,7 @@
         "prepare": "tsc",
         "test": "tsc && nyc ava",
         "test-ci": "nyc ava",
-        "format": "prettier",
+        "lint": "tslint --project .",
         "docs": "tsc && jsdoc2md --no-cache --plugin dmd-clear -t README_tpl.hbs --files './out/**/*.js' > README.md"
     },
     "contributors": [
@@ -72,29 +72,29 @@
         "url": "https://github.com/iotaledger/iota.js.git"
     },
     "dependencies": {
-        "@iota/bundle": "^1.0.0-beta.5",
-        "@iota/bundle-validator": "^1.0.0-beta.5",
-        "@iota/checksum": "^1.0.0-beta.5",
-        "@iota/converter": "^1.0.0-beta.5",
-        "@iota/curl": "^1.0.0-beta.5",
-        "@iota/http-client": "^1.0.0-beta.5",
-        "@iota/kerl": "^1.0.0-beta.5",
-        "@iota/pad": "^1.0.0-beta.5",
-        "@iota/signing": "^1.0.0-beta.5",
-        "@iota/transaction": "^1.0.0-beta.5",
-        "@iota/transaction-converter": "^1.0.0-beta.5",
-        "@types/bluebird": "^3.5.20",
+        "@iota/bundle": "^1.0.0-beta.8",
+        "@iota/bundle-validator": "^1.0.0-beta.8",
+        "@iota/checksum": "^1.0.0-beta.8",
+        "@iota/converter": "^1.0.0-beta.8",
+        "@iota/curl": "^1.0.0-beta.8",
+        "@iota/http-client": "^1.0.0-beta.8",
+        "@iota/kerl": "^1.0.0-beta.8",
+        "@iota/pad": "^1.0.0-beta.8",
+        "@iota/signing": "^1.0.0-beta.8",
+        "@iota/transaction": "^1.0.0-beta.8",
+        "@iota/transaction-converter": "^1.0.0-beta.8",
+        "@types/bluebird": "^3.5.25",
         "bluebird": "^3.5.1"
     },
     "devDependencies": {
         "@babel/plugin-syntax-async-generators": "^7.0.0-beta.49",
-        "@iota/samples": "^1.0.0-beta.5",
+        "@iota/samples": "^1.0.0-beta.8",
         "@types/nock": "^9.1.2",
         "babel-cli": "^6.26.0",
         "babel-core": "^6.26.0",
         "babel-plugin-transform-object-rest-spread": "^6.26.0",
         "babel-preset-es2015": "^6.24.1",
         "babel-preset-latest": "^6.24.1",
-        "nock": "^9.2.3"
+        "nock": "^10.0.4"
     }
 }

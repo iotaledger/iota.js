@@ -4,7 +4,7 @@ import {
     GetNeighborsCommand,
     GetNeighborsResponse,
     IRICommand,
-    Neighbor,
+    Neighbor, // tslint:disable-line no-unused-variable
     Neighbors,
     Provider,
 } from '../../types'

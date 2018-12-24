@@ -1,66 +1,68 @@
-import * as Bluebird from 'bluebird'
 import { createHttpClient, HttpClientSettings } from '@iota/http-client'
+import * as Bluebird from 'bluebird' // tslint:disable-line no-unused-variable
 import {
+    AttachToTangle,
+    BaseCommand, // tslint:disable-line no-unused-variable
+    Inputs, // tslint:disable-line no-unused-variable
+    Neighbor, // tslint:disable-line no-unused-variable
+    Provider, // tslint:disable-line no-unused-variable
+    Transaction, // tslint:disable-line no-unused-variable
+    Transfer, // tslint:disable-line no-unused-variable
+} from '../../types'
+import {
+    AccountData, // tslint:disable-line no-unused-variable
+    Balances, // tslint:disable-line no-unused-variable
+    CheckConsistencyOptions, // tslint:disable-line no-unused-variable
     createAddNeighbors,
     createAttachToTangle,
+    createBroadcastBundle,
     createBroadcastTransactions,
     createCheckConsistency,
+    createFindTransactionObjects,
     createFindTransactions,
+    createGetAccountData,
     createGetBalances,
+    createGetBundle,
     createGetInclusionStates,
+    createGetInputs,
+    // createWereAddressesSpentFrom,
+    createGetLatestInclusion,
     createGetNeighbors,
+    createGetNewAddress,
     createGetNodeInfo,
     createGetTips,
+    createGetTransactionObjects,
     createGetTransactionsToApprove,
     createGetTrytes,
     createInterruptAttachingToTangle,
-    createRemoveNeighbors,
-    createStoreTransactions,
-    // createWereAddressesSpentFrom,
-    createBroadcastBundle,
-    createFindTransactionObjects,
-    createGetAccountData,
-    createGetBundle,
-    createGetInputs,
-    createGetLatestInclusion,
-    createGetNewAddress,
-    createGetTransactionObjects,
     createIsPromotable,
     createIsReattachable,
     createPrepareTransfers,
     createPromoteTransaction,
-    createReplayBundle,
     // createSendTransfer,
+    createRemoveNeighbors,
+    createReplayBundle,
     createSendTrytes,
     createStoreAndBroadcast,
+    createStoreTransactions,
     createTraverseBundle,
-    // Types
-    AccountData,
-    Balances,
-    CheckConsistencyOptions,
-    FindTransactionsQuery,
-    GetAccountDataOptions,
-    GetInputsOptions,
-    GetNewAddressOptions,
-    GetNodeInfoResponse,
-    PrepareTransfersOptions,
-    PromoteTransactionOptions,
-    TransactionsToApprove,
+    FindTransactionsQuery, // tslint:disable-line no-unused-variable
+    GetAccountDataOptions, // tslint:disable-line no-unused-variable
+    GetInputsOptions, // tslint:disable-line no-unused-variable
+    GetNewAddressOptions, // tslint:disable-line no-unused-variable
+    GetNodeInfoResponse, // tslint:disable-line no-unused-variable
+    PrepareTransfersOptions, // tslint:disable-line no-unused-variable
+    PromoteTransactionOptions, // tslint:disable-line no-unused-variable
+    TransactionsToApprove, // tslint:disable-line no-unused-variable
 } from './'
-import { createGetTransfers, GetTransfersOptions } from './createGetTransfers'
 import { createGetBundlesFromAddresses } from './createGetBundlesFromAddresses'
 import {
-    AttachToTangle,
-    Provider,
-    BaseCommand,
-    Inputs,
-    Neighbor,
-    Transaction,
-    Transfer,
-    CreateProvider,
-} from '../../types'
+    createGetTransfers,
+    GetTransfersOptions, // tslint:disable-line no-unused-variable
+} from './createGetTransfers'
 
 export interface Settings extends HttpClientSettings {
+    readonly network?: Provider
     readonly attachToTangle?: AttachToTangle
 }
 
@@ -77,7 +79,8 @@ export function returnType<T>(func: Func<T>) {
  *
  * @memberof module:core
  *
- * @param {object | Function} [settings={} | provider] - Connection settings or `provider` factory
+ * @param {object} [settings={}] - Connection settings
+ * @param {Provider} [settings.network] - Network provider, defaults to `http-client`.
  * @param {string} [settings.provider=http://localhost:14265] Uri of IRI node
  * @param {function} [settings.attachToTangle] - Function to override
  * [`attachToTangle`]{@link #module_core.attachToTangle} with
@@ -86,11 +89,8 @@ export function returnType<T>(func: Func<T>) {
  *
  * @return {API}
  */
-export const composeAPI = (input: Partial<Settings> | CreateProvider = {}) => {
-    const isFn = typeof input === 'function'
-    const settings: Partial<Settings> = isFn ? {} : <Partial<Settings>>input
-    const provider: Provider = isFn ? (input as CreateProvider)() : createHttpClient(settings)
-
+export const composeAPI = (settings: Partial<Settings> = {}) => {
+    let provider: Provider = createHttpClient(settings)
     let attachToTangle: AttachToTangle = settings.attachToTangle || createAttachToTangle(provider)
 
     /**
@@ -102,15 +102,24 @@ export const composeAPI = (input: Partial<Settings> | CreateProvider = {}) => {
      *
      * @param {object} settings - Provider settings object
      * @param {string} [settings.provider] - Http `uri` of IRI node
-     * @param {function} [settings.attachToTangle] - Function to override
+     * @param {Provider} [settings.network] - Network provider to override with
+     * @param {function} [settings.attachToTangle] - AttachToTangle function to override with
      * [`attachToTangle`]{@link #module_core.attachToTangle} with
      */
     function setSettings(newSettings: Partial<Settings> = {}) {
-        provider.setSettings(newSettings)
-
         if (newSettings.attachToTangle) {
             attachToTangle = newSettings.attachToTangle
         }
+
+        if (newSettings.network) {
+            provider = newSettings.network
+        }
+
+        provider.setSettings(newSettings)
+    }
+
+    function overrideNetwork(network: Provider) {
+        provider = network
     }
 
     /**
@@ -129,7 +138,7 @@ export const composeAPI = (input: Partial<Settings> | CreateProvider = {}) => {
     }
 
     /** @namespace API */
-    const api = {
+    return {
         // IRI commands
         addNeighbors: createAddNeighbors(provider),
         attachToTangle,
@@ -171,14 +180,8 @@ export const composeAPI = (input: Partial<Settings> | CreateProvider = {}) => {
         traverseBundle: createTraverseBundle(provider),
         setSettings,
         overrideAttachToTangle,
+        overrideNetwork,
     }
-
-    return isFn
-        ? (settings: Partial<Settings>) => {
-              setSettings(settings)
-              return api
-          }
-        : api
 }
 
 export const apiType = returnType(composeAPI)
