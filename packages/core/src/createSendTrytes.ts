@@ -28,7 +28,7 @@ export const createSendTrytes = (provider: Provider, attachFn?: AttachToTangle) 
     const attachToTangle = attachFn || createAttachToTangle(provider)
 
     /**
-     * [Attaches to tanlge]{@link #module_core.attachToTangle}, [stores]{@link #module_core.storeTransactions}
+     * [Attaches to Tangle]{@link #module_core.attachToTangle}, [stores]{@link #module_core.storeTransactions}
      * and [broadcasts]{@link #module_core.broadcastTransactions} a list of transaction trytes.
      *
      * **Note:** Persist the transaction trytes in local storage __before__ calling this command, to ensure
@@ -56,10 +56,16 @@ export const createSendTrytes = (provider: Provider, attachFn?: AttachToTangle) 
      *
      * @memberof module:core
      *
-     * @param {Trytes[]} trytes - List of trytes to attach, store & broadcast
-     * @param {number} depth - Depth
-     * @param {number} minWeightMagnitude - Min weight magnitude
-     * @param {string} [reference] - Optional reference hash
+     * @param {Trytes[]} trytes - List of trytes to attach, store and broadcast
+     *
+     * @param {number} depth - The depth at which Random Walk starts. A value of `3` is typically used by wallets,
+     * meaning that RW starts 3 milestones back.
+     *
+     * @param {number} minWeightMagnitude - Minimum number of trailing zeros in transaction hash. This is used to
+     * search for a valid `nonce`. Currently it is `14` on mainnet & spamnet and `9` on most other testnets.
+     *
+     * @param {string} [reference] - Optional reference transaction hash
+     *
      * @param {Callback} [callback] - Optional callback
      *
      * @return {Promise}

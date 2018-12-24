@@ -38,8 +38,8 @@ export const createCheckConsistency = ({ send }: Provider) =>
      * are not conflicting with each other and rest of the ledger.
      *
      * As long as a transaction is consistent it might be accepted by the network.
-     * In case transaction is inconsistent, it will not be accepted, and a reattachment
-     * is required by calling [`replaybundle`]{@link #module_core.replayBundle}.
+     * In case a transaction is inconsistent, it will not be accepted, and a reattachment
+     * is required by calling [`replayBundle`]{@link #module_core.replayBundle}.
      *
      * @example
      *
@@ -60,9 +60,9 @@ export const createCheckConsistency = ({ send }: Provider) =>
      * or if not referenced by recent milestones issued by
      * [Coordinator](https://docs.iota.org/introduction/tangle/consensus).
      * Therefore `checkConsistency` with a time heuristic can determine
-     * if a transaction should be [_promoted_]{@link promoteTransaction}
-     * or [_reattached_]{@link replayBundle}.
-     * This functionality is abstracted in [`isPromotable`]{@link isPromotable}.
+     * if a transaction should be [_promoted_]{@link #module_core.promoteTransaction}
+     * or [_reattached_]{@link #module_core.replayBundle}.
+     * This functionality is abstracted in [`isPromotable`]{@link #module_core.isPromotable}.
      *
      * ```js
      * const isAboveMaxDepth = attachmentTimestamp => (
@@ -87,10 +87,10 @@ export const createCheckConsistency = ({ send }: Provider) =>
      * @memberof module:core
      *
      * @param {Hash|Hash[]} transactions - Tail transaction hash (hash of transaction
-     * with `currentIndex=0`), or array of tail transaction hashes.
+     * with `currentIndex == 0`), or array of tail transaction hashes
      * @param {object} [options] - Options
      * @param {boolean} [options.rejectWithReason] - Enables rejection if state is `false`, with reason as error message
-     * @param {Callback} [callback] - Optional callback.
+     * @param {Callback} [callback] - Optional callback
      *
      * @return {Promise}
      * @fulfil {boolean} Consistency state of given transaction or co-consistency of given transactions.
