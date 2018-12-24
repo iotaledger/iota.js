@@ -30,16 +30,16 @@ export const createAttachToTangle = ({ send }: Provider): AttachToTangle => {
      *  - `hash`
      *  - `nonce`
      *  - `attachmentTimestamp`
-     *  - `attachmentTimsetampLowerBound`
+     *  - `attachmentTimestampLowerBound`
      *  - `attachmentTimestampUpperBound`
      *
-     * This method can be replaced with a local equivelant such as
+     * This method can be replaced with a local equivalent such as
      * [`ccurl.interface.js`](https://github.com/iotaledger/ccurl.interface.js) in node.js,
      * [`curl.lib.js`](https://github.com/iotaledger/curl.lib.js) which works on WebGL 2 enabled browsers
      * or remote [`PoWbox`](https://powbox.devnet.iota.org/).
      *
      * `trunkTransaction` and `branchTransaction` hashes are given by
-     * {@link #module_core.getTransactionsToApprove `getTransactionToApprove`}.
+     * {@link #module_core.getTransactionsToApprove `getTransactionsToApprove`}.
      *
      * **Note:** Persist the transaction trytes in local storage __before__ calling this command, to ensure
      * that reattachment is possible, until your bundle has been included.
@@ -49,7 +49,7 @@ export const createAttachToTangle = ({ send }: Provider): AttachToTangle => {
      * ```js
      * getTransactionsToApprove(depth)
      *   .then(({ trunkTransaction, branchTransaction }) =>
-     *     attachToTangle(trunkTransaction, branchTransaction, minWightMagnitude, trytes)
+     *     attachToTangle(trunkTransaction, branchTransaction, minWeightMagnitude, trytes)
      *   )
      *   .then(attachedTrytes => {
      *     // ...
@@ -67,7 +67,7 @@ export const createAttachToTangle = ({ send }: Provider): AttachToTangle => {
      * [`getTransactionsToApprove`]{@link #module_core.getTransactionsToApprove}
      * @param {Hash} branchTransaction - Branch transaction as returned by
      * [`getTransactionsToApprove`]{@link #module_core.getTransactionsToApprove}
-     * @param {number} minWeightMagnitude - Number of minimun trailing zeros in tail transaction hash
+     * @param {number} minWeightMagnitude - Number of minimum trailing zeros in tail transaction hash
      * @param {TransactionTrytes[]} trytes - List of transaction trytes
      * @param {Callback} [callback] - Optional callback
      *

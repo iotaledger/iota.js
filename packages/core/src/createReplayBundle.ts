@@ -26,8 +26,8 @@ export const createReplayBundle = (provider: Provider, attachFn?: AttachToTangle
     const sendTrytes = createSendTrytes(provider, attachFn)
 
     /**
-     * Reattaches a transfer to tangle by selecting tips & performing the Proof-of-Work again.
-     * Reattachments are usefull in case original transactions are pending, and can be done securely
+     * Reattaches a transfer to the Tangle by selecting tips and performing the Proof-of-Work again.
+     * Reattachments are useful in case the original transactions are pending, and can be done securely
      * as many times as needed.
      *
      * @example
@@ -54,7 +54,7 @@ export const createReplayBundle = (provider: Provider, attachFn?: AttachToTangle
      *
      * @param {number} minWeightMagnitude - Minimum number of trailing zeros in transaction hash. This is used by
      * [`attachToTangle`]{@link #module_core.attachToTangle} function to search for a valid `nonce`.
-     * Currently is `14` on mainnet & spamnnet and `9` on most other testnets.
+     * Currently it is `14` on mainnet & spamnet and `9` on most other testnets.
      *
      * @param {Callback} [callback] - Optional callback
      *

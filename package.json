@@ -39,7 +39,7 @@
                 "tslint --fix",
                 "git add"
             ],
-            "*.{js,ts,json,md}": [
+            "*.{js,ts,json}": [
                 "prettier --write",
                 "git add"
             ]

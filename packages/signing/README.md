@@ -22,7 +22,7 @@ yarn add @iota/signing
 
     * [~subseed(seed, index)](#module_signing..subseed)
 
-    * [~key(subseed, length)](#module_signing..key)
+    * [~key(subseedTrits, length)](#module_signing..key)
 
     * [~digests(key)](#module_signing..digests)
 
@@ -49,11 +49,11 @@ yarn add @iota/signing
 **Returns**: <code>Int8Array</code> - subseed trits  
 <a name="module_signing..key"></a>
 
-### *signing*~key(subseed, length)
+### *signing*~key(subseedTrits, length)
 
 | Param | Type | Description |
 | --- | --- | --- |
-| subseed | <code>Int8Array</code> | Subseed trits |
+| subseedTrits | <code>Int8Array</code> | Subseed trits |
 | length | <code>number</code> | Private key length |
 
 **Returns**: <code>Int8Array</code> - Private key trits  
