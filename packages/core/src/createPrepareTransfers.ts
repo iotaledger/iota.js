@@ -71,7 +71,7 @@ export interface PrepareTransfersProps {
 }
 
 /**
- * Create a [`prepareTransfers`]{@link #module_core.prepareTransfers} function by passing an optional newtowrk `provider`.
+ * Create a [`prepareTransfers`]{@link #module_core.prepareTransfers} function by passing an optional network `provider`.
  * It is possible to prepare and sign transactions offline, by omitting the provider option.
  *
  * @method createPrepareTransfers
@@ -92,10 +92,10 @@ export const createPrepareTransfers = (provider?: Provider, now: () => number = 
      * Prepares the transaction trytes by generating a bundle, filling in transfers and inputs,
      * adding remainder and signing. It can be used to generate and sign bundles either online or offline.
      * For offline usage, please see [`createPrepareTransfers`]{@link #module_core.createPrepareTransfers}
-     * which creates a `prepareTransfers` without a network provider.
+     * which can create a `prepareTransfers` function without a network provider.
      *
-     * **Note:** After calling this method, persist the returned transaction trytes in local storage. Only then you should broadcast to netowrk.
-     * This will allow for reattachments and prevent key reuse if trytes can't be recovered by querying the netowrk after broadcasting.
+     * **Note:** After calling this method, persist the returned transaction trytes in local storage. Only then you should broadcast to network.
+     * This will allow for reattachments and prevent key reuse if trytes can't be recovered by querying the network after broadcasting.
      *
      * @method prepareTransfers
      *
@@ -109,16 +109,16 @@ export const createPrepareTransfers = (provider?: Provider, now: () => number = 
      * @param {Input[]} [options.inputs] Inputs used for signing. Needs to have correct security, keyIndex and address value
      * @param {Hash} [options.inputs[].address] Input address trytes
      * @param {number} [options.inputs[].keyIndex] Key index at which address was generated
-     * @param {number} [options.inputs[].security = 2] Security level
+     * @param {number} [options.inputs[].security] Security level
      * @param {number} [options.inputs[].balance] Balance in iotas
      * @param {Hash} [options.address] Remainder address
-     * @param {Number} [options.security] Security level to be used for getting inputs and reminder address
+     * @param {Number} [options.security = 2] Security level to be used for getting inputs and remainder address
      * @property {Hash} [options.hmacKey] HMAC key used for attaching an HMAC
      *
      * @param {function} [callback] Optional callback
      *
      * @return {Promise}
-     * @fulfil {array} trytes Returns bundle trytes
+     * @fulfil {array} Returns bundle trytes
      * @reject {Error}
      * - `INVALID_SEED`
      * - `INVALID_TRANSFER_ARRAY`

@@ -16,10 +16,10 @@ const numericTrytesRegex = /^(RA|PA)?(UA|VA|WA|XA|YA|ZA|9B|AB|BB|CB)+((SA)(UA|VA
  * Takes a bundle as input and from the signatureMessageFragments extracts the correct JSON
  * data which was encoded and sent with the transaction.
  * Supports the following forms of JSON encoded values:
- * - `"{ \"message\": \"hello\" }"\`
+ * - `"{ \"message\": \"hello\" }"`
  * - `"[1, 2, 3]"`
  * - `"true"`, `"false"` & `"null"`
- * - `"\"hello\""
+ * - `"\"hello\""`
  * - `123`
  *
  * @example
@@ -38,7 +38,7 @@ const numericTrytesRegex = /^(RA|PA)?(UA|VA|WA|XA|YA|ZA|9B|AB|BB|CB)+((SA)(UA|VA
  *
  * ```js
  * getBundle(tailHash)
- *   .then(bunlde => {
+ *   .then(bundle => {
  *      const msg = JSON.parse(extractJson(bundle))
  *      // ...
  *   })
