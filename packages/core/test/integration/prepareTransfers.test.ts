@@ -114,3 +114,30 @@ test('prepareTransfers() throws intuitive error when provided invalid transfers 
         'prepareTransfers() should throw intuitive error when provided invalid transfers array'
     )
 })
+
+test('prepareTransfers() throws error for inputs without security level.', async t => {
+    const input: any = {
+        address: 'I'.repeat(81),
+        keyIndex: 0,
+        balance: 1,
+    }
+
+    t.is(
+        t.throws(() =>
+            prepareTransfers(
+                'SEED',
+                [
+                    {
+                        address: 'A'.repeat(81),
+                        value: 1,
+                    },
+                ],
+                {
+                    inputs: [input],
+                }
+            )
+        ).message,
+        `Invalid input: ${input}`,
+        'prepareTransfers() should throw error for inputs without security level.'
+    )
+})

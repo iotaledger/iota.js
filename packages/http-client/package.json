@@ -1,6 +1,6 @@
 {
     "name": "@iota/http-client",
-    "version": "1.0.0-beta.7",
+    "version": "1.0.0-beta.8",
     "description": "Send commands to IRI over HTTP.",
     "main": "./out/http-client/src/index.js",
     "typings": "typings/http-client/src",
@@ -64,12 +64,12 @@
         "url": "https://github.com/iotaledger/iota.js.git"
     },
     "dependencies": {
-        "@types/bluebird": "^3.5.24",
+        "@types/bluebird": "^3.5.25",
         "bluebird": "^3.5.1",
         "cross-fetch": "^3.0.0"
     },
     "devDependencies": {
         "@types/nock": "^9.1.2",
-        "nock": "^10.0.1"
+        "nock": "^10.0.4"
     }
 }

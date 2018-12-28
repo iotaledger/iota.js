@@ -39,7 +39,7 @@
                 "tslint --fix",
                 "git add"
             ],
-            "*.{js,ts,json,md}": [
+            "*.{js,ts,json}": [
                 "prettier --write",
                 "git add"
             ]
@@ -66,7 +66,7 @@
         "url": "https://github.com/iotaledger/iota.lib.js.git"
     },
     "dependencies": {
-        "@types/bluebird": "^3.5.20"
+        "@types/bluebird": "^3.5.25"
     },
     "devDependencies": {
         "@commitlint/cli": "^7.2.1",

@@ -8,5 +8,7 @@ test('isSecurityLevel() returns true for valid security level.', t => {
 test('isSecurityLevel() returns false for invalid security level.', t => {
     t.is(isSecurityLevel(-1), false, 'isTransactionHash() should return false for negative security level.')
 
-    t.is(isSecurityLevel(0), false, 'isSecurityLevel() should return fasle for security level of 0.')
+    t.is(isSecurityLevel(0), false, 'isSecurityLevel() should return false for security level of 0.')
+
+    t.is(isSecurityLevel(4), false, 'isSecurityLevel() should return false for security level above 3.')
 })

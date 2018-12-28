@@ -26,7 +26,7 @@ nock('http://localhost:14265', headers)
     .persist()
     .post('/', {
         command: IRICommand.WERE_ADDRESSES_SPENT_FROM,
-        addresses: ['FJHSSHBZTAKQNDTIKJYCZBOZDGSZANCZSWCNWUOCZXFADNOQSYAHEJPXRLOVPNOQFQXXGEGVDGICLMOXX'],
+        addresses: [addresses[0]],
     })
     .reply(200, {
         states: [true],
@@ -36,7 +36,7 @@ nock('http://localhost:14265', headers)
     .persist()
     .post('/', {
         command: IRICommand.WERE_ADDRESSES_SPENT_FROM,
-        addresses: ['9DZXPFSVCSSWXXQPFMWLGFKPBAFTHYMKMZCPFHBVHXPFNJEIJIEEPKXAUBKBNNLIKWHJIYQDFWQVELOCB'],
+        addresses: [addresses[1]],
     })
     .reply(200, {
         states: [false],
@@ -46,7 +46,7 @@ nock('http://localhost:14265', headers)
     .persist()
     .post('/', {
         command: IRICommand.WERE_ADDRESSES_SPENT_FROM,
-        addresses: ['OTSZGTNPKFSGJLUPUNGGXFBYF9GVUEHOADZZTDEOJPWNEIVBLHOMUWPILAHTQHHVSBKTDVQIAEQOZXGFB'],
+        addresses: [addresses[2]],
     })
     .reply(200, {
         states: [false],
@@ -56,10 +56,7 @@ nock('http://localhost:14265', headers)
     .persist()
     .post('/', {
         command: IRICommand.WERE_ADDRESSES_SPENT_FROM,
-        addresses: [
-            '9DZXPFSVCSSWXXQPFMWLGFKPBAFTHYMKMZCPFHBVHXPFNJEIJIEEPKXAUBKBNNLIKWHJIYQDFWQVELOCB',
-            'OTSZGTNPKFSGJLUPUNGGXFBYF9GVUEHOADZZTDEOJPWNEIVBLHOMUWPILAHTQHHVSBKTDVQIAEQOZXGFB',
-        ],
+        addresses: [addresses[1], addresses[2]],
     })
     .reply(200, {
         states: [false, false],

@@ -1,4 +1,4 @@
-# @iota/bundle
+# @iota/bundle-validator
 
 Syntactically validates bundle structure and signatures.
 
@@ -6,13 +6,13 @@ Syntactically validates bundle structure and signatures.
 
 Install using [npm](https://www.npmjs.org/):
 ```
-npm install @iota/bundle
+npm install @iota/bundle-validator
 ```
 
 or using [yarn](https://yarnpkg.com/):
 
 ```
-yarn add @iota/bundle
+yarn add @iota/bundle-validator
 ```
 
 ## API Reference
