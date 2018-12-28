@@ -1351,8 +1351,8 @@ adding remainder and signing. It can be used to generate and sign bundles either
 For offline usage, please see [`createPrepareTransfers`](#module_core.createPrepareTransfers)
 which creates a `prepareTransfers` without a network provider.
 
-**Note:** After calling this method, persist the returned transaction trytes in local storage. Only then you should broadcast to netowrk.
-This will allow for reattachments and prevent key reuse if trytes can't be recovered by querying the netowrk after broadcasting.
+**Note:** After calling this method, persist the returned transaction trytes in local storage. Only then you should broadcast to the network.
+This will allow for reattachments and prevent key reuse if trytes can't be recovered by querying the network after broadcasting.
 
 <a name="module_core.createPromoteTransaction"></a>
 
