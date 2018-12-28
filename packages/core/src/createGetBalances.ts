@@ -49,7 +49,7 @@ export const createGetBalances = ({ send }: Provider) =>
     (
         addresses: ReadonlyArray<Hash>,
         threshold: number,
-        tips?: Hash[],
+        tips?: ReadonlyArray<Hash>,
         callback?: Callback<Balances>
     ): Promise<Balances> => {
         // If no tips are provided, switch arguments
@@ -65,7 +65,7 @@ export const createGetBalances = ({ send }: Provider) =>
                         arrayValidator(hashValidator)(addresses, errors.INVALID_ADDRESS),
                         getBalancesThresholdValidator(threshold),
                     ],
-                    ...(tips && tips.length ? [arrayValidator(transactionHashValidator)(tips)] : []),
+                    ...(Array.isArray(tips) && tips.length ? [arrayValidator(transactionHashValidator)(tips)] : []),
                 ]
             )
         )
@@ -74,7 +74,7 @@ export const createGetBalances = ({ send }: Provider) =>
                     command: IRICommand.GET_BALANCES,
                     addresses: removeChecksum(addresses), // Addresses passed to IRI should not have the checksum
                     threshold,
-                    ...(tips && tips.length && { tips }),
+                    ...(Array.isArray(tips) && tips.length && { tips }),
                 })
             )
             .then(res => ({
