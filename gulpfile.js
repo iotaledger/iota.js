@@ -1,6 +1,5 @@
 var gulp       = require('gulp'),
     jshint     = require('gulp-jshint'),
-    uglify     = require('gulp-uglify'),
     tap        = require('gulp-tap'),
     sourcemaps = require("gulp-sourcemaps"),
     buffer     = require("gulp-buffer"),
@@ -38,7 +37,6 @@ function dist () {
         }))
         .pipe(buffer())
         .pipe(sourcemaps.init({ loadMaps: true }))
-        .pipe(uglify())
         .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest('dist'))
 }
