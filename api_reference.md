@@ -1194,7 +1194,7 @@ const minWeightMagnitude = 14
 
 getTransactionsToApprove(depth)
   .then(transactionsToApprove =>
-     attachToTanle(minWightMagnitude, trytes, { transactionsToApprove })
+     attachToTangle(minWightMagnitude, trytes, { transactionsToApprove })
   )
   .then(storeAndBroadcast)
   .catch(err => {
