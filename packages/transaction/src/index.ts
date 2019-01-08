@@ -142,7 +142,7 @@ export const isTransactionTrytes = (trytes: any, minWeightMagnitude?: number): t
  */
 export const isAttachedTrytes = (trytes: any): trytes is Trytes =>
     isTrytesOfExactLength(trytes, TRANSACTION_TRYTES_SIZE) &&
-    !/^[9]+$/.test(trytes.slice(TRANSACTION_TRYTES_SIZE - 3 * HASH_TRYTES_SIZE))
+    !/^[9]+$/.test(trytes.slice(TRANSACTION_TRYTES_SIZE - HASH_TRITS_SIZE))
 
 export const isAttachedTrytesArray = isArray(isAttachedTrytes)
 export const isTransactionArray = isArray(isTransaction)
