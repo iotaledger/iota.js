@@ -1,4 +1,5 @@
-export const HASH_SIZE = 81
+export const HASH_TRYTES_SIZE = 81
+export const HASH_TRITS_SIZE = HASH_TRYTES_SIZE * 3
 export const TRANSACTION_TRYTES_SIZE = 2673
 export const SIGNATURE_MESSAGE_FRAGMENT_TRYTES_SIZE = 2187
 export const TAG_TRYTES_SIZE = 27

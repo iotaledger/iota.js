@@ -4,6 +4,7 @@ import { trits, trytes } from '@iota/converter'
 import Kerl from '@iota/kerl'
 import { padTag, padTrits, padTrytes } from '@iota/pad'
 import { add, normalizedBundleHash } from '@iota/signing'
+import { INVALID_ADDRESS_LAST_TRIT } from '../../errors'
 import '../../typed-array'
 import {
     Bundle,
@@ -12,6 +13,7 @@ import {
     Trytes,
 } from '../../types'
 
+const HASH_TRITS_SIZE = 243
 const NULL_HASH_TRYTES = '9'.repeat(81)
 const NULL_TAG_TRYTES = '9'.repeat(27)
 const NULL_NONCE_TRYTES = '9'.repeat(27)
@@ -74,6 +76,10 @@ export const addEntry = (transactions: Bundle, entry: Partial<BundleEntry>): Bun
     const lastIndex = transactions.length - 1 + length
     const tag = padTag(entryWithDefaults.tag)
     const obsoleteTag = tag
+
+    if (value !== 0 && trits(address)[HASH_TRITS_SIZE - 1] !== 0) {
+        throw new Error(INVALID_ADDRESS_LAST_TRIT)
+    }
 
     return transactions.map(transaction => ({ ...transaction, lastIndex })).concat(
         Array(length)

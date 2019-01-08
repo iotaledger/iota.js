@@ -9,7 +9,8 @@ import { isArray, isHash, isTrytesOfExactLength, validate, Validator } from '../
 import '../../typed-array'
 import { Hash, Transaction, Trytes } from '../../types'
 import {
-    HASH_SIZE,
+    HASH_TRITS_SIZE,
+    HASH_TRYTES_SIZE,
     NONCE_TRYTES_SIZE,
     OBSOLETE_TAG_TRYTES_SIZE,
     SIGNATURE_MESSAGE_FRAGMENT_TRYTES_SIZE,
@@ -67,7 +68,9 @@ export const isTransaction = (tx: any): tx is Transaction =>
     Number.isInteger(tx.attachmentTimestamp) &&
     Number.isInteger(tx.attachmentTimestampLowerBound) &&
     Number.isInteger(tx.attachmentTimestampUpperBound) &&
-    isTrytesOfExactLength(tx.nonce, NONCE_TRYTES_SIZE)
+    isTrytesOfExactLength(tx.nonce, NONCE_TRYTES_SIZE) &&
+    // Check that last trit of address with balance is 0.
+    (tx.value === 0 || trytesToTrits(tx.address)[HASH_TRITS_SIZE - 1] === 0)
 
 /**
  * Checks if given transaction object is tail transaction.
@@ -93,7 +96,7 @@ export const isTailTransaction = (transaction: any): transaction is Transaction 
  * @return {boolean}
  */
 export const isTransactionHash = (hash: any, minWeightMagnitude?: number): hash is Hash => {
-    const hasCorrectHashLength = isTrytesOfExactLength(hash, HASH_SIZE)
+    const hasCorrectHashLength = isTrytesOfExactLength(hash, HASH_TRYTES_SIZE)
 
     if (minWeightMagnitude) {
         return (
@@ -139,7 +142,7 @@ export const isTransactionTrytes = (trytes: any, minWeightMagnitude?: number): t
  */
 export const isAttachedTrytes = (trytes: any): trytes is Trytes =>
     isTrytesOfExactLength(trytes, TRANSACTION_TRYTES_SIZE) &&
-    !/^[9]+$/.test(trytes.slice(TRANSACTION_TRYTES_SIZE - 3 * HASH_SIZE))
+    !/^[9]+$/.test(trytes.slice(TRANSACTION_TRYTES_SIZE - 3 * HASH_TRYTES_SIZE))
 
 export const isAttachedTrytesArray = isArray(isAttachedTrytes)
 export const isTransactionArray = isArray(isTransaction)

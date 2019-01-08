@@ -15,6 +15,8 @@ interface SignatureFragments {
 
 export { Transaction, Bundle, INVALID_BUNDLE }
 
+const HASH_TRITS_SIZE = 243
+
 /**
  * Validates all signatures of a bundle.
  *
@@ -70,6 +72,11 @@ export default function isBundle(bundle: Bundle) {
         address: Hash
         signatureFragments: Trytes[]
     }> = []
+
+    // Addresses of value txs must have last trit == 0.
+    if (bundle.some(tx => tx.value !== 0 && trits(tx.address)[HASH_TRITS_SIZE - 1] !== 0)) {
+        return false
+    }
 
     bundle.forEach((bundleTx, index) => {
         totalSum += bundleTx.value
