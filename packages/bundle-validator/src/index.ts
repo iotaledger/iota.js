@@ -76,6 +76,11 @@ export default function isBundle(bundle: Bundle) {
         return false
     }
 
+    // Txs must have correct lastIndex
+    if (bundle.some(tx => tx.lastIndex !== bundle.length - 1)) {
+        return false
+    }
+
     bundle.forEach((bundleTx, index) => {
         totalSum += bundleTx.value
 
@@ -123,11 +128,6 @@ export default function isBundle(bundle: Bundle) {
 
     // Check if bundle hash is the same as returned by tx object
     if (bundleHashFromTxs !== bundleHash) {
-        return false
-    }
-
-    // Last tx in the bundle should have currentIndex === lastIndex
-    if (bundle[bundle.length - 1].currentIndex !== bundle[bundle.length - 1].lastIndex) {
         return false
     }
 
