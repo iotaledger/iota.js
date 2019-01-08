@@ -71,13 +71,13 @@ export default function isBundle(bundle: Bundle) {
         signatureFragments: Trytes[]
     }> = []
 
+    // currentIndex has to be equal to the index in the array
+    if (bundle.some((tx, index) => tx.currentIndex !== index)) {
+        return false
+    }
+
     bundle.forEach((bundleTx, index) => {
         totalSum += bundleTx.value
-
-        // currentIndex has to be equal to the index in the array
-        if (bundleTx.currentIndex !== index) {
-            return false
-        }
 
         // Get the transaction trytes
         const thisTxTrytes = asTransactionTrytes(bundleTx)
