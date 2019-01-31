@@ -64,7 +64,7 @@ const iota = composeAPI({
 
 iota.getNodeInfo()
     .then(info => console.log(info))
-    .catch(err => {
+    .catch(error => {
         console.log(`Request error: ${error.message}`)
     })
 ```
@@ -167,7 +167,7 @@ const transfers = [{
 const depth = 3 
 
 // Difficulty of Proof-of-Work required to attach transaction to tangle.
-// Minimum value on mainnet & spamnet is `14`, `9` on devnet and other testnets.
+// Minimum value on mainnet is `14`, `7` on spamnet and `9` on devnet and other testnets.
 const minWeightMagnitude = 14
 
 // Prepare a bundle and signs it.
