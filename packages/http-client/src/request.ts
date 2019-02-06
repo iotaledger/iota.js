@@ -141,7 +141,7 @@ export const batchedSend = <C extends BaseCommand>(
                     ...responses[0]
                         .slice()
                         .sort((a: any, b: any) => a.milestoneIndex - b.milestoneIndex)
-                        .slice(-1),
+                        .slice(-1)[0],
                     balances: responses[0].reduce(
                         (acc: ReadonlyArray<string>, response: R) =>
                             acc.concat((response as GetBalancesResponse).balances),
