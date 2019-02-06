@@ -2,13 +2,18 @@ import 'cross-fetch/polyfill' // tslint:disable-line no-submodule-imports
 import {
     BaseCommand,
     FindTransactionsResponse,
-    GetBalancesResponse, // tslint:disable-line no-unused-variable
+    GetBalancesResponse,
+    GetInclusionStatesResponse,
+    GetTrytesResponse,
     IRICommand,
+    Trytes,
 } from '../../types'
 import { BatchableCommand } from './httpClient'
 import { API_VERSION, DEFAULT_URI, MAX_REQUEST_BATCH_SIZE } from './settings'
 
 const requestError = (statusText: string) => `Request error: ${statusText}`
+
+type R = GetBalancesResponse | GetInclusionStatesResponse | GetTrytesResponse | FindTransactionsResponse
 
 /**
  * Sends an http request to a specified host.
@@ -27,7 +32,7 @@ const requestError = (statusText: string) => `Request error: ${statusText}`
  * @fulil {Object} - Response
  * @reject {Error} - Request error
  */
-export const send = <C extends BaseCommand, R = any>(
+export const send = <C extends BaseCommand>(
     command: C,
     uri: string = DEFAULT_URI,
     apiVersion: string | number = API_VERSION
@@ -81,7 +86,7 @@ export const send = <C extends BaseCommand, R = any>(
  * @fulil {Object} - Response
  * @reject {Error} - Request error
  */
-export const batchedSend = <C extends BaseCommand, R = any>(
+export const batchedSend = <C extends BaseCommand>(
     command: BatchableCommand<C>,
     keysToBatch: ReadonlyArray<string>,
     requestBatchSize = MAX_REQUEST_BATCH_SIZE,
@@ -117,7 +122,7 @@ export const batchedSend = <C extends BaseCommand, R = any>(
                         []
                     )
                     .map((batchedCommand: BatchableCommand<C>) => send(batchedCommand, uri, apiVersion))
-            ).then(res => res.reduce((acc: ReadonlyArray<R>, batch: Object) => acc.concat(batch as R), [])) // tslint:disable-line ban-types
+            ).then(res => res.reduce((acc: ReadonlyArray<R>, batch) => acc.concat(batch as R), []))
         })
     ).then((responses: ReadonlyArray<ReadonlyArray<R>>) => {
         switch (command.command) {
@@ -126,9 +131,8 @@ export const batchedSend = <C extends BaseCommand, R = any>(
                     hashes: (responses[0][0] as any).hashes.filter((hash: string) =>
                         responses.every(
                             response =>
-                                response.findIndex(
-                                    (res: Object) => (res as FindTransactionsResponse).hashes.indexOf(hash) > -1 // tslint:disable-line ban-types
-                                ) > -1
+                                response.findIndex(res => (res as FindTransactionsResponse).hashes.indexOf(hash) > -1) >
+                                -1
                         )
                     ),
                 }
@@ -138,12 +142,20 @@ export const batchedSend = <C extends BaseCommand, R = any>(
                         .slice()
                         .sort((a: any, b: any) => a.milestoneIndex - b.milestoneIndex)
                         .slice(-1),
-                    balances: responses[0].reduce((acc, response: any) => acc.concat(response.balances), []),
+                    balances: responses[0].reduce(
+                        (acc: ReadonlyArray<string>, response: R) =>
+                            acc.concat((response as GetBalancesResponse).balances),
+                        []
+                    ),
                 }
             case IRICommand.GET_INCLUSION_STATES:
                 return {
-                    ...(responses[0][0] as Object), // tslint:disable-line ban-types
-                    states: responses[0].reduce((acc: any, response: any) => acc.conact(response.states)),
+                    ...responses[0][0],
+                    states: responses[0].reduce(
+                        (acc: ReadonlyArray<boolean>, response: R) =>
+                            acc.concat((response as GetInclusionStatesResponse).states),
+                        []
+                    ),
                 }
             default:
                 throw requestError('Invalid batched request.')
