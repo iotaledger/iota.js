@@ -110,8 +110,8 @@ export const batchedSend = <C extends BaseCommand>(
                     .reduce(
                         (
                             acc,
-                            _,
-                            i // tslint:disable-line no-unused-variable
+                            _, // tslint:disable-line no-unused-variable
+                            i
                         ) =>
                             i < Math.ceil(command[key].length / requestBatchSize)
                                 ? acc.concat({
