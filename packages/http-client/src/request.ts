@@ -87,8 +87,18 @@ export const batchedSend = <C extends BaseCommand, R = any>(
     requestBatchSize = MAX_REQUEST_BATCH_SIZE,
     uri: string = DEFAULT_URI,
     apiVersion: string | number = API_VERSION
-): Promise<any> =>
-    Promise.all(
+): Promise<any> => {
+    const params = Object.keys(command)
+        .filter(key => keysToBatch.indexOf(key) === -1)
+        .reduce(
+            (acc: any, key: string) => ({
+                ...acc,
+                [key]: command[key],
+            }),
+            {}
+        )
+
+    return Promise.all(
         keysToBatch.map(key => {
             return Promise.all(
                 command[key]
@@ -100,7 +110,7 @@ export const batchedSend = <C extends BaseCommand, R = any>(
                         ) =>
                             i < Math.ceil(command[key].length / requestBatchSize)
                                 ? acc.concat({
-                                      command: command.command,
+                                      ...params,
                                       [key]: command[key].slice(i * requestBatchSize, (1 + i) * requestBatchSize),
                                   })
                                 : acc,
@@ -139,3 +149,4 @@ export const batchedSend = <C extends BaseCommand, R = any>(
                 throw requestError('Invalid batched request.')
         }
     })
+}
