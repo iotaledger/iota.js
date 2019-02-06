@@ -157,6 +157,13 @@ export const batchedSend = <C extends BaseCommand>(
                         []
                     ),
                 }
+            case IRICommand.GET_TRYTES:
+                return {
+                    trytes: responses[0].reduce(
+                        (acc: ReadonlyArray<Trytes>, response: R) => acc.concat((response as GetTrytesResponse).trytes),
+                        []
+                    ),
+                }
             default:
                 throw requestError('Invalid batched request.')
         }
