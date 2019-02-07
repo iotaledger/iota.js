@@ -9,7 +9,7 @@ import {
     Trytes,
 } from '../../types'
 import { BatchableCommand } from './httpClient'
-import { API_VERSION, DEFAULT_URI, MAX_REQUEST_BATCH_SIZE } from './settings'
+import { API_VERSION, DEFAULT_URI, REQUEST_BATCH_SIZE } from './settings'
 
 const requestError = (statusText: string) => `Request error: ${statusText}`
 
@@ -89,7 +89,7 @@ export const send = <C extends BaseCommand>(
 export const batchedSend = <C extends BaseCommand>(
     command: BatchableCommand<C>,
     keysToBatch: ReadonlyArray<string>,
-    requestBatchSize = MAX_REQUEST_BATCH_SIZE,
+    requestBatchSize = REQUEST_BATCH_SIZE,
     uri: string = DEFAULT_URI,
     apiVersion: string | number = API_VERSION
 ): Promise<any> => {
