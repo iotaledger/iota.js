@@ -4,12 +4,10 @@ import {
     apiVersion,
     findTransactionsCommand,
     findTransactionsResponse,
-    headers,
     invalidCommand,
     invalidGetTransactionsToApproveCommand,
     invalidGetTransactionsToApproveCommandIgnored,
     invalidGetTransactionsToApproveResponse,
-    requestBatchSize,
 } from './send'
 
 const { send } = createHttpClient({
