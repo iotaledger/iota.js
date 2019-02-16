@@ -5,7 +5,7 @@ import Kerl from '@iota/kerl'
 import { padTrits } from '@iota/pad'
 import * as errors from '../../errors'
 import '../../typed-array'
-import { Hash } from '../../types'
+import { Hash, Maybe } from '../../types'
 import add from './add'
 
 export const TRYTE_WIDTH = 3
@@ -16,6 +16,35 @@ export const HASH_LENGTH = 243
 export const FRAGMENT_LENGTH = (HASH_LENGTH / NUMBER_OF_SECURITY_LEVELS / TRYTE_WIDTH) * HASH_LENGTH
 export const NUMBER_OF_FRAGMENT_CHUNKS = FRAGMENT_LENGTH / HASH_LENGTH
 export const NORMALIZED_FRAGMENT_LENGTH = HASH_LENGTH / TRYTE_WIDTH / NUMBER_OF_SECURITY_LEVELS
+
+export interface EntangledSigning {
+    generateSignature(
+        seed: Int8Array,
+        index: number,
+        security: number,
+        bundle: Int8Array
+    ): Promise<ReadonlyArray<Int8Array>>
+}
+
+export interface NativeModules {
+    Signing?: EntangledSigning
+    [name: string]: any
+}
+
+let NativeSigning: Promise<Maybe<EntangledSigning>>
+try {
+    // @ts-ignore-next-line
+    const reactNative = import('react-native')
+    NativeSigning = reactNative
+        .then(rn => {
+            if (rn.Platform.OS === 'ios' || rn.Platform.OS === 'android') {
+                return rn.modules.Signing
+            }
+            return undefined
+        })
+        // tslint:disable-next-line
+        .catch(() => Promise.resolve(undefined))
+} catch (err) {} // tslint:disable-line
 
 /**
  * @method subseed
@@ -204,7 +233,11 @@ export function signatureFragments(
     security: number,
     bundle: Int8Array
 ): Promise<ReadonlyArray<Int8Array>> {
-    return Promise.resolve().then(nativeSigning => {
+    return NativeSigning.then(nativeSigning => {
+        if (nativeSigning) {
+            return nativeSigning.generateSignature(seed, index, security, bundle)
+        }
+
         const normalizedBundleHash = normalizedBundle(bundle)
         const keyTrits = key(subseed(seed, index), security)
 

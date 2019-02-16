@@ -9,8 +9,18 @@
     },
     "scripts": {
         "prepare": "tsc",
+        "prepublishOnly": "npm run build",
+        "build-android": "./scripts/build-android.sh",
+        "build-android-clean": "./scripts/build-android.sh clean",
+        "build-ios": "./scripts/build-ios.sh",
+        "build-ios-clean": "./scripts/build-ios.sh clean",
+        "build": "npm run build-android",
+        "build-clean": "npm run build-android-clean",
         "test": "tsc",
         "test-ci": "echo \"Warning: no test specified\" && exit 0",
+        "test-android": "tsc && npm run build-android",
+        "test-android-ci": "npm run build-android",
+        "test-ios": "tsc && npm run build-ios",
         "lint": "tslint --project .",
         "docs": "tsc && jsdoc2md --no-cache --plugin dmd-clear -t README_tpl.hbs --files './out/**/*.js' > README.md"
     },
