@@ -3,7 +3,7 @@ import * as Promise from 'bluebird'
 import { addEntry, addTrytes, finalizeBundle } from '@iota/bundle'
 import { removeChecksum } from '@iota/checksum'
 import { trits, trytes } from '@iota/converter'
-import { key, normalizedBundleHash, signatureFragment, subseed } from '@iota/signing'
+import { key, normalizedBundle, signatureFragments, subseed } from '@iota/signing'
 import { asFinalTransactionTrytes } from '@iota/transaction-converter'
 import * as errors from '../../errors'
 import {
@@ -341,33 +341,21 @@ export const finalize = (props: PrepareTransfersProps): PrepareTransfersProps =>
     transactions: finalizeBundle(props.transactions),
 })
 
-export const addSignatures = (props: PrepareTransfersProps): PrepareTransfersProps => {
+export const addSignatures = (props: PrepareTransfersProps): Promise<PrepareTransfersProps> => {
     const { transactions, inputs, seed } = props
-    const normalizedBundle = normalizedBundleHash(transactions[0].bundle)
+    const normalizedBundleHash = normalizedBundle(trits(transactions[0].bundle))
 
-    return {
-        ...props,
-        transactions: addTrytes(
-            transactions,
-            inputs.reduce((acc: ReadonlyArray<Trytes>, { keyIndex, security }) => {
-                const keyTrits = key(subseed(trits(seed), keyIndex), security || SECURITY_LEVEL)
-
-                return acc.concat(
-                    Array(security)
-                        .fill(null)
-                        .map((_, i) =>
-                            trytes(
-                                signatureFragment(
-                                    normalizedBundle.slice((i * HASH_LENGTH) / 3, ((i + 1) * HASH_LENGTH) / 3),
-                                    keyTrits.slice(i * KEY_FRAGMENT_LENGTH, (i + 1) * KEY_FRAGMENT_LENGTH)
-                                )
-                            )
-                        )
-                )
-            }, []),
-            transactions.findIndex(({ value }) => value < 0)
-        ),
-    }
+    return Promise.all(
+        inputs.map(({ keyIndex, security }) =>
+            signatureFragments(trits(seed), keyIndex, security || SECURITY_LEVEL, trits(transactions[0].bundle))
+        )
+    )
+        .then(fragments => fragments.reduce((acc, fragment) => acc.concat(fragment), []))
+        .then(fragments => fragments.map(trytes))
+        .then(fragments => ({
+            ...props,
+            transactions: addTrytes(transactions, fragments, transactions.findIndex(({ value }) => value < 0)),
+        }))
 }
 
 export const addHMAC = (props: PrepareTransfersProps): PrepareTransfersProps => {
