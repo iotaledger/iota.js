@@ -52,6 +52,12 @@ const defaults: PrepareTransfersOptions = {
     hmacKey: undefined,
 }
 
+const isTritArray = (tritArray: any, length?: number): boolean =>
+    (tritArray instanceof Array || tritArray instanceof Int8Array) &&
+    typeof tritArray.every === 'function' &&
+    (tritArray as number[]).every(trit => [-1, 0, 1].indexOf(trit) > -1) &&
+    (typeof length === 'number' ? tritArray.length === length : true)
+
 export const getPrepareTransfersOptions = (options: Partial<PrepareTransfersOptions>) => ({
     ...getOptionsWithDefaults(defaults)(options),
     remainderAddress: options.address || options.remainderAddress || undefined,
@@ -61,7 +67,7 @@ export interface PrepareTransfersProps {
     readonly transactions: ReadonlyArray<Transaction>
     readonly trytes: ReadonlyArray<Trytes>
     readonly transfers: ReadonlyArray<Transfer>
-    readonly seed: Trytes
+    readonly seed: Int8Array
     readonly security: number
     readonly inputs: ReadonlyArray<Address>
     readonly timestamp: number
@@ -130,7 +136,7 @@ export const createPrepareTransfers = (provider?: Provider, now: () => number = 
      * - Fetch error, if connected to network
      */
     return function prepareTransfers(
-        seed: Trytes,
+        seed: Int8Array | Trytes,
         transfers: ReadonlyArray<Transfer>,
         options: Partial<PrepareTransfersOptions> = {},
         callback?: Callback<ReadonlyArray<Trytes>>
@@ -143,7 +149,9 @@ export const createPrepareTransfers = (provider?: Provider, now: () => number = 
                 )
             }
 
-            if (isTrytes(seed) && seed.length < 81) {
+            if (
+                typeof seed === 'string' ? isTrytes(seed) && seed.length < 81 : isTritArray(seed) && seed.length < 243
+            ) {
                 /* tslint:disable-next-line:no-console */
                 console.warn(
                     'WARNING: Seeds with less length than 81 trytes are not secure! Use a random, 81-trytes long seed!'
@@ -155,7 +163,7 @@ export const createPrepareTransfers = (provider?: Provider, now: () => number = 
             validatePrepareTransfers({
                 transactions: [],
                 trytes: [],
-                seed,
+                seed: typeof seed === 'string' ? trits(seed) : Int8Array.from(seed),
                 transfers,
                 timestamp: Math.floor((typeof now === 'function' ? now() : Date.now()) / 1000),
                 ...getPrepareTransfersOptions(options),
@@ -183,7 +191,6 @@ export const validatePrepareTransfers = (props: PrepareTransfersProps) => {
     const remainderAddress = props.address || props.remainderAddress
 
     validate(
-        seedValidator(seed),
         securityLevelValidator(security),
         arrayValidator(transferValidator)(transfers),
         !!remainderAddress && remainderAddressValidator(remainderAddress),
@@ -256,7 +263,7 @@ export const createAddInputs = (provider?: Provider) => {
 
         return (!getInputs || inputs.length
             ? Promise.resolve(inputs)
-            : getInputs(seed, { security, threshold }).then(response => response.inputs)
+            : getInputs(trytes(seed), { security, threshold }).then(response => response.inputs)
         ).then(res => ({
             ...props,
             inputs: res,
@@ -299,7 +306,7 @@ export const createAddRemainder = (provider?: Provider) => {
 
         return (remainderAddress
             ? Promise.resolve(remainderAddress)
-            : getNewAddress!(seed, {
+            : getNewAddress!(trytes(seed), {
                   index: getRemainderAddressStartIndex(inputs),
                   security,
               })
@@ -347,7 +354,7 @@ export const addSignatures = (props: PrepareTransfersProps): Promise<PrepareTran
 
     return Promise.all(
         inputs.map(({ keyIndex, security }) =>
-            signatureFragments(trits(seed), keyIndex, security || SECURITY_LEVEL, trits(transactions[0].bundle))
+            signatureFragments(seed, keyIndex, security || SECURITY_LEVEL, trits(transactions[0].bundle))
         )
     )
         .then(fragments => fragments.reduce((acc, fragment) => acc.concat(fragment), []))
