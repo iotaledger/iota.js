@@ -3,7 +3,7 @@ import * as Promise from 'bluebird'
 import { addEntry, addTrytes, finalizeBundle } from '@iota/bundle'
 import { removeChecksum } from '@iota/checksum'
 import { trits, trytes } from '@iota/converter'
-import { key, normalizedBundle, signatureFragments, subseed } from '@iota/signing'
+import { signatureFragments } from '@iota/signing'
 import { asFinalTransactionTrytes } from '@iota/transaction-converter'
 import * as errors from '../../errors'
 import {
@@ -12,7 +12,6 @@ import {
     isTrytes,
     remainderAddressValidator,
     securityLevelValidator,
-    seedValidator,
     transferValidator,
     validate,
 } from '../../guards'
@@ -32,7 +31,6 @@ import HMAC from './hmac'
 
 const HASH_LENGTH = 81
 const SIGNATURE_MESSAGE_FRAGMENT_LENGTH = 2187
-const KEY_FRAGMENT_LENGTH = 6561
 const NULL_HASH_TRYTES = '9'.repeat(HASH_LENGTH)
 const SECURITY_LEVEL = 2
 
@@ -159,6 +157,10 @@ export const createPrepareTransfers = (provider?: Provider, now: () => number = 
             }
         }
 
+        if (!isTrytes(seed as Trytes) && !isTritArray(seed)) {
+            throw new Error(errors.INVALID_SEED)
+        }
+
         const props = Promise.resolve(
             validatePrepareTransfers({
                 transactions: [],
@@ -187,7 +189,7 @@ export const createPrepareTransfers = (provider?: Provider, now: () => number = 
 }
 
 export const validatePrepareTransfers = (props: PrepareTransfersProps) => {
-    const { seed, transfers, inputs, security } = props
+    const { transfers, inputs, security } = props
     const remainderAddress = props.address || props.remainderAddress
 
     validate(
@@ -350,7 +352,6 @@ export const finalize = (props: PrepareTransfersProps): PrepareTransfersProps =>
 
 export const addSignatures = (props: PrepareTransfersProps): Promise<PrepareTransfersProps> => {
     const { transactions, inputs, seed } = props
-    const normalizedBundleHash = normalizedBundle(trits(transactions[0].bundle))
 
     return Promise.all(
         inputs.map(({ keyIndex, security }) =>

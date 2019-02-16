@@ -1,11 +1,11 @@
 /** @module signing */
 
-import { fromValue, trits, trytes, value } from '@iota/converter'
+import { fromValue } from '@iota/converter'
 import Kerl from '@iota/kerl'
 import { padTrits } from '@iota/pad'
 import * as errors from '../../errors'
 import '../../typed-array'
-import { Hash, Maybe } from '../../types'
+import { Maybe } from '../../types'
 import add from './add'
 
 export const TRYTE_WIDTH = 3
