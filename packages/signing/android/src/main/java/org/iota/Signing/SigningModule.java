@@ -3,6 +3,8 @@ package org.iota.Signing;
 import org.iota.mobile.*;
 
 import com.facebook.react.bridge.Promise;
+import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
@@ -23,15 +25,21 @@ public class SigningModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void generateAddress(byte[] seed, int index, int security, Promise promise) {
-      String address = Interface.iota_sign_address_gen_trits(seed, index, security);
-      promise.resolve(address);
+    public void generateAddress(ReadableArray seed, int index, int security, Promise promise) {
+        byte[] seedBytes = Converter.readableArrayToByteArray(seed);
+        byte[] addressBytes = Interface.iota_sign_address_gen_trits(seedBytes, index, security);
+
+        WritableArray result = Converter.byteArrayToWritableArray(addressBytes);
+        promise.resolve(result);
     }
 
     @ReactMethod
-    public void generateSignature(byte[] seed, int index, int security, String bundleHash, Promise promise) {
-      String signature = Interface.iota_sign_signature_gen_trits(seed, index, security, bundleHash);
-      promise.resolve(signature);
-    }
+    public void generateSignature(ReadableArray seed, int index, int security, ReadableArray bundleHash, Promise promise) {
+        byte[] seedBytes = Converter.readableArrayToByteArray(seed);
+        byte[] bundleHashBytes = Converter.readableArrayToByteArray(bundleHash);
+        byte[] signatureBytes = Interface.iota_sign_signature_gen_trits(seedBytes, index, security, bundleHashBytes);
 
+        WritableArray result = Converter.byteArrayToWritableArray(signatureBytes);
+        promise.resolve(result);
+    }
 }
