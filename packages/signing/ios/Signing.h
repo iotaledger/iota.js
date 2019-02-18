@@ -6,6 +6,6 @@
 #import <React/RCTEventEmitter.h>
 #import <EntangledKit/EntangledKit.h>
 
-@interface PearlDiver: NSObject <RCTBridgeModule>
+@interface Signing: NSObject <RCTBridgeModule>
 
 @end

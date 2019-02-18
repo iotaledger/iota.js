@@ -1,7 +1,14 @@
-mport <Foundation/Foundation.h>
-#import "EntangledIOS.h"
+//
+//  EntangledIOS.m
+//  iotaWallet
+//
+//  Created by Rajiv Shah on 4/6/18.
+//
 
-@implementation EntangledIOS
+#import <Foundation/Foundation.h>
+#import "Signing.h"
+
+@implementation Signing
 
 RCT_EXPORT_MODULE();
 
@@ -82,7 +89,7 @@ RCT_EXPORT_METHOD(generateAddresses:(NSArray<NSNumber*>*)seed index:(int)index s
 }
 
 // Signature generation
-RCT_EXPORT_METHOD(generateSignature:(NSArray<NSNumber*>*)seed index:(int)index security:(int)security bundleHash:(NSArray<NSNumber*>*)bundleHash resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+RCT_EXPORT_METHOD(generateSignature:(NSArray *)seed index:(int)index security:(int)security bundleHash:(NSArray *)bundleHash resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
   int8_t seedTrits[sizeof(seed)] = "";
   for (int i = 0; i < sizeof(seed); i++)

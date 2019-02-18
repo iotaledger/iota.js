@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		83298858221A69CD006722C2 /* EntangledKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83298857221A69CD006722C2 /* EntangledKit.framework */; };
 		B3E7B58A1CC2AC0600A0062D /* Signing.m in Sources */ = {isa = PBXBuildFile; fileRef = B3E7B5891CC2AC0600A0062D /* Signing.m */; };
 /* End PBXBuildFile section */
 
@@ -24,6 +25,8 @@
 
 /* Begin PBXFileReference section */
 		134814201AA4EA6300B7C361 /* libSigning.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libSigning.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		83298856221A693F006722C2 /* bindings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = bindings.h; sourceTree = "<group>"; };
+		83298857221A69CD006722C2 /* EntangledKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = EntangledKit.framework; sourceTree = "<group>"; };
 		B3E7B5881CC2AC0600A0062D /* Signing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Signing.h; sourceTree = "<group>"; };
 		B3E7B5891CC2AC0600A0062D /* Signing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Signing.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -33,6 +36,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83298858221A69CD006722C2 /* EntangledKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -50,10 +54,20 @@
 		58B511D21A9E6C8500147676 = {
 			isa = PBXGroup;
 			children = (
+				83298856221A693F006722C2 /* bindings.h */,
 				B3E7B5881CC2AC0600A0062D /* Signing.h */,
 				B3E7B5891CC2AC0600A0062D /* Signing.m */,
+				83298855221A68B5006722C2 /* Frameworks */,
 				134814211AA4EA7D00B7C361 /* Products */,
 			);
+			sourceTree = "<group>";
+		};
+		83298855221A68B5006722C2 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				83298857221A69CD006722C2 /* EntangledKit.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -203,8 +217,12 @@
 		58B511F01A9E6C8500147676 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				HEADER_SEARCH_PATHS = (
-				"$(inherited)",
+					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(SRCROOT)/../../../React/**",
 					"$(SRCROOT)/../../react-native/React/**",
@@ -219,6 +237,10 @@
 		58B511F11A9E6C8500147676 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
