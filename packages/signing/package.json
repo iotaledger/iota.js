@@ -17,6 +17,7 @@
         "build": "npm run build-android",
         "build-clean": "npm run build-android-clean",
         "test": "tsc",
+        "test-ci": "echo \"Warning: no test specified\" && exit 0",
         "test-android": "tsc && npm run build-android",
         "test-ios": "tsc && npm run build-ios",
         "lint": "tslint --project .",
