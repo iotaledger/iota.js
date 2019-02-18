@@ -18,12 +18,12 @@ export const NUMBER_OF_FRAGMENT_CHUNKS = FRAGMENT_LENGTH / HASH_LENGTH
 export const NORMALIZED_FRAGMENT_LENGTH = HASH_LENGTH / TRYTE_WIDTH / NUMBER_OF_SECURITY_LEVELS
 
 export interface EntangledSigning {
-    generateSignature(
-        seed: Int8Array,
+    generateSignature?: (
+        seed: number[],
         index: number,
-        security: number,
-        bundle: Int8Array
-    ): Promise<ReadonlyArray<Int8Array>>
+        numberOfFragments: number,
+        bundle: number[]
+    ) => Promise<number[]>
 }
 
 export interface NativeModules {
@@ -31,14 +31,14 @@ export interface NativeModules {
     [name: string]: any
 }
 
-let NativeSigning: Promise<Maybe<EntangledSigning>>
+let NativeSigning: Promise<Maybe<EntangledSigning>> = Promise.resolve(undefined)
 try {
     // @ts-ignore-next-line
     const reactNative = import('react-native')
     NativeSigning = reactNative
         .then(rn => {
             if (rn.Platform.OS === 'ios' || rn.Platform.OS === 'android') {
-                return rn.modules.Signing
+                return rn.NativeModules.Signing
             }
             return undefined
         })
@@ -230,19 +230,30 @@ export function signatureFragment(
 export function signatureFragments(
     seed: Int8Array,
     index: number,
-    security: number,
+    numberOfFragments: number,
     bundle: Int8Array
 ): Promise<ReadonlyArray<Int8Array>> {
     return NativeSigning.then(nativeSigning => {
-        if (nativeSigning) {
-            return nativeSigning.generateSignature(seed, index, security, bundle)
+        if (nativeSigning && typeof nativeSigning.generateSignature === 'function') {
+            return nativeSigning
+                .generateSignature(
+                    Array.prototype.slice.call(seed),
+                    index,
+                    numberOfFragments,
+                    Array.prototype.slice.call(bundle)
+                )
+                .then(signatures =>
+                    Array(numberOfFragments)
+                        .fill(undefined)
+                        .map((_, i) => new Int8Array(signatures.slice(i * FRAGMENT_LENGTH, (i + 1) * FRAGMENT_LENGTH)))
+                )
         }
 
         const normalizedBundleHash = normalizedBundle(bundle)
-        const keyTrits = key(subseed(seed, index), security)
+        const keyTrits = key(subseed(seed, index), numberOfFragments)
 
-        return Promise.all(
-            new Array(security)
+        return Promise.resolve(
+            new Array(numberOfFragments)
                 .fill(undefined)
                 .map((_, i) =>
                     signatureFragment(
