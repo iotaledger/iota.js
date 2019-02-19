@@ -1,18 +1,18 @@
 //
-//  IOTASigningUtils.h
-//  Signing
+//  EntangledSigningUtils.h
+//  EntangledSigning
 //
 //  Created by Rajiv Shah on 2/18/19.
 //  Copyright © 2019 IOTA Foundation. All rights reserved.
 //
 
-#ifndef IOTASigningUtils_h
-#define IOTASigningUtils_h
+#ifndef EntangledSigningUtils_h
+#define EntangledSigningUtils_h
 
 #import <Foundation/Foundation.h>
 #import <stddef.h>
 
-@interface IOTASigningUtils : NSObject
+@interface EntangledSigningUtils : NSObject
 
 /**
  Converts a NSMutableArray representation of trits into an int8_t representation
@@ -33,4 +33,4 @@
 
 @end
 
-#endif /* IOTASigningUtils_h */
+#endif /* EntangledSigningUtils_h */

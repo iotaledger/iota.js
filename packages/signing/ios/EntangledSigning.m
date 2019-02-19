@@ -1,16 +1,17 @@
 //
-//  EntangledIOS.m
-//  iotaWallet
+//  EntangledSigning.m
+//  EntangledSigning
 //
 //  Created by Rajiv Shah on 4/6/18.
 //
 
 #import <Foundation/Foundation.h>
-#import "Signing.h"
+#import "EntangledSigning.h"
+#import "EntangledSigningUtils.h"
 
-@implementation Signing
+@implementation EntangledSigning
 
-RCT_EXPORT_MODULE();
+RCT_EXPORT_MODULE(Signing);
 
 
 // Hashing
@@ -95,8 +96,8 @@ RCT_EXPORT_METHOD(generateSignature:(NSArray *)seed index:(int)index security:(i
     int8_t* bundleHash_ptr = NULL;
     NSMutableArray * signatureTrits = [NSMutableArray array];
     
-    seedTrits_ptr = [EntangledIOSUtils NSMutableArrayTritsToInt8:[NSMutableArray arrayWithArray:seed]];
-    bundleHash_ptr = [EntangledIOSUtils NSMutableArrayTritsToInt8:[NSMutableArray arrayWithArray:bundleHash]];
+    seedTrits_ptr = [EntangledSigningUtils NSMutableArrayTritsToInt8:[NSMutableArray arrayWithArray:seed]];
+    bundleHash_ptr = [EntangledSigningUtils NSMutableArrayTritsToInt8:[NSMutableArray arrayWithArray:bundleHash]];
     
     int8_t * signature = [EntangledIOSBindings iota_ios_sign_signature_gen_trits:seedTrits_ptr index:index security:security bundleHash:bundleHash_ptr];
     
@@ -104,7 +105,7 @@ RCT_EXPORT_METHOD(generateSignature:(NSArray *)seed index:(int)index security:(i
     free(seedTrits_ptr);
     free(bundleHash_ptr);
     
-    signatureTrits = [EntangledIOSUtils Int8TritsToNSMutableArray:signature count:6561 * security];
+    signatureTrits = [EntangledSigningUtils Int8TritsToNSMutableArray:signature count:6561 * security];
     free(signature);
     
     resolve(signatureTrits);

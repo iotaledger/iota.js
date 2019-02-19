@@ -1,15 +1,15 @@
 //
-//  IOTASigningUtils.m
-//  Signing
+//  EntangledSigningUtils.m
+//  EntangledSigning
 //
 //  Created by Rajiv Shah on 2/18/19.
 //  Copyright © 2019 IOTA Foundation. All rights reserved.
 //
 
-#import "IOTASigningUtils.h"
+#import "EntangledSigningUtils.h"
 #import <Foundation/Foundation.h>
 
-@implementation IOTASigningUtils
+@implementation EntangledSigningUtils
 
 
 /**
