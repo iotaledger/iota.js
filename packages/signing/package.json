@@ -58,9 +58,7 @@
         "@iota/pad": "^1.0.0-beta.8"
     },
     "devDependencies": {
-        "babel-preset-react-native": "^4.0.1",
-        "react": "^16.5.0",
-        "react-native": "^0.57.1"
+        "babel-preset-react-native": "^4.0.1"
     },
     "peerDependencies": {
         "react": "^16.5.0",
