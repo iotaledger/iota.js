@@ -72,7 +72,7 @@ export const createGetBalances = ({ send }: Provider) =>
             .then(() =>
                 send<GetBalancesCommand, GetBalancesResponse>({
                     command: IRICommand.GET_BALANCES,
-                    addresses: removeChecksum(addresses), // Addresses passed to IRI should not have the checksum
+                    addresses: addresses.map(removeChecksum), // Addresses passed to IRI should not have the checksum
                     threshold,
                     ...(Array.isArray(tips) && tips.length && { tips }),
                 })
