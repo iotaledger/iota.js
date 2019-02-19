@@ -6,6 +6,6 @@
 #import <React/RCTEventEmitter.h>
 #import <EntangledKit/EntangledKit.h>
 
-@interface Signing: NSObject <RCTBridgeModule>
+@interface EntangledSigning: NSObject <RCTBridgeModule>
 
 @end

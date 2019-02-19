@@ -1,16 +1,17 @@
 //
-//  EntangledIOS.m
-//  iotaWallet
+//  EntangledSigning.m
+//  EntangledSigning
 //
 //  Created by Rajiv Shah on 4/6/18.
 //
 
 #import <Foundation/Foundation.h>
-#import "Signing.h"
+#import "EntangledSigning.h"
+#import "EntangledSigningUtils.h"
 
-@implementation Signing
+@implementation EntangledSigning
 
-RCT_EXPORT_MODULE();
+RCT_EXPORT_MODULE(Signing);
 
 
 // Hashing
@@ -91,26 +92,23 @@ RCT_EXPORT_METHOD(generateAddresses:(NSArray<NSNumber*>*)seed index:(int)index s
 // Signature generation
 RCT_EXPORT_METHOD(generateSignature:(NSArray *)seed index:(int)index security:(int)security bundleHash:(NSArray *)bundleHash resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
-  int8_t seedTrits[sizeof(seed)] = "";
-  for (int i = 0; i < sizeof(seed); i++)
-  {
-      seedTrits[i] = (int8_t)seed[i];
-  }
-  int8_t bundleTrits[sizeof(bundleHash)] = "";
-  for (int i = 0; i < sizeof(seed); i++)
-  {
-      bundleTrits[i] = (int8_t)bundleHash[i];
-  }
-  int8_t * signature = [EntangledIOSBindings iota_ios_sign_signature_gen_trits:seedTrits index:index security:security bundleHash:bundleTrits];
-  memset_s(seedTrits, strlen(seedTrits), 0, strlen(seedTrits));
-
-  NSMutableArray * signatureTrits = [NSMutableArray array];
-  for (int i = 0; i < sizeof(signature); i++)
-  {
-      NSInteger item = signature[i];
-      [signatureTrits addObject:[NSNumber numberWithInteger:item]];
-  }
-  resolve(signatureTrits);
+    int8_t* seedTrits_ptr = NULL;
+    int8_t* bundleHash_ptr = NULL;
+    NSMutableArray * signatureTrits = [NSMutableArray array];
+    
+    seedTrits_ptr = [EntangledSigningUtils NSMutableArrayTritsToInt8:[NSMutableArray arrayWithArray:seed]];
+    bundleHash_ptr = [EntangledSigningUtils NSMutableArrayTritsToInt8:[NSMutableArray arrayWithArray:bundleHash]];
+    
+    int8_t * signature = [EntangledIOSBindings iota_ios_sign_signature_gen_trits:seedTrits_ptr index:index security:security bundleHash:bundleHash_ptr];
+    
+    memset_s(seedTrits_ptr, 243, 0, 243);
+    free(seedTrits_ptr);
+    free(bundleHash_ptr);
+    
+    signatureTrits = [EntangledSigningUtils Int8TritsToNSMutableArray:signature count:6561 * security];
+    free(signature);
+    
+    resolve(signatureTrits);
 }
 
 @end
