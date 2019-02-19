@@ -165,7 +165,7 @@ export const createPrepareTransfers = (provider?: Provider, now: () => number = 
             validatePrepareTransfers({
                 transactions: [],
                 trytes: [],
-                seed: typeof seed === 'string' ? trits(seed) : Int8Array.from(seed),
+                seed: typeof seed === 'string' ? trits(seed) : new Int8Array(seed),
                 transfers,
                 timestamp: Math.floor((typeof now === 'function' ? now() : Date.now()) / 1000),
                 ...getPrepareTransfersOptions(options),
