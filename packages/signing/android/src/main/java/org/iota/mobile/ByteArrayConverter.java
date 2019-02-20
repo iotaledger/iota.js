@@ -7,7 +7,7 @@ import com.facebook.react.bridge.WritableNativeArray;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Converter {
+public class ByteArrayConverter {
 
     public static WritableArray byteArrayToWritableArray(byte[] byteArray) {
         WritableArray writableArray = new WritableNativeArray();

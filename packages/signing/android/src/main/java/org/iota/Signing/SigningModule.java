@@ -26,20 +26,20 @@ public class SigningModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void generateAddress(ReadableArray seed, int index, int security, Promise promise) {
-        byte[] seedBytes = Converter.readableArrayToByteArray(seed);
+        byte[] seedBytes = ByteArrayConverter.readableArrayToByteArray(seed);
         byte[] addressBytes = Interface.iota_sign_address_gen_trits(seedBytes, index, security);
 
-        WritableArray result = Converter.byteArrayToWritableArray(addressBytes);
+        WritableArray result = ByteArrayConverter.byteArrayToWritableArray(addressBytes);
         promise.resolve(result);
     }
 
     @ReactMethod
     public void generateSignature(ReadableArray seed, int index, int security, ReadableArray bundleHash, Promise promise) {
-        byte[] seedBytes = Converter.readableArrayToByteArray(seed);
-        byte[] bundleHashBytes = Converter.readableArrayToByteArray(bundleHash);
+        byte[] seedBytes = ByteArrayConverter.readableArrayToByteArray(seed);
+        byte[] bundleHashBytes = ByteArrayConverter.readableArrayToByteArray(bundleHash);
         byte[] signatureBytes = Interface.iota_sign_signature_gen_trits(seedBytes, index, security, bundleHashBytes);
 
-        WritableArray result = Converter.byteArrayToWritableArray(signatureBytes);
+        WritableArray result = ByteArrayConverter.byteArrayToWritableArray(signatureBytes);
         promise.resolve(result);
     }
 }
