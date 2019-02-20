@@ -1,4 +1,4 @@
-package org.iota.mobile;
+package org.iota.MobileSigning;
 
 public class Interface {
     static { System.loadLibrary("dummy"); }

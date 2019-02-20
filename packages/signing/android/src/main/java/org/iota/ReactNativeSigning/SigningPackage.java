@@ -1,4 +1,4 @@
-package org.iota.Signing;
+package org.iota.ReactNativeSigning;
 
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.NativeModule;

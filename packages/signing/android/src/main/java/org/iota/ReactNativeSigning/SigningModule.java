@@ -1,6 +1,6 @@
-package org.iota.Signing;
+package org.iota.ReactNativeSigning;
 
-import org.iota.mobile.*;
+import org.iota.MobileSigning.*;
 
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReadableArray;
