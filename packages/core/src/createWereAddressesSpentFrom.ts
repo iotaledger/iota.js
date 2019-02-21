@@ -30,7 +30,7 @@ export const createWereAddressesSpentFrom = ({ send }: Provider, caller?: string
         .then(() =>
             send<WereAddressesSpentFromCommand, WereAddressesSpentFromResponse>({
                 command: IRICommand.WERE_ADDRESSES_SPENT_FROM,
-                addresses: removeChecksum(addresses),
+                addresses: addresses.map(removeChecksum),
             })
         )
         .then(res => res.states)

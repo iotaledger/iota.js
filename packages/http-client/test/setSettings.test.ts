@@ -1,16 +1,20 @@
 import test from 'ava'
 import * as nock from 'nock'
 import { createHttpClient } from '../src'
-import { command as batchedCommand, response as batchedResponse } from './batchedSend.test'
-import { command, headers, response } from './send.test'
+import {
+    expectedFindTransactionsResponse as batchedResponse,
+    findTransactionsCommand as batchedCommand,
+    requestBatchSize,
+} from './batchedSend'
+import { apiVersion, findTransactionsCommand as command, findTransactionsResponse as response, headers } from './send'
 
-const API_VERSION = 1
+const bumpedApiVersion = apiVersion + 1
 
-nock('http://localhost:34265', headers(API_VERSION))
+nock('http://localhost:34265', headers(apiVersion))
     .post('/', command)
     .reply(200, response)
 
-nock('http://localhost:44265', headers(2))
+nock('http://localhost:44265', headers(bumpedApiVersion))
     .post('/', command)
     .reply(200, response)
 
@@ -29,7 +33,7 @@ test('setSettings() sets X-IOTA-API-Version', async t => {
 
     client.setSettings({
         provider: 'http://localhost:44265',
-        apiVersion: 2,
+        apiVersion: bumpedApiVersion,
     })
 
     t.deepEqual(await client.send(command), response)
@@ -39,11 +43,11 @@ test('setSettings() sets request batch size', async t => {
     const client = createHttpClient({
         provider: 'http://localhost:24265',
         requestBatchSize: 1000,
-        apiVersion: API_VERSION,
+        apiVersion,
     })
 
     client.setSettings({
-        requestBatchSize: 2,
+        requestBatchSize,
     })
 
     t.deepEqual(await client.send(batchedCommand), batchedResponse)

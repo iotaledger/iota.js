@@ -1,0 +1,4 @@
+framework module EntangledKit {
+  umbrella header "EntangledKit.h"
+  export *
+  module * { export *}}

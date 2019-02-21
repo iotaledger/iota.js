@@ -10,7 +10,7 @@ import { isArray, Validator } from '../../guards'
 import { Bundle, Hash, Transaction, Trytes } from '../../types'
 
 interface SignatureFragments {
-    readonly [key: string]: ReadonlyArray<Trytes>
+    readonly [key: string]: ReadonlyArray<Int8Array>
 }
 
 export { Transaction, Bundle, INVALID_BUNDLE }
@@ -30,18 +30,20 @@ export const validateBundleSignatures = (bundle: Bundle): boolean => {
             value < 0
                 ? {
                       ...acc,
-                      [address]: [signatureMessageFragment],
+                      [address]: [trits(signatureMessageFragment)],
                   }
                 : value === 0 && acc.hasOwnProperty(address) && address === bundle[i - 1].address
                     ? {
                           ...acc,
-                          [address]: acc[address].concat(signatureMessageFragment),
+                          [address]: acc[address].concat(trits(signatureMessageFragment)),
                       }
                     : acc,
         {}
     )
 
-    return Object.keys(signatures).every(address => validateSignatures(address, signatures[address], bundle[0].bundle))
+    return Object.keys(signatures).every(address =>
+        validateSignatures(trits(address), signatures[address], trits(bundle[0].bundle))
+    )
 }
 
 /**
@@ -62,8 +64,7 @@ export default function isBundle(bundle: Bundle) {
     let totalSum = 0
     const bundleHash = bundle[0].bundle
 
-    const kerl = new Kerl()
-    kerl.initialize()
+    const sponge = new Kerl()
 
     // Prepare for signature validation
     const signaturesToValidate: Array<{
@@ -71,19 +72,24 @@ export default function isBundle(bundle: Bundle) {
         signatureFragments: Trytes[]
     }> = []
 
+    // currentIndex has to be equal to the index in the array
+    if (bundle.some((tx, index) => tx.currentIndex !== index)) {
+        return false
+    }
+
+    // Txs must have correct lastIndex
+    if (bundle.some(tx => tx.lastIndex !== bundle.length - 1)) {
+        return false
+    }
+
     bundle.forEach((bundleTx, index) => {
         totalSum += bundleTx.value
-
-        // currentIndex has to be equal to the index in the array
-        if (bundleTx.currentIndex !== index) {
-            return false
-        }
 
         // Get the transaction trytes
         const thisTxTrytes = asTransactionTrytes(bundleTx)
 
         const thisTxTrits = trits(thisTxTrytes.slice(2187, 2187 + 162))
-        kerl.absorb(thisTxTrits, 0, thisTxTrits.length)
+        sponge.absorb(thisTxTrits, 0, thisTxTrits.length)
 
         // Check if input transaction
         if (bundleTx.value < 0) {
@@ -117,17 +123,10 @@ export default function isBundle(bundle: Bundle) {
     const bundleFromTxs: Int8Array = new Int8Array(Kerl.HASH_LENGTH)
 
     // get the bundle hash from the bundle transactions
-    kerl.squeeze(bundleFromTxs, 0, Kerl.HASH_LENGTH)
-
-    const bundleHashFromTxs = trytes(bundleFromTxs)
+    sponge.squeeze(bundleFromTxs, 0, Kerl.HASH_LENGTH)
 
     // Check if bundle hash is the same as returned by tx object
-    if (bundleHashFromTxs !== bundleHash) {
-        return false
-    }
-
-    // Last tx in the bundle should have currentIndex === lastIndex
-    if (bundle[bundle.length - 1].currentIndex !== bundle[bundle.length - 1].lastIndex) {
+    if (trytes(bundleFromTxs) !== bundleHash) {
         return false
     }
 

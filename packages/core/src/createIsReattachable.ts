@@ -43,7 +43,7 @@ export const createIsReattachable = (provider: Provider) => {
                 // 1. Remove checksum and validate addresses
                 validate(arrayValidator(trytesValidator)(inputAddressArray, INVALID_ADDRESS))
 
-                addresses = inputAddressArray.map(addr => removeChecksum(addr))
+                addresses = inputAddressArray.map(removeChecksum)
 
                 validate(arrayValidator(hashValidator)(addresses))
             })
