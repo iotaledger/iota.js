@@ -53,3 +53,4 @@ export const NO_INPUTS = 'Could not find any available inputs.'
 export const invalidChecksum = (address: string) => `Invalid Checksum: ${address}`
 export const inconsistentTransaction = (reason: string) => `Transaction is inconsistent. Reason: ${reason}`
 export const INVALID_DELAY = 'Invalid delay.'
+export const INVALID_ADDRESS_LAST_TRIT = 'Invalid address: Last trit of address of value transaction must be 0.'

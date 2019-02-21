@@ -1,6 +1,9 @@
+import { tritsToTrytes, trytesToTrits } from '@iota/converter'
 import test from 'ava'
+import { INVALID_ADDRESS_LAST_TRIT } from '../../errors'
 import { addEntry, addTrytes, createBundle, finalizeBundle } from '../src'
 
+const HASH_TRITS_SIZE = 243
 const NULL_HASH = '9'.repeat(81)
 const NULL_NONCE = '9'.repeat(27)
 const addresses = ['A'.repeat(81), 'B'.repeat(81)]
@@ -97,6 +100,32 @@ test('addEntry() adds new entry and returns correct transactions.', t => {
         }),
         bundle,
         'addEntry() should add new entry and return correct trasnactions.'
+    )
+})
+
+test('addEntry() throws error for entry with value and address with last trit !== 0.', t => {
+    const invalidAddressTrits = trytesToTrits(addresses[1])
+    invalidAddressTrits[HASH_TRITS_SIZE - 1] = 1
+    const invalidAddressTrytes = tritsToTrytes(invalidAddressTrits)
+
+    const entry = {
+        length: 1,
+        address: invalidAddressTrytes,
+        value: 1,
+        tag: 'TAG',
+        timestamp: 1522219,
+    }
+
+    t.is(
+        t.throws(() => addEntry([], entry)).message,
+        INVALID_ADDRESS_LAST_TRIT,
+        'addEntry() should throw error for entry with value and address with last trit !== 0.'
+    )
+
+    t.is(
+        t.throws(() => addEntry([], { ...entry, value: -1 })).message,
+        INVALID_ADDRESS_LAST_TRIT,
+        'addEntry() should throw error for entry with value and address with last trit !== 0.'
     )
 })
 

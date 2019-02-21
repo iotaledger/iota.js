@@ -1,6 +1,8 @@
+import { tritsToTrytes, trytesToTrits } from '@iota/converter'
 import { transactionObject } from '@iota/samples'
 import test from 'ava'
 import { isTransaction } from '../src'
+import { HASH_TRITS_SIZE } from '../src/constants'
 
 test('isTransaction() returns false for transaction with invalid hash.', t => {
     t.is(
@@ -43,6 +45,24 @@ test('isTransaction() returns true for valid transaction with address (with chec
         }),
         true,
         'isTransaction() should return true for valid transaction with address (with checksum).'
+    )
+})
+
+test('isTransaction() returns false for value transaction with last trit of address != 0.', t => {
+    const invalidAddressTrits = trytesToTrits(transactionObject.address)
+    invalidAddressTrits[HASH_TRITS_SIZE - 1] = 1
+    const invalidAddressTrytes = tritsToTrytes(invalidAddressTrits)
+
+    t.is(
+        isTransaction({ ...transactionObject, value: 1, address: invalidAddressTrytes }),
+        false,
+        'isTransaction() should return false for value transaction with last trit of address != 0.'
+    )
+
+    t.is(
+        isTransaction({ ...transactionObject, value: -1, address: invalidAddressTrytes }),
+        false,
+        'isTransaction() should return false for value transaction with last trit of address != 0.'
     )
 })
 
