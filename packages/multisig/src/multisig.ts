@@ -3,7 +3,7 @@ import { removeChecksum } from '@iota/checksum'
 import { trits, trytes } from '@iota/converter'
 import { Balances, createGetBalances } from '@iota/core'
 import Kerl from '@iota/kerl'
-import { digests, key, normalizedBundleHash, signatureFragment, subseed } from '@iota/signing'
+import { digests, key, normalizedBundle, signatureFragment, subseed } from '@iota/signing'
 import * as Promise from 'bluebird'
 import * as errors from '../../errors'
 import {
@@ -338,12 +338,12 @@ export default class Multisig {
                     const firstFragment = keyTrits.slice(0, 6561)
 
                     //  Get the normalized bundle hash
-                    const normalizedBundle = normalizedBundleHash(bundleHash as string)
+                    const normalizedBundleHash = normalizedBundle(trits(bundleHash))
                     const normalizedBundleFragments = []
 
                     // Split hash into 3 fragments
                     for (let k = 0; k < 3; k++) {
-                        normalizedBundleFragments[k] = normalizedBundle.slice(k * 27, (k + 1) * 27)
+                        normalizedBundleFragments[k] = normalizedBundleHash.slice(k * 27, (k + 1) * 27)
                     }
 
                     //  First bundle fragment uses 27 trytes

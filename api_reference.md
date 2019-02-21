@@ -1658,7 +1658,7 @@ Example with `getBundle`:
 
 ```js
 getBundle(tailHash)
-  .then(bunlde => {
+  .then(bundle => {
      const msg = JSON.parse(extractJson(bundle))
      // ...
   })
