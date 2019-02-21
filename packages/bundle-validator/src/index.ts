@@ -79,13 +79,18 @@ export default function isBundle(bundle: Bundle) {
         return false
     }
 
+    // currentIndex has to be equal to the index in the array
+    if (bundle.some((tx, index) => tx.currentIndex !== index)) {
+        return false
+    }
+
+    // Txs must have correct lastIndex
+    if (bundle.some(tx => tx.lastIndex !== bundle.length - 1)) {
+        return false
+    }
+
     bundle.forEach((bundleTx, index) => {
         totalSum += bundleTx.value
-
-        // currentIndex has to be equal to the index in the array
-        if (bundleTx.currentIndex !== index) {
-            return false
-        }
 
         // Get the transaction trytes
         const thisTxTrytes = asTransactionTrytes(bundleTx)
@@ -129,11 +134,6 @@ export default function isBundle(bundle: Bundle) {
 
     // Check if bundle hash is the same as returned by tx object
     if (trytes(bundleFromTxs) !== bundleHash) {
-        return false
-    }
-
-    // Last tx in the bundle should have currentIndex === lastIndex
-    if (bundle[bundle.length - 1].currentIndex !== bundle[bundle.length - 1].lastIndex) {
         return false
     }
 
