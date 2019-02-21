@@ -12,12 +12,12 @@ export interface Settings {
 export const DEFAULT_PORT = 14265
 export const DEFAULT_HOST = 'http://localhost'
 export const DEFAULT_URI = `${DEFAULT_HOST}:${DEFAULT_PORT}`
-export const MAX_REQUEST_BATCH_SIZE = 1000
+export const REQUEST_BATCH_SIZE = 1000
 export const API_VERSION = 1
 
 const defaults: Settings = {
     provider: DEFAULT_URI,
-    requestBatchSize: MAX_REQUEST_BATCH_SIZE,
+    requestBatchSize: REQUEST_BATCH_SIZE,
     apiVersion: API_VERSION,
 }
 
@@ -47,9 +47,6 @@ export const getSettingsWithDefaults = (settings: Partial<Settings> = {}): Setti
     if (settings.hasOwnProperty('requestBatchSize')) {
         if (!Number.isInteger(requestBatchSize) || requestBatchSize <= 0) {
             throw new Error('Invalid `requestBatchSize` option')
-        }
-        if (requestBatchSize > MAX_REQUEST_BATCH_SIZE) {
-            throw new Error('`requestBatchSize` should not exceed max value of' + MAX_REQUEST_BATCH_SIZE)
         }
     }
 
