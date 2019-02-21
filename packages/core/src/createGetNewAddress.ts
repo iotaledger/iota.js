@@ -88,7 +88,11 @@ export const generateAddresses = (seed: Trytes, index: number, security: number,
         .map(() => generateAddress(seed, index++, security))
 
 export const applyChecksumOption = (checksum: boolean) => (addresses: Trytes | ReadonlyArray<Trytes>) =>
-    checksum ? (Array.isArray(addresses) ? addChecksum(addresses) : addChecksum(asArray(addresses))[0]) : addresses
+    checksum
+        ? Array.isArray(addresses)
+            ? addresses.map(addr => addChecksum(addr))
+            : addChecksum(addresses as Trytes)
+        : addresses
 
 export const applyReturnAllOption = (returnAll: boolean, total?: number) => (addresses: ReadonlyArray<Trytes>) =>
     returnAll || total ? addresses : addresses[addresses.length - 1]

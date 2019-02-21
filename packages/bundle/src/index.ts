@@ -3,7 +3,7 @@
 import { trits, trytes } from '@iota/converter'
 import Kerl from '@iota/kerl'
 import { padTag, padTrits, padTrytes } from '@iota/pad'
-import { add, normalizedBundleHash } from '@iota/signing'
+import { add, normalizedBundle } from '@iota/signing'
 import '../../typed-array'
 import {
     Bundle,
@@ -133,22 +133,17 @@ export const addTrytes = (transactions: Bundle, fragments: ReadonlyArray<Trytes>
  * @return {Transaction[]} List of transactions in the finalized bundle
  */
 export const finalizeBundle = (transactions: Bundle): Bundle => {
-    const valueTrits = transactions.map(tx => trits(tx.value)).map(padTrits(81))
-
-    const timestampTrits = transactions.map(tx => trits(tx.timestamp)).map(padTrits(27))
-
-    const currentIndexTrits = transactions.map(tx => trits(tx.currentIndex)).map(padTrits(27))
-
-    const lastIndexTrits = padTrits(27)(trits(transactions[0].lastIndex))
-
-    const obsoleteTagTrits = transactions.map(tx => trits(tx.obsoleteTag)).map(padTrits(81))
-
-    let bundleHash: Hash
     let validBundle: boolean = false
 
+    const valueTrits = transactions.map(tx => trits(tx.value)).map(padTrits(81))
+    const timestampTrits = transactions.map(tx => trits(tx.timestamp)).map(padTrits(27))
+    const currentIndexTrits = transactions.map(tx => trits(tx.currentIndex)).map(padTrits(27))
+    const lastIndexTrits = padTrits(27)(trits(transactions[0].lastIndex))
+    const obsoleteTagTrits = transactions.map(tx => trits(tx.obsoleteTag)).map(padTrits(81))
+    const bundleHashTrits = new Int8Array(Kerl.HASH_LENGTH)
+
     while (!validBundle) {
-        const kerl = new Kerl()
-        kerl.initialize()
+        const sponge = new Kerl()
 
         for (let i = 0; i < transactions.length; i++) {
             const essence = trits(
@@ -159,14 +154,12 @@ export const finalizeBundle = (transactions: Bundle): Bundle => {
                     trytes(currentIndexTrits[i]) +
                     trytes(lastIndexTrits)
             )
-            kerl.absorb(essence, 0, essence.length)
+            sponge.absorb(essence, 0, essence.length)
         }
 
-        const bundleHashTrits = new Int8Array(Kerl.HASH_LENGTH)
-        kerl.squeeze(bundleHashTrits, 0, Kerl.HASH_LENGTH)
-        bundleHash = trytes(bundleHashTrits)
+        sponge.squeeze(bundleHashTrits, 0, Kerl.HASH_LENGTH)
 
-        if (normalizedBundleHash(bundleHash).indexOf(13) !== -1) {
+        if (normalizedBundle(bundleHashTrits).indexOf(13) !== -1) {
             // Insecure bundle, increment obsoleteTag and recompute bundle hash
             obsoleteTagTrits[0] = add(obsoleteTagTrits[0], new Int8Array(1).fill(1))
         } else {
@@ -178,6 +171,6 @@ export const finalizeBundle = (transactions: Bundle): Bundle => {
         ...transaction,
         // overwrite obsoleteTag in first entry
         obsoleteTag: i === 0 ? trytes(obsoleteTagTrits[0]) : transaction.obsoleteTag,
-        bundle: bundleHash,
+        bundle: trytes(bundleHashTrits),
     }))
 }
