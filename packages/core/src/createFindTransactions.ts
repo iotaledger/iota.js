@@ -43,7 +43,7 @@ export const removeAddressChecksum = (query: FindTransactionsQuery) =>
     query.addresses
         ? {
               ...query,
-              addresses: removeChecksum(query.addresses),
+              addresses: query.addresses.map(removeChecksum),
           }
         : query
 
