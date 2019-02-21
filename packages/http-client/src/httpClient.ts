@@ -84,11 +84,11 @@ export const createHttpClient = (settings?: Partial<Settings>): Provider => {
                     const keysToBatch = getKeysToBatch(command, requestBatchSize)
 
                     if (keysToBatch.length) {
-                        return batchedSend<C, R>(command, keysToBatch, requestBatchSize, provider, apiVersion)
+                        return batchedSend<C>(command, keysToBatch, requestBatchSize, provider, apiVersion)
                     }
                 }
 
-                return send<C, R>(command, provider, apiVersion)
+                return send<C>(command, provider, apiVersion)
             }),
 
         /**
