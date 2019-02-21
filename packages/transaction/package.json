@@ -1,6 +1,6 @@
 {
     "name": "@iota/transaction",
-    "version": "1.0.0-beta.8",
+    "version": "1.0.0-beta.9",
     "description": "Utilities and validators for transactions.",
     "main": "./out/transaction/src/index.js",
     "typings": "typings/transaction/src",
@@ -65,10 +65,10 @@
         "url": "https://github.com/iotaledger/iota.js.git/tree/develop/packages/crypto"
     },
     "dependencies": {
-        "@iota/converter": "^1.0.0-beta.8",
-        "@iota/curl": "^1.0.0-beta.8"
+        "@iota/converter": "^1.0.0-beta.9",
+        "@iota/curl": "^1.0.0-beta.9"
     },
     "devDependencies": {
-        "@iota/samples": "^1.0.0-beta.8"
+        "@iota/samples": "^1.0.0-beta.9"
     }
 }
