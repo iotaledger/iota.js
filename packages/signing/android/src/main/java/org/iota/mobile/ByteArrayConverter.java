@@ -1,4 +1,4 @@
-package org.iota.MobileSigning;
+package org.iota.mobile;
 
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.WritableArray;
