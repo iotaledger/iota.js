@@ -69,7 +69,7 @@ describe('utils.checksum', function () {
                     var checksumLength = 3;
 
                     validAddressData.forEach(function (data) {
-                        expect(Utils.addChecksum(data.address, checksumLength)).to.equal(data.address + data.checksum.slice(0, checksumLength));
+                        expect(Utils.addChecksum(data.address, checksumLength)).to.equal(data.address + data.checksum.slice(-checksumLength));
                     });
                 });
             });
@@ -103,7 +103,7 @@ describe('utils.checksum', function () {
 
                     expect(actualAddressesWithChecksum).to.eql(expectedAddressesWithChecksum);
                 });
-                
+
                 it('should have correct checksum length', function () {
                     var checksumLength = 4;
 
@@ -115,7 +115,7 @@ describe('utils.checksum', function () {
                     );
 
                     var expectedAddressesWithChecksum = validAddressData.map(function (data) {
-                        return data.address + data.checksum.slice(0, checksumLength);
+                        return data.address + data.checksum.slice(-checksumLength);
                     });
 
                     expect(actualAddressesWithChecksum).to.eql(expectedAddressesWithChecksum);
@@ -176,11 +176,11 @@ describe('utils.checksum', function () {
 
                     addressData.forEach(function (data) {
                         var addressTritsWithChecksum = Utils.addChecksum(data.address, tritsChecksumLength);
-                        expect(addressTritsWithChecksum).to.eql(data.address.concat(data.checksum.slice(0, tritsChecksumLength)));
+                        expect(addressTritsWithChecksum).to.eql(data.address.concat(data.checksum.slice(-tritsChecksumLength)));
 
                         // Also assert on trytes
                         expect(Converter.trytes(addressTritsWithChecksum)).to.equal(
-                            Converter.trytes(data.address).concat(Converter.trytes(data.checksum).slice(0, trytesChecksumLength))
+                            Converter.trytes(data.address).concat(Converter.trytes(data.checksum).slice(-trytesChecksumLength))
                         );
                     });
                 });
@@ -253,7 +253,7 @@ describe('utils.checksum', function () {
                         tritsChecksumLength
                     );
                     var expectedTritArray = addressData.map(function (data) {
-                        return data.address.concat(data.checksum.slice(0, tritsChecksumLength));
+                        return data.address.concat(data.checksum.slice(-tritsChecksumLength));
                     });
 
                     expect(actualTritArray).to.eql(expectedTritArray);
