@@ -294,6 +294,13 @@ export type AttachToTangle = (
     callback?: Callback<ReadonlyArray<Trytes>>
 ) => Promise<ReadonlyArray<Trytes>>
 
+export type NativeGenerateSignatureFunction = (
+    seed: number[],
+    index: number,
+    numberOfFragments: number,
+    bundle: number[]
+) => Promise<number[]>
+
 /* Util methods */
 export const asArray = <T>(x: T | ReadonlyArray<T>): ReadonlyArray<T> => (Array.isArray(x) ? x : [x])
 

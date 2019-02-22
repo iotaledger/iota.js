@@ -20,6 +20,7 @@ import {
     asArray,
     Callback,
     getOptionsWithDefaults,
+    NativeGenerateSignatureFunction,
     Provider,
     Transaction, // tslint:disable-line no-unused-variable
     Transfer,
@@ -40,6 +41,7 @@ export interface PrepareTransfersOptions {
     readonly remainderAddress?: Trytes
     readonly security: number
     readonly hmacKey?: Trytes
+    readonly nativeGenerateSignatureFunction?: NativeGenerateSignatureFunction
 }
 
 const defaults: PrepareTransfersOptions = {
@@ -72,6 +74,7 @@ export interface PrepareTransfersProps {
     readonly remainderAddress?: Trytes
     readonly address?: Trytes
     readonly hmacKey?: Trytes
+    readonly nativeGenerateSignatureFunction?: NativeGenerateSignatureFunction
 }
 
 /**
@@ -351,11 +354,17 @@ export const finalize = (props: PrepareTransfersProps): PrepareTransfersProps =>
 })
 
 export const addSignatures = (props: PrepareTransfersProps): Promise<PrepareTransfersProps> => {
-    const { transactions, inputs, seed } = props
+    const { transactions, inputs, seed, nativeGenerateSignatureFunction } = props
 
     return Promise.all(
         inputs.map(({ keyIndex, security }) =>
-            signatureFragments(seed, keyIndex, security || SECURITY_LEVEL, trits(transactions[0].bundle))
+            signatureFragments(
+                seed,
+                keyIndex,
+                security || SECURITY_LEVEL,
+                trits(transactions[0].bundle),
+                nativeGenerateSignatureFunction
+            )
         )
     )
         .then(fragments => fragments.reduce((acc, fragment) => acc.concat(fragment), []))
