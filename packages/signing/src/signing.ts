@@ -1,11 +1,11 @@
 /** @module signing */
-
 import { fromValue } from '@iota/converter'
 import Kerl from '@iota/kerl'
 import { padTrits } from '@iota/pad'
+import * as Promise from 'bluebird'
 import * as errors from '../../errors'
 import '../../typed-array'
-import { Maybe } from '../../types'
+import { NativeGenerateSignatureFunction } from '../../types'
 import add from './add'
 
 export const TRYTE_WIDTH = 3
@@ -16,35 +16,6 @@ export const HASH_LENGTH = 243
 export const FRAGMENT_LENGTH = (HASH_LENGTH / NUMBER_OF_SECURITY_LEVELS / TRYTE_WIDTH) * HASH_LENGTH
 export const NUMBER_OF_FRAGMENT_CHUNKS = FRAGMENT_LENGTH / HASH_LENGTH
 export const NORMALIZED_FRAGMENT_LENGTH = HASH_LENGTH / TRYTE_WIDTH / NUMBER_OF_SECURITY_LEVELS
-
-export interface EntangledSigning {
-    generateSignature?: (
-        seed: number[],
-        index: number,
-        numberOfFragments: number,
-        bundle: number[]
-    ) => Promise<number[]>
-}
-
-export interface NativeModules {
-    Signing?: EntangledSigning
-    [name: string]: any
-}
-
-let NativeSigning: Promise<Maybe<EntangledSigning>> = Promise.resolve(undefined)
-try {
-    // @ts-ignore-next-line
-    const reactNative = import('react-native')
-    NativeSigning = reactNative
-        .then(rn => {
-            if (rn.Platform.OS === 'ios' || rn.Platform.OS === 'android') {
-                return rn.NativeModules.Signing
-            }
-            return undefined
-        })
-        // tslint:disable-next-line
-        .catch(() => Promise.resolve(undefined))
-} catch (err) {} // tslint:disable-line
 
 /**
  * @method subseed
@@ -231,41 +202,35 @@ export function signatureFragments(
     seed: Int8Array,
     index: number,
     numberOfFragments: number,
-    bundle: Int8Array
+    bundle: Int8Array,
+    nativeGenerateSignatureFunction?: NativeGenerateSignatureFunction
 ): Promise<ReadonlyArray<Int8Array>> {
-    return NativeSigning.then(nativeSigning => {
-        if (nativeSigning && typeof nativeSigning.generateSignature === 'function') {
-            return nativeSigning
-                .generateSignature(
-                    Array.prototype.slice.call(seed),
-                    index,
-                    numberOfFragments,
-                    Array.prototype.slice.call(bundle)
-                )
-                .then(signatures =>
-                    Array(numberOfFragments)
-                        .fill(undefined)
-                        .map((_, i) => new Int8Array(signatures.slice(i * FRAGMENT_LENGTH, (i + 1) * FRAGMENT_LENGTH)))
-                )
-        }
-
-        const normalizedBundleHash = normalizedBundle(bundle)
-        const keyTrits = key(subseed(seed, index), numberOfFragments)
-
-        return Promise.resolve(
-            new Array(numberOfFragments)
+    if (nativeGenerateSignatureFunction && typeof nativeGenerateSignatureFunction === 'function') {
+        return nativeGenerateSignatureFunction(
+            Array.prototype.slice.call(seed),
+            index,
+            numberOfFragments,
+            Array.prototype.slice.call(bundle)
+        ).then(signatures =>
+            Array(numberOfFragments)
                 .fill(undefined)
-                .map((_, i) =>
-                    signatureFragment(
-                        normalizedBundleHash.slice(
-                            i * NORMALIZED_FRAGMENT_LENGTH,
-                            (i + 1) * NORMALIZED_FRAGMENT_LENGTH
-                        ),
-                        keyTrits.slice(i * FRAGMENT_LENGTH, (i + 1) * FRAGMENT_LENGTH)
-                    )
-                )
+                .map((_, i) => new Int8Array(signatures.slice(i * FRAGMENT_LENGTH, (i + 1) * FRAGMENT_LENGTH)))
         )
-    })
+    }
+
+    const normalizedBundleHash = normalizedBundle(bundle)
+    const keyTrits = key(subseed(seed, index), numberOfFragments)
+
+    return Promise.resolve(
+        new Array(numberOfFragments)
+            .fill(undefined)
+            .map((_, i) =>
+                signatureFragment(
+                    normalizedBundleHash.slice(i * NORMALIZED_FRAGMENT_LENGTH, (i + 1) * NORMALIZED_FRAGMENT_LENGTH),
+                    keyTrits.slice(i * FRAGMENT_LENGTH, (i + 1) * FRAGMENT_LENGTH)
+                )
+            )
+    )
 }
 
 /**
