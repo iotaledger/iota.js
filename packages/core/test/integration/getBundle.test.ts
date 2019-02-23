@@ -4,6 +4,7 @@ import test from 'ava'
 import { INVALID_TRANSACTION_HASH } from '../../../errors'
 import { createGetBundle } from '../../src'
 import './nocks/getTrytes'
+import { stringify } from '../../../guards'
 
 const getBundle = createGetBundle(createHttpClient())
 const tail = bundle[0].hash
@@ -14,7 +15,7 @@ test('getBundle() resolves to correct bundle.', async t => {
 
 test('getBundle() resolves to correct signle transaction bundle.', async t => {
     t.deepEqual(
-        await getBundle(bundleWithZeroValue[0].hash),
+        await getBundle(stringify(bundleWithZeroValue[0].hash)),
         bundleWithZeroValue,
         'getBundle() should resolve to correct single transaction bundle.'
     )
@@ -25,7 +26,7 @@ test('getBundle() rejects with correct error for invalid hash.', t => {
 
     t.is(
         t.throws(() => getBundle(invalidHash), Error).message,
-        `${INVALID_TRANSACTION_HASH}: ${invalidHash}`,
+        `${INVALID_TRANSACTION_HASH}: ${stringify(invalidHash)}`,
         'getBundle() should throw correct error for invalid hash.'
     )
 })

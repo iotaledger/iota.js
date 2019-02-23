@@ -3,6 +3,7 @@ import test from 'ava'
 import { INVALID_TRANSACTION_HASH } from '../../../errors'
 import { createGetTrytes } from '../../src'
 import { getTrytesCommand, getTrytesResponse } from './nocks/getTrytes'
+import { stringify } from '../../../guards'
 
 const getTrytes = createGetTrytes(createHttpClient())
 
@@ -19,7 +20,7 @@ test('getTrytes() rejects with correct error for invalid hashes', t => {
 
     t.is(
         t.throws(() => getTrytes(invalidHashes), Error).message,
-        `${INVALID_TRANSACTION_HASH}: ${invalidHashes[0]}`,
+        `${INVALID_TRANSACTION_HASH}: ${stringify(invalidHashes[0])}`,
         'getTrytes() should throw error for invalid hashes'
     )
 })

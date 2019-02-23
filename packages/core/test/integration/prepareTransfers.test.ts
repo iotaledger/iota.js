@@ -5,7 +5,7 @@ import test from 'ava'
 import { Transfer, Trytes } from '../../../types'
 import { createPrepareTransfers } from '../../src'
 import { getRemainderAddressStartIndex } from '../../src/createPrepareTransfers'
-
+import { stringify } from '../../../guards'
 import './nocks/prepareTransfers'
 
 const inputs: ReadonlyArray<any> = [
@@ -110,7 +110,7 @@ test('prepareTransfers() throws intuitive error when provided invalid transfers 
 
     t.is(
         t.throws(() => prepareTransfers('SEED', invalidTransfer)).message,
-        `Invalid transfer array: ${invalidTransfer}`,
+        `Invalid transfer array: ${stringify(invalidTransfer)}`,
         'prepareTransfers() should throw intuitive error when provided invalid transfers array'
     )
 })

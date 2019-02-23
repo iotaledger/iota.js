@@ -283,3 +283,7 @@ export const getBalancesThresholdValidator: Validator<number> = threshold => [
     t => Number.isInteger(t) && t <= 100,
     errors.INVALID_THRESHOLD,
 ]
+
+export const stringify = (value: any) => {
+    return JSON.stringify(value, null, 1)    
+}

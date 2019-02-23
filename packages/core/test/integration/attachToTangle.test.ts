@@ -3,6 +3,7 @@ import test from 'ava'
 import { INVALID_BRANCH_TRANSACTION, INVALID_TRANSACTION_TRYTES, INVALID_TRUNK_TRANSACTION } from '../../../errors'
 import { createAttachToTangle } from '../../src'
 import { attachToTangleCommand, attachToTangleResponse } from './nocks/attachToTangle'
+import { stringify } from '../../../guards'
 
 const attachToTangle = createAttachToTangle(createHttpClient())
 
@@ -46,7 +47,7 @@ test('attachToTangle() rejects with correct errors for invalid input', t => {
                 ),
             Error
         ).message,
-        `${INVALID_TRUNK_TRANSACTION}: ${invalidTrytes[0]}`,
+        `${INVALID_TRUNK_TRANSACTION}: ${stringify(invalidTrytes[0])}`,
         'attachToTangle() should throw error for invalid trunk transaction'
     )
 
@@ -61,7 +62,7 @@ test('attachToTangle() rejects with correct errors for invalid input', t => {
                 ),
             Error
         ).message,
-        `${INVALID_BRANCH_TRANSACTION}: ${invalidTrytes[0]}`,
+        `${INVALID_BRANCH_TRANSACTION}: ${stringify(invalidTrytes[0])}`,
         'attachToTangle() should throw error for invalid branch transaction'
     )
 
@@ -76,7 +77,7 @@ test('attachToTangle() rejects with correct errors for invalid input', t => {
                 ),
             Error
         ).message,
-        `${INVALID_TRANSACTION_TRYTES}: ${invalidTrytes[0]}`,
+        `${INVALID_TRANSACTION_TRYTES}: ${stringify(invalidTrytes[0])}`,
         'attachToTangle() should throw error for invalid trytes'
     )
 })

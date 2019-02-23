@@ -10,6 +10,7 @@ import './nocks/getInclusionStates'
 import './nocks/getNodeInfo'
 import './nocks/getTrytes'
 import './nocks/wereAddressesSpentFrom'
+import { stringify } from '../../../guards'
 
 const getAccountData = createGetAccountData(createHttpClient(), 'lib')
 const seed = 'SEED'
@@ -63,13 +64,13 @@ test('getAccountData() rejects with correct errors for invalid inputs', t => {
 
     t.is(
         t.throws(() => getAccountData(invalidSeed, { start: 0 }), Error).message,
-        `${INVALID_SEED}: ${invalidSeed}`,
+        `${INVALID_SEED}: ${stringify(invalidSeed)}`,
         'getAccountData() should throw correct error for invalid seed'
     )
 
     t.is(
         t.throws(() => getAccountData(seed, invalidStartEndOptions), Error).message,
-        `${INVALID_START_END_OPTIONS}: ${invalidStartEndOptions}`,
+        `${INVALID_START_END_OPTIONS}: ${stringify(invalidStartEndOptions)}`,
         'getAccountData() should throw correct error for invalid start & end options'
     )
 })

@@ -5,6 +5,7 @@ import { INVALID_ATTACHED_TRYTES } from '../../../errors'
 import { createStoreAndBroadcast } from '../../src'
 import './nocks/broadcastTransactions'
 import { storeTransactionsCommand } from './nocks/storeTransactions'
+import { stringify } from '../../../guards'
 
 const storeAndBroadcast = createStoreAndBroadcast(createHttpClient())
 
@@ -31,7 +32,7 @@ test('storeAndBroadcast() rejects with correct error for invalid attached trytes
 
     t.is(
         t.throws(() => storeAndBroadcast(invalidTrytes), Error).message,
-        `${INVALID_ATTACHED_TRYTES}: ${invalidTrytes[0]}`,
+        `${INVALID_ATTACHED_TRYTES}: ${stringify(invalidTrytes[0])}`,
         'storeAndBroadcast() should throw error for invalid attached trytes.'
     )
 })
@@ -39,7 +40,7 @@ test('storeAndBroadcast() rejects with correct error for invalid attached trytes
 test('storeAndBroadcast() rejects with correct errors for attached trytes of invalid length.', t => {
     t.is(
         t.throws(() => storeAndBroadcast(attachedTrytesOfInvalidLength), Error).message,
-        `${INVALID_ATTACHED_TRYTES}: ${attachedTrytesOfInvalidLength[0]}`,
+        `${INVALID_ATTACHED_TRYTES}: ${stringify(attachedTrytesOfInvalidLength[0])}`,
         'storeAndBroadcast() should throw error for attached trytes of invalid length.'
     )
 })

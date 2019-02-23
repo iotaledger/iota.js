@@ -4,6 +4,7 @@ import test from 'ava'
 import { INVALID_TRANSACTION_HASH } from '../../../errors'
 import { createTraverseBundle } from '../../src'
 import './nocks/getTrytes'
+import { stringify } from '../../../guards'
 
 const traverseBundle = createTraverseBundle(createHttpClient())
 const tail = bundle[0].hash
@@ -25,7 +26,7 @@ test('traverseBundle() rejects with correct error for invalid hash.', t => {
 
     t.is(
         t.throws(() => traverseBundle(invalidHash), Error).message,
-        `${INVALID_TRANSACTION_HASH}: ${invalidHash}`,
+        `${INVALID_TRANSACTION_HASH}: ${stringify(invalidHash)}`,
         'traverseBundle() should throw correct error for invalid hash.'
     )
 })

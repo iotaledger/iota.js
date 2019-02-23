@@ -7,6 +7,7 @@ import './nocks/getInclusionStates'
 import './nocks/getNodeInfo'
 import './nocks/getTrytes'
 import './nocks/wereAddressesSpentFrom'
+import { stringify } from '../../../guards'
 
 import { transfers } from '@iota/samples'
 
@@ -30,25 +31,25 @@ test('getTransfers() rejects with correct errors for invalid inputs', t => {
 
     t.is(
         t.throws(() => getTransfers(invalidSeed, { start: 0 }), Error).message,
-        `${INVALID_SEED}: ${invalidSeed}`,
+        `${INVALID_SEED}: ${stringify(invalidSeed)}`,
         'getTransfers() should throw correct error for invalid seed'
     )
 
     t.is(
         t.throws(() => getTransfers(seed, { start: -1 }), Error).message,
-        `${INVALID_START_OPTION}: ${-1}`,
+        `${INVALID_START_OPTION}: ${stringify(-1)}`,
         'getTransfers() should throw correct error for invalid start option'
     )
 
     t.is(
         t.throws(() => getTransfers(seed, invalidStartEndOptions), Error).message,
-        `${INVALID_START_END_OPTIONS}: ${invalidStartEndOptions}`,
+        `${INVALID_START_END_OPTIONS}: ${stringify(invalidStartEndOptions)}`,
         'getTransfers() should throw correct error for invalid start & end options'
     )
 
     t.is(
         t.throws(() => getTransfers(seed, { start: 0, security: -1 }), Error).message,
-        `${INVALID_SECURITY_LEVEL}: ${-1}`,
+        `${INVALID_SECURITY_LEVEL}: ${stringify(-1)}`,
         'getTransfers() should throw correct error for invalid security level'
     )
 })

@@ -7,6 +7,7 @@ import { attachToTangleCommand } from './nocks/attachToTangle'
 import './nocks/broadcastTransactions'
 import { getTransactionsToApproveCommand } from './nocks/getTransactionsToApprove'
 import './nocks/storeTransactions'
+import { stringify } from '../../../guards'
 
 const { minWeightMagnitude, trytes } = attachToTangleCommand
 const { depth } = getTransactionsToApproveCommand
@@ -34,7 +35,7 @@ test('sendTrytes() rejects with correct errors for invalid input.', t => {
 
     t.is(
         t.throws(() => sendTrytes(invalidTrytes, depth, minWeightMagnitude), Error).message,
-        `${INVALID_TRANSACTION_TRYTES}: ${invalidTrytes[0]}`,
+        `${INVALID_TRANSACTION_TRYTES}: ${stringify(invalidTrytes[0])}`,
         'sendTrytes() should throw correct error for invalid trytes.'
     )
 })

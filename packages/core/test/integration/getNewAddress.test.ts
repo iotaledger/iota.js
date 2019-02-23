@@ -10,6 +10,7 @@ import {
 } from '../../src/createGetNewAddress'
 import './nocks/findTransactions'
 import './nocks/wereAddressesSpentFrom'
+import { stringify } from '../../../guards'
 
 import { addresses, addressesWithChecksum, newAddress, newAddressWithChecksum, seed } from '@iota/samples'
 
@@ -62,7 +63,7 @@ test('getNewAddress() rejects with correct errors for invalid arguments', t => {
 
     t.is(
         t.throws(() => getNewAddress(invalidSeed, { index: 0 }), Error).message,
-        `${INVALID_SEED}: ${invalidSeed}`,
+        `${INVALID_SEED}: ${stringify(invalidSeed)}`,
         'getNewAddress() should throw correct error for invalid seed'
     )
 })
@@ -70,7 +71,7 @@ test('getNewAddress() rejects with correct errors for invalid arguments', t => {
 test('getNewAddress() rejects with correct errors for `total=0`', t => {
     t.is(
         t.throws(() => getNewAddress(seed, { index: 0, total: 0 }), Error).message,
-        `${INVALID_TOTAL_OPTION}: ${0}`,
+        `${INVALID_TOTAL_OPTION}: ${stringify(0)}`,
         'getNewAddress() should throw correct error for `total=0`'
     )
 })

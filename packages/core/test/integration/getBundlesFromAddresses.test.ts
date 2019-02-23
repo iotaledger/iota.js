@@ -12,6 +12,7 @@ import { getBalancesCommand } from './nocks/getBalances'
 import './nocks/getInclusionStates'
 import './nocks/getNodeInfo'
 import './nocks/getTrytes'
+import { stringify } from '../../../guards'
 
 const getBundlesFromAddresses = createGetBundlesFromAddresses(createHttpClient(), 'lib')
 
@@ -30,7 +31,7 @@ test('getBundlesFromAddresses() rejects with correct errors for invalid addresse
 
     t.is(
         t.throws(() => getBundlesFromAddresses(invalidAddresses, true), Error).message,
-        `${INVALID_ADDRESS}: ${invalidAddresses[0]}`,
+        `${INVALID_ADDRESS}: ${stringify(invalidAddresses[0])}`,
         'getBundlesFromAddresses() should throw correct error for invalid addresses.'
     )
 })
