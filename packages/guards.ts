@@ -189,11 +189,7 @@ export const validate = (...validators: Array<Validatable | false>) => {
             const [value, isValid, msg] = validator
 
             if (!isValid(value)) {
-                if( typeof value !== 'object' ) {
-                    throw new Error(`${msg}: ${value}`)
-                } else {
-                    throw new Error(`${msg}: ${JSON.stringify(value, null, 1)}`)
-                }
+                throw new Error(`${msg}: ${JSON.stringify(value, null, 1)}`)
             }
         }
     })
