@@ -14,7 +14,7 @@ test('validate() throws correct error for invalid input.', t => {
 
     t.is(
         t.throws(() => validate(validator(value)), Error).message,
-        `${errorMessage}: ${value}`,
+        `${errorMessage}: "${value}"`,
         'validate() should throw correct error for invalid input.'
     )
 })
