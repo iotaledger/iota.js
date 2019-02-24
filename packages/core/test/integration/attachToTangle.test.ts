@@ -77,7 +77,7 @@ test('attachToTangle() rejects with correct errors for invalid input', t => {
                 ),
             Error
         ).message,
-        `${INVALID_TRANSACTION_TRYTES}: ${stringify(invalidTrytes[0][0])}`,
+        `${INVALID_TRANSACTION_TRYTES}: ${stringify(invalidTrytes[0])}`,
         'attachToTangle() should throw error for invalid trytes'
     )
 })
