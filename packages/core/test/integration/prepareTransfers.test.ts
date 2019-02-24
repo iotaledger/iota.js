@@ -137,7 +137,7 @@ test('prepareTransfers() throws error for inputs without security level.', async
                 }
             )
         ).message,
-        `Invalid input: ${stringify(input)}`,
+        `Invalid input: ${input}`,
         'prepareTransfers() should throw error for inputs without security level.'
     )
 })
