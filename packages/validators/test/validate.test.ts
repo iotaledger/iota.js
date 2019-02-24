@@ -9,11 +9,12 @@ test('validate() does not throw error for valid input.', t => {
 
 test('validate() throws correct error for invalid input.', t => {
     const errorMessage = 'validation error'
-    const validator: Validator<string> = input => [input, (v: any): v is string => false, errorMessage]
+    // const validator: Validator<string> = input => [input, (v: any): v is string => false, errorMessage]
     const value = 'test'
 
     t.is(
-        t.throws(() => validate(validator(value)), Error).message,
+        // t.throws(() => validate(validator(value)), Error).message,
+        t.throws(() => validate(value), Error).message,
         `${errorMessage}: ${JSON.stringify(value, null, 1)}`,
         'validate() should throw correct error for invalid input.'
     )
