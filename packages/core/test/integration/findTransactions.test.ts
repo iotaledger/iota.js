@@ -48,7 +48,7 @@ test('findTransactions() does not mutate original query object', async t => {
 test('findTransactions() rejects with correct error for invalid addresses', async t => {
     t.is(
         t.throws(() => findTransactions({ addresses: invalidHashes }), Error).message,
-        `${INVALID_ADDRESS}: ${invalidHashes[0]}`,
+        `${INVALID_ADDRESS}: ${stringify(invalidHashes[0])}`,
         'getBalances() should throw error for invalid addresses'
     )
 })
