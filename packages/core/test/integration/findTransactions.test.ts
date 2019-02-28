@@ -64,7 +64,7 @@ test('findTransactions() by bundle hashes resolves to correct response', async t
 test('findTransactions() rejects with correct error for invalid bundle hashes', async t => {
     t.is(
         t.throws(() => findTransactions({ bundles: invalidHashes }), Error).message,
-        `${INVALID_HASH}: ${stringify(invalidHashes[0])}`,
+        `${INVALID_HASH}: ${stringify(invalidHashes)}`,
         'findTransactions() should throw error for invalid bundle hashes'
     )
 })
@@ -80,7 +80,7 @@ test('findTransactions() by tags resolves to correct response', async t => {
 test('findTransactions() rejects with correct error for invalid tags', async t => {
     t.is(
         t.throws(() => findTransactions({ tags: invalidHashes }), Error).message,
-        `${INVALID_TAG}: ${stringify(invalidHashes[0])}`,
+        `${INVALID_TAG}: ${stringify(invalidHashes)}`,
         'findTransactions() should throw error for invalid tags'
     )
 })
@@ -96,7 +96,7 @@ test('findTransactions() by approvees resolves to correct response', async t => 
 test('findTransactions() rejects with correct error for invalid approvees', async t => {
     t.is(
         t.throws(() => findTransactions({ approvees: invalidHashes }), Error).message,
-        `${INVALID_TRANSACTION_HASH}: ${stringify(invalidHashes[0])}`,
+        `${INVALID_TRANSACTION_HASH}: ${stringify(invalidHashes)}`,
         'findTransactions() should throw error for invalid apprvovees'
     )
 })

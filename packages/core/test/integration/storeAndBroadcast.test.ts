@@ -40,7 +40,7 @@ test('storeAndBroadcast() rejects with correct error for invalid attached trytes
 test('storeAndBroadcast() rejects with correct errors for attached trytes of invalid length.', t => {
     t.is(
         t.throws(() => storeAndBroadcast(attachedTrytesOfInvalidLength), Error).message,
-        `${INVALID_ATTACHED_TRYTES}: ${stringify(attachedTrytesOfInvalidLength[0])}`,
+        `${INVALID_ATTACHED_TRYTES}: ${stringify(attachedTrytesOfInvalidLength)}`,
         'storeAndBroadcast() should throw error for attached trytes of invalid length.'
     )
 })
