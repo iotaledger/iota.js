@@ -24,7 +24,7 @@ test('getTransactionObjects() rejects with correct error for invalid hash.', t =
 
     t.is(
         t.throws(() => getTransactionObjects(invalidHashes), Error).message,
-        `${INVALID_TRANSACTION_HASH}: ${stringify(invalidHashes[0])}`,
+        `${INVALID_TRANSACTION_HASH}: ${stringify(invalidHashes)}`,
         'getTransactionObjects() should throw correct error for invalid hash.'
     )
 })

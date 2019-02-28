@@ -24,7 +24,7 @@ test('getInclusionStates() resolves to correct inclusion states', async t => {
 
     t.is(
         t.throws(() => getInclusionStates(getInclusionStatesCommand.transactions, invalidHashes), Error).message,
-        `${INVALID_TRANSACTION_HASH}: ${stringify(invalidHashes[0])}`,
+        `${INVALID_TRANSACTION_HASH}: ${stringify(invalidHashes)}`,
         'getInclusionStates() throws error for invalid tips'
     )
 })

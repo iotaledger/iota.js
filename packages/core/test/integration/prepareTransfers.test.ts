@@ -116,11 +116,11 @@ test('prepareTransfers() throws intuitive error when provided invalid transfers 
 })
 
 test('prepareTransfers() throws error for inputs without security level.', async t => {
-    const input: any = {
+    const input: any = [{
         address: 'I'.repeat(81),
         keyIndex: 0,
         balance: 1,
-    }
+    }]
 
     t.is(
         t.throws(() =>
@@ -133,7 +133,7 @@ test('prepareTransfers() throws error for inputs without security level.', async
                     },
                 ],
                 {
-                    inputs: [input],
+                    inputs: input,
                 }
             )
         ).message,

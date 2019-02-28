@@ -35,7 +35,7 @@ test('sendTrytes() rejects with correct errors for invalid input.', t => {
 
     t.is(
         t.throws(() => sendTrytes(invalidTrytes, depth, minWeightMagnitude), Error).message,
-        `${INVALID_TRANSACTION_TRYTES}: ${stringify(invalidTrytes[0])}`,
+        `${INVALID_TRANSACTION_TRYTES}: ${stringify(invalidTrytes)}`,
         'sendTrytes() should throw correct error for invalid trytes.'
     )
 })

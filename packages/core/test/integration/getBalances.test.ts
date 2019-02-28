@@ -46,7 +46,7 @@ test('getBalances() rejects with correct errors for invalid input', t => {
 
     t.is(
         t.throws(() => getBalances(invalidAddresses, getBalancesCommand.threshold), Error).message,
-        `${INVALID_ADDRESS}: ${stringify(invalidAddresses[0])}`,
+        `${INVALID_ADDRESS}: ${stringify(invalidAddresses)}`,
         'getBalances() should throw error for invalid addresses'
     )
 
