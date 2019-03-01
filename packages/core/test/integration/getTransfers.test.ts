@@ -1,4 +1,5 @@
 import { createHttpClient } from '@iota/http-client'
+import { transfers } from '@iota/samples'
 import test from 'ava'
 import { INVALID_SECURITY_LEVEL, INVALID_SEED, INVALID_START_END_OPTIONS, INVALID_START_OPTION } from '../../../errors'
 import { stringify } from '../../../guards'
@@ -8,7 +9,6 @@ import './nocks/getInclusionStates'
 import './nocks/getNodeInfo'
 import './nocks/getTrytes'
 import './nocks/wereAddressesSpentFrom'
-import { transfers } from '@iota/samples'
 
 const getTransfers = createGetTransfers(createHttpClient(), 'lib')
 const seed = 'SEED'
