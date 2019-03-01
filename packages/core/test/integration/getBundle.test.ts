@@ -26,7 +26,7 @@ test('getBundle() rejects with correct error for invalid hash.', t => {
 
     t.is(
         t.throws(() => getBundle(invalidHash), Error).message,
-        `${INVALID_TRANSACTION_HASH}: ${invalidHash}`,
+        `${INVALID_TRANSACTION_HASH}: ${stringify(invalidHash)}`,
         'getBundle() should throw correct error for invalid hash.'
     )
 })
