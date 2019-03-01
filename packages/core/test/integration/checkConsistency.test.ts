@@ -1,6 +1,7 @@
 import { createHttpClient } from '@iota/http-client'
 import test from 'ava'
 import { inconsistentTransaction, INVALID_TRANSACTION_HASH } from '../../../errors'
+import { stringify } from '../../../guards'
 import { createCheckConsistency } from '../../src'
 import {
     checkConsistencyCommand,
@@ -8,7 +9,6 @@ import {
     checkConsistencyWithInfoCommand,
     checkConsistencyWithInfoResponse,
 } from './nocks/checkConsistency'
-import { stringify } from '../../../guards'
 
 const checkConsistency = createCheckConsistency(createHttpClient())
 

@@ -1,6 +1,7 @@
 import { createHttpClient } from '@iota/http-client'
 import test from 'ava'
 import { INVALID_ADDRESS, INVALID_HASH, INVALID_TAG, INVALID_TRANSACTION_HASH } from '../../../errors'
+import { stringify } from '../../../guards'
 import { createFindTransactions } from '../../src'
 import {
     findTransactionsByAddressesCommand,
@@ -12,7 +13,6 @@ import {
     findTransactionsByTagsCommand,
     findTransactionsByTagsResponse,
 } from './nocks/findTransactions'
-import { stringify } from '../../../guards'
 
 const findTransactions = createFindTransactions(createHttpClient())
 

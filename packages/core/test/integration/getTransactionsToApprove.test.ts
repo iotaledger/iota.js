@@ -1,6 +1,7 @@
 import { createHttpClient } from '@iota/http-client'
 import test from 'ava'
 import { INVALID_REFERENCE_HASH } from '../../../errors'
+import { stringify } from '../../../guards'
 import { createGetTransactionsToApprove } from '../../src'
 import {
     getTransactionsToApproveCommand,
@@ -8,7 +9,6 @@ import {
     getTransactionsToApproveWithReferenceCommand,
     getTransactionsToApproveWithReferenceResponse,
 } from './nocks/getTransactionsToApprove'
-import { stringify } from '../../../guards'
 
 const getTransactionsToApprove = createGetTransactionsToApprove(createHttpClient())
 

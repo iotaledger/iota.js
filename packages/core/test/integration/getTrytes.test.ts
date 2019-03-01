@@ -1,9 +1,9 @@
 import { createHttpClient } from '@iota/http-client'
 import test from 'ava'
 import { INVALID_TRANSACTION_HASH } from '../../../errors'
+import { stringify } from '../../../guards'
 import { createGetTrytes } from '../../src'
 import { getTrytesCommand, getTrytesResponse } from './nocks/getTrytes'
-import { stringify } from '../../../guards'
 
 const getTrytes = createGetTrytes(createHttpClient())
 

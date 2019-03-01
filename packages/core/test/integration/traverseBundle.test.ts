@@ -2,9 +2,9 @@ import { createHttpClient } from '@iota/http-client'
 import { bundle, bundleWithZeroValue } from '@iota/samples'
 import test from 'ava'
 import { INVALID_TRANSACTION_HASH } from '../../../errors'
+import { stringify } from '../../../guards'
 import { createTraverseBundle } from '../../src'
 import './nocks/getTrytes'
-import { stringify } from '../../../guards'
 
 const traverseBundle = createTraverseBundle(createHttpClient())
 const tail = bundle[0].hash

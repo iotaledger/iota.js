@@ -2,6 +2,7 @@ import { createHttpClient } from '@iota/http-client'
 import { bundle, bundleWithZeroValue, transfers } from '@iota/samples'
 import test from 'ava'
 import { INVALID_ADDRESS } from '../../../errors'
+import { stringify } from '../../../guards'
 import {
     createGetBundlesFromAddresses,
     getBundleSync,
@@ -12,7 +13,6 @@ import { getBalancesCommand } from './nocks/getBalances'
 import './nocks/getInclusionStates'
 import './nocks/getNodeInfo'
 import './nocks/getTrytes'
-import { stringify } from '../../../guards'
 
 const getBundlesFromAddresses = createGetBundlesFromAddresses(createHttpClient(), 'lib')
 

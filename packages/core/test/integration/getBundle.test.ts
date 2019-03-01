@@ -2,9 +2,9 @@ import { createHttpClient } from '@iota/http-client'
 import { bundle, bundleWithZeroValue } from '@iota/samples'
 import test from 'ava'
 import { INVALID_TRANSACTION_HASH } from '../../../errors'
+import { stringify } from '../../../guards'
 import { createGetBundle } from '../../src'
 import './nocks/getTrytes'
-import { stringify } from '../../../guards'
 
 const getBundle = createGetBundle(createHttpClient())
 const tail = bundle[0].hash

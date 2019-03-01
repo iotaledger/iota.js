@@ -1,6 +1,7 @@
 import { createHttpClient } from '@iota/http-client'
 import test from 'ava'
 import { INVALID_SEED, INVALID_TOTAL_OPTION } from '../../../errors'
+import { stringify } from '../../../guards'
 import {
     applyChecksumOption,
     applyReturnAllOption,
@@ -10,7 +11,6 @@ import {
 } from '../../src/createGetNewAddress'
 import './nocks/findTransactions'
 import './nocks/wereAddressesSpentFrom'
-import { stringify } from '../../../guards'
 
 import { addresses, addressesWithChecksum, newAddress, newAddressWithChecksum, seed } from '@iota/samples'
 

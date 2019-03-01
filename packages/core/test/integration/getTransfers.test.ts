@@ -1,14 +1,13 @@
 import { createHttpClient } from '@iota/http-client'
 import test from 'ava'
 import { INVALID_SECURITY_LEVEL, INVALID_SEED, INVALID_START_END_OPTIONS, INVALID_START_OPTION } from '../../../errors'
+import { stringify } from '../../../guards'
 import { createGetTransfers } from '../../src/createGetTransfers'
 import './nocks/findTransactions'
 import './nocks/getInclusionStates'
 import './nocks/getNodeInfo'
 import './nocks/getTrytes'
 import './nocks/wereAddressesSpentFrom'
-import { stringify } from '../../../guards'
-
 import { transfers } from '@iota/samples'
 
 const getTransfers = createGetTransfers(createHttpClient(), 'lib')

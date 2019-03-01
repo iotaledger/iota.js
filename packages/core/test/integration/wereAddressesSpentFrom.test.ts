@@ -1,9 +1,9 @@
 import { createHttpClient } from '@iota/http-client'
 import test from 'ava'
 import { INVALID_ADDRESS } from '../../../errors'
+import { stringify } from '../../../guards'
 import { createWereAddressesSpentFrom } from '../../src/createWereAddressesSpentFrom'
 import { wereAddressesSpentFromCommand, wereAddressesSpentFromResponse } from './nocks/wereAddressesSpentFrom'
-import { stringify } from '../../../guards'
 
 const wereAddressesSpentFrom = createWereAddressesSpentFrom(createHttpClient(), 'lib')
 

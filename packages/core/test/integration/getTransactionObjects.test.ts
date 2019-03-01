@@ -2,9 +2,8 @@ import { createHttpClient } from '@iota/http-client'
 import { bundle } from '@iota/samples'
 import test from 'ava'
 import { INVALID_TRANSACTION_HASH } from '../../../errors'
-import { createGetTransactionObjects } from '../../src'
 import { stringify } from '../../../guards'
-
+import { createGetTransactionObjects } from '../../src'
 import './nocks/getTrytes'
 
 const getTransactionObjects = createGetTransactionObjects(createHttpClient())

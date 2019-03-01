@@ -1,9 +1,9 @@
 import { createHttpClient } from '@iota/http-client'
 import test from 'ava'
 import { INVALID_ADDRESS, INVALID_THRESHOLD, INVALID_TRANSACTION_HASH } from '../../../errors'
+import { stringify } from '../../../guards'
 import { createGetBalances } from '../../src'
 import { balancesResponse, getBalancesCommand } from './nocks/getBalances'
-import { stringify } from '../../../guards'
 
 const getBalances = createGetBalances(createHttpClient())
 

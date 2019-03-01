@@ -2,10 +2,10 @@ import { addChecksum } from '@iota/checksum'
 import { createHttpClient } from '@iota/http-client'
 import { addresses, trytes as expected } from '@iota/samples'
 import test from 'ava'
+import { stringify } from '../../../guards'
 import { Transfer, Trytes } from '../../../types'
 import { createPrepareTransfers } from '../../src'
 import { getRemainderAddressStartIndex } from '../../src/createPrepareTransfers'
-import { stringify } from '../../../guards'
 import './nocks/prepareTransfers'
 
 const inputs: ReadonlyArray<any> = [
