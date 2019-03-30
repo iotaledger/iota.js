@@ -15,7 +15,6 @@ export {
     isTransaction,
     signatureOrMessage,
     tag,
-    transactionBufferSlice,
     transactionEssence,
     transactionHash,
     transactionNonce,

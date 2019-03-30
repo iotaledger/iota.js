@@ -290,10 +290,7 @@ describe('transactionBufferSlice(transactionFieldOffset: number, transactionFiel
     assert({
         given: 'valid transactionBuffer and transactionBufferOffset = 0',
         should: 'return the correct slice',
-        actual: transactionBufferSlice(0, 1)(
-            new Int8Array(TRANSACTION_LENGTH).fill(0).map((trit, i) => (i === 0 ? 1 : 0)),
-            0
-        ),
+        actual: transactionBufferSlice(0, 1)(new Int8Array(TRANSACTION_LENGTH).map((trit, i) => (i === 0 ? 1 : 0)), 0),
         expected: new Int8Array(1).fill(1),
     })
 
@@ -301,7 +298,7 @@ describe('transactionBufferSlice(transactionFieldOffset: number, transactionFiel
         given: 'valid transactionBuffer and valid transactionBufferOffset',
         should: 'return the correct slice',
         actual: transactionBufferSlice(0, 1)(
-            new Int8Array(TRANSACTION_LENGTH * 2).fill(0).map((trit, i) => (i === TRANSACTION_LENGTH ? 1 : trit)),
+            new Int8Array(TRANSACTION_LENGTH * 2).map((trit, i) => (i === TRANSACTION_LENGTH ? 1 : trit)),
             TRANSACTION_LENGTH
         ),
         expected: new Int8Array(1).fill(1),
@@ -1451,7 +1448,7 @@ describe('isTransaction(transaction, minWeightMagnitude)', async assert => {
     assert({
         given: 'transaction of illegal length',
         should: 'return false',
-        actual: isTransaction(new Int8Array(TRANSACTION_LENGTH - 1).fill(0)),
+        actual: isTransaction(new Int8Array(TRANSACTION_LENGTH - 1)),
         expected: false,
     })
 
@@ -1552,7 +1549,7 @@ describe('isTailTransaction(transaction)', async assert => {
     assert({
         given: 'transaction of illegal length',
         should: 'return false',
-        actual: isTailTransaction(new Int8Array(TRANSACTION_LENGTH - 1).fill(0)),
+        actual: isTailTransaction(new Int8Array(TRANSACTION_LENGTH - 1)),
         expected: false,
     })
 
@@ -1596,7 +1593,7 @@ describe('isHeadTransaction(transaction)', async assert => {
     assert({
         given: 'transaction of illegal length',
         should: 'return false',
-        actual: isHeadTransaction(new Int8Array(TRANSACTION_LENGTH - 1).fill(0)),
+        actual: isHeadTransaction(new Int8Array(TRANSACTION_LENGTH - 1)),
         expected: false,
     })
 

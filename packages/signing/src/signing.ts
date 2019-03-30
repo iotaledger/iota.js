@@ -6,7 +6,7 @@ import * as Promise from 'bluebird'
 import * as errors from '../../errors'
 import '../../typed-array'
 import { NativeGenerateSignatureFunction } from '../../types'
-import add from './add'
+import { add } from './add'
 
 export const TRYTE_WIDTH = 3
 export const MIN_TRYTE_VALUE = -13
@@ -204,33 +204,31 @@ export function signatureFragments(
     numberOfFragments: number,
     bundle: Int8Array,
     nativeGenerateSignatureFunction?: NativeGenerateSignatureFunction
-): Promise<ReadonlyArray<Int8Array>> {
+): Promise<Int8Array> {
     if (nativeGenerateSignatureFunction && typeof nativeGenerateSignatureFunction === 'function') {
         return nativeGenerateSignatureFunction(
             Array.prototype.slice.call(seed),
             index,
             numberOfFragments,
             Array.prototype.slice.call(bundle)
-        ).then(signatures =>
-            Array(numberOfFragments)
-                .fill(undefined)
-                .map((_, i) => new Int8Array(signatures.slice(i * FRAGMENT_LENGTH, (i + 1) * FRAGMENT_LENGTH)))
-        )
+        ).then(nativeSignature => new Int8Array(nativeSignature))
     }
 
     const normalizedBundleHash = normalizedBundle(bundle)
     const keyTrits = key(subseed(seed, index), numberOfFragments)
+    const signature = new Int8Array(numberOfFragments * FRAGMENT_LENGTH)
 
-    return Promise.resolve(
-        new Array(numberOfFragments)
-            .fill(undefined)
-            .map((_, i) =>
-                signatureFragment(
-                    normalizedBundleHash.slice(i * NORMALIZED_FRAGMENT_LENGTH, (i + 1) * NORMALIZED_FRAGMENT_LENGTH),
-                    keyTrits.slice(i * FRAGMENT_LENGTH, (i + 1) * FRAGMENT_LENGTH)
-                )
-            )
-    )
+    for (let i = 0; i < numberOfFragments; i++) {
+        signature.set(
+            signatureFragment(
+                normalizedBundleHash.slice(i * NORMALIZED_FRAGMENT_LENGTH, (i + 1) * NORMALIZED_FRAGMENT_LENGTH),
+                keyTrits.slice(i * FRAGMENT_LENGTH, (i + 1) * FRAGMENT_LENGTH)
+            ),
+            i * FRAGMENT_LENGTH
+        )
+    }
+
+    return Promise.resolve(signature)
 }
 
 /**

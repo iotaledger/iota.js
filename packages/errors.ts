@@ -9,6 +9,32 @@ export const ILLEGAL_BUNDLE_HASH_LENGTH = 'Illegal bundle hash length'
 export const ILLEGAL_KEY_FRAGMENT_LENGTH = 'Illegal key fragment length'
 export const ILLEGAL_TRIT_CONVERSION_INPUT = 'Illegal conversion input. Expected trits as Int8Array.'
 export const ILLEGAL_TRYTE_CONVERSION_INPUT = 'Illegal conversion input. Expected trytes string or integer.'
+export const ILLEGAL_MIN_WEIGHT_MAGNITUDE = 'Illegal minWeightMagnitude value.'
+
+export const ILLEGAL_ADDRESS_LAST_TRIT = 'Illegal address. Last trit must be 0.'
+export const ILLEGAL_ADDRESS_LENGTH = 'Illegal address length.'
+export const ILLEGAL_BUNDLE_LENGTH = 'Illegal bundle hash length.'
+export const ILLEGAL_OBSOLETE_TAG_LENGTH = 'Illegal obsoleteTag length.'
+export const ILLEGAL_SIGNATURE_OR_MESSAGE = 'Illegal signature or message.'
+export const ILLEGAL_SIGNATURE_OR_MESSAGE_LENGTH = 'Illegal signatureOrMessage length.'
+export const ILLEGAL_TAG_LENGTH = 'Illegal tag length.'
+export const ILLEGAL_ISSUANCE_TIMESTAMP = 'Illegal issuance timestamp'
+export const ILLEGAL_ISSUANCE_TIMESTAMP_LENGTH = 'Illegal issuanceTimestamp length.'
+export const ILLEGAL_VALUE_LENGTH = 'Illegal value length.'
+
+export const ILLEGAL_TRANSACTION_FIELD_OFFSET = 'Illegal transaction field offset.'
+export const ILLEGAL_TRANSACTION_FIELD_LENGTH = 'Illegal transaction field length.'
+export const ILLEGAL_LENGTH_OR_OFFSET = 'Illegal length or offset.'
+export const ILLEGAL_TRANSACTION_BUFFER = 'Illegal transaction buffer. Expected `Int8Array`.'
+export const ILLEGAL_TRANSACTION_BUFFER_LENGTH = 'Illegal transaction buffer length.'
+export const ILLEGAL_TRANSACTION_OFFSET = 'Illegal transaction offset.'
+export const ILLEGAL_TRANSACTION_LENGTH = 'Illegal transaction length.'
+export const ILLEGAL_TRANSACTION_ORDER = 'Illegal transaction order.'
+
+export const ILLEGAL_TRANSACTION_INDEX = 'Illegal transaction index.'
+
+export const ILLEGAL_PADDING_LENGTH = 'Illegal padding length. Input value length exceeds padding length.'
+
 export const INCONSISTENT_SUBTANGLE = 'Inconsistent subtangle'
 export const INSUFFICIENT_BALANCE = 'Insufficient balance'
 export const INVALID_ADDRESS = 'Invalid address'
@@ -53,4 +79,3 @@ export const NO_INPUTS = 'Could not find any available inputs.'
 export const invalidChecksum = (address: string) => `Invalid Checksum: ${address}`
 export const inconsistentTransaction = (reason: string) => `Transaction is inconsistent. Reason: ${reason}`
 export const INVALID_DELAY = 'Invalid delay.'
-export const INVALID_ADDRESS_LAST_TRIT = 'Invalid address: Last trit of address of value transaction must be 0.'

@@ -1,182 +1,287 @@
 /** @module bundle */
 
-import { trits, trytes } from '@iota/converter'
+import { tritsToTrytes, tritsToValue, valueToTrits } from '@iota/converter'
 import Kerl from '@iota/kerl'
-import { padTag, padTrits, padTrytes } from '@iota/pad'
-import { add, normalizedBundle } from '@iota/signing'
-import { INVALID_ADDRESS_LAST_TRIT } from '../../errors'
+import { increment, MAX_TRYTE_VALUE, normalizedBundle } from '@iota/signing'
+import * as warning from 'warning'
+import * as errors from '../../errors'
+import { isNullTrits } from '../../guards'
 import '../../typed-array'
-import {
-    Bundle,
-    Hash,
-    Transaction, // tslint:disable-line no-unused-variable
-    Trytes,
-} from '../../types'
 
-const HASH_TRITS_SIZE = 243
-const NULL_HASH_TRYTES = '9'.repeat(81)
-const NULL_TAG_TRYTES = '9'.repeat(27)
-const NULL_NONCE_TRYTES = '9'.repeat(27)
-const NULL_SIGNATURE_MESSAGE_FRAGMENT_TRYTES = '9'.repeat(2187)
+import {
+    ADDRESS_LENGTH,
+    ADDRESS_OFFSET,
+    BUNDLE_LENGTH,
+    BUNDLE_OFFSET,
+    CURRENT_INDEX_LENGTH,
+    CURRENT_INDEX_OFFSET,
+    isMultipleOfTransactionLength,
+    ISSUANCE_TIMESTAMP_LENGTH,
+    ISSUANCE_TIMESTAMP_OFFSET,
+    isTailTransaction,
+    LAST_INDEX_LENGTH,
+    LAST_INDEX_OFFSET,
+    lastIndex,
+    OBSOLETE_TAG_LENGTH,
+    OBSOLETE_TAG_OFFSET,
+    SIGNATURE_OR_MESSAGE_LENGTH,
+    SIGNATURE_OR_MESSAGE_OFFSET,
+    TAG_LENGTH,
+    TAG_OFFSET,
+    TRANSACTION_ESSENCE_LENGTH,
+    TRANSACTION_LENGTH,
+    transactionEssence,
+    VALUE_LENGTH,
+    VALUE_OFFSET,
+} from '@iota/transaction'
 
 export interface BundleEntry {
-    readonly length: number
-    readonly address: Hash
-    readonly value: number
-    readonly tag: string
-    readonly timestamp: number
-    readonly signatureMessageFragments: ReadonlyArray<Trytes>
+    readonly signatureOrMessage: Int8Array
+    // readonly extraDataDigest: Int8Array
+    readonly address: Int8Array
+    readonly value: Int8Array
+    readonly obsoleteTag: Int8Array
+    readonly issuanceTimestamp: Int8Array
+    readonly tag: Int8Array
 }
-
-export { Transaction, Bundle }
-
-const getEntryWithDefaults = (entry: Partial<BundleEntry>): BundleEntry => ({
-    length: entry.length || 1,
-    address: entry.address || NULL_HASH_TRYTES,
-    value: entry.value || 0,
-    tag: entry.tag || NULL_TAG_TRYTES,
-    timestamp: entry.timestamp || Math.floor(Date.now() / 1000),
-    signatureMessageFragments: entry.signatureMessageFragments
-        ? entry.signatureMessageFragments.map(padTrytes(2187))
-        : Array(entry.length || 1).fill(NULL_SIGNATURE_MESSAGE_FRAGMENT_TRYTES),
-})
 
 /**
  * Creates a bundle with given transaction entries.
  *
  * @method createBundle
  *
- * @param {BundleEntry[]} entries - Entries of single or multiple transactions with the same address
+ * @param {BundleEntry[]} [entries=[]] - Entries of single or multiple transactions with the same address
  *
- * @return {Transaction[]} List of transactions in the bundle
+ * @return {Int8Array[]} List of transactions in the bundle
  */
-export const createBundle = (entries: ReadonlyArray<Partial<BundleEntry>> = []): Bundle =>
-    entries.reduce((bundle: Bundle, entry) => addEntry(bundle, entry), [])
+export const createBundle = (entries: ReadonlyArray<Partial<BundleEntry>> = []): Int8Array =>
+    entries.reduce((bundle, entry) => addEntry(bundle, entry), new Int8Array(0))
 
 /**
  * Adds given transaction entry to a bundle.
  *
  * @method addEntry
  *
- * @param {Transaction[]} transactions - List of transactions currently in the bundle
+ * @param {object} entry - Entry of a single or multiple transactions with the same address.
+ * @param {Int8Array} entry.address - Address.
+ * @param {Int8Array} entry.value - Value to transfer in iotas.
+ * @param {Int8Array} [entry.signatureOrMessage] - Signature or message fragment(s).
+ * @param {Int8Array} [entry.timestamp] - Issuance timestamp (in seconds).
+ * @param {Int8Array} [entry.tag] - Optional Tag, **Deprecated**.
+ * @param {Int8Array} bundle - Bundle buffer.
  *
- * @param {object} entry - Entry of a single or multiple transactions with the same address
- * @param {number} [entry.length = 1] - Entry length, which indicates how many transactions in the bundle it will occupy
- * @param {Hash} [entry.address] - Address, defaults to all-9s
- * @param {number} [entry.value = 0] - Value to transfer in iotas
- * @param {Trytes[]} [entry.signatureMessageFragments] - List of signature message fragments, defaults to all-9s
- * @param {number} [entry.timestamp] - Transaction timestamp, defaults to `Math.floor(Date.now() / 1000)`
- * @param {string} [entry.tag] - Optional Tag, defaults to null tag (all-9s)
- *
- * @return {Transaction[]} List of transactions in the updated bundle
+ * @return {Int8Array} Bundle copy with new entries.
  */
-export const addEntry = (transactions: Bundle, entry: Partial<BundleEntry>): Bundle => {
-    const entryWithDefaults = getEntryWithDefaults(entry)
-    const { length, address, value, timestamp, signatureMessageFragments } = entryWithDefaults
-    const lastIndex = transactions.length - 1 + length
-    const tag = padTag(entryWithDefaults.tag)
-    const obsoleteTag = tag
+export const addEntry = (bundle: Int8Array, entry: Partial<BundleEntry>): Int8Array => {
+    const {
+        signatureOrMessage,
+        // extraDataDigest,
+        address,
+        value,
+        obsoleteTag,
+        issuanceTimestamp,
+        tag,
+    } = entry
 
-    if (value !== 0 && trits(address)[HASH_TRITS_SIZE - 1] !== 0) {
-        throw new Error(INVALID_ADDRESS_LAST_TRIT)
+    /*
+    warning(
+        signatureOrMessage && !isNullTrits(signatureOrMessage),
+        'Deprecation warning: \n' +
+            ' - Use of "signatureOrMessage" field before bundle finalization is deprecated and will be removed in v1.0.0. \n'
+    )
+
+    warning(
+        obsoleteTag && !isNullTrits(obsoleteTag),
+        'Deprecation warning: \n' +
+            ' - "obseleteTag" field is deprecated and will be removed in implementation of final design. \n' +
+            ' - Use of "obsoleteTag" or "tag" field before bundle finalization is deprecated and will be removed in v1.0.0. \n'
+    )
+
+    warning(
+        tag && !isNullTrits(tag),
+        'Deprecation warning: \n' +
+            ' - Use of "tag" field before bundle finalization is deprecated and will be removed in v1.0.0. \n'
+    )
+    */
+
+    if (!isMultipleOfTransactionLength(bundle.length)) {
+        throw new RangeError(errors.ILLEGAL_TRANSACTION_BUFFER_LENGTH)
     }
 
-    return transactions.map(transaction => ({ ...transaction, lastIndex })).concat(
-        Array(length)
-            .fill(null)
-            .map((_, i) => ({
-                address,
-                value: i === 0 ? value : 0,
-                tag,
-                obsoleteTag,
-                currentIndex: transactions.length + i,
-                lastIndex,
-                timestamp,
-                signatureMessageFragment: signatureMessageFragments[i],
-                trunkTransaction: NULL_HASH_TRYTES,
-                branchTransaction: NULL_HASH_TRYTES,
-                attachmentTimestamp: 0,
-                attachmentTimestampLowerBound: 0,
-                attachmentTimestampUpperBound: 0,
-                bundle: NULL_HASH_TRYTES,
-                nonce: NULL_NONCE_TRYTES,
-                hash: NULL_HASH_TRYTES,
-            }))
-    )
-}
+    if (
+        signatureOrMessage &&
+        (signatureOrMessage.length === 0 || signatureOrMessage.length % SIGNATURE_OR_MESSAGE_LENGTH !== 0)
+    ) {
+        throw new RangeError(errors.ILLEGAL_SIGNATURE_OR_MESSAGE_LENGTH)
+    }
 
-/**
- * Adds signature message fragments to transactions in a bundle starting at offset.
- *
- * @method addTrytes
- *
- * @param {Transaction[]} transactions - List of transactions in the bundle
- *
- * @param {Trytes[]} fragments - List of signature message fragments to add
- *
- * @param {number} [offset = 0] - Optional offset to start appending signature message fragments
- *
- * @return {Transaction[]} List of transactions in the updated bundle
- */
-export const addTrytes = (transactions: Bundle, fragments: ReadonlyArray<Trytes>, offset = 0): Bundle =>
-    transactions.map(
-        (transaction, i) =>
-            i >= offset && i < offset + fragments.length
-                ? {
-                      ...transaction,
-                      signatureMessageFragment: padTrytes(27 * 81)(fragments[i - offset] || ''),
-                  }
-                : transaction
-    )
+    if (address && address.length !== ADDRESS_LENGTH) {
+        throw new RangeError(errors.ILLEGAL_ADDRESS_LENGTH)
+    }
+
+    if (value && value.length > VALUE_LENGTH) {
+        throw new RangeError(errors.ILLEGAL_VALUE_LENGTH)
+    }
+
+    if (obsoleteTag && obsoleteTag.length > OBSOLETE_TAG_LENGTH) {
+        throw new RangeError(errors.ILLEGAL_OBSOLETE_TAG_LENGTH)
+    }
+
+    if (issuanceTimestamp && issuanceTimestamp.length > ISSUANCE_TIMESTAMP_LENGTH) {
+        throw new RangeError(errors.ILLEGAL_ISSUANCE_TIMESTAMP_LENGTH)
+    }
+
+    if (tag && tag.length > TAG_LENGTH) {
+        throw new RangeError(errors.ILLEGAL_TAG_LENGTH)
+    }
+
+    const signatureOrMessageCopy = signatureOrMessage
+        ? signatureOrMessage.slice()
+        : new Int8Array(SIGNATURE_OR_MESSAGE_LENGTH)
+    const numberOfFragments = signatureOrMessageCopy.length / SIGNATURE_OR_MESSAGE_LENGTH
+    const bundleCopy = new Int8Array(bundle.length + numberOfFragments * TRANSACTION_LENGTH)
+    const currentIndexBuffer = bundle.length > 0 ? increment(lastIndex(bundle)) : new Int8Array(LAST_INDEX_LENGTH)
+    const lastIndexBuffer = currentIndexBuffer.slice()
+    let fragmentIndex = 0
+
+    bundleCopy.set(bundle.slice())
+
+    // Create and append transactions to the bundle.
+    for (let offset = bundle.length; offset < bundleCopy.length; offset += TRANSACTION_LENGTH) {
+        const signatureOrMessageCopyFragment = signatureOrMessageCopy.subarray(
+            fragmentIndex * SIGNATURE_OR_MESSAGE_LENGTH,
+            (fragmentIndex + 1) * SIGNATURE_OR_MESSAGE_LENGTH
+        )
+
+        bundleCopy.set(signatureOrMessageCopyFragment, offset + SIGNATURE_OR_MESSAGE_OFFSET)
+
+        if (address) {
+            bundleCopy.set(address, offset + ADDRESS_OFFSET)
+        }
+
+        if (value && fragmentIndex === 0) {
+            bundleCopy.set(value, offset + VALUE_OFFSET)
+        }
+
+        if (obsoleteTag) {
+            bundleCopy.set(obsoleteTag, offset + OBSOLETE_TAG_OFFSET)
+        }
+
+        if (issuanceTimestamp) {
+            bundleCopy.set(issuanceTimestamp, offset + ISSUANCE_TIMESTAMP_OFFSET)
+        }
+
+        bundleCopy.set(currentIndexBuffer, offset + CURRENT_INDEX_OFFSET)
+
+        if (tag) {
+            bundleCopy.set(tag, offset + TAG_OFFSET)
+        }
+
+        lastIndexBuffer.set(currentIndexBuffer.slice())
+        currentIndexBuffer.set(increment(currentIndexBuffer))
+        fragmentIndex++
+    }
+
+    for (let offset = LAST_INDEX_OFFSET; offset < bundleCopy.length; offset += TRANSACTION_LENGTH) {
+        bundleCopy.set(lastIndexBuffer, offset)
+    }
+
+    return bundleCopy
+}
 
 /**
  * Finalizes a bundle by calculating the bundle hash.
  *
  * @method finalizeBundle
  *
- * @param {Transaction[]} transactions - List of transactions in the bundle
+ * @param {Int8Array} bundle - Bundle transaction trits
  *
- * @return {Transaction[]} List of transactions in the finalized bundle
+ * @return {Int8Array} List of transactions in the finalized bundle
  */
-export const finalizeBundle = (transactions: Bundle): Bundle => {
-    let validBundle: boolean = false
-
-    const valueTrits = transactions.map(tx => trits(tx.value)).map(padTrits(81))
-    const timestampTrits = transactions.map(tx => trits(tx.timestamp)).map(padTrits(27))
-    const currentIndexTrits = transactions.map(tx => trits(tx.currentIndex)).map(padTrits(27))
-    const lastIndexTrits = padTrits(27)(trits(transactions[0].lastIndex))
-    const obsoleteTagTrits = transactions.map(tx => trits(tx.obsoleteTag)).map(padTrits(81))
-    const bundleHashTrits = new Int8Array(Kerl.HASH_LENGTH)
-
-    while (!validBundle) {
-        const sponge = new Kerl()
-
-        for (let i = 0; i < transactions.length; i++) {
-            const essence = trits(
-                transactions[i].address +
-                    trytes(valueTrits[i]) +
-                    trytes(obsoleteTagTrits[i]) +
-                    trytes(timestampTrits[i]) +
-                    trytes(currentIndexTrits[i]) +
-                    trytes(lastIndexTrits)
-            )
-            sponge.absorb(essence, 0, essence.length)
-        }
-
-        sponge.squeeze(bundleHashTrits, 0, Kerl.HASH_LENGTH)
-
-        if (normalizedBundle(bundleHashTrits).indexOf(13) !== -1) {
-            // Insecure bundle, increment obsoleteTag and recompute bundle hash
-            obsoleteTagTrits[0] = add(obsoleteTagTrits[0], new Int8Array(1).fill(1))
-        } else {
-            validBundle = true
-        }
+export const finalizeBundle = (bundle: Int8Array): Int8Array => {
+    if (!isMultipleOfTransactionLength(bundle.length)) {
+        throw new Error(errors.ILLEGAL_TRANSACTION_BUFFER_LENGTH)
     }
 
-    return transactions.map((transaction, i) => ({
-        ...transaction,
-        // overwrite obsoleteTag in first entry
-        obsoleteTag: i === 0 ? trytes(obsoleteTagTrits[0]) : transaction.obsoleteTag,
-        bundle: trytes(bundleHashTrits),
-    }))
+    const sponge = new Kerl()
+    const bundleCopy = bundle.slice()
+    const bundleHash = new Int8Array(BUNDLE_LENGTH)
+
+    // This block recomputes bundle hash by incrementing `obsoleteTag` field of first transaction in the bundle.
+    // Normalized bundle should NOT contain value `13`.
+    while (true) {
+        // Absorb essence trits to squeeze bundle hash.
+        for (let offset = 0; offset < bundle.length; offset += TRANSACTION_LENGTH) {
+            sponge.absorb(transactionEssence(bundleCopy, offset), 0, TRANSACTION_ESSENCE_LENGTH)
+        }
+
+        // Set new bundle hash value.
+        sponge.squeeze(bundleHash, 0, BUNDLE_LENGTH)
+
+        // Stop mutation if essence results to secure bundle.
+        if (normalizedBundle(bundleHash).indexOf(MAX_TRYTE_VALUE /* 13 */) === -1) {
+            // Essence results to secure bundle.
+            break
+        }
+
+        // Essence results to insecure bundle. (Normalized bundle hash contains value `13`.)
+        bundleCopy.set(
+            increment(bundleCopy.subarray(OBSOLETE_TAG_OFFSET, OBSOLETE_TAG_OFFSET + OBSOLETE_TAG_LENGTH)),
+            OBSOLETE_TAG_OFFSET
+        )
+
+        sponge.reset()
+    }
+
+    // Set bundle field of each transaction.
+    for (let offset = BUNDLE_OFFSET; offset < bundle.length; offset += TRANSACTION_LENGTH) {
+        bundleCopy.set(bundleHash, offset)
+    }
+
+    return bundleCopy
+}
+
+/**
+ * Adds signature message fragments to transactions in a bundle starting at offset.
+ *
+ * @method addSignatureOrMessage
+ *
+ * @param {Int8Array} bundle - Bundle buffer.
+ * @param {Int8Array} signatureOrMessage - Signature or message to add.
+ * @param {number} index - Transaction index as entry point for signature or message fragments.
+ *
+ * @return {Int8Array} List of transactions in the updated bundle
+ */
+export const addSignatureOrMessage = (bundle: Int8Array, signatureOrMessage: Int8Array, index: number): Int8Array => {
+    if (!isMultipleOfTransactionLength(bundle.length)) {
+        throw new Error(errors.ILLEGAL_TRANSACTION_BUFFER_LENGTH)
+    }
+
+    if (!Number.isInteger(index)) {
+        throw new TypeError(errors.ILLEGAL_TRANSACTION_INDEX)
+    }
+
+    if (signatureOrMessage.length === 0 || signatureOrMessage.length % SIGNATURE_OR_MESSAGE_LENGTH !== 0) {
+        throw new RangeError(errors.ILLEGAL_SIGNATURE_OR_MESSAGE_LENGTH)
+    }
+
+    if (
+        index < 0 ||
+        index > bundle.length / TRANSACTION_LENGTH - 1 - signatureOrMessage.length / SIGNATURE_OR_MESSAGE_LENGTH
+    ) {
+        throw new RangeError(errors.ILLEGAL_TRANSACTION_INDEX)
+    }
+
+    const bundleCopy = bundle.slice()
+    const numberOfFragmentsToAdd = Math.ceil(signatureOrMessage.length / SIGNATURE_OR_MESSAGE_LENGTH)
+    const signatureOrMessageCopy = new Int8Array(numberOfFragmentsToAdd)
+
+    for (let i = 0; i < numberOfFragmentsToAdd; i++) {
+        bundleCopy.set(
+            signatureOrMessage.slice(i * SIGNATURE_OR_MESSAGE_LENGTH, (i + 1) * SIGNATURE_OR_MESSAGE_LENGTH),
+            (index + i) * TRANSACTION_LENGTH + SIGNATURE_OR_MESSAGE_OFFSET
+        )
+    }
+
+    return bundleCopy
 }

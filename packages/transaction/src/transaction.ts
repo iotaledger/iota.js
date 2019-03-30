@@ -209,7 +209,7 @@ export const createCurrentIndex = (warn = true) =>
         return transactionBufferSlice(CURRENT_INDEX_OFFSET, CURRENT_INDEX_LENGTH)(buffer, offset)
     }
 
-export const currentIndex = createCurrentIndex(false)
+export const currentIndex = createCurrentIndex()
 
 export const createLastIndex = (warn = true) =>
     /**

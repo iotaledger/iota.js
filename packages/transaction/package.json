@@ -1,7 +1,7 @@
 {
     "name": "@iota/transaction",
     "version": "1.0.0-beta.11",
-    "description": "Utilities and validators for transactions.",
+    "description": "IOTA transaction (de)serialization & guards.",
     "main": "./out/transaction/src/index.js",
     "typings": "typings/transaction/src",
     "publishConfig": {
@@ -28,7 +28,7 @@
                 100
             ],
             "branches": [
-                95,
+                100,
                 100
             ],
             "statements": [
@@ -56,7 +56,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/iotaledger/iota.js.git/tree/develop/packages/crypto"
+        "url": "https://github.com/iotaledger/iota.js/tree/next/packages/transaction"
     },
     "dependencies": {
         "@iota/converter": "1.0.0-beta.11",
@@ -68,6 +68,7 @@
     },
     "devDependencies": {
         "@iota/samples": "^1.0.0-beta.11",
+        "@iota/pad": "1.0.0-beta.11",
         "riteway": "^6.0.3",
         "watch": "^1.0.2"
     }

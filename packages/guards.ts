@@ -10,6 +10,56 @@ import { Address, Hash, Tag, Transfer, Trytes } from './types'
 /* Type guards */
 
 /**
+ * Checks if input is an `Int8Array` of trit values; `-1, 0, 1`.
+ *
+ * @method isTrits
+ *
+ * @param {any} input
+ *
+ * @return {boolean}
+ */
+export const isTrits = (input: any): input is Int8Array => {
+    if (input instanceof Int8Array) {
+        for (let i = 0; i < input.length; i++) {
+            if (!(input[i] === 0 || input[i] === -1 || input[i] === 1)) {
+                return false
+            }
+        }
+
+        return true
+    }
+
+    return false
+}
+
+/**
+ * Checks if trits are NULL.
+ *
+ * @method isNullTrits
+ *
+ * @param {Int8Array} trits
+ *
+ * @return {boolean}
+ */
+export const isNullTrits = (input: Int8Array): boolean => {
+    if (input instanceof Int8Array) {
+        if (input.length === 0) {
+            return true
+        }
+
+        for (let i = 0; i < input.length; i++) {
+            if (input[i] !== 0) {
+                return false
+            }
+        }
+
+        return true
+    }
+
+    return false
+}
+
+/**
  * Checks if input is correct trytes consisting of [9A-Z]; optionally validate length
  * @method isTrytes
  *
