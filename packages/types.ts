@@ -1,4 +1,5 @@
 import * as Promise from 'bluebird'
+import { EventEmitter } from 'events'
 export type Maybe<T> = T | void
 
 export type Hash = string
@@ -58,6 +59,14 @@ export interface Transaction {
     readonly attachmentTimestampUpperBound: number
     readonly nonce: string
     readonly confirmed?: boolean
+}
+
+export interface TransactionEssence {
+    readonly address: Int8Array
+    readonly value: Int8Array
+    readonly obsoleteTag?: Int8Array
+    readonly issuanceTimestamp?: Int8Array
+    readonly currentIndex: Int8Array
 }
 
 /* Bundle object */
@@ -306,3 +315,45 @@ export const asArray = <T>(x: T | ReadonlyArray<T>): ReadonlyArray<T> => (Array.
 
 export const getOptionsWithDefaults = <T>(defaults: Readonly<T>) => (options: Readonly<Partial<T>>): Readonly<T> =>
     Object.assign({}, defaults, options) // tslint:disable-line prefer-object-spread
+
+export interface PersistenceIteratorOptions<K = any> {
+    gt?: K
+    gte?: K
+    lt?: K
+    lte?: K
+    reverse?: boolean
+    limit?: number
+    keys?: boolean
+    values?: boolean
+    keyAsBuffer?: boolean
+    valueAsBuffer?: boolean
+}
+
+export interface PersistenceError extends Error {
+    notFound?: boolean
+}
+
+export type CreatePersistenceReadStream = (
+    onData: (data: { key: Int8Array; value: Int8Array }) => any,
+    onError: (error: Error) => any,
+    onClose: () => any,
+    onEnd: () => any,
+    options?: PersistenceIteratorOptions
+) => NodeJS.ReadableStream
+
+export interface Persistence extends EventEmitter {
+    readonly nextIndex: () => Promise<Int8Array>
+    readonly writeBundle: (bundle: Int8Array) => Promise<void>
+    readonly deleteBundle: (bundleHash: Int8Array) => Promise<void>
+    readonly readCDA: (address: Int8Array) => Promise<Int8Array> // ?
+    readonly writeCDA: (address: Int8Array, cda: Int8Array) => Promise<void>
+    readonly deleteCDA: (address: Int8Array) => Promise<void>
+    readonly createReadStream: CreatePersistenceReadStream
+}
+
+export interface PersistenceAdapter {
+    readonly read: (key: Int8Array) => Promise<Int8Array>
+    readonly write: (key: Int8Array, value: Int8Array) => Promise<void>
+    readonly delete: (key: Int8Array) => Promise<void>
+    readonly createReadStream: CreatePersistenceReadStream
+}

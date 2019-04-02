@@ -30,11 +30,13 @@ export const ILLEGAL_TRANSACTION_BUFFER_LENGTH = 'Illegal transaction buffer len
 export const ILLEGAL_TRANSACTION_OFFSET = 'Illegal transaction offset.'
 export const ILLEGAL_TRANSACTION_LENGTH = 'Illegal transaction length.'
 export const ILLEGAL_TRANSACTION_ORDER = 'Illegal transaction order.'
-
 export const ILLEGAL_TRANSACTION_INDEX = 'Illegal transaction index.'
 
-export const ILLEGAL_PADDING_LENGTH = 'Illegal padding length. Input value length exceeds padding length.'
+export const ILLEGAL_SEED_LENGTH = 'Illegal seed length. Expected length of 243 trits.'
+export const ILLEGAL_KEY_INDEX = 'Illegal key index.'
+export const ILLEGAL_CDA_LENGTH = 'Illegal cda length.'
 
+export const ILLEGAL_PADDING_LENGTH = 'Illegal padding length. Input value length exceeds padding length.'
 export const INCONSISTENT_SUBTANGLE = 'Inconsistent subtangle'
 export const INSUFFICIENT_BALANCE = 'Insufficient balance'
 export const INVALID_ADDRESS = 'Invalid address'
