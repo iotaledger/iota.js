@@ -18,7 +18,6 @@ import {
     isMultipleOfTransactionLength,
     ISSUANCE_TIMESTAMP_LENGTH,
     ISSUANCE_TIMESTAMP_OFFSET,
-    isTailTransaction,
     LAST_INDEX_LENGTH,
     LAST_INDEX_OFFSET,
     lastIndex,
@@ -31,6 +30,7 @@ import {
     TRANSACTION_ESSENCE_LENGTH,
     TRANSACTION_LENGTH,
     transactionEssence,
+    value as transactionValue,
     VALUE_LENGTH,
     VALUE_OFFSET,
 } from '@iota/transaction'
@@ -284,4 +284,36 @@ export const addSignatureOrMessage = (bundle: Int8Array, signatureOrMessage: Int
     }
 
     return bundleCopy
+}
+
+export const valueSum = (buffer: Int8Array, offset: number, length: number): number => {
+    if (!isMultipleOfTransactionLength(buffer.length)) {
+        throw new RangeError(errors.ILLEGAL_TRANSACTION_BUFFER_LENGTH)
+    }
+
+    if (!Number.isInteger(offset)) {
+        throw new TypeError(errors.ILLEGAL_TRANSACTION_OFFSET)
+    }
+
+    if (!isMultipleOfTransactionLength(offset)) {
+        throw new RangeError(errors.ILLEGAL_TRANSACTION_OFFSET)
+    }
+
+    if (!Number.isInteger(length)) {
+        throw new TypeError(errors.ILLEGAL_BUNDLE_LENGTH)
+    }
+
+    if (!isMultipleOfTransactionLength(length)) {
+        throw new RangeError(errors.ILLEGAL_BUNDLE_LENGTH)
+    }
+
+    let sum = 0
+
+    for (let bundleOffset = 0; bundleOffset < length; bundleOffset += TRANSACTION_LENGTH) {
+        const a = tritsToValue(transactionValue(buffer, offset + bundleOffset))
+        console.log(a)
+        sum += a
+    }
+
+    return sum
 }

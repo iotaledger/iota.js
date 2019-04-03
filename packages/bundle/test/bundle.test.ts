@@ -15,8 +15,9 @@ import {
     TRANSACTION_LENGTH,
     transactionEssence,
     VALUE_LENGTH,
+    VALUE_OFFSET,
 } from '@iota/transaction'
-import { addEntry, addSignatureOrMessage, createBundle, finalizeBundle } from '../src'
+import { addEntry, addSignatureOrMessage, createBundle, finalizeBundle, valueSum } from '../src'
 
 import { describe, Try } from 'riteway'
 import * as errors from '../../errors'
@@ -411,5 +412,129 @@ describe('addSignatureOrMessage(bundle: Int8Array, signatureOrMessage: Int8Array
         should: 'produce correct signed bundle',
         actual: tritsToTrytes(await actualFinalSignedBundle),
         expected: tritsToTrytes(expectedFinalSignedBundle),
+    })
+})
+
+describe('valueSum(buffer: Int8Array, offset: number, length: number): number', async assert => {
+    assert({
+        given: 'buffer of length that is not multiple of transaction length',
+        should: 'throw RangeError',
+        actual: Try(valueSum, new Int8Array(TRANSACTION_LENGTH - 1), 0, TRANSACTION_LENGTH),
+        expected: new RangeError(errors.ILLEGAL_TRANSACTION_BUFFER_LENGTH),
+    })
+
+    assert({
+        given: 'offset that is not multiple of transaction length',
+        should: 'throw RangeError',
+        actual: Try(valueSum, new Int8Array(TRANSACTION_LENGTH), 1, TRANSACTION_LENGTH),
+        expected: new RangeError(errors.ILLEGAL_TRANSACTION_OFFSET),
+    })
+
+    assert({
+        given: 'length that is not multiple of transaction length',
+        should: 'throw RangeError',
+        actual: Try(valueSum, new Int8Array(TRANSACTION_LENGTH), 0, TRANSACTION_LENGTH - 1),
+        expected: new RangeError(errors.ILLEGAL_BUNDLE_LENGTH),
+    })
+
+    assert({
+        given: 'offset = undefined',
+        should: 'throw TypeError',
+        actual: Try(valueSum, new Int8Array(TRANSACTION_LENGTH), undefined as any, TRANSACTION_LENGTH),
+        expected: new TypeError(errors.ILLEGAL_TRANSACTION_OFFSET),
+    })
+
+    assert({
+        given: 'offset = NaN',
+        should: 'throw TypeError',
+        actual: Try(valueSum, new Int8Array(TRANSACTION_LENGTH), NaN as any, TRANSACTION_LENGTH),
+        expected: new TypeError(errors.ILLEGAL_TRANSACTION_OFFSET),
+    })
+
+    assert({
+        given: 'offset = null',
+        should: 'throw TypeError',
+        actual: Try(valueSum, new Int8Array(TRANSACTION_LENGTH), null as any, TRANSACTION_LENGTH),
+        expected: new TypeError(errors.ILLEGAL_TRANSACTION_OFFSET),
+    })
+
+    assert({
+        given: 'offset = Infinity',
+        should: 'throw TypeError',
+        actual: Try(valueSum, new Int8Array(TRANSACTION_LENGTH), Infinity as any, TRANSACTION_LENGTH),
+        expected: new TypeError(errors.ILLEGAL_TRANSACTION_OFFSET),
+    })
+
+    assert({
+        given: 'offset = "0" (string)',
+        should: 'throw TypeError',
+        actual: Try(valueSum, new Int8Array(TRANSACTION_LENGTH), '0' as any, TRANSACTION_LENGTH),
+        expected: new TypeError(errors.ILLEGAL_TRANSACTION_OFFSET),
+    })
+
+    assert({
+        given: 'offset = 0.1',
+        should: 'throw TypeError',
+        actual: Try(valueSum, new Int8Array(TRANSACTION_LENGTH), 0.1, TRANSACTION_LENGTH),
+        expected: new TypeError(errors.ILLEGAL_TRANSACTION_OFFSET),
+    })
+
+    assert({
+        given: 'length = undefined',
+        should: 'throw TypeError',
+        actual: Try(valueSum, new Int8Array(TRANSACTION_LENGTH), 0, undefined as any),
+        expected: new TypeError(errors.ILLEGAL_TRANSACTION_OFFSET),
+    })
+
+    assert({
+        given: 'length = NaN',
+        should: 'throw TypeError',
+        actual: Try(valueSum, new Int8Array(TRANSACTION_LENGTH), 0, NaN as any),
+        expected: new TypeError(errors.ILLEGAL_TRANSACTION_OFFSET),
+    })
+
+    assert({
+        given: 'length = null',
+        should: 'throw TypeError',
+        actual: Try(valueSum, new Int8Array(TRANSACTION_LENGTH), 0, null as any),
+        expected: new TypeError(errors.ILLEGAL_TRANSACTION_OFFSET),
+    })
+
+    assert({
+        given: 'length = Infinity',
+        should: 'throw TypeError',
+        actual: Try(valueSum, new Int8Array(TRANSACTION_LENGTH), 0, Infinity as any),
+        expected: new TypeError(errors.ILLEGAL_TRANSACTION_OFFSET),
+    })
+
+    assert({
+        given: 'length = "0" (string)',
+        should: 'throw TypeError',
+        actual: Try(valueSum, new Int8Array(TRANSACTION_LENGTH), 0, '0' as any),
+        expected: new TypeError(errors.ILLEGAL_TRANSACTION_OFFSET),
+    })
+
+    assert({
+        given: 'length = 0.1',
+        should: 'throw TypeError',
+        actual: Try(valueSum, new Int8Array(TRANSACTION_LENGTH), 0, 0.1),
+        expected: new TypeError(errors.ILLEGAL_TRANSACTION_OFFSET),
+    })
+
+    assert({
+        given: 'valid buffer',
+        should: 'calculate value sum',
+        actual: (() => {
+            const buffer = new Int8Array(3 * TRANSACTION_LENGTH).fill(0)
+            const offset = TRANSACTION_LENGTH
+            const length = TRANSACTION_LENGTH * 2
+
+            buffer.set(valueToTrits(10000), VALUE_OFFSET)
+            buffer.set(valueToTrits(-9), offset + VALUE_OFFSET)
+            buffer.set(valueToTrits(10), offset + TRANSACTION_LENGTH + VALUE_OFFSET)
+
+            return valueSum(buffer, offset, length)
+        })(),
+        expected: 1,
     })
 })
