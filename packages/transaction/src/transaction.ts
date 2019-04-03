@@ -422,7 +422,7 @@ export const isTransaction = (transaction: any, minWeightMagnitude = 0): boolean
  *
  * @return {boolean}
  */
-export const isTailTransaction = (transaction: any): transaction is Int8Array =>
+export const isTail = (transaction: any): transaction is Int8Array =>
     isTransaction(transaction) && tritsToValue(createCurrentIndex(false)(transaction)) === 0
 
 /**
@@ -435,6 +435,21 @@ export const isTailTransaction = (transaction: any): transaction is Int8Array =>
  *
  * @return {boolean}
  */
-export const isHeadTransaction = (transaction: any): transaction is Int8Array =>
+export const isHead = (transaction: any): transaction is Int8Array =>
     isTransaction(transaction) &&
     tritsToValue(createCurrentIndex(false)(transaction)) === tritsToValue(createLastIndex(false)(transaction))
+
+/**
+ * Checks if given transaction has been attached.
+ *
+ * @method isAttachedTransaction
+ *
+ * @param {Int8Array} transaction
+ *
+ * @return {boolean}
+ */
+export const isAttached = (transaction: Int8Array): boolean =>
+    isTransaction(transaction) &&
+    transaction
+        .subarray(TRUNK_TRANSACTION_OFFSET, TRANSACTION_NONCE_OFFSET + TRANSACTION_NONCE_LENGTH)
+        .some(trit => trit !== 0)

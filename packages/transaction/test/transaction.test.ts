@@ -13,11 +13,12 @@ import {
     createLastIndex,
     createObsoleteTag,
     CURRENT_INDEX_LENGTH,
-    isHeadTransaction,
+    isAttached,
+    isHead,
     isMultipleOfTransactionLength,
     ISSUANCE_TIMESTAMP_LENGTH,
     issuanceTimestamp,
-    isTailTransaction,
+    isTail,
     isTransaction,
     LAST_INDEX_LENGTH,
     OBSOLETE_TAG_LENGTH,
@@ -29,6 +30,7 @@ import {
     transactionEssence,
     transactionHash,
     transactionNonce,
+    TRUNK_TRANSACTION_OFFSET,
     trunkTransaction,
     value,
     VALUE_LENGTH,
@@ -1538,7 +1540,7 @@ describe('isTransaction(transaction, minWeightMagnitude)', async assert => {
     })
 })
 
-describe('isTailTransaction(transaction)', async assert => {
+describe('isTail(transaction)', async assert => {
     if (
         tritsToValue(value(transactionWithInvalidAddress)) <= 0 ||
         tritsToValue(value(transactionWithInvalidAddressB)) > 0
@@ -1549,40 +1551,40 @@ describe('isTailTransaction(transaction)', async assert => {
     assert({
         given: 'transaction of illegal length',
         should: 'return false',
-        actual: isTailTransaction(new Int8Array(TRANSACTION_LENGTH - 1)),
+        actual: isTail(new Int8Array(TRANSACTION_LENGTH - 1)),
         expected: false,
     })
 
     assert({
         given: 'positive value transaction with last trit of address != 0',
         should: 'return false',
-        actual: isTailTransaction(transactionWithInvalidAddress),
+        actual: isTail(transactionWithInvalidAddress),
         expected: false,
     })
 
     assert({
         given: 'negative value transaction with last trit of address != 0',
         should: 'return false',
-        actual: isTailTransaction(transactionWithInvalidAddressB),
+        actual: isTail(transactionWithInvalidAddressB),
         expected: false,
     })
 
     assert({
         given: 'valid non-tail transaction (currentIndex > 0)',
         should: 'return false',
-        actual: isTailTransaction(trytesToTrits(bundleTrytes[1])),
+        actual: isTail(trytesToTrits(bundleTrytes[1])),
         expected: false,
     })
 
     assert({
         given: 'valid tail transaction (currentIndex = 0)',
         should: 'return true',
-        actual: isTailTransaction(trytesToTrits(bundleTrytes[0])),
+        actual: isTail(trytesToTrits(bundleTrytes[0])),
         expected: true,
     })
 })
 
-describe('isHeadTransaction(transaction)', async assert => {
+describe('isHead(transaction)', async assert => {
     if (
         tritsToValue(value(transactionWithInvalidAddress)) <= 0 ||
         tritsToValue(value(transactionWithInvalidAddressB)) > 0
@@ -1593,35 +1595,60 @@ describe('isHeadTransaction(transaction)', async assert => {
     assert({
         given: 'transaction of illegal length',
         should: 'return false',
-        actual: isHeadTransaction(new Int8Array(TRANSACTION_LENGTH - 1)),
+        actual: isHead(new Int8Array(TRANSACTION_LENGTH - 1)),
         expected: false,
     })
 
     assert({
         given: 'positive value transaction with last trit of address != 0',
         should: 'return false',
-        actual: isHeadTransaction(transactionWithInvalidAddress),
+        actual: isHead(transactionWithInvalidAddress),
         expected: false,
     })
 
     assert({
         given: 'negative value transaction with last trit of address != 0',
         should: 'return false',
-        actual: isHeadTransaction(transactionWithInvalidAddressB),
+        actual: isHead(transactionWithInvalidAddressB),
         expected: false,
     })
 
     assert({
         given: 'valid non-tail transaction (currentIndex > 0)',
         should: 'return false',
-        actual: isHeadTransaction(trytesToTrits(bundleTrytes[0])),
+        actual: isHead(trytesToTrits(bundleTrytes[0])),
         expected: false,
     })
 
     assert({
         given: 'valid tail transaction (currentIndex = 0)',
         should: 'return true',
-        actual: isHeadTransaction(trytesToTrits(bundleTrytes[bundleTrytes.length - 1])),
+        actual: isHead(trytesToTrits(bundleTrytes[bundleTrytes.length - 1])),
+        expected: true,
+    })
+})
+
+describe('isAttached(transaction)', async assert => {
+    assert({
+        given: 'transaction of illegal length',
+        should: 'return false',
+        actual: isAttached(new Int8Array(TRANSACTION_LENGTH - 1)),
+        expected: false,
+    })
+
+    assert({
+        given: 'non-attached transaction',
+        should: 'return false',
+        actual: isAttached(new Int8Array(TRANSACTION_LENGTH)),
+        expected: false,
+    })
+
+    assert({
+        given: 'attached transaction',
+        should: 'return true',
+        actual: isAttached(
+            new Int8Array(TRANSACTION_LENGTH).fill(1, TRUNK_TRANSACTION_OFFSET, TRUNK_TRANSACTION_OFFSET + 1)
+        ),
         expected: true,
     })
 })
