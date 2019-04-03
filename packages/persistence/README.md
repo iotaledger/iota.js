@@ -25,6 +25,7 @@ import leveldown from 'leveldown'
             deleteBundle,
             writeCDA,
             deleteCDA,
+            batch,
             createReadStream,
         } = await persistence(adapter)
 
@@ -38,10 +39,11 @@ import leveldown from 'leveldown'
 <a name="PersistenceAdapter"></a>
 ## PersistenceAdapter interface
 ```TS
-interface PersistenceAdapter {
-    readonly read: (key: Int8Array) => Promise<Int8Array>
-    readonly write: (key: Int8Array, value: Int8Array) => Promise<void>
-    readonly delete: (key: Int8Array) => Promise<void>
+interface PersistenceAdapter<K = Buffer, V = Buffer> {
+    readonly read: (key: K) => Promise<V>
+    readonly write: (key: K, value: V) => Promise<void>
+    readonly delete: (key: K) => Promise<void>
+    readonly batch: (ops: ReadonlyArray<PersistenceAdapterBatch<K, V>>) => Promise<void>
     readonly createReadStream: CreatePersistenceReadStream
 }
 ```
@@ -49,7 +51,7 @@ interface PersistenceAdapter {
 **`createReadStream()`** reads & streams persisted **bundles** & **CDAs** as key-value pairs.
 ```JS
 createReadStream
-    .on('data', ({ key, value }) => {
+    .on('data', value => {
         if (value.length === CDA_LENGTH) {
             // It's a CDA
             const {
@@ -74,7 +76,7 @@ createReadStream
 ```
 ```TS
 type CreatePersistenceReadStream = (
-    onData: (data: { key: Int8Array; value: Int8Array }) => any,
+    onData: (data: Int8Array) => any,
     onError: (error: Error) => any,
     onClose: () => any,
     onEnd: () => any
@@ -85,9 +87,9 @@ type CreatePersistenceReadStream = (
 Persistence module emits events after every sucessful modification of the state.
 
 ```JS
-persistence.on('writeBundle', callback)
-persistence.on('deleteBundle', callback)
-persistence.on('writeCDA', callback)
-persistence.on('deleteCDA', callback)
+persistence.on('writeBundle', bundle => {})
+persistence.on('deleteBundle', bundle => {})
+persistence.on('writeCDA', cda => {})
+persistence.on('deleteCDA', cda => {})
 ```
 

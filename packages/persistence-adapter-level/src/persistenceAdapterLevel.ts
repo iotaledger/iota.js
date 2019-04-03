@@ -1,16 +1,30 @@
 import { trytesToTrits } from '@iota/converter'
-import { AbstractLevelDOWN } from 'abstract-leveldown'
+import { AbstractBatch, AbstractLevelDOWN } from 'abstract-leveldown'
 import * as Promise from 'bluebird'
 import { EventEmitter } from 'events'
 import leveldown from 'leveldown'
 import * as levelup from 'levelup'
 import * as path from 'path'
-import { PersistenceAdapter, PersistenceIteratorOptions } from '../../types'
+import {
+    PersistenceAdapter,
+    PersistenceAdapterBatch,
+    PersistenceAdapterDeleteOp,
+    PersistenceAdapterWriteOp,
+    PersistenceIteratorOptions,
+} from '../../types'
+
+export {
+    PersistenceAdapter,
+    PersistenceAdapterBatch,
+    PersistenceIteratorOptions,
+    PersistenceAdapterDeleteOp,
+    PersistenceAdapterWriteOp,
+}
 
 export interface PersistenceAdapterParams {
-    storeID: string
-    storePath: string
-    store?: any
+    readonly storeID: string
+    readonly storePath: string
+    readonly store?: any
 }
 
 export interface PersistenceError extends Error {
@@ -33,25 +47,42 @@ export const persistenceAdapter = (params: PersistenceAdapterParams): Persistenc
     const db: levelup.LevelUp<AbstractLevelDOWN<any, any>> = levelup.default(store(path.join(storePath, storeID)))
 
     return {
-        read: (key: Int8Array) =>
-            Promise.try(() => db.get(Buffer.from(key.buffer))).then(value => Int8Array.from(value)),
+        read: key => Promise.try(() => db.get(key)),
 
-        write: (key: Int8Array, value: Int8Array) =>
-            Promise.try(() => db.put(Buffer.from(key.buffer), Buffer.from(value.buffer))),
+        write: (key, value) => Promise.try(() => db.put(key, value)),
 
-        delete: (key: Int8Array) =>
-            Promise.try(() => db.get(Buffer.from(key.buffer))).then(value => db.del(Buffer.from(key.buffer))),
+        delete: key => Promise.try(() => db.get(key)).then(value => db.del(key)),
 
-        createReadStream: (
-            onData: (data: { key: Int8Array; value: Int8Array }) => any,
-            onError: (error: Error) => any,
-            onClose: () => any,
-            onEnd: () => any,
-            options?: PersistenceIteratorOptions
-        ) =>
+        batch: ops =>
+            Promise.try(() =>
+                db.batch(
+                    ops.map(
+                        (op): AbstractBatch<Buffer, Buffer> => {
+                            const { type, key } = op
+                            switch (type) {
+                                case 'write':
+                                    return {
+                                        type: 'put',
+                                        key,
+                                        value: (op as PersistenceAdapterWriteOp<Buffer, Buffer>).value,
+                                    }
+                                case 'delete':
+                                    return {
+                                        type: 'del',
+                                        key,
+                                    }
+                            }
+                        }
+                    )
+                )
+            ),
+
+        createReadStream: (onData, onError, onClose, onEnd, options) =>
             db
                 .createReadStream(options)
-                .on('data', onData)
+                .on('data', ({ value }) => {
+                    onData(value)
+                })
                 .on('error', onError)
                 .on('close', onClose)
                 .on('end', onEnd),

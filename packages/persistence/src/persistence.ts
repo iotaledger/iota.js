@@ -1,5 +1,5 @@
 import { asyncBuffer } from '@iota/async-buffer'
-import { tritsToTrytes, tritsToValue, trytesToTrits, valueToTrits } from '@iota/converter'
+import { bytesToTrits, tritsToBytes, tritsToTrytes, tritsToValue, trytesToTrits, valueToTrits } from '@iota/converter'
 import Kerl from '@iota/kerl'
 import * as signing from '@iota/signing'
 import { ADDRESS_LENGTH, bundle, isMultipleOfTransactionLength } from '@iota/transaction'
@@ -7,32 +7,37 @@ import * as Promise from 'bluebird'
 import { EventEmitter } from 'events'
 import * as errors from '../../errors'
 import { isTrits } from '../../guards'
-import { Persistence, PersistenceAdapter, PersistenceError, PersistenceIteratorOptions } from '../../types'
+import {
+    Persistence,
+    PersistenceAdapter,
+    PersistenceAdapterBatch,
+    PersistenceBatch,
+    PersistenceError,
+    PersistenceIteratorOptions,
+} from '../../types'
 
-export { Persistence, PersistenceAdapter, PersistenceError, PersistenceIteratorOptions }
+export { Persistence, PersistenceAdapter, PersistenceError, PersistenceIteratorOptions, PersistenceBatch }
 
 const KEY_LENGTH = 243
+const CDA_ADDRESS_OFFSET = 0
+const CDA_ADDRESS_LENGTH = ADDRESS_LENGTH
 const CDA_LENGTH = 243 + 27 + 81 + 27 + 35 + 1 // address + timeout_at + expected_amount + checksum + key_index + security
 
 const KEY_INDEX_START = 0
 
-const events = {
-    writeBundle: 'writeBundle',
-    deleteBundle: 'deleteBundle',
-    writeCDA: 'writeCDA',
-    deleteCDA: 'deleteCDA',
-}
-
-const prefixes = {
-    KEY_INDEX_PREFIX: trytesToTrits('KEY9INDEX'),
-    CDA_PREFIX: trytesToTrits('CDA'),
-}
-
-const mergePrefix = (prefix: Int8Array, key: Int8Array): Int8Array => {
-    const out = new Int8Array(prefix.length + key.length)
-    out.set(prefix)
-    out.set(key, prefix.length)
-    return out
+export const storeID = (seed: Int8Array): string => {
+    if (seed.length !== Kerl.HASH_LENGTH) {
+        throw new Error(errors.ILLEGAL_SEED_LENGTH)
+    }
+    const sponge = new Kerl()
+    const id = new Int8Array(Kerl.HASH_LENGTH)
+    sponge.absorb(
+        signing.address(signing.digests(signing.key(signing.subseed(seed, KEY_INDEX_START), 2))),
+        0,
+        Kerl.HASH_LENGTH
+    )
+    sponge.squeeze(id, 0, Kerl.HASH_LENGTH)
+    return tritsToTrytes(id)
 }
 
 const verifyIndex = (index: Int8Array) => {
@@ -45,28 +50,37 @@ const verifyIndex = (index: Int8Array) => {
 
 const increment = (index: Int8Array) => valueToTrits(tritsToValue(index) + 1)
 
-export const storeID = (seed: Int8Array): string => {
-    if (seed.length !== Kerl.HASH_LENGTH) {
-        throw new Error(errors.ILLEGAL_SEED_LENGTH)
-    }
-    const sponge = new Kerl()
-    const id = new Int8Array(Kerl.HASH_LENGTH)
-    sponge.absorb(signing.address(signing.digests(signing.key(signing.subseed(seed, 0), 2))), 0, Kerl.HASH_LENGTH)
-    sponge.squeeze(id, 0, Kerl.HASH_LENGTH)
-    return tritsToTrytes(id)
+const prefixes = {
+    KEY_INDEX_PREFIX: tritsToBytes(trytesToTrits('KEY9INDEX')),
 }
 
-export function persistence(this: any, persistenceAdapter: PersistenceAdapter): Promise<Persistence> {
+const events = {
+    writeBundle: 'writeBundle',
+    deleteBundle: 'deleteBundle',
+    writeCDA: 'writeCDA',
+    deleteCDA: 'deleteCDA',
+}
+
+export function persistence(this: any, persistenceAdapter: PersistenceAdapter): Persistence<Int8Array> {
     const keyIndexBuffer = asyncBuffer<Int8Array>()
-    const init = () =>
-        persistenceAdapter
+    let initialized = false
+
+    const ready = () => {
+        if (initialized) {
+            return Promise.resolve()
+        }
+
+        initialized = true
+
+        return persistenceAdapter
             .read(prefixes.KEY_INDEX_PREFIX)
+            .then(bytesToTrits)
             .then(keyIndexBuffer.write)
             .catch(error => {
                 if (error.notFound) {
                     // Intialize index field in store.
                     const index = valueToTrits(KEY_INDEX_START)
-                    return persistenceAdapter.write(prefixes.KEY_INDEX_PREFIX, index).then(() => {
+                    return persistenceAdapter.write(prefixes.KEY_INDEX_PREFIX, tritsToBytes(index)).then(() => {
                         keyIndexBuffer.write(index)
                         return index
                     })
@@ -74,98 +88,178 @@ export function persistence(this: any, persistenceAdapter: PersistenceAdapter): 
 
                 throw error
             })
+    }
 
-    return init().then(() =>
-        Object.assign(
-            this,
-            {
-                nextIndex: () => {
-                    return keyIndexBuffer
-                        .read()
-                        .then(verifyIndex)
-                        .then(increment)
-                        .then(index =>
-                            persistenceAdapter
-                                .write(prefixes.KEY_INDEX_PREFIX, index)
-                                .then(() => keyIndexBuffer.write(index))
-                                .then(() => index)
-                                .catch(error => {
-                                    // On error, restore the buffer value and rethrow.
-                                    keyIndexBuffer.write(index)
-                                    throw error
-                                })
-                        )
-                },
+    return Object.assign(
+        this,
+        {
+            nextIndex: () =>
+                ready()
+                    .then(keyIndexBuffer.read)
+                    .then(verifyIndex)
+                    .then(increment)
+                    .then(index =>
+                        persistenceAdapter
+                            .write(prefixes.KEY_INDEX_PREFIX, tritsToBytes(index))
+                            .then(() => keyIndexBuffer.write(index))
+                            .then(() => index)
+                            .catch(error => {
+                                // On error, restore the buffer value and rethrow.
+                                keyIndexBuffer.write(index)
+                                throw error
+                            })
+                    ),
 
-                writeBundle: (buffer: Int8Array) => {
-                    if (!isMultipleOfTransactionLength(buffer.length)) {
-                        throw new RangeError(errors.ILLEGAL_BUNDLE_LENGTH)
-                    }
-                    return persistenceAdapter.write(bundle(buffer), buffer).then(() => {
+            writeBundle: (buffer: Int8Array) => {
+                if (!isMultipleOfTransactionLength(buffer.length)) {
+                    throw new RangeError(errors.ILLEGAL_BUNDLE_LENGTH)
+                }
+
+                return ready()
+                    .then(() => persistenceAdapter.write(tritsToBytes(bundle(buffer)), tritsToBytes(buffer)))
+                    .then(() => {
                         this.emit(events.writeBundle, buffer)
                     })
-                },
-                deleteBundle: (buffer: Int8Array) => {
-                    if (!isMultipleOfTransactionLength(buffer.length)) {
-                        throw new RangeError(errors.ILLEGAL_BUNDLE_LENGTH)
-                    }
-                    return persistenceAdapter.delete(bundle(buffer)).then(() => {
+            },
+
+            deleteBundle: (buffer: Int8Array) => {
+                if (!isMultipleOfTransactionLength(buffer.length)) {
+                    throw new RangeError(errors.ILLEGAL_BUNDLE_LENGTH)
+                }
+
+                return ready()
+                    .then(() => persistenceAdapter.delete(tritsToBytes(bundle(buffer))))
+                    .then(() => {
                         this.emit(events.deleteCDA, buffer)
                     })
-                },
+            },
 
-                readCDA: (address: Int8Array) => persistenceAdapter.read(mergePrefix(prefixes.CDA_PREFIX, address)),
-                writeCDA: (address: Int8Array, cda: Int8Array) => {
-                    if (address.length !== ADDRESS_LENGTH) {
-                        throw new Error(errors.ILLEGAL_ADDRESS_LENGTH)
-                    }
+            readCDA: (address: Int8Array) => {
+                if (address.length !== ADDRESS_LENGTH) {
+                    throw new RangeError(errors.ILLEGAL_ADDRESS_LENGTH)
+                }
 
-                    if (cda.length !== CDA_LENGTH) {
-                        throw new Error(errors.ILLEGAL_CDA_LENGTH)
-                    }
+                return ready()
+                    .then(() => persistenceAdapter.read(tritsToBytes(address)))
+                    .then(bytesToTrits)
+            },
 
-                    return persistenceAdapter.write(mergePrefix(prefixes.CDA_PREFIX, address), cda).then(() => {
-                        this.emit(events.writeCDA, cda)
+            writeCDA: (cda: Int8Array) => {
+                if (cda.length !== CDA_LENGTH) {
+                    throw new RangeError(errors.ILLEGAL_CDA_LENGTH)
+                }
+
+                return ready()
+                    .then(() =>
+                        persistenceAdapter.read(tritsToBytes(cda.slice(CDA_ADDRESS_OFFSET, CDA_ADDRESS_LENGTH)))
+                    )
+                    .then(() => {
+                        throw new Error(errors.CDA_ALREADY_IN_STORE)
                     })
-                },
-                deleteCDA: (address: Int8Array) => {
-                    if (address.length !== ADDRESS_LENGTH) {
-                        throw new Error(errors.ILLEGAL_ADDRESS_LENGTH)
-                    }
+                    .catch(error => {
+                        if (error.notFound) {
+                            return persistenceAdapter
+                                .write(
+                                    tritsToBytes(cda.slice(CDA_ADDRESS_OFFSET, CDA_ADDRESS_LENGTH)),
+                                    tritsToBytes(cda)
+                                )
+                                .then(() => {
+                                    this.emit(events.writeCDA, cda)
+                                })
+                        }
 
-                    return persistenceAdapter.read(mergePrefix(prefixes.CDA_PREFIX, address)).then(cda =>
-                        persistenceAdapter.delete(mergePrefix(prefixes.CDA_PREFIX, address)).then(() => {
+                        throw error
+                    })
+            },
+
+            deleteCDA: (cda: Int8Array) => {
+                if (cda.length !== CDA_LENGTH) {
+                    throw new RangeError(errors.ILLEGAL_CDA_LENGTH)
+                }
+
+                return ready().then(() =>
+                    persistenceAdapter
+                        .delete(tritsToBytes(cda.slice(CDA_ADDRESS_OFFSET, CDA_ADDRESS_LENGTH)))
+                        .then(() => {
                             this.emit(events.deleteCDA, cda)
                         })
-                    )
-                },
-
-                createReadStream: (
-                    onData: (data: { key: Int8Array; value: Int8Array }) => any,
-                    onError: (error: Error) => any,
-                    onClose: () => any,
-                    onEnd: () => any,
-                    options?: PersistenceIteratorOptions<Int8Array>
-                ) =>
-                    persistenceAdapter.createReadStream(
-                        ({ key, value }) => {
-                            if (isMultipleOfTransactionLength(value.length) || value.length === CDA_LENGTH) {
-                                const buffer = Int8Array.from(key)
-                                const length = buffer.length
-                                const offset = length - KEY_LENGTH
-                                onData({
-                                    key: buffer.slice(offset, length),
-                                    value: Int8Array.from(value),
-                                })
-                            }
-                        },
-                        onError,
-                        onClose,
-                        onEnd,
-                        { reverse: true, ...(options || {}) }
-                    ),
+                )
             },
-            EventEmitter.prototype
-        )
+
+            batch: (ops: ReadonlyArray<PersistenceBatch<Int8Array>>) => {
+                for (const { type, value } of ops) {
+                    if (!events.hasOwnProperty(type)) {
+                        throw new Error(errors.ILLEGAL_BATCH)
+                    }
+
+                    if (
+                        (type === events.writeBundle || type === events.deleteBundle) &&
+                        !isMultipleOfTransactionLength(value.length)
+                    ) {
+                        throw new RangeError('ILLEGAL_BUNDLE_LENGTH')
+                    }
+
+                    if ((type === events.writeCDA || type === events.deleteCDA) && value.length !== CDA_LENGTH) {
+                        throw new RangeError('ILLEGAL_CDA_LENGTH')
+                    }
+                }
+
+                return ready()
+                    .then(() =>
+                        persistenceAdapter.batch(
+                            ops.map(
+                                ({ type, value }): PersistenceAdapterBatch<Buffer, Buffer> => {
+                                    switch (type) {
+                                        case 'writeBundle':
+                                            return {
+                                                type: 'write',
+                                                key: tritsToBytes(bundle(value)),
+                                                value: tritsToBytes(value),
+                                            }
+                                        case 'deleteBundle':
+                                            return {
+                                                type: 'delete',
+                                                key: tritsToBytes(bundle(value)),
+                                            }
+
+                                        case 'writeCDA':
+                                            return {
+                                                type: 'write',
+                                                key: tritsToBytes(value.slice(CDA_ADDRESS_OFFSET, CDA_ADDRESS_LENGTH)),
+                                                value: tritsToBytes(value),
+                                            }
+                                        case 'deleteCDA':
+                                            return {
+                                                type: 'delete',
+                                                key: tritsToBytes(value.slice(CDA_ADDRESS_OFFSET, CDA_ADDRESS_LENGTH)),
+                                            }
+                                    }
+                                }
+                            )
+                        )
+                    )
+                    .tap(() => ops.forEach(({ type, value }) => this.emit(events[type], value)))
+            },
+
+            createReadStream: (
+                onData: (data: Int8Array) => any,
+                onError: (error: Error) => any,
+                onClose: () => any,
+                onEnd: () => any,
+                options?: PersistenceIteratorOptions<Int8Array>
+            ) =>
+                persistenceAdapter.createReadStream(
+                    value => {
+                        if (isMultipleOfTransactionLength(value.length) || value.length === CDA_LENGTH) {
+                            onData(bytesToTrits(value))
+                        }
+                    },
+                    onError,
+                    onClose,
+                    onEnd,
+                    { reverse: true, ...(options || {}) }
+                ),
+        },
+        EventEmitter.prototype
     )
 }

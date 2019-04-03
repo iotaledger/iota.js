@@ -333,27 +333,46 @@ export interface PersistenceError extends Error {
     notFound?: boolean
 }
 
-export type CreatePersistenceReadStream = (
-    onData: (data: { key: Int8Array; value: Int8Array }) => any,
+export interface PersistenceBatch<V> {
+    readonly type: 'writeBundle' | 'deleteBundle' | 'writeCDA' | 'deleteCDA'
+    readonly value: V
+}
+
+export type CreatePersistenceReadStream<V> = (
+    onData: (data: V) => any,
     onError: (error: Error) => any,
     onClose: () => any,
     onEnd: () => any,
     options?: PersistenceIteratorOptions
 ) => NodeJS.ReadableStream
 
-export interface Persistence extends EventEmitter {
-    readonly nextIndex: () => Promise<Int8Array>
-    readonly writeBundle: (bundle: Int8Array) => Promise<void>
-    readonly deleteBundle: (bundleHash: Int8Array) => Promise<void>
-    readonly readCDA: (address: Int8Array) => Promise<Int8Array> // ?
-    readonly writeCDA: (address: Int8Array, cda: Int8Array) => Promise<void>
-    readonly deleteCDA: (address: Int8Array) => Promise<void>
-    readonly createReadStream: CreatePersistenceReadStream
+export interface Persistence<V = Int8Array> extends EventEmitter {
+    readonly nextIndex: () => Promise<V>
+    readonly writeBundle: (bundle: V) => Promise<void>
+    readonly deleteBundle: (bundle: V) => Promise<void>
+    readonly readCDA: (address: V) => Promise<Int8Array>
+    readonly writeCDA: (cda: V) => Promise<void>
+    readonly deleteCDA: (cda: V) => Promise<void>
+    readonly batch: (ops: PersistenceBatch<V>) => Promise<void>
+    readonly createReadStream: CreatePersistenceReadStream<V>
 }
 
-export interface PersistenceAdapter {
-    readonly read: (key: Int8Array) => Promise<Int8Array>
-    readonly write: (key: Int8Array, value: Int8Array) => Promise<void>
-    readonly delete: (key: Int8Array) => Promise<void>
-    readonly createReadStream: CreatePersistenceReadStream
+export type PersistenceAdapterBatch<K, V> = PersistenceAdapterWriteOp<K, V> | PersistenceAdapterDeleteOp<K>
+
+export interface PersistenceAdapterWriteOp<K, V> {
+    readonly type: 'write'
+    readonly key: K
+    readonly value: V
+}
+export interface PersistenceAdapterDeleteOp<K> {
+    readonly type: 'delete'
+    readonly key: K
+}
+
+export interface PersistenceAdapter<K = Buffer, V = Buffer> {
+    readonly read: (key: K) => Promise<V>
+    readonly write: (key: K, value: V) => Promise<void>
+    readonly delete: (key: K) => Promise<void>
+    readonly batch: (ops: ReadonlyArray<PersistenceAdapterBatch<K, V>>) => Promise<void>
+    readonly createReadStream: CreatePersistenceReadStream<V>
 }

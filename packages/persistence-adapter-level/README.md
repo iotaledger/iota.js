@@ -17,9 +17,9 @@ import leveldown from 'leveldown'
     })
 
     try {
-        const { nextIndex } = await persistence(adapter)
+        const { nextIndex } = persistence(adapter)
 
-        return nextIndex()
+        return await nextIndex()
     } catch (error) {
         return error
     }

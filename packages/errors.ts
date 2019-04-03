@@ -35,6 +35,8 @@ export const ILLEGAL_TRANSACTION_INDEX = 'Illegal transaction index.'
 export const ILLEGAL_SEED_LENGTH = 'Illegal seed length. Expected length of 243 trits.'
 export const ILLEGAL_KEY_INDEX = 'Illegal key index.'
 export const ILLEGAL_CDA_LENGTH = 'Illegal cda length.'
+export const ILLEGAL_BATCH = 'Illegal batch.'
+export const CDA_ALREADY_IN_STORE = 'CDA is already in store.'
 
 export const ILLEGAL_PADDING_LENGTH = 'Illegal padding length. Input value length exceeds padding length.'
 export const INCONSISTENT_SUBTANGLE = 'Inconsistent subtangle'
