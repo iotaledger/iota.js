@@ -1,73 +1,75 @@
 import { bytesToTrits, tritsToBytes, trytesToTrits, valueToTrits } from '@iota/converter'
 import { ADDRESS_LENGTH, bundle, TRANSACTION_LENGTH } from '@iota/transaction'
 import { describe, Try } from 'riteway'
-import { persistenceAdapter, PersistenceAdapterDeleteOp, PersistenceError } from '../src/persistenceAdapterLevel'
+import { persistenceAdapter, PersistenceAdapterParams } from '../src/persistenceAdapterLevel'
 
 const CDA_LENGTH = 243 + 27 + 81 + 27 + 35 + 1
 
 let i = -1
-const isolate = () => {
+const isolate = (params?: PersistenceAdapterParams) => {
     i++
-    return persistenceAdapter({
-        storeID: 'ID-' + i.toString(),
-        storePath: './test/temp',
-    })
+    return persistenceAdapter(
+        params || {
+            storeID: 'ID-' + i.toString(),
+            storePath: './test/temp',
+        }
+    )
 }
 
 describe('persistenceAdapter(params: PersistenceAdapterParams): PersistenceAdapter', async assert => {
     assert({
         given: 'storeID = undefined',
         should: 'throw error',
-        actual: Try(persistenceAdapter, { storeID: undefined } as any),
+        actual: Try(isolate, { storeID: undefined } as any),
         expected: new Error(),
     })
 
     assert({
         given: 'storeID = null',
         should: 'throw error',
-        actual: Try(persistenceAdapter, { storeID: null } as any),
+        actual: Try(isolate, { storeID: null } as any),
         expected: new Error(),
     })
 
     assert({
         given: 'storeID = NaN',
         should: 'throw error',
-        actual: Try(persistenceAdapter, { storeID: NaN } as any),
+        actual: Try(isolate, { storeID: NaN } as any),
         expected: new Error(),
     })
 
     assert({
         given: 'storeID = 1 (numeric)',
         should: 'throw error',
-        actual: Try(persistenceAdapter, { storeID: 1 } as any),
+        actual: Try(isolate, { storeID: 1 } as any),
         expected: new Error(),
     })
 
     assert({
         given: 'storePath = undefined',
         should: 'throw error',
-        actual: Try(persistenceAdapter, { storeID: 'ID', storePath: undefined } as any),
+        actual: Try(isolate, { storeID: 'ID', storePath: undefined } as any),
         expected: new Error(),
     })
 
     assert({
         given: 'storePath = null',
         should: 'throw error',
-        actual: Try(persistenceAdapter, { storeId: 'ID', storePath: null } as any),
+        actual: Try(isolate, { storeId: 'ID', storePath: null } as any),
         expected: new Error(),
     })
 
     assert({
         given: 'storeID = NaN',
         should: 'throw error',
-        actual: Try(persistenceAdapter, { storeID: 'ID', storePath: NaN } as any),
+        actual: Try(isolate, { storeID: 'ID', storePath: NaN } as any),
         expected: new Error(),
     })
 
     assert({
         given: 'storeID = 1 (numeric)',
         should: 'throw error',
-        actual: Try(persistenceAdapter, { storeID: 'ID', storePath: 1 } as any),
+        actual: Try(isolate, { storeID: 'ID', storePath: 1 } as any),
         expected: new Error(),
     })
 })
@@ -164,7 +166,7 @@ describe('adapter.createReadStream(onData: (data: V) => any, onError, onClose, o
         given: 'persisted bundle & CDA',
         should: 'read bundle & CDA',
         actual: await (async () => {
-            const adapter = await isolate()
+            const adapter = isolate()
 
             await adapter.write(tritsToBytes(bundle(buffer)), tritsToBytes(buffer))
             await adapter.write(tritsToBytes(address), tritsToBytes(cda))

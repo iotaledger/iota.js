@@ -1,7 +1,5 @@
-import { trytesToTrits } from '@iota/converter'
 import { AbstractBatch, AbstractLevelDOWN } from 'abstract-leveldown'
 import * as Promise from 'bluebird'
-import { EventEmitter } from 'events'
 import leveldown from 'leveldown'
 import * as levelup from 'levelup'
 import * as path from 'path'
@@ -40,11 +38,10 @@ export const persistenceAdapter = (params: PersistenceAdapterParams): Persistenc
         throw new Error('Illegal store path.')
     }
 
-    const emitter = new EventEmitter()
     const storeID = params.storeID
     const storePath = params.storePath
     const store = params.store || leveldown
-    const db: levelup.LevelUp<AbstractLevelDOWN<any, any>> = levelup.default(store(path.join(storePath, storeID)))
+    const db: levelup.LevelUp<AbstractLevelDOWN<Buffer, Buffer>> = levelup.default(store(path.join(storePath, storeID)))
 
     return {
         read: key => Promise.try(() => db.get(key)),
