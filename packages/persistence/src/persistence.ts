@@ -62,7 +62,7 @@ const events = {
 }
 
 export function persistence(this: any, persistenceAdapter: PersistenceAdapter): Persistence<Int8Array> {
-    const keyIndexBuffer = asyncBuffer<Int8Array>()
+    const indexBuffer = asyncBuffer<Int8Array>()
     let initialized = false
 
     const ready = () => {
@@ -75,13 +75,13 @@ export function persistence(this: any, persistenceAdapter: PersistenceAdapter): 
         return persistenceAdapter
             .read(prefixes.KEY_INDEX_PREFIX)
             .then(bytesToTrits)
-            .then(keyIndexBuffer.write)
+            .then(indexBuffer.write)
             .catch(error => {
                 if (error.notFound) {
                     // Intialize index field in store.
                     const index = valueToTrits(KEY_INDEX_START)
                     return persistenceAdapter.write(prefixes.KEY_INDEX_PREFIX, tritsToBytes(index)).then(() => {
-                        keyIndexBuffer.write(index)
+                        indexBuffer.write(index)
                         return index
                     })
                 }
@@ -95,17 +95,17 @@ export function persistence(this: any, persistenceAdapter: PersistenceAdapter): 
         {
             nextIndex: () =>
                 ready()
-                    .then(keyIndexBuffer.read)
+                    .then(indexBuffer.read)
                     .then(verifyIndex)
                     .then(increment)
                     .then(index =>
                         persistenceAdapter
                             .write(prefixes.KEY_INDEX_PREFIX, tritsToBytes(index))
-                            .then(() => keyIndexBuffer.write(index))
+                            .then(() => indexBuffer.write(index))
                             .then(() => index)
                             .catch(error => {
                                 // On error, restore the buffer value and rethrow.
-                                keyIndexBuffer.write(index)
+                                indexBuffer.write(index)
                                 throw error
                             })
                     ),
@@ -117,9 +117,7 @@ export function persistence(this: any, persistenceAdapter: PersistenceAdapter): 
 
                 return ready()
                     .then(() => persistenceAdapter.write(tritsToBytes(bundle(buffer)), tritsToBytes(buffer)))
-                    .then(() => {
-                        this.emit(events.writeBundle, buffer)
-                    })
+                    .tap(() => this.emit(events.writeBundle, buffer))
             },
 
             deleteBundle: (buffer: Int8Array) => {
@@ -129,9 +127,7 @@ export function persistence(this: any, persistenceAdapter: PersistenceAdapter): 
 
                 return ready()
                     .then(() => persistenceAdapter.delete(tritsToBytes(bundle(buffer))))
-                    .then(() => {
-                        this.emit(events.deleteCDA, buffer)
-                    })
+                    .tap(() => this.emit(events.deleteCDA, buffer))
             },
 
             readCDA: (address: Int8Array) => {
@@ -163,9 +159,7 @@ export function persistence(this: any, persistenceAdapter: PersistenceAdapter): 
                                     tritsToBytes(cda.slice(CDA_ADDRESS_OFFSET, CDA_ADDRESS_LENGTH)),
                                     tritsToBytes(cda)
                                 )
-                                .then(() => {
-                                    this.emit(events.writeCDA, cda)
-                                })
+                                .tap(() => this.emit(events.writeCDA, cda))
                         }
 
                         throw error
@@ -180,9 +174,7 @@ export function persistence(this: any, persistenceAdapter: PersistenceAdapter): 
                 return ready().then(() =>
                     persistenceAdapter
                         .delete(tritsToBytes(cda.slice(CDA_ADDRESS_OFFSET, CDA_ADDRESS_LENGTH)))
-                        .then(() => {
-                            this.emit(events.deleteCDA, cda)
-                        })
+                        .tap(() => this.emit(events.deleteCDA, cda))
                 )
             },
 

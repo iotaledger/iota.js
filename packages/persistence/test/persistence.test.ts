@@ -7,7 +7,6 @@ import { ADDRESS_LENGTH, bundle, TRANSACTION_LENGTH } from '@iota/transaction'
 import { describe, Try } from 'riteway'
 import * as errors from '../../errors'
 import { PersistenceAdapter, PersistenceError } from '../../types'
-import { asyncPipe, tap } from '../../utils'
 import { persistence as createPersistence, storeID } from '../src/persistence'
 
 const CDA_LENGTH = 243 + 27 + 81 + 27 + 35 + 1
