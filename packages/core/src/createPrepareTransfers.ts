@@ -10,7 +10,6 @@ import {
     TRANSACTION_LENGTH,
     value,
 } from '@iota/transaction'
-import { asFinalTransactionTrytes, asTransactionObject } from '@iota/transaction-converter'
 import * as Promise from 'bluebird'
 import * as errors from '../../errors'
 import {

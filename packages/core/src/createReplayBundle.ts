@@ -1,8 +1,5 @@
-import { TRANSACTION_HASH_LENGTH } from '@iota/transaction'
 import { asFinalTransactionTrytes } from '@iota/transaction-converter'
 import * as Promise from 'bluebird'
-import * as errors from '../../errors'
-import { isHash, validate } from '../../guards'
 import {
     AttachToTangle,
     Bundle,

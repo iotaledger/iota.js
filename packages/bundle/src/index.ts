@@ -1,11 +1,9 @@
 /** @module bundle */
 
-import { tritsToTrytes, tritsToValue, valueToTrits } from '@iota/converter'
+import { tritsToValue } from '@iota/converter'
 import Kerl from '@iota/kerl'
 import { increment, MAX_TRYTE_VALUE, normalizedBundle } from '@iota/signing'
-import * as warning from 'warning'
 import * as errors from '../../errors'
-import { isNullTrits } from '../../guards'
 import '../../typed-array'
 
 import {
@@ -13,7 +11,6 @@ import {
     ADDRESS_OFFSET,
     BUNDLE_LENGTH,
     BUNDLE_OFFSET,
-    CURRENT_INDEX_LENGTH,
     CURRENT_INDEX_OFFSET,
     isMultipleOfTransactionLength,
     ISSUANCE_TIMESTAMP_LENGTH,
@@ -274,7 +271,6 @@ export const addSignatureOrMessage = (bundle: Int8Array, signatureOrMessage: Int
 
     const bundleCopy = bundle.slice()
     const numberOfFragmentsToAdd = signatureOrMessage.length / SIGNATURE_OR_MESSAGE_LENGTH
-    const signatureOrMessageCopy = new Int8Array(numberOfFragmentsToAdd)
 
     for (let i = 0; i < numberOfFragmentsToAdd; i++) {
         bundleCopy.set(

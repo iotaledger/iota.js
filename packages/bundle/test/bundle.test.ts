@@ -5,7 +5,6 @@ import {
     ADDRESS_LENGTH,
     bundle,
     BUNDLE_LENGTH,
-    BUNDLE_OFFSET,
     ISSUANCE_TIMESTAMP_LENGTH,
     OBSOLETE_TAG_LENGTH,
     obsoleteTag as obsoleteTagCopy,

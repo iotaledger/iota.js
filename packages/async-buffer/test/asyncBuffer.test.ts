@@ -1,6 +1,5 @@
 import * as BluebirdPromise from 'bluebird'
 import { describe, Try } from 'riteway'
-import { asyncPipe } from '../../utils'
 import { asyncBuffer } from '../src/asyncBuffer'
 
 describe('asyncBuffer(length?: number)', async assert => {

@@ -6,7 +6,6 @@ import { ADDRESS_LENGTH, bundle, isMultipleOfTransactionLength } from '@iota/tra
 import * as Promise from 'bluebird'
 import { EventEmitter } from 'events'
 import * as errors from '../../errors'
-import { isTrits } from '../../guards'
 import {
     Persistence,
     PersistenceAdapter,
@@ -18,7 +17,6 @@ import {
 
 export { Persistence, PersistenceAdapter, PersistenceError, PersistenceIteratorOptions, PersistenceBatch }
 
-const KEY_LENGTH = 243
 const CDA_ADDRESS_OFFSET = 0
 const CDA_ADDRESS_LENGTH = ADDRESS_LENGTH
 const CDA_LENGTH = 243 + 27 + 81 + 27 + 35 + 1 // address + timeout_at + expected_amount + checksum + key_index + security

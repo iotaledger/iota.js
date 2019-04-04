@@ -1,9 +1,5 @@
-import { trytesToTrits } from '@iota/converter'
-import { isTransaction } from '@iota/transaction'
 import { asTransactionObject } from '@iota/transaction-converter'
 import * as Promise from 'bluebird'
-import * as errors from '../../errors'
-import { arrayValidator, depthValidator, minWeightMagnitudeValidator, validate } from '../../guards'
 import {
     AttachToTangle,
     Bundle,

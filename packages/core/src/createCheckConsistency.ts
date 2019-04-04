@@ -1,6 +1,6 @@
 import * as Promise from 'bluebird'
 import * as errors from '../../errors'
-import { arrayValidator, isHash, validate } from '../../guards'
+import { isHash, validate } from '../../guards'
 import {
     asArray,
     Callback,

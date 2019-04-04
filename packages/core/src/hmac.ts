@@ -1,7 +1,6 @@
 import { tritsToValue } from '@iota/converter'
 import Curl from '@iota/curl'
 import { bundle, SIGNATURE_OR_MESSAGE_OFFSET, TRANSACTION_LENGTH, value } from '@iota/transaction'
-import { Bundle } from '../../types'
 
 const HMAC_ROUNDS = 27
 

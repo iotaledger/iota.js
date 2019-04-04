@@ -4,7 +4,7 @@ import { TRYTE_WIDTH } from '@iota/signing'
 import { BUNDLE_LENGTH, TRANSACTION_HASH_LENGTH } from '@iota/transaction'
 import * as Promise from 'bluebird'
 import * as errors from '../../errors'
-import { arrayValidator, isHash, isTag, isTrytesOfExactLength, validate } from '../../guards'
+import { isHash, isTag, isTrytesOfExactLength, validate } from '../../guards'
 import {
     Callback,
     FindTransactionsCommand,

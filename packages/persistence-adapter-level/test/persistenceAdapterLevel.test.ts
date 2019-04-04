@@ -1,4 +1,4 @@
-import { bytesToTrits, tritsToBytes, trytesToTrits, valueToTrits } from '@iota/converter'
+import { bytesToTrits, tritsToBytes, valueToTrits } from '@iota/converter'
 import { ADDRESS_LENGTH, bundle, TRANSACTION_LENGTH } from '@iota/transaction'
 import { describe, Try } from 'riteway'
 import { persistenceAdapter, PersistenceAdapterParams } from '../src/persistenceAdapterLevel'

@@ -1,5 +1,3 @@
-import { trytesToTrits } from '@iota/converter'
-import { TRANSACTION_HASH_LENGTH } from '@iota/transaction'
 import * as Promise from 'bluebird'
 import * as errors from '../../errors'
 import { arrayValidator, hashValidator, validate } from '../../guards'

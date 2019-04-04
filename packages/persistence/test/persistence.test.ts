@@ -1,12 +1,11 @@
-import { asyncBuffer } from '@iota/async-buffer'
-import { bytesToTrits, tritsToBytes, tritsToTrytes, tritsToValue, trytesToTrits, valueToTrits } from '@iota/converter'
+import { bytesToTrits, tritsToBytes, tritsToValue, trytesToTrits, valueToTrits } from '@iota/converter'
 import Kerl from '@iota/kerl'
 import { persistenceAdapter } from '@iota/persistence-adapter-level'
 import { add } from '@iota/signing'
 import { ADDRESS_LENGTH, bundle, TRANSACTION_LENGTH } from '@iota/transaction'
 import { describe, Try } from 'riteway'
 import * as errors from '../../errors'
-import { PersistenceAdapter, PersistenceError } from '../../types'
+import { PersistenceAdapter } from '../../types'
 import { persistence as createPersistence, storeID } from '../src/persistence'
 
 const CDA_LENGTH = 243 + 27 + 81 + 27 + 35 + 1
@@ -89,7 +88,6 @@ describe('persistence.nextIndex()', async assert => {
 
             let i = 0
 
-            const write = adapter.write
             const faultyAdapter: PersistenceAdapter = {
                 ...adapter,
                 write: (key, value): any => {
@@ -455,7 +453,6 @@ describe('persistence.batch(ops: ReadonlyArray<PersistenceAdapterBatch<V, K>>) -
 
 describe('persistence.createReadStream(onData: (data: V) => any): NodeJS.ReadStream', async assert => {
     const buffer = new Int8Array(TRANSACTION_LENGTH * 2).fill(-1)
-    const address = new Int8Array(ADDRESS_LENGTH).fill(1)
     const cda = new Int8Array(CDA_LENGTH).fill(1)
     const expected = [buffer, cda]
 

@@ -5,7 +5,7 @@ import Kerl from '@iota/kerl'
 import { validateSignatures } from '@iota/signing'
 import { asTransactionTrytes } from '@iota/transaction-converter'
 import { INVALID_BUNDLE } from '../../errors'
-import { isArray, isTrytes, Validator } from '../../guards'
+import { Validator } from '../../guards'
 import { Bundle, Hash, Transaction, Trytes } from '../../types'
 
 interface SignatureFragments {

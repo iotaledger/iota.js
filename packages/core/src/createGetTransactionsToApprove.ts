@@ -2,7 +2,7 @@ import { TRYTE_WIDTH } from '@iota/signing'
 import { TRANSACTION_HASH_LENGTH } from '@iota/transaction'
 import * as Promise from 'bluebird'
 import * as errors from '../../errors'
-import { depthValidator, isTrytesOfExactLength, validate } from '../../guards'
+import { isTrytesOfExactLength, validate } from '../../guards'
 import {
     Callback,
     GetTransactionsToApproveCommand,

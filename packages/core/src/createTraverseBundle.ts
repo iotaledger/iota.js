@@ -1,4 +1,3 @@
-import { trytesToTrits } from '@iota/converter'
 import { TRYTE_WIDTH } from '@iota/signing'
 import { TRANSACTION_HASH_LENGTH } from '@iota/transaction'
 import { asTransactionObject } from '@iota/transaction-converter'
@@ -67,7 +66,9 @@ export const createTraverseBundle = (provider: Provider) => {
             .then(() => getTrytes([trunkTransaction]))
             .then(([trytes]) => asTransactionObject(trytes, trunkTransaction))
             .tap(transaction =>
-                validate(bundle.length === 0 && [transaction, t => t.currentIndex === 0, errors.INVALID_TAIL_TRANSACTION])
+                validate(
+                    bundle.length === 0 && [transaction, t => t.currentIndex === 0, errors.INVALID_TAIL_TRANSACTION]
+                )
             )
             .then(transaction =>
                 transaction.currentIndex === transaction.lastIndex
