@@ -346,15 +346,15 @@ export type CreatePersistenceReadStream<V> = (
     options?: PersistenceIteratorOptions
 ) => NodeJS.ReadableStream
 
-export interface Persistence<V = Int8Array> extends EventEmitter {
-    readonly nextIndex: () => Promise<V>
-    readonly writeBundle: (bundle: V) => Promise<void>
-    readonly deleteBundle: (bundle: V) => Promise<void>
-    readonly readCDA: (address: V) => Promise<Int8Array>
-    readonly writeCDA: (cda: V) => Promise<void>
-    readonly deleteCDA: (cda: V) => Promise<void>
-    readonly batch: (ops: PersistenceBatch<V>) => Promise<void>
-    readonly createReadStream: CreatePersistenceReadStream<V>
+export interface Persistence<T = Int8Array> extends EventEmitter {
+    readonly nextIndex: () => Promise<T>
+    readonly writeBundle: (bundle: T) => Promise<void>
+    readonly deleteBundle: (bundle: T) => Promise<void>
+    readonly readCDA: (address: T) => Promise<T>
+    readonly writeCDA: (cda: T) => Promise<void>
+    readonly deleteCDA: (cda: T) => Promise<void>
+    readonly batch: (ops: PersistenceBatch<T>) => Promise<void>
+    readonly createReadStream: CreatePersistenceReadStream<T>
 }
 
 export type PersistenceAdapterBatch<K, V> = PersistenceAdapterWriteOp<K, V> | PersistenceAdapterDeleteOp<K>
