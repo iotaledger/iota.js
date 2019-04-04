@@ -1,10 +1,11 @@
+import * as BluebirdPromise from 'bluebird'
 import { describe, Try } from 'riteway'
-import { asyncPipe, tap } from '../../utils'
+import { asyncPipe } from '../../utils'
 import { asyncBuffer } from '../src/asyncBuffer'
 
 describe('asyncBuffer(length?: number)', async assert => {
     const letter = 'hi'
-    const delay = (t: number) => new Promise(resolve => setTimeout(resolve, t))
+    const delay = (t: number) => new BluebirdPromise(resolve => setTimeout(resolve, t))
 
     assert({
         given: 'a past letter',
@@ -39,14 +40,18 @@ describe('asyncBuffer(length?: number)', async assert => {
             const delayLowerBound = 1
             const delayUpperBound = 10
             const g = (j: number) => ++j
-            const f = asyncPipe<number>(buffer.read, g, tap(buffer.write))
+            const f = () =>
+                buffer
+                    .read()
+                    .then(g)
+                    .tap(buffer.write)
 
             buffer.write(-1)
 
-            return Promise.all(
+            return BluebirdPromise.all(
                 new Array(numberOfActions)
                     .fill(undefined)
-                    .map(() => delay(Math.floor(Math.random() * delayUpperBound) + delayLowerBound).then(() => f()))
+                    .map(() => delay(Math.floor(Math.random() * delayUpperBound) + delayLowerBound).then(f))
             ).then(results => results.sort((a: number, b: number) => a - b))
         })(),
         expected: new Array(numberOfActions).fill(0).map((_, i) => i),

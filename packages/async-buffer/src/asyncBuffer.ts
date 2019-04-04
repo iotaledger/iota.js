@@ -1,3 +1,5 @@
+import * as Promise from 'bluebird'
+
 export interface AsyncBuffer<T> {
     read: () => Promise<T>
     write: (value: T) => void
