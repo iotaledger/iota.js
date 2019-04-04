@@ -1,5 +1,5 @@
 import { createHttpClient, HttpClientSettings } from '@iota/http-client'
-import * as Bluebird from 'bluebird' // tslint:disable-line no-unused-variable
+import * as Promise from 'bluebird' // tslint:disable-line no-unused-variable
 import {
     AttachToTangle,
     BaseCommand, // tslint:disable-line no-unused-variable

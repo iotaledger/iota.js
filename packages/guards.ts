@@ -247,7 +247,7 @@ export const validate = (...validators: Array<Validatable | false>) => {
     return true
 }
 
-export const arrayValidator = <T>(validator: Validator<T>, allowEmpty = false): Validator<ReadonlyArray<T>> => (
+export const arrayValidator = <T>(validator: Validator<T>): Validator<ReadonlyArray<T>> => (
     arr: ReadonlyArray<any>,
     customMsg?: string
 ) => {
@@ -292,11 +292,15 @@ export const tagValidator: Validator<string> = tag => [tag, isTag, errors.INVALI
 
 export const transferValidator: Validator<Transfer> = transfer => [transfer, isTransfer, errors.INVALID_TRANSFER]
 
-export const hashValidator: Validator<Hash> = hash => [hash, isHash, errors.INVALID_HASH]
+export const hashValidator: Validator<Hash> = (hash, errorMessage?: string) => [
+    hash,
+    isHash,
+    errorMessage || errors.INVALID_HASH,
+]
 
-export const trytesValidator: Validator<Trytes> = (trytes, msg?: string) => [
+export const trytesValidator = (trytes: Trytes, msg?: string) => [
     trytes,
-    isTrytes,
+    (t: Trytes) => (length ? isTrytesOfExactLength(t, length) : isTrytes(t)),
     msg || errors.INVALID_TRYTES,
 ]
 

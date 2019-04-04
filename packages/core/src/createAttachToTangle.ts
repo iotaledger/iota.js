@@ -1,7 +1,9 @@
-import { transactionHashValidator, transactionTrytesValidator } from '@iota/transaction'
+import { trytesToTrits } from '@iota/converter'
+import { TRYTE_WIDTH } from '@iota/signing'
+import { isTransaction, TRANSACTION_HASH_LENGTH, TRANSACTION_LENGTH } from '@iota/transaction'
 import * as Promise from 'bluebird'
-import { INVALID_BRANCH_TRANSACTION, INVALID_TRUNK_TRANSACTION } from '../../errors'
-import { arrayValidator, integerValidator, validate } from '../../guards'
+import * as errors from '../../errors'
+import { isTrytesOfExactLength, validate } from '../../guards'
 import {
     AttachToTangle,
     AttachToTangleCommand,
@@ -10,7 +12,7 @@ import {
     Hash,
     IRICommand,
     Provider,
-    TransactionTrytes,
+    Trytes,
 } from '../../types'
 
 /**
@@ -85,15 +87,36 @@ export const createAttachToTangle = ({ send }: Provider): AttachToTangle => {
         trunkTransaction: Hash,
         branchTransaction: Hash,
         minWeightMagnitude: number,
-        trytes: ReadonlyArray<TransactionTrytes>,
-        callback?: Callback<ReadonlyArray<TransactionTrytes>>
-    ): Promise<ReadonlyArray<TransactionTrytes>> {
+        trytes: ReadonlyArray<Trytes>,
+        callback?: Callback<ReadonlyArray<Trytes>>
+    ): Promise<ReadonlyArray<Trytes>> {
         return Promise.resolve(
             validate(
-                integerValidator(minWeightMagnitude),
-                arrayValidator<TransactionTrytes>(transactionTrytesValidator)(trytes),
-                transactionHashValidator(trunkTransaction, INVALID_TRUNK_TRANSACTION),
-                transactionHashValidator(branchTransaction, INVALID_BRANCH_TRANSACTION)
+                [
+                    trunkTransaction,
+                    t => isTrytesOfExactLength(t, TRANSACTION_HASH_LENGTH / TRYTE_WIDTH),
+                    errors.INVALID_TRUNK_TRANSACTION,
+                ],
+                [
+                    branchTransaction,
+                    t => isTrytesOfExactLength(t, TRANSACTION_HASH_LENGTH / TRYTE_WIDTH),
+                    errors.INVALID_BRANCH_TRANSACTION,
+                ],
+                [
+                    minWeightMagnitude,
+                    mwm => Number.isInteger(mwm) && mwm <= TRANSACTION_HASH_LENGTH,
+                    errors.INVALID_MIN_WEIGHT_MAGNITUDE,
+                ],
+                [
+                    trytes,
+                    arr =>
+                        arr.every(
+                            (t: Trytes) =>
+                                isTrytesOfExactLength(t, TRANSACTION_LENGTH / TRYTE_WIDTH) &&
+                                isTransaction(trytesToTrits(t))
+                        ),
+                    errors.INVALID_TRANSACTION_TRYTES,
+                ]
             )
         )
             .then(() =>

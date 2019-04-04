@@ -1,6 +1,8 @@
-import { transactionHashValidator } from '@iota/transaction'
+import { TRYTE_WIDTH } from '@iota/signing'
+import { TRANSACTION_HASH_LENGTH } from '@iota/transaction'
 import * as Promise from 'bluebird'
-import { arrayValidator, validate } from '../../guards'
+import * as errors from '../../errors'
+import { isTrytesOfExactLength, validate } from '../../guards'
 import { Callback, GetTrytesCommand, GetTrytesResponse, Hash, IRICommand, Provider, Trytes } from '../../types'
 
 /**
@@ -47,7 +49,13 @@ export const createGetTrytes = ({ send }: Provider) =>
         hashes: ReadonlyArray<Hash>,
         callback?: Callback<ReadonlyArray<Trytes>>
     ): Promise<ReadonlyArray<Trytes>> {
-        return Promise.resolve(validate(arrayValidator(transactionHashValidator)(hashes)))
+        return Promise.resolve(
+            validate([
+                hashes,
+                arr => arr.every((h: Hash) => isTrytesOfExactLength(h, TRANSACTION_HASH_LENGTH / TRYTE_WIDTH)),
+                errors.INVALID_TRANSACTION_HASH,
+            ])
+        )
             .then(() =>
                 send<GetTrytesCommand, GetTrytesResponse>({
                     command: IRICommand.GET_TRYTES,

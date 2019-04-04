@@ -1,6 +1,8 @@
-import { transactionTrytesValidator } from '@iota/transaction'
+import { trytesToTrits } from '@iota/converter'
+import { isTransaction } from '@iota/transaction'
 import { asTransactionObject } from '@iota/transaction-converter'
 import * as Promise from 'bluebird'
+import * as errors from '../../errors'
 import { arrayValidator, depthValidator, minWeightMagnitudeValidator, validate } from '../../guards'
 import {
     AttachToTangle,
@@ -88,18 +90,11 @@ export const createSendTrytes = (provider: Provider, attachFn?: AttachToTangle) 
             reference = undefined
         }
 
-        return Promise.resolve(
-            validate(
-                arrayValidator(transactionTrytesValidator)(trytes),
-                depthValidator(depth),
-                minWeightMagnitudeValidator(minWeightMagnitude)
-            )
-        )
-            .then(() => getTransactionsToApprove(depth, reference))
+        return getTransactionsToApprove(depth, reference)
             .then(({ trunkTransaction, branchTransaction }) =>
                 attachToTangle(trunkTransaction, branchTransaction, minWeightMagnitude, trytes)
             )
-            .tap(attachedTrytes => storeAndBroadcast(attachedTrytes))
+            .then(attachedTrytes => storeAndBroadcast(attachedTrytes))
             .then(attachedTrytes => attachedTrytes.map(t => asTransactionObject(t)))
             .asCallback(typeof arguments[3] === 'function' ? arguments[3] : callback)
     }

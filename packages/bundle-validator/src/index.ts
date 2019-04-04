@@ -3,10 +3,9 @@
 import { trits, trytes } from '@iota/converter'
 import Kerl from '@iota/kerl'
 import { validateSignatures } from '@iota/signing'
-import { isTransaction } from '@iota/transaction'
 import { asTransactionTrytes } from '@iota/transaction-converter'
 import { INVALID_BUNDLE } from '../../errors'
-import { isArray, Validator } from '../../guards'
+import { isArray, isTrytes, Validator } from '../../guards'
 import { Bundle, Hash, Transaction, Trytes } from '../../types'
 
 interface SignatureFragments {
@@ -27,21 +26,23 @@ const HASH_TRITS_SIZE = 243
  * @return {boolean}
  */
 export const validateBundleSignatures = (bundle: Bundle): boolean => {
-    const signatures: SignatureFragments = [...bundle].sort((a, b) => a.currentIndex - b.currentIndex).reduce(
-        (acc: SignatureFragments, { address, signatureMessageFragment, value }, i) =>
-            value < 0
-                ? {
-                      ...acc,
-                      [address]: [trits(signatureMessageFragment)],
-                  }
-                : value === 0 && acc.hasOwnProperty(address) && address === bundle[i - 1].address
+    const signatures: SignatureFragments = [...bundle]
+        .sort((a, b) => a.currentIndex - b.currentIndex)
+        .reduce(
+            (acc: SignatureFragments, { address, signatureMessageFragment, value }, i) =>
+                value < 0
+                    ? {
+                          ...acc,
+                          [address]: [trits(signatureMessageFragment)],
+                      }
+                    : value === 0 && acc.hasOwnProperty(address) && address === bundle[i - 1].address
                     ? {
                           ...acc,
                           [address]: acc[address].concat(trits(signatureMessageFragment)),
                       }
                     : acc,
-        {}
-    )
+            {}
+        )
 
     return Object.keys(signatures).every(address =>
         validateSignatures(trits(address), signatures[address], trits(bundle[0].bundle))
@@ -59,10 +60,6 @@ export const validateBundleSignatures = (bundle: Bundle): boolean => {
  * @returns {boolean}
  */
 export default function isBundle(bundle: Bundle) {
-    if (!isArray(isTransaction)(bundle)) {
-        return false
-    }
-
     let totalSum = 0
     const bundleHash = bundle[0].bundle
 

@@ -1,6 +1,8 @@
-import { transactionHashValidator } from '@iota/transaction'
+import { trytesToTrits } from '@iota/converter'
+import { TRANSACTION_HASH_LENGTH } from '@iota/transaction'
 import * as Promise from 'bluebird'
-import { arrayValidator, validate } from '../../guards'
+import * as errors from '../../errors'
+import { arrayValidator, hashValidator, validate } from '../../guards'
 import {
     Callback,
     GetInclusionStatesCommand,
@@ -56,8 +58,8 @@ export const createGetInclusionStates = ({ send }: Provider) =>
     ): Promise<ReadonlyArray<boolean>> =>
         Promise.resolve(
             validate(
-                arrayValidator(transactionHashValidator)(transactions),
-                arrayValidator(transactionHashValidator)(tips)
+                arrayValidator(hashValidator)(transactions, errors.INVALID_TRANSACTION_HASH),
+                arrayValidator(hashValidator)(tips, errors.INVALID_TRANSACTION_HASH)
             )
         )
             .then(() =>

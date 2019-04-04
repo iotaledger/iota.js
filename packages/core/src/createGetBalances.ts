@@ -1,8 +1,9 @@
 import { removeChecksum } from '@iota/checksum'
-import { transactionHashValidator } from '@iota/transaction'
+import { TRYTE_WIDTH } from '@iota/signing'
+import { TRANSACTION_HASH_LENGTH } from '@iota/transaction'
 import * as Promise from 'bluebird'
 import * as errors from '../../errors'
-import { arrayValidator, getBalancesThresholdValidator, hashValidator, validate } from '../../guards'
+import { getBalancesThresholdValidator, isHash, isTrytesOfExactLength, validate } from '../../guards'
 import { Balances, Callback, GetBalancesCommand, GetBalancesResponse, Hash, IRICommand, Provider } from '../../types'
 
 /**
@@ -60,12 +61,12 @@ export const createGetBalances = ({ send }: Provider) =>
 
         return Promise.resolve(
             validate(
-                ...[
-                    ...[
-                        arrayValidator(hashValidator)(addresses, errors.INVALID_ADDRESS),
-                        getBalancesThresholdValidator(threshold),
-                    ],
-                    ...(Array.isArray(tips) && tips.length ? [arrayValidator(transactionHashValidator)(tips)] : []),
+                [addresses, (arr: Hash[]) => arr.every(isHash), errors.INVALID_ADDRESS],
+                getBalancesThresholdValidator(threshold),
+                !!tips && [
+                    tips,
+                    (arr: Hash[]) => arr.every(h => isTrytesOfExactLength(h, TRANSACTION_HASH_LENGTH / TRYTE_WIDTH)),
+                    errors.INVALID_TRANSACTION_HASH,
                 ]
             )
         )

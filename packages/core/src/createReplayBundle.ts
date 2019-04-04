@@ -1,7 +1,8 @@
-import { transactionHashValidator } from '@iota/transaction'
+import { TRANSACTION_HASH_LENGTH } from '@iota/transaction'
 import { asFinalTransactionTrytes } from '@iota/transaction-converter'
 import * as Promise from 'bluebird'
-import { depthValidator, minWeightMagnitudeValidator, validate } from '../../guards'
+import * as errors from '../../errors'
+import { isHash, validate } from '../../guards'
 import {
     AttachToTangle,
     Bundle,
@@ -74,14 +75,7 @@ export const createReplayBundle = (provider: Provider, attachFn?: AttachToTangle
         reference?: Hash,
         callback?: Callback<Bundle>
     ): Promise<Bundle> {
-        return Promise.resolve(
-            validate(
-                transactionHashValidator(tail),
-                depthValidator(depth),
-                minWeightMagnitudeValidator(minWeightMagnitude)
-            )
-        )
-            .then(() => getBundle(tail))
+        return getBundle(tail)
             .then(bundle => asFinalTransactionTrytes(bundle))
             .then(trytes => sendTrytes(trytes, depth, minWeightMagnitude, reference))
             .asCallback(typeof arguments[3] === 'function' ? arguments[3] : callback)

@@ -1,5 +1,4 @@
 import { bundleValidator } from '@iota/bundle-validator'
-import { transactionHashValidator } from '@iota/transaction'
 import * as Promise from 'bluebird'
 import { validate } from '../../guards'
 import {
@@ -10,8 +9,6 @@ import {
     Transaction, // tslint:disable-line no-unused-variable
 } from '../../types'
 import { createTraverseBundle } from './'
-
-export const validateBundle = (bundle: Bundle) => validate(bundleValidator(bundle))
 
 /**
  * @method createGetBundle
@@ -57,9 +54,8 @@ export const createGetBundle = (provider: Provider) => {
      * - Fetch error
      */
     return function getBundle(tailTransactionHash: Hash, callback?: Callback<Bundle>): Promise<Bundle> {
-        return Promise.resolve(validate(transactionHashValidator(tailTransactionHash)))
-            .then(() => traverseBundle(tailTransactionHash))
-            .tap(validateBundle)
+        return traverseBundle(tailTransactionHash)
+            .tap(bundle => validate(bundleValidator(bundle)))
             .asCallback(callback)
     }
 }
