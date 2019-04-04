@@ -148,7 +148,7 @@ export function digest(
     const sponge = new Kerl()
 
     for (let j = 0; j < NUMBER_OF_FRAGMENT_CHUNKS; j++) {
-        for (let k = normalizedBundleFragment[j] - MIN_TRYTE_VALUE; k-- > 0; ) {
+        for (let k = normalizedBundleFragment[normalizedBundleFragmentOffset + j] - MIN_TRYTE_VALUE; k-- > 0; ) {
             sponge.reset()
             sponge.absorb(buffer, j * HASH_LENGTH, HASH_LENGTH)
             sponge.squeeze(buffer, j * HASH_LENGTH, HASH_LENGTH)
@@ -184,11 +184,11 @@ export function signatureFragment(
         throw new Error(errors.ILLEGAL_KEY_FRAGMENT_LENGTH)
     }
 
-    const signatureFragmentTrits = keyFragment.slice()
+    const signatureFragmentTrits = keyFragment.slice(keyFragmentOffset, keyFragmentOffset + FRAGMENT_LENGTH)
     const sponge = new Kerl()
 
     for (let j = 0; j < NUMBER_OF_FRAGMENT_CHUNKS; j++) {
-        for (let k = 0; k < MAX_TRYTE_VALUE - normalizedBundleFragment[j]; k++) {
+        for (let k = 0; k < MAX_TRYTE_VALUE - normalizedBundleFragment[normalizedBundleFragmentOffset + j]; k++) {
             sponge.reset()
             sponge.absorb(signatureFragmentTrits, j * HASH_LENGTH, HASH_LENGTH)
             sponge.squeeze(signatureFragmentTrits, j * HASH_LENGTH, HASH_LENGTH)
