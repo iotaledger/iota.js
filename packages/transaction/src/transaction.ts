@@ -451,5 +451,5 @@ export const isHead = (transaction: any): transaction is Int8Array =>
 export const isAttached = (transaction: Int8Array): boolean =>
     isTransaction(transaction) &&
     transaction
-        .subarray(TRUNK_TRANSACTION_OFFSET, TRANSACTION_NONCE_OFFSET + TRANSACTION_NONCE_LENGTH)
+        .subarray(ATTACHMENT_TIMESTAMP_OFFSET, ATTACHMENT_TIMESTAMP_OFFSET + ATTACHMENT_TIMESTAMP_LENGTH)
         .some(trit => trit !== 0)

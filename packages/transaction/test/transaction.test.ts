@@ -4,6 +4,7 @@ import {
     address,
     ADDRESS_LENGTH,
     ADDRESS_OFFSET,
+    ATTACHMENT_TIMESTAMP_OFFSET,
     attachmentTimestamp,
     attachmentTimestampLowerBound,
     attachmentTimestampUpperBound,
@@ -30,7 +31,6 @@ import {
     transactionEssence,
     transactionHash,
     transactionNonce,
-    TRUNK_TRANSACTION_OFFSET,
     trunkTransaction,
     value,
     VALUE_LENGTH,
@@ -1647,7 +1647,7 @@ describe('isAttached(transaction)', async assert => {
         given: 'attached transaction',
         should: 'return true',
         actual: isAttached(
-            new Int8Array(TRANSACTION_LENGTH).fill(1, TRUNK_TRANSACTION_OFFSET, TRUNK_TRANSACTION_OFFSET + 1)
+            new Int8Array(TRANSACTION_LENGTH).fill(1, ATTACHMENT_TIMESTAMP_OFFSET, ATTACHMENT_TIMESTAMP_OFFSET + 1)
         ),
         expected: true,
     })
