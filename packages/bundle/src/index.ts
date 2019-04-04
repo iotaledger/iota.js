@@ -273,7 +273,7 @@ export const addSignatureOrMessage = (bundle: Int8Array, signatureOrMessage: Int
     }
 
     const bundleCopy = bundle.slice()
-    const numberOfFragmentsToAdd = Math.ceil(signatureOrMessage.length / SIGNATURE_OR_MESSAGE_LENGTH)
+    const numberOfFragmentsToAdd = signatureOrMessage.length / SIGNATURE_OR_MESSAGE_LENGTH
     const signatureOrMessageCopy = new Int8Array(numberOfFragmentsToAdd)
 
     for (let i = 0; i < numberOfFragmentsToAdd; i++) {
@@ -310,9 +310,7 @@ export const valueSum = (buffer: Int8Array, offset: number, length: number): num
     let sum = 0
 
     for (let bundleOffset = 0; bundleOffset < length; bundleOffset += TRANSACTION_LENGTH) {
-        const a = tritsToValue(transactionValue(buffer, offset + bundleOffset))
-        console.log(a)
-        sum += a
+        sum += tritsToValue(transactionValue(buffer, offset + bundleOffset))
     }
 
     return sum
