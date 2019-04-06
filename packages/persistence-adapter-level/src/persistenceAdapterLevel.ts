@@ -4,44 +4,43 @@ import leveldown from 'leveldown'
 import * as levelup from 'levelup'
 import * as path from 'path'
 import {
+    CreatePersistenceAdapter,
     PersistenceAdapter,
     PersistenceAdapterBatch,
     PersistenceAdapterDeleteOp,
+    PersistenceAdapterParams,
     PersistenceAdapterWriteOp,
+    PersistenceError,
     PersistenceIteratorOptions,
 } from '../../types'
 
 export {
+    CreatePersistenceAdapter,
     PersistenceAdapter,
     PersistenceAdapterBatch,
     PersistenceIteratorOptions,
     PersistenceAdapterDeleteOp,
     PersistenceAdapterWriteOp,
+    PersistenceAdapterParams,
+    PersistenceError,
 }
 
-export interface PersistenceAdapterParams {
-    readonly storeID: string
-    readonly storePath: string
-    readonly store?: any
-}
-
-export interface PersistenceError extends Error {
-    notFound?: boolean
-}
-
-export const persistenceAdapter = (params: PersistenceAdapterParams): PersistenceAdapter => {
-    if (typeof params.storeID !== 'string') {
-        throw new Error('Illegal storeID.')
+export const createPersistenceAdapter = ({
+    persistenceID,
+    persistencePath,
+    store = leveldown,
+}: PersistenceAdapterParams): PersistenceAdapter => {
+    if (typeof persistenceID !== 'string') {
+        throw new TypeError('Illegal storeID.')
     }
 
-    if (typeof params.storePath !== 'string') {
-        throw new Error('Illegal store path.')
+    if (typeof persistencePath !== 'string') {
+        throw new TypeError('Illegal store path.')
     }
 
-    const storeID = params.storeID
-    const storePath = params.storePath
-    const store = params.store || leveldown
-    const db: levelup.LevelUp<AbstractLevelDOWN<Buffer, Buffer>> = levelup.default(store(path.join(storePath, storeID)))
+    const db: levelup.LevelUp<AbstractLevelDOWN<Buffer, Buffer>> = levelup.default(
+        store(path.join(persistencePath, persistenceID))
+    )
 
     return {
         read: key => Promise.try(() => db.get(key)),
@@ -74,14 +73,6 @@ export const persistenceAdapter = (params: PersistenceAdapterParams): Persistenc
                 )
             ),
 
-        createReadStream: (onData, onError, onClose, onEnd, options) =>
-            db
-                .createReadStream(options)
-                .on('data', ({ value }) => {
-                    onData(value)
-                })
-                .on('error', onError)
-                .on('close', onClose)
-                .on('end', onEnd),
+        createReadStream: options => db.createReadStream(options),
     }
 }

@@ -1,55 +1,64 @@
-import { bytesToTrits, tritsToBytes, tritsToValue, trytesToTrits, valueToTrits } from '@iota/converter'
+import { asyncBuffer } from '@iota/async-buffer'
+import { bytesToTrits, tritsToBytes, tritsToTrytes, tritsToValue, trytesToTrits, valueToTrits } from '@iota/converter'
 import Kerl from '@iota/kerl'
-import { persistenceAdapter } from '@iota/persistence-adapter-level'
+import {
+    createPersistenceAdapter,
+    CreatePersistenceAdapter,
+    PersistenceAdapter,
+    PersistenceAdapterParams,
+} from '@iota/persistence-adapter-level'
 import { add } from '@iota/signing'
 import { ADDRESS_LENGTH, bundle, TRANSACTION_LENGTH } from '@iota/transaction'
+import * as BluebirdPromise from 'bluebird'
 import { describe, Try } from 'riteway'
 import * as errors from '../../errors'
-import { PersistenceAdapter } from '../../types'
-import { persistence as createPersistence, storeID } from '../src/persistence'
+import { createPersistence, generatePersistenceID, PersistenceBatch, PersistenceParams } from '../src/persistence'
 
 const CDA_LENGTH = 243 + 27 + 81 + 27 + 35 + 1
 const CDA_ADDRESS_OFFSET = 0
 const CDA_ADDRESS_LENGTH = ADDRESS_LENGTH
+const CDAddress = (cda: Int8Array) => cda.slice(CDA_ADDRESS_OFFSET, CDA_ADDRESS_OFFSET + CDA_ADDRESS_LENGTH)
 
 const KEY_INDEX_PREFIX = tritsToBytes(trytesToTrits('KEY9INDEX'))
 
-let numberOfStores = -1
+const numberOfInstances = -1
 const seed = new Int8Array(243)
 
-const isolate = () => {
-    numberOfStores++
+const isolate = (() => {
+    let i = -1
 
-    const adapter = persistenceAdapter({
-        storeID: storeID(add(seed, valueToTrits(numberOfStores))),
-        storePath: './test/temp',
-    })
+    return (params: Partial<PersistenceParams> = {}) => {
+        i++
 
-    return {
-        persistence: createPersistence(adapter),
-        adapter,
+        return createPersistence({
+            persistenceID: generatePersistenceID(add(seed, valueToTrits(i))),
+            persistencePath: './test/temp',
+            stateAdapter: createPersistenceAdapter,
+            historyAdapter: createPersistenceAdapter,
+            ...params,
+        })
     }
-}
+})()
 
-describe('storeId(seed: Int8Array): string', async assert => {
+describe('generatePersistenceID(seed: Int8Array): string', async assert => {
     assert({
         given: 'seed.length < 243',
         should: 'throw Error',
-        actual: Try(storeID, new Int8Array(Kerl.HASH_LENGTH - 1)),
+        actual: Try(generatePersistenceID, new Int8Array(Kerl.HASH_LENGTH - 1)),
         expected: new Error(errors.ILLEGAL_SEED_LENGTH),
     })
 
     assert({
         given: 'seed.length > 243',
         should: 'throw Error',
-        actual: Try(storeID, new Int8Array(Kerl.HASH_LENGTH + 1)),
+        actual: Try(generatePersistenceID, new Int8Array(Kerl.HASH_LENGTH + 1)),
         expected: new Error(errors.ILLEGAL_SEED_LENGTH),
     })
 
     assert({
         given: 'valid seed',
-        should: 'should produce correct storeID',
-        actual: storeID(new Int8Array(Kerl.HASH_LENGTH)),
+        should: 'should produce correct persistenceID',
+        actual: generatePersistenceID(new Int8Array(Kerl.HASH_LENGTH)),
         expected: 'WUPANEMSQXZGVLYUKXFEOHQQMPBRIQVJKHFBGMIRDMRFCTLILLBECYEFFLFVOZMJRKGGFDHBNCSQUOODD',
     })
 })
@@ -59,14 +68,15 @@ describe('persistence.nextIndex()', async assert => {
         given: 'a read fault',
         should: 'throw an error',
         actual: await (async () => {
-            const { adapter } = isolate()
-            const faultyAdapter: any = {
-                ...adapter,
-                read: (key: Int8Array) => Promise.reject(new Error('err...')),
-            }
+            const stateAdapter: CreatePersistenceAdapter = (params: PersistenceAdapterParams) => ({
+                ...createPersistenceAdapter(params),
+                read: (key: Buffer) => BluebirdPromise.reject(new Error('err...')),
+            })
+
+            const { nextIndex } = isolate({ stateAdapter })
 
             try {
-                return await createPersistence(faultyAdapter).nextIndex()
+                return await nextIndex()
             } catch (error) {
                 return error.message
             }
@@ -78,61 +88,59 @@ describe('persistence.nextIndex()', async assert => {
         given: 'a write fault',
         should: 'throw an error',
         actual: await (async () => {
-            numberOfStores += 1
-            const adapter = persistenceAdapter({
-                storeID: storeID(add(seed, valueToTrits(numberOfStores))),
-                storePath: './test/temp',
-            })
+            const buffer = asyncBuffer<boolean>()
+            const stateAdapter: CreatePersistenceAdapter = (params: PersistenceAdapterParams) => {
+                const adapter = createPersistenceAdapter(params)
+                let i = 0
 
-            await adapter.write(KEY_INDEX_PREFIX, tritsToBytes(valueToTrits(100000)))
+                adapter.write(KEY_INDEX_PREFIX, tritsToBytes(valueToTrits(100000))).then(() => buffer.write(true))
 
-            let i = 0
-
-            const faultyAdapter: PersistenceAdapter = {
-                ...adapter,
-                write: (key, value): any => {
-                    if (i !== 0) {
-                        return adapter.write(key, value)
-                    } else {
-                        i += 1
-                        return Promise.reject(new Error('err...'))
-                    }
-                },
-            }
-
-            const persistence = createPersistence(faultyAdapter)
-
-            try {
-                await persistence.nextIndex()
-            } catch (error) {
                 return {
-                    error: error.message,
-                    index: await persistence.nextIndex(),
+                    ...adapter,
+                    write(key: Buffer, value: Buffer): BluebirdPromise<void> {
+                        if (i !== 0) {
+                            return adapter.write(key, value)
+                        } else {
+                            i += 1
+                            return BluebirdPromise.reject(new Error('err...'))
+                        }
+                    },
                 }
             }
+
+            const { nextIndex } = isolate({ stateAdapter })
+
+            await buffer.read()
+
+            try {
+                await nextIndex()
+            } catch (error) {
+                return [error.message, await nextIndex()]
+            }
         })(),
-        expected: {
-            error: new Error('err...').message,
-            index: valueToTrits(100002),
-        },
+        expected: [new Error('err...').message, valueToTrits(100002)],
     })
 
     assert({
         given: 'a faulty key index record',
         should: 'throw error',
         actual: await (async () => {
-            numberOfStores += 1
+            const buffer = asyncBuffer<boolean>()
 
-            const adapter = persistenceAdapter({
-                storeID: storeID(add(seed, valueToTrits(numberOfStores))),
-                storePath: './test/temp',
-            })
+            const stateAdapter: CreatePersistenceAdapter = (params: PersistenceAdapterParams) => {
+                const adapter = createPersistenceAdapter(params)
 
-            await adapter.write(KEY_INDEX_PREFIX, tritsToBytes(valueToTrits(-1)))
-            const persistence = createPersistence(adapter)
+                adapter.write(KEY_INDEX_PREFIX, tritsToBytes(valueToTrits(-1))).then(() => buffer.write(true))
+
+                return adapter
+            }
+
+            const { nextIndex } = isolate({ stateAdapter })
+
+            await buffer.read()
 
             try {
-                await persistence.nextIndex()
+                await nextIndex()
             } catch (error) {
                 return error
             }
@@ -147,17 +155,17 @@ describe('persistence.nextIndex()', async assert => {
         given: 'store = leveldb',
         should: 'increment index atomically',
         actual: await (async () => {
-            const { adapter, persistence } = isolate()
+            const { nextIndex, stateRead } = isolate({})
             const delayLowerBound = 1
             const delayUpperBound = 30
 
             const results = await Promise.all(
                 new Array(numberOfActions).fill(undefined).map(async () => {
                     await delay(Math.floor(Math.random() * delayUpperBound) + delayLowerBound)
-                    return persistence.nextIndex()
+                    return nextIndex()
                 })
             )
-            const persistedIndex = await adapter.read(KEY_INDEX_PREFIX).then(bytesToTrits)
+            const persistedIndex = await stateRead(KEY_INDEX_PREFIX).then(bytesToTrits)
 
             return {
                 results: results.map(trits => tritsToValue(trits)).sort((a, b) => a - b),
@@ -175,28 +183,32 @@ describe('persistence.writeBundle(bundle: Int8Array) -> adapter.read(key: Int8Ar
     assert({
         given: 'bundle of length that is not multiple of transaction length',
         should: 'throw RangeError',
-        actual: Try(isolate().persistence.writeBundle, new Int8Array(TRANSACTION_LENGTH - 1)),
+        actual: Try(isolate().writeBundle, new Int8Array(TRANSACTION_LENGTH - 1)),
         expected: new RangeError(errors.ILLEGAL_BUNDLE_LENGTH),
     })
+    ;(async () => {
+        const expected = new Int8Array(TRANSACTION_LENGTH * 2).fill(1)
 
-    assert({
-        given: 'a written bundle',
-        should: 'read it',
-        actual: await (async () => {
-            const { adapter, persistence } = isolate()
-            const buffer = new Int8Array(TRANSACTION_LENGTH * 2).fill(1)
-            await persistence.writeBundle(buffer)
-            return adapter.read(tritsToBytes(bundle(buffer))).then(bytesToTrits)
-        })(),
-        expected: new Int8Array(TRANSACTION_LENGTH * 2).fill(1),
-    })
+        assert({
+            given: 'a written bundle',
+            should: 'read it',
+            actual: await (async () => {
+                const { writeBundle, stateRead } = isolate()
+
+                await writeBundle(expected)
+
+                return stateRead(tritsToBytes(bundle(expected))).then(bytesToTrits)
+            })(),
+            expected,
+        })
+    })()
 })
 
 describe('persistence.writeBundle(buffer: Int8Array) -> persistence.deleteBundle(buffer: Int8Array) -> adapter.read(key: Buffer): Buffer', async assert => {
     assert({
         given: 'bundle of length that is not multiple of transaction length',
         should: 'throw RangeError',
-        actual: Try(isolate().persistence.deleteBundle, new Int8Array(TRANSACTION_LENGTH - 1)),
+        actual: Try(isolate().deleteBundle, new Int8Array(TRANSACTION_LENGTH - 1)),
         expected: new RangeError(errors.ILLEGAL_BUNDLE_LENGTH),
     })
 
@@ -204,18 +216,19 @@ describe('persistence.writeBundle(buffer: Int8Array) -> persistence.deleteBundle
         given: 'a written bundle',
         should: 'delete it',
         actual: await (async () => {
-            const { adapter, persistence } = isolate()
+            const { writeBundle, deleteBundle, stateRead } = isolate()
             const buffer = new Int8Array(TRANSACTION_LENGTH * 2).fill(1)
-            let wroteAndDeleted = false
+            let deleted = false
+
             try {
-                await persistence.writeBundle(buffer)
-                await persistence.deleteBundle(buffer)
+                await writeBundle(buffer)
+                await deleteBundle(buffer)
 
-                wroteAndDeleted = true
+                deleted = true
 
-                await adapter.read(tritsToBytes(bundle(buffer)))
+                await stateRead(tritsToBytes(bundle(buffer)))
             } catch (error) {
-                if (wroteAndDeleted && error.notFound) {
+                if (deleted && error.notFound) {
                     return 'ok'
                 }
 
@@ -230,14 +243,14 @@ describe('persistence.writeCDA(cda: Int8Array) -> persistence.readCDA(address: I
     assert({
         given: 'CDA of illegal length (cda.length < expected)',
         should: 'throw RangeError',
-        actual: Try(isolate().persistence.writeCDA, new Int8Array(CDA_LENGTH - 1)),
+        actual: Try(isolate().writeCDA, new Int8Array(CDA_LENGTH - 1)),
         expected: new RangeError(errors.ILLEGAL_CDA_LENGTH),
     })
 
     assert({
         given: 'CDA of illegal length (cda.length > expected)',
         should: 'throw RangeError',
-        actual: Try(isolate().persistence.writeCDA, new Int8Array(CDA_LENGTH + 1)),
+        actual: Try(isolate().writeCDA, new Int8Array(CDA_LENGTH + 1)),
         expected: new RangeError(errors.ILLEGAL_CDA_LENGTH),
     })
 
@@ -245,32 +258,14 @@ describe('persistence.writeCDA(cda: Int8Array) -> persistence.readCDA(address: I
         given: 'a written cda',
         should: 'read it',
         actual: await (async () => {
-            const { persistence } = isolate()
+            const { writeCDA, readCDA } = isolate()
             const cda = new Int8Array(CDA_LENGTH).fill(1)
 
-            await persistence.writeCDA(cda)
+            await writeCDA(cda)
 
-            return persistence.readCDA(cda.slice(CDA_ADDRESS_OFFSET, CDA_ADDRESS_LENGTH))
+            return readCDA(cda.slice(CDA_ADDRESS_OFFSET, CDA_ADDRESS_LENGTH))
         })(),
         expected: new Int8Array(CDA_LENGTH).fill(1),
-    })
-
-    assert({
-        given: 'a written cda',
-        should: 'throw Error on overwrite attemp',
-        actual: await (async () => {
-            const { persistence } = isolate()
-            const cda = new Int8Array(CDA_LENGTH).fill(1)
-
-            await persistence.writeCDA(cda)
-
-            try {
-                await persistence.writeCDA(cda)
-            } catch (error) {
-                return error
-            }
-        })(),
-        expected: new Error(errors.CDA_ALREADY_IN_STORE),
     })
 })
 
@@ -278,14 +273,14 @@ describe('persistence.readCDA(address: Int8Array)', async assert => {
     assert({
         given: 'address of illegal length (address.length < expected)',
         should: 'throw RangeError',
-        actual: Try(isolate().persistence.readCDA, new Int8Array(ADDRESS_LENGTH - 1)),
+        actual: Try(isolate().readCDA, new Int8Array(ADDRESS_LENGTH - 1)),
         expected: new RangeError(errors.ILLEGAL_ADDRESS_LENGTH),
     })
 
     assert({
         given: 'address of illegal length (address.length > expected)',
         should: 'throw RangeError',
-        actual: Try(isolate().persistence.readCDA, new Int8Array(ADDRESS_LENGTH + 1)),
+        actual: Try(isolate().readCDA, new Int8Array(ADDRESS_LENGTH + 1)),
         expected: new RangeError(errors.ILLEGAL_ADDRESS_LENGTH),
     })
 })
@@ -294,14 +289,14 @@ describe('persistence.writeCDA(cda: Int8Array) -> persistence.deleteCDA(address:
     assert({
         given: 'illegal CDA length (cda.length < expected)',
         should: 'throw RangeError',
-        actual: Try(isolate().persistence.deleteCDA, new Int8Array(CDA_LENGTH - 1)),
+        actual: Try(isolate().deleteCDA, new Int8Array(CDA_LENGTH - 1)),
         expected: new RangeError(errors.ILLEGAL_ADDRESS_LENGTH),
     })
 
     assert({
         given: 'illegal CDA length (cda.length > expected)',
         should: 'throw RangeError',
-        actual: Try(await isolate().persistence.deleteCDA, new Int8Array(CDA_LENGTH + 1)),
+        actual: Try(await isolate().deleteCDA, new Int8Array(CDA_LENGTH + 1)),
         expected: new RangeError(errors.ILLEGAL_ADDRESS_LENGTH),
     })
 
@@ -309,19 +304,19 @@ describe('persistence.writeCDA(cda: Int8Array) -> persistence.deleteCDA(address:
         given: 'a written CDA',
         should: 'delete it',
         actual: await (async () => {
-            const { persistence } = isolate()
+            const { writeCDA, deleteCDA, readCDA } = isolate()
             const cda = new Int8Array(CDA_LENGTH).fill(1)
-            let wroteAndDeleted = false
+            let deleted = false
 
             try {
-                await persistence.writeCDA(cda)
-                await persistence.deleteCDA(cda)
+                await writeCDA(cda)
+                await deleteCDA(cda)
 
-                wroteAndDeleted = true
+                deleted = true
 
-                return await persistence.readCDA(cda.slice(CDA_ADDRESS_OFFSET, CDA_ADDRESS_LENGTH))
+                return await readCDA(cda.slice(CDA_ADDRESS_OFFSET, CDA_ADDRESS_LENGTH))
             } catch (error) {
-                if (wroteAndDeleted && error.notFound) {
+                if (deleted && error.notFound) {
                     return 'ok'
                 }
                 throw error
@@ -335,7 +330,7 @@ describe('persistence.batch(ops: ReadonlyArray<PersistenceAdapterBatch<V, K>>) -
     assert({
         given: 'Illegal bundle in batch write',
         should: 'throw RangeError',
-        actual: Try(isolate().persistence.batch as any, [
+        actual: Try(isolate().batch as any, [
             {
                 type: 'writeBundle',
                 value: new Int8Array(TRANSACTION_LENGTH * 2 - 1),
@@ -347,7 +342,7 @@ describe('persistence.batch(ops: ReadonlyArray<PersistenceAdapterBatch<V, K>>) -
     assert({
         given: 'Illegal bundle in batch delete',
         should: 'throw RangeError',
-        actual: Try(isolate().persistence.batch as any, [
+        actual: Try(isolate().batch as any, [
             {
                 type: 'deleteBundle',
                 value: new Int8Array(TRANSACTION_LENGTH * 2 - 1),
@@ -359,7 +354,7 @@ describe('persistence.batch(ops: ReadonlyArray<PersistenceAdapterBatch<V, K>>) -
     assert({
         given: 'Illegal CDA in batch write',
         should: 'throw RangeError',
-        actual: Try(isolate().persistence.batch as any, [
+        actual: Try(isolate().batch as any, [
             {
                 type: 'writeCDA',
                 value: new Int8Array(CDA_LENGTH - 1).fill(1),
@@ -371,7 +366,7 @@ describe('persistence.batch(ops: ReadonlyArray<PersistenceAdapterBatch<V, K>>) -
     assert({
         given: 'Illegal CDA in batch delete',
         should: 'throw RangeError',
-        actual: Try(isolate().persistence.batch as any, [
+        actual: Try(isolate().batch as any, [
             {
                 type: 'deleteCDA',
                 value: new Int8Array(CDA_LENGTH - 1).fill(1),
@@ -383,7 +378,7 @@ describe('persistence.batch(ops: ReadonlyArray<PersistenceAdapterBatch<V, K>>) -
     assert({
         given: 'Illegal batch op',
         should: 'throw Error',
-        actual: Try(isolate().persistence.batch as any, [
+        actual: Try(isolate().batch as any, [
             {
                 type: 'unknown',
                 value: new Int8Array(CDA_LENGTH),
@@ -400,14 +395,14 @@ describe('persistence.batch(ops: ReadonlyArray<PersistenceAdapterBatch<V, K>>) -
 
     assert({
         given: 'persisted bundle & cda',
-        should: 'batch delete and persist a new ones',
+        should: 'batch delete and persist new ones',
         actual: await (async () => {
-            const { persistence, adapter } = isolate()
+            const { writeBundle, writeCDA, readCDA, batch, stateRead } = isolate()
 
-            await persistence.writeBundle(buffer)
-            await persistence.writeCDA(cda)
+            await writeBundle(buffer)
+            await writeCDA(cda)
 
-            await persistence.batch([
+            await batch([
                 {
                     type: 'deleteBundle' as any,
                     value: buffer,
@@ -427,7 +422,7 @@ describe('persistence.batch(ops: ReadonlyArray<PersistenceAdapterBatch<V, K>>) -
             ] as any)
 
             try {
-                await adapter.read(tritsToBytes(bundle(bufferB)))
+                await stateRead(tritsToBytes(bundle(bufferB)))
             } catch (error) {
                 if (!error.notFound) {
                     throw error
@@ -435,17 +430,14 @@ describe('persistence.batch(ops: ReadonlyArray<PersistenceAdapterBatch<V, K>>) -
             }
 
             try {
-                await persistence.readCDA(cda.slice(CDA_ADDRESS_OFFSET, CDA_ADDRESS_LENGTH))
+                await readCDA(CDAddress(cda))
             } catch (error) {
                 if (!error.notFound) {
                     throw error
                 }
             }
 
-            return [
-                await adapter.read(tritsToBytes(bundle(bufferB))).then(bytesToTrits),
-                await persistence.readCDA(cdaB.slice(CDA_ADDRESS_OFFSET, CDA_ADDRESS_LENGTH)),
-            ]
+            return [await stateRead(tritsToBytes(bundle(bufferB))).then(bytesToTrits), await readCDA(CDAddress(cdaB))]
         })(),
         expected: [bufferB, cdaB],
     })
@@ -454,25 +446,41 @@ describe('persistence.batch(ops: ReadonlyArray<PersistenceAdapterBatch<V, K>>) -
 describe('persistence.createReadStream(onData: (data: V) => any): NodeJS.ReadStream', async assert => {
     const buffer = new Int8Array(TRANSACTION_LENGTH * 2).fill(-1)
     const cda = new Int8Array(CDA_LENGTH).fill(1)
-    const expected = [buffer, cda]
+    const expected = [buffer, cda, buffer].map(tritsToTrytes)
 
     assert({
-        given: 'persisted key index, bundle & CDA',
-        should: 'read bundle & CDA',
+        given: 'persisted state & history',
+        should: 'read state & history',
         actual: await (async () => {
-            const { adapter, persistence } = isolate()
+            const { writeBundle, writeCDA, createStateReadStream, createHistoryReadStream, historyWrite } = isolate()
 
-            await adapter.write(KEY_INDEX_PREFIX, tritsToBytes(valueToTrits(9)))
-            await persistence.writeBundle(buffer)
-            await persistence.writeCDA(cda)
+            await writeBundle(buffer)
+            await writeCDA(cda)
+            await historyWrite(tritsToBytes(bundle(buffer)), tritsToBytes(buffer))
 
             return new Promise((resolve, reject) => {
                 const result: any = []
-                const onData = (data: any) => result.push(data)
-                const onError = (error: any) => reject(error)
-                const onClose = () => {} // tslint:disable-line
-                const onEnd = () => resolve(result)
-                persistence.createReadStream(onData, onError, onClose, onEnd)
+                const noop = () => {} // tslint:disable-line
+
+                createStateReadStream({ reverse: true })
+                    .on('data', ({ value }: { value: Buffer }) => {
+                        if (value.length > 0) {
+                            result.push(bytesToTrits(value))
+                        }
+                    })
+                    .on('close', noop)
+                    .on('end', () => {
+                        createHistoryReadStream()
+                            .on('data', ({ value }: { value: Buffer }) => {
+                                if (value.length > 0) {
+                                    result.push(bytesToTrits(value))
+                                }
+                            })
+                            .on('close', noop)
+                            .on('end', () => resolve(result.map(tritsToTrytes)))
+                            .on('error', (error: Error) => reject(error))
+                    })
+                    .on('error', (error: Error) => reject(error))
             })
         })(),
         expected,

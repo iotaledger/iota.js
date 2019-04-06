@@ -329,44 +329,52 @@ export interface PersistenceIteratorOptions<K = any> {
     valueAsBuffer?: boolean
 }
 
-export interface PersistenceError extends Error {
-    notFound?: boolean
+// Persistence
+export type CreatePersistence<T = Int8Array, B = Buffer> = (params: PersistenceParams<B>) => Persistence<T>
+
+export interface PersistenceParams<B = Buffer> {
+    readonly persistenceID: string
+    readonly persistencePath: string
+    readonly stateAdapter: CreatePersistenceAdapter<B, B>
+    readonly historyAdapter: CreatePersistenceAdapter<B, B>
 }
 
-export interface PersistenceBatch<V> {
-    readonly type: 'writeBundle' | 'deleteBundle' | 'writeCDA' | 'deleteCDA'
-    readonly value: V
-}
-
-export type CreatePersistenceReadStream<V> = (
-    onData: (data: V) => any,
-    onError: (error: Error) => any,
-    onClose: () => any,
-    onEnd: () => any,
-    options?: PersistenceIteratorOptions
-) => NodeJS.ReadableStream
-
-export interface Persistence<T = Int8Array> extends EventEmitter {
+export interface Persistence<T = Int8Array, B = Buffer> extends EventEmitter {
     readonly nextIndex: () => Promise<T>
     readonly writeBundle: (bundle: T) => Promise<void>
     readonly deleteBundle: (bundle: T) => Promise<void>
     readonly readCDA: (address: T) => Promise<T>
     readonly writeCDA: (cda: T) => Promise<void>
     readonly deleteCDA: (cda: T) => Promise<void>
-    readonly batch: (ops: PersistenceBatch<T>) => Promise<void>
-    readonly createReadStream: CreatePersistenceReadStream<T>
+    readonly batch: (ops: ReadonlyArray<PersistenceBatch<T>>) => Promise<void>
+
+    readonly stateRead: (key: B) => Promise<B>
+    readonly stateWrite: (key: B, value: B) => Promise<void>
+    readonly stateDelete: (key: B) => Promise<B>
+    readonly stateBatch: (ops: ReadonlyArray<PersistenceAdapterBatch<B, B>>) => Promise<void>
+    readonly createStateReadStream: (options?: PersistenceIteratorOptions) => NodeJS.ReadableStream
+
+    readonly historyRead: (key: B) => Promise<B>
+    readonly historyWrite: (key: B, value: B) => Promise<void>
+    readonly historyDelete: (key: B) => Promise<void>
+    readonly historyBatch: (ops: ReadonlyArray<PersistenceAdapterBatch<B, B>>) => Promise<void>
+    readonly createHistoryReadStream: (options?: PersistenceIteratorOptions) => NodeJS.ReadableStream
 }
 
-export type PersistenceAdapterBatch<K, V> = PersistenceAdapterWriteOp<K, V> | PersistenceAdapterDeleteOp<K>
-
-export interface PersistenceAdapterWriteOp<K, V> {
-    readonly type: 'write'
-    readonly key: K
+export interface PersistenceBatch<V = Int8Array> {
+    readonly type: 'writeBundle' | 'deleteBundle' | 'writeCDA' | 'deleteCDA'
     readonly value: V
 }
-export interface PersistenceAdapterDeleteOp<K> {
-    readonly type: 'delete'
-    readonly key: K
+
+// Persistence Adapter
+export type CreatePersistenceAdapter<K = Buffer, V = Buffer> = (
+    params: PersistenceAdapterParams
+) => PersistenceAdapter<K, V>
+
+export interface PersistenceAdapterParams {
+    readonly persistenceID: string
+    readonly persistencePath?: string
+    readonly store?: any
 }
 
 export interface PersistenceAdapter<K = Buffer, V = Buffer> {
@@ -374,5 +382,24 @@ export interface PersistenceAdapter<K = Buffer, V = Buffer> {
     readonly write: (key: K, value: V) => Promise<void>
     readonly delete: (key: K) => Promise<void>
     readonly batch: (ops: ReadonlyArray<PersistenceAdapterBatch<K, V>>) => Promise<void>
-    readonly createReadStream: CreatePersistenceReadStream<V>
+    readonly createReadStream: (options?: PersistenceIteratorOptions) => NodeJS.ReadableStream
+}
+
+export type PersistenceAdapterBatch<K = Buffer, V = Buffer> =
+    | PersistenceAdapterWriteOp<K, V>
+    | PersistenceAdapterDeleteOp<K>
+
+export interface PersistenceAdapterWriteOp<K = Buffer, V = Buffer> {
+    readonly type: 'write'
+    readonly key: K
+    readonly value: V
+}
+
+export interface PersistenceAdapterDeleteOp<K = Buffer> {
+    readonly type: 'delete'
+    readonly key: K
+}
+
+export interface PersistenceError extends Error {
+    notFound?: boolean
 }
