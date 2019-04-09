@@ -170,7 +170,7 @@ describe('adapter.createReadStream(onData: (data: V) => any, onError, onClose, o
         given: 'persisted bundle & CDA',
         should: 'read bundle & CDA',
         actual: await (async () => {
-            const { read, write, createReadStream } = isolate()
+            const { write, createReadStream } = isolate()
 
             await write(tritsToBytes(bundle(buffer)), tritsToBytes(buffer))
             await write(tritsToBytes(address), tritsToBytes(cda))

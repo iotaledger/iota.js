@@ -11,8 +11,6 @@ import {
     Persistence,
     PersistenceAdapter,
     PersistenceAdapterBatch,
-    PersistenceAdapterDeleteOp,
-    PersistenceAdapterWriteOp,
     PersistenceBatch,
     PersistenceError,
     PersistenceIteratorOptions,

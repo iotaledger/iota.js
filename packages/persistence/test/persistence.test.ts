@@ -4,7 +4,6 @@ import Kerl from '@iota/kerl'
 import {
     createPersistenceAdapter,
     CreatePersistenceAdapter,
-    PersistenceAdapter,
     PersistenceAdapterParams,
 } from '@iota/persistence-adapter-level'
 import { add } from '@iota/signing'
@@ -12,13 +11,7 @@ import { ADDRESS_LENGTH, bundle, TRANSACTION_LENGTH } from '@iota/transaction'
 import * as BluebirdPromise from 'bluebird'
 import { describe, Try } from 'riteway'
 import * as errors from '../../errors'
-import {
-    createPersistence,
-    generatePersistenceID,
-    PersistenceBatch,
-    PersistenceParams,
-    streamToBuffers,
-} from '../src/persistence'
+import { createPersistence, generatePersistenceID, PersistenceParams, streamToBuffers } from '../src/persistence'
 
 const CDA_LENGTH = 243 + 27 + 27 + 1 + 81 + 35 + 1
 const CDA_ADDRESS_OFFSET = 0
@@ -27,10 +20,8 @@ const CDAddress = (cda: Int8Array) => cda.slice(CDA_ADDRESS_OFFSET, CDA_ADDRESS_
 
 const KEY_INDEX_PREFIX = tritsToBytes(trytesToTrits('KEY9INDEX'))
 
-const numberOfInstances = -1
-const seed = new Int8Array(243)
-
 const isolate = (() => {
+    const seed = new Int8Array(243)
     let i = -1
 
     return (params: Partial<PersistenceParams> = {}) => {

@@ -6,8 +6,6 @@ import * as errors from '../../errors'
 import {
     CDA_INDEX_LENGTH,
     CDAMultiUseBooleanAsTrit,
-    CDAParams,
-    CDASecurityTritAsValue,
     deserializeCDAInput,
     isAlive,
     isExpired,
@@ -51,9 +49,6 @@ const addressChecksumB = addressB + checksumB
 const timeoutAtB = 1552847640
 const multiUseB = true
 const expectedAmountB = 0
-const magnetB = `iota://${addressB}${checksumB}/?timeout_at=${timeoutAtB}&multi_use=${CDAMultiUseBooleanAsTrit(
-    multiUseB
-)}&expected_amount=${expectedAmountB}`
 const magnetBShort = `iota://${addressB}${checksumB}/?timeout_at=${timeoutAtB}&multi_use=${CDAMultiUseBooleanAsTrit(
     multiUseB
 )}`
@@ -100,17 +95,6 @@ const aliveCda = {
     address: addressChecksum,
     timeoutAt: futureTime,
     expectedAmount: 100,
-}
-
-const aliceCDAMultiUse = {
-    address: addressChecksum,
-    timeoutAt: futureTime,
-    multiUse: true,
-}
-
-const aliveCdaMultiUse = {
-    address: addressChecksum,
-    timeoutAt: futureTime,
 }
 
 describe('isExpired', async assert => {
