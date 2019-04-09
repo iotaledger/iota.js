@@ -26,7 +26,7 @@ export const NORMALIZED_FRAGMENT_LENGTH = HASH_LENGTH / TRYTE_WIDTH / NUMBER_OF_
  * @return {Int8Array} subseed trits
  */
 export function subseed(seed: Int8Array, index: number): Int8Array {
-    if (index < 0) {
+    if (!Number.isInteger(index) || index < 0) {
         throw new Error(errors.ILLEGAL_SUBSEED_INDEX)
     }
 
@@ -52,6 +52,10 @@ export function subseed(seed: Int8Array, index: number): Int8Array {
 export function key(subseedTrits: Int8Array, numberOfFragments: number): Int8Array {
     if (subseedTrits.length !== Kerl.HASH_LENGTH) {
         throw new Error(errors.ILLEGAL_SUBSEED_LENGTH)
+    }
+
+    if ([1, 2, 3].indexOf(numberOfFragments) === -1) {
+        throw new Error(errors.ILLEGAL_NUMBER_OF_FRAGMENTS)
     }
 
     const keyTrits = new Int8Array(FRAGMENT_LENGTH * numberOfFragments)
