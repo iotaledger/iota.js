@@ -1,6 +1,7 @@
 export const ILLEGAL_LENGTH = 'Illegal trits length'
 export const ILLEGAL_SUBSEED_INDEX = 'Illegal subseed length'
 export const ILLEGAL_SUBSEED_LENGTH = 'Illegal subseed length'
+export const ILLEGAL_NUMBER_OF_FRAGMENTS = 'Illegal number of fragments'
 export const ILLEGAL_KEY_LENGTH = 'Illegal key length'
 export const ILLEGAL_DIGESTS_LENGTH = 'Illegal digests length'
 export const ILLEGAL_NORMALIZED_FRAGMENT_LENGTH = 'Illegal normalized fragment length'
@@ -37,6 +38,9 @@ export const ILLEGAL_KEY_INDEX = 'Illegal key index.'
 export const ILLEGAL_CDA_LENGTH = 'Illegal cda length.'
 export const ILLEGAL_BATCH = 'Illegal batch.'
 export const CDA_ALREADY_IN_STORE = 'CDA is already in store.'
+
+export const ILLEGAL_PERSISTENCE_ID = 'Illegal persistence id.'
+export const ILLEGAL_PERSISTENCE_PATH = 'Illegal persistence path.'
 
 export const ILLEGAL_PADDING_LENGTH = 'Illegal padding length. Input value length exceeds padding length.'
 export const INCONSISTENT_SUBTANGLE = 'Inconsistent subtangle'
