@@ -1,6 +1,6 @@
 {
     "name": "@iota/converter",
-    "version": "1.0.0-beta.11",
+    "version": "1.0.0-beta.12",
     "description": "Convert values & trytes to trits and back",
     "main": "./out/src/index.js",
     "typings": "typings/src",
@@ -62,6 +62,5 @@
     "repository": {
         "type": "git",
         "url": "https://github.com/iotaledger/iota.js.git/tree/develop/packages/crypto"
-    },
-    "dependencies": {}
+    }
 }

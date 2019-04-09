@@ -1,6 +1,6 @@
 {
     "name": "@iota/samples",
-    "version": "1.0.0-beta.11",
+    "version": "1.0.0-beta.12",
     "description": "Collection of samples useful in testing IOTA modules.",
     "main": "./out/samples/src/index.js",
     "typings": "typings/samples/src",
@@ -34,6 +34,5 @@
     "repository": {
         "type": "git",
         "url": "https://github.com/iotaledger/iota.js.git/tree/develop/packages/crypto"
-    },
-    "dependencies": {}
+    }
 }
