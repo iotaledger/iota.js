@@ -262,10 +262,7 @@ export const addSignatureOrMessage = (bundle: Int8Array, signatureOrMessage: Int
         throw new RangeError(errors.ILLEGAL_SIGNATURE_OR_MESSAGE_LENGTH)
     }
 
-    if (
-        index < 0 ||
-        index > bundle.length / TRANSACTION_LENGTH - 1 - signatureOrMessage.length / SIGNATURE_OR_MESSAGE_LENGTH
-    ) {
+    if (index < 0 || bundle.length - index - signatureOrMessage.length / SIGNATURE_OR_MESSAGE_LENGTH < 0) {
         throw new RangeError(errors.ILLEGAL_TRANSACTION_INDEX)
     }
 
