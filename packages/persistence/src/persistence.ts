@@ -30,7 +30,7 @@ export {
 
 const CDA_ADDRESS_OFFSET = 0
 const CDA_ADDRESS_LENGTH = ADDRESS_LENGTH
-const CDA_LENGTH = 243 + 27 + 27 + 81 + 35 + 1 // address + checksum + timeout_at + expected_amount + key_index + security
+const CDA_LENGTH = 243 + 27 + 27 + 1 + 81 + 35 + 1 // address + checksum + timeout_at + multi_use + expected_amount + key_index + security
 const CDAddress = (cda: Int8Array) => cda.slice(CDA_ADDRESS_OFFSET, CDA_ADDRESS_OFFSET + CDA_ADDRESS_LENGTH)
 
 const KEY_INDEX_START = 0

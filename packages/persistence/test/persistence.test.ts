@@ -12,9 +12,15 @@ import { ADDRESS_LENGTH, bundle, TRANSACTION_LENGTH } from '@iota/transaction'
 import * as BluebirdPromise from 'bluebird'
 import { describe, Try } from 'riteway'
 import * as errors from '../../errors'
-import { createPersistence, generatePersistenceID, PersistenceBatch, PersistenceParams } from '../src/persistence'
+import {
+    createPersistence,
+    generatePersistenceID,
+    PersistenceBatch,
+    PersistenceParams,
+    streamToBuffers,
+} from '../src/persistence'
 
-const CDA_LENGTH = 243 + 27 + 81 + 27 + 35 + 1
+const CDA_LENGTH = 243 + 27 + 27 + 1 + 81 + 35 + 1
 const CDA_ADDRESS_OFFSET = 0
 const CDA_ADDRESS_LENGTH = ADDRESS_LENGTH
 const CDAddress = (cda: Int8Array) => cda.slice(CDA_ADDRESS_OFFSET, CDA_ADDRESS_OFFSET + CDA_ADDRESS_LENGTH)
