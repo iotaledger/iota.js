@@ -147,4 +147,63 @@ describe('asyncBuffer(length?: number)', async assert => {
         })(),
         expected: Error('Buffer cannot exceed specified length of 2 items.'),
     })
+
+    assert({
+        given: '1 write',
+        should: 'return inbound length of 1 & outbound length of 0',
+        actual: (() => {
+            const buffer = asyncBuffer<number>()
+            buffer.write(1)
+            return [buffer.inboundLength(), buffer.outboundLength()]
+        })(),
+        expected: [1, 0],
+    })
+
+    assert({
+        given: '1 read',
+        should: 'return inbound length of 1 & outbound length of 0',
+        actual: (() => {
+            const buffer = asyncBuffer<number>()
+            buffer.read()
+            return [buffer.inboundLength(), buffer.outboundLength()]
+        })(),
+        expected: [0, 1],
+    })
+
+    assert({
+        given: '1 write and then 1 read',
+        should: 'return inbound length of 0 & outbound length of 0',
+        actual: (() => {
+            const buffer = asyncBuffer<number>()
+            buffer.read()
+            buffer.write(1)
+            return [buffer.inboundLength(), buffer.outboundLength()]
+        })(),
+        expected: [0, 0],
+    })
+
+    assert({
+        given: '1 read and then 1 write',
+        should: 'return inbound length of 0 & outbound length of 0',
+        actual: (() => {
+            const buffer = asyncBuffer<number>()
+            buffer.read()
+            buffer.write(1)
+            return [buffer.inboundLength(), buffer.outboundLength()]
+        })(),
+        expected: [0, 0],
+    })
+
+    assert({
+        given: '1 read, then 1 write and then 1 read',
+        should: 'return inbound length of 0 & outbound length of 1',
+        actual: (() => {
+            const buffer = asyncBuffer<number>()
+            buffer.read()
+            buffer.write(1)
+            buffer.read()
+            return [buffer.inboundLength(), buffer.outboundLength()]
+        })(),
+        expected: [0, 1],
+    })
 })

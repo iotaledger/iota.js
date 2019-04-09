@@ -3,6 +3,8 @@ import * as Promise from 'bluebird'
 export interface AsyncBuffer<T> {
     read: () => Promise<T>
     write: (value: T) => void
+    inboundLength: () => number
+    outboundLength: () => number
 }
 
 export const asyncBuffer = <T>(length = Number.POSITIVE_INFINITY): AsyncBuffer<T> => {
@@ -31,7 +33,7 @@ export const asyncBuffer = <T>(length = Number.POSITIVE_INFINITY): AsyncBuffer<T
                 ;(outboundQueue.shift() as Resolver<T>)(value)
             }
             // A buffer has length indicating how many values can be queued.
-            // If buffer is to exceed specified length, a error is thrown.
+            // If buffer is to exceed specified length, an error is thrown.
             else if (inboundQueue.length < length) {
                 inboundQueue.push(value)
             } else {
@@ -51,5 +53,8 @@ export const asyncBuffer = <T>(length = Number.POSITIVE_INFINITY): AsyncBuffer<T
                 }
             })
         },
+
+        inboundLength: (): number => inboundQueue.length,
+        outboundLength: (): number => outboundQueue.length,
     }
 }
