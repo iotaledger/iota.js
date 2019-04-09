@@ -2,15 +2,15 @@
     "name": "@iota/async-buffer",
     "version": "1.0.0-beta.11",
     "description": "Async buffer",
-    "main": "out/async-buffer/src/asyncBuffer.js",
-    "typings": "typings/async-buffer/src/asyncBuffer.d.ts",
+    "main": "out/src/asyncBuffer.js",
+    "typings": "typings/src/asyncBuffer.d.ts",
     "publishConfig": {
         "access": "public"
     },
     "scripts": {
         "prepare": "tsc",
-        "test": "tsc && nyc riteway out/async-buffer/test/asyncBuffer.test.js",
-        "test-ci": "nyc riteway out/async-buffer/test/asyncBuffer.test.js",
+        "test": "tsc && nyc riteway out/test/asyncBuffer.test.js",
+        "test-ci": "nyc riteway out/test/asyncBuffer.test.js",
         "watch": "watch 'clear && npm run -s test'",
         "lint": "tslint --project ."
     },
@@ -30,7 +30,7 @@
             ]
         },
         "include": [
-            "out/*/src/*.js"
+            "out/async-buffer/src/*.js"
         ]
     },
     "bugs": {
