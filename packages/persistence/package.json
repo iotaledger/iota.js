@@ -10,7 +10,7 @@
     "scripts": {
         "prepare": "tsc",
         "test": "tsc && mkdir ./test/temp && nyc riteway out/persistence/test/persistence.test.js ; rm -rf ./test/temp",
-        "test-ci": "nyc riteway out/persistence/test/persistence.test.js",
+        "test-ci": "mkdir ./test/temp && nyc riteway out/persistence/test/persistence.test.js ; rm -rf ./test/temp",
         "watch": "watch 'clear && npm run -s test'",
         "lint": "tslint --project ."
     },
