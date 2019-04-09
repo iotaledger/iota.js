@@ -1,4 +1,4 @@
-import { asyncBuffer } from '@iota/async-buffer'
+import { asyncBuffer, AsyncBuffer } from '@iota/async-buffer'
 import { bytesToTrits, tritsToBytes, tritsToTrytes, tritsToValue, trytesToTrits, valueToTrits } from '@iota/converter'
 import Kerl from '@iota/kerl'
 import { address as signingAddress, digests, key, subseed } from '@iota/signing'
@@ -275,4 +275,21 @@ export const generatePersistenceID = (seed: Int8Array): string => {
     sponge.absorb(signingAddress(digests(key(subseed(seed, KEY_INDEX_START), 2))), 0, Kerl.HASH_LENGTH)
     sponge.squeeze(id, 0, Kerl.HASH_LENGTH)
     return tritsToTrytes(id)
+}
+
+export const streamToBuffers = ({
+    bundles,
+    deposits,
+}: {
+    bundles: AsyncBuffer<Int8Array>
+    deposits: AsyncBuffer<Int8Array>
+}) => ({ value }: { value: Buffer }) => {
+    const trits = bytesToTrits(value)
+    if (trits.length !== 0 && isMultipleOfTransactionLength(trits.length)) {
+        bundles.write(trits)
+    }
+
+    if (trits.length === CDA_LENGTH) {
+        deposits.write(trits)
+    }
 }

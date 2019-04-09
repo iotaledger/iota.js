@@ -492,3 +492,35 @@ describe('persistence.createReadStream(onData: (data: V) => any): NodeJS.ReadStr
         expected,
     })
 })
+
+describe('streamToBuffers({ bundles, deposits })', async assert => {
+    const b = new Int8Array(TRANSACTION_LENGTH * 2)
+    const cda = new Int8Array(CDA_LENGTH).fill(-1)
+    const expected = [b, cda]
+
+    assert({
+        given: 'written CDA & bundle',
+        should: 'write to buffers',
+        actual: await (async () => {
+            const { writeBundle, writeCDA, createStateReadStream } = isolate()
+            const bundles = asyncBuffer<Int8Array>()
+            const deposits = asyncBuffer<Int8Array>()
+
+            const noop = () => {} // tslint:disable-line
+
+            await writeBundle(b)
+            await writeCDA(cda)
+
+            return new Promise((resolve, reject) => {
+                createStateReadStream({ reverse: true })
+                    .on('data', streamToBuffers({ bundles, deposits }))
+                    .on('close', noop)
+                    .on('end', () =>
+                        bundles.read().then(bufferB => deposits.read().then(bufferCda => resolve([bufferB, bufferCda])))
+                    )
+                    .on('error', (error: Error) => reject(error))
+            })
+        })(),
+        expected,
+    })
+})
