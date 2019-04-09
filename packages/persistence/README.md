@@ -1,4 +1,4 @@
-# `@iota/persistence`
+# @iota/persistence
 
 Persistence module allows to persist a state of **`last key index`**, **`bundles`** and **`CDAs`***.
 
@@ -7,14 +7,14 @@ Access to a database is done with adapters that implement the <a href="#Persiste
 <small>* **CDAs** = **C**onditional **D**eposit **A**dresses</small>
 ## Example with level adapter
 ```JS
-import { persistence, storeID } from '@iota/persistence'
-import { persistenceAdapter } from '@iota/persistence-adapter-level'
+import { persistence, persistenceID } from '@iota/persistence'
+import { createPersistenceAdapter } from '@iota/persistence-adapter-level'
 import leveldown from 'leveldown'
 
 ;(async function (seed) {
     const adapter = persistenceAdapter({
-        storeID: storeID(seed),
-        storePath: './test/temp', // test directory
+        persistenceID: persistenceID(seed),
+        persistencePath: './test/temp', // test directory
         store: leveldown // default store
     })
 
@@ -26,7 +26,11 @@ import leveldown from 'leveldown'
             writeCDA,
             deleteCDA,
             batch,
-            createReadStream,
+            state.read,
+            createStateReadStream,
+            history.read,
+            history.delete,
+            createHistoryReadStream,
         } = await persistence(adapter)
 
         return nextIndex()
@@ -39,17 +43,20 @@ import leveldown from 'leveldown'
 <a name="PersistenceAdapter"></a>
 ## PersistenceAdapter interface
 ```TS
-interface PersistenceAdapter<K = Buffer, V = Buffer> {
+export interface PersistenceAdapter<K = Buffer, V = Buffer> {
     readonly read: (key: K) => Promise<V>
     readonly write: (key: K, value: V) => Promise<void>
     readonly delete: (key: K) => Promise<void>
     readonly batch: (ops: ReadonlyArray<PersistenceAdapterBatch<K, V>>) => Promise<void>
-    readonly createReadStream: CreatePersistenceReadStream
+    readonly createReadStream: (options?: PersistenceIteratorOptions) => NodeJS.ReadableStream
 }
 ```
 ### Readable streams
 **`createReadStream()`** reads & streams persisted **bundles** & **CDAs** as key-value pairs.
 ```JS
+import { CDA_LENGTH, deserializeCDA } from '@iota/cda'
+import { isMultipleOfTransactionLength } from '@iota/transaction'
+
 createReadStream
     .on('data', value => {
         if (value.length === CDA_LENGTH) {
@@ -61,7 +68,7 @@ createReadStream
                 checksum,
                 index,
                 security,
-            } = desirializeCDA(value)
+            } = deserializeCDA(value)
         } else if (isMultipleOfTransactionLength(value)) {
             // It's a bundle
             const bundle = transaction.bundle(value)
@@ -74,14 +81,7 @@ createReadStream
     .on('close', () => {})
     .on('end', () => {})
 ```
-```TS
-type CreatePersistenceReadStream = (
-    onData: (data: Int8Array) => any,
-    onError: (error: Error) => any,
-    onClose: () => any,
-    onEnd: () => any
-) => NodeJS.ReadableStream
-```
+
 
 ## Persistence Events
 Persistence module emits events after every sucessful modification of the state.

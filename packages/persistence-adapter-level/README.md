@@ -1,23 +1,23 @@
-# `@iota/persistence-adapater-level`
+# @iota/persistence-adapater-level
 
 Persistence adapter with support for different [**`abstract-level`**](https://github.com/Level/abstract-leveldown) stores, such as
 [**`leveldown`**](https://github.com/Level/leveldown) (recommended default), [`leveljs`](https://github.com/Level/level-js), [`memdown`](https://github.com/Level/memdown) and [others...](https://github.com/Level/awesome/#stores)
 
 ## Example with `@iota/persistence`
 ```JS
-import { persistence, storeID } from '@iota/persistence'
+import { persistence, persistenceID } from '@iota/persistence'
 import { persistenceAdapter } from '@iota/persistence-adapter-level'
 import leveldown from 'leveldown'
 
 ;(async function (seed) {
-    const adapter = persistenceAdapter({
-        storeID: storeID(seed),
-        storePath: './test/temp', // test directory
+    const persistenceAdapter = createPersistenceAdapter({
+        persistenceID: persistenceID(seed),
+        persistencePath: './test/temp', // test directory
         store: leveldown, // default store
     })
 
     try {
-        const { nextIndex } = persistence(adapter)
+        const { nextIndex } = createPersistence(persistenceAdapter)
 
         return await nextIndex()
     } catch (error) {
