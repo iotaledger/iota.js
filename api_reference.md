@@ -495,7 +495,7 @@ that reattachment is possible, until your bundle has been included.
 ```js
 getTransactionsToApprove(depth)
   .then(({ trunkTransaction, branchTransaction }) =>
-    attachToTangle(trunkTransaction, branchTransaction, minWightMagnitude, trytes)
+    attachToTangle(trunkTransaction, branchTransaction, minWeightMagnitude, trytes)
   )
   .then(attachedTrytes => {
     // ...
@@ -1194,7 +1194,7 @@ const minWeightMagnitude = 14
 
 getTransactionsToApprove(depth)
   .then(transactionsToApprove =>
-     attachToTangle(minWightMagnitude, trytes, { transactionsToApprove })
+     attachToTangle(minWeightMagnitude, trytes, { transactionsToApprove })
   )
   .then(storeAndBroadcast)
   .catch(err => {
