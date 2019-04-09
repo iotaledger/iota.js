@@ -3,13 +3,13 @@ matrix:
   include:
     - language: node_js
       node_js:
+        - '11'
         - '10'
         - '8'
       before_script:
         - npm i
       script:
         - npm run test-ci
-        - commitlint-travis
     - language: android
       name: Android
       android:
