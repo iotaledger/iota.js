@@ -1,6 +1,9 @@
-import { attachedTrytesValidator } from '@iota/transaction'
+import { trytesToTrits } from '@iota/converter'
+import { TRYTE_WIDTH } from '@iota/signing'
+import { isAttached, TRANSACTION_LENGTH } from '@iota/transaction'
 import * as Promise from 'bluebird'
-import { arrayValidator, validate } from '../../guards'
+import * as errors from '../../errors'
+import { isTrytesOfExactLength, validate } from '../../guards'
 import {
     Callback,
     IRICommand,
@@ -47,7 +50,17 @@ export const createStoreTransactions = ({ send }: Provider) =>
      * - Fetch error
      */
     (trytes: ReadonlyArray<Trytes>, callback?: Callback<ReadonlyArray<Trytes>>): Promise<ReadonlyArray<Trytes>> =>
-        Promise.resolve(validate(arrayValidator(attachedTrytesValidator)(trytes)))
+        Promise.resolve(
+            validate([
+                trytes,
+                arr =>
+                    arr.every(
+                        (t: Trytes) =>
+                            isTrytesOfExactLength(t, TRANSACTION_LENGTH / TRYTE_WIDTH) && isAttached(trytesToTrits(t))
+                    ),
+                errors.INVALID_ATTACHED_TRYTES,
+            ])
+        )
             .then(() =>
                 send<StoreTransactionsCommand, StoreTransactionsResponse>({
                     command: IRICommand.STORE_TRANSACTIONS,

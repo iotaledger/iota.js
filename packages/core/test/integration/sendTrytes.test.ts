@@ -29,11 +29,16 @@ test('sendTrytes() does not mutate original trytes.', async t => {
     t.deepEqual(trytesCopy, trytes, 'sendTrytes() should not mutate original trytes.')
 })
 
-test('sendTrytes() rejects with correct errors for invalid input.', t => {
+test('sendTrytes() rejects with correct errors for invalid input.', async t => {
     const invalidTrytes = ['asdasDSFDAFD']
-
+    let errorMessage = ''
+    try {
+        await sendTrytes(invalidTrytes, depth, minWeightMagnitude)
+    } catch (error) {
+        errorMessage = error.message
+    }
     t.is(
-        t.throws(() => sendTrytes(invalidTrytes, depth, minWeightMagnitude), Error).message,
+        errorMessage,
         `${INVALID_TRANSACTION_TRYTES}: ${invalidTrytes[0]}`,
         'sendTrytes() should throw correct error for invalid trytes.'
     )

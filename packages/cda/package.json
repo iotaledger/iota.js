@@ -1,0 +1,64 @@
+{
+    "name": "@iota/cda",
+    "version": "1.0.0-beta.11",
+    "description": "Conditional Deposit Addresses - (timeout_at, multi_use, expected_amount)",
+    "main": "out/cda/src/cda.js",
+    "typings": "typings/cda/src/cda.d.ts",
+    "publishConfig": {
+        "access": "public"
+    },
+    "scripts": {
+        "prepare": "tsc",
+        "test": "tsc && nyc riteway out/cda/test/cda.test.js",
+        "test-ci": "nyc riteway out/cda/test/cda.test.js",
+        "watch": "watch 'clear && npm run -s test'",
+        "lint": "tslint --project ."
+    },
+    "nyc": {
+        "watermarks": {
+            "functions": [
+                100,
+                100
+            ],
+            "branches": [
+                100,
+                100
+            ],
+            "statements": [
+                100,
+                100
+            ]
+        },
+        "include": [
+            "out/*/src/*.js"
+        ]
+    },
+    "bugs": {
+        "url": "https://github.com/iotaledger/iota.js/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/iotaledger/iota.js/tree/next/packages/account"
+    },
+    "keywords": [
+        "iota",
+        "conditional",
+        "state",
+        "conditional deposit address"
+    ],
+    "contributors": [
+        "Chris Dukakis <chris.dukakis@iota.org> (https://github.com/chrisdukakis)"
+    ],
+    "license": "MIT",
+    "dependencies": {
+        "@iota/curl": "1.0.0-beta.11",
+        "@iota/converter": "1.0.0-beta.11",
+        "@iota/pad": "1.0.0-beta.11",
+        "@iota/signing": "1.0.0-beta.11",
+        "@iota/transaction": "1.0.0-beta.11"
+    },
+    "devDependencies": {
+        "riteway": "^6.0.3",
+        "watch": "^1.0.2"
+    }
+}

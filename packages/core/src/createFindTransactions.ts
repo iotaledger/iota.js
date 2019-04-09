@@ -1,9 +1,10 @@
 import { removeChecksum } from '@iota/checksum'
 import { padTagArray } from '@iota/pad'
-import { transactionHashValidator } from '@iota/transaction'
+import { TRYTE_WIDTH } from '@iota/signing'
+import { BUNDLE_LENGTH, TRANSACTION_HASH_LENGTH } from '@iota/transaction'
 import * as Promise from 'bluebird'
 import * as errors from '../../errors'
-import { arrayValidator, hashValidator, tagValidator, validate } from '../../guards'
+import { isHash, isTag, isTrytesOfExactLength, validate } from '../../guards'
 import {
     Callback,
     FindTransactionsCommand,
@@ -12,6 +13,7 @@ import {
     Hash,
     IRICommand,
     Provider,
+    Trytes,
 } from '../../types'
 
 const keysOf = <T>(o: T): ReadonlyArray<keyof T> => Object.keys(o) as Array<keyof T>
@@ -32,10 +34,19 @@ export const validateFindTransactions = (query: FindTransactionsQuery) => {
     hasValidKeys(query)
 
     validate(
-        !!addresses && arrayValidator(hashValidator)(addresses, errors.INVALID_ADDRESS),
-        !!tags && arrayValidator(tagValidator)(tags),
-        !!approvees && arrayValidator(transactionHashValidator)(approvees),
-        !!bundles && arrayValidator(hashValidator)(bundles)
+        !!addresses && [addresses, arr => arr.every(isHash), errors.INVALID_ADDRESS],
+
+        !!tags && [tags, arr => arr.every(isTag), errors.INVALID_TAG],
+        !!approvees && [
+            approvees,
+            arr => arr.every((a: Trytes) => isTrytesOfExactLength(a, TRANSACTION_HASH_LENGTH / TRYTE_WIDTH)),
+            errors.INVALID_TRANSACTION_HASH,
+        ],
+        !!bundles && [
+            bundles,
+            arr => arr.every((b: Trytes) => isTrytesOfExactLength(b, BUNDLE_LENGTH / TRYTE_WIDTH)),
+            errors.INVALID_HASH,
+        ]
     )
 }
 

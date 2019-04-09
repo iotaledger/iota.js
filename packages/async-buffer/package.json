@@ -1,0 +1,55 @@
+{
+    "name": "@iota/async-buffer",
+    "version": "1.0.0-beta.11",
+    "description": "Async buffer",
+    "main": "out/src/asyncBuffer.js",
+    "typings": "typings/src/asyncBuffer.d.ts",
+    "publishConfig": {
+        "access": "public"
+    },
+    "scripts": {
+        "prepare": "tsc",
+        "test": "tsc && nyc riteway out/test/asyncBuffer.test.js",
+        "test-ci": "nyc riteway out/test/asyncBuffer.test.js",
+        "watch": "watch 'clear && npm run -s test'",
+        "lint": "tslint --project ."
+    },
+    "nyc": {
+        "watermarks": {
+            "functions": [
+                100,
+                100
+            ],
+            "branches": [
+                100,
+                100
+            ],
+            "statements": [
+                100,
+                100
+            ]
+        },
+        "include": [
+            "out/async-buffer/src/*.js"
+        ]
+    },
+    "bugs": {
+        "url": "https://github.com/iotaledger/iota.js/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/iotaledger/iota.js/tree/next/packages/async-buffer"
+    },
+    "keywords": [
+        "async",
+        "buffer",
+        "promise",
+        "queue"
+    ],
+    "author": "Chris Dukakis <chris.dukakis@iota.org> (https://github.com/chrisdukakis)",
+    "license": "MIT",
+    "devDependencies": {
+        "riteway": "^6.0.3",
+        "watch": "^1.0.2"
+    }
+}

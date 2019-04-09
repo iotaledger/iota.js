@@ -1,7 +1,7 @@
 {
     "name": "@iota/transaction",
     "version": "1.0.0-beta.11",
-    "description": "Utilities and validators for transactions.",
+    "description": "IOTA transaction (de)serialization & guards.",
     "main": "./out/transaction/src/index.js",
     "typings": "typings/transaction/src",
     "publishConfig": {
@@ -9,8 +9,9 @@
     },
     "scripts": {
         "prepare": "tsc",
-        "test": "tsc && nyc ava",
-        "test-ci": "nyc ava",
+        "test": "tsc && nyc riteway out/transaction/test/transaction.test.js",
+        "watch": "watch 'clear && npm run -s test'",
+        "test-ci": "nyc riteway out/transaction/test/*.test.js",
         "lint": "tslint --project .",
         "docs": "tsc && jsdoc2md --no-cache --plugin dmd-clear -t README_tpl.hbs --files './out/**/*.js' > README.md"
     },
@@ -20,26 +21,19 @@
         "Chris Dukakis <chris.dukakis@iota.org> (https://github.com/chrisdukakis)",
         "Umair Sarfraz <umair.sarfraz@iota.org> (https://github.com/laumair)"
     ],
-    "ava": {
-        "files": "out/transaction/test/*.test.js",
-        "failFast": true,
-        "failWithoutAssertions": false,
-        "compileEnhancements": false,
-        "verbose": true
-    },
     "nyc": {
         "watermarks": {
             "functions": [
-                80,
-                95
+                100,
+                100
             ],
             "branches": [
-                80,
-                95
+                100,
+                100
             ],
             "statements": [
-                80,
-                95
+                100,
+                100
             ]
         },
         "include": [
@@ -62,13 +56,20 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/iotaledger/iota.js.git/tree/develop/packages/crypto"
+        "url": "https://github.com/iotaledger/iota.js/tree/next/packages/transaction"
     },
     "dependencies": {
-        "@iota/converter": "^1.0.0-beta.11",
-        "@iota/curl": "^1.0.0-beta.11"
+        "@iota/converter": "1.0.0-beta.11",
+        "@iota/curl": "1.0.0-beta.11",
+        "@iota/kerl": "1.0.0-beta.11",
+        "@iota/signing": "1.0.0-beta.11",
+        "@types/warning": "^3.0.0",
+        "warning": "^4.0.3"
     },
     "devDependencies": {
-        "@iota/samples": "^1.0.0-beta.11"
+        "@iota/samples": "^1.0.0-beta.11",
+        "@iota/pad": "1.0.0-beta.11",
+        "riteway": "^6.0.3",
+        "watch": "^1.0.2"
     }
 }

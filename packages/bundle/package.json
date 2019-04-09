@@ -9,8 +9,9 @@
     },
     "scripts": {
         "prepare": "tsc",
-        "test": "tsc && nyc ava",
-        "test-ci": "nyc ava",
+        "test": "tsc && nyc riteway out/bundle/test/bundle.test.js",
+        "test-ci": "nyc riteway out/bundle/test/bundle.test.js",
+        "watch": "watch 'clear && npm run -s test'",
         "lint": "tslint --project .",
         "docs": "tsc && jsdoc2md --no-cache --plugin dmd-clear -t README_tpl.hbs --files './out/**/*.js' > README.md"
     },
@@ -19,31 +20,23 @@
         "Edward Greve <edward@iota.org> (https://github.com/anyong)",
         "Chris Dukakis <chris.dukakis@iota.org> (https://github.com/chrisdukakis)"
     ],
-    "ava": {
-        "files": "out/bundle/test/*.test.js",
-        "failFast": true,
-        "failWithoutAssertions": false,
-        "compileEnhancements": false,
-        "verbose": true
-    },
     "nyc": {
         "watermarks": {
             "functions": [
-                80,
-                95
+                100,
+                100
             ],
             "branches": [
-                80,
-                95
+                100,
+                100
             ],
             "statements": [
-                80,
-                95
+                100,
+                100
             ]
         },
         "include": [
-            "out/*/src/*.js",
-            "out/*/test/*.js"
+            "out/*/src/*.js"
         ]
     },
     "keywords": [
@@ -61,12 +54,18 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/iotaledger/iota.js.git/tree/develop/packages/crypto"
+        "url": "https://github.com/iotaledger/iota.js/tree/next/packages/bundle"
     },
     "dependencies": {
         "@iota/converter": "^1.0.0-beta.11",
         "@iota/kerl": "^1.0.0-beta.11",
-        "@iota/pad": "^1.0.0-beta.11",
-        "@iota/signing": "^1.0.0-beta.11"
+        "@iota/signing": "^1.0.0-beta.11",
+        "@iota/transaction": "1.0.0-beta.11",
+        "@types/warning": "^3.0.0",
+        "warning": "^4.0.3"
+    },
+    "devDependencies": {
+        "riteway": "^6.0.3",
+        "watch": "^1.0.2"
     }
 }

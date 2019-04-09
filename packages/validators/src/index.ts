@@ -73,18 +73,4 @@ export const isUriArray = isArray(isUri)
 
 /* Transaction guards & validators */
 
-export {
-    isAttachedTrytes,
-    isAttachedTrytesArray,
-    isTailTransaction,
-    isTransaction,
-    isTransactionArray,
-    isTransactionTrytes,
-    isTransactionHash,
-    isTransactionHashArray,
-    transactionHashValidator,
-    transactionValidator,
-    tailTransactionValidator,
-    transactionTrytesValidator,
-    attachedTrytesValidator,
-} from '@iota/transaction'
+export { isAttached, isTail, isHead, isTransaction } from '@iota/transaction'

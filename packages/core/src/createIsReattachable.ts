@@ -1,7 +1,7 @@
 import { removeChecksum } from '@iota/checksum'
 import * as Promise from 'bluebird'
 import { INVALID_ADDRESS } from '../../errors'
-import { arrayValidator, hashValidator, trytesValidator, validate } from '../../guards'
+import { arrayValidator, hashValidator, validate } from '../../guards'
 import { asArray, Callback, Hash, Provider, Transaction, Trytes } from '../../types'
 import { createFindTransactionObjects, createGetLatestInclusion } from './'
 
@@ -41,7 +41,7 @@ export const createIsReattachable = (provider: Provider) => {
         return (
             Promise.try(() => {
                 // 1. Remove checksum and validate addresses
-                validate(arrayValidator(trytesValidator)(inputAddressArray, INVALID_ADDRESS))
+                validate(arrayValidator(hashValidator)(inputAddressArray, INVALID_ADDRESS))
 
                 addresses = inputAddressArray.map(removeChecksum)
 

@@ -1,7 +1,9 @@
-import { tailTransactionValidator, transactionHashValidator } from '@iota/transaction'
+import { TRYTE_WIDTH } from '@iota/signing'
+import { TRANSACTION_HASH_LENGTH } from '@iota/transaction'
 import { asTransactionObject } from '@iota/transaction-converter'
 import * as Promise from 'bluebird'
-import { validate } from '../../guards'
+import * as errors from '../../errors'
+import { isTrytesOfExactLength, validate } from '../../guards'
 import { Callback, Hash, Provider, Transaction } from '../../types'
 import { createGetTrytes } from './'
 
@@ -54,15 +56,24 @@ export const createTraverseBundle = (provider: Provider) => {
         bundle: ReadonlyArray<Transaction> = [],
         callback?: Callback<ReadonlyArray<Transaction>>
     ): Promise<ReadonlyArray<Transaction>> {
-        return Promise.resolve(validate(transactionHashValidator(trunkTransaction)))
+        return Promise.resolve(
+            validate([
+                trunkTransaction,
+                t => isTrytesOfExactLength(t, TRANSACTION_HASH_LENGTH / TRYTE_WIDTH),
+                errors.INVALID_TRANSACTION_HASH,
+            ])
+        )
             .then(() => getTrytes([trunkTransaction]))
             .then(([trytes]) => asTransactionObject(trytes, trunkTransaction))
-            .tap(transaction => validate(bundle.length === 0 && tailTransactionValidator(transaction)))
-            .then(
-                transaction =>
-                    transaction.currentIndex === transaction.lastIndex
-                        ? bundle.concat(transaction)
-                        : traverseBundle(transaction.trunkTransaction, bundle.concat(transaction))
+            .tap(transaction =>
+                validate(
+                    bundle.length === 0 && [transaction, t => t.currentIndex === 0, errors.INVALID_TAIL_TRANSACTION]
+                )
+            )
+            .then(transaction =>
+                transaction.currentIndex === transaction.lastIndex
+                    ? bundle.concat(transaction)
+                    : traverseBundle(transaction.trunkTransaction, bundle.concat(transaction))
             )
             .asCallback(arguments[1] === 'function' ? arguments[1] : callback)
     }

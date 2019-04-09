@@ -10,6 +10,56 @@ import { Address, Hash, Tag, Transfer, Trytes } from './types'
 /* Type guards */
 
 /**
+ * Checks if input is an `Int8Array` of trit values; `-1, 0, 1`.
+ *
+ * @method isTrits
+ *
+ * @param {any} input
+ *
+ * @return {boolean}
+ */
+export const isTrits = (input: any): input is Int8Array => {
+    if (input instanceof Int8Array) {
+        for (let i = 0; i < input.length; i++) {
+            if (!(input[i] === 0 || input[i] === -1 || input[i] === 1)) {
+                return false
+            }
+        }
+
+        return true
+    }
+
+    return false
+}
+
+/**
+ * Checks if trits are NULL.
+ *
+ * @method isNullTrits
+ *
+ * @param {Int8Array} trits
+ *
+ * @return {boolean}
+ */
+export const isNullTrits = (input: Int8Array): boolean => {
+    if (input instanceof Int8Array) {
+        if (input.length === 0) {
+            return true
+        }
+
+        for (let i = 0; i < input.length; i++) {
+            if (input[i] !== 0) {
+                return false
+            }
+        }
+
+        return true
+    }
+
+    return false
+}
+
+/**
  * Checks if input is correct trytes consisting of [9A-Z]; optionally validate length
  * @method isTrytes
  *
@@ -197,7 +247,7 @@ export const validate = (...validators: Array<Validatable | false>) => {
     return true
 }
 
-export const arrayValidator = <T>(validator: Validator<T>, allowEmpty = false): Validator<ReadonlyArray<T>> => (
+export const arrayValidator = <T>(validator: Validator<T>): Validator<ReadonlyArray<T>> => (
     arr: ReadonlyArray<any>,
     customMsg?: string
 ) => {
@@ -242,11 +292,15 @@ export const tagValidator: Validator<string> = tag => [tag, isTag, errors.INVALI
 
 export const transferValidator: Validator<Transfer> = transfer => [transfer, isTransfer, errors.INVALID_TRANSFER]
 
-export const hashValidator: Validator<Hash> = hash => [hash, isHash, errors.INVALID_HASH]
+export const hashValidator: Validator<Hash> = (hash, errorMessage?: string) => [
+    hash,
+    isHash,
+    errorMessage || errors.INVALID_HASH,
+]
 
-export const trytesValidator: Validator<Trytes> = (trytes, msg?: string) => [
+export const trytesValidator = (trytes: Trytes, msg?: string) => [
     trytes,
-    isTrytes,
+    (t: Trytes) => (length ? isTrytesOfExactLength(t, length) : isTrytes(t)),
     msg || errors.INVALID_TRYTES,
 ]
 

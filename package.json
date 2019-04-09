@@ -66,7 +66,8 @@
         "url": "https://github.com/iotaledger/iota.lib.js.git"
     },
     "dependencies": {
-        "@types/bluebird": "^3.5.25"
+        "@types/bluebird": "^3.5.25",
+        "@types/node": "^11.13.0"
     },
     "devDependencies": {
         "@commitlint/cli": "^7.2.1",

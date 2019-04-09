@@ -1,2 +1,2 @@
 export * from './signing'
-export { default as add } from './add'
+export { add, increment } from './add'
