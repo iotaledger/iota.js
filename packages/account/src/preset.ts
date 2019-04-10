@@ -24,7 +24,7 @@ import {
     isAboveMaxDepth,
 } from '@iota/core'
 import { createHttpClient } from '@iota/http-client'
-import { PersistenceIteratorOptions } from '@iota/persistence'
+import { PersistenceBatchTypes, PersistenceIteratorOptions } from '@iota/persistence'
 import { createPersistenceAdapter } from '@iota/persistence-adapter-level'
 import { address as signingAddress, digests, key, subseed, TRYTE_WIDTH } from '@iota/signing'
 import {
@@ -55,15 +55,16 @@ import {
     TransactionIssuanceParams,
 } from './account'
 
+export enum Events {
+    attachToTangle = 'attachToTangle',
+    error = 'error',
+}
+
 export interface CDAAccount
     extends AddressGeneration<CDAParams, CDA>,
         TransactionIssuance<CDA, Bundle>,
         TransactionAttachment,
         History<CDA, Bundle> {}
-
-export const events = {
-    attachToTangle: 'attachToTangle',
-}
 
 export function networkAdapter({ provider }: NetworkParams): Network {
     const httpClient = createHttpClient({ provider })
@@ -158,7 +159,15 @@ export function transactionIssuance(
                                 })),
                                 remainderAddress,
                             }
-                        ).tap(trytes => persistence.writeBundle(bundleTrytesToBundleTrits(trytes)))
+                        ).tap(trytes =>
+                            persistence.batch([
+                                ...inputs.map(input => ({
+                                    type: PersistenceBatchTypes.deleteCDA,
+                                    value: serializeCDAInput(input),
+                                })),
+                                { type: PersistenceBatchTypes.writeBundle, value: bundleTrytesToBundleTrits(trytes) },
+                            ])
+                        )
                     )
                 })
         },
@@ -300,7 +309,7 @@ export function transactionAttachment(this: any, params: TransactionAttachmentPa
                 })
                 .catch(error => {
                     bundles.write(bundle)
-                    this.emit(error)
+                    that.emit(Events.error, error)
                 })
         })
     }

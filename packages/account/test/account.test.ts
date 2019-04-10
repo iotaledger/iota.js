@@ -285,4 +285,21 @@ describe('account.generateCDA/account.sendToCDA', async assert => {
         })(),
         expected: accountASpendsFromRemainderTrytes,
     })
+
+    assert({
+        given: 'that account A has used all inputs in previous transfers, sendToCDA',
+        should: 'throw "insufficient balance" error',
+        actual: await (async () => {
+            try {
+                await accountARemainderReceivesExpectedBalance()
+                return await accountA.sendToCDA({
+                    ...cdaB1,
+                    value: 1,
+                })
+            } catch (error) {
+                return error.message
+            }
+        })(),
+        expected: 'Insufficient balance',
+    })
 })
