@@ -1,6 +1,6 @@
 {
     "name": "@iota/persistence",
-    "version": "1.0.0-beta.12",
+    "version": "1.0.0-beta.13",
     "description": "iota.js persistence inteface",
     "main": "out/persistence/src/persistence.js",
     "typings": "typings/persistence/src/persistence.d.ts",
@@ -56,7 +56,7 @@
         "@iota/transaction": "^1.0.0-beta.12"
     },
     "devDependencies": {
-        "@iota/persistence-adapter-level": "^1.0.0-beta.12",
+        "@iota/persistence-adapter-level": "^1.0.0-beta.13",
         "riteway": "^6.0.3",
         "watch": "^1.0.2"
     }
