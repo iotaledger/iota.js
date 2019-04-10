@@ -11,7 +11,13 @@ import { ADDRESS_LENGTH, bundle, TRANSACTION_LENGTH } from '@iota/transaction'
 import * as BluebirdPromise from 'bluebird'
 import { describe, Try } from 'riteway'
 import * as errors from '../../errors'
-import { createPersistence, generatePersistenceID, PersistenceParams, streamToBuffers } from '../src/persistence'
+import {
+    createPersistence,
+    generatePersistenceID,
+    PersistenceBatchTypes,
+    PersistenceParams,
+    streamToBuffers,
+} from '../src/persistence'
 
 const CDA_LENGTH = 243 + 27 + 27 + 1 + 81 + 35 + 1
 const CDA_ADDRESS_OFFSET = 0
@@ -329,11 +335,11 @@ describe('persistence.batch(ops: ReadonlyArray<PersistenceAdapterBatch<V, K>>) -
         should: 'throw RangeError',
         actual: Try(isolate().batch as any, [
             {
-                type: 'writeBundle',
+                type: PersistenceBatchTypes.writeBundle,
                 value: new Int8Array(TRANSACTION_LENGTH * 2 - 1),
             },
-        ]),
-        expected: new RangeError(errors.ILLEGAL_BUNDLE_LENGTH),
+        ]).message,
+        expected: errors.ILLEGAL_BUNDLE_LENGTH,
     })
 
     assert({
@@ -341,11 +347,11 @@ describe('persistence.batch(ops: ReadonlyArray<PersistenceAdapterBatch<V, K>>) -
         should: 'throw RangeError',
         actual: Try(isolate().batch as any, [
             {
-                type: 'deleteBundle',
+                type: PersistenceBatchTypes.deleteBundle,
                 value: new Int8Array(TRANSACTION_LENGTH * 2 - 1),
             },
-        ]),
-        expected: new RangeError(errors.ILLEGAL_BUNDLE_LENGTH),
+        ]).message,
+        expected: errors.ILLEGAL_BUNDLE_LENGTH,
     })
 
     assert({
@@ -353,11 +359,11 @@ describe('persistence.batch(ops: ReadonlyArray<PersistenceAdapterBatch<V, K>>) -
         should: 'throw RangeError',
         actual: Try(isolate().batch as any, [
             {
-                type: 'writeCDA',
+                type: PersistenceBatchTypes.writeCDA,
                 value: new Int8Array(CDA_LENGTH - 1).fill(1),
             },
-        ]),
-        expected: new RangeError(errors.ILLEGAL_BUNDLE_LENGTH),
+        ]).message,
+        expected: errors.ILLEGAL_CDA_LENGTH,
     })
 
     assert({
@@ -365,11 +371,11 @@ describe('persistence.batch(ops: ReadonlyArray<PersistenceAdapterBatch<V, K>>) -
         should: 'throw RangeError',
         actual: Try(isolate().batch as any, [
             {
-                type: 'deleteCDA',
+                type: PersistenceBatchTypes.deleteCDA,
                 value: new Int8Array(CDA_LENGTH - 1).fill(1),
             },
-        ]),
-        expected: new RangeError(errors.ILLEGAL_BUNDLE_LENGTH),
+        ]).message,
+        expected: errors.ILLEGAL_CDA_LENGTH,
     })
 
     assert({
@@ -380,8 +386,8 @@ describe('persistence.batch(ops: ReadonlyArray<PersistenceAdapterBatch<V, K>>) -
                 type: 'unknown',
                 value: new Int8Array(CDA_LENGTH),
             } as any,
-        ]),
-        expected: new Error(errors.ILLEGAL_BATCH),
+        ]).message,
+        expected: errors.ILLEGAL_BATCH,
     })
 
     const buffer = new Int8Array(TRANSACTION_LENGTH * 2).fill(1)
@@ -401,19 +407,19 @@ describe('persistence.batch(ops: ReadonlyArray<PersistenceAdapterBatch<V, K>>) -
 
             await batch([
                 {
-                    type: 'deleteBundle' as any,
+                    type: PersistenceBatchTypes.deleteBundle,
                     value: buffer,
                 },
                 {
-                    type: 'writeBundle' as any,
+                    type: PersistenceBatchTypes.writeBundle,
                     value: bufferB,
                 },
                 {
-                    type: 'deleteCDA' as any,
+                    type: PersistenceBatchTypes.deleteCDA,
                     value: cda,
                 },
                 {
-                    type: 'writeCDA' as any,
+                    type: PersistenceBatchTypes.writeCDA,
                     value: cdaB,
                 },
             ] as any)

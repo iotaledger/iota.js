@@ -156,8 +156,8 @@ export function createAccountWithPreset<X, Y, Z>(preset: AccountPreset<X, Y, Z>)
         function accountMixin(this: any) {
             return Object.assign(
                 this,
-                preset.addressGeneration({ seed, persistence, timeSource, security: preset.security }),
-                preset.transactionIssuance({
+                preset.addressGeneration.call(this, { seed, persistence, timeSource, security: preset.security }),
+                preset.transactionIssuance.call(this, {
                     seed,
                     deposits,
                     persistence,
@@ -166,8 +166,13 @@ export function createAccountWithPreset<X, Y, Z>(preset: AccountPreset<X, Y, Z>)
                     security: preset.security,
                     now: preset.test.now,
                 }),
-                preset.transactionAttachment({ bundles, persistence, network, delay: preset.attachmentDelay }),
-                preset.history({ persistence }),
+                preset.transactionAttachment.call(this, {
+                    bundles,
+                    persistence,
+                    network,
+                    delay: preset.attachmentDelay,
+                }),
+                preset.history.call(this, { persistence }),
                 EventEmitter.prototype
             )
         }

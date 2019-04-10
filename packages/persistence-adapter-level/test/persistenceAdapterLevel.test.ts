@@ -2,7 +2,11 @@ import { bytesToTrits, tritsToBytes, valueToTrits } from '@iota/converter'
 import { ADDRESS_LENGTH, bundle, TRANSACTION_LENGTH } from '@iota/transaction'
 import leveldown from 'leveldown'
 import { describe, Try } from 'riteway'
-import { createPersistenceAdapter, PersistenceAdapterParams } from '../src/persistenceAdapterLevel'
+import {
+    createPersistenceAdapter,
+    PersistenceAdapterBatchTypes,
+    PersistenceAdapterParams,
+} from '../src/persistenceAdapterLevel'
 
 const CDA_LENGTH = 243 + 27 + 81 + 27 + 35 + 1
 
@@ -136,11 +140,11 @@ describe('adapter.batch(ops: ReadonlyArray<PersistenceAdapterBatch<V, K>>) -> ad
 
             await batch([
                 {
-                    type: 'delete',
+                    type: PersistenceAdapterBatchTypes.delete,
                     key: tritsToBytes(bundle(buffer)),
                 },
                 {
-                    type: 'write',
+                    type: PersistenceAdapterBatchTypes.write,
                     key: tritsToBytes(bundle(bufferB)),
                     value: tritsToBytes(bufferB),
                 },

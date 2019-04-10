@@ -7,6 +7,7 @@ import {
     CreatePersistenceAdapter,
     PersistenceAdapter,
     PersistenceAdapterBatch,
+    PersistenceAdapterBatchTypes,
     PersistenceAdapterDeleteOp,
     PersistenceAdapterParams,
     PersistenceAdapterWriteOp,
@@ -18,6 +19,7 @@ export {
     CreatePersistenceAdapter,
     PersistenceAdapter,
     PersistenceAdapterBatch,
+    PersistenceAdapterBatchTypes,
     PersistenceIteratorOptions,
     PersistenceAdapterDeleteOp,
     PersistenceAdapterWriteOp,
@@ -56,13 +58,13 @@ export const createPersistenceAdapter = ({
                         (op): AbstractBatch<Buffer, Buffer> => {
                             const { type, key } = op
                             switch (type) {
-                                case 'write':
+                                case PersistenceAdapterBatchTypes.write:
                                     return {
                                         type: 'put',
                                         key,
                                         value: (op as PersistenceAdapterWriteOp<Buffer, Buffer>).value,
                                     }
-                                case 'delete':
+                                case PersistenceAdapterBatchTypes.delete:
                                     return {
                                         type: 'del',
                                         key,
