@@ -11,8 +11,11 @@ import {
     Persistence,
     PersistenceAdapter,
     PersistenceAdapterBatch,
+    PersistenceAdapterBatchTypes,
     PersistenceBatch,
+    PersistenceBatchTypes,
     PersistenceError,
+    PersistenceEvents,
     PersistenceIteratorOptions,
     PersistenceParams,
 } from '../../types'
@@ -20,9 +23,11 @@ import {
 export {
     Persistence,
     PersistenceAdapter,
+    PersistenceBatch,
+    PersistenceBatchTypes,
+    PersistenceEvents,
     PersistenceError,
     PersistenceIteratorOptions,
-    PersistenceBatch,
     PersistenceParams,
 }
 
@@ -44,13 +49,6 @@ const increment = (index: Int8Array) => valueToTrits(tritsToValue(index) + 1)
 
 const prefixes = {
     KEY_INDEX_PREFIX: tritsToBytes(trytesToTrits('KEY9INDEX')),
-}
-
-const events = {
-    writeBundle: 'writeBundle',
-    deleteBundle: 'deleteBundle',
-    writeCDA: 'writeCDA',
-    deleteCDA: 'deleteCDA',
 }
 
 export function createPersistence({
@@ -119,7 +117,7 @@ export function createPersistence({
 
                     return ready()
                         .then(() => state.write(tritsToBytes(bundle(buffer)), tritsToBytes(buffer)))
-                        .tap(() => this.emit(events.writeBundle, buffer))
+                        .tap(() => this.emit(PersistenceEvents.writeBundle, buffer))
                 },
 
                 deleteBundle: (buffer: Int8Array) => {
@@ -130,7 +128,7 @@ export function createPersistence({
                     return ready()
                         .then(() => history.write(tritsToBytes(bundle(buffer)), tritsToBytes(buffer)))
                         .then(() => state.delete(tritsToBytes(bundle(buffer))))
-                        .tap(() => this.emit(events.deleteBundle, buffer))
+                        .tap(() => this.emit(PersistenceEvents.deleteBundle, buffer))
                 },
 
                 readCDA: (address: Int8Array) => {
@@ -150,7 +148,7 @@ export function createPersistence({
 
                     return ready()
                         .then(() => state.write(tritsToBytes(CDAddress(cda)), tritsToBytes(cda)))
-                        .tap(() => this.emit(events.writeCDA, cda))
+                        .tap(() => this.emit(PersistenceEvents.writeCDA, cda))
                 },
 
                 deleteCDA: (cda: Int8Array) => {
@@ -161,24 +159,24 @@ export function createPersistence({
                     return ready()
                         .then(() => history.write(tritsToBytes(CDAddress(cda)), tritsToBytes(cda)))
                         .then(() => state.delete(tritsToBytes(CDAddress(cda))))
-                        .tap(() => this.emit(events.deleteCDA, cda))
+                        .tap(() => this.emit(PersistenceEvents.deleteCDA, cda))
                 },
 
                 batch: (ops: ReadonlyArray<PersistenceBatch<Int8Array>>) => {
                     for (const { type, value } of ops) {
-                        if (!events.hasOwnProperty(type)) {
-                            throw new Error(errors.ILLEGAL_BATCH)
-                        }
-
-                        if (
-                            (type === events.writeBundle || type === events.deleteBundle) &&
-                            !isMultipleOfTransactionLength(value.length)
+                        if (type === PersistenceBatchTypes.writeBundle || type === PersistenceBatchTypes.deleteBundle) {
+                            if (!isMultipleOfTransactionLength(value.length)) {
+                                throw new RangeError(errors.ILLEGAL_BUNDLE_LENGTH)
+                            }
+                        } else if (
+                            type === PersistenceBatchTypes.writeCDA ||
+                            type === PersistenceBatchTypes.deleteCDA
                         ) {
-                            throw new RangeError(errors.ILLEGAL_BUNDLE_LENGTH)
-                        }
-
-                        if ((type === events.writeCDA || type === events.deleteCDA) && value.length !== CDA_LENGTH) {
-                            throw new RangeError(errors.ILLEGAL_CDA_LENGTH)
+                            if (value.length !== CDA_LENGTH) {
+                                throw new RangeError(errors.ILLEGAL_CDA_LENGTH)
+                            }
+                        } else {
+                            throw new Error(errors.ILLEGAL_BATCH)
                         }
                     }
 
@@ -186,19 +184,23 @@ export function createPersistence({
                         .then(() =>
                             history.batch(
                                 ops
-                                    .filter(({ type }) => type === 'deleteBundle' || type === 'deleteCDA')
+                                    .filter(
+                                        ({ type }) =>
+                                            type === PersistenceBatchTypes.deleteBundle ||
+                                            type === PersistenceBatchTypes.deleteCDA
+                                    )
                                     .map(
                                         ({ type, value }): PersistenceAdapterBatch => {
                                             switch (type) {
-                                                case 'deleteBundle':
+                                                case PersistenceBatchTypes.deleteBundle:
                                                     return {
-                                                        type: 'write',
+                                                        type: PersistenceAdapterBatchTypes.write,
                                                         key: tritsToBytes(bundle(value)),
                                                         value: tritsToBytes(value),
                                                     }
-                                                case 'deleteCDA':
+                                                case PersistenceBatchTypes.deleteCDA:
                                                     return {
-                                                        type: 'write',
+                                                        type: PersistenceAdapterBatchTypes.write,
                                                         key: tritsToBytes(CDAddress(value)),
                                                         value: tritsToBytes(value),
                                                     }
@@ -214,27 +216,27 @@ export function createPersistence({
                                 ops.map(
                                     ({ type, value }): PersistenceAdapterBatch => {
                                         switch (type) {
-                                            case 'writeBundle':
+                                            case PersistenceBatchTypes.writeBundle:
                                                 return {
-                                                    type: 'write',
+                                                    type: PersistenceAdapterBatchTypes.write,
                                                     key: tritsToBytes(bundle(value)),
                                                     value: tritsToBytes(value),
                                                 }
-                                            case 'deleteBundle':
+                                            case PersistenceBatchTypes.deleteBundle:
                                                 return {
-                                                    type: 'delete',
+                                                    type: PersistenceAdapterBatchTypes.delete,
                                                     key: tritsToBytes(bundle(value)),
                                                 }
 
-                                            case 'writeCDA':
+                                            case PersistenceBatchTypes.writeCDA:
                                                 return {
-                                                    type: 'write',
+                                                    type: PersistenceAdapterBatchTypes.write,
                                                     key: tritsToBytes(CDAddress(value)),
                                                     value: tritsToBytes(value),
                                                 }
-                                            case 'deleteCDA':
+                                            case PersistenceBatchTypes.deleteCDA:
                                                 return {
-                                                    type: 'delete',
+                                                    type: PersistenceAdapterBatchTypes.delete,
                                                     key: tritsToBytes(CDAddress(value)),
                                                 }
                                         }
@@ -242,7 +244,7 @@ export function createPersistence({
                                 )
                             )
                         )
-                        .tap(() => ops.forEach(({ type, value }) => this.emit(events[type], value)))
+                        .tap(() => ops.forEach(({ type, value }) => this.emit(type, value)))
                 },
 
                 stateRead: state.read,

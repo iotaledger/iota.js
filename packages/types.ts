@@ -361,8 +361,26 @@ export interface Persistence<T = Int8Array, B = Buffer> extends EventEmitter {
     readonly createHistoryReadStream: (options?: PersistenceIteratorOptions) => NodeJS.ReadableStream
 }
 
+export enum PersistenceEvents {
+    writeBundle = 'writeBundle',
+    deleteBundle = 'deleteBundle',
+    writeCDA = 'writeCDA',
+    deleteCDA = 'deleteCDA',
+}
+
+export enum PersistenceBatchTypes {
+    writeBundle = 'writeBundle',
+    deleteBundle = 'deleteBundle',
+    writeCDA = 'writeCDA',
+    deleteCDA = 'delteCDA',
+}
+
 export interface PersistenceBatch<V = Int8Array> {
-    readonly type: 'writeBundle' | 'deleteBundle' | 'writeCDA' | 'deleteCDA'
+    readonly type:
+        | PersistenceBatchTypes.writeBundle
+        | PersistenceBatchTypes.deleteBundle
+        | PersistenceBatchTypes.writeCDA
+        | PersistenceBatchTypes.deleteCDA
     readonly value: V
 }
 
@@ -389,14 +407,19 @@ export type PersistenceAdapterBatch<K = Buffer, V = Buffer> =
     | PersistenceAdapterWriteOp<K, V>
     | PersistenceAdapterDeleteOp<K>
 
+export enum PersistenceAdapterBatchTypes {
+    write = 'write',
+    delete = 'delete',
+}
+
 export interface PersistenceAdapterWriteOp<K = Buffer, V = Buffer> {
-    readonly type: 'write'
+    readonly type: PersistenceAdapterBatchTypes.write
     readonly key: K
     readonly value: V
 }
 
 export interface PersistenceAdapterDeleteOp<K = Buffer> {
-    readonly type: 'delete'
+    readonly type: PersistenceAdapterBatchTypes.delete
     readonly key: K
 }
 
