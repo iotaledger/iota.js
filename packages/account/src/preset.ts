@@ -69,14 +69,15 @@ export interface CDAAccount
 export function networkAdapter({ provider }: NetworkParams): Network {
     const httpClient = createHttpClient({ provider })
     const getBalances = createGetBalances(httpClient)
+    const getTrytes = createGetTrytes(httpClient)
+    const getLatestInclusion = createGetLatestInclusion(httpClient)
 
     return {
-        getTrytes: createGetTrytes(httpClient),
-        getBalance: (address: Trytes): Promise<number> =>
-            getBalances([address], 100).then(({ balances }) => balances[0]),
+        getTrytes: hashes => (hashes.length > 0 ? getTrytes(hashes) : Promise.resolve([])),
+        getBalance: (address): Promise<number> => getBalances([address], 100).then(({ balances }) => balances[0]),
         getBalances,
         getConsistency: createCheckConsistency(httpClient),
-        getLatestInclusion: createGetLatestInclusion(httpClient),
+        getLatestInclusion: hashes => (hashes.length > 0 ? getLatestInclusion(hashes) : Promise.resolve([])),
         findTransactions: createFindTransactions(httpClient),
         sendTrytes: createSendTrytes(httpClient),
         setSettings: httpClient.setSettings,
@@ -248,79 +249,20 @@ export function transactionIssuance(
 }
 
 export function transactionAttachment(this: any, params: TransactionAttachmentParams): TransactionAttachment {
+    const that = this // tslint:disable-line
     const { bundles, persistence, network } = params
     const { findTransactions, sendTrytes, getTrytes, getLatestInclusion, getConsistency } = network
 
     let reference: Transaction
     let running = false
 
-    const routine = (attachParams: TransactionAttachmentStartParams) => {
-        const { depth, minWeightMagnitude, maxDepth, delay } = attachParams
-
-        bundles.read().then(bundle => {
-            setTimeout(() => routine(attachParams), delay)
-
-            findTransactions({ addresses: [tritsToTrytes(transactionAddress(bundle))] })
-                .then(hashes => getTrytes(hashes))
-                .then(pastAttachments =>
-                    pastAttachments.filter(
-                        trytes =>
-                            tritsToTrytes(bundleHash(bundle)) ===
-                            trytes.slice(
-                                BUNDLE_OFFSET / TRYTE_WIDTH,
-                                BUNDLE_OFFSET / TRYTE_WIDTH + BUNDLE_LENGTH / TRYTE_WIDTH
-                            )
-                    )
-                )
-                .then(pastAttachments =>
-                    getLatestInclusion(
-                        pastAttachments.map(trytes => tritsToTrytes(transactionHash(trytesToTrits(trytes))))
-                    )
-                )
-                .then(inclusionStates => {
-                    const trytes = bundleTritsToBundleTrytes(bundle)
-
-                    if (inclusionStates.length === 0) {
-                        sendTrytes(trytes.slice().reverse(), depth, minWeightMagnitude, reference.hash)
-                            .tap(transactions => this.emit(events.attachToTangle, transactions))
-                            .tap(([tail]) => {
-                                if (!reference || !isAboveMaxDepth(reference.attachmentTimestamp, maxDepth)) {
-                                    reference = tail
-                                } else {
-                                    return getConsistency([tail.hash]).then(consistent => {
-                                        if (!consistent) {
-                                            reference = tail
-                                        }
-                                    })
-                                }
-                            })
-                    }
-
-                    if (inclusionStates.indexOf(true) > -1) {
-                        persistence.deleteBundle(bundleHash(bundle))
-                        return
-                    } else {
-                        bundles.write(bundle)
-                    }
-
-                    if (!running) {
-                        return
-                    }
-                })
-                .catch(error => {
-                    bundles.write(bundle)
-                    that.emit(Events.error, error)
-                })
-        })
-    }
-
-    return {
+    const transactionAttacher = {
         startAttaching: (startParams: TransactionAttachmentStartParams) => {
             if (running) {
                 return
             }
 
-            routine(startParams)
+            attachToTangleRoutine(startParams)
 
             running = true
         },
@@ -332,6 +274,72 @@ export function transactionAttachment(this: any, params: TransactionAttachmentPa
             running = false
         },
     }
+
+    function attachToTangleRoutine(attachParams: TransactionAttachmentStartParams) {
+        if (running) {
+            return false
+        }
+
+        const { depth, minWeightMagnitude, maxDepth, delay } = attachParams
+
+        bundles.read().then(bundle =>
+            Promise.resolve({ addresses: [tritsToTrytes(transactionAddress(bundle))] })
+                .then(findTransactions)
+                .then(getTrytes)
+                .then(pastAttachments =>
+                    pastAttachments.filter(
+                        trytes =>
+                            tritsToTrytes(bundleHash(bundle)) ===
+                            trytes.slice(
+                                BUNDLE_OFFSET / TRYTE_WIDTH,
+                                BUNDLE_OFFSET / TRYTE_WIDTH + BUNDLE_LENGTH / TRYTE_WIDTH
+                            )
+                    )
+                )
+                .then(pastAttachments =>
+                    pastAttachments.map(trytes => tritsToTrytes(transactionHash(trytesToTrits(trytes))))
+                )
+                .then(pastAttachmentHashes =>
+                    getLatestInclusion(pastAttachmentHashes).tap(inclusionStates =>
+                        inclusionStates.indexOf(true) > -1
+                            ? persistence.deleteBundle(bundleHash(bundle))
+                            : Promise.all(pastAttachmentHashes.map(h => getConsistency([h]))).tap(consistencyStates =>
+                                  consistencyStates.indexOf(true) > -1
+                                      ? setTimeout(() => bundles.write(bundle), delay)
+                                      : sendTrytes(
+                                            bundleTritsToBundleTrytes(bundle),
+                                            depth,
+                                            minWeightMagnitude,
+                                            reference ? reference.hash : undefined
+                                        )
+                                            .tap(transactions => that.emit(Events.attachToTangle, transactions))
+                                            .tap(([tail]) => {
+                                                if (
+                                                    !reference ||
+                                                    !isAboveMaxDepth(reference.attachmentTimestamp, maxDepth)
+                                                ) {
+                                                    reference = tail
+                                                } else {
+                                                    return getConsistency([tail.hash]).then(consistent => {
+                                                        if (!consistent) {
+                                                            reference = tail
+                                                        }
+                                                    })
+                                                }
+
+                                                setTimeout(() => attachToTangleRoutine(attachParams), delay)
+                                            })
+                              )
+                    )
+                )
+                .catch(error => {
+                    bundles.write(bundle)
+                    that.emit(Events.error, error)
+                })
+        )
+    }
+
+    return transactionAttacher
 }
 
 export function history({ persistence }: HistoryParams): History<CDA, ReadonlyArray<Trytes>> {
@@ -353,7 +361,7 @@ export function history({ persistence }: HistoryParams): History<CDA, ReadonlyAr
             })
             stream.on('end', () => emitter.emit('end'))
             stream.on('close', () => emitter.emit('close'))
-            stream.on('error', error => emitter.emit(error))
+            stream.on('error', error => emitter.emit('error', error))
 
             return emitter
         },
@@ -375,7 +383,7 @@ export function history({ persistence }: HistoryParams): History<CDA, ReadonlyAr
             })
             stream.on('end', () => emitter.emit('end'))
             stream.on('close', () => emitter.emit('close'))
-            stream.on('error', error => emitter.emit(error))
+            stream.on('error', error => emitter.emit('error', error))
 
             return emitter
         },
