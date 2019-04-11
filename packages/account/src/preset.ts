@@ -302,7 +302,7 @@ export function transactionAttachment(this: any, params: TransactionAttachmentPa
                 .then(pastAttachmentHashes =>
                     getLatestInclusion(pastAttachmentHashes).tap(inclusionStates =>
                         inclusionStates.indexOf(true) > -1
-                            ? persistence.deleteBundle(bundleHash(bundle))
+                            ? persistence.deleteBundle(bundle)
                             : Promise.all(pastAttachmentHashes.map(h => getConsistency([h]))).tap(consistencyStates =>
                                   consistencyStates.indexOf(true) > -1
                                       ? setTimeout(() => bundles.write(bundle), delay)
