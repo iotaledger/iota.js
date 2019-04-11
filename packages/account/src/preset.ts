@@ -209,7 +209,7 @@ export function transactionIssuance(
                             acc.totalBalance += balance
                             acc.inputs.push({ ...input, balance })
                         }
-                    } else if (isExpired(currentTime, input)) {
+                    } else if (input.timeoutAt !== 0 && isExpired(currentTime, input)) {
                         persistence.deleteCDA(cda)
                     } else {
                         buffer.push(cda)
