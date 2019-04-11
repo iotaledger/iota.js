@@ -262,9 +262,9 @@ export function transactionAttachment(this: any, params: TransactionAttachmentPa
                 return
             }
 
-            attachToTangleRoutine(startParams)
-
             running = true
+
+            attachToTangleRoutine(startParams)
         },
         stopAttaching: () => {
             if (!running) {
@@ -276,14 +276,14 @@ export function transactionAttachment(this: any, params: TransactionAttachmentPa
     }
 
     function attachToTangleRoutine(attachParams: TransactionAttachmentStartParams) {
-        if (running) {
+        if (!running) {
             return false
         }
 
         const { depth, minWeightMagnitude, maxDepth, delay } = attachParams
 
         bundles.read().then(bundle =>
-            Promise.resolve({ addresses: [tritsToTrytes(transactionAddress(bundle))] })
+            Promise.resolve({ addresses: [tritsToTrytes(transactionAddress(bundle.slice(-TRANSACTION_LENGTH)))] })
                 .then(findTransactions)
                 .then(getTrytes)
                 .then(pastAttachments =>
@@ -302,7 +302,7 @@ export function transactionAttachment(this: any, params: TransactionAttachmentPa
                 .then(pastAttachmentHashes =>
                     getLatestInclusion(pastAttachmentHashes).tap(inclusionStates =>
                         inclusionStates.indexOf(true) > -1
-                            ? persistence.deleteBundle(bundleHash(bundle))
+                            ? persistence.deleteBundle(bundle)
                             : Promise.all(pastAttachmentHashes.map(h => getConsistency([h]))).tap(consistencyStates =>
                                   consistencyStates.indexOf(true) > -1
                                       ? setTimeout(() => bundles.write(bundle), delay)
@@ -327,11 +327,12 @@ export function transactionAttachment(this: any, params: TransactionAttachmentPa
                                                     })
                                                 }
 
-                                                setTimeout(() => attachToTangleRoutine(attachParams), delay)
+                                                setTimeout(() => bundles.write(bundle), delay)
                                             })
                               )
                     )
                 )
+                .tap(() => setTimeout(() => attachToTangleRoutine(attachParams), 1000))
                 .catch(error => {
                     bundles.write(bundle)
                     that.emit(Events.error, error)
