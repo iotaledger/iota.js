@@ -283,7 +283,7 @@ export function transactionAttachment(this: any, params: TransactionAttachmentPa
         const { depth, minWeightMagnitude, maxDepth, delay } = attachParams
 
         bundles.read().then(bundle =>
-            Promise.resolve({ addresses: [tritsToTrytes(transactionAddress(bundle))] })
+            Promise.resolve({ addresses: [tritsToTrytes(transactionAddress(bundle.slice(-TRANSACTION_LENGTH)))] })
                 .then(findTransactions)
                 .then(getTrytes)
                 .then(pastAttachments =>
