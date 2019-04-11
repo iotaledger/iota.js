@@ -262,9 +262,9 @@ export function transactionAttachment(this: any, params: TransactionAttachmentPa
                 return
             }
 
-            attachToTangleRoutine(startParams)
-
             running = true
+
+            attachToTangleRoutine(startParams)
         },
         stopAttaching: () => {
             if (!running) {
@@ -276,7 +276,7 @@ export function transactionAttachment(this: any, params: TransactionAttachmentPa
     }
 
     function attachToTangleRoutine(attachParams: TransactionAttachmentStartParams) {
-        if (running) {
+        if (!running) {
             return false
         }
 
@@ -327,11 +327,12 @@ export function transactionAttachment(this: any, params: TransactionAttachmentPa
                                                     })
                                                 }
 
-                                                setTimeout(() => attachToTangleRoutine(attachParams), delay)
+                                                setTimeout(() => bundles.write(bundle), delay)
                                             })
                               )
                     )
                 )
+                .tap(() => setTimeout(() => attachToTangleRoutine(attachParams), 1000))
                 .catch(error => {
                     bundles.write(bundle)
                     that.emit(Events.error, error)
