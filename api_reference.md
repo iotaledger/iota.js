@@ -89,7 +89,7 @@ Validates signatures and overall structure.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| entries | <code>Array.&lt;BundleEntry&gt;</code> | Entries of signle or multiple transactions with the same address |
+| entries | <code>Array.&lt;BundleEntry&gt;</code> | Entries of single or multiple transactions with the same address |
 
 Creates a bunlde with given transaction entries.
 
