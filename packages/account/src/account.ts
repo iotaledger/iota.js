@@ -1,4 +1,5 @@
 import { asyncBuffer, AsyncBuffer } from '@iota/async-buffer'
+import { trytesToTrits } from '@iota/converter'
 import { API } from '@iota/core'
 import {
     createPersistence,
@@ -49,7 +50,7 @@ export interface HistoryParams {
 }
 
 export interface AccountParams {
-    readonly seed: Int8Array
+    readonly seed: Int8Array | string
     readonly provider?: string
     readonly persistencePath?: string
     readonly stateAdapter?: CreatePersistenceAdapter
@@ -135,6 +136,10 @@ export function createAccountWithPreset<X, Y, Z>(preset: AccountPreset<X, Y, Z>)
             timeSource = preset.timeSource,
         }: AccountParams
     ): Account<X, Y, Z> {
+        if (typeof seed === 'string') {
+            seed = trytesToTrits(seed)
+        }
+
         const persistence = createPersistence({
             persistenceID: generatePersistenceID(seed),
             persistencePath,
@@ -156,9 +161,14 @@ export function createAccountWithPreset<X, Y, Z>(preset: AccountPreset<X, Y, Z>)
         function accountMixin(this: any) {
             return Object.assign(
                 this,
-                preset.addressGeneration.call(this, { seed, persistence, timeSource, security: preset.security }),
+                preset.addressGeneration.call(this, {
+                    seed: seed as Int8Array,
+                    persistence,
+                    timeSource,
+                    security: preset.security,
+                }),
                 preset.transactionIssuance.call(this, {
-                    seed,
+                    seed: seed as Int8Array,
                     deposits,
                     persistence,
                     network,
