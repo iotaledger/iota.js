@@ -1,4 +1,4 @@
-import { trytesToTrits } from '@iota/converter'
+import { tritsToTrytes, trytesToTrits } from '@iota/converter'
 import { transactionHash } from '@iota/transaction'
 import { asTransactionObject, asTransactionTrytes } from '@iota/transaction-converter'
 import { NativeModules } from 'react-native'
@@ -45,7 +45,10 @@ export const attachToTangle = (
         return NativeModules.PearlDiver.doPOW(asTransactionTrytes(transaction), minWeightMagnitude).then(
             (nonce: Trytes) => {
                 const transactionTrytes = asTransactionTrytes({ ...transaction, nonce })
-                return search([...transactions, transactionTrytes], transactionHash(trytesToTrits(transactionTrytes)))
+                return search(
+                    [...transactions, transactionTrytes],
+                    tritsToTrytes(transactionHash(trytesToTrits(transactionTrytes)))
+                )
             }
         )
     }

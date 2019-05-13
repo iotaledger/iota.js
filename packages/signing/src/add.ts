@@ -44,7 +44,7 @@ function full_add(a: number, b: number, c: number) {
     return [s_out, c_out]
 }
 
-export default function add(a: Int8Array, b: Int8Array): Int8Array {
+export function add(a: Int8Array, b: Int8Array): Int8Array {
     const out = new Int8Array(Math.max(a.length, b.length))
     let carry = 0
     let a_i
@@ -62,3 +62,5 @@ export default function add(a: Int8Array, b: Int8Array): Int8Array {
 
     return out
 }
+
+export const increment = (value: Int8Array) => add(value, new Int8Array(1).fill(1))

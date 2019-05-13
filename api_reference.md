@@ -89,7 +89,7 @@ Validates signatures and overall structure.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| entries | <code>Array.&lt;BundleEntry&gt;</code> | Entries of signle or multiple transactions with the same address |
+| entries | <code>Array.&lt;BundleEntry&gt;</code> | Entries of single or multiple transactions with the same address |
 
 Creates a bunlde with given transaction entries.
 
@@ -495,7 +495,7 @@ that reattachment is possible, until your bundle has been included.
 ```js
 getTransactionsToApprove(depth)
   .then(({ trunkTransaction, branchTransaction }) =>
-    attachToTangle(trunkTransaction, branchTransaction, minWightMagnitude, trytes)
+    attachToTangle(trunkTransaction, branchTransaction, minWeightMagnitude, trytes)
   )
   .then(attachedTrytes => {
     // ...
@@ -1194,7 +1194,7 @@ const minWeightMagnitude = 14
 
 getTransactionsToApprove(depth)
   .then(transactionsToApprove =>
-     attachToTangle(minWightMagnitude, trytes, { transactionsToApprove })
+     attachToTangle(minWeightMagnitude, trytes, { transactionsToApprove })
   )
   .then(storeAndBroadcast)
   .catch(err => {

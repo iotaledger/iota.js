@@ -1,7 +1,6 @@
-import { transactionHashValidator } from '@iota/transaction'
 import * as Promise from 'bluebird'
-import { inconsistentTransaction } from '../../errors'
-import { arrayValidator, validate } from '../../guards'
+import * as errors from '../../errors'
+import { isHash, validate } from '../../guards'
 import {
     asArray,
     Callback,
@@ -105,17 +104,18 @@ export const createCheckConsistency = ({ send }: Provider) =>
         callback?: Callback<boolean>
     ): Promise<boolean> {
         const { rejectWithReason } = getOptionsWithDefaults(defaults)(options || {})
+        const tails = asArray(transactions)
 
-        return Promise.resolve(validate(arrayValidator(transactionHashValidator)(asArray(transactions))))
+        return Promise.resolve(validate([transactions, arr => arr.every(isHash), errors.INVALID_TRANSACTION_HASH]))
             .then(() =>
                 send<CheckConsistencyCommand, CheckConsistencyResponse>({
                     command: IRICommand.CHECK_CONSISTENCY,
-                    tails: asArray(transactions),
+                    tails,
                 })
             )
             .then(({ state, info }) => {
                 if (rejectWithReason && !state) {
-                    throw new Error(inconsistentTransaction(info))
+                    throw new Error(errors.inconsistentTransaction(info))
                 }
 
                 return state

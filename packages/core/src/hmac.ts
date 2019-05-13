@@ -1,30 +1,25 @@
-import { trits, trytes } from '@iota/converter'
+import { tritsToValue } from '@iota/converter'
 import Curl from '@iota/curl'
-import { Bundle } from '../../types'
+import { bundle, SIGNATURE_OR_MESSAGE_OFFSET, TRANSACTION_LENGTH, value } from '@iota/transaction'
 
 const HMAC_ROUNDS = 27
 
-export default function addHMAC(transactions: Bundle, key: Int8Array): Bundle {
+export default function addHMAC(transactions: Int8Array, key: Int8Array): Int8Array {
     const curl = new Curl(HMAC_ROUNDS)
-    const bundleHashTrits = trits(transactions[0].bundle)
     const hmac = new Int8Array(Curl.HASH_LENGTH)
 
     curl.initialize()
     curl.absorb(key, 0, Curl.HASH_LENGTH)
-    curl.absorb(bundleHashTrits, 0, Curl.HASH_LENGTH)
+    curl.absorb(bundle(transactions), 0, Curl.HASH_LENGTH)
     curl.squeeze(hmac, 0, Curl.HASH_LENGTH)
 
-    const hmacTrytes = trytes(hmac)
+    const transactionsCopy = transactions.slice()
 
-    return transactions.map(
-        transaction =>
-            transaction.value > 0
-                ? {
-                      ...transaction,
-                      signatureMessageFragment: hmacTrytes.concat(
-                          transaction.signatureMessageFragment.substr(81, 2187)
-                      ),
-                  }
-                : transaction
-    )
+    for (let offset = 0; offset < transactionsCopy.length; offset += TRANSACTION_LENGTH) {
+        if (tritsToValue(value(transactions, offset)) > 0) {
+            transactionsCopy.set(hmac, offset + SIGNATURE_OR_MESSAGE_OFFSET)
+        }
+    }
+
+    return transactionsCopy
 }

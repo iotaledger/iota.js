@@ -1,10 +1,16 @@
-import * as Promise from 'bluebird'
-
-import { addEntry, addTrytes, finalizeBundle } from '@iota/bundle'
+import { addEntry, addSignatureOrMessage, finalizeBundle, valueSum } from '@iota/bundle'
 import { removeChecksum } from '@iota/checksum'
-import { trits, trytes } from '@iota/converter'
+import { tritsToTrytes, tritsToValue, trytesToTrits, valueToTrits } from '@iota/converter'
 import { signatureFragments } from '@iota/signing'
-import { asFinalTransactionTrytes } from '@iota/transaction-converter'
+import {
+    address,
+    bundle,
+    SIGNATURE_OR_MESSAGE_LENGTH,
+    SIGNATURE_OR_MESSAGE_OFFSET,
+    TRANSACTION_LENGTH,
+    value,
+} from '@iota/transaction'
+import * as Promise from 'bluebird'
 import * as errors from '../../errors'
 import {
     arrayValidator,
@@ -31,7 +37,6 @@ import { createGetInputs, createGetNewAddress } from './'
 import HMAC from './hmac'
 
 const HASH_LENGTH = 81
-const SIGNATURE_MESSAGE_FRAGMENT_LENGTH = 2187
 const NULL_HASH_TRYTES = '9'.repeat(HASH_LENGTH)
 const SECURITY_LEVEL = 2
 
@@ -64,7 +69,7 @@ export const getPrepareTransfersOptions = (options: Partial<PrepareTransfersOpti
 })
 
 export interface PrepareTransfersProps {
-    readonly transactions: ReadonlyArray<Transaction>
+    readonly transactions: Int8Array
     readonly trytes: ReadonlyArray<Trytes>
     readonly transfers: ReadonlyArray<Transfer>
     readonly seed: Int8Array
@@ -166,9 +171,9 @@ export const createPrepareTransfers = (provider?: Provider, now: () => number = 
 
         const props = Promise.resolve(
             validatePrepareTransfers({
-                transactions: [],
+                transactions: new Int8Array(0),
                 trytes: [],
-                seed: typeof seed === 'string' ? trits(seed) : new Int8Array(seed),
+                seed: typeof seed === 'string' ? trytesToTrits(seed) : new Int8Array(seed),
                 transfers,
                 timestamp: Math.floor((typeof now === 'function' ? now() : Date.now()) / 1000),
                 ...getPrepareTransfersOptions(options),
@@ -211,14 +216,13 @@ export const addHMACPlaceholder = (props: PrepareTransfersProps): PrepareTransfe
     return hmacKey
         ? {
               ...props,
-              transfers: transfers.map(
-                  (transfer, i) =>
-                      transfer.value > 0
-                          ? {
-                                ...transfer,
-                                message: NULL_HASH_TRYTES + (transfer.message || ''),
-                            }
-                          : transfer
+              transfers: transfers.map((transfer, i) =>
+                  transfer.value > 0
+                      ? {
+                            ...transfer,
+                            message: NULL_HASH_TRYTES + (transfer.message || ''),
+                        }
+                      : transfer
               ),
           }
         : props
@@ -229,23 +233,20 @@ export const addTransfers = (props: PrepareTransfersProps): PrepareTransfersProp
 
     return {
         ...props,
-        transactions: transfers.reduce((acc, { address, value, tag, message }) => {
-            const length = Math.ceil(((message || '').length || 1) / SIGNATURE_MESSAGE_FRAGMENT_LENGTH)
+        transactions: transfers.reduce((acc, transfer) => {
+            const messageTrits = trytesToTrits(transfer.message || '')
+            const signatureOrMessage = new Int8Array(
+                (1 + Math.floor(messageTrits.length / SIGNATURE_OR_MESSAGE_LENGTH)) * SIGNATURE_OR_MESSAGE_LENGTH
+            )
+            signatureOrMessage.set(messageTrits, SIGNATURE_OR_MESSAGE_OFFSET)
 
             return addEntry(acc, {
-                address: removeChecksum(address),
-                value,
-                tag,
-                timestamp,
-                length,
-                signatureMessageFragments: Array(length)
-                    .fill('')
-                    .map((_, i) =>
-                        (message || '').slice(
-                            i * SIGNATURE_MESSAGE_FRAGMENT_LENGTH,
-                            (i + 1) * SIGNATURE_MESSAGE_FRAGMENT_LENGTH
-                        )
-                    ),
+                signatureOrMessage,
+                address: trytesToTrits(removeChecksum(transfer.address)),
+                value: valueToTrits(transfer.value),
+                obsoleteTag: trytesToTrits(transfer.tag || ''),
+                issuanceTimestamp: valueToTrits(timestamp),
+                tag: trytesToTrits(transfer.tag || ''),
             })
         }, transactions),
     }
@@ -256,7 +257,7 @@ export const createAddInputs = (provider?: Provider) => {
 
     return (props: PrepareTransfersProps): Promise<PrepareTransfersProps> => {
         const { transactions, transfers, inputs, timestamp, seed, security } = props
-        const threshold = transfers.reduce((sum, { value }) => (sum += value), 0)
+        const threshold = transfers.reduce((sum, transfer) => (sum += transfer.value), 0)
 
         if (threshold === 0) {
             return Promise.resolve(props)
@@ -268,17 +269,17 @@ export const createAddInputs = (provider?: Provider) => {
 
         return (!getInputs || inputs.length
             ? Promise.resolve(inputs)
-            : getInputs(trytes(seed), { security, threshold }).then(response => response.inputs)
+            : getInputs(tritsToTrytes(seed), { security, threshold }).then(response => response.inputs)
         ).then(res => ({
             ...props,
             inputs: res,
             transactions: res.reduce(
                 (acc, input) =>
                     addEntry(acc, {
-                        length: input.security,
-                        address: removeChecksum(input.address),
-                        value: -input.balance,
-                        timestamp: timestamp || Math.floor(Date.now() / 1000),
+                        signatureOrMessage: new Int8Array(input.security * SIGNATURE_OR_MESSAGE_LENGTH),
+                        address: trytesToTrits(removeChecksum(input.address)),
+                        value: valueToTrits(-input.balance),
+                        issuanceTimestamp: valueToTrits(timestamp),
                     }),
                 transactions
             ),
@@ -293,15 +294,15 @@ export const createAddRemainder = (provider?: Provider) => {
         const { transactions, remainderAddress, seed, security, inputs, timestamp } = props
 
         // Values of transactions in the bundle should sum up to 0.
-        const value = transactions.reduce((acc, transaction) => (acc += transaction.value), 0)
+        const sum = valueSum(transactions, 0, transactions.length)
 
         // Value > 0 indicates insufficient balance in inputs.
-        if (value > 0) {
+        if (sum > 0) {
             throw new Error(errors.INSUFFICIENT_BALANCE)
         }
 
         // If value is already zero no remainder is required
-        if (value === 0) {
+        if (sum === 0) {
             return props
         }
 
@@ -311,21 +312,21 @@ export const createAddRemainder = (provider?: Provider) => {
 
         return (remainderAddress
             ? Promise.resolve(remainderAddress)
-            : getNewAddress!(trytes(seed), {
+            : getNewAddress!(tritsToTrytes(seed), {
                   index: getRemainderAddressStartIndex(inputs),
                   security,
               })
-        ).then(address => {
-            address = asArray(address)[0]
+        ).then(addresses => {
+            const addressTrytes = asArray(addresses)[0]
 
             return {
                 ...props,
-                remainderAddress: address,
+                remainderAddress: addressTrytes,
                 transactions: addEntry(transactions, {
-                    length: 1,
-                    address,
-                    value: Math.abs(value),
-                    timestamp: timestamp || Math.floor(Date.now() / 1000),
+                    signatureOrMessage: new Int8Array(SIGNATURE_OR_MESSAGE_LENGTH),
+                    address: trytesToTrits(addressTrytes as Trytes),
+                    value: valueToTrits(Math.abs(sum)),
+                    issuanceTimestamp: valueToTrits(timestamp),
                 }),
             }
         })
@@ -337,12 +338,20 @@ export const getRemainderAddressStartIndex = (inputs: ReadonlyArray<Address>): n
 
 export const verifyNotSendingToInputs = (props: PrepareTransfersProps): PrepareTransfersProps => {
     const { transactions } = props
-    const isSendingToInputs = transactions
-        .filter(({ value }) => value < 0)
-        .some(output => transactions.findIndex(input => input.value > 0 && input.address === output.address) > -1)
 
-    if (isSendingToInputs) {
-        throw new Error(errors.SENDING_BACK_TO_INPUTS)
+    for (let offset = 0; offset < transactions.length; offset += TRANSACTION_LENGTH) {
+        if (tritsToValue(value(transactions, offset)) < 0) {
+            for (let jOffset = 0; jOffset < transactions.length; jOffset += TRANSACTION_LENGTH) {
+                if (jOffset !== offset) {
+                    if (
+                        tritsToValue(value(transactions, jOffset)) > 0 &&
+                        tritsToTrytes(address(transactions, jOffset)) === tritsToTrytes(address(transactions, offset))
+                    ) {
+                        throw new Error(errors.SENDING_BACK_TO_INPUTS)
+                    }
+                }
+            }
+        }
     }
 
     return props
@@ -355,6 +364,14 @@ export const finalize = (props: PrepareTransfersProps): PrepareTransfersProps =>
 
 export const addSignatures = (props: PrepareTransfersProps): Promise<PrepareTransfersProps> => {
     const { transactions, inputs, seed, nativeGenerateSignatureFunction } = props
+    let signatureIndex: number
+
+    for (let i = 0; i < transactions.length / TRANSACTION_LENGTH; i++) {
+        if (tritsToValue(value(transactions, i * TRANSACTION_LENGTH)) < 0) {
+            signatureIndex = i
+            break
+        }
+    }
 
     return Promise.all(
         inputs.map(({ keyIndex, security }) =>
@@ -362,26 +379,36 @@ export const addSignatures = (props: PrepareTransfersProps): Promise<PrepareTran
                 seed,
                 keyIndex,
                 security || SECURITY_LEVEL,
-                trits(transactions[0].bundle),
+                bundle(transactions),
                 nativeGenerateSignatureFunction
             )
         )
-    )
-        .then(fragments => fragments.reduce((acc, fragment) => acc.concat(fragment), []))
-        .then(fragments => fragments.map(trytes))
-        .then(fragments => ({
-            ...props,
-            transactions: addTrytes(transactions, fragments, transactions.findIndex(({ value }) => value < 0)),
-        }))
+    ).then(signatures => ({
+        ...props,
+        transactions: signatures.reduce((acc, signature) => {
+            const transactionsCopy = addSignatureOrMessage(acc, signature, signatureIndex)
+            signatureIndex += signature.length / SIGNATURE_OR_MESSAGE_LENGTH
+            return transactionsCopy
+        }, transactions),
+    }))
 }
 
 export const addHMAC = (props: PrepareTransfersProps): PrepareTransfersProps => {
     const { hmacKey, transactions } = props
 
-    return hmacKey ? { ...props, transactions: HMAC(transactions, trits(hmacKey)) } : props
+    return hmacKey ? { ...props, transactions: HMAC(transactions, trytesToTrits(hmacKey)) } : props
 }
 
-export const asTransactionTrytes = (props: PrepareTransfersProps): PrepareTransfersProps => ({
-    ...props,
-    trytes: asFinalTransactionTrytes(props.transactions),
-})
+export const asTransactionTrytes = (props: PrepareTransfersProps): PrepareTransfersProps => {
+    const { transactions } = props
+    const trytes: Trytes[] = []
+
+    for (let offset = 0; offset < transactions.length; offset += TRANSACTION_LENGTH) {
+        trytes.push(tritsToTrytes(transactions.subarray(offset, offset + TRANSACTION_LENGTH)))
+    }
+
+    return {
+        ...props,
+        trytes: trytes.reverse().slice(),
+    }
+}

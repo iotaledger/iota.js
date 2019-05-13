@@ -30,7 +30,7 @@ test('sendTrytes() does not mutate original trytes.', async t => {
     t.deepEqual(trytesCopy, trytes, 'sendTrytes() should not mutate original trytes.')
 })
 
-test('sendTrytes() rejects with correct errors for invalid input.', t => {
+test('sendTrytes() rejects with correct errors for invalid input.', async t => {
     const invalidTrytes = ['asdasDSFDAFD']
 
     t.is(

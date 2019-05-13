@@ -58,6 +58,10 @@ export function trits(input: string | number): Int8Array {
         for (let i = 0; i < input.length; i++) {
             const index = TRYTE_ALPHABET.indexOf(input.charAt(i))
 
+            if (index === -1) {
+                throw new Error(errors.INVALID_TRYTES)
+            }
+
             result[i * 3] = TRYTES_TRITS_LUT[index][0]
             result[i * 3 + 1] = TRYTES_TRITS_LUT[index][1]
             result[i * 3 + 2] = TRYTES_TRITS_LUT[index][2]

@@ -1,15 +1,18 @@
 import test from 'ava'
-import { isHash } from '../src'
+import { isEmpty, isNinesTrytes } from '../src'
 
-test('isHash()', t => {
-    const validHash = 'JALLWDUOSTSJVL9EEHKW9YQFPBVBJAGLNKRVGSQZCGHQWEMIIILJMTHVAGVDXJVZMBAMOZTSBQNRVNLLS'
-    const validHashWithChecksum =
-        'JALLWDUOSTSJVL9EEHKW9YQFPBVBJAGLNKRVGSQZCGHQWEMIIILJMTHVAGVDXJVZMBAMOZTSBQNRVNLLSJMPIVGPNE'
-    const invalidHash = '123adfdsafLWDUOSTSJVL9EEHKW9YQFPBVBJAGLNKRVGSQZCGHQWEMIIILJMTHVAGVDXJVZMBAMOZTSBQNRVNLLASD'
+test('isEmpty() returns true for all-9s.', t => {
+    t.is(isEmpty('99999'), true, 'isEmpty() should return true for all-9s.')
 
-    t.is(isHash(validHash), true, 'hash() should return true for valid hash.')
+    t.is(
+        isNinesTrytes('99999'), // isEmtpy() alias
+        true,
+        'isNinesTrytes() should return true for all-9s.'
+    )
+})
 
-    t.is(isHash(validHashWithChecksum), true, 'hash() should return true for valid hash with checksum.')
+test('isEmpty() returns false for non-9s.', t => {
+    t.is(isEmpty('ASDF999'), false, 'isEmpty() should return false for non-9s.')
 
-    t.is(isHash(invalidHash), false, 'hash() should return false for invalid hash')
+    t.is(isNinesTrytes('ASDF999'), false, 'isNinesTrytes() should return false for non-9s.')
 })

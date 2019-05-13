@@ -1,7 +1,8 @@
-import { transactionHashValidator } from '@iota/transaction'
+import { TRYTE_WIDTH } from '@iota/signing'
+import { TRANSACTION_HASH_LENGTH } from '@iota/transaction'
 import * as Promise from 'bluebird'
-import { INVALID_REFERENCE_HASH } from '../../errors'
-import { depthValidator, validate } from '../../guards'
+import * as errors from '../../errors'
+import { isTrytesOfExactLength, validate } from '../../guards'
 import {
     Callback,
     GetTransactionsToApproveCommand,
@@ -68,13 +69,20 @@ export const createGetTransactionsToApprove = ({ send }: Provider) =>
      * - `INVALID_REFERENCE_HASH`: Invalid reference hash
      * - Fetch error
      */
-    function attachToTangle(
+    function getTransactionsToApprove(
         depth: number,
         reference?: Hash,
         callback?: Callback<TransactionsToApprove>
     ): Promise<TransactionsToApprove> {
         return Promise.resolve(
-            validate(depthValidator(depth), !!reference && transactionHashValidator(reference, INVALID_REFERENCE_HASH))
+            validate(
+                [depth, n => Number.isInteger(n) && n > 0, errors.INVALID_DEPTH],
+                !!reference && [
+                    reference,
+                    t => isTrytesOfExactLength(reference, TRANSACTION_HASH_LENGTH / TRYTE_WIDTH),
+                    errors.INVALID_REFERENCE_HASH,
+                ]
+            )
         )
             .then(() =>
                 send<GetTransactionsToApproveCommand, GetTransactionsToApproveResponse>({

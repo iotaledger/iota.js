@@ -1,9 +1,25 @@
-import { addEntry, addTrytes, finalizeBundle } from '@iota/bundle'
+import { addEntry, addSignatureOrMessage, finalizeBundle } from '@iota/bundle'
 import { removeChecksum } from '@iota/checksum'
-import { trits, trytes } from '@iota/converter'
+import { tritsToTrytes, trytesToTrits, valueToTrits } from '@iota/converter'
 import { Balances, createGetBalances } from '@iota/core'
 import Kerl from '@iota/kerl'
-import { digests, key, normalizedBundle, signatureFragment, subseed } from '@iota/signing'
+import {
+    digests,
+    FRAGMENT_LENGTH,
+    key,
+    NORMALIZED_FRAGMENT_LENGTH,
+    normalizedBundle,
+    signatureFragment,
+    subseed,
+} from '@iota/signing'
+import {
+    address,
+    bundle as bundleHash,
+    SIGNATURE_OR_MESSAGE_LENGTH,
+    SIGNATURE_OR_MESSAGE_OFFSET,
+    signatureOrMessage,
+    TRANSACTION_LENGTH,
+} from '@iota/transaction'
 import * as Promise from 'bluebird'
 import * as errors from '../../errors'
 import {
@@ -29,8 +45,11 @@ export interface MultisigInput {
 
 export const multisigInputValidator: Validator<MultisigInput> = (multisigInput: any) => [
     multisigInput,
-    ({ address, balance, securitySum }: MultisigInput) =>
-        isSecurityLevel(securitySum) && isHash(address) && Number.isInteger(balance) && balance > 0,
+    (input: MultisigInput) =>
+        isSecurityLevel(input.securitySum) &&
+        isHash(input.address) &&
+        Number.isInteger(input.balance) &&
+        input.balance > 0,
     errors.INVALID_INPUT,
 ]
 
@@ -47,119 +66,61 @@ export const createBundle = (
     input: MultisigInput,
     transfers: ReadonlyArray<Transfer>,
     remainderAddress?: string
-): Bundle => {
+): Int8Array => {
     // Create a new bundle
-    let bundle: Transaction[] = []
+    let bundle: Int8Array = transfers.reduce((acc, transfer) => {
+        const message = trytesToTrits(transfer.message || '')
+        const signatureOrMessageTrits = new Int8Array(
+            (1 + Math.floor(message.length / SIGNATURE_OR_MESSAGE_LENGTH)) * SIGNATURE_OR_MESSAGE_LENGTH
+        )
 
-    const signatureFragments: string[] = []
-    const totalBalance: number = input.balance
-    let totalValue = 0
-    let tag: string = '9'.repeat(27)
+        signatureOrMessageTrits.set(message, SIGNATURE_OR_MESSAGE_OFFSET)
 
-    //  Iterate over all transfers, get totalValue
-    //  and prepare the signatureFragments, message and tag
-    for (let i = 0; i < transfers.length; i++) {
-        let signatureMessageLength = 1
-
-        // If message longer than 2187 trytes, increase signatureMessageLength (add multiple transactions)
-        if ((transfers[i].message || '').length > 2187) {
-            // Get total length, message / maxLength (2187 trytes)
-            signatureMessageLength += Math.floor((transfers[i].message || '').length / 2187)
-
-            let msgCopy = transfers[i].message
-
-            // While there is still a message, copy it
-            while (msgCopy) {
-                let fragment = msgCopy.slice(0, 2187)
-                msgCopy = msgCopy.slice(2187, msgCopy.length)
-
-                // Pad remainder of fragment
-                for (let j = 0; fragment.length < 2187; j++) {
-                    fragment += '9'
-                }
-
-                signatureFragments.push(fragment)
-            }
-        } else {
-            // Else, get single fragment with 2187 of 9's trytes
-            let fragment = ''
-
-            if (transfers[i].message) {
-                fragment = (transfers[i].message || '').slice(0, 2187)
-            }
-
-            for (let j = 0; fragment.length < 2187; j++) {
-                fragment += '9'
-            }
-
-            signatureFragments.push(fragment)
-        }
-
-        // If no tag defined, get 27 tryte tag.
-        tag = transfers[i].tag || '9'.repeat(27)
-
-        // Pad for required 27 tryte length
-        for (let j = 0; tag.length < 27; j++) {
-            tag += '9'
-        }
-
-        // Add first entries to the bundle
-        // Slice the address in case the user provided a checksummed one
-        const _bundle = addEntry(bundle, {
-            length: signatureMessageLength,
-            address: transfers[i].address.slice(0, 81),
-            value: transfers[i].value,
-            tag,
-            timestamp: Math.floor(Date.now() / 1000),
+        return addEntry(acc, {
+            signatureOrMessage: signatureOrMessageTrits,
+            address: trytesToTrits(removeChecksum(transfer.address)),
+            value: valueToTrits(transfer.value),
+            obsoleteTag: trytesToTrits(transfer.tag || ''),
+            issuanceTimestamp: valueToTrits(Math.floor(Date.now() / 1000)),
         })
+    }, new Int8Array(0))
 
-        bundle = _bundle.slice()
+    const totalBalance = input.balance
+    const totalValue = transfers.reduce((acc, transfer) => (acc += transfer.value), 0)
+    const remainder = totalBalance - totalValue
 
-        // Sum up total value
-        totalValue += transfers[i].value
+    if (remainder < 0) {
+        throw new Error('Not enough balance.')
     }
 
     if (totalBalance > 0) {
-        const toSubtract = 0 - totalBalance
-
         // Add input as bundle entry
         // Only a single entry, signatures will be added later
-        const _bundle = addEntry(bundle, {
-            length: input.securitySum,
-            address: input.address,
-            value: toSubtract,
-            tag,
-            timestamp: Math.floor(Date.now() / 1000),
+        bundle = addEntry(bundle, {
+            signatureOrMessage: new Int8Array(input.securitySum * SIGNATURE_OR_MESSAGE_LENGTH),
+            address: trytesToTrits(input.address),
+            value: valueToTrits(0 - totalBalance),
+            issuanceTimestamp: valueToTrits(Math.floor(Date.now() / 1000)),
         })
-
-        bundle = _bundle.slice()
-    }
-
-    if (totalValue > totalBalance) {
-        throw new Error('Not enough balance.')
     }
 
     // If there is a remainder value
     // Add extra output to send remaining funds to
-    if (totalBalance > totalValue) {
-        const remainder = totalBalance - totalValue
-
+    if (remainder > 0) {
         // Remainder bundle entry if necessary
         if (!remainderAddress) {
             throw new Error('No remainder address defined')
         }
 
-        const _bundle = addEntry(bundle, {
-            length: 1,
-            address: remainderAddress,
-            value: remainder,
-            tag,
-            timestamp: Math.floor(Date.now() / 1000),
+        bundle = addEntry(bundle, {
+            signatureOrMessage: new Int8Array(SIGNATURE_OR_MESSAGE_LENGTH),
+            address: trytesToTrits(remainderAddress),
+            value: valueToTrits(remainder),
+            issuanceTimestamp: valueToTrits(Math.floor(Date.now() / 1000)),
         })
-        bundle = _bundle.slice()
     }
 
-    return addTrytes(finalizeBundle(bundle), signatureFragments, bundle.findIndex(tx => tx.value < 0))
+    return finalizeBundle(bundle)
 }
 
 /**
@@ -169,6 +130,7 @@ export const createBundle = (
  */
 export default class Multisig {
     public address = Address
+
     private provider: Provider // tslint:disable-line variable-name
 
     constructor(provider: Provider) {
@@ -186,10 +148,10 @@ export default class Multisig {
      * @param {number} index
      * @param {number} security Security level to be used for the private key / address. Can be 1, 2 or 3
      *
-     * @return {string} digest trytes
+     * @return {Int8Array} digest trytes
      */
     public getKey(seed: string, index: number, security: number) {
-        return trytes(key(subseed(trits(seed), index), security))
+        return key(subseed(trytesToTrits(seed), index), security)
     }
 
     /**
@@ -206,9 +168,9 @@ export default class Multisig {
      * @return {string} digest trytes
      **/
     public getDigest(seed: string, index: number, security: number) {
-        const keyTrits = key(subseed(trits(seed), index), security)
+        const keyTrits = key(subseed(trytesToTrits(seed), index), security)
 
-        return trytes(digests(keyTrits))
+        return tritsToTrytes(digests(keyTrits))
     }
 
     /**
@@ -231,8 +193,8 @@ export default class Multisig {
 
         // Absorb all key digests
         digestsArr.forEach(keyDigest => {
-            const digestTrits = trits(keyDigest)
-            kerl.absorb(trits(keyDigest), 0, digestTrits.length)
+            const digestTrits = trytesToTrits(keyDigest)
+            kerl.absorb(trytesToTrits(keyDigest), 0, digestTrits.length)
         })
 
         // Squeeze address trits
@@ -240,7 +202,7 @@ export default class Multisig {
         kerl.squeeze(addressTrits, 0, Kerl.HASH_LENGTH)
 
         // Convert trits into trytes and return the address
-        return trytes(addressTrits) === multisigAddress
+        return tritsToTrytes(addressTrits) === multisigAddress
     }
 
     /**
@@ -259,7 +221,7 @@ export default class Multisig {
      * @param {object} transfers
      * @param {function} callback
      *
-     * @return {array} Array of transaction objects
+     * @return {Int8Array} Bundle trits
      */
     public initiateTransfer(
         input: MultisigInput,
@@ -275,22 +237,20 @@ export default class Multisig {
             )
         )
             .then(() => sanitizeTransfers(transfers))
-            .then((sanitizedTransfers: ReadonlyArray<Transfer>) => {
-                if (input.balance) {
-                    return createBundle(input, sanitizedTransfers, remainderAddress)
-                } else {
-                    return createGetBalances(this.provider)([input.address], 100)
-                        .then(
-                            (res: Balances): MultisigInput => ({
-                                ...input,
-                                balance: res.balances[0],
-                            })
-                        )
-                        .then((inputWithBalance: MultisigInput) =>
-                            createBundle(inputWithBalance, sanitizedTransfers, remainderAddress)
-                        )
-                }
-            })
+            .then((sanitizedTransfers: ReadonlyArray<Transfer>) =>
+                input.balance
+                    ? createBundle(input, sanitizedTransfers, remainderAddress)
+                    : (createGetBalances(this.provider) as any)([input.address], 100)
+                          .then(
+                              (res: Balances): MultisigInput => ({
+                                  ...input,
+                                  balance: res.balances[0],
+                              })
+                          )
+                          .then((inputWithBalance: MultisigInput) =>
+                              createBundle(inputWithBalance, sanitizedTransfers, remainderAddress)
+                          )
+            )
             .asCallback(callback)
     }
 
@@ -301,81 +261,50 @@ export default class Multisig {
      *
      * @memberof Multisig
      *
-     * @param {array} bundleToSign
+     * @param {Int8Array} bundle
      * @param {number} cosignerIndex
      * @param {string} inputAddress
-     * @param {string} key
+     * @param {string} keyTrits
      * @param {function} callback
      *
-     * @return {array} trytes Returns bundle trytes
+     * @return {Int8Array} bundle with signature trits
      */
-    public addSignature(bundleToSign: Bundle, inputAddress: string, keyTrytes: string, callback: Callback) {
-        const bundle = bundleToSign
-        const _bundle: Array<Partial<Transaction>> = []
+    public addSignature(bundle: Int8Array, inputAddress: string, keyTrits: Int8Array, callback: Callback) {
+        const bundleHashTrits = bundleHash(bundle)
+        const normalizedBundleHash = normalizedBundle(bundleHashTrits)
+        let signatureIndex = 0
 
-        // Get the security used for the private key
-        // 1 security level = 2187 trytes
-        const security = keyTrytes.length / 2187
+        for (const offset = 0; offset < bundle.length * TRANSACTION_LENGTH; offset + TRANSACTION_LENGTH) {
+            if (tritsToTrytes(address(bundle)) === inputAddress && isNinesTrytes(signatureOrMessage(bundle))) {
+                const signature = new Int8Array(keyTrits.length)
 
-        // convert private key trytes into trits
-        const keyTrits = trits(keyTrytes)
-
-        // First get the total number of already signed transactions
-        // use that for the bundle hash calculation as well as knowing
-        // where to add the signature
-        let numSignedTxs = 0
-
-        for (let i = 0; i < bundle.length; i++) {
-            if (bundle[i].address === inputAddress) {
-                // If transaction is already signed, increase counter
-                if (!isNinesTrytes(bundle[i].signatureMessageFragment as string)) {
-                    numSignedTxs++
-                } else {
-                    // Else sign the transactionse
-                    const bundleHash = bundle[i].bundle
-
-                    //  First 6561 trits for the firstFragment
-                    const firstFragment = keyTrits.slice(0, 6561)
-
-                    //  Get the normalized bundle hash
-                    const normalizedBundleHash = normalizedBundle(trits(bundleHash))
-                    const normalizedBundleFragments = []
-
-                    // Split hash into 3 fragments
-                    for (let k = 0; k < 3; k++) {
-                        normalizedBundleFragments[k] = normalizedBundleHash.slice(k * 27, (k + 1) * 27)
-                    }
-
-                    //  First bundle fragment uses 27 trytes
-                    const firstBundleFragment = normalizedBundleFragments[numSignedTxs % 3]
-
-                    //  Calculate the new signatureFragment with the first bundle fragment
-                    const firstSignedFragment = signatureFragment(firstBundleFragment, firstFragment)
-
-                    //  Convert signature to trytes and assign the new signatureFragment
-                    _bundle.push({ signatureMessageFragment: trytes(firstSignedFragment) })
-
-                    for (let j = 1; j < security; j++) {
-                        //  Next 6561 trits for the firstFragment
-                        const nextFragment = keyTrits.slice(6561 * j, (j + 1) * 6561)
-
-                        //  Use the next 27 trytes
-                        const nextBundleFragment = normalizedBundleFragments[(numSignedTxs + j) % 3]
-
-                        //  Calculate the new signatureFragment with the first bundle fragment
-                        const nextSignedFragment = signatureFragment(nextBundleFragment, nextFragment)
-
-                        //  Convert signature to trytes and add new bundle entry at i + j position
-                        // Assign the signature fragment
-                        _bundle.push({ signatureMessageFragment: trytes(nextSignedFragment) })
-                    }
-
-                    break
+                for (let i = 0; i < keyTrits.length / FRAGMENT_LENGTH; i++) {
+                    signature.set(
+                        signatureFragment(
+                            normalizedBundleHash.slice(
+                                i * NORMALIZED_FRAGMENT_LENGTH,
+                                (i + 1) * NORMALIZED_FRAGMENT_LENGTH
+                            ),
+                            keyTrits.slice(i * FRAGMENT_LENGTH, (i + 1) * FRAGMENT_LENGTH)
+                        ),
+                        i * FRAGMENT_LENGTH
+                    )
                 }
+
+                const bundleTrits = addSignatureOrMessage(bundle, signature, signatureIndex)
+                const bundleTrytes = []
+
+                for (let jOffset = 0; jOffset < bundleTrits.length; jOffset += TRANSACTION_LENGTH) {
+                    bundleTrytes.push(tritsToTrytes(bundleTrits.slice(jOffset, jOffset + TRANSACTION_LENGTH)))
+                }
+
+                return callback(null, bundleTrytes.slice())
             }
+
+            signatureIndex += 1
         }
 
-        return callback(null, _bundle.slice())
+        return callback(new Error('Could not find signature index for address: ' + inputAddress))
     }
 }
 

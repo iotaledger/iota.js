@@ -66,7 +66,8 @@
         "url": "https://github.com/iotaledger/iota.lib.js.git"
     },
     "dependencies": {
-        "@types/bluebird": "^3.5.25"
+        "@types/bluebird": "^3.5.25",
+        "@types/node": "^11.13.0"
     },
     "devDependencies": {
         "@commitlint/cli": "^7.2.1",
@@ -74,11 +75,11 @@
         "@commitlint/travis-cli": "^7.2.1",
         "ava": "^0.25.0",
         "dmd-clear": "^0.1.2",
-        "husky": "^1.1.2",
+        "husky": "^2.0.0",
         "jsdoc-babel": "^0.5.0",
         "lerna": "^3.13.0",
         "lint-staged": "^8.0.4",
-        "nyc": "^13.3.0",
+        "nyc": "^14.0.0",
         "prettier": "^1.10.2",
         "staged-git-files": "^1.1.1",
         "tslint": "^5.9.1",

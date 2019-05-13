@@ -1,19 +1,17 @@
 {
-  "lerna": "2.10.1",
-  "packages": [
-    "packages/*"
-  ],
-  "create": {
-    "homepage": "https://github.com/iotaledger/iota.lib.js",
-    "license": "MIT"
-  },
-  "publish": {
-    "allowBranch": "next",
-    "cdVersion": "prerelease",
-    "conventionalCommits": true,
-    "gitRemote": "upstream",
-    "preid": "alpha",
-    "message": "chore(release): publish %s"
-  },
-  "version": "1.0.0-beta.11"
+    "lerna": "2.10.1",
+    "packages": ["packages/*"],
+    "create": {
+        "homepage": "https://github.com/iotaledger/iota.lib.js",
+        "license": "MIT"
+    },
+    "publish": {
+        "allowBranch": "next",
+        "cdVersion": "prerelease",
+        "conventionalCommits": true,
+        "gitRemote": "upstream",
+        "preid": "alpha",
+        "message": "chore(release): publish %s"
+    },
+    "version": "1.0.0-beta.14"
 }

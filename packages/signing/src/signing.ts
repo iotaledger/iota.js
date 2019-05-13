@@ -6,7 +6,7 @@ import * as Promise from 'bluebird'
 import * as errors from '../../errors'
 import '../../typed-array'
 import { NativeGenerateSignatureFunction } from '../../types'
-import add from './add'
+import { add } from './add'
 
 export const TRYTE_WIDTH = 3
 export const MIN_TRYTE_VALUE = -13
@@ -26,7 +26,7 @@ export const NORMALIZED_FRAGMENT_LENGTH = HASH_LENGTH / TRYTE_WIDTH / NUMBER_OF_
  * @return {Int8Array} subseed trits
  */
 export function subseed(seed: Int8Array, index: number): Int8Array {
-    if (index < 0) {
+    if (!Number.isInteger(index) || index < 0) {
         throw new Error(errors.ILLEGAL_SUBSEED_INDEX)
     }
 
@@ -52,6 +52,10 @@ export function subseed(seed: Int8Array, index: number): Int8Array {
 export function key(subseedTrits: Int8Array, numberOfFragments: number): Int8Array {
     if (subseedTrits.length !== Kerl.HASH_LENGTH) {
         throw new Error(errors.ILLEGAL_SUBSEED_LENGTH)
+    }
+
+    if ([1, 2, 3].indexOf(numberOfFragments) === -1) {
+        throw new Error(errors.ILLEGAL_NUMBER_OF_FRAGMENTS)
     }
 
     const keyTrits = new Int8Array(FRAGMENT_LENGTH * numberOfFragments)
@@ -148,7 +152,7 @@ export function digest(
     const sponge = new Kerl()
 
     for (let j = 0; j < NUMBER_OF_FRAGMENT_CHUNKS; j++) {
-        for (let k = normalizedBundleFragment[j] - MIN_TRYTE_VALUE; k-- > 0; ) {
+        for (let k = normalizedBundleFragment[normalizedBundleFragmentOffset + j] - MIN_TRYTE_VALUE; k-- > 0; ) {
             sponge.reset()
             sponge.absorb(buffer, j * HASH_LENGTH, HASH_LENGTH)
             sponge.squeeze(buffer, j * HASH_LENGTH, HASH_LENGTH)
@@ -184,11 +188,11 @@ export function signatureFragment(
         throw new Error(errors.ILLEGAL_KEY_FRAGMENT_LENGTH)
     }
 
-    const signatureFragmentTrits = keyFragment.slice()
+    const signatureFragmentTrits = keyFragment.slice(keyFragmentOffset, keyFragmentOffset + FRAGMENT_LENGTH)
     const sponge = new Kerl()
 
     for (let j = 0; j < NUMBER_OF_FRAGMENT_CHUNKS; j++) {
-        for (let k = 0; k < MAX_TRYTE_VALUE - normalizedBundleFragment[j]; k++) {
+        for (let k = 0; k < MAX_TRYTE_VALUE - normalizedBundleFragment[normalizedBundleFragmentOffset + j]; k++) {
             sponge.reset()
             sponge.absorb(signatureFragmentTrits, j * HASH_LENGTH, HASH_LENGTH)
             sponge.squeeze(signatureFragmentTrits, j * HASH_LENGTH, HASH_LENGTH)
@@ -204,33 +208,31 @@ export function signatureFragments(
     numberOfFragments: number,
     bundle: Int8Array,
     nativeGenerateSignatureFunction?: NativeGenerateSignatureFunction
-): Promise<ReadonlyArray<Int8Array>> {
+): Promise<Int8Array> {
     if (nativeGenerateSignatureFunction && typeof nativeGenerateSignatureFunction === 'function') {
         return nativeGenerateSignatureFunction(
             Array.prototype.slice.call(seed),
             index,
             numberOfFragments,
             Array.prototype.slice.call(bundle)
-        ).then(signatures =>
-            Array(numberOfFragments)
-                .fill(undefined)
-                .map((_, i) => new Int8Array(signatures.slice(i * FRAGMENT_LENGTH, (i + 1) * FRAGMENT_LENGTH)))
-        )
+        ).then(nativeSignature => new Int8Array(nativeSignature))
     }
 
     const normalizedBundleHash = normalizedBundle(bundle)
     const keyTrits = key(subseed(seed, index), numberOfFragments)
+    const signature = new Int8Array(numberOfFragments * FRAGMENT_LENGTH)
 
-    return Promise.resolve(
-        new Array(numberOfFragments)
-            .fill(undefined)
-            .map((_, i) =>
-                signatureFragment(
-                    normalizedBundleHash.slice(i * NORMALIZED_FRAGMENT_LENGTH, (i + 1) * NORMALIZED_FRAGMENT_LENGTH),
-                    keyTrits.slice(i * FRAGMENT_LENGTH, (i + 1) * FRAGMENT_LENGTH)
-                )
-            )
-    )
+    for (let i = 0; i < numberOfFragments; i++) {
+        signature.set(
+            signatureFragment(
+                normalizedBundleHash.slice(i * NORMALIZED_FRAGMENT_LENGTH, (i + 1) * NORMALIZED_FRAGMENT_LENGTH),
+                keyTrits.slice(i * FRAGMENT_LENGTH, (i + 1) * FRAGMENT_LENGTH)
+            ),
+            i * FRAGMENT_LENGTH
+        )
+    }
+
+    return Promise.resolve(signature)
 }
 
 /**

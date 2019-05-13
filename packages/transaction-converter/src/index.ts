@@ -70,7 +70,7 @@ export const asTransactionObject = (trytes: Trytes, hash?: Hash): Transaction =>
     const trits = trytesToTrits(trytes)
 
     return {
-        hash: hash || transactionHash(trits),
+        hash: hash || tritsToTrytes(transactionHash(trits)),
         signatureMessageFragment: trytes.slice(0, 2187),
         address: trytes.slice(2187, 2268),
         value: value(trits.slice(6804, 6837)),
