@@ -31,13 +31,20 @@ test('sendTrytes() does not mutate original trytes.', async t => {
 })
 
 test('sendTrytes() rejects with correct errors for invalid input.', async t => {
-    const invalidTrytes = ['asdasDSFDAFD']
+  const invalidTrytes = ['asdasDSFDAFD']
+  let errorMessage = ''
 
-    t.is(
-        t.throws(() => sendTrytes(invalidTrytes, depth, minWeightMagnitude), Error).message,
-        `${INVALID_TRANSACTION_TRYTES}: ${stringify(invalidTrytes)}`,
-        'sendTrytes() should throw correct error for invalid trytes.'
-    )
+  try {
+      await sendTrytes(invalidTrytes, depth, minWeightMagnitude)
+  } catch (error) {
+      errorMessage = error.message
+  }
+
+  t.is(
+      errorMessage,
+      `${INVALID_TRANSACTION_TRYTES}: ${stringify(invalidTrytes)}`,
+      'sendTrytes() should throw correct error for invalid trytes.'
+  )
 })
 
 test.cb('sendTrytes() invokes callback', t => {
