@@ -106,7 +106,7 @@ export const createCheckConsistency = ({ send }: Provider) =>
         const { rejectWithReason } = getOptionsWithDefaults(defaults)(options || {})
         const tails = asArray(transactions)
 
-        return Promise.resolve(validate([transactions, arr => arr.every(isHash), errors.INVALID_TRANSACTION_HASH]))
+        return Promise.resolve(validate([tails, arr => arr.every(isHash), errors.INVALID_TRANSACTION_HASH]))
             .then(() =>
                 send<CheckConsistencyCommand, CheckConsistencyResponse>({
                     command: IRICommand.CHECK_CONSISTENCY,
