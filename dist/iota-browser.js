@@ -5060,7 +5060,7 @@ makeRequest.prototype.open = function() {
     request.setRequestHeader('X-IOTA-API-Version', '1');
 
     if (this.password) {
-        request.setRequestHeader('Authorization', 'Basic ' + Buffer.from(params.user + ':' + params.password).toString('base64'));
+        request.setRequestHeader('Authorization', 'Basic ' + Buffer.from(this.tokenOrUsername + ':' + this.password).toString('base64'));
     } else if (this.tokenOrUsername) {
         //request.withCredentials = true;
         request.setRequestHeader('Authorization', 'token ' + this.tokenOrUsername);
