@@ -5,7 +5,9 @@
   "main": "./lib/iota.js",
   "scripts": {
     "build": "gulp",
-    "test": "mocha"
+    "test": "mocha",
+    "preversion": "npm test",
+    "version": "npm run build && git add -A dist"
   },
   "author": {
     "name": "Dominik Schiener (IOTA Foundation)",
