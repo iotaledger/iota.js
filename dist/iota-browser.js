@@ -23133,12 +23133,14 @@ exports.clearImmediate = typeof clearImmediate === "function" ? clearImmediate :
 },{"process/browser.js":62,"timers":63}],64:[function(require,module,exports){
 module.exports={
   "name": "iota.lib.js",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "Javascript Library for IOTA",
   "main": "./lib/iota.js",
   "scripts": {
     "build": "gulp",
-    "test": "mocha"
+    "test": "mocha",
+    "preversion": "npm test",
+    "version": "npm run build && git add -A dist"
   },
   "author": {
     "name": "Dominik Schiener (IOTA Foundation)",
