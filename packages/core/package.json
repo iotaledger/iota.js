@@ -83,7 +83,7 @@
         "@iota/signing": "^1.0.0-beta.12",
         "@iota/transaction": "^1.0.0-beta.12",
         "@iota/transaction-converter": "^1.0.0-beta.12",
-        "bluebird": "^3.5.1"
+        "bluebird": "^3.5.5"
     },
     "devDependencies": {
         "@babel/plugin-syntax-async-generators": "^7.0.0-beta.49",
