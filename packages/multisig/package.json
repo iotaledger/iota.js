@@ -52,7 +52,7 @@
         "@iota/signing": "^1.0.0-beta.12",
         "@iota/transaction": "^1.0.0-beta.12",
         "@types/bluebird": "^3.5.25",
-        "bluebird": "^3.5.1",
+        "bluebird": "^3.5.5",
         "isomorphic-fetch": "^2.2.1"
     }
 }
