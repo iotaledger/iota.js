@@ -2,8 +2,8 @@ import { createHttpClient } from '@iota/http-client'
 import { bundle } from '@iota/samples'
 import test from 'ava'
 import { INVALID_TRANSACTION_HASH } from '../../../errors'
+import { stringify } from '../../../guards'
 import { createGetTransactionObjects } from '../../src'
-
 import './nocks/getTrytes'
 
 const getTransactionObjects = createGetTransactionObjects(createHttpClient())
@@ -23,7 +23,7 @@ test('getTransactionObjects() rejects with correct error for invalid hash.', t =
 
     t.is(
         t.throws(() => getTransactionObjects(invalidHashes), Error).message,
-        `${INVALID_TRANSACTION_HASH}: ${invalidHashes[0]}`,
+        `${INVALID_TRANSACTION_HASH}: ${stringify(invalidHashes)}`,
         'getTransactionObjects() should throw correct error for invalid hash.'
     )
 })

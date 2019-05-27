@@ -2,6 +2,7 @@ import { createHttpClient } from '@iota/http-client'
 import { bundle } from '@iota/samples'
 import test from 'ava'
 import { INVALID_TRANSACTION_TRYTES } from '../../../errors'
+import { stringify } from '../../../guards'
 import { createSendTrytes } from '../../src'
 import { attachToTangleCommand } from './nocks/attachToTangle'
 import './nocks/broadcastTransactions'
@@ -30,18 +31,20 @@ test('sendTrytes() does not mutate original trytes.', async t => {
 })
 
 test('sendTrytes() rejects with correct errors for invalid input.', async t => {
-    const invalidTrytes = ['asdasDSFDAFD']
-    let errorMessage = ''
-    try {
-        await sendTrytes(invalidTrytes, depth, minWeightMagnitude)
-    } catch (error) {
-        errorMessage = error.message
-    }
-    t.is(
-        errorMessage,
-        `${INVALID_TRANSACTION_TRYTES}: ${invalidTrytes[0]}`,
-        'sendTrytes() should throw correct error for invalid trytes.'
-    )
+  const invalidTrytes = ['asdasDSFDAFD']
+  let errorMessage = ''
+
+  try {
+      await sendTrytes(invalidTrytes, depth, minWeightMagnitude)
+  } catch (error) {
+      errorMessage = error.message
+  }
+
+  t.is(
+      errorMessage,
+      `${INVALID_TRANSACTION_TRYTES}: ${stringify(invalidTrytes)}`,
+      'sendTrytes() should throw correct error for invalid trytes.'
+  )
 })
 
 test.cb('sendTrytes() invokes callback', t => {

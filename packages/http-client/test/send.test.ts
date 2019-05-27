@@ -16,6 +16,14 @@ const { send } = createHttpClient({
     apiVersion,
 })
 
+const basicAuthHttpClient = createHttpClient({
+    provider: 'https://localhost:24265',
+    requestBatchSize: 3,
+    apiVersion,
+    user: 'user',
+    password: 'password',
+})
+
 test('send() returns correct response.', async t => {
     t.deepEqual(await send(findTransactionsCommand), findTransactionsResponse)
 })
@@ -40,4 +48,23 @@ test('send() ignores invalid json of bad requests.', t => {
     return send(invalidGetTransactionsToApproveCommandIgnored).catch(error => {
         t.is(error, 'Request error: Bad Request', 'httpClient.send() should ignore invalid json of bad requests.')
     })
+})
+
+test('send() returns correct response with basic auth.', async t => {
+    t.deepEqual(await basicAuthHttpClient.send(findTransactionsCommand), findTransactionsResponse)
+})
+
+test('createHttpClient() throws error if basic auth is used without https', t => {
+    t.is(
+        t.throws(() =>
+            createHttpClient({
+                provider: 'http://localhost:24265',
+                requestBatchSize: 3,
+                apiVersion,
+                user: 'user',
+                password: 'password',
+            })
+        ).message,
+        'Basic auth requires https.'
+    )
 })

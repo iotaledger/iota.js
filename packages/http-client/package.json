@@ -67,7 +67,7 @@
         "cross-fetch": "^3.0.0"
     },
     "devDependencies": {
-        "@types/nock": "^9.1.2",
+        "@types/nock": "^10.0.0",
         "nock": "^10.0.4"
     }
 }

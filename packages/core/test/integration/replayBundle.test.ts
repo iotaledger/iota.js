@@ -2,6 +2,7 @@ import { createHttpClient } from '@iota/http-client'
 import { bundle } from '@iota/samples'
 import test from 'ava'
 import { INVALID_TRANSACTION_HASH } from '../../../errors'
+import { stringify } from '../../../guards'
 import { createReplayBundle } from '../../src'
 import { attachToTangleCommand } from './nocks/attachToTangle'
 import './nocks/broadcastTransactions'
@@ -27,7 +28,7 @@ test('replayBundle() rejects with correct error for invalid hash.', t => {
 
     t.is(
         t.throws(() => replayBundle(invalidHash, depth, minWeightMagnitude), Error).message,
-        `${INVALID_TRANSACTION_HASH}: ${invalidHash}`,
+        `${INVALID_TRANSACTION_HASH}: ${stringify(invalidHash)}`,
         'replayBundle() should throw correct error for invalid hash.'
     )
 })
