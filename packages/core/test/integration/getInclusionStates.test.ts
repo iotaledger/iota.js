@@ -1,6 +1,7 @@
 import { createHttpClient } from '@iota/http-client'
 import test from 'ava'
 import { INVALID_TRANSACTION_HASH } from '../../../errors'
+import { stringify } from '../../../guards'
 import { createGetInclusionStates } from '../../src'
 import { getInclusionStatesCommand, getInclusionStatesResponse } from './nocks/getInclusionStates'
 
@@ -17,13 +18,13 @@ test('getInclusionStates() resolves to correct inclusion states', async t => {
 
     t.is(
         t.throws(() => getInclusionStates(invalidHashes, getInclusionStatesCommand.tips), Error).message,
-        `${INVALID_TRANSACTION_HASH}: ${invalidHashes[0]}`,
+        `${INVALID_TRANSACTION_HASH}: ${stringify(invalidHashes)}`,
         'getInclusionStates() throws error for invalid hashes'
     )
 
     t.is(
         t.throws(() => getInclusionStates(getInclusionStatesCommand.transactions, invalidHashes), Error).message,
-        `${INVALID_TRANSACTION_HASH}: ${invalidHashes[0]}`,
+        `${INVALID_TRANSACTION_HASH}: ${stringify(invalidHashes)}`,
         'getInclusionStates() throws error for invalid tips'
     )
 })

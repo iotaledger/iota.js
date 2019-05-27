@@ -2,6 +2,7 @@ import { createHttpClient } from '@iota/http-client'
 import { transfers } from '@iota/samples'
 import test from 'ava'
 import { INVALID_SEED, INVALID_START_END_OPTIONS } from '../../../errors'
+import { stringify } from '../../../guards'
 import { Hash } from '../../../types'
 import { AccountData, createGetAccountData } from '../../src'
 import './nocks/findTransactions'
@@ -63,13 +64,13 @@ test('getAccountData() rejects with correct errors for invalid inputs', t => {
 
     t.is(
         t.throws(() => getAccountData(invalidSeed, { start: 0 }), Error).message,
-        `${INVALID_SEED}: ${invalidSeed}`,
+        `${INVALID_SEED}: ${stringify(invalidSeed)}`,
         'getAccountData() should throw correct error for invalid seed'
     )
 
     t.is(
         t.throws(() => getAccountData(seed, invalidStartEndOptions), Error).message,
-        `${INVALID_START_END_OPTIONS}: ${invalidStartEndOptions}`,
+        `${INVALID_START_END_OPTIONS}: ${stringify(invalidStartEndOptions)}`,
         'getAccountData() should throw correct error for invalid start & end options'
     )
 })

@@ -1,6 +1,7 @@
 import { createHttpClient } from '@iota/http-client'
 import test from 'ava'
 import { INVALID_ADDRESS, INVALID_THRESHOLD, INVALID_TRANSACTION_HASH } from '../../../errors'
+import { stringify } from '../../../guards'
 import { createGetBalances } from '../../src'
 import { balancesResponse, getBalancesCommand } from './nocks/getBalances'
 
@@ -39,13 +40,13 @@ test('getBalances() rejects with correct errors for invalid input', t => {
     t.is(
         t.throws(() => getBalances([...addressesWithChecksum], getBalancesCommand.threshold, invalidTips), Error)
             .message,
-        `${INVALID_TRANSACTION_HASH}: ${invalidTips}`,
+        `${INVALID_TRANSACTION_HASH}: ${stringify(invalidTips)}`,
         'getBalances() should throw error for invalid tips'
     )
 
     t.is(
         t.throws(() => getBalances(invalidAddresses, getBalancesCommand.threshold), Error).message,
-        `${INVALID_ADDRESS}: ${invalidAddresses[0]}`,
+        `${INVALID_ADDRESS}: ${stringify(invalidAddresses)}`,
         'getBalances() should throw error for invalid addresses'
     )
 

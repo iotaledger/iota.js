@@ -239,7 +239,7 @@ export const validate = (...validators: Array<Validatable | false>) => {
             const [value, isValid, msg] = validator
 
             if (!isValid(value)) {
-                throw new Error(`${msg}: ${value}`)
+                throw new Error(`${msg}: ${JSON.stringify(value, null, 1)}`)
             }
         }
     })
@@ -337,3 +337,7 @@ export const getBalancesThresholdValidator: Validator<number> = threshold => [
     t => Number.isInteger(t) && t <= 100,
     errors.INVALID_THRESHOLD,
 ]
+
+export const stringify = (value: any) => {
+    return JSON.stringify(value, null, 1)    
+}

@@ -2,6 +2,7 @@ import { createHttpClient } from '@iota/http-client'
 import { bundle, bundleWithZeroValue, transfers } from '@iota/samples'
 import test from 'ava'
 import { INVALID_ADDRESS } from '../../../errors'
+import { stringify } from '../../../guards'
 import {
     createGetBundlesFromAddresses,
     getBundleSync,
@@ -30,7 +31,7 @@ test('getBundlesFromAddresses() rejects with correct errors for invalid addresse
 
     t.is(
         t.throws(() => getBundlesFromAddresses(invalidAddresses, true), Error).message,
-        `${INVALID_ADDRESS}: ${invalidAddresses[0]}`,
+        `${INVALID_ADDRESS}: ${stringify(invalidAddresses)}`,
         'getBundlesFromAddresses() should throw correct error for invalid addresses.'
     )
 })

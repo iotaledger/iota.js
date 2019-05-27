@@ -1,6 +1,7 @@
 import { createHttpClient } from '@iota/http-client'
 import test from 'ava'
 import { INVALID_REFERENCE_HASH } from '../../../errors'
+import { stringify } from '../../../guards'
 import { createGetTransactionsToApprove } from '../../src'
 import {
     getTransactionsToApproveCommand,
@@ -41,7 +42,7 @@ test('getTransactionsToApprove() rejects with correct error for invalid referenc
 
     t.is(
         t.throws(() => getTransactionsToApprove(getTransactionsToApproveCommand.depth, invalidHash), Error).message,
-        `${INVALID_REFERENCE_HASH}: ${invalidHash}`,
+        `${INVALID_REFERENCE_HASH}: ${stringify(invalidHash)}`,
         'getTransactionsToApprove() should throw error for invalid reference option'
     )
 })
