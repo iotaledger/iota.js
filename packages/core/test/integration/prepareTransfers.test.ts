@@ -2,10 +2,10 @@ import { addChecksum } from '@iota/checksum'
 import { createHttpClient } from '@iota/http-client'
 import { addresses, trytes as expected } from '@iota/samples'
 import test from 'ava'
+import { stringify } from '../../../guards'
 import { Transfer, Trytes } from '../../../types'
 import { createPrepareTransfers } from '../../src'
 import { getRemainderAddressStartIndex } from '../../src/createPrepareTransfers'
-
 import './nocks/prepareTransfers'
 
 const inputs: ReadonlyArray<any> = [
@@ -110,17 +110,17 @@ test('prepareTransfers() throws intuitive error when provided invalid transfers 
 
     t.is(
         t.throws(() => prepareTransfers('SEED', invalidTransfer)).message,
-        `Invalid transfer array: ${invalidTransfer}`,
+        `Invalid transfer array: ${stringify(invalidTransfer)}`,
         'prepareTransfers() should throw intuitive error when provided invalid transfers array'
     )
 })
 
 test('prepareTransfers() throws error for inputs without security level.', async t => {
-    const input: any = {
+    const input: any = [{
         address: 'I'.repeat(81),
         keyIndex: 0,
         balance: 1,
-    }
+    }]
 
     t.is(
         t.throws(() =>
@@ -133,11 +133,11 @@ test('prepareTransfers() throws error for inputs without security level.', async
                     },
                 ],
                 {
-                    inputs: [input],
+                    inputs: input,
                 }
             )
         ).message,
-        `Invalid input: ${input}`,
+        `Invalid input: ${stringify(input)}`,
         'prepareTransfers() should throw error for inputs without security level.'
     )
 })

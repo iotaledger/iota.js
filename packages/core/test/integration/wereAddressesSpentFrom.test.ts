@@ -1,6 +1,7 @@
 import { createHttpClient } from '@iota/http-client'
 import test from 'ava'
 import { INVALID_ADDRESS } from '../../../errors'
+import { stringify } from '../../../guards'
 import { createWereAddressesSpentFrom } from '../../src/createWereAddressesSpentFrom'
 import { wereAddressesSpentFromCommand, wereAddressesSpentFromResponse } from './nocks/wereAddressesSpentFrom'
 
@@ -39,7 +40,7 @@ test('wereAddressesSpentFrom() rejects with correct error for invalid addresses'
 
     t.is(
         t.throws(() => wereAddressesSpentFrom(invalidAddresses), Error).message,
-        `${INVALID_ADDRESS}: ${invalidAddresses[0]}`,
+        `${INVALID_ADDRESS}: ${stringify(invalidAddresses)}`,
         'wereAddressesSpentFrom() should throw error for invalid addresses'
     )
 })

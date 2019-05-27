@@ -1,6 +1,7 @@
 import { createHttpClient } from '@iota/http-client'
 import test from 'ava'
 import { inconsistentTransaction, INVALID_TRANSACTION_HASH } from '../../../errors'
+import { stringify } from '../../../guards'
 import { createCheckConsistency } from '../../src'
 import {
     checkConsistencyCommand,
@@ -24,7 +25,7 @@ test('checkConsistency() rejects with correct errors for invalid transaction has
 
     t.is(
         t.throws(() => checkConsistency(invalidHashes), Error).message,
-        `${INVALID_TRANSACTION_HASH}: ${invalidHashes[0]}`,
+        `${INVALID_TRANSACTION_HASH}: ${stringify(invalidHashes)}`,
         'checkConsistency() should throw error for invalid transaction hashes'
     )
 })
