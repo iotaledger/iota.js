@@ -1,10 +1,13 @@
+import * as url from 'url'
 import { getOptionsWithDefaults } from '../../types'
 export interface Settings {
     readonly provider: string
     readonly host?: string // deprecated
     readonly port?: number | string // deprecated
     readonly sandbox?: string // removed
-    readonly token?: string // removed
+    readonly user?: string
+    readonly password?: string
+    readonly token?: string
     readonly requestBatchSize: number
     readonly apiVersion: number | string
 }
@@ -23,9 +26,17 @@ const defaults: Settings = {
 
 /* tslint:disable no-console */
 export const getSettingsWithDefaults = (settings: Partial<Settings> = {}): Settings => {
-    const { provider, host, port, sandbox, token, requestBatchSize, apiVersion } = getOptionsWithDefaults(defaults)(
-        settings
-    )
+    const {
+        provider,
+        host,
+        port,
+        user,
+        password,
+        sandbox,
+        token,
+        requestBatchSize,
+        apiVersion,
+    } = getOptionsWithDefaults(defaults)(settings)
 
     let providerUri: string = provider
 
@@ -44,11 +55,15 @@ export const getSettingsWithDefaults = (settings: Partial<Settings> = {}): Setti
         providerUri = [host || DEFAULT_HOST, port || DEFAULT_PORT].join('/').replace('//', '/')
     }
 
+    if (user && password && url.parse(providerUri).protocol !== 'https:') {
+        throw new Error('Basic auth requires https.')
+    }
+
     if (settings.hasOwnProperty('requestBatchSize')) {
         if (!Number.isInteger(requestBatchSize) || requestBatchSize <= 0) {
             throw new Error('Invalid `requestBatchSize` option')
         }
     }
 
-    return { provider: providerUri, requestBatchSize, apiVersion }
+    return { provider: providerUri, requestBatchSize, apiVersion, user, password }
 }

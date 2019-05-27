@@ -67,3 +67,11 @@ export const invalidJSONResponseNock = nock('http://localhost:24265', headers())
     .persist()
     .post('/', invalidGetTransactionsToApproveCommandIgnored)
     .reply(400, 'Invalid json')
+
+export const basicAuthNock = nock('https://localhost:24265', {
+    ...headers(),
+    Authorization: `Basic ${Buffer.from('user:password').toString('base64')}`,
+} as any)
+    .persist()
+    .post('/', findTransactionsCommand)
+    .reply(200, findTransactionsResponse)

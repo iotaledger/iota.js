@@ -1,4 +1,5 @@
 import 'cross-fetch/polyfill' // tslint:disable-line no-submodule-imports
+import * as url from 'url'
 import {
     BaseCommand,
     FindTransactionsResponse,
@@ -14,6 +15,14 @@ import { API_VERSION, DEFAULT_URI, REQUEST_BATCH_SIZE } from './settings'
 const requestError = (statusText: string) => `Request error: ${statusText}`
 
 type R = GetBalancesResponse | GetInclusionStatesResponse | GetTrytesResponse | FindTransactionsResponse
+
+export interface RequestParams<C> {
+    readonly command: C
+    readonly uri?: string
+    readonly apiVersion?: string | number
+    readonly user?: string
+    readonly password?: string
+}
 
 /**
  * Sends an http request to a specified host.
@@ -32,28 +41,34 @@ type R = GetBalancesResponse | GetInclusionStatesResponse | GetTrytesResponse | 
  * @fulil {Object} - Response
  * @reject {Error} - Request error
  */
-export const send = <C extends BaseCommand>(
-    command: C,
-    uri: string = DEFAULT_URI,
-    apiVersion: string | number = API_VERSION
-): Promise<R> =>
-    fetch(uri, {
+export const send = <C extends BaseCommand>(params: RequestParams<C>): Promise<R> => {
+    const headers: any = {
+        'Content-Type': 'application/json',
+        'X-IOTA-API-Version': (params.apiVersion || API_VERSION).toString(),
+    }
+
+    const uri = params.uri || DEFAULT_URI
+
+    if (params.user && params.password) {
+        if (url.parse(uri).protocol !== 'https:') {
+            throw new Error('Basic auth requires https.')
+        }
+        headers.Authorization = `Basic ${Buffer.from(`${params.user}:${params.password}`).toString('base64')}`
+    }
+
+    return fetch(uri, {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-IOTA-API-Version': apiVersion.toString(),
-        },
-        body: JSON.stringify(command),
+        headers,
+        body: JSON.stringify(params.command),
     }).then(res =>
         res
             .json()
-            .then(
-                json =>
-                    res.ok
-                        ? json
-                        : Promise.reject(
-                              requestError(json.error || json.exception ? json.error || json.exception : res.statusText)
-                          )
+            .then(json =>
+                res.ok
+                    ? json
+                    : Promise.reject(
+                          requestError(json.error || json.exception ? json.error || json.exception : res.statusText)
+                      )
             )
             .catch(error => {
                 if (!res.ok && error.type === 'invalid-json') {
@@ -63,6 +78,7 @@ export const send = <C extends BaseCommand>(
                 }
             })
     )
+}
 
 /**
  * Sends a batched http request to a specified host
@@ -87,18 +103,16 @@ export const send = <C extends BaseCommand>(
  * @reject {Error} - Request error
  */
 export const batchedSend = <C extends BaseCommand>(
-    command: BatchableCommand<C>,
+    requestParams: RequestParams<BatchableCommand<C>>,
     keysToBatch: ReadonlyArray<string>,
-    requestBatchSize = REQUEST_BATCH_SIZE,
-    uri: string = DEFAULT_URI,
-    apiVersion: string | number = API_VERSION
+    requestBatchSize = REQUEST_BATCH_SIZE
 ): Promise<any> => {
-    const params = Object.keys(command)
+    const params = Object.keys(requestParams.command)
         .filter(key => keysToBatch.indexOf(key) === -1)
         .reduce(
             (acc: any, key: string) => ({
                 ...acc,
-                [key]: command[key],
+                [key]: requestParams.command[key],
             }),
             {}
         )
@@ -106,26 +120,29 @@ export const batchedSend = <C extends BaseCommand>(
     return Promise.all(
         keysToBatch.map(key => {
             return Promise.all(
-                command[key]
+                requestParams.command[key]
                     .reduce(
                         (
                             acc,
                             _, // tslint:disable-line no-unused-variable
                             i
                         ) =>
-                            i < Math.ceil(command[key].length / requestBatchSize)
+                            i < Math.ceil(requestParams.command[key].length / requestBatchSize)
                                 ? acc.concat({
                                       ...params,
-                                      [key]: command[key].slice(i * requestBatchSize, (1 + i) * requestBatchSize),
+                                      [key]: requestParams.command[key].slice(
+                                          i * requestBatchSize,
+                                          (1 + i) * requestBatchSize
+                                      ),
                                   })
                                 : acc,
                         []
                     )
-                    .map((batchedCommand: BatchableCommand<C>) => send(batchedCommand, uri, apiVersion))
+                    .map((batchedCommand: BatchableCommand<C>) => send({ ...requestParams, command: batchedCommand }))
             ).then(res => res.reduce((acc: ReadonlyArray<R>, batch) => acc.concat(batch as R), []))
         })
     ).then((responses: ReadonlyArray<ReadonlyArray<R>>) => {
-        switch (command.command) {
+        switch (requestParams.command.command) {
             case IRICommand.FIND_TRANSACTIONS:
                 return {
                     hashes: (responses[0][0] as any).hashes.filter((hash: string) =>
