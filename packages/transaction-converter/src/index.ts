@@ -3,9 +3,9 @@
 import { tritsToTrytes, trytesToTrits, value } from '@iota/converter'
 import { padTrits, padTrytes } from '@iota/pad'
 import { transactionHash } from '@iota/transaction'
+import 'core-js'
 import * as errors from '../../errors'
 import { isTrytesOfExactLength } from '../../guards'
-import '../../typed-array'
 import { asArray, Hash, Transaction, Trytes } from '../../types'
 
 export { Transaction }
