@@ -76,5 +76,9 @@ export const createPersistenceAdapter = ({
             ),
 
         createReadStream: options => db.createReadStream(options),
+
+        close: () => Promise.try(() => db.close()),
+
+        open: () => Promise.try(() => db.open()),
     }
 }

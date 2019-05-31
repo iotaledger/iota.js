@@ -247,17 +247,8 @@ export function createPersistence({
                         .tap(() => ops.forEach(({ type, value }) => this.emit(type, value)))
                 },
 
-                stateRead: state.read,
-                stateWrite: state.write,
-                stateDelete: state.delete,
-                stateBatch: state.batch,
-                createStateReadStream: (options: PersistenceIteratorOptions) => state.createReadStream(options),
-
-                historyRead: history.read,
-                historyWrite: history.write,
-                historyDelete: history.delete,
-                historyBatch: history.batch,
-                createHistoryReadStream: (options: PersistenceIteratorOptions) => history.createReadStream(options),
+                state,
+                history,
             },
             EventEmitter.prototype
         )

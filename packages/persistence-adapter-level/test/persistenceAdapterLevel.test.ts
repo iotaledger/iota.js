@@ -195,3 +195,23 @@ describe('adapter.createReadStream(onData: (data: V) => any, onError, onClose, o
         expected,
     })
 })
+
+describe('adapter.open(): Promise<void> / adapter.close(): Promise<void>', async assert => {
+    const { open, close, write } = isolate()
+
+    assert({
+        given: 'closed database',
+        should: 'open it and close it',
+        actual: (await (async () => {
+            await open()
+            await close()
+
+            try {
+                await write(tritsToBytes(new Int8Array(1)), tritsToBytes(new Int8Array(1)))
+            } catch (error) {
+                return error
+            }
+        })()).message,
+        expected: 'Database is not open',
+    })
+})

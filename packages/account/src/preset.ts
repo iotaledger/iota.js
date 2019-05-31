@@ -125,7 +125,7 @@ interface CDAInputs {
 
 export function transactionIssuance(
     this: any,
-    { seed, deposits, persistence, network, timeSource, now }: TransactionIssuanceParams
+    { seed, deposits, persistence, ready, network, timeSource, now }: TransactionIssuanceParams
 ) {
     const { getBalance } = network
     const prepareTransfers = createPrepareTransfers(undefined, now)
@@ -137,7 +137,10 @@ export function transactionIssuance(
                     'Provide an object with conditions and value for the CDA transfer: { timeoutAt, [multiUse], [exeptectedAmount], [security=2], value }'
                 )
             }
-            return Promise.try(() => timeSource().then(currentTime => verifyCDATransfer(currentTime, cdaTransfer)))
+
+            return Promise.try(() =>
+                ready.then(timeSource).then(currentTime => verifyCDATransfer(currentTime, cdaTransfer))
+            )
                 .then(() => accumulateInputs(cdaTransfer.value))
                 .then(({ inputs, totalBalance }) => {
                     const remainder = totalBalance - cdaTransfer.value
@@ -348,7 +351,7 @@ export function history({ persistence }: HistoryParams): History<CDA, ReadonlyAr
         // Streaming support will be added later
         readIncludedDeposits(options: PersistenceIteratorOptions) {
             const emitter = new EventEmitter()
-            const stream = persistence.createHistoryReadStream({
+            const stream = persistence.history.createReadStream({
                 ...options,
                 keys: false,
                 values: true,
@@ -369,7 +372,7 @@ export function history({ persistence }: HistoryParams): History<CDA, ReadonlyAr
 
         readIncludedTransfers(options: PersistenceIteratorOptions) {
             const emitter = new EventEmitter()
-            const stream = persistence.createHistoryReadStream({
+            const stream = persistence.history.createReadStream({
                 ...options,
                 keys: false,
                 values: true,
@@ -390,23 +393,23 @@ export function history({ persistence }: HistoryParams): History<CDA, ReadonlyAr
         },
 
         getDeposit(address: Trytes) {
-            return persistence
-                .historyRead(tritsToBytes(trytesToTrits(address)))
+            return persistence.history
+                .read(tritsToBytes(trytesToTrits(address)))
                 .then(value => deserializeCDA(bytesToTrits(value)))
         },
 
         getTransfer(bundle: Trytes) {
-            return persistence
-                .historyRead(tritsToBytes(trytesToTrits(bundle)))
+            return persistence.history
+                .read(tritsToBytes(trytesToTrits(bundle)))
                 .then(value => bundleTritsToBundleTrytes(bytesToTrits(value)))
         },
 
         deleteDeposit(address: Trytes) {
-            return persistence.historyDelete(tritsToBytes(trytesToTrits(address)))
+            return persistence.history.delete(tritsToBytes(trytesToTrits(address)))
         },
 
         deleteTransfer(bundle: Trytes) {
-            return persistence.historyDelete(tritsToBytes(trytesToTrits(bundle)))
+            return persistence.history.delete(tritsToBytes(trytesToTrits(bundle)))
         },
     }
 }
@@ -422,9 +425,12 @@ export function createAccountPreset(test = {}): AccountPreset<CDAParams, CDA, Re
         addressGeneration,
         transactionIssuance,
         transactionAttachment,
-        attachmentDelay: 1000 * 30,
         history,
         timeSource: () => Promise.resolve(Math.floor(Date.now() / 1000)),
+        depth: 3,
+        minWeightMagnitude: 9,
+        delay: 1000 * 30,
+        maxDepth: 6,
         test,
     }
 }

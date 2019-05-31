@@ -158,7 +158,7 @@ describe('persistence.nextIndex()', async assert => {
         given: 'store = leveldb',
         should: 'increment index atomically',
         actual: await (async () => {
-            const { nextIndex, stateRead } = isolate({})
+            const { nextIndex, state } = isolate({})
             const delayLowerBound = 1
             const delayUpperBound = 30
 
@@ -168,7 +168,7 @@ describe('persistence.nextIndex()', async assert => {
                     return nextIndex()
                 })
             )
-            const persistedIndex = await stateRead(KEY_INDEX_PREFIX).then(bytesToTrits)
+            const persistedIndex = await state.read(KEY_INDEX_PREFIX).then(bytesToTrits)
 
             return {
                 results: results.map(trits => tritsToValue(trits)).sort((a, b) => a - b),
@@ -196,11 +196,11 @@ describe('persistence.writeBundle(bundle: Int8Array) -> adapter.read(key: Int8Ar
             given: 'a written bundle',
             should: 'read it',
             actual: await (async () => {
-                const { writeBundle, stateRead } = isolate()
+                const { writeBundle, state } = isolate()
 
                 await writeBundle(expected)
 
-                return stateRead(tritsToBytes(bundle(expected))).then(bytesToTrits)
+                return state.read(tritsToBytes(bundle(expected))).then(bytesToTrits)
             })(),
             expected,
         })
@@ -219,7 +219,7 @@ describe('persistence.writeBundle(buffer: Int8Array) -> persistence.deleteBundle
         given: 'a written bundle',
         should: 'delete it',
         actual: await (async () => {
-            const { writeBundle, deleteBundle, stateRead } = isolate()
+            const { writeBundle, deleteBundle, state } = isolate()
             const buffer = new Int8Array(TRANSACTION_LENGTH * 2).fill(1)
             let deleted = false
 
@@ -229,7 +229,7 @@ describe('persistence.writeBundle(buffer: Int8Array) -> persistence.deleteBundle
 
                 deleted = true
 
-                await stateRead(tritsToBytes(bundle(buffer)))
+                await state.read(tritsToBytes(bundle(buffer)))
             } catch (error) {
                 if (deleted && error.notFound) {
                     return 'ok'
@@ -400,7 +400,7 @@ describe('persistence.batch(ops: ReadonlyArray<PersistenceAdapterBatch<V, K>>) -
         given: 'persisted bundle & cda',
         should: 'batch delete and persist new ones',
         actual: await (async () => {
-            const { writeBundle, writeCDA, readCDA, batch, stateRead } = isolate()
+            const { writeBundle, writeCDA, readCDA, batch, state } = isolate()
 
             await writeBundle(buffer)
             await writeCDA(cda)
@@ -425,7 +425,7 @@ describe('persistence.batch(ops: ReadonlyArray<PersistenceAdapterBatch<V, K>>) -
             ] as any)
 
             try {
-                await stateRead(tritsToBytes(bundle(bufferB)))
+                await state.read(tritsToBytes(bundle(bufferB)))
             } catch (error) {
                 if (!error.notFound) {
                     throw error
@@ -440,7 +440,7 @@ describe('persistence.batch(ops: ReadonlyArray<PersistenceAdapterBatch<V, K>>) -
                 }
             }
 
-            return [await stateRead(tritsToBytes(bundle(bufferB))).then(bytesToTrits), await readCDA(CDAddress(cdaB))]
+            return [await state.read(tritsToBytes(bundle(bufferB))).then(bytesToTrits), await readCDA(CDAddress(cdaB))]
         })(),
         expected: [bufferB, cdaB],
     })
@@ -455,17 +455,18 @@ describe('persistence.createReadStream(onData: (data: V) => any): NodeJS.ReadStr
         given: 'persisted state & history',
         should: 'read state & history',
         actual: await (async () => {
-            const { writeBundle, writeCDA, createStateReadStream, createHistoryReadStream, historyWrite } = isolate()
+            const { writeBundle, writeCDA, state, history } = isolate()
 
             await writeBundle(buffer)
             await writeCDA(cda)
-            await historyWrite(tritsToBytes(bundle(buffer)), tritsToBytes(buffer))
+            await history.write(tritsToBytes(bundle(buffer)), tritsToBytes(buffer))
 
             return new Promise((resolve, reject) => {
                 const result: any = []
                 const noop = () => {} // tslint:disable-line
 
-                createStateReadStream({ reverse: true })
+                state
+                    .createReadStream({ reverse: true })
                     .on('data', ({ value }: { value: Buffer }) => {
                         if (value.length > 0) {
                             result.push(bytesToTrits(value))
@@ -473,7 +474,8 @@ describe('persistence.createReadStream(onData: (data: V) => any): NodeJS.ReadStr
                     })
                     .on('close', noop)
                     .on('end', () => {
-                        createHistoryReadStream()
+                        history
+                            .createReadStream()
                             .on('data', ({ value }: { value: Buffer }) => {
                                 if (value.length > 0) {
                                     result.push(bytesToTrits(value))
@@ -499,7 +501,7 @@ describe('streamToBuffers({ bundles, deposits })', async assert => {
         given: 'written CDA & bundle',
         should: 'write to buffers',
         actual: await (async () => {
-            const { writeBundle, writeCDA, createStateReadStream } = isolate()
+            const { writeBundle, writeCDA, state } = isolate()
             const bundles = asyncBuffer<Int8Array>()
             const deposits = asyncBuffer<Int8Array>()
 
@@ -509,7 +511,8 @@ describe('streamToBuffers({ bundles, deposits })', async assert => {
             await writeCDA(cda)
 
             return new Promise((resolve, reject) => {
-                createStateReadStream({ reverse: true })
+                state
+                    .createReadStream({ reverse: true })
                     .on('data', streamToBuffers({ bundles, deposits }))
                     .on('close', noop)
                     .on('end', () =>
