@@ -1,5 +1,5 @@
 /* tslint:disable variable-name no-conditional-assignment */
-import 'core-js'
+import 'core-js/features/typed-array' // tslint:disable-line
 import * as CryptoJS from 'crypto-js'
 import * as errors from './errors'
 import { tritsToWords, wordsToTrits } from './word-converter'

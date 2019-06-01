@@ -3,7 +3,7 @@
 import { tritsToTrytes, trytesToTrits, value } from '@iota/converter'
 import { padTrits, padTrytes } from '@iota/pad'
 import { transactionHash } from '@iota/transaction'
-import 'core-js'
+import 'core-js/features/typed-array' // tslint:disable-line
 import * as errors from '../../errors'
 import { isTrytesOfExactLength } from '../../guards'
 import { asArray, Hash, Transaction, Trytes } from '../../types'

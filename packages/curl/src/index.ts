@@ -1,5 +1,5 @@
 // tslint:disable no-conditional-assignment
-import 'core-js'
+import 'core-js/features/typed-array' // tslint:disable-line
 
 const NUMBER_OF_ROUNDS = 81
 const HASH_LENGTH = 243

@@ -1,5 +1,5 @@
+import 'core-js/features/typed-array' // tslint:disable-line
 import * as errors from '../../errors'
-import 'core-js'
 import { Tag, Trytes } from '../../types'
 
 export const padTrytes = (length: number) => (trytes: Trytes) =>

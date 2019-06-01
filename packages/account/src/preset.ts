@@ -38,6 +38,7 @@ import {
 } from '@iota/transaction'
 import { asTransactionObjects } from '@iota/transaction-converter'
 import * as Promise from 'bluebird'
+import 'core-js/features/typed-array' // tslint:disable-line
 import { EventEmitter } from 'events'
 import { Bundle, Transaction, Trytes } from '../../types'
 import {

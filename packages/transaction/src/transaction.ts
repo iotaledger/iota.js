@@ -5,7 +5,7 @@ import { tritsToValue } from '@iota/converter'
 import Curl from '@iota/curl'
 import Kerl from '@iota/kerl'
 import { FRAGMENT_LENGTH } from '@iota/signing'
-import 'core-js'
+import 'core-js/features/typed-array' // tslint:disable-line
 import * as warning from 'warning'
 import * as errors from '../../errors'
 import { isTrits } from '../../guards'
