@@ -73,7 +73,7 @@ export const asTransactionObject = (trytes: Trytes, hash?: Hash): Transaction =>
         hash: hash || tritsToTrytes(transactionHash(trits)),
         signatureMessageFragment: trytes.slice(0, 2187),
         address: trytes.slice(2187, 2268),
-        value: value(trits.slice(6804, 6837)),
+        value: value(trits.slice(6804, 6885)),
         obsoleteTag: trytes.slice(2295, 2322),
         timestamp: value(trits.slice(6966, 6993)),
         currentIndex: value(trits.slice(6993, 7020)),
