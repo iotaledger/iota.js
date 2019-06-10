@@ -2,7 +2,40 @@
 
 import { tritsToTrytes, trytesToTrits, value } from '@iota/converter'
 import { padTrits, padTrytes } from '@iota/pad'
-import { transactionHash } from '@iota/transaction'
+import {
+    transactionHash,
+    TRYTE_WIDTH,
+    SIGNATURE_OR_MESSAGE_OFFSET,
+    SIGNATURE_OR_MESSAGE_LENGTH,
+    ADDRESS_OFFSET,
+    ADDRESS_LENGTH,
+    VALUE_OFFSET,
+    VALUE_LENGTH,
+    OBSOLETE_TAG_OFFSET,
+    OBSOLETE_TAG_LENGTH,
+    ISSUANCE_TIMESTAMP_OFFSET,
+    ISSUANCE_TIMESTAMP_LENGTH,
+    CURRENT_INDEX_OFFSET,
+    CURRENT_INDEX_LENGTH,
+    LAST_INDEX_OFFSET,
+    LAST_INDEX_LENGTH,
+    BUNDLE_OFFSET,
+    BUNDLE_LENGTH,
+    TRUNK_TRANSACTION_OFFSET,
+    TRUNK_TRANSACTION_LENGTH,
+    BRANCH_TRANSACTION_OFFSET,
+    BRANCH_TRANSACTION_LENGTH,
+    TAG_OFFSET,
+    TAG_LENGTH,
+    ATTACHMENT_TIMESTAMP_OFFSET,
+    ATTACHMENT_TIMESTAMP_LENGTH,
+    ATTACHMENT_TIMESTAMP_LOWER_BOUND_OFFSET,
+    ATTACHMENT_TIMESTAMP_LOWER_BOUND_LENGTH,
+    ATTACHMENT_TIMESTAMP_UPPER_BOUND_OFFSET,
+    ATTACHMENT_TIMESTAMP_UPPER_BOUND_LENGTH,
+    TRANSACTION_NONCE_OFFSET,
+    TRANSACTION_NONCE_LENGTH,
+} from '@iota/transaction'
 import * as errors from '../../errors'
 import { isTrytesOfExactLength } from '../../guards'
 import '../../typed-array'
@@ -71,21 +104,48 @@ export const asTransactionObject = (trytes: Trytes, hash?: Hash): Transaction =>
 
     return {
         hash: hash || tritsToTrytes(transactionHash(trits)),
-        signatureMessageFragment: trytes.slice(0, 2187),
-        address: trytes.slice(2187, 2268),
-        value: value(trits.slice(6804, 6885)),
-        obsoleteTag: trytes.slice(2295, 2322),
-        timestamp: value(trits.slice(6966, 6993)),
-        currentIndex: value(trits.slice(6993, 7020)),
-        lastIndex: value(trits.slice(7020, 7047)),
-        bundle: trytes.slice(2349, 2430),
-        trunkTransaction: trytes.slice(2430, 2511),
-        branchTransaction: trytes.slice(2511, 2592),
-        tag: trytes.slice(2592, 2619),
-        attachmentTimestamp: value(trits.slice(7857, 7884)),
-        attachmentTimestampLowerBound: value(trits.slice(7884, 7911)),
-        attachmentTimestampUpperBound: value(trits.slice(7911, 7938)),
-        nonce: trytes.slice(2646, 2673),
+        signatureMessageFragment: trytes.slice(
+            SIGNATURE_OR_MESSAGE_OFFSET / TRYTE_WIDTH,
+            SIGNATURE_OR_MESSAGE_LENGTH / TRYTE_WIDTH
+        ),
+        address: trytes.slice(ADDRESS_OFFSET / TRYTE_WIDTH, (ADDRESS_OFFSET + ADDRESS_LENGTH) / TRYTE_WIDTH),
+        value: value(trits.slice(VALUE_OFFSET, VALUE_OFFSET + VALUE_LENGTH)),
+        obsoleteTag: trytes.slice(
+            OBSOLETE_TAG_OFFSET / TRYTE_WIDTH,
+            (OBSOLETE_TAG_OFFSET + OBSOLETE_TAG_LENGTH) / TRYTE_WIDTH
+        ),
+        timestamp: value(trits.slice(ISSUANCE_TIMESTAMP_OFFSET, ISSUANCE_TIMESTAMP_OFFSET + ISSUANCE_TIMESTAMP_LENGTH)),
+        currentIndex: value(trits.slice(CURRENT_INDEX_OFFSET, CURRENT_INDEX_OFFSET + CURRENT_INDEX_LENGTH)),
+        lastIndex: value(trits.slice(LAST_INDEX_OFFSET, LAST_INDEX_OFFSET + LAST_INDEX_LENGTH)),
+        bundle: trytes.slice(BUNDLE_OFFSET / TRYTE_WIDTH, (BUNDLE_OFFSET + BUNDLE_LENGTH) / TRYTE_WIDTH),
+        trunkTransaction: trytes.slice(
+            TRUNK_TRANSACTION_OFFSET / TRYTE_WIDTH,
+            (TRUNK_TRANSACTION_OFFSET + TRUNK_TRANSACTION_LENGTH) / TRYTE_WIDTH
+        ),
+        branchTransaction: trytes.slice(
+            BRANCH_TRANSACTION_OFFSET / TRYTE_WIDTH,
+            (BRANCH_TRANSACTION_OFFSET + BRANCH_TRANSACTION_LENGTH) / TRYTE_WIDTH
+        ),
+        tag: trytes.slice(TAG_OFFSET / TRYTE_WIDTH, (TAG_OFFSET + TAG_LENGTH) / TRYTE_WIDTH),
+        attachmentTimestamp: value(
+            trits.slice(ATTACHMENT_TIMESTAMP_OFFSET, ATTACHMENT_TIMESTAMP_OFFSET + ATTACHMENT_TIMESTAMP_LENGTH)
+        ),
+        attachmentTimestampLowerBound: value(
+            trits.slice(
+                ATTACHMENT_TIMESTAMP_LOWER_BOUND_OFFSET,
+                ATTACHMENT_TIMESTAMP_LOWER_BOUND_OFFSET + ATTACHMENT_TIMESTAMP_LOWER_BOUND_LENGTH
+            )
+        ),
+        attachmentTimestampUpperBound: value(
+            trits.slice(
+                ATTACHMENT_TIMESTAMP_UPPER_BOUND_OFFSET,
+                ATTACHMENT_TIMESTAMP_UPPER_BOUND_OFFSET + ATTACHMENT_TIMESTAMP_UPPER_BOUND_LENGTH
+            )
+        ),
+        nonce: trytes.slice(
+            TRANSACTION_NONCE_OFFSET / TRYTE_WIDTH,
+            (TRANSACTION_NONCE_OFFSET + TRANSACTION_NONCE_LENGTH) / TRYTE_WIDTH
+        ),
     }
 }
 
