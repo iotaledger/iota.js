@@ -3,7 +3,7 @@
 import { tritsToValue } from '@iota/converter'
 import Kerl from '@iota/kerl'
 import { increment, MAX_TRYTE_VALUE, normalizedBundle } from '@iota/signing'
-import 'core-js/features/typed-array' // tslint:disable-line
+import 'core-js'
 import * as errors from '../../errors'
 
 import {

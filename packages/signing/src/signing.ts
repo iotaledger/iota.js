@@ -3,7 +3,7 @@ import { fromValue } from '@iota/converter'
 import Kerl from '@iota/kerl'
 import { padTrits } from '@iota/pad'
 import * as Promise from 'bluebird'
-import 'core-js/features/typed-array' // tslint:disable-line
+import 'core-js'
 import * as errors from '../../errors'
 import { NativeGenerateSignatureFunction } from '../../types'
 import { add } from './add'

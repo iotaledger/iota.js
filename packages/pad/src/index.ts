@@ -1,4 +1,4 @@
-import 'core-js/features/typed-array' // tslint:disable-line
+import 'core-js'
 import * as errors from '../../errors'
 import { Tag, Trytes } from '../../types'
 
