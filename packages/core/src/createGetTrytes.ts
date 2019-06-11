@@ -1,4 +1,4 @@
-import { TRYTE_WIDTH } from '@iota/signing'
+import { TRYTE_WIDTH } from '@iota/converter'
 import { TRANSACTION_HASH_LENGTH } from '@iota/transaction'
 import * as Promise from 'bluebird'
 import * as errors from '../../errors'
