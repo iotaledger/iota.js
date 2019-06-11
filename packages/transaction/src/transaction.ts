@@ -1,7 +1,7 @@
 /**
  * @module transaction
  */
-import { tritsToValue, TRYTE_WIDTH } from '@iota/converter'
+import { tritsToValue } from '@iota/converter'
 import Curl from '@iota/curl'
 import Kerl from '@iota/kerl'
 import { FRAGMENT_LENGTH } from '@iota/signing'
