@@ -1,6 +1,6 @@
 /** @module transaction-converter */
 
-import { tritsToTrytes, trytesToTrits, value } from '@iota/converter'
+import { tritsToTrytes, TRYTE_WIDTH, trytesToTrits, value } from '@iota/converter'
 import { padTrits, padTrytes } from '@iota/pad'
 import {
     ADDRESS_LENGTH,
@@ -32,7 +32,6 @@ import {
     transactionHash,
     TRUNK_TRANSACTION_LENGTH,
     TRUNK_TRANSACTION_OFFSET,
-    TRYTE_WIDTH,
     VALUE_LENGTH,
     VALUE_OFFSET,
 } from '@iota/transaction'
