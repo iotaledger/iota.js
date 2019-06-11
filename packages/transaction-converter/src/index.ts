@@ -1,6 +1,6 @@
 /** @module transaction-converter */
 
-import { tritsToTrytes, trytesToTrits, value } from '@iota/converter'
+import { tritsToTrytes, TRYTE_WIDTH, trytesToTrits, value } from '@iota/converter'
 import { padTrits, padTrytes } from '@iota/pad'
 import {
     ADDRESS_LENGTH,
@@ -27,12 +27,12 @@ import {
     SIGNATURE_OR_MESSAGE_OFFSET,
     TAG_LENGTH,
     TAG_OFFSET,
+    TRANSACTION_LENGTH,
     TRANSACTION_NONCE_LENGTH,
     TRANSACTION_NONCE_OFFSET,
     transactionHash,
     TRUNK_TRANSACTION_LENGTH,
     TRUNK_TRANSACTION_OFFSET,
-    TRYTE_WIDTH,
     VALUE_LENGTH,
     VALUE_OFFSET,
 } from '@iota/transaction'
@@ -61,18 +61,26 @@ export function asTransactionTrytes(
         [
             transaction.signatureMessageFragment,
             transaction.address,
-            tritsToTrytes(padTrits(81)(trytesToTrits(transaction.value))),
-            padTrytes(27)(transaction.obsoleteTag),
-            tritsToTrytes(padTrits(27)(trytesToTrits(transaction.timestamp))),
-            tritsToTrytes(padTrits(27)(trytesToTrits(transaction.currentIndex))),
-            tritsToTrytes(padTrits(27)(trytesToTrits(transaction.lastIndex))),
+            tritsToTrytes(padTrits(VALUE_LENGTH)(trytesToTrits(transaction.value))),
+            padTrytes(OBSOLETE_TAG_LENGTH / TRYTE_WIDTH)(transaction.obsoleteTag),
+            tritsToTrytes(padTrits(ISSUANCE_TIMESTAMP_LENGTH)(trytesToTrits(transaction.timestamp))),
+            tritsToTrytes(padTrits(CURRENT_INDEX_LENGTH)(trytesToTrits(transaction.currentIndex))),
+            tritsToTrytes(padTrits(LAST_INDEX_LENGTH)(trytesToTrits(transaction.lastIndex))),
             transaction.bundle,
             transaction.trunkTransaction,
             transaction.branchTransaction,
-            padTrytes(27)(transaction.tag || transaction.obsoleteTag),
-            tritsToTrytes(padTrits(27)(trytesToTrits(transaction.attachmentTimestamp))),
-            tritsToTrytes(padTrits(27)(trytesToTrits(transaction.attachmentTimestampLowerBound))),
-            tritsToTrytes(padTrits(27)(trytesToTrits(transaction.attachmentTimestampUpperBound))),
+            padTrytes(OBSOLETE_TAG_LENGTH / TRYTE_WIDTH)(transaction.tag || transaction.obsoleteTag),
+            tritsToTrytes(padTrits(ATTACHMENT_TIMESTAMP_LENGTH)(trytesToTrits(transaction.attachmentTimestamp))),
+            tritsToTrytes(
+                padTrits(ATTACHMENT_TIMESTAMP_LOWER_BOUND_LENGTH)(
+                    trytesToTrits(transaction.attachmentTimestampLowerBound)
+                )
+            ),
+            tritsToTrytes(
+                padTrits(ATTACHMENT_TIMESTAMP_UPPER_BOUND_LENGTH)(
+                    trytesToTrits(transaction.attachmentTimestampUpperBound)
+                )
+            ),
             transaction.nonce,
         ].join('')
     )
@@ -90,7 +98,7 @@ export function asTransactionTrytes(
  * @return {Transaction} Transaction object
  */
 export const asTransactionObject = (trytes: Trytes, hash?: Hash): Transaction => {
-    if (!isTrytesOfExactLength(trytes, 2673)) {
+    if (!isTrytesOfExactLength(trytes, TRANSACTION_LENGTH / TRYTE_WIDTH)) {
         throw new Error(errors.INVALID_TRYTES)
     }
 
