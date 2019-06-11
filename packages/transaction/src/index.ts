@@ -21,6 +21,7 @@ export {
     transactionNonce,
     trunkTransaction,
     value,
+    TRYTE_WIDTH,
     SIGNATURE_OR_MESSAGE_OFFSET,
     SIGNATURE_OR_MESSAGE_LENGTH,
     ADDRESS_OFFSET,
