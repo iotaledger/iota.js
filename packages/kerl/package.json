@@ -1,6 +1,6 @@
 {
     "name": "@iota/kerl",
-    "version": "1.0.0-beta.12",
+    "version": "1.0.0-beta.15",
     "description": "IOTA-related cryptographic methods",
     "main": "./out/src/index.js",
     "typings": "typings/src",
@@ -47,6 +47,6 @@
         "crypto-js": "^3.1.9-1"
     },
     "devDependencies": {
-        "@iota/converter": "^1.0.0-beta.12"
+        "@iota/converter": "^1.0.0-beta.15"
     }
 }

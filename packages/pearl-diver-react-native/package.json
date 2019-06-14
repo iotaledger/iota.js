@@ -1,6 +1,6 @@
 {
     "name": "@iota/pearl-diver-react-native",
-    "version": "1.0.0-beta.12",
+    "version": "1.0.0-beta.15",
     "description": "Transaction nonce searcher for IOTA apps built with react-native.",
     "main": "./out/pearl-diver-react-native/src/index.js",
     "typings": "typings/pearl-diver-react-native/src",
@@ -46,9 +46,9 @@
         "url": "https://github.com/iotaledger/iota.js.git"
     },
     "dependencies": {
-        "@iota/converter": "^1.0.0-beta.12",
-        "@iota/transaction": "^1.0.0-beta.12",
-        "@iota/transaction-converter": "^1.0.0-beta.12",
+        "@iota/converter": "^1.0.0-beta.15",
+        "@iota/transaction": "^1.0.0-beta.15",
+        "@iota/transaction-converter": "^1.0.0-beta.15",
         "@types/react-native": "^0.57.42"
     },
     "devDependencies": {

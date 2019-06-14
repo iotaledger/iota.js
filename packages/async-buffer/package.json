@@ -1,6 +1,6 @@
 {
     "name": "@iota/async-buffer",
-    "version": "1.0.0-beta.12",
+    "version": "1.0.0-beta.15",
     "description": "Async buffer",
     "main": "out/src/asyncBuffer.js",
     "typings": "typings/src/asyncBuffer.d.ts",
