@@ -12,7 +12,7 @@ import {
     verifyCDAParams,
     verifyCDATransfer,
 } from '@iota/cda'
-import { bytesToTrits, tritsToBytes, tritsToTrytes, tritsToValue, trytesToTrits } from '@iota/converter'
+import { bytesToTrits, tritsToBytes, tritsToTrytes, tritsToValue, TRYTE_WIDTH, trytesToTrits } from '@iota/converter'
 import {
     createCheckConsistency,
     createFindTransactions,
@@ -26,7 +26,7 @@ import {
 import { createHttpClient } from '@iota/http-client'
 import { PersistenceBatchTypes, PersistenceIteratorOptions } from '@iota/persistence'
 import { createPersistenceAdapter } from '@iota/persistence-adapter-level'
-import { address as signingAddress, digests, key, subseed, TRYTE_WIDTH } from '@iota/signing'
+import { address as signingAddress, digests, key, subseed } from '@iota/signing'
 import {
     address as transactionAddress,
     bundle as bundleHash,
@@ -38,6 +38,7 @@ import {
 } from '@iota/transaction'
 import { asTransactionObjects } from '@iota/transaction-converter'
 import * as Promise from 'bluebird'
+import 'core-js'
 import { EventEmitter } from 'events'
 import { Bundle, Transaction, Trytes } from '../../types'
 import {

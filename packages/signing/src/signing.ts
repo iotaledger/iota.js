@@ -1,14 +1,13 @@
 /** @module signing */
-import { fromValue } from '@iota/converter'
+import { fromValue, TRYTE_WIDTH } from '@iota/converter'
 import Kerl from '@iota/kerl'
 import { padTrits } from '@iota/pad'
 import * as Promise from 'bluebird'
+import 'core-js'
 import * as errors from '../../errors'
-import '../../typed-array'
 import { NativeGenerateSignatureFunction } from '../../types'
 import { add } from './add'
 
-export const TRYTE_WIDTH = 3
 export const MIN_TRYTE_VALUE = -13
 export const MAX_TRYTE_VALUE = 13
 export const NUMBER_OF_SECURITY_LEVELS = 3
