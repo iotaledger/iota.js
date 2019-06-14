@@ -1,3 +1,4 @@
+import { CDA } from '@iota/cda'
 import { trytesToTrits } from '@iota/converter'
 import { generateAddress } from '@iota/core'
 import * as BluebirdPromise from 'bluebird'
@@ -199,6 +200,7 @@ describe('account.generateCDA/account.sendToCDA', async assert => {
         seed: trytesToTrits(seedB),
         persistencePath,
     })
+
     // request from 0 and A
     let cdaB1
     const accountBRequestsFromAny = () =>
@@ -215,6 +217,99 @@ describe('account.generateCDA/account.sendToCDA', async assert => {
         })
 
     cdaB1 = await accountBRequestsFromAny()
+
+    const accountASends10iToB = (cda: CDA) => {
+        const hash = 'ZZKVOZRYHZVYORKHDLWRNIWKWLZMVBNFSPQC99PYHVJFRYRHXVUTHPQOVPJBRNFLYWDNKBBUJOTDQVTDE'
+        const transactionsToApprove = {
+            trunkTransaction: '9'.repeat(81),
+            branchTransaction: '9'.repeat(81),
+        }
+
+        nock('http://localhost:14265', headers)
+            .post('/', {
+                command: IRICommand.FIND_TRANSACTIONS,
+                addresses: [cda.address.slice(0, 81)],
+            })
+            .times(1)
+            .reply(200, {
+                hashes: [hash],
+            })
+
+        nock('http://localhost:14265', headers)
+            .post('/', {
+                command: IRICommand.GET_TRYTES,
+                hashes: [hash],
+            })
+            .times(1)
+            .reply(200, {
+                trytes: [accountASends10iToBTrytes[0]],
+            })
+
+        nock('http://localhost:14265', headers)
+            .persist()
+            .post('/', { command: IRICommand.GET_NODE_INFO })
+            .reply(200, {
+                appName: 'IRI',
+                appVersion: '',
+                duration: 100,
+                jreAvailableProcessors: 4,
+                jreFreeMemory: 13020403,
+                jreMaxMemory: 1241331231,
+                jreTotalMemory: 4245234332,
+                latestMilestone: 'M'.repeat(81),
+                latestMilestoneIndex: 1,
+                latestSolidSubtangleMilestone: 'M'.repeat(81),
+                latestSolidSubtangleMilestoneIndex: 1,
+                neighbors: 5,
+                packetsQueueSize: 23,
+                time: 213213214,
+                tips: 123,
+                transactionsToRequest: 10,
+            })
+
+        nock('http://localhost:14265', headers)
+            .post('/', {
+                command: IRICommand.GET_INCLUSION_STATES,
+                transactions: [hash],
+                tips: ['M'.repeat(81)],
+            })
+            .times(1)
+            .reply(200, {
+                states: [false],
+            })
+
+        nock('http://localhost:14265', headers)
+            .post('/', {
+                command: IRICommand.CHECK_CONSISTENCY,
+                tails: [hash],
+            })
+            .times(1)
+            .reply(200, {
+                states: [false],
+            })
+
+        nock('http://localhost:14265', headers)
+            .post('/', {
+                command: IRICommand.GET_TRANSACTIONS_TO_APPROVE,
+                depth: 3,
+            })
+            .times(1)
+            .reply(200, {
+                ...transactionsToApprove,
+            })
+
+        nock('http://localhost:14265', headers)
+            .post('/', {
+                command: IRICommand.ATTACH_TO_TANGLE,
+                trytes: [...accountASends10iToBTrytes],
+                ...transactionsToApprove,
+                minWeightMagnitude: 9,
+            })
+            .times(1)
+            .reply(200, {
+                trytes: [...accountASends10iToBTrytes],
+            })
+    }
 
     assert({
         given: 'that account0 has 0 persisted CDAs, sendToCDA',
@@ -258,6 +353,7 @@ describe('account.generateCDA/account.sendToCDA', async assert => {
                 await accountAHas2iInA2()
                 await delay(5500)
                 const cdaB2 = await accountBRequests10iFromAccountA()
+                await accountASends10iToB(cdaB2)
                 return await accountA.sendToCDA({
                     ...cdaB2,
                     value: cdaB2.expectedAmount,

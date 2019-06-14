@@ -347,18 +347,8 @@ export interface Persistence<T = Int8Array, B = Buffer> extends EventEmitter {
     readonly writeCDA: (cda: T) => Promise<void>
     readonly deleteCDA: (cda: T) => Promise<void>
     readonly batch: (ops: ReadonlyArray<PersistenceBatch<T>>) => Promise<void>
-
-    readonly stateRead: (key: B) => Promise<B>
-    readonly stateWrite: (key: B, value: B) => Promise<void>
-    readonly stateDelete: (key: B) => Promise<B>
-    readonly stateBatch: (ops: ReadonlyArray<PersistenceAdapterBatch<B, B>>) => Promise<void>
-    readonly createStateReadStream: (options?: PersistenceIteratorOptions) => NodeJS.ReadableStream
-
-    readonly historyRead: (key: B) => Promise<B>
-    readonly historyWrite: (key: B, value: B) => Promise<void>
-    readonly historyDelete: (key: B) => Promise<void>
-    readonly historyBatch: (ops: ReadonlyArray<PersistenceAdapterBatch<B, B>>) => Promise<void>
-    readonly createHistoryReadStream: (options?: PersistenceIteratorOptions) => NodeJS.ReadableStream
+    readonly state: PersistenceAdapter<B, B>
+    readonly history: PersistenceAdapter<B, B>
 }
 
 export enum PersistenceEvents {
@@ -401,6 +391,8 @@ export interface PersistenceAdapter<K = Buffer, V = Buffer> {
     readonly delete: (key: K) => Promise<void>
     readonly batch: (ops: ReadonlyArray<PersistenceAdapterBatch<K, V>>) => Promise<void>
     readonly createReadStream: (options?: PersistenceIteratorOptions) => NodeJS.ReadableStream
+    readonly close: () => Promise<void>
+    readonly open: () => Promise<void>
 }
 
 export type PersistenceAdapterBatch<K = Buffer, V = Buffer> =

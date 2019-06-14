@@ -23,6 +23,7 @@ export interface TransactionIssuanceParams {
     readonly seed: Int8Array
     readonly deposits: AsyncBuffer<Int8Array>
     readonly persistence: Persistence
+    readonly ready: Promise<any>
     readonly network: Network
     readonly timeSource: TimeSource
     readonly security: 1 | 2 | 3
@@ -35,7 +36,6 @@ export interface TransactionAttachmentParams {
     readonly network: Network
     readonly bundles: AsyncBuffer<Int8Array>
     readonly persistence: Persistence
-    readonly delay: number
 }
 export interface TransactionAttachmentStartParams {
     readonly depth: number
@@ -57,6 +57,10 @@ export interface AccountParams {
     readonly historyAdapter?: CreatePersistenceAdapter
     readonly network?: any
     readonly timeSource?: TimeSource
+    readonly depth?: number
+    readonly minWeightMagnitude?: number
+    readonly delay?: number
+    readonly maxDepth?: number
 }
 
 export interface AddressGeneration<X, Y> {
@@ -96,7 +100,10 @@ export interface Account<X, Y, Z>
         TransactionIssuance<Y, Z>,
         TransactionAttachment,
         History<Y, Z>,
-        EventEmitter {}
+        EventEmitter {
+    stop: () => Promise<void>
+    start: () => Promise<void>
+}
 
 export type TimeSource = () => Promise<number>
 export type CreateNetwork = (params: NetworkParams) => Network
@@ -117,8 +124,11 @@ export interface AccountPreset<X, Y, Z> {
     readonly addressGeneration: CreateAddressGeneration<X, Y>
     readonly transactionIssuance: CreateTransactionIssuance<Y, Z>
     readonly transactionAttachment: CreateTransactionAttachment<Z>
-    readonly attachmentDelay: number
     readonly timeSource: TimeSource
+    readonly depth: number
+    readonly minWeightMagnitude: number
+    readonly delay: number
+    readonly maxDepth: number
     readonly test: { [t: string]: any }
     readonly [k: string]: any
 }
@@ -134,29 +144,34 @@ export function createAccountWithPreset<X, Y, Z>(preset: AccountPreset<X, Y, Z>)
             provider = preset.provider,
             network = preset.network({ provider }),
             timeSource = preset.timeSource,
+            depth = preset.depth,
+            minWeightMagnitude = preset.minWeightMagnitude,
+            delay = preset.delay,
+            maxDepth = preset.maxDepth,
         }: AccountParams
     ): Account<X, Y, Z> {
         if (typeof seed === 'string') {
             seed = trytesToTrits(seed)
         }
 
+        const bundles = asyncBuffer<Int8Array>()
+        const deposits = asyncBuffer<Int8Array>()
         const persistence = createPersistence({
             persistenceID: generatePersistenceID(seed),
             persistencePath,
             stateAdapter,
             historyAdapter,
         })
-
-        const bundles = asyncBuffer<Int8Array>()
-        const deposits = asyncBuffer<Int8Array>()
+        const state = persistence.state.createReadStream()
+        const ready = new Promise(resolve => {
+            state.on('end', () => resolve())
+        })
 
         persistence.on('writeBundle', bundles.write)
         persistence.on('writeCDA', deposits.write)
 
-        persistence
-            .createStateReadStream()
-            .on('data', streamToBuffers({ bundles, deposits }))
-            .on('error', error => this.emit('error', error))
+        state.on('data', streamToBuffers({ bundles, deposits }))
+        state.on('error', error => this.emit('error', error))
 
         function accountMixin(this: any) {
             return Object.assign(
@@ -171,6 +186,7 @@ export function createAccountWithPreset<X, Y, Z>(preset: AccountPreset<X, Y, Z>)
                     seed: seed as Int8Array,
                     deposits,
                     persistence,
+                    ready,
                     network,
                     timeSource,
                     security: preset.security,
@@ -180,15 +196,37 @@ export function createAccountWithPreset<X, Y, Z>(preset: AccountPreset<X, Y, Z>)
                     bundles,
                     persistence,
                     network,
-                    delay: preset.attachmentDelay,
                 }),
+                {
+                    stop: () => {
+                        this.stopAttaching()
+                        return persistence.history.close().then(() => persistence.state.close())
+                    },
+                    start: () => {
+                        return persistence.history
+                            .open()
+                            .then(() => persistence.state.open())
+                            .tap(this.startAttaching)
+                    },
+                },
                 preset.history.call(this, { persistence }),
                 EventEmitter.prototype
             )
         }
 
         const target = {}
-        return accountMixin.call(target)
+        const account = accountMixin.call(target)
+
+        ready.tap(() => {
+            account.startAttaching({
+                depth,
+                minWeightMagnitude,
+                delay,
+                maxDepth,
+            })
+        })
+
+        return account
     }
 }
 
