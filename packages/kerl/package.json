@@ -44,6 +44,7 @@
     },
     "dependencies": {
         "@types/crypto-js": "^3.1.38",
+        "core-js": "^3.1.4",
         "crypto-js": "^3.1.9-1"
     },
     "devDependencies": {
