@@ -67,5 +67,8 @@
     "devDependencies": {
         "riteway": "^6.0.3",
         "watch": "^1.0.2"
+    },
+    "dependencies": {
+        "core-js": "^3.1.4"
     }
 }
