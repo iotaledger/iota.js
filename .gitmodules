@@ -1,1 +1,4 @@
 
+[submodule "entangled"]
+	path = entangled
+	url = https://github.com/iotaledger/entangled

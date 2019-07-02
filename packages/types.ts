@@ -1,5 +1,6 @@
 import * as Promise from 'bluebird'
 import { EventEmitter } from 'events'
+import { Readable } from 'stream'
 export type Maybe<T> = T | void
 
 export type Hash = string
@@ -316,6 +317,46 @@ export const asArray = <T>(x: T | ReadonlyArray<T>): ReadonlyArray<T> => (Array.
 export const getOptionsWithDefaults = <T>(defaults: Readonly<T>) => (options: Readonly<Partial<T>>): Readonly<T> =>
     Object.assign({}, defaults, options) // tslint:disable-line prefer-object-spread
 
+// Persistence
+export type CreatePersistence<K, V> = (adapter: PersistenceAdapter<K, V>) => Persistence<K, V>
+
+export interface Persistence<K, V> extends Readable {
+    readonly increment: () => Promise<V>
+    readonly put: (key: K, value: V) => Promise<void>
+    readonly del: (key: K) => Promise<void>
+    readonly get: (key: K) => Promise<V>
+    readonly batch: (ops: PersistenceBatch<K, V>) => Promise<void>
+    readonly close: () => void
+    readonly open: () => void
+}
+
+export type PersistenceBatch<K, V> = ReadonlyArray<PersistencePutCommand<K, V> | PersistenceDelCommand<K>>
+
+export enum PersistenceBatchTypes {
+    put = 'put',
+    del = 'del',
+}
+
+export interface PersistencePutCommand<K, V> {
+    readonly type: PersistenceBatchTypes.put
+    readonly key: K
+    readonly value: V
+}
+
+export interface PersistenceDelCommand<K> {
+    readonly type: PersistenceBatchTypes.del
+    readonly key: K
+}
+
+// Persistence Adapter
+export type CreatePersistenceAdapter<K, V> = (params: PersistenceAdapterParams) => PersistenceAdapter<K, V>
+
+export interface PersistenceAdapterParams {
+    readonly persistenceID: string
+    readonly persistencePath?: string
+    readonly store?: any
+}
+
 export interface PersistenceIteratorOptions<K = any> {
     gt?: K
     gte?: K
@@ -329,90 +370,14 @@ export interface PersistenceIteratorOptions<K = any> {
     valueAsBuffer?: boolean
 }
 
-// Persistence
-export type CreatePersistence<T = Int8Array, B = Buffer> = (params: PersistenceParams<B>) => Persistence<T>
-
-export interface PersistenceParams<B = Buffer> {
-    readonly persistenceID: string
-    readonly persistencePath: string
-    readonly stateAdapter: CreatePersistenceAdapter<B, B>
-    readonly historyAdapter: CreatePersistenceAdapter<B, B>
-}
-
-export interface Persistence<T = Int8Array, B = Buffer> extends EventEmitter {
-    readonly nextIndex: () => Promise<T>
-    readonly writeBundle: (bundle: T) => Promise<void>
-    readonly deleteBundle: (bundle: T) => Promise<void>
-    readonly readCDA: (address: T) => Promise<T>
-    readonly writeCDA: (cda: T) => Promise<void>
-    readonly deleteCDA: (cda: T) => Promise<void>
-    readonly batch: (ops: ReadonlyArray<PersistenceBatch<T>>) => Promise<void>
-    readonly state: PersistenceAdapter<B, B>
-    readonly history: PersistenceAdapter<B, B>
-}
-
-export enum PersistenceEvents {
-    writeBundle = 'writeBundle',
-    deleteBundle = 'deleteBundle',
-    writeCDA = 'writeCDA',
-    deleteCDA = 'deleteCDA',
-}
-
-export enum PersistenceBatchTypes {
-    writeBundle = 'writeBundle',
-    deleteBundle = 'deleteBundle',
-    writeCDA = 'writeCDA',
-    deleteCDA = 'delteCDA',
-}
-
-export interface PersistenceBatch<V = Int8Array> {
-    readonly type:
-        | PersistenceBatchTypes.writeBundle
-        | PersistenceBatchTypes.deleteBundle
-        | PersistenceBatchTypes.writeCDA
-        | PersistenceBatchTypes.deleteCDA
-    readonly value: V
-}
-
-// Persistence Adapter
-export type CreatePersistenceAdapter<K = Buffer, V = Buffer> = (
-    params: PersistenceAdapterParams
-) => PersistenceAdapter<K, V>
-
-export interface PersistenceAdapterParams {
-    readonly persistenceID: string
-    readonly persistencePath?: string
-    readonly store?: any
-}
-
-export interface PersistenceAdapter<K = Buffer, V = Buffer> {
-    readonly read: (key: K) => Promise<V>
-    readonly write: (key: K, value: V) => Promise<void>
-    readonly delete: (key: K) => Promise<void>
-    readonly batch: (ops: ReadonlyArray<PersistenceAdapterBatch<K, V>>) => Promise<void>
+export interface PersistenceAdapter<K, V> {
+    readonly get: (key: K) => Promise<V>
+    readonly put: (key: K, value: V) => Promise<void>
+    readonly del: (key: K) => Promise<void>
+    readonly batch: (ops: PersistenceBatch<K, V>) => Promise<void>
     readonly createReadStream: (options?: PersistenceIteratorOptions) => NodeJS.ReadableStream
     readonly close: () => Promise<void>
     readonly open: () => Promise<void>
-}
-
-export type PersistenceAdapterBatch<K = Buffer, V = Buffer> =
-    | PersistenceAdapterWriteOp<K, V>
-    | PersistenceAdapterDeleteOp<K>
-
-export enum PersistenceAdapterBatchTypes {
-    write = 'write',
-    delete = 'delete',
-}
-
-export interface PersistenceAdapterWriteOp<K = Buffer, V = Buffer> {
-    readonly type: PersistenceAdapterBatchTypes.write
-    readonly key: K
-    readonly value: V
-}
-
-export interface PersistenceAdapterDeleteOp<K = Buffer> {
-    readonly type: PersistenceAdapterBatchTypes.delete
-    readonly key: K
 }
 
 export interface PersistenceError extends Error {
