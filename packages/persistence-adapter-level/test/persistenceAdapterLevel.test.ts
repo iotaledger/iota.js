@@ -21,7 +21,7 @@ const isolate = (() => {
     }
 })()
 
-describe('persistenceAdapter(params: PersistenceAdapterParams): PersistenceAdapter', async assert => {
+describe('persistenceAdapter({ persistenceID, persistencePath })', async assert => {
     assert({
         given: 'persistenceID = undefined',
         should: 'throw error',
@@ -79,7 +79,7 @@ describe('persistenceAdapter(params: PersistenceAdapterParams): PersistenceAdapt
     })
 })
 
-describe('adapter.write(key: K, value: V) -> adapter.read(key: K): V', async assert => {
+describe('adapter.put(key, value) -> adapter.read(key)', async assert => {
     assert({
         given: 'a written value',
         should: 'read it',
@@ -95,9 +95,9 @@ describe('adapter.write(key: K, value: V) -> adapter.read(key: K): V', async ass
     })
 })
 
-describe('adapter.write(key: K, value: V) -> adapter.delete(key: K) -> adapter.read(key: K))', async assert => {
+describe('adapter.put(key, value) -> adapter.del(key) -> adapter.get(key))', async assert => {
     assert({
-        given: 'a written bundle',
+        given: 'a written value',
         should: 'delete it',
         actual: await (async () => {
             const adapter = isolate()
@@ -123,12 +123,12 @@ describe('adapter.write(key: K, value: V) -> adapter.delete(key: K) -> adapter.r
     })
 })
 
-describe('adapter.batch(ops: ReadonlyArray<PersistenceAdapterBatch<V, K>>) -> adapter.read(key: K): V)', async assert => {
+describe('adapter.put(key, value) -> adapter.batch(commands) -> adapter.get(key))', async assert => {
     const a = new Int8Array(1).fill(1)
     const b = new Int8Array(1).fill(-1)
 
     assert({
-        given: 'a written bundle',
+        given: 'a written value',
         should: 'batch delete it and persist a new one',
         actual: await (async () => {
             const adapter = isolate()
@@ -161,13 +161,13 @@ describe('adapter.batch(ops: ReadonlyArray<PersistenceAdapterBatch<V, K>>) -> ad
     })
 })
 
-describe('adapter.createReadStream(onData: (data: V) => any, onError, onClose, onEnd, options): NodeJS.ReadStream', async assert => {
+describe('adapter.createReadStream(options)', async assert => {
     const a = new Int8Array(1).fill(1)
     const b = new Int8Array(1).fill(-1)
 
     assert({
-        given: 'persisted bundle & CDA',
-        should: 'read bundle & CDA',
+        given: 'persisted values',
+        should: 'read as stream',
         actual: await (async () => {
             const adapter = isolate()
 
@@ -192,7 +192,7 @@ describe('adapter.createReadStream(onData: (data: V) => any, onError, onClose, o
     })
 })
 
-describe('adapter.open(): Promise<void> / adapter.close(): Promise<void>', async assert => {
+describe('adapter.open() / adapter.close()', async assert => {
     const adapter = isolate()
 
     assert({
