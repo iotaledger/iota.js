@@ -65,6 +65,7 @@ export function createPersistence(adapter: PersistenceAdapter<string, Int8Array>
         return Object.assign(
             this,
             {
+                ready,
                 increment: () =>
                     ready()
                         .then(() => indexBuffer.read())
@@ -114,6 +115,8 @@ export function createPersistence(adapter: PersistenceAdapter<string, Int8Array>
                                 }
                             })
                         ),
+                open: adapter.open,
+                close: adapter.close,
             },
             EventEmitter.prototype
         )
@@ -121,6 +124,7 @@ export function createPersistence(adapter: PersistenceAdapter<string, Int8Array>
 
     const persistence = persistenceMixin.apply({})
 
+    ready().then(() => persistence.emit('ready'))
     source.on('data', data => persistence.emit('data', data))
 
     return persistence

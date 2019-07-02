@@ -40,7 +40,7 @@ import { asTransactionObjects } from '@iota/transaction-converter'
 import * as Promise from 'bluebird'
 import 'core-js'
 import { EventEmitter } from 'events'
-import { Bundle, Transaction, Trytes } from '../../types'
+import { Bundle, PersistenceDelCommand, Transaction, Trytes } from '../../types'
 import {
     AccountPreset,
     AddressGeneration,
@@ -87,7 +87,7 @@ export function networkAdapter({ provider }: NetworkParams): Network {
 
 export function addressGeneration(addressGenerationParams: AddressGenerationParams) {
     const { seed, persistence, timeSource } = addressGenerationParams
-    const { nextIndex, writeCDA } = persistence
+    const { increment, put } = persistence
 
     return {
         generateCDA(cdaParams: CDAParams) {
@@ -100,21 +100,22 @@ export function addressGeneration(addressGenerationParams: AddressGenerationPara
             const { timeoutAt, expectedAmount, multiUse } = cdaParams
 
             return Promise.try(() => timeSource().then(currentTime => verifyCDAParams(currentTime, cdaParams)))
-                .then(nextIndex)
+                .then(increment)
                 .then(index => {
                     const security = cdaParams.security || addressGenerationParams.security
-
-                    return serializeCDAInput({
-                        address: signingAddress(digests(key(subseed(seed, tritsToValue(index)), security))),
+                    const address = signingAddress(digests(key(subseed(seed, tritsToValue(index)), security)))
+                    const serializedCDA = serializeCDAInput({
+                        address,
                         index,
                         security,
                         timeoutAt,
                         multiUse,
                         expectedAmount,
                     })
+                    return persistence
+                        .put(['0', ':', tritsToTrytes(address)].join(), serializedCDA)
+                        .then(() => deserializeCDA(serializedCDA))
                 })
-                .tap(writeCDA)
-                .then(deserializeCDA)
         },
     }
 }
@@ -126,7 +127,7 @@ interface CDAInputs {
 
 export function transactionIssuance(
     this: any,
-    { seed, deposits, persistence, ready, network, timeSource, now }: TransactionIssuanceParams
+    { seed, deposits, persistence, network, timeSource, now }: TransactionIssuanceParams
 ) {
     const { getBalance } = network
     const prepareTransfers = createPrepareTransfers(undefined, now)
@@ -140,7 +141,10 @@ export function transactionIssuance(
             }
 
             return Promise.try(() =>
-                ready.then(timeSource).then(currentTime => verifyCDATransfer(currentTime, cdaTransfer))
+                persistence
+                    .ready()
+                    .then(timeSource)
+                    .then(currentTime => verifyCDATransfer(currentTime, cdaTransfer))
             )
                 .then(() => accumulateInputs(cdaTransfer.value))
                 .then(({ inputs, totalBalance }) => {
@@ -156,21 +160,29 @@ export function transactionIssuance(
                                 },
                             ],
                             {
-                                inputs: inputs.slice().map(input => ({
+                                inputs: inputs.map(input => ({
                                     address: tritsToTrytes(input.address),
                                     keyIndex: tritsToValue(input.index),
-                                    security: input.security as number,
+                                    security: input.security,
                                     balance: input.balance as number,
                                 })),
                                 remainderAddress,
                             }
                         ).tap(trytes =>
                             persistence.batch([
-                                ...inputs.map(input => ({
-                                    type: PersistenceBatchTypes.deleteCDA,
-                                    value: serializeCDAInput(input),
-                                })),
-                                { type: PersistenceBatchTypes.writeBundle, value: bundleTrytesToBundleTrits(trytes) },
+                                ...inputs.map(
+                                    (input): PersistenceDelCommand<string> => ({
+                                        type: PersistenceBatchTypes.del,
+                                        key: ['0', ':', tritsToTrytes(input.address)].join(''),
+                                    })
+                                ),
+                                {
+                                    type: PersistenceBatchTypes.put,
+                                    key: ['0', ':', tritsToTrytes(bundleHash(bundleTrytesToBundleTrits(trytes)))].join(
+                                        ''
+                                    ),
+                                    value: bundleTrytesToBundleTrits(trytes),
+                                },
                             ])
                         )
                     )
@@ -214,7 +226,7 @@ export function transactionIssuance(
                             acc.inputs.push({ ...input, balance })
                         }
                     } else if (input.timeoutAt !== 0 && isExpired(currentTime, input)) {
-                        persistence.deleteCDA(cda)
+                        persistence.del(['0', ':', tritsToTrytes(input.address)].join(''))
                     } else {
                         buffer.push(cda)
                     }
@@ -230,12 +242,13 @@ export function transactionIssuance(
             return Promise.resolve(undefined)
         }
 
-        return persistence.nextIndex().then(index => {
+        return persistence.increment().then(index => {
             const security = 2
             const remainderAddress = signingAddress(digests(key(subseed(seed, tritsToValue(index)), security)))
 
             return persistence
-                .writeCDA(
+                .put(
+                    ['0', ':', tritsToTrytes(remainderAddress)].join(''),
                     serializeCDAInput({
                         address: remainderAddress,
                         index,
@@ -306,7 +319,7 @@ export function transactionAttachment(this: any, params: TransactionAttachmentPa
                 .then(pastAttachmentHashes =>
                     getLatestInclusion(pastAttachmentHashes).tap(inclusionStates =>
                         inclusionStates.indexOf(true) > -1
-                            ? persistence.deleteBundle(bundle)
+                            ? persistence.del(['0', ':', tritsToTrytes(bundleHash(bundle))].join(''))
                             : Promise.all(pastAttachmentHashes.map(h => getConsistency([h]))).tap(consistencyStates =>
                                   consistencyStates.indexOf(true) > -1
                                       ? setTimeout(() => bundles.write(bundle), delay)
@@ -347,86 +360,16 @@ export function transactionAttachment(this: any, params: TransactionAttachmentPa
     return transactionAttacher
 }
 
-export function history({ persistence }: HistoryParams): History<CDA, ReadonlyArray<Trytes>> {
-    return {
-        // Streaming support will be added later
-        readIncludedDeposits(options: PersistenceIteratorOptions) {
-            const emitter = new EventEmitter()
-            const stream = persistence.history.createReadStream({
-                ...options,
-                keys: false,
-                values: true,
-            })
-
-            stream.on('data', value => {
-                const trits = bytesToTrits(value)
-                if (trits.length === CDA_LENGTH) {
-                    emitter.emit('data', deserializeCDA(trits))
-                }
-            })
-            stream.on('end', () => emitter.emit('end'))
-            stream.on('close', () => emitter.emit('close'))
-            stream.on('error', error => emitter.emit('error', error))
-
-            return emitter
-        },
-
-        readIncludedTransfers(options: PersistenceIteratorOptions) {
-            const emitter = new EventEmitter()
-            const stream = persistence.history.createReadStream({
-                ...options,
-                keys: false,
-                values: true,
-            })
-
-            stream.on('data', value => {
-                const trits = bytesToTrits(value)
-
-                if (trits.length !== 0 && isMultipleOfTransactionLength(trits.length)) {
-                    emitter.emit('data', asTransactionObjects()(bundleTritsToBundleTrytes(trits)))
-                }
-            })
-            stream.on('end', () => emitter.emit('end'))
-            stream.on('close', () => emitter.emit('close'))
-            stream.on('error', error => emitter.emit('error', error))
-
-            return emitter
-        },
-
-        getDeposit(address: Trytes) {
-            return persistence.history
-                .read(tritsToBytes(trytesToTrits(address)))
-                .then(value => deserializeCDA(bytesToTrits(value)))
-        },
-
-        getTransfer(bundle: Trytes) {
-            return persistence.history
-                .read(tritsToBytes(trytesToTrits(bundle)))
-                .then(value => bundleTritsToBundleTrytes(bytesToTrits(value)))
-        },
-
-        deleteDeposit(address: Trytes) {
-            return persistence.history.delete(tritsToBytes(trytesToTrits(address)))
-        },
-
-        deleteTransfer(bundle: Trytes) {
-            return persistence.history.delete(tritsToBytes(trytesToTrits(bundle)))
-        },
-    }
-}
-
 export function createAccountPreset(test = {}): AccountPreset<CDAParams, CDA, ReadonlyArray<Trytes>> {
     return {
         persistencePath: './',
-        stateAdapter: createPersistenceAdapter,
-        historyAdapter: createPersistenceAdapter,
+        persistenceAdapter: createPersistenceAdapter,
         provider: 'http://localhost:14265',
         network: networkAdapter,
         security: 2,
         addressGeneration,
         transactionIssuance,
         transactionAttachment,
-        history,
         timeSource: () => Promise.resolve(Math.floor(Date.now() / 1000)),
         depth: 3,
         minWeightMagnitude: 9,

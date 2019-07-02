@@ -1,13 +1,9 @@
 import { asyncBuffer, AsyncBuffer } from '@iota/async-buffer'
-import { trytesToTrits } from '@iota/converter'
+import { CDA_LENGTH, CDAInput, deserializeCDAInput, isExpired } from '@iota/cda'
+import { tritsToTrytes, trytesToTrits } from '@iota/converter'
 import { API } from '@iota/core'
-import {
-    createPersistence,
-    generatePersistenceID,
-    Persistence,
-    PersistenceIteratorOptions,
-    streamToBuffers,
-} from '@iota/persistence'
+import { createPersistence, generatePersistenceID, Persistence, PersistenceIteratorOptions } from '@iota/persistence'
+import { isMultipleOfTransactionLength } from '@iota/transaction'
 import * as Promise from 'bluebird'
 import { EventEmitter } from 'events'
 import { CreatePersistenceAdapter, Trytes } from '../../types'
@@ -15,15 +11,14 @@ import { preset as defaultPreset } from './preset'
 
 export interface AddressGenerationParams {
     readonly seed: Int8Array
-    readonly persistence: Persistence
+    readonly persistence: Persistence<string, Int8Array>
     readonly timeSource: TimeSource
     readonly security: 1 | 2 | 3
 }
 export interface TransactionIssuanceParams {
     readonly seed: Int8Array
     readonly deposits: AsyncBuffer<Int8Array>
-    readonly persistence: Persistence
-    readonly ready: Promise<any>
+    readonly persistence: Persistence<string, Int8Array>
     readonly network: Network
     readonly timeSource: TimeSource
     readonly security: 1 | 2 | 3
@@ -35,7 +30,7 @@ export interface NetworkParams {
 export interface TransactionAttachmentParams {
     readonly network: Network
     readonly bundles: AsyncBuffer<Int8Array>
-    readonly persistence: Persistence
+    readonly persistence: Persistence<string, Int8Array>
 }
 export interface TransactionAttachmentStartParams {
     readonly depth: number
@@ -46,15 +41,14 @@ export interface TransactionAttachmentStartParams {
 }
 
 export interface HistoryParams {
-    readonly persistence: Persistence
+    readonly persistence: Persistence<string, Int8Array>
 }
 
 export interface AccountParams {
     readonly seed: Int8Array | string
     readonly provider?: string
     readonly persistencePath?: string
-    readonly stateAdapter?: CreatePersistenceAdapter
-    readonly historyAdapter?: CreatePersistenceAdapter
+    readonly persistenceAdapter?: CreatePersistenceAdapter<string, Int8Array>
     readonly network?: any
     readonly timeSource?: TimeSource
     readonly depth?: number
@@ -116,8 +110,7 @@ export type CreateAccountWithPreset<X, Y, Z> = (preset: AccountPreset<X, Y, Z>) 
 
 export interface AccountPreset<X, Y, Z> {
     readonly persistencePath: string
-    readonly stateAdapter: CreatePersistenceAdapter
-    readonly historyAdapter: CreatePersistenceAdapter
+    readonly persistenceAdapter: CreatePersistenceAdapter<string, Int8Array>
     readonly provider: string
     readonly network: CreateNetwork
     readonly security: 1 | 2 | 3
@@ -139,8 +132,7 @@ export function createAccountWithPreset<X, Y, Z>(preset: AccountPreset<X, Y, Z>)
         {
             seed,
             persistencePath = preset.persistencePath,
-            stateAdapter = preset.stateAdapter,
-            historyAdapter = preset.historyAdapter,
+            persistenceAdapter = preset.persistenceAdapter,
             provider = preset.provider,
             network = preset.network({ provider }),
             timeSource = preset.timeSource,
@@ -156,22 +148,65 @@ export function createAccountWithPreset<X, Y, Z>(preset: AccountPreset<X, Y, Z>)
 
         const bundles = asyncBuffer<Int8Array>()
         const deposits = asyncBuffer<Int8Array>()
-        const persistence = createPersistence({
-            persistenceID: generatePersistenceID(seed),
-            persistencePath,
-            stateAdapter,
-            historyAdapter,
-        })
-        const state = persistence.state.createReadStream()
-        const ready = new Promise(resolve => {
-            state.on('end', () => resolve())
-        })
 
-        persistence.on('writeBundle', bundles.write)
-        persistence.on('writeCDA', deposits.write)
+        let depositsList: CDAInput[] = []
 
-        state.on('data', streamToBuffers({ bundles, deposits }))
-        state.on('error', error => this.emit('error', error))
+        const emitDepositEvents = () => {
+            persistence
+                .ready()
+                .then(timeSource)
+                .then(currentTime => {
+                    const depositsListCopy = [...depositsList].filter(deposit => deposit.timeoutAt > 0)
+
+                    network
+                        .getBalances(depositsListCopy.map(({ address }) => address), 100)
+                        .then((balances: ReadonlyArray<number>) => {
+                            depositsList = depositsListCopy.filter((deposit, i) => {
+                                if (balances[i] > 0) {
+                                    if (deposit.expectedAmount && balances[i] >= deposit.expectedAmount) {
+                                        this.emit('deposit', { ...deposit, balance: balances[i] })
+                                        return false
+                                    } else if (deposit.multiUse && isExpired(currentTime, deposit)) {
+                                        this.emit('deposit', { ...deposit, balance: balances[i] })
+                                        return false
+                                    } else if (!deposit.multiUse) {
+                                        this.emit('deposit', { ...deposit, balance: balances[i] })
+                                        return false
+                                    }
+                                    return true
+                                }
+
+                                if (isExpired(currentTime, deposit)) {
+                                    return false
+                                }
+
+                                return true
+                            })
+                        })
+                })
+        }
+
+        let emitDepositEventsTimeout: any
+
+        const persistence = createPersistence(
+            persistenceAdapter({
+                persistenceID: generatePersistenceID(seed),
+                persistencePath,
+            })
+        )
+
+        persistence.on('data', ({ key, value }) => {
+            if (key[0] === '0') {
+                if (isMultipleOfTransactionLength(value.length)) {
+                    bundles.write(value)
+                }
+
+                if (value.length === CDA_LENGTH) {
+                    deposits.write(value)
+                    depositsList.push(deserializeCDAInput(value))
+                }
+            }
+        })
 
         function accountMixin(this: any) {
             return Object.assign(
@@ -186,7 +221,6 @@ export function createAccountWithPreset<X, Y, Z>(preset: AccountPreset<X, Y, Z>)
                     seed: seed as Int8Array,
                     deposits,
                     persistence,
-                    ready,
                     network,
                     timeSource,
                     security: preset.security,
@@ -200,16 +234,16 @@ export function createAccountWithPreset<X, Y, Z>(preset: AccountPreset<X, Y, Z>)
                 {
                     stop: () => {
                         this.stopAttaching()
-                        return persistence.history.close().then(() => persistence.state.close())
+                        clearTimeout(emitDepositEventsTimeout)
+                        return persistence.close()
                     },
                     start: () => {
-                        return persistence.history
-                            .open()
-                            .then(() => persistence.state.open())
-                            .tap(this.startAttaching)
+                        return persistence.open().then(() => {
+                            emitDepositEventsTimeout = setTimeout(emitDepositEvents, 60 * 1000)
+                            this.startAttaching()
+                        })
                     },
                 },
-                preset.history.call(this, { persistence }),
                 EventEmitter.prototype
             )
         }
@@ -217,14 +251,17 @@ export function createAccountWithPreset<X, Y, Z>(preset: AccountPreset<X, Y, Z>)
         const target = {}
         const account = accountMixin.call(target)
 
-        ready.tap(() => {
-            account.startAttaching({
-                depth,
-                minWeightMagnitude,
-                delay,
-                maxDepth,
+        persistence
+            .ready()
+            .then(() => {
+                account.startAttaching({
+                    depth,
+                    minWeightMagnitude,
+                    delay,
+                    maxDepth,
+                })
             })
-        })
+            .catch((error: Error) => account.emit('error', error))
 
         return account
     }

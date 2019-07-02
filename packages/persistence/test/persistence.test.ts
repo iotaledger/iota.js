@@ -50,14 +50,13 @@ describe('persistence.increment()', async assert => {
         given: 'a read fault',
         should: 'throw an error',
         actual: await (async () => {
-            const persistence = createPersistence({
-                ...isolate(),
-                get(key: string) {
-                    return BluebirdPromise.reject(new Error('error'))
-                },
-            })
-
             try {
+                const persistence = createPersistence({
+                    ...isolate(),
+                    get(key: string) {
+                        return BluebirdPromise.reject(new Error('error'))
+                    },
+                })
                 await persistence.increment()
             } catch (error) {
                 return error.message

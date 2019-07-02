@@ -321,13 +321,14 @@ export const getOptionsWithDefaults = <T>(defaults: Readonly<T>) => (options: Re
 export type CreatePersistence<K, V> = (adapter: PersistenceAdapter<K, V>) => Persistence<K, V>
 
 export interface Persistence<K, V> extends Readable {
+    readonly ready: () => Promise<void>
     readonly increment: () => Promise<V>
     readonly put: (key: K, value: V) => Promise<void>
     readonly del: (key: K) => Promise<void>
     readonly get: (key: K) => Promise<V>
     readonly batch: (ops: PersistenceBatch<K, V>) => Promise<void>
-    readonly close: () => void
-    readonly open: () => void
+    readonly close: () => Promise<void>
+    readonly open: () => Promise<void>
 }
 
 export type PersistenceBatch<K, V> = ReadonlyArray<PersistencePutCommand<K, V> | PersistenceDelCommand<K>>
