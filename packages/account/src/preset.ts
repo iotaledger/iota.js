@@ -14,13 +14,17 @@ import {
 } from '@iota/cda'
 import { bytesToTrits, tritsToBytes, tritsToTrytes, tritsToValue, TRYTE_WIDTH, trytesToTrits } from '@iota/converter'
 import {
+    createAttachToTangle,
     createCheckConsistency,
     createFindTransactions,
     createGetBalances,
+    createGetBundlesFromAddresses,
     createGetLatestInclusion,
+    createGetTransactionsToApprove,
     createGetTrytes,
     createPrepareTransfers,
     createSendTrytes,
+    createStoreAndBroadcast,
     isAboveMaxDepth,
 } from '@iota/core'
 import { createHttpClient } from '@iota/http-client'
@@ -36,17 +40,15 @@ import {
     TRANSACTION_LENGTH,
     transactionHash,
 } from '@iota/transaction'
-import { asTransactionObjects } from '@iota/transaction-converter'
+import { asTransactionObject, asTransactionObjects } from '@iota/transaction-converter'
 import * as Promise from 'bluebird'
 import 'core-js'
 import { EventEmitter } from 'events'
-import { Bundle, PersistenceDelCommand, Transaction, Trytes } from '../../types'
+import { Bundle, Hash, PersistenceDelCommand, Transaction, Trytes } from '../../types'
 import {
     AccountPreset,
     AddressGeneration,
     AddressGenerationParams,
-    History,
-    HistoryParams,
     Network,
     NetworkParams,
     TransactionAttachment,
@@ -57,15 +59,18 @@ import {
 } from './account'
 
 export enum Events {
+    selectInput = 'selectedInput',
+    prepareTransfer = 'preparedTransfer',
+    getTransactionsToApprove = 'getTransactionsToApprove',
     attachToTangle = 'attachToTangle',
+    broadcast = 'broadcast',
     error = 'error',
 }
 
 export interface CDAAccount
     extends AddressGeneration<CDAParams, CDA>,
         TransactionIssuance<CDA, Bundle>,
-        TransactionAttachment,
-        History<CDA, Bundle> {}
+        TransactionAttachment {}
 
 export function networkAdapter({ provider }: NetworkParams): Network {
     const httpClient = createHttpClient({ provider })
@@ -79,9 +84,13 @@ export function networkAdapter({ provider }: NetworkParams): Network {
         getBalances,
         getConsistency: createCheckConsistency(httpClient),
         getLatestInclusion: hashes => (hashes.length > 0 ? getLatestInclusion(hashes) : Promise.resolve([])),
+        getBundlesFromAddresses: createGetBundlesFromAddresses(httpClient),
         findTransactions: createFindTransactions(httpClient),
         sendTrytes: createSendTrytes(httpClient),
         setSettings: httpClient.setSettings,
+        getTransactionsToApprove: createGetTransactionsToApprove(httpClient),
+        attachToTangle: createAttachToTangle(httpClient),
+        storeAndBroadcast: createStoreAndBroadcast(httpClient),
     }
 }
 
@@ -133,7 +142,7 @@ export function transactionIssuance(
     const prepareTransfers = createPrepareTransfers(undefined, now)
 
     const transactionIssuer = {
-        sendToCDA(cdaTransfer: CDATransfer): Promise<ReadonlyArray<Trytes>> {
+        sendToCDA: (cdaTransfer: CDATransfer): Promise<ReadonlyArray<Trytes>> => {
             if (!cdaTransfer) {
                 throw new Error(
                     'Provide an object with conditions and value for the CDA transfer: { timeoutAt, [multiUse], [exeptectedAmount], [security=2], value }'
@@ -148,6 +157,7 @@ export function transactionIssuance(
             )
                 .then(() => accumulateInputs(cdaTransfer.value))
                 .then(({ inputs, totalBalance }) => {
+                    inputs.forEach(input => this.emit(Events.selectInput, { cdaTransfer, input }))
                     const remainder = totalBalance - cdaTransfer.value
 
                     return generateRemainderAddress(remainder).then(remainderAddress =>
@@ -168,23 +178,27 @@ export function transactionIssuance(
                                 })),
                                 remainderAddress,
                             }
-                        ).tap(trytes =>
-                            persistence.batch([
-                                ...inputs.map(
-                                    (input): PersistenceDelCommand<string> => ({
-                                        type: PersistenceBatchTypes.del,
-                                        key: ['0', ':', tritsToTrytes(input.address)].join(''),
-                                    })
-                                ),
-                                {
-                                    type: PersistenceBatchTypes.put,
-                                    key: ['0', ':', tritsToTrytes(bundleHash(bundleTrytesToBundleTrits(trytes)))].join(
-                                        ''
-                                    ),
-                                    value: bundleTrytesToBundleTrits(trytes),
-                                },
-                            ])
                         )
+                            .tap(trytes => this.emit(Events.prepareTransfer, { cdaTransfer, trytes }))
+                            .tap(trytes =>
+                                persistence.batch([
+                                    ...inputs.map(
+                                        (input): PersistenceDelCommand<string> => ({
+                                            type: PersistenceBatchTypes.del,
+                                            key: ['0', ':', tritsToTrytes(input.address)].join(''),
+                                        })
+                                    ),
+                                    {
+                                        type: PersistenceBatchTypes.put,
+                                        key: [
+                                            '0',
+                                            ':',
+                                            tritsToTrytes(bundleHash(bundleTrytesToBundleTrits(trytes))),
+                                        ].join(''),
+                                        value: bundleTrytesToBundleTrits(trytes),
+                                    },
+                                ])
+                            )
                     )
                 })
         },
@@ -266,33 +280,21 @@ export function transactionIssuance(
 }
 
 export function transactionAttachment(this: any, params: TransactionAttachmentParams): TransactionAttachment {
-    const that = this // tslint:disable-line
     const { bundles, persistence, network } = params
-    const { findTransactions, sendTrytes, getTrytes, getLatestInclusion, getConsistency } = network
+    const {
+        findTransactions,
+        storeAndBroadcast,
+        getTransactionsToApprove,
+        attachToTangle,
+        getTrytes,
+        getLatestInclusion,
+        getConsistency,
+    } = network
 
     let reference: Transaction
     let running = false
 
-    const transactionAttacher = {
-        startAttaching: (startParams: TransactionAttachmentStartParams) => {
-            if (running) {
-                return
-            }
-
-            running = true
-
-            attachToTangleRoutine(startParams)
-        },
-        stopAttaching: () => {
-            if (!running) {
-                return
-            }
-
-            running = false
-        },
-    }
-
-    function attachToTangleRoutine(attachParams: TransactionAttachmentStartParams) {
+    const attachToTangleRoutine = (attachParams: TransactionAttachmentStartParams) => {
         if (!running) {
             return false
         }
@@ -317,47 +319,89 @@ export function transactionAttachment(this: any, params: TransactionAttachmentPa
                     pastAttachments.map(trytes => tritsToTrytes(transactionHash(trytesToTrits(trytes))))
                 )
                 .then(pastAttachmentHashes =>
-                    getLatestInclusion(pastAttachmentHashes).tap(inclusionStates =>
-                        inclusionStates.indexOf(true) > -1
-                            ? persistence.del(['0', ':', tritsToTrytes(bundleHash(bundle))].join(''))
-                            : Promise.all(pastAttachmentHashes.map(h => getConsistency([h]))).tap(consistencyStates =>
-                                  consistencyStates.indexOf(true) > -1
-                                      ? setTimeout(() => bundles.write(bundle), delay)
-                                      : sendTrytes(
-                                            bundleTritsToBundleTrytes(bundle),
-                                            depth,
-                                            minWeightMagnitude,
-                                            reference ? reference.hash : undefined
-                                        )
-                                            .tap(transactions => that.emit(Events.attachToTangle, transactions))
-                                            .tap(([tail]) => {
-                                                if (
-                                                    !reference ||
-                                                    !isAboveMaxDepth(reference.attachmentTimestamp, maxDepth)
-                                                ) {
-                                                    reference = tail
-                                                } else {
-                                                    return getConsistency([tail.hash]).then(consistent => {
-                                                        if (!consistent) {
-                                                            reference = tail
-                                                        }
-                                                    })
-                                                }
+                    getLatestInclusion(pastAttachmentHashes).tap(inclusionStates => {
+                        if (inclusionStates.indexOf(true) > -1) {
+                            return persistence.del(['0', ':', tritsToTrytes(bundleHash(bundle))].join(''))
+                        }
 
-                                                setTimeout(() => bundles.write(bundle), delay)
-                                            })
-                              )
-                    )
+                        return Promise.all(pastAttachmentHashes.map(h => getConsistency([h]))).tap(consistencyStates =>
+                            consistencyStates.indexOf(true) > -1
+                                ? setTimeout(() => bundles.write(bundle), delay)
+                                : getTransactionsToApprove(depth, reference ? reference.hash : undefined)
+                                      .tap(transactionsToApprove =>
+                                          this.emit(Events.getTransactionsToApprove, {
+                                              trytes: bundleTritsToBundleTrytes(bundle),
+                                              transactionsToApprove,
+                                          })
+                                      )
+                                      .then(
+                                          ({
+                                              trunkTransaction,
+                                              branchTransaction,
+                                          }: {
+                                              trunkTransaction: Hash
+                                              branchTransaction: Hash
+                                          }) =>
+                                              attachToTangle(
+                                                  trunkTransaction,
+                                                  branchTransaction,
+                                                  minWeightMagnitude,
+                                                  bundleTritsToBundleTrytes(bundle)
+                                              )
+                                      )
+                                      .tap(transactions =>
+                                          this.emit(
+                                              Events.attachToTangle,
+                                              transactions.map(t => asTransactionObject(t))
+                                          )
+                                      )
+                                      .then(attachedTrytes => storeAndBroadcast(attachedTrytes))
+                                      .tap(attachedTrytes =>
+                                          this.emit(Events.broadcast, attachedTrytes.map(t => asTransactionObject(t)))
+                                      )
+                                      .then(attachedTrytes => attachedTrytes.map(t => asTransactionObject(t)))
+                                      .tap(([tail]) => {
+                                          if (!reference || !isAboveMaxDepth(reference.attachmentTimestamp, maxDepth)) {
+                                              reference = tail
+                                          } else {
+                                              return getConsistency([tail.hash]).then(consistent => {
+                                                  if (!consistent) {
+                                                      reference = tail
+                                                  }
+                                              })
+                                          }
+
+                                          setTimeout(() => bundles.write(bundle), delay)
+                                      })
+                        )
+                    })
                 )
                 .tap(() => setTimeout(() => attachToTangleRoutine(attachParams), 1000))
                 .catch(error => {
                     bundles.write(bundle)
-                    that.emit(Events.error, error)
+                    this.emit(Events.error, error)
                 })
         )
     }
 
-    return transactionAttacher
+    return {
+        startAttaching: (startParams: TransactionAttachmentStartParams) => {
+            if (running) {
+                return
+            }
+
+            running = true
+
+            attachToTangleRoutine(startParams)
+        },
+        stopAttaching: () => {
+            if (!running) {
+                return
+            }
+
+            running = false
+        },
+    }
 }
 
 export function createAccountPreset(test = {}): AccountPreset<CDAParams, CDA, ReadonlyArray<Trytes>> {
@@ -374,6 +418,7 @@ export function createAccountPreset(test = {}): AccountPreset<CDAParams, CDA, Re
         depth: 3,
         minWeightMagnitude: 9,
         delay: 1000 * 30,
+        pollingDelay: 1000 * 30,
         maxDepth: 6,
         test,
     }

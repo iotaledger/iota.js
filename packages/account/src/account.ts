@@ -6,7 +6,7 @@ import { createPersistence, generatePersistenceID, Persistence, PersistenceItera
 import { isMultipleOfTransactionLength } from '@iota/transaction'
 import * as Promise from 'bluebird'
 import { EventEmitter } from 'events'
-import { CreatePersistenceAdapter, Trytes } from '../../types'
+import { Bundle, CreatePersistenceAdapter, Transaction, Trytes } from '../../types'
 import { preset as defaultPreset } from './preset'
 
 export interface AddressGenerationParams {
@@ -54,6 +54,7 @@ export interface AccountParams {
     readonly depth?: number
     readonly minWeightMagnitude?: number
     readonly delay?: number
+    readonly pollingDelay?: number
     readonly maxDepth?: number
 }
 
@@ -74,29 +75,25 @@ export interface Network {
     readonly getTrytes: API['getTrytes']
     readonly sendTrytes: API['sendTrytes']
     readonly setSettings: API['setSettings']
+    readonly storeAndBroadcast: API['storeAndBroadcast']
+    readonly getTransactionsToApprove: API['getTransactionsToApprove']
+    readonly attachToTangle: API['attachToTangle']
+    readonly getBundlesFromAddresses: API['getBundlesFromAddresses']
 }
 export interface TransactionAttachment {
     readonly startAttaching: (params: TransactionAttachmentStartParams) => void
     readonly stopAttaching: () => void
 }
 
-export interface History<Y, Z> {
-    readonly readIncludedDeposits: (options: PersistenceIteratorOptions) => EventEmitter
-    readonly readIncludedTransfers: (options: PersistenceIteratorOptions) => EventEmitter
-    readonly getDeposit: (key: Trytes) => Promise<Y>
-    readonly getTransfer: (key: Trytes) => Promise<Z>
-    readonly deleteDeposit: (key: Trytes) => Promise<void>
-    readonly deleteTransfer: (key: Trytes) => Promise<void>
-}
-
 export interface Account<X, Y, Z>
     extends AddressGeneration<X, Y>,
         TransactionIssuance<Y, Z>,
         TransactionAttachment,
-        History<Y, Z>,
         EventEmitter {
     stop: () => Promise<void>
     start: () => Promise<void>
+    getTotalBalance: () => Promise<void>
+    getAvailableBalance: () => Promise<void>
 }
 
 export type TimeSource = () => Promise<number>
@@ -104,7 +101,6 @@ export type CreateNetwork = (params: NetworkParams) => Network
 export type CreateAddressGeneration<X, Y> = (params: AddressGenerationParams) => AddressGeneration<X, Y>
 export type CreateTransactionIssuance<Y, Z> = (params: TransactionIssuanceParams) => TransactionIssuance<Y, Z>
 export type CreateTransactionAttachment<Z> = (params: TransactionAttachmentParams) => TransactionAttachment
-export type CreateHistory<Y, Z> = (params: HistoryParams) => History<Y, Z>
 export type CreateAccount<X, Y, Z> = (params: AccountParams) => Account<X, Y, Z>
 export type CreateAccountWithPreset<X, Y, Z> = (preset: AccountPreset<X, Y, Z>) => CreateAccount<X, Y, Z>
 
@@ -121,6 +117,7 @@ export interface AccountPreset<X, Y, Z> {
     readonly depth: number
     readonly minWeightMagnitude: number
     readonly delay: number
+    readonly pollingDelay: number
     readonly maxDepth: number
     readonly test: { [t: string]: any }
     readonly [k: string]: any
@@ -139,6 +136,7 @@ export function createAccountWithPreset<X, Y, Z>(preset: AccountPreset<X, Y, Z>)
             depth = preset.depth,
             minWeightMagnitude = preset.minWeightMagnitude,
             delay = preset.delay,
+            pollingDelay = preset.pollingDelay,
             maxDepth = preset.maxDepth,
         }: AccountParams
     ): Account<X, Y, Z> {
@@ -146,47 +144,13 @@ export function createAccountWithPreset<X, Y, Z>(preset: AccountPreset<X, Y, Z>)
             seed = trytesToTrits(seed)
         }
 
+        const addresses: Trytes[] = []
         const bundles = asyncBuffer<Int8Array>()
         const deposits = asyncBuffer<Int8Array>()
-
-        let depositsList: CDAInput[] = []
-
-        const emitDepositEvents = () => {
-            persistence
-                .ready()
-                .then(timeSource)
-                .then(currentTime => {
-                    const depositsListCopy = [...depositsList].filter(deposit => deposit.timeoutAt > 0)
-
-                    network
-                        .getBalances(depositsListCopy.map(({ address }) => address), 100)
-                        .then((balances: ReadonlyArray<number>) => {
-                            depositsList = depositsListCopy.filter((deposit, i) => {
-                                if (balances[i] > 0) {
-                                    if (deposit.expectedAmount && balances[i] >= deposit.expectedAmount) {
-                                        this.emit('deposit', { ...deposit, balance: balances[i] })
-                                        return false
-                                    } else if (deposit.multiUse && isExpired(currentTime, deposit)) {
-                                        this.emit('deposit', { ...deposit, balance: balances[i] })
-                                        return false
-                                    } else if (!deposit.multiUse) {
-                                        this.emit('deposit', { ...deposit, balance: balances[i] })
-                                        return false
-                                    }
-                                    return true
-                                }
-
-                                if (isExpired(currentTime, deposit)) {
-                                    return false
-                                }
-
-                                return true
-                            })
-                        })
-                })
-        }
+        const depositsList: CDAInput[] = []
 
         let emitDepositEventsTimeout: any
+        let running: boolean = true
 
         const persistence = createPersistence(
             persistenceAdapter({
@@ -196,14 +160,17 @@ export function createAccountWithPreset<X, Y, Z>(preset: AccountPreset<X, Y, Z>)
         )
 
         persistence.on('data', ({ key, value }) => {
-            if (key[0] === '0') {
-                if (isMultipleOfTransactionLength(value.length)) {
-                    bundles.write(value)
+            const trits = Int8Array.from(value)
+            if (key.toString()[0] === '0') {
+                if (isMultipleOfTransactionLength(trits.length)) {
+                    bundles.write(trits)
                 }
 
-                if (value.length === CDA_LENGTH) {
-                    deposits.write(value)
-                    depositsList.push(deserializeCDAInput(value))
+                if (trits.length === CDA_LENGTH) {
+                    deposits.write(trits)
+                    const cda = deserializeCDAInput(trits)
+                    depositsList.push(cda)
+                    addresses.push(tritsToTrytes(cda.address))
                 }
             }
         })
@@ -233,15 +200,56 @@ export function createAccountWithPreset<X, Y, Z>(preset: AccountPreset<X, Y, Z>)
                 }),
                 {
                     stop: () => {
-                        this.stopAttaching()
-                        clearTimeout(emitDepositEventsTimeout)
-                        return persistence.close()
+                        if (running) {
+                            running = false
+
+                            this.stopAttaching()
+                            clearTimeout(emitDepositEventsTimeout)
+                            return persistence.close()
+                        }
                     },
                     start: () => {
+                        if (running) {
+                            return
+                        }
+
+                        running = true
+
                         return persistence.open().then(() => {
-                            emitDepositEventsTimeout = setTimeout(emitDepositEvents, 60 * 1000)
+                            emitDepositEventsTimeout = setTimeout(emitTransferEvents, pollingDelay)
                             this.startAttaching()
                         })
+                    },
+                    getTotalBalance: () => {
+                        return persistence
+                            .ready()
+                            .then(() => network.getBalances(addresses, 100))
+                            .then(({ balances }) => balances.reduce((acc: number, b: number) => (acc += b), 0))
+                    },
+                    getAvailableBalance: () => {
+                        return persistence
+                            .ready()
+                            .then(() => timeSource())
+                            .then(currentTime => {
+                                const depositsListCopy = [...depositsList]
+                                return network
+                                    .getBalances(depositsList.map(({ address }) => tritsToTrytes(address)), 100)
+                                    .then(({ balances }: { balances: ReadonlyArray<number> }) => {
+                                        let acc = 0
+                                        depositsList.forEach((input, i) => {
+                                            if (balances[i] > 0) {
+                                                if (input.expectedAmount && balances[i] >= input.expectedAmount) {
+                                                    acc += balances[i]
+                                                } else if (input.multiUse && isExpired(currentTime, input)) {
+                                                    acc += balances[i]
+                                                } else if (!input.multiUse) {
+                                                    acc += balances[i]
+                                                }
+                                            }
+                                        })
+                                        return acc
+                                    })
+                            })
                     },
                 },
                 EventEmitter.prototype
@@ -250,18 +258,99 @@ export function createAccountWithPreset<X, Y, Z>(preset: AccountPreset<X, Y, Z>)
 
         const target = {}
         const account = accountMixin.call(target)
+        const emittedIncludedDeposits: { [k: string]: boolean } = {}
+        const emittedPendingDeposits: { [k: string]: boolean } = {}
+        const emittedIncludedWithdrawals: { [k: string]: boolean } = {}
+        const emittedPendingWithdrawals: { [k: string]: boolean } = {}
 
-        persistence
-            .ready()
-            .then(() => {
-                account.startAttaching({
-                    depth,
-                    minWeightMagnitude,
-                    delay,
-                    maxDepth,
+        const emitTransferEvents = () => {
+            persistence
+                .ready()
+                .then(() => network.getBundlesFromAddresses(addresses, true))
+                .then(bundlesFromAddresses => {
+                    bundlesFromAddresses
+                        .filter(
+                            (bundle: Bundle) =>
+                                emittedIncludedDeposits[bundle[0].hash] !== true ||
+                                (emittedPendingDeposits[bundle[0].hash] === true &&
+                                    emittedIncludedDeposits[bundle[0].hash] !== true &&
+                                    (bundle[0] as any).persistence === true)
+                        )
+                        .filter(
+                            (bundle: ReadonlyArray<Transaction>) =>
+                                bundle.findIndex(tx => addresses.indexOf(tx.address) > -1 && tx.value > 0) > -1
+                        )
+                        .forEach((bundle: ReadonlyArray<Transaction>) =>
+                            bundle
+                                .filter(tx => addresses.indexOf(tx.address) > 0 && tx.value > 0)
+                                .forEach(tx => {
+                                    account.emit(
+                                        (bundle[0] as any).persistence ? 'includedDeposit' : 'pendingDeposit',
+                                        {
+                                            address: tx.address,
+                                            bundle,
+                                        }
+                                    )
+                                    if ((bundle[0] as any).persistence) {
+                                        emittedIncludedDeposits[bundle[0].hash] = true
+                                    } else {
+                                        emittedPendingDeposits[bundle[0].hash] = true
+                                    }
+                                })
+                        )
+                    bundlesFromAddresses
+                        .filter(
+                            (bundle: Bundle) =>
+                                emittedIncludedWithdrawals[bundle[0].hash] !== true ||
+                                (emittedPendingWithdrawals[bundle[0].hash] === true &&
+                                    emittedIncludedWithdrawals[bundle[0].hash] !== true &&
+                                    (bundle[0] as any).persistence === true)
+                        )
+                        .filter(
+                            (bundle: ReadonlyArray<Transaction>) =>
+                                bundle.findIndex(tx => addresses.indexOf(tx.address) > -1 && tx.value < 0) > -1
+                        )
+                        .forEach((bundle: ReadonlyArray<Transaction>) =>
+                            bundle
+                                .filter(tx => addresses.indexOf(tx.address) > 0 && tx.value < 0)
+                                .forEach(tx => {
+                                    account.emit(
+                                        (bundle[0] as any).persistence ? 'includedWithdrawal' : 'pendingWithdrawal',
+                                        {
+                                            address: tx.address,
+                                            bundle,
+                                        }
+                                    )
+                                    if ((bundle[0] as any).persistence) {
+                                        emittedIncludedWithdrawals[bundle[0].hash] = true
+                                    } else {
+                                        emittedPendingWithdrawals[bundle[0].hash] = true
+                                    }
+                                })
+                        )
                 })
-            })
-            .catch((error: Error) => account.emit('error', error))
+                .catch(error => account.emit('error', error))
+                .then(() => {
+                    emitDepositEventsTimeout = setTimeout(emitTransferEvents, pollingDelay)
+                })
+        }
+
+        if (running) {
+            persistence
+                .ready()
+                .then(() =>
+                    account.startAttaching({
+                        depth,
+                        minWeightMagnitude,
+                        delay,
+                        maxDepth,
+                    })
+                )
+                .then(() => {
+                    emitDepositEventsTimeout = setTimeout(emitTransferEvents, 0)
+                })
+                .catch((error: Error) => account.emit('error', error))
+        }
 
         return account
     }
