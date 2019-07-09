@@ -2,7 +2,7 @@ import { asyncBuffer, AsyncBuffer } from '@iota/async-buffer'
 import { CDA_LENGTH, CDAInput, deserializeCDAInput, isExpired } from '@iota/cda'
 import { tritsToTrytes, trytesToTrits } from '@iota/converter'
 import { API } from '@iota/core'
-import { createPersistence, generatePersistenceID, Persistence, PersistenceIteratorOptions } from '@iota/persistence'
+import { createPersistence, generatePersistenceID, Persistence } from '@iota/persistence'
 import { isMultipleOfTransactionLength } from '@iota/transaction'
 import * as Promise from 'bluebird'
 import { EventEmitter } from 'events'
@@ -233,10 +233,10 @@ export function createAccountWithPreset<X, Y, Z>(preset: AccountPreset<X, Y, Z>)
                             .then(currentTime => {
                                 const depositsListCopy = [...depositsList]
                                 return network
-                                    .getBalances(depositsList.map(({ address }) => tritsToTrytes(address)), 100)
+                                    .getBalances(depositsListCopy.map(({ address }) => tritsToTrytes(address)), 100)
                                     .then(({ balances }: { balances: ReadonlyArray<number> }) => {
                                         let acc = 0
-                                        depositsList.forEach((input, i) => {
+                                        depositsListCopy.forEach((input, i) => {
                                             if (balances[i] > 0) {
                                                 if (input.expectedAmount && balances[i] >= input.expectedAmount) {
                                                     acc += balances[i]

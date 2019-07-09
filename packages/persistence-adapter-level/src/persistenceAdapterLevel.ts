@@ -1,5 +1,5 @@
 import { bytesToTrits, tritsToBytes } from '@iota/converter'
-import { AbstractBatch, AbstractLevelDOWN } from 'abstract-leveldown'
+import { AbstractLevelDOWN } from 'abstract-leveldown'
 import * as Promise from 'bluebird'
 import leveldown from 'leveldown'
 import * as levelup from 'levelup'

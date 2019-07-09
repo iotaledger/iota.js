@@ -1,7 +1,6 @@
 import {
     CDA,
     CDA_CHECKSUM_LENGTH,
-    CDA_LENGTH,
     CDAInput,
     CDAParams,
     CDATransfer,
@@ -12,7 +11,7 @@ import {
     verifyCDAParams,
     verifyCDATransfer,
 } from '@iota/cda'
-import { bytesToTrits, tritsToBytes, tritsToTrytes, tritsToValue, TRYTE_WIDTH, trytesToTrits } from '@iota/converter'
+import { tritsToTrytes, tritsToValue, TRYTE_WIDTH, trytesToTrits } from '@iota/converter'
 import {
     createAttachToTangle,
     createCheckConsistency,
@@ -28,7 +27,7 @@ import {
     isAboveMaxDepth,
 } from '@iota/core'
 import { createHttpClient } from '@iota/http-client'
-import { PersistenceBatchTypes, PersistenceIteratorOptions } from '@iota/persistence'
+import { PersistenceBatchTypes } from '@iota/persistence'
 import { createPersistenceAdapter } from '@iota/persistence-adapter-level'
 import { address as signingAddress, digests, key, subseed } from '@iota/signing'
 import {
@@ -36,14 +35,12 @@ import {
     bundle as bundleHash,
     BUNDLE_LENGTH,
     BUNDLE_OFFSET,
-    isMultipleOfTransactionLength,
     TRANSACTION_LENGTH,
     transactionHash,
 } from '@iota/transaction'
-import { asTransactionObject, asTransactionObjects } from '@iota/transaction-converter'
+import { asTransactionObject } from '@iota/transaction-converter'
 import * as Promise from 'bluebird'
 import 'core-js'
-import { EventEmitter } from 'events'
 import { Bundle, Hash, PersistenceDelCommand, Transaction, Trytes } from '../../types'
 import {
     AccountPreset,
@@ -96,7 +93,6 @@ export function networkAdapter({ provider }: NetworkParams): Network {
 
 export function addressGeneration(addressGenerationParams: AddressGenerationParams) {
     const { seed, persistence, timeSource } = addressGenerationParams
-    const { increment, put } = persistence
 
     return {
         generateCDA(cdaParams: CDAParams) {
@@ -109,7 +105,7 @@ export function addressGeneration(addressGenerationParams: AddressGenerationPara
             const { timeoutAt, expectedAmount, multiUse } = cdaParams
 
             return Promise.try(() => timeSource().then(currentTime => verifyCDAParams(currentTime, cdaParams)))
-                .then(increment)
+                .then(persistence.increment)
                 .then(index => {
                     const security = cdaParams.security || addressGenerationParams.security
                     const address = signingAddress(digests(key(subseed(seed, tritsToValue(index)), security)))

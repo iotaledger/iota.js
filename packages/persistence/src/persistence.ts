@@ -1,10 +1,9 @@
-import { asyncBuffer, AsyncBuffer } from '@iota/async-buffer'
-import { bytesToTrits, tritsToBytes, tritsToTrytes, tritsToValue, trytesToTrits, valueToTrits } from '@iota/converter'
+import { asyncBuffer } from '@iota/async-buffer'
+import { tritsToTrytes, tritsToValue, valueToTrits } from '@iota/converter'
 import Kerl from '@iota/kerl'
 import * as Signing from '@iota/signing'
 import * as Promise from 'bluebird'
 import { EventEmitter } from 'events'
-import { promisify } from 'util'
 import * as errors from '../../errors'
 import { isTrits } from '../../guards'
 import {
@@ -14,7 +13,6 @@ import {
     PersistenceBatchTypes,
     PersistenceError,
     PersistenceIteratorOptions,
-    PersistencePutCommand,
 } from '../../types'
 
 export {

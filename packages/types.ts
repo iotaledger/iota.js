@@ -1,5 +1,4 @@
 import * as Promise from 'bluebird'
-import { EventEmitter } from 'events'
 import { Readable } from 'stream'
 export type Maybe<T> = T | void
 

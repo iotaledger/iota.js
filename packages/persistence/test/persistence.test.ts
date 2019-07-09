@@ -1,11 +1,10 @@
-import { tritsToValue, valueToTrits } from '@iota/converter'
-import Kerl from '@iota/kerl'
+import { valueToTrits } from '@iota/converter'
 import { createPersistenceAdapter } from '@iota/persistence-adapter-level'
 import { add } from '@iota/signing'
 import * as BluebirdPromise from 'bluebird'
-import { describe, Try } from 'riteway'
+import { describe } from 'riteway'
 import * as errors from '../../errors'
-import { createPersistence, generatePersistenceID, PersistenceBatchTypes } from '../src/persistence'
+import { createPersistence, generatePersistenceID } from '../src/persistence'
 
 const KEY_INDEX_PREFIX = 'key_index'
 

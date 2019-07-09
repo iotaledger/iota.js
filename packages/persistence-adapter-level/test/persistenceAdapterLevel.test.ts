@@ -1,4 +1,4 @@
-import { bytesToTrits, tritsToBytes, valueToTrits } from '@iota/converter'
+import { bytesToTrits, valueToTrits } from '@iota/converter'
 import leveldown from 'leveldown'
 import { describe, Try } from 'riteway'
 import {
@@ -85,7 +85,6 @@ describe('adapter.put(key, value) -> adapter.read(key)', async assert => {
         should: 'read it',
         actual: await (async () => {
             const adapter = isolate({ store: leveldown })
-            const key = new Int8Array(1).fill(1)
 
             await adapter.put('key', valueToTrits(999314))
 
