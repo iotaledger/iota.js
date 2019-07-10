@@ -1,4 +1,5 @@
-import { AbstractBatch, AbstractLevelDOWN } from 'abstract-leveldown'
+import { bytesToTrits, tritsToBytes } from '@iota/converter'
+import { AbstractLevelDOWN } from 'abstract-leveldown'
 import * as Promise from 'bluebird'
 import leveldown from 'leveldown'
 import * as levelup from 'levelup'
@@ -6,11 +7,8 @@ import * as path from 'path'
 import {
     CreatePersistenceAdapter,
     PersistenceAdapter,
-    PersistenceAdapterBatch,
-    PersistenceAdapterBatchTypes,
-    PersistenceAdapterDeleteOp,
     PersistenceAdapterParams,
-    PersistenceAdapterWriteOp,
+    PersistenceBatchTypes,
     PersistenceError,
     PersistenceIteratorOptions,
 } from '../../types'
@@ -18,11 +16,8 @@ import {
 export {
     CreatePersistenceAdapter,
     PersistenceAdapter,
-    PersistenceAdapterBatch,
-    PersistenceAdapterBatchTypes,
+    PersistenceBatchTypes,
     PersistenceIteratorOptions,
-    PersistenceAdapterDeleteOp,
-    PersistenceAdapterWriteOp,
     PersistenceAdapterParams,
     PersistenceError,
 }
@@ -31,7 +26,7 @@ export const createPersistenceAdapter = ({
     persistenceID,
     persistencePath,
     store = leveldown,
-}: PersistenceAdapterParams): PersistenceAdapter => {
+}: PersistenceAdapterParams): PersistenceAdapter<string, Int8Array> => {
     if (typeof persistenceID !== 'string') {
         throw new TypeError('Illegal storeID.')
     }
@@ -40,41 +35,45 @@ export const createPersistenceAdapter = ({
         throw new TypeError('Illegal store path.')
     }
 
-    const db: levelup.LevelUp<AbstractLevelDOWN<Buffer, Buffer>> = levelup.default(
+    const db: levelup.LevelUp<AbstractLevelDOWN<string, Buffer>> = levelup.default(
         store(path.join(persistencePath, persistenceID))
     )
 
     return {
-        read: key => Promise.try(() => db.get(key)),
+        get: key => Promise.try(() => db.get(key)).then(bytesToTrits),
 
-        write: (key, value) => Promise.try(() => db.put(key, value)),
+        put: (key, value) => Promise.try(() => db.put(key, tritsToBytes(value))),
 
-        delete: key => Promise.try(() => db.get(key)).then(value => db.del(key)),
+        del: key => Promise.try(() => db.del(key)),
 
-        batch: ops =>
+        batch: commands =>
             Promise.try(() =>
                 db.batch(
-                    ops.map(
-                        (op): AbstractBatch<Buffer, Buffer> => {
-                            const { type, key } = op
-                            switch (type) {
-                                case PersistenceAdapterBatchTypes.write:
-                                    return {
-                                        type: 'put',
-                                        key,
-                                        value: (op as PersistenceAdapterWriteOp<Buffer, Buffer>).value,
-                                    }
-                                case PersistenceAdapterBatchTypes.delete:
-                                    return {
-                                        type: 'del',
-                                        key,
-                                    }
-                            }
+                    commands.map(command => {
+                        switch (command.type) {
+                            case PersistenceBatchTypes.put:
+                                return {
+                                    type: PersistenceBatchTypes.put,
+                                    key: command.key,
+                                    value: tritsToBytes(command.value),
+                                }
+                            case PersistenceBatchTypes.del:
+                                return {
+                                    type: PersistenceBatchTypes.del,
+                                    key: command.key,
+                                }
                         }
-                    )
+
+                        /* istanbul ignore next */
+                        return undefined as any
+                    })
                 )
             ),
 
         createReadStream: options => db.createReadStream(options),
+
+        close: () => Promise.try(() => db.close()),
+
+        open: () => Promise.try(() => db.open()),
     }
 }

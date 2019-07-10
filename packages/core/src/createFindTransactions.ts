@@ -1,6 +1,6 @@
 import { removeChecksum } from '@iota/checksum'
+import { TRYTE_WIDTH } from '@iota/converter'
 import { padTagArray } from '@iota/pad'
-import { TRYTE_WIDTH } from '@iota/signing'
 import { BUNDLE_LENGTH, TRANSACTION_HASH_LENGTH } from '@iota/transaction'
 import * as Promise from 'bluebird'
 import * as errors from '../../errors'

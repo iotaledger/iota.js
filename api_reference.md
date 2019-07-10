@@ -896,7 +896,7 @@ Fetches inclusion states of given list of transactions, by calling
 
 **Example**  
 ```js
-getInclusionStates(transactions)
+getInclusionStates(transactions, tips)
   .then(states => {
     // ...
   })

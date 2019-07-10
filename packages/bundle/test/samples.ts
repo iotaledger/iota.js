@@ -1,5 +1,5 @@
-import { trytesToTrits, valueToTrits } from '@iota/converter'
-import { address, digests, FRAGMENT_LENGTH, key, subseed, TRYTE_WIDTH } from '@iota/signing'
+import { TRYTE_WIDTH, trytesToTrits, valueToTrits } from '@iota/converter'
+import { address, digests, FRAGMENT_LENGTH, key, subseed } from '@iota/signing'
 
 export const seed = trytesToTrits('THIS9IS9THE9BEST9OF9ALL9POSSIBLE9WORLDS')
 export const securityLevel = 2
