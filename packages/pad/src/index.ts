@@ -1,5 +1,5 @@
+import 'core-js'
 import * as errors from '../../errors'
-import '../../typed-array'
 import { Tag, Trytes } from '../../types'
 
 export const padTrytes = (length: number) => (trytes: Trytes) =>

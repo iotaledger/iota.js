@@ -104,7 +104,7 @@ export { createGetBundle } from './createGetBundle'
 // Traversing and validating bundles gets slower as bundle instances increase.
 // Use `findTransactionObjects` on `addresses` and lazily fetch the bundles when needed.
 //
-// export { createGetBundlesFromAddresses } from './createGetBundlesFromAddresses'
+export { createGetBundlesFromAddresses } from './createGetBundlesFromAddresses'
 
 export { createGetInputs, GetInputsOptions } from './createGetInputs'
 

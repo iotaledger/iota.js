@@ -1,6 +1,6 @@
 {
     "name": "@iota/converter",
-    "version": "1.0.0-beta.12",
+    "version": "1.0.0-beta.16",
     "description": "Convert values & trytes to trits and back",
     "main": "./out/src/index.js",
     "typings": "typings/src",
@@ -9,8 +9,9 @@
     },
     "scripts": {
         "prepare": "tsc",
-        "test": "tsc && nyc ava",
-        "test-ci": "nyc ava",
+        "test": "tsc && nyc riteway out/test/converter.test.js",
+        "test-ci": "nyc riteway out/test/converter.test.js",
+        "watch": "watch 'clear && npm run -s test'",
         "lint": "tslint --project .",
         "docs": "tsc && jsdoc2md --no-cache --plugin dmd-clear -t README_tpl.hbs --files './out/**/*.js' > README.md"
     },
@@ -62,5 +63,12 @@
     "repository": {
         "type": "git",
         "url": "https://github.com/iotaledger/iota.js.git/tree/develop/packages/crypto"
+    },
+    "devDependencies": {
+        "riteway": "^6.0.3",
+        "watch": "^1.0.2"
+    },
+    "dependencies": {
+        "core-js": "^3.1.4"
     }
 }

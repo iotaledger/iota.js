@@ -1,8 +1,11 @@
+import 'core-js'
 import * as errors from './errors'
 
 const RADIX = 3
-const MAX_TRIT_VALUE = 1
-const MIN_TRIT_VALUE = -1
+const MAX_TRIT_VALUE = (RADIX - 1) / 2
+const MIN_TRIT_VALUE = -MAX_TRIT_VALUE
+
+export const TRYTE_WIDTH = MAX_TRIT_VALUE - MIN_TRIT_VALUE + 1
 
 // All possible tryte values
 export const TRYTE_ALPHABET = '9ABCDEFGHIJKLMNOPQRSTUVWXYZ'
@@ -53,7 +56,7 @@ export function trits(input: string | number): Int8Array {
     if (typeof input === 'number' && Number.isInteger(input)) {
         return fromValue(input)
     } else if (typeof input === 'string') {
-        const result = new Int8Array(input.length * 3)
+        const result = new Int8Array(input.length * TRYTE_WIDTH)
 
         for (let i = 0; i < input.length; i++) {
             const index = TRYTE_ALPHABET.indexOf(input.charAt(i))
@@ -62,9 +65,9 @@ export function trits(input: string | number): Int8Array {
                 throw new Error(errors.INVALID_TRYTES)
             }
 
-            result[i * 3] = TRYTES_TRITS_LUT[index][0]
-            result[i * 3 + 1] = TRYTES_TRITS_LUT[index][1]
-            result[i * 3 + 2] = TRYTES_TRITS_LUT[index][2]
+            for (let j = 0; j < TRYTE_WIDTH; j++) {
+                result[i * TRYTE_WIDTH + j] = TRYTES_TRITS_LUT[index][j]
+            }
         }
 
         return result
@@ -103,18 +106,16 @@ export function trytes(trits: Int8Array): string {
 
     let result = ''
 
-    for (let i = 0; i < trits.length; i += 3) {
-        // Iterate over all possible tryte values to find correct trit representation
-        for (let j = 0; j < TRYTE_ALPHABET.length; j++) {
-            if (
-                trits[i] === TRYTES_TRITS_LUT[j][0] &&
-                trits[i + 1] === TRYTES_TRITS_LUT[j][1] &&
-                trits[i + 2] === TRYTES_TRITS_LUT[j][2]
-            ) {
-                result += TRYTE_ALPHABET.charAt(j)
-                break
-            }
+    for (let i = 0; i < trits.length / TRYTE_WIDTH; i++) {
+        let j = 0
+        for (let k = 0; k < TRYTE_WIDTH; k++) {
+            j += trits[i * TRYTE_WIDTH + k] * TRYTE_WIDTH ** k
         }
+        if (j < 0) {
+            j += TRYTE_ALPHABET.length
+        }
+
+        result += TRYTE_ALPHABET.charAt(j)
     }
 
     return result
@@ -147,7 +148,7 @@ export function value(trits: Int8Array): number {
     let returnValue = 0
 
     for (let i = trits.length; i-- > 0; ) {
-        returnValue = returnValue * 3 + trits[i]
+        returnValue = returnValue * RADIX + trits[i]
     }
 
     return returnValue
@@ -178,7 +179,7 @@ export const tritsToValue = value
 // tslint:disable-next-line no-shadowed-variable
 export function fromValue(value: number): Int8Array {
     const destination = new Int8Array(
-        value ? 1 + Math.floor(Math.log(2 * Math.max(1, Math.abs(value))) / Math.log(3)) : 0
+        value ? 1 + Math.floor(Math.log(2 * Math.max(1, Math.abs(value))) / Math.log(RADIX)) : 0
     )
     let absoluteValue = value < 0 ? -value : value
     let i = 0
