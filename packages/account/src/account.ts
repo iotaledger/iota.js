@@ -271,10 +271,10 @@ export function createAccountWithPreset<X, Y, Z>(preset: AccountPreset<X, Y, Z>)
                     bundlesFromAddresses
                         .filter(
                             (bundle: Bundle) =>
-                                emittedIncludedDeposits[bundle[0].hash] !== true ||
-                                (emittedPendingDeposits[bundle[0].hash] === true &&
-                                    emittedIncludedDeposits[bundle[0].hash] !== true &&
-                                    (bundle[0] as any).persistence === true)
+                                (emittedIncludedDeposits[bundle[0].hash] !== true &&
+                                    (bundle[0] as any).persistence === true) ||
+                                (emittedPendingDeposits[bundle[0].hash] !== true &&
+                                    (bundle[0] as any).persistence === false)
                         )
                         .filter(
                             (bundle: ReadonlyArray<Transaction>) =>
@@ -301,10 +301,10 @@ export function createAccountWithPreset<X, Y, Z>(preset: AccountPreset<X, Y, Z>)
                     bundlesFromAddresses
                         .filter(
                             (bundle: Bundle) =>
-                                emittedIncludedWithdrawals[bundle[0].hash] !== true ||
-                                (emittedPendingWithdrawals[bundle[0].hash] === true &&
-                                    emittedIncludedWithdrawals[bundle[0].hash] !== true &&
-                                    (bundle[0] as any).persistence === true)
+                                (emittedIncludedWithdrawals[bundle[0].hash] !== true &&
+                                    (bundle[0] as any).persistence === true) ||
+                                (emittedPendingWithdrawals[bundle[0].hash] !== true &&
+                                    (bundle[0] as any).persistence === false)
                         )
                         .filter(
                             (bundle: ReadonlyArray<Transaction>) =>
