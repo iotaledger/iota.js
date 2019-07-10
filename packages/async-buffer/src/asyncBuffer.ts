@@ -3,6 +3,7 @@ import * as Promise from 'bluebird'
 export interface AsyncBuffer<T> {
     read: () => Promise<T>
     write: (value: T) => void
+    dump: () => ReadonlyArray<T>
     inboundLength: () => number
     outboundLength: () => number
 }
@@ -53,6 +54,8 @@ export const asyncBuffer = <T>(length = Number.POSITIVE_INFINITY): AsyncBuffer<T
                 }
             })
         },
+
+        dump: () => [...inboundQueue],
 
         inboundLength: (): number => inboundQueue.length,
         outboundLength: (): number => outboundQueue.length,
