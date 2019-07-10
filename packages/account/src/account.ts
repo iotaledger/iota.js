@@ -149,7 +149,7 @@ export function createAccountWithPreset<X, Y, Z>(preset: AccountPreset<X, Y, Z>)
         const deposits = asyncBuffer<Int8Array>()
         const depositsList: CDAInput[] = []
 
-        let emitDepositEventsTimeout: any
+        let emitTransferEventsTimeout: any
         let running: boolean = true
 
         const persistence = createPersistence(
@@ -204,7 +204,7 @@ export function createAccountWithPreset<X, Y, Z>(preset: AccountPreset<X, Y, Z>)
                             running = false
 
                             this.stopAttaching()
-                            clearTimeout(emitDepositEventsTimeout)
+                            clearTimeout(emitTransferEventsTimeout)
                             return persistence.close()
                         }
                     },
@@ -216,7 +216,7 @@ export function createAccountWithPreset<X, Y, Z>(preset: AccountPreset<X, Y, Z>)
                         running = true
 
                         return persistence.open().then(() => {
-                            emitDepositEventsTimeout = setTimeout(emitTransferEvents, pollingDelay)
+                            emitTransferEventsTimeout = setTimeout(emitTransferEvents, pollingDelay)
                             this.startAttaching()
                         })
                     },
@@ -264,7 +264,7 @@ export function createAccountWithPreset<X, Y, Z>(preset: AccountPreset<X, Y, Z>)
         const emittedPendingWithdrawals: { [k: string]: boolean } = {}
 
         const emitTransferEvents = () => {
-            persistence
+            return persistence
                 .ready()
                 .then(() => network.getBundlesFromAddresses(addresses, true))
                 .then(bundlesFromAddresses => {
@@ -331,26 +331,26 @@ export function createAccountWithPreset<X, Y, Z>(preset: AccountPreset<X, Y, Z>)
                 })
                 .catch(error => account.emit('error', error))
                 .then(() => {
-                    emitDepositEventsTimeout = setTimeout(emitTransferEvents, pollingDelay)
+                    emitTransferEventsTimeout = setTimeout(emitTransferEvents, pollingDelay)
                 })
         }
 
         if (running) {
             persistence
                 .ready()
-                .then(() =>
+                .then(() => {
                     account.startAttaching({
                         depth,
                         minWeightMagnitude,
                         delay,
                         maxDepth,
                     })
-                )
-                .then(() => {
-                    emitDepositEventsTimeout = setTimeout(emitTransferEvents, 0)
+                    emitTransferEvents()
                 })
                 .catch((error: Error) => account.emit('error', error))
         }
+
+        account.on('error', () => {}) // tslint:disable-line
 
         return account
     }
