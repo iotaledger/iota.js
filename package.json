@@ -34,19 +34,13 @@
         }
     },
     "lint-staged": {
-        "linters": {
-            "*.{ts}": [
-                "tslint --fix",
-                "git add"
-            ],
-            "*.{js,ts,json}": [
-                "prettier --write",
-                "git add"
-            ]
-        },
-        "ignore": [
-            "package-lock.json",
-            "packages/**/package-lock.json"
+        "*.{ts}": [
+            "tslint --fix",
+            "git add"
+        ],
+        "*.{js,ts,json}": [
+            "prettier --write",
+            "git add"
         ]
     },
     "keywords": [
