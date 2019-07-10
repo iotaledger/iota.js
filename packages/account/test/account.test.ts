@@ -29,6 +29,7 @@ describe('account.generateCDA()', async assert => {
     const accountParams = {
         seed: trytesToTrits('RQMMPLNFUUCULIIHEYKYBUXUFEDPKTXDQQQRUOBUVIVWIOAXDPNHLAJDSPCXKJNPTPJYBBCJKPVMONYDK'),
         persistencePath,
+        emitTransferEvents: false,
     }
 
     const account = createAccount(accountParams)
@@ -119,6 +120,7 @@ describe('account.generateCDA/account.sendToCDA', async assert => {
     const account0 = createAccount({
         seed: trytesToTrits(seed0),
         persistencePath,
+        emitTransferEvents: false,
         timeSource: () => BluebirdPromise.resolve(Math.floor(Date.now() / 1000)),
     })
 
@@ -138,6 +140,7 @@ describe('account.generateCDA/account.sendToCDA', async assert => {
         },
     })({
         seed: trytesToTrits(seedA),
+        emitTransferEvents: false,
         persistencePath,
     })
     const accountARequestedFromAnyInA1 = () =>
@@ -198,6 +201,7 @@ describe('account.generateCDA/account.sendToCDA', async assert => {
         now: () => futureTime,
     })({
         seed: trytesToTrits(seedB),
+        emitTransferEvents: false,
         persistencePath,
     })
 
