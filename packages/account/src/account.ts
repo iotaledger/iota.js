@@ -56,6 +56,7 @@ export interface AccountParams {
     readonly delay?: number
     readonly pollingDelay?: number
     readonly maxDepth?: number
+    readonly emitTransferEvents?: boolean
 }
 
 export interface AddressGeneration<X, Y> {
@@ -138,6 +139,7 @@ export function createAccountWithPreset<X, Y, Z>(preset: AccountPreset<X, Y, Z>)
             delay = preset.delay,
             pollingDelay = preset.pollingDelay,
             maxDepth = preset.maxDepth,
+            emitTransferEvents = true,
         }: AccountParams
     ): Account<X, Y, Z> {
         if (typeof seed === 'string') {
@@ -149,7 +151,7 @@ export function createAccountWithPreset<X, Y, Z>(preset: AccountPreset<X, Y, Z>)
         const deposits = asyncBuffer<Int8Array>()
         const depositsList: CDAInput[] = []
 
-        let emitDepositEventsTimeout: any
+        let transferEventsTimeout: any
         let running: boolean = true
 
         const persistence = createPersistence(
@@ -204,7 +206,7 @@ export function createAccountWithPreset<X, Y, Z>(preset: AccountPreset<X, Y, Z>)
                             running = false
 
                             this.stopAttaching()
-                            clearTimeout(emitDepositEventsTimeout)
+                            clearTimeout(transferEventsTimeout)
                             return persistence.close()
                         }
                     },
@@ -216,7 +218,9 @@ export function createAccountWithPreset<X, Y, Z>(preset: AccountPreset<X, Y, Z>)
                         running = true
 
                         return persistence.open().then(() => {
-                            emitDepositEventsTimeout = setTimeout(emitTransferEvents, pollingDelay)
+                            if (emitTransferEvents) {
+                                transferEventsTimeout = setTimeout(transferEvents, pollingDelay)
+                            }
                             this.startAttaching()
                         })
                     },
@@ -263,8 +267,8 @@ export function createAccountWithPreset<X, Y, Z>(preset: AccountPreset<X, Y, Z>)
         const emittedIncludedWithdrawals: { [k: string]: boolean } = {}
         const emittedPendingWithdrawals: { [k: string]: boolean } = {}
 
-        const emitTransferEvents = () => {
-            persistence
+        const transferEvents = () => {
+            return persistence
                 .ready()
                 .then(() => network.getBundlesFromAddresses(addresses, true))
                 .then(bundlesFromAddresses => {
@@ -331,26 +335,29 @@ export function createAccountWithPreset<X, Y, Z>(preset: AccountPreset<X, Y, Z>)
                 })
                 .catch(error => account.emit('error', error))
                 .then(() => {
-                    emitDepositEventsTimeout = setTimeout(emitTransferEvents, pollingDelay)
+                    transferEventsTimeout = setTimeout(transferEvents, pollingDelay)
                 })
         }
 
         if (running) {
             persistence
                 .ready()
-                .then(() =>
+                .then(() => {
                     account.startAttaching({
                         depth,
                         minWeightMagnitude,
                         delay,
                         maxDepth,
                     })
-                )
-                .then(() => {
-                    emitDepositEventsTimeout = setTimeout(emitTransferEvents, 0)
+
+                    if (emitTransferEvents) {
+                        transferEvents()
+                    }
                 })
                 .catch((error: Error) => account.emit('error', error))
         }
+
+        account.on('error', () => {}) // tslint:disable-line
 
         return account
     }
