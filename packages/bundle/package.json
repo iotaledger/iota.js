@@ -62,7 +62,6 @@
         "@iota/signing": "^1.0.0-beta.16",
         "@iota/transaction": "^1.0.0-beta.16",
         "@types/warning": "^3.0.0",
-        "core-js": "^3.1.4",
         "warning": "^4.0.3"
     },
     "devDependencies": {

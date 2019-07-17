@@ -2,8 +2,8 @@
     "name": "@iota/curl",
     "version": "1.0.0-beta.16",
     "description": "Curl sponge function",
-    "main": "./out/index.js",
-    "typings": "typings",
+    "main": "./out/curl/src/index.js",
+    "typings": "typings/curl/src",
     "publishConfig": {
         "access": "public"
     },
@@ -41,8 +41,5 @@
     "repository": {
         "type": "git",
         "url": "https://github.com/iotaledger/iota.js.git/tree/develop/packages/crypto"
-    },
-    "dependencies": {
-        "core-js": "^3.1.4"
     }
 }

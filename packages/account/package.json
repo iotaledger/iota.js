@@ -64,7 +64,6 @@
         "@iota/transaction": "^1.0.0-beta.16",
         "@iota/transaction-converter": "^1.0.0-beta.16",
         "@types/nock": "^9.3.1",
-        "core-js": "^3.1.4",
         "nock": "^10.0.6"
     },
     "devDependencies": {

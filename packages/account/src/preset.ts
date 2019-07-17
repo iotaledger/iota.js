@@ -40,7 +40,7 @@ import {
 } from '@iota/transaction'
 import { asTransactionObject } from '@iota/transaction-converter'
 import * as Promise from 'bluebird'
-import 'core-js'
+import '../../typed-array'
 import { Bundle, Hash, PersistenceDelCommand, Transaction, Trytes } from '../../types'
 import {
     AccountPreset,

@@ -5,10 +5,10 @@ import { tritsToValue } from '@iota/converter'
 import Curl from '@iota/curl'
 import Kerl from '@iota/kerl'
 import { FRAGMENT_LENGTH } from '@iota/signing'
-import 'core-js'
 import * as warning from 'warning'
 import * as errors from '../../errors'
 import { isTrits } from '../../guards'
+import '../../typed-array'
 
 export const SIGNATURE_OR_MESSAGE_OFFSET = 0
 export const SIGNATURE_OR_MESSAGE_LENGTH = FRAGMENT_LENGTH

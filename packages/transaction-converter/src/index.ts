@@ -36,9 +36,9 @@ import {
     VALUE_LENGTH,
     VALUE_OFFSET,
 } from '@iota/transaction'
-import 'core-js'
 import * as errors from '../../errors'
 import { isTrytesOfExactLength } from '../../guards'
+import '../../typed-array'
 import { asArray, Hash, Transaction, Trytes } from '../../types'
 
 export { Transaction }
