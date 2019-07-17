@@ -1,4 +1,4 @@
-import 'core-js'
+import '../../typed-array'
 import * as errors from './errors'
 
 const RADIX = 3

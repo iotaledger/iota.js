@@ -2,10 +2,10 @@ import { tritsToTrytes, tritsToValue, trytesToTrits, valueToTrits } from '@iota/
 import Curl from '@iota/curl'
 import { padTrits } from '@iota/pad'
 import { ADDRESS_LENGTH, VALUE_LENGTH } from '@iota/transaction'
-import 'core-js'
 import * as querystring from 'querystring'
 import * as errors from '../../errors'
 import { isTrytesOfExactLength } from '../../guards'
+import '../../typed-array'
 import { Trytes } from '../../types'
 
 export interface AbstractCDA {

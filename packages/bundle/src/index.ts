@@ -3,8 +3,8 @@
 import { tritsToValue } from '@iota/converter'
 import Kerl from '@iota/kerl'
 import { increment, MAX_TRYTE_VALUE, normalizedBundle } from '@iota/signing'
-import 'core-js'
 import * as errors from '../../errors'
+import '../../typed-array'
 
 import {
     ADDRESS_LENGTH,

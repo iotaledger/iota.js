@@ -2,8 +2,8 @@
     "name": "@iota/converter",
     "version": "1.0.0-beta.16",
     "description": "Convert values & trytes to trits and back",
-    "main": "./out/src/index.js",
-    "typings": "typings/src",
+    "main": "./out/converter/src/index.js",
+    "typings": "typings/converter/src",
     "publishConfig": {
         "access": "public"
     },
@@ -21,7 +21,7 @@
         "Chris Dukakis <chris.dukakis@iota.org> (https://github.com/chrisdukakis)"
     ],
     "ava": {
-        "files": "out/test/*.test.js",
+        "files": "out/converter/test/*.test.js",
         "failFast": true,
         "failWithoutAssertions": false,
         "compileEnhancements": false,
@@ -43,8 +43,8 @@
             ]
         },
         "include": [
-            "out/src/*.js",
-            "out/test/*.js"
+            "out/converter/src/*.js",
+            "out/converter/test/*.js"
         ]
     },
     "keywords": [

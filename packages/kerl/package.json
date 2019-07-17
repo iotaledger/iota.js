@@ -2,8 +2,8 @@
     "name": "@iota/kerl",
     "version": "1.0.0-beta.16",
     "description": "IOTA-related cryptographic methods",
-    "main": "./out/src/index.js",
-    "typings": "typings/src",
+    "main": "./out/kerl/src/index.js",
+    "typings": "typings/kerl/src",
     "publishConfig": {
         "access": "public"
     },
@@ -19,7 +19,7 @@
         "Chris Dukakis <chris.dukakis@iota.org> (https://github.com/chrisdukakis)"
     ],
     "ava": {
-        "files": "out/test/*.test.js",
+        "files": "out/kerl/test/*.test.js",
         "failFast": true,
         "failWithoutAssertions": false,
         "compileEnhancements": false,
@@ -44,7 +44,6 @@
     },
     "dependencies": {
         "@types/crypto-js": "^3.1.38",
-        "core-js": "^3.1.4",
         "crypto-js": "^3.1.9-1"
     },
     "devDependencies": {

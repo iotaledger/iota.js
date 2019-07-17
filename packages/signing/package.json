@@ -46,7 +46,6 @@
     "dependencies": {
         "@iota/converter": "^1.0.0-beta.16",
         "@iota/kerl": "^1.0.0-beta.16",
-        "@iota/pad": "^1.0.0-beta.16",
-        "core-js": "^3.1.4"
+        "@iota/pad": "^1.0.0-beta.16"
     }
 }
