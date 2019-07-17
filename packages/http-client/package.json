@@ -64,10 +64,12 @@
         "url": "https://github.com/iotaledger/iota.js.git"
     },
     "dependencies": {
-        "cross-fetch": "^3.0.0"
+        "cross-fetch": "^3.0.0",
+        "url-parse": "^1.4.7"
     },
     "devDependencies": {
         "@types/nock": "^10.0.0",
+        "@types/url-parse": "^1.4.3",
         "nock": "^10.0.4"
     }
 }

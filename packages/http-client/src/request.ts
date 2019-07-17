@@ -1,5 +1,5 @@
 import 'cross-fetch/polyfill' // tslint:disable-line no-submodule-imports
-import * as url from 'url'
+import * as parseUrl from 'url-parse'
 import {
     BaseCommand,
     FindTransactionsResponse,
@@ -50,7 +50,7 @@ export const send = <C extends BaseCommand>(params: RequestParams<C>): Promise<R
     const uri = params.uri || DEFAULT_URI
 
     if (params.user && params.password) {
-        if (url.parse(uri).protocol !== 'https:') {
+        if (parseUrl(uri, true).protocol !== 'https:') {
             throw new Error('Basic auth requires https.')
         }
         headers.Authorization = `Basic ${Buffer.from(`${params.user}:${params.password}`).toString('base64')}`
