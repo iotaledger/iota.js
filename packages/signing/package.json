@@ -1,6 +1,6 @@
 {
     "name": "@iota/signing",
-    "version": "1.0.0-beta.16",
+    "version": "1.0.0-beta.19",
     "description": "IOTA Signing Scheme",
     "main": "./out/signing/src/index.js",
     "typings": "typings/signing/src",
@@ -44,8 +44,8 @@
         "url": "https://github.com/iotaledger/iota.js.git/tree/develop/packages/crypto"
     },
     "dependencies": {
-        "@iota/converter": "^1.0.0-beta.16",
-        "@iota/kerl": "^1.0.0-beta.16",
-        "@iota/pad": "^1.0.0-beta.16"
+        "@iota/converter": "^1.0.0-beta.19",
+        "@iota/kerl": "^1.0.0-beta.19",
+        "@iota/pad": "^1.0.0-beta.19"
     }
 }
