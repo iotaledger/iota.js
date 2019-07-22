@@ -1,8 +1,6 @@
 import { bytesToTrits, tritsToBytes } from '@iota/converter'
-import { AbstractLevelDOWN } from 'abstract-leveldown'
 import * as Promise from 'bluebird'
-import leveldown from 'leveldown'
-import * as levelup from 'levelup'
+import * as level from 'level'
 import * as path from 'path'
 import {
     CreatePersistenceAdapter,
@@ -25,7 +23,6 @@ export {
 export const createPersistenceAdapter = ({
     persistenceID,
     persistencePath,
-    store = leveldown,
 }: PersistenceAdapterParams): PersistenceAdapter<string, Int8Array> => {
     if (typeof persistenceID !== 'string') {
         throw new TypeError('Illegal storeID.')
@@ -35,9 +32,7 @@ export const createPersistenceAdapter = ({
         throw new TypeError('Illegal store path.')
     }
 
-    const db: levelup.LevelUp<AbstractLevelDOWN<string, Buffer>> = levelup.default(
-        store(path.join(persistencePath, persistenceID))
-    )
+    const db = level(path.join(persistencePath, persistenceID), { keyEncoding: 'utf8', valueEncoding: 'binary' })
 
     return {
         get: key => Promise.try(() => db.get(key)).then(bytesToTrits),
