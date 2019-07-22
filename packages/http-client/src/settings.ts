@@ -1,4 +1,4 @@
-import * as url from 'url'
+import * as parseUrl from 'url-parse'
 import { getOptionsWithDefaults } from '../../types'
 export interface Settings {
     readonly provider: string
@@ -55,7 +55,7 @@ export const getSettingsWithDefaults = (settings: Partial<Settings> = {}): Setti
         providerUri = [host || DEFAULT_HOST, port || DEFAULT_PORT].join('/').replace('//', '/')
     }
 
-    if (user && password && url.parse(providerUri).protocol !== 'https:') {
+    if (user && password && parseUrl(providerUri, true).protocol !== 'https:') {
         throw new Error('Basic auth requires https.')
     }
 
