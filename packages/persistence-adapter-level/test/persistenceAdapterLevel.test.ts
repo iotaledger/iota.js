@@ -1,5 +1,4 @@
 import { bytesToTrits, valueToTrits } from '@iota/converter'
-import leveldown from 'leveldown'
 import { describe, Try } from 'riteway'
 import {
     createPersistenceAdapter,
@@ -84,7 +83,7 @@ describe('adapter.put(key, value) -> adapter.read(key)', async assert => {
         given: 'a written value',
         should: 'read it',
         actual: await (async () => {
-            const adapter = isolate({ store: leveldown })
+            const adapter = isolate()
 
             await adapter.put('key', valueToTrits(999314))
 
