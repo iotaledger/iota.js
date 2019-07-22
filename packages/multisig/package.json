@@ -1,6 +1,6 @@
 {
     "name": "@iota/multisig",
-    "version": "1.0.0-beta.19",
+    "version": "1.0.0-beta.20",
     "description": "Methods for generating multisig addresses and co-signing transactions.",
     "main": "./out/multisig/src/index.js",
     "typings": "typings/multisig/src",
@@ -47,7 +47,7 @@
         "@iota/bundle": "^1.0.0-beta.19",
         "@iota/checksum": "^1.0.0-beta.19",
         "@iota/converter": "^1.0.0-beta.19",
-        "@iota/core": "^1.0.0-beta.19",
+        "@iota/core": "^1.0.0-beta.20",
         "@iota/kerl": "^1.0.0-beta.19",
         "@iota/signing": "^1.0.0-beta.19",
         "@iota/transaction": "^1.0.0-beta.19",

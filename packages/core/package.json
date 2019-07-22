@@ -1,6 +1,6 @@
 {
     "name": "@iota/core",
-    "version": "1.0.0-beta.19",
+    "version": "1.0.0-beta.20",
     "description": "Core functionality to interact with the IOTA network: generate addresses, create, broadcast and monitor transactions.",
     "main": "./out/core/src/index.js",
     "typings": "typings/core/src",
@@ -77,7 +77,7 @@
         "@iota/checksum": "^1.0.0-beta.19",
         "@iota/converter": "^1.0.0-beta.19",
         "@iota/curl": "^1.0.0-beta.19",
-        "@iota/http-client": "^1.0.0-beta.19",
+        "@iota/http-client": "^1.0.0-beta.20",
         "@iota/kerl": "^1.0.0-beta.19",
         "@iota/pad": "^1.0.0-beta.19",
         "@iota/signing": "^1.0.0-beta.19",
