@@ -1,6 +1,6 @@
 {
     "name": "@iota/persistence-adapter-level",
-    "version": "1.0.0-beta.20",
+    "version": "1.0.0-beta.21",
     "description": "Level persistence adapter, with support for different store types.",
     "main": "out/persistence-adapter-level/src/persistenceAdapterLevel.js",
     "typings": "typings/persistence-adapter-level/src/persistenceAdapterLevel.d.ts",
@@ -48,11 +48,11 @@
     "author": "Chris Dukakis <chris.dukakis@iota.org> (https://github.com/chrisdukakis)",
     "license": "MIT",
     "dependencies": {
-        "@iota/converter": "^1.0.0-beta.19",
+        "@iota/converter": "^1.0.0-beta.21",
         "level": "^5.0.1"
     },
     "devDependencies": {
-        "@iota/transaction": "^1.0.0-beta.19",
+        "@iota/transaction": "^1.0.0-beta.21",
         "riteway": "^6.0.3",
         "watch": "^1.0.2"
     }
