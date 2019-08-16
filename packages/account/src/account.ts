@@ -286,7 +286,7 @@ export function createAccountWithPreset<X, Y, Z>(preset: AccountPreset<X, Y, Z>)
                         )
                         .forEach((bundle: ReadonlyArray<Transaction>) =>
                             bundle
-                                .filter(tx => addresses.indexOf(tx.address) > 0 && tx.value > 0)
+                                .filter(tx => addresses.indexOf(tx.address) > -1 && tx.value > 0)
                                 .forEach(tx => {
                                     account.emit(
                                         (bundle[0] as any).persistence ? 'includedDeposit' : 'pendingDeposit',
