@@ -67,7 +67,7 @@
         "@commitlint/cli": "^8.1.0",
         "@commitlint/config-conventional": "^8.0.0",
         "@commitlint/travis-cli": "^7.2.1",
-        "ava": "^0.25.0",
+        "ava": "^2.3.0",
         "dmd-clear": "^0.1.2",
         "husky": "^3.0.0",
         "jsdoc-babel": "^0.5.0",
