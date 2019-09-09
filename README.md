@@ -224,7 +224,7 @@ If the IOTA JavaScript client library has been useful to you and you feel like c
     npm run init
     ```
 
-This step will download all dependencies, build and link the packages together. iota.js uses [Lerna](https://lernajs.io/) to manage multiple packages. You can re-bootstrap your setup at any point with `lerna bootstrap` command.
+This step will download all dependencies, build and link the packages together. iota.js uses [Lerna](https://lerna.js.org/) to manage multiple packages. You can re-bootstrap your setup at any point with `lerna bootstrap` command.
 
 ### Running tests
 
