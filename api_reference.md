@@ -1308,7 +1308,7 @@ getLatestInclusion(tails)
 | --- | --- | --- |
 | [provider] | <code>Provider</code> | Optional network provider to fetch inputs and remainder address. In case this is omitted, proper input objects and remainder should be passed to [`prepareTransfers`](#module_core.prepareTransfers), if required. |
 
-Create a [`prepareTransfers`](#module_core.prepareTransfers) function by passing an optional newtowrk `provider`.
+Create a [`prepareTransfers`](#module_core.prepareTransfers) function by passing an optional network `provider`.
 It is possible to prepare and sign transactions offline, by omitting the provider option.
 
 **Returns**: <code>function</code> - [`prepareTransfers`](#module_core.prepareTransfers)  
