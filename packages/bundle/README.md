@@ -21,65 +21,79 @@ yarn add @iota/bundle
     
 * [bundle](#module_bundle)
 
-    * [~createBundle(entries)](#module_bundle..createBundle)
+    * [~createBundle([entries])](#module_bundle..createBundle)
 
-    * [~addEntry(transactions, entry)](#module_bundle..addEntry)
+    * [~addEntry(entry, bundle)](#module_bundle..addEntry)
 
-    * [~addTrytes(transactions, fragments, [offset])](#module_bundle..addTrytes)
+    * [~finalizeBundle(bundle)](#module_bundle..finalizeBundle)
 
-    * [~finalizeBundle(transactions)](#module_bundle..finalizeBundle)
+    * [~addSignatureOrMessage(bundle, signatureOrMessage, index)](#module_bundle..addSignatureOrMessage)
+
+    * [~valueSum(bundle, offset, length)](#module_bundle..valueSum)
 
 
 <a name="module_bundle..createBundle"></a>
 
-### *bundle*~createBundle(entries)
+### *bundle*~createBundle([entries])
 
-| Param | Type | Description |
-| --- | --- | --- |
-| entries | <code>Array.&lt;BundleEntry&gt;</code> | Entries of single or multiple transactions with the same address |
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [entries] | <code>Array.&lt;BundleEntry&gt;</code> | <code>[]</code> | Entries of single or multiple transactions with the same address |
 
 Creates a bundle with given transaction entries.
 
-**Returns**: <code>Array.&lt;Transaction&gt;</code> - List of transactions in the bundle  
+**Returns**: <code>Array.&lt;Int8Array&gt;</code> - List of transactions in the bundle  
 <a name="module_bundle..addEntry"></a>
 
-### *bundle*~addEntry(transactions, entry)
-
-| Param | Type | Default | Description |
-| --- | --- | --- | --- |
-| transactions | <code>Array.&lt;Transaction&gt;</code> |  | List of transactions currently in the bundle |
-| entry | <code>object</code> |  | Entry of a single or multiple transactions with the same address |
-| [entry.length] | <code>number</code> | <code>1</code> | Entry length, which indicates how many transactions in the bundle it will occupy |
-| [entry.address] | <code>Hash</code> |  | Address, defaults to all-9s |
-| [entry.value] | <code>number</code> | <code>0</code> | Value to transfer in iotas |
-| [entry.signatureMessageFragments] | <code>Array.&lt;Trytes&gt;</code> |  | List of signature message fragments, defaults to all-9s |
-| [entry.timestamp] | <code>number</code> |  | Transaction timestamp, defaults to `Math.floor(Date.now() / 1000)` |
-| [entry.tag] | <code>string</code> |  | Optional Tag, defaults to null tag (all-9s) |
-
-Adds given transaction entry to a bundle.
-
-**Returns**: <code>Array.&lt;Transaction&gt;</code> - List of transactions in the updated bundle  
-<a name="module_bundle..addTrytes"></a>
-
-### *bundle*~addTrytes(transactions, fragments, [offset])
-
-| Param | Type | Default | Description |
-| --- | --- | --- | --- |
-| transactions | <code>Array.&lt;Transaction&gt;</code> |  | List of transactions in the bundle |
-| fragments | <code>Array.&lt;Trytes&gt;</code> |  | List of signature message fragments to add |
-| [offset] | <code>number</code> | <code>0</code> | Optional offset to start appending signature message fragments |
-
-Adds signature message fragments to transactions in a bundle starting at offset.
-
-**Returns**: <code>Array.&lt;Transaction&gt;</code> - List of transactions in the updated bundle  
-<a name="module_bundle..finalizeBundle"></a>
-
-### *bundle*~finalizeBundle(transactions)
+### *bundle*~addEntry(entry, bundle)
 
 | Param | Type | Description |
 | --- | --- | --- |
-| transactions | <code>Array.&lt;Transaction&gt;</code> | List of transactions in the bundle |
+| entry | <code>object</code> | Entry of a single or multiple transactions with the same address. |
+| entry.address | <code>Int8Array</code> | Address. |
+| entry.value | <code>Int8Array</code> | Value to transfer in iotas. |
+| [entry.signatureOrMessage] | <code>Int8Array</code> | Signature or message fragment(s). |
+| [entry.timestamp] | <code>Int8Array</code> | Issuance timestamp (in seconds). |
+| [entry.tag] | <code>Int8Array</code> | Optional Tag, **Deprecated**. |
+| bundle | <code>Int8Array</code> | Bundle buffer. |
+
+Adds given transaction entry to a bundle.
+
+**Returns**: <code>Int8Array</code> - Bundle copy with new entries.  
+<a name="module_bundle..finalizeBundle"></a>
+
+### *bundle*~finalizeBundle(bundle)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| bundle | <code>Int8Array</code> | Bundle transaction trits |
 
 Finalizes a bundle by calculating the bundle hash.
 
-**Returns**: <code>Array.&lt;Transaction&gt;</code> - List of transactions in the finalized bundle  
+**Returns**: <code>Int8Array</code> - List of transactions in the finalized bundle  
+<a name="module_bundle..addSignatureOrMessage"></a>
+
+### *bundle*~addSignatureOrMessage(bundle, signatureOrMessage, index)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| bundle | <code>Int8Array</code> | Bundle buffer. |
+| signatureOrMessage | <code>Int8Array</code> | Signature or message to add. |
+| index | <code>number</code> | Transaction index as entry point for signature or message fragments. |
+
+Adds signature message fragments to transactions in a bundle starting at offset.
+
+**Returns**: <code>Int8Array</code> - List of transactions in the updated bundle  
+<a name="module_bundle..valueSum"></a>
+
+### *bundle*~valueSum(bundle, offset, length)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| bundle | <code>Int8Array</code> | Bundle buffer. |
+| offset | <code>number</code> | Offset from the start of the bundle buffer. |
+| length | <code>number</code> | Length of transactions in which values should be summed. |
+
+Sums up transaction values in a bundle starting at offset.
+
+**Returns**: <code>number</code> - Total value of 'length' transactions in the bundle starting at offset.  
