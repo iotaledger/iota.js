@@ -6,7 +6,7 @@ import {
     findTransactionsCommand as batchedCommand,
     requestBatchSize,
 } from './batchedSend'
-import { apiVersion, findTransactionsCommand as command, findTransactionsResponse as response, headers } from './send'
+import { apiVersion, findTransactionsCommand as command, findTransactionsResponse as response, headers, agents } from './send'
 
 const bumpedApiVersion = apiVersion + 1
 
@@ -51,4 +51,37 @@ test('setSettings() sets request batch size', async t => {
     })
 
     t.deepEqual(await client.send(batchedCommand), batchedResponse)
+})
+
+
+test('setSettings() sets an agent to the client with dependancy to cross-fetch', async (t) => {
+
+
+    const runningNode = (process: NodeJS.Process) => typeof process === 'object' && typeof process.versions === 'object' && typeof process.versions.node !== 'undefined';
+
+    if (!runningNode) {
+        t.pass("Not running via node...");
+        return;
+    }
+
+    const agent = agents({
+        host: 'http://some.proxy.com',
+        port: 1234,
+    });
+
+    const fakeFetch = (req: any, res: any) => new Promise<any>((resolve, reject) => {
+        t.is(req.agent.host, agent.host);
+        t.is(req.agent.port, agent.port);
+        resolve();
+    });
+
+    (global as any).fetch = fakeFetch;
+
+    const httpsClient = createHttpClient({
+        provider: 'http://localhost:34265',
+        agent: agent
+    });
+    
+    await t.throws(httpsClient.send(command));
+
 })
