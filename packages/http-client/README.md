@@ -66,6 +66,7 @@ Sends an http request to a specified host.
 | [settings.provider] | <code>string</code> | <code>&quot;http://localhost:14265&quot;</code> | Uri of IRI node |
 | [settings.apiVersion] | <code>string</code> \| <code>number</code> | <code>1</code> | IOTA Api version to be sent as `X-IOTA-API-Version` header. |
 | [settings.requestBatchSize] | <code>number</code> | <code>1000</code> | Number of search values per request. |
+| [settings.agent] | <code>object</code> | <code>{}</code> | Agent to handle the connections |
 
 <a name="module_http-client..createHttpClient"></a>
 
@@ -77,6 +78,7 @@ Sends an http request to a specified host.
 | [settings.provider] | <code>string</code> | <code>&quot;http://localhost:14265&quot;</code> | Uri of IRI node |
 | [settings.apiVersion] | <code>string</code> \| <code>number</code> | <code>1</code> | IOTA Api version to be sent as `X-IOTA-API-Version` header. |
 | [settings.requestBatchSize] | <code>number</code> | <code>1000</code> | Number of search values per request. |
+| [settings.agent] | <code>object</code> | <code>{}</code> | Agent to handle the connections |
 
 Create an http client to access IRI http API.
 
