@@ -279,6 +279,17 @@ export const addSignatureOrMessage = (bundle: Int8Array, signatureOrMessage: Int
     return bundleCopy
 }
 
+/**
+ * Sums up transaction values in a bundle starting at offset.
+ *
+ * @method valueSum
+ *
+ * @param {Int8Array} bundle - Bundle buffer.
+ * @param {number} offset - Offset from the start of the bundle buffer.
+ * @param {number} length - Length of transactions in which values should be summed.
+ *
+ * @return {number} Total value of 'length' transactions in the bundle starting at offset.
+ */
 export const valueSum = (buffer: Int8Array, offset: number, length: number): number => {
     if (!isMultipleOfTransactionLength(buffer.length)) {
         throw new RangeError(errors.ILLEGAL_TRANSACTION_BUFFER_LENGTH)
