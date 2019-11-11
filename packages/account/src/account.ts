@@ -1,9 +1,10 @@
 import { asyncBuffer, AsyncBuffer } from '@iota/async-buffer'
-import { CDA_LENGTH, CDAInput, deserializeCDAInput, isExpired } from '@iota/cda'
-import { tritsToTrytes, trytesToTrits } from '@iota/converter'
+import { AbstractCDA, CDA_LENGTH, CDAInput, deserializeCDAInput, isExpired } from '@iota/cda'
+import { tritsToTrytes, tritsToValue, trytesToTrits } from '@iota/converter'
 import { API } from '@iota/core'
 import { createPersistence, generatePersistenceID, Persistence } from '@iota/persistence'
-import { isMultipleOfTransactionLength } from '@iota/transaction'
+import { isMultipleOfTransactionLength, TRANSACTION_LENGTH } from '@iota/transaction'
+import { asTransactionObject } from '@iota/transaction-converter'
 import * as Promise from 'bluebird'
 import { EventEmitter } from 'events'
 import { Bundle, CreatePersistenceAdapter, Transaction, Trytes } from '../../types'
@@ -86,6 +87,19 @@ export interface TransactionAttachment {
     readonly stopAttaching: () => void
 }
 
+export interface Deposit extends AbstractCDA {
+    readonly address: Trytes
+    readonly index: number
+    readonly security: 1 | 2 | 3
+    readonly balance: number
+}
+
+export interface AccountState {
+    readonly deposits: ReadonlyArray<Deposit>
+    readonly withdrawals: ReadonlyArray<ReadonlyArray<Trytes>>
+    readonly lastKeyIndex: number
+}
+
 export interface Account<X, Y, Z>
     extends AddressGeneration<X, Y>,
         TransactionIssuance<Y, Z>,
@@ -93,8 +107,12 @@ export interface Account<X, Y, Z>
         EventEmitter {
     stop: () => Promise<void>
     start: () => Promise<void>
-    getTotalBalance: () => Promise<void>
-    getAvailableBalance: () => Promise<void>
+    getTotalBalance: () => Promise<number>
+    getAvailableBalance: () => Promise<number>
+    getDeposits: () => Promise<Deposit>
+    getWithdrawals: () => Promise<ReadonlyArray<Transaction>>
+    exportState: () => Promise<AccountState>
+    importState: (state: AccountState) => Promise<void>
 }
 
 export type TimeSource = () => Promise<number>
@@ -150,6 +168,7 @@ export function createAccountWithPreset<X, Y, Z>(preset: AccountPreset<X, Y, Z>)
         const bundles = asyncBuffer<Int8Array>()
         const deposits = asyncBuffer<Int8Array>()
         const depositsList: CDAInput[] = []
+        const withdrawalsList: Array<ReadonlyArray<Transaction>> = []
 
         let transferEventsTimeout: any
         let running: boolean = true
@@ -166,6 +185,14 @@ export function createAccountWithPreset<X, Y, Z>(preset: AccountPreset<X, Y, Z>)
             if (key.toString()[0] === '0') {
                 if (isMultipleOfTransactionLength(trits.length)) {
                     bundles.write(trits)
+
+                    const bundle = []
+                    for (let offset = 0; offset < trits.length; offset += TRANSACTION_LENGTH) {
+                        bundle.push(
+                            asTransactionObject(tritsToTrytes(trits.slice(offset, offset + TRANSACTION_LENGTH)))
+                        )
+                    }
+                    withdrawalsList.push(bundle)
                 }
 
                 if (trits.length === CDA_LENGTH) {
@@ -255,7 +282,32 @@ export function createAccountWithPreset<X, Y, Z>(preset: AccountPreset<X, Y, Z>)
                                     })
                             })
                     },
+                    getDeposits: () => {
+                        return persistence
+                            .ready()
+                            .then(() =>
+                                [...depositsList].map(deposit => ({
+                                    ...deposit,
+                                    address: tritsToTrytes(deposit.address),
+                                    index: tritsToValue(deposit.index),
+                                }))
+                            )
+                            .then(depositsListCopy =>
+                                network
+                                    .getBalances(depositsListCopy.map(deposit => deposit.address), 100)
+                                    .then(({ balances }: { balances: ReadonlyArray<number> }) =>
+                                        depositsListCopy.map((deposit, i) => ({
+                                            ...deposit,
+                                            balance: balances[i],
+                                        }))
+                                    )
+                            )
+                    },
+                    getWithdrawals: () => {
+                        return persistence.ready().then(() => [...withdrawalsList])
+                    },
                 },
+
                 EventEmitter.prototype
             )
         }
