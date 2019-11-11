@@ -1,13 +1,19 @@
 import { asyncBuffer, AsyncBuffer } from '@iota/async-buffer'
-import { AbstractCDA, CDA_LENGTH, CDAInput, deserializeCDAInput, isExpired } from '@iota/cda'
-import { tritsToTrytes, tritsToValue, trytesToTrits } from '@iota/converter'
+import { AbstractCDA, CDA_LENGTH, CDAInput, deserializeCDAInput, isExpired, serializeCDAInput } from '@iota/cda'
+import { tritsToTrytes, tritsToValue, trytesToTrits, valueToTrits } from '@iota/converter'
 import { API } from '@iota/core'
-import { createPersistence, generatePersistenceID, Persistence } from '@iota/persistence'
-import { isMultipleOfTransactionLength, TRANSACTION_LENGTH } from '@iota/transaction'
+import {
+    createPersistence,
+    generatePersistenceID,
+    Persistence,
+    PersistenceBatch,
+    PersistenceBatchTypes,
+} from '@iota/persistence'
+import { bundle as bundleHash, isMultipleOfTransactionLength, TRANSACTION_LENGTH } from '@iota/transaction'
 import { asTransactionObject } from '@iota/transaction-converter'
 import * as Promise from 'bluebird'
 import { EventEmitter } from 'events'
-import { Bundle, CreatePersistenceAdapter, Transaction, Trytes } from '../../types'
+import { Bundle, CreatePersistenceAdapter, PersistencePutCommand, Transaction, Trytes } from '../../types'
 import { preset as defaultPreset } from './preset'
 
 export interface AddressGenerationParams {
@@ -305,6 +311,51 @@ export function createAccountWithPreset<X, Y, Z>(preset: AccountPreset<X, Y, Z>)
                     },
                     getWithdrawals: () => {
                         return persistence.ready().then(() => [...withdrawalsList])
+                    },
+                    exportState: () => {
+                        return persistence
+                            .ready()
+                            .then(() => persistence.get('key_index'))
+                            .then(lastKeyIndex => ({
+                                lastKeyIndex,
+                                deposits: [...depositsList].map(deposit => ({
+                                    ...deposit,
+                                    address: tritsToTrytes(deposit.address),
+                                    index: tritsToValue(deposit.index),
+                                })),
+                                withdrawals: [...withdrawalsList],
+                            }))
+                    },
+                    importState: (state: AccountState) => {
+                        return persistence.ready().then(() =>
+                            persistence.batch([
+                                {
+                                    type: PersistenceBatchTypes.put,
+                                    key: 'key_index',
+                                    value: valueToTrits(state.lastKeyIndex),
+                                },
+                                ...state.deposits.map(deposit => ({
+                                    type: 'put',
+                                    key: ['0', ':', deposit.address].join(''),
+                                    value: serializeCDAInput({
+                                        ...deposit,
+                                        address: trytesToTrits(deposit.address),
+                                        index: trytesToTrits(deposit.index),
+                                    }),
+                                })),
+                                ...state.withdrawals.map(withdrawal => {
+                                    const trits = new Int8Array(withdrawal.length * TRANSACTION_LENGTH)
+                                    for (let i = 0; i < withdrawal.length; i++) {
+                                        trits.set(trytesToTrits(withdrawal[i]), i * TRANSACTION_LENGTH)
+                                    }
+                                    return {
+                                        type: PersistenceBatchTypes.put,
+                                        key: ['0', ':', tritsToTrytes(bundleHash(trits))].join(''),
+                                        value: trits,
+                                    }
+                                }),
+                            ] as PersistenceBatch<string, Int8Array>)
+                        )
                     },
                 },
 
