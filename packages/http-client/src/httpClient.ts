@@ -78,21 +78,21 @@ export const createHttpClient = (settings?: Partial<Settings>): Provider => {
          */
         send: <C extends BaseCommand, R>(command: Readonly<C>): Promise<Readonly<R>> =>
             Promise.try(() => {
-                const { provider, user, password, requestBatchSize, apiVersion } = currentSettings
+                const { provider, user, password, requestBatchSize, apiVersion, agent } = currentSettings
 
                 if (isBatchableCommand(command)) {
                     const keysToBatch = getKeysToBatch(command, requestBatchSize)
 
                     if (keysToBatch.length) {
                         return batchedSend<C>(
-                            { command, uri: provider, user, password, apiVersion },
+                            { command, uri: provider, user, password, apiVersion, agent },
                             keysToBatch,
                             requestBatchSize
                         )
                     }
                 }
-
-                return send<C>({ command, uri: provider, user, password, apiVersion })
+                
+                return send<C>({ command, uri: provider, user, password, apiVersion, agent })
             }),
 
         /**

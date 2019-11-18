@@ -1,4 +1,6 @@
 import * as nock from 'nock'
+import { Agent as HttpAgent } from 'http';
+import { Agent as HttpsAgent } from 'https';
 import {
     FindTransactionsCommand,
     FindTransactionsResponse,
@@ -16,6 +18,8 @@ export const headers = (version: string | number = apiVersion) => ({
         'X-IOTA-API-Version': version.toString(),
     },
 })
+
+export const agents = (options: any) => Object.assign(options.host.startsWith('https') ? new HttpsAgent() : new HttpAgent(), options);
 
 export const findTransactionsCommand: FindTransactionsCommand = {
     command: IRICommand.FIND_TRANSACTIONS,
