@@ -1,7 +1,7 @@
 import 'cross-fetch/polyfill' // tslint:disable-line no-submodule-imports
-import * as parseUrl from 'url-parse'
 import { Agent as HttpAgent } from 'http'
-import { Agent as HttpsAgent} from 'https'
+import { Agent as HttpsAgent } from 'https'
+import * as parseUrl from 'url-parse'
 import {
     BaseCommand,
     FindTransactionsResponse,
@@ -23,8 +23,8 @@ export interface RequestParams<C> {
     readonly uri?: string
     readonly apiVersion?: string | number
     readonly user?: string
-    readonly password?: string,
-    readonly agent?:HttpAgent | HttpsAgent
+    readonly password?: string
+    readonly agent?: HttpAgent | HttpsAgent
 }
 
 /**
@@ -58,12 +58,13 @@ export const send = <C extends BaseCommand>(params: RequestParams<C>): Promise<R
         }
         headers.Authorization = `Basic ${Buffer.from(`${params.user}:${params.password}`).toString('base64')}`
     }
-    
-    return fetch(uri,Object.assign({
+
+    return fetch(uri, {
         method: 'POST',
         headers,
         body: JSON.stringify(params.command),
-    },{ agent : params.agent })).then(res =>
+        agent: params.agent,
+    } as any).then(res =>
         res
             .json()
             .then(json =>

@@ -1,7 +1,7 @@
-import * as parseUrl from 'url-parse'
-import { getOptionsWithDefaults } from '../../types'
 import { Agent as HttpAgent } from 'http'
 import { Agent as HttpsAgent } from 'https'
+import * as parseUrl from 'url-parse'
+import { getOptionsWithDefaults } from '../../types'
 export interface Settings {
     readonly provider: string
     readonly host?: string // deprecated
@@ -11,7 +11,7 @@ export interface Settings {
     readonly password?: string
     readonly token?: string
     readonly requestBatchSize: number
-    readonly apiVersion: number | string,
+    readonly apiVersion: number | string
     readonly agent?: HttpAgent | HttpsAgent
 }
 
@@ -39,7 +39,7 @@ export const getSettingsWithDefaults = (settings: Partial<Settings> = {}): Setti
         token,
         requestBatchSize,
         apiVersion,
-        agent
+        agent,
     } = getOptionsWithDefaults(defaults)(settings)
 
     let providerUri: string = provider
@@ -68,7 +68,6 @@ export const getSettingsWithDefaults = (settings: Partial<Settings> = {}): Setti
             throw new Error('Invalid `requestBatchSize` option')
         }
     }
-
 
     return { provider: providerUri, requestBatchSize, apiVersion, user, password, agent }
 }
