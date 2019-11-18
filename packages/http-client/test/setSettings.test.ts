@@ -6,7 +6,7 @@ import {
     findTransactionsCommand as batchedCommand,
     requestBatchSize,
 } from './batchedSend'
-import { apiVersion, findTransactionsCommand as command, findTransactionsResponse as response, headers, agents } from './send'
+import { agents, apiVersion, findTransactionsCommand as command, findTransactionsResponse as response, headers } from './send'
 
 const bumpedApiVersion = apiVersion + 1
 
@@ -79,7 +79,7 @@ test('setSettings() sets an agent to the client with dependancy to cross-fetch',
 
     const httpsClient = createHttpClient({
         provider: 'http://localhost:34265',
-        agent: agent
+        agent
     });
     
     await t.throws(httpsClient.send(command));

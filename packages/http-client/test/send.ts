@@ -1,6 +1,6 @@
-import * as nock from 'nock'
 import { Agent as HttpAgent } from 'http';
 import { Agent as HttpsAgent } from 'https';
+import * as nock from 'nock'
 import {
     FindTransactionsCommand,
     FindTransactionsResponse,
