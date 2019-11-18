@@ -1,5 +1,5 @@
-import { Agent as HttpAgent } from 'http';
-import { Agent as HttpsAgent } from 'https';
+import { Agent as HttpAgent } from 'http'
+import { Agent as HttpsAgent } from 'https'
 import * as nock from 'nock'
 import {
     FindTransactionsCommand,
@@ -19,7 +19,8 @@ export const headers = (version: string | number = apiVersion) => ({
     },
 })
 
-export const agents = (options: any) => Object.assign(options.host.startsWith('https') ? new HttpsAgent() : new HttpAgent(), options);
+export const agents = (options: any) =>
+    Object.assign(options.host.startsWith('https') ? new HttpsAgent() : new HttpAgent(), options)
 
 export const findTransactionsCommand: FindTransactionsCommand = {
     command: IRICommand.FIND_TRANSACTIONS,

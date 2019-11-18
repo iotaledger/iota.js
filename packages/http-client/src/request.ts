@@ -1,6 +1,6 @@
 import 'cross-fetch/polyfill' // tslint:disable-line no-submodule-imports
 import { Agent as HttpAgent } from 'http'
-import { Agent as HttpsAgent} from 'https'
+import { Agent as HttpsAgent } from 'https'
 import * as parseUrl from 'url-parse'
 import {
     BaseCommand,
@@ -23,8 +23,8 @@ export interface RequestParams<C> {
     readonly uri?: string
     readonly apiVersion?: string | number
     readonly user?: string
-    readonly password?: string,
-    readonly agent?:HttpAgent | HttpsAgent
+    readonly password?: string
+    readonly agent?: HttpAgent | HttpsAgent
 }
 
 /**
