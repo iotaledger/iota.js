@@ -91,7 +91,7 @@ export const createHttpClient = (settings?: Partial<Settings>): Provider => {
                         )
                     }
                 }
-                
+
                 return send<C>({ command, uri: provider, user, password, apiVersion, agent })
             }),
 
