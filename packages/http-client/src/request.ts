@@ -58,11 +58,13 @@ export const send = <C extends BaseCommand>(params: RequestParams<C>): Promise<R
         }
         headers.Authorization = `Basic ${Buffer.from(`${params.user}:${params.password}`).toString('base64')}`
     }
-    
-    return fetch(uri,{
+
+    return fetch(uri, {
         method: 'POST',
         headers,
-        body: JSON.stringify(params.command), agent : params.agent}).then(res =>
+        body: JSON.stringify(params.command),
+        agent: params.agent,
+    } as any).then(res =>
         res
             .json()
             .then(json =>
