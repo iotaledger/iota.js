@@ -13,7 +13,7 @@ import { bundle as bundleHash, isMultipleOfTransactionLength, TRANSACTION_LENGTH
 import { asTransactionObject } from '@iota/transaction-converter'
 import * as Promise from 'bluebird'
 import { EventEmitter } from 'events'
-import { Bundle, CreatePersistenceAdapter, PersistencePutCommand, Transaction, Trytes } from '../../types'
+import { Bundle, CreatePersistenceAdapter, Transaction, Trytes } from '../../types'
 import { preset as defaultPreset } from './preset'
 
 export interface AddressGenerationParams {
