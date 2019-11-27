@@ -1,6 +1,6 @@
 {
     "name": "@iota/unit-converter",
-    "version": "1.0.0-beta.21",
+    "version": "1.0.0-beta.23",
     "description": "Converts value across different IOTA units.",
     "main": "./out/src/index.js",
     "typings": "./typings/src",

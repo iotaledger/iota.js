@@ -1,6 +1,6 @@
 {
     "name": "@iota/transaction-converter",
-    "version": "1.0.0-beta.21",
+    "version": "1.0.0-beta.23",
     "description": "Converts transaction trytes to transaction objects and back.",
     "main": "./out/transaction-converter/src/index.js",
     "typings": "typings/transaction-converter/src",
@@ -64,9 +64,9 @@
         "url": "https://github.com/iotaledger/iota.js.git/tree/develop/packages/crypto"
     },
     "dependencies": {
-        "@iota/converter": "^1.0.0-beta.21",
+        "@iota/converter": "^1.0.0-beta.23",
         "@iota/pad": "^1.0.0-beta.19",
-        "@iota/transaction": "^1.0.0-beta.21"
+        "@iota/transaction": "^1.0.0-beta.23"
     },
     "devDependencies": {
         "@iota/samples": "^1.0.0-beta.12"
