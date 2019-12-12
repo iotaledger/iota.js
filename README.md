@@ -14,19 +14,25 @@
     <a href="https://discord.iota.org/">
     <img src="https://img.shields.io/badge/Discord-9cf.svg?logo=discord"
          alt="Discord">
+    </a>
     <a href="https://iota.stackexchange.com/">
     <img src="https://img.shields.io/badge/StackExchange-9cf.svg?logo=stackexchange"
          alt="StackExchange">
+    </a>
     <a href="https://raw.githubusercontent.com/iotaledger/iota.lib.js/master/LICENSE">
     <img src="https://img.shields.io/badge/license-MIT-green.svg"
          alt="MIT license">
+    </a>
     <a href="https://docs.iota.org/docs/node-software/0.1/iri/references/api-reference">
     <img src="https://img.shields.io/badge/Node%20API%20coverage-16/18%20commands-green.svg"
          alt="Supported IRI API endpoints">
+    </a>
     <a href="https://greenkeeper.io/">
     <img src="https://badges.greenkeeper.io/iotaledger/iota.js.svg" alt="Code quality">
+    </a>
     <a href="https://travis-ci.org/iotaledger/iota.js">
     <img src="https://travis-ci.org/iotaledger/iota.js.svg" alt="Build status">
+    </a>
 </p>
       
 <p align="center">
