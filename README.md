@@ -7,7 +7,7 @@
 
 <p align="center">
     <a href="https://docs.iota.org/docs/client-libraries/0.1/getting-started/js-quickstart">
-    <img src="https://img.shields.io/badge/Developer%20documentation%20portal-blue.svg"
+    <img src="https://img.shields.io/badge/Developer%20documentation%20portal-blue.svg?style=for-the-badge"
          alt="Developer documentation portal">
     <a href="https://discord.iota.org/">
     <img src="https://img.shields.io/badge/Discord-9cf.svg?logo=discord"
