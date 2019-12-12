@@ -7,25 +7,20 @@
 
 <p align="center">
     <a href="https://docs.iota.org/docs/client-libraries/0.1/getting-started/js-quickstart" style="text-decoration:none;">
-    <img src="https://img.shields.io/badge/Documentation%20portal-blue.svg?style=for-the-badge"
-         alt="Developer documentation portal">
-      </p>
-  <p align="center">
+    <img src="https://img.shields.io/badge/Documentation%20portal-blue.svg?style=for-the-badge" alt="Developer documentation portal">
+</p>
+<p align="center">
     <a href="https://discord.iota.org/" style="text-decoration:none;">
-    <img src="https://img.shields.io/badge/Discord-9cf.svg?logo=discord"
-         alt="Discord">
+    <img src="https://img.shields.io/badge/Discord-9cf.svg?logo=discord" alt="Discord">
     </a>
     <a href="https://iota.stackexchange.com/" style="text-decoration:none;">
-    <img src="https://img.shields.io/badge/StackExchange-9cf.svg?logo=stackexchange"
-         alt="StackExchange">
+    <img src="https://img.shields.io/badge/StackExchange-9cf.svg?logo=stackexchange" alt="StackExchange">
     </a>
     <a href="https://raw.githubusercontent.com/iotaledger/iota.lib.js/master/LICENSE" style="text-decoration:none;">
-    <img src="https://img.shields.io/badge/license-MIT-green.svg"
-         alt="MIT license">
+    <img src="https://img.shields.io/badge/license-MIT-green.svg" alt="MIT license">
     </a>
     <a href="https://docs.iota.org/docs/node-software/0.1/iri/references/api-reference" style="text-decoration:none;">
-    <img src="https://img.shields.io/badge/Node%20API%20coverage-16/18%20commands-green.svg"
-         alt="Supported IRI API endpoints">
+    <img src="https://img.shields.io/badge/Node%20API%20coverage-16/18%20commands-green.svg" alt="Supported IRI API endpoints">
     </a>
     <a href="https://greenkeeper.io/" style="text-decoration:none;">
     <img src="https://badges.greenkeeper.io/iotaledger/iota.js.svg" alt="Code quality">
