@@ -1,6 +1,6 @@
 {
     "name": "@iota/account",
-    "version": "1.0.0-beta.23",
+    "version": "1.0.0-beta.24",
     "description": "Account module in JavaScript.",
     "main": "out/account/src/account.js",
     "typings": "typings/account/src/account.d.ts",
@@ -55,7 +55,7 @@
         "@iota/bundle": "^1.0.0-beta.23",
         "@iota/cda": "^1.0.0-beta.23",
         "@iota/converter": "^1.0.0-beta.23",
-        "@iota/core": "^1.0.0-beta.23",
+        "@iota/core": "^1.0.0-beta.24",
         "@iota/curl": "^1.0.0-beta.19",
         "@iota/http-client": "^1.0.0-beta.23",
         "@iota/persistence": "^1.0.0-beta.23",

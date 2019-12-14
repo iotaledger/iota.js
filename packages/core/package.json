@@ -1,6 +1,6 @@
 {
     "name": "@iota/core",
-    "version": "1.0.0-beta.23",
+    "version": "1.0.0-beta.24",
     "description": "Core functionality to interact with the IOTA network: generate addresses, create, broadcast and monitor transactions.",
     "main": "./out/core/src/index.js",
     "typings": "typings/core/src",
