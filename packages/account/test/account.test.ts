@@ -179,6 +179,7 @@ describe('account.generateCDA/account.sendToCDA', async assert => {
                 milestone: 'M'.repeat(81),
                 milestoneIndex: 1,
             })
+
     const accountARemainderReceivesExpectedBalance = () =>
         nock('http://localhost:14265', headers)
             .post('/', {
@@ -205,6 +206,9 @@ describe('account.generateCDA/account.sendToCDA', async assert => {
         persistencePath,
     })
 
+    const addressB1 = generateAddress(seedB, 1, 2, false)
+    const addressB2 = generateAddress(seedB, 2, 2, false)
+
     // request from 0 and A
     let cdaB1
     const accountBRequestsFromAny = () =>
@@ -221,6 +225,17 @@ describe('account.generateCDA/account.sendToCDA', async assert => {
         })
 
     cdaB1 = await accountBRequestsFromAny()
+
+    const assertRemoteSpentState = (address: string, state: boolean) =>
+        nock('http://localhost:14265', headers)
+            .post('/', {
+                command: IRICommand.WERE_ADDRESSES_SPENT_FROM,
+                addresses: [address],
+            })
+            .times(1)
+            .reply(200, {
+                states: [state],
+            })
 
     const accountASends10iToB = (cda: CDA) => {
         const hash = 'ZZKVOZRYHZVYORKHDLWRNIWKWLZMVBNFSPQC99PYHVJFRYRHXVUTHPQOVPJBRNFLYWDNKBBUJOTDQVTDE'
@@ -320,6 +335,7 @@ describe('account.generateCDA/account.sendToCDA', async assert => {
         should: 'throw "Insufficient balance" error',
         actual: await (async () => {
             try {
+                await assertRemoteSpentState(addressB1, false)
                 return await account0.sendToCDA({ ...cdaB1, value: 1 })
             } catch (error) {
                 return error.message
@@ -338,6 +354,8 @@ describe('account.generateCDA/account.sendToCDA', async assert => {
                     timeoutAt: futureTime,
                     multiUse: true,
                 })
+
+                await assertRemoteSpentState(addressB1, false)
                 return await account0.sendToCDA({ ...cdaB1, value: 1 })
             } catch (error) {
                 return error.message
@@ -355,6 +373,7 @@ describe('account.generateCDA/account.sendToCDA', async assert => {
                 await accountARequestedFromAnyInA2()
                 await accountAHas9iInA1()
                 await accountAHas2iInA2()
+                await assertRemoteSpentState(addressB2, false)
                 await delay(5500)
                 const cdaB2 = await accountBRequests10iFromAccountA()
                 await accountASends10iToB(cdaB2)
@@ -375,6 +394,8 @@ describe('account.generateCDA/account.sendToCDA', async assert => {
         actual: await (async () => {
             try {
                 await accountARemainderReceivesExpectedBalance()
+                await assertRemoteSpentState(addressB1, false)
+
                 return await accountA.sendToCDA({
                     ...cdaB1,
                     value: 1,
@@ -392,6 +413,8 @@ describe('account.generateCDA/account.sendToCDA', async assert => {
         actual: await (async () => {
             try {
                 await accountARemainderReceivesExpectedBalance()
+                await assertRemoteSpentState(addressB1, false)
+
                 return await accountA.sendToCDA({
                     ...cdaB1,
                     value: 1,
@@ -401,5 +424,23 @@ describe('account.generateCDA/account.sendToCDA', async assert => {
             }
         })(),
         expected: 'Insufficient balance',
+    })
+
+    assert({
+        given: 'that CDA is spent from',
+        should: 'throw error',
+        actual: await (async () => {
+            try {
+                await assertRemoteSpentState(addressB1, true)
+
+                return await accountA.sendToCDA({
+                    ...cdaB1,
+                    value: 1,
+                })
+            } catch (error) {
+                return error.message
+            }
+        })(),
+        expected: `Aborted sending to spent address; ${addressB1}`,
     })
 })
