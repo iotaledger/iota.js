@@ -120,7 +120,7 @@ export function addressGeneration(addressGenerationParams: AddressGenerationPara
                         expectedAmount,
                     })
                     return persistence
-                        .put(['0', ':', tritsToTrytes(address)].join(), serializedCDA)
+                        .put(['0', tritsToTrytes(address)].join(':'), serializedCDA)
                         .then(() => deserializeCDA(serializedCDA))
                 })
         },
@@ -189,16 +189,15 @@ export function transactionIssuance(
                                         ...inputs.map(
                                             (input): PersistenceDelCommand<string> => ({
                                                 type: PersistenceBatchTypes.del,
-                                                key: ['0', ':', tritsToTrytes(input.address)].join(''),
+                                                key: ['0', tritsToTrytes(input.address)].join(':'),
                                             })
                                         ),
                                         {
                                             type: PersistenceBatchTypes.put,
                                             key: [
                                                 '0',
-                                                ':',
                                                 tritsToTrytes(bundleHash(bundleTrytesToBundleTrits(trytes))),
-                                            ].join(''),
+                                            ].join(':'),
                                             value: bundleTrytesToBundleTrits(trytes),
                                         },
                                     ])
@@ -244,7 +243,7 @@ export function transactionIssuance(
                             acc.inputs.push({ ...input, balance })
                         }
                     } else if (input.timeoutAt !== 0 && isExpired(currentTime, input)) {
-                        persistence.del(['0', ':', tritsToTrytes(input.address)].join(''))
+                        persistence.del(['0', tritsToTrytes(input.address)].join(':'))
                     } else {
                         buffer.push(cda)
                     }
@@ -266,7 +265,7 @@ export function transactionIssuance(
 
             return persistence
                 .put(
-                    ['0', ':', tritsToTrytes(remainderAddress)].join(''),
+                    ['0', tritsToTrytes(remainderAddress)].join(':'),
                     serializeCDAInput({
                         address: remainderAddress,
                         index,
@@ -325,7 +324,7 @@ export function transactionAttachment(this: any, params: TransactionAttachmentPa
                 .then(pastAttachmentHashes =>
                     getLatestInclusion(pastAttachmentHashes).tap(inclusionStates => {
                         if (inclusionStates.indexOf(true) > -1) {
-                            return persistence.del(['0', ':', tritsToTrytes(bundleHash(bundle))].join(''))
+                            return persistence.del(['0', tritsToTrytes(bundleHash(bundle))].join(':'))
                         }
 
                         return Promise.all(pastAttachmentHashes.map(h => getConsistency([h]))).tap(consistencyStates =>
