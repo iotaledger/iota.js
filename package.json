@@ -10,7 +10,8 @@
         "test-android-ci": "lerna bootstrap && lerna run test-android-ci --stream",
         "test:staged": "node scripts/test-staged.js",
         "lint": "tslint --project .",
-        "docs": "lerna run docs"
+        "docs": "lerna run docs",
+        "publish": "lerna publish"
     },
     "contributors": [
         "Dominik Schiener <dom@iota.org> (https://iota.org)",
