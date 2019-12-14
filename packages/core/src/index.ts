@@ -85,11 +85,11 @@ export { createStoreTransactions } from './createStoreTransactions'
 // It's being used internally by `getNewAddress()`.
 // Avoid developing programs that rely on this method.
 //
-// export {
-//     createWereAddressesSpentFrom,
-//     WereAddressesSpentFromCommand,
-//     WereAddressesSpentFromResponse
-// } from './createWereAddressesSpentFrom'
+export {
+    createWereAddressesSpentFrom,
+    WereAddressesSpentFromCommand,
+    WereAddressesSpentFromResponse,
+} from './createWereAddressesSpentFrom'
 
 // Wrappers
 export { createBroadcastBundle } from './createBroadcastBundle'

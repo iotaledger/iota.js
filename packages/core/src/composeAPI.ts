@@ -25,7 +25,6 @@ import {
     createGetBundle,
     createGetInclusionStates,
     createGetInputs,
-    // createWereAddressesSpentFrom,
     createGetLatestInclusion,
     createGetNeighbors,
     createGetNewAddress,
@@ -39,13 +38,14 @@ import {
     createIsReattachable,
     createPrepareTransfers,
     createPromoteTransaction,
-    // createSendTransfer,
     createRemoveNeighbors,
+    // createSendTransfer,
     createReplayBundle,
     createSendTrytes,
     createStoreAndBroadcast,
     createStoreTransactions,
     createTraverseBundle,
+    createWereAddressesSpentFrom,
     FindTransactionsQuery, // tslint:disable-line no-unused-variable
     GetAccountDataOptions, // tslint:disable-line no-unused-variable
     GetInputsOptions, // tslint:disable-line no-unused-variable
@@ -155,7 +155,7 @@ export const composeAPI = (settings: Partial<Settings> = {}) => {
         interruptAttachingToTangle: createInterruptAttachingToTangle(provider),
         removeNeighbors: createRemoveNeighbors(provider),
         storeTransactions: createStoreTransactions(provider),
-        // wereAddressesSpentFrom: createWereAddressesSpentFrom(provider),
+        wereAddressesSpentFrom: createWereAddressesSpentFrom(provider),
         sendCommand: provider.send,
 
         // Wrapper methods

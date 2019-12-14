@@ -87,6 +87,7 @@ export interface Network {
     readonly getTransactionsToApprove: API['getTransactionsToApprove']
     readonly attachToTangle: API['attachToTangle']
     readonly getBundlesFromAddresses: API['getBundlesFromAddresses']
+    readonly wereAddressesSpentFrom: API['wereAddressesSpentFrom']
 }
 export interface TransactionAttachment {
     readonly startAttaching: (params: TransactionAttachmentStartParams) => void
