@@ -214,6 +214,7 @@ export function transactionIssuance(
     ): Promise<CDAInputs> {
         if (deposits.inboundLength() === 0) {
             buffer.forEach(deposits.write)
+            acc.inputs.map(serializeCDAInput).forEach(deposits.write)
             throw new Error('Insufficient balance')
         }
 
