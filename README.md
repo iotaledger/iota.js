@@ -161,7 +161,7 @@ For details on all available API methods, see the [reference page](api_reference
 
 We have a list of test cases in the [`examples` directory](https://github.com/iotaledger/iota.js/tree/next/examples) that you can use as a reference when developing apps with IOTA.
 
-Here's how you could send a zero-value transaction, using the library. For the guide, see the [documentation portal](https://docs.iota.org/docs/client-libraries/0.1/how-to-guides/js/send-your-first-bundle).
+Here's how you could send a zero-value transaction and read the message in it from the Tangle, using the library. For the guides, see the [documentation portal](https://docs.iota.org/docs/client-libraries/0.1/how-to-guides/js/send-your-first-bundle).
 
 ```js
 const Iota = require('@iota/core');
@@ -184,7 +184,7 @@ const address =
 const seed =
   'PUEOTSEITFEVEWCWBTSIZM9NKRGJEIMXTULBACGFRQK9IMGICLBKW9TTEVSDQMGWKBXPVCBMMCXWMNPDX';
 
-// Define a message to send.
+// Define a JSON message to send.
 // This message must include only ASCII characters.
 const message = JSON.stringify({"message": "Hello world"});
 
@@ -209,12 +209,24 @@ iota
     return iota.sendTrytes(trytes, depth, minimumWeightMagnitude);
   })
   .then(bundle => {
-    console.log(`Bundle hash: ${bundle[0].bundle}`);
+    // Get a reference to the tail transaction (currentIndex 0)
+    let tailTransaction = bundle[0]
+    let JSONTailTransaction = JSON.stringify(tailTransaction,null,1);
+    console.log(JSONTailTransaction);
+    // Get the tail transaction's bundle from the Tangle
+    iota.getBundle("NOLIVEQNRHIIRPDPHYTGJOVSGOUXVAACDNAPNTTRFNNCVNJMDZFPURTDNVTAKHPSLSJRYZGQHYBBAE999")
+        .then(foundBundle => {
+            iota.findTransactionObjects({ bundles: [foundBundle[0].bundle] })
+                .then(bundle => {
+                    // Get your hello world message from the transaction's `signatureMessageFragment` field and print it to the console
+                    console.log(JSON.parse(Extract.extractJson(bundle)));
+                })
+        })
   })
   .catch(err => {
     console.error(err)
   });
-  ```
+```
 
 ## Supporting the project
 
