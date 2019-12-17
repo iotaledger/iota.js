@@ -149,6 +149,8 @@ export interface AccountPreset<X, Y, Z> {
     readonly [k: string]: any
 }
 
+export const SENT_TO_ADDRESS_PREFIX = 'sent_to'
+
 export function createAccountWithPreset<X, Y, Z>(preset: AccountPreset<X, Y, Z>): CreateAccount<X, Y, Z> {
     return function(
         this: any,
@@ -186,30 +188,6 @@ export function createAccountWithPreset<X, Y, Z>(preset: AccountPreset<X, Y, Z>)
                 persistencePath,
             })
         )
-
-        persistence.on('data', ({ key, value }) => {
-            const trits = Int8Array.from(value)
-            if (key.toString()[0] === '0') {
-                if (isMultipleOfTransactionLength(trits.length)) {
-                    bundles.write(trits)
-
-                    const bundle = []
-                    for (let offset = 0; offset < trits.length; offset += TRANSACTION_LENGTH) {
-                        bundle.push(
-                            asTransactionObject(tritsToTrytes(trits.slice(offset, offset + TRANSACTION_LENGTH)))
-                        )
-                    }
-                    withdrawalsList.push(bundle)
-                }
-
-                if (trits.length === CDA_LENGTH) {
-                    deposits.write(trits)
-                    const cda = deserializeCDAInput(trits)
-                    depositsList.push(cda)
-                    addresses.push(tritsToTrytes(cda.address))
-                }
-            }
-        })
 
         function accountMixin(this: any) {
             return Object.assign(
@@ -366,6 +344,38 @@ export function createAccountWithPreset<X, Y, Z>(preset: AccountPreset<X, Y, Z>)
 
         const target = {}
         const account = accountMixin.call(target)
+
+        persistence.on('data', ({ key, value }) => {
+            const trits = Int8Array.from(value)
+            const [prefix, id] = key.toString().split(':')
+            if (prefix === '0') {
+                if (isMultipleOfTransactionLength(trits.length)) {
+                    bundles.write(trits)
+
+                    const bundle = []
+                    for (let offset = 0; offset < trits.length; offset += TRANSACTION_LENGTH) {
+                        bundle.push(
+                            asTransactionObject(tritsToTrytes(trits.slice(offset, offset + TRANSACTION_LENGTH)))
+                        )
+                    }
+                    withdrawalsList.push(bundle)
+                }
+
+                if (trits.length === CDA_LENGTH) {
+                    deposits.write(trits)
+                    const cda = deserializeCDAInput(trits)
+                    depositsList.push(cda)
+                    addresses.push(tritsToTrytes(cda.address))
+                }
+            } else if (prefix === SENT_TO_ADDRESS_PREFIX) {
+                timeSource().then(now => {
+                    if (tritsToValue(trits) <= now) {
+                        persistence.del([prefix, id].join(':')).catch(error => account.emit('error', error))
+                    }
+                })
+            }
+        })
+
         const emittedIncludedDeposits: { [k: string]: boolean } = {}
         const emittedPendingDeposits: { [k: string]: boolean } = {}
         const emittedIncludedWithdrawals: { [k: string]: boolean } = {}

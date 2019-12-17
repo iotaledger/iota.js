@@ -11,7 +11,7 @@ import {
     verifyCDAParams,
     verifyCDATransfer,
 } from '@iota/cda'
-import { tritsToTrytes, tritsToValue, TRYTE_WIDTH, trytesToTrits } from '@iota/converter'
+import { tritsToTrytes, tritsToValue, TRYTE_WIDTH, trytesToTrits, valueToTrits } from '@iota/converter'
 import {
     createAttachToTangle,
     createCheckConsistency,
@@ -49,6 +49,7 @@ import {
     AddressGenerationParams,
     Network,
     NetworkParams,
+    SENT_TO_ADDRESS_PREFIX,
     TransactionAttachment,
     TransactionAttachmentParams,
     TransactionAttachmentStartParams,
@@ -148,63 +149,86 @@ export function transactionIssuance(
                 )
             }
 
-            return wereAddressesSpentFrom([noChecksum(cdaTransfer.address)]).then(([spent]) => {
-                if (spent) {
-                    throw new Error(`Aborted sending to spent address; ${noChecksum(cdaTransfer.address)}`)
-                }
+            return (cdaTransfer.multiUse === true
+                ? Promise.resolve()
+                : persistence
+                      .get([SENT_TO_ADDRESS_PREFIX, noChecksum(cdaTransfer.address)].join(':'))
+                      .then(() => {
+                          throw new Error(
+                              `Aborted sending twice to the same address; ${noChecksum(cdaTransfer.address)}`
+                          )
+                      })
+                      .catch(error => {
+                          if (!error.notFound) {
+                              throw error
+                          }
+                      })
+            ).then(() =>
+                wereAddressesSpentFrom([noChecksum(cdaTransfer.address)]).then(([spent]) => {
+                    if (spent) {
+                        throw new Error(`Aborted sending to spent address; ${noChecksum(cdaTransfer.address)}`)
+                    }
 
-                return Promise.try(() =>
-                    persistence
-                        .ready()
-                        .then(timeSource)
-                        .then(currentTime => verifyCDATransfer(currentTime, cdaTransfer))
-                )
-                    .then(() => accumulateInputs(cdaTransfer.value))
-                    .then(({ inputs, totalBalance }) => {
-                        inputs.forEach(input => this.emit(Events.selectInput, { cdaTransfer, input }))
-                        const remainder = totalBalance - cdaTransfer.value
+                    return Promise.try(() =>
+                        persistence
+                            .ready()
+                            .then(timeSource)
+                            .then(currentTime => verifyCDATransfer(currentTime, cdaTransfer))
+                    )
+                        .then(() => accumulateInputs(cdaTransfer.value))
+                        .then(({ inputs, totalBalance }) => {
+                            inputs.forEach(input => this.emit(Events.selectInput, { cdaTransfer, input }))
+                            const remainder = totalBalance - cdaTransfer.value
 
-                        return generateRemainderAddress(remainder).then(remainderAddress =>
-                            prepareTransfers(
-                                seed,
-                                [
-                                    {
-                                        address: noChecksum(cdaTransfer.address),
-                                        value: cdaTransfer.value,
-                                    },
-                                ],
-                                {
-                                    inputs: inputs.map(input => ({
-                                        address: tritsToTrytes(input.address),
-                                        keyIndex: tritsToValue(input.index),
-                                        security: input.security,
-                                        balance: input.balance as number,
-                                    })),
-                                    remainderAddress,
-                                }
-                            )
-                                .tap(trytes => this.emit(Events.prepareTransfer, { cdaTransfer, trytes }))
-                                .tap(trytes =>
-                                    persistence.batch([
-                                        ...inputs.map(
-                                            (input): PersistenceDelCommand<string> => ({
-                                                type: PersistenceBatchTypes.del,
-                                                key: ['0', tritsToTrytes(input.address)].join(':'),
-                                            })
-                                        ),
+                            return generateRemainderAddress(remainder).then(remainderAddress =>
+                                prepareTransfers(
+                                    seed,
+                                    [
                                         {
-                                            type: PersistenceBatchTypes.put,
-                                            key: [
-                                                '0',
-                                                tritsToTrytes(bundleHash(bundleTrytesToBundleTrits(trytes))),
-                                            ].join(':'),
-                                            value: bundleTrytesToBundleTrits(trytes),
+                                            address: noChecksum(cdaTransfer.address),
+                                            value: cdaTransfer.value,
                                         },
-                                    ])
+                                    ],
+                                    {
+                                        inputs: inputs.map(input => ({
+                                            address: tritsToTrytes(input.address),
+                                            keyIndex: tritsToValue(input.index),
+                                            security: input.security,
+                                            balance: input.balance as number,
+                                        })),
+                                        remainderAddress,
+                                    }
                                 )
-                        )
-                    })
-            })
+                                    .tap(trytes => this.emit(Events.prepareTransfer, { cdaTransfer, trytes }))
+                                    .tap(trytes =>
+                                        persistence.batch([
+                                            ...inputs.map(
+                                                (input): PersistenceDelCommand<string> => ({
+                                                    type: PersistenceBatchTypes.del,
+                                                    key: ['0', tritsToTrytes(input.address)].join(':'),
+                                                })
+                                            ),
+                                            {
+                                                type: PersistenceBatchTypes.put,
+                                                key: [
+                                                    '0',
+                                                    tritsToTrytes(bundleHash(bundleTrytesToBundleTrits(trytes))),
+                                                ].join(':'),
+                                                value: bundleTrytesToBundleTrits(trytes),
+                                            },
+                                            {
+                                                type: PersistenceBatchTypes.put,
+                                                key: [SENT_TO_ADDRESS_PREFIX, noChecksum(cdaTransfer.address)].join(
+                                                    ':'
+                                                ),
+                                                value: valueToTrits(cdaTransfer.timeoutAt),
+                                            },
+                                        ])
+                                    )
+                            )
+                        })
+                })
+            )
         },
     }
     function accumulateInputs(
@@ -214,6 +238,7 @@ export function transactionIssuance(
     ): Promise<CDAInputs> {
         if (deposits.inboundLength() === 0) {
             buffer.forEach(deposits.write)
+            acc.inputs.map(serializeCDAInput).forEach(deposits.write)
             throw new Error('Insufficient balance')
         }
 
