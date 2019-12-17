@@ -125,14 +125,16 @@ describe('account.generateCDA/account.sendToCDA', async assert => {
     })
 
     // ---
-    // account A has 11i balance in snapshot (A1: 9i + A2: 1i), sends 10i to B, receives remainder of 1i in A3
+    // account A has 12i balance in snapshot (A1: 9i + A2: 3i), sends 10i to B, receives remainder of 3i in A3
     const seedA = 'RQFLPKU9BIEGPPEIXEHH9RFDUMSYXMPZOVBKBITSPEFMSOIBYHMFVHRNRF9YNZYQRNBYCS9OULYHBFPHZ'
     const addressA1 = generateAddress(seedA, 1, 2, false)
     const addressA2 = generateAddress(seedA, 2, 2, false)
     const addressA3 = generateAddress(seedA, 3, 2, false)
+    const addressA4 = generateAddress(seedA, 4, 2, false)
     const balanceA1 = 9
-    const balanceA2 = 2
-    const remainderA3 = 1
+    const balanceA2 = 3
+    const remainderA3 = 2
+    const remainderA4 = 1
     const accountA = createAccountWithPreset({
         ...preset,
         test: {
@@ -166,7 +168,7 @@ describe('account.generateCDA/account.sendToCDA', async assert => {
                 milestone: 'M'.repeat(81),
                 milestoneIndex: 1,
             })
-    const accountAHas2iInA2 = () =>
+    const accountAHas3iInA2 = () =>
         nock('http://localhost:14265', headers)
             .post('/', {
                 command: IRICommand.GET_BALANCES,
@@ -180,7 +182,7 @@ describe('account.generateCDA/account.sendToCDA', async assert => {
                 milestoneIndex: 1,
             })
 
-    const accountARemainderReceivesExpectedBalance = () =>
+    const accountARemainder3ReceivesExpectedBalance = () =>
         nock('http://localhost:14265', headers)
             .post('/', {
                 command: IRICommand.GET_BALANCES,
@@ -190,6 +192,20 @@ describe('account.generateCDA/account.sendToCDA', async assert => {
             .times(1)
             .reply(200, {
                 balances: [remainderA3],
+                milestone: 'M'.repeat(81),
+                milestoneIndex: 1,
+            })
+
+    const accountARemainder4ReceivesExpectedBalance = () =>
+        nock('http://localhost:14265', headers)
+            .post('/', {
+                command: IRICommand.GET_BALANCES,
+                addresses: [addressA4],
+                threshold: 100,
+            })
+            .times(1)
+            .reply(200, {
+                balances: [remainderA4],
                 milestone: 'M'.repeat(81),
                 milestoneIndex: 1,
             })
@@ -208,6 +224,7 @@ describe('account.generateCDA/account.sendToCDA', async assert => {
 
     const addressB1 = generateAddress(seedB, 1, 2, false)
     const addressB2 = generateAddress(seedB, 2, 2, false)
+    const addressB3 = generateAddress(seedB, 3, 2, false)
 
     // request from 0 and A
     let cdaB1
@@ -365,14 +382,14 @@ describe('account.generateCDA/account.sendToCDA', async assert => {
     })
 
     assert({
-        given: 'that account A has 11i balance in snapshot (A1: 9i, A2: 2i)',
+        given: 'that account A has 12i balance in snapshot (A1: 9i, A2: 3i)',
         should: 'send 10i to B',
         actual: await (async () => {
             try {
                 await accountARequestedFromAnyInA1()
                 await accountARequestedFromAnyInA2()
                 await accountAHas9iInA1()
-                await accountAHas2iInA2()
+                await accountAHas3iInA2()
                 await assertRemoteSpentState(addressB2, false)
                 await delay(5500)
                 const cdaB2 = await accountBRequests10iFromAccountA()
@@ -393,7 +410,7 @@ describe('account.generateCDA/account.sendToCDA', async assert => {
         should: 'be able to spend 1i from remainder address A3',
         actual: await (async () => {
             try {
-                await accountARemainderReceivesExpectedBalance()
+                await accountARemainder3ReceivesExpectedBalance()
                 await assertRemoteSpentState(addressB1, false)
 
                 return await accountA.sendToCDA({
@@ -408,16 +425,17 @@ describe('account.generateCDA/account.sendToCDA', async assert => {
     })
 
     assert({
-        given: 'that account A has used all inputs in previous transfers, sendToCDA',
+        given:
+            'that account A has used all inputs in previous transfers (except one with insufficient balance of 1i), sendToCDA',
         should: 'throw "insufficient balance" error',
         actual: await (async () => {
             try {
-                await accountARemainderReceivesExpectedBalance()
+                await accountARemainder4ReceivesExpectedBalance()
                 await assertRemoteSpentState(addressB1, false)
 
                 return await accountA.sendToCDA({
                     ...cdaB1,
-                    value: 1,
+                    value: 2,
                 })
             } catch (error) {
                 return error.message
@@ -435,12 +453,38 @@ describe('account.generateCDA/account.sendToCDA', async assert => {
 
                 return await accountA.sendToCDA({
                     ...cdaB1,
-                    value: 1,
+                    value: 2,
                 })
             } catch (error) {
                 return error.message
             }
         })(),
         expected: `Aborted sending to spent address; ${addressB1}`,
+    })
+
+    assert({
+        given: 'a CDA with multiUse=false',
+        should: 'allow only one transfer',
+        actual: await (async () => {
+            try {
+                const cdaB3 = await accountB.generateCDA({
+                    timeoutAt: futureTime,
+                    expectedAmount: 1,
+                    multiUse: false,
+                })
+                const transfer = { ...cdaB3, value: 1 }
+
+                await accountARemainder4ReceivesExpectedBalance()
+                await assertRemoteSpentState(addressB3, false)
+                await accountA.sendToCDA(transfer)
+
+                await accountARemainder4ReceivesExpectedBalance()
+                await assertRemoteSpentState(addressB3, false)
+                await accountA.sendToCDA(transfer)
+            } catch (error) {
+                return error.message
+            }
+        })(),
+        expected: `Aborted sending twice to the same address; ${addressB3}`,
     })
 })

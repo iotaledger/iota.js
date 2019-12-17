@@ -149,6 +149,8 @@ export interface AccountPreset<X, Y, Z> {
     readonly [k: string]: any
 }
 
+export const SENT_TO_ADDRESS_PREFIX = 'sent_to'
+
 export function createAccountWithPreset<X, Y, Z>(preset: AccountPreset<X, Y, Z>): CreateAccount<X, Y, Z> {
     return function(
         this: any,
