@@ -18,9 +18,10 @@ import { preset as defaultPreset } from './preset'
 
 export interface AddressGenerationParams {
     readonly seed: Int8Array
+    readonly security: 1 | 2 | 3
     readonly persistence: Persistence<string, Int8Array>
     readonly timeSource: TimeSource
-    readonly security: 1 | 2 | 3
+    readonly network: Network
 }
 export interface TransactionIssuanceParams {
     readonly seed: Int8Array
@@ -197,6 +198,7 @@ export function createAccountWithPreset<X, Y, Z>(preset: AccountPreset<X, Y, Z>)
                     persistence,
                     timeSource,
                     security: preset.security,
+                    network,
                 }),
                 preset.transactionIssuance.call(this, {
                     seed: seed as Int8Array,
