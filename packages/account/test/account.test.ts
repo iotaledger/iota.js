@@ -232,6 +232,25 @@ describe('account.generateCDA()', async assert => {
         })).toString(),
         expected: 'Error: Expired timeout.',
     })
+
+    /*
+    const s = ''
+    const acc = createAccount({
+        seed: s,
+        persistencePath,
+        provider: '',
+    })
+
+    assert({
+        given: 'a new address',
+        should: 'attach it to tangle',
+        actual: await Try(async () => {
+            const { address } = await acc.generateCDA({ timeoutAt: futureTime, expectedAmount: 1 })
+            return new Promise(resolve => acc.on('attachToTangle', ([tail]) => resolve(tail.address)))
+        }),
+        expected: generateAddress(s, 1, 2, false),
+    })
+    */
 })
 
 describe('account.generateCDA/account.sendToCDA', async assert => {

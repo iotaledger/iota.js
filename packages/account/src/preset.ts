@@ -95,7 +95,8 @@ export function networkAdapter({ provider }: NetworkParams): Network {
 }
 
 export function addressGeneration(addressGenerationParams: AddressGenerationParams) {
-    const { seed, persistence, timeSource, network } = addressGenerationParams
+    const { seed, persistence, timeSource, network, now } = addressGenerationParams
+    const prepareTransfers = createPrepareTransfers(undefined, now)
 
     function generateCDA(cdaParams: CDAParams): Promise<CDA> {
         if (!cdaParams) {
@@ -130,6 +131,22 @@ export function addressGeneration(addressGenerationParams: AddressGenerationPara
                     return persistence
                         .put(['0', addressTrytes].join(':'), serializedCDA)
                         .then(() => deserializeCDA(serializedCDA))
+                        .then(cda =>
+                            prepareTransfers('9'.repeat(81), [
+                                {
+                                    address: cda.address,
+                                    value: 0,
+                                },
+                            ])
+                                .then(trytes => {
+                                    const bundleTrits = bundleTrytesToBundleTrits(trytes)
+                                    return persistence.put(
+                                        ['0', tritsToTrytes(bundleHash(bundleTrits))].join(':'),
+                                        bundleTrits
+                                    )
+                                })
+                                .then(() => cda)
+                        )
                 })
             })
     }
