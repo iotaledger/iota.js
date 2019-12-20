@@ -95,23 +95,29 @@ export function networkAdapter({ provider }: NetworkParams): Network {
 }
 
 export function addressGeneration(addressGenerationParams: AddressGenerationParams) {
-    const { seed, persistence, timeSource } = addressGenerationParams
+    const { seed, persistence, timeSource, network } = addressGenerationParams
 
-    return {
-        generateCDA(cdaParams: CDAParams) {
-            if (!cdaParams) {
-                throw new Error(
-                    'Provide an object with conditions for the CDA: { timeoutAt, [multiUse], [exeptectedAmount], [security=2] }'
-                )
-            }
+    function generateCDA(cdaParams: CDAParams): Promise<CDA> {
+        if (!cdaParams) {
+            throw new Error(
+                'Provide an object with conditions for the CDA: { timeoutAt, [multiUse], [exeptectedAmount], [security=2] }'
+            )
+        }
 
-            const { timeoutAt, expectedAmount, multiUse } = cdaParams
+        const { timeoutAt, expectedAmount, multiUse } = cdaParams
 
-            return Promise.try(() => timeSource().then(currentTime => verifyCDAParams(currentTime, cdaParams)))
-                .then(persistence.increment)
-                .then(index => {
-                    const security = cdaParams.security || addressGenerationParams.security
-                    const address = signingAddress(digests(key(subseed(seed, tritsToValue(index)), security)))
+        return Promise.try(() => timeSource().then(currentTime => verifyCDAParams(currentTime, cdaParams)))
+            .then(persistence.increment)
+            .then(index => {
+                const security = cdaParams.security || addressGenerationParams.security
+                const address = signingAddress(digests(key(subseed(seed, tritsToValue(index)), security)))
+                const addressTrytes = tritsToTrytes(address)
+
+                return network.wereAddressesSpentFrom([addressTrytes]).then(([spent]) => {
+                    if (spent) {
+                        return generateCDA(cdaParams)
+                    }
+
                     const serializedCDA = serializeCDAInput({
                         address,
                         index,
@@ -120,12 +126,15 @@ export function addressGeneration(addressGenerationParams: AddressGenerationPara
                         multiUse,
                         expectedAmount,
                     })
+
                     return persistence
-                        .put(['0', tritsToTrytes(address)].join(':'), serializedCDA)
+                        .put(['0', addressTrytes].join(':'), serializedCDA)
                         .then(() => deserializeCDA(serializedCDA))
                 })
-        },
+            })
     }
+
+    return { generateCDA }
 }
 
 interface CDAInputs {
