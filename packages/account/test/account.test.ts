@@ -302,6 +302,9 @@ describe('account.generateCDA/account.sendToCDA', async assert => {
         expectedAmount: 3,
     })
 
+    const a3 = generateAddress(seedA, 3, 2, false)
+    const a4 = generateAddress(seedA, 4, 2, false)
+
     const b1 = generateAddress(seedB, 1, 2, false)
     assertRemoteSpentState(b1, false)
     assertAddressTransactions(b1, [])
@@ -378,6 +381,8 @@ describe('account.generateCDA/account.sendToCDA', async assert => {
         actual: await Try(() => {
             assertBalance(A1.address, 9)
             assertBalance(A2.address, 3)
+            assertRemoteSpentState(a3, false)
+            assertAddressTransactions(a3, [])
             assertTransfer(B2, accountASends10iToBTrytes)
             assertRemoteSpentState(B2.address, false)
 
@@ -393,7 +398,9 @@ describe('account.generateCDA/account.sendToCDA', async assert => {
         given: 'that previous transfer of 10i to B is included, account A',
         should: 'be able to spend 1i from remainder address A3',
         actual: await Try(() => {
-            assertBalance(generateAddress(seedA, 3, 2, false), 2)
+            assertBalance(a3, 2)
+            assertRemoteSpentState(a4, false)
+            assertAddressTransactions(a4, [])
             assertRemoteSpentState(B1.address, false)
 
             return accountA.sendToCDA({
@@ -409,9 +416,7 @@ describe('account.generateCDA/account.sendToCDA', async assert => {
             'that account A has used all inputs in previous transfers (except one with insufficient balance of 1i), sendToCDA',
         should: 'throw "insufficient balance" error',
         actual: (await Try(() => {
-            const input = generateAddress(seedA, 4, 2, false)
-
-            assertBalance(input, 1)
+            assertBalance(a4, 1)
             assertRemoteSpentState(B1.address, false)
 
             return accountA.sendToCDA({
@@ -443,13 +448,11 @@ describe('account.generateCDA/account.sendToCDA', async assert => {
             const value = 1
             const transfer = { ...B3, value }
 
-            const address = generateAddress(seedA, 4, 2, false)
-
-            assertBalance(address, value)
+            assertBalance(a4, value)
             assertRemoteSpentState(B3.address, false)
             await accountA.sendToCDA(transfer)
 
-            assertBalance(address, value)
+            assertBalance(a4, value)
             assertRemoteSpentState(B3.address, false)
             return accountA.sendToCDA(transfer)
         })).toString(),

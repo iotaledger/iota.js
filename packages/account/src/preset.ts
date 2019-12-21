@@ -118,7 +118,7 @@ export function addressGeneration(this: any, addressGenerationParams: AddressGen
 
                 return network.isAddressUsed(addressTrytes).then(({ isUsed, isSpent, transactions }) => {
                     if (isUsed) {
-                        emitter.emit('error', new Error('Dropping used address.'), {
+                        emitter.emit('error', new Error('Dropped used address.'), {
                             address: addressTrytes,
                             isSpent,
                             transactions,
@@ -248,6 +248,9 @@ export function transactionIssuance(
             )
         },
     }
+
+    const emitter = this // tslint:disable-line
+
     function accumulateInputs(
         threshold: number,
         acc: CDAInputs = { inputs: [], totalBalance: 0 },
@@ -304,20 +307,33 @@ export function transactionIssuance(
         return persistence.increment().then(index => {
             const security = 2
             const remainderAddress = signingAddress(digests(key(subseed(seed, tritsToValue(index)), security)))
+            const addressTrytes = tritsToTrytes(remainderAddress)
 
-            return persistence
-                .put(
-                    ['0', tritsToTrytes(remainderAddress)].join(':'),
-                    serializeCDAInput({
-                        address: remainderAddress,
-                        index,
-                        security,
-                        timeoutAt: 0,
-                        multiUse: false,
-                        expectedAmount: remainder,
+            return network.isAddressUsed(addressTrytes).then(({ isUsed, isSpent, transactions }) => {
+                if (isUsed) {
+                    emitter.emit('error', new Error('Dropped used address.'), {
+                        address: addressTrytes,
+                        isSpent,
+                        transactions,
                     })
-                )
-                .then(() => tritsToTrytes(remainderAddress))
+
+                    return generateRemainderAddress(remainder)
+                }
+
+                return persistence
+                    .put(
+                        ['0', tritsToTrytes(remainderAddress)].join(':'),
+                        serializeCDAInput({
+                            address: remainderAddress,
+                            index,
+                            security,
+                            timeoutAt: 0,
+                            multiUse: false,
+                            expectedAmount: remainder,
+                        })
+                    )
+                    .then(() => tritsToTrytes(remainderAddress))
+            })
         })
     }
 
