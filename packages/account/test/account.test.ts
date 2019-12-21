@@ -322,14 +322,16 @@ describe('account.generateCDA/account.sendToCDA', async assert => {
         given: 'that account has 1 persisted, unfunded CDA, sendToCDA',
         should: 'throw "Insufficient balance" error',
         actual: (await Try(async () => {
-            assertRemoteSpentState(generateAddress(seed0, 1, 2, false), false)
-            const cda = await account0.generateCDA({
-                timeoutAt: futureTime,
-                multiUse: true,
-            })
-            const value = 1
+            const address = generateAddress(seed0, 1, 2, false)
+            assertRemoteSpentState(address, false)
 
-            assertBalance(cda.address, value - 1)
+            await account0.generateCDA({
+                timeoutAt: futureTime,
+                expectedAmount: 1,
+            })
+
+            const value = 1
+            assertBalance(address, value - 1)
             assertRemoteSpentState(B1.address, false)
 
             return account0.sendToCDA({ ...B1, value })
@@ -338,13 +340,59 @@ describe('account.generateCDA/account.sendToCDA', async assert => {
     })
 
     assert({
+        given: 'that account has 1 persisted, funded but spent CDA, sendToCDA',
+        should: 'throw "Insufficient balance" error & drop the spent input',
+        actual: await Try(async () => {
+            let rejected = ''
+            const emitted = new Promise(resolve =>
+                account0.on('error', (error: Error, input: any) => {
+                    if (input !== undefined && input.address && input.balance) {
+                        resolve({
+                            error: error.toString(),
+                            address: input.address,
+                            balance: input.balance,
+                        })
+                    }
+                })
+            )
+            const address = generateAddress(seed0, 1, 2, false)
+            const value = 1
+
+            assertBalance(address, value)
+            assertRemoteSpentState(address, true)
+            assertRemoteSpentState(B1.address, false)
+
+            try {
+                await account0.sendToCDA({ ...B1, value })
+            } catch (error) {
+                rejected = error.toString()
+            }
+
+            return {
+                rejected,
+                emitted: await emitted,
+            }
+        }),
+        expected: {
+            rejected: 'Error: Insufficient balance',
+            emitted: {
+                error: 'Error: Dropped spent input.',
+                address: generateAddress(seed0, 1, 2, false),
+                balance: 1,
+            },
+        },
+    })
+
+    assert({
         given: 'that account A has 12i balance in snapshot (A1: 9i, A2: 3i)',
         should: 'send 10i to B',
         actual: await Try(() => {
             assertBalance(A1.address, 9)
             assertBalance(A2.address, 3)
-            assertTransfer(B2, accountASends10iToBTrytes)
+            assertRemoteSpentState(A1.address, false)
+            assertRemoteSpentState(A2.address, false)
             assertRemoteSpentState(B2.address, false)
+            assertTransfer(B2, accountASends10iToBTrytes)
 
             return accountA.sendToCDA({
                 ...B2,
@@ -358,7 +406,9 @@ describe('account.generateCDA/account.sendToCDA', async assert => {
         given: 'that previous transfer of 10i to B is included, account A',
         should: 'be able to spend 1i from remainder address A3',
         actual: await Try(() => {
-            assertBalance(generateAddress(seedA, 3, 2, false), 2)
+            const address = generateAddress(seedA, 3, 2, false)
+            assertBalance(address, 2)
+            assertRemoteSpentState(address, false)
             assertRemoteSpentState(B1.address, false)
 
             return accountA.sendToCDA({
@@ -374,7 +424,9 @@ describe('account.generateCDA/account.sendToCDA', async assert => {
             'that account A has used all inputs in previous transfers (except one with insufficient balance of 1i), sendToCDA',
         should: 'throw "insufficient balance" error',
         actual: (await Try(() => {
-            assertBalance(generateAddress(seedA, 4, 2, false), 1)
+            const address = generateAddress(seedA, 4, 2, false)
+            assertBalance(address, 1)
+            assertRemoteSpentState(address, false)
             assertRemoteSpentState(B1.address, false)
 
             return accountA.sendToCDA({
@@ -409,6 +461,7 @@ describe('account.generateCDA/account.sendToCDA', async assert => {
             const address = generateAddress(seedA, 4, 2, false)
 
             assertBalance(address, value)
+            assertRemoteSpentState(address, false)
             assertRemoteSpentState(B3.address, false)
             await accountA.sendToCDA(transfer)
 

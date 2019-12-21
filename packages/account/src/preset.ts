@@ -240,6 +240,9 @@ export function transactionIssuance(
             )
         },
     }
+
+    const emitter = this // tslint:disable-line
+
     function accumulateInputs(
         threshold: number,
         acc: CDAInputs = { inputs: [], totalBalance: 0 },
@@ -252,39 +255,53 @@ export function transactionIssuance(
         }
 
         return deposits.read().then(cda =>
-            timeSource().then(currentTime => {
-                const input = deserializeCDAInput(cda)
+            timeSource()
+                .then(currentTime => {
+                    const input = deserializeCDAInput(cda)
+                    const address = tritsToTrytes(input.address)
 
-                return getBalance(tritsToTrytes(input.address)).then(balance => {
-                    //
-                    // Input selection Conditions
-                    //
-                    // The following strategy is blocking execution because it awaits arrival of balance on inputs.
-                    // A strategy leading to eventual input selection should be discussed.
-                    // Such us inputs are selected prior to inclusion of funding transactions,
-                    // and order of funding and withdrawing is not important.
-                    // This would allow for _transduction_ of transfers instead of reduction of inputs.
-                    //
-                    if (balance > 0) {
-                        if (input.expectedAmount && balance >= input.expectedAmount) {
-                            acc.totalBalance += balance
-                            acc.inputs.push({ ...input, balance })
-                        } else if (input.multiUse && isExpired(currentTime, input)) {
-                            acc.totalBalance += balance
-                            acc.inputs.push({ ...input, balance })
-                        } else if (!input.multiUse) {
-                            acc.totalBalance += balance
-                            acc.inputs.push({ ...input, balance })
+                    return getBalance(address).then(balance => {
+                        //
+                        // Input selection Conditions
+                        //
+                        // The following strategy is blocking execution because it awaits arrival of balance on inputs.
+                        // A strategy leading to eventual input selection should be discussed.
+                        // Such us inputs are selected prior to inclusion of funding transactions,
+                        // and order of funding and withdrawing is not important.
+                        // This would allow for _transduction_ of transfers instead of reduction of inputs.
+                        //
+                        if (
+                            balance > 0 &&
+                            ((input.expectedAmount && balance >= input.expectedAmount) ||
+                                (input.multiUse && isExpired(currentTime, input)) ||
+                                !input.multiUse)
+                        ) {
+                            return wereAddressesSpentFrom([address]).then(([spent]) => {
+                                if (spent) {
+                                    return persistence.del(['0', address].join(':')).then(() =>
+                                        emitter.emit('error', new Error('Dropped spent input.'), {
+                                            address,
+                                            balance,
+                                        })
+                                    )
+                                }
+
+                                acc.inputs.push({ ...input, balance })
+                                acc.totalBalance += balance
+                            })
+                        } else if (input.timeoutAt !== 0 && isExpired(currentTime, input)) {
+                            return persistence.del(['0', address].join(':'))
+                        } else {
+                            buffer.push(cda) // restore later
                         }
-                    } else if (input.timeoutAt !== 0 && isExpired(currentTime, input)) {
-                        persistence.del(['0', tritsToTrytes(input.address)].join(':'))
-                    } else {
-                        buffer.push(cda)
-                    }
-
-                    return acc.totalBalance >= threshold ? acc : accumulateInputs(threshold, acc, buffer)
+                    })
                 })
-            })
+                .catch(error => {
+                    // TODO: add a "maxRetries" argument
+                    deposits.write(cda) // enables retries after network/db errors
+                    emitter.emit('error', error)
+                })
+                .then(() => (acc.totalBalance >= threshold ? acc : accumulateInputs(threshold, acc, buffer)))
         )
     }
 
