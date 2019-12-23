@@ -26,6 +26,17 @@ const headers = {
     },
 }
 
+const assertAddressTransactions = (address: Trytes, hashes: Trytes[]) =>
+    nock('http://localhost:14265', headers)
+        .post('/', {
+            command: IRICommand.FIND_TRANSACTIONS,
+            addresses: [noChecksum(address)],
+        })
+        .times(1)
+        .reply(200, {
+            hashes,
+        })
+
 const assertRemoteSpentState = (address: Trytes, state: boolean) =>
     nock('http://localhost:14265', headers)
         .post('/', {
@@ -58,15 +69,7 @@ const assertTransfer = (transfer: CDATransfer, trytes: Trytes[]) => {
         branchTransaction: '9'.repeat(81),
     }
 
-    nock('http://localhost:14265', headers)
-        .post('/', {
-            command: IRICommand.FIND_TRANSACTIONS,
-            addresses: [noChecksum(transfer.address)],
-        })
-        .times(1)
-        .reply(200, {
-            hashes: [hash],
-        })
+    assertAddressTransactions(transfer.address, [hash])
 
     nock('http://localhost:14265', headers)
         .post('/', {
@@ -170,7 +173,11 @@ describe('account.generateCDA()', async assert => {
         given: 'timeoutAt & multiUse conditions',
         should: 'generate 1st CDA',
         actual: await Try(() => {
-            assertRemoteSpentState(generateAddress(seed, 1, 2, false), false)
+            const address = generateAddress(seed, 1, 2, false)
+
+            assertRemoteSpentState(address, false)
+            assertAddressTransactions(address, [])
+
             return account.generateCDA({
                 timeoutAt: futureTime,
                 multiUse: false,
@@ -188,7 +195,11 @@ describe('account.generateCDA()', async assert => {
         given: 'timeoutAt & expectedAmount conditions',
         should: 'generate 2nd CDA',
         actual: await Try(() => {
-            assertRemoteSpentState(generateAddress(seed, 2, 2, false), false)
+            const address = generateAddress(seed, 2, 2, false)
+
+            assertRemoteSpentState(address, false)
+            assertAddressTransactions(address, [])
+
             return account.generateCDA({
                 timeoutAt: futureTime,
                 expectedAmount: 9,
@@ -206,9 +217,18 @@ describe('account.generateCDA()', async assert => {
         given: 'timeoutAt & expectedAmount conditions',
         should: 'generate 5th CDA if 3rd & 4th are spent',
         actual: await Try(() => {
-            assertRemoteSpentState(generateAddress(seed, 3, 2, false), true)
-            assertRemoteSpentState(generateAddress(seed, 4, 2, false), true)
-            assertRemoteSpentState(generateAddress(seed, 5, 2, false), false)
+            const c = generateAddress(seed, 3, 2, false)
+            const d = generateAddress(seed, 4, 2, false)
+            const e = generateAddress(seed, 5, 2, false)
+
+            assertRemoteSpentState(c, true)
+            assertAddressTransactions(c, [])
+
+            assertRemoteSpentState(d, false)
+            assertAddressTransactions(d, ['9'.repeat(81)])
+
+            assertRemoteSpentState(e, false)
+            assertAddressTransactions(e, [])
 
             return account.generateCDA({
                 timeoutAt: futureTime,
@@ -266,31 +286,44 @@ describe('account.generateCDA/account.sendToCDA', async assert => {
         persistencePath,
     })
 
-    assertRemoteSpentState(generateAddress(seedA, 1, 2, false), false)
+    const a1 = generateAddress(seedA, 1, 2, false)
+    assertRemoteSpentState(a1, false)
+    assertAddressTransactions(a1, [])
     const A1 = await accountA.generateCDA({
         timeoutAt: Math.floor(Date.now() / 1000) + 5,
         multiUse: true,
     })
 
-    assertRemoteSpentState(generateAddress(seedA, 2, 2, false), false)
+    const a2 = generateAddress(seedA, 2, 2, false)
+    assertRemoteSpentState(a2, false)
+    assertAddressTransactions(a2, [])
     const A2 = await accountA.generateCDA({
         timeoutAt: futureTime,
         expectedAmount: 3,
     })
 
-    assertRemoteSpentState(generateAddress(seedB, 1, 2, false), false)
+    const a3 = generateAddress(seedA, 3, 2, false)
+    const a4 = generateAddress(seedA, 4, 2, false)
+
+    const b1 = generateAddress(seedB, 1, 2, false)
+    assertRemoteSpentState(b1, false)
+    assertAddressTransactions(b1, [])
     const B1 = await accountB.generateCDA({
         timeoutAt: futureTime,
         multiUse: true,
     })
 
-    assertRemoteSpentState(generateAddress(seedB, 2, 2, false), false)
+    const b2 = generateAddress(seedB, 2, 2, false)
+    assertRemoteSpentState(b2, false)
+    assertAddressTransactions(b2, [])
     const B2 = await accountB.generateCDA({
         timeoutAt: futureTime,
         expectedAmount: 10,
     })
 
-    assertRemoteSpentState(generateAddress(seedB, 3, 2, false), false)
+    const b3 = generateAddress(seedB, 3, 2, false)
+    assertRemoteSpentState(b3, false)
+    assertAddressTransactions(b3, [])
     const B3 = await accountB.generateCDA({
         timeoutAt: futureTime,
         expectedAmount: 1,
@@ -302,6 +335,7 @@ describe('account.generateCDA/account.sendToCDA', async assert => {
         should: 'throw "Insufficient balance" error',
         actual: (await Try(() => {
             assertRemoteSpentState(B1.address, false)
+            assertAddressTransactions(B1.address, [])
             return account0.sendToCDA({ ...B1, value: 1 })
         })).toString(),
         expected: 'Error: Insufficient balance',
@@ -322,7 +356,11 @@ describe('account.generateCDA/account.sendToCDA', async assert => {
         given: 'that account has 1 persisted, unfunded CDA, sendToCDA',
         should: 'throw "Insufficient balance" error',
         actual: (await Try(async () => {
-            assertRemoteSpentState(generateAddress(seed0, 1, 2, false), false)
+            const address = generateAddress(seed0, 1, 2, false)
+
+            assertRemoteSpentState(address, false)
+            assertAddressTransactions(address, [])
+
             const cda = await account0.generateCDA({
                 timeoutAt: futureTime,
                 multiUse: true,
@@ -343,6 +381,8 @@ describe('account.generateCDA/account.sendToCDA', async assert => {
         actual: await Try(() => {
             assertBalance(A1.address, 9)
             assertBalance(A2.address, 3)
+            assertRemoteSpentState(a3, false)
+            assertAddressTransactions(a3, [])
             assertTransfer(B2, accountASends10iToBTrytes)
             assertRemoteSpentState(B2.address, false)
 
@@ -358,7 +398,9 @@ describe('account.generateCDA/account.sendToCDA', async assert => {
         given: 'that previous transfer of 10i to B is included, account A',
         should: 'be able to spend 1i from remainder address A3',
         actual: await Try(() => {
-            assertBalance(generateAddress(seedA, 3, 2, false), 2)
+            assertBalance(a3, 2)
+            assertRemoteSpentState(a4, false)
+            assertAddressTransactions(a4, [])
             assertRemoteSpentState(B1.address, false)
 
             return accountA.sendToCDA({
@@ -374,7 +416,7 @@ describe('account.generateCDA/account.sendToCDA', async assert => {
             'that account A has used all inputs in previous transfers (except one with insufficient balance of 1i), sendToCDA',
         should: 'throw "insufficient balance" error',
         actual: (await Try(() => {
-            assertBalance(generateAddress(seedA, 4, 2, false), 1)
+            assertBalance(a4, 1)
             assertRemoteSpentState(B1.address, false)
 
             return accountA.sendToCDA({
@@ -406,13 +448,11 @@ describe('account.generateCDA/account.sendToCDA', async assert => {
             const value = 1
             const transfer = { ...B3, value }
 
-            const address = generateAddress(seedA, 4, 2, false)
-
-            assertBalance(address, value)
+            assertBalance(a4, value)
             assertRemoteSpentState(B3.address, false)
             await accountA.sendToCDA(transfer)
 
-            assertBalance(address, value)
+            assertBalance(a4, value)
             assertRemoteSpentState(B3.address, false)
             return accountA.sendToCDA(transfer)
         })).toString(),

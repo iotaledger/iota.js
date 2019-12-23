@@ -91,11 +91,23 @@ test.cb('getNewAddress() passes correct arguments to callback', t => {
 })
 
 test('isAddressUsed() resolves to correct state', async t => {
-    t.is(await isAddressUsed(addresses[0]), true, 'isAddressUsed() resolves to `true` for spent address')
+    t.deepEqual(
+        await isAddressUsed(addresses[0]),
+        { isUsed: true, isSpent: true, transactions: [] },
+        'isAddressUsed() resolves to `true` for spent address'
+    )
 
-    t.is(await isAddressUsed(addresses[1]), true, 'isAddressUsed() resolves to `true` for address with transactions')
+    t.deepEqual(
+        await isAddressUsed(addresses[1]),
+        { isUsed: true, isSpent: false, transactions: ['A'.repeat(81), 'B'.repeat(81)] },
+        'isAddressUsed() resolves to `true` for address with transactions'
+    )
 
-    t.is(await isAddressUsed(addresses[1]), true, 'isAddressUsed() resolves to `false` result for unused address')
+    t.deepEqual(
+        await isAddressUsed(addresses[2]),
+        { isUsed: false, isSpent: false, transactions: [] },
+        'isAddressUsed() resolves to `false` result for unused address'
+    )
 })
 
 test('getUntilFirstUnusedAddress() resolves to correct new address', async t => {

@@ -2,7 +2,7 @@ import { addChecksum } from '@iota/checksum'
 import * as Promise from 'bluebird'
 import * as errors from '../../errors'
 import { indexValidator, securityLevelValidator, seedValidator, validate } from '../../guards'
-import { asArray, Callback, getOptionsWithDefaults, Provider, Trytes } from '../../types'
+import { Callback, getOptionsWithDefaults, Provider, Trytes } from '../../types'
 import { createFindTransactions, generateAddress } from './'
 import { createWereAddressesSpentFrom } from './createWereAddressesSpentFrom'
 
@@ -16,14 +16,23 @@ export interface GetNewAddressOptions {
 
 export type GetNewAddressResult = Trytes | ReadonlyArray<Trytes>
 
+export interface AddressState {
+    readonly isUsed: boolean
+    readonly isSpent: boolean
+    readonly transactions: ReadonlyArray<Trytes>
+}
+
 export const createIsAddressUsed = (provider: Provider) => {
     const wereAddressesSpentFrom = createWereAddressesSpentFrom(provider, 'lib')
     const findTransactions = createFindTransactions(provider)
 
-    return (address: Trytes) =>
-        wereAddressesSpentFrom(asArray(address)).then(
-            ([spent]) =>
-                spent || findTransactions({ addresses: asArray(address) }).then(transactions => transactions.length > 0)
+    return (address: Trytes): Promise<AddressState> =>
+        wereAddressesSpentFrom([address]).then(([isSpent]) =>
+            findTransactions({ addresses: [address] }).then(transactions => ({
+                isUsed: isSpent || transactions.length > 0,
+                isSpent,
+                transactions,
+            }))
         )
 }
 
@@ -50,7 +59,7 @@ export const createIsAddressUsed = (provider: Provider) => {
  * - Fetch error
  */
 export const getUntilFirstUnusedAddress = (
-    isAddressUsed: (address: Trytes) => Promise<boolean>,
+    isAddressUsed: (address: Trytes) => Promise<AddressState>,
     seed: Trytes,
     index: number,
     security: number,
@@ -65,8 +74,8 @@ export const getUntilFirstUnusedAddress = (
             addressList.push(nextAddress)
         }
 
-        return isAddressUsed(nextAddress).then(used => {
-            if (used) {
+        return isAddressUsed(nextAddress).then(({ isUsed }) => {
+            if (isUsed) {
                 return iterate()
             }
 
@@ -187,11 +196,10 @@ export const createGetNewAddress = (provider: Provider, caller?: string) => {
                 (!!total || total === 0) && [total, t => Number.isInteger(t) && t > 0, errors.INVALID_TOTAL_OPTION]
             )
         )
-            .then(
-                () =>
-                    total && total > 0
-                        ? generateAddresses(seed, index, security, total)
-                        : Promise.try(getUntilFirstUnusedAddress(isAddressUsed, seed, index, security, returnAll))
+            .then(() =>
+                total && total > 0
+                    ? generateAddresses(seed, index, security, total)
+                    : Promise.try(getUntilFirstUnusedAddress(isAddressUsed, seed, index, security, returnAll))
             )
             .then(applyReturnAllOption(returnAll, total))
             .then(applyChecksumOption(checksum))

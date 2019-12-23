@@ -6,6 +6,7 @@ import { stringify } from '../../../guards'
 import { Transfer, Trytes } from '../../../types'
 import { createPrepareTransfers } from '../../src'
 import { getRemainderAddressStartIndex } from '../../src/createPrepareTransfers'
+import './nocks/findTransactions'
 import './nocks/prepareTransfers'
 
 const inputs: ReadonlyArray<any> = [
@@ -116,11 +117,13 @@ test('prepareTransfers() throws intuitive error when provided invalid transfers 
 })
 
 test('prepareTransfers() throws error for inputs without security level.', async t => {
-    const input: any = [{
-        address: 'I'.repeat(81),
-        keyIndex: 0,
-        balance: 1,
-    }]
+    const input: any = [
+        {
+            address: 'I'.repeat(81),
+            keyIndex: 0,
+            balance: 1,
+        },
+    ]
 
     t.is(
         t.throws(() =>
