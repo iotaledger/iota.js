@@ -21,6 +21,7 @@ import {
     createGetLatestInclusion,
     createGetTransactionsToApprove,
     createGetTrytes,
+    createIsAddressUsed,
     createPrepareTransfers,
     createSendTrytes,
     createStoreAndBroadcast,
@@ -91,12 +92,14 @@ export function networkAdapter({ provider }: NetworkParams): Network {
         attachToTangle: createAttachToTangle(httpClient),
         storeAndBroadcast: createStoreAndBroadcast(httpClient),
         wereAddressesSpentFrom: createWereAddressesSpentFrom(httpClient, 'lib'),
+        isAddressUsed: createIsAddressUsed(httpClient),
     }
 }
 
-export function addressGeneration(addressGenerationParams: AddressGenerationParams) {
+export function addressGeneration(this: any, addressGenerationParams: AddressGenerationParams) {
     const { seed, persistence, timeSource, network, now } = addressGenerationParams
     const prepareTransfers = createPrepareTransfers(undefined, now)
+    const emitter = this // tslint:disable-line
 
     function generateCDA(cdaParams: CDAParams): Promise<CDA> {
         if (!cdaParams) {
@@ -114,8 +117,13 @@ export function addressGeneration(addressGenerationParams: AddressGenerationPara
                 const address = signingAddress(digests(key(subseed(seed, tritsToValue(index)), security)))
                 const addressTrytes = tritsToTrytes(address)
 
-                return network.wereAddressesSpentFrom([addressTrytes]).then(([spent]) => {
-                    if (spent) {
+                return network.isAddressUsed(addressTrytes).then(({ isUsed, isSpent, transactions }) => {
+                    if (isUsed) {
+                        emitter.emit('error', new Error('Dropped used address.'), {
+                            address: addressTrytes,
+                            isSpent,
+                            transactions,
+                        })
                         return generateCDA(cdaParams)
                     }
 
@@ -257,6 +265,9 @@ export function transactionIssuance(
             )
         },
     }
+
+    const emitter = this // tslint:disable-line
+
     function accumulateInputs(
         threshold: number,
         acc: CDAInputs = { inputs: [], totalBalance: 0 },
@@ -313,20 +324,33 @@ export function transactionIssuance(
         return persistence.increment().then(index => {
             const security = 2
             const remainderAddress = signingAddress(digests(key(subseed(seed, tritsToValue(index)), security)))
+            const addressTrytes = tritsToTrytes(remainderAddress)
 
-            return persistence
-                .put(
-                    ['0', tritsToTrytes(remainderAddress)].join(':'),
-                    serializeCDAInput({
-                        address: remainderAddress,
-                        index,
-                        security,
-                        timeoutAt: 0,
-                        multiUse: false,
-                        expectedAmount: remainder,
+            return network.isAddressUsed(addressTrytes).then(({ isUsed, isSpent, transactions }) => {
+                if (isUsed) {
+                    emitter.emit('error', new Error('Dropped used address.'), {
+                        address: addressTrytes,
+                        isSpent,
+                        transactions,
                     })
-                )
-                .then(() => tritsToTrytes(remainderAddress))
+
+                    return generateRemainderAddress(remainder)
+                }
+
+                return persistence
+                    .put(
+                        ['0', tritsToTrytes(remainderAddress)].join(':'),
+                        serializeCDAInput({
+                            address: remainderAddress,
+                            index,
+                            security,
+                            timeoutAt: 0,
+                            multiUse: false,
+                            expectedAmount: remainder,
+                        })
+                    )
+                    .then(() => tritsToTrytes(remainderAddress))
+            })
         })
     }
 

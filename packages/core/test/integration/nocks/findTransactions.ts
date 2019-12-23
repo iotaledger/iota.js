@@ -100,3 +100,11 @@ nock('http://localhost:14265', headers)
         addresses: [addresses[1], addresses[2]],
     })
     .reply(200, findTransactionsResponse)
+
+nock('http://localhost:14265', headers)
+    .persist()
+    .post('/', {
+        command: IRICommand.FIND_TRANSACTIONS,
+        addresses: [addresses[0]],
+    })
+    .reply(200, emptyFindTransactionsResponse)

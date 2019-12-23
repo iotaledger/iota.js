@@ -24,6 +24,7 @@ export interface AddressGenerationParams {
     readonly network: Network
     readonly now: () => number // testing only
 }
+
 export interface TransactionIssuanceParams {
     readonly seed: Int8Array
     readonly deposits: AsyncBuffer<Int8Array>
@@ -90,6 +91,9 @@ export interface Network {
     readonly attachToTangle: API['attachToTangle']
     readonly getBundlesFromAddresses: API['getBundlesFromAddresses']
     readonly wereAddressesSpentFrom: API['wereAddressesSpentFrom']
+    readonly isAddressUsed: (
+        address: Trytes
+    ) => Promise<{ isUsed: boolean; isSpent: boolean; transactions: ReadonlyArray<Trytes> }>
 }
 export interface TransactionAttachment {
     readonly startAttaching: (params: TransactionAttachmentStartParams) => void
