@@ -308,7 +308,7 @@ describe('account.generateCDA/account.sendToCDA', async assert => {
     const a1 = generateAddress(seedA, 1, 2, false)
     assertRemoteSpentState(a1, false)
     assertAddressTransactions(a1, [])
-    const A1 = await accountA.generateCDA({
+    await accountA.generateCDA({
         timeoutAt: Math.floor(Date.now() / 1000) + 5,
         multiUse: true,
     })
@@ -316,7 +316,7 @@ describe('account.generateCDA/account.sendToCDA', async assert => {
     const a2 = generateAddress(seedA, 2, 2, false)
     assertRemoteSpentState(a2, false)
     assertAddressTransactions(a2, [])
-    const A2 = await accountA.generateCDA({
+    await accountA.generateCDA({
         timeoutAt: futureTime,
         expectedAmount: 3,
     })
