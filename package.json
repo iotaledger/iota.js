@@ -74,7 +74,7 @@
         "jsdoc-babel": "^0.5.0",
         "lerna": "^3.14.1",
         "lint-staged": "^9.0.0",
-        "nyc": "^14.0.0",
+        "nyc": "^15.0.0",
         "prettier": "^1.10.2",
         "staged-git-files": "^1.1.1",
         "tslint": "^5.9.1",
