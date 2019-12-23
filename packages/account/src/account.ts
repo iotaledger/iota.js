@@ -22,6 +22,7 @@ export interface AddressGenerationParams {
     readonly persistence: Persistence<string, Int8Array>
     readonly timeSource: TimeSource
     readonly network: Network
+    readonly now: () => number // testing only
 }
 
 export interface TransactionIssuanceParams {
@@ -203,6 +204,7 @@ export function createAccountWithPreset<X, Y, Z>(preset: AccountPreset<X, Y, Z>)
                     timeSource,
                     security: preset.security,
                     network,
+                    now: preset.test.now,
                 }),
                 preset.transactionIssuance.call(this, {
                     seed: seed as Int8Array,
