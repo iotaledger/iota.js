@@ -430,7 +430,7 @@ describe('account.generateCDA/account.sendToCDA', async assert => {
         expected: {
             rejected: 'Error: Insufficient balance',
             emitted: {
-                error: 'Error: Dropped spent input.',
+                error: 'Error: Skipping spent input.',
                 address: generateAddress(seed0, 1, 2, false),
                 balance: 1,
             },

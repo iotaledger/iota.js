@@ -43,7 +43,7 @@ import {
 import { asTransactionObject } from '@iota/transaction-converter'
 import * as Promise from 'bluebird'
 import '../../typed-array'
-import { Bundle, Hash, PersistenceDelCommand, Transaction, Trytes } from '../../types'
+import { Bundle, Hash, PersistencePutCommand, Transaction, Trytes } from '../../types'
 import {
     AccountPreset,
     AddressGeneration,
@@ -119,12 +119,26 @@ export function addressGeneration(this: any, addressGenerationParams: AddressGen
 
                 return network.isAddressUsed(addressTrytes).then(({ isUsed, isSpent, transactions }) => {
                     if (isUsed) {
-                        emitter.emit('error', new Error('Dropped used address.'), {
-                            address: addressTrytes,
-                            isSpent,
-                            transactions,
-                        })
-                        return generateCDA(cdaParams)
+                        return persistence
+                            .put(
+                                ['0', addressTrytes].join(':'),
+                                isSpent
+                                    ? new Int8Array(1)
+                                    : serializeCDAInput({
+                                          address,
+                                          index,
+                                          security,
+                                          timeoutAt: 0,
+                                      })
+                            )
+                            .then(() =>
+                                emitter.emit('error', new Error('Skipping used address.'), {
+                                    address: addressTrytes,
+                                    isSpent,
+                                    transactions,
+                                })
+                            )
+                            .then(() => generateCDA(cdaParams))
                     }
 
                     const serializedCDA = serializeCDAInput({
@@ -237,9 +251,10 @@ export function transactionIssuance(
                                     .tap(trytes =>
                                         persistence.batch([
                                             ...inputs.map(
-                                                (input): PersistenceDelCommand<string> => ({
-                                                    type: PersistenceBatchTypes.del,
+                                                (input): PersistencePutCommand<string, Int8Array> => ({
+                                                    type: PersistenceBatchTypes.put,
                                                     key: ['0', tritsToTrytes(input.address)].join(':'),
+                                                    value: new Int8Array(1),
                                                 })
                                             ),
                                             {
@@ -303,8 +318,8 @@ export function transactionIssuance(
                         ) {
                             return wereAddressesSpentFrom([address]).then(([spent]) => {
                                 if (spent) {
-                                    return persistence.del(['0', address].join(':')).then(() =>
-                                        emitter.emit('error', new Error('Dropped spent input.'), {
+                                    return persistence.put(['0', address].join(':'), new Int8Array(1)).then(() =>
+                                        emitter.emit('error', new Error('Skipping spent input.'), {
                                             address,
                                             balance,
                                         })
@@ -315,7 +330,7 @@ export function transactionIssuance(
                                 acc.totalBalance += balance
                             })
                         } else if (input.timeoutAt !== 0 && isExpired(currentTime, input)) {
-                            return persistence.del(['0', address].join(':'))
+                            return persistence.put(['0', address].join(':'), new Int8Array(1))
                         } else {
                             buffer.push(cda) // restore later
                         }
@@ -342,13 +357,26 @@ export function transactionIssuance(
 
             return network.isAddressUsed(addressTrytes).then(({ isUsed, isSpent, transactions }) => {
                 if (isUsed) {
-                    emitter.emit('error', new Error('Dropped used address.'), {
-                        address: addressTrytes,
-                        isSpent,
-                        transactions,
-                    })
-
-                    return generateRemainderAddress(remainder)
+                    return persistence
+                        .put(
+                            ['0', addressGeneration].join(':'),
+                            isSpent
+                                ? new Int8Array(1)
+                                : serializeCDAInput({
+                                      address: remainderAddress,
+                                      index,
+                                      security,
+                                      timeoutAt: 0,
+                                  })
+                        )
+                        .then(() =>
+                            emitter.emit('error', new Error('Dropped used address.'), {
+                                address: addressTrytes,
+                                isSpent,
+                                transactions,
+                            })
+                        )
+                        .then(() => generateRemainderAddress(remainder))
                 }
 
                 return persistence

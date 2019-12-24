@@ -375,6 +375,11 @@ export function createAccountWithPreset<X, Y, Z>(preset: AccountPreset<X, Y, Z>)
                     depositsList.push(cda)
                     addresses.push(tritsToTrytes(cda.address))
                 }
+
+                if (trits.length === 1) {
+                    // used address, don't list it as deposit or pass it to input selection
+                    addresses.push(id)
+                }
             } else if (prefix === SENT_TO_ADDRESS_PREFIX) {
                 timeSource().then(now => {
                     if (tritsToValue(trits) <= now) {
