@@ -2,7 +2,7 @@
 
 import { tritsToValue } from '@iota/converter'
 import Kerl from '@iota/kerl'
-import { increment, MAX_TRYTE_VALUE, normalizedBundle } from '@iota/signing'
+import { increment, MAX_TRYTE_VALUE, NORMALIZED_FRAGMENT_LENGTH, normalizedBundle } from '@iota/signing'
 import * as errors from '../../errors'
 import '../../typed-array'
 
@@ -193,9 +193,11 @@ export const addEntry = (bundle: Int8Array, entry: Partial<BundleEntry>): Int8Ar
  *
  * @param {Int8Array} bundle - Bundle transaction trits
  *
+ * @param {number} [numberOfFragments=3]
+ *
  * @return {Int8Array} List of transactions in the finalized bundle
  */
-export const finalizeBundle = (bundle: Int8Array): Int8Array => {
+export const finalizeBundle = (bundle: Int8Array, numberOfFragments = 3): Int8Array => {
     if (!isMultipleOfTransactionLength(bundle.length)) {
         throw new Error(errors.ILLEGAL_TRANSACTION_BUFFER_LENGTH)
     }
@@ -216,7 +218,7 @@ export const finalizeBundle = (bundle: Int8Array): Int8Array => {
         sponge.squeeze(bundleHash, 0, BUNDLE_LENGTH)
 
         // Stop mutation if essence results to secure bundle.
-        if (normalizedBundle(bundleHash).indexOf(MAX_TRYTE_VALUE /* 13 */) === -1) {
+        if (normalizedBundle(bundleHash).slice(0, numberOfFragments * NORMALIZED_FRAGMENT_LENGTH).indexOf(MAX_TRYTE_VALUE /* 13 */) === -1) {
             // Essence results to secure bundle.
             break
         }
