@@ -70,7 +70,7 @@
         "@commitlint/travis-cli": "^8.3.3",
         "ava": "^0.25.0",
         "dmd-clear": "^0.1.2",
-        "husky": "^3.0.0",
+        "husky": "^4.0.2",
         "jsdoc-babel": "^0.5.0",
         "lerna": "^3.14.1",
         "lint-staged": "^9.0.0",
