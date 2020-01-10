@@ -1,6 +1,6 @@
 {
     "name": "@iota/account",
-    "version": "1.0.0-beta.28",
+    "version": "1.0.0-beta.29",
     "description": "Account module in JavaScript.",
     "main": "out/account/src/account.js",
     "typings": "typings/account/src/account.d.ts",
@@ -52,10 +52,10 @@
     "license": "MIT",
     "dependencies": {
         "@iota/async-buffer": "^1.0.0-beta.23",
-        "@iota/bundle": "^1.0.0-beta.23",
+        "@iota/bundle": "^1.0.0-beta.29",
         "@iota/cda": "^1.0.0-beta.23",
         "@iota/converter": "^1.0.0-beta.23",
-        "@iota/core": "^1.0.0-beta.27",
+        "@iota/core": "^1.0.0-beta.29",
         "@iota/curl": "^1.0.0-beta.19",
         "@iota/http-client": "^1.0.0-beta.23",
         "@iota/persistence": "^1.0.0-beta.23",
