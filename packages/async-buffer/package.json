@@ -51,5 +51,8 @@
     "devDependencies": {
         "riteway": "^6.0.3",
         "watch": "^1.0.2"
+    },
+    "dependencies": {
+        "bluebird": "^3.7.2"
     }
 }

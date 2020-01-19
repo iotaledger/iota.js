@@ -66,5 +66,8 @@
     "dependencies": {
         "@types/bignumber.js": "^5.0.0",
         "bignumber.js": "^7.2.1"
+    },
+    "devDependencies": {
+        "ava": "^0.25.0"
     }
 }
