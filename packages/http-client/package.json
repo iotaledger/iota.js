@@ -71,7 +71,7 @@
     "devDependencies": {
         "@types/nock": "^10.0.0",
         "@types/url-parse": "^1.4.3",
-        "ava": "^0.25.0",
+        "ava": "^3.0.0",
         "nock": "^10.0.4"
     }
 }
