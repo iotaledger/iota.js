@@ -14,51 +14,63 @@ import {
 
 /**
  * @method createBroadcastTransactions
+ * 
+ * @summary Creates a new `broadcastTransactions()` method, using a custom Provider instance.
  *
  * @memberof module:core
+ * 
+ * @ignore
  *
- * @param {Provider} provider - Network provider
+ * @param {Provider} provider - The Provider object that the method should use to call the node's API endpoints.
  *
- * @return {function} {@link #module_core.broadcastTransactions `broadcastTransactions`}
+ * @return {Function} [`broadcastTransactions`]{@link #module_core.broadcastTransactions}  - A new `broadcastTransactions()` function that uses your chosen Provider instance.
  */
 export const createBroadcastTransactions = ({ send }: Provider) =>
     /**
-     * Broadcasts an list of _attached_ transaction trytes to the network by calling
-     * [`boradcastTransactions`](https://docs.iota.org/iri/api#endpoints/broadcastTransactions) command.
-     * Tip selection and Proof-of-Work must be done first, by calling
-     * [`getTransactionsToApprove`]{@link #module_core.getTransactionsToApprove} and
-     * [`attachToTangle`]{@link #module_core.attachToTangle} or an equivalent attach method or remote
-     * [`PoWbox`](https://powbox.testnet.iota.org/), which is a development tool.
+     * This method uses the connected IRI node's
+     * [`broadcastTransactions`](https://docs.iota.org/docs/node-software/0.1/iri/references/api-reference#broadcastTransactions) endpoint to send it the given transaction trytes.
+     * 
+     * **Note:** Before calling this method, we recommend saving your transaction trytes in local storage.
+     * By doing so, you make sure that you can always reattach your transactions to the Tangle in case they remain in a pending state. 
+     * 
+     * ## Related methods
+     * 
+     * The given transaction trytes must be in a valid bundle and must include a proof of work.
+     * 
+     * To create a valid bundle, use the `prepareTransfers()` method. For more information about what makes a bundles and transactions valid, see [this guide](https://docs.iota.org/docs/node-software/0.1/iri/concepts/transaction-validation).
+     * 
+     * To do proof of work, use one of the following methods:
+     * 
+     * - [`attachToTangle()`]{@link #module_core.attachToTangle}
+     * - [`sendTrytes()`]{@link #module_core.sendTrytes}
      *
-     * You may use this method to increase odds of effective transaction propagation.
+     * @method broadcastTransactions
+     * 
+     * @summary Sends the given transaction trytes to the connected IRI node.
      *
-     * **Note:** Persist the transaction trytes in local storage __before__ calling this command, to ensure
-     * that reattachment is possible, until your bundle has been included.
+     * @memberof module:core
      *
+     * @param {TransactionTrytes[]} trytes - Transaction trytes that include proof of work
+     * @param {Callback} [callback] - Optional callback
+     * 
      * @example
      *
      * ```js
      * broadcastTransactions(trytes)
-     *   .then(trytes => {
-     *      // ...
+     *   .then(transactionTrytes => {
+     *      console.log(`Successfully sent the following transaction trytes to the node:)
+     *      console.log(JSON.stringify(transactionTrytes));
      *   })
-     *   .catch(err => {
-     *     // ...
+     *   .catch(error => {
+     *     console.log(`Something went wrong: ${error}`)
      *   })
      * ```
      *
-     * @method broadcastTransactions
-     *
-     * @memberof module:core
-     *
-     * @param {TransactionTrytes[]} trytes - Attached Transaction trytes
-     * @param {Callback} [callback] - Optional callback
-     *
      * @return {Promise}
-     * @fulfil {Trytes[]} Attached transaction trytes
-     * @reject {Error}
-     * - `INVALID_ATTACHED_TRYTES`: Invalid array of attached trytes
-     * - Fetch error
+     * @fulfil {TransactionTrytes[]} transactionTrytes - Array of transaction trytes that you just broadcast
+     * @reject {Error} error - An error that contains one of the following:
+     * - `INVALID_ATTACHED_TRYTES`: Make sure that the trytes include a proof of work
+     * - Fetch error: The connected IOTA node's API returned an error. See the [list of error messages](https://docs.iota.org/docs/node-software/0.1/iri/references/api-errors) 
      */
     (trytes: ReadonlyArray<Trytes>, callback?: Callback<ReadonlyArray<Trytes>>): Promise<ReadonlyArray<Trytes>> =>
         Promise.resolve(

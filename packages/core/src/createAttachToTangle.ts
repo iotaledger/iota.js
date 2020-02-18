@@ -17,33 +17,50 @@ import {
 /**
  * @method createAttachToTangle
  *
+ * @summary Creates a new `attachToTangle()` method, using a custom Provider instance.
+ * 
  * @memberof module:core
+ * 
+ * @ignore
  *
- * @param {Provider} provider - Network provider
+ * @param {Provider} provider - The Provider object that the method should use to call the node's API endpoints.
  *
- * @return {Function} {@link #module_core.attachToTangle `attachToTangle`}
+ * @return {Function} [`attachToTangle`]{@link #module_core.attachToTangle}  - A new `attachToTangle()` function that uses your chosen Provider instance.
  */
 export const createAttachToTangle = ({ send }: Provider): AttachToTangle => {
     /**
-     * Performs the Proof-of-Work required to attach a transaction to the Tangle by
-     * calling [`attachToTangle`](https://docs.iota.works/iri/api#endpoints/attachToTangle) command.
-     * Returns list of transaction trytes and overwrites the following fields:
+     * This method uses the connected IRI node's [`attachToTangle`](https://docs.iota.org/docs/node-software/0.1/iri/references/api-reference#attachToTangle) endpoint to connect the given transaction trytes into a bundle and do proof of work. 
+     * 
+     * The first transaction in the array of transaction trytes will be the 
+     * 
+     * By doing proof of work, this method overwrites the following transaction fields:
      *  - `hash`
      *  - `nonce`
      *  - `attachmentTimestamp`
      *  - `attachmentTimestampLowerBound`
      *  - `attachmentTimestampUpperBound`
      *
-     * This method can be replaced with a local equivalent such as
-     * [`ccurl.interface.js`](https://github.com/iotaledger/ccurl.interface.js) in node.js,
-     * [`curl.lib.js`](https://github.com/iotaledger/curl.lib.js) which works on WebGL 2 enabled browsers
-     * or remote [`PoWbox`](https://powbox.devnet.iota.org/).
+     * **Note:** You can replace this method with your own custom one in the [`composeApi()`]{@link ##module_core.composeApi} method. For example, you may want to write a function that does local proof of work, using either the [`ccurl.interface.js`](https://github.com/iotaledger/ccurl.interface.js) NodeJS library,
+     * or the [`curl.lib.js`](https://github.com/iotaledger/curl.lib.js) library for browsers that support WebGL2.
+     * 
+     * ## Related methods
+     * 
+     * To attach the returned transaction trytes to the Tangle, send them to a node, using the [`broadcastTransactions()`]{@link #module_core.broadcastTransactions} method.
+     * 
+     * You can get a trunk and branch transaction hash by calling the
+     * [`getTransactionsToApprove()`]{@link #module_core.getTransactionsToApprove} method
+     * 
+     * @method attachToTangle
+     * 
+     * @summary Connects the given transaction trytes into a bundle and sends them to the connected IOTA node to complete [remote proof of work](https://docs.iota.org/docs/getting-started/0.1/transactions/proof-of-work). 
+     * 
+     * @memberof module:core
      *
-     * `trunkTransaction` and `branchTransaction` hashes are given by
-     * {@link #module_core.getTransactionsToApprove `getTransactionsToApprove`}.
-     *
-     * **Note:** Persist the transaction trytes in local storage __before__ calling this command, to ensure
-     * that reattachment is possible, until your bundle has been included.
+     * @param {Hash} trunkTransaction - Trunk transaction hash 
+     * @param {Hash} branchTransaction - Branch transaction hash
+     * @param {number} minWeightMagnitude - The [minimum weight magnitude](https://docs.iota.org/docs/getting-started/0.1/network/minimum-weight-magnitude) to use for proof of work. **Note:** This value must be at least the same as the minimum weight magnitude of the branch and trunk transactions.
+     * @param {TransactionTrytes[]} trytes - Array of transaction trytes in head first order, which are returned by the [`prepareTransfers()`]{@link #module_core.prepareTransfers} method
+     * @param {Callback} [callback] - Optional callback function
      *
      * @example
      *
@@ -53,34 +70,20 @@ export const createAttachToTangle = ({ send }: Provider): AttachToTangle => {
      *     attachToTangle(trunkTransaction, branchTransaction, minWeightMagnitude, trytes)
      *   )
      *   .then(attachedTrytes => {
-     *     // ...
-     *   })
-     *   .catch(err => {
-     *     // ...
+     *     console.log(`Successfully did proof of work. Here are your bundle's transaction trytes: ${attachedTrytes}`)
+     *   }).catch(error => {
+     *     console.log(`Something went wrong: ${error}`)
      *   })
      * ```
      *
-     * @method attachToTangle
-     *
-     * @memberof module:core
-     *
-     * @param {Hash} trunkTransaction - Trunk transaction as returned by
-     * [`getTransactionsToApprove`]{@link #module_core.getTransactionsToApprove}
-     * @param {Hash} branchTransaction - Branch transaction as returned by
-     * [`getTransactionsToApprove`]{@link #module_core.getTransactionsToApprove}
-     * @param {number} minWeightMagnitude - Number of minimum trailing zeros in tail transaction hash
-     * @param {TransactionTrytes[]} trytes - List of transaction trytes
-     * @param {Callback} [callback] - Optional callback
-     *
      * @return {Promise}
-     * @fulfil {TransactionTrytes[]} Array of transaction trytes with nonce and attachment timestamps
-     * @reject {Error}
-     * - `INVALID_TRUNK_TRANSACTION`: Invalid `trunkTransaction`
-     * - `INVALID_BRANCH_TRANSACTION`: Invalid `branchTransaction`
-     * - `INVALID_MIN_WEIGHT_MAGNITUDE`: Invalid `minWeightMagnitude` argument
-     * - `INVALID_TRANSACTION_TRYTES`: Invalid transaction trytes
-     * - `INVALID_TRANSACTIONS_TO_APPROVE`: Invalid transactions to approve
-     * - Fetch error
+     * @fulfil {TransactionTrytes[]} attachedTrytes - Array of transaction trytes in tail-first order. To attach these transactions to the Tangle, pass the trytes to the [`broadcastTransactions()`]{@link #module_core.broadcastTransactions} method.
+     * @reject {Error} error - One of the following errors:
+     * - `INVALID_TRUNK_TRANSACTION`: Make sure that the hash contains 81 trytes
+     * - `INVALID_BRANCH_TRANSACTION`: Make sure that the hash contains 81 trytes
+     * - `INVALID_MIN_WEIGHT_MAGNITUDE`: Make sure that the minimum weight magnitude is at least the same as the one used for the branch and trunk transactions.
+     * - `INVALID_TRANSACTION_TRYTES`: Make sure the trytes can be converted to a valid transaction object
+     * - Fetch error: The connected IOTA node's API returned an error. See the [list of error messages](https://docs.iota.org/docs/node-software/0.1/iri/references/api-errors) 
      */
     return function attachToTangle(
         trunkTransaction: Hash,

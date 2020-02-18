@@ -48,12 +48,16 @@ export const getAccountDataOptions = getOptionsWithDefaults(defaults)
 
 /**
  * @method createGetAccountData
+ * 
+ * @summary Creates a new `getAccountData()` method, using a custom Provider instance.
  *
  * @memberof module:core
+ * 
+ * @ignore
  *
- * @param {Provider} provider - Network provider for accessing IRI
+ * @param {Provider} provider - The Provider object that the method should use to call the node's API endpoints.
  *
- * @return {function} {@link #module_core.getAccountData `getAccountData`}
+ * @return {Function} [`getAccountData`]{@link #module_core.getAccountData}  - A new `getAccountData()` function that uses your chosen Provider instance.
  */
 export const createGetAccountData = (provider: Provider, caller?: string) => {
     const getNewAddress = createGetNewAddress(provider, /* Called by */ 'lib')
@@ -62,43 +66,64 @@ export const createGetAccountData = (provider: Provider, caller?: string) => {
     const wereAddressesSpentFrom = createWereAddressesSpentFrom(provider, /* Called by */ 'lib')
 
     /**
-     * Returns an `AccountData` object, containing account information about `addresses`, `transactions`,
-     * `inputs` and total account balance.
-     *
-     * @example
-     *
-     * ```js
-     * getAccountData(seed, {
-     *    start: 0,
-     *    security: 2
-     * })
-     *   .then(accountData => {
-     *     const { addresses, inputs, transactions, balance } = accountData
-     *     // ...
-     *   })
-     *   .catch(err => {
-     *     // ...
-     *   })
-     * ```
-     *
+     * This method generates [addresses](https://docs.iota.org/docs/getting-started/0.1/clients/addresses) for a given seed, and searches the Tangle for data about those addresses such as transactions, inputs, and total balance.
+     * 
+     * **Note:** The given seed is used to [generate addresses](https://docs.iota.org/docs/client-libraries/0.1/how-to-guides/js/generate-an-address) on your local device. It is never sent anywhere.
+     * 
+     * If you don't pass an `options.end` argument to this method, it will continue to generate addresses until it finds an unspent one.
+     * 
+     * **Note:** The total balance does not include IOTA tokens on [spent addresses](https://docs.iota.org/docs/getting-started/0.1/clients/addresses#spent-addresses).
+     * 
+     * ## Related methods
+     * 
+     * If you want to find the balance of specific addresses, which don't have to belong to your seed, use the [`getBalances()`]{@link #module_core.getBalances} method.
+     * 
+     * If you want to find only inputs (objects that contain information about addresses with a postive balance), use the [`getInputs()`]{@link #module_core.getInputs} method.
+     * 
      * @method getAccountData
+     * 
+     * @summary Searches the Tangle for transctions, addresses, and balances that are associated with a given seed.
      *
      * @memberof module:core
      *
-     * @param {string} seed
-     * @param {object} options
-     * @param {number} [options.start=0] - Starting key index
-     * @param {number} [options.security = 0] - Security level to be used for getting inputs and addresses
-     * @param {number} [options.end] - Ending key index
-     * @param {Callback} [callback] - Optional callback
+     * @param {string} seed - The seed to use to generate addresses
+     * @param {Object} options - Options object
+     * @param {number} [options.start=0] - The key index from which to start generating addresses
+     * @param {number} [options.security=2] - The [security level](https://docs.iota.org/docs/getting-started/0.1/clients/security-levels) to use to generate the addresses
+     * @param {number} [options.end] - The key index at which to stop generating addresses
+     * @param {Callback} [callback] - Optional callback function
+     * 
+     * @example
+     *
+     * ```js
+     * getAccountData(seed)
+     *   .then(accountData => {
+     *     const { addresses, inputs, transactions, balance } = accountData
+     *     console.log(`Successfully found the following transactions:)
+     *     console.log(JSON.stringify(transactions));
+     *   })
+     *   .catch(error => {
+     *     console.log(`Something went wrong: ${error}`)
+     *   })
+     * ```
      *
      * @returns {Promise}
-     * @fulfil {AccountData}
-     * @reject {Error}
-     * - `INVALID_SEED`
-     * - `INVALID_START_OPTION`
-     * - `INVALID_START_END_OPTIONS`: Invalid combination of start & end options`
-     * - Fetch error
+     * @fulfil {AccountData} accountData - Object that contains the following:
+     * - accountData.transfers: (deprecated) Array of transaction objects that contain one of the seed's addresses
+     * - accountData.transactions: Array of transaction hashes for transactions that contain one of the seed's addresses
+     * - accountData.addresses: Array of spent addresses
+     * - accountData.inputs: Array of input objects for any unspent addresses
+     *   - accountData.inputs.address: The 81-tryte address (without checksum)
+     *   - accountData.inputs.keyIndex: The key index of the address
+     *   - accountData.inputs.security: Security level of the address
+     *   - accountData.inputs.balance: Balance of the address
+     * - accountData.balance: The total balance of unspent addresses
+     * @reject {Error} error - An error that contains one of the following:
+     * - `INVALID_SEED`: Make sure that the seed contains only trytes
+     * - `INVALID_SECURITY_LEVEL`: Make sure that the security level is a number between 1 and 3
+     * - `INVALID_START_OPTION`: Make sure that the `options.start` argument is greater than zero
+     * - `INVALID_START_END_OPTIONS`: Make sure that the `options.end` argument is not greater than the `options.start` argument by more than 1,000`
+     * - Fetch error: The connected IOTA node's API returned an error. See the [list of error messages](https://docs.iota.org/docs/node-software/0.1/iri/references/api-errors) 
      */
     return (
         seed: string,
@@ -110,8 +135,8 @@ export const createGetAccountData = (provider: Provider, caller?: string) => {
         if (caller !== 'lib') {
             /* tslint:disable-next-line:no-console */
             console.warn(
-                '`AccountData.transfers` field is deprecated, and `AccountData.transactions` field should be used instead.\n' +
-                    'Fetching of full bundles should be done lazily.'
+                'The returned `accountData.transfers` field is deprecated, therefore do not rely on this field in your applications.\n' +
+                'Instead, you can get only the transactions that you need by using the transaction hashes returned in the `accountData.transactions` field.'
             )
         }
 

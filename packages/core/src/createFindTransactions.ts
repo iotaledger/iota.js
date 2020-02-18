@@ -68,52 +68,62 @@ export const padTags = (query: FindTransactionsQuery) =>
 
 /**
  * @method createFindTransactions
+ * 
+ * @summary Creates a new `findTransactions()` method, using a custom Provider instance.
  *
  * @memberof module:core
+ * 
+ * @ignore
  *
- * @param {Provider} provider - Network provider for accessing IRI
+ * @param {Provider} provider - The Provider object that the method should use to call the node's API endpoints.
  *
- * @return {function} {@link #module_core.findTransactions `findTransactionObjects`}
+ * @return {Function} [`findTransactions`]{@link #module_core.findTransactions}  - A new `findTransactions()` function that uses your chosen Provider instance.
  */
 export const createFindTransactions = ({ send }: Provider) => {
     /**
-     * Searches for transaction `hashes`  by calling
-     * [`findTransactions`](https://docs.iota.org/iri/api#endpoints/findTransactions) command.
-     * It allows to search for transactions by passing a `query` object with `addresses`, `tags` and `approvees` fields.
-     * Multiple query fields are supported and `findTransactions` returns intersection of results.
+     * This method searches for transaction hashes by calling the connected IRI node's [`findTransactions`](https://docs.iota.org/docs/node-software/0.1/iri/references/api-reference#findTransactions) endpoint.
+     * 
+     * If you pass more than one query parameter, this method returns only transactions that contain all the given fields in those queries.
+     * 
+     * ## Related methods
+     * 
+     * If you want to find transaction objects, use the [`findTransactionObjects()`]{@link #module_core.findTransactionObjects} method.
+     * 
+     * @method findTransactions
+     * 
+     * @summary * Searches the Tangle for the hashes of transactions that contain all the given values in their transaction fields.
+     * 
+     * @memberof module:core
      *
+     * @param {Object} query - Query object
+     * @param {Hash[]} [query.addresses] - Array of addresses to search for in transactions
+     * @param {Hash[]} [query.bundles] - Array of bundle hashes to search for in transactions
+     * @param {Tag[]} [query.tags] - Array of tags to search for in transactions
+     * @param {Hash[]} [query.approvees] - Array of transaction hashes that you want to search for in transactions' branch and trunk transaction fields
+     * @param {Callback} [callback] - Optional callback function
+     * 
      * @example
      *
      * ```js
-     * findTransactions({ addresses: ['ADRR...'] })
-     *    .then(hashes => {
-     *        // ...
-     *    })
-     *    .catch(err => {
-     *        // handle errors here
-     *    })
+     * findTransactions({ addresses: ['ADDRESS999...'] })
+     *    .then(transactionHashes => {
+     *      console.log(`Successfully found the following transactions:)
+     *      console.log(JSON.stringify(transactionHashes));
+     *   })
+     *   .catch(error => {
+     *     console.log(`Something went wrong: ${error}`)
+     *   })
      * ```
      *
-     * @method findTransactions
-     *
-     * @memberof module:core
-     *
-     * @param {object} query
-     * @param {Hash[]} [query.addresses] - List of addresses
-     * @param {Hash[]} [query.bundles] - List of bundle hashes
-     * @param {Tag[]} [query.tags] - List of tags
-     * @param {Hash[]} [query.addresses] - List of approvees
-     * @param {Callback} [callback] - Optional callback
-     *
      * @returns {Promise}
-     * @fulfil {Hash[]} Array of transaction hashes
-     * @reject {Error}
-     * - `INVALID_SEARCH_KEY`
-     * - `INVALID_HASH`: Invalid bundle hash
-     * - `INVALID_TRANSACTION_HASH`: Invalid approvee transaction hash
-     * - `INVALID_ADDRESS`: Invalid address
-     * - `INVALID_TAG`: Invalid tag
-     * - Fetch error
+     * @fulfil {Hash[]} transactionHashes - Array of transaction hashes for transactions, which contain fields that match the query object
+     * @reject {Error} error - An error that contains one of the following:
+     * - `INVALID_SEARCH_KEY`: Make sure that you entered valid query parameters
+     * - `INVALID_HASH`: Make sure that the bundle hashes are 81 trytes long
+     * - `INVALID_TRANSACTION_HASH`: Make sure that the approvee transaction hashes are 81 trytes long
+     * - `INVALID_ADDRESS`: Make sure that the addresses contain only trytes
+     * - `INVALID_TAG`: Make sure that the tags contain only trytes
+     * - Fetch error: The connected IOTA node's API returned an error. See the [list of error messages](https://docs.iota.org/docs/node-software/0.1/iri/references/api-errors) 
      */
     return function findTransactions(
         query: FindTransactionsQuery,

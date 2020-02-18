@@ -4,44 +4,54 @@ import { AddNeighborsCommand, AddNeighborsResponse, Callback, IRICommand, Provid
 
 /**
  * @method createAddNeighbors
+ * 
+ * @summary Creates a new `addNeighbors()` method, using a custom Provider instance.
  *
  * @memberof module:core
+ * 
+ * @ignore
  *
- * @param {Provider} provider - Network provider
+ * @param {Provider} provider - The Provider object that the method should use to call the node's API endpoints.
  *
- * @return {Function} {@link #module_core.addNeighbors `addNeighbors`}
+ * @return {Function} [`addNeighbors`]{@link #module_core.addNeighbors}  - A new `addNeighbors()` function that uses your chosen Provider instance.
  */
 export const createAddNeighbors = ({ send }: Provider) =>
     /**
-     * Adds a list of neighbors to the connected IRI node by calling
-     * [`addNeighbors`](https://docs.iota.works/iri/api#endpoints/addNeighbors) command.
-     * Assumes `addNeighbors` command is available on the node.
+     * 
+     * This method uses the connected IRI node's
+     * [`addNeighbors`](https://docs.iota.org/docs/node-software/0.1/iri/references/api-reference#addNeighbors) endpoint to add temporary neighbors to it.
+     * 
+     * These neighbors are removed when the node is restarted.
+     * 
+     * ## Related methods
+     * 
+     * If you want to see statistics about the connected IRI node's neighbors, use the [`getNeighbors()`]{@link #module_core.getNeighbors} method.
+     * 
+     * @method addNeighbors
+     * 
+     * @summary Adds temporary neighbors to the connected IRI node.
+     *  
+     * @memberof module:core
      *
-     * `addNeighbors` has temporary effect until your node relaunches.
-     *
+     * @param {Array.<string>} URIs - Comma-separated URIs of neighbor nodes that you want to add
+     * @param {Callback} [callback] - Optional callback function
+     * 
      * @example
-     *
      * ```js
-     * addNeighbors(['udp://148.148.148.148:14265'])
-     *   .then(numAdded => {
-     *     // ...
-     *   }).catch(err => {
-     *     // ...
+     * addNeighbors(['tcp://148.148.148.148:15600'])
+     *   .then(numberOfNeighbors => {
+     *     console.log(`Successfully added ${numberOfNeighbors} neighbors`)
+     *   }).catch(error => {
+     *     console.log(`Something went wrong: ${error}`)
      *   })
      * ```
      *
-     * @method addNeighbors
-     *
-     * @memberof module:core
-     *
-     * @param {Array} uris - List of URI's
-     * @param {Callback} [callback] - Optional callback
-     *
      * @return {Promise}
-     * @fulfil {number} Number of neighbors that were added
-     * @reject {Error}
-     * - `INVALID_URI`: Invalid uri
-     * - Fetch error
+     * @fulfil {number} numberOfNeighbors - Number of neighbors that were added
+     * @reject {Error} error - One of the following errors:
+     * - `INVALID_URI`: Make sure that the URI is a string and starts with `tcp://`
+     * - Fetch error: The connected IOTA node's API returned an error. See the [list of error messages](https://docs.iota.org/docs/node-software/0.1/iri/references/api-errors) 
+     * 
      */
     function addedNeighbors(uris: ReadonlyArray<string>, callback?: Callback<number>): Promise<number> {
         return Promise.resolve(validate(arrayValidator<string>(uriValidator)(uris)))

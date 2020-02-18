@@ -15,6 +15,8 @@ import { createAttachToTangle, createGetTransactionsToApprove, createStoreAndBro
  * @method createSendTrytes
  *
  * @memberof module:core
+ * 
+ * @ignore
  *
  * @param {Provider} provider - Network provider
  *
@@ -26,12 +28,37 @@ export const createSendTrytes = (provider: Provider, attachFn?: AttachToTangle) 
     const attachToTangle = attachFn || createAttachToTangle(provider)
 
     /**
-     * [Attaches to Tangle]{@link #module_core.attachToTangle}, [stores]{@link #module_core.storeTransactions}
-     * and [broadcasts]{@link #module_core.broadcastTransactions} a list of transaction trytes.
+     * This method takes an array of transaction trytes that don't include a proof of work or 
+     * 
+     * Then, the method calls the following to finalize the bundle and send it to the node:
+     * - [`getTransactionsToApprove()`]{@link #module_core.getTransactionsToApprove}
+     * - [`attachToTangle()`]{@link #module_core.attachToTangle}
+     * - [`storeAndBroadcast()`]{@link #module_core.storeAndBroadcast}
      *
-     * **Note:** Persist the transaction trytes in local storage __before__ calling this command, to ensure
-     * that reattachment is possible, until your bundle has been included.
+     * **Note:** Before calling this method, we recommend saving your transaction trytes in local storage.
+     * By doing so, you make sure that you can always reattach your transactions to the Tangle in case they remain in a pending state. 
+     * 
+     * ## Related methods
+     * 
+     * To create transaction trytes that don't include a proof of work or trunk and branch transactions, use the [`prepareTransfers()`]{@link #module_core.prepareTransfers} method.
      *
+     * @method sendTrytes
+     * 
+     * @summary Does tip selection and proof of work for a bundle of transaction trytes before sending the final transactions to the connected IRI node.
+     *
+     * @memberof module:core
+     *
+     * @param {Trytes[]} trytes - Array of prepared transaction trytes to attach, store, and send
+     *
+     * @param {number} depth - The [depth](https://docs.iota.org/docs/getting-started/0.1/transactions/depth) at which to start the weighted random walk. The [Trinity wallet](https://trinity.iota.org/) uses a value of `3`,
+     * meaning that the weighted random walk starts 3 milestones in the past.
+     *
+     * @param {number} minWeightMagnitude - The [minimum weight magnitude](https://docs.iota.org/docs/getting-started/0.1/network/minimum-weight-magnitude) to use for proof of work. **Note:** This value must be at least the same as the minimum weight magnitude of the branch and trunk transactions.
+     *
+     * @param {string} [reference] - Optional reference transaction hash
+     *
+     * @param {Callback} [callback] - Optional callback function
+     * 
      * @example
      * ```js
      * prepareTransfers(seed, transfers)
@@ -42,37 +69,21 @@ export const createSendTrytes = (provider: Provider, attachFn?: AttachToTangle) 
      *
      *      return iota.sendTrytes(trytes, depth, minWeightMagnitude)
      *   })
-     *   .then(transactions => {
-     *     // ...
-     *   })
-     *   .catch(err => {
-     *     // ...
+     *   .then(bundle => {
+     *     console.log(`Successfully attached transactions to the Tangle`);
+     *     console.log(JSON.stringify(bundle));
+     *   }).catch(error => {
+     *     console.log(`Something went wrong: ${error}`)
      *   })
      * ```
      *
-     * @method sendTrytes
-     *
-     * @memberof module:core
-     *
-     * @param {Trytes[]} trytes - List of trytes to attach, store and broadcast
-     *
-     * @param {number} depth - The depth at which Random Walk starts. A value of `3` is typically used by wallets,
-     * meaning that RW starts 3 milestones back.
-     *
-     * @param {number} minWeightMagnitude - Minimum number of trailing zeros in transaction hash. This is used to
-     * search for a valid `nonce`. Currently it is `14` on mainnet & spamnet and `9` on most other testnets.
-     *
-     * @param {string} [reference] - Optional reference transaction hash
-     *
-     * @param {Callback} [callback] - Optional callback
-     *
      * @return {Promise}
-     * @fulfil {Transaction[]}  Returns list of attached transactions
-     * @reject {Error}
-     * - `INVALID_TRANSACTION_TRYTES`
-     * - `INVALID_DEPTH`
-     * - `INVALID_MIN_WEIGHT_MAGNITUDE`
-     * - Fetch error, if connected to network
+     * @fulfil {Transaction[]} bundle - Array of transaction objects that you just sent to the node
+     * @reject {Error} error - An error that contains one of the following:
+     * - `INVALID_TRANSACTION_TRYTES`: Make sure the trytes can be converted to a valid transaction object
+     * - `INVALID_DEPTH`: Make sure that the `depth` argument is greater than zero
+     * - `INVALID_MIN_WEIGHT_MAGNITUDE`: Make sure that the minimum weight magnitude is at least the same as the original bundle
+     * - Fetch error: The connected IOTA node's API returned an error. See the [list of error messages](https://docs.iota.org/docs/node-software/0.1/iri/references/api-errors) 
      */
     return function sendTrytes(
         trytes: ReadonlyArray<Trytes>,

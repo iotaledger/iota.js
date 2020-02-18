@@ -43,9 +43,11 @@ export interface BundleEntry {
 }
 
 /**
- * Creates a bundle with given transaction entries.
+ * Creates a bundle array from the given transaction entries.
  *
  * @method createBundle
+ * 
+ * @summary
  *
  * @param {BundleEntry[]} [entries=[]] - Entries of single or multiple transactions with the same address
  *
@@ -55,19 +57,31 @@ export const createBundle = (entries: ReadonlyArray<Partial<BundleEntry>> = []):
     entries.reduce((bundle, entry) => addEntry(bundle, entry), new Int8Array(0))
 
 /**
- * Adds given transaction entry to a bundle.
+ * Adds the transaction trits in the given entry object to a given bundle array.
+ * 
+ * ## Related methods
+ * 
+ * See the converter package for methods that convert values to trits.
  *
  * @method addEntry
+ * 
+ * @summary Adds the given transaction entry to a bundle array.
  *
- * @param {object} entry - Entry of a single or multiple transactions with the same address.
- * @param {Int8Array} entry.address - Address.
- * @param {Int8Array} entry.value - Value to transfer in iotas.
- * @param {Int8Array} [entry.signatureOrMessage] - Signature or message fragment(s).
- * @param {Int8Array} [entry.timestamp] - Issuance timestamp (in seconds).
- * @param {Int8Array} [entry.tag] - Optional Tag, **Deprecated**.
- * @param {Int8Array} bundle - Bundle buffer.
+ * @param {object} entry - Transaction entry object
+ * @param {Int8Array} entry.address - An address in trits
+ * @param {Int8Array} entry.value - Value to transfer in iotas
+ * @param {Int8Array} [entry.signatureOrMessage] - Signature fragments or a message
+ * @param {Int8Array} [entry.timestamp] - Unix epoch in seconds.
+ * @param {Int8Array} [entry.tag] - (deprecated)
+ * @param {Int8Array} bundle - Bundle array
  *
  * @return {Int8Array} Bundle copy with new entries.
+ * 
+ * @throws {errors.ILLEGAL_TRANSACTION_BUFFER_LENGTH}: Make sure that the `bundle` argument contains valid transaction trytes
+ * @throws {errors.ILLEGAL_SIGNATURE_OR_MESSAGE_LENGTH}: 
+ * @throws
+ * @throws
+ * @throws
  */
 export const addEntry = (bundle: Int8Array, entry: Partial<BundleEntry>): Int8Array => {
     const {

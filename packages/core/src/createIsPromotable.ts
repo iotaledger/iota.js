@@ -16,70 +16,53 @@ export const isAboveMaxDepth = (attachmentTimestamp: number, depth = DEPTH) =>
  * @method createIsPromotable
  *
  * @memberof module:core
+ * 
+ * @ignore
  *
  * @param {Provider} provider - Network provider
  *
  * @param {number} [depth=6] - Depth up to which promotion is effective.
  *
- * @return {function} {@link #module_core.isPromotable `isPromotable`}
+ * @return {function} {@link #module_core.isPromotable}
  */
 export const createIsPromotable = (provider: Provider, depth = DEPTH) => {
     const checkConsistency = createCheckConsistency(provider)
     const getTrytes = createGetTrytes(provider)
 
     /**
-     * Checks if a transaction is _promotable_, by calling [`checkConsistency`]{@link #module_core.checkConsistency} and
-     * verifying that `attachmentTimestamp` is above a lower bound.
-     * Lower bound is calculated based on number of milestones issued
-     * since transaction attachment.
-     *
-     * @example
-     * #### Example with promotion and reattachments
-     *
-     * Using `isPromotable` to determine if transaction can be [_promoted_]{@link #module_core.promoteTransaction}
-     * or should be [_reattached_]{@link #module_core.replayBundle}
-     *
-     * ```js
-     * // We need to monitor inclusion states of all tail transactions (original tail & reattachments)
-     * const tails = [tail]
-     *
-     * getLatestInclusion(tails)
-     *   .then(states => {
-     *     // Check if none of transactions confirmed
-     *     if (states.indexOf(true) === -1) {
-     *       const tail = tails[tails.length - 1] // Get latest tail hash
-     *
-     *       return isPromotable(tail)
-     *         .then(isPromotable => isPromotable
-     *           ? promoteTransaction(tail, 3, 14)
-     *           : replayBundle(tail, 3, 14)
-     *             .then(([reattachedTail]) => {
-     *               const newTailHash = reattachedTail.hash
-     *
-     *               // Keeping track of all tail hashes to check confirmation
-     *               tails.push(newTailHash)
-     *
-     *               // Promote the new tail...
-     *             })
-     *     }
-     *   }).catch(err => {
-     *     // ...
-     *   })
-     * ```
-     *
+     * To decide if a transaction can be promoted, this method makes sure that it's [consistent]{@link #module_core.checkConsistency}
+     * and that the value of the transaction's `attachmentTimestamp` field is not older than the latest 6 milestones.
+     * 
+     * ## Related methods
+     * 
+     * If a transaction is promotable, you can promote it by using the [`promoteTransaction()`]{@link #module_core.promoteTransaction} method.
+     * 
      * @method isPromotable
-     *
+     * 
+     * @summary Checks if a given tail transaction hash can be [promoted](https://docs.iota.org/docs/getting-started/0.1/transactions/reattach-rebroadcast-promote#promote).
+     * 
      * @memberof module:core
      *
      * @param {Hash} tail - Tail transaction hash
-     * @param {Callback} [callback] - Optional callback
+     * @param {Callback} [callback] - Optional callback function
+     * 
+     * @example
+     * ```js
+     * isPromotable(tailTransactionHash)
+     *   .then(isPromotable => {
+     *     isPromotable? console.log(`${tailTransactionHash} can be promoted`):
+     *     console.log(`${tailTransactionHash} cannot be promoted. You may want to reattach it.`);
+     *   })
+     *   .catch(error => {
+     *     console.log(`Something went wrong: ${error}`);
+     *   })
+     * ```
      *
      * @return {Promise}
-     * @fulfil {boolean} Consistency state of transaction or co-consistency of transactions
-     * @reject {Error}
-     * - `INVALID_HASH`: Invalid hash
-     * - `INVALID_DEPTH`: Invalid depth
-     * - Fetch error
+     * @fulfil {boolean} isPromotable - Returns `true` if the transaction is promotable or `false` if not.
+     * @reject {Error} error - An error that contains one of the following:
+     * - `INVALID_TRANSACTION_HASH`: Make sure the tail transaction hashes are 81 trytes long and their `currentIndex` field is 0
+     * - Fetch error: The connected IOTA node's API returned an error. See the [list of error messages](https://docs.iota.org/docs/node-software/0.1/iri/references/api-errors) 
      */
     return (tail: Hash, callback?: Callback<boolean>): Promise<boolean> =>
         Promise.resolve(validate(hashValidator(tail), depthValidator(depth)))

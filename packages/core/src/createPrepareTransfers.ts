@@ -83,63 +83,125 @@ export interface PrepareTransfersProps {
 }
 
 /**
- * Create a [`prepareTransfers`]{@link #module_core.prepareTransfers} function by passing an optional network `provider`.
- * It is possible to prepare and sign transactions offline, by omitting the provider option.
  *
  * @method createPrepareTransfers
- *
+ * 
+ * @summary Creates a new `prepareTransfers()` method.
+ * 
  * @memberof module:core
  *
- * @param {Provider} [provider] - Optional network provider to fetch inputs and remainder address.
- * In case this is omitted, proper input objects and remainder should be passed
- * to [`prepareTransfers`]{@link #module_core.prepareTransfers}, if required.
+ * @param {Provider} [provider] - Optional provider object that the method should use to call the node's API endpoints.
+ * To create transactions offline, omit this parameter so that the returned function does not get your addresses and balances from the node. If you want to create value transactions offline, make sure to pass input objects and a remainder address to the returned function.
+ * 
+ * @example
+ * ```js
+ * const prepareTransfersOffline = Iota.createPrepareTransfers();
+ * 
+ * const transfers = [
+ *  {
+ *    value: 1,
+ *    address: 'RECEIVINGADDRESS...'
+ *  }
+ * ];
+ * 
+ * prepareTransfersOffline(seed, transfers, {
+ *  inputs:[{address: 'ADDRESS...',
+ *  keyIndex: 5,
+ *  security: 2,
+ *  balance: 50}],
+ *  // Remainder will be 50 -1 = 49 IOTA tokens
+ *  address: 'REMAINDERADDRESS...'
+ * })
+ * .then(bundleTrytes => {
+ *  console.log('Bundle trytes are ready to be attached to the Tangle:');
+ *  console.log(JSON.stringify(bundleTrytes));
+ * })
+ * .catch(error => {
+ *  console.log(`Something went wrong: ${error}`);
+ * });
+ * ```
  *
- * @return {Function} {@link #module_core.prepareTransfers `prepareTransfers`}
+ * @return {Function} [`prepareTransfers`]{@link #module_core.prepareTransfers}  - A new `prepareTransfers()` function that uses your chosen Provider instance.
  */
 export const createPrepareTransfers = (provider?: Provider, now: () => number = () => Date.now(), caller?: string) => {
     const addInputs = createAddInputs(provider)
     const addRemainder = createAddRemainder(provider)
 
     /**
-     * Prepares the transaction trytes by generating a bundle, filling in transfers and inputs,
-     * adding remainder and signing. It can be used to generate and sign bundles either online or offline.
-     * For offline usage, please see [`createPrepareTransfers`]{@link #module_core.createPrepareTransfers}
-     * which can create a `prepareTransfers` function without a network provider.
+     * This method creates a bundle, using the given arguments and uses the given seed to sign any transactions that withdraw IOTA tokens.
+     * 
+     * **Note:** The given seed is used to [generate addresses](https://docs.iota.org/docs/client-libraries/0.1/how-to-guides/js/generate-an-address) and sign transactions on your local device. It is never sent anywhere.
+     * 
+     * **Note:** To create transactions offline, use the [`createPrepareTransfers`]{@link #module_core.createPrepareTransfers} without a `provider` argument.
      *
-     * **Note:** After calling this method, persist the returned transaction trytes in local storage. Only then you should broadcast to network.
-     * This will allow for reattachments and prevent key reuse if trytes can't be recovered by querying the network after broadcasting.
-     *
+     * After calling this method, we recommend saving the returned transaction trytes in local storage before sending them to a node.
+     * By doing so, you make sure that you can always reattach your transactions to the Tangle in case they remain in a pending state.
+     * Reattaching transactions is safer than creating and signing new transactions, which could lead to [spent addresses](https://docs.iota.org/docs/getting-started/0.1/clients/addresses#spent-addresses).
+     * 
+     * ## Related methods
+     * 
+     * To attach the returned transaction trytes to the Tangle, you can use one of the following:
+     * 
+     * - [`sendTrytes()`]{@link #module_core.sendTrytes} (easiest)
+     * - [`getTransactionsToApprove()`]{@link #module_core.getTransactionsToApprove} followed by [`attachToTangle()`]{@link #module_core.attachToTangle} followed by [`broadcastTransactions()`]{@link #module_core.broadcastTransactions} (for more control)
+     * 
      * @method prepareTransfers
+     * 
+     * @summary Creates and signs a bundle of valid transaction trytes, using the given arguments.
      *
      * @memberof module:core
      *
-     * @param {string} seed
+     * @param {string} seed - The seed to use to generate addresses and sign transactions
      *
-     * @param {object} transfers
+     * @param {Transfers[].<Transfer>} transfers - Array of transfer objects
+     * @param {Hash} transfer.address - Address to which to send a transaction
+     * @param {number} transfer.value - Amount of IOTA tokens to send to the address
+     * @param {string} transfer.message - Message to include in the transaction. The message must include only ASCII characters.
+     * @param {string} transfer.tag - Up to 27 trytes to include in the transaction's `obsoleteTag` field 
+     * @param {Object} [options] - Options object
+     * @param {Input[]} [options.inputs] Array of input objects, which contain information about the addresses from which to withdraw IOTA tokens
+     * @param {Hash} [options.inputs[].address] One of the seed's addresses from which to withdraw IOTA tokens
+     * @param {number} [options.inputs[].keyIndex] Key index of the address
+     * @param {number} [options.inputs[].security] Security level of the address
+     * @param {number} [options.inputs[].balance] Total balance of the address. The total balance is withdrawn and any remaining IOTA tokens are sent to the address in the `options.remainderAddress` field.
+     * @param {Hash} [options.remainderAddress] Remainder address to send any remaining IOTA tokens (total value in the `transfers` array minus the total balance of the input addresses)
+     * @param {number} [options.security=2] Security level to use for calling the [`getInputs`]{@link #module_core.getInputs} method to automatically select input objects
+     * @property {Hash} [options.hmacKey] HMAC key used for adding an HMAC signature to the transaction
      *
-     * @param {object} [options]
-     * @param {Input[]} [options.inputs] Inputs used for signing. Needs to have correct security, keyIndex and address value
-     * @param {Hash} [options.inputs[].address] Input address trytes
-     * @param {number} [options.inputs[].keyIndex] Key index at which address was generated
-     * @param {number} [options.inputs[].security] Security level
-     * @param {number} [options.inputs[].balance] Balance in iotas
-     * @param {Hash} [options.address] Remainder address
-     * @param {Number} [options.security = 2] Security level to be used for getting inputs and remainder address
-     * @property {Hash} [options.hmacKey] HMAC key used for attaching an HMAC
-     *
-     * @param {function} [callback] Optional callback
+     * @param {function} [callback] Optional callback function
+     * 
+     * @example
+     * 
+     * ```js
+     * 
+     * const transfers = [
+     *  {
+     *    value: 1,
+     *    address: 'RECEIVINGADDRESS...'
+     *  }
+     * ];
+     * 
+     * prepareTransfersOffline(seed, transfers)
+     * .then(bundleTrytes => {
+     *  console.log('Bundle trytes are ready to be attached to the Tangle:');
+     *  console.log(JSON.stringify(bundleTrytes));
+     * })
+     * .catch(error => {
+     *  console.log(`Something went wrong: ${error}`);
+     * });
+     * ```
      *
      * @return {Promise}
-     * @fulfil {array} Returns bundle trytes
-     * @reject {Error}
-     * - `INVALID_SEED`
-     * - `INVALID_TRANSFER_ARRAY`
-     * - `INVALID_INPUT`
-     * - `INVALID_REMAINDER_ADDRESS`
-     * - `INSUFFICIENT_BALANCE`
-     * - `NO_INPUTS`
-     * - `SENDING_BACK_TO_INPUTS`
-     * - Fetch error, if connected to network
+     * @fulfil {array} bundleTrytes - Array of transaction trytes
+     * @reject {Error} error - An error that contains one of the following:
+     * - `INVALID_SEED`: Make sure that the seed contains only trytes
+     * - `INVALID_TRANSFER_ARRAY`: Make sure that any objects in the `transfers` argument are valid (for example that the addresses contain only trytes, the values are numbers)
+     * - `INVALID_INPUT`: Make sure that the `options.inputs[]` argument contains valid input objects
+     * - `INVALID_REMAINDER_ADDRESS`: If you used the `createPrepareTransfers()` method without a provider, make sure you entered an address in the `options.remainderAddress` argument
+     * - `INSUFFICIENT_BALANCE`: Make sure that the seed's addresses have enough IOTA tokens to complete the transfer
+     * - `NO_INPUTS`: Make sure that the `options.inputs[]` argument contains valid input objects
+     * - `SENDING_BACK_TO_INPUTS`: Make sure that none of the `transfer.address` arguments are in the `options.inputs[].address parameters 
+     * - Fetch error: The connected IOTA node's API returned an error. See the [list of error messages](https://docs.iota.org/docs/node-software/0.1/iri/references/api-errors) 
      */
     return function prepareTransfers(
         seed: Int8Array | Trytes,
@@ -160,7 +222,7 @@ export const createPrepareTransfers = (provider?: Provider, now: () => number = 
             ) {
                 /* tslint:disable-next-line:no-console */
                 console.warn(
-                    'WARNING: Seeds with less length than 81 trytes are not secure! Use a random, 81-trytes long seed!'
+                    'WARNING: Seeds that are less than 81 trytes long are not secure! Generate a random, 81-trytes seed!'
                 )
             }
         }

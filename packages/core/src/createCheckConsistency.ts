@@ -22,81 +22,66 @@ const defaults = {
 
 /**
  * @method createCheckConsistency
+ * 
+ * @summary Creates a new `checkConsistency()` method, using a custom Provider instance.
  *
  * @memberof module:core
+ * 
+ * @ignore
  *
- * @param {Provider} provider - Network provider
+ * @param {Provider} provider - The Provider object that the method should use to call the node's API endpoints.
  *
- * @return {function} {@link #module_core.checkConsistency `checkConsistency`}
+ * @return {Function} [`checkConsistency`]{@link #module_core.checkConsistency}  - A new `checkConsistency()` function that uses your chosen Provider instance.
  */
 export const createCheckConsistency = ({ send }: Provider) =>
     /**
-     * Checks if a transaction is _consistent_ or a set of transactions are _co-consistent_, by calling
-     * [`checkConsistency`](https://docs.iota.org/iri/api#endpoints/checkConsistency) command.
-     * _Co-consistent_ transactions and the transactions that they approve (directly or inderectly),
-     * are not conflicting with each other and rest of the ledger.
+     * This method uses the connected IRI node's
+     * [`checkConsistency`](https://docs.iota.org/docs/node-software/0.1/iri/references/api-reference#checkconsistency) endpoint.
+     * 
+     * A consistent transaction is one where the following statements are true:
+     * - The node has the transaction's branch and trunk transactions in its ledger
+     * - The transaction's bundle is valid
+     * - The transaction's branch and trunk transactions are valid
+     * 
+     * For more information about what makes a bundles and transactions valid, see [this guide](https://docs.iota.org/docs/node-software/0.1/iri/concepts/transaction-validation).
      *
-     * As long as a transaction is consistent it might be accepted by the network.
-     * In case a transaction is inconsistent, it will not be accepted, and a reattachment
-     * is required by calling [`replayBundle`]{@link #module_core.replayBundle}.
-     *
-     * @example
-     *
-     * ```js
-     * checkConsistency(tailHash)
-     *   .then(isConsistent => {
-     *     // ...
-     *   })
-     *   .catch(err => {
-     *     // ...
-     *   })
-     * ```
-     *
-     * @example
-     * ##### Example with `checkConsistency` & `isPromotable`
-     *
-     * Consistent transactions might remain pending due to networking issues,
-     * or if not referenced by recent milestones issued by
-     * [Coordinator](https://docs.iota.org/introduction/tangle/consensus).
-     * Therefore `checkConsistency` with a time heuristic can determine
-     * if a transaction should be [_promoted_]{@link #module_core.promoteTransaction}
-     * or [_reattached_]{@link #module_core.replayBundle}.
-     * This functionality is abstracted in [`isPromotable`]{@link #module_core.isPromotable}.
-     *
-     * ```js
-     * const isAboveMaxDepth = attachmentTimestamp => (
-     *    // Check against future timestamps
-     *    attachmentTimestamp < Date.now() &&
-     *    // Check if transaction wasn't issued before last 6 milestones
-     *    // Milestones are being issued every ~2mins
-     *    Date.now() - attachmentTimestamp < 11 * 60 * 1000
-     * )
-     *
-     * const isPromotable = ({ hash, attachmentTimestamp }) => (
-     *   checkConsistency(hash)
-     *      .then(isConsistent => (
-     *        isConsistent &&
-     *        isAboveMaxDepth(attachmentTimestamp)
-     *      ))
-     * )
-     * ```
-     *
+     * As long as a transaction is consistent it has a chance of being confirmed.
+     * 
+     * ## Related methods
+     * 
+     * If a consistent transaction is taking a long time to be confirmed, you can improve its chances, using the [`isPromotable()`]{@link #module_core.isPromotable}
+     * and [`promoteTransaction()`]{@link #module_core.promoteTransaction} methods.
+     * 
+     * If a transaction is inconsistent, it will never be confirmed. In this case, you can reattach the transaction, using the [`replayBundle()`]{@link #module_core.replayBundle} method.
+     * 
      * @method checkConsistency
-     *
+     * 
+     * @summary Checks if one or more transactions are consistent.
+     * 
      * @memberof module:core
      *
-     * @param {Hash|Hash[]} transactions - Tail transaction hash (hash of transaction
-     * with `currentIndex == 0`), or array of tail transaction hashes
-     * @param {object} [options] - Options
-     * @param {boolean} [options.rejectWithReason] - Enables rejection if state is `false`, with reason as error message
-     * @param {Callback} [callback] - Optional callback
+     * @param {Hash|Hash[]} transactions - One or more tail transaction hashes to check
+     * @param {Object} [options] - Options object
+     * @param {boolean} [options.rejectWithReason] - Return the reason for inconsistent transactions
+     * @param {Callback} [callback] - Optional callback function
+     * 
+     * @example
+     * ```js
+     * checkConsistency(transactions)
+     *   .then(isConsistent => {
+     *     isConsistent? console.log(All these transactions are consistent): console.log(One or more of these transactions are inconsistent);
+     *   })
+     *   .catch(err => {
+     *     console.log(`Something went wrong: ${error}`);
+     *   })
+     * ```
      *
      * @return {Promise}
-     * @fulfil {boolean} Consistency state of given transaction or co-consistency of given transactions.
-     * @reject {Error}
-     * - `INVALID_TRANSACTION_HASH`: Invalid transaction hash
-     * - Fetch error
-     * - Reason for returning `false`, if called with `options.rejectWithReason`
+     * @fulfil {boolean} isConsistent - Whether the given transactions are consistent
+     * @reject {Error} error - An error that contains one of the following:
+     * - `INVALID_TRANSACTION_HASH`: Make sure the tail transaction hashes are 81 trytes long and their `currentIndex` field is 0
+     * - Fetch error: The connected IOTA node's API returned an error. See the [list of error messages](https://docs.iota.org/docs/node-software/0.1/iri/references/api-errors) 
+     * - Reason for inconsistency if the method was called with the `options.rejectWithReason` argument
      */
     function checkConsistency(
         transactions: Hash | ReadonlyArray<Hash>,

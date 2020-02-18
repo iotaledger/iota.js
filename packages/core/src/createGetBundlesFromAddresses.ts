@@ -15,8 +15,8 @@ export const createGetBundlesFromAddresses = (provider: Provider, caller?: strin
         if (caller !== 'lib') {
             /* tslint:disable-next-line:no-console */
             console.warn(
-                '`getBundlesFromAddresses()` has been deprecated and will be removed in v2.0.0' +
-                    'Please use `findTransactionObjects()` and `getBundle()` as an alternative'
+                'The `getBundlesFromAddresses()` method is deprecated and will be removed in v2.0.0' +
+                    'Please use the `findTransactionObjects()` and `getBundle()` methods as an alternative'
             )
         }
 
