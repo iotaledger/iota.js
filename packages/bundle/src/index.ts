@@ -43,11 +43,9 @@ export interface BundleEntry {
 }
 
 /**
- * Creates a bundle array from the given transaction entries.
- *
  * @method createBundle
  * 
- * @summary
+ * @summary Creates a bundle array from the given transaction entries.
  *
  * @param {BundleEntry[]} [entries=[]] - Entries of single or multiple transactions with the same address
  *
@@ -78,10 +76,7 @@ export const createBundle = (entries: ReadonlyArray<Partial<BundleEntry>> = []):
  * @return {Int8Array} Bundle copy with new entries.
  * 
  * @throws {errors.ILLEGAL_TRANSACTION_BUFFER_LENGTH}: Make sure that the `bundle` argument contains valid transaction trytes
- * @throws {errors.ILLEGAL_SIGNATURE_OR_MESSAGE_LENGTH}: 
- * @throws
- * @throws
- * @throws
+ * @throws {errors.ILLEGAL_SIGNATURE_OR_MESSAGE_LENGTH}
  */
 export const addEntry = (bundle: Int8Array, entry: Partial<BundleEntry>): Int8Array => {
     const {
