@@ -27,8 +27,8 @@ import {
  */
 export const createBroadcastTransactions = ({ send }: Provider) =>
     /**
-     * This method uses the connected IRI node's
-     * [`broadcastTransactions`](https://docs.iota.org/docs/node-software/0.1/iri/references/api-reference#broadcastTransactions) endpoint to send it the given transaction trytes.
+     * This method sends the given transaction trytes to the connected IRI node, using its
+     * [`broadcastTransactions`](https://docs.iota.org/docs/node-software/0.1/iri/references/api-reference#broadcastTransactions) endpoint.
      * 
      * **Note:** Before calling this method, we recommend saving your transaction trytes in local storage.
      * By doing so, you make sure that you can always reattach your transactions to the Tangle in case they remain in a pending state. 
@@ -67,7 +67,9 @@ export const createBroadcastTransactions = ({ send }: Provider) =>
      * ```
      *
      * @return {Promise}
+     * 
      * @fulfil {TransactionTrytes[]} transactionTrytes - Array of transaction trytes that you just broadcast
+     * 
      * @reject {Error} error - An error that contains one of the following:
      * - `INVALID_ATTACHED_TRYTES`: Make sure that the trytes include a proof of work
      * - Fetch error: The connected IOTA node's API returned an error. See the [list of error messages](https://docs.iota.org/docs/node-software/0.1/iri/references/api-errors) 

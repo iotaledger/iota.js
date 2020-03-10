@@ -33,7 +33,6 @@ export const createBroadcastBundle = (provider: Provider) => {
      * 
      * To create and sign a bundle of new transactions, use the [`prepareTransfers()`]{@link #module_core.prepareTransfers} method.
      * 
-     *
      * @method broadcastBundle
      * 
      * @summary Resends all transactions in the bundle of a given tail transaction hash to the connected IRI node.
@@ -57,7 +56,9 @@ export const createBroadcastBundle = (provider: Provider) => {
      * ```
      *
      * @return {Promise}
+     * 
      * @fulfil {Transaction[]} transactionObjects - Array of transaction objects
+     * 
      * @reject {Error} error - An error that contains one of the following:
      * - `INVALID_TRANSACTION_HASH`: Make sure the tail transaction hash is 81 trytes long and its `currentIndex` field is 0
      * - `INVALID_BUNDLE`: Check the tail transaction's bundle for the following:

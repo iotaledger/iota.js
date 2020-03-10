@@ -52,7 +52,9 @@ export const createGetTrytes = ({ send }: Provider) =>
      * ```
      *
      * @return {Promise}
+     * 
      * @fulfil {Trytes[]} transactionTrytes - Array of transaction trytes
+     * 
      * @reject Error{} error - An error that contains one of the following:
      * - `INVALID_TRANSACTION_HASH`: Make sure that the transaction hashes are 81 trytes long
      * - Fetch error: The connected IOTA node's API returned an error. See the [list of error messages](https://docs.iota.org/docs/node-software/0.1/iri/references/api-errors) 

@@ -116,7 +116,9 @@ export const createFindTransactions = ({ send }: Provider) => {
      * ```
      *
      * @returns {Promise}
+     * 
      * @fulfil {Hash[]} transactionHashes - Array of transaction hashes for transactions, which contain fields that match the query object
+     * 
      * @reject {Error} error - An error that contains one of the following:
      * - `INVALID_SEARCH_KEY`: Make sure that you entered valid query parameters
      * - `INVALID_HASH`: Make sure that the bundle hashes are 81 trytes long

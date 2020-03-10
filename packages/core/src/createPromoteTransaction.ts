@@ -90,7 +90,9 @@ export const createPromoteTransaction = (provider: Provider, attachFn?: AttachTo
      * ```
      *
      * @returns {Promise}
+     * 
      * @fulfil {Transaction[]} transactions - Array of zero-value transaction objects that were sent
+     * 
      * @reject {Error} error - An error that contains one of the following:
      * - `INCONSISTENT_SUBTANGLE`: In this case, promotion has no effect and a reattachment is required by calling the [`replayBundle()`]{@link #module_core.replayBundle} method
      * - Fetch error: The connected IOTA node's API returned an error. See the [list of error messages](https://docs.iota.org/docs/node-software/0.1/iri/references/api-errors) 

@@ -18,8 +18,8 @@ import { AddNeighborsCommand, AddNeighborsResponse, Callback, IRICommand, Provid
 export const createAddNeighbors = ({ send }: Provider) =>
     /**
      * 
-     * This method uses the connected IRI node's
-     * [`addNeighbors`](https://docs.iota.org/docs/node-software/0.1/iri/references/api-reference#addNeighbors) endpoint to add temporary neighbors to it.
+     * This method adds temporary neighbors to the connected IRI node by calling the its
+     * [`addNeighbors`](https://docs.iota.org/docs/node-software/0.1/iri/references/api-reference#addNeighbors) endpoint.
      * 
      * These neighbors are removed when the node is restarted.
      * 
@@ -47,7 +47,9 @@ export const createAddNeighbors = ({ send }: Provider) =>
      * ```
      *
      * @return {Promise}
+     * 
      * @fulfil {number} numberOfNeighbors - Number of neighbors that were added
+     * 
      * @reject {Error} error - One of the following errors:
      * - `INVALID_URI`: Make sure that the URI is a string and starts with `tcp://`
      * - Fetch error: The connected IOTA node's API returned an error. See the [list of error messages](https://docs.iota.org/docs/node-software/0.1/iri/references/api-errors) 

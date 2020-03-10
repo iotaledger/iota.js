@@ -45,7 +45,9 @@ export const createGetTips = ({ send }: Provider) =>
      * ```
      *
      * @return {Promise}
+     * 
      * @fulfil {Hash[]} tips - Array of tip transaction hashes
+     * 
      * @reject {Error} error - Fetch error: The connected IOTA node's API returned an error. See the [list of error messages](https://docs.iota.org/docs/node-software/0.1/iri/references/api-errors) 
      */
     (callback?: Callback<ReadonlyArray<Hash>>): Promise<ReadonlyArray<Hash>> =>

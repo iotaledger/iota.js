@@ -153,7 +153,7 @@ export const createPrepareTransfers = (provider?: Provider, now: () => number = 
      *
      * @param {string} seed - The seed to use to generate addresses and sign transactions
      *
-     * @param {Transfers[].<Transfer>} transfers - Array of transfer objects
+     * @param {Transfers.<Transfer>} transfers - Array of transfer objects
      * @param {Hash} transfer.address - Address to which to send a transaction
      * @param {number} transfer.value - Amount of IOTA tokens to send to the address
      * @param {string} transfer.message - Message to include in the transaction. The message must include only ASCII characters.
@@ -192,7 +192,9 @@ export const createPrepareTransfers = (provider?: Provider, now: () => number = 
      * ```
      *
      * @return {Promise}
+     * 
      * @fulfil {array} bundleTrytes - Array of transaction trytes
+     * 
      * @reject {Error} error - An error that contains one of the following:
      * - `INVALID_SEED`: Make sure that the seed contains only trytes
      * - `INVALID_TRANSFER_ARRAY`: Make sure that any objects in the `transfers` argument are valid (for example that the addresses contain only trytes, the values are numbers)

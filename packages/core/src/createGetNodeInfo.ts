@@ -41,6 +41,7 @@ export const createGetNodeInfo = ({ send }: Provider) =>
      * ```
      *
      * @return {Promise}
+     * 
      * @fulfil {NodeInfo} info - Object that contains the following information:
      * info.appName: Name of the IRI network
      * info.appVersion: Version of the [IRI node software](https://docs.iota.org/docs/node-software/0.1/iri/introduction/overview)
@@ -63,6 +64,7 @@ export const createGetNodeInfo = ({ send }: Provider) =>
      * info.features: Enabled configuration options on the node
      * info.coordinatorAddress: Address (Merkle root) of the [Coordinator](https://docs.iota.org/docs/getting-started/0.1/network/the-coordinator)
      * info.duration: Number of milliseconds it took to complete the request
+     * 
      * @reject {Error} error - Fetch error: The connected IOTA node's API returned an error. See the [list of error messages](https://docs.iota.org/docs/node-software/0.1/iri/references/api-errors) 
      */
     function getNodeInfo(callback?: Callback<GetNodeInfoResponse>): Promise<GetNodeInfoResponse> {

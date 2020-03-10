@@ -58,7 +58,9 @@ export const createGetBundle = (provider: Provider) => {
      * ```
      *
      * @returns {Promise}
+     * 
      * @fulfil {Transaction[]} bundle - Array of transaction objects that are in the bundle
+     * 
      * @reject {Error} error - An error that contains one of the following:
      * - `INVALID_TRANSACTION_HASH`: Make sure the tail transaction hash is 81 trytes long
      * - `INVALID_TAIL_HASH`: Make sure that the tail transaction hash is for a transaction whose `currentIndex` field is 0

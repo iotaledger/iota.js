@@ -32,6 +32,7 @@ import { Hash } from '../../types'
  * @returns {Hash} address - An 81-tryte address
  * 
  * @throws {errors.INVALID_SEED}: Make sure that the seed contains only trytes
+ * 
  * @throws {errors.INVALID_SECURITY_LEVEL}: Make sure that the security level is a number between 1 and 3
  */
 export const generateAddress = (seed: string, index: number, security: number = 2, checksum: boolean = false): Hash => {

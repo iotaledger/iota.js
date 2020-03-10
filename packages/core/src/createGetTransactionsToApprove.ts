@@ -61,9 +61,11 @@ export const createGetTransactionsToApprove = ({ send }: Provider) =>
      * ```
      *
      * @return {Promise}
+     * 
      * @fulfil {Object} transactionsToApprove - An object that contains the following:
      * - trunkTransaction: Transaction hash
      * - branchTransaction: Transaction hash
+     * 
      * @reject {Error} error - An error that contains one of the following:
      * - `INVALID_DEPTH`: Make sure that the `depth` argument is greater than zero
      * - `INVALID_REFERENCE_HASH`: Make sure that the reference transaction hash is 81 trytes long

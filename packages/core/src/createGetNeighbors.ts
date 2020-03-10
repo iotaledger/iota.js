@@ -54,6 +54,7 @@ export const createGetNeighbors = ({ send }: Provider) => {
      *```
      *
      * @return {Promise}
+     * 
      * @fulfil {Neighbors} neighbors - Array that contains the following:
      * - neighbors.address: IP address of the neighbor
      * - neighbors.domain: Domain name of the neighbor
@@ -66,6 +67,7 @@ export const createGetNeighbors = ({ send }: Provider) => {
      * - neighbors.numberOfDroppedSentPackets: Number of network packets that the neighbor dropped because its queue was full
      * - neighbors.connectionType: The transport protocol that the neighbor uses to sent packets to the connected node
      * - neighbors.connected: Whether the neighbor is connected to the node
+     * 
      * @reject {Error} error - Fetch error: The connected IOTA node's API returned an error. See the [list of error messages](https://docs.iota.org/docs/node-software/0.1/iri/references/api-errors) 
      */
     return function getNeighbors(callback?: Callback<Neighbors>): Promise<Neighbors> {

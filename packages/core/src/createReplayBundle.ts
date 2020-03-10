@@ -62,7 +62,9 @@ export const createReplayBundle = (provider: Provider, attachFn?: AttachToTangle
      * ```
      *
      * @returns {Promise}
+     * 
      * @fulfil {Transaction[]} bundle - Array of transaction objects in the reattached bundle
+     * 
      * @reject {Error} error - An error that contains one of the following:
      * - `INVALID_DEPTH`: Make sure that the `depth` argument is greater than zero
      * - `INVALID_MIN_WEIGHT_MAGNITUDE`: Make sure that the minimum weight magnitude is at least the same as the original bundle

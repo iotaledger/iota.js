@@ -51,7 +51,9 @@ export const createIsAddressUsed = (provider: Provider) => {
  * @param {number} [options.security=2] - Security level
  *
  * @return {Promise}
+ * 
  * @fulfil {Hash[]} List of addresses up to (and including) first unused address
+ *
  * @reject {Error}
  * - `INVALID_SEED`
  * - `INVALID_START_OPTION`
@@ -169,7 +171,9 @@ export const createGetNewAddress = (provider: Provider, caller?: string) => {
      * ```
      *
      * @return {Promise}
+     * 
      * @fulfil {Hash|Hash[]} address - A single new address or an array of new addresses
+     * 
      * @reject {Error} error - An error that contains one of the following:
      * - `INVALID_SEED`: Make sure that the seed contains only trytes
      * - `INVALID_SECURITY_LEVEL`: Make sure that the security level is a number between 1 and 3

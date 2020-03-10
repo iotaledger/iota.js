@@ -104,6 +104,7 @@ export const createGetInputs = (provider: Provider) => {
      * - input.security: The security level of the address
      * - input.balance: The amount of IOTA tokens in the address
      * - inputs.totalBalance: The combined balance of all addresses
+     * 
      * @reject {Error} error - An error that contains one of the following:
      * - `INVALID_SEED`: Make sure that the seed contains only trytes
      * - `INVALID_SECURITY_LEVEL`: Make sure that the security level is a number between 1 and 3

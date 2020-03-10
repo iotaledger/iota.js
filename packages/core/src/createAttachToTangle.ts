@@ -29,9 +29,7 @@ import {
  */
 export const createAttachToTangle = ({ send }: Provider): AttachToTangle => {
     /**
-     * This method uses the connected IRI node's [`attachToTangle`](https://docs.iota.org/docs/node-software/0.1/iri/references/api-reference#attachToTangle) endpoint to connect the given transaction trytes into a bundle and do proof of work. 
-     * 
-     * The first transaction in the array of transaction trytes will be the 
+     * This method uses the connected IRI node's [`attachToTangle`](https://docs.iota.org/docs/node-software/0.1/iri/references/api-reference#attachToTangle) endpoint to chain the given transaction trytes into a bundle and do proof of work. 
      * 
      * By doing proof of work, this method overwrites the following transaction fields:
      *  - `hash`
@@ -45,7 +43,7 @@ export const createAttachToTangle = ({ send }: Provider): AttachToTangle => {
      * 
      * ## Related methods
      * 
-     * To attach the returned transaction trytes to the Tangle, send them to a node, using the [`broadcastTransactions()`]{@link #module_core.broadcastTransactions} method.
+     * To attach the returned transaction trytes to the Tangle, use the [`broadcastTransactions()`]{@link #module_core.broadcastTransactions} method to send them to a node.
      * 
      * You can get a trunk and branch transaction hash by calling the
      * [`getTransactionsToApprove()`]{@link #module_core.getTransactionsToApprove} method
@@ -77,7 +75,9 @@ export const createAttachToTangle = ({ send }: Provider): AttachToTangle => {
      * ```
      *
      * @return {Promise}
+     * 
      * @fulfil {TransactionTrytes[]} attachedTrytes - Array of transaction trytes in tail-first order. To attach these transactions to the Tangle, pass the trytes to the [`broadcastTransactions()`]{@link #module_core.broadcastTransactions} method.
+     * 
      * @reject {Error} error - One of the following errors:
      * - `INVALID_TRUNK_TRANSACTION`: Make sure that the hash contains 81 trytes
      * - `INVALID_BRANCH_TRANSACTION`: Make sure that the hash contains 81 trytes

@@ -108,6 +108,7 @@ export const createGetAccountData = (provider: Provider, caller?: string) => {
      * ```
      *
      * @returns {Promise}
+     * 
      * @fulfil {AccountData} accountData - Object that contains the following:
      * - accountData.transfers: (deprecated) Array of transaction objects that contain one of the seed's addresses
      * - accountData.transactions: Array of transaction hashes for transactions that contain one of the seed's addresses
@@ -118,6 +119,7 @@ export const createGetAccountData = (provider: Provider, caller?: string) => {
      *   - accountData.inputs.security: Security level of the address
      *   - accountData.inputs.balance: Balance of the address
      * - accountData.balance: The total balance of unspent addresses
+     * 
      * @reject {Error} error - An error that contains one of the following:
      * - `INVALID_SEED`: Make sure that the seed contains only trytes
      * - `INVALID_SECURITY_LEVEL`: Make sure that the security level is a number between 1 and 3

@@ -63,10 +63,6 @@ export const createSendTrytes = (provider: Provider, attachFn?: AttachToTangle) 
      * ```js
      * prepareTransfers(seed, transfers)
      *   .then(trytes => {
-     *      // Persist trytes locally before sending to network.
-     *      // This allows for reattachments and prevents key reuse if trytes can't
-     *      // be recovered by querying the network after broadcasting.
-     *
      *      return iota.sendTrytes(trytes, depth, minWeightMagnitude)
      *   })
      *   .then(bundle => {
@@ -78,7 +74,9 @@ export const createSendTrytes = (provider: Provider, attachFn?: AttachToTangle) 
      * ```
      *
      * @return {Promise}
+     * 
      * @fulfil {Transaction[]} bundle - Array of transaction objects that you just sent to the node
+     * 
      * @reject {Error} error - An error that contains one of the following:
      * - `INVALID_TRANSACTION_TRYTES`: Make sure the trytes can be converted to a valid transaction object
      * - `INVALID_DEPTH`: Make sure that the `depth` argument is greater than zero

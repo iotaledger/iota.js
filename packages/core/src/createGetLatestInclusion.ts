@@ -55,7 +55,9 @@ export const createGetLatestInclusion = (provider: Provider) => {
      * ```
      * 
      * @return {Promise}
+     * 
      * @fulfil {boolean[]} states - Array of inclusion states, where `true` means that the transaction is confirmed and `false` means that it's not.
+     * 
      * @reject {Error} error - An error that contains one of the following:
      * - `INVALID_HASH`: Make sure that the transaction hashes are 81 trytes long
      * - Fetch error: The connected IOTA node's API returned an error. See the [list of error messages](https://docs.iota.org/docs/node-software/0.1/iri/references/api-errors) 

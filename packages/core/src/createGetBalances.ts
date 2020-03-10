@@ -54,11 +54,13 @@ export const createGetBalances = ({ send }: Provider) =>
      * ```
      *
      * @return {Promise}
+     * 
      * @fulfil {Balances} balances - Object that contains the following:
      * - balances.addresses: Array of balances in the same order as the `addresses` argument
      * - balances.references: Either the transaction hash of the latest milestone, or the transaction hashes that were passed to the `tips` argument
      * - balances.milestoneIndex: The latest milestone index that confirmed the balance
      * - balances.duration: The number of milliseconds that it took for the node to return a response
+     * 
      * @reject {Error} error - An error that contains one of the following:
      * - `INVALID_HASH`: Make sure that the addresses contain only trytes
      * - `INVALID_THRESHOLD`: Make sure that the threshold is a number greater than zero

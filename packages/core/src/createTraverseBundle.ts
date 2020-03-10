@@ -53,7 +53,9 @@ export const createTraverseBundle = (provider: Provider) => {
      * ```
      *
      * @returns {Promise}
+     * 
      * @fulfil {Transaction[]} bundle - Array of transaction objects
+     * 
      * @reject {Error} error - An error that contains one of the following:
      * - `INVALID_TRANSACTION_HASH`: Make sure the tail transaction hash is 81 trytes long
      * -`INVALID_TAIL_TRANSACTION`: Make sure that the tail transaction hash is for a transaction whose `currentIndex` field is 0

@@ -35,15 +35,15 @@ const defaults = {
  */
 export const createCheckConsistency = ({ send }: Provider) =>
     /**
-     * This method uses the connected IRI node's
+     * This method finds out if a transaction has a chance of being confirmed, using the connected IRI node's
      * [`checkConsistency`](https://docs.iota.org/docs/node-software/0.1/iri/references/api-reference#checkconsistency) endpoint.
      * 
-     * A consistent transaction is one where the following statements are true:
+     * A consistent transaction is one where:
      * - The node has the transaction's branch and trunk transactions in its ledger
      * - The transaction's bundle is valid
      * - The transaction's branch and trunk transactions are valid
      * 
-     * For more information about what makes a bundles and transactions valid, see [this guide](https://docs.iota.org/docs/node-software/0.1/iri/concepts/transaction-validation).
+     * For more information about what makes a bundles and transactions valid, see [this article](https://docs.iota.org/docs/node-software/0.1/iri/concepts/transaction-validation).
      *
      * As long as a transaction is consistent it has a chance of being confirmed.
      * 
@@ -77,7 +77,9 @@ export const createCheckConsistency = ({ send }: Provider) =>
      * ```
      *
      * @return {Promise}
+     * 
      * @fulfil {boolean} isConsistent - Whether the given transactions are consistent
+     * 
      * @reject {Error} error - An error that contains one of the following:
      * - `INVALID_TRANSACTION_HASH`: Make sure the tail transaction hashes are 81 trytes long and their `currentIndex` field is 0
      * - Fetch error: The connected IOTA node's API returned an error. See the [list of error messages](https://docs.iota.org/docs/node-software/0.1/iri/references/api-errors) 
