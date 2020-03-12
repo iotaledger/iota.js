@@ -2,46 +2,28 @@ import { TRYTE_ALPHABET } from './'
 import * as errors from './errors'
 
 /**
- * Converts an ascii encoded string to trytes.
- *
- * ### How conversion works:
- *
- * An ascii value of `1 Byte` can be represented in `2 Trytes`:
- *
- * 1. We get the decimal unicode value of an individual ASCII character.
- *
- * 2. From the decimal value, we then derive the two tryte values by calculating the tryte equivalent
- * (e.g.: `100` is expressed as `19 + 3 * 27`), given that tryte alphabet contains `27` trytes values:
- *   a. The first tryte value is the decimal value modulo `27` (which is the length of the alphabet).
- *   b. The second value is the remainder of `decimal value - first value` devided by `27`.
- *
- * 3. The two values returned from Step 2. are then input as indices into the available
- * trytes alphabet (`9ABCDEFGHIJKLMNOPQRSTUVWXYZ`), to get the correct tryte value.
- *
- * ### Example:
- *
- * Lets say we want to convert ascii character `Z`.
- *
- * 1. `Z` has a decimal unicode value of `90`.
- *
- * 2. `90` can be represented as `9 + 3 * 27`. To make it simpler:
- *   a. First value is `90 % 27 = 9`.
- *   b. Second value is `(90 - 9) / 27 = 3`.
- *
- * 3. Our two values are `9` and `3`. To get the tryte value now we simply insert it as indices
- * into the tryte alphabet:
- *   a. The first tryte value is `'9ABCDEFGHIJKLMNOPQRSTUVWXYZ'[9] = I`
- *   b. The second tryte value is `'9ABCDEFGHIJKLMNOPQRSTUVWXYZ'[3] = C`
- *
- * Therefore ascii character `Z` is represented as `IC` in trytes.
- *
+ * This method converts ASCII characters to [trytes](https://docs.iota.org/docs/getting-started/0.1/introduction/ternary).
+ * 
+ * ## Related methods
+ * 
+ * To convert trytes to ASCII characters, use the [`trytesToAscii()`]{@link #module_converter.trytesToAscii} method.
+ * 
  * @method asciiToTrytes
- *
+ * 
+ * @summary Converts ASCII characters to trytes.
+ *  
  * @memberof module:converter
  *
- * @param {string} input - ascii input
- *
- * @return {string} string of trytes
+ * @param {string} input - ASCII input
+ * 
+ * @example
+ * ```js
+ * let trytes = Converter.asciiToTrytes('Hello, where is my coffee?');
+ * ```
+ * 
+ * @return {string} Trytes
+ * 
+ * @throws {errors.INVALID_ASCII_CHARS}: Make sure that the `input` argument contains only valid ASCII characters.
  */
 export const asciiToTrytes = (input: string): string => {
     // If input is not an ascii string, throw error
@@ -62,15 +44,31 @@ export const asciiToTrytes = (input: string): string => {
 }
 
 /**
- * Converts trytes of _even_ length to an ascii string
+ * This method converts ASCII characters to [trytes](https://docs.iota.org/docs/getting-started/0.1/introduction/ternary).
+ * 
+ * Because each ASCII character is represented as 2 trytes, the given trytes must be of an even length.
  *
+ * ## Related methods
+ * 
+ * To convert ASCII characters to trytes, use the [`asciiToTrytes()`]{@link #module_converter.asciiToTrytes} method.
+ * 
  * @method trytesToAscii
- *
+ * 
+ * @summary Converts trytes to ASCII characters.
+ *  
  * @memberof module:converter
  *
- * @param {string} trytes - trytes
- *
- * @return {string} string in ascii
+ * @param {string} trytes - An even number of trytes
+ * 
+ * @example
+ * ```js
+ * let message = Converter.trytesToAscii('IOTA');
+ * ```
+ * 
+ * @return {string} ASCII characters
+ * 
+ * @throws {errors.INVALID_TRYTES}: Make sure that the `trytes` argument contains only valid trytes (A-Z or 9).
+ * @throws {errors.INVALID_ODD_LENGTH}: Make sure that the `trytes` argument contains an even number of trytes.
  */
 export const trytesToAscii = (trytes: string): string => {
     if (typeof trytes !== 'string' || !new RegExp(`^[9A-Z]{1,}$`).test(trytes)) {

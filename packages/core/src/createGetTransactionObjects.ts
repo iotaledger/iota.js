@@ -25,7 +25,7 @@ export const createGetTransactionObjects = (provider: Provider) => {
      * 
      * ## Related methods
      * 
-     * If you want to find all transaction objects in a specific bundle, use the [`getBundle()`]{@link #module_core.getBundle} method.
+     * To find all transaction objects in a specific bundle, use the [`getBundle()`]{@link #module_core.getBundle} method.
      * 
      * @method getTransactionObjects
      * 

@@ -21,7 +21,7 @@ export const createGetTips = ({ send }: Provider) =>
      * 
      * ## Related methods
      * 
-     * If you want to find two consistent tip transactions to use as branch and trunk transactions, use the [`getTransactionsToApprove()`]{@link #module_core.getTransactionsToApprove} method.
+     * To find two consistent tip transactions to use as branch and trunk transactions, use the [`getTransactionsToApprove()`]{@link #module_core.getTransactionsToApprove} method.
      * 
      * @method getTips
      * 

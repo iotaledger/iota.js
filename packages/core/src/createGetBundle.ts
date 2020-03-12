@@ -33,7 +33,7 @@ export const createGetBundle = (provider: Provider) => {
      * 
      * ## Related methods
      * 
-     * If you want to find transaction objects that aren't in the same bundle, use the [`getTransactionObjects()`]{@link #module_core.getTransactionObjects} method.
+     * To find transaction objects that aren't in the same bundle, use the [`getTransactionObjects()`]{@link #module_core.getTransactionObjects} method.
      * 
      * @method getBundle
      * 

@@ -28,7 +28,7 @@ export const createGetBalances = ({ send }: Provider) =>
      * 
      * ## Related methods
      * 
-     * If you want to find the balance of all addresses that belong to your seed, use the [`getAccountData()`]{@link #module_core.getAccountData} method.
+     * To find the balance of all addresses that belong to your seed, use the [`getAccountData()`]{@link #module_core.getAccountData} method.
      * 
      * @method getBalances
      * 

@@ -28,7 +28,7 @@ export const createGetLatestInclusion = (provider: Provider) => {
      * 
      * ## Related methods
      * 
-     * If you want to check if transactions are referenced by a non-milestone transaction, use the [`getInclusionStates()`]{@link #module_core.getInclusionStates} method.
+     * To check if transactions are referenced by a non-milestone transaction, use the [`getInclusionStates()`]{@link #module_core.getInclusionStates} method.
      * 
      * @method getLatestInclusion
      * 

@@ -25,7 +25,7 @@ export const createAddNeighbors = ({ send }: Provider) =>
      * 
      * ## Related methods
      * 
-     * If you want to see statistics about the connected IRI node's neighbors, use the [`getNeighbors()`]{@link #module_core.getNeighbors} method.
+     * To see statistics about the connected IRI node's neighbors, use the [`getNeighbors()`]{@link #module_core.getNeighbors} method.
      * 
      * @method addNeighbors
      * 

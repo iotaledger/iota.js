@@ -55,7 +55,7 @@ export const createBundle = (entries: ReadonlyArray<Partial<BundleEntry>> = []):
     entries.reduce((bundle, entry) => addEntry(bundle, entry), new Int8Array(0))
 
 /**
- * Adds the transaction trits in the given entry object to a given bundle array.
+ * Adds transaction trits in the given entry object to a given bundle array.
  * 
  * ## Related methods
  * 
@@ -64,19 +64,35 @@ export const createBundle = (entries: ReadonlyArray<Partial<BundleEntry>> = []):
  * @method addEntry
  * 
  * @summary Adds the given transaction entry to a bundle array.
+ * 
+ * @memberof module:bundle
  *
  * @param {object} entry - Transaction entry object
  * @param {Int8Array} entry.address - An address in trits
- * @param {Int8Array} entry.value - Value to transfer in iotas
- * @param {Int8Array} [entry.signatureOrMessage] - Signature fragments or a message
- * @param {Int8Array} [entry.timestamp] - Unix epoch in seconds.
+ * @param {Int8Array} entry.value - An amount of IOTA tokens in trits
+ * @param {Int8Array} [entry.signatureOrMessage] - Signature fragments or a message in trits
+ * @param {Int8Array} [entry.timestamp] - Unix epoch in trits
  * @param {Int8Array} [entry.tag] - (deprecated)
- * @param {Int8Array} bundle - Bundle array
- *
- * @return {Int8Array} Bundle copy with new entries.
+ * @param {Int8Array} bundle - Bundle array to which to add the entry object
  * 
- * @throws {errors.ILLEGAL_TRANSACTION_BUFFER_LENGTH}: Make sure that the `bundle` argument contains valid transaction trytes
- * @throws {errors.ILLEGAL_SIGNATURE_OR_MESSAGE_LENGTH}
+ * @example
+ * ```js
+ * let bundle = new Int8Array();
+ * 
+ * bundle = Bundle.addEntry(bundle, {
+ *  address: Converter.trytesToTrits(outputAddress),
+ *  value: Converter.valueToTrits(value),
+ *  issuanceTimestamp: Converter.valueToTrits(Math.floor(Date.now() / 1000));
+ * });
+ * ```
+ *
+ * @return {Int8Array} A copy of the original bundle that also includes the added entries.
+ * 
+ * @throws {errors.ILLEGAL_TRANSACTION_BUFFER_LENGTH}: Make sure that the `bundle` argument contains valid transaction trits
+ * @throws {errors.ILLEGAL_SIGNATURE_OR_MESSAGE_LENGTH}: Make sure that the `entry.signatureOrMessage` argument contains 6,561 trits
+ * @throws {errors.ILLEGAL_ADDRESS_LENGTH}: Make sure that the `entry.address` argument contains 243 trits
+ * @throws {errors.ILLEGAL_VALUE_LENGTH}: Make sure that the `entry.value` argument contains 6,561 trits
+ * @throws {errors.ILLEGAL_ISSUANCE_TIMESTAMP_LENGTH}: Make sure that the `entry.timestamp` argument contains 81 trits
  */
 export const addEntry = (bundle: Int8Array, entry: Partial<BundleEntry>): Int8Array => {
     const {
@@ -196,15 +212,28 @@ export const addEntry = (bundle: Int8Array, entry: Partial<BundleEntry>): Int8Ar
 }
 
 /**
- * Finalizes a bundle by calculating the bundle hash.
+ * This method takes an array of transaction trits, generates the bundle hash, and adds it to each transaction.
+ * 
+ * ## Related methods
+ * 
+ * See the [`addEntry()`]{@link #module_bundle.addEntry} method for creating new bundles.
  *
  * @method finalizeBundle
+ * 
+ * @summary Generates a bundle hash.
+ * 
+ * @memberof module:bundle
  *
- * @param {Int8Array} bundle - Bundle transaction trits
- *
- * @param {number} [numberOfFragments=3]
- *
- * @return {Int8Array} List of transactions in the finalized bundle
+ * @param {Int8Array} bundle - Transaction trits
+ * 
+ * @example
+ * ```js
+ * const result = Bundle.finalizeBundle(bundle);
+ * ```
+ * 
+ * @return {Int8Array} Transaction trits that include a bundle hash
+ * 
+ * @throws {errors.ILLEGAL_TRANSACTION_BUFFER_LENGTH}: Make sure that the `bundle` argument contains valid transaction trits
  */
 export const finalizeBundle = (bundle: Int8Array, numberOfFragments = 3): Int8Array => {
     if (!isMultipleOfTransactionLength(bundle.length)) {
@@ -250,15 +279,36 @@ export const finalizeBundle = (bundle: Int8Array, numberOfFragments = 3): Int8Ar
 }
 
 /**
- * Adds signature message fragments to transactions in a bundle starting at offset.
+ * This method takes an array of transaction trits, and add the given message or signature to the transactions, starting from the given index.
+ * 
+ * If the signature or message is too long to fit in a single transaction, it is split across the next transaction in the bundle, starting from the given index.
+ * 
+ * ## Related methods
+ * 
+ * See the [`addEntry()`]{@link #module_bundle.addEntry} method for creating new bundles.
  *
  * @method addSignatureOrMessage
+ * 
+ * @summary Adds signature message fragments to transactions in a bundle.
+ * 
+ * @memberof module:bundle
  *
- * @param {Int8Array} bundle - Bundle buffer.
- * @param {Int8Array} signatureOrMessage - Signature or message to add.
- * @param {number} index - Transaction index as entry point for signature or message fragments.
+ * @param {Int8Array} bundle - Transaction trits
+ * @param {Int8Array} signatureOrMessage - Signature or message to add to the bundle
+ * @param {number} index - Transaction index at which to start adding the signature or message
+ * 
+ * @example
+ * ```js
+ * const signature = Converter.trytesToTrits('SIGNATURE...')
+ * bundle.set(Bundle.addSignatureOrMessage(bundle, signature, 1));
+ * ```
+ * 
+ * @return {Int8Array} Transaction trits that include a bundle hash.
+ * 
+ * @throws {errors.ILLEGAL_TRANSACTION_BUFFER_LENGTH}: Make sure that the `bundle` argument contains valid transaction trits
+ * @throws {errors.ILLEGAL_TRANSACTION_INDEX}: Make sure that the `index` argument is a number and that the bundle contains enough transactions
+ * @throws {errors.ILLEGAL_SIGNATURE_OR_MESSAGE_LENGTH}: Make sure that the `signatureOrMessage` argument contains at least 6,561 trits
  *
- * @return {Int8Array} List of transactions in the updated bundle
  */
 export const addSignatureOrMessage = (bundle: Int8Array, signatureOrMessage: Int8Array, index: number): Int8Array => {
     if (!isMultipleOfTransactionLength(bundle.length)) {
@@ -290,17 +340,6 @@ export const addSignatureOrMessage = (bundle: Int8Array, signatureOrMessage: Int
     return bundleCopy
 }
 
-/**
- * Sums up transaction values in a bundle starting at offset.
- *
- * @method valueSum
- *
- * @param {Int8Array} bundle - Bundle buffer.
- * @param {number} offset - Offset from the start of the bundle buffer.
- * @param {number} length - Length of transactions in which values should be summed.
- *
- * @return {number} Total value of 'length' transactions in the bundle starting at offset.
- */
 export const valueSum = (buffer: Int8Array, offset: number, length: number): number => {
     if (!isMultipleOfTransactionLength(buffer.length)) {
         throw new RangeError(errors.ILLEGAL_TRANSACTION_BUFFER_LENGTH)

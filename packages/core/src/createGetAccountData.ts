@@ -76,9 +76,9 @@ export const createGetAccountData = (provider: Provider, caller?: string) => {
      * 
      * ## Related methods
      * 
-     * If you want to find the balance of specific addresses, which don't have to belong to your seed, use the [`getBalances()`]{@link #module_core.getBalances} method.
+     * To find the balance of specific addresses, which don't have to belong to your seed, use the [`getBalances()`]{@link #module_core.getBalances} method.
      * 
-     * If you want to find only inputs (objects that contain information about addresses with a postive balance), use the [`getInputs()`]{@link #module_core.getInputs} method.
+     * To find only inputs (objects that contain information about addresses with a postive balance), use the [`getInputs()`]{@link #module_core.getInputs} method.
      * 
      * @method getAccountData
      * 

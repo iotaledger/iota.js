@@ -87,7 +87,7 @@ export const createFindTransactions = ({ send }: Provider) => {
      * 
      * ## Related methods
      * 
-     * If you want to find transaction objects, use the [`findTransactionObjects()`]{@link #module_core.findTransactionObjects} method.
+     * To find transaction objects, use the [`findTransactionObjects()`]{@link #module_core.findTransactionObjects} method.
      * 
      * @method findTransactions
      * 

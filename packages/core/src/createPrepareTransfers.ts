@@ -91,7 +91,7 @@ export interface PrepareTransfersProps {
  * @memberof module:core
  *
  * @param {Provider} [provider] - Optional provider object that the method should use to call the node's API endpoints.
- * To create transactions offline, omit this parameter so that the returned function does not get your addresses and balances from the node. If you want to create value transactions offline, make sure to pass input objects and a remainder address to the returned function.
+ * To create transactions offline, omit this parameter so that the returned function does not get your addresses and balances from the node. To create value transactions offline, make sure to pass input objects and a remainder address to the returned function.
  * 
  * @example
  * ```js

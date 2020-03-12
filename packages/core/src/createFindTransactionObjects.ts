@@ -27,7 +27,7 @@ export const createFindTransactionObjects = (provider: Provider) => {
      * 
      * ## Related methods
      * 
-     * If you want to find only transaction hashes, use the [`findTransactions()`]{@link #module_core.findTransactions} method.
+     * To find only transaction hashes, use the [`findTransactions()`]{@link #module_core.findTransactions} method.
      * 
      * @method findTransactionObjects
      * 

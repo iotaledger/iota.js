@@ -23,11 +23,13 @@ export const createGetTrytes = ({ send }: Provider) =>
      * This method uses the connected IRI node's
      * [`getTrytes`](https://docs.iota.org/docs/node-software/0.1/iri/references/api-reference#gettrytes) endpoint.
      * 
+     * The transaction trytes include all transaction fields except the transaction hash.
+     * 
      * **Note:** If the connected IRI node doesn't have the given transaction in its ledger, the value at the index of that transaction hash is either `null` or a string of `9`s.
      * 
      * ## Related methods
      * 
-     * If you want to get transaction objects instead of trytes, use the [`getTransactionObjects()`]{@link #module_core.getTransactionObjects} method.
+     * To get transaction objects instead of trytes, use the [`getTransactionObjects()`]{@link #module_core.getTransactionObjects} method.
      * 
      * @method getTrytes
      * 

@@ -33,7 +33,7 @@ export const createGetInclusionStates = ({ send }: Provider) =>
      * 
      * ## Related methods
      * 
-     * If you want to find out if one or more transactions are confirmed, use the [`getLatestInclusion()`]{@link #module_core.getLatestInclusion} method.
+     * To find out if one or more transactions are confirmed, use the [`getLatestInclusion()`]{@link #module_core.getLatestInclusion} method.
      * 
      * @method getInclusionStates
      * 

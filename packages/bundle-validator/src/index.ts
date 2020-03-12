@@ -15,15 +15,29 @@ interface SignatureFragments {
 export { Transaction, Bundle, INVALID_BUNDLE }
 
 const HASH_TRITS_SIZE = 243
-
 /**
- * Validates all signatures of a bundle.
+ * 
+ * This method takes an array of transaction trytes and checks if the signatures are valid.
+ * 
+ * ## Related methods
+ * 
+ * To get a bundle's transaction trytes from the Tangle, use the [`getBundle()`]{@link #module_core.getBundle} method.
+ * 
+ * @method validateBundleSignatures
+ * 
+ * @summary Validates the signatures in a given bundle
+ *  
+ * @memberof module:bundle-validator
  *
- * @method validateSignatures
+ * @param {Transaction[]} bundle - Transaction trytes
+ * 
+ * @example
+ * ```js
+ * let valid = Validator.validateBundleSignatures(bundle);
+ * ```
  *
- * @param {Transaction[]} bundle
- *
- * @return {boolean}
+ * @return {boolean} Whether the signatures are valid
+ * 
  */
 export const validateBundleSignatures = (bundle: Bundle): boolean => {
     const signatures: SignatureFragments = [...bundle]
@@ -50,14 +64,32 @@ export const validateBundleSignatures = (bundle: Bundle): boolean => {
 }
 
 /**
- * Checks if a bundle is _syntactically_ valid.
- * Validates signatures and overall structure.
+ * This method takes an array of transaction trytes and validates whether they form a valid bundle by checking the following:
+ * 
+ * - Addresses in value transactions have a 0 trit at the end, which means they were generated using the Kerl hashing function
+ * - Transactions in the bundle array are in the same order as their `currentIndex` field
+ * - The total value of all transactions in the bundle sums to 0
+ * - The bundle hash is valid
  *
+ * ## Related methods
+ * 
+ * To get a bundle's transaction trytes from the Tangle, use the [`getBundle()`]{@link #module_core.getBundle} method.
+ * 
  * @method isBundle
+ * 
+ * @summary Validates the structure and contents of a given bundle.
+ *  
+ * @memberof module:bundle-validator
  *
- * @param {Transaction[]} bundle
+ * @param {Transaction[]} bundle - Transaction trytes
+ * 
+ * @example
+ * ```js
+ * let valid = Validator.validateBundleSignatures(bundle);
+ * ```
  *
- * @returns {boolean}
+ * @return {boolean} Whether the bundle is valid
+ * 
  */
 export default function isBundle(bundle: Bundle) {
     let totalSum = 0

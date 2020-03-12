@@ -46,13 +46,28 @@ export { Transaction }
 export function asTransactionTrytes(transactions: Transaction): Trytes
 export function asTransactionTrytes(transactions: ReadonlyArray<Transaction>): ReadonlyArray<Trytes>
 /**
- * Converts a transaction object or a list of those into transaction trytes.
- *
+ * This method takes one or more transaction objects and converts them into trytes.
+ * 
+ * ## Related methods
+ * 
+ * To get JSON data from the `signatureMessageFragment` field of the transaction trytes, use the [`extractJSON()`]{@link #module_extract-json.extractJSON} method.
+ * 
  * @method asTransactionTrytes
+ * 
+ * @summary Converts one or more transaction objects into transaction trytes.
+ *  
+ * @memberof module:transaction-converter
  *
- * @param {Transaction | Transaction[]} transactions - Transaction object(s)
- *
+ * @param {Transaction | Transaction[]} transactions - Transaction objects
+ * 
+ * @example
+ * ```js
+ * let trytes = TransactionConverter.asTransactionTrytes(transactionObject);
+ * ```
+ * 
  * @return {Trytes | Trytes[]} Transaction trytes
+ * 
+ * @throws {errors.INVALID_TRYTES}: Make sure that the object fields in the `transactions` argument contains valid trytes (A-Z or 9).
  */
 export function asTransactionTrytes(
     transactions: Transaction | ReadonlyArray<Transaction>
@@ -89,13 +104,30 @@ export function asTransactionTrytes(
 }
 
 /**
- * Converts transaction trytes of 2673 trytes into a transaction object.
- *
+ * This method takes 2,673 transaction trytes and converts them into a transaction object.
+ * 
+ * ## Related methods
+ * 
+ * To convert more than one transaction into an object at once, use the [`asTransactionObjects()`]{@link #module_transaction-converter.asTransactionObjects} method.
+ * 
+ * To get a transaction's trytes from the Tangle, use the [`getTrytes()`]{@link #module_core.getTrytes} method.
+ * 
  * @method asTransactionObject
+ * 
+ * @summary Converts transaction trytes into a transaction object.
+ *  
+ * @memberof module:transaction-converter
  *
- * @param {Trytes} trytes - Transaction trytes
- *
- * @return {Transaction} Transaction object
+ * @param {Trytes} transaction - Transaction trytes
+ * 
+ * @example
+ * ```js
+ * let transactionObject = TransactionConverter.asTransactionObject(transactionTrytes);
+ * ```
+ * 
+ * @return {Transaction} transactionObject - A transaction object
+ * 
+ * @throws {errors.INVALID_TRYTES}: Make sure that the object fields in the `transaction` argument contains valid trytes (A-Z or 9).
  */
 export const asTransactionObject = (trytes: Trytes, hash?: Hash): Transaction => {
     if (!isTrytesOfExactLength(trytes, TRANSACTION_LENGTH / TRYTE_WIDTH)) {
@@ -158,17 +190,30 @@ export const asTransactionObject = (trytes: Trytes, hash?: Hash): Transaction =>
 }
 
 /**
- * Converts a list of transaction trytes into list of transaction objects.
- * Accepts a list of hashes and returns a mapper. In cases hashes are given,
- * the mapper function map them to converted objects.
- *
+ * This method takes an array of transaction hashes and returns a mapper.
+ * 
+ * If any hashes are given, the mapper function maps them to their converted objects. Otherwise, all hashes are recalculated.
+ * 
+ * ## Related methods
+ * 
+ * To get a transaction's trytes from the Tangle, use the [`getTrytes()`]{@link #module_core.getTrytes} method.
+ * 
  * @method asTransactionObjects
+ * 
+ * @summary Converts one or more transaction trytes into transaction objects.
+ *  
+ * @memberof module:transaction-converter
  *
- * @param {Hash[]} [hashes] - Optional list of known hashes.
- * Known hashes are directly mapped to transaction objects,
- * otherwise all hashes are being recalculated.
- *
- * @return {Function} {@link #module_transaction.transactionObjectsMapper `transactionObjectsMapper`}
+ * @param {Hash[]} [hashes] - Transaction hashes
+ * 
+ * @example
+ * ```js
+ * let transactionObjectsMapper = TransactionConverter.asTransactionObjects([hashes]);
+ * ```
+ * 
+ * @return {Function} [`transactionObjectsMapper()`]{@link #module_transaction.transactionObjectsMapper}
+ * 
+ * @throws {errors.INVALID_TRYTES}: Make sure that transcactions contains valid trytes (A-Z or 9).
  */
 export const asTransactionObjects = (hashes?: ReadonlyArray<Hash>) => {
     /**

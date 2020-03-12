@@ -25,7 +25,7 @@ import {
  *
  * @param {Provider} provider - The Provider object that the method should use to call the node's API endpoints.
  *
- * @return {Function} [`attachToTangle`]{@link #module_core.attachToTangle}  - A new `attachToTangle()` function that uses your chosen Provider instance.
+ * @return {Function} [`attachToTangle`]{@link #module_core.attachToTangle} - A new `attachToTangle()` function that uses your chosen Provider instance.
  */
 export const createAttachToTangle = ({ send }: Provider): AttachToTangle => {
     /**

@@ -30,7 +30,7 @@ export const createGetNeighbors = ({ send }: Provider) => {
      * 
      * ## Related methods
      * 
-     * If you want to add neighbors to the node, use the [`addNeighbors()`]{@link #module_core.addNeighbors} method.
+     * To add neighbors to the node, use the [`addNeighbors()`]{@link #module_core.addNeighbors} method.
      * 
      * @method getNeighbors
      * 
