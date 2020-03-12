@@ -85,10 +85,10 @@ export const validateBundleSignatures = (bundle: Bundle): boolean => {
  * 
  * @example
  * ```js
- * let valid = Validator.validateBundleSignatures(bundle);
+ * let bundle = Validator.isBundle(bundle);
  * ```
  *
- * @return {boolean} Whether the bundle is valid
+ * @return {boolean} bundle - Whether the bundle is valid
  * 
  */
 export default function isBundle(bundle: Bundle) {
