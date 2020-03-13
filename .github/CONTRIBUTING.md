@@ -96,7 +96,7 @@ Otherwise, your feature may not be approved at all.
 
 To build a new feature, check out a new branch based on the `master` branch, and be sure to consider the following:
 
-- If the feature has a public facing API, make sure to document it, using Javadoc code comments
+- If the feature has a public facing API, make sure to document it, using [JSDoc](https://jsdoc.app/) code comments
 
 </details>
 
