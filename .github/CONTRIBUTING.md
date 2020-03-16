@@ -123,7 +123,7 @@ This section guides you through submitting a pull request (PR). Following these 
 
 When creating a pull request, please follow these steps to have your contribution considered by the maintainers:
 
-- A pull request should have only one concern (for example one feature or one bug). If a PR address more than one concern, it should be split into two or more PRs.
+- A pull request should have only one concern (for example one feature or one bug). If a PR addresses more than one concern, it should be split into two or more PRs.
 
 - A pull request can be merged only if it references an open issue
 
