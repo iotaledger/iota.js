@@ -44,7 +44,7 @@
     },
     "dependencies": {
         "@types/crypto-js": "^3.1.38",
-        "crypto-js": "^3.1.9-1"
+        "crypto-js": "^3.3.0"
     },
     "devDependencies": {
         "@iota/converter": "^1.0.0-beta.23",
