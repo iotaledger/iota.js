@@ -44,7 +44,7 @@ export const asciiToTrytes = (input: string): string => {
 }
 
 /**
- * This method converts ASCII characters to [trytes](https://docs.iota.org/docs/getting-started/0.1/introduction/ternary).
+ * This method converts trytes to ASCII characters.
  * 
  * Because each ASCII character is represented as 2 trytes, the given trytes must be of an even length.
  *
