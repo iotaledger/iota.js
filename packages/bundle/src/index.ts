@@ -71,7 +71,7 @@ export const createBundle = (entries: ReadonlyArray<Partial<BundleEntry>> = []):
  * @param {Int8Array} entry.address - An address in trits
  * @param {Int8Array} entry.value - An amount of IOTA tokens in trits
  * @param {Int8Array} [entry.signatureOrMessage] - Signature fragments or a message in trits
- * @param {Int8Array} [entry.timestamp] - Unix epoch in trits
+ * @param {Int8Array} [entry.issuanceTimestamp] - Unix epoch in trits
  * @param {Int8Array} [entry.tag] - (deprecated)
  * @param {Int8Array} bundle - Bundle array to which to add the entry object
  * 
