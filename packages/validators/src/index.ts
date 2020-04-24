@@ -13,7 +13,7 @@ import { isValidChecksum } from '@iota/checksum'
  * 
  * ## Related methods
  * 
- * To generate a new addres with a checksum, use the [`getNewAddress()`]{@link #module_core.getNewAddress} method.
+ * To generate a new address with a checksum, use the [`getNewAddress()`]{@link #module_core.getNewAddress} method.
  * 
  * @method isAddress
  * 
