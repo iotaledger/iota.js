@@ -95,6 +95,7 @@ export function addChecksum(input: Trytes, checksumLength = ADDRESS_CHECKSUM_TRY
  * ## Related methods
  * 
  * To generate an address, use the [`getNewAddress()`]{@link #module_core.getNewAddress} method.
+ * To add a checksum to an address, use the [`addChecksum()`]{@link #module_checksum.addChecksum} method.
  * 
  * @method removeChecksum
  * 
@@ -127,6 +128,7 @@ export function removeChecksum(input: Trytes): Trytes {
  * ## Related methods
  * 
  * To generate an address, use the [`getNewAddress()`]{@link #module_core.getNewAddress} method.
+ * To add a checksum to an address, use the [`addChecksum()`]{@link #module_checksum.addChecksum} method.
  * 
  * @method isValidChecksum
  * 
