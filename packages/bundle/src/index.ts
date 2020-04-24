@@ -59,7 +59,7 @@ export const createBundle = (entries: ReadonlyArray<Partial<BundleEntry>> = []):
  * 
  * ## Related methods
  * 
- * See the converter package for methods that convert values to trits.
+ * See the [converter](https://github.com/iotaledger/iota.js/tree/next/packages/converter) package for methods that convert values to trits.
  *
  * @method addEntry
  * 
