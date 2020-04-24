@@ -35,7 +35,7 @@ const defaults = {
  */
 export const createCheckConsistency = ({ send }: Provider) =>
     /**
-     * This method finds out if a transaction has a chance of being confirmed, using the connected IRI node's
+     * This method finds out if a transaction has a chance of being confirmed, using the connected node's
      * [`checkConsistency`](https://docs.iota.org/docs/node-software/0.1/iri/references/api-reference#checkconsistency) endpoint.
      * 
      * A consistent transaction is one where:
@@ -49,8 +49,8 @@ export const createCheckConsistency = ({ send }: Provider) =>
      * 
      * ## Related methods
      * 
-     * If a consistent transaction is taking a long time to be confirmed, you can improve its chances, using the [`isPromotable()`]{@link #module_core.isPromotable}
-     * and [`promoteTransaction()`]{@link #module_core.promoteTransaction} methods.
+     * If a consistent transaction is taking a long time to be confirmed, you can improve its chances, using the
+     * [`promoteTransaction()`]{@link #module_core.promoteTransaction} method.
      * 
      * If a transaction is inconsistent, it will never be confirmed. In this case, you can reattach the transaction, using the [`replayBundle()`]{@link #module_core.replayBundle} method.
      * 
