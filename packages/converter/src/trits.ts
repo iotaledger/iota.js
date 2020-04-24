@@ -196,7 +196,8 @@ export function value(trits: Int8Array): number {
  * ## Related methods
  * 
  * To convert trytes to trits, use the [`trytesToTrits()`]{@link #module_converter.trytesToTrits} method.
- * 
+ * To convert trits to trytes, use the [`tritsToTrytes()`]{@link #module_converter.tritsToTrytes} method.
+ *
  * @method tritsToValue
  * 
  * @summary Converts trits to a number.
