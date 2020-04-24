@@ -25,7 +25,7 @@ import { isValidChecksum } from '@iota/checksum'
  * 
  * @example
  * ```js
- * let valid = Validator.isAddress('ADDRESS.WITH.CHECKSUM');
+ * let valid = Validator.isAddress('9FNJWLMBECSQDKHQAGDHDPXBMZFMQIMAFAUIQTDECJVGKJBKHLEBVU9TWCTPRJGYORFDSYENIQKBVSYKW9NSLGS9UW');
  * ```
  * 
  * @return {boolean} valid - Whether the checksum is valid
