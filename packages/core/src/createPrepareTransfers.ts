@@ -95,7 +95,7 @@ export interface PrepareTransfersProps {
  * 
  * @example
  * ```js
- * const prepareTransfersOffline = Iota.createPrepareTransfers();
+ * const prepareTransfers = Iota.createPrepareTransfers();
  * 
  * const transfers = [
  *  {
@@ -104,7 +104,7 @@ export interface PrepareTransfersProps {
  *  }
  * ];
  * 
- * prepareTransfersOffline(seed, transfers, {
+ * prepareTransfers(seed, transfers, {
  *  inputs:[{address: 'ADDRESS...',
  *  keyIndex: 5,
  *  security: 2,
@@ -181,7 +181,7 @@ export const createPrepareTransfers = (provider?: Provider, now: () => number = 
      *  }
      * ];
      * 
-     * prepareTransfersOffline(seed, transfers)
+     * prepareTransfers(seed, transfers)
      * .then(bundleTrytes => {
      *  console.log('Bundle trytes are ready to be attached to the Tangle:');
      *  console.log(JSON.stringify(bundleTrytes));
