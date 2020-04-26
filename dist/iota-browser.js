@@ -2938,7 +2938,7 @@ var trits_to_words = function(trits) {
     var base = new Uint32Array(INT_LENGTH);
 
     if (trits.slice(0, 242).every(function(a) {
-            a == -1
+            return a == -1;
         })) {
         base = ta_slice(HALF_3);
         bigint_not(base);
@@ -3796,6 +3796,9 @@ module.exports = {
     },
     inconsistentSubtangle: function (tail) {
         return new Error("Inconsistent subtangle: " + tail);
+    },
+    invalidBundleHash: function () {
+        return new Error("Missing bundle hash");
     }
 }
 
@@ -5594,7 +5597,7 @@ var transactionObject = function(trytes, hash) {
 
     thisTransaction.signatureMessageFragment = trytes.slice(0, 2187);
     thisTransaction.address = trytes.slice(2187, 2268);
-    thisTransaction.value = Converter.value(transactionTrits.slice(6804, 6837));
+    thisTransaction.value = Converter.value(transactionTrits.slice(6804, 6885));
     thisTransaction.obsoleteTag = trytes.slice(2295, 2322);
     thisTransaction.timestamp = Converter.value(transactionTrits.slice(6966, 6993));
     thisTransaction.currentIndex = Converter.value(transactionTrits.slice(6993, 7020));
@@ -23133,7 +23136,7 @@ exports.clearImmediate = typeof clearImmediate === "function" ? clearImmediate :
 },{"process/browser.js":62,"timers":63}],64:[function(require,module,exports){
 module.exports={
   "name": "iota.lib.js",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "description": "Javascript Library for IOTA",
   "main": "./lib/iota.js",
   "scripts": {
