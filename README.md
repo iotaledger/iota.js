@@ -229,6 +229,8 @@ iota
 
 If the IOTA JavaScript client library has been useful to you and you feel like contributing, consider posting a [bug report](https://github.com/iotaledger/iota.js/issues/new), [feature request](https://github.com/iotaledger/iota.js/issues/new) or a [pull request](https://github.com/iotaledger/iota.js/pulls/).  
 
+See the [contributing guidelines](.github/CONTRIBUTING.md) for more information.
+
 ### Cloning and bootstrapping the repository on GitHub
 
 1. Click the <kbd>Fork</kbd> button in the top-right corner
