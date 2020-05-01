@@ -66,7 +66,7 @@ export const TRANSACTION_HASH_LENGTH = Curl.HASH_LENGTH
  *
  * @param {Int8Array} lengthOrOffset
  *
- * @return {bolean}
+ * @return {boolean}
  */
 export const isMultipleOfTransactionLength = (lengthOrOffset: number) => {
     if (!Number.isInteger(lengthOrOffset)) {
@@ -126,12 +126,11 @@ export const transactionBufferSlice = (transactionFieldOffset: number, transacti
 }
 
 /**
- * Returns a copy of `signatureOrMessage` field.
+ * Gets the `signatureOrMessage` field of all transactions in a bundle.
  *
  * @method signatureOrMessage
  *
- * @param {Int8Array} buffer - Transaction buffer. Buffer length must be a multiple of transaction length.
- * @param {Number} [offset=0] - Transaction trit offset. It must be a multiple of transaction length.
+ * @param {Int8Array} buffer - Transaction trytes
  *
  * @return {Int8Array}
  */
@@ -352,14 +351,32 @@ export const transactionNonce = transactionBufferSlice(TRANSACTION_NONCE_OFFSET,
 export const transactionEssence = transactionBufferSlice(TRANSACTION_ESSENCE_OFFSET, TRANSACTION_ESSENCE_LENGTH)
 
 /**
- * Calculates the transaction hash.
- *
+ * This method takes transaction trits, and returns the transaction hash.
+ * 
+ * ## Related methods
+ * 
+ * To validate the length of transaction trits, use the [`isMultipleOfTransactionLength()`]{@link #module_transaction.isMultipleOfTransactionLength} method.
+ * 
+ * To get a transaction's trits from the Tangle, use the [`getTrytes()`]{@link #module_core.getTrytes} method, then convert them to trits, using the [`trytesToTrits()`]{@link #module_converter.trytesToTrits} method.
+ * 
  * @method transactionHash
+ * 
+ * @summary Generates the transaction hash for a given transaction.
+ *  
+ * @memberof module:transaction
  *
- * @param {Int8Array} buffer - Transaction buffer. Buffer length must be multiple of transaction length.
- * @param {Number} [offset=0] - Transaction trit offset. It must be a multiple of transaction length.
- *
+ * @param {Int8Array} buffer - Transactions in trits
+ * @param {Number} [offset=0] - Offset in trits to define a transaction to hash in the `buffer` argument
+ * 
+ * @example
+ * ```js
+ * let hash = Transaction.transactionHash(transactions);
+ * ```
+ * 
  * @return {Int8Array} Transaction hash
+ * 
+ * @throws {errors.ILLEGAL_TRANSACTION_BUFFER_LENGTH}: Make sure that the `buffer` argument contains 8,019 trits (the length of a transaction without the transaction hash).
+ * @throws {errors.ILLEGAL_TRANSACTION_OFFSET}: Make sure that the `offset` argument is a multiple of 8,019 (the length of a transaction without the transaction hash).
  */
 export const transactionHash = (buffer: Int8Array, offset = 0): Int8Array => {
     if (!isMultipleOfTransactionLength(buffer.length)) {
@@ -381,14 +398,33 @@ export const transactionHash = (buffer: Int8Array, offset = 0): Int8Array => {
 /* Guards */
 
 /**
- * Checks if input trits represent a syntactically valid transaction.
+ * This method takes an array of transaction trits and validates whether they form a valid transaction by checking the following:
+ * 
+ * - Addresses in value transactions have a 0 trit at the end, which means they were generated using the Kerl hashing function
+ * - The transaction would result in a valid hash, according to the given [`minWeightMagnitude`](https://docs.iota.org/docs/getting-started/0.1/network/minimum-weight-magnitude) argument
  *
+ * ## Related methods
+ * 
+ * To get a transaction's trits from the Tangle, use the [`getTrytes()`]{@link #module_core.getTrytes} method, then convert them to trits, using the [`trytesToTrits()`]{@link #module_converter.trytesToTrits} method.
+ * 
  * @method isTransaction
+ * 
+ * @summary Validates the structure and contents of a given transaction.
+ *  
+ * @memberof module:transaction
  *
- * @param {Int8Array} transaction - Transaction trits.
- * @param {number} [minWeightMagnitude=0] - Min weight magnitude.
- *
- * @return {boolean}
+ * @param {Int8Array} transaction - Transaction trits
+ * @param {number} [minWeightMagnitude=0] - Minimum weight magnitude
+ * 
+ * @example
+ * ```js
+ * let valid = Transaction.isTransaction(transaction);
+ * ```
+ * 
+ * @return {boolean} valid - Whether the transaction is valid.
+ * 
+ * @throws {errors.ILLEGAL_MIN_WEIGHT_MAGNITUDE}: Make sure that the `minWeightMagnitude` argument is a number between 1 and 81.
+ * @throws {errors.ILLEGAL_TRANSACTION_BUFFER_LENGTH}: Make sure that the `transaction` argument contains 8,019 trits (the length of a transaction without the transaction hash).
  */
 export const isTransaction = (transaction: any, minWeightMagnitude = 0): boolean => {
     if (!Number.isInteger(minWeightMagnitude)) {
@@ -413,40 +449,89 @@ export const isTransaction = (transaction: any, minWeightMagnitude = 0): boolean
 }
 
 /**
- * Checks if given transaction is tail.
- * A tail transaction is the one with `currentIndex=0`.
+ * This method takes an array of transaction trits, and checks its `currentIndex` field to validate whether it is the tail transaction in a bundle.
  *
+ * ## Related methods
+ * 
+ * To get a transaction's trits from the Tangle, use the [`getTrytes()`]{@link #module_core.getTrytes} method, then convert them to trits, using the [`trytesToTrits()`]{@link #module_converter.trytesToTrits} method.
+ * 
  * @method isTailTransaction
+ * 
+ * @summary Checks if the given transaction is a tail transaction in a bundle.
+ *  
+ * @memberof module:transaction
  *
- * @param {Int8Array} transaction
- *
- * @return {boolean}
+ * @param {Int8Array} transaction - Transaction trits
+ * 
+ * @example
+ * ```js
+ * let tail = Transaction.isTailTransaction(transaction);
+ * ```
+ * 
+ * @return {boolean} tail - Whether the transaction is a tail transaction.
+ * 
+ * @throws {errors.ILLEGAL_TRANSACTION_BUFFER_LENGTH}: Make sure that the `transaction` argument contains 8,019 trits (the length of a transaction without the transaction hash).
  */
 export const isTail = (transaction: any): transaction is Int8Array =>
     isTransaction(transaction) && tritsToValue(createCurrentIndex(false)(transaction)) === 0
 
 /**
- * Checks if given transaction is head.
- * The head transaction is the one with `currentIndex=lastIndex`.
+ * This method takes an array of transaction trits, and checks its `currentIndex` field to validate whether it is the head transaction in a bundle.
  *
+ * ## Related methods
+ * 
+ * To get a transaction's trits from the Tangle, use the [`getTrytes()`]{@link #module_core.getTrytes} method, then convert them to trits, using the [`trytesToTrits()`]{@link #module_converter.trytesToTrits} method.
+ * 
  * @method isHeadTransaction
+ * 
+ * @summary Checks if the given transaction is a head transaction in a bundle.
+ *  
+ * @memberof module:transaction
  *
- * @param {Int8Array} transaction
- *
- * @return {boolean}
+ * @param {Int8Array} transaction - Transaction trits
+ * 
+ * @example
+ * ```js
+ * let head = Transaction.isHeadTransaction(transaction);
+ * ```
+ * 
+ * @return {boolean} head - Whether the transaction is a head transaction.
+ * 
+ * @throws {errors.ILLEGAL_TRANSACTION_BUFFER_LENGTH}: Make sure that the `transaction` argument contains 8,019 trits (the length of a transaction without the transaction hash).
  */
 export const isHead = (transaction: any): transaction is Int8Array =>
     isTransaction(transaction) &&
     tritsToValue(createCurrentIndex(false)(transaction)) === tritsToValue(createLastIndex(false)(transaction))
 
 /**
- * Checks if given transaction has been attached.
+ * This method checks if the given transaction trits include a proof of work by validating that the its `attachmentTimestamp` field has a non-zero value.
+ * 
+ * The `attachmentTimestamp` field is set by the `attachToTangle` endpoint. Therefore, if this field is non-zero, this method assumes that proof of work was done.
+ * 
+ * **Note:** This method does not validate proof of work.
  *
+ * ## Related methods
+ * 
+ * To get a transaction's trits from the Tangle, use the [`getTrytes()`]{@link #module_core.getTrytes} method, then convert them to trits, using the [`trytesToTrits()`]{@link #module_converter.trytesToTrits} method.
+ * 
  * @method isAttachedTransaction
+ * 
+ * @ignore
+ * 
+ * @summary Checks if the given transaction has a non-zero value in its `attachmentTimestamp` field.
+ *  
+ * @memberof module:transaction
  *
- * @param {Int8Array} transaction
- *
- * @return {boolean}
+ * @param {Int8Array} transaction - Transaction trits
+ * 
+ * @example
+ * ```js
+ * let attached = Transaction.isAttachedTransaction(transaction);
+ * ```
+ * 
+ * @return {boolean} attached - Whether the transaction has a non-zero value in its `attachmentTimestamp` field.
+ * 
+ * @throws {errors.ILLEGAL_TRANSACTION_BUFFER_LENGTH}: Make sure that the `transaction` argument contains 8,019 trits (the length of a transaction without the transaction hash).
  */
 export const isAttached = (transaction: Int8Array): boolean =>
     isTransaction(transaction) &&

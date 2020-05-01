@@ -8,44 +8,63 @@ import { Balances, Callback, GetBalancesCommand, GetBalancesResponse, Hash, IRIC
 
 /**
  * @method createGetBalances
+ * 
+ * @summary Creates a new `getBalances()` method, using a custom Provider instance.
  *
  * @memberof module:core
+ * 
+ * @ignore
  *
- * @param {Provider} provider - Network provider
+ * @param {Provider} provider - The Provider object that the method should use to call the node's API endpoints.
  *
- * @return {function} {@link #module_core.getBalances `getBalances`}
+ * @return {Function} [`getBalances`]{@link #module_core.getBalances}  - A new `getBalances()` function that uses your chosen Provider instance.
  */
 export const createGetBalances = ({ send }: Provider) =>
     /**
-     * Fetches _confirmed_ balances of given addresses at the latest solid milestone,
-     * by calling [`getBalances`](https://docs.iota.works/iri/api#endpoints/getBalances) command.
+     * This method uses the connected IRI node's [`getBalances`](https://docs.iota.org/docs/node-software/0.1/iri/references/api-reference#getbalances) endpoint.
      *
+     * Any pending output transactions are not included in the balance.
+     * For example, if a pending output transaction deposits 10 Mi into an address that contains 50 Mi, this method will return a balance of 50 Mi not 60 Mi.
+     * 
+     * ## Related methods
+     * 
+     * To find the balance of all addresses that belong to your seed, use the [`getAccountData()`]{@link #module_core.getAccountData} method.
+     * 
+     * @method getBalances
+     * 
+     * @summary Gets the confirmed balances of the given addresses.
+     * 
+     * @memberof module:core
+     *
+     * @param {Hash[]} addresses - Array of addresses
+     * @param {number} threshold - Not used, but should be set to 100 until [this issue](https://github.com/iotaledger/iri/issues/1723) is resolved.
+     * @param {Hash[]} [tips] - Array of past transaction hashes from which to calculate the balances of the addresses. The balance will be calculated from the latest milestone that references these transactions.
+     * @param {Callback} [callback] - Optional callback function
+     * 
      * @example
      * ```js
      * getBalances([address], 100)
-     *   .then(({ balances }) => {
-     *     // ...
+     *   .then( balances => {
+     *     console.log(`Balance of the first address: `$balances.balances[0])
+     *     console.log(JSON.stringify(transactions));
      *   })
-     *   .catch(err => {
-     *     // ...
-     *   })
+     *   .catch(error => {
+     *     console.log(`Something went wrong: ${error}`)
+     * }
      * ```
      *
-     * @method getBalances
-     *
-     * @memberof module:core
-     *
-     * @param {Hash[]} addresses - List of addresses
-     * @param {number} threshold - Confirmation threshold, currently `100` should be used
-     * @param {Hash[]} [tips] - List of tips to calculate the balance from the PoV of these transactions
-     * @param {Callback} [callback] - Optional callback
-     *
      * @return {Promise}
-     * @fulfil {Balances} Object with list of `balances` and corresponding `milestone`
-     * @reject {Error}
-     * - `INVALID_HASH`: Invalid address
-     * - `INVALID_THRESHOLD`: Invalid `threshold`
-     * - Fetch error
+     * 
+     * @fulfil {Balances} balances - Object that contains the following:
+     * - balances.addresses: Array of balances in the same order as the `addresses` argument
+     * - balances.references: Either the transaction hash of the latest milestone, or the transaction hashes that were passed to the `tips` argument
+     * - balances.milestoneIndex: The latest milestone index that confirmed the balance
+     * - balances.duration: The number of milliseconds that it took for the node to return a response
+     * 
+     * @reject {Error} error - An error that contains one of the following:
+     * - `INVALID_HASH`: Make sure that the addresses contain only trytes
+     * - `INVALID_THRESHOLD`: Make sure that the threshold is a number greater than zero
+     * - Fetch error: The connected IOTA node's API returned an error. See the [list of error messages](https://docs.iota.org/docs/node-software/0.1/iri/references/api-errors) 
      */
     (
         addresses: ReadonlyArray<Hash>,

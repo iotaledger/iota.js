@@ -73,38 +73,45 @@ export function returnType<T>(func: Func<T>) {
 }
 
 /**
- * Composes API object from it's components
- *
  * @method composeApi
+ * 
+ * @summary Creates an API object that's used to send requests to an IRI node.
  *
  * @memberof module:core
  *
- * @param {object} [settings={}] - Connection settings
- * @param {Provider} [settings.network] - Network provider, defaults to `http-client`.
- * @param {string} [settings.provider=http://localhost:14265] Uri of IRI node
- * @param {function} [settings.attachToTangle] - Function to override
- * [`attachToTangle`]{@link #module_core.attachToTangle} with
- * @param {string | number} [settings.apiVersion=1] - IOTA Api version to be sent as `X-IOTA-API-Version` header.
- * @param {number} [settings.requestBatchSize=1000] - Number of search values per request.
+ * @param {Object} [settings={}] - Connection settings.
+ * @param {Provider} [settings.network=http-client] - Network provider
+ * @param {string} [settings.provider=http://localhost:14265] - URI of an IRI node
+ * @param {Function} [settings.attachToTangle=attachToTangle] - Function that overrides the default `attachToTangle` endpoint
+ * @param {string | number} [settings.apiVersion=1] - IOTA API version to use in the `X-IOTA-API-Version` HTTP header
+ * @param {number} [settings.requestBatchSize=1000] - Maximum number of parameters that may be sent in batched API request for [`findTransactions`]{@link #module_core.findTransactions}, [`getBalances`]{@link #module_core.getBalances}, [`getInclusionStates`]{@link #module_core.getInclusionStates}, and [`getTrytes`]{@link #module_core.getTrytes}
  *
- * @return {API}
+ * @example
+ * ```js
+ * const Iota = require('@iota/core`);
+ * 
+ * const iota = Iota.composeAPI({
+ *  provider: 'https://nodes.devnet.thetangle.org:443'
+ * });
+ * ```
+ * 
+ * @return {API} iota - API object to use to interact with an IRI node.
  */
 export const composeAPI = (settings: Partial<Settings> = {}) => {
     let provider: Provider = createHttpClient(settings)
     let attachToTangle: AttachToTangle = settings.attachToTangle || createAttachToTangle(provider)
 
     /**
-     * Defines network provider configuration and [`attachToTangle`]{@link #module_core.attachToTangle} method.
-     *
      * @method setSettings
+     * 
+     * @summary Defines network provider configuration and [`attachToTangle`]{@link #module_core.attachToTangle} method.
      *
      * @memberof API
      *
-     * @param {object} settings - Provider settings object
-     * @param {string} [settings.provider] - Http `uri` of IRI node
-     * @param {Provider} [settings.network] - Network provider to override with
-     * @param {function} [settings.attachToTangle] - AttachToTangle function to override with
-     * [`attachToTangle`]{@link #module_core.attachToTangle} with
+     * @param {Object} settings - Provider settings object
+     * @param {string} [settings.provider] - URI of an IRI node
+     * @param {Provider} [settings.network] - Network provider
+     * @param {Function} [settings.attachToTangle] - A new `attachToTangle()` function
      */
     function setSettings(newSettings: Partial<Settings> = {}) {
         if (newSettings.attachToTangle) {
@@ -118,20 +125,35 @@ export const composeAPI = (settings: Partial<Settings> = {}) => {
         provider.setSettings(newSettings)
     }
 
+    /**
+     * 
+     * @method overrideNetwork
+     * 
+     * @summary Overrides the default provider
+     *
+     * @memberof API
+     * 
+     * @ignore
+     *
+     * @param {Provider} network - Provider instance to use to override the existing network settings
+     */
+
     function overrideNetwork(network: Provider) {
         provider = network
     }
 
     /**
-     * Overides default [`attachToTangle`]{@link #module_core.attachToTangle} with a local equivalent or
-     * [`PoWBox`](https://powbox.devnet.iota.org/)
      *
      * @method overrideAttachToTangle
+     * 
+     * @summary Overrides the default [`attachToTangle`]{@link #module_core.attachToTangle} method
      *
      * @memberof API
+     * 
+     * @ignore
      *
-     * @param {function} attachToTangle - Function to override
-     * [`attachToTangle`]{@link #module_core.attachToTangle} with
+     * @param {function} attachToTangle - Function that overrides the
+     * [`attachToTangle`]{@link #module_core.attachToTangle} method
      */
     function overrideAttachToTangle(attachFn: AttachToTangle) {
         attachToTangle = attachFn
