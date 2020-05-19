@@ -89,7 +89,7 @@
         "@babel/plugin-syntax-async-generators": "^7.0.0-beta.49",
         "@iota/samples": "^1.0.0-beta.12",
         "@types/nock": "^10.0.0",
-        "ava": "^0.25.0",
+        "ava": "^3.0.0",
         "babel-cli": "^6.26.0",
         "babel-core": "^6.26.0",
         "babel-plugin-transform-object-rest-spread": "^6.26.0",
