@@ -49,3 +49,5 @@ jobs:
         - npm i
       script:
         - npm run test-android
+  allow_failures:
+    - language: android
