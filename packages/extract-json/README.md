@@ -17,42 +17,39 @@ yarn add @iota/extract-json
 
 ## API Reference
 
-    <a name="module_extract-json..extractJson"></a>
+    <a name="module_extract-json.extractJson"></a>
 
-### *extract-json*~extractJson(bundle)
+### *extract-json*.extractJson(bundle)
+**Summary**: Extracts JSON from transactions.  
+**Throws**:
 
-| Param | Type |
-| --- | --- |
-| bundle | <code>array</code> | 
+- <code>errors.INVALID\_BUNDLE</code> : Make sure that the `bundle` argument is an array of transaction trytes.
+- <code>errors.INVALID\_JSON</code> : Make sure that the transactions' `signatureMessageFragment` fields contain valid JSON.
 
-Takes a bundle as input and from the signatureMessageFragments extracts the correct JSON
-data which was encoded and sent with the transaction.
-Supports the following forms of JSON encoded values:
+
+| Param | Type | Description |
+| --- | --- | --- |
+| bundle | <code>array</code> | Transaction trytes |
+
+This method takes the `signatureMessageFragment` fields of all the given transaction trytes, and tries to extract any JSON data that's in them.
+
+The following forms of JSON-encoded values are supported:
 - `"{ \"message\": \"hello\" }"`
 - `"[1, 2, 3]"`
 - `"true"`, `"false"` & `"null"`
 - `"\"hello\""`
 - `123`
 
+## Related methods
+
+To get a bundle's transaction trytes from the Tangle, use the [`getBundle()`](#module_core.getBundle) method.
+
+**Returns**: <code>string</code> \| <code>number</code> \| <code>null</code> - The JSON data in the transactions  
 **Example**  
 ```js
 try {
-  const msg = JSON.parse(extractJson(bundle))
-} catch (err) {
-  err.msg == errors.INVALID_BUNDLE
-  // Invalid bundle or invalid encoded JSON
+  const json = JSON.parse(extractJson(bundle))
+} catch (error) {
+  console.log(error);
 }
-```
-**Example**  
-Example with `getBundle`:
-
-```js
-getBundle(tailHash)
-  .then(bundle => {
-     const msg = JSON.parse(extractJson(bundle))
-     // ...
-  })
-  .catch((err) => {
-     // Handle network & extraction errors
-  })
 ```
