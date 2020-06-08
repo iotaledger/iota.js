@@ -18,7 +18,7 @@ import {
     createFindTransactions,
     createGetBalances,
     createGetBundlesFromAddresses,
-    createGetLatestInclusion,
+    createGetInclusionStates,
     createGetTransactionsToApprove,
     createGetTrytes,
     createIsAddressUsed,
@@ -76,14 +76,14 @@ export function networkAdapter({ provider }: NetworkParams): Network {
     const httpClient = createHttpClient({ provider })
     const getBalances = createGetBalances(httpClient)
     const getTrytes = createGetTrytes(httpClient)
-    const getLatestInclusion = createGetLatestInclusion(httpClient)
+    const getInclusionStates = createGetInclusionStates(httpClient)
 
     return {
         getTrytes: hashes => (hashes.length > 0 ? getTrytes(hashes) : Promise.resolve([])),
         getBalance: (address): Promise<number> => getBalances([address], 100).then(({ balances }) => balances[0]),
         getBalances,
         getConsistency: createCheckConsistency(httpClient),
-        getLatestInclusion: hashes => (hashes.length > 0 ? getLatestInclusion(hashes) : Promise.resolve([])),
+        getInclusionStates: hashes => (hashes.length > 0 ? getInclusionStates(hashes) : Promise.resolve([])),
         getBundlesFromAddresses: createGetBundlesFromAddresses(httpClient, 'lib'),
         findTransactions: createFindTransactions(httpClient),
         sendTrytes: createSendTrytes(httpClient),
@@ -407,7 +407,7 @@ export function transactionAttachment(this: any, params: TransactionAttachmentPa
         getTransactionsToApprove,
         attachToTangle,
         getTrytes,
-        getLatestInclusion,
+        getInclusionStates,
         getConsistency,
     } = network
 
@@ -439,7 +439,7 @@ export function transactionAttachment(this: any, params: TransactionAttachmentPa
                     pastAttachments.map(trytes => tritsToTrytes(transactionHash(trytesToTrits(trytes))))
                 )
                 .then(pastAttachmentHashes =>
-                    getLatestInclusion(pastAttachmentHashes).tap(inclusionStates => {
+                    getInclusionStates(pastAttachmentHashes).tap(inclusionStates => {
                         if (inclusionStates.indexOf(true) > -1) {
                             return persistence.del(['0', tritsToTrytes(bundleHash(bundle))].join(':'))
                         }

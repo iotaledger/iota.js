@@ -5,7 +5,6 @@ import headers from './headers'
 export const getInclusionStatesCommand: GetInclusionStatesCommand = {
     command: IRICommand.GET_INCLUSION_STATES,
     transactions: ['A'.repeat(81), 'B'.repeat(81)],
-    tips: ['M'.repeat(81)],
 }
 
 export const getInclusionStatesResponse: GetInclusionStatesResponse = {

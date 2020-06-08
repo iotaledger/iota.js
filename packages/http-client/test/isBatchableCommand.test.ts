@@ -28,7 +28,6 @@ const getBalancesCommand: GetBalancesCommand = {
 const getInclusionStatesCommand: GetInclusionStatesCommand = {
     command: IRICommand.GET_INCLUSION_STATES,
     transactions: ['A'.repeat(81), 'B'.repeat(81)],
-    tips: ['T'.repeat(81)],
 }
 
 interface CustomCommand extends BaseCommand {

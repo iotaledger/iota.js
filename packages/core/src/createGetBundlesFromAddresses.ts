@@ -1,10 +1,10 @@
 import * as Promise from 'bluebird'
 import { Bundle, Callback, Hash, Provider, Transaction } from '../../types'
-import { createFindTransactionObjects, createGetLatestInclusion } from './'
+import { createFindTransactionObjects, createGetInclusionStates } from './'
 
 export const createGetBundlesFromAddresses = (provider: Provider, caller?: string) => {
     const findTransactionObjects = createFindTransactionObjects(provider)
-    const getLatestInclusion = createGetLatestInclusion(provider)
+    const getInclusionStates = createGetInclusionStates(provider)
 
     /* tslint:disable-next-line:only-arrow-functions */
     return function(
@@ -36,9 +36,8 @@ export const createGetBundlesFromAddresses = (provider: Provider, caller?: strin
                 .then(groupTransactionsIntoBundles)
 
                 // 4. If requested, add persistence status to each bundle
-                .then(
-                    (bundles: ReadonlyArray<Bundle>) =>
-                        inclusionStates ? addPersistence(getLatestInclusion, bundles) : bundles
+                .then((bundles: ReadonlyArray<Bundle>) =>
+                    inclusionStates ? addPersistence(getInclusionStates, bundles) : bundles
                 )
 
                 // 5. Sort bundles by timestamp
@@ -96,16 +95,16 @@ export const zipPersistence = (bundles: ReadonlyArray<Bundle>) => (
     // Since bundles are atomic, all transactions have the same state
     zip2(bundles, states).map(([bundle, state]) => bundle.map(tx => ({ ...tx, persistence: state })))
 
-type GetLatestInclusion = (
+type GetInclusionStates = (
     transactions: ReadonlyArray<Hash>,
     callback?: Callback<ReadonlyArray<boolean>>
 ) => Promise<ReadonlyArray<boolean>>
 
-export const addPersistence = (getLatestInclusion: GetLatestInclusion, bundles: ReadonlyArray<Bundle>) => {
+export const addPersistence = (getInclusionStates: GetInclusionStates, bundles: ReadonlyArray<Bundle>) => {
     // Get the first hash of each bundle
     const hashes = bundles.map(bundle => bundle[0].hash)
 
-    return getLatestInclusion(hashes).then(zipPersistence(bundles))
+    return getInclusionStates(hashes).then(zipPersistence(bundles))
 }
 
 export const sortByTimestamp = (bundles: ReadonlyArray<Bundle>) =>

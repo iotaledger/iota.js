@@ -108,8 +108,6 @@ export { createGetBundlesFromAddresses } from './createGetBundlesFromAddresses'
 
 export { createGetInputs, GetInputsOptions } from './createGetInputs'
 
-export { createGetLatestInclusion } from './createGetLatestInclusion'
-
 export {
     createGetNewAddress,
     // createGetUntilFirstUnusedAddress,

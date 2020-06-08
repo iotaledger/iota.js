@@ -185,19 +185,16 @@ export const getBalancesNockBatchB = nock('http://localhost:24265', headers(apiV
 export const getInclusionStatesCommand: GetInclusionStatesCommand = {
     command: IRICommand.GET_INCLUSION_STATES,
     transactions: ['A'.repeat(81), 'B'.repeat(81), 'C'.repeat(81)],
-    tips: ['T'.repeat(81)],
 }
 
 export const getInclusionStatesCommandA: GetInclusionStatesCommand = {
     command: IRICommand.GET_INCLUSION_STATES,
     transactions: ['A'.repeat(81), 'B'.repeat(81)],
-    tips: ['T'.repeat(81)],
 }
 
 export const getInclusionStatesCommandB: GetInclusionStatesCommand = {
     command: IRICommand.GET_INCLUSION_STATES,
     transactions: ['C'.repeat(81)],
-    tips: ['T'.repeat(81)],
 }
 
 export const expectedGetInclusionStatesResponse: GetInclusionStatesResponse = {
