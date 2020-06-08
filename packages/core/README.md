@@ -29,88 +29,45 @@ yarn add @iota/core
 
     * [.composeApi([settings])](#module_core.composeApi)
 
-    * [.createAddNeighbors(provider)](#module_core.createAddNeighbors)
-
-    * [.addNeighbors(uris, [callback])](#module_core.addNeighbors)
-
-    * [.createAttachToTangle(provider)](#module_core.createAttachToTangle)
+    * [.addNeighbors(URIs, [callback])](#module_core.addNeighbors)
 
     * [.attachToTangle(trunkTransaction, branchTransaction, minWeightMagnitude, trytes, [callback])](#module_core.attachToTangle)
 
-    * [.createBroadcastBundle(provider)](#module_core.createBroadcastBundle)
-
     * [.broadcastBundle(tailTransactionHash, [callback])](#module_core.broadcastBundle)
-
-    * [.createBroadcastTransactions(provider)](#module_core.createBroadcastTransactions)
 
     * [.broadcastTransactions(trytes, [callback])](#module_core.broadcastTransactions)
 
-    * [.createCheckConsistency(provider)](#module_core.createCheckConsistency)
-
     * [.checkConsistency(transactions, [options], [callback])](#module_core.checkConsistency)
-
-    * [.createFindTransactionObjects(provider)](#module_core.createFindTransactionObjects)
 
     * [.findTransactionObjects(query, [callback])](#module_core.findTransactionObjects)
 
-    * [.createFindTransactions(provider)](#module_core.createFindTransactions)
-
     * [.findTransactions(query, [callback])](#module_core.findTransactions)
-
-    * [.createGetAccountData(provider)](#module_core.createGetAccountData)
 
     * [.getAccountData(seed, options, [callback])](#module_core.getAccountData)
 
-    * [.createGetBalances(provider)](#module_core.createGetBalances)
-
-
-    * [.getBalances(addresses, threshold, [tips], [callback])](#module_core.getBalances)
-
-    * [.createGetBundle(provider)](#module_core.createGetBundle)
+    * [.getBalances(addresses, [tips], [callback])](#module_core.getBalances)
 
     * [.getBundle(tailTransactionHash, [callback])](#module_core.getBundle)
 
-    * [.createGetInclusionStates(provider)](#module_core.createGetInclusionStates)
-
     * [.getInclusionStates(transactions, tips, [callback])](#module_core.getInclusionStates)
-
-    * [.createGetInputs(provider)](#module_core.createGetInputs)
 
     * [.getInputs(seed, [options], [callback])](#module_core.getInputs)
 
-    * [.createGetLatestInclusion(provider)](#module_core.createGetLatestInclusion)
-
-    * [.getLatestInclusion(transactions, tips, [callback])](#module_core.getLatestInclusion)
-
-    * [.createGetNeighbors(provider)](#module_core.createGetNeighbors)
+    * [.getLatestInclusion(transactions, [callback])](#module_core.getLatestInclusion)
 
     * [.getNeighbors([callback])](#module_core.getNeighbors)
 
-    * [.createGetNewAddress(provider)](#module_core.createGetNewAddress)
-
     * [.getNewAddress(seed, [options], [callback])](#module_core.getNewAddress)
-
-    * [.createGetNodeInfo(provider)](#module_core.createGetNodeInfo)
 
     * [.getNodeInfo([callback])](#module_core.getNodeInfo)
 
-    * [.createGetTips(provider)](#module_core.createGetTips)
-
     * [.getTips([callback])](#module_core.getTips)
-
-    * [.createGetTransactionObjects(provider)](#module_core.createGetTransactionObjects)
 
     * [.getTransactionObjects(hashes, [callback])](#module_core.getTransactionObjects)
 
-    * [.createGetTransactionsToApprove(provider)](#module_core.createGetTransactionsToApprove)
-
     * [.getTransactionsToApprove(depth, [reference], [callback])](#module_core.getTransactionsToApprove)
 
-    * [.createGetTrytes(provider)](#module_core.createGetTrytes)
-
     * [.getTrytes(hashes, [callback])](#module_core.getTrytes)
-
-    * [.createIsPromotable(provider, [depth])](#module_core.createIsPromotable)
 
     * [.isPromotable(tail, [callback])](#module_core.isPromotable)
 
@@ -118,31 +75,17 @@ yarn add @iota/core
 
     * [.prepareTransfers(seed, transfers, [options], [callback])](#module_core.prepareTransfers)
 
-    * [.createPromoteTransaction(provider, [attachFn])](#module_core.createPromoteTransaction)
-
     * [.promoteTransaction(tail, depth, minWeightMagnitude, [spamTransfers], [options], [callback])](#module_core.promoteTransaction)
-
-    * [.createRemoveNeighbors(provider)](#module_core.createRemoveNeighbors)
 
     * [.removeNeighbors(uris, [callback])](#module_core.removeNeighbors)
 
-    * [.createReplayBundle(provider)](#module_core.createReplayBundle)
-
     * [.replayBundle(tail, depth, minWeightMagnitude, [callback])](#module_core.replayBundle)
-
-    * [.createSendTrytes(provider)](#module_core.createSendTrytes)
 
     * [.sendTrytes(trytes, depth, minWeightMagnitude, [reference], [callback])](#module_core.sendTrytes)
 
-    * [.createStoreAndBroadcast(provider)](#module_core.createStoreAndBroadcast)
-
     * [.storeAndBroadcast(trytes, [callback])](#module_core.storeAndBroadcast)
 
-    * [.createStoreTransactions(provider)](#module_core.createStoreTransactions)
-
-    * [.storeTransactions(trytes, [callback])](#module_core.storeTransactions)
-
-    * [.createTraverseBundle(provider)](#module_core.createTraverseBundle)
+    * [.storeAndBroadcast(trytes, [callback])](#module_core.storeAndBroadcast)
 
     * [.traverseBundle(trunkTransaction, [bundle], [callback])](#module_core.traverseBundle)
 
@@ -152,103 +95,96 @@ yarn add @iota/core
 <a name="module_core.composeApi"></a>
 
 ### *core*.composeApi([settings])
+**Summary**: Creates an API object that's used to send requests to an IRI node.  
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
-| [settings] | <code>object</code> | <code>{}</code> | Connection settings |
-| [settings.network] | <code>Provider</code> |  | Network provider, defaults to `http-client`. |
-| [settings.provider] | <code>string</code> | <code>&quot;http://localhost:14265&quot;</code> | Uri of IRI node |
-| [settings.attachToTangle] | <code>function</code> |  | Function to override [`attachToTangle`](#module_core.attachToTangle) with |
-| [settings.apiVersion] | <code>string</code> \| <code>number</code> | <code>1</code> | IOTA Api version to be sent as `X-IOTA-API-Version` header. |
-| [settings.requestBatchSize] | <code>number</code> | <code>1000</code> | Number of search values per request. |
+| [settings] | <code>Object</code> | <code>{}</code> | Connection settings. |
+| [settings.network] | <code>Provider</code> | <code>http-client</code> | Network provider |
+| [settings.provider] | <code>string</code> | <code>&quot;http://localhost:14265&quot;</code> | URI of an IRI node |
+| [settings.attachToTangle] | <code>function</code> | <code>attachToTangle</code> | Function that overrides the default `attachToTangle` endpoint |
+| [settings.apiVersion] | <code>string</code> \| <code>number</code> | <code>1</code> | IOTA API version to use in the `X-IOTA-API-Version` HTTP header |
+| [settings.requestBatchSize] | <code>number</code> | <code>1000</code> | Maximum number of parameters that may be sent in batched API request for [`findTransactions`](#module_core.findTransactions), [`getBalances`](#module_core.getBalances), [`getInclusionStates`](#module_core.getInclusionStates), and [`getTrytes`](#module_core.getTrytes) |
 
-Composes API object from it's components
+**Returns**: [<code>API</code>](#API) - iota - API object to use to interact with an IRI node.  
+**Example**  
+```js
+const Iota = require('@iota/core`);
 
-<a name="module_core.createAddNeighbors"></a>
-
-### *core*.createAddNeighbors(provider)
-
-| Param | Type | Description |
-| --- | --- | --- |
-| provider | <code>Provider</code> | Network provider |
-
-**Returns**: <code>function</code> - [`addNeighbors`](#module_core.addNeighbors)  
+const iota = Iota.composeAPI({
+ provider: 'https://nodes.devnet.thetangle.org:443'
+});
+```
 <a name="module_core.addNeighbors"></a>
 
-### *core*.addNeighbors(uris, [callback])
-**Fulfil**: <code>number</code> Number of neighbors that were added  
-**Reject**: <code>Error</code>
-- `INVALID_URI`: Invalid uri
-- Fetch error  
+### *core*.addNeighbors(URIs, [callback])
+**Summary**: Adds temporary neighbors to the connected IRI node.  
+**Fulfil**: <code>number</code> numberOfNeighbors - Number of neighbors that were added  
+**Reject**: <code>Error</code> error - One of the following errors:
+- `INVALID_URI`: Make sure that the URI is a string and starts with `tcp://`
+- Fetch error: The connected IOTA node's API returned an error. See the [list of error messages](https://docs.iota.org/docs/node-software/0.1/iri/references/api-errors)  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| uris | <code>Array</code> | List of URI's |
-| [callback] | <code>Callback</code> | Optional callback |
+| URIs | <code>Array.&lt;string&gt;</code> | Comma-separated URIs of neighbor nodes that you want to add |
+| [callback] | <code>Callback</code> | Optional callback function |
 
-Adds a list of neighbors to the connected IRI node by calling
-[`addNeighbors`](https://docs.iota.works/iri/api#endpoints/addNeighbors) command.
-Assumes `addNeighbors` command is available on the node.
+This method adds temporary neighbors to the connected IRI node by calling the its
+[`addNeighbors`](https://docs.iota.org/docs/node-software/0.1/iri/references/api-reference#addNeighbors) endpoint.
 
-`addNeighbors` has temporary effect until your node relaunches.
+These neighbors are removed when the node is restarted.
+
+## Related methods
+
+To see statistics about the connected IRI node's neighbors, use the [`getNeighbors()`](#module_core.getNeighbors) method.
 
 **Example**  
 ```js
-addNeighbors(['udp://148.148.148.148:14265'])
-  .then(numAdded => {
-    // ...
-  }).catch(err => {
-    // ...
+addNeighbors(['tcp://148.148.148.148:15600'])
+  .then(numberOfNeighbors => {
+    console.log(`Successfully added ${numberOfNeighbors} neighbors`)
+  }).catch(error => {
+    console.log(`Something went wrong: ${error}`)
   })
 ```
-<a name="module_core.createAttachToTangle"></a>
-
-### *core*.createAttachToTangle(provider)
-
-| Param | Type | Description |
-| --- | --- | --- |
-| provider | <code>Provider</code> | Network provider |
-
-**Returns**: <code>function</code> - [`attachToTangle`](#module_core.attachToTangle)  
 <a name="module_core.attachToTangle"></a>
 
 ### *core*.attachToTangle(trunkTransaction, branchTransaction, minWeightMagnitude, trytes, [callback])
-**Fulfil**: <code>TransactionTrytes[]</code> Array of transaction trytes with nonce and attachment timestamps  
-**Reject**: <code>Error</code>
-- `INVALID_TRUNK_TRANSACTION`: Invalid `trunkTransaction`
-- `INVALID_BRANCH_TRANSACTION`: Invalid `branchTransaction`
-- `INVALID_MIN_WEIGHT_MAGNITUDE`: Invalid `minWeightMagnitude` argument
-- `INVALID_TRANSACTION_TRYTES`: Invalid transaction trytes
-- `INVALID_TRANSACTIONS_TO_APPROVE`: Invalid transactions to approve
-- Fetch error  
+**Summary**: Connects the given transaction trytes into a bundle and sends them to the connected IOTA node to complete [remote proof of work](https://docs.iota.org/docs/getting-started/0.1/transactions/proof-of-work).  
+**Fulfil**: <code>TransactionTrytes[]</code> attachedTrytes - Array of transaction trytes in tail-first order. To attach these transactions to the Tangle, pass the trytes to the [`broadcastTransactions()`](#module_core.broadcastTransactions) method.  
+**Reject**: <code>Error</code> error - One of the following errors:
+- `INVALID_TRUNK_TRANSACTION`: Make sure that the hash contains 81 trytes
+- `INVALID_BRANCH_TRANSACTION`: Make sure that the hash contains 81 trytes
+- `INVALID_MIN_WEIGHT_MAGNITUDE`: Make sure that the minimum weight magnitude is at least the same as the one used for the branch and trunk transactions.
+- `INVALID_TRANSACTION_TRYTES`: Make sure the trytes can be converted to a valid transaction object
+- Fetch error: The connected IOTA node's API returned an error. See the [list of error messages](https://docs.iota.org/docs/node-software/0.1/iri/references/api-errors)  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| trunkTransaction | <code>Hash</code> | Trunk transaction as returned by [`getTransactionsToApprove`](#module_core.getTransactionsToApprove) |
-| branchTransaction | <code>Hash</code> | Branch transaction as returned by [`getTransactionsToApprove`](#module_core.getTransactionsToApprove) |
-| minWeightMagnitude | <code>number</code> | Number of minimum trailing zeros in tail transaction hash |
-| trytes | <code>Array.&lt;TransactionTrytes&gt;</code> | List of transaction trytes |
-| [callback] | <code>Callback</code> | Optional callback |
+| trunkTransaction | <code>Hash</code> | Trunk transaction hash |
+| branchTransaction | <code>Hash</code> | Branch transaction hash |
+| minWeightMagnitude | <code>number</code> | The [minimum weight magnitude](https://docs.iota.org/docs/getting-started/0.1/network/minimum-weight-magnitude) to use for proof of work. **Note:** This value must be at least the same as the minimum weight magnitude of the branch and trunk transactions. |
+| trytes | <code>Array.&lt;TransactionTrytes&gt;</code> | Array of transaction trytes in head first order, which are returned by the [`prepareTransfers()`](#module_core.prepareTransfers) method |
+| [callback] | <code>Callback</code> | Optional callback function |
 
-Performs the Proof-of-Work required to attach a transaction to the Tangle by
-calling [`attachToTangle`](https://docs.iota.works/iri/api#endpoints/attachToTangle) command.
-Returns list of transaction trytes and overwrites the following fields:
+This method uses the connected IRI node's [`attachToTangle`](https://docs.iota.org/docs/node-software/0.1/iri/references/api-reference#attachToTangle) endpoint to chain the given transaction trytes into a bundle and do proof of work.
+
+By doing proof of work, this method overwrites the following transaction fields:
  - `hash`
  - `nonce`
  - `attachmentTimestamp`
  - `attachmentTimestampLowerBound`
  - `attachmentTimestampUpperBound`
 
-This method can be replaced with a local equivalent such as
-[`ccurl.interface.js`](https://github.com/iotaledger/ccurl.interface.js) in node.js,
-[`curl.lib.js`](https://github.com/iotaledger/curl.lib.js) which works on WebGL 2 enabled browsers
-or remote [`PoWbox`](https://powbox.devnet.iota.org/).
+**Note:** You can replace this method with your own custom one in the [`composeApi()`](##module_core.composeApi) method. For example, you may want to write a function that does local proof of work, using either the [`ccurl.interface.js`](https://github.com/iotaledger/ccurl.interface.js) NodeJS library,
+or the [`curl.lib.js`](https://github.com/iotaledger/curl.lib.js) library for browsers that support WebGL2.
 
-`trunkTransaction` and `branchTransaction` hashes are given by
-[`getTransactionsToApprove`](#module_core.getTransactionsToApprove).
+## Related methods
 
-**Note:** Persist the transaction trytes in local storage __before__ calling this command, to ensure
-that reattachment is possible, until your bundle has been included.
+To attach the returned transaction trytes to the Tangle, use the [`broadcastTransactions()`](#module_core.broadcastTransactions) method to send them to a node.
+
+You can get a trunk and branch transaction hash by calling the
+[`getTransactionsToApprove()`](#module_core.getTransactionsToApprove) method
 
 **Example**  
 ```js
@@ -257,1130 +193,1206 @@ getTransactionsToApprove(depth)
     attachToTangle(trunkTransaction, branchTransaction, minWeightMagnitude, trytes)
   )
   .then(attachedTrytes => {
-    // ...
-  })
-  .catch(err => {
-    // ...
+    console.log(`Successfully did proof of work. Here are your bundle's transaction trytes: ${attachedTrytes}`)
+  }).catch(error => {
+    console.log(`Something went wrong: ${error}`)
   })
 ```
-<a name="module_core.createBroadcastBundle"></a>
-
-### *core*.createBroadcastBundle(provider)
-
-| Param | Type | Description |
-| --- | --- | --- |
-| provider | <code>Provider</code> | Network provider |
-
-**Returns**: <code>function</code> - [`broadcastBundle`](#module_core.broadcastBundle)  
 <a name="module_core.broadcastBundle"></a>
 
 ### *core*.broadcastBundle(tailTransactionHash, [callback])
-**Fulfil**: <code>Transaction[]</code> List of transaction objects  
-**Reject**: <code>Error</code>
-- `INVALID_HASH`: Invalid tail transaction hash
-- `INVALID_BUNDLE`: Invalid bundle
-- Fetch error  
+**Summary**: Resends all transactions in the bundle of a given tail transaction hash to the connected IRI node.  
+**Fulfil**: <code>Transaction[]</code> transactionObjects - Array of transaction objects  
+**Reject**: <code>Error</code> error - An error that contains one of the following:
+- `INVALID_TRANSACTION_HASH`: Make sure the tail transaction hash is 81 trytes long and its `currentIndex` field is 0
+- `INVALID_BUNDLE`: Check the tail transaction's bundle for the following:
+  - Addresses in value transactions have a 0 trit at the end, which means they were generated using the Kerl hashing function
+  - Transactions in the bundle array are in the same order as their currentIndex field
+  - The total value of all transactions in the bundle sums to 0
+  - The bundle hash is valid
+- Fetch error: The connected IOTA node's API returned an error. See the [list of error messages](https://docs.iota.org/docs/node-software/0.1/iri/references/api-errors)  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | tailTransactionHash | <code>Hash</code> | Tail transaction hash |
-| [callback] | <code>Callback</code> | Optional callback |
+| [callback] | <code>Callback</code> | Optional callback function |
 
-Re-broadcasts all transactions in a bundle given the tail transaction hash.
-It might be useful when transactions did not properly propagate,
-particularly in the case of large bundles.
+This method uses the `getBundle()` method to get all transactions in the given tail transaction's bundle from the connected IRI node.
+
+Then, those transactions are sent to the node again so that the node sends them to all of its neighbors.
+
+You may want to use this method to improve the likelihood of your transactions reaching the rest of the network.
+
+**Note:** To use this method, the node must already have your bundle's transaction trytes in its ledger.
+
+## Related methods
+
+To create and sign a bundle of new transactions, use the [`prepareTransfers()`](#module_core.prepareTransfers) method.
 
 **Example**  
 ```js
 broadcastBundle(tailHash)
-  .then(transactions => {
-     // ...
+  .then(transactionObjects => {
+     console.log(`Successfully sent the following bundle to the node:)
+     console.log(JSON.stringify(transactionObjects));
   })
-  .catch(err => {
-    // ...
+  .catch(error => {
+    console.log(`Something went wrong: ${error}`)
   })
 ```
-<a name="module_core.createBroadcastTransactions"></a>
-
-### *core*.createBroadcastTransactions(provider)
-
-| Param | Type | Description |
-| --- | --- | --- |
-| provider | <code>Provider</code> | Network provider |
-
-**Returns**: <code>function</code> - [`broadcastTransactions`](#module_core.broadcastTransactions)  
 <a name="module_core.broadcastTransactions"></a>
 
 ### *core*.broadcastTransactions(trytes, [callback])
-**Fulfil**: <code>Trytes[]</code> Attached transaction trytes  
-**Reject**: <code>Error</code>
-- `INVALID_ATTACHED_TRYTES`: Invalid array of attached trytes
-- Fetch error  
+**Summary**: Sends the given transaction trytes to the connected IRI node.  
+**Fulfil**: <code>TransactionTrytes[]</code> transactionTrytes - Array of transaction trytes that you just broadcast  
+**Reject**: <code>Error</code> error - An error that contains one of the following:
+- `INVALID_ATTACHED_TRYTES`: Make sure that the trytes include a proof of work
+- Fetch error: The connected IOTA node's API returned an error. See the [list of error messages](https://docs.iota.org/docs/node-software/0.1/iri/references/api-errors)  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| trytes | <code>Array.&lt;TransactionTrytes&gt;</code> | Attached Transaction trytes |
+| trytes | <code>Array.&lt;TransactionTrytes&gt;</code> | Transaction trytes that include proof of work |
 | [callback] | <code>Callback</code> | Optional callback |
 
-Broadcasts an list of _attached_ transaction trytes to the network by calling
-[`boradcastTransactions`](https://docs.iota.org/iri/api#endpoints/broadcastTransactions) command.
-Tip selection and Proof-of-Work must be done first, by calling
-[`getTransactionsToApprove`](#module_core.getTransactionsToApprove) and
-[`attachToTangle`](#module_core.attachToTangle) or an equivalent attach method or remote
-[`PoWbox`](https://powbox.testnet.iota.org/), which is a development tool.
+This method sends the given transaction trytes to the connected IRI node, using its
+[`broadcastTransactions`](https://docs.iota.org/docs/node-software/0.1/iri/references/api-reference#broadcastTransactions) endpoint.
 
-You may use this method to increase odds of effective transaction propagation.
+**Note:** Before calling this method, we recommend saving your transaction trytes in local storage.
+By doing so, you make sure that you can always reattach your transactions to the Tangle in case they remain in a pending state.
 
-**Note:** Persist the transaction trytes in local storage __before__ calling this command, to ensure
-that reattachment is possible, until your bundle has been included.
+## Related methods
+
+The given transaction trytes must be in a valid bundle and must include a proof of work.
+
+To create a valid bundle, use the `prepareTransfers()` method. For more information about what makes a bundles and transactions valid, see [this guide](https://docs.iota.org/docs/node-software/0.1/iri/concepts/transaction-validation).
+
+To do proof of work, use one of the following methods:
+
+- [`attachToTangle()`](#module_core.attachToTangle)
+- [`sendTrytes()`](#module_core.sendTrytes)
 
 **Example**  
 ```js
 broadcastTransactions(trytes)
-  .then(trytes => {
-     // ...
+  .then(transactionTrytes => {
+     console.log(`Successfully sent the following transaction trytes to the node:)
+     console.log(JSON.stringify(transactionTrytes));
   })
-  .catch(err => {
-    // ...
+  .catch(error => {
+    console.log(`Something went wrong: ${error}`)
   })
 ```
-<a name="module_core.createCheckConsistency"></a>
-
-### *core*.createCheckConsistency(provider)
-
-| Param | Type | Description |
-| --- | --- | --- |
-| provider | <code>Provider</code> | Network provider |
-
-**Returns**: <code>function</code> - [`checkConsistency`](#module_core.checkConsistency)  
 <a name="module_core.checkConsistency"></a>
 
 ### *core*.checkConsistency(transactions, [options], [callback])
-**Fulfil**: <code>boolean</code> Consistency state of given transaction or co-consistency of given transactions.  
-**Reject**: <code>Error</code>
-- `INVALID_TRANSACTION_HASH`: Invalid transaction hash
-- Fetch error
-- Reason for returning `false`, if called with `options.rejectWithReason`  
+**Summary**: Checks if one or more transactions are consistent.  
+**Fulfil**: <code>boolean</code> isConsistent - Whether the given transactions are consistent  
+**Reject**: <code>Error</code> error - An error that contains one of the following:
+- `INVALID_TRANSACTION_HASH`: Make sure the tail transaction hashes are 81 trytes long and their `currentIndex` field is 0
+- Fetch error: The connected IOTA node's API returned an error. See the [list of error messages](https://docs.iota.org/docs/node-software/0.1/iri/references/api-errors)
+- Reason for inconsistency if the method was called with the `options.rejectWithReason` argument  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| transactions | <code>Hash</code> \| <code>Array.&lt;Hash&gt;</code> | Tail transaction hash (hash of transaction with `currentIndex == 0`), or array of tail transaction hashes |
-| [options] | <code>object</code> | Options |
-| [options.rejectWithReason] | <code>boolean</code> | Enables rejection if state is `false`, with reason as error message |
-| [callback] | <code>Callback</code> | Optional callback |
+| transactions | <code>Hash</code> \| <code>Array.&lt;Hash&gt;</code> | One or more tail transaction hashes to check |
+| [options] | <code>Object</code> | Options object |
+| [options.rejectWithReason] | <code>boolean</code> | Return the reason for inconsistent transactions |
+| [callback] | <code>Callback</code> | Optional callback function |
 
-Checks if a transaction is _consistent_ or a set of transactions are _co-consistent_, by calling
-[`checkConsistency`](https://docs.iota.org/iri/api#endpoints/checkConsistency) command.
-_Co-consistent_ transactions and the transactions that they approve (directly or inderectly),
-are not conflicting with each other and rest of the ledger.
+This method finds out if a transaction has a chance of being confirmed, using the connected node's
+[`checkConsistency`](https://docs.iota.org/docs/node-software/0.1/iri/references/api-reference#checkconsistency) endpoint.
 
-As long as a transaction is consistent it might be accepted by the network.
-In case a transaction is inconsistent, it will not be accepted, and a reattachment
-is required by calling [`replayBundle`](#module_core.replayBundle).
+A consistent transaction is one where:
+- The node has the transaction's branch and trunk transactions in its ledger
+- The transaction's bundle is valid
+- The transaction's branch and trunk transactions are valid
+
+For more information about what makes a bundles and transactions valid, see [this article](https://docs.iota.org/docs/node-software/0.1/iri/concepts/transaction-validation).
+
+As long as a transaction is consistent it has a chance of being confirmed.
+
+## Related methods
+
+If a consistent transaction is taking a long time to be confirmed, you can improve its chances, using the
+[`promoteTransaction()`](#module_core.promoteTransaction) method.
+
+If a transaction is inconsistent, it will never be confirmed. In this case, you can reattach the transaction, using the [`replayBundle()`](#module_core.replayBundle) method.
 
 **Example**  
 ```js
-checkConsistency(tailHash)
+checkConsistency(transactions)
   .then(isConsistent => {
-    // ...
+    isConsistent? console.log(All these transactions are consistent): console.log(One or more of these transactions are inconsistent);
   })
   .catch(err => {
-    // ...
+    console.log(`Something went wrong: ${error}`);
   })
 ```
-**Example**  
-##### Example with `checkConsistency` & `isPromotable`
-
-Consistent transactions might remain pending due to networking issues,
-or if not referenced by recent milestones issued by
-[Coordinator](https://docs.iota.org/introduction/tangle/consensus).
-Therefore `checkConsistency` with a time heuristic can determine
-if a transaction should be [_promoted_](#module_core.promoteTransaction)
-or [_reattached_](#module_core.replayBundle).
-This functionality is abstracted in [`isPromotable`](#module_core.isPromotable).
-
-```js
-const isAboveMaxDepth = attachmentTimestamp => (
-   // Check against future timestamps
-   attachmentTimestamp < Date.now() &&
-   // Check if transaction wasn't issued before last 6 milestones
-   // Milestones are being issued every ~2mins
-   Date.now() - attachmentTimestamp < 11 * 60 * 1000
-)
-
-const isPromotable = ({ hash, attachmentTimestamp }) => (
-  checkConsistency(hash)
-     .then(isConsistent => (
-       isConsistent &&
-       isAboveMaxDepth(attachmentTimestamp)
-     ))
-)
-```
-<a name="module_core.createFindTransactionObjects"></a>
-
-### *core*.createFindTransactionObjects(provider)
-
-| Param | Type | Description |
-| --- | --- | --- |
-| provider | <code>Provider</code> | Network provider for accessing IRI |
-
-**Returns**: <code>function</code> - [`findTransactionObjects`](#module_core.findTransactionObjects)  
 <a name="module_core.findTransactionObjects"></a>
 
 ### *core*.findTransactionObjects(query, [callback])
-**Fulfil**: <code>Transaction[]</code> Array of transaction objects  
-**Reject**: <code>Error</code>
-- `INVALID_SEARCH_KEY`
-- `INVALID_HASH`: Invalid bundle hash
-- `INVALID_TRANSACTION_HASH`: Invalid approvee transaction hash
-- `INVALID_ADDRESS`: Invalid address
-- `INVALID_TAG`: Invalid tag
-- Fetch error  
+**Summary**: Searches the Tangle for transaction objects that contain all the given values in their [transaction fields](https://docs.iota.org/docs/getting-started/0.1/transactions/transactions#structure-of-a-transaction).  
+**Fulfil**: <code>Transaction[]</code> transactionObjects - Array of transaction objects, which contain fields that match the query object  
+**Reject**: <code>Error</code> error - An error that contains one of the following:
+- `INVALID_SEARCH_KEY`: Make sure that you entered valid query parameters
+- `INVALID_HASH`: Make sure that the bundle hashes are 81 trytes long
+- `INVALID_TRANSACTION_HASH`: Make sure that the approvee transaction hashes are 81 trytes long
+- `INVALID_ADDRESS`: Make sure that the addresses contain only trytes
+- `INVALID_TAG`: Make sure that the tags contain only trytes
+- Fetch error: The connected IOTA node's API returned an error. See the [list of error messages](https://docs.iota.org/docs/node-software/0.1/iri/references/api-errors)  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| query | <code>object</code> |  |
-| [query.addresses] | <code>Array.&lt;Hash&gt;</code> | List of addresses |
-| [query.bundles] | <code>Array.&lt;Hash&gt;</code> | List of bundle hashes |
-| [query.tags] | <code>Array.&lt;Tag&gt;</code> | List of tags |
-| [query.addresses] | <code>Array.&lt;Hash&gt;</code> | List of approvees |
-| [callback] | <code>Callback</code> | Optional callback |
+| query | <code>Object</code> | Query object |
+| [query.addresses] | <code>Array.&lt;Hash&gt;</code> | Array of addresses to search for in transactions |
+| [query.bundles] | <code>Array.&lt;Hash&gt;</code> | Array of bundle hashes to search for in transactions |
+| [query.tags] | <code>Array.&lt;Tag&gt;</code> | Array of tags to search for in transactions |
+| [query.approvees] | <code>Array.&lt;Hash&gt;</code> | Array of transaction hashes that you want to search for in transactions' branch and trunk transaction fields |
+| [callback] | <code>Callback</code> | Optional callback function |
 
-Wrapper function for [`findTransactions`](#module_core.findTransactions) and
-[`getTrytes`](#module_core.getTrytes).
-Searches for transactions given a `query` object with `addresses`, `tags` and `approvees` fields.
-Multiple query fields are supported and `findTransactionObjects` returns intersection of results.
+This method uses the [`findTransactions()`](#module_core.findTransactions) to find transactions with the given fields, then it uses
+the [`getTransactionObjects()`](#module_core.getTransactionObjects) method to return the transaction objects.
+
+If you pass more than one query, this method returns only transactions that contain all the given fields in those queries.
+
+## Related methods
+
+To find only transaction hashes, use the [`findTransactions()`](#module_core.findTransactions) method.
 
 **Example**  
-Searching for transactions by address:
-
 ```js
-findTransactionObjects({ addresses: ['ADR...'] })
-   .then(transactions => {
-       // ...
-   })
-   .catch(err => {
-       // ...
-   })
+findTransactionObjects({ addresses: ['ADDRESS999...'] })
+   .then(transactionObjects => {
+     console.log(`Successfully found the following transactions:)
+     console.log(JSON.stringify(transactionObjects));
+  })
+  .catch(error => {
+    console.log(`Something went wrong: ${error}`)
+  })
 ```
-<a name="module_core.createFindTransactions"></a>
-
-### *core*.createFindTransactions(provider)
-
-| Param | Type | Description |
-| --- | --- | --- |
-| provider | <code>Provider</code> | Network provider for accessing IRI |
-
-**Returns**: <code>function</code> - [`findTransactionObjects`](#module_core.findTransactions)  
 <a name="module_core.findTransactions"></a>
 
 ### *core*.findTransactions(query, [callback])
-**Fulfil**: <code>Hash[]</code> Array of transaction hashes  
-**Reject**: <code>Error</code>
-- `INVALID_SEARCH_KEY`
-- `INVALID_HASH`: Invalid bundle hash
-- `INVALID_TRANSACTION_HASH`: Invalid approvee transaction hash
-- `INVALID_ADDRESS`: Invalid address
-- `INVALID_TAG`: Invalid tag
-- Fetch error  
+**Summary**: * Searches the Tangle for the hashes of transactions that contain all the given values in their transaction fields.  
+**Fulfil**: <code>Hash[]</code> transactionHashes - Array of transaction hashes for transactions, which contain fields that match the query object  
+**Reject**: <code>Error</code> error - An error that contains one of the following:
+- `INVALID_SEARCH_KEY`: Make sure that you entered valid query parameters
+- `INVALID_HASH`: Make sure that the bundle hashes are 81 trytes long
+- `INVALID_TRANSACTION_HASH`: Make sure that the approvee transaction hashes are 81 trytes long
+- `INVALID_ADDRESS`: Make sure that the addresses contain only trytes
+- `INVALID_TAG`: Make sure that the tags contain only trytes
+- Fetch error: The connected IOTA node's API returned an error. See the [list of error messages](https://docs.iota.org/docs/node-software/0.1/iri/references/api-errors)  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| query | <code>object</code> |  |
-| [query.addresses] | <code>Array.&lt;Hash&gt;</code> | List of addresses |
-| [query.bundles] | <code>Array.&lt;Hash&gt;</code> | List of bundle hashes |
-| [query.tags] | <code>Array.&lt;Tag&gt;</code> | List of tags |
-| [query.addresses] | <code>Array.&lt;Hash&gt;</code> | List of approvees |
-| [callback] | <code>Callback</code> | Optional callback |
+| query | <code>Object</code> | Query object |
+| [query.addresses] | <code>Array.&lt;Hash&gt;</code> | Array of addresses to search for in transactions |
+| [query.bundles] | <code>Array.&lt;Hash&gt;</code> | Array of bundle hashes to search for in transactions |
+| [query.tags] | <code>Array.&lt;Tag&gt;</code> | Array of tags to search for in transactions |
+| [query.approvees] | <code>Array.&lt;Hash&gt;</code> | Array of transaction hashes that you want to search for in transactions' branch and trunk transaction fields |
+| [callback] | <code>Callback</code> | Optional callback function |
 
-Searches for transaction `hashes`  by calling
-[`findTransactions`](https://docs.iota.org/iri/api#endpoints/findTransactions) command.
-It allows to search for transactions by passing a `query` object with `addresses`, `tags` and `approvees` fields.
-Multiple query fields are supported and `findTransactions` returns intersection of results.
+This method searches for transaction hashes by calling the connected IRI node's [`findTransactions`](https://docs.iota.org/docs/node-software/0.1/iri/references/api-reference#findTransactions) endpoint.
+
+If you pass more than one query parameter, this method returns only transactions that contain all the given fields in those queries.
+
+## Related methods
+
+To find transaction objects, use the [`findTransactionObjects()`](#module_core.findTransactionObjects) method.
 
 **Example**  
 ```js
-findTransactions({ addresses: ['ADRR...'] })
-   .then(hashes => {
-       // ...
-   })
-   .catch(err => {
-       // handle errors here
-   })
+findTransactions({ addresses: ['ADDRESS999...'] })
+   .then(transactionHashes => {
+     console.log(`Successfully found the following transactions:)
+     console.log(JSON.stringify(transactionHashes));
+  })
+  .catch(error => {
+    console.log(`Something went wrong: ${error}`)
+  })
 ```
-<a name="module_core.createGetAccountData"></a>
-
-### *core*.createGetAccountData(provider)
-
-| Param | Type | Description |
-| --- | --- | --- |
-| provider | <code>Provider</code> | Network provider for accessing IRI |
-
-**Returns**: <code>function</code> - [`getAccountData`](#module_core.getAccountData)  
 <a name="module_core.getAccountData"></a>
 
 ### *core*.getAccountData(seed, options, [callback])
-**Fulfil**: <code>AccountData</code>  
-**Reject**: <code>Error</code>
-- `INVALID_SEED`
-- `INVALID_START_OPTION`
-- `INVALID_START_END_OPTIONS`: Invalid combination of start & end options`
-- Fetch error  
+**Summary**: Searches the Tangle for transctions, addresses, and balances that are associated with a given seed.  
+**Fulfil**: <code>AccountData</code> accountData - Object that contains the following:
+- accountData.transfers: (deprecated) Array of transaction objects that contain one of the seed's addresses
+- accountData.transactions: Array of transaction hashes for transactions that contain one of the seed's addresses
+- accountData.addresses: Array of spent addresses
+- accountData.inputs: Array of input objects for any unspent addresses
+  - accountData.inputs.address: The 81-tryte address (without checksum)
+  - accountData.inputs.keyIndex: The key index of the address
+  - accountData.inputs.security: Security level of the address
+  - accountData.inputs.balance: Balance of the address
+- accountData.balance: The total balance of unspent addresses  
+**Reject**: <code>Error</code> error - An error that contains one of the following:
+- `INVALID_SEED`: Make sure that the seed contains only trytes
+- `INVALID_SECURITY_LEVEL`: Make sure that the security level is a number between 1 and 3
+- `INVALID_START_OPTION`: Make sure that the `options.start` argument is greater than zero
+- `INVALID_START_END_OPTIONS`: Make sure that the `options.end` argument is not greater than the `options.start` argument by more than 1,000`
+- Fetch error: The connected IOTA node's API returned an error. See the [list of error messages](https://docs.iota.org/docs/node-software/0.1/iri/references/api-errors)  
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
-| seed | <code>string</code> |  |  |
-| options | <code>object</code> |  |  |
-| [options.start] | <code>number</code> | <code>0</code> | Starting key index |
-| [options.security] | <code>number</code> | <code>0</code> | Security level to be used for getting inputs and addresses |
-| [options.end] | <code>number</code> |  | Ending key index |
-| [callback] | <code>Callback</code> |  | Optional callback |
+| seed | <code>string</code> |  | The seed to use to generate addresses |
+| options | <code>Object</code> |  | Options object |
+| [options.start] | <code>number</code> | <code>0</code> | The key index from which to start generating addresses |
+| [options.security] | <code>number</code> | <code>2</code> | The [security level](https://docs.iota.org/docs/getting-started/0.1/clients/security-levels) to use to generate the addresses |
+| [options.end] | <code>number</code> |  | The key index at which to stop generating addresses |
+| [callback] | <code>Callback</code> |  | Optional callback function |
 
-Returns an `AccountData` object, containing account information about `addresses`, `transactions`,
-`inputs` and total account balance.
+This method generates [addresses](https://docs.iota.org/docs/getting-started/0.1/clients/addresses) for a given seed, and searches the Tangle for data about those addresses such as transactions, inputs, and total balance.
+
+**Note:** The given seed is used to [generate addresses](https://docs.iota.org/docs/client-libraries/0.1/how-to-guides/js/generate-an-address) on your local device. It is never sent anywhere.
+
+If you don't pass an `options.end` argument to this method, it will continue to generate addresses until it finds an unspent one.
+
+**Note:** The total balance does not include IOTA tokens on [spent addresses](https://docs.iota.org/docs/getting-started/0.1/clients/addresses#spent-addresses).
+
+## Related methods
+
+To find the balance of specific addresses, which don't have to belong to your seed, use the [`getBalances()`](#module_core.getBalances) method.
+
+To find only inputs (objects that contain information about addresses with a postive balance), use the [`getInputs()`](#module_core.getInputs) method.
 
 **Example**  
 ```js
-getAccountData(seed, {
-   start: 0,
-   security: 2
-})
+getAccountData(seed)
   .then(accountData => {
     const { addresses, inputs, transactions, balance } = accountData
-    // ...
+    console.log(`Successfully found the following transactions:)
+    console.log(JSON.stringify(transactions));
   })
-  .catch(err => {
-    // ...
+  .catch(error => {
+    console.log(`Something went wrong: ${error}`)
   })
 ```
-<a name="module_core.createGetBalances"></a>
+<a name="module_core.getBalances"></a>
 
-### *core*.createGetBalances(provider)
+### *core*.getBalances(addresses, [tips], [callback])
+**Summary**: Gets the confirmed balances of the given addresses.  
+**Fulfil**: <code>Balances</code> balances - Object that contains the following:
+- balances.addresses: Array of balances in the same order as the `addresses` argument
+- balances.references: Either the transaction hash of the latest milestone, or the transaction hashes that were passed to the `tips` argument
+- balances.milestoneIndex: The latest milestone index that confirmed the balance
+- balances.duration: The number of milliseconds that it took for the node to return a response  
+**Reject**: <code>Error</code> error - An error that contains one of the following:
+- `INVALID_HASH`: Make sure that the addresses contain only trytes
+- Fetch error: The connected IOTA node's API returned an error. See the [list of error messages](https://docs.iota.org/docs/node-software/0.1/iri/references/api-errors)  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| provider | <code>Provider</code> | Network provider |
+| addresses | <code>Array.&lt;Hash&gt;</code> | Array of addresses |
+| [tips] | <code>Array.&lt;Hash&gt;</code> | Array of past transaction hashes from which to calculate the balances of the addresses. The balance will be calculated from the latest milestone that references these transactions. |
+| [callback] | <code>Callback</code> | Optional callback function |
 
-**Returns**: <code>function</code> - [`getBalances`](#module_core.getBalances)  
-<a name="module_core.getBalances"></a>
+This method uses the connected IRI node's [`getBalances`](https://docs.iota.org/docs/node-software/0.1/iri/references/api-reference#getbalances) endpoint.
 
-### _core_.getBalances(addresses, threshold, [tips], [callback])
-**Fulfil**: <code>Balances</code> Object with list of `balances` and corresponding `milestone`  
-**Reject**: <code>Error</code>
--   `INVALID_HASH`: Invalid address
--   `INVALID_THRESHOLD`: Invalid `threshold`
--   Fetch error
+Any pending output transactions are not included in the balance.
+For example, if a pending output transaction deposits 10 Mi into an address that contains 50 Mi, this method will return a balance of 50 Mi not 60 Mi.
 
-| Param      | Type                            | Description                                                              |
-| ---------- | ------------------------------- | ------------------------------------------------------------------------ |
-| addresses  | <code>Array.&lt;Hash&gt;</code> | List of addresses                                                        |
-| threshold  | <code>number</code>             | Confirmation threshold, currently `100` should be used                   |
-| [tips]     | <code>Array.&lt;Hash&gt;</code> | List of tips to calculate the balance from the PoV of these transactions |
-| [callback] | <code>Callback</code>           | Optional callback                                                        |
+## Related methods
 
-Fetches _confirmed_ balances of given addresses at the latest solid milestone,
-by calling [`getBalances`](https://docs.iota.works/iri/api#endpoints/getBalances) command.
+To find the balance of all addresses that belong to your seed, use the [`getAccountData()`](#module_core.getAccountData) method.
 
 **Example**  
 ```js
-getBalances([address], 100)
-  .then(({ balances }) => {
-    // ...
+getBalances([address])
+  .then( balances => {
+    console.log(`Balance of the first address: `$balances.balances[0])
+    console.log(JSON.stringify(transactions));
   })
-  .catch(err => {
-    // ...
-  })
+  .catch(error => {
+    console.log(`Something went wrong: ${error}`)
+}
 ```
-<a name="module_core.createGetBundle"></a>
-
-### *core*.createGetBundle(provider)
-
-| Param | Type | Description |
-| --- | --- | --- |
-| provider | <code>Provider</code> | Network provider for accessing IRI |
-
-**Returns**: <code>function</code> - [`getBundle`](#module_core.getBundle)  
 <a name="module_core.getBundle"></a>
 
 ### *core*.getBundle(tailTransactionHash, [callback])
-**Fulfil**: <code>Transaction[]</code> Bundle as array of transaction objects  
-**Reject**: <code>Error</code>
-- `INVALID_TRANSACTION_HASH`
-- `INVALID_TAIL_HASH`: Provided transaction is not tail (`currentIndex !== 0`)
-- `INVALID_BUNDLE`: Bundle is syntactically invalid
-- Fetch error  
+**Summary**: Searches the Tangle for a valid bundle that includes the given tail transaction hash.  
+**Fulfil**: <code>Transaction[]</code> bundle - Array of transaction objects that are in the bundle  
+**Reject**: <code>Error</code> error - An error that contains one of the following:
+- `INVALID_TRANSACTION_HASH`: Make sure the tail transaction hash is 81 trytes long
+- `INVALID_TAIL_HASH`: Make sure that the tail transaction hash is for a transaction whose `currentIndex` field is 0
+- `INVALID_BUNDLE`: Check the tail transaction's bundle for the following:
+  - Addresses in value transactions have a 0 trit at the end, which means they were generated using the Kerl hashing function
+  - Transactions in the bundle array are in the same order as their currentIndex field
+  - The total value of all transactions in the bundle sums to 0
+  - The bundle hash is valid
+- Fetch error: The connected IOTA node's API returned an error. See the [list of error messages](https://docs.iota.org/docs/node-software/0.1/iri/references/api-errors)  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | tailTransactionHash | <code>Hash</code> | Tail transaction hash |
-| [callback] | <code>Callback</code> | Optional callback |
+| [callback] | <code>Callback</code> | Optional callback function |
 
-Fetches and validates the bundle given a _tail_ transaction hash, by calling
-[`traverseBundle`](#module_core.traverseBundle) and traversing through `trunkTransaction`.
+This method uses the [`traverseBundle()`](#module_core.traverseBundle) method to find all transactions in a bundle, validate them, and return them as transaction objects.
+
+For more information about what makes a bundles and transactions valid, see [this guide](https://docs.iota.org/docs/node-software/0.1/iri/concepts/transaction-validation).
+
+## Related methods
+
+To find transaction objects that aren't in the same bundle, use the [`getTransactionObjects()`](#module_core.getTransactionObjects) method.
 
 **Example**  
 ```js
 getBundle(tail)
    .then(bundle => {
-       // ...
-   })
-   .catch(err => {
-       // handle errors
+    console.log(`Bundle found:)
+    console.log(JSON.stringify(bundle));
+  })
+  .catch(error => {
+    console.log(`Something went wrong: ${error}`)
    })
 ```
-<a name="module_core.createGetInclusionStates"></a>
-
-### *core*.createGetInclusionStates(provider)
-
-| Param | Type | Description |
-| --- | --- | --- |
-| provider | <code>Provider</code> | Network provider for accessing IRI |
-
-**Returns**: <code>function</code> - [`getInclusionStates`](#module_core.getInclusionStates)  
 <a name="module_core.getInclusionStates"></a>
 
 ### *core*.getInclusionStates(transactions, tips, [callback])
-**Fulfil**: <code>boolean[]</code> Array of inclusion state  
-**Reject**: <code>Error</code>
-- `INVALID_TRANSACTION_HASH`: Invalid `hashes` or `tips`
-- Fetch error  
+**Summary**: Finds out if one or more given transactions are referenced by one or more other given transactions.  
+**Fulfil**: <code>boolean[]</code> states - Array of inclusion states, where `true` means that the transaction is referenced by the given transacions and `false` means that it's not.  
+**Reject**: <code>Error</code> error - An error that contains one of the following:
+- `INVALID_TRANSACTION_HASH`: Make sure that the transaction hashes are 81 trytes long
+- Fetch error: The connected IOTA node's API returned an error. See the [list of error messages](https://docs.iota.org/docs/node-software/0.1/iri/references/api-errors)  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| transactions | <code>Array.&lt;Hash&gt;</code> | List of transaction hashes |
-| tips | <code>Array.&lt;Hash&gt;</code> | List of tips to check if transactions are referenced by |
-| [callback] | <code>Callback</code> | Optional callback |
+| transactions | <code>Array.&lt;Hash&gt;</code> | Array of transaction hashes to check |
+| tips | <code>Array.&lt;Hash&gt;</code> | Array of transaction hashes that should directly or indirectly reference the given transactions |
+| [callback] | <code>Callback</code> | Optional callback function |
 
-Fetches inclusion states of given list of transactions, by calling
-[`getInclusionStates`](https://docs.iota.works/iri/api#endpoints/getInclusionsStates) command.
+This method uses the connected IRI node's [`getInclusionStates`](https://docs.iota.org/docs/node-software/0.1/iri/references/api-reference#getinclusionstates) endpoint.
+
+If the given tip transactions reference a given transaction, the returned state is `true`.
+
+If the given tip transactions do not reference a given transaction, the returned state is `false`.
+
+## Related methods
+
+To find out if one or more transactions are confirmed, use the [`getLatestInclusion()`](#module_core.getLatestInclusion) method.
 
 **Example**  
 ```js
-getInclusionStates(transactions)
+getInclusionStates(transactions, )
   .then(states => {
-    // ...
+     for(let i = 0; i < states.length; i++){
+         states? console.log(`Transaction ${i} is referenced by the given transactions`) :
+         console.log(`Transaction ${i} is not referenced by the given transactions`);
+     }
   })
-  .catch(err => {
-    // ...
-  })
+  .catch(error => {
+    console.log(`Something went wrong: ${error}`)
+  });
 ```
-<a name="module_core.createGetInputs"></a>
-
-### *core*.createGetInputs(provider)
-
-| Param | Type | Description |
-| --- | --- | --- |
-| provider | <code>Provider</code> | Network provider for accessing IRI |
-
-**Returns**: <code>function</code> - [`getInputs`](#module_core.getInputs)  
 <a name="module_core.getInputs"></a>
 
 ### *core*.getInputs(seed, [options], [callback])
-**Fulfil**: <code>Inputs</code> Inputs object containg a list of `[Address](Address)` objects and `totalBalance` field  
-**Reject**: <code>Error</code>
-- `INVALID_SEED`
-- `INVALID_SECURITY_LEVEL`
-- `INVALID_START_OPTION`
-- `INVALID_START_END_OPTIONS`
-- `INVALID_THRESHOLD`
-- `INSUFFICIENT_BALANCE`
-- Fetch error  
+**Summary**: Finds a seed's addresses that have a positive balance.  
+**Fulfil**: <code>Inputs</code> - Array that contains the following:
+- input.addresses: An address
+- input.keyIndex: The key index of the address
+- input.security: The security level of the address
+- input.balance: The amount of IOTA tokens in the address
+- inputs.totalBalance: The combined balance of all addresses  
+**Reject**: <code>Error</code> error - An error that contains one of the following:
+- `INVALID_SEED`: Make sure that the seed contains only trytes
+- `INVALID_SECURITY_LEVEL`: Make sure that the security level is a number between 1 and 3
+- `INVALID_START_OPTION`: Make sure that the `options.start` argument is greater than zero
+- `INVALID_START_END_OPTIONS`: Make sure that the `options.end` argument is not greater than the `options.start` argument by more than 1,000`
+- Fetch error: The connected IOTA node's API returned an error. See the [list of error messages](https://docs.iota.org/docs/node-software/0.1/iri/references/api-errors) `
+- `INVALID_THRESHOLD`: Make sure that the threshold is a number greater than zero
+- `INSUFFICIENT_BALANCE`: Make sure that the seed has addresses that contain IOTA tokens
+- Fetch error: The connected IOTA node's API returned an error. See the [list of error messages](https://docs.iota.org/docs/node-software/0.1/iri/references/api-errors)  
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
-| seed | <code>string</code> |  |  |
-| [options] | <code>object</code> |  |  |
-| [options.start] | <code>number</code> | <code>0</code> | Index offset indicating from which address we start scanning for balance |
-| [options.end] | <code>number</code> |  | Last index up to which we stop scanning |
-| [options.security] | <code>number</code> | <code>2</code> | Security level of inputs |
-| [options.threshold] | <code>threshold</code> |  | Minimum amount of balance required |
-| [callback] | <code>Callback</code> |  | Optional callback |
+| seed | <code>string</code> |  | The seed to use to generate addresses |
+| [options] | <code>Object</code> |  | Options object |
+| [options.start] | <code>number</code> | <code>0</code> | The key index from which to start generating addresses |
+| [options.security] | <code>number</code> | <code>2</code> | The [security level](https://docs.iota.org/docs/getting-started/0.1/clients/security-levels) to use to generate the addresses |
+| [options.end] | <code>number</code> |  | The key index at which to stop generating addresses |
+| [options.threshold] | <code>number</code> |  | The amount of IOTA tokens that you want to find |
+| [callback] | <code>Callback</code> |  | Optional callback function |
 
-Creates and returns an `Inputs` object by generating addresses and fetching their latest balance.
+This method generates [addresses](https://docs.iota.org/docs/getting-started/0.1/clients/addresses) for a given seed and finds those that have a positive balance.
+
+**Note:** The given seed is used to [generate addresses](https://docs.iota.org/docs/client-libraries/0.1/how-to-guides/js/generate-an-address) on your local device. It is never sent anywhere.
+
+To find a certain amount of [IOTA tokens](https://docs.iota.org/docs/getting-started/0.1/clients/token) and return only the addresses that, when combined, contain that amount, pass it to the `options.threshold` argument.
+
+## Related methods
+
+You may want to use this method to find inputs for the [`prepareTransfers()`](#module_core.prepareTransfers) method.
 
 **Example**  
 ```js
-getInputs(seed, { start: 0, threhold })
+getInputs(seed)
   .then(({ inputs, totalBalance }) => {
-    // ...
+    console.log(`Your seed has a total of ${totalBalance} IOTA tokens \n` +
+    `on the following addresses:`)
+     for(let i = 0; i < inputs.length; i++) {
+         console.log(`${inputs[i].address}: ${inputs[i].balance}`)
+     }
   })
-  .catch(err => {
-    if (err.message === errors.INSUFFICIENT_BALANCE) {
-       // ...
+  .catch(error => {
+    if (error.message === errors.INSUFFICIENT_BALANCE) {
+       console.log('You have no IOTA tokens');
     }
-    // ...
-  })
+  });
 ```
-<a name="module_core.createGetLatestInclusion"></a>
-
-### *core*.createGetLatestInclusion(provider)
-
-| Param | Type | Description |
-| --- | --- | --- |
-| provider | <code>Provider</code> | Network provider for accessing IRI |
-
-**Returns**: <code>function</code> - [`getLatestInclusion`](#module_core.getLatestInclusion)  
 <a name="module_core.getLatestInclusion"></a>
 
-### *core*.getLatestInclusion(transactions, tips, [callback])
-**Fulfil**: <code>boolean[]</code> List of inclusion states  
-**Reject**: <code>Error</code>
-- `INVALID_HASH`: Invalid transaction hash
-- Fetch error  
+### *core*.getLatestInclusion(transactions, [callback])
+**Summary**: Finds out if one or more given transactions are [confirmed or pending](https://docs.iota.org/docs/getting-started/0.1/network/the-tangle#transaction-states).  
+**Fulfil**: <code>boolean[]</code> states - Array of inclusion states, where `true` means that the transaction is confirmed and `false` means that it's not.  
+**Reject**: <code>Error</code> error - An error that contains one of the following:
+- `INVALID_HASH`: Make sure that the transaction hashes are 81 trytes long
+- Fetch error: The connected IOTA node's API returned an error. See the [list of error messages](https://docs.iota.org/docs/node-software/0.1/iri/references/api-errors)  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| transactions | <code>Array.&lt;Hash&gt;</code> | List of transactions hashes |
-| tips | <code>number</code> | List of tips to check if transactions are referenced by |
-| [callback] | <code>Callback</code> | Optional callback |
+| transactions | <code>Array.&lt;Hash&gt;</code> | List of transactions hashes to check |
+| [callback] | <code>Callback</code> | Optional callback function |
 
-Fetches inclusion states of given transactions and a list of tips,
-by calling [`getInclusionStates`](#module_core.getInclusionStates) on `latestSolidSubtangleMilestone`.
+This method uses the node's `latestSolidSubtangleMilestone` field as the `tips` argument to make sure that the given transactions are referenced by the node's latest solid milestone.
+
+An invalid transaction will always remain in a pending state.
+
+**Note:** If a valid transaction is in a pending state for too long, you can [increase its chances of being confirmed](https://docs.iota.org/docs/client-libraries/0.1/how-to-guides/js/confirm-pending-bundle).
+
+## Related methods
+
+To check if transactions are referenced by a non-milestone transaction, use the [`getInclusionStates()`](#module_core.getInclusionStates) method.
 
 **Example**  
 ```js
-getLatestInclusion(hashes)
-   .then(states => {
-       // ...
-   })
-   .catch(err => {
-       // handle error
-   })
+iota.getLatestInclusionState(['transactionHash'])
+.then(states => {
+   for(let i = 0; i < states.length; i++){
+       states[i]? console.log(`Transaction ${i} is confirmed`) :
+       console.log(`transaction ${i} is pending`);
+   }
+ })
+.catch(error => {
+    console.log(`Something went wrong: ${error}`);
+ });
 ```
-<a name="module_core.createGetNeighbors"></a>
-
-### *core*.createGetNeighbors(provider)
-
-| Param | Type | Description |
-| --- | --- | --- |
-| provider | <code>Provider</code> | Network provider |
-
-**Returns**: <code>function</code> - [`getNeighbors`](#module_core.getNeighbors)  
 <a name="module_core.getNeighbors"></a>
 
 ### *core*.getNeighbors([callback])
-**Fulfil**: <code>Neighbors</code>  
-**Reject**: <code>Error</code>
-- Fetch error  
+**Summary**: Gets information and statistics about the connected IRI node's neighbors.  
+**Fulfil**: <code>Neighbors</code> neighbors - Array that contains the following:
+- neighbors.address: IP address of the neighbor
+- neighbors.domain: Domain name of the neighbor
+- neighbors.numberOfAllTransactions: Number of transactions in the neighbors ledger (including invalid ones)
+- neighbors.numberOfRandomTransactionRequests: Number of random tip transactions that the neighbor has requested from the connected node
+- neighbors.numberOfNewTransactions: Number of new transactions that the neighbor has sent to the connected node
+- neighbors.numberOfInvalidTransactions: Number of invalid transactions that the neighbor sent to the connected node
+- neighbors.numberOfStaleTransactions: Number of transactions that the neighbor sent to the connected node, which contain a timestamp that's older than the connected node's latest snapshot
+- neighbors.numberOfSentTransactions: Number of transactions that the connected node has sent to the neighbor
+- neighbors.numberOfDroppedSentPackets: Number of network packets that the neighbor dropped because its queue was full
+- neighbors.connectionType: The transport protocol that the neighbor uses to sent packets to the connected node
+- neighbors.connected: Whether the neighbor is connected to the node  
+**Reject**: <code>Error</code> error - Fetch error: The connected IOTA node's API returned an error. See the [list of error messages](https://docs.iota.org/docs/node-software/0.1/iri/references/api-errors)  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| [callback] | <code>Callback</code> | Optional callback |
+| [callback] | <code>Callback</code> | Optional callback function |
 
-Returns list of connected neighbors.
+This method uses the connected IRI node's [`getNeighbors`](https://docs.iota.org/docs/node-software/0.1/iri/references/api-reference#getneighbors) endpoint to find information about the neighbors' activity.
 
-<a name="module_core.createGetNewAddress"></a>
+All statistics are aggregated until the node restarts.
 
-### *core*.createGetNewAddress(provider)
+## Related methods
 
-| Param | Type | Description |
-| --- | --- | --- |
-| provider | <code>Provider</code> | Network provider |
-
-**Returns**: <code>function</code> - [`getNewAddress`](#module_core.getNewAddress)  
-<a name="module_core.getNewAddress"></a>
-
-### *core*.getNewAddress(seed, [options], [callback])
-**Fulfil**: <code>Hash\|Hash[]</code> New (unused) address or list of addresses up to (and including) first unused address  
-**Reject**: <code>Error</code>
-- `INVALID_SEED`
-- `INVALID_START_OPTION`
-- `INVALID_SECURITY`
-- Fetch error  
-
-| Param | Type | Default | Description |
-| --- | --- | --- | --- |
-| seed | <code>string</code> |  | At least 81 trytes long seed |
-| [options] | <code>object</code> |  |  |
-| [options.index] | <code>number</code> | <code>0</code> | Key index to start search at |
-| [options.security] | <code>number</code> | <code>2</code> | Security level |
-| [options.checksum] | <code>boolean</code> | <code>false</code> | `Deprecated` Flag to include 9-trytes checksum or not |
-| [options.total] | <code>number</code> |  | `Deprecated` Number of addresses to generate. |
-| [options.returnAll] | <code>boolean</code> | <code>false</code> | `Deprecated` Flag to return all addresses, from start up to new address. |
-| [callback] | <code>Callback</code> |  | Optional callback |
-
-Generates and returns a new address by calling [`findTransactions`](#module_core.findTransactions)
-until the first unused address is detected. This stops working after a snapshot.
+To add neighbors to the node, use the [`addNeighbors()`](#module_core.addNeighbors) method.
 
 **Example**  
 ```js
-getNewAddress(seed, { index })
+getNeighbors()
+.then(neighbors => {
+    console.log(`Node is connected to the following neighbors: \n`)
+    console.log(JSON.stringify(neighbors));
+})
+.catch(error => {
+    console.log(`Something went wrong: ${error}`);
+});
+```
+<a name="module_core.getNewAddress"></a>
+
+### *core*.getNewAddress(seed, [options], [callback])
+**Summary**: Generates a new address for a given seed.  
+**Fulfil**: <code>Hash\|Hash[]</code> address - A single new address or an array of new addresses  
+**Reject**: <code>Error</code> error - An error that contains one of the following:
+- `INVALID_SEED`: Make sure that the seed contains only trytes
+- `INVALID_SECURITY_LEVEL`: Make sure that the security level is a number between 1 and 3
+- `INVALID_START_OPTION`: Make sure that the `options.start` argument is greater than zero
+- Fetch error: The connected IOTA node's API returned an error. See the [list of error messages](https://docs.iota.org/docs/node-software/0.1/iri/references/api-errors)  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| seed | <code>string</code> |  | The seed to use to generate addresses |
+| [options] | <code>Object</code> |  | Options object |
+| [options.index] | <code>number</code> | <code>0</code> | The key index from which to start generating addresses |
+| [options.security] | <code>number</code> | <code>2</code> | The [security level](https://docs.iota.org/docs/getting-started/0.1/clients/security-levels) to use to generate the addresses |
+| [options.checksum] | <code>boolean</code> | <code>false</code> | `Deprecated` |
+| [options.total] | <code>number</code> |  | `Deprecated` |
+| [options.returnAll] | <code>boolean</code> | <code>false</code> | `Deprecated` |
+| [callback] | <code>Callback</code> |  | Optional callback function |
+
+This method uses the connected IRI node's [`findTransactions`](#module_core.findTransactions)
+endpoint to search every transactions in the Tangle for each generated address. If an address is found in a transaction, a new address is generated until one is found that isn't in any transactions.
+
+**Note:** The given seed is used to [generate addresses](https://docs.iota.org/docs/client-libraries/0.1/how-to-guides/js/generate-an-address) on your local device. It is never sent anywhere.
+
+**Note:** Because of local snapshots, this method is not a reliable way of generating unspent addresses. Instead, you should use the [account module](https://docs.iota.org/docs/client-libraries/0.1/account-module/introduction/overview) to keep track of your spent addresses.
+
+## Related methods
+
+To find out which of your addresses are spent, use the [`getAccountData()`](#module_core.getAccountData) method.
+
+**Example**  
+```js
+getNewAddress(seed)
   .then(address => {
-    // ...
+    console.log(`Here's your new address: ${address})
   })
-  .catch(err => {
-    // ...
+  .catch(error => {
+    console.log(`Something went wrong: ${error}`);
   })
 ```
-<a name="module_core.createGetNodeInfo"></a>
-
-### *core*.createGetNodeInfo(provider)
-
-| Param | Type | Description |
-| --- | --- | --- |
-| provider | <code>Provider</code> | Network provider |
-
-**Returns**: <code>function</code> - [`getNodeInfo`](#module_core.getNodeInfo)  
 <a name="module_core.getNodeInfo"></a>
 
 ### *core*.getNodeInfo([callback])
-**Fulfil**: <code>NodeInfo</code> Object with information about connected node.  
-**Reject**: <code>Error</code>
-- Fetch error  
+**Summary**: Gets information about the connected IRI node.  
+**Fulfil**: <code>NodeInfo</code> info - Object that contains the following information:
+info.appName: Name of the IRI network
+info.appVersion: Version of the [IRI node software](https://docs.iota.org/docs/node-software/0.1/iri/introduction/overview)
+info.jreAvailableProcessors: Available CPU cores on the node
+info.jreFreeMemory: Amount of free memory in the Java virtual machine
+info.jreMaxMemory: Maximum amount of memory that the Java virtual machine can use
+info.jreTotalMemory: Total amount of memory in the Java virtual machine
+info.jreVersion: The version of the Java runtime environment
+info.latestMilestone: Transaction hash of the latest [milestone](https://docs.iota.org/docs/getting-started/0.1/network/the-coordinator)
+info.latestMilestoneIndex: Index of the latest milestone
+info.latestSolidSubtangleMilestone: Transaction hash of the node's latest solid milestone
+info.latestSolidSubtangleMilestoneIndex: Index of the node's latest solid milestone
+info.milestoneStartIndex: Start milestone for the current version of the IRI node software
+info.lastSnapshottedMilestoneIndex: Index of the last milestone that triggered a [local snapshot](https://docs.iota.org/docs/getting-started/0.1/network/nodes#local-snapshots) on the node
+info.neighbors: Total number of connected neighbors
+info.packetsQueueSize: Size of the node's packet queue
+info.time: Unix timestamp
+info.tips: Number of tips transactions
+info.transactionsToRequest: Total number of transactions that the node is missing in its ledger
+info.features: Enabled configuration options on the node
+info.coordinatorAddress: Address (Merkle root) of the [Coordinator](https://docs.iota.org/docs/getting-started/0.1/network/the-coordinator)
+info.duration: Number of milliseconds it took to complete the request  
+**Reject**: <code>Error</code> error - Fetch error: The connected IOTA node's API returned an error. See the [list of error messages](https://docs.iota.org/docs/node-software/0.1/iri/references/api-errors)  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| [callback] | <code>Callback</code> | Optional callback |
+| [callback] | <code>Callback</code> | Optional callback function |
 
-Returns information about connected node by calling
-[`getNodeInfo`](https://docs.iota.works/iri/api#endpoints/getNodeInfo) command.
+This method uses the connected IRI node's
+[`getNodeInfo`](https://docs.iota.org/docs/node-software/0.1/iri/references/api-reference#getnodeinfo) endpoint.
+
+## Related methods
+
+To get statistics about the connected node's neighbors, use the [`getNeighbors()`](#module_core.getNeighbors) method.
 
 **Example**  
 ```js
 getNodeInfo()
-  .then(info => console.log(info))
-  .catch(err => {
-    // ...
+  .then(info => console.log(JSON.stringify(info)))
+  .catch(error => {
+    console.log(`Something went wrong: ${error}`);
   })
 ```
-<a name="module_core.createGetTips"></a>
-
-### *core*.createGetTips(provider)
-
-| Param | Type | Description |
-| --- | --- | --- |
-| provider | <code>Provider</code> | Network provider |
-
-**Returns**: <code>function</code> - [`getTips`](#module_core.getTips)  
 <a name="module_core.getTips"></a>
 
 ### *core*.getTips([callback])
-**Fulfil**: <code>Hash[]</code> List of tip hashes  
-**Reject**: <code>Error</code>
-- Fetch error  
+**Summary**: Searches the Tangle for tip transactions.  
+**Fulfil**: <code>Hash[]</code> tips - Array of tip transaction hashes  
+**Reject**: <code>Error</code> error - Fetch error: The connected IOTA node's API returned an error. See the [list of error messages](https://docs.iota.org/docs/node-software/0.1/iri/references/api-errors)  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| [callback] | <code>Callback</code> | Optional callback |
+| [callback] | <code>Callback</code> | Optional callback function |
 
-Returns a list of tips (transactions not referenced by other transactions),
-as seen by the connected node.
+This method finds all transactions that aren't referenced by other transactions in the Tangle
+by calling the connected IRI node's [`getTips`](https://docs.iota.org/docs/node-software/0.1/iri/references/api-reference#gettips) endpoint.
+
+## Related methods
+
+To find two consistent tip transactions to use as branch and trunk transactions, use the [`getTransactionsToApprove()`](#module_core.getTransactionsToApprove) method.
 
 **Example**  
 ```js
 getTips()
   .then(tips => {
-    // ...
+    console.log('Found the following tip transactions:');
+    console.log(JSON.stringify(tips));
   })
-  .catch(err => {
-    // ...
+  .catch(error => {
+    console.log(`Something went wrong: ${error}`);
   })
 ```
-<a name="module_core.createGetTransactionObjects"></a>
-
-### *core*.createGetTransactionObjects(provider)
-
-| Param | Type | Description |
-| --- | --- | --- |
-| provider | <code>Provider</code> | Network provider |
-
-**Returns**: <code>function</code> - [`getTransactionObjects`](#module_core.getTransactionObjects)  
 <a name="module_core.getTransactionObjects"></a>
 
 ### *core*.getTransactionObjects(hashes, [callback])
-**Fulfil**: <code>Transaction[]</code> - List of transaction objects  
-**Reject**: <code>Error</code>
-- `INVALID_TRANSACTION_HASH`
-- Fetch error  
+**Summary**: Searches the Tangle for transactions with the given hashes and returns their contents as objects.  
+**Fulfil**: <code>Transaction[]</code> - Array of transaction objects  
+**Reject**: <code>Error</code> error - An error that contains one of the following:
+- `INVALID_TRANSACTION_HASH`: Make sure that the transaction hashes are 81 trytes long
+- Fetch error: The connected IOTA node's API returned an error. See the [list of error messages](https://docs.iota.org/docs/node-software/0.1/iri/references/api-errors)  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | hashes | <code>Array.&lt;Hash&gt;</code> | Array of transaction hashes |
-| [callback] | <code>function</code> | Optional callback |
+| [callback] | <code>function</code> | Optional callback function |
 
-Fetches the transaction objects, given an array of transaction hashes.
+This method returns transaction objects in the same order as the given hashes.
+For example, if the node doesn't have any transactions with a given hash, the value at that index in the returned array is empty.
+
+## Related methods
+
+To find all transaction objects in a specific bundle, use the [`getBundle()`](#module_core.getBundle) method.
 
 **Example**  
 ```js
-getTransactionObjects(hashes)
-  .then(transactions => {
-    // ...
+getTransactionObjects(transactionHashes)
+  .then(transactionObjects => {
+    console.log('Found the following transactions:');
+    console.log(JSON.stringify(transactionObjects));
   })
-  .catch(err => {
-    // handle errors
-  })
+  .catch(error => {
+    console.log(`Something went wrong: ${error}`);
+  });
 ```
-<a name="module_core.createGetTransactionsToApprove"></a>
-
-### *core*.createGetTransactionsToApprove(provider)
-
-| Param | Type | Description |
-| --- | --- | --- |
-| provider | <code>Provider</code> | Network provider |
-
-**Returns**: <code>function</code> - [`getTransactionsToApprove`](#module_core.getTransactionsToApprove)  
 <a name="module_core.getTransactionsToApprove"></a>
 
 ### *core*.getTransactionsToApprove(depth, [reference], [callback])
-**Fulfil**: <code>trunkTransaction, branchTransaction</code> A pair of approved transactions  
-**Reject**: <code>Error</code>
-- `INVALID_DEPTH`
-- `INVALID_REFERENCE_HASH`: Invalid reference hash
-- Fetch error  
+**Summary**: Gets two tip transaction hashes that can be used as branch and trunk transactions.  
+**Fulfil**: <code>Object</code> transactionsToApprove - An object that contains the following:
+- trunkTransaction: Transaction hash
+- branchTransaction: Transaction hash  
+**Reject**: <code>Error</code> error - An error that contains one of the following:
+- `INVALID_DEPTH`: Make sure that the `depth` argument is greater than zero
+- `INVALID_REFERENCE_HASH`: Make sure that the reference transaction hash is 81 trytes long
+- Fetch error: The connected IOTA node's API returned an error. See the [list of error messages](https://docs.iota.org/docs/node-software/0.1/iri/references/api-errors)  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| depth | <code>number</code> | The depth at which Random Walk starts. A value of `3` is typically used by wallets, meaning that RW starts 3 milestones back. |
-| [reference] | <code>Hash</code> | Optional reference transaction hash |
-| [callback] | <code>Callback</code> | Optional callback |
+| depth | <code>number</code> | The [depth](https://docs.iota.org/docs/getting-started/0.1/transactions/depth) at which to start the weighted random walk. The [Trinity wallet](https://trinity.iota.org/) uses a value of `3`, meaning that the weighted random walk starts 3 milestones in the past. |
+| [reference] | <code>Hash</code> | Optional transaction hash that you want the tip transactions to reference |
+| [callback] | <code>Callback</code> | Optional callback function |
 
-Does the _tip selection_ by calling
-[`getTransactionsToApprove`](https://docs.iota.works/iri/api#endpoints/getTransactionsToApprove) command.
-Returns a pair of approved transactions, which are chosen randomly after validating the transaction trytes,
-the signatures and cross-checking for conflicting transactions.
+This method gets two [consistent](#module_core.checkConsistency) tip transaction hashes that can be used as branch and trunk transactions by calling the connected IRI node's [`getTransactionsToApprove`](https://docs.iota.works/iri/api#endpoints/getTransactionsToApprove) endpoint.
 
-Tip selection is executed by a Random Walk (RW) starting at random point in given `depth`
-ending up to the pair of selected tips. For more information about tip selection please refer to the
-[whitepaper](https://iota.org/IOTA_Whitepaper.pdf).
+To make sure that the tip transactions also directly or indirectly reference another transaction, add that transaction's hash to the `reference` argument.
 
-The `reference` option allows to select tips in a way that the reference transaction is being approved too.
-This is useful for promoting transactions, for example with
-[`promoteTransaction`](#module_core.promoteTransaction).
+## Related methods
+
+You can use the returned transaction hashes to do proof of work on transaction trytes, using the [`attachToTangle()`](#module_core.attachToTangle) method.
 
 **Example**  
 ```js
-const depth = 3
-const minWeightMagnitude = 14
-
-getTransactionsToApprove(depth)
-  .then(transactionsToApprove =>
-     attachToTangle(minWeightMagnitude, trytes, { transactionsToApprove })
-  )
-  .then(storeAndBroadcast)
-  .catch(err => {
-    // handle errors here
+getTransactionsToApprove(3)
+  .then(transactionsToApprove) => {
+     console.log(Found the following transaction hashes that you can reference in a new bundle:);
+     console.log(JSON.stringify(transactionsToApprove));
+  })
+  .catch(error => {
+    console.log(`Something went wrong: ${error}`);
   })
 ```
-<a name="module_core.createGetTrytes"></a>
-
-### *core*.createGetTrytes(provider)
-
-| Param | Type | Description |
-| --- | --- | --- |
-| provider | <code>Provider</code> | Network provider |
-
-**Returns**: <code>function</code> - [`getTrytes`](#module_core.getTrytes)  
 <a name="module_core.getTrytes"></a>
 
 ### *core*.getTrytes(hashes, [callback])
-**Fulfil**: <code>Trytes[]</code> - Transaction trytes  
-**Reject**: Error{}
-- `INVALID_TRANSACTION_HASH`: Invalid hash
-- Fetch error  
+**Summary**: Gets the transaction trytes for the given transaction hashes.  
+**Fulfil**: <code>Trytes[]</code> transactionTrytes - Array of transaction trytes  
+**Reject**: Error{} error - An error that contains one of the following:
+- `INVALID_TRANSACTION_HASH`: Make sure that the transaction hashes are 81 trytes long
+- Fetch error: The connected IOTA node's API returned an error. See the [list of error messages](https://docs.iota.org/docs/node-software/0.1/iri/references/api-errors)  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| hashes | <code>Array.&lt;Hash&gt;</code> | List of transaction hashes |
-| [callback] | <code>Callback</code> | Optional callback |
+| hashes | <code>Array.&lt;Hash&gt;</code> | Array of transaction hashes |
+| [callback] | <code>Callback</code> | Optional callback function |
 
-Fetches the transaction trytes given a list of transaction hashes, by calling
-[`getTrytes`](https://docs.iota.works/iri/api#endpoints/getTrytes) command.
+This method uses the connected IRI node's
+[`getTrytes`](https://docs.iota.org/docs/node-software/0.1/iri/references/api-reference#gettrytes) endpoint.
+
+The transaction trytes include all transaction fields except the transaction hash.
+
+**Note:** If the connected IRI node doesn't have the given transaction in its ledger, the value at the index of that transaction hash is either `null` or a string of `9`s.
+
+## Related methods
+
+To get transaction objects instead of trytes, use the [`getTransactionObjects()`](#module_core.getTransactionObjects) method.
 
 **Example**  
 ```js
 getTrytes(hashes)
-  // Parsing as transaction objects
-  .then(trytes => asTransactionObjects(hashes)(trytes))
-  .then(transactions => {
-    // ...
+  .then(trytes => {
+  .then(transactionTrytes => {
+    console.log(Found the following transaction trytes:);
+    console.log(JSON.stringify(transactionTrytes));
   })
-  .catch(err => {
-    // ...
-  })
+  .catch(error => {
+    console.log(`Something went wrong: ${error}`);
+  });
 ```
-<a name="module_core.createIsPromotable"></a>
-
-### *core*.createIsPromotable(provider, [depth])
-
-| Param | Type | Default | Description |
-| --- | --- | --- | --- |
-| provider | <code>Provider</code> |  | Network provider |
-| [depth] | <code>number</code> | <code>6</code> | Depth up to which promotion is effective. |
-
-**Returns**: <code>function</code> - [`isPromotable`](#module_core.isPromotable)  
 <a name="module_core.isPromotable"></a>
 
 ### *core*.isPromotable(tail, [callback])
-**Fulfil**: <code>boolean</code> Consistency state of transaction or co-consistency of transactions  
-**Reject**: <code>Error</code>
-- `INVALID_HASH`: Invalid hash
-- `INVALID_DEPTH`: Invalid depth
-- Fetch error  
+**Summary**: Checks if a given tail transaction hash can be [promoted](https://docs.iota.org/docs/getting-started/0.1/transactions/reattach-rebroadcast-promote#promote).  
+**Fulfil**: <code>boolean</code> isPromotable - Returns `true` if the transaction is promotable or `false` if not.  
+**Reject**: <code>Error</code> error - An error that contains one of the following:
+- `INVALID_TRANSACTION_HASH`: Make sure the tail transaction hashes are 81 trytes long and their `currentIndex` field is 0
+- Fetch error: The connected IOTA node's API returned an error. See the [list of error messages](https://docs.iota.org/docs/node-software/0.1/iri/references/api-errors)  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | tail | <code>Hash</code> | Tail transaction hash |
-| [callback] | <code>Callback</code> | Optional callback |
+| [callback] | <code>Callback</code> | Optional callback function |
 
-Checks if a transaction is _promotable_, by calling [`checkConsistency`](#module_core.checkConsistency) and
-verifying that `attachmentTimestamp` is above a lower bound.
-Lower bound is calculated based on number of milestones issued
-since transaction attachment.
+To decide if a transaction can be promoted, this method makes sure that it's [consistent](#module_core.checkConsistency)
+and that the value of the transaction's `attachmentTimestamp` field is not older than the latest 6 milestones.
+
+## Related methods
+
+If a transaction is promotable, you can promote it by using the [`promoteTransaction()`](#module_core.promoteTransaction) method.
 
 **Example**  
-#### Example with promotion and reattachments
-
-Using `isPromotable` to determine if transaction can be [_promoted_](#module_core.promoteTransaction)
-or should be [_reattached_](#module_core.replayBundle)
-
 ```js
-// We need to monitor inclusion states of all tail transactions (original tail & reattachments)
-const tails = [tail]
-
-getLatestInclusion(tails)
-  .then(states => {
-    // Check if none of transactions confirmed
-    if (states.indexOf(true) === -1) {
-      const tail = tails[tails.length - 1] // Get latest tail hash
-
-      return isPromotable(tail)
-        .then(isPromotable => isPromotable
-          ? promoteTransaction(tail, 3, 14)
-          : replayBundle(tail, 3, 14)
-            .then(([reattachedTail]) => {
-              const newTailHash = reattachedTail.hash
-
-              // Keeping track of all tail hashes to check confirmation
-              tails.push(newTailHash)
-
-              // Promote the new tail...
-            })
-    }
-  }).catch(err => {
-    // ...
+isPromotable(tailTransactionHash)
+  .then(isPromotable => {
+    isPromotable? console.log(`${tailTransactionHash} can be promoted`):
+    console.log(`${tailTransactionHash} cannot be promoted. You may want to reattach it.`);
+  })
+  .catch(error => {
+    console.log(`Something went wrong: ${error}`);
   })
 ```
 <a name="module_core.createPrepareTransfers"></a>
 
 ### *core*.createPrepareTransfers([provider])
+**Summary**: Creates a new `prepareTransfers()` method.  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| [provider] | <code>Provider</code> | Optional network provider to fetch inputs and remainder address. In case this is omitted, proper input objects and remainder should be passed to [`prepareTransfers`](#module_core.prepareTransfers), if required. |
+| [provider] | <code>Provider</code> | Optional provider object that the method should use to call the node's API endpoints. To create transactions offline, omit this parameter so that the returned function does not get your addresses and balances from the node. To create value transactions offline, make sure to pass input objects and a remainder address to the returned function. |
 
-Create a [`prepareTransfers`](#module_core.prepareTransfers) function by passing an optional network `provider`.
-It is possible to prepare and sign transactions offline, by omitting the provider option.
+**Returns**: <code>function</code> - [`prepareTransfers`](#module_core.prepareTransfers)  - A new `prepareTransfers()` function that uses your chosen Provider instance.  
+**Example**  
+```js
+const prepareTransfers = Iota.createPrepareTransfers();
 
-**Returns**: <code>function</code> - [`prepareTransfers`](#module_core.prepareTransfers)  
+const transfers = [
+ {
+   value: 1,
+   address: 'RECEIVINGADDRESS...'
+ }
+];
+
+prepareTransfers(seed, transfers, {
+ inputs:[{address: 'ADDRESS...',
+ keyIndex: 5,
+ security: 2,
+ balance: 50}],
+ // Remainder will be 50 -1 = 49 IOTA tokens
+ address: 'REMAINDERADDRESS...'
+})
+.then(bundleTrytes => {
+ console.log('Bundle trytes are ready to be attached to the Tangle:');
+ console.log(JSON.stringify(bundleTrytes));
+})
+.catch(error => {
+ console.log(`Something went wrong: ${error}`);
+});
+```
 <a name="module_core.prepareTransfers"></a>
 
 ### *core*.prepareTransfers(seed, transfers, [options], [callback])
-**Fulfil**: <code>array</code> Returns bundle trytes  
-**Reject**: <code>Error</code>
-- `INVALID_SEED`
-- `INVALID_TRANSFER_ARRAY`
-- `INVALID_INPUT`
-- `INVALID_REMAINDER_ADDRESS`
-- `INSUFFICIENT_BALANCE`
-- `NO_INPUTS`
-- `SENDING_BACK_TO_INPUTS`
-- Fetch error, if connected to network  
+**Summary**: Creates and signs a bundle of valid transaction trytes, using the given arguments.  
+**Fulfil**: <code>array</code> bundleTrytes - Array of transaction trytes  
+**Reject**: <code>Error</code> error - An error that contains one of the following:
+- `INVALID_SEED`: Make sure that the seed contains only trytes
+- `INVALID_TRANSFER_ARRAY`: Make sure that any objects in the `transfers` argument are valid (for example that the addresses contain only trytes, the values are numbers)
+- `INVALID_INPUT`: Make sure that the `options.inputs[]` argument contains valid input objects
+- `INVALID_REMAINDER_ADDRESS`: If you used the `createPrepareTransfers()` method without a provider, make sure you entered an address in the `options.remainderAddress` argument
+- `INSUFFICIENT_BALANCE`: Make sure that the seed's addresses have enough IOTA tokens to complete the transfer
+- `NO_INPUTS`: Make sure that the `options.inputs[]` argument contains valid input objects
+- `SENDING_BACK_TO_INPUTS`: Make sure that none of the `transfer.address` arguments are in the `options.inputs[].address parameters
+- Fetch error: The connected IOTA node's API returned an error. See the [list of error messages](https://docs.iota.org/docs/node-software/0.1/iri/references/api-errors)  
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
-| seed | <code>string</code> |  |  |
-| transfers | <code>object</code> |  |  |
-| [options] | <code>object</code> |  |  |
-| [options.inputs] | <code>Array.&lt;Input&gt;</code> |  | Inputs used for signing. Needs to have correct security, keyIndex and address value |
-| [options.inputs[].address] | <code>Hash</code> |  | Input address trytes |
-| [options.inputs[].keyIndex] | <code>number</code> |  | Key index at which address was generated |
-| [options.inputs[].security] | <code>number</code> |  | Security level |
-| [options.inputs[].balance] | <code>number</code> |  | Balance in iotas |
-| [options.address] | <code>Hash</code> |  | Remainder address |
-| [options.security] | <code>Number</code> | <code>2</code> | Security level to be used for getting inputs and remainder address |
-| [callback] | <code>function</code> |  | Optional callback |
+| seed | <code>string</code> |  | The seed to use to generate addresses and sign transactions |
+| transfers | <code>Transfers.&lt;Transfer&gt;</code> |  | Array of transfer objects |
+| transfer.address | <code>Hash</code> |  | Address to which to send a transaction |
+| transfer.value | <code>number</code> |  | Amount of IOTA tokens to send to the address |
+| transfer.message | <code>string</code> |  | Message to include in the transaction. The message must include only ASCII characters. |
+| transfer.tag | <code>string</code> |  | Up to 27 trytes to include in the transaction's `obsoleteTag` field |
+| [options] | <code>Object</code> |  | Options object |
+| [options.inputs] | <code>Array.&lt;Input&gt;</code> |  | Array of input objects, which contain information about the addresses from which to withdraw IOTA tokens |
+| [options.inputs[].address] | <code>Hash</code> |  | One of the seed's addresses from which to withdraw IOTA tokens |
+| [options.inputs[].keyIndex] | <code>number</code> |  | Key index of the address |
+| [options.inputs[].security] | <code>number</code> |  | Security level of the address |
+| [options.inputs[].balance] | <code>number</code> |  | Total balance of the address. The total balance is withdrawn and any remaining IOTA tokens are sent to the address in the `options.remainderAddress` field. |
+| [options.remainderAddress] | <code>Hash</code> |  | Remainder address to send any remaining IOTA tokens (total value in the `transfers` array minus the total balance of the input addresses) |
+| [options.security] | <code>number</code> | <code>2</code> | Security level to use for calling the [`getInputs`](#module_core.getInputs) method to automatically select input objects |
+| [callback] | <code>function</code> |  | Optional callback function |
 
 **Properties**
 
 | Name | Type | Description |
 | --- | --- | --- |
-| [options.hmacKey] | <code>Hash</code> | HMAC key used for attaching an HMAC |
+| [options.hmacKey] | <code>Hash</code> | HMAC key used for adding an HMAC signature to the transaction |
 
-Prepares the transaction trytes by generating a bundle, filling in transfers and inputs,
-adding remainder and signing. It can be used to generate and sign bundles either online or offline.
-For offline usage, please see [`createPrepareTransfers`](#module_core.createPrepareTransfers)
-which can create a `prepareTransfers` function without a network provider.
+This method creates a bundle, using the given arguments and uses the given seed to sign any transactions that withdraw IOTA tokens.
 
-**Note:** After calling this method, persist the returned transaction trytes in local storage. Only then you should broadcast to network.
-This will allow for reattachments and prevent key reuse if trytes can't be recovered by querying the network after broadcasting.
+**Note:** The given seed is used to [generate addresses](https://docs.iota.org/docs/client-libraries/0.1/how-to-guides/js/generate-an-address) and sign transactions on your local device. It is never sent anywhere.
 
-<a name="module_core.createPromoteTransaction"></a>
+**Note:** To create transactions offline, use the [`createPrepareTransfers`](#module_core.createPrepareTransfers) without a `provider` argument.
 
-### *core*.createPromoteTransaction(provider, [attachFn])
+After calling this method, we recommend saving the returned transaction trytes in local storage before sending them to a node.
+By doing so, you make sure that you can always reattach your transactions to the Tangle in case they remain in a pending state.
+Reattaching transactions is safer than creating and signing new transactions, which could lead to [spent addresses](https://docs.iota.org/docs/getting-started/0.1/clients/addresses#spent-addresses).
 
-| Param | Type | Description |
-| --- | --- | --- |
-| provider | <code>Provider</code> | Network provider |
-| [attachFn] | <code>function</code> | Optional `attachToTangle` function to override the [default method](#module_core.attachToTangle). |
+## Related methods
 
-**Returns**: <code>function</code> - [`promoteTransaction`](#module_core.promoteTransaction)  
-<a name="module_core.promoteTransaction"></a>
+To attach the returned transaction trytes to the Tangle, you can use one of the following:
 
-### *core*.promoteTransaction(tail, depth, minWeightMagnitude, [spamTransfers], [options], [callback])
-**Fulfil**: <code>Transaction[]</code>  
-**Reject**: <code>Error</code>
-- `INCONSISTENT_SUBTANGLE`: In this case promotion has no effect and a reattachment is required by calling [`replayBundle`](#module_core.replayBundle).
-- Fetch error  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| tail | <code>Hash</code> | Tail transaction hash. Tail transaction is the transaction in the bundle with `currentIndex == 0`. |
-| depth | <code>number</code> | The depth at which Random Walk starts. A value of `3` is typically used by wallets, meaning that RW starts 3 milestones back. |
-| minWeightMagnitude | <code>number</code> | Minimum number of trailing zeros in transaction hash. This is used by [`attachToTangle`](#module_core.attachToTangle) function to search for a valid `nonce`. Currently it is `14` on mainnet & spamnet and `9` on most other testnets. |
-| [spamTransfers] | <code>array</code> | Array of spam transfers to promote with. By default it will issue an all-9s, zero-value transfer. |
-| [options] | <code>object</code> | Options |
-| [options.delay] | <code>number</code> | Delay between spam transactions in `ms` |
-| [options.interrupt] | <code>boolean</code> \| <code>function</code> | Interrupt signal, which can be a function that evaluates to boolean |
-| [callback] | <code>Callback</code> | Optional callback |
-
-Promotes a transaction by adding zero-value spam transactions on top of it.
-Will promote `maximum` transfers on top of the current one with `delay` interval. Promotion
-is interruptable through the `interrupt` option.
-
-<a name="module_core.createRemoveNeighbors"></a>
-
-### *core*.createRemoveNeighbors(provider)
-
-| Param | Type | Description |
-| --- | --- | --- |
-| provider | <code>Provider</code> | Network provider |
-
-**Returns**: <code>function</code> - [`removeNeighbors`](#module_core.removeNeighbors)  
-<a name="module_core.removeNeighbors"></a>
-
-### *core*.removeNeighbors(uris, [callback])
-**Fulfil**: <code>number</code> Number of neighbors that were removed  
-**Reject**: <code>Error</code>
-- `INVALID_URI`: Invalid uri
-- Fetch error  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| uris | <code>Array</code> | List of URI's |
-| [callback] | <code>Callback</code> | Optional callback |
-
-Removes a list of neighbors from the connected IRI node by calling
-[`removeNeighbors`](https://docs.iota.works/iri/api#endpoints/removeNeighbors) command.
-Assumes `removeNeighbors` command is available on the node.
-
-This method has temporary effect until your IRI node relaunches.
-
-<a name="module_core.createReplayBundle"></a>
-
-### *core*.createReplayBundle(provider)
-
-| Param | Type | Description |
-| --- | --- | --- |
-| provider | <code>Provider</code> | Network provider |
-
-**Returns**: <code>function</code> - [`replayBundle`](#module_core.replayBundle)  
-<a name="module_core.replayBundle"></a>
-
-### *core*.replayBundle(tail, depth, minWeightMagnitude, [callback])
-**Fulfil**: <code>Transaction[]</code>  
-**Reject**: <code>Error</code>
-- `INVALID_DEPTH`
-- `INVALID_MIN_WEIGHT_MAGNITUDE`
-- `INVALID_TRANSACTION_HASH`
-- `INVALID_BUNDLE`
-- Fetch error  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| tail | <code>Hash</code> | Tail transaction hash. Tail transaction is the transaction in the bundle with `currentIndex == 0`. |
-| depth | <code>number</code> | The depth at which Random Walk starts. A value of `3` is typically used by wallets, meaning that RW starts 3 milestones back. |
-| minWeightMagnitude | <code>number</code> | Minimum number of trailing zeros in transaction hash. This is used by [`attachToTangle`](#module_core.attachToTangle) function to search for a valid `nonce`. Currently it is `14` on mainnet & spamnet and `9` on most other testnets. |
-| [callback] | <code>Callback</code> | Optional callback |
-
-Reattaches a transfer to the Tangle by selecting tips and performing the Proof-of-Work again.
-Reattachments are useful in case the original transactions are pending, and can be done securely
-as many times as needed.
+- [`sendTrytes()`](#module_core.sendTrytes) (easiest)
+- [`getTransactionsToApprove()`](#module_core.getTransactionsToApprove) followed by [`attachToTangle()`](#module_core.attachToTangle) followed by [`broadcastTransactions()`](#module_core.broadcastTransactions) (for more control)
 
 **Example**  
 ```js
-replayBundle(tail)
-  .then(transactions => {
-    // ...
-  })
-  .catch(err => {
-    // ...
-  })
+
+const transfers = [
+ {
+   value: 1,
+   address: 'RECEIVINGADDRESS...'
+ }
+];
+
+prepareTransfers(seed, transfers)
+.then(bundleTrytes => {
+ console.log('Bundle trytes are ready to be attached to the Tangle:');
+ console.log(JSON.stringify(bundleTrytes));
+})
+.catch(error => {
+ console.log(`Something went wrong: ${error}`);
+});
+```
+<a name="module_core.promoteTransaction"></a>
+
+### *core*.promoteTransaction(tail, depth, minWeightMagnitude, [spamTransfers], [options], [callback])
+**Summary**: [Promotes](https://docs.iota.org/docs/getting-started/0.1/transactions/reattach-rebroadcast-promote#promote) a given tail transaction.  
+**Fulfil**: <code>Transaction[]</code> transactions - Array of zero-value transaction objects that were sent  
+**Reject**: <code>Error</code> error - An error that contains one of the following:
+- `INCONSISTENT_SUBTANGLE`: In this case, promotion has no effect and a reattachment is required by calling the [`replayBundle()`](#module_core.replayBundle) method
+- Fetch error: The connected IOTA node's API returned an error. See the [list of error messages](https://docs.iota.org/docs/node-software/0.1/iri/references/api-errors)  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| tail | <code>Hash</code> |  | Tail transaction hash |
+| depth | <code>number</code> |  | The [depth](https://docs.iota.org/docs/getting-started/0.1/transactions/depth) at which to start the weighted random walk. The [Trinity wallet](https://trinity.iota.org/) uses a value of `3`, meaning that the weighted random walk starts 3 milestones in the past. |
+| minWeightMagnitude | <code>number</code> |  | [Minimum weight magnitude](https://docs.iota.org/docs/getting-started/0.1/network/minimum-weight-magnitude) |
+| [spamTransfers] | <code>Array</code> | <code>{address: &#x27;9999...999&#x27;, value:0, tag:&#x27;999...999&#x27;,message: &#x27;999...999&#x27; }</code> | Array of transfer objects to use to promote the transaction |
+| [options] | <code>Object</code> |  | Options object |
+| [options.delay] | <code>number</code> |  | Delay in milliseconds before sending each zero-value transaction |
+| [options.interrupt] | <code>boolean</code> \| <code>function</code> |  | Either a boolean or a function that evaluates to a boolean to stop the method from sending transactions |
+| [callback] | <code>Callback</code> |  | Optional callback function |
+
+This method promotes only consistent transactions by checking them with the [`checkConsistency()`](#module_core.checkConsistency) method.
+
+## Related methods
+
+Use the [`isPromotable()`](#module_core.isPromotable) method to check if a transaction can be [promoted](https://docs.iota.org/docs/getting-started/0.1/transactions/reattach-rebroadcast-promote).
+
+If a transaction can't be promoted, use the [`replayBundle()`](#module_core.replayBundle) method to [reattach](https://docs.iota.org/docs/getting-started/0.1/transactions/reattach-rebroadcast-promote) it to the Tangle.
+
+**Example**  
+```js
+iota.promoteTransaction('FOSJBUZEHOBDKIOJ9RXBRPPZSJHWMXCDFJLIJSLJG9HRKEEJGAHWATEVCYERPQXDWFHQRGZOGIILZ9999',
+3,14)
+.then(transactions => {
+  console.log(`Promoted the tail transaction, using the following transactions: \n` +
+  JSON.stringify(transactions));
+})
+.catch(error => {
+    console.log(`Something went wrong: ${error}`);
 })
 ```
-<a name="module_core.createSendTrytes"></a>
+<a name="module_core.removeNeighbors"></a>
 
-### *core*.createSendTrytes(provider)
+### *core*.removeNeighbors(uris, [callback])
+**Summary**: Removes a list of neighbors from the connected IRI node.  
+**Fulfil**: <code>number</code> numberOfNeighbors - Number of neighbors that were removed  
+**Reject**: <code>Error</code> error - An error that contains one of the following:
+- `INVALID_URI`: Make sure that the URI is valid (for example URIs must start with `udp://` or `tcp://`)
+- Fetch error: The connected IOTA node's API returned an error. See the [list of error messages](https://docs.iota.org/docs/node-software/0.1/iri/references/api-errors)  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| provider | <code>Provider</code> | Network provider |
+| uris | <code>Array</code> | Array of neighbor URIs that you want to add to the node |
+| [callback] | <code>Callback</code> | Optional callback function |
 
-**Returns**: <code>function</code> - [`sendTrytes`](#module_core.sendTrytes)  
+This method removes a list of neighbors from the connected IRI node by calling its
+[`removeNeighbors`](https://docs.iota.org/docs/node-software/0.1/iri/references/api-reference#removeneighbors) endpoint.
+
+These neighbors are re-added when the node is restarted.
+
+## Related methods
+
+To see statistics about the connected IRI node's neighbors, use the [`getNeighbors()`](#module_core.getNeighbors) method.
+
+**Example**  
+```js
+iota.addNeighbors(['tcp://148.148.148.148:15600'])
+  .then(numberOfNeighbors => {
+    console.log(`Successfully removed ${numberOfNeighbors} neighbors`)
+  }).catch(error => {
+    console.log(`Something went wrong: ${error}`)
+  })
+```
+<a name="module_core.replayBundle"></a>
+
+### *core*.replayBundle(tail, depth, minWeightMagnitude, [callback])
+**Summary**: Reattaches a bundle to the Tangle.  
+**Fulfil**: <code>Transaction[]</code> bundle - Array of transaction objects in the reattached bundle  
+**Reject**: <code>Error</code> error - An error that contains one of the following:
+- `INVALID_DEPTH`: Make sure that the `depth` argument is greater than zero
+- `INVALID_MIN_WEIGHT_MAGNITUDE`: Make sure that the minimum weight magnitude is at least the same as the original bundle
+- `INVALID_TRANSACTION_HASH`: Make sure the tail transaction hash is 81 trytes long and its `currentIndex` field is 0
+- `INVALID_BUNDLE`: Check the tail transaction's bundle for the following:
+  - Addresses in value transactions have a 0 trit at the end, which means they were generated using the Kerl hashing function
+  - Transactions in the bundle array are in the same order as their currentIndex field
+  - The total value of all transactions in the bundle sums to 0
+  - The bundle hash is valid
+- Fetch error: The connected IOTA node's API returned an error. See the [list of error messages](https://docs.iota.org/docs/node-software/0.1/iri/references/api-errors)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| tail | <code>Hash</code> | Tail transaction hash |
+| depth | <code>number</code> | The [depth](https://docs.iota.org/docs/getting-started/0.1/transactions/depth) at which to start the weighted random walk. The [Trinity wallet](https://trinity.iota.org/) uses a value of `3`, meaning that the weighted random walk starts 3 milestones in the past. |
+| minWeightMagnitude | <code>number</code> | The [minimum weight magnitude](https://docs.iota.org/docs/getting-started/0.1/network/minimum-weight-magnitude) to use for proof of work. **Note:** This value must be at least the same as the minimum weight magnitude of the branch and trunk transactions. |
+| [callback] | <code>Callback</code> | Optional callback function |
+
+This method [reattaches](https://docs.iota.org/docs/getting-started/0.1/transactions/reattach-rebroadcast-promote#reattach) a bundle to the Tangle by calling the [`sendTrytes()`](#module_core.sendTrytes) method.
+
+You can call this function as many times as you need until one of the bundles becomes confirmed.
+
+## Related methods
+
+Before you call this method, it's worth finding out if you can promote it by calling the [`isPromotable()`](#module_core.isPromotable) method.
+
+**Example**  
+```js
+iota.replayBundle(tailTransactionHash)
+  .then(bundle => {
+    console.log(`Successfully reattached ${tailTransactionHash}`);
+    console.log(JSON.stringify(bundle));
+  }).catch(error => {
+    console.log(`Something went wrong: ${error}`)
+  })
+```
 <a name="module_core.sendTrytes"></a>
 
 ### *core*.sendTrytes(trytes, depth, minWeightMagnitude, [reference], [callback])
-**Fulfil**: <code>Transaction[]</code>  Returns list of attached transactions  
-**Reject**: <code>Error</code>
-- `INVALID_TRANSACTION_TRYTES`
-- `INVALID_DEPTH`
-- `INVALID_MIN_WEIGHT_MAGNITUDE`
-- Fetch error, if connected to network  
+**Summary**: Does tip selection and proof of work for a bundle of transaction trytes before sending the final transactions to the connected IRI node.  
+**Fulfil**: <code>Transaction[]</code> bundle - Array of transaction objects that you just sent to the node  
+**Reject**: <code>Error</code> error - An error that contains one of the following:
+- `INVALID_TRANSACTION_TRYTES`: Make sure the trytes can be converted to a valid transaction object
+- `INVALID_DEPTH`: Make sure that the `depth` argument is greater than zero
+- `INVALID_MIN_WEIGHT_MAGNITUDE`: Make sure that the minimum weight magnitude is at least the same as the original bundle
+- Fetch error: The connected IOTA node's API returned an error. See the [list of error messages](https://docs.iota.org/docs/node-software/0.1/iri/references/api-errors)  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| trytes | <code>Array.&lt;Trytes&gt;</code> | List of trytes to attach, store and broadcast |
-| depth | <code>number</code> | The depth at which Random Walk starts. A value of `3` is typically used by wallets, meaning that RW starts 3 milestones back. |
-| minWeightMagnitude | <code>number</code> | Minimum number of trailing zeros in transaction hash. This is used to search for a valid `nonce`. Currently it is `14` on mainnet & spamnet and `9` on most other testnets. |
+| trytes | <code>Array.&lt;Trytes&gt;</code> | Array of prepared transaction trytes to attach, store, and send |
+| depth | <code>number</code> | The [depth](https://docs.iota.org/docs/getting-started/0.1/transactions/depth) at which to start the weighted random walk. The [Trinity wallet](https://trinity.iota.org/) uses a value of `3`, meaning that the weighted random walk starts 3 milestones in the past. |
+| minWeightMagnitude | <code>number</code> | The [minimum weight magnitude](https://docs.iota.org/docs/getting-started/0.1/network/minimum-weight-magnitude) to use for proof of work. **Note:** This value must be at least the same as the minimum weight magnitude of the branch and trunk transactions. |
 | [reference] | <code>string</code> | Optional reference transaction hash |
-| [callback] | <code>Callback</code> | Optional callback |
+| [callback] | <code>Callback</code> | Optional callback function |
 
-[Attaches to Tangle](#module_core.attachToTangle), [stores](#module_core.storeTransactions)
-and [broadcasts](#module_core.broadcastTransactions) a list of transaction trytes.
+This method takes an array of transaction trytes that don't include a proof of work or
 
-**Note:** Persist the transaction trytes in local storage __before__ calling this command, to ensure
-that reattachment is possible, until your bundle has been included.
+Then, the method calls the following to finalize the bundle and send it to the node:
+- [`getTransactionsToApprove()`](#module_core.getTransactionsToApprove)
+- [`attachToTangle()`](#module_core.attachToTangle)
+- [`storeAndBroadcast()`](#module_core.storeAndBroadcast)
+
+**Note:** Before calling this method, we recommend saving your transaction trytes in local storage.
+By doing so, you make sure that you can always reattach your transactions to the Tangle in case they remain in a pending state.
+
+## Related methods
+
+To create transaction trytes that don't include a proof of work or trunk and branch transactions, use the [`prepareTransfers()`](#module_core.prepareTransfers) method.
 
 **Example**  
 ```js
 prepareTransfers(seed, transfers)
   .then(trytes => {
-     // Persist trytes locally before sending to network.
-     // This allows for reattachments and prevents key reuse if trytes can't
-     // be recovered by querying the network after broadcasting.
-
      return iota.sendTrytes(trytes, depth, minWeightMagnitude)
   })
-  .then(transactions => {
-    // ...
-  })
-  .catch(err => {
-    // ...
+  .then(bundle => {
+    console.log(`Successfully attached transactions to the Tangle`);
+    console.log(JSON.stringify(bundle));
+  }).catch(error => {
+    console.log(`Something went wrong: ${error}`)
   })
 ```
-<a name="module_core.createStoreAndBroadcast"></a>
-
-### *core*.createStoreAndBroadcast(provider)
-
-| Param | Type |
-| --- | --- |
-| provider | <code>Provider</code> | 
-
-**Returns**: <code>function</code> - [`storeAndBroadcast`](#module_core.storeAndBroadcast)  
 <a name="module_core.storeAndBroadcast"></a>
 
 ### *core*.storeAndBroadcast(trytes, [callback])
-**Fulfil**: <code>Trytes[]</code> Attached transaction trytes  
-**Reject**: <code>Error</code>
-- `INVALID_ATTACHED_TRYTES`: Invalid attached trytes
-- Fetch error  
+**Summary**: Sends the given transaction trytes to the connected IRI node.  
+**Fulfil**: <code>Trytes[]</code> transactionTrytes - Attached transaction trytes  
+**Reject**: <code>Error</code> error - An error that contains one of the following:
+- `INVALID_TRANSACTION_TRYTES`: Make sure the trytes can be converted to a valid transaction object
+- Fetch error: The connected IOTA node's API returned an error. See the [list of error messages](https://docs.iota.org/docs/node-software/0.1/iri/references/api-errors)  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| trytes | <code>Array.&lt;Trytes&gt;</code> | Attached transaction trytes |
-| [callback] | <code>Callback</code> | Optional callback |
+| trytes | <code>Array.&lt;Trytes&gt;</code> | Array of transaction trytes |
+| [callback] | <code>Callback</code> | Optional callback function |
 
-Stores and broadcasts a list of _attached_ transaction trytes by calling
-[`storeTransactions`](#module_core.storeTransactions) and
-[`broadcastTransactions`](#module_core.broadcastTransactions).
+This method uses the connected IRI node's
+[`broadcastTransactions`](https://docs.iota.org/docs/node-software/0.1/iri/references/api-reference#broadcastTransactions) and [`storeTransactions`](https://docs.iota.org/docs/node-software/0.1/iri/references/api-reference#storeTransactions) endpoints to send it the given transaction trytes.
 
-**Note:** Persist the transaction trytes in local storage __before__ calling this command, to ensure
-that reattachment is possible, until your bundle has been included.
+**Note:** Before calling this method, we recommend saving your transaction trytes in local storage.
+By doing so, you make sure that you can always reattach your transactions to the Tangle in case they remain in a pending state.
 
-Any transactions stored with this command will eventaully be erased, as a result of a snapshot.
+## Related methods
 
-<a name="module_core.createStoreTransactions"></a>
+The given transaction trytes must be in a valid bundle and must include a proof of work.
 
-### *core*.createStoreTransactions(provider)
+To create a valid bundle, use the `prepareTransfers()` method. For more information about what makes a bundles and transactions valid, see [this guide](https://docs.iota.org/docs/node-software/0.1/iri/concepts/transaction-validation).
 
-| Param | Type | Description |
-| --- | --- | --- |
-| provider | <code>Provider</code> | Network provider |
+To do proof of work, use one of the following methods:
 
-**Returns**: <code>function</code> - [`storeTransactions`](#module_core.storeTransactions)  
-<a name="module_core.storeTransactions"></a>
-
-### *core*.storeTransactions(trytes, [callback])
-**Fullfil**: <code>Trytes[]</code> Attached transaction trytes  
-**Reject**: <code>Error</code>
-- `INVALID_ATTACHED_TRYTES`: Invalid attached trytes
-- Fetch error  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| trytes | <code>Array.&lt;Trytes&gt;</code> | Attached transaction trytes |
-| [callback] | <code>Callback</code> | Optional callback |
-
-Persists a list of _attached_ transaction trytes in the store of connected node by calling
-[`storeTransactions`](https://docs.iota.org/iri/api#endpoints/storeTransactions) command.
-Tip selection and Proof-of-Work must be done first, by calling
-[`getTransactionsToApprove`](#module_core.getTransactionsToApprove) and
-[`attachToTangle`](#module_core.attachToTangle) or an equivalent attach method or remote
-[`PoWbox`](https://powbox.devnet.iota.org/).
-
-**Note:** Persist the transaction trytes in local storage __before__ calling this command, to ensure
-that reattachment is possible, until your bundle has been included.
-
-Any transactions stored with this command will eventaully be erased, as a result of a snapshot.
-
-<a name="module_core.createTraverseBundle"></a>
-
-### *core*.createTraverseBundle(provider)
-
-| Param | Type |
-| --- | --- |
-| provider | <code>Provider</code> | 
-
-**Returns**: <code>function</code> - [`traverseBundle`](#module_core.traverseBundle)  
-<a name="module_core.traverseBundle"></a>
-
-### *core*.traverseBundle(trunkTransaction, [bundle], [callback])
-**Fulfil**: <code>Transaction[]</code> Bundle as array of transaction objects  
-**Reject**: <code>Error</code>
-- `INVALID_TRANSACTION_HASH`
-- `INVALID_TAIL_HASH`: Provided transaction is not tail (`currentIndex !== 0`)
-- `INVALID_BUNDLE`: Bundle is syntactically invalid
-- Fetch error  
-
-| Param | Type | Default | Description |
-| --- | --- | --- | --- |
-| trunkTransaction | <code>Hash</code> |  | Trunk transaction, should be tail (`currentIndex == 0`) |
-| [bundle] | <code>Hash</code> | <code>[]</code> | List of accumulated transactions |
-| [callback] | <code>Callback</code> |  | Optional callback |
-
-Fetches the bundle of a given the _tail_ transaction hash, by traversing through `trunkTransaction`.
-It does not validate the bundle.
+- [`attachToTangle()`](#module_core.attachToTangle)
+- [`sendTrytes()`](#module_core.sendTrytes)
 
 **Example**  
 ```js
-traverseBundle(tail)
-   .then(bundle => {
-       // ...
-   })
-   .catch(err => {
-       // handle errors
-   })
+storeAndBroadcast(trytes)
+.then(transactionTrytes => {
+    console.log(`Successfully sent transactions to the node`);
+    console.log(JSON.stringify(transactionTrytes));
+}).catch(error => {
+    console.log(`Something went wrong: ${error}`)
+})
+```
+<a name="module_core.storeAndBroadcast"></a>
+
+### *core*.storeAndBroadcast(trytes, [callback])
+**Summary**: Stores the given transaction trytes on the connected IRI node.  
+**Fullfil**: <code>Trytes[]</code> transactionTrytes - Attached transaction trytes  
+**Reject**: <code>Error</code> error - An error that contains one of the following:
+- `INVALID_TRANSACTION_TRYTES`: Make sure the trytes can be converted to a valid transaction object
+- Fetch error: The connected IOTA node's API returned an error. See the [list of error messages](https://docs.iota.org/docs/node-software/0.1/iri/references/api-errors)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| trytes | <code>Array.&lt;Trytes&gt;</code> | Array of transaction trytes |
+| [callback] | <code>Callback</code> | Optional callback function |
+
+This method uses the connected IRI node's
+[`storeTransactions`](https://docs.iota.org/docs/node-software/0.1/iri/references/api-reference#storeTransactions) endpoint to store the given transaction trytes.
+
+**Note:** Before calling this method, we recommend saving your transaction trytes in local storage.
+By doing so, you make sure that you can always reattach your transactions to the Tangle in case they remain in a pending state.
+
+## Related methods
+
+The given transaction trytes must be in a valid bundle and must include a proof of work.
+
+To create a valid bundle, use the `prepareTransfers()` method. For more information about what makes a bundles and transactions valid, see [this guide](https://docs.iota.org/docs/node-software/0.1/iri/concepts/transaction-validation).
+
+To do proof of work, use one of the following methods:
+
+- [`attachToTangle()`](#module_core.attachToTangle)
+- [`sendTrytes()`](#module_core.sendTrytes)
+
+**Example**  
+```js
+storeTransactions(trytes)
+.then(transactionTrytes => {
+    console.log(`Successfully stored transactions on the node`);
+    console.log(JSON.stringify(transactionTrytes));
+}).catch(error => {
+    console.log(`Something went wrong: ${error}`)
+})
+```
+<a name="module_core.traverseBundle"></a>
+
+### *core*.traverseBundle(trunkTransaction, [bundle], [callback])
+**Summary**: Gets all transaction in the bundle of a given tail transaction hash.  
+**Fulfil**: <code>Transaction[]</code> bundle - Array of transaction objects  
+**Reject**: <code>Error</code> error - An error that contains one of the following:
+- `INVALID_TRANSACTION_HASH`: Make sure the tail transaction hash is 81 trytes long
+-`INVALID_TAIL_TRANSACTION`: Make sure that the tail transaction hash is for a transaction whose `currentIndex` field is 0
+- `INVALID_BUNDLE`: Check the tail transaction's bundle for the following:
+  - Addresses in value transactions have a 0 trit at the end, which means they were generated using the Kerl hashing function
+  - Transactions in the bundle array are in the same order as their currentIndex field
+  - The total value of all transactions in the bundle sums to 0
+  - The bundle hash is valid
+- Fetch error: The connected IOTA node's API returned an error. See the [list of error messages](https://docs.iota.org/docs/node-software/0.1/iri/references/api-errors)  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| trunkTransaction | <code>Hash</code> |  | Tail transaction hash |
+| [bundle] | <code>Hash</code> | <code>[]</code> | Array of existing transaction objects to include in the returned bundle |
+| [callback] | <code>Callback</code> |  | Optional callback function |
+
+Gets all transactions in the bundle of a given tail transaction hash, by traversing its `trunkTransaction` field.
+
+**Note:** This method does not validate the bundle.
+
+## Related methods
+
+To get and validate all transactions in a bundle, use the [`getBundle()`](#module_core.getBundle) method.
+
+**Example**  
+```js
+traverseBundle(tailTransactionHash)
+.then(bundle => {
+    console.log(`Successfully found the following transactions in the bundle:`);
+    console.log(JSON.stringify(bundle));
+}).catch(error => {
+    console.log(`Something went wrong: ${error}`)
+})
 ```
 <a name="module_core.generateAddress"></a>
 
 ### *core*.generateAddress(seed, index, [security], [checksum])
+**Summary**: Generates an address with a specific index and security level.  
+**Throws**:
+
+- <code>errors.INVALID\_SEED</code> : Make sure that the seed contains only trytes
+- <code>errors.INVALID\_SECURITY\_LEVEL</code> : Make sure that the security level is a number between 1 and 3
+
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
-| seed | <code>string</code> |  |  |
-| index | <code>number</code> |  | Private key index |
-| [security] | <code>number</code> | <code>2</code> | Security level of the private key |
-| [checksum] | <code>boolean</code> | <code>false</code> | Flag to add 9trytes checksum |
+| seed | <code>string</code> |  | The seed to use to generate the address |
+| index | <code>number</code> |  | The key index to use to generate the address |
+| [security] | <code>number</code> | <code>2</code> | The [security level](https://docs.iota.org/docs/getting-started/0.1/clients/security-levels) to use to generate the address |
+| [checksum] | <code>boolean</code> | <code>false</code> | Whether to add the [checksum](https://docs.iota.org/docs/getting-started/0.1/clients/checksums) |
 
-Generates an address deterministically, according to the given seed, index and security level.
+Generates an address, according to the given seed, index, and security level.
 
-**Returns**: <code>Hash</code> - Address trytes  
+**Note:** This method does not check if the address is [spent](https://docs.iota.org/docs/getting-started/0.1/clients/addresses#spent-addresses).
+
+## Related methods
+
+To generate an address that has a lower probability of being spent, use the [`getNewAddress()`](#module_core.getNewAddress) method.
+
+**Returns**: <code>Hash</code> - address - An 81-tryte address  
+**Example**  
+```js
+const myAddress = generateAddress(seed, 0);
+```

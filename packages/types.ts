@@ -166,7 +166,6 @@ export interface FindTransactionsResponse {
 export interface GetBalancesCommand extends BaseCommand {
     readonly command: string
     readonly addresses: ReadonlyArray<Hash>
-    readonly threshold: number
     readonly tips?: ReadonlyArray<Hash>
 }
 
