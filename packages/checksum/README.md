@@ -17,7 +17,17 @@ yarn add @iota/checksum
 
 ## API Reference
 
-    <a name="module_checksum.addChecksum"></a>
+    
+* [checksum](#module_checksum)
+
+    * [.addChecksum(input, [checksumLength], [isAddress])](#module_checksum.addChecksum)
+
+    * [.removeChecksum(input)](#module_checksum.removeChecksum)
+
+    * [.isValidChecksum(addressWithChecksum)](#module_checksum.isValidChecksum)
+
+
+<a name="module_checksum.addChecksum"></a>
 
 ### *checksum*.addChecksum(input, [checksumLength], [isAddress])
 **Summary**: Generates a checksum and appends it to the given trytes.  
