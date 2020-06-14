@@ -45,7 +45,7 @@ yarn add @iota/core
 
     * [.getAccountData(seed, options, [callback])](#module_core.getAccountData)
 
-    * [.getBalances(addresses, threshold, [tips], [callback])](#module_core.getBalances)
+    * [.getBalances(addresses, [tips], [callback])](#module_core.getBalances)
 
     * [.getBundle(tailTransactionHash, [callback])](#module_core.getBundle)
 
@@ -60,8 +60,6 @@ yarn add @iota/core
     * [.getNewAddress(seed, [options], [callback])](#module_core.getNewAddress)
 
     * [.getNodeInfo([callback])](#module_core.getNodeInfo)
-
-    * [.getTips([callback])](#module_core.getTips)
 
     * [.getTransactionObjects(hashes, [callback])](#module_core.getTransactionObjects)
 
@@ -469,7 +467,7 @@ getAccountData(seed)
 ```
 <a name="module_core.getBalances"></a>
 
-### *core*.getBalances(addresses, threshold, [tips], [callback])
+### *core*.getBalances(addresses, [tips], [callback])
 **Summary**: Gets the confirmed balances of the given addresses.  
 **Fulfil**: <code>Balances</code> balances - Object that contains the following:
 - balances.addresses: Array of balances in the same order as the `addresses` argument
@@ -478,13 +476,11 @@ getAccountData(seed)
 - balances.duration: The number of milliseconds that it took for the node to return a response  
 **Reject**: <code>Error</code> error - An error that contains one of the following:
 - `INVALID_HASH`: Make sure that the addresses contain only trytes
-- `INVALID_THRESHOLD`: Make sure that the threshold is a number greater than zero
 - Fetch error: The connected IOTA node's API returned an error. See the [list of error messages](https://docs.iota.org/docs/node-software/0.1/iri/references/api-errors)  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | addresses | <code>Array.&lt;Hash&gt;</code> | Array of addresses |
-| threshold | <code>number</code> | Not used, but should be set to 100 until [this issue](https://github.com/iotaledger/iri/issues/1723) is resolved. |
 | [tips] | <code>Array.&lt;Hash&gt;</code> | Array of past transaction hashes from which to calculate the balances of the addresses. The balance will be calculated from the latest milestone that references these transactions. |
 | [callback] | <code>Callback</code> | Optional callback function |
 
@@ -499,7 +495,7 @@ To find the balance of all addresses that belong to your seed, use the [`getAcco
 
 **Example**  
 ```js
-getBalances([address], 100)
+getBalances([address])
   .then( balances => {
     console.log(`Balance of the first address: `$balances.balances[0])
     console.log(JSON.stringify(transactions));
@@ -800,35 +796,6 @@ To get statistics about the connected node's neighbors, use the [`getNeighbors()
 ```js
 getNodeInfo()
   .then(info => console.log(JSON.stringify(info)))
-  .catch(error => {
-    console.log(`Something went wrong: ${error}`);
-  })
-```
-<a name="module_core.getTips"></a>
-
-### *core*.getTips([callback])
-**Summary**: Searches the Tangle for tip transactions.  
-**Fulfil**: <code>Hash[]</code> tips - Array of tip transaction hashes  
-**Reject**: <code>Error</code> error - Fetch error: The connected IOTA node's API returned an error. See the [list of error messages](https://docs.iota.org/docs/node-software/0.1/iri/references/api-errors)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| [callback] | <code>Callback</code> | Optional callback function |
-
-This method finds all transactions that aren't referenced by other transactions in the Tangle
-by calling the connected IRI node's [`getTips`](https://docs.iota.org/docs/node-software/0.1/iri/references/api-reference#gettips) endpoint.
-
-## Related methods
-
-To find two consistent tip transactions to use as branch and trunk transactions, use the [`getTransactionsToApprove()`](#module_core.getTransactionsToApprove) method.
-
-**Example**  
-```js
-getTips()
-  .then(tips => {
-    console.log('Found the following tip transactions:');
-    console.log(JSON.stringify(tips));
-  })
   .catch(error => {
     console.log(`Something went wrong: ${error}`);
   })

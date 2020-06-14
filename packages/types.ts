@@ -89,7 +89,6 @@ export enum IRICommand {
     GET_NEIGHBORS = 'getNeighbors',
     ADD_NEIGHBORS = 'addNeighbors',
     REMOVE_NEIGHBORS = 'removeNeighbors',
-    GET_TIPS = 'getTips',
     FIND_TRANSACTIONS = 'findTransactions',
     GET_TRYTES = 'getTrytes',
     GET_INCLUSION_STATES = 'getInclusionStates',
@@ -166,7 +165,6 @@ export interface FindTransactionsResponse {
 export interface GetBalancesCommand extends BaseCommand {
     readonly command: string
     readonly addresses: ReadonlyArray<Hash>
-    readonly threshold: number
     readonly tips?: ReadonlyArray<Hash>
 }
 
@@ -223,15 +221,6 @@ export interface GetNodeInfoResponse {
     readonly time: number
     readonly tips: number
     readonly transactionsToRequest: number
-}
-
-export interface GetTipsCommand extends BaseCommand {
-    command: IRICommand.GET_TIPS
-}
-
-export interface GetTipsResponse {
-    readonly hashes: ReadonlyArray<Hash>
-    readonly duration: number
 }
 
 export interface TransactionsToApprove {

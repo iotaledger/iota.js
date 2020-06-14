@@ -22,7 +22,6 @@ const getTrytesCommand: GetTrytesCommand = {
 const getBalancesCommand: GetBalancesCommand = {
     command: IRICommand.GET_BALANCES,
     addresses: ['A'.repeat(81), 'B'.repeat(81)],
-    threshold: 100,
 }
 
 const getInclusionStatesCommand: GetInclusionStatesCommand = {

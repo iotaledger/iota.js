@@ -80,7 +80,7 @@ export function networkAdapter({ provider }: NetworkParams): Network {
 
     return {
         getTrytes: hashes => (hashes.length > 0 ? getTrytes(hashes) : Promise.resolve([])),
-        getBalance: (address): Promise<number> => getBalances([address], 100).then(({ balances }) => balances[0]),
+        getBalance: (address): Promise<number> => getBalances([address]).then(({ balances }) => balances[0]),
         getBalances,
         getConsistency: createCheckConsistency(httpClient),
         getInclusionStates: hashes => (hashes.length > 0 ? getInclusionStates(hashes) : Promise.resolve([])),
