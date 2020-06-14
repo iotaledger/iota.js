@@ -3,7 +3,7 @@ import * as Promise from 'bluebird'
 import { INVALID_ADDRESS } from '../../errors'
 import { arrayValidator, hashValidator, validate } from '../../guards'
 import { asArray, Callback, Hash, Provider, Transaction, Trytes } from '../../types'
-import { createFindTransactionObjects, createGetLatestInclusion } from './'
+import { createFindTransactionObjects, createGetInclusionStates } from './'
 
 // Filters out all receiving or 0-value transactions
 // Note: Transaction value < 0 is a tx-out (spending transaction)
@@ -11,7 +11,7 @@ const filterSpendingTransactions = (transactions: ReadonlyArray<Transaction>) =>
 
 // Appends the confirmation status to each transaction
 const withInclusionState = (provider: Provider, transactions: ReadonlyArray<Transaction>) =>
-    createGetLatestInclusion(provider)(transactions.map(tx => tx.hash)).then(states =>
+    createGetInclusionStates(provider)(transactions.map(tx => tx.hash)).then(states =>
         transactions.map((tx, i) => ({
             ...tx,
             confirmed: states[i],

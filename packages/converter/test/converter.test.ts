@@ -28,6 +28,13 @@ describe('trytesToAscii(trytes)', async assert => {
     })
 
     assert({
+        given: 'tryte-encoded ascii with 9s',
+        should: 'convert to ascii ignoring zero/null char code',
+        actual: trytesToAscii('SBYBCCKB9999'),
+        expected: 'IOTA',
+    })
+
+    assert({
         given: 'non-trytes',
         should: 'throw error',
         actual: Try(trytesToTrits, 'AAfasds'),

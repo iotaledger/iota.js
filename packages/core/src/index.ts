@@ -35,8 +35,6 @@ export {
     GetNeighborsResponse,
     GetNodeInfoCommand,
     GetNodeInfoResponse,
-    GetTipsCommand,
-    GetTipsResponse,
     GetTransactionsToApproveCommand,
     GetTransactionsToApproveResponse,
     TransactionsToApprove,
@@ -67,8 +65,6 @@ export { createGetInclusionStates } from './createGetInclusionStates'
 export { createGetNeighbors } from './createGetNeighbors'
 
 export { createGetNodeInfo } from './createGetNodeInfo'
-
-export { createGetTips } from './createGetTips'
 
 export { createGetTransactionsToApprove } from './createGetTransactionsToApprove'
 
@@ -107,8 +103,6 @@ export { createGetBundle } from './createGetBundle'
 export { createGetBundlesFromAddresses } from './createGetBundlesFromAddresses'
 
 export { createGetInputs, GetInputsOptions } from './createGetInputs'
-
-export { createGetLatestInclusion } from './createGetLatestInclusion'
 
 export {
     createGetNewAddress,

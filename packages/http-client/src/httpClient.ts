@@ -56,26 +56,68 @@ export const getKeysToBatch = <C>(
     )
 
 /**
- * Create an http client to access IRI http API.
- *
+ * This method creates an HTTP client that you can use to send requests to the [IRI API endpoints](https://docs.iota.org/docs/node-software/0.1/iri/references/api-reference).
+ * 
+ * ## Related methods
+ * 
+ * To send requests to the IRI node, use the [`send()`]{@link #module_http-client.send} method.
+ * 
  * @method createHttpClient
+ * 
+ * @summary Creates an HTTP client to access the IRI API.
+ *  
+ * @memberof module:http-client
  *
- * @param {object} [settings={}]
- * @param {string} [settings.provider=http://localhost:14265] Uri of IRI node
- * @param {string | number} [settings.apiVersion=1] - IOTA Api version to be sent as `X-IOTA-API-Version` header.
- * @param {number} [settings.requestBatchSize=1000] - Number of search values per request.
- * @return Object
+ * @param {Object} [settings={}]
+ * @param {String} [settings.provider=http://localhost:14265] URI of an IRI node to connect to
+ * @param {String | number} [settings.apiVersion=1] - IOTA API version to be sent in the `X-IOTA-API-Version` header.
+ * @param {number} [settings.requestBatchSize=1000] - Number of search values per request
+ * 
+ * @example
+ * ```js
+ * let settings = {
+ *  provider: 'http://mynode.eu:14265'
+ * }
+ * 
+ * let httpClient = HttpClient.createHttpClient(settings);
+ * ```
+ *
+ * @return HTTP client object
  */
 export const createHttpClient = (settings?: Partial<Settings>): Provider => {
     let currentSettings = getSettingsWithDefaults({ ...settings })
     return {
         /**
-         * @member send
-         *
-         * @param {object} command
-         *
-         * @return {object} response
-         */
+        * This method uses the HTTP client to send requests to the [IRI API endpoints](https://docs.iota.org/docs/node-software/0.1/iri/references/api-reference).
+        * 
+        * ## Related methods
+        * 
+        * To create an HTTP client, use the [`createHttpClient()`]{@link #module_http-client.createHttpClient} method.
+        * 
+        * @method createHttpClient
+        * 
+        * @summary Sends an API request to the connected IRI node.
+        *
+        * @param {Object} command - The request body for the API endpoint
+        * 
+        * @example
+        * ```js
+        * let httpClient = HttpClient.createHttpClient(settings);
+        * httpClient.send({command:'getNodeInfo'})
+        * .then(response => {
+        *   console.log(response);
+        * })
+        * .catch(error => {
+        *   console.log(error);
+        * })
+        * ```
+        *
+        * @return {Promise}
+        * 
+        * @fulfil {Object} response - The response from the IRI node
+        * 
+        * @reject {Object} error - The connected IOTA node's API returned an error. See the [list of error messages](https://docs.iota.org/docs/node-software/0.1/iri/references/api-errors) 
+        */
         send: <C extends BaseCommand, R>(command: Readonly<C>): Promise<Readonly<R>> =>
             Promise.try(() => {
                 const { provider, user, password, requestBatchSize, apiVersion, agent } = currentSettings
@@ -96,13 +138,45 @@ export const createHttpClient = (settings?: Partial<Settings>): Provider => {
             }),
 
         /**
-         * @member setSettings
-         *
-         * @param {object} [settings={}]
-         * @param {string} [settings.provider=http://localhost:14265] Uri of IRI node
-         * @param {string | number} [settings.apiVersion=1] - IOTA Api version to be sent as `X-IOTA-API-Version` header.
-         * @param {number} [settings.requestBatchSize=1000] - Number of search values per request.
-         */
+        * This method updates the settings of an existing HTTP client.
+        * 
+        * ## Related methods
+        * 
+        * To create an HTTP client, use the [`createHttpClient()`]{@link #module_http-client.createHttpClient} method.
+        * 
+        * @method setSettings
+        * 
+        * @summary Updates the settings of an existing HTTP client.
+        *
+        * @param {Object} [settings={}]
+        * @param {String} [settings.provider=http://localhost:14265] URI of an IRI node to connect to
+        * @param {String | number} [settings.apiVersion=1] - IOTA API version to be sent in the `X-IOTA-API-Version` header.
+        * @param {number} [settings.requestBatchSize=1000] - Number of search values per request.
+        * 
+        * @example
+        * ```js
+        * let settings = {
+        *   provider: 'https://nodes.devnet.thetangle.org:443'
+        *   }
+        * 
+        * let httpClient = http.createHttpClient(settings);
+        * httpClient.send({command:'getNodeInfo'}).then(res => {
+        *   console.log(res)
+        * }).catch(err => {
+        *   console.log(err)
+        * });
+        * 
+        * httpClient.setSettings({provider:'http://newnode.org:14265'});
+        * 
+        * httpClient.send({command:'getNodeInfo'}).then(res => {
+        *   console.log(res)
+        * }).catch(err => {
+        *   console.log(err)
+        * })
+        * ```
+        *
+        * @return {void}
+        */
         setSettings: (newSettings?: Partial<Settings>): void => {
             currentSettings = getSettingsWithDefaults({ ...currentSettings, ...newSettings })
         },
