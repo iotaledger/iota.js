@@ -53,8 +53,6 @@ yarn add @iota/core
 
     * [.getInputs(seed, [options], [callback])](#module_core.getInputs)
 
-    * [.getLatestInclusion(transactions, [callback])](#module_core.getLatestInclusion)
-
     * [.getNeighbors([callback])](#module_core.getNeighbors)
 
     * [.getNewAddress(seed, [options], [callback])](#module_core.getNewAddress)
@@ -631,43 +629,6 @@ getInputs(seed)
        console.log('You have no IOTA tokens');
     }
   });
-```
-<a name="module_core.getLatestInclusion"></a>
-
-### *core*.getLatestInclusion(transactions, [callback])
-**Summary**: Finds out if one or more given transactions are [confirmed or pending](https://docs.iota.org/docs/getting-started/0.1/network/the-tangle#transaction-states).  
-**Fulfil**: <code>boolean[]</code> states - Array of inclusion states, where `true` means that the transaction is confirmed and `false` means that it's not.  
-**Reject**: <code>Error</code> error - An error that contains one of the following:
-- `INVALID_HASH`: Make sure that the transaction hashes are 81 trytes long
-- Fetch error: The connected IOTA node's API returned an error. See the [list of error messages](https://docs.iota.org/docs/node-software/0.1/iri/references/api-errors)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| transactions | <code>Array.&lt;Hash&gt;</code> | List of transactions hashes to check |
-| [callback] | <code>Callback</code> | Optional callback function |
-
-This method uses the node's `latestSolidSubtangleMilestone` field as the `tips` argument to make sure that the given transactions are referenced by the node's latest solid milestone.
-
-An invalid transaction will always remain in a pending state.
-
-**Note:** If a valid transaction is in a pending state for too long, you can [increase its chances of being confirmed](https://docs.iota.org/docs/client-libraries/0.1/how-to-guides/js/confirm-pending-bundle).
-
-## Related methods
-
-To check if transactions are referenced by a non-milestone transaction, use the [`getInclusionStates()`](#module_core.getInclusionStates) method.
-
-**Example**  
-```js
-iota.getLatestInclusionState(['transactionHash'])
-.then(states => {
-   for(let i = 0; i < states.length; i++){
-       states[i]? console.log(`Transaction ${i} is confirmed`) :
-       console.log(`transaction ${i} is pending`);
-   }
- })
-.catch(error => {
-    console.log(`Something went wrong: ${error}`);
- });
 ```
 <a name="module_core.getNeighbors"></a>
 

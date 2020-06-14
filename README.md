@@ -121,8 +121,6 @@ For details on all available API methods, see the [reference page](api_reference
 
 * [.getInputs(seed, [options], [callback])](api_reference.md#module_core.getInputs)
 
-* [.getLatestInclusion(transactions, tips, [callback])](api_reference.md#module_core.getLatestInclusion)
-
 * [.getNeighbors([callback])](api_reference.md#module_core.getNeighbors)
 
 * [.getNewAddress(seed, [options], [callback])](api_reference.md#module_core.getNewAddress)
