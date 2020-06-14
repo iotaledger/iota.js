@@ -82,7 +82,7 @@ export interface Network {
     readonly getBalances: API['getBalances']
     readonly getBalance: (address: Trytes) => Promise<number>
     readonly getConsistency: API['checkConsistency']
-    readonly getLatestInclusion: API['getLatestInclusion']
+    readonly getInclusionStates: API['getInclusionStates']
     readonly getTrytes: API['getTrytes']
     readonly sendTrytes: API['sendTrytes']
     readonly setSettings: API['setSettings']
