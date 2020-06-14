@@ -61,8 +61,6 @@ yarn add @iota/core
 
     * [.getNodeInfo([callback])](#module_core.getNodeInfo)
 
-    * [.getTips([callback])](#module_core.getTips)
-
     * [.getTransactionObjects(hashes, [callback])](#module_core.getTransactionObjects)
 
     * [.getTransactionsToApprove(depth, [reference], [callback])](#module_core.getTransactionsToApprove)
@@ -805,35 +803,6 @@ To get statistics about the connected node's neighbors, use the [`getNeighbors()
 ```js
 getNodeInfo()
   .then(info => console.log(JSON.stringify(info)))
-  .catch(error => {
-    console.log(`Something went wrong: ${error}`);
-  })
-```
-<a name="module_core.getTips"></a>
-
-### *core*.getTips([callback])
-**Summary**: Searches the Tangle for tip transactions.  
-**Fulfil**: <code>Hash[]</code> tips - Array of tip transaction hashes  
-**Reject**: <code>Error</code> error - Fetch error: The connected IOTA node's API returned an error. See the [list of error messages](https://docs.iota.org/docs/node-software/0.1/iri/references/api-errors)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| [callback] | <code>Callback</code> | Optional callback function |
-
-This method finds all transactions that aren't referenced by other transactions in the Tangle
-by calling the connected IRI node's [`getTips`](https://docs.iota.org/docs/node-software/0.1/iri/references/api-reference#gettips) endpoint.
-
-## Related methods
-
-To find two consistent tip transactions to use as branch and trunk transactions, use the [`getTransactionsToApprove()`](#module_core.getTransactionsToApprove) method.
-
-**Example**  
-```js
-getTips()
-  .then(tips => {
-    console.log('Found the following tip transactions:');
-    console.log(JSON.stringify(tips));
-  })
   .catch(error => {
     console.log(`Something went wrong: ${error}`);
   })

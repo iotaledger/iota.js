@@ -336,10 +336,6 @@ Converts an integer value to trits
 
     * [.getNodeInfo([callback])](#module_core.getNodeInfo)
 
-    * [.createGetTips(provider)](#module_core.createGetTips)
-
-    * [.getTips([callback])](#module_core.getTips)
-
     * [.createGetTransactionObjects(provider)](#module_core.createGetTransactionObjects)
 
     * [.getTransactionObjects(hashes, [callback])](#module_core.getTransactionObjects)
@@ -1083,40 +1079,6 @@ getNodeInfo()
     // ...
   })
 ```
-<a name="module_core.createGetTips"></a>
-
-### *core*.createGetTips(provider)
-
-| Param | Type | Description |
-| --- | --- | --- |
-| provider | <code>Provider</code> | Network provider |
-
-**Returns**: <code>function</code> - [`getTips`](#module_core.getTips)  
-<a name="module_core.getTips"></a>
-
-### *core*.getTips([callback])
-**Fulfil**: <code>Hash[]</code> List of tip hashes  
-**Reject**: <code>Error</code>
-- Fetch error  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| [callback] | <code>Callback</code> | Optional callback |
-
-Returns a list of tips (transactions not referenced by other transactions),
-as seen by the connected node.
-
-**Example**  
-```js
-getTips()
-  .then(tips => {
-    // ...
-  })
-  .catch(err => {
-    // ...
-  })
-```
-<a name="module_core.createGetTransactionObjects"></a>
 
 ### *core*.createGetTransactionObjects(provider)
 
