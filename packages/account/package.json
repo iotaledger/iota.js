@@ -63,7 +63,7 @@
         "@iota/signing": "^1.0.0-beta.23",
         "@iota/transaction": "^1.0.0-beta.23",
         "@iota/transaction-converter": "^1.0.0-beta.23",
-        "@types/nock": "^9.3.1",
+        "@types/nock": "^11.1.0",
         "bluebird": "^3.7.2",
         "nock": "^10.0.6"
     },
