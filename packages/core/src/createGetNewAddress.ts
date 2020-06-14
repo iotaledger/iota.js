@@ -51,7 +51,9 @@ export const createIsAddressUsed = (provider: Provider) => {
  * @param {number} [options.security=2] - Security level
  *
  * @return {Promise}
+ * 
  * @fulfil {Hash[]} List of addresses up to (and including) first unused address
+ *
  * @reject {Error}
  * - `INVALID_SEED`
  * - `INVALID_START_OPTION`
@@ -116,51 +118,67 @@ export const getNewAddressOptions = getOptionsWithDefaults<GetNewAddressOptions>
 
 /**
  * @method createGetNewAddress
- *
- * @param {Provider} provider - Network provider
+ * 
+ * @summary Creates a new `getNewAddress()` method, using a custom Provider instance.
  *
  * @memberof module:core
+ * 
+ * @ignore
  *
- * @return {function} {@link #module_core.getNewAddress `getNewAddress`}
+ * @param {Provider} provider - The Provider object that the method should use to call the node's API endpoints.
+ *
+ * @return {Function} [`getNewAddress`]{@link #module_core.getNewAddress}  - A new `getNewAddress()` function that uses your chosen Provider instance.
  */
 export const createGetNewAddress = (provider: Provider, caller?: string) => {
     const isAddressUsed = createIsAddressUsed(provider)
 
     /**
-     * Generates and returns a new address by calling [`findTransactions`]{@link #module_core.findTransactions}
-     * until the first unused address is detected. This stops working after a snapshot.
-     *
-     * @example
-     * ```js
-     * getNewAddress(seed, { index })
-     *   .then(address => {
-     *     // ...
-     *   })
-     *   .catch(err => {
-     *     // ...
-     *   })
-     * ```
-     *
+     * This method uses the connected IRI node's [`findTransactions`]{@link #module_core.findTransactions}
+     * endpoint to search every transactions in the Tangle for each generated address. If an address is found in a transaction, a new address is generated until one is found that isn't in any transactions.
+     * 
+     * **Note:** The given seed is used to [generate addresses](https://docs.iota.org/docs/client-libraries/0.1/how-to-guides/js/generate-an-address) on your local device. It is never sent anywhere.
+     * 
+     * **Note:** Because of local snapshots, this method is not a reliable way of generating unspent addresses. Instead, you should use the [account module](https://docs.iota.org/docs/client-libraries/0.1/account-module/introduction/overview) to keep track of your spent addresses.
+     * 
+     * ## Related methods
+     * 
+     * To find out which of your addresses are spent, use the [`getAccountData()`]{@link #module_core.getAccountData} method.
+     * 
      * @method getNewAddress
+     * 
+     * @summary Generates a new address for a given seed.
      *
      * @memberof module:core
      *
-     * @param {string} seed - At least 81 trytes long seed
-     * @param {object} [options]
-     * @param {number} [options.index=0] - Key index to start search at
-     * @param {number} [options.security=2] - Security level
-     * @param {boolean} [options.checksum=false] - `Deprecated` Flag to include 9-trytes checksum or not
-     * @param {number} [options.total] - `Deprecated` Number of addresses to generate.
-     * @param {boolean} [options.returnAll=false] - `Deprecated` Flag to return all addresses, from start up to new address.
-     * @param {Callback} [callback] - Optional callback
+     * @param {string} seed - The seed to use to generate addresses
+     * @param {Object} [options] - Options object
+     * @param {number} [options.index=0] - The key index from which to start generating addresses
+     * @param {number} [options.security=2] - The [security level](https://docs.iota.org/docs/getting-started/0.1/clients/security-levels) to use to generate the addresses
+     * @param {boolean} [options.checksum=false] - `Deprecated`
+     * @param {number} [options.total] - `Deprecated`
+     * @param {boolean} [options.returnAll=false] - `Deprecated`
+     * @param {Callback} [callback] - Optional callback function
+     * 
+     * @example
+     * ```js
+     * getNewAddress(seed)
+     *   .then(address => {
+     *     console.log(`Here's your new address: ${address})
+     *   })
+     *   .catch(error => {
+     *     console.log(`Something went wrong: ${error}`);
+     *   })
+     * ```
      *
      * @return {Promise}
-     * @fulfil {Hash|Hash[]} New (unused) address or list of addresses up to (and including) first unused address
-     * @reject {Error}
-     * - `INVALID_SEED`
-     * - `INVALID_START_OPTION`
-     * - `INVALID_SECURITY`
-     * - Fetch error
+     * 
+     * @fulfil {Hash|Hash[]} address - A single new address or an array of new addresses
+     * 
+     * @reject {Error} error - An error that contains one of the following:
+     * - `INVALID_SEED`: Make sure that the seed contains only trytes
+     * - `INVALID_SECURITY_LEVEL`: Make sure that the security level is a number between 1 and 3
+     * - `INVALID_START_OPTION`: Make sure that the `options.start` argument is greater than zero
+     * - Fetch error: The connected IOTA node's API returned an error. See the [list of error messages](https://docs.iota.org/docs/node-software/0.1/iri/references/api-errors) 
      */
     return function getNewAddress(
         seed: Trytes,

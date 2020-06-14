@@ -1,13 +1,14 @@
-dist: trusty
-matrix:
+os: linux
+dist: xenial
+language: node_js
+
+jobs:
   include:
     - language: node_js
       node_js:
-        - '11'
+        - '12'
         - '10'
         - '8'
-      before_script:
-        - npm i
       script:
         - npm run test-ci
     - language: android
@@ -48,3 +49,5 @@ matrix:
         - npm i
       script:
         - npm run test-android
+  allow_failures:
+    - language: android

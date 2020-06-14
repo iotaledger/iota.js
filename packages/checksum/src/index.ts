@@ -19,17 +19,36 @@ const ADDRESS_WITH_CHECKSUM_TRYTES_LENGTH = HASH_TRYTES_LENGTH + ADDRESS_CHECKSU
 const MIN_CHECKSUM_TRYTES_LENGTH = 3
 
 /**
- * Generates and appends the 9-tryte checksum of the given trytes, usually an address.
- *
+ * This method takes 81 trytes, which could be an address or a seed, generates the [checksum](https://docs.iota.org/docs/getting-started/0.1/clients/checksums) and appends it to the trytes.
+ * 
+ * To generate a checksum that is less than 9 trytes long, make sure to set the `isAddress` argument to false.
+ * 
+ * ## Related methods
+ * 
+ * To generate an address, use the [`getNewAddress()`]{@link #module_core.getNewAddress} method.
+ * 
  * @method addChecksum
+ * 
+ * @summary Generates a checksum and appends it to the given trytes.
+ *  
+ * @memberof module:checksum
  *
- * @param {string} input - Input trytes
+ * @param {string} input - 81 trytes to which to append the checksum
  *
- * @param {number} [checksumLength=9] - Checksum trytes length
+ * @param {number} [checksumLength=9] - Length of the checksum to generate
  *
- * @param {boolean} [isAddress=true] - Flag to denote if given input is address. Defaults to `true`.
+ * @param {boolean} [isAddress=true] - Whether the input is an address
+ * 
+ * @example
+ * ```js
+ * let addressWithChecksum = Checksum.addChecksum('ADDRESS...');
+ * ```
  *
- * @returns {string} Address (with checksum)
+ * @returns {string} The original trytes with an appended checksum.
+ * 
+ * @throws {errors.INVALID_ADDRESS}: Make sure that the given address is 90 trytes long.
+ * @throws {errors.INVALID_TRYTES}: Make sure that the `input` argument contains only [trytes](https://docs.iota.org/docs/getting-started/0.1/introduction/ternary)
+ * @throws {errors.INVALID_CHECKSUM_LENGTH}: Make sure that the `checksumLength` argument is a number greater than or equal to 3. If the `isAddress` argument is set to true, make sure that the `checksumLength` argument is 9.
  */
 export function addChecksum(input: Trytes, checksumLength = ADDRESS_CHECKSUM_TRYTES_LENGTH, isAddress = true): Trytes {
     if (!isTrytes(input)) {
@@ -71,13 +90,29 @@ export function addChecksum(input: Trytes, checksumLength = ADDRESS_CHECKSUM_TRY
 }
 
 /**
- * Removes the 9-trytes checksum of the given input.
- *
+ * This method takes an address of 90 trytes, and removes the last 9 trytes to return the address without a checksum.
+ * 
+ * ## Related methods
+ * 
+ * To generate an address, use the [`getNewAddress()`]{@link #module_core.getNewAddress} method.
+ * To add a checksum to an address, use the [`addChecksum()`]{@link #module_checksum.addChecksum} method.
+ * 
  * @method removeChecksum
+ * 
+ * @summary Removes the checksum from the given address.
+ *  
+ * @memberof module:checksum
  *
- * @param {string} input - Input trytes
+ * @param {string} input - Address from which to remove the checksum
+ * 
+ * @example
+ * ```js
+ * let addressWithoutChecksum = Checksum.removeChecksum('ADDRESS...');
+ * ```
  *
- * @return {string} Trytes without checksum
+ * @returns {string} The original address without the appended checksum.
+ * 
+ * @throws {errors.INVALID_ADDRESS}: Make sure that the given address is 90 trytes long.
  */
 export function removeChecksum(input: Trytes): Trytes {
     if (!isTrytes(input, HASH_TRYTES_LENGTH) && !isTrytes(input, ADDRESS_WITH_CHECKSUM_TRYTES_LENGTH)) {
@@ -88,13 +123,29 @@ export function removeChecksum(input: Trytes): Trytes {
 }
 
 /**
- * Validates the checksum of the given address trytes.
- *
+ * This method takes an address of 90 trytes, and checks if the checksum is valid.
+ * 
+ * ## Related methods
+ * 
+ * To generate an address, use the [`getNewAddress()`]{@link #module_core.getNewAddress} method.
+ * To add a checksum to an address, use the [`addChecksum()`]{@link #module_checksum.addChecksum} method.
+ * 
  * @method isValidChecksum
+ * 
+ * @summary Validates the checksum of an address.
+ *  
+ * @memberof module:checksum
  *
- * @param {string} addressWithChecksum
+ * @param {string} addressWithChecksum - Address with a checksum
+ * 
+ * @example
+ * ```js
+ * let valid = Checksum.isValidChecksum('ADDRESS...');
+ * ```
  *
- * @return {boolean}
+ * @returns {boolean} Whether the checksum is valid.
+ * 
+ * @throws {errors.INVALID_ADDRESS}: Make sure that the given address is 90 trytes long.
  */
 export const isValidChecksum = (addressWithChecksum: Trytes): boolean =>
     addressWithChecksum === addChecksum(removeChecksum(addressWithChecksum))
