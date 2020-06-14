@@ -38,11 +38,11 @@ const defaults: GetInputsOptions = {
 
 /**
  * @method createGetInputs
- * 
+ *
  * @summary Creates a new `getInputs()` method, using a custom Provider instance.
  *
  * @memberof module:core
- * 
+ *
  * @ignore
  *
  * @param {Provider} provider - The Provider object that the method should use to call the node's API endpoints.
@@ -55,17 +55,17 @@ export const createGetInputs = (provider: Provider) => {
 
     /**
      * This method generates [addresses](https://docs.iota.org/docs/getting-started/0.1/clients/addresses) for a given seed and finds those that have a positive balance.
-     * 
+     *
      * **Note:** The given seed is used to [generate addresses](https://docs.iota.org/docs/client-libraries/0.1/how-to-guides/js/generate-an-address) on your local device. It is never sent anywhere.
-     * 
+     *
      * To find a certain amount of [IOTA tokens](https://docs.iota.org/docs/getting-started/0.1/clients/token) and return only the addresses that, when combined, contain that amount, pass it to the `options.threshold` argument.
-     * 
+     *
      * ## Related methods
-     * 
+     *
      * You may want to use this method to find inputs for the [`prepareTransfers()`]{@link #module_core.prepareTransfers} method.
-     * 
+     *
      * @method getInputs
-     * 
+     *
      * @summary Finds a seed's addresses that have a positive balance.
      *
      * @memberof module:core
@@ -77,7 +77,7 @@ export const createGetInputs = (provider: Provider) => {
      * @param {number} [options.end] - The key index at which to stop generating addresses
      * @param {number} [options.threshold] - The amount of IOTA tokens that you want to find
      * @param {Callback} [callback] - Optional callback function
-     * 
+     *
      * @example
      *
      * ```js
@@ -104,7 +104,7 @@ export const createGetInputs = (provider: Provider) => {
      * - input.security: The security level of the address
      * - input.balance: The amount of IOTA tokens in the address
      * - inputs.totalBalance: The combined balance of all addresses
-     * 
+     *
      * @reject {Error} error - An error that contains one of the following:
      * - `INVALID_SEED`: Make sure that the seed contains only trytes
      * - `INVALID_SECURITY_LEVEL`: Make sure that the security level is a number between 1 and 3
@@ -113,7 +113,7 @@ export const createGetInputs = (provider: Provider) => {
      * - Fetch error: The connected IOTA node's API returned an error. See the [list of error messages](https://docs.iota.org/docs/node-software/0.1/iri/references/api-errors) `
      * - `INVALID_THRESHOLD`: Make sure that the threshold is a number greater than zero
      * - `INSUFFICIENT_BALANCE`: Make sure that the seed has addresses that contain IOTA tokens
-     * - Fetch error: The connected IOTA node's API returned an error. See the [list of error messages](https://docs.iota.org/docs/node-software/0.1/iri/references/api-errors) 
+     * - Fetch error: The connected IOTA node's API returned an error. See the [list of error messages](https://docs.iota.org/docs/node-software/0.1/iri/references/api-errors)
      */
     return (seed: Trytes, options: Partial<GetInputsOptions> = {}, callback?: Callback<Inputs>): Promise<Inputs> => {
         const { start, end, security, threshold } = getInputsOptions(options)
@@ -123,7 +123,7 @@ export const createGetInputs = (provider: Provider) => {
             .then(newAddressOptions => getNewAddress(seed, newAddressOptions))
             .then(allAddresses => asArray(allAddresses))
             .then(allAddresses =>
-                getBalances(allAddresses, 100)
+                getBalances(allAddresses)
                     .then(({ balances }) => createInputsObject(allAddresses, balances, start, security))
                     .then(res => filterByThreshold(res, threshold))
                     .tap(inputs => hasSufficientBalance(inputs, threshold))

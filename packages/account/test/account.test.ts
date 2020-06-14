@@ -53,7 +53,6 @@ const assertBalance = (address: Trytes, balance: number) =>
         .post('/', {
             command: IRICommand.GET_BALANCES,
             addresses: [noChecksum(address)],
-            threshold: 100,
         })
         .times(1)
         .reply(200, {

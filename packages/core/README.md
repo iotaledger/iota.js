@@ -45,7 +45,7 @@ yarn add @iota/core
 
     * [.getAccountData(seed, options, [callback])](#module_core.getAccountData)
 
-    * [.getBalances(addresses, threshold, [tips], [callback])](#module_core.getBalances)
+    * [.getBalances(addresses, [tips], [callback])](#module_core.getBalances)
 
     * [.getBundle(tailTransactionHash, [callback])](#module_core.getBundle)
 
@@ -469,7 +469,7 @@ getAccountData(seed)
 ```
 <a name="module_core.getBalances"></a>
 
-### *core*.getBalances(addresses, threshold, [tips], [callback])
+### *core*.getBalances(addresses, [tips], [callback])
 **Summary**: Gets the confirmed balances of the given addresses.  
 **Fulfil**: <code>Balances</code> balances - Object that contains the following:
 - balances.addresses: Array of balances in the same order as the `addresses` argument
@@ -478,13 +478,11 @@ getAccountData(seed)
 - balances.duration: The number of milliseconds that it took for the node to return a response  
 **Reject**: <code>Error</code> error - An error that contains one of the following:
 - `INVALID_HASH`: Make sure that the addresses contain only trytes
-- `INVALID_THRESHOLD`: Make sure that the threshold is a number greater than zero
 - Fetch error: The connected IOTA node's API returned an error. See the [list of error messages](https://docs.iota.org/docs/node-software/0.1/iri/references/api-errors)  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | addresses | <code>Array.&lt;Hash&gt;</code> | Array of addresses |
-| threshold | <code>number</code> | Not used, but should be set to 100 until [this issue](https://github.com/iotaledger/iri/issues/1723) is resolved. |
 | [tips] | <code>Array.&lt;Hash&gt;</code> | Array of past transaction hashes from which to calculate the balances of the addresses. The balance will be calculated from the latest milestone that references these transactions. |
 | [callback] | <code>Callback</code> | Optional callback function |
 
@@ -499,7 +497,7 @@ To find the balance of all addresses that belong to your seed, use the [`getAcco
 
 **Example**  
 ```js
-getBalances([address], 100)
+getBalances([address])
   .then( balances => {
     console.log(`Balance of the first address: `$balances.balances[0])
     console.log(JSON.stringify(transactions));

@@ -240,7 +240,7 @@ export default class Multisig {
             .then((sanitizedTransfers: ReadonlyArray<Transfer>) =>
                 input.balance
                     ? createBundle(input, sanitizedTransfers, remainderAddress)
-                    : (createGetBalances(this.provider) as any)([input.address], 100)
+                    : (createGetBalances(this.provider) as any)([input.address])
                           .then(
                               (res: Balances): MultisigInput => ({
                                   ...input,
