@@ -48,11 +48,11 @@ export const getAccountDataOptions = getOptionsWithDefaults(defaults)
 
 /**
  * @method createGetAccountData
- * 
+ *
  * @summary Creates a new `getAccountData()` method, using a custom Provider instance.
  *
  * @memberof module:core
- * 
+ *
  * @ignore
  *
  * @param {Provider} provider - The Provider object that the method should use to call the node's API endpoints.
@@ -67,21 +67,21 @@ export const createGetAccountData = (provider: Provider, caller?: string) => {
 
     /**
      * This method generates [addresses](https://docs.iota.org/docs/getting-started/0.1/clients/addresses) for a given seed, and searches the Tangle for data about those addresses such as transactions, inputs, and total balance.
-     * 
+     *
      * **Note:** The given seed is used to [generate addresses](https://docs.iota.org/docs/client-libraries/0.1/how-to-guides/js/generate-an-address) on your local device. It is never sent anywhere.
-     * 
+     *
      * If you don't pass an `options.end` argument to this method, it will continue to generate addresses until it finds an unspent one.
-     * 
+     *
      * **Note:** The total balance does not include IOTA tokens on [spent addresses](https://docs.iota.org/docs/getting-started/0.1/clients/addresses#spent-addresses).
-     * 
+     *
      * ## Related methods
-     * 
+     *
      * To find the balance of specific addresses, which don't have to belong to your seed, use the [`getBalances()`]{@link #module_core.getBalances} method.
-     * 
+     *
      * To find only inputs (objects that contain information about addresses with a postive balance), use the [`getInputs()`]{@link #module_core.getInputs} method.
-     * 
+     *
      * @method getAccountData
-     * 
+     *
      * @summary Searches the Tangle for transctions, addresses, and balances that are associated with a given seed.
      *
      * @memberof module:core
@@ -92,7 +92,7 @@ export const createGetAccountData = (provider: Provider, caller?: string) => {
      * @param {number} [options.security=2] - The [security level](https://docs.iota.org/docs/getting-started/0.1/clients/security-levels) to use to generate the addresses
      * @param {number} [options.end] - The key index at which to stop generating addresses
      * @param {Callback} [callback] - Optional callback function
-     * 
+     *
      * @example
      *
      * ```js
@@ -108,7 +108,7 @@ export const createGetAccountData = (provider: Provider, caller?: string) => {
      * ```
      *
      * @returns {Promise}
-     * 
+     *
      * @fulfil {AccountData} accountData - Object that contains the following:
      * - accountData.transfers: (deprecated) Array of transaction objects that contain one of the seed's addresses
      * - accountData.transactions: Array of transaction hashes for transactions that contain one of the seed's addresses
@@ -119,13 +119,13 @@ export const createGetAccountData = (provider: Provider, caller?: string) => {
      *   - accountData.inputs.security: Security level of the address
      *   - accountData.inputs.balance: Balance of the address
      * - accountData.balance: The total balance of unspent addresses
-     * 
+     *
      * @reject {Error} error - An error that contains one of the following:
      * - `INVALID_SEED`: Make sure that the seed contains only trytes
      * - `INVALID_SECURITY_LEVEL`: Make sure that the security level is a number between 1 and 3
      * - `INVALID_START_OPTION`: Make sure that the `options.start` argument is greater than zero
      * - `INVALID_START_END_OPTIONS`: Make sure that the `options.end` argument is not greater than the `options.start` argument by more than 1,000`
-     * - Fetch error: The connected IOTA node's API returned an error. See the [list of error messages](https://docs.iota.org/docs/node-software/0.1/iri/references/api-errors) 
+     * - Fetch error: The connected IOTA node's API returned an error. See the [list of error messages](https://docs.iota.org/docs/node-software/0.1/iri/references/api-errors)
      */
     return (
         seed: string,
@@ -138,7 +138,7 @@ export const createGetAccountData = (provider: Provider, caller?: string) => {
             /* tslint:disable-next-line:no-console */
             console.warn(
                 'The returned `accountData.transfers` field is deprecated, therefore do not rely on this field in your applications.\n' +
-                'Instead, you can get only the transactions that you need by using the transaction hashes returned in the `accountData.transactions` field.'
+                    'Instead, you can get only the transactions that you need by using the transaction hashes returned in the `accountData.transactions` field.'
             )
         }
 
@@ -168,7 +168,7 @@ export const createGetAccountData = (provider: Provider, caller?: string) => {
                     Promise.all([
                         getBundlesFromAddresses(addresses, true),
                         // findTransactions({ addresses }), // Find transactions instead of getBundlesFromAddress as of v2.0.0
-                        getBalances(addresses, 100),
+                        getBalances(addresses),
                         wereAddressesSpentFrom(addresses),
                         addresses,
                     ])
