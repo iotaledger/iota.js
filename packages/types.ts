@@ -184,7 +184,6 @@ export interface Balances {
 export interface GetInclusionStatesCommand extends BaseCommand {
     readonly command: IRICommand.GET_INCLUSION_STATES
     readonly transactions: ReadonlyArray<Hash>
-    readonly tips: ReadonlyArray<Hash>
 }
 
 export interface GetInclusionStatesResponse {
