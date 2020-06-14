@@ -129,8 +129,6 @@ For details on all available API methods, see the [reference page](api_reference
 
 * [.getNodeInfo([callback])](api_reference.md#module_core.getNodeInfo)
 
-* [getTips([callback])](api_reference.md#module_core.getTips)
-
 * [getTransactionObjects(hashes, [callback])](api_reference.md#module_core.getTransactionObjects)
 
 * [.getTransactionsToApprove(depth, [reference], [callback])](api_reference.md#module_core.getTransactionsToApprove)

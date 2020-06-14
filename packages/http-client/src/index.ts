@@ -24,8 +24,6 @@ export {
     GetNeighborsResponse,
     GetNodeInfoCommand,
     GetNodeInfoResponse,
-    GetTipsCommand,
-    GetTipsResponse,
     GetTransactionsToApproveCommand,
     GetTransactionsToApproveResponse,
     TransactionsToApprove,

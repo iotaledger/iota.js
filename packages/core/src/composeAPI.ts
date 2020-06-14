@@ -29,7 +29,6 @@ import {
     createGetNeighbors,
     createGetNewAddress,
     createGetNodeInfo,
-    createGetTips,
     createGetTransactionObjects,
     createGetTransactionsToApprove,
     createGetTrytes,
@@ -74,7 +73,7 @@ export function returnType<T>(func: Func<T>) {
 
 /**
  * @method composeApi
- * 
+ *
  * @summary Creates an API object that's used to send requests to an IRI node.
  *
  * @memberof module:core
@@ -89,12 +88,12 @@ export function returnType<T>(func: Func<T>) {
  * @example
  * ```js
  * const Iota = require('@iota/core`);
- * 
+ *
  * const iota = Iota.composeAPI({
  *  provider: 'https://nodes.devnet.thetangle.org:443'
  * });
  * ```
- * 
+ *
  * @return {API} iota - API object to use to interact with an IRI node.
  */
 export const composeAPI = (settings: Partial<Settings> = {}) => {
@@ -103,7 +102,7 @@ export const composeAPI = (settings: Partial<Settings> = {}) => {
 
     /**
      * @method setSettings
-     * 
+     *
      * @summary Defines network provider configuration and [`attachToTangle`]{@link #module_core.attachToTangle} method.
      *
      * @memberof API
@@ -126,13 +125,13 @@ export const composeAPI = (settings: Partial<Settings> = {}) => {
     }
 
     /**
-     * 
+     *
      * @method overrideNetwork
-     * 
+     *
      * @summary Overrides the default provider
      *
      * @memberof API
-     * 
+     *
      * @ignore
      *
      * @param {Provider} network - Provider instance to use to override the existing network settings
@@ -145,11 +144,11 @@ export const composeAPI = (settings: Partial<Settings> = {}) => {
     /**
      *
      * @method overrideAttachToTangle
-     * 
+     *
      * @summary Overrides the default [`attachToTangle`]{@link #module_core.attachToTangle} method
      *
      * @memberof API
-     * 
+     *
      * @ignore
      *
      * @param {function} attachToTangle - Function that overrides the
@@ -171,7 +170,6 @@ export const composeAPI = (settings: Partial<Settings> = {}) => {
         getInclusionStates: createGetInclusionStates(provider),
         getNeighbors: createGetNeighbors(provider),
         getNodeInfo: createGetNodeInfo(provider),
-        getTips: createGetTips(provider),
         getTransactionsToApprove: createGetTransactionsToApprove(provider),
         getTrytes: createGetTrytes(provider),
         interruptAttachingToTangle: createInterruptAttachingToTangle(provider),
