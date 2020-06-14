@@ -1080,6 +1080,8 @@ getNodeInfo()
   })
 ```
 
+<a name="module_core.createGetTransactionObjects"></a>
+
 ### *core*.createGetTransactionObjects(provider)
 
 | Param | Type | Description |
