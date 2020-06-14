@@ -36,12 +36,10 @@
     },
     "lint-staged": {
         "*.{ts}": [
-            "tslint --fix",
-            "git add"
+            "tslint --fix"
         ],
         "*.{js,ts,json}": [
-            "prettier --write",
-            "git add"
+            "prettier --write"
         ]
     },
     "keywords": [
