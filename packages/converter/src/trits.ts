@@ -45,6 +45,8 @@ export const TRYTES_TRITS_LUT: ReadonlyArray<ReadonlyArray<number>> = [
  * Converts trytes or values to trits
  *
  * @method trits
+ * 
+ * @ignore
  *
  * @memberof module:converter
  *
@@ -77,13 +79,28 @@ export function trits(input: string | number): Int8Array {
 }
 
 /**
+ * This method converts [trytes](https://docs.iota.org/docs/getting-started/0.1/introduction/ternary) to trits.
+ * 
+ * ## Related methods
+ * 
+ * To convert ASCII characters to trytes, use the [`asciiToTrytes()`]{@link #module_converter.asciiToTrytes} method.
+ * 
  * @method trytesToTrits
- *
+ * 
+ * @summary Converts trytes to trits.
+ *  
  * @memberof module:converter
  *
- * @ignore
- *
- * @alias trits
+ * @param {String|number} input - Trytes
+ * 
+ * @example
+ * ```js
+ * let trits = Converter.trytesToTrits('IOTA');
+ * ```
+ * 
+ * @return {Int8Array} trits 
+ * 
+ * @throws {errors.INVALID_TRYTES}: Make sure that the `input` argument contains only valid trytes (A-Z or 9).
  */
 export const trytesToTrits = trits
 
@@ -93,6 +110,8 @@ export const trytesToTrits = trits
  * @method trytes
  *
  * @memberof module:converter
+ * 
+ * @ignore
  *
  * @param {Int8Array} trits
  *
@@ -122,13 +141,28 @@ export function trytes(trits: Int8Array): string {
 }
 
 /**
+ * This method converts [trits](https://docs.iota.org/docs/getting-started/0.1/introduction/ternary) to trytes.
+ * 
+ * ## Related methods
+ * 
+ * To convert trytes to ASCII characters, use the [`trytesToAscii()`]{@link #module_converter.trytesToAscii} method.
+ * 
  * @method tritsToTrytes
- *
+ * 
+ * @summary Converts trits to trytes.
+ *  
  * @memberof module:converter
  *
- * @ignore
- *
- * @alias trytes
+ * @param {String|number} input - Trits
+ * 
+ * @example
+ * ```js
+ * let trytes = Converter.tritsToTrytes(trits);
+ * ```
+ * 
+ * @return {Int8Array} trytes 
+ * 
+ * @throws {errors.INVALID_TRITS}: Make sure that the `input` argument contains an array of trits.
  */
 export const tritsToTrytes = trytes
 
@@ -136,6 +170,8 @@ export const tritsToTrytes = trytes
  * Converts trits into an integer value
  *
  * @method value
+ * 
+ * @ignore
  *
  * @memberof module:converter
  *
@@ -155,13 +191,27 @@ export function value(trits: Int8Array): number {
 }
 
 /**
- * @method tritsToValue
+ * This method converts [trits](https://docs.iota.org/docs/getting-started/0.1/introduction/ternary) to a number.
+ * 
+ * ## Related methods
+ * 
+ * To convert trytes to trits, use the [`trytesToTrits()`]{@link #module_converter.trytesToTrits} method.
+ * To convert trits to trytes, use the [`tritsToTrytes()`]{@link #module_converter.tritsToTrytes} method.
  *
+ * @method tritsToValue
+ * 
+ * @summary Converts trits to a number.
+ *  
  * @memberof module:converter
  *
- * @ignore
- *
- * @alias value
+ * @param {String|number} input - Trits
+ * 
+ * @example
+ * ```js
+ * let number = Converter.tritsToValue(trits);
+ * ```
+ * 
+ * @return {Int8Array} number
  */
 export const tritsToValue = value
 
@@ -169,6 +219,8 @@ export const tritsToValue = value
  * Converts an integer value to trits
  *
  * @method fromValue
+ * 
+ * @ignore
  *
  * @memberof module:converter
  *
@@ -207,12 +259,25 @@ export function fromValue(value: number): Int8Array {
 }
 
 /**
+ * This method converts a number to [trits](https://docs.iota.org/docs/getting-started/0.1/introduction/ternary).
+ * 
+ * ## Related methods
+ * 
+ * To convert trits to trytes, use the [`tritsToTrytes()`]{@link #module_converter.tritsToTrytes} method.
+ * 
  * @method valueToTrits
- *
+ * 
+ * @summary Converts trits to a number.
+ *  
  * @memberof module:converter
  *
- * @ignore
- *
- * @alias fromValue
+ * @param {String|number} input - Number
+ * 
+ * @example
+ * ```js
+ * let trits = Converter.valueToTrits(9);
+ * ```
+ * 
+ * @return {Int8Array} trits
  */
 export const valueToTrits = fromValue

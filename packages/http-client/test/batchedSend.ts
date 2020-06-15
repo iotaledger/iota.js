@@ -134,19 +134,16 @@ export const getTrytesNockBatchB = nock('http://localhost:24265', headers(apiVer
 export const getBalancesCommand: GetBalancesCommand = {
     command: IRICommand.GET_BALANCES,
     addresses: ['A'.repeat(81), 'B'.repeat(81), 'C'.repeat(81)],
-    threshold: 100,
 }
 
 export const getBalancesCommandA: GetBalancesCommand = {
     command: IRICommand.GET_BALANCES,
     addresses: ['A'.repeat(81), 'B'.repeat(81)],
-    threshold: 100,
 }
 
 export const getBalancesCommandB: GetBalancesCommand = {
     command: IRICommand.GET_BALANCES,
     addresses: ['C'.repeat(81)],
-    threshold: 100,
 }
 
 export const expectedGetBalancesResponse: GetBalancesResponse = {
@@ -185,19 +182,16 @@ export const getBalancesNockBatchB = nock('http://localhost:24265', headers(apiV
 export const getInclusionStatesCommand: GetInclusionStatesCommand = {
     command: IRICommand.GET_INCLUSION_STATES,
     transactions: ['A'.repeat(81), 'B'.repeat(81), 'C'.repeat(81)],
-    tips: ['T'.repeat(81)],
 }
 
 export const getInclusionStatesCommandA: GetInclusionStatesCommand = {
     command: IRICommand.GET_INCLUSION_STATES,
     transactions: ['A'.repeat(81), 'B'.repeat(81)],
-    tips: ['T'.repeat(81)],
 }
 
 export const getInclusionStatesCommandB: GetInclusionStatesCommand = {
     command: IRICommand.GET_INCLUSION_STATES,
     transactions: ['C'.repeat(81)],
-    tips: ['T'.repeat(81)],
 }
 
 export const expectedGetInclusionStatesResponse: GetInclusionStatesResponse = {

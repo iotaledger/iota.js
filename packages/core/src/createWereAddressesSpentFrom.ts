@@ -20,9 +20,8 @@ export const createWereAddressesSpentFrom = ({ send }: Provider, caller?: string
     if (caller !== 'lib') {
         /* tslint:disable-next-line:no-console */
         console.warn(
-            'Avoid using `wereAddressesSpentFrom()` instead of proper input management with a local database.\n' +
-                '`wereAddressesSpentFrom()` does not scale in IoT environment, hence it will be removed from the ' +
-                'library in a future version.'
+            'Avoid using `wereAddressesSpentFrom()`. Instead, use the account module to keep track of spent addresses.\n' +
+                '`wereAddressesSpentFrom()` will be removed from the library in a future version.'
         )
     }
 

@@ -121,15 +121,11 @@ For details on all available API methods, see the [reference page](api_reference
 
 * [.getInputs(seed, [options], [callback])](api_reference.md#module_core.getInputs)
 
-* [.getLatestInclusion(transactions, tips, [callback])](api_reference.md#module_core.getLatestInclusion)
-
 * [.getNeighbors([callback])](api_reference.md#module_core.getNeighbors)
 
 * [.getNewAddress(seed, [options], [callback])](api_reference.md#module_core.getNewAddress)
 
 * [.getNodeInfo([callback])](api_reference.md#module_core.getNodeInfo)
-
-* [getTips([callback])](api_reference.md#module_core.getTips)
 
 * [getTransactionObjects(hashes, [callback])](api_reference.md#module_core.getTransactionObjects)
 
@@ -228,6 +224,8 @@ iota
 ## Supporting the project
 
 If the IOTA JavaScript client library has been useful to you and you feel like contributing, consider posting a [bug report](https://github.com/iotaledger/iota.js/issues/new), [feature request](https://github.com/iotaledger/iota.js/issues/new) or a [pull request](https://github.com/iotaledger/iota.js/pulls/).  
+
+See the [contributing guidelines](.github/CONTRIBUTING.md) for more information.
 
 ### Cloning and bootstrapping the repository on GitHub
 
