@@ -17,7 +17,13 @@ yarn add @iota/extract-json
 
 ## API Reference
 
-    <a name="module_extract-json.extractJson"></a>
+    
+* [extract-json](#module_extract-json)
+
+    * [.extractJson(bundle)](#module_extract-json.extractJson)
+
+
+<a name="module_extract-json.extractJson"></a>
 
 ### *extract-json*.extractJson(bundle)
 **Summary**: Extracts JSON from transactions.  
