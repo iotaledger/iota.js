@@ -29,6 +29,8 @@ export const generateSpam = (n: number = 1): ReadonlyArray<Transfer> => new Arra
  * @method createPromoteTransaction
  *
  * @memberof module:core
+ * 
+ * @ignore
  *
  * @param {Provider} provider - Network provider
  *
@@ -42,41 +44,58 @@ export const createPromoteTransaction = (provider: Provider, attachFn?: AttachTo
     const sendTransfer = createSendTransfer(provider, attachFn)
 
     /**
-     * Promotes a transaction by adding zero-value spam transactions on top of it.
-     * Will promote `maximum` transfers on top of the current one with `delay` interval. Promotion
-     * is interruptable through the `interrupt` option.
-     *
+     * This method promotes only consistent transactions by checking them with the [`checkConsistency()`]{@link #module_core.checkConsistency} method.
+     * 
+     * ## Related methods
+     * 
+     * Use the [`isPromotable()`]{@link #module_core.isPromotable} method to check if a transaction can be [promoted](https://docs.iota.org/docs/getting-started/0.1/transactions/reattach-rebroadcast-promote).
+     * 
+     * If a transaction can't be promoted, use the [`replayBundle()`]{@link #module_core.replayBundle} method to [reattach](https://docs.iota.org/docs/getting-started/0.1/transactions/reattach-rebroadcast-promote) it to the Tangle.
+     * 
      * @method promoteTransaction
-     *
+     * 
+     * @summary [Promotes](https://docs.iota.org/docs/getting-started/0.1/transactions/reattach-rebroadcast-promote#promote) a given tail transaction.
+     *  
      * @memberof module:core
      *
-     * @param {Hash} tail - Tail transaction hash. Tail transaction is the transaction in the bundle with
-     * `currentIndex == 0`.
+     * @param {Hash} tail - Tail transaction hash
      *
-     * @param {number} depth - The depth at which Random Walk starts. A value of `3` is typically used by wallets,
-     * meaning that RW starts 3 milestones back.
+     * @param {number} depth - The [depth](https://docs.iota.org/docs/getting-started/0.1/transactions/depth) at which to start the weighted random walk. The [Trinity wallet](https://trinity.iota.org/) uses a value of `3`,
+     * meaning that the weighted random walk starts 3 milestones in the past.
      *
-     * @param {number} minWeightMagnitude - Minimum number of trailing zeros in transaction hash. This is used by
-     * [`attachToTangle`]{@link #module_core.attachToTangle} function to search for a valid `nonce`.
-     * Currently it is `14` on mainnet & spamnet and `9` on most other testnets.
+     * @param {number} minWeightMagnitude - [Minimum weight magnitude](https://docs.iota.org/docs/getting-started/0.1/network/minimum-weight-magnitude)
      *
-     * @param {array} [spamTransfers] - Array of spam transfers to promote with.
-     * By default it will issue an all-9s, zero-value transfer.
+     * @param {Array} [spamTransfers={address: '9999...999', value:0, tag:'999...999',message: '999...999' }] - Array of transfer objects to use to promote the transaction
+     * 
+     * @param {Object} [options] - Options object
      *
-     * @param {object} [options] - Options
+     * @param {number} [options.delay] - Delay in milliseconds before sending each zero-value transaction
      *
-     * @param {number} [options.delay] - Delay between spam transactions in `ms`
+     * @param {boolean|Function} [options.interrupt] - Either a boolean or a function that evaluates to a boolean to stop the method from sending transactions
      *
-     * @param {boolean|function} [options.interrupt] - Interrupt signal, which can be a function that evaluates
-     * to boolean
-     *
-     * @param {Callback} [callback] - Optional callback
+     * @param {Callback} [callback] - Optional callback function
+     * 
+     * @example
+     * 
+     * ```js
+     * iota.promoteTransaction('FOSJBUZEHOBDKIOJ9RXBRPPZSJHWMXCDFJLIJSLJG9HRKEEJGAHWATEVCYERPQXDWFHQRGZOGIILZ9999',
+     * 3,14)
+     * .then(transactions => {
+     *   console.log(`Promoted the tail transaction, using the following transactions: \n` +
+     *   JSON.stringify(transactions));
+     * })
+     * .catch(error => {
+     *     console.log(`Something went wrong: ${error}`);
+     * })
+     * ```
      *
      * @returns {Promise}
-     * @fulfil {Transaction[]}
-     * @reject {Error}
-     * - `INCONSISTENT_SUBTANGLE`: In this case promotion has no effect and a reattachment is required by calling [`replayBundle`]{@link #module_core.replayBundle}.
-     * - Fetch error
+     * 
+     * @fulfil {Transaction[]} transactions - Array of zero-value transaction objects that were sent
+     * 
+     * @reject {Error} error - An error that contains one of the following:
+     * - `INCONSISTENT_SUBTANGLE`: In this case, promotion has no effect and a reattachment is required by calling the [`replayBundle()`]{@link #module_core.replayBundle} method
+     * - Fetch error: The connected IOTA node's API returned an error. See the [list of error messages](https://docs.iota.org/docs/node-software/0.1/iri/references/api-errors) 
      */
     return function promoteTransaction(
         tailTransaction: string,

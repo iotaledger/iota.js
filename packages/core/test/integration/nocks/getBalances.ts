@@ -10,7 +10,6 @@ import headers from './headers'
 export const getBalancesCommand: GetBalancesCommand = {
     command: IRICommand.GET_BALANCES,
     addresses,
-    threshold: 100,
 }
 
 export const getBalancesCommandWithTips: GetBalancesCommand = { ...getBalancesCommand, tips: ['M'.repeat(81)] }

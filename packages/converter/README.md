@@ -24,108 +24,152 @@ yarn add @iota/converter
 
     * [.trytesToAscii(trytes)](#module_converter.trytesToAscii)
 
-    * [.trits(input)](#module_converter.trits)
+    * [.trytesToTrits(input)](#module_converter.trytesToTrits)
 
-    * [.trytes(trits)](#module_converter.trytes)
+    * [.tritsToTrytes(input)](#module_converter.tritsToTrytes)
 
-    * [.value(trits)](#module_converter.value)
+    * [.tritsToValue(input)](#module_converter.tritsToValue)
 
-    * [.fromValue(value)](#module_converter.fromValue)
+    * [.valueToTrits(input)](#module_converter.valueToTrits)
 
 
 <a name="module_converter.asciiToTrytes"></a>
 
 ### *converter*.asciiToTrytes(input)
+**Summary**: Converts ASCII characters to trytes.  
+**Throws**:
+
+- <code>errors.INVALID\_ASCII\_CHARS</code> : Make sure that the `input` argument contains only valid ASCII characters.
+
 
 | Param | Type | Description |
 | --- | --- | --- |
-| input | <code>string</code> | ascii input |
+| input | <code>string</code> | ASCII input |
 
-Converts an ascii encoded string to trytes.
+This method converts ASCII characters to [trytes](https://docs.iota.org/docs/getting-started/0.1/introduction/ternary).
 
-### How conversion works:
+## Related methods
 
-An ascii value of `1 Byte` can be represented in `2 Trytes`:
+To convert trytes to ASCII characters, use the [`trytesToAscii()`](#module_converter.trytesToAscii) method.
 
-1. We get the decimal unicode value of an individual ASCII character.
-
-2. From the decimal value, we then derive the two tryte values by calculating the tryte equivalent
-(e.g.: `100` is expressed as `19 + 3 * 27`), given that tryte alphabet contains `27` trytes values:
-  a. The first tryte value is the decimal value modulo `27` (which is the length of the alphabet).
-  b. The second value is the remainder of `decimal value - first value` devided by `27`.
-
-3. The two values returned from Step 2. are then input as indices into the available
-trytes alphabet (`9ABCDEFGHIJKLMNOPQRSTUVWXYZ`), to get the correct tryte value.
-
-### Example:
-
-Lets say we want to convert ascii character `Z`.
-
-1. `Z` has a decimal unicode value of `90`.
-
-2. `90` can be represented as `9 + 3 * 27`. To make it simpler:
-  a. First value is `90 % 27 = 9`.
-  b. Second value is `(90 - 9) / 27 = 3`.
-
-3. Our two values are `9` and `3`. To get the tryte value now we simply insert it as indices
-into the tryte alphabet:
-  a. The first tryte value is `'9ABCDEFGHIJKLMNOPQRSTUVWXYZ'[9] = I`
-  b. The second tryte value is `'9ABCDEFGHIJKLMNOPQRSTUVWXYZ'[3] = C`
-
-Therefore ascii character `Z` is represented as `IC` in trytes.
-
-**Returns**: <code>string</code> - string of trytes  
+**Returns**: <code>string</code> - Trytes  
+**Example**  
+```js
+let trytes = Converter.asciiToTrytes('Hello, where is my coffee?');
+```
 <a name="module_converter.trytesToAscii"></a>
 
 ### *converter*.trytesToAscii(trytes)
+**Summary**: Converts trytes to ASCII characters.  
+**Throws**:
+
+- <code>errors.INVALID\_TRYTES</code> : Make sure that the `trytes` argument contains only valid trytes (A-Z or 9).
+- <code>errors.INVALID\_ODD\_LENGTH</code> : Make sure that the `trytes` argument contains an even number of trytes.
+
 
 | Param | Type | Description |
 | --- | --- | --- |
-| trytes | <code>string</code> | trytes |
+| trytes | <code>string</code> | An even number of trytes |
 
-Converts trytes of _even_ length to an ascii string
+This method converts trytes to ASCII characters.
 
-**Returns**: <code>string</code> - string in ascii  
-<a name="module_converter.trits"></a>
+Because each ASCII character is represented as 2 trytes, the given trytes must be of an even length.
 
-### *converter*.trits(input)
+## Related methods
+
+To convert ASCII characters to trytes, use the [`asciiToTrytes()`](#module_converter.asciiToTrytes) method.
+
+**Returns**: <code>string</code> - ASCII characters  
+**Example**  
+```js
+let message = Converter.trytesToAscii('IOTA');
+```
+<a name="module_converter.trytesToTrits"></a>
+
+### *converter*.trytesToTrits(input)
+**Summary**: Converts trytes to trits.  
+**Throws**:
+
+- <code>errors.INVALID\_TRYTES</code> : Make sure that the `input` argument contains only valid trytes (A-Z or 9).
+
 
 | Param | Type | Description |
 | --- | --- | --- |
-| input | <code>String</code> \| <code>Number</code> | Tryte string or value to be converted. |
+| input | <code>String</code> \| <code>number</code> | Trytes |
 
-Converts trytes or values to trits
+This method converts [trytes](https://docs.iota.org/docs/getting-started/0.1/introduction/ternary) to trits.
 
-**Returns**: <code>Int8Array</code> - trits  
-<a name="module_converter.trytes"></a>
+## Related methods
 
-### *converter*.trytes(trits)
-
-| Param | Type |
-| --- | --- |
-| trits | <code>Int8Array</code> | 
-
-Converts trits to trytes
-
-**Returns**: <code>String</code> - trytes  
-<a name="module_converter.value"></a>
-
-### *converter*.value(trits)
-
-| Param | Type |
-| --- | --- |
-| trits | <code>Int8Array</code> | 
-
-Converts trits into an integer value
-
-<a name="module_converter.fromValue"></a>
-
-### *converter*.fromValue(value)
-
-| Param | Type |
-| --- | --- |
-| value | <code>Number</code> | 
-
-Converts an integer value to trits
+To convert ASCII characters to trytes, use the [`asciiToTrytes()`](#module_converter.asciiToTrytes) method.
 
 **Returns**: <code>Int8Array</code> - trits  
+**Example**  
+```js
+let trits = Converter.trytesToTrits('IOTA');
+```
+<a name="module_converter.tritsToTrytes"></a>
+
+### *converter*.tritsToTrytes(input)
+**Summary**: Converts trits to trytes.  
+**Throws**:
+
+- <code>errors.INVALID\_TRITS</code> : Make sure that the `input` argument contains an array of trits.
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| input | <code>String</code> \| <code>number</code> | Trits |
+
+This method converts [trits](https://docs.iota.org/docs/getting-started/0.1/introduction/ternary) to trytes.
+
+## Related methods
+
+To convert trytes to ASCII characters, use the [`trytesToAscii()`](#module_converter.trytesToAscii) method.
+
+**Returns**: <code>Int8Array</code> - trytes  
+**Example**  
+```js
+let trytes = Converter.tritsToTrytes(trits);
+```
+<a name="module_converter.tritsToValue"></a>
+
+### *converter*.tritsToValue(input)
+**Summary**: Converts trits to a number.  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| input | <code>String</code> \| <code>number</code> | Trits |
+
+This method converts [trits](https://docs.iota.org/docs/getting-started/0.1/introduction/ternary) to a number.
+
+## Related methods
+
+To convert trytes to trits, use the [`trytesToTrits()`](#module_converter.trytesToTrits) method.
+To convert trits to trytes, use the [`tritsToTrytes()`](#module_converter.tritsToTrytes) method.
+
+**Returns**: <code>Int8Array</code> - number  
+**Example**  
+```js
+let number = Converter.tritsToValue(trits);
+```
+<a name="module_converter.valueToTrits"></a>
+
+### *converter*.valueToTrits(input)
+**Summary**: Converts trits to a number.  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| input | <code>String</code> \| <code>number</code> | Number |
+
+This method converts a number to [trits](https://docs.iota.org/docs/getting-started/0.1/introduction/ternary).
+
+## Related methods
+
+To convert trits to trytes, use the [`tritsToTrytes()`](#module_converter.tritsToTrytes) method.
+
+**Returns**: <code>Int8Array</code> - trits  
+**Example**  
+```js
+let trits = Converter.valueToTrits(9);
+```

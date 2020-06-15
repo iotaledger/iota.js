@@ -28,18 +28,32 @@ export const unitMap: UnitMap = {
 }
 
 /**
- * Converts accross IOTA units. Valid unit names are:
- * `i`, `Ki`, `Mi`, `Gi`, `Ti`, `Pi`
- *
+ * This method converts a value of [IOTA tokens](https://docs.iota.org/docs/getting-started/0.1/clients/token) from a given unit to another given unit. 
+ * 
+ * Valid unit names include the following:
+ * - `i`: 1
+ * - `Ki`: 1,000
+ * - `Mi`: 1,000,000
+ * - `Gi`: 1,000,000,000
+ * - `Ti`: 1,000,000,000,000
+ * - `Pi`: 1,000,000,000,000,000
+ * 
  * @method convertUnits
+ * 
+ * @summary Converts a value of IOTA tokens from one unit to another.
+ *  
+ * @memberof module:unit-converter
  *
- * @param {string | int | float} value
- *
- * @param {string} fromUnit - Name of original value unit
- *
- * @param {string} toUnit - Name of unit wich we convert to
- *
- * @return {Number}
+ * @param {String | integer | float} value - Number of IOTA tokens
+ * @param {String} fromUnit - Unit of the `value` argument
+ * @param {String} toUnit - Unit to which to convert the value to
+ * 
+ * @example
+ * ```js
+ * let newUnit = UnitConverter.convertUnits(100, 'Ti', 'Pi');
+ * ```
+ * 
+ * @return {number} newUnit - The number of units of IOTA tokens 
  */
 export const convertUnits = (value: string | number, fromUnit: Unit, toUnit: Unit) => {
     // Check if wrong unit provided

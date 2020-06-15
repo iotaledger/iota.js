@@ -20,28 +20,74 @@ yarn add @iota/validators
     
 * [validators](#module_validators)
 
-    * [~isTrytes(trytes, [length])](#module_validators..isTrytes)
+    * _static_
+        * [.isAddress(address)](#module_validators.isAddress)
 
-    * [~isTrytesOfExactLength(trytes, length)](#module_validators..isTrytesOfExactLength)
+    * _inner_
+        * [~isTrits(input)](#module_validators..isTrits)
 
-    * [~isTrytesOfMaxLength(trytes, length)](#module_validators..isTrytesOfMaxLength)
+        * [~isNullTrits(trits)](#module_validators..isNullTrits)
 
-    * [~isEmpty(hash)](#module_validators..isEmpty)
+        * [~isTrytes(trytes, [length])](#module_validators..isTrytes)
 
-    * [~isHash(hash)](#module_validators..isHash)
+        * [~isTrytesOfExactLength(trytes, length)](#module_validators..isTrytesOfExactLength)
 
-    * [~isInput(address)](#module_validators..isInput)
+        * [~isTrytesOfMaxLength(trytes, length)](#module_validators..isTrytesOfMaxLength)
 
-    * [~isTag(tag)](#module_validators..isTag)
+        * [~isEmpty(hash)](#module_validators..isEmpty)
 
-    * [~isTransfer(transfer)](#module_validators..isTransfer)
+        * [~isHash(hash)](#module_validators..isHash)
 
-    * [~isUri(uri)](#module_validators..isUri)
+        * [~isInput(address)](#module_validators..isInput)
 
-    * [~validate()](#module_validators..validate)
+        * [~isTag(tag)](#module_validators..isTag)
 
-    * [~isAddress(address)](#module_validators..isAddress)
+        * [~isTransfer(transfer)](#module_validators..isTransfer)
 
+        * [~isUri(uri)](#module_validators..isUri)
+
+        * [~validate()](#module_validators..validate)
+
+
+<a name="module_validators.isAddress"></a>
+
+### *validators*.isAddress(address)
+**Summary**: Validates the checksum of the given address.  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| address | <code>string</code> | Address with a checksum |
+
+This method takes an address with a checksum and validates that the checksum is correct.
+
+## Related methods
+
+To generate a new address with a checksum, use the [`getNewAddress()`](#module_core.getNewAddress) method.
+
+**Returns**: <code>boolean</code> - valid - Whether the checksum is valid  
+**Example**  
+```js
+let valid = Validator.isAddress('9FNJWLMBECSQDKHQAGDHDPXBMZFMQIMAFAUIQTDECJVGKJBKHLEBVU9TWCTPRJGYORFDSYENIQKBVSYKW9NSLGS9UW');
+```
+<a name="module_validators..isTrits"></a>
+
+### *validators*~isTrits(input)
+
+| Param | Type |
+| --- | --- |
+| input | <code>any</code> | 
+
+Checks if input is an `Int8Array` of trit values; `-1, 0, 1`.
+
+<a name="module_validators..isNullTrits"></a>
+
+### *validators*~isNullTrits(trits)
+
+| Param | Type |
+| --- | --- |
+| trits | <code>Int8Array</code> | 
+
+Checks if trits are NULL.
 
 <a name="module_validators..isTrytes"></a>
 
@@ -164,13 +210,3 @@ try {
   console.log(err.message) // 'Invalid trytes'
 }
 ```
-<a name="module_validators..isAddress"></a>
-
-### *validators*~isAddress(address)
-
-| Param | Type | Description |
-| --- | --- | --- |
-| address | <code>string</code> | Address trytes, with checksum |
-
-Checks integrity of given address by validating the checksum.
-

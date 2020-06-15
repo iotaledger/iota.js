@@ -9,13 +9,27 @@ export { errors }
 import { isValidChecksum } from '@iota/checksum'
 
 /**
- * Checks integrity of given address by validating the checksum.
- *
+ * This method takes an address with a checksum and validates that the checksum is correct.
+ * 
+ * ## Related methods
+ * 
+ * To generate a new address with a checksum, use the [`getNewAddress()`]{@link #module_core.getNewAddress} method.
+ * 
  * @method isAddress
+ * 
+ * @summary Validates the checksum of the given address.
+ *  
+ * @memberof module:validators
  *
- * @param {string} address - Address trytes, with checksum
- *
- * @return {boolean}
+ * @param {string} address - Address with a checksum
+ * 
+ * @example
+ * ```js
+ * let valid = Validator.isAddress('9FNJWLMBECSQDKHQAGDHDPXBMZFMQIMAFAUIQTDECJVGKJBKHLEBVU9TWCTPRJGYORFDSYENIQKBVSYKW9NSLGS9UW');
+ * ```
+ * 
+ * @return {boolean} valid - Whether the checksum is valid
+ * 
  */
 export const isAddress = (address: any) => {
     let isValid = false
