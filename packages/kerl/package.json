@@ -43,7 +43,7 @@
         "url": "https://github.com/iotaledger/iota.js.git/tree/develop/packages/crypto"
     },
     "dependencies": {
-        "@types/crypto-js": "^3.1.38",
+        "@types/crypto-js": "^3.1.47",
         "crypto-js": "^4.0.0"
     },
     "devDependencies": {
