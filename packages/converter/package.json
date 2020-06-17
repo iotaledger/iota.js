@@ -21,7 +21,9 @@
         "Chris Dukakis <chris.dukakis@iota.org> (https://github.com/chrisdukakis)"
     ],
     "ava": {
-        "files": "out/converter/test/*.test.js",
+        "files": [
+            "out/converter/test/*.test.js"
+        ],
         "failFast": true,
         "failWithoutAssertions": false,
         "verbose": true

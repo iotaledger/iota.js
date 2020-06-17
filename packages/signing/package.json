@@ -20,7 +20,9 @@
         "Chris Dukakis <chris.dukakis@iota.org> (https://github.com/chrisdukakis)"
     ],
     "ava": {
-        "files": "out/signing/test/*.test.js",
+        "files": [
+            "out/signing/test/*.test.js"
+        ],
         "failFast": true,
         "failWithoutAssertions": false,
         "verbose": true
