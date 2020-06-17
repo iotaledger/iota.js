@@ -24,7 +24,7 @@ test('checkConsistency() rejects with correct errors for invalid transaction has
     const invalidHashes = ['asdasDSFDAFD']
 
     t.is(
-        t.throws(() => checkConsistency(invalidHashes), Error).message,
+        t.throws(() => checkConsistency(invalidHashes), { instanceOf: Error }).message,
         `${INVALID_TRANSACTION_HASH}: ${stringify(invalidHashes)}`,
         'checkConsistency() should throw error for invalid transaction hashes'
     )

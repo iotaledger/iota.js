@@ -30,7 +30,7 @@ test('getBundlesFromAddresses() rejects with correct errors for invalid addresse
     const invalidAddresses = ['asdasDSFDAFD']
 
     t.is(
-        t.throws(() => getBundlesFromAddresses(invalidAddresses, true), Error).message,
+        t.throws(() => getBundlesFromAddresses(invalidAddresses, true), { instanceOf: Error }).message,
         `${INVALID_ADDRESS}: ${stringify(invalidAddresses)}`,
         'getBundlesFromAddresses() should throw correct error for invalid addresses.'
     )

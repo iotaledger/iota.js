@@ -41,7 +41,9 @@ test('getTransactionsToApprove() rejects with correct error for invalid referenc
     const invalidHash = 'asdasDSFDAFD'
 
     t.is(
-        t.throws(() => getTransactionsToApprove(getTransactionsToApproveCommand.depth, invalidHash), Error).message,
+        t.throws(() => getTransactionsToApprove(getTransactionsToApproveCommand.depth, invalidHash), {
+            instanceOf: Error,
+        }).message,
         `${INVALID_REFERENCE_HASH}: ${stringify(invalidHash)}`,
         'getTransactionsToApprove() should throw error for invalid reference option'
     )

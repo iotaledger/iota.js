@@ -25,7 +25,7 @@ test('getBundle() rejects with correct error for invalid hash.', t => {
     const invalidHash = 'asdasDSFDAFD'
 
     t.is(
-        t.throws(() => getBundle(invalidHash), Error).message,
+        t.throws(() => getBundle(invalidHash), { instanceOf: Error }).message,
         `${INVALID_TRANSACTION_HASH}: ${stringify(invalidHash)}`,
         'getBundle() should throw correct error for invalid hash.'
     )
