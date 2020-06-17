@@ -13,45 +13,40 @@ export { Bundle, Transaction }
 const numericTrytesRegex = /^(RA|PA)?(UA|VA|WA|XA|YA|ZA|9B|AB|BB|CB)+((SA)(UA|VA|WA|XA|YA|ZA|9B|AB|BB|CB)+)?((TC|OB)(RA|PA)?(UA|VA|WA|XA|YA|ZA|9B|AB|BB|CB)+)?99/
 
 /**
- * Takes a bundle as input and from the signatureMessageFragments extracts the correct JSON
- * data which was encoded and sent with the transaction.
- * Supports the following forms of JSON encoded values:
+ * This method takes the `signatureMessageFragment` fields of all the given transaction trytes, and tries to extract any JSON data that's in them.
+ * 
+ * The following forms of JSON-encoded values are supported:
  * - `"{ \"message\": \"hello\" }"`
  * - `"[1, 2, 3]"`
  * - `"true"`, `"false"` & `"null"`
  * - `"\"hello\""`
  * - `123`
+ * 
+ * ## Related methods
+ * 
+ * To get a bundle's transaction trytes from the Tangle, use the [`getBundle()`]{@link #module_core.getBundle} method.
+ * 
+ * @method extractJson
+ * 
+ * @summary Extracts JSON from transactions.
+ *  
+ * @memberof module:extract-json
  *
+ * @param {array} bundle - Transaction trytes
+ * 
  * @example
- *
  * ```js
  * try {
- *   const msg = JSON.parse(extractJson(bundle))
- * } catch (err) {
- *   err.msg == errors.INVALID_BUNDLE
- *   // Invalid bundle or invalid encoded JSON
+ *   const json = JSON.parse(extractJson(bundle))
+ * } catch (error) {
+ *   console.log(error);
  * }
  * ```
- *
- * @example
- * Example with `getBundle`:
- *
- * ```js
- * getBundle(tailHash)
- *   .then(bundle => {
- *      const msg = JSON.parse(extractJson(bundle))
- *      // ...
- *   })
- *   .catch((err) => {
- *      // Handle network & extraction errors
- *   })
- * ```
- *
- * @method extractJson
- *
- * @param {array} bundle
- *
- * @returns {string | number | null}
+ * 
+ * @return {string | number | null} The JSON data in the transactions
+ * 
+ * @throws {errors.INVALID_BUNDLE}: Make sure that the `bundle` argument is an array of transaction trytes.
+ * @throws {errors.INVALID_JSON}: Make sure that the transactions' `signatureMessageFragment` fields contain valid JSON.
  */
 export const extractJson = (bundle: Bundle): string | number | null => {
     if (!Array.isArray(bundle) || bundle[0] === undefined) {

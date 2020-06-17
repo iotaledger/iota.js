@@ -27,7 +27,7 @@ test('replayBundle() rejects with correct error for invalid hash.', t => {
     const invalidHash = 'asdasDSFDAFD'
 
     t.is(
-        t.throws(() => replayBundle(invalidHash, depth, minWeightMagnitude), Error).message,
+        t.throws(() => replayBundle(invalidHash, depth, minWeightMagnitude), { instanceOf: Error }).message,
         `${INVALID_TRANSACTION_HASH}: ${stringify(invalidHash)}`,
         'replayBundle() should throw correct error for invalid hash.'
     )

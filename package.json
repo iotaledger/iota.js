@@ -36,12 +36,10 @@
     },
     "lint-staged": {
         "*.{ts}": [
-            "tslint --fix",
-            "git add"
+            "tslint --fix"
         ],
         "*.{js,ts,json}": [
-            "prettier --write",
-            "git add"
+            "prettier --write"
         ]
     },
     "keywords": [
@@ -66,17 +64,17 @@
         "bluebird": "^3.7.2"
     },
     "devDependencies": {
-        "@commitlint/cli": "^8.1.0",
-        "@commitlint/config-conventional": "^8.0.0",
+        "@commitlint/cli": "^8.3.5",
+        "@commitlint/config-conventional": "^8.3.4",
         "@commitlint/travis-cli": "^8.3.3",
         "ava": "^3.0.0",
         "dmd-clear": "^0.1.2",
         "husky": "^3.0.0",
         "jsdoc-babel": "^0.5.0",
-        "lerna": "^3.14.1",
-        "lint-staged": "^9.0.0",
+        "lerna": "^3.22.1",
+        "lint-staged": "^10.2.10",
         "nyc": "^15.0.0",
-        "prettier": "^1.10.2",
+        "prettier": "^2.0.5",
         "staged-git-files": "^1.1.1",
         "tslint": "^5.9.1",
         "tslint-config-prettier": "^1.6.0",

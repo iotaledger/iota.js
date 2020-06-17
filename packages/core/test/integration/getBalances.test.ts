@@ -1,6 +1,6 @@
 import { createHttpClient } from '@iota/http-client'
 import test from 'ava'
-import { INVALID_ADDRESS, INVALID_THRESHOLD, INVALID_TRANSACTION_HASH } from '../../../errors'
+import { INVALID_ADDRESS, INVALID_TRANSACTION_HASH } from '../../../errors'
 import { stringify } from '../../../guards'
 import { createGetBalances } from '../../src'
 import { balancesResponse, getBalancesCommand } from './nocks/getBalances'
@@ -11,7 +11,7 @@ const addressesWithChecksum = getBalancesCommand.addresses.map(address => addres
 
 test('getBalances() resolves to correct balances response', async t => {
     t.deepEqual(
-        await getBalances(getBalancesCommand.addresses, getBalancesCommand.threshold),
+        await getBalances(getBalancesCommand.addresses),
         balancesResponse,
         'getBalances() should resolve to correct balances'
     )
@@ -19,7 +19,7 @@ test('getBalances() resolves to correct balances response', async t => {
 
 test('getBalances() removes checksum from addresses', async t => {
     t.deepEqual(
-        await getBalances([...addressesWithChecksum], getBalancesCommand.threshold),
+        await getBalances([...addressesWithChecksum]),
         balancesResponse,
         'getBalances() by addresses should remove checksum from addresses'
     )
@@ -28,7 +28,7 @@ test('getBalances() removes checksum from addresses', async t => {
 test('getBalances() does not mutate original addresses', async t => {
     const addresses = [...addressesWithChecksum]
 
-    await getBalances(addresses, 100)
+    await getBalances(addresses)
 
     t.deepEqual(addresses, addressesWithChecksum, 'getBalances() should not mutate original addresses')
 })
@@ -38,35 +38,28 @@ test('getBalances() rejects with correct errors for invalid input', t => {
     const invalidTips = [`m${'M'.repeat(80)}`]
 
     t.is(
-        t.throws(() => getBalances([...addressesWithChecksum], getBalancesCommand.threshold, invalidTips), Error)
-            .message,
+        t.throws(() => getBalances([...addressesWithChecksum], invalidTips), { instanceOf: Error }).message,
         `${INVALID_TRANSACTION_HASH}: ${stringify(invalidTips)}`,
         'getBalances() should throw error for invalid tips'
     )
 
     t.is(
-        t.throws(() => getBalances(invalidAddresses, getBalancesCommand.threshold), Error).message,
+        t.throws(() => getBalances(invalidAddresses), { instanceOf: Error }).message,
         `${INVALID_ADDRESS}: ${stringify(invalidAddresses)}`,
         'getBalances() should throw error for invalid addresses'
-    )
-
-    t.is(
-        t.throws(() => getBalances(getBalancesCommand.addresses, 101), Error).message,
-        `${INVALID_THRESHOLD}: 101`,
-        'getBalances() should throw error for invalid threshold'
     )
 })
 
 test.cb('getBalances() invokes callback when tips parameter is not provided', t => {
-    getBalances(getBalancesCommand.addresses, getBalancesCommand.threshold, undefined, t.end)
+    getBalances(getBalancesCommand.addresses, undefined, t.end)
 })
 
 test.cb('getBalances() invokes callback when tips parameter is provided', t => {
-    getBalances(getBalancesCommand.addresses, getBalancesCommand.threshold, ['M'.repeat(81)], t.end)
+    getBalances(getBalancesCommand.addresses, ['M'.repeat(81)], t.end)
 })
 
 test.cb('getBalances() passes correct arguments to callback when tips parameter is not provided', t => {
-    getBalances(getBalancesCommand.addresses, getBalancesCommand.threshold, undefined, (err, res) => {
+    getBalances(getBalancesCommand.addresses, undefined, (err, res) => {
         t.is(err, null, 'getBalances() should pass null as first argument in callback for successuful requests')
 
         t.deepEqual(
@@ -80,7 +73,7 @@ test.cb('getBalances() passes correct arguments to callback when tips parameter 
 })
 
 test.cb('getBalances() passes correct arguments to callback when tips parameter is provided', t => {
-    getBalances(getBalancesCommand.addresses, getBalancesCommand.threshold, ['M'.repeat(81)], (err, res) => {
+    getBalances(getBalancesCommand.addresses, ['M'.repeat(81)], (err, res) => {
         t.is(err, null, 'getBalances() should pass null as first argument in callback for successuful requests')
 
         t.deepEqual(

@@ -320,10 +320,6 @@ Converts an integer value to trits
 
     * [.getInputs(seed, [options], [callback])](#module_core.getInputs)
 
-    * [.createGetLatestInclusion(provider)](#module_core.createGetLatestInclusion)
-
-    * [.getLatestInclusion(transactions, tips, [callback])](#module_core.getLatestInclusion)
-
     * [.createGetNeighbors(provider)](#module_core.createGetNeighbors)
 
     * [.getNeighbors([callback])](#module_core.getNeighbors)
@@ -335,10 +331,6 @@ Converts an integer value to trits
     * [.createGetNodeInfo(provider)](#module_core.createGetNodeInfo)
 
     * [.getNodeInfo([callback])](#module_core.getNodeInfo)
-
-    * [.createGetTips(provider)](#module_core.createGetTips)
-
-    * [.getTips([callback])](#module_core.getTips)
 
     * [.createGetTransactionObjects(provider)](#module_core.createGetTransactionObjects)
 
@@ -951,42 +943,6 @@ getInputs(seed, { start: 0, threhold })
     // ...
   })
 ```
-<a name="module_core.createGetLatestInclusion"></a>
-
-### *core*.createGetLatestInclusion(provider)
-
-| Param | Type | Description |
-| --- | --- | --- |
-| provider | <code>Provider</code> | Network provider for accessing IRI |
-
-**Returns**: <code>function</code> - [`getLatestInclusion`](#module_core.getLatestInclusion)  
-<a name="module_core.getLatestInclusion"></a>
-
-### *core*.getLatestInclusion(transactions, tips, [callback])
-**Fulfil**: <code>boolean[]</code> List of inclusion states  
-**Reject**: <code>Error</code>
-- `INVALID_HASH`: Invalid transaction hash
-- Fetch error  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| transactions | <code>Array.&lt;Hash&gt;</code> | List of transactions hashes |
-| tips | <code>number</code> | List of tips to check if transactions are referenced by |
-| [callback] | <code>Callback</code> | Optional callback |
-
-Fetches inclusion states of given transactions and a list of tips,
-by calling [`getInclusionStates`](#module_core.getInclusionStates) on `latestSolidSubtangleMilestone`.
-
-**Example**  
-```js
-getLatestInclusion(hashes)
-   .then(states => {
-       // ...
-   })
-   .catch(err => {
-       // handle error
-   })
-```
 <a name="module_core.createGetNeighbors"></a>
 
 ### *core*.createGetNeighbors(provider)
@@ -1083,39 +1039,7 @@ getNodeInfo()
     // ...
   })
 ```
-<a name="module_core.createGetTips"></a>
 
-### *core*.createGetTips(provider)
-
-| Param | Type | Description |
-| --- | --- | --- |
-| provider | <code>Provider</code> | Network provider |
-
-**Returns**: <code>function</code> - [`getTips`](#module_core.getTips)  
-<a name="module_core.getTips"></a>
-
-### *core*.getTips([callback])
-**Fulfil**: <code>Hash[]</code> List of tip hashes  
-**Reject**: <code>Error</code>
-- Fetch error  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| [callback] | <code>Callback</code> | Optional callback |
-
-Returns a list of tips (transactions not referenced by other transactions),
-as seen by the connected node.
-
-**Example**  
-```js
-getTips()
-  .then(tips => {
-    // ...
-  })
-  .catch(err => {
-    // ...
-  })
-```
 <a name="module_core.createGetTransactionObjects"></a>
 
 ### *core*.createGetTransactionObjects(provider)
@@ -1277,7 +1201,7 @@ or should be [_reattached_](#module_core.replayBundle)
 // We need to monitor inclusion states of all tail transactions (original tail & reattachments)
 const tails = [tail]
 
-getLatestInclusion(tails)
+getInclusionStates(tails)
   .then(states => {
     // Check if none of transactions confirmed
     if (states.indexOf(true) === -1) {
@@ -1641,7 +1565,7 @@ Supports the following forms of JSON encoded values:
 - `"{ \"message\": \"hello\" }"\`
 - `"[1, 2, 3]"`
 - `"true"`, `"false"` & `"null"`
-- `"\"hello\""
+- `"\"hello\""`
 - `123`
 
 **Example**  

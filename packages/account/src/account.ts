@@ -82,7 +82,7 @@ export interface Network {
     readonly getBalances: API['getBalances']
     readonly getBalance: (address: Trytes) => Promise<number>
     readonly getConsistency: API['checkConsistency']
-    readonly getLatestInclusion: API['getLatestInclusion']
+    readonly getInclusionStates: API['getInclusionStates']
     readonly getTrytes: API['getTrytes']
     readonly sendTrytes: API['sendTrytes']
     readonly setSettings: API['setSettings']
@@ -247,7 +247,7 @@ export function createAccountWithPreset<X, Y, Z>(preset: AccountPreset<X, Y, Z>)
                     getTotalBalance: () => {
                         return persistence
                             .ready()
-                            .then(() => network.getBalances(addresses, 100))
+                            .then(() => network.getBalances(addresses))
                             .then(({ balances }) => balances.reduce((acc: number, b: number) => (acc += b), 0))
                     },
                     getAvailableBalance: () => {
@@ -257,7 +257,7 @@ export function createAccountWithPreset<X, Y, Z>(preset: AccountPreset<X, Y, Z>)
                             .then(currentTime => {
                                 const depositsListCopy = [...depositsList]
                                 return network
-                                    .getBalances(depositsListCopy.map(({ address }) => tritsToTrytes(address)), 100)
+                                    .getBalances(depositsListCopy.map(({ address }) => tritsToTrytes(address)))
                                     .then(({ balances }: { balances: ReadonlyArray<number> }) => {
                                         let acc = 0
                                         depositsListCopy.forEach((input, i) => {
@@ -287,7 +287,7 @@ export function createAccountWithPreset<X, Y, Z>(preset: AccountPreset<X, Y, Z>)
                             )
                             .then(depositsListCopy =>
                                 network
-                                    .getBalances(depositsListCopy.map(deposit => deposit.address), 100)
+                                    .getBalances(depositsListCopy.map(deposit => deposit.address))
                                     .then(({ balances }: { balances: ReadonlyArray<number> }) =>
                                         depositsListCopy.map((deposit, i) => ({
                                             ...deposit,

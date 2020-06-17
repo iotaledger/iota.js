@@ -20,50 +20,93 @@ yarn add @iota/transaction-converter
     
 * [transaction-converter](#module_transaction-converter)
 
-    * [~asTransactionTrytes(transactions)](#module_transaction-converter..asTransactionTrytes)
+    * _static_
+        * [.asTransactionTrytes(transactions)](#module_transaction-converter.asTransactionTrytes)
 
-    * [~asTransactionObject(trytes)](#module_transaction-converter..asTransactionObject)
+        * [.asTransactionObject(transaction)](#module_transaction-converter.asTransactionObject)
 
-    * [~asTransactionObjects([hashes])](#module_transaction-converter..asTransactionObjects)
+        * [.asTransactionObjects([hashes])](#module_transaction-converter.asTransactionObjects)
 
-    * [~transactionObjectsMapper(trytes)](#module_transaction-converter..transactionObjectsMapper)
+    * _inner_
+        * [~transactionObjectsMapper(trytes)](#module_transaction-converter..transactionObjectsMapper)
 
 
-<a name="module_transaction-converter..asTransactionTrytes"></a>
+<a name="module_transaction-converter.asTransactionTrytes"></a>
 
-### *transaction-converter*~asTransactionTrytes(transactions)
+### *transaction-converter*.asTransactionTrytes(transactions)
+**Summary**: Converts one or more transaction objects into transaction trytes.  
+**Throws**:
+
+- <code>errors.INVALID\_TRYTES</code> : Make sure that the object fields in the `transactions` argument contains valid trytes (A-Z or 9).
+
 
 | Param | Type | Description |
 | --- | --- | --- |
-| transactions | <code>Transaction</code> \| <code>Array.&lt;Transaction&gt;</code> | Transaction object(s) |
+| transactions | <code>Transaction</code> \| <code>Array.&lt;Transaction&gt;</code> | Transaction objects |
 
-Converts a transaction object or a list of those into transaction trytes.
+This method takes one or more transaction objects and converts them into trytes.
+
+## Related methods
+
+To get JSON data from the `signatureMessageFragment` field of the transaction trytes, use the [`extractJSON()`](#module_extract-json.extractJSON) method.
 
 **Returns**: <code>Trytes</code> \| <code>Array.&lt;Trytes&gt;</code> - Transaction trytes  
-<a name="module_transaction-converter..asTransactionObject"></a>
+**Example**  
+```js
+let trytes = TransactionConverter.asTransactionTrytes(transactionObject);
+```
+<a name="module_transaction-converter.asTransactionObject"></a>
 
-### *transaction-converter*~asTransactionObject(trytes)
+### *transaction-converter*.asTransactionObject(transaction)
+**Summary**: Converts transaction trytes into a transaction object.  
+**Throws**:
 
-| Param | Type | Description |
-| --- | --- | --- |
-| trytes | <code>Trytes</code> | Transaction trytes |
+- <code>errors.INVALID\_TRYTES</code> : Make sure that the object fields in the `transaction` argument contains valid trytes (A-Z or 9).
 
-Converts transaction trytes of 2673 trytes into a transaction object.
-
-**Returns**: <code>Transaction</code> - Transaction object  
-<a name="module_transaction-converter..asTransactionObjects"></a>
-
-### *transaction-converter*~asTransactionObjects([hashes])
 
 | Param | Type | Description |
 | --- | --- | --- |
-| [hashes] | <code>Array.&lt;Hash&gt;</code> | Optional list of known hashes. Known hashes are directly mapped to transaction objects, otherwise all hashes are being recalculated. |
+| transaction | <code>Trytes</code> | Transaction trytes |
 
-Converts a list of transaction trytes into list of transaction objects.
-Accepts a list of hashes and returns a mapper. In cases hashes are given,
-the mapper function map them to converted objects.
+This method takes 2,673 transaction trytes and converts them into a transaction object.
 
-**Returns**: <code>function</code> - [`transactionObjectsMapper`](#module_transaction.transactionObjectsMapper)  
+## Related methods
+
+To convert more than one transaction into an object at once, use the [`asTransactionObjects()`](#module_transaction-converter.asTransactionObjects) method.
+
+To get a transaction's trytes from the Tangle, use the [`getTrytes()`](#module_core.getTrytes) method.
+
+**Returns**: <code>Transaction</code> - transactionObject - A transaction object  
+**Example**  
+```js
+let transactionObject = TransactionConverter.asTransactionObject(transactionTrytes);
+```
+<a name="module_transaction-converter.asTransactionObjects"></a>
+
+### *transaction-converter*.asTransactionObjects([hashes])
+**Summary**: Converts one or more transaction trytes into transaction objects.  
+**Throws**:
+
+- <code>errors.INVALID\_TRYTES</code> : Make sure that transcactions contains valid trytes (A-Z or 9).
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| [hashes] | <code>Array.&lt;Hash&gt;</code> | Transaction hashes |
+
+This method takes an array of transaction hashes and returns a mapper.
+
+If any hashes are given, the mapper function maps them to their converted objects. Otherwise, all hashes are recalculated.
+
+## Related methods
+
+To get a transaction's trytes from the Tangle, use the [`getTrytes()`](#module_core.getTrytes) method.
+
+**Returns**: <code>function</code> - [`transactionObjectsMapper()`](#module_transaction.transactionObjectsMapper)  
+**Example**  
+```js
+let transactionObjectsMapper = TransactionConverter.asTransactionObjects([hashes]);
+```
 <a name="module_transaction-converter..transactionObjectsMapper"></a>
 
 ### *transaction-converter*~transactionObjectsMapper(trytes)

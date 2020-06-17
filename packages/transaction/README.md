@@ -20,81 +20,338 @@ yarn add @iota/transaction
     
 * [transaction](#module_transaction)
 
-    * [~transactionHash(trits)](#module_transaction..transactionHash)
+    * _static_
+        * [.transactionHash(buffer, [offset])](#module_transaction.transactionHash)
 
-    * [~isTransaction(tx)](#module_transaction..isTransaction)
+        * [.isTransaction(transaction, [minWeightMagnitude])](#module_transaction.isTransaction)
 
-    * [~isTailTransaction(transaction)](#module_transaction..isTailTransaction)
+        * [.isTailTransaction(transaction)](#module_transaction.isTailTransaction)
 
-    * [~isTransactionHash(hash, mwm)](#module_transaction..isTransactionHash)
+        * [.isHeadTransaction(transaction)](#module_transaction.isHeadTransaction)
 
-    * [~isTransactionTrytes(trytes, minWeightMagnitude)](#module_transaction..isTransactionTrytes)
+    * _inner_
+        * [~isMultipleOfTransactionLength(lengthOrOffset)](#module_transaction..isMultipleOfTransactionLength)
 
-    * [~isAttachedTrytes(trytes)](#module_transaction..isAttachedTrytes)
+        * [~signatureOrMessage(buffer)](#module_transaction..signatureOrMessage)
+
+        * [~address(buffer, [offset])](#module_transaction..address)
+
+        * [~value(buffer, [offset])](#module_transaction..value)
+
+        * [~obsoleteTag(buffer, [offset])](#module_transaction..obsoleteTag)
+
+        * [~issuanceTimestamp(buffer, [offset])](#module_transaction..issuanceTimestamp)
+
+        * [~currentIndex(buffer, [offset])](#module_transaction..currentIndex)
+
+        * [~lastIndex(buffer, [offset])](#module_transaction..lastIndex)
+
+        * [~bundle(buffer, [offset])](#module_transaction..bundle)
+
+        * [~trunkTransaction(buffer, [offset])](#module_transaction..trunkTransaction)
+
+        * [~branchTransaction(buffer, [offset])](#module_transaction..branchTransaction)
+
+        * [~tag(buffer, [offset])](#module_transaction..tag)
+
+        * [~attachmentTimestamp(buffer, [offset])](#module_transaction..attachmentTimestamp)
+
+        * [~attachmentTimestampLowerBound(buffer, [offset])](#module_transaction..attachmentTimestampLowerBound)
+
+        * [~attachmentTimestampUpperBound(buffer, [offset])](#module_transaction..attachmentTimestampUpperBound)
+
+        * [~transactionNonce(buffer, [offset])](#module_transaction..transactionNonce)
+
+        * [~bundle(buffer, [offset])](#module_transaction..bundle)
 
 
-<a name="module_transaction..transactionHash"></a>
+<a name="module_transaction.transactionHash"></a>
 
-### *transaction*~transactionHash(trits)
+### *transaction*.transactionHash(buffer, [offset])
+**Summary**: Generates the transaction hash for a given transaction.  
+**Throws**:
+
+- <code>errors.ILLEGAL\_TRANSACTION\_BUFFER\_LENGTH</code> : Make sure that the `buffer` argument contains 8,019 trits (the length of a transaction without the transaction hash).
+- <code>errors.ILLEGAL\_TRANSACTION\_OFFSET</code> : Make sure that the `offset` argument is a multiple of 8,019 (the length of a transaction without the transaction hash).
+
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| buffer | <code>Int8Array</code> |  | Transactions in trits |
+| [offset] | <code>Number</code> | <code>0</code> | Offset in trits to define a transaction to hash in the `buffer` argument |
+
+This method takes transaction trits, and returns the transaction hash.
+
+## Related methods
+
+To validate the length of transaction trits, use the [`isMultipleOfTransactionLength()`](#module_transaction.isMultipleOfTransactionLength) method.
+
+To get a transaction's trits from the Tangle, use the [`getTrytes()`](#module_core.getTrytes) method, then convert them to trits, using the [`trytesToTrits()`](#module_converter.trytesToTrits) method.
+
+**Returns**: <code>Int8Array</code> - Transaction hash  
+**Example**  
+```js
+let hash = Transaction.transactionHash(transactions);
+```
+<a name="module_transaction.isTransaction"></a>
+
+### *transaction*.isTransaction(transaction, [minWeightMagnitude])
+**Summary**: Validates the structure and contents of a given transaction.  
+**Throws**:
+
+- <code>errors.ILLEGAL\_MIN\_WEIGHT\_MAGNITUDE</code> : Make sure that the `minWeightMagnitude` argument is a number between 1 and 81.
+- <code>errors.ILLEGAL\_TRANSACTION\_BUFFER\_LENGTH</code> : Make sure that the `transaction` argument contains 8,019 trits (the length of a transaction without the transaction hash).
+
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| transaction | <code>Int8Array</code> |  | Transaction trits |
+| [minWeightMagnitude] | <code>number</code> | <code>0</code> | Minimum weight magnitude |
+
+This method takes an array of transaction trits and validates whether they form a valid transaction by checking the following:
+
+- Addresses in value transactions have a 0 trit at the end, which means they were generated using the Kerl hashing function
+- The transaction would result in a valid hash, according to the given [`minWeightMagnitude`](https://docs.iota.org/docs/getting-started/0.1/network/minimum-weight-magnitude) argument
+
+## Related methods
+
+To get a transaction's trits from the Tangle, use the [`getTrytes()`](#module_core.getTrytes) method, then convert them to trits, using the [`trytesToTrits()`](#module_converter.trytesToTrits) method.
+
+**Returns**: <code>boolean</code> - valid - Whether the transaction is valid.  
+**Example**  
+```js
+let valid = Transaction.isTransaction(transaction);
+```
+<a name="module_transaction.isTailTransaction"></a>
+
+### *transaction*.isTailTransaction(transaction)
+**Summary**: Checks if the given transaction is a tail transaction in a bundle.  
+**Throws**:
+
+- <code>errors.ILLEGAL\_TRANSACTION\_BUFFER\_LENGTH</code> : Make sure that the `transaction` argument contains 8,019 trits (the length of a transaction without the transaction hash).
+
 
 | Param | Type | Description |
 | --- | --- | --- |
-| trits | <code>Int8Array</code> | Int8Array of 8019 transaction trits |
+| transaction | <code>Int8Array</code> | Transaction trits |
 
-Calculates the transaction hash out of 8019 transaction trits.
+This method takes an array of transaction trits, and checks its `currentIndex` field to validate whether it is the tail transaction in a bundle.
 
-**Returns**: <code>Hash</code> - Transaction hash  
-<a name="module_transaction..isTransaction"></a>
+## Related methods
 
-### *transaction*~isTransaction(tx)
+To get a transaction's trits from the Tangle, use the [`getTrytes()`](#module_core.getTrytes) method, then convert them to trits, using the [`trytesToTrits()`](#module_converter.trytesToTrits) method.
 
-| Param | Type |
-| --- | --- |
-| tx | <code>object</code> | 
+**Returns**: <code>boolean</code> - tail - Whether the transaction is a tail transaction.  
+**Example**  
+```js
+let tail = Transaction.isTailTransaction(transaction);
+```
+<a name="module_transaction.isHeadTransaction"></a>
 
-Checks if input is valid transaction object.
+### *transaction*.isHeadTransaction(transaction)
+**Summary**: Checks if the given transaction is a head transaction in a bundle.  
+**Throws**:
 
-<a name="module_transaction..isTailTransaction"></a>
+- <code>errors.ILLEGAL\_TRANSACTION\_BUFFER\_LENGTH</code> : Make sure that the `transaction` argument contains 8,019 trits (the length of a transaction without the transaction hash).
 
-### *transaction*~isTailTransaction(transaction)
 
-| Param | Type |
-| --- | --- |
-| transaction | <code>object</code> | 
+| Param | Type | Description |
+| --- | --- | --- |
+| transaction | <code>Int8Array</code> | Transaction trits |
 
-Checks if given transaction object is tail transaction.
-A tail transaction is one with `currentIndex=0`.
+This method takes an array of transaction trits, and checks its `currentIndex` field to validate whether it is the head transaction in a bundle.
 
-<a name="module_transaction..isTransactionHash"></a>
+## Related methods
 
-### *transaction*~isTransactionHash(hash, mwm)
+To get a transaction's trits from the Tangle, use the [`getTrytes()`](#module_core.getTrytes) method, then convert them to trits, using the [`trytesToTrits()`](#module_converter.trytesToTrits) method.
 
-| Param | Type |
-| --- | --- |
-| hash | <code>string</code> | 
-| mwm | <code>number</code> | 
+**Returns**: <code>boolean</code> - head - Whether the transaction is a head transaction.  
+**Example**  
+```js
+let head = Transaction.isHeadTransaction(transaction);
+```
+<a name="module_transaction..isMultipleOfTransactionLength"></a>
 
-Checks if input is correct transaction hash (81 trytes)
-
-<a name="module_transaction..isTransactionTrytes"></a>
-
-### *transaction*~isTransactionTrytes(trytes, minWeightMagnitude)
-
-| Param | Type |
-| --- | --- |
-| trytes | <code>string</code> | 
-| minWeightMagnitude | <code>number</code> | 
-
-Checks if input is correct transaction trytes (2673 trytes)
-
-<a name="module_transaction..isAttachedTrytes"></a>
-
-### *transaction*~isAttachedTrytes(trytes)
+### *transaction*~isMultipleOfTransactionLength(lengthOrOffset)
 
 | Param | Type |
 | --- | --- |
-| trytes | <code>string</code> | 
+| lengthOrOffset | <code>Int8Array</code> | 
 
-Checks if input is valid attached transaction trytes.
-For attached transactions last 241 trytes are non-zero.
+Checks if given value is a valid transaction buffer length or offset.
+
+<a name="module_transaction..signatureOrMessage"></a>
+
+### *transaction*~signatureOrMessage(buffer)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| buffer | <code>Int8Array</code> | Transaction trytes |
+
+Gets the `signatureOrMessage` field of all transactions in a bundle.
+
+<a name="module_transaction..address"></a>
+
+### *transaction*~address(buffer, [offset])
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| buffer | <code>Int8Array</code> |  | Transaction buffer. Buffer length must be a multiple of transaction length |
+| [offset] | <code>Number</code> | <code>0</code> | Transaction trit offset. It must be a multiple of transaction length. |
+
+Returns a copy of `address` field.
+
+<a name="module_transaction..value"></a>
+
+### *transaction*~value(buffer, [offset])
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| buffer | <code>Int8Array</code> |  | Transaction buffer. Buffer length must be a multiple of transaction length. |
+| [offset] | <code>Number</code> | <code>0</code> | Transaction trit offset. It must be a multiple of transaction length. |
+
+Returns a copy of `value` field.
+
+<a name="module_transaction..obsoleteTag"></a>
+
+### *transaction*~obsoleteTag(buffer, [offset])
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| buffer | <code>Int8Array</code> |  | Transaction buffer. Buffer length must be a multiple of transaction length. |
+| [offset] | <code>Number</code> | <code>0</code> | Transaction trit offset. It must be a multiple of transaction length. |
+
+Returns a copy of `obsoleteTag` field.
+
+<a name="module_transaction..issuanceTimestamp"></a>
+
+### *transaction*~issuanceTimestamp(buffer, [offset])
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| buffer | <code>Int8Array</code> |  | Transaction buffer. Buffer length must be a multiple of transaction length. |
+| [offset] | <code>Number</code> | <code>0</code> | Transaction trit offset. It must be a multiple of transaction length. |
+
+Returns a copy of `issuanceTimestamp` field.
+
+<a name="module_transaction..currentIndex"></a>
+
+### *transaction*~currentIndex(buffer, [offset])
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| buffer | <code>Int8Array</code> |  | Transaction buffer. Buffer length must be a multiple of transaction length. |
+| [offset] | <code>Number</code> | <code>0</code> | Transaction trit offset. It must be a multiple of transaction length. |
+
+Returns a copy of `currentIndex` field.
+
+<a name="module_transaction..lastIndex"></a>
+
+### *transaction*~lastIndex(buffer, [offset])
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| buffer | <code>Int8Array</code> |  | Transaction buffer. Buffer length must be a multiple of transaction length. |
+| [offset] | <code>Number</code> | <code>0</code> | Transaction trit offset. It must be a multiple of transaction length. |
+
+Returns a copy of `lastIndex` field.
+
+<a name="module_transaction..bundle"></a>
+
+### *transaction*~bundle(buffer, [offset])
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| buffer | <code>Int8Array</code> |  | Transaction buffer. Buffer length must be a multiple of transaction length. |
+| [offset] | <code>Number</code> | <code>0</code> | Transaction trit offset. It must be a multiple of transaction length. |
+
+Returns a copy of `bundle` field.
+
+<a name="module_transaction..trunkTransaction"></a>
+
+### *transaction*~trunkTransaction(buffer, [offset])
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| buffer | <code>Int8Array</code> |  | Transaction buffer. Buffer length must be a multiple of transaction length. |
+| [offset] | <code>Number</code> | <code>0</code> | Transaction trit offset. It must be a multiple of transaction length. |
+
+Returns a copy of `trunkTransaction` field.
+
+<a name="module_transaction..branchTransaction"></a>
+
+### *transaction*~branchTransaction(buffer, [offset])
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| buffer | <code>Int8Array</code> |  | Transaction buffer. Buffer length must be a multiple of transaction length. |
+| [offset] | <code>Number</code> | <code>0</code> | Transaction trit offset. It must be a multiple of transaction length. |
+
+Returns a copy of `branchTransaction` field.
+
+<a name="module_transaction..tag"></a>
+
+### *transaction*~tag(buffer, [offset])
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| buffer | <code>Int8Array</code> |  | Transaction buffer. Buffer length must be a multiple of transaction length. |
+| [offset] | <code>Number</code> | <code>0</code> | Transaction trit offset. It must be a multiple of transaction length. |
+
+Returns a copy of `tag` field.
+
+<a name="module_transaction..attachmentTimestamp"></a>
+
+### *transaction*~attachmentTimestamp(buffer, [offset])
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| buffer | <code>Int8Array</code> |  | Transaction buffer. Buffer length must be a multiple of transaction length. |
+| [offset] | <code>Number</code> | <code>0</code> | Transaction trit offset. It must be a multiple of transaction length. |
+
+Returns a copy of `attachmentTimestamp` field.
+
+<a name="module_transaction..attachmentTimestampLowerBound"></a>
+
+### *transaction*~attachmentTimestampLowerBound(buffer, [offset])
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| buffer | <code>Int8Array</code> |  | Transaction buffer. Buffer length must be a multiple of transaction length. |
+| [offset] | <code>Number</code> | <code>0</code> | Transaction trit offset. It must be a multiple of transaction length. |
+
+Returns a copy of `attachmentTimestampLowerBound` field.
+
+<a name="module_transaction..attachmentTimestampUpperBound"></a>
+
+### *transaction*~attachmentTimestampUpperBound(buffer, [offset])
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| buffer | <code>Int8Array</code> |  | Transaction buffer. Buffer length must be a multiple of transaction length. |
+| [offset] | <code>Number</code> | <code>0</code> | Transaction trit offset. It must be a multiple of transaction length. |
+
+Returns a copy of `attachmentTimestampUpperBound` field.
+
+<a name="module_transaction..transactionNonce"></a>
+
+### *transaction*~transactionNonce(buffer, [offset])
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| buffer | <code>Int8Array</code> |  | Transaction buffer. Buffer length must be a multiple of transaction length. |
+| [offset] | <code>Number</code> | <code>0</code> | Transaction trit offset. It must be a multiple of transaction length. |
+
+Returns a copy of `tansactionNonce` field.
+
+<a name="module_transaction..bundle"></a>
+
+### *transaction*~bundle(buffer, [offset])
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| buffer | <code>Int8Array</code> |  | Transaction buffer. Buffer length must be a multiple of transaction length. |
+| [offset] | <code>Number</code> | <code>0</code> | Transaction trit offset. It must be a multiple of transaction length. |
+
+Returns a copy of transaction essence fields.
 

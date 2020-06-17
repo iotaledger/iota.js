@@ -6,6 +6,8 @@ import { createBroadcastTransactions, createStoreTransactions } from './'
  * @method createStoreAndBroadcast
  *
  * @memberof module:core
+ * 
+ * @ignore
  *
  * @param {Provider} provider
  *
@@ -16,27 +18,50 @@ export const createStoreAndBroadcast = (provider: Provider) => {
     const broadcastTransactions = createBroadcastTransactions(provider)
 
     /**
-     * Stores and broadcasts a list of _attached_ transaction trytes by calling
-     * [`storeTransactions`]{@link #module_core.storeTransactions} and
-     * [`broadcastTransactions`]{@link #module_core.broadcastTransactions}.
-     *
-     * **Note:** Persist the transaction trytes in local storage __before__ calling this command, to ensure
-     * that reattachment is possible, until your bundle has been included.
-     *
-     * Any transactions stored with this command will eventaully be erased, as a result of a snapshot.
+     * This method uses the connected IRI node's
+     * [`broadcastTransactions`](https://docs.iota.org/docs/node-software/0.1/iri/references/api-reference#broadcastTransactions) and [`storeTransactions`](https://docs.iota.org/docs/node-software/0.1/iri/references/api-reference#storeTransactions) endpoints to send it the given transaction trytes.
+     * 
+     * **Note:** Before calling this method, we recommend saving your transaction trytes in local storage.
+     * By doing so, you make sure that you can always reattach your transactions to the Tangle in case they remain in a pending state. 
+     * 
+     * ## Related methods
+     * 
+     * The given transaction trytes must be in a valid bundle and must include a proof of work.
+     * 
+     * To create a valid bundle, use the `prepareTransfers()` method. For more information about what makes a bundles and transactions valid, see [this guide](https://docs.iota.org/docs/node-software/0.1/iri/concepts/transaction-validation).
+     * 
+     * To do proof of work, use one of the following methods:
+     * 
+     * - [`attachToTangle()`]{@link #module_core.attachToTangle}
+     * - [`sendTrytes()`]{@link #module_core.sendTrytes}
      *
      * @method storeAndBroadcast
+     * 
+     * @summary Sends the given transaction trytes to the connected IRI node.
      *
      * @memberof module:core
      *
-     * @param {Array<Trytes>} trytes - Attached transaction trytes
-     * @param {Callback} [callback] - Optional callback
+     * @param {Array<Trytes>} trytes - Array of transaction trytes
+     * @param {Callback} [callback] - Optional callback function
+     * 
+     * @example
+     * ```js
+     * storeAndBroadcast(trytes)
+     * .then(transactionTrytes => {
+     *     console.log(`Successfully sent transactions to the node`);
+     *     console.log(JSON.stringify(transactionTrytes));
+     * }).catch(error => {
+     *     console.log(`Something went wrong: ${error}`)
+     * })
+     * ```
      *
      * @return {Promise<Trytes[]>}
-     * @fulfil {Trytes[]} Attached transaction trytes
-     * @reject {Error}
-     * - `INVALID_ATTACHED_TRYTES`: Invalid attached trytes
-     * - Fetch error
+     * 
+     * @fulfil {Trytes[]} transactionTrytes - Attached transaction trytes
+     * 
+     * @reject {Error} error - An error that contains one of the following:
+     * - `INVALID_TRANSACTION_TRYTES`: Make sure the trytes can be converted to a valid transaction object
+     * - Fetch error: The connected IOTA node's API returned an error. See the [list of error messages](https://docs.iota.org/docs/node-software/0.1/iri/references/api-errors) 
      */
     return (
         trytes: ReadonlyArray<Trytes>,
