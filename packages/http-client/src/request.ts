@@ -64,19 +64,21 @@ export const send = <C extends BaseCommand>(params: RequestParams<C>): Promise<R
         headers,
         body: JSON.stringify(params.command),
         agent: params.agent,
-    } as any).then(res =>
+    } as any).then((res) =>
         res
             .json()
-            .then(json =>
+            .then((json) =>
                 res.ok
                     ? json
                     : Promise.reject(
-                          requestError(json.error || json.exception ? json.error || json.exception : res.statusText)
+                          new Error(
+                              requestError(json.error || json.exception ? json.error || json.exception : res.statusText)
+                          )
                       )
             )
-            .catch(error => {
+            .catch((error) => {
                 if (!res.ok && error.type === 'invalid-json') {
-                    throw requestError(res.statusText)
+                    throw new Error(requestError(res.statusText))
                 } else {
                     throw error
                 }
@@ -112,7 +114,7 @@ export const batchedSend = <C extends BaseCommand>(
     requestBatchSize = REQUEST_BATCH_SIZE
 ): Promise<any> => {
     const params = Object.keys(requestParams.command)
-        .filter(key => keysToBatch.indexOf(key) === -1)
+        .filter((key) => keysToBatch.indexOf(key) === -1)
         .reduce(
             (acc: any, key: string) => ({
                 ...acc,
@@ -122,7 +124,7 @@ export const batchedSend = <C extends BaseCommand>(
         )
 
     return Promise.all(
-        keysToBatch.map(key => {
+        keysToBatch.map((key) => {
             return Promise.all(
                 requestParams.command[key]
                     .reduce(
@@ -143,7 +145,7 @@ export const batchedSend = <C extends BaseCommand>(
                         []
                     )
                     .map((batchedCommand: BatchableCommand<C>) => send({ ...requestParams, command: batchedCommand }))
-            ).then(res => res.reduce((acc: ReadonlyArray<R>, batch) => acc.concat(batch as R), []))
+            ).then((res) => res.reduce((acc: ReadonlyArray<R>, batch) => acc.concat(batch as R), []))
         })
     ).then((responses: ReadonlyArray<ReadonlyArray<R>>) => {
         switch (requestParams.command.command) {
@@ -151,9 +153,10 @@ export const batchedSend = <C extends BaseCommand>(
                 return {
                     hashes: (responses[0][0] as any).hashes.filter((hash: string) =>
                         responses.every(
-                            response =>
-                                response.findIndex(res => (res as FindTransactionsResponse).hashes.indexOf(hash) > -1) >
-                                -1
+                            (response) =>
+                                response.findIndex(
+                                    (res) => (res as FindTransactionsResponse).hashes.indexOf(hash) > -1
+                                ) > -1
                         )
                     ),
                 }
