@@ -19,7 +19,7 @@ test('addChecksum() returns the exact address, if was passed with checksum', t =
 test('addChecksum() throws error for invalid addresses', t => {
     const error = t.throws(
         () => addChecksum(invalidAddress),
-        Error,
+        { instanceOf: Error },
         'addChecksum() should throw error if address is invalid.'
     )
 
@@ -46,7 +46,7 @@ test('isValidChecksum() correctly validates the checksum', t => {
 test('isValidChecksum() throws error for invalid address', t => {
     const error = t.throws(
         () => isValidChecksum(invalidAddress),
-        Error,
+        { instanceOf: Error },
         'isValidChecksum() should throw error if invalid address was passed.'
     )
 
@@ -72,7 +72,7 @@ test('removeChecksum() returns the exact address, if was passed without checksum
 test('removeChecksum() throws error for invalid addresses', t => {
     const error = t.throws(
         () => removeChecksum(invalidAddress),
-        Error,
+        { instanceOf: Error },
         'removeChecksum() should throw error if invalid address was passed.'
     )
 

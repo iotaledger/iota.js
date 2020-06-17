@@ -13,7 +13,7 @@ test('validate() throws correct error for invalid input.', t => {
     const value = 'test'
 
     t.is(
-        t.throws(() => validate(validator(value)), Error).message,
+        t.throws(() => validate(validator(value)), { instanceOf: Error }).message,
         `${errorMessage}: ${JSON.stringify(value, null, 1)}`,
         'validate() should throw correct error for invalid input.'
     )
