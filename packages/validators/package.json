@@ -23,7 +23,6 @@
         "files": "out/validators/test/*.test.js",
         "failFast": true,
         "failWithoutAssertions": false,
-        "compileEnhancements": false,
         "verbose": true
     },
     "nyc": {

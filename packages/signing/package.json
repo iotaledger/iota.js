@@ -23,7 +23,6 @@
         "files": "out/signing/test/*.test.js",
         "failFast": true,
         "failWithoutAssertions": false,
-        "compileEnhancements": false,
         "verbose": true
     },
     "keywords": [

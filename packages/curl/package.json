@@ -22,7 +22,6 @@
         "files": "out/test/*.test.js",
         "failFast": true,
         "failWithoutAssertions": false,
-        "compileEnhancements": false,
         "verbose": true
     },
     "keywords": [
