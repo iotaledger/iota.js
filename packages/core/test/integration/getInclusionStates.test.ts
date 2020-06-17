@@ -17,7 +17,7 @@ test('getInclusionStates() resolves to correct inclusion states', async t => {
     const invalidHashes = ['asdasDSFDAFD']
 
     t.is(
-        t.throws(() => getInclusionStates(invalidHashes), Error).message,
+        t.throws(() => getInclusionStates(invalidHashes), { instanceOf: Error }).message,
         `${INVALID_TRANSACTION_HASH}: ${stringify(invalidHashes)}`,
         'getInclusionStates() throws error for invalid hashes'
     )

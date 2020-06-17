@@ -39,7 +39,7 @@ test('wereAddressesSpentFrom() rejects with correct error for invalid addresses'
     const invalidAddresses = ['asdasDSFDAFD']
 
     t.is(
-        t.throws(() => wereAddressesSpentFrom(invalidAddresses), Error).message,
+        t.throws(() => wereAddressesSpentFrom(invalidAddresses), { instanceOf: Error }).message,
         `${INVALID_ADDRESS}: ${stringify(invalidAddresses)}`,
         'wereAddressesSpentFrom() should throw error for invalid addresses'
     )

@@ -63,13 +63,13 @@ test('getAccountData() rejects with correct errors for invalid inputs', t => {
     }
 
     t.is(
-        t.throws(() => getAccountData(invalidSeed, { start: 0 }), Error).message,
+        t.throws(() => getAccountData(invalidSeed, { start: 0 }), { instanceOf: Error }).message,
         `${INVALID_SEED}: ${stringify(invalidSeed)}`,
         'getAccountData() should throw correct error for invalid seed'
     )
 
     t.is(
-        t.throws(() => getAccountData(seed, invalidStartEndOptions), Error).message,
+        t.throws(() => getAccountData(seed, invalidStartEndOptions), { instanceOf: Error }).message,
         `${INVALID_START_END_OPTIONS}: ${stringify(invalidStartEndOptions)}`,
         'getAccountData() should throw correct error for invalid start & end options'
     )
