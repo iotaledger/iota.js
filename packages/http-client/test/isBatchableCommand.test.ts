@@ -1,4 +1,4 @@
-import { test } from 'ava'
+import test from 'ava'
 import {
     BaseCommand,
     FindTransactionsCommand,
@@ -38,22 +38,22 @@ const nonBatchableCommand: CustomCommand = {
     key: ['key'],
 }
 
-test('isBatchableCommand() returns true for batchable findTransactions commands.', t => {
+test('isBatchableCommand() returns true for batchable findTransactions commands.', (t) => {
     t.is(isBatchableCommand(findTransactionsCommand), true)
 })
 
-test('isBatchableCommand() returns true for batchable getTrytes commands.', t => {
+test('isBatchableCommand() returns true for batchable getTrytes commands.', (t) => {
     t.is(isBatchableCommand(getTrytesCommand), true)
 })
 
-test('isBatchableCommand() returns true for batchable getBalances commands.', t => {
+test('isBatchableCommand() returns true for batchable getBalances commands.', (t) => {
     t.is(isBatchableCommand(getBalancesCommand), true)
 })
 
-test('isBatchableCommand() returns true for batchable getInclusionStates commands.', t => {
+test('isBatchableCommand() returns true for batchable getInclusionStates commands.', (t) => {
     t.is(isBatchableCommand(getInclusionStatesCommand), true)
 })
 
-test('isBatchableCommand() returns false for non-batchable commands.', t => {
+test('isBatchableCommand() returns false for non-batchable commands.', (t) => {
     t.is(isBatchableCommand(nonBatchableCommand), false)
 })
