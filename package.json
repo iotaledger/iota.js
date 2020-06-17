@@ -71,7 +71,7 @@
         "dmd-clear": "^0.1.2",
         "husky": "^3.0.0",
         "jsdoc-babel": "^0.5.0",
-        "lerna": "^3.18.0",
+        "lerna": "^3.22.1",
         "lint-staged": "^10.2.10",
         "nyc": "^15.0.0",
         "prettier": "^2.0.5",
