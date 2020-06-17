@@ -38,13 +38,13 @@ test('getBalances() rejects with correct errors for invalid input', t => {
     const invalidTips = [`m${'M'.repeat(80)}`]
 
     t.is(
-        t.throws(() => getBalances([...addressesWithChecksum], invalidTips), Error).message,
+        t.throws(() => getBalances([...addressesWithChecksum], invalidTips), { instanceOf: Error }).message,
         `${INVALID_TRANSACTION_HASH}: ${stringify(invalidTips)}`,
         'getBalances() should throw error for invalid tips'
     )
 
     t.is(
-        t.throws(() => getBalances(invalidAddresses), Error).message,
+        t.throws(() => getBalances(invalidAddresses), { instanceOf: Error }).message,
         `${INVALID_ADDRESS}: ${stringify(invalidAddresses)}`,
         'getBalances() should throw error for invalid addresses'
     )

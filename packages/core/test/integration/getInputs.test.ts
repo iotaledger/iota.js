@@ -82,7 +82,7 @@ test('createInputsObject() aggregates addresses and balances', t => {
 
 test('hasSufficientBalance() throws error for insufficient balance', t => {
     t.is(
-        t.throws(() => hasSufficientBalance(inputs, 110), Error).message,
+        t.throws(() => hasSufficientBalance(inputs, 110), { instanceOf: Error }).message,
         `${INSUFFICIENT_BALANCE}`,
         'hasSufficientBalance() should throw error for insufficient balance'
     )
@@ -104,13 +104,13 @@ test('getInputs() rejects with correct errors for invalid input', t => {
     }
 
     t.is(
-        t.throws(() => getInputs(invalidSeed), Error).message,
+        t.throws(() => getInputs(invalidSeed), { instanceOf: Error }).message,
         `${INVALID_SEED}: ${stringify(invalidSeed)}`,
         'getInputs() should throw correct error for invalid seed'
     )
 
     t.is(
-        t.throws(() => getInputs(seed, invalidStartEndOptions), Error).message,
+        t.throws(() => getInputs(seed, invalidStartEndOptions), { instanceOf: Error }).message,
         `${INVALID_START_END_OPTIONS}: ${stringify(invalidStartEndOptions)}`,
         'getInputs() should throw correct error for invalid start & end options'
     )

@@ -19,7 +19,7 @@ test('getTrytes() rejects with correct error for invalid hashes', t => {
     const invalidHashes = ['asdasDSFDAFD']
 
     t.is(
-        t.throws(() => getTrytes(invalidHashes), Error).message,
+        t.throws(() => getTrytes(invalidHashes), { instanceOf: Error }).message,
         `${INVALID_TRANSACTION_HASH}: ${stringify(invalidHashes)}`,
         'getTrytes() should throw error for invalid hashes'
     )

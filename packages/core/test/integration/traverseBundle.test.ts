@@ -25,7 +25,7 @@ test('traverseBundle() rejects with correct error for invalid hash.', t => {
     const invalidHash = 'asdasDSFDAFD'
 
     t.is(
-        t.throws(() => traverseBundle(invalidHash), Error).message,
+        t.throws(() => traverseBundle(invalidHash), { instanceOf: Error }).message,
         `${INVALID_TRANSACTION_HASH}: ${stringify(invalidHash)}`,
         'traverseBundle() should throw correct error for invalid hash.'
     )

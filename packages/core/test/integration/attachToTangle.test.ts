@@ -45,7 +45,7 @@ test('attachToTangle() rejects with correct errors for invalid input', t => {
                     attachToTangleCommand.minWeightMagnitude,
                     attachToTangleCommand.trytes
                 ),
-            Error
+            { instanceOf: Error }
         ).message,
         `${INVALID_TRUNK_TRANSACTION}: ${stringify(invalidTrytes[0])}`,
         'attachToTangle() should throw error for invalid trunk transaction'
@@ -60,7 +60,7 @@ test('attachToTangle() rejects with correct errors for invalid input', t => {
                     attachToTangleCommand.minWeightMagnitude,
                     attachToTangleCommand.trytes
                 ),
-            Error
+            { instanceOf: Error }
         ).message,
         `${INVALID_BRANCH_TRANSACTION}: ${stringify(invalidTrytes[0])}`,
         'attachToTangle() should throw error for invalid branch transaction'
@@ -75,7 +75,7 @@ test('attachToTangle() rejects with correct errors for invalid input', t => {
                     attachToTangleCommand.minWeightMagnitude,
                     invalidTrytes
                 ),
-            Error
+            { instanceOf: Error }
         ).message,
         `${INVALID_TRANSACTION_TRYTES}: ${stringify(invalidTrytes)}`,
         'attachToTangle() should throw error for invalid trytes'

@@ -22,7 +22,7 @@ test('getTransactionObjects() rejects with correct error for invalid hash.', t =
     const invalidHashes = ['asdasDSFDAFD']
 
     t.is(
-        t.throws(() => getTransactionObjects(invalidHashes), Error).message,
+        t.throws(() => getTransactionObjects(invalidHashes), { instanceOf: Error }).message,
         `${INVALID_TRANSACTION_HASH}: ${stringify(invalidHashes)}`,
         'getTransactionObjects() should throw correct error for invalid hash.'
     )

@@ -62,7 +62,7 @@ test('getNewAddress() rejects with correct errors for invalid arguments', t => {
     const invalidSeed = 'asdasDSFDAFD'
 
     t.is(
-        t.throws(() => getNewAddress(invalidSeed, { index: 0 }), Error).message,
+        t.throws(() => getNewAddress(invalidSeed, { index: 0 }), { instanceOf: Error }).message,
         `${INVALID_SEED}: ${stringify(invalidSeed)}`,
         'getNewAddress() should throw correct error for invalid seed'
     )
@@ -70,7 +70,7 @@ test('getNewAddress() rejects with correct errors for invalid arguments', t => {
 
 test('getNewAddress() rejects with correct errors for `total=0`', t => {
     t.is(
-        t.throws(() => getNewAddress(seed, { index: 0, total: 0 }), Error).message,
+        t.throws(() => getNewAddress(seed, { index: 0, total: 0 }), { instanceOf: Error }).message,
         `${INVALID_TOTAL_OPTION}: ${stringify(0)}`,
         'getNewAddress() should throw correct error for `total=0`'
     )
