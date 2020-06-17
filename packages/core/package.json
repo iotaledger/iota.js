@@ -25,7 +25,6 @@
         ],
         "failFast": true,
         "failWithoutAssertions": false,
-        "compileEnhancements": false,
         "verbose": true
     },
     "nyc": {
