@@ -172,15 +172,7 @@ test('extractJson() parses numbers', t => {
 
 test('extractJson() throws error for invalid bundle.', t => {
     t.is(
-        t.throws(() => extractJson([]), Error).message,
-        errors.INVALID_BUNDLE,
-        'extractJson() should throw correct error for invalid bundle.'
-    )
-})
-
-test('extractJson() throws error for invalid bundle.', t => {
-    t.is(
-        t.throws(() => extractJson([]), Error).message,
+        t.throws(() => extractJson([]), { instanceOf: Error }).message,
         errors.INVALID_BUNDLE,
         'extractJson() should throw correct error for invalid bundle.'
     )
@@ -188,7 +180,7 @@ test('extractJson() throws error for invalid bundle.', t => {
 
 test('extractJson() throws error for invalid JSON.', t => {
     t.is(
-        t.throws(() => extractJson(bundleWithInvalidJSON), Error).message,
+        t.throws(() => extractJson(bundleWithInvalidJSON), { instanceOf: Error }).message,
         errors.INVALID_JSON,
         'extractJson() should throw correct error for invalid JSON.'
     )
