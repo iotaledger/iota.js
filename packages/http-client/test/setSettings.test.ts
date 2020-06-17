@@ -55,7 +55,7 @@ test('setSettings() sets request batch size', async (t) => {
     t.deepEqual(await client.send(batchedCommand), batchedResponse)
 })
 
-test('setSettings() sets an agent to the client with dependancy to cross-fetch', async (t) => {
+test.skip('setSettings() sets an agent to the client with dependancy to cross-fetch', async (t) => {
     const runningNode = (process: NodeJS.Process) =>
         typeof process === 'object' &&
         typeof process.versions === 'object' &&
