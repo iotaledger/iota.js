@@ -30,15 +30,19 @@ test('send() returns correct response.', async t => {
 
 test('send() returns correct error message for bad request.', t => {
     return send(invalidCommand).catch(error => {
-        t.is(error, 'Request error: Bad Request', 'httpClient.send() should throw correct error for bad request.')
+        t.deepEqual(
+            error,
+            new Error('Request error: Bad Request'),
+            'httpClient.send() should throw correct error for bad request.'
+        )
     })
 })
 
 test('send() parses and returns json encoded error of bad request.', t => {
     return send(invalidGetTransactionsToApproveCommand).catch(error => {
-        t.is(
+        t.deepEqual(
             error,
-            `Request error: ${invalidGetTransactionsToApproveResponse.error}`,
+            new Error(`Request error: ${invalidGetTransactionsToApproveResponse.error}`),
             'httpClient.send() should parse and return json encoded error of bad request.'
         )
     })
@@ -46,7 +50,11 @@ test('send() parses and returns json encoded error of bad request.', t => {
 
 test('send() ignores invalid json of bad requests.', t => {
     return send(invalidGetTransactionsToApproveCommandIgnored).catch(error => {
-        t.is(error, 'Request error: Bad Request', 'httpClient.send() should ignore invalid json of bad requests.')
+        t.deepEqual(
+            error,
+            new Error('Request error: Bad Request'),
+            'httpClient.send() should ignore invalid json of bad requests.'
+        )
     })
 })
 

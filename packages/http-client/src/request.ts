@@ -71,12 +71,14 @@ export const send = <C extends BaseCommand>(params: RequestParams<C>): Promise<R
                 res.ok
                     ? json
                     : Promise.reject(
-                          requestError(json.error || json.exception ? json.error || json.exception : res.statusText)
+                          new Error(
+                              requestError(json.error || json.exception ? json.error || json.exception : res.statusText)
+                          )
                       )
             )
             .catch(error => {
                 if (!res.ok && error.type === 'invalid-json') {
-                    throw requestError(res.statusText)
+                    throw new Error(requestError(res.statusText))
                 } else {
                     throw error
                 }
@@ -122,7 +124,7 @@ export const batchedSend = <C extends BaseCommand>(
         )
 
     return Promise.all(
-        keysToBatch.map(key => {
+        keysToBatch.map((key) => {
             return Promise.all(
                 requestParams.command[key]
                     .reduce(
@@ -152,8 +154,9 @@ export const batchedSend = <C extends BaseCommand>(
                     hashes: (responses[0][0] as any).hashes.filter((hash: string) =>
                         responses.every(
                             response =>
-                                response.findIndex(res => (res as FindTransactionsResponse).hashes.indexOf(hash) > -1) >
-                                -1
+                                response.findIndex(
+                                    res => (res as FindTransactionsResponse).hashes.indexOf(hash) > -1
+                                ) > -1
                         )
                     ),
                 }
