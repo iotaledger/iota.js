@@ -67,6 +67,6 @@
         "bignumber.js": "^7.2.1"
     },
     "devDependencies": {
-        "ava": "^3.0.0"
+        "ava": "^3.9.0"
     }
 }
