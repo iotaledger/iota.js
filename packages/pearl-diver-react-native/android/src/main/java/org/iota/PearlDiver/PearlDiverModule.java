@@ -27,7 +27,7 @@ public class PearlDiverModule extends ReactContextBaseJavaModule {
         new GuardedResultAsyncTask<String>(mContext) {
             @Override
             protected String doInBackgroundGuarded() {
-                String nonce = Interface.doPOW(trytes, mwm);
+                String nonce = Interface.iota_pow_trytes(trytes, mwm);
                 return nonce;
             }
 
