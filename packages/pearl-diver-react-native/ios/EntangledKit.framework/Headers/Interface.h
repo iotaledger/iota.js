@@ -11,13 +11,6 @@
 
 #include <stddef.h>
 
-char* iota_checksum(const char* input, const size_t input_length,
-                    const size_t checksum_length);
-char* iota_digest(char const* const trytes);
-char* iota_pow(const char* trytes, int mwm);
-char* iota_sign_address_gen(const char* seed, const int index,
-                            const int security);
-char* iota_sign_signature_gen(const char* seed, const int index,
-                              const int security, const char* bundleHash);
+char* iota_pow_trytes(const char* trytes, int mwm);
 
 #endif  // __MOBILE__IOS_INTERFACE_H_

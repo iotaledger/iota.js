@@ -1,19 +1,18 @@
 #!/bin/bash
 
 out=bazel-bin/mobile/ios
-pull=26
-branch=iota-js-ios
+branch=develop
 
-if [ ! -d entangled ]; then
-  git clone https://github.com/iotaledger/entangled && cd entangled && git fetch origin pull/$pull/head:$branch && git checkout $branch && git submodule update --init --recursive
+if [ ! -d iota_common ]; then
+    git clone https://github.com/iotaledger/iota_common && cd iota_common && git submodule update --init --recursive
 else
-  cd entangled
+  cd iota_common
   
   if [ "$1" == "clean" ]; then
     bazel clean
   fi
 
-  git fetch origin pull/$pull/head:$branch && git checkout $branch && git submodule update --recursive
+  git fetch origin $branch:latest && git checkout latest && git submodule update --recursive
 fi
 
 fetched=$?
