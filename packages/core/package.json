@@ -1,6 +1,6 @@
 {
     "name": "@iota/core",
-    "version": "1.0.0-beta.29",
+    "version": "1.0.0-beta.30",
     "description": "Core functionality to interact with the IOTA network: generate addresses, create, broadcast and monitor transactions.",
     "main": "./out/core/src/index.js",
     "typings": "typings/core/src",
@@ -71,17 +71,17 @@
         "url": "https://github.com/iotaledger/iota.js.git"
     },
     "dependencies": {
-        "@iota/bundle": "^1.0.0-beta.29",
-        "@iota/bundle-validator": "^1.0.0-beta.23",
-        "@iota/checksum": "^1.0.0-beta.23",
-        "@iota/converter": "^1.0.0-beta.23",
+        "@iota/bundle": "^1.0.0-beta.30",
+        "@iota/bundle-validator": "^1.0.0-beta.30",
+        "@iota/checksum": "^1.0.0-beta.30",
+        "@iota/converter": "^1.0.0-beta.30",
         "@iota/curl": "^1.0.0-beta.19",
-        "@iota/http-client": "^1.0.0-beta.23",
-        "@iota/kerl": "^1.0.0-beta.23",
-        "@iota/pad": "^1.0.0-beta.19",
-        "@iota/signing": "^1.0.0-beta.23",
-        "@iota/transaction": "^1.0.0-beta.23",
-        "@iota/transaction-converter": "^1.0.0-beta.23",
+        "@iota/http-client": "^1.0.0-beta.30",
+        "@iota/kerl": "^1.0.0-beta.30",
+        "@iota/pad": "^1.0.0-beta.30",
+        "@iota/signing": "^1.0.0-beta.30",
+        "@iota/transaction": "^1.0.0-beta.30",
+        "@iota/transaction-converter": "^1.0.0-beta.30",
         "bluebird": "^3.5.5"
     },
     "devDependencies": {

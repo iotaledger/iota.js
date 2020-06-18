@@ -1,6 +1,6 @@
 {
     "name": "@iota/cda",
-    "version": "1.0.0-beta.23",
+    "version": "1.0.0-beta.30",
     "description": "Conditional Deposit Addresses - (timeout_at, multi_use, expected_amount)",
     "main": "out/cda/src/cda.js",
     "typings": "typings/cda/src/cda.d.ts",
@@ -51,11 +51,11 @@
     ],
     "license": "MIT",
     "dependencies": {
-        "@iota/converter": "^1.0.0-beta.23",
+        "@iota/converter": "^1.0.0-beta.30",
         "@iota/curl": "^1.0.0-beta.19",
-        "@iota/pad": "^1.0.0-beta.19",
-        "@iota/signing": "^1.0.0-beta.23",
-        "@iota/transaction": "^1.0.0-beta.23"
+        "@iota/pad": "^1.0.0-beta.30",
+        "@iota/signing": "^1.0.0-beta.30",
+        "@iota/transaction": "^1.0.0-beta.30"
     },
     "devDependencies": {
         "riteway": "^6.0.3",
