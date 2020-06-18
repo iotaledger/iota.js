@@ -1,7 +1,7 @@
 #!/bin/bash
 
 out=bazel-bin/mobile/ios
-branch=develop
+branch=master
 
 if [ ! -d iota_common ]; then
     git clone https://github.com/iotaledger/iota_common && cd iota_common && git submodule update --init --recursive
@@ -18,5 +18,5 @@ fi
 fetched=$?
 
 if [ $fetched ]; then
-  bazel build --ios_multi_cpus='i386,x86_64,armv7,arm64' --copt=-fembed-bitcode --copt=-Ofast //mobile/ios:ios_bindings && echo A | unzip $out/ios_bindings.zip -d $out/ios_bindings
+  bazel build --ios_multi_cpus='i386,x86_64,armv7,arm64' --copt=-fembed-bitcode --copt=-O3 //mobile/ios:ios_bindings && echo A | unzip $out/ios_bindings.zip -d $out/ios_bindings
 fi
