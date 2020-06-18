@@ -1,6 +1,6 @@
 {
     "name": "@iota/extract-json",
-    "version": "1.0.0-beta.23",
+    "version": "1.0.0-beta.30",
     "description": "Extracts JSON encoded messages from signature message fragments",
     "main": "./out/extract-json/src/index.js",
     "typings": "./typings/extract-json/src",
@@ -65,7 +65,7 @@
         "url": "https://github.com/iotaledger/iota.js.git/tree/develop/packages/crypto"
     },
     "dependencies": {
-        "@iota/converter": "^1.0.0-beta.23"
+        "@iota/converter": "^1.0.0-beta.30"
     },
     "devDependencies": {
         "@iota/samples": "^1.0.0-beta.12",

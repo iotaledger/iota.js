@@ -1,6 +1,6 @@
 {
     "name": "@iota/persistence",
-    "version": "1.0.0-beta.23",
+    "version": "1.0.0-beta.30",
     "description": "iota.js persistence inteface",
     "main": "out/persistence/src/persistence.js",
     "typings": "typings/persistence/src/persistence.d.ts",
@@ -49,15 +49,15 @@
     "author": "Chris Dukakis <chris.dukakis@iota.org> (https://github.com/chrisdukakis)",
     "license": "MIT",
     "dependencies": {
-        "@iota/async-buffer": "^1.0.0-beta.23",
-        "@iota/converter": "^1.0.0-beta.23",
-        "@iota/kerl": "^1.0.0-beta.23",
-        "@iota/signing": "^1.0.0-beta.23",
-        "@iota/transaction": "^1.0.0-beta.23",
+        "@iota/async-buffer": "^1.0.0-beta.30",
+        "@iota/converter": "^1.0.0-beta.30",
+        "@iota/kerl": "^1.0.0-beta.30",
+        "@iota/signing": "^1.0.0-beta.30",
+        "@iota/transaction": "^1.0.0-beta.30",
         "bluebird": "^3.7.2"
     },
     "devDependencies": {
-        "@iota/persistence-adapter-level": "^1.0.0-beta.23",
+        "@iota/persistence-adapter-level": "^1.0.0-beta.30",
         "riteway": "^6.0.3",
         "watch": "^1.0.2"
     }

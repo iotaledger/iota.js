@@ -1,6 +1,6 @@
 {
     "name": "@iota/converter",
-    "version": "1.0.0-beta.23",
+    "version": "1.0.0-beta.30",
     "description": "Convert values & trytes to trits and back",
     "main": "./out/converter/src/index.js",
     "typings": "typings/converter/src",
