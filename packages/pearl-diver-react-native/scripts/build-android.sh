@@ -1,7 +1,7 @@
 #!/bin/bash
 
 out=bazel-bin/mobile/android
-branch=develop
+branch=master
 
 if [ ! -d iota_common ]; then
   git clone https://github.com/iotaledger/iota_common && cd iota_common && git submodule update --init --recursive
