@@ -306,7 +306,7 @@ Converts an integer value to trits
 
     * [.createGetBalances(provider)](#module_core.createGetBalances)
 
-    * [.getBalances(addresses, threshold, [callback])](#module_core.getBalances)
+    * [.getBalances(addresses, [callback])](#module_core.getBalances)
 
     * [.createGetBundle(provider)](#module_core.createGetBundle)
 
@@ -314,7 +314,7 @@ Converts an integer value to trits
 
     * [.createGetInclusionStates(provider)](#module_core.createGetInclusionStates)
 
-    * [.getInclusionStates(transactions, tips, [callback])](#module_core.getInclusionStates)
+    * [.getInclusionStates(transactions, [callback])](#module_core.getInclusionStates)
 
     * [.createGetInputs(provider)](#module_core.createGetInputs)
 
@@ -797,17 +797,15 @@ getAccountData(seed, {
 **Returns**: <code>function</code> - [`getBalances`](#module_core.getBalances)  
 <a name="module_core.getBalances"></a>
 
-### *core*.getBalances(addresses, threshold, [callback])
+### *core*.getBalances(addresses, [callback])
 **Fulfil**: <code>Balances</code> Object with list of `balances` and corresponding `milestone`  
 **Reject**: <code>Error</code>
 - `INVALID_HASH`: Invalid address
-- `INVALID_THRESHOLD`: Invalid `threshold`
 - Fetch error  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | addresses | <code>Array.&lt;Hash&gt;</code> | List of addresses |
-| threshold | <code>number</code> | Confirmation threshold, currently `100` should be used |
 | [callback] | <code>Callback</code> | Optional callback |
 
 Fetches _confirmed_ balances of given addresses at the latest solid milestone,
@@ -871,16 +869,15 @@ getBundle(tail)
 **Returns**: <code>function</code> - [`getInclusionStates`](#module_core.getInclusionStates)  
 <a name="module_core.getInclusionStates"></a>
 
-### *core*.getInclusionStates(transactions, tips, [callback])
+### *core*.getInclusionStates(transactions, [callback])
 **Fulfil**: <code>boolean[]</code> Array of inclusion state  
 **Reject**: <code>Error</code>
-- `INVALID_TRANSACTION_HASH`: Invalid `hashes` or `tips`
+- `INVALID_TRANSACTION_HASH`: Invalid `hashes`
 - Fetch error  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | transactions | <code>Array.&lt;Hash&gt;</code> | List of transaction hashes |
-| tips | <code>Array.&lt;Hash&gt;</code> | List of tips to check if transactions are referenced by |
 | [callback] | <code>Callback</code> | Optional callback |
 
 Fetches inclusion states of given list of transactions, by calling
@@ -888,7 +885,7 @@ Fetches inclusion states of given list of transactions, by calling
 
 **Example**  
 ```js
-getInclusionStates(transactions, tips)
+getInclusionStates(transactions)
   .then(states => {
     // ...
   })
