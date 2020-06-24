@@ -113,11 +113,11 @@ For details on all available API methods, see the [reference page](api_reference
 
 * [.getAccountData(seed, options, [callback])](api_reference.md#module_core.getAccountData)
 
-* [.getBalances(addresses, threshold, [callback])](api_reference.md#module_core.getBalances)
+* [.getBalances(addresses, [callback])](api_reference.md#module_core.getBalances)
 
 * [.getBundle(tailTransactionHash, [callback])](api_reference.md#module_core.getBundle)
 
-* [.getInclusionStates(transactions, tips, [callback])](api_reference.md#module_core.getInclusionStates)
+* [.getInclusionStates(transactions, [callback])](api_reference.md#module_core.getInclusionStates)
 
 * [.getInputs(seed, [options], [callback])](api_reference.md#module_core.getInputs)
 
