@@ -33,7 +33,7 @@ import {
     Validator,
 } from '../../guards'
 import { Bundle, Callback, Provider, Transaction, Transfer } from '../../types'
-import Address from './address'
+import { Address } from './address'
 
 export { Bundle, Callback, Provider, Transaction, Transfer }
 
@@ -54,7 +54,7 @@ export const multisigInputValidator: Validator<MultisigInput> = (multisigInput: 
 ]
 
 export const sanitizeTransfers = (transfers: ReadonlyArray<Transfer>): ReadonlyArray<Transfer> =>
-    transfers.map(transfer => ({
+    transfers.map((transfer) => ({
         ...transfer,
         message: transfer.message || '',
         tag: transfer.tag || '',
@@ -128,7 +128,7 @@ export const createBundle = (
  *
  * @memberof module:multisig
  */
-export default class Multisig {
+export class Multisig {
     public address = Address
 
     private provider: Provider // tslint:disable-line variable-name
@@ -192,7 +192,7 @@ export default class Multisig {
         kerl.initialize()
 
         // Absorb all key digests
-        digestsArr.forEach(keyDigest => {
+        digestsArr.forEach((keyDigest) => {
             const digestTrits = trytesToTrits(keyDigest)
             kerl.absorb(trytesToTrits(keyDigest), 0, digestTrits.length)
         })
