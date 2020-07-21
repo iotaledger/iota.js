@@ -46,7 +46,8 @@ export interface MultisigInput {
 export const multisigInputValidator: Validator<MultisigInput> = (multisigInput: any) => [
     multisigInput,
     (input: MultisigInput) =>
-        isSecurityLevel(input.securitySum) &&
+        Number.isInteger(input.securitySum) &&
+        input.securitySum > 0 &&
         isHash(input.address) &&
         Number.isInteger(input.balance) &&
         input.balance > 0,
@@ -274,34 +275,38 @@ export class Multisig {
         const normalizedBundleHash = normalizedBundle(bundleHashTrits)
         let signatureIndex = 0
 
-        for (const offset = 0; offset < bundle.length * TRANSACTION_LENGTH; offset + TRANSACTION_LENGTH) {
-            if (tritsToTrytes(address(bundle)) === inputAddress && isNinesTrytes(signatureOrMessage(bundle))) {
-                const signature = new Int8Array(keyTrits.length)
+        for (let offset = 0; offset < bundle.length; offset += TRANSACTION_LENGTH) {
+            if (tritsToTrytes(address(bundle.slice(offset, offset + TRANSACTION_LENGTH))) === inputAddress) {
+                if (
+                    !isNinesTrytes(tritsToTrytes(signatureOrMessage(bundle.slice(offset, offset + TRANSACTION_LENGTH))))
+                ) {
+                    signatureIndex += 1
+                } else {
+                    const signature = new Int8Array(keyTrits.length)
 
-                for (let i = 0; i < keyTrits.length / FRAGMENT_LENGTH; i++) {
-                    signature.set(
-                        signatureFragment(
-                            normalizedBundleHash.slice(
-                                i * NORMALIZED_FRAGMENT_LENGTH,
-                                (i + 1) * NORMALIZED_FRAGMENT_LENGTH
+                    for (let i = 0; i < keyTrits.length / FRAGMENT_LENGTH; i++) {
+                        signature.set(
+                            signatureFragment(
+                                normalizedBundleHash.slice(
+                                    i * NORMALIZED_FRAGMENT_LENGTH,
+                                    (i + 1) * NORMALIZED_FRAGMENT_LENGTH
+                                ),
+                                keyTrits.slice(i * FRAGMENT_LENGTH, (i + 1) * FRAGMENT_LENGTH)
                             ),
-                            keyTrits.slice(i * FRAGMENT_LENGTH, (i + 1) * FRAGMENT_LENGTH)
-                        ),
-                        i * FRAGMENT_LENGTH
-                    )
+                            i * FRAGMENT_LENGTH
+                        )
+                    }
+
+                    const bundleTrits = addSignatureOrMessage(bundle, signature, signatureIndex)
+                    const bundleTrytes = []
+
+                    for (let jOffset = 0; jOffset < bundleTrits.length; jOffset += TRANSACTION_LENGTH) {
+                        bundleTrytes.push(tritsToTrytes(bundleTrits.slice(jOffset, jOffset + TRANSACTION_LENGTH)))
+                    }
+
+                    return callback(null, bundleTrytes.slice())
                 }
-
-                const bundleTrits = addSignatureOrMessage(bundle, signature, signatureIndex)
-                const bundleTrytes = []
-
-                for (let jOffset = 0; jOffset < bundleTrits.length; jOffset += TRANSACTION_LENGTH) {
-                    bundleTrytes.push(tritsToTrytes(bundleTrits.slice(jOffset, jOffset + TRANSACTION_LENGTH)))
-                }
-
-                return callback(null, bundleTrytes.slice())
             }
-
-            signatureIndex += 1
         }
 
         return callback(new Error('Could not find signature index for address: ' + inputAddress))
