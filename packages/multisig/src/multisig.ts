@@ -33,7 +33,7 @@ import {
     Validator,
 } from '../../guards'
 import { Bundle, Callback, Provider, Transaction, Transfer } from '../../types'
-import Address from './address'
+import { Address } from './address'
 
 export { Bundle, Callback, Provider, Transaction, Transfer }
 
@@ -128,7 +128,7 @@ export const createBundle = (
  *
  * @memberof module:multisig
  */
-export default class Multisig {
+export class Multisig {
     public address = Address
 
     private provider: Provider // tslint:disable-line variable-name

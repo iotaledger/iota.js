@@ -6,7 +6,7 @@ import { asArray } from '../../types'
  * @class Address
  * @memberof module:multisig
  */
-export default class Address {
+export class Address {
     private kerl: Kerl
 
     constructor(digests?: string | ReadonlyArray<string>) {
