@@ -54,7 +54,7 @@ export const multisigInputValidator: Validator<MultisigInput> = (multisigInput: 
 ]
 
 export const sanitizeTransfers = (transfers: ReadonlyArray<Transfer>): ReadonlyArray<Transfer> =>
-    transfers.map((transfer) => ({
+    transfers.map(transfer => ({
         ...transfer,
         message: transfer.message || '',
         tag: transfer.tag || '',
@@ -192,7 +192,7 @@ export class Multisig {
         kerl.initialize()
 
         // Absorb all key digests
-        digestsArr.forEach((keyDigest) => {
+        digestsArr.forEach(keyDigest => {
             const digestTrits = trytesToTrits(keyDigest)
             kerl.absorb(trytesToTrits(keyDigest), 0, digestTrits.length)
         })
