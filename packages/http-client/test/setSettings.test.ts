@@ -81,7 +81,7 @@ test('setSettings() sets an agent to the client with dependancy to cross-fetch',
         provider: 'http://localhost:34265',
         agent
     });
-    
-    await t.throws(httpsClient.send(command));
+
+    await t.throwsAsync(httpsClient.send(command));
 
 })
