@@ -26,7 +26,6 @@ import {
     arrayValidator,
     isHash,
     isNinesTrytes,
-    isSecurityLevel,
     remainderAddressValidator,
     transferValidator,
     validate,
