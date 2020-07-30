@@ -8,4 +8,4 @@ Each example is a standalone app and includes description & instructions.
   [`@iota/pearl-diver-react-native`](https://github.com/iotaledger/iota.js/tree/next/packages/pearl-diver-react-native#iotapearl-diver-react-native).
 
 - [`multisig`](https://github.com/iotaledger/iota.js/tree/next/examples/multisig): Example
-  script demostrating multisig address generation and signing.
+  script demonstrating multisig address generation and signing.
