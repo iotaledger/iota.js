@@ -1,0 +1,23 @@
+name: Snyk test dependencies
+
+on: 
+  push:
+    branches:
+    - next
+  pull_request:
+    branches:
+    - next
+
+jobs:
+  security:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+
+    - name: Run Snyk to test dependencies
+      uses: snyk/actions/node@master
+      env:
+        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      with:
+        command: test
+        args: --org=iota-foundation
