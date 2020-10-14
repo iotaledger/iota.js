@@ -70,9 +70,9 @@
         "url-parse": "^1.4.7"
     },
     "devDependencies": {
-        "@types/nock": "^10.0.0",
+        "@types/nock": "^10.0.3",
         "@types/url-parse": "^1.4.3",
-        "ava": "^3.0.0",
-        "nock": "^10.0.4"
+        "ava": "^3.13.0",
+        "nock": "^10.0.6"
     }
 }
