@@ -65,7 +65,7 @@
     },
     "devDependencies": {
         "@commitlint/cli": "^9.1.2",
-        "@commitlint/config-conventional": "^8.3.4",
+        "@commitlint/config-conventional": "^11.0.0",
         "@commitlint/travis-cli": "^9.0.0",
         "ava": "^3.0.0",
         "dmd-clear": "^0.1.2",
