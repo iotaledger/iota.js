@@ -64,6 +64,7 @@
         "url": "https://github.com/iotaledger/iota.js.git/tree/develop/packages/crypto"
     },
     "devDependencies": {
-        "ava": "^3.0.0"
+        "@ava/babel": "^1.0.1",
+        "ava": "^3.13.0"
     }
 }
