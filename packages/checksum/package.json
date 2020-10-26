@@ -20,10 +20,11 @@
         "Chris Dukakis <chris.dukakis@iota.org> (https://github.com/chrisdukakis)"
     ],
     "ava": {
-        "files": "out/checksum/test/*.test.js",
+        "files": [
+            "out/checksum/test/*.test.js"
+        ],
         "failFast": true,
         "failWithoutAssertions": false,
-        "compileEnhancements": false,
         "verbose": true
     },
     "nyc": {
@@ -65,7 +66,8 @@
         "@iota/kerl": "^1.0.0-beta.30"
     },
     "devDependencies": {
+        "@ava/babel": "^1.0.1",
         "@iota/samples": "^1.0.0-beta.12",
-        "ava": "^0.25.0"
+        "ava": "^3.13.0"
     }
 }

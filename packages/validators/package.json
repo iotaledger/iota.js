@@ -20,10 +20,11 @@
         "Chris Dukakis <chris.dukakis@iota.org> (https://github.com/chrisdukakis)"
     ],
     "ava": {
-        "files": "out/validators/test/*.test.js",
+        "files": [
+            "out/validators/test/*.test.js"
+        ],
         "failFast": true,
         "failWithoutAssertions": false,
-        "compileEnhancements": false,
         "verbose": true
     },
     "nyc": {
@@ -52,8 +53,9 @@
         "bluebird": "^3.7.2"
     },
     "devDependencies": {
+        "@ava/babel": "^1.0.1",
         "@iota/samples": "^1.0.0-beta.12",
-        "ava": "^0.25.0"
+        "ava": "^3.13.0"
     },
     "keywords": [
         "iota",
