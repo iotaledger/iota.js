@@ -66,7 +66,7 @@
     },
     "dependencies": {
         "@types/bignumber.js": "^5.0.0",
-        "bignumber.js": "^7.2.1"
+        "bignumber.js": "^9.0.1"
     },
     "devDependencies": {
         "@ava/babel": "^1.0.1",
