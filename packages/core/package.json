@@ -90,7 +90,6 @@
         "@iota/samples": "^1.0.0-beta.12",
         "@types/nock": "^10.0.0",
         "ava": "^3.13.0",
-        "babel-cli": "^6.26.0",
         "babel-core": "^6.26.0",
         "babel-plugin-transform-object-rest-spread": "^6.26.0",
         "babel-preset-es2015": "^6.24.1",
