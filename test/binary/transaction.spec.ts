@@ -1,3 +1,5 @@
+// Copyright 2020 IOTA Stiftung
+// SPDX-License-Identifier: Apache-2.0
 import { deserializeTransactionEssence, serializeTransactionEssence } from "../../src/binary/transaction";
 import { ITransactionEssence } from "../../src/models/ITransactionEssence";
 import { Converter } from "../../src/utils/converter";

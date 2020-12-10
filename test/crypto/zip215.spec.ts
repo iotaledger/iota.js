@@ -1,4 +1,5 @@
-/* eslint-disable max-len */
+// Copyright 2020 IOTA Stiftung
+// SPDX-License-Identifier: Apache-2.0
 import { Zip215 } from "../../src/crypto/zip215";
 import { Converter } from "../../src/utils/converter";
 import testData from "./zip215.json";

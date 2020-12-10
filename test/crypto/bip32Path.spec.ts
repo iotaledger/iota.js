@@ -1,4 +1,5 @@
-/* eslint-disable max-len */
+// Copyright 2020 IOTA Stiftung
+// SPDX-License-Identifier: Apache-2.0
 import { Bip32Path } from "../../src/crypto/bip32Path";
 
 describe("Bip32Path", () => {

@@ -1,4 +1,5 @@
-/* eslint-disable max-len */
+// Copyright 2020 IOTA Stiftung
+// SPDX-License-Identifier: Apache-2.0
 import { Bech32 } from "../../src/crypto/bech32";
 import { Converter } from "../../src/utils/converter";
 
@@ -27,7 +28,8 @@ describe("Bech32", () => {
 
     test("Can encode a string", () => {
         const address = Converter.hexToBytes("0152fdfc072182654f163f5f0f9a621d729566c74d10037c4d7bbb0407d1e2c649");
-        expect(Bech32.encode("iot", address)).toEqual("iot1q9f0mlq8yxpx2nck8a0slxnzr4ef2ek8f5gqxlzd0wasgp73utryjtzcp98");
+        expect(Bech32.encode("iot", address))
+            .toEqual("iot1q9f0mlq8yxpx2nck8a0slxnzr4ef2ek8f5gqxlzd0wasgp73utryjtzcp98");
     });
 
     test("Can decode a string", () => {
@@ -36,7 +38,8 @@ describe("Bech32", () => {
         expect(result).toBeDefined();
         if (result) {
             expect(result.humanReadablePart).toEqual("iot");
-            expect(Converter.bytesToHex(result.data)).toEqual("0152fdfc072182654f163f5f0f9a621d729566c74d10037c4d7bbb0407d1e2c649");
+            expect(Converter.bytesToHex(result.data))
+                .toEqual("0152fdfc072182654f163f5f0f9a621d729566c74d10037c4d7bbb0407d1e2c649");
         }
     });
 

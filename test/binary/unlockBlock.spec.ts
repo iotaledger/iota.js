@@ -1,4 +1,5 @@
-/* eslint-disable max-len */
+// Copyright 2020 IOTA Stiftung
+// SPDX-License-Identifier: Apache-2.0
 import { deserializeReferenceUnlockBlock, deserializeUnlockBlock, deserializeUnlockBlocks, serializeSignatureUnlockBlock, deserializeSignatureUnlockBlock, serializeReferenceUnlockBlock, serializeUnlockBlock, serializeUnlockBlocks } from "../../src/binary/unlockBlock";
 import { IReferenceUnlockBlock } from "../../src/models/IReferenceUnlockBlock";
 import { ISignatureUnlockBlock } from "../../src/models/ISignatureUnlockBlock";
@@ -14,6 +15,7 @@ describe("Binary Unlock Block", () => {
                 signature: {
                     type: 1,
                     publicKey: "6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92",
+                    // eslint-disable-next-line max-len
                     signature: "2c59d43952bda7ca60d3c2288ebc00703b4b60c928d277382cad5f57b02a90825f2d3a8509d6594498e0488f086d8fa3f13d9636d20e759eb5806ffe663bac0d"
                 }
             },
@@ -26,12 +28,14 @@ describe("Binary Unlock Block", () => {
         const serialized = new WriteStream();
         serializeUnlockBlocks(serialized, unlockBlocks);
         const hex = serialized.finalHex();
+        // eslint-disable-next-line max-len
         expect(hex).toEqual("020000016920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f922c59d43952bda7ca60d3c2288ebc00703b4b60c928d277382cad5f57b02a90825f2d3a8509d6594498e0488f086d8fa3f13d9636d20e759eb5806ffe663bac0d01a05b");
         const deserialized = deserializeUnlockBlocks(new ReadStream(Converter.hexToBytes(hex)));
         expect(deserialized.length).toEqual(2);
         const obj1 = deserialized[0] as ISignatureUnlockBlock;
         expect(obj1.type).toEqual(0);
         expect(obj1.signature.publicKey).toEqual("6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92");
+        // eslint-disable-next-line max-len
         expect(obj1.signature.signature).toEqual("2c59d43952bda7ca60d3c2288ebc00703b4b60c928d277382cad5f57b02a90825f2d3a8509d6594498e0488f086d8fa3f13d9636d20e759eb5806ffe663bac0d");
         const obj2 = deserialized[1] as IReferenceUnlockBlock;
         expect(obj2.type).toEqual(1);
@@ -60,6 +64,7 @@ describe("Binary Unlock Block", () => {
             signature: {
                 type: 1,
                 publicKey: "6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92",
+                // eslint-disable-next-line max-len
                 signature: "2c59d43952bda7ca60d3c2288ebc00703b4b60c928d277382cad5f57b02a90825f2d3a8509d6594498e0488f086d8fa3f13d9636d20e759eb5806ffe663bac0d"
             }
         };
@@ -67,11 +72,14 @@ describe("Binary Unlock Block", () => {
         const serialized = new WriteStream();
         serializeSignatureUnlockBlock(serialized, object);
         const hex = serialized.finalHex();
+        // eslint-disable-next-line max-len
         expect(hex).toEqual("00016920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f922c59d43952bda7ca60d3c2288ebc00703b4b60c928d277382cad5f57b02a90825f2d3a8509d6594498e0488f086d8fa3f13d9636d20e759eb5806ffe663bac0d");
         const deserialized = deserializeSignatureUnlockBlock(new ReadStream(Converter.hexToBytes(hex)));
         expect(deserialized.type).toEqual(0);
         expect(deserialized.signature.type).toEqual(1);
-        expect(deserialized.signature.publicKey).toEqual("6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92");
+        expect(deserialized.signature.publicKey)
+            .toEqual("6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92");
+        // eslint-disable-next-line max-len
         expect(deserialized.signature.signature).toEqual("2c59d43952bda7ca60d3c2288ebc00703b4b60c928d277382cad5f57b02a90825f2d3a8509d6594498e0488f086d8fa3f13d9636d20e759eb5806ffe663bac0d");
     });
 

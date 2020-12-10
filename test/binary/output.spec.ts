@@ -1,4 +1,5 @@
-/* eslint-disable max-len */
+// Copyright 2020 IOTA Stiftung
+// SPDX-License-Identifier: Apache-2.0
 import { deserializeOutput, deserializeOutputs, deserializeSigLockedSingleOutput, serializeOutput, serializeOutputs, serializeSigLockedSingleOutput } from "../../src/binary/output";
 import { ISigLockedSingleOutput } from "../../src/models/ISigLockedSingleOutput";
 import { Converter } from "../../src/utils/converter";
@@ -29,16 +30,19 @@ describe("Binary Output", () => {
         const serialized = new WriteStream();
         serializeOutputs(serialized, outputs);
         const hex = serialized.finalHex();
+        // eslint-disable-next-line max-len
         expect(hex).toEqual("020000016920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f9240e201000000000000014566920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f106120f0000000000");
         const deserialized = deserializeOutputs(new ReadStream(Converter.hexToBytes(hex)));
         expect(deserialized.length).toEqual(2);
         expect(deserialized[0].type).toEqual(0);
         expect(deserialized[0].address.type).toEqual(1);
-        expect(deserialized[0].address.address).toEqual("6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92");
+        expect(deserialized[0].address.address)
+            .toEqual("6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92");
         expect(deserialized[0].amount).toEqual(123456);
         expect(deserialized[1].type).toEqual(0);
         expect(deserialized[1].address.type).toEqual(1);
-        expect(deserialized[1].address.address).toEqual("4566920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1");
+        expect(deserialized[1].address.address)
+            .toEqual("4566920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1");
         expect(deserialized[1].amount).toEqual(987654);
     });
 
@@ -59,7 +63,8 @@ describe("Binary Output", () => {
         const deserialized = deserializeOutput(new ReadStream(Converter.hexToBytes(hex)));
         expect(deserialized.type).toEqual(0);
         expect(deserialized.address.type).toEqual(1);
-        expect(deserialized.address.address).toEqual("6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92");
+        expect(deserialized.address.address)
+            .toEqual("6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92");
         expect(deserialized.amount).toEqual(123456);
     });
 
@@ -80,7 +85,8 @@ describe("Binary Output", () => {
         const deserialized = deserializeSigLockedSingleOutput(new ReadStream(Converter.hexToBytes(hex)));
         expect(deserialized.type).toEqual(0);
         expect(deserialized.address.type).toEqual(1);
-        expect(deserialized.address.address).toEqual("6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92");
+        expect(deserialized.address.address)
+            .toEqual("6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92");
         expect(deserialized.amount).toEqual(123456);
     });
 });

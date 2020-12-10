@@ -1,4 +1,5 @@
-/* eslint-disable max-len */
+// Copyright 2020 IOTA Stiftung
+// SPDX-License-Identifier: Apache-2.0
 import { serializeMessage } from "../../src/binary/message";
 import { IMessage } from "../../src/models/IMessage";
 import { LocalPowProvider } from "../../src/pow/localPowProvider";

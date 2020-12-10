@@ -1,4 +1,5 @@
-/* eslint-disable max-len */
+// Copyright 2020 IOTA Stiftung
+// SPDX-License-Identifier: Apache-2.0
 import { Blake2b } from "../../src/crypto/blake2b";
 import { Ed25519 } from "../../src/crypto/ed25519";
 import { HmacSha512 } from "../../src/crypto/hmacSha512";

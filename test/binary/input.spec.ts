@@ -1,4 +1,5 @@
-/* eslint-disable max-len */
+// Copyright 2020 IOTA Stiftung
+// SPDX-License-Identifier: Apache-2.0
 import { deserializeInput, deserializeInputs, deserializeUTXOInput, serializeInput, serializeInputs, serializeUTXOInput } from "../../src/binary/input";
 import { IUTXOInput } from "../../src/models/IUTXOInput";
 import { Converter } from "../../src/utils/converter";
@@ -23,14 +24,17 @@ describe("Binary Input", () => {
         const serialized = new WriteStream();
         serializeInputs(serialized, inputs);
         const hex = serialized.finalHex();
+        // eslint-disable-next-line max-len
         expect(hex).toEqual("0200006920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f923930004566920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1a05b");
         const deserialized = deserializeInputs(new ReadStream(Converter.hexToBytes(hex)));
         expect(deserialized.length).toEqual(2);
         expect(deserialized[0].type).toEqual(0);
-        expect(deserialized[0].transactionId).toEqual("6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92");
+        expect(deserialized[0].transactionId)
+            .toEqual("6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92");
         expect(deserialized[0].transactionOutputIndex).toEqual(12345);
         expect(deserialized[1].type).toEqual(0);
-        expect(deserialized[1].transactionId).toEqual("4566920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1");
+        expect(deserialized[1].transactionId)
+            .toEqual("4566920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1");
         expect(deserialized[1].transactionOutputIndex).toEqual(23456);
     });
 
