@@ -35,6 +35,7 @@
 * [Sha512](classes/sha512.md)
 * [SingleNodeClient](classes/singlenodeclient.md)
 * [Slip0010](classes/slip0010.md)
+* [UnitsHelper](classes/unitshelper.md)
 * [WriteStream](classes/writestream.md)
 
 ### Interfaces

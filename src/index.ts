@@ -65,6 +65,7 @@ export * from "./models/ITransactionPayload";
 export * from "./models/ITypeBase";
 export * from "./models/IUTXOInput";
 export * from "./models/ledgerInclusionState";
+export * from "./models/units";
 export * from "./pow/localPowProvider";
 export * from "./seedTypes/ed25519Seed";
 export * from "./utils/arrayHelper";
@@ -76,5 +77,6 @@ export * from "./utils/messageHelper";
 export * from "./utils/powHelper";
 export * from "./utils/randomHelper";
 export * from "./utils/readStream";
+export * from "./utils/unitsHelper";
 export * from "./utils/writeStream";
 

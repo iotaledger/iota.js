@@ -8224,6 +8224,11 @@
 
 	});
 
+	var units = createCommonjsModule(function (module, exports) {
+	Object.defineProperty(exports, "__esModule", { value: true });
+
+	});
+
 	var b1t6 = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.B1T6 = void 0;
@@ -9075,6 +9080,135 @@
 
 	});
 
+	var unitsHelper = createCommonjsModule(function (module, exports) {
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.UnitsHelper = void 0;
+	/**
+	 * Class to help with units formatting.
+	 */
+	var UnitsHelper = /** @class */ (function () {
+	    function UnitsHelper() {
+	    }
+	    /**
+	     * Format the value in the best units.
+	     * @param value The value to format.
+	     * @param decimalPlaces The number of decimal places to display.
+	     * @returns The formated value.
+	     */
+	    UnitsHelper.formatBest = function (value, decimalPlaces) {
+	        if (decimalPlaces === void 0) { decimalPlaces = 2; }
+	        return UnitsHelper.formatUnits(value, UnitsHelper.calculateBest(value), decimalPlaces);
+	    };
+	    /**
+	     * Format the value in the best units.
+	     * @param value The value to format.
+	     * @param unit The unit to format with.
+	     * @param decimalPlaces The number of decimal places to display.
+	     * @returns The formated value.
+	     */
+	    UnitsHelper.formatUnits = function (value, unit, decimalPlaces) {
+	        if (decimalPlaces === void 0) { decimalPlaces = 2; }
+	        if (!UnitsHelper.UNIT_MAP[unit]) {
+	            throw new Error("Unrecognized unit " + unit);
+	        }
+	        if (!value) {
+	            return "0 " + unit;
+	        }
+	        return unit === "i"
+	            ? value + " i"
+	            : UnitsHelper.convertUnits(value, "i", unit).toFixed(decimalPlaces) + " " + unit;
+	    };
+	    /**
+	     * Format the value in the best units.
+	     * @param value The value to format.
+	     * @returns The best units for the value.
+	     */
+	    UnitsHelper.calculateBest = function (value) {
+	        var bestUnits = "i";
+	        if (!value) {
+	            return bestUnits;
+	        }
+	        var checkLength = Math.abs(value).toString().length;
+	        if (checkLength > UnitsHelper.UNIT_MAP.Pi.dp) {
+	            bestUnits = "Pi";
+	        }
+	        else if (checkLength > UnitsHelper.UNIT_MAP.Ti.dp) {
+	            bestUnits = "Ti";
+	        }
+	        else if (checkLength > UnitsHelper.UNIT_MAP.Gi.dp) {
+	            bestUnits = "Gi";
+	        }
+	        else if (checkLength > UnitsHelper.UNIT_MAP.Mi.dp) {
+	            bestUnits = "Mi";
+	        }
+	        else if (checkLength > UnitsHelper.UNIT_MAP.Ki.dp) {
+	            bestUnits = "Ki";
+	        }
+	        return bestUnits;
+	    };
+	    /**
+	     * Convert the value to different units.
+	     * @param value The value to convert.
+	     * @param fromUnit The form unit.
+	     * @param toUnit The to unit.
+	     * @returns The formatted unit.
+	     */
+	    UnitsHelper.convertUnits = function (value, fromUnit, toUnit) {
+	        if (!value) {
+	            return 0;
+	        }
+	        if (!UnitsHelper.UNIT_MAP[fromUnit]) {
+	            throw new Error("Unrecognized fromUnit " + fromUnit);
+	        }
+	        if (!UnitsHelper.UNIT_MAP[toUnit]) {
+	            throw new Error("Unrecognized toUnit " + toUnit);
+	        }
+	        if (fromUnit === toUnit) {
+	            return Number(value);
+	        }
+	        var multiplier = value < 0 ? -1 : 1;
+	        var scaledValue = Math.abs(Number(value)) *
+	            UnitsHelper.UNIT_MAP[fromUnit].val /
+	            UnitsHelper.UNIT_MAP[toUnit].val;
+	        var numDecimals = UnitsHelper.UNIT_MAP[toUnit].dp;
+	        // We cant use toFixed to just convert the new value to a string with
+	        // fixed decimal places as it will round, which we don't want
+	        // instead we want to convert the value to a string and manually
+	        // truncate the number of digits after the decimal
+	        // Unfortunately large numbers end up in scientific notation with
+	        // the regular toString() so we use a custom conversion.
+	        var fixed = scaledValue.toString();
+	        if (fixed.includes("e")) {
+	            fixed = scaledValue.toFixed(Number.parseInt(fixed.split("-")[1], 10));
+	        }
+	        // Now we have the number as a full string we can split it into
+	        // whole and decimals parts
+	        var parts = fixed.split(".");
+	        if (parts.length === 1) {
+	            parts.push("0");
+	        }
+	        // Now truncate the decimals by the number allowed on the toUnit
+	        parts[1] = parts[1].slice(0, numDecimals);
+	        // Finally join the parts and convert back to a real number
+	        return Number.parseFloat(parts[0] + "." + parts[1]) * multiplier;
+	    };
+	    /**
+	     * Map units.
+	     */
+	    UnitsHelper.UNIT_MAP = {
+	        i: { val: 1, dp: 0 },
+	        Ki: { val: 1000, dp: 3 },
+	        Mi: { val: 1000000, dp: 6 },
+	        Gi: { val: 1000000000, dp: 9 },
+	        Ti: { val: 1000000000000, dp: 12 },
+	        Pi: { val: 1000000000000000, dp: 15 }
+	    };
+	    return UnitsHelper;
+	}());
+	exports.UnitsHelper = UnitsHelper;
+
+	});
+
 	var es = createCommonjsModule(function (module, exports) {
 	var __createBinding = (commonjsGlobal && commonjsGlobal.__createBinding) || (Object.create ? (function(o, m, k, k2) {
 	    if (k2 === undefined) k2 = k;
@@ -9154,6 +9288,7 @@
 	__exportStar(ITypeBase, exports);
 	__exportStar(IUTXOInput, exports);
 	__exportStar(ledgerInclusionState, exports);
+	__exportStar(units, exports);
 	__exportStar(localPowProvider, exports);
 	__exportStar(ed25519Seed, exports);
 	__exportStar(arrayHelper, exports);
@@ -9165,6 +9300,7 @@
 	__exportStar(powHelper, exports);
 	__exportStar(randomHelper, exports);
 	__exportStar(readStream, exports);
+	__exportStar(unitsHelper, exports);
 	__exportStar(writeStream, exports);
 
 	});
