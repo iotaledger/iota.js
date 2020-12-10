@@ -1,3 +1,5 @@
+// Copyright 2020 IOTA Stiftung
+// SPDX-License-Identifier: Apache-2.0
 import { ITypeBase } from "../models/ITypeBase";
 import { IUTXOInput, UTXO_INPUT_TYPE } from "../models/IUTXOInput";
 import { ReadStream } from "../utils/readStream";

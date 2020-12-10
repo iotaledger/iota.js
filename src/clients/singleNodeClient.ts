@@ -1,3 +1,5 @@
+// Copyright 2020 IOTA Stiftung
+// SPDX-License-Identifier: Apache-2.0
 import { serializeMessage } from "../binary/message";
 import { IAddressOutputsResponse } from "../models/api/IAddressOutputsResponse";
 import { IAddressResponse } from "../models/api/IAddressResponse";

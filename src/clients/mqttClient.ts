@@ -1,3 +1,5 @@
+// Copyright 2020 IOTA Stiftung
+// SPDX-License-Identifier: Apache-2.0
 import * as mqtt from "mqtt";
 import { deserializeMessage } from "../binary/message";
 import { IMilestoneResponse } from "../models/api/IMilestoneResponse";

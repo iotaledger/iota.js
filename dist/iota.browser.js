@@ -30,9 +30,11 @@
 	}
 
 	var blake2b = createCommonjsModule(function (module, exports) {
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
+	/* eslint-disable no-bitwise */
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.Blake2b = void 0;
-	/* eslint-disable no-bitwise */
 	/**
 	 * Class to help with Blake2B Signature scheme.
 	 * TypeScript conversion from https://github.com/dcposch/blakejs
@@ -342,9 +344,10 @@
 	});
 
 	var arrayHelper = createCommonjsModule(function (module, exports) {
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.ArrayHelper = void 0;
-	/* eslint-disable no-bitwise */
 	/**
 	 * Array helper methods.
 	 */
@@ -377,6 +380,8 @@
 	var ed25519Address = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.Ed25519Address = void 0;
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
 
 
 	/**
@@ -426,6 +431,8 @@
 	var common = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.ARRAY_LENGTH = exports.STRING_LENGTH = exports.SMALL_TYPE_LENGTH = exports.TYPE_LENGTH = exports.MERKLE_PROOF_LENGTH = exports.TRANSACTION_ID_LENGTH = exports.MESSAGE_ID_LENGTH = exports.UINT64_SIZE = exports.UINT32_SIZE = exports.UINT16_SIZE = exports.BYTE_SIZE = void 0;
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
 
 	exports.BYTE_SIZE = 1;
 	exports.UINT16_SIZE = 2;
@@ -444,6 +451,8 @@
 	var address = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.serializeEd25519Address = exports.deserializeEd25519Address = exports.serializeAddress = exports.deserializeAddress = exports.MIN_ED25519_ADDRESS_LENGTH = exports.MIN_ADDRESS_LENGTH = void 0;
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
 
 
 
@@ -632,6 +641,8 @@
 	var sha512 = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.Sha512 = void 0;
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
 	/* eslint-disable no-bitwise */
 	/**
 	 * Class to help with Sha512 scheme.
@@ -1270,6 +1281,8 @@
 	});
 
 	var randomHelper = createCommonjsModule(function (module, exports) {
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.RandomHelper = void 0;
 	/**
@@ -1309,6 +1322,8 @@
 	var bigIntHelper = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.BigIntHelper = void 0;
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
 	/* eslint-disable no-bitwise */
 
 	/**
@@ -1395,14 +1410,16 @@
 	});
 
 	var bigIntCommon = createCommonjsModule(function (module, exports) {
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
 	/* eslint-disable no-bitwise */
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.BIG_8388607 = exports.BIG_2097151 = exports.BIG_683901 = exports.BIG_136657 = exports.BIG_997805 = exports.BIG_654183 = exports.BIG_470296 = exports.BIG_666643 = exports.BIG_38 = exports.BIG_ARR = exports.BIG_1_SHIFTL_25 = exports.BIG_1_SHIFTL_24 = exports.BIG_1_SHIFTL_20 = void 0;
 	/**
 	 * This is a port of the Go code from https://github.com/hdevalence/ed25519consensus
 	 * which is an extension of https://github.com/golang/crypto/tree/master/ed25519
-	 * which in a port of the “ref10” implementation of ed25519 from SUPERCOP
+	 * which is in turn a port of the “ref10” implementation of ed25519 from SUPERCOP
 	 */
-	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.BIG_8388607 = exports.BIG_2097151 = exports.BIG_683901 = exports.BIG_136657 = exports.BIG_997805 = exports.BIG_654183 = exports.BIG_470296 = exports.BIG_666643 = exports.BIG_38 = exports.BIG_ARR = exports.BIG_1_SHIFTL_25 = exports.BIG_1_SHIFTL_24 = exports.BIG_1_SHIFTL_20 = void 0;
 	/* @internal */
 	exports.BIG_1_SHIFTL_20 = BigInt(1) << BigInt(20);
 	/* @internal */
@@ -1439,10 +1456,11 @@
 	});
 
 	var fieldElement = createCommonjsModule(function (module, exports) {
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.FieldElement = void 0;
 	/* eslint-disable no-bitwise */
-	/* eslint-disable max-len */
 	/**
 	 * This is a port of the Go code from https://github.com/hdevalence/ed25519consensus
 	 * which is an extension of https://github.com/golang/crypto/tree/master/ed25519
@@ -1534,16 +1552,26 @@
 	        var g719 = BigInt(19 * g.data[7]);
 	        var g819 = BigInt(19 * g.data[8]);
 	        var g919 = BigInt(19 * g.data[9]);
-	        var h0 = (f0 * g0) + (f12 * g919) + (f2 * g819) + (f32 * g719) + (f4 * g619) + (f52 * g519) + (f6 * g419) + (f72 * g319) + (f8 * g219) + (f92 * g119);
-	        var h1 = (f0 * g1) + (f1 * g0) + (f2 * g919) + (f3 * g819) + (f4 * g719) + (f5 * g619) + (f6 * g519) + (f7 * g419) + (f8 * g319) + (f9 * g219);
-	        var h2 = (f0 * g2) + (f12 * g1) + (f2 * g0) + (f32 * g919) + (f4 * g819) + (f52 * g719) + (f6 * g619) + (f72 * g519) + (f8 * g419) + (f92 * g319);
-	        var h3 = (f0 * g3) + (f1 * g2) + (f2 * g1) + (f3 * g0) + (f4 * g919) + (f5 * g819) + (f6 * g719) + (f7 * g619) + (f8 * g519) + (f9 * g419);
-	        var h4 = (f0 * g4) + (f12 * g3) + (f2 * g2) + (f32 * g1) + (f4 * g0) + (f52 * g919) + (f6 * g819) + (f72 * g719) + (f8 * g619) + (f92 * g519);
-	        var h5 = (f0 * g5) + (f1 * g4) + (f2 * g3) + (f3 * g2) + (f4 * g1) + (f5 * g0) + (f6 * g919) + (f7 * g819) + (f8 * g719) + (f9 * g619);
-	        var h6 = (f0 * g6) + (f12 * g5) + (f2 * g4) + (f32 * g3) + (f4 * g2) + (f52 * g1) + (f6 * g0) + (f72 * g919) + (f8 * g819) + (f92 * g719);
-	        var h7 = (f0 * g7) + (f1 * g6) + (f2 * g5) + (f3 * g4) + (f4 * g3) + (f5 * g2) + (f6 * g1) + (f7 * g0) + (f8 * g919) + (f9 * g819);
-	        var h8 = (f0 * g8) + (f12 * g7) + (f2 * g6) + (f32 * g5) + (f4 * g4) + (f52 * g3) + (f6 * g2) + (f72 * g1) + (f8 * g0) + (f92 * g919);
-	        var h9 = (f0 * g9) + (f1 * g8) + (f2 * g7) + (f3 * g6) + (f4 * g5) + (f5 * g4) + (f6 * g3) + (f7 * g2) + (f8 * g1) + (f9 * g0);
+	        var h0 = (f0 * g0) + (f12 * g919) + (f2 * g819) + (f32 * g719) +
+	            (f4 * g619) + (f52 * g519) + (f6 * g419) + (f72 * g319) + (f8 * g219) + (f92 * g119);
+	        var h1 = (f0 * g1) + (f1 * g0) + (f2 * g919) + (f3 * g819) + (f4 * g719) +
+	            (f5 * g619) + (f6 * g519) + (f7 * g419) + (f8 * g319) + (f9 * g219);
+	        var h2 = (f0 * g2) + (f12 * g1) + (f2 * g0) + (f32 * g919) + (f4 * g819) +
+	            (f52 * g719) + (f6 * g619) + (f72 * g519) + (f8 * g419) + (f92 * g319);
+	        var h3 = (f0 * g3) + (f1 * g2) + (f2 * g1) + (f3 * g0) + (f4 * g919) +
+	            (f5 * g819) + (f6 * g719) + (f7 * g619) + (f8 * g519) + (f9 * g419);
+	        var h4 = (f0 * g4) + (f12 * g3) + (f2 * g2) + (f32 * g1) + (f4 * g0) +
+	            (f52 * g919) + (f6 * g819) + (f72 * g719) + (f8 * g619) + (f92 * g519);
+	        var h5 = (f0 * g5) + (f1 * g4) + (f2 * g3) + (f3 * g2) + (f4 * g1) +
+	            (f5 * g0) + (f6 * g919) + (f7 * g819) + (f8 * g719) + (f9 * g619);
+	        var h6 = (f0 * g6) + (f12 * g5) + (f2 * g4) + (f32 * g3) + (f4 * g2) +
+	            (f52 * g1) + (f6 * g0) + (f72 * g919) + (f8 * g819) + (f92 * g719);
+	        var h7 = (f0 * g7) + (f1 * g6) + (f2 * g5) + (f3 * g4) + (f4 * g3) +
+	            (f5 * g2) + (f6 * g1) + (f7 * g0) + (f8 * g919) + (f9 * g819);
+	        var h8 = (f0 * g8) + (f12 * g7) + (f2 * g6) + (f32 * g5) + (f4 * g4) +
+	            (f52 * g3) + (f6 * g2) + (f72 * g1) + (f8 * g0) + (f92 * g919);
+	        var h9 = (f0 * g9) + (f1 * g8) + (f2 * g7) + (f3 * g6) + (f4 * g5) +
+	            (f5 * g4) + (f6 * g3) + (f7 * g2) + (f8 * g1) + (f9 * g0);
 	        this.combine(h0, h1, h2, h3, h4, h5, h6, h7, h8, h9);
 	    };
 	    /**
@@ -2104,13 +2132,10 @@
 	});
 
 	var cachedGroupElement = createCommonjsModule(function (module, exports) {
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.CachedGroupElement = void 0;
-	/**
-	 * This is a port of the Go code from https://github.com/hdevalence/ed25519consensus
-	 * which is an extension of https://github.com/golang/crypto/tree/master/ed25519
-	 * which in a port of the “ref10” implementation of ed25519 from SUPERCOP
-	 */
 
 	/**
 	 * Cached group element.
@@ -2136,6 +2161,8 @@
 	});
 
 	var completedGroupElement = createCommonjsModule(function (module, exports) {
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.CompletedGroupElement = void 0;
 
@@ -2260,6 +2287,8 @@
 	var preComputedGroupElement = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.PreComputedGroupElement = void 0;
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
 	/* eslint-disable no-bitwise */
 	/**
 	 * This is a port of the Go code from https://github.com/hdevalence/ed25519consensus
@@ -2349,6 +2378,8 @@
 	});
 
 	var _const = createCommonjsModule(function (module, exports) {
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.CONST_BASE = exports.CONST_BI = exports.CONST_ORDER = exports.CONST_A = exports.CONST_SQRT_M1 = exports.CONST_D2 = exports.CONST_D = void 0;
 	/* eslint-disable max-len */
@@ -2712,6 +2743,8 @@
 	var projectiveGroupElement = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.ProjectiveGroupElement = void 0;
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
 	/* eslint-disable no-bitwise */
 	/**
 	 * This is a port of the Go code from https://github.com/hdevalence/ed25519consensus
@@ -2879,6 +2912,8 @@
 	});
 
 	var extendedGroupElement = createCommonjsModule(function (module, exports) {
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.ExtendedGroupElement = void 0;
 	/* eslint-disable no-bitwise */
@@ -3099,7 +3134,8 @@
 	var scalar = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.scalarMinimal = exports.scalarReduce = exports.scalarMulAdd = void 0;
-	/* eslint-disable max-len */
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
 	/* eslint-disable no-bitwise */
 	/**
 	 * This is a port of the Go code from https://github.com/hdevalence/ed25519consensus
@@ -3171,13 +3207,20 @@
 	    var s5 = c5 + (a0 * b5) + (a1 * b4) + (a2 * b3) + (a3 * b2) + (a4 * b1) + (a5 * b0);
 	    var s6 = c6 + (a0 * b6) + (a1 * b5) + (a2 * b4) + (a3 * b3) + (a4 * b2) + (a5 * b1) + (a6 * b0);
 	    var s7 = c7 + (a0 * b7) + (a1 * b6) + (a2 * b5) + (a3 * b4) + (a4 * b3) + (a5 * b2) + (a6 * b1) + (a7 * b0);
-	    var s8 = c8 + (a0 * b8) + (a1 * b7) + (a2 * b6) + (a3 * b5) + (a4 * b4) + (a5 * b3) + (a6 * b2) + (a7 * b1) + (a8 * b0);
-	    var s9 = c9 + (a0 * b9) + (a1 * b8) + (a2 * b7) + (a3 * b6) + (a4 * b5) + (a5 * b4) + (a6 * b3) + (a7 * b2) + (a8 * b1) + (a9 * b0);
-	    var s10 = c10 + (a0 * b10) + (a1 * b9) + (a2 * b8) + (a3 * b7) + (a4 * b6) + (a5 * b5) + (a6 * b4) + (a7 * b3) + (a8 * b2) + (a9 * b1) + (a10 * b0);
-	    var s11 = c11 + (a0 * b11) + (a1 * b10) + (a2 * b9) + (a3 * b8) + (a4 * b7) + (a5 * b6) + (a6 * b5) + (a7 * b4) + (a8 * b3) + (a9 * b2) + (a10 * b1) + (a11 * b0);
-	    var s12 = (a1 * b11) + (a2 * b10) + (a3 * b9) + (a4 * b8) + (a5 * b7) + (a6 * b6) + (a7 * b5) + (a8 * b4) + (a9 * b3) + (a10 * b2) + (a11 * b1);
-	    var s13 = (a2 * b11) + (a3 * b10) + (a4 * b9) + (a5 * b8) + (a6 * b7) + (a7 * b6) + (a8 * b5) + (a9 * b4) + (a10 * b3) + (a11 * b2);
-	    var s14 = (a3 * b11) + (a4 * b10) + (a5 * b9) + (a6 * b8) + (a7 * b7) + (a8 * b6) + (a9 * b5) + (a10 * b4) + (a11 * b3);
+	    var s8 = c8 + (a0 * b8) + (a1 * b7) + (a2 * b6) + (a3 * b5) +
+	        (a4 * b4) + (a5 * b3) + (a6 * b2) + (a7 * b1) + (a8 * b0);
+	    var s9 = c9 + (a0 * b9) + (a1 * b8) + (a2 * b7) + (a3 * b6) +
+	        (a4 * b5) + (a5 * b4) + (a6 * b3) + (a7 * b2) + (a8 * b1) + (a9 * b0);
+	    var s10 = c10 + (a0 * b10) + (a1 * b9) + (a2 * b8) + (a3 * b7) + (a4 * b6) +
+	        (a5 * b5) + (a6 * b4) + (a7 * b3) + (a8 * b2) + (a9 * b1) + (a10 * b0);
+	    var s11 = c11 + (a0 * b11) + (a1 * b10) + (a2 * b9) + (a3 * b8) + (a4 * b7) +
+	        (a5 * b6) + (a6 * b5) + (a7 * b4) + (a8 * b3) + (a9 * b2) + (a10 * b1) + (a11 * b0);
+	    var s12 = (a1 * b11) + (a2 * b10) + (a3 * b9) + (a4 * b8) + (a5 * b7) +
+	        (a6 * b6) + (a7 * b5) + (a8 * b4) + (a9 * b3) + (a10 * b2) + (a11 * b1);
+	    var s13 = (a2 * b11) + (a3 * b10) + (a4 * b9) + (a5 * b8) + (a6 * b7) +
+	        (a7 * b6) + (a8 * b5) + (a9 * b4) + (a10 * b3) + (a11 * b2);
+	    var s14 = (a3 * b11) + (a4 * b10) + (a5 * b9) + (a6 * b8) + (a7 * b7) +
+	        (a8 * b6) + (a9 * b5) + (a10 * b4) + (a11 * b3);
 	    var s15 = (a4 * b11) + (a5 * b10) + (a6 * b9) + (a7 * b8) + (a8 * b7) + (a9 * b6) + (a10 * b5) + (a11 * b4);
 	    var s16 = (a5 * b11) + (a6 * b10) + (a7 * b9) + (a8 * b8) + (a9 * b7) + (a10 * b6) + (a11 * b5);
 	    var s17 = (a6 * b11) + (a7 * b10) + (a8 * b9) + (a9 * b8) + (a10 * b7) + (a11 * b6);
@@ -3853,9 +3896,11 @@
 	});
 
 	var ed25519 = createCommonjsModule(function (module, exports) {
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
+	/* eslint-disable no-bitwise */
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.Ed25519 = void 0;
-	/* eslint-disable no-bitwise */
 	/**
 	 * This is a port of the Go code from https://github.com/hdevalence/ed25519consensus
 	 * which is an extension of https://github.com/golang/crypto/tree/master/ed25519
@@ -4071,6 +4116,8 @@
 	var output = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.serializeSigLockedSingleOutput = exports.deserializeSigLockedSingleOutput = exports.serializeOutput = exports.deserializeOutput = exports.serializeOutputs = exports.deserializeOutputs = exports.MIN_SIG_LOCKED_OUTPUT_LENGTH = exports.MIN_OUTPUT_LENGTH = void 0;
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
 
 
 
@@ -4175,6 +4222,8 @@
 	var transaction = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.serializeTransactionEssence = exports.deserializeTransactionEssence = exports.MIN_TRANSACTION_ESSENCE_LENGTH = void 0;
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
 
 
 
@@ -4257,6 +4306,8 @@
 	var signature = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.serializeEd25519Signature = exports.deserializeEd25519Signature = exports.serializeSignature = exports.deserializeSignature = exports.MIN_ED25519_SIGNATURE_LENGTH = exports.MIN_SIGNATURE_LENGTH = void 0;
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
 
 
 
@@ -4335,6 +4386,8 @@
 	var unlockBlock = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.serializeReferenceUnlockBlock = exports.deserializeReferenceUnlockBlock = exports.serializeSignatureUnlockBlock = exports.deserializeSignatureUnlockBlock = exports.serializeUnlockBlock = exports.deserializeUnlockBlock = exports.serializeUnlockBlocks = exports.deserializeUnlockBlocks = exports.MIN_REFERENCE_UNLOCK_BLOCK_LENGTH = exports.MIN_SIGNATURE_UNLOCK_BLOCK_LENGTH = exports.MIN_UNLOCK_BLOCK_LENGTH = void 0;
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
 
 
 
@@ -4474,6 +4527,8 @@
 	var payload = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.serializeIndexationPayload = exports.deserializeIndexationPayload = exports.serializeMilestonePayload = exports.deserializeMilestonePayload = exports.serializeTransactionPayload = exports.deserializeTransactionPayload = exports.serializePayload = exports.deserializePayload = exports.MIN_TRANSACTION_PAYLOAD_LENGTH = exports.MIN_INDEXATION_PAYLOAD_LENGTH = exports.MIN_MILESTONE_PAYLOAD_LENGTH = exports.MIN_PAYLOAD_LENGTH = void 0;
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
 
 
 
@@ -4751,6 +4806,8 @@
 	});
 
 	var clientError = createCommonjsModule(function (module, exports) {
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
 	var __extends = (commonjsGlobal && commonjsGlobal.__extends) || (function () {
 	    var extendStatics = function (d, b) {
 	        extendStatics = Object.setPrototypeOf ||
@@ -4766,9 +4823,6 @@
 	})();
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.ClientError = void 0;
-	/**
-	 * Class to handle http errors.
-	 */
 	var ClientError = /** @class */ (function (_super) {
 	    __extends(ClientError, _super);
 	    /**
@@ -4794,6 +4848,8 @@
 	var converter = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.Converter = void 0;
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
 	/* eslint-disable no-bitwise */
 	/**
 	 * Convert arrays to and from different formats.
@@ -4940,6 +4996,8 @@
 	var readStream = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.ReadStream = void 0;
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
 	/* eslint-disable no-bitwise */
 
 
@@ -5133,6 +5191,8 @@
 	};
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.MqttClient = void 0;
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
 	var mqtt = __importStar(require$$0__default$1['default']);
 
 
@@ -5580,9 +5640,11 @@
 	});
 
 	var bech32 = createCommonjsModule(function (module, exports) {
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
+	/* eslint-disable no-bitwise */
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.Bech32 = void 0;
-	/* eslint-disable no-bitwise */
 	/**
 	 * Class to help with Bech32 encoding/decoding.
 	 * Based on reference implementation https://github.com/sipa/bech32/blob/master/ref/javascript/bech32.js
@@ -5827,6 +5889,8 @@
 	var bech32Helper = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.Bech32Helper = void 0;
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
 	/* eslint-disable no-bitwise */
 
 	/**
@@ -5896,6 +5960,8 @@
 	var writeStream = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.WriteStream = void 0;
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
 	/* eslint-disable no-bitwise */
 
 
@@ -6096,6 +6162,8 @@
 	};
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.SingleNodeClient = void 0;
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
 
 
 
@@ -6534,6 +6602,8 @@
 	});
 
 	var bip32Path = createCommonjsModule(function (module, exports) {
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.Bip32Path = void 0;
 	/**
@@ -6598,6 +6668,8 @@
 	var curl = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.Curl = void 0;
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
 	/* eslint-disable no-bitwise */
 	/**
 	 * Class to implement Curl sponge.
@@ -6702,6 +6774,8 @@
 	var hmacSha512 = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.HmacSha512 = void 0;
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
 	/* eslint-disable no-bitwise */
 
 	/**
@@ -6770,6 +6844,8 @@
 	var slip0010 = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.Slip0010 = void 0;
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
 	/* eslint-disable no-bitwise */
 
 
@@ -6852,6 +6928,8 @@
 	var zip215 = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.Zip215 = void 0;
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
 	/* eslint-disable no-bitwise */
 	/**
 	 * This is a port of the Go code from https://github.com/hdevalence/ed25519consensus
@@ -6961,6 +7039,8 @@
 	};
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.getUnspentAddresses = void 0;
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
 
 
 
@@ -7513,6 +7593,8 @@
 	};
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.buildTransactionPayload = exports.sendAdvanced = void 0;
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
 
 
 
@@ -7694,6 +7776,8 @@
 	};
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.calculateInputs = exports.sendMultipleEd25519 = exports.sendMultiple = exports.sendEd25519 = exports.send = void 0;
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
 
 
 
@@ -8142,6 +8226,8 @@
 	var b1t6 = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.B1T6 = void 0;
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
 	/* eslint-disable no-bitwise */
 	/**
 	 * Class implements the b1t6 encoding encoding which uses a group of 6 trits to encode each byte.
@@ -8242,6 +8328,8 @@
 	var powHelper = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.PowHelper = void 0;
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
 	/* eslint-disable no-bitwise */
 
 
@@ -8355,6 +8443,8 @@
 	};
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.LocalPowProvider = void 0;
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
 
 
 
@@ -8758,6 +8848,8 @@
 	};
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.MessageHelper = void 0;
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
 
 
 
@@ -8994,6 +9086,8 @@
 	    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 	};
 	Object.defineProperty(exports, "__esModule", { value: true });
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
 	__exportStar(ed25519Address, exports);
 	__exportStar(address, exports);
 	__exportStar(common, exports);
@@ -9086,6 +9180,8 @@
 	    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 	};
 	Object.defineProperty(exports, "__esModule", { value: true });
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
 	__exportStar(es, exports);
 
 	});

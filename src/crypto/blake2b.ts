@@ -1,4 +1,7 @@
+// Copyright 2020 IOTA Stiftung
+// SPDX-License-Identifier: Apache-2.0
 /* eslint-disable no-bitwise */
+
 /**
  * Class to help with Blake2B Signature scheme.
  * TypeScript conversion from https://github.com/dcposch/blakejs

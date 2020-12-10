@@ -1,4 +1,7 @@
+// Copyright 2020 IOTA Stiftung
+// SPDX-License-Identifier: Apache-2.0
 /* eslint-disable no-bitwise */
+
 /**
  * Class to help with Bech32 encoding/decoding.
  * Based on reference implementation https://github.com/sipa/bech32/blob/master/ref/javascript/bech32.js

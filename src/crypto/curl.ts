@@ -1,3 +1,5 @@
+// Copyright 2020 IOTA Stiftung
+// SPDX-License-Identifier: Apache-2.0
 /* eslint-disable no-bitwise */
 /**
  * Class to implement Curl sponge.

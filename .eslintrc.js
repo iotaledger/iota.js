@@ -23,7 +23,8 @@ module.exports = {
         "@typescript-eslint",
         "import",
         "jsdoc",
-        "unicorn"
+        "unicorn",
+        "header"
     ],
     "settings": {
         "jsdoc": {
@@ -1328,6 +1329,7 @@ module.exports = {
         ],
         "jsdoc/newline-after-description": "off",
         "jsdoc/require-param-type": "off",
-        "jsdoc/require-returns-type": "off"
+        "jsdoc/require-returns-type": "off",
+        "header/header": [2, "line", [" Copyright 2020 IOTA Stiftung", " SPDX-License-Identifier: Apache-2.0"]]
     }
 };

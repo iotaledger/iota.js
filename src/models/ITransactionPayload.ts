@@ -1,3 +1,5 @@
+// Copyright 2020 IOTA Stiftung
+// SPDX-License-Identifier: Apache-2.0
 import { IReferenceUnlockBlock } from "./IReferenceUnlockBlock";
 import { ISignatureUnlockBlock } from "./ISignatureUnlockBlock";
 import { ITransactionEssence } from "./ITransactionEssence";

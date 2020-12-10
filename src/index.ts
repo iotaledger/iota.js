@@ -1,3 +1,5 @@
+// Copyright 2020 IOTA Stiftung
+// SPDX-License-Identifier: Apache-2.0
 export * from "./addressTypes/ed25519Address";
 export * from "./binary/address";
 export * from "./binary/common";

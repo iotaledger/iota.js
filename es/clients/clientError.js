@@ -1,4 +1,6 @@
 "use strict";
+// Copyright 2020 IOTA Stiftung
+// SPDX-License-Identifier: Apache-2.0
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -14,9 +16,6 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ClientError = void 0;
-/**
- * Class to handle http errors.
- */
 var ClientError = /** @class */ (function (_super) {
     __extends(ClientError, _super);
     /**
@@ -36,4 +35,4 @@ var ClientError = /** @class */ (function (_super) {
     return ClientError;
 }(Error));
 exports.ClientError = ClientError;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiY2xpZW50RXJyb3IuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi9zcmMvY2xpZW50cy9jbGllbnRFcnJvci50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7Ozs7O0FBQUE7O0dBRUc7QUFDSDtJQUFpQywrQkFBSztJQWdCbEM7Ozs7OztPQU1HO0lBQ0gscUJBQVksT0FBZSxFQUFFLEtBQWEsRUFBRSxVQUFrQixFQUFFLElBQWE7UUFBN0UsWUFDSSxrQkFBTSxPQUFPLENBQUMsU0FJakI7UUFIRyxLQUFJLENBQUMsS0FBSyxHQUFHLEtBQUssQ0FBQztRQUNuQixLQUFJLENBQUMsVUFBVSxHQUFHLFVBQVUsQ0FBQztRQUM3QixLQUFJLENBQUMsSUFBSSxHQUFHLElBQUksQ0FBQzs7SUFDckIsQ0FBQztJQUNMLGtCQUFDO0FBQUQsQ0FBQyxBQTdCRCxDQUFpQyxLQUFLLEdBNkJyQztBQTdCWSxrQ0FBVyJ9
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiY2xpZW50RXJyb3IuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi9zcmMvY2xpZW50cy9jbGllbnRFcnJvci50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiO0FBQUEsK0JBQStCO0FBQy9CLHNDQUFzQzs7Ozs7Ozs7Ozs7Ozs7OztBQUV0QztJQUFpQywrQkFBSztJQWdCbEM7Ozs7OztPQU1HO0lBQ0gscUJBQVksT0FBZSxFQUFFLEtBQWEsRUFBRSxVQUFrQixFQUFFLElBQWE7UUFBN0UsWUFDSSxrQkFBTSxPQUFPLENBQUMsU0FJakI7UUFIRyxLQUFJLENBQUMsS0FBSyxHQUFHLEtBQUssQ0FBQztRQUNuQixLQUFJLENBQUMsVUFBVSxHQUFHLFVBQVUsQ0FBQztRQUM3QixLQUFJLENBQUMsSUFBSSxHQUFHLElBQUksQ0FBQzs7SUFDckIsQ0FBQztJQUNMLGtCQUFDO0FBQUQsQ0FBQyxBQTdCRCxDQUFpQyxLQUFLLEdBNkJyQztBQTdCWSxrQ0FBVyJ9

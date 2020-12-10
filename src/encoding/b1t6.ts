@@ -1,3 +1,5 @@
+// Copyright 2020 IOTA Stiftung
+// SPDX-License-Identifier: Apache-2.0
 /* eslint-disable no-bitwise */
 /**
  * Class implements the b1t6 encoding encoding which uses a group of 6 trits to encode each byte.

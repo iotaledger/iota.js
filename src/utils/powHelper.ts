@@ -1,3 +1,5 @@
+// Copyright 2020 IOTA Stiftung
+// SPDX-License-Identifier: Apache-2.0
 /* eslint-disable no-bitwise */
 import { Blake2b } from "../crypto/blake2b";
 import { Curl } from "../crypto/curl";

@@ -1,3 +1,5 @@
+// Copyright 2020 IOTA Stiftung
+// SPDX-License-Identifier: Apache-2.0
 import { Bip32Path } from "../crypto/bip32Path";
 import { IKeyPair } from "./IKeyPair";
 

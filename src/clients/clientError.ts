@@ -1,6 +1,6 @@
-/**
- * Class to handle http errors.
- */
+// Copyright 2020 IOTA Stiftung
+// SPDX-License-Identifier: Apache-2.0
+
 export class ClientError extends Error {
     /**
      * The route the request was made to.
