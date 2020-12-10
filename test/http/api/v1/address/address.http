@@ -1,0 +1,5 @@
+# Use https://marketplace.visualstudio.com/items?itemName=humao.rest-client to execute these in VSCode
+
+### Address data
+GET http://localhost:14265/api/v1/addresses/6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92
+Content-Type: application/json

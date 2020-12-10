@@ -1,83 +1,80 @@
 {
-    "name": "iota-js",
-    "version": "1.0.0-alpha.1",
-    "description": "IOTA Client Reference Implementation",
-    "scripts": {
-        "init": "npm i && lerna bootstrap",
-        "test": "lerna exec -- npm test",
-        "test-ci": "lerna bootstrap && lerna exec -- npm run test-ci && npm run lint",
-        "test-android": "lerna bootstrap && lerna run test-android --stream",
-        "test-android-ci": "lerna bootstrap && lerna run test-android-ci --stream",
-        "test:staged": "node scripts/test-staged.js",
-        "lint": "tslint --project .",
-        "docs": "lerna run docs",
-        "publish": "lerna publish"
-    },
-    "contributors": [
-        "Dominik Schiener <dom@iota.org> (https://iota.org)",
-        "Edward Greve <edward@iota.org> (https://github.com/anyong)",
-        "Chris Dukakis <chris.dukakis@iota.org> (https://github.com/chrisdukakis)"
-    ],
-    "ava": {
-        "files": [
-            "packages/**/out/**/test/*.test.js",
-            "packages/**/out/**/test/integration/*.test.js"
-        ],
-        "failFast": true,
-        "failWithoutAssertions": false,
-        "compileEnhancements": false,
-        "verbose": true
-    },
-    "husky": {
-        "hooks": {
-            "pre-commit": "lint-staged && node ./scripts/test-staged.js",
-            "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-        }
-    },
-    "lint-staged": {
-        "*.{ts}": [
-            "tslint --fix"
-        ],
-        "*.{js,ts,json}": [
-            "prettier --write"
-        ]
-    },
+    "name": "@iota/iota.js",
+    "description": "IOTA JavaScript Library for Chrysalis",
+    "version": "1.5.0-alpha.1",
     "keywords": [
         "iota",
-        "tangle",
-        "library",
-        "javascript",
-        "nodejs",
-        "API"
+        "client"
     ],
-    "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/iotaledger/iota.lib.js/issues"
-    },
+    "authors": [
+        "Martyn Janes <martyn.janes@iota.org>"
+    ],
     "repository": {
         "type": "git",
-        "url": "https://github.com/iotaledger/iota.lib.js.git"
+        "url": "https://github.com/iotaledger/iota.js.git"
     },
+    "license": "MIT",
     "dependencies": {
-        "@types/bluebird": "^3.5.32",
-        "@types/node": "^12.0.0",
-        "bluebird": "^3.7.2"
+        "mqtt": "^4.2.4",
+        "node-fetch": "^2.6.1"
     },
+    "scripts": {
+        "build-clean": "rimraf ./es/*",
+        "build-lint": "eslint src --ext .tsx,.ts",
+        "build-compile": "tsc",
+        "build-watch": "tsc --watch",
+        "build": "run-s build-clean build-lint build-compile",
+        "test": "jest",
+        "package-umd": "rollup --config rollup.config.js",
+        "package-umd-min": "rollup --config rollup.config.js --environment MINIFY:true",
+        "package-umd-browser": "rollup --config rollup.config.js --environment BROWSER:true",
+        "package-umd-browser-min": "rollup --config rollup.config.js --environment BROWSER:true --environment MINIFY:true",
+        "package": "run-s package-umd package-umd-min package-umd-browser package-umd-browser-min",
+        "dist-clean": "rimraf ./dist/* ./typings/*",
+        "typings": "tsc --emitDeclarationOnly --declaration true --declarationDir typings",
+        "docs-clean": "rimraf ./docs/*",
+        "docs-build": "typedoc --module commonjs --disableSources --excludePrivate --stripInternal --excludeNotExported --excludeNotDocumented --theme markdown --readme none --hideGenerator --mode file --target es6 --exclude ./**/src/index.ts --out ./docs ./src",
+        "docs": "npm-run-all docs-clean docs-build",
+        "dist": "run-s dist-clean build test package typings docs"
+    },
+    "browserslist": [
+        ">0.2%",
+        "not dead",
+        "not ie <= 11",
+        "not op_mini all"
+    ],
     "devDependencies": {
-        "@commitlint/cli": "^9.1.2",
-        "@commitlint/config-conventional": "^11.0.0",
-        "@commitlint/travis-cli": "^9.0.0",
-        "ava": "^3.0.0",
-        "dmd-clear": "^0.1.2",
-        "husky": "^3.0.0",
-        "jsdoc-babel": "^0.5.0",
-        "lerna": "^3.22.1",
-        "lint-staged": "^10.2.10",
-        "nyc": "^15.1.0",
-        "prettier": "^2.0.5",
-        "staged-git-files": "^1.1.1",
-        "tslint": "^5.9.1",
-        "tslint-config-prettier": "^1.6.0",
-        "typescript": "^3.1.3"
-    }
+        "@rollup/plugin-commonjs": "^15.1.0",
+        "@rollup/plugin-node-resolve": "^11.0.0",
+        "@types/jest": "^26.0.15",
+        "@types/node-fetch": "^2.5.7",
+        "@typescript-eslint/eslint-plugin": "^4.5.0",
+        "@typescript-eslint/parser": "^4.5.0",
+        "cross-env": "^7.0.2",
+        "eslint": "^7.11.0",
+        "eslint-plugin-import": "^2.22.1",
+        "eslint-plugin-jsdoc": "^30.7.3",
+        "eslint-plugin-unicorn": "^23.0.0",
+        "jest": "^26.6.0",
+        "npm-run-all": "^4.1.5",
+        "rimraf": "^3.0.2",
+        "rollup": "^2.32.1",
+        "rollup-plugin-terser": "^7.0.2",
+        "ts-jest": "^26.4.1",
+        "ts-node": "^9.0.0",
+        "typedoc": "^0.19.2",
+        "typedoc-plugin-markdown": "^3.0.11",
+        "typescript": "^4.0.3"
+    },
+    "main": "dist/iota.js",
+    "browser": "dist/iota.browser.js",
+    "module": "es/index.js",
+    "typings": "typings/index.d.ts",
+    "files": [
+        "dist",
+        "lib",
+        "es",
+        "src",
+        "typings"
+    ]
 }

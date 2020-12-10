@@ -1,0 +1,10 @@
+# Use https://marketplace.visualstudio.com/items?itemName=humao.rest-client to execute these in VSCode
+
+### Add Peer
+POST http://localhost:14265/api/v1/peers
+Content-Type: application/json
+
+{
+    "multiAddress": "/ip4/127.0.0.1/tcp/15601",
+    "alias": "fred"
+}

@@ -1,0 +1,225 @@
+<html>
+
+<head>
+    <title>iota.js Simple Browser Example</title>
+</head>
+
+<body>
+    <h1>iota.js Simple Browser Example</h1>
+    <pre id="console"></pre>
+    <script src="../../dist/iota.browser.js"></script>
+    <script>
+        function consoleLog(message, obj) {
+            const con = document.getElementById("console");
+            con.innerHTML += (message || "").replace("\t", "&nbsp;&nbsp;&nbsp;") + " " + (obj ? JSON.stringify(obj) : "") + "<br/>";
+        }
+        function consoleLink(lnk) {
+            const con = document.getElementById("console");
+            con.innerHTML += `<a href="${lnk}" target="_blank">${lnk}</a><br/>`;
+        }
+
+        async function run() {
+            Iota.setLogger(consoleLog);
+            const client = new Iota.SingleNodeClient("http://localhost:14265/");
+
+            const health = await client.health();
+            consoleLog("Is the node healthy", health ? "Yes" : "No");
+            consoleLog();
+
+            const info = await client.info();
+            consoleLog("Node Info");
+            Iota.logInfo("", info);
+            consoleLog();
+
+            const tips = await client.tips();
+            consoleLog("Tips");
+            Iota.logTips("", tips);
+            consoleLog();
+
+            const submitMessage = {
+                version: 1,
+                parent1MessageId: tips.tip1MessageId,
+                parent2MessageId: tips.tip2MessageId,
+                payload: {
+                    type: 2,
+                    index: "Foo",
+                    data: Iota.Converter.asciiToHex("Bar")
+                }
+            };
+
+            const messageIdCreated = await client.messageSubmit(submitMessage);
+            consoleLog("Submit Message:");
+            consoleLog("\tMessage Id", messageIdCreated);
+            consoleLog();
+
+            const message = await client.message(messageIdCreated);
+            consoleLog("Get Message");
+            Iota.logMessage("", message);
+            consoleLog();
+
+            const messageMetadata = await client.messageMetadata(messageIdCreated);
+            consoleLog("Message Metadata");
+            Iota.logMessageMetadata("", messageMetadata);
+            consoleLog();
+
+            const messageRaw = await client.messageRaw(messageIdCreated);
+            consoleLog("Message Raw");
+            consoleLog("\tRaw:", Iota.Converter.bytesToHex(messageRaw));
+            consoleLog();
+
+            const decoded = Iota.deserializeMessage(new Iota.ReadStream(messageRaw));
+            consoleLog("Message Decoded");
+            Iota.logMessage("", decoded);
+            consoleLog();
+
+            const messages = await client.messagesFind("Foo");
+            consoleLog("Messages");
+            consoleLog("\tIndex:", messages.index);
+            consoleLog("\tMax Results:", messages.maxResults);
+            consoleLog("\tCount:", messages.count);
+            consoleLog("\tMessage Ids:", messages.messageIds);
+            consoleLog();
+
+            const children = await client.messageChildren(tips.tip1MessageId);
+            consoleLog("Children");
+            consoleLog("\tMessage Id:", children.messageId);
+            consoleLog("\tMax Results:", children.maxResults);
+            consoleLog("\tCount:", children.count);
+            consoleLog("\tChildren Message Ids:", children.childrenMessageIds);
+            consoleLog();
+
+            const milestone = await client.milestone(info.latestMilestoneIndex);
+            consoleLog("Milestone");
+            consoleLog("\tMilestone Index:", milestone.milestoneIndex);
+            consoleLog("\tMessage Id:", milestone.messageId);
+            consoleLog("\tTimestamp:", milestone.timestamp);
+            consoleLog();
+
+            const output = await client.output("00000000000000000000000000000000000000000000000000000000000000000000");
+            consoleLog("Output");
+            consoleLog("\tMessage Id:", output.messageId);
+            consoleLog("\tTransaction Id:", output.transactionId);
+            consoleLog("\tOutput Index:", output.outputIndex);
+            consoleLog("\tIs Spent:", output.isSpent);
+            Iota.logOutput("\t", output.output);
+            consoleLog();
+
+            const address = await client.addressEd25519(output.output.address.address);
+            consoleLog("Address");
+            consoleLog("\tAddress:", address.address);
+            consoleLog("\tMax Results:", address.maxResults);
+            consoleLog("\tCount:", address.count);
+            consoleLog("\tBalance:", address.balance);
+            consoleLog();
+
+            const addressOutputs = await client.addressEd25519Outputs(output.output.address.address);
+            consoleLog("Address Outputs");
+            consoleLog("\tAddress:", addressOutputs.address);
+            consoleLog("\tMax Results:", addressOutputs.maxResults);
+            consoleLog("\tCount:", addressOutputs.count);
+            consoleLog("\tOutput Ids:", addressOutputs.outputIds);
+            consoleLog();
+
+            await doTransfer(client);
+        }
+
+        async function doTransfer(client) {
+            // These are the default values from the Hornet alphanet configuration
+            const privateKey = "256a818b2aac458941f7274985a410e57fb750f3a3a67969ece5bd9ae7eef5b2f7868ab6bb55800b77b8b74191ad8285a9bf428ace579d541fda47661803ff44";
+            const publicKey = "f7868ab6bb55800b77b8b74191ad8285a9bf428ace579d541fda47661803ff44";
+
+            consoleLog("Genesis");
+            consoleLog("\tPrivate Key:", privateKey);
+            consoleLog("\tPublic Key:", publicKey);
+
+            const genesisSeedKeyPair = {
+                privateKey: Iota.Converter.hexToBytes(privateKey),
+                publicKey: Iota.Converter.hexToBytes(publicKey)
+            };
+
+            const ed25519Address = new Iota.Ed25519Address();
+            const genesisAddress = ed25519Address.publicKeyToAddress(genesisSeedKeyPair.publicKey);
+            const genesisAddressHex = Iota.Converter.bytesToHex(genesisAddress);
+            consoleLog("\tAddress Ed25519:", genesisAddressHex);
+            consoleLog("\tAddress Bech32:", Iota.Bech32Helper.toBech32(Iota.ED25519_ADDRESS_TYPE, genesisAddress));
+
+            // Create a new seed for the wallet
+            const walletSeed = new Iota.Ed25519Seed(Iota.Converter.hexToBytes("e57fb750f3a3a67969ece5bd9ae7eef5b2256a818b2aac458941f7274985a410"));
+
+            // Use the new seed like a wallet with Bip32 Paths
+            const walletPath = new Iota.Bip32Path("m/0");
+            const walletAddressSeed = walletSeed.generateSeedFromPath(walletPath);
+            const walletEd25519Address = new Iota.Ed25519Address();
+            const newAddress = walletEd25519Address.publicKeyToAddress(walletAddressSeed.keyPair().publicKey);
+            const newAddressHex = Iota.Converter.bytesToHex(newAddress);
+
+            consoleLog("Wallet 1");
+            consoleLog("\tSeed:", Iota.Converter.bytesToHex(walletSeed.toBytes()));
+            consoleLog("\tPath:", walletPath.toString());
+            consoleLog(`\tAddress Ed25519 ${walletPath.toString()}:`, newAddressHex);
+            consoleLog(`\tAddress Bech32 ${walletPath.toString()}:`, Iota.Bech32Helper.toBech32(Iota.ED25519_ADDRESS_TYPE, newAddress));
+            consoleLog();
+
+            // Because we are using the genesis address we must use send advanced as the input address is
+            // not calculated from a Bip32 path, if you were doing a wallet to wallet transfer you can just use send
+            // which calculates all the inputs/outputs for you
+            const genesisAddressOutputs = await client.addressEd25519Outputs(genesisAddressHex);
+
+            const inputsWithKeyPairs = [];
+
+            let totalGenesis = 0;
+
+            for (let i = 0; i < genesisAddressOutputs.outputIds.length; i++) {
+                const output = await client.output(genesisAddressOutputs.outputIds[i]);
+                if (!output.isSpent) {
+                    inputsWithKeyPairs.push({
+                        input: {
+                            type: 0,
+                            transactionId: output.transactionId,
+                            transactionOutputIndex: output.outputIndex
+                        },
+                        addressKeyPair: genesisSeedKeyPair
+                    });
+                    totalGenesis += output.output.amount;
+                }
+            }
+
+            const amountToSend = 1000;
+
+            const outputs = [
+                // This is the transfer to the new address
+                {
+                    address: newAddressHex,
+                    addressType: Iota.ED25519_ADDRESS_TYPE,
+                    amount: amountToSend
+                },
+                // Sending remainder back to genesis
+                {
+                    address: genesisAddressHex,
+                    addressType: Iota.ED25519_ADDRESS_TYPE,
+                    amount: totalGenesis - amountToSend
+                }
+            ];
+
+            const { messageId } = await Iota.sendAdvanced(client, inputsWithKeyPairs, outputs, "WALLET", Iota.Converter.asciiToBytes("Not trinity"));
+
+            consoleLog("Created Message Id", messageId);
+
+            const newAddressBalance = await Iota.getBalance(client, walletSeed, new Iota.Bip32Path());
+            consoleLog("Wallet 1 Address Balance", newAddressBalance);
+
+            const unspentAddress = await Iota.getUnspentAddress(client, walletSeed, new Iota.Bip32Path());
+            consoleLog("Wallet 1 First Unspent Address", unspentAddress);
+
+            const allUspentAddresses = await Iota.getUnspentAddresses(client, walletSeed, new Iota.Bip32Path());
+            consoleLog("Wallet 1 Unspent Addresses", allUspentAddresses);
+        }
+
+        run()
+            .then(() => consoleLog("Done"))
+            .catch((err) => consoleLog(err.toString()));
+
+    </script>
+</body>
+
+</html>

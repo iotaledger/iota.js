@@ -1,5 +1,0 @@
-rootProject.name = 'mobile'
-include ':@iota_pearl-diver-react-native'
-project(':@iota_pearl-diver-react-native').projectDir = new File(rootProject.projectDir, '../node_modules/@iota/pearl-diver-react-native/android')
-
-include ':app'

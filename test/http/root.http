@@ -1,0 +1,5 @@
+# Use https://marketplace.visualstudio.com/items?itemName=humao.rest-client to execute these in VSCode
+
+### Root - Should return a 404
+GET http://localhost:14265/
+Content-Type: application/json

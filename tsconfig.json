@@ -1,12 +1,16 @@
 {
-    "compilerOptions": {
-        "lib": ["dom", "es2015"],
-        "noImplicitThis": true,
-        "strict": true,
-        "outDir": "out",
-        "typeRoots": ["node_modules/@types"],
-        "declaration": true,
-        "declarationDir": "typings",
-        "sourceMap": true
-    }
+  "compilerOptions": {
+    "target": "es5",
+    "strict": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "outDir": "./es",
+    "inlineSourceMap": true,
+    "esModuleInterop": true,
+    "stripInternal": true,
+    "resolveJsonModule": true
+  },
+  "include": [
+    "src"
+  ]
 }
