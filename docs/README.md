@@ -141,6 +141,8 @@
 * [sendAdvanced](README.md#sendadvanced)
 * [sendData](README.md#senddata)
 * [sendEd25519](README.md#sended25519)
+* [sendMultiple](README.md#sendmultiple)
+* [sendMultipleEd25519](README.md#sendmultipleed25519)
 * [serializeAddress](README.md#serializeaddress)
 * [serializeEd25519Address](README.md#serializeed25519address)
 * [serializeEd25519Signature](README.md#serializeed25519signature)
@@ -1071,7 +1073,7 @@ ___
 
 ▸ **send**(`client`: [IClient](interfaces/iclient.md), `seed`: [ISeed](interfaces/iseed.md), `basePath`: [Bip32Path](classes/bip32path.md), `addressBech32`: string, `amount`: number, `startIndex?`: undefined \| number): Promise<{ message: [IMessage](interfaces/imessage.md) ; messageId: string  }\>
 
-Send a transfer from the balance on the seed.
+Send a transfer from the balance on the seed to a single output.
 
 #### Parameters:
 
@@ -1136,7 +1138,7 @@ ___
 
 ▸ **sendEd25519**(`client`: [IClient](interfaces/iclient.md), `seed`: [ISeed](interfaces/iseed.md), `basePath`: [Bip32Path](classes/bip32path.md), `addressEd25519`: string, `amount`: number, `startIndex?`: undefined \| number): Promise<{ message: [IMessage](interfaces/imessage.md) ; messageId: string  }\>
 
-Send a transfer from the balance on the seed.
+Send a transfer from the balance on the seed to a single output.
 
 #### Parameters:
 
@@ -1147,6 +1149,50 @@ Name | Type | Description |
 `basePath` | [Bip32Path](classes/bip32path.md) | The base path to start looking for addresses. |
 `addressEd25519` | string | The address to send the funds to in ed25519 format. |
 `amount` | number | The amount to send. |
+`startIndex?` | undefined \| number | The start index for the wallet count address, defaults to 0. |
+
+**Returns:** Promise<{ message: [IMessage](interfaces/imessage.md) ; messageId: string  }\>
+
+The id of the message created and the contructed message.
+
+___
+
+### sendMultiple
+
+▸ **sendMultiple**(`client`: [IClient](interfaces/iclient.md), `seed`: [ISeed](interfaces/iseed.md), `basePath`: [Bip32Path](classes/bip32path.md), `outputs`: { addressBech32: string ; amount: number  }[], `startIndex?`: undefined \| number): Promise<{ message: [IMessage](interfaces/imessage.md) ; messageId: string  }\>
+
+Send a transfer from the balance on the seed to multiple outputs.
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`client` | [IClient](interfaces/iclient.md) | The client to send the transfer with. |
+`seed` | [ISeed](interfaces/iseed.md) | The seed to use for address generation. |
+`basePath` | [Bip32Path](classes/bip32path.md) | The base path to start looking for addresses. |
+`outputs` | { addressBech32: string ; amount: number  }[] | The address to send the funds to in bech32 format and amounts. |
+`startIndex?` | undefined \| number | The start index for the wallet count address, defaults to 0. |
+
+**Returns:** Promise<{ message: [IMessage](interfaces/imessage.md) ; messageId: string  }\>
+
+The id of the message created and the contructed message.
+
+___
+
+### sendMultipleEd25519
+
+▸ **sendMultipleEd25519**(`client`: [IClient](interfaces/iclient.md), `seed`: [ISeed](interfaces/iseed.md), `basePath`: [Bip32Path](classes/bip32path.md), `outputs`: { addressEd25519: string ; amount: number  }[], `startIndex?`: undefined \| number): Promise<{ message: [IMessage](interfaces/imessage.md) ; messageId: string  }\>
+
+Send a transfer from the balance on the seed.
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`client` | [IClient](interfaces/iclient.md) | The client to send the transfer with. |
+`seed` | [ISeed](interfaces/iseed.md) | The seed to use for address generation. |
+`basePath` | [Bip32Path](classes/bip32path.md) | The base path to start looking for addresses. |
+`outputs` | { addressEd25519: string ; amount: number  }[] | The outputs including address to send the funds to in ed25519 format and amount. |
 `startIndex?` | undefined \| number | The start index for the wallet count address, defaults to 0. |
 
 **Returns:** Promise<{ message: [IMessage](interfaces/imessage.md) ; messageId: string  }\>

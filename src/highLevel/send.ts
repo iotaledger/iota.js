@@ -11,7 +11,7 @@ import { Converter } from "../utils/converter";
 import { sendAdvanced } from "./sendAdvanced";
 
 /**
- * Send a transfer from the balance on the seed.
+ * Send a transfer from the balance on the seed to a single output.
  * @param client The client to send the transfer with.
  * @param seed The seed to use for address generation.
  * @param basePath The base path to start looking for addresses.
@@ -56,7 +56,7 @@ export async function send(
 }
 
 /**
- * Send a transfer from the balance on the seed.
+ * Send a transfer from the balance on the seed to a single output.
  * @param client The client to send the transfer with.
  * @param seed The seed to use for address generation.
  * @param basePath The base path to start looking for addresses.
@@ -82,6 +82,91 @@ export async function sendEd25519(
         client,
         inputsAndKey,
         outputs);
+
+    return {
+        messageId: response.messageId,
+        message: response.message
+    };
+}
+
+/**
+ * Send a transfer from the balance on the seed to multiple outputs.
+ * @param client The client to send the transfer with.
+ * @param seed The seed to use for address generation.
+ * @param basePath The base path to start looking for addresses.
+ * @param outputs The address to send the funds to in bech32 format and amounts.
+ * @param startIndex The start index for the wallet count address, defaults to 0.
+ * @returns The id of the message created and the contructed message.
+ */
+export async function sendMultiple(
+    client: IClient,
+    seed: ISeed,
+    basePath: Bip32Path,
+    outputs: {
+        addressBech32: string;
+        amount: number;
+    }[],
+    startIndex?: number): Promise<{
+        messageId: string;
+        message: IMessage;
+    }> {
+    const hexOutputs = outputs.map(output => {
+        const bech32Details = Bech32Helper.fromBech32(output.addressBech32);
+        if (!bech32Details) {
+            throw new Error("Unable to decode bech32 address");
+        }
+
+        return {
+            address: Converter.bytesToHex(bech32Details.addressBytes),
+            addressType: bech32Details.addressType,
+            amount: output.amount
+        };
+    });
+
+    const inputsAndKey = await calculateInputs(client, seed, basePath, hexOutputs, startIndex);
+
+    const response = await sendAdvanced(
+        client,
+        inputsAndKey,
+        hexOutputs);
+
+    return {
+        messageId: response.messageId,
+        message: response.message
+    };
+}
+
+/**
+ * Send a transfer from the balance on the seed.
+ * @param client The client to send the transfer with.
+ * @param seed The seed to use for address generation.
+ * @param basePath The base path to start looking for addresses.
+ * @param outputs The outputs including address to send the funds to in ed25519 format and amount.
+ * @param startIndex The start index for the wallet count address, defaults to 0.
+ * @returns The id of the message created and the contructed message.
+ */
+export async function sendMultipleEd25519(
+    client: IClient,
+    seed: ISeed,
+    basePath: Bip32Path,
+    outputs: {
+        addressEd25519: string;
+        amount: number;
+    }[],
+    startIndex?: number): Promise<{
+        messageId: string;
+        message: IMessage;
+    }> {
+    const hexOutputs = outputs.map(output => (
+        { address: output.addressEd25519, addressType: ED25519_ADDRESS_TYPE, amount: output.amount }
+    ));
+
+    const inputsAndKey = await calculateInputs(client, seed, basePath, hexOutputs, startIndex);
+
+    const response = await sendAdvanced(
+        client,
+        inputsAndKey,
+        hexOutputs);
 
     return {
         messageId: response.messageId,

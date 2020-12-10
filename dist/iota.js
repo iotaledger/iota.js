@@ -7694,14 +7694,14 @@
 	    }
 	};
 	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.calculateInputs = exports.sendEd25519 = exports.send = void 0;
+	exports.calculateInputs = exports.sendMultipleEd25519 = exports.sendMultiple = exports.sendEd25519 = exports.send = void 0;
 
 
 
 
 
 	/**
-	 * Send a transfer from the balance on the seed.
+	 * Send a transfer from the balance on the seed to a single output.
 	 * @param client The client to send the transfer with.
 	 * @param seed The seed to use for address generation.
 	 * @param basePath The base path to start looking for addresses.
@@ -7743,7 +7743,7 @@
 	}
 	exports.send = send;
 	/**
-	 * Send a transfer from the balance on the seed.
+	 * Send a transfer from the balance on the seed to a single output.
 	 * @param client The client to send the transfer with.
 	 * @param seed The seed to use for address generation.
 	 * @param basePath The base path to start looking for addresses.
@@ -7774,6 +7774,78 @@
 	    });
 	}
 	exports.sendEd25519 = sendEd25519;
+	/**
+	 * Send a transfer from the balance on the seed to multiple outputs.
+	 * @param client The client to send the transfer with.
+	 * @param seed The seed to use for address generation.
+	 * @param basePath The base path to start looking for addresses.
+	 * @param outputs The address to send the funds to in bech32 format and amounts.
+	 * @param startIndex The start index for the wallet count address, defaults to 0.
+	 * @returns The id of the message created and the contructed message.
+	 */
+	function sendMultiple(client, seed, basePath, outputs, startIndex) {
+	    return __awaiter(this, void 0, void 0, function () {
+	        var hexOutputs, inputsAndKey, response;
+	        return __generator(this, function (_a) {
+	            switch (_a.label) {
+	                case 0:
+	                    hexOutputs = outputs.map(function (output) {
+	                        var bech32Details = bech32Helper.Bech32Helper.fromBech32(output.addressBech32);
+	                        if (!bech32Details) {
+	                            throw new Error("Unable to decode bech32 address");
+	                        }
+	                        return {
+	                            address: converter.Converter.bytesToHex(bech32Details.addressBytes),
+	                            addressType: bech32Details.addressType,
+	                            amount: output.amount
+	                        };
+	                    });
+	                    return [4 /*yield*/, calculateInputs(client, seed, basePath, hexOutputs, startIndex)];
+	                case 1:
+	                    inputsAndKey = _a.sent();
+	                    return [4 /*yield*/, sendAdvanced_1.sendAdvanced(client, inputsAndKey, hexOutputs)];
+	                case 2:
+	                    response = _a.sent();
+	                    return [2 /*return*/, {
+	                            messageId: response.messageId,
+	                            message: response.message
+	                        }];
+	            }
+	        });
+	    });
+	}
+	exports.sendMultiple = sendMultiple;
+	/**
+	 * Send a transfer from the balance on the seed.
+	 * @param client The client to send the transfer with.
+	 * @param seed The seed to use for address generation.
+	 * @param basePath The base path to start looking for addresses.
+	 * @param outputs The outputs including address to send the funds to in ed25519 format and amount.
+	 * @param startIndex The start index for the wallet count address, defaults to 0.
+	 * @returns The id of the message created and the contructed message.
+	 */
+	function sendMultipleEd25519(client, seed, basePath, outputs, startIndex) {
+	    return __awaiter(this, void 0, void 0, function () {
+	        var hexOutputs, inputsAndKey, response;
+	        return __generator(this, function (_a) {
+	            switch (_a.label) {
+	                case 0:
+	                    hexOutputs = outputs.map(function (output) { return ({ address: output.addressEd25519, addressType: IEd25519Address.ED25519_ADDRESS_TYPE, amount: output.amount }); });
+	                    return [4 /*yield*/, calculateInputs(client, seed, basePath, hexOutputs, startIndex)];
+	                case 1:
+	                    inputsAndKey = _a.sent();
+	                    return [4 /*yield*/, sendAdvanced_1.sendAdvanced(client, inputsAndKey, hexOutputs)];
+	                case 2:
+	                    response = _a.sent();
+	                    return [2 /*return*/, {
+	                            messageId: response.messageId,
+	                            message: response.message
+	                        }];
+	            }
+	        });
+	    });
+	}
+	exports.sendMultipleEd25519 = sendMultipleEd25519;
 	/**
 	 * Calculate the inputs from the seed and basePath.
 	 * @param client The client to send the transfer with.

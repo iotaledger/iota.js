@@ -74,6 +74,8 @@ There are also high level operations which make use of the API level methods:
 * retrieveData - Given a message id return the index and data from it.
 * send - Given a seed, path, destination address in bech32 format and amount, make a single transfer.
 * sendEd25519 - Given a seed, path, destination address in ed25519 format and amount, make a single transfer.
+* sendMultiple - Given a seed, path, destination addresses in bech32 format and amounts, make multiple transfers.
+* sendMultipleEd25519 - Given a seed, path, destination addresses in ed25519 format and amounts, make multiple transfers.
 * sendAdvanced - Given a set of inputs with keypairs seed, path, list of destinations make multiple transfers, can also include index data.
 * sendData - Given index and data create a new data message.
 
