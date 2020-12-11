@@ -4,7 +4,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
-    "build-watch": "tsc --watch"
+    "start": "node dist/index"
   },
   "dependencies": {
     "@iota/iota.js": "file:../..",
