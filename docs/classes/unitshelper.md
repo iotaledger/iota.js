@@ -19,6 +19,10 @@ Class to help with units formatting.
 * [formatBest](unitshelper.md#formatbest)
 * [formatUnits](unitshelper.md#formatunits)
 
+### Object literals
+
+* [UNIT\_MAP](unitshelper.md#unit_map)
+
 ## Methods
 
 ### calculateBest
@@ -95,3 +99,22 @@ Name | Type | Default value | Description |
 **Returns:** string
 
 The formated value.
+
+## Object literals
+
+### UNIT\_MAP
+
+▪ `Static` `Readonly` **UNIT\_MAP**: object
+
+Map units.
+
+#### Properties:
+
+Name | Type | Value |
+------ | ------ | ------ |
+`Gi` | object | { dp: number = 9; val: number = 1000000000 } |
+`Ki` | object | { dp: number = 3; val: number = 1000 } |
+`Mi` | object | { dp: number = 6; val: number = 1000000 } |
+`Pi` | object | { dp: number = 15; val: number = 1000000000000000 } |
+`Ti` | object | { dp: number = 12; val: number = 1000000000000 } |
+`i` | object | { dp: number = 0; val: number = 1 } |

@@ -9,7 +9,7 @@ export class UnitsHelper {
     /**
      * Map units.
      */
-    private static readonly UNIT_MAP: { [unit: string]: { val: number; dp: number } } = {
+    public static readonly UNIT_MAP: { [unit in Units]: { val: number; dp: number } } = {
         i: { val: 1, dp: 0 },
         Ki: { val: 1000, dp: 3 },
         Mi: { val: 1000000, dp: 6 },

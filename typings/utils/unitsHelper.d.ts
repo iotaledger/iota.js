@@ -6,7 +6,12 @@ export declare class UnitsHelper {
     /**
      * Map units.
      */
-    private static readonly UNIT_MAP;
+    static readonly UNIT_MAP: {
+        [unit in Units]: {
+            val: number;
+            dp: number;
+        };
+    };
     /**
      * Format the value in the best units.
      * @param value The value to format.
