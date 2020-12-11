@@ -35,5 +35,5 @@ export declare class UnitsHelper {
      * @param toUnit The to unit.
      * @returns The formatted unit.
      */
-    static convertUnits(value: string | number, fromUnit: Units, toUnit: Units): number;
+    static convertUnits(value: number, fromUnit: Units, toUnit: Units): number;
 }

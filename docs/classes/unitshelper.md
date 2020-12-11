@@ -41,7 +41,7 @@ ___
 
 ### convertUnits
 
-▸ `Static`**convertUnits**(`value`: string \| number, `fromUnit`: Units, `toUnit`: Units): number
+▸ `Static`**convertUnits**(`value`: number, `fromUnit`: Units, `toUnit`: Units): number
 
 Convert the value to different units.
 
@@ -49,7 +49,7 @@ Convert the value to different units.
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`value` | string \| number | The value to convert. |
+`value` | number | The value to convert. |
 `fromUnit` | Units | The form unit. |
 `toUnit` | Units | The to unit. |
 

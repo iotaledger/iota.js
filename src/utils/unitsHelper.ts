@@ -85,7 +85,7 @@ export class UnitsHelper {
      * @param toUnit The to unit.
      * @returns The formatted unit.
      */
-    public static convertUnits(value: string | number, fromUnit: Units, toUnit: Units): number {
+    public static convertUnits(value: number, fromUnit: Units, toUnit: Units): number {
         if (!value) {
             return 0;
         }
@@ -95,9 +95,14 @@ export class UnitsHelper {
         if (!UnitsHelper.UNIT_MAP[toUnit]) {
             throw new Error(`Unrecognized toUnit ${toUnit}`);
         }
+        if (fromUnit === "i" && value % 1 !== 0) {
+            throw new Error("If fromUnit is 'i' the value must be an integer value");
+        }
+
         if (fromUnit === toUnit) {
             return Number(value);
         }
+
         const multiplier = value < 0 ? -1 : 1;
         const scaledValue = Math.abs(Number(value)) *
             UnitsHelper.UNIT_MAP[fromUnit].val /

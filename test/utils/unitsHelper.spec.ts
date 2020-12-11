@@ -92,6 +92,10 @@ describe("UnitsHelper", () => {
         expect(UnitsHelper.convertUnits(undefined as unknown as number, "i", "Ki")).toEqual(0);
     });
 
+    test("convertUnits should throw with fromUnit i and fractional number", () => {
+        expect(() => UnitsHelper.convertUnits(1.23, "i", "Ki")).toThrow("integer");
+    });
+
     test("convertUnits should calculate the value with new units", () => {
         const results: { input: number; from: Units; to: Units; output: number }[] = [
             { input: 1, from: "i", to: "i", output: 1 },
