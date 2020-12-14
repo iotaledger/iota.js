@@ -9053,7 +9053,7 @@
 	                                }
 	                            }
 	                            for (i = 0; i < sortedInputs.length; i++) {
-	                                if (unlockBlocksFull[i].type === IEd25519Address.ED25519_ADDRESS_TYPE) {
+	                                if (unlockBlocksFull[i].signature.type === IEd25519Address.ED25519_ADDRESS_TYPE) {
 	                                    verified = ed25519.Ed25519.verify(converter.Converter.hexToBytes(unlockBlocksFull[i].signature.publicKey), essenceFinal, converter.Converter.hexToBytes(unlockBlocksFull[i].signature.signature));
 	                                    if (!verified) {
 	                                        invalid.push("Signature for unlock block " + i + " is incorrect.");

@@ -205,7 +205,7 @@ export class MessageHelper {
                     }
 
                     for (let i = 0; i < sortedInputs.length; i++) {
-                        if (unlockBlocksFull[i].type === ED25519_ADDRESS_TYPE) {
+                        if (unlockBlocksFull[i].signature.type === ED25519_ADDRESS_TYPE) {
                             const verified = Ed25519.verify(
                                 Converter.hexToBytes(unlockBlocksFull[i].signature.publicKey),
                                 essenceFinal,
