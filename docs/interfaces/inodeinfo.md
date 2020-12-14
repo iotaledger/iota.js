@@ -59,7 +59,7 @@ ___
 
 ### networkId
 
-•  **networkId**: number
+•  **networkId**: string
 
 The network id.
 

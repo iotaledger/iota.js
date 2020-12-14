@@ -47,7 +47,7 @@ Client for API communication.
 
 ### constructor
 
-\+ **new SingleNodeClient**(`endpoint`: string, `basePath?`: undefined \| string, `powProvider?`: [IPowProvider](../interfaces/ipowprovider.md)): [SingleNodeClient](singlenodeclient.md)
+\+ **new SingleNodeClient**(`endpoint`: string, `basePath?`: undefined \| string, `powProvider?`: [IPowProvider](../interfaces/ipowprovider.md), `targetScore?`: undefined \| number): [SingleNodeClient](singlenodeclient.md)
 
 Create a new instance of client.
 
@@ -57,7 +57,8 @@ Name | Type | Description |
 ------ | ------ | ------ |
 `endpoint` | string | The endpoint. |
 `basePath?` | undefined \| string | for the API defaults to /api/v1/ |
-`powProvider?` | [IPowProvider](../interfaces/ipowprovider.md) | Optional local POW provider.  |
+`powProvider?` | [IPowProvider](../interfaces/ipowprovider.md) | Optional local POW provider. |
+`targetScore?` | undefined \| number | The target score for PoW.  |
 
 **Returns:** [SingleNodeClient](singlenodeclient.md)
 

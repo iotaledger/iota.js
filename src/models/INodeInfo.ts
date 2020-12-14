@@ -22,7 +22,7 @@ export interface INodeInfo {
     /**
      * The network id.
      */
-    networkId: number;
+    networkId: string;
 
     /**
      * The latest milestone message index;

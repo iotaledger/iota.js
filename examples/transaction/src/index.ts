@@ -1,9 +1,10 @@
-import { Bech32Helper, Bip32Path, Converter, Ed25519Address, Ed25519Seed, ED25519_ADDRESS_TYPE, getBalance, getUnspentAddress, getUnspentAddresses, IKeyPair, IUTXOInput, sendAdvanced, SingleNodeClient } from "@iota/iota.js";
+import { Bech32Helper, Bip32Path, Converter, Ed25519Address, Ed25519Seed, ED25519_ADDRESS_TYPE, getBalance, getUnspentAddress, getUnspentAddresses, IKeyPair, IUTXOInput, LocalPowProvider, sendAdvanced, SingleNodeClient } from "@iota/iota.js";
 
 const API_ENDPOINT = "http://localhost:14265";
 
 async function run() {
-    const client = new SingleNodeClient(API_ENDPOINT);
+    const localPow = new LocalPowProvider();
+    const client = new SingleNodeClient(API_ENDPOINT, undefined, localPow);
 
     // These are the default values from the Hornet alphanet configuration
     const privateKey = "256a818b2aac458941f7274985a410e57fb750f3a3a67969ece5bd9ae7eef5b2f7868ab6bb55800b77b8b74191ad8285a9bf428ace579d541fda47661803ff44";

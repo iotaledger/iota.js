@@ -6171,6 +6171,7 @@
 
 
 
+
 	/**
 	 * Client for API communication.
 	 */
@@ -6180,14 +6181,16 @@
 	     * @param endpoint The endpoint.
 	     * @param basePath for the API defaults to /api/v1/
 	     * @param powProvider Optional local POW provider.
+	     * @param targetScore The target score for PoW.
 	     */
-	    function SingleNodeClient(endpoint, basePath, powProvider) {
+	    function SingleNodeClient(endpoint, basePath, powProvider, targetScore) {
 	        if (!endpoint) {
 	            throw new Error("The endpoint can not be empty");
 	        }
 	        this._endpoint = endpoint.replace(/\/+$/, "");
 	        this._basePath = basePath !== null && basePath !== void 0 ? basePath : "/api/v1/";
 	        this._powProvider = powProvider;
+	        this._targetScore = targetScore !== null && targetScore !== void 0 ? targetScore : 100;
 	    }
 	    /**
 	     * Get the health of the node.
@@ -6277,26 +6280,31 @@
 	     */
 	    SingleNodeClient.prototype.messageSubmit = function (message$1) {
 	        return __awaiter(this, void 0, void 0, function () {
-	            var targetScore, writeStream$1, messageBytes, nonce, response;
+	            var nodeInfo, networkIdBytes, networkId64, writeStream$1, messageBytes, nonce, response;
 	            return __generator(this, function (_a) {
 	                switch (_a.label) {
 	                    case 0:
-	                        if (!(!message$1.nonce || message$1.nonce.length === 0)) return [3 /*break*/, 3];
-	                        if (!this._powProvider) return [3 /*break*/, 2];
-	                        targetScore = 100;
+	                        if (!(!message$1.nonce || message$1.nonce.length === 0)) return [3 /*break*/, 4];
+	                        if (!this._powProvider) return [3 /*break*/, 3];
+	                        return [4 /*yield*/, this.info()];
+	                    case 1:
+	                        nodeInfo = _a.sent();
+	                        networkIdBytes = blake2b.Blake2b.sum256(converter.Converter.asciiToBytes(nodeInfo.networkId));
+	                        networkId64 = bigIntHelper.BigIntHelper.read8(networkIdBytes, 0);
+	                        message$1.networkId = networkId64.toString();
 	                        writeStream$1 = new writeStream.WriteStream();
 	                        message.serializeMessage(writeStream$1, message$1);
 	                        messageBytes = writeStream$1.finalBytes();
-	                        return [4 /*yield*/, this._powProvider.pow(messageBytes, targetScore)];
-	                    case 1:
+	                        return [4 /*yield*/, this._powProvider.pow(messageBytes, this._targetScore)];
+	                    case 2:
 	                        nonce = _a.sent();
 	                        message$1.nonce = nonce.toString(10);
-	                        return [3 /*break*/, 3];
-	                    case 2:
+	                        return [3 /*break*/, 4];
+	                    case 3:
 	                        message$1.nonce = "0";
-	                        _a.label = 3;
-	                    case 3: return [4 /*yield*/, this.fetchJson("post", "messages", message$1)];
-	                    case 4:
+	                        _a.label = 4;
+	                    case 4: return [4 /*yield*/, this.fetchJson("post", "messages", message$1)];
+	                    case 5:
 	                        response = _a.sent();
 	                        return [2 /*return*/, response.messageId];
 	                }
@@ -6310,19 +6318,24 @@
 	     */
 	    SingleNodeClient.prototype.messageSubmitRaw = function (message) {
 	        return __awaiter(this, void 0, void 0, function () {
-	            var targetScore, nonce, response;
+	            var nodeInfo, networkIdBytes, networkId64, nonce, response;
 	            return __generator(this, function (_a) {
 	                switch (_a.label) {
 	                    case 0:
-	                        if (!(arrayHelper.ArrayHelper.equal(message.slice(-8), SingleNodeClient.NONCE_ZERO) && this._powProvider)) return [3 /*break*/, 2];
-	                        targetScore = 100;
-	                        return [4 /*yield*/, this._powProvider.pow(message, targetScore)];
+	                        if (!(arrayHelper.ArrayHelper.equal(message.slice(-8), SingleNodeClient.NONCE_ZERO) && this._powProvider)) return [3 /*break*/, 3];
+	                        return [4 /*yield*/, this.info()];
 	                    case 1:
+	                        nodeInfo = _a.sent();
+	                        networkIdBytes = blake2b.Blake2b.sum256(converter.Converter.asciiToBytes(nodeInfo.networkId));
+	                        networkId64 = bigIntHelper.BigIntHelper.read8(networkIdBytes, 0);
+	                        bigIntHelper.BigIntHelper.write8(networkId64, message, 0);
+	                        return [4 /*yield*/, this._powProvider.pow(message, this._targetScore)];
+	                    case 2:
 	                        nonce = _a.sent();
 	                        bigIntHelper.BigIntHelper.write8(nonce, message, message.length - 8);
-	                        _a.label = 2;
-	                    case 2: return [4 /*yield*/, this.fetchBinary("post", "messages", message)];
-	                    case 3:
+	                        _a.label = 3;
+	                    case 3: return [4 /*yield*/, this.fetchBinary("post", "messages", message)];
+	                    case 4:
 	                        response = _a.sent();
 	                        return [2 /*return*/, response.messageId];
 	                }
@@ -8367,16 +8380,16 @@
 	     * @internal
 	     */
 	    PowHelper.trailingZeros = function (powDigest, nonce) {
-	        // allocate exactly one Curl block
-	        var buf = new Int8Array(243);
-	        var n = b1t6.B1T6.encode(buf, 0, powDigest);
-	        // add the nonce to the trit buffer
-	        PowHelper.encodeNonce(buf, n, nonce);
+	        var buf = new Int8Array(curl.Curl.HASH_LENGTH);
+	        var digestTritsLen = b1t6.B1T6.encode(buf, 0, powDigest);
+	        var biArr = new Uint8Array(8);
+	        bigIntHelper.BigIntHelper.write8(nonce, biArr, 0);
+	        b1t6.B1T6.encode(buf, digestTritsLen, biArr);
 	        var curl$1 = new curl.Curl();
-	        curl$1.absorb(buf, 0, buf.length);
-	        var digest = new Int8Array(243);
-	        curl$1.squeeze(digest, 0, digest.length);
-	        return PowHelper.trinaryTrailingZeros(digest);
+	        curl$1.absorb(buf, 0, curl.Curl.HASH_LENGTH);
+	        var hash = new Int8Array(curl.Curl.HASH_LENGTH);
+	        curl$1.squeeze(hash, 0, curl.Curl.HASH_LENGTH);
+	        return PowHelper.trinaryTrailingZeros(hash);
 	    };
 	    /**
 	     * Find the number of trailing zeros.
@@ -8390,18 +8403,6 @@
 	            z++;
 	        }
 	        return z;
-	    };
-	    /**
-	     * Encodes nonce as 48 trits using the b1t6 encoding.
-	     * @param dst The destination buffer.
-	     * @param startIndex The start index;
-	     * @param nonce The nonce to encode.
-	     * @internal
-	     */
-	    PowHelper.encodeNonce = function (dst, startIndex, nonce) {
-	        var arr = new Uint8Array(8);
-	        bigIntHelper.BigIntHelper.write8(nonce, arr, 0);
-	        b1t6.B1T6.encode(dst, startIndex, arr);
 	    };
 	    return PowHelper;
 	}());
@@ -8454,6 +8455,7 @@
 
 
 
+
 	/**
 	 * Local POW Provider.
 	 * WARNING - This is really slow.
@@ -8491,22 +8493,25 @@
 	     * @internal
 	     */
 	    LocalPowProvider.prototype.worker = function (powDigest, target) {
-	        var curl$1 = new curl.Curl();
-	        var hash = new Int8Array(curl.Curl.HASH_LENGTH);
-	        var buf = new Int8Array(curl.Curl.HASH_LENGTH);
-	        b1t6.B1T6.encode(buf, 0, powDigest);
-	        var digestTritsLen = b1t6.B1T6.encodedLen(powDigest);
 	        var nonce = BigInt(0);
 	        var returnNonce;
+	        var buf = new Int8Array(curl.Curl.HASH_LENGTH);
+	        var digestTritsLen = b1t6.B1T6.encode(buf, 0, powDigest);
+	        var hash = new Int8Array(curl.Curl.HASH_LENGTH);
+	        var biArr = new Uint8Array(8);
+	        var curl$1 = new curl.Curl();
 	        do {
-	            powHelper.PowHelper.encodeNonce(buf, digestTritsLen, nonce);
+	            bigIntHelper.BigIntHelper.write8(nonce, biArr, 0);
+	            b1t6.B1T6.encode(buf, digestTritsLen, biArr);
 	            curl$1.reset();
 	            curl$1.absorb(buf, 0, curl.Curl.HASH_LENGTH);
 	            curl$1.squeeze(hash, 0, curl.Curl.HASH_LENGTH);
 	            if (powHelper.PowHelper.trinaryTrailingZeros(hash) >= target) {
 	                returnNonce = nonce;
 	            }
-	            nonce++;
+	            else {
+	                nonce++;
+	            }
 	        } while (returnNonce === undefined);
 	        return returnNonce !== null && returnNonce !== void 0 ? returnNonce : BigInt(0);
 	    };

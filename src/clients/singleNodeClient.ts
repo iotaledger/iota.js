@@ -1,6 +1,7 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 import { serializeMessage } from "../binary/message";
+import { Blake2b } from "../crypto/blake2b";
 import { IAddressOutputsResponse } from "../models/api/IAddressOutputsResponse";
 import { IAddressResponse } from "../models/api/IAddressResponse";
 import { IChildrenResponse } from "../models/api/IChildrenResponse";
@@ -52,18 +53,26 @@ export class SingleNodeClient implements IClient {
     private readonly _powProvider?: IPowProvider;
 
     /**
+     * The target score for pow.
+     * @internal
+     */
+    private readonly _targetScore: number;
+
+    /**
      * Create a new instance of client.
      * @param endpoint The endpoint.
      * @param basePath for the API defaults to /api/v1/
      * @param powProvider Optional local POW provider.
+     * @param targetScore The target score for PoW.
      */
-    constructor(endpoint: string, basePath?: string, powProvider?: IPowProvider) {
+    constructor(endpoint: string, basePath?: string, powProvider?: IPowProvider, targetScore?: number) {
         if (!endpoint) {
             throw new Error("The endpoint can not be empty");
         }
         this._endpoint = endpoint.replace(/\/+$/, "");
         this._basePath = basePath ?? "/api/v1/";
         this._powProvider = powProvider;
+        this._targetScore = targetScore ?? 100;
     }
 
     /**
@@ -133,12 +142,16 @@ export class SingleNodeClient implements IClient {
     public async messageSubmit(message: IMessage): Promise<string> {
         if (!message.nonce || message.nonce.length === 0) {
             if (this._powProvider) {
-                // Get the pow targetscore from node info ?
-                const targetScore = 100;
+                const nodeInfo = await this.info();
+
+                const networkIdBytes = Blake2b.sum256(Converter.asciiToBytes(nodeInfo.networkId));
+                const networkId64 = BigIntHelper.read8(networkIdBytes, 0);
+                message.networkId = networkId64.toString();
+
                 const writeStream = new WriteStream();
                 serializeMessage(writeStream, message);
                 const messageBytes = writeStream.finalBytes();
-                const nonce = await this._powProvider.pow(messageBytes, targetScore);
+                const nonce = await this._powProvider.pow(messageBytes, this._targetScore);
                 message.nonce = nonce.toString(10);
             } else {
                 message.nonce = "0";
@@ -157,9 +170,13 @@ export class SingleNodeClient implements IClient {
      */
     public async messageSubmitRaw(message: Uint8Array): Promise<string> {
         if (ArrayHelper.equal(message.slice(-8), SingleNodeClient.NONCE_ZERO) && this._powProvider) {
-            // Get the pow targetscore from node info ?
-            const targetScore = 100;
-            const nonce = await this._powProvider.pow(message, targetScore);
+            const nodeInfo = await this.info();
+
+            const networkIdBytes = Blake2b.sum256(Converter.asciiToBytes(nodeInfo.networkId));
+            const networkId64 = BigIntHelper.read8(networkIdBytes, 0);
+            BigIntHelper.write8(networkId64, message, 0);
+
+            const nonce = await this._powProvider.pow(message, this._targetScore);
             BigIntHelper.write8(nonce, message, message.length - 8);
         }
 

@@ -4,6 +4,7 @@ import { Blake2b } from "../crypto/blake2b";
 import { Curl } from "../crypto/curl";
 import { B1T6 } from "../encoding/b1t6";
 import { IPowProvider } from "../models/IPowProvider";
+import { BigIntHelper } from "../utils/bigIntHelper";
 import { PowHelper } from "../utils/powHelper";
 
 /**
@@ -41,20 +42,18 @@ export class LocalPowProvider implements IPowProvider {
      * @internal
      */
     private worker(powDigest: Uint8Array, target: number): bigint {
-        const curl = new Curl();
-
-        const hash: Int8Array = new Int8Array(Curl.HASH_LENGTH);
-
-        const buf: Int8Array = new Int8Array(Curl.HASH_LENGTH);
-        B1T6.encode(buf, 0, powDigest);
-
-        const digestTritsLen = B1T6.encodedLen(powDigest);
-
         let nonce = BigInt(0);
         let returnNonce;
 
+        const buf: Int8Array = new Int8Array(Curl.HASH_LENGTH);
+        const digestTritsLen = B1T6.encode(buf, 0, powDigest);
+        const hash: Int8Array = new Int8Array(Curl.HASH_LENGTH);
+        const biArr = new Uint8Array(8);
+        const curl = new Curl();
+
         do {
-            PowHelper.encodeNonce(buf, digestTritsLen, nonce);
+            BigIntHelper.write8(nonce, biArr, 0);
+            B1T6.encode(buf, digestTritsLen, biArr);
 
             curl.reset();
             curl.absorb(buf, 0, Curl.HASH_LENGTH);
@@ -62,8 +61,9 @@ export class LocalPowProvider implements IPowProvider {
 
             if (PowHelper.trinaryTrailingZeros(hash) >= target) {
                 returnNonce = nonce;
+            } else {
+                nonce++;
             }
-            nonce++;
         } while (returnNonce === undefined);
 
         return returnNonce ?? BigInt(0);

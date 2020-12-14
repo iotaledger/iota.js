@@ -20,8 +20,9 @@ export declare class SingleNodeClient implements IClient {
      * @param endpoint The endpoint.
      * @param basePath for the API defaults to /api/v1/
      * @param powProvider Optional local POW provider.
+     * @param targetScore The target score for PoW.
      */
-    constructor(endpoint: string, basePath?: string, powProvider?: IPowProvider);
+    constructor(endpoint: string, basePath?: string, powProvider?: IPowProvider, targetScore?: number);
     /**
      * Get the health of the node.
      * @returns True if the node is healthy.
