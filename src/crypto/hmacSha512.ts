@@ -36,7 +36,9 @@ export class HmacSha512 {
         this._sha512 = new Sha512(bits);
 
         if (key.length > 128) {
-            key = new Sha512(bits).digest();
+            key = new Sha512(bits)
+                .update(key)
+                .digest();
         }
 
         this._oKeyPad = new Uint8Array(128);
@@ -53,7 +55,7 @@ export class HmacSha512 {
 
     /**
      * Perform Sum 512 on the data.
-     * @param key The key for thr hmac.
+     * @param key The key for the hmac.
      * @param data The data to operate on.
      * @returns The sum 512 of the data.
      */

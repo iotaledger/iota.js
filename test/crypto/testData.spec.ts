@@ -6,7 +6,7 @@ import { HmacSha512 } from "../../src/crypto/hmacSha512";
 import { Sha512 } from "../../src/crypto/sha512";
 import { Zip215 } from "../../src/crypto/zip215";
 import { Converter } from "../../src/utils/converter";
-import testData from "./testData.json";
+import testData from "./testData/testData.json";
 
 describe("Test Data", () => {
     test("Can validate data set", () => {

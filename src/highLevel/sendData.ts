@@ -20,6 +20,10 @@ export async function sendData(client: IClient, indexationKey: string, indexatio
         throw new Error("indexationKey must not be empty");
     }
 
+    if (!indexationData) {
+        throw new Error("indexationData must not be empty");
+    }
+
     const indexationPayload: IIndexationPayload = {
         type: 2,
         index: indexationKey,

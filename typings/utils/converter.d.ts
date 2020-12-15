@@ -50,4 +50,16 @@ export declare class Converter {
      * @returns true if the string is hex.
      */
     static isHex(value: string): boolean;
+    /**
+     * Convert bytes to binary string.
+     * @param bytes The bytes to convert.
+     * @returns A binary string of the bytes.
+     */
+    static bytesToBinary(bytes: Uint8Array): string;
+    /**
+     * Convert a binary string to bytes.
+     * @param binary The binary string.
+     * @returns The bytes.
+     */
+    static binaryToBytes(binary: string): Uint8Array;
 }

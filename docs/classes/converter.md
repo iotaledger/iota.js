@@ -16,7 +16,9 @@ Convert arrays to and from different formats.
 
 * [asciiToBytes](converter.md#asciitobytes)
 * [asciiToHex](converter.md#asciitohex)
+* [binaryToBytes](converter.md#binarytobytes)
 * [bytesToAscii](converter.md#bytestoascii)
+* [bytesToBinary](converter.md#bytestobinary)
 * [bytesToHex](converter.md#bytestohex)
 * [hexToAscii](converter.md#hextoascii)
 * [hexToBytes](converter.md#hextobytes)
@@ -60,6 +62,24 @@ The hex version of the bytes.
 
 ___
 
+### binaryToBytes
+
+▸ `Static`**binaryToBytes**(`binary`: string): Uint8Array
+
+Convert a binary string to bytes.
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`binary` | string | The binary string. |
+
+**Returns:** Uint8Array
+
+The bytes.
+
+___
+
 ### bytesToAscii
 
 ▸ `Static`**bytesToAscii**(`array`: ArrayLike<number\>, `startIndex?`: undefined \| number, `length?`: number \| undefined): string
@@ -77,6 +97,24 @@ Name | Type | Description |
 **Returns:** string
 
 The array formated as hex.
+
+___
+
+### bytesToBinary
+
+▸ `Static`**bytesToBinary**(`bytes`: Uint8Array): string
+
+Convert bytes to binary string.
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`bytes` | Uint8Array | The bytes to convert. |
+
+**Returns:** string
+
+A binary string of the bytes.
 
 ___
 

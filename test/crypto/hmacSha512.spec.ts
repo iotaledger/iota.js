@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 import { HmacSha512 } from "../../src/crypto/hmacSha512";
 import { Converter } from "../../src/utils/converter";
+import testData from "./testData/hmacSha512.json";
 
 describe("HmacSha512", () => {
     test("Can perform a hmac on short ascii", () => {
@@ -29,5 +30,15 @@ describe("HmacSha512", () => {
         expect(Converter.bytesToHex(digest2))
             // eslint-disable-next-line max-len
             .toEqual("36428b004e849827c41015a3d8a51363d58b916697d6755043be182b7ed610c44e6fec3cc8eb3ef53e2a46affc3f42b33764497271f13a4928df631dd083376e");
+    });
+
+    test("Can verify with test vectors", () => {
+        for (const test of testData) {
+            expect(Converter.bytesToHex(
+                HmacSha512.sum512(
+                    Converter.hexToBytes(test.key),
+                    Converter.hexToBytes(test.input)
+                ))).toEqual(test.hash);
+        }
     });
 });

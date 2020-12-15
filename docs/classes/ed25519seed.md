@@ -25,6 +25,7 @@ Class to help with seeds.
 * [generateSeedFromPath](ed25519seed.md#generateseedfrompath)
 * [keyPair](ed25519seed.md#keypair)
 * [toBytes](ed25519seed.md#tobytes)
+* [fromMnemonic](ed25519seed.md#frommnemonic)
 
 ## Constructors
 
@@ -89,3 +90,21 @@ Return the key as bytes.
 **Returns:** Uint8Array
 
 The key as bytes.
+
+___
+
+### fromMnemonic
+
+▸ `Static`**fromMnemonic**(`mnemonic`: string): [Ed25519Seed](ed25519seed.md)
+
+Create the seed from a Bip39 mnenomic.
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`mnemonic` | string | The mnenomic to create the seed from. |
+
+**Returns:** [Ed25519Seed](ed25519seed.md)
+
+A new instance of Ed25519Seed.

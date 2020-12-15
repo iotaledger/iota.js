@@ -1,0 +1,602 @@
+[
+	{
+		"entropy": "b583a941c7c7ab2cf0d7df85b1e8bd5899a3e2df21255147",
+		"mnemonic": "remain bubble expire moon kingdom nose select winner mad monster consider raise olive vapor lady caution eyebrow describe",
+		"password": "b89bd29c677f4185a5e87a529dfe75c1c21d8f7ca96cc41636cf6f3f762e65145308e0c9e3e7967d0fbbb9fdcbe9fa48dcf5c2ed56b4350ab2fd9c77",
+		"seed": "8bac7d0231895d408591769bb104d20ee78e17c6773cc1aae7d1a755d60ff77ee3f058576ba3ac231a2dce87be7e282198b21aa1a5dbd1996090df94d06cc3df"
+	},
+	{
+		"entropy": "481a0e86aaac76331a756a81b611b81b291e009673d8676be9565cd6a265c87a",
+		"mnemonic": "elite spare payment fetch shuffle book hawk pull like rack host curve music able flush kitchen guess gap few rifle health cream capable escape",
+		"password": "8ca09925bc488fc6c005eb2bfaeb1f335167324c83df6a49d3d733bf05a04650295f3c7d",
+		"seed": "1a47ccd4a42dd01102668dcc4c8ad66afcdd587036cbf4ca54ae1a0f929770ae7196f2d6c941613a959b6452c259d2a18f860f169b94f500b7c739f5d56ff16e"
+	},
+	{
+		"entropy": "9c22b6a076e504605c84fcd0316852ef4757458ca75488986da29fd6",
+		"mnemonic": "order between pool universe expect coral improve panel south mercy believe teach install people crater tunnel mass sell hamster distance hip",
+		"password": "0d20fe",
+		"seed": "f9d6022207019d63183bde5b8e2e12fd19011436d9029a3e0e2d4f088fed978043d1abab52b6c6d69f17193448b185e9b629b3b82a6c07fbf1c630df096edfd6"
+	},
+	{
+		"entropy": "483496409c70b7636b90b876e3cd6eafa3beace4",
+		"mnemonic": "else pigeon mother decline arena random purity blade ivory bunker forum gap desk filter move",
+		"password": "fe05499fc28ea87ad875fbf18c6f22678bb0c3cd8149a9b141c53bc1b1488bf6b66644a38d74801d1ee0309720990bbceebd2f4bc58a",
+		"seed": "d4cb50ca3145e53e3e9618879be96ffd21f50ebe07cea986dedefd2f5b8aa618b2443b00a911352bd099788525432162a84e103a5f60c3b6fd2ca585bc20f481"
+	},
+	{
+		"entropy": "e24ad5c8d1fc77c2100eeb048b589c99",
+		"mnemonic": "time find impulse physical shuffle three dizzy talent afraid food cheese crater",
+		"password": "92e0064c09d2e5ca41df6214e685cbb5caaae8221d9510c4339e370a02",
+		"seed": "84bec7ec997e5e7ae8aa90d80b93b148362cc52d1e8dc82c5e5deb5f148ddd0d82d230ce2a1e943ed5e02dbe6f13173752221392c176b988d640ebfb65b6ed86"
+	},
+	{
+		"entropy": "7f3801eb24b6a6070757d60d6eae138c41c6a748637ac68713fac3e1",
+		"mnemonic": "left scale kiss enact heavy adjust bubble width aspect install lumber blush broccoli father canoe hungry shoot decade wrong march barrel",
+		"password": "f263836f72bbea817ce1010a3e11f8c9f3c5ea61a810e84ce5ecf47b848b652ed4f23d",
+		"seed": "627c2aa4d1e30bed21072efb48d2d758abfc7b72b7db879324a27b70787925d46fc0fc0eab04cba2484d12ab2935ba0405584ad8bb740987ab7519ac70314cf8"
+	},
+	{
+		"entropy": "5cb3e178d7d29ea0353f92829018f3d1dc266ced2bae2fe04b35a99e",
+		"mnemonic": "frequent pair funny quick clarify exotic stay venture little liar diagram photo second cushion regret into copper across sniff farm typical",
+		"password": "333868f8607f19e535a0c4529454759909bdcd4fa19bfb3d9142e376c467313a100ab995329df68169c48f64fb83",
+		"seed": "0a6b8774c8bc455d97d0bee5d2c2e4b505ad152ef0bb776754d0eed9146087b0f5477a96fe4514c94fbf9b5bda152982efe03372ccd8ae94f2fc7df076c6bb31"
+	},
+	{
+		"entropy": "cb3c69465ac0036ec48efd180af99cc8ab030e26ca2dd7d4b34fa9cc",
+		"mnemonic": "sleep today face remain ability resist banana text blossom fit grunt mule rabbit mandate open east style pitch stadium fatal scale",
+		"password": "eccf603f1a108c3765a3e608055b122930b0a0",
+		"seed": "79a76a0544b2b1c1105ed61b2b0647374008bffa9701ed0357bfd0369dfd0cb3012ef12516c31a09f8e970d3132cac48f659d7d28516203ae86f29a920787509"
+	},
+	{
+		"entropy": "ad1dfb87f82e93e3ef88f9032e4c3fc1282f2bd3ca6513c58449172d",
+		"mnemonic": "public used tiger utility truck vehicle sail busy add include avocado liquid load nominee execute erosion because club banner comic swamp",
+		"password": "cfe2f246532b117708e977cdfafa9ee258cb8de16b09a8059699e777f837f919",
+		"seed": "f315be1dd0dd16b03d85451b2d97626dd9a14717921b9bd2f3734f19edde98b7ac6cb77b9e64d2c101073ef62a24537d8beb92f9003d33d42c40d40cd10ddbbf"
+	},
+	{
+		"entropy": "3ec8518c051209fc8b4be1fc63cdec3cf5bf1ac4991deaaa",
+		"mnemonic": "disagree dream glide any calm wrestle coffee label wise bunker kitchen ketchup fossil miracle bar casual turkey fiber",
+		"password": "a878",
+		"seed": "2ad376b2e4b5d392b26d9bf7708504b834ed19bdbad247600363d30971211c5ea5d9f0a4b354903d0b6ce7ddccab8b70c0c6cf7e6b2794b8488c28f8a22c2296"
+	},
+	{
+		"entropy": "66662f00a2c30e9853aac5ab2dddae41263453e074e30a6576713ca4",
+		"mnemonic": "grid cousin scan easily couch equip exchange flavor private humble high liquid globe clarify limb organ apology close ordinary junk empower",
+		"password": "94c252d372cefe38284b2252d4c9b986b28c4ace",
+		"seed": "64404ee130429b398a25c21fd3fa360b0bdb93e8b4fd8f26dc8ffe08e24dd871ca17487ac87a35b39946f4b748f9952e636e90133cb1e10042666448d59fb51a"
+	},
+	{
+		"entropy": "af6abaaf400d6ce8003aaf7c59e1bd936599bbfcf2484d3b2f039e41",
+		"mnemonic": "quarter fiction profit length strategy inject abstract field labor someone hunt chat flower target video empower essay sunny science develop borrow",
+		"password": "417d96d4b056144161f5bcd0ec5fd765",
+		"seed": "dabbbf5286027dab8c85bcb72c54f8ba1547dc9edd09b2b7ab30beefc4397297b78f1359aa908eb8b3d86b1e3c741fb04c2558a3700ce1267633f626aa16e248"
+	},
+	{
+		"entropy": "b2a128dfa710bf2da2300f33303181a8649d32fa3759f95c38f8a4a5318ed91f",
+		"mnemonic": "razor announce dawn evolve armor nothing match acid creek light gather express endorse offer trip twenty welcome tide dilemma enable fantasy shuffle good tiger",
+		"password": "0a03ce757a",
+		"seed": "31469c3632ec2a134cc240e9ac0460d84ee767cf512844e3beebb03125626ec6992bfa99c5b32c9a2acc837eb1cf4ca9c12a88709f09760006a69ed1cabb63fc"
+	},
+	{
+		"entropy": "287f5af38a42a8794633fa6b73dbbc601128d494ce6612b3ca9e88c272aa72bf",
+		"mnemonic": "chronic width rude behind clever device boat leg hidden paddle upper scan barely heart farm smoke bargain oxygen police bag cheese festival slab turn",
+		"password": "6bae41c6f7aaef0b2f62d049360d6ca7963908b4f38f32b71135ffd8c1a1dfa3dc6469eb8ed8764ea3d22b4dd6bc24",
+		"seed": "139c85409bfc1d974615f68d9b4d147f61c024e4c28aa368b29cef6d9590971d68e5615cc1bc260227b2fe09be18a3562f69280759ca6e43606f8649dcb8cb3e"
+	},
+	{
+		"entropy": "98d5007f095e440323df6fce1a077e6d592e3d1218ba4c30",
+		"mnemonic": "occur pool cabin bargain tone account month unknown sock south test survey napkin burden embody blanket equip love",
+		"password": "3132ca624feb9aa4a280a0ad066a7ac7d8aa395ca2cc3c5b035c84edb72f5effe29a544694e707a207c43c",
+		"seed": "b52b06bfb4a758deac5acc8722dfbfa7fefcb47d4072802f7c2ab9e79aeb6a0e81f2d854297dfb204dba1e50b12a0693da8e2a0f94e5cfe69be44daa45bd7191"
+	},
+	{
+		"entropy": "d8f2d703d2bb3f4ec5cb4745cfdb386981f5680be6285df6a914b874db698c40",
+		"mnemonic": "suggest note science pistol recycle polar blame happy easy learn sock spread butter reduce convince shallow fuel relief early ill ethics regular country amused",
+		"password": "1da82d65bed5f75867a865",
+		"seed": "6192595fc5f6c7c09eb67d1c4cae61ccea7a8085528f80a57b54ac52bd63e07a2454989251d9422327004eac341dacee337199c35abcd50559f33bea1c19150e"
+	},
+	{
+		"entropy": "ff075d79e2dbd8cc1e2bcee92160d91cf775f6a5",
+		"mnemonic": "yellow depend fury shield rural gravity judge keep truck arch curve delay jar win neglect",
+		"password": "42ebe3fc994b3dd273ada58f00",
+		"seed": "cff961ad4c9cf68db2726f7339d5b3d632c51875911398cc2647703d4508601887993bd21407e4e538f9dc75d8a77200a30c4b3df55004df1137362f27b05ac5"
+	},
+	{
+		"entropy": "f6f1fe4b673dbc9fcb7c6d5e503d65c6d32c67556f3bfea7",
+		"mnemonic": "want morning name solar swift exit combine misery furnace limit floor misery crazy crisp fiber trash wrong derive",
+		"password": "d6cd6e6957b036e3a36e7e18f4d06d30e31562c9d5218e11bb565ef72f25f8761d95e91f1941b6d2bf7035428b44377d6889d05239e45de6ad8b84be377135",
+		"seed": "0fb177ea6fff30d3f24774c2be5f1f4102645432bb50629b0d416c7558a36fa195bd125041ec745f184d926317e0106e6e94b1c563a9010f7eb36fce963b278d"
+	},
+	{
+		"entropy": "b3c2ad8e6bbdb9561ef98f264c8db0a7bd2313a6c01227e10aa003fd30b9e5c1",
+		"mnemonic": "record betray glory student swear prison know cradle chaos good history exhaust split mean only across child analyst pool among spread friend novel close",
+		"password": "c2cd898b45b539f0",
+		"seed": "474dcf8ce5309d30b92368ad03f3a6205b3a97487f7369f644ea426277b7f61a35abcef9644859ebe4c957c3a9d6afa2240af5e4de9f86f43facb211ee80eb74"
+	},
+	{
+		"entropy": "d18d20f8215e7684888b7a8a9ae107f4f28c6be0c63c4141",
+		"mnemonic": "spice harbor dignity dress trash drastic captain hungry melody strike draft try churn curious loan shy donor announce",
+		"password": "64c6d106549abb8de5775d455f09a5385addacc78abcae38464a18d25699c6e64a38356c4f18fc43c88441f5700c9f0c5aaf47f6b125be705d549a0e0d",
+		"seed": "62b9b21deffb042d3c6a4ab158fc91b0655085a113d6fdb57a4c453d6b11d9ea703415dead96e5c9414ebdef4a946cb85cd65f29183ae519ad2078c98954ab68"
+	},
+	{
+		"entropy": "f30fe962e01c0af10c8b902efc627ffa35b8d889",
+		"mnemonic": "vessel leg flavor scan scheme joy cram improve confirm toast paper virtual fortune hobby chat",
+		"password": "019b75b485fa409a71906a259c3ff72d99fe6f2dcf39de985d694a22beb13ba2687efab9c48b15ccc91134dff6ea5b84ce6bb6ff",
+		"seed": "df0c1c915c407862b00899f80bb4f5ff7d4b3312e0c0edd3839f24229cb7ec8c76665eeb43a2fc3eb24c2bc1d737e6b2104f27466fce34ffb676aaf6dfec66c4"
+	},
+	{
+		"entropy": "49a60c36623f6ccc1c379d66962598a5ebdd6a5dade4da497c5377a8dd83f9ce",
+		"mnemonic": "endless corn assault settle walnut gravity ignore victory grief raise great envelope saddle release issue route surge episode below urban miss sea transfer shiver",
+		"password": "ecd566",
+		"seed": "02ef1fb1b40b30b5cfd2f9866cd8be05019f6e1a038a0e232dacc8c610f4fb7578bd5015fc434d3b584eb44cc9d747f3d49991ebfa8fb4721e8f272ac22600b6"
+	},
+	{
+		"entropy": "020582d8d3a3388c31db9929f502894be5be867d2f3de51993dfcb5e9ed4bca9",
+		"mnemonic": "acoustic clown renew point crime ecology shuffle industry clarify pool pelican oak fossil drip visa tray topic smart wave note try heart verify cook",
+		"password": "e9163123a862b99739db5d0f97b7b04ec070b1f242ba63122ee65001a5b288568b6737f0bfbf8790318913a7ddac004519f9bf6c6e0c3692ab43bb33c2cffc",
+		"seed": "31298c14bc45f7352c0c682d31a03cc181a8ceba1ab0f5bd16d789153fdec8854676467cbb6a7882be704d139722246a6a3998d5a7d6172ee6d71b418616db2d"
+	},
+	{
+		"entropy": "6249227fc525d9ceb118d2e2484efabf431f4e10084ad4955240de1574987855",
+		"mnemonic": "girl empower paper medal frown trap settle bottom time draw salt leader cradle poem dizzy announce stand pride mother rotate firm equip throw recall",
+		"password": "8d3b32d2b555ebc1c859d82eae9ef4e04ebc055cf68a263d45d8",
+		"seed": "4f7921a16171adbb4883798242fc1c91fbccdc9e53ff509e684a1bafc79c2050bb58c9f0f180da58adc53220f34f4267780081580303c6c2f3fafe890bb164db"
+	},
+	{
+		"entropy": "c57c248f75c6b25ab6c6edecba3b1af87bd62fa3b79c3723",
+		"mnemonic": "shell thrive cat twist hen coil swallow tank uncover spike shop valley runway blind mom vicious damp brisk",
+		"password": "5cde89c6e5145a803d988de2f23c5691a681330af17ab6c9d641597a2924c123",
+		"seed": "b9b142260afbdfa71e8f7151971f400b84385e95dca27258114dba98dc350ca7f50ed6339f7c1d2c358a5b1f6ada2804fe0fc2c7aa98a1460836a05a68fdf710"
+	},
+	{
+		"entropy": "6afaf08a785ce09cbdd1c5e07da3785952c851c2",
+		"mnemonic": "helmet stuff card vague sock exact warrior december there unfair task razor clutch cigar apple",
+		"password": "a3e9612c48076908fc4b1347450161afc70c231cb8f3c1a870f7d0a4462a03ace21625eaa5fb9c513105ecfaab1080",
+		"seed": "f91bd4efdeeb4852173b762e4e125afb3145d003eb1872f2afb5b2b94fb3dbe961d880d54682be819444da200b70fe67d98c43f7634c8ff7542730618fdf3bb0"
+	},
+	{
+		"entropy": "530f97adfd90c6a56300bdbfeb9dc376498aa9580bcc4ff8",
+		"mnemonic": "fantasy lake twin will arrest famous metal bless say friend ignore uncle obvious feed gasp kangaroo exit scatter",
+		"password": "dd13317aa5e2a32f585e9c2a6b14abf9f7daa2aadb42e322149a6b16f4e97cc3c6f048",
+		"seed": "2a59fb1f2747fcd4a380aa11450f6a855d8f90edfdaec5ac54802774a68e0aafc8aa6bc6d32549b4646e43e3c76065820dbcaaf95fd8f18d3350e8a58958ffa0"
+	},
+	{
+		"entropy": "c88b4a390db4a833bd7ff1789721365957eefc9b4cef3445",
+		"mnemonic": "silk fog mixture bread enhance border vote wreck joy ribbon eternal razor leave layer honey over crowd convince",
+		"password": "21f68dc4f660aac6c94bcf9dee86c35621536fcb231409e29bcaecbca1377c6ded6399581dc437f5f5334ee3033870660fad36aaf7b5057d7488bfb0",
+		"seed": "ba66b477adee12417c8bffb9d638bd7b39e01e9bc2a61b75e6aa115f5bb6a4bdcc5115ae322b74f41baca373521cf8e2ec8dde4ac7318fe327c7f49c70f07ea3"
+	},
+	{
+		"entropy": "9d8f2a495406b3a3e71b906f584deab20366b84010e46cd7fce806c5",
+		"mnemonic": "outside junk myself pool hen spin organ improve hungry second kingdom goat cushion found able broken holiday say deliver assault funny",
+		"password": "45a7019f5bfe48cee886cb58f96ba279c2e860b880f2a77f4b852a9cdf4fdc308284e673e72d493a4b2899a4adf710304cd9d1a2410a9ebee9a4d4e5",
+		"seed": "8435e455892f963283924e71cb725ba208b8964aa1259ad2bcd7fe5141a0a38d0b4e3eb767bd52c22c3cefb361ac167b7869e802dab4a9ed12c67dcd33cd1f6b"
+	},
+	{
+		"entropy": "65cd60e6d27ea8492986ea924ec3b2583e95b94e2fb2f5b8531c6940",
+		"mnemonic": "grape help defy pilot tunnel cause plastic tail myself invite uncle race true syrup december wagon volcano secret shove spoon arrive",
+		"password": "5342ff691b80b7e1135a571a52ded30f4c57341439f688b0",
+		"seed": "08acf395357dd13a5c4397832c2bd90a5eac1b5e650cc45a0a67ab0666094073866e83d756ad1733ffa7290b713550893abef15a0b6148e9a920e3fb0340cca1"
+	},
+	{
+		"entropy": "c4c54565f8ec2b37dd897e974137ecbdd056cf248bd12cc3",
+		"mnemonic": "shadow clay floor vault section orbit involve cool nuclear answer will knife air guide mutual kick coast buffalo",
+		"password": "2bd55adbb46a816385a61f74fc8494beb73efcbd0848a1ad05",
+		"seed": "897ef2a16627fd760b6e43c402225f3b17e4f54c58712c2e83a6ab286c3d6a5aa60eba311d6658473732d365c65af3d99af6010bd8329a675d35e7d696a27365"
+	},
+	{
+		"entropy": "b7764ce3fb73b227242057da0ed049ac05697bf7cbcca828d7b1ffc5",
+		"mnemonic": "resist raven decline want depth bean mountain april sure isolate bar fix final sadness tennis kangaroo popular effort unaware zebra forget",
+		"password": "c174f3726e4fc258fda0c8c061453a44fec928ef99fc6a4651b00365fb038d4391",
+		"seed": "667ffc93ad05f58cc980cfc0b6503b819130b670cbbbbfc90bd03db55800122f2e2eea440f5222a609a61a60453a1102d43c51e4f9001208e86ee37cf7bbc313"
+	},
+	{
+		"entropy": "b9b38a332a36af666cab1cdf04144241d79e51c0",
+		"mnemonic": "rifle ordinary mimic federal helmet rebel razor glory tenant camera awesome lonely ketchup cigar action",
+		"password": "2a108739a92feee78d78a86f03c8b7b2921b2eab4985ca073ead8abf2a0d7d86124c",
+		"seed": "f3d6e0da4138b282603765c26b029ce04ac7af03ccb650e3cfca8d21f6ea35c9b6ccf6132daca66b02f5f8b7709c3e3b017e520d8cd40aaa1b35ec63010f91e5"
+	},
+	{
+		"entropy": "fe11ee3c79d553f16a6429ce9e11a60c",
+		"mnemonic": "wrap month monitor victory festival weather praise lunch soldier vacuum hat bomb",
+		"password": "4e134818",
+		"seed": "ce787ce09c90e47daf22b15ffe1df314bf70b48fca2d5565a892eb59ea4d1cdfdfa5b18416c30682650efed4fc690329b0c61a34ca434a8195d99b80937f4646"
+	},
+	{
+		"entropy": "55dce6b49aed72b56398ab7d6261ac569b1f0429815db7856281e8c8b79a475c",
+		"mnemonic": "fiction transfer pudding cupboard strong follow mobile betray latin basic help pudding rapid link plastic close resource climb parrot spice merge snake buddy moon",
+		"password": "fc44641138b5ba89eaf26b461e8339190b",
+		"seed": "2677f2e12fe9897a610fc1d296d3ffe97497025bfe1577a3921ccab63adb6bd43654b3165f4f18b90411de0bdac19bbea1a08498198fd961d13c83d7c1728f1a"
+	},
+	{
+		"entropy": "81cf0701b0eca60f3a82e93c2f46609b701d7d8fe4e069a08068cd04",
+		"mnemonic": "limb join scatter gift skill always tube frog destroy kick oblige dad achieve salute display orchard have advice boss old dolphin",
+		"password": "89f6ed05",
+		"seed": "26cbb76b9b16abb0077a3a1383463516930c971177bcd3bc139f7f05e1b88e8e489d59282e91aeee3db91b58d10223aee101cc63db43330be729aef8e0eb9015"
+	},
+	{
+		"entropy": "b095337c80f4a84ef4972cd77501c3f3c093ef882daf0156cf148c66",
+		"mnemonic": "rack praise tennis acid enhance cherry spoil tortoise student pool ill travel ankle water camera remove access reopen share boat guilt",
+		"password": "25ec68940aeed3a1715c4ef4320f55ddffd77171f0d4344bccfe4297ec6b0085abfb",
+		"seed": "8249e9c31fa5c4fe5cf7b4c1744561934780af49114c206fb2382c47c2596f7dab64caccabe1b70251b544275ff50843b5fbbb4632e9b19002a9246907754b5e"
+	},
+	{
+		"entropy": "9ce6b31f57df81496a264c4390ec674284bdbdc58e5057bc",
+		"mnemonic": "ostrich culture sick quick way pigeon possible sister drum manual border lunar envelope ten bike skate fish title",
+		"password": "0767f276a3125cfa323e70cf38c50c433b29a4feb439e5023230",
+		"seed": "ca1ae461e65be0d096837f22d7c2b1838eb4d1c9851b6ac08e78f3a1837f3c66d20d8f549868a21ee347856eede349e61b4ca5c09d545663dfddfa8546903c9a"
+	},
+	{
+		"entropy": "85e2466522248cb8767b3f0fe285dbd4678fca08697c14b9",
+		"mnemonic": "magnet banana off dust emotion found supreme gun avocado before ivory potato jump topic canvas convince believe slab",
+		"password": "b598c59bc77e8d64ef93a92812315d197ab6fd237d28966b8b9a2f49956ba26033b8bd1c8af803787a31",
+		"seed": "e5380a5c5b421df7dd2d17f58da5497460cd8739343b21208a0818d62f4cf7cc6f608d4f46046adb2998f0538817214450dd722da1cf37d811bad3d66235e19d"
+	},
+	{
+		"entropy": "5c7bd58b9305b7960f610b547bb39f6c7d5adde88630ca2b4402a630501f651e",
+		"mnemonic": "fragile team glass champion fork slam diesel cannon federal talk treat suggest stick humble pear ship sketch focus absent erase agree autumn nerve surround",
+		"password": "926bd3e9c94041270441daaef8aecd2da53e77ef02a10a6d1926c75df8e869156ea4f62d2a54f82a994760ff4a81fb87fe67dcf406a9fadf0c7e611b86274d",
+		"seed": "759d3e1d25160665c26a1e5338803aff571306dc881f4b984ee67b2a879b1d20a4d2e045519062ef420c42f571d40a7626ff222ba9137623fb47f7ef9428271d"
+	},
+	{
+		"entropy": "3ce0e65acfb582e3b0055073405d31ca0c223e43c279903da40d15f3",
+		"mnemonic": "diagram already note panda flag impact scale present infant actual erase neglect season busy audit execute mother unfold addict cloud crumble",
+		"password": "e7ce687290a413",
+		"seed": "ca1c7f60532e324de93fb1cb2f912b0204dd9ed5626ebea34ac087ffee22fe607f391055a366a1b18a5e89630958c3624441edfe0495f7ec14400985c553d9ec"
+	},
+	{
+		"entropy": "8b75de5a89ef1cf81cb2367c3fc690e6334dbf46e2a9aadc28f80012c7389fe9",
+		"mnemonic": "merge puzzle note because vault lab index egg label wreck picnic small crumble text breeze festival print throw dignity ability cluster ordinary leisure creek",
+		"password": "1e3e7fe9c322e7f3c0aa6edbcce187ea6f8188113804e65e2936e9fa631d3461cd49ddda",
+		"seed": "fb766da38b7206a8aadd1ef53c8e72cd552b1b9a7d3e3de579b186e73eb774dce28c7cb85bf5cf9425840df036a5d105b062fc37ac4e67c860acd1ffaff75209"
+	},
+	{
+		"entropy": "b7e4e8116d4402ef4b65a6c3719426e6",
+		"mnemonic": "retire chef affair surround dizzy jeans collect regular sell million answer soap",
+		"password": "c41057a361c192f76f04532b293d8949c0ed5ae5a0823b97172b840cabc774608272a3f175992b81190501a16914",
+		"seed": "048b297d4f501634983d2c6c851778559ce7d8b11d8ddfa2ea179c67396651981b85e855db5deebe5798c77b896a778bc39426175ad9f55407398501fec20be2"
+	},
+	{
+		"entropy": "f132240182392bfc187d78c30513e276b74d4fdbb4665cd5",
+		"mnemonic": "van muffin about afford naive wrap giggle pyramid seek chuckle weasel uniform inquiry pony human mimic fresh protect",
+		"password": "63b097addcbd87fac1",
+		"seed": "841606588684867a17149a0984db7daea2d919f50ae09a07ce033d09dc401be9348487cf01c380390318b7e947cade3106cbd356bfa6e95c27eacebdd5bdbcef"
+	},
+	{
+		"entropy": "fc95b6afad6f84ca84aa79c70d80b29bebec434d3dc40248",
+		"mnemonic": "wish pumpkin program food weapon grab bargain execute shove hire coach daughter salute canvas crunch review across dust",
+		"password": "e3",
+		"seed": "d1a00595c4702d257c4897d4cdda665d12cc0819f44cfa641fcd7ce8fcd3c01464639e353230a5f66a308a2510a8f9991c93d9cca1b992bb9e45a6d170c14177"
+	},
+	{
+		"entropy": "e6e0a4d164477175280b7423a2ab576de77173160be0e739ca1177c5",
+		"mnemonic": "tragic ahead crowd silk jacket ritual parent hub casual best still swift jacket ridge flag lab transfer soft lounge usage flavor",
+		"password": "3a542f6da50e71d7233962b78068fdeb2064933f73f2548859212f",
+		"seed": "d8055c7e5549f0793e51500b14fdbbe4ea4e9f2d83730c371188cdf842d6018a2201772a57d56d0b18066fa787331713394ea0456ee6b7875e86c7bd42f1ad05"
+	},
+	{
+		"entropy": "79e207432b8491202b804d984f8bfd88653a382fa8cfe0eb",
+		"mnemonic": "ketchup awake speak finish empower mosquito puppy answer obscure labor youth awkward father bright salt boring thought game",
+		"password": "8e399f94c1326ebd699199f258dec733f5e31fd7611ffd1244057bbed14b1ae849a0ca",
+		"seed": "c885686e3dd5011358c04c1c92300706d602e42fbaece2c9d75f2f08c79aba30deb56adf74e4e2e51d67bd2e7a12850383a16b81cf3b1a92ac381bcfef80ac3e"
+	},
+	{
+		"entropy": "431d366ce2f4901fc27731e669dfa77163e425e7d12f6827f5995da1987885a3",
+		"mnemonic": "drink trust open shine empower avocado antenna tower toy exclude truth tissue dinner base palm chalk habit distance green robust book detail bird heart",
+		"password": "9e0c6d49251d4cd0776f3903de724b021a1f951cc2f63c93ca5724e3ef1acac82f856499e9db483609b89e49883ea53cbf",
+		"seed": "12d703fc297888d0136d853ccb599bd14f7873de2d68c4b3446e5ec8d8828fec3a5eb417c01d55f3f28f4ba26b8294255a4c29dcf61172d7c69b06b78f8f13b6"
+	},
+	{
+		"entropy": "3c08699db6baff43b1064a0951a1804b6c631537f471e0e7fae67e31aa5df16a",
+		"mnemonic": "despair drive guess hope quiz peace series sing announce minimum gas nothing shiver melody thank mixed thought divert ridge wise boy confirm shield find",
+		"password": "539c122f5e8d32b1237b578e8779a579e74107de0e6a1d082be7",
+		"seed": "d8ff1d737a5d0f9aaed761566cab7335da51492e776ff6b4d34a23ab9a74ae05d8c690fbf02e23c5f3bd0ef43207e63135ddb276f171f1e99d3efcffb2ec156e"
+	},
+	{
+		"entropy": "cebcc5d8a8cce2a295d3bec8d1464609",
+		"mnemonic": "solid tower involve face soda eyebrow firm jelly silver mechanic muscle bar",
+		"password": "5313d2f05d1c1db7f68f7744895b41a786c84e117cf395c0a3b761a05fa93c",
+		"seed": "f7ebdcec71ac0fadc50860fae73f89b4fc3987e3c8a76a57ec3681c76320158e182a9751eef1cb4287973d8c5f890b687c238e08912f166c9b710923bd2c0165"
+	},
+	{
+		"entropy": "035c5fc3f335b60cf8f46cf85255c856",
+		"mnemonic": "addict title valley toy fork all toilet mirror weapon naive improve public",
+		"password": "85d010ae6d3e71ea335487fa",
+		"seed": "b9cafd56dc534d364534cf74190c421c7bf543ab407d09bb1c9404b668f5b104a861faae19f5db616b5d64d12e730d0d3ab1c1a724bc4659515a39339eea54a7"
+	},
+	{
+		"entropy": "96cae20bdb94e1ef9cc7f820a4d4deb8a112e7bb4a1f02fe756c4a772bfa29b6",
+		"mnemonic": "nothing finish load rescue evoke water indoor yellow camera chase dash image bachelor inherit unfold dumb actual victory force neutral increase wonder plug shy",
+		"password": "c2abbd21ddd5393d9a9306eceb467824b9600f3387f30b81",
+		"seed": "91f09fe2a1d67bff594947d9632c381e24d8265615e0004aa3a4f6720de75fa38b85ba7699876eb1ec9930469af8afb2c5a0258d402387a8f56ad7e93e2cfc96"
+	},
+	{
+		"entropy": "7230a4ea85063ff8bd11ddca17c36e42",
+		"mnemonic": "impulse lunch deny anxiety glue wisdom violin desert skate safe swear luggage",
+		"password": "",
+		"seed": "0bf7f14d3b06a488044c26893dff4322913fa5eaedc7d19be25e3decab0565b439ef332263201db51d41cc02a9d64052bd5cca234e123d3c6836cdba46281a30"
+	},
+	{
+		"entropy": "4f1c5963d026efb4922af4de1d406ffc89c15bcb50e831bea036160f",
+		"mnemonic": "excuse tissue flight park humble surge emerge future task tube brief weekend orchard pupil coil brown coyote vital assault clown wife",
+		"password": "4c15b3ffca140bda51dab58786393b3ea076c36e70199d4e5937feff786ccafdf0baa6141a1f51f712c77dfe8e0162be829399d566823c",
+		"seed": "816a3c334de3899be0b5f559b0023be411226b8682a812c822d9342b665019d2a4b1643dfbcd0b0325968209428d6ea8a2c27676f139b8613b70a70e47cc1826"
+	},
+	{
+		"entropy": "7c85f2ea19a32e32f1a192661f2b3139e035958335f00dac",
+		"mnemonic": "lady convince ritual crew cream bonus shoot crane gravity welcome slush inherit addict skull art safe asset give",
+		"password": "c6b896403fcd9e1a1abadb080fc2a507373b04531a",
+		"seed": "a343ad2cc8de5258a89956de59550836860edc2b3fbb14b13da31ca19cbbf6ceab39848080550cf3f98c7d7d6a744e1fee7ee89ec4ff5e43982c26f9292ab101"
+	},
+	{
+		"entropy": "0b97e3270f5b9b897996bf67411c8101",
+		"mnemonic": "argue sample six burger rifle seven town subject guard angry cake adult",
+		"password": "9429892a30976c11e1",
+		"seed": "e745456e3c4eeaed01cb003754e711d399359e93ec3b666ed12fe5e703300dd5a88e89011138b8af67f6ed9f0cf8b69c198fe5b855037d5325f0f1a6a0768f6f"
+	},
+	{
+		"entropy": "57a24c5be3d2e3a29ab88ff0512c14444fa421e2731d7233",
+		"mnemonic": "fish bar black sibling comfort spend helmet ball utility maximum agree mass where axis mean glove impulse offer",
+		"password": "c3f5d20918e0181a361174c767bc6e29742075c56d4b292f300ad00bee9880c8e40bda3399622abe54fba0d2393ed6e6f1a320a0c630827f16367997",
+		"seed": "ddef766e9560e6f460168860d534c90fc1f64674bfe91d27e7156abe65c45d1492ab8f72a3305c95a29be362735959588c4899c801dd6aaa3f1ba8f96135d15f"
+	},
+	{
+		"entropy": "e72cd7594ab3e2afe11ff966cc52fa0a",
+		"mnemonic": "transfer grit stone nice dilemma fitness love you grocery glad salon better",
+		"password": "a42dcbfea39b68537d8df8d3a47a052b41abccd43f9a9d4c68a219af99f0400054d3e4986d91d381511cf2",
+		"seed": "66a8de3383d73302028a2972d59c2744b9411d39c6c9ebcbaecb892ab123c41d84b83737ebad41c088d42fccd20932a337e0abff431b1cb04829e451032eab3f"
+	},
+	{
+		"entropy": "4369eaaaee82eca51e26c4795ca7047e3729799a",
+		"mnemonic": "drop exercise primary tackle conduct family joy sudden junk topple scissors wise income rubber heart",
+		"password": "d26dcccb96f0834d",
+		"seed": "88910e4834e14bbb5d6251daa9f03ae3fae595de0c60dd23d6f5efb70f2037229c216a236189543a0175244cec3e730bf000f7ca6037da669334dca1dd9b62cf"
+	},
+	{
+		"entropy": "cab119d3e279636fbfe3738253264fa76d77ba94",
+		"mnemonic": "skirt match insane shaft normal result zebra hover liquid odor negative excite student tail father",
+		"password": "19a362e10aa27238699020ff",
+		"seed": "c1b1bf208459ecbb44e3e3531f23a1e6259738787fb29fd6b395443a6fe365c5d9bc4ff0327fc661c5dbc30a7c26232783adb71f39205cf49504219ee92b6668"
+	},
+	{
+		"entropy": "724df93bfcbf56a9235c5de1161956793f451a65fae938a5e6df5a9f9c98017c",
+		"mnemonic": "inch hurt exclude west voice fee miracle merry three radio few venue violin minor obey frog december connect result release what equal album milk",
+		"password": "59ff03f32ff2fe4b2c29b217153ff234cacedff697350e2f94af73988070",
+		"seed": "bf517e259b866072ee82f6e98754825bf9d2979d032b2bb30e7d72b2cecffd9a4b08c4a8e8503a0d5eee88b1b3451586c8df6dd224e9b4d8e5541a3cd0d8c308"
+	},
+	{
+		"entropy": "a0a124729b8f944f190ee2c0d63ce1be5e666f21e6c469e2",
+		"mnemonic": "pass ankle bronze damage welcome chest goddess sword school rapid debris lake toy daring maple sudden hazard black",
+		"password": "9a01492fde6c2afc809dca8fc0d430ec3816817db46171fc381607aa60abb51581",
+		"seed": "18a7290176e316e211367c8785e060cfcff2c03c1dea7a619f3a66c8718c83257a6baa9de6ecff07c56358707189a3edfcd4d550d1d0aa3e25033078bbad568e"
+	},
+	{
+		"entropy": "a32a7a2e32562c658ee49a0141374ab71a7939b82e978ebb24fb5f52",
+		"mnemonic": "permit fatigue merit gorilla glare crazy describe nation access answer sport hotel pole orphan thing spray modify summer disagree salt charge",
+		"password": "75d539a3226b9216e5a96d9e0b93675289316e09352b92574e01ca713dc509258eacd3df1419ae30b579ee",
+		"seed": "9c21f90f6faa96250b815ea19a389d753d74abfecaeea240b9ee8035d42b2ef8e4b2daa9c0c369f4fcb898370e3d27129c12753626d0682c2f535ee96ec93f60"
+	},
+	{
+		"entropy": "d413366efced2aa8ae333c9a89fab304",
+		"mnemonic": "staff often option what sport february rhythm guide once exist proud anchor",
+		"password": "a88d",
+		"seed": "ccf8283b2cd206241c6ac3e171d712b8999ee022da7211ac3e99cfc0233c10ab6df0b11988cdb1c15395c84f87b7e499b60e824022431b413a2f0bc0c1b8f497"
+	},
+	{
+		"entropy": "12f2e4bdf9bf3c77be68354bd1248b74cc78bda2",
+		"mnemonic": "base now control vibrant video design whale allow envelope matrix carpet trumpet shy gain mass",
+		"password": "79daf5f9a2748dc091869c356aba10c0d6e243b7dde204eab989fb1f9da49aa4298442fc282f286594700d8fd66ad08d67e180",
+		"seed": "edf04ff89afe0f599ecdc8bc702ed7a6047ef02604e9f228f315376137cc9fccfef5afdba8cf4b18e47e24fce2dca3af63d60a0fbdc2704bb315c3923e380574"
+	},
+	{
+		"entropy": "2b2b276d77d057d0d46aacc1de7453a636feccf5",
+		"mnemonic": "clinic float swap use air trick faculty few scrub victory belt erase husband grid stand",
+		"password": "a1e0afb60c0ee40c031d0f66e3021dca",
+		"seed": "788d6eb856f0dc69a33f36db6d013ab4a4ecdb612e9813793b129c230aa957cb15906926ab7c768480f1fb0ca2e75bbda0432c94feffac92550e1067d64c00bb"
+	},
+	{
+		"entropy": "3e2cf32928204419c1f46310a4c1134f510b0495",
+		"mnemonic": "dilemma guide ski expect affair artefact amazing midnight awful champion dynamic pact awful liquid first",
+		"password": "508a44a0cd041c91c084b93303394975999b0e64b794ecda56ca643a2aa5f930ba36b630e9af0ce46e41",
+		"seed": "1590a0ddc989bf82803459547d082ee60c79687694f45af5b6a0ba8ea7194b5327e1368f1808e1ee02583482e76de128d8477d60db3b4f08ec346932c1d7d93c"
+	},
+	{
+		"entropy": "cba3601b9bc6ba0ada51e71fab95bca2feb4d1db9c6b5f07d7972434",
+		"mnemonic": "slight brand alone daring hill air harsh diagram cabbage frequent hundred echo twice happy hover miracle gallery dirt total embody domain",
+		"password": "4e05427b6963dcd0ad559e48fd4541da9d6175eb38bb95bc151516dd331c7fca654e949afcb43d1c10aacaaf73a9",
+		"seed": "d58dd509fe2bfeb65a57f9e4714cc640fe86eec62d792499db071fd87ea7b15867bb3d65283b38143d37d83fb2ae37ed9ca2b9d4879d1cdf4780e1d0ce72d8b2"
+	},
+	{
+		"entropy": "e28534efc8cdb7c5cf78c91267e8e890e7141e9fad4afa86",
+		"mnemonic": "tip claim desk muscle swarm title digital bomb bar dismiss demand canyon image aunt leaf power whisper crime",
+		"password": "4112998aec",
+		"seed": "2cefdf763609ae0f0ab8ea6f288bd5028617e32861e9c6219254ea419503687695a637577ed1b7984e4050c6056de211894c5994443a5ecd327ec42e1bc09ef1"
+	},
+	{
+		"entropy": "5deed2b5df7b243034ca30416a24d80cfd75dfa152dc3cd1",
+		"mnemonic": "fuel isolate pulp same rather blossom spring ecology door eye current boring struggle used luxury fortune devote mesh",
+		"password": "5852c93305dd3d8219fdf719d578d63534ba0e11d854853de7492f6bb37d6885f0f58541f10d4ee271774f5bac",
+		"seed": "ace45c22257266b43f2da8ac65cb0aecd60112f8daae4bf18231c7a9fd644e6734e5b44c43c27a906e46ea0e3eb8ffb274823cdc4e55f0475c80941cb1e29e4a"
+	},
+	{
+		"entropy": "ad8fbeb7de8d0ea8fc2980144b16abf7",
+		"mnemonic": "pulse law pupil rug special federal vague copy begin flavor priority upper",
+		"password": "b2410d",
+		"seed": "27dbea5d1f683aab8e0a7dacdc11df7446086febf3c3c9e305d296940eb6f0d657979c9d3ff81f4e320d1cd549563765e9f642a1bd5612f7b13ab78580cb52e7"
+	},
+	{
+		"entropy": "a98efadadcba3d5aeb84e47a048a4c702fd977c359d83154a3c466bbf5b80496",
+		"mnemonic": "praise jelly repeat ride phrase pulp puppy orient key cattle narrow theory work room aspect deposit course pink valve sniff satisfy swing banner simple",
+		"password": "4fa8445aa277528c",
+		"seed": "9198521b111aba5116cf7eadec9f5d850e7af67bb16c0093f7693278bbc0ba072c411447ed71f4578bffdb204a125300e67fb1d98fe80a75ac41932682764331"
+	},
+	{
+		"entropy": "445d0627cf642c1e525fb94a61eb871376f6f05e651c4d4b7123a055",
+		"mnemonic": "dust trial measure paddle drift august enact warm engine aunt tide cheap hunt join kangaroo phone essence fortune employ doll explain",
+		"password": "6f73d0d300e34d621ac923f383e14003819799d4f82a67037746662354af407b001f69aafb",
+		"seed": "4c9d9315dd3d6bc774d996aab7b5cd41fe893d03a87fc13233113a81131040be10a4637164145f71894a9d4cbc21efe2cc16a5380c27f8def0f1e54a1f7dbc74"
+	},
+	{
+		"entropy": "1098632fa7319380d5f7161abb3c5e4b",
+		"mnemonic": "awesome seek slogan example bomb scatter fit tissue boy supreme bleak nurse",
+		"password": "358a1c47087b141073a90a0a759b7619dbad19d23ab1b4df8653010e7203ac3ccc66a13439913a93ae9a6a839fff992e",
+		"seed": "604a2439655a3259af131da8cdaaae20fc492f138c3ba2456e793a1f0c4233a65e65f1851c2d786a67f4ae5d1c858b60021f9b4c9dcdec35c4663b782db2f32c"
+	},
+	{
+		"entropy": "cf27899440b27c912a010f0f947d5767",
+		"mnemonic": "song detail govern lift chief embrace pool capable auto physical fiction soldier",
+		"password": "645a4bbc7fd7668384ddda0a38e92755b23e803b26c60441107e2b6a659e857564b2",
+		"seed": "99ed76c6a77d8cd04a6ebf9f8c4a8aee312b8e34f521af73f1f181bc1530b95ec4b89d8ece7a4079c426116b8bee67cadc44f7083b01534b68ddbd919cec54b2"
+	},
+	{
+		"entropy": "93523873236be4b8b7c1e1f7169ae1a8",
+		"mnemonic": "nation mushroom broom egg salad fox tenant destroy warfare regular reveal expand",
+		"password": "1680082bc3b9c55006e56a1ba8d0c4ac49d33d541d66e1fd9e81e73d9d67280b3eb48aab40bb15b5ff62",
+		"seed": "c693ebb96a3f90fa8954f21cf9c50549d2b17e32d9ba77fdb6e9d3542f227196e37fa60bb0bbdc70cd8c3ab70b374c3c1d12d79934b2134065c150cb72122df9"
+	},
+	{
+		"entropy": "f3e150092bfaa87283c1009429d7e0ff",
+		"mnemonic": "view appear across fitness pride deer audit cactus neither exchange wealth wrong",
+		"password": "6a1fca50a9856361bf5f43d77e04adee4ce63aa41d4cd5043593fecaeb5010f5d9b45bbbcf978b3c500e9e38ef16d7a6c2606a445b9e41ea34e2",
+		"seed": "a8979c77927b6e7dcfd4558f41b9db88e603b238de78ae559acfa354ac930e055d791428070bafe69c9f7c1d8b4b03ebf5f3884ca11f1fabb9bd55d1f6241e0f"
+	},
+	{
+		"entropy": "73e9ea86bf2baca33db0c643acf044f332ef5ea3edf07424fc9c06f4",
+		"mnemonic": "initial exercise payment layer river face walnut boat dry guide bachelor toy confirm quantum moral safe injury child check assume evil",
+		"password": "3a9b78c85bff87fb9ace9fd158a5322745b57514b0ecf938c2c02c333516d456",
+		"seed": "7315a903bdc78cfc379ca5a1956aafc00b0b8ac028e167dd59427399b53a8342b1863409826633d6d2c6911eb94ada3974d35ed7bd71dc45b7fd3d15cd595e76"
+	},
+	{
+		"entropy": "c27990e7fb864b3aa9923e3074cf7d4a",
+		"mnemonic": "second smart delay warfare gorilla outer play elephant corn please tent network",
+		"password": "4ce0e52787195bdd26485a1027d033302a8bccba4df286c55aa48982851581892436465f",
+		"seed": "69fdd70b597951a0d34b66b27e5073a50febefc9bc7bb082250f3931bc8fc028fa5a0c2203af86eb169a370fa067e8bdb62f0ca24c86d0e8d4fef3a3a3a18dfe"
+	},
+	{
+		"entropy": "609320fc851b2ecb69bffa00c5f8f5b2feb0d9b955c2c0b6",
+		"mnemonic": "gauge october dish any real grant plunge young absorb cool dice grass twelve holiday torch reunion scheme remove",
+		"password": "270ba5ba218bac6507fbd8bd70156edce52b2d1595951e6f1ecdabdc8151cdfc71a10a604e0e0339d90d0a4f95f1fafe34ab1134bedabc9a7f",
+		"seed": "fa0c945b868d3e09207a1c610534f2d8ce98375e359b268407e80ec0f0b2834ba1c6190ce89582486420872f6fd98b08b68361fcd9cb06dab9a0897cdef9daec"
+	},
+	{
+		"entropy": "7a0a5a1664ef6839f383910107bba540",
+		"mnemonic": "key fan machine six walk brother sock impulse absurd differ true lift",
+		"password": "a7526557676cd9e9e72adfd67d1d5764",
+		"seed": "acc44c136739c29872b7ff14790cf17dfd98cf8c5d4e654117365649154de05aab5c3a2ac340526caf2b00d51d49380bfef40c812cf1567c6f3f7cb79d6f6a06"
+	},
+	{
+		"entropy": "3c612dbe514b9194daf8f8ad9f0b3420855819c3fc2eb309",
+		"mnemonic": "detect annual hurdle penalty ribbon skill hip business pulse weapon snack donate few artefact avocado magic reason execute",
+		"password": "09d1fcb84da545d44c3a16f30626b1216ffff6c7",
+		"seed": "d7b868813b37ba4599c4c1a3cce4e2878dc3308841fdcc427d4489802d638cd0892b8ed3a7d5a67fc189ec228e38d22cda21be05404b28f5d867dbe833925b58"
+	},
+	{
+		"entropy": "a1ace8f405dd6106671623cbcac2c0cc1be808b2e2670bdd",
+		"mnemonic": "payment guard dial arm stock lobster ordinary settle slim figure rabbit oblige salon affair slide erupt armed umbrella",
+		"password": "2a253b80bde6b643bb715e6b",
+		"seed": "8842a016369e50c5ab9316a89a9c7b5d1b2c7a4af311652d296e702f2a1dd1afba0505df2822c98a7fb5040aee3f4e15003bb595e5d13bbbc6b432b1c2e7662e"
+	},
+	{
+		"entropy": "ad0deaae454108b511e722660c34c3bc4c8fd486e279fd5066577d5b",
+		"mnemonic": "public hungry process melody awesome fold elegant tone gravity giant couch joy similar tumble breeze execute wool lobster noise wide royal",
+		"password": "da85724e13d68def89",
+		"seed": "f309e9c90461d36baa450f7676c7fc3a514b98c63e32916b45d22bdc4e109eb49a795ef226111a3c53a6f72d7240f50b6be90560dd8cfe70420052de7805f067"
+	},
+	{
+		"entropy": "84efc3f5e24418cb3ff3cffa779da1530ded6323",
+		"mnemonic": "lumber lawn word setup dose grain zone ketchup whip rude hair plastic tell ranch moment",
+		"password": "bfb2114e54dc9c0a0555a5030111f11eb28f0d3a8cb1",
+		"seed": "cc0c57be3f75fc121fe233f0d6f21001ef269aad4ec7e06b7afcc3544dc28d474a60f66af3b8651492ebfebd9943c479437583d0bece80a343a832135960977d"
+	},
+	{
+		"entropy": "f037b4649da21b46820875068022c6a5b2f57ac643c736e714944c59",
+		"mnemonic": "usual sad bomb deputy canvas person amused attitude alley absurd random enter consider runway boil jump dad december celery obvious noise",
+		"password": "f965c8a30137ec16de9902dabf08019dd148d6cbb63ef325223fbe1feac6c87517e192b6a091c975aefcefcff6763cfe3284",
+		"seed": "3fa85d4ce5cd2f0702ac3ee2e7b1a9d345fba29dcbe803282d1881fb2be9caa6f0e6825a2ca6f16ff717b820481a8c65f0b9a3428f99c39e35a531d6e0c08525"
+	},
+	{
+		"entropy": "043c9166dd0d977589c0c75c712c1c07",
+		"mnemonic": "aerobic tonight fluid ring sunny river check body fragile maximum alpha autumn",
+		"password": "05bacc5d",
+		"seed": "9269660e26e7f943c94e274f127831443dd3f8efed21c23db21fc7d1a8520331d3ebbfd2c04145d9fef2c761265d9a94cc6e34f6f1b5f1a7fa448d521bfaab1d"
+	},
+	{
+		"entropy": "30fc67455ea7c3c9c718d2840cc7f1e5",
+		"mnemonic": "couch tobacco spend run label top broccoli bottom lottery great wise skirt",
+		"password": "23e901b13d9e9c3bd25ddc150d5735b7a41d34c1c34100fef3349692db6db9d7f3b067dfc150b6baedbde40b0f57b843",
+		"seed": "28c58ceadd6e87634ebec356f020d396aa69829c6311e979b120bb7d0786f3ea0aec7e33fc08fd7e109076d71bb20855069c7dbf89d6bed9b5fc83e8636cb8e7"
+	},
+	{
+		"entropy": "4c6f29014ff5365e6bf8a5871430fe07f2cd7d9c",
+		"mnemonic": "erase junk doctor paper fat connect quiz believe mandate pave display avocado coast salute industry",
+		"password": "bd794736b50141555a9668383faf6440e6caa2",
+		"seed": "4fa17f41f8b22fe3b6150880956d894ddac541a85691872e5cddee9d3ed4ccf378f124fb255586d07fadf530acf762c4f4d5483f5a43bf0e91007061518e4c4b"
+	},
+	{
+		"entropy": "a76174be991464bcae78de45bc5121ea0acb7624ba800d66",
+		"mnemonic": "polar arm cook cram edge furnace rigid bridge east tip embody staff protect roast napkin exotic aspect correct",
+		"password": "",
+		"seed": "17b293f53b6f1a15f364652fdf325af1cac39e66d10429d426b61189f62cac08b8900f7348ccf1b32a1ec92ae73b6ab5c97495f8416ec7c4279b22dff26d300f"
+	},
+	{
+		"entropy": "23287bf09184c1cedc78b864de03a904dc89270c",
+		"mnemonic": "case duck wire cart equal trash impose blade gospel useless tumble answer silk near crash",
+		"password": "818a881637fc",
+		"seed": "efd16c967b4893f796b3c4bb8644cdd6e6d72e6afd9e0dc1d5d56c0660a50562e8b95e4be9949c02b9aa89f1a0f43ca691e8a279ac22ce08f6c167f64e00f2d2"
+	},
+	{
+		"entropy": "e26106ce7d92c98c82ce286851498ebff4624bb3",
+		"mnemonic": "tiny amused receive will clutch shock arctic shallow hair medal glove lend economy chair small",
+		"password": "a77df380460e1dbf51c0dfa9c9e6a9cbeb8ebee94259c87807dda6c607b183400448e674f035b77058dd562b",
+		"seed": "58ca830b60ff430f0c7e5e5e928d169dd9d174ed2e2ec90fb6c776cbf72f88e9ce1775d590eabeaad3833fdc0b70035079603478036f9205e01e77b3f33b97e0"
+	},
+	{
+		"entropy": "d6813754a21154d80777773fc5a5c153",
+		"mnemonic": "story answer steel during best hire build upon divert coffee icon point",
+		"password": "87393f41be6eb2ca0f",
+		"seed": "4a967b9d38d1778cdae6cca80a04f693eac96e5affbbdd5f0f2d3782c39b2b0edc32ca8f648505554aa70497933ca3710b315da61c41fc8178a2a12ccb2fcf1b"
+	},
+	{
+		"entropy": "db1bcd3b38e59dc07cba22c2ccdec28e3061dbf1d4acc9c1aeb0c1b4",
+		"mnemonic": "swallow taxi excite impact flush then very dust security group radar broccoli alcohol unknown shrug night six aspect promote lock elbow",
+		"password": "b10b18b46fb3cd132b55",
+		"seed": "992993ed541304178a91bd2cf313909c4131ed64244bdca93e8b03b1724d5b55c0c7518ae36eddada43c77a388b6f3933a679e8753e0eeaeb850b79c88a5e44f"
+	},
+	{
+		"entropy": "4e1a9a810ec4403cae3e1a0bd5eb2794",
+		"mnemonic": "evoke state park budget dune bundle rib select armed quantum size chunk",
+		"password": "",
+		"seed": "55770cee1a8c5f4dfb48d9387534dbf5fe3ab504a5c450f6284fc16e3124e328888761da916dce74fbba5b7a4e0f7d67278a63fbaa3f735864c40ddeb9ad2ae9"
+	},
+	{
+		"entropy": "8ffc0660ce18f8260e6b55f12bc100a61315414677264a869ee794154e6fd98e",
+		"mnemonic": "morning then oblige order moon basic defy height van fun dizzy equip course pass border tooth enhance crunch rigid choice female dawn great snake",
+		"password": "047132f08baf12c9ebfaf8ed9dd5f73de5b7817512757e0379de723ddf",
+		"seed": "338cf904ae3afa08ada73598bf2cc74c631d6eb03696ab32dd2bc6750025b5a1ddd494865ffb1e3eb4a82f40707e1ccae7fed7f84f36434fb5b10467fe7abfe9"
+	},
+	{
+		"entropy": "14140fb80c731d851ee2a25fa02cb1f668717067636a061c995b51f1365ee49e",
+		"mnemonic": "beef parrot unlock body crack secret knee february garden accident cluster under mandate return outside hood alcohol tooth fine physical beach control mystery swap",
+		"password": "8b5e92dceb93288d22c875a6279f63811a943ddb654679f2e9060ee7dbaaa41047d9c9c59c41f970edcdf04252525e3d4b0bd9d672e17af9fe1222",
+		"seed": "e49f8c6b68e644b2c2ffd794e5add76cf8277fe879de4cd83235be13a9abff1c70b0ab69a5ab529fd22a1be1d8152551fa71cb27b1b9ab2434c49b60ed2423cb"
+	},
+	{
+		"entropy": "dba8b7cc4f902ef10b6879837c6cecbafb0846ea",
+		"mnemonic": "sweet east vessel palace actual joy color august lock toddler depth invest rack casino price",
+		"password": "6fc01605d574992ffec57e13fb748792c3b4eb758602f45f9d79f35223e4053e993105062d4af60181a50b710f94967277121589b4a22329b5f03cf6486081",
+		"seed": "0d1381058c49722c7968526f5e23703b8dfb25ecf179f8e12aec4534edddf55e2bb8f5fd6586f256a7167d7996babf9608580aab40c954c1d3c656aa80bdf5c2"
+	},
+	{
+		"entropy": "54fb8d557edc263de19e5cc558acde136bd80652",
+		"mnemonic": "female symbol fetch world second bus major slide shed shell daring chat rural add engine",
+		"password": "41de7dabf1dd63471d9497f00cd2d5f9d461",
+		"seed": "c65cbb8a289f6f056028956c0aec56827b5b78a0edf0519636943f89c00f447f3bd68c8661861868fe7b77b1d70e720dfe5ebe818c5bc18bb0881d9a855e9cf3"
+	},
+	{
+		"entropy": "643751bdfc8b237b018864c95a08baca99677b991025a3b8d6026baaa83d2895",
+		"mnemonic": "goddess ritual hunt weekend rate rural alert arrive sing space concert news nose saddle gold again photo shop letter struggle pride burden pelican room",
+		"password": "6d8f6e9344edd161fc03abad6966a15b3a3967500966c001515131cae743b7aa5dd7994e9805cfd8eb518957a9595a8595ab11fbdd",
+		"seed": "610785caf6ed82afd16a246745632c2e8f5e769a49876be02ff940dd932b75dcc9ec92f23f84f2cbc422876e8e1708fe897ad1fde7cd86f6cf65dc5b307c8129"
+	}
+]

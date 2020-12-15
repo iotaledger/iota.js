@@ -113,7 +113,7 @@ const client = new SingleNodeClient("http://localhost:14265", { powProvider: new
 
 Please find other examples in the [./examples](./examples) folder.
 * Simple - Performs basic API operations.
-* Address - Demonstrates address generation from a seed using raw and Bip32 path methods.
+* Address - Demonstrates address generation from a Bip39 mnemonic seed using raw and Bip32 path methods.
 * Transaction - Demonstrates how to send a transaction and call some of the other higher level functions.
 * Data - Storing and retrieving data on the tangle.
 * Browser - Demonstrates direct inclusion and use of the library in an html page.

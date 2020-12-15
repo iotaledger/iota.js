@@ -1,6 +1,7 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 import { Bip32Path } from "../crypto/bip32Path";
+import { Bip39 } from "../crypto/bip39";
 import { Ed25519 } from "../crypto/ed25519";
 import { Slip0010 } from "../crypto/slip0010";
 import { IKeyPair } from "../models/IKeyPair";
@@ -16,7 +17,7 @@ export const ED25519_SEED_TYPE: number = 1;
  */
 export class Ed25519Seed implements ISeed {
     /**
-     * SeedSize is the size, in bytes, of private key seeds.
+     * Size, in bytes, of private key seeds.
      * @internal
      */
     public static SEED_SIZE_BYTES: number = 32;
@@ -33,6 +34,15 @@ export class Ed25519Seed implements ISeed {
      */
     constructor(secretKeyBytes?: Uint8Array) {
         this._secretKey = secretKeyBytes ?? new Uint8Array();
+    }
+
+    /**
+     * Create the seed from a Bip39 mnenomic.
+     * @param mnemonic The mnenomic to create the seed from.
+     * @returns A new instance of Ed25519Seed.
+     */
+    public static fromMnemonic(mnemonic: string): Ed25519Seed {
+        return new Ed25519Seed(Bip39.mnemonicToSeed(mnemonic, undefined, 2048, 32));
     }
 
     /**

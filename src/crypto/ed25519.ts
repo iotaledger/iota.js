@@ -61,16 +61,14 @@ export class Ed25519 {
 
 
     /**
-     * NewKeyFromSeed calculates a private key from a seed. It will panic if
-     * len(seed) is not SeedSize. This function is provided for interoperability
-     * with RFC 8032. RFC 8032's private keys correspond to seeds in this
-     * package.
+     * Calculates a private key from a seed.
      * @param seed The seed to generate the private key from.
      * @returns The private key.
      */
     public static privateKeyFromSeed(seed: Uint8Array): Uint8Array {
         if (!seed || seed.length !== Ed25519.SEED_SIZE) {
-            throw new Error("Bad seed length");
+            throw new Error(`The seed length is incorrect, it should be ${Ed25519.SEED_SIZE
+                } but is ${seed ? seed.length : 0}`);
         }
 
         const sha512 = new Sha512();

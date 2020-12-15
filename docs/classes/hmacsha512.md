@@ -82,7 +82,7 @@ Perform Sum 512 on the data.
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`key` | Uint8Array | The key for thr hmac. |
+`key` | Uint8Array | The key for the hmac. |
 `data` | Uint8Array | The data to operate on. |
 
 **Returns:** Uint8Array

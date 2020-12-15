@@ -142,6 +142,31 @@ export class Converter {
         return /[\da-f]/gi.test(value);
     }
 
+    /**
+     * Convert bytes to binary string.
+     * @param bytes The bytes to convert.
+     * @returns A binary string of the bytes.
+     */
+    public static bytesToBinary(bytes: Uint8Array): string {
+        const b = [];
+        for (let i = 0; i < bytes.length; i++) {
+            b.push(bytes[i].toString(2).padStart(8, "0"));
+        }
+        return b.join("");
+    }
+
+    /**
+     * Convert a binary string to bytes.
+     * @param binary The binary string.
+     * @returns The bytes.
+     */
+    public static binaryToBytes(binary: string): Uint8Array {
+        const bytes = new Uint8Array(Math.ceil(binary.length / 8));
+        for (let i = 0; i < bytes.length; i++) {
+            bytes[i] = Number.parseInt(binary.slice((i * 8), (i + 1) * 8), 2);
+        }
+        return bytes;
+    }
 
     /**
      * Build the static lookup tables.

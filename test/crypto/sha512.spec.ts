@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 import { Sha512 } from "../../src/crypto/sha512";
 import { Converter } from "../../src/utils/converter";
+import testData from "./testData/sha512.json";
 
 describe("Sha512", () => {
     test("Can perform a sha512 on short ascii", () => {
@@ -29,5 +30,11 @@ describe("Sha512", () => {
         expect(Converter.bytesToHex(digest))
             // eslint-disable-next-line max-len
             .toEqual("07e547d9586f6a73f73fbac0435ed76951218fb7d0c8d788a309d785436bbb642e93a252a954f23912547d1e8a3b5ed6e1bfd7097821233fa0538f3db854fee6");
+    });
+
+    test("Can verify with test vectors", () => {
+        for (const test of testData) {
+            expect(Converter.bytesToHex(Sha512.sum512(Converter.hexToBytes(test.input)))).toEqual(test.hash);
+        }
     });
 });

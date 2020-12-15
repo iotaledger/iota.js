@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 import { Zip215 } from "../../src/crypto/zip215";
 import { Converter } from "../../src/utils/converter";
-import testData from "./zip215.json";
+import testData from "./testData/zip215.json";
 
 // https://github.com/hdevalence/ed25519consensus/blob/main/zip215_test.go
 describe("Zip215", () => {

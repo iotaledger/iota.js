@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 import { Blake2b } from "../../src/crypto/blake2b";
 import { Converter } from "../../src/utils/converter";
-import testData from "./blake2b.json";
+import testData from "./testData/blake2b.json";
 
 describe("Blake2b", () => {
     test("Can perform a sum512 on short ascii", () => {

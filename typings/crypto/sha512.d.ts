@@ -4,6 +4,22 @@
  */
 export declare class Sha512 {
     /**
+     * Sha512 224.
+     */
+    static SIZE_224: number;
+    /**
+     * Sha512 256.
+     */
+    static SIZE_256: number;
+    /**
+     * Sha512 384.
+     */
+    static SIZE_384: number;
+    /**
+     * Sha512 512.
+     */
+    static SIZE_512: number;
+    /**
      * Create a new instance of Sha512.
      * @param bits The number of bits.
      */

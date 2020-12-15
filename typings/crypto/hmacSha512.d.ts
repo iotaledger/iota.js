@@ -11,7 +11,7 @@ export declare class HmacSha512 {
     constructor(key: Uint8Array, bits?: number);
     /**
      * Perform Sum 512 on the data.
-     * @param key The key for thr hmac.
+     * @param key The key for the hmac.
      * @param data The data to operate on.
      * @returns The sum 512 of the data.
      */

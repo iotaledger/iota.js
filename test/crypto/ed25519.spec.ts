@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 import { Ed25519 } from "../../src/crypto/ed25519";
 import { Converter } from "../../src/utils/converter";
-import testData from "./ed25519.json";
+import testData from "./testData/ed25519.json";
 
 describe("Ed25519", () => {
     test("Can generate a key pair from a seed", () => {

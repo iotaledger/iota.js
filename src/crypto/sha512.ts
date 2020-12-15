@@ -7,8 +7,22 @@
  */
 export class Sha512 {
     /**
+     * Sha512 224.
+     */
+    public static SIZE_224: number = 224;
+
+    /**
+     * Sha512 256.
+     */
+    public static SIZE_256: number = 256;
+
+    /**
+     * Sha512 384.
+     */
+    public static SIZE_384: number = 384;
+
+    /**
      * Sha512 512.
-     * @internal
      */
     public static SIZE_512: number = 512;
 
@@ -16,13 +30,13 @@ export class Sha512 {
      * Extra constants.
      * @internal
      */
-    private static readonly EXTRA = [-2147483648, 8388608, 32768, 128];
+    private static readonly EXTRA: number[] = [-2147483648, 8388608, 32768, 128];
 
     /**
      * Shift constants.
      * @internal
      */
-    private static readonly SHIFT = [24, 16, 8, 0];
+    private static readonly SHIFT: number[] = [24, 16, 8, 0];
 
     /**
      * K.
@@ -120,7 +134,7 @@ export class Sha512 {
     private _h2l: number;
 
     /**
-     * H2 High.
+     * H3 High.
      * @internal
      */
     private _h3h: number;
@@ -225,13 +239,20 @@ export class Sha512 {
      * Create a new instance of Sha512.
      * @param bits The number of bits.
      */
-    constructor(bits: number = 512) {
+    constructor(bits: number = Sha512.SIZE_512) {
+        if (bits !== Sha512.SIZE_224 &&
+            bits !== Sha512.SIZE_256 &&
+            bits !== Sha512.SIZE_384 &&
+            bits !== Sha512.SIZE_512) {
+            throw new Error("Only 224, 256, 384 or 512 bits are supported");
+        }
+
         this._blocks = [
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
         ];
 
-        if (bits === 384) {
+        if (bits === Sha512.SIZE_384) {
             this._h0h = 0xCBBB9D5D;
             this._h0l = 0xC1059ED8;
             this._h1h = 0x629A292A;
@@ -248,7 +269,7 @@ export class Sha512 {
             this._h6l = 0x64F98FA7;
             this._h7h = 0x47B5481D;
             this._h7l = 0xBEFA4FA4;
-        } else if (bits === 256) {
+        } else if (bits === Sha512.SIZE_256) {
             this._h0h = 0x22312194;
             this._h0l = 0xFC2BF72C;
             this._h1h = 0x9F555FA3;
@@ -265,7 +286,7 @@ export class Sha512 {
             this._h6l = 0x2C85B8AA;
             this._h7h = 0x0EB72DDC;
             this._h7l = 0x81C52CA2;
-        } else if (bits === 224) {
+        } else if (bits === Sha512.SIZE_224) {
             this._h0h = 0x8C3D37C8;
             this._h0l = 0x19544DA2;
             this._h1h = 0x73E19966;
@@ -432,10 +453,10 @@ export class Sha512 {
             (h3h >> 24) & 0xFF, (h3h >> 16) & 0xFF, (h3h >> 8) & 0xFF, h3h & 0xFF
         ];
 
-        if (bits >= 256) {
+        if (bits >= Sha512.SIZE_256) {
             arr.push((h3l >> 24) & 0xFF, (h3l >> 16) & 0xFF, (h3l >> 8) & 0xFF, h3l & 0xFF);
         }
-        if (bits >= 384) {
+        if (bits >= Sha512.SIZE_384) {
             arr.push(
                 (h4h >> 24) & 0xFF, (h4h >> 16) & 0xFF, (h4h >> 8) & 0xFF, h4h & 0xFF,
                 (h4l >> 24) & 0xFF, (h4l >> 16) & 0xFF, (h4l >> 8) & 0xFF, h4l & 0xFF,
@@ -443,7 +464,7 @@ export class Sha512 {
                 (h5l >> 24) & 0xFF, (h5l >> 16) & 0xFF, (h5l >> 8) & 0xFF, h5l & 0xFF
             );
         }
-        if (bits === 512) {
+        if (bits === Sha512.SIZE_512) {
             arr.push(
                 (h6h >> 24) & 0xFF, (h6h >> 16) & 0xFF, (h6h >> 8) & 0xFF, h6h & 0xFF,
                 (h6l >> 24) & 0xFF, (h6l >> 16) & 0xFF, (h6l >> 8) & 0xFF, h6l & 0xFF,

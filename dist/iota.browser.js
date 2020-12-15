@@ -654,17 +654,23 @@
 	     * @param bits The number of bits.
 	     */
 	    function Sha512(bits) {
-	        if (bits === void 0) { bits = 512; }
+	        if (bits === void 0) { bits = Sha512.SIZE_512; }
 	        /**
 	         * Blocks.
 	         * @internal
 	         */
 	        this._blocks = [];
+	        if (bits !== Sha512.SIZE_224 &&
+	            bits !== Sha512.SIZE_256 &&
+	            bits !== Sha512.SIZE_384 &&
+	            bits !== Sha512.SIZE_512) {
+	            throw new Error("Only 224, 256, 384 or 512 bits are supported");
+	        }
 	        this._blocks = [
 	            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	        ];
-	        if (bits === 384) {
+	        if (bits === Sha512.SIZE_384) {
 	            this._h0h = 0xCBBB9D5D;
 	            this._h0l = 0xC1059ED8;
 	            this._h1h = 0x629A292A;
@@ -682,7 +688,7 @@
 	            this._h7h = 0x47B5481D;
 	            this._h7l = 0xBEFA4FA4;
 	        }
-	        else if (bits === 256) {
+	        else if (bits === Sha512.SIZE_256) {
 	            this._h0h = 0x22312194;
 	            this._h0l = 0xFC2BF72C;
 	            this._h1h = 0x9F555FA3;
@@ -700,7 +706,7 @@
 	            this._h7h = 0x0EB72DDC;
 	            this._h7l = 0x81C52CA2;
 	        }
-	        else if (bits === 224) {
+	        else if (bits === Sha512.SIZE_224) {
 	            this._h0h = 0x8C3D37C8;
 	            this._h0l = 0x19544DA2;
 	            this._h1h = 0x73E19966;
@@ -858,13 +864,13 @@
 	            (h2l >> 24) & 0xFF, (h2l >> 16) & 0xFF, (h2l >> 8) & 0xFF, h2l & 0xFF,
 	            (h3h >> 24) & 0xFF, (h3h >> 16) & 0xFF, (h3h >> 8) & 0xFF, h3h & 0xFF
 	        ];
-	        if (bits >= 256) {
+	        if (bits >= Sha512.SIZE_256) {
 	            arr.push((h3l >> 24) & 0xFF, (h3l >> 16) & 0xFF, (h3l >> 8) & 0xFF, h3l & 0xFF);
 	        }
-	        if (bits >= 384) {
+	        if (bits >= Sha512.SIZE_384) {
 	            arr.push((h4h >> 24) & 0xFF, (h4h >> 16) & 0xFF, (h4h >> 8) & 0xFF, h4h & 0xFF, (h4l >> 24) & 0xFF, (h4l >> 16) & 0xFF, (h4l >> 8) & 0xFF, h4l & 0xFF, (h5h >> 24) & 0xFF, (h5h >> 16) & 0xFF, (h5h >> 8) & 0xFF, h5h & 0xFF, (h5l >> 24) & 0xFF, (h5l >> 16) & 0xFF, (h5l >> 8) & 0xFF, h5l & 0xFF);
 	        }
-	        if (bits === 512) {
+	        if (bits === Sha512.SIZE_512) {
 	            arr.push((h6h >> 24) & 0xFF, (h6h >> 16) & 0xFF, (h6h >> 8) & 0xFF, h6h & 0xFF, (h6l >> 24) & 0xFF, (h6l >> 16) & 0xFF, (h6l >> 8) & 0xFF, h6l & 0xFF, (h7h >> 24) & 0xFF, (h7h >> 16) & 0xFF, (h7h >> 8) & 0xFF, h7h & 0xFF, (h7l >> 24) & 0xFF, (h7l >> 16) & 0xFF, (h7l >> 8) & 0xFF, h7l & 0xFF);
 	        }
 	        return Uint8Array.from(arr);
@@ -1214,8 +1220,19 @@
 	        this._h7l = (c2 << 16) | (c1 & 0xFFFF);
 	    };
 	    /**
+	     * Sha512 224.
+	     */
+	    Sha512.SIZE_224 = 224;
+	    /**
+	     * Sha512 256.
+	     */
+	    Sha512.SIZE_256 = 256;
+	    /**
+	     * Sha512 384.
+	     */
+	    Sha512.SIZE_384 = 384;
+	    /**
 	     * Sha512 512.
-	     * @internal
 	     */
 	    Sha512.SIZE_512 = 512;
 	    /**
@@ -3935,16 +3952,13 @@
 	        };
 	    };
 	    /**
-	     * NewKeyFromSeed calculates a private key from a seed. It will panic if
-	     * len(seed) is not SeedSize. This function is provided for interoperability
-	     * with RFC 8032. RFC 8032's private keys correspond to seeds in this
-	     * package.
+	     * Calculates a private key from a seed.
 	     * @param seed The seed to generate the private key from.
 	     * @returns The private key.
 	     */
 	    Ed25519.privateKeyFromSeed = function (seed) {
 	        if (!seed || seed.length !== Ed25519.SEED_SIZE) {
-	            throw new Error("Bad seed length");
+	            throw new Error("The seed length is incorrect, it should be " + Ed25519.SEED_SIZE + " but is " + (seed ? seed.length : 0));
 	        }
 	        var sha512$1 = new sha512.Sha512();
 	        sha512$1.update(seed);
@@ -4964,6 +4978,30 @@
 	            return false;
 	        }
 	        return /[\da-f]/gi.test(value);
+	    };
+	    /**
+	     * Convert bytes to binary string.
+	     * @param bytes The bytes to convert.
+	     * @returns A binary string of the bytes.
+	     */
+	    Converter.bytesToBinary = function (bytes) {
+	        var b = [];
+	        for (var i = 0; i < bytes.length; i++) {
+	            b.push(bytes[i].toString(2).padStart(8, "0"));
+	        }
+	        return b.join("");
+	    };
+	    /**
+	     * Convert a binary string to bytes.
+	     * @param binary The binary string.
+	     * @returns The bytes.
+	     */
+	    Converter.binaryToBytes = function (binary) {
+	        var bytes = new Uint8Array(Math.ceil(binary.length / 8));
+	        for (var i = 0; i < bytes.length; i++) {
+	            bytes[i] = Number.parseInt(binary.slice((i * 8), (i + 1) * 8), 2);
+	        }
+	        return bytes;
 	    };
 	    /**
 	     * Build the static lookup tables.
@@ -6717,6 +6755,2764 @@
 
 	});
 
+	var sha256 = createCommonjsModule(function (module, exports) {
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.Sha256 = void 0;
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
+	/* eslint-disable no-bitwise */
+	/* eslint-disable unicorn/prefer-math-trunc */
+	/**
+	 * Class to help with Sha256 scheme.
+	 * TypeScript conversion from https://github.com/emn178/js-sha256
+	 */
+	var Sha256 = /** @class */ (function () {
+	    /**
+	     * Create a new instance of Sha256.
+	     * @param bits The number of bits.
+	     */
+	    function Sha256(bits) {
+	        if (bits === void 0) { bits = Sha256.SIZE_256; }
+	        /**
+	         * Blocks.
+	         * @internal
+	         */
+	        this._blocks = [];
+	        if (bits !== Sha256.SIZE_224 && bits !== Sha256.SIZE_256) {
+	            throw new Error("Only 224 or 256 bits are supported");
+	        }
+	        this._blocks = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+	        if (bits === Sha256.SIZE_224) {
+	            this._h0 = 0xC1059ED8;
+	            this._h1 = 0x367CD507;
+	            this._h2 = 0x3070DD17;
+	            this._h3 = 0xF70E5939;
+	            this._h4 = 0xFFC00B31;
+	            this._h5 = 0x68581511;
+	            this._h6 = 0x64F98FA7;
+	            this._h7 = 0xBEFA4FA4;
+	        }
+	        else {
+	            this._h0 = 0x6A09E667;
+	            this._h1 = 0xBB67AE85;
+	            this._h2 = 0x3C6EF372;
+	            this._h3 = 0xA54FF53A;
+	            this._h4 = 0x510E527F;
+	            this._h5 = 0x9B05688C;
+	            this._h6 = 0x1F83D9AB;
+	            this._h7 = 0x5BE0CD19;
+	        }
+	        this._bits = bits;
+	        this._block = 0;
+	        this._start = 0;
+	        this._bytes = 0;
+	        this._hBytes = 0;
+	        this._lastByteIndex = 0;
+	        this._finalized = false;
+	        this._hashed = false;
+	        this._first = true;
+	    }
+	    /**
+	     * Perform Sum 256 on the data.
+	     * @param data The data to operate on.
+	     * @returns The sum 256 of the data.
+	     */
+	    Sha256.sum256 = function (data) {
+	        var b2b = new Sha256(Sha256.SIZE_256);
+	        b2b.update(data);
+	        return b2b.digest();
+	    };
+	    /**
+	     * Perform Sum 224 on the data.
+	     * @param data The data to operate on.
+	     * @returns The sum 224 of the data.
+	     */
+	    Sha256.sum224 = function (data) {
+	        var b2b = new Sha256(Sha256.SIZE_224);
+	        b2b.update(data);
+	        return b2b.digest();
+	    };
+	    /**
+	     * Update the hash with the data.
+	     * @param message The data to update the hash with.
+	     * @returns The instance for chaining.
+	     */
+	    Sha256.prototype.update = function (message) {
+	        if (this._finalized) {
+	            throw new Error("The hash has already been finalized.");
+	        }
+	        var index = 0;
+	        var i;
+	        var length = message.length;
+	        var blocks = this._blocks;
+	        while (index < length) {
+	            if (this._hashed) {
+	                this._hashed = false;
+	                blocks[0] = this._block;
+	                blocks[1] = 0;
+	                blocks[2] = 0;
+	                blocks[3] = 0;
+	                blocks[4] = 0;
+	                blocks[5] = 0;
+	                blocks[6] = 0;
+	                blocks[7] = 0;
+	                blocks[8] = 0;
+	                blocks[9] = 0;
+	                blocks[10] = 0;
+	                blocks[11] = 0;
+	                blocks[12] = 0;
+	                blocks[13] = 0;
+	                blocks[14] = 0;
+	                blocks[15] = 0;
+	                blocks[16] = 0;
+	            }
+	            for (i = this._start; index < length && i < 64; ++index) {
+	                blocks[i >> 2] |= message[index] << Sha256.SHIFT[i++ & 3];
+	            }
+	            this._lastByteIndex = i;
+	            this._bytes += i - this._start;
+	            if (i >= 64) {
+	                this._block = blocks[16];
+	                this._start = i - 64;
+	                this.hash();
+	                this._hashed = true;
+	            }
+	            else {
+	                this._start = i;
+	            }
+	        }
+	        if (this._bytes > 4294967295) {
+	            this._hBytes += Math.trunc(this._bytes / 4294967296);
+	            this._bytes %= 4294967296;
+	        }
+	        return this;
+	    };
+	    /**
+	     * Get the digest.
+	     * @returns The digest.
+	     */
+	    Sha256.prototype.digest = function () {
+	        this.finalize();
+	        var h0 = this._h0;
+	        var h1 = this._h1;
+	        var h2 = this._h2;
+	        var h3 = this._h3;
+	        var h4 = this._h4;
+	        var h5 = this._h5;
+	        var h6 = this._h6;
+	        var h7 = this._h7;
+	        var arr = [
+	            (h0 >> 24) & 0xFF, (h0 >> 16) & 0xFF, (h0 >> 8) & 0xFF, h0 & 0xFF,
+	            (h1 >> 24) & 0xFF, (h1 >> 16) & 0xFF, (h1 >> 8) & 0xFF, h1 & 0xFF,
+	            (h2 >> 24) & 0xFF, (h2 >> 16) & 0xFF, (h2 >> 8) & 0xFF, h2 & 0xFF,
+	            (h3 >> 24) & 0xFF, (h3 >> 16) & 0xFF, (h3 >> 8) & 0xFF, h3 & 0xFF,
+	            (h4 >> 24) & 0xFF, (h4 >> 16) & 0xFF, (h4 >> 8) & 0xFF, h4 & 0xFF,
+	            (h5 >> 24) & 0xFF, (h5 >> 16) & 0xFF, (h5 >> 8) & 0xFF, h5 & 0xFF,
+	            (h6 >> 24) & 0xFF, (h6 >> 16) & 0xFF, (h6 >> 8) & 0xFF, h6 & 0xFF
+	        ];
+	        if (this._bits === Sha256.SIZE_256) {
+	            arr.push((h7 >> 24) & 0xFF, (h7 >> 16) & 0xFF, (h7 >> 8) & 0xFF, h7 & 0xFF);
+	        }
+	        return Uint8Array.from(arr);
+	    };
+	    /**
+	     * Finalize the hash.
+	     * @internal
+	     */
+	    Sha256.prototype.finalize = function () {
+	        if (this._finalized) {
+	            return;
+	        }
+	        this._finalized = true;
+	        var blocks = this._blocks;
+	        var i = this._lastByteIndex;
+	        blocks[16] = this._block;
+	        blocks[i >> 2] |= Sha256.EXTRA[i & 3];
+	        this._block = blocks[16];
+	        if (i >= 56) {
+	            if (!this._hashed) {
+	                this.hash();
+	            }
+	            blocks[0] = this._block;
+	            blocks[1] = 0;
+	            blocks[2] = 0;
+	            blocks[3] = 0;
+	            blocks[4] = 0;
+	            blocks[5] = 0;
+	            blocks[6] = 0;
+	            blocks[7] = 0;
+	            blocks[8] = 0;
+	            blocks[9] = 0;
+	            blocks[10] = 0;
+	            blocks[11] = 0;
+	            blocks[12] = 0;
+	            blocks[13] = 0;
+	            blocks[14] = 0;
+	            blocks[15] = 0;
+	            blocks[16] = 0;
+	        }
+	        blocks[14] = (this._hBytes << 3) | (this._bytes >>> 29);
+	        blocks[15] = this._bytes << 3;
+	        this.hash();
+	    };
+	    /**
+	     * Perform the hash.
+	     * @internal
+	     */
+	    Sha256.prototype.hash = function () {
+	        var a = this._h0;
+	        var b = this._h1;
+	        var c = this._h2;
+	        var d = this._h3;
+	        var e = this._h4;
+	        var f = this._h5;
+	        var g = this._h6;
+	        var h = this._h7;
+	        var blocks = this._blocks;
+	        var j;
+	        var s0;
+	        var s1;
+	        var maj;
+	        var t1;
+	        var t2;
+	        var ch;
+	        var ab;
+	        var da;
+	        var cd;
+	        var bc;
+	        for (j = 16; j < 64; ++j) {
+	            // rightrotate
+	            t1 = blocks[j - 15];
+	            s0 = ((t1 >>> 7) | (t1 << 25)) ^ ((t1 >>> 18) | (t1 << 14)) ^ (t1 >>> 3);
+	            t1 = blocks[j - 2];
+	            s1 = ((t1 >>> 17) | (t1 << 15)) ^ ((t1 >>> 19) | (t1 << 13)) ^ (t1 >>> 10);
+	            blocks[j] = blocks[j - 16] + s0 + blocks[j - 7] + s1 << 0;
+	        }
+	        bc = b & c;
+	        for (j = 0; j < 64; j += 4) {
+	            if (this._first) {
+	                if (this._bits === Sha256.SIZE_224) {
+	                    ab = 300032;
+	                    t1 = blocks[0] - 1413257819;
+	                    h = t1 - 150054599 << 0;
+	                    d = t1 + 24177077 << 0;
+	                }
+	                else {
+	                    ab = 704751109;
+	                    t1 = blocks[0] - 210244248;
+	                    h = t1 - 1521486534 << 0;
+	                    d = t1 + 143694565 << 0;
+	                }
+	                this._first = false;
+	            }
+	            else {
+	                s0 = ((a >>> 2) | (a << 30)) ^ ((a >>> 13) | (a << 19)) ^ ((a >>> 22) | (a << 10));
+	                s1 = ((e >>> 6) | (e << 26)) ^ ((e >>> 11) | (e << 21)) ^ ((e >>> 25) | (e << 7));
+	                ab = a & b;
+	                maj = ab ^ (a & c) ^ bc;
+	                ch = (e & f) ^ (~e & g);
+	                t1 = h + s1 + ch + Sha256.K[j] + blocks[j];
+	                t2 = s0 + maj;
+	                h = d + t1 << 0;
+	                d = t1 + t2 << 0;
+	            }
+	            s0 = ((d >>> 2) | (d << 30)) ^ ((d >>> 13) | (d << 19)) ^ ((d >>> 22) | (d << 10));
+	            s1 = ((h >>> 6) | (h << 26)) ^ ((h >>> 11) | (h << 21)) ^ ((h >>> 25) | (h << 7));
+	            da = d & a;
+	            maj = da ^ (d & b) ^ ab;
+	            ch = (h & e) ^ (~h & f);
+	            t1 = g + s1 + ch + Sha256.K[j + 1] + blocks[j + 1];
+	            t2 = s0 + maj;
+	            g = c + t1 << 0;
+	            c = t1 + t2 << 0;
+	            s0 = ((c >>> 2) | (c << 30)) ^ ((c >>> 13) | (c << 19)) ^ ((c >>> 22) | (c << 10));
+	            s1 = ((g >>> 6) | (g << 26)) ^ ((g >>> 11) | (g << 21)) ^ ((g >>> 25) | (g << 7));
+	            cd = c & d;
+	            maj = cd ^ (c & a) ^ da;
+	            ch = (g & h) ^ (~g & e);
+	            t1 = f + s1 + ch + Sha256.K[j + 2] + blocks[j + 2];
+	            t2 = s0 + maj;
+	            f = b + t1 << 0;
+	            b = t1 + t2 << 0;
+	            s0 = ((b >>> 2) | (b << 30)) ^ ((b >>> 13) | (b << 19)) ^ ((b >>> 22) | (b << 10));
+	            s1 = ((f >>> 6) | (f << 26)) ^ ((f >>> 11) | (f << 21)) ^ ((f >>> 25) | (f << 7));
+	            bc = b & c;
+	            maj = bc ^ (b & d) ^ cd;
+	            ch = (f & g) ^ (~f & h);
+	            t1 = e + s1 + ch + Sha256.K[j + 3] + blocks[j + 3];
+	            t2 = s0 + maj;
+	            e = a + t1 << 0;
+	            a = t1 + t2 << 0;
+	        }
+	        this._h0 += Math.trunc(a);
+	        this._h1 += Math.trunc(b);
+	        this._h2 += Math.trunc(c);
+	        this._h3 += Math.trunc(d);
+	        this._h4 += Math.trunc(e);
+	        this._h5 += Math.trunc(f);
+	        this._h6 += Math.trunc(g);
+	        this._h7 += Math.trunc(h);
+	    };
+	    /**
+	     * Sha256 256.
+	     */
+	    Sha256.SIZE_256 = 256;
+	    /**
+	     * Sha256 224.
+	     */
+	    Sha256.SIZE_224 = 224;
+	    /**
+	     * Extra constants.
+	     * @internal
+	     */
+	    Sha256.EXTRA = [-2147483648, 8388608, 32768, 128];
+	    /**
+	     * Shift constants.
+	     * @internal
+	     */
+	    Sha256.SHIFT = [24, 16, 8, 0];
+	    /**
+	     * K.
+	     * @internal
+	     */
+	    Sha256.K = Uint32Array.from([
+	        0x428A2F98, 0x71374491, 0xB5C0FBCF, 0xE9B5DBA5, 0x3956C25B, 0x59F111F1, 0x923F82A4, 0xAB1C5ED5,
+	        0xD807AA98, 0x12835B01, 0x243185BE, 0x550C7DC3, 0x72BE5D74, 0x80DEB1FE, 0x9BDC06A7, 0xC19BF174,
+	        0xE49B69C1, 0xEFBE4786, 0x0FC19DC6, 0x240CA1CC, 0x2DE92C6F, 0x4A7484AA, 0x5CB0A9DC, 0x76F988DA,
+	        0x983E5152, 0xA831C66D, 0xB00327C8, 0xBF597FC7, 0xC6E00BF3, 0xD5A79147, 0x06CA6351, 0x14292967,
+	        0x27B70A85, 0x2E1B2138, 0x4D2C6DFC, 0x53380D13, 0x650A7354, 0x766A0ABB, 0x81C2C92E, 0x92722C85,
+	        0xA2BFE8A1, 0xA81A664B, 0xC24B8B70, 0xC76C51A3, 0xD192E819, 0xD6990624, 0xF40E3585, 0x106AA070,
+	        0x19A4C116, 0x1E376C08, 0x2748774C, 0x34B0BCB5, 0x391C0CB3, 0x4ED8AA4A, 0x5B9CCA4F, 0x682E6FF3,
+	        0x748F82EE, 0x78A5636F, 0x84C87814, 0x8CC70208, 0x90BEFFFA, 0xA4506CEB, 0xBEF9A3F7, 0xC67178F2
+	    ]);
+	    return Sha256;
+	}());
+	exports.Sha256 = Sha256;
+
+	});
+
+	var hmacSha256 = createCommonjsModule(function (module, exports) {
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.HmacSha256 = void 0;
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
+	/* eslint-disable no-bitwise */
+
+	/**
+	 * Class to help with HmacSha256 scheme.
+	 * TypeScript conversion from https://github.com/emn178/js-sha256
+	 */
+	var HmacSha256 = /** @class */ (function () {
+	    /**
+	     * Create a new instance of HmacSha256.
+	     * @param key The key for the hmac.
+	     * @param bits The number of bits.
+	     */
+	    function HmacSha256(key, bits) {
+	        if (bits === void 0) { bits = 256; }
+	        this._bits = bits;
+	        this._sha256 = new sha256.Sha256(bits);
+	        if (key.length > 64) {
+	            key = new sha256.Sha256(bits)
+	                .update(key)
+	                .digest();
+	        }
+	        this._oKeyPad = new Uint8Array(64);
+	        var iKeyPad = new Uint8Array(64);
+	        for (var i = 0; i < 64; ++i) {
+	            var b = key[i] || 0;
+	            this._oKeyPad[i] = 0x5C ^ b;
+	            iKeyPad[i] = 0x36 ^ b;
+	        }
+	        this._sha256.update(iKeyPad);
+	    }
+	    /**
+	     * Perform Sum 256 on the data.
+	     * @param key The key for the hmac.
+	     * @param data The data to operate on.
+	     * @returns The sum 256 of the data.
+	     */
+	    HmacSha256.sum256 = function (key, data) {
+	        var b2b = new HmacSha256(key, 256);
+	        b2b.update(data);
+	        return b2b.digest();
+	    };
+	    /**
+	     * Update the hash with the data.
+	     * @param message The data to update the hash with.
+	     * @returns The instance for chaining.
+	     */
+	    HmacSha256.prototype.update = function (message) {
+	        this._sha256.update(message);
+	        return this;
+	    };
+	    /**
+	     * Get the digest.
+	     * @returns The digest.
+	     */
+	    HmacSha256.prototype.digest = function () {
+	        var innerHash = this._sha256.digest();
+	        var finalSha256 = new sha256.Sha256(this._bits);
+	        finalSha256.update(this._oKeyPad);
+	        finalSha256.update(innerHash);
+	        return finalSha256.digest();
+	    };
+	    return HmacSha256;
+	}());
+	exports.HmacSha256 = HmacSha256;
+
+	});
+
+	var hmacSha512 = createCommonjsModule(function (module, exports) {
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.HmacSha512 = void 0;
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
+	/* eslint-disable no-bitwise */
+
+	/**
+	 * Class to help with HmacSha512 scheme.
+	 * TypeScript conversion from https://github.com/emn178/js-sha512
+	 */
+	var HmacSha512 = /** @class */ (function () {
+	    /**
+	     * Create a new instance of HmacSha512.
+	     * @param key The key for the hmac.
+	     * @param bits The number of bits.
+	     */
+	    function HmacSha512(key, bits) {
+	        if (bits === void 0) { bits = 512; }
+	        this._bits = bits;
+	        this._sha512 = new sha512.Sha512(bits);
+	        if (key.length > 128) {
+	            key = new sha512.Sha512(bits)
+	                .update(key)
+	                .digest();
+	        }
+	        this._oKeyPad = new Uint8Array(128);
+	        var iKeyPad = new Uint8Array(128);
+	        for (var i = 0; i < 128; ++i) {
+	            var b = key[i] || 0;
+	            this._oKeyPad[i] = 0x5C ^ b;
+	            iKeyPad[i] = 0x36 ^ b;
+	        }
+	        this._sha512.update(iKeyPad);
+	    }
+	    /**
+	     * Perform Sum 512 on the data.
+	     * @param key The key for the hmac.
+	     * @param data The data to operate on.
+	     * @returns The sum 512 of the data.
+	     */
+	    HmacSha512.sum512 = function (key, data) {
+	        var b2b = new HmacSha512(key, 512);
+	        b2b.update(data);
+	        return b2b.digest();
+	    };
+	    /**
+	     * Update the hash with the data.
+	     * @param message The data to update the hash with.
+	     * @returns The instance for chaining.
+	     */
+	    HmacSha512.prototype.update = function (message) {
+	        this._sha512.update(message);
+	        return this;
+	    };
+	    /**
+	     * Get the digest.
+	     * @returns The digest.
+	     */
+	    HmacSha512.prototype.digest = function () {
+	        var innerHash = this._sha512.digest();
+	        var finalSha512 = new sha512.Sha512(this._bits);
+	        finalSha512.update(this._oKeyPad);
+	        finalSha512.update(innerHash);
+	        return finalSha512.digest();
+	    };
+	    return HmacSha512;
+	}());
+	exports.HmacSha512 = HmacSha512;
+
+	});
+
+	var pbkdf2 = createCommonjsModule(function (module, exports) {
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
+	/* eslint-disable no-bitwise */
+	/* eslint-disable unicorn/prefer-math-trunc */
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.Pbkdf2 = void 0;
+
+
+	/**
+	 * Implementation of the password based key derivation function 2.
+	 */
+	var Pbkdf2 = /** @class */ (function () {
+	    function Pbkdf2() {
+	    }
+	    /**
+	     * Derive a key from the parameters using Sha256.
+	     * @param password The password to derive the key from.
+	     * @param salt The salt for the derivation.
+	     * @param iterations Numer of iterations to perform.
+	     * @param keyLength The length of the key to derive.
+	     * @returns The derived key.
+	     */
+	    Pbkdf2.sha256 = function (password, salt, iterations, keyLength) {
+	        return Pbkdf2.deriveKey(password, salt, iterations, keyLength, 32, function (pass, block) { return hmacSha256.HmacSha256.sum256(pass, block); });
+	    };
+	    /**
+	     * Derive a key from the parameters using Sha512.
+	     * @param password The password to derive the key from.
+	     * @param salt The salt for the derivation.
+	     * @param iterations Numer of iterations to perform.
+	     * @param keyLength The length of the key to derive.
+	     * @returns The derived key.
+	     */
+	    Pbkdf2.sha512 = function (password, salt, iterations, keyLength) {
+	        return Pbkdf2.deriveKey(password, salt, iterations, keyLength, 64, function (pass, block) { return hmacSha512.HmacSha512.sum512(pass, block); });
+	    };
+	    /**
+	     * Derive a key from the parameters.
+	     * @param password The password to derive the key from.
+	     * @param salt The salt for the derivation.
+	     * @param iterations Numer of iterations to perform.
+	     * @param keyLength The length of the key to derive.
+	     * @param macLength The length of the mac key.
+	     * @param sumFunc The mac function.
+	     * @returns The derived key.
+	     * @internal
+	     */
+	    Pbkdf2.deriveKey = function (password, salt, iterations, keyLength, macLength, sumFunc) {
+	        if (iterations < 1) {
+	            throw new Error("Iterations must be > 0");
+	        }
+	        if (keyLength > (Math.pow(2, 32) - 1) * macLength) {
+	            throw new Error("Requested key length is too long");
+	        }
+	        var DK = new Uint8Array(keyLength);
+	        var T = new Uint8Array(macLength);
+	        var block1 = new Uint8Array(salt.length + 4);
+	        var l = Math.ceil(keyLength / macLength);
+	        var r = (keyLength - (l - 1)) * macLength;
+	        block1.set(salt, 0);
+	        for (var i = 1; i <= l; i++) {
+	            block1[salt.length + 0] = (i >> 24) & 0xFF;
+	            block1[salt.length + 1] = (i >> 16) & 0xFF;
+	            block1[salt.length + 2] = (i >> 8) & 0xFF;
+	            block1[salt.length + 3] = (i >> 0) & 0xFF;
+	            var U = sumFunc(password, block1);
+	            T = U.slice(0, macLength);
+	            for (var j = 1; j < iterations; j++) {
+	                U = sumFunc(password, U);
+	                for (var k = 0; k < macLength; k++) {
+	                    T[k] ^= U[k];
+	                }
+	            }
+	            var destPos = (i - 1) * macLength;
+	            var len = (i === l ? r : macLength);
+	            for (var j = 0; j < len; j++) {
+	                DK[destPos + j] = T[j];
+	            }
+	        }
+	        return DK;
+	    };
+	    return Pbkdf2;
+	}());
+	exports.Pbkdf2 = Pbkdf2;
+
+	});
+
+	var english = createCommonjsModule(function (module, exports) {
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.english = void 0;
+	exports.english = [
+	    "abandon",
+	    "ability",
+	    "able",
+	    "about",
+	    "above",
+	    "absent",
+	    "absorb",
+	    "abstract",
+	    "absurd",
+	    "abuse",
+	    "access",
+	    "accident",
+	    "account",
+	    "accuse",
+	    "achieve",
+	    "acid",
+	    "acoustic",
+	    "acquire",
+	    "across",
+	    "act",
+	    "action",
+	    "actor",
+	    "actress",
+	    "actual",
+	    "adapt",
+	    "add",
+	    "addict",
+	    "address",
+	    "adjust",
+	    "admit",
+	    "adult",
+	    "advance",
+	    "advice",
+	    "aerobic",
+	    "affair",
+	    "afford",
+	    "afraid",
+	    "again",
+	    "age",
+	    "agent",
+	    "agree",
+	    "ahead",
+	    "aim",
+	    "air",
+	    "airport",
+	    "aisle",
+	    "alarm",
+	    "album",
+	    "alcohol",
+	    "alert",
+	    "alien",
+	    "all",
+	    "alley",
+	    "allow",
+	    "almost",
+	    "alone",
+	    "alpha",
+	    "already",
+	    "also",
+	    "alter",
+	    "always",
+	    "amateur",
+	    "amazing",
+	    "among",
+	    "amount",
+	    "amused",
+	    "analyst",
+	    "anchor",
+	    "ancient",
+	    "anger",
+	    "angle",
+	    "angry",
+	    "animal",
+	    "ankle",
+	    "announce",
+	    "annual",
+	    "another",
+	    "answer",
+	    "antenna",
+	    "antique",
+	    "anxiety",
+	    "any",
+	    "apart",
+	    "apology",
+	    "appear",
+	    "apple",
+	    "approve",
+	    "april",
+	    "arch",
+	    "arctic",
+	    "area",
+	    "arena",
+	    "argue",
+	    "arm",
+	    "armed",
+	    "armor",
+	    "army",
+	    "around",
+	    "arrange",
+	    "arrest",
+	    "arrive",
+	    "arrow",
+	    "art",
+	    "artefact",
+	    "artist",
+	    "artwork",
+	    "ask",
+	    "aspect",
+	    "assault",
+	    "asset",
+	    "assist",
+	    "assume",
+	    "asthma",
+	    "athlete",
+	    "atom",
+	    "attack",
+	    "attend",
+	    "attitude",
+	    "attract",
+	    "auction",
+	    "audit",
+	    "august",
+	    "aunt",
+	    "author",
+	    "auto",
+	    "autumn",
+	    "average",
+	    "avocado",
+	    "avoid",
+	    "awake",
+	    "aware",
+	    "away",
+	    "awesome",
+	    "awful",
+	    "awkward",
+	    "axis",
+	    "baby",
+	    "bachelor",
+	    "bacon",
+	    "badge",
+	    "bag",
+	    "balance",
+	    "balcony",
+	    "ball",
+	    "bamboo",
+	    "banana",
+	    "banner",
+	    "bar",
+	    "barely",
+	    "bargain",
+	    "barrel",
+	    "base",
+	    "basic",
+	    "basket",
+	    "battle",
+	    "beach",
+	    "bean",
+	    "beauty",
+	    "because",
+	    "become",
+	    "beef",
+	    "before",
+	    "begin",
+	    "behave",
+	    "behind",
+	    "believe",
+	    "below",
+	    "belt",
+	    "bench",
+	    "benefit",
+	    "best",
+	    "betray",
+	    "better",
+	    "between",
+	    "beyond",
+	    "bicycle",
+	    "bid",
+	    "bike",
+	    "bind",
+	    "biology",
+	    "bird",
+	    "birth",
+	    "bitter",
+	    "black",
+	    "blade",
+	    "blame",
+	    "blanket",
+	    "blast",
+	    "bleak",
+	    "bless",
+	    "blind",
+	    "blood",
+	    "blossom",
+	    "blouse",
+	    "blue",
+	    "blur",
+	    "blush",
+	    "board",
+	    "boat",
+	    "body",
+	    "boil",
+	    "bomb",
+	    "bone",
+	    "bonus",
+	    "book",
+	    "boost",
+	    "border",
+	    "boring",
+	    "borrow",
+	    "boss",
+	    "bottom",
+	    "bounce",
+	    "box",
+	    "boy",
+	    "bracket",
+	    "brain",
+	    "brand",
+	    "brass",
+	    "brave",
+	    "bread",
+	    "breeze",
+	    "brick",
+	    "bridge",
+	    "brief",
+	    "bright",
+	    "bring",
+	    "brisk",
+	    "broccoli",
+	    "broken",
+	    "bronze",
+	    "broom",
+	    "brother",
+	    "brown",
+	    "brush",
+	    "bubble",
+	    "buddy",
+	    "budget",
+	    "buffalo",
+	    "build",
+	    "bulb",
+	    "bulk",
+	    "bullet",
+	    "bundle",
+	    "bunker",
+	    "burden",
+	    "burger",
+	    "burst",
+	    "bus",
+	    "business",
+	    "busy",
+	    "butter",
+	    "buyer",
+	    "buzz",
+	    "cabbage",
+	    "cabin",
+	    "cable",
+	    "cactus",
+	    "cage",
+	    "cake",
+	    "call",
+	    "calm",
+	    "camera",
+	    "camp",
+	    "can",
+	    "canal",
+	    "cancel",
+	    "candy",
+	    "cannon",
+	    "canoe",
+	    "canvas",
+	    "canyon",
+	    "capable",
+	    "capital",
+	    "captain",
+	    "car",
+	    "carbon",
+	    "card",
+	    "cargo",
+	    "carpet",
+	    "carry",
+	    "cart",
+	    "case",
+	    "cash",
+	    "casino",
+	    "castle",
+	    "casual",
+	    "cat",
+	    "catalog",
+	    "catch",
+	    "category",
+	    "cattle",
+	    "caught",
+	    "cause",
+	    "caution",
+	    "cave",
+	    "ceiling",
+	    "celery",
+	    "cement",
+	    "census",
+	    "century",
+	    "cereal",
+	    "certain",
+	    "chair",
+	    "chalk",
+	    "champion",
+	    "change",
+	    "chaos",
+	    "chapter",
+	    "charge",
+	    "chase",
+	    "chat",
+	    "cheap",
+	    "check",
+	    "cheese",
+	    "chef",
+	    "cherry",
+	    "chest",
+	    "chicken",
+	    "chief",
+	    "child",
+	    "chimney",
+	    "choice",
+	    "choose",
+	    "chronic",
+	    "chuckle",
+	    "chunk",
+	    "churn",
+	    "cigar",
+	    "cinnamon",
+	    "circle",
+	    "citizen",
+	    "city",
+	    "civil",
+	    "claim",
+	    "clap",
+	    "clarify",
+	    "claw",
+	    "clay",
+	    "clean",
+	    "clerk",
+	    "clever",
+	    "click",
+	    "client",
+	    "cliff",
+	    "climb",
+	    "clinic",
+	    "clip",
+	    "clock",
+	    "clog",
+	    "close",
+	    "cloth",
+	    "cloud",
+	    "clown",
+	    "club",
+	    "clump",
+	    "cluster",
+	    "clutch",
+	    "coach",
+	    "coast",
+	    "coconut",
+	    "code",
+	    "coffee",
+	    "coil",
+	    "coin",
+	    "collect",
+	    "color",
+	    "column",
+	    "combine",
+	    "come",
+	    "comfort",
+	    "comic",
+	    "common",
+	    "company",
+	    "concert",
+	    "conduct",
+	    "confirm",
+	    "congress",
+	    "connect",
+	    "consider",
+	    "control",
+	    "convince",
+	    "cook",
+	    "cool",
+	    "copper",
+	    "copy",
+	    "coral",
+	    "core",
+	    "corn",
+	    "correct",
+	    "cost",
+	    "cotton",
+	    "couch",
+	    "country",
+	    "couple",
+	    "course",
+	    "cousin",
+	    "cover",
+	    "coyote",
+	    "crack",
+	    "cradle",
+	    "craft",
+	    "cram",
+	    "crane",
+	    "crash",
+	    "crater",
+	    "crawl",
+	    "crazy",
+	    "cream",
+	    "credit",
+	    "creek",
+	    "crew",
+	    "cricket",
+	    "crime",
+	    "crisp",
+	    "critic",
+	    "crop",
+	    "cross",
+	    "crouch",
+	    "crowd",
+	    "crucial",
+	    "cruel",
+	    "cruise",
+	    "crumble",
+	    "crunch",
+	    "crush",
+	    "cry",
+	    "crystal",
+	    "cube",
+	    "culture",
+	    "cup",
+	    "cupboard",
+	    "curious",
+	    "current",
+	    "curtain",
+	    "curve",
+	    "cushion",
+	    "custom",
+	    "cute",
+	    "cycle",
+	    "dad",
+	    "damage",
+	    "damp",
+	    "dance",
+	    "danger",
+	    "daring",
+	    "dash",
+	    "daughter",
+	    "dawn",
+	    "day",
+	    "deal",
+	    "debate",
+	    "debris",
+	    "decade",
+	    "december",
+	    "decide",
+	    "decline",
+	    "decorate",
+	    "decrease",
+	    "deer",
+	    "defense",
+	    "define",
+	    "defy",
+	    "degree",
+	    "delay",
+	    "deliver",
+	    "demand",
+	    "demise",
+	    "denial",
+	    "dentist",
+	    "deny",
+	    "depart",
+	    "depend",
+	    "deposit",
+	    "depth",
+	    "deputy",
+	    "derive",
+	    "describe",
+	    "desert",
+	    "design",
+	    "desk",
+	    "despair",
+	    "destroy",
+	    "detail",
+	    "detect",
+	    "develop",
+	    "device",
+	    "devote",
+	    "diagram",
+	    "dial",
+	    "diamond",
+	    "diary",
+	    "dice",
+	    "diesel",
+	    "diet",
+	    "differ",
+	    "digital",
+	    "dignity",
+	    "dilemma",
+	    "dinner",
+	    "dinosaur",
+	    "direct",
+	    "dirt",
+	    "disagree",
+	    "discover",
+	    "disease",
+	    "dish",
+	    "dismiss",
+	    "disorder",
+	    "display",
+	    "distance",
+	    "divert",
+	    "divide",
+	    "divorce",
+	    "dizzy",
+	    "doctor",
+	    "document",
+	    "dog",
+	    "doll",
+	    "dolphin",
+	    "domain",
+	    "donate",
+	    "donkey",
+	    "donor",
+	    "door",
+	    "dose",
+	    "double",
+	    "dove",
+	    "draft",
+	    "dragon",
+	    "drama",
+	    "drastic",
+	    "draw",
+	    "dream",
+	    "dress",
+	    "drift",
+	    "drill",
+	    "drink",
+	    "drip",
+	    "drive",
+	    "drop",
+	    "drum",
+	    "dry",
+	    "duck",
+	    "dumb",
+	    "dune",
+	    "during",
+	    "dust",
+	    "dutch",
+	    "duty",
+	    "dwarf",
+	    "dynamic",
+	    "eager",
+	    "eagle",
+	    "early",
+	    "earn",
+	    "earth",
+	    "easily",
+	    "east",
+	    "easy",
+	    "echo",
+	    "ecology",
+	    "economy",
+	    "edge",
+	    "edit",
+	    "educate",
+	    "effort",
+	    "egg",
+	    "eight",
+	    "either",
+	    "elbow",
+	    "elder",
+	    "electric",
+	    "elegant",
+	    "element",
+	    "elephant",
+	    "elevator",
+	    "elite",
+	    "else",
+	    "embark",
+	    "embody",
+	    "embrace",
+	    "emerge",
+	    "emotion",
+	    "employ",
+	    "empower",
+	    "empty",
+	    "enable",
+	    "enact",
+	    "end",
+	    "endless",
+	    "endorse",
+	    "enemy",
+	    "energy",
+	    "enforce",
+	    "engage",
+	    "engine",
+	    "enhance",
+	    "enjoy",
+	    "enlist",
+	    "enough",
+	    "enrich",
+	    "enroll",
+	    "ensure",
+	    "enter",
+	    "entire",
+	    "entry",
+	    "envelope",
+	    "episode",
+	    "equal",
+	    "equip",
+	    "era",
+	    "erase",
+	    "erode",
+	    "erosion",
+	    "error",
+	    "erupt",
+	    "escape",
+	    "essay",
+	    "essence",
+	    "estate",
+	    "eternal",
+	    "ethics",
+	    "evidence",
+	    "evil",
+	    "evoke",
+	    "evolve",
+	    "exact",
+	    "example",
+	    "excess",
+	    "exchange",
+	    "excite",
+	    "exclude",
+	    "excuse",
+	    "execute",
+	    "exercise",
+	    "exhaust",
+	    "exhibit",
+	    "exile",
+	    "exist",
+	    "exit",
+	    "exotic",
+	    "expand",
+	    "expect",
+	    "expire",
+	    "explain",
+	    "expose",
+	    "express",
+	    "extend",
+	    "extra",
+	    "eye",
+	    "eyebrow",
+	    "fabric",
+	    "face",
+	    "faculty",
+	    "fade",
+	    "faint",
+	    "faith",
+	    "fall",
+	    "false",
+	    "fame",
+	    "family",
+	    "famous",
+	    "fan",
+	    "fancy",
+	    "fantasy",
+	    "farm",
+	    "fashion",
+	    "fat",
+	    "fatal",
+	    "father",
+	    "fatigue",
+	    "fault",
+	    "favorite",
+	    "feature",
+	    "february",
+	    "federal",
+	    "fee",
+	    "feed",
+	    "feel",
+	    "female",
+	    "fence",
+	    "festival",
+	    "fetch",
+	    "fever",
+	    "few",
+	    "fiber",
+	    "fiction",
+	    "field",
+	    "figure",
+	    "file",
+	    "film",
+	    "filter",
+	    "final",
+	    "find",
+	    "fine",
+	    "finger",
+	    "finish",
+	    "fire",
+	    "firm",
+	    "first",
+	    "fiscal",
+	    "fish",
+	    "fit",
+	    "fitness",
+	    "fix",
+	    "flag",
+	    "flame",
+	    "flash",
+	    "flat",
+	    "flavor",
+	    "flee",
+	    "flight",
+	    "flip",
+	    "float",
+	    "flock",
+	    "floor",
+	    "flower",
+	    "fluid",
+	    "flush",
+	    "fly",
+	    "foam",
+	    "focus",
+	    "fog",
+	    "foil",
+	    "fold",
+	    "follow",
+	    "food",
+	    "foot",
+	    "force",
+	    "forest",
+	    "forget",
+	    "fork",
+	    "fortune",
+	    "forum",
+	    "forward",
+	    "fossil",
+	    "foster",
+	    "found",
+	    "fox",
+	    "fragile",
+	    "frame",
+	    "frequent",
+	    "fresh",
+	    "friend",
+	    "fringe",
+	    "frog",
+	    "front",
+	    "frost",
+	    "frown",
+	    "frozen",
+	    "fruit",
+	    "fuel",
+	    "fun",
+	    "funny",
+	    "furnace",
+	    "fury",
+	    "future",
+	    "gadget",
+	    "gain",
+	    "galaxy",
+	    "gallery",
+	    "game",
+	    "gap",
+	    "garage",
+	    "garbage",
+	    "garden",
+	    "garlic",
+	    "garment",
+	    "gas",
+	    "gasp",
+	    "gate",
+	    "gather",
+	    "gauge",
+	    "gaze",
+	    "general",
+	    "genius",
+	    "genre",
+	    "gentle",
+	    "genuine",
+	    "gesture",
+	    "ghost",
+	    "giant",
+	    "gift",
+	    "giggle",
+	    "ginger",
+	    "giraffe",
+	    "girl",
+	    "give",
+	    "glad",
+	    "glance",
+	    "glare",
+	    "glass",
+	    "glide",
+	    "glimpse",
+	    "globe",
+	    "gloom",
+	    "glory",
+	    "glove",
+	    "glow",
+	    "glue",
+	    "goat",
+	    "goddess",
+	    "gold",
+	    "good",
+	    "goose",
+	    "gorilla",
+	    "gospel",
+	    "gossip",
+	    "govern",
+	    "gown",
+	    "grab",
+	    "grace",
+	    "grain",
+	    "grant",
+	    "grape",
+	    "grass",
+	    "gravity",
+	    "great",
+	    "green",
+	    "grid",
+	    "grief",
+	    "grit",
+	    "grocery",
+	    "group",
+	    "grow",
+	    "grunt",
+	    "guard",
+	    "guess",
+	    "guide",
+	    "guilt",
+	    "guitar",
+	    "gun",
+	    "gym",
+	    "habit",
+	    "hair",
+	    "half",
+	    "hammer",
+	    "hamster",
+	    "hand",
+	    "happy",
+	    "harbor",
+	    "hard",
+	    "harsh",
+	    "harvest",
+	    "hat",
+	    "have",
+	    "hawk",
+	    "hazard",
+	    "head",
+	    "health",
+	    "heart",
+	    "heavy",
+	    "hedgehog",
+	    "height",
+	    "hello",
+	    "helmet",
+	    "help",
+	    "hen",
+	    "hero",
+	    "hidden",
+	    "high",
+	    "hill",
+	    "hint",
+	    "hip",
+	    "hire",
+	    "history",
+	    "hobby",
+	    "hockey",
+	    "hold",
+	    "hole",
+	    "holiday",
+	    "hollow",
+	    "home",
+	    "honey",
+	    "hood",
+	    "hope",
+	    "horn",
+	    "horror",
+	    "horse",
+	    "hospital",
+	    "host",
+	    "hotel",
+	    "hour",
+	    "hover",
+	    "hub",
+	    "huge",
+	    "human",
+	    "humble",
+	    "humor",
+	    "hundred",
+	    "hungry",
+	    "hunt",
+	    "hurdle",
+	    "hurry",
+	    "hurt",
+	    "husband",
+	    "hybrid",
+	    "ice",
+	    "icon",
+	    "idea",
+	    "identify",
+	    "idle",
+	    "ignore",
+	    "ill",
+	    "illegal",
+	    "illness",
+	    "image",
+	    "imitate",
+	    "immense",
+	    "immune",
+	    "impact",
+	    "impose",
+	    "improve",
+	    "impulse",
+	    "inch",
+	    "include",
+	    "income",
+	    "increase",
+	    "index",
+	    "indicate",
+	    "indoor",
+	    "industry",
+	    "infant",
+	    "inflict",
+	    "inform",
+	    "inhale",
+	    "inherit",
+	    "initial",
+	    "inject",
+	    "injury",
+	    "inmate",
+	    "inner",
+	    "innocent",
+	    "input",
+	    "inquiry",
+	    "insane",
+	    "insect",
+	    "inside",
+	    "inspire",
+	    "install",
+	    "intact",
+	    "interest",
+	    "into",
+	    "invest",
+	    "invite",
+	    "involve",
+	    "iron",
+	    "island",
+	    "isolate",
+	    "issue",
+	    "item",
+	    "ivory",
+	    "jacket",
+	    "jaguar",
+	    "jar",
+	    "jazz",
+	    "jealous",
+	    "jeans",
+	    "jelly",
+	    "jewel",
+	    "job",
+	    "join",
+	    "joke",
+	    "journey",
+	    "joy",
+	    "judge",
+	    "juice",
+	    "jump",
+	    "jungle",
+	    "junior",
+	    "junk",
+	    "just",
+	    "kangaroo",
+	    "keen",
+	    "keep",
+	    "ketchup",
+	    "key",
+	    "kick",
+	    "kid",
+	    "kidney",
+	    "kind",
+	    "kingdom",
+	    "kiss",
+	    "kit",
+	    "kitchen",
+	    "kite",
+	    "kitten",
+	    "kiwi",
+	    "knee",
+	    "knife",
+	    "knock",
+	    "know",
+	    "lab",
+	    "label",
+	    "labor",
+	    "ladder",
+	    "lady",
+	    "lake",
+	    "lamp",
+	    "language",
+	    "laptop",
+	    "large",
+	    "later",
+	    "latin",
+	    "laugh",
+	    "laundry",
+	    "lava",
+	    "law",
+	    "lawn",
+	    "lawsuit",
+	    "layer",
+	    "lazy",
+	    "leader",
+	    "leaf",
+	    "learn",
+	    "leave",
+	    "lecture",
+	    "left",
+	    "leg",
+	    "legal",
+	    "legend",
+	    "leisure",
+	    "lemon",
+	    "lend",
+	    "length",
+	    "lens",
+	    "leopard",
+	    "lesson",
+	    "letter",
+	    "level",
+	    "liar",
+	    "liberty",
+	    "library",
+	    "license",
+	    "life",
+	    "lift",
+	    "light",
+	    "like",
+	    "limb",
+	    "limit",
+	    "link",
+	    "lion",
+	    "liquid",
+	    "list",
+	    "little",
+	    "live",
+	    "lizard",
+	    "load",
+	    "loan",
+	    "lobster",
+	    "local",
+	    "lock",
+	    "logic",
+	    "lonely",
+	    "long",
+	    "loop",
+	    "lottery",
+	    "loud",
+	    "lounge",
+	    "love",
+	    "loyal",
+	    "lucky",
+	    "luggage",
+	    "lumber",
+	    "lunar",
+	    "lunch",
+	    "luxury",
+	    "lyrics",
+	    "machine",
+	    "mad",
+	    "magic",
+	    "magnet",
+	    "maid",
+	    "mail",
+	    "main",
+	    "major",
+	    "make",
+	    "mammal",
+	    "man",
+	    "manage",
+	    "mandate",
+	    "mango",
+	    "mansion",
+	    "manual",
+	    "maple",
+	    "marble",
+	    "march",
+	    "margin",
+	    "marine",
+	    "market",
+	    "marriage",
+	    "mask",
+	    "mass",
+	    "master",
+	    "match",
+	    "material",
+	    "math",
+	    "matrix",
+	    "matter",
+	    "maximum",
+	    "maze",
+	    "meadow",
+	    "mean",
+	    "measure",
+	    "meat",
+	    "mechanic",
+	    "medal",
+	    "media",
+	    "melody",
+	    "melt",
+	    "member",
+	    "memory",
+	    "mention",
+	    "menu",
+	    "mercy",
+	    "merge",
+	    "merit",
+	    "merry",
+	    "mesh",
+	    "message",
+	    "metal",
+	    "method",
+	    "middle",
+	    "midnight",
+	    "milk",
+	    "million",
+	    "mimic",
+	    "mind",
+	    "minimum",
+	    "minor",
+	    "minute",
+	    "miracle",
+	    "mirror",
+	    "misery",
+	    "miss",
+	    "mistake",
+	    "mix",
+	    "mixed",
+	    "mixture",
+	    "mobile",
+	    "model",
+	    "modify",
+	    "mom",
+	    "moment",
+	    "monitor",
+	    "monkey",
+	    "monster",
+	    "month",
+	    "moon",
+	    "moral",
+	    "more",
+	    "morning",
+	    "mosquito",
+	    "mother",
+	    "motion",
+	    "motor",
+	    "mountain",
+	    "mouse",
+	    "move",
+	    "movie",
+	    "much",
+	    "muffin",
+	    "mule",
+	    "multiply",
+	    "muscle",
+	    "museum",
+	    "mushroom",
+	    "music",
+	    "must",
+	    "mutual",
+	    "myself",
+	    "mystery",
+	    "myth",
+	    "naive",
+	    "name",
+	    "napkin",
+	    "narrow",
+	    "nasty",
+	    "nation",
+	    "nature",
+	    "near",
+	    "neck",
+	    "need",
+	    "negative",
+	    "neglect",
+	    "neither",
+	    "nephew",
+	    "nerve",
+	    "nest",
+	    "net",
+	    "network",
+	    "neutral",
+	    "never",
+	    "news",
+	    "next",
+	    "nice",
+	    "night",
+	    "noble",
+	    "noise",
+	    "nominee",
+	    "noodle",
+	    "normal",
+	    "north",
+	    "nose",
+	    "notable",
+	    "note",
+	    "nothing",
+	    "notice",
+	    "novel",
+	    "now",
+	    "nuclear",
+	    "number",
+	    "nurse",
+	    "nut",
+	    "oak",
+	    "obey",
+	    "object",
+	    "oblige",
+	    "obscure",
+	    "observe",
+	    "obtain",
+	    "obvious",
+	    "occur",
+	    "ocean",
+	    "october",
+	    "odor",
+	    "off",
+	    "offer",
+	    "office",
+	    "often",
+	    "oil",
+	    "okay",
+	    "old",
+	    "olive",
+	    "olympic",
+	    "omit",
+	    "once",
+	    "one",
+	    "onion",
+	    "online",
+	    "only",
+	    "open",
+	    "opera",
+	    "opinion",
+	    "oppose",
+	    "option",
+	    "orange",
+	    "orbit",
+	    "orchard",
+	    "order",
+	    "ordinary",
+	    "organ",
+	    "orient",
+	    "original",
+	    "orphan",
+	    "ostrich",
+	    "other",
+	    "outdoor",
+	    "outer",
+	    "output",
+	    "outside",
+	    "oval",
+	    "oven",
+	    "over",
+	    "own",
+	    "owner",
+	    "oxygen",
+	    "oyster",
+	    "ozone",
+	    "pact",
+	    "paddle",
+	    "page",
+	    "pair",
+	    "palace",
+	    "palm",
+	    "panda",
+	    "panel",
+	    "panic",
+	    "panther",
+	    "paper",
+	    "parade",
+	    "parent",
+	    "park",
+	    "parrot",
+	    "party",
+	    "pass",
+	    "patch",
+	    "path",
+	    "patient",
+	    "patrol",
+	    "pattern",
+	    "pause",
+	    "pave",
+	    "payment",
+	    "peace",
+	    "peanut",
+	    "pear",
+	    "peasant",
+	    "pelican",
+	    "pen",
+	    "penalty",
+	    "pencil",
+	    "people",
+	    "pepper",
+	    "perfect",
+	    "permit",
+	    "person",
+	    "pet",
+	    "phone",
+	    "photo",
+	    "phrase",
+	    "physical",
+	    "piano",
+	    "picnic",
+	    "picture",
+	    "piece",
+	    "pig",
+	    "pigeon",
+	    "pill",
+	    "pilot",
+	    "pink",
+	    "pioneer",
+	    "pipe",
+	    "pistol",
+	    "pitch",
+	    "pizza",
+	    "place",
+	    "planet",
+	    "plastic",
+	    "plate",
+	    "play",
+	    "please",
+	    "pledge",
+	    "pluck",
+	    "plug",
+	    "plunge",
+	    "poem",
+	    "poet",
+	    "point",
+	    "polar",
+	    "pole",
+	    "police",
+	    "pond",
+	    "pony",
+	    "pool",
+	    "popular",
+	    "portion",
+	    "position",
+	    "possible",
+	    "post",
+	    "potato",
+	    "pottery",
+	    "poverty",
+	    "powder",
+	    "power",
+	    "practice",
+	    "praise",
+	    "predict",
+	    "prefer",
+	    "prepare",
+	    "present",
+	    "pretty",
+	    "prevent",
+	    "price",
+	    "pride",
+	    "primary",
+	    "print",
+	    "priority",
+	    "prison",
+	    "private",
+	    "prize",
+	    "problem",
+	    "process",
+	    "produce",
+	    "profit",
+	    "program",
+	    "project",
+	    "promote",
+	    "proof",
+	    "property",
+	    "prosper",
+	    "protect",
+	    "proud",
+	    "provide",
+	    "public",
+	    "pudding",
+	    "pull",
+	    "pulp",
+	    "pulse",
+	    "pumpkin",
+	    "punch",
+	    "pupil",
+	    "puppy",
+	    "purchase",
+	    "purity",
+	    "purpose",
+	    "purse",
+	    "push",
+	    "put",
+	    "puzzle",
+	    "pyramid",
+	    "quality",
+	    "quantum",
+	    "quarter",
+	    "question",
+	    "quick",
+	    "quit",
+	    "quiz",
+	    "quote",
+	    "rabbit",
+	    "raccoon",
+	    "race",
+	    "rack",
+	    "radar",
+	    "radio",
+	    "rail",
+	    "rain",
+	    "raise",
+	    "rally",
+	    "ramp",
+	    "ranch",
+	    "random",
+	    "range",
+	    "rapid",
+	    "rare",
+	    "rate",
+	    "rather",
+	    "raven",
+	    "raw",
+	    "razor",
+	    "ready",
+	    "real",
+	    "reason",
+	    "rebel",
+	    "rebuild",
+	    "recall",
+	    "receive",
+	    "recipe",
+	    "record",
+	    "recycle",
+	    "reduce",
+	    "reflect",
+	    "reform",
+	    "refuse",
+	    "region",
+	    "regret",
+	    "regular",
+	    "reject",
+	    "relax",
+	    "release",
+	    "relief",
+	    "rely",
+	    "remain",
+	    "remember",
+	    "remind",
+	    "remove",
+	    "render",
+	    "renew",
+	    "rent",
+	    "reopen",
+	    "repair",
+	    "repeat",
+	    "replace",
+	    "report",
+	    "require",
+	    "rescue",
+	    "resemble",
+	    "resist",
+	    "resource",
+	    "response",
+	    "result",
+	    "retire",
+	    "retreat",
+	    "return",
+	    "reunion",
+	    "reveal",
+	    "review",
+	    "reward",
+	    "rhythm",
+	    "rib",
+	    "ribbon",
+	    "rice",
+	    "rich",
+	    "ride",
+	    "ridge",
+	    "rifle",
+	    "right",
+	    "rigid",
+	    "ring",
+	    "riot",
+	    "ripple",
+	    "risk",
+	    "ritual",
+	    "rival",
+	    "river",
+	    "road",
+	    "roast",
+	    "robot",
+	    "robust",
+	    "rocket",
+	    "romance",
+	    "roof",
+	    "rookie",
+	    "room",
+	    "rose",
+	    "rotate",
+	    "rough",
+	    "round",
+	    "route",
+	    "royal",
+	    "rubber",
+	    "rude",
+	    "rug",
+	    "rule",
+	    "run",
+	    "runway",
+	    "rural",
+	    "sad",
+	    "saddle",
+	    "sadness",
+	    "safe",
+	    "sail",
+	    "salad",
+	    "salmon",
+	    "salon",
+	    "salt",
+	    "salute",
+	    "same",
+	    "sample",
+	    "sand",
+	    "satisfy",
+	    "satoshi",
+	    "sauce",
+	    "sausage",
+	    "save",
+	    "say",
+	    "scale",
+	    "scan",
+	    "scare",
+	    "scatter",
+	    "scene",
+	    "scheme",
+	    "school",
+	    "science",
+	    "scissors",
+	    "scorpion",
+	    "scout",
+	    "scrap",
+	    "screen",
+	    "script",
+	    "scrub",
+	    "sea",
+	    "search",
+	    "season",
+	    "seat",
+	    "second",
+	    "secret",
+	    "section",
+	    "security",
+	    "seed",
+	    "seek",
+	    "segment",
+	    "select",
+	    "sell",
+	    "seminar",
+	    "senior",
+	    "sense",
+	    "sentence",
+	    "series",
+	    "service",
+	    "session",
+	    "settle",
+	    "setup",
+	    "seven",
+	    "shadow",
+	    "shaft",
+	    "shallow",
+	    "share",
+	    "shed",
+	    "shell",
+	    "sheriff",
+	    "shield",
+	    "shift",
+	    "shine",
+	    "ship",
+	    "shiver",
+	    "shock",
+	    "shoe",
+	    "shoot",
+	    "shop",
+	    "short",
+	    "shoulder",
+	    "shove",
+	    "shrimp",
+	    "shrug",
+	    "shuffle",
+	    "shy",
+	    "sibling",
+	    "sick",
+	    "side",
+	    "siege",
+	    "sight",
+	    "sign",
+	    "silent",
+	    "silk",
+	    "silly",
+	    "silver",
+	    "similar",
+	    "simple",
+	    "since",
+	    "sing",
+	    "siren",
+	    "sister",
+	    "situate",
+	    "six",
+	    "size",
+	    "skate",
+	    "sketch",
+	    "ski",
+	    "skill",
+	    "skin",
+	    "skirt",
+	    "skull",
+	    "slab",
+	    "slam",
+	    "sleep",
+	    "slender",
+	    "slice",
+	    "slide",
+	    "slight",
+	    "slim",
+	    "slogan",
+	    "slot",
+	    "slow",
+	    "slush",
+	    "small",
+	    "smart",
+	    "smile",
+	    "smoke",
+	    "smooth",
+	    "snack",
+	    "snake",
+	    "snap",
+	    "sniff",
+	    "snow",
+	    "soap",
+	    "soccer",
+	    "social",
+	    "sock",
+	    "soda",
+	    "soft",
+	    "solar",
+	    "soldier",
+	    "solid",
+	    "solution",
+	    "solve",
+	    "someone",
+	    "song",
+	    "soon",
+	    "sorry",
+	    "sort",
+	    "soul",
+	    "sound",
+	    "soup",
+	    "source",
+	    "south",
+	    "space",
+	    "spare",
+	    "spatial",
+	    "spawn",
+	    "speak",
+	    "special",
+	    "speed",
+	    "spell",
+	    "spend",
+	    "sphere",
+	    "spice",
+	    "spider",
+	    "spike",
+	    "spin",
+	    "spirit",
+	    "split",
+	    "spoil",
+	    "sponsor",
+	    "spoon",
+	    "sport",
+	    "spot",
+	    "spray",
+	    "spread",
+	    "spring",
+	    "spy",
+	    "square",
+	    "squeeze",
+	    "squirrel",
+	    "stable",
+	    "stadium",
+	    "staff",
+	    "stage",
+	    "stairs",
+	    "stamp",
+	    "stand",
+	    "start",
+	    "state",
+	    "stay",
+	    "steak",
+	    "steel",
+	    "stem",
+	    "step",
+	    "stereo",
+	    "stick",
+	    "still",
+	    "sting",
+	    "stock",
+	    "stomach",
+	    "stone",
+	    "stool",
+	    "story",
+	    "stove",
+	    "strategy",
+	    "street",
+	    "strike",
+	    "strong",
+	    "struggle",
+	    "student",
+	    "stuff",
+	    "stumble",
+	    "style",
+	    "subject",
+	    "submit",
+	    "subway",
+	    "success",
+	    "such",
+	    "sudden",
+	    "suffer",
+	    "sugar",
+	    "suggest",
+	    "suit",
+	    "summer",
+	    "sun",
+	    "sunny",
+	    "sunset",
+	    "super",
+	    "supply",
+	    "supreme",
+	    "sure",
+	    "surface",
+	    "surge",
+	    "surprise",
+	    "surround",
+	    "survey",
+	    "suspect",
+	    "sustain",
+	    "swallow",
+	    "swamp",
+	    "swap",
+	    "swarm",
+	    "swear",
+	    "sweet",
+	    "swift",
+	    "swim",
+	    "swing",
+	    "switch",
+	    "sword",
+	    "symbol",
+	    "symptom",
+	    "syrup",
+	    "system",
+	    "table",
+	    "tackle",
+	    "tag",
+	    "tail",
+	    "talent",
+	    "talk",
+	    "tank",
+	    "tape",
+	    "target",
+	    "task",
+	    "taste",
+	    "tattoo",
+	    "taxi",
+	    "teach",
+	    "team",
+	    "tell",
+	    "ten",
+	    "tenant",
+	    "tennis",
+	    "tent",
+	    "term",
+	    "test",
+	    "text",
+	    "thank",
+	    "that",
+	    "theme",
+	    "then",
+	    "theory",
+	    "there",
+	    "they",
+	    "thing",
+	    "this",
+	    "thought",
+	    "three",
+	    "thrive",
+	    "throw",
+	    "thumb",
+	    "thunder",
+	    "ticket",
+	    "tide",
+	    "tiger",
+	    "tilt",
+	    "timber",
+	    "time",
+	    "tiny",
+	    "tip",
+	    "tired",
+	    "tissue",
+	    "title",
+	    "toast",
+	    "tobacco",
+	    "today",
+	    "toddler",
+	    "toe",
+	    "together",
+	    "toilet",
+	    "token",
+	    "tomato",
+	    "tomorrow",
+	    "tone",
+	    "tongue",
+	    "tonight",
+	    "tool",
+	    "tooth",
+	    "top",
+	    "topic",
+	    "topple",
+	    "torch",
+	    "tornado",
+	    "tortoise",
+	    "toss",
+	    "total",
+	    "tourist",
+	    "toward",
+	    "tower",
+	    "town",
+	    "toy",
+	    "track",
+	    "trade",
+	    "traffic",
+	    "tragic",
+	    "train",
+	    "transfer",
+	    "trap",
+	    "trash",
+	    "travel",
+	    "tray",
+	    "treat",
+	    "tree",
+	    "trend",
+	    "trial",
+	    "tribe",
+	    "trick",
+	    "trigger",
+	    "trim",
+	    "trip",
+	    "trophy",
+	    "trouble",
+	    "truck",
+	    "true",
+	    "truly",
+	    "trumpet",
+	    "trust",
+	    "truth",
+	    "try",
+	    "tube",
+	    "tuition",
+	    "tumble",
+	    "tuna",
+	    "tunnel",
+	    "turkey",
+	    "turn",
+	    "turtle",
+	    "twelve",
+	    "twenty",
+	    "twice",
+	    "twin",
+	    "twist",
+	    "two",
+	    "type",
+	    "typical",
+	    "ugly",
+	    "umbrella",
+	    "unable",
+	    "unaware",
+	    "uncle",
+	    "uncover",
+	    "under",
+	    "undo",
+	    "unfair",
+	    "unfold",
+	    "unhappy",
+	    "uniform",
+	    "unique",
+	    "unit",
+	    "universe",
+	    "unknown",
+	    "unlock",
+	    "until",
+	    "unusual",
+	    "unveil",
+	    "update",
+	    "upgrade",
+	    "uphold",
+	    "upon",
+	    "upper",
+	    "upset",
+	    "urban",
+	    "urge",
+	    "usage",
+	    "use",
+	    "used",
+	    "useful",
+	    "useless",
+	    "usual",
+	    "utility",
+	    "vacant",
+	    "vacuum",
+	    "vague",
+	    "valid",
+	    "valley",
+	    "valve",
+	    "van",
+	    "vanish",
+	    "vapor",
+	    "various",
+	    "vast",
+	    "vault",
+	    "vehicle",
+	    "velvet",
+	    "vendor",
+	    "venture",
+	    "venue",
+	    "verb",
+	    "verify",
+	    "version",
+	    "very",
+	    "vessel",
+	    "veteran",
+	    "viable",
+	    "vibrant",
+	    "vicious",
+	    "victory",
+	    "video",
+	    "view",
+	    "village",
+	    "vintage",
+	    "violin",
+	    "virtual",
+	    "virus",
+	    "visa",
+	    "visit",
+	    "visual",
+	    "vital",
+	    "vivid",
+	    "vocal",
+	    "voice",
+	    "void",
+	    "volcano",
+	    "volume",
+	    "vote",
+	    "voyage",
+	    "wage",
+	    "wagon",
+	    "wait",
+	    "walk",
+	    "wall",
+	    "walnut",
+	    "want",
+	    "warfare",
+	    "warm",
+	    "warrior",
+	    "wash",
+	    "wasp",
+	    "waste",
+	    "water",
+	    "wave",
+	    "way",
+	    "wealth",
+	    "weapon",
+	    "wear",
+	    "weasel",
+	    "weather",
+	    "web",
+	    "wedding",
+	    "weekend",
+	    "weird",
+	    "welcome",
+	    "west",
+	    "wet",
+	    "whale",
+	    "what",
+	    "wheat",
+	    "wheel",
+	    "when",
+	    "where",
+	    "whip",
+	    "whisper",
+	    "wide",
+	    "width",
+	    "wife",
+	    "wild",
+	    "will",
+	    "win",
+	    "window",
+	    "wine",
+	    "wing",
+	    "wink",
+	    "winner",
+	    "winter",
+	    "wire",
+	    "wisdom",
+	    "wise",
+	    "wish",
+	    "witness",
+	    "wolf",
+	    "woman",
+	    "wonder",
+	    "wood",
+	    "wool",
+	    "word",
+	    "work",
+	    "world",
+	    "worry",
+	    "worth",
+	    "wrap",
+	    "wreck",
+	    "wrestle",
+	    "wrist",
+	    "write",
+	    "wrong",
+	    "yard",
+	    "year",
+	    "yellow",
+	    "you",
+	    "young",
+	    "youth",
+	    "zebra",
+	    "zero",
+	    "zone",
+	    "zoo"
+	];
+
+	});
+
+	var bip39 = createCommonjsModule(function (module, exports) {
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.Bip39 = void 0;
+
+
+
+
+
+	/**
+	 * Implementation of Bip39 for mnemonic generation.
+	 */
+	var Bip39 = /** @class */ (function () {
+	    function Bip39() {
+	    }
+	    /**
+	     * Set the wordlist and joining character.
+	     * @param wordlistData Array of words.
+	     * @param joiningChar The character to join the words with.
+	     */
+	    Bip39.setWordList = function (wordlistData, joiningChar) {
+	        if (joiningChar === void 0) { joiningChar = " "; }
+	        Bip39._wordlist = wordlistData;
+	        Bip39._joiningChar = joiningChar;
+	    };
+	    /**
+	     * Generate a random mnemonic.
+	     * @param length The length of the mnemonic to generate, defaults to 256.
+	     * @returns The random mnemonic.
+	     */
+	    Bip39.randomMnemonic = function (length) {
+	        if (length === void 0) { length = 256; }
+	        if (length % 32 !== 0) {
+	            throw new Error("The length must be a multiple of 32");
+	        }
+	        var randomBytes = randomHelper.RandomHelper.generate(length / 8);
+	        return Bip39.entropyToMnemonic(randomBytes);
+	    };
+	    /**
+	     * Generate a mnemonic from the entropy.
+	     * @param entropy The entropy to generate
+	     * @returns The mnemonic.
+	     */
+	    Bip39.entropyToMnemonic = function (entropy) {
+	        if (!Bip39._wordlist) {
+	            Bip39.setWordList(english.english, " ");
+	        }
+	        if (entropy.length % 4 !== 0 || entropy.length < 16 || entropy.length > 32) {
+	            throw new Error("The length of the entropy is invalid, it should be a multiple of 4, >= 16 and <= 32, it is " + entropy.length);
+	        }
+	        var bin = "" + converter.Converter.bytesToBinary(entropy) + Bip39.entropyChecksumBits(entropy);
+	        var mnemonic = [];
+	        for (var i = 0; i < bin.length / 11; i++) {
+	            var wordIndexBits = bin.slice(i * 11, (i + 1) * 11);
+	            var wordIndex = Number.parseInt(wordIndexBits, 2);
+	            mnemonic.push(Bip39._wordlist[wordIndex]);
+	        }
+	        return mnemonic.join(Bip39._joiningChar);
+	    };
+	    /**
+	     * Convert a mnemonic to a seed.
+	     * @param mnemonic The mnemonic to convert.
+	     * @param password The password to apply to the seed generation.
+	     * @param iterations The number of iterations to perform on the password function, defaults to 2048.
+	     * @param keyLength The size of the key length to generate, defaults to 64.
+	     * @returns The seed.
+	     */
+	    Bip39.mnemonicToSeed = function (mnemonic, password, iterations, keyLength) {
+	        if (iterations === void 0) { iterations = 2048; }
+	        if (keyLength === void 0) { keyLength = 64; }
+	        var mnemonicBytes = converter.Converter.asciiToBytes(mnemonic.normalize("NFKD"));
+	        var salt = converter.Converter.asciiToBytes("mnemonic" + (password !== null && password !== void 0 ? password : "").normalize("NFKD"));
+	        return pbkdf2.Pbkdf2.sha512(mnemonicBytes, salt, iterations, keyLength);
+	    };
+	    /**
+	     * Convert the mnemonic back to entropy.
+	     * @param mnemonic The mnemonic to convert.
+	     * @returns The entropy.
+	     */
+	    Bip39.mnemonicToEntropy = function (mnemonic) {
+	        if (!Bip39._wordlist) {
+	            Bip39.setWordList(english.english, " ");
+	        }
+	        var words = mnemonic.normalize("NFKD").split(Bip39._joiningChar);
+	        if (words.length % 3 !== 0) {
+	            throw new Error("Invalid mnemonic the number of words should be a multiple of 3, it is " + words.length);
+	        }
+	        var bits = words
+	            .map(function (word) {
+	            var index = Bip39._wordlist.indexOf(word);
+	            if (index === -1) {
+	                throw new Error("The mnemonic contains a word not in the wordlist " + word);
+	            }
+	            return index.toString(2).padStart(11, "0");
+	        })
+	            .join("");
+	        var dividerIndex = Math.floor(bits.length / 33) * 32;
+	        var entropyBits = bits.slice(0, dividerIndex);
+	        var checksumBits = bits.slice(dividerIndex);
+	        var entropy = converter.Converter.binaryToBytes(entropyBits);
+	        if (entropy.length % 4 !== 0 || entropy.length < 16 || entropy.length > 32) {
+	            throw new Error("The length of the entropy is invalid");
+	        }
+	        var newChecksum = Bip39.entropyChecksumBits(entropy);
+	        if (newChecksum !== checksumBits) {
+	            throw new Error("The checksum does not match " + newChecksum + " != " + checksumBits + ".");
+	        }
+	        return entropy;
+	    };
+	    /**
+	     * Calculate the entropy checksum.
+	     * @param entropy The entropy to calculate the checksum for.
+	     * @returns The checksum.
+	     */
+	    Bip39.entropyChecksumBits = function (entropy) {
+	        var hash = sha256.Sha256.sum256(entropy);
+	        var bits = entropy.length * 8;
+	        var hashbits = converter.Converter.bytesToBinary(hash);
+	        return hashbits.slice(0, bits / 32);
+	    };
+	    /**
+	     * The character to join the mnemonics with.
+	     * @internal
+	     */
+	    Bip39._joiningChar = " "; // \u3000 for japanese
+	    return Bip39;
+	}());
+	exports.Bip39 = Bip39;
+
+	});
+
 	var curl = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.Curl = void 0;
@@ -6820,76 +9616,6 @@
 	    return Curl;
 	}());
 	exports.Curl = Curl;
-
-	});
-
-	var hmacSha512 = createCommonjsModule(function (module, exports) {
-	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.HmacSha512 = void 0;
-	// Copyright 2020 IOTA Stiftung
-	// SPDX-License-Identifier: Apache-2.0
-	/* eslint-disable no-bitwise */
-
-	/**
-	 * Class to help with HmacSha512 scheme.
-	 * TypeScript conversion from https://github.com/emn178/js-sha512
-	 */
-	var HmacSha512 = /** @class */ (function () {
-	    /**
-	     * Create a new instance of HmacSha512.
-	     * @param key The key for the hmac.
-	     * @param bits The number of bits.
-	     */
-	    function HmacSha512(key, bits) {
-	        if (bits === void 0) { bits = 512; }
-	        this._bits = bits;
-	        this._sha512 = new sha512.Sha512(bits);
-	        if (key.length > 128) {
-	            key = new sha512.Sha512(bits).digest();
-	        }
-	        this._oKeyPad = new Uint8Array(128);
-	        var iKeyPad = new Uint8Array(128);
-	        for (var i = 0; i < 128; ++i) {
-	            var b = key[i] || 0;
-	            this._oKeyPad[i] = 0x5C ^ b;
-	            iKeyPad[i] = 0x36 ^ b;
-	        }
-	        this._sha512.update(iKeyPad);
-	    }
-	    /**
-	     * Perform Sum 512 on the data.
-	     * @param key The key for thr hmac.
-	     * @param data The data to operate on.
-	     * @returns The sum 512 of the data.
-	     */
-	    HmacSha512.sum512 = function (key, data) {
-	        var b2b = new HmacSha512(key, 512);
-	        b2b.update(data);
-	        return b2b.digest();
-	    };
-	    /**
-	     * Update the hash with the data.
-	     * @param message The data to update the hash with.
-	     * @returns The instance for chaining.
-	     */
-	    HmacSha512.prototype.update = function (message) {
-	        this._sha512.update(message);
-	        return this;
-	    };
-	    /**
-	     * Get the digest.
-	     * @returns The digest.
-	     */
-	    HmacSha512.prototype.digest = function () {
-	        var innerHash = this._sha512.digest();
-	        var finalSha512 = new sha512.Sha512(this._bits);
-	        finalSha512.update(this._oKeyPad);
-	        finalSha512.update(innerHash);
-	        return finalSha512.digest();
-	    };
-	    return HmacSha512;
-	}());
-	exports.HmacSha512 = HmacSha512;
 
 	});
 
@@ -8132,6 +10858,9 @@
 	                    if (!indexationKey || indexationKey.length === 0) {
 	                        throw new Error("indexationKey must not be empty");
 	                    }
+	                    if (!indexationData) {
+	                        throw new Error("indexationData must not be empty");
+	                    }
 	                    indexationPayload = {
 	                        type: 2,
 	                        index: indexationKey,
@@ -8565,6 +11294,7 @@
 	exports.Ed25519Seed = exports.ED25519_SEED_TYPE = void 0;
 
 
+
 	/**
 	 * The global type for the seed.
 	 */
@@ -8580,6 +11310,14 @@
 	    function Ed25519Seed(secretKeyBytes) {
 	        this._secretKey = secretKeyBytes !== null && secretKeyBytes !== void 0 ? secretKeyBytes : new Uint8Array();
 	    }
+	    /**
+	     * Create the seed from a Bip39 mnenomic.
+	     * @param mnemonic The mnenomic to create the seed from.
+	     * @returns A new instance of Ed25519Seed.
+	     */
+	    Ed25519Seed.fromMnemonic = function (mnemonic) {
+	        return new Ed25519Seed(bip39.Bip39.mnemonicToSeed(mnemonic, undefined, 2048, 32));
+	    };
 	    /**
 	     * Get the key pair from the seed.
 	     * @returns The key pair.
@@ -8608,7 +11346,7 @@
 	        return this._secretKey;
 	    };
 	    /**
-	     * SeedSize is the size, in bytes, of private key seeds.
+	     * Size, in bytes, of private key seeds.
 	     * @internal
 	     */
 	    Ed25519Seed.SEED_SIZE_BYTES = 32;
@@ -9285,10 +12023,14 @@
 	__exportStar(singleNodeClientOptions, exports);
 	__exportStar(bech32, exports);
 	__exportStar(bip32Path, exports);
+	__exportStar(bip39, exports);
 	__exportStar(blake2b, exports);
 	__exportStar(curl, exports);
 	__exportStar(ed25519, exports);
+	__exportStar(hmacSha256, exports);
 	__exportStar(hmacSha512, exports);
+	__exportStar(pbkdf2, exports);
+	__exportStar(sha256, exports);
 	__exportStar(sha512, exports);
 	__exportStar(slip0010, exports);
 	__exportStar(zip215, exports);

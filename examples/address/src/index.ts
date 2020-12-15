@@ -1,14 +1,16 @@
-import { Bech32Helper, Bip32Path, Converter, Ed25519Address, Ed25519Seed, ED25519_ADDRESS_TYPE, RandomHelper } from "@iota/iota.js";
+import { Bip39, Bech32Helper, Bip32Path, Converter, Ed25519Address, Ed25519Seed, ED25519_ADDRESS_TYPE, RandomHelper } from "@iota/iota.js";
 
 async function run() {
-    // Generate a random seed.
-    const randomSeedBytes = RandomHelper.generate(32);
-
     console.log("Base");
-    console.log("\tSeed", Converter.bytesToHex(randomSeedBytes));
 
-    // Create a new seed
-    const baseSeed = new Ed25519Seed(randomSeedBytes);
+    // Generate a random mnenomic.
+    const randomMnemonic = Bip39.randomMnemonic();
+    console.log("\tMnenomic:", randomMnemonic)
+
+    // Generate the seed from the mnenomic
+    const baseSeed = Ed25519Seed.fromMnemonic(randomMnemonic);
+
+    console.log("\tSeed", Converter.bytesToHex(baseSeed.toBytes()));
 
     // Seed has public and private key
     const baseSeedKeyPair = baseSeed.keyPair();

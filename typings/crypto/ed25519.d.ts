@@ -31,10 +31,7 @@ export declare class Ed25519 {
         privateKey: Uint8Array;
     };
     /**
-     * NewKeyFromSeed calculates a private key from a seed. It will panic if
-     * len(seed) is not SeedSize. This function is provided for interoperability
-     * with RFC 8032. RFC 8032's private keys correspond to seeds in this
-     * package.
+     * Calculates a private key from a seed.
      * @param seed The seed to generate the private key from.
      * @returns The private key.
      */
