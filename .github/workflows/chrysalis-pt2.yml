@@ -5,12 +5,12 @@ on:
     branches: [feature/chrysalis-pt2]
     paths:
       - "src/**"
-      - ".github/workflows/chrysalis-pt2.yaml"
+      - ".github/workflows/chrysalis-pt2.yml"
   pull_request:
     branches: [feature/chrysalis-pt2]
     paths:
       - "src/**"
-      - ".github/workflows/chrysalis-pt2.yaml"
+      - ".github/workflows/chrysalis-pt2.yml"
 
 
 jobs:
