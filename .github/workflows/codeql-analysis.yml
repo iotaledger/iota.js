@@ -3,7 +3,7 @@ name: "CodeQL"
 on:
   push:
     branches:
-      - master
+      - feature/chrysalis-pt2
     paths:
       - 'src/**'
       - '.github/codeql/**'
