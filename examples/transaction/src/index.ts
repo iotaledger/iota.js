@@ -1,4 +1,4 @@
-import { Bech32Helper, Bip32Path, Converter, Ed25519Address, Ed25519Seed, ED25519_ADDRESS_TYPE, getBalance, getUnspentAddress, getUnspentAddresses, IKeyPair, IUTXOInput, LocalPowProvider, sendAdvanced, SingleNodeClient } from "@iota/iota.js";
+import { Bech32Helper, Bip32Path, Converter, Ed25519Address, Ed25519Seed, ED25519_ADDRESS_TYPE, getBalance, getUnspentAddress, getUnspentAddresses, IKeyPair, IUTXOInput, sendAdvanced, SingleNodeClient } from "@iota/iota.js";
 
 const API_ENDPOINT = "http://localhost:14265";
 
