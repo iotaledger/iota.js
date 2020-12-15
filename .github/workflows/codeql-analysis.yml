@@ -1,0 +1,39 @@
+name: "CodeQL"
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'src/**'
+      - '.github/codeql/**'
+      - '.github/workflows/codeql-analysis.yml'
+  pull_request:
+    paths:
+      - 'src/**'
+      - '.github/codeql/**'
+      - '.github/workflows/codeql-analysis.yml'
+  schedule:
+    - cron: '0 0 * * *'
+
+jobs:
+  CodeQL-Build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+
+      - run: git checkout HEAD^2
+        if: ${{ github.event_name == 'pull_request' }}
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v1
+        with:
+          languages: javascript
+          config-file: ./.github/codeql/codeql-config.yml
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v1

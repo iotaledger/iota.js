@@ -13,7 +13,7 @@
         "type": "git",
         "url": "https://github.com/iotaledger/iota.js.git"
     },
-    "license": "MIT",
+    "license": "Apache-2.0",
     "dependencies": {
         "mqtt": "^4.2.4",
         "node-fetch": "^2.6.1"

@@ -1,8 +1,34 @@
-# iota.js
+<h2 align="center">iota.js</h2>
+
+<p align="center">
+  <a href="https://discord.iota.org/" style="text-decoration:none;"><img src="https://img.shields.io/badge/Discord-9cf.svg?logo=discord" alt="Discord"></a>
+    <a href="https://iota.stackexchange.com/" style="text-decoration:none;"><img src="https://img.shields.io/badge/StackExchange-9cf.svg?logo=stackexchange" alt="StackExchange"></a>
+    <a href="https://github.com/iotaledger/iota.js/blob/master/LICENSE" style="text-decoration:none;"><img src="https://img.shields.io/github/license/iotaledger/iota.js.svg" alt="Apache-2.0 license"></a>
+</p>
+      
+<p align="center">
+  <a href="#about">About</a> ◈
+  <a href="#prerequisites">Prerequisites</a> ◈
+  <a href="#example">Example</a> ◈
+  <a href="#api-endpoints">Api Endpoints</a> ◈
+  <a href="#high-level-operations">High Level Operations</a> ◈
+  <a href="#mqtt-operations">MQTT Operations</a> ◈
+  <a href="#models">Models</a> ◈
+  <a href="#proof-of-work">Proof Of Work</a> ◈
+  <a href="#additional-examples">Additional Examples</a> ◈
+  <a href="#supporting-the-project">Supporting the project</a> ◈
+  <a href="#joining-the-discussion">Joining the discussion</a> 
+</p>
+
+# About
 
 Experimental client library for IOTA Chrysalis network. Implemeted in TypeScript to strongly type the objects sent and received from the API.
 
-## Installation
+Also includes High Level operations and MQTT support.
+
+Runs in both NodeJS and Browser environments.
+
+## Prerequisites
 
 ```shell
 npm install iotaledger/iota.js#chrysalis
@@ -109,7 +135,7 @@ You can experiment using it or any other PoW implementation by passing it in the
 const client = new SingleNodeClient("http://localhost:14265", { powProvider: new LocalPowProvider() });
 ```
 
-## More Examples
+## Additional Examples
 
 Please find other examples in the [./examples](./examples) folder.
 * Simple - Performs basic API operations.
@@ -121,3 +147,12 @@ Please find other examples in the [./examples](./examples) folder.
 * Mqtt - Using mqtt to read streaming messages.
 * Browser Mqtt - Using mqtt to read streaming messages in the browser.
 
+## Supporting the project
+
+If the iota.js has been useful to you and you feel like contributing, consider submitting a [bug report](https://github.com/iotaledger/iota.js/issues/new), [feature request](https://github.com/iotaledger/iota.js/issues/new) or a [pull request](https://github.com/iotaledger/iota.js/pulls/).
+
+See our [contributing guidelines](.github/CONTRIBUTING.md) for more information.
+
+## Joining the discussion
+
+If you want to get involved in the community, need help with getting set up, have any issues or just want to discuss IOTA, Distributed Registry Technology (DRT), and IoT with other people, feel free to join our [Discord](https://discord.iota.org/).
