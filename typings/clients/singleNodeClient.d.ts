@@ -10,7 +10,7 @@ import { IMessage } from "../models/IMessage";
 import { IMessageMetadata } from "../models/IMessageMetadata";
 import { INodeInfo } from "../models/INodeInfo";
 import { IPeer } from "../models/IPeer";
-import { IPowProvider } from "../models/IPowProvider";
+import { SingleNodeClientOptions } from "./singleNodeClientOptions";
 /**
  * Client for API communication.
  */
@@ -18,11 +18,9 @@ export declare class SingleNodeClient implements IClient {
     /**
      * Create a new instance of client.
      * @param endpoint The endpoint.
-     * @param basePath for the API defaults to /api/v1/
-     * @param powProvider Optional local POW provider.
-     * @param targetScore The target score for PoW.
+     * @param options Options for the client.
      */
-    constructor(endpoint: string, basePath?: string, powProvider?: IPowProvider, targetScore?: number);
+    constructor(endpoint: string, options?: SingleNodeClientOptions);
     /**
      * Get the health of the node.
      * @returns True if the node is healthy.

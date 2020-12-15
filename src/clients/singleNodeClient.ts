@@ -23,6 +23,7 @@ import { BigIntHelper } from "../utils/bigIntHelper";
 import { Converter } from "../utils/converter";
 import { WriteStream } from "../utils/writeStream";
 import { ClientError } from "./clientError";
+import { SingleNodeClientOptions } from "./singleNodeClientOptions";
 
 /**
  * Client for API communication.
@@ -59,20 +60,25 @@ export class SingleNodeClient implements IClient {
     private readonly _targetScore: number;
 
     /**
+     * The Api request timeout.
+     * @internal
+     */
+    private readonly _timeout?: number;
+
+    /**
      * Create a new instance of client.
      * @param endpoint The endpoint.
-     * @param basePath for the API defaults to /api/v1/
-     * @param powProvider Optional local POW provider.
-     * @param targetScore The target score for PoW.
+     * @param options Options for the client.
      */
-    constructor(endpoint: string, basePath?: string, powProvider?: IPowProvider, targetScore?: number) {
+    constructor(endpoint: string, options?: SingleNodeClientOptions) {
         if (!endpoint) {
             throw new Error("The endpoint can not be empty");
         }
         this._endpoint = endpoint.replace(/\/+$/, "");
-        this._basePath = basePath ?? "/api/v1/";
-        this._powProvider = powProvider;
-        this._targetScore = targetScore ?? 100;
+        this._basePath = options?.basePath ?? "/api/v1/";
+        this._powProvider = options?.powProvider;
+        this._targetScore = options?.targetScore ?? 100;
+        this._timeout = options?.timeout;
     }
 
     /**
@@ -356,12 +362,7 @@ export class SingleNodeClient implements IClient {
      * @internal
      */
     private async fetchStatus(route: string): Promise<number> {
-        const response = await fetch(
-            `${this._endpoint}${route}`,
-            {
-                method: "get"
-            }
-        );
+        const response = await this.fetchWithTimeout("get", route);
 
         return response.status;
     }
@@ -375,15 +376,11 @@ export class SingleNodeClient implements IClient {
      * @internal
      */
     private async fetchJson<T, U>(method: "get" | "post" | "delete", route: string, requestData?: T): Promise<U> {
-        const response = await fetch(
-            `${this._endpoint}${this._basePath}${route}`,
-            {
-                method,
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: requestData ? JSON.stringify(requestData) : undefined
-            }
+        const response = await this.fetchWithTimeout(
+            method,
+            `${this._basePath}${route}`,
+            { "Content-Type": "application/json" },
+            requestData ? JSON.stringify(requestData) : undefined
         );
 
         const responseData: IResponse<U> = await response.json();
@@ -412,15 +409,11 @@ export class SingleNodeClient implements IClient {
         method: "get" | "post",
         route: string,
         requestData?: Uint8Array): Promise<Uint8Array | T> {
-        const response = await fetch(
-            `${this._endpoint}${this._basePath}${route}`,
-            {
-                method,
-                headers: {
-                    "Content-Type": "application/octet-stream"
-                },
-                body: requestData
-            }
+        const response = await this.fetchWithTimeout(
+            method,
+            `${this._basePath}${route}`,
+            { "Content-Type": "application/octet-stream" },
+            requestData
         );
 
         let responseData: IResponse<T> | undefined;
@@ -445,5 +438,54 @@ export class SingleNodeClient implements IClient {
             response.status,
             responseData?.error?.code
         );
+    }
+
+    /**
+     * Perform a fetch request.
+     * @param method The http method.
+     * @param route The route of the request.
+     * @param headers The headers for the request.
+     * @param requestData Request to send to the endpoint.
+     * @returns The response.
+     * @internal
+     */
+    private async fetchWithTimeout(
+        method: "get" | "post" | "delete",
+        route: string,
+        headers?: { [id: string]: string },
+        body?: string | Uint8Array): Promise<Response> {
+        let controller: AbortController | undefined;
+        let timerId: NodeJS.Timeout | undefined;
+
+        if (this._timeout !== undefined) {
+            controller = new AbortController();
+            timerId = setTimeout(
+                () => {
+                    if (controller) {
+                        controller.abort();
+                    }
+                },
+                this._timeout);
+        }
+
+        try {
+            const response = await fetch(
+                `${this._endpoint}${route}`,
+                {
+                    method,
+                    headers,
+                    body,
+                    signal: controller ? controller.signal : undefined
+                }
+            );
+
+            return response;
+        } catch (err) {
+            throw err.name === "AbortError" ? new Error("Timeout") : err;
+        } finally {
+            if (timerId) {
+                clearTimeout(timerId);
+            }
+        }
     }
 }

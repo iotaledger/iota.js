@@ -6180,18 +6180,18 @@
 	    /**
 	     * Create a new instance of client.
 	     * @param endpoint The endpoint.
-	     * @param basePath for the API defaults to /api/v1/
-	     * @param powProvider Optional local POW provider.
-	     * @param targetScore The target score for PoW.
+	     * @param options Options for the client.
 	     */
-	    function SingleNodeClient(endpoint, basePath, powProvider, targetScore) {
+	    function SingleNodeClient(endpoint, options) {
+	        var _a, _b;
 	        if (!endpoint) {
 	            throw new Error("The endpoint can not be empty");
 	        }
 	        this._endpoint = endpoint.replace(/\/+$/, "");
-	        this._basePath = basePath !== null && basePath !== void 0 ? basePath : "/api/v1/";
-	        this._powProvider = powProvider;
-	        this._targetScore = targetScore !== null && targetScore !== void 0 ? targetScore : 100;
+	        this._basePath = (_a = options === null || options === void 0 ? void 0 : options.basePath) !== null && _a !== void 0 ? _a : "/api/v1/";
+	        this._powProvider = options === null || options === void 0 ? void 0 : options.powProvider;
+	        this._targetScore = (_b = options === null || options === void 0 ? void 0 : options.targetScore) !== null && _b !== void 0 ? _b : 100;
+	        this._timeout = options === null || options === void 0 ? void 0 : options.timeout;
 	    }
 	    /**
 	     * Get the health of the node.
@@ -6514,9 +6514,7 @@
 	            var response;
 	            return __generator(this, function (_a) {
 	                switch (_a.label) {
-	                    case 0: return [4 /*yield*/, fetch("" + this._endpoint + route, {
-	                            method: "get"
-	                        })];
+	                    case 0: return [4 /*yield*/, this.fetchWithTimeout("get", route)];
 	                    case 1:
 	                        response = _a.sent();
 	                        return [2 /*return*/, response.status];
@@ -6538,13 +6536,7 @@
 	            var response, responseData;
 	            return __generator(this, function (_d) {
 	                switch (_d.label) {
-	                    case 0: return [4 /*yield*/, fetch("" + this._endpoint + this._basePath + route, {
-	                            method: method,
-	                            headers: {
-	                                "Content-Type": "application/json"
-	                            },
-	                            body: requestData ? JSON.stringify(requestData) : undefined
-	                        })];
+	                    case 0: return [4 /*yield*/, this.fetchWithTimeout(method, "" + this._basePath + route, { "Content-Type": "application/json" }, requestData ? JSON.stringify(requestData) : undefined)];
 	                    case 1:
 	                        response = _d.sent();
 	                        return [4 /*yield*/, response.json()];
@@ -6572,13 +6564,7 @@
 	            var response, responseData, _d;
 	            return __generator(this, function (_e) {
 	                switch (_e.label) {
-	                    case 0: return [4 /*yield*/, fetch("" + this._endpoint + this._basePath + route, {
-	                            method: method,
-	                            headers: {
-	                                "Content-Type": "application/octet-stream"
-	                            },
-	                            body: requestData
-	                        })];
+	                    case 0: return [4 /*yield*/, this.fetchWithTimeout(method, "" + this._basePath + route, { "Content-Type": "application/octet-stream" }, requestData)];
 	                    case 1:
 	                        response = _e.sent();
 	                        if (!response.ok) return [3 /*break*/, 5];
@@ -6605,6 +6591,54 @@
 	        });
 	    };
 	    /**
+	     * Perform a fetch request.
+	     * @param method The http method.
+	     * @param route The route of the request.
+	     * @param headers The headers for the request.
+	     * @param requestData Request to send to the endpoint.
+	     * @returns The response.
+	     * @internal
+	     */
+	    SingleNodeClient.prototype.fetchWithTimeout = function (method, route, headers, body) {
+	        return __awaiter(this, void 0, void 0, function () {
+	            var controller, timerId, response, err_1;
+	            return __generator(this, function (_a) {
+	                switch (_a.label) {
+	                    case 0:
+	                        if (this._timeout !== undefined) {
+	                            controller = new AbortController();
+	                            timerId = setTimeout(function () {
+	                                if (controller) {
+	                                    controller.abort();
+	                                }
+	                            }, this._timeout);
+	                        }
+	                        _a.label = 1;
+	                    case 1:
+	                        _a.trys.push([1, 3, 4, 5]);
+	                        return [4 /*yield*/, fetch("" + this._endpoint + route, {
+	                                method: method,
+	                                headers: headers,
+	                                body: body,
+	                                signal: controller ? controller.signal : undefined
+	                            })];
+	                    case 2:
+	                        response = _a.sent();
+	                        return [2 /*return*/, response];
+	                    case 3:
+	                        err_1 = _a.sent();
+	                        throw err_1.name === "AbortError" ? new Error("Timeout") : err_1;
+	                    case 4:
+	                        if (timerId) {
+	                            clearTimeout(timerId);
+	                        }
+	                        return [7 /*endfinally*/];
+	                    case 5: return [2 /*return*/];
+	                }
+	            });
+	        });
+	    };
+	    /**
 	     * A zero nonce.
 	     * @internal
 	     */
@@ -6612,6 +6646,11 @@
 	    return SingleNodeClient;
 	}());
 	exports.SingleNodeClient = SingleNodeClient;
+
+	});
+
+	var singleNodeClientOptions = createCommonjsModule(function (module, exports) {
+	Object.defineProperty(exports, "__esModule", { value: true });
 
 	});
 
@@ -9244,6 +9283,7 @@
 	__exportStar(clientError, exports);
 	__exportStar(mqttClient, exports);
 	__exportStar(singleNodeClient, exports);
+	__exportStar(singleNodeClientOptions, exports);
 	__exportStar(bech32, exports);
 	__exportStar(bip32Path, exports);
 	__exportStar(blake2b, exports);

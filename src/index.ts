@@ -13,6 +13,7 @@ export * from "./binary/unlockBlock";
 export * from "./clients/clientError";
 export * from "./clients/mqttClient";
 export * from "./clients/singleNodeClient";
+export * from "./clients/singleNodeClientOptions";
 export * from "./crypto/bech32";
 export * from "./crypto/bip32Path";
 export * from "./crypto/blake2b";

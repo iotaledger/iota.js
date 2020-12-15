@@ -103,10 +103,10 @@ You can see the model definitions for all the objects in the [typings](./typings
 
 A very simple local proof of work provider [./localPowProvider](./src/pow/localPowProvider.ts) is implemented but not used by default.
 The example is included for reference purposes, but should not be used as it is very slow.
-You can experiment using it or any other PoW implementation by passing it to the constructor of a SingleNodeClient.
+You can experiment using it or any other PoW implementation by passing it in the options parameter of the SingleNodeClient constructor.
 
 ```js
-const client = new SingleNodeClient("http://localhost:14265", undefined, new LocalPowProvider());
+const client = new SingleNodeClient("http://localhost:14265", { powProvider: new LocalPowProvider() });
 ```
 
 ## More Examples
