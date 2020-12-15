@@ -1,7 +1,7 @@
 name: Client Build Chrysalis Pt 2
 
 on:
-  push:
+  [push, pull_request]:
     branches: [feature/chrysalis-pt2]
     paths:
       - "src/**"
