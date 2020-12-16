@@ -9,7 +9,7 @@ export class Bip32Path {
      * The path.
      * @internal
      */
-    private readonly _path: string[];
+    private _path: string[];
 
     /**
      * Create a new instance of Bip32Path.
@@ -25,6 +25,17 @@ export class Bip32Path {
         } else {
             this._path = [];
         }
+    }
+
+    /**
+     * Construct a new path by cloning an existing one.
+     * @param bip32Path The path to clone.
+     * @returns A new instance of Bip32Path.
+     */
+    public static fromPath(bip32Path: Bip32Path): Bip32Path {
+        const p = new Bip32Path();
+        p._path = bip32Path._path.slice();
+        return p;
     }
 
     /**

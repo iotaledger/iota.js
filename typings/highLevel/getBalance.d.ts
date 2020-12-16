@@ -5,8 +5,17 @@ import { ISeed } from "../models/ISeed";
  * Get the balance for a list of addresses.
  * @param client The client to send the transfer with.
  * @param seed The seed.
+ * @param accountIndex The account index in the wallet.
+ * @param startIndex The start index to generate from, defaults to 0.
+ * @returns The balance.
+ */
+export declare function getBalance(client: IClient, seed: ISeed, accountIndex: number, startIndex?: number): Promise<number>;
+/**
+ * Get the balance for a list of addresses.
+ * @param client The client to send the transfer with.
+ * @param seed The seed.
  * @param basePath The base path to start looking for addresses.
  * @param startIndex The start index to generate from, defaults to 0.
  * @returns The balance.
  */
-export declare function getBalance(client: IClient, seed: ISeed, basePath: Bip32Path, startIndex?: number): Promise<number>;
+export declare function getBalancePath(client: IClient, seed: ISeed, basePath: Bip32Path, startIndex?: number): Promise<number>;

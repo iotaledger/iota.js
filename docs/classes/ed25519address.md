@@ -16,26 +16,40 @@ Class to help with Ed25519 Signature scheme.
 
 ## Index
 
+### Constructors
+
+* [constructor](ed25519address.md#constructor)
+
 ### Methods
 
-* [publicKeyToAddress](ed25519address.md#publickeytoaddress)
-* [verifyAddress](ed25519address.md#verifyaddress)
+* [toAddress](ed25519address.md#toaddress)
+* [verify](ed25519address.md#verify)
 
-## Methods
+## Constructors
 
-### publicKeyToAddress
+### constructor
 
-▸ **publicKeyToAddress**(`publicKey`: Uint8Array): Uint8Array
+\+ **new Ed25519Address**(`publicKey`: Uint8Array): [Ed25519Address](ed25519address.md)
 
-*Implementation of [IAddress](../interfaces/iaddress.md)*
-
-Convert the public key to an address.
+Create a new instance of Ed25519Address.
 
 #### Parameters:
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`publicKey` | Uint8Array | The public key to convert. |
+`publicKey` | Uint8Array | The public key for the address.  |
+
+**Returns:** [Ed25519Address](ed25519address.md)
+
+## Methods
+
+### toAddress
+
+▸ **toAddress**(): Uint8Array
+
+*Implementation of [IAddress](../interfaces/iaddress.md)*
+
+Convert the public key to an address.
 
 **Returns:** Uint8Array
 
@@ -43,11 +57,9 @@ The address.
 
 ___
 
-### verifyAddress
+### verify
 
-▸ **verifyAddress**(`publicKey`: Uint8Array, `address`: Uint8Array): boolean
-
-*Implementation of [IAddress](../interfaces/iaddress.md)*
+▸ **verify**(`address`: Uint8Array): boolean
 
 Use the public key to validate the address.
 
@@ -55,7 +67,6 @@ Use the public key to validate the address.
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`publicKey` | Uint8Array | The public key to verify with. |
 `address` | Uint8Array | The address to verify. |
 
 **Returns:** boolean

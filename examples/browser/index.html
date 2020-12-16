@@ -137,8 +137,8 @@
                 publicKey: Iota.Converter.hexToBytes(publicKey)
             };
 
-            const ed25519Address = new Iota.Ed25519Address();
-            const genesisAddress = ed25519Address.publicKeyToAddress(genesisSeedKeyPair.publicKey);
+            const ed25519Address = new Iota.Ed25519Address(genesisSeedKeyPair.publicKey);
+            const genesisAddress = ed25519Address.toAddress();
             const genesisAddressHex = Iota.Converter.bytesToHex(genesisAddress);
             consoleLog("\tAddress Ed25519:", genesisAddressHex);
             consoleLog("\tAddress Bech32:", Iota.Bech32Helper.toBech32(Iota.ED25519_ADDRESS_TYPE, genesisAddress));
@@ -146,11 +146,11 @@
             // Create a new seed for the wallet
             const walletSeed = new Iota.Ed25519Seed(Iota.Converter.hexToBytes("e57fb750f3a3a67969ece5bd9ae7eef5b2256a818b2aac458941f7274985a410"));
 
-            // Use the new seed like a wallet with Bip32 Paths
-            const walletPath = new Iota.Bip32Path("m/0");
+            // Use the new seed like a wallet with Bip32 Paths 44,4128,accountIndex,isInternal,addressIndex
+            const walletPath = new Iota.Bip32Path("m/44'/4218'/0'/0'/0'");
             const walletAddressSeed = walletSeed.generateSeedFromPath(walletPath);
-            const walletEd25519Address = new Iota.Ed25519Address();
-            const newAddress = walletEd25519Address.publicKeyToAddress(walletAddressSeed.keyPair().publicKey);
+            const walletEd25519Address = new Iota.Ed25519Address(walletAddressSeed.keyPair().publicKey);
+            const newAddress = walletEd25519Address.toAddress();
             const newAddressHex = Iota.Converter.bytesToHex(newAddress);
 
             consoleLog("Wallet 1");
@@ -205,13 +205,13 @@
 
             consoleLog("Created Message Id", messageId);
 
-            const newAddressBalance = await Iota.getBalance(client, walletSeed, new Iota.Bip32Path());
+            const newAddressBalance = await Iota.getBalance(client, walletSeed, 0);
             consoleLog("Wallet 1 Address Balance", newAddressBalance);
 
-            const unspentAddress = await Iota.getUnspentAddress(client, walletSeed, new Iota.Bip32Path());
+            const unspentAddress = await Iota.getUnspentAddress(client, walletSeed, 0);
             consoleLog("Wallet 1 First Unspent Address", unspentAddress);
 
-            const allUspentAddresses = await Iota.getUnspentAddresses(client, walletSeed, new Iota.Bip32Path());
+            const allUspentAddresses = await Iota.getUnspentAddresses(client, walletSeed, 0);
             consoleLog("Wallet 1 Unspent Addresses", allUspentAddresses);
         }
 

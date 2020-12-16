@@ -18,8 +18,8 @@ async function run() {
         publicKey: Converter.hexToBytes(publicKey)
     };
 
-    const ed25519Address = new Ed25519Address();
-    const genesisAddress = ed25519Address.publicKeyToAddress(genesisSeedKeyPair.publicKey);
+    const ed25519Address = new Ed25519Address(genesisSeedKeyPair.publicKey);
+    const genesisAddress = ed25519Address.toAddress();
     const genesisAddressHex = Converter.bytesToHex(genesisAddress);
     console.log("\tAddress Ed25519:", genesisAddressHex);
     console.log("\tAddress Bech32:", Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, genesisAddress));
@@ -27,11 +27,11 @@ async function run() {
     // Create a new seed for the wallet
     const walletSeed = new Ed25519Seed(Converter.hexToBytes("e57fb750f3a3a67969ece5bd9ae7eef5b2256a818b2aac458941f7274985a410"));
 
-    // Use the new seed like a wallet with Bip32 Paths
-    const walletPath = new Bip32Path("m/0");
+    // Use the new seed like a wallet with Bip32 Paths 44,4128,accountIndex,isInternal,addressIndex
+    const walletPath = new Bip32Path("m/44'/4218'/0'/0'/0'");
     const walletAddressSeed = walletSeed.generateSeedFromPath(walletPath);
-    const walletEd25519Address = new Ed25519Address();
-    const newAddress = walletEd25519Address.publicKeyToAddress(walletAddressSeed.keyPair().publicKey);
+    const walletEd25519Address = new Ed25519Address(walletAddressSeed.keyPair().publicKey);
+    const newAddress = walletEd25519Address.toAddress();
     const newAddressHex = Converter.bytesToHex(newAddress);
 
     console.log("Wallet 1");
@@ -93,13 +93,13 @@ async function run() {
 
     console.log("Created Message Id", messageId);
 
-    const newAddressBalance = await getBalance(client, walletSeed, new Bip32Path());
+    const newAddressBalance = await getBalance(client, walletSeed, 0);
     console.log("Wallet 1 Address Balance", newAddressBalance);
 
-    const unspentAddress = await getUnspentAddress(client, walletSeed, new Bip32Path());
+    const unspentAddress = await getUnspentAddress(client, walletSeed, 0);
     console.log("Wallet 1 First Unspent Address", unspentAddress);
 
-    const allUspentAddresses = await getUnspentAddresses(client, walletSeed, new Bip32Path());
+    const allUspentAddresses = await getUnspentAddresses(client, walletSeed, 0);
     console.log("Wallet 1 Unspent Addresses", allUspentAddresses);
 }
 

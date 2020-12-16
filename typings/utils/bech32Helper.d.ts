@@ -3,9 +3,9 @@
  */
 export declare class Bech32Helper {
     /**
-     * The human readable part of the bech32 addresses.
+     * The default human readable part of the bech32 addresses, currently 'iot'.
      */
-    static BECH32_DEFAULT_HRP: string;
+    static BECH32_DEFAULT_HRP_MAIN: string;
     /**
      * Encode an address to bech32.
      * @param addressType The address type to encode.

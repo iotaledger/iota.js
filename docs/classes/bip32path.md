@@ -23,6 +23,7 @@ Class to help with bip32 paths.
 * [push](bip32path.md#push)
 * [pushHardened](bip32path.md#pushhardened)
 * [toString](bip32path.md#tostring)
+* [fromPath](bip32path.md#frompath)
 
 ## Constructors
 
@@ -105,3 +106,21 @@ Converts the path to a string.
 **Returns:** string
 
 The path as a string.
+
+___
+
+### fromPath
+
+▸ `Static`**fromPath**(`bip32Path`: [Bip32Path](bip32path.md)): [Bip32Path](bip32path.md)
+
+Construct a new path by cloning an existing one.
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`bip32Path` | [Bip32Path](bip32path.md) | The path to clone. |
+
+**Returns:** [Bip32Path](bip32path.md)
+
+A new instance of Bip32Path.

@@ -388,24 +388,27 @@
 	 * Class to help with Ed25519 Signature scheme.
 	 */
 	var Ed25519Address = /** @class */ (function () {
-	    function Ed25519Address() {
+	    /**
+	     * Create a new instance of Ed25519Address.
+	     * @param publicKey The public key for the address.
+	     */
+	    function Ed25519Address(publicKey) {
+	        this._publicKey = publicKey;
 	    }
 	    /**
 	     * Convert the public key to an address.
-	     * @param publicKey The public key to convert.
 	     * @returns The address.
 	     */
-	    Ed25519Address.prototype.publicKeyToAddress = function (publicKey) {
-	        return blake2b.Blake2b.sum256(publicKey);
+	    Ed25519Address.prototype.toAddress = function () {
+	        return blake2b.Blake2b.sum256(this._publicKey);
 	    };
 	    /**
 	     * Use the public key to validate the address.
-	     * @param publicKey The public key to verify with.
 	     * @param address The address to verify.
 	     * @returns True if the data and address is verified.
 	     */
-	    Ed25519Address.prototype.verifyAddress = function (publicKey, address) {
-	        return arrayHelper.ArrayHelper.equal(this.publicKeyToAddress(publicKey), address);
+	    Ed25519Address.prototype.verify = function (address) {
+	        return arrayHelper.ArrayHelper.equal(this.toAddress(), address);
 	    };
 	    /**
 	     * Address size.
@@ -5945,7 +5948,7 @@
 	     * @returns The array formated as hex.
 	     */
 	    Bech32Helper.toBech32 = function (addressType, addressBytes, humanReadablePart) {
-	        if (humanReadablePart === void 0) { humanReadablePart = Bech32Helper.BECH32_DEFAULT_HRP; }
+	        if (humanReadablePart === void 0) { humanReadablePart = Bech32Helper.BECH32_DEFAULT_HRP_MAIN; }
 	        var addressData = new Uint8Array(1 + addressBytes.length);
 	        addressData[0] = addressType;
 	        addressData.set(addressBytes, 1);
@@ -5958,7 +5961,7 @@
 	     * @returns The address type and address bytes or undefined if it cannot be decoded.
 	     */
 	    Bech32Helper.fromBech32 = function (bech32Text, humanReadablePart) {
-	        if (humanReadablePart === void 0) { humanReadablePart = Bech32Helper.BECH32_DEFAULT_HRP; }
+	        if (humanReadablePart === void 0) { humanReadablePart = Bech32Helper.BECH32_DEFAULT_HRP_MAIN; }
 	        var decoded = bech32.Bech32.decode(bech32Text);
 	        if (decoded) {
 	            if (decoded.humanReadablePart !== humanReadablePart) {
@@ -5982,13 +5985,13 @@
 	     * @returns True if the passed address matches the pattern for a bech32 address.
 	     */
 	    Bech32Helper.matches = function (bech32Text, humanReadablePart) {
-	        if (humanReadablePart === void 0) { humanReadablePart = Bech32Helper.BECH32_DEFAULT_HRP; }
+	        if (humanReadablePart === void 0) { humanReadablePart = Bech32Helper.BECH32_DEFAULT_HRP_MAIN; }
 	        return bech32.Bech32.matches(humanReadablePart, bech32Text);
 	    };
 	    /**
-	     * The human readable part of the bech32 addresses.
+	     * The default human readable part of the bech32 addresses, currently 'iot'.
 	     */
-	    Bech32Helper.BECH32_DEFAULT_HRP = "iot";
+	    Bech32Helper.BECH32_DEFAULT_HRP_MAIN = "iot";
 	    return Bech32Helper;
 	}());
 	exports.Bech32Helper = Bech32Helper;
@@ -6715,6 +6718,16 @@
 	            this._path = [];
 	        }
 	    }
+	    /**
+	     * Construct a new path by cloning an existing one.
+	     * @param bip32Path The path to clone.
+	     * @returns A new instance of Bip32Path.
+	     */
+	    Bip32Path.fromPath = function (bip32Path) {
+	        var p = new Bip32Path();
+	        p._path = bip32Path._path.slice();
+	        return p;
+	    };
 	    /**
 	     * Converts the path to a string.
 	     * @returns The path as a string.
@@ -9778,7 +9791,110 @@
 
 	});
 
+	var addresses = createCommonjsModule(function (module, exports) {
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.generateBip32Address = exports.generateBip32Path = exports.generateAccountAddress = exports.generateAccountPath = exports.DEFAULT_BIP32_ACCOUNT_PATH = void 0;
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
+
+	exports.DEFAULT_BIP32_ACCOUNT_PATH = "m/44'/4218'";
+	/**
+	 * Generate an account path based on all its parts.
+	 * @param accountIndex The account index.
+	 * @param addressIndex The address index.
+	 * @param isInternal Is this an internal address.
+	 * @returns The generated address.
+	 */
+	function generateAccountPath(accountIndex, addressIndex, isInternal) {
+	    var bip32Path$1 = new bip32Path.Bip32Path(exports.DEFAULT_BIP32_ACCOUNT_PATH);
+	    bip32Path$1.pushHardened(accountIndex);
+	    bip32Path$1.pushHardened(isInternal ? 1 : 0);
+	    bip32Path$1.pushHardened(addressIndex);
+	    return bip32Path$1;
+	}
+	exports.generateAccountPath = generateAccountPath;
+	/**
+	 * Generate addresses based on the account indexing style.
+	 * @param seed The seed to use for address generation.
+	 * @param addressState The address state.
+	 * @param addressState.seed The seed to generate the address for.
+	 * @param addressState.accountIndex The index of the account to calculate.
+	 * @param addressState.addressIndex The index of the address to calculate.
+	 * @param addressState.isInternal Are we generating an internal address.
+	 * @param isFirst Is this the first address we are generating.
+	 * @returns The key pair for the address.
+	 */
+	function generateAccountAddress(seed, addressState, isFirst) {
+	    // Not the first address so increment the counters.
+	    if (!isFirst) {
+	        // Flip-flop between internal and external
+	        // and then increment the address Index
+	        if (!addressState.isInternal) {
+	            addressState.isInternal = true;
+	        }
+	        else {
+	            addressState.isInternal = false;
+	            addressState.addressIndex++;
+	        }
+	    }
+	    var path = generateAccountPath(addressState.accountIndex, addressState.addressIndex, addressState.isInternal);
+	    var addressSeed = seed.generateSeedFromPath(path);
+	    return {
+	        path: path,
+	        keyPair: addressSeed.keyPair()
+	    };
+	}
+	exports.generateAccountAddress = generateAccountAddress;
+	/**
+	 * Generate a bip32 path based on all its parts.
+	 * @param basePath The base path for the address.
+	 * @param addressIndex The address index.
+	 * @returns The generated address.
+	 */
+	function generateBip32Path(basePath, addressIndex) {
+	    var bip32Path$1 = bip32Path.Bip32Path.fromPath(basePath);
+	    bip32Path$1.pushHardened(addressIndex);
+	    return bip32Path$1;
+	}
+	exports.generateBip32Path = generateBip32Path;
+	/**
+	 * Generate addresses based on a bip32 path increment.
+	 * @param seed The seed to use for address generation.
+	 * @param addressState The address state.
+	 * @param addressState.seed The seed to generate the address for.
+	 * @param addressState.basePath The base path to start building from.
+	 * @param addressState.addressIndex The index of the address to calculate.
+	 * @param isFirst Is this the first address we are generating.
+	 * @returns The key pair for the address.
+	 */
+	function generateBip32Address(seed, addressState, isFirst) {
+	    // Not the first address so increment the counters.
+	    if (!isFirst) {
+	        addressState.addressIndex++;
+	    }
+	    var path = generateBip32Path(addressState.basePath, addressState.addressIndex);
+	    var addressSeed = seed.generateSeedFromPath(path);
+	    return {
+	        path: path,
+	        keyPair: addressSeed.keyPair()
+	    };
+	}
+	exports.generateBip32Address = generateBip32Address;
+
+	});
+
 	var getUnspentAddresses_1 = createCommonjsModule(function (module, exports) {
+	var __assign = (commonjsGlobal && commonjsGlobal.__assign) || function () {
+	    __assign = Object.assign || function(t) {
+	        for (var s, i = 1, n = arguments.length; i < n; i++) {
+	            s = arguments[i];
+	            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+	                t[p] = s[p];
+	        }
+	        return t;
+	    };
+	    return __assign.apply(this, arguments);
+	};
 	var __awaiter = (commonjsGlobal && commonjsGlobal.__awaiter) || function (thisArg, _arguments, P, generator) {
 	    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
 	    return new (P || (P = Promise))(function (resolve, reject) {
@@ -9816,9 +9932,10 @@
 	    }
 	};
 	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.getUnspentAddresses = void 0;
+	exports.getUnspentAddressesWithAddressGenerator = exports.getUnspentAddressesBip32 = exports.getUnspentAddresses = void 0;
 	// Copyright 2020 IOTA Stiftung
 	// SPDX-License-Identifier: Apache-2.0
+
 
 
 
@@ -9827,28 +9944,73 @@
 	 * Get all the unspent addresses.
 	 * @param client The client to send the transfer with.
 	 * @param seed The seed to use for address generation.
-	 * @param basePath The base path to start looking for addresses.
+	 * @param accountIndex The account index in the wallet.
 	 * @param startIndex Optional start index for the wallet count address, defaults to 0.
 	 * @param countLimit Limit the number of items to find.
+	 * @param zeroCount Abort when the number of zero balances is exceeded.
 	 * @returns All the unspent addresses.
 	 */
-	function getUnspentAddresses(client, seed, basePath, startIndex, countLimit) {
+	function getUnspentAddresses(client, seed, accountIndex, startIndex, countLimit, zeroCount) {
 	    return __awaiter(this, void 0, void 0, function () {
-	        var localStartIndex, localCountLimit, finished, allUnspent, addressKeyPair, ed25519Address$1, addressBytes, addressHex, addressResponse;
+	        return __generator(this, function (_a) {
+	            return [2 /*return*/, getUnspentAddressesWithAddressGenerator(client, seed, {
+	                    accountIndex: accountIndex,
+	                    addressIndex: startIndex !== null && startIndex !== void 0 ? startIndex : 0,
+	                    isInternal: false
+	                }, addresses.generateAccountAddress, countLimit, zeroCount)];
+	        });
+	    });
+	}
+	exports.getUnspentAddresses = getUnspentAddresses;
+	/**
+	 * Get all the unspent addresses with a bip32 base path.
+	 * @param client The client to send the transfer with.
+	 * @param seed The seed to use for address generation.
+	 * @param basePath The base path.
+	 * @param startIndex Optional start index for the wallet count address, defaults to 0.
+	 * @param countLimit Limit the number of items to find.
+	 * @param zeroCount Abort when the number of zero balances is exceeded.
+	 * @returns All the unspent addresses.
+	 */
+	function getUnspentAddressesBip32(client, seed, basePath, startIndex, countLimit, zeroCount) {
+	    return __awaiter(this, void 0, void 0, function () {
+	        return __generator(this, function (_a) {
+	            return [2 /*return*/, getUnspentAddressesWithAddressGenerator(client, seed, {
+	                    basePath: basePath,
+	                    addressIndex: startIndex !== null && startIndex !== void 0 ? startIndex : 0
+	                }, addresses.generateBip32Address, countLimit, zeroCount)];
+	        });
+	    });
+	}
+	exports.getUnspentAddressesBip32 = getUnspentAddressesBip32;
+	/**
+	 * Get all the unspent addresses using an address generator.
+	 * @param client The client to send the transfer with.
+	 * @param seed The seed to use for address generation.
+	 * @param initialAddressState The initial address state for calculating the addresses.
+	 * @param nextAddress Calculate the next address for inputs.
+	 * @param countLimit Limit the number of items to find.
+	 * @param zeroCount Abort when the number of zero balances is exceeded.
+	 * @returns All the unspent addresses.
+	 */
+	function getUnspentAddressesWithAddressGenerator(client, seed, initialAddressState, nextAddress, countLimit, zeroCount) {
+	    return __awaiter(this, void 0, void 0, function () {
+	        var localCountLimit, localZeroCount, finished, allUnspent, isFirst, zeroBalance, pathKeyPair, ed25519Address$1, addressBytes, addressHex, addressResponse, stateNoSeed;
 	        return __generator(this, function (_a) {
 	            switch (_a.label) {
 	                case 0:
-	                    localStartIndex = startIndex !== null && startIndex !== void 0 ? startIndex : 0;
 	                    localCountLimit = countLimit !== null && countLimit !== void 0 ? countLimit : Number.MAX_SAFE_INTEGER;
+	                    localZeroCount = zeroCount !== null && zeroCount !== void 0 ? zeroCount : 5;
 	                    finished = false;
 	                    allUnspent = [];
+	                    isFirst = true;
+	                    zeroBalance = 0;
 	                    _a.label = 1;
 	                case 1:
-	                    basePath.push(localStartIndex);
-	                    addressKeyPair = seed.generateSeedFromPath(basePath).keyPair();
-	                    basePath.pop();
-	                    ed25519Address$1 = new ed25519Address.Ed25519Address();
-	                    addressBytes = ed25519Address$1.publicKeyToAddress(addressKeyPair.publicKey);
+	                    pathKeyPair = nextAddress(seed, initialAddressState, isFirst);
+	                    isFirst = false;
+	                    ed25519Address$1 = new ed25519Address.Ed25519Address(pathKeyPair.keyPair.publicKey);
+	                    addressBytes = ed25519Address$1.toAddress();
 	                    addressHex = converter.Converter.bytesToHex(addressBytes);
 	                    return [4 /*yield*/, client.addressEd25519(addressHex)];
 	                case 2:
@@ -9856,19 +10018,23 @@
 	                    // If there are no outputs for the address we have reached the
 	                    // end of the used addresses
 	                    if (addressResponse.count === 0) {
-	                        finished = true;
+	                        zeroBalance++;
+	                        if (zeroBalance >= localZeroCount) {
+	                            finished = true;
+	                        }
 	                    }
 	                    else {
+	                        stateNoSeed = __assign(__assign({}, initialAddressState), { seed: undefined });
 	                        allUnspent.push({
-	                            address: bech32Helper.Bech32Helper.toBech32(IEd25519Address.ED25519_ADDRESS_TYPE, addressBytes),
-	                            index: localStartIndex,
+	                            addressBech32: bech32Helper.Bech32Helper.toBech32(IEd25519Address.ED25519_ADDRESS_TYPE, addressBytes),
+	                            state: stateNoSeed,
+	                            keyPair: pathKeyPair.keyPair,
 	                            balance: addressResponse.balance
 	                        });
 	                        if (allUnspent.length === localCountLimit) {
 	                            finished = true;
 	                        }
 	                    }
-	                    localStartIndex++;
 	                    _a.label = 3;
 	                case 3:
 	                    if (!finished) return [3 /*break*/, 1];
@@ -9878,7 +10044,7 @@
 	        });
 	    });
 	}
-	exports.getUnspentAddresses = getUnspentAddresses;
+	exports.getUnspentAddressesWithAddressGenerator = getUnspentAddressesWithAddressGenerator;
 
 	});
 
@@ -9920,23 +10086,23 @@
 	    }
 	};
 	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.getBalance = void 0;
+	exports.getBalancePath = exports.getBalance = void 0;
 
 	/**
 	 * Get the balance for a list of addresses.
 	 * @param client The client to send the transfer with.
 	 * @param seed The seed.
-	 * @param basePath The base path to start looking for addresses.
+	 * @param accountIndex The account index in the wallet.
 	 * @param startIndex The start index to generate from, defaults to 0.
 	 * @returns The balance.
 	 */
-	function getBalance(client, seed, basePath, startIndex) {
+	function getBalance(client, seed, accountIndex, startIndex) {
 	    if (startIndex === void 0) { startIndex = 0; }
 	    return __awaiter(this, void 0, void 0, function () {
 	        var allUnspent;
 	        return __generator(this, function (_a) {
 	            switch (_a.label) {
-	                case 0: return [4 /*yield*/, getUnspentAddresses_1.getUnspentAddresses(client, seed, basePath, startIndex)];
+	                case 0: return [4 /*yield*/, getUnspentAddresses_1.getUnspentAddresses(client, seed, accountIndex, startIndex)];
 	                case 1:
 	                    allUnspent = _a.sent();
 	                    return [2 /*return*/, allUnspent.reduce(function (total, output) { return total + output.balance; }, 0)];
@@ -9945,6 +10111,29 @@
 	    });
 	}
 	exports.getBalance = getBalance;
+	/**
+	 * Get the balance for a list of addresses.
+	 * @param client The client to send the transfer with.
+	 * @param seed The seed.
+	 * @param basePath The base path to start looking for addresses.
+	 * @param startIndex The start index to generate from, defaults to 0.
+	 * @returns The balance.
+	 */
+	function getBalancePath(client, seed, basePath, startIndex) {
+	    if (startIndex === void 0) { startIndex = 0; }
+	    return __awaiter(this, void 0, void 0, function () {
+	        var allUnspent;
+	        return __generator(this, function (_a) {
+	            switch (_a.label) {
+	                case 0: return [4 /*yield*/, getUnspentAddresses_1.getUnspentAddressesBip32(client, seed, basePath, startIndex)];
+	                case 1:
+	                    allUnspent = _a.sent();
+	                    return [2 /*return*/, allUnspent.reduce(function (total, output) { return total + output.balance; }, 0)];
+	            }
+	        });
+	    });
+	}
+	exports.getBalancePath = getBalancePath;
 
 	});
 
@@ -9992,16 +10181,16 @@
 	 * Get the first unspent address.
 	 * @param client The client to send the transfer with.
 	 * @param seed The seed to use for address generation.
-	 * @param basePath The base path to start looking for addresses.
+	 * @param accountIndex The account index in the wallet.
 	 * @param startIndex Optional start index for the wallet count address, defaults to 0.
 	 * @returns The first unspent address.
 	 */
-	function getUnspentAddress(client, seed, basePath, startIndex) {
+	function getUnspentAddress(client, seed, accountIndex, startIndex) {
 	    return __awaiter(this, void 0, void 0, function () {
 	        var allUnspent;
 	        return __generator(this, function (_a) {
 	            switch (_a.label) {
-	                case 0: return [4 /*yield*/, getUnspentAddresses_1.getUnspentAddresses(client, seed, basePath, startIndex, 1)];
+	                case 0: return [4 /*yield*/, getUnspentAddresses_1.getUnspentAddresses(client, seed, accountIndex, startIndex, 1, 5)];
 	                case 1:
 	                    allUnspent = _a.sent();
 	                    return [2 /*return*/, allUnspent.length > 0 ? allUnspent[0] : undefined];
@@ -10553,9 +10742,10 @@
 	    }
 	};
 	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.calculateInputs = exports.sendMultipleEd25519 = exports.sendMultiple = exports.sendEd25519 = exports.send = void 0;
+	exports.calculateInputs = exports.sendWithAddressGenerator = exports.sendMultipleEd25519 = exports.sendMultiple = exports.sendEd25519 = exports.send = void 0;
 	// Copyright 2020 IOTA Stiftung
 	// SPDX-License-Identifier: Apache-2.0
+
 
 
 
@@ -10565,40 +10755,16 @@
 	 * Send a transfer from the balance on the seed to a single output.
 	 * @param client The client to send the transfer with.
 	 * @param seed The seed to use for address generation.
-	 * @param basePath The base path to start looking for addresses.
+	 * @param accountIndex The account index in the wallet.
 	 * @param addressBech32 The address to send the funds to in bech32 format.
 	 * @param amount The amount to send.
 	 * @param startIndex The start index for the wallet count address, defaults to 0.
 	 * @returns The id of the message created and the contructed message.
 	 */
-	function send(client, seed, basePath, addressBech32, amount, startIndex) {
+	function send(client, seed, accountIndex, addressBech32, amount, startIndex) {
 	    return __awaiter(this, void 0, void 0, function () {
-	        var bech32Details, outputs, inputsAndKey, response;
 	        return __generator(this, function (_a) {
-	            switch (_a.label) {
-	                case 0:
-	                    bech32Details = bech32Helper.Bech32Helper.fromBech32(addressBech32);
-	                    if (!bech32Details) {
-	                        throw new Error("Unable to decode bech32 address");
-	                    }
-	                    outputs = [
-	                        {
-	                            address: converter.Converter.bytesToHex(bech32Details.addressBytes),
-	                            addressType: bech32Details.addressType,
-	                            amount: amount
-	                        }
-	                    ];
-	                    return [4 /*yield*/, calculateInputs(client, seed, basePath, outputs, startIndex)];
-	                case 1:
-	                    inputsAndKey = _a.sent();
-	                    return [4 /*yield*/, sendAdvanced_1.sendAdvanced(client, inputsAndKey, outputs)];
-	                case 2:
-	                    response = _a.sent();
-	                    return [2 /*return*/, {
-	                            messageId: response.messageId,
-	                            message: response.message
-	                        }];
-	            }
+	            return [2 /*return*/, sendMultiple(client, seed, accountIndex, [{ addressBech32: addressBech32, amount: amount }], startIndex)];
 	        });
 	    });
 	}
@@ -10607,30 +10773,16 @@
 	 * Send a transfer from the balance on the seed to a single output.
 	 * @param client The client to send the transfer with.
 	 * @param seed The seed to use for address generation.
-	 * @param basePath The base path to start looking for addresses.
+	 * @param accountIndex The account index in the wallet.
 	 * @param addressEd25519 The address to send the funds to in ed25519 format.
 	 * @param amount The amount to send.
 	 * @param startIndex The start index for the wallet count address, defaults to 0.
 	 * @returns The id of the message created and the contructed message.
 	 */
-	function sendEd25519(client, seed, basePath, addressEd25519, amount, startIndex) {
+	function sendEd25519(client, seed, accountIndex, addressEd25519, amount, startIndex) {
 	    return __awaiter(this, void 0, void 0, function () {
-	        var outputs, inputsAndKey, response;
 	        return __generator(this, function (_a) {
-	            switch (_a.label) {
-	                case 0:
-	                    outputs = [{ address: addressEd25519, addressType: IEd25519Address.ED25519_ADDRESS_TYPE, amount: amount }];
-	                    return [4 /*yield*/, calculateInputs(client, seed, basePath, outputs, startIndex)];
-	                case 1:
-	                    inputsAndKey = _a.sent();
-	                    return [4 /*yield*/, sendAdvanced_1.sendAdvanced(client, inputsAndKey, outputs)];
-	                case 2:
-	                    response = _a.sent();
-	                    return [2 /*return*/, {
-	                            messageId: response.messageId,
-	                            message: response.message
-	                        }];
-	            }
+	            return [2 /*return*/, sendMultipleEd25519(client, seed, accountIndex, [{ addressEd25519: addressEd25519, amount: amount }], startIndex)];
 	        });
 	    });
 	}
@@ -10639,39 +10791,31 @@
 	 * Send a transfer from the balance on the seed to multiple outputs.
 	 * @param client The client to send the transfer with.
 	 * @param seed The seed to use for address generation.
-	 * @param basePath The base path to start looking for addresses.
+	 * @param accountIndex The account index in the wallet.
 	 * @param outputs The address to send the funds to in bech32 format and amounts.
 	 * @param startIndex The start index for the wallet count address, defaults to 0.
 	 * @returns The id of the message created and the contructed message.
 	 */
-	function sendMultiple(client, seed, basePath, outputs, startIndex) {
+	function sendMultiple(client, seed, accountIndex, outputs, startIndex) {
 	    return __awaiter(this, void 0, void 0, function () {
-	        var hexOutputs, inputsAndKey, response;
+	        var hexOutputs;
 	        return __generator(this, function (_a) {
-	            switch (_a.label) {
-	                case 0:
-	                    hexOutputs = outputs.map(function (output) {
-	                        var bech32Details = bech32Helper.Bech32Helper.fromBech32(output.addressBech32);
-	                        if (!bech32Details) {
-	                            throw new Error("Unable to decode bech32 address");
-	                        }
-	                        return {
-	                            address: converter.Converter.bytesToHex(bech32Details.addressBytes),
-	                            addressType: bech32Details.addressType,
-	                            amount: output.amount
-	                        };
-	                    });
-	                    return [4 /*yield*/, calculateInputs(client, seed, basePath, hexOutputs, startIndex)];
-	                case 1:
-	                    inputsAndKey = _a.sent();
-	                    return [4 /*yield*/, sendAdvanced_1.sendAdvanced(client, inputsAndKey, hexOutputs)];
-	                case 2:
-	                    response = _a.sent();
-	                    return [2 /*return*/, {
-	                            messageId: response.messageId,
-	                            message: response.message
-	                        }];
-	            }
+	            hexOutputs = outputs.map(function (output) {
+	                var bech32Details = bech32Helper.Bech32Helper.fromBech32(output.addressBech32);
+	                if (!bech32Details) {
+	                    throw new Error("Unable to decode bech32 address");
+	                }
+	                return {
+	                    address: converter.Converter.bytesToHex(bech32Details.addressBytes),
+	                    addressType: bech32Details.addressType,
+	                    amount: output.amount
+	                };
+	            });
+	            return [2 /*return*/, sendWithAddressGenerator(client, seed, {
+	                    accountIndex: accountIndex,
+	                    addressIndex: startIndex !== null && startIndex !== void 0 ? startIndex : 0,
+	                    isInternal: false
+	                }, addresses.generateAccountAddress, hexOutputs)];
 	        });
 	    });
 	}
@@ -10680,22 +10824,43 @@
 	 * Send a transfer from the balance on the seed.
 	 * @param client The client to send the transfer with.
 	 * @param seed The seed to use for address generation.
-	 * @param basePath The base path to start looking for addresses.
+	 * @param accountIndex The account index in the wallet.
 	 * @param outputs The outputs including address to send the funds to in ed25519 format and amount.
 	 * @param startIndex The start index for the wallet count address, defaults to 0.
 	 * @returns The id of the message created and the contructed message.
 	 */
-	function sendMultipleEd25519(client, seed, basePath, outputs, startIndex) {
+	function sendMultipleEd25519(client, seed, accountIndex, outputs, startIndex) {
 	    return __awaiter(this, void 0, void 0, function () {
-	        var hexOutputs, inputsAndKey, response;
+	        var hexOutputs;
+	        return __generator(this, function (_a) {
+	            hexOutputs = outputs.map(function (output) { return ({ address: output.addressEd25519, addressType: IEd25519Address.ED25519_ADDRESS_TYPE, amount: output.amount }); });
+	            return [2 /*return*/, sendWithAddressGenerator(client, seed, {
+	                    accountIndex: accountIndex,
+	                    addressIndex: startIndex !== null && startIndex !== void 0 ? startIndex : 0,
+	                    isInternal: false
+	                }, addresses.generateAccountAddress, hexOutputs)];
+	        });
+	    });
+	}
+	exports.sendMultipleEd25519 = sendMultipleEd25519;
+	/**
+	 * Send a transfer using account based indexing for the inputs.
+	 * @param client The client to send the transfer with.
+	 * @param seed The seed to use for address generation.
+	 * @param initialAddressState The initial address state for calculating the addresses.
+	 * @param nextAddress Calculate the next address for inputs.
+	 * @param outputs The address to send the funds to in bech32 format and amounts.
+	 * @returns The id of the message created and the contructed message.
+	 */
+	function sendWithAddressGenerator(client, seed, initialAddressState, nextAddress, outputs) {
+	    return __awaiter(this, void 0, void 0, function () {
+	        var inputsAndKeys, response;
 	        return __generator(this, function (_a) {
 	            switch (_a.label) {
-	                case 0:
-	                    hexOutputs = outputs.map(function (output) { return ({ address: output.addressEd25519, addressType: IEd25519Address.ED25519_ADDRESS_TYPE, amount: output.amount }); });
-	                    return [4 /*yield*/, calculateInputs(client, seed, basePath, hexOutputs, startIndex)];
+	                case 0: return [4 /*yield*/, calculateInputs(client, seed, initialAddressState, nextAddress, outputs, 5)];
 	                case 1:
-	                    inputsAndKey = _a.sent();
-	                    return [4 /*yield*/, sendAdvanced_1.sendAdvanced(client, inputsAndKey, hexOutputs)];
+	                    inputsAndKeys = _a.sent();
+	                    return [4 /*yield*/, sendAdvanced_1.sendAdvanced(client, inputsAndKeys, outputs)];
 	                case 2:
 	                    response = _a.sent();
 	                    return [2 /*return*/, {
@@ -10706,39 +10871,44 @@
 	        });
 	    });
 	}
-	exports.sendMultipleEd25519 = sendMultipleEd25519;
+	exports.sendWithAddressGenerator = sendWithAddressGenerator;
 	/**
 	 * Calculate the inputs from the seed and basePath.
 	 * @param client The client to send the transfer with.
 	 * @param seed The seed to use for address generation.
-	 * @param basePath The base path to start looking for addresses.
+	 * @param initialAddressState The initial address state for calculating the addresses.
+	 * @param nextAddress Calculate the next address for inputs.
 	 * @param outputs The outputs to send.
-	 * @param startIndex The start index for the wallet count address, defaults to 0.
+	 * @param zeroCount Abort when the number of zero balances is exceeded.
 	 * @returns The id of the message created and the contructed message.
 	 */
-	function calculateInputs(client, seed, basePath, outputs, startIndex) {
+	function calculateInputs(client, seed, initialAddressState, nextAddress, outputs, zeroCount) {
 	    return __awaiter(this, void 0, void 0, function () {
-	        var requiredBalance, localStartIndex, consumedBalance, inputsAndSignatureKeyPairs, finished, addressKeyPair, ed25519Address$1, address, addressOutputIds, _i, _a, addressOutputId, addressOutput, input;
+	        var requiredBalance, localZeroCount, consumedBalance, inputsAndSignatureKeyPairs, finished, isFirst, zeroBalance, keyPairAndPath, ed25519Address$1, address, addressOutputIds, _i, _a, addressOutputId, addressOutput, input;
 	        return __generator(this, function (_b) {
 	            switch (_b.label) {
 	                case 0:
 	                    requiredBalance = outputs.reduce(function (total, output) { return total + output.amount; }, 0);
-	                    localStartIndex = startIndex !== null && startIndex !== void 0 ? startIndex : 0;
+	                    localZeroCount = zeroCount !== null && zeroCount !== void 0 ? zeroCount : 5;
 	                    consumedBalance = 0;
 	                    inputsAndSignatureKeyPairs = [];
 	                    finished = false;
+	                    isFirst = true;
+	                    zeroBalance = 0;
 	                    _b.label = 1;
 	                case 1:
-	                    basePath.push(localStartIndex);
-	                    addressKeyPair = seed.generateSeedFromPath(basePath).keyPair();
-	                    basePath.pop();
-	                    ed25519Address$1 = new ed25519Address.Ed25519Address();
-	                    address = converter.Converter.bytesToHex(ed25519Address$1.publicKeyToAddress(addressKeyPair.publicKey));
+	                    keyPairAndPath = nextAddress(seed, initialAddressState, isFirst);
+	                    isFirst = false;
+	                    ed25519Address$1 = new ed25519Address.Ed25519Address(keyPairAndPath.keyPair.publicKey);
+	                    address = converter.Converter.bytesToHex(ed25519Address$1.toAddress());
 	                    return [4 /*yield*/, client.addressEd25519Outputs(address)];
 	                case 2:
 	                    addressOutputIds = _b.sent();
 	                    if (!(addressOutputIds.count === 0)) return [3 /*break*/, 3];
-	                    finished = true;
+	                    zeroBalance++;
+	                    if (zeroBalance >= localZeroCount) {
+	                        finished = true;
+	                    }
 	                    return [3 /*break*/, 7];
 	                case 3:
 	                    _i = 0, _a = addressOutputIds.outputIds;
@@ -10752,7 +10922,10 @@
 	                    if (!addressOutput.isSpent &&
 	                        consumedBalance < requiredBalance) {
 	                        if (addressOutput.output.amount === 0) {
-	                            finished = true;
+	                            zeroBalance++;
+	                            if (zeroBalance >= localZeroCount) {
+	                                finished = true;
+	                            }
 	                        }
 	                        else {
 	                            consumedBalance += addressOutput.output.amount;
@@ -10763,7 +10936,7 @@
 	                            };
 	                            inputsAndSignatureKeyPairs.push({
 	                                input: input,
-	                                addressKeyPair: addressKeyPair
+	                                addressKeyPair: keyPairAndPath.keyPair
 	                            });
 	                            if (consumedBalance >= requiredBalance) {
 	                                // We didn't use all the balance from the last input
@@ -10784,12 +10957,9 @@
 	                    _i++;
 	                    return [3 /*break*/, 4];
 	                case 7:
-	                    localStartIndex++;
+	                    if (!finished) return [3 /*break*/, 1];
 	                    _b.label = 8;
 	                case 8:
-	                    if (!finished) return [3 /*break*/, 1];
-	                    _b.label = 9;
-	                case 9:
 	                    if (consumedBalance < requiredBalance) {
 	                        throw new Error("There are not enough funds in the inputs for the required balance");
 	                    }
@@ -10934,7 +11104,21 @@
 
 	});
 
+	var IAccountAddressGeneratorState = createCommonjsModule(function (module, exports) {
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
+	Object.defineProperty(exports, "__esModule", { value: true });
+
+	});
+
 	var IAddress = createCommonjsModule(function (module, exports) {
+	Object.defineProperty(exports, "__esModule", { value: true });
+
+	});
+
+	var IBip32PathAddressGeneratorState = createCommonjsModule(function (module, exports) {
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
 	Object.defineProperty(exports, "__esModule", { value: true });
 
 	});
@@ -11662,7 +11846,7 @@
 	    MessageHelper.validateTransaction = function (client, message) {
 	        var _a, _b;
 	        return __awaiter(this, void 0, void 0, function () {
-	            var invalid, txsForAddresses, i, sigUnlockBlock, address, addr, outputs, _i, _c, outputId, output$1, inputCount, inputTotal, _d, _e, input$1, unlockBlockCount, outputTotal, _f, _g, output$1, serializedInputs, _h, _j, input$1, writeStream$1, sortedInputs, inputsAreSorted, i, serializedOutputs, _k, _l, output$1, writeStream$1, sortedOutputs, outputsAreSorted, i, binaryEssence, essenceFinal, unlockBlocksFull, i, refUnlockBlock, i, verified, err_1;
+	            var invalid, txsForAddresses, i, sigUnlockBlock, address, outputs, _i, _c, outputId, output$1, inputCount, inputTotal, _d, _e, input$1, unlockBlockCount, outputTotal, _f, _g, output$1, serializedInputs, _h, _j, input$1, writeStream$1, sortedInputs, inputsAreSorted, i, serializedOutputs, _k, _l, output$1, writeStream$1, sortedOutputs, outputsAreSorted, i, binaryEssence, essenceFinal, unlockBlocksFull, i, refUnlockBlock, i, verified, err_1;
 	            return __generator(this, function (_m) {
 	                switch (_m.label) {
 	                    case 0:
@@ -11708,9 +11892,8 @@
 	                        if (!(message.payload.unlockBlocks[i].type === ISignatureUnlockBlock.SIGNATURE_UNLOCK_BLOCK_TYPE)) return [3 /*break*/, 12];
 	                        sigUnlockBlock = message.payload.unlockBlocks[i];
 	                        if (!(sigUnlockBlock.signature.type === IEd25519Address.ED25519_ADDRESS_TYPE)) return [3 /*break*/, 12];
-	                        address = new ed25519Address.Ed25519Address();
-	                        addr = address.publicKeyToAddress(converter.Converter.hexToBytes(sigUnlockBlock.signature.publicKey));
-	                        return [4 /*yield*/, client.addressEd25519Outputs(converter.Converter.bytesToHex(addr))];
+	                        address = new ed25519Address.Ed25519Address(converter.Converter.hexToBytes(sigUnlockBlock.signature.publicKey));
+	                        return [4 /*yield*/, client.addressEd25519Outputs(converter.Converter.bytesToHex(address.toAddress()))];
 	                    case 8:
 	                        outputs = _m.sent();
 	                        _i = 0, _c = outputs.outputIds;
@@ -12034,6 +12217,7 @@
 	__exportStar(sha512, exports);
 	__exportStar(slip0010, exports);
 	__exportStar(zip215, exports);
+	__exportStar(addresses, exports);
 	__exportStar(getBalance_1, exports);
 	__exportStar(getUnspentAddress_1, exports);
 	__exportStar(getUnspentAddresses_1, exports);
@@ -12053,7 +12237,9 @@
 	__exportStar(IOutputResponse, exports);
 	__exportStar(IResponse, exports);
 	__exportStar(ITipsResponse, exports);
+	__exportStar(IAccountAddressGeneratorState, exports);
 	__exportStar(IAddress, exports);
+	__exportStar(IBip32PathAddressGeneratorState, exports);
 	__exportStar(IClient, exports);
 	__exportStar(IEd25519Address, exports);
 	__exportStar(IEd25519Signature, exports);

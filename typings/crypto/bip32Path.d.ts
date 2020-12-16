@@ -8,6 +8,12 @@ export declare class Bip32Path {
      */
     constructor(initialPath?: string);
     /**
+     * Construct a new path by cloning an existing one.
+     * @param bip32Path The path to clone.
+     * @returns A new instance of Bip32Path.
+     */
+    static fromPath(bip32Path: Bip32Path): Bip32Path;
+    /**
      * Converts the path to a string.
      * @returns The path as a string.
      */

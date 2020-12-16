@@ -9,24 +9,27 @@ var arrayHelper_1 = require("../utils/arrayHelper");
  * Class to help with Ed25519 Signature scheme.
  */
 var Ed25519Address = /** @class */ (function () {
-    function Ed25519Address() {
+    /**
+     * Create a new instance of Ed25519Address.
+     * @param publicKey The public key for the address.
+     */
+    function Ed25519Address(publicKey) {
+        this._publicKey = publicKey;
     }
     /**
      * Convert the public key to an address.
-     * @param publicKey The public key to convert.
      * @returns The address.
      */
-    Ed25519Address.prototype.publicKeyToAddress = function (publicKey) {
-        return blake2b_1.Blake2b.sum256(publicKey);
+    Ed25519Address.prototype.toAddress = function () {
+        return blake2b_1.Blake2b.sum256(this._publicKey);
     };
     /**
      * Use the public key to validate the address.
-     * @param publicKey The public key to verify with.
      * @param address The address to verify.
      * @returns True if the data and address is verified.
      */
-    Ed25519Address.prototype.verifyAddress = function (publicKey, address) {
-        return arrayHelper_1.ArrayHelper.equal(this.publicKeyToAddress(publicKey), address);
+    Ed25519Address.prototype.verify = function (address) {
+        return arrayHelper_1.ArrayHelper.equal(this.toAddress(), address);
     };
     /**
      * Address size.
@@ -36,4 +39,4 @@ var Ed25519Address = /** @class */ (function () {
     return Ed25519Address;
 }());
 exports.Ed25519Address = Ed25519Address;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZWQyNTUxOUFkZHJlc3MuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi9zcmMvYWRkcmVzc1R5cGVzL2VkMjU1MTlBZGRyZXNzLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7OztBQUFBLCtCQUErQjtBQUMvQixzQ0FBc0M7QUFDdEMsNkNBQTRDO0FBRTVDLG9EQUFtRDtBQUVuRDs7R0FFRztBQUNIO0lBQUE7SUF5QkEsQ0FBQztJQWxCRzs7OztPQUlHO0lBQ0ksMkNBQWtCLEdBQXpCLFVBQTBCLFNBQXFCO1FBQzNDLE9BQU8saUJBQU8sQ0FBQyxNQUFNLENBQUMsU0FBUyxDQUFDLENBQUM7SUFDckMsQ0FBQztJQUVEOzs7OztPQUtHO0lBQ0ksc0NBQWEsR0FBcEIsVUFBcUIsU0FBcUIsRUFBRSxPQUFtQjtRQUMzRCxPQUFPLHlCQUFXLENBQUMsS0FBSyxDQUFDLElBQUksQ0FBQyxrQkFBa0IsQ0FBQyxTQUFTLENBQUMsRUFBRSxPQUFPLENBQUMsQ0FBQztJQUMxRSxDQUFDO0lBdkJEOzs7T0FHRztJQUNXLDZCQUFjLEdBQVcsaUJBQU8sQ0FBQyxRQUFRLENBQUM7SUFvQjVELHFCQUFDO0NBQUEsQUF6QkQsSUF5QkM7QUF6Qlksd0NBQWMifQ==
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZWQyNTUxOUFkZHJlc3MuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi9zcmMvYWRkcmVzc1R5cGVzL2VkMjU1MTlBZGRyZXNzLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7OztBQUFBLCtCQUErQjtBQUMvQixzQ0FBc0M7QUFDdEMsNkNBQTRDO0FBRTVDLG9EQUFtRDtBQUVuRDs7R0FFRztBQUNIO0lBWUk7OztPQUdHO0lBQ0gsd0JBQVksU0FBcUI7UUFDN0IsSUFBSSxDQUFDLFVBQVUsR0FBRyxTQUFTLENBQUM7SUFDaEMsQ0FBQztJQUVEOzs7T0FHRztJQUNJLGtDQUFTLEdBQWhCO1FBQ0ksT0FBTyxpQkFBTyxDQUFDLE1BQU0sQ0FBQyxJQUFJLENBQUMsVUFBVSxDQUFDLENBQUM7SUFDM0MsQ0FBQztJQUVEOzs7O09BSUc7SUFDSSwrQkFBTSxHQUFiLFVBQWMsT0FBbUI7UUFDN0IsT0FBTyx5QkFBVyxDQUFDLEtBQUssQ0FBQyxJQUFJLENBQUMsU0FBUyxFQUFFLEVBQUUsT0FBTyxDQUFDLENBQUM7SUFDeEQsQ0FBQztJQWxDRDs7O09BR0c7SUFDVyw2QkFBYyxHQUFXLGlCQUFPLENBQUMsUUFBUSxDQUFDO0lBK0I1RCxxQkFBQztDQUFBLEFBcENELElBb0NDO0FBcENZLHdDQUFjIn0=

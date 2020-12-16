@@ -15,21 +15,32 @@ export class Ed25519Address implements IAddress {
     public static ADDRESS_LENGTH: number = Blake2b.SIZE_256;
 
     /**
+     * The public key for the address.
+     */
+    private readonly _publicKey: Uint8Array;
+
+    /**
+     * Create a new instance of Ed25519Address.
+     * @param publicKey The public key for the address.
+     */
+    constructor(publicKey: Uint8Array) {
+        this._publicKey = publicKey;
+    }
+
+    /**
      * Convert the public key to an address.
-     * @param publicKey The public key to convert.
      * @returns The address.
      */
-    public publicKeyToAddress(publicKey: Uint8Array): Uint8Array {
-        return Blake2b.sum256(publicKey);
+    public toAddress(): Uint8Array {
+        return Blake2b.sum256(this._publicKey);
     }
 
     /**
      * Use the public key to validate the address.
-     * @param publicKey The public key to verify with.
      * @param address The address to verify.
      * @returns True if the data and address is verified.
      */
-    public verifyAddress(publicKey: Uint8Array, address: Uint8Array): boolean {
-        return ArrayHelper.equal(this.publicKeyToAddress(publicKey), address);
+    public verify(address: Uint8Array): boolean {
+        return ArrayHelper.equal(this.toAddress(), address);
     }
 }

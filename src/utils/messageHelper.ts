@@ -65,12 +65,11 @@ export class MessageHelper {
                             const sigUnlockBlock = message.payload.unlockBlocks[i] as ISignatureUnlockBlock;
 
                             if (sigUnlockBlock.signature.type === ED25519_ADDRESS_TYPE) {
-                                const address = new Ed25519Address();
-
-                                const addr = address.publicKeyToAddress(
+                                const address = new Ed25519Address(
                                     Converter.hexToBytes(sigUnlockBlock.signature.publicKey));
 
-                                const outputs = await client.addressEd25519Outputs(Converter.bytesToHex(addr));
+                                const outputs = await client.addressEd25519Outputs(
+                                    Converter.bytesToHex(address.toAddress()));
 
                                 for (const outputId of outputs.outputIds) {
                                     const output = await client.output(outputId);

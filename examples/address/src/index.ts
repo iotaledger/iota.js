@@ -1,4 +1,4 @@
-import { Bip39, Bech32Helper, Bip32Path, Converter, Ed25519Address, Ed25519Seed, ED25519_ADDRESS_TYPE, RandomHelper } from "@iota/iota.js";
+import { Bech32Helper, Bip32Path, Bip39, Converter, DEFAULT_BIP32_ACCOUNT_PATH, Ed25519Address, Ed25519Seed, ED25519_ADDRESS_TYPE, generateAccountAddress, generateBip32Address } from "@iota/iota.js";
 
 async function run() {
     console.log("Base");
@@ -19,16 +19,20 @@ async function run() {
 
     // Get the address for the seed which is actually the Blake2b.sum256 of the public key
     // display it in both Ed25519 and Bech 32 format
-    const baseEd25519Address = new Ed25519Address();
-    const basePublicKeyAddress = baseEd25519Address.publicKeyToAddress(baseSeedKeyPair.publicKey);
+    const baseEd25519Address = new Ed25519Address(baseSeedKeyPair.publicKey);
+    const basePublicKeyAddress = baseEd25519Address.toAddress();
     console.log("\tPublic Key Address Ed25519", Converter.bytesToHex(basePublicKeyAddress));
     console.log("\tPublic Key Address Bech32", Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, basePublicKeyAddress));
     console.log();
 
-    // Now generate some additional addresses using Bip32
-    const basePath = new Bip32Path("m/0");
-    for (let i = 0; i < 10; i++) {
-        basePath.push(i);
+    // Now generate some additional addresses using Bip32 and the default wallet path
+    const basePath = new Bip32Path(DEFAULT_BIP32_ACCOUNT_PATH);
+    const accountIndex = 0;
+    const isInternal = true;
+    for (let addressIndex = 0; addressIndex < 10; addressIndex++) {
+        basePath.pushHardened(accountIndex);
+        basePath.pushHardened(isInternal ? 1 : 0);
+        basePath.pushHardened(addressIndex);
 
         console.log(`Wallet Index ${basePath.toString()}`);
 
@@ -43,14 +47,57 @@ async function run() {
 
         // Get the address for the path seed which is actually the Blake2b.sum256 of the public key
         // display it in both Ed25519 and Bech 32 format
-        const indexEd25519Address = new Ed25519Address();
-        const indexPublicKeyAddress = indexEd25519Address.publicKeyToAddress(indexSeedKeyPair.publicKey);
+        const indexEd25519Address = new Ed25519Address(indexSeedKeyPair.publicKey);
+        const indexPublicKeyAddress = indexEd25519Address.toAddress();
         console.log("\tAddress Ed25519", Converter.bytesToHex(indexPublicKeyAddress));
         console.log("\tAddress Bech32", Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, indexPublicKeyAddress));
         console.log();
 
         basePath.pop();
+        basePath.pop();
+        basePath.pop();
+    }
 
+    // This can also be achieved using the address builders, this will include
+    // both internal and external addresses.
+    console.log();
+    console.log("Generated Addresses using Account Format");
+    const addressGeneratorAccountState = {
+        seed: baseSeed,
+        accountIndex,
+        addressIndex: 0,
+        isInternal
+    };
+    for (let i = 0; i < 20; i++) {
+        const pathAndKeyPair = generateAccountAddress(addressGeneratorAccountState, i === 0)
+        console.log(`Wallet Index ${pathAndKeyPair.path ? pathAndKeyPair.path.toString() : ""}`);
+        console.log("\tPrivate Key", Converter.bytesToHex(pathAndKeyPair.keyPair.privateKey));
+        console.log("\tPublic Key", Converter.bytesToHex(pathAndKeyPair.keyPair.publicKey));
+
+        const indexEd25519Address = new Ed25519Address(pathAndKeyPair.keyPair.publicKey);
+        const indexPublicKeyAddress = indexEd25519Address.toAddress();
+        console.log("\tAddress Ed25519", Converter.bytesToHex(indexPublicKeyAddress));
+        console.log("\tAddress Bech32", Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, indexPublicKeyAddress));
+        console.log();
+    }
+
+    console.log();
+    console.log("Generated Addresses using Bip32 Format");
+    const addressGeneratorBip32State = {
+        seed: baseSeed,
+        addressIndex: 0,
+        basePath: new Bip32Path("m/123'/456'")
+    };
+    for (let i = 0; i < 10; i++) {
+        const pathAndKeyPair = generateBip32Address(addressGeneratorBip32State, i === 0)
+        console.log(`Wallet Index ${pathAndKeyPair.path ? pathAndKeyPair.path.toString() : ""}`);
+        console.log("\tPrivate Key", Converter.bytesToHex(pathAndKeyPair.keyPair.privateKey));
+        console.log("\tPublic Key", Converter.bytesToHex(pathAndKeyPair.keyPair.publicKey));
+        const indexEd25519Address = new Ed25519Address(pathAndKeyPair.keyPair.publicKey);
+        const indexPublicKeyAddress = indexEd25519Address.toAddress();
+        console.log("\tAddress Ed25519", Converter.bytesToHex(indexPublicKeyAddress));
+        console.log("\tAddress Bech32", Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, indexPublicKeyAddress));
+        console.log();
     }
 }
 

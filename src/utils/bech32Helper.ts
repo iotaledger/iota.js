@@ -8,9 +8,14 @@ import { Bech32 } from "../crypto/bech32";
  */
 export class Bech32Helper {
     /**
-     * The human readable part of the bech32 addresses.
+     * The default human readable part of the bech32 addresses for mainnet, currently 'iot'.
      */
-    public static BECH32_DEFAULT_HRP: string = "iot";
+    public static BECH32_DEFAULT_HRP_MAIN: string = "iot";
+
+    /**
+     * The default human readable part of the bech32 addresses for testnet, currently 'toi'.
+     */
+    public static BECH32_DEFAULT_HRP_TEST: string = "toi";
 
     /**
      * Encode an address to bech32.
@@ -22,7 +27,7 @@ export class Bech32Helper {
     public static toBech32(
         addressType: number,
         addressBytes: Uint8Array,
-        humanReadablePart: string = Bech32Helper.BECH32_DEFAULT_HRP): string {
+        humanReadablePart: string = Bech32Helper.BECH32_DEFAULT_HRP_MAIN): string {
         const addressData = new Uint8Array(1 + addressBytes.length);
         addressData[0] = addressType;
         addressData.set(addressBytes, 1);
@@ -35,7 +40,7 @@ export class Bech32Helper {
      * @param humanReadablePart The human readable part to use.
      * @returns The address type and address bytes or undefined if it cannot be decoded.
      */
-    public static fromBech32(bech32Text: string, humanReadablePart: string = Bech32Helper.BECH32_DEFAULT_HRP): {
+    public static fromBech32(bech32Text: string, humanReadablePart: string = Bech32Helper.BECH32_DEFAULT_HRP_MAIN): {
         addressType: number;
         addressBytes: Uint8Array;
     } | undefined {
@@ -66,7 +71,9 @@ export class Bech32Helper {
      * @param humanReadablePart The human readable part to match.
      * @returns True if the passed address matches the pattern for a bech32 address.
      */
-    public static matches(bech32Text?: string, humanReadablePart: string = Bech32Helper.BECH32_DEFAULT_HRP): boolean {
+    public static matches(
+        bech32Text?: string,
+        humanReadablePart: string = Bech32Helper.BECH32_DEFAULT_HRP_MAIN): boolean {
         return Bech32.matches(humanReadablePart, bech32Text);
     }
 }

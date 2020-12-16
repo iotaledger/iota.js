@@ -4,16 +4,23 @@ import { IAddress } from "../models/IAddress";
  */
 export declare class Ed25519Address implements IAddress {
     /**
+     * The public key for the address.
+     */
+    private readonly _publicKey;
+    /**
+     * Create a new instance of Ed25519Address.
+     * @param publicKey The public key for the address.
+     */
+    constructor(publicKey: Uint8Array);
+    /**
      * Convert the public key to an address.
-     * @param publicKey The public key to convert.
      * @returns The address.
      */
-    publicKeyToAddress(publicKey: Uint8Array): Uint8Array;
+    toAddress(): Uint8Array;
     /**
      * Use the public key to validate the address.
-     * @param publicKey The public key to verify with.
      * @param address The address to verify.
      * @returns True if the data and address is verified.
      */
-    verifyAddress(publicKey: Uint8Array, address: Uint8Array): boolean;
+    verify(address: Uint8Array): boolean;
 }

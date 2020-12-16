@@ -14,7 +14,7 @@ Convert address to bech32.
 
 ### Properties
 
-* [BECH32\_DEFAULT\_HRP](bech32helper.md#bech32_default_hrp)
+* [BECH32\_DEFAULT\_HRP\_MAIN](bech32helper.md#bech32_default_hrp_main)
 
 ### Methods
 
@@ -24,11 +24,11 @@ Convert address to bech32.
 
 ## Properties
 
-### BECH32\_DEFAULT\_HRP
+### BECH32\_DEFAULT\_HRP\_MAIN
 
-▪ `Static` **BECH32\_DEFAULT\_HRP**: string = "iot"
+▪ `Static` **BECH32\_DEFAULT\_HRP\_MAIN**: string = "iot"
 
-The human readable part of the bech32 addresses.
+The default human readable part of the bech32 addresses, currently 'iot'.
 
 ## Methods
 
@@ -43,7 +43,7 @@ Decode an address from bech32.
 Name | Type | Default value | Description |
 ------ | ------ | ------ | ------ |
 `bech32Text` | string | - | The bech32 text to decode. |
-`humanReadablePart` | string | Bech32Helper.BECH32\_DEFAULT\_HRP | The human readable part to use. |
+`humanReadablePart` | string | Bech32Helper.BECH32\_DEFAULT\_HRP\_MAIN | The human readable part to use. |
 
 **Returns:** { addressBytes: Uint8Array ; addressType: number  } \| undefined
 
@@ -62,7 +62,7 @@ Does the provided string look like it might be an bech32 address with matching h
 Name | Type | Default value | Description |
 ------ | ------ | ------ | ------ |
 `bech32Text?` | undefined \| string | - | The bech32 text to text. |
-`humanReadablePart` | string | Bech32Helper.BECH32\_DEFAULT\_HRP | The human readable part to match. |
+`humanReadablePart` | string | Bech32Helper.BECH32\_DEFAULT\_HRP\_MAIN | The human readable part to match. |
 
 **Returns:** boolean
 
@@ -82,7 +82,7 @@ Name | Type | Default value | Description |
 ------ | ------ | ------ | ------ |
 `addressType` | number | - | The address type to encode. |
 `addressBytes` | Uint8Array | - | The address bytes to encode. |
-`humanReadablePart` | string | Bech32Helper.BECH32\_DEFAULT\_HRP | The human readable part to use. |
+`humanReadablePart` | string | Bech32Helper.BECH32\_DEFAULT\_HRP\_MAIN | The human readable part to use. |
 
 **Returns:** string
 
