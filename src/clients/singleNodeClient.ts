@@ -1,6 +1,6 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import { serializeMessage } from "../binary/message";
+import { MAX_MESSAGE_LENGTH, serializeMessage } from "../binary/message";
 import { Blake2b } from "../crypto/blake2b";
 import { IAddressOutputsResponse } from "../models/api/IAddressOutputsResponse";
 import { IAddressResponse } from "../models/api/IAddressResponse";
@@ -146,6 +146,15 @@ export class SingleNodeClient implements IClient {
      * @returns The messageId.
      */
     public async messageSubmit(message: IMessage): Promise<string> {
+        const writeStream = new WriteStream();
+        serializeMessage(writeStream, message);
+        const messageBytes = writeStream.finalBytes();
+
+        if (messageBytes.length > MAX_MESSAGE_LENGTH) {
+            throw new Error(`The message length is ${messageBytes.length
+                }, which exceeds the maximum size of ${MAX_MESSAGE_LENGTH}`);
+        }
+
         if (!message.nonce || message.nonce.length === 0) {
             if (this._powProvider) {
                 const nodeInfo = await this.info();
@@ -154,9 +163,6 @@ export class SingleNodeClient implements IClient {
                 const networkId64 = BigIntHelper.read8(networkIdBytes, 0);
                 message.networkId = networkId64.toString();
 
-                const writeStream = new WriteStream();
-                serializeMessage(writeStream, message);
-                const messageBytes = writeStream.finalBytes();
                 const nonce = await this._powProvider.pow(messageBytes, this._targetScore);
                 message.nonce = nonce.toString(10);
             } else {
@@ -175,6 +181,10 @@ export class SingleNodeClient implements IClient {
      * @returns The messageId.
      */
     public async messageSubmitRaw(message: Uint8Array): Promise<string> {
+        if (message.length > MAX_MESSAGE_LENGTH) {
+            throw new Error(`The message length is ${message.length
+                }, which exceeds the maximum size of ${MAX_MESSAGE_LENGTH}`);
+        }
         if (ArrayHelper.equal(message.slice(-8), SingleNodeClient.NONCE_ZERO) && this._powProvider) {
             const nodeInfo = await this.info();
 

@@ -14,6 +14,11 @@ const MIN_MESSAGE_LENGTH: number = UINT64_SIZE +
 const EMPTY_MESSAGE_ID_HEX: string = "0".repeat(MESSAGE_ID_LENGTH * 2);
 
 /**
+ * The maximum length of a message.
+ */
+export const MAX_MESSAGE_LENGTH: number = 32768;
+
+/**
  * Deserialize the message from binary.
  * @param readStream The message to deserialize.
  * @returns The deserialized message.

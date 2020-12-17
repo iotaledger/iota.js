@@ -21,6 +21,11 @@ export const MIN_INDEXATION_PAYLOAD_LENGTH: number = MIN_PAYLOAD_LENGTH + STRING
 export const MIN_TRANSACTION_PAYLOAD_LENGTH: number = MIN_PAYLOAD_LENGTH + UINT32_SIZE;
 
 /**
+ * The maximum length of a indexation key.
+ */
+export const MAX_INDEXATION_KEY_LENGTH: number = 64;
+
+/**
  * Deserialize the payload from binary.
  * @param readStream The stream to read the data from.
  * @returns The deserialized object.
@@ -240,6 +245,10 @@ export function deserializeIndexationPayload(readStream: ReadStream): IIndexatio
  */
 export function serializeIndexationPayload(writeStream: WriteStream,
     object: IIndexationPayload): void {
+    if (object.index.length > MAX_INDEXATION_KEY_LENGTH) {
+        throw new Error(`The indexation key length is ${object.index.length
+            }, which exceeds the maximum size of ${MAX_INDEXATION_KEY_LENGTH}`);
+    }
     writeStream.writeUInt32("payloadIndexation.type", object.type);
     writeStream.writeString("payloadIndexation.index", object.index);
     writeStream.writeUInt32("payloadIndexation.dataLength", object.data.length / 2);
