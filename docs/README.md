@@ -90,6 +90,8 @@
 * [ED25519\_SEED\_TYPE](README.md#ed25519_seed_type)
 * [ED25519\_SIGNATURE\_TYPE](README.md#ed25519_signature_type)
 * [INDEXATION\_PAYLOAD\_TYPE](README.md#indexation_payload_type)
+* [MAX\_INDEXATION\_KEY\_LENGTH](README.md#max_indexation_key_length)
+* [MAX\_MESSAGE\_LENGTH](README.md#max_message_length)
 * [MILESTONE\_PAYLOAD\_TYPE](README.md#milestone_payload_type)
 * [REFERENCE\_UNLOCK\_BLOCK\_TYPE](README.md#reference_unlock_block_type)
 * [SIGNATURE\_UNLOCK\_BLOCK\_TYPE](README.md#signature_unlock_block_type)
@@ -231,6 +233,22 @@ The global type for the payload.
 
 ___
 
+### MAX\_INDEXATION\_KEY\_LENGTH
+
+• `Const` **MAX\_INDEXATION\_KEY\_LENGTH**: number = 64
+
+The maximum length of a indexation key.
+
+___
+
+### MAX\_MESSAGE\_LENGTH
+
+• `Const` **MAX\_MESSAGE\_LENGTH**: number = 32768
+
+The maximum length of a message.
+
+___
+
 ### MILESTONE\_PAYLOAD\_TYPE
 
 • `Const` **MILESTONE\_PAYLOAD\_TYPE**: number = 1
@@ -310,7 +328,7 @@ ___
 
 ### calculateInputs
 
-▸ **calculateInputs**<T\>(`client`: [IClient](interfaces/iclient.md), `seed`: [ISeed](interfaces/iseed.md), `initialAddressState`: T, `nextAddress`: (s: [ISeed](interfaces/iseed.md), addressState: T, isFirst: boolean) => { keyPair: [IKeyPair](interfaces/ikeypair.md) ; path?: [Bip32Path](classes/bip32path.md)  }, `outputs`: { address: string ; addressType: number ; amount: number  }[], `zeroCount`: number): Promise<{ addressKeyPair: [IKeyPair](interfaces/ikeypair.md) ; input: [IUTXOInput](interfaces/iutxoinput.md)  }[]\>
+▸ **calculateInputs**<T\>(`client`: [IClient](interfaces/iclient.md), `seed`: [ISeed](interfaces/iseed.md), `initialAddressState`: T, `nextAddressPath`: (addressState: T, isFirst: boolean) => string, `outputs`: { address: string ; addressType: number ; amount: number  }[], `zeroCount`: number): Promise<{ addressKeyPair: [IKeyPair](interfaces/ikeypair.md) ; input: [IUTXOInput](interfaces/iutxoinput.md)  }[]\>
 
 Calculate the inputs from the seed and basePath.
 
@@ -327,7 +345,7 @@ Name | Type | Description |
 `client` | [IClient](interfaces/iclient.md) | The client to send the transfer with. |
 `seed` | [ISeed](interfaces/iseed.md) | The seed to use for address generation. |
 `initialAddressState` | T | The initial address state for calculating the addresses. |
-`nextAddress` | (s: [ISeed](interfaces/iseed.md), addressState: T, isFirst: boolean) => { keyPair: [IKeyPair](interfaces/ikeypair.md) ; path?: [Bip32Path](classes/bip32path.md)  } | Calculate the next address for inputs. |
+`nextAddressPath` | (addressState: T, isFirst: boolean) => string | Calculate the next address for inputs. |
 `outputs` | { address: string ; addressType: number ; amount: number  }[] | The outputs to send. |
 `zeroCount` | number | Abort when the number of zero balances is exceeded. |
 
@@ -699,7 +717,7 @@ ___
 
 ### generateAccountAddress
 
-▸ **generateAccountAddress**(`seed`: [ISeed](interfaces/iseed.md), `addressState`: [IAccountAddressGeneratorState](interfaces/iaccountaddressgeneratorstate.md), `isFirst`: boolean): object
+▸ **generateAccountAddress**(`addressState`: [IAccountAddressGeneratorState](interfaces/iaccountaddressgeneratorstate.md), `isFirst`: boolean): string
 
 Generate addresses based on the account indexing style.
 
@@ -707,16 +725,10 @@ Generate addresses based on the account indexing style.
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`seed` | [ISeed](interfaces/iseed.md) | The seed to use for address generation. |
 `addressState` | [IAccountAddressGeneratorState](interfaces/iaccountaddressgeneratorstate.md) | The address state. |
 `isFirst` | boolean | Is this the first address we are generating. |
 
-**Returns:** object
-
-Name | Type |
------- | ------ |
-`keyPair` | [IKeyPair](interfaces/ikeypair.md) |
-`path?` | [Bip32Path](classes/bip32path.md) |
+**Returns:** string
 
 The key pair for the address.
 
@@ -744,7 +756,7 @@ ___
 
 ### generateBip32Address
 
-▸ **generateBip32Address**(`seed`: [ISeed](interfaces/iseed.md), `addressState`: [IBip32PathAddressGeneratorState](interfaces/ibip32pathaddressgeneratorstate.md), `isFirst`: boolean): object
+▸ **generateBip32Address**(`addressState`: [IBip32PathAddressGeneratorState](interfaces/ibip32pathaddressgeneratorstate.md), `isFirst`: boolean): string
 
 Generate addresses based on a bip32 path increment.
 
@@ -752,16 +764,10 @@ Generate addresses based on a bip32 path increment.
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`seed` | [ISeed](interfaces/iseed.md) | The seed to use for address generation. |
 `addressState` | [IBip32PathAddressGeneratorState](interfaces/ibip32pathaddressgeneratorstate.md) | The address state. |
 `isFirst` | boolean | Is this the first address we are generating. |
 
-**Returns:** object
-
-Name | Type |
------- | ------ |
-`keyPair` | [IKeyPair](interfaces/ikeypair.md) |
-`path?` | [Bip32Path](classes/bip32path.md) |
+**Returns:** string
 
 The key pair for the address.
 
@@ -830,7 +836,7 @@ ___
 
 ### getUnspentAddress
 
-▸ **getUnspentAddress**(`client`: [IClient](interfaces/iclient.md), `seed`: [ISeed](interfaces/iseed.md), `accountIndex`: number, `startIndex?`: undefined \| number): Promise<{ addressBech32: string ; balance: number ; keyPair: [IKeyPair](interfaces/ikeypair.md) ; state: [IAccountAddressGeneratorState](interfaces/iaccountaddressgeneratorstate.md)  } \| undefined\>
+▸ **getUnspentAddress**(`client`: [IClient](interfaces/iclient.md), `seed`: [ISeed](interfaces/iseed.md), `accountIndex`: number, `startIndex?`: undefined \| number): Promise<{ address: string ; balance: number ; path: string  } \| undefined\>
 
 Get the first unspent address.
 
@@ -843,7 +849,7 @@ Name | Type | Description |
 `accountIndex` | number | The account index in the wallet. |
 `startIndex?` | undefined \| number | Optional start index for the wallet count address, defaults to 0. |
 
-**Returns:** Promise<{ addressBech32: string ; balance: number ; keyPair: [IKeyPair](interfaces/ikeypair.md) ; state: [IAccountAddressGeneratorState](interfaces/iaccountaddressgeneratorstate.md)  } \| undefined\>
+**Returns:** Promise<{ address: string ; balance: number ; path: string  } \| undefined\>
 
 The first unspent address.
 
@@ -851,7 +857,7 @@ ___
 
 ### getUnspentAddresses
 
-▸ **getUnspentAddresses**(`client`: [IClient](interfaces/iclient.md), `seed`: [ISeed](interfaces/iseed.md), `accountIndex`: number, `startIndex?`: undefined \| number, `countLimit?`: undefined \| number, `zeroCount?`: undefined \| number): Promise<{ addressBech32: string ; balance: number ; keyPair: [IKeyPair](interfaces/ikeypair.md) ; state: [IAccountAddressGeneratorState](interfaces/iaccountaddressgeneratorstate.md)  }[]\>
+▸ **getUnspentAddresses**(`client`: [IClient](interfaces/iclient.md), `seed`: [ISeed](interfaces/iseed.md), `accountIndex`: number, `startIndex?`: undefined \| number, `countLimit?`: undefined \| number, `zeroCount?`: undefined \| number): Promise<{ address: string ; balance: number ; path: string  }[]\>
 
 Get all the unspent addresses.
 
@@ -866,7 +872,7 @@ Name | Type | Description |
 `countLimit?` | undefined \| number | Limit the number of items to find. |
 `zeroCount?` | undefined \| number | Abort when the number of zero balances is exceeded. |
 
-**Returns:** Promise<{ addressBech32: string ; balance: number ; keyPair: [IKeyPair](interfaces/ikeypair.md) ; state: [IAccountAddressGeneratorState](interfaces/iaccountaddressgeneratorstate.md)  }[]\>
+**Returns:** Promise<{ address: string ; balance: number ; path: string  }[]\>
 
 All the unspent addresses.
 
@@ -874,7 +880,7 @@ ___
 
 ### getUnspentAddressesBip32
 
-▸ **getUnspentAddressesBip32**(`client`: [IClient](interfaces/iclient.md), `seed`: [ISeed](interfaces/iseed.md), `basePath`: [Bip32Path](classes/bip32path.md), `startIndex?`: undefined \| number, `countLimit?`: undefined \| number, `zeroCount?`: undefined \| number): Promise<{ addressBech32: string ; balance: number ; keyPair: [IKeyPair](interfaces/ikeypair.md) ; state: [IBip32PathAddressGeneratorState](interfaces/ibip32pathaddressgeneratorstate.md)  }[]\>
+▸ **getUnspentAddressesBip32**(`client`: [IClient](interfaces/iclient.md), `seed`: [ISeed](interfaces/iseed.md), `basePath`: [Bip32Path](classes/bip32path.md), `startIndex?`: undefined \| number, `countLimit?`: undefined \| number, `zeroCount?`: undefined \| number): Promise<{ address: string ; balance: number ; path: string  }[]\>
 
 Get all the unspent addresses with a bip32 base path.
 
@@ -889,7 +895,7 @@ Name | Type | Description |
 `countLimit?` | undefined \| number | Limit the number of items to find. |
 `zeroCount?` | undefined \| number | Abort when the number of zero balances is exceeded. |
 
-**Returns:** Promise<{ addressBech32: string ; balance: number ; keyPair: [IKeyPair](interfaces/ikeypair.md) ; state: [IBip32PathAddressGeneratorState](interfaces/ibip32pathaddressgeneratorstate.md)  }[]\>
+**Returns:** Promise<{ address: string ; balance: number ; path: string  }[]\>
 
 All the unspent addresses.
 
@@ -897,7 +903,7 @@ ___
 
 ### getUnspentAddressesWithAddressGenerator
 
-▸ **getUnspentAddressesWithAddressGenerator**<T\>(`client`: [IClient](interfaces/iclient.md), `seed`: [ISeed](interfaces/iseed.md), `initialAddressState`: T, `nextAddress`: (s: [ISeed](interfaces/iseed.md), addressState: T, isFirst: boolean) => { keyPair: [IKeyPair](interfaces/ikeypair.md) ; path?: [Bip32Path](classes/bip32path.md)  }, `countLimit?`: undefined \| number, `zeroCount?`: undefined \| number): Promise<{ addressBech32: string ; balance: number ; keyPair: [IKeyPair](interfaces/ikeypair.md) ; state: T  }[]\>
+▸ **getUnspentAddressesWithAddressGenerator**<T\>(`client`: [IClient](interfaces/iclient.md), `seed`: [ISeed](interfaces/iseed.md), `initialAddressState`: T, `nextAddressPath`: (addressState: T, isFirst: boolean) => string, `countLimit?`: undefined \| number, `zeroCount?`: undefined \| number): Promise<{ address: string ; balance: number ; path: string  }[]\>
 
 Get all the unspent addresses using an address generator.
 
@@ -914,11 +920,11 @@ Name | Type | Description |
 `client` | [IClient](interfaces/iclient.md) | The client to send the transfer with. |
 `seed` | [ISeed](interfaces/iseed.md) | The seed to use for address generation. |
 `initialAddressState` | T | The initial address state for calculating the addresses. |
-`nextAddress` | (s: [ISeed](interfaces/iseed.md), addressState: T, isFirst: boolean) => { keyPair: [IKeyPair](interfaces/ikeypair.md) ; path?: [Bip32Path](classes/bip32path.md)  } | Calculate the next address for inputs. |
+`nextAddressPath` | (addressState: T, isFirst: boolean) => string | Calculate the next address for inputs. |
 `countLimit?` | undefined \| number | Limit the number of items to find. |
 `zeroCount?` | undefined \| number | Abort when the number of zero balances is exceeded. |
 
-**Returns:** Promise<{ addressBech32: string ; balance: number ; keyPair: [IKeyPair](interfaces/ikeypair.md) ; state: T  }[]\>
+**Returns:** Promise<{ address: string ; balance: number ; path: string  }[]\>
 
 All the unspent addresses.
 
@@ -1300,7 +1306,7 @@ ___
 
 ### sendData
 
-▸ **sendData**(`client`: [IClient](interfaces/iclient.md), `indexationKey`: string, `indexationData`: Uint8Array): Promise<{ message: [IMessage](interfaces/imessage.md) ; messageId: string  }\>
+▸ **sendData**(`client`: [IClient](interfaces/iclient.md), `indexationKey`: string, `indexationData?`: Uint8Array): Promise<{ message: [IMessage](interfaces/imessage.md) ; messageId: string  }\>
 
 Send a data message.
 
@@ -1310,7 +1316,7 @@ Name | Type | Description |
 ------ | ------ | ------ |
 `client` | [IClient](interfaces/iclient.md) | The client to send the transfer with. |
 `indexationKey` | string | The index name. |
-`indexationData` | Uint8Array | The index data. |
+`indexationData?` | Uint8Array | The index data. |
 
 **Returns:** Promise<{ message: [IMessage](interfaces/imessage.md) ; messageId: string  }\>
 
@@ -1387,7 +1393,7 @@ ___
 
 ### sendWithAddressGenerator
 
-▸ **sendWithAddressGenerator**<T\>(`client`: [IClient](interfaces/iclient.md), `seed`: [ISeed](interfaces/iseed.md), `initialAddressState`: T, `nextAddress`: (s: [ISeed](interfaces/iseed.md), addressState: T, isFirst: boolean) => { keyPair: [IKeyPair](interfaces/ikeypair.md) ; path?: [Bip32Path](classes/bip32path.md)  }, `outputs`: { address: string ; addressType: number ; amount: number  }[]): Promise<{ message: [IMessage](interfaces/imessage.md) ; messageId: string  }\>
+▸ **sendWithAddressGenerator**<T\>(`client`: [IClient](interfaces/iclient.md), `seed`: [ISeed](interfaces/iseed.md), `initialAddressState`: T, `nextAddressPath`: (addressState: T, isFirst: boolean) => string, `outputs`: { address: string ; addressType: number ; amount: number  }[]): Promise<{ message: [IMessage](interfaces/imessage.md) ; messageId: string  }\>
 
 Send a transfer using account based indexing for the inputs.
 
@@ -1404,7 +1410,7 @@ Name | Type | Description |
 `client` | [IClient](interfaces/iclient.md) | The client to send the transfer with. |
 `seed` | [ISeed](interfaces/iseed.md) | The seed to use for address generation. |
 `initialAddressState` | T | The initial address state for calculating the addresses. |
-`nextAddress` | (s: [ISeed](interfaces/iseed.md), addressState: T, isFirst: boolean) => { keyPair: [IKeyPair](interfaces/ikeypair.md) ; path?: [Bip32Path](classes/bip32path.md)  } | Calculate the next address for inputs. |
+`nextAddressPath` | (addressState: T, isFirst: boolean) => string | Calculate the next address for inputs. |
 `outputs` | { address: string ; addressType: number ; amount: number  }[] | The address to send the funds to in bech32 format and amounts. |
 
 **Returns:** Promise<{ message: [IMessage](interfaces/imessage.md) ; messageId: string  }\>

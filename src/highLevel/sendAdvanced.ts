@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 import { serializeInput } from "../binary/input";
 import { serializeOutput } from "../binary/output";
+import { MAX_INDEXATION_KEY_LENGTH } from "../binary/payload";
 import { serializeTransactionEssence } from "../binary/transaction";
 import { Ed25519 } from "../crypto/ed25519";
 import { IClient } from "../models/IClient";
@@ -79,6 +80,10 @@ export function buildTransactionPayload(
     if (!outputs || outputs.length === 0) {
         throw new Error("You must specify some outputs");
     }
+    if (indexationKey && indexationKey.length > MAX_INDEXATION_KEY_LENGTH) {
+        throw new Error(`The indexation key length is ${indexationKey.length
+            }, which exceeds the maximum size of ${MAX_INDEXATION_KEY_LENGTH}`);
+    }
 
     const outputsWithSerialization: {
         output: ISigLockedSingleOutput;
@@ -127,11 +132,11 @@ export function buildTransactionPayload(
         type: 0,
         inputs: sortedInputs.map(i => i.input),
         outputs: sortedOutputs.map(o => o.output),
-        payload: indexationKey && indexationData
+        payload: indexationKey
             ? {
                 type: 2,
                 index: indexationKey,
-                data: Converter.bytesToHex(indexationData)
+                data: indexationData ? Converter.bytesToHex(indexationData) : ""
             }
             : undefined
     };

@@ -15,6 +15,7 @@ Convert address to bech32.
 ### Properties
 
 * [BECH32\_DEFAULT\_HRP\_MAIN](bech32helper.md#bech32_default_hrp_main)
+* [BECH32\_DEFAULT\_HRP\_TEST](bech32helper.md#bech32_default_hrp_test)
 
 ### Methods
 
@@ -28,7 +29,15 @@ Convert address to bech32.
 
 ▪ `Static` **BECH32\_DEFAULT\_HRP\_MAIN**: string = "iot"
 
-The default human readable part of the bech32 addresses, currently 'iot'.
+The default human readable part of the bech32 addresses for mainnet, currently 'iot'.
+
+___
+
+### BECH32\_DEFAULT\_HRP\_TEST
+
+▪ `Static` **BECH32\_DEFAULT\_HRP\_TEST**: string = "toi"
+
+The default human readable part of the bech32 addresses for testnet, currently 'toi'.
 
 ## Methods
 

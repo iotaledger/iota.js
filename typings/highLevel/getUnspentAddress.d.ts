@@ -1,6 +1,4 @@
-import { IAccountAddressGeneratorState } from "../models/IAccountAddressGeneratorState";
 import { IClient } from "../models/IClient";
-import { IKeyPair } from "../models/IKeyPair";
 import { ISeed } from "../models/ISeed";
 /**
  * Get the first unspent address.
@@ -11,8 +9,7 @@ import { ISeed } from "../models/ISeed";
  * @returns The first unspent address.
  */
 export declare function getUnspentAddress(client: IClient, seed: ISeed, accountIndex: number, startIndex?: number): Promise<{
-    addressBech32: string;
-    keyPair: IKeyPair;
-    state: IAccountAddressGeneratorState;
+    address: string;
+    path: string;
     balance: number;
 } | undefined>;

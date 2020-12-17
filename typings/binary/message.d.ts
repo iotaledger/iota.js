@@ -2,6 +2,10 @@ import { IMessage } from "../models/IMessage";
 import { ReadStream } from "../utils/readStream";
 import { WriteStream } from "../utils/writeStream";
 /**
+ * The maximum length of a message.
+ */
+export declare const MAX_MESSAGE_LENGTH: number;
+/**
  * Deserialize the message from binary.
  * @param readStream The message to deserialize.
  * @returns The deserialized message.

@@ -1,8 +1,6 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import { IAccountAddressGeneratorState } from "../models/IAccountAddressGeneratorState";
 import { IClient } from "../models/IClient";
-import { IKeyPair } from "../models/IKeyPair";
 import { ISeed } from "../models/ISeed";
 import { getUnspentAddresses } from "./getUnspentAddresses";
 
@@ -19,9 +17,8 @@ export async function getUnspentAddress(
     seed: ISeed,
     accountIndex: number,
     startIndex?: number): Promise<{
-        addressBech32: string;
-        keyPair: IKeyPair;
-        state: IAccountAddressGeneratorState;
+        address: string;
+        path: string;
         balance: number;
     } | undefined> {
     const allUnspent = await getUnspentAddresses(client, seed, accountIndex, startIndex, 1, 5);

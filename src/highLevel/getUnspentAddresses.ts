@@ -6,7 +6,6 @@ import { IAccountAddressGeneratorState } from "../models/IAccountAddressGenerato
 import { IBip32PathAddressGeneratorState } from "../models/IBip32PathAddressGeneratorState";
 import { IClient } from "../models/IClient";
 import { ED25519_ADDRESS_TYPE } from "../models/IEd25519Address";
-import { IKeyPair } from "../models/IKeyPair";
 import { ISeed } from "../models/ISeed";
 import { Bech32Helper } from "../utils/bech32Helper";
 import { Converter } from "../utils/converter";
@@ -29,9 +28,8 @@ export async function getUnspentAddresses(
     startIndex?: number,
     countLimit?: number,
     zeroCount?: number): Promise<{
-        addressBech32: string;
-        keyPair: IKeyPair;
-        state: IAccountAddressGeneratorState;
+        address: string;
+        path: string;
         balance: number;
     }[]> {
     return getUnspentAddressesWithAddressGenerator<IAccountAddressGeneratorState>(
@@ -65,9 +63,8 @@ export async function getUnspentAddressesBip32(
     startIndex?: number,
     countLimit?: number,
     zeroCount?: number): Promise<{
-        addressBech32: string;
-        keyPair: IKeyPair;
-        state: IBip32PathAddressGeneratorState;
+        address: string;
+        path: string;
         balance: number;
     }[]> {
     return getUnspentAddressesWithAddressGenerator<IBip32PathAddressGeneratorState>(
@@ -88,7 +85,7 @@ export async function getUnspentAddressesBip32(
  * @param client The client to send the transfer with.
  * @param seed The seed to use for address generation.
  * @param initialAddressState The initial address state for calculating the addresses.
- * @param nextAddress Calculate the next address for inputs.
+ * @param nextAddressPath Calculate the next address for inputs.
  * @param countLimit Limit the number of items to find.
  * @param zeroCount Abort when the number of zero balances is exceeded.
  * @returns All the unspent addresses.
@@ -97,24 +94,19 @@ export async function getUnspentAddressesWithAddressGenerator<T>(
     client: IClient,
     seed: ISeed,
     initialAddressState: T,
-    nextAddress: (s: ISeed, addressState: T, isFirst: boolean) => {
-        keyPair: IKeyPair;
-        path?: Bip32Path;
-    },
+    nextAddressPath: (addressState: T, isFirst: boolean) => string,
     countLimit?: number,
     zeroCount?: number): Promise<{
-        addressBech32: string;
-        keyPair: IKeyPair;
-        state: T;
+        address: string;
+        path: string;
         balance: number;
     }[]> {
     const localCountLimit = countLimit ?? Number.MAX_SAFE_INTEGER;
     const localZeroCount = zeroCount ?? 5;
     let finished = false;
     const allUnspent: {
-        addressBech32: string;
-        keyPair: IKeyPair;
-        state: T;
+        address: string;
+        path: string;
         balance: number;
     }[] = [];
 
@@ -122,10 +114,12 @@ export async function getUnspentAddressesWithAddressGenerator<T>(
     let zeroBalance = 0;
 
     do {
-        const pathKeyPair = nextAddress(seed, initialAddressState, isFirst);
+        const path = nextAddressPath(initialAddressState, isFirst);
         isFirst = false;
 
-        const ed25519Address = new Ed25519Address(pathKeyPair.keyPair.publicKey);
+        const addressSeed = seed.generateSeedFromPath(new Bip32Path(path));
+
+        const ed25519Address = new Ed25519Address(addressSeed.keyPair().publicKey);
         const addressBytes = ed25519Address.toAddress();
         const addressHex = Converter.bytesToHex(addressBytes);
         const addressResponse = await client.addressEd25519(addressHex);
@@ -138,11 +132,9 @@ export async function getUnspentAddressesWithAddressGenerator<T>(
                 finished = true;
             }
         } else {
-            const stateNoSeed = { ...initialAddressState, seed: undefined };
             allUnspent.push({
-                addressBech32: Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, addressBytes),
-                state: stateNoSeed,
-                keyPair: pathKeyPair.keyPair,
+                address: Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, addressBytes),
+                path,
                 balance: addressResponse.balance
             });
 

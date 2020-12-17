@@ -162,7 +162,7 @@ export async function sendMultipleEd25519(
  * @param client The client to send the transfer with.
  * @param seed The seed to use for address generation.
  * @param initialAddressState The initial address state for calculating the addresses.
- * @param nextAddress Calculate the next address for inputs.
+ * @param nextAddressPath Calculate the next address for inputs.
  * @param outputs The address to send the funds to in bech32 format and amounts.
  * @returns The id of the message created and the contructed message.
  */
@@ -170,10 +170,7 @@ export async function sendWithAddressGenerator<T>(
     client: IClient,
     seed: ISeed,
     initialAddressState: T,
-    nextAddress: (s: ISeed, addressState: T, isFirst: boolean) => {
-        keyPair: IKeyPair;
-        path?: Bip32Path;
-    },
+    nextAddressPath: (addressState: T, isFirst: boolean) => string,
     outputs: {
         address: string;
         addressType: number;
@@ -186,7 +183,7 @@ export async function sendWithAddressGenerator<T>(
         client,
         seed,
         initialAddressState,
-        nextAddress,
+        nextAddressPath,
         outputs,
         5
     );
@@ -207,7 +204,7 @@ export async function sendWithAddressGenerator<T>(
  * @param client The client to send the transfer with.
  * @param seed The seed to use for address generation.
  * @param initialAddressState The initial address state for calculating the addresses.
- * @param nextAddress Calculate the next address for inputs.
+ * @param nextAddressPath Calculate the next address for inputs.
  * @param outputs The outputs to send.
  * @param zeroCount Abort when the number of zero balances is exceeded.
  * @returns The id of the message created and the contructed message.
@@ -216,10 +213,7 @@ export async function calculateInputs<T>(
     client: IClient,
     seed: ISeed,
     initialAddressState: T,
-    nextAddress: (s: ISeed, addressState: T, isFirst: boolean) => {
-        keyPair: IKeyPair;
-        path?: Bip32Path;
-    },
+    nextAddressPath: (addressState: T, isFirst: boolean) => string,
     outputs: { address: string; addressType: number; amount: number }[],
     zeroCount: number
 ): Promise<{
@@ -239,10 +233,13 @@ export async function calculateInputs<T>(
     let zeroBalance = 0;
 
     do {
-        const keyPairAndPath = nextAddress(seed, initialAddressState, isFirst);
+        const path = nextAddressPath(initialAddressState, isFirst);
         isFirst = false;
 
-        const ed25519Address = new Ed25519Address(keyPairAndPath.keyPair.publicKey);
+        const addressSeed = seed.generateSeedFromPath(new Bip32Path(path));
+
+        const addressKeyPair = addressSeed.keyPair();
+        const ed25519Address = new Ed25519Address(addressKeyPair.publicKey);
         const address = Converter.bytesToHex(ed25519Address.toAddress());
         const addressOutputIds = await client.addressEd25519Outputs(address);
 
@@ -273,7 +270,7 @@ export async function calculateInputs<T>(
 
                         inputsAndSignatureKeyPairs.push({
                             input,
-                            addressKeyPair: keyPairAndPath.keyPair
+                            addressKeyPair
                         });
 
                         if (consumedBalance >= requiredBalance) {

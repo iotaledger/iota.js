@@ -1,15 +1,4 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -51,6 +40,7 @@ exports.getUnspentAddressesWithAddressGenerator = exports.getUnspentAddressesBip
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 var ed25519Address_1 = require("../addressTypes/ed25519Address");
+var bip32Path_1 = require("../crypto/bip32Path");
 var IEd25519Address_1 = require("../models/IEd25519Address");
 var bech32Helper_1 = require("../utils/bech32Helper");
 var converter_1 = require("../utils/converter");
@@ -103,14 +93,14 @@ exports.getUnspentAddressesBip32 = getUnspentAddressesBip32;
  * @param client The client to send the transfer with.
  * @param seed The seed to use for address generation.
  * @param initialAddressState The initial address state for calculating the addresses.
- * @param nextAddress Calculate the next address for inputs.
+ * @param nextAddressPath Calculate the next address for inputs.
  * @param countLimit Limit the number of items to find.
  * @param zeroCount Abort when the number of zero balances is exceeded.
  * @returns All the unspent addresses.
  */
-function getUnspentAddressesWithAddressGenerator(client, seed, initialAddressState, nextAddress, countLimit, zeroCount) {
+function getUnspentAddressesWithAddressGenerator(client, seed, initialAddressState, nextAddressPath, countLimit, zeroCount) {
     return __awaiter(this, void 0, void 0, function () {
-        var localCountLimit, localZeroCount, finished, allUnspent, isFirst, zeroBalance, pathKeyPair, ed25519Address, addressBytes, addressHex, addressResponse, stateNoSeed;
+        var localCountLimit, localZeroCount, finished, allUnspent, isFirst, zeroBalance, path, addressSeed, ed25519Address, addressBytes, addressHex, addressResponse;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -122,9 +112,10 @@ function getUnspentAddressesWithAddressGenerator(client, seed, initialAddressSta
                     zeroBalance = 0;
                     _a.label = 1;
                 case 1:
-                    pathKeyPair = nextAddress(seed, initialAddressState, isFirst);
+                    path = nextAddressPath(initialAddressState, isFirst);
                     isFirst = false;
-                    ed25519Address = new ed25519Address_1.Ed25519Address(pathKeyPair.keyPair.publicKey);
+                    addressSeed = seed.generateSeedFromPath(new bip32Path_1.Bip32Path(path));
+                    ed25519Address = new ed25519Address_1.Ed25519Address(addressSeed.keyPair().publicKey);
                     addressBytes = ed25519Address.toAddress();
                     addressHex = converter_1.Converter.bytesToHex(addressBytes);
                     return [4 /*yield*/, client.addressEd25519(addressHex)];
@@ -139,11 +130,9 @@ function getUnspentAddressesWithAddressGenerator(client, seed, initialAddressSta
                         }
                     }
                     else {
-                        stateNoSeed = __assign(__assign({}, initialAddressState), { seed: undefined });
                         allUnspent.push({
-                            addressBech32: bech32Helper_1.Bech32Helper.toBech32(IEd25519Address_1.ED25519_ADDRESS_TYPE, addressBytes),
-                            state: stateNoSeed,
-                            keyPair: pathKeyPair.keyPair,
+                            address: bech32Helper_1.Bech32Helper.toBech32(IEd25519Address_1.ED25519_ADDRESS_TYPE, addressBytes),
+                            path: path,
                             balance: addressResponse.balance
                         });
                         if (allUnspent.length === localCountLimit) {
@@ -160,4 +149,4 @@ function getUnspentAddressesWithAddressGenerator(client, seed, initialAddressSta
     });
 }
 exports.getUnspentAddressesWithAddressGenerator = getUnspentAddressesWithAddressGenerator;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZ2V0VW5zcGVudEFkZHJlc3Nlcy5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy9oaWdoTGV2ZWwvZ2V0VW5zcGVudEFkZHJlc3Nlcy50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7OztBQUFBLCtCQUErQjtBQUMvQixzQ0FBc0M7QUFDdEMsaUVBQWdFO0FBS2hFLDZEQUFpRTtBQUdqRSxzREFBcUQ7QUFDckQsZ0RBQStDO0FBQy9DLHlDQUEyRTtBQUUzRTs7Ozs7Ozs7O0dBU0c7QUFDSCxTQUFzQixtQkFBbUIsQ0FDckMsTUFBZSxFQUNmLElBQVcsRUFDWCxZQUFvQixFQUNwQixVQUFtQixFQUNuQixVQUFtQixFQUNuQixTQUFrQjs7O1lBTWxCLHNCQUFPLHVDQUF1QyxDQUMxQyxNQUFNLEVBQ04sSUFBSSxFQUNKO29CQUNJLFlBQVksY0FBQTtvQkFDWixZQUFZLEVBQUUsVUFBVSxhQUFWLFVBQVUsY0FBVixVQUFVLEdBQUksQ0FBQztvQkFDN0IsVUFBVSxFQUFFLEtBQUs7aUJBQ3BCLEVBQ0Qsa0NBQXNCLEVBQ3RCLFVBQVUsRUFDVixTQUFTLENBQ1osRUFBQzs7O0NBQ0w7QUF4QkQsa0RBd0JDO0FBRUQ7Ozs7Ozs7OztHQVNHO0FBQ0gsU0FBc0Isd0JBQXdCLENBQzFDLE1BQWUsRUFDZixJQUFXLEVBQ1gsUUFBbUIsRUFDbkIsVUFBbUIsRUFDbkIsVUFBbUIsRUFDbkIsU0FBa0I7OztZQU1sQixzQkFBTyx1Q0FBdUMsQ0FDMUMsTUFBTSxFQUNOLElBQUksRUFDSjtvQkFDSSxRQUFRLFVBQUE7b0JBQ1IsWUFBWSxFQUFFLFVBQVUsYUFBVixVQUFVLGNBQVYsVUFBVSxHQUFJLENBQUM7aUJBQ2hDLEVBQ0QsZ0NBQW9CLEVBQ3BCLFVBQVUsRUFDVixTQUFTLENBQ1osRUFBQzs7O0NBQ0w7QUF2QkQsNERBdUJDO0FBRUQ7Ozs7Ozs7OztHQVNHO0FBQ0gsU0FBc0IsdUNBQXVDLENBQ3pELE1BQWUsRUFDZixJQUFXLEVBQ1gsbUJBQXNCLEVBQ3RCLFdBR0MsRUFDRCxVQUFtQixFQUNuQixTQUFrQjs7Ozs7O29CQU1aLGVBQWUsR0FBRyxVQUFVLGFBQVYsVUFBVSxjQUFWLFVBQVUsR0FBSSxNQUFNLENBQUMsZ0JBQWdCLENBQUM7b0JBQ3hELGNBQWMsR0FBRyxTQUFTLGFBQVQsU0FBUyxjQUFULFNBQVMsR0FBSSxDQUFDLENBQUM7b0JBQ2xDLFFBQVEsR0FBRyxLQUFLLENBQUM7b0JBQ2YsVUFBVSxHQUtWLEVBQUUsQ0FBQztvQkFFTCxPQUFPLEdBQUcsSUFBSSxDQUFDO29CQUNmLFdBQVcsR0FBRyxDQUFDLENBQUM7OztvQkFHVixXQUFXLEdBQUcsV0FBVyxDQUFDLElBQUksRUFBRSxtQkFBbUIsRUFBRSxPQUFPLENBQUMsQ0FBQztvQkFDcEUsT0FBTyxHQUFHLEtBQUssQ0FBQztvQkFFVixjQUFjLEdBQUcsSUFBSSwrQkFBYyxDQUFDLFdBQVcsQ0FBQyxPQUFPLENBQUMsU0FBUyxDQUFDLENBQUM7b0JBQ25FLFlBQVksR0FBRyxjQUFjLENBQUMsU0FBUyxFQUFFLENBQUM7b0JBQzFDLFVBQVUsR0FBRyxxQkFBUyxDQUFDLFVBQVUsQ0FBQyxZQUFZLENBQUMsQ0FBQztvQkFDOUIscUJBQU0sTUFBTSxDQUFDLGNBQWMsQ0FBQyxVQUFVLENBQUMsRUFBQTs7b0JBQXpELGVBQWUsR0FBRyxTQUF1QztvQkFFL0QsOERBQThEO29CQUM5RCw0QkFBNEI7b0JBQzVCLElBQUksZUFBZSxDQUFDLEtBQUssS0FBSyxDQUFDLEVBQUU7d0JBQzdCLFdBQVcsRUFBRSxDQUFDO3dCQUNkLElBQUksV0FBVyxJQUFJLGNBQWMsRUFBRTs0QkFDL0IsUUFBUSxHQUFHLElBQUksQ0FBQzt5QkFDbkI7cUJBQ0o7eUJBQU07d0JBQ0csV0FBVyx5QkFBUSxtQkFBbUIsS0FBRSxJQUFJLEVBQUUsU0FBUyxHQUFFLENBQUM7d0JBQ2hFLFVBQVUsQ0FBQyxJQUFJLENBQUM7NEJBQ1osYUFBYSxFQUFFLDJCQUFZLENBQUMsUUFBUSxDQUFDLHNDQUFvQixFQUFFLFlBQVksQ0FBQzs0QkFDeEUsS0FBSyxFQUFFLFdBQVc7NEJBQ2xCLE9BQU8sRUFBRSxXQUFXLENBQUMsT0FBTzs0QkFDNUIsT0FBTyxFQUFFLGVBQWUsQ0FBQyxPQUFPO3lCQUNuQyxDQUFDLENBQUM7d0JBRUgsSUFBSSxVQUFVLENBQUMsTUFBTSxLQUFLLGVBQWUsRUFBRTs0QkFDdkMsUUFBUSxHQUFHLElBQUksQ0FBQzt5QkFDbkI7cUJBQ0o7Ozt3QkFDSSxDQUFDLFFBQVE7O3dCQUVsQixzQkFBTyxVQUFVLEVBQUM7Ozs7Q0FDckI7QUE1REQsMEZBNERDIn0=
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZ2V0VW5zcGVudEFkZHJlc3Nlcy5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy9oaWdoTGV2ZWwvZ2V0VW5zcGVudEFkZHJlc3Nlcy50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7QUFBQSwrQkFBK0I7QUFDL0Isc0NBQXNDO0FBQ3RDLGlFQUFnRTtBQUNoRSxpREFBZ0Q7QUFJaEQsNkRBQWlFO0FBRWpFLHNEQUFxRDtBQUNyRCxnREFBK0M7QUFDL0MseUNBQTJFO0FBRTNFOzs7Ozs7Ozs7R0FTRztBQUNILFNBQXNCLG1CQUFtQixDQUNyQyxNQUFlLEVBQ2YsSUFBVyxFQUNYLFlBQW9CLEVBQ3BCLFVBQW1CLEVBQ25CLFVBQW1CLEVBQ25CLFNBQWtCOzs7WUFLbEIsc0JBQU8sdUNBQXVDLENBQzFDLE1BQU0sRUFDTixJQUFJLEVBQ0o7b0JBQ0ksWUFBWSxjQUFBO29CQUNaLFlBQVksRUFBRSxVQUFVLGFBQVYsVUFBVSxjQUFWLFVBQVUsR0FBSSxDQUFDO29CQUM3QixVQUFVLEVBQUUsS0FBSztpQkFDcEIsRUFDRCxrQ0FBc0IsRUFDdEIsVUFBVSxFQUNWLFNBQVMsQ0FDWixFQUFDOzs7Q0FDTDtBQXZCRCxrREF1QkM7QUFFRDs7Ozs7Ozs7O0dBU0c7QUFDSCxTQUFzQix3QkFBd0IsQ0FDMUMsTUFBZSxFQUNmLElBQVcsRUFDWCxRQUFtQixFQUNuQixVQUFtQixFQUNuQixVQUFtQixFQUNuQixTQUFrQjs7O1lBS2xCLHNCQUFPLHVDQUF1QyxDQUMxQyxNQUFNLEVBQ04sSUFBSSxFQUNKO29CQUNJLFFBQVEsVUFBQTtvQkFDUixZQUFZLEVBQUUsVUFBVSxhQUFWLFVBQVUsY0FBVixVQUFVLEdBQUksQ0FBQztpQkFDaEMsRUFDRCxnQ0FBb0IsRUFDcEIsVUFBVSxFQUNWLFNBQVMsQ0FDWixFQUFDOzs7Q0FDTDtBQXRCRCw0REFzQkM7QUFFRDs7Ozs7Ozs7O0dBU0c7QUFDSCxTQUFzQix1Q0FBdUMsQ0FDekQsTUFBZSxFQUNmLElBQVcsRUFDWCxtQkFBc0IsRUFDdEIsZUFBOEQsRUFDOUQsVUFBbUIsRUFDbkIsU0FBa0I7Ozs7OztvQkFLWixlQUFlLEdBQUcsVUFBVSxhQUFWLFVBQVUsY0FBVixVQUFVLEdBQUksTUFBTSxDQUFDLGdCQUFnQixDQUFDO29CQUN4RCxjQUFjLEdBQUcsU0FBUyxhQUFULFNBQVMsY0FBVCxTQUFTLEdBQUksQ0FBQyxDQUFDO29CQUNsQyxRQUFRLEdBQUcsS0FBSyxDQUFDO29CQUNmLFVBQVUsR0FJVixFQUFFLENBQUM7b0JBRUwsT0FBTyxHQUFHLElBQUksQ0FBQztvQkFDZixXQUFXLEdBQUcsQ0FBQyxDQUFDOzs7b0JBR1YsSUFBSSxHQUFHLGVBQWUsQ0FBQyxtQkFBbUIsRUFBRSxPQUFPLENBQUMsQ0FBQztvQkFDM0QsT0FBTyxHQUFHLEtBQUssQ0FBQztvQkFFVixXQUFXLEdBQUcsSUFBSSxDQUFDLG9CQUFvQixDQUFDLElBQUkscUJBQVMsQ0FBQyxJQUFJLENBQUMsQ0FBQyxDQUFDO29CQUU3RCxjQUFjLEdBQUcsSUFBSSwrQkFBYyxDQUFDLFdBQVcsQ0FBQyxPQUFPLEVBQUUsQ0FBQyxTQUFTLENBQUMsQ0FBQztvQkFDckUsWUFBWSxHQUFHLGNBQWMsQ0FBQyxTQUFTLEVBQUUsQ0FBQztvQkFDMUMsVUFBVSxHQUFHLHFCQUFTLENBQUMsVUFBVSxDQUFDLFlBQVksQ0FBQyxDQUFDO29CQUM5QixxQkFBTSxNQUFNLENBQUMsY0FBYyxDQUFDLFVBQVUsQ0FBQyxFQUFBOztvQkFBekQsZUFBZSxHQUFHLFNBQXVDO29CQUUvRCw4REFBOEQ7b0JBQzlELDRCQUE0QjtvQkFDNUIsSUFBSSxlQUFlLENBQUMsS0FBSyxLQUFLLENBQUMsRUFBRTt3QkFDN0IsV0FBVyxFQUFFLENBQUM7d0JBQ2QsSUFBSSxXQUFXLElBQUksY0FBYyxFQUFFOzRCQUMvQixRQUFRLEdBQUcsSUFBSSxDQUFDO3lCQUNuQjtxQkFDSjt5QkFBTTt3QkFDSCxVQUFVLENBQUMsSUFBSSxDQUFDOzRCQUNaLE9BQU8sRUFBRSwyQkFBWSxDQUFDLFFBQVEsQ0FBQyxzQ0FBb0IsRUFBRSxZQUFZLENBQUM7NEJBQ2xFLElBQUksTUFBQTs0QkFDSixPQUFPLEVBQUUsZUFBZSxDQUFDLE9BQU87eUJBQ25DLENBQUMsQ0FBQzt3QkFFSCxJQUFJLFVBQVUsQ0FBQyxNQUFNLEtBQUssZUFBZSxFQUFFOzRCQUN2QyxRQUFRLEdBQUcsSUFBSSxDQUFDO3lCQUNuQjtxQkFDSjs7O3dCQUNJLENBQUMsUUFBUTs7d0JBRWxCLHNCQUFPLFVBQVUsRUFBQzs7OztDQUNyQjtBQXZERCwwRkF1REMifQ==

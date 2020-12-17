@@ -1,4 +1,3 @@
-import { Bip32Path } from "../crypto/bip32Path";
 import { IClient } from "../models/IClient";
 import { IKeyPair } from "../models/IKeyPair";
 import { IMessage } from "../models/IMessage";
@@ -69,14 +68,11 @@ export declare function sendMultipleEd25519(client: IClient, seed: ISeed, accoun
  * @param client The client to send the transfer with.
  * @param seed The seed to use for address generation.
  * @param initialAddressState The initial address state for calculating the addresses.
- * @param nextAddress Calculate the next address for inputs.
+ * @param nextAddressPath Calculate the next address for inputs.
  * @param outputs The address to send the funds to in bech32 format and amounts.
  * @returns The id of the message created and the contructed message.
  */
-export declare function sendWithAddressGenerator<T>(client: IClient, seed: ISeed, initialAddressState: T, nextAddress: (s: ISeed, addressState: T, isFirst: boolean) => {
-    keyPair: IKeyPair;
-    path?: Bip32Path;
-}, outputs: {
+export declare function sendWithAddressGenerator<T>(client: IClient, seed: ISeed, initialAddressState: T, nextAddressPath: (addressState: T, isFirst: boolean) => string, outputs: {
     address: string;
     addressType: number;
     amount: number;
@@ -89,15 +85,12 @@ export declare function sendWithAddressGenerator<T>(client: IClient, seed: ISeed
  * @param client The client to send the transfer with.
  * @param seed The seed to use for address generation.
  * @param initialAddressState The initial address state for calculating the addresses.
- * @param nextAddress Calculate the next address for inputs.
+ * @param nextAddressPath Calculate the next address for inputs.
  * @param outputs The outputs to send.
  * @param zeroCount Abort when the number of zero balances is exceeded.
  * @returns The id of the message created and the contructed message.
  */
-export declare function calculateInputs<T>(client: IClient, seed: ISeed, initialAddressState: T, nextAddress: (s: ISeed, addressState: T, isFirst: boolean) => {
-    keyPair: IKeyPair;
-    path?: Bip32Path;
-}, outputs: {
+export declare function calculateInputs<T>(client: IClient, seed: ISeed, initialAddressState: T, nextAddressPath: (addressState: T, isFirst: boolean) => string, outputs: {
     address: string;
     addressType: number;
     amount: number;

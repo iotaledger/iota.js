@@ -4544,7 +4544,7 @@
 
 	var payload = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.serializeIndexationPayload = exports.deserializeIndexationPayload = exports.serializeMilestonePayload = exports.deserializeMilestonePayload = exports.serializeTransactionPayload = exports.deserializeTransactionPayload = exports.serializePayload = exports.deserializePayload = exports.MIN_TRANSACTION_PAYLOAD_LENGTH = exports.MIN_INDEXATION_PAYLOAD_LENGTH = exports.MIN_MILESTONE_PAYLOAD_LENGTH = exports.MIN_PAYLOAD_LENGTH = void 0;
+	exports.serializeIndexationPayload = exports.deserializeIndexationPayload = exports.serializeMilestonePayload = exports.deserializeMilestonePayload = exports.serializeTransactionPayload = exports.deserializeTransactionPayload = exports.serializePayload = exports.deserializePayload = exports.MAX_INDEXATION_KEY_LENGTH = exports.MIN_TRANSACTION_PAYLOAD_LENGTH = exports.MIN_INDEXATION_PAYLOAD_LENGTH = exports.MIN_MILESTONE_PAYLOAD_LENGTH = exports.MIN_PAYLOAD_LENGTH = void 0;
 	// Copyright 2020 IOTA Stiftung
 	// SPDX-License-Identifier: Apache-2.0
 
@@ -4562,6 +4562,10 @@
 	    common.BYTE_SIZE + ed25519.Ed25519.SIGNATURE_SIZE;
 	exports.MIN_INDEXATION_PAYLOAD_LENGTH = exports.MIN_PAYLOAD_LENGTH + common.STRING_LENGTH + common.STRING_LENGTH;
 	exports.MIN_TRANSACTION_PAYLOAD_LENGTH = exports.MIN_PAYLOAD_LENGTH + common.UINT32_SIZE;
+	/**
+	 * The maximum length of a indexation key.
+	 */
+	exports.MAX_INDEXATION_KEY_LENGTH = 64;
 	/**
 	 * Deserialize the payload from binary.
 	 * @param readStream The stream to read the data from.
@@ -4760,6 +4764,9 @@
 	 * @param object The object to serialize.
 	 */
 	function serializeIndexationPayload(writeStream, object) {
+	    if (object.index.length > exports.MAX_INDEXATION_KEY_LENGTH) {
+	        throw new Error("The indexation key length is " + object.index.length + ", which exceeds the maximum size of " + exports.MAX_INDEXATION_KEY_LENGTH);
+	    }
 	    writeStream.writeUInt32("payloadIndexation.type", object.type);
 	    writeStream.writeString("payloadIndexation.index", object.index);
 	    writeStream.writeUInt32("payloadIndexation.dataLength", object.data.length / 2);
@@ -4771,7 +4778,7 @@
 
 	var message = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.serializeMessage = exports.deserializeMessage = void 0;
+	exports.serializeMessage = exports.deserializeMessage = exports.MAX_MESSAGE_LENGTH = void 0;
 
 
 	var MIN_MESSAGE_LENGTH = common.UINT64_SIZE +
@@ -4779,6 +4786,10 @@
 	    payload.MIN_PAYLOAD_LENGTH +
 	    common.UINT64_SIZE;
 	var EMPTY_MESSAGE_ID_HEX = "0".repeat(common.MESSAGE_ID_LENGTH * 2);
+	/**
+	 * The maximum length of a message.
+	 */
+	exports.MAX_MESSAGE_LENGTH = 32768;
 	/**
 	 * Deserialize the message from binary.
 	 * @param readStream The message to deserialize.
@@ -5990,9 +6001,13 @@
 	        return bech32.Bech32.matches(humanReadablePart, bech32Text);
 	    };
 	    /**
-	     * The default human readable part of the bech32 addresses, currently 'iot'.
+	     * The default human readable part of the bech32 addresses for mainnet, currently 'iot'.
 	     */
 	    Bech32Helper.BECH32_DEFAULT_HRP_MAIN = "iot";
+	    /**
+	     * The default human readable part of the bech32 addresses for testnet, currently 'toi'.
+	     */
+	    Bech32Helper.BECH32_DEFAULT_HRP_TEST = "toi";
 	    return Bech32Helper;
 	}());
 	exports.Bech32Helper = Bech32Helper;
@@ -6322,10 +6337,16 @@
 	     */
 	    SingleNodeClient.prototype.messageSubmit = function (message$1) {
 	        return __awaiter(this, void 0, void 0, function () {
-	            var nodeInfo, networkIdBytes, networkId64, writeStream$1, messageBytes, nonce, response;
+	            var writeStream$1, messageBytes, nodeInfo, networkIdBytes, networkId64, nonce, response;
 	            return __generator(this, function (_a) {
 	                switch (_a.label) {
 	                    case 0:
+	                        writeStream$1 = new writeStream.WriteStream();
+	                        message.serializeMessage(writeStream$1, message$1);
+	                        messageBytes = writeStream$1.finalBytes();
+	                        if (messageBytes.length > message.MAX_MESSAGE_LENGTH) {
+	                            throw new Error("The message length is " + messageBytes.length + ", which exceeds the maximum size of " + message.MAX_MESSAGE_LENGTH);
+	                        }
 	                        if (!(!message$1.nonce || message$1.nonce.length === 0)) return [3 /*break*/, 4];
 	                        if (!this._powProvider) return [3 /*break*/, 3];
 	                        return [4 /*yield*/, this.info()];
@@ -6334,9 +6355,6 @@
 	                        networkIdBytes = blake2b.Blake2b.sum256(converter.Converter.asciiToBytes(nodeInfo.networkId));
 	                        networkId64 = bigIntHelper.BigIntHelper.read8(networkIdBytes, 0);
 	                        message$1.networkId = networkId64.toString();
-	                        writeStream$1 = new writeStream.WriteStream();
-	                        message.serializeMessage(writeStream$1, message$1);
-	                        messageBytes = writeStream$1.finalBytes();
 	                        return [4 /*yield*/, this._powProvider.pow(messageBytes, this._targetScore)];
 	                    case 2:
 	                        nonce = _a.sent();
@@ -6358,25 +6376,28 @@
 	     * @param message The message to submit.
 	     * @returns The messageId.
 	     */
-	    SingleNodeClient.prototype.messageSubmitRaw = function (message) {
+	    SingleNodeClient.prototype.messageSubmitRaw = function (message$1) {
 	        return __awaiter(this, void 0, void 0, function () {
 	            var nodeInfo, networkIdBytes, networkId64, nonce, response;
 	            return __generator(this, function (_a) {
 	                switch (_a.label) {
 	                    case 0:
-	                        if (!(arrayHelper.ArrayHelper.equal(message.slice(-8), SingleNodeClient.NONCE_ZERO) && this._powProvider)) return [3 /*break*/, 3];
+	                        if (message$1.length > message.MAX_MESSAGE_LENGTH) {
+	                            throw new Error("The message length is " + message$1.length + ", which exceeds the maximum size of " + message.MAX_MESSAGE_LENGTH);
+	                        }
+	                        if (!(arrayHelper.ArrayHelper.equal(message$1.slice(-8), SingleNodeClient.NONCE_ZERO) && this._powProvider)) return [3 /*break*/, 3];
 	                        return [4 /*yield*/, this.info()];
 	                    case 1:
 	                        nodeInfo = _a.sent();
 	                        networkIdBytes = blake2b.Blake2b.sum256(converter.Converter.asciiToBytes(nodeInfo.networkId));
 	                        networkId64 = bigIntHelper.BigIntHelper.read8(networkIdBytes, 0);
-	                        bigIntHelper.BigIntHelper.write8(networkId64, message, 0);
-	                        return [4 /*yield*/, this._powProvider.pow(message, this._targetScore)];
+	                        bigIntHelper.BigIntHelper.write8(networkId64, message$1, 0);
+	                        return [4 /*yield*/, this._powProvider.pow(message$1, this._targetScore)];
 	                    case 2:
 	                        nonce = _a.sent();
-	                        bigIntHelper.BigIntHelper.write8(nonce, message, message.length - 8);
+	                        bigIntHelper.BigIntHelper.write8(nonce, message$1, message$1.length - 8);
 	                        _a.label = 3;
-	                    case 3: return [4 /*yield*/, this.fetchBinary("post", "messages", message)];
+	                    case 3: return [4 /*yield*/, this.fetchBinary("post", "messages", message$1)];
 	                    case 4:
 	                        response = _a.sent();
 	                        return [2 /*return*/, response.messageId];
@@ -9816,7 +9837,6 @@
 	exports.generateAccountPath = generateAccountPath;
 	/**
 	 * Generate addresses based on the account indexing style.
-	 * @param seed The seed to use for address generation.
 	 * @param addressState The address state.
 	 * @param addressState.seed The seed to generate the address for.
 	 * @param addressState.accountIndex The index of the account to calculate.
@@ -9825,7 +9845,7 @@
 	 * @param isFirst Is this the first address we are generating.
 	 * @returns The key pair for the address.
 	 */
-	function generateAccountAddress(seed, addressState, isFirst) {
+	function generateAccountAddress(addressState, isFirst) {
 	    // Not the first address so increment the counters.
 	    if (!isFirst) {
 	        // Flip-flop between internal and external
@@ -9839,11 +9859,7 @@
 	        }
 	    }
 	    var path = generateAccountPath(addressState.accountIndex, addressState.addressIndex, addressState.isInternal);
-	    var addressSeed = seed.generateSeedFromPath(path);
-	    return {
-	        path: path,
-	        keyPair: addressSeed.keyPair()
-	    };
+	    return path.toString();
 	}
 	exports.generateAccountAddress = generateAccountAddress;
 	/**
@@ -9860,7 +9876,6 @@
 	exports.generateBip32Path = generateBip32Path;
 	/**
 	 * Generate addresses based on a bip32 path increment.
-	 * @param seed The seed to use for address generation.
 	 * @param addressState The address state.
 	 * @param addressState.seed The seed to generate the address for.
 	 * @param addressState.basePath The base path to start building from.
@@ -9868,34 +9883,19 @@
 	 * @param isFirst Is this the first address we are generating.
 	 * @returns The key pair for the address.
 	 */
-	function generateBip32Address(seed, addressState, isFirst) {
+	function generateBip32Address(addressState, isFirst) {
 	    // Not the first address so increment the counters.
 	    if (!isFirst) {
 	        addressState.addressIndex++;
 	    }
 	    var path = generateBip32Path(addressState.basePath, addressState.addressIndex);
-	    var addressSeed = seed.generateSeedFromPath(path);
-	    return {
-	        path: path,
-	        keyPair: addressSeed.keyPair()
-	    };
+	    return path.toString();
 	}
 	exports.generateBip32Address = generateBip32Address;
 
 	});
 
 	var getUnspentAddresses_1 = createCommonjsModule(function (module, exports) {
-	var __assign = (commonjsGlobal && commonjsGlobal.__assign) || function () {
-	    __assign = Object.assign || function(t) {
-	        for (var s, i = 1, n = arguments.length; i < n; i++) {
-	            s = arguments[i];
-	            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-	                t[p] = s[p];
-	        }
-	        return t;
-	    };
-	    return __assign.apply(this, arguments);
-	};
 	var __awaiter = (commonjsGlobal && commonjsGlobal.__awaiter) || function (thisArg, _arguments, P, generator) {
 	    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
 	    return new (P || (P = Promise))(function (resolve, reject) {
@@ -9936,6 +9936,7 @@
 	exports.getUnspentAddressesWithAddressGenerator = exports.getUnspentAddressesBip32 = exports.getUnspentAddresses = void 0;
 	// Copyright 2020 IOTA Stiftung
 	// SPDX-License-Identifier: Apache-2.0
+
 
 
 
@@ -9989,14 +9990,14 @@
 	 * @param client The client to send the transfer with.
 	 * @param seed The seed to use for address generation.
 	 * @param initialAddressState The initial address state for calculating the addresses.
-	 * @param nextAddress Calculate the next address for inputs.
+	 * @param nextAddressPath Calculate the next address for inputs.
 	 * @param countLimit Limit the number of items to find.
 	 * @param zeroCount Abort when the number of zero balances is exceeded.
 	 * @returns All the unspent addresses.
 	 */
-	function getUnspentAddressesWithAddressGenerator(client, seed, initialAddressState, nextAddress, countLimit, zeroCount) {
+	function getUnspentAddressesWithAddressGenerator(client, seed, initialAddressState, nextAddressPath, countLimit, zeroCount) {
 	    return __awaiter(this, void 0, void 0, function () {
-	        var localCountLimit, localZeroCount, finished, allUnspent, isFirst, zeroBalance, pathKeyPair, ed25519Address$1, addressBytes, addressHex, addressResponse, stateNoSeed;
+	        var localCountLimit, localZeroCount, finished, allUnspent, isFirst, zeroBalance, path, addressSeed, ed25519Address$1, addressBytes, addressHex, addressResponse;
 	        return __generator(this, function (_a) {
 	            switch (_a.label) {
 	                case 0:
@@ -10008,9 +10009,10 @@
 	                    zeroBalance = 0;
 	                    _a.label = 1;
 	                case 1:
-	                    pathKeyPair = nextAddress(seed, initialAddressState, isFirst);
+	                    path = nextAddressPath(initialAddressState, isFirst);
 	                    isFirst = false;
-	                    ed25519Address$1 = new ed25519Address.Ed25519Address(pathKeyPair.keyPair.publicKey);
+	                    addressSeed = seed.generateSeedFromPath(new bip32Path.Bip32Path(path));
+	                    ed25519Address$1 = new ed25519Address.Ed25519Address(addressSeed.keyPair().publicKey);
 	                    addressBytes = ed25519Address$1.toAddress();
 	                    addressHex = converter.Converter.bytesToHex(addressBytes);
 	                    return [4 /*yield*/, client.addressEd25519(addressHex)];
@@ -10025,11 +10027,9 @@
 	                        }
 	                    }
 	                    else {
-	                        stateNoSeed = __assign(__assign({}, initialAddressState), { seed: undefined });
 	                        allUnspent.push({
-	                            addressBech32: bech32Helper.Bech32Helper.toBech32(IEd25519Address.ED25519_ADDRESS_TYPE, addressBytes),
-	                            state: stateNoSeed,
-	                            keyPair: pathKeyPair.keyPair,
+	                            address: bech32Helper.Bech32Helper.toBech32(IEd25519Address.ED25519_ADDRESS_TYPE, addressBytes),
+	                            path: path,
 	                            balance: addressResponse.balance
 	                        });
 	                        if (allUnspent.length === localCountLimit) {
@@ -10570,6 +10570,7 @@
 
 
 
+
 	/**
 	 * Send a transfer from the balance on the seed.
 	 * @param client The client to send the transfer with.
@@ -10620,6 +10621,9 @@
 	    }
 	    if (!outputs || outputs.length === 0) {
 	        throw new Error("You must specify some outputs");
+	    }
+	    if (indexationKey && indexationKey.length > payload.MAX_INDEXATION_KEY_LENGTH) {
+	        throw new Error("The indexation key length is " + indexationKey.length + ", which exceeds the maximum size of " + payload.MAX_INDEXATION_KEY_LENGTH);
 	    }
 	    var outputsWithSerialization = [];
 	    for (var _i = 0, outputs_1 = outputs; _i < outputs_1.length; _i++) {
@@ -10752,6 +10756,7 @@
 
 
 
+
 	/**
 	 * Send a transfer from the balance on the seed to a single output.
 	 * @param client The client to send the transfer with.
@@ -10849,16 +10854,16 @@
 	 * @param client The client to send the transfer with.
 	 * @param seed The seed to use for address generation.
 	 * @param initialAddressState The initial address state for calculating the addresses.
-	 * @param nextAddress Calculate the next address for inputs.
+	 * @param nextAddressPath Calculate the next address for inputs.
 	 * @param outputs The address to send the funds to in bech32 format and amounts.
 	 * @returns The id of the message created and the contructed message.
 	 */
-	function sendWithAddressGenerator(client, seed, initialAddressState, nextAddress, outputs) {
+	function sendWithAddressGenerator(client, seed, initialAddressState, nextAddressPath, outputs) {
 	    return __awaiter(this, void 0, void 0, function () {
 	        var inputsAndKeys, response;
 	        return __generator(this, function (_a) {
 	            switch (_a.label) {
-	                case 0: return [4 /*yield*/, calculateInputs(client, seed, initialAddressState, nextAddress, outputs, 5)];
+	                case 0: return [4 /*yield*/, calculateInputs(client, seed, initialAddressState, nextAddressPath, outputs, 5)];
 	                case 1:
 	                    inputsAndKeys = _a.sent();
 	                    return [4 /*yield*/, sendAdvanced_1.sendAdvanced(client, inputsAndKeys, outputs)];
@@ -10878,14 +10883,14 @@
 	 * @param client The client to send the transfer with.
 	 * @param seed The seed to use for address generation.
 	 * @param initialAddressState The initial address state for calculating the addresses.
-	 * @param nextAddress Calculate the next address for inputs.
+	 * @param nextAddressPath Calculate the next address for inputs.
 	 * @param outputs The outputs to send.
 	 * @param zeroCount Abort when the number of zero balances is exceeded.
 	 * @returns The id of the message created and the contructed message.
 	 */
-	function calculateInputs(client, seed, initialAddressState, nextAddress, outputs, zeroCount) {
+	function calculateInputs(client, seed, initialAddressState, nextAddressPath, outputs, zeroCount) {
 	    return __awaiter(this, void 0, void 0, function () {
-	        var requiredBalance, localZeroCount, consumedBalance, inputsAndSignatureKeyPairs, finished, isFirst, zeroBalance, keyPairAndPath, ed25519Address$1, address, addressOutputIds, _i, _a, addressOutputId, addressOutput, input;
+	        var requiredBalance, localZeroCount, consumedBalance, inputsAndSignatureKeyPairs, finished, isFirst, zeroBalance, path, addressSeed, addressKeyPair, ed25519Address$1, address, addressOutputIds, _i, _a, addressOutputId, addressOutput, input;
 	        return __generator(this, function (_b) {
 	            switch (_b.label) {
 	                case 0:
@@ -10898,9 +10903,11 @@
 	                    zeroBalance = 0;
 	                    _b.label = 1;
 	                case 1:
-	                    keyPairAndPath = nextAddress(seed, initialAddressState, isFirst);
+	                    path = nextAddressPath(initialAddressState, isFirst);
 	                    isFirst = false;
-	                    ed25519Address$1 = new ed25519Address.Ed25519Address(keyPairAndPath.keyPair.publicKey);
+	                    addressSeed = seed.generateSeedFromPath(new bip32Path.Bip32Path(path));
+	                    addressKeyPair = addressSeed.keyPair();
+	                    ed25519Address$1 = new ed25519Address.Ed25519Address(addressKeyPair.publicKey);
 	                    address = converter.Converter.bytesToHex(ed25519Address$1.toAddress());
 	                    return [4 /*yield*/, client.addressEd25519Outputs(address)];
 	                case 2:
@@ -10937,7 +10944,7 @@
 	                            };
 	                            inputsAndSignatureKeyPairs.push({
 	                                input: input,
-	                                addressKeyPair: keyPairAndPath.keyPair
+	                                addressKeyPair: addressKeyPair
 	                            });
 	                            if (consumedBalance >= requiredBalance) {
 	                                // We didn't use all the balance from the last input
@@ -11012,6 +11019,9 @@
 	};
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.sendData = void 0;
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
+
 
 	/**
 	 * Send a data message.
@@ -11029,13 +11039,13 @@
 	                    if (!indexationKey || indexationKey.length === 0) {
 	                        throw new Error("indexationKey must not be empty");
 	                    }
-	                    if (!indexationData) {
-	                        throw new Error("indexationData must not be empty");
+	                    if (indexationKey.length > payload.MAX_INDEXATION_KEY_LENGTH) {
+	                        throw new Error("The indexation key length is " + indexationKey.length + ", which exceeds the maximum size of " + payload.MAX_INDEXATION_KEY_LENGTH);
 	                    }
 	                    indexationPayload = {
 	                        type: 2,
 	                        index: indexationKey,
-	                        data: converter.Converter.bytesToHex(indexationData)
+	                        data: indexationData ? converter.Converter.bytesToHex(indexationData) : ""
 	                    };
 	                    return [4 /*yield*/, client.tips()];
 	                case 1:

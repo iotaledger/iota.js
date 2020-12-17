@@ -3,8 +3,6 @@
 import { Bip32Path } from "../crypto/bip32Path";
 import { IAccountAddressGeneratorState } from "../models/IAccountAddressGeneratorState";
 import { IBip32PathAddressGeneratorState } from "../models/IBip32PathAddressGeneratorState";
-import { IKeyPair } from "../models/IKeyPair";
-import { ISeed } from "../models/ISeed";
 
 export const DEFAULT_BIP32_ACCOUNT_PATH: string = "m/44'/4218'";
 
@@ -28,7 +26,6 @@ export function generateAccountPath(
 
 /**
  * Generate addresses based on the account indexing style.
- * @param seed The seed to use for address generation.
  * @param addressState The address state.
  * @param addressState.seed The seed to generate the address for.
  * @param addressState.accountIndex The index of the account to calculate.
@@ -37,10 +34,7 @@ export function generateAccountPath(
  * @param isFirst Is this the first address we are generating.
  * @returns The key pair for the address.
  */
-export function generateAccountAddress(seed: ISeed, addressState: IAccountAddressGeneratorState, isFirst: boolean): {
-    keyPair: IKeyPair;
-    path?: Bip32Path;
-} {
+export function generateAccountAddress(addressState: IAccountAddressGeneratorState, isFirst: boolean): string {
     // Not the first address so increment the counters.
     if (!isFirst) {
         // Flip-flop between internal and external
@@ -59,12 +53,7 @@ export function generateAccountAddress(seed: ISeed, addressState: IAccountAddres
         addressState.isInternal
     );
 
-    const addressSeed = seed.generateSeedFromPath(path);
-
-    return {
-        path,
-        keyPair: addressSeed.keyPair()
-    };
+    return path.toString();
 }
 
 /**
@@ -85,7 +74,6 @@ export function generateBip32Path(
 
 /**
  * Generate addresses based on a bip32 path increment.
- * @param seed The seed to use for address generation.
  * @param addressState The address state.
  * @param addressState.seed The seed to generate the address for.
  * @param addressState.basePath The base path to start building from.
@@ -93,10 +81,7 @@ export function generateBip32Path(
  * @param isFirst Is this the first address we are generating.
  * @returns The key pair for the address.
  */
-export function generateBip32Address(seed: ISeed, addressState: IBip32PathAddressGeneratorState, isFirst: boolean): {
-    keyPair: IKeyPair;
-    path?: Bip32Path;
-} {
+export function generateBip32Address(addressState: IBip32PathAddressGeneratorState, isFirst: boolean): string {
     // Not the first address so increment the counters.
     if (!isFirst) {
         addressState.addressIndex++;
@@ -107,10 +92,5 @@ export function generateBip32Address(seed: ISeed, addressState: IBip32PathAddres
         addressState.addressIndex
     );
 
-    const addressSeed = seed.generateSeedFromPath(path);
-
-    return {
-        path,
-        keyPair: addressSeed.keyPair()
-    };
+    return path.toString();
 }
