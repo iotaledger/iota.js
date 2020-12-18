@@ -44,11 +44,10 @@
 
 ### Interfaces
 
-* [IAccountAddressGeneratorState](interfaces/iaccountaddressgeneratorstate.md)
 * [IAddress](interfaces/iaddress.md)
 * [IAddressOutputsResponse](interfaces/iaddressoutputsresponse.md)
 * [IAddressResponse](interfaces/iaddressresponse.md)
-* [IBip32PathAddressGeneratorState](interfaces/ibip32pathaddressgeneratorstate.md)
+* [IBip44GeneratorState](interfaces/ibip44generatorstate.md)
 * [IChildrenResponse](interfaces/ichildrenresponse.md)
 * [IClient](interfaces/iclient.md)
 * [IEd25519Address](interfaces/ied25519address.md)
@@ -124,15 +123,11 @@
 * [deserializeUTXOInput](README.md#deserializeutxoinput)
 * [deserializeUnlockBlock](README.md#deserializeunlockblock)
 * [deserializeUnlockBlocks](README.md#deserializeunlockblocks)
-* [generateAccountAddress](README.md#generateaccountaddress)
-* [generateAccountPath](README.md#generateaccountpath)
-* [generateBip32Address](README.md#generatebip32address)
-* [generateBip32Path](README.md#generatebip32path)
+* [generateBip44Address](README.md#generatebip44address)
+* [generateBip44Path](README.md#generatebip44path)
 * [getBalance](README.md#getbalance)
-* [getBalancePath](README.md#getbalancepath)
 * [getUnspentAddress](README.md#getunspentaddress)
 * [getUnspentAddresses](README.md#getunspentaddresses)
-* [getUnspentAddressesBip32](README.md#getunspentaddressesbip32)
 * [getUnspentAddressesWithAddressGenerator](README.md#getunspentaddresseswithaddressgenerator)
 * [logAddress](README.md#logaddress)
 * [logInfo](README.md#loginfo)
@@ -715,9 +710,9 @@ The deserialized object.
 
 ___
 
-### generateAccountAddress
+### generateBip44Address
 
-▸ **generateAccountAddress**(`addressState`: [IAccountAddressGeneratorState](interfaces/iaccountaddressgeneratorstate.md), `isFirst`: boolean): string
+▸ **generateBip44Address**(`generatorState`: [IBip44GeneratorState](interfaces/ibip44generatorstate.md), `isFirst`: boolean): string
 
 Generate addresses based on the account indexing style.
 
@@ -725,7 +720,7 @@ Generate addresses based on the account indexing style.
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`addressState` | [IAccountAddressGeneratorState](interfaces/iaccountaddressgeneratorstate.md) | The address state. |
+`generatorState` | [IBip44GeneratorState](interfaces/ibip44generatorstate.md) | The address state. |
 `isFirst` | boolean | Is this the first address we are generating. |
 
 **Returns:** string
@@ -734,11 +729,11 @@ The key pair for the address.
 
 ___
 
-### generateAccountPath
+### generateBip44Path
 
-▸ **generateAccountPath**(`accountIndex`: number, `addressIndex`: number, `isInternal`: boolean): [Bip32Path](classes/bip32path.md)
+▸ **generateBip44Path**(`accountIndex`: number, `addressIndex`: number, `isInternal`: boolean): [Bip32Path](classes/bip32path.md)
 
-Generate an account path based on all its parts.
+Generate a bip44 path based on all its parts.
 
 #### Parameters:
 
@@ -747,44 +742,6 @@ Name | Type | Description |
 `accountIndex` | number | The account index. |
 `addressIndex` | number | The address index. |
 `isInternal` | boolean | Is this an internal address. |
-
-**Returns:** [Bip32Path](classes/bip32path.md)
-
-The generated address.
-
-___
-
-### generateBip32Address
-
-▸ **generateBip32Address**(`addressState`: [IBip32PathAddressGeneratorState](interfaces/ibip32pathaddressgeneratorstate.md), `isFirst`: boolean): string
-
-Generate addresses based on a bip32 path increment.
-
-#### Parameters:
-
-Name | Type | Description |
------- | ------ | ------ |
-`addressState` | [IBip32PathAddressGeneratorState](interfaces/ibip32pathaddressgeneratorstate.md) | The address state. |
-`isFirst` | boolean | Is this the first address we are generating. |
-
-**Returns:** string
-
-The key pair for the address.
-
-___
-
-### generateBip32Path
-
-▸ **generateBip32Path**(`basePath`: [Bip32Path](classes/bip32path.md), `addressIndex`: number): [Bip32Path](classes/bip32path.md)
-
-Generate a bip32 path based on all its parts.
-
-#### Parameters:
-
-Name | Type | Description |
------- | ------ | ------ |
-`basePath` | [Bip32Path](classes/bip32path.md) | The base path for the address. |
-`addressIndex` | number | The address index. |
 
 **Returns:** [Bip32Path](classes/bip32path.md)
 
@@ -805,27 +762,6 @@ Name | Type | Default value | Description |
 `client` | [IClient](interfaces/iclient.md) | - | The client to send the transfer with. |
 `seed` | [ISeed](interfaces/iseed.md) | - | The seed. |
 `accountIndex` | number | - | The account index in the wallet. |
-`startIndex` | number | 0 | The start index to generate from, defaults to 0. |
-
-**Returns:** Promise<number\>
-
-The balance.
-
-___
-
-### getBalancePath
-
-▸ **getBalancePath**(`client`: [IClient](interfaces/iclient.md), `seed`: [ISeed](interfaces/iseed.md), `basePath`: [Bip32Path](classes/bip32path.md), `startIndex?`: number): Promise<number\>
-
-Get the balance for a list of addresses.
-
-#### Parameters:
-
-Name | Type | Default value | Description |
------- | ------ | ------ | ------ |
-`client` | [IClient](interfaces/iclient.md) | - | The client to send the transfer with. |
-`seed` | [ISeed](interfaces/iseed.md) | - | The seed. |
-`basePath` | [Bip32Path](classes/bip32path.md) | - | The base path to start looking for addresses. |
 `startIndex` | number | 0 | The start index to generate from, defaults to 0. |
 
 **Returns:** Promise<number\>
@@ -868,29 +804,6 @@ Name | Type | Description |
 `client` | [IClient](interfaces/iclient.md) | The client to send the transfer with. |
 `seed` | [ISeed](interfaces/iseed.md) | The seed to use for address generation. |
 `accountIndex` | number | The account index in the wallet. |
-`startIndex?` | undefined \| number | Optional start index for the wallet count address, defaults to 0. |
-`countLimit?` | undefined \| number | Limit the number of items to find. |
-`zeroCount?` | undefined \| number | Abort when the number of zero balances is exceeded. |
-
-**Returns:** Promise<{ address: string ; balance: number ; path: string  }[]\>
-
-All the unspent addresses.
-
-___
-
-### getUnspentAddressesBip32
-
-▸ **getUnspentAddressesBip32**(`client`: [IClient](interfaces/iclient.md), `seed`: [ISeed](interfaces/iseed.md), `basePath`: [Bip32Path](classes/bip32path.md), `startIndex?`: undefined \| number, `countLimit?`: undefined \| number, `zeroCount?`: undefined \| number): Promise<{ address: string ; balance: number ; path: string  }[]\>
-
-Get all the unspent addresses with a bip32 base path.
-
-#### Parameters:
-
-Name | Type | Description |
------- | ------ | ------ |
-`client` | [IClient](interfaces/iclient.md) | The client to send the transfer with. |
-`seed` | [ISeed](interfaces/iseed.md) | The seed to use for address generation. |
-`basePath` | [Bip32Path](classes/bip32path.md) | The base path. |
 `startIndex?` | undefined \| number | Optional start index for the wallet count address, defaults to 0. |
 `countLimit?` | undefined \| number | Limit the number of items to find. |
 `zeroCount?` | undefined \| number | Abort when the number of zero balances is exceeded. |

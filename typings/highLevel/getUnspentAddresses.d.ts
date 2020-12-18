@@ -1,4 +1,3 @@
-import { Bip32Path } from "../crypto/bip32Path";
 import { IClient } from "../models/IClient";
 import { ISeed } from "../models/ISeed";
 /**
@@ -12,21 +11,6 @@ import { ISeed } from "../models/ISeed";
  * @returns All the unspent addresses.
  */
 export declare function getUnspentAddresses(client: IClient, seed: ISeed, accountIndex: number, startIndex?: number, countLimit?: number, zeroCount?: number): Promise<{
-    address: string;
-    path: string;
-    balance: number;
-}[]>;
-/**
- * Get all the unspent addresses with a bip32 base path.
- * @param client The client to send the transfer with.
- * @param seed The seed to use for address generation.
- * @param basePath The base path.
- * @param startIndex Optional start index for the wallet count address, defaults to 0.
- * @param countLimit Limit the number of items to find.
- * @param zeroCount Abort when the number of zero balances is exceeded.
- * @returns All the unspent addresses.
- */
-export declare function getUnspentAddressesBip32(client: IClient, seed: ISeed, basePath: Bip32Path, startIndex?: number, countLimit?: number, zeroCount?: number): Promise<{
     address: string;
     path: string;
     balance: number;

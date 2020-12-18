@@ -9815,83 +9815,55 @@
 
 	var addresses = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.generateBip32Address = exports.generateBip32Path = exports.generateAccountAddress = exports.generateAccountPath = exports.DEFAULT_BIP32_ACCOUNT_PATH = void 0;
+	exports.generateBip44Address = exports.generateBip44Path = exports.IOTA_BIP44_BASE_PATH = void 0;
 	// Copyright 2020 IOTA Stiftung
 	// SPDX-License-Identifier: Apache-2.0
 
-	exports.DEFAULT_BIP32_ACCOUNT_PATH = "m/44'/4218'";
+	exports.IOTA_BIP44_BASE_PATH = "m/44'/4218'";
 	/**
-	 * Generate an account path based on all its parts.
+	 * Generate a bip44 path based on all its parts.
 	 * @param accountIndex The account index.
 	 * @param addressIndex The address index.
 	 * @param isInternal Is this an internal address.
 	 * @returns The generated address.
 	 */
-	function generateAccountPath(accountIndex, addressIndex, isInternal) {
-	    var bip32Path$1 = new bip32Path.Bip32Path(exports.DEFAULT_BIP32_ACCOUNT_PATH);
+	function generateBip44Path(accountIndex, addressIndex, isInternal) {
+	    var bip32Path$1 = new bip32Path.Bip32Path(exports.IOTA_BIP44_BASE_PATH);
 	    bip32Path$1.pushHardened(accountIndex);
 	    bip32Path$1.pushHardened(isInternal ? 1 : 0);
 	    bip32Path$1.pushHardened(addressIndex);
 	    return bip32Path$1;
 	}
-	exports.generateAccountPath = generateAccountPath;
+	exports.generateBip44Path = generateBip44Path;
 	/**
 	 * Generate addresses based on the account indexing style.
-	 * @param addressState The address state.
-	 * @param addressState.seed The seed to generate the address for.
-	 * @param addressState.accountIndex The index of the account to calculate.
-	 * @param addressState.addressIndex The index of the address to calculate.
-	 * @param addressState.isInternal Are we generating an internal address.
+	 * @param generatorState The address state.
+	 * @param generatorState.accountIndex The index of the account to calculate.
+	 * @param generatorState.addressIndex The index of the address to calculate.
+	 * @param generatorState.isInternal Are we generating an internal address.
 	 * @param isFirst Is this the first address we are generating.
 	 * @returns The key pair for the address.
 	 */
-	function generateAccountAddress(addressState, isFirst) {
+	function generateBip44Address(generatorState, isFirst) {
 	    // Not the first address so increment the counters.
 	    if (!isFirst) {
 	        // Flip-flop between internal and external
 	        // and then increment the address Index
-	        if (!addressState.isInternal) {
-	            addressState.isInternal = true;
+	        if (!generatorState.isInternal) {
+	            generatorState.isInternal = true;
 	        }
 	        else {
-	            addressState.isInternal = false;
-	            addressState.addressIndex++;
+	            generatorState.isInternal = false;
+	            generatorState.addressIndex++;
 	        }
 	    }
-	    var path = generateAccountPath(addressState.accountIndex, addressState.addressIndex, addressState.isInternal);
+	    var path = new bip32Path.Bip32Path(exports.IOTA_BIP44_BASE_PATH);
+	    path.pushHardened(generatorState.accountIndex);
+	    path.pushHardened(generatorState.isInternal ? 1 : 0);
+	    path.pushHardened(generatorState.addressIndex);
 	    return path.toString();
 	}
-	exports.generateAccountAddress = generateAccountAddress;
-	/**
-	 * Generate a bip32 path based on all its parts.
-	 * @param basePath The base path for the address.
-	 * @param addressIndex The address index.
-	 * @returns The generated address.
-	 */
-	function generateBip32Path(basePath, addressIndex) {
-	    var bip32Path$1 = bip32Path.Bip32Path.fromPath(basePath);
-	    bip32Path$1.pushHardened(addressIndex);
-	    return bip32Path$1;
-	}
-	exports.generateBip32Path = generateBip32Path;
-	/**
-	 * Generate addresses based on a bip32 path increment.
-	 * @param addressState The address state.
-	 * @param addressState.seed The seed to generate the address for.
-	 * @param addressState.basePath The base path to start building from.
-	 * @param addressState.addressIndex The index of the address to calculate.
-	 * @param isFirst Is this the first address we are generating.
-	 * @returns The key pair for the address.
-	 */
-	function generateBip32Address(addressState, isFirst) {
-	    // Not the first address so increment the counters.
-	    if (!isFirst) {
-	        addressState.addressIndex++;
-	    }
-	    var path = generateBip32Path(addressState.basePath, addressState.addressIndex);
-	    return path.toString();
-	}
-	exports.generateBip32Address = generateBip32Address;
+	exports.generateBip44Address = generateBip44Address;
 
 	});
 
@@ -9933,7 +9905,7 @@
 	    }
 	};
 	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.getUnspentAddressesWithAddressGenerator = exports.getUnspentAddressesBip32 = exports.getUnspentAddresses = void 0;
+	exports.getUnspentAddressesWithAddressGenerator = exports.getUnspentAddresses = void 0;
 	// Copyright 2020 IOTA Stiftung
 	// SPDX-License-Identifier: Apache-2.0
 
@@ -9959,32 +9931,11 @@
 	                    accountIndex: accountIndex,
 	                    addressIndex: startIndex !== null && startIndex !== void 0 ? startIndex : 0,
 	                    isInternal: false
-	                }, addresses.generateAccountAddress, countLimit, zeroCount)];
+	                }, addresses.generateBip44Address, countLimit, zeroCount)];
 	        });
 	    });
 	}
 	exports.getUnspentAddresses = getUnspentAddresses;
-	/**
-	 * Get all the unspent addresses with a bip32 base path.
-	 * @param client The client to send the transfer with.
-	 * @param seed The seed to use for address generation.
-	 * @param basePath The base path.
-	 * @param startIndex Optional start index for the wallet count address, defaults to 0.
-	 * @param countLimit Limit the number of items to find.
-	 * @param zeroCount Abort when the number of zero balances is exceeded.
-	 * @returns All the unspent addresses.
-	 */
-	function getUnspentAddressesBip32(client, seed, basePath, startIndex, countLimit, zeroCount) {
-	    return __awaiter(this, void 0, void 0, function () {
-	        return __generator(this, function (_a) {
-	            return [2 /*return*/, getUnspentAddressesWithAddressGenerator(client, seed, {
-	                    basePath: basePath,
-	                    addressIndex: startIndex !== null && startIndex !== void 0 ? startIndex : 0
-	                }, addresses.generateBip32Address, countLimit, zeroCount)];
-	        });
-	    });
-	}
-	exports.getUnspentAddressesBip32 = getUnspentAddressesBip32;
 	/**
 	 * Get all the unspent addresses using an address generator.
 	 * @param client The client to send the transfer with.
@@ -10087,7 +10038,7 @@
 	    }
 	};
 	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.getBalancePath = exports.getBalance = void 0;
+	exports.getBalance = void 0;
 
 	/**
 	 * Get the balance for a list of addresses.
@@ -10112,29 +10063,6 @@
 	    });
 	}
 	exports.getBalance = getBalance;
-	/**
-	 * Get the balance for a list of addresses.
-	 * @param client The client to send the transfer with.
-	 * @param seed The seed.
-	 * @param basePath The base path to start looking for addresses.
-	 * @param startIndex The start index to generate from, defaults to 0.
-	 * @returns The balance.
-	 */
-	function getBalancePath(client, seed, basePath, startIndex) {
-	    if (startIndex === void 0) { startIndex = 0; }
-	    return __awaiter(this, void 0, void 0, function () {
-	        var allUnspent;
-	        return __generator(this, function (_a) {
-	            switch (_a.label) {
-	                case 0: return [4 /*yield*/, getUnspentAddresses_1.getUnspentAddressesBip32(client, seed, basePath, startIndex)];
-	                case 1:
-	                    allUnspent = _a.sent();
-	                    return [2 /*return*/, allUnspent.reduce(function (total, output) { return total + output.balance; }, 0)];
-	            }
-	        });
-	    });
-	}
-	exports.getBalancePath = getBalancePath;
 
 	});
 
@@ -10660,11 +10588,11 @@
 	        type: 0,
 	        inputs: sortedInputs.map(function (i) { return i.input; }),
 	        outputs: sortedOutputs.map(function (o) { return o.output; }),
-	        payload: indexationKey && indexationData
+	        payload: indexationKey
 	            ? {
 	                type: 2,
 	                index: indexationKey,
-	                data: converter.Converter.bytesToHex(indexationData)
+	                data: indexationData ? converter.Converter.bytesToHex(indexationData) : ""
 	            }
 	            : undefined
 	    };
@@ -10821,7 +10749,7 @@
 	                    accountIndex: accountIndex,
 	                    addressIndex: startIndex !== null && startIndex !== void 0 ? startIndex : 0,
 	                    isInternal: false
-	                }, addresses.generateAccountAddress, hexOutputs)];
+	                }, addresses.generateBip44Address, hexOutputs)];
 	        });
 	    });
 	}
@@ -10844,7 +10772,7 @@
 	                    accountIndex: accountIndex,
 	                    addressIndex: startIndex !== null && startIndex !== void 0 ? startIndex : 0,
 	                    isInternal: false
-	                }, addresses.generateAccountAddress, hexOutputs)];
+	                }, addresses.generateBip44Address, hexOutputs)];
 	        });
 	    });
 	}
@@ -11115,19 +11043,12 @@
 
 	});
 
-	var IAccountAddressGeneratorState = createCommonjsModule(function (module, exports) {
-	// Copyright 2020 IOTA Stiftung
-	// SPDX-License-Identifier: Apache-2.0
-	Object.defineProperty(exports, "__esModule", { value: true });
-
-	});
-
 	var IAddress = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 
 	});
 
-	var IBip32PathAddressGeneratorState = createCommonjsModule(function (module, exports) {
+	var IBip44GeneratorState = createCommonjsModule(function (module, exports) {
 	// Copyright 2020 IOTA Stiftung
 	// SPDX-License-Identifier: Apache-2.0
 	Object.defineProperty(exports, "__esModule", { value: true });
@@ -12248,9 +12169,8 @@
 	__exportStar(IOutputResponse, exports);
 	__exportStar(IResponse, exports);
 	__exportStar(ITipsResponse, exports);
-	__exportStar(IAccountAddressGeneratorState, exports);
 	__exportStar(IAddress, exports);
-	__exportStar(IBip32PathAddressGeneratorState, exports);
+	__exportStar(IBip44GeneratorState, exports);
 	__exportStar(IClient, exports);
 	__exportStar(IEd25519Address, exports);
 	__exportStar(IEd25519Signature, exports);

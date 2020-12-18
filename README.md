@@ -92,11 +92,8 @@ These methods are implemented on the API client.
 There are also high level operations which make use of the API level methods:
 
 * getBalance - Given a seed and account index calculate the total balance available on it's addresses.
-* getBalanceBip32 - Given a seed, bip32 path calculate the total balance available on it's addresses.
 * getUnspentAddress - Given a seed, account index, and start index find the next unspent address.
-* getUnspentAddressBip32 - Given a seed, path, and start index find the next unspent address.
 * getUnspentAddresses - Given a seed, account index, and start index find all the unspent addresses.
-* getUnspentAddressesBip32 - Given a seed, path, and start index find all the unspent addresses.
 * promote - Promote a message by attaching an empty message to it.
 * reattach - Reattach a message using the message id.
 * retry - Looks at the metadata for a message and promotes or retries depending on it's state.

@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 import { Ed25519Address } from "../addressTypes/ed25519Address";
 import { Bip32Path } from "../crypto/bip32Path";
-import { IAccountAddressGeneratorState } from "../models/IAccountAddressGeneratorState";
+import { IBip44GeneratorState } from "../models/IBip44GeneratorState";
 import { IClient } from "../models/IClient";
 import { ED25519_ADDRESS_TYPE } from "../models/IEd25519Address";
 import { IKeyPair } from "../models/IKeyPair";
@@ -11,7 +11,7 @@ import { ISeed } from "../models/ISeed";
 import { IUTXOInput } from "../models/IUTXOInput";
 import { Bech32Helper } from "../utils/bech32Helper";
 import { Converter } from "../utils/converter";
-import { generateAccountAddress } from "./addresses";
+import { generateBip44Address } from "./addresses";
 import { sendAdvanced } from "./sendAdvanced";
 
 /**
@@ -106,7 +106,7 @@ export async function sendMultiple(
         };
     });
 
-    return sendWithAddressGenerator<IAccountAddressGeneratorState>(
+    return sendWithAddressGenerator<IBip44GeneratorState>(
         client,
         seed,
         {
@@ -114,7 +114,7 @@ export async function sendMultiple(
             addressIndex: startIndex ?? 0,
             isInternal: false
         },
-        generateAccountAddress,
+        generateBip44Address,
         hexOutputs
     );
 }
@@ -144,7 +144,7 @@ export async function sendMultipleEd25519(
         { address: output.addressEd25519, addressType: ED25519_ADDRESS_TYPE, amount: output.amount }
     ));
 
-    return sendWithAddressGenerator<IAccountAddressGeneratorState>(
+    return sendWithAddressGenerator<IBip44GeneratorState>(
         client,
         seed,
         {
@@ -152,7 +152,7 @@ export async function sendMultipleEd25519(
             addressIndex: startIndex ?? 0,
             isInternal: false
         },
-        generateAccountAddress,
+        generateBip44Address,
         hexOutputs
     );
 }

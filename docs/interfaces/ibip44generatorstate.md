@@ -1,22 +1,22 @@
 **[@iota/iota.js](../README.md)**
 
-> [Globals](../README.md) / IAccountAddressGeneratorState
+> [Globals](../README.md) / IBip44GeneratorState
 
-# Interface: IAccountAddressGeneratorState
+# Interface: IBip44GeneratorState
 
 Definition of address generator state.
 
 ## Hierarchy
 
-* **IAccountAddressGeneratorState**
+* **IBip44GeneratorState**
 
 ## Index
 
 ### Properties
 
-* [accountIndex](iaccountaddressgeneratorstate.md#accountindex)
-* [addressIndex](iaccountaddressgeneratorstate.md#addressindex)
-* [isInternal](iaccountaddressgeneratorstate.md#isinternal)
+* [accountIndex](ibip44generatorstate.md#accountindex)
+* [addressIndex](ibip44generatorstate.md#addressindex)
+* [isInternal](ibip44generatorstate.md#isinternal)
 
 ## Properties
 

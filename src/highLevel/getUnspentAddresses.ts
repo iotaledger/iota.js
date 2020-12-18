@@ -2,14 +2,13 @@
 // SPDX-License-Identifier: Apache-2.0
 import { Ed25519Address } from "../addressTypes/ed25519Address";
 import { Bip32Path } from "../crypto/bip32Path";
-import { IAccountAddressGeneratorState } from "../models/IAccountAddressGeneratorState";
-import { IBip32PathAddressGeneratorState } from "../models/IBip32PathAddressGeneratorState";
+import { IBip44GeneratorState } from "../models/IBip44GeneratorState";
 import { IClient } from "../models/IClient";
 import { ED25519_ADDRESS_TYPE } from "../models/IEd25519Address";
 import { ISeed } from "../models/ISeed";
 import { Bech32Helper } from "../utils/bech32Helper";
 import { Converter } from "../utils/converter";
-import { generateAccountAddress, generateBip32Address } from "./addresses";
+import { generateBip44Address } from "./addresses";
 
 /**
  * Get all the unspent addresses.
@@ -32,7 +31,7 @@ export async function getUnspentAddresses(
         path: string;
         balance: number;
     }[]> {
-    return getUnspentAddressesWithAddressGenerator<IAccountAddressGeneratorState>(
+    return getUnspentAddressesWithAddressGenerator<IBip44GeneratorState>(
         client,
         seed,
         {
@@ -40,41 +39,7 @@ export async function getUnspentAddresses(
             addressIndex: startIndex ?? 0,
             isInternal: false
         },
-        generateAccountAddress,
-        countLimit,
-        zeroCount
-    );
-}
-
-/**
- * Get all the unspent addresses with a bip32 base path.
- * @param client The client to send the transfer with.
- * @param seed The seed to use for address generation.
- * @param basePath The base path.
- * @param startIndex Optional start index for the wallet count address, defaults to 0.
- * @param countLimit Limit the number of items to find.
- * @param zeroCount Abort when the number of zero balances is exceeded.
- * @returns All the unspent addresses.
- */
-export async function getUnspentAddressesBip32(
-    client: IClient,
-    seed: ISeed,
-    basePath: Bip32Path,
-    startIndex?: number,
-    countLimit?: number,
-    zeroCount?: number): Promise<{
-        address: string;
-        path: string;
-        balance: number;
-    }[]> {
-    return getUnspentAddressesWithAddressGenerator<IBip32PathAddressGeneratorState>(
-        client,
-        seed,
-        {
-            basePath,
-            addressIndex: startIndex ?? 0
-        },
-        generateBip32Address,
+        generateBip44Address,
         countLimit,
         zeroCount
     );

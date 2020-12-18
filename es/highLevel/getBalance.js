@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getBalancePath = exports.getBalance = void 0;
+exports.getBalance = void 0;
 var getUnspentAddresses_1 = require("./getUnspentAddresses");
 /**
  * Get the balance for a list of addresses.
@@ -61,27 +61,4 @@ function getBalance(client, seed, accountIndex, startIndex) {
     });
 }
 exports.getBalance = getBalance;
-/**
- * Get the balance for a list of addresses.
- * @param client The client to send the transfer with.
- * @param seed The seed.
- * @param basePath The base path to start looking for addresses.
- * @param startIndex The start index to generate from, defaults to 0.
- * @returns The balance.
- */
-function getBalancePath(client, seed, basePath, startIndex) {
-    if (startIndex === void 0) { startIndex = 0; }
-    return __awaiter(this, void 0, void 0, function () {
-        var allUnspent;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, getUnspentAddresses_1.getUnspentAddressesBip32(client, seed, basePath, startIndex)];
-                case 1:
-                    allUnspent = _a.sent();
-                    return [2 /*return*/, allUnspent.reduce(function (total, output) { return total + output.balance; }, 0)];
-            }
-        });
-    });
-}
-exports.getBalancePath = getBalancePath;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZ2V0QmFsYW5jZS5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy9oaWdoTGV2ZWwvZ2V0QmFsYW5jZS50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7QUFLQSw2REFBc0Y7QUFFdEY7Ozs7Ozs7R0FPRztBQUNILFNBQXNCLFVBQVUsQ0FDNUIsTUFBZSxFQUNmLElBQVcsRUFDWCxZQUFvQixFQUNwQixVQUFzQjtJQUF0QiwyQkFBQSxFQUFBLGNBQXNCOzs7Ozt3QkFDSCxxQkFBTSx5Q0FBbUIsQ0FBQyxNQUFNLEVBQUUsSUFBSSxFQUFFLFlBQVksRUFBRSxVQUFVLENBQUMsRUFBQTs7b0JBQTlFLFVBQVUsR0FBRyxTQUFpRTtvQkFFcEYsc0JBQU8sVUFBVSxDQUFDLE1BQU0sQ0FBQyxVQUFDLEtBQUssRUFBRSxNQUFNLElBQUssT0FBQSxLQUFLLEdBQUcsTUFBTSxDQUFDLE9BQU8sRUFBdEIsQ0FBc0IsRUFBRSxDQUFDLENBQUMsRUFBQzs7OztDQUMxRTtBQVJELGdDQVFDO0FBRUQ7Ozs7Ozs7R0FPRztBQUNILFNBQXNCLGNBQWMsQ0FDaEMsTUFBZSxFQUNmLElBQVcsRUFDWCxRQUFtQixFQUNuQixVQUFzQjtJQUF0QiwyQkFBQSxFQUFBLGNBQXNCOzs7Ozt3QkFDSCxxQkFBTSw4Q0FBd0IsQ0FBQyxNQUFNLEVBQUUsSUFBSSxFQUFFLFFBQVEsRUFBRSxVQUFVLENBQUMsRUFBQTs7b0JBQS9FLFVBQVUsR0FBRyxTQUFrRTtvQkFFckYsc0JBQU8sVUFBVSxDQUFDLE1BQU0sQ0FBQyxVQUFDLEtBQUssRUFBRSxNQUFNLElBQUssT0FBQSxLQUFLLEdBQUcsTUFBTSxDQUFDLE9BQU8sRUFBdEIsQ0FBc0IsRUFBRSxDQUFDLENBQUMsRUFBQzs7OztDQUMxRTtBQVJELHdDQVFDIn0=
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZ2V0QmFsYW5jZS5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy9oaWdoTGV2ZWwvZ2V0QmFsYW5jZS50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7QUFJQSw2REFBNEQ7QUFFNUQ7Ozs7Ozs7R0FPRztBQUNILFNBQXNCLFVBQVUsQ0FDNUIsTUFBZSxFQUNmLElBQVcsRUFDWCxZQUFvQixFQUNwQixVQUFzQjtJQUF0QiwyQkFBQSxFQUFBLGNBQXNCOzs7Ozt3QkFDSCxxQkFBTSx5Q0FBbUIsQ0FBQyxNQUFNLEVBQUUsSUFBSSxFQUFFLFlBQVksRUFBRSxVQUFVLENBQUMsRUFBQTs7b0JBQTlFLFVBQVUsR0FBRyxTQUFpRTtvQkFFcEYsc0JBQU8sVUFBVSxDQUFDLE1BQU0sQ0FBQyxVQUFDLEtBQUssRUFBRSxNQUFNLElBQUssT0FBQSxLQUFLLEdBQUcsTUFBTSxDQUFDLE9BQU8sRUFBdEIsQ0FBc0IsRUFBRSxDQUFDLENBQUMsRUFBQzs7OztDQUMxRTtBQVJELGdDQVFDIn0=
