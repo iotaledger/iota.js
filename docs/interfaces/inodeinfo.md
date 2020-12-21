@@ -17,6 +17,7 @@ Response from the /info endpoint.
 * [features](inodeinfo.md#features)
 * [isHealthy](inodeinfo.md#ishealthy)
 * [latestMilestoneIndex](inodeinfo.md#latestmilestoneindex)
+* [minPowScore](inodeinfo.md#minpowscore)
 * [name](inodeinfo.md#name)
 * [networkId](inodeinfo.md#networkid)
 * [pruningIndex](inodeinfo.md#pruningindex)
@@ -46,6 +47,14 @@ ___
 •  **latestMilestoneIndex**: number
 
 The latest milestone message index;
+
+___
+
+### minPowScore
+
+•  **minPowScore**: number
+
+The minimum score required for PoW.
 
 ___
 

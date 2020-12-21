@@ -19,6 +19,10 @@ export interface INodeInfo {
      */
     networkId: string;
     /**
+     * The minimum score required for PoW.
+     */
+    minPowScore: number;
+    /**
      * The latest milestone message index;
      */
     latestMilestoneIndex: number;

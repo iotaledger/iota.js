@@ -14,9 +14,9 @@ export interface SingleNodeClientOptions {
     powProvider?: IPowProvider;
 
     /**
-     * The target score required for pow on the network.
+     * Override the minimum PoW score retrieved from the network.
      */
-    targetScore?: number;
+    overrideMinPow?: number;
 
     /**
      * Timeout for API requests.

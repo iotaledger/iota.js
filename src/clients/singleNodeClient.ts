@@ -57,7 +57,13 @@ export class SingleNodeClient implements IClient {
      * The target score for pow.
      * @internal
      */
-    private readonly _targetScore: number;
+    private _minPowScore?: number;
+
+    /**
+     * The network id from node info.
+     * @internal
+     */
+    private _networkId?: bigint;
 
     /**
      * The Api request timeout.
@@ -77,7 +83,7 @@ export class SingleNodeClient implements IClient {
         this._endpoint = endpoint.replace(/\/+$/, "");
         this._basePath = options?.basePath ?? "/api/v1/";
         this._powProvider = options?.powProvider;
-        this._targetScore = options?.targetScore ?? 100;
+        this._minPowScore = options?.overrideMinPow;
         this._timeout = options?.timeout;
     }
 
@@ -157,14 +163,16 @@ export class SingleNodeClient implements IClient {
 
         if (!message.nonce || message.nonce.length === 0) {
             if (this._powProvider) {
-                const nodeInfo = await this.info();
+                await this.populatePowInfo();
+                if (this._networkId && this._minPowScore) {
+                    BigIntHelper.write8(this._networkId, messageBytes, 0);
+                    message.networkId = this._networkId.toString();
 
-                const networkIdBytes = Blake2b.sum256(Converter.asciiToBytes(nodeInfo.networkId));
-                const networkId64 = BigIntHelper.read8(networkIdBytes, 0);
-                message.networkId = networkId64.toString();
-
-                const nonce = await this._powProvider.pow(messageBytes, this._targetScore);
-                message.nonce = nonce.toString(10);
+                    const nonce = await this._powProvider.pow(messageBytes, this._minPowScore);
+                    message.nonce = nonce.toString(10);
+                } else {
+                    throw new Error(this._networkId ? "minPowScore is missing" : "networkId is missing");
+                }
             } else {
                 message.nonce = "0";
             }
@@ -185,15 +193,15 @@ export class SingleNodeClient implements IClient {
             throw new Error(`The message length is ${message.length
                 }, which exceeds the maximum size of ${MAX_MESSAGE_LENGTH}`);
         }
-        if (ArrayHelper.equal(message.slice(-8), SingleNodeClient.NONCE_ZERO) && this._powProvider) {
-            const nodeInfo = await this.info();
-
-            const networkIdBytes = Blake2b.sum256(Converter.asciiToBytes(nodeInfo.networkId));
-            const networkId64 = BigIntHelper.read8(networkIdBytes, 0);
-            BigIntHelper.write8(networkId64, message, 0);
-
-            const nonce = await this._powProvider.pow(message, this._targetScore);
-            BigIntHelper.write8(nonce, message, message.length - 8);
+        if (this._powProvider && ArrayHelper.equal(message.slice(-8), SingleNodeClient.NONCE_ZERO)) {
+            await this.populatePowInfo();
+            if (this._networkId && this._minPowScore) {
+                BigIntHelper.write8(this._networkId, message, 0);
+                const nonce = await this._powProvider.pow(message, this._minPowScore);
+                BigIntHelper.write8(nonce, message, message.length - 8);
+            } else {
+                throw new Error(this._networkId ? "minPowScore is missing" : "networkId is missing");
+            }
         }
 
         const response = await this.fetchBinary<IMessageIdResponse>("post", "messages", message);
@@ -496,6 +504,21 @@ export class SingleNodeClient implements IClient {
             if (timerId) {
                 clearTimeout(timerId);
             }
+        }
+    }
+
+    /**
+     * Get the pow info from the node.
+     * @internal
+     */
+    private async populatePowInfo(): Promise<void> {
+        if (!this._networkId || !this._minPowScore) {
+            const nodeInfo = await this.info();
+
+            const networkIdBytes = Blake2b.sum256(Converter.asciiToBytes(nodeInfo.networkId));
+            this._networkId = BigIntHelper.read8(networkIdBytes, 0);
+
+            this._minPowScore = nodeInfo.minPowScore ?? 100;
         }
     }
 }

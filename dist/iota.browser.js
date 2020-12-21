@@ -6238,14 +6238,14 @@
 	     * @param options Options for the client.
 	     */
 	    function SingleNodeClient(endpoint, options) {
-	        var _a, _b;
+	        var _a;
 	        if (!endpoint) {
 	            throw new Error("The endpoint can not be empty");
 	        }
 	        this._endpoint = endpoint.replace(/\/+$/, "");
 	        this._basePath = (_a = options === null || options === void 0 ? void 0 : options.basePath) !== null && _a !== void 0 ? _a : "/api/v1/";
 	        this._powProvider = options === null || options === void 0 ? void 0 : options.powProvider;
-	        this._targetScore = (_b = options === null || options === void 0 ? void 0 : options.targetScore) !== null && _b !== void 0 ? _b : 100;
+	        this._minPowScore = options === null || options === void 0 ? void 0 : options.overrideMinPow;
 	        this._timeout = options === null || options === void 0 ? void 0 : options.timeout;
 	    }
 	    /**
@@ -6336,7 +6336,7 @@
 	     */
 	    SingleNodeClient.prototype.messageSubmit = function (message$1) {
 	        return __awaiter(this, void 0, void 0, function () {
-	            var writeStream$1, messageBytes, nodeInfo, networkIdBytes, networkId64, nonce, response;
+	            var writeStream$1, messageBytes, nonce, response;
 	            return __generator(this, function (_a) {
 	                switch (_a.label) {
 	                    case 0:
@@ -6346,24 +6346,26 @@
 	                        if (messageBytes.length > message.MAX_MESSAGE_LENGTH) {
 	                            throw new Error("The message length is " + messageBytes.length + ", which exceeds the maximum size of " + message.MAX_MESSAGE_LENGTH);
 	                        }
-	                        if (!(!message$1.nonce || message$1.nonce.length === 0)) return [3 /*break*/, 4];
-	                        if (!this._powProvider) return [3 /*break*/, 3];
-	                        return [4 /*yield*/, this.info()];
+	                        if (!(!message$1.nonce || message$1.nonce.length === 0)) return [3 /*break*/, 6];
+	                        if (!this._powProvider) return [3 /*break*/, 5];
+	                        return [4 /*yield*/, this.populatePowInfo()];
 	                    case 1:
-	                        nodeInfo = _a.sent();
-	                        networkIdBytes = blake2b.Blake2b.sum256(converter.Converter.asciiToBytes(nodeInfo.networkId));
-	                        networkId64 = bigIntHelper.BigIntHelper.read8(networkIdBytes, 0);
-	                        message$1.networkId = networkId64.toString();
-	                        return [4 /*yield*/, this._powProvider.pow(messageBytes, this._targetScore)];
+	                        _a.sent();
+	                        if (!(this._networkId && this._minPowScore)) return [3 /*break*/, 3];
+	                        bigIntHelper.BigIntHelper.write8(this._networkId, messageBytes, 0);
+	                        message$1.networkId = this._networkId.toString();
+	                        return [4 /*yield*/, this._powProvider.pow(messageBytes, this._minPowScore)];
 	                    case 2:
 	                        nonce = _a.sent();
 	                        message$1.nonce = nonce.toString(10);
 	                        return [3 /*break*/, 4];
-	                    case 3:
-	                        message$1.nonce = "0";
-	                        _a.label = 4;
-	                    case 4: return [4 /*yield*/, this.fetchJson("post", "messages", message$1)];
+	                    case 3: throw new Error(this._networkId ? "minPowScore is missing" : "networkId is missing");
+	                    case 4: return [3 /*break*/, 6];
 	                    case 5:
+	                        message$1.nonce = "0";
+	                        _a.label = 6;
+	                    case 6: return [4 /*yield*/, this.fetchJson("post", "messages", message$1)];
+	                    case 7:
 	                        response = _a.sent();
 	                        return [2 /*return*/, response.messageId];
 	                }
@@ -6377,27 +6379,27 @@
 	     */
 	    SingleNodeClient.prototype.messageSubmitRaw = function (message$1) {
 	        return __awaiter(this, void 0, void 0, function () {
-	            var nodeInfo, networkIdBytes, networkId64, nonce, response;
+	            var nonce, response;
 	            return __generator(this, function (_a) {
 	                switch (_a.label) {
 	                    case 0:
 	                        if (message$1.length > message.MAX_MESSAGE_LENGTH) {
 	                            throw new Error("The message length is " + message$1.length + ", which exceeds the maximum size of " + message.MAX_MESSAGE_LENGTH);
 	                        }
-	                        if (!(arrayHelper.ArrayHelper.equal(message$1.slice(-8), SingleNodeClient.NONCE_ZERO) && this._powProvider)) return [3 /*break*/, 3];
-	                        return [4 /*yield*/, this.info()];
+	                        if (!(this._powProvider && arrayHelper.ArrayHelper.equal(message$1.slice(-8), SingleNodeClient.NONCE_ZERO))) return [3 /*break*/, 4];
+	                        return [4 /*yield*/, this.populatePowInfo()];
 	                    case 1:
-	                        nodeInfo = _a.sent();
-	                        networkIdBytes = blake2b.Blake2b.sum256(converter.Converter.asciiToBytes(nodeInfo.networkId));
-	                        networkId64 = bigIntHelper.BigIntHelper.read8(networkIdBytes, 0);
-	                        bigIntHelper.BigIntHelper.write8(networkId64, message$1, 0);
-	                        return [4 /*yield*/, this._powProvider.pow(message$1, this._targetScore)];
+	                        _a.sent();
+	                        if (!(this._networkId && this._minPowScore)) return [3 /*break*/, 3];
+	                        bigIntHelper.BigIntHelper.write8(this._networkId, message$1, 0);
+	                        return [4 /*yield*/, this._powProvider.pow(message$1, this._minPowScore)];
 	                    case 2:
 	                        nonce = _a.sent();
 	                        bigIntHelper.BigIntHelper.write8(nonce, message$1, message$1.length - 8);
-	                        _a.label = 3;
-	                    case 3: return [4 /*yield*/, this.fetchBinary("post", "messages", message$1)];
-	                    case 4:
+	                        return [3 /*break*/, 4];
+	                    case 3: throw new Error(this._networkId ? "minPowScore is missing" : "networkId is missing");
+	                    case 4: return [4 /*yield*/, this.fetchBinary("post", "messages", message$1)];
+	                    case 5:
 	                        response = _a.sent();
 	                        return [2 /*return*/, response.messageId];
 	                }
@@ -6695,6 +6697,29 @@
 	                        }
 	                        return [7 /*endfinally*/];
 	                    case 5: return [2 /*return*/];
+	                }
+	            });
+	        });
+	    };
+	    /**
+	     * Get the pow info from the node.
+	     */
+	    SingleNodeClient.prototype.populatePowInfo = function () {
+	        var _a;
+	        return __awaiter(this, void 0, void 0, function () {
+	            var nodeInfo, networkIdBytes;
+	            return __generator(this, function (_b) {
+	                switch (_b.label) {
+	                    case 0:
+	                        if (!(!this._networkId || !this._minPowScore)) return [3 /*break*/, 2];
+	                        return [4 /*yield*/, this.info()];
+	                    case 1:
+	                        nodeInfo = _b.sent();
+	                        networkIdBytes = blake2b.Blake2b.sum256(converter.Converter.asciiToBytes(nodeInfo.networkId));
+	                        this._networkId = bigIntHelper.BigIntHelper.read8(networkIdBytes, 0);
+	                        this._minPowScore = (_a = nodeInfo.minPowScore) !== null && _a !== void 0 ? _a : 100;
+	                        _b.label = 2;
+	                    case 2: return [2 /*return*/];
 	                }
 	            });
 	        });
