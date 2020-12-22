@@ -72,6 +72,18 @@ export class SingleNodeClient implements IClient {
     private readonly _timeout?: number;
 
     /**
+     * Username for the endpoint.
+     * @internal
+     */
+    private readonly _userName?: string;
+
+    /**
+     * Password for the endpoint.
+     * @internal
+     */
+    private readonly _password?: string;
+
+    /**
      * Create a new instance of client.
      * @param endpoint The endpoint.
      * @param options Options for the client.
@@ -85,6 +97,12 @@ export class SingleNodeClient implements IClient {
         this._powProvider = options?.powProvider;
         this._minPowScore = options?.overrideMinPow;
         this._timeout = options?.timeout;
+        this._userName = options?.userName;
+        this._password = options?.password;
+
+        if (this._userName && this._password && !this._endpoint.startsWith("https")) {
+            throw new Error("Basic authentication requires the endpoint to be https");
+        }
     }
 
     /**
@@ -484,6 +502,11 @@ export class SingleNodeClient implements IClient {
                     }
                 },
                 this._timeout);
+        }
+
+        if (this._userName && this._password) {
+            headers = headers ?? {};
+            headers.Authorization = `Basic ${btoa(`${this._userName}:${this._password}`)}`;
         }
 
         try {

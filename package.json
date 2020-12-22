@@ -45,6 +45,9 @@
         "not ie <= 11",
         "not op_mini all"
     ],
+    "engines": {
+        "node": ">=12.0.0"
+    },
     "devDependencies": {
         "@rollup/plugin-commonjs": "^15.1.0",
         "@rollup/plugin-node-resolve": "^11.0.0",

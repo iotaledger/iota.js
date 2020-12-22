@@ -16,4 +16,12 @@ export interface SingleNodeClientOptions {
      * Timeout for API requests.
      */
     timeout?: number;
+    /**
+     * Username for the endpoint.
+     */
+    userName?: string;
+    /**
+     * Password for the endpoint.
+     */
+    password?: string;
 }

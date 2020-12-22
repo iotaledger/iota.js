@@ -6247,6 +6247,11 @@
 	        this._powProvider = options === null || options === void 0 ? void 0 : options.powProvider;
 	        this._minPowScore = options === null || options === void 0 ? void 0 : options.overrideMinPow;
 	        this._timeout = options === null || options === void 0 ? void 0 : options.timeout;
+	        this._userName = options === null || options === void 0 ? void 0 : options.userName;
+	        this._password = options === null || options === void 0 ? void 0 : options.password;
+	        if (this._userName && this._password && !this._endpoint.startsWith("https")) {
+	            throw new Error("Basic authentication requires the endpoint to be https");
+	        }
 	    }
 	    /**
 	     * Get the health of the node.
@@ -6676,6 +6681,10 @@
 	                                }
 	                            }, this._timeout);
 	                        }
+	                        if (this._userName && this._password) {
+	                            headers = headers !== null && headers !== void 0 ? headers : {};
+	                            headers.Authorization = "Basic " + btoa(this._userName + ":" + this._password);
+	                        }
 	                        _a.label = 1;
 	                    case 1:
 	                        _a.trys.push([1, 3, 4, 5]);
@@ -6703,6 +6712,7 @@
 	    };
 	    /**
 	     * Get the pow info from the node.
+	     * @internal
 	     */
 	    SingleNodeClient.prototype.populatePowInfo = function () {
 	        var _a;

@@ -6248,6 +6248,11 @@
 	        this._powProvider = options === null || options === void 0 ? void 0 : options.powProvider;
 	        this._minPowScore = options === null || options === void 0 ? void 0 : options.overrideMinPow;
 	        this._timeout = options === null || options === void 0 ? void 0 : options.timeout;
+	        this._userName = options === null || options === void 0 ? void 0 : options.userName;
+	        this._password = options === null || options === void 0 ? void 0 : options.password;
+	        if (this._userName && this._password && !this._endpoint.startsWith("https")) {
+	            throw new Error("Basic authentication requires the endpoint to be https");
+	        }
 	    }
 	    /**
 	     * Get the health of the node.
@@ -6677,6 +6682,10 @@
 	                                }
 	                            }, this._timeout);
 	                        }
+	                        if (this._userName && this._password) {
+	                            headers = headers !== null && headers !== void 0 ? headers : {};
+	                            headers.Authorization = "Basic " + btoa(this._userName + ":" + this._password);
+	                        }
 	                        _a.label = 1;
 	                    case 1:
 	                        _a.trys.push([1, 3, 4, 5]);
@@ -6704,6 +6713,7 @@
 	    };
 	    /**
 	     * Get the pow info from the node.
+	     * @internal
 	     */
 	    SingleNodeClient.prototype.populatePowInfo = function () {
 	        var _a;
@@ -12237,6 +12247,8 @@
 	});
 
 	var index_node = createCommonjsModule(function (module, exports) {
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
 	var __createBinding = (commonjsGlobal && commonjsGlobal.__createBinding) || (Object.create ? (function(o, m, k, k2) {
 	    if (k2 === undefined) k2 = k;
 	    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
@@ -12247,16 +12259,17 @@
 	var __exportStar = (commonjsGlobal && commonjsGlobal.__exportStar) || function(m, exports) {
 	    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 	};
-	var __importDefault = (commonjsGlobal && commonjsGlobal.__importDefault) || function (mod) {
-	    return (mod && mod.__esModule) ? mod : { "default": mod };
-	};
 	Object.defineProperty(exports, "__esModule", { value: true });
-	// Copyright 2020 IOTA Stiftung
-	// SPDX-License-Identifier: Apache-2.0
-	var node_fetch_1 = __importDefault(require$$0__default$2['default']);
+	// Polyfills for NodeJS
+	// Fetch
 	if (!globalThis.fetch) {
-	    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-	    globalThis.fetch = node_fetch_1.default;
+	    // eslint-disable-next-line @typescript-eslint/no-require-imports
+	    globalThis.fetch = require$$0__default$2['default'];
+	}
+	// Base 64 Conversion
+	if (!globalThis.btoa) {
+	    globalThis.btoa = function (a) { return Buffer.from(a).toString("base64"); };
+	    globalThis.atob = function (a) { return Buffer.from(a, "base64").toString(); };
 	}
 	__exportStar(es, exports);
 
