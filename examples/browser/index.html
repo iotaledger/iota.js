@@ -31,15 +31,14 @@
             Iota.logInfo("", info);
             consoleLog();
 
-            const tips = await client.tips();
+            const tipsResponse = await client.tips();
             consoleLog("Tips");
-            Iota.logTips("", tips);
+            Iota.logTips("", tipsResponse);
             consoleLog();
 
             const submitMessage = {
                 version: 1,
-                parent1MessageId: tips.tip1MessageId,
-                parent2MessageId: tips.tip2MessageId,
+                parents: tipsResponse.tips,
                 payload: {
                     type: 2,
                     index: "Foo",
@@ -80,7 +79,7 @@
             consoleLog("\tMessage Ids:", messages.messageIds);
             consoleLog();
 
-            const children = await client.messageChildren(tips.tip1MessageId);
+            const children = await client.messageChildren(tipsResponse.tips[0]);
             consoleLog("Children");
             consoleLog("\tMessage Id:", children.messageId);
             consoleLog("\tMax Results:", children.maxResults);

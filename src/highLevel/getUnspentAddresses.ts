@@ -60,14 +60,12 @@ export async function getUnspentAddressesWithAddressGenerator<T>(
     seed: ISeed,
     initialAddressState: T,
     nextAddressPath: (addressState: T, isFirst: boolean) => string,
-    countLimit?: number,
-    zeroCount?: number): Promise<{
+    countLimit: number = Number.MAX_SAFE_INTEGER,
+    zeroCount: number = 5): Promise<{
         address: string;
         path: string;
         balance: number;
     }[]> {
-    const localCountLimit = countLimit ?? Number.MAX_SAFE_INTEGER;
-    const localZeroCount = zeroCount ?? 5;
     let finished = false;
     const allUnspent: {
         address: string;
@@ -93,7 +91,7 @@ export async function getUnspentAddressesWithAddressGenerator<T>(
         // end of the used addresses
         if (addressResponse.count === 0) {
             zeroBalance++;
-            if (zeroBalance >= localZeroCount) {
+            if (zeroBalance >= zeroCount) {
                 finished = true;
             }
         } else {
@@ -103,7 +101,7 @@ export async function getUnspentAddressesWithAddressGenerator<T>(
                 balance: addressResponse.balance
             });
 
-            if (allUnspent.length === localCountLimit) {
+            if (allUnspent.length === countLimit) {
                 finished = true;
             }
         }

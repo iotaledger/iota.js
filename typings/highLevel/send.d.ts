@@ -94,7 +94,7 @@ export declare function calculateInputs<T>(client: IClient, seed: ISeed, initial
     address: string;
     addressType: number;
     amount: number;
-}[], zeroCount: number): Promise<{
+}[], zeroCount?: number): Promise<{
     input: IUTXOInput;
     addressKeyPair: IKeyPair;
 }[]>;

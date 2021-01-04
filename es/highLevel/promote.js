@@ -45,7 +45,7 @@ exports.promote = void 0;
  */
 function promote(client, messageId) {
     return __awaiter(this, void 0, void 0, function () {
-        var message, tips, promoteMessage, promoteMessageId;
+        var message, tipsResponse, promoteMessage, promoteMessageId;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, client.message(messageId)];
@@ -56,10 +56,9 @@ function promote(client, messageId) {
                     }
                     return [4 /*yield*/, client.tips()];
                 case 2:
-                    tips = _a.sent();
+                    tipsResponse = _a.sent();
                     promoteMessage = {
-                        parent1MessageId: tips.tip1MessageId,
-                        parent2MessageId: messageId
+                        parents: tipsResponse.tips
                     };
                     return [4 /*yield*/, client.messageSubmit(promoteMessage)];
                 case 3:
@@ -73,4 +72,4 @@ function promote(client, messageId) {
     });
 }
 exports.promote = promote;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicHJvbW90ZS5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy9oaWdoTGV2ZWwvcHJvbW90ZS50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7QUFLQTs7Ozs7R0FLRztBQUNILFNBQXNCLE9BQU8sQ0FBQyxNQUFlLEVBQUUsU0FBaUI7Ozs7O3dCQUk1QyxxQkFBTSxNQUFNLENBQUMsT0FBTyxDQUFDLFNBQVMsQ0FBQyxFQUFBOztvQkFBekMsT0FBTyxHQUFHLFNBQStCO29CQUMvQyxJQUFJLENBQUMsT0FBTyxFQUFFO3dCQUNWLE1BQU0sSUFBSSxLQUFLLENBQUMsNkJBQTZCLENBQUMsQ0FBQztxQkFDbEQ7b0JBRVkscUJBQU0sTUFBTSxDQUFDLElBQUksRUFBRSxFQUFBOztvQkFBMUIsSUFBSSxHQUFHLFNBQW1CO29CQUUxQixjQUFjLEdBQWE7d0JBQzdCLGdCQUFnQixFQUFFLElBQUksQ0FBQyxhQUFhO3dCQUNwQyxnQkFBZ0IsRUFBRSxTQUFTO3FCQUM5QixDQUFDO29CQUV1QixxQkFBTSxNQUFNLENBQUMsYUFBYSxDQUFDLGNBQWMsQ0FBQyxFQUFBOztvQkFBN0QsZ0JBQWdCLEdBQUcsU0FBMEM7b0JBRW5FLHNCQUFPOzRCQUNILE9BQU8sU0FBQTs0QkFDUCxTQUFTLEVBQUUsZ0JBQWdCO3lCQUM5QixFQUFDOzs7O0NBQ0w7QUF0QkQsMEJBc0JDIn0=
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicHJvbW90ZS5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy9oaWdoTGV2ZWwvcHJvbW90ZS50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7QUFLQTs7Ozs7R0FLRztBQUNILFNBQXNCLE9BQU8sQ0FBQyxNQUFlLEVBQUUsU0FBaUI7Ozs7O3dCQUk1QyxxQkFBTSxNQUFNLENBQUMsT0FBTyxDQUFDLFNBQVMsQ0FBQyxFQUFBOztvQkFBekMsT0FBTyxHQUFHLFNBQStCO29CQUMvQyxJQUFJLENBQUMsT0FBTyxFQUFFO3dCQUNWLE1BQU0sSUFBSSxLQUFLLENBQUMsNkJBQTZCLENBQUMsQ0FBQztxQkFDbEQ7b0JBRW9CLHFCQUFNLE1BQU0sQ0FBQyxJQUFJLEVBQUUsRUFBQTs7b0JBQWxDLFlBQVksR0FBRyxTQUFtQjtvQkFFbEMsY0FBYyxHQUFhO3dCQUM3QixPQUFPLEVBQUUsWUFBWSxDQUFDLElBQUk7cUJBQzdCLENBQUM7b0JBRXVCLHFCQUFNLE1BQU0sQ0FBQyxhQUFhLENBQUMsY0FBYyxDQUFDLEVBQUE7O29CQUE3RCxnQkFBZ0IsR0FBRyxTQUEwQztvQkFFbkUsc0JBQU87NEJBQ0gsT0FBTyxTQUFBOzRCQUNQLFNBQVMsRUFBRSxnQkFBZ0I7eUJBQzlCLEVBQUM7Ozs7Q0FDTDtBQXJCRCwwQkFxQkMifQ==

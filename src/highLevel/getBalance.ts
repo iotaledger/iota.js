@@ -19,5 +19,10 @@ export async function getBalance(
     startIndex: number = 0): Promise<number> {
     const allUnspent = await getUnspentAddresses(client, seed, accountIndex, startIndex);
 
-    return allUnspent.reduce((total, output) => total + output.balance, 0);
+    let total = 0;
+    for (const output of allUnspent) {
+        total += output.balance;
+    }
+
+    return total;
 }

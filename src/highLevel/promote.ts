@@ -18,11 +18,10 @@ export async function promote(client: IClient, messageId: string): Promise<{
         throw new Error("The message does not exist.");
     }
 
-    const tips = await client.tips();
+    const tipsResponse = await client.tips();
 
     const promoteMessage: IMessage = {
-        parent1MessageId: tips.tip1MessageId,
-        parent2MessageId: messageId
+        parents: tipsResponse.tips
     };
 
     const promoteMessageId = await client.messageSubmit(promoteMessage);

@@ -13,8 +13,10 @@ describe("LocalPowProvider", () => {
         const pow = new LocalPowProvider();
 
         const message: IMessage = {
-            parent1MessageId: Converter.bytesToHex(RandomHelper.generate(32)),
-            parent2MessageId: Converter.bytesToHex(RandomHelper.generate(32)),
+            parents: [
+                Converter.bytesToHex(RandomHelper.generate(32)),
+                Converter.bytesToHex(RandomHelper.generate(32))
+            ],
             payload: {
                 type: 2,
                 index: "hello world",

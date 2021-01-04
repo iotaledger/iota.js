@@ -42,11 +42,10 @@ export async function sendAdvanced(
     const transactionPayload = buildTransactionPayload(
         inputsAndSignatureKeyPairs, outputs, indexationKey, indexationData);
 
-    const tips = await client.tips();
+    const tipsResponse = await client.tips();
 
     const message: IMessage = {
-        parent1MessageId: tips.tip1MessageId,
-        parent2MessageId: tips.tip2MessageId,
+        parents: tipsResponse.tips,
         payload: transactionPayload
     };
 

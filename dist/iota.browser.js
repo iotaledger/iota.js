@@ -15,18 +15,28 @@
 		return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, 'default') ? x['default'] : x;
 	}
 
-	function createCommonjsModule(fn, basedir, module) {
-		return module = {
-			path: basedir,
-			exports: {},
-			require: function (path, base) {
-				return commonjsRequire(path, (base === undefined || base === null) ? module.path : base);
-			}
-		}, fn(module, module.exports), module.exports;
+	function getAugmentedNamespace(n) {
+		if (n.__esModule) return n;
+		var a = Object.defineProperty({}, '__esModule', {value: true});
+		Object.keys(n).forEach(function (k) {
+			var d = Object.getOwnPropertyDescriptor(n, k);
+			Object.defineProperty(a, k, d.get ? d : {
+				enumerable: true,
+				get: function () {
+					return n[k];
+				}
+			});
+		});
+		return a;
 	}
 
-	function commonjsRequire () {
-		throw new Error('Dynamic requires are not currently supported by @rollup/plugin-commonjs');
+	function createCommonjsModule(fn) {
+	  var module = { exports: {} };
+		return fn(module, module.exports), module.exports;
+	}
+
+	function commonjsRequire (target) {
+		throw new Error('Could not dynamically require "' + target + '". Please configure the dynamicRequireTargets option of @rollup/plugin-commonjs appropriately for this require call to behave properly.');
 	}
 
 	var blake2b = createCommonjsModule(function (module, exports) {
@@ -4556,7 +4566,8 @@
 
 	exports.MIN_PAYLOAD_LENGTH = common.TYPE_LENGTH;
 	exports.MIN_MILESTONE_PAYLOAD_LENGTH = exports.MIN_PAYLOAD_LENGTH + common.UINT32_SIZE + common.UINT64_SIZE +
-	    common.MESSAGE_ID_LENGTH + common.MESSAGE_ID_LENGTH + common.MERKLE_PROOF_LENGTH +
+	    common.BYTE_SIZE + common.MESSAGE_ID_LENGTH + common.MESSAGE_ID_LENGTH +
+	    common.MERKLE_PROOF_LENGTH +
 	    common.BYTE_SIZE + ed25519.Ed25519.PUBLIC_KEY_SIZE +
 	    common.BYTE_SIZE + ed25519.Ed25519.SIGNATURE_SIZE;
 	exports.MIN_INDEXATION_PAYLOAD_LENGTH = exports.MIN_PAYLOAD_LENGTH + common.STRING_LENGTH + common.STRING_LENGTH;
@@ -4687,8 +4698,12 @@
 	    }
 	    var index = readStream.readUInt32("payloadMilestone.index");
 	    var timestamp = readStream.readUInt64("payloadMilestone.timestamp");
-	    var parent1MessageId = readStream.readFixedHex("payloadMilestone.parent1MessageId", common.MESSAGE_ID_LENGTH);
-	    var parent2MessageId = readStream.readFixedHex("payloadMilestone.parent2MessageId", common.MESSAGE_ID_LENGTH);
+	    var numParents = readStream.readByte("payloadMilestone.numParents");
+	    var parents = [];
+	    for (var i = 0; i < numParents; i++) {
+	        var parentMessageId = readStream.readFixedHex("payloadMilestone.parentMessageId" + (i + 1), common.MESSAGE_ID_LENGTH);
+	        parents.push(parentMessageId);
+	    }
 	    var inclusionMerkleProof = readStream.readFixedHex("payloadMilestone.inclusionMerkleProof", common.MERKLE_PROOF_LENGTH);
 	    var publicKeysCount = readStream.readByte("payloadMilestone.publicKeysCount");
 	    var publicKeys = [];
@@ -4704,8 +4719,7 @@
 	        type: 1,
 	        index: index,
 	        timestamp: Number(timestamp),
-	        parent1MessageId: parent1MessageId,
-	        parent2MessageId: parent2MessageId,
+	        parents: parents,
 	        inclusionMerkleProof: inclusionMerkleProof,
 	        publicKeys: publicKeys,
 	        signatures: signatures
@@ -4721,8 +4735,10 @@
 	    writeStream.writeUInt32("payloadMilestone.type", object.type);
 	    writeStream.writeUInt32("payloadMilestone.index", object.index);
 	    writeStream.writeUInt64("payloadMilestone.timestamp", BigInt(object.timestamp));
-	    writeStream.writeFixedHex("payloadMilestone.parent1MessageId", common.MESSAGE_ID_LENGTH, object.parent1MessageId);
-	    writeStream.writeFixedHex("payloadMilestone.parent2MessageId", common.MESSAGE_ID_LENGTH, object.parent2MessageId);
+	    writeStream.writeByte("payloadMilestone.numParents", object.parents.length);
+	    for (var i = 0; i < object.parents.length; i++) {
+	        writeStream.writeFixedHex("payloadMilestone.parentMessageId" + (i + 1), common.MESSAGE_ID_LENGTH, object.parents[i]);
+	    }
 	    writeStream.writeFixedHex("payloadMilestone.inclusionMerkleProof", common.MERKLE_PROOF_LENGTH, object.inclusionMerkleProof);
 	    writeStream.writeByte("payloadMilestone.publicKeysCount", object.publicKeys.length);
 	    for (var i = 0; i < object.publicKeys.length; i++) {
@@ -4781,10 +4797,10 @@
 
 
 	var MIN_MESSAGE_LENGTH = common.UINT64_SIZE +
+	    common.BYTE_SIZE +
 	    (2 * common.MESSAGE_ID_LENGTH) +
 	    payload.MIN_PAYLOAD_LENGTH +
 	    common.UINT64_SIZE;
-	var EMPTY_MESSAGE_ID_HEX = "0".repeat(common.MESSAGE_ID_LENGTH * 2);
 	/**
 	 * The maximum length of a message.
 	 */
@@ -4799,8 +4815,12 @@
 	        throw new Error("Message data is " + readStream.length() + " in length which is less than the minimimum size required of " + MIN_MESSAGE_LENGTH);
 	    }
 	    var networkId = readStream.readUInt64("message.networkId");
-	    var parent1MessageId = readStream.readFixedHex("message.parent1MessageId", common.MESSAGE_ID_LENGTH);
-	    var parent2MessageId = readStream.readFixedHex("message.parent2MessageId", common.MESSAGE_ID_LENGTH);
+	    var numParents = readStream.readByte("message.numParents");
+	    var parents = [];
+	    for (var i = 0; i < numParents; i++) {
+	        var parentMessageId = readStream.readFixedHex("message.parentMessageId", common.MESSAGE_ID_LENGTH);
+	        parents.push(parentMessageId);
+	    }
 	    var payload$1 = payload.deserializePayload(readStream);
 	    var nonce = readStream.readUInt64("message.nonce");
 	    var unused = readStream.unused();
@@ -4809,9 +4829,8 @@
 	    }
 	    return {
 	        networkId: networkId.toString(10),
+	        parents: parents,
 	        payload: payload$1,
-	        parent1MessageId: parent1MessageId,
-	        parent2MessageId: parent2MessageId,
 	        nonce: nonce.toString(10)
 	    };
 	}
@@ -4824,8 +4843,13 @@
 	function serializeMessage(writeStream, object) {
 	    var _a, _b, _c, _d;
 	    writeStream.writeUInt64("message.networkId", BigInt((_a = object.networkId) !== null && _a !== void 0 ? _a : 0));
-	    writeStream.writeFixedHex("message.parent1MessageId", common.MESSAGE_ID_LENGTH, (_b = object.parent1MessageId) !== null && _b !== void 0 ? _b : EMPTY_MESSAGE_ID_HEX);
-	    writeStream.writeFixedHex("message.parent2MessageId", common.MESSAGE_ID_LENGTH, (_c = object.parent2MessageId) !== null && _c !== void 0 ? _c : EMPTY_MESSAGE_ID_HEX);
+	    var numParents = (_c = (_b = object.parents) === null || _b === void 0 ? void 0 : _b.length) !== null && _c !== void 0 ? _c : 0;
+	    writeStream.writeByte("message.numParents", numParents);
+	    if (object.parents) {
+	        for (var i = 0; i < numParents; i++) {
+	            writeStream.writeFixedHex("message.parentMessageId" + (i + 1), common.MESSAGE_ID_LENGTH, object.parents[i]);
+	        }
+	    }
 	    payload.serializePayload(writeStream, object.payload);
 	    writeStream.writeUInt64("message.nonce", BigInt((_d = object.nonce) !== null && _d !== void 0 ? _d : 0));
 	}
@@ -6745,9 +6769,10 @@
 
 	});
 
-	var singleNodeClientOptions = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 
+	var singleNodeClientOptions = /*#__PURE__*/Object.freeze({
+		__proto__: null
 	});
 
 	var bip32Path = createCommonjsModule(function (module, exports) {
@@ -9981,13 +10006,13 @@
 	 * @returns All the unspent addresses.
 	 */
 	function getUnspentAddressesWithAddressGenerator(client, seed, initialAddressState, nextAddressPath, countLimit, zeroCount) {
+	    if (countLimit === void 0) { countLimit = Number.MAX_SAFE_INTEGER; }
+	    if (zeroCount === void 0) { zeroCount = 5; }
 	    return __awaiter(this, void 0, void 0, function () {
-	        var localCountLimit, localZeroCount, finished, allUnspent, isFirst, zeroBalance, path, addressSeed, ed25519Address$1, addressBytes, addressHex, addressResponse;
+	        var finished, allUnspent, isFirst, zeroBalance, path, addressSeed, ed25519Address$1, addressBytes, addressHex, addressResponse;
 	        return __generator(this, function (_a) {
 	            switch (_a.label) {
 	                case 0:
-	                    localCountLimit = countLimit !== null && countLimit !== void 0 ? countLimit : Number.MAX_SAFE_INTEGER;
-	                    localZeroCount = zeroCount !== null && zeroCount !== void 0 ? zeroCount : 5;
 	                    finished = false;
 	                    allUnspent = [];
 	                    isFirst = true;
@@ -10007,7 +10032,7 @@
 	                    // end of the used addresses
 	                    if (addressResponse.count === 0) {
 	                        zeroBalance++;
-	                        if (zeroBalance >= localZeroCount) {
+	                        if (zeroBalance >= zeroCount) {
 	                            finished = true;
 	                        }
 	                    }
@@ -10017,7 +10042,7 @@
 	                            path: path,
 	                            balance: addressResponse.balance
 	                        });
-	                        if (allUnspent.length === localCountLimit) {
+	                        if (allUnspent.length === countLimit) {
 	                            finished = true;
 	                        }
 	                    }
@@ -10085,13 +10110,18 @@
 	function getBalance(client, seed, accountIndex, startIndex) {
 	    if (startIndex === void 0) { startIndex = 0; }
 	    return __awaiter(this, void 0, void 0, function () {
-	        var allUnspent;
+	        var allUnspent, total, _i, allUnspent_1, output;
 	        return __generator(this, function (_a) {
 	            switch (_a.label) {
 	                case 0: return [4 /*yield*/, getUnspentAddresses_1.getUnspentAddresses(client, seed, accountIndex, startIndex)];
 	                case 1:
 	                    allUnspent = _a.sent();
-	                    return [2 /*return*/, allUnspent.reduce(function (total, output) { return total + output.balance; }, 0)];
+	                    total = 0;
+	                    for (_i = 0, allUnspent_1 = allUnspent; _i < allUnspent_1.length; _i++) {
+	                        output = allUnspent_1[_i];
+	                        total += output.balance;
+	                    }
+	                    return [2 /*return*/, total];
 	            }
 	        });
 	    });
@@ -10212,7 +10242,7 @@
 	 */
 	function promote(client, messageId) {
 	    return __awaiter(this, void 0, void 0, function () {
-	        var message, tips, promoteMessage, promoteMessageId;
+	        var message, tipsResponse, promoteMessage, promoteMessageId;
 	        return __generator(this, function (_a) {
 	            switch (_a.label) {
 	                case 0: return [4 /*yield*/, client.message(messageId)];
@@ -10223,10 +10253,9 @@
 	                    }
 	                    return [4 /*yield*/, client.tips()];
 	                case 2:
-	                    tips = _a.sent();
+	                    tipsResponse = _a.sent();
 	                    promoteMessage = {
-	                        parent1MessageId: tips.tip1MessageId,
-	                        parent2MessageId: messageId
+	                        parents: tipsResponse.tips
 	                    };
 	                    return [4 /*yield*/, client.messageSubmit(promoteMessage)];
 	                case 3:
@@ -10290,7 +10319,7 @@
 	 */
 	function reattach(client, messageId) {
 	    return __awaiter(this, void 0, void 0, function () {
-	        var message, tips, reattachMessage, reattachedMessageId;
+	        var message, tipsResponse, reattachMessage, reattachedMessageId;
 	        return __generator(this, function (_a) {
 	            switch (_a.label) {
 	                case 0: return [4 /*yield*/, client.message(messageId)];
@@ -10301,10 +10330,9 @@
 	                    }
 	                    return [4 /*yield*/, client.tips()];
 	                case 2:
-	                    tips = _a.sent();
+	                    tipsResponse = _a.sent();
 	                    reattachMessage = {
-	                        parent1MessageId: tips.tip1MessageId,
-	                        parent2MessageId: tips.tip2MessageId,
+	                        parents: tipsResponse.tips,
 	                        payload: message.payload
 	                    };
 	                    return [4 /*yield*/, client.messageSubmit(reattachMessage)];
@@ -10544,17 +10572,16 @@
 	 */
 	function sendAdvanced(client, inputsAndSignatureKeyPairs, outputs, indexationKey, indexationData) {
 	    return __awaiter(this, void 0, void 0, function () {
-	        var transactionPayload, tips, message, messageId;
+	        var transactionPayload, tipsResponse, message, messageId;
 	        return __generator(this, function (_a) {
 	            switch (_a.label) {
 	                case 0:
 	                    transactionPayload = buildTransactionPayload(inputsAndSignatureKeyPairs, outputs, indexationKey, indexationData);
 	                    return [4 /*yield*/, client.tips()];
 	                case 1:
-	                    tips = _a.sent();
+	                    tipsResponse = _a.sent();
 	                    message = {
-	                        parent1MessageId: tips.tip1MessageId,
-	                        parent2MessageId: tips.tip2MessageId,
+	                        parents: tipsResponse.tips,
 	                        payload: transactionPayload
 	                    };
 	                    return [4 /*yield*/, client.messageSubmit(message)];
@@ -10851,19 +10878,23 @@
 	 * @returns The id of the message created and the contructed message.
 	 */
 	function calculateInputs(client, seed, initialAddressState, nextAddressPath, outputs, zeroCount) {
+	    if (zeroCount === void 0) { zeroCount = 5; }
 	    return __awaiter(this, void 0, void 0, function () {
-	        var requiredBalance, localZeroCount, consumedBalance, inputsAndSignatureKeyPairs, finished, isFirst, zeroBalance, path, addressSeed, addressKeyPair, ed25519Address$1, address, addressOutputIds, _i, _a, addressOutputId, addressOutput, input;
-	        return __generator(this, function (_b) {
-	            switch (_b.label) {
+	        var requiredBalance, _i, outputs_1, output, consumedBalance, inputsAndSignatureKeyPairs, finished, isFirst, zeroBalance, path, addressSeed, addressKeyPair, ed25519Address$1, address, addressOutputIds, _a, _b, addressOutputId, addressOutput, input;
+	        return __generator(this, function (_c) {
+	            switch (_c.label) {
 	                case 0:
-	                    requiredBalance = outputs.reduce(function (total, output) { return total + output.amount; }, 0);
-	                    localZeroCount = zeroCount !== null && zeroCount !== void 0 ? zeroCount : 5;
+	                    requiredBalance = 0;
+	                    for (_i = 0, outputs_1 = outputs; _i < outputs_1.length; _i++) {
+	                        output = outputs_1[_i];
+	                        requiredBalance += output.amount;
+	                    }
 	                    consumedBalance = 0;
 	                    inputsAndSignatureKeyPairs = [];
 	                    finished = false;
 	                    isFirst = true;
 	                    zeroBalance = 0;
-	                    _b.label = 1;
+	                    _c.label = 1;
 	                case 1:
 	                    path = nextAddressPath(initialAddressState, isFirst);
 	                    isFirst = false;
@@ -10873,27 +10904,27 @@
 	                    address = converter.Converter.bytesToHex(ed25519Address$1.toAddress());
 	                    return [4 /*yield*/, client.addressEd25519Outputs(address)];
 	                case 2:
-	                    addressOutputIds = _b.sent();
+	                    addressOutputIds = _c.sent();
 	                    if (!(addressOutputIds.count === 0)) return [3 /*break*/, 3];
 	                    zeroBalance++;
-	                    if (zeroBalance >= localZeroCount) {
+	                    if (zeroBalance >= zeroCount) {
 	                        finished = true;
 	                    }
 	                    return [3 /*break*/, 7];
 	                case 3:
-	                    _i = 0, _a = addressOutputIds.outputIds;
-	                    _b.label = 4;
+	                    _a = 0, _b = addressOutputIds.outputIds;
+	                    _c.label = 4;
 	                case 4:
-	                    if (!(_i < _a.length)) return [3 /*break*/, 7];
-	                    addressOutputId = _a[_i];
+	                    if (!(_a < _b.length)) return [3 /*break*/, 7];
+	                    addressOutputId = _b[_a];
 	                    return [4 /*yield*/, client.output(addressOutputId)];
 	                case 5:
-	                    addressOutput = _b.sent();
+	                    addressOutput = _c.sent();
 	                    if (!addressOutput.isSpent &&
 	                        consumedBalance < requiredBalance) {
 	                        if (addressOutput.output.amount === 0) {
 	                            zeroBalance++;
-	                            if (zeroBalance >= localZeroCount) {
+	                            if (zeroBalance >= zeroCount) {
 	                                finished = true;
 	                            }
 	                        }
@@ -10922,13 +10953,13 @@
 	                            }
 	                        }
 	                    }
-	                    _b.label = 6;
+	                    _c.label = 6;
 	                case 6:
-	                    _i++;
+	                    _a++;
 	                    return [3 /*break*/, 4];
 	                case 7:
 	                    if (!finished) return [3 /*break*/, 1];
-	                    _b.label = 8;
+	                    _c.label = 8;
 	                case 8:
 	                    if (consumedBalance < requiredBalance) {
 	                        throw new Error("There are not enough funds in the inputs for the required balance");
@@ -10994,7 +11025,7 @@
 	 */
 	function sendData(client, indexationKey, indexationData) {
 	    return __awaiter(this, void 0, void 0, function () {
-	        var indexationPayload, tips, message, messageId;
+	        var indexationPayload, tipsResponse, message, messageId;
 	        return __generator(this, function (_a) {
 	            switch (_a.label) {
 	                case 0:
@@ -11011,10 +11042,9 @@
 	                    };
 	                    return [4 /*yield*/, client.tips()];
 	                case 1:
-	                    tips = _a.sent();
+	                    tipsResponse = _a.sent();
 	                    message = {
-	                        parent1MessageId: tips.tip1MessageId,
-	                        parent2MessageId: tips.tip2MessageId,
+	                        parents: tipsResponse.tips,
 	                        payload: indexationPayload
 	                    };
 	                    return [4 /*yield*/, client.messageSubmit(message)];
@@ -11032,131 +11062,156 @@
 
 	});
 
-	var IAddressOutputsResponse = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 
+	var IAddressOutputsResponse = /*#__PURE__*/Object.freeze({
+		__proto__: null
 	});
 
-	var IAddressResponse = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 
+	var IAddressResponse = /*#__PURE__*/Object.freeze({
+		__proto__: null
 	});
 
-	var IChildrenResponse = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 
+	var IChildrenResponse = /*#__PURE__*/Object.freeze({
+		__proto__: null
 	});
 
-	var IMessageIdResponse = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 
+	var IMessageIdResponse = /*#__PURE__*/Object.freeze({
+		__proto__: null
 	});
 
-	var IMessagesResponse = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 
+	var IMessagesResponse = /*#__PURE__*/Object.freeze({
+		__proto__: null
 	});
 
-	var IMilestoneResponse = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 
+	var IMilestoneResponse = /*#__PURE__*/Object.freeze({
+		__proto__: null
 	});
 
-	var IOutputResponse = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 
+	var IOutputResponse = /*#__PURE__*/Object.freeze({
+		__proto__: null
 	});
 
-	var IResponse = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 
+	var IResponse = /*#__PURE__*/Object.freeze({
+		__proto__: null
 	});
 
-	var ITipsResponse = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 
+	var ITipsResponse = /*#__PURE__*/Object.freeze({
+		__proto__: null
 	});
 
-	var IAddress = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 
+	var IAddress = /*#__PURE__*/Object.freeze({
+		__proto__: null
 	});
 
-	var IBip44GeneratorState = createCommonjsModule(function (module, exports) {
 	// Copyright 2020 IOTA Stiftung
 	// SPDX-License-Identifier: Apache-2.0
 	Object.defineProperty(exports, "__esModule", { value: true });
 
+	var IBip44GeneratorState = /*#__PURE__*/Object.freeze({
+		__proto__: null
 	});
 
-	var IClient = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 
+	var IClient = /*#__PURE__*/Object.freeze({
+		__proto__: null
 	});
 
-	var IGossipMetrics = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 
+	var IGossipMetrics = /*#__PURE__*/Object.freeze({
+		__proto__: null
 	});
 
-	var IKeyPair = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 
+	var IKeyPair = /*#__PURE__*/Object.freeze({
+		__proto__: null
 	});
 
-	var IMessage = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 
+	var IMessage = /*#__PURE__*/Object.freeze({
+		__proto__: null
 	});
 
-	var IMessageMetadata = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 
+	var IMessageMetadata = /*#__PURE__*/Object.freeze({
+		__proto__: null
 	});
 
-	var IMqttClient = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 
+	var IMqttClient = /*#__PURE__*/Object.freeze({
+		__proto__: null
 	});
 
-	var IMqttStatus = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 
+	var IMqttStatus = /*#__PURE__*/Object.freeze({
+		__proto__: null
 	});
 
-	var INodeInfo = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 
+	var INodeInfo = /*#__PURE__*/Object.freeze({
+		__proto__: null
 	});
 
-	var IPeer = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 
+	var IPeer = /*#__PURE__*/Object.freeze({
+		__proto__: null
 	});
 
-	var IPowProvider = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 
+	var IPowProvider = /*#__PURE__*/Object.freeze({
+		__proto__: null
 	});
 
-	var ISeed = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 
+	var ISeed = /*#__PURE__*/Object.freeze({
+		__proto__: null
 	});
 
-	var ITypeBase = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 
+	var ITypeBase = /*#__PURE__*/Object.freeze({
+		__proto__: null
 	});
 
-	var ledgerInclusionState = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 
+	var ledgerInclusionState = /*#__PURE__*/Object.freeze({
+		__proto__: null
 	});
 
-	var units = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 
+	var units = /*#__PURE__*/Object.freeze({
+		__proto__: null
 	});
 
 	var b1t6 = createCommonjsModule(function (module, exports) {
@@ -11556,11 +11611,14 @@
 	/**
 	 * Log the tips information.
 	 * @param prefix The prefix for the output.
-	 * @param tips The tips to log.
+	 * @param tipsResponse The tips to log.
 	 */
-	function logTips(prefix, tips) {
-	    logger(prefix + "\tTip 1 Message Id:", tips.tip1MessageId);
-	    logger(prefix + "\tTip 2 Message Id:", tips.tip2MessageId);
+	function logTips(prefix, tipsResponse) {
+	    if (tipsResponse.tips) {
+	        for (var i = 0; i < tipsResponse.tips.length; i++) {
+	            logger(prefix + "\tTip " + (i + 1) + " Message Id:", tipsResponse.tips[i]);
+	        }
+	    }
 	}
 	exports.logTips = logTips;
 	/**
@@ -11570,8 +11628,11 @@
 	 */
 	function logMessage(prefix, message) {
 	    logger(prefix + "\tNetwork Id:", message.networkId);
-	    logger(prefix + "\tParent 1 Message Id:", message.parent1MessageId);
-	    logger(prefix + "\tParent 2 Message Id:", message.parent2MessageId);
+	    if (message.parents) {
+	        for (var i = 0; i < message.parents.length; i++) {
+	            logger(prefix + "\tParent " + (i + 1) + " Message Id:", message.parents[i]);
+	        }
+	    }
 	    logPayload(prefix + "\t", message.payload);
 	    if (message.nonce !== undefined) {
 	        logger(prefix + "\tNonce:", message.nonce);
@@ -11585,8 +11646,11 @@
 	 */
 	function logMessageMetadata(prefix, messageMetadata) {
 	    logger(prefix + "\tMessage Id:", messageMetadata.messageId);
-	    logger(prefix + "\tParent 1 Message Id:", messageMetadata.parent1MessageId);
-	    logger(prefix + "\tParent 2 Message Id:", messageMetadata.parent2MessageId);
+	    if (messageMetadata.parents) {
+	        for (var i = 0; i < messageMetadata.parents.length; i++) {
+	            logger(prefix + "\tParent " + (i + 1) + " Message Id:", messageMetadata.parents[i]);
+	        }
+	    }
 	    if (messageMetadata.isSolid !== undefined) {
 	        logger(prefix + "\tIs Solid:", messageMetadata.isSolid);
 	    }
@@ -11645,8 +11709,9 @@
 	            logger(prefix + "Milestone Payload");
 	            logger(prefix + "\tIndex:", payload.index);
 	            logger(prefix + "\tTimestamp:", payload.timestamp);
-	            logger(prefix + "\tParent 1:", payload.parent1MessageId);
-	            logger(prefix + "\tParent 2:", payload.parent2MessageId);
+	            for (var i = 0; i < payload.parents.length; i++) {
+	                logger(prefix + "\tParent " + (i + 1) + ":", payload.parents[i]);
+	            }
 	            logger(prefix + "\tInclusion Merkle Proof:", payload.inclusionMerkleProof);
 	            logger(prefix + "\tPublic Keys:", payload.publicKeys);
 	            logger(prefix + "\tSignatures:", payload.signatures);
@@ -11666,12 +11731,10 @@
 	 * @param unknownAddress The address to log.
 	 */
 	function logAddress(prefix, unknownAddress) {
-	    if (unknownAddress) {
-	        if (unknownAddress.type === IEd25519Address.ED25519_ADDRESS_TYPE) {
-	            var address = unknownAddress;
-	            logger(prefix + "Ed25519 Address");
-	            logger(prefix + "\tAddress:", address.address);
-	        }
+	    if ((unknownAddress === null || unknownAddress === void 0 ? void 0 : unknownAddress.type) === IEd25519Address.ED25519_ADDRESS_TYPE) {
+	        var address = unknownAddress;
+	        logger(prefix + "Ed25519 Address");
+	        logger(prefix + "\tAddress:", address.address);
 	    }
 	}
 	exports.logAddress = logAddress;
@@ -11681,13 +11744,11 @@
 	 * @param unknownSignature The signature to log.
 	 */
 	function logSignature(prefix, unknownSignature) {
-	    if (unknownSignature) {
-	        if (unknownSignature.type === IEd25519Signature.ED25519_SIGNATURE_TYPE) {
-	            var signature = unknownSignature;
-	            logger(prefix + "Ed25519 Signature");
-	            logger(prefix + "\tPublic Key:", signature.publicKey);
-	            logger(prefix + "\tSignature:", signature.signature);
-	        }
+	    if ((unknownSignature === null || unknownSignature === void 0 ? void 0 : unknownSignature.type) === IEd25519Signature.ED25519_SIGNATURE_TYPE) {
+	        var signature = unknownSignature;
+	        logger(prefix + "Ed25519 Signature");
+	        logger(prefix + "\tPublic Key:", signature.publicKey);
+	        logger(prefix + "\tSignature:", signature.signature);
 	    }
 	}
 	exports.logSignature = logSignature;
@@ -11697,13 +11758,11 @@
 	 * @param unknownInput The input to log.
 	 */
 	function logInput(prefix, unknownInput) {
-	    if (unknownInput) {
-	        if (unknownInput.type === IUTXOInput.UTXO_INPUT_TYPE) {
-	            var input = unknownInput;
-	            logger(prefix + "UTXO Input");
-	            logger(prefix + "\tTransaction Id:", input.transactionId);
-	            logger(prefix + "\tTransaction Output Index:", input.transactionOutputIndex);
-	        }
+	    if ((unknownInput === null || unknownInput === void 0 ? void 0 : unknownInput.type) === IUTXOInput.UTXO_INPUT_TYPE) {
+	        var input = unknownInput;
+	        logger(prefix + "UTXO Input");
+	        logger(prefix + "\tTransaction Id:", input.transactionId);
+	        logger(prefix + "\tTransaction Output Index:", input.transactionOutputIndex);
 	    }
 	}
 	exports.logInput = logInput;
@@ -11713,13 +11772,11 @@
 	 * @param unknownOutput The output to log.
 	 */
 	function logOutput(prefix, unknownOutput) {
-	    if (unknownOutput) {
-	        if (unknownOutput.type === ISigLockedSingleOutput.SIG_LOCKED_SINGLE_OUTPUT_TYPE) {
-	            var output = unknownOutput;
-	            logger(prefix + "Signature Locked Single Output");
-	            logAddress(prefix + "\t\t", output.address);
-	            logger(prefix + "\t\tAmount:", output.amount);
-	        }
+	    if ((unknownOutput === null || unknownOutput === void 0 ? void 0 : unknownOutput.type) === ISigLockedSingleOutput.SIG_LOCKED_SINGLE_OUTPUT_TYPE) {
+	        var output = unknownOutput;
+	        logger(prefix + "Signature Locked Single Output");
+	        logAddress(prefix + "\t\t", output.address);
+	        logger(prefix + "\t\tAmount:", output.amount);
 	    }
 	}
 	exports.logOutput = logOutput;
@@ -11729,17 +11786,15 @@
 	 * @param unknownUnlockBlock The unlock block to log.
 	 */
 	function logUnlockBlock(prefix, unknownUnlockBlock) {
-	    if (unknownUnlockBlock) {
-	        if (unknownUnlockBlock.type === ISignatureUnlockBlock.SIGNATURE_UNLOCK_BLOCK_TYPE) {
-	            var unlockBlock = unknownUnlockBlock;
-	            logger(prefix + "\tSignature Unlock Block");
-	            logSignature(prefix + "\t\t\t", unlockBlock.signature);
-	        }
-	        else if (unknownUnlockBlock.type === IReferenceUnlockBlock.REFERENCE_UNLOCK_BLOCK_TYPE) {
-	            var unlockBlock = unknownUnlockBlock;
-	            logger(prefix + "\tReference Unlock Block");
-	            logger(prefix + "\t\tReference:", unlockBlock.reference);
-	        }
+	    if ((unknownUnlockBlock === null || unknownUnlockBlock === void 0 ? void 0 : unknownUnlockBlock.type) === ISignatureUnlockBlock.SIGNATURE_UNLOCK_BLOCK_TYPE) {
+	        var unlockBlock = unknownUnlockBlock;
+	        logger(prefix + "\tSignature Unlock Block");
+	        logSignature(prefix + "\t\t\t", unlockBlock.signature);
+	    }
+	    else if ((unknownUnlockBlock === null || unknownUnlockBlock === void 0 ? void 0 : unknownUnlockBlock.type) === IReferenceUnlockBlock.REFERENCE_UNLOCK_BLOCK_TYPE) {
+	        var unlockBlock = unknownUnlockBlock;
+	        logger(prefix + "\tReference Unlock Block");
+	        logger(prefix + "\t\tReference:", unlockBlock.reference);
 	    }
 	}
 	exports.logUnlockBlock = logUnlockBlock;
@@ -12142,6 +12197,58 @@
 
 	});
 
+	var require$$13 = /*@__PURE__*/getAugmentedNamespace(singleNodeClientOptions);
+
+	var require$$38 = /*@__PURE__*/getAugmentedNamespace(IAddressOutputsResponse);
+
+	var require$$39 = /*@__PURE__*/getAugmentedNamespace(IAddressResponse);
+
+	var require$$40 = /*@__PURE__*/getAugmentedNamespace(IChildrenResponse);
+
+	var require$$41 = /*@__PURE__*/getAugmentedNamespace(IMessageIdResponse);
+
+	var require$$42 = /*@__PURE__*/getAugmentedNamespace(IMessagesResponse);
+
+	var require$$43 = /*@__PURE__*/getAugmentedNamespace(IMilestoneResponse);
+
+	var require$$44 = /*@__PURE__*/getAugmentedNamespace(IOutputResponse);
+
+	var require$$45 = /*@__PURE__*/getAugmentedNamespace(IResponse);
+
+	var require$$46 = /*@__PURE__*/getAugmentedNamespace(ITipsResponse);
+
+	var require$$47 = /*@__PURE__*/getAugmentedNamespace(IAddress);
+
+	var require$$48 = /*@__PURE__*/getAugmentedNamespace(IBip44GeneratorState);
+
+	var require$$49 = /*@__PURE__*/getAugmentedNamespace(IClient);
+
+	var require$$52 = /*@__PURE__*/getAugmentedNamespace(IGossipMetrics);
+
+	var require$$54 = /*@__PURE__*/getAugmentedNamespace(IKeyPair);
+
+	var require$$55 = /*@__PURE__*/getAugmentedNamespace(IMessage);
+
+	var require$$56 = /*@__PURE__*/getAugmentedNamespace(IMessageMetadata);
+
+	var require$$58 = /*@__PURE__*/getAugmentedNamespace(IMqttClient);
+
+	var require$$59 = /*@__PURE__*/getAugmentedNamespace(IMqttStatus);
+
+	var require$$60 = /*@__PURE__*/getAugmentedNamespace(INodeInfo);
+
+	var require$$61 = /*@__PURE__*/getAugmentedNamespace(IPeer);
+
+	var require$$62 = /*@__PURE__*/getAugmentedNamespace(IPowProvider);
+
+	var require$$64 = /*@__PURE__*/getAugmentedNamespace(ISeed);
+
+	var require$$69 = /*@__PURE__*/getAugmentedNamespace(ITypeBase);
+
+	var require$$71 = /*@__PURE__*/getAugmentedNamespace(ledgerInclusionState);
+
+	var require$$72 = /*@__PURE__*/getAugmentedNamespace(units);
+
 	var es = createCommonjsModule(function (module, exports) {
 	var __createBinding = (commonjsGlobal && commonjsGlobal.__createBinding) || (Object.create ? (function(o, m, k, k2) {
 	    if (k2 === undefined) k2 = k;
@@ -12169,7 +12276,7 @@
 	__exportStar(clientError, exports);
 	__exportStar(mqttClient, exports);
 	__exportStar(singleNodeClient, exports);
-	__exportStar(singleNodeClientOptions, exports);
+	__exportStar(require$$13, exports);
 	__exportStar(bech32, exports);
 	__exportStar(bip32Path, exports);
 	__exportStar(bip39, exports);
@@ -12194,41 +12301,41 @@
 	__exportStar(send_1, exports);
 	__exportStar(sendAdvanced_1, exports);
 	__exportStar(sendData_1, exports);
-	__exportStar(IAddressOutputsResponse, exports);
-	__exportStar(IAddressResponse, exports);
-	__exportStar(IChildrenResponse, exports);
-	__exportStar(IMessageIdResponse, exports);
-	__exportStar(IMessagesResponse, exports);
-	__exportStar(IMilestoneResponse, exports);
-	__exportStar(IOutputResponse, exports);
-	__exportStar(IResponse, exports);
-	__exportStar(ITipsResponse, exports);
-	__exportStar(IAddress, exports);
-	__exportStar(IBip44GeneratorState, exports);
-	__exportStar(IClient, exports);
+	__exportStar(require$$38, exports);
+	__exportStar(require$$39, exports);
+	__exportStar(require$$40, exports);
+	__exportStar(require$$41, exports);
+	__exportStar(require$$42, exports);
+	__exportStar(require$$43, exports);
+	__exportStar(require$$44, exports);
+	__exportStar(require$$45, exports);
+	__exportStar(require$$46, exports);
+	__exportStar(require$$47, exports);
+	__exportStar(require$$48, exports);
+	__exportStar(require$$49, exports);
 	__exportStar(IEd25519Address, exports);
 	__exportStar(IEd25519Signature, exports);
-	__exportStar(IGossipMetrics, exports);
+	__exportStar(require$$52, exports);
 	__exportStar(IIndexationPayload, exports);
-	__exportStar(IKeyPair, exports);
-	__exportStar(IMessage, exports);
-	__exportStar(IMessageMetadata, exports);
+	__exportStar(require$$54, exports);
+	__exportStar(require$$55, exports);
+	__exportStar(require$$56, exports);
 	__exportStar(IMilestonePayload, exports);
-	__exportStar(IMqttClient, exports);
-	__exportStar(IMqttStatus, exports);
-	__exportStar(INodeInfo, exports);
-	__exportStar(IPeer, exports);
-	__exportStar(IPowProvider, exports);
+	__exportStar(require$$58, exports);
+	__exportStar(require$$59, exports);
+	__exportStar(require$$60, exports);
+	__exportStar(require$$61, exports);
+	__exportStar(require$$62, exports);
 	__exportStar(IReferenceUnlockBlock, exports);
-	__exportStar(ISeed, exports);
+	__exportStar(require$$64, exports);
 	__exportStar(ISigLockedSingleOutput, exports);
 	__exportStar(ISignatureUnlockBlock, exports);
 	__exportStar(ITransactionEssence, exports);
 	__exportStar(ITransactionPayload, exports);
-	__exportStar(ITypeBase, exports);
+	__exportStar(require$$69, exports);
 	__exportStar(IUTXOInput, exports);
-	__exportStar(ledgerInclusionState, exports);
-	__exportStar(units, exports);
+	__exportStar(require$$71, exports);
+	__exportStar(require$$72, exports);
 	__exportStar(localPowProvider, exports);
 	__exportStar(ed25519Seed, exports);
 	__exportStar(arrayHelper, exports);

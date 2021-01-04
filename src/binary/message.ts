@@ -3,15 +3,14 @@
 import { IMessage } from "../models/IMessage";
 import { ReadStream } from "../utils/readStream";
 import { WriteStream } from "../utils/writeStream";
-import { MESSAGE_ID_LENGTH, UINT64_SIZE } from "./common";
+import { BYTE_SIZE, MESSAGE_ID_LENGTH, UINT64_SIZE } from "./common";
 import { deserializePayload, MIN_PAYLOAD_LENGTH, serializePayload } from "./payload";
 
 const MIN_MESSAGE_LENGTH: number = UINT64_SIZE +
+    BYTE_SIZE +
     (2 * MESSAGE_ID_LENGTH) +
     MIN_PAYLOAD_LENGTH +
     UINT64_SIZE;
-
-const EMPTY_MESSAGE_ID_HEX: string = "0".repeat(MESSAGE_ID_LENGTH * 2);
 
 /**
  * The maximum length of a message.
@@ -31,8 +30,13 @@ export function deserializeMessage(readStream: ReadStream): IMessage {
 
     const networkId = readStream.readUInt64("message.networkId");
 
-    const parent1MessageId = readStream.readFixedHex("message.parent1MessageId", MESSAGE_ID_LENGTH);
-    const parent2MessageId = readStream.readFixedHex("message.parent2MessageId", MESSAGE_ID_LENGTH);
+    const numParents = readStream.readByte("message.numParents");
+    const parents: string[] = [];
+
+    for (let i = 0; i < numParents; i++) {
+        const parentMessageId = readStream.readFixedHex("message.parentMessageId", MESSAGE_ID_LENGTH);
+        parents.push(parentMessageId);
+    }
 
     const payload = deserializePayload(readStream);
 
@@ -45,9 +49,8 @@ export function deserializeMessage(readStream: ReadStream): IMessage {
 
     return {
         networkId: networkId.toString(10),
+        parents,
         payload,
-        parent1MessageId,
-        parent2MessageId,
         nonce: nonce.toString(10)
     };
 }
@@ -60,10 +63,15 @@ export function deserializeMessage(readStream: ReadStream): IMessage {
 export function serializeMessage(writeStream: WriteStream, object: IMessage): void {
     writeStream.writeUInt64("message.networkId", BigInt(object.networkId ?? 0));
 
-    writeStream.writeFixedHex("message.parent1MessageId",
-        MESSAGE_ID_LENGTH, object.parent1MessageId ?? EMPTY_MESSAGE_ID_HEX);
-    writeStream.writeFixedHex("message.parent2MessageId",
-        MESSAGE_ID_LENGTH, object.parent2MessageId ?? EMPTY_MESSAGE_ID_HEX);
+    const numParents = object.parents?.length ?? 0;
+    writeStream.writeByte("message.numParents", numParents);
+
+    if (object.parents) {
+        for (let i = 0; i < numParents; i++) {
+            writeStream.writeFixedHex(`message.parentMessageId${i + 1}`,
+                MESSAGE_ID_LENGTH, object.parents[i]);
+        }
+    }
 
     serializePayload(writeStream, object.payload);
 

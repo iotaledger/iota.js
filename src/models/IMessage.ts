@@ -14,14 +14,9 @@ export interface IMessage {
     networkId?: string;
 
     /**
-     * The parent 1 message id.
+     * The parent message ids.
      */
-    parent1MessageId?: string;
-
-    /**
-     * The parent 2 message id.
-     */
-    parent2MessageId?: string;
+    parents?: string[];
 
     /**
      * The payload contents.

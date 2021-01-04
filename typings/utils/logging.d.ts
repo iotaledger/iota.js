@@ -17,9 +17,9 @@ export declare function logInfo(prefix: string, info: INodeInfo): void;
 /**
  * Log the tips information.
  * @param prefix The prefix for the output.
- * @param tips The tips to log.
+ * @param tipsResponse The tips to log.
  */
-export declare function logTips(prefix: string, tips: ITipsResponse): void;
+export declare function logTips(prefix: string, tipsResponse: ITipsResponse): void;
 /**
  * Log a message to the console.
  * @param prefix The prefix for the output.

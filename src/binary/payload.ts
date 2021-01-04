@@ -14,7 +14,8 @@ import { deserializeUnlockBlocks, serializeUnlockBlocks } from "./unlockBlock";
 
 export const MIN_PAYLOAD_LENGTH: number = TYPE_LENGTH;
 export const MIN_MILESTONE_PAYLOAD_LENGTH: number = MIN_PAYLOAD_LENGTH + UINT32_SIZE + UINT64_SIZE +
-    MESSAGE_ID_LENGTH + MESSAGE_ID_LENGTH + MERKLE_PROOF_LENGTH +
+    BYTE_SIZE + MESSAGE_ID_LENGTH + MESSAGE_ID_LENGTH +
+    MERKLE_PROOF_LENGTH +
     BYTE_SIZE + Ed25519.PUBLIC_KEY_SIZE +
     BYTE_SIZE + Ed25519.SIGNATURE_SIZE;
 export const MIN_INDEXATION_PAYLOAD_LENGTH: number = MIN_PAYLOAD_LENGTH + STRING_LENGTH + STRING_LENGTH;
@@ -161,8 +162,12 @@ export function deserializeMilestonePayload(readStream: ReadStream): IMilestoneP
     }
     const index = readStream.readUInt32("payloadMilestone.index");
     const timestamp = readStream.readUInt64("payloadMilestone.timestamp");
-    const parent1MessageId = readStream.readFixedHex("payloadMilestone.parent1MessageId", MESSAGE_ID_LENGTH);
-    const parent2MessageId = readStream.readFixedHex("payloadMilestone.parent2MessageId", MESSAGE_ID_LENGTH);
+    const numParents = readStream.readByte("payloadMilestone.numParents");
+    const parents: string[] = [];
+    for (let i = 0; i < numParents; i++) {
+        const parentMessageId = readStream.readFixedHex(`payloadMilestone.parentMessageId${i + 1}`, MESSAGE_ID_LENGTH);
+        parents.push(parentMessageId);
+    }
     const inclusionMerkleProof = readStream.readFixedHex("payloadMilestone.inclusionMerkleProof", MERKLE_PROOF_LENGTH);
     const publicKeysCount = readStream.readByte("payloadMilestone.publicKeysCount");
     const publicKeys = [];
@@ -179,8 +184,7 @@ export function deserializeMilestonePayload(readStream: ReadStream): IMilestoneP
         type: 1,
         index,
         timestamp: Number(timestamp),
-        parent1MessageId,
-        parent2MessageId,
+        parents,
         inclusionMerkleProof,
         publicKeys,
         signatures
@@ -197,8 +201,12 @@ export function serializeMilestonePayload(writeStream: WriteStream,
     writeStream.writeUInt32("payloadMilestone.type", object.type);
     writeStream.writeUInt32("payloadMilestone.index", object.index);
     writeStream.writeUInt64("payloadMilestone.timestamp", BigInt(object.timestamp));
-    writeStream.writeFixedHex("payloadMilestone.parent1MessageId", MESSAGE_ID_LENGTH, object.parent1MessageId);
-    writeStream.writeFixedHex("payloadMilestone.parent2MessageId", MESSAGE_ID_LENGTH, object.parent2MessageId);
+
+    writeStream.writeByte("payloadMilestone.numParents", object.parents.length);
+    for (let i = 0; i < object.parents.length; i++) {
+        writeStream.writeFixedHex(`payloadMilestone.parentMessageId${i + 1}`,
+            MESSAGE_ID_LENGTH, object.parents[i]);
+    }
 
     writeStream.writeFixedHex("payloadMilestone.inclusionMerkleProof",
         MERKLE_PROOF_LENGTH, object.inclusionMerkleProof);
