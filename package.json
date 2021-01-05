@@ -15,6 +15,7 @@
     },
     "license": "Apache-2.0",
     "dependencies": {
+        "big-integer": "^1.6.48",
         "mqtt": "^4.2.4",
         "node-fetch": "^2.6.1"
     },
@@ -51,6 +52,7 @@
     "devDependencies": {
         "@rollup/plugin-commonjs": "^15.1.0",
         "@rollup/plugin-node-resolve": "^11.0.0",
+        "@rollup/plugin-replace": "^2.3.4",
         "@types/jest": "^26.0.15",
         "@types/node-fetch": "^2.5.7",
         "@typescript-eslint/eslint-plugin": "^4.5.0",

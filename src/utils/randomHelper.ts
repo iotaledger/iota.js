@@ -11,17 +11,15 @@ export class RandomHelper {
      * @returns The random array.
      */
     public static generate(length: number): Uint8Array {
-        let randomBytes: Uint8Array;
-        if (globalThis.crypto?.getRandomValues) {
-            randomBytes = new Uint8Array(length);
-            globalThis.crypto.getRandomValues(randomBytes);
-        } else if (typeof require !== "undefined") {
+        if (process.env.BROWSER) {
+            const randomBytes = new Uint8Array(length);
+            window.crypto.getRandomValues(randomBytes);
+            return randomBytes;
+        // eslint-disable-next-line no-else-return
+        } else {
             // eslint-disable-next-line @typescript-eslint/no-var-requires,@typescript-eslint/no-require-imports
             const crypto = require("crypto");
-            randomBytes = crypto.randomBytes(length);
-        } else {
-            throw new TypeError("No random method available");
+            return crypto.randomBytes(length) as Uint8Array;
         }
-        return randomBytes;
     }
 }

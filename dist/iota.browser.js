@@ -1,13 +1,13 @@
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('crypto'), require('mqtt')) :
-	typeof define === 'function' && define.amd ? define(['crypto', 'mqtt'], factory) :
-	(global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.Iota = factory(global.crypto, global.mqtt));
-}(this, (function (require$$0, require$$0$1) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('big-integer'), require('mqtt')) :
+	typeof define === 'function' && define.amd ? define(['big-integer', 'mqtt'], factory) :
+	(global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.Iota = factory(global.BigInteger, global.mqtt));
+}(this, (function (require$$0$1, require$$0) { 'use strict';
 
 	function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
-	var require$$0__default = /*#__PURE__*/_interopDefaultLegacy(require$$0);
 	var require$$0__default$1 = /*#__PURE__*/_interopDefaultLegacy(require$$0$1);
+	var require$$0__default = /*#__PURE__*/_interopDefaultLegacy(require$$0);
 
 	var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
@@ -1317,21 +1317,12 @@
 	     * @returns The random array.
 	     */
 	    RandomHelper.generate = function (length) {
-	        var _a;
-	        var randomBytes;
-	        if ((_a = globalThis.crypto) === null || _a === void 0 ? void 0 : _a.getRandomValues) {
-	            randomBytes = new Uint8Array(length);
-	            globalThis.crypto.getRandomValues(randomBytes);
+	        {
+	            var randomBytes = new Uint8Array(length);
+	            window.crypto.getRandomValues(randomBytes);
+	            return randomBytes;
+	            // eslint-disable-next-line no-else-return
 	        }
-	        else if (typeof commonjsRequire !== "undefined") {
-	            // eslint-disable-next-line @typescript-eslint/no-var-requires,@typescript-eslint/no-require-imports
-	            var crypto_1 = require$$0__default['default'];
-	            randomBytes = crypto_1.randomBytes(length);
-	        }
-	        else {
-	            throw new TypeError("No random method available");
-	        }
-	        return randomBytes;
 	    };
 	    return RandomHelper;
 	}());
@@ -5245,7 +5236,7 @@
 	exports.MqttClient = void 0;
 	// Copyright 2020 IOTA Stiftung
 	// SPDX-License-Identifier: Apache-2.0
-	var mqtt = __importStar(require$$0__default$1['default']);
+	var mqtt = __importStar(require$$0__default['default']);
 
 
 
@@ -12246,6 +12237,8 @@
 	});
 
 	var index_browser = createCommonjsModule(function (module, exports) {
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
 	var __createBinding = (commonjsGlobal && commonjsGlobal.__createBinding) || (Object.create ? (function(o, m, k, k2) {
 	    if (k2 === undefined) k2 = k;
 	    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
@@ -12257,8 +12250,12 @@
 	    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 	};
 	Object.defineProperty(exports, "__esModule", { value: true });
-	// Copyright 2020 IOTA Stiftung
-	// SPDX-License-Identifier: Apache-2.0
+	// Polyfills for Browser
+	// BigInt
+	if (!window.BigInt) {
+	    // eslint-disable-next-line @typescript-eslint/no-require-imports
+	    window.BigInt = require$$0__default$1['default'];
+	}
 	__exportStar(es, exports);
 
 	});

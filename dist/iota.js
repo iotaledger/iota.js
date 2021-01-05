@@ -1318,21 +1318,11 @@
 	     * @returns The random array.
 	     */
 	    RandomHelper.generate = function (length) {
-	        var _a;
-	        var randomBytes;
-	        if ((_a = globalThis.crypto) === null || _a === void 0 ? void 0 : _a.getRandomValues) {
-	            randomBytes = new Uint8Array(length);
-	            globalThis.crypto.getRandomValues(randomBytes);
-	        }
-	        else if (typeof commonjsRequire !== "undefined") {
+	        {
 	            // eslint-disable-next-line @typescript-eslint/no-var-requires,@typescript-eslint/no-require-imports
 	            var crypto_1 = require$$0__default['default'];
-	            randomBytes = crypto_1.randomBytes(length);
+	            return crypto_1.randomBytes(length);
 	        }
-	        else {
-	            throw new TypeError("No random method available");
-	        }
-	        return randomBytes;
 	    };
 	    return RandomHelper;
 	}());
