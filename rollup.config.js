@@ -28,7 +28,7 @@ export default {
             "node-fetch": "node-fetch",
             "crypto": "crypto",
             "mqtt": "mqtt",
-            "big-integer": "BigInteger"
+            "big-integer": "big-integer"
         }
     },
     external: (process.env.BROWSER

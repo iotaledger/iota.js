@@ -2,13 +2,13 @@
 	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('node-fetch'), require('crypto'), require('mqtt')) :
 	typeof define === 'function' && define.amd ? define(['node-fetch', 'crypto', 'mqtt'], factory) :
 	(global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.Iota = factory(global['node-fetch'], global.crypto, global.mqtt));
-}(this, (function (require$$0$2, require$$0, require$$0$1) { 'use strict';
+}(this, (function (require$$0, require$$0$1, require$$0$2) { 'use strict';
 
 	function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
-	var require$$0__default$2 = /*#__PURE__*/_interopDefaultLegacy(require$$0$2);
 	var require$$0__default = /*#__PURE__*/_interopDefaultLegacy(require$$0);
 	var require$$0__default$1 = /*#__PURE__*/_interopDefaultLegacy(require$$0$1);
+	var require$$0__default$2 = /*#__PURE__*/_interopDefaultLegacy(require$$0$2);
 
 	var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
@@ -28,6 +28,19 @@
 
 	function commonjsRequire () {
 		throw new Error('Dynamic requires are not currently supported by @rollup/plugin-commonjs');
+	}
+
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
+	// Fetch
+	if (!globalThis.fetch) {
+	    // eslint-disable-next-line @typescript-eslint/no-require-imports
+	    globalThis.fetch = require$$0__default['default'];
+	}
+	// Base 64 Conversion
+	if (!globalThis.btoa) {
+	    globalThis.btoa = function (a) { return Buffer.from(a).toString("base64"); };
+	    globalThis.atob = function (a) { return Buffer.from(a, "base64").toString(); };
 	}
 
 	var blake2b = createCommonjsModule(function (module, exports) {
@@ -1320,7 +1333,7 @@
 	    RandomHelper.generate = function (length) {
 	        {
 	            // eslint-disable-next-line @typescript-eslint/no-var-requires,@typescript-eslint/no-require-imports
-	            var crypto_1 = require$$0__default['default'];
+	            var crypto_1 = require$$0__default$1['default'];
 	            return crypto_1.randomBytes(length);
 	        }
 	    };
@@ -5236,7 +5249,7 @@
 	exports.MqttClient = void 0;
 	// Copyright 2020 IOTA Stiftung
 	// SPDX-License-Identifier: Apache-2.0
-	var mqtt = __importStar(require$$0__default$1['default']);
+	var mqtt = __importStar(require$$0__default$2['default']);
 
 
 
@@ -12250,17 +12263,7 @@
 	    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 	};
 	Object.defineProperty(exports, "__esModule", { value: true });
-	// Polyfills for NodeJS
-	// Fetch
-	if (!globalThis.fetch) {
-	    // eslint-disable-next-line @typescript-eslint/no-require-imports
-	    globalThis.fetch = require$$0__default$2['default'];
-	}
-	// Base 64 Conversion
-	if (!globalThis.btoa) {
-	    globalThis.btoa = function (a) { return Buffer.from(a).toString("base64"); };
-	    globalThis.atob = function (a) { return Buffer.from(a, "base64").toString(); };
-	}
+
 	__exportStar(es, exports);
 
 	});
