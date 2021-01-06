@@ -1,5 +1,6 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
+import { ConflictReason } from "./conflictReason";
 import { LedgerInclusionState } from "./ledgerInclusionState";
 
 /**
@@ -40,6 +41,11 @@ export interface IMessageMetadata {
      * The ledger inclusion state.
      */
     ledgerInclusionState?: LedgerInclusionState;
+
+    /**
+     * The conflict reason.
+     */
+    conflictReason?: ConflictReason;
 
     /**
      * Should the message be promoted.

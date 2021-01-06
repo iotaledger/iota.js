@@ -27,7 +27,6 @@
 * [HmacSha256](classes/hmacsha256.md)
 * [HmacSha512](classes/hmacsha512.md)
 * [LocalPowProvider](classes/localpowprovider.md)
-* [MessageHelper](classes/messagehelper.md)
 * [MqttClient](classes/mqttclient.md)
 * [Pbkdf2](classes/pbkdf2.md)
 * [PowHelper](classes/powhelper.md)
@@ -175,6 +174,10 @@
 * [serializeUnlockBlock](README.md#serializeunlockblock)
 * [serializeUnlockBlocks](README.md#serializeunlockblocks)
 * [setLogger](README.md#setlogger)
+
+### Object literals
+
+* [CONFLICT\_REASON\_STRINGS](README.md#conflict_reason_strings)
 
 ## Type aliases
 
@@ -1685,3 +1688,25 @@ Name | Type | Description |
 `log` | (message: string, data?: unknown) => void | The logger.  |
 
 **Returns:** void
+
+## Object literals
+
+### CONFLICT\_REASON\_STRINGS
+
+▪ `Const` **CONFLICT\_REASON\_STRINGS**: object
+
+Conflict reason strings.
+
+#### Properties:
+
+Name | Type | Value |
+------ | ------ | ------ |
+`[ConflictReason.inputOutputSumMismatch]` | string | "The sum of the inputs and output values does not match" |
+`[ConflictReason.inputUTXOAlreadySpentInThisMilestone]` | string | "The referenced UTXO was already spent while confirming this milestone" |
+`[ConflictReason.inputUTXOAlreadySpent]` | string | "The referenced UTXO was already spent" |
+`[ConflictReason.inputUTXONotFound]` | string | "The referenced UTXO cannot be found" |
+`[ConflictReason.invalidSignature]` | string | "The unlock block signature is invalid" |
+`[ConflictReason.none]` | string | "Not conflicting" |
+`[ConflictReason.semanticValidationFailed]` | string | "The semantic validation failed" |
+`[ConflictReason.unsupportedAddressType]` | string | "The address type used is unsupported" |
+`[ConflictReason.unsupportedInputOrOutputType]` | string | "The input or output type used is unsupported" |

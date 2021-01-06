@@ -94,6 +94,9 @@ export function logMessageMetadata(prefix: string, messageMetadata: IMessageMeta
         logger(`${prefix}\tReferenced By Milestone Index:`, messageMetadata.referencedByMilestoneIndex);
     }
     logger(`${prefix}\tLedger Inclusion State:`, messageMetadata.ledgerInclusionState);
+    if (messageMetadata.conflictReason !== undefined) {
+        logger(`${prefix}\tConflict Reason:`, messageMetadata.conflictReason);
+    }
     if (messageMetadata.shouldPromote !== undefined) {
         logger(`${prefix}\tShould Promote:`, messageMetadata.shouldPromote);
     }

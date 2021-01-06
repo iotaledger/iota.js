@@ -1,3 +1,4 @@
+import { ConflictReason } from "./conflictReason";
 import { LedgerInclusionState } from "./ledgerInclusionState";
 /**
  * Response from the metadata endpoint.
@@ -31,6 +32,10 @@ export interface IMessageMetadata {
      * The ledger inclusion state.
      */
     ledgerInclusionState?: LedgerInclusionState;
+    /**
+     * The conflict reason.
+     */
+    conflictReason?: ConflictReason;
     /**
      * Should the message be promoted.
      */

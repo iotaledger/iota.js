@@ -14,6 +14,7 @@ Response from the metadata endpoint.
 
 ### Properties
 
+* [conflictReason](imessagemetadata.md#conflictreason)
 * [isSolid](imessagemetadata.md#issolid)
 * [ledgerInclusionState](imessagemetadata.md#ledgerinclusionstate)
 * [messageId](imessagemetadata.md#messageid)
@@ -25,6 +26,14 @@ Response from the metadata endpoint.
 * [shouldReattach](imessagemetadata.md#shouldreattach)
 
 ## Properties
+
+### conflictReason
+
+• `Optional` **conflictReason**: ConflictReason
+
+The conflict reason.
+
+___
 
 ### isSolid
 
