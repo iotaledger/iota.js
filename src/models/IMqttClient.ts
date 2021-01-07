@@ -1,6 +1,6 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import { IMilestoneResponse } from "./api/IMilestoneResponse";
+import { IMqttMilestoneResponse } from "./api/IMqttMilestoneResponse";
 import { IOutputResponse } from "./api/IOutputResponse";
 import { IMessage } from "./IMessage";
 import { IMessageMetadata } from "./IMessageMetadata";
@@ -16,7 +16,7 @@ export interface IMqttClient {
      * @returns A subscription Id which can be used to unsubscribe.
      */
     milestonesLatest(
-        callback: (topic: string, data: IMilestoneResponse) => void): string;
+        callback: (topic: string, data: IMqttMilestoneResponse) => void): string;
 
     /**
      * Subscribe to the latest solid milestone updates.
@@ -24,7 +24,7 @@ export interface IMqttClient {
      * @returns A subscription Id which can be used to unsubscribe.
      */
     milestonesSolid(
-        callback: (topic: string, data: IMilestoneResponse) => void): string;
+        callback: (topic: string, data: IMqttMilestoneResponse) => void): string;
 
     /**
      * Subscribe to metadata updates for a specific message.

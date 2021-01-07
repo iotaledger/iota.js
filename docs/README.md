@@ -61,6 +61,7 @@
 * [IMilestonePayload](interfaces/imilestonepayload.md)
 * [IMilestoneResponse](interfaces/imilestoneresponse.md)
 * [IMqttClient](interfaces/imqttclient.md)
+* [IMqttMilestoneResponse](interfaces/imqttmilestoneresponse.md)
 * [IMqttStatus](interfaces/imqttstatus.md)
 * [INodeInfo](interfaces/inodeinfo.md)
 * [IOutputResponse](interfaces/ioutputresponse.md)

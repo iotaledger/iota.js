@@ -187,7 +187,7 @@ ___
 
 ### milestonesLatest
 
-▸ **milestonesLatest**(`callback`: (topic: string, data: [IMilestoneResponse](imilestoneresponse.md)) => void): string
+▸ **milestonesLatest**(`callback`: (topic: string, data: [IMqttMilestoneResponse](imqttmilestoneresponse.md)) => void): string
 
 Subscribe to the latest milestone updates.
 
@@ -195,7 +195,7 @@ Subscribe to the latest milestone updates.
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`callback` | (topic: string, data: [IMilestoneResponse](imilestoneresponse.md)) => void | The callback which is called when new data arrives. |
+`callback` | (topic: string, data: [IMqttMilestoneResponse](imqttmilestoneresponse.md)) => void | The callback which is called when new data arrives. |
 
 **Returns:** string
 
@@ -205,7 +205,7 @@ ___
 
 ### milestonesSolid
 
-▸ **milestonesSolid**(`callback`: (topic: string, data: [IMilestoneResponse](imilestoneresponse.md)) => void): string
+▸ **milestonesSolid**(`callback`: (topic: string, data: [IMqttMilestoneResponse](imqttmilestoneresponse.md)) => void): string
 
 Subscribe to the latest solid milestone updates.
 
@@ -213,7 +213,7 @@ Subscribe to the latest solid milestone updates.
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`callback` | (topic: string, data: [IMilestoneResponse](imilestoneresponse.md)) => void | The callback which is called when new data arrives. |
+`callback` | (topic: string, data: [IMqttMilestoneResponse](imqttmilestoneresponse.md)) => void | The callback which is called when new data arrives. |
 
 **Returns:** string
 
