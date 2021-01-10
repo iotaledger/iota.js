@@ -14,5 +14,5 @@ export interface IIndexationPayload extends ITypeBase<2> {
     /**
      * The index data.
      */
-    data: string;
+    data?: string;
 }

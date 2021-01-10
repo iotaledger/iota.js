@@ -90,7 +90,7 @@ export class WriteStream {
      */
     public writeFixedHex(name: string, length: number, val: string): void {
         if (!Converter.isHex(val)) {
-            throw new Error(`The ${val} should be in hex format`);
+            throw new Error(`The ${name} should be in hex format`);
         }
 
         // Hex should be twice the length as each byte is 2 ascii characters

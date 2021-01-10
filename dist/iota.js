@@ -4772,8 +4772,13 @@
 	    }
 	    writeStream.writeUInt32("payloadIndexation.type", object.type);
 	    writeStream.writeString("payloadIndexation.index", object.index);
-	    writeStream.writeUInt32("payloadIndexation.dataLength", object.data.length / 2);
-	    writeStream.writeFixedHex("payloadIndexation.data", object.data.length / 2, object.data);
+	    if (object.data) {
+	        writeStream.writeUInt32("payloadIndexation.dataLength", object.data.length / 2);
+	        writeStream.writeFixedHex("payloadIndexation.data", object.data.length / 2, object.data);
+	    }
+	    else {
+	        writeStream.writeUInt32("payloadIndexation.dataLength", 0);
+	    }
 	}
 	exports.serializeIndexationPayload = serializeIndexationPayload;
 
@@ -6086,7 +6091,7 @@
 	     */
 	    WriteStream.prototype.writeFixedHex = function (name, length, val) {
 	        if (!converter.Converter.isHex(val)) {
-	            throw new Error("The " + val + " should be in hex format");
+	            throw new Error("The " + name + " should be in hex format");
 	        }
 	        // Hex should be twice the length as each byte is 2 ascii characters
 	        if (length * 2 !== val.length) {
@@ -10391,7 +10396,7 @@
 	                        if (indexationPayload) {
 	                            return [2 /*return*/, {
 	                                    index: indexationPayload.index,
-	                                    data: converter.Converter.hexToBytes(indexationPayload.data)
+	                                    data: indexationPayload.data ? converter.Converter.hexToBytes(indexationPayload.data) : undefined
 	                                }];
 	                        }
 	                    }
@@ -11734,7 +11739,7 @@
 	            var payload = unknownPayload;
 	            logger(prefix + "Indexation Payload");
 	            logger(prefix + "\tIndex:", payload.index);
-	            logger(prefix + "\tData:", converter.Converter.hexToAscii(payload.data));
+	            logger(prefix + "\tData:", payload.data ? converter.Converter.hexToAscii(payload.data) : "None");
 	        }
 	    }
 	}

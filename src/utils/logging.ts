@@ -150,7 +150,7 @@ export function logPayload(prefix: string, unknownPayload?: ITypeBase<unknown>):
             const payload = unknownPayload as IIndexationPayload;
             logger(`${prefix}Indexation Payload`);
             logger(`${prefix}\tIndex:`, payload.index);
-            logger(`${prefix}\tData:`, Converter.hexToAscii(payload.data));
+            logger(`${prefix}\tData:`, payload.data ? Converter.hexToAscii(payload.data) : "None");
         }
     }
 }

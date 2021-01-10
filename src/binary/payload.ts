@@ -251,6 +251,10 @@ export function serializeIndexationPayload(writeStream: WriteStream,
     }
     writeStream.writeUInt32("payloadIndexation.type", object.type);
     writeStream.writeString("payloadIndexation.index", object.index);
-    writeStream.writeUInt32("payloadIndexation.dataLength", object.data.length / 2);
-    writeStream.writeFixedHex("payloadIndexation.data", object.data.length / 2, object.data);
+    if (object.data) {
+        writeStream.writeUInt32("payloadIndexation.dataLength", object.data.length / 2);
+        writeStream.writeFixedHex("payloadIndexation.data", object.data.length / 2, object.data);
+    } else {
+        writeStream.writeUInt32("payloadIndexation.dataLength", 0);
+    }
 }

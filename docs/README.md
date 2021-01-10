@@ -1076,7 +1076,7 @@ ___
 
 ### retrieveData
 
-▸ **retrieveData**(`client`: [IClient](interfaces/iclient.md), `messageId`: string): Promise<{ data: Uint8Array ; index: string  } \| undefined\>
+▸ **retrieveData**(`client`: [IClient](interfaces/iclient.md), `messageId`: string): Promise<{ data?: Uint8Array ; index: string  } \| undefined\>
 
 Retrieve a data message.
 
@@ -1087,7 +1087,7 @@ Name | Type | Description |
 `client` | [IClient](interfaces/iclient.md) | The client to send the transfer with. |
 `messageId` | string | The message id of the data to get. |
 
-**Returns:** Promise<{ data: Uint8Array ; index: string  } \| undefined\>
+**Returns:** Promise<{ data?: Uint8Array ; index: string  } \| undefined\>
 
 The message index and data.
 
