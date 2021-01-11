@@ -14,19 +14,23 @@ Gossip metrics.
 
 ### Properties
 
-* [droppedSentPackets](igossipmetrics.md#droppedsentpackets)
+* [droppedPackets](igossipmetrics.md#droppedpackets)
 * [knownMessages](igossipmetrics.md#knownmessages)
 * [newMessages](igossipmetrics.md#newmessages)
 * [receivedHeartbeats](igossipmetrics.md#receivedheartbeats)
+* [receivedMessageRequests](igossipmetrics.md#receivedmessagerequests)
 * [receivedMessages](igossipmetrics.md#receivedmessages)
+* [receivedMilestoneRequests](igossipmetrics.md#receivedmilestonerequests)
 * [sentHeartbeats](igossipmetrics.md#sentheartbeats)
-* [sentPackets](igossipmetrics.md#sentpackets)
+* [sentMessageRequests](igossipmetrics.md#sentmessagerequests)
+* [sentMessages](igossipmetrics.md#sentmessages)
+* [sentMilestoneRequests](igossipmetrics.md#sentmilestonerequests)
 
 ## Properties
 
-### droppedSentPackets
+### droppedPackets
 
-•  **droppedSentPackets**: number
+•  **droppedPackets**: number
 
 The number of dropped sent packets.
 
@@ -56,11 +60,27 @@ The number of received heartbeats.
 
 ___
 
+### receivedMessageRequests
+
+•  **receivedMessageRequests**: number
+
+The number of received message requests.
+
+___
+
 ### receivedMessages
 
 •  **receivedMessages**: number
 
 The number of received messages.
+
+___
+
+### receivedMilestoneRequests
+
+•  **receivedMilestoneRequests**: number
+
+The number of received milestone requests.
 
 ___
 
@@ -72,8 +92,24 @@ The number of sent heartbeats.
 
 ___
 
-### sentPackets
+### sentMessageRequests
 
-•  **sentPackets**: number
+•  **sentMessageRequests**: number
 
-The number of sent packets.
+The number of sent message requests.
+
+___
+
+### sentMessages
+
+•  **sentMessages**: number
+
+The number of sent messages.
+
+___
+
+### sentMilestoneRequests
+
+•  **sentMilestoneRequests**: number
+
+The number of sent miletsone requests.
