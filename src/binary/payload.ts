@@ -7,6 +7,7 @@ import { TRANSACTION_ESSENCE_TYPE } from "../models/ITransactionEssence";
 import { ITransactionPayload, TRANSACTION_PAYLOAD_TYPE } from "../models/ITransactionPayload";
 import { ITypeBase } from "../models/ITypeBase";
 import { ReadStream } from "../utils/readStream";
+import { TextHelper } from "../utils/textHelper";
 import { WriteStream } from "../utils/writeStream";
 import { BYTE_SIZE, MERKLE_PROOF_LENGTH, MESSAGE_ID_LENGTH, STRING_LENGTH, TYPE_LENGTH, UINT32_SIZE, UINT64_SIZE } from "./common";
 import { deserializeTransactionEssence, serializeTransactionEssence } from "./transaction";
@@ -19,6 +20,11 @@ export const MIN_MILESTONE_PAYLOAD_LENGTH: number = MIN_PAYLOAD_LENGTH + UINT32_
     BYTE_SIZE + Ed25519.SIGNATURE_SIZE;
 export const MIN_INDEXATION_PAYLOAD_LENGTH: number = MIN_PAYLOAD_LENGTH + STRING_LENGTH + STRING_LENGTH;
 export const MIN_TRANSACTION_PAYLOAD_LENGTH: number = MIN_PAYLOAD_LENGTH + UINT32_SIZE;
+
+/**
+ * The minimum length of a indexation key.
+ */
+export const MIN_INDEXATION_KEY_LENGTH: number = 1;
 
 /**
  * The maximum length of a indexation key.
@@ -78,11 +84,11 @@ export function serializePayload(writeStream: WriteStream,
     if (!object) {
         // No other data to write
     } else if (object.type === TRANSACTION_PAYLOAD_TYPE) {
-        serializeTransactionPayload(writeStream, object as ITransactionPayload);
+        serializeTransactionPayload(writeStream, object);
     } else if (object.type === MILESTONE_PAYLOAD_TYPE) {
-        serializeMilestonePayload(writeStream, object as IMilestonePayload);
+        serializeMilestonePayload(writeStream, object);
     } else if (object.type === INDEXATION_PAYLOAD_TYPE) {
-        serializeIndexationPayload(writeStream, object as IIndexationPayload);
+        serializeIndexationPayload(writeStream, object);
     } else {
         throw new Error(`Unrecognized transaction type ${(object as ITypeBase<unknown>).type}`);
     }
@@ -121,7 +127,7 @@ export function deserializeTransactionPayload(readStream: ReadStream): ITransact
     }
 
     return {
-        type: 0,
+        type: TRANSACTION_PAYLOAD_TYPE,
         essence,
         unlockBlocks
     };
@@ -176,7 +182,7 @@ export function deserializeMilestonePayload(readStream: ReadStream): IMilestoneP
     }
 
     return {
-        type: 1,
+        type: MILESTONE_PAYLOAD_TYPE,
         index,
         timestamp: Number(timestamp),
         parent1MessageId,
@@ -232,7 +238,7 @@ export function deserializeIndexationPayload(readStream: ReadStream): IIndexatio
     const data = readStream.readFixedHex("payloadIndexation.data", dataLength);
 
     return {
-        type: 2,
+        type: INDEXATION_PAYLOAD_TYPE,
         index,
         data
     };
@@ -245,10 +251,18 @@ export function deserializeIndexationPayload(readStream: ReadStream): IIndexatio
  */
 export function serializeIndexationPayload(writeStream: WriteStream,
     object: IIndexationPayload): void {
+    if (object.index.length < MIN_INDEXATION_KEY_LENGTH) {
+        throw new Error(`The indexation key length is ${object.index.length
+            }, which is below the minimum size of ${MIN_INDEXATION_KEY_LENGTH}`);
+    }
     if (object.index.length > MAX_INDEXATION_KEY_LENGTH) {
         throw new Error(`The indexation key length is ${object.index.length
             }, which exceeds the maximum size of ${MAX_INDEXATION_KEY_LENGTH}`);
     }
+    if (!TextHelper.isUTF8(object.index)) {
+        throw new Error("The index can only contain UTF8 characters");
+    }
+
     writeStream.writeUInt32("payloadIndexation.type", object.type);
     writeStream.writeString("payloadIndexation.index", object.index);
     if (object.data) {
