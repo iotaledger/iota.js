@@ -14,25 +14,25 @@ Milestone.
 
 ### Properties
 
+* [index](imilestoneresponse.md#index)
 * [messageId](imilestoneresponse.md#messageid)
-* [milestoneIndex](imilestoneresponse.md#milestoneindex)
 * [timestamp](imilestoneresponse.md#timestamp)
 
 ## Properties
+
+### index
+
+•  **index**: number
+
+The milestone index.
+
+___
 
 ### messageId
 
 •  **messageId**: string
 
 The message id of the milestone.
-
-___
-
-### milestoneIndex
-
-•  **milestoneIndex**: number
-
-The milestone index.
 
 ___
 

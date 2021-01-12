@@ -14,14 +14,14 @@ Milestone.
 
 ### Properties
 
-* [milestoneIndex](imqttmilestoneresponse.md#milestoneindex)
+* [index](imqttmilestoneresponse.md#index)
 * [timestamp](imqttmilestoneresponse.md#timestamp)
 
 ## Properties
 
-### milestoneIndex
+### index
 
-•  **milestoneIndex**: number
+•  **index**: number
 
 The milestone index.
 

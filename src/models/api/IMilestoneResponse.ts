@@ -7,7 +7,7 @@ export interface IMilestoneResponse {
     /**
      * The milestone index.
      */
-    milestoneIndex: number;
+    index: number;
 
     /**
      * The message id of the milestone.

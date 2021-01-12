@@ -5,7 +5,7 @@ export interface IMqttMilestoneResponse {
     /**
      * The milestone index.
      */
-    milestoneIndex: number;
+    index: number;
     /**
      * The timestamp of the milestone.
      */
