@@ -27,17 +27,17 @@ Convert address to bech32.
 
 ### BECH32\_DEFAULT\_HRP\_MAIN
 
-▪ `Static` **BECH32\_DEFAULT\_HRP\_MAIN**: string = "iot"
+▪ `Static` **BECH32\_DEFAULT\_HRP\_MAIN**: string = "iota"
 
-The default human readable part of the bech32 addresses for mainnet, currently 'iot'.
+The default human readable part of the bech32 addresses for mainnet, currently 'iota'.
 
 ___
 
 ### BECH32\_DEFAULT\_HRP\_TEST
 
-▪ `Static` **BECH32\_DEFAULT\_HRP\_TEST**: string = "toi"
+▪ `Static` **BECH32\_DEFAULT\_HRP\_TEST**: string = "atoi"
 
-The default human readable part of the bech32 addresses for testnet, currently 'toi'.
+The default human readable part of the bech32 addresses for testnet, currently 'atoi'.
 
 ## Methods
 

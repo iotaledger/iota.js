@@ -3,11 +3,11 @@
  */
 export declare class Bech32Helper {
     /**
-     * The default human readable part of the bech32 addresses for mainnet, currently 'iot'.
+     * The default human readable part of the bech32 addresses for mainnet, currently 'iota'.
      */
     static BECH32_DEFAULT_HRP_MAIN: string;
     /**
-     * The default human readable part of the bech32 addresses for testnet, currently 'toi'.
+     * The default human readable part of the bech32 addresses for testnet, currently 'atoi'.
      */
     static BECH32_DEFAULT_HRP_TEST: string;
     /**
