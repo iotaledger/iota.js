@@ -3,7 +3,7 @@ import { ITypeBase } from "./ITypeBase";
 /**
  * The global type for the unlock block.
  */
-export declare const SIGNATURE_UNLOCK_BLOCK_TYPE: number;
+export declare const SIGNATURE_UNLOCK_BLOCK_TYPE = 0;
 /**
  * Signature unlock block.
  */

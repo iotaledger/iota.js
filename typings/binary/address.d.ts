@@ -1,7 +1,13 @@
 import { IEd25519Address } from "../models/IEd25519Address";
 import { ReadStream } from "../utils/readStream";
 import { WriteStream } from "../utils/writeStream";
+/**
+ * The minimum length of an address binary representation.
+ */
 export declare const MIN_ADDRESS_LENGTH: number;
+/**
+ * The minimum length of an ed25519 address binary representation.
+ */
 export declare const MIN_ED25519_ADDRESS_LENGTH: number;
 /**
  * Deserialize the address from binary.

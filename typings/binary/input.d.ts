@@ -1,8 +1,18 @@
 import { IUTXOInput } from "../models/IUTXOInput";
 import { ReadStream } from "../utils/readStream";
 import { WriteStream } from "../utils/writeStream";
+/**
+ * The minimum length of an input binary representation.
+ */
 export declare const MIN_INPUT_LENGTH: number;
+/**
+ * The minimum length of a utxo input binary representation.
+ */
 export declare const MIN_UTXO_INPUT_LENGTH: number;
+/**
+ * The maximum number of inputs.
+ */
+export declare const MAX_INPUT_COUNT: number;
 /**
  * Deserialize the inputs from binary.
  * @param readStream The stream to read the data from.

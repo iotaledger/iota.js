@@ -1,4 +1,4 @@
-import { Converter, deserializeMessage, IMessage, logInfo, logMessage, logMessageMetadata, logOutput, logTips, ReadStream, SingleNodeClient } from "@iota/iota.js";
+import { Converter, deserializeMessage, IMessage, INDEXATION_PAYLOAD_TYPE, logInfo, logMessage, logMessageMetadata, logOutput, logTips, ReadStream, SingleNodeClient } from "@iota/iota.js";
 
 const API_ENDPOINT = "http://localhost:14265";
 
@@ -23,7 +23,7 @@ async function run() {
         parent1MessageId: tips.tip1MessageId,
         parent2MessageId: tips.tip2MessageId,
         payload: {
-            type: 2,
+            type: INDEXATION_PAYLOAD_TYPE,
             index: "Foo",
             data: Converter.asciiToHex("Bar")
         }
@@ -71,7 +71,7 @@ async function run() {
 
     const milestone = await client.milestone(info.latestMilestoneIndex);
     console.log("Milestone");
-    console.log("\tMilestone Index:", milestone.milestoneIndex);
+    console.log("\tMilestone Index:", milestone.index);
     console.log("\tMessage Id:", milestone.messageId);
     console.log("\tTimestamp:", milestone.timestamp);
     console.log();

@@ -44,8 +44,13 @@ export enum ConflictReason {
     unsupportedAddressType = 7,
 
     /**
+     * The dust allowance for the address is invalid.
+     */
+    invalidDustAllowance = 8,
+
+    /**
      * The semantic validation failed.
      */
-    semanticValidationFailed = 8
+    semanticValidationFailed = 9
 }
 

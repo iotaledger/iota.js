@@ -1,7 +1,13 @@
 import { IEd25519Signature } from "../models/IEd25519Signature";
 import { ReadStream } from "../utils/readStream";
 import { WriteStream } from "../utils/writeStream";
+/**
+ * The minimum length of a signature binary representation.
+ */
 export declare const MIN_SIGNATURE_LENGTH: number;
+/**
+ * The minimum length of an ed25519 signature binary representation.
+ */
 export declare const MIN_ED25519_SIGNATURE_LENGTH: number;
 /**
  * Deserialize the signature from binary.

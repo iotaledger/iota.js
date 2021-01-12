@@ -9,6 +9,9 @@ import { deserializeInputs, serializeInputs } from "./input";
 import { deserializeOutputs, serializeOutputs } from "./output";
 import { deserializePayload, serializePayload } from "./payload";
 
+/**
+ * The minimum length of a transaction essence binary representation.
+ */
 export const MIN_TRANSACTION_ESSENCE_LENGTH: number = SMALL_TYPE_LENGTH + (2 * ARRAY_LENGTH) + UINT32_SIZE;
 
 /**
@@ -36,7 +39,7 @@ export function deserializeTransactionEssence(readStream: ReadStream): ITransact
     }
 
     return {
-        type: 0,
+        type: TRANSACTION_ESSENCE_TYPE,
         inputs,
         outputs,
         payload: payload as IIndexationPayload

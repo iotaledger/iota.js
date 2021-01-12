@@ -2,7 +2,7 @@ import { ITypeBase } from "./ITypeBase";
 /**
  * The global type for the address type.
  */
-export declare const ED25519_ADDRESS_TYPE: number;
+export declare const ED25519_ADDRESS_TYPE = 1;
 /**
  * Ed25519Address address.
  */

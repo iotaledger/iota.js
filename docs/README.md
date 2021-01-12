@@ -38,6 +38,7 @@
 * [Sha512](classes/sha512.md)
 * [SingleNodeClient](classes/singlenodeclient.md)
 * [Slip0010](classes/slip0010.md)
+* [TextHelper](classes/texthelper.md)
 * [UnitsHelper](classes/unitshelper.md)
 * [WriteStream](classes/writestream.md)
 
@@ -70,6 +71,7 @@
 * [IReferenceUnlockBlock](interfaces/ireferenceunlockblock.md)
 * [IResponse](interfaces/iresponse.md)
 * [ISeed](interfaces/iseed.md)
+* [ISigLockedDustAllowanceOutput](interfaces/isiglockeddustallowanceoutput.md)
 * [ISigLockedSingleOutput](interfaces/isiglockedsingleoutput.md)
 * [ISignatureUnlockBlock](interfaces/isignatureunlockblock.md)
 * [ITipsResponse](interfaces/itipsresponse.md)
@@ -84,19 +86,49 @@
 
 ### Variables
 
+* [ARRAY\_LENGTH](README.md#array_length)
 * [BIG\_1\_SHIFTL\_20](README.md#big_1_shiftl_20)
+* [BYTE\_SIZE](README.md#byte_size)
 * [ED25519\_ADDRESS\_TYPE](README.md#ed25519_address_type)
 * [ED25519\_SEED\_TYPE](README.md#ed25519_seed_type)
 * [ED25519\_SIGNATURE\_TYPE](README.md#ed25519_signature_type)
+* [EMPTY\_MESSAGE\_ID\_HEX](README.md#empty_message_id_hex)
 * [INDEXATION\_PAYLOAD\_TYPE](README.md#indexation_payload_type)
 * [MAX\_INDEXATION\_KEY\_LENGTH](README.md#max_indexation_key_length)
+* [MAX\_INPUT\_COUNT](README.md#max_input_count)
 * [MAX\_MESSAGE\_LENGTH](README.md#max_message_length)
+* [MAX\_OUTPUT\_COUNT](README.md#max_output_count)
+* [MERKLE\_PROOF\_LENGTH](README.md#merkle_proof_length)
+* [MESSAGE\_ID\_LENGTH](README.md#message_id_length)
 * [MILESTONE\_PAYLOAD\_TYPE](README.md#milestone_payload_type)
+* [MIN\_ADDRESS\_LENGTH](README.md#min_address_length)
+* [MIN\_ED25519\_ADDRESS\_LENGTH](README.md#min_ed25519_address_length)
+* [MIN\_ED25519\_SIGNATURE\_LENGTH](README.md#min_ed25519_signature_length)
+* [MIN\_INDEXATION\_KEY\_LENGTH](README.md#min_indexation_key_length)
+* [MIN\_INPUT\_LENGTH](README.md#min_input_length)
+* [MIN\_MESSAGE\_LENGTH](README.md#min_message_length)
+* [MIN\_OUTPUT\_LENGTH](README.md#min_output_length)
+* [MIN\_REFERENCE\_UNLOCK\_BLOCK\_LENGTH](README.md#min_reference_unlock_block_length)
+* [MIN\_SIGNATURE\_LENGTH](README.md#min_signature_length)
+* [MIN\_SIGNATURE\_UNLOCK\_BLOCK\_LENGTH](README.md#min_signature_unlock_block_length)
+* [MIN\_SIG\_LOCKED\_DUST\_ALLOWANCE\_OUTPUT\_LENGTH](README.md#min_sig_locked_dust_allowance_output_length)
+* [MIN\_SIG\_LOCKED\_SINGLE\_OUTPUT\_LENGTH](README.md#min_sig_locked_single_output_length)
+* [MIN\_TRANSACTION\_ESSENCE\_LENGTH](README.md#min_transaction_essence_length)
+* [MIN\_UNLOCK\_BLOCK\_LENGTH](README.md#min_unlock_block_length)
+* [MIN\_UTXO\_INPUT\_LENGTH](README.md#min_utxo_input_length)
 * [REFERENCE\_UNLOCK\_BLOCK\_TYPE](README.md#reference_unlock_block_type)
 * [SIGNATURE\_UNLOCK\_BLOCK\_TYPE](README.md#signature_unlock_block_type)
+* [SIG\_LOCKED\_DUST\_ALLOWANCE\_OUTPUT\_TYPE](README.md#sig_locked_dust_allowance_output_type)
 * [SIG\_LOCKED\_SINGLE\_OUTPUT\_TYPE](README.md#sig_locked_single_output_type)
+* [SMALL\_TYPE\_LENGTH](README.md#small_type_length)
+* [STRING\_LENGTH](README.md#string_length)
 * [TRANSACTION\_ESSENCE\_TYPE](README.md#transaction_essence_type)
+* [TRANSACTION\_ID\_LENGTH](README.md#transaction_id_length)
 * [TRANSACTION\_PAYLOAD\_TYPE](README.md#transaction_payload_type)
+* [TYPE\_LENGTH](README.md#type_length)
+* [UINT16\_SIZE](README.md#uint16_size)
+* [UINT32\_SIZE](README.md#uint32_size)
+* [UINT64\_SIZE](README.md#uint64_size)
 * [UTXO\_INPUT\_TYPE](README.md#utxo_input_type)
 
 ### Functions
@@ -115,6 +147,7 @@
 * [deserializeOutputs](README.md#deserializeoutputs)
 * [deserializePayload](README.md#deserializepayload)
 * [deserializeReferenceUnlockBlock](README.md#deserializereferenceunlockblock)
+* [deserializeSigLockedDustAllowanceOutput](README.md#deserializesiglockeddustallowanceoutput)
 * [deserializeSigLockedSingleOutput](README.md#deserializesiglockedsingleoutput)
 * [deserializeSignature](README.md#deserializesignature)
 * [deserializeSignatureUnlockBlock](README.md#deserializesignatureunlockblock)
@@ -166,6 +199,7 @@
 * [serializeOutputs](README.md#serializeoutputs)
 * [serializePayload](README.md#serializepayload)
 * [serializeReferenceUnlockBlock](README.md#serializereferenceunlockblock)
+* [serializeSigLockedDustAllowanceOutput](README.md#serializesiglockeddustallowanceoutput)
 * [serializeSigLockedSingleOutput](README.md#serializesiglockedsingleoutput)
 * [serializeSignature](README.md#serializesignature)
 * [serializeSignatureUnlockBlock](README.md#serializesignatureunlockblock)
@@ -190,6 +224,14 @@ The different states of ledger inclusion.
 
 ## Variables
 
+### ARRAY\_LENGTH
+
+• `Const` **ARRAY\_LENGTH**: number = UINT16\_SIZE
+
+Byte length for an array length.
+
+___
+
 ### BIG\_1\_SHIFTL\_20
 
 • `Const` **BIG\_1\_SHIFTL\_20**: bigint = BigInt(1) << BigInt(20)
@@ -200,9 +242,17 @@ which is in turn a port of the “ref10” implementation of ed25519 from SUPERC
 
 ___
 
+### BYTE\_SIZE
+
+• `Const` **BYTE\_SIZE**: number = 1
+
+Byte length for a byte field.
+
+___
+
 ### ED25519\_ADDRESS\_TYPE
 
-• `Const` **ED25519\_ADDRESS\_TYPE**: number = 1
+• `Const` **ED25519\_ADDRESS\_TYPE**: 1 = 1
 
 The global type for the address type.
 
@@ -218,15 +268,23 @@ ___
 
 ### ED25519\_SIGNATURE\_TYPE
 
-• `Const` **ED25519\_SIGNATURE\_TYPE**: number = 1
+• `Const` **ED25519\_SIGNATURE\_TYPE**: 1 = 1
 
 The global type for the signature type.
 
 ___
 
+### EMPTY\_MESSAGE\_ID\_HEX
+
+• `Const` **EMPTY\_MESSAGE\_ID\_HEX**: string = "0".repeat(MESSAGE\_ID\_LENGTH * 2)
+
+Empty message id.
+
+___
+
 ### INDEXATION\_PAYLOAD\_TYPE
 
-• `Const` **INDEXATION\_PAYLOAD\_TYPE**: number = 2
+• `Const` **INDEXATION\_PAYLOAD\_TYPE**: 2 = 2
 
 The global type for the payload.
 
@@ -240,6 +298,14 @@ The maximum length of a indexation key.
 
 ___
 
+### MAX\_INPUT\_COUNT
+
+• `Const` **MAX\_INPUT\_COUNT**: number = 127
+
+The maximum number of inputs.
+
+___
+
 ### MAX\_MESSAGE\_LENGTH
 
 • `Const` **MAX\_MESSAGE\_LENGTH**: number = 32768
@@ -248,17 +314,161 @@ The maximum length of a message.
 
 ___
 
+### MAX\_OUTPUT\_COUNT
+
+• `Const` **MAX\_OUTPUT\_COUNT**: number = 127
+
+The maximum number of outputs.
+
+___
+
+### MERKLE\_PROOF\_LENGTH
+
+• `Const` **MERKLE\_PROOF\_LENGTH**: number = Blake2b.SIZE\_256
+
+Byte length for a merkle prrof.
+
+___
+
+### MESSAGE\_ID\_LENGTH
+
+• `Const` **MESSAGE\_ID\_LENGTH**: number = Blake2b.SIZE\_256
+
+Byte length for a message id.
+
+___
+
 ### MILESTONE\_PAYLOAD\_TYPE
 
-• `Const` **MILESTONE\_PAYLOAD\_TYPE**: number = 1
+• `Const` **MILESTONE\_PAYLOAD\_TYPE**: 1 = 1
 
 The global type for the payload.
 
 ___
 
+### MIN\_ADDRESS\_LENGTH
+
+• `Const` **MIN\_ADDRESS\_LENGTH**: number = SMALL\_TYPE\_LENGTH
+
+The minimum length of an address binary representation.
+
+___
+
+### MIN\_ED25519\_ADDRESS\_LENGTH
+
+• `Const` **MIN\_ED25519\_ADDRESS\_LENGTH**: number = MIN\_ADDRESS\_LENGTH + Ed25519Address.ADDRESS\_LENGTH
+
+The minimum length of an ed25519 address binary representation.
+
+___
+
+### MIN\_ED25519\_SIGNATURE\_LENGTH
+
+• `Const` **MIN\_ED25519\_SIGNATURE\_LENGTH**: number = MIN\_SIGNATURE\_LENGTH + Ed25519.SIGNATURE\_SIZE + Ed25519.PUBLIC\_KEY\_SIZE
+
+The minimum length of an ed25519 signature binary representation.
+
+___
+
+### MIN\_INDEXATION\_KEY\_LENGTH
+
+• `Const` **MIN\_INDEXATION\_KEY\_LENGTH**: number = 1
+
+The minimum length of a indexation key.
+
+___
+
+### MIN\_INPUT\_LENGTH
+
+• `Const` **MIN\_INPUT\_LENGTH**: number = SMALL\_TYPE\_LENGTH
+
+The minimum length of an input binary representation.
+
+___
+
+### MIN\_MESSAGE\_LENGTH
+
+• `Const` **MIN\_MESSAGE\_LENGTH**: number = UINT64\_SIZE + (2 * MESSAGE\_ID\_LENGTH) + MIN\_PAYLOAD\_LENGTH + UINT64\_SIZE
+
+The minimum length of a message binary representation.
+
+___
+
+### MIN\_OUTPUT\_LENGTH
+
+• `Const` **MIN\_OUTPUT\_LENGTH**: number = SMALL\_TYPE\_LENGTH
+
+The minimum length of an output binary representation.
+
+___
+
+### MIN\_REFERENCE\_UNLOCK\_BLOCK\_LENGTH
+
+• `Const` **MIN\_REFERENCE\_UNLOCK\_BLOCK\_LENGTH**: number = MIN\_UNLOCK\_BLOCK\_LENGTH + UINT16\_SIZE
+
+The minimum length of a reference unlock block binary representation.
+
+___
+
+### MIN\_SIGNATURE\_LENGTH
+
+• `Const` **MIN\_SIGNATURE\_LENGTH**: number = SMALL\_TYPE\_LENGTH
+
+The minimum length of a signature binary representation.
+
+___
+
+### MIN\_SIGNATURE\_UNLOCK\_BLOCK\_LENGTH
+
+• `Const` **MIN\_SIGNATURE\_UNLOCK\_BLOCK\_LENGTH**: number = MIN\_UNLOCK\_BLOCK\_LENGTH + MIN\_SIGNATURE\_LENGTH
+
+The minimum length of a signature unlock block binary representation.
+
+___
+
+### MIN\_SIG\_LOCKED\_DUST\_ALLOWANCE\_OUTPUT\_LENGTH
+
+• `Const` **MIN\_SIG\_LOCKED\_DUST\_ALLOWANCE\_OUTPUT\_LENGTH**: number = MIN\_OUTPUT\_LENGTH + MIN\_ADDRESS\_LENGTH + MIN\_ED25519\_ADDRESS\_LENGTH
+
+The minimum length of a sig locked dust allowance output binary representation.
+
+___
+
+### MIN\_SIG\_LOCKED\_SINGLE\_OUTPUT\_LENGTH
+
+• `Const` **MIN\_SIG\_LOCKED\_SINGLE\_OUTPUT\_LENGTH**: number = MIN\_OUTPUT\_LENGTH + MIN\_ADDRESS\_LENGTH + MIN\_ED25519\_ADDRESS\_LENGTH
+
+The minimum length of a sig locked single output binary representation.
+
+___
+
+### MIN\_TRANSACTION\_ESSENCE\_LENGTH
+
+• `Const` **MIN\_TRANSACTION\_ESSENCE\_LENGTH**: number = SMALL\_TYPE\_LENGTH + (2 * ARRAY\_LENGTH) + UINT32\_SIZE
+
+The minimum length of a transaction essence binary representation.
+
+___
+
+### MIN\_UNLOCK\_BLOCK\_LENGTH
+
+• `Const` **MIN\_UNLOCK\_BLOCK\_LENGTH**: number = SMALL\_TYPE\_LENGTH
+
+The minimum length of an unlock block binary representation.
+
+___
+
+### MIN\_UTXO\_INPUT\_LENGTH
+
+• `Const` **MIN\_UTXO\_INPUT\_LENGTH**: number = MIN\_INPUT\_LENGTH + TRANSACTION\_ID\_LENGTH + UINT16\_SIZE
+
+The minimum length of a utxo input binary representation.
+
+___
+
 ### REFERENCE\_UNLOCK\_BLOCK\_TYPE
 
-• `Const` **REFERENCE\_UNLOCK\_BLOCK\_TYPE**: number = 1
+• `Const` **REFERENCE\_UNLOCK\_BLOCK\_TYPE**: 1 = 1
 
 The global type for the unlock block.
 
@@ -266,39 +476,103 @@ ___
 
 ### SIGNATURE\_UNLOCK\_BLOCK\_TYPE
 
-• `Const` **SIGNATURE\_UNLOCK\_BLOCK\_TYPE**: number = 0
+• `Const` **SIGNATURE\_UNLOCK\_BLOCK\_TYPE**: 0 = 0
 
 The global type for the unlock block.
 
 ___
 
+### SIG\_LOCKED\_DUST\_ALLOWANCE\_OUTPUT\_TYPE
+
+• `Const` **SIG\_LOCKED\_DUST\_ALLOWANCE\_OUTPUT\_TYPE**: 1 = 1
+
+The global type for the sig locked dust allowance output.
+
+___
+
 ### SIG\_LOCKED\_SINGLE\_OUTPUT\_TYPE
 
-• `Const` **SIG\_LOCKED\_SINGLE\_OUTPUT\_TYPE**: number = 0
+• `Const` **SIG\_LOCKED\_SINGLE\_OUTPUT\_TYPE**: 0 = 0
 
 The global type for the sig locked single output.
 
 ___
 
+### SMALL\_TYPE\_LENGTH
+
+• `Const` **SMALL\_TYPE\_LENGTH**: number = BYTE\_SIZE
+
+Byte length for a small type length.
+
+___
+
+### STRING\_LENGTH
+
+• `Const` **STRING\_LENGTH**: number = UINT16\_SIZE
+
+Byte length for a string length.
+
+___
+
 ### TRANSACTION\_ESSENCE\_TYPE
 
-• `Const` **TRANSACTION\_ESSENCE\_TYPE**: number = 0
+• `Const` **TRANSACTION\_ESSENCE\_TYPE**: 0 = 0
 
 The global type for the transaction essence.
 
 ___
 
+### TRANSACTION\_ID\_LENGTH
+
+• `Const` **TRANSACTION\_ID\_LENGTH**: number = Blake2b.SIZE\_256
+
+Byte length for a transaction id.
+
+___
+
 ### TRANSACTION\_PAYLOAD\_TYPE
 
-• `Const` **TRANSACTION\_PAYLOAD\_TYPE**: number = 0
+• `Const` **TRANSACTION\_PAYLOAD\_TYPE**: 0 = 0
 
 The global type for the payload.
 
 ___
 
+### TYPE\_LENGTH
+
+• `Const` **TYPE\_LENGTH**: number = UINT32\_SIZE
+
+Byte length for a type length.
+
+___
+
+### UINT16\_SIZE
+
+• `Const` **UINT16\_SIZE**: number = 2
+
+Byte length for a uint16 field.
+
+___
+
+### UINT32\_SIZE
+
+• `Const` **UINT32\_SIZE**: number = 4
+
+Byte length for a uint32 field.
+
+___
+
+### UINT64\_SIZE
+
+• `Const` **UINT64\_SIZE**: number = 8
+
+Byte length for a uint64 field.
+
+___
+
 ### UTXO\_INPUT\_TYPE
 
-• `Const` **UTXO\_INPUT\_TYPE**: number = 0
+• `Const` **UTXO\_INPUT\_TYPE**: 0 = 0
 
 The global type for the input.
 
@@ -306,7 +580,7 @@ The global type for the input.
 
 ### buildTransactionPayload
 
-▸ **buildTransactionPayload**(`inputsAndSignatureKeyPairs`: { addressKeyPair: [IKeyPair](interfaces/ikeypair.md) ; input: [IUTXOInput](interfaces/iutxoinput.md)  }[], `outputs`: { address: string ; addressType: number ; amount: number  }[], `indexationKey?`: undefined \| string, `indexationData?`: Uint8Array): [ITransactionPayload](interfaces/itransactionpayload.md)
+▸ **buildTransactionPayload**(`inputsAndSignatureKeyPairs`: { addressKeyPair: [IKeyPair](interfaces/ikeypair.md) ; input: [IUTXOInput](interfaces/iutxoinput.md)  }[], `outputs`: { address: string ; addressType: number ; amount: number ; isDustAllowance?: undefined \| false \| true  }[], `indexationKey?`: undefined \| string, `indexationData?`: Uint8Array): [ITransactionPayload](interfaces/itransactionpayload.md)
 
 Build a transaction payload.
 
@@ -315,7 +589,7 @@ Build a transaction payload.
 Name | Type | Description |
 ------ | ------ | ------ |
 `inputsAndSignatureKeyPairs` | { addressKeyPair: [IKeyPair](interfaces/ikeypair.md) ; input: [IUTXOInput](interfaces/iutxoinput.md)  }[] | The inputs with the signature key pairs needed to sign transfers. |
-`outputs` | { address: string ; addressType: number ; amount: number  }[] | The outputs to send. |
+`outputs` | { address: string ; addressType: number ; amount: number ; isDustAllowance?: undefined \| false \| true  }[] | The outputs to send. |
 `indexationKey?` | undefined \| string | Optional indexation key. |
 `indexationData?` | Uint8Array | Optional index data. |
 
@@ -500,7 +774,7 @@ ___
 
 ### deserializeOutput
 
-▸ **deserializeOutput**(`readStream`: [ReadStream](classes/readstream.md)): [ISigLockedSingleOutput](interfaces/isiglockedsingleoutput.md)
+▸ **deserializeOutput**(`readStream`: [ReadStream](classes/readstream.md)): [ISigLockedSingleOutput](interfaces/isiglockedsingleoutput.md) \| [ISigLockedDustAllowanceOutput](interfaces/isiglockeddustallowanceoutput.md)
 
 Deserialize the output from binary.
 
@@ -510,7 +784,7 @@ Name | Type | Description |
 ------ | ------ | ------ |
 `readStream` | [ReadStream](classes/readstream.md) | The stream to read the data from. |
 
-**Returns:** [ISigLockedSingleOutput](interfaces/isiglockedsingleoutput.md)
+**Returns:** [ISigLockedSingleOutput](interfaces/isiglockedsingleoutput.md) \| [ISigLockedDustAllowanceOutput](interfaces/isiglockeddustallowanceoutput.md)
 
 The deserialized object.
 
@@ -518,7 +792,7 @@ ___
 
 ### deserializeOutputs
 
-▸ **deserializeOutputs**(`readStream`: [ReadStream](classes/readstream.md)): [ISigLockedSingleOutput](interfaces/isiglockedsingleoutput.md)[]
+▸ **deserializeOutputs**(`readStream`: [ReadStream](classes/readstream.md)): ([ISigLockedSingleOutput](interfaces/isiglockedsingleoutput.md) \| [ISigLockedDustAllowanceOutput](interfaces/isiglockeddustallowanceoutput.md))[]
 
 Deserialize the outputs from binary.
 
@@ -528,7 +802,7 @@ Name | Type | Description |
 ------ | ------ | ------ |
 `readStream` | [ReadStream](classes/readstream.md) | The stream to read the data from. |
 
-**Returns:** [ISigLockedSingleOutput](interfaces/isiglockedsingleoutput.md)[]
+**Returns:** ([ISigLockedSingleOutput](interfaces/isiglockedsingleoutput.md) \| [ISigLockedDustAllowanceOutput](interfaces/isiglockeddustallowanceoutput.md))[]
 
 The deserialized object.
 
@@ -565,6 +839,24 @@ Name | Type | Description |
 `readStream` | [ReadStream](classes/readstream.md) | The stream to read the data from. |
 
 **Returns:** [IReferenceUnlockBlock](interfaces/ireferenceunlockblock.md)
+
+The deserialized object.
+
+___
+
+### deserializeSigLockedDustAllowanceOutput
+
+▸ **deserializeSigLockedDustAllowanceOutput**(`readStream`: [ReadStream](classes/readstream.md)): [ISigLockedDustAllowanceOutput](interfaces/isiglockeddustallowanceoutput.md)
+
+Deserialize the signature locked dust allowance output from binary.
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`readStream` | [ReadStream](classes/readstream.md) | The stream to read the data from. |
+
+**Returns:** [ISigLockedDustAllowanceOutput](interfaces/isiglockeddustallowanceoutput.md)
 
 The deserialized object.
 
@@ -1201,7 +1493,7 @@ ___
 
 ### sendAdvanced
 
-▸ **sendAdvanced**(`client`: [IClient](interfaces/iclient.md), `inputsAndSignatureKeyPairs`: { addressKeyPair: [IKeyPair](interfaces/ikeypair.md) ; input: [IUTXOInput](interfaces/iutxoinput.md)  }[], `outputs`: { address: string ; addressType: number ; amount: number  }[], `indexationKey?`: undefined \| string, `indexationData?`: Uint8Array): Promise<{ message: [IMessage](interfaces/imessage.md) ; messageId: string  }\>
+▸ **sendAdvanced**(`client`: [IClient](interfaces/iclient.md), `inputsAndSignatureKeyPairs`: { addressKeyPair: [IKeyPair](interfaces/ikeypair.md) ; input: [IUTXOInput](interfaces/iutxoinput.md)  }[], `outputs`: { address: string ; addressType: number ; amount: number ; isDustAllowance?: undefined \| false \| true  }[], `indexationKey?`: undefined \| string, `indexationData?`: Uint8Array): Promise<{ message: [IMessage](interfaces/imessage.md) ; messageId: string  }\>
 
 Send a transfer from the balance on the seed.
 
@@ -1211,7 +1503,7 @@ Name | Type | Description |
 ------ | ------ | ------ |
 `client` | [IClient](interfaces/iclient.md) | The client to send the transfer with. |
 `inputsAndSignatureKeyPairs` | { addressKeyPair: [IKeyPair](interfaces/ikeypair.md) ; input: [IUTXOInput](interfaces/iutxoinput.md)  }[] | The inputs with the signature key pairs needed to sign transfers. |
-`outputs` | { address: string ; addressType: number ; amount: number  }[] | The outputs to send. |
+`outputs` | { address: string ; addressType: number ; amount: number ; isDustAllowance?: undefined \| false \| true  }[] | The outputs to send. |
 `indexationKey?` | undefined \| string | Optional indexation key. |
 `indexationData?` | Uint8Array | Optional index data. |
 
@@ -1266,7 +1558,7 @@ ___
 
 ### sendMultiple
 
-▸ **sendMultiple**(`client`: [IClient](interfaces/iclient.md), `seed`: [ISeed](interfaces/iseed.md), `accountIndex`: number, `outputs`: { addressBech32: string ; amount: number  }[], `startIndex?`: undefined \| number): Promise<{ message: [IMessage](interfaces/imessage.md) ; messageId: string  }\>
+▸ **sendMultiple**(`client`: [IClient](interfaces/iclient.md), `seed`: [ISeed](interfaces/iseed.md), `accountIndex`: number, `outputs`: { addressBech32: string ; amount: number ; isDustAllowance?: undefined \| false \| true  }[], `startIndex?`: undefined \| number): Promise<{ message: [IMessage](interfaces/imessage.md) ; messageId: string  }\>
 
 Send a transfer from the balance on the seed to multiple outputs.
 
@@ -1277,7 +1569,7 @@ Name | Type | Description |
 `client` | [IClient](interfaces/iclient.md) | The client to send the transfer with. |
 `seed` | [ISeed](interfaces/iseed.md) | The seed to use for address generation. |
 `accountIndex` | number | The account index in the wallet. |
-`outputs` | { addressBech32: string ; amount: number  }[] | The address to send the funds to in bech32 format and amounts. |
+`outputs` | { addressBech32: string ; amount: number ; isDustAllowance?: undefined \| false \| true  }[] | The address to send the funds to in bech32 format and amounts. |
 `startIndex?` | undefined \| number | The start index for the wallet count address, defaults to 0. |
 
 **Returns:** Promise<{ message: [IMessage](interfaces/imessage.md) ; messageId: string  }\>
@@ -1288,7 +1580,7 @@ ___
 
 ### sendMultipleEd25519
 
-▸ **sendMultipleEd25519**(`client`: [IClient](interfaces/iclient.md), `seed`: [ISeed](interfaces/iseed.md), `accountIndex`: number, `outputs`: { addressEd25519: string ; amount: number  }[], `startIndex?`: undefined \| number): Promise<{ message: [IMessage](interfaces/imessage.md) ; messageId: string  }\>
+▸ **sendMultipleEd25519**(`client`: [IClient](interfaces/iclient.md), `seed`: [ISeed](interfaces/iseed.md), `accountIndex`: number, `outputs`: { addressEd25519: string ; amount: number ; isDustAllowance?: undefined \| false \| true  }[], `startIndex?`: undefined \| number): Promise<{ message: [IMessage](interfaces/imessage.md) ; messageId: string  }\>
 
 Send a transfer from the balance on the seed.
 
@@ -1299,7 +1591,7 @@ Name | Type | Description |
 `client` | [IClient](interfaces/iclient.md) | The client to send the transfer with. |
 `seed` | [ISeed](interfaces/iseed.md) | The seed to use for address generation. |
 `accountIndex` | number | The account index in the wallet. |
-`outputs` | { addressEd25519: string ; amount: number  }[] | The outputs including address to send the funds to in ed25519 format and amount. |
+`outputs` | { addressEd25519: string ; amount: number ; isDustAllowance?: undefined \| false \| true  }[] | The outputs including address to send the funds to in ed25519 format and amount. |
 `startIndex?` | undefined \| number | The start index for the wallet count address, defaults to 0. |
 
 **Returns:** Promise<{ message: [IMessage](interfaces/imessage.md) ; messageId: string  }\>
@@ -1310,7 +1602,7 @@ ___
 
 ### sendWithAddressGenerator
 
-▸ **sendWithAddressGenerator**<T\>(`client`: [IClient](interfaces/iclient.md), `seed`: [ISeed](interfaces/iseed.md), `initialAddressState`: T, `nextAddressPath`: (addressState: T, isFirst: boolean) => string, `outputs`: { address: string ; addressType: number ; amount: number  }[]): Promise<{ message: [IMessage](interfaces/imessage.md) ; messageId: string  }\>
+▸ **sendWithAddressGenerator**<T\>(`client`: [IClient](interfaces/iclient.md), `seed`: [ISeed](interfaces/iseed.md), `initialAddressState`: T, `nextAddressPath`: (addressState: T, isFirst: boolean) => string, `outputs`: { address: string ; addressType: number ; amount: number ; isDustAllowance?: undefined \| false \| true  }[]): Promise<{ message: [IMessage](interfaces/imessage.md) ; messageId: string  }\>
 
 Send a transfer using account based indexing for the inputs.
 
@@ -1328,7 +1620,7 @@ Name | Type | Description |
 `seed` | [ISeed](interfaces/iseed.md) | The seed to use for address generation. |
 `initialAddressState` | T | The initial address state for calculating the addresses. |
 `nextAddressPath` | (addressState: T, isFirst: boolean) => string | Calculate the next address for inputs. |
-`outputs` | { address: string ; addressType: number ; amount: number  }[] | The address to send the funds to in bech32 format and amounts. |
+`outputs` | { address: string ; addressType: number ; amount: number ; isDustAllowance?: undefined \| false \| true  }[] | The address to send the funds to in bech32 format and amounts. |
 
 **Returns:** Promise<{ message: [IMessage](interfaces/imessage.md) ; messageId: string  }\>
 
@@ -1474,7 +1766,7 @@ ___
 
 ### serializeOutput
 
-▸ **serializeOutput**(`writeStream`: [WriteStream](classes/writestream.md), `object`: [ISigLockedSingleOutput](interfaces/isiglockedsingleoutput.md)): void
+▸ **serializeOutput**(`writeStream`: [WriteStream](classes/writestream.md), `object`: [ISigLockedSingleOutput](interfaces/isiglockedsingleoutput.md) \| [ISigLockedDustAllowanceOutput](interfaces/isiglockeddustallowanceoutput.md)): void
 
 Serialize the output to binary.
 
@@ -1483,7 +1775,7 @@ Serialize the output to binary.
 Name | Type | Description |
 ------ | ------ | ------ |
 `writeStream` | [WriteStream](classes/writestream.md) | The stream to write the data to. |
-`object` | [ISigLockedSingleOutput](interfaces/isiglockedsingleoutput.md) | The object to serialize.  |
+`object` | [ISigLockedSingleOutput](interfaces/isiglockedsingleoutput.md) \| [ISigLockedDustAllowanceOutput](interfaces/isiglockeddustallowanceoutput.md) | The object to serialize.  |
 
 **Returns:** void
 
@@ -1491,7 +1783,7 @@ ___
 
 ### serializeOutputs
 
-▸ **serializeOutputs**(`writeStream`: [WriteStream](classes/writestream.md), `objects`: [ISigLockedSingleOutput](interfaces/isiglockedsingleoutput.md)[]): void
+▸ **serializeOutputs**(`writeStream`: [WriteStream](classes/writestream.md), `objects`: ([ISigLockedSingleOutput](interfaces/isiglockedsingleoutput.md) \| [ISigLockedDustAllowanceOutput](interfaces/isiglockeddustallowanceoutput.md))[]): void
 
 Serialize the outputs to binary.
 
@@ -1500,7 +1792,7 @@ Serialize the outputs to binary.
 Name | Type | Description |
 ------ | ------ | ------ |
 `writeStream` | [WriteStream](classes/writestream.md) | The stream to write the data to. |
-`objects` | [ISigLockedSingleOutput](interfaces/isiglockedsingleoutput.md)[] | The objects to serialize.  |
+`objects` | ([ISigLockedSingleOutput](interfaces/isiglockedsingleoutput.md) \| [ISigLockedDustAllowanceOutput](interfaces/isiglockeddustallowanceoutput.md))[] | The objects to serialize.  |
 
 **Returns:** void
 
@@ -1535,6 +1827,23 @@ Name | Type | Description |
 ------ | ------ | ------ |
 `writeStream` | [WriteStream](classes/writestream.md) | The stream to write the data to. |
 `object` | [IReferenceUnlockBlock](interfaces/ireferenceunlockblock.md) | The object to serialize.  |
+
+**Returns:** void
+
+___
+
+### serializeSigLockedDustAllowanceOutput
+
+▸ **serializeSigLockedDustAllowanceOutput**(`writeStream`: [WriteStream](classes/writestream.md), `object`: [ISigLockedDustAllowanceOutput](interfaces/isiglockeddustallowanceoutput.md)): void
+
+Serialize the signature locked dust allowance output to binary.
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`writeStream` | [WriteStream](classes/writestream.md) | The stream to write the data to. |
+`object` | [ISigLockedDustAllowanceOutput](interfaces/isiglockeddustallowanceoutput.md) | The object to serialize.  |
 
 **Returns:** void
 
@@ -1706,6 +2015,7 @@ Name | Type | Value |
 `[ConflictReason.inputUTXOAlreadySpentInThisMilestone]` | string | "The referenced UTXO was already spent while confirming this milestone" |
 `[ConflictReason.inputUTXOAlreadySpent]` | string | "The referenced UTXO was already spent" |
 `[ConflictReason.inputUTXONotFound]` | string | "The referenced UTXO cannot be found" |
+`[ConflictReason.invalidDustAllowance]` | string | "The dust allowance for the address is invalid" |
 `[ConflictReason.invalidSignature]` | string | "The unlock block signature is invalid" |
 `[ConflictReason.none]` | string | "Not conflicting" |
 `[ConflictReason.semanticValidationFailed]` | string | "The semantic validation failed" |

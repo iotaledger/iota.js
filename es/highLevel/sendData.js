@@ -40,7 +40,9 @@ exports.sendData = void 0;
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 var payload_1 = require("../binary/payload");
+var IIndexationPayload_1 = require("../models/IIndexationPayload");
 var converter_1 = require("../utils/converter");
+var textHelper_1 = require("../utils/textHelper");
 /**
  * Send a data message.
  * @param client The client to send the transfer with.
@@ -50,31 +52,32 @@ var converter_1 = require("../utils/converter");
  */
 function sendData(client, indexationKey, indexationData) {
     return __awaiter(this, void 0, void 0, function () {
-        var indexationPayload, tips, message, messageId;
+        var indexationPayload, message, messageId;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    if (!indexationKey || indexationKey.length === 0) {
+                    if (!indexationKey) {
                         throw new Error("indexationKey must not be empty");
+                    }
+                    if (indexationKey.length < payload_1.MIN_INDEXATION_KEY_LENGTH) {
+                        throw new Error("The indexation key length is " + indexationKey.length + ", which is below the minimum size of " + payload_1.MIN_INDEXATION_KEY_LENGTH);
                     }
                     if (indexationKey.length > payload_1.MAX_INDEXATION_KEY_LENGTH) {
                         throw new Error("The indexation key length is " + indexationKey.length + ", which exceeds the maximum size of " + payload_1.MAX_INDEXATION_KEY_LENGTH);
                     }
+                    if (!textHelper_1.TextHelper.isUTF8(indexationKey)) {
+                        throw new Error("The indexationKey can only contain UTF8 characters");
+                    }
                     indexationPayload = {
-                        type: 2,
+                        type: IIndexationPayload_1.INDEXATION_PAYLOAD_TYPE,
                         index: indexationKey,
                         data: indexationData ? converter_1.Converter.bytesToHex(indexationData) : ""
                     };
-                    return [4 /*yield*/, client.tips()];
-                case 1:
-                    tips = _a.sent();
                     message = {
-                        parent1MessageId: tips.tip1MessageId,
-                        parent2MessageId: tips.tip2MessageId,
                         payload: indexationPayload
                     };
                     return [4 /*yield*/, client.messageSubmit(message)];
-                case 2:
+                case 1:
                     messageId = _a.sent();
                     return [2 /*return*/, {
                             message: message,
@@ -85,4 +88,4 @@ function sendData(client, indexationKey, indexationData) {
     });
 }
 exports.sendData = sendData;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoic2VuZERhdGEuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi9zcmMvaGlnaExldmVsL3NlbmREYXRhLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7OztBQUFBLCtCQUErQjtBQUMvQixzQ0FBc0M7QUFDdEMsNkNBQThEO0FBSTlELGdEQUErQztBQUUvQzs7Ozs7O0dBTUc7QUFDSCxTQUFzQixRQUFRLENBQUMsTUFBZSxFQUFFLGFBQXFCLEVBQUUsY0FBMkI7Ozs7OztvQkFJOUYsSUFBSSxDQUFDLGFBQWEsSUFBSSxhQUFhLENBQUMsTUFBTSxLQUFLLENBQUMsRUFBRTt3QkFDOUMsTUFBTSxJQUFJLEtBQUssQ0FBQyxpQ0FBaUMsQ0FBQyxDQUFDO3FCQUN0RDtvQkFFRCxJQUFJLGFBQWEsQ0FBQyxNQUFNLEdBQUcsbUNBQXlCLEVBQUU7d0JBQ2xELE1BQU0sSUFBSSxLQUFLLENBQUMsa0NBQWdDLGFBQWEsQ0FBQyxNQUFNLDRDQUN6QixtQ0FBMkIsQ0FBQyxDQUFDO3FCQUMzRTtvQkFFSyxpQkFBaUIsR0FBdUI7d0JBQzFDLElBQUksRUFBRSxDQUFDO3dCQUNQLEtBQUssRUFBRSxhQUFhO3dCQUNwQixJQUFJLEVBQUUsY0FBYyxDQUFDLENBQUMsQ0FBQyxxQkFBUyxDQUFDLFVBQVUsQ0FBQyxjQUFjLENBQUMsQ0FBQyxDQUFDLENBQUMsRUFBRTtxQkFDbkUsQ0FBQztvQkFFVyxxQkFBTSxNQUFNLENBQUMsSUFBSSxFQUFFLEVBQUE7O29CQUExQixJQUFJLEdBQUcsU0FBbUI7b0JBRTFCLE9BQU8sR0FBYTt3QkFDdEIsZ0JBQWdCLEVBQUUsSUFBSSxDQUFDLGFBQWE7d0JBQ3BDLGdCQUFnQixFQUFFLElBQUksQ0FBQyxhQUFhO3dCQUNwQyxPQUFPLEVBQUUsaUJBQWlCO3FCQUM3QixDQUFDO29CQUVnQixxQkFBTSxNQUFNLENBQUMsYUFBYSxDQUFDLE9BQU8sQ0FBQyxFQUFBOztvQkFBL0MsU0FBUyxHQUFHLFNBQW1DO29CQUNyRCxzQkFBTzs0QkFDSCxPQUFPLFNBQUE7NEJBQ1AsU0FBUyxXQUFBO3lCQUNaLEVBQUM7Ozs7Q0FDTDtBQWhDRCw0QkFnQ0MifQ==
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoic2VuZERhdGEuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi9zcmMvaGlnaExldmVsL3NlbmREYXRhLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7OztBQUFBLCtCQUErQjtBQUMvQixzQ0FBc0M7QUFDdEMsNkNBQXlGO0FBRXpGLG1FQUEyRjtBQUUzRixnREFBK0M7QUFDL0Msa0RBQWlEO0FBRWpEOzs7Ozs7R0FNRztBQUNILFNBQXNCLFFBQVEsQ0FBQyxNQUFlLEVBQUUsYUFBcUIsRUFBRSxjQUEyQjs7Ozs7O29CQUk5RixJQUFJLENBQUMsYUFBYSxFQUFFO3dCQUNoQixNQUFNLElBQUksS0FBSyxDQUFDLGlDQUFpQyxDQUFDLENBQUM7cUJBQ3REO29CQUVELElBQUksYUFBYSxDQUFDLE1BQU0sR0FBRyxtQ0FBeUIsRUFBRTt3QkFDbEQsTUFBTSxJQUFJLEtBQUssQ0FBQyxrQ0FBZ0MsYUFBYSxDQUFDLE1BQU0sNkNBQ3hCLG1DQUEyQixDQUFDLENBQUM7cUJBQzVFO29CQUVELElBQUksYUFBYSxDQUFDLE1BQU0sR0FBRyxtQ0FBeUIsRUFBRTt3QkFDbEQsTUFBTSxJQUFJLEtBQUssQ0FBQyxrQ0FBZ0MsYUFBYSxDQUFDLE1BQU0sNENBQ3pCLG1DQUEyQixDQUFDLENBQUM7cUJBQzNFO29CQUVELElBQUksQ0FBQyx1QkFBVSxDQUFDLE1BQU0sQ0FBQyxhQUFhLENBQUMsRUFBRTt3QkFDbkMsTUFBTSxJQUFJLEtBQUssQ0FBQyxvREFBb0QsQ0FBQyxDQUFDO3FCQUN6RTtvQkFFSyxpQkFBaUIsR0FBdUI7d0JBQzFDLElBQUksRUFBRSw0Q0FBdUI7d0JBQzdCLEtBQUssRUFBRSxhQUFhO3dCQUNwQixJQUFJLEVBQUUsY0FBYyxDQUFDLENBQUMsQ0FBQyxxQkFBUyxDQUFDLFVBQVUsQ0FBQyxjQUFjLENBQUMsQ0FBQyxDQUFDLENBQUMsRUFBRTtxQkFDbkUsQ0FBQztvQkFFSSxPQUFPLEdBQWE7d0JBQ3RCLE9BQU8sRUFBRSxpQkFBaUI7cUJBQzdCLENBQUM7b0JBRWdCLHFCQUFNLE1BQU0sQ0FBQyxhQUFhLENBQUMsT0FBTyxDQUFDLEVBQUE7O29CQUEvQyxTQUFTLEdBQUcsU0FBbUM7b0JBQ3JELHNCQUFPOzRCQUNILE9BQU8sU0FBQTs0QkFDUCxTQUFTLFdBQUE7eUJBQ1osRUFBQzs7OztDQUNMO0FBckNELDRCQXFDQyJ9

@@ -1,4 +1,4 @@
-import { Bech32Helper, Bip32Path, Converter, Ed25519Address, Ed25519Seed, ED25519_ADDRESS_TYPE, getBalance, getUnspentAddress, getUnspentAddresses, IKeyPair, IUTXOInput, sendAdvanced, SingleNodeClient } from "@iota/iota.js";
+import { Bech32Helper, Bip32Path, Converter, Ed25519Address, Ed25519Seed, ED25519_ADDRESS_TYPE, getBalance, getUnspentAddress, getUnspentAddresses, IKeyPair, IUTXOInput, sendAdvanced, SingleNodeClient, UTXO_INPUT_TYPE } from "@iota/iota.js";
 
 const API_ENDPOINT = "http://localhost:14265";
 
@@ -58,7 +58,7 @@ async function run() {
         if (!output.isSpent) {
             inputsWithKeyPairs.push({
                 input: {
-                    type: 0,
+                    type: UTXO_INPUT_TYPE,
                     transactionId: output.transactionId,
                     transactionOutputIndex: output.outputIndex
                 },

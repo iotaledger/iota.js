@@ -647,7 +647,7 @@ module.exports = {
             "error"
         ],
         "no-control-regex": [
-            "error"
+            "off"
         ],
         "no-debugger": [
             "error"

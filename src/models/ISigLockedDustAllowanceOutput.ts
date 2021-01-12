@@ -4,14 +4,14 @@ import { IEd25519Address } from "./IEd25519Address";
 import { ITypeBase } from "./ITypeBase";
 
 /**
- * The global type for the sig locked single output.
+ * The global type for the sig locked dust allowance output.
  */
-export const SIG_LOCKED_SINGLE_OUTPUT_TYPE = 0;
+export const SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE = 1;
 
 /**
  * Signature locked single output.
  */
-export interface ISigLockedSingleOutput extends ITypeBase<0> {
+export interface ISigLockedDustAllowanceOutput extends ITypeBase<1> {
     /**
      * The address.
      */

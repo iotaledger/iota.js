@@ -45,7 +45,7 @@ exports.reattach = void 0;
  */
 function reattach(client, messageId) {
     return __awaiter(this, void 0, void 0, function () {
-        var message, tips, reattachMessage, reattachedMessageId;
+        var message, reattachMessage, reattachedMessageId;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, client.message(messageId)];
@@ -54,16 +54,11 @@ function reattach(client, messageId) {
                     if (!message) {
                         throw new Error("The message does not exist.");
                     }
-                    return [4 /*yield*/, client.tips()];
-                case 2:
-                    tips = _a.sent();
                     reattachMessage = {
-                        parent1MessageId: tips.tip1MessageId,
-                        parent2MessageId: tips.tip2MessageId,
                         payload: message.payload
                     };
                     return [4 /*yield*/, client.messageSubmit(reattachMessage)];
-                case 3:
+                case 2:
                     reattachedMessageId = _a.sent();
                     return [2 /*return*/, {
                             message: message,
@@ -74,4 +69,4 @@ function reattach(client, messageId) {
     });
 }
 exports.reattach = reattach;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicmVhdHRhY2guanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi9zcmMvaGlnaExldmVsL3JlYXR0YWNoLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7OztBQUtBOzs7OztHQUtHO0FBQ0gsU0FBc0IsUUFBUSxDQUFDLE1BQWUsRUFBRSxTQUFpQjs7Ozs7d0JBSTdDLHFCQUFNLE1BQU0sQ0FBQyxPQUFPLENBQUMsU0FBUyxDQUFDLEVBQUE7O29CQUF6QyxPQUFPLEdBQUcsU0FBK0I7b0JBQy9DLElBQUksQ0FBQyxPQUFPLEVBQUU7d0JBQ1YsTUFBTSxJQUFJLEtBQUssQ0FBQyw2QkFBNkIsQ0FBQyxDQUFDO3FCQUNsRDtvQkFFWSxxQkFBTSxNQUFNLENBQUMsSUFBSSxFQUFFLEVBQUE7O29CQUExQixJQUFJLEdBQUcsU0FBbUI7b0JBRTFCLGVBQWUsR0FBYTt3QkFDOUIsZ0JBQWdCLEVBQUUsSUFBSSxDQUFDLGFBQWE7d0JBQ3BDLGdCQUFnQixFQUFFLElBQUksQ0FBQyxhQUFhO3dCQUNwQyxPQUFPLEVBQUUsT0FBTyxDQUFDLE9BQU87cUJBQzNCLENBQUM7b0JBRTBCLHFCQUFNLE1BQU0sQ0FBQyxhQUFhLENBQUMsZUFBZSxDQUFDLEVBQUE7O29CQUFqRSxtQkFBbUIsR0FBRyxTQUEyQztvQkFFdkUsc0JBQU87NEJBQ0gsT0FBTyxTQUFBOzRCQUNQLFNBQVMsRUFBRSxtQkFBbUI7eUJBQ2pDLEVBQUM7Ozs7Q0FDTDtBQXZCRCw0QkF1QkMifQ==
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicmVhdHRhY2guanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi9zcmMvaGlnaExldmVsL3JlYXR0YWNoLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7OztBQUtBOzs7OztHQUtHO0FBQ0gsU0FBc0IsUUFBUSxDQUFDLE1BQWUsRUFBRSxTQUFpQjs7Ozs7d0JBSTdDLHFCQUFNLE1BQU0sQ0FBQyxPQUFPLENBQUMsU0FBUyxDQUFDLEVBQUE7O29CQUF6QyxPQUFPLEdBQUcsU0FBK0I7b0JBQy9DLElBQUksQ0FBQyxPQUFPLEVBQUU7d0JBQ1YsTUFBTSxJQUFJLEtBQUssQ0FBQyw2QkFBNkIsQ0FBQyxDQUFDO3FCQUNsRDtvQkFFSyxlQUFlLEdBQWE7d0JBQzlCLE9BQU8sRUFBRSxPQUFPLENBQUMsT0FBTztxQkFDM0IsQ0FBQztvQkFFMEIscUJBQU0sTUFBTSxDQUFDLGFBQWEsQ0FBQyxlQUFlLENBQUMsRUFBQTs7b0JBQWpFLG1CQUFtQixHQUFHLFNBQTJDO29CQUV2RSxzQkFBTzs0QkFDSCxPQUFPLFNBQUE7NEJBQ1AsU0FBUyxFQUFFLG1CQUFtQjt5QkFDakMsRUFBQzs7OztDQUNMO0FBbkJELDRCQW1CQyJ9

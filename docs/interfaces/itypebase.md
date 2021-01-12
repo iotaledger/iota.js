@@ -30,6 +30,8 @@ Name |
 
   ↳ [ISignatureUnlockBlock](isignatureunlockblock.md)
 
+  ↳ [ISigLockedDustAllowanceOutput](isiglockeddustallowanceoutput.md)
+
   ↳ [ISigLockedSingleOutput](isiglockedsingleoutput.md)
 
   ↳ [ITransactionEssence](itransactionessence.md)

@@ -1,3 +1,4 @@
+import { ISigLockedDustAllowanceOutput } from "../ISigLockedDustAllowanceOutput";
 import { ISigLockedSingleOutput } from "../ISigLockedSingleOutput";
 /**
  * Details of an output.
@@ -22,5 +23,5 @@ export interface IOutputResponse {
     /**
      * The output.
      */
-    output: ISigLockedSingleOutput;
+    output: ISigLockedSingleOutput | ISigLockedDustAllowanceOutput;
 }

@@ -1,7 +1,7 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 import { deserializeInput, deserializeInputs, deserializeUTXOInput, serializeInput, serializeInputs, serializeUTXOInput } from "../../src/binary/input";
-import { IUTXOInput } from "../../src/models/IUTXOInput";
+import { IUTXOInput, UTXO_INPUT_TYPE } from "../../src/models/IUTXOInput";
 import { Converter } from "../../src/utils/converter";
 import { ReadStream } from "../../src/utils/readStream";
 import { WriteStream } from "../../src/utils/writeStream";
@@ -10,12 +10,12 @@ describe("Binary Input", () => {
     test("Can serialize and deserialize inputs", () => {
         const inputs: IUTXOInput[] = [
             {
-                type: 0,
+                type: UTXO_INPUT_TYPE,
                 transactionId: "6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92",
                 transactionOutputIndex: 12345
             },
             {
-                type: 0,
+                type: UTXO_INPUT_TYPE,
                 transactionId: "4566920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1",
                 transactionOutputIndex: 23456
             }
@@ -40,7 +40,7 @@ describe("Binary Input", () => {
 
     test("Can serialize and deserialize input", () => {
         const object: IUTXOInput = {
-            type: 0,
+            type: UTXO_INPUT_TYPE,
             transactionId: "6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92",
             transactionOutputIndex: 12345
         };
@@ -57,7 +57,7 @@ describe("Binary Input", () => {
 
     test("Can serialize and deserialize utxo input", () => {
         const object: IUTXOInput = {
-            type: 0,
+            type: UTXO_INPUT_TYPE,
             transactionId: "6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92",
             transactionOutputIndex: 12345
         };

@@ -6,8 +6,20 @@ import { ReadStream } from "../utils/readStream";
 import { WriteStream } from "../utils/writeStream";
 import { SMALL_TYPE_LENGTH, TRANSACTION_ID_LENGTH, UINT16_SIZE } from "./common";
 
+/**
+ * The minimum length of an input binary representation.
+ */
 export const MIN_INPUT_LENGTH: number = SMALL_TYPE_LENGTH;
+
+/**
+ * The minimum length of a utxo input binary representation.
+ */
 export const MIN_UTXO_INPUT_LENGTH: number = MIN_INPUT_LENGTH + TRANSACTION_ID_LENGTH + UINT16_SIZE;
+
+/**
+ * The maximum number of inputs.
+ */
+export const MAX_INPUT_COUNT: number = 127;
 
 /**
  * Deserialize the inputs from binary.
@@ -32,6 +44,9 @@ export function deserializeInputs(readStream: ReadStream): IUTXOInput[] {
  */
 export function serializeInputs(writeStream: WriteStream,
     objects: IUTXOInput[]): void {
+    if (objects.length > MAX_INPUT_COUNT) {
+        throw new Error(`The maximum number of inputs is ${MAX_INPUT_COUNT}, you have provided ${objects.length}`);
+    }
     writeStream.writeUInt16("inputs.numInputs", objects.length);
 
     for (let i = 0; i < objects.length; i++) {
@@ -96,7 +111,7 @@ export function deserializeUTXOInput(readStream: ReadStream): IUTXOInput {
     const transactionOutputIndex = readStream.readUInt16("utxoInput.transactionOutputIndex");
 
     return {
-        type: 0,
+        type: UTXO_INPUT_TYPE,
         transactionId,
         transactionOutputIndex
     };

@@ -40,7 +40,7 @@ ___
 
 ### output
 
-•  **output**: [ISigLockedSingleOutput](isiglockedsingleoutput.md)
+•  **output**: [ISigLockedSingleOutput](isiglockedsingleoutput.md) \| [ISigLockedDustAllowanceOutput](isiglockeddustallowanceoutput.md)
 
 The output.
 

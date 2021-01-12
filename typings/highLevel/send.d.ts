@@ -43,6 +43,7 @@ export declare function sendEd25519(client: IClient, seed: ISeed, accountIndex: 
 export declare function sendMultiple(client: IClient, seed: ISeed, accountIndex: number, outputs: {
     addressBech32: string;
     amount: number;
+    isDustAllowance?: boolean;
 }[], startIndex?: number): Promise<{
     messageId: string;
     message: IMessage;
@@ -59,6 +60,7 @@ export declare function sendMultiple(client: IClient, seed: ISeed, accountIndex:
 export declare function sendMultipleEd25519(client: IClient, seed: ISeed, accountIndex: number, outputs: {
     addressEd25519: string;
     amount: number;
+    isDustAllowance?: boolean;
 }[], startIndex?: number): Promise<{
     messageId: string;
     message: IMessage;
@@ -76,6 +78,7 @@ export declare function sendWithAddressGenerator<T>(client: IClient, seed: ISeed
     address: string;
     addressType: number;
     amount: number;
+    isDustAllowance?: boolean;
 }[]): Promise<{
     messageId: string;
     message: IMessage;

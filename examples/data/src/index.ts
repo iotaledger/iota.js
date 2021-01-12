@@ -25,7 +25,7 @@ async function run() {
         if (firstResult) {
             console.log("First Result");
             console.log("\tIndex: ", firstResult.index);
-            console.log("\tData: ", Converter.bytesToAscii(firstResult.data));
+            console.log("\tData: ", firstResult.data ? Converter.bytesToAscii(firstResult.data) : "None");
         }
 
     } else {

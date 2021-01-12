@@ -9,6 +9,7 @@ import { IMessageMetadata } from "../models/IMessageMetadata";
 import { IMilestonePayload, MILESTONE_PAYLOAD_TYPE } from "../models/IMilestonePayload";
 import { INodeInfo } from "../models/INodeInfo";
 import { IReferenceUnlockBlock, REFERENCE_UNLOCK_BLOCK_TYPE } from "../models/IReferenceUnlockBlock";
+import { ISigLockedDustAllowanceOutput, SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE } from "../models/ISigLockedDustAllowanceOutput";
 import { ISigLockedSingleOutput, SIG_LOCKED_SINGLE_OUTPUT_TYPE } from "../models/ISigLockedSingleOutput";
 import { ISignatureUnlockBlock, SIGNATURE_UNLOCK_BLOCK_TYPE } from "../models/ISignatureUnlockBlock";
 import { TRANSACTION_ESSENCE_TYPE } from "../models/ITransactionEssence";
@@ -43,6 +44,7 @@ export function logInfo(prefix: string, info: INodeInfo): void {
     logger(`${prefix}\tName:`, info.name);
     logger(`${prefix}\tVersion:`, info.version);
     logger(`${prefix}\tNetwork Id:`, info.networkId);
+    logger(`${prefix}\tMin PoW Score:`, info.minPowScore);
     logger(`${prefix}\tIs Healthy:`, info.isHealthy);
     logger(`${prefix}\tLatest Milestone Index:`, info.latestMilestoneIndex);
     logger(`${prefix}\tSolid Milestone Index:`, info.solidMilestoneIndex);
@@ -212,6 +214,11 @@ export function logOutput(prefix: string, unknownOutput?: ITypeBase<unknown>): v
         if (unknownOutput.type === SIG_LOCKED_SINGLE_OUTPUT_TYPE) {
             const output = unknownOutput as ISigLockedSingleOutput;
             logger(`${prefix}Signature Locked Single Output`);
+            logAddress(`${prefix}\t\t`, output.address);
+            logger(`${prefix}\t\tAmount:`, output.amount);
+        } else if (unknownOutput.type === SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE) {
+            const output = unknownOutput as ISigLockedDustAllowanceOutput;
+            logger(`${prefix}Signature Locked Dust Allowance Output`);
             logAddress(`${prefix}\t\t`, output.address);
             logger(`${prefix}\t\tAmount:`, output.amount);
         }

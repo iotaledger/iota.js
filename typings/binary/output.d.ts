@@ -1,32 +1,47 @@
+import { ISigLockedDustAllowanceOutput } from "../models/ISigLockedDustAllowanceOutput";
 import { ISigLockedSingleOutput } from "../models/ISigLockedSingleOutput";
 import { ReadStream } from "../utils/readStream";
 import { WriteStream } from "../utils/writeStream";
+/**
+ * The minimum length of an output binary representation.
+ */
 export declare const MIN_OUTPUT_LENGTH: number;
-export declare const MIN_SIG_LOCKED_OUTPUT_LENGTH: number;
+/**
+ * The minimum length of a sig locked single output binary representation.
+ */
+export declare const MIN_SIG_LOCKED_SINGLE_OUTPUT_LENGTH: number;
+/**
+ * The minimum length of a sig locked dust allowance output binary representation.
+ */
+export declare const MIN_SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_LENGTH: number;
+/**
+ * The maximum number of outputs.
+ */
+export declare const MAX_OUTPUT_COUNT: number;
 /**
  * Deserialize the outputs from binary.
  * @param readStream The stream to read the data from.
  * @returns The deserialized object.
  */
-export declare function deserializeOutputs(readStream: ReadStream): ISigLockedSingleOutput[];
+export declare function deserializeOutputs(readStream: ReadStream): (ISigLockedSingleOutput | ISigLockedDustAllowanceOutput)[];
 /**
  * Serialize the outputs to binary.
  * @param writeStream The stream to write the data to.
  * @param objects The objects to serialize.
  */
-export declare function serializeOutputs(writeStream: WriteStream, objects: ISigLockedSingleOutput[]): void;
+export declare function serializeOutputs(writeStream: WriteStream, objects: (ISigLockedSingleOutput | ISigLockedDustAllowanceOutput)[]): void;
 /**
  * Deserialize the output from binary.
  * @param readStream The stream to read the data from.
  * @returns The deserialized object.
  */
-export declare function deserializeOutput(readStream: ReadStream): ISigLockedSingleOutput;
+export declare function deserializeOutput(readStream: ReadStream): (ISigLockedSingleOutput | ISigLockedDustAllowanceOutput);
 /**
  * Serialize the output to binary.
  * @param writeStream The stream to write the data to.
  * @param object The object to serialize.
  */
-export declare function serializeOutput(writeStream: WriteStream, object: ISigLockedSingleOutput): void;
+export declare function serializeOutput(writeStream: WriteStream, object: ISigLockedSingleOutput | ISigLockedDustAllowanceOutput): void;
 /**
  * Deserialize the signature locked single output from binary.
  * @param readStream The stream to read the data from.
@@ -39,3 +54,15 @@ export declare function deserializeSigLockedSingleOutput(readStream: ReadStream)
  * @param object The object to serialize.
  */
 export declare function serializeSigLockedSingleOutput(writeStream: WriteStream, object: ISigLockedSingleOutput): void;
+/**
+ * Deserialize the signature locked dust allowance output from binary.
+ * @param readStream The stream to read the data from.
+ * @returns The deserialized object.
+ */
+export declare function deserializeSigLockedDustAllowanceOutput(readStream: ReadStream): ISigLockedDustAllowanceOutput;
+/**
+ * Serialize the signature locked dust allowance output to binary.
+ * @param writeStream The stream to write the data to.
+ * @param object The object to serialize.
+ */
+export declare function serializeSigLockedDustAllowanceOutput(writeStream: WriteStream, object: ISigLockedDustAllowanceOutput): void;

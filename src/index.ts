@@ -66,6 +66,7 @@ export * from "./models/IPeer";
 export * from "./models/IPowProvider";
 export * from "./models/IReferenceUnlockBlock";
 export * from "./models/ISeed";
+export * from "./models/ISigLockedDustAllowanceOutput";
 export * from "./models/ISigLockedSingleOutput";
 export * from "./models/ISignatureUnlockBlock";
 export * from "./models/ITransactionEssence";
@@ -85,6 +86,7 @@ export * from "./utils/logging";
 export * from "./utils/powHelper";
 export * from "./utils/randomHelper";
 export * from "./utils/readStream";
+export * from "./utils/textHelper";
 export * from "./utils/unitsHelper";
 export * from "./utils/writeStream";
 

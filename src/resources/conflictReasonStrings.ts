@@ -15,5 +15,6 @@ export const CONFLICT_REASON_STRINGS: { [key in ConflictReason]: string } = {
     [ConflictReason.invalidSignature]: "The unlock block signature is invalid",
     [ConflictReason.unsupportedInputOrOutputType]: "The input or output type used is unsupported",
     [ConflictReason.unsupportedAddressType]: "The address type used is unsupported",
+    [ConflictReason.invalidDustAllowance]: "The dust allowance for the address is invalid",
     [ConflictReason.semanticValidationFailed]: "The semantic validation failed"
 };

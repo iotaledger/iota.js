@@ -8,7 +8,7 @@ import { ED25519_ADDRESS_TYPE } from "../models/IEd25519Address";
 import { IKeyPair } from "../models/IKeyPair";
 import { IMessage } from "../models/IMessage";
 import { ISeed } from "../models/ISeed";
-import { IUTXOInput } from "../models/IUTXOInput";
+import { IUTXOInput, UTXO_INPUT_TYPE } from "../models/IUTXOInput";
 import { Bech32Helper } from "../utils/bech32Helper";
 import { Converter } from "../utils/converter";
 import { generateBip44Address } from "./addresses";
@@ -88,6 +88,7 @@ export async function sendMultiple(
     outputs: {
         addressBech32: string;
         amount: number;
+        isDustAllowance?: boolean;
     }[],
     startIndex?: number): Promise<{
         messageId: string;
@@ -102,7 +103,8 @@ export async function sendMultiple(
         return {
             address: Converter.bytesToHex(bech32Details.addressBytes),
             addressType: bech32Details.addressType,
-            amount: output.amount
+            amount: output.amount,
+            isDustAllowance: output.isDustAllowance
         };
     });
 
@@ -135,13 +137,19 @@ export async function sendMultipleEd25519(
     outputs: {
         addressEd25519: string;
         amount: number;
+        isDustAllowance?: boolean;
     }[],
     startIndex?: number): Promise<{
         messageId: string;
         message: IMessage;
     }> {
     const hexOutputs = outputs.map(output => (
-        { address: output.addressEd25519, addressType: ED25519_ADDRESS_TYPE, amount: output.amount }
+        {
+            address: output.addressEd25519,
+            addressType: ED25519_ADDRESS_TYPE,
+            amount: output.amount,
+            isDustAllowance: output.isDustAllowance
+        }
     ));
 
     return sendWithAddressGenerator<IBip44GeneratorState>(
@@ -175,6 +183,7 @@ export async function sendWithAddressGenerator<T>(
         address: string;
         addressType: number;
         amount: number;
+        isDustAllowance?: boolean;
     }[]): Promise<{
         messageId: string;
         message: IMessage;
@@ -263,7 +272,7 @@ export async function calculateInputs<T>(
                         consumedBalance += addressOutput.output.amount;
 
                         const input: IUTXOInput = {
-                            type: 0,
+                            type: UTXO_INPUT_TYPE,
                             transactionId: addressOutput.transactionId,
                             transactionOutputIndex: addressOutput.outputIndex
                         };

@@ -33,7 +33,7 @@ ___
 
 ### outputs
 
-•  **outputs**: [ISigLockedSingleOutput](isiglockedsingleoutput.md)[]
+•  **outputs**: ([ISigLockedSingleOutput](isiglockedsingleoutput.md) \| [ISigLockedDustAllowanceOutput](isiglockeddustallowanceoutput.md))[]
 
 The outputs of the transaction.
 

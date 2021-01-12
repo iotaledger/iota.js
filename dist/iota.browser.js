@@ -445,16 +445,49 @@
 	// Copyright 2020 IOTA Stiftung
 	// SPDX-License-Identifier: Apache-2.0
 
+	/**
+	 * Byte length for a byte field.
+	 */
 	exports.BYTE_SIZE = 1;
+	/**
+	 * Byte length for a uint16 field.
+	 */
 	exports.UINT16_SIZE = 2;
+	/**
+	 * Byte length for a uint32 field.
+	 */
 	exports.UINT32_SIZE = 4;
+	/**
+	 * Byte length for a uint64 field.
+	 */
 	exports.UINT64_SIZE = 8;
+	/**
+	 * Byte length for a message id.
+	 */
 	exports.MESSAGE_ID_LENGTH = blake2b.Blake2b.SIZE_256;
+	/**
+	 * Byte length for a transaction id.
+	 */
 	exports.TRANSACTION_ID_LENGTH = blake2b.Blake2b.SIZE_256;
+	/**
+	 * Byte length for a merkle prrof.
+	 */
 	exports.MERKLE_PROOF_LENGTH = blake2b.Blake2b.SIZE_256;
+	/**
+	 * Byte length for a type length.
+	 */
 	exports.TYPE_LENGTH = exports.UINT32_SIZE;
+	/**
+	 * Byte length for a small type length.
+	 */
 	exports.SMALL_TYPE_LENGTH = exports.BYTE_SIZE;
+	/**
+	 * Byte length for a string length.
+	 */
 	exports.STRING_LENGTH = exports.UINT16_SIZE;
+	/**
+	 * Byte length for an array length.
+	 */
 	exports.ARRAY_LENGTH = exports.UINT16_SIZE;
 
 	});
@@ -467,7 +500,13 @@
 
 
 
+	/**
+	 * The minimum length of an address binary representation.
+	 */
 	exports.MIN_ADDRESS_LENGTH = common.SMALL_TYPE_LENGTH;
+	/**
+	 * The minimum length of an ed25519 address binary representation.
+	 */
 	exports.MIN_ED25519_ADDRESS_LENGTH = exports.MIN_ADDRESS_LENGTH + ed25519Address.Ed25519Address.ADDRESS_LENGTH;
 	/**
 	 * Deserialize the address from binary.
@@ -518,7 +557,7 @@
 	    }
 	    var address = readStream.readFixedHex("ed25519Address.address", ed25519Address.Ed25519Address.ADDRESS_LENGTH);
 	    return {
-	        type: 1,
+	        type: IEd25519Address.ED25519_ADDRESS_TYPE,
 	        address: address
 	    };
 	}
@@ -548,11 +587,21 @@
 
 	var input = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.serializeUTXOInput = exports.deserializeUTXOInput = exports.serializeInput = exports.deserializeInput = exports.serializeInputs = exports.deserializeInputs = exports.MIN_UTXO_INPUT_LENGTH = exports.MIN_INPUT_LENGTH = void 0;
+	exports.serializeUTXOInput = exports.deserializeUTXOInput = exports.serializeInput = exports.deserializeInput = exports.serializeInputs = exports.deserializeInputs = exports.MAX_INPUT_COUNT = exports.MIN_UTXO_INPUT_LENGTH = exports.MIN_INPUT_LENGTH = void 0;
 
 
+	/**
+	 * The minimum length of an input binary representation.
+	 */
 	exports.MIN_INPUT_LENGTH = common.SMALL_TYPE_LENGTH;
+	/**
+	 * The minimum length of a utxo input binary representation.
+	 */
 	exports.MIN_UTXO_INPUT_LENGTH = exports.MIN_INPUT_LENGTH + common.TRANSACTION_ID_LENGTH + common.UINT16_SIZE;
+	/**
+	 * The maximum number of inputs.
+	 */
+	exports.MAX_INPUT_COUNT = 127;
 	/**
 	 * Deserialize the inputs from binary.
 	 * @param readStream The stream to read the data from.
@@ -573,6 +622,9 @@
 	 * @param objects The objects to serialize.
 	 */
 	function serializeInputs(writeStream, objects) {
+	    if (objects.length > exports.MAX_INPUT_COUNT) {
+	        throw new Error("The maximum number of inputs is " + exports.MAX_INPUT_COUNT + ", you have provided " + objects.length);
+	    }
 	    writeStream.writeUInt16("inputs.numInputs", objects.length);
 	    for (var i = 0; i < objects.length; i++) {
 	        serializeInput(writeStream, objects[i]);
@@ -629,7 +681,7 @@
 	    var transactionId = readStream.readFixedHex("utxoInput.transactionId", common.TRANSACTION_ID_LENGTH);
 	    var transactionOutputIndex = readStream.readUInt16("utxoInput.transactionOutputIndex");
 	    return {
-	        type: 0,
+	        type: IUTXOInput.UTXO_INPUT_TYPE,
 	        transactionId: transactionId,
 	        transactionOutputIndex: transactionOutputIndex
 	    };
@@ -4119,6 +4171,41 @@
 
 	});
 
+	var textHelper = createCommonjsModule(function (module, exports) {
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.TextHelper = void 0;
+	/**
+	 * Class to help with text.
+	 */
+	var TextHelper = /** @class */ (function () {
+	    function TextHelper() {
+	    }
+	    /**
+	     * Is the string UTF8.
+	     * @param value The value to test.
+	     * @returns True if the value is UTF8.
+	     */
+	    TextHelper.isUTF8 = function (value) {
+	        return value ? !/[\u0080-\uFFFF]/g.test(value) : true;
+	    };
+	    return TextHelper;
+	}());
+	exports.TextHelper = TextHelper;
+
+	});
+
+	var ISigLockedDustAllowanceOutput = createCommonjsModule(function (module, exports) {
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE = void 0;
+	/**
+	 * The global type for the sig locked dust allowance output.
+	 */
+	exports.SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE = 1;
+
+	});
+
 	var ISigLockedSingleOutput = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.SIG_LOCKED_SINGLE_OUTPUT_TYPE = void 0;
@@ -4131,14 +4218,29 @@
 
 	var output = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.serializeSigLockedSingleOutput = exports.deserializeSigLockedSingleOutput = exports.serializeOutput = exports.deserializeOutput = exports.serializeOutputs = exports.deserializeOutputs = exports.MIN_SIG_LOCKED_OUTPUT_LENGTH = exports.MIN_OUTPUT_LENGTH = void 0;
+	exports.serializeSigLockedDustAllowanceOutput = exports.deserializeSigLockedDustAllowanceOutput = exports.serializeSigLockedSingleOutput = exports.deserializeSigLockedSingleOutput = exports.serializeOutput = exports.deserializeOutput = exports.serializeOutputs = exports.deserializeOutputs = exports.MAX_OUTPUT_COUNT = exports.MIN_SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_LENGTH = exports.MIN_SIG_LOCKED_SINGLE_OUTPUT_LENGTH = exports.MIN_OUTPUT_LENGTH = void 0;
 	// Copyright 2020 IOTA Stiftung
 	// SPDX-License-Identifier: Apache-2.0
 
 
 
+
+	/**
+	 * The minimum length of an output binary representation.
+	 */
 	exports.MIN_OUTPUT_LENGTH = common.SMALL_TYPE_LENGTH;
-	exports.MIN_SIG_LOCKED_OUTPUT_LENGTH = exports.MIN_OUTPUT_LENGTH + address.MIN_ADDRESS_LENGTH + address.MIN_ED25519_ADDRESS_LENGTH;
+	/**
+	 * The minimum length of a sig locked single output binary representation.
+	 */
+	exports.MIN_SIG_LOCKED_SINGLE_OUTPUT_LENGTH = exports.MIN_OUTPUT_LENGTH + address.MIN_ADDRESS_LENGTH + address.MIN_ED25519_ADDRESS_LENGTH;
+	/**
+	 * The minimum length of a sig locked dust allowance output binary representation.
+	 */
+	exports.MIN_SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_LENGTH = exports.MIN_OUTPUT_LENGTH + address.MIN_ADDRESS_LENGTH + address.MIN_ED25519_ADDRESS_LENGTH;
+	/**
+	 * The maximum number of outputs.
+	 */
+	exports.MAX_OUTPUT_COUNT = 127;
 	/**
 	 * Deserialize the outputs from binary.
 	 * @param readStream The stream to read the data from.
@@ -4159,6 +4261,9 @@
 	 * @param objects The objects to serialize.
 	 */
 	function serializeOutputs(writeStream, objects) {
+	    if (objects.length > exports.MAX_OUTPUT_COUNT) {
+	        throw new Error("The maximum number of outputs is " + exports.MAX_OUTPUT_COUNT + ", you have provided " + objects.length);
+	    }
 	    writeStream.writeUInt16("outputs.numOutputs", objects.length);
 	    for (var i = 0; i < objects.length; i++) {
 	        serializeOutput(writeStream, objects[i]);
@@ -4179,6 +4284,9 @@
 	    if (type === ISigLockedSingleOutput.SIG_LOCKED_SINGLE_OUTPUT_TYPE) {
 	        input = deserializeSigLockedSingleOutput(readStream);
 	    }
+	    else if (type === ISigLockedDustAllowanceOutput.SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE) {
+	        input = deserializeSigLockedDustAllowanceOutput(readStream);
+	    }
 	    else {
 	        throw new Error("Unrecognized output type " + type);
 	    }
@@ -4194,6 +4302,9 @@
 	    if (object.type === ISigLockedSingleOutput.SIG_LOCKED_SINGLE_OUTPUT_TYPE) {
 	        serializeSigLockedSingleOutput(writeStream, object);
 	    }
+	    else if (object.type === ISigLockedDustAllowanceOutput.SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE) {
+	        serializeSigLockedDustAllowanceOutput(writeStream, object);
+	    }
 	    else {
 	        throw new Error("Unrecognized output type " + object.type);
 	    }
@@ -4205,8 +4316,8 @@
 	 * @returns The deserialized object.
 	 */
 	function deserializeSigLockedSingleOutput(readStream) {
-	    if (!readStream.hasRemaining(exports.MIN_SIG_LOCKED_OUTPUT_LENGTH)) {
-	        throw new Error("Signature Locked Single Output data is " + readStream.length() + " in length which is less than the minimimum size required of " + exports.MIN_SIG_LOCKED_OUTPUT_LENGTH);
+	    if (!readStream.hasRemaining(exports.MIN_SIG_LOCKED_SINGLE_OUTPUT_LENGTH)) {
+	        throw new Error("Signature Locked Single Output data is " + readStream.length() + " in length which is less than the minimimum size required of " + exports.MIN_SIG_LOCKED_SINGLE_OUTPUT_LENGTH);
 	    }
 	    var type = readStream.readByte("sigLockedSingleOutput.type");
 	    if (type !== ISigLockedSingleOutput.SIG_LOCKED_SINGLE_OUTPUT_TYPE) {
@@ -4215,7 +4326,7 @@
 	    var address$1 = address.deserializeAddress(readStream);
 	    var amount = readStream.readUInt64("sigLockedSingleOutput.amount");
 	    return {
-	        type: 0,
+	        type: ISigLockedSingleOutput.SIG_LOCKED_SINGLE_OUTPUT_TYPE,
 	        address: address$1,
 	        amount: Number(amount)
 	    };
@@ -4232,6 +4343,39 @@
 	    writeStream.writeUInt64("sigLockedSingleOutput.amount", BigInt(object.amount));
 	}
 	exports.serializeSigLockedSingleOutput = serializeSigLockedSingleOutput;
+	/**
+	 * Deserialize the signature locked dust allowance output from binary.
+	 * @param readStream The stream to read the data from.
+	 * @returns The deserialized object.
+	 */
+	function deserializeSigLockedDustAllowanceOutput(readStream) {
+	    if (!readStream.hasRemaining(exports.MIN_SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_LENGTH)) {
+	        throw new Error("Signature Locked Dust Allowance Output data is " + readStream.length() + " in length which is less than the minimimum size required of " + exports.MIN_SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_LENGTH);
+	    }
+	    var type = readStream.readByte("sigLockedDustAllowanceOutput.type");
+	    if (type !== ISigLockedDustAllowanceOutput.SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE) {
+	        throw new Error("Type mismatch in sigLockedDustAllowanceOutput " + type);
+	    }
+	    var address$1 = address.deserializeAddress(readStream);
+	    var amount = readStream.readUInt64("sigLockedDustAllowanceOutput.amount");
+	    return {
+	        type: ISigLockedDustAllowanceOutput.SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE,
+	        address: address$1,
+	        amount: Number(amount)
+	    };
+	}
+	exports.deserializeSigLockedDustAllowanceOutput = deserializeSigLockedDustAllowanceOutput;
+	/**
+	 * Serialize the signature locked dust allowance output to binary.
+	 * @param writeStream The stream to write the data to.
+	 * @param object The object to serialize.
+	 */
+	function serializeSigLockedDustAllowanceOutput(writeStream, object) {
+	    writeStream.writeByte("sigLockedDustAllowanceOutput.type", object.type);
+	    address.serializeAddress(writeStream, object.address);
+	    writeStream.writeUInt64("sigLockedDustAllowanceOutput.amount", BigInt(object.amount));
+	}
+	exports.serializeSigLockedDustAllowanceOutput = serializeSigLockedDustAllowanceOutput;
 
 	});
 
@@ -4246,6 +4390,9 @@
 
 
 
+	/**
+	 * The minimum length of a transaction essence binary representation.
+	 */
 	exports.MIN_TRANSACTION_ESSENCE_LENGTH = common.SMALL_TYPE_LENGTH + (2 * common.ARRAY_LENGTH) + common.UINT32_SIZE;
 	/**
 	 * Deserialize the transaction essence from binary.
@@ -4267,7 +4414,7 @@
 	        throw new Error("Transaction essence can only contain embedded Indexation Payload");
 	    }
 	    return {
-	        type: 0,
+	        type: ITransactionEssence.TRANSACTION_ESSENCE_TYPE,
 	        inputs: inputs,
 	        outputs: outputs,
 	        payload: payload$1
@@ -4327,7 +4474,13 @@
 
 
 
+	/**
+	 * The minimum length of a signature binary representation.
+	 */
 	exports.MIN_SIGNATURE_LENGTH = common.SMALL_TYPE_LENGTH;
+	/**
+	 * The minimum length of an ed25519 signature binary representation.
+	 */
 	exports.MIN_ED25519_SIGNATURE_LENGTH = exports.MIN_SIGNATURE_LENGTH + ed25519.Ed25519.SIGNATURE_SIZE + ed25519.Ed25519.PUBLIC_KEY_SIZE;
 	/**
 	 * Deserialize the signature from binary.
@@ -4379,7 +4532,7 @@
 	    var publicKey = readStream.readFixedHex("ed25519Signature.publicKey", ed25519.Ed25519.PUBLIC_KEY_SIZE);
 	    var signature = readStream.readFixedHex("ed25519Signature.signature", ed25519.Ed25519.SIGNATURE_SIZE);
 	    return {
-	        type: 1,
+	        type: IEd25519Signature.ED25519_SIGNATURE_TYPE,
 	        publicKey: publicKey,
 	        signature: signature
 	    };
@@ -4408,8 +4561,17 @@
 
 
 
+	/**
+	 * The minimum length of an unlock block binary representation.
+	 */
 	exports.MIN_UNLOCK_BLOCK_LENGTH = common.SMALL_TYPE_LENGTH;
+	/**
+	 * The minimum length of a signature unlock block binary representation.
+	 */
 	exports.MIN_SIGNATURE_UNLOCK_BLOCK_LENGTH = exports.MIN_UNLOCK_BLOCK_LENGTH + signature.MIN_SIGNATURE_LENGTH;
+	/**
+	 * The minimum length of a reference unlock block binary representation.
+	 */
 	exports.MIN_REFERENCE_UNLOCK_BLOCK_LENGTH = exports.MIN_UNLOCK_BLOCK_LENGTH + common.UINT16_SIZE;
 	/**
 	 * Deserialize the unlock blocks from binary.
@@ -4492,7 +4654,7 @@
 	    }
 	    var signature$1 = signature.deserializeSignature(readStream);
 	    return {
-	        type: 0,
+	        type: ISignatureUnlockBlock.SIGNATURE_UNLOCK_BLOCK_TYPE,
 	        signature: signature$1
 	    };
 	}
@@ -4522,7 +4684,7 @@
 	    }
 	    var reference = readStream.readUInt16("referenceUnlockBlock.reference");
 	    return {
-	        type: 1,
+	        type: IReferenceUnlockBlock.REFERENCE_UNLOCK_BLOCK_TYPE,
 	        reference: reference
 	    };
 	}
@@ -4542,9 +4704,10 @@
 
 	var payload = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.serializeIndexationPayload = exports.deserializeIndexationPayload = exports.serializeMilestonePayload = exports.deserializeMilestonePayload = exports.serializeTransactionPayload = exports.deserializeTransactionPayload = exports.serializePayload = exports.deserializePayload = exports.MAX_INDEXATION_KEY_LENGTH = exports.MIN_TRANSACTION_PAYLOAD_LENGTH = exports.MIN_INDEXATION_PAYLOAD_LENGTH = exports.MIN_MILESTONE_PAYLOAD_LENGTH = exports.MIN_PAYLOAD_LENGTH = void 0;
+	exports.serializeIndexationPayload = exports.deserializeIndexationPayload = exports.serializeMilestonePayload = exports.deserializeMilestonePayload = exports.serializeTransactionPayload = exports.deserializeTransactionPayload = exports.serializePayload = exports.deserializePayload = exports.MAX_INDEXATION_KEY_LENGTH = exports.MIN_INDEXATION_KEY_LENGTH = exports.MIN_TRANSACTION_PAYLOAD_LENGTH = exports.MIN_INDEXATION_PAYLOAD_LENGTH = exports.MIN_MILESTONE_PAYLOAD_LENGTH = exports.MIN_PAYLOAD_LENGTH = void 0;
 	// Copyright 2020 IOTA Stiftung
 	// SPDX-License-Identifier: Apache-2.0
+
 
 
 
@@ -4560,6 +4723,10 @@
 	    common.BYTE_SIZE + ed25519.Ed25519.SIGNATURE_SIZE;
 	exports.MIN_INDEXATION_PAYLOAD_LENGTH = exports.MIN_PAYLOAD_LENGTH + common.STRING_LENGTH + common.STRING_LENGTH;
 	exports.MIN_TRANSACTION_PAYLOAD_LENGTH = exports.MIN_PAYLOAD_LENGTH + common.UINT32_SIZE;
+	/**
+	 * The minimum length of a indexation key.
+	 */
+	exports.MIN_INDEXATION_KEY_LENGTH = 1;
 	/**
 	 * The maximum length of a indexation key.
 	 */
@@ -4649,7 +4816,7 @@
 	        throw new Error("Unrecognized transaction essence type " + type);
 	    }
 	    return {
-	        type: 0,
+	        type: ITransactionPayload.TRANSACTION_PAYLOAD_TYPE,
 	        essence: essence,
 	        unlockBlocks: unlockBlocks
 	    };
@@ -4700,7 +4867,7 @@
 	        signatures.push(readStream.readFixedHex("payloadMilestone.signature", ed25519.Ed25519.SIGNATURE_SIZE));
 	    }
 	    return {
-	        type: 1,
+	        type: IMilestonePayload.MILESTONE_PAYLOAD_TYPE,
 	        index: index,
 	        timestamp: Number(timestamp),
 	        parent1MessageId: parent1MessageId,
@@ -4750,7 +4917,7 @@
 	    var dataLength = readStream.readUInt32("payloadIndexation.dataLength");
 	    var data = readStream.readFixedHex("payloadIndexation.data", dataLength);
 	    return {
-	        type: 2,
+	        type: IIndexationPayload.INDEXATION_PAYLOAD_TYPE,
 	        index: index,
 	        data: data
 	    };
@@ -4762,8 +4929,14 @@
 	 * @param object The object to serialize.
 	 */
 	function serializeIndexationPayload(writeStream, object) {
+	    if (object.index.length < exports.MIN_INDEXATION_KEY_LENGTH) {
+	        throw new Error("The indexation key length is " + object.index.length + ", which is below the minimum size of " + exports.MIN_INDEXATION_KEY_LENGTH);
+	    }
 	    if (object.index.length > exports.MAX_INDEXATION_KEY_LENGTH) {
 	        throw new Error("The indexation key length is " + object.index.length + ", which exceeds the maximum size of " + exports.MAX_INDEXATION_KEY_LENGTH);
+	    }
+	    if (!textHelper.TextHelper.isUTF8(object.index)) {
+	        throw new Error("The index can only contain UTF8 characters");
 	    }
 	    writeStream.writeUInt32("payloadIndexation.type", object.type);
 	    writeStream.writeString("payloadIndexation.index", object.index);
@@ -4784,10 +4957,16 @@
 	exports.serializeMessage = exports.deserializeMessage = exports.MAX_MESSAGE_LENGTH = void 0;
 
 
+	/**
+	 * The minimum length of a message binary representation.
+	 */
 	var MIN_MESSAGE_LENGTH = common.UINT64_SIZE +
 	    (2 * common.MESSAGE_ID_LENGTH) +
 	    payload.MIN_PAYLOAD_LENGTH +
 	    common.UINT64_SIZE;
+	/**
+	 * Empty message id.
+	 */
 	var EMPTY_MESSAGE_ID_HEX = "0".repeat(common.MESSAGE_ID_LENGTH * 2);
 	/**
 	 * The maximum length of a message.
@@ -6004,13 +6183,13 @@
 	        return bech32.Bech32.matches(humanReadablePart, bech32Text);
 	    };
 	    /**
-	     * The default human readable part of the bech32 addresses for mainnet, currently 'iot'.
+	     * The default human readable part of the bech32 addresses for mainnet, currently 'iota'.
 	     */
-	    Bech32Helper.BECH32_DEFAULT_HRP_MAIN = "iot";
+	    Bech32Helper.BECH32_DEFAULT_HRP_MAIN = "iota";
 	    /**
-	     * The default human readable part of the bech32 addresses for testnet, currently 'toi'.
+	     * The default human readable part of the bech32 addresses for testnet, currently 'atoi'.
 	     */
-	    Bech32Helper.BECH32_DEFAULT_HRP_TEST = "toi";
+	    Bech32Helper.BECH32_DEFAULT_HRP_TEST = "atoi";
 	    return Bech32Helper;
 	}());
 	exports.Bech32Helper = Bech32Helper;
@@ -10294,7 +10473,7 @@
 	 */
 	function reattach(client, messageId) {
 	    return __awaiter(this, void 0, void 0, function () {
-	        var message, tips, reattachMessage, reattachedMessageId;
+	        var message, reattachMessage, reattachedMessageId;
 	        return __generator(this, function (_a) {
 	            switch (_a.label) {
 	                case 0: return [4 /*yield*/, client.message(messageId)];
@@ -10303,16 +10482,11 @@
 	                    if (!message) {
 	                        throw new Error("The message does not exist.");
 	                    }
-	                    return [4 /*yield*/, client.tips()];
-	                case 2:
-	                    tips = _a.sent();
 	                    reattachMessage = {
-	                        parent1MessageId: tips.tip1MessageId,
-	                        parent2MessageId: tips.tip2MessageId,
 	                        payload: message.payload
 	                    };
 	                    return [4 /*yield*/, client.messageSubmit(reattachMessage)];
-	                case 3:
+	                case 2:
 	                    reattachedMessageId = _a.sent();
 	                    return [2 /*return*/, {
 	                            message: message,
@@ -10537,6 +10711,15 @@
 
 
 
+
+
+
+
+
+
+
+
+
 	/**
 	 * Send a transfer from the balance on the seed.
 	 * @param client The client to send the transfer with.
@@ -10548,21 +10731,16 @@
 	 */
 	function sendAdvanced(client, inputsAndSignatureKeyPairs, outputs, indexationKey, indexationData) {
 	    return __awaiter(this, void 0, void 0, function () {
-	        var transactionPayload, tips, message, messageId;
+	        var transactionPayload, message, messageId;
 	        return __generator(this, function (_a) {
 	            switch (_a.label) {
 	                case 0:
 	                    transactionPayload = buildTransactionPayload(inputsAndSignatureKeyPairs, outputs, indexationKey, indexationData);
-	                    return [4 /*yield*/, client.tips()];
-	                case 1:
-	                    tips = _a.sent();
 	                    message = {
-	                        parent1MessageId: tips.tip1MessageId,
-	                        parent2MessageId: tips.tip2MessageId,
 	                        payload: transactionPayload
 	                    };
 	                    return [4 /*yield*/, client.messageSubmit(message)];
-	                case 2:
+	                case 1:
 	                    messageId = _a.sent();
 	                    return [2 /*return*/, {
 	                            messageId: messageId,
@@ -10588,25 +10766,33 @@
 	    if (!outputs || outputs.length === 0) {
 	        throw new Error("You must specify some outputs");
 	    }
-	    if (indexationKey && indexationKey.length > payload.MAX_INDEXATION_KEY_LENGTH) {
-	        throw new Error("The indexation key length is " + indexationKey.length + ", which exceeds the maximum size of " + payload.MAX_INDEXATION_KEY_LENGTH);
+	    if (indexationKey) {
+	        if (indexationKey.length < payload.MIN_INDEXATION_KEY_LENGTH) {
+	            throw new Error("The indexation key length is " + indexationKey.length + ", which is below the minimum size of " + payload.MIN_INDEXATION_KEY_LENGTH);
+	        }
+	        if (indexationKey.length > payload.MAX_INDEXATION_KEY_LENGTH) {
+	            throw new Error("The indexation key length is " + indexationKey.length + ", which exceeds the maximum size of " + payload.MAX_INDEXATION_KEY_LENGTH);
+	        }
+	        if (!textHelper.TextHelper.isUTF8(indexationKey)) {
+	            throw new Error("The indexationKey can only contain UTF8 characters");
+	        }
 	    }
 	    var outputsWithSerialization = [];
 	    for (var _i = 0, outputs_1 = outputs; _i < outputs_1.length; _i++) {
 	        var output$1 = outputs_1[_i];
 	        if (output$1.addressType === IEd25519Address.ED25519_ADDRESS_TYPE) {
-	            var sigLockedOutput = {
-	                type: 0,
+	            var o = {
+	                type: output$1.isDustAllowance ? ISigLockedDustAllowanceOutput.SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE : ISigLockedSingleOutput.SIG_LOCKED_SINGLE_OUTPUT_TYPE,
 	                address: {
-	                    type: 1,
+	                    type: output$1.addressType,
 	                    address: output$1.address
 	                },
 	                amount: output$1.amount
 	            };
 	            var writeStream$1 = new writeStream.WriteStream();
-	            output.serializeOutput(writeStream$1, sigLockedOutput);
+	            output.serializeOutput(writeStream$1, o);
 	            outputsWithSerialization.push({
-	                output: sigLockedOutput,
+	                output: o,
 	                serialized: writeStream$1.finalHex()
 	            });
 	        }
@@ -10623,12 +10809,12 @@
 	    var sortedInputs = inputsAndSignatureKeyPairsSerialized.sort(function (a, b) { return a.serialized.localeCompare(b.serialized); });
 	    var sortedOutputs = outputsWithSerialization.sort(function (a, b) { return a.serialized.localeCompare(b.serialized); });
 	    var transactionEssence = {
-	        type: 0,
+	        type: ITransactionEssence.TRANSACTION_ESSENCE_TYPE,
 	        inputs: sortedInputs.map(function (i) { return i.input; }),
 	        outputs: sortedOutputs.map(function (o) { return o.output; }),
 	        payload: indexationKey
 	            ? {
-	                type: 2,
+	                type: IIndexationPayload.INDEXATION_PAYLOAD_TYPE,
 	                index: indexationKey,
 	                data: indexationData ? converter.Converter.bytesToHex(indexationData) : ""
 	            }
@@ -10645,15 +10831,15 @@
 	        var hexInputAddressPublic = converter.Converter.bytesToHex(input$1.addressKeyPair.publicKey);
 	        if (addressToUnlockBlock[hexInputAddressPublic]) {
 	            unlockBlocks.push({
-	                type: 1,
+	                type: IReferenceUnlockBlock.REFERENCE_UNLOCK_BLOCK_TYPE,
 	                reference: addressToUnlockBlock[hexInputAddressPublic].unlockIndex
 	            });
 	        }
 	        else {
 	            unlockBlocks.push({
-	                type: 0,
+	                type: ISignatureUnlockBlock.SIGNATURE_UNLOCK_BLOCK_TYPE,
 	                signature: {
-	                    type: 1,
+	                    type: IEd25519Signature.ED25519_SIGNATURE_TYPE,
 	                    publicKey: hexInputAddressPublic,
 	                    signature: converter.Converter.bytesToHex(ed25519.Ed25519.sign(input$1.addressKeyPair.privateKey, essenceFinal))
 	                }
@@ -10665,7 +10851,7 @@
 	        }
 	    }
 	    var transactionPayload = {
-	        type: 0,
+	        type: ITransactionPayload.TRANSACTION_PAYLOAD_TYPE,
 	        essence: transactionEssence,
 	        unlockBlocks: unlockBlocks
 	    };
@@ -10716,6 +10902,7 @@
 	exports.calculateInputs = exports.sendWithAddressGenerator = exports.sendMultipleEd25519 = exports.sendMultiple = exports.sendEd25519 = exports.send = void 0;
 	// Copyright 2020 IOTA Stiftung
 	// SPDX-License-Identifier: Apache-2.0
+
 
 
 
@@ -10780,7 +10967,8 @@
 	                return {
 	                    address: converter.Converter.bytesToHex(bech32Details.addressBytes),
 	                    addressType: bech32Details.addressType,
-	                    amount: output.amount
+	                    amount: output.amount,
+	                    isDustAllowance: output.isDustAllowance
 	                };
 	            });
 	            return [2 /*return*/, sendWithAddressGenerator(client, seed, {
@@ -10805,7 +10993,12 @@
 	    return __awaiter(this, void 0, void 0, function () {
 	        var hexOutputs;
 	        return __generator(this, function (_a) {
-	            hexOutputs = outputs.map(function (output) { return ({ address: output.addressEd25519, addressType: IEd25519Address.ED25519_ADDRESS_TYPE, amount: output.amount }); });
+	            hexOutputs = outputs.map(function (output) { return ({
+	                address: output.addressEd25519,
+	                addressType: IEd25519Address.ED25519_ADDRESS_TYPE,
+	                amount: output.amount,
+	                isDustAllowance: output.isDustAllowance
+	            }); });
 	            return [2 /*return*/, sendWithAddressGenerator(client, seed, {
 	                    accountIndex: accountIndex,
 	                    addressIndex: startIndex !== null && startIndex !== void 0 ? startIndex : 0,
@@ -10904,7 +11097,7 @@
 	                        else {
 	                            consumedBalance += addressOutput.output.amount;
 	                            input = {
-	                                type: 0,
+	                                type: IUTXOInput.UTXO_INPUT_TYPE,
 	                                transactionId: addressOutput.transactionId,
 	                                transactionOutputIndex: addressOutput.outputIndex
 	                            };
@@ -10989,6 +11182,8 @@
 	// SPDX-License-Identifier: Apache-2.0
 
 
+
+
 	/**
 	 * Send a data message.
 	 * @param client The client to send the transfer with.
@@ -10998,31 +11193,32 @@
 	 */
 	function sendData(client, indexationKey, indexationData) {
 	    return __awaiter(this, void 0, void 0, function () {
-	        var indexationPayload, tips, message, messageId;
+	        var indexationPayload, message, messageId;
 	        return __generator(this, function (_a) {
 	            switch (_a.label) {
 	                case 0:
-	                    if (!indexationKey || indexationKey.length === 0) {
+	                    if (!indexationKey) {
 	                        throw new Error("indexationKey must not be empty");
+	                    }
+	                    if (indexationKey.length < payload.MIN_INDEXATION_KEY_LENGTH) {
+	                        throw new Error("The indexation key length is " + indexationKey.length + ", which is below the minimum size of " + payload.MIN_INDEXATION_KEY_LENGTH);
 	                    }
 	                    if (indexationKey.length > payload.MAX_INDEXATION_KEY_LENGTH) {
 	                        throw new Error("The indexation key length is " + indexationKey.length + ", which exceeds the maximum size of " + payload.MAX_INDEXATION_KEY_LENGTH);
 	                    }
+	                    if (!textHelper.TextHelper.isUTF8(indexationKey)) {
+	                        throw new Error("The indexationKey can only contain UTF8 characters");
+	                    }
 	                    indexationPayload = {
-	                        type: 2,
+	                        type: IIndexationPayload.INDEXATION_PAYLOAD_TYPE,
 	                        index: indexationKey,
 	                        data: indexationData ? converter.Converter.bytesToHex(indexationData) : ""
 	                    };
-	                    return [4 /*yield*/, client.tips()];
-	                case 1:
-	                    tips = _a.sent();
 	                    message = {
-	                        parent1MessageId: tips.tip1MessageId,
-	                        parent2MessageId: tips.tip2MessageId,
 	                        payload: indexationPayload
 	                    };
 	                    return [4 /*yield*/, client.messageSubmit(message)];
-	                case 2:
+	                case 1:
 	                    messageId = _a.sent();
 	                    return [2 /*return*/, {
 	                            message: message,
@@ -11122,9 +11318,13 @@
 	     */
 	    ConflictReason[ConflictReason["unsupportedAddressType"] = 7] = "unsupportedAddressType";
 	    /**
+	     * The dust allowance for the address is invalid.
+	     */
+	    ConflictReason[ConflictReason["invalidDustAllowance"] = 8] = "invalidDustAllowance";
+	    /**
 	     * The semantic validation failed.
 	     */
-	    ConflictReason[ConflictReason["semanticValidationFailed"] = 8] = "semanticValidationFailed";
+	    ConflictReason[ConflictReason["semanticValidationFailed"] = 9] = "semanticValidationFailed";
 	})(ConflictReason = exports.ConflictReason || (exports.ConflictReason = {}));
 
 	});
@@ -11510,6 +11710,7 @@
 	    _a[conflictReason.ConflictReason.invalidSignature] = "The unlock block signature is invalid",
 	    _a[conflictReason.ConflictReason.unsupportedInputOrOutputType] = "The input or output type used is unsupported",
 	    _a[conflictReason.ConflictReason.unsupportedAddressType] = "The address type used is unsupported",
+	    _a[conflictReason.ConflictReason.invalidDustAllowance] = "The dust allowance for the address is invalid",
 	    _a[conflictReason.ConflictReason.semanticValidationFailed] = "The semantic validation failed",
 	    _a);
 
@@ -11596,6 +11797,7 @@
 
 
 
+
 	/**
 	 * The logger used by the log methods.
 	 * @param message The message to output.
@@ -11622,6 +11824,7 @@
 	    logger(prefix + "\tName:", info.name);
 	    logger(prefix + "\tVersion:", info.version);
 	    logger(prefix + "\tNetwork Id:", info.networkId);
+	    logger(prefix + "\tMin PoW Score:", info.minPowScore);
 	    logger(prefix + "\tIs Healthy:", info.isHealthy);
 	    logger(prefix + "\tLatest Milestone Index:", info.latestMilestoneIndex);
 	    logger(prefix + "\tSolid Milestone Index:", info.solidMilestoneIndex);
@@ -11796,6 +11999,12 @@
 	        if (unknownOutput.type === ISigLockedSingleOutput.SIG_LOCKED_SINGLE_OUTPUT_TYPE) {
 	            var output = unknownOutput;
 	            logger(prefix + "Signature Locked Single Output");
+	            logAddress(prefix + "\t\t", output.address);
+	            logger(prefix + "\t\tAmount:", output.amount);
+	        }
+	        else if (unknownOutput.type === ISigLockedDustAllowanceOutput.SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE) {
+	            var output = unknownOutput;
+	            logger(prefix + "Signature Locked Dust Allowance Output");
 	            logAddress(prefix + "\t\t", output.address);
 	            logger(prefix + "\t\tAmount:", output.amount);
 	        }
@@ -12037,6 +12246,7 @@
 	__exportStar(IPowProvider, exports);
 	__exportStar(IReferenceUnlockBlock, exports);
 	__exportStar(ISeed, exports);
+	__exportStar(ISigLockedDustAllowanceOutput, exports);
 	__exportStar(ISigLockedSingleOutput, exports);
 	__exportStar(ISignatureUnlockBlock, exports);
 	__exportStar(ITransactionEssence, exports);
@@ -12056,6 +12266,7 @@
 	__exportStar(powHelper, exports);
 	__exportStar(randomHelper, exports);
 	__exportStar(readStream, exports);
+	__exportStar(textHelper, exports);
 	__exportStar(unitsHelper, exports);
 	__exportStar(writeStream, exports);
 

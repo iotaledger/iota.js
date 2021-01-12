@@ -8,6 +8,10 @@ export declare const MIN_MILESTONE_PAYLOAD_LENGTH: number;
 export declare const MIN_INDEXATION_PAYLOAD_LENGTH: number;
 export declare const MIN_TRANSACTION_PAYLOAD_LENGTH: number;
 /**
+ * The minimum length of a indexation key.
+ */
+export declare const MIN_INDEXATION_KEY_LENGTH: number;
+/**
  * The maximum length of a indexation key.
  */
 export declare const MAX_INDEXATION_KEY_LENGTH: number;

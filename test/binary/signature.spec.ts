@@ -1,7 +1,7 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 import { deserializeSignature, deserializeEd25519Signature, serializeSignature, serializeEd25519Signature } from "../../src/binary/signature";
-import { IEd25519Signature } from "../../src/models/IEd25519Signature";
+import { ED25519_SIGNATURE_TYPE, IEd25519Signature } from "../../src/models/IEd25519Signature";
 import { Converter } from "../../src/utils/converter";
 import { ReadStream } from "../../src/utils/readStream";
 import { WriteStream } from "../../src/utils/writeStream";
@@ -9,7 +9,7 @@ import { WriteStream } from "../../src/utils/writeStream";
 describe("Binary Signature", () => {
     test("Can serialize and deserialize signature", () => {
         const object: IEd25519Signature = {
-            type: 1,
+            type: ED25519_SIGNATURE_TYPE,
             publicKey: "6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92",
             // eslint-disable-next-line max-len
             signature: "2c59d43952bda7ca60d3c2288ebc00703b4b60c928d277382cad5f57b02a90825f2d3a8509d6594498e0488f086d8fa3f13d9636d20e759eb5806ffe663bac0d"
@@ -29,7 +29,7 @@ describe("Binary Signature", () => {
 
     test("Can serialize and deserialize ed25519 signature", () => {
         const object: IEd25519Signature = {
-            type: 1,
+            type: ED25519_SIGNATURE_TYPE,
             publicKey: "6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92",
             // eslint-disable-next-line max-len
             signature: "2c59d43952bda7ca60d3c2288ebc00703b4b60c928d277382cad5f57b02a90825f2d3a8509d6594498e0488f086d8fa3f13d9636d20e759eb5806ffe663bac0d"

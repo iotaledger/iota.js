@@ -1,8 +1,8 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 import { deserializeIndexationPayload, deserializePayload, serializeIndexationPayload, serializeMilestonePayload, deserializeMilestonePayload } from "../../src/binary/payload";
-import { IIndexationPayload } from "../../src/models/IIndexationPayload";
-import { IMilestonePayload } from "../../src/models/IMilestonePayload";
+import { IIndexationPayload, INDEXATION_PAYLOAD_TYPE } from "../../src/models/IIndexationPayload";
+import { IMilestonePayload, MILESTONE_PAYLOAD_TYPE } from "../../src/models/IMilestonePayload";
 import { Converter } from "../../src/utils/converter";
 import { ReadStream } from "../../src/utils/readStream";
 import { WriteStream } from "../../src/utils/writeStream";
@@ -95,7 +95,7 @@ describe("Binary Payload", () => {
 
     test("Can serialize and deserialize indexation payload", () => {
         const payload: IIndexationPayload = {
-            type: 2,
+            type: INDEXATION_PAYLOAD_TYPE,
             index: "foo",
             data: Converter.asciiToHex("bar")
         };
@@ -107,12 +107,15 @@ describe("Binary Payload", () => {
         const deserialized = deserializeIndexationPayload(new ReadStream(Converter.hexToBytes(hex)));
         expect(deserialized.type).toEqual(2);
         expect(deserialized.index).toEqual("foo");
-        expect(Converter.hexToAscii(deserialized.data)).toEqual("bar");
+        expect(deserialized.data).toBeDefined();
+        if (deserialized.data) {
+            expect(Converter.hexToAscii(deserialized.data)).toEqual("bar");
+        }
     });
 
     test("Can serialize and deserialize milestone payload", () => {
         const payload: IMilestonePayload = {
-            type: 1,
+            type: MILESTONE_PAYLOAD_TYPE,
             index: 1087,
             timestamp: 1605190003,
             parent1MessageId: "c0ab1d1f6886ba6317634da6b2d957e7c987a9699dd3707d1e2751fcf4b8efe3",

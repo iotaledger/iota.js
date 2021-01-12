@@ -8,14 +8,14 @@ import { Bech32 } from "../crypto/bech32";
  */
 export class Bech32Helper {
     /**
-     * The default human readable part of the bech32 addresses for mainnet, currently 'iot'.
+     * The default human readable part of the bech32 addresses for mainnet, currently 'iota'.
      */
-    public static BECH32_DEFAULT_HRP_MAIN: string = "iot";
+    public static BECH32_DEFAULT_HRP_MAIN: string = "iota";
 
     /**
-     * The default human readable part of the bech32 addresses for testnet, currently 'toi'.
+     * The default human readable part of the bech32 addresses for testnet, currently 'atoi'.
      */
-    public static BECH32_DEFAULT_HRP_TEST: string = "toi";
+    public static BECH32_DEFAULT_HRP_TEST: string = "atoi";
 
     /**
      * Encode an address to bech32.

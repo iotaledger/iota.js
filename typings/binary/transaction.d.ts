@@ -1,6 +1,9 @@
 import { ITransactionEssence } from "../models/ITransactionEssence";
 import { ReadStream } from "../utils/readStream";
 import { WriteStream } from "../utils/writeStream";
+/**
+ * The minimum length of a transaction essence binary representation.
+ */
 export declare const MIN_TRANSACTION_ESSENCE_LENGTH: number;
 /**
  * Deserialize the transaction essence from binary.
