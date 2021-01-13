@@ -13,12 +13,27 @@ import { BYTE_SIZE, MERKLE_PROOF_LENGTH, MESSAGE_ID_LENGTH, STRING_LENGTH, TYPE_
 import { deserializeTransactionEssence, serializeTransactionEssence } from "./transaction";
 import { deserializeUnlockBlocks, serializeUnlockBlocks } from "./unlockBlock";
 
+/**
+ * The minimum length of a payload binary representation.
+ */
 export const MIN_PAYLOAD_LENGTH: number = TYPE_LENGTH;
+
+/**
+ * The minimum length of a milestone payload binary representation.
+ */
 export const MIN_MILESTONE_PAYLOAD_LENGTH: number = MIN_PAYLOAD_LENGTH + UINT32_SIZE + UINT64_SIZE +
     MESSAGE_ID_LENGTH + MESSAGE_ID_LENGTH + MERKLE_PROOF_LENGTH +
     BYTE_SIZE + Ed25519.PUBLIC_KEY_SIZE +
     BYTE_SIZE + Ed25519.SIGNATURE_SIZE;
+
+/**
+ * The minimum length of an indexation payload binary representation.
+ */
 export const MIN_INDEXATION_PAYLOAD_LENGTH: number = MIN_PAYLOAD_LENGTH + STRING_LENGTH + STRING_LENGTH;
+
+/**
+ * The minimum length of a transaction payload binary representation.
+ */
 export const MIN_TRANSACTION_PAYLOAD_LENGTH: number = MIN_PAYLOAD_LENGTH + UINT32_SIZE;
 
 /**
