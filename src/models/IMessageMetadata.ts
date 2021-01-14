@@ -25,7 +25,7 @@ export interface IMessageMetadata {
     /**
      * Is the message solid.
      */
-    isSolid?: boolean;
+    isSolid: boolean;
 
     /**
      * Is the message referenced by a milestone.
