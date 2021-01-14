@@ -52,6 +52,7 @@ async function run() {
     console.log("\tSolid Milestone Index:", info.solidMilestoneIndex);
     console.log("\tPruning Index:", info.pruningIndex);
     console.log("\tFeatures:", info.features);
+    console.log("\tMin PoW Score:", info.minPowScore);
 }
 
 run()

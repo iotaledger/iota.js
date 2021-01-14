@@ -105,15 +105,19 @@
 * [MIN\_ED25519\_ADDRESS\_LENGTH](README.md#min_ed25519_address_length)
 * [MIN\_ED25519\_SIGNATURE\_LENGTH](README.md#min_ed25519_signature_length)
 * [MIN\_INDEXATION\_KEY\_LENGTH](README.md#min_indexation_key_length)
+* [MIN\_INDEXATION\_PAYLOAD\_LENGTH](README.md#min_indexation_payload_length)
 * [MIN\_INPUT\_LENGTH](README.md#min_input_length)
 * [MIN\_MESSAGE\_LENGTH](README.md#min_message_length)
+* [MIN\_MILESTONE\_PAYLOAD\_LENGTH](README.md#min_milestone_payload_length)
 * [MIN\_OUTPUT\_LENGTH](README.md#min_output_length)
+* [MIN\_PAYLOAD\_LENGTH](README.md#min_payload_length)
 * [MIN\_REFERENCE\_UNLOCK\_BLOCK\_LENGTH](README.md#min_reference_unlock_block_length)
 * [MIN\_SIGNATURE\_LENGTH](README.md#min_signature_length)
 * [MIN\_SIGNATURE\_UNLOCK\_BLOCK\_LENGTH](README.md#min_signature_unlock_block_length)
 * [MIN\_SIG\_LOCKED\_DUST\_ALLOWANCE\_OUTPUT\_LENGTH](README.md#min_sig_locked_dust_allowance_output_length)
 * [MIN\_SIG\_LOCKED\_SINGLE\_OUTPUT\_LENGTH](README.md#min_sig_locked_single_output_length)
 * [MIN\_TRANSACTION\_ESSENCE\_LENGTH](README.md#min_transaction_essence_length)
+* [MIN\_TRANSACTION\_PAYLOAD\_LENGTH](README.md#min_transaction_payload_length)
 * [MIN\_UNLOCK\_BLOCK\_LENGTH](README.md#min_unlock_block_length)
 * [MIN\_UTXO\_INPUT\_LENGTH](README.md#min_utxo_input_length)
 * [REFERENCE\_UNLOCK\_BLOCK\_TYPE](README.md#reference_unlock_block_type)
@@ -378,6 +382,14 @@ The minimum length of a indexation key.
 
 ___
 
+### MIN\_INDEXATION\_PAYLOAD\_LENGTH
+
+• `Const` **MIN\_INDEXATION\_PAYLOAD\_LENGTH**: number = MIN\_PAYLOAD\_LENGTH + STRING\_LENGTH + STRING\_LENGTH
+
+The minimum length of an indexation payload binary representation.
+
+___
+
 ### MIN\_INPUT\_LENGTH
 
 • `Const` **MIN\_INPUT\_LENGTH**: number = SMALL\_TYPE\_LENGTH
@@ -394,11 +406,27 @@ The minimum length of a message binary representation.
 
 ___
 
+### MIN\_MILESTONE\_PAYLOAD\_LENGTH
+
+• `Const` **MIN\_MILESTONE\_PAYLOAD\_LENGTH**: number = MIN\_PAYLOAD\_LENGTH + UINT32\_SIZE + UINT64\_SIZE + MESSAGE\_ID\_LENGTH + MESSAGE\_ID\_LENGTH + MERKLE\_PROOF\_LENGTH + BYTE\_SIZE + Ed25519.PUBLIC\_KEY\_SIZE + BYTE\_SIZE + Ed25519.SIGNATURE\_SIZE
+
+The minimum length of a milestone payload binary representation.
+
+___
+
 ### MIN\_OUTPUT\_LENGTH
 
 • `Const` **MIN\_OUTPUT\_LENGTH**: number = SMALL\_TYPE\_LENGTH
 
 The minimum length of an output binary representation.
+
+___
+
+### MIN\_PAYLOAD\_LENGTH
+
+• `Const` **MIN\_PAYLOAD\_LENGTH**: number = TYPE\_LENGTH
+
+The minimum length of a payload binary representation.
 
 ___
 
@@ -447,6 +475,14 @@ ___
 • `Const` **MIN\_TRANSACTION\_ESSENCE\_LENGTH**: number = SMALL\_TYPE\_LENGTH + (2 * ARRAY\_LENGTH) + UINT32\_SIZE
 
 The minimum length of a transaction essence binary representation.
+
+___
+
+### MIN\_TRANSACTION\_PAYLOAD\_LENGTH
+
+• `Const` **MIN\_TRANSACTION\_PAYLOAD\_LENGTH**: number = MIN\_PAYLOAD\_LENGTH + UINT32\_SIZE
+
+The minimum length of a transaction payload binary representation.
 
 ___
 

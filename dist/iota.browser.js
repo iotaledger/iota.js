@@ -4716,12 +4716,24 @@
 
 
 
+	/**
+	 * The minimum length of a payload binary representation.
+	 */
 	exports.MIN_PAYLOAD_LENGTH = common.TYPE_LENGTH;
+	/**
+	 * The minimum length of a milestone payload binary representation.
+	 */
 	exports.MIN_MILESTONE_PAYLOAD_LENGTH = exports.MIN_PAYLOAD_LENGTH + common.UINT32_SIZE + common.UINT64_SIZE +
 	    common.MESSAGE_ID_LENGTH + common.MESSAGE_ID_LENGTH + common.MERKLE_PROOF_LENGTH +
 	    common.BYTE_SIZE + ed25519.Ed25519.PUBLIC_KEY_SIZE +
 	    common.BYTE_SIZE + ed25519.Ed25519.SIGNATURE_SIZE;
+	/**
+	 * The minimum length of an indexation payload binary representation.
+	 */
 	exports.MIN_INDEXATION_PAYLOAD_LENGTH = exports.MIN_PAYLOAD_LENGTH + common.STRING_LENGTH + common.STRING_LENGTH;
+	/**
+	 * The minimum length of a transaction payload binary representation.
+	 */
 	exports.MIN_TRANSACTION_PAYLOAD_LENGTH = exports.MIN_PAYLOAD_LENGTH + common.UINT32_SIZE;
 	/**
 	 * The minimum length of a indexation key.

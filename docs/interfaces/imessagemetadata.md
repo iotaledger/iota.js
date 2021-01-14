@@ -37,7 +37,7 @@ ___
 
 ### isSolid
 
-• `Optional` **isSolid**: undefined \| false \| true
+•  **isSolid**: boolean
 
 Is the message solid.
 

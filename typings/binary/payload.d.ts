@@ -3,9 +3,21 @@ import { IMilestonePayload } from "../models/IMilestonePayload";
 import { ITransactionPayload } from "../models/ITransactionPayload";
 import { ReadStream } from "../utils/readStream";
 import { WriteStream } from "../utils/writeStream";
+/**
+ * The minimum length of a payload binary representation.
+ */
 export declare const MIN_PAYLOAD_LENGTH: number;
+/**
+ * The minimum length of a milestone payload binary representation.
+ */
 export declare const MIN_MILESTONE_PAYLOAD_LENGTH: number;
+/**
+ * The minimum length of an indexation payload binary representation.
+ */
 export declare const MIN_INDEXATION_PAYLOAD_LENGTH: number;
+/**
+ * The minimum length of a transaction payload binary representation.
+ */
 export declare const MIN_TRANSACTION_PAYLOAD_LENGTH: number;
 /**
  * The minimum length of a indexation key.
