@@ -14,53 +14,17 @@ Convert arrays to and from different formats.
 
 ### Methods
 
-* [asciiToBytes](converter.md#asciitobytes)
-* [asciiToHex](converter.md#asciitohex)
 * [binaryToBytes](converter.md#binarytobytes)
-* [bytesToAscii](converter.md#bytestoascii)
 * [bytesToBinary](converter.md#bytestobinary)
 * [bytesToHex](converter.md#bytestohex)
-* [hexToAscii](converter.md#hextoascii)
+* [bytesToUtf8](converter.md#bytestoutf8)
 * [hexToBytes](converter.md#hextobytes)
+* [hexToUtf8](converter.md#hextoutf8)
 * [isHex](converter.md#ishex)
+* [utf8ToBytes](converter.md#utf8tobytes)
+* [utf8ToHex](converter.md#utf8tohex)
 
 ## Methods
-
-### asciiToBytes
-
-▸ `Static`**asciiToBytes**(`ascii`: string): Uint8Array
-
-Decode a text string to raw array.
-
-#### Parameters:
-
-Name | Type | Description |
------- | ------ | ------ |
-`ascii` | string | The text to decode. |
-
-**Returns:** Uint8Array
-
-The array.
-
-___
-
-### asciiToHex
-
-▸ `Static`**asciiToHex**(`ascii`: string): string
-
-Convert the ascii text to hex.
-
-#### Parameters:
-
-Name | Type | Description |
------- | ------ | ------ |
-`ascii` | string | The ascii to convert. |
-
-**Returns:** string
-
-The hex version of the bytes.
-
-___
 
 ### binaryToBytes
 
@@ -77,26 +41,6 @@ Name | Type | Description |
 **Returns:** Uint8Array
 
 The bytes.
-
-___
-
-### bytesToAscii
-
-▸ `Static`**bytesToAscii**(`array`: ArrayLike<number\>, `startIndex?`: undefined \| number, `length?`: number \| undefined): string
-
-Encode a raw array to text string.
-
-#### Parameters:
-
-Name | Type | Description |
------- | ------ | ------ |
-`array` | ArrayLike<number\> | The bytes to encode. |
-`startIndex?` | undefined \| number | The index to start in the bytes. |
-`length?` | number \| undefined | The length of bytes to read. |
-
-**Returns:** string
-
-The array formated as hex.
 
 ___
 
@@ -139,21 +83,23 @@ The array formated as hex.
 
 ___
 
-### hexToAscii
+### bytesToUtf8
 
-▸ `Static`**hexToAscii**(`hex`: string): string
+▸ `Static`**bytesToUtf8**(`array`: ArrayLike<number\>, `startIndex?`: undefined \| number, `length?`: number \| undefined): string
 
-Convert the hex text to ascii.
+Encode a raw array to UTF8 string.
 
 #### Parameters:
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`hex` | string | The hex to convert. |
+`array` | ArrayLike<number\> | The bytes to encode. |
+`startIndex?` | undefined \| number | The index to start in the bytes. |
+`length?` | number \| undefined | The length of bytes to read. |
 
 **Returns:** string
 
-The ascii version of the bytes.
+The array formated as UTF8.
 
 ___
 
@@ -176,6 +122,24 @@ The array.
 
 ___
 
+### hexToUtf8
+
+▸ `Static`**hexToUtf8**(`hex`: string): string
+
+Convert the hex text to text.
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`hex` | string | The hex to convert. |
+
+**Returns:** string
+
+The UTF8 version of the bytes.
+
+___
+
 ### isHex
 
 ▸ `Static`**isHex**(`value`: string): boolean
@@ -191,3 +155,39 @@ Name | Type | Description |
 **Returns:** boolean
 
 true if the string is hex.
+
+___
+
+### utf8ToBytes
+
+▸ `Static`**utf8ToBytes**(`utf8`: string): Uint8Array
+
+Convert a UTF8 string to raw array.
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`utf8` | string | The text to decode. |
+
+**Returns:** Uint8Array
+
+The array.
+
+___
+
+### utf8ToHex
+
+▸ `Static`**utf8ToHex**(`utf8`: string): string
+
+Convert the UTF8 to hex.
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`utf8` | string | The text to convert. |
+
+**Returns:** string
+
+The hex version of the bytes.

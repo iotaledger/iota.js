@@ -5,18 +5,18 @@ import { Converter } from "../../src/utils/converter";
 import testData from "./testData/sha512.json";
 
 describe("Sha512", () => {
-    test("Can perform a sha512 on short ascii", () => {
+    test("Can perform a sha512 on short text", () => {
         const sha = new Sha512();
-        sha.update(Converter.asciiToBytes("abc"));
+        sha.update(Converter.utf8ToBytes("abc"));
         const digest = sha.digest();
         expect(Converter.bytesToHex(digest))
             // eslint-disable-next-line max-len
             .toEqual("ddaf35a193617abacc417349ae20413112e6fa4e89a97ea20a9eeee64b55d39a2192992a274fc1a836ba3c23a3feebbd454d4423643ce80e2a9ac94fa54ca49f");
     });
 
-    test("Can perform a sha512 on empty ascii", () => {
+    test("Can perform a sha512 on empty text", () => {
         const sha = new Sha512();
-        sha.update(Converter.asciiToBytes(""));
+        sha.update(Converter.utf8ToBytes(""));
         const digest = sha.digest();
         expect(Converter.bytesToHex(digest))
             // eslint-disable-next-line max-len
@@ -25,7 +25,7 @@ describe("Sha512", () => {
 
     test("Can perform a sha512 on sentence", () => {
         const sha = new Sha512();
-        sha.update(Converter.asciiToBytes("The quick brown fox jumps over the lazy dog"));
+        sha.update(Converter.utf8ToBytes("The quick brown fox jumps over the lazy dog"));
         const digest = sha.digest();
         expect(Converter.bytesToHex(digest))
             // eslint-disable-next-line max-len

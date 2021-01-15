@@ -89,7 +89,7 @@ async function run() {
         }
     ];
 
-    const { messageId } = await sendAdvanced(client, inputsWithKeyPairs, outputs, "WALLET", Converter.asciiToBytes("Not trinity"));
+    const { messageId } = await sendAdvanced(client, inputsWithKeyPairs, outputs, "WALLET", Converter.utf8ToBytes("Not trinity"));
 
     console.log("Created Message Id", messageId);
 

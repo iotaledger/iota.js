@@ -84,6 +84,5 @@ export * from "./utils/logging";
 export * from "./utils/powHelper";
 export * from "./utils/randomHelper";
 export * from "./utils/readStream";
-export * from "./utils/textHelper";
 export * from "./utils/unitsHelper";
 export * from "./utils/writeStream";

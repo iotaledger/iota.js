@@ -43,7 +43,7 @@
                 payload: {
                     type: 2,
                     index: "Foo",
-                    data: Iota.Converter.asciiToHex("Bar")
+                    data: Iota.Converter.utf8ToHex("Bar")
                 }
             };
 
@@ -201,7 +201,7 @@
                 }
             ];
 
-            const { messageId } = await Iota.sendAdvanced(client, inputsWithKeyPairs, outputs, "WALLET", Iota.Converter.asciiToBytes("Not trinity"));
+            const { messageId } = await Iota.sendAdvanced(client, inputsWithKeyPairs, outputs, "WALLET", Iota.Converter.utf8ToBytes("Not trinity"));
 
             consoleLog("Created Message Id", messageId);
 

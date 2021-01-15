@@ -7,7 +7,6 @@ import { TRANSACTION_ESSENCE_TYPE } from "../models/ITransactionEssence";
 import { ITransactionPayload, TRANSACTION_PAYLOAD_TYPE } from "../models/ITransactionPayload";
 import { ITypeBase } from "../models/ITypeBase";
 import { ReadStream } from "../utils/readStream";
-import { TextHelper } from "../utils/textHelper";
 import { WriteStream } from "../utils/writeStream";
 import { BYTE_SIZE, MERKLE_PROOF_LENGTH, MESSAGE_ID_LENGTH, STRING_LENGTH, TYPE_LENGTH, UINT32_SIZE, UINT64_SIZE } from "./common";
 import { deserializeTransactionEssence, serializeTransactionEssence } from "./transaction";
@@ -273,9 +272,6 @@ export function serializeIndexationPayload(writeStream: WriteStream,
     if (object.index.length > MAX_INDEXATION_KEY_LENGTH) {
         throw new Error(`The indexation key length is ${object.index.length
             }, which exceeds the maximum size of ${MAX_INDEXATION_KEY_LENGTH}`);
-    }
-    if (!TextHelper.isUTF8(object.index)) {
-        throw new Error("The index can only contain UTF8 characters");
     }
 
     writeStream.writeUInt32("payloadIndexation.type", object.type);

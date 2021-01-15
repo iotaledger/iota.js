@@ -25,7 +25,7 @@ async function run() {
         payload: {
             type: INDEXATION_PAYLOAD_TYPE,
             index: "Foo",
-            data: Converter.asciiToHex("Bar")
+            data: Converter.utf8ToHex("Bar")
         }
     };
 

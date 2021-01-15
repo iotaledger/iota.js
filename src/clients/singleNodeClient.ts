@@ -538,7 +538,7 @@ export class SingleNodeClient implements IClient {
         if (!this._networkId || !this._minPowScore) {
             const nodeInfo = await this.info();
 
-            const networkIdBytes = Blake2b.sum256(Converter.asciiToBytes(nodeInfo.networkId));
+            const networkIdBytes = Blake2b.sum256(Converter.utf8ToBytes(nodeInfo.networkId));
             this._networkId = BigIntHelper.read8(networkIdBytes, 0);
 
             this._minPowScore = nodeInfo.minPowScore ?? 100;

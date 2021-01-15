@@ -97,7 +97,7 @@ describe("Binary Payload", () => {
         const payload: IIndexationPayload = {
             type: INDEXATION_PAYLOAD_TYPE,
             index: "foo",
-            data: Converter.asciiToHex("bar")
+            data: Converter.utf8ToHex("bar")
         };
 
         const serialized = new WriteStream();
@@ -109,7 +109,7 @@ describe("Binary Payload", () => {
         expect(deserialized.index).toEqual("foo");
         expect(deserialized.data).toBeDefined();
         if (deserialized.data) {
-            expect(Converter.hexToAscii(deserialized.data)).toEqual("bar");
+            expect(Converter.hexToUtf8(deserialized.data)).toEqual("bar");
         }
     });
 

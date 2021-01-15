@@ -3,19 +3,19 @@
  */
 export declare class Converter {
     /**
-     * Encode a raw array to text string.
+     * Encode a raw array to UTF8 string.
      * @param array The bytes to encode.
      * @param startIndex The index to start in the bytes.
      * @param length The length of bytes to read.
-     * @returns The array formated as hex.
+     * @returns The array formated as UTF8.
      */
-    static bytesToAscii(array: ArrayLike<number>, startIndex?: number, length?: number | undefined): string;
+    static bytesToUtf8(array: ArrayLike<number>, startIndex?: number, length?: number | undefined): string;
     /**
-     * Decode a text string to raw array.
-     * @param ascii The text to decode.
+     * Convert a UTF8 string to raw array.
+     * @param utf8 The text to decode.
      * @returns The array.
      */
-    static asciiToBytes(ascii: string): Uint8Array;
+    static utf8ToBytes(utf8: string): Uint8Array;
     /**
      * Encode a raw array to hex string.
      * @param array The bytes to encode.
@@ -33,17 +33,17 @@ export declare class Converter {
      */
     static hexToBytes(hex: string, reverse?: boolean): Uint8Array;
     /**
-     * Convert the ascii text to hex.
-     * @param ascii The ascii to convert.
+     * Convert the UTF8 to hex.
+     * @param utf8 The text to convert.
      * @returns The hex version of the bytes.
      */
-    static asciiToHex(ascii: string): string;
+    static utf8ToHex(utf8: string): string;
     /**
-     * Convert the hex text to ascii.
+     * Convert the hex text to text.
      * @param hex The hex to convert.
-     * @returns The ascii version of the bytes.
+     * @returns The UTF8 version of the bytes.
      */
-    static hexToAscii(hex: string): string;
+    static hexToUtf8(hex: string): string;
     /**
      * Is the data hex format.
      * @param value The value to test.

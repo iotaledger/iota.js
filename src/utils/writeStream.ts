@@ -93,7 +93,7 @@ export class WriteStream {
             throw new Error(`The ${name} should be in hex format`);
         }
 
-        // Hex should be twice the length as each byte is 2 ascii characters
+        // Hex should be twice the length as each byte is 2 characters
         if (length * 2 !== val.length) {
             throw new Error(`${name} length ${val.length} does not match expected length ${length * 2}`);
         }
@@ -178,7 +178,7 @@ export class WriteStream {
 
         this.expand(val.length);
 
-        this._storage.set(Converter.asciiToBytes(val), this._writeIndex);
+        this._storage.set(Converter.utf8ToBytes(val), this._writeIndex);
         this._writeIndex += val.length;
 
         return val;

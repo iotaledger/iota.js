@@ -20,7 +20,7 @@ export class Slip0010 {
         privateKey: Uint8Array;
         chainCode: Uint8Array;
     } {
-        const hmac = new HmacSha512(Converter.asciiToBytes("ed25519 seed"));
+        const hmac = new HmacSha512(Converter.utf8ToBytes("ed25519 seed"));
         const fullKey = hmac.update(seed).digest();
         return {
             privateKey: Uint8Array.from(fullKey.slice(0, 32)),

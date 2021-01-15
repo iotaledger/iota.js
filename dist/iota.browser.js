@@ -4171,31 +4171,6 @@
 
 	});
 
-	var textHelper = createCommonjsModule(function (module, exports) {
-	// Copyright 2020 IOTA Stiftung
-	// SPDX-License-Identifier: Apache-2.0
-	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.TextHelper = void 0;
-	/**
-	 * Class to help with text.
-	 */
-	var TextHelper = /** @class */ (function () {
-	    function TextHelper() {
-	    }
-	    /**
-	     * Is the string UTF8.
-	     * @param value The value to test.
-	     * @returns True if the value is UTF8.
-	     */
-	    TextHelper.isUTF8 = function (value) {
-	        return value ? !/[\u0080-\uFFFF]/g.test(value) : true;
-	    };
-	    return TextHelper;
-	}());
-	exports.TextHelper = TextHelper;
-
-	});
-
 	var ISigLockedDustAllowanceOutput = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE = void 0;
@@ -4715,7 +4690,6 @@
 
 
 
-
 	/**
 	 * The minimum length of a payload binary representation.
 	 */
@@ -4947,9 +4921,6 @@
 	    if (object.index.length > exports.MAX_INDEXATION_KEY_LENGTH) {
 	        throw new Error("The indexation key length is " + object.index.length + ", which exceeds the maximum size of " + exports.MAX_INDEXATION_KEY_LENGTH);
 	    }
-	    if (!textHelper.TextHelper.isUTF8(object.index)) {
-	        throw new Error("The index can only contain UTF8 characters");
-	    }
 	    writeStream.writeUInt32("payloadIndexation.type", object.type);
 	    writeStream.writeString("payloadIndexation.index", object.index);
 	    if (object.data) {
@@ -5081,33 +5052,70 @@
 	    function Converter() {
 	    }
 	    /**
-	     * Encode a raw array to text string.
+	     * Encode a raw array to UTF8 string.
 	     * @param array The bytes to encode.
 	     * @param startIndex The index to start in the bytes.
 	     * @param length The length of bytes to read.
-	     * @returns The array formated as hex.
+	     * @returns The array formated as UTF8.
 	     */
-	    Converter.bytesToAscii = function (array, startIndex, length) {
-	        var ascii = "";
-	        var len = length !== null && length !== void 0 ? length : array.length;
+	    Converter.bytesToUtf8 = function (array, startIndex, length) {
 	        var start = startIndex !== null && startIndex !== void 0 ? startIndex : 0;
-	        for (var i = 0; i < len; i++) {
-	            ascii += String.fromCharCode(array[start + i]);
+	        var len = length !== null && length !== void 0 ? length : array.length;
+	        var str = "";
+	        for (var i = start; i < start + len; i++) {
+	            var value = array[i];
+	            if (value < 0x80) {
+	                str += String.fromCharCode(value);
+	            }
+	            else if (value > 0xBF && value < 0xE0) {
+	                str += String.fromCharCode(((value & 0x1F) << 6) | (array[i + 1] & 0x3F));
+	                i += 1;
+	            }
+	            else if (value > 0xDF && value < 0xF0) {
+	                str += String.fromCharCode(((value & 0x0F) << 12) | ((array[i + 1] & 0x3F) << 6) | (array[i + 2] & 0x3F));
+	                i += 2;
+	            }
+	            else {
+	                // surrogate pair
+	                var charCode = (((value & 0x07) << 18) |
+	                    ((array[i + 1] & 0x3F) << 12) |
+	                    ((array[i + 2] & 0x3F) << 6) |
+	                    (array[i + 3] & 0x3F)) - 0x010000;
+	                str += String.fromCharCode((charCode >> 10) | 0xD800, (charCode & 0x03FF) | 0xDC00);
+	                i += 3;
+	            }
 	        }
-	        return ascii;
+	        return str;
 	    };
 	    /**
-	     * Decode a text string to raw array.
-	     * @param ascii The text to decode.
+	     * Convert a UTF8 string to raw array.
+	     * @param utf8 The text to decode.
 	     * @returns The array.
 	     */
-	    Converter.asciiToBytes = function (ascii) {
-	        var sizeof = ascii.length;
-	        var array = new Uint8Array(sizeof);
-	        for (var i = 0; i < ascii.length; i++) {
-	            array[i] = ascii.charCodeAt(i);
+	    Converter.utf8ToBytes = function (utf8) {
+	        var bytes = [];
+	        for (var i = 0; i < utf8.length; i++) {
+	            var charcode = utf8.charCodeAt(i);
+	            if (charcode < 0x80) {
+	                bytes.push(charcode);
+	            }
+	            else if (charcode < 0x800) {
+	                bytes.push(0xC0 | (charcode >> 6), 0x80 | (charcode & 0x3F));
+	            }
+	            else if (charcode < 0xD800 || charcode >= 0xE000) {
+	                bytes.push(0xE0 | (charcode >> 12), 0x80 | ((charcode >> 6) & 0x3F), 0x80 | (charcode & 0x3F));
+	            }
+	            else {
+	                // surrogate pair
+	                i++;
+	                // UTF-16 encodes 0x10000-0x10FFFF by
+	                // subtracting 0x10000 and splitting the
+	                // 20 bits of 0x0-0xFFFFF into two halves
+	                charcode = 0x10000 + (((charcode & 0x3FF) << 10) | (utf8.charCodeAt(i) & 0x3FF));
+	                bytes.push(0xF0 | (charcode >> 18), 0x80 | ((charcode >> 12) & 0x3F), 0x80 | ((charcode >> 6) & 0x3F), 0x80 | (charcode & 0x3F));
+	            }
 	        }
-	        return array;
+	        return Uint8Array.from(bytes);
 	    };
 	    /**
 	     * Encode a raw array to hex string.
@@ -5162,20 +5170,20 @@
 	        return array;
 	    };
 	    /**
-	     * Convert the ascii text to hex.
-	     * @param ascii The ascii to convert.
+	     * Convert the UTF8 to hex.
+	     * @param utf8 The text to convert.
 	     * @returns The hex version of the bytes.
 	     */
-	    Converter.asciiToHex = function (ascii) {
-	        return Converter.bytesToHex(Converter.asciiToBytes(ascii));
+	    Converter.utf8ToHex = function (utf8) {
+	        return Converter.bytesToHex(Converter.utf8ToBytes(utf8));
 	    };
 	    /**
-	     * Convert the hex text to ascii.
+	     * Convert the hex text to text.
 	     * @param hex The hex to convert.
-	     * @returns The ascii version of the bytes.
+	     * @returns The UTF8 version of the bytes.
 	     */
-	    Converter.hexToAscii = function (hex) {
-	        return Converter.bytesToAscii(Converter.hexToBytes(hex));
+	    Converter.hexToUtf8 = function (hex) {
+	        return Converter.bytesToUtf8(Converter.hexToBytes(hex));
 	    };
 	    /**
 	     * Is the data hex format.
@@ -5404,7 +5412,7 @@
 	        if (!this.hasRemaining(stringLength)) {
 	            throw new Error(name + " length " + stringLength + " exceeds the remaining data " + this.unused());
 	        }
-	        var val = converter.Converter.bytesToAscii(this._storage, this._readIndex, stringLength);
+	        var val = converter.Converter.bytesToUtf8(this._storage, this._readIndex, stringLength);
 	        if (moveIndex) {
 	            this._readIndex += stringLength;
 	        }
@@ -6279,7 +6287,7 @@
 	        if (!converter.Converter.isHex(val)) {
 	            throw new Error("The " + name + " should be in hex format");
 	        }
-	        // Hex should be twice the length as each byte is 2 ascii characters
+	        // Hex should be twice the length as each byte is 2 characters
 	        if (length * 2 !== val.length) {
 	            throw new Error(name + " length " + val.length + " does not match expected length " + length * 2);
 	        }
@@ -6348,7 +6356,7 @@
 	    WriteStream.prototype.writeString = function (name, val) {
 	        this.writeUInt16(name, val.length);
 	        this.expand(val.length);
-	        this._storage.set(converter.Converter.asciiToBytes(val), this._writeIndex);
+	        this._storage.set(converter.Converter.utf8ToBytes(val), this._writeIndex);
 	        this._writeIndex += val.length;
 	        return val;
 	    };
@@ -6920,7 +6928,7 @@
 	                        return [4 /*yield*/, this.info()];
 	                    case 1:
 	                        nodeInfo = _b.sent();
-	                        networkIdBytes = blake2b.Blake2b.sum256(converter.Converter.asciiToBytes(nodeInfo.networkId));
+	                        networkIdBytes = blake2b.Blake2b.sum256(converter.Converter.utf8ToBytes(nodeInfo.networkId));
 	                        this._networkId = bigIntHelper.BigIntHelper.read8(networkIdBytes, 0);
 	                        this._minPowScore = (_a = nodeInfo.minPowScore) !== null && _a !== void 0 ? _a : 100;
 	                        _b.label = 2;
@@ -9716,8 +9724,8 @@
 	    Bip39.mnemonicToSeed = function (mnemonic, password, iterations, keyLength) {
 	        if (iterations === void 0) { iterations = 2048; }
 	        if (keyLength === void 0) { keyLength = 64; }
-	        var mnemonicBytes = converter.Converter.asciiToBytes(mnemonic.normalize("NFKD"));
-	        var salt = converter.Converter.asciiToBytes("mnemonic" + (password !== null && password !== void 0 ? password : "").normalize("NFKD"));
+	        var mnemonicBytes = converter.Converter.utf8ToBytes(mnemonic.normalize("NFKD"));
+	        var salt = converter.Converter.utf8ToBytes("mnemonic" + (password !== null && password !== void 0 ? password : "").normalize("NFKD"));
 	        return pbkdf2.Pbkdf2.sha512(mnemonicBytes, salt, iterations, keyLength);
 	    };
 	    /**
@@ -9905,7 +9913,7 @@
 	     * @returns The key and chain code.
 	     */
 	    Slip0010.getMasterKeyFromSeed = function (seed) {
-	        var hmac = new hmacSha512.HmacSha512(converter.Converter.asciiToBytes("ed25519 seed"));
+	        var hmac = new hmacSha512.HmacSha512(converter.Converter.utf8ToBytes("ed25519 seed"));
 	        var fullKey = hmac.update(seed).digest();
 	        return {
 	            privateKey: Uint8Array.from(fullKey.slice(0, 32)),
@@ -10731,7 +10739,6 @@
 
 
 
-
 	/**
 	 * Send a transfer from the balance on the seed.
 	 * @param client The client to send the transfer with.
@@ -10784,9 +10791,6 @@
 	        }
 	        if (indexationKey.length > payload.MAX_INDEXATION_KEY_LENGTH) {
 	            throw new Error("The indexation key length is " + indexationKey.length + ", which exceeds the maximum size of " + payload.MAX_INDEXATION_KEY_LENGTH);
-	        }
-	        if (!textHelper.TextHelper.isUTF8(indexationKey)) {
-	            throw new Error("The indexationKey can only contain UTF8 characters");
 	        }
 	    }
 	    var outputsWithSerialization = [];
@@ -11205,7 +11209,6 @@
 
 
 
-
 	/**
 	 * Send a data message.
 	 * @param client The client to send the transfer with.
@@ -11227,9 +11230,6 @@
 	                    }
 	                    if (indexationKey.length > payload.MAX_INDEXATION_KEY_LENGTH) {
 	                        throw new Error("The indexation key length is " + indexationKey.length + ", which exceeds the maximum size of " + payload.MAX_INDEXATION_KEY_LENGTH);
-	                    }
-	                    if (!textHelper.TextHelper.isUTF8(indexationKey)) {
-	                        throw new Error("The indexationKey can only contain UTF8 characters");
 	                    }
 	                    indexationPayload = {
 	                        type: IIndexationPayload.INDEXATION_PAYLOAD_TYPE,
@@ -11959,7 +11959,7 @@
 	            var payload = unknownPayload;
 	            logger(prefix + "Indexation Payload");
 	            logger(prefix + "\tIndex:", payload.index);
-	            logger(prefix + "\tData:", payload.data ? converter.Converter.hexToAscii(payload.data) : "None");
+	            logger(prefix + "\tData:", payload.data ? converter.Converter.hexToUtf8(payload.data) : "None");
 	        }
 	    }
 	}
@@ -12288,7 +12288,6 @@
 	__exportStar(powHelper, exports);
 	__exportStar(randomHelper, exports);
 	__exportStar(readStream, exports);
-	__exportStar(textHelper, exports);
 	__exportStar(unitsHelper, exports);
 	__exportStar(writeStream, exports);
 

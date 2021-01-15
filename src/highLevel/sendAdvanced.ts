@@ -19,7 +19,6 @@ import { ITransactionEssence, TRANSACTION_ESSENCE_TYPE } from "../models/ITransa
 import { ITransactionPayload, TRANSACTION_PAYLOAD_TYPE } from "../models/ITransactionPayload";
 import { IUTXOInput } from "../models/IUTXOInput";
 import { Converter } from "../utils/converter";
-import { TextHelper } from "../utils/textHelper";
 import { WriteStream } from "../utils/writeStream";
 
 /**
@@ -99,10 +98,6 @@ export function buildTransactionPayload(
         if (indexationKey.length > MAX_INDEXATION_KEY_LENGTH) {
             throw new Error(`The indexation key length is ${indexationKey.length
                 }, which exceeds the maximum size of ${MAX_INDEXATION_KEY_LENGTH}`);
-        }
-
-        if (!TextHelper.isUTF8(indexationKey)) {
-            throw new Error("The indexationKey can only contain UTF8 characters");
         }
     }
 

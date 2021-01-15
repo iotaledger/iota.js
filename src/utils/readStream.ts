@@ -189,7 +189,7 @@ export class ReadStream {
             throw new Error(`${name} length ${stringLength
                 } exceeds the remaining data ${this.unused()}`);
         }
-        const val = Converter.bytesToAscii(this._storage, this._readIndex, stringLength);
+        const val = Converter.bytesToUtf8(this._storage, this._readIndex, stringLength);
         if (moveIndex) {
             this._readIndex += stringLength;
         }

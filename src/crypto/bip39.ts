@@ -84,8 +84,8 @@ export class Bip39 {
      */
     public static mnemonicToSeed(
         mnemonic: string, password?: string, iterations: number = 2048, keyLength: number = 64): Uint8Array {
-        const mnemonicBytes = Converter.asciiToBytes(mnemonic.normalize("NFKD"));
-        const salt = Converter.asciiToBytes(`mnemonic${(password ?? "").normalize("NFKD")}`);
+        const mnemonicBytes = Converter.utf8ToBytes(mnemonic.normalize("NFKD"));
+        const salt = Converter.utf8ToBytes(`mnemonic${(password ?? "").normalize("NFKD")}`);
 
         return Pbkdf2.sha512(mnemonicBytes, salt, iterations, keyLength);
     }

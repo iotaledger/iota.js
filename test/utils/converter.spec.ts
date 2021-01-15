@@ -23,26 +23,26 @@ describe("Converter", () => {
         expect(Converter.hexToBytes("64636261", true)).toEqual(bytes);
     });
 
-    test("Can convert from bytes to ascii", () => {
+    test("Can convert from bytes to text", () => {
         const bytes = Uint8Array.from([97, 98, 99, 100]);
-        expect(Converter.bytesToAscii(bytes)).toEqual("abcd");
+        expect(Converter.bytesToUtf8(bytes)).toEqual("abcd");
     });
 
-    test("Can convert from ascii to bytes", () => {
+    test("Can convert from text to bytes", () => {
         const bytes = Uint8Array.from([97, 98, 99, 100]);
-        expect(Converter.asciiToBytes("abcd")).toEqual(bytes);
+        expect(Converter.utf8ToBytes("abcd")).toEqual(bytes);
     });
 
-    test("Can convert from bytes to ascii", () => {
+    test("Can convert from bytes to text", () => {
         const bytes = Uint8Array.from([97, 98, 99, 100]);
-        expect(Converter.bytesToAscii(bytes)).toEqual("abcd");
+        expect(Converter.bytesToUtf8(bytes)).toEqual("abcd");
     });
 
-    test("Can convert from ascii to hex", () => {
-        expect(Converter.asciiToHex("abcd")).toEqual("61626364");
+    test("Can convert from text to hex", () => {
+        expect(Converter.utf8ToHex("abcd")).toEqual("61626364");
     });
 
-    test("Can convert from hex to ascii", () => {
-        expect(Converter.hexToAscii("61626364")).toEqual("abcd");
+    test("Can convert from hex to text", () => {
+        expect(Converter.hexToUtf8("61626364")).toEqual("abcd");
     });
 });

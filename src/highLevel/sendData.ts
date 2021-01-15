@@ -5,7 +5,6 @@ import { IClient } from "../models/IClient";
 import { IIndexationPayload, INDEXATION_PAYLOAD_TYPE } from "../models/IIndexationPayload";
 import { IMessage } from "../models/IMessage";
 import { Converter } from "../utils/converter";
-import { TextHelper } from "../utils/textHelper";
 
 /**
  * Send a data message.
@@ -30,10 +29,6 @@ export async function sendData(client: IClient, indexationKey: string, indexatio
     if (indexationKey.length > MAX_INDEXATION_KEY_LENGTH) {
         throw new Error(`The indexation key length is ${indexationKey.length
             }, which exceeds the maximum size of ${MAX_INDEXATION_KEY_LENGTH}`);
-    }
-
-    if (!TextHelper.isUTF8(indexationKey)) {
-        throw new Error("The indexationKey can only contain UTF8 characters");
     }
 
     const indexationPayload: IIndexationPayload = {

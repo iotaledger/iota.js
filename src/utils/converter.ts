@@ -18,39 +18,81 @@ export class Converter {
     private static DECODE_LOOKUP: number[] | undefined;
 
     /**
-     * Encode a raw array to text string.
+     * Encode a raw array to UTF8 string.
      * @param array The bytes to encode.
      * @param startIndex The index to start in the bytes.
      * @param length The length of bytes to read.
-     * @returns The array formated as hex.
+     * @returns The array formated as UTF8.
      */
-    public static bytesToAscii(
+    public static bytesToUtf8(
         array: ArrayLike<number>,
         startIndex?: number,
         length?: number | undefined): string {
-        let ascii = "";
-        const len = length ?? array.length;
         const start = startIndex ?? 0;
-        for (let i = 0; i < len; i++) {
-            ascii += String.fromCharCode(array[start + i]);
+        const len = length ?? array.length;
+        let str = "";
+
+        for (let i = start; i < start + len; i++) {
+            const value = array[i];
+
+            if (value < 0x80) {
+                str += String.fromCharCode(value);
+            } else if (value > 0xBF && value < 0xE0) {
+                str += String.fromCharCode(((value & 0x1F) << 6) | (array[i + 1] & 0x3F));
+                i += 1;
+            } else if (value > 0xDF && value < 0xF0) {
+                str += String.fromCharCode(
+                    ((value & 0x0F) << 12) | ((array[i + 1] & 0x3F) << 6) | (array[i + 2] & 0x3F));
+                i += 2;
+            } else {
+                // surrogate pair
+                const charCode = (
+                    ((value & 0x07) << 18) |
+                    ((array[i + 1] & 0x3F) << 12) |
+                    ((array[i + 2] & 0x3F) << 6) |
+                    (array[i + 3] & 0x3F)) - 0x010000;
+
+                str += String.fromCharCode((charCode >> 10) | 0xD800, (charCode & 0x03FF) | 0xDC00);
+                i += 3;
+            }
         }
-        return ascii;
+
+        return str;
     }
 
     /**
-     * Decode a text string to raw array.
-     * @param ascii The text to decode.
+     * Convert a UTF8 string to raw array.
+     * @param utf8 The text to decode.
      * @returns The array.
      */
-    public static asciiToBytes(ascii: string): Uint8Array {
-        const sizeof = ascii.length;
-        const array = new Uint8Array(sizeof);
+    public static utf8ToBytes(utf8: string): Uint8Array {
+        const bytes: number[] = [];
 
-        for (let i = 0; i < ascii.length; i++) {
-            array[i] = ascii.charCodeAt(i);
+        for (let i = 0; i < utf8.length; i++) {
+            let charcode = utf8.charCodeAt(i);
+            if (charcode < 0x80) {
+                bytes.push(charcode);
+            } else if (charcode < 0x800) {
+                bytes.push(0xC0 | (charcode >> 6), 0x80 | (charcode & 0x3F));
+            } else if (charcode < 0xD800 || charcode >= 0xE000) {
+                bytes.push(0xE0 | (charcode >> 12), 0x80 | ((charcode >> 6) & 0x3F), 0x80 | (charcode & 0x3F));
+            } else {
+                // surrogate pair
+                i++;
+                // UTF-16 encodes 0x10000-0x10FFFF by
+                // subtracting 0x10000 and splitting the
+                // 20 bits of 0x0-0xFFFFF into two halves
+                charcode = 0x10000 + (((charcode & 0x3FF) << 10) | (utf8.charCodeAt(i) & 0x3FF));
+                bytes.push(
+                    0xF0 | (charcode >> 18),
+                    0x80 | ((charcode >> 12) & 0x3F),
+                    0x80 | ((charcode >> 6) & 0x3F),
+                    0x80 | (charcode & 0x3F)
+                );
+            }
         }
 
-        return array;
+        return Uint8Array.from(bytes);
     }
 
     /**
@@ -113,21 +155,21 @@ export class Converter {
     }
 
     /**
-     * Convert the ascii text to hex.
-     * @param ascii The ascii to convert.
+     * Convert the UTF8 to hex.
+     * @param utf8 The text to convert.
      * @returns The hex version of the bytes.
      */
-    public static asciiToHex(ascii: string): string {
-        return Converter.bytesToHex(Converter.asciiToBytes(ascii));
+    public static utf8ToHex(utf8: string): string {
+        return Converter.bytesToHex(Converter.utf8ToBytes(utf8));
     }
 
     /**
-     * Convert the hex text to ascii.
+     * Convert the hex text to text.
      * @param hex The hex to convert.
-     * @returns The ascii version of the bytes.
+     * @returns The UTF8 version of the bytes.
      */
-    public static hexToAscii(hex: string): string {
-        return Converter.bytesToAscii(Converter.hexToBytes(hex));
+    public static hexToUtf8(hex: string): string {
+        return Converter.bytesToUtf8(Converter.hexToBytes(hex));
     }
 
     /**
