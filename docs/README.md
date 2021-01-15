@@ -1506,7 +1506,7 @@ ___
 
 ### send
 
-▸ **send**(`client`: [IClient](interfaces/iclient.md), `seed`: [ISeed](interfaces/iseed.md), `accountIndex`: number, `addressBech32`: string, `amount`: number, `startIndex?`: undefined \| number): Promise<{ message: [IMessage](interfaces/imessage.md) ; messageId: string  }\>
+▸ **send**(`client`: [IClient](interfaces/iclient.md), `seed`: [ISeed](interfaces/iseed.md), `accountIndex`: number, `addressBech32`: string, `amount`: number, `startIndex?`: undefined \| number, `indexationKey?`: undefined \| string, `indexationData?`: Uint8Array): Promise<{ message: [IMessage](interfaces/imessage.md) ; messageId: string  }\>
 
 Send a transfer from the balance on the seed to a single output.
 
@@ -1520,6 +1520,8 @@ Name | Type | Description |
 `addressBech32` | string | The address to send the funds to in bech32 format. |
 `amount` | number | The amount to send. |
 `startIndex?` | undefined \| number | The start index for the wallet count address, defaults to 0. |
+`indexationKey?` | undefined \| string | Optional indexation key. |
+`indexationData?` | Uint8Array | Optional index data. |
 
 **Returns:** Promise<{ message: [IMessage](interfaces/imessage.md) ; messageId: string  }\>
 
@@ -1571,7 +1573,7 @@ ___
 
 ### sendEd25519
 
-▸ **sendEd25519**(`client`: [IClient](interfaces/iclient.md), `seed`: [ISeed](interfaces/iseed.md), `accountIndex`: number, `addressEd25519`: string, `amount`: number, `startIndex?`: undefined \| number): Promise<{ message: [IMessage](interfaces/imessage.md) ; messageId: string  }\>
+▸ **sendEd25519**(`client`: [IClient](interfaces/iclient.md), `seed`: [ISeed](interfaces/iseed.md), `accountIndex`: number, `addressEd25519`: string, `amount`: number, `startIndex?`: undefined \| number, `indexationKey?`: undefined \| string, `indexationData?`: Uint8Array): Promise<{ message: [IMessage](interfaces/imessage.md) ; messageId: string  }\>
 
 Send a transfer from the balance on the seed to a single output.
 
@@ -1585,6 +1587,8 @@ Name | Type | Description |
 `addressEd25519` | string | The address to send the funds to in ed25519 format. |
 `amount` | number | The amount to send. |
 `startIndex?` | undefined \| number | The start index for the wallet count address, defaults to 0. |
+`indexationKey?` | undefined \| string | Optional indexation key. |
+`indexationData?` | Uint8Array | Optional index data. |
 
 **Returns:** Promise<{ message: [IMessage](interfaces/imessage.md) ; messageId: string  }\>
 
@@ -1594,7 +1598,7 @@ ___
 
 ### sendMultiple
 
-▸ **sendMultiple**(`client`: [IClient](interfaces/iclient.md), `seed`: [ISeed](interfaces/iseed.md), `accountIndex`: number, `outputs`: { addressBech32: string ; amount: number ; isDustAllowance?: undefined \| false \| true  }[], `startIndex?`: undefined \| number): Promise<{ message: [IMessage](interfaces/imessage.md) ; messageId: string  }\>
+▸ **sendMultiple**(`client`: [IClient](interfaces/iclient.md), `seed`: [ISeed](interfaces/iseed.md), `accountIndex`: number, `outputs`: { addressBech32: string ; amount: number ; isDustAllowance?: undefined \| false \| true  }[], `startIndex?`: undefined \| number, `indexationKey?`: undefined \| string, `indexationData?`: Uint8Array): Promise<{ message: [IMessage](interfaces/imessage.md) ; messageId: string  }\>
 
 Send a transfer from the balance on the seed to multiple outputs.
 
@@ -1607,6 +1611,8 @@ Name | Type | Description |
 `accountIndex` | number | The account index in the wallet. |
 `outputs` | { addressBech32: string ; amount: number ; isDustAllowance?: undefined \| false \| true  }[] | The address to send the funds to in bech32 format and amounts. |
 `startIndex?` | undefined \| number | The start index for the wallet count address, defaults to 0. |
+`indexationKey?` | undefined \| string | Optional indexation key. |
+`indexationData?` | Uint8Array | Optional index data. |
 
 **Returns:** Promise<{ message: [IMessage](interfaces/imessage.md) ; messageId: string  }\>
 
@@ -1616,7 +1622,7 @@ ___
 
 ### sendMultipleEd25519
 
-▸ **sendMultipleEd25519**(`client`: [IClient](interfaces/iclient.md), `seed`: [ISeed](interfaces/iseed.md), `accountIndex`: number, `outputs`: { addressEd25519: string ; amount: number ; isDustAllowance?: undefined \| false \| true  }[], `startIndex?`: undefined \| number): Promise<{ message: [IMessage](interfaces/imessage.md) ; messageId: string  }\>
+▸ **sendMultipleEd25519**(`client`: [IClient](interfaces/iclient.md), `seed`: [ISeed](interfaces/iseed.md), `accountIndex`: number, `outputs`: { addressEd25519: string ; amount: number ; isDustAllowance?: undefined \| false \| true  }[], `startIndex?`: undefined \| number, `indexationKey?`: undefined \| string, `indexationData?`: Uint8Array): Promise<{ message: [IMessage](interfaces/imessage.md) ; messageId: string  }\>
 
 Send a transfer from the balance on the seed.
 
@@ -1629,6 +1635,8 @@ Name | Type | Description |
 `accountIndex` | number | The account index in the wallet. |
 `outputs` | { addressEd25519: string ; amount: number ; isDustAllowance?: undefined \| false \| true  }[] | The outputs including address to send the funds to in ed25519 format and amount. |
 `startIndex?` | undefined \| number | The start index for the wallet count address, defaults to 0. |
+`indexationKey?` | undefined \| string | Optional indexation key. |
+`indexationData?` | Uint8Array | Optional index data. |
 
 **Returns:** Promise<{ message: [IMessage](interfaces/imessage.md) ; messageId: string  }\>
 
@@ -1638,7 +1646,7 @@ ___
 
 ### sendWithAddressGenerator
 
-▸ **sendWithAddressGenerator**<T\>(`client`: [IClient](interfaces/iclient.md), `seed`: [ISeed](interfaces/iseed.md), `initialAddressState`: T, `nextAddressPath`: (addressState: T, isFirst: boolean) => string, `outputs`: { address: string ; addressType: number ; amount: number ; isDustAllowance?: undefined \| false \| true  }[]): Promise<{ message: [IMessage](interfaces/imessage.md) ; messageId: string  }\>
+▸ **sendWithAddressGenerator**<T\>(`client`: [IClient](interfaces/iclient.md), `seed`: [ISeed](interfaces/iseed.md), `initialAddressState`: T, `nextAddressPath`: (addressState: T, isFirst: boolean) => string, `outputs`: { address: string ; addressType: number ; amount: number ; isDustAllowance?: undefined \| false \| true  }[], `indexationKey?`: undefined \| string, `indexationData?`: Uint8Array): Promise<{ message: [IMessage](interfaces/imessage.md) ; messageId: string  }\>
 
 Send a transfer using account based indexing for the inputs.
 
@@ -1657,6 +1665,8 @@ Name | Type | Description |
 `initialAddressState` | T | The initial address state for calculating the addresses. |
 `nextAddressPath` | (addressState: T, isFirst: boolean) => string | Calculate the next address for inputs. |
 `outputs` | { address: string ; addressType: number ; amount: number ; isDustAllowance?: undefined \| false \| true  }[] | The address to send the funds to in bech32 format and amounts. |
+`indexationKey?` | undefined \| string | Optional indexation key. |
+`indexationData?` | Uint8Array | Optional index data. |
 
 **Returns:** Promise<{ message: [IMessage](interfaces/imessage.md) ; messageId: string  }\>
 

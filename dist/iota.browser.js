@@ -10930,12 +10930,14 @@
 	 * @param addressBech32 The address to send the funds to in bech32 format.
 	 * @param amount The amount to send.
 	 * @param startIndex The start index for the wallet count address, defaults to 0.
+	 * @param indexationKey Optional indexation key.
+	 * @param indexationData Optional index data.
 	 * @returns The id of the message created and the contructed message.
 	 */
-	function send(client, seed, accountIndex, addressBech32, amount, startIndex) {
+	function send(client, seed, accountIndex, addressBech32, amount, startIndex, indexationKey, indexationData) {
 	    return __awaiter(this, void 0, void 0, function () {
 	        return __generator(this, function (_a) {
-	            return [2 /*return*/, sendMultiple(client, seed, accountIndex, [{ addressBech32: addressBech32, amount: amount }], startIndex)];
+	            return [2 /*return*/, sendMultiple(client, seed, accountIndex, [{ addressBech32: addressBech32, amount: amount }], startIndex, indexationKey, indexationData)];
 	        });
 	    });
 	}
@@ -10948,12 +10950,14 @@
 	 * @param addressEd25519 The address to send the funds to in ed25519 format.
 	 * @param amount The amount to send.
 	 * @param startIndex The start index for the wallet count address, defaults to 0.
+	 * @param indexationKey Optional indexation key.
+	 * @param indexationData Optional index data.
 	 * @returns The id of the message created and the contructed message.
 	 */
-	function sendEd25519(client, seed, accountIndex, addressEd25519, amount, startIndex) {
+	function sendEd25519(client, seed, accountIndex, addressEd25519, amount, startIndex, indexationKey, indexationData) {
 	    return __awaiter(this, void 0, void 0, function () {
 	        return __generator(this, function (_a) {
-	            return [2 /*return*/, sendMultipleEd25519(client, seed, accountIndex, [{ addressEd25519: addressEd25519, amount: amount }], startIndex)];
+	            return [2 /*return*/, sendMultipleEd25519(client, seed, accountIndex, [{ addressEd25519: addressEd25519, amount: amount }], startIndex, indexationKey, indexationData)];
 	        });
 	    });
 	}
@@ -10965,9 +10969,11 @@
 	 * @param accountIndex The account index in the wallet.
 	 * @param outputs The address to send the funds to in bech32 format and amounts.
 	 * @param startIndex The start index for the wallet count address, defaults to 0.
+	 * @param indexationKey Optional indexation key.
+	 * @param indexationData Optional index data.
 	 * @returns The id of the message created and the contructed message.
 	 */
-	function sendMultiple(client, seed, accountIndex, outputs, startIndex) {
+	function sendMultiple(client, seed, accountIndex, outputs, startIndex, indexationKey, indexationData) {
 	    return __awaiter(this, void 0, void 0, function () {
 	        var hexOutputs;
 	        return __generator(this, function (_a) {
@@ -10987,7 +10993,7 @@
 	                    accountIndex: accountIndex,
 	                    addressIndex: startIndex !== null && startIndex !== void 0 ? startIndex : 0,
 	                    isInternal: false
-	                }, addresses.generateBip44Address, hexOutputs)];
+	                }, addresses.generateBip44Address, hexOutputs, indexationKey, indexationData)];
 	        });
 	    });
 	}
@@ -10999,9 +11005,11 @@
 	 * @param accountIndex The account index in the wallet.
 	 * @param outputs The outputs including address to send the funds to in ed25519 format and amount.
 	 * @param startIndex The start index for the wallet count address, defaults to 0.
+	 * @param indexationKey Optional indexation key.
+	 * @param indexationData Optional index data.
 	 * @returns The id of the message created and the contructed message.
 	 */
-	function sendMultipleEd25519(client, seed, accountIndex, outputs, startIndex) {
+	function sendMultipleEd25519(client, seed, accountIndex, outputs, startIndex, indexationKey, indexationData) {
 	    return __awaiter(this, void 0, void 0, function () {
 	        var hexOutputs;
 	        return __generator(this, function (_a) {
@@ -11015,7 +11023,7 @@
 	                    accountIndex: accountIndex,
 	                    addressIndex: startIndex !== null && startIndex !== void 0 ? startIndex : 0,
 	                    isInternal: false
-	                }, addresses.generateBip44Address, hexOutputs)];
+	                }, addresses.generateBip44Address, hexOutputs, indexationKey, indexationData)];
 	        });
 	    });
 	}
@@ -11027,9 +11035,11 @@
 	 * @param initialAddressState The initial address state for calculating the addresses.
 	 * @param nextAddressPath Calculate the next address for inputs.
 	 * @param outputs The address to send the funds to in bech32 format and amounts.
+	 * @param indexationKey Optional indexation key.
+	 * @param indexationData Optional index data.
 	 * @returns The id of the message created and the contructed message.
 	 */
-	function sendWithAddressGenerator(client, seed, initialAddressState, nextAddressPath, outputs) {
+	function sendWithAddressGenerator(client, seed, initialAddressState, nextAddressPath, outputs, indexationKey, indexationData) {
 	    return __awaiter(this, void 0, void 0, function () {
 	        var inputsAndKeys, response;
 	        return __generator(this, function (_a) {
@@ -11037,7 +11047,7 @@
 	                case 0: return [4 /*yield*/, calculateInputs(client, seed, initialAddressState, nextAddressPath, outputs, 5)];
 	                case 1:
 	                    inputsAndKeys = _a.sent();
-	                    return [4 /*yield*/, sendAdvanced_1.sendAdvanced(client, inputsAndKeys, outputs)];
+	                    return [4 /*yield*/, sendAdvanced_1.sendAdvanced(client, inputsAndKeys, outputs, indexationKey, indexationData)];
 	                case 2:
 	                    response = _a.sent();
 	                    return [2 /*return*/, {

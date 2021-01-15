@@ -22,6 +22,8 @@ import { sendAdvanced } from "./sendAdvanced";
  * @param addressBech32 The address to send the funds to in bech32 format.
  * @param amount The amount to send.
  * @param startIndex The start index for the wallet count address, defaults to 0.
+ * @param indexationKey Optional indexation key.
+ * @param indexationData Optional index data.
  * @returns The id of the message created and the contructed message.
  */
 export async function send(
@@ -30,7 +32,9 @@ export async function send(
     accountIndex: number,
     addressBech32: string,
     amount: number,
-    startIndex?: number): Promise<{
+    startIndex?: number,
+    indexationKey?: string,
+    indexationData?: Uint8Array): Promise<{
         messageId: string;
         message: IMessage;
     }> {
@@ -39,7 +43,9 @@ export async function send(
         seed,
         accountIndex,
         [{ addressBech32, amount }],
-        startIndex
+        startIndex,
+        indexationKey,
+        indexationData
     );
 }
 
@@ -51,6 +57,8 @@ export async function send(
  * @param addressEd25519 The address to send the funds to in ed25519 format.
  * @param amount The amount to send.
  * @param startIndex The start index for the wallet count address, defaults to 0.
+ * @param indexationKey Optional indexation key.
+ * @param indexationData Optional index data.
  * @returns The id of the message created and the contructed message.
  */
 export async function sendEd25519(
@@ -59,7 +67,9 @@ export async function sendEd25519(
     accountIndex: number,
     addressEd25519: string,
     amount: number,
-    startIndex?: number): Promise<{
+    startIndex?: number,
+    indexationKey?: string,
+    indexationData?: Uint8Array): Promise<{
         messageId: string;
         message: IMessage;
     }> {
@@ -68,7 +78,9 @@ export async function sendEd25519(
         seed,
         accountIndex,
         [{ addressEd25519, amount }],
-        startIndex
+        startIndex,
+        indexationKey,
+        indexationData
     );
 }
 
@@ -79,6 +91,8 @@ export async function sendEd25519(
  * @param accountIndex The account index in the wallet.
  * @param outputs The address to send the funds to in bech32 format and amounts.
  * @param startIndex The start index for the wallet count address, defaults to 0.
+ * @param indexationKey Optional indexation key.
+ * @param indexationData Optional index data.
  * @returns The id of the message created and the contructed message.
  */
 export async function sendMultiple(
@@ -90,7 +104,9 @@ export async function sendMultiple(
         amount: number;
         isDustAllowance?: boolean;
     }[],
-    startIndex?: number): Promise<{
+    startIndex?: number,
+    indexationKey?: string,
+    indexationData?: Uint8Array): Promise<{
         messageId: string;
         message: IMessage;
     }> {
@@ -117,7 +133,9 @@ export async function sendMultiple(
             isInternal: false
         },
         generateBip44Address,
-        hexOutputs
+        hexOutputs,
+        indexationKey,
+        indexationData
     );
 }
 
@@ -128,6 +146,8 @@ export async function sendMultiple(
  * @param accountIndex The account index in the wallet.
  * @param outputs The outputs including address to send the funds to in ed25519 format and amount.
  * @param startIndex The start index for the wallet count address, defaults to 0.
+ * @param indexationKey Optional indexation key.
+ * @param indexationData Optional index data.
  * @returns The id of the message created and the contructed message.
  */
 export async function sendMultipleEd25519(
@@ -139,7 +159,9 @@ export async function sendMultipleEd25519(
         amount: number;
         isDustAllowance?: boolean;
     }[],
-    startIndex?: number): Promise<{
+    startIndex?: number,
+    indexationKey?: string,
+    indexationData?: Uint8Array): Promise<{
         messageId: string;
         message: IMessage;
     }> {
@@ -161,7 +183,9 @@ export async function sendMultipleEd25519(
             isInternal: false
         },
         generateBip44Address,
-        hexOutputs
+        hexOutputs,
+        indexationKey,
+        indexationData
     );
 }
 
@@ -172,6 +196,8 @@ export async function sendMultipleEd25519(
  * @param initialAddressState The initial address state for calculating the addresses.
  * @param nextAddressPath Calculate the next address for inputs.
  * @param outputs The address to send the funds to in bech32 format and amounts.
+ * @param indexationKey Optional indexation key.
+ * @param indexationData Optional index data.
  * @returns The id of the message created and the contructed message.
  */
 export async function sendWithAddressGenerator<T>(
@@ -184,7 +210,9 @@ export async function sendWithAddressGenerator<T>(
         addressType: number;
         amount: number;
         isDustAllowance?: boolean;
-    }[]): Promise<{
+    }[],
+    indexationKey?: string,
+    indexationData?: Uint8Array): Promise<{
         messageId: string;
         message: IMessage;
     }> {
@@ -200,7 +228,9 @@ export async function sendWithAddressGenerator<T>(
     const response = await sendAdvanced(
         client,
         inputsAndKeys,
-        outputs);
+        outputs,
+        indexationKey,
+        indexationData);
 
     return {
         messageId: response.messageId,

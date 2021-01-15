@@ -11,9 +11,11 @@ import { IUTXOInput } from "../models/IUTXOInput";
  * @param addressBech32 The address to send the funds to in bech32 format.
  * @param amount The amount to send.
  * @param startIndex The start index for the wallet count address, defaults to 0.
+ * @param indexationKey Optional indexation key.
+ * @param indexationData Optional index data.
  * @returns The id of the message created and the contructed message.
  */
-export declare function send(client: IClient, seed: ISeed, accountIndex: number, addressBech32: string, amount: number, startIndex?: number): Promise<{
+export declare function send(client: IClient, seed: ISeed, accountIndex: number, addressBech32: string, amount: number, startIndex?: number, indexationKey?: string, indexationData?: Uint8Array): Promise<{
     messageId: string;
     message: IMessage;
 }>;
@@ -25,9 +27,11 @@ export declare function send(client: IClient, seed: ISeed, accountIndex: number,
  * @param addressEd25519 The address to send the funds to in ed25519 format.
  * @param amount The amount to send.
  * @param startIndex The start index for the wallet count address, defaults to 0.
+ * @param indexationKey Optional indexation key.
+ * @param indexationData Optional index data.
  * @returns The id of the message created and the contructed message.
  */
-export declare function sendEd25519(client: IClient, seed: ISeed, accountIndex: number, addressEd25519: string, amount: number, startIndex?: number): Promise<{
+export declare function sendEd25519(client: IClient, seed: ISeed, accountIndex: number, addressEd25519: string, amount: number, startIndex?: number, indexationKey?: string, indexationData?: Uint8Array): Promise<{
     messageId: string;
     message: IMessage;
 }>;
@@ -38,13 +42,15 @@ export declare function sendEd25519(client: IClient, seed: ISeed, accountIndex: 
  * @param accountIndex The account index in the wallet.
  * @param outputs The address to send the funds to in bech32 format and amounts.
  * @param startIndex The start index for the wallet count address, defaults to 0.
+ * @param indexationKey Optional indexation key.
+ * @param indexationData Optional index data.
  * @returns The id of the message created and the contructed message.
  */
 export declare function sendMultiple(client: IClient, seed: ISeed, accountIndex: number, outputs: {
     addressBech32: string;
     amount: number;
     isDustAllowance?: boolean;
-}[], startIndex?: number): Promise<{
+}[], startIndex?: number, indexationKey?: string, indexationData?: Uint8Array): Promise<{
     messageId: string;
     message: IMessage;
 }>;
@@ -55,13 +61,15 @@ export declare function sendMultiple(client: IClient, seed: ISeed, accountIndex:
  * @param accountIndex The account index in the wallet.
  * @param outputs The outputs including address to send the funds to in ed25519 format and amount.
  * @param startIndex The start index for the wallet count address, defaults to 0.
+ * @param indexationKey Optional indexation key.
+ * @param indexationData Optional index data.
  * @returns The id of the message created and the contructed message.
  */
 export declare function sendMultipleEd25519(client: IClient, seed: ISeed, accountIndex: number, outputs: {
     addressEd25519: string;
     amount: number;
     isDustAllowance?: boolean;
-}[], startIndex?: number): Promise<{
+}[], startIndex?: number, indexationKey?: string, indexationData?: Uint8Array): Promise<{
     messageId: string;
     message: IMessage;
 }>;
@@ -72,6 +80,8 @@ export declare function sendMultipleEd25519(client: IClient, seed: ISeed, accoun
  * @param initialAddressState The initial address state for calculating the addresses.
  * @param nextAddressPath Calculate the next address for inputs.
  * @param outputs The address to send the funds to in bech32 format and amounts.
+ * @param indexationKey Optional indexation key.
+ * @param indexationData Optional index data.
  * @returns The id of the message created and the contructed message.
  */
 export declare function sendWithAddressGenerator<T>(client: IClient, seed: ISeed, initialAddressState: T, nextAddressPath: (addressState: T, isFirst: boolean) => string, outputs: {
@@ -79,7 +89,7 @@ export declare function sendWithAddressGenerator<T>(client: IClient, seed: ISeed
     addressType: number;
     amount: number;
     isDustAllowance?: boolean;
-}[]): Promise<{
+}[], indexationKey?: string, indexationData?: Uint8Array): Promise<{
     messageId: string;
     message: IMessage;
 }>;
