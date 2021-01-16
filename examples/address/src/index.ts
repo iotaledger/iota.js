@@ -5,9 +5,9 @@ async function run() {
 
     // Generate a random mnenomic.
     const randomMnemonic = Bip39.randomMnemonic();
-    console.log("\tMnemomic:", randomMnemonic)
+    console.log("\tMnemonic:", randomMnemonic)
 
-    // Generate the seed from the Mnemomic
+    // Generate the seed from the Mnemonic
     const baseSeed = Ed25519Seed.fromMnemonic(randomMnemonic);
 
     console.log("\tSeed", Converter.bytesToHex(baseSeed.toBytes()));
