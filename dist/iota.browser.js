@@ -5894,328 +5894,6 @@
 
 	});
 
-	var bech32 = createCommonjsModule(function (module, exports) {
-	// Copyright 2020 IOTA Stiftung
-	// SPDX-License-Identifier: Apache-2.0
-	/* eslint-disable no-bitwise */
-	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.Bech32 = void 0;
-	/**
-	 * Class to help with Bech32 encoding/decoding.
-	 * Based on reference implementation https://github.com/sipa/bech32/blob/master/ref/javascript/bech32.js
-	 */
-	var Bech32 = /** @class */ (function () {
-	    function Bech32() {
-	    }
-	    /**
-	     * Encode the buffer.
-	     * @param humanReadablePart The header
-	     * @param data The data to encode.
-	     * @returns The encoded data.
-	     */
-	    Bech32.encode = function (humanReadablePart, data) {
-	        return Bech32.encode5BitArray(humanReadablePart, Bech32.to5Bit(data));
-	    };
-	    /**
-	     * Encode the 5 bit data buffer.
-	     * @param humanReadablePart The header
-	     * @param data5Bit The data to encode.
-	     * @returns The encoded data.
-	     */
-	    Bech32.encode5BitArray = function (humanReadablePart, data5Bit) {
-	        var checksum = Bech32.createChecksum(humanReadablePart, data5Bit);
-	        var ret = "" + humanReadablePart + Bech32.SEPARATOR;
-	        for (var i = 0; i < data5Bit.length; i++) {
-	            ret += Bech32.CHARSET.charAt(data5Bit[i]);
-	        }
-	        for (var i = 0; i < checksum.length; i++) {
-	            ret += Bech32.CHARSET.charAt(checksum[i]);
-	        }
-	        return ret;
-	    };
-	    /**
-	     * Decode a bech32 string.
-	     * @param bech The text to decode.
-	     * @returns The decoded data or undefined if it could not be decoded.
-	     */
-	    Bech32.decode = function (bech) {
-	        var result = Bech32.decodeTo5BitArray(bech);
-	        return result ? {
-	            humanReadablePart: result.humanReadablePart,
-	            data: Bech32.from5Bit(result.data)
-	        } : undefined;
-	    };
-	    /**
-	     * Decode a bech32 string to 5 bit array.
-	     * @param bech The text to decode.
-	     * @returns The decoded data or undefined if it could not be decoded.
-	     */
-	    Bech32.decodeTo5BitArray = function (bech) {
-	        bech = bech.toLowerCase();
-	        var separatorPos = bech.lastIndexOf(Bech32.SEPARATOR);
-	        if (separatorPos === -1) {
-	            throw new Error("There is no separator character " + Bech32.SEPARATOR + " in the data");
-	        }
-	        if (separatorPos < 1) {
-	            throw new Error("The separator position is " + separatorPos + ", which is too early in the string");
-	        }
-	        if (separatorPos + 7 > bech.length) {
-	            throw new Error("The separator position is " + separatorPos + ", which doesn't leave enough space for data");
-	        }
-	        var data = new Uint8Array(bech.length - separatorPos - 1);
-	        var idx = 0;
-	        for (var i = separatorPos + 1; i < bech.length; i++) {
-	            var d = Bech32.CHARSET.indexOf(bech.charAt(i));
-	            if (d === -1) {
-	                throw new Error("Data contains characters not in the charset " + bech.charAt(i));
-	            }
-	            data[idx++] = Bech32.CHARSET.indexOf(bech.charAt(i));
-	        }
-	        var humanReadablePart = bech.slice(0, separatorPos);
-	        if (!Bech32.verifyChecksum(humanReadablePart, data)) {
-	            return;
-	        }
-	        return { humanReadablePart: humanReadablePart, data: data.slice(0, -6) };
-	    };
-	    /**
-	     * Convert the input bytes into 5 bit data.
-	     * @param bytes The bytes to convert.
-	     * @returns The data in 5 bit form.
-	     */
-	    Bech32.to5Bit = function (bytes) {
-	        return Bech32.convertBits(bytes, 8, 5, true);
-	    };
-	    /**
-	     * Convert the 5 bit data to 8 bit.
-	     * @param fiveBit The 5 bit data to convert.
-	     * @returns The 5 bit data converted to 8 bit.
-	     */
-	    Bech32.from5Bit = function (fiveBit) {
-	        return Bech32.convertBits(fiveBit, 5, 8, false);
-	    };
-	    /**
-	     * Does the given string match the bech32 pattern.
-	     * @param humanReadablePart The human readable part.
-	     * @param bech32Text The text to test.
-	     * @returns True if this is potentially a match.
-	     */
-	    Bech32.matches = function (humanReadablePart, bech32Text) {
-	        if (!bech32Text) {
-	            return false;
-	        }
-	        var regEx = new RegExp("^" + humanReadablePart + "1[" + Bech32.CHARSET + "]{6,}$");
-	        return regEx.test(bech32Text);
-	    };
-	    /**
-	     * Create the checksum from the human redable part and the data.
-	     * @param humanReadablePart The human readable part.
-	     * @param data The data.
-	     * @returns The checksum.
-	     * @internal
-	     */
-	    Bech32.createChecksum = function (humanReadablePart, data) {
-	        var expanded = Bech32.humanReadablePartExpand(humanReadablePart);
-	        var values = new Uint8Array(expanded.length + data.length + 6);
-	        values.set(expanded, 0);
-	        values.set(data, expanded.length);
-	        values.set([0, 0, 0, 0, 0, 0], expanded.length + data.length);
-	        var mod = Bech32.polymod(values) ^ 1;
-	        var ret = new Uint8Array(6);
-	        for (var i = 0; i < 6; i++) {
-	            ret[i] = (mod >> 5 * (5 - i)) & 31;
-	        }
-	        return ret;
-	    };
-	    /**
-	     * Verify the checksum given the humarn readable part and data.
-	     * @param humanReadablePart The human redable part to validate the checksum.
-	     * @param data The data to validate the checksum.
-	     * @returns True if the checksum was verified.
-	     * @internal
-	     */
-	    Bech32.verifyChecksum = function (humanReadablePart, data) {
-	        var expanded = Bech32.humanReadablePartExpand(humanReadablePart);
-	        var values = new Uint8Array(expanded.length + data.length);
-	        values.set(expanded, 0);
-	        values.set(data, expanded.length);
-	        return Bech32.polymod(values) === 1;
-	    };
-	    /**
-	     * Calculate the polymod of the values.
-	     * @param values The values to calculate the polymod for.
-	     * @returns The polymod of the values.
-	     * @internal
-	     */
-	    Bech32.polymod = function (values) {
-	        var chk = 1;
-	        for (var p = 0; p < values.length; p++) {
-	            var top_1 = chk >> 25;
-	            chk = ((chk & 0x1FFFFFF) << 5) ^ values[p];
-	            for (var i = 0; i < 5; ++i) {
-	                if ((top_1 >> i) & 1) {
-	                    chk ^= Bech32.GENERATOR[i];
-	                }
-	            }
-	        }
-	        return chk;
-	    };
-	    /**
-	     * Expand the human readable part.
-	     * @param humanReadablePart The human readable part to expand.
-	     * @returns The expanded human readable part.
-	     * @internal
-	     */
-	    Bech32.humanReadablePartExpand = function (humanReadablePart) {
-	        var ret = new Uint8Array((humanReadablePart.length * 2) + 1);
-	        var idx = 0;
-	        for (var i = 0; i < humanReadablePart.length; i++) {
-	            ret[idx++] = humanReadablePart.charCodeAt(i) >> 5;
-	        }
-	        ret[idx++] = 0;
-	        for (var i = 0; i < humanReadablePart.length; i++) {
-	            ret[idx++] = humanReadablePart.charCodeAt(i) & 31;
-	        }
-	        return ret;
-	    };
-	    /**
-	     * Convert input data from one bit resolution to another.
-	     * @param data The data to convert.
-	     * @param fromBits The resolution of the input data.
-	     * @param toBits The required resolution of the output data.
-	     * @param padding Include padding in the output.
-	     * @returns The converted data,
-	     * @internal
-	     */
-	    Bech32.convertBits = function (data, fromBits, toBits, padding) {
-	        var value = 0;
-	        var bits = 0;
-	        var maxV = (1 << toBits) - 1;
-	        var res = [];
-	        for (var i = 0; i < data.length; i++) {
-	            value = (value << fromBits) | data[i];
-	            bits += fromBits;
-	            while (bits >= toBits) {
-	                bits -= toBits;
-	                res.push((value >> bits) & maxV);
-	            }
-	        }
-	        if (padding) {
-	            if (bits > 0) {
-	                res.push((value << (toBits - bits)) & maxV);
-	            }
-	        }
-	        else {
-	            if (bits >= fromBits) {
-	                throw new Error("Excess padding");
-	            }
-	            if ((value << (toBits - bits)) & maxV) {
-	                throw new Error("Non-zero padding");
-	            }
-	        }
-	        return new Uint8Array(res);
-	    };
-	    /**
-	     * The alphabet to use.
-	     * @internal
-	     */
-	    Bech32.CHARSET = "qpzry9x8gf2tvdw0s3jn54khce6mua7l";
-	    /**
-	     * The separator between human readable part and data.
-	     * @internal
-	     */
-	    Bech32.SEPARATOR = "1";
-	    /**
-	     * The generator constants;
-	     * @internal
-	     */
-	    Bech32.GENERATOR = Uint32Array.from([
-	        0x3B6A57B2,
-	        0x26508E6D,
-	        0x1EA119FA,
-	        0x3D4233DD,
-	        0x2A1462B3
-	    ]);
-	    return Bech32;
-	}());
-	exports.Bech32 = Bech32;
-
-	});
-
-	var bech32Helper = createCommonjsModule(function (module, exports) {
-	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.Bech32Helper = void 0;
-	// Copyright 2020 IOTA Stiftung
-	// SPDX-License-Identifier: Apache-2.0
-	/* eslint-disable no-bitwise */
-
-	/**
-	 * Convert address to bech32.
-	 */
-	var Bech32Helper = /** @class */ (function () {
-	    function Bech32Helper() {
-	    }
-	    /**
-	     * Encode an address to bech32.
-	     * @param addressType The address type to encode.
-	     * @param addressBytes The address bytes to encode.
-	     * @param humanReadablePart The human readable part to use.
-	     * @returns The array formated as hex.
-	     */
-	    Bech32Helper.toBech32 = function (addressType, addressBytes, humanReadablePart) {
-	        if (humanReadablePart === void 0) { humanReadablePart = Bech32Helper.BECH32_DEFAULT_HRP_MAIN; }
-	        var addressData = new Uint8Array(1 + addressBytes.length);
-	        addressData[0] = addressType;
-	        addressData.set(addressBytes, 1);
-	        return bech32.Bech32.encode(humanReadablePart, addressData);
-	    };
-	    /**
-	     * Decode an address from bech32.
-	     * @param bech32Text The bech32 text to decode.
-	     * @param humanReadablePart The human readable part to use.
-	     * @returns The address type and address bytes or undefined if it cannot be decoded.
-	     */
-	    Bech32Helper.fromBech32 = function (bech32Text, humanReadablePart) {
-	        if (humanReadablePart === void 0) { humanReadablePart = Bech32Helper.BECH32_DEFAULT_HRP_MAIN; }
-	        var decoded = bech32.Bech32.decode(bech32Text);
-	        if (decoded) {
-	            if (decoded.humanReadablePart !== humanReadablePart) {
-	                throw new Error("The hrp part of the address should be " + humanReadablePart + ", it is " + decoded.humanReadablePart);
-	            }
-	            if (decoded.data.length === 0) {
-	                throw new Error("The data part of the address should be at least length 1, it is 0");
-	            }
-	            var addressType = decoded.data[0];
-	            var addressBytes = decoded.data.slice(1);
-	            return {
-	                addressType: addressType,
-	                addressBytes: addressBytes
-	            };
-	        }
-	    };
-	    /**
-	     * Does the provided string look like it might be an bech32 address with matching hrp.
-	     * @param bech32Text The bech32 text to text.
-	     * @param humanReadablePart The human readable part to match.
-	     * @returns True if the passed address matches the pattern for a bech32 address.
-	     */
-	    Bech32Helper.matches = function (bech32Text, humanReadablePart) {
-	        if (humanReadablePart === void 0) { humanReadablePart = Bech32Helper.BECH32_DEFAULT_HRP_MAIN; }
-	        return bech32.Bech32.matches(humanReadablePart, bech32Text);
-	    };
-	    /**
-	     * The default human readable part of the bech32 addresses for mainnet, currently 'iota'.
-	     */
-	    Bech32Helper.BECH32_DEFAULT_HRP_MAIN = "iota";
-	    /**
-	     * The default human readable part of the bech32 addresses for testnet, currently 'atoi'.
-	     */
-	    Bech32Helper.BECH32_DEFAULT_HRP_TEST = "atoi";
-	    return Bech32Helper;
-	}());
-	exports.Bech32Helper = Bech32Helper;
-
-	});
-
 	var writeStream = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.WriteStream = void 0;
@@ -6423,7 +6101,6 @@
 	exports.SingleNodeClient = void 0;
 	// Copyright 2020 IOTA Stiftung
 	// SPDX-License-Identifier: Apache-2.0
-
 
 
 
@@ -6658,9 +6335,6 @@
 	    SingleNodeClient.prototype.address = function (addressBech32) {
 	        return __awaiter(this, void 0, void 0, function () {
 	            return __generator(this, function (_a) {
-	                if (!bech32Helper.Bech32Helper.matches(addressBech32)) {
-	                    throw new Error("The supplied address does not appear to be bech32 format");
-	                }
 	                return [2 /*return*/, this.fetchJson("get", "addresses/" + addressBech32)];
 	            });
 	        });
@@ -6673,9 +6347,6 @@
 	    SingleNodeClient.prototype.addressOutputs = function (addressBech32) {
 	        return __awaiter(this, void 0, void 0, function () {
 	            return __generator(this, function (_a) {
-	                if (!bech32Helper.Bech32Helper.matches(addressBech32)) {
-	                    throw new Error("The supplied address does not appear to be bech32 format");
-	                }
 	                return [2 /*return*/, this.fetchJson("get", "addresses/" + addressBech32 + "/outputs")];
 	            });
 	        });
@@ -6950,6 +6621,253 @@
 
 	var singleNodeClientOptions = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
+
+	});
+
+	var bech32 = createCommonjsModule(function (module, exports) {
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
+	/* eslint-disable no-bitwise */
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.Bech32 = void 0;
+	/**
+	 * Class to help with Bech32 encoding/decoding.
+	 * Based on reference implementation https://github.com/sipa/bech32/blob/master/ref/javascript/bech32.js
+	 */
+	var Bech32 = /** @class */ (function () {
+	    function Bech32() {
+	    }
+	    /**
+	     * Encode the buffer.
+	     * @param humanReadablePart The header
+	     * @param data The data to encode.
+	     * @returns The encoded data.
+	     */
+	    Bech32.encode = function (humanReadablePart, data) {
+	        return Bech32.encode5BitArray(humanReadablePart, Bech32.to5Bit(data));
+	    };
+	    /**
+	     * Encode the 5 bit data buffer.
+	     * @param humanReadablePart The header
+	     * @param data5Bit The data to encode.
+	     * @returns The encoded data.
+	     */
+	    Bech32.encode5BitArray = function (humanReadablePart, data5Bit) {
+	        var checksum = Bech32.createChecksum(humanReadablePart, data5Bit);
+	        var ret = "" + humanReadablePart + Bech32.SEPARATOR;
+	        for (var i = 0; i < data5Bit.length; i++) {
+	            ret += Bech32.CHARSET.charAt(data5Bit[i]);
+	        }
+	        for (var i = 0; i < checksum.length; i++) {
+	            ret += Bech32.CHARSET.charAt(checksum[i]);
+	        }
+	        return ret;
+	    };
+	    /**
+	     * Decode a bech32 string.
+	     * @param bech The text to decode.
+	     * @returns The decoded data or undefined if it could not be decoded.
+	     */
+	    Bech32.decode = function (bech) {
+	        var result = Bech32.decodeTo5BitArray(bech);
+	        return result ? {
+	            humanReadablePart: result.humanReadablePart,
+	            data: Bech32.from5Bit(result.data)
+	        } : undefined;
+	    };
+	    /**
+	     * Decode a bech32 string to 5 bit array.
+	     * @param bech The text to decode.
+	     * @returns The decoded data or undefined if it could not be decoded.
+	     */
+	    Bech32.decodeTo5BitArray = function (bech) {
+	        bech = bech.toLowerCase();
+	        var separatorPos = bech.lastIndexOf(Bech32.SEPARATOR);
+	        if (separatorPos === -1) {
+	            throw new Error("There is no separator character " + Bech32.SEPARATOR + " in the data");
+	        }
+	        if (separatorPos < 1) {
+	            throw new Error("The separator position is " + separatorPos + ", which is too early in the string");
+	        }
+	        if (separatorPos + 7 > bech.length) {
+	            throw new Error("The separator position is " + separatorPos + ", which doesn't leave enough space for data");
+	        }
+	        var data = new Uint8Array(bech.length - separatorPos - 1);
+	        var idx = 0;
+	        for (var i = separatorPos + 1; i < bech.length; i++) {
+	            var d = Bech32.CHARSET.indexOf(bech.charAt(i));
+	            if (d === -1) {
+	                throw new Error("Data contains characters not in the charset " + bech.charAt(i));
+	            }
+	            data[idx++] = Bech32.CHARSET.indexOf(bech.charAt(i));
+	        }
+	        var humanReadablePart = bech.slice(0, separatorPos);
+	        if (!Bech32.verifyChecksum(humanReadablePart, data)) {
+	            return;
+	        }
+	        return { humanReadablePart: humanReadablePart, data: data.slice(0, -6) };
+	    };
+	    /**
+	     * Convert the input bytes into 5 bit data.
+	     * @param bytes The bytes to convert.
+	     * @returns The data in 5 bit form.
+	     */
+	    Bech32.to5Bit = function (bytes) {
+	        return Bech32.convertBits(bytes, 8, 5, true);
+	    };
+	    /**
+	     * Convert the 5 bit data to 8 bit.
+	     * @param fiveBit The 5 bit data to convert.
+	     * @returns The 5 bit data converted to 8 bit.
+	     */
+	    Bech32.from5Bit = function (fiveBit) {
+	        return Bech32.convertBits(fiveBit, 5, 8, false);
+	    };
+	    /**
+	     * Does the given string match the bech32 pattern.
+	     * @param humanReadablePart The human readable part.
+	     * @param bech32Text The text to test.
+	     * @returns True if this is potentially a match.
+	     */
+	    Bech32.matches = function (humanReadablePart, bech32Text) {
+	        if (!bech32Text) {
+	            return false;
+	        }
+	        var regEx = new RegExp("^" + humanReadablePart + "1[" + Bech32.CHARSET + "]{6,}$");
+	        return regEx.test(bech32Text);
+	    };
+	    /**
+	     * Create the checksum from the human redable part and the data.
+	     * @param humanReadablePart The human readable part.
+	     * @param data The data.
+	     * @returns The checksum.
+	     * @internal
+	     */
+	    Bech32.createChecksum = function (humanReadablePart, data) {
+	        var expanded = Bech32.humanReadablePartExpand(humanReadablePart);
+	        var values = new Uint8Array(expanded.length + data.length + 6);
+	        values.set(expanded, 0);
+	        values.set(data, expanded.length);
+	        values.set([0, 0, 0, 0, 0, 0], expanded.length + data.length);
+	        var mod = Bech32.polymod(values) ^ 1;
+	        var ret = new Uint8Array(6);
+	        for (var i = 0; i < 6; i++) {
+	            ret[i] = (mod >> 5 * (5 - i)) & 31;
+	        }
+	        return ret;
+	    };
+	    /**
+	     * Verify the checksum given the humarn readable part and data.
+	     * @param humanReadablePart The human redable part to validate the checksum.
+	     * @param data The data to validate the checksum.
+	     * @returns True if the checksum was verified.
+	     * @internal
+	     */
+	    Bech32.verifyChecksum = function (humanReadablePart, data) {
+	        var expanded = Bech32.humanReadablePartExpand(humanReadablePart);
+	        var values = new Uint8Array(expanded.length + data.length);
+	        values.set(expanded, 0);
+	        values.set(data, expanded.length);
+	        return Bech32.polymod(values) === 1;
+	    };
+	    /**
+	     * Calculate the polymod of the values.
+	     * @param values The values to calculate the polymod for.
+	     * @returns The polymod of the values.
+	     * @internal
+	     */
+	    Bech32.polymod = function (values) {
+	        var chk = 1;
+	        for (var p = 0; p < values.length; p++) {
+	            var top_1 = chk >> 25;
+	            chk = ((chk & 0x1FFFFFF) << 5) ^ values[p];
+	            for (var i = 0; i < 5; ++i) {
+	                if ((top_1 >> i) & 1) {
+	                    chk ^= Bech32.GENERATOR[i];
+	                }
+	            }
+	        }
+	        return chk;
+	    };
+	    /**
+	     * Expand the human readable part.
+	     * @param humanReadablePart The human readable part to expand.
+	     * @returns The expanded human readable part.
+	     * @internal
+	     */
+	    Bech32.humanReadablePartExpand = function (humanReadablePart) {
+	        var ret = new Uint8Array((humanReadablePart.length * 2) + 1);
+	        var idx = 0;
+	        for (var i = 0; i < humanReadablePart.length; i++) {
+	            ret[idx++] = humanReadablePart.charCodeAt(i) >> 5;
+	        }
+	        ret[idx++] = 0;
+	        for (var i = 0; i < humanReadablePart.length; i++) {
+	            ret[idx++] = humanReadablePart.charCodeAt(i) & 31;
+	        }
+	        return ret;
+	    };
+	    /**
+	     * Convert input data from one bit resolution to another.
+	     * @param data The data to convert.
+	     * @param fromBits The resolution of the input data.
+	     * @param toBits The required resolution of the output data.
+	     * @param padding Include padding in the output.
+	     * @returns The converted data,
+	     * @internal
+	     */
+	    Bech32.convertBits = function (data, fromBits, toBits, padding) {
+	        var value = 0;
+	        var bits = 0;
+	        var maxV = (1 << toBits) - 1;
+	        var res = [];
+	        for (var i = 0; i < data.length; i++) {
+	            value = (value << fromBits) | data[i];
+	            bits += fromBits;
+	            while (bits >= toBits) {
+	                bits -= toBits;
+	                res.push((value >> bits) & maxV);
+	            }
+	        }
+	        if (padding) {
+	            if (bits > 0) {
+	                res.push((value << (toBits - bits)) & maxV);
+	            }
+	        }
+	        else {
+	            if (bits >= fromBits) {
+	                throw new Error("Excess padding");
+	            }
+	            if ((value << (toBits - bits)) & maxV) {
+	                throw new Error("Non-zero padding");
+	            }
+	        }
+	        return new Uint8Array(res);
+	    };
+	    /**
+	     * The alphabet to use.
+	     * @internal
+	     */
+	    Bech32.CHARSET = "qpzry9x8gf2tvdw0s3jn54khce6mua7l";
+	    /**
+	     * The separator between human readable part and data.
+	     * @internal
+	     */
+	    Bech32.SEPARATOR = "1";
+	    /**
+	     * The generator constants;
+	     * @internal
+	     */
+	    Bech32.GENERATOR = Uint32Array.from([
+	        0x3B6A57B2,
+	        0x26508E6D,
+	        0x1EA119FA,
+	        0x3D4233DD,
+	        0x2A1462B3
+	    ]);
+	    return Bech32;
+	}());
+	exports.Bech32 = Bech32;
 
 	});
 
@@ -10104,6 +10022,78 @@
 
 	});
 
+	var bech32Helper = createCommonjsModule(function (module, exports) {
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.Bech32Helper = void 0;
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
+	/* eslint-disable no-bitwise */
+
+	/**
+	 * Convert address to bech32.
+	 */
+	var Bech32Helper = /** @class */ (function () {
+	    function Bech32Helper() {
+	    }
+	    /**
+	     * Encode an address to bech32.
+	     * @param addressType The address type to encode.
+	     * @param addressBytes The address bytes to encode.
+	     * @param humanReadablePart The human readable part to use.
+	     * @returns The array formated as hex.
+	     */
+	    Bech32Helper.toBech32 = function (addressType, addressBytes, humanReadablePart) {
+	        var addressData = new Uint8Array(1 + addressBytes.length);
+	        addressData[0] = addressType;
+	        addressData.set(addressBytes, 1);
+	        return bech32.Bech32.encode(humanReadablePart, addressData);
+	    };
+	    /**
+	     * Decode an address from bech32.
+	     * @param bech32Text The bech32 text to decode.
+	     * @param humanReadablePart The human readable part to use.
+	     * @returns The address type and address bytes or undefined if it cannot be decoded.
+	     */
+	    Bech32Helper.fromBech32 = function (bech32Text, humanReadablePart) {
+	        var decoded = bech32.Bech32.decode(bech32Text);
+	        if (decoded) {
+	            if (decoded.humanReadablePart !== humanReadablePart) {
+	                throw new Error("The hrp part of the address should be " + humanReadablePart + ", it is " + decoded.humanReadablePart);
+	            }
+	            if (decoded.data.length === 0) {
+	                throw new Error("The data part of the address should be at least length 1, it is 0");
+	            }
+	            var addressType = decoded.data[0];
+	            var addressBytes = decoded.data.slice(1);
+	            return {
+	                addressType: addressType,
+	                addressBytes: addressBytes
+	            };
+	        }
+	    };
+	    /**
+	     * Does the provided string look like it might be an bech32 address with matching hrp.
+	     * @param bech32Text The bech32 text to text.
+	     * @param humanReadablePart The human readable part to match.
+	     * @returns True if the passed address matches the pattern for a bech32 address.
+	     */
+	    Bech32Helper.matches = function (bech32Text, humanReadablePart) {
+	        return bech32.Bech32.matches(humanReadablePart, bech32Text);
+	    };
+	    /**
+	     * The default human readable part of the bech32 addresses for mainnet, currently 'iota'.
+	     */
+	    Bech32Helper.BECH32_DEFAULT_HRP_MAIN = "iota";
+	    /**
+	     * The default human readable part of the bech32 addresses for testnet, currently 'atoi'.
+	     */
+	    Bech32Helper.BECH32_DEFAULT_HRP_TEST = "atoi";
+	    return Bech32Helper;
+	}());
+	exports.Bech32Helper = Bech32Helper;
+
+	});
+
 	var getUnspentAddresses_1 = createCommonjsModule(function (module, exports) {
 	var __awaiter = (commonjsGlobal && commonjsGlobal.__awaiter) || function (thisArg, _arguments, P, generator) {
 	    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -10156,19 +10146,21 @@
 	 * @param client The client to send the transfer with.
 	 * @param seed The seed to use for address generation.
 	 * @param accountIndex The account index in the wallet.
-	 * @param startIndex Optional start index for the wallet count address, defaults to 0.
-	 * @param countLimit Limit the number of items to find.
-	 * @param zeroCount Abort when the number of zero balances is exceeded.
+	 * @param addressOptions Optional address configuration for balance address lookups.
+	 * @param addressOptions.startIndex The start index for the wallet count address, defaults to 0.
+	 * @param addressOptions.zeroCount The number of addresses with 0 balance during lookup before aborting.
+	 * @param addressOptions.requiredCount The max number of addresses to find.
 	 * @returns All the unspent addresses.
 	 */
-	function getUnspentAddresses(client, seed, accountIndex, startIndex, countLimit, zeroCount) {
+	function getUnspentAddresses(client, seed, accountIndex, addressOptions) {
+	    var _a;
 	    return __awaiter(this, void 0, void 0, function () {
-	        return __generator(this, function (_a) {
+	        return __generator(this, function (_b) {
 	            return [2 /*return*/, getUnspentAddressesWithAddressGenerator(client, seed, {
 	                    accountIndex: accountIndex,
-	                    addressIndex: startIndex !== null && startIndex !== void 0 ? startIndex : 0,
+	                    addressIndex: (_a = addressOptions === null || addressOptions === void 0 ? void 0 : addressOptions.startIndex) !== null && _a !== void 0 ? _a : 0,
 	                    isInternal: false
-	                }, addresses.generateBip44Address, countLimit, zeroCount)];
+	                }, addresses.generateBip44Address, addressOptions)];
 	        });
 	    });
 	}
@@ -10179,24 +10171,29 @@
 	 * @param seed The seed to use for address generation.
 	 * @param initialAddressState The initial address state for calculating the addresses.
 	 * @param nextAddressPath Calculate the next address for inputs.
-	 * @param countLimit Limit the number of items to find.
-	 * @param zeroCount Abort when the number of zero balances is exceeded.
+	 * @param addressOptions Optional address configuration for balance address lookups.
+	 * @param addressOptions.startIndex The start index for the wallet count address, defaults to 0.
+	 * @param addressOptions.zeroCount The number of addresses with 0 balance during lookup before aborting.
+	 * @param addressOptions.requiredCount The max number of addresses to find.
 	 * @returns All the unspent addresses.
 	 */
-	function getUnspentAddressesWithAddressGenerator(client, seed, initialAddressState, nextAddressPath, countLimit, zeroCount) {
+	function getUnspentAddressesWithAddressGenerator(client, seed, initialAddressState, nextAddressPath, addressOptions) {
+	    var _a, _b;
 	    return __awaiter(this, void 0, void 0, function () {
-	        var localCountLimit, localZeroCount, finished, allUnspent, isFirst, zeroBalance, path, addressSeed, ed25519Address$1, addressBytes, addressHex, addressResponse;
-	        return __generator(this, function (_a) {
-	            switch (_a.label) {
-	                case 0:
-	                    localCountLimit = countLimit !== null && countLimit !== void 0 ? countLimit : Number.MAX_SAFE_INTEGER;
-	                    localZeroCount = zeroCount !== null && zeroCount !== void 0 ? zeroCount : 5;
+	        var nodeInfo, localRequiredLimit, localZeroCount, finished, allUnspent, isFirst, zeroBalance, path, addressSeed, ed25519Address$1, addressBytes, addressHex, addressResponse;
+	        return __generator(this, function (_c) {
+	            switch (_c.label) {
+	                case 0: return [4 /*yield*/, client.info()];
+	                case 1:
+	                    nodeInfo = _c.sent();
+	                    localRequiredLimit = (_a = addressOptions === null || addressOptions === void 0 ? void 0 : addressOptions.requiredCount) !== null && _a !== void 0 ? _a : Number.MAX_SAFE_INTEGER;
+	                    localZeroCount = (_b = addressOptions === null || addressOptions === void 0 ? void 0 : addressOptions.zeroCount) !== null && _b !== void 0 ? _b : 20;
 	                    finished = false;
 	                    allUnspent = [];
 	                    isFirst = true;
 	                    zeroBalance = 0;
-	                    _a.label = 1;
-	                case 1:
+	                    _c.label = 2;
+	                case 2:
 	                    path = nextAddressPath(initialAddressState, isFirst);
 	                    isFirst = false;
 	                    addressSeed = seed.generateSeedFromPath(new bip32Path.Bip32Path(path));
@@ -10204,11 +10201,11 @@
 	                    addressBytes = ed25519Address$1.toAddress();
 	                    addressHex = converter.Converter.bytesToHex(addressBytes);
 	                    return [4 /*yield*/, client.addressEd25519(addressHex)];
-	                case 2:
-	                    addressResponse = _a.sent();
-	                    // If there are no outputs for the address we have reached the
-	                    // end of the used addresses
-	                    if (addressResponse.count === 0) {
+	                case 3:
+	                    addressResponse = _c.sent();
+	                    // If there is no balance we increment the counter and end
+	                    // the text when we have reached the count
+	                    if (addressResponse.balance === 0) {
 	                        zeroBalance++;
 	                        if (zeroBalance >= localZeroCount) {
 	                            finished = true;
@@ -10216,19 +10213,19 @@
 	                    }
 	                    else {
 	                        allUnspent.push({
-	                            address: bech32Helper.Bech32Helper.toBech32(IEd25519Address.ED25519_ADDRESS_TYPE, addressBytes),
+	                            address: bech32Helper.Bech32Helper.toBech32(IEd25519Address.ED25519_ADDRESS_TYPE, addressBytes, nodeInfo.bech32HRP),
 	                            path: path,
 	                            balance: addressResponse.balance
 	                        });
-	                        if (allUnspent.length === localCountLimit) {
+	                        if (allUnspent.length === localRequiredLimit) {
 	                            finished = true;
 	                        }
 	                    }
-	                    _a.label = 3;
-	                case 3:
-	                    if (!finished) return [3 /*break*/, 1];
-	                    _a.label = 4;
-	                case 4: return [2 /*return*/, allUnspent];
+	                    _c.label = 4;
+	                case 4:
+	                    if (!finished) return [3 /*break*/, 2];
+	                    _c.label = 5;
+	                case 5: return [2 /*return*/, allUnspent];
 	            }
 	        });
 	    });
@@ -10282,19 +10279,24 @@
 	 * @param client The client to send the transfer with.
 	 * @param seed The seed.
 	 * @param accountIndex The account index in the wallet.
-	 * @param startIndex The start index to generate from, defaults to 0.
+	 * @param addressOptions Optional address configuration for balance address lookups.
+	 * @param addressOptions.startIndex The start index for the wallet count address, defaults to 0.
+	 * @param addressOptions.zeroCount The number of addresses with 0 balance during lookup before aborting.
 	 * @returns The balance.
 	 */
-	function getBalance(client, seed, accountIndex, startIndex) {
-	    if (startIndex === void 0) { startIndex = 0; }
+	function getBalance(client, seed, accountIndex, addressOptions) {
 	    return __awaiter(this, void 0, void 0, function () {
-	        var allUnspent;
+	        var allUnspent, total, i;
 	        return __generator(this, function (_a) {
 	            switch (_a.label) {
-	                case 0: return [4 /*yield*/, getUnspentAddresses_1.getUnspentAddresses(client, seed, accountIndex, startIndex)];
+	                case 0: return [4 /*yield*/, getUnspentAddresses_1.getUnspentAddresses(client, seed, accountIndex, addressOptions)];
 	                case 1:
 	                    allUnspent = _a.sent();
-	                    return [2 /*return*/, allUnspent.reduce(function (total, output) { return total + output.balance; }, 0)];
+	                    total = 0;
+	                    for (i = 0; i < allUnspent.length; i++) {
+	                        total += allUnspent[i].balance;
+	                    }
+	                    return [2 /*return*/, total];
 	            }
 	        });
 	    });
@@ -10348,15 +10350,21 @@
 	 * @param client The client to send the transfer with.
 	 * @param seed The seed to use for address generation.
 	 * @param accountIndex The account index in the wallet.
-	 * @param startIndex Optional start index for the wallet count address, defaults to 0.
+	 * @param addressOptions Optional address configuration for balance address lookups.
+	 * @param addressOptions.startIndex The start index for the wallet count address, defaults to 0.
+	 * @param addressOptions.zeroCount The number of addresses with 0 balance during lookup before aborting.
 	 * @returns The first unspent address.
 	 */
-	function getUnspentAddress(client, seed, accountIndex, startIndex) {
+	function getUnspentAddress(client, seed, accountIndex, addressOptions) {
 	    return __awaiter(this, void 0, void 0, function () {
 	        var allUnspent;
 	        return __generator(this, function (_a) {
 	            switch (_a.label) {
-	                case 0: return [4 /*yield*/, getUnspentAddresses_1.getUnspentAddresses(client, seed, accountIndex, startIndex, 1, 5)];
+	                case 0: return [4 /*yield*/, getUnspentAddresses_1.getUnspentAddresses(client, seed, accountIndex, {
+	                        startIndex: addressOptions === null || addressOptions === void 0 ? void 0 : addressOptions.startIndex,
+	                        zeroCount: addressOptions === null || addressOptions === void 0 ? void 0 : addressOptions.zeroCount,
+	                        requiredCount: 1
+	                    })];
 	                case 1:
 	                    allUnspent = _a.sent();
 	                    return [2 /*return*/, allUnspent.length > 0 ? allUnspent[0] : undefined];
@@ -10560,6 +10568,8 @@
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.retrieveData = void 0;
 
+
+
 	/**
 	 * Retrieve a data message.
 	 * @param client The client to send the transfer with.
@@ -10576,10 +10586,10 @@
 	                    message = _a.sent();
 	                    if (message === null || message === void 0 ? void 0 : message.payload) {
 	                        indexationPayload = void 0;
-	                        if (message.payload.type === 0) {
+	                        if (message.payload.type === ITransactionPayload.TRANSACTION_PAYLOAD_TYPE) {
 	                            indexationPayload = message.payload.essence.payload;
 	                        }
-	                        else if (message.payload.type === 2) {
+	                        else if (message.payload.type === IIndexationPayload.INDEXATION_PAYLOAD_TYPE) {
 	                            indexationPayload = message.payload;
 	                        }
 	                        if (indexationPayload) {
@@ -10744,17 +10754,18 @@
 	 * @param client The client to send the transfer with.
 	 * @param inputsAndSignatureKeyPairs The inputs with the signature key pairs needed to sign transfers.
 	 * @param outputs The outputs to send.
-	 * @param indexationKey Optional indexation key.
-	 * @param indexationData Optional index data.
+	 * @param indexation Optional indexation data to associate with the transaction.
+	 * @param indexation.key Indexation key.
+	 * @param indexation.data Optional index data.
 	 * @returns The id of the message created and the remainder address if one was needed.
 	 */
-	function sendAdvanced(client, inputsAndSignatureKeyPairs, outputs, indexationKey, indexationData) {
+	function sendAdvanced(client, inputsAndSignatureKeyPairs, outputs, indexation) {
 	    return __awaiter(this, void 0, void 0, function () {
 	        var transactionPayload, message, messageId;
 	        return __generator(this, function (_a) {
 	            switch (_a.label) {
 	                case 0:
-	                    transactionPayload = buildTransactionPayload(inputsAndSignatureKeyPairs, outputs, indexationKey, indexationData);
+	                    transactionPayload = buildTransactionPayload(inputsAndSignatureKeyPairs, outputs, indexation);
 	                    message = {
 	                        payload: transactionPayload
 	                    };
@@ -10774,23 +10785,24 @@
 	 * Build a transaction payload.
 	 * @param inputsAndSignatureKeyPairs The inputs with the signature key pairs needed to sign transfers.
 	 * @param outputs The outputs to send.
-	 * @param indexationKey Optional indexation key.
-	 * @param indexationData Optional index data.
+	 * @param indexation Optional indexation data to associate with the transaction.
+	 * @param indexation.key Indexation key.
+	 * @param indexation.data Optional index data.
 	 * @returns The transaction payload.
 	 */
-	function buildTransactionPayload(inputsAndSignatureKeyPairs, outputs, indexationKey, indexationData) {
+	function buildTransactionPayload(inputsAndSignatureKeyPairs, outputs, indexation) {
 	    if (!inputsAndSignatureKeyPairs || inputsAndSignatureKeyPairs.length === 0) {
 	        throw new Error("You must specify some inputs");
 	    }
 	    if (!outputs || outputs.length === 0) {
 	        throw new Error("You must specify some outputs");
 	    }
-	    if (indexationKey) {
-	        if (indexationKey.length < payload.MIN_INDEXATION_KEY_LENGTH) {
-	            throw new Error("The indexation key length is " + indexationKey.length + ", which is below the minimum size of " + payload.MIN_INDEXATION_KEY_LENGTH);
+	    if (indexation === null || indexation === void 0 ? void 0 : indexation.key) {
+	        if (indexation.key.length < payload.MIN_INDEXATION_KEY_LENGTH) {
+	            throw new Error("The indexation key length is " + indexation.key.length + ", which is below the minimum size of " + payload.MIN_INDEXATION_KEY_LENGTH);
 	        }
-	        if (indexationKey.length > payload.MAX_INDEXATION_KEY_LENGTH) {
-	            throw new Error("The indexation key length is " + indexationKey.length + ", which exceeds the maximum size of " + payload.MAX_INDEXATION_KEY_LENGTH);
+	        if (indexation.key.length > payload.MAX_INDEXATION_KEY_LENGTH) {
+	            throw new Error("The indexation key length is " + indexation.key.length + ", which exceeds the maximum size of " + payload.MAX_INDEXATION_KEY_LENGTH);
 	        }
 	    }
 	    var outputsWithSerialization = [];
@@ -10828,11 +10840,11 @@
 	        type: ITransactionEssence.TRANSACTION_ESSENCE_TYPE,
 	        inputs: sortedInputs.map(function (i) { return i.input; }),
 	        outputs: sortedOutputs.map(function (o) { return o.output; }),
-	        payload: indexationKey
+	        payload: indexation
 	            ? {
 	                type: IIndexationPayload.INDEXATION_PAYLOAD_TYPE,
-	                index: indexationKey,
-	                data: indexationData ? converter.Converter.bytesToHex(indexationData) : ""
+	                index: indexation.key,
+	                data: indexation.data ? converter.Converter.bytesToHex(indexation.data) : ""
 	            }
 	            : undefined
 	    };
@@ -10933,15 +10945,18 @@
 	 * @param accountIndex The account index in the wallet.
 	 * @param addressBech32 The address to send the funds to in bech32 format.
 	 * @param amount The amount to send.
-	 * @param startIndex The start index for the wallet count address, defaults to 0.
-	 * @param indexationKey Optional indexation key.
-	 * @param indexationData Optional index data.
+	 * @param indexation Optional indexation data to associate with the transaction.
+	 * @param indexation.key Indexation key.
+	 * @param indexation.data Optional index data.
+	 * @param addressOptions Optional address configuration for balance address lookups.
+	 * @param addressOptions.startIndex The start index for the wallet count address, defaults to 0.
+	 * @param addressOptions.zeroCount The number of addresses with 0 balance during lookup before aborting.
 	 * @returns The id of the message created and the contructed message.
 	 */
-	function send(client, seed, accountIndex, addressBech32, amount, startIndex, indexationKey, indexationData) {
+	function send(client, seed, accountIndex, addressBech32, amount, indexation, addressOptions) {
 	    return __awaiter(this, void 0, void 0, function () {
 	        return __generator(this, function (_a) {
-	            return [2 /*return*/, sendMultiple(client, seed, accountIndex, [{ addressBech32: addressBech32, amount: amount }], startIndex, indexationKey, indexationData)];
+	            return [2 /*return*/, sendMultiple(client, seed, accountIndex, [{ addressBech32: addressBech32, amount: amount }], indexation, addressOptions)];
 	        });
 	    });
 	}
@@ -10953,15 +10968,18 @@
 	 * @param accountIndex The account index in the wallet.
 	 * @param addressEd25519 The address to send the funds to in ed25519 format.
 	 * @param amount The amount to send.
-	 * @param startIndex The start index for the wallet count address, defaults to 0.
-	 * @param indexationKey Optional indexation key.
-	 * @param indexationData Optional index data.
+	 * @param indexation Optional indexation data to associate with the transaction.
+	 * @param indexation.key Indexation key.
+	 * @param indexation.data Optional index data.
+	 * @param addressOptions Optional address configuration for balance address lookups.
+	 * @param addressOptions.startIndex The start index for the wallet count address, defaults to 0.
+	 * @param addressOptions.zeroCount The number of addresses with 0 balance during lookup before aborting.
 	 * @returns The id of the message created and the contructed message.
 	 */
-	function sendEd25519(client, seed, accountIndex, addressEd25519, amount, startIndex, indexationKey, indexationData) {
+	function sendEd25519(client, seed, accountIndex, addressEd25519, amount, indexation, addressOptions) {
 	    return __awaiter(this, void 0, void 0, function () {
 	        return __generator(this, function (_a) {
-	            return [2 /*return*/, sendMultipleEd25519(client, seed, accountIndex, [{ addressEd25519: addressEd25519, amount: amount }], startIndex, indexationKey, indexationData)];
+	            return [2 /*return*/, sendMultipleEd25519(client, seed, accountIndex, [{ addressEd25519: addressEd25519, amount: amount }], indexation, addressOptions)];
 	        });
 	    });
 	}
@@ -10972,32 +10990,41 @@
 	 * @param seed The seed to use for address generation.
 	 * @param accountIndex The account index in the wallet.
 	 * @param outputs The address to send the funds to in bech32 format and amounts.
-	 * @param startIndex The start index for the wallet count address, defaults to 0.
-	 * @param indexationKey Optional indexation key.
-	 * @param indexationData Optional index data.
+	 * @param indexation Optional indexation data to associate with the transaction.
+	 * @param indexation.key Indexation key.
+	 * @param indexation.data Optional index data.
+	 * @param addressOptions Optional address configuration for balance address lookups.
+	 * @param addressOptions.startIndex The start index for the wallet count address, defaults to 0.
+	 * @param addressOptions.zeroCount The number of addresses with 0 balance during lookup before aborting.
 	 * @returns The id of the message created and the contructed message.
 	 */
-	function sendMultiple(client, seed, accountIndex, outputs, startIndex, indexationKey, indexationData) {
+	function sendMultiple(client, seed, accountIndex, outputs, indexation, addressOptions) {
+	    var _a;
 	    return __awaiter(this, void 0, void 0, function () {
-	        var hexOutputs;
-	        return __generator(this, function (_a) {
-	            hexOutputs = outputs.map(function (output) {
-	                var bech32Details = bech32Helper.Bech32Helper.fromBech32(output.addressBech32);
-	                if (!bech32Details) {
-	                    throw new Error("Unable to decode bech32 address");
-	                }
-	                return {
-	                    address: converter.Converter.bytesToHex(bech32Details.addressBytes),
-	                    addressType: bech32Details.addressType,
-	                    amount: output.amount,
-	                    isDustAllowance: output.isDustAllowance
-	                };
-	            });
-	            return [2 /*return*/, sendWithAddressGenerator(client, seed, {
-	                    accountIndex: accountIndex,
-	                    addressIndex: startIndex !== null && startIndex !== void 0 ? startIndex : 0,
-	                    isInternal: false
-	                }, addresses.generateBip44Address, hexOutputs, indexationKey, indexationData)];
+	        var nodeInfo, hexOutputs;
+	        return __generator(this, function (_b) {
+	            switch (_b.label) {
+	                case 0: return [4 /*yield*/, client.info()];
+	                case 1:
+	                    nodeInfo = _b.sent();
+	                    hexOutputs = outputs.map(function (output) {
+	                        var bech32Details = bech32Helper.Bech32Helper.fromBech32(output.addressBech32, nodeInfo.bech32HRP);
+	                        if (!bech32Details) {
+	                            throw new Error("Unable to decode bech32 address");
+	                        }
+	                        return {
+	                            address: converter.Converter.bytesToHex(bech32Details.addressBytes),
+	                            addressType: bech32Details.addressType,
+	                            amount: output.amount,
+	                            isDustAllowance: output.isDustAllowance
+	                        };
+	                    });
+	                    return [2 /*return*/, sendWithAddressGenerator(client, seed, {
+	                            accountIndex: accountIndex,
+	                            addressIndex: (_a = addressOptions === null || addressOptions === void 0 ? void 0 : addressOptions.startIndex) !== null && _a !== void 0 ? _a : 0,
+	                            isInternal: false
+	                        }, addresses.generateBip44Address, hexOutputs, indexation, addressOptions === null || addressOptions === void 0 ? void 0 : addressOptions.zeroCount)];
+	            }
 	        });
 	    });
 	}
@@ -11008,15 +11035,19 @@
 	 * @param seed The seed to use for address generation.
 	 * @param accountIndex The account index in the wallet.
 	 * @param outputs The outputs including address to send the funds to in ed25519 format and amount.
-	 * @param startIndex The start index for the wallet count address, defaults to 0.
-	 * @param indexationKey Optional indexation key.
-	 * @param indexationData Optional index data.
+	 * @param indexation Optional indexation data to associate with the transaction.
+	 * @param indexation.key Indexation key.
+	 * @param indexation.data Optional index data.
+	 * @param addressOptions Optional address configuration for balance address lookups.
+	 * @param addressOptions.startIndex The start index for the wallet count address, defaults to 0.
+	 * @param addressOptions.zeroCount The number of addresses with 0 balance during lookup before aborting.
 	 * @returns The id of the message created and the contructed message.
 	 */
-	function sendMultipleEd25519(client, seed, accountIndex, outputs, startIndex, indexationKey, indexationData) {
+	function sendMultipleEd25519(client, seed, accountIndex, outputs, indexation, addressOptions) {
+	    var _a;
 	    return __awaiter(this, void 0, void 0, function () {
 	        var hexOutputs;
-	        return __generator(this, function (_a) {
+	        return __generator(this, function (_b) {
 	            hexOutputs = outputs.map(function (output) { return ({
 	                address: output.addressEd25519,
 	                addressType: IEd25519Address.ED25519_ADDRESS_TYPE,
@@ -11025,9 +11056,9 @@
 	            }); });
 	            return [2 /*return*/, sendWithAddressGenerator(client, seed, {
 	                    accountIndex: accountIndex,
-	                    addressIndex: startIndex !== null && startIndex !== void 0 ? startIndex : 0,
+	                    addressIndex: (_a = addressOptions === null || addressOptions === void 0 ? void 0 : addressOptions.startIndex) !== null && _a !== void 0 ? _a : 0,
 	                    isInternal: false
-	                }, addresses.generateBip44Address, hexOutputs, indexationKey, indexationData)];
+	                }, addresses.generateBip44Address, hexOutputs, indexation, addressOptions === null || addressOptions === void 0 ? void 0 : addressOptions.zeroCount)];
 	        });
 	    });
 	}
@@ -11039,19 +11070,21 @@
 	 * @param initialAddressState The initial address state for calculating the addresses.
 	 * @param nextAddressPath Calculate the next address for inputs.
 	 * @param outputs The address to send the funds to in bech32 format and amounts.
-	 * @param indexationKey Optional indexation key.
-	 * @param indexationData Optional index data.
+	 * @param indexation Optional indexation data to associate with the transaction.
+	 * @param indexation.key Indexation key.
+	 * @param indexation.data Optional index data.
+	 * @param zeroCount The number of addresses with 0 balance during lookup before aborting.
 	 * @returns The id of the message created and the contructed message.
 	 */
-	function sendWithAddressGenerator(client, seed, initialAddressState, nextAddressPath, outputs, indexationKey, indexationData) {
+	function sendWithAddressGenerator(client, seed, initialAddressState, nextAddressPath, outputs, indexation, zeroCount) {
 	    return __awaiter(this, void 0, void 0, function () {
 	        var inputsAndKeys, response;
 	        return __generator(this, function (_a) {
 	            switch (_a.label) {
-	                case 0: return [4 /*yield*/, calculateInputs(client, seed, initialAddressState, nextAddressPath, outputs, 5)];
+	                case 0: return [4 /*yield*/, calculateInputs(client, seed, initialAddressState, nextAddressPath, outputs, zeroCount)];
 	                case 1:
 	                    inputsAndKeys = _a.sent();
-	                    return [4 /*yield*/, sendAdvanced_1.sendAdvanced(client, inputsAndKeys, outputs, indexationKey, indexationData)];
+	                    return [4 /*yield*/, sendAdvanced_1.sendAdvanced(client, inputsAndKeys, outputs, indexation)];
 	                case 2:
 	                    response = _a.sent();
 	                    return [2 /*return*/, {
@@ -11080,7 +11113,7 @@
 	            switch (_b.label) {
 	                case 0:
 	                    requiredBalance = outputs.reduce(function (total, output) { return total + output.amount; }, 0);
-	                    localZeroCount = zeroCount !== null && zeroCount !== void 0 ? zeroCount : 5;
+	                    localZeroCount = zeroCount !== null && zeroCount !== void 0 ? zeroCount : 20;
 	                    consumedBalance = 0;
 	                    inputsAndSignatureKeyPairs = [];
 	                    finished = false;
@@ -11760,8 +11793,8 @@
 	        this._secretKey = secretKeyBytes !== null && secretKeyBytes !== void 0 ? secretKeyBytes : new Uint8Array();
 	    }
 	    /**
-	     * Create the seed from a Bip39 mnenomic.
-	     * @param mnemonic The mnenomic to create the seed from.
+	     * Create the seed from a Bip39 mnemonic.
+	     * @param mnemonic The mnemonic to create the seed from.
 	     * @returns A new instance of Ed25519Seed.
 	     */
 	    Ed25519Seed.fromMnemonic = function (mnemonic) {
@@ -11846,8 +11879,9 @@
 	    logger(prefix + "\tName:", info.name);
 	    logger(prefix + "\tVersion:", info.version);
 	    logger(prefix + "\tNetwork Id:", info.networkId);
-	    logger(prefix + "\tMin PoW Score:", info.minPowScore);
 	    logger(prefix + "\tIs Healthy:", info.isHealthy);
+	    logger(prefix + "\tMin PoW Score:", info.minPowScore);
+	    logger(prefix + "\tBech32 HRP:", info.bech32HRP);
 	    logger(prefix + "\tLatest Milestone Index:", info.latestMilestoneIndex);
 	    logger(prefix + "\tSolid Milestone Index:", info.solidMilestoneIndex);
 	    logger(prefix + "\tPruning Index:", info.pruningIndex);

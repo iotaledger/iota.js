@@ -17,8 +17,6 @@ Address details.
 * [address](iaddressresponse.md#address)
 * [addressType](iaddressresponse.md#addresstype)
 * [balance](iaddressresponse.md#balance)
-* [count](iaddressresponse.md#count)
-* [maxResults](iaddressresponse.md#maxresults)
 
 ## Properties
 
@@ -43,19 +41,3 @@ ___
 •  **balance**: number
 
 The balance of the address.
-
-___
-
-### count
-
-•  **count**: number
-
-The number of items returned.
-
-___
-
-### maxResults
-
-•  **maxResults**: number
-
-The max number of results returned.

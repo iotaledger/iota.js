@@ -615,7 +615,7 @@ The global type for the input.
 
 ### buildTransactionPayload
 
-▸ **buildTransactionPayload**(`inputsAndSignatureKeyPairs`: { addressKeyPair: [IKeyPair](interfaces/ikeypair.md) ; input: [IUTXOInput](interfaces/iutxoinput.md)  }[], `outputs`: { address: string ; addressType: number ; amount: number ; isDustAllowance?: undefined \| false \| true  }[], `indexationKey?`: undefined \| string, `indexationData?`: Uint8Array): [ITransactionPayload](interfaces/itransactionpayload.md)
+▸ **buildTransactionPayload**(`inputsAndSignatureKeyPairs`: { addressKeyPair: [IKeyPair](interfaces/ikeypair.md) ; input: [IUTXOInput](interfaces/iutxoinput.md)  }[], `outputs`: { address: string ; addressType: number ; amount: number ; isDustAllowance?: undefined \| false \| true  }[], `indexation?`: undefined \| { data?: Uint8Array ; key: string  }): [ITransactionPayload](interfaces/itransactionpayload.md)
 
 Build a transaction payload.
 
@@ -625,8 +625,7 @@ Name | Type | Description |
 ------ | ------ | ------ |
 `inputsAndSignatureKeyPairs` | { addressKeyPair: [IKeyPair](interfaces/ikeypair.md) ; input: [IUTXOInput](interfaces/iutxoinput.md)  }[] | The inputs with the signature key pairs needed to sign transfers. |
 `outputs` | { address: string ; addressType: number ; amount: number ; isDustAllowance?: undefined \| false \| true  }[] | The outputs to send. |
-`indexationKey?` | undefined \| string | Optional indexation key. |
-`indexationData?` | Uint8Array | Optional index data. |
+`indexation?` | undefined \| { data?: Uint8Array ; key: string  } | Optional indexation data to associate with the transaction. |
 
 **Returns:** [ITransactionPayload](interfaces/itransactionpayload.md)
 
@@ -636,7 +635,7 @@ ___
 
 ### calculateInputs
 
-▸ **calculateInputs**<T\>(`client`: [IClient](interfaces/iclient.md), `seed`: [ISeed](interfaces/iseed.md), `initialAddressState`: T, `nextAddressPath`: (addressState: T, isFirst: boolean) => string, `outputs`: { address: string ; addressType: number ; amount: number  }[], `zeroCount`: number): Promise<{ addressKeyPair: [IKeyPair](interfaces/ikeypair.md) ; input: [IUTXOInput](interfaces/iutxoinput.md)  }[]\>
+▸ **calculateInputs**<T\>(`client`: [IClient](interfaces/iclient.md), `seed`: [ISeed](interfaces/iseed.md), `initialAddressState`: T, `nextAddressPath`: (addressState: T, isFirst: boolean) => string, `outputs`: { address: string ; addressType: number ; amount: number  }[], `zeroCount?`: undefined \| number): Promise<{ addressKeyPair: [IKeyPair](interfaces/ikeypair.md) ; input: [IUTXOInput](interfaces/iutxoinput.md)  }[]\>
 
 Calculate the inputs from the seed and basePath.
 
@@ -655,7 +654,7 @@ Name | Type | Description |
 `initialAddressState` | T | The initial address state for calculating the addresses. |
 `nextAddressPath` | (addressState: T, isFirst: boolean) => string | Calculate the next address for inputs. |
 `outputs` | { address: string ; addressType: number ; amount: number  }[] | The outputs to send. |
-`zeroCount` | number | Abort when the number of zero balances is exceeded. |
+`zeroCount?` | undefined \| number | Abort when the number of zero balances is exceeded. |
 
 **Returns:** Promise<{ addressKeyPair: [IKeyPair](interfaces/ikeypair.md) ; input: [IUTXOInput](interfaces/iutxoinput.md)  }[]\>
 
@@ -1082,18 +1081,18 @@ ___
 
 ### getBalance
 
-▸ **getBalance**(`client`: [IClient](interfaces/iclient.md), `seed`: [ISeed](interfaces/iseed.md), `accountIndex`: number, `startIndex?`: number): Promise<number\>
+▸ **getBalance**(`client`: [IClient](interfaces/iclient.md), `seed`: [ISeed](interfaces/iseed.md), `accountIndex`: number, `addressOptions?`: undefined \| { startIndex?: undefined \| number ; zeroCount?: undefined \| number  }): Promise<number\>
 
 Get the balance for a list of addresses.
 
 #### Parameters:
 
-Name | Type | Default value | Description |
------- | ------ | ------ | ------ |
-`client` | [IClient](interfaces/iclient.md) | - | The client to send the transfer with. |
-`seed` | [ISeed](interfaces/iseed.md) | - | The seed. |
-`accountIndex` | number | - | The account index in the wallet. |
-`startIndex` | number | 0 | The start index to generate from, defaults to 0. |
+Name | Type | Description |
+------ | ------ | ------ |
+`client` | [IClient](interfaces/iclient.md) | The client to send the transfer with. |
+`seed` | [ISeed](interfaces/iseed.md) | The seed. |
+`accountIndex` | number | The account index in the wallet. |
+`addressOptions?` | undefined \| { startIndex?: undefined \| number ; zeroCount?: undefined \| number  } | Optional address configuration for balance address lookups. |
 
 **Returns:** Promise<number\>
 
@@ -1103,7 +1102,7 @@ ___
 
 ### getUnspentAddress
 
-▸ **getUnspentAddress**(`client`: [IClient](interfaces/iclient.md), `seed`: [ISeed](interfaces/iseed.md), `accountIndex`: number, `startIndex?`: undefined \| number): Promise<{ address: string ; balance: number ; path: string  } \| undefined\>
+▸ **getUnspentAddress**(`client`: [IClient](interfaces/iclient.md), `seed`: [ISeed](interfaces/iseed.md), `accountIndex`: number, `addressOptions?`: undefined \| { startIndex?: undefined \| number ; zeroCount?: undefined \| number  }): Promise<{ address: string ; balance: number ; path: string  } \| undefined\>
 
 Get the first unspent address.
 
@@ -1114,7 +1113,7 @@ Name | Type | Description |
 `client` | [IClient](interfaces/iclient.md) | The client to send the transfer with. |
 `seed` | [ISeed](interfaces/iseed.md) | The seed to use for address generation. |
 `accountIndex` | number | The account index in the wallet. |
-`startIndex?` | undefined \| number | Optional start index for the wallet count address, defaults to 0. |
+`addressOptions?` | undefined \| { startIndex?: undefined \| number ; zeroCount?: undefined \| number  } | Optional address configuration for balance address lookups. |
 
 **Returns:** Promise<{ address: string ; balance: number ; path: string  } \| undefined\>
 
@@ -1124,7 +1123,7 @@ ___
 
 ### getUnspentAddresses
 
-▸ **getUnspentAddresses**(`client`: [IClient](interfaces/iclient.md), `seed`: [ISeed](interfaces/iseed.md), `accountIndex`: number, `startIndex?`: undefined \| number, `countLimit?`: undefined \| number, `zeroCount?`: undefined \| number): Promise<{ address: string ; balance: number ; path: string  }[]\>
+▸ **getUnspentAddresses**(`client`: [IClient](interfaces/iclient.md), `seed`: [ISeed](interfaces/iseed.md), `accountIndex`: number, `addressOptions?`: undefined \| { requiredCount?: undefined \| number ; startIndex?: undefined \| number ; zeroCount?: undefined \| number  }): Promise<{ address: string ; balance: number ; path: string  }[]\>
 
 Get all the unspent addresses.
 
@@ -1135,9 +1134,7 @@ Name | Type | Description |
 `client` | [IClient](interfaces/iclient.md) | The client to send the transfer with. |
 `seed` | [ISeed](interfaces/iseed.md) | The seed to use for address generation. |
 `accountIndex` | number | The account index in the wallet. |
-`startIndex?` | undefined \| number | Optional start index for the wallet count address, defaults to 0. |
-`countLimit?` | undefined \| number | Limit the number of items to find. |
-`zeroCount?` | undefined \| number | Abort when the number of zero balances is exceeded. |
+`addressOptions?` | undefined \| { requiredCount?: undefined \| number ; startIndex?: undefined \| number ; zeroCount?: undefined \| number  } | Optional address configuration for balance address lookups. |
 
 **Returns:** Promise<{ address: string ; balance: number ; path: string  }[]\>
 
@@ -1147,7 +1144,7 @@ ___
 
 ### getUnspentAddressesWithAddressGenerator
 
-▸ **getUnspentAddressesWithAddressGenerator**<T\>(`client`: [IClient](interfaces/iclient.md), `seed`: [ISeed](interfaces/iseed.md), `initialAddressState`: T, `nextAddressPath`: (addressState: T, isFirst: boolean) => string, `countLimit?`: undefined \| number, `zeroCount?`: undefined \| number): Promise<{ address: string ; balance: number ; path: string  }[]\>
+▸ **getUnspentAddressesWithAddressGenerator**<T\>(`client`: [IClient](interfaces/iclient.md), `seed`: [ISeed](interfaces/iseed.md), `initialAddressState`: T, `nextAddressPath`: (addressState: T, isFirst: boolean) => string, `addressOptions?`: undefined \| { requiredCount?: undefined \| number ; startIndex?: undefined \| number ; zeroCount?: undefined \| number  }): Promise<{ address: string ; balance: number ; path: string  }[]\>
 
 Get all the unspent addresses using an address generator.
 
@@ -1165,8 +1162,7 @@ Name | Type | Description |
 `seed` | [ISeed](interfaces/iseed.md) | The seed to use for address generation. |
 `initialAddressState` | T | The initial address state for calculating the addresses. |
 `nextAddressPath` | (addressState: T, isFirst: boolean) => string | Calculate the next address for inputs. |
-`countLimit?` | undefined \| number | Limit the number of items to find. |
-`zeroCount?` | undefined \| number | Abort when the number of zero balances is exceeded. |
+`addressOptions?` | undefined \| { requiredCount?: undefined \| number ; startIndex?: undefined \| number ; zeroCount?: undefined \| number  } | Optional address configuration for balance address lookups. |
 
 **Returns:** Promise<{ address: string ; balance: number ; path: string  }[]\>
 
@@ -1505,7 +1501,7 @@ ___
 
 ### send
 
-▸ **send**(`client`: [IClient](interfaces/iclient.md), `seed`: [ISeed](interfaces/iseed.md), `accountIndex`: number, `addressBech32`: string, `amount`: number, `startIndex?`: undefined \| number, `indexationKey?`: undefined \| string, `indexationData?`: Uint8Array): Promise<{ message: [IMessage](interfaces/imessage.md) ; messageId: string  }\>
+▸ **send**(`client`: [IClient](interfaces/iclient.md), `seed`: [ISeed](interfaces/iseed.md), `accountIndex`: number, `addressBech32`: string, `amount`: number, `indexation?`: undefined \| { data?: Uint8Array ; key: string  }, `addressOptions?`: undefined \| { startIndex?: undefined \| number ; zeroCount?: undefined \| number  }): Promise<{ message: [IMessage](interfaces/imessage.md) ; messageId: string  }\>
 
 Send a transfer from the balance on the seed to a single output.
 
@@ -1518,9 +1514,8 @@ Name | Type | Description |
 `accountIndex` | number | The account index in the wallet. |
 `addressBech32` | string | The address to send the funds to in bech32 format. |
 `amount` | number | The amount to send. |
-`startIndex?` | undefined \| number | The start index for the wallet count address, defaults to 0. |
-`indexationKey?` | undefined \| string | Optional indexation key. |
-`indexationData?` | Uint8Array | Optional index data. |
+`indexation?` | undefined \| { data?: Uint8Array ; key: string  } | Optional indexation data to associate with the transaction. |
+`addressOptions?` | undefined \| { startIndex?: undefined \| number ; zeroCount?: undefined \| number  } | Optional address configuration for balance address lookups. |
 
 **Returns:** Promise<{ message: [IMessage](interfaces/imessage.md) ; messageId: string  }\>
 
@@ -1530,7 +1525,7 @@ ___
 
 ### sendAdvanced
 
-▸ **sendAdvanced**(`client`: [IClient](interfaces/iclient.md), `inputsAndSignatureKeyPairs`: { addressKeyPair: [IKeyPair](interfaces/ikeypair.md) ; input: [IUTXOInput](interfaces/iutxoinput.md)  }[], `outputs`: { address: string ; addressType: number ; amount: number ; isDustAllowance?: undefined \| false \| true  }[], `indexationKey?`: undefined \| string, `indexationData?`: Uint8Array): Promise<{ message: [IMessage](interfaces/imessage.md) ; messageId: string  }\>
+▸ **sendAdvanced**(`client`: [IClient](interfaces/iclient.md), `inputsAndSignatureKeyPairs`: { addressKeyPair: [IKeyPair](interfaces/ikeypair.md) ; input: [IUTXOInput](interfaces/iutxoinput.md)  }[], `outputs`: { address: string ; addressType: number ; amount: number ; isDustAllowance?: undefined \| false \| true  }[], `indexation?`: undefined \| { data?: Uint8Array ; key: string  }): Promise<{ message: [IMessage](interfaces/imessage.md) ; messageId: string  }\>
 
 Send a transfer from the balance on the seed.
 
@@ -1541,8 +1536,7 @@ Name | Type | Description |
 `client` | [IClient](interfaces/iclient.md) | The client to send the transfer with. |
 `inputsAndSignatureKeyPairs` | { addressKeyPair: [IKeyPair](interfaces/ikeypair.md) ; input: [IUTXOInput](interfaces/iutxoinput.md)  }[] | The inputs with the signature key pairs needed to sign transfers. |
 `outputs` | { address: string ; addressType: number ; amount: number ; isDustAllowance?: undefined \| false \| true  }[] | The outputs to send. |
-`indexationKey?` | undefined \| string | Optional indexation key. |
-`indexationData?` | Uint8Array | Optional index data. |
+`indexation?` | undefined \| { data?: Uint8Array ; key: string  } | Optional indexation data to associate with the transaction. |
 
 **Returns:** Promise<{ message: [IMessage](interfaces/imessage.md) ; messageId: string  }\>
 
@@ -1572,7 +1566,7 @@ ___
 
 ### sendEd25519
 
-▸ **sendEd25519**(`client`: [IClient](interfaces/iclient.md), `seed`: [ISeed](interfaces/iseed.md), `accountIndex`: number, `addressEd25519`: string, `amount`: number, `startIndex?`: undefined \| number, `indexationKey?`: undefined \| string, `indexationData?`: Uint8Array): Promise<{ message: [IMessage](interfaces/imessage.md) ; messageId: string  }\>
+▸ **sendEd25519**(`client`: [IClient](interfaces/iclient.md), `seed`: [ISeed](interfaces/iseed.md), `accountIndex`: number, `addressEd25519`: string, `amount`: number, `indexation?`: undefined \| { data?: Uint8Array ; key: string  }, `addressOptions?`: undefined \| { startIndex?: undefined \| number ; zeroCount?: undefined \| number  }): Promise<{ message: [IMessage](interfaces/imessage.md) ; messageId: string  }\>
 
 Send a transfer from the balance on the seed to a single output.
 
@@ -1585,9 +1579,8 @@ Name | Type | Description |
 `accountIndex` | number | The account index in the wallet. |
 `addressEd25519` | string | The address to send the funds to in ed25519 format. |
 `amount` | number | The amount to send. |
-`startIndex?` | undefined \| number | The start index for the wallet count address, defaults to 0. |
-`indexationKey?` | undefined \| string | Optional indexation key. |
-`indexationData?` | Uint8Array | Optional index data. |
+`indexation?` | undefined \| { data?: Uint8Array ; key: string  } | Optional indexation data to associate with the transaction. |
+`addressOptions?` | undefined \| { startIndex?: undefined \| number ; zeroCount?: undefined \| number  } | Optional address configuration for balance address lookups. |
 
 **Returns:** Promise<{ message: [IMessage](interfaces/imessage.md) ; messageId: string  }\>
 
@@ -1597,7 +1590,7 @@ ___
 
 ### sendMultiple
 
-▸ **sendMultiple**(`client`: [IClient](interfaces/iclient.md), `seed`: [ISeed](interfaces/iseed.md), `accountIndex`: number, `outputs`: { addressBech32: string ; amount: number ; isDustAllowance?: undefined \| false \| true  }[], `startIndex?`: undefined \| number, `indexationKey?`: undefined \| string, `indexationData?`: Uint8Array): Promise<{ message: [IMessage](interfaces/imessage.md) ; messageId: string  }\>
+▸ **sendMultiple**(`client`: [IClient](interfaces/iclient.md), `seed`: [ISeed](interfaces/iseed.md), `accountIndex`: number, `outputs`: { addressBech32: string ; amount: number ; isDustAllowance?: undefined \| false \| true  }[], `indexation?`: undefined \| { data?: Uint8Array ; key: string  }, `addressOptions?`: undefined \| { startIndex?: undefined \| number ; zeroCount?: undefined \| number  }): Promise<{ message: [IMessage](interfaces/imessage.md) ; messageId: string  }\>
 
 Send a transfer from the balance on the seed to multiple outputs.
 
@@ -1609,9 +1602,8 @@ Name | Type | Description |
 `seed` | [ISeed](interfaces/iseed.md) | The seed to use for address generation. |
 `accountIndex` | number | The account index in the wallet. |
 `outputs` | { addressBech32: string ; amount: number ; isDustAllowance?: undefined \| false \| true  }[] | The address to send the funds to in bech32 format and amounts. |
-`startIndex?` | undefined \| number | The start index for the wallet count address, defaults to 0. |
-`indexationKey?` | undefined \| string | Optional indexation key. |
-`indexationData?` | Uint8Array | Optional index data. |
+`indexation?` | undefined \| { data?: Uint8Array ; key: string  } | Optional indexation data to associate with the transaction. |
+`addressOptions?` | undefined \| { startIndex?: undefined \| number ; zeroCount?: undefined \| number  } | Optional address configuration for balance address lookups. |
 
 **Returns:** Promise<{ message: [IMessage](interfaces/imessage.md) ; messageId: string  }\>
 
@@ -1621,7 +1613,7 @@ ___
 
 ### sendMultipleEd25519
 
-▸ **sendMultipleEd25519**(`client`: [IClient](interfaces/iclient.md), `seed`: [ISeed](interfaces/iseed.md), `accountIndex`: number, `outputs`: { addressEd25519: string ; amount: number ; isDustAllowance?: undefined \| false \| true  }[], `startIndex?`: undefined \| number, `indexationKey?`: undefined \| string, `indexationData?`: Uint8Array): Promise<{ message: [IMessage](interfaces/imessage.md) ; messageId: string  }\>
+▸ **sendMultipleEd25519**(`client`: [IClient](interfaces/iclient.md), `seed`: [ISeed](interfaces/iseed.md), `accountIndex`: number, `outputs`: { addressEd25519: string ; amount: number ; isDustAllowance?: undefined \| false \| true  }[], `indexation?`: undefined \| { data?: Uint8Array ; key: string  }, `addressOptions?`: undefined \| { startIndex?: undefined \| number ; zeroCount?: undefined \| number  }): Promise<{ message: [IMessage](interfaces/imessage.md) ; messageId: string  }\>
 
 Send a transfer from the balance on the seed.
 
@@ -1633,9 +1625,8 @@ Name | Type | Description |
 `seed` | [ISeed](interfaces/iseed.md) | The seed to use for address generation. |
 `accountIndex` | number | The account index in the wallet. |
 `outputs` | { addressEd25519: string ; amount: number ; isDustAllowance?: undefined \| false \| true  }[] | The outputs including address to send the funds to in ed25519 format and amount. |
-`startIndex?` | undefined \| number | The start index for the wallet count address, defaults to 0. |
-`indexationKey?` | undefined \| string | Optional indexation key. |
-`indexationData?` | Uint8Array | Optional index data. |
+`indexation?` | undefined \| { data?: Uint8Array ; key: string  } | Optional indexation data to associate with the transaction. |
+`addressOptions?` | undefined \| { startIndex?: undefined \| number ; zeroCount?: undefined \| number  } | Optional address configuration for balance address lookups. |
 
 **Returns:** Promise<{ message: [IMessage](interfaces/imessage.md) ; messageId: string  }\>
 
@@ -1645,7 +1636,7 @@ ___
 
 ### sendWithAddressGenerator
 
-▸ **sendWithAddressGenerator**<T\>(`client`: [IClient](interfaces/iclient.md), `seed`: [ISeed](interfaces/iseed.md), `initialAddressState`: T, `nextAddressPath`: (addressState: T, isFirst: boolean) => string, `outputs`: { address: string ; addressType: number ; amount: number ; isDustAllowance?: undefined \| false \| true  }[], `indexationKey?`: undefined \| string, `indexationData?`: Uint8Array): Promise<{ message: [IMessage](interfaces/imessage.md) ; messageId: string  }\>
+▸ **sendWithAddressGenerator**<T\>(`client`: [IClient](interfaces/iclient.md), `seed`: [ISeed](interfaces/iseed.md), `initialAddressState`: T, `nextAddressPath`: (addressState: T, isFirst: boolean) => string, `outputs`: { address: string ; addressType: number ; amount: number ; isDustAllowance?: undefined \| false \| true  }[], `indexation?`: undefined \| { data?: Uint8Array ; key: string  }, `zeroCount?`: undefined \| number): Promise<{ message: [IMessage](interfaces/imessage.md) ; messageId: string  }\>
 
 Send a transfer using account based indexing for the inputs.
 
@@ -1664,8 +1655,8 @@ Name | Type | Description |
 `initialAddressState` | T | The initial address state for calculating the addresses. |
 `nextAddressPath` | (addressState: T, isFirst: boolean) => string | Calculate the next address for inputs. |
 `outputs` | { address: string ; addressType: number ; amount: number ; isDustAllowance?: undefined \| false \| true  }[] | The address to send the funds to in bech32 format and amounts. |
-`indexationKey?` | undefined \| string | Optional indexation key. |
-`indexationData?` | Uint8Array | Optional index data. |
+`indexation?` | undefined \| { data?: Uint8Array ; key: string  } | Optional indexation data to associate with the transaction. |
+`zeroCount?` | undefined \| number | The number of addresses with 0 balance during lookup before aborting. |
 
 **Returns:** Promise<{ message: [IMessage](interfaces/imessage.md) ; messageId: string  }\>
 

@@ -27,7 +27,7 @@ export class Bech32Helper {
     public static toBech32(
         addressType: number,
         addressBytes: Uint8Array,
-        humanReadablePart: string = Bech32Helper.BECH32_DEFAULT_HRP_MAIN): string {
+        humanReadablePart: string): string {
         const addressData = new Uint8Array(1 + addressBytes.length);
         addressData[0] = addressType;
         addressData.set(addressBytes, 1);
@@ -40,7 +40,7 @@ export class Bech32Helper {
      * @param humanReadablePart The human readable part to use.
      * @returns The address type and address bytes or undefined if it cannot be decoded.
      */
-    public static fromBech32(bech32Text: string, humanReadablePart: string = Bech32Helper.BECH32_DEFAULT_HRP_MAIN): {
+    public static fromBech32(bech32Text: string, humanReadablePart: string): {
         addressType: number;
         addressBytes: Uint8Array;
     } | undefined {
@@ -72,8 +72,8 @@ export class Bech32Helper {
      * @returns True if the passed address matches the pattern for a bech32 address.
      */
     public static matches(
-        bech32Text?: string,
-        humanReadablePart: string = Bech32Helper.BECH32_DEFAULT_HRP_MAIN): boolean {
+        bech32Text: string,
+        humanReadablePart: string): boolean {
         return Bech32.matches(humanReadablePart, bech32Text);
     }
 }

@@ -18,7 +18,6 @@ import { INodeInfo } from "../models/INodeInfo";
 import { IPeer } from "../models/IPeer";
 import { IPowProvider } from "../models/IPowProvider";
 import { ArrayHelper } from "../utils/arrayHelper";
-import { Bech32Helper } from "../utils/bech32Helper";
 import { BigIntHelper } from "../utils/bigIntHelper";
 import { Converter } from "../utils/converter";
 import { WriteStream } from "../utils/writeStream";
@@ -269,9 +268,6 @@ export class SingleNodeClient implements IClient {
      * @returns The address details.
      */
     public async address(addressBech32: string): Promise<IAddressResponse> {
-        if (!Bech32Helper.matches(addressBech32)) {
-            throw new Error("The supplied address does not appear to be bech32 format");
-        }
         return this.fetchJson<unknown, IAddressResponse>(
             "get",
             `addresses/${addressBech32}`
@@ -284,9 +280,6 @@ export class SingleNodeClient implements IClient {
      * @returns The address outputs.
      */
     public async addressOutputs(addressBech32: string): Promise<IAddressOutputsResponse> {
-        if (!Bech32Helper.matches(addressBech32)) {
-            throw new Error("The supplied address does not appear to be bech32 format");
-        }
         return this.fetchJson<unknown, IAddressOutputsResponse>(
             "get",
             `addresses/${addressBech32}/outputs`

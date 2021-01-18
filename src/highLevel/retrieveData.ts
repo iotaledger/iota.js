@@ -1,7 +1,8 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 import { IClient } from "../models/IClient";
-import { IIndexationPayload } from "../models/IIndexationPayload";
+import { IIndexationPayload, INDEXATION_PAYLOAD_TYPE } from "../models/IIndexationPayload";
+import { TRANSACTION_PAYLOAD_TYPE } from "../models/ITransactionPayload";
 import { Converter } from "../utils/converter";
 
 /**
@@ -19,9 +20,9 @@ export async function retrieveData(client: IClient, messageId: string): Promise<
     if (message?.payload) {
         let indexationPayload: IIndexationPayload | undefined;
 
-        if (message.payload.type === 0) {
+        if (message.payload.type === TRANSACTION_PAYLOAD_TYPE) {
             indexationPayload = message.payload.essence.payload;
-        } else if (message.payload.type === 2) {
+        } else if (message.payload.type === INDEXATION_PAYLOAD_TYPE) {
             indexationPayload = message.payload;
         }
 

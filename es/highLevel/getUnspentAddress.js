@@ -43,15 +43,21 @@ var getUnspentAddresses_1 = require("./getUnspentAddresses");
  * @param client The client to send the transfer with.
  * @param seed The seed to use for address generation.
  * @param accountIndex The account index in the wallet.
- * @param startIndex Optional start index for the wallet count address, defaults to 0.
+ * @param addressOptions Optional address configuration for balance address lookups.
+ * @param addressOptions.startIndex The start index for the wallet count address, defaults to 0.
+ * @param addressOptions.zeroCount The number of addresses with 0 balance during lookup before aborting.
  * @returns The first unspent address.
  */
-function getUnspentAddress(client, seed, accountIndex, startIndex) {
+function getUnspentAddress(client, seed, accountIndex, addressOptions) {
     return __awaiter(this, void 0, void 0, function () {
         var allUnspent;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, getUnspentAddresses_1.getUnspentAddresses(client, seed, accountIndex, startIndex, 1, 5)];
+                case 0: return [4 /*yield*/, getUnspentAddresses_1.getUnspentAddresses(client, seed, accountIndex, {
+                        startIndex: addressOptions === null || addressOptions === void 0 ? void 0 : addressOptions.startIndex,
+                        zeroCount: addressOptions === null || addressOptions === void 0 ? void 0 : addressOptions.zeroCount,
+                        requiredCount: 1
+                    })];
                 case 1:
                     allUnspent = _a.sent();
                     return [2 /*return*/, allUnspent.length > 0 ? allUnspent[0] : undefined];
@@ -60,4 +66,4 @@ function getUnspentAddress(client, seed, accountIndex, startIndex) {
     });
 }
 exports.getUnspentAddress = getUnspentAddress;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZ2V0VW5zcGVudEFkZHJlc3MuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi9zcmMvaGlnaExldmVsL2dldFVuc3BlbnRBZGRyZXNzLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7OztBQUlBLDZEQUE0RDtBQUU1RDs7Ozs7OztHQU9HO0FBQ0gsU0FBc0IsaUJBQWlCLENBQ25DLE1BQWUsRUFDZixJQUFXLEVBQ1gsWUFBb0IsRUFDcEIsVUFBbUI7Ozs7O3dCQUtBLHFCQUFNLHlDQUFtQixDQUFDLE1BQU0sRUFBRSxJQUFJLEVBQUUsWUFBWSxFQUFFLFVBQVUsRUFBRSxDQUFDLEVBQUUsQ0FBQyxDQUFDLEVBQUE7O29CQUFwRixVQUFVLEdBQUcsU0FBdUU7b0JBRTFGLHNCQUFPLFVBQVUsQ0FBQyxNQUFNLEdBQUcsQ0FBQyxDQUFDLENBQUMsQ0FBQyxVQUFVLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLFNBQVMsRUFBQzs7OztDQUM1RDtBQVpELDhDQVlDIn0=
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZ2V0VW5zcGVudEFkZHJlc3MuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi9zcmMvaGlnaExldmVsL2dldFVuc3BlbnRBZGRyZXNzLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7OztBQUlBLDZEQUE0RDtBQUU1RDs7Ozs7Ozs7O0dBU0c7QUFDSCxTQUFzQixpQkFBaUIsQ0FDbkMsTUFBZSxFQUNmLElBQVcsRUFDWCxZQUFvQixFQUNwQixjQUdDOzs7Ozt3QkFLa0IscUJBQU0seUNBQW1CLENBQ3hDLE1BQU0sRUFDTixJQUFJLEVBQ0osWUFBWSxFQUNaO3dCQUNJLFVBQVUsRUFBRSxjQUFjLGFBQWQsY0FBYyx1QkFBZCxjQUFjLENBQUUsVUFBVTt3QkFDdEMsU0FBUyxFQUFFLGNBQWMsYUFBZCxjQUFjLHVCQUFkLGNBQWMsQ0FBRSxTQUFTO3dCQUNwQyxhQUFhLEVBQUUsQ0FBQztxQkFDbkIsQ0FBQyxFQUFBOztvQkFSQSxVQUFVLEdBQUcsU0FRYjtvQkFFTixzQkFBTyxVQUFVLENBQUMsTUFBTSxHQUFHLENBQUMsQ0FBQyxDQUFDLENBQUMsVUFBVSxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxTQUFTLEVBQUM7Ozs7Q0FDNUQ7QUF2QkQsOENBdUJDIn0=

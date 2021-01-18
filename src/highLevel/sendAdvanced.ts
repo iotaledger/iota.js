@@ -26,8 +26,9 @@ import { WriteStream } from "../utils/writeStream";
  * @param client The client to send the transfer with.
  * @param inputsAndSignatureKeyPairs The inputs with the signature key pairs needed to sign transfers.
  * @param outputs The outputs to send.
- * @param indexationKey Optional indexation key.
- * @param indexationData Optional index data.
+ * @param indexation Optional indexation data to associate with the transaction.
+ * @param indexation.key Indexation key.
+ * @param indexation.data Optional index data.
  * @returns The id of the message created and the remainder address if one was needed.
  */
 export async function sendAdvanced(
@@ -42,13 +43,15 @@ export async function sendAdvanced(
         amount: number;
         isDustAllowance?: boolean;
     }[],
-    indexationKey?: string,
-    indexationData?: Uint8Array): Promise<{
+    indexation?: {
+        key: string;
+        data?: Uint8Array;
+    }): Promise<{
         messageId: string;
         message: IMessage;
     }> {
     const transactionPayload = buildTransactionPayload(
-        inputsAndSignatureKeyPairs, outputs, indexationKey, indexationData);
+        inputsAndSignatureKeyPairs, outputs, indexation);
 
     const message: IMessage = {
         payload: transactionPayload
@@ -66,8 +69,9 @@ export async function sendAdvanced(
  * Build a transaction payload.
  * @param inputsAndSignatureKeyPairs The inputs with the signature key pairs needed to sign transfers.
  * @param outputs The outputs to send.
- * @param indexationKey Optional indexation key.
- * @param indexationData Optional index data.
+ * @param indexation Optional indexation data to associate with the transaction.
+ * @param indexation.key Indexation key.
+ * @param indexation.data Optional index data.
  * @returns The transaction payload.
  */
 export function buildTransactionPayload(
@@ -81,22 +85,24 @@ export function buildTransactionPayload(
         amount: number;
         isDustAllowance?: boolean;
     }[],
-    indexationKey?: string,
-    indexationData?: Uint8Array): ITransactionPayload {
+    indexation?: {
+        key: string;
+        data?: Uint8Array;
+    }): ITransactionPayload {
     if (!inputsAndSignatureKeyPairs || inputsAndSignatureKeyPairs.length === 0) {
         throw new Error("You must specify some inputs");
     }
     if (!outputs || outputs.length === 0) {
         throw new Error("You must specify some outputs");
     }
-    if (indexationKey) {
-        if (indexationKey.length < MIN_INDEXATION_KEY_LENGTH) {
-            throw new Error(`The indexation key length is ${indexationKey.length
+    if (indexation?.key) {
+        if (indexation.key.length < MIN_INDEXATION_KEY_LENGTH) {
+            throw new Error(`The indexation key length is ${indexation.key.length
                 }, which is below the minimum size of ${MIN_INDEXATION_KEY_LENGTH}`);
         }
 
-        if (indexationKey.length > MAX_INDEXATION_KEY_LENGTH) {
-            throw new Error(`The indexation key length is ${indexationKey.length
+        if (indexation.key.length > MAX_INDEXATION_KEY_LENGTH) {
+            throw new Error(`The indexation key length is ${indexation.key.length
                 }, which exceeds the maximum size of ${MAX_INDEXATION_KEY_LENGTH}`);
         }
     }
@@ -148,11 +154,11 @@ export function buildTransactionPayload(
         type: TRANSACTION_ESSENCE_TYPE,
         inputs: sortedInputs.map(i => i.input),
         outputs: sortedOutputs.map(o => o.output),
-        payload: indexationKey
+        payload: indexation
             ? {
                 type: INDEXATION_PAYLOAD_TYPE,
-                index: indexationKey,
-                data: indexationData ? Converter.bytesToHex(indexationData) : ""
+                index: indexation.key,
+                data: indexation.data ? Converter.bytesToHex(indexation.data) : ""
             }
             : undefined
     };

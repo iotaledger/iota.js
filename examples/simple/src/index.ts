@@ -89,8 +89,6 @@ async function run() {
     console.log("Address");
     console.log("\tAddress Type:", address.addressType);
     console.log("\tAddress:", address.address);
-    console.log("\tMax Results:", address.maxResults);
-    console.log("\tCount:", address.count);
     console.log("\tBalance:", address.balance);
     console.log();
 

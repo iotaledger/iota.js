@@ -14,6 +14,7 @@ Response from the /info endpoint.
 
 ### Properties
 
+* [bech32HRP](inodeinfo.md#bech32hrp)
 * [features](inodeinfo.md#features)
 * [isHealthy](inodeinfo.md#ishealthy)
 * [latestMilestoneIndex](inodeinfo.md#latestmilestoneindex)
@@ -25,6 +26,14 @@ Response from the /info endpoint.
 * [version](inodeinfo.md#version)
 
 ## Properties
+
+### bech32HRP
+
+•  **bech32HRP**: string
+
+The human readable part of bech32 addresses.
+
+___
 
 ### features
 

@@ -107,8 +107,6 @@
             const address = await client.addressEd25519(output.output.address.address);
             consoleLog("Address");
             consoleLog("\tAddress:", address.address);
-            consoleLog("\tMax Results:", address.maxResults);
-            consoleLog("\tCount:", address.count);
             consoleLog("\tBalance:", address.balance);
             consoleLog();
 
@@ -120,10 +118,10 @@
             consoleLog("\tOutput Ids:", addressOutputs.outputIds);
             consoleLog();
 
-            await doTransfer(client);
+            await doTransfer(client, info);
         }
 
-        async function doTransfer(client) {
+        async function doTransfer(client, nodeInfo) {
             // These are the default values from the Hornet alphanet configuration
             const privateKey = "256a818b2aac458941f7274985a410e57fb750f3a3a67969ece5bd9ae7eef5b2f7868ab6bb55800b77b8b74191ad8285a9bf428ace579d541fda47661803ff44";
             const publicKey = "f7868ab6bb55800b77b8b74191ad8285a9bf428ace579d541fda47661803ff44";
@@ -141,7 +139,7 @@
             const genesisAddress = ed25519Address.toAddress();
             const genesisAddressHex = Iota.Converter.bytesToHex(genesisAddress);
             consoleLog("\tAddress Ed25519:", genesisAddressHex);
-            consoleLog("\tAddress Bech32:", Iota.Bech32Helper.toBech32(Iota.ED25519_ADDRESS_TYPE, genesisAddress));
+            consoleLog("\tAddress Bech32:", Iota.Bech32Helper.toBech32(Iota.ED25519_ADDRESS_TYPE, genesisAddress, nodeInfo.bech32HRP));
 
             // Create a new seed for the wallet
             const walletSeed = new Iota.Ed25519Seed(Iota.Converter.hexToBytes("e57fb750f3a3a67969ece5bd9ae7eef5b2256a818b2aac458941f7274985a410"));
@@ -157,7 +155,7 @@
             consoleLog("\tSeed:", Iota.Converter.bytesToHex(walletSeed.toBytes()));
             consoleLog("\tPath:", walletPath.toString());
             consoleLog(`\tAddress Ed25519 ${walletPath.toString()}:`, newAddressHex);
-            consoleLog(`\tAddress Bech32 ${walletPath.toString()}:`, Iota.Bech32Helper.toBech32(Iota.ED25519_ADDRESS_TYPE, newAddress));
+            consoleLog(`\tAddress Bech32 ${walletPath.toString()}:`, Iota.Bech32Helper.toBech32(Iota.ED25519_ADDRESS_TYPE, newAddress, nodeInfo.bech32HRP));
             consoleLog();
 
             // Because we are using the genesis address we must use send advanced as the input address is
@@ -184,7 +182,7 @@
                 }
             }
 
-            const amountToSend = 1000;
+            const amountToSend = 10000000;
 
             const outputs = [
                 // This is the transfer to the new address
@@ -201,7 +199,7 @@
                 }
             ];
 
-            const { messageId } = await Iota.sendAdvanced(client, inputsWithKeyPairs, outputs, "WALLET", Iota.Converter.utf8ToBytes("Not trinity"));
+            const { messageId } = await Iota.sendAdvanced(client, inputsWithKeyPairs, outputs, { key: "WALLET", data: Iota.Converter.utf8ToBytes("Not trinity") });
 
             consoleLog("Created Message Id", messageId);
 

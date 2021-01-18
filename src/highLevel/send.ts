@@ -21,9 +21,12 @@ import { sendAdvanced } from "./sendAdvanced";
  * @param accountIndex The account index in the wallet.
  * @param addressBech32 The address to send the funds to in bech32 format.
  * @param amount The amount to send.
- * @param startIndex The start index for the wallet count address, defaults to 0.
- * @param indexationKey Optional indexation key.
- * @param indexationData Optional index data.
+ * @param indexation Optional indexation data to associate with the transaction.
+ * @param indexation.key Indexation key.
+ * @param indexation.data Optional index data.
+ * @param addressOptions Optional address configuration for balance address lookups.
+ * @param addressOptions.startIndex The start index for the wallet count address, defaults to 0.
+ * @param addressOptions.zeroCount The number of addresses with 0 balance during lookup before aborting.
  * @returns The id of the message created and the contructed message.
  */
 export async function send(
@@ -32,20 +35,25 @@ export async function send(
     accountIndex: number,
     addressBech32: string,
     amount: number,
-    startIndex?: number,
-    indexationKey?: string,
-    indexationData?: Uint8Array): Promise<{
-        messageId: string;
-        message: IMessage;
-    }> {
+    indexation?: {
+        key: string;
+        data?: Uint8Array;
+    },
+    addressOptions?: {
+        startIndex?: number;
+        zeroCount?: number;
+    }
+): Promise<{
+    messageId: string;
+    message: IMessage;
+}> {
     return sendMultiple(
         client,
         seed,
         accountIndex,
         [{ addressBech32, amount }],
-        startIndex,
-        indexationKey,
-        indexationData
+        indexation,
+        addressOptions
     );
 }
 
@@ -56,9 +64,12 @@ export async function send(
  * @param accountIndex The account index in the wallet.
  * @param addressEd25519 The address to send the funds to in ed25519 format.
  * @param amount The amount to send.
- * @param startIndex The start index for the wallet count address, defaults to 0.
- * @param indexationKey Optional indexation key.
- * @param indexationData Optional index data.
+ * @param indexation Optional indexation data to associate with the transaction.
+ * @param indexation.key Indexation key.
+ * @param indexation.data Optional index data.
+ * @param addressOptions Optional address configuration for balance address lookups.
+ * @param addressOptions.startIndex The start index for the wallet count address, defaults to 0.
+ * @param addressOptions.zeroCount The number of addresses with 0 balance during lookup before aborting.
  * @returns The id of the message created and the contructed message.
  */
 export async function sendEd25519(
@@ -67,20 +78,25 @@ export async function sendEd25519(
     accountIndex: number,
     addressEd25519: string,
     amount: number,
-    startIndex?: number,
-    indexationKey?: string,
-    indexationData?: Uint8Array): Promise<{
-        messageId: string;
-        message: IMessage;
-    }> {
+    indexation?: {
+        key: string;
+        data?: Uint8Array;
+    },
+    addressOptions?: {
+        startIndex?: number;
+        zeroCount?: number;
+    }
+): Promise<{
+    messageId: string;
+    message: IMessage;
+}> {
     return sendMultipleEd25519(
         client,
         seed,
         accountIndex,
         [{ addressEd25519, amount }],
-        startIndex,
-        indexationKey,
-        indexationData
+        indexation,
+        addressOptions
     );
 }
 
@@ -90,9 +106,12 @@ export async function sendEd25519(
  * @param seed The seed to use for address generation.
  * @param accountIndex The account index in the wallet.
  * @param outputs The address to send the funds to in bech32 format and amounts.
- * @param startIndex The start index for the wallet count address, defaults to 0.
- * @param indexationKey Optional indexation key.
- * @param indexationData Optional index data.
+ * @param indexation Optional indexation data to associate with the transaction.
+ * @param indexation.key Indexation key.
+ * @param indexation.data Optional index data.
+ * @param addressOptions Optional address configuration for balance address lookups.
+ * @param addressOptions.startIndex The start index for the wallet count address, defaults to 0.
+ * @param addressOptions.zeroCount The number of addresses with 0 balance during lookup before aborting.
  * @returns The id of the message created and the contructed message.
  */
 export async function sendMultiple(
@@ -104,14 +123,21 @@ export async function sendMultiple(
         amount: number;
         isDustAllowance?: boolean;
     }[],
-    startIndex?: number,
-    indexationKey?: string,
-    indexationData?: Uint8Array): Promise<{
-        messageId: string;
-        message: IMessage;
-    }> {
+    indexation?: {
+        key: string;
+        data?: Uint8Array;
+    },
+    addressOptions?: {
+        startIndex?: number;
+        zeroCount?: number;
+    }
+): Promise<{
+    messageId: string;
+    message: IMessage;
+}> {
+    const nodeInfo = await client.info();
     const hexOutputs = outputs.map(output => {
-        const bech32Details = Bech32Helper.fromBech32(output.addressBech32);
+        const bech32Details = Bech32Helper.fromBech32(output.addressBech32, nodeInfo.bech32HRP);
         if (!bech32Details) {
             throw new Error("Unable to decode bech32 address");
         }
@@ -129,13 +155,13 @@ export async function sendMultiple(
         seed,
         {
             accountIndex,
-            addressIndex: startIndex ?? 0,
+            addressIndex: addressOptions?.startIndex ?? 0,
             isInternal: false
         },
         generateBip44Address,
         hexOutputs,
-        indexationKey,
-        indexationData
+        indexation,
+        addressOptions?.zeroCount
     );
 }
 
@@ -145,9 +171,12 @@ export async function sendMultiple(
  * @param seed The seed to use for address generation.
  * @param accountIndex The account index in the wallet.
  * @param outputs The outputs including address to send the funds to in ed25519 format and amount.
- * @param startIndex The start index for the wallet count address, defaults to 0.
- * @param indexationKey Optional indexation key.
- * @param indexationData Optional index data.
+ * @param indexation Optional indexation data to associate with the transaction.
+ * @param indexation.key Indexation key.
+ * @param indexation.data Optional index data.
+ * @param addressOptions Optional address configuration for balance address lookups.
+ * @param addressOptions.startIndex The start index for the wallet count address, defaults to 0.
+ * @param addressOptions.zeroCount The number of addresses with 0 balance during lookup before aborting.
  * @returns The id of the message created and the contructed message.
  */
 export async function sendMultipleEd25519(
@@ -159,12 +188,18 @@ export async function sendMultipleEd25519(
         amount: number;
         isDustAllowance?: boolean;
     }[],
-    startIndex?: number,
-    indexationKey?: string,
-    indexationData?: Uint8Array): Promise<{
-        messageId: string;
-        message: IMessage;
-    }> {
+    indexation?: {
+        key: string;
+        data?: Uint8Array;
+    },
+    addressOptions?: {
+        startIndex?: number;
+        zeroCount?: number;
+    }
+): Promise<{
+    messageId: string;
+    message: IMessage;
+}> {
     const hexOutputs = outputs.map(output => (
         {
             address: output.addressEd25519,
@@ -179,13 +214,13 @@ export async function sendMultipleEd25519(
         seed,
         {
             accountIndex,
-            addressIndex: startIndex ?? 0,
+            addressIndex: addressOptions?.startIndex ?? 0,
             isInternal: false
         },
         generateBip44Address,
         hexOutputs,
-        indexationKey,
-        indexationData
+        indexation,
+        addressOptions?.zeroCount
     );
 }
 
@@ -196,8 +231,10 @@ export async function sendMultipleEd25519(
  * @param initialAddressState The initial address state for calculating the addresses.
  * @param nextAddressPath Calculate the next address for inputs.
  * @param outputs The address to send the funds to in bech32 format and amounts.
- * @param indexationKey Optional indexation key.
- * @param indexationData Optional index data.
+ * @param indexation Optional indexation data to associate with the transaction.
+ * @param indexation.key Indexation key.
+ * @param indexation.data Optional index data.
+ * @param zeroCount The number of addresses with 0 balance during lookup before aborting.
  * @returns The id of the message created and the contructed message.
  */
 export async function sendWithAddressGenerator<T>(
@@ -211,26 +248,29 @@ export async function sendWithAddressGenerator<T>(
         amount: number;
         isDustAllowance?: boolean;
     }[],
-    indexationKey?: string,
-    indexationData?: Uint8Array): Promise<{
-        messageId: string;
-        message: IMessage;
-    }> {
+    indexation?: {
+        key: string;
+        data?: Uint8Array;
+    },
+    zeroCount?: number
+): Promise<{
+    messageId: string;
+    message: IMessage;
+}> {
     const inputsAndKeys = await calculateInputs(
         client,
         seed,
         initialAddressState,
         nextAddressPath,
         outputs,
-        5
+        zeroCount
     );
 
     const response = await sendAdvanced(
         client,
         inputsAndKeys,
         outputs,
-        indexationKey,
-        indexationData);
+        indexation);
 
     return {
         messageId: response.messageId,
@@ -254,13 +294,13 @@ export async function calculateInputs<T>(
     initialAddressState: T,
     nextAddressPath: (addressState: T, isFirst: boolean) => string,
     outputs: { address: string; addressType: number; amount: number }[],
-    zeroCount: number
+    zeroCount?: number
 ): Promise<{
     input: IUTXOInput;
     addressKeyPair: IKeyPair;
 }[]> {
     const requiredBalance = outputs.reduce((total, output) => total + output.amount, 0);
-    const localZeroCount = zeroCount ?? 5;
+    const localZeroCount = zeroCount ?? 20;
 
     let consumedBalance = 0;
     const inputsAndSignatureKeyPairs: {

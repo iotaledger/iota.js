@@ -44,8 +44,9 @@ export function logInfo(prefix: string, info: INodeInfo): void {
     logger(`${prefix}\tName:`, info.name);
     logger(`${prefix}\tVersion:`, info.version);
     logger(`${prefix}\tNetwork Id:`, info.networkId);
-    logger(`${prefix}\tMin PoW Score:`, info.minPowScore);
     logger(`${prefix}\tIs Healthy:`, info.isHealthy);
+    logger(`${prefix}\tMin PoW Score:`, info.minPowScore);
+    logger(`${prefix}\tBech32 HRP:`, info.bech32HRP);
     logger(`${prefix}\tLatest Milestone Index:`, info.latestMilestoneIndex);
     logger(`${prefix}\tSolid Milestone Index:`, info.solidMilestoneIndex);
     logger(`${prefix}\tPruning Index:`, info.pruningIndex);
