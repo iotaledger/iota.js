@@ -97,13 +97,13 @@ ___
 
 ▸ `Static`**fromMnemonic**(`mnemonic`: string): [Ed25519Seed](ed25519seed.md)
 
-Create the seed from a Bip39 mnenomic.
+Create the seed from a Bip39 mnemonic.
 
 #### Parameters:
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`mnemonic` | string | The mnenomic to create the seed from. |
+`mnemonic` | string | The mnemonic to create the seed from. |
 
 **Returns:** [Ed25519Seed](ed25519seed.md)
 

@@ -3,7 +3,7 @@ import { Bech32Helper, Bip32Path, Bip39, Converter, Ed25519Address, Ed25519Seed,
 async function run() {
     console.log("Base");
 
-    // Generate a random mnenomic.
+    // Generate a random mnemonic.
     const randomMnemonic = Bip39.randomMnemonic();
     console.log("\tMnemonic:", randomMnemonic)
 
