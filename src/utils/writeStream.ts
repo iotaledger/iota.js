@@ -190,7 +190,8 @@ export class WriteStream {
      */
     private expand(additional: number): void {
         if (this._writeIndex + additional > this._storage.byteLength) {
-            const newArr = new Uint8Array(this._storage.length + WriteStream.CHUNK_SIZE);
+            const newArr = new Uint8Array(
+                this._storage.length + (Math.ceil(additional / WriteStream.CHUNK_SIZE) * WriteStream.CHUNK_SIZE));
             newArr.set(this._storage, 0);
             this._storage = newArr;
         }
