@@ -366,7 +366,7 @@
 	    /**
 	     * Are the two array equals.
 	     * @param array1 The first array.
-	     * @param array2 The second arry.
+	     * @param array2 The second array.
 	     * @returns True if the arrays are equal.
 	     */
 	    ArrayHelper.equal = function (array1, array2) {
@@ -11280,19 +11280,23 @@
 	 * @returns The id of the message created and the contructed message.
 	 */
 	function calculateInputs(client, seed, initialAddressState, nextAddressPath, outputs, zeroCount) {
+	    if (zeroCount === void 0) { zeroCount = 20; }
 	    return __awaiter(this, void 0, void 0, function () {
-	        var requiredBalance, localZeroCount, consumedBalance, inputsAndSignatureKeyPairs, finished, isFirst, zeroBalance, path, addressSeed, addressKeyPair, ed25519Address$1, address, addressOutputIds, _i, _a, addressOutputId, addressOutput, input;
-	        return __generator(this, function (_b) {
-	            switch (_b.label) {
+	        var requiredBalance, _i, outputs_1, output, consumedBalance, inputsAndSignatureKeyPairs, finished, isFirst, zeroBalance, path, addressSeed, addressKeyPair, ed25519Address$1, address, addressOutputIds, _a, _b, addressOutputId, addressOutput, input;
+	        return __generator(this, function (_c) {
+	            switch (_c.label) {
 	                case 0:
-	                    requiredBalance = outputs.reduce(function (total, output) { return total + output.amount; }, 0);
-	                    localZeroCount = zeroCount !== null && zeroCount !== void 0 ? zeroCount : 20;
+	                    requiredBalance = 0;
+	                    for (_i = 0, outputs_1 = outputs; _i < outputs_1.length; _i++) {
+	                        output = outputs_1[_i];
+	                        requiredBalance += output.amount;
+	                    }
 	                    consumedBalance = 0;
 	                    inputsAndSignatureKeyPairs = [];
 	                    finished = false;
 	                    isFirst = true;
 	                    zeroBalance = 0;
-	                    _b.label = 1;
+	                    _c.label = 1;
 	                case 1:
 	                    path = nextAddressPath(initialAddressState, isFirst);
 	                    isFirst = false;
@@ -11302,27 +11306,27 @@
 	                    address = converter.Converter.bytesToHex(ed25519Address$1.toAddress());
 	                    return [4 /*yield*/, client.addressEd25519Outputs(address)];
 	                case 2:
-	                    addressOutputIds = _b.sent();
+	                    addressOutputIds = _c.sent();
 	                    if (!(addressOutputIds.count === 0)) return [3 /*break*/, 3];
 	                    zeroBalance++;
-	                    if (zeroBalance >= localZeroCount) {
+	                    if (zeroBalance >= zeroCount) {
 	                        finished = true;
 	                    }
 	                    return [3 /*break*/, 7];
 	                case 3:
-	                    _i = 0, _a = addressOutputIds.outputIds;
-	                    _b.label = 4;
+	                    _a = 0, _b = addressOutputIds.outputIds;
+	                    _c.label = 4;
 	                case 4:
-	                    if (!(_i < _a.length)) return [3 /*break*/, 7];
-	                    addressOutputId = _a[_i];
+	                    if (!(_a < _b.length)) return [3 /*break*/, 7];
+	                    addressOutputId = _b[_a];
 	                    return [4 /*yield*/, client.output(addressOutputId)];
 	                case 5:
-	                    addressOutput = _b.sent();
+	                    addressOutput = _c.sent();
 	                    if (!addressOutput.isSpent &&
 	                        consumedBalance < requiredBalance) {
 	                        if (addressOutput.output.amount === 0) {
 	                            zeroBalance++;
-	                            if (zeroBalance >= localZeroCount) {
+	                            if (zeroBalance >= zeroCount) {
 	                                finished = true;
 	                            }
 	                        }
@@ -11351,13 +11355,13 @@
 	                            }
 	                        }
 	                    }
-	                    _b.label = 6;
+	                    _c.label = 6;
 	                case 6:
-	                    _i++;
+	                    _a++;
 	                    return [3 /*break*/, 4];
 	                case 7:
 	                    if (!finished) return [3 /*break*/, 1];
-	                    _b.label = 8;
+	                    _c.label = 8;
 	                case 8:
 	                    if (consumedBalance < requiredBalance) {
 	                        throw new Error("There are not enough funds in the inputs for the required balance");
@@ -11510,8 +11514,6 @@
 	// SPDX-License-Identifier: Apache-2.0
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.ConflictReason = void 0;
-	// eslint-disable-next-line no-shadow
-	var ConflictReason;
 	(function (ConflictReason) {
 	    /**
 	     * The message has no conflict.
@@ -11553,7 +11555,7 @@
 	     * The semantic validation failed.
 	     */
 	    ConflictReason[ConflictReason["semanticValidationFailed"] = 9] = "semanticValidationFailed";
-	})(ConflictReason = exports.ConflictReason || (exports.ConflictReason = {}));
+	})(exports.ConflictReason || (exports.ConflictReason = {}));
 
 	});
 
@@ -12177,12 +12179,10 @@
 	 * @param unknownAddress The address to log.
 	 */
 	function logAddress(prefix, unknownAddress) {
-	    if (unknownAddress) {
-	        if (unknownAddress.type === IEd25519Address.ED25519_ADDRESS_TYPE) {
-	            var address = unknownAddress;
-	            logger(prefix + "Ed25519 Address");
-	            logger(prefix + "\tAddress:", address.address);
-	        }
+	    if ((unknownAddress === null || unknownAddress === void 0 ? void 0 : unknownAddress.type) === IEd25519Address.ED25519_ADDRESS_TYPE) {
+	        var address = unknownAddress;
+	        logger(prefix + "Ed25519 Address");
+	        logger(prefix + "\tAddress:", address.address);
 	    }
 	}
 	exports.logAddress = logAddress;
@@ -12192,13 +12192,11 @@
 	 * @param unknownSignature The signature to log.
 	 */
 	function logSignature(prefix, unknownSignature) {
-	    if (unknownSignature) {
-	        if (unknownSignature.type === IEd25519Signature.ED25519_SIGNATURE_TYPE) {
-	            var signature = unknownSignature;
-	            logger(prefix + "Ed25519 Signature");
-	            logger(prefix + "\tPublic Key:", signature.publicKey);
-	            logger(prefix + "\tSignature:", signature.signature);
-	        }
+	    if ((unknownSignature === null || unknownSignature === void 0 ? void 0 : unknownSignature.type) === IEd25519Signature.ED25519_SIGNATURE_TYPE) {
+	        var signature = unknownSignature;
+	        logger(prefix + "Ed25519 Signature");
+	        logger(prefix + "\tPublic Key:", signature.publicKey);
+	        logger(prefix + "\tSignature:", signature.signature);
 	    }
 	}
 	exports.logSignature = logSignature;
@@ -12208,13 +12206,11 @@
 	 * @param unknownInput The input to log.
 	 */
 	function logInput(prefix, unknownInput) {
-	    if (unknownInput) {
-	        if (unknownInput.type === IUTXOInput.UTXO_INPUT_TYPE) {
-	            var input = unknownInput;
-	            logger(prefix + "UTXO Input");
-	            logger(prefix + "\tTransaction Id:", input.transactionId);
-	            logger(prefix + "\tTransaction Output Index:", input.transactionOutputIndex);
-	        }
+	    if ((unknownInput === null || unknownInput === void 0 ? void 0 : unknownInput.type) === IUTXOInput.UTXO_INPUT_TYPE) {
+	        var input = unknownInput;
+	        logger(prefix + "UTXO Input");
+	        logger(prefix + "\tTransaction Id:", input.transactionId);
+	        logger(prefix + "\tTransaction Output Index:", input.transactionOutputIndex);
 	    }
 	}
 	exports.logInput = logInput;

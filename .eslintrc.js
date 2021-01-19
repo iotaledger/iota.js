@@ -1156,6 +1156,9 @@ module.exports = {
         "unicorn/custom-error-definition": [
             "off"
         ],
+        "unicorn/empty-brace-spaces": [
+            "off"
+        ],
         "unicorn/error-message": [
             "error"
         ],

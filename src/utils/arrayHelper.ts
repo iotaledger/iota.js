@@ -8,7 +8,7 @@ export class ArrayHelper {
     /**
      * Are the two array equals.
      * @param array1 The first array.
-     * @param array2 The second arry.
+     * @param array2 The second array.
      * @returns True if the arrays are equal.
      */
     public static equal(

@@ -294,13 +294,15 @@ export async function calculateInputs<T>(
     initialAddressState: T,
     nextAddressPath: (addressState: T, isFirst: boolean) => string,
     outputs: { address: string; addressType: number; amount: number }[],
-    zeroCount?: number
+    zeroCount: number = 20
 ): Promise<{
     input: IUTXOInput;
     addressKeyPair: IKeyPair;
 }[]> {
-    const requiredBalance = outputs.reduce((total, output) => total + output.amount, 0);
-    const localZeroCount = zeroCount ?? 20;
+    let requiredBalance = 0;
+    for (const output of outputs) {
+        requiredBalance += output.amount;
+    }
 
     let consumedBalance = 0;
     const inputsAndSignatureKeyPairs: {
@@ -324,7 +326,7 @@ export async function calculateInputs<T>(
 
         if (addressOutputIds.count === 0) {
             zeroBalance++;
-            if (zeroBalance >= localZeroCount) {
+            if (zeroBalance >= zeroCount) {
                 finished = true;
             }
         } else {
@@ -335,7 +337,7 @@ export async function calculateInputs<T>(
                     consumedBalance < requiredBalance) {
                     if (addressOutput.output.amount === 0) {
                         zeroBalance++;
-                        if (zeroBalance >= localZeroCount) {
+                        if (zeroBalance >= zeroCount) {
                             finished = true;
                         }
                     } else {

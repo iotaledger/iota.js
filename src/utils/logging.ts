@@ -164,12 +164,10 @@ export function logPayload(prefix: string, unknownPayload?: ITypeBase<unknown>):
  * @param unknownAddress The address to log.
  */
 export function logAddress(prefix: string, unknownAddress?: ITypeBase<unknown>): void {
-    if (unknownAddress) {
-        if (unknownAddress.type === ED25519_ADDRESS_TYPE) {
-            const address = unknownAddress as IEd25519Address;
-            logger(`${prefix}Ed25519 Address`);
-            logger(`${prefix}\tAddress:`, address.address);
-        }
+    if (unknownAddress?.type === ED25519_ADDRESS_TYPE) {
+        const address = unknownAddress as IEd25519Address;
+        logger(`${prefix}Ed25519 Address`);
+        logger(`${prefix}\tAddress:`, address.address);
     }
 }
 
@@ -179,13 +177,11 @@ export function logAddress(prefix: string, unknownAddress?: ITypeBase<unknown>):
  * @param unknownSignature The signature to log.
  */
 export function logSignature(prefix: string, unknownSignature?: ITypeBase<unknown>): void {
-    if (unknownSignature) {
-        if (unknownSignature.type === ED25519_SIGNATURE_TYPE) {
-            const signature = unknownSignature as IEd25519Signature;
-            logger(`${prefix}Ed25519 Signature`);
-            logger(`${prefix}\tPublic Key:`, signature.publicKey);
-            logger(`${prefix}\tSignature:`, signature.signature);
-        }
+    if (unknownSignature?.type === ED25519_SIGNATURE_TYPE) {
+        const signature = unknownSignature as IEd25519Signature;
+        logger(`${prefix}Ed25519 Signature`);
+        logger(`${prefix}\tPublic Key:`, signature.publicKey);
+        logger(`${prefix}\tSignature:`, signature.signature);
     }
 }
 
@@ -195,13 +191,11 @@ export function logSignature(prefix: string, unknownSignature?: ITypeBase<unknow
  * @param unknownInput The input to log.
  */
 export function logInput(prefix: string, unknownInput?: ITypeBase<unknown>): void {
-    if (unknownInput) {
-        if (unknownInput.type === UTXO_INPUT_TYPE) {
-            const input = unknownInput as IUTXOInput;
-            logger(`${prefix}UTXO Input`);
-            logger(`${prefix}\tTransaction Id:`, input.transactionId);
-            logger(`${prefix}\tTransaction Output Index:`, input.transactionOutputIndex);
-        }
+    if (unknownInput?.type === UTXO_INPUT_TYPE) {
+        const input = unknownInput as IUTXOInput;
+        logger(`${prefix}UTXO Input`);
+        logger(`${prefix}\tTransaction Id:`, input.transactionId);
+        logger(`${prefix}\tTransaction Output Index:`, input.transactionOutputIndex);
     }
 }
 
