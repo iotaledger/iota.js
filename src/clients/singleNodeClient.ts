@@ -498,8 +498,9 @@ export class SingleNodeClient implements IClient {
         }
 
         if (this._userName && this._password) {
+            const userPass = Converter.bytesToBase64(Converter.utf8ToBytes(`${this._userName}:${this._password}`));
             headers = headers ?? {};
-            headers.Authorization = `Basic ${btoa(`${this._userName}:${this._password}`)}`;
+            headers.Authorization = `Basic ${userPass}`;
         }
 
         try {

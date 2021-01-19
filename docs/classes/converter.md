@@ -14,7 +14,9 @@ Convert arrays to and from different formats.
 
 ### Methods
 
+* [base64ToBytes](converter.md#base64tobytes)
 * [binaryToBytes](converter.md#binarytobytes)
+* [bytesToBase64](converter.md#bytestobase64)
 * [bytesToBinary](converter.md#bytestobinary)
 * [bytesToHex](converter.md#bytestohex)
 * [bytesToUtf8](converter.md#bytestoutf8)
@@ -25,6 +27,24 @@ Convert arrays to and from different formats.
 * [utf8ToHex](converter.md#utf8tohex)
 
 ## Methods
+
+### base64ToBytes
+
+▸ `Static`**base64ToBytes**(`base64`: string): Uint8Array
+
+Convert a base64 string to bytes.
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`base64` | string | The base64 string. |
+
+**Returns:** Uint8Array
+
+The bytes.
+
+___
 
 ### binaryToBytes
 
@@ -41,6 +61,24 @@ Name | Type | Description |
 **Returns:** Uint8Array
 
 The bytes.
+
+___
+
+### bytesToBase64
+
+▸ `Static`**bytesToBase64**(`bytes`: Uint8Array): string
+
+Convert bytes to base64 string.
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`bytes` | Uint8Array | The bytes to convert. |
+
+**Returns:** string
+
+A base64 string of the bytes.
 
 ___
 

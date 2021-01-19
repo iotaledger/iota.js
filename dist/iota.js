@@ -37,11 +37,6 @@
 	    // eslint-disable-next-line @typescript-eslint/no-require-imports
 	    globalThis.fetch = require$$0__default['default'];
 	}
-	// Base 64 Conversion
-	if (!globalThis.btoa) {
-	    globalThis.btoa = function (a) { return Buffer.from(a).toString("base64"); };
-	    globalThis.atob = function (a) { return Buffer.from(a, "base64").toString(); };
-	}
 
 	var blake2b = createCommonjsModule(function (module, exports) {
 	// Copyright 2020 IOTA Stiftung
@@ -5044,12 +5039,168 @@
 
 	});
 
+	var byteLength_1 = byteLength;
+	var toByteArray_1 = toByteArray;
+	var fromByteArray_1 = fromByteArray;
+
+	var lookup = [];
+	var revLookup = [];
+	var Arr = typeof Uint8Array !== 'undefined' ? Uint8Array : Array;
+
+	var code = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+	for (var i = 0, len = code.length; i < len; ++i) {
+	  lookup[i] = code[i];
+	  revLookup[code.charCodeAt(i)] = i;
+	}
+
+	// Support decoding URL-safe base64 strings, as Node.js does.
+	// See: https://en.wikipedia.org/wiki/Base64#URL_applications
+	revLookup['-'.charCodeAt(0)] = 62;
+	revLookup['_'.charCodeAt(0)] = 63;
+
+	function getLens (b64) {
+	  var len = b64.length;
+
+	  if (len % 4 > 0) {
+	    throw new Error('Invalid string. Length must be a multiple of 4')
+	  }
+
+	  // Trim off extra bytes after placeholder bytes are found
+	  // See: https://github.com/beatgammit/base64-js/issues/42
+	  var validLen = b64.indexOf('=');
+	  if (validLen === -1) validLen = len;
+
+	  var placeHoldersLen = validLen === len
+	    ? 0
+	    : 4 - (validLen % 4);
+
+	  return [validLen, placeHoldersLen]
+	}
+
+	// base64 is 4/3 + up to two characters of the original data
+	function byteLength (b64) {
+	  var lens = getLens(b64);
+	  var validLen = lens[0];
+	  var placeHoldersLen = lens[1];
+	  return ((validLen + placeHoldersLen) * 3 / 4) - placeHoldersLen
+	}
+
+	function _byteLength (b64, validLen, placeHoldersLen) {
+	  return ((validLen + placeHoldersLen) * 3 / 4) - placeHoldersLen
+	}
+
+	function toByteArray (b64) {
+	  var tmp;
+	  var lens = getLens(b64);
+	  var validLen = lens[0];
+	  var placeHoldersLen = lens[1];
+
+	  var arr = new Arr(_byteLength(b64, validLen, placeHoldersLen));
+
+	  var curByte = 0;
+
+	  // if there are placeholders, only get up to the last complete 4 chars
+	  var len = placeHoldersLen > 0
+	    ? validLen - 4
+	    : validLen;
+
+	  var i;
+	  for (i = 0; i < len; i += 4) {
+	    tmp =
+	      (revLookup[b64.charCodeAt(i)] << 18) |
+	      (revLookup[b64.charCodeAt(i + 1)] << 12) |
+	      (revLookup[b64.charCodeAt(i + 2)] << 6) |
+	      revLookup[b64.charCodeAt(i + 3)];
+	    arr[curByte++] = (tmp >> 16) & 0xFF;
+	    arr[curByte++] = (tmp >> 8) & 0xFF;
+	    arr[curByte++] = tmp & 0xFF;
+	  }
+
+	  if (placeHoldersLen === 2) {
+	    tmp =
+	      (revLookup[b64.charCodeAt(i)] << 2) |
+	      (revLookup[b64.charCodeAt(i + 1)] >> 4);
+	    arr[curByte++] = tmp & 0xFF;
+	  }
+
+	  if (placeHoldersLen === 1) {
+	    tmp =
+	      (revLookup[b64.charCodeAt(i)] << 10) |
+	      (revLookup[b64.charCodeAt(i + 1)] << 4) |
+	      (revLookup[b64.charCodeAt(i + 2)] >> 2);
+	    arr[curByte++] = (tmp >> 8) & 0xFF;
+	    arr[curByte++] = tmp & 0xFF;
+	  }
+
+	  return arr
+	}
+
+	function tripletToBase64 (num) {
+	  return lookup[num >> 18 & 0x3F] +
+	    lookup[num >> 12 & 0x3F] +
+	    lookup[num >> 6 & 0x3F] +
+	    lookup[num & 0x3F]
+	}
+
+	function encodeChunk (uint8, start, end) {
+	  var tmp;
+	  var output = [];
+	  for (var i = start; i < end; i += 3) {
+	    tmp =
+	      ((uint8[i] << 16) & 0xFF0000) +
+	      ((uint8[i + 1] << 8) & 0xFF00) +
+	      (uint8[i + 2] & 0xFF);
+	    output.push(tripletToBase64(tmp));
+	  }
+	  return output.join('')
+	}
+
+	function fromByteArray (uint8) {
+	  var tmp;
+	  var len = uint8.length;
+	  var extraBytes = len % 3; // if we have 1 byte left, pad 2 bytes
+	  var parts = [];
+	  var maxChunkLength = 16383; // must be multiple of 3
+
+	  // go through the array every three bytes, we'll deal with trailing stuff later
+	  for (var i = 0, len2 = len - extraBytes; i < len2; i += maxChunkLength) {
+	    parts.push(encodeChunk(uint8, i, (i + maxChunkLength) > len2 ? len2 : (i + maxChunkLength)));
+	  }
+
+	  // pad the end with zeros, but make sure to not forget the extra bytes
+	  if (extraBytes === 1) {
+	    tmp = uint8[len - 1];
+	    parts.push(
+	      lookup[tmp >> 2] +
+	      lookup[(tmp << 4) & 0x3F] +
+	      '=='
+	    );
+	  } else if (extraBytes === 2) {
+	    tmp = (uint8[len - 2] << 8) + uint8[len - 1];
+	    parts.push(
+	      lookup[tmp >> 10] +
+	      lookup[(tmp >> 4) & 0x3F] +
+	      lookup[(tmp << 2) & 0x3F] +
+	      '='
+	    );
+	  }
+
+	  return parts.join('')
+	}
+
+	var base64Js = {
+		byteLength: byteLength_1,
+		toByteArray: toByteArray_1,
+		fromByteArray: fromByteArray_1
+	};
+
 	var converter = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.Converter = void 0;
 	// Copyright 2020 IOTA Stiftung
 	// SPDX-License-Identifier: Apache-2.0
 	/* eslint-disable no-bitwise */
+
 	/**
 	 * Convert arrays to and from different formats.
 	 */
@@ -5224,6 +5375,22 @@
 	            bytes[i] = Number.parseInt(binary.slice((i * 8), (i + 1) * 8), 2);
 	        }
 	        return bytes;
+	    };
+	    /**
+	     * Convert bytes to base64 string.
+	     * @param bytes The bytes to convert.
+	     * @returns A base64 string of the bytes.
+	     */
+	    Converter.bytesToBase64 = function (bytes) {
+	        return base64Js.fromByteArray(bytes);
+	    };
+	    /**
+	     * Convert a base64 string to bytes.
+	     * @param base64 The base64 string.
+	     * @returns The bytes.
+	     */
+	    Converter.base64ToBytes = function (base64) {
+	        return base64Js.toByteArray(base64);
 	    };
 	    /**
 	     * Build the static lookup tables.
@@ -6049,7 +6216,7 @@
 	     */
 	    WriteStream.prototype.expand = function (additional) {
 	        if (this._writeIndex + additional > this._storage.byteLength) {
-	            var newArr = new Uint8Array(this._storage.length + WriteStream.CHUNK_SIZE);
+	            var newArr = new Uint8Array(this._storage.length + (Math.ceil(additional / WriteStream.CHUNK_SIZE) * WriteStream.CHUNK_SIZE));
 	            newArr.set(this._storage, 0);
 	            this._storage = newArr;
 	        }
@@ -6548,7 +6715,7 @@
 	     */
 	    SingleNodeClient.prototype.fetchWithTimeout = function (method, route, headers, body) {
 	        return __awaiter(this, void 0, void 0, function () {
-	            var controller, timerId, response, err_1;
+	            var controller, timerId, userPass, response, err_1;
 	            return __generator(this, function (_a) {
 	                switch (_a.label) {
 	                    case 0:
@@ -6561,8 +6728,9 @@
 	                            }, this._timeout);
 	                        }
 	                        if (this._userName && this._password) {
+	                            userPass = converter.Converter.bytesToBase64(converter.Converter.utf8ToBytes(this._userName + ":" + this._password));
 	                            headers = headers !== null && headers !== void 0 ? headers : {};
-	                            headers.Authorization = "Basic " + btoa(this._userName + ":" + this._password);
+	                            headers.Authorization = "Basic " + userPass;
 	                        }
 	                        _a.label = 1;
 	                    case 1:

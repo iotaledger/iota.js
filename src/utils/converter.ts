@@ -1,6 +1,7 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 /* eslint-disable no-bitwise */
+import { toByteArray, fromByteArray } from "base64-js";
 /**
  * Convert arrays to and from different formats.
  */
@@ -208,6 +209,24 @@ export class Converter {
             bytes[i] = Number.parseInt(binary.slice((i * 8), (i + 1) * 8), 2);
         }
         return bytes;
+    }
+
+    /**
+     * Convert bytes to base64 string.
+     * @param bytes The bytes to convert.
+     * @returns A base64 string of the bytes.
+     */
+    public static bytesToBase64(bytes: Uint8Array): string {
+        return fromByteArray(bytes);
+    }
+
+    /**
+     * Convert a base64 string to bytes.
+     * @param base64 The base64 string.
+     * @returns The bytes.
+     */
+    public static base64ToBytes(base64: string): Uint8Array {
+        return toByteArray(base64);
     }
 
     /**

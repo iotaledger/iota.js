@@ -62,4 +62,16 @@ export declare class Converter {
      * @returns The bytes.
      */
     static binaryToBytes(binary: string): Uint8Array;
+    /**
+     * Convert bytes to base64 string.
+     * @param bytes The bytes to convert.
+     * @returns A base64 string of the bytes.
+     */
+    static bytesToBase64(bytes: Uint8Array): string;
+    /**
+     * Convert a base64 string to bytes.
+     * @param base64 The base64 string.
+     * @returns The bytes.
+     */
+    static base64ToBytes(base64: string): Uint8Array;
 }

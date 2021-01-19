@@ -9,7 +9,7 @@ async function run() {
 
     for (let i = 0; i < 10; i++) {
         console.log("Sending Data")
-        const sendResult = await sendData(client, myIndex, Converter.utf8ToBytes(`This is data ${i}`));
+        const sendResult = await sendData(client, myIndex, Converter.utf8ToBytes(`This is data ${i} 🚀`));
         console.log("Received Message Id", sendResult.messageId);
     }
 
