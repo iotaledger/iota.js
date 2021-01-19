@@ -647,7 +647,7 @@ module.exports = {
             "error"
         ],
         "no-control-regex": [
-            "error"
+            "off"
         ],
         "no-debugger": [
             "error"
@@ -1154,6 +1154,9 @@ module.exports = {
             "error"
         ],
         "unicorn/custom-error-definition": [
+            "off"
+        ],
+        "unicorn/empty-brace-spaces": [
             "off"
         ],
         "unicorn/error-message": [

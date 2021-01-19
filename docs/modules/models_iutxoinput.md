@@ -2,20 +2,20 @@
 
 # Module: models/IUTXOInput
 
-## Index
+## Table of contents
 
 ### Interfaces
 
-* [IUTXOInput](../interfaces/models_iutxoinput.iutxoinput.md)
+- [IUTXOInput](../interfaces/models/iutxoinput.iutxoinput.md)
 
 ### Variables
 
-* [UTXO\_INPUT\_TYPE](models_iutxoinput.md#utxo_input_type)
+- [UTXO\_INPUT\_TYPE](models_iutxoinput.md#utxo_input_type)
 
 ## Variables
 
 ### UTXO\_INPUT\_TYPE
 
-• `Const` **UTXO\_INPUT\_TYPE**: *number*= 0
+• `Const` **UTXO\_INPUT\_TYPE**: *0*= 0
 
 The global type for the input.

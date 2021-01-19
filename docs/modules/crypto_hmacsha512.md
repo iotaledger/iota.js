@@ -2,8 +2,8 @@
 
 # Module: crypto/hmacSha512
 
-## Index
+## Table of contents
 
 ### Classes
 
-* [HmacSha512](../classes/crypto_hmacsha512.hmacsha512.md)
+- [HmacSha512](../classes/crypto/hmacsha512.hmacsha512.md)

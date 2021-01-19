@@ -2,8 +2,8 @@
 
 # Module: utils/bigIntHelper
 
-## Index
+## Table of contents
 
 ### Classes
 
-* [BigIntHelper](../classes/utils_biginthelper.biginthelper.md)
+- [BigIntHelper](../classes/utils/biginthelper.biginthelper.md)

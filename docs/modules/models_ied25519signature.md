@@ -2,20 +2,20 @@
 
 # Module: models/IEd25519Signature
 
-## Index
+## Table of contents
 
 ### Interfaces
 
-* [IEd25519Signature](../interfaces/models_ied25519signature.ied25519signature.md)
+- [IEd25519Signature](../interfaces/models/ied25519signature.ied25519signature.md)
 
 ### Variables
 
-* [ED25519\_SIGNATURE\_TYPE](models_ied25519signature.md#ed25519_signature_type)
+- [ED25519\_SIGNATURE\_TYPE](models_ied25519signature.md#ed25519_signature_type)
 
 ## Variables
 
 ### ED25519\_SIGNATURE\_TYPE
 
-• `Const` **ED25519\_SIGNATURE\_TYPE**: *number*= 1
+• `Const` **ED25519\_SIGNATURE\_TYPE**: *1*= 1
 
 The global type for the signature type.

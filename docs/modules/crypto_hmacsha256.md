@@ -2,8 +2,8 @@
 
 # Module: crypto/hmacSha256
 
-## Index
+## Table of contents
 
 ### Classes
 
-* [HmacSha256](../classes/crypto_hmacsha256.hmacsha256.md)
+- [HmacSha256](../classes/crypto/hmacsha256.hmacsha256.md)

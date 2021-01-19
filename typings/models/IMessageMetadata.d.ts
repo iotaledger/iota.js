@@ -1,3 +1,4 @@
+import { ConflictReason } from "./conflictReason";
 import { LedgerInclusionState } from "./ledgerInclusionState";
 /**
  * Response from the metadata endpoint.
@@ -14,7 +15,7 @@ export interface IMessageMetadata {
     /**
      * Is the message solid.
      */
-    isSolid?: boolean;
+    isSolid: boolean;
     /**
      * Is the message referenced by a milestone.
      */
@@ -27,6 +28,10 @@ export interface IMessageMetadata {
      * The ledger inclusion state.
      */
     ledgerInclusionState?: LedgerInclusionState;
+    /**
+     * The conflict reason.
+     */
+    conflictReason?: ConflictReason;
     /**
      * Should the message be promoted.
      */

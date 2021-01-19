@@ -50,19 +50,21 @@ var addresses_1 = require("./addresses");
  * @param client The client to send the transfer with.
  * @param seed The seed to use for address generation.
  * @param accountIndex The account index in the wallet.
- * @param startIndex Optional start index for the wallet count address, defaults to 0.
- * @param countLimit Limit the number of items to find.
- * @param zeroCount Abort when the number of zero balances is exceeded.
+ * @param addressOptions Optional address configuration for balance address lookups.
+ * @param addressOptions.startIndex The start index for the wallet count address, defaults to 0.
+ * @param addressOptions.zeroCount The number of addresses with 0 balance during lookup before aborting.
+ * @param addressOptions.requiredCount The max number of addresses to find.
  * @returns All the unspent addresses.
  */
-function getUnspentAddresses(client, seed, accountIndex, startIndex, countLimit, zeroCount) {
+function getUnspentAddresses(client, seed, accountIndex, addressOptions) {
+    var _a;
     return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
+        return __generator(this, function (_b) {
             return [2 /*return*/, getUnspentAddressesWithAddressGenerator(client, seed, {
                     accountIndex: accountIndex,
-                    addressIndex: startIndex !== null && startIndex !== void 0 ? startIndex : 0,
+                    addressIndex: (_a = addressOptions === null || addressOptions === void 0 ? void 0 : addressOptions.startIndex) !== null && _a !== void 0 ? _a : 0,
                     isInternal: false
-                }, addresses_1.generateBip44Address, countLimit, zeroCount)];
+                }, addresses_1.generateBip44Address, addressOptions)];
         });
     });
 }
@@ -73,24 +75,29 @@ exports.getUnspentAddresses = getUnspentAddresses;
  * @param seed The seed to use for address generation.
  * @param initialAddressState The initial address state for calculating the addresses.
  * @param nextAddressPath Calculate the next address for inputs.
- * @param countLimit Limit the number of items to find.
- * @param zeroCount Abort when the number of zero balances is exceeded.
+ * @param addressOptions Optional address configuration for balance address lookups.
+ * @param addressOptions.startIndex The start index for the wallet count address, defaults to 0.
+ * @param addressOptions.zeroCount The number of addresses with 0 balance during lookup before aborting.
+ * @param addressOptions.requiredCount The max number of addresses to find.
  * @returns All the unspent addresses.
  */
-function getUnspentAddressesWithAddressGenerator(client, seed, initialAddressState, nextAddressPath, countLimit, zeroCount) {
-    if (countLimit === void 0) { countLimit = Number.MAX_SAFE_INTEGER; }
-    if (zeroCount === void 0) { zeroCount = 5; }
+function getUnspentAddressesWithAddressGenerator(client, seed, initialAddressState, nextAddressPath, addressOptions) {
+    var _a, _b;
     return __awaiter(this, void 0, void 0, function () {
-        var finished, allUnspent, isFirst, zeroBalance, path, addressSeed, ed25519Address, addressBytes, addressHex, addressResponse;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
+        var nodeInfo, localRequiredLimit, localZeroCount, finished, allUnspent, isFirst, zeroBalance, path, addressSeed, ed25519Address, addressBytes, addressHex, addressResponse;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
+                case 0: return [4 /*yield*/, client.info()];
+                case 1:
+                    nodeInfo = _c.sent();
+                    localRequiredLimit = (_a = addressOptions === null || addressOptions === void 0 ? void 0 : addressOptions.requiredCount) !== null && _a !== void 0 ? _a : Number.MAX_SAFE_INTEGER;
+                    localZeroCount = (_b = addressOptions === null || addressOptions === void 0 ? void 0 : addressOptions.zeroCount) !== null && _b !== void 0 ? _b : 20;
                     finished = false;
                     allUnspent = [];
                     isFirst = true;
                     zeroBalance = 0;
-                    _a.label = 1;
-                case 1:
+                    _c.label = 2;
+                case 2:
                     path = nextAddressPath(initialAddressState, isFirst);
                     isFirst = false;
                     addressSeed = seed.generateSeedFromPath(new bip32Path_1.Bip32Path(path));
@@ -98,34 +105,34 @@ function getUnspentAddressesWithAddressGenerator(client, seed, initialAddressSta
                     addressBytes = ed25519Address.toAddress();
                     addressHex = converter_1.Converter.bytesToHex(addressBytes);
                     return [4 /*yield*/, client.addressEd25519(addressHex)];
-                case 2:
-                    addressResponse = _a.sent();
-                    // If there are no outputs for the address we have reached the
-                    // end of the used addresses
-                    if (addressResponse.count === 0) {
+                case 3:
+                    addressResponse = _c.sent();
+                    // If there is no balance we increment the counter and end
+                    // the text when we have reached the count
+                    if (addressResponse.balance === 0) {
                         zeroBalance++;
-                        if (zeroBalance >= zeroCount) {
+                        if (zeroBalance >= localZeroCount) {
                             finished = true;
                         }
                     }
                     else {
                         allUnspent.push({
-                            address: bech32Helper_1.Bech32Helper.toBech32(IEd25519Address_1.ED25519_ADDRESS_TYPE, addressBytes),
+                            address: bech32Helper_1.Bech32Helper.toBech32(IEd25519Address_1.ED25519_ADDRESS_TYPE, addressBytes, nodeInfo.bech32HRP),
                             path: path,
                             balance: addressResponse.balance
                         });
-                        if (allUnspent.length === countLimit) {
+                        if (allUnspent.length === localRequiredLimit) {
                             finished = true;
                         }
                     }
-                    _a.label = 3;
-                case 3:
-                    if (!finished) return [3 /*break*/, 1];
-                    _a.label = 4;
-                case 4: return [2 /*return*/, allUnspent];
+                    _c.label = 4;
+                case 4:
+                    if (!finished) return [3 /*break*/, 2];
+                    _c.label = 5;
+                case 5: return [2 /*return*/, allUnspent];
             }
         });
     });
 }
 exports.getUnspentAddressesWithAddressGenerator = getUnspentAddressesWithAddressGenerator;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZ2V0VW5zcGVudEFkZHJlc3Nlcy5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy9oaWdoTGV2ZWwvZ2V0VW5zcGVudEFkZHJlc3Nlcy50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7QUFBQSwrQkFBK0I7QUFDL0Isc0NBQXNDO0FBQ3RDLGlFQUFnRTtBQUNoRSxpREFBZ0Q7QUFHaEQsNkRBQWlFO0FBRWpFLHNEQUFxRDtBQUNyRCxnREFBK0M7QUFDL0MseUNBQW1EO0FBRW5EOzs7Ozs7Ozs7R0FTRztBQUNILFNBQXNCLG1CQUFtQixDQUNyQyxNQUFlLEVBQ2YsSUFBVyxFQUNYLFlBQW9CLEVBQ3BCLFVBQW1CLEVBQ25CLFVBQW1CLEVBQ25CLFNBQWtCOzs7WUFLbEIsc0JBQU8sdUNBQXVDLENBQzFDLE1BQU0sRUFDTixJQUFJLEVBQ0o7b0JBQ0ksWUFBWSxjQUFBO29CQUNaLFlBQVksRUFBRSxVQUFVLGFBQVYsVUFBVSxjQUFWLFVBQVUsR0FBSSxDQUFDO29CQUM3QixVQUFVLEVBQUUsS0FBSztpQkFDcEIsRUFDRCxnQ0FBb0IsRUFDcEIsVUFBVSxFQUNWLFNBQVMsQ0FDWixFQUFDOzs7Q0FDTDtBQXZCRCxrREF1QkM7QUFFRDs7Ozs7Ozs7O0dBU0c7QUFDSCxTQUFzQix1Q0FBdUMsQ0FDekQsTUFBZSxFQUNmLElBQVcsRUFDWCxtQkFBc0IsRUFDdEIsZUFBOEQsRUFDOUQsVUFBNEMsRUFDNUMsU0FBcUI7SUFEckIsMkJBQUEsRUFBQSxhQUFxQixNQUFNLENBQUMsZ0JBQWdCO0lBQzVDLDBCQUFBLEVBQUEsYUFBcUI7Ozs7OztvQkFLakIsUUFBUSxHQUFHLEtBQUssQ0FBQztvQkFDZixVQUFVLEdBSVYsRUFBRSxDQUFDO29CQUVMLE9BQU8sR0FBRyxJQUFJLENBQUM7b0JBQ2YsV0FBVyxHQUFHLENBQUMsQ0FBQzs7O29CQUdWLElBQUksR0FBRyxlQUFlLENBQUMsbUJBQW1CLEVBQUUsT0FBTyxDQUFDLENBQUM7b0JBQzNELE9BQU8sR0FBRyxLQUFLLENBQUM7b0JBRVYsV0FBVyxHQUFHLElBQUksQ0FBQyxvQkFBb0IsQ0FBQyxJQUFJLHFCQUFTLENBQUMsSUFBSSxDQUFDLENBQUMsQ0FBQztvQkFFN0QsY0FBYyxHQUFHLElBQUksK0JBQWMsQ0FBQyxXQUFXLENBQUMsT0FBTyxFQUFFLENBQUMsU0FBUyxDQUFDLENBQUM7b0JBQ3JFLFlBQVksR0FBRyxjQUFjLENBQUMsU0FBUyxFQUFFLENBQUM7b0JBQzFDLFVBQVUsR0FBRyxxQkFBUyxDQUFDLFVBQVUsQ0FBQyxZQUFZLENBQUMsQ0FBQztvQkFDOUIscUJBQU0sTUFBTSxDQUFDLGNBQWMsQ0FBQyxVQUFVLENBQUMsRUFBQTs7b0JBQXpELGVBQWUsR0FBRyxTQUF1QztvQkFFL0QsOERBQThEO29CQUM5RCw0QkFBNEI7b0JBQzVCLElBQUksZUFBZSxDQUFDLEtBQUssS0FBSyxDQUFDLEVBQUU7d0JBQzdCLFdBQVcsRUFBRSxDQUFDO3dCQUNkLElBQUksV0FBVyxJQUFJLFNBQVMsRUFBRTs0QkFDMUIsUUFBUSxHQUFHLElBQUksQ0FBQzt5QkFDbkI7cUJBQ0o7eUJBQU07d0JBQ0gsVUFBVSxDQUFDLElBQUksQ0FBQzs0QkFDWixPQUFPLEVBQUUsMkJBQVksQ0FBQyxRQUFRLENBQUMsc0NBQW9CLEVBQUUsWUFBWSxDQUFDOzRCQUNsRSxJQUFJLE1BQUE7NEJBQ0osT0FBTyxFQUFFLGVBQWUsQ0FBQyxPQUFPO3lCQUNuQyxDQUFDLENBQUM7d0JBRUgsSUFBSSxVQUFVLENBQUMsTUFBTSxLQUFLLFVBQVUsRUFBRTs0QkFDbEMsUUFBUSxHQUFHLElBQUksQ0FBQzt5QkFDbkI7cUJBQ0o7Ozt3QkFDSSxDQUFDLFFBQVE7O3dCQUVsQixzQkFBTyxVQUFVLEVBQUM7Ozs7Q0FDckI7QUFyREQsMEZBcURDIn0=
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZ2V0VW5zcGVudEFkZHJlc3Nlcy5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy9oaWdoTGV2ZWwvZ2V0VW5zcGVudEFkZHJlc3Nlcy50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7QUFBQSwrQkFBK0I7QUFDL0Isc0NBQXNDO0FBQ3RDLGlFQUFnRTtBQUNoRSxpREFBZ0Q7QUFHaEQsNkRBQWlFO0FBRWpFLHNEQUFxRDtBQUNyRCxnREFBK0M7QUFDL0MseUNBQW1EO0FBRW5EOzs7Ozs7Ozs7O0dBVUc7QUFDSCxTQUFzQixtQkFBbUIsQ0FDckMsTUFBZSxFQUNmLElBQVcsRUFDWCxZQUFvQixFQUNwQixjQUlDOzs7O1lBS0Qsc0JBQU8sdUNBQXVDLENBQzFDLE1BQU0sRUFDTixJQUFJLEVBQ0o7b0JBQ0ksWUFBWSxjQUFBO29CQUNaLFlBQVksUUFBRSxjQUFjLGFBQWQsY0FBYyx1QkFBZCxjQUFjLENBQUUsVUFBVSxtQ0FBSSxDQUFDO29CQUM3QyxVQUFVLEVBQUUsS0FBSztpQkFDcEIsRUFDRCxnQ0FBb0IsRUFDcEIsY0FBYyxDQUNqQixFQUFDOzs7Q0FDTDtBQXhCRCxrREF3QkM7QUFFRDs7Ozs7Ozs7Ozs7R0FXRztBQUNILFNBQXNCLHVDQUF1QyxDQUN6RCxNQUFlLEVBQ2YsSUFBVyxFQUNYLG1CQUFzQixFQUN0QixlQUE4RCxFQUM5RCxjQUlDOzs7Ozs7d0JBS2dCLHFCQUFNLE1BQU0sQ0FBQyxJQUFJLEVBQUUsRUFBQTs7b0JBQTlCLFFBQVEsR0FBRyxTQUFtQjtvQkFDOUIsa0JBQWtCLFNBQUcsY0FBYyxhQUFkLGNBQWMsdUJBQWQsY0FBYyxDQUFFLGFBQWEsbUNBQUksTUFBTSxDQUFDLGdCQUFnQixDQUFDO29CQUM5RSxjQUFjLFNBQUcsY0FBYyxhQUFkLGNBQWMsdUJBQWQsY0FBYyxDQUFFLFNBQVMsbUNBQUksRUFBRSxDQUFDO29CQUNuRCxRQUFRLEdBQUcsS0FBSyxDQUFDO29CQUNmLFVBQVUsR0FJVixFQUFFLENBQUM7b0JBRUwsT0FBTyxHQUFHLElBQUksQ0FBQztvQkFDZixXQUFXLEdBQUcsQ0FBQyxDQUFDOzs7b0JBR1YsSUFBSSxHQUFHLGVBQWUsQ0FBQyxtQkFBbUIsRUFBRSxPQUFPLENBQUMsQ0FBQztvQkFDM0QsT0FBTyxHQUFHLEtBQUssQ0FBQztvQkFFVixXQUFXLEdBQUcsSUFBSSxDQUFDLG9CQUFvQixDQUFDLElBQUkscUJBQVMsQ0FBQyxJQUFJLENBQUMsQ0FBQyxDQUFDO29CQUU3RCxjQUFjLEdBQUcsSUFBSSwrQkFBYyxDQUFDLFdBQVcsQ0FBQyxPQUFPLEVBQUUsQ0FBQyxTQUFTLENBQUMsQ0FBQztvQkFDckUsWUFBWSxHQUFHLGNBQWMsQ0FBQyxTQUFTLEVBQUUsQ0FBQztvQkFDMUMsVUFBVSxHQUFHLHFCQUFTLENBQUMsVUFBVSxDQUFDLFlBQVksQ0FBQyxDQUFDO29CQUM5QixxQkFBTSxNQUFNLENBQUMsY0FBYyxDQUFDLFVBQVUsQ0FBQyxFQUFBOztvQkFBekQsZUFBZSxHQUFHLFNBQXVDO29CQUUvRCwwREFBMEQ7b0JBQzFELDBDQUEwQztvQkFDMUMsSUFBSSxlQUFlLENBQUMsT0FBTyxLQUFLLENBQUMsRUFBRTt3QkFDL0IsV0FBVyxFQUFFLENBQUM7d0JBQ2QsSUFBSSxXQUFXLElBQUksY0FBYyxFQUFFOzRCQUMvQixRQUFRLEdBQUcsSUFBSSxDQUFDO3lCQUNuQjtxQkFDSjt5QkFBTTt3QkFDSCxVQUFVLENBQUMsSUFBSSxDQUFDOzRCQUNaLE9BQU8sRUFBRSwyQkFBWSxDQUFDLFFBQVEsQ0FBQyxzQ0FBb0IsRUFBRSxZQUFZLEVBQUUsUUFBUSxDQUFDLFNBQVMsQ0FBQzs0QkFDdEYsSUFBSSxNQUFBOzRCQUNKLE9BQU8sRUFBRSxlQUFlLENBQUMsT0FBTzt5QkFDbkMsQ0FBQyxDQUFDO3dCQUVILElBQUksVUFBVSxDQUFDLE1BQU0sS0FBSyxrQkFBa0IsRUFBRTs0QkFDMUMsUUFBUSxHQUFHLElBQUksQ0FBQzt5QkFDbkI7cUJBQ0o7Ozt3QkFDSSxDQUFDLFFBQVE7O3dCQUVsQixzQkFBTyxVQUFVLEVBQUM7Ozs7Q0FDckI7QUEzREQsMEZBMkRDIn0=

@@ -37,6 +37,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.retrieveData = void 0;
+var IIndexationPayload_1 = require("../models/IIndexationPayload");
+var ITransactionPayload_1 = require("../models/ITransactionPayload");
 var converter_1 = require("../utils/converter");
 /**
  * Retrieve a data message.
@@ -54,16 +56,16 @@ function retrieveData(client, messageId) {
                     message = _a.sent();
                     if (message === null || message === void 0 ? void 0 : message.payload) {
                         indexationPayload = void 0;
-                        if (message.payload.type === 0) {
+                        if (message.payload.type === ITransactionPayload_1.TRANSACTION_PAYLOAD_TYPE) {
                             indexationPayload = message.payload.essence.payload;
                         }
-                        else if (message.payload.type === 2) {
+                        else if (message.payload.type === IIndexationPayload_1.INDEXATION_PAYLOAD_TYPE) {
                             indexationPayload = message.payload;
                         }
                         if (indexationPayload) {
                             return [2 /*return*/, {
                                     index: indexationPayload.index,
-                                    data: converter_1.Converter.hexToBytes(indexationPayload.data)
+                                    data: indexationPayload.data ? converter_1.Converter.hexToBytes(indexationPayload.data) : undefined
                                 }];
                         }
                     }
@@ -73,4 +75,4 @@ function retrieveData(client, messageId) {
     });
 }
 exports.retrieveData = retrieveData;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicmV0cmlldmVEYXRhLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vc3JjL2hpZ2hMZXZlbC9yZXRyaWV2ZURhdGEudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O0FBSUEsZ0RBQStDO0FBRS9DOzs7OztHQUtHO0FBQ0gsU0FBc0IsWUFBWSxDQUFDLE1BQWUsRUFBRSxTQUFpQjs7Ozs7d0JBSWpELHFCQUFNLE1BQU0sQ0FBQyxPQUFPLENBQUMsU0FBUyxDQUFDLEVBQUE7O29CQUF6QyxPQUFPLEdBQUcsU0FBK0I7b0JBRS9DLElBQUksT0FBTyxhQUFQLE9BQU8sdUJBQVAsT0FBTyxDQUFFLE9BQU8sRUFBRTt3QkFDZCxpQkFBaUIsU0FBZ0MsQ0FBQzt3QkFFdEQsSUFBSSxPQUFPLENBQUMsT0FBTyxDQUFDLElBQUksS0FBSyxDQUFDLEVBQUU7NEJBQzVCLGlCQUFpQixHQUFHLE9BQU8sQ0FBQyxPQUFPLENBQUMsT0FBTyxDQUFDLE9BQU8sQ0FBQzt5QkFDdkQ7NkJBQU0sSUFBSSxPQUFPLENBQUMsT0FBTyxDQUFDLElBQUksS0FBSyxDQUFDLEVBQUU7NEJBQ25DLGlCQUFpQixHQUFHLE9BQU8sQ0FBQyxPQUFPLENBQUM7eUJBQ3ZDO3dCQUVELElBQUksaUJBQWlCLEVBQUU7NEJBQ25CLHNCQUFPO29DQUNILEtBQUssRUFBRSxpQkFBaUIsQ0FBQyxLQUFLO29DQUM5QixJQUFJLEVBQUUscUJBQVMsQ0FBQyxVQUFVLENBQUMsaUJBQWlCLENBQUMsSUFBSSxDQUFDO2lDQUNyRCxFQUFDO3lCQUNMO3FCQUNKOzs7OztDQUNKO0FBdEJELG9DQXNCQyJ9
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicmV0cmlldmVEYXRhLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vc3JjL2hpZ2hMZXZlbC9yZXRyaWV2ZURhdGEudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O0FBR0EsbUVBQTJGO0FBQzNGLHFFQUF5RTtBQUN6RSxnREFBK0M7QUFFL0M7Ozs7O0dBS0c7QUFDSCxTQUFzQixZQUFZLENBQUMsTUFBZSxFQUFFLFNBQWlCOzs7Ozt3QkFJakQscUJBQU0sTUFBTSxDQUFDLE9BQU8sQ0FBQyxTQUFTLENBQUMsRUFBQTs7b0JBQXpDLE9BQU8sR0FBRyxTQUErQjtvQkFFL0MsSUFBSSxPQUFPLGFBQVAsT0FBTyx1QkFBUCxPQUFPLENBQUUsT0FBTyxFQUFFO3dCQUNkLGlCQUFpQixTQUFnQyxDQUFDO3dCQUV0RCxJQUFJLE9BQU8sQ0FBQyxPQUFPLENBQUMsSUFBSSxLQUFLLDhDQUF3QixFQUFFOzRCQUNuRCxpQkFBaUIsR0FBRyxPQUFPLENBQUMsT0FBTyxDQUFDLE9BQU8sQ0FBQyxPQUFPLENBQUM7eUJBQ3ZEOzZCQUFNLElBQUksT0FBTyxDQUFDLE9BQU8sQ0FBQyxJQUFJLEtBQUssNENBQXVCLEVBQUU7NEJBQ3pELGlCQUFpQixHQUFHLE9BQU8sQ0FBQyxPQUFPLENBQUM7eUJBQ3ZDO3dCQUVELElBQUksaUJBQWlCLEVBQUU7NEJBQ25CLHNCQUFPO29DQUNILEtBQUssRUFBRSxpQkFBaUIsQ0FBQyxLQUFLO29DQUM5QixJQUFJLEVBQUUsaUJBQWlCLENBQUMsSUFBSSxDQUFDLENBQUMsQ0FBQyxxQkFBUyxDQUFDLFVBQVUsQ0FBQyxpQkFBaUIsQ0FBQyxJQUFJLENBQUMsQ0FBQyxDQUFDLENBQUMsU0FBUztpQ0FDMUYsRUFBQzt5QkFDTDtxQkFDSjs7Ozs7Q0FDSjtBQXRCRCxvQ0FzQkMifQ==

@@ -2,8 +2,8 @@
 
 # Module: crypto/edwards25519/cachedGroupElement
 
-## Index
+## Table of contents
 
 ### Classes
 
-* [CachedGroupElement](../classes/crypto_edwards25519_cachedgroupelement.cachedgroupelement.md)
+- [CachedGroupElement](../classes/crypto/edwards25519/cachedgroupelement.cachedgroupelement.md)

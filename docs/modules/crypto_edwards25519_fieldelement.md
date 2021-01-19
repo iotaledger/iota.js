@@ -2,8 +2,8 @@
 
 # Module: crypto/edwards25519/fieldElement
 
-## Index
+## Table of contents
 
 ### Classes
 
-* [FieldElement](../classes/crypto_edwards25519_fieldelement.fieldelement.md)
+- [FieldElement](../classes/crypto/edwards25519/fieldelement.fieldelement.md)

@@ -2,17 +2,17 @@
 
 # Module: highLevel/retry
 
-## Index
+## Table of contents
 
 ### Functions
 
-* [retry](highlevel_retry.md#retry)
+- [retry](highlevel_retry.md#retry)
 
 ## Functions
 
 ### retry
 
-▸ **retry**(`client`: [*IClient*](../interfaces/models_iclient.iclient.md), `messageId`: *string*): *Promise*<{}\>
+▸ **retry**(`client`: [*IClient*](../interfaces/models/iclient.iclient.md), `messageId`: *string*): *Promise*<{}\>
 
 Retry an existing message either by promoting or reattaching.
 
@@ -20,7 +20,7 @@ Retry an existing message either by promoting or reattaching.
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`client` | [*IClient*](../interfaces/models_iclient.iclient.md) | The client to perform the retry with.   |
+`client` | [*IClient*](../interfaces/models/iclient.iclient.md) | The client to perform the retry with.   |
 `messageId` | *string* | The message to retry.   |
 
 **Returns:** *Promise*<{}\>

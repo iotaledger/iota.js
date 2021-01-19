@@ -2,8 +2,8 @@
 
 # Module: crypto/sha512
 
-## Index
+## Table of contents
 
 ### Classes
 
-* [Sha512](../classes/crypto_sha512.sha512.md)
+- [Sha512](../classes/crypto/sha512.sha512.md)

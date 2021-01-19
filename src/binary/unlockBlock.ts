@@ -8,9 +8,20 @@ import { WriteStream } from "../utils/writeStream";
 import { SMALL_TYPE_LENGTH, UINT16_SIZE } from "./common";
 import { deserializeSignature, MIN_SIGNATURE_LENGTH, serializeSignature } from "./signature";
 
+/**
+ * The minimum length of an unlock block binary representation.
+ */
 export const MIN_UNLOCK_BLOCK_LENGTH: number = SMALL_TYPE_LENGTH;
+
+/**
+ * The minimum length of a signature unlock block binary representation.
+ */
 export const MIN_SIGNATURE_UNLOCK_BLOCK_LENGTH: number =
     MIN_UNLOCK_BLOCK_LENGTH + MIN_SIGNATURE_LENGTH;
+
+/**
+ * The minimum length of a reference unlock block binary representation.
+ */
 export const MIN_REFERENCE_UNLOCK_BLOCK_LENGTH: number = MIN_UNLOCK_BLOCK_LENGTH + UINT16_SIZE;
 
 /**
@@ -74,9 +85,9 @@ export function deserializeUnlockBlock(readStream: ReadStream): IReferenceUnlock
 export function serializeUnlockBlock(writeStream: WriteStream,
     object: IReferenceUnlockBlock | ISignatureUnlockBlock): void {
     if (object.type === SIGNATURE_UNLOCK_BLOCK_TYPE) {
-        serializeSignatureUnlockBlock(writeStream, object as ISignatureUnlockBlock);
+        serializeSignatureUnlockBlock(writeStream, object);
     } else if (object.type === REFERENCE_UNLOCK_BLOCK_TYPE) {
-        serializeReferenceUnlockBlock(writeStream, object as IReferenceUnlockBlock);
+        serializeReferenceUnlockBlock(writeStream, object);
     } else {
         throw new Error(`Unrecognized unlock block type ${(object as ITypeBase<unknown>).type}`);
     }
@@ -101,7 +112,7 @@ export function deserializeSignatureUnlockBlock(readStream: ReadStream): ISignat
     const signature = deserializeSignature(readStream);
 
     return {
-        type: 0,
+        type: SIGNATURE_UNLOCK_BLOCK_TYPE,
         signature
     };
 }
@@ -136,7 +147,7 @@ export function deserializeReferenceUnlockBlock(readStream: ReadStream): IRefere
     const reference = readStream.readUInt16("referenceUnlockBlock.reference");
 
     return {
-        type: 1,
+        type: REFERENCE_UNLOCK_BLOCK_TYPE,
         reference
     };
 }

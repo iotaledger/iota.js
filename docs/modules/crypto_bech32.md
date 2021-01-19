@@ -2,8 +2,8 @@
 
 # Module: crypto/bech32
 
-## Index
+## Table of contents
 
 ### Classes
 
-* [Bech32](../classes/crypto_bech32.bech32.md)
+- [Bech32](../classes/crypto/bech32.bech32.md)

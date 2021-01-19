@@ -1,7 +1,7 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 import { deserializeAddress, deserializeEd25519Address, serializeAddress, serializeEd25519Address } from "../../src/binary/address";
-import { IEd25519Address } from "../../src/models/IEd25519Address";
+import { ED25519_ADDRESS_TYPE, IEd25519Address } from "../../src/models/IEd25519Address";
 import { Converter } from "../../src/utils/converter";
 import { ReadStream } from "../../src/utils/readStream";
 import { WriteStream } from "../../src/utils/writeStream";
@@ -9,7 +9,7 @@ import { WriteStream } from "../../src/utils/writeStream";
 describe("Binary Address", () => {
     test("Can serialize and deserialize address", () => {
         const object: IEd25519Address = {
-            type: 1,
+            type: ED25519_ADDRESS_TYPE,
             address: "6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
         };
 
@@ -24,7 +24,7 @@ describe("Binary Address", () => {
 
     test("Can serialize and deserialize ed25519 address", () => {
         const object: IEd25519Address = {
-            type: 1,
+            type: ED25519_ADDRESS_TYPE,
             address: "6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
         };
 

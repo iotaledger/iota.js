@@ -97,7 +97,10 @@ describe("Binary Message", () => {
         const payload = message.payload as IIndexationPayload;
         expect(payload.type).toEqual(2);
         expect(payload.index).toEqual("Foo");
-        expect(Converter.hexToAscii(payload.data)).toEqual("Bar");
+        expect(payload.data).toBeDefined();
+        if (payload.data) {
+            expect(Converter.hexToUtf8(payload.data)).toEqual("Bar");
+        }
         expect(message.nonce).toEqual("0");
     });
 
@@ -125,7 +128,10 @@ describe("Binary Message", () => {
         const payload = message.payload as IIndexationPayload;
         expect(payload.type).toEqual(2);
         expect(payload.index).toEqual("Foo");
-        expect(Converter.hexToAscii(payload.data)).toEqual("Bar");
+        expect(payload.data).toBeDefined();
+        if (payload.data) {
+            expect(Converter.hexToUtf8(payload.data)).toEqual("Bar");
+        }
         expect(message.nonce).toEqual("0");
     });
 

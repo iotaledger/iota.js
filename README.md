@@ -48,13 +48,11 @@ async function run() {
     console.log("\tVersion:", info.version);
     console.log("\tIs Healthy:", info.isHealthy);
     console.log("\tNetwork Id:", info.networkId);
-    console.log("\tCoordinator Public Key:", info.coordinatorPublicKey);
-    console.log("\tLatest Milestone Message Id:", info.latestMilestoneMessageId);
     console.log("\tLatest Milestone Index:", info.latestMilestoneIndex);
-    console.log("\tSolid Milestone Message Id:", info.solidMilestoneMessageId);
     console.log("\tSolid Milestone Index:", info.solidMilestoneIndex);
     console.log("\tPruning Index:", info.pruningIndex);
     console.log("\tFeatures:", info.features);
+    console.log("\tMin PoW Score:", info.minPowScore);
 }
 
 run()

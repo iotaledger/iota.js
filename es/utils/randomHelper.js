@@ -15,23 +15,19 @@ var RandomHelper = /** @class */ (function () {
      * @returns The random array.
      */
     RandomHelper.generate = function (length) {
-        var _a;
-        var randomBytes;
-        if ((_a = globalThis.crypto) === null || _a === void 0 ? void 0 : _a.getRandomValues) {
-            randomBytes = new Uint8Array(length);
-            globalThis.crypto.getRandomValues(randomBytes);
-        }
-        else if (typeof require !== "undefined") {
-            // eslint-disable-next-line @typescript-eslint/no-var-requires,@typescript-eslint/no-require-imports
-            var crypto_1 = require("crypto");
-            randomBytes = crypto_1.randomBytes(length);
+        if (process.env.BROWSER) {
+            var randomBytes = new Uint8Array(length);
+            window.crypto.getRandomValues(randomBytes);
+            return randomBytes;
+            // eslint-disable-next-line no-else-return
         }
         else {
-            throw new TypeError("No random method available");
+            // eslint-disable-next-line @typescript-eslint/no-var-requires,@typescript-eslint/no-require-imports
+            var crypto_1 = require("crypto");
+            return crypto_1.randomBytes(length);
         }
-        return randomBytes;
     };
     return RandomHelper;
 }());
 exports.RandomHelper = RandomHelper;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicmFuZG9tSGVscGVyLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vc3JjL3V0aWxzL3JhbmRvbUhlbHBlci50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiO0FBQUEsK0JBQStCO0FBQy9CLHNDQUFzQzs7O0FBRXRDOztHQUVHO0FBQ0g7SUFBQTtJQW9CQSxDQUFDO0lBbkJHOzs7O09BSUc7SUFDVyxxQkFBUSxHQUF0QixVQUF1QixNQUFjOztRQUNqQyxJQUFJLFdBQXVCLENBQUM7UUFDNUIsVUFBSSxVQUFVLENBQUMsTUFBTSwwQ0FBRSxlQUFlLEVBQUU7WUFDcEMsV0FBVyxHQUFHLElBQUksVUFBVSxDQUFDLE1BQU0sQ0FBQyxDQUFDO1lBQ3JDLFVBQVUsQ0FBQyxNQUFNLENBQUMsZUFBZSxDQUFDLFdBQVcsQ0FBQyxDQUFDO1NBQ2xEO2FBQU0sSUFBSSxPQUFPLE9BQU8sS0FBSyxXQUFXLEVBQUU7WUFDdkMsb0dBQW9HO1lBQ3BHLElBQU0sUUFBTSxHQUFHLE9BQU8sQ0FBQyxRQUFRLENBQUMsQ0FBQztZQUNqQyxXQUFXLEdBQUcsUUFBTSxDQUFDLFdBQVcsQ0FBQyxNQUFNLENBQUMsQ0FBQztTQUM1QzthQUFNO1lBQ0gsTUFBTSxJQUFJLFNBQVMsQ0FBQyw0QkFBNEIsQ0FBQyxDQUFDO1NBQ3JEO1FBQ0QsT0FBTyxXQUFXLENBQUM7SUFDdkIsQ0FBQztJQUNMLG1CQUFDO0FBQUQsQ0FBQyxBQXBCRCxJQW9CQztBQXBCWSxvQ0FBWSJ9
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicmFuZG9tSGVscGVyLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vc3JjL3V0aWxzL3JhbmRvbUhlbHBlci50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiO0FBQUEsK0JBQStCO0FBQy9CLHNDQUFzQzs7O0FBRXRDOztHQUVHO0FBQ0g7SUFBQTtJQWtCQSxDQUFDO0lBakJHOzs7O09BSUc7SUFDVyxxQkFBUSxHQUF0QixVQUF1QixNQUFjO1FBQ2pDLElBQUksT0FBTyxDQUFDLEdBQUcsQ0FBQyxPQUFPLEVBQUU7WUFDckIsSUFBTSxXQUFXLEdBQUcsSUFBSSxVQUFVLENBQUMsTUFBTSxDQUFDLENBQUM7WUFDM0MsTUFBTSxDQUFDLE1BQU0sQ0FBQyxlQUFlLENBQUMsV0FBVyxDQUFDLENBQUM7WUFDM0MsT0FBTyxXQUFXLENBQUM7WUFDdkIsMENBQTBDO1NBQ3pDO2FBQU07WUFDSCxvR0FBb0c7WUFDcEcsSUFBTSxRQUFNLEdBQUcsT0FBTyxDQUFDLFFBQVEsQ0FBQyxDQUFDO1lBQ2pDLE9BQU8sUUFBTSxDQUFDLFdBQVcsQ0FBQyxNQUFNLENBQWUsQ0FBQztTQUNuRDtJQUNMLENBQUM7SUFDTCxtQkFBQztBQUFELENBQUMsQUFsQkQsSUFrQkM7QUFsQlksb0NBQVkifQ==

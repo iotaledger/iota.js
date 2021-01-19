@@ -2,8 +2,8 @@
 
 # Module: crypto/edwards25519/preComputedGroupElement
 
-## Index
+## Table of contents
 
 ### Classes
 
-* [PreComputedGroupElement](../classes/crypto_edwards25519_precomputedgroupelement.precomputedgroupelement.md)
+- [PreComputedGroupElement](../classes/crypto/edwards25519/precomputedgroupelement.precomputedgroupelement.md)

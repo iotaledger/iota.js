@@ -5,7 +5,7 @@ import { ITypeBase } from "./ITypeBase";
 /**
  * The global type for the input.
  */
-export const UTXO_INPUT_TYPE: number = 0;
+export const UTXO_INPUT_TYPE = 0;
 
 /**
  * UTXO Transaction Input.

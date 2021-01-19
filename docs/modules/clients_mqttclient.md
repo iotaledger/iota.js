@@ -2,8 +2,8 @@
 
 # Module: clients/mqttClient
 
-## Index
+## Table of contents
 
 ### Classes
 
-* [MqttClient](../classes/clients_mqttclient.mqttclient.md)
+- [MqttClient](../classes/clients/mqttclient.mqttclient.md)

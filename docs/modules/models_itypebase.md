@@ -2,8 +2,8 @@
 
 # Module: models/ITypeBase
 
-## Index
+## Table of contents
 
 ### Interfaces
 
-* [ITypeBase](../interfaces/models_itypebase.itypebase.md)
+- [ITypeBase](../interfaces/models/itypebase.itypebase.md)

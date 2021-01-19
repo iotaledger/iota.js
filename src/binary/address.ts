@@ -6,7 +6,14 @@ import { ReadStream } from "../utils/readStream";
 import { WriteStream } from "../utils/writeStream";
 import { SMALL_TYPE_LENGTH } from "./common";
 
+/**
+ * The minimum length of an address binary representation.
+ */
 export const MIN_ADDRESS_LENGTH: number = SMALL_TYPE_LENGTH;
+
+/**
+ * The minimum length of an ed25519 address binary representation.
+ */
 export const MIN_ED25519_ADDRESS_LENGTH: number = MIN_ADDRESS_LENGTH + Ed25519Address.ADDRESS_LENGTH;
 
 /**
@@ -64,7 +71,7 @@ export function deserializeEd25519Address(readStream: ReadStream): IEd25519Addre
     const address = readStream.readFixedHex("ed25519Address.address", Ed25519Address.ADDRESS_LENGTH);
 
     return {
-        type: 1,
+        type: ED25519_ADDRESS_TYPE,
         address
     };
 }

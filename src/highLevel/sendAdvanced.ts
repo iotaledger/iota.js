@@ -2,18 +2,21 @@
 // SPDX-License-Identifier: Apache-2.0
 import { serializeInput } from "../binary/input";
 import { serializeOutput } from "../binary/output";
-import { MAX_INDEXATION_KEY_LENGTH } from "../binary/payload";
+import { MAX_INDEXATION_KEY_LENGTH, MIN_INDEXATION_KEY_LENGTH } from "../binary/payload";
 import { serializeTransactionEssence } from "../binary/transaction";
 import { Ed25519 } from "../crypto/ed25519";
 import { IClient } from "../models/IClient";
 import { ED25519_ADDRESS_TYPE } from "../models/IEd25519Address";
+import { ED25519_SIGNATURE_TYPE } from "../models/IEd25519Signature";
+import { INDEXATION_PAYLOAD_TYPE } from "../models/IIndexationPayload";
 import { IKeyPair } from "../models/IKeyPair";
 import { IMessage } from "../models/IMessage";
-import { IReferenceUnlockBlock } from "../models/IReferenceUnlockBlock";
-import { ISigLockedSingleOutput } from "../models/ISigLockedSingleOutput";
-import { ISignatureUnlockBlock } from "../models/ISignatureUnlockBlock";
-import { ITransactionEssence } from "../models/ITransactionEssence";
-import { ITransactionPayload } from "../models/ITransactionPayload";
+import { IReferenceUnlockBlock, REFERENCE_UNLOCK_BLOCK_TYPE } from "../models/IReferenceUnlockBlock";
+import { ISigLockedDustAllowanceOutput, SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE } from "../models/ISigLockedDustAllowanceOutput";
+import { ISigLockedSingleOutput, SIG_LOCKED_SINGLE_OUTPUT_TYPE } from "../models/ISigLockedSingleOutput";
+import { ISignatureUnlockBlock, SIGNATURE_UNLOCK_BLOCK_TYPE } from "../models/ISignatureUnlockBlock";
+import { ITransactionEssence, TRANSACTION_ESSENCE_TYPE } from "../models/ITransactionEssence";
+import { ITransactionPayload, TRANSACTION_PAYLOAD_TYPE } from "../models/ITransactionPayload";
 import { IUTXOInput } from "../models/IUTXOInput";
 import { Converter } from "../utils/converter";
 import { WriteStream } from "../utils/writeStream";
@@ -23,8 +26,9 @@ import { WriteStream } from "../utils/writeStream";
  * @param client The client to send the transfer with.
  * @param inputsAndSignatureKeyPairs The inputs with the signature key pairs needed to sign transfers.
  * @param outputs The outputs to send.
- * @param indexationKey Optional indexation key.
- * @param indexationData Optional index data.
+ * @param indexation Optional indexation data to associate with the transaction.
+ * @param indexation.key Indexation key.
+ * @param indexation.data Optional index data.
  * @returns The id of the message created and the remainder address if one was needed.
  */
 export async function sendAdvanced(
@@ -33,14 +37,21 @@ export async function sendAdvanced(
         input: IUTXOInput;
         addressKeyPair: IKeyPair;
     }[],
-    outputs: { address: string; addressType: number; amount: number }[],
-    indexationKey?: string,
-    indexationData?: Uint8Array): Promise<{
+    outputs: {
+        address: string;
+        addressType: number;
+        amount: number;
+        isDustAllowance?: boolean;
+    }[],
+    indexation?: {
+        key: string;
+        data?: Uint8Array;
+    }): Promise<{
         messageId: string;
         message: IMessage;
     }> {
     const transactionPayload = buildTransactionPayload(
-        inputsAndSignatureKeyPairs, outputs, indexationKey, indexationData);
+        inputsAndSignatureKeyPairs, outputs, indexation);
 
     const tipsResponse = await client.tips();
 
@@ -61,8 +72,9 @@ export async function sendAdvanced(
  * Build a transaction payload.
  * @param inputsAndSignatureKeyPairs The inputs with the signature key pairs needed to sign transfers.
  * @param outputs The outputs to send.
- * @param indexationKey Optional indexation key.
- * @param indexationData Optional index data.
+ * @param indexation Optional indexation data to associate with the transaction.
+ * @param indexation.key Indexation key.
+ * @param indexation.data Optional index data.
  * @returns The transaction payload.
  */
 export function buildTransactionPayload(
@@ -70,39 +82,53 @@ export function buildTransactionPayload(
         input: IUTXOInput;
         addressKeyPair: IKeyPair;
     }[],
-    outputs: { address: string; addressType: number; amount: number }[],
-    indexationKey?: string,
-    indexationData?: Uint8Array): ITransactionPayload {
+    outputs: {
+        address: string;
+        addressType: number;
+        amount: number;
+        isDustAllowance?: boolean;
+    }[],
+    indexation?: {
+        key: string;
+        data?: Uint8Array;
+    }): ITransactionPayload {
     if (!inputsAndSignatureKeyPairs || inputsAndSignatureKeyPairs.length === 0) {
         throw new Error("You must specify some inputs");
     }
     if (!outputs || outputs.length === 0) {
         throw new Error("You must specify some outputs");
     }
-    if (indexationKey && indexationKey.length > MAX_INDEXATION_KEY_LENGTH) {
-        throw new Error(`The indexation key length is ${indexationKey.length
-            }, which exceeds the maximum size of ${MAX_INDEXATION_KEY_LENGTH}`);
+    if (indexation?.key) {
+        if (indexation.key.length < MIN_INDEXATION_KEY_LENGTH) {
+            throw new Error(`The indexation key length is ${indexation.key.length
+                }, which is below the minimum size of ${MIN_INDEXATION_KEY_LENGTH}`);
+        }
+
+        if (indexation.key.length > MAX_INDEXATION_KEY_LENGTH) {
+            throw new Error(`The indexation key length is ${indexation.key.length
+                }, which exceeds the maximum size of ${MAX_INDEXATION_KEY_LENGTH}`);
+        }
     }
 
     const outputsWithSerialization: {
-        output: ISigLockedSingleOutput;
+        output: ISigLockedSingleOutput | ISigLockedDustAllowanceOutput;
         serialized: string;
     }[] = [];
 
     for (const output of outputs) {
         if (output.addressType === ED25519_ADDRESS_TYPE) {
-            const sigLockedOutput: ISigLockedSingleOutput = {
-                type: 0,
+            const o: ISigLockedSingleOutput | ISigLockedDustAllowanceOutput = {
+                type: output.isDustAllowance ? SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE : SIG_LOCKED_SINGLE_OUTPUT_TYPE,
                 address: {
-                    type: 1,
+                    type: output.addressType,
                     address: output.address
                 },
                 amount: output.amount
             };
             const writeStream = new WriteStream();
-            serializeOutput(writeStream, sigLockedOutput);
+            serializeOutput(writeStream, o);
             outputsWithSerialization.push({
-                output: sigLockedOutput,
+                output: o,
                 serialized: writeStream.finalHex()
             });
         } else {
@@ -128,14 +154,14 @@ export function buildTransactionPayload(
     const sortedOutputs = outputsWithSerialization.sort((a, b) => a.serialized.localeCompare(b.serialized));
 
     const transactionEssence: ITransactionEssence = {
-        type: 0,
+        type: TRANSACTION_ESSENCE_TYPE,
         inputs: sortedInputs.map(i => i.input),
         outputs: sortedOutputs.map(o => o.output),
-        payload: indexationKey
+        payload: indexation
             ? {
-                type: 2,
-                index: indexationKey,
-                data: indexationData ? Converter.bytesToHex(indexationData) : ""
+                type: INDEXATION_PAYLOAD_TYPE,
+                index: indexation.key,
+                data: indexation.data ? Converter.bytesToHex(indexation.data) : ""
             }
             : undefined
     };
@@ -157,14 +183,14 @@ export function buildTransactionPayload(
         const hexInputAddressPublic = Converter.bytesToHex(input.addressKeyPair.publicKey);
         if (addressToUnlockBlock[hexInputAddressPublic]) {
             unlockBlocks.push({
-                type: 1,
+                type: REFERENCE_UNLOCK_BLOCK_TYPE,
                 reference: addressToUnlockBlock[hexInputAddressPublic].unlockIndex
             });
         } else {
             unlockBlocks.push({
-                type: 0,
+                type: SIGNATURE_UNLOCK_BLOCK_TYPE,
                 signature: {
-                    type: 1,
+                    type: ED25519_SIGNATURE_TYPE,
                     publicKey: hexInputAddressPublic,
                     signature: Converter.bytesToHex(
                         Ed25519.sign(input.addressKeyPair.privateKey, essenceFinal)
@@ -179,7 +205,7 @@ export function buildTransactionPayload(
     }
 
     const transactionPayload: ITransactionPayload = {
-        type: 0,
+        type: TRANSACTION_PAYLOAD_TYPE,
         essence: transactionEssence,
         unlockBlocks
     };

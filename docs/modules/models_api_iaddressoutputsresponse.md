@@ -2,8 +2,8 @@
 
 # Module: models/api/IAddressOutputsResponse
 
-## Index
+## Table of contents
 
 ### Interfaces
 
-* [IAddressOutputsResponse](../interfaces/models_api_iaddressoutputsresponse.iaddressoutputsresponse.md)
+- [IAddressOutputsResponse](../interfaces/models/api/iaddressoutputsresponse.iaddressoutputsresponse.md)

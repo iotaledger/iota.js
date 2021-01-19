@@ -5,7 +5,7 @@ import { ITypeBase } from "./ITypeBase";
 /**
  * The global type for the payload.
  */
-export declare const TRANSACTION_PAYLOAD_TYPE: number;
+export declare const TRANSACTION_PAYLOAD_TYPE = 0;
 /**
  * Transaction payload.
  */

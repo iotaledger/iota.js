@@ -2,7 +2,7 @@ import { ITypeBase } from "./ITypeBase";
 /**
  * The global type for the unlock block.
  */
-export declare const REFERENCE_UNLOCK_BLOCK_TYPE: number;
+export declare const REFERENCE_UNLOCK_BLOCK_TYPE = 1;
 /**
  * Reference unlock block.
  */

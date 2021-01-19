@@ -5,18 +5,18 @@ import { Converter } from "../../src/utils/converter";
 import testData from "./testData/hmacSha512.json";
 
 describe("HmacSha512", () => {
-    test("Can perform a hmac on short ascii", () => {
-        const hmacSha512 = new HmacSha512(Converter.asciiToBytes("mykey"));
-        hmacSha512.update(Converter.asciiToBytes("abc"));
+    test("Can perform a hmac on short text", () => {
+        const hmacSha512 = new HmacSha512(Converter.utf8ToBytes("mykey"));
+        hmacSha512.update(Converter.utf8ToBytes("abc"));
         const digest2 = hmacSha512.digest();
         expect(Converter.bytesToHex(digest2))
             // eslint-disable-next-line max-len
             .toEqual("1facfdf577f1ab50db6c9b274a62024884d8c5e8484b4f5852e00e7acb2d96a83c70ed8c6acced4b2251472dbcea195bce4016af968320c1f7bdf3cdb3549ecf");
     });
 
-    test("Can perform a hmac on empty ascii", () => {
-        const hmacSha512 = new HmacSha512(Converter.asciiToBytes("mykey"));
-        hmacSha512.update(Converter.asciiToBytes(""));
+    test("Can perform a hmac on empty text", () => {
+        const hmacSha512 = new HmacSha512(Converter.utf8ToBytes("mykey"));
+        hmacSha512.update(Converter.utf8ToBytes(""));
         const digest2 = hmacSha512.digest();
         expect(Converter.bytesToHex(digest2))
             // eslint-disable-next-line max-len
@@ -24,8 +24,8 @@ describe("HmacSha512", () => {
     });
 
     test("Can perform a hmac on sentence", () => {
-        const hmacSha512 = new HmacSha512(Converter.asciiToBytes("mykey"));
-        hmacSha512.update(Converter.asciiToBytes("The quick brown fox jumps over the lazy dog"));
+        const hmacSha512 = new HmacSha512(Converter.utf8ToBytes("mykey"));
+        hmacSha512.update(Converter.utf8ToBytes("The quick brown fox jumps over the lazy dog"));
         const digest2 = hmacSha512.digest();
         expect(Converter.bytesToHex(digest2))
             // eslint-disable-next-line max-len

@@ -2,20 +2,20 @@
 
 # Module: models/ITransactionPayload
 
-## Index
+## Table of contents
 
 ### Interfaces
 
-* [ITransactionPayload](../interfaces/models_itransactionpayload.itransactionpayload.md)
+- [ITransactionPayload](../interfaces/models/itransactionpayload.itransactionpayload.md)
 
 ### Variables
 
-* [TRANSACTION\_PAYLOAD\_TYPE](models_itransactionpayload.md#transaction_payload_type)
+- [TRANSACTION\_PAYLOAD\_TYPE](models_itransactionpayload.md#transaction_payload_type)
 
 ## Variables
 
 ### TRANSACTION\_PAYLOAD\_TYPE
 
-• `Const` **TRANSACTION\_PAYLOAD\_TYPE**: *number*= 0
+• `Const` **TRANSACTION\_PAYLOAD\_TYPE**: *0*= 0
 
 The global type for the payload.

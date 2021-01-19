@@ -2,8 +2,8 @@
 
 # Module: crypto/edwards25519/projectiveGroupElement
 
-## Index
+## Table of contents
 
 ### Classes
 
-* [ProjectiveGroupElement](../classes/crypto_edwards25519_projectivegroupelement.projectivegroupelement.md)
+- [ProjectiveGroupElement](../classes/crypto/edwards25519/projectivegroupelement.projectivegroupelement.md)

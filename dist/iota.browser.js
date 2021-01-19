@@ -1,7 +1,7 @@
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('crypto'), require('mqtt')) :
-	typeof define === 'function' && define.amd ? define(['crypto', 'mqtt'], factory) :
-	(global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.Iota = factory(global.crypto, global.mqtt));
+	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('big-integer'), require('mqtt')) :
+	typeof define === 'function' && define.amd ? define(['big-integer', 'mqtt'], factory) :
+	(global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.Iota = factory(global['big-integer'], global.mqtt));
 }(this, (function (require$$0, require$$0$1) { 'use strict';
 
 	function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
@@ -15,28 +15,26 @@
 		return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, 'default') ? x['default'] : x;
 	}
 
-	function getAugmentedNamespace(n) {
-		if (n.__esModule) return n;
-		var a = Object.defineProperty({}, '__esModule', {value: true});
-		Object.keys(n).forEach(function (k) {
-			var d = Object.getOwnPropertyDescriptor(n, k);
-			Object.defineProperty(a, k, d.get ? d : {
-				enumerable: true,
-				get: function () {
-					return n[k];
-				}
-			});
-		});
-		return a;
+	function createCommonjsModule(fn, basedir, module) {
+		return module = {
+			path: basedir,
+			exports: {},
+			require: function (path, base) {
+				return commonjsRequire(path, (base === undefined || base === null) ? module.path : base);
+			}
+		}, fn(module, module.exports), module.exports;
 	}
 
-	function createCommonjsModule(fn) {
-	  var module = { exports: {} };
-		return fn(module, module.exports), module.exports;
+	function commonjsRequire () {
+		throw new Error('Dynamic requires are not currently supported by @rollup/plugin-commonjs');
 	}
 
-	function commonjsRequire (target) {
-		throw new Error('Could not dynamically require "' + target + '". Please configure the dynamicRequireTargets option of @rollup/plugin-commonjs appropriately for this require call to behave properly.');
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
+	// BigInt
+	if (!window.BigInt) {
+	    // eslint-disable-next-line @typescript-eslint/no-require-imports
+	    window.BigInt = require$$0__default['default'];
 	}
 
 	var blake2b = createCommonjsModule(function (module, exports) {
@@ -367,7 +365,7 @@
 	    /**
 	     * Are the two array equals.
 	     * @param array1 The first array.
-	     * @param array2 The second arry.
+	     * @param array2 The second array.
 	     * @returns True if the arrays are equal.
 	     */
 	    ArrayHelper.equal = function (array1, array2) {
@@ -447,16 +445,49 @@
 	// Copyright 2020 IOTA Stiftung
 	// SPDX-License-Identifier: Apache-2.0
 
+	/**
+	 * Byte length for a byte field.
+	 */
 	exports.BYTE_SIZE = 1;
+	/**
+	 * Byte length for a uint16 field.
+	 */
 	exports.UINT16_SIZE = 2;
+	/**
+	 * Byte length for a uint32 field.
+	 */
 	exports.UINT32_SIZE = 4;
+	/**
+	 * Byte length for a uint64 field.
+	 */
 	exports.UINT64_SIZE = 8;
+	/**
+	 * Byte length for a message id.
+	 */
 	exports.MESSAGE_ID_LENGTH = blake2b.Blake2b.SIZE_256;
+	/**
+	 * Byte length for a transaction id.
+	 */
 	exports.TRANSACTION_ID_LENGTH = blake2b.Blake2b.SIZE_256;
+	/**
+	 * Byte length for a merkle prrof.
+	 */
 	exports.MERKLE_PROOF_LENGTH = blake2b.Blake2b.SIZE_256;
+	/**
+	 * Byte length for a type length.
+	 */
 	exports.TYPE_LENGTH = exports.UINT32_SIZE;
+	/**
+	 * Byte length for a small type length.
+	 */
 	exports.SMALL_TYPE_LENGTH = exports.BYTE_SIZE;
+	/**
+	 * Byte length for a string length.
+	 */
 	exports.STRING_LENGTH = exports.UINT16_SIZE;
+	/**
+	 * Byte length for an array length.
+	 */
 	exports.ARRAY_LENGTH = exports.UINT16_SIZE;
 
 	});
@@ -469,7 +500,13 @@
 
 
 
+	/**
+	 * The minimum length of an address binary representation.
+	 */
 	exports.MIN_ADDRESS_LENGTH = common.SMALL_TYPE_LENGTH;
+	/**
+	 * The minimum length of an ed25519 address binary representation.
+	 */
 	exports.MIN_ED25519_ADDRESS_LENGTH = exports.MIN_ADDRESS_LENGTH + ed25519Address.Ed25519Address.ADDRESS_LENGTH;
 	/**
 	 * Deserialize the address from binary.
@@ -520,7 +557,7 @@
 	    }
 	    var address = readStream.readFixedHex("ed25519Address.address", ed25519Address.Ed25519Address.ADDRESS_LENGTH);
 	    return {
-	        type: 1,
+	        type: IEd25519Address.ED25519_ADDRESS_TYPE,
 	        address: address
 	    };
 	}
@@ -550,11 +587,21 @@
 
 	var input = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.serializeUTXOInput = exports.deserializeUTXOInput = exports.serializeInput = exports.deserializeInput = exports.serializeInputs = exports.deserializeInputs = exports.MIN_UTXO_INPUT_LENGTH = exports.MIN_INPUT_LENGTH = void 0;
+	exports.serializeUTXOInput = exports.deserializeUTXOInput = exports.serializeInput = exports.deserializeInput = exports.serializeInputs = exports.deserializeInputs = exports.MAX_INPUT_COUNT = exports.MIN_UTXO_INPUT_LENGTH = exports.MIN_INPUT_LENGTH = void 0;
 
 
+	/**
+	 * The minimum length of an input binary representation.
+	 */
 	exports.MIN_INPUT_LENGTH = common.SMALL_TYPE_LENGTH;
+	/**
+	 * The minimum length of a utxo input binary representation.
+	 */
 	exports.MIN_UTXO_INPUT_LENGTH = exports.MIN_INPUT_LENGTH + common.TRANSACTION_ID_LENGTH + common.UINT16_SIZE;
+	/**
+	 * The maximum number of inputs.
+	 */
+	exports.MAX_INPUT_COUNT = 127;
 	/**
 	 * Deserialize the inputs from binary.
 	 * @param readStream The stream to read the data from.
@@ -575,6 +622,9 @@
 	 * @param objects The objects to serialize.
 	 */
 	function serializeInputs(writeStream, objects) {
+	    if (objects.length > exports.MAX_INPUT_COUNT) {
+	        throw new Error("The maximum number of inputs is " + exports.MAX_INPUT_COUNT + ", you have provided " + objects.length);
+	    }
 	    writeStream.writeUInt16("inputs.numInputs", objects.length);
 	    for (var i = 0; i < objects.length; i++) {
 	        serializeInput(writeStream, objects[i]);
@@ -631,7 +681,7 @@
 	    var transactionId = readStream.readFixedHex("utxoInput.transactionId", common.TRANSACTION_ID_LENGTH);
 	    var transactionOutputIndex = readStream.readUInt16("utxoInput.transactionOutputIndex");
 	    return {
-	        type: 0,
+	        type: IUTXOInput.UTXO_INPUT_TYPE,
 	        transactionId: transactionId,
 	        transactionOutputIndex: transactionOutputIndex
 	    };
@@ -1327,21 +1377,12 @@
 	     * @returns The random array.
 	     */
 	    RandomHelper.generate = function (length) {
-	        var _a;
-	        var randomBytes;
-	        if ((_a = globalThis.crypto) === null || _a === void 0 ? void 0 : _a.getRandomValues) {
-	            randomBytes = new Uint8Array(length);
-	            globalThis.crypto.getRandomValues(randomBytes);
+	        {
+	            var randomBytes = new Uint8Array(length);
+	            window.crypto.getRandomValues(randomBytes);
+	            return randomBytes;
+	            // eslint-disable-next-line no-else-return
 	        }
-	        else if (typeof commonjsRequire !== "undefined") {
-	            // eslint-disable-next-line @typescript-eslint/no-var-requires,@typescript-eslint/no-require-imports
-	            var crypto_1 = require$$0__default['default'];
-	            randomBytes = crypto_1.randomBytes(length);
-	        }
-	        else {
-	            throw new TypeError("No random method available");
-	        }
-	        return randomBytes;
 	    };
 	    return RandomHelper;
 	}());
@@ -4130,6 +4171,16 @@
 
 	});
 
+	var ISigLockedDustAllowanceOutput = createCommonjsModule(function (module, exports) {
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE = void 0;
+	/**
+	 * The global type for the sig locked dust allowance output.
+	 */
+	exports.SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE = 1;
+
+	});
+
 	var ISigLockedSingleOutput = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.SIG_LOCKED_SINGLE_OUTPUT_TYPE = void 0;
@@ -4142,14 +4193,29 @@
 
 	var output = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.serializeSigLockedSingleOutput = exports.deserializeSigLockedSingleOutput = exports.serializeOutput = exports.deserializeOutput = exports.serializeOutputs = exports.deserializeOutputs = exports.MIN_SIG_LOCKED_OUTPUT_LENGTH = exports.MIN_OUTPUT_LENGTH = void 0;
+	exports.serializeSigLockedDustAllowanceOutput = exports.deserializeSigLockedDustAllowanceOutput = exports.serializeSigLockedSingleOutput = exports.deserializeSigLockedSingleOutput = exports.serializeOutput = exports.deserializeOutput = exports.serializeOutputs = exports.deserializeOutputs = exports.MAX_OUTPUT_COUNT = exports.MIN_SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_LENGTH = exports.MIN_SIG_LOCKED_SINGLE_OUTPUT_LENGTH = exports.MIN_OUTPUT_LENGTH = void 0;
 	// Copyright 2020 IOTA Stiftung
 	// SPDX-License-Identifier: Apache-2.0
 
 
 
+
+	/**
+	 * The minimum length of an output binary representation.
+	 */
 	exports.MIN_OUTPUT_LENGTH = common.SMALL_TYPE_LENGTH;
-	exports.MIN_SIG_LOCKED_OUTPUT_LENGTH = exports.MIN_OUTPUT_LENGTH + address.MIN_ADDRESS_LENGTH + address.MIN_ED25519_ADDRESS_LENGTH;
+	/**
+	 * The minimum length of a sig locked single output binary representation.
+	 */
+	exports.MIN_SIG_LOCKED_SINGLE_OUTPUT_LENGTH = exports.MIN_OUTPUT_LENGTH + address.MIN_ADDRESS_LENGTH + address.MIN_ED25519_ADDRESS_LENGTH;
+	/**
+	 * The minimum length of a sig locked dust allowance output binary representation.
+	 */
+	exports.MIN_SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_LENGTH = exports.MIN_OUTPUT_LENGTH + address.MIN_ADDRESS_LENGTH + address.MIN_ED25519_ADDRESS_LENGTH;
+	/**
+	 * The maximum number of outputs.
+	 */
+	exports.MAX_OUTPUT_COUNT = 127;
 	/**
 	 * Deserialize the outputs from binary.
 	 * @param readStream The stream to read the data from.
@@ -4170,6 +4236,9 @@
 	 * @param objects The objects to serialize.
 	 */
 	function serializeOutputs(writeStream, objects) {
+	    if (objects.length > exports.MAX_OUTPUT_COUNT) {
+	        throw new Error("The maximum number of outputs is " + exports.MAX_OUTPUT_COUNT + ", you have provided " + objects.length);
+	    }
 	    writeStream.writeUInt16("outputs.numOutputs", objects.length);
 	    for (var i = 0; i < objects.length; i++) {
 	        serializeOutput(writeStream, objects[i]);
@@ -4190,6 +4259,9 @@
 	    if (type === ISigLockedSingleOutput.SIG_LOCKED_SINGLE_OUTPUT_TYPE) {
 	        input = deserializeSigLockedSingleOutput(readStream);
 	    }
+	    else if (type === ISigLockedDustAllowanceOutput.SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE) {
+	        input = deserializeSigLockedDustAllowanceOutput(readStream);
+	    }
 	    else {
 	        throw new Error("Unrecognized output type " + type);
 	    }
@@ -4205,6 +4277,9 @@
 	    if (object.type === ISigLockedSingleOutput.SIG_LOCKED_SINGLE_OUTPUT_TYPE) {
 	        serializeSigLockedSingleOutput(writeStream, object);
 	    }
+	    else if (object.type === ISigLockedDustAllowanceOutput.SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE) {
+	        serializeSigLockedDustAllowanceOutput(writeStream, object);
+	    }
 	    else {
 	        throw new Error("Unrecognized output type " + object.type);
 	    }
@@ -4216,8 +4291,8 @@
 	 * @returns The deserialized object.
 	 */
 	function deserializeSigLockedSingleOutput(readStream) {
-	    if (!readStream.hasRemaining(exports.MIN_SIG_LOCKED_OUTPUT_LENGTH)) {
-	        throw new Error("Signature Locked Single Output data is " + readStream.length() + " in length which is less than the minimimum size required of " + exports.MIN_SIG_LOCKED_OUTPUT_LENGTH);
+	    if (!readStream.hasRemaining(exports.MIN_SIG_LOCKED_SINGLE_OUTPUT_LENGTH)) {
+	        throw new Error("Signature Locked Single Output data is " + readStream.length() + " in length which is less than the minimimum size required of " + exports.MIN_SIG_LOCKED_SINGLE_OUTPUT_LENGTH);
 	    }
 	    var type = readStream.readByte("sigLockedSingleOutput.type");
 	    if (type !== ISigLockedSingleOutput.SIG_LOCKED_SINGLE_OUTPUT_TYPE) {
@@ -4226,7 +4301,7 @@
 	    var address$1 = address.deserializeAddress(readStream);
 	    var amount = readStream.readUInt64("sigLockedSingleOutput.amount");
 	    return {
-	        type: 0,
+	        type: ISigLockedSingleOutput.SIG_LOCKED_SINGLE_OUTPUT_TYPE,
 	        address: address$1,
 	        amount: Number(amount)
 	    };
@@ -4243,6 +4318,39 @@
 	    writeStream.writeUInt64("sigLockedSingleOutput.amount", BigInt(object.amount));
 	}
 	exports.serializeSigLockedSingleOutput = serializeSigLockedSingleOutput;
+	/**
+	 * Deserialize the signature locked dust allowance output from binary.
+	 * @param readStream The stream to read the data from.
+	 * @returns The deserialized object.
+	 */
+	function deserializeSigLockedDustAllowanceOutput(readStream) {
+	    if (!readStream.hasRemaining(exports.MIN_SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_LENGTH)) {
+	        throw new Error("Signature Locked Dust Allowance Output data is " + readStream.length() + " in length which is less than the minimimum size required of " + exports.MIN_SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_LENGTH);
+	    }
+	    var type = readStream.readByte("sigLockedDustAllowanceOutput.type");
+	    if (type !== ISigLockedDustAllowanceOutput.SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE) {
+	        throw new Error("Type mismatch in sigLockedDustAllowanceOutput " + type);
+	    }
+	    var address$1 = address.deserializeAddress(readStream);
+	    var amount = readStream.readUInt64("sigLockedDustAllowanceOutput.amount");
+	    return {
+	        type: ISigLockedDustAllowanceOutput.SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE,
+	        address: address$1,
+	        amount: Number(amount)
+	    };
+	}
+	exports.deserializeSigLockedDustAllowanceOutput = deserializeSigLockedDustAllowanceOutput;
+	/**
+	 * Serialize the signature locked dust allowance output to binary.
+	 * @param writeStream The stream to write the data to.
+	 * @param object The object to serialize.
+	 */
+	function serializeSigLockedDustAllowanceOutput(writeStream, object) {
+	    writeStream.writeByte("sigLockedDustAllowanceOutput.type", object.type);
+	    address.serializeAddress(writeStream, object.address);
+	    writeStream.writeUInt64("sigLockedDustAllowanceOutput.amount", BigInt(object.amount));
+	}
+	exports.serializeSigLockedDustAllowanceOutput = serializeSigLockedDustAllowanceOutput;
 
 	});
 
@@ -4257,6 +4365,9 @@
 
 
 
+	/**
+	 * The minimum length of a transaction essence binary representation.
+	 */
 	exports.MIN_TRANSACTION_ESSENCE_LENGTH = common.SMALL_TYPE_LENGTH + (2 * common.ARRAY_LENGTH) + common.UINT32_SIZE;
 	/**
 	 * Deserialize the transaction essence from binary.
@@ -4278,7 +4389,7 @@
 	        throw new Error("Transaction essence can only contain embedded Indexation Payload");
 	    }
 	    return {
-	        type: 0,
+	        type: ITransactionEssence.TRANSACTION_ESSENCE_TYPE,
 	        inputs: inputs,
 	        outputs: outputs,
 	        payload: payload$1
@@ -4338,7 +4449,13 @@
 
 
 
+	/**
+	 * The minimum length of a signature binary representation.
+	 */
 	exports.MIN_SIGNATURE_LENGTH = common.SMALL_TYPE_LENGTH;
+	/**
+	 * The minimum length of an ed25519 signature binary representation.
+	 */
 	exports.MIN_ED25519_SIGNATURE_LENGTH = exports.MIN_SIGNATURE_LENGTH + ed25519.Ed25519.SIGNATURE_SIZE + ed25519.Ed25519.PUBLIC_KEY_SIZE;
 	/**
 	 * Deserialize the signature from binary.
@@ -4390,7 +4507,7 @@
 	    var publicKey = readStream.readFixedHex("ed25519Signature.publicKey", ed25519.Ed25519.PUBLIC_KEY_SIZE);
 	    var signature = readStream.readFixedHex("ed25519Signature.signature", ed25519.Ed25519.SIGNATURE_SIZE);
 	    return {
-	        type: 1,
+	        type: IEd25519Signature.ED25519_SIGNATURE_TYPE,
 	        publicKey: publicKey,
 	        signature: signature
 	    };
@@ -4419,8 +4536,17 @@
 
 
 
+	/**
+	 * The minimum length of an unlock block binary representation.
+	 */
 	exports.MIN_UNLOCK_BLOCK_LENGTH = common.SMALL_TYPE_LENGTH;
+	/**
+	 * The minimum length of a signature unlock block binary representation.
+	 */
 	exports.MIN_SIGNATURE_UNLOCK_BLOCK_LENGTH = exports.MIN_UNLOCK_BLOCK_LENGTH + signature.MIN_SIGNATURE_LENGTH;
+	/**
+	 * The minimum length of a reference unlock block binary representation.
+	 */
 	exports.MIN_REFERENCE_UNLOCK_BLOCK_LENGTH = exports.MIN_UNLOCK_BLOCK_LENGTH + common.UINT16_SIZE;
 	/**
 	 * Deserialize the unlock blocks from binary.
@@ -4503,7 +4629,7 @@
 	    }
 	    var signature$1 = signature.deserializeSignature(readStream);
 	    return {
-	        type: 0,
+	        type: ISignatureUnlockBlock.SIGNATURE_UNLOCK_BLOCK_TYPE,
 	        signature: signature$1
 	    };
 	}
@@ -4533,7 +4659,7 @@
 	    }
 	    var reference = readStream.readUInt16("referenceUnlockBlock.reference");
 	    return {
-	        type: 1,
+	        type: IReferenceUnlockBlock.REFERENCE_UNLOCK_BLOCK_TYPE,
 	        reference: reference
 	    };
 	}
@@ -4553,7 +4679,7 @@
 
 	var payload = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.serializeIndexationPayload = exports.deserializeIndexationPayload = exports.serializeMilestonePayload = exports.deserializeMilestonePayload = exports.serializeTransactionPayload = exports.deserializeTransactionPayload = exports.serializePayload = exports.deserializePayload = exports.MAX_INDEXATION_KEY_LENGTH = exports.MIN_TRANSACTION_PAYLOAD_LENGTH = exports.MIN_INDEXATION_PAYLOAD_LENGTH = exports.MIN_MILESTONE_PAYLOAD_LENGTH = exports.MIN_PAYLOAD_LENGTH = void 0;
+	exports.serializeIndexationPayload = exports.deserializeIndexationPayload = exports.serializeMilestonePayload = exports.deserializeMilestonePayload = exports.serializeTransactionPayload = exports.deserializeTransactionPayload = exports.serializePayload = exports.deserializePayload = exports.MAX_INDEXATION_KEY_LENGTH = exports.MIN_INDEXATION_KEY_LENGTH = exports.MIN_TRANSACTION_PAYLOAD_LENGTH = exports.MIN_INDEXATION_PAYLOAD_LENGTH = exports.MIN_MILESTONE_PAYLOAD_LENGTH = exports.MIN_PAYLOAD_LENGTH = void 0;
 	// Copyright 2020 IOTA Stiftung
 	// SPDX-License-Identifier: Apache-2.0
 
@@ -4564,14 +4690,30 @@
 
 
 
+	/**
+	 * The minimum length of a payload binary representation.
+	 */
 	exports.MIN_PAYLOAD_LENGTH = common.TYPE_LENGTH;
+	/**
+	 * The minimum length of a milestone payload binary representation.
+	 */
 	exports.MIN_MILESTONE_PAYLOAD_LENGTH = exports.MIN_PAYLOAD_LENGTH + common.UINT32_SIZE + common.UINT64_SIZE +
 	    common.BYTE_SIZE + common.MESSAGE_ID_LENGTH + common.MESSAGE_ID_LENGTH +
 	    common.MERKLE_PROOF_LENGTH +
 	    common.BYTE_SIZE + ed25519.Ed25519.PUBLIC_KEY_SIZE +
 	    common.BYTE_SIZE + ed25519.Ed25519.SIGNATURE_SIZE;
+	/**
+	 * The minimum length of an indexation payload binary representation.
+	 */
 	exports.MIN_INDEXATION_PAYLOAD_LENGTH = exports.MIN_PAYLOAD_LENGTH + common.STRING_LENGTH + common.STRING_LENGTH;
+	/**
+	 * The minimum length of a transaction payload binary representation.
+	 */
 	exports.MIN_TRANSACTION_PAYLOAD_LENGTH = exports.MIN_PAYLOAD_LENGTH + common.UINT32_SIZE;
+	/**
+	 * The minimum length of a indexation key.
+	 */
+	exports.MIN_INDEXATION_KEY_LENGTH = 1;
 	/**
 	 * The maximum length of a indexation key.
 	 */
@@ -4661,7 +4803,7 @@
 	        throw new Error("Unrecognized transaction essence type " + type);
 	    }
 	    return {
-	        type: 0,
+	        type: ITransactionPayload.TRANSACTION_PAYLOAD_TYPE,
 	        essence: essence,
 	        unlockBlocks: unlockBlocks
 	    };
@@ -4716,7 +4858,7 @@
 	        signatures.push(readStream.readFixedHex("payloadMilestone.signature", ed25519.Ed25519.SIGNATURE_SIZE));
 	    }
 	    return {
-	        type: 1,
+	        type: IMilestonePayload.MILESTONE_PAYLOAD_TYPE,
 	        index: index,
 	        timestamp: Number(timestamp),
 	        parents: parents,
@@ -4767,7 +4909,7 @@
 	    var dataLength = readStream.readUInt32("payloadIndexation.dataLength");
 	    var data = readStream.readFixedHex("payloadIndexation.data", dataLength);
 	    return {
-	        type: 2,
+	        type: IIndexationPayload.INDEXATION_PAYLOAD_TYPE,
 	        index: index,
 	        data: data
 	    };
@@ -4779,13 +4921,21 @@
 	 * @param object The object to serialize.
 	 */
 	function serializeIndexationPayload(writeStream, object) {
+	    if (object.index.length < exports.MIN_INDEXATION_KEY_LENGTH) {
+	        throw new Error("The indexation key length is " + object.index.length + ", which is below the minimum size of " + exports.MIN_INDEXATION_KEY_LENGTH);
+	    }
 	    if (object.index.length > exports.MAX_INDEXATION_KEY_LENGTH) {
 	        throw new Error("The indexation key length is " + object.index.length + ", which exceeds the maximum size of " + exports.MAX_INDEXATION_KEY_LENGTH);
 	    }
 	    writeStream.writeUInt32("payloadIndexation.type", object.type);
 	    writeStream.writeString("payloadIndexation.index", object.index);
-	    writeStream.writeUInt32("payloadIndexation.dataLength", object.data.length / 2);
-	    writeStream.writeFixedHex("payloadIndexation.data", object.data.length / 2, object.data);
+	    if (object.data) {
+	        writeStream.writeUInt32("payloadIndexation.dataLength", object.data.length / 2);
+	        writeStream.writeFixedHex("payloadIndexation.data", object.data.length / 2, object.data);
+	    }
+	    else {
+	        writeStream.writeUInt32("payloadIndexation.dataLength", 0);
+	    }
 	}
 	exports.serializeIndexationPayload = serializeIndexationPayload;
 
@@ -4796,6 +4946,9 @@
 	exports.serializeMessage = exports.deserializeMessage = exports.MAX_MESSAGE_LENGTH = void 0;
 
 
+	/**
+	 * The minimum length of a message binary representation.
+	 */
 	var MIN_MESSAGE_LENGTH = common.UINT64_SIZE +
 	    common.BYTE_SIZE +
 	    (2 * common.MESSAGE_ID_LENGTH) +
@@ -4897,12 +5050,168 @@
 
 	});
 
+	var byteLength_1 = byteLength;
+	var toByteArray_1 = toByteArray;
+	var fromByteArray_1 = fromByteArray;
+
+	var lookup = [];
+	var revLookup = [];
+	var Arr = typeof Uint8Array !== 'undefined' ? Uint8Array : Array;
+
+	var code = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+	for (var i = 0, len = code.length; i < len; ++i) {
+	  lookup[i] = code[i];
+	  revLookup[code.charCodeAt(i)] = i;
+	}
+
+	// Support decoding URL-safe base64 strings, as Node.js does.
+	// See: https://en.wikipedia.org/wiki/Base64#URL_applications
+	revLookup['-'.charCodeAt(0)] = 62;
+	revLookup['_'.charCodeAt(0)] = 63;
+
+	function getLens (b64) {
+	  var len = b64.length;
+
+	  if (len % 4 > 0) {
+	    throw new Error('Invalid string. Length must be a multiple of 4')
+	  }
+
+	  // Trim off extra bytes after placeholder bytes are found
+	  // See: https://github.com/beatgammit/base64-js/issues/42
+	  var validLen = b64.indexOf('=');
+	  if (validLen === -1) validLen = len;
+
+	  var placeHoldersLen = validLen === len
+	    ? 0
+	    : 4 - (validLen % 4);
+
+	  return [validLen, placeHoldersLen]
+	}
+
+	// base64 is 4/3 + up to two characters of the original data
+	function byteLength (b64) {
+	  var lens = getLens(b64);
+	  var validLen = lens[0];
+	  var placeHoldersLen = lens[1];
+	  return ((validLen + placeHoldersLen) * 3 / 4) - placeHoldersLen
+	}
+
+	function _byteLength (b64, validLen, placeHoldersLen) {
+	  return ((validLen + placeHoldersLen) * 3 / 4) - placeHoldersLen
+	}
+
+	function toByteArray (b64) {
+	  var tmp;
+	  var lens = getLens(b64);
+	  var validLen = lens[0];
+	  var placeHoldersLen = lens[1];
+
+	  var arr = new Arr(_byteLength(b64, validLen, placeHoldersLen));
+
+	  var curByte = 0;
+
+	  // if there are placeholders, only get up to the last complete 4 chars
+	  var len = placeHoldersLen > 0
+	    ? validLen - 4
+	    : validLen;
+
+	  var i;
+	  for (i = 0; i < len; i += 4) {
+	    tmp =
+	      (revLookup[b64.charCodeAt(i)] << 18) |
+	      (revLookup[b64.charCodeAt(i + 1)] << 12) |
+	      (revLookup[b64.charCodeAt(i + 2)] << 6) |
+	      revLookup[b64.charCodeAt(i + 3)];
+	    arr[curByte++] = (tmp >> 16) & 0xFF;
+	    arr[curByte++] = (tmp >> 8) & 0xFF;
+	    arr[curByte++] = tmp & 0xFF;
+	  }
+
+	  if (placeHoldersLen === 2) {
+	    tmp =
+	      (revLookup[b64.charCodeAt(i)] << 2) |
+	      (revLookup[b64.charCodeAt(i + 1)] >> 4);
+	    arr[curByte++] = tmp & 0xFF;
+	  }
+
+	  if (placeHoldersLen === 1) {
+	    tmp =
+	      (revLookup[b64.charCodeAt(i)] << 10) |
+	      (revLookup[b64.charCodeAt(i + 1)] << 4) |
+	      (revLookup[b64.charCodeAt(i + 2)] >> 2);
+	    arr[curByte++] = (tmp >> 8) & 0xFF;
+	    arr[curByte++] = tmp & 0xFF;
+	  }
+
+	  return arr
+	}
+
+	function tripletToBase64 (num) {
+	  return lookup[num >> 18 & 0x3F] +
+	    lookup[num >> 12 & 0x3F] +
+	    lookup[num >> 6 & 0x3F] +
+	    lookup[num & 0x3F]
+	}
+
+	function encodeChunk (uint8, start, end) {
+	  var tmp;
+	  var output = [];
+	  for (var i = start; i < end; i += 3) {
+	    tmp =
+	      ((uint8[i] << 16) & 0xFF0000) +
+	      ((uint8[i + 1] << 8) & 0xFF00) +
+	      (uint8[i + 2] & 0xFF);
+	    output.push(tripletToBase64(tmp));
+	  }
+	  return output.join('')
+	}
+
+	function fromByteArray (uint8) {
+	  var tmp;
+	  var len = uint8.length;
+	  var extraBytes = len % 3; // if we have 1 byte left, pad 2 bytes
+	  var parts = [];
+	  var maxChunkLength = 16383; // must be multiple of 3
+
+	  // go through the array every three bytes, we'll deal with trailing stuff later
+	  for (var i = 0, len2 = len - extraBytes; i < len2; i += maxChunkLength) {
+	    parts.push(encodeChunk(uint8, i, (i + maxChunkLength) > len2 ? len2 : (i + maxChunkLength)));
+	  }
+
+	  // pad the end with zeros, but make sure to not forget the extra bytes
+	  if (extraBytes === 1) {
+	    tmp = uint8[len - 1];
+	    parts.push(
+	      lookup[tmp >> 2] +
+	      lookup[(tmp << 4) & 0x3F] +
+	      '=='
+	    );
+	  } else if (extraBytes === 2) {
+	    tmp = (uint8[len - 2] << 8) + uint8[len - 1];
+	    parts.push(
+	      lookup[tmp >> 10] +
+	      lookup[(tmp >> 4) & 0x3F] +
+	      lookup[(tmp << 2) & 0x3F] +
+	      '='
+	    );
+	  }
+
+	  return parts.join('')
+	}
+
+	var base64Js = {
+		byteLength: byteLength_1,
+		toByteArray: toByteArray_1,
+		fromByteArray: fromByteArray_1
+	};
+
 	var converter = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.Converter = void 0;
 	// Copyright 2020 IOTA Stiftung
 	// SPDX-License-Identifier: Apache-2.0
 	/* eslint-disable no-bitwise */
+
 	/**
 	 * Convert arrays to and from different formats.
 	 */
@@ -4910,33 +5219,70 @@
 	    function Converter() {
 	    }
 	    /**
-	     * Encode a raw array to text string.
+	     * Encode a raw array to UTF8 string.
 	     * @param array The bytes to encode.
 	     * @param startIndex The index to start in the bytes.
 	     * @param length The length of bytes to read.
-	     * @returns The array formated as hex.
+	     * @returns The array formated as UTF8.
 	     */
-	    Converter.bytesToAscii = function (array, startIndex, length) {
-	        var ascii = "";
-	        var len = length !== null && length !== void 0 ? length : array.length;
+	    Converter.bytesToUtf8 = function (array, startIndex, length) {
 	        var start = startIndex !== null && startIndex !== void 0 ? startIndex : 0;
-	        for (var i = 0; i < len; i++) {
-	            ascii += String.fromCharCode(array[start + i]);
+	        var len = length !== null && length !== void 0 ? length : array.length;
+	        var str = "";
+	        for (var i = start; i < start + len; i++) {
+	            var value = array[i];
+	            if (value < 0x80) {
+	                str += String.fromCharCode(value);
+	            }
+	            else if (value > 0xBF && value < 0xE0) {
+	                str += String.fromCharCode(((value & 0x1F) << 6) | (array[i + 1] & 0x3F));
+	                i += 1;
+	            }
+	            else if (value > 0xDF && value < 0xF0) {
+	                str += String.fromCharCode(((value & 0x0F) << 12) | ((array[i + 1] & 0x3F) << 6) | (array[i + 2] & 0x3F));
+	                i += 2;
+	            }
+	            else {
+	                // surrogate pair
+	                var charCode = (((value & 0x07) << 18) |
+	                    ((array[i + 1] & 0x3F) << 12) |
+	                    ((array[i + 2] & 0x3F) << 6) |
+	                    (array[i + 3] & 0x3F)) - 0x010000;
+	                str += String.fromCharCode((charCode >> 10) | 0xD800, (charCode & 0x03FF) | 0xDC00);
+	                i += 3;
+	            }
 	        }
-	        return ascii;
+	        return str;
 	    };
 	    /**
-	     * Decode a text string to raw array.
-	     * @param ascii The text to decode.
+	     * Convert a UTF8 string to raw array.
+	     * @param utf8 The text to decode.
 	     * @returns The array.
 	     */
-	    Converter.asciiToBytes = function (ascii) {
-	        var sizeof = ascii.length;
-	        var array = new Uint8Array(sizeof);
-	        for (var i = 0; i < ascii.length; i++) {
-	            array[i] = ascii.charCodeAt(i);
+	    Converter.utf8ToBytes = function (utf8) {
+	        var bytes = [];
+	        for (var i = 0; i < utf8.length; i++) {
+	            var charcode = utf8.charCodeAt(i);
+	            if (charcode < 0x80) {
+	                bytes.push(charcode);
+	            }
+	            else if (charcode < 0x800) {
+	                bytes.push(0xC0 | (charcode >> 6), 0x80 | (charcode & 0x3F));
+	            }
+	            else if (charcode < 0xD800 || charcode >= 0xE000) {
+	                bytes.push(0xE0 | (charcode >> 12), 0x80 | ((charcode >> 6) & 0x3F), 0x80 | (charcode & 0x3F));
+	            }
+	            else {
+	                // surrogate pair
+	                i++;
+	                // UTF-16 encodes 0x10000-0x10FFFF by
+	                // subtracting 0x10000 and splitting the
+	                // 20 bits of 0x0-0xFFFFF into two halves
+	                charcode = 0x10000 + (((charcode & 0x3FF) << 10) | (utf8.charCodeAt(i) & 0x3FF));
+	                bytes.push(0xF0 | (charcode >> 18), 0x80 | ((charcode >> 12) & 0x3F), 0x80 | ((charcode >> 6) & 0x3F), 0x80 | (charcode & 0x3F));
+	            }
 	        }
-	        return array;
+	        return Uint8Array.from(bytes);
 	    };
 	    /**
 	     * Encode a raw array to hex string.
@@ -4991,20 +5337,20 @@
 	        return array;
 	    };
 	    /**
-	     * Convert the ascii text to hex.
-	     * @param ascii The ascii to convert.
+	     * Convert the UTF8 to hex.
+	     * @param utf8 The text to convert.
 	     * @returns The hex version of the bytes.
 	     */
-	    Converter.asciiToHex = function (ascii) {
-	        return Converter.bytesToHex(Converter.asciiToBytes(ascii));
+	    Converter.utf8ToHex = function (utf8) {
+	        return Converter.bytesToHex(Converter.utf8ToBytes(utf8));
 	    };
 	    /**
-	     * Convert the hex text to ascii.
+	     * Convert the hex text to text.
 	     * @param hex The hex to convert.
-	     * @returns The ascii version of the bytes.
+	     * @returns The UTF8 version of the bytes.
 	     */
-	    Converter.hexToAscii = function (hex) {
-	        return Converter.bytesToAscii(Converter.hexToBytes(hex));
+	    Converter.hexToUtf8 = function (hex) {
+	        return Converter.bytesToUtf8(Converter.hexToBytes(hex));
 	    };
 	    /**
 	     * Is the data hex format.
@@ -5040,6 +5386,22 @@
 	            bytes[i] = Number.parseInt(binary.slice((i * 8), (i + 1) * 8), 2);
 	        }
 	        return bytes;
+	    };
+	    /**
+	     * Convert bytes to base64 string.
+	     * @param bytes The bytes to convert.
+	     * @returns A base64 string of the bytes.
+	     */
+	    Converter.bytesToBase64 = function (bytes) {
+	        return base64Js.fromByteArray(bytes);
+	    };
+	    /**
+	     * Convert a base64 string to bytes.
+	     * @param base64 The base64 string.
+	     * @returns The bytes.
+	     */
+	    Converter.base64ToBytes = function (base64) {
+	        return base64Js.toByteArray(base64);
 	    };
 	    /**
 	     * Build the static lookup tables.
@@ -5233,7 +5595,7 @@
 	        if (!this.hasRemaining(stringLength)) {
 	            throw new Error(name + " length " + stringLength + " exceeds the remaining data " + this.unused());
 	        }
-	        var val = converter.Converter.bytesToAscii(this._storage, this._readIndex, stringLength);
+	        var val = converter.Converter.bytesToUtf8(this._storage, this._readIndex, stringLength);
 	        if (moveIndex) {
 	            this._readIndex += stringLength;
 	        }
@@ -5715,6 +6077,737 @@
 
 	});
 
+	var writeStream = createCommonjsModule(function (module, exports) {
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.WriteStream = void 0;
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
+	/* eslint-disable no-bitwise */
+
+
+	/**
+	 * Keep track of the write index within a stream.
+	 */
+	var WriteStream = /** @class */ (function () {
+	    /**
+	     * Create a new instance of ReadStream.
+	     */
+	    function WriteStream() {
+	        this._storage = new Uint8Array(WriteStream.CHUNK_SIZE);
+	        this._writeIndex = 0;
+	    }
+	    /**
+	     * Get the length of the stream.
+	     * @returns The stream length.
+	     */
+	    WriteStream.prototype.length = function () {
+	        return this._storage.length;
+	    };
+	    /**
+	     * How much unused data is there.
+	     * @returns The amount of unused data.
+	     */
+	    WriteStream.prototype.unused = function () {
+	        return this._storage.length - this._writeIndex;
+	    };
+	    /**
+	     * Get the final stream as bytes.
+	     * @returns The final stream.
+	     */
+	    WriteStream.prototype.finalBytes = function () {
+	        return this._storage.subarray(0, this._writeIndex);
+	    };
+	    /**
+	     * Get the final stream as hex.
+	     * @returns The final stream as hex.
+	     */
+	    WriteStream.prototype.finalHex = function () {
+	        return converter.Converter.bytesToHex(this._storage.subarray(0, this._writeIndex));
+	    };
+	    /**
+	     * Get the current write index.
+	     * @returns The current write index.
+	     */
+	    WriteStream.prototype.getWriteIndex = function () {
+	        return this._writeIndex;
+	    };
+	    /**
+	     * Set the current write index.
+	     * @param writeIndex The current write index.
+	     */
+	    WriteStream.prototype.setWriteIndex = function (writeIndex) {
+	        this._writeIndex = writeIndex;
+	    };
+	    /**
+	     * Write fixed length stream.
+	     * @param name The name of the data we are trying to write.
+	     * @param length The length of the data to write.
+	     * @param val The data to write.
+	     */
+	    WriteStream.prototype.writeFixedHex = function (name, length, val) {
+	        if (!converter.Converter.isHex(val)) {
+	            throw new Error("The " + name + " should be in hex format");
+	        }
+	        // Hex should be twice the length as each byte is 2 characters
+	        if (length * 2 !== val.length) {
+	            throw new Error(name + " length " + val.length + " does not match expected length " + length * 2);
+	        }
+	        this.expand(length);
+	        this._storage.set(converter.Converter.hexToBytes(val), this._writeIndex);
+	        this._writeIndex += length;
+	    };
+	    /**
+	     * Write fixed length stream.
+	     * @param name The name of the data we are trying to write.
+	     * @param length The length of the data to write.
+	     * @param val The data to write.
+	     */
+	    WriteStream.prototype.writeBytes = function (name, length, val) {
+	        this.expand(length);
+	        this._storage.set(val, this._writeIndex);
+	        this._writeIndex += length;
+	    };
+	    /**
+	     * Write a byte to the stream.
+	     * @param name The name of the data we are trying to write.
+	     * @param val The data to write.
+	     */
+	    WriteStream.prototype.writeByte = function (name, val) {
+	        this.expand(1);
+	        this._storage[this._writeIndex++] = val & 0xFF;
+	    };
+	    /**
+	     * Write a UInt16 to the stream.
+	     * @param name The name of the data we are trying to write.
+	     * @param val The data to write.
+	     */
+	    WriteStream.prototype.writeUInt16 = function (name, val) {
+	        this.expand(2);
+	        this._storage[this._writeIndex++] = val & 0xFF;
+	        this._storage[this._writeIndex++] = val >>> 8;
+	    };
+	    /**
+	     * Write a UInt32 to the stream.
+	     * @param name The name of the data we are trying to write.
+	     * @param val The data to write.
+	     */
+	    WriteStream.prototype.writeUInt32 = function (name, val) {
+	        this.expand(4);
+	        this._storage[this._writeIndex++] = val & 0xFF;
+	        this._storage[this._writeIndex++] = val >>> 8;
+	        this._storage[this._writeIndex++] = val >>> 16;
+	        this._storage[this._writeIndex++] = val >>> 24;
+	    };
+	    /**
+	     * Write a UInt64 to the stream.
+	     * @param name The name of the data we are trying to write.
+	     * @param val The data to write.
+	     */
+	    WriteStream.prototype.writeUInt64 = function (name, val) {
+	        this.expand(8);
+	        bigIntHelper.BigIntHelper.write8(val, this._storage, this._writeIndex);
+	        this._writeIndex += 8;
+	    };
+	    /**
+	     * Write a string to the stream.
+	     * @param name The name of the data we are trying to write.
+	     * @param val The data to write.
+	     * @returns The string.
+	     */
+	    WriteStream.prototype.writeString = function (name, val) {
+	        this.writeUInt16(name, val.length);
+	        this.expand(val.length);
+	        this._storage.set(converter.Converter.utf8ToBytes(val), this._writeIndex);
+	        this._writeIndex += val.length;
+	        return val;
+	    };
+	    /**
+	     * Expand the storage if there is not enough spave.
+	     * @param additional The amount of space needed.
+	     */
+	    WriteStream.prototype.expand = function (additional) {
+	        if (this._writeIndex + additional > this._storage.byteLength) {
+	            var newArr = new Uint8Array(this._storage.length + (Math.ceil(additional / WriteStream.CHUNK_SIZE) * WriteStream.CHUNK_SIZE));
+	            newArr.set(this._storage, 0);
+	            this._storage = newArr;
+	        }
+	    };
+	    /**
+	     * Chunk size to expand the storage.
+	     * @internal
+	     */
+	    WriteStream.CHUNK_SIZE = 4096;
+	    return WriteStream;
+	}());
+	exports.WriteStream = WriteStream;
+
+	});
+
+	var singleNodeClient = createCommonjsModule(function (module, exports) {
+	var __awaiter = (commonjsGlobal && commonjsGlobal.__awaiter) || function (thisArg, _arguments, P, generator) {
+	    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+	    return new (P || (P = Promise))(function (resolve, reject) {
+	        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+	        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+	        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+	        step((generator = generator.apply(thisArg, _arguments || [])).next());
+	    });
+	};
+	var __generator = (commonjsGlobal && commonjsGlobal.__generator) || function (thisArg, body) {
+	    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+	    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+	    function verb(n) { return function (v) { return step([n, v]); }; }
+	    function step(op) {
+	        if (f) throw new TypeError("Generator is already executing.");
+	        while (_) try {
+	            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+	            if (y = 0, t) op = [op[0] & 2, t.value];
+	            switch (op[0]) {
+	                case 0: case 1: t = op; break;
+	                case 4: _.label++; return { value: op[1], done: false };
+	                case 5: _.label++; y = op[1]; op = [0]; continue;
+	                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+	                default:
+	                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+	                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+	                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+	                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+	                    if (t[2]) _.ops.pop();
+	                    _.trys.pop(); continue;
+	            }
+	            op = body.call(thisArg, _);
+	        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+	        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+	    }
+	};
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.SingleNodeClient = void 0;
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
+
+
+
+
+
+
+
+	/**
+	 * Client for API communication.
+	 */
+	var SingleNodeClient = /** @class */ (function () {
+	    /**
+	     * Create a new instance of client.
+	     * @param endpoint The endpoint.
+	     * @param options Options for the client.
+	     */
+	    function SingleNodeClient(endpoint, options) {
+	        var _a;
+	        if (!endpoint) {
+	            throw new Error("The endpoint can not be empty");
+	        }
+	        this._endpoint = endpoint.replace(/\/+$/, "");
+	        this._basePath = (_a = options === null || options === void 0 ? void 0 : options.basePath) !== null && _a !== void 0 ? _a : "/api/v1/";
+	        this._powProvider = options === null || options === void 0 ? void 0 : options.powProvider;
+	        this._minPowScore = options === null || options === void 0 ? void 0 : options.overrideMinPow;
+	        this._timeout = options === null || options === void 0 ? void 0 : options.timeout;
+	        this._userName = options === null || options === void 0 ? void 0 : options.userName;
+	        this._password = options === null || options === void 0 ? void 0 : options.password;
+	        if (this._userName && this._password && !this._endpoint.startsWith("https")) {
+	            throw new Error("Basic authentication requires the endpoint to be https");
+	        }
+	    }
+	    /**
+	     * Get the health of the node.
+	     * @returns True if the node is healthy.
+	     */
+	    SingleNodeClient.prototype.health = function () {
+	        return __awaiter(this, void 0, void 0, function () {
+	            var status;
+	            return __generator(this, function (_a) {
+	                switch (_a.label) {
+	                    case 0: return [4 /*yield*/, this.fetchStatus("/health")];
+	                    case 1:
+	                        status = _a.sent();
+	                        if (status === 200) {
+	                            return [2 /*return*/, true];
+	                        }
+	                        else if (status === 503) {
+	                            return [2 /*return*/, false];
+	                        }
+	                        throw new clientError.ClientError("Unexpected response code", "/health", status);
+	                }
+	            });
+	        });
+	    };
+	    /**
+	     * Get the info about the node.
+	     * @returns The node information.
+	     */
+	    SingleNodeClient.prototype.info = function () {
+	        return __awaiter(this, void 0, void 0, function () {
+	            return __generator(this, function (_a) {
+	                return [2 /*return*/, this.fetchJson("get", "info")];
+	            });
+	        });
+	    };
+	    /**
+	     * Get the tips from the node.
+	     * @returns The tips.
+	     */
+	    SingleNodeClient.prototype.tips = function () {
+	        return __awaiter(this, void 0, void 0, function () {
+	            return __generator(this, function (_a) {
+	                return [2 /*return*/, this.fetchJson("get", "tips")];
+	            });
+	        });
+	    };
+	    /**
+	     * Get the message data by id.
+	     * @param messageId The message to get the data for.
+	     * @returns The message data.
+	     */
+	    SingleNodeClient.prototype.message = function (messageId) {
+	        return __awaiter(this, void 0, void 0, function () {
+	            return __generator(this, function (_a) {
+	                return [2 /*return*/, this.fetchJson("get", "messages/" + messageId)];
+	            });
+	        });
+	    };
+	    /**
+	     * Get the message metadata by id.
+	     * @param messageId The message to get the metadata for.
+	     * @returns The message metadata.
+	     */
+	    SingleNodeClient.prototype.messageMetadata = function (messageId) {
+	        return __awaiter(this, void 0, void 0, function () {
+	            return __generator(this, function (_a) {
+	                return [2 /*return*/, this.fetchJson("get", "messages/" + messageId + "/metadata")];
+	            });
+	        });
+	    };
+	    /**
+	     * Get the message raw data by id.
+	     * @param messageId The message to get the data for.
+	     * @returns The message raw data.
+	     */
+	    SingleNodeClient.prototype.messageRaw = function (messageId) {
+	        return __awaiter(this, void 0, void 0, function () {
+	            return __generator(this, function (_a) {
+	                return [2 /*return*/, this.fetchBinary("get", "messages/" + messageId + "/raw")];
+	            });
+	        });
+	    };
+	    /**
+	     * Submit message.
+	     * @param message The message to submit.
+	     * @returns The messageId.
+	     */
+	    SingleNodeClient.prototype.messageSubmit = function (message$1) {
+	        return __awaiter(this, void 0, void 0, function () {
+	            var writeStream$1, messageBytes, nonce, response;
+	            return __generator(this, function (_a) {
+	                switch (_a.label) {
+	                    case 0:
+	                        writeStream$1 = new writeStream.WriteStream();
+	                        message.serializeMessage(writeStream$1, message$1);
+	                        messageBytes = writeStream$1.finalBytes();
+	                        if (messageBytes.length > message.MAX_MESSAGE_LENGTH) {
+	                            throw new Error("The message length is " + messageBytes.length + ", which exceeds the maximum size of " + message.MAX_MESSAGE_LENGTH);
+	                        }
+	                        if (!(!message$1.nonce || message$1.nonce.length === 0)) return [3 /*break*/, 6];
+	                        if (!this._powProvider) return [3 /*break*/, 5];
+	                        return [4 /*yield*/, this.populatePowInfo()];
+	                    case 1:
+	                        _a.sent();
+	                        if (!(this._networkId && this._minPowScore)) return [3 /*break*/, 3];
+	                        bigIntHelper.BigIntHelper.write8(this._networkId, messageBytes, 0);
+	                        message$1.networkId = this._networkId.toString();
+	                        return [4 /*yield*/, this._powProvider.pow(messageBytes, this._minPowScore)];
+	                    case 2:
+	                        nonce = _a.sent();
+	                        message$1.nonce = nonce.toString(10);
+	                        return [3 /*break*/, 4];
+	                    case 3: throw new Error(this._networkId ? "minPowScore is missing" : "networkId is missing");
+	                    case 4: return [3 /*break*/, 6];
+	                    case 5:
+	                        message$1.nonce = "0";
+	                        _a.label = 6;
+	                    case 6: return [4 /*yield*/, this.fetchJson("post", "messages", message$1)];
+	                    case 7:
+	                        response = _a.sent();
+	                        return [2 /*return*/, response.messageId];
+	                }
+	            });
+	        });
+	    };
+	    /**
+	     * Submit message in raw format.
+	     * @param message The message to submit.
+	     * @returns The messageId.
+	     */
+	    SingleNodeClient.prototype.messageSubmitRaw = function (message$1) {
+	        return __awaiter(this, void 0, void 0, function () {
+	            var nonce, response;
+	            return __generator(this, function (_a) {
+	                switch (_a.label) {
+	                    case 0:
+	                        if (message$1.length > message.MAX_MESSAGE_LENGTH) {
+	                            throw new Error("The message length is " + message$1.length + ", which exceeds the maximum size of " + message.MAX_MESSAGE_LENGTH);
+	                        }
+	                        if (!(this._powProvider && arrayHelper.ArrayHelper.equal(message$1.slice(-8), SingleNodeClient.NONCE_ZERO))) return [3 /*break*/, 4];
+	                        return [4 /*yield*/, this.populatePowInfo()];
+	                    case 1:
+	                        _a.sent();
+	                        if (!(this._networkId && this._minPowScore)) return [3 /*break*/, 3];
+	                        bigIntHelper.BigIntHelper.write8(this._networkId, message$1, 0);
+	                        return [4 /*yield*/, this._powProvider.pow(message$1, this._minPowScore)];
+	                    case 2:
+	                        nonce = _a.sent();
+	                        bigIntHelper.BigIntHelper.write8(nonce, message$1, message$1.length - 8);
+	                        return [3 /*break*/, 4];
+	                    case 3: throw new Error(this._networkId ? "minPowScore is missing" : "networkId is missing");
+	                    case 4: return [4 /*yield*/, this.fetchBinary("post", "messages", message$1)];
+	                    case 5:
+	                        response = _a.sent();
+	                        return [2 /*return*/, response.messageId];
+	                }
+	            });
+	        });
+	    };
+	    /**
+	     * Find messages by index.
+	     * @param indexationKey The index value.
+	     * @returns The messageId.
+	     */
+	    SingleNodeClient.prototype.messagesFind = function (indexationKey) {
+	        return __awaiter(this, void 0, void 0, function () {
+	            return __generator(this, function (_a) {
+	                return [2 /*return*/, this.fetchJson("get", "messages?index=" + encodeURIComponent(indexationKey))];
+	            });
+	        });
+	    };
+	    /**
+	     * Get the children of a message.
+	     * @param messageId The id of the message to get the children for.
+	     * @returns The messages children.
+	     */
+	    SingleNodeClient.prototype.messageChildren = function (messageId) {
+	        return __awaiter(this, void 0, void 0, function () {
+	            return __generator(this, function (_a) {
+	                return [2 /*return*/, this.fetchJson("get", "messages/" + messageId + "/children")];
+	            });
+	        });
+	    };
+	    /**
+	     * Find an output by its identifier.
+	     * @param outputId The id of the output to get.
+	     * @returns The output details.
+	     */
+	    SingleNodeClient.prototype.output = function (outputId) {
+	        return __awaiter(this, void 0, void 0, function () {
+	            return __generator(this, function (_a) {
+	                return [2 /*return*/, this.fetchJson("get", "outputs/" + outputId)];
+	            });
+	        });
+	    };
+	    /**
+	     * Get the address details.
+	     * @param addressBech32 The address to get the details for.
+	     * @returns The address details.
+	     */
+	    SingleNodeClient.prototype.address = function (addressBech32) {
+	        return __awaiter(this, void 0, void 0, function () {
+	            return __generator(this, function (_a) {
+	                return [2 /*return*/, this.fetchJson("get", "addresses/" + addressBech32)];
+	            });
+	        });
+	    };
+	    /**
+	     * Get the address outputs.
+	     * @param addressBech32 The address to get the outputs for.
+	     * @returns The address outputs.
+	     */
+	    SingleNodeClient.prototype.addressOutputs = function (addressBech32) {
+	        return __awaiter(this, void 0, void 0, function () {
+	            return __generator(this, function (_a) {
+	                return [2 /*return*/, this.fetchJson("get", "addresses/" + addressBech32 + "/outputs")];
+	            });
+	        });
+	    };
+	    /**
+	     * Get the address detail using ed25519 address.
+	     * @param addressEd25519 The address to get the details for.
+	     * @returns The address details.
+	     */
+	    SingleNodeClient.prototype.addressEd25519 = function (addressEd25519) {
+	        return __awaiter(this, void 0, void 0, function () {
+	            return __generator(this, function (_a) {
+	                if (!converter.Converter.isHex(addressEd25519)) {
+	                    throw new Error("The supplied address does not appear to be hex format");
+	                }
+	                return [2 /*return*/, this.fetchJson("get", "addresses/ed25519/" + addressEd25519)];
+	            });
+	        });
+	    };
+	    /**
+	     * Get the address outputs using ed25519 address.
+	     * @param addressEd25519 The address to get the outputs for.
+	     * @returns The address outputs.
+	     */
+	    SingleNodeClient.prototype.addressEd25519Outputs = function (addressEd25519) {
+	        return __awaiter(this, void 0, void 0, function () {
+	            return __generator(this, function (_a) {
+	                if (!converter.Converter.isHex(addressEd25519)) {
+	                    throw new Error("The supplied address does not appear to be hex format");
+	                }
+	                return [2 /*return*/, this.fetchJson("get", "addresses/ed25519/" + addressEd25519 + "/outputs")];
+	            });
+	        });
+	    };
+	    /**
+	     * Get the requested milestone.
+	     * @param index The index of the milestone to get.
+	     * @returns The milestone details.
+	     */
+	    SingleNodeClient.prototype.milestone = function (index) {
+	        return __awaiter(this, void 0, void 0, function () {
+	            return __generator(this, function (_a) {
+	                return [2 /*return*/, this.fetchJson("get", "milestones/" + index)];
+	            });
+	        });
+	    };
+	    /**
+	     * Get the list of peers.
+	     * @returns The list of peers.
+	     */
+	    SingleNodeClient.prototype.peers = function () {
+	        return __awaiter(this, void 0, void 0, function () {
+	            return __generator(this, function (_a) {
+	                return [2 /*return*/, this.fetchJson("get", "peers")];
+	            });
+	        });
+	    };
+	    /**
+	     * Add a new peer.
+	     * @param multiAddress The address of the peer to add.
+	     * @param alias An optional alias for the peer.
+	     * @returns The details for the created peer.
+	     */
+	    SingleNodeClient.prototype.peerAdd = function (multiAddress, alias) {
+	        return __awaiter(this, void 0, void 0, function () {
+	            return __generator(this, function (_a) {
+	                return [2 /*return*/, this.fetchJson("post", "peers", {
+	                        multiAddress: multiAddress,
+	                        alias: alias
+	                    })];
+	            });
+	        });
+	    };
+	    /**
+	     * Delete a peer.
+	     * @param peerId The peer to delete.
+	     * @returns Nothing.
+	     */
+	    SingleNodeClient.prototype.peerDelete = function (peerId) {
+	        return __awaiter(this, void 0, void 0, function () {
+	            return __generator(this, function (_a) {
+	                // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
+	                return [2 /*return*/, this.fetchJson("delete", "peers/" + peerId)];
+	            });
+	        });
+	    };
+	    /**
+	     * Get a peer.
+	     * @param peerId The peer to delete.
+	     * @returns The details for the created peer.
+	     */
+	    SingleNodeClient.prototype.peer = function (peerId) {
+	        return __awaiter(this, void 0, void 0, function () {
+	            return __generator(this, function (_a) {
+	                return [2 /*return*/, this.fetchJson("get", "peers/" + peerId)];
+	            });
+	        });
+	    };
+	    /**
+	     * Perform a request and just return the status.
+	     * @param route The route of the request.
+	     * @returns The response.
+	     * @internal
+	     */
+	    SingleNodeClient.prototype.fetchStatus = function (route) {
+	        return __awaiter(this, void 0, void 0, function () {
+	            var response;
+	            return __generator(this, function (_a) {
+	                switch (_a.label) {
+	                    case 0: return [4 /*yield*/, this.fetchWithTimeout("get", route)];
+	                    case 1:
+	                        response = _a.sent();
+	                        return [2 /*return*/, response.status];
+	                }
+	            });
+	        });
+	    };
+	    /**
+	     * Perform a request in json format.
+	     * @param method The http method.
+	     * @param route The route of the request.
+	     * @param requestData Request to send to the endpoint.
+	     * @returns The response.
+	     * @internal
+	     */
+	    SingleNodeClient.prototype.fetchJson = function (method, route, requestData) {
+	        var _a, _b, _c;
+	        return __awaiter(this, void 0, void 0, function () {
+	            var response, responseData;
+	            return __generator(this, function (_d) {
+	                switch (_d.label) {
+	                    case 0: return [4 /*yield*/, this.fetchWithTimeout(method, "" + this._basePath + route, { "Content-Type": "application/json" }, requestData ? JSON.stringify(requestData) : undefined)];
+	                    case 1:
+	                        response = _d.sent();
+	                        return [4 /*yield*/, response.json()];
+	                    case 2:
+	                        responseData = _d.sent();
+	                        if (response.ok && !responseData.error) {
+	                            return [2 /*return*/, responseData.data];
+	                        }
+	                        throw new clientError.ClientError((_b = (_a = responseData.error) === null || _a === void 0 ? void 0 : _a.message) !== null && _b !== void 0 ? _b : response.statusText, route, response.status, (_c = responseData.error) === null || _c === void 0 ? void 0 : _c.code);
+	                }
+	            });
+	        });
+	    };
+	    /**
+	     * Perform a request for binary data.
+	     * @param method The http method.
+	     * @param route The route of the request.
+	     * @param requestData Request to send to the endpoint.
+	     * @returns The response.
+	     * @internal
+	     */
+	    SingleNodeClient.prototype.fetchBinary = function (method, route, requestData) {
+	        var _a, _b, _c;
+	        return __awaiter(this, void 0, void 0, function () {
+	            var response, responseData, _d;
+	            return __generator(this, function (_e) {
+	                switch (_e.label) {
+	                    case 0: return [4 /*yield*/, this.fetchWithTimeout(method, "" + this._basePath + route, { "Content-Type": "application/octet-stream" }, requestData)];
+	                    case 1:
+	                        response = _e.sent();
+	                        if (!response.ok) return [3 /*break*/, 5];
+	                        if (!(method === "get")) return [3 /*break*/, 3];
+	                        _d = Uint8Array.bind;
+	                        return [4 /*yield*/, response.arrayBuffer()];
+	                    case 2: return [2 /*return*/, new (_d.apply(Uint8Array, [void 0, _e.sent()]))()];
+	                    case 3: return [4 /*yield*/, response.json()];
+	                    case 4:
+	                        responseData = _e.sent();
+	                        if (!(responseData === null || responseData === void 0 ? void 0 : responseData.error)) {
+	                            return [2 /*return*/, responseData === null || responseData === void 0 ? void 0 : responseData.data];
+	                        }
+	                        _e.label = 5;
+	                    case 5:
+	                        if (!!responseData) return [3 /*break*/, 7];
+	                        return [4 /*yield*/, response.json()];
+	                    case 6:
+	                        responseData = _e.sent();
+	                        _e.label = 7;
+	                    case 7: throw new clientError.ClientError((_b = (_a = responseData === null || responseData === void 0 ? void 0 : responseData.error) === null || _a === void 0 ? void 0 : _a.message) !== null && _b !== void 0 ? _b : response.statusText, route, response.status, (_c = responseData === null || responseData === void 0 ? void 0 : responseData.error) === null || _c === void 0 ? void 0 : _c.code);
+	                }
+	            });
+	        });
+	    };
+	    /**
+	     * Perform a fetch request.
+	     * @param method The http method.
+	     * @param route The route of the request.
+	     * @param headers The headers for the request.
+	     * @param requestData Request to send to the endpoint.
+	     * @returns The response.
+	     * @internal
+	     */
+	    SingleNodeClient.prototype.fetchWithTimeout = function (method, route, headers, body) {
+	        return __awaiter(this, void 0, void 0, function () {
+	            var controller, timerId, userPass, response, err_1;
+	            return __generator(this, function (_a) {
+	                switch (_a.label) {
+	                    case 0:
+	                        if (this._timeout !== undefined) {
+	                            controller = new AbortController();
+	                            timerId = setTimeout(function () {
+	                                if (controller) {
+	                                    controller.abort();
+	                                }
+	                            }, this._timeout);
+	                        }
+	                        if (this._userName && this._password) {
+	                            userPass = converter.Converter.bytesToBase64(converter.Converter.utf8ToBytes(this._userName + ":" + this._password));
+	                            headers = headers !== null && headers !== void 0 ? headers : {};
+	                            headers.Authorization = "Basic " + userPass;
+	                        }
+	                        _a.label = 1;
+	                    case 1:
+	                        _a.trys.push([1, 3, 4, 5]);
+	                        return [4 /*yield*/, fetch("" + this._endpoint + route, {
+	                                method: method,
+	                                headers: headers,
+	                                body: body,
+	                                signal: controller ? controller.signal : undefined
+	                            })];
+	                    case 2:
+	                        response = _a.sent();
+	                        return [2 /*return*/, response];
+	                    case 3:
+	                        err_1 = _a.sent();
+	                        throw err_1.name === "AbortError" ? new Error("Timeout") : err_1;
+	                    case 4:
+	                        if (timerId) {
+	                            clearTimeout(timerId);
+	                        }
+	                        return [7 /*endfinally*/];
+	                    case 5: return [2 /*return*/];
+	                }
+	            });
+	        });
+	    };
+	    /**
+	     * Get the pow info from the node.
+	     * @internal
+	     */
+	    SingleNodeClient.prototype.populatePowInfo = function () {
+	        var _a;
+	        return __awaiter(this, void 0, void 0, function () {
+	            var nodeInfo, networkIdBytes;
+	            return __generator(this, function (_b) {
+	                switch (_b.label) {
+	                    case 0:
+	                        if (!(!this._networkId || !this._minPowScore)) return [3 /*break*/, 2];
+	                        return [4 /*yield*/, this.info()];
+	                    case 1:
+	                        nodeInfo = _b.sent();
+	                        networkIdBytes = blake2b.Blake2b.sum256(converter.Converter.utf8ToBytes(nodeInfo.networkId));
+	                        this._networkId = bigIntHelper.BigIntHelper.read8(networkIdBytes, 0);
+	                        this._minPowScore = (_a = nodeInfo.minPowScore) !== null && _a !== void 0 ? _a : 100;
+	                        _b.label = 2;
+	                    case 2: return [2 /*return*/];
+	                }
+	            });
+	        });
+	    };
+	    /**
+	     * A zero nonce.
+	     * @internal
+	     */
+	    SingleNodeClient.NONCE_ZERO = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 0]);
+	    return SingleNodeClient;
+	}());
+	exports.SingleNodeClient = SingleNodeClient;
+
+	});
+
+	var singleNodeClientOptions = createCommonjsModule(function (module, exports) {
+	Object.defineProperty(exports, "__esModule", { value: true });
+
+	});
+
 	var bech32 = createCommonjsModule(function (module, exports) {
 	// Copyright 2020 IOTA Stiftung
 	// SPDX-License-Identifier: Apache-2.0
@@ -5960,819 +7053,6 @@
 	}());
 	exports.Bech32 = Bech32;
 
-	});
-
-	var bech32Helper = createCommonjsModule(function (module, exports) {
-	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.Bech32Helper = void 0;
-	// Copyright 2020 IOTA Stiftung
-	// SPDX-License-Identifier: Apache-2.0
-	/* eslint-disable no-bitwise */
-
-	/**
-	 * Convert address to bech32.
-	 */
-	var Bech32Helper = /** @class */ (function () {
-	    function Bech32Helper() {
-	    }
-	    /**
-	     * Encode an address to bech32.
-	     * @param addressType The address type to encode.
-	     * @param addressBytes The address bytes to encode.
-	     * @param humanReadablePart The human readable part to use.
-	     * @returns The array formated as hex.
-	     */
-	    Bech32Helper.toBech32 = function (addressType, addressBytes, humanReadablePart) {
-	        if (humanReadablePart === void 0) { humanReadablePart = Bech32Helper.BECH32_DEFAULT_HRP_MAIN; }
-	        var addressData = new Uint8Array(1 + addressBytes.length);
-	        addressData[0] = addressType;
-	        addressData.set(addressBytes, 1);
-	        return bech32.Bech32.encode(humanReadablePart, addressData);
-	    };
-	    /**
-	     * Decode an address from bech32.
-	     * @param bech32Text The bech32 text to decode.
-	     * @param humanReadablePart The human readable part to use.
-	     * @returns The address type and address bytes or undefined if it cannot be decoded.
-	     */
-	    Bech32Helper.fromBech32 = function (bech32Text, humanReadablePart) {
-	        if (humanReadablePart === void 0) { humanReadablePart = Bech32Helper.BECH32_DEFAULT_HRP_MAIN; }
-	        var decoded = bech32.Bech32.decode(bech32Text);
-	        if (decoded) {
-	            if (decoded.humanReadablePart !== humanReadablePart) {
-	                throw new Error("The hrp part of the address should be " + humanReadablePart + ", it is " + decoded.humanReadablePart);
-	            }
-	            if (decoded.data.length === 0) {
-	                throw new Error("The data part of the address should be at least length 1, it is 0");
-	            }
-	            var addressType = decoded.data[0];
-	            var addressBytes = decoded.data.slice(1);
-	            return {
-	                addressType: addressType,
-	                addressBytes: addressBytes
-	            };
-	        }
-	    };
-	    /**
-	     * Does the provided string look like it might be an bech32 address with matching hrp.
-	     * @param bech32Text The bech32 text to text.
-	     * @param humanReadablePart The human readable part to match.
-	     * @returns True if the passed address matches the pattern for a bech32 address.
-	     */
-	    Bech32Helper.matches = function (bech32Text, humanReadablePart) {
-	        if (humanReadablePart === void 0) { humanReadablePart = Bech32Helper.BECH32_DEFAULT_HRP_MAIN; }
-	        return bech32.Bech32.matches(humanReadablePart, bech32Text);
-	    };
-	    /**
-	     * The default human readable part of the bech32 addresses for mainnet, currently 'iot'.
-	     */
-	    Bech32Helper.BECH32_DEFAULT_HRP_MAIN = "iot";
-	    /**
-	     * The default human readable part of the bech32 addresses for testnet, currently 'toi'.
-	     */
-	    Bech32Helper.BECH32_DEFAULT_HRP_TEST = "toi";
-	    return Bech32Helper;
-	}());
-	exports.Bech32Helper = Bech32Helper;
-
-	});
-
-	var writeStream = createCommonjsModule(function (module, exports) {
-	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.WriteStream = void 0;
-	// Copyright 2020 IOTA Stiftung
-	// SPDX-License-Identifier: Apache-2.0
-	/* eslint-disable no-bitwise */
-
-
-	/**
-	 * Keep track of the write index within a stream.
-	 */
-	var WriteStream = /** @class */ (function () {
-	    /**
-	     * Create a new instance of ReadStream.
-	     */
-	    function WriteStream() {
-	        this._storage = new Uint8Array(WriteStream.CHUNK_SIZE);
-	        this._writeIndex = 0;
-	    }
-	    /**
-	     * Get the length of the stream.
-	     * @returns The stream length.
-	     */
-	    WriteStream.prototype.length = function () {
-	        return this._storage.length;
-	    };
-	    /**
-	     * How much unused data is there.
-	     * @returns The amount of unused data.
-	     */
-	    WriteStream.prototype.unused = function () {
-	        return this._storage.length - this._writeIndex;
-	    };
-	    /**
-	     * Get the final stream as bytes.
-	     * @returns The final stream.
-	     */
-	    WriteStream.prototype.finalBytes = function () {
-	        return this._storage.subarray(0, this._writeIndex);
-	    };
-	    /**
-	     * Get the final stream as hex.
-	     * @returns The final stream as hex.
-	     */
-	    WriteStream.prototype.finalHex = function () {
-	        return converter.Converter.bytesToHex(this._storage.subarray(0, this._writeIndex));
-	    };
-	    /**
-	     * Get the current write index.
-	     * @returns The current write index.
-	     */
-	    WriteStream.prototype.getWriteIndex = function () {
-	        return this._writeIndex;
-	    };
-	    /**
-	     * Set the current write index.
-	     * @param writeIndex The current write index.
-	     */
-	    WriteStream.prototype.setWriteIndex = function (writeIndex) {
-	        this._writeIndex = writeIndex;
-	    };
-	    /**
-	     * Write fixed length stream.
-	     * @param name The name of the data we are trying to write.
-	     * @param length The length of the data to write.
-	     * @param val The data to write.
-	     */
-	    WriteStream.prototype.writeFixedHex = function (name, length, val) {
-	        if (!converter.Converter.isHex(val)) {
-	            throw new Error("The " + val + " should be in hex format");
-	        }
-	        // Hex should be twice the length as each byte is 2 ascii characters
-	        if (length * 2 !== val.length) {
-	            throw new Error(name + " length " + val.length + " does not match expected length " + length * 2);
-	        }
-	        this.expand(length);
-	        this._storage.set(converter.Converter.hexToBytes(val), this._writeIndex);
-	        this._writeIndex += length;
-	    };
-	    /**
-	     * Write fixed length stream.
-	     * @param name The name of the data we are trying to write.
-	     * @param length The length of the data to write.
-	     * @param val The data to write.
-	     */
-	    WriteStream.prototype.writeBytes = function (name, length, val) {
-	        this.expand(length);
-	        this._storage.set(val, this._writeIndex);
-	        this._writeIndex += length;
-	    };
-	    /**
-	     * Write a byte to the stream.
-	     * @param name The name of the data we are trying to write.
-	     * @param val The data to write.
-	     */
-	    WriteStream.prototype.writeByte = function (name, val) {
-	        this.expand(1);
-	        this._storage[this._writeIndex++] = val & 0xFF;
-	    };
-	    /**
-	     * Write a UInt16 to the stream.
-	     * @param name The name of the data we are trying to write.
-	     * @param val The data to write.
-	     */
-	    WriteStream.prototype.writeUInt16 = function (name, val) {
-	        this.expand(2);
-	        this._storage[this._writeIndex++] = val & 0xFF;
-	        this._storage[this._writeIndex++] = val >>> 8;
-	    };
-	    /**
-	     * Write a UInt32 to the stream.
-	     * @param name The name of the data we are trying to write.
-	     * @param val The data to write.
-	     */
-	    WriteStream.prototype.writeUInt32 = function (name, val) {
-	        this.expand(4);
-	        this._storage[this._writeIndex++] = val & 0xFF;
-	        this._storage[this._writeIndex++] = val >>> 8;
-	        this._storage[this._writeIndex++] = val >>> 16;
-	        this._storage[this._writeIndex++] = val >>> 24;
-	    };
-	    /**
-	     * Write a UInt64 to the stream.
-	     * @param name The name of the data we are trying to write.
-	     * @param val The data to write.
-	     */
-	    WriteStream.prototype.writeUInt64 = function (name, val) {
-	        this.expand(8);
-	        bigIntHelper.BigIntHelper.write8(val, this._storage, this._writeIndex);
-	        this._writeIndex += 8;
-	    };
-	    /**
-	     * Write a string to the stream.
-	     * @param name The name of the data we are trying to write.
-	     * @param val The data to write.
-	     * @returns The string.
-	     */
-	    WriteStream.prototype.writeString = function (name, val) {
-	        this.writeUInt16(name, val.length);
-	        this.expand(val.length);
-	        this._storage.set(converter.Converter.asciiToBytes(val), this._writeIndex);
-	        this._writeIndex += val.length;
-	        return val;
-	    };
-	    /**
-	     * Expand the storage if there is not enough spave.
-	     * @param additional The amount of space needed.
-	     */
-	    WriteStream.prototype.expand = function (additional) {
-	        if (this._writeIndex + additional > this._storage.byteLength) {
-	            var newArr = new Uint8Array(this._storage.length + WriteStream.CHUNK_SIZE);
-	            newArr.set(this._storage, 0);
-	            this._storage = newArr;
-	        }
-	    };
-	    /**
-	     * Chunk size to expand the storage.
-	     * @internal
-	     */
-	    WriteStream.CHUNK_SIZE = 4096;
-	    return WriteStream;
-	}());
-	exports.WriteStream = WriteStream;
-
-	});
-
-	var singleNodeClient = createCommonjsModule(function (module, exports) {
-	var __awaiter = (commonjsGlobal && commonjsGlobal.__awaiter) || function (thisArg, _arguments, P, generator) {
-	    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-	    return new (P || (P = Promise))(function (resolve, reject) {
-	        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-	        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-	        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-	        step((generator = generator.apply(thisArg, _arguments || [])).next());
-	    });
-	};
-	var __generator = (commonjsGlobal && commonjsGlobal.__generator) || function (thisArg, body) {
-	    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-	    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-	    function verb(n) { return function (v) { return step([n, v]); }; }
-	    function step(op) {
-	        if (f) throw new TypeError("Generator is already executing.");
-	        while (_) try {
-	            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-	            if (y = 0, t) op = [op[0] & 2, t.value];
-	            switch (op[0]) {
-	                case 0: case 1: t = op; break;
-	                case 4: _.label++; return { value: op[1], done: false };
-	                case 5: _.label++; y = op[1]; op = [0]; continue;
-	                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-	                default:
-	                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-	                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-	                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-	                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-	                    if (t[2]) _.ops.pop();
-	                    _.trys.pop(); continue;
-	            }
-	            op = body.call(thisArg, _);
-	        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-	        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-	    }
-	};
-	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.SingleNodeClient = void 0;
-	// Copyright 2020 IOTA Stiftung
-	// SPDX-License-Identifier: Apache-2.0
-
-
-
-
-
-
-
-
-	/**
-	 * Client for API communication.
-	 */
-	var SingleNodeClient = /** @class */ (function () {
-	    /**
-	     * Create a new instance of client.
-	     * @param endpoint The endpoint.
-	     * @param options Options for the client.
-	     */
-	    function SingleNodeClient(endpoint, options) {
-	        var _a;
-	        if (!endpoint) {
-	            throw new Error("The endpoint can not be empty");
-	        }
-	        this._endpoint = endpoint.replace(/\/+$/, "");
-	        this._basePath = (_a = options === null || options === void 0 ? void 0 : options.basePath) !== null && _a !== void 0 ? _a : "/api/v1/";
-	        this._powProvider = options === null || options === void 0 ? void 0 : options.powProvider;
-	        this._minPowScore = options === null || options === void 0 ? void 0 : options.overrideMinPow;
-	        this._timeout = options === null || options === void 0 ? void 0 : options.timeout;
-	        this._userName = options === null || options === void 0 ? void 0 : options.userName;
-	        this._password = options === null || options === void 0 ? void 0 : options.password;
-	        if (this._userName && this._password && !this._endpoint.startsWith("https")) {
-	            throw new Error("Basic authentication requires the endpoint to be https");
-	        }
-	    }
-	    /**
-	     * Get the health of the node.
-	     * @returns True if the node is healthy.
-	     */
-	    SingleNodeClient.prototype.health = function () {
-	        return __awaiter(this, void 0, void 0, function () {
-	            var status;
-	            return __generator(this, function (_a) {
-	                switch (_a.label) {
-	                    case 0: return [4 /*yield*/, this.fetchStatus("/health")];
-	                    case 1:
-	                        status = _a.sent();
-	                        if (status === 200) {
-	                            return [2 /*return*/, true];
-	                        }
-	                        else if (status === 503) {
-	                            return [2 /*return*/, false];
-	                        }
-	                        throw new clientError.ClientError("Unexpected response code", "/health", status);
-	                }
-	            });
-	        });
-	    };
-	    /**
-	     * Get the info about the node.
-	     * @returns The node information.
-	     */
-	    SingleNodeClient.prototype.info = function () {
-	        return __awaiter(this, void 0, void 0, function () {
-	            return __generator(this, function (_a) {
-	                return [2 /*return*/, this.fetchJson("get", "info")];
-	            });
-	        });
-	    };
-	    /**
-	     * Get the tips from the node.
-	     * @returns The tips.
-	     */
-	    SingleNodeClient.prototype.tips = function () {
-	        return __awaiter(this, void 0, void 0, function () {
-	            return __generator(this, function (_a) {
-	                return [2 /*return*/, this.fetchJson("get", "tips")];
-	            });
-	        });
-	    };
-	    /**
-	     * Get the message data by id.
-	     * @param messageId The message to get the data for.
-	     * @returns The message data.
-	     */
-	    SingleNodeClient.prototype.message = function (messageId) {
-	        return __awaiter(this, void 0, void 0, function () {
-	            return __generator(this, function (_a) {
-	                return [2 /*return*/, this.fetchJson("get", "messages/" + messageId)];
-	            });
-	        });
-	    };
-	    /**
-	     * Get the message metadata by id.
-	     * @param messageId The message to get the metadata for.
-	     * @returns The message metadata.
-	     */
-	    SingleNodeClient.prototype.messageMetadata = function (messageId) {
-	        return __awaiter(this, void 0, void 0, function () {
-	            return __generator(this, function (_a) {
-	                return [2 /*return*/, this.fetchJson("get", "messages/" + messageId + "/metadata")];
-	            });
-	        });
-	    };
-	    /**
-	     * Get the message raw data by id.
-	     * @param messageId The message to get the data for.
-	     * @returns The message raw data.
-	     */
-	    SingleNodeClient.prototype.messageRaw = function (messageId) {
-	        return __awaiter(this, void 0, void 0, function () {
-	            return __generator(this, function (_a) {
-	                return [2 /*return*/, this.fetchBinary("get", "messages/" + messageId + "/raw")];
-	            });
-	        });
-	    };
-	    /**
-	     * Submit message.
-	     * @param message The message to submit.
-	     * @returns The messageId.
-	     */
-	    SingleNodeClient.prototype.messageSubmit = function (message$1) {
-	        return __awaiter(this, void 0, void 0, function () {
-	            var writeStream$1, messageBytes, nonce, response;
-	            return __generator(this, function (_a) {
-	                switch (_a.label) {
-	                    case 0:
-	                        writeStream$1 = new writeStream.WriteStream();
-	                        message.serializeMessage(writeStream$1, message$1);
-	                        messageBytes = writeStream$1.finalBytes();
-	                        if (messageBytes.length > message.MAX_MESSAGE_LENGTH) {
-	                            throw new Error("The message length is " + messageBytes.length + ", which exceeds the maximum size of " + message.MAX_MESSAGE_LENGTH);
-	                        }
-	                        if (!(!message$1.nonce || message$1.nonce.length === 0)) return [3 /*break*/, 6];
-	                        if (!this._powProvider) return [3 /*break*/, 5];
-	                        return [4 /*yield*/, this.populatePowInfo()];
-	                    case 1:
-	                        _a.sent();
-	                        if (!(this._networkId && this._minPowScore)) return [3 /*break*/, 3];
-	                        bigIntHelper.BigIntHelper.write8(this._networkId, messageBytes, 0);
-	                        message$1.networkId = this._networkId.toString();
-	                        return [4 /*yield*/, this._powProvider.pow(messageBytes, this._minPowScore)];
-	                    case 2:
-	                        nonce = _a.sent();
-	                        message$1.nonce = nonce.toString(10);
-	                        return [3 /*break*/, 4];
-	                    case 3: throw new Error(this._networkId ? "minPowScore is missing" : "networkId is missing");
-	                    case 4: return [3 /*break*/, 6];
-	                    case 5:
-	                        message$1.nonce = "0";
-	                        _a.label = 6;
-	                    case 6: return [4 /*yield*/, this.fetchJson("post", "messages", message$1)];
-	                    case 7:
-	                        response = _a.sent();
-	                        return [2 /*return*/, response.messageId];
-	                }
-	            });
-	        });
-	    };
-	    /**
-	     * Submit message in raw format.
-	     * @param message The message to submit.
-	     * @returns The messageId.
-	     */
-	    SingleNodeClient.prototype.messageSubmitRaw = function (message$1) {
-	        return __awaiter(this, void 0, void 0, function () {
-	            var nonce, response;
-	            return __generator(this, function (_a) {
-	                switch (_a.label) {
-	                    case 0:
-	                        if (message$1.length > message.MAX_MESSAGE_LENGTH) {
-	                            throw new Error("The message length is " + message$1.length + ", which exceeds the maximum size of " + message.MAX_MESSAGE_LENGTH);
-	                        }
-	                        if (!(this._powProvider && arrayHelper.ArrayHelper.equal(message$1.slice(-8), SingleNodeClient.NONCE_ZERO))) return [3 /*break*/, 4];
-	                        return [4 /*yield*/, this.populatePowInfo()];
-	                    case 1:
-	                        _a.sent();
-	                        if (!(this._networkId && this._minPowScore)) return [3 /*break*/, 3];
-	                        bigIntHelper.BigIntHelper.write8(this._networkId, message$1, 0);
-	                        return [4 /*yield*/, this._powProvider.pow(message$1, this._minPowScore)];
-	                    case 2:
-	                        nonce = _a.sent();
-	                        bigIntHelper.BigIntHelper.write8(nonce, message$1, message$1.length - 8);
-	                        return [3 /*break*/, 4];
-	                    case 3: throw new Error(this._networkId ? "minPowScore is missing" : "networkId is missing");
-	                    case 4: return [4 /*yield*/, this.fetchBinary("post", "messages", message$1)];
-	                    case 5:
-	                        response = _a.sent();
-	                        return [2 /*return*/, response.messageId];
-	                }
-	            });
-	        });
-	    };
-	    /**
-	     * Find messages by index.
-	     * @param indexationKey The index value.
-	     * @returns The messageId.
-	     */
-	    SingleNodeClient.prototype.messagesFind = function (indexationKey) {
-	        return __awaiter(this, void 0, void 0, function () {
-	            return __generator(this, function (_a) {
-	                return [2 /*return*/, this.fetchJson("get", "messages?index=" + encodeURIComponent(indexationKey))];
-	            });
-	        });
-	    };
-	    /**
-	     * Get the children of a message.
-	     * @param messageId The id of the message to get the children for.
-	     * @returns The messages children.
-	     */
-	    SingleNodeClient.prototype.messageChildren = function (messageId) {
-	        return __awaiter(this, void 0, void 0, function () {
-	            return __generator(this, function (_a) {
-	                return [2 /*return*/, this.fetchJson("get", "messages/" + messageId + "/children")];
-	            });
-	        });
-	    };
-	    /**
-	     * Find an output by its identifier.
-	     * @param outputId The id of the output to get.
-	     * @returns The output details.
-	     */
-	    SingleNodeClient.prototype.output = function (outputId) {
-	        return __awaiter(this, void 0, void 0, function () {
-	            return __generator(this, function (_a) {
-	                return [2 /*return*/, this.fetchJson("get", "outputs/" + outputId)];
-	            });
-	        });
-	    };
-	    /**
-	     * Get the address details.
-	     * @param addressBech32 The address to get the details for.
-	     * @returns The address details.
-	     */
-	    SingleNodeClient.prototype.address = function (addressBech32) {
-	        return __awaiter(this, void 0, void 0, function () {
-	            return __generator(this, function (_a) {
-	                if (!bech32Helper.Bech32Helper.matches(addressBech32)) {
-	                    throw new Error("The supplied address does not appear to be bech32 format");
-	                }
-	                return [2 /*return*/, this.fetchJson("get", "addresses/" + addressBech32)];
-	            });
-	        });
-	    };
-	    /**
-	     * Get the address outputs.
-	     * @param addressBech32 The address to get the outputs for.
-	     * @returns The address outputs.
-	     */
-	    SingleNodeClient.prototype.addressOutputs = function (addressBech32) {
-	        return __awaiter(this, void 0, void 0, function () {
-	            return __generator(this, function (_a) {
-	                if (!bech32Helper.Bech32Helper.matches(addressBech32)) {
-	                    throw new Error("The supplied address does not appear to be bech32 format");
-	                }
-	                return [2 /*return*/, this.fetchJson("get", "addresses/" + addressBech32 + "/outputs")];
-	            });
-	        });
-	    };
-	    /**
-	     * Get the address detail using ed25519 address.
-	     * @param addressEd25519 The address to get the details for.
-	     * @returns The address details.
-	     */
-	    SingleNodeClient.prototype.addressEd25519 = function (addressEd25519) {
-	        return __awaiter(this, void 0, void 0, function () {
-	            return __generator(this, function (_a) {
-	                if (!converter.Converter.isHex(addressEd25519)) {
-	                    throw new Error("The supplied address does not appear to be hex format");
-	                }
-	                return [2 /*return*/, this.fetchJson("get", "addresses/ed25519/" + addressEd25519)];
-	            });
-	        });
-	    };
-	    /**
-	     * Get the address outputs using ed25519 address.
-	     * @param addressEd25519 The address to get the outputs for.
-	     * @returns The address outputs.
-	     */
-	    SingleNodeClient.prototype.addressEd25519Outputs = function (addressEd25519) {
-	        return __awaiter(this, void 0, void 0, function () {
-	            return __generator(this, function (_a) {
-	                if (!converter.Converter.isHex(addressEd25519)) {
-	                    throw new Error("The supplied address does not appear to be hex format");
-	                }
-	                return [2 /*return*/, this.fetchJson("get", "addresses/ed25519/" + addressEd25519 + "/outputs")];
-	            });
-	        });
-	    };
-	    /**
-	     * Get the requested milestone.
-	     * @param index The index of the milestone to get.
-	     * @returns The milestone details.
-	     */
-	    SingleNodeClient.prototype.milestone = function (index) {
-	        return __awaiter(this, void 0, void 0, function () {
-	            return __generator(this, function (_a) {
-	                return [2 /*return*/, this.fetchJson("get", "milestones/" + index)];
-	            });
-	        });
-	    };
-	    /**
-	     * Get the list of peers.
-	     * @returns The list of peers.
-	     */
-	    SingleNodeClient.prototype.peers = function () {
-	        return __awaiter(this, void 0, void 0, function () {
-	            return __generator(this, function (_a) {
-	                return [2 /*return*/, this.fetchJson("get", "peers")];
-	            });
-	        });
-	    };
-	    /**
-	     * Add a new peer.
-	     * @param multiAddress The address of the peer to add.
-	     * @param alias An optional alias for the peer.
-	     * @returns The details for the created peer.
-	     */
-	    SingleNodeClient.prototype.peerAdd = function (multiAddress, alias) {
-	        return __awaiter(this, void 0, void 0, function () {
-	            return __generator(this, function (_a) {
-	                return [2 /*return*/, this.fetchJson("post", "peers", {
-	                        multiAddress: multiAddress,
-	                        alias: alias
-	                    })];
-	            });
-	        });
-	    };
-	    /**
-	     * Delete a peer.
-	     * @param peerId The peer to delete.
-	     * @returns Nothing.
-	     */
-	    SingleNodeClient.prototype.peerDelete = function (peerId) {
-	        return __awaiter(this, void 0, void 0, function () {
-	            return __generator(this, function (_a) {
-	                // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
-	                return [2 /*return*/, this.fetchJson("delete", "peers/" + peerId)];
-	            });
-	        });
-	    };
-	    /**
-	     * Get a peer.
-	     * @param peerId The peer to delete.
-	     * @returns The details for the created peer.
-	     */
-	    SingleNodeClient.prototype.peer = function (peerId) {
-	        return __awaiter(this, void 0, void 0, function () {
-	            return __generator(this, function (_a) {
-	                return [2 /*return*/, this.fetchJson("get", "peers/" + peerId)];
-	            });
-	        });
-	    };
-	    /**
-	     * Perform a request and just return the status.
-	     * @param route The route of the request.
-	     * @returns The response.
-	     * @internal
-	     */
-	    SingleNodeClient.prototype.fetchStatus = function (route) {
-	        return __awaiter(this, void 0, void 0, function () {
-	            var response;
-	            return __generator(this, function (_a) {
-	                switch (_a.label) {
-	                    case 0: return [4 /*yield*/, this.fetchWithTimeout("get", route)];
-	                    case 1:
-	                        response = _a.sent();
-	                        return [2 /*return*/, response.status];
-	                }
-	            });
-	        });
-	    };
-	    /**
-	     * Perform a request in json format.
-	     * @param method The http method.
-	     * @param route The route of the request.
-	     * @param requestData Request to send to the endpoint.
-	     * @returns The response.
-	     * @internal
-	     */
-	    SingleNodeClient.prototype.fetchJson = function (method, route, requestData) {
-	        var _a, _b, _c;
-	        return __awaiter(this, void 0, void 0, function () {
-	            var response, responseData;
-	            return __generator(this, function (_d) {
-	                switch (_d.label) {
-	                    case 0: return [4 /*yield*/, this.fetchWithTimeout(method, "" + this._basePath + route, { "Content-Type": "application/json" }, requestData ? JSON.stringify(requestData) : undefined)];
-	                    case 1:
-	                        response = _d.sent();
-	                        return [4 /*yield*/, response.json()];
-	                    case 2:
-	                        responseData = _d.sent();
-	                        if (response.ok && !responseData.error) {
-	                            return [2 /*return*/, responseData.data];
-	                        }
-	                        throw new clientError.ClientError((_b = (_a = responseData.error) === null || _a === void 0 ? void 0 : _a.message) !== null && _b !== void 0 ? _b : response.statusText, route, response.status, (_c = responseData.error) === null || _c === void 0 ? void 0 : _c.code);
-	                }
-	            });
-	        });
-	    };
-	    /**
-	     * Perform a request for binary data.
-	     * @param method The http method.
-	     * @param route The route of the request.
-	     * @param requestData Request to send to the endpoint.
-	     * @returns The response.
-	     * @internal
-	     */
-	    SingleNodeClient.prototype.fetchBinary = function (method, route, requestData) {
-	        var _a, _b, _c;
-	        return __awaiter(this, void 0, void 0, function () {
-	            var response, responseData, _d;
-	            return __generator(this, function (_e) {
-	                switch (_e.label) {
-	                    case 0: return [4 /*yield*/, this.fetchWithTimeout(method, "" + this._basePath + route, { "Content-Type": "application/octet-stream" }, requestData)];
-	                    case 1:
-	                        response = _e.sent();
-	                        if (!response.ok) return [3 /*break*/, 5];
-	                        if (!(method === "get")) return [3 /*break*/, 3];
-	                        _d = Uint8Array.bind;
-	                        return [4 /*yield*/, response.arrayBuffer()];
-	                    case 2: return [2 /*return*/, new (_d.apply(Uint8Array, [void 0, _e.sent()]))()];
-	                    case 3: return [4 /*yield*/, response.json()];
-	                    case 4:
-	                        responseData = _e.sent();
-	                        if (!(responseData === null || responseData === void 0 ? void 0 : responseData.error)) {
-	                            return [2 /*return*/, responseData === null || responseData === void 0 ? void 0 : responseData.data];
-	                        }
-	                        _e.label = 5;
-	                    case 5:
-	                        if (!!responseData) return [3 /*break*/, 7];
-	                        return [4 /*yield*/, response.json()];
-	                    case 6:
-	                        responseData = _e.sent();
-	                        _e.label = 7;
-	                    case 7: throw new clientError.ClientError((_b = (_a = responseData === null || responseData === void 0 ? void 0 : responseData.error) === null || _a === void 0 ? void 0 : _a.message) !== null && _b !== void 0 ? _b : response.statusText, route, response.status, (_c = responseData === null || responseData === void 0 ? void 0 : responseData.error) === null || _c === void 0 ? void 0 : _c.code);
-	                }
-	            });
-	        });
-	    };
-	    /**
-	     * Perform a fetch request.
-	     * @param method The http method.
-	     * @param route The route of the request.
-	     * @param headers The headers for the request.
-	     * @param requestData Request to send to the endpoint.
-	     * @returns The response.
-	     * @internal
-	     */
-	    SingleNodeClient.prototype.fetchWithTimeout = function (method, route, headers, body) {
-	        return __awaiter(this, void 0, void 0, function () {
-	            var controller, timerId, response, err_1;
-	            return __generator(this, function (_a) {
-	                switch (_a.label) {
-	                    case 0:
-	                        if (this._timeout !== undefined) {
-	                            controller = new AbortController();
-	                            timerId = setTimeout(function () {
-	                                if (controller) {
-	                                    controller.abort();
-	                                }
-	                            }, this._timeout);
-	                        }
-	                        if (this._userName && this._password) {
-	                            headers = headers !== null && headers !== void 0 ? headers : {};
-	                            headers.Authorization = "Basic " + btoa(this._userName + ":" + this._password);
-	                        }
-	                        _a.label = 1;
-	                    case 1:
-	                        _a.trys.push([1, 3, 4, 5]);
-	                        return [4 /*yield*/, fetch("" + this._endpoint + route, {
-	                                method: method,
-	                                headers: headers,
-	                                body: body,
-	                                signal: controller ? controller.signal : undefined
-	                            })];
-	                    case 2:
-	                        response = _a.sent();
-	                        return [2 /*return*/, response];
-	                    case 3:
-	                        err_1 = _a.sent();
-	                        throw err_1.name === "AbortError" ? new Error("Timeout") : err_1;
-	                    case 4:
-	                        if (timerId) {
-	                            clearTimeout(timerId);
-	                        }
-	                        return [7 /*endfinally*/];
-	                    case 5: return [2 /*return*/];
-	                }
-	            });
-	        });
-	    };
-	    /**
-	     * Get the pow info from the node.
-	     * @internal
-	     */
-	    SingleNodeClient.prototype.populatePowInfo = function () {
-	        var _a;
-	        return __awaiter(this, void 0, void 0, function () {
-	            var nodeInfo, networkIdBytes;
-	            return __generator(this, function (_b) {
-	                switch (_b.label) {
-	                    case 0:
-	                        if (!(!this._networkId || !this._minPowScore)) return [3 /*break*/, 2];
-	                        return [4 /*yield*/, this.info()];
-	                    case 1:
-	                        nodeInfo = _b.sent();
-	                        networkIdBytes = blake2b.Blake2b.sum256(converter.Converter.asciiToBytes(nodeInfo.networkId));
-	                        this._networkId = bigIntHelper.BigIntHelper.read8(networkIdBytes, 0);
-	                        this._minPowScore = (_a = nodeInfo.minPowScore) !== null && _a !== void 0 ? _a : 100;
-	                        _b.label = 2;
-	                    case 2: return [2 /*return*/];
-	                }
-	            });
-	        });
-	    };
-	    /**
-	     * A zero nonce.
-	     * @internal
-	     */
-	    SingleNodeClient.NONCE_ZERO = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 0]);
-	    return SingleNodeClient;
-	}());
-	exports.SingleNodeClient = SingleNodeClient;
-
-	});
-
-	Object.defineProperty(exports, "__esModule", { value: true });
-
-	var singleNodeClientOptions = /*#__PURE__*/Object.freeze({
-		__proto__: null
 	});
 
 	var bip32Path = createCommonjsModule(function (module, exports) {
@@ -9546,8 +9826,8 @@
 	    Bip39.mnemonicToSeed = function (mnemonic, password, iterations, keyLength) {
 	        if (iterations === void 0) { iterations = 2048; }
 	        if (keyLength === void 0) { keyLength = 64; }
-	        var mnemonicBytes = converter.Converter.asciiToBytes(mnemonic.normalize("NFKD"));
-	        var salt = converter.Converter.asciiToBytes("mnemonic" + (password !== null && password !== void 0 ? password : "").normalize("NFKD"));
+	        var mnemonicBytes = converter.Converter.utf8ToBytes(mnemonic.normalize("NFKD"));
+	        var salt = converter.Converter.utf8ToBytes("mnemonic" + (password !== null && password !== void 0 ? password : "").normalize("NFKD"));
 	        return pbkdf2.Pbkdf2.sha512(mnemonicBytes, salt, iterations, keyLength);
 	    };
 	    /**
@@ -9735,7 +10015,7 @@
 	     * @returns The key and chain code.
 	     */
 	    Slip0010.getMasterKeyFromSeed = function (seed) {
-	        var hmac = new hmacSha512.HmacSha512(converter.Converter.asciiToBytes("ed25519 seed"));
+	        var hmac = new hmacSha512.HmacSha512(converter.Converter.utf8ToBytes("ed25519 seed"));
 	        var fullKey = hmac.update(seed).digest();
 	        return {
 	            privateKey: Uint8Array.from(fullKey.slice(0, 32)),
@@ -9926,6 +10206,78 @@
 
 	});
 
+	var bech32Helper = createCommonjsModule(function (module, exports) {
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.Bech32Helper = void 0;
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
+	/* eslint-disable no-bitwise */
+
+	/**
+	 * Convert address to bech32.
+	 */
+	var Bech32Helper = /** @class */ (function () {
+	    function Bech32Helper() {
+	    }
+	    /**
+	     * Encode an address to bech32.
+	     * @param addressType The address type to encode.
+	     * @param addressBytes The address bytes to encode.
+	     * @param humanReadablePart The human readable part to use.
+	     * @returns The array formated as hex.
+	     */
+	    Bech32Helper.toBech32 = function (addressType, addressBytes, humanReadablePart) {
+	        var addressData = new Uint8Array(1 + addressBytes.length);
+	        addressData[0] = addressType;
+	        addressData.set(addressBytes, 1);
+	        return bech32.Bech32.encode(humanReadablePart, addressData);
+	    };
+	    /**
+	     * Decode an address from bech32.
+	     * @param bech32Text The bech32 text to decode.
+	     * @param humanReadablePart The human readable part to use.
+	     * @returns The address type and address bytes or undefined if it cannot be decoded.
+	     */
+	    Bech32Helper.fromBech32 = function (bech32Text, humanReadablePart) {
+	        var decoded = bech32.Bech32.decode(bech32Text);
+	        if (decoded) {
+	            if (decoded.humanReadablePart !== humanReadablePart) {
+	                throw new Error("The hrp part of the address should be " + humanReadablePart + ", it is " + decoded.humanReadablePart);
+	            }
+	            if (decoded.data.length === 0) {
+	                throw new Error("The data part of the address should be at least length 1, it is 0");
+	            }
+	            var addressType = decoded.data[0];
+	            var addressBytes = decoded.data.slice(1);
+	            return {
+	                addressType: addressType,
+	                addressBytes: addressBytes
+	            };
+	        }
+	    };
+	    /**
+	     * Does the provided string look like it might be an bech32 address with matching hrp.
+	     * @param bech32Text The bech32 text to text.
+	     * @param humanReadablePart The human readable part to match.
+	     * @returns True if the passed address matches the pattern for a bech32 address.
+	     */
+	    Bech32Helper.matches = function (bech32Text, humanReadablePart) {
+	        return bech32.Bech32.matches(humanReadablePart, bech32Text);
+	    };
+	    /**
+	     * The default human readable part of the bech32 addresses for mainnet, currently 'iota'.
+	     */
+	    Bech32Helper.BECH32_DEFAULT_HRP_MAIN = "iota";
+	    /**
+	     * The default human readable part of the bech32 addresses for testnet, currently 'atoi'.
+	     */
+	    Bech32Helper.BECH32_DEFAULT_HRP_TEST = "atoi";
+	    return Bech32Helper;
+	}());
+	exports.Bech32Helper = Bech32Helper;
+
+	});
+
 	var getUnspentAddresses_1 = createCommonjsModule(function (module, exports) {
 	var __awaiter = (commonjsGlobal && commonjsGlobal.__awaiter) || function (thisArg, _arguments, P, generator) {
 	    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -9978,19 +10330,21 @@
 	 * @param client The client to send the transfer with.
 	 * @param seed The seed to use for address generation.
 	 * @param accountIndex The account index in the wallet.
-	 * @param startIndex Optional start index for the wallet count address, defaults to 0.
-	 * @param countLimit Limit the number of items to find.
-	 * @param zeroCount Abort when the number of zero balances is exceeded.
+	 * @param addressOptions Optional address configuration for balance address lookups.
+	 * @param addressOptions.startIndex The start index for the wallet count address, defaults to 0.
+	 * @param addressOptions.zeroCount The number of addresses with 0 balance during lookup before aborting.
+	 * @param addressOptions.requiredCount The max number of addresses to find.
 	 * @returns All the unspent addresses.
 	 */
-	function getUnspentAddresses(client, seed, accountIndex, startIndex, countLimit, zeroCount) {
+	function getUnspentAddresses(client, seed, accountIndex, addressOptions) {
+	    var _a;
 	    return __awaiter(this, void 0, void 0, function () {
-	        return __generator(this, function (_a) {
+	        return __generator(this, function (_b) {
 	            return [2 /*return*/, getUnspentAddressesWithAddressGenerator(client, seed, {
 	                    accountIndex: accountIndex,
-	                    addressIndex: startIndex !== null && startIndex !== void 0 ? startIndex : 0,
+	                    addressIndex: (_a = addressOptions === null || addressOptions === void 0 ? void 0 : addressOptions.startIndex) !== null && _a !== void 0 ? _a : 0,
 	                    isInternal: false
-	                }, addresses.generateBip44Address, countLimit, zeroCount)];
+	                }, addresses.generateBip44Address, addressOptions)];
 	        });
 	    });
 	}
@@ -10001,24 +10355,29 @@
 	 * @param seed The seed to use for address generation.
 	 * @param initialAddressState The initial address state for calculating the addresses.
 	 * @param nextAddressPath Calculate the next address for inputs.
-	 * @param countLimit Limit the number of items to find.
-	 * @param zeroCount Abort when the number of zero balances is exceeded.
+	 * @param addressOptions Optional address configuration for balance address lookups.
+	 * @param addressOptions.startIndex The start index for the wallet count address, defaults to 0.
+	 * @param addressOptions.zeroCount The number of addresses with 0 balance during lookup before aborting.
+	 * @param addressOptions.requiredCount The max number of addresses to find.
 	 * @returns All the unspent addresses.
 	 */
-	function getUnspentAddressesWithAddressGenerator(client, seed, initialAddressState, nextAddressPath, countLimit, zeroCount) {
-	    if (countLimit === void 0) { countLimit = Number.MAX_SAFE_INTEGER; }
-	    if (zeroCount === void 0) { zeroCount = 5; }
+	function getUnspentAddressesWithAddressGenerator(client, seed, initialAddressState, nextAddressPath, addressOptions) {
+	    var _a, _b;
 	    return __awaiter(this, void 0, void 0, function () {
-	        var finished, allUnspent, isFirst, zeroBalance, path, addressSeed, ed25519Address$1, addressBytes, addressHex, addressResponse;
-	        return __generator(this, function (_a) {
-	            switch (_a.label) {
-	                case 0:
+	        var nodeInfo, localRequiredLimit, localZeroCount, finished, allUnspent, isFirst, zeroBalance, path, addressSeed, ed25519Address$1, addressBytes, addressHex, addressResponse;
+	        return __generator(this, function (_c) {
+	            switch (_c.label) {
+	                case 0: return [4 /*yield*/, client.info()];
+	                case 1:
+	                    nodeInfo = _c.sent();
+	                    localRequiredLimit = (_a = addressOptions === null || addressOptions === void 0 ? void 0 : addressOptions.requiredCount) !== null && _a !== void 0 ? _a : Number.MAX_SAFE_INTEGER;
+	                    localZeroCount = (_b = addressOptions === null || addressOptions === void 0 ? void 0 : addressOptions.zeroCount) !== null && _b !== void 0 ? _b : 20;
 	                    finished = false;
 	                    allUnspent = [];
 	                    isFirst = true;
 	                    zeroBalance = 0;
-	                    _a.label = 1;
-	                case 1:
+	                    _c.label = 2;
+	                case 2:
 	                    path = nextAddressPath(initialAddressState, isFirst);
 	                    isFirst = false;
 	                    addressSeed = seed.generateSeedFromPath(new bip32Path.Bip32Path(path));
@@ -10026,31 +10385,31 @@
 	                    addressBytes = ed25519Address$1.toAddress();
 	                    addressHex = converter.Converter.bytesToHex(addressBytes);
 	                    return [4 /*yield*/, client.addressEd25519(addressHex)];
-	                case 2:
-	                    addressResponse = _a.sent();
-	                    // If there are no outputs for the address we have reached the
-	                    // end of the used addresses
-	                    if (addressResponse.count === 0) {
+	                case 3:
+	                    addressResponse = _c.sent();
+	                    // If there is no balance we increment the counter and end
+	                    // the text when we have reached the count
+	                    if (addressResponse.balance === 0) {
 	                        zeroBalance++;
-	                        if (zeroBalance >= zeroCount) {
+	                        if (zeroBalance >= localZeroCount) {
 	                            finished = true;
 	                        }
 	                    }
 	                    else {
 	                        allUnspent.push({
-	                            address: bech32Helper.Bech32Helper.toBech32(IEd25519Address.ED25519_ADDRESS_TYPE, addressBytes),
+	                            address: bech32Helper.Bech32Helper.toBech32(IEd25519Address.ED25519_ADDRESS_TYPE, addressBytes, nodeInfo.bech32HRP),
 	                            path: path,
 	                            balance: addressResponse.balance
 	                        });
-	                        if (allUnspent.length === countLimit) {
+	                        if (allUnspent.length === localRequiredLimit) {
 	                            finished = true;
 	                        }
 	                    }
-	                    _a.label = 3;
-	                case 3:
-	                    if (!finished) return [3 /*break*/, 1];
-	                    _a.label = 4;
-	                case 4: return [2 /*return*/, allUnspent];
+	                    _c.label = 4;
+	                case 4:
+	                    if (!finished) return [3 /*break*/, 2];
+	                    _c.label = 5;
+	                case 5: return [2 /*return*/, allUnspent];
 	            }
 	        });
 	    });
@@ -10104,16 +10463,17 @@
 	 * @param client The client to send the transfer with.
 	 * @param seed The seed.
 	 * @param accountIndex The account index in the wallet.
-	 * @param startIndex The start index to generate from, defaults to 0.
+	 * @param addressOptions Optional address configuration for balance address lookups.
+	 * @param addressOptions.startIndex The start index for the wallet count address, defaults to 0.
+	 * @param addressOptions.zeroCount The number of addresses with 0 balance during lookup before aborting.
 	 * @returns The balance.
 	 */
-	function getBalance(client, seed, accountIndex, startIndex) {
-	    if (startIndex === void 0) { startIndex = 0; }
+	function getBalance(client, seed, accountIndex, addressOptions) {
 	    return __awaiter(this, void 0, void 0, function () {
 	        var allUnspent, total, _i, allUnspent_1, output;
 	        return __generator(this, function (_a) {
 	            switch (_a.label) {
-	                case 0: return [4 /*yield*/, getUnspentAddresses_1.getUnspentAddresses(client, seed, accountIndex, startIndex)];
+	                case 0: return [4 /*yield*/, getUnspentAddresses_1.getUnspentAddresses(client, seed, accountIndex, addressOptions)];
 	                case 1:
 	                    allUnspent = _a.sent();
 	                    total = 0;
@@ -10175,15 +10535,21 @@
 	 * @param client The client to send the transfer with.
 	 * @param seed The seed to use for address generation.
 	 * @param accountIndex The account index in the wallet.
-	 * @param startIndex Optional start index for the wallet count address, defaults to 0.
+	 * @param addressOptions Optional address configuration for balance address lookups.
+	 * @param addressOptions.startIndex The start index for the wallet count address, defaults to 0.
+	 * @param addressOptions.zeroCount The number of addresses with 0 balance during lookup before aborting.
 	 * @returns The first unspent address.
 	 */
-	function getUnspentAddress(client, seed, accountIndex, startIndex) {
+	function getUnspentAddress(client, seed, accountIndex, addressOptions) {
 	    return __awaiter(this, void 0, void 0, function () {
 	        var allUnspent;
 	        return __generator(this, function (_a) {
 	            switch (_a.label) {
-	                case 0: return [4 /*yield*/, getUnspentAddresses_1.getUnspentAddresses(client, seed, accountIndex, startIndex, 1, 5)];
+	                case 0: return [4 /*yield*/, getUnspentAddresses_1.getUnspentAddresses(client, seed, accountIndex, {
+	                        startIndex: addressOptions === null || addressOptions === void 0 ? void 0 : addressOptions.startIndex,
+	                        zeroCount: addressOptions === null || addressOptions === void 0 ? void 0 : addressOptions.zeroCount,
+	                        requiredCount: 1
+	                    })];
 	                case 1:
 	                    allUnspent = _a.sent();
 	                    return [2 /*return*/, allUnspent.length > 0 ? allUnspent[0] : undefined];
@@ -10390,6 +10756,8 @@
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.retrieveData = void 0;
 
+
+
 	/**
 	 * Retrieve a data message.
 	 * @param client The client to send the transfer with.
@@ -10406,16 +10774,16 @@
 	                    message = _a.sent();
 	                    if (message === null || message === void 0 ? void 0 : message.payload) {
 	                        indexationPayload = void 0;
-	                        if (message.payload.type === 0) {
+	                        if (message.payload.type === ITransactionPayload.TRANSACTION_PAYLOAD_TYPE) {
 	                            indexationPayload = message.payload.essence.payload;
 	                        }
-	                        else if (message.payload.type === 2) {
+	                        else if (message.payload.type === IIndexationPayload.INDEXATION_PAYLOAD_TYPE) {
 	                            indexationPayload = message.payload;
 	                        }
 	                        if (indexationPayload) {
 	                            return [2 /*return*/, {
 	                                    index: indexationPayload.index,
-	                                    data: converter.Converter.hexToBytes(indexationPayload.data)
+	                                    data: indexationPayload.data ? converter.Converter.hexToBytes(indexationPayload.data) : undefined
 	                                }];
 	                        }
 	                    }
@@ -10561,22 +10929,31 @@
 
 
 
+
+
+
+
+
+
+
+
 	/**
 	 * Send a transfer from the balance on the seed.
 	 * @param client The client to send the transfer with.
 	 * @param inputsAndSignatureKeyPairs The inputs with the signature key pairs needed to sign transfers.
 	 * @param outputs The outputs to send.
-	 * @param indexationKey Optional indexation key.
-	 * @param indexationData Optional index data.
+	 * @param indexation Optional indexation data to associate with the transaction.
+	 * @param indexation.key Indexation key.
+	 * @param indexation.data Optional index data.
 	 * @returns The id of the message created and the remainder address if one was needed.
 	 */
-	function sendAdvanced(client, inputsAndSignatureKeyPairs, outputs, indexationKey, indexationData) {
+	function sendAdvanced(client, inputsAndSignatureKeyPairs, outputs, indexation) {
 	    return __awaiter(this, void 0, void 0, function () {
 	        var transactionPayload, tipsResponse, message, messageId;
 	        return __generator(this, function (_a) {
 	            switch (_a.label) {
 	                case 0:
-	                    transactionPayload = buildTransactionPayload(inputsAndSignatureKeyPairs, outputs, indexationKey, indexationData);
+	                    transactionPayload = buildTransactionPayload(inputsAndSignatureKeyPairs, outputs, indexation);
 	                    return [4 /*yield*/, client.tips()];
 	                case 1:
 	                    tipsResponse = _a.sent();
@@ -10600,36 +10977,42 @@
 	 * Build a transaction payload.
 	 * @param inputsAndSignatureKeyPairs The inputs with the signature key pairs needed to sign transfers.
 	 * @param outputs The outputs to send.
-	 * @param indexationKey Optional indexation key.
-	 * @param indexationData Optional index data.
+	 * @param indexation Optional indexation data to associate with the transaction.
+	 * @param indexation.key Indexation key.
+	 * @param indexation.data Optional index data.
 	 * @returns The transaction payload.
 	 */
-	function buildTransactionPayload(inputsAndSignatureKeyPairs, outputs, indexationKey, indexationData) {
+	function buildTransactionPayload(inputsAndSignatureKeyPairs, outputs, indexation) {
 	    if (!inputsAndSignatureKeyPairs || inputsAndSignatureKeyPairs.length === 0) {
 	        throw new Error("You must specify some inputs");
 	    }
 	    if (!outputs || outputs.length === 0) {
 	        throw new Error("You must specify some outputs");
 	    }
-	    if (indexationKey && indexationKey.length > payload.MAX_INDEXATION_KEY_LENGTH) {
-	        throw new Error("The indexation key length is " + indexationKey.length + ", which exceeds the maximum size of " + payload.MAX_INDEXATION_KEY_LENGTH);
+	    if (indexation === null || indexation === void 0 ? void 0 : indexation.key) {
+	        if (indexation.key.length < payload.MIN_INDEXATION_KEY_LENGTH) {
+	            throw new Error("The indexation key length is " + indexation.key.length + ", which is below the minimum size of " + payload.MIN_INDEXATION_KEY_LENGTH);
+	        }
+	        if (indexation.key.length > payload.MAX_INDEXATION_KEY_LENGTH) {
+	            throw new Error("The indexation key length is " + indexation.key.length + ", which exceeds the maximum size of " + payload.MAX_INDEXATION_KEY_LENGTH);
+	        }
 	    }
 	    var outputsWithSerialization = [];
 	    for (var _i = 0, outputs_1 = outputs; _i < outputs_1.length; _i++) {
 	        var output$1 = outputs_1[_i];
 	        if (output$1.addressType === IEd25519Address.ED25519_ADDRESS_TYPE) {
-	            var sigLockedOutput = {
-	                type: 0,
+	            var o = {
+	                type: output$1.isDustAllowance ? ISigLockedDustAllowanceOutput.SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE : ISigLockedSingleOutput.SIG_LOCKED_SINGLE_OUTPUT_TYPE,
 	                address: {
-	                    type: 1,
+	                    type: output$1.addressType,
 	                    address: output$1.address
 	                },
 	                amount: output$1.amount
 	            };
 	            var writeStream$1 = new writeStream.WriteStream();
-	            output.serializeOutput(writeStream$1, sigLockedOutput);
+	            output.serializeOutput(writeStream$1, o);
 	            outputsWithSerialization.push({
-	                output: sigLockedOutput,
+	                output: o,
 	                serialized: writeStream$1.finalHex()
 	            });
 	        }
@@ -10646,14 +11029,14 @@
 	    var sortedInputs = inputsAndSignatureKeyPairsSerialized.sort(function (a, b) { return a.serialized.localeCompare(b.serialized); });
 	    var sortedOutputs = outputsWithSerialization.sort(function (a, b) { return a.serialized.localeCompare(b.serialized); });
 	    var transactionEssence = {
-	        type: 0,
+	        type: ITransactionEssence.TRANSACTION_ESSENCE_TYPE,
 	        inputs: sortedInputs.map(function (i) { return i.input; }),
 	        outputs: sortedOutputs.map(function (o) { return o.output; }),
-	        payload: indexationKey
+	        payload: indexation
 	            ? {
-	                type: 2,
-	                index: indexationKey,
-	                data: indexationData ? converter.Converter.bytesToHex(indexationData) : ""
+	                type: IIndexationPayload.INDEXATION_PAYLOAD_TYPE,
+	                index: indexation.key,
+	                data: indexation.data ? converter.Converter.bytesToHex(indexation.data) : ""
 	            }
 	            : undefined
 	    };
@@ -10668,15 +11051,15 @@
 	        var hexInputAddressPublic = converter.Converter.bytesToHex(input$1.addressKeyPair.publicKey);
 	        if (addressToUnlockBlock[hexInputAddressPublic]) {
 	            unlockBlocks.push({
-	                type: 1,
+	                type: IReferenceUnlockBlock.REFERENCE_UNLOCK_BLOCK_TYPE,
 	                reference: addressToUnlockBlock[hexInputAddressPublic].unlockIndex
 	            });
 	        }
 	        else {
 	            unlockBlocks.push({
-	                type: 0,
+	                type: ISignatureUnlockBlock.SIGNATURE_UNLOCK_BLOCK_TYPE,
 	                signature: {
-	                    type: 1,
+	                    type: IEd25519Signature.ED25519_SIGNATURE_TYPE,
 	                    publicKey: hexInputAddressPublic,
 	                    signature: converter.Converter.bytesToHex(ed25519.Ed25519.sign(input$1.addressKeyPair.privateKey, essenceFinal))
 	                }
@@ -10688,7 +11071,7 @@
 	        }
 	    }
 	    var transactionPayload = {
-	        type: 0,
+	        type: ITransactionPayload.TRANSACTION_PAYLOAD_TYPE,
 	        essence: transactionEssence,
 	        unlockBlocks: unlockBlocks
 	    };
@@ -10746,6 +11129,7 @@
 
 
 
+
 	/**
 	 * Send a transfer from the balance on the seed to a single output.
 	 * @param client The client to send the transfer with.
@@ -10753,13 +11137,18 @@
 	 * @param accountIndex The account index in the wallet.
 	 * @param addressBech32 The address to send the funds to in bech32 format.
 	 * @param amount The amount to send.
-	 * @param startIndex The start index for the wallet count address, defaults to 0.
+	 * @param indexation Optional indexation data to associate with the transaction.
+	 * @param indexation.key Indexation key.
+	 * @param indexation.data Optional index data.
+	 * @param addressOptions Optional address configuration for balance address lookups.
+	 * @param addressOptions.startIndex The start index for the wallet count address, defaults to 0.
+	 * @param addressOptions.zeroCount The number of addresses with 0 balance during lookup before aborting.
 	 * @returns The id of the message created and the contructed message.
 	 */
-	function send(client, seed, accountIndex, addressBech32, amount, startIndex) {
+	function send(client, seed, accountIndex, addressBech32, amount, indexation, addressOptions) {
 	    return __awaiter(this, void 0, void 0, function () {
 	        return __generator(this, function (_a) {
-	            return [2 /*return*/, sendMultiple(client, seed, accountIndex, [{ addressBech32: addressBech32, amount: amount }], startIndex)];
+	            return [2 /*return*/, sendMultiple(client, seed, accountIndex, [{ addressBech32: addressBech32, amount: amount }], indexation, addressOptions)];
 	        });
 	    });
 	}
@@ -10771,13 +11160,18 @@
 	 * @param accountIndex The account index in the wallet.
 	 * @param addressEd25519 The address to send the funds to in ed25519 format.
 	 * @param amount The amount to send.
-	 * @param startIndex The start index for the wallet count address, defaults to 0.
+	 * @param indexation Optional indexation data to associate with the transaction.
+	 * @param indexation.key Indexation key.
+	 * @param indexation.data Optional index data.
+	 * @param addressOptions Optional address configuration for balance address lookups.
+	 * @param addressOptions.startIndex The start index for the wallet count address, defaults to 0.
+	 * @param addressOptions.zeroCount The number of addresses with 0 balance during lookup before aborting.
 	 * @returns The id of the message created and the contructed message.
 	 */
-	function sendEd25519(client, seed, accountIndex, addressEd25519, amount, startIndex) {
+	function sendEd25519(client, seed, accountIndex, addressEd25519, amount, indexation, addressOptions) {
 	    return __awaiter(this, void 0, void 0, function () {
 	        return __generator(this, function (_a) {
-	            return [2 /*return*/, sendMultipleEd25519(client, seed, accountIndex, [{ addressEd25519: addressEd25519, amount: amount }], startIndex)];
+	            return [2 /*return*/, sendMultipleEd25519(client, seed, accountIndex, [{ addressEd25519: addressEd25519, amount: amount }], indexation, addressOptions)];
 	        });
 	    });
 	}
@@ -10788,29 +11182,41 @@
 	 * @param seed The seed to use for address generation.
 	 * @param accountIndex The account index in the wallet.
 	 * @param outputs The address to send the funds to in bech32 format and amounts.
-	 * @param startIndex The start index for the wallet count address, defaults to 0.
+	 * @param indexation Optional indexation data to associate with the transaction.
+	 * @param indexation.key Indexation key.
+	 * @param indexation.data Optional index data.
+	 * @param addressOptions Optional address configuration for balance address lookups.
+	 * @param addressOptions.startIndex The start index for the wallet count address, defaults to 0.
+	 * @param addressOptions.zeroCount The number of addresses with 0 balance during lookup before aborting.
 	 * @returns The id of the message created and the contructed message.
 	 */
-	function sendMultiple(client, seed, accountIndex, outputs, startIndex) {
+	function sendMultiple(client, seed, accountIndex, outputs, indexation, addressOptions) {
+	    var _a;
 	    return __awaiter(this, void 0, void 0, function () {
-	        var hexOutputs;
-	        return __generator(this, function (_a) {
-	            hexOutputs = outputs.map(function (output) {
-	                var bech32Details = bech32Helper.Bech32Helper.fromBech32(output.addressBech32);
-	                if (!bech32Details) {
-	                    throw new Error("Unable to decode bech32 address");
-	                }
-	                return {
-	                    address: converter.Converter.bytesToHex(bech32Details.addressBytes),
-	                    addressType: bech32Details.addressType,
-	                    amount: output.amount
-	                };
-	            });
-	            return [2 /*return*/, sendWithAddressGenerator(client, seed, {
-	                    accountIndex: accountIndex,
-	                    addressIndex: startIndex !== null && startIndex !== void 0 ? startIndex : 0,
-	                    isInternal: false
-	                }, addresses.generateBip44Address, hexOutputs)];
+	        var nodeInfo, hexOutputs;
+	        return __generator(this, function (_b) {
+	            switch (_b.label) {
+	                case 0: return [4 /*yield*/, client.info()];
+	                case 1:
+	                    nodeInfo = _b.sent();
+	                    hexOutputs = outputs.map(function (output) {
+	                        var bech32Details = bech32Helper.Bech32Helper.fromBech32(output.addressBech32, nodeInfo.bech32HRP);
+	                        if (!bech32Details) {
+	                            throw new Error("Unable to decode bech32 address");
+	                        }
+	                        return {
+	                            address: converter.Converter.bytesToHex(bech32Details.addressBytes),
+	                            addressType: bech32Details.addressType,
+	                            amount: output.amount,
+	                            isDustAllowance: output.isDustAllowance
+	                        };
+	                    });
+	                    return [2 /*return*/, sendWithAddressGenerator(client, seed, {
+	                            accountIndex: accountIndex,
+	                            addressIndex: (_a = addressOptions === null || addressOptions === void 0 ? void 0 : addressOptions.startIndex) !== null && _a !== void 0 ? _a : 0,
+	                            isInternal: false
+	                        }, addresses.generateBip44Address, hexOutputs, indexation, addressOptions === null || addressOptions === void 0 ? void 0 : addressOptions.zeroCount)];
+	            }
 	        });
 	    });
 	}
@@ -10821,19 +11227,30 @@
 	 * @param seed The seed to use for address generation.
 	 * @param accountIndex The account index in the wallet.
 	 * @param outputs The outputs including address to send the funds to in ed25519 format and amount.
-	 * @param startIndex The start index for the wallet count address, defaults to 0.
+	 * @param indexation Optional indexation data to associate with the transaction.
+	 * @param indexation.key Indexation key.
+	 * @param indexation.data Optional index data.
+	 * @param addressOptions Optional address configuration for balance address lookups.
+	 * @param addressOptions.startIndex The start index for the wallet count address, defaults to 0.
+	 * @param addressOptions.zeroCount The number of addresses with 0 balance during lookup before aborting.
 	 * @returns The id of the message created and the contructed message.
 	 */
-	function sendMultipleEd25519(client, seed, accountIndex, outputs, startIndex) {
+	function sendMultipleEd25519(client, seed, accountIndex, outputs, indexation, addressOptions) {
+	    var _a;
 	    return __awaiter(this, void 0, void 0, function () {
 	        var hexOutputs;
-	        return __generator(this, function (_a) {
-	            hexOutputs = outputs.map(function (output) { return ({ address: output.addressEd25519, addressType: IEd25519Address.ED25519_ADDRESS_TYPE, amount: output.amount }); });
+	        return __generator(this, function (_b) {
+	            hexOutputs = outputs.map(function (output) { return ({
+	                address: output.addressEd25519,
+	                addressType: IEd25519Address.ED25519_ADDRESS_TYPE,
+	                amount: output.amount,
+	                isDustAllowance: output.isDustAllowance
+	            }); });
 	            return [2 /*return*/, sendWithAddressGenerator(client, seed, {
 	                    accountIndex: accountIndex,
-	                    addressIndex: startIndex !== null && startIndex !== void 0 ? startIndex : 0,
+	                    addressIndex: (_a = addressOptions === null || addressOptions === void 0 ? void 0 : addressOptions.startIndex) !== null && _a !== void 0 ? _a : 0,
 	                    isInternal: false
-	                }, addresses.generateBip44Address, hexOutputs)];
+	                }, addresses.generateBip44Address, hexOutputs, indexation, addressOptions === null || addressOptions === void 0 ? void 0 : addressOptions.zeroCount)];
 	        });
 	    });
 	}
@@ -10845,17 +11262,21 @@
 	 * @param initialAddressState The initial address state for calculating the addresses.
 	 * @param nextAddressPath Calculate the next address for inputs.
 	 * @param outputs The address to send the funds to in bech32 format and amounts.
+	 * @param indexation Optional indexation data to associate with the transaction.
+	 * @param indexation.key Indexation key.
+	 * @param indexation.data Optional index data.
+	 * @param zeroCount The number of addresses with 0 balance during lookup before aborting.
 	 * @returns The id of the message created and the contructed message.
 	 */
-	function sendWithAddressGenerator(client, seed, initialAddressState, nextAddressPath, outputs) {
+	function sendWithAddressGenerator(client, seed, initialAddressState, nextAddressPath, outputs, indexation, zeroCount) {
 	    return __awaiter(this, void 0, void 0, function () {
 	        var inputsAndKeys, response;
 	        return __generator(this, function (_a) {
 	            switch (_a.label) {
-	                case 0: return [4 /*yield*/, calculateInputs(client, seed, initialAddressState, nextAddressPath, outputs, 5)];
+	                case 0: return [4 /*yield*/, calculateInputs(client, seed, initialAddressState, nextAddressPath, outputs, zeroCount)];
 	                case 1:
 	                    inputsAndKeys = _a.sent();
-	                    return [4 /*yield*/, sendAdvanced_1.sendAdvanced(client, inputsAndKeys, outputs)];
+	                    return [4 /*yield*/, sendAdvanced_1.sendAdvanced(client, inputsAndKeys, outputs, indexation)];
 	                case 2:
 	                    response = _a.sent();
 	                    return [2 /*return*/, {
@@ -10931,7 +11352,7 @@
 	                        else {
 	                            consumedBalance += addressOutput.output.amount;
 	                            input = {
-	                                type: 0,
+	                                type: IUTXOInput.UTXO_INPUT_TYPE,
 	                                transactionId: addressOutput.transactionId,
 	                                transactionOutputIndex: addressOutput.outputIndex
 	                            };
@@ -11016,6 +11437,7 @@
 	// SPDX-License-Identifier: Apache-2.0
 
 
+
 	/**
 	 * Send a data message.
 	 * @param client The client to send the transfer with.
@@ -11029,14 +11451,17 @@
 	        return __generator(this, function (_a) {
 	            switch (_a.label) {
 	                case 0:
-	                    if (!indexationKey || indexationKey.length === 0) {
+	                    if (!indexationKey) {
 	                        throw new Error("indexationKey must not be empty");
+	                    }
+	                    if (indexationKey.length < payload.MIN_INDEXATION_KEY_LENGTH) {
+	                        throw new Error("The indexation key length is " + indexationKey.length + ", which is below the minimum size of " + payload.MIN_INDEXATION_KEY_LENGTH);
 	                    }
 	                    if (indexationKey.length > payload.MAX_INDEXATION_KEY_LENGTH) {
 	                        throw new Error("The indexation key length is " + indexationKey.length + ", which exceeds the maximum size of " + payload.MAX_INDEXATION_KEY_LENGTH);
 	                    }
 	                    indexationPayload = {
-	                        type: 2,
+	                        type: IIndexationPayload.INDEXATION_PAYLOAD_TYPE,
 	                        index: indexationKey,
 	                        data: indexationData ? converter.Converter.bytesToHex(indexationData) : ""
 	                    };
@@ -11062,156 +11487,181 @@
 
 	});
 
+	var IAddressOutputsResponse = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 
-	var IAddressOutputsResponse = /*#__PURE__*/Object.freeze({
-		__proto__: null
 	});
 
+	var IAddressResponse = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 
-	var IAddressResponse = /*#__PURE__*/Object.freeze({
-		__proto__: null
 	});
 
+	var IChildrenResponse = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 
-	var IChildrenResponse = /*#__PURE__*/Object.freeze({
-		__proto__: null
 	});
 
+	var IMessageIdResponse = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 
-	var IMessageIdResponse = /*#__PURE__*/Object.freeze({
-		__proto__: null
 	});
 
+	var IMessagesResponse = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 
-	var IMessagesResponse = /*#__PURE__*/Object.freeze({
-		__proto__: null
 	});
 
+	var IMilestoneResponse = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 
-	var IMilestoneResponse = /*#__PURE__*/Object.freeze({
-		__proto__: null
 	});
 
+	var IOutputResponse = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 
-	var IOutputResponse = /*#__PURE__*/Object.freeze({
-		__proto__: null
 	});
 
+	var IResponse = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 
-	var IResponse = /*#__PURE__*/Object.freeze({
-		__proto__: null
 	});
 
+	var ITipsResponse = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 
-	var ITipsResponse = /*#__PURE__*/Object.freeze({
-		__proto__: null
 	});
 
+	var conflictReason = createCommonjsModule(function (module, exports) {
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.ConflictReason = void 0;
+	(function (ConflictReason) {
+	    /**
+	     * The message has no conflict.
+	     */
+	    ConflictReason[ConflictReason["none"] = 0] = "none";
+	    /**
+	     * The referenced UTXO was already spent.
+	     */
+	    ConflictReason[ConflictReason["inputUTXOAlreadySpent"] = 1] = "inputUTXOAlreadySpent";
+	    /**
+	     * The referenced UTXO was already spent while confirming this milestone.
+	     */
+	    ConflictReason[ConflictReason["inputUTXOAlreadySpentInThisMilestone"] = 2] = "inputUTXOAlreadySpentInThisMilestone";
+	    /**
+	     * The referenced UTXO cannot be found.
+	     */
+	    ConflictReason[ConflictReason["inputUTXONotFound"] = 3] = "inputUTXONotFound";
+	    /**
+	     * The sum of the inputs and output values does not match.
+	     */
+	    ConflictReason[ConflictReason["inputOutputSumMismatch"] = 4] = "inputOutputSumMismatch";
+	    /**
+	     * The unlock block signature is invalid.
+	     */
+	    ConflictReason[ConflictReason["invalidSignature"] = 5] = "invalidSignature";
+	    /**
+	     * The input or output type used is unsupported.
+	     */
+	    ConflictReason[ConflictReason["unsupportedInputOrOutputType"] = 6] = "unsupportedInputOrOutputType";
+	    /**
+	     * The address type used is unsupported.
+	     */
+	    ConflictReason[ConflictReason["unsupportedAddressType"] = 7] = "unsupportedAddressType";
+	    /**
+	     * The dust allowance for the address is invalid.
+	     */
+	    ConflictReason[ConflictReason["invalidDustAllowance"] = 8] = "invalidDustAllowance";
+	    /**
+	     * The semantic validation failed.
+	     */
+	    ConflictReason[ConflictReason["semanticValidationFailed"] = 9] = "semanticValidationFailed";
+	})(exports.ConflictReason || (exports.ConflictReason = {}));
+
+	});
+
+	var IAddress = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 
-	var IAddress = /*#__PURE__*/Object.freeze({
-		__proto__: null
 	});
 
+	var IBip44GeneratorState = createCommonjsModule(function (module, exports) {
 	// Copyright 2020 IOTA Stiftung
 	// SPDX-License-Identifier: Apache-2.0
 	Object.defineProperty(exports, "__esModule", { value: true });
 
-	var IBip44GeneratorState = /*#__PURE__*/Object.freeze({
-		__proto__: null
 	});
 
+	var IClient = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 
-	var IClient = /*#__PURE__*/Object.freeze({
-		__proto__: null
 	});
 
+	var IGossipMetrics = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 
-	var IGossipMetrics = /*#__PURE__*/Object.freeze({
-		__proto__: null
 	});
 
+	var IKeyPair = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 
-	var IKeyPair = /*#__PURE__*/Object.freeze({
-		__proto__: null
 	});
 
+	var IMessage = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 
-	var IMessage = /*#__PURE__*/Object.freeze({
-		__proto__: null
 	});
 
+	var IMessageMetadata = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 
-	var IMessageMetadata = /*#__PURE__*/Object.freeze({
-		__proto__: null
 	});
 
+	var IMqttClient = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 
-	var IMqttClient = /*#__PURE__*/Object.freeze({
-		__proto__: null
 	});
 
+	var IMqttStatus = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 
-	var IMqttStatus = /*#__PURE__*/Object.freeze({
-		__proto__: null
 	});
 
+	var INodeInfo = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 
-	var INodeInfo = /*#__PURE__*/Object.freeze({
-		__proto__: null
 	});
 
+	var IPeer = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 
-	var IPeer = /*#__PURE__*/Object.freeze({
-		__proto__: null
 	});
 
+	var IPowProvider = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 
-	var IPowProvider = /*#__PURE__*/Object.freeze({
-		__proto__: null
 	});
 
+	var ISeed = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 
-	var ISeed = /*#__PURE__*/Object.freeze({
-		__proto__: null
 	});
 
+	var ITypeBase = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 
-	var ITypeBase = /*#__PURE__*/Object.freeze({
-		__proto__: null
 	});
 
+	var ledgerInclusionState = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 
-	var ledgerInclusionState = /*#__PURE__*/Object.freeze({
-		__proto__: null
 	});
 
+	var units = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 
-	var units = /*#__PURE__*/Object.freeze({
-		__proto__: null
 	});
 
 	var b1t6 = createCommonjsModule(function (module, exports) {
@@ -11494,6 +11944,31 @@
 
 	});
 
+	var conflictReasonStrings = createCommonjsModule(function (module, exports) {
+	var _a;
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.CONFLICT_REASON_STRINGS = void 0;
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
+
+	/**
+	 * Conflict reason strings.
+	 */
+	exports.CONFLICT_REASON_STRINGS = (_a = {},
+	    _a[conflictReason.ConflictReason.none] = "Not conflicting",
+	    _a[conflictReason.ConflictReason.inputUTXOAlreadySpent] = "The referenced UTXO was already spent",
+	    _a[conflictReason.ConflictReason.inputUTXOAlreadySpentInThisMilestone] = "The referenced UTXO was already spent while confirming this milestone",
+	    _a[conflictReason.ConflictReason.inputUTXONotFound] = "The referenced UTXO cannot be found",
+	    _a[conflictReason.ConflictReason.inputOutputSumMismatch] = "The sum of the inputs and output values does not match",
+	    _a[conflictReason.ConflictReason.invalidSignature] = "The unlock block signature is invalid",
+	    _a[conflictReason.ConflictReason.unsupportedInputOrOutputType] = "The input or output type used is unsupported",
+	    _a[conflictReason.ConflictReason.unsupportedAddressType] = "The address type used is unsupported",
+	    _a[conflictReason.ConflictReason.invalidDustAllowance] = "The dust allowance for the address is invalid",
+	    _a[conflictReason.ConflictReason.semanticValidationFailed] = "The semantic validation failed",
+	    _a);
+
+	});
+
 	var ed25519Seed = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.Ed25519Seed = exports.ED25519_SEED_TYPE = void 0;
@@ -11516,8 +11991,8 @@
 	        this._secretKey = secretKeyBytes !== null && secretKeyBytes !== void 0 ? secretKeyBytes : new Uint8Array();
 	    }
 	    /**
-	     * Create the seed from a Bip39 mnenomic.
-	     * @param mnemonic The mnenomic to create the seed from.
+	     * Create the seed from a Bip39 mnemonic.
+	     * @param mnemonic The mnemonic to create the seed from.
 	     * @returns A new instance of Ed25519Seed.
 	     */
 	    Ed25519Seed.fromMnemonic = function (mnemonic) {
@@ -11575,6 +12050,7 @@
 
 
 
+
 	/**
 	 * The logger used by the log methods.
 	 * @param message The message to output.
@@ -11602,6 +12078,8 @@
 	    logger(prefix + "\tVersion:", info.version);
 	    logger(prefix + "\tNetwork Id:", info.networkId);
 	    logger(prefix + "\tIs Healthy:", info.isHealthy);
+	    logger(prefix + "\tMin PoW Score:", info.minPowScore);
+	    logger(prefix + "\tBech32 HRP:", info.bech32HRP);
 	    logger(prefix + "\tLatest Milestone Index:", info.latestMilestoneIndex);
 	    logger(prefix + "\tSolid Milestone Index:", info.solidMilestoneIndex);
 	    logger(prefix + "\tPruning Index:", info.pruningIndex);
@@ -11661,6 +12139,9 @@
 	        logger(prefix + "\tReferenced By Milestone Index:", messageMetadata.referencedByMilestoneIndex);
 	    }
 	    logger(prefix + "\tLedger Inclusion State:", messageMetadata.ledgerInclusionState);
+	    if (messageMetadata.conflictReason !== undefined) {
+	        logger(prefix + "\tConflict Reason:", messageMetadata.conflictReason);
+	    }
 	    if (messageMetadata.shouldPromote !== undefined) {
 	        logger(prefix + "\tShould Promote:", messageMetadata.shouldPromote);
 	    }
@@ -11720,7 +12201,7 @@
 	            var payload = unknownPayload;
 	            logger(prefix + "Indexation Payload");
 	            logger(prefix + "\tIndex:", payload.index);
-	            logger(prefix + "\tData:", converter.Converter.hexToAscii(payload.data));
+	            logger(prefix + "\tData:", payload.data ? converter.Converter.hexToUtf8(payload.data) : "None");
 	        }
 	    }
 	}
@@ -11772,11 +12253,19 @@
 	 * @param unknownOutput The output to log.
 	 */
 	function logOutput(prefix, unknownOutput) {
-	    if ((unknownOutput === null || unknownOutput === void 0 ? void 0 : unknownOutput.type) === ISigLockedSingleOutput.SIG_LOCKED_SINGLE_OUTPUT_TYPE) {
-	        var output = unknownOutput;
-	        logger(prefix + "Signature Locked Single Output");
-	        logAddress(prefix + "\t\t", output.address);
-	        logger(prefix + "\t\tAmount:", output.amount);
+	    if (unknownOutput) {
+	        if (unknownOutput.type === ISigLockedSingleOutput.SIG_LOCKED_SINGLE_OUTPUT_TYPE) {
+	            var output = unknownOutput;
+	            logger(prefix + "Signature Locked Single Output");
+	            logAddress(prefix + "\t\t", output.address);
+	            logger(prefix + "\t\tAmount:", output.amount);
+	        }
+	        else if (unknownOutput.type === ISigLockedDustAllowanceOutput.SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE) {
+	            var output = unknownOutput;
+	            logger(prefix + "Signature Locked Dust Allowance Output");
+	            logAddress(prefix + "\t\t", output.address);
+	            logger(prefix + "\t\tAmount:", output.amount);
+	        }
 	    }
 	}
 	exports.logOutput = logOutput;
@@ -11798,270 +12287,6 @@
 	    }
 	}
 	exports.logUnlockBlock = logUnlockBlock;
-
-	});
-
-	var messageHelper = createCommonjsModule(function (module, exports) {
-	var __awaiter = (commonjsGlobal && commonjsGlobal.__awaiter) || function (thisArg, _arguments, P, generator) {
-	    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-	    return new (P || (P = Promise))(function (resolve, reject) {
-	        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-	        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-	        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-	        step((generator = generator.apply(thisArg, _arguments || [])).next());
-	    });
-	};
-	var __generator = (commonjsGlobal && commonjsGlobal.__generator) || function (thisArg, body) {
-	    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-	    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-	    function verb(n) { return function (v) { return step([n, v]); }; }
-	    function step(op) {
-	        if (f) throw new TypeError("Generator is already executing.");
-	        while (_) try {
-	            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-	            if (y = 0, t) op = [op[0] & 2, t.value];
-	            switch (op[0]) {
-	                case 0: case 1: t = op; break;
-	                case 4: _.label++; return { value: op[1], done: false };
-	                case 5: _.label++; y = op[1]; op = [0]; continue;
-	                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-	                default:
-	                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-	                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-	                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-	                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-	                    if (t[2]) _.ops.pop();
-	                    _.trys.pop(); continue;
-	            }
-	            op = body.call(thisArg, _);
-	        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-	        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-	    }
-	};
-	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.MessageHelper = void 0;
-	// Copyright 2020 IOTA Stiftung
-	// SPDX-License-Identifier: Apache-2.0
-
-
-
-
-
-
-
-
-
-
-	/**
-	 * Helper methods for messages.
-	 */
-	var MessageHelper = /** @class */ (function () {
-	    function MessageHelper() {
-	    }
-	    /**
-	     * Validate a transaction the message.
-	     * @param client The client for making API calls.
-	     * @param message The message to validate.
-	     * @returns The reasons why to message is not valid.
-	     */
-	    MessageHelper.validateTransaction = function (client, message) {
-	        var _a, _b;
-	        return __awaiter(this, void 0, void 0, function () {
-	            var invalid, txsForAddresses, i, sigUnlockBlock, address, outputs, _i, _c, outputId, output$1, inputCount, inputTotal, _d, _e, input$1, unlockBlockCount, outputTotal, _f, _g, output$1, serializedInputs, _h, _j, input$1, writeStream$1, sortedInputs, inputsAreSorted, i, serializedOutputs, _k, _l, output$1, writeStream$1, sortedOutputs, outputsAreSorted, i, binaryEssence, essenceFinal, unlockBlocksFull, i, refUnlockBlock, i, verified, err_1;
-	            return __generator(this, function (_m) {
-	                switch (_m.label) {
-	                    case 0:
-	                        invalid = [];
-	                        _m.label = 1;
-	                    case 1:
-	                        _m.trys.push([1, 15, , 16]);
-	                        if (!!message) return [3 /*break*/, 2];
-	                        invalid.push("The message is empty.");
-	                        return [3 /*break*/, 14];
-	                    case 2:
-	                        if (!!message.payload) return [3 /*break*/, 3];
-	                        invalid.push("There is no payload.");
-	                        return [3 /*break*/, 14];
-	                    case 3:
-	                        if (!(message.payload.type !== 0)) return [3 /*break*/, 4];
-	                        invalid.push("The payload type is not a transaction, it is " + message.payload.type + ".");
-	                        return [3 /*break*/, 14];
-	                    case 4:
-	                        if (!!message.payload.essence) return [3 /*break*/, 5];
-	                        invalid.push("There is no payload essence.");
-	                        return [3 /*break*/, 14];
-	                    case 5:
-	                        if (!(message.payload.essence.type !== 0)) return [3 /*break*/, 6];
-	                        invalid.push("The payload essence is of a type not supported. " + message.payload.essence.type + ".");
-	                        return [3 /*break*/, 14];
-	                    case 6:
-	                        if (!message.payload.essence.inputs || message.payload.essence.inputs.length === 0) {
-	                            invalid.push("There are no inputs.");
-	                        }
-	                        if (!message.payload.essence.outputs || message.payload.essence.outputs.length === 0) {
-	                            invalid.push("There are no outputs.");
-	                        }
-	                        if (!message.payload.unlockBlocks || message.payload.unlockBlocks.length === 0) {
-	                            invalid.push("There are no unlock blocks.");
-	                        }
-	                        txsForAddresses = {};
-	                        if (!message.payload.unlockBlocks) return [3 /*break*/, 13];
-	                        i = 0;
-	                        _m.label = 7;
-	                    case 7:
-	                        if (!(i < message.payload.unlockBlocks.length)) return [3 /*break*/, 13];
-	                        if (!(message.payload.unlockBlocks[i].type === ISignatureUnlockBlock.SIGNATURE_UNLOCK_BLOCK_TYPE)) return [3 /*break*/, 12];
-	                        sigUnlockBlock = message.payload.unlockBlocks[i];
-	                        if (!(sigUnlockBlock.signature.type === IEd25519Address.ED25519_ADDRESS_TYPE)) return [3 /*break*/, 12];
-	                        address = new ed25519Address.Ed25519Address(converter.Converter.hexToBytes(sigUnlockBlock.signature.publicKey));
-	                        return [4 /*yield*/, client.addressEd25519Outputs(converter.Converter.bytesToHex(address.toAddress()))];
-	                    case 8:
-	                        outputs = _m.sent();
-	                        _i = 0, _c = outputs.outputIds;
-	                        _m.label = 9;
-	                    case 9:
-	                        if (!(_i < _c.length)) return [3 /*break*/, 12];
-	                        outputId = _c[_i];
-	                        return [4 /*yield*/, client.output(outputId)];
-	                    case 10:
-	                        output$1 = _m.sent();
-	                        txsForAddresses[output$1.transactionId] = {
-	                            isSpent: output$1.isSpent,
-	                            amount: output$1.output.amount
-	                        };
-	                        _m.label = 11;
-	                    case 11:
-	                        _i++;
-	                        return [3 /*break*/, 9];
-	                    case 12:
-	                        i++;
-	                        return [3 /*break*/, 7];
-	                    case 13:
-	                        inputCount = 0;
-	                        inputTotal = 0;
-	                        if (message.payload.essence.inputs) {
-	                            inputCount = message.payload.essence.inputs.length;
-	                            for (_d = 0, _e = message.payload.essence.inputs; _d < _e.length; _d++) {
-	                                input$1 = _e[_d];
-	                                if (!txsForAddresses[input$1.transactionId]) {
-	                                    invalid.push("Missing transaction " + input$1.transactionId + " from source address.");
-	                                }
-	                                else if (txsForAddresses[input$1.transactionId].isSpent) {
-	                                    invalid.push("Transaction " + input$1.transactionId + " is already spent.");
-	                                }
-	                                else {
-	                                    inputTotal += txsForAddresses[input$1.transactionId].amount;
-	                                }
-	                            }
-	                        }
-	                        unlockBlockCount = (_b = (_a = message.payload.unlockBlocks) === null || _a === void 0 ? void 0 : _a.length) !== null && _b !== void 0 ? _b : 0;
-	                        if (inputCount !== unlockBlockCount) {
-	                            invalid.push("The number of unlock blocks " + unlockBlockCount + ", does not equal the number of inputs " + inputCount + ".");
-	                        }
-	                        outputTotal = 0;
-	                        if (message.payload.essence.outputs) {
-	                            for (_f = 0, _g = message.payload.essence.outputs; _f < _g.length; _f++) {
-	                                output$1 = _g[_f];
-	                                outputTotal += output$1.amount;
-	                            }
-	                        }
-	                        if (outputTotal !== inputTotal) {
-	                            invalid.push("The input total " + inputTotal + " does not equal the output total " + outputTotal + ".");
-	                        }
-	                        serializedInputs = [];
-	                        for (_h = 0, _j = message.payload.essence.inputs; _h < _j.length; _h++) {
-	                            input$1 = _j[_h];
-	                            writeStream$1 = new writeStream.WriteStream();
-	                            input.serializeInput(writeStream$1, input$1);
-	                            serializedInputs.push({
-	                                input: input$1,
-	                                serialized: writeStream$1.finalHex(),
-	                                index: serializedInputs.length
-	                            });
-	                        }
-	                        sortedInputs = serializedInputs.sort(function (a, b) { return a.serialized.localeCompare(b.serialized); });
-	                        inputsAreSorted = true;
-	                        for (i = 0; i < sortedInputs.length; i++) {
-	                            if (i !== sortedInputs[i].index) {
-	                                inputsAreSorted = false;
-	                                break;
-	                            }
-	                        }
-	                        if (!inputsAreSorted) {
-	                            invalid.push("The inputs are not lexigraphically sorted.");
-	                        }
-	                        serializedOutputs = [];
-	                        for (_k = 0, _l = message.payload.essence.outputs; _k < _l.length; _k++) {
-	                            output$1 = _l[_k];
-	                            writeStream$1 = new writeStream.WriteStream();
-	                            output.serializeOutput(writeStream$1, output$1);
-	                            serializedOutputs.push({
-	                                output: output$1,
-	                                serialized: writeStream$1.finalHex(),
-	                                index: serializedOutputs.length
-	                            });
-	                        }
-	                        sortedOutputs = serializedOutputs.sort(function (a, b) { return a.serialized.localeCompare(b.serialized); });
-	                        outputsAreSorted = true;
-	                        for (i = 0; i < sortedOutputs.length; i++) {
-	                            if (i !== sortedOutputs[i].index) {
-	                                outputsAreSorted = false;
-	                                break;
-	                            }
-	                        }
-	                        if (!outputsAreSorted) {
-	                            invalid.push("The outputs are not lexigraphically sorted.");
-	                        }
-	                        if (inputsAreSorted && outputsAreSorted && inputCount === unlockBlockCount) {
-	                            binaryEssence = new writeStream.WriteStream();
-	                            transaction.serializeTransactionEssence(binaryEssence, message.payload.essence);
-	                            essenceFinal = binaryEssence.finalBytes();
-	                            unlockBlocksFull = [];
-	                            for (i = 0; i < message.payload.unlockBlocks.length; i++) {
-	                                if (message.payload.unlockBlocks[i].type === ISignatureUnlockBlock.SIGNATURE_UNLOCK_BLOCK_TYPE) {
-	                                    unlockBlocksFull.push(message.payload.unlockBlocks[i]);
-	                                }
-	                                else if (message.payload.unlockBlocks[i].type === IReferenceUnlockBlock.REFERENCE_UNLOCK_BLOCK_TYPE) {
-	                                    refUnlockBlock = message.payload.unlockBlocks[i];
-	                                    if (refUnlockBlock.reference < 0 ||
-	                                        refUnlockBlock.reference > message.payload.unlockBlocks.length - 1) {
-	                                        invalid.push("Unlock Block " + i + " references index " + refUnlockBlock.reference + " which is out of range.");
-	                                    }
-	                                    else if (refUnlockBlock.reference === i) {
-	                                        invalid.push("Unlock Block " + i + " references itself.");
-	                                    }
-	                                    else if (message.payload.unlockBlocks[refUnlockBlock.reference].type === 1) {
-	                                        invalid.push("Unlock Block " + i + " references another reference.");
-	                                    }
-	                                    else {
-	                                        unlockBlocksFull.push(message.payload.unlockBlocks[refUnlockBlock.reference]);
-	                                    }
-	                                }
-	                            }
-	                            for (i = 0; i < sortedInputs.length; i++) {
-	                                if (unlockBlocksFull[i].signature.type === IEd25519Address.ED25519_ADDRESS_TYPE) {
-	                                    verified = ed25519.Ed25519.verify(converter.Converter.hexToBytes(unlockBlocksFull[i].signature.publicKey), essenceFinal, converter.Converter.hexToBytes(unlockBlocksFull[i].signature.signature));
-	                                    if (!verified) {
-	                                        invalid.push("Signature for unlock block " + i + " is incorrect.");
-	                                    }
-	                                }
-	                            }
-	                        }
-	                        _m.label = 14;
-	                    case 14: return [3 /*break*/, 16];
-	                    case 15:
-	                        err_1 = _m.sent();
-	                        invalid.push("The following error occured while validating the transaction");
-	                        invalid.push(err_1.toString().replace("TypeError: ", ""));
-	                        return [3 /*break*/, 16];
-	                    case 16: return [2 /*return*/, invalid];
-	                }
-	            });
-	        });
-	    };
-	    return MessageHelper;
-	}());
-	exports.MessageHelper = MessageHelper;
 
 	});
 
@@ -12197,58 +12422,6 @@
 
 	});
 
-	var require$$13 = /*@__PURE__*/getAugmentedNamespace(singleNodeClientOptions);
-
-	var require$$38 = /*@__PURE__*/getAugmentedNamespace(IAddressOutputsResponse);
-
-	var require$$39 = /*@__PURE__*/getAugmentedNamespace(IAddressResponse);
-
-	var require$$40 = /*@__PURE__*/getAugmentedNamespace(IChildrenResponse);
-
-	var require$$41 = /*@__PURE__*/getAugmentedNamespace(IMessageIdResponse);
-
-	var require$$42 = /*@__PURE__*/getAugmentedNamespace(IMessagesResponse);
-
-	var require$$43 = /*@__PURE__*/getAugmentedNamespace(IMilestoneResponse);
-
-	var require$$44 = /*@__PURE__*/getAugmentedNamespace(IOutputResponse);
-
-	var require$$45 = /*@__PURE__*/getAugmentedNamespace(IResponse);
-
-	var require$$46 = /*@__PURE__*/getAugmentedNamespace(ITipsResponse);
-
-	var require$$47 = /*@__PURE__*/getAugmentedNamespace(IAddress);
-
-	var require$$48 = /*@__PURE__*/getAugmentedNamespace(IBip44GeneratorState);
-
-	var require$$49 = /*@__PURE__*/getAugmentedNamespace(IClient);
-
-	var require$$52 = /*@__PURE__*/getAugmentedNamespace(IGossipMetrics);
-
-	var require$$54 = /*@__PURE__*/getAugmentedNamespace(IKeyPair);
-
-	var require$$55 = /*@__PURE__*/getAugmentedNamespace(IMessage);
-
-	var require$$56 = /*@__PURE__*/getAugmentedNamespace(IMessageMetadata);
-
-	var require$$58 = /*@__PURE__*/getAugmentedNamespace(IMqttClient);
-
-	var require$$59 = /*@__PURE__*/getAugmentedNamespace(IMqttStatus);
-
-	var require$$60 = /*@__PURE__*/getAugmentedNamespace(INodeInfo);
-
-	var require$$61 = /*@__PURE__*/getAugmentedNamespace(IPeer);
-
-	var require$$62 = /*@__PURE__*/getAugmentedNamespace(IPowProvider);
-
-	var require$$64 = /*@__PURE__*/getAugmentedNamespace(ISeed);
-
-	var require$$69 = /*@__PURE__*/getAugmentedNamespace(ITypeBase);
-
-	var require$$71 = /*@__PURE__*/getAugmentedNamespace(ledgerInclusionState);
-
-	var require$$72 = /*@__PURE__*/getAugmentedNamespace(units);
-
 	var es = createCommonjsModule(function (module, exports) {
 	var __createBinding = (commonjsGlobal && commonjsGlobal.__createBinding) || (Object.create ? (function(o, m, k, k2) {
 	    if (k2 === undefined) k2 = k;
@@ -12276,7 +12449,7 @@
 	__exportStar(clientError, exports);
 	__exportStar(mqttClient, exports);
 	__exportStar(singleNodeClient, exports);
-	__exportStar(require$$13, exports);
+	__exportStar(singleNodeClientOptions, exports);
 	__exportStar(bech32, exports);
 	__exportStar(bip32Path, exports);
 	__exportStar(bip39, exports);
@@ -12301,49 +12474,51 @@
 	__exportStar(send_1, exports);
 	__exportStar(sendAdvanced_1, exports);
 	__exportStar(sendData_1, exports);
-	__exportStar(require$$38, exports);
-	__exportStar(require$$39, exports);
-	__exportStar(require$$40, exports);
-	__exportStar(require$$41, exports);
-	__exportStar(require$$42, exports);
-	__exportStar(require$$43, exports);
-	__exportStar(require$$44, exports);
-	__exportStar(require$$45, exports);
-	__exportStar(require$$46, exports);
-	__exportStar(require$$47, exports);
-	__exportStar(require$$48, exports);
-	__exportStar(require$$49, exports);
+	__exportStar(IAddressOutputsResponse, exports);
+	__exportStar(IAddressResponse, exports);
+	__exportStar(IChildrenResponse, exports);
+	__exportStar(IMessageIdResponse, exports);
+	__exportStar(IMessagesResponse, exports);
+	__exportStar(IMilestoneResponse, exports);
+	__exportStar(IOutputResponse, exports);
+	__exportStar(IResponse, exports);
+	__exportStar(ITipsResponse, exports);
+	__exportStar(conflictReason, exports);
+	__exportStar(IAddress, exports);
+	__exportStar(IBip44GeneratorState, exports);
+	__exportStar(IClient, exports);
 	__exportStar(IEd25519Address, exports);
 	__exportStar(IEd25519Signature, exports);
-	__exportStar(require$$52, exports);
+	__exportStar(IGossipMetrics, exports);
 	__exportStar(IIndexationPayload, exports);
-	__exportStar(require$$54, exports);
-	__exportStar(require$$55, exports);
-	__exportStar(require$$56, exports);
+	__exportStar(IKeyPair, exports);
+	__exportStar(IMessage, exports);
+	__exportStar(IMessageMetadata, exports);
 	__exportStar(IMilestonePayload, exports);
-	__exportStar(require$$58, exports);
-	__exportStar(require$$59, exports);
-	__exportStar(require$$60, exports);
-	__exportStar(require$$61, exports);
-	__exportStar(require$$62, exports);
+	__exportStar(IMqttClient, exports);
+	__exportStar(IMqttStatus, exports);
+	__exportStar(INodeInfo, exports);
+	__exportStar(IPeer, exports);
+	__exportStar(IPowProvider, exports);
 	__exportStar(IReferenceUnlockBlock, exports);
-	__exportStar(require$$64, exports);
+	__exportStar(ISeed, exports);
+	__exportStar(ISigLockedDustAllowanceOutput, exports);
 	__exportStar(ISigLockedSingleOutput, exports);
 	__exportStar(ISignatureUnlockBlock, exports);
 	__exportStar(ITransactionEssence, exports);
 	__exportStar(ITransactionPayload, exports);
-	__exportStar(require$$69, exports);
+	__exportStar(ITypeBase, exports);
 	__exportStar(IUTXOInput, exports);
-	__exportStar(require$$71, exports);
-	__exportStar(require$$72, exports);
+	__exportStar(ledgerInclusionState, exports);
+	__exportStar(units, exports);
 	__exportStar(localPowProvider, exports);
+	__exportStar(conflictReasonStrings, exports);
 	__exportStar(ed25519Seed, exports);
 	__exportStar(arrayHelper, exports);
 	__exportStar(bech32Helper, exports);
 	__exportStar(bigIntHelper, exports);
 	__exportStar(converter, exports);
 	__exportStar(logging, exports);
-	__exportStar(messageHelper, exports);
 	__exportStar(powHelper, exports);
 	__exportStar(randomHelper, exports);
 	__exportStar(readStream, exports);
@@ -12353,6 +12528,8 @@
 	});
 
 	var index_browser = createCommonjsModule(function (module, exports) {
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
 	var __createBinding = (commonjsGlobal && commonjsGlobal.__createBinding) || (Object.create ? (function(o, m, k, k2) {
 	    if (k2 === undefined) k2 = k;
 	    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
@@ -12364,8 +12541,7 @@
 	    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 	};
 	Object.defineProperty(exports, "__esModule", { value: true });
-	// Copyright 2020 IOTA Stiftung
-	// SPDX-License-Identifier: Apache-2.0
+
 	__exportStar(es, exports);
 
 	});

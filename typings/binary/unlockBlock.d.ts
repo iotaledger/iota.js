@@ -2,8 +2,17 @@ import { IReferenceUnlockBlock } from "../models/IReferenceUnlockBlock";
 import { ISignatureUnlockBlock } from "../models/ISignatureUnlockBlock";
 import { ReadStream } from "../utils/readStream";
 import { WriteStream } from "../utils/writeStream";
+/**
+ * The minimum length of an unlock block binary representation.
+ */
 export declare const MIN_UNLOCK_BLOCK_LENGTH: number;
+/**
+ * The minimum length of a signature unlock block binary representation.
+ */
 export declare const MIN_SIGNATURE_UNLOCK_BLOCK_LENGTH: number;
+/**
+ * The minimum length of a reference unlock block binary representation.
+ */
 export declare const MIN_REFERENCE_UNLOCK_BLOCK_LENGTH: number;
 /**
  * Deserialize the unlock blocks from binary.

@@ -2,7 +2,7 @@ import { ITypeBase } from "./ITypeBase";
 /**
  * The global type for the payload.
  */
-export declare const MILESTONE_PAYLOAD_TYPE: number;
+export declare const MILESTONE_PAYLOAD_TYPE = 1;
 /**
  * Milestone payload.
  */

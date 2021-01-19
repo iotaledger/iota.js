@@ -2,8 +2,8 @@
 
 # Module: crypto/blake2b
 
-## Index
+## Table of contents
 
 ### Classes
 
-* [Blake2b](../classes/crypto_blake2b.blake2b.md)
+- [Blake2b](../classes/crypto/blake2b.blake2b.md)

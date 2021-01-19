@@ -1,13 +1,19 @@
-import { Bech32Helper, Bip32Path, Bip39, Converter, Ed25519Address, Ed25519Seed, ED25519_ADDRESS_TYPE, generateBip44Address, IOTA_BIP44_BASE_PATH } from "@iota/iota.js";
+import { Bech32Helper, Bip32Path, Bip39, Converter, Ed25519Address, Ed25519Seed, ED25519_ADDRESS_TYPE, generateBip44Address, IOTA_BIP44_BASE_PATH, SingleNodeClient } from "@iota/iota.js";
+
+const API_ENDPOINT = "http://localhost:14265";
 
 async function run() {
+    const client = new SingleNodeClient(API_ENDPOINT);
+
+    const info = await client.info();
+
     console.log("Base");
 
-    // Generate a random mnenomic.
+    // Generate a random mnemonic.
     const randomMnemonic = Bip39.randomMnemonic();
-    console.log("\tMnenomic:", randomMnemonic)
+    console.log("\tMnemonic:", randomMnemonic)
 
-    // Generate the seed from the mnenomic
+    // Generate the seed from the Mnemonic
     const baseSeed = Ed25519Seed.fromMnemonic(randomMnemonic);
 
     console.log("\tSeed", Converter.bytesToHex(baseSeed.toBytes()));
@@ -22,7 +28,7 @@ async function run() {
     const baseEd25519Address = new Ed25519Address(baseSeedKeyPair.publicKey);
     const basePublicKeyAddress = baseEd25519Address.toAddress();
     console.log("\tPublic Key Address Ed25519", Converter.bytesToHex(basePublicKeyAddress));
-    console.log("\tPublic Key Address Bech32", Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, basePublicKeyAddress));
+    console.log("\tPublic Key Address Bech32", Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, basePublicKeyAddress, info.bech32HRP));
     console.log();
 
     // Generate the next addresses for your account.
@@ -47,7 +53,7 @@ async function run() {
         const indexEd25519Address = new Ed25519Address(addressKeyPair.publicKey);
         const indexPublicKeyAddress = indexEd25519Address.toAddress();
         console.log("\tAddress Ed25519", Converter.bytesToHex(indexPublicKeyAddress));
-        console.log("\tAddress Bech32", Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, indexPublicKeyAddress));
+        console.log("\tAddress Bech32", Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, indexPublicKeyAddress, info.bech32HRP));
         console.log();
     }
 
@@ -81,7 +87,7 @@ async function run() {
         const indexEd25519Address = new Ed25519Address(indexSeedKeyPair.publicKey);
         const indexPublicKeyAddress = indexEd25519Address.toAddress();
         console.log("\tAddress Ed25519", Converter.bytesToHex(indexPublicKeyAddress));
-        console.log("\tAddress Bech32", Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, indexPublicKeyAddress));
+        console.log("\tAddress Bech32", Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, indexPublicKeyAddress, info.bech32HRP));
         console.log();
 
         basePath.pop();

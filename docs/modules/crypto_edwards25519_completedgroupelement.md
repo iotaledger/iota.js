@@ -2,8 +2,8 @@
 
 # Module: crypto/edwards25519/completedGroupElement
 
-## Index
+## Table of contents
 
 ### Classes
 
-* [CompletedGroupElement](../classes/crypto_edwards25519_completedgroupelement.completedgroupelement.md)
+- [CompletedGroupElement](../classes/crypto/edwards25519/completedgroupelement.completedgroupelement.md)

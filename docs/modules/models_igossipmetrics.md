@@ -2,8 +2,8 @@
 
 # Module: models/IGossipMetrics
 
-## Index
+## Table of contents
 
 ### Interfaces
 
-* [IGossipMetrics](../interfaces/models_igossipmetrics.igossipmetrics.md)
+- [IGossipMetrics](../interfaces/models/igossipmetrics.igossipmetrics.md)

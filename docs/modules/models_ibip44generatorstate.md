@@ -2,8 +2,8 @@
 
 # Module: models/IBip44GeneratorState
 
-## Index
+## Table of contents
 
 ### Interfaces
 
-* [IBip44GeneratorState](../interfaces/models_ibip44generatorstate.ibip44generatorstate.md)
+- [IBip44GeneratorState](../interfaces/models/ibip44generatorstate.ibip44generatorstate.md)

@@ -2,8 +2,8 @@
 
 # Module: utils/converter
 
-## Index
+## Table of contents
 
 ### Classes
 
-* [Converter](../classes/utils_converter.converter.md)
+- [Converter](../classes/utils/converter.converter.md)

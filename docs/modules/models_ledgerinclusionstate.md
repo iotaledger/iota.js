@@ -2,11 +2,11 @@
 
 # Module: models/ledgerInclusionState
 
-## Index
+## Table of contents
 
 ### Type aliases
 
-* [LedgerInclusionState](models_ledgerinclusionstate.md#ledgerinclusionstate)
+- [LedgerInclusionState](models_ledgerinclusionstate.md#ledgerinclusionstate)
 
 ## Type aliases
 

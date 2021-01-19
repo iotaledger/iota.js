@@ -2,8 +2,8 @@
 
 # Module: models/IMqttClient
 
-## Index
+## Table of contents
 
 ### Interfaces
 
-* [IMqttClient](../interfaces/models_imqttclient.imqttclient.md)
+- [IMqttClient](../interfaces/models/imqttclient.imqttclient.md)

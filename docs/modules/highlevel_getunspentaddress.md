@@ -2,17 +2,17 @@
 
 # Module: highLevel/getUnspentAddress
 
-## Index
+## Table of contents
 
 ### Functions
 
-* [getUnspentAddress](highlevel_getunspentaddress.md#getunspentaddress)
+- [getUnspentAddress](highlevel_getunspentaddress.md#getunspentaddress)
 
 ## Functions
 
 ### getUnspentAddress
 
-▸ **getUnspentAddress**(`client`: [*IClient*](../interfaces/models_iclient.iclient.md), `seed`: [*ISeed*](../interfaces/models_iseed.iseed.md), `accountIndex`: *number*, `startIndex?`: *number*): *Promise*<*undefined* \| {}\>
+▸ **getUnspentAddress**(`client`: [*IClient*](../interfaces/models/iclient.iclient.md), `seed`: [*ISeed*](../interfaces/models/iseed.iseed.md), `accountIndex`: *number*, `addressOptions?`: {}): *Promise*<{} \| *undefined*\>
 
 Get the first unspent address.
 
@@ -20,11 +20,11 @@ Get the first unspent address.
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`client` | [*IClient*](../interfaces/models_iclient.iclient.md) | The client to send the transfer with.   |
-`seed` | [*ISeed*](../interfaces/models_iseed.iseed.md) | The seed to use for address generation.   |
+`client` | [*IClient*](../interfaces/models/iclient.iclient.md) | The client to send the transfer with.   |
+`seed` | [*ISeed*](../interfaces/models/iseed.iseed.md) | The seed to use for address generation.   |
 `accountIndex` | *number* | The account index in the wallet.   |
-`startIndex?` | *number* | Optional start index for the wallet count address, defaults to 0.   |
+`addressOptions?` | {} | Optional address configuration for balance address lookups.   |
 
-**Returns:** *Promise*<*undefined* \| {}\>
+**Returns:** *Promise*<{} \| *undefined*\>
 
 The first unspent address.

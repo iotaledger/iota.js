@@ -2,8 +2,8 @@
 
 # Module: models/IClient
 
-## Index
+## Table of contents
 
 ### Interfaces
 
-* [IClient](../interfaces/models_iclient.iclient.md)
+- [IClient](../interfaces/models/iclient.iclient.md)

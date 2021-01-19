@@ -2,8 +2,8 @@
 
 # Module: crypto/edwards25519/extendedGroupElement
 
-## Index
+## Table of contents
 
 ### Classes
 
-* [ExtendedGroupElement](../classes/crypto_edwards25519_extendedgroupelement.extendedgroupelement.md)
+- [ExtendedGroupElement](../classes/crypto/edwards25519/extendedgroupelement.extendedgroupelement.md)

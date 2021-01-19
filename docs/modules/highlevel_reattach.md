@@ -2,17 +2,17 @@
 
 # Module: highLevel/reattach
 
-## Index
+## Table of contents
 
 ### Functions
 
-* [reattach](highlevel_reattach.md#reattach)
+- [reattach](highlevel_reattach.md#reattach)
 
 ## Functions
 
 ### reattach
 
-▸ **reattach**(`client`: [*IClient*](../interfaces/models_iclient.iclient.md), `messageId`: *string*): *Promise*<{}\>
+▸ **reattach**(`client`: [*IClient*](../interfaces/models/iclient.iclient.md), `messageId`: *string*): *Promise*<{}\>
 
 Reattach an existing message.
 
@@ -20,7 +20,7 @@ Reattach an existing message.
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`client` | [*IClient*](../interfaces/models_iclient.iclient.md) | The client to perform the reattach with.   |
+`client` | [*IClient*](../interfaces/models/iclient.iclient.md) | The client to perform the reattach with.   |
 `messageId` | *string* | The message to reattach.   |
 
 **Returns:** *Promise*<{}\>

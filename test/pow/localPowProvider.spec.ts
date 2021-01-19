@@ -1,6 +1,7 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 import { serializeMessage } from "../../src/binary/message";
+import { INDEXATION_PAYLOAD_TYPE } from "../../src/models/IIndexationPayload";
 import { IMessage } from "../../src/models/IMessage";
 import { LocalPowProvider } from "../../src/pow/localPowProvider";
 import { Converter } from "../../src/utils/converter";
@@ -18,7 +19,7 @@ describe("LocalPowProvider", () => {
                 Converter.bytesToHex(RandomHelper.generate(32))
             ],
             payload: {
-                type: 2,
+                type: INDEXATION_PAYLOAD_TYPE,
                 index: "hello world",
                 data: Converter.bytesToHex(Uint8Array.from([1, 2, 3, 4]))
             }

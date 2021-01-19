@@ -1,12 +1,16 @@
 import commonjs from '@rollup/plugin-commonjs';
 import resolve from '@rollup/plugin-node-resolve';
+import replace from '@rollup/plugin-replace';
 import { terser } from 'rollup-plugin-terser';
 
 const plugins = [
+    replace({
+        "process.env.BROWSER": !!process.env.BROWSER
+    }),
     commonjs(),
     resolve({
         browser: process.env.BROWSER
-    }),
+    })
 ];
 
 if (process.env.MINIFY) {
@@ -23,9 +27,19 @@ export default {
         globals: {
             "node-fetch": "node-fetch",
             "crypto": "crypto",
-            "mqtt": "mqtt"
+            "mqtt": "mqtt",
+            "big-integer": "big-integer"
         }
     },
-    external: (process.env.BROWSER ? ["mqtt"] : ["crypto", "node-fetch", "mqtt"]),
+    external: (process.env.BROWSER
+        ? [
+            "mqtt",
+            "big-integer"
+        ]
+        : [
+            "crypto",
+            "node-fetch",
+            "mqtt"
+        ]),
     plugins
 }

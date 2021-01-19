@@ -2,8 +2,8 @@
 
 # Module: models/IAddress
 
-## Index
+## Table of contents
 
 ### Interfaces
 
-* [IAddress](../interfaces/models_iaddress.iaddress.md)
+- [IAddress](../interfaces/models/iaddress.iaddress.md)

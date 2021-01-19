@@ -2,8 +2,8 @@
 
 # Module: models/IKeyPair
 
-## Index
+## Table of contents
 
 ### Interfaces
 
-* [IKeyPair](../interfaces/models_ikeypair.ikeypair.md)
+- [IKeyPair](../interfaces/models/ikeypair.ikeypair.md)

@@ -18,7 +18,6 @@ import { INodeInfo } from "../models/INodeInfo";
 import { IPeer } from "../models/IPeer";
 import { IPowProvider } from "../models/IPowProvider";
 import { ArrayHelper } from "../utils/arrayHelper";
-import { Bech32Helper } from "../utils/bech32Helper";
 import { BigIntHelper } from "../utils/bigIntHelper";
 import { Converter } from "../utils/converter";
 import { WriteStream } from "../utils/writeStream";
@@ -269,9 +268,6 @@ export class SingleNodeClient implements IClient {
      * @returns The address details.
      */
     public async address(addressBech32: string): Promise<IAddressResponse> {
-        if (!Bech32Helper.matches(addressBech32)) {
-            throw new Error("The supplied address does not appear to be bech32 format");
-        }
         return this.fetchJson<unknown, IAddressResponse>(
             "get",
             `addresses/${addressBech32}`
@@ -284,9 +280,6 @@ export class SingleNodeClient implements IClient {
      * @returns The address outputs.
      */
     public async addressOutputs(addressBech32: string): Promise<IAddressOutputsResponse> {
-        if (!Bech32Helper.matches(addressBech32)) {
-            throw new Error("The supplied address does not appear to be bech32 format");
-        }
         return this.fetchJson<unknown, IAddressOutputsResponse>(
             "get",
             `addresses/${addressBech32}/outputs`
@@ -505,8 +498,9 @@ export class SingleNodeClient implements IClient {
         }
 
         if (this._userName && this._password) {
+            const userPass = Converter.bytesToBase64(Converter.utf8ToBytes(`${this._userName}:${this._password}`));
             headers = headers ?? {};
-            headers.Authorization = `Basic ${btoa(`${this._userName}:${this._password}`)}`;
+            headers.Authorization = `Basic ${userPass}`;
         }
 
         try {
@@ -538,7 +532,7 @@ export class SingleNodeClient implements IClient {
         if (!this._networkId || !this._minPowScore) {
             const nodeInfo = await this.info();
 
-            const networkIdBytes = Blake2b.sum256(Converter.asciiToBytes(nodeInfo.networkId));
+            const networkIdBytes = Blake2b.sum256(Converter.utf8ToBytes(nodeInfo.networkId));
             this._networkId = BigIntHelper.read8(networkIdBytes, 0);
 
             this._minPowScore = nodeInfo.minPowScore ?? 100;

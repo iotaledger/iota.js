@@ -2,8 +2,8 @@
 
 # Module: models/api/IAddressResponse
 
-## Index
+## Table of contents
 
 ### Interfaces
 
-* [IAddressResponse](../interfaces/models_api_iaddressresponse.iaddressresponse.md)
+- [IAddressResponse](../interfaces/models/api/iaddressresponse.iaddressresponse.md)

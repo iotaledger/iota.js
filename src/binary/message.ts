@@ -6,6 +6,9 @@ import { WriteStream } from "../utils/writeStream";
 import { BYTE_SIZE, MESSAGE_ID_LENGTH, UINT64_SIZE } from "./common";
 import { deserializePayload, MIN_PAYLOAD_LENGTH, serializePayload } from "./payload";
 
+/**
+ * The minimum length of a message binary representation.
+ */
 const MIN_MESSAGE_LENGTH: number = UINT64_SIZE +
     BYTE_SIZE +
     (2 * MESSAGE_ID_LENGTH) +

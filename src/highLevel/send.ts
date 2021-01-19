@@ -8,7 +8,7 @@ import { ED25519_ADDRESS_TYPE } from "../models/IEd25519Address";
 import { IKeyPair } from "../models/IKeyPair";
 import { IMessage } from "../models/IMessage";
 import { ISeed } from "../models/ISeed";
-import { IUTXOInput } from "../models/IUTXOInput";
+import { IUTXOInput, UTXO_INPUT_TYPE } from "../models/IUTXOInput";
 import { Bech32Helper } from "../utils/bech32Helper";
 import { Converter } from "../utils/converter";
 import { generateBip44Address } from "./addresses";
@@ -21,7 +21,12 @@ import { sendAdvanced } from "./sendAdvanced";
  * @param accountIndex The account index in the wallet.
  * @param addressBech32 The address to send the funds to in bech32 format.
  * @param amount The amount to send.
- * @param startIndex The start index for the wallet count address, defaults to 0.
+ * @param indexation Optional indexation data to associate with the transaction.
+ * @param indexation.key Indexation key.
+ * @param indexation.data Optional index data.
+ * @param addressOptions Optional address configuration for balance address lookups.
+ * @param addressOptions.startIndex The start index for the wallet count address, defaults to 0.
+ * @param addressOptions.zeroCount The number of addresses with 0 balance during lookup before aborting.
  * @returns The id of the message created and the contructed message.
  */
 export async function send(
@@ -30,16 +35,25 @@ export async function send(
     accountIndex: number,
     addressBech32: string,
     amount: number,
-    startIndex?: number): Promise<{
-        messageId: string;
-        message: IMessage;
-    }> {
+    indexation?: {
+        key: string;
+        data?: Uint8Array;
+    },
+    addressOptions?: {
+        startIndex?: number;
+        zeroCount?: number;
+    }
+): Promise<{
+    messageId: string;
+    message: IMessage;
+}> {
     return sendMultiple(
         client,
         seed,
         accountIndex,
         [{ addressBech32, amount }],
-        startIndex
+        indexation,
+        addressOptions
     );
 }
 
@@ -50,7 +64,12 @@ export async function send(
  * @param accountIndex The account index in the wallet.
  * @param addressEd25519 The address to send the funds to in ed25519 format.
  * @param amount The amount to send.
- * @param startIndex The start index for the wallet count address, defaults to 0.
+ * @param indexation Optional indexation data to associate with the transaction.
+ * @param indexation.key Indexation key.
+ * @param indexation.data Optional index data.
+ * @param addressOptions Optional address configuration for balance address lookups.
+ * @param addressOptions.startIndex The start index for the wallet count address, defaults to 0.
+ * @param addressOptions.zeroCount The number of addresses with 0 balance during lookup before aborting.
  * @returns The id of the message created and the contructed message.
  */
 export async function sendEd25519(
@@ -59,16 +78,25 @@ export async function sendEd25519(
     accountIndex: number,
     addressEd25519: string,
     amount: number,
-    startIndex?: number): Promise<{
-        messageId: string;
-        message: IMessage;
-    }> {
+    indexation?: {
+        key: string;
+        data?: Uint8Array;
+    },
+    addressOptions?: {
+        startIndex?: number;
+        zeroCount?: number;
+    }
+): Promise<{
+    messageId: string;
+    message: IMessage;
+}> {
     return sendMultipleEd25519(
         client,
         seed,
         accountIndex,
         [{ addressEd25519, amount }],
-        startIndex
+        indexation,
+        addressOptions
     );
 }
 
@@ -78,7 +106,12 @@ export async function sendEd25519(
  * @param seed The seed to use for address generation.
  * @param accountIndex The account index in the wallet.
  * @param outputs The address to send the funds to in bech32 format and amounts.
- * @param startIndex The start index for the wallet count address, defaults to 0.
+ * @param indexation Optional indexation data to associate with the transaction.
+ * @param indexation.key Indexation key.
+ * @param indexation.data Optional index data.
+ * @param addressOptions Optional address configuration for balance address lookups.
+ * @param addressOptions.startIndex The start index for the wallet count address, defaults to 0.
+ * @param addressOptions.zeroCount The number of addresses with 0 balance during lookup before aborting.
  * @returns The id of the message created and the contructed message.
  */
 export async function sendMultiple(
@@ -88,13 +121,23 @@ export async function sendMultiple(
     outputs: {
         addressBech32: string;
         amount: number;
+        isDustAllowance?: boolean;
     }[],
-    startIndex?: number): Promise<{
-        messageId: string;
-        message: IMessage;
-    }> {
+    indexation?: {
+        key: string;
+        data?: Uint8Array;
+    },
+    addressOptions?: {
+        startIndex?: number;
+        zeroCount?: number;
+    }
+): Promise<{
+    messageId: string;
+    message: IMessage;
+}> {
+    const nodeInfo = await client.info();
     const hexOutputs = outputs.map(output => {
-        const bech32Details = Bech32Helper.fromBech32(output.addressBech32);
+        const bech32Details = Bech32Helper.fromBech32(output.addressBech32, nodeInfo.bech32HRP);
         if (!bech32Details) {
             throw new Error("Unable to decode bech32 address");
         }
@@ -102,7 +145,8 @@ export async function sendMultiple(
         return {
             address: Converter.bytesToHex(bech32Details.addressBytes),
             addressType: bech32Details.addressType,
-            amount: output.amount
+            amount: output.amount,
+            isDustAllowance: output.isDustAllowance
         };
     });
 
@@ -111,11 +155,13 @@ export async function sendMultiple(
         seed,
         {
             accountIndex,
-            addressIndex: startIndex ?? 0,
+            addressIndex: addressOptions?.startIndex ?? 0,
             isInternal: false
         },
         generateBip44Address,
-        hexOutputs
+        hexOutputs,
+        indexation,
+        addressOptions?.zeroCount
     );
 }
 
@@ -125,7 +171,12 @@ export async function sendMultiple(
  * @param seed The seed to use for address generation.
  * @param accountIndex The account index in the wallet.
  * @param outputs The outputs including address to send the funds to in ed25519 format and amount.
- * @param startIndex The start index for the wallet count address, defaults to 0.
+ * @param indexation Optional indexation data to associate with the transaction.
+ * @param indexation.key Indexation key.
+ * @param indexation.data Optional index data.
+ * @param addressOptions Optional address configuration for balance address lookups.
+ * @param addressOptions.startIndex The start index for the wallet count address, defaults to 0.
+ * @param addressOptions.zeroCount The number of addresses with 0 balance during lookup before aborting.
  * @returns The id of the message created and the contructed message.
  */
 export async function sendMultipleEd25519(
@@ -135,13 +186,27 @@ export async function sendMultipleEd25519(
     outputs: {
         addressEd25519: string;
         amount: number;
+        isDustAllowance?: boolean;
     }[],
-    startIndex?: number): Promise<{
-        messageId: string;
-        message: IMessage;
-    }> {
+    indexation?: {
+        key: string;
+        data?: Uint8Array;
+    },
+    addressOptions?: {
+        startIndex?: number;
+        zeroCount?: number;
+    }
+): Promise<{
+    messageId: string;
+    message: IMessage;
+}> {
     const hexOutputs = outputs.map(output => (
-        { address: output.addressEd25519, addressType: ED25519_ADDRESS_TYPE, amount: output.amount }
+        {
+            address: output.addressEd25519,
+            addressType: ED25519_ADDRESS_TYPE,
+            amount: output.amount,
+            isDustAllowance: output.isDustAllowance
+        }
     ));
 
     return sendWithAddressGenerator<IBip44GeneratorState>(
@@ -149,11 +214,13 @@ export async function sendMultipleEd25519(
         seed,
         {
             accountIndex,
-            addressIndex: startIndex ?? 0,
+            addressIndex: addressOptions?.startIndex ?? 0,
             isInternal: false
         },
         generateBip44Address,
-        hexOutputs
+        hexOutputs,
+        indexation,
+        addressOptions?.zeroCount
     );
 }
 
@@ -164,6 +231,10 @@ export async function sendMultipleEd25519(
  * @param initialAddressState The initial address state for calculating the addresses.
  * @param nextAddressPath Calculate the next address for inputs.
  * @param outputs The address to send the funds to in bech32 format and amounts.
+ * @param indexation Optional indexation data to associate with the transaction.
+ * @param indexation.key Indexation key.
+ * @param indexation.data Optional index data.
+ * @param zeroCount The number of addresses with 0 balance during lookup before aborting.
  * @returns The id of the message created and the contructed message.
  */
 export async function sendWithAddressGenerator<T>(
@@ -175,23 +246,31 @@ export async function sendWithAddressGenerator<T>(
         address: string;
         addressType: number;
         amount: number;
-    }[]): Promise<{
-        messageId: string;
-        message: IMessage;
-    }> {
+        isDustAllowance?: boolean;
+    }[],
+    indexation?: {
+        key: string;
+        data?: Uint8Array;
+    },
+    zeroCount?: number
+): Promise<{
+    messageId: string;
+    message: IMessage;
+}> {
     const inputsAndKeys = await calculateInputs(
         client,
         seed,
         initialAddressState,
         nextAddressPath,
         outputs,
-        5
+        zeroCount
     );
 
     const response = await sendAdvanced(
         client,
         inputsAndKeys,
-        outputs);
+        outputs,
+        indexation);
 
     return {
         messageId: response.messageId,
@@ -265,7 +344,7 @@ export async function calculateInputs<T>(
                         consumedBalance += addressOutput.output.amount;
 
                         const input: IUTXOInput = {
-                            type: 0,
+                            type: UTXO_INPUT_TYPE,
                             transactionId: addressOutput.transactionId,
                             transactionOutputIndex: addressOutput.outputIndex
                         };

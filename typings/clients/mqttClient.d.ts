@@ -1,4 +1,4 @@
-import { IMilestoneResponse } from "../models/api/IMilestoneResponse";
+import { IMqttMilestoneResponse } from "../models/api/IMqttMilestoneResponse";
 import { IOutputResponse } from "../models/api/IOutputResponse";
 import { IMessage } from "../models/IMessage";
 import { IMessageMetadata } from "../models/IMessageMetadata";
@@ -19,13 +19,13 @@ export declare class MqttClient implements IMqttClient {
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    milestonesLatest(callback: (topic: string, data: IMilestoneResponse) => void): string;
+    milestonesLatest(callback: (topic: string, data: IMqttMilestoneResponse) => void): string;
     /**
      * Subscribe to the latest solid milestone updates.
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    milestonesSolid(callback: (topic: string, data: IMilestoneResponse) => void): string;
+    milestonesSolid(callback: (topic: string, data: IMqttMilestoneResponse) => void): string;
     /**
      * Subscribe to metadata updates for a specific message.
      * @param messageId The message to monitor.

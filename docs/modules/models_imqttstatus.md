@@ -2,8 +2,8 @@
 
 # Module: models/IMqttStatus
 
-## Index
+## Table of contents
 
 ### Interfaces
 
-* [IMqttStatus](../interfaces/models_imqttstatus.imqttstatus.md)
+- [IMqttStatus](../interfaces/models/imqttstatus.imqttstatus.md)

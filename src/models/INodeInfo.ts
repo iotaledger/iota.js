@@ -30,6 +30,11 @@ export interface INodeInfo {
     minPowScore: number;
 
     /**
+     * The human readable part of bech32 addresses.
+     */
+    bech32HRP: string;
+
+    /**
      * The latest milestone message index;
      */
     latestMilestoneIndex: number;

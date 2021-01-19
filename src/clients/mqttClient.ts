@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 import * as mqtt from "mqtt";
 import { deserializeMessage } from "../binary/message";
-import { IMilestoneResponse } from "../models/api/IMilestoneResponse";
+import { IMqttMilestoneResponse } from "../models/api/IMqttMilestoneResponse";
 import { IOutputResponse } from "../models/api/IOutputResponse";
 import { IMessage } from "../models/IMessage";
 import { IMessageMetadata } from "../models/IMessageMetadata";
@@ -101,7 +101,7 @@ export class MqttClient implements IMqttClient {
      * @returns A subscription Id which can be used to unsubscribe.
      */
     public milestonesLatest(
-        callback: (topic: string, data: IMilestoneResponse) => void): string {
+        callback: (topic: string, data: IMqttMilestoneResponse) => void): string {
         return this.internalSubscribe("milestones/latest", true, callback);
     }
 
@@ -111,7 +111,7 @@ export class MqttClient implements IMqttClient {
      * @returns A subscription Id which can be used to unsubscribe.
      */
     public milestonesSolid(
-        callback: (topic: string, data: IMilestoneResponse) => void): string {
+        callback: (topic: string, data: IMqttMilestoneResponse) => void): string {
         return this.internalSubscribe("milestones/solid", true, callback);
     }
 

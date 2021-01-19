@@ -20,8 +20,8 @@ var Ed25519Seed = /** @class */ (function () {
         this._secretKey = secretKeyBytes !== null && secretKeyBytes !== void 0 ? secretKeyBytes : new Uint8Array();
     }
     /**
-     * Create the seed from a Bip39 mnenomic.
-     * @param mnemonic The mnenomic to create the seed from.
+     * Create the seed from a Bip39 mnemonic.
+     * @param mnemonic The mnemonic to create the seed from.
      * @returns A new instance of Ed25519Seed.
      */
     Ed25519Seed.fromMnemonic = function (mnemonic) {

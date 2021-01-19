@@ -2,8 +2,8 @@
 
 # Module: models/IPeer
 
-## Index
+## Table of contents
 
 ### Interfaces
 
-* [IPeer](../interfaces/models_ipeer.ipeer.md)
+- [IPeer](../interfaces/models/ipeer.ipeer.md)

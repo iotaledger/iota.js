@@ -9,7 +9,7 @@ async function run() {
 
     for (let i = 0; i < 10; i++) {
         console.log("Sending Data")
-        const sendResult = await sendData(client, myIndex, Converter.asciiToBytes(`This is data ${i}`));
+        const sendResult = await sendData(client, myIndex, Converter.utf8ToBytes(`This is data ${i} 🚀`));
         console.log("Received Message Id", sendResult.messageId);
     }
 
@@ -25,7 +25,7 @@ async function run() {
         if (firstResult) {
             console.log("First Result");
             console.log("\tIndex: ", firstResult.index);
-            console.log("\tData: ", Converter.bytesToAscii(firstResult.data));
+            console.log("\tData: ", firstResult.data ? Converter.bytesToUtf8(firstResult.data) : "None");
         }
 
     } else {

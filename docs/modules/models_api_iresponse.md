@@ -2,8 +2,8 @@
 
 # Module: models/api/IResponse
 
-## Index
+## Table of contents
 
 ### Interfaces
 
-* [IResponse](../interfaces/models_api_iresponse.iresponse.md)
+- [IResponse](../interfaces/models/api/iresponse.iresponse.md)

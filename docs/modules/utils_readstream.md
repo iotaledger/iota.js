@@ -2,8 +2,8 @@
 
 # Module: utils/readStream
 
-## Index
+## Table of contents
 
 ### Classes
 
-* [ReadStream](../classes/utils_readstream.readstream.md)
+- [ReadStream](../classes/utils/readstream.readstream.md)

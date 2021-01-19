@@ -2,8 +2,8 @@
 
 # Module: clients/singleNodeClient
 
-## Index
+## Table of contents
 
 ### Classes
 
-* [SingleNodeClient](../classes/clients_singlenodeclient.singlenodeclient.md)
+- [SingleNodeClient](../classes/clients/singlenodeclient.singlenodeclient.md)

@@ -2,8 +2,8 @@
 
 # Module: models/api/IMilestoneResponse
 
-## Index
+## Table of contents
 
 ### Interfaces
 
-* [IMilestoneResponse](../interfaces/models_api_imilestoneresponse.imilestoneresponse.md)
+- [IMilestoneResponse](../interfaces/models/api/imilestoneresponse.imilestoneresponse.md)

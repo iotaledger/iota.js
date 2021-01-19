@@ -7,5 +7,5 @@ import { IClient } from "../models/IClient";
  */
 export declare function retrieveData(client: IClient, messageId: string): Promise<{
     index: string;
-    data: Uint8Array;
+    data?: Uint8Array;
 } | undefined>;

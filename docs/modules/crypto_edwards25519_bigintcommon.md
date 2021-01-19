@@ -2,11 +2,11 @@
 
 # Module: crypto/edwards25519/bigIntCommon
 
-## Index
+## Table of contents
 
 ### Variables
 
-* [BIG\_1\_SHIFTL\_20](crypto_edwards25519_bigintcommon.md#big_1_shiftl_20)
+- [BIG\_1\_SHIFTL\_20](crypto_edwards25519_bigintcommon.md#big_1_shiftl_20)
 
 ## Variables
 

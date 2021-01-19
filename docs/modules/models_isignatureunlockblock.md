@@ -2,20 +2,20 @@
 
 # Module: models/ISignatureUnlockBlock
 
-## Index
+## Table of contents
 
 ### Interfaces
 
-* [ISignatureUnlockBlock](../interfaces/models_isignatureunlockblock.isignatureunlockblock.md)
+- [ISignatureUnlockBlock](../interfaces/models/isignatureunlockblock.isignatureunlockblock.md)
 
 ### Variables
 
-* [SIGNATURE\_UNLOCK\_BLOCK\_TYPE](models_isignatureunlockblock.md#signature_unlock_block_type)
+- [SIGNATURE\_UNLOCK\_BLOCK\_TYPE](models_isignatureunlockblock.md#signature_unlock_block_type)
 
 ## Variables
 
 ### SIGNATURE\_UNLOCK\_BLOCK\_TYPE
 
-• `Const` **SIGNATURE\_UNLOCK\_BLOCK\_TYPE**: *number*= 0
+• `Const` **SIGNATURE\_UNLOCK\_BLOCK\_TYPE**: *0*= 0
 
 The global type for the unlock block.

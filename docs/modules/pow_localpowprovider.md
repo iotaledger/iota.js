@@ -2,8 +2,8 @@
 
 # Module: pow/localPowProvider
 
-## Index
+## Table of contents
 
 ### Classes
 
-* [LocalPowProvider](../classes/pow_localpowprovider.localpowprovider.md)
+- [LocalPowProvider](../classes/pow/localpowprovider.localpowprovider.md)

@@ -2,8 +2,8 @@
 
 # Module: models/api/ITipsResponse
 
-## Index
+## Table of contents
 
 ### Interfaces
 
-* [ITipsResponse](../interfaces/models_api_itipsresponse.itipsresponse.md)
+- [ITipsResponse](../interfaces/models/api/itipsresponse.itipsresponse.md)

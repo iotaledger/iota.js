@@ -2,8 +2,8 @@
 
 # Module: utils/unitsHelper
 
-## Index
+## Table of contents
 
 ### Classes
 
-* [UnitsHelper](../classes/utils_unitshelper.unitshelper.md)
+- [UnitsHelper](../classes/utils/unitshelper.unitshelper.md)

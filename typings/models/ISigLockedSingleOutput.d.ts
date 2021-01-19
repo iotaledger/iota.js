@@ -3,7 +3,7 @@ import { ITypeBase } from "./ITypeBase";
 /**
  * The global type for the sig locked single output.
  */
-export declare const SIG_LOCKED_SINGLE_OUTPUT_TYPE: number;
+export declare const SIG_LOCKED_SINGLE_OUTPUT_TYPE = 0;
 /**
  * Signature locked single output.
  */

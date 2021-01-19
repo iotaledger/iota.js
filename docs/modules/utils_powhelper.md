@@ -2,8 +2,8 @@
 
 # Module: utils/powHelper
 
-## Index
+## Table of contents
 
 ### Classes
 
-* [PowHelper](../classes/utils_powhelper.powhelper.md)
+- [PowHelper](../classes/utils/powhelper.powhelper.md)

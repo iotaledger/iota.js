@@ -6,7 +6,14 @@ import { ReadStream } from "../utils/readStream";
 import { WriteStream } from "../utils/writeStream";
 import { SMALL_TYPE_LENGTH } from "./common";
 
+/**
+ * The minimum length of a signature binary representation.
+ */
 export const MIN_SIGNATURE_LENGTH: number = SMALL_TYPE_LENGTH;
+
+/**
+ * The minimum length of an ed25519 signature binary representation.
+ */
 export const MIN_ED25519_SIGNATURE_LENGTH: number =
     MIN_SIGNATURE_LENGTH + Ed25519.SIGNATURE_SIZE + Ed25519.PUBLIC_KEY_SIZE;
 
@@ -67,7 +74,7 @@ export function deserializeEd25519Signature(readStream: ReadStream): IEd25519Sig
     const signature = readStream.readFixedHex("ed25519Signature.signature", Ed25519.SIGNATURE_SIZE);
 
     return {
-        type: 1,
+        type: ED25519_SIGNATURE_TYPE,
         publicKey,
         signature
     };

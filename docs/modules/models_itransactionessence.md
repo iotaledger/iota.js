@@ -2,20 +2,20 @@
 
 # Module: models/ITransactionEssence
 
-## Index
+## Table of contents
 
 ### Interfaces
 
-* [ITransactionEssence](../interfaces/models_itransactionessence.itransactionessence.md)
+- [ITransactionEssence](../interfaces/models/itransactionessence.itransactionessence.md)
 
 ### Variables
 
-* [TRANSACTION\_ESSENCE\_TYPE](models_itransactionessence.md#transaction_essence_type)
+- [TRANSACTION\_ESSENCE\_TYPE](models_itransactionessence.md#transaction_essence_type)
 
 ## Variables
 
 ### TRANSACTION\_ESSENCE\_TYPE
 
-• `Const` **TRANSACTION\_ESSENCE\_TYPE**: *number*= 0
+• `Const` **TRANSACTION\_ESSENCE\_TYPE**: *0*= 0
 
 The global type for the transaction essence.

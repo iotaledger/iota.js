@@ -8,8 +8,9 @@ import { IUTXOInput } from "../models/IUTXOInput";
  * @param client The client to send the transfer with.
  * @param inputsAndSignatureKeyPairs The inputs with the signature key pairs needed to sign transfers.
  * @param outputs The outputs to send.
- * @param indexationKey Optional indexation key.
- * @param indexationData Optional index data.
+ * @param indexation Optional indexation data to associate with the transaction.
+ * @param indexation.key Indexation key.
+ * @param indexation.data Optional index data.
  * @returns The id of the message created and the remainder address if one was needed.
  */
 export declare function sendAdvanced(client: IClient, inputsAndSignatureKeyPairs: {
@@ -19,7 +20,11 @@ export declare function sendAdvanced(client: IClient, inputsAndSignatureKeyPairs
     address: string;
     addressType: number;
     amount: number;
-}[], indexationKey?: string, indexationData?: Uint8Array): Promise<{
+    isDustAllowance?: boolean;
+}[], indexation?: {
+    key: string;
+    data?: Uint8Array;
+}): Promise<{
     messageId: string;
     message: IMessage;
 }>;
@@ -27,8 +32,9 @@ export declare function sendAdvanced(client: IClient, inputsAndSignatureKeyPairs
  * Build a transaction payload.
  * @param inputsAndSignatureKeyPairs The inputs with the signature key pairs needed to sign transfers.
  * @param outputs The outputs to send.
- * @param indexationKey Optional indexation key.
- * @param indexationData Optional index data.
+ * @param indexation Optional indexation data to associate with the transaction.
+ * @param indexation.key Indexation key.
+ * @param indexation.data Optional index data.
  * @returns The transaction payload.
  */
 export declare function buildTransactionPayload(inputsAndSignatureKeyPairs: {
@@ -38,4 +44,8 @@ export declare function buildTransactionPayload(inputsAndSignatureKeyPairs: {
     address: string;
     addressType: number;
     amount: number;
-}[], indexationKey?: string, indexationData?: Uint8Array): ITransactionPayload;
+    isDustAllowance?: boolean;
+}[], indexation?: {
+    key: string;
+    data?: Uint8Array;
+}): ITransactionPayload;

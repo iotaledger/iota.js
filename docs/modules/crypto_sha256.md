@@ -2,8 +2,8 @@
 
 # Module: crypto/sha256
 
-## Index
+## Table of contents
 
 ### Classes
 
-* [Sha256](../classes/crypto_sha256.sha256.md)
+- [Sha256](../classes/crypto/sha256.sha256.md)

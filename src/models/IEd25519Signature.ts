@@ -5,7 +5,7 @@ import { ITypeBase } from "./ITypeBase";
 /**
  * The global type for the signature type.
  */
-export const ED25519_SIGNATURE_TYPE: number = 1;
+export const ED25519_SIGNATURE_TYPE = 1;
 
 /**
  * Ed25519Signature signature.

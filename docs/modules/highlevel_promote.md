@@ -2,17 +2,17 @@
 
 # Module: highLevel/promote
 
-## Index
+## Table of contents
 
 ### Functions
 
-* [promote](highlevel_promote.md#promote)
+- [promote](highlevel_promote.md#promote)
 
 ## Functions
 
 ### promote
 
-▸ **promote**(`client`: [*IClient*](../interfaces/models_iclient.iclient.md), `messageId`: *string*): *Promise*<{}\>
+▸ **promote**(`client`: [*IClient*](../interfaces/models/iclient.iclient.md), `messageId`: *string*): *Promise*<{}\>
 
 Promote an existing message.
 
@@ -20,7 +20,7 @@ Promote an existing message.
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`client` | [*IClient*](../interfaces/models_iclient.iclient.md) | The client to perform the promote with.   |
+`client` | [*IClient*](../interfaces/models/iclient.iclient.md) | The client to perform the promote with.   |
 `messageId` | *string* | The message to promote.   |
 
 **Returns:** *Promise*<{}\>

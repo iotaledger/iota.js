@@ -15,18 +15,21 @@ import { generateBip44Address } from "./addresses";
  * @param client The client to send the transfer with.
  * @param seed The seed to use for address generation.
  * @param accountIndex The account index in the wallet.
- * @param startIndex Optional start index for the wallet count address, defaults to 0.
- * @param countLimit Limit the number of items to find.
- * @param zeroCount Abort when the number of zero balances is exceeded.
+ * @param addressOptions Optional address configuration for balance address lookups.
+ * @param addressOptions.startIndex The start index for the wallet count address, defaults to 0.
+ * @param addressOptions.zeroCount The number of addresses with 0 balance during lookup before aborting.
+ * @param addressOptions.requiredCount The max number of addresses to find.
  * @returns All the unspent addresses.
  */
 export async function getUnspentAddresses(
     client: IClient,
     seed: ISeed,
     accountIndex: number,
-    startIndex?: number,
-    countLimit?: number,
-    zeroCount?: number): Promise<{
+    addressOptions?: {
+        startIndex?: number;
+        zeroCount?: number;
+        requiredCount?: number;
+    }): Promise<{
         address: string;
         path: string;
         balance: number;
@@ -36,12 +39,11 @@ export async function getUnspentAddresses(
         seed,
         {
             accountIndex,
-            addressIndex: startIndex ?? 0,
+            addressIndex: addressOptions?.startIndex ?? 0,
             isInternal: false
         },
         generateBip44Address,
-        countLimit,
-        zeroCount
+        addressOptions
     );
 }
 
@@ -51,8 +53,10 @@ export async function getUnspentAddresses(
  * @param seed The seed to use for address generation.
  * @param initialAddressState The initial address state for calculating the addresses.
  * @param nextAddressPath Calculate the next address for inputs.
- * @param countLimit Limit the number of items to find.
- * @param zeroCount Abort when the number of zero balances is exceeded.
+ * @param addressOptions Optional address configuration for balance address lookups.
+ * @param addressOptions.startIndex The start index for the wallet count address, defaults to 0.
+ * @param addressOptions.zeroCount The number of addresses with 0 balance during lookup before aborting.
+ * @param addressOptions.requiredCount The max number of addresses to find.
  * @returns All the unspent addresses.
  */
 export async function getUnspentAddressesWithAddressGenerator<T>(
@@ -60,12 +64,18 @@ export async function getUnspentAddressesWithAddressGenerator<T>(
     seed: ISeed,
     initialAddressState: T,
     nextAddressPath: (addressState: T, isFirst: boolean) => string,
-    countLimit: number = Number.MAX_SAFE_INTEGER,
-    zeroCount: number = 5): Promise<{
+    addressOptions?: {
+        startIndex?: number;
+        zeroCount?: number;
+        requiredCount?: number;
+    }): Promise<{
         address: string;
         path: string;
         balance: number;
     }[]> {
+    const nodeInfo = await client.info();
+    const localRequiredLimit = addressOptions?.requiredCount ?? Number.MAX_SAFE_INTEGER;
+    const localZeroCount = addressOptions?.zeroCount ?? 20;
     let finished = false;
     const allUnspent: {
         address: string;
@@ -87,21 +97,21 @@ export async function getUnspentAddressesWithAddressGenerator<T>(
         const addressHex = Converter.bytesToHex(addressBytes);
         const addressResponse = await client.addressEd25519(addressHex);
 
-        // If there are no outputs for the address we have reached the
-        // end of the used addresses
-        if (addressResponse.count === 0) {
+        // If there is no balance we increment the counter and end
+        // the text when we have reached the count
+        if (addressResponse.balance === 0) {
             zeroBalance++;
-            if (zeroBalance >= zeroCount) {
+            if (zeroBalance >= localZeroCount) {
                 finished = true;
             }
         } else {
             allUnspent.push({
-                address: Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, addressBytes),
+                address: Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, addressBytes, nodeInfo.bech32HRP),
                 path,
                 balance: addressResponse.balance
             });
 
-            if (allUnspent.length === countLimit) {
+            if (allUnspent.length === localRequiredLimit) {
                 finished = true;
             }
         }

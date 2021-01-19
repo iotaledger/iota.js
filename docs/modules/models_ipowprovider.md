@@ -2,8 +2,8 @@
 
 # Module: models/IPowProvider
 
-## Index
+## Table of contents
 
 ### Interfaces
 
-* [IPowProvider](../interfaces/models_ipowprovider.ipowprovider.md)
+- [IPowProvider](../interfaces/models/ipowprovider.ipowprovider.md)

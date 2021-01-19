@@ -2,20 +2,20 @@
 
 # Module: models/ISigLockedSingleOutput
 
-## Index
+## Table of contents
 
 ### Interfaces
 
-* [ISigLockedSingleOutput](../interfaces/models_isiglockedsingleoutput.isiglockedsingleoutput.md)
+- [ISigLockedSingleOutput](../interfaces/models/isiglockedsingleoutput.isiglockedsingleoutput.md)
 
 ### Variables
 
-* [SIG\_LOCKED\_SINGLE\_OUTPUT\_TYPE](models_isiglockedsingleoutput.md#sig_locked_single_output_type)
+- [SIG\_LOCKED\_SINGLE\_OUTPUT\_TYPE](models_isiglockedsingleoutput.md#sig_locked_single_output_type)
 
 ## Variables
 
 ### SIG\_LOCKED\_SINGLE\_OUTPUT\_TYPE
 
-• `Const` **SIG\_LOCKED\_SINGLE\_OUTPUT\_TYPE**: *number*= 0
+• `Const` **SIG\_LOCKED\_SINGLE\_OUTPUT\_TYPE**: *0*= 0
 
 The global type for the sig locked single output.

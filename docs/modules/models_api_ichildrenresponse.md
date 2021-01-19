@@ -2,8 +2,8 @@
 
 # Module: models/api/IChildrenResponse
 
-## Index
+## Table of contents
 
 ### Interfaces
 
-* [IChildrenResponse](../interfaces/models_api_ichildrenresponse.ichildrenresponse.md)
+- [IChildrenResponse](../interfaces/models/api/ichildrenresponse.ichildrenresponse.md)

@@ -2,15 +2,15 @@
 
 # Module: seedTypes/ed25519Seed
 
-## Index
+## Table of contents
 
 ### Classes
 
-* [Ed25519Seed](../classes/seedtypes_ed25519seed.ed25519seed.md)
+- [Ed25519Seed](../classes/seedtypes/ed25519seed.ed25519seed.md)
 
 ### Variables
 
-* [ED25519\_SEED\_TYPE](seedtypes_ed25519seed.md#ed25519_seed_type)
+- [ED25519\_SEED\_TYPE](seedtypes_ed25519seed.md#ed25519_seed_type)
 
 ## Variables
 

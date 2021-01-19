@@ -2,8 +2,8 @@
 
 # Module: models/IMessageMetadata
 
-## Index
+## Table of contents
 
 ### Interfaces
 
-* [IMessageMetadata](../interfaces/models_imessagemetadata.imessagemetadata.md)
+- [IMessageMetadata](../interfaces/models/imessagemetadata.imessagemetadata.md)

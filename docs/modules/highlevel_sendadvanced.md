@@ -2,18 +2,18 @@
 
 # Module: highLevel/sendAdvanced
 
-## Index
+## Table of contents
 
 ### Functions
 
-* [buildTransactionPayload](highlevel_sendadvanced.md#buildtransactionpayload)
-* [sendAdvanced](highlevel_sendadvanced.md#sendadvanced)
+- [buildTransactionPayload](highlevel_sendadvanced.md#buildtransactionpayload)
+- [sendAdvanced](highlevel_sendadvanced.md#sendadvanced)
 
 ## Functions
 
 ### buildTransactionPayload
 
-▸ **buildTransactionPayload**(`inputsAndSignatureKeyPairs`: {}[], `outputs`: {}[], `indexationKey?`: *string*, `indexationData?`: *Uint8Array*): [*ITransactionPayload*](../interfaces/models_itransactionpayload.itransactionpayload.md)
+▸ **buildTransactionPayload**(`inputsAndSignatureKeyPairs`: {}[], `outputs`: {}[], `indexation?`: {}): [*ITransactionPayload*](../interfaces/models/itransactionpayload.itransactionpayload.md)
 
 Build a transaction payload.
 
@@ -23,10 +23,9 @@ Name | Type | Description |
 ------ | ------ | ------ |
 `inputsAndSignatureKeyPairs` | {}[] | The inputs with the signature key pairs needed to sign transfers.   |
 `outputs` | {}[] | The outputs to send.   |
-`indexationKey?` | *string* | Optional indexation key.   |
-`indexationData?` | *Uint8Array* | Optional index data.   |
+`indexation?` | {} | Optional indexation data to associate with the transaction.   |
 
-**Returns:** [*ITransactionPayload*](../interfaces/models_itransactionpayload.itransactionpayload.md)
+**Returns:** [*ITransactionPayload*](../interfaces/models/itransactionpayload.itransactionpayload.md)
 
 The transaction payload.
 
@@ -34,7 +33,7 @@ ___
 
 ### sendAdvanced
 
-▸ **sendAdvanced**(`client`: [*IClient*](../interfaces/models_iclient.iclient.md), `inputsAndSignatureKeyPairs`: {}[], `outputs`: {}[], `indexationKey?`: *string*, `indexationData?`: *Uint8Array*): *Promise*<{}\>
+▸ **sendAdvanced**(`client`: [*IClient*](../interfaces/models/iclient.iclient.md), `inputsAndSignatureKeyPairs`: {}[], `outputs`: {}[], `indexation?`: {}): *Promise*<{}\>
 
 Send a transfer from the balance on the seed.
 
@@ -42,11 +41,10 @@ Send a transfer from the balance on the seed.
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`client` | [*IClient*](../interfaces/models_iclient.iclient.md) | The client to send the transfer with.   |
+`client` | [*IClient*](../interfaces/models/iclient.iclient.md) | The client to send the transfer with.   |
 `inputsAndSignatureKeyPairs` | {}[] | The inputs with the signature key pairs needed to sign transfers.   |
 `outputs` | {}[] | The outputs to send.   |
-`indexationKey?` | *string* | Optional indexation key.   |
-`indexationData?` | *Uint8Array* | Optional index data.   |
+`indexation?` | {} | Optional indexation data to associate with the transaction.   |
 
 **Returns:** *Promise*<{}\>
 

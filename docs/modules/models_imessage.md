@@ -2,8 +2,8 @@
 
 # Module: models/IMessage
 
-## Index
+## Table of contents
 
 ### Interfaces
 
-* [IMessage](../interfaces/models_imessage.imessage.md)
+- [IMessage](../interfaces/models/imessage.imessage.md)

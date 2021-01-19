@@ -42,6 +42,7 @@ exports.calculateInputs = exports.sendWithAddressGenerator = exports.sendMultipl
 var ed25519Address_1 = require("../addressTypes/ed25519Address");
 var bip32Path_1 = require("../crypto/bip32Path");
 var IEd25519Address_1 = require("../models/IEd25519Address");
+var IUTXOInput_1 = require("../models/IUTXOInput");
 var bech32Helper_1 = require("../utils/bech32Helper");
 var converter_1 = require("../utils/converter");
 var addresses_1 = require("./addresses");
@@ -53,13 +54,18 @@ var sendAdvanced_1 = require("./sendAdvanced");
  * @param accountIndex The account index in the wallet.
  * @param addressBech32 The address to send the funds to in bech32 format.
  * @param amount The amount to send.
- * @param startIndex The start index for the wallet count address, defaults to 0.
+ * @param indexation Optional indexation data to associate with the transaction.
+ * @param indexation.key Indexation key.
+ * @param indexation.data Optional index data.
+ * @param addressOptions Optional address configuration for balance address lookups.
+ * @param addressOptions.startIndex The start index for the wallet count address, defaults to 0.
+ * @param addressOptions.zeroCount The number of addresses with 0 balance during lookup before aborting.
  * @returns The id of the message created and the contructed message.
  */
-function send(client, seed, accountIndex, addressBech32, amount, startIndex) {
+function send(client, seed, accountIndex, addressBech32, amount, indexation, addressOptions) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
-            return [2 /*return*/, sendMultiple(client, seed, accountIndex, [{ addressBech32: addressBech32, amount: amount }], startIndex)];
+            return [2 /*return*/, sendMultiple(client, seed, accountIndex, [{ addressBech32: addressBech32, amount: amount }], indexation, addressOptions)];
         });
     });
 }
@@ -71,13 +77,18 @@ exports.send = send;
  * @param accountIndex The account index in the wallet.
  * @param addressEd25519 The address to send the funds to in ed25519 format.
  * @param amount The amount to send.
- * @param startIndex The start index for the wallet count address, defaults to 0.
+ * @param indexation Optional indexation data to associate with the transaction.
+ * @param indexation.key Indexation key.
+ * @param indexation.data Optional index data.
+ * @param addressOptions Optional address configuration for balance address lookups.
+ * @param addressOptions.startIndex The start index for the wallet count address, defaults to 0.
+ * @param addressOptions.zeroCount The number of addresses with 0 balance during lookup before aborting.
  * @returns The id of the message created and the contructed message.
  */
-function sendEd25519(client, seed, accountIndex, addressEd25519, amount, startIndex) {
+function sendEd25519(client, seed, accountIndex, addressEd25519, amount, indexation, addressOptions) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
-            return [2 /*return*/, sendMultipleEd25519(client, seed, accountIndex, [{ addressEd25519: addressEd25519, amount: amount }], startIndex)];
+            return [2 /*return*/, sendMultipleEd25519(client, seed, accountIndex, [{ addressEd25519: addressEd25519, amount: amount }], indexation, addressOptions)];
         });
     });
 }
@@ -88,29 +99,41 @@ exports.sendEd25519 = sendEd25519;
  * @param seed The seed to use for address generation.
  * @param accountIndex The account index in the wallet.
  * @param outputs The address to send the funds to in bech32 format and amounts.
- * @param startIndex The start index for the wallet count address, defaults to 0.
+ * @param indexation Optional indexation data to associate with the transaction.
+ * @param indexation.key Indexation key.
+ * @param indexation.data Optional index data.
+ * @param addressOptions Optional address configuration for balance address lookups.
+ * @param addressOptions.startIndex The start index for the wallet count address, defaults to 0.
+ * @param addressOptions.zeroCount The number of addresses with 0 balance during lookup before aborting.
  * @returns The id of the message created and the contructed message.
  */
-function sendMultiple(client, seed, accountIndex, outputs, startIndex) {
+function sendMultiple(client, seed, accountIndex, outputs, indexation, addressOptions) {
+    var _a;
     return __awaiter(this, void 0, void 0, function () {
-        var hexOutputs;
-        return __generator(this, function (_a) {
-            hexOutputs = outputs.map(function (output) {
-                var bech32Details = bech32Helper_1.Bech32Helper.fromBech32(output.addressBech32);
-                if (!bech32Details) {
-                    throw new Error("Unable to decode bech32 address");
-                }
-                return {
-                    address: converter_1.Converter.bytesToHex(bech32Details.addressBytes),
-                    addressType: bech32Details.addressType,
-                    amount: output.amount
-                };
-            });
-            return [2 /*return*/, sendWithAddressGenerator(client, seed, {
-                    accountIndex: accountIndex,
-                    addressIndex: startIndex !== null && startIndex !== void 0 ? startIndex : 0,
-                    isInternal: false
-                }, addresses_1.generateBip44Address, hexOutputs)];
+        var nodeInfo, hexOutputs;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0: return [4 /*yield*/, client.info()];
+                case 1:
+                    nodeInfo = _b.sent();
+                    hexOutputs = outputs.map(function (output) {
+                        var bech32Details = bech32Helper_1.Bech32Helper.fromBech32(output.addressBech32, nodeInfo.bech32HRP);
+                        if (!bech32Details) {
+                            throw new Error("Unable to decode bech32 address");
+                        }
+                        return {
+                            address: converter_1.Converter.bytesToHex(bech32Details.addressBytes),
+                            addressType: bech32Details.addressType,
+                            amount: output.amount,
+                            isDustAllowance: output.isDustAllowance
+                        };
+                    });
+                    return [2 /*return*/, sendWithAddressGenerator(client, seed, {
+                            accountIndex: accountIndex,
+                            addressIndex: (_a = addressOptions === null || addressOptions === void 0 ? void 0 : addressOptions.startIndex) !== null && _a !== void 0 ? _a : 0,
+                            isInternal: false
+                        }, addresses_1.generateBip44Address, hexOutputs, indexation, addressOptions === null || addressOptions === void 0 ? void 0 : addressOptions.zeroCount)];
+            }
         });
     });
 }
@@ -121,19 +144,30 @@ exports.sendMultiple = sendMultiple;
  * @param seed The seed to use for address generation.
  * @param accountIndex The account index in the wallet.
  * @param outputs The outputs including address to send the funds to in ed25519 format and amount.
- * @param startIndex The start index for the wallet count address, defaults to 0.
+ * @param indexation Optional indexation data to associate with the transaction.
+ * @param indexation.key Indexation key.
+ * @param indexation.data Optional index data.
+ * @param addressOptions Optional address configuration for balance address lookups.
+ * @param addressOptions.startIndex The start index for the wallet count address, defaults to 0.
+ * @param addressOptions.zeroCount The number of addresses with 0 balance during lookup before aborting.
  * @returns The id of the message created and the contructed message.
  */
-function sendMultipleEd25519(client, seed, accountIndex, outputs, startIndex) {
+function sendMultipleEd25519(client, seed, accountIndex, outputs, indexation, addressOptions) {
+    var _a;
     return __awaiter(this, void 0, void 0, function () {
         var hexOutputs;
-        return __generator(this, function (_a) {
-            hexOutputs = outputs.map(function (output) { return ({ address: output.addressEd25519, addressType: IEd25519Address_1.ED25519_ADDRESS_TYPE, amount: output.amount }); });
+        return __generator(this, function (_b) {
+            hexOutputs = outputs.map(function (output) { return ({
+                address: output.addressEd25519,
+                addressType: IEd25519Address_1.ED25519_ADDRESS_TYPE,
+                amount: output.amount,
+                isDustAllowance: output.isDustAllowance
+            }); });
             return [2 /*return*/, sendWithAddressGenerator(client, seed, {
                     accountIndex: accountIndex,
-                    addressIndex: startIndex !== null && startIndex !== void 0 ? startIndex : 0,
+                    addressIndex: (_a = addressOptions === null || addressOptions === void 0 ? void 0 : addressOptions.startIndex) !== null && _a !== void 0 ? _a : 0,
                     isInternal: false
-                }, addresses_1.generateBip44Address, hexOutputs)];
+                }, addresses_1.generateBip44Address, hexOutputs, indexation, addressOptions === null || addressOptions === void 0 ? void 0 : addressOptions.zeroCount)];
         });
     });
 }
@@ -145,17 +179,21 @@ exports.sendMultipleEd25519 = sendMultipleEd25519;
  * @param initialAddressState The initial address state for calculating the addresses.
  * @param nextAddressPath Calculate the next address for inputs.
  * @param outputs The address to send the funds to in bech32 format and amounts.
+ * @param indexation Optional indexation data to associate with the transaction.
+ * @param indexation.key Indexation key.
+ * @param indexation.data Optional index data.
+ * @param zeroCount The number of addresses with 0 balance during lookup before aborting.
  * @returns The id of the message created and the contructed message.
  */
-function sendWithAddressGenerator(client, seed, initialAddressState, nextAddressPath, outputs) {
+function sendWithAddressGenerator(client, seed, initialAddressState, nextAddressPath, outputs, indexation, zeroCount) {
     return __awaiter(this, void 0, void 0, function () {
         var inputsAndKeys, response;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, calculateInputs(client, seed, initialAddressState, nextAddressPath, outputs, 5)];
+                case 0: return [4 /*yield*/, calculateInputs(client, seed, initialAddressState, nextAddressPath, outputs, zeroCount)];
                 case 1:
                     inputsAndKeys = _a.sent();
-                    return [4 /*yield*/, sendAdvanced_1.sendAdvanced(client, inputsAndKeys, outputs)];
+                    return [4 /*yield*/, sendAdvanced_1.sendAdvanced(client, inputsAndKeys, outputs, indexation)];
                 case 2:
                     response = _a.sent();
                     return [2 /*return*/, {
@@ -231,7 +269,7 @@ function calculateInputs(client, seed, initialAddressState, nextAddressPath, out
                         else {
                             consumedBalance += addressOutput.output.amount;
                             input = {
-                                type: 0,
+                                type: IUTXOInput_1.UTXO_INPUT_TYPE,
                                 transactionId: addressOutput.transactionId,
                                 transactionOutputIndex: addressOutput.outputIndex
                             };
@@ -270,4 +308,4 @@ function calculateInputs(client, seed, initialAddressState, nextAddressPath, out
     });
 }
 exports.calculateInputs = calculateInputs;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoic2VuZC5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy9oaWdoTGV2ZWwvc2VuZC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7QUFBQSwrQkFBK0I7QUFDL0Isc0NBQXNDO0FBQ3RDLGlFQUFnRTtBQUNoRSxpREFBZ0Q7QUFHaEQsNkRBQWlFO0FBS2pFLHNEQUFxRDtBQUNyRCxnREFBK0M7QUFDL0MseUNBQW1EO0FBQ25ELCtDQUE4QztBQUU5Qzs7Ozs7Ozs7O0dBU0c7QUFDSCxTQUFzQixJQUFJLENBQ3RCLE1BQWUsRUFDZixJQUFXLEVBQ1gsWUFBb0IsRUFDcEIsYUFBcUIsRUFDckIsTUFBYyxFQUNkLFVBQW1COzs7WUFJbkIsc0JBQU8sWUFBWSxDQUNmLE1BQU0sRUFDTixJQUFJLEVBQ0osWUFBWSxFQUNaLENBQUMsRUFBRSxhQUFhLGVBQUEsRUFBRSxNQUFNLFFBQUEsRUFBRSxDQUFDLEVBQzNCLFVBQVUsQ0FDYixFQUFDOzs7Q0FDTDtBQWpCRCxvQkFpQkM7QUFFRDs7Ozs7Ozs7O0dBU0c7QUFDSCxTQUFzQixXQUFXLENBQzdCLE1BQWUsRUFDZixJQUFXLEVBQ1gsWUFBb0IsRUFDcEIsY0FBc0IsRUFDdEIsTUFBYyxFQUNkLFVBQW1COzs7WUFJbkIsc0JBQU8sbUJBQW1CLENBQ3RCLE1BQU0sRUFDTixJQUFJLEVBQ0osWUFBWSxFQUNaLENBQUMsRUFBRSxjQUFjLGdCQUFBLEVBQUUsTUFBTSxRQUFBLEVBQUUsQ0FBQyxFQUM1QixVQUFVLENBQ2IsRUFBQzs7O0NBQ0w7QUFqQkQsa0NBaUJDO0FBRUQ7Ozs7Ozs7O0dBUUc7QUFDSCxTQUFzQixZQUFZLENBQzlCLE1BQWUsRUFDZixJQUFXLEVBQ1gsWUFBb0IsRUFDcEIsT0FHRyxFQUNILFVBQW1COzs7O1lBSWIsVUFBVSxHQUFHLE9BQU8sQ0FBQyxHQUFHLENBQUMsVUFBQSxNQUFNO2dCQUNqQyxJQUFNLGFB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
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoic2VuZC5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy9oaWdoTGV2ZWwvc2VuZC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7QUFBQSwrQkFBK0I7QUFDL0Isc0NBQXNDO0FBQ3RDLGlFQUFnRTtBQUNoRSxpREFBZ0Q7QUFHaEQsNkRBQWlFO0FBSWpFLG1EQUFtRTtBQUNuRSxzREFBcUQ7QUFDckQsZ0RBQStDO0FBQy9DLHlDQUFtRDtBQUNuRCwrQ0FBOEM7QUFFOUM7Ozs7Ozs7Ozs7Ozs7O0dBY0c7QUFDSCxTQUFzQixJQUFJLENBQ3RCLE1BQWUsRUFDZixJQUFXLEVBQ1gsWUFBb0IsRUFDcEIsYUFBcUIsRUFDckIsTUFBYyxFQUNkLFVBR0MsRUFDRCxjQUdDOzs7WUFLRCxzQkFBTyxZQUFZLENBQ2YsTUFBTSxFQUNOLElBQUksRUFDSixZQUFZLEVBQ1osQ0FBQyxFQUFFLGFBQWEsZUFBQSxFQUFFLE1BQU0sUUFBQSxFQUFFLENBQUMsRUFDM0IsVUFBVSxFQUNWLGNBQWMsQ0FDakIsRUFBQzs7O0NBQ0w7QUExQkQsb0JBMEJDO0FBRUQ7Ozs7Ozs7Ozs7Ozs7O0dBY0c7QUFDSCxTQUFzQixXQUFXLENBQzdCLE1BQWUsRUFDZixJQUFXLEVBQ1gsWUFBb0IsRUFDcEIsY0FBc0IsRUFDdEIsTUFBYyxFQUNkLFVBR0MsRUFDRCxjQUdDOzs7WUFLRCxzQkFBTyxtQkFBbUIsQ0FDdEIsTUFBTSxFQUNOLElBQUksRUFDSixZQUFZLEVBQ1osQ0FBQyxFQUFFLGNBQWMsZ0JBQUEsRUFBRSxNQUFNLFFBQUEsRUFBRSxDQUFDLEVBQzVCLFVBQVUsRUFDVixjQUFjLENBQ2pCLEVBQUM7OztDQUNMO0FBMUJELGtDQTBCQztBQUVEOzs7Ozs7Ozs7Ozs7O0dBYUc7QUFDSCxTQUFzQixZQUFZLENBQzlCLE1BQWUsRUFDZixJQUFXLEVBQ1gsWUFBb0IsRUFDcEIsT0FJRyxFQUNILFVB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

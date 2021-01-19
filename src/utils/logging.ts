@@ -9,6 +9,7 @@ import { IMessageMetadata } from "../models/IMessageMetadata";
 import { IMilestonePayload, MILESTONE_PAYLOAD_TYPE } from "../models/IMilestonePayload";
 import { INodeInfo } from "../models/INodeInfo";
 import { IReferenceUnlockBlock, REFERENCE_UNLOCK_BLOCK_TYPE } from "../models/IReferenceUnlockBlock";
+import { ISigLockedDustAllowanceOutput, SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE } from "../models/ISigLockedDustAllowanceOutput";
 import { ISigLockedSingleOutput, SIG_LOCKED_SINGLE_OUTPUT_TYPE } from "../models/ISigLockedSingleOutput";
 import { ISignatureUnlockBlock, SIGNATURE_UNLOCK_BLOCK_TYPE } from "../models/ISignatureUnlockBlock";
 import { TRANSACTION_ESSENCE_TYPE } from "../models/ITransactionEssence";
@@ -44,6 +45,8 @@ export function logInfo(prefix: string, info: INodeInfo): void {
     logger(`${prefix}\tVersion:`, info.version);
     logger(`${prefix}\tNetwork Id:`, info.networkId);
     logger(`${prefix}\tIs Healthy:`, info.isHealthy);
+    logger(`${prefix}\tMin PoW Score:`, info.minPowScore);
+    logger(`${prefix}\tBech32 HRP:`, info.bech32HRP);
     logger(`${prefix}\tLatest Milestone Index:`, info.latestMilestoneIndex);
     logger(`${prefix}\tSolid Milestone Index:`, info.solidMilestoneIndex);
     logger(`${prefix}\tPruning Index:`, info.pruningIndex);
@@ -103,6 +106,9 @@ export function logMessageMetadata(prefix: string, messageMetadata: IMessageMeta
         logger(`${prefix}\tReferenced By Milestone Index:`, messageMetadata.referencedByMilestoneIndex);
     }
     logger(`${prefix}\tLedger Inclusion State:`, messageMetadata.ledgerInclusionState);
+    if (messageMetadata.conflictReason !== undefined) {
+        logger(`${prefix}\tConflict Reason:`, messageMetadata.conflictReason);
+    }
     if (messageMetadata.shouldPromote !== undefined) {
         logger(`${prefix}\tShould Promote:`, messageMetadata.shouldPromote);
     }
@@ -157,7 +163,7 @@ export function logPayload(prefix: string, unknownPayload?: ITypeBase<unknown>):
             const payload = unknownPayload as IIndexationPayload;
             logger(`${prefix}Indexation Payload`);
             logger(`${prefix}\tIndex:`, payload.index);
-            logger(`${prefix}\tData:`, Converter.hexToAscii(payload.data));
+            logger(`${prefix}\tData:`, payload.data ? Converter.hexToUtf8(payload.data) : "None");
         }
     }
 }
@@ -209,11 +215,18 @@ export function logInput(prefix: string, unknownInput?: ITypeBase<unknown>): voi
  * @param unknownOutput The output to log.
  */
 export function logOutput(prefix: string, unknownOutput?: ITypeBase<unknown>): void {
-    if (unknownOutput?.type === SIG_LOCKED_SINGLE_OUTPUT_TYPE) {
-        const output = unknownOutput as ISigLockedSingleOutput;
-        logger(`${prefix}Signature Locked Single Output`);
-        logAddress(`${prefix}\t\t`, output.address);
-        logger(`${prefix}\t\tAmount:`, output.amount);
+    if (unknownOutput) {
+        if (unknownOutput.type === SIG_LOCKED_SINGLE_OUTPUT_TYPE) {
+            const output = unknownOutput as ISigLockedSingleOutput;
+            logger(`${prefix}Signature Locked Single Output`);
+            logAddress(`${prefix}\t\t`, output.address);
+            logger(`${prefix}\t\tAmount:`, output.amount);
+        } else if (unknownOutput.type === SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE) {
+            const output = unknownOutput as ISigLockedDustAllowanceOutput;
+            logger(`${prefix}Signature Locked Dust Allowance Output`);
+            logAddress(`${prefix}\t\t`, output.address);
+            logger(`${prefix}\t\tAmount:`, output.amount);
+        }
     }
 }
 

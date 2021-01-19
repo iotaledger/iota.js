@@ -2,8 +2,8 @@
 
 # Module: utils/writeStream
 
-## Index
+## Table of contents
 
 ### Classes
 
-* [WriteStream](../classes/utils_writestream.writestream.md)
+- [WriteStream](../classes/utils/writestream.writestream.md)

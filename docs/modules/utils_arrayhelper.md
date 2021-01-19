@@ -2,8 +2,8 @@
 
 # Module: utils/arrayHelper
 
-## Index
+## Table of contents
 
 ### Classes
 
-* [ArrayHelper](../classes/utils_arrayhelper.arrayhelper.md)
+- [ArrayHelper](../classes/utils/arrayhelper.arrayhelper.md)

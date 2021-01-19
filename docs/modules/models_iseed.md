@@ -2,8 +2,8 @@
 
 # Module: models/ISeed
 
-## Index
+## Table of contents
 
 ### Interfaces
 
-* [ISeed](../interfaces/models_iseed.iseed.md)
+- [ISeed](../interfaces/models/iseed.iseed.md)

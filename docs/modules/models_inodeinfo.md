@@ -2,8 +2,8 @@
 
 # Module: models/INodeInfo
 
-## Index
+## Table of contents
 
 ### Interfaces
 
-* [INodeInfo](../interfaces/models_inodeinfo.inodeinfo.md)
+- [INodeInfo](../interfaces/models/inodeinfo.inodeinfo.md)

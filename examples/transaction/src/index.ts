@@ -1,9 +1,11 @@
-import { Bech32Helper, Bip32Path, Converter, Ed25519Address, Ed25519Seed, ED25519_ADDRESS_TYPE, getBalance, getUnspentAddress, getUnspentAddresses, IKeyPair, IUTXOInput, sendAdvanced, SingleNodeClient } from "@iota/iota.js";
+import { Bech32Helper, Bip32Path, Converter, Ed25519Address, Ed25519Seed, ED25519_ADDRESS_TYPE, getBalance, getUnspentAddress, getUnspentAddresses, IKeyPair, IUTXOInput, sendAdvanced, SingleNodeClient, UTXO_INPUT_TYPE } from "@iota/iota.js";
 
 const API_ENDPOINT = "http://localhost:14265";
 
 async function run() {
     const client = new SingleNodeClient(API_ENDPOINT);
+
+    const nodeInfo = await client.info();
 
     // These are the default values from the Hornet alphanet configuration
     const privateKey = "256a818b2aac458941f7274985a410e57fb750f3a3a67969ece5bd9ae7eef5b2f7868ab6bb55800b77b8b74191ad8285a9bf428ace579d541fda47661803ff44";
@@ -22,7 +24,7 @@ async function run() {
     const genesisAddress = ed25519Address.toAddress();
     const genesisAddressHex = Converter.bytesToHex(genesisAddress);
     console.log("\tAddress Ed25519:", genesisAddressHex);
-    console.log("\tAddress Bech32:", Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, genesisAddress));
+    console.log("\tAddress Bech32:", Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, genesisAddress, nodeInfo.bech32HRP));
 
     // Create a new seed for the wallet
     const walletSeed = new Ed25519Seed(Converter.hexToBytes("e57fb750f3a3a67969ece5bd9ae7eef5b2256a818b2aac458941f7274985a410"));
@@ -38,7 +40,7 @@ async function run() {
     console.log("\tSeed:", Converter.bytesToHex(walletSeed.toBytes()));
     console.log("\tPath:", walletPath.toString());
     console.log(`\tAddress Ed25519 ${walletPath.toString()}:`, newAddressHex);
-    console.log(`\tAddress Bech32 ${walletPath.toString()}:`, Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, newAddress));
+    console.log(`\tAddress Bech32 ${walletPath.toString()}:`, Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, newAddress, nodeInfo.bech32HRP));
     console.log();
 
     // Because we are using the genesis address we must use send advanced as the input address is
@@ -58,7 +60,7 @@ async function run() {
         if (!output.isSpent) {
             inputsWithKeyPairs.push({
                 input: {
-                    type: 0,
+                    type: UTXO_INPUT_TYPE,
                     transactionId: output.transactionId,
                     transactionOutputIndex: output.outputIndex
                 },
@@ -68,7 +70,7 @@ async function run() {
         }
     }
 
-    const amountToSend = 1000;
+    const amountToSend = 10000000;
 
     const outputs : {
         address: string;
@@ -89,7 +91,7 @@ async function run() {
         }
     ];
 
-    const { messageId } = await sendAdvanced(client, inputsWithKeyPairs, outputs, "WALLET", Converter.asciiToBytes("Not trinity"));
+    const { messageId } = await sendAdvanced(client, inputsWithKeyPairs, outputs, { key: "WALLET", data: Converter.utf8ToBytes("Not trinity") });
 
     console.log("Created Message Id", messageId);
 

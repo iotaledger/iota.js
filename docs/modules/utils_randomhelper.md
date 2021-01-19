@@ -2,8 +2,8 @@
 
 # Module: utils/randomHelper
 
-## Index
+## Table of contents
 
 ### Classes
 
-* [RandomHelper](../classes/utils_randomhelper.randomhelper.md)
+- [RandomHelper](../classes/utils/randomhelper.randomhelper.md)

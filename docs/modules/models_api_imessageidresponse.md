@@ -2,8 +2,8 @@
 
 # Module: models/api/IMessageIdResponse
 
-## Index
+## Table of contents
 
 ### Interfaces
 
-* [IMessageIdResponse](../interfaces/models_api_imessageidresponse.imessageidresponse.md)
+- [IMessageIdResponse](../interfaces/models/api/imessageidresponse.imessageidresponse.md)

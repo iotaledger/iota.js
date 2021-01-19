@@ -1,8 +1,9 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 import { deserializeReferenceUnlockBlock, deserializeUnlockBlock, deserializeUnlockBlocks, serializeSignatureUnlockBlock, deserializeSignatureUnlockBlock, serializeReferenceUnlockBlock, serializeUnlockBlock, serializeUnlockBlocks } from "../../src/binary/unlockBlock";
-import { IReferenceUnlockBlock } from "../../src/models/IReferenceUnlockBlock";
-import { ISignatureUnlockBlock } from "../../src/models/ISignatureUnlockBlock";
+import { ED25519_SIGNATURE_TYPE } from "../../src/models/IEd25519Signature";
+import { IReferenceUnlockBlock, REFERENCE_UNLOCK_BLOCK_TYPE } from "../../src/models/IReferenceUnlockBlock";
+import { ISignatureUnlockBlock, SIGNATURE_UNLOCK_BLOCK_TYPE } from "../../src/models/ISignatureUnlockBlock";
 import { Converter } from "../../src/utils/converter";
 import { ReadStream } from "../../src/utils/readStream";
 import { WriteStream } from "../../src/utils/writeStream";
@@ -11,16 +12,16 @@ describe("Binary Unlock Block", () => {
     test("Can serialize and deserialize unlock blocks", () => {
         const unlockBlocks: (IReferenceUnlockBlock | ISignatureUnlockBlock)[] = [
             {
-                type: 0,
+                type: SIGNATURE_UNLOCK_BLOCK_TYPE,
                 signature: {
-                    type: 1,
+                    type: ED25519_SIGNATURE_TYPE,
                     publicKey: "6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92",
                     // eslint-disable-next-line max-len
                     signature: "2c59d43952bda7ca60d3c2288ebc00703b4b60c928d277382cad5f57b02a90825f2d3a8509d6594498e0488f086d8fa3f13d9636d20e759eb5806ffe663bac0d"
                 }
             },
             {
-                type: 1,
+                type: REFERENCE_UNLOCK_BLOCK_TYPE,
                 reference: 23456
             }
         ];
@@ -44,7 +45,7 @@ describe("Binary Unlock Block", () => {
 
     test("Can serialize and deserialize unlock block", () => {
         const object: IReferenceUnlockBlock = {
-            type: 1,
+            type: REFERENCE_UNLOCK_BLOCK_TYPE,
             reference: 23456
         };
 
@@ -60,9 +61,9 @@ describe("Binary Unlock Block", () => {
 
     test("Can serialize and deserialize signature unlock block", () => {
         const object: ISignatureUnlockBlock = {
-            type: 0,
+            type: SIGNATURE_UNLOCK_BLOCK_TYPE,
             signature: {
-                type: 1,
+                type: ED25519_SIGNATURE_TYPE,
                 publicKey: "6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92",
                 // eslint-disable-next-line max-len
                 signature: "2c59d43952bda7ca60d3c2288ebc00703b4b60c928d277382cad5f57b02a90825f2d3a8509d6594498e0488f086d8fa3f13d9636d20e759eb5806ffe663bac0d"
@@ -85,7 +86,7 @@ describe("Binary Unlock Block", () => {
 
     test("Can serialize and deserialize reference unlock block", () => {
         const object: IReferenceUnlockBlock = {
-            type: 1,
+            type: REFERENCE_UNLOCK_BLOCK_TYPE,
             reference: 23456
         };
 

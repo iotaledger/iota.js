@@ -37,8 +37,8 @@ export class Ed25519Seed implements ISeed {
     }
 
     /**
-     * Create the seed from a Bip39 mnenomic.
-     * @param mnemonic The mnenomic to create the seed from.
+     * Create the seed from a Bip39 mnemonic.
+     * @param mnemonic The mnemonic to create the seed from.
      * @returns A new instance of Ed25519Seed.
      */
     public static fromMnemonic(mnemonic: string): Ed25519Seed {
