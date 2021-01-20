@@ -23,7 +23,13 @@ export const MIN_SIG_LOCKED_SINGLE_OUTPUT_LENGTH: number =
  * The minimum length of a sig locked dust allowance output binary representation.
  */
 export const MIN_SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_LENGTH: number =
-MIN_OUTPUT_LENGTH + MIN_ADDRESS_LENGTH + MIN_ED25519_ADDRESS_LENGTH;
+    MIN_OUTPUT_LENGTH + MIN_ADDRESS_LENGTH + MIN_ED25519_ADDRESS_LENGTH;
+
+
+/**
+ * The minimum number of outputs.
+ */
+export const MIN_OUTPUT_COUNT: number = 1;
 
 /**
  * The maximum number of outputs.
@@ -53,6 +59,9 @@ export function deserializeOutputs(readStream: ReadStream): (ISigLockedSingleOut
  */
 export function serializeOutputs(writeStream: WriteStream,
     objects: (ISigLockedSingleOutput | ISigLockedDustAllowanceOutput)[]): void {
+    if (objects.length < MIN_OUTPUT_COUNT) {
+        throw new Error(`The minimum number of outputs is ${MIN_OUTPUT_COUNT}, you have provided ${objects.length}`);
+    }
     if (objects.length > MAX_OUTPUT_COUNT) {
         throw new Error(`The maximum number of outputs is ${MAX_OUTPUT_COUNT}, you have provided ${objects.length}`);
     }

@@ -24,6 +24,8 @@ Name |
 
   ↳ [*IMilestonePayload*](imilestonepayload.imilestonepayload.md)
 
+  ↳ [*IReceiptPayload*](ireceiptpayload.ireceiptpayload.md)
+
   ↳ [*IReferenceUnlockBlock*](ireferenceunlockblock.ireferenceunlockblock.md)
 
   ↳ [*ISigLockedDustAllowanceOutput*](isiglockeddustallowanceoutput.isiglockeddustallowanceoutput.md)

@@ -7,6 +7,7 @@
 ### Variables
 
 - [MAX\_OUTPUT\_COUNT](binary_output.md#max_output_count)
+- [MIN\_OUTPUT\_COUNT](binary_output.md#min_output_count)
 - [MIN\_OUTPUT\_LENGTH](binary_output.md#min_output_length)
 - [MIN\_SIG\_LOCKED\_DUST\_ALLOWANCE\_OUTPUT\_LENGTH](binary_output.md#min_sig_locked_dust_allowance_output_length)
 - [MIN\_SIG\_LOCKED\_SINGLE\_OUTPUT\_LENGTH](binary_output.md#min_sig_locked_single_output_length)
@@ -29,6 +30,14 @@
 • `Const` **MAX\_OUTPUT\_COUNT**: *number*= 127
 
 The maximum number of outputs.
+
+___
+
+### MIN\_OUTPUT\_COUNT
+
+• `Const` **MIN\_OUTPUT\_COUNT**: *number*= 1
+
+The minimum number of outputs.
 
 ___
 

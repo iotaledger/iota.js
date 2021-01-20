@@ -80,6 +80,11 @@ export class WriteStream {
      */
     public setWriteIndex(writeIndex: number): void {
         this._writeIndex = writeIndex;
+
+        if (writeIndex >= this._storage.length) {
+            throw new Error(`You cannot set the writeIndex to ${writeIndex
+            } as the stream is only ${this._storage.length} in length`);
+        }
     }
 
     /**

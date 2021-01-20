@@ -576,6 +576,87 @@
 
 	});
 
+	var funds = createCommonjsModule(function (module, exports) {
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.serializeMigratedFunds = exports.deserializeMigratedFunds = exports.serializeFunds = exports.deserializeFunds = exports.MAX_FUNDS_COUNT = exports.MIN_MIGRATED_FUNDS_LENGTH = exports.TAIL_HASH_LENGTH = void 0;
+
+
+	/**
+	 * The length of the tail hash length in bytes.
+	 */
+	exports.TAIL_HASH_LENGTH = 49;
+	/**
+	 * The minimum length of a migrated fund binary representation.
+	 */
+	exports.MIN_MIGRATED_FUNDS_LENGTH = exports.TAIL_HASH_LENGTH + // tailTransactionHash
+	    address.MIN_ED25519_ADDRESS_LENGTH + // address
+	    common.UINT64_SIZE; // deposit
+	/**
+	 * The maximum number of funds.
+	 */
+	exports.MAX_FUNDS_COUNT = 127;
+	/**
+	 * Deserialize the receipt payload funds from binary.
+	 * @param readStream The stream to read the data from.
+	 * @returns The deserialized object.
+	 */
+	function deserializeFunds(readStream) {
+	    var numFunds = readStream.readUInt16("funds.numFunds");
+	    var funds = [];
+	    for (var i = 0; i < numFunds; i++) {
+	        funds.push(deserializeMigratedFunds(readStream));
+	    }
+	    return funds;
+	}
+	exports.deserializeFunds = deserializeFunds;
+	/**
+	 * Serialize the receipt payload funds to binary.
+	 * @param writeStream The stream to write the data to.
+	 * @param objects The objects to serialize.
+	 */
+	function serializeFunds(writeStream, objects) {
+	    if (objects.length > exports.MAX_FUNDS_COUNT) {
+	        throw new Error("The maximum number of funds is " + exports.MAX_FUNDS_COUNT + ", you have provided " + objects.length);
+	    }
+	    writeStream.writeUInt16("funds.numFunds", objects.length);
+	    for (var i = 0; i < objects.length; i++) {
+	        serializeMigratedFunds(writeStream, objects[i]);
+	    }
+	}
+	exports.serializeFunds = serializeFunds;
+	/**
+	 * Deserialize the migrated fund from binary.
+	 * @param readStream The stream to read the data from.
+	 * @returns The deserialized object.
+	 */
+	function deserializeMigratedFunds(readStream) {
+	    if (!readStream.hasRemaining(exports.MIN_MIGRATED_FUNDS_LENGTH)) {
+	        throw new Error("Migrated funds data is " + readStream.length() + " in length which is less than the minimimum size required of " + exports.MIN_MIGRATED_FUNDS_LENGTH);
+	    }
+	    var tailTransactionHash = readStream.readFixedHex("migratedFunds.tailTransactionHash", exports.TAIL_HASH_LENGTH);
+	    var address$1 = address.deserializeAddress(readStream);
+	    var deposit = readStream.readUInt64("migratedFunds.deposit");
+	    return {
+	        tailTransactionHash: tailTransactionHash,
+	        address: address$1,
+	        deposit: Number(deposit)
+	    };
+	}
+	exports.deserializeMigratedFunds = deserializeMigratedFunds;
+	/**
+	 * Serialize the migrated funds to binary.
+	 * @param writeStream The stream to write the data to.
+	 * @param object The object to serialize.
+	 */
+	function serializeMigratedFunds(writeStream, object) {
+	    writeStream.writeFixedHex("migratedFunds.tailTransactionHash", exports.TAIL_HASH_LENGTH, object.tailTransactionHash);
+	    address.serializeAddress(writeStream, object.address);
+	    writeStream.writeUInt64("migratedFunds.deposit", BigInt(object.deposit));
+	}
+	exports.serializeMigratedFunds = serializeMigratedFunds;
+
+	});
+
 	var IUTXOInput = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.UTXO_INPUT_TYPE = void 0;
@@ -588,7 +669,7 @@
 
 	var input = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.serializeUTXOInput = exports.deserializeUTXOInput = exports.serializeInput = exports.deserializeInput = exports.serializeInputs = exports.deserializeInputs = exports.MAX_INPUT_COUNT = exports.MIN_UTXO_INPUT_LENGTH = exports.MIN_INPUT_LENGTH = void 0;
+	exports.serializeUTXOInput = exports.deserializeUTXOInput = exports.serializeInput = exports.deserializeInput = exports.serializeInputs = exports.deserializeInputs = exports.MAX_INPUT_COUNT = exports.MIN_INPUT_COUNT = exports.MIN_UTXO_INPUT_LENGTH = exports.MIN_INPUT_LENGTH = void 0;
 
 
 	/**
@@ -599,6 +680,10 @@
 	 * The minimum length of a utxo input binary representation.
 	 */
 	exports.MIN_UTXO_INPUT_LENGTH = exports.MIN_INPUT_LENGTH + common.TRANSACTION_ID_LENGTH + common.UINT16_SIZE;
+	/**
+	 * The minimum number of inputs.
+	 */
+	exports.MIN_INPUT_COUNT = 1;
 	/**
 	 * The maximum number of inputs.
 	 */
@@ -623,6 +708,9 @@
 	 * @param objects The objects to serialize.
 	 */
 	function serializeInputs(writeStream, objects) {
+	    if (objects.length < exports.MIN_INPUT_COUNT) {
+	        throw new Error("The minimum number of inputs is " + exports.MIN_INPUT_COUNT + ", you have provided " + objects.length);
+	    }
 	    if (objects.length > exports.MAX_INPUT_COUNT) {
 	        throw new Error("The maximum number of inputs is " + exports.MAX_INPUT_COUNT + ", you have provided " + objects.length);
 	    }
@@ -4151,6 +4239,16 @@
 
 	});
 
+	var IReceiptPayload = createCommonjsModule(function (module, exports) {
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.RECEIPT_PAYLOAD_TYPE = void 0;
+	/**
+	 * The global type for the payload.
+	 */
+	exports.RECEIPT_PAYLOAD_TYPE = 3;
+
+	});
+
 	var ITransactionEssence = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.TRANSACTION_ESSENCE_TYPE = void 0;
@@ -4193,7 +4291,7 @@
 
 	var output = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.serializeSigLockedDustAllowanceOutput = exports.deserializeSigLockedDustAllowanceOutput = exports.serializeSigLockedSingleOutput = exports.deserializeSigLockedSingleOutput = exports.serializeOutput = exports.deserializeOutput = exports.serializeOutputs = exports.deserializeOutputs = exports.MAX_OUTPUT_COUNT = exports.MIN_SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_LENGTH = exports.MIN_SIG_LOCKED_SINGLE_OUTPUT_LENGTH = exports.MIN_OUTPUT_LENGTH = void 0;
+	exports.serializeSigLockedDustAllowanceOutput = exports.deserializeSigLockedDustAllowanceOutput = exports.serializeSigLockedSingleOutput = exports.deserializeSigLockedSingleOutput = exports.serializeOutput = exports.deserializeOutput = exports.serializeOutputs = exports.deserializeOutputs = exports.MAX_OUTPUT_COUNT = exports.MIN_OUTPUT_COUNT = exports.MIN_SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_LENGTH = exports.MIN_SIG_LOCKED_SINGLE_OUTPUT_LENGTH = exports.MIN_OUTPUT_LENGTH = void 0;
 	// Copyright 2020 IOTA Stiftung
 	// SPDX-License-Identifier: Apache-2.0
 
@@ -4212,6 +4310,10 @@
 	 * The minimum length of a sig locked dust allowance output binary representation.
 	 */
 	exports.MIN_SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_LENGTH = exports.MIN_OUTPUT_LENGTH + address.MIN_ADDRESS_LENGTH + address.MIN_ED25519_ADDRESS_LENGTH;
+	/**
+	 * The minimum number of outputs.
+	 */
+	exports.MIN_OUTPUT_COUNT = 1;
 	/**
 	 * The maximum number of outputs.
 	 */
@@ -4236,6 +4338,9 @@
 	 * @param objects The objects to serialize.
 	 */
 	function serializeOutputs(writeStream, objects) {
+	    if (objects.length < exports.MIN_OUTPUT_COUNT) {
+	        throw new Error("The minimum number of outputs is " + exports.MIN_OUTPUT_COUNT + ", you have provided " + objects.length);
+	    }
 	    if (objects.length > exports.MAX_OUTPUT_COUNT) {
 	        throw new Error("The maximum number of outputs is " + exports.MAX_OUTPUT_COUNT + ", you have provided " + objects.length);
 	    }
@@ -4679,9 +4784,11 @@
 
 	var payload = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.serializeIndexationPayload = exports.deserializeIndexationPayload = exports.serializeMilestonePayload = exports.deserializeMilestonePayload = exports.serializeTransactionPayload = exports.deserializeTransactionPayload = exports.serializePayload = exports.deserializePayload = exports.MAX_INDEXATION_KEY_LENGTH = exports.MIN_INDEXATION_KEY_LENGTH = exports.MIN_TRANSACTION_PAYLOAD_LENGTH = exports.MIN_INDEXATION_PAYLOAD_LENGTH = exports.MIN_MILESTONE_PAYLOAD_LENGTH = exports.MIN_PAYLOAD_LENGTH = void 0;
+	exports.serializeReceiptPayload = exports.deserializeReceiptPayload = exports.serializeIndexationPayload = exports.deserializeIndexationPayload = exports.serializeMilestonePayload = exports.deserializeMilestonePayload = exports.serializeTransactionPayload = exports.deserializeTransactionPayload = exports.serializePayload = exports.deserializePayload = exports.MAX_INDEXATION_KEY_LENGTH = exports.MIN_INDEXATION_KEY_LENGTH = exports.MIN_RECEIPT_PAYLOAD_LENGTH = exports.MIN_TRANSACTION_PAYLOAD_LENGTH = exports.MIN_INDEXATION_PAYLOAD_LENGTH = exports.MIN_MILESTONE_PAYLOAD_LENGTH = exports.MIN_PAYLOAD_LENGTH = void 0;
 	// Copyright 2020 IOTA Stiftung
 	// SPDX-License-Identifier: Apache-2.0
+
+
 
 
 
@@ -4697,18 +4804,35 @@
 	/**
 	 * The minimum length of a milestone payload binary representation.
 	 */
-	exports.MIN_MILESTONE_PAYLOAD_LENGTH = exports.MIN_PAYLOAD_LENGTH + common.UINT32_SIZE + common.UINT64_SIZE +
-	    common.MESSAGE_ID_LENGTH + common.MESSAGE_ID_LENGTH + common.MERKLE_PROOF_LENGTH +
-	    common.BYTE_SIZE + ed25519.Ed25519.PUBLIC_KEY_SIZE +
-	    common.BYTE_SIZE + ed25519.Ed25519.SIGNATURE_SIZE;
+	exports.MIN_MILESTONE_PAYLOAD_LENGTH = exports.MIN_PAYLOAD_LENGTH + // min payload
+	    common.UINT32_SIZE + // index
+	    common.UINT64_SIZE + // timestamp
+	    common.MESSAGE_ID_LENGTH + // parent 1
+	    common.MESSAGE_ID_LENGTH + // parent 2
+	    common.MERKLE_PROOF_LENGTH + // merkle proof
+	    common.BYTE_SIZE + // publicKeysCount
+	    ed25519.Ed25519.PUBLIC_KEY_SIZE + // 1 public key
+	    common.BYTE_SIZE + // signatireCount
+	    ed25519.Ed25519.SIGNATURE_SIZE; // 1 signature
 	/**
 	 * The minimum length of an indexation payload binary representation.
 	 */
-	exports.MIN_INDEXATION_PAYLOAD_LENGTH = exports.MIN_PAYLOAD_LENGTH + common.STRING_LENGTH + common.STRING_LENGTH;
+	exports.MIN_INDEXATION_PAYLOAD_LENGTH = exports.MIN_PAYLOAD_LENGTH + // min payload
+	    common.STRING_LENGTH + // index length
+	    1 + // index min 1 byte
+	    common.STRING_LENGTH; // data length
 	/**
 	 * The minimum length of a transaction payload binary representation.
 	 */
-	exports.MIN_TRANSACTION_PAYLOAD_LENGTH = exports.MIN_PAYLOAD_LENGTH + common.UINT32_SIZE;
+	exports.MIN_TRANSACTION_PAYLOAD_LENGTH = exports.MIN_PAYLOAD_LENGTH + // min payload
+	    common.UINT32_SIZE; // essence type
+	/**
+	 * The minimum length of a receipt payload binary representation.
+	 */
+	exports.MIN_RECEIPT_PAYLOAD_LENGTH = exports.MIN_PAYLOAD_LENGTH +
+	    common.UINT32_SIZE + // migratedAt
+	    common.UINT16_SIZE + // numFunds
+	    funds.MIN_MIGRATED_FUNDS_LENGTH; // 1 Fund
 	/**
 	 * The minimum length of a indexation key.
 	 */
@@ -4742,6 +4866,9 @@
 	        else if (payloadType === IIndexationPayload.INDEXATION_PAYLOAD_TYPE) {
 	            payload = deserializeIndexationPayload(readStream);
 	        }
+	        else if (payloadType === IReceiptPayload.RECEIPT_PAYLOAD_TYPE) {
+	            payload = deserializeReceiptPayload(readStream);
+	        }
 	        else {
 	            throw new Error("Unrecognized payload type " + payloadType);
 	        }
@@ -4768,6 +4895,9 @@
 	    }
 	    else if (object.type === IIndexationPayload.INDEXATION_PAYLOAD_TYPE) {
 	        serializeIndexationPayload(writeStream, object);
+	    }
+	    else if (object.type === IReceiptPayload.RECEIPT_PAYLOAD_TYPE) {
+	        serializeReceiptPayload(writeStream, object);
 	    }
 	    else {
 	        throw new Error("Unrecognized transaction type " + object.type);
@@ -4847,6 +4977,10 @@
 	    for (var i = 0; i < publicKeysCount; i++) {
 	        publicKeys.push(readStream.readFixedHex("payloadMilestone.publicKey", ed25519.Ed25519.PUBLIC_KEY_SIZE));
 	    }
+	    var receipt = deserializePayload(readStream);
+	    if (receipt && receipt.type !== IReceiptPayload.RECEIPT_PAYLOAD_TYPE) {
+	        throw new Error("Milestones only support embedded receipt payload type");
+	    }
 	    var signaturesCount = readStream.readByte("payloadMilestone.signaturesCount");
 	    var signatures = [];
 	    for (var i = 0; i < signaturesCount; i++) {
@@ -4860,6 +4994,7 @@
 	        parent2MessageId: parent2MessageId,
 	        inclusionMerkleProof: inclusionMerkleProof,
 	        publicKeys: publicKeys,
+	        receipt: receipt,
 	        signatures: signatures
 	    };
 	}
@@ -4880,6 +5015,7 @@
 	    for (var i = 0; i < object.publicKeys.length; i++) {
 	        writeStream.writeFixedHex("payloadMilestone.publicKey", ed25519.Ed25519.PUBLIC_KEY_SIZE, object.publicKeys[i]);
 	    }
+	    serializePayload(writeStream, object.receipt);
 	    writeStream.writeByte("payloadMilestone.signaturesCount", object.signatures.length);
 	    for (var i = 0; i < object.signatures.length; i++) {
 	        writeStream.writeFixedHex("payloadMilestone.signature", ed25519.Ed25519.SIGNATURE_SIZE, object.signatures[i]);
@@ -4932,6 +5068,39 @@
 	    }
 	}
 	exports.serializeIndexationPayload = serializeIndexationPayload;
+	/**
+	 * Deserialize the receipt payload from binary.
+	 * @param readStream The stream to read the data from.
+	 * @returns The deserialized object.
+	 */
+	function deserializeReceiptPayload(readStream) {
+	    if (!readStream.hasRemaining(exports.MIN_RECEIPT_PAYLOAD_LENGTH)) {
+	        throw new Error("Receipt Payload data is " + readStream.length() + " in length which is less than the minimimum size required of " + exports.MIN_RECEIPT_PAYLOAD_LENGTH);
+	    }
+	    var type = readStream.readUInt32("payloadReceipt.type");
+	    if (type !== IReceiptPayload.RECEIPT_PAYLOAD_TYPE) {
+	        throw new Error("Type mismatch in payloadReceipt " + type);
+	    }
+	    var migratedAt = readStream.readUInt32("payloadReceipt.migratedAt");
+	    var funds$1 = funds.deserializeFunds(readStream);
+	    return {
+	        type: IReceiptPayload.RECEIPT_PAYLOAD_TYPE,
+	        migratedAt: migratedAt,
+	        funds: funds$1
+	    };
+	}
+	exports.deserializeReceiptPayload = deserializeReceiptPayload;
+	/**
+	 * Serialize the indexation payload essence to binary.
+	 * @param writeStream The stream to write the data to.
+	 * @param object The object to serialize.
+	 */
+	function serializeReceiptPayload(writeStream, object) {
+	    writeStream.writeUInt32("payloadReceipt.type", object.type);
+	    writeStream.writeUInt32("payloadReceipt.migratedAt", object.migratedAt);
+	    funds.serializeFunds(writeStream, object.funds);
+	}
+	exports.serializeReceiptPayload = serializeReceiptPayload;
 
 	});
 
@@ -5463,6 +5632,23 @@
 	     */
 	    ReadStream.prototype.unused = function () {
 	        return this._storage.byteLength - this._readIndex;
+	    };
+	    /**
+	     * Get the current read index.
+	     * @returns The current read index.
+	     */
+	    ReadStream.prototype.getReadIndex = function () {
+	        return this._readIndex;
+	    };
+	    /**
+	     * Set the current read index.
+	     * @param readIndex The current read index.
+	     */
+	    ReadStream.prototype.setReadIndex = function (readIndex) {
+	        this._readIndex = readIndex;
+	        if (readIndex >= this._storage.length) {
+	            throw new Error("You cannot set the readIndex to " + readIndex + " as the stream is only " + this._storage.length + " in length");
+	        }
 	    };
 	    /**
 	     * Read fixed length as hex.
@@ -6126,6 +6312,9 @@
 	     */
 	    WriteStream.prototype.setWriteIndex = function (writeIndex) {
 	        this._writeIndex = writeIndex;
+	        if (writeIndex >= this._storage.length) {
+	            throw new Error("You cannot set the writeIndex to " + writeIndex + " as the stream is only " + this._storage.length + " in length");
+	        }
 	    };
 	    /**
 	     * Write fixed length stream.
@@ -11596,6 +11785,11 @@
 
 	});
 
+	var IMigratedFunds = createCommonjsModule(function (module, exports) {
+	Object.defineProperty(exports, "__esModule", { value: true });
+
+	});
+
 	var IMqttClient = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 
@@ -12408,6 +12602,7 @@
 	__exportStar(ed25519Address, exports);
 	__exportStar(address, exports);
 	__exportStar(common, exports);
+	__exportStar(funds, exports);
 	__exportStar(input, exports);
 	__exportStar(message, exports);
 	__exportStar(output, exports);
@@ -12463,12 +12658,14 @@
 	__exportStar(IKeyPair, exports);
 	__exportStar(IMessage, exports);
 	__exportStar(IMessageMetadata, exports);
+	__exportStar(IMigratedFunds, exports);
 	__exportStar(IMilestonePayload, exports);
 	__exportStar(IMqttClient, exports);
 	__exportStar(IMqttStatus, exports);
 	__exportStar(INodeInfo, exports);
 	__exportStar(IPeer, exports);
 	__exportStar(IPowProvider, exports);
+	__exportStar(IReceiptPayload, exports);
 	__exportStar(IReferenceUnlockBlock, exports);
 	__exportStar(ISeed, exports);
 	__exportStar(ISigLockedDustAllowanceOutput, exports);

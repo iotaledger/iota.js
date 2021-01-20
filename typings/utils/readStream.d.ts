@@ -25,6 +25,16 @@ export declare class ReadStream {
      */
     unused(): number;
     /**
+     * Get the current read index.
+     * @returns The current read index.
+     */
+    getReadIndex(): number;
+    /**
+     * Set the current read index.
+     * @param readIndex The current read index.
+     */
+    setReadIndex(readIndex: number): void;
+    /**
      * Read fixed length as hex.
      * @param name The name of the data we are trying to read.
      * @param length The length of the data to read.

@@ -17,6 +17,11 @@ export const MIN_INPUT_LENGTH: number = SMALL_TYPE_LENGTH;
 export const MIN_UTXO_INPUT_LENGTH: number = MIN_INPUT_LENGTH + TRANSACTION_ID_LENGTH + UINT16_SIZE;
 
 /**
+ * The minimum number of inputs.
+ */
+export const MIN_INPUT_COUNT: number = 1;
+
+/**
  * The maximum number of inputs.
  */
 export const MAX_INPUT_COUNT: number = 127;
@@ -44,6 +49,9 @@ export function deserializeInputs(readStream: ReadStream): IUTXOInput[] {
  */
 export function serializeInputs(writeStream: WriteStream,
     objects: IUTXOInput[]): void {
+    if (objects.length < MIN_INPUT_COUNT) {
+        throw new Error(`The minimum number of inputs is ${MIN_INPUT_COUNT}, you have provided ${objects.length}`);
+    }
     if (objects.length > MAX_INPUT_COUNT) {
         throw new Error(`The maximum number of inputs is ${MAX_INPUT_COUNT}, you have provided ${objects.length}`);
     }

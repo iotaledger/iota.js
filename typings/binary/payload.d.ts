@@ -1,5 +1,6 @@
 import { IIndexationPayload } from "../models/IIndexationPayload";
 import { IMilestonePayload } from "../models/IMilestonePayload";
+import { IReceiptPayload } from "../models/IReceiptPayload";
 import { ITransactionPayload } from "../models/ITransactionPayload";
 import { ReadStream } from "../utils/readStream";
 import { WriteStream } from "../utils/writeStream";
@@ -20,6 +21,10 @@ export declare const MIN_INDEXATION_PAYLOAD_LENGTH: number;
  */
 export declare const MIN_TRANSACTION_PAYLOAD_LENGTH: number;
 /**
+ * The minimum length of a receipt payload binary representation.
+ */
+export declare const MIN_RECEIPT_PAYLOAD_LENGTH: number;
+/**
  * The minimum length of a indexation key.
  */
 export declare const MIN_INDEXATION_KEY_LENGTH: number;
@@ -32,13 +37,13 @@ export declare const MAX_INDEXATION_KEY_LENGTH: number;
  * @param readStream The stream to read the data from.
  * @returns The deserialized object.
  */
-export declare function deserializePayload(readStream: ReadStream): IIndexationPayload | IMilestonePayload | ITransactionPayload | undefined;
+export declare function deserializePayload(readStream: ReadStream): IIndexationPayload | IMilestonePayload | ITransactionPayload | IReceiptPayload | undefined;
 /**
  * Serialize the payload essence to binary.
  * @param writeStream The stream to write the data to.
  * @param object The object to serialize.
  */
-export declare function serializePayload(writeStream: WriteStream, object: IIndexationPayload | IMilestonePayload | ITransactionPayload | undefined): void;
+export declare function serializePayload(writeStream: WriteStream, object: IIndexationPayload | IMilestonePayload | ITransactionPayload | IReceiptPayload | undefined): void;
 /**
  * Deserialize the transaction payload from binary.
  * @param readStream The stream to read the data from.
@@ -75,3 +80,15 @@ export declare function deserializeIndexationPayload(readStream: ReadStream): II
  * @param object The object to serialize.
  */
 export declare function serializeIndexationPayload(writeStream: WriteStream, object: IIndexationPayload): void;
+/**
+ * Deserialize the receipt payload from binary.
+ * @param readStream The stream to read the data from.
+ * @returns The deserialized object.
+ */
+export declare function deserializeReceiptPayload(readStream: ReadStream): IReceiptPayload;
+/**
+ * Serialize the indexation payload essence to binary.
+ * @param writeStream The stream to write the data to.
+ * @param object The object to serialize.
+ */
+export declare function serializeReceiptPayload(writeStream: WriteStream, object: IReceiptPayload): void;

@@ -21,6 +21,7 @@ Milestone payload.
 - [parent1MessageId](imilestonepayload.imilestonepayload.md#parent1messageid)
 - [parent2MessageId](imilestonepayload.imilestonepayload.md#parent2messageid)
 - [publicKeys](imilestonepayload.imilestonepayload.md#publickeys)
+- [receipt](imilestonepayload.imilestonepayload.md#receipt)
 - [signatures](imilestonepayload.imilestonepayload.md#signatures)
 - [timestamp](imilestonepayload.imilestonepayload.md#timestamp)
 - [type](imilestonepayload.imilestonepayload.md#type)
@@ -64,6 +65,14 @@ ___
 • **publicKeys**: *string*[]
 
 The public keys.
+
+___
+
+### receipt
+
+• `Optional` **receipt**: *undefined* \| [*IReceiptPayload*](ireceiptpayload.ireceiptpayload.md)
+
+Receipt payload.
 
 ___
 

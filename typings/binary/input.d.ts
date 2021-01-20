@@ -10,6 +10,10 @@ export declare const MIN_INPUT_LENGTH: number;
  */
 export declare const MIN_UTXO_INPUT_LENGTH: number;
 /**
+ * The minimum number of inputs.
+ */
+export declare const MIN_INPUT_COUNT: number;
+/**
  * The maximum number of inputs.
  */
 export declare const MAX_INPUT_COUNT: number;

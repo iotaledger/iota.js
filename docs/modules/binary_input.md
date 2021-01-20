@@ -7,6 +7,7 @@
 ### Variables
 
 - [MAX\_INPUT\_COUNT](binary_input.md#max_input_count)
+- [MIN\_INPUT\_COUNT](binary_input.md#min_input_count)
 - [MIN\_INPUT\_LENGTH](binary_input.md#min_input_length)
 - [MIN\_UTXO\_INPUT\_LENGTH](binary_input.md#min_utxo_input_length)
 
@@ -26,6 +27,14 @@
 • `Const` **MAX\_INPUT\_COUNT**: *number*= 127
 
 The maximum number of inputs.
+
+___
+
+### MIN\_INPUT\_COUNT
+
+• `Const` **MIN\_INPUT\_COUNT**: *number*= 1
+
+The minimum number of inputs.
 
 ___
 

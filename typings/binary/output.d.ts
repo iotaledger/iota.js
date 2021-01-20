@@ -15,6 +15,10 @@ export declare const MIN_SIG_LOCKED_SINGLE_OUTPUT_LENGTH: number;
  */
 export declare const MIN_SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_LENGTH: number;
 /**
+ * The minimum number of outputs.
+ */
+export declare const MIN_OUTPUT_COUNT: number;
+/**
  * The maximum number of outputs.
  */
 export declare const MAX_OUTPUT_COUNT: number;

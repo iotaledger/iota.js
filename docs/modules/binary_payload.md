@@ -11,6 +11,7 @@
 - [MIN\_INDEXATION\_PAYLOAD\_LENGTH](binary_payload.md#min_indexation_payload_length)
 - [MIN\_MILESTONE\_PAYLOAD\_LENGTH](binary_payload.md#min_milestone_payload_length)
 - [MIN\_PAYLOAD\_LENGTH](binary_payload.md#min_payload_length)
+- [MIN\_RECEIPT\_PAYLOAD\_LENGTH](binary_payload.md#min_receipt_payload_length)
 - [MIN\_TRANSACTION\_PAYLOAD\_LENGTH](binary_payload.md#min_transaction_payload_length)
 
 ### Functions
@@ -18,10 +19,12 @@
 - [deserializeIndexationPayload](binary_payload.md#deserializeindexationpayload)
 - [deserializeMilestonePayload](binary_payload.md#deserializemilestonepayload)
 - [deserializePayload](binary_payload.md#deserializepayload)
+- [deserializeReceiptPayload](binary_payload.md#deserializereceiptpayload)
 - [deserializeTransactionPayload](binary_payload.md#deserializetransactionpayload)
 - [serializeIndexationPayload](binary_payload.md#serializeindexationpayload)
 - [serializeMilestonePayload](binary_payload.md#serializemilestonepayload)
 - [serializePayload](binary_payload.md#serializepayload)
+- [serializeReceiptPayload](binary_payload.md#serializereceiptpayload)
 - [serializeTransactionPayload](binary_payload.md#serializetransactionpayload)
 
 ## Variables
@@ -63,6 +66,14 @@ ___
 • `Const` **MIN\_PAYLOAD\_LENGTH**: *number*
 
 The minimum length of a payload binary representation.
+
+___
+
+### MIN\_RECEIPT\_PAYLOAD\_LENGTH
+
+• `Const` **MIN\_RECEIPT\_PAYLOAD\_LENGTH**: *number*
+
+The minimum length of a receipt payload binary representation.
 
 ___
 
@@ -112,7 +123,7 @@ ___
 
 ### deserializePayload
 
-▸ **deserializePayload**(`readStream`: [*ReadStream*](../classes/utils/readstream.readstream.md)): [*IIndexationPayload*](../interfaces/models/iindexationpayload.iindexationpayload.md) \| [*IMilestonePayload*](../interfaces/models/imilestonepayload.imilestonepayload.md) \| [*ITransactionPayload*](../interfaces/models/itransactionpayload.itransactionpayload.md) \| *undefined*
+▸ **deserializePayload**(`readStream`: [*ReadStream*](../classes/utils/readstream.readstream.md)): [*IIndexationPayload*](../interfaces/models/iindexationpayload.iindexationpayload.md) \| [*IMilestonePayload*](../interfaces/models/imilestonepayload.imilestonepayload.md) \| [*ITransactionPayload*](../interfaces/models/itransactionpayload.itransactionpayload.md) \| [*IReceiptPayload*](../interfaces/models/ireceiptpayload.ireceiptpayload.md) \| *undefined*
 
 Deserialize the payload from binary.
 
@@ -122,7 +133,25 @@ Name | Type | Description |
 ------ | ------ | ------ |
 `readStream` | [*ReadStream*](../classes/utils/readstream.readstream.md) | The stream to read the data from.   |
 
-**Returns:** [*IIndexationPayload*](../interfaces/models/iindexationpayload.iindexationpayload.md) \| [*IMilestonePayload*](../interfaces/models/imilestonepayload.imilestonepayload.md) \| [*ITransactionPayload*](../interfaces/models/itransactionpayload.itransactionpayload.md) \| *undefined*
+**Returns:** [*IIndexationPayload*](../interfaces/models/iindexationpayload.iindexationpayload.md) \| [*IMilestonePayload*](../interfaces/models/imilestonepayload.imilestonepayload.md) \| [*ITransactionPayload*](../interfaces/models/itransactionpayload.itransactionpayload.md) \| [*IReceiptPayload*](../interfaces/models/ireceiptpayload.ireceiptpayload.md) \| *undefined*
+
+The deserialized object.
+
+___
+
+### deserializeReceiptPayload
+
+▸ **deserializeReceiptPayload**(`readStream`: [*ReadStream*](../classes/utils/readstream.readstream.md)): [*IReceiptPayload*](../interfaces/models/ireceiptpayload.ireceiptpayload.md)
+
+Deserialize the receipt payload from binary.
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`readStream` | [*ReadStream*](../classes/utils/readstream.readstream.md) | The stream to read the data from.   |
+
+**Returns:** [*IReceiptPayload*](../interfaces/models/ireceiptpayload.ireceiptpayload.md)
 
 The deserialized object.
 
@@ -182,7 +211,7 @@ ___
 
 ### serializePayload
 
-▸ **serializePayload**(`writeStream`: [*WriteStream*](../classes/utils/writestream.writestream.md), `object`: [*IIndexationPayload*](../interfaces/models/iindexationpayload.iindexationpayload.md) \| [*IMilestonePayload*](../interfaces/models/imilestonepayload.imilestonepayload.md) \| [*ITransactionPayload*](../interfaces/models/itransactionpayload.itransactionpayload.md) \| *undefined*): *void*
+▸ **serializePayload**(`writeStream`: [*WriteStream*](../classes/utils/writestream.writestream.md), `object`: [*IIndexationPayload*](../interfaces/models/iindexationpayload.iindexationpayload.md) \| [*IMilestonePayload*](../interfaces/models/imilestonepayload.imilestonepayload.md) \| [*ITransactionPayload*](../interfaces/models/itransactionpayload.itransactionpayload.md) \| [*IReceiptPayload*](../interfaces/models/ireceiptpayload.ireceiptpayload.md) \| *undefined*): *void*
 
 Serialize the payload essence to binary.
 
@@ -191,7 +220,24 @@ Serialize the payload essence to binary.
 Name | Type | Description |
 ------ | ------ | ------ |
 `writeStream` | [*WriteStream*](../classes/utils/writestream.writestream.md) | The stream to write the data to.   |
-`object` | [*IIndexationPayload*](../interfaces/models/iindexationpayload.iindexationpayload.md) \| [*IMilestonePayload*](../interfaces/models/imilestonepayload.imilestonepayload.md) \| [*ITransactionPayload*](../interfaces/models/itransactionpayload.itransactionpayload.md) \| *undefined* | The object to serialize.    |
+`object` | [*IIndexationPayload*](../interfaces/models/iindexationpayload.iindexationpayload.md) \| [*IMilestonePayload*](../interfaces/models/imilestonepayload.imilestonepayload.md) \| [*ITransactionPayload*](../interfaces/models/itransactionpayload.itransactionpayload.md) \| [*IReceiptPayload*](../interfaces/models/ireceiptpayload.ireceiptpayload.md) \| *undefined* | The object to serialize.    |
+
+**Returns:** *void*
+
+___
+
+### serializeReceiptPayload
+
+▸ **serializeReceiptPayload**(`writeStream`: [*WriteStream*](../classes/utils/writestream.writestream.md), `object`: [*IReceiptPayload*](../interfaces/models/ireceiptpayload.ireceiptpayload.md)): *void*
+
+Serialize the indexation payload essence to binary.
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`writeStream` | [*WriteStream*](../classes/utils/writestream.writestream.md) | The stream to write the data to.   |
+`object` | [*IReceiptPayload*](../interfaces/models/ireceiptpayload.ireceiptpayload.md) | The object to serialize.    |
 
 **Returns:** *void*
 

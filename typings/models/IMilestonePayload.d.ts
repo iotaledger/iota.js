@@ -1,3 +1,4 @@
+import { IReceiptPayload } from "./IReceiptPayload";
 import { ITypeBase } from "./ITypeBase";
 /**
  * The global type for the payload.
@@ -35,4 +36,8 @@ export interface IMilestonePayload extends ITypeBase<1> {
      * The signatures.
      */
     signatures: string[];
+    /**
+     * Receipt payload.
+     */
+    receipt?: IReceiptPayload;
 }
