@@ -36,6 +36,7 @@ Client for API communication.
 - [messageSubmitRaw](singlenodeclient.singlenodeclient.md#messagesubmitraw)
 - [messagesFind](singlenodeclient.singlenodeclient.md#messagesfind)
 - [milestone](singlenodeclient.singlenodeclient.md#milestone)
+- [milestoneUtxoChanges](singlenodeclient.singlenodeclient.md#milestoneutxochanges)
 - [output](singlenodeclient.singlenodeclient.md#output)
 - [peer](singlenodeclient.singlenodeclient.md#peer)
 - [peerAdd](singlenodeclient.singlenodeclient.md#peeradd)
@@ -325,6 +326,26 @@ Name | Type | Description |
 **Returns:** *Promise*<[*IMilestoneResponse*](../../interfaces/models/api/imilestoneresponse.imilestoneresponse.md)\>
 
 The milestone details.
+
+Implementation of: [IClient](../../interfaces/models/iclient.iclient.md)
+
+___
+
+### milestoneUtxoChanges
+
+▸ **milestoneUtxoChanges**(`index`: *number*): *Promise*<[*IMilestoneUtxoChangesResponse*](../../interfaces/models/api/imilestoneutxochangesresponse.imilestoneutxochangesresponse.md)\>
+
+Get the requested milestone utxo changes.
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`index` | *number* | The index of the milestone to request the changes for.   |
+
+**Returns:** *Promise*<[*IMilestoneUtxoChangesResponse*](../../interfaces/models/api/imilestoneutxochangesresponse.imilestoneutxochangesresponse.md)\>
+
+The milestone utxo changes details.
 
 Implementation of: [IClient](../../interfaces/models/iclient.iclient.md)
 

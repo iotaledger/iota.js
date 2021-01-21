@@ -32,6 +32,7 @@ Client interface definition for API communication.
 - [messageSubmitRaw](iclient.iclient.md#messagesubmitraw)
 - [messagesFind](iclient.iclient.md#messagesfind)
 - [milestone](iclient.iclient.md#milestone)
+- [milestoneUtxoChanges](iclient.iclient.md#milestoneutxochanges)
 - [output](iclient.iclient.md#output)
 - [peer](iclient.iclient.md#peer)
 - [peerAdd](iclient.iclient.md#peeradd)
@@ -278,6 +279,24 @@ Name | Type | Description |
 **Returns:** *Promise*<[*IMilestoneResponse*](api/imilestoneresponse.imilestoneresponse.md)\>
 
 The milestone details.
+
+___
+
+### milestoneUtxoChanges
+
+▸ **milestoneUtxoChanges**(`index`: *number*): *Promise*<[*IMilestoneUtxoChangesResponse*](api/imilestoneutxochangesresponse.imilestoneutxochangesresponse.md)\>
+
+Get the requested milestone utxo changes.
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`index` | *number* | The index of the milestone to request the changes for.   |
+
+**Returns:** *Promise*<[*IMilestoneUtxoChangesResponse*](api/imilestoneutxochangesresponse.imilestoneutxochangesresponse.md)\>
+
+The milestone utxo changes details.
 
 ___
 

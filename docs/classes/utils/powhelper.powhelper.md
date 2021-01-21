@@ -19,6 +19,8 @@ Helper methods for POW.
 ### Methods
 
 - [score](powhelper.powhelper.md#score)
+- [trailingZeros](powhelper.powhelper.md#trailingzeros)
+- [trinaryTrailingZeros](powhelper.powhelper.md#trinarytrailingzeros)
 
 ## Constructors
 
@@ -45,3 +47,40 @@ Name | Type | Description |
 **Returns:** *number*
 
 The score for the data.
+
+___
+
+### trailingZeros
+
+▸ `Static`**trailingZeros**(`powDigest`: *Uint8Array*, `nonce`: *bigint*): *number*
+
+Calculate the trailing zeros.
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`powDigest` | *Uint8Array* | The pow digest.   |
+`nonce` | *bigint* | The nonce.   |
+
+**Returns:** *number*
+
+The trailing zeros.
+
+___
+
+### trinaryTrailingZeros
+
+▸ `Static`**trinaryTrailingZeros**(`trits`: *Int8Array*): *number*
+
+Find the number of trailing zeros.
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`trits` | *Int8Array* | The trits to look for zeros.   |
+
+**Returns:** *number*
+
+The number of trailing zeros.

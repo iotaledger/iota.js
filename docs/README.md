@@ -86,6 +86,7 @@
 - [models/api/IMessageIdResponse](modules/models_api_imessageidresponse.md)
 - [models/api/IMessagesResponse](modules/models_api_imessagesresponse.md)
 - [models/api/IMilestoneResponse](modules/models_api_imilestoneresponse.md)
+- [models/api/IMilestoneUtxoChangesResponse](modules/models_api_imilestoneutxochangesresponse.md)
 - [models/api/IMqttMilestoneResponse](modules/models_api_imqttmilestoneresponse.md)
 - [models/api/IOutputResponse](modules/models_api_ioutputresponse.md)
 - [models/api/IResponse](modules/models_api_iresponse.md)

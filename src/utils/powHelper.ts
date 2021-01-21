@@ -33,7 +33,6 @@ export class PowHelper {
      * @param powDigest The pow digest.
      * @param nonce The nonce.
      * @returns The trailing zeros.
-     * @internal
      */
     public static trailingZeros(powDigest: Uint8Array, nonce: bigint): number {
         const buf = new Int8Array(Curl.HASH_LENGTH);
@@ -56,7 +55,6 @@ export class PowHelper {
      * Find the number of trailing zeros.
      * @param trits The trits to look for zeros.
      * @returns The number of trailing zeros.
-     * @internal
      */
     public static trinaryTrailingZeros(trits: Int8Array): number {
         let z: number = 0;
