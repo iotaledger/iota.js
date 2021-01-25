@@ -7,6 +7,8 @@
 ### Variables
 
 - [MAX\_MESSAGE\_LENGTH](binary_message.md#max_message_length)
+- [MAX\_NUMBER\_PARENTS](binary_message.md#max_number_parents)
+- [MIN\_NUMBER\_PARENTS](binary_message.md#min_number_parents)
 
 ### Functions
 
@@ -20,6 +22,22 @@
 • `Const` **MAX\_MESSAGE\_LENGTH**: *number*= 32768
 
 The maximum length of a message.
+
+___
+
+### MAX\_NUMBER\_PARENTS
+
+• `Const` **MAX\_NUMBER\_PARENTS**: *number*= 8
+
+The maximum number of parents.
+
+___
+
+### MIN\_NUMBER\_PARENTS
+
+• `Const` **MIN\_NUMBER\_PARENTS**: *number*= 1
+
+The minimum number of parents.
 
 ## Functions
 

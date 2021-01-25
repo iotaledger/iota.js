@@ -20,6 +20,7 @@ async function run() {
     console.log();
 
     const submitMessage: IMessage = {
+        // Parents can be left undefined if you want the node to populate the field
         parents: tipsResponse.tips,
         payload: {
             type: INDEXATION_PAYLOAD_TYPE,

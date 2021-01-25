@@ -21,6 +21,16 @@ const MIN_MESSAGE_LENGTH: number = UINT64_SIZE +
 export const MAX_MESSAGE_LENGTH: number = 32768;
 
 /**
+ * The maximum number of parents.
+ */
+export const MAX_NUMBER_PARENTS: number = 8;
+
+/**
+ * The minimum number of parents.
+ */
+export const MIN_NUMBER_PARENTS: number = 1;
+
+/**
  * Deserialize the message from binary.
  * @param readStream The message to deserialize.
  * @returns The deserialized message.
@@ -70,7 +80,18 @@ export function serializeMessage(writeStream: WriteStream, object: IMessage): vo
     writeStream.writeByte("message.numParents", numParents);
 
     if (object.parents) {
+        if (numParents > MAX_NUMBER_PARENTS) {
+            throw new Error(`A maximum of ${MAX_NUMBER_PARENTS
+                } parents is allowed, you provided ${numParents}`);
+        }
+        if ((new Set(object.parents)).size !== numParents) {
+            throw new Error("The message parents must be unique");
+        }
+        const sorted = object.parents.slice().sort();
         for (let i = 0; i < numParents; i++) {
+            if (sorted[i] !== object.parents[i]) {
+                throw new Error("The message parents must be lexographically sorted");
+            }
             writeStream.writeFixedHex(`message.parentMessageId${i + 1}`,
                 MESSAGE_ID_LENGTH, object.parents[i]);
         }

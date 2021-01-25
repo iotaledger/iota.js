@@ -53,10 +53,7 @@ export async function sendAdvanced(
     const transactionPayload = buildTransactionPayload(
         inputsAndSignatureKeyPairs, outputs, indexation);
 
-    const tipsResponse = await client.tips();
-
     const message: IMessage = {
-        parents: tipsResponse.tips,
         payload: transactionPayload
     };
 

@@ -18,10 +18,7 @@ export async function reattach(client: IClient, messageId: string): Promise<{
         throw new Error("The message does not exist.");
     }
 
-    const tipsResponse = await client.tips();
-
     const reattachMessage: IMessage = {
-        parents: tipsResponse.tips,
         payload: message.payload
     };
 

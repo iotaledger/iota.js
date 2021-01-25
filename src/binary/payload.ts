@@ -9,6 +9,7 @@ import { ITypeBase } from "../models/ITypeBase";
 import { ReadStream } from "../utils/readStream";
 import { WriteStream } from "../utils/writeStream";
 import { BYTE_SIZE, MERKLE_PROOF_LENGTH, MESSAGE_ID_LENGTH, STRING_LENGTH, TYPE_LENGTH, UINT32_SIZE, UINT64_SIZE } from "./common";
+import { MAX_NUMBER_PARENTS, MIN_NUMBER_PARENTS } from "./message";
 import { deserializeTransactionEssence, serializeTransactionEssence } from "./transaction";
 import { deserializeUnlockBlocks, serializeUnlockBlocks } from "./unlockBlock";
 
@@ -184,6 +185,7 @@ export function deserializeMilestonePayload(readStream: ReadStream): IMilestoneP
     const timestamp = readStream.readUInt64("payloadMilestone.timestamp");
     const numParents = readStream.readByte("payloadMilestone.numParents");
     const parents: string[] = [];
+
     for (let i = 0; i < numParents; i++) {
         const parentMessageId = readStream.readFixedHex(`payloadMilestone.parentMessageId${i + 1}`, MESSAGE_ID_LENGTH);
         parents.push(parentMessageId);
@@ -222,8 +224,25 @@ export function serializeMilestonePayload(writeStream: WriteStream,
     writeStream.writeUInt32("payloadMilestone.index", object.index);
     writeStream.writeUInt64("payloadMilestone.timestamp", BigInt(object.timestamp));
 
+    if (object.parents.length < MIN_NUMBER_PARENTS) {
+        throw new Error(`A minimum of ${MIN_NUMBER_PARENTS
+            } parents is allowed, you provided ${object.parents.length}`);
+    }
+    if (object.parents.length > MAX_NUMBER_PARENTS) {
+        throw new Error(`A maximum of ${MAX_NUMBER_PARENTS
+            } parents is allowed, you provided ${object.parents.length}`);
+    }
+    if ((new Set(object.parents)).size !== object.parents.length) {
+        throw new Error("The milestone parents must be unique");
+    }
+    const sorted = object.parents.slice().sort();
+
     writeStream.writeByte("payloadMilestone.numParents", object.parents.length);
     for (let i = 0; i < object.parents.length; i++) {
+        if (sorted[i] !== object.parents[i]) {
+            throw new Error("The milestone parents must be lexographically sorted");
+        }
+
         writeStream.writeFixedHex(`payloadMilestone.parentMessageId${i + 1}`,
             MESSAGE_ID_LENGTH, object.parents[i]);
     }

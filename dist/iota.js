@@ -4690,6 +4690,7 @@
 
 
 
+
 	/**
 	 * The minimum length of a payload binary representation.
 	 */
@@ -4877,8 +4878,21 @@
 	    writeStream.writeUInt32("payloadMilestone.type", object.type);
 	    writeStream.writeUInt32("payloadMilestone.index", object.index);
 	    writeStream.writeUInt64("payloadMilestone.timestamp", BigInt(object.timestamp));
+	    if (object.parents.length < message.MIN_NUMBER_PARENTS) {
+	        throw new Error("A minimum of " + message.MIN_NUMBER_PARENTS + " parents is allowed, you provided " + object.parents.length);
+	    }
+	    if (object.parents.length > message.MAX_NUMBER_PARENTS) {
+	        throw new Error("A maximum of " + message.MAX_NUMBER_PARENTS + " parents is allowed, you provided " + object.parents.length);
+	    }
+	    if ((new Set(object.parents)).size !== object.parents.length) {
+	        throw new Error("The milestone parents must be unique");
+	    }
+	    var sorted = object.parents.slice().sort();
 	    writeStream.writeByte("payloadMilestone.numParents", object.parents.length);
 	    for (var i = 0; i < object.parents.length; i++) {
+	        if (sorted[i] !== object.parents[i]) {
+	            throw new Error("The milestone parents must be lexographically sorted");
+	        }
 	        writeStream.writeFixedHex("payloadMilestone.parentMessageId" + (i + 1), common.MESSAGE_ID_LENGTH, object.parents[i]);
 	    }
 	    writeStream.writeFixedHex("payloadMilestone.inclusionMerkleProof", common.MERKLE_PROOF_LENGTH, object.inclusionMerkleProof);
@@ -4943,7 +4957,7 @@
 
 	var message = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.serializeMessage = exports.deserializeMessage = exports.MAX_MESSAGE_LENGTH = void 0;
+	exports.serializeMessage = exports.deserializeMessage = exports.MIN_NUMBER_PARENTS = exports.MAX_NUMBER_PARENTS = exports.MAX_MESSAGE_LENGTH = void 0;
 
 
 	/**
@@ -4958,6 +4972,14 @@
 	 * The maximum length of a message.
 	 */
 	exports.MAX_MESSAGE_LENGTH = 32768;
+	/**
+	 * The maximum number of parents.
+	 */
+	exports.MAX_NUMBER_PARENTS = 8;
+	/**
+	 * The minimum number of parents.
+	 */
+	exports.MIN_NUMBER_PARENTS = 1;
 	/**
 	 * Deserialize the message from binary.
 	 * @param readStream The message to deserialize.
@@ -4999,7 +5021,17 @@
 	    var numParents = (_c = (_b = object.parents) === null || _b === void 0 ? void 0 : _b.length) !== null && _c !== void 0 ? _c : 0;
 	    writeStream.writeByte("message.numParents", numParents);
 	    if (object.parents) {
+	        if (numParents > exports.MAX_NUMBER_PARENTS) {
+	            throw new Error("A maximum of " + exports.MAX_NUMBER_PARENTS + " parents is allowed, you provided " + numParents);
+	        }
+	        if ((new Set(object.parents)).size !== numParents) {
+	            throw new Error("The message parents must be unique");
+	        }
+	        var sorted = object.parents.slice().sort();
 	        for (var i = 0; i < numParents; i++) {
+	            if (sorted[i] !== object.parents[i]) {
+	                throw new Error("The message parents must be lexographically sorted");
+	            }
 	            writeStream.writeFixedHex("message.parentMessageId" + (i + 1), common.MESSAGE_ID_LENGTH, object.parents[i]);
 	        }
 	    }
@@ -10600,6 +10632,9 @@
 	};
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.promote = void 0;
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
+
 	/**
 	 * Promote an existing message.
 	 * @param client The client to perform the promote with.
@@ -10608,18 +10643,29 @@
 	 */
 	function promote(client, messageId) {
 	    return __awaiter(this, void 0, void 0, function () {
-	        var message, tipsResponse, promoteMessage, promoteMessageId;
+	        var message$1, tipsResponse, promoteMessage, promoteMessageId;
 	        return __generator(this, function (_a) {
 	            switch (_a.label) {
 	                case 0: return [4 /*yield*/, client.message(messageId)];
 	                case 1:
-	                    message = _a.sent();
-	                    if (!message) {
+	                    message$1 = _a.sent();
+	                    if (!message$1) {
 	                        throw new Error("The message does not exist.");
 	                    }
 	                    return [4 /*yield*/, client.tips()];
 	                case 2:
 	                    tipsResponse = _a.sent();
+	                    // Parents must be unique and lexicographically sorted
+	                    // so don't add the messageId if it is already one of the tips
+	                    if (!tipsResponse.tips.includes(messageId)) {
+	                        tipsResponse.tips.push(messageId);
+	                    }
+	                    // If we now exceed the max parents remove one
+	                    if (tipsResponse.tips.length > message.MAX_NUMBER_PARENTS) {
+	                        tipsResponse.tips.shift();
+	                    }
+	                    // Finally sort the list
+	                    tipsResponse.tips.sort();
 	                    promoteMessage = {
 	                        parents: tipsResponse.tips
 	                    };
@@ -10627,7 +10673,7 @@
 	                case 3:
 	                    promoteMessageId = _a.sent();
 	                    return [2 /*return*/, {
-	                            message: message,
+	                            message: message$1,
 	                            messageId: promoteMessageId
 	                        }];
 	            }
@@ -10685,7 +10731,7 @@
 	 */
 	function reattach(client, messageId) {
 	    return __awaiter(this, void 0, void 0, function () {
-	        var message, tipsResponse, reattachMessage, reattachedMessageId;
+	        var message, reattachMessage, reattachedMessageId;
 	        return __generator(this, function (_a) {
 	            switch (_a.label) {
 	                case 0: return [4 /*yield*/, client.message(messageId)];
@@ -10694,15 +10740,11 @@
 	                    if (!message) {
 	                        throw new Error("The message does not exist.");
 	                    }
-	                    return [4 /*yield*/, client.tips()];
-	                case 2:
-	                    tipsResponse = _a.sent();
 	                    reattachMessage = {
-	                        parents: tipsResponse.tips,
 	                        payload: message.payload
 	                    };
 	                    return [4 /*yield*/, client.messageSubmit(reattachMessage)];
-	                case 3:
+	                case 2:
 	                    reattachedMessageId = _a.sent();
 	                    return [2 /*return*/, {
 	                            message: message,
@@ -10949,20 +10991,16 @@
 	 */
 	function sendAdvanced(client, inputsAndSignatureKeyPairs, outputs, indexation) {
 	    return __awaiter(this, void 0, void 0, function () {
-	        var transactionPayload, tipsResponse, message, messageId;
+	        var transactionPayload, message, messageId;
 	        return __generator(this, function (_a) {
 	            switch (_a.label) {
 	                case 0:
 	                    transactionPayload = buildTransactionPayload(inputsAndSignatureKeyPairs, outputs, indexation);
-	                    return [4 /*yield*/, client.tips()];
-	                case 1:
-	                    tipsResponse = _a.sent();
 	                    message = {
-	                        parents: tipsResponse.tips,
 	                        payload: transactionPayload
 	                    };
 	                    return [4 /*yield*/, client.messageSubmit(message)];
-	                case 2:
+	                case 1:
 	                    messageId = _a.sent();
 	                    return [2 /*return*/, {
 	                            messageId: messageId,
@@ -11447,7 +11485,7 @@
 	 */
 	function sendData(client, indexationKey, indexationData) {
 	    return __awaiter(this, void 0, void 0, function () {
-	        var indexationPayload, tipsResponse, message, messageId;
+	        var indexationPayload, message, messageId;
 	        return __generator(this, function (_a) {
 	            switch (_a.label) {
 	                case 0:
@@ -11465,15 +11503,11 @@
 	                        index: indexationKey,
 	                        data: indexationData ? converter.Converter.bytesToHex(indexationData) : ""
 	                    };
-	                    return [4 /*yield*/, client.tips()];
-	                case 1:
-	                    tipsResponse = _a.sent();
 	                    message = {
-	                        parents: tipsResponse.tips,
 	                        payload: indexationPayload
 	                    };
 	                    return [4 /*yield*/, client.messageSubmit(message)];
-	                case 2:
+	                case 1:
 	                    messageId = _a.sent();
 	                    return [2 /*return*/, {
 	                            message: message,

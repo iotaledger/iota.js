@@ -6,7 +6,6 @@ import { IMessage } from "../../src/models/IMessage";
 import { LocalPowProvider } from "../../src/pow/localPowProvider";
 import { Converter } from "../../src/utils/converter";
 import { PowHelper } from "../../src/utils/powHelper";
-import { RandomHelper } from "../../src/utils/randomHelper";
 import { WriteStream } from "../../src/utils/writeStream";
 
 describe("LocalPowProvider", () => {
@@ -14,10 +13,6 @@ describe("LocalPowProvider", () => {
         const pow = new LocalPowProvider();
 
         const message: IMessage = {
-            parents: [
-                Converter.bytesToHex(RandomHelper.generate(32)),
-                Converter.bytesToHex(RandomHelper.generate(32))
-            ],
             payload: {
                 type: INDEXATION_PAYLOAD_TYPE,
                 index: "hello world",

@@ -6,6 +6,14 @@ import { WriteStream } from "../utils/writeStream";
  */
 export declare const MAX_MESSAGE_LENGTH: number;
 /**
+ * The maximum number of parents.
+ */
+export declare const MAX_NUMBER_PARENTS: number;
+/**
+ * The minimum number of parents.
+ */
+export declare const MIN_NUMBER_PARENTS: number;
+/**
  * Deserialize the message from binary.
  * @param readStream The message to deserialize.
  * @returns The deserialized message.

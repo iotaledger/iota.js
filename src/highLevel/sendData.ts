@@ -37,10 +37,7 @@ export async function sendData(client: IClient, indexationKey: string, indexatio
         data: indexationData ? Converter.bytesToHex(indexationData) : ""
     };
 
-    const tipsResponse = await client.tips();
-
     const message: IMessage = {
-        parents: tipsResponse.tips,
         payload: indexationPayload
     };
 
