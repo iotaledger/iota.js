@@ -60,6 +60,7 @@
 - [models/IClient](modules/models_iclient.md)
 - [models/IEd25519Address](modules/models_ied25519address.md)
 - [models/IEd25519Signature](modules/models_ied25519signature.md)
+- [models/IGossipHeartbeat](modules/models_igossipheartbeat.md)
 - [models/IGossipMetrics](modules/models_igossipmetrics.md)
 - [models/IIndexationPayload](modules/models_iindexationpayload.md)
 - [models/IKeyPair](modules/models_ikeypair.md)

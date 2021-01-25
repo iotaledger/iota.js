@@ -55,6 +55,7 @@ export * from "./models/IBip44GeneratorState";
 export * from "./models/IClient";
 export * from "./models/IEd25519Address";
 export * from "./models/IEd25519Signature";
+export * from "./models/IGossipHeartbeat";
 export * from "./models/IGossipMetrics";
 export * from "./models/IIndexationPayload";
 export * from "./models/IKeyPair";

@@ -11694,6 +11694,11 @@
 
 	});
 
+	var IGossipHeartbeat = createCommonjsModule(function (module, exports) {
+	Object.defineProperty(exports, "__esModule", { value: true });
+
+	});
+
 	var IGossipMetrics = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 
@@ -12474,6 +12479,7 @@
 	__exportStar(IClient, exports);
 	__exportStar(IEd25519Address, exports);
 	__exportStar(IEd25519Signature, exports);
+	__exportStar(IGossipHeartbeat, exports);
 	__exportStar(IGossipMetrics, exports);
 	__exportStar(IIndexationPayload, exports);
 	__exportStar(IKeyPair, exports);

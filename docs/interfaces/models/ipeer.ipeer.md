@@ -16,7 +16,7 @@ Peer details.
 
 - [alias](ipeer.ipeer.md#alias)
 - [connected](ipeer.ipeer.md#connected)
-- [gossipMetrics](ipeer.ipeer.md#gossipmetrics)
+- [gossip](ipeer.ipeer.md#gossip)
 - [id](ipeer.ipeer.md#id)
 - [multiAddresses](ipeer.ipeer.md#multiaddresses)
 - [relation](ipeer.ipeer.md#relation)
@@ -39,9 +39,9 @@ Is it connected.
 
 ___
 
-### gossipMetrics
+### gossip
 
-• **gossipMetrics**: [*IGossipMetrics*](igossipmetrics.igossipmetrics.md)
+• `Optional` **gossip**: *undefined* \| { `heartbeat?`: *undefined* \| [*IGossipHeartbeat*](igossipheartbeat.igossipheartbeat.md) ; `metrics`: [*IGossipMetrics*](igossipmetrics.igossipmetrics.md)  }
 
 Gossip metrics for the peer.
 
