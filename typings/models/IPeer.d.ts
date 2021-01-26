@@ -1,3 +1,4 @@
+import { IGossipHeartbeat } from "./IGossipHeartbeat";
 import { IGossipMetrics } from "./IGossipMetrics";
 /**
  * Peer details.
@@ -26,5 +27,14 @@ export interface IPeer {
     /**
      * Gossip metrics for the peer.
      */
-    gossipMetrics: IGossipMetrics;
+    gossip?: {
+        /**
+         * The peer heartbeat.
+         */
+        heartbeat?: IGossipHeartbeat;
+        /**
+         * The peer metrics.
+         */
+        metrics: IGossipMetrics;
+    };
 }

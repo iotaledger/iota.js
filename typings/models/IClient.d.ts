@@ -3,6 +3,7 @@ import { IAddressResponse } from "./api/IAddressResponse";
 import { IChildrenResponse } from "./api/IChildrenResponse";
 import { IMessagesResponse } from "./api/IMessagesResponse";
 import { IMilestoneResponse } from "./api/IMilestoneResponse";
+import { IMilestoneUtxoChangesResponse } from "./api/IMilestoneUtxoChangesResponse";
 import { IOutputResponse } from "./api/IOutputResponse";
 import { ITipsResponse } from "./api/ITipsResponse";
 import { IMessage } from "./IMessage";
@@ -106,6 +107,12 @@ export interface IClient {
      * @returns The milestone details.
      */
     milestone(index: number): Promise<IMilestoneResponse>;
+    /**
+     * Get the requested milestone utxo changes.
+     * @param index The index of the milestone to request the changes for.
+     * @returns The milestone utxo changes details.
+     */
+    milestoneUtxoChanges(index: number): Promise<IMilestoneUtxoChangesResponse>;
     /**
      * Get the list of peers.
      * @returns The list of peers.

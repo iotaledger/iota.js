@@ -6340,7 +6340,6 @@
 	        this._endpoint = endpoint.replace(/\/+$/, "");
 	        this._basePath = (_a = options === null || options === void 0 ? void 0 : options.basePath) !== null && _a !== void 0 ? _a : "/api/v1/";
 	        this._powProvider = options === null || options === void 0 ? void 0 : options.powProvider;
-	        this._minPowScore = options === null || options === void 0 ? void 0 : options.overrideMinPow;
 	        this._timeout = options === null || options === void 0 ? void 0 : options.timeout;
 	        this._userName = options === null || options === void 0 ? void 0 : options.userName;
 	        this._password = options === null || options === void 0 ? void 0 : options.password;
@@ -6605,6 +6604,18 @@
 	        return __awaiter(this, void 0, void 0, function () {
 	            return __generator(this, function (_a) {
 	                return [2 /*return*/, this.fetchJson("get", "milestones/" + index)];
+	            });
+	        });
+	    };
+	    /**
+	     * Get the requested milestone utxo changes.
+	     * @param index The index of the milestone to request the changes for.
+	     * @returns The milestone utxo changes details.
+	     */
+	    SingleNodeClient.prototype.milestoneUtxoChanges = function (index) {
+	        return __awaiter(this, void 0, void 0, function () {
+	            return __generator(this, function (_a) {
+	                return [2 /*return*/, this.fetchJson("get", "milestones/" + index + "/utxo-changes")];
 	            });
 	        });
 	    };
@@ -10184,6 +10195,108 @@
 
 	});
 
+	var b1t6 = createCommonjsModule(function (module, exports) {
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.B1T6 = void 0;
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
+	/* eslint-disable no-bitwise */
+	/**
+	 * Class implements the b1t6 encoding encoding which uses a group of 6 trits to encode each byte.
+	 */
+	var B1T6 = /** @class */ (function () {
+	    function B1T6() {
+	    }
+	    /**
+	     * The encoded length of the data.
+	     * @param data The data.
+	     * @returns The encoded length.
+	     */
+	    B1T6.encodedLen = function (data) {
+	        return data.length * B1T6.TRITS_PER_TRYTE;
+	    };
+	    /**
+	     * Encode a byte array into trits.
+	     * @param dst The destination array.
+	     * @param startIndex The start index to write in the array.
+	     * @param src The source data.
+	     * @returns The length of the encode.
+	     */
+	    B1T6.encode = function (dst, startIndex, src) {
+	        var j = 0;
+	        for (var i = 0; i < src.length; i++) {
+	            var _a = B1T6.encodeGroup(src[i]), t1 = _a.t1, t2 = _a.t2;
+	            B1T6.storeTrits(dst, startIndex + j, t1);
+	            B1T6.storeTrits(dst, startIndex + j + B1T6.TRITS_PER_TRYTE, t2);
+	            j += 6;
+	        }
+	        return j;
+	    };
+	    /**
+	     * Encode a group to trits.
+	     * @param b The value to encode.
+	     * @returns The trit groups.
+	     * @internal
+	     */
+	    B1T6.encodeGroup = function (b) {
+	        var v = (b << 24 >> 24) + (B1T6.TRYTE_RADIX_HALF * B1T6.TRYTE_RADIX) + B1T6.TRYTE_RADIX_HALF;
+	        var quo = Math.trunc(v / 27);
+	        var rem = Math.trunc(v % 27);
+	        return {
+	            t1: rem + B1T6.MIN_TRYTE_VALUE,
+	            t2: quo + B1T6.MIN_TRYTE_VALUE
+	        };
+	    };
+	    /**
+	     * Store the trits in the dest array.
+	     * @param trits The trits array.
+	     * @param startIndex The start index in the array to write.
+	     * @param value The value to write.
+	     * @internal
+	     */
+	    B1T6.storeTrits = function (trits, startIndex, value) {
+	        var idx = value - B1T6.MIN_TRYTE_VALUE;
+	        trits[startIndex] = B1T6.TRYTE_VALUE_TO_TRITS[idx][0];
+	        trits[startIndex + 1] = B1T6.TRYTE_VALUE_TO_TRITS[idx][1];
+	        trits[startIndex + 2] = B1T6.TRYTE_VALUE_TO_TRITS[idx][2];
+	    };
+	    /**
+	     * Trytes to trits lookup table.
+	     * @internal
+	     */
+	    B1T6.TRYTE_VALUE_TO_TRITS = [
+	        [-1, -1, -1], [0, -1, -1], [1, -1, -1], [-1, 0, -1], [0, 0, -1], [1, 0, -1],
+	        [-1, 1, -1], [0, 1, -1], [1, 1, -1], [-1, -1, 0], [0, -1, 0], [1, -1, 0],
+	        [-1, 0, 0], [0, 0, 0], [1, 0, 0], [-1, 1, 0], [0, 1, 0], [1, 1, 0],
+	        [-1, -1, 1], [0, -1, 1], [1, -1, 1], [-1, 0, 1], [0, 0, 1], [1, 0, 1],
+	        [-1, 1, 1], [0, 1, 1], [1, 1, 1]
+	    ];
+	    /**
+	     * Minimum tryte value.
+	     * @internal
+	     */
+	    B1T6.MIN_TRYTE_VALUE = -13;
+	    /**
+	     * Radix for trytes.
+	     * @internal
+	     */
+	    B1T6.TRYTE_RADIX = 27;
+	    /**
+	     * Half radix for trytes to save recalculating.
+	     * @internal
+	     */
+	    B1T6.TRYTE_RADIX_HALF = 13;
+	    /**
+	     * Trites per tryte.
+	     * @internal
+	     */
+	    B1T6.TRITS_PER_TRYTE = 3;
+	    return B1T6;
+	}());
+	exports.B1T6 = B1T6;
+
+	});
+
 	var addresses = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.generateBip44Address = exports.generateBip44Path = exports.IOTA_BIP44_BASE_PATH = void 0;
@@ -11551,6 +11664,11 @@
 
 	});
 
+	var IMilestoneUtxoChangesResponse = createCommonjsModule(function (module, exports) {
+	Object.defineProperty(exports, "__esModule", { value: true });
+
+	});
+
 	var IOutputResponse = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 
@@ -11633,6 +11751,11 @@
 
 	});
 
+	var IGossipHeartbeat = createCommonjsModule(function (module, exports) {
+	Object.defineProperty(exports, "__esModule", { value: true });
+
+	});
+
 	var IGossipMetrics = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 
@@ -11698,108 +11821,6 @@
 
 	});
 
-	var b1t6 = createCommonjsModule(function (module, exports) {
-	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.B1T6 = void 0;
-	// Copyright 2020 IOTA Stiftung
-	// SPDX-License-Identifier: Apache-2.0
-	/* eslint-disable no-bitwise */
-	/**
-	 * Class implements the b1t6 encoding encoding which uses a group of 6 trits to encode each byte.
-	 */
-	var B1T6 = /** @class */ (function () {
-	    function B1T6() {
-	    }
-	    /**
-	     * The encoded length of the data.
-	     * @param data The data.
-	     * @returns The encoded length.
-	     */
-	    B1T6.encodedLen = function (data) {
-	        return data.length * B1T6.TRITS_PER_TRYTE;
-	    };
-	    /**
-	     * Encode a byte array into trits.
-	     * @param dst The destination array.
-	     * @param startIndex The start index to write in the array.
-	     * @param src The source data.
-	     * @returns The length of the encode.
-	     */
-	    B1T6.encode = function (dst, startIndex, src) {
-	        var j = 0;
-	        for (var i = 0; i < src.length; i++) {
-	            var _a = B1T6.encodeGroup(src[i]), t1 = _a.t1, t2 = _a.t2;
-	            B1T6.storeTrits(dst, startIndex + j, t1);
-	            B1T6.storeTrits(dst, startIndex + j + B1T6.TRITS_PER_TRYTE, t2);
-	            j += 6;
-	        }
-	        return j;
-	    };
-	    /**
-	     * Encode a group to trits.
-	     * @param b The value to encode.
-	     * @returns The trit groups.
-	     * @internal
-	     */
-	    B1T6.encodeGroup = function (b) {
-	        var v = (b << 24 >> 24) + (B1T6.TRYTE_RADIX_HALF * B1T6.TRYTE_RADIX) + B1T6.TRYTE_RADIX_HALF;
-	        var quo = Math.trunc(v / 27);
-	        var rem = Math.trunc(v % 27);
-	        return {
-	            t1: rem + B1T6.MIN_TRYTE_VALUE,
-	            t2: quo + B1T6.MIN_TRYTE_VALUE
-	        };
-	    };
-	    /**
-	     * Store the trits in the dest array.
-	     * @param trits The trits array.
-	     * @param startIndex The start index in the array to write.
-	     * @param value The value to write.
-	     * @internal
-	     */
-	    B1T6.storeTrits = function (trits, startIndex, value) {
-	        var idx = value - B1T6.MIN_TRYTE_VALUE;
-	        trits[startIndex] = B1T6.TRYTE_VALUE_TO_TRITS[idx][0];
-	        trits[startIndex + 1] = B1T6.TRYTE_VALUE_TO_TRITS[idx][1];
-	        trits[startIndex + 2] = B1T6.TRYTE_VALUE_TO_TRITS[idx][2];
-	    };
-	    /**
-	     * Trytes to trits lookup table.
-	     * @internal
-	     */
-	    B1T6.TRYTE_VALUE_TO_TRITS = [
-	        [-1, -1, -1], [0, -1, -1], [1, -1, -1], [-1, 0, -1], [0, 0, -1], [1, 0, -1],
-	        [-1, 1, -1], [0, 1, -1], [1, 1, -1], [-1, -1, 0], [0, -1, 0], [1, -1, 0],
-	        [-1, 0, 0], [0, 0, 0], [1, 0, 0], [-1, 1, 0], [0, 1, 0], [1, 1, 0],
-	        [-1, -1, 1], [0, -1, 1], [1, -1, 1], [-1, 0, 1], [0, 0, 1], [1, 0, 1],
-	        [-1, 1, 1], [0, 1, 1], [1, 1, 1]
-	    ];
-	    /**
-	     * Minimum tryte value.
-	     * @internal
-	     */
-	    B1T6.MIN_TRYTE_VALUE = -13;
-	    /**
-	     * Radix for trytes.
-	     * @internal
-	     */
-	    B1T6.TRYTE_RADIX = 27;
-	    /**
-	     * Half radix for trytes to save recalculating.
-	     * @internal
-	     */
-	    B1T6.TRYTE_RADIX_HALF = 13;
-	    /**
-	     * Trites per tryte.
-	     * @internal
-	     */
-	    B1T6.TRITS_PER_TRYTE = 3;
-	    return B1T6;
-	}());
-	exports.B1T6 = B1T6;
-
-	});
-
 	var powHelper = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.PowHelper = void 0;
@@ -11834,7 +11855,6 @@
 	     * @param powDigest The pow digest.
 	     * @param nonce The nonce.
 	     * @returns The trailing zeros.
-	     * @internal
 	     */
 	    PowHelper.trailingZeros = function (powDigest, nonce) {
 	        var buf = new Int8Array(curl.Curl.HASH_LENGTH);
@@ -11852,7 +11872,6 @@
 	     * Find the number of trailing zeros.
 	     * @param trits The trits to look for zeros.
 	     * @returns The number of trailing zeros.
-	     * @internal
 	     */
 	    PowHelper.trinaryTrailingZeros = function (trits) {
 	        var z = 0;
@@ -12497,6 +12516,7 @@
 	__exportStar(sha512, exports);
 	__exportStar(slip0010, exports);
 	__exportStar(zip215, exports);
+	__exportStar(b1t6, exports);
 	__exportStar(addresses, exports);
 	__exportStar(getBalance_1, exports);
 	__exportStar(getUnspentAddress_1, exports);
@@ -12514,6 +12534,7 @@
 	__exportStar(IMessageIdResponse, exports);
 	__exportStar(IMessagesResponse, exports);
 	__exportStar(IMilestoneResponse, exports);
+	__exportStar(IMilestoneUtxoChangesResponse, exports);
 	__exportStar(IOutputResponse, exports);
 	__exportStar(IResponse, exports);
 	__exportStar(ITipsResponse, exports);
@@ -12523,6 +12544,7 @@
 	__exportStar(IClient, exports);
 	__exportStar(IEd25519Address, exports);
 	__exportStar(IEd25519Signature, exports);
+	__exportStar(IGossipHeartbeat, exports);
 	__exportStar(IGossipMetrics, exports);
 	__exportStar(IIndexationPayload, exports);
 	__exportStar(IKeyPair, exports);

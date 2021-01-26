@@ -8,6 +8,7 @@ import { IChildrenResponse } from "../models/api/IChildrenResponse";
 import { IMessageIdResponse } from "../models/api/IMessageIdResponse";
 import { IMessagesResponse } from "../models/api/IMessagesResponse";
 import { IMilestoneResponse } from "../models/api/IMilestoneResponse";
+import { IMilestoneUtxoChangesResponse } from "../models/api/IMilestoneUtxoChangesResponse";
 import { IOutputResponse } from "../models/api/IOutputResponse";
 import { IResponse } from "../models/api/IResponse";
 import { ITipsResponse } from "../models/api/ITipsResponse";
@@ -94,7 +95,6 @@ export class SingleNodeClient implements IClient {
         this._endpoint = endpoint.replace(/\/+$/, "");
         this._basePath = options?.basePath ?? "/api/v1/";
         this._powProvider = options?.powProvider;
-        this._minPowScore = options?.overrideMinPow;
         this._timeout = options?.timeout;
         this._userName = options?.userName;
         this._password = options?.password;
@@ -325,6 +325,18 @@ export class SingleNodeClient implements IClient {
         return this.fetchJson<unknown, IMilestoneResponse>(
             "get",
             `milestones/${index}`
+        );
+    }
+
+    /**
+     * Get the requested milestone utxo changes.
+     * @param index The index of the milestone to request the changes for.
+     * @returns The milestone utxo changes details.
+     */
+    public async milestoneUtxoChanges(index: number): Promise<IMilestoneUtxoChangesResponse> {
+        return this.fetchJson<unknown, IMilestoneUtxoChangesResponse>(
+            "get",
+            `milestones/${index}/utxo-changes`
         );
     }
 

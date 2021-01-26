@@ -3,6 +3,7 @@ import { IAddressResponse } from "../models/api/IAddressResponse";
 import { IChildrenResponse } from "../models/api/IChildrenResponse";
 import { IMessagesResponse } from "../models/api/IMessagesResponse";
 import { IMilestoneResponse } from "../models/api/IMilestoneResponse";
+import { IMilestoneUtxoChangesResponse } from "../models/api/IMilestoneUtxoChangesResponse";
 import { IOutputResponse } from "../models/api/IOutputResponse";
 import { ITipsResponse } from "../models/api/ITipsResponse";
 import { IClient } from "../models/IClient";
@@ -114,6 +115,12 @@ export declare class SingleNodeClient implements IClient {
      * @returns The milestone details.
      */
     milestone(index: number): Promise<IMilestoneResponse>;
+    /**
+     * Get the requested milestone utxo changes.
+     * @param index The index of the milestone to request the changes for.
+     * @returns The milestone utxo changes details.
+     */
+    milestoneUtxoChanges(index: number): Promise<IMilestoneUtxoChangesResponse>;
     /**
      * Get the list of peers.
      * @returns The list of peers.
