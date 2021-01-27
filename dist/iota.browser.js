@@ -6513,12 +6513,22 @@
 	    /**
 	     * Get the address outputs.
 	     * @param addressBech32 The address to get the outputs for.
+	     * @param type Filter the type of outputs you are looking up, defaults to all.
+	     * @param includeSpent Filter the type of outputs you are looking up, defaults to false.
 	     * @returns The address outputs.
 	     */
-	    SingleNodeClient.prototype.addressOutputs = function (addressBech32) {
+	    SingleNodeClient.prototype.addressOutputs = function (addressBech32, type, includeSpent) {
 	        return __awaiter(this, void 0, void 0, function () {
+	            var queryParams;
 	            return __generator(this, function (_a) {
-	                return [2 /*return*/, this.fetchJson("get", "addresses/" + addressBech32 + "/outputs")];
+	                queryParams = [];
+	                if (type !== undefined) {
+	                    queryParams.push("type=" + type);
+	                }
+	                if (includeSpent !== undefined) {
+	                    queryParams.push("include-spent=" + includeSpent);
+	                }
+	                return [2 /*return*/, this.fetchJson("get", "addresses/" + addressBech32 + "/outputs" + this.combineQueryParams(queryParams))];
 	            });
 	        });
 	    };
@@ -6540,15 +6550,25 @@
 	    /**
 	     * Get the address outputs using ed25519 address.
 	     * @param addressEd25519 The address to get the outputs for.
+	     * @param type Filter the type of outputs you are looking up, defaults to all.
+	     * @param includeSpent Filter the type of outputs you are looking up, defaults to false.
 	     * @returns The address outputs.
 	     */
-	    SingleNodeClient.prototype.addressEd25519Outputs = function (addressEd25519) {
+	    SingleNodeClient.prototype.addressEd25519Outputs = function (addressEd25519, type, includeSpent) {
 	        return __awaiter(this, void 0, void 0, function () {
+	            var queryParams;
 	            return __generator(this, function (_a) {
 	                if (!converter.Converter.isHex(addressEd25519)) {
 	                    throw new Error("The supplied address does not appear to be hex format");
 	                }
-	                return [2 /*return*/, this.fetchJson("get", "addresses/ed25519/" + addressEd25519 + "/outputs")];
+	                queryParams = [];
+	                if (type !== undefined) {
+	                    queryParams.push("type=" + type);
+	                }
+	                if (includeSpent !== undefined) {
+	                    queryParams.push("include-spent=" + includeSpent);
+	                }
+	                return [2 /*return*/, this.fetchJson("get", "addresses/ed25519/" + addressEd25519 + "/outputs" + this.combineQueryParams(queryParams))];
 	            });
 	        });
 	    };
@@ -6767,6 +6787,14 @@
 	                }
 	            });
 	        });
+	    };
+	    /**
+	     * Combine the query params.
+	     * @param queryParams The quer params to combine.
+	     * @returns The combined query params.
+	     */
+	    SingleNodeClient.prototype.combineQueryParams = function (queryParams) {
+	        return queryParams.length > 0 ? "?" + queryParams.join("&") : "";
 	    };
 	    /**
 	     * Get the pow info from the node.

@@ -86,9 +86,11 @@ export interface IClient {
     /**
      * Get the address outputs using bech32 address.
      * @param addressBech32 The address to get the outputs for.
+     * @param type Filter the type of outputs you are looking up, defaults to all.
+     * @param includeSpent Filter the type of outputs you are looking up, defaults to false.
      * @returns The address outputs.
      */
-    addressOutputs(addressBech32: string): Promise<IAddressOutputsResponse>;
+    addressOutputs(addressBech32: string, type?: number, includeSpent?: boolean): Promise<IAddressOutputsResponse>;
     /**
      * Get the address details using ed25519 address.
      * @param addressEd25519 The address to get the details for.
@@ -98,9 +100,11 @@ export interface IClient {
     /**
      * Get the address outputs.
      * @param addressEd25519 The address to get the outputs for.
+     * @param type Filter the type of outputs you are looking up, defaults to all.
+     * @param includeSpent Filter the type of outputs you are looking up, defaults to false.
      * @returns The address outputs.
      */
-    addressEd25519Outputs(addressEd25519: string): Promise<IAddressOutputsResponse>;
+    addressEd25519Outputs(addressEd25519: string, type?: number, includeSpent?: boolean): Promise<IAddressOutputsResponse>;
     /**
      * Get the requested milestone.
      * @param index The index of the milestone to get.

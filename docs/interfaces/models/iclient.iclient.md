@@ -80,7 +80,7 @@ ___
 
 ### addressEd25519Outputs
 
-▸ **addressEd25519Outputs**(`addressEd25519`: *string*): *Promise*<[*IAddressOutputsResponse*](api/iaddressoutputsresponse.iaddressoutputsresponse.md)\>
+▸ **addressEd25519Outputs**(`addressEd25519`: *string*, `type?`: *number*, `includeSpent?`: *boolean*): *Promise*<[*IAddressOutputsResponse*](api/iaddressoutputsresponse.iaddressoutputsresponse.md)\>
 
 Get the address outputs.
 
@@ -89,6 +89,8 @@ Get the address outputs.
 Name | Type | Description |
 ------ | ------ | ------ |
 `addressEd25519` | *string* | The address to get the outputs for.   |
+`type?` | *number* | Filter the type of outputs you are looking up, defaults to all.   |
+`includeSpent?` | *boolean* | Filter the type of outputs you are looking up, defaults to false.   |
 
 **Returns:** *Promise*<[*IAddressOutputsResponse*](api/iaddressoutputsresponse.iaddressoutputsresponse.md)\>
 
@@ -98,7 +100,7 @@ ___
 
 ### addressOutputs
 
-▸ **addressOutputs**(`addressBech32`: *string*): *Promise*<[*IAddressOutputsResponse*](api/iaddressoutputsresponse.iaddressoutputsresponse.md)\>
+▸ **addressOutputs**(`addressBech32`: *string*, `type?`: *number*, `includeSpent?`: *boolean*): *Promise*<[*IAddressOutputsResponse*](api/iaddressoutputsresponse.iaddressoutputsresponse.md)\>
 
 Get the address outputs using bech32 address.
 
@@ -107,6 +109,8 @@ Get the address outputs using bech32 address.
 Name | Type | Description |
 ------ | ------ | ------ |
 `addressBech32` | *string* | The address to get the outputs for.   |
+`type?` | *number* | Filter the type of outputs you are looking up, defaults to all.   |
+`includeSpent?` | *boolean* | Filter the type of outputs you are looking up, defaults to false.   |
 
 **Returns:** *Promise*<[*IAddressOutputsResponse*](api/iaddressoutputsresponse.iaddressoutputsresponse.md)\>
 
