@@ -78,7 +78,7 @@ The minimum length of a treasury output binary representation.
 
 ### deserializeOutput
 
-▸ **deserializeOutput**(`readStream`: [*ReadStream*](../classes/utils/readstream.readstream.md)): [*ISigLockedSingleOutput*](../interfaces/models/isiglockedsingleoutput.isiglockedsingleoutput.md) \| [*ISigLockedDustAllowanceOutput*](../interfaces/models/isiglockeddustallowanceoutput.isiglockeddustallowanceoutput.md) \| [*ITreasuryOutput*](../interfaces/models/itreasuryoutput.itreasuryoutput.md)
+▸ **deserializeOutput**(`readStream`: [*ReadStream*](../classes/utils/readstream.readstream.md)): [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*unknown*\>
 
 Deserialize the output from binary.
 
@@ -88,7 +88,7 @@ Name | Type | Description |
 ------ | ------ | ------ |
 `readStream` | [*ReadStream*](../classes/utils/readstream.readstream.md) | The stream to read the data from.   |
 
-**Returns:** [*ISigLockedSingleOutput*](../interfaces/models/isiglockedsingleoutput.isiglockedsingleoutput.md) \| [*ISigLockedDustAllowanceOutput*](../interfaces/models/isiglockeddustallowanceoutput.isiglockeddustallowanceoutput.md) \| [*ITreasuryOutput*](../interfaces/models/itreasuryoutput.itreasuryoutput.md)
+**Returns:** [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*unknown*\>
 
 The deserialized object.
 
@@ -96,7 +96,7 @@ ___
 
 ### deserializeOutputs
 
-▸ **deserializeOutputs**(`readStream`: [*ReadStream*](../classes/utils/readstream.readstream.md)): ([*ISigLockedSingleOutput*](../interfaces/models/isiglockedsingleoutput.isiglockedsingleoutput.md) \| [*ISigLockedDustAllowanceOutput*](../interfaces/models/isiglockeddustallowanceoutput.isiglockeddustallowanceoutput.md) \| [*ITreasuryOutput*](../interfaces/models/itreasuryoutput.itreasuryoutput.md))[]
+▸ **deserializeOutputs**(`readStream`: [*ReadStream*](../classes/utils/readstream.readstream.md)): [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*unknown*\>[]
 
 Deserialize the outputs from binary.
 
@@ -106,7 +106,7 @@ Name | Type | Description |
 ------ | ------ | ------ |
 `readStream` | [*ReadStream*](../classes/utils/readstream.readstream.md) | The stream to read the data from.   |
 
-**Returns:** ([*ISigLockedSingleOutput*](../interfaces/models/isiglockedsingleoutput.isiglockedsingleoutput.md) \| [*ISigLockedDustAllowanceOutput*](../interfaces/models/isiglockeddustallowanceoutput.isiglockeddustallowanceoutput.md) \| [*ITreasuryOutput*](../interfaces/models/itreasuryoutput.itreasuryoutput.md))[]
+**Returns:** [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*unknown*\>[]
 
 The deserialized object.
 

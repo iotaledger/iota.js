@@ -40,7 +40,7 @@ ___
 
 ### output
 
-• **output**: [*ISigLockedSingleOutput*](../isiglockedsingleoutput.isiglockedsingleoutput.md) \| [*ISigLockedDustAllowanceOutput*](../isiglockeddustallowanceoutput.isiglockeddustallowanceoutput.md)
+• **output**: [*ITypeBase*](../itypebase.itypebase.md)<*unknown*\>
 
 The output.
 

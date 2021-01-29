@@ -33,7 +33,7 @@ export declare const MAX_OUTPUT_COUNT: number;
  * @param readStream The stream to read the data from.
  * @returns The deserialized object.
  */
-export declare function deserializeOutputs(readStream: ReadStream): (ISigLockedSingleOutput | ISigLockedDustAllowanceOutput | ITreasuryOutput)[];
+export declare function deserializeOutputs(readStream: ReadStream): ITypeBase<unknown>[];
 /**
  * Serialize the outputs to binary.
  * @param writeStream The stream to write the data to.
@@ -45,7 +45,7 @@ export declare function serializeOutputs(writeStream: WriteStream, objects: ITyp
  * @param readStream The stream to read the data from.
  * @returns The deserialized object.
  */
-export declare function deserializeOutput(readStream: ReadStream): (ISigLockedSingleOutput | ISigLockedDustAllowanceOutput | ITreasuryOutput);
+export declare function deserializeOutput(readStream: ReadStream): ITypeBase<unknown>;
 /**
  * Serialize the output to binary.
  * @param writeStream The stream to write the data to.

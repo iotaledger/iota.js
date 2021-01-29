@@ -47,11 +47,10 @@ export const MAX_OUTPUT_COUNT: number = 127;
  * @param readStream The stream to read the data from.
  * @returns The deserialized object.
  */
-export function deserializeOutputs(readStream: ReadStream):
-    (ISigLockedSingleOutput | ISigLockedDustAllowanceOutput | ITreasuryOutput)[] {
+export function deserializeOutputs(readStream: ReadStream): ITypeBase<unknown>[] {
     const numOutputs = readStream.readUInt16("outputs.numOutputs");
 
-    const inputs: (ISigLockedSingleOutput | ISigLockedDustAllowanceOutput | ITreasuryOutput)[] = [];
+    const inputs: ITypeBase<unknown>[] = [];
     for (let i = 0; i < numOutputs; i++) {
         inputs.push(deserializeOutput(readStream));
     }
@@ -85,8 +84,7 @@ export function serializeOutputs(writeStream: WriteStream,
  * @param readStream The stream to read the data from.
  * @returns The deserialized object.
  */
-export function deserializeOutput(readStream: ReadStream):
-    (ISigLockedSingleOutput | ISigLockedDustAllowanceOutput | ITreasuryOutput) {
+export function deserializeOutput(readStream: ReadStream): ITypeBase<unknown> {
     if (!readStream.hasRemaining(MIN_OUTPUT_LENGTH)) {
         throw new Error(`Output data is ${readStream.length()
             } in length which is less than the minimimum size required of ${MIN_OUTPUT_LENGTH}`);

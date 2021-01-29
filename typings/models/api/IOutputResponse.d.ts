@@ -1,5 +1,4 @@
-import { ISigLockedDustAllowanceOutput } from "../ISigLockedDustAllowanceOutput";
-import { ISigLockedSingleOutput } from "../ISigLockedSingleOutput";
+import { ITypeBase } from "../ITypeBase";
 /**
  * Details of an output.
  */
@@ -23,5 +22,5 @@ export interface IOutputResponse {
     /**
      * The output.
      */
-    output: ISigLockedSingleOutput | ISigLockedDustAllowanceOutput;
+    output: ITypeBase<unknown>;
 }
