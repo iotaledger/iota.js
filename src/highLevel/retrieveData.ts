@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 import { IClient } from "../models/IClient";
 import { IIndexationPayload, INDEXATION_PAYLOAD_TYPE } from "../models/IIndexationPayload";
-import { ITransactionPayload, TRANSACTION_PAYLOAD_TYPE } from "../models/ITransactionPayload";
+import { TRANSACTION_PAYLOAD_TYPE } from "../models/ITransactionPayload";
 import { Converter } from "../utils/converter";
 
 /**
@@ -21,9 +21,9 @@ export async function retrieveData(client: IClient, messageId: string): Promise<
         let indexationPayload: IIndexationPayload | undefined;
 
         if (message.payload.type === TRANSACTION_PAYLOAD_TYPE) {
-            indexationPayload = (message.payload as ITransactionPayload).essence.payload;
+            indexationPayload = message.payload.essence.payload;
         } else if (message.payload.type === INDEXATION_PAYLOAD_TYPE) {
-            indexationPayload = message.payload as IIndexationPayload;
+            indexationPayload = message.payload;
         }
 
         if (indexationPayload) {

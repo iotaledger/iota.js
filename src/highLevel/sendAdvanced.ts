@@ -17,7 +17,6 @@ import { ISigLockedSingleOutput, SIG_LOCKED_SINGLE_OUTPUT_TYPE } from "../models
 import { ISignatureUnlockBlock, SIGNATURE_UNLOCK_BLOCK_TYPE } from "../models/ISignatureUnlockBlock";
 import { ITransactionEssence, TRANSACTION_ESSENCE_TYPE } from "../models/ITransactionEssence";
 import { ITransactionPayload, TRANSACTION_PAYLOAD_TYPE } from "../models/ITransactionPayload";
-import { ITypeBase } from "../models/ITypeBase";
 import { IUTXOInput } from "../models/IUTXOInput";
 import { Converter } from "../utils/converter";
 import { WriteStream } from "../utils/writeStream";
@@ -109,28 +108,20 @@ export function buildTransactionPayload(
     }
 
     const outputsWithSerialization: {
-        output: ITypeBase<number>;
+        output: ISigLockedDustAllowanceOutput | ISigLockedSingleOutput;
         serialized: string;
     }[] = [];
 
     for (const output of outputs) {
         if (output.addressType === ED25519_ADDRESS_TYPE) {
-            const o: ITypeBase<number> =
-                output.isDustAllowance ? {
-                    type: SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE,
-                    address: {
-                        type: output.addressType,
-                        address: output.address
-                    },
-                    amount: output.amount
-                } as ISigLockedDustAllowanceOutput : {
-                    type: SIG_LOCKED_SINGLE_OUTPUT_TYPE,
-                    address: {
-                        type: output.addressType,
-                        address: output.address
-                    },
-                    amount: output.amount
-                } as ISigLockedSingleOutput;
+            const o: ISigLockedDustAllowanceOutput | ISigLockedSingleOutput = {
+                type: output.isDustAllowance ? SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE : SIG_LOCKED_SINGLE_OUTPUT_TYPE,
+                address: {
+                    type: output.addressType,
+                    address: output.address
+                },
+                amount: output.amount
+            };
             const writeStream = new WriteStream();
             serializeOutput(writeStream, o);
             outputsWithSerialization.push({

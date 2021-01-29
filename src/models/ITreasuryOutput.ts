@@ -1,6 +1,5 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import { IAmountOutput } from "./IAmountOutput";
 import { ITypeBase } from "./ITypeBase";
 
 /**
@@ -11,5 +10,9 @@ export const TREASURY_OUTPUT_TYPE = 2;
 /**
  * Treasury Output.
  */
-export interface ITreasuryOutput extends ITypeBase<2>, IAmountOutput {
+export interface ITreasuryOutput extends ITypeBase<2> {
+    /**
+     * The amount of the output.
+     */
+    amount: number;
 }

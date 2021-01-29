@@ -19,7 +19,6 @@ import { ITransactionPayload, TRANSACTION_PAYLOAD_TYPE } from "../models/ITransa
 import { ITreasuryInput, TREASURY_INPUT_TYPE } from "../models/ITreasuryInput";
 import { ITreasuryOutput, TREASURY_OUTPUT_TYPE } from "../models/ITreasuryOutput";
 import { ITreasuryTransactionPayload, TREASURY_TRANSACTION_PAYLOAD_TYPE } from "../models/ITreasuryTransactionPayload";
-import { ITypeBase } from "../models/ITypeBase";
 import { IUTXOInput, UTXO_INPUT_TYPE } from "../models/IUTXOInput";
 import { Converter } from "./converter";
 
@@ -127,18 +126,23 @@ export function logMessageMetadata(prefix: string, messageMetadata: IMessageMeta
  * @param prefix The prefix for the output.
  * @param unknownPayload The payload.
  */
-export function logPayload(prefix: string, unknownPayload?: ITypeBase<number>): void {
+export function logPayload(prefix: string, unknownPayload?:
+    ITransactionPayload |
+    IMilestonePayload |
+    IIndexationPayload |
+    ITreasuryTransactionPayload |
+    IReceiptPayload): void {
     if (unknownPayload) {
         if (unknownPayload.type === TRANSACTION_PAYLOAD_TYPE) {
-            logTransactionPayload(prefix, unknownPayload as ITransactionPayload);
+            logTransactionPayload(prefix, unknownPayload);
         } else if (unknownPayload.type === MILESTONE_PAYLOAD_TYPE) {
-            logMilestonePayload(prefix, unknownPayload as IMilestonePayload);
+            logMilestonePayload(prefix, unknownPayload);
         } else if (unknownPayload.type === INDEXATION_PAYLOAD_TYPE) {
-            logIndexationPayload(prefix, unknownPayload as IIndexationPayload);
+            logIndexationPayload(prefix, unknownPayload);
         } else if (unknownPayload.type === RECEIPT_PAYLOAD_TYPE) {
-            logReceiptPayload(prefix, unknownPayload as IReceiptPayload);
+            logReceiptPayload(prefix, unknownPayload);
         } else if (unknownPayload.type === TREASURY_TRANSACTION_PAYLOAD_TYPE) {
-            logTreasuryTransactionPayload(prefix, unknownPayload as ITreasuryTransactionPayload);
+            logTreasuryTransactionPayload(prefix, unknownPayload);
         }
     }
 }
@@ -243,9 +247,9 @@ export function logTreasuryTransactionPayload(prefix: string, payload?: ITreasur
  * @param prefix The prefix for the output.
  * @param unknownAddress The address to log.
  */
-export function logAddress(prefix: string, unknownAddress?: ITypeBase<number>): void {
+export function logAddress(prefix: string, unknownAddress?: IEd25519Address): void {
     if (unknownAddress?.type === ED25519_ADDRESS_TYPE) {
-        const address = unknownAddress as IEd25519Address;
+        const address = unknownAddress;
         logger(`${prefix}Ed25519 Address`);
         logger(`${prefix}\tAddress:`, address.address);
     }
@@ -256,9 +260,9 @@ export function logAddress(prefix: string, unknownAddress?: ITypeBase<number>): 
  * @param prefix The prefix for the output.
  * @param unknownSignature The signature to log.
  */
-export function logSignature(prefix: string, unknownSignature?: ITypeBase<number>): void {
+export function logSignature(prefix: string, unknownSignature?: IEd25519Signature): void {
     if (unknownSignature?.type === ED25519_SIGNATURE_TYPE) {
-        const signature = unknownSignature as IEd25519Signature;
+        const signature = unknownSignature;
         logger(`${prefix}Ed25519 Signature`);
         logger(`${prefix}\tPublic Key:`, signature.publicKey);
         logger(`${prefix}\tSignature:`, signature.signature);
@@ -270,15 +274,15 @@ export function logSignature(prefix: string, unknownSignature?: ITypeBase<number
  * @param prefix The prefix for the output.
  * @param unknownInput The input to log.
  */
-export function logInput(prefix: string, unknownInput?: ITypeBase<number>): void {
+export function logInput(prefix: string, unknownInput?: IUTXOInput | ITreasuryInput): void {
     if (unknownInput) {
         if (unknownInput.type === UTXO_INPUT_TYPE) {
-            const input = unknownInput as IUTXOInput;
+            const input = unknownInput;
             logger(`${prefix}UTXO Input`);
             logger(`${prefix}\tTransaction Id:`, input.transactionId);
             logger(`${prefix}\tTransaction Output Index:`, input.transactionOutputIndex);
         } else if (unknownInput.type === TREASURY_INPUT_TYPE) {
-            const input = unknownInput as ITreasuryInput;
+            const input = unknownInput;
             logger(`${prefix}Treasury Input`);
             logger(`${prefix}\tMilestone Hash:`, input.milestoneHash);
         }
@@ -290,20 +294,21 @@ export function logInput(prefix: string, unknownInput?: ITypeBase<number>): void
  * @param prefix The prefix for the output.
  * @param unknownOutput The output to log.
  */
-export function logOutput(prefix: string, unknownOutput?: ITypeBase<number>): void {
+export function logOutput(prefix: string,
+    unknownOutput?: ISigLockedSingleOutput | ISigLockedDustAllowanceOutput | ITreasuryOutput): void {
     if (unknownOutput) {
         if (unknownOutput.type === SIG_LOCKED_SINGLE_OUTPUT_TYPE) {
-            const output = unknownOutput as ISigLockedSingleOutput;
+            const output = unknownOutput;
             logger(`${prefix}Signature Locked Single Output`);
             logAddress(`${prefix}\t\t`, output.address);
             logger(`${prefix}\t\tAmount:`, output.amount);
         } else if (unknownOutput.type === SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE) {
-            const output = unknownOutput as ISigLockedDustAllowanceOutput;
+            const output = unknownOutput;
             logger(`${prefix}Signature Locked Dust Allowance Output`);
             logAddress(`${prefix}\t\t`, output.address);
             logger(`${prefix}\t\tAmount:`, output.amount);
         } else if (unknownOutput.type === TREASURY_OUTPUT_TYPE) {
-            const output = unknownOutput as ITreasuryOutput;
+            const output = unknownOutput;
             logger(`${prefix}Treasury Output`);
             logger(`${prefix}\t\tAmount:`, output.amount);
         }
@@ -315,14 +320,15 @@ export function logOutput(prefix: string, unknownOutput?: ITypeBase<number>): vo
  * @param prefix The prefix for the output.
  * @param unknownUnlockBlock The unlock block to log.
  */
-export function logUnlockBlock(prefix: string, unknownUnlockBlock?: ITypeBase<number>): void {
+export function logUnlockBlock(prefix: string,
+    unknownUnlockBlock?: ISignatureUnlockBlock | IReferenceUnlockBlock): void {
     if (unknownUnlockBlock) {
         if (unknownUnlockBlock.type === SIGNATURE_UNLOCK_BLOCK_TYPE) {
-            const unlockBlock = unknownUnlockBlock as ISignatureUnlockBlock;
+            const unlockBlock = unknownUnlockBlock;
             logger(`${prefix}\tSignature Unlock Block`);
             logSignature(`${prefix}\t\t`, unlockBlock.signature);
         } else if (unknownUnlockBlock.type === REFERENCE_UNLOCK_BLOCK_TYPE) {
-            const unlockBlock = unknownUnlockBlock as IReferenceUnlockBlock;
+            const unlockBlock = unknownUnlockBlock;
             logger(`${prefix}\tReference Unlock Block`);
             logger(`${prefix}\t\tReference:`, unlockBlock.reference);
         }

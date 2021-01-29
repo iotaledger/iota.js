@@ -1,6 +1,9 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
+import { INDEXATION_PAYLOAD_TYPE } from "../models/IIndexationPayload";
 import { IMessage } from "../models/IMessage";
+import { MILESTONE_PAYLOAD_TYPE } from "../models/IMilestonePayload";
+import { TRANSACTION_PAYLOAD_TYPE } from "../models/ITransactionPayload";
 import { ReadStream } from "../utils/readStream";
 import { WriteStream } from "../utils/writeStream";
 import { BYTE_SIZE, MESSAGE_ID_LENGTH, UINT64_SIZE } from "./common";
@@ -53,6 +56,13 @@ export function deserializeMessage(readStream: ReadStream): IMessage {
 
     const payload = deserializePayload(readStream);
 
+    if (payload &&
+        payload.type !== TRANSACTION_PAYLOAD_TYPE &&
+        payload.type !== INDEXATION_PAYLOAD_TYPE &&
+        payload.type !== MILESTONE_PAYLOAD_TYPE) {
+        throw new Error("Messages can only contain transaction, indexation or milestone payloads");
+    }
+
     const nonce = readStream.readUInt64("message.nonce");
 
     const unused = readStream.unused();
@@ -95,6 +105,13 @@ export function serializeMessage(writeStream: WriteStream, object: IMessage): vo
             writeStream.writeFixedHex(`message.parentMessageId${i + 1}`,
                 MESSAGE_ID_LENGTH, object.parents[i]);
         }
+    }
+
+    if (object.payload &&
+        object.payload.type !== TRANSACTION_PAYLOAD_TYPE &&
+        object.payload.type !== INDEXATION_PAYLOAD_TYPE &&
+        object.payload.type !== MILESTONE_PAYLOAD_TYPE) {
+        throw new Error("Messages can only contain transaction, indexation or milestone payloads");
     }
 
     serializePayload(writeStream, object.payload);

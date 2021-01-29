@@ -29,9 +29,9 @@ export const MIN_REFERENCE_UNLOCK_BLOCK_LENGTH: number = MIN_UNLOCK_BLOCK_LENGTH
  * @param readStream The stream to read the data from.
  * @returns The deserialized object.
  */
-export function deserializeUnlockBlocks(readStream: ReadStream): ITypeBase<number>[] {
+export function deserializeUnlockBlocks(readStream: ReadStream): (ISignatureUnlockBlock | IReferenceUnlockBlock)[] {
     const numUnlockBlocks = readStream.readUInt16("transactionEssence.numUnlockBlocks");
-    const unlockBlocks: ITypeBase<number>[] = [];
+    const unlockBlocks: (ISignatureUnlockBlock | IReferenceUnlockBlock)[] = [];
     for (let i = 0; i < numUnlockBlocks; i++) {
         unlockBlocks.push(deserializeUnlockBlock(readStream));
     }
@@ -43,7 +43,8 @@ export function deserializeUnlockBlocks(readStream: ReadStream): ITypeBase<numbe
  * @param writeStream The stream to write the data to.
  * @param objects The objects to serialize.
  */
-export function serializeUnlockBlocks(writeStream: WriteStream, objects: ITypeBase<number>[]): void {
+export function serializeUnlockBlocks(writeStream: WriteStream, objects:
+    (ISignatureUnlockBlock | IReferenceUnlockBlock)[]): void {
     writeStream.writeUInt16("transactionEssence.numUnlockBlocks", objects.length);
 
     for (let i = 0; i < objects.length; i++) {
@@ -56,7 +57,7 @@ export function serializeUnlockBlocks(writeStream: WriteStream, objects: ITypeBa
  * @param readStream The stream to read the data from.
  * @returns The deserialized object.
  */
-export function deserializeUnlockBlock(readStream: ReadStream): ITypeBase<number> {
+export function deserializeUnlockBlock(readStream: ReadStream): ISignatureUnlockBlock | IReferenceUnlockBlock {
     if (!readStream.hasRemaining(MIN_UNLOCK_BLOCK_LENGTH)) {
         throw new Error(`Unlock Block data is ${readStream.length()
             } in length which is less than the minimimum size required of ${MIN_UNLOCK_BLOCK_LENGTH}`);
@@ -81,13 +82,14 @@ export function deserializeUnlockBlock(readStream: ReadStream): ITypeBase<number
  * @param writeStream The stream to write the data to.
  * @param object The object to serialize.
  */
-export function serializeUnlockBlock(writeStream: WriteStream, object: ITypeBase<number>): void {
+export function serializeUnlockBlock(writeStream: WriteStream,
+    object: (ISignatureUnlockBlock | IReferenceUnlockBlock)): void {
     if (object.type === SIGNATURE_UNLOCK_BLOCK_TYPE) {
-        serializeSignatureUnlockBlock(writeStream, object as ISignatureUnlockBlock);
+        serializeSignatureUnlockBlock(writeStream, object);
     } else if (object.type === REFERENCE_UNLOCK_BLOCK_TYPE) {
-        serializeReferenceUnlockBlock(writeStream, object as IReferenceUnlockBlock);
+        serializeReferenceUnlockBlock(writeStream, object);
     } else {
-        throw new Error(`Unrecognized unlock block type ${object.type}`);
+        throw new Error(`Unrecognized unlock block type ${(object as ITypeBase<number>).type}`);
     }
 }
 

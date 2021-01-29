@@ -842,6 +842,36 @@
 
 	});
 
+	var IIndexationPayload = createCommonjsModule(function (module, exports) {
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.INDEXATION_PAYLOAD_TYPE = void 0;
+	/**
+	 * The global type for the payload.
+	 */
+	exports.INDEXATION_PAYLOAD_TYPE = 2;
+
+	});
+
+	var IMilestonePayload = createCommonjsModule(function (module, exports) {
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.MILESTONE_PAYLOAD_TYPE = void 0;
+	/**
+	 * The global type for the payload.
+	 */
+	exports.MILESTONE_PAYLOAD_TYPE = 1;
+
+	});
+
+	var ITransactionPayload = createCommonjsModule(function (module, exports) {
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.TRANSACTION_PAYLOAD_TYPE = void 0;
+	/**
+	 * The global type for the payload.
+	 */
+	exports.TRANSACTION_PAYLOAD_TYPE = 0;
+
+	});
+
 	var sha512 = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.Sha512 = void 0;
@@ -4272,26 +4302,6 @@
 
 	});
 
-	var IIndexationPayload = createCommonjsModule(function (module, exports) {
-	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.INDEXATION_PAYLOAD_TYPE = void 0;
-	/**
-	 * The global type for the payload.
-	 */
-	exports.INDEXATION_PAYLOAD_TYPE = 2;
-
-	});
-
-	var IMilestonePayload = createCommonjsModule(function (module, exports) {
-	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.MILESTONE_PAYLOAD_TYPE = void 0;
-	/**
-	 * The global type for the payload.
-	 */
-	exports.MILESTONE_PAYLOAD_TYPE = 1;
-
-	});
-
 	var IReceiptPayload = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.RECEIPT_PAYLOAD_TYPE = void 0;
@@ -4309,16 +4319,6 @@
 	 * The global type for the transaction essence.
 	 */
 	exports.TRANSACTION_ESSENCE_TYPE = 0;
-
-	});
-
-	var ITransactionPayload = createCommonjsModule(function (module, exports) {
-	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.TRANSACTION_PAYLOAD_TYPE = void 0;
-	/**
-	 * The global type for the payload.
-	 */
-	exports.TRANSACTION_PAYLOAD_TYPE = 0;
 
 	});
 
@@ -4584,6 +4584,9 @@
 
 
 
+
+
+
 	/**
 	 * The minimum length of a transaction essence binary representation.
 	 */
@@ -4607,6 +4610,19 @@
 	    if (payload$1 && payload$1.type !== IIndexationPayload.INDEXATION_PAYLOAD_TYPE) {
 	        throw new Error("Transaction essence can only contain embedded Indexation Payload");
 	    }
+	    for (var _i = 0, inputs_1 = inputs; _i < inputs_1.length; _i++) {
+	        var input$1 = inputs_1[_i];
+	        if (input$1.type !== IUTXOInput.UTXO_INPUT_TYPE) {
+	            throw new Error("Transaction essence can only contain UTXO Inputs");
+	        }
+	    }
+	    for (var _a = 0, outputs_1 = outputs; _a < outputs_1.length; _a++) {
+	        var output$1 = outputs_1[_a];
+	        if (output$1.type !== ISigLockedSingleOutput.SIG_LOCKED_SINGLE_OUTPUT_TYPE &&
+	            output$1.type !== ISigLockedDustAllowanceOutput.SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE) {
+	            throw new Error("Transaction essence can only contain sig locked single input or sig locked dust allowance outputs");
+	        }
+	    }
 	    return {
 	        type: ITransactionEssence.TRANSACTION_ESSENCE_TYPE,
 	        inputs: inputs,
@@ -4622,7 +4638,20 @@
 	 */
 	function serializeTransactionEssence(writeStream, object) {
 	    writeStream.writeByte("transactionEssence.type", object.type);
+	    for (var _i = 0, _a = object.inputs; _i < _a.length; _i++) {
+	        var input$1 = _a[_i];
+	        if (input$1.type !== IUTXOInput.UTXO_INPUT_TYPE) {
+	            throw new Error("Transaction essence can only contain UTXO Inputs");
+	        }
+	    }
 	    input.serializeInputs(writeStream, object.inputs);
+	    for (var _b = 0, _c = object.outputs; _b < _c.length; _b++) {
+	        var output$1 = _c[_b];
+	        if (output$1.type !== ISigLockedSingleOutput.SIG_LOCKED_SINGLE_OUTPUT_TYPE &&
+	            output$1.type !== ISigLockedDustAllowanceOutput.SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE) {
+	            throw new Error("Transaction essence can only contain sig locked single input or sig locked dust allowance outputs");
+	        }
+	    }
 	    output.serializeOutputs(writeStream, object.outputs);
 	    payload.serializePayload(writeStream, object.payload);
 	}
@@ -5297,6 +5326,11 @@
 	var message = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.serializeMessage = exports.deserializeMessage = exports.MIN_NUMBER_PARENTS = exports.MAX_NUMBER_PARENTS = exports.MAX_MESSAGE_LENGTH = void 0;
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
+
+
+
 
 
 	/**
@@ -5336,6 +5370,12 @@
 	        parents.push(parentMessageId);
 	    }
 	    var payload$1 = payload.deserializePayload(readStream);
+	    if (payload$1 &&
+	        payload$1.type !== ITransactionPayload.TRANSACTION_PAYLOAD_TYPE &&
+	        payload$1.type !== IIndexationPayload.INDEXATION_PAYLOAD_TYPE &&
+	        payload$1.type !== IMilestonePayload.MILESTONE_PAYLOAD_TYPE) {
+	        throw new Error("Messages can only contain transaction, indexation or milestone payloads");
+	    }
 	    var nonce = readStream.readUInt64("message.nonce");
 	    var unused = readStream.unused();
 	    if (unused !== 0) {
@@ -5373,6 +5413,12 @@
 	            }
 	            writeStream.writeFixedHex("message.parentMessageId" + (i + 1), common.MESSAGE_ID_LENGTH, object.parents[i]);
 	        }
+	    }
+	    if (object.payload &&
+	        object.payload.type !== ITransactionPayload.TRANSACTION_PAYLOAD_TYPE &&
+	        object.payload.type !== IIndexationPayload.INDEXATION_PAYLOAD_TYPE &&
+	        object.payload.type !== IMilestonePayload.MILESTONE_PAYLOAD_TYPE) {
+	        throw new Error("Messages can only contain transaction, indexation or milestone payloads");
 	    }
 	    payload.serializePayload(writeStream, object.payload);
 	    writeStream.writeUInt64("message.nonce", BigInt((_d = object.nonce) !== null && _d !== void 0 ? _d : 0));
@@ -11565,15 +11611,8 @@
 	    for (var _i = 0, outputs_1 = outputs; _i < outputs_1.length; _i++) {
 	        var output$1 = outputs_1[_i];
 	        if (output$1.addressType === IEd25519Address.ED25519_ADDRESS_TYPE) {
-	            var o = output$1.isDustAllowance ? {
-	                type: ISigLockedDustAllowanceOutput.SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE,
-	                address: {
-	                    type: output$1.addressType,
-	                    address: output$1.address
-	                },
-	                amount: output$1.amount
-	            } : {
-	                type: ISigLockedSingleOutput.SIG_LOCKED_SINGLE_OUTPUT_TYPE,
+	            var o = {
+	                type: output$1.isDustAllowance ? ISigLockedDustAllowanceOutput.SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE : ISigLockedSingleOutput.SIG_LOCKED_SINGLE_OUTPUT_TYPE,
 	                address: {
 	                    type: output$1.addressType,
 	                    address: output$1.address
@@ -12166,13 +12205,6 @@
 	});
 
 	var IAddress = createCommonjsModule(function (module, exports) {
-	Object.defineProperty(exports, "__esModule", { value: true });
-
-	});
-
-	var IAmountOutput = createCommonjsModule(function (module, exports) {
-	// Copyright 2020 IOTA Stiftung
-	// SPDX-License-Identifier: Apache-2.0
 	Object.defineProperty(exports, "__esModule", { value: true });
 
 	});
@@ -13084,7 +13116,6 @@
 	__exportStar(ITipsResponse, exports);
 	__exportStar(conflictReason, exports);
 	__exportStar(IAddress, exports);
-	__exportStar(IAmountOutput, exports);
 	__exportStar(IBip44GeneratorState, exports);
 	__exportStar(IClient, exports);
 	__exportStar(IEd25519Address, exports);

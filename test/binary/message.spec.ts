@@ -6,7 +6,6 @@ import { IMilestonePayload } from "../../src/models/IMilestonePayload";
 import { ISigLockedSingleOutput } from "../../src/models/ISigLockedSingleOutput";
 import { ISignatureUnlockBlock } from "../../src/models/ISignatureUnlockBlock";
 import { ITransactionPayload } from "../../src/models/ITransactionPayload";
-import { IUTXOInput } from "../../src/models/IUTXOInput";
 import { Converter } from "../../src/utils/converter";
 import { ReadStream } from "../../src/utils/readStream";
 import { WriteStream } from "../../src/utils/writeStream";
@@ -152,7 +151,7 @@ describe("Binary Message", () => {
         expect(payload.essence.type).toEqual(0);
         expect(payload.essence.inputs.length).toEqual(1);
         expect(payload.essence.inputs[0].type).toEqual(0);
-        const utxoInput = payload.essence.inputs[0] as IUTXOInput;
+        const utxoInput = payload.essence.inputs[0];
         expect(utxoInput.transactionId)
             .toEqual("2367ec318426c9f5d1115a6ac96f6c3cd2e53443713e0b63f0c266cbda744474");
         expect(utxoInput.transactionOutputIndex).toEqual(1);

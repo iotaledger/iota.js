@@ -87,7 +87,13 @@ export const MAX_INDEXATION_KEY_LENGTH: number = 64;
  * @param readStream The stream to read the data from.
  * @returns The deserialized object.
  */
-export function deserializePayload(readStream: ReadStream): ITypeBase<number> | undefined {
+export function deserializePayload(readStream: ReadStream):
+    ITransactionPayload |
+    IMilestonePayload |
+    IIndexationPayload |
+    ITreasuryTransactionPayload |
+    IReceiptPayload |
+    undefined {
     if (!readStream.hasRemaining(MIN_PAYLOAD_LENGTH)) {
         throw new Error(`Payload data is ${readStream.length()
             } in length which is less than the minimimum size required of ${MIN_PAYLOAD_LENGTH}`);
@@ -100,7 +106,12 @@ export function deserializePayload(readStream: ReadStream): ITypeBase<number> | 
             } exceeds the remaining data ${readStream.unused()}`);
     }
 
-    let payload: ITypeBase<number> | undefined;
+    let payload: ITransactionPayload |
+        IMilestonePayload |
+        IIndexationPayload |
+        ITreasuryTransactionPayload |
+        IReceiptPayload |
+        undefined;
 
     if (payloadLength > 0) {
         const payloadType = readStream.readUInt32("payload.type", false);
@@ -128,7 +139,13 @@ export function deserializePayload(readStream: ReadStream): ITypeBase<number> | 
  * @param writeStream The stream to write the data to.
  * @param object The object to serialize.
  */
-export function serializePayload(writeStream: WriteStream, object: ITypeBase<number> | undefined): void {
+export function serializePayload(writeStream: WriteStream, object:
+    ITransactionPayload |
+    IMilestonePayload |
+    IIndexationPayload |
+    ITreasuryTransactionPayload |
+    IReceiptPayload |
+    undefined): void {
     // Store the location for the payload length and write 0
     // we will rewind and fill in once the size of the payload is known
     const payloadLengthWriteIndex = writeStream.getWriteIndex();
@@ -137,17 +154,17 @@ export function serializePayload(writeStream: WriteStream, object: ITypeBase<num
     if (!object) {
         // No other data to write
     } else if (object.type === TRANSACTION_PAYLOAD_TYPE) {
-        serializeTransactionPayload(writeStream, object as ITransactionPayload);
+        serializeTransactionPayload(writeStream, object);
     } else if (object.type === MILESTONE_PAYLOAD_TYPE) {
-        serializeMilestonePayload(writeStream, object as IMilestonePayload);
+        serializeMilestonePayload(writeStream, object);
     } else if (object.type === INDEXATION_PAYLOAD_TYPE) {
-        serializeIndexationPayload(writeStream, object as IIndexationPayload);
+        serializeIndexationPayload(writeStream, object);
     } else if (object.type === RECEIPT_PAYLOAD_TYPE) {
-        serializeReceiptPayload(writeStream, object as IReceiptPayload);
+        serializeReceiptPayload(writeStream, object);
     } else if (object.type === TREASURY_TRANSACTION_PAYLOAD_TYPE) {
-        serializeTreasuryTransactionPayload(writeStream, object as ITreasuryTransactionPayload);
+        serializeTreasuryTransactionPayload(writeStream, object);
     } else {
-        throw new Error(`Unrecognized transaction type ${object.type}`);
+        throw new Error(`Unrecognized transaction type ${(object as ITypeBase<number>).type}`);
     }
 
     const endOfPayloadWriteIndex = writeStream.getWriteIndex();

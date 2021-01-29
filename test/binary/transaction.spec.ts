@@ -41,7 +41,7 @@ describe("Binary Transaction", () => {
         expect(deserialized.type).toEqual(0);
         expect(deserialized.inputs.length).toEqual(1);
 
-        const utxoInput = deserialized.inputs[0] as IUTXOInput;
+        const utxoInput = deserialized.inputs[0];
         expect(utxoInput.type).toEqual(0);
         expect(utxoInput.transactionId).toEqual("a".repeat(64));
         expect(utxoInput.transactionOutputIndex).toEqual(2);
@@ -91,7 +91,7 @@ describe("Binary Transaction", () => {
         expect(deserialized.type).toEqual(0);
         expect(deserialized.inputs.length).toEqual(1);
 
-        const utxoInput = deserialized.inputs[0] as IUTXOInput;
+        const utxoInput = deserialized.inputs[0];
         expect(utxoInput.type).toEqual(0);
         expect(utxoInput.transactionId).toEqual("a".repeat(64));
         expect(utxoInput.transactionOutputIndex).toEqual(2);
