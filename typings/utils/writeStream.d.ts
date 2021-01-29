@@ -82,6 +82,12 @@ export declare class WriteStream {
      */
     writeString(name: string, val: string): string;
     /**
+     * Write a boolean to the stream.
+     * @param name The name of the data we are trying to write.
+     * @param val The data to write.
+     */
+    writeBoolean(name: string, val: boolean): void;
+    /**
      * Expand the storage if there is not enough spave.
      * @param additional The amount of space needed.
      */

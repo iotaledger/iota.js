@@ -56,6 +56,27 @@ export class ReadStream {
     }
 
     /**
+     * Get the current read index.
+     * @returns The current read index.
+     */
+    public getReadIndex(): number {
+        return this._readIndex;
+    }
+
+    /**
+     * Set the current read index.
+     * @param readIndex The current read index.
+     */
+    public setReadIndex(readIndex: number): void {
+        this._readIndex = readIndex;
+
+        if (readIndex >= this._storage.length) {
+            throw new Error(`You cannot set the readIndex to ${readIndex
+            } as the stream is only ${this._storage.length} in length`);
+        }
+    }
+
+    /**
      * Read fixed length as hex.
      * @param name The name of the data we are trying to read.
      * @param length The length of the data to read.
@@ -194,5 +215,23 @@ export class ReadStream {
             this._readIndex += stringLength;
         }
         return val;
+    }
+
+    /**
+     * Read a boolean from the stream.
+     * @param name The name of the data we are trying to read.
+     * @param moveIndex Move the index pointer on.
+     * @returns The value.
+     */
+    public readBoolean(name: string, moveIndex: boolean = true): boolean {
+        if (!this.hasRemaining(1)) {
+            throw new Error(`${name} length ${1
+                } exceeds the remaining data ${this.unused()}`);
+        }
+        const val = this._storage[this._readIndex];
+        if (moveIndex) {
+            this._readIndex += 1;
+        }
+        return val !== 0;
     }
 }

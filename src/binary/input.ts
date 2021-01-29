@@ -1,5 +1,6 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
+import { ITreasuryInput, TREASURY_INPUT_TYPE } from "../models/ITreasuryInput";
 import { ITypeBase } from "../models/ITypeBase";
 import { IUTXOInput, UTXO_INPUT_TYPE } from "../models/IUTXOInput";
 import { ReadStream } from "../utils/readStream";
@@ -17,6 +18,16 @@ export const MIN_INPUT_LENGTH: number = SMALL_TYPE_LENGTH;
 export const MIN_UTXO_INPUT_LENGTH: number = MIN_INPUT_LENGTH + TRANSACTION_ID_LENGTH + UINT16_SIZE;
 
 /**
+ * The minimum length of a treasury input binary representation.
+ */
+export const MIN_TREASURY_INPUT_LENGTH: number = MIN_INPUT_LENGTH + TRANSACTION_ID_LENGTH;
+
+/**
+ * The minimum number of inputs.
+ */
+export const MIN_INPUT_COUNT: number = 1;
+
+/**
  * The maximum number of inputs.
  */
 export const MAX_INPUT_COUNT: number = 127;
@@ -26,10 +37,10 @@ export const MAX_INPUT_COUNT: number = 127;
  * @param readStream The stream to read the data from.
  * @returns The deserialized object.
  */
-export function deserializeInputs(readStream: ReadStream): IUTXOInput[] {
+export function deserializeInputs(readStream: ReadStream): (IUTXOInput | ITreasuryInput)[] {
     const numInputs = readStream.readUInt16("inputs.numInputs");
 
-    const inputs: IUTXOInput[] = [];
+    const inputs: (IUTXOInput | ITreasuryInput)[] = [];
     for (let i = 0; i < numInputs; i++) {
         inputs.push(deserializeInput(readStream));
     }
@@ -43,7 +54,10 @@ export function deserializeInputs(readStream: ReadStream): IUTXOInput[] {
  * @param objects The objects to serialize.
  */
 export function serializeInputs(writeStream: WriteStream,
-    objects: IUTXOInput[]): void {
+    objects: ITypeBase<unknown>[]): void {
+    if (objects.length < MIN_INPUT_COUNT) {
+        throw new Error(`The minimum number of inputs is ${MIN_INPUT_COUNT}, you have provided ${objects.length}`);
+    }
     if (objects.length > MAX_INPUT_COUNT) {
         throw new Error(`The maximum number of inputs is ${MAX_INPUT_COUNT}, you have provided ${objects.length}`);
     }
@@ -59,7 +73,7 @@ export function serializeInputs(writeStream: WriteStream,
  * @param readStream The stream to read the data from.
  * @returns The deserialized object.
  */
-export function deserializeInput(readStream: ReadStream): IUTXOInput {
+export function deserializeInput(readStream: ReadStream): IUTXOInput | ITreasuryInput {
     if (!readStream.hasRemaining(MIN_INPUT_LENGTH)) {
         throw new Error(`Input data is ${readStream.length()
             } in length which is less than the minimimum size required of ${MIN_INPUT_LENGTH}`);
@@ -70,6 +84,8 @@ export function deserializeInput(readStream: ReadStream): IUTXOInput {
 
     if (type === UTXO_INPUT_TYPE) {
         input = deserializeUTXOInput(readStream);
+    } else if (type === TREASURY_INPUT_TYPE) {
+        input = deserializeTreasuryInput(readStream);
     } else {
         throw new Error(`Unrecognized input type ${type}`);
     }
@@ -83,11 +99,13 @@ export function deserializeInput(readStream: ReadStream): IUTXOInput {
  * @param object The object to serialize.
  */
 export function serializeInput(writeStream: WriteStream,
-    object: IUTXOInput): void {
+    object: ITypeBase<unknown>): void {
     if (object.type === UTXO_INPUT_TYPE) {
-        serializeUTXOInput(writeStream, object);
+        serializeUTXOInput(writeStream, object as IUTXOInput);
+    } else if (object.type === TREASURY_INPUT_TYPE) {
+        serializeTreasuryInput(writeStream, object as ITreasuryInput);
     } else {
-        throw new Error(`Unrecognized input type ${(object as ITypeBase<unknown>).type}`);
+        throw new Error(`Unrecognized input type ${object.type}`);
     }
 }
 
@@ -127,4 +145,39 @@ export function serializeUTXOInput(writeStream: WriteStream,
     writeStream.writeByte("utxoInput.type", object.type);
     writeStream.writeFixedHex("utxoInput.transactionId", TRANSACTION_ID_LENGTH, object.transactionId);
     writeStream.writeUInt16("utxoInput.transactionOutputIndex", object.transactionOutputIndex);
+}
+
+/**
+ * Deserialize the treasury input from binary.
+ * @param readStream The stream to read the data from.
+ * @returns The deserialized object.
+ */
+export function deserializeTreasuryInput(readStream: ReadStream): ITreasuryInput {
+    if (!readStream.hasRemaining(MIN_TREASURY_INPUT_LENGTH)) {
+        throw new Error(`Treasury Input data is ${readStream.length()
+            } in length which is less than the minimimum size required of ${MIN_TREASURY_INPUT_LENGTH}`);
+    }
+
+    const type = readStream.readByte("treasuryInput.type");
+    if (type !== TREASURY_INPUT_TYPE) {
+        throw new Error(`Type mismatch in treasuryInput ${type}`);
+    }
+
+    const milestoneHash = readStream.readFixedHex("treasuryInput.milestoneHash", TRANSACTION_ID_LENGTH);
+
+    return {
+        type: TREASURY_INPUT_TYPE,
+        milestoneHash
+    };
+}
+
+/**
+ * Serialize the treasury input to binary.
+ * @param writeStream The stream to write the data to.
+ * @param object The object to serialize.
+ */
+export function serializeTreasuryInput(writeStream: WriteStream,
+    object: ITreasuryInput): void {
+    writeStream.writeByte("treasuryInput.type", object.type);
+    writeStream.writeFixedHex("treasuryInput.milestoneHash", TRANSACTION_ID_LENGTH, object.milestoneHash);
 }

@@ -7,16 +7,20 @@
 ### Variables
 
 - [MAX\_INPUT\_COUNT](binary_input.md#max_input_count)
+- [MIN\_INPUT\_COUNT](binary_input.md#min_input_count)
 - [MIN\_INPUT\_LENGTH](binary_input.md#min_input_length)
+- [MIN\_TREASURY\_INPUT\_LENGTH](binary_input.md#min_treasury_input_length)
 - [MIN\_UTXO\_INPUT\_LENGTH](binary_input.md#min_utxo_input_length)
 
 ### Functions
 
 - [deserializeInput](binary_input.md#deserializeinput)
 - [deserializeInputs](binary_input.md#deserializeinputs)
+- [deserializeTreasuryInput](binary_input.md#deserializetreasuryinput)
 - [deserializeUTXOInput](binary_input.md#deserializeutxoinput)
 - [serializeInput](binary_input.md#serializeinput)
 - [serializeInputs](binary_input.md#serializeinputs)
+- [serializeTreasuryInput](binary_input.md#serializetreasuryinput)
 - [serializeUTXOInput](binary_input.md#serializeutxoinput)
 
 ## Variables
@@ -29,11 +33,27 @@ The maximum number of inputs.
 
 ___
 
+### MIN\_INPUT\_COUNT
+
+• `Const` **MIN\_INPUT\_COUNT**: *number*= 1
+
+The minimum number of inputs.
+
+___
+
 ### MIN\_INPUT\_LENGTH
 
 • `Const` **MIN\_INPUT\_LENGTH**: *number*
 
 The minimum length of an input binary representation.
+
+___
+
+### MIN\_TREASURY\_INPUT\_LENGTH
+
+• `Const` **MIN\_TREASURY\_INPUT\_LENGTH**: *number*
+
+The minimum length of a treasury input binary representation.
 
 ___
 
@@ -47,7 +67,7 @@ The minimum length of a utxo input binary representation.
 
 ### deserializeInput
 
-▸ **deserializeInput**(`readStream`: [*ReadStream*](../classes/utils/readstream.readstream.md)): [*IUTXOInput*](../interfaces/models/iutxoinput.iutxoinput.md)
+▸ **deserializeInput**(`readStream`: [*ReadStream*](../classes/utils/readstream.readstream.md)): [*IUTXOInput*](../interfaces/models/iutxoinput.iutxoinput.md) \| [*ITreasuryInput*](../interfaces/models/itreasuryinput.itreasuryinput.md)
 
 Deserialize the input from binary.
 
@@ -57,7 +77,7 @@ Name | Type | Description |
 ------ | ------ | ------ |
 `readStream` | [*ReadStream*](../classes/utils/readstream.readstream.md) | The stream to read the data from.   |
 
-**Returns:** [*IUTXOInput*](../interfaces/models/iutxoinput.iutxoinput.md)
+**Returns:** [*IUTXOInput*](../interfaces/models/iutxoinput.iutxoinput.md) \| [*ITreasuryInput*](../interfaces/models/itreasuryinput.itreasuryinput.md)
 
 The deserialized object.
 
@@ -65,7 +85,7 @@ ___
 
 ### deserializeInputs
 
-▸ **deserializeInputs**(`readStream`: [*ReadStream*](../classes/utils/readstream.readstream.md)): [*IUTXOInput*](../interfaces/models/iutxoinput.iutxoinput.md)[]
+▸ **deserializeInputs**(`readStream`: [*ReadStream*](../classes/utils/readstream.readstream.md)): ([*IUTXOInput*](../interfaces/models/iutxoinput.iutxoinput.md) \| [*ITreasuryInput*](../interfaces/models/itreasuryinput.itreasuryinput.md))[]
 
 Deserialize the inputs from binary.
 
@@ -75,7 +95,25 @@ Name | Type | Description |
 ------ | ------ | ------ |
 `readStream` | [*ReadStream*](../classes/utils/readstream.readstream.md) | The stream to read the data from.   |
 
-**Returns:** [*IUTXOInput*](../interfaces/models/iutxoinput.iutxoinput.md)[]
+**Returns:** ([*IUTXOInput*](../interfaces/models/iutxoinput.iutxoinput.md) \| [*ITreasuryInput*](../interfaces/models/itreasuryinput.itreasuryinput.md))[]
+
+The deserialized object.
+
+___
+
+### deserializeTreasuryInput
+
+▸ **deserializeTreasuryInput**(`readStream`: [*ReadStream*](../classes/utils/readstream.readstream.md)): [*ITreasuryInput*](../interfaces/models/itreasuryinput.itreasuryinput.md)
+
+Deserialize the treasury input from binary.
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`readStream` | [*ReadStream*](../classes/utils/readstream.readstream.md) | The stream to read the data from.   |
+
+**Returns:** [*ITreasuryInput*](../interfaces/models/itreasuryinput.itreasuryinput.md)
 
 The deserialized object.
 
@@ -101,7 +139,7 @@ ___
 
 ### serializeInput
 
-▸ **serializeInput**(`writeStream`: [*WriteStream*](../classes/utils/writestream.writestream.md), `object`: [*IUTXOInput*](../interfaces/models/iutxoinput.iutxoinput.md)): *void*
+▸ **serializeInput**(`writeStream`: [*WriteStream*](../classes/utils/writestream.writestream.md), `object`: [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*unknown*\>): *void*
 
 Serialize the input to binary.
 
@@ -110,7 +148,7 @@ Serialize the input to binary.
 Name | Type | Description |
 ------ | ------ | ------ |
 `writeStream` | [*WriteStream*](../classes/utils/writestream.writestream.md) | The stream to write the data to.   |
-`object` | [*IUTXOInput*](../interfaces/models/iutxoinput.iutxoinput.md) | The object to serialize.    |
+`object` | [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*unknown*\> | The object to serialize.    |
 
 **Returns:** *void*
 
@@ -118,7 +156,7 @@ ___
 
 ### serializeInputs
 
-▸ **serializeInputs**(`writeStream`: [*WriteStream*](../classes/utils/writestream.writestream.md), `objects`: [*IUTXOInput*](../interfaces/models/iutxoinput.iutxoinput.md)[]): *void*
+▸ **serializeInputs**(`writeStream`: [*WriteStream*](../classes/utils/writestream.writestream.md), `objects`: [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*unknown*\>[]): *void*
 
 Serialize the inputs to binary.
 
@@ -127,7 +165,24 @@ Serialize the inputs to binary.
 Name | Type | Description |
 ------ | ------ | ------ |
 `writeStream` | [*WriteStream*](../classes/utils/writestream.writestream.md) | The stream to write the data to.   |
-`objects` | [*IUTXOInput*](../interfaces/models/iutxoinput.iutxoinput.md)[] | The objects to serialize.    |
+`objects` | [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*unknown*\>[] | The objects to serialize.    |
+
+**Returns:** *void*
+
+___
+
+### serializeTreasuryInput
+
+▸ **serializeTreasuryInput**(`writeStream`: [*WriteStream*](../classes/utils/writestream.writestream.md), `object`: [*ITreasuryInput*](../interfaces/models/itreasuryinput.itreasuryinput.md)): *void*
+
+Serialize the treasury input to binary.
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`writeStream` | [*WriteStream*](../classes/utils/writestream.writestream.md) | The stream to write the data to.   |
+`object` | [*ITreasuryInput*](../interfaces/models/itreasuryinput.itreasuryinput.md) | The object to serialize.    |
 
 **Returns:** *void*
 

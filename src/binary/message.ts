@@ -47,7 +47,7 @@ export function deserializeMessage(readStream: ReadStream): IMessage {
     const parents: string[] = [];
 
     for (let i = 0; i < numParents; i++) {
-        const parentMessageId = readStream.readFixedHex("message.parentMessageId", MESSAGE_ID_LENGTH);
+        const parentMessageId = readStream.readFixedHex(`message.parentMessageId${i}`, MESSAGE_ID_LENGTH);
         parents.push(parentMessageId);
     }
 

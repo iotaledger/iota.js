@@ -25,6 +25,16 @@ export declare class ReadStream {
      */
     unused(): number;
     /**
+     * Get the current read index.
+     * @returns The current read index.
+     */
+    getReadIndex(): number;
+    /**
+     * Set the current read index.
+     * @param readIndex The current read index.
+     */
+    setReadIndex(readIndex: number): void;
+    /**
      * Read fixed length as hex.
      * @param name The name of the data we are trying to read.
      * @param length The length of the data to read.
@@ -75,4 +85,11 @@ export declare class ReadStream {
      * @returns The string.
      */
     readString(name: string, moveIndex?: boolean): string;
+    /**
+     * Read a boolean from the stream.
+     * @param name The name of the data we are trying to read.
+     * @param moveIndex Move the index pointer on.
+     * @returns The value.
+     */
+    readBoolean(name: string, moveIndex?: boolean): boolean;
 }

@@ -1,6 +1,4 @@
-import { IIndexationPayload } from "./IIndexationPayload";
-import { IMilestonePayload } from "./IMilestonePayload";
-import { ITransactionPayload } from "./ITransactionPayload";
+import { ITypeBase } from "./ITypeBase";
 /**
  * Message layout.
  */
@@ -16,7 +14,7 @@ export interface IMessage {
     /**
      * The payload contents.
      */
-    payload?: IIndexationPayload | IMilestonePayload | ITransactionPayload;
+    payload?: ITypeBase<unknown>;
     /**
      * The nonce for the message.
      */

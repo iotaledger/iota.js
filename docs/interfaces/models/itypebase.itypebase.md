@@ -24,6 +24,8 @@ Name |
 
   ↳ [*IMilestonePayload*](imilestonepayload.imilestonepayload.md)
 
+  ↳ [*IReceiptPayload*](ireceiptpayload.ireceiptpayload.md)
+
   ↳ [*IReferenceUnlockBlock*](ireferenceunlockblock.ireferenceunlockblock.md)
 
   ↳ [*ISigLockedDustAllowanceOutput*](isiglockeddustallowanceoutput.isiglockeddustallowanceoutput.md)
@@ -35,6 +37,12 @@ Name |
   ↳ [*ITransactionEssence*](itransactionessence.itransactionessence.md)
 
   ↳ [*ITransactionPayload*](itransactionpayload.itransactionpayload.md)
+
+  ↳ [*ITreasuryInput*](itreasuryinput.itreasuryinput.md)
+
+  ↳ [*ITreasuryOutput*](itreasuryoutput.itreasuryoutput.md)
+
+  ↳ [*ITreasuryTransactionPayload*](itreasurytransactionpayload.itreasurytransactionpayload.md)
 
   ↳ [*IUTXOInput*](iutxoinput.iutxoinput.md)
 

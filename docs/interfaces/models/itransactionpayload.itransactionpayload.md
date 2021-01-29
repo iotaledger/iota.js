@@ -42,6 +42,6 @@ ___
 
 ### unlockBlocks
 
-• **unlockBlocks**: ([*IReferenceUnlockBlock*](ireferenceunlockblock.ireferenceunlockblock.md) \| [*ISignatureUnlockBlock*](isignatureunlockblock.isignatureunlockblock.md))[]
+• **unlockBlocks**: [*ITypeBase*](itypebase.itypebase.md)<*unknown*\>[]
 
 The unlock blocks.

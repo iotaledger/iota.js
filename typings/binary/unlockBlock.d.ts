@@ -1,5 +1,6 @@
 import { IReferenceUnlockBlock } from "../models/IReferenceUnlockBlock";
 import { ISignatureUnlockBlock } from "../models/ISignatureUnlockBlock";
+import { ITypeBase } from "../models/ITypeBase";
 import { ReadStream } from "../utils/readStream";
 import { WriteStream } from "../utils/writeStream";
 /**
@@ -19,25 +20,25 @@ export declare const MIN_REFERENCE_UNLOCK_BLOCK_LENGTH: number;
  * @param readStream The stream to read the data from.
  * @returns The deserialized object.
  */
-export declare function deserializeUnlockBlocks(readStream: ReadStream): (IReferenceUnlockBlock | ISignatureUnlockBlock)[];
+export declare function deserializeUnlockBlocks(readStream: ReadStream): ITypeBase<unknown>[];
 /**
  * Serialize the unlock blocks to binary.
  * @param writeStream The stream to write the data to.
  * @param objects The objects to serialize.
  */
-export declare function serializeUnlockBlocks(writeStream: WriteStream, objects: (IReferenceUnlockBlock | ISignatureUnlockBlock)[]): void;
+export declare function serializeUnlockBlocks(writeStream: WriteStream, objects: ITypeBase<unknown>[]): void;
 /**
  * Deserialize the unlock block from binary.
  * @param readStream The stream to read the data from.
  * @returns The deserialized object.
  */
-export declare function deserializeUnlockBlock(readStream: ReadStream): IReferenceUnlockBlock | ISignatureUnlockBlock;
+export declare function deserializeUnlockBlock(readStream: ReadStream): ITypeBase<unknown>;
 /**
  * Serialize the unlock block to binary.
  * @param writeStream The stream to write the data to.
  * @param object The object to serialize.
  */
-export declare function serializeUnlockBlock(writeStream: WriteStream, object: IReferenceUnlockBlock | ISignatureUnlockBlock): void;
+export declare function serializeUnlockBlock(writeStream: WriteStream, object: ITypeBase<unknown>): void;
 /**
  * Deserialize the signature unlock block from binary.
  * @param readStream The stream to read the data from.

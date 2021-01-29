@@ -80,6 +80,11 @@ export class WriteStream {
      */
     public setWriteIndex(writeIndex: number): void {
         this._writeIndex = writeIndex;
+
+        if (writeIndex >= this._storage.length) {
+            throw new Error(`You cannot set the writeIndex to ${writeIndex
+            } as the stream is only ${this._storage.length} in length`);
+        }
     }
 
     /**
@@ -182,6 +187,17 @@ export class WriteStream {
         this._writeIndex += val.length;
 
         return val;
+    }
+
+    /**
+     * Write a boolean to the stream.
+     * @param name The name of the data we are trying to write.
+     * @param val The data to write.
+     */
+    public writeBoolean(name: string, val: boolean): void {
+        this.expand(1);
+
+        this._storage[this._writeIndex++] = val ? 1 : 0;
     }
 
     /**

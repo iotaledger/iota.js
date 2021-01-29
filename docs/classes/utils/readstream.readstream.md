@@ -18,8 +18,10 @@ Keep track of the read index within a stream.
 
 ### Methods
 
+- [getReadIndex](readstream.readstream.md#getreadindex)
 - [hasRemaining](readstream.readstream.md#hasremaining)
 - [length](readstream.readstream.md#length)
+- [readBoolean](readstream.readstream.md#readboolean)
 - [readByte](readstream.readstream.md#readbyte)
 - [readBytes](readstream.readstream.md#readbytes)
 - [readFixedHex](readstream.readstream.md#readfixedhex)
@@ -27,6 +29,7 @@ Keep track of the read index within a stream.
 - [readUInt16](readstream.readstream.md#readuint16)
 - [readUInt32](readstream.readstream.md#readuint32)
 - [readUInt64](readstream.readstream.md#readuint64)
+- [setReadIndex](readstream.readstream.md#setreadindex)
 - [unused](readstream.readstream.md#unused)
 
 ## Constructors
@@ -47,6 +50,18 @@ Name | Type | Default value | Description |
 **Returns:** [*ReadStream*](readstream.readstream.md)
 
 ## Methods
+
+### getReadIndex
+
+▸ **getReadIndex**(): *number*
+
+Get the current read index.
+
+**Returns:** *number*
+
+The current read index.
+
+___
 
 ### hasRemaining
 
@@ -75,6 +90,25 @@ Get the length of the storage.
 **Returns:** *number*
 
 The storage length.
+
+___
+
+### readBoolean
+
+▸ **readBoolean**(`name`: *string*, `moveIndex?`: *boolean*): *boolean*
+
+Read a boolean from the stream.
+
+#### Parameters:
+
+Name | Type | Default value | Description |
+------ | ------ | ------ | ------ |
+`name` | *string* | - | The name of the data we are trying to read.   |
+`moveIndex` | *boolean* | true | Move the index pointer on.   |
+
+**Returns:** *boolean*
+
+The value.
 
 ___
 
@@ -210,6 +244,22 @@ Name | Type | Default value | Description |
 **Returns:** *bigint*
 
 The value.
+
+___
+
+### setReadIndex
+
+▸ **setReadIndex**(`readIndex`: *number*): *void*
+
+Set the current read index.
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`readIndex` | *number* | The current read index.    |
+
+**Returns:** *void*
 
 ___
 
