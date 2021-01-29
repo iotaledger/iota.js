@@ -1,4 +1,4 @@
-import { Converter, deserializeMessage, IMessage, INDEXATION_PAYLOAD_TYPE, logInfo, logMessage, logMessageMetadata, logOutput, logTips, ReadStream, SingleNodeClient } from "@iota/iota.js";
+import { Converter, deserializeMessage, IIndexationPayload, IMessage, INDEXATION_PAYLOAD_TYPE, ISigLockedSingleOutput, logInfo, logMessage, logMessageMetadata, logOutput, logTips, ReadStream, SingleNodeClient } from "@iota/iota.js";
 
 const API_ENDPOINT = "http://localhost:14265";
 
@@ -26,7 +26,7 @@ async function run() {
             type: INDEXATION_PAYLOAD_TYPE,
             index: "Foo",
             data: Converter.utf8ToHex("Bar")
-        }
+        } as IIndexationPayload
     };
 
     const messageId = await client.messageSubmit(submitMessage);
@@ -85,14 +85,14 @@ async function run() {
     logOutput("\t", output.output);
     console.log();
 
-    const address = await client.addressEd25519(output.output.address.address);
+    const address = await client.addressEd25519((output.output as ISigLockedSingleOutput).address.address);
     console.log("Address");
     console.log("\tAddress Type:", address.addressType);
     console.log("\tAddress:", address.address);
     console.log("\tBalance:", address.balance);
     console.log();
 
-    const addressOutputs = await client.addressEd25519Outputs(output.output.address.address);
+    const addressOutputs = await client.addressEd25519Outputs((output.output as ISigLockedSingleOutput).address.address);
     console.log("Address Outputs");
     console.log("\tAddress:", addressOutputs.address);
     console.log("\tMax Results:", addressOutputs.maxResults);

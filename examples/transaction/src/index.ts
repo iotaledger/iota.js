@@ -1,4 +1,4 @@
-import { Bech32Helper, Bip32Path, Converter, Ed25519Address, Ed25519Seed, ED25519_ADDRESS_TYPE, getBalance, getUnspentAddress, getUnspentAddresses, IKeyPair, IUTXOInput, sendAdvanced, SingleNodeClient, UTXO_INPUT_TYPE } from "@iota/iota.js";
+import { Bech32Helper, Bip32Path, Converter, Ed25519Address, Ed25519Seed, ED25519_ADDRESS_TYPE, getBalance, getUnspentAddress, getUnspentAddresses, IKeyPair, ISigLockedSingleOutput, IUTXOInput, sendAdvanced, SIG_LOCKED_SINGLE_OUTPUT_TYPE, SingleNodeClient, UTXO_INPUT_TYPE } from "@iota/iota.js";
 
 const API_ENDPOINT = "http://localhost:14265";
 
@@ -66,7 +66,9 @@ async function run() {
                 },
                 addressKeyPair: genesisSeedKeyPair
             });
-            totalGenesis += output.output.amount;
+            if (output.output.type === SIG_LOCKED_SINGLE_OUTPUT_TYPE) {
+                totalGenesis += (output.output as ISigLockedSingleOutput).amount;
+            }
         }
     }
 
