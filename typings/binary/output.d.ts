@@ -33,25 +33,25 @@ export declare const MAX_OUTPUT_COUNT: number;
  * @param readStream The stream to read the data from.
  * @returns The deserialized object.
  */
-export declare function deserializeOutputs(readStream: ReadStream): ITypeBase<unknown>[];
+export declare function deserializeOutputs(readStream: ReadStream): ITypeBase<number>[];
 /**
  * Serialize the outputs to binary.
  * @param writeStream The stream to write the data to.
  * @param objects The objects to serialize.
  */
-export declare function serializeOutputs(writeStream: WriteStream, objects: ITypeBase<unknown>[]): void;
+export declare function serializeOutputs(writeStream: WriteStream, objects: ITypeBase<number>[]): void;
 /**
  * Deserialize the output from binary.
  * @param readStream The stream to read the data from.
  * @returns The deserialized object.
  */
-export declare function deserializeOutput(readStream: ReadStream): ITypeBase<unknown>;
+export declare function deserializeOutput(readStream: ReadStream): ITypeBase<number>;
 /**
  * Serialize the output to binary.
  * @param writeStream The stream to write the data to.
  * @param object The object to serialize.
  */
-export declare function serializeOutput(writeStream: WriteStream, object: ITypeBase<unknown>): void;
+export declare function serializeOutput(writeStream: WriteStream, object: ITypeBase<number>): void;
 /**
  * Deserialize the signature locked single output from binary.
  * @param readStream The stream to read the data from.

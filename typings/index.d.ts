@@ -50,6 +50,7 @@ export * from "./models/api/IResponse";
 export * from "./models/api/ITipsResponse";
 export * from "./models/conflictReason";
 export * from "./models/IAddress";
+export * from "./models/IAmountOutput";
 export * from "./models/IBip44GeneratorState";
 export * from "./models/IClient";
 export * from "./models/IEd25519Address";

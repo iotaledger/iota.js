@@ -15,12 +15,12 @@ export interface ITransactionEssence extends ITypeBase<0> {
     /**
      * The inputs of the transaction.
      */
-    inputs: ITypeBase<unknown>[];
+    inputs: ITypeBase<number>[];
 
     /**
      * The outputs of the transaction.
      */
-    outputs: ITypeBase<unknown>[];
+    outputs: ITypeBase<number>[];
 
     /**
      * Indexation payload.

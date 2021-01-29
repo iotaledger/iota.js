@@ -12170,6 +12170,13 @@
 
 	});
 
+	var IAmountOutput = createCommonjsModule(function (module, exports) {
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
+	Object.defineProperty(exports, "__esModule", { value: true });
+
+	});
+
 	var IBip44GeneratorState = createCommonjsModule(function (module, exports) {
 	// Copyright 2020 IOTA Stiftung
 	// SPDX-License-Identifier: Apache-2.0
@@ -13077,6 +13084,7 @@
 	__exportStar(ITipsResponse, exports);
 	__exportStar(conflictReason, exports);
 	__exportStar(IAddress, exports);
+	__exportStar(IAmountOutput, exports);
 	__exportStar(IBip44GeneratorState, exports);
 	__exportStar(IClient, exports);
 	__exportStar(IEd25519Address, exports);

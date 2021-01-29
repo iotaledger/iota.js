@@ -87,7 +87,7 @@ export const MAX_INDEXATION_KEY_LENGTH: number = 64;
  * @param readStream The stream to read the data from.
  * @returns The deserialized object.
  */
-export function deserializePayload(readStream: ReadStream): ITypeBase<unknown> | undefined {
+export function deserializePayload(readStream: ReadStream): ITypeBase<number> | undefined {
     if (!readStream.hasRemaining(MIN_PAYLOAD_LENGTH)) {
         throw new Error(`Payload data is ${readStream.length()
             } in length which is less than the minimimum size required of ${MIN_PAYLOAD_LENGTH}`);
@@ -100,7 +100,7 @@ export function deserializePayload(readStream: ReadStream): ITypeBase<unknown> |
             } exceeds the remaining data ${readStream.unused()}`);
     }
 
-    let payload: ITypeBase<unknown> | undefined;
+    let payload: ITypeBase<number> | undefined;
 
     if (payloadLength > 0) {
         const payloadType = readStream.readUInt32("payload.type", false);
@@ -128,7 +128,7 @@ export function deserializePayload(readStream: ReadStream): ITypeBase<unknown> |
  * @param writeStream The stream to write the data to.
  * @param object The object to serialize.
  */
-export function serializePayload(writeStream: WriteStream, object: ITypeBase<unknown> | undefined): void {
+export function serializePayload(writeStream: WriteStream, object: ITypeBase<number> | undefined): void {
     // Store the location for the payload length and write 0
     // we will rewind and fill in once the size of the payload is known
     const payloadLengthWriteIndex = writeStream.getWriteIndex();
@@ -202,7 +202,7 @@ export function serializeTransactionPayload(writeStream: WriteStream, object: IT
         serializeTransactionEssence(writeStream, object.essence);
         serializeUnlockBlocks(writeStream, object.unlockBlocks);
     } else {
-        throw new Error(`Unrecognized transaction type ${(object as ITypeBase<unknown>).type}`);
+        throw new Error(`Unrecognized transaction type ${object.type}`);
     }
 }
 

@@ -34,7 +34,7 @@ export declare function deserializeInputs(readStream: ReadStream): (IUTXOInput |
  * @param writeStream The stream to write the data to.
  * @param objects The objects to serialize.
  */
-export declare function serializeInputs(writeStream: WriteStream, objects: ITypeBase<unknown>[]): void;
+export declare function serializeInputs(writeStream: WriteStream, objects: ITypeBase<number>[]): void;
 /**
  * Deserialize the input from binary.
  * @param readStream The stream to read the data from.
@@ -46,7 +46,7 @@ export declare function deserializeInput(readStream: ReadStream): IUTXOInput | I
  * @param writeStream The stream to write the data to.
  * @param object The object to serialize.
  */
-export declare function serializeInput(writeStream: WriteStream, object: ITypeBase<unknown>): void;
+export declare function serializeInput(writeStream: WriteStream, object: ITypeBase<number>): void;
 /**
  * Deserialize the utxo input from binary.
  * @param readStream The stream to read the data from.

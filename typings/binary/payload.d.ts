@@ -43,13 +43,13 @@ export declare const MAX_INDEXATION_KEY_LENGTH: number;
  * @param readStream The stream to read the data from.
  * @returns The deserialized object.
  */
-export declare function deserializePayload(readStream: ReadStream): ITypeBase<unknown> | undefined;
+export declare function deserializePayload(readStream: ReadStream): ITypeBase<number> | undefined;
 /**
  * Serialize the payload essence to binary.
  * @param writeStream The stream to write the data to.
  * @param object The object to serialize.
  */
-export declare function serializePayload(writeStream: WriteStream, object: ITypeBase<unknown> | undefined): void;
+export declare function serializePayload(writeStream: WriteStream, object: ITypeBase<number> | undefined): void;
 /**
  * Deserialize the transaction payload from binary.
  * @param readStream The stream to read the data from.

@@ -139,7 +139,7 @@ ___
 
 ### serializeInput
 
-▸ **serializeInput**(`writeStream`: [*WriteStream*](../classes/utils/writestream.writestream.md), `object`: [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*unknown*\>): *void*
+▸ **serializeInput**(`writeStream`: [*WriteStream*](../classes/utils/writestream.writestream.md), `object`: [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*number*\>): *void*
 
 Serialize the input to binary.
 
@@ -148,7 +148,7 @@ Serialize the input to binary.
 Name | Type | Description |
 ------ | ------ | ------ |
 `writeStream` | [*WriteStream*](../classes/utils/writestream.writestream.md) | The stream to write the data to.   |
-`object` | [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*unknown*\> | The object to serialize.    |
+`object` | [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*number*\> | The object to serialize.    |
 
 **Returns:** *void*
 
@@ -156,7 +156,7 @@ ___
 
 ### serializeInputs
 
-▸ **serializeInputs**(`writeStream`: [*WriteStream*](../classes/utils/writestream.writestream.md), `objects`: [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*unknown*\>[]): *void*
+▸ **serializeInputs**(`writeStream`: [*WriteStream*](../classes/utils/writestream.writestream.md), `objects`: [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*number*\>[]): *void*
 
 Serialize the inputs to binary.
 
@@ -165,7 +165,7 @@ Serialize the inputs to binary.
 Name | Type | Description |
 ------ | ------ | ------ |
 `writeStream` | [*WriteStream*](../classes/utils/writestream.writestream.md) | The stream to write the data to.   |
-`objects` | [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*unknown*\>[] | The objects to serialize.    |
+`objects` | [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*number*\>[] | The objects to serialize.    |
 
 **Returns:** *void*
 

@@ -42,6 +42,6 @@ ___
 
 ### unlockBlocks
 
-• **unlockBlocks**: [*ITypeBase*](itypebase.itypebase.md)<*unknown*\>[]
+• **unlockBlocks**: [*ITypeBase*](itypebase.itypebase.md)<*number*\>[]
 
 The unlock blocks.

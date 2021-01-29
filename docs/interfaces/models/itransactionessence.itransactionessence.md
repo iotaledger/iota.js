@@ -25,7 +25,7 @@ Transaction payload.
 
 ### inputs
 
-• **inputs**: [*ITypeBase*](itypebase.itypebase.md)<*unknown*\>[]
+• **inputs**: [*ITypeBase*](itypebase.itypebase.md)<*number*\>[]
 
 The inputs of the transaction.
 
@@ -33,7 +33,7 @@ ___
 
 ### outputs
 
-• **outputs**: [*ITypeBase*](itypebase.itypebase.md)<*unknown*\>[]
+• **outputs**: [*ITypeBase*](itypebase.itypebase.md)<*number*\>[]
 
 The outputs of the transaction.
 

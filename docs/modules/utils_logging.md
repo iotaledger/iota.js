@@ -28,7 +28,7 @@
 
 ### logAddress
 
-▸ **logAddress**(`prefix`: *string*, `unknownAddress?`: [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*unknown*\>): *void*
+▸ **logAddress**(`prefix`: *string*, `unknownAddress?`: [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*number*\>): *void*
 
 Log an address to the console.
 
@@ -37,7 +37,7 @@ Log an address to the console.
 Name | Type | Description |
 ------ | ------ | ------ |
 `prefix` | *string* | The prefix for the output.   |
-`unknownAddress?` | [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*unknown*\> | The address to log.    |
+`unknownAddress?` | [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*number*\> | The address to log.    |
 
 **Returns:** *void*
 
@@ -96,7 +96,7 @@ ___
 
 ### logInput
 
-▸ **logInput**(`prefix`: *string*, `unknownInput?`: [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*unknown*\>): *void*
+▸ **logInput**(`prefix`: *string*, `unknownInput?`: [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*number*\>): *void*
 
 Log input to the console.
 
@@ -105,7 +105,7 @@ Log input to the console.
 Name | Type | Description |
 ------ | ------ | ------ |
 `prefix` | *string* | The prefix for the output.   |
-`unknownInput?` | [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*unknown*\> | The input to log.    |
+`unknownInput?` | [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*number*\> | The input to log.    |
 
 **Returns:** *void*
 
@@ -164,7 +164,7 @@ ___
 
 ### logOutput
 
-▸ **logOutput**(`prefix`: *string*, `unknownOutput?`: [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*unknown*\>): *void*
+▸ **logOutput**(`prefix`: *string*, `unknownOutput?`: [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*number*\>): *void*
 
 Log output to the console.
 
@@ -173,7 +173,7 @@ Log output to the console.
 Name | Type | Description |
 ------ | ------ | ------ |
 `prefix` | *string* | The prefix for the output.   |
-`unknownOutput?` | [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*unknown*\> | The output to log.    |
+`unknownOutput?` | [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*number*\> | The output to log.    |
 
 **Returns:** *void*
 
@@ -181,7 +181,7 @@ ___
 
 ### logPayload
 
-▸ **logPayload**(`prefix`: *string*, `unknownPayload?`: [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*unknown*\>): *void*
+▸ **logPayload**(`prefix`: *string*, `unknownPayload?`: [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*number*\>): *void*
 
 Log a message to the console.
 
@@ -190,7 +190,7 @@ Log a message to the console.
 Name | Type | Description |
 ------ | ------ | ------ |
 `prefix` | *string* | The prefix for the output.   |
-`unknownPayload?` | [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*unknown*\> | The payload.    |
+`unknownPayload?` | [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*number*\> | The payload.    |
 
 **Returns:** *void*
 
@@ -215,7 +215,7 @@ ___
 
 ### logSignature
 
-▸ **logSignature**(`prefix`: *string*, `unknownSignature?`: [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*unknown*\>): *void*
+▸ **logSignature**(`prefix`: *string*, `unknownSignature?`: [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*number*\>): *void*
 
 Log signature to the console.
 
@@ -224,7 +224,7 @@ Log signature to the console.
 Name | Type | Description |
 ------ | ------ | ------ |
 `prefix` | *string* | The prefix for the output.   |
-`unknownSignature?` | [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*unknown*\> | The signature to log.    |
+`unknownSignature?` | [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*number*\> | The signature to log.    |
 
 **Returns:** *void*
 
@@ -283,7 +283,7 @@ ___
 
 ### logUnlockBlock
 
-▸ **logUnlockBlock**(`prefix`: *string*, `unknownUnlockBlock?`: [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*unknown*\>): *void*
+▸ **logUnlockBlock**(`prefix`: *string*, `unknownUnlockBlock?`: [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*number*\>): *void*
 
 Log unlock block to the console.
 
@@ -292,7 +292,7 @@ Log unlock block to the console.
 Name | Type | Description |
 ------ | ------ | ------ |
 `prefix` | *string* | The prefix for the output.   |
-`unknownUnlockBlock?` | [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*unknown*\> | The unlock block to log.    |
+`unknownUnlockBlock?` | [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*number*\> | The unlock block to log.    |
 
 **Returns:** *void*
 

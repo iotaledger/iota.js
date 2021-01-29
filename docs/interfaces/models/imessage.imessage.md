@@ -47,6 +47,6 @@ ___
 
 ### payload
 
-• `Optional` **payload**: *undefined* \| [*ITypeBase*](itypebase.itypebase.md)<*unknown*\>
+• `Optional` **payload**: *undefined* \| [*ITypeBase*](itypebase.itypebase.md)<*number*\>
 
 The payload contents.

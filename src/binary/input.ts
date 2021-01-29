@@ -53,8 +53,7 @@ export function deserializeInputs(readStream: ReadStream): (IUTXOInput | ITreasu
  * @param writeStream The stream to write the data to.
  * @param objects The objects to serialize.
  */
-export function serializeInputs(writeStream: WriteStream,
-    objects: ITypeBase<unknown>[]): void {
+export function serializeInputs(writeStream: WriteStream, objects: ITypeBase<number>[]): void {
     if (objects.length < MIN_INPUT_COUNT) {
         throw new Error(`The minimum number of inputs is ${MIN_INPUT_COUNT}, you have provided ${objects.length}`);
     }
@@ -98,8 +97,7 @@ export function deserializeInput(readStream: ReadStream): IUTXOInput | ITreasury
  * @param writeStream The stream to write the data to.
  * @param object The object to serialize.
  */
-export function serializeInput(writeStream: WriteStream,
-    object: ITypeBase<unknown>): void {
+export function serializeInput(writeStream: WriteStream, object: ITypeBase<number>): void {
     if (object.type === UTXO_INPUT_TYPE) {
         serializeUTXOInput(writeStream, object as IUTXOInput);
     } else if (object.type === TREASURY_INPUT_TYPE) {

@@ -29,5 +29,5 @@ export interface IOutputResponse {
     /**
      * The output.
      */
-    output: ITypeBase<unknown>;
+    output: ITypeBase<number>;
 }

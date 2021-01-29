@@ -19,7 +19,7 @@ export interface IMessage {
     /**
      * The payload contents.
      */
-    payload?: ITypeBase<unknown>;
+    payload?: ITypeBase<number>;
 
     /**
      * The nonce for the message.

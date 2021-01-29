@@ -40,7 +40,7 @@ ___
 
 ### output
 
-• **output**: [*ITypeBase*](../itypebase.itypebase.md)<*unknown*\>
+• **output**: [*ITypeBase*](../itypebase.itypebase.md)<*number*\>
 
 The output.
 

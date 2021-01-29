@@ -85,7 +85,7 @@ ___
 
 ### deserializeUnlockBlock
 
-▸ **deserializeUnlockBlock**(`readStream`: [*ReadStream*](../classes/utils/readstream.readstream.md)): [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*unknown*\>
+▸ **deserializeUnlockBlock**(`readStream`: [*ReadStream*](../classes/utils/readstream.readstream.md)): [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*number*\>
 
 Deserialize the unlock block from binary.
 
@@ -95,7 +95,7 @@ Name | Type | Description |
 ------ | ------ | ------ |
 `readStream` | [*ReadStream*](../classes/utils/readstream.readstream.md) | The stream to read the data from.   |
 
-**Returns:** [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*unknown*\>
+**Returns:** [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*number*\>
 
 The deserialized object.
 
@@ -103,7 +103,7 @@ ___
 
 ### deserializeUnlockBlocks
 
-▸ **deserializeUnlockBlocks**(`readStream`: [*ReadStream*](../classes/utils/readstream.readstream.md)): [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*unknown*\>[]
+▸ **deserializeUnlockBlocks**(`readStream`: [*ReadStream*](../classes/utils/readstream.readstream.md)): [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*number*\>[]
 
 Deserialize the unlock blocks from binary.
 
@@ -113,7 +113,7 @@ Name | Type | Description |
 ------ | ------ | ------ |
 `readStream` | [*ReadStream*](../classes/utils/readstream.readstream.md) | The stream to read the data from.   |
 
-**Returns:** [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*unknown*\>[]
+**Returns:** [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*number*\>[]
 
 The deserialized object.
 
@@ -155,7 +155,7 @@ ___
 
 ### serializeUnlockBlock
 
-▸ **serializeUnlockBlock**(`writeStream`: [*WriteStream*](../classes/utils/writestream.writestream.md), `object`: [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*unknown*\>): *void*
+▸ **serializeUnlockBlock**(`writeStream`: [*WriteStream*](../classes/utils/writestream.writestream.md), `object`: [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*number*\>): *void*
 
 Serialize the unlock block to binary.
 
@@ -164,7 +164,7 @@ Serialize the unlock block to binary.
 Name | Type | Description |
 ------ | ------ | ------ |
 `writeStream` | [*WriteStream*](../classes/utils/writestream.writestream.md) | The stream to write the data to.   |
-`object` | [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*unknown*\> | The object to serialize.    |
+`object` | [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*number*\> | The object to serialize.    |
 
 **Returns:** *void*
 
@@ -172,7 +172,7 @@ ___
 
 ### serializeUnlockBlocks
 
-▸ **serializeUnlockBlocks**(`writeStream`: [*WriteStream*](../classes/utils/writestream.writestream.md), `objects`: [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*unknown*\>[]): *void*
+▸ **serializeUnlockBlocks**(`writeStream`: [*WriteStream*](../classes/utils/writestream.writestream.md), `objects`: [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*number*\>[]): *void*
 
 Serialize the unlock blocks to binary.
 
@@ -181,6 +181,6 @@ Serialize the unlock blocks to binary.
 Name | Type | Description |
 ------ | ------ | ------ |
 `writeStream` | [*WriteStream*](../classes/utils/writestream.writestream.md) | The stream to write the data to.   |
-`objects` | [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*unknown*\>[] | The objects to serialize.    |
+`objects` | [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*number*\>[] | The objects to serialize.    |
 
 **Returns:** *void*

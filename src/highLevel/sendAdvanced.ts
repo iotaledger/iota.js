@@ -109,13 +109,13 @@ export function buildTransactionPayload(
     }
 
     const outputsWithSerialization: {
-        output: ITypeBase<unknown>;
+        output: ITypeBase<number>;
         serialized: string;
     }[] = [];
 
     for (const output of outputs) {
         if (output.addressType === ED25519_ADDRESS_TYPE) {
-            const o: ITypeBase<unknown> =
+            const o: ITypeBase<number> =
                 output.isDustAllowance ? {
                     type: SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE,
                     address: {

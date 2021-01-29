@@ -1,3 +1,4 @@
+import { IAmountOutput } from "./IAmountOutput";
 import { IEd25519Address } from "./IEd25519Address";
 import { ITypeBase } from "./ITypeBase";
 /**
@@ -7,13 +8,9 @@ export declare const SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE = 1;
 /**
  * Signature locked single output.
  */
-export interface ISigLockedDustAllowanceOutput extends ITypeBase<1> {
+export interface ISigLockedDustAllowanceOutput extends ITypeBase<1>, IAmountOutput {
     /**
      * The address.
      */
     address: IEd25519Address;
-    /**
-     * The amount of the output.
-     */
-    amount: number;
 }

@@ -47,10 +47,10 @@ export const MAX_OUTPUT_COUNT: number = 127;
  * @param readStream The stream to read the data from.
  * @returns The deserialized object.
  */
-export function deserializeOutputs(readStream: ReadStream): ITypeBase<unknown>[] {
+export function deserializeOutputs(readStream: ReadStream): ITypeBase<number>[] {
     const numOutputs = readStream.readUInt16("outputs.numOutputs");
 
-    const inputs: ITypeBase<unknown>[] = [];
+    const inputs: ITypeBase<number>[] = [];
     for (let i = 0; i < numOutputs; i++) {
         inputs.push(deserializeOutput(readStream));
     }
@@ -64,7 +64,7 @@ export function deserializeOutputs(readStream: ReadStream): ITypeBase<unknown>[]
  * @param objects The objects to serialize.
  */
 export function serializeOutputs(writeStream: WriteStream,
-    objects: ITypeBase<unknown>[]): void {
+    objects: ITypeBase<number>[]): void {
     if (objects.length < MIN_OUTPUT_COUNT) {
         throw new Error(`The minimum number of outputs is ${MIN_OUTPUT_COUNT}, you have provided ${objects.length}`);
     }
@@ -84,7 +84,7 @@ export function serializeOutputs(writeStream: WriteStream,
  * @param readStream The stream to read the data from.
  * @returns The deserialized object.
  */
-export function deserializeOutput(readStream: ReadStream): ITypeBase<unknown> {
+export function deserializeOutput(readStream: ReadStream): ITypeBase<number> {
     if (!readStream.hasRemaining(MIN_OUTPUT_LENGTH)) {
         throw new Error(`Output data is ${readStream.length()
             } in length which is less than the minimimum size required of ${MIN_OUTPUT_LENGTH}`);
@@ -112,7 +112,7 @@ export function deserializeOutput(readStream: ReadStream): ITypeBase<unknown> {
  * @param object The object to serialize.
  */
 export function serializeOutput(writeStream: WriteStream,
-    object: ITypeBase<unknown>): void {
+    object: ITypeBase<number>): void {
     if (object.type === SIG_LOCKED_SINGLE_OUTPUT_TYPE) {
         serializeSigLockedSingleOutput(writeStream, object as ISigLockedSingleOutput);
     } else if (object.type === SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE) {

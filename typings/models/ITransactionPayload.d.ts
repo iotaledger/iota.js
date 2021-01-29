@@ -15,5 +15,5 @@ export interface ITransactionPayload extends ITypeBase<0> {
     /**
      * The unlock blocks.
      */
-    unlockBlocks: ITypeBase<unknown>[];
+    unlockBlocks: ITypeBase<number>[];
 }

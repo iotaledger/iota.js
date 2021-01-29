@@ -127,7 +127,7 @@ export function logMessageMetadata(prefix: string, messageMetadata: IMessageMeta
  * @param prefix The prefix for the output.
  * @param unknownPayload The payload.
  */
-export function logPayload(prefix: string, unknownPayload?: ITypeBase<unknown>): void {
+export function logPayload(prefix: string, unknownPayload?: ITypeBase<number>): void {
     if (unknownPayload) {
         if (unknownPayload.type === TRANSACTION_PAYLOAD_TYPE) {
             logTransactionPayload(prefix, unknownPayload as ITransactionPayload);
@@ -243,7 +243,7 @@ export function logTreasuryTransactionPayload(prefix: string, payload?: ITreasur
  * @param prefix The prefix for the output.
  * @param unknownAddress The address to log.
  */
-export function logAddress(prefix: string, unknownAddress?: ITypeBase<unknown>): void {
+export function logAddress(prefix: string, unknownAddress?: ITypeBase<number>): void {
     if (unknownAddress?.type === ED25519_ADDRESS_TYPE) {
         const address = unknownAddress as IEd25519Address;
         logger(`${prefix}Ed25519 Address`);
@@ -256,7 +256,7 @@ export function logAddress(prefix: string, unknownAddress?: ITypeBase<unknown>):
  * @param prefix The prefix for the output.
  * @param unknownSignature The signature to log.
  */
-export function logSignature(prefix: string, unknownSignature?: ITypeBase<unknown>): void {
+export function logSignature(prefix: string, unknownSignature?: ITypeBase<number>): void {
     if (unknownSignature?.type === ED25519_SIGNATURE_TYPE) {
         const signature = unknownSignature as IEd25519Signature;
         logger(`${prefix}Ed25519 Signature`);
@@ -270,7 +270,7 @@ export function logSignature(prefix: string, unknownSignature?: ITypeBase<unknow
  * @param prefix The prefix for the output.
  * @param unknownInput The input to log.
  */
-export function logInput(prefix: string, unknownInput?: ITypeBase<unknown>): void {
+export function logInput(prefix: string, unknownInput?: ITypeBase<number>): void {
     if (unknownInput) {
         if (unknownInput.type === UTXO_INPUT_TYPE) {
             const input = unknownInput as IUTXOInput;
@@ -290,7 +290,7 @@ export function logInput(prefix: string, unknownInput?: ITypeBase<unknown>): voi
  * @param prefix The prefix for the output.
  * @param unknownOutput The output to log.
  */
-export function logOutput(prefix: string, unknownOutput?: ITypeBase<unknown>): void {
+export function logOutput(prefix: string, unknownOutput?: ITypeBase<number>): void {
     if (unknownOutput) {
         if (unknownOutput.type === SIG_LOCKED_SINGLE_OUTPUT_TYPE) {
             const output = unknownOutput as ISigLockedSingleOutput;
@@ -315,7 +315,7 @@ export function logOutput(prefix: string, unknownOutput?: ITypeBase<unknown>): v
  * @param prefix The prefix for the output.
  * @param unknownUnlockBlock The unlock block to log.
  */
-export function logUnlockBlock(prefix: string, unknownUnlockBlock?: ITypeBase<unknown>): void {
+export function logUnlockBlock(prefix: string, unknownUnlockBlock?: ITypeBase<number>): void {
     if (unknownUnlockBlock) {
         if (unknownUnlockBlock.type === SIGNATURE_UNLOCK_BLOCK_TYPE) {
             const unlockBlock = unknownUnlockBlock as ISignatureUnlockBlock;

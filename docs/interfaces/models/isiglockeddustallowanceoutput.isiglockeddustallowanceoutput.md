@@ -10,6 +10,8 @@ Signature locked single output.
 
 * [*ITypeBase*](itypebase.itypebase.md)<*1*\>
 
+* [*IAmountOutput*](iamountoutput.iamountoutput.md)
+
   ↳ **ISigLockedDustAllowanceOutput**
 
 ## Table of contents
@@ -35,6 +37,8 @@ ___
 • **amount**: *number*
 
 The amount of the output.
+
+Inherited from: [IAmountOutput](iamountoutput.iamountoutput.md).[amount](iamountoutput.iamountoutput.md#amount)
 
 ___
 
