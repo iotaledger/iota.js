@@ -1,6 +1,6 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import { IIndexationPayload, INDEXATION_PAYLOAD_TYPE } from "../models/IIndexationPayload";
+import { INDEXATION_PAYLOAD_TYPE } from "../models/IIndexationPayload";
 import { ISigLockedDustAllowanceOutput, SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE } from "../models/ISigLockedDustAllowanceOutput";
 import { ISigLockedSingleOutput, SIG_LOCKED_SINGLE_OUTPUT_TYPE } from "../models/ISigLockedSingleOutput";
 import { ITransactionEssence, TRANSACTION_ESSENCE_TYPE } from "../models/ITransactionEssence";
@@ -60,7 +60,7 @@ export function deserializeTransactionEssence(readStream: ReadStream): ITransact
         type: TRANSACTION_ESSENCE_TYPE,
         inputs: inputs as IUTXOInput[],
         outputs: outputs as (ISigLockedSingleOutput | ISigLockedDustAllowanceOutput)[],
-        payload: payload as IIndexationPayload
+        payload
     };
 }
 

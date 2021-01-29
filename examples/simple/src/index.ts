@@ -26,7 +26,7 @@ async function run() {
             type: INDEXATION_PAYLOAD_TYPE,
             index: "Foo",
             data: Converter.utf8ToHex("Bar")
-        } as IIndexationPayload
+        }
     };
 
     const messageId = await client.messageSubmit(submitMessage);

@@ -8,8 +8,6 @@ import { ED25519_ADDRESS_TYPE } from "../models/IEd25519Address";
 import { IKeyPair } from "../models/IKeyPair";
 import { IMessage } from "../models/IMessage";
 import { ISeed } from "../models/ISeed";
-import { ISigLockedDustAllowanceOutput, SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE } from "../models/ISigLockedDustAllowanceOutput";
-import { ISigLockedSingleOutput, SIG_LOCKED_SINGLE_OUTPUT_TYPE } from "../models/ISigLockedSingleOutput";
 import { IUTXOInput, UTXO_INPUT_TYPE } from "../models/IUTXOInput";
 import { Bech32Helper } from "../utils/bech32Helper";
 import { Converter } from "../utils/converter";
@@ -337,46 +335,36 @@ export async function calculateInputs<T>(
 
                 if (!addressOutput.isSpent &&
                     consumedBalance < requiredBalance) {
-                    let output: ISigLockedSingleOutput | ISigLockedDustAllowanceOutput | undefined;
+                    if (addressOutput.output.amount === 0) {
+                        zeroBalance++;
+                        if (zeroBalance >= zeroCount) {
+                            finished = true;
+                        }
+                    } else {
+                        consumedBalance += addressOutput.output.amount;
 
-                    if (addressOutput.output.type === SIG_LOCKED_SINGLE_OUTPUT_TYPE) {
-                        output = addressOutput.output as ISigLockedSingleOutput;
-                    } else if (addressOutput.output.type === SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE) {
-                        output = addressOutput.output as ISigLockedDustAllowanceOutput;
-                    }
+                        const input: IUTXOInput = {
+                            type: UTXO_INPUT_TYPE,
+                            transactionId: addressOutput.transactionId,
+                            transactionOutputIndex: addressOutput.outputIndex
+                        };
 
-                    if (output) {
-                        if (output.amount === 0) {
-                            zeroBalance++;
-                            if (zeroBalance >= zeroCount) {
-                                finished = true;
+                        inputsAndSignatureKeyPairs.push({
+                            input,
+                            addressKeyPair
+                        });
+
+                        if (consumedBalance >= requiredBalance) {
+                            // We didn't use all the balance from the last input
+                            // so return the rest to the same address.
+                            if (consumedBalance - requiredBalance > 0) {
+                                outputs.push({
+                                    amount: consumedBalance - requiredBalance,
+                                    address: addressOutput.output.address.address,
+                                    addressType: addressOutput.output.address.type
+                                });
                             }
-                        } else {
-                            consumedBalance += output.amount;
-
-                            const input: IUTXOInput = {
-                                type: UTXO_INPUT_TYPE,
-                                transactionId: addressOutput.transactionId,
-                                transactionOutputIndex: addressOutput.outputIndex
-                            };
-
-                            inputsAndSignatureKeyPairs.push({
-                                input,
-                                addressKeyPair
-                            });
-
-                            if (consumedBalance >= requiredBalance) {
-                                // We didn't use all the balance from the last input
-                                // so return the rest to the same address.
-                                if (consumedBalance - requiredBalance > 0) {
-                                    outputs.push({
-                                        amount: consumedBalance - requiredBalance,
-                                        address: output.address.address,
-                                        addressType: output.address.type
-                                    });
-                                }
-                                finished = true;
-                            }
+                            finished = true;
                         }
                     }
                 }

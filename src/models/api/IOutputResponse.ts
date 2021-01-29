@@ -1,6 +1,7 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import { ITypeBase } from "../ITypeBase";
+import { ISigLockedDustAllowanceOutput } from "../ISigLockedDustAllowanceOutput";
+import { ISigLockedSingleOutput } from "../ISigLockedSingleOutput";
 
 /**
  * Details of an output.
@@ -29,5 +30,5 @@ export interface IOutputResponse {
     /**
      * The output.
      */
-    output: ITypeBase<number>;
+    output: ISigLockedSingleOutput | ISigLockedDustAllowanceOutput;
 }

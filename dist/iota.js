@@ -11740,8 +11740,6 @@
 
 
 
-
-
 	/**
 	 * Send a transfer from the balance on the seed to a single output.
 	 * @param client The client to send the transfer with.
@@ -11913,7 +11911,7 @@
 	function calculateInputs(client, seed, initialAddressState, nextAddressPath, outputs, zeroCount) {
 	    if (zeroCount === void 0) { zeroCount = 5; }
 	    return __awaiter(this, void 0, void 0, function () {
-	        var requiredBalance, _i, outputs_1, output, consumedBalance, inputsAndSignatureKeyPairs, finished, isFirst, zeroBalance, path, addressSeed, addressKeyPair, ed25519Address$1, address, addressOutputIds, _a, _b, addressOutputId, addressOutput, output, input;
+	        var requiredBalance, _i, outputs_1, output, consumedBalance, inputsAndSignatureKeyPairs, finished, isFirst, zeroBalance, path, addressSeed, addressKeyPair, ed25519Address$1, address, addressOutputIds, _a, _b, addressOutputId, addressOutput, input;
 	        return __generator(this, function (_c) {
 	            switch (_c.label) {
 	                case 0:
@@ -11955,43 +11953,34 @@
 	                    addressOutput = _c.sent();
 	                    if (!addressOutput.isSpent &&
 	                        consumedBalance < requiredBalance) {
-	                        output = void 0;
-	                        if (addressOutput.output.type === ISigLockedSingleOutput.SIG_LOCKED_SINGLE_OUTPUT_TYPE) {
-	                            output = addressOutput.output;
-	                        }
-	                        else if (addressOutput.output.type === ISigLockedDustAllowanceOutput.SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE) {
-	                            output = addressOutput.output;
-	                        }
-	                        if (output) {
-	                            if (output.amount === 0) {
-	                                zeroBalance++;
-	                                if (zeroBalance >= zeroCount) {
-	                                    finished = true;
-	                                }
+	                        if (addressOutput.output.amount === 0) {
+	                            zeroBalance++;
+	                            if (zeroBalance >= zeroCount) {
+	                                finished = true;
 	                            }
-	                            else {
-	                                consumedBalance += output.amount;
-	                                input = {
-	                                    type: IUTXOInput.UTXO_INPUT_TYPE,
-	                                    transactionId: addressOutput.transactionId,
-	                                    transactionOutputIndex: addressOutput.outputIndex
-	                                };
-	                                inputsAndSignatureKeyPairs.push({
-	                                    input: input,
-	                                    addressKeyPair: addressKeyPair
-	                                });
-	                                if (consumedBalance >= requiredBalance) {
-	                                    // We didn't use all the balance from the last input
-	                                    // so return the rest to the same address.
-	                                    if (consumedBalance - requiredBalance > 0) {
-	                                        outputs.push({
-	                                            amount: consumedBalance - requiredBalance,
-	                                            address: output.address.address,
-	                                            addressType: output.address.type
-	                                        });
-	                                    }
-	                                    finished = true;
+	                        }
+	                        else {
+	                            consumedBalance += addressOutput.output.amount;
+	                            input = {
+	                                type: IUTXOInput.UTXO_INPUT_TYPE,
+	                                transactionId: addressOutput.transactionId,
+	                                transactionOutputIndex: addressOutput.outputIndex
+	                            };
+	                            inputsAndSignatureKeyPairs.push({
+	                                input: input,
+	                                addressKeyPair: addressKeyPair
+	                            });
+	                            if (consumedBalance >= requiredBalance) {
+	                                // We didn't use all the balance from the last input
+	                                // so return the rest to the same address.
+	                                if (consumedBalance - requiredBalance > 0) {
+	                                    outputs.push({
+	                                        amount: consumedBalance - requiredBalance,
+	                                        address: addressOutput.output.address.address,
+	                                        addressType: addressOutput.output.address.type
+	                                    });
 	                                }
+	                                finished = true;
 	                            }
 	                        }
 	                    }
