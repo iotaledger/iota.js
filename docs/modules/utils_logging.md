@@ -158,7 +158,7 @@ ___
 
 ### logTips
 
-▸ **logTips**(`prefix`: *string*, `tips`: [*ITipsResponse*](../interfaces/models/api/itipsresponse.itipsresponse.md)): *void*
+▸ **logTips**(`prefix`: *string*, `tipsResponse`: [*ITipsResponse*](../interfaces/models/api/itipsresponse.itipsresponse.md)): *void*
 
 Log the tips information.
 
@@ -167,7 +167,7 @@ Log the tips information.
 Name | Type | Description |
 ------ | ------ | ------ |
 `prefix` | *string* | The prefix for the output.   |
-`tips` | [*ITipsResponse*](../interfaces/models/api/itipsresponse.itipsresponse.md) | The tips to log.    |
+`tipsResponse` | [*ITipsResponse*](../interfaces/models/api/itipsresponse.itipsresponse.md) | The tips to log.    |
 
 **Returns:** *void*
 

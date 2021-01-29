@@ -9,6 +9,7 @@ import { ITypeBase } from "../models/ITypeBase";
 import { ReadStream } from "../utils/readStream";
 import { WriteStream } from "../utils/writeStream";
 import { BYTE_SIZE, MERKLE_PROOF_LENGTH, MESSAGE_ID_LENGTH, STRING_LENGTH, TYPE_LENGTH, UINT32_SIZE, UINT64_SIZE } from "./common";
+import { MAX_NUMBER_PARENTS, MIN_NUMBER_PARENTS } from "./message";
 import { deserializeTransactionEssence, serializeTransactionEssence } from "./transaction";
 import { deserializeUnlockBlocks, serializeUnlockBlocks } from "./unlockBlock";
 
@@ -21,7 +22,8 @@ export const MIN_PAYLOAD_LENGTH: number = TYPE_LENGTH;
  * The minimum length of a milestone payload binary representation.
  */
 export const MIN_MILESTONE_PAYLOAD_LENGTH: number = MIN_PAYLOAD_LENGTH + UINT32_SIZE + UINT64_SIZE +
-    MESSAGE_ID_LENGTH + MESSAGE_ID_LENGTH + MERKLE_PROOF_LENGTH +
+    BYTE_SIZE + MESSAGE_ID_LENGTH + MESSAGE_ID_LENGTH +
+    MERKLE_PROOF_LENGTH +
     BYTE_SIZE + Ed25519.PUBLIC_KEY_SIZE +
     BYTE_SIZE + Ed25519.SIGNATURE_SIZE;
 
@@ -181,8 +183,13 @@ export function deserializeMilestonePayload(readStream: ReadStream): IMilestoneP
     }
     const index = readStream.readUInt32("payloadMilestone.index");
     const timestamp = readStream.readUInt64("payloadMilestone.timestamp");
-    const parent1MessageId = readStream.readFixedHex("payloadMilestone.parent1MessageId", MESSAGE_ID_LENGTH);
-    const parent2MessageId = readStream.readFixedHex("payloadMilestone.parent2MessageId", MESSAGE_ID_LENGTH);
+    const numParents = readStream.readByte("payloadMilestone.numParents");
+    const parents: string[] = [];
+
+    for (let i = 0; i < numParents; i++) {
+        const parentMessageId = readStream.readFixedHex(`payloadMilestone.parentMessageId${i + 1}`, MESSAGE_ID_LENGTH);
+        parents.push(parentMessageId);
+    }
     const inclusionMerkleProof = readStream.readFixedHex("payloadMilestone.inclusionMerkleProof", MERKLE_PROOF_LENGTH);
     const publicKeysCount = readStream.readByte("payloadMilestone.publicKeysCount");
     const publicKeys = [];
@@ -199,8 +206,7 @@ export function deserializeMilestonePayload(readStream: ReadStream): IMilestoneP
         type: MILESTONE_PAYLOAD_TYPE,
         index,
         timestamp: Number(timestamp),
-        parent1MessageId,
-        parent2MessageId,
+        parents,
         inclusionMerkleProof,
         publicKeys,
         signatures
@@ -217,8 +223,29 @@ export function serializeMilestonePayload(writeStream: WriteStream,
     writeStream.writeUInt32("payloadMilestone.type", object.type);
     writeStream.writeUInt32("payloadMilestone.index", object.index);
     writeStream.writeUInt64("payloadMilestone.timestamp", BigInt(object.timestamp));
-    writeStream.writeFixedHex("payloadMilestone.parent1MessageId", MESSAGE_ID_LENGTH, object.parent1MessageId);
-    writeStream.writeFixedHex("payloadMilestone.parent2MessageId", MESSAGE_ID_LENGTH, object.parent2MessageId);
+
+    if (object.parents.length < MIN_NUMBER_PARENTS) {
+        throw new Error(`A minimum of ${MIN_NUMBER_PARENTS
+            } parents is allowed, you provided ${object.parents.length}`);
+    }
+    if (object.parents.length > MAX_NUMBER_PARENTS) {
+        throw new Error(`A maximum of ${MAX_NUMBER_PARENTS
+            } parents is allowed, you provided ${object.parents.length}`);
+    }
+    if ((new Set(object.parents)).size !== object.parents.length) {
+        throw new Error("The milestone parents must be unique");
+    }
+    const sorted = object.parents.slice().sort();
+
+    writeStream.writeByte("payloadMilestone.numParents", object.parents.length);
+    for (let i = 0; i < object.parents.length; i++) {
+        if (sorted[i] !== object.parents[i]) {
+            throw new Error("The milestone parents must be lexographically sorted");
+        }
+
+        writeStream.writeFixedHex(`payloadMilestone.parentMessageId${i + 1}`,
+            MESSAGE_ID_LENGTH, object.parents[i]);
+    }
 
     writeStream.writeFixedHex("payloadMilestone.inclusionMerkleProof",
         MERKLE_PROOF_LENGTH, object.inclusionMerkleProof);

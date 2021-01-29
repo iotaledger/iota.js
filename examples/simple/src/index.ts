@@ -14,14 +14,14 @@ async function run() {
     logInfo("", info);
     console.log();
 
-    const tips = await client.tips();
+    const tipsResponse = await client.tips();
     console.log("Tips");
-    logTips("", tips);
+    logTips("", tipsResponse);
     console.log();
 
     const submitMessage: IMessage = {
-        parent1MessageId: tips.tip1MessageId,
-        parent2MessageId: tips.tip2MessageId,
+        // Parents can be left undefined if you want the node to populate the field
+        parents: tipsResponse.tips,
         payload: {
             type: INDEXATION_PAYLOAD_TYPE,
             index: "Foo",
@@ -61,7 +61,7 @@ async function run() {
     console.log("\tMessage Ids:", messages.messageIds);
     console.log();
 
-    const children = await client.messageChildren(tips.tip1MessageId);
+    const children = await client.messageChildren(tipsResponse.tips[0]);
     console.log("Children");
     console.log("\tMessage Id:", children.messageId);
     console.log("\tMax Results:", children.maxResults);

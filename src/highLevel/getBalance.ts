@@ -25,9 +25,8 @@ export async function getBalance(
     const allUnspent = await getUnspentAddresses(client, seed, accountIndex, addressOptions);
 
     let total = 0;
-
-    for (let i = 0; i < allUnspent.length; i++) {
-        total += allUnspent[i].balance;
+    for (const output of allUnspent) {
+        total += output.balance;
     }
 
     return total;

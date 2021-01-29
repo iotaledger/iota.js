@@ -1162,6 +1162,9 @@ module.exports = {
         "unicorn/error-message": [
             "error"
         ],
+        "unicorn/empty-brace-spaces": [
+            "off"
+        ],
         "unicorn/escape-case": [
             "error"
         ],
@@ -1169,7 +1172,7 @@ module.exports = {
             "error"
         ],
         "unicorn/explicit-length-check": [
-            "error"
+            "off"
         ],
         "unicorn/filename-case": [
             "off"

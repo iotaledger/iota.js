@@ -50,15 +50,16 @@ var getUnspentAddresses_1 = require("./getUnspentAddresses");
  */
 function getBalance(client, seed, accountIndex, addressOptions) {
     return __awaiter(this, void 0, void 0, function () {
-        var allUnspent, total, i;
+        var allUnspent, total, _i, allUnspent_1, output;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, getUnspentAddresses_1.getUnspentAddresses(client, seed, accountIndex, addressOptions)];
                 case 1:
                     allUnspent = _a.sent();
                     total = 0;
-                    for (i = 0; i < allUnspent.length; i++) {
-                        total += allUnspent[i].balance;
+                    for (_i = 0, allUnspent_1 = allUnspent; _i < allUnspent_1.length; _i++) {
+                        output = allUnspent_1[_i];
+                        total += output.balance;
                     }
                     return [2 /*return*/, total];
             }
@@ -66,4 +67,4 @@ function getBalance(client, seed, accountIndex, addressOptions) {
     });
 }
 exports.getBalance = getBalance;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZ2V0QmFsYW5jZS5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy9oaWdoTGV2ZWwvZ2V0QmFsYW5jZS50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7QUFJQSw2REFBNEQ7QUFFNUQ7Ozs7Ozs7OztHQVNHO0FBQ0gsU0FBc0IsVUFBVSxDQUM1QixNQUFlLEVBQ2YsSUFBVyxFQUNYLFlBQW9CLEVBQ3BCLGNBR0M7Ozs7O3dCQUNrQixxQkFBTSx5Q0FBbUIsQ0FBQyxNQUFNLEVBQUUsSUFBSSxFQUFFLFlBQVksRUFBRSxjQUFjLENBQUMsRUFBQTs7b0JBQWxGLFVBQVUsR0FBRyxTQUFxRTtvQkFFcEYsS0FBSyxHQUFHLENBQUMsQ0FBQztvQkFFZCxLQUFTLENBQUMsR0FBRyxDQUFDLEVBQUUsQ0FBQyxHQUFHLFVBQVUsQ0FBQyxNQUFNLEVBQUUsQ0FBQyxFQUFFLEVBQUU7d0JBQ3hDLEtBQUssSUFBSSxVQUFVLENBQUMsQ0FBQyxDQUFDLENBQUMsT0FBTyxDQUFDO3FCQUNsQztvQkFFRCxzQkFBTyxLQUFLLEVBQUM7Ozs7Q0FDaEI7QUFqQkQsZ0NBaUJDIn0=
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZ2V0QmFsYW5jZS5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy9oaWdoTGV2ZWwvZ2V0QmFsYW5jZS50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7QUFJQSw2REFBNEQ7QUFFNUQ7Ozs7Ozs7OztHQVNHO0FBQ0gsU0FBc0IsVUFBVSxDQUM1QixNQUFlLEVBQ2YsSUFBVyxFQUNYLFlBQW9CLEVBQ3BCLGNBR0M7Ozs7O3dCQUNrQixxQkFBTSx5Q0FBbUIsQ0FBQyxNQUFNLEVBQUUsSUFBSSxFQUFFLFlBQVksRUFBRSxjQUFjLENBQUMsRUFBQTs7b0JBQWxGLFVBQVUsR0FBRyxTQUFxRTtvQkFFcEYsS0FBSyxHQUFHLENBQUMsQ0FBQztvQkFDZCxXQUErQixFQUFWLHlCQUFVLEVBQVYsd0JBQVUsRUFBVixJQUFVLEVBQUU7d0JBQXRCLE1BQU07d0JBQ2IsS0FBSyxJQUFJLE1BQU0sQ0FBQyxPQUFPLENBQUM7cUJBQzNCO29CQUVELHNCQUFPLEtBQUssRUFBQzs7OztDQUNoQjtBQWhCRCxnQ0FnQkMifQ==

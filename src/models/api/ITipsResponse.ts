@@ -5,12 +5,7 @@
  */
 export interface ITipsResponse {
     /**
-     * The message id of tip 1.
+     * The message ids of the tip.
      */
-    tip1MessageId: string;
-
-    /**
-     * The message id of tip 2.
-     */
-    tip2MessageId: string;
+    tips: string[];
 }

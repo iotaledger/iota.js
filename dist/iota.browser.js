@@ -4690,6 +4690,7 @@
 
 
 
+
 	/**
 	 * The minimum length of a payload binary representation.
 	 */
@@ -4698,7 +4699,8 @@
 	 * The minimum length of a milestone payload binary representation.
 	 */
 	exports.MIN_MILESTONE_PAYLOAD_LENGTH = exports.MIN_PAYLOAD_LENGTH + common.UINT32_SIZE + common.UINT64_SIZE +
-	    common.MESSAGE_ID_LENGTH + common.MESSAGE_ID_LENGTH + common.MERKLE_PROOF_LENGTH +
+	    common.BYTE_SIZE + common.MESSAGE_ID_LENGTH + common.MESSAGE_ID_LENGTH +
+	    common.MERKLE_PROOF_LENGTH +
 	    common.BYTE_SIZE + ed25519.Ed25519.PUBLIC_KEY_SIZE +
 	    common.BYTE_SIZE + ed25519.Ed25519.SIGNATURE_SIZE;
 	/**
@@ -4839,8 +4841,12 @@
 	    }
 	    var index = readStream.readUInt32("payloadMilestone.index");
 	    var timestamp = readStream.readUInt64("payloadMilestone.timestamp");
-	    var parent1MessageId = readStream.readFixedHex("payloadMilestone.parent1MessageId", common.MESSAGE_ID_LENGTH);
-	    var parent2MessageId = readStream.readFixedHex("payloadMilestone.parent2MessageId", common.MESSAGE_ID_LENGTH);
+	    var numParents = readStream.readByte("payloadMilestone.numParents");
+	    var parents = [];
+	    for (var i = 0; i < numParents; i++) {
+	        var parentMessageId = readStream.readFixedHex("payloadMilestone.parentMessageId" + (i + 1), common.MESSAGE_ID_LENGTH);
+	        parents.push(parentMessageId);
+	    }
 	    var inclusionMerkleProof = readStream.readFixedHex("payloadMilestone.inclusionMerkleProof", common.MERKLE_PROOF_LENGTH);
 	    var publicKeysCount = readStream.readByte("payloadMilestone.publicKeysCount");
 	    var publicKeys = [];
@@ -4856,8 +4862,7 @@
 	        type: IMilestonePayload.MILESTONE_PAYLOAD_TYPE,
 	        index: index,
 	        timestamp: Number(timestamp),
-	        parent1MessageId: parent1MessageId,
-	        parent2MessageId: parent2MessageId,
+	        parents: parents,
 	        inclusionMerkleProof: inclusionMerkleProof,
 	        publicKeys: publicKeys,
 	        signatures: signatures
@@ -4873,8 +4878,23 @@
 	    writeStream.writeUInt32("payloadMilestone.type", object.type);
 	    writeStream.writeUInt32("payloadMilestone.index", object.index);
 	    writeStream.writeUInt64("payloadMilestone.timestamp", BigInt(object.timestamp));
-	    writeStream.writeFixedHex("payloadMilestone.parent1MessageId", common.MESSAGE_ID_LENGTH, object.parent1MessageId);
-	    writeStream.writeFixedHex("payloadMilestone.parent2MessageId", common.MESSAGE_ID_LENGTH, object.parent2MessageId);
+	    if (object.parents.length < message.MIN_NUMBER_PARENTS) {
+	        throw new Error("A minimum of " + message.MIN_NUMBER_PARENTS + " parents is allowed, you provided " + object.parents.length);
+	    }
+	    if (object.parents.length > message.MAX_NUMBER_PARENTS) {
+	        throw new Error("A maximum of " + message.MAX_NUMBER_PARENTS + " parents is allowed, you provided " + object.parents.length);
+	    }
+	    if ((new Set(object.parents)).size !== object.parents.length) {
+	        throw new Error("The milestone parents must be unique");
+	    }
+	    var sorted = object.parents.slice().sort();
+	    writeStream.writeByte("payloadMilestone.numParents", object.parents.length);
+	    for (var i = 0; i < object.parents.length; i++) {
+	        if (sorted[i] !== object.parents[i]) {
+	            throw new Error("The milestone parents must be lexographically sorted");
+	        }
+	        writeStream.writeFixedHex("payloadMilestone.parentMessageId" + (i + 1), common.MESSAGE_ID_LENGTH, object.parents[i]);
+	    }
 	    writeStream.writeFixedHex("payloadMilestone.inclusionMerkleProof", common.MERKLE_PROOF_LENGTH, object.inclusionMerkleProof);
 	    writeStream.writeByte("payloadMilestone.publicKeysCount", object.publicKeys.length);
 	    for (var i = 0; i < object.publicKeys.length; i++) {
@@ -4937,24 +4957,29 @@
 
 	var message = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.serializeMessage = exports.deserializeMessage = exports.MAX_MESSAGE_LENGTH = void 0;
+	exports.serializeMessage = exports.deserializeMessage = exports.MIN_NUMBER_PARENTS = exports.MAX_NUMBER_PARENTS = exports.MAX_MESSAGE_LENGTH = void 0;
 
 
 	/**
 	 * The minimum length of a message binary representation.
 	 */
 	var MIN_MESSAGE_LENGTH = common.UINT64_SIZE +
+	    common.BYTE_SIZE +
 	    (2 * common.MESSAGE_ID_LENGTH) +
 	    payload.MIN_PAYLOAD_LENGTH +
 	    common.UINT64_SIZE;
 	/**
-	 * Empty message id.
-	 */
-	var EMPTY_MESSAGE_ID_HEX = "0".repeat(common.MESSAGE_ID_LENGTH * 2);
-	/**
 	 * The maximum length of a message.
 	 */
 	exports.MAX_MESSAGE_LENGTH = 32768;
+	/**
+	 * The maximum number of parents.
+	 */
+	exports.MAX_NUMBER_PARENTS = 8;
+	/**
+	 * The minimum number of parents.
+	 */
+	exports.MIN_NUMBER_PARENTS = 1;
 	/**
 	 * Deserialize the message from binary.
 	 * @param readStream The message to deserialize.
@@ -4965,8 +4990,12 @@
 	        throw new Error("Message data is " + readStream.length() + " in length which is less than the minimimum size required of " + MIN_MESSAGE_LENGTH);
 	    }
 	    var networkId = readStream.readUInt64("message.networkId");
-	    var parent1MessageId = readStream.readFixedHex("message.parent1MessageId", common.MESSAGE_ID_LENGTH);
-	    var parent2MessageId = readStream.readFixedHex("message.parent2MessageId", common.MESSAGE_ID_LENGTH);
+	    var numParents = readStream.readByte("message.numParents");
+	    var parents = [];
+	    for (var i = 0; i < numParents; i++) {
+	        var parentMessageId = readStream.readFixedHex("message.parentMessageId", common.MESSAGE_ID_LENGTH);
+	        parents.push(parentMessageId);
+	    }
 	    var payload$1 = payload.deserializePayload(readStream);
 	    var nonce = readStream.readUInt64("message.nonce");
 	    var unused = readStream.unused();
@@ -4975,9 +5004,8 @@
 	    }
 	    return {
 	        networkId: networkId.toString(10),
+	        parents: parents,
 	        payload: payload$1,
-	        parent1MessageId: parent1MessageId,
-	        parent2MessageId: parent2MessageId,
 	        nonce: nonce.toString(10)
 	    };
 	}
@@ -4990,8 +5018,23 @@
 	function serializeMessage(writeStream, object) {
 	    var _a, _b, _c, _d;
 	    writeStream.writeUInt64("message.networkId", BigInt((_a = object.networkId) !== null && _a !== void 0 ? _a : 0));
-	    writeStream.writeFixedHex("message.parent1MessageId", common.MESSAGE_ID_LENGTH, (_b = object.parent1MessageId) !== null && _b !== void 0 ? _b : EMPTY_MESSAGE_ID_HEX);
-	    writeStream.writeFixedHex("message.parent2MessageId", common.MESSAGE_ID_LENGTH, (_c = object.parent2MessageId) !== null && _c !== void 0 ? _c : EMPTY_MESSAGE_ID_HEX);
+	    var numParents = (_c = (_b = object.parents) === null || _b === void 0 ? void 0 : _b.length) !== null && _c !== void 0 ? _c : 0;
+	    writeStream.writeByte("message.numParents", numParents);
+	    if (object.parents) {
+	        if (numParents > exports.MAX_NUMBER_PARENTS) {
+	            throw new Error("A maximum of " + exports.MAX_NUMBER_PARENTS + " parents is allowed, you provided " + numParents);
+	        }
+	        if ((new Set(object.parents)).size !== numParents) {
+	            throw new Error("The message parents must be unique");
+	        }
+	        var sorted = object.parents.slice().sort();
+	        for (var i = 0; i < numParents; i++) {
+	            if (sorted[i] !== object.parents[i]) {
+	                throw new Error("The message parents must be lexographically sorted");
+	            }
+	            writeStream.writeFixedHex("message.parentMessageId" + (i + 1), common.MESSAGE_ID_LENGTH, object.parents[i]);
+	        }
+	    }
 	    payload.serializePayload(writeStream, object.payload);
 	    writeStream.writeUInt64("message.nonce", BigInt((_d = object.nonce) !== null && _d !== void 0 ? _d : 0));
 	}
@@ -10600,15 +10643,16 @@
 	 */
 	function getBalance(client, seed, accountIndex, addressOptions) {
 	    return __awaiter(this, void 0, void 0, function () {
-	        var allUnspent, total, i;
+	        var allUnspent, total, _i, allUnspent_1, output;
 	        return __generator(this, function (_a) {
 	            switch (_a.label) {
 	                case 0: return [4 /*yield*/, getUnspentAddresses_1.getUnspentAddresses(client, seed, accountIndex, addressOptions)];
 	                case 1:
 	                    allUnspent = _a.sent();
 	                    total = 0;
-	                    for (i = 0; i < allUnspent.length; i++) {
-	                        total += allUnspent[i].balance;
+	                    for (_i = 0, allUnspent_1 = allUnspent; _i < allUnspent_1.length; _i++) {
+	                        output = allUnspent_1[_i];
+	                        total += output.balance;
 	                    }
 	                    return [2 /*return*/, total];
 	            }
@@ -10729,6 +10773,9 @@
 	};
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.promote = void 0;
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
+
 	/**
 	 * Promote an existing message.
 	 * @param client The client to perform the promote with.
@@ -10737,27 +10784,37 @@
 	 */
 	function promote(client, messageId) {
 	    return __awaiter(this, void 0, void 0, function () {
-	        var message, tips, promoteMessage, promoteMessageId;
+	        var message$1, tipsResponse, promoteMessage, promoteMessageId;
 	        return __generator(this, function (_a) {
 	            switch (_a.label) {
 	                case 0: return [4 /*yield*/, client.message(messageId)];
 	                case 1:
-	                    message = _a.sent();
-	                    if (!message) {
+	                    message$1 = _a.sent();
+	                    if (!message$1) {
 	                        throw new Error("The message does not exist.");
 	                    }
 	                    return [4 /*yield*/, client.tips()];
 	                case 2:
-	                    tips = _a.sent();
+	                    tipsResponse = _a.sent();
+	                    // Parents must be unique and lexicographically sorted
+	                    // so don't add the messageId if it is already one of the tips
+	                    if (!tipsResponse.tips.includes(messageId)) {
+	                        tipsResponse.tips.push(messageId);
+	                    }
+	                    // If we now exceed the max parents remove one
+	                    if (tipsResponse.tips.length > message.MAX_NUMBER_PARENTS) {
+	                        tipsResponse.tips.shift();
+	                    }
+	                    // Finally sort the list
+	                    tipsResponse.tips.sort();
 	                    promoteMessage = {
-	                        parent1MessageId: tips.tip1MessageId,
-	                        parent2MessageId: messageId
+	                        parents: tipsResponse.tips
 	                    };
 	                    return [4 /*yield*/, client.messageSubmit(promoteMessage)];
 	                case 3:
 	                    promoteMessageId = _a.sent();
 	                    return [2 /*return*/, {
-	                            message: message,
+	                            message: message$1,
 	                            messageId: promoteMessageId
 	                        }];
 	            }
@@ -11421,7 +11478,7 @@
 	 * @returns The id of the message created and the contructed message.
 	 */
 	function calculateInputs(client, seed, initialAddressState, nextAddressPath, outputs, zeroCount) {
-	    if (zeroCount === void 0) { zeroCount = 20; }
+	    if (zeroCount === void 0) { zeroCount = 5; }
 	    return __awaiter(this, void 0, void 0, function () {
 	        var requiredBalance, _i, outputs_1, output, consumedBalance, inputsAndSignatureKeyPairs, finished, isFirst, zeroBalance, path, addressSeed, addressKeyPair, ed25519Address$1, address, addressOutputIds, _a, _b, addressOutputId, addressOutput, input;
 	        return __generator(this, function (_c) {
@@ -12113,11 +12170,14 @@
 	/**
 	 * Log the tips information.
 	 * @param prefix The prefix for the output.
-	 * @param tips The tips to log.
+	 * @param tipsResponse The tips to log.
 	 */
-	function logTips(prefix, tips) {
-	    logger(prefix + "\tTip 1 Message Id:", tips.tip1MessageId);
-	    logger(prefix + "\tTip 2 Message Id:", tips.tip2MessageId);
+	function logTips(prefix, tipsResponse) {
+	    if (tipsResponse.tips) {
+	        for (var i = 0; i < tipsResponse.tips.length; i++) {
+	            logger(prefix + "\tTip " + (i + 1) + " Message Id:", tipsResponse.tips[i]);
+	        }
+	    }
 	}
 	exports.logTips = logTips;
 	/**
@@ -12127,8 +12187,11 @@
 	 */
 	function logMessage(prefix, message) {
 	    logger(prefix + "\tNetwork Id:", message.networkId);
-	    logger(prefix + "\tParent 1 Message Id:", message.parent1MessageId);
-	    logger(prefix + "\tParent 2 Message Id:", message.parent2MessageId);
+	    if (message.parents) {
+	        for (var i = 0; i < message.parents.length; i++) {
+	            logger(prefix + "\tParent " + (i + 1) + " Message Id:", message.parents[i]);
+	        }
+	    }
 	    logPayload(prefix + "\t", message.payload);
 	    if (message.nonce !== undefined) {
 	        logger(prefix + "\tNonce:", message.nonce);
@@ -12142,8 +12205,11 @@
 	 */
 	function logMessageMetadata(prefix, messageMetadata) {
 	    logger(prefix + "\tMessage Id:", messageMetadata.messageId);
-	    logger(prefix + "\tParent 1 Message Id:", messageMetadata.parent1MessageId);
-	    logger(prefix + "\tParent 2 Message Id:", messageMetadata.parent2MessageId);
+	    if (messageMetadata.parents) {
+	        for (var i = 0; i < messageMetadata.parents.length; i++) {
+	            logger(prefix + "\tParent " + (i + 1) + " Message Id:", messageMetadata.parents[i]);
+	        }
+	    }
 	    if (messageMetadata.isSolid !== undefined) {
 	        logger(prefix + "\tIs Solid:", messageMetadata.isSolid);
 	    }
@@ -12205,8 +12271,9 @@
 	            logger(prefix + "Milestone Payload");
 	            logger(prefix + "\tIndex:", payload.index);
 	            logger(prefix + "\tTimestamp:", payload.timestamp);
-	            logger(prefix + "\tParent 1:", payload.parent1MessageId);
-	            logger(prefix + "\tParent 2:", payload.parent2MessageId);
+	            for (var i = 0; i < payload.parents.length; i++) {
+	                logger(prefix + "\tParent " + (i + 1) + ":", payload.parents[i]);
+	            }
 	            logger(prefix + "\tInclusion Merkle Proof:", payload.inclusionMerkleProof);
 	            logger(prefix + "\tPublic Keys:", payload.publicKeys);
 	            logger(prefix + "\tSignatures:", payload.signatures);
@@ -12289,17 +12356,15 @@
 	 * @param unknownUnlockBlock The unlock block to log.
 	 */
 	function logUnlockBlock(prefix, unknownUnlockBlock) {
-	    if (unknownUnlockBlock) {
-	        if (unknownUnlockBlock.type === ISignatureUnlockBlock.SIGNATURE_UNLOCK_BLOCK_TYPE) {
-	            var unlockBlock = unknownUnlockBlock;
-	            logger(prefix + "\tSignature Unlock Block");
-	            logSignature(prefix + "\t\t\t", unlockBlock.signature);
-	        }
-	        else if (unknownUnlockBlock.type === IReferenceUnlockBlock.REFERENCE_UNLOCK_BLOCK_TYPE) {
-	            var unlockBlock = unknownUnlockBlock;
-	            logger(prefix + "\tReference Unlock Block");
-	            logger(prefix + "\t\tReference:", unlockBlock.reference);
-	        }
+	    if ((unknownUnlockBlock === null || unknownUnlockBlock === void 0 ? void 0 : unknownUnlockBlock.type) === ISignatureUnlockBlock.SIGNATURE_UNLOCK_BLOCK_TYPE) {
+	        var unlockBlock = unknownUnlockBlock;
+	        logger(prefix + "\tSignature Unlock Block");
+	        logSignature(prefix + "\t\t\t", unlockBlock.signature);
+	    }
+	    else if ((unknownUnlockBlock === null || unknownUnlockBlock === void 0 ? void 0 : unknownUnlockBlock.type) === IReferenceUnlockBlock.REFERENCE_UNLOCK_BLOCK_TYPE) {
+	        var unlockBlock = unknownUnlockBlock;
+	        logger(prefix + "\tReference Unlock Block");
+	        logger(prefix + "\t\tReference:", unlockBlock.reference);
 	    }
 	}
 	exports.logUnlockBlock = logUnlockBlock;

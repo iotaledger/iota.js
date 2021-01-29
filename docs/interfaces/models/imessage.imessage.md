@@ -16,8 +16,7 @@ Message layout.
 
 - [networkId](imessage.imessage.md#networkid)
 - [nonce](imessage.imessage.md#nonce)
-- [parent1MessageId](imessage.imessage.md#parent1messageid)
-- [parent2MessageId](imessage.imessage.md#parent2messageid)
+- [parents](imessage.imessage.md#parents)
 - [payload](imessage.imessage.md#payload)
 
 ## Properties
@@ -38,19 +37,11 @@ The nonce for the message.
 
 ___
 
-### parent1MessageId
+### parents
 
-• `Optional` **parent1MessageId**: *undefined* \| *string*
+• `Optional` **parents**: *undefined* \| *string*[]
 
-The parent 1 message id.
-
-___
-
-### parent2MessageId
-
-• `Optional` **parent2MessageId**: *undefined* \| *string*
-
-The parent 2 message id.
+The parent message ids.
 
 ___
 

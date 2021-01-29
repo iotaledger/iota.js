@@ -294,7 +294,7 @@ export async function calculateInputs<T>(
     initialAddressState: T,
     nextAddressPath: (addressState: T, isFirst: boolean) => string,
     outputs: { address: string; addressType: number; amount: number }[],
-    zeroCount: number = 20
+    zeroCount: number = 5
 ): Promise<{
     input: IUTXOInput;
     addressKeyPair: IKeyPair;

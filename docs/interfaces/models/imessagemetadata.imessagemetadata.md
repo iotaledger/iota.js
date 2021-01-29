@@ -19,8 +19,7 @@ Response from the metadata endpoint.
 - [ledgerInclusionState](imessagemetadata.imessagemetadata.md#ledgerinclusionstate)
 - [messageId](imessagemetadata.imessagemetadata.md#messageid)
 - [milestoneIndex](imessagemetadata.imessagemetadata.md#milestoneindex)
-- [parent1MessageId](imessagemetadata.imessagemetadata.md#parent1messageid)
-- [parent2MessageId](imessagemetadata.imessagemetadata.md#parent2messageid)
+- [parents](imessagemetadata.imessagemetadata.md#parents)
 - [referencedByMilestoneIndex](imessagemetadata.imessagemetadata.md#referencedbymilestoneindex)
 - [shouldPromote](imessagemetadata.imessagemetadata.md#shouldpromote)
 - [shouldReattach](imessagemetadata.imessagemetadata.md#shouldreattach)
@@ -67,19 +66,11 @@ Is this message a valid milestone.
 
 ___
 
-### parent1MessageId
+### parents
 
-• **parent1MessageId**: *string*
+• `Optional` **parents**: *undefined* \| *string*[]
 
-The message id of parent 1.
-
-___
-
-### parent2MessageId
-
-• **parent2MessageId**: *string*
-
-The message id of parent 2.
+The parent message ids.
 
 ___
 

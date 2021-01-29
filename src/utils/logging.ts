@@ -56,11 +56,14 @@ export function logInfo(prefix: string, info: INodeInfo): void {
 /**
  * Log the tips information.
  * @param prefix The prefix for the output.
- * @param tips The tips to log.
+ * @param tipsResponse The tips to log.
  */
-export function logTips(prefix: string, tips: ITipsResponse): void {
-    logger(`${prefix}\tTip 1 Message Id:`, tips.tip1MessageId);
-    logger(`${prefix}\tTip 2 Message Id:`, tips.tip2MessageId);
+export function logTips(prefix: string, tipsResponse: ITipsResponse): void {
+    if (tipsResponse.tips) {
+        for (let i = 0; i < tipsResponse.tips.length; i++) {
+            logger(`${prefix}\tTip ${i + 1} Message Id:`, tipsResponse.tips[i]);
+        }
+    }
 }
 
 /**
@@ -70,8 +73,11 @@ export function logTips(prefix: string, tips: ITipsResponse): void {
  */
 export function logMessage(prefix: string, message: IMessage): void {
     logger(`${prefix}\tNetwork Id:`, message.networkId);
-    logger(`${prefix}\tParent 1 Message Id:`, message.parent1MessageId);
-    logger(`${prefix}\tParent 2 Message Id:`, message.parent2MessageId);
+    if (message.parents) {
+        for (let i = 0; i < message.parents.length; i++) {
+            logger(`${prefix}\tParent ${i + 1} Message Id:`, message.parents[i]);
+        }
+    }
     logPayload(`${prefix}\t`, message.payload);
     if (message.nonce !== undefined) {
         logger(`${prefix}\tNonce:`, message.nonce);
@@ -85,8 +91,11 @@ export function logMessage(prefix: string, message: IMessage): void {
  */
 export function logMessageMetadata(prefix: string, messageMetadata: IMessageMetadata): void {
     logger(`${prefix}\tMessage Id:`, messageMetadata.messageId);
-    logger(`${prefix}\tParent 1 Message Id:`, messageMetadata.parent1MessageId);
-    logger(`${prefix}\tParent 2 Message Id:`, messageMetadata.parent2MessageId);
+    if (messageMetadata.parents) {
+        for (let i = 0; i < messageMetadata.parents.length; i++) {
+            logger(`${prefix}\tParent ${i + 1} Message Id:`, messageMetadata.parents[i]);
+        }
+    }
     if (messageMetadata.isSolid !== undefined) {
         logger(`${prefix}\tIs Solid:`, messageMetadata.isSolid);
     }
@@ -144,8 +153,9 @@ export function logPayload(prefix: string, unknownPayload?: ITypeBase<unknown>):
             logger(`${prefix}Milestone Payload`);
             logger(`${prefix}\tIndex:`, payload.index);
             logger(`${prefix}\tTimestamp:`, payload.timestamp);
-            logger(`${prefix}\tParent 1:`, payload.parent1MessageId);
-            logger(`${prefix}\tParent 2:`, payload.parent2MessageId);
+            for (let i = 0; i < payload.parents.length; i++) {
+                logger(`${prefix}\tParent ${i + 1}:`, payload.parents[i]);
+            }
             logger(`${prefix}\tInclusion Merkle Proof:`, payload.inclusionMerkleProof);
             logger(`${prefix}\tPublic Keys:`, payload.publicKeys);
             logger(`${prefix}\tSignatures:`, payload.signatures);
@@ -226,15 +236,13 @@ export function logOutput(prefix: string, unknownOutput?: ITypeBase<unknown>): v
  * @param unknownUnlockBlock The unlock block to log.
  */
 export function logUnlockBlock(prefix: string, unknownUnlockBlock?: ITypeBase<unknown>): void {
-    if (unknownUnlockBlock) {
-        if (unknownUnlockBlock.type === SIGNATURE_UNLOCK_BLOCK_TYPE) {
-            const unlockBlock = unknownUnlockBlock as ISignatureUnlockBlock;
-            logger(`${prefix}\tSignature Unlock Block`);
-            logSignature(`${prefix}\t\t\t`, unlockBlock.signature);
-        } else if (unknownUnlockBlock.type === REFERENCE_UNLOCK_BLOCK_TYPE) {
-            const unlockBlock = unknownUnlockBlock as IReferenceUnlockBlock;
-            logger(`${prefix}\tReference Unlock Block`);
-            logger(`${prefix}\t\tReference:`, unlockBlock.reference);
-        }
+    if (unknownUnlockBlock?.type === SIGNATURE_UNLOCK_BLOCK_TYPE) {
+        const unlockBlock = unknownUnlockBlock as ISignatureUnlockBlock;
+        logger(`${prefix}\tSignature Unlock Block`);
+        logSignature(`${prefix}\t\t\t`, unlockBlock.signature);
+    } else if (unknownUnlockBlock?.type === REFERENCE_UNLOCK_BLOCK_TYPE) {
+        const unlockBlock = unknownUnlockBlock as IReferenceUnlockBlock;
+        logger(`${prefix}\tReference Unlock Block`);
+        logger(`${prefix}\t\tReference:`, unlockBlock.reference);
     }
 }

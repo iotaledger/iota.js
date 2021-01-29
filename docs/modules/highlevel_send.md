@@ -36,7 +36,7 @@ Name | Type | Default value | Description |
 `initialAddressState` | T | - | The initial address state for calculating the addresses.   |
 `nextAddressPath` | (`addressState`: T, `isFirst`: *boolean*) => *string* | - | Calculate the next address for inputs.   |
 `outputs` | {}[] | - | The outputs to send.   |
-`zeroCount` | *number* | 20 | Abort when the number of zero balances is exceeded.   |
+`zeroCount` | *number* | 5 | Abort when the number of zero balances is exceeded.   |
 
 **Returns:** *Promise*<{}[]\>
 
