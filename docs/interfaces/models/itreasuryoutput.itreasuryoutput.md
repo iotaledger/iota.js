@@ -10,8 +10,6 @@ Treasury Output.
 
 * [*ITypeBase*](itypebase.itypebase.md)<*2*\>
 
-* [*IAmountOutput*](iamountoutput.iamountoutput.md)
-
   ↳ **ITreasuryOutput**
 
 ## Table of contents
@@ -28,8 +26,6 @@ Treasury Output.
 • **amount**: *number*
 
 The amount of the output.
-
-Inherited from: [IAmountOutput](iamountoutput.iamountoutput.md).[amount](iamountoutput.iamountoutput.md#amount)
 
 ___
 

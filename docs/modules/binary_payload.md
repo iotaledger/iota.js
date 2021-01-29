@@ -134,7 +134,7 @@ ___
 
 ### deserializePayload
 
-▸ **deserializePayload**(`readStream`: [*ReadStream*](../classes/utils/readstream.readstream.md)): [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*number*\> \| *undefined*
+▸ **deserializePayload**(`readStream`: [*ReadStream*](../classes/utils/readstream.readstream.md)): [*ITransactionPayload*](../interfaces/models/itransactionpayload.itransactionpayload.md) \| [*IMilestonePayload*](../interfaces/models/imilestonepayload.imilestonepayload.md) \| [*IIndexationPayload*](../interfaces/models/iindexationpayload.iindexationpayload.md) \| [*ITreasuryTransactionPayload*](../interfaces/models/itreasurytransactionpayload.itreasurytransactionpayload.md) \| [*IReceiptPayload*](../interfaces/models/ireceiptpayload.ireceiptpayload.md) \| *undefined*
 
 Deserialize the payload from binary.
 
@@ -144,7 +144,7 @@ Name | Type | Description |
 ------ | ------ | ------ |
 `readStream` | [*ReadStream*](../classes/utils/readstream.readstream.md) | The stream to read the data from.   |
 
-**Returns:** [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*number*\> \| *undefined*
+**Returns:** [*ITransactionPayload*](../interfaces/models/itransactionpayload.itransactionpayload.md) \| [*IMilestonePayload*](../interfaces/models/imilestonepayload.imilestonepayload.md) \| [*IIndexationPayload*](../interfaces/models/iindexationpayload.iindexationpayload.md) \| [*ITreasuryTransactionPayload*](../interfaces/models/itreasurytransactionpayload.itreasurytransactionpayload.md) \| [*IReceiptPayload*](../interfaces/models/ireceiptpayload.ireceiptpayload.md) \| *undefined*
 
 The deserialized object.
 
@@ -240,7 +240,7 @@ ___
 
 ### serializePayload
 
-▸ **serializePayload**(`writeStream`: [*WriteStream*](../classes/utils/writestream.writestream.md), `object`: [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*number*\> \| *undefined*): *void*
+▸ **serializePayload**(`writeStream`: [*WriteStream*](../classes/utils/writestream.writestream.md), `object`: [*ITransactionPayload*](../interfaces/models/itransactionpayload.itransactionpayload.md) \| [*IMilestonePayload*](../interfaces/models/imilestonepayload.imilestonepayload.md) \| [*IIndexationPayload*](../interfaces/models/iindexationpayload.iindexationpayload.md) \| [*ITreasuryTransactionPayload*](../interfaces/models/itreasurytransactionpayload.itreasurytransactionpayload.md) \| [*IReceiptPayload*](../interfaces/models/ireceiptpayload.ireceiptpayload.md) \| *undefined*): *void*
 
 Serialize the payload essence to binary.
 
@@ -249,7 +249,7 @@ Serialize the payload essence to binary.
 Name | Type | Description |
 ------ | ------ | ------ |
 `writeStream` | [*WriteStream*](../classes/utils/writestream.writestream.md) | The stream to write the data to.   |
-`object` | [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*number*\> \| *undefined* | The object to serialize.    |
+`object` | [*ITransactionPayload*](../interfaces/models/itransactionpayload.itransactionpayload.md) \| [*IMilestonePayload*](../interfaces/models/imilestonepayload.imilestonepayload.md) \| [*IIndexationPayload*](../interfaces/models/iindexationpayload.iindexationpayload.md) \| [*ITreasuryTransactionPayload*](../interfaces/models/itreasurytransactionpayload.itreasurytransactionpayload.md) \| [*IReceiptPayload*](../interfaces/models/ireceiptpayload.ireceiptpayload.md) \| *undefined* | The object to serialize.    |
 
 **Returns:** *void*
 

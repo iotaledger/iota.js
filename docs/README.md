@@ -57,7 +57,6 @@
 - [highLevel/sendAdvanced](modules/highlevel_sendadvanced.md)
 - [highLevel/sendData](modules/highlevel_senddata.md)
 - [models/IAddress](modules/models_iaddress.md)
-- [models/IAmountOutput](modules/models_iamountoutput.md)
 - [models/IBip44GeneratorState](modules/models_ibip44generatorstate.md)
 - [models/IClient](modules/models_iclient.md)
 - [models/IEd25519Address](modules/models_ied25519address.md)

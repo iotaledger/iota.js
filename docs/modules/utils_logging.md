@@ -28,7 +28,7 @@
 
 ### logAddress
 
-▸ **logAddress**(`prefix`: *string*, `unknownAddress?`: [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*number*\>): *void*
+▸ **logAddress**(`prefix`: *string*, `unknownAddress?`: [*IEd25519Address*](../interfaces/models/ied25519address.ied25519address.md)): *void*
 
 Log an address to the console.
 
@@ -37,7 +37,7 @@ Log an address to the console.
 Name | Type | Description |
 ------ | ------ | ------ |
 `prefix` | *string* | The prefix for the output.   |
-`unknownAddress?` | [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*number*\> | The address to log.    |
+`unknownAddress?` | [*IEd25519Address*](../interfaces/models/ied25519address.ied25519address.md) | The address to log.    |
 
 **Returns:** *void*
 
@@ -96,7 +96,7 @@ ___
 
 ### logInput
 
-▸ **logInput**(`prefix`: *string*, `unknownInput?`: [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*number*\>): *void*
+▸ **logInput**(`prefix`: *string*, `unknownInput?`: [*IUTXOInput*](../interfaces/models/iutxoinput.iutxoinput.md) \| [*ITreasuryInput*](../interfaces/models/itreasuryinput.itreasuryinput.md)): *void*
 
 Log input to the console.
 
@@ -105,7 +105,7 @@ Log input to the console.
 Name | Type | Description |
 ------ | ------ | ------ |
 `prefix` | *string* | The prefix for the output.   |
-`unknownInput?` | [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*number*\> | The input to log.    |
+`unknownInput?` | [*IUTXOInput*](../interfaces/models/iutxoinput.iutxoinput.md) \| [*ITreasuryInput*](../interfaces/models/itreasuryinput.itreasuryinput.md) | The input to log.    |
 
 **Returns:** *void*
 
@@ -164,7 +164,7 @@ ___
 
 ### logOutput
 
-▸ **logOutput**(`prefix`: *string*, `unknownOutput?`: [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*number*\>): *void*
+▸ **logOutput**(`prefix`: *string*, `unknownOutput?`: [*ISigLockedSingleOutput*](../interfaces/models/isiglockedsingleoutput.isiglockedsingleoutput.md) \| [*ISigLockedDustAllowanceOutput*](../interfaces/models/isiglockeddustallowanceoutput.isiglockeddustallowanceoutput.md) \| [*ITreasuryOutput*](../interfaces/models/itreasuryoutput.itreasuryoutput.md)): *void*
 
 Log output to the console.
 
@@ -173,7 +173,7 @@ Log output to the console.
 Name | Type | Description |
 ------ | ------ | ------ |
 `prefix` | *string* | The prefix for the output.   |
-`unknownOutput?` | [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*number*\> | The output to log.    |
+`unknownOutput?` | [*ISigLockedSingleOutput*](../interfaces/models/isiglockedsingleoutput.isiglockedsingleoutput.md) \| [*ISigLockedDustAllowanceOutput*](../interfaces/models/isiglockeddustallowanceoutput.isiglockeddustallowanceoutput.md) \| [*ITreasuryOutput*](../interfaces/models/itreasuryoutput.itreasuryoutput.md) | The output to log.    |
 
 **Returns:** *void*
 
@@ -181,7 +181,7 @@ ___
 
 ### logPayload
 
-▸ **logPayload**(`prefix`: *string*, `unknownPayload?`: [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*number*\>): *void*
+▸ **logPayload**(`prefix`: *string*, `unknownPayload?`: [*ITransactionPayload*](../interfaces/models/itransactionpayload.itransactionpayload.md) \| [*IMilestonePayload*](../interfaces/models/imilestonepayload.imilestonepayload.md) \| [*IIndexationPayload*](../interfaces/models/iindexationpayload.iindexationpayload.md) \| [*ITreasuryTransactionPayload*](../interfaces/models/itreasurytransactionpayload.itreasurytransactionpayload.md) \| [*IReceiptPayload*](../interfaces/models/ireceiptpayload.ireceiptpayload.md)): *void*
 
 Log a message to the console.
 
@@ -190,7 +190,7 @@ Log a message to the console.
 Name | Type | Description |
 ------ | ------ | ------ |
 `prefix` | *string* | The prefix for the output.   |
-`unknownPayload?` | [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*number*\> | The payload.    |
+`unknownPayload?` | [*ITransactionPayload*](../interfaces/models/itransactionpayload.itransactionpayload.md) \| [*IMilestonePayload*](../interfaces/models/imilestonepayload.imilestonepayload.md) \| [*IIndexationPayload*](../interfaces/models/iindexationpayload.iindexationpayload.md) \| [*ITreasuryTransactionPayload*](../interfaces/models/itreasurytransactionpayload.itreasurytransactionpayload.md) \| [*IReceiptPayload*](../interfaces/models/ireceiptpayload.ireceiptpayload.md) | The payload.    |
 
 **Returns:** *void*
 
@@ -215,7 +215,7 @@ ___
 
 ### logSignature
 
-▸ **logSignature**(`prefix`: *string*, `unknownSignature?`: [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*number*\>): *void*
+▸ **logSignature**(`prefix`: *string*, `unknownSignature?`: [*IEd25519Signature*](../interfaces/models/ied25519signature.ied25519signature.md)): *void*
 
 Log signature to the console.
 
@@ -224,7 +224,7 @@ Log signature to the console.
 Name | Type | Description |
 ------ | ------ | ------ |
 `prefix` | *string* | The prefix for the output.   |
-`unknownSignature?` | [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*number*\> | The signature to log.    |
+`unknownSignature?` | [*IEd25519Signature*](../interfaces/models/ied25519signature.ied25519signature.md) | The signature to log.    |
 
 **Returns:** *void*
 
@@ -283,7 +283,7 @@ ___
 
 ### logUnlockBlock
 
-▸ **logUnlockBlock**(`prefix`: *string*, `unknownUnlockBlock?`: [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*number*\>): *void*
+▸ **logUnlockBlock**(`prefix`: *string*, `unknownUnlockBlock?`: [*ISignatureUnlockBlock*](../interfaces/models/isignatureunlockblock.isignatureunlockblock.md) \| [*IReferenceUnlockBlock*](../interfaces/models/ireferenceunlockblock.ireferenceunlockblock.md)): *void*
 
 Log unlock block to the console.
 
@@ -292,7 +292,7 @@ Log unlock block to the console.
 Name | Type | Description |
 ------ | ------ | ------ |
 `prefix` | *string* | The prefix for the output.   |
-`unknownUnlockBlock?` | [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*number*\> | The unlock block to log.    |
+`unknownUnlockBlock?` | [*ISignatureUnlockBlock*](../interfaces/models/isignatureunlockblock.isignatureunlockblock.md) \| [*IReferenceUnlockBlock*](../interfaces/models/ireferenceunlockblock.ireferenceunlockblock.md) | The unlock block to log.    |
 
 **Returns:** *void*
 

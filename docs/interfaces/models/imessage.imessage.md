@@ -47,6 +47,6 @@ ___
 
 ### payload
 
-• `Optional` **payload**: *undefined* \| [*ITypeBase*](itypebase.itypebase.md)<*number*\>
+• `Optional` **payload**: *undefined* \| [*ITransactionPayload*](itransactionpayload.itransactionpayload.md) \| [*IMilestonePayload*](imilestonepayload.imilestonepayload.md) \| [*IIndexationPayload*](iindexationpayload.iindexationpayload.md)
 
 The payload contents.
