@@ -25,7 +25,7 @@ Transaction payload.
 
 ### inputs
 
-• **inputs**: [*IUTXOInput*](iutxoinput.iutxoinput.md)[]
+• **inputs**: [*ITypeBase*](itypebase.itypebase.md)<*unknown*\>[]
 
 The inputs of the transaction.
 
@@ -33,7 +33,7 @@ ___
 
 ### outputs
 
-• **outputs**: ([*ISigLockedSingleOutput*](isiglockedsingleoutput.isiglockedsingleoutput.md) \| [*ISigLockedDustAllowanceOutput*](isiglockeddustallowanceoutput.isiglockeddustallowanceoutput.md))[]
+• **outputs**: [*ITypeBase*](itypebase.itypebase.md)<*unknown*\>[]
 
 The outputs of the transaction.
 

@@ -1,4 +1,5 @@
 import { IMigratedFunds } from "./IMigratedFunds";
+import { ITreasuryTransactionPayload } from "./ITreasuryTransactionPayload";
 import { ITypeBase } from "./ITypeBase";
 /**
  * The global type for the payload.
@@ -13,7 +14,15 @@ export interface IReceiptPayload extends ITypeBase<3> {
      */
     migratedAt: number;
     /**
+     * Whether this Receipt is the final one for a given migrated at index.
+     */
+    final: boolean;
+    /**
      * The index data.
      */
     funds: IMigratedFunds[];
+    /**
+     * The TreasuryTransaction used to fund the funds.
+     */
+    transaction: ITreasuryTransactionPayload;
 }

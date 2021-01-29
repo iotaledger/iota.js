@@ -16,11 +16,21 @@ Receipt payload.
 
 ### Properties
 
+- [final](ireceiptpayload.ireceiptpayload.md#final)
 - [funds](ireceiptpayload.ireceiptpayload.md#funds)
 - [migratedAt](ireceiptpayload.ireceiptpayload.md#migratedat)
+- [transaction](ireceiptpayload.ireceiptpayload.md#transaction)
 - [type](ireceiptpayload.ireceiptpayload.md#type)
 
 ## Properties
+
+### final
+
+• **final**: *boolean*
+
+Whether this Receipt is the final one for a given migrated at index.
+
+___
 
 ### funds
 
@@ -35,6 +45,14 @@ ___
 • **migratedAt**: *number*
 
 The milestone index at which the funds were migrated in the legacy network.
+
+___
+
+### transaction
+
+• **transaction**: [*ITreasuryTransactionPayload*](itreasurytransactionpayload.itreasurytransactionpayload.md)
+
+The TreasuryTransaction used to fund the funds.
 
 ___
 

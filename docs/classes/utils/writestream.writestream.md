@@ -24,6 +24,7 @@ Keep track of the write index within a stream.
 - [length](writestream.writestream.md#length)
 - [setWriteIndex](writestream.writestream.md#setwriteindex)
 - [unused](writestream.writestream.md#unused)
+- [writeBoolean](writestream.writestream.md#writeboolean)
 - [writeByte](writestream.writestream.md#writebyte)
 - [writeBytes](writestream.writestream.md#writebytes)
 - [writeFixedHex](writestream.writestream.md#writefixedhex)
@@ -117,6 +118,23 @@ How much unused data is there.
 **Returns:** *number*
 
 The amount of unused data.
+
+___
+
+### writeBoolean
+
+▸ **writeBoolean**(`name`: *string*, `val`: *boolean*): *void*
+
+Write a boolean to the stream.
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`name` | *string* | The name of the data we are trying to write.   |
+`val` | *boolean* | The data to write.    |
+
+**Returns:** *void*
 
 ___
 

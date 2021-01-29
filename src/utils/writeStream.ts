@@ -190,6 +190,17 @@ export class WriteStream {
     }
 
     /**
+     * Write a boolean to the stream.
+     * @param name The name of the data we are trying to write.
+     * @param val The data to write.
+     */
+    public writeBoolean(name: string, val: boolean): void {
+        this.expand(1);
+
+        this._storage[this._writeIndex++] = val ? 1 : 0;
+    }
+
+    /**
      * Expand the storage if there is not enough spave.
      * @param additional The amount of space needed.
      */

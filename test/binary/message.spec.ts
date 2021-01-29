@@ -3,8 +3,10 @@
 import { deserializeMessage, serializeMessage } from "../../src/binary/message";
 import { IIndexationPayload } from "../../src/models/IIndexationPayload";
 import { IMilestonePayload } from "../../src/models/IMilestonePayload";
+import { ISigLockedSingleOutput } from "../../src/models/ISigLockedSingleOutput";
 import { ISignatureUnlockBlock } from "../../src/models/ISignatureUnlockBlock";
 import { ITransactionPayload } from "../../src/models/ITransactionPayload";
+import { IUTXOInput } from "../../src/models/IUTXOInput";
 import { Converter } from "../../src/utils/converter";
 import { ReadStream } from "../../src/utils/readStream";
 import { WriteStream } from "../../src/utils/writeStream";
@@ -133,27 +135,34 @@ describe("Binary Message", () => {
         expect(payload.essence.type).toEqual(0);
         expect(payload.essence.inputs.length).toEqual(1);
         expect(payload.essence.inputs[0].type).toEqual(0);
-        expect(payload.essence.inputs[0].transactionId)
+        const utxoInput = payload.essence.inputs[0] as IUTXOInput;
+        expect(utxoInput.transactionId)
             .toEqual("2367ec318426c9f5d1115a6ac96f6c3cd2e53443713e0b63f0c266cbda744474");
-        expect(payload.essence.inputs[0].transactionOutputIndex).toEqual(1);
+        expect(utxoInput.transactionOutputIndex).toEqual(1);
+
+        const sigLockedOutput1 = payload.essence.outputs[0] as ISigLockedSingleOutput;
         expect(payload.essence.outputs.length).toEqual(2);
-        expect(payload.essence.outputs[0].type).toEqual(0);
-        expect(payload.essence.outputs[0].address.type).toEqual(1);
-        expect(payload.essence.outputs[0].address.address)
+        expect(sigLockedOutput1.type).toEqual(0);
+        expect(sigLockedOutput1.address.type).toEqual(1);
+        expect(sigLockedOutput1.address.address)
             .toEqual("3eb1ed78d420c8318972b8b0839420f502b25356270a48a430cb55a5e323f723");
-        expect(payload.essence.outputs[0].amount).toEqual(100);
-        expect(payload.essence.outputs[1].type).toEqual(0);
-        expect(payload.essence.outputs[1].address.type).toEqual(1);
-        expect(payload.essence.outputs[1].address.address)
+        expect(sigLockedOutput1.amount).toEqual(100);
+
+        const sigLockedOutput2 = payload.essence.outputs[1] as ISigLockedSingleOutput;
+        expect(sigLockedOutput2.type).toEqual(0);
+        expect(sigLockedOutput2.address.type).toEqual(1);
+        expect(sigLockedOutput2.address.address)
             .toEqual("625d17d4a4b21cd5edeb57544b9d2d66ce22985fb61f17d1d7cae958d0068618");
-        expect(payload.essence.outputs[1].amount).toEqual(2779530283277561);
+        expect(sigLockedOutput2.amount).toEqual(2779530283277561);
+
         expect(payload.unlockBlocks.length).toEqual(1);
-        expect(payload.unlockBlocks[0].type).toEqual(0);
-        const unlockBlock = payload.unlockBlocks[0] as ISignatureUnlockBlock;
-        expect(unlockBlock.signature.publicKey)
+
+        const sigUnlockBlock = payload.unlockBlocks[0] as ISignatureUnlockBlock;
+        expect(sigUnlockBlock.type).toEqual(0);
+        expect(sigUnlockBlock.signature.publicKey)
             .toEqual("14fe414a9eccf9589b38c7c89a2fa5921b4b170ebefc04b6a812b3d02068cfd7");
         // eslint-disable-next-line max-len
-        expect(unlockBlock.signature.signature).toEqual("3163a90017ed5fe9530f52fb0d30836a453a37204f4d59e03012d82e0a946f31c930ac54f4a35aef9578b9dec9c12887404be353c5f7ebd88bcbefcc78e29c05");
+        expect(sigUnlockBlock.signature.signature).toEqual("3163a90017ed5fe9530f52fb0d30836a453a37204f4d59e03012d82e0a946f31c930ac54f4a35aef9578b9dec9c12887404be353c5f7ebd88bcbefcc78e29c05");
         expect(message.nonce).toEqual("0");
     });
 });

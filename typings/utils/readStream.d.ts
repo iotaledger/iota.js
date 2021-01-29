@@ -85,4 +85,11 @@ export declare class ReadStream {
      * @returns The string.
      */
     readString(name: string, moveIndex?: boolean): string;
+    /**
+     * Read a boolean from the stream.
+     * @param name The name of the data we are trying to read.
+     * @param moveIndex Move the index pointer on.
+     * @returns The value.
+     */
+    readBoolean(name: string, moveIndex?: boolean): boolean;
 }

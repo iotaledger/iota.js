@@ -11,6 +11,7 @@
 - [MIN\_OUTPUT\_LENGTH](binary_output.md#min_output_length)
 - [MIN\_SIG\_LOCKED\_DUST\_ALLOWANCE\_OUTPUT\_LENGTH](binary_output.md#min_sig_locked_dust_allowance_output_length)
 - [MIN\_SIG\_LOCKED\_SINGLE\_OUTPUT\_LENGTH](binary_output.md#min_sig_locked_single_output_length)
+- [MIN\_TREASURY\_OUTPUT\_LENGTH](binary_output.md#min_treasury_output_length)
 
 ### Functions
 
@@ -18,10 +19,12 @@
 - [deserializeOutputs](binary_output.md#deserializeoutputs)
 - [deserializeSigLockedDustAllowanceOutput](binary_output.md#deserializesiglockeddustallowanceoutput)
 - [deserializeSigLockedSingleOutput](binary_output.md#deserializesiglockedsingleoutput)
+- [deserializeTreasuryOutput](binary_output.md#deserializetreasuryoutput)
 - [serializeOutput](binary_output.md#serializeoutput)
 - [serializeOutputs](binary_output.md#serializeoutputs)
 - [serializeSigLockedDustAllowanceOutput](binary_output.md#serializesiglockeddustallowanceoutput)
 - [serializeSigLockedSingleOutput](binary_output.md#serializesiglockedsingleoutput)
+- [serializeTreasuryOutput](binary_output.md#serializetreasuryoutput)
 
 ## Variables
 
@@ -63,11 +66,19 @@ ___
 
 The minimum length of a sig locked single output binary representation.
 
+___
+
+### MIN\_TREASURY\_OUTPUT\_LENGTH
+
+• `Const` **MIN\_TREASURY\_OUTPUT\_LENGTH**: *number*
+
+The minimum length of a treasury output binary representation.
+
 ## Functions
 
 ### deserializeOutput
 
-▸ **deserializeOutput**(`readStream`: [*ReadStream*](../classes/utils/readstream.readstream.md)): [*ISigLockedSingleOutput*](../interfaces/models/isiglockedsingleoutput.isiglockedsingleoutput.md) \| [*ISigLockedDustAllowanceOutput*](../interfaces/models/isiglockeddustallowanceoutput.isiglockeddustallowanceoutput.md)
+▸ **deserializeOutput**(`readStream`: [*ReadStream*](../classes/utils/readstream.readstream.md)): [*ISigLockedSingleOutput*](../interfaces/models/isiglockedsingleoutput.isiglockedsingleoutput.md) \| [*ISigLockedDustAllowanceOutput*](../interfaces/models/isiglockeddustallowanceoutput.isiglockeddustallowanceoutput.md) \| [*ITreasuryOutput*](../interfaces/models/itreasuryoutput.itreasuryoutput.md)
 
 Deserialize the output from binary.
 
@@ -77,7 +88,7 @@ Name | Type | Description |
 ------ | ------ | ------ |
 `readStream` | [*ReadStream*](../classes/utils/readstream.readstream.md) | The stream to read the data from.   |
 
-**Returns:** [*ISigLockedSingleOutput*](../interfaces/models/isiglockedsingleoutput.isiglockedsingleoutput.md) \| [*ISigLockedDustAllowanceOutput*](../interfaces/models/isiglockeddustallowanceoutput.isiglockeddustallowanceoutput.md)
+**Returns:** [*ISigLockedSingleOutput*](../interfaces/models/isiglockedsingleoutput.isiglockedsingleoutput.md) \| [*ISigLockedDustAllowanceOutput*](../interfaces/models/isiglockeddustallowanceoutput.isiglockeddustallowanceoutput.md) \| [*ITreasuryOutput*](../interfaces/models/itreasuryoutput.itreasuryoutput.md)
 
 The deserialized object.
 
@@ -85,7 +96,7 @@ ___
 
 ### deserializeOutputs
 
-▸ **deserializeOutputs**(`readStream`: [*ReadStream*](../classes/utils/readstream.readstream.md)): ([*ISigLockedSingleOutput*](../interfaces/models/isiglockedsingleoutput.isiglockedsingleoutput.md) \| [*ISigLockedDustAllowanceOutput*](../interfaces/models/isiglockeddustallowanceoutput.isiglockeddustallowanceoutput.md))[]
+▸ **deserializeOutputs**(`readStream`: [*ReadStream*](../classes/utils/readstream.readstream.md)): ([*ISigLockedSingleOutput*](../interfaces/models/isiglockedsingleoutput.isiglockedsingleoutput.md) \| [*ISigLockedDustAllowanceOutput*](../interfaces/models/isiglockeddustallowanceoutput.isiglockeddustallowanceoutput.md) \| [*ITreasuryOutput*](../interfaces/models/itreasuryoutput.itreasuryoutput.md))[]
 
 Deserialize the outputs from binary.
 
@@ -95,7 +106,7 @@ Name | Type | Description |
 ------ | ------ | ------ |
 `readStream` | [*ReadStream*](../classes/utils/readstream.readstream.md) | The stream to read the data from.   |
 
-**Returns:** ([*ISigLockedSingleOutput*](../interfaces/models/isiglockedsingleoutput.isiglockedsingleoutput.md) \| [*ISigLockedDustAllowanceOutput*](../interfaces/models/isiglockeddustallowanceoutput.isiglockeddustallowanceoutput.md))[]
+**Returns:** ([*ISigLockedSingleOutput*](../interfaces/models/isiglockedsingleoutput.isiglockedsingleoutput.md) \| [*ISigLockedDustAllowanceOutput*](../interfaces/models/isiglockeddustallowanceoutput.isiglockeddustallowanceoutput.md) \| [*ITreasuryOutput*](../interfaces/models/itreasuryoutput.itreasuryoutput.md))[]
 
 The deserialized object.
 
@@ -137,9 +148,27 @@ The deserialized object.
 
 ___
 
+### deserializeTreasuryOutput
+
+▸ **deserializeTreasuryOutput**(`readStream`: [*ReadStream*](../classes/utils/readstream.readstream.md)): [*ITreasuryOutput*](../interfaces/models/itreasuryoutput.itreasuryoutput.md)
+
+Deserialize the treasury output from binary.
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`readStream` | [*ReadStream*](../classes/utils/readstream.readstream.md) | The stream to read the data from.   |
+
+**Returns:** [*ITreasuryOutput*](../interfaces/models/itreasuryoutput.itreasuryoutput.md)
+
+The deserialized object.
+
+___
+
 ### serializeOutput
 
-▸ **serializeOutput**(`writeStream`: [*WriteStream*](../classes/utils/writestream.writestream.md), `object`: [*ISigLockedSingleOutput*](../interfaces/models/isiglockedsingleoutput.isiglockedsingleoutput.md) \| [*ISigLockedDustAllowanceOutput*](../interfaces/models/isiglockeddustallowanceoutput.isiglockeddustallowanceoutput.md)): *void*
+▸ **serializeOutput**(`writeStream`: [*WriteStream*](../classes/utils/writestream.writestream.md), `object`: [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*unknown*\>): *void*
 
 Serialize the output to binary.
 
@@ -148,7 +177,7 @@ Serialize the output to binary.
 Name | Type | Description |
 ------ | ------ | ------ |
 `writeStream` | [*WriteStream*](../classes/utils/writestream.writestream.md) | The stream to write the data to.   |
-`object` | [*ISigLockedSingleOutput*](../interfaces/models/isiglockedsingleoutput.isiglockedsingleoutput.md) \| [*ISigLockedDustAllowanceOutput*](../interfaces/models/isiglockeddustallowanceoutput.isiglockeddustallowanceoutput.md) | The object to serialize.    |
+`object` | [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*unknown*\> | The object to serialize.    |
 
 **Returns:** *void*
 
@@ -156,7 +185,7 @@ ___
 
 ### serializeOutputs
 
-▸ **serializeOutputs**(`writeStream`: [*WriteStream*](../classes/utils/writestream.writestream.md), `objects`: ([*ISigLockedSingleOutput*](../interfaces/models/isiglockedsingleoutput.isiglockedsingleoutput.md) \| [*ISigLockedDustAllowanceOutput*](../interfaces/models/isiglockeddustallowanceoutput.isiglockeddustallowanceoutput.md))[]): *void*
+▸ **serializeOutputs**(`writeStream`: [*WriteStream*](../classes/utils/writestream.writestream.md), `objects`: [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*unknown*\>[]): *void*
 
 Serialize the outputs to binary.
 
@@ -165,7 +194,7 @@ Serialize the outputs to binary.
 Name | Type | Description |
 ------ | ------ | ------ |
 `writeStream` | [*WriteStream*](../classes/utils/writestream.writestream.md) | The stream to write the data to.   |
-`objects` | ([*ISigLockedSingleOutput*](../interfaces/models/isiglockedsingleoutput.isiglockedsingleoutput.md) \| [*ISigLockedDustAllowanceOutput*](../interfaces/models/isiglockeddustallowanceoutput.isiglockeddustallowanceoutput.md))[] | The objects to serialize.    |
+`objects` | [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*unknown*\>[] | The objects to serialize.    |
 
 **Returns:** *void*
 
@@ -200,5 +229,22 @@ Name | Type | Description |
 ------ | ------ | ------ |
 `writeStream` | [*WriteStream*](../classes/utils/writestream.writestream.md) | The stream to write the data to.   |
 `object` | [*ISigLockedSingleOutput*](../interfaces/models/isiglockedsingleoutput.isiglockedsingleoutput.md) | The object to serialize.    |
+
+**Returns:** *void*
+
+___
+
+### serializeTreasuryOutput
+
+▸ **serializeTreasuryOutput**(`writeStream`: [*WriteStream*](../classes/utils/writestream.writestream.md), `object`: [*ITreasuryOutput*](../interfaces/models/itreasuryoutput.itreasuryoutput.md)): *void*
+
+Serialize the treasury output to binary.
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`writeStream` | [*WriteStream*](../classes/utils/writestream.writestream.md) | The stream to write the data to.   |
+`object` | [*ITreasuryOutput*](../interfaces/models/itreasuryoutput.itreasuryoutput.md) | The object to serialize.    |
 
 **Returns:** *void*

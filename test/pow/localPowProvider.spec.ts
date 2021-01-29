@@ -1,7 +1,7 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 import { serializeMessage } from "../../src/binary/message";
-import { INDEXATION_PAYLOAD_TYPE } from "../../src/models/IIndexationPayload";
+import { IIndexationPayload, INDEXATION_PAYLOAD_TYPE } from "../../src/models/IIndexationPayload";
 import { IMessage } from "../../src/models/IMessage";
 import { LocalPowProvider } from "../../src/pow/localPowProvider";
 import { Converter } from "../../src/utils/converter";
@@ -13,15 +13,18 @@ describe("LocalPowProvider", () => {
     test("Calculate from an empty message", async () => {
         const pow = new LocalPowProvider();
 
+        const indexationPayload: IIndexationPayload = {
+            type: INDEXATION_PAYLOAD_TYPE,
+            index: "hello world",
+            data: Converter.bytesToHex(Uint8Array.from([1, 2, 3, 4]))
+        };
+
         const message: IMessage = {
             parent1MessageId: Converter.bytesToHex(RandomHelper.generate(32)),
             parent2MessageId: Converter.bytesToHex(RandomHelper.generate(32)),
-            payload: {
-                type: INDEXATION_PAYLOAD_TYPE,
-                index: "hello world",
-                data: Converter.bytesToHex(Uint8Array.from([1, 2, 3, 4]))
-            }
+            payload: indexationPayload
         };
+
         const writeStream = new WriteStream();
         serializeMessage(writeStream, message);
         const messageBytes = writeStream.finalBytes();

@@ -2,6 +2,8 @@ import { IIndexationPayload } from "../models/IIndexationPayload";
 import { IMilestonePayload } from "../models/IMilestonePayload";
 import { IReceiptPayload } from "../models/IReceiptPayload";
 import { ITransactionPayload } from "../models/ITransactionPayload";
+import { ITreasuryTransactionPayload } from "../models/ITreasuryTransactionPayload";
+import { ITypeBase } from "../models/ITypeBase";
 import { ReadStream } from "../utils/readStream";
 import { WriteStream } from "../utils/writeStream";
 /**
@@ -25,6 +27,10 @@ export declare const MIN_TRANSACTION_PAYLOAD_LENGTH: number;
  */
 export declare const MIN_RECEIPT_PAYLOAD_LENGTH: number;
 /**
+ * The minimum length of a treasure transaction payload binary representation.
+ */
+export declare const MIN_TREASURY_TRANSACTION_PAYLOAD_LENGTH: number;
+/**
  * The minimum length of a indexation key.
  */
 export declare const MIN_INDEXATION_KEY_LENGTH: number;
@@ -37,13 +43,13 @@ export declare const MAX_INDEXATION_KEY_LENGTH: number;
  * @param readStream The stream to read the data from.
  * @returns The deserialized object.
  */
-export declare function deserializePayload(readStream: ReadStream): IIndexationPayload | IMilestonePayload | ITransactionPayload | IReceiptPayload | undefined;
+export declare function deserializePayload(readStream: ReadStream): ITypeBase<unknown> | undefined;
 /**
  * Serialize the payload essence to binary.
  * @param writeStream The stream to write the data to.
  * @param object The object to serialize.
  */
-export declare function serializePayload(writeStream: WriteStream, object: IIndexationPayload | IMilestonePayload | ITransactionPayload | IReceiptPayload | undefined): void;
+export declare function serializePayload(writeStream: WriteStream, object: ITypeBase<unknown> | undefined): void;
 /**
  * Deserialize the transaction payload from binary.
  * @param readStream The stream to read the data from.
@@ -51,7 +57,7 @@ export declare function serializePayload(writeStream: WriteStream, object: IInde
  */
 export declare function deserializeTransactionPayload(readStream: ReadStream): ITransactionPayload;
 /**
- * Serialize the transaction payload essence to binary.
+ * Serialize the transaction payload to binary.
  * @param writeStream The stream to write the data to.
  * @param object The object to serialize.
  */
@@ -63,7 +69,7 @@ export declare function serializeTransactionPayload(writeStream: WriteStream, ob
  */
 export declare function deserializeMilestonePayload(readStream: ReadStream): IMilestonePayload;
 /**
- * Serialize the milestone payload essence to binary.
+ * Serialize the milestone payload to binary.
  * @param writeStream The stream to write the data to.
  * @param object The object to serialize.
  */
@@ -75,7 +81,7 @@ export declare function serializeMilestonePayload(writeStream: WriteStream, obje
  */
 export declare function deserializeIndexationPayload(readStream: ReadStream): IIndexationPayload;
 /**
- * Serialize the indexation payload essence to binary.
+ * Serialize the indexation payload to binary.
  * @param writeStream The stream to write the data to.
  * @param object The object to serialize.
  */
@@ -87,8 +93,20 @@ export declare function serializeIndexationPayload(writeStream: WriteStream, obj
  */
 export declare function deserializeReceiptPayload(readStream: ReadStream): IReceiptPayload;
 /**
- * Serialize the indexation payload essence to binary.
+ * Serialize the receipt payload to binary.
  * @param writeStream The stream to write the data to.
  * @param object The object to serialize.
  */
 export declare function serializeReceiptPayload(writeStream: WriteStream, object: IReceiptPayload): void;
+/**
+ * Deserialize the treasury transaction payload from binary.
+ * @param readStream The stream to read the data from.
+ * @returns The deserialized object.
+ */
+export declare function deserializeTreasuryTransactionPayload(readStream: ReadStream): ITreasuryTransactionPayload;
+/**
+ * Serialize the treasury transaction payload to binary.
+ * @param writeStream The stream to write the data to.
+ * @param object The object to serialize.
+ */
+export declare function serializeTreasuryTransactionPayload(writeStream: WriteStream, object: ITreasuryTransactionPayload): void;

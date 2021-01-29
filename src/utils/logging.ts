@@ -6,14 +6,19 @@ import { ED25519_SIGNATURE_TYPE, IEd25519Signature } from "../models/IEd25519Sig
 import { IIndexationPayload, INDEXATION_PAYLOAD_TYPE } from "../models/IIndexationPayload";
 import { IMessage } from "../models/IMessage";
 import { IMessageMetadata } from "../models/IMessageMetadata";
+import { IMigratedFunds } from "../models/IMigratedFunds";
 import { IMilestonePayload, MILESTONE_PAYLOAD_TYPE } from "../models/IMilestonePayload";
 import { INodeInfo } from "../models/INodeInfo";
+import { IReceiptPayload, RECEIPT_PAYLOAD_TYPE } from "../models/IReceiptPayload";
 import { IReferenceUnlockBlock, REFERENCE_UNLOCK_BLOCK_TYPE } from "../models/IReferenceUnlockBlock";
 import { ISigLockedDustAllowanceOutput, SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE } from "../models/ISigLockedDustAllowanceOutput";
 import { ISigLockedSingleOutput, SIG_LOCKED_SINGLE_OUTPUT_TYPE } from "../models/ISigLockedSingleOutput";
 import { ISignatureUnlockBlock, SIGNATURE_UNLOCK_BLOCK_TYPE } from "../models/ISignatureUnlockBlock";
 import { TRANSACTION_ESSENCE_TYPE } from "../models/ITransactionEssence";
 import { ITransactionPayload, TRANSACTION_PAYLOAD_TYPE } from "../models/ITransactionPayload";
+import { ITreasuryInput, TREASURY_INPUT_TYPE } from "../models/ITreasuryInput";
+import { ITreasuryOutput, TREASURY_OUTPUT_TYPE } from "../models/ITreasuryOutput";
+import { ITreasuryTransactionPayload, TREASURY_TRANSACTION_PAYLOAD_TYPE } from "../models/ITreasuryTransactionPayload";
 import { ITypeBase } from "../models/ITypeBase";
 import { IUTXOInput, UTXO_INPUT_TYPE } from "../models/IUTXOInput";
 import { Converter } from "./converter";
@@ -116,45 +121,110 @@ export function logMessageMetadata(prefix: string, messageMetadata: IMessageMeta
 export function logPayload(prefix: string, unknownPayload?: ITypeBase<unknown>): void {
     if (unknownPayload) {
         if (unknownPayload.type === TRANSACTION_PAYLOAD_TYPE) {
-            const payload = unknownPayload as ITransactionPayload;
-            logger(`${prefix}Transaction Payload`);
-            if (payload.essence.type === TRANSACTION_ESSENCE_TYPE) {
-                if (payload.essence.inputs) {
-                    logger(`${prefix}\tInputs:`, payload.essence.inputs.length);
-                    for (const input of payload.essence.inputs) {
-                        logInput(`${prefix}\t\t`, input);
-                    }
-                }
-                if (payload.essence.outputs) {
-                    logger(`${prefix}\tOutputs:`, payload.essence.outputs.length);
-                    for (const output of payload.essence.outputs) {
-                        logOutput(`${prefix}\t\t`, output);
-                    }
-                }
-                logPayload(`${prefix}\t`, payload.essence.payload);
-            }
-            if (payload.unlockBlocks) {
-                logger(`${prefix}\tUnlock Blocks:`, payload.unlockBlocks.length);
-                for (const unlockBlock of payload.unlockBlocks) {
-                    logUnlockBlock(`${prefix}\t\t`, unlockBlock);
-                }
-            }
+            logTransactionPayload(prefix, unknownPayload as ITransactionPayload);
         } else if (unknownPayload.type === MILESTONE_PAYLOAD_TYPE) {
-            const payload = unknownPayload as IMilestonePayload;
-            logger(`${prefix}Milestone Payload`);
-            logger(`${prefix}\tIndex:`, payload.index);
-            logger(`${prefix}\tTimestamp:`, payload.timestamp);
-            logger(`${prefix}\tParent 1:`, payload.parent1MessageId);
-            logger(`${prefix}\tParent 2:`, payload.parent2MessageId);
-            logger(`${prefix}\tInclusion Merkle Proof:`, payload.inclusionMerkleProof);
-            logger(`${prefix}\tPublic Keys:`, payload.publicKeys);
-            logger(`${prefix}\tSignatures:`, payload.signatures);
+            logMilestonePayload(prefix, unknownPayload as IMilestonePayload);
         } else if (unknownPayload.type === INDEXATION_PAYLOAD_TYPE) {
-            const payload = unknownPayload as IIndexationPayload;
-            logger(`${prefix}Indexation Payload`);
-            logger(`${prefix}\tIndex:`, payload.index);
-            logger(`${prefix}\tData:`, payload.data ? Converter.hexToUtf8(payload.data) : "None");
+            logIndexationPayload(prefix, unknownPayload as IIndexationPayload);
+        } else if (unknownPayload.type === RECEIPT_PAYLOAD_TYPE) {
+            logReceiptPayload(prefix, unknownPayload as IReceiptPayload);
+        } else if (unknownPayload.type === TREASURY_TRANSACTION_PAYLOAD_TYPE) {
+            logTreasuryTransactionPayload(prefix, unknownPayload as ITreasuryTransactionPayload);
         }
+    }
+}
+
+/**
+ * Log a transaction payload to the console.
+ * @param prefix The prefix for the output.
+ * @param payload The payload.
+ */
+export function logTransactionPayload(prefix: string, payload?: ITransactionPayload): void {
+    if (payload) {
+        logger(`${prefix}Transaction Payload`);
+        if (payload.essence.type === TRANSACTION_ESSENCE_TYPE) {
+            if (payload.essence.inputs) {
+                logger(`${prefix}\tInputs:`, payload.essence.inputs.length);
+                for (const input of payload.essence.inputs) {
+                    logInput(`${prefix}\t\t`, input);
+                }
+            }
+            if (payload.essence.outputs) {
+                logger(`${prefix}\tOutputs:`, payload.essence.outputs.length);
+                for (const output of payload.essence.outputs) {
+                    logOutput(`${prefix}\t\t`, output);
+                }
+            }
+            logPayload(`${prefix}\t`, payload.essence.payload);
+        }
+        if (payload.unlockBlocks) {
+            logger(`${prefix}\tUnlock Blocks:`, payload.unlockBlocks.length);
+            for (const unlockBlock of payload.unlockBlocks) {
+                logUnlockBlock(`${prefix}\t\t`, unlockBlock);
+            }
+        }
+    }
+}
+
+/**
+ * Log a indexation payload to the console.
+ * @param prefix The prefix for the output.
+ * @param payload The payload.
+ */
+export function logIndexationPayload(prefix: string, payload?: IIndexationPayload): void {
+    if (payload) {
+        logger(`${prefix}Indexation Payload`);
+        logger(`${prefix}\tIndex:`, payload.index);
+        logger(`${prefix}\tData:`, payload.data ? Converter.hexToUtf8(payload.data) : "None");
+    }
+}
+
+/**
+ * Log a milestone payload to the console.
+ * @param prefix The prefix for the output.
+ * @param payload The payload.
+ */
+export function logMilestonePayload(prefix: string, payload?: IMilestonePayload): void {
+    if (payload) {
+        logger(`${prefix}Milestone Payload`);
+        logger(`${prefix}\tIndex:`, payload.index);
+        logger(`${prefix}\tTimestamp:`, payload.timestamp);
+        logger(`${prefix}\tParent 1:`, payload.parent1MessageId);
+        logger(`${prefix}\tParent 2:`, payload.parent2MessageId);
+        logger(`${prefix}\tInclusion Merkle Proof:`, payload.inclusionMerkleProof);
+        logger(`${prefix}\tPublic Keys:`, payload.publicKeys);
+        logger(`${prefix}\tSignatures:`, payload.signatures);
+    }
+}
+
+/**
+ * Log a receipt payload to the console.
+ * @param prefix The prefix for the output.
+ * @param payload The payload.
+ */
+export function logReceiptPayload(prefix: string, payload?: IReceiptPayload): void {
+    if (payload) {
+        logger(`${prefix}Receipt Payload`);
+        logger(`${prefix}\tMigrated At:`, payload.migratedAt);
+        logger(`${prefix}\tFinal:`, payload.final);
+        logger(`${prefix}\tFunds:`, payload.funds.length);
+        for (const funds of payload.funds) {
+            logFunds(`${prefix}\t\t`, funds);
+        }
+        logTreasuryTransactionPayload(`${prefix}\t\t`, payload.transaction);
+    }
+}
+
+/**
+ * Log a treasury transaction payload to the console.
+ * @param prefix The prefix for the output.
+ * @param payload The payload.
+ */
+export function logTreasuryTransactionPayload(prefix: string, payload?: ITreasuryTransactionPayload): void {
+    if (payload) {
+        logger(`${prefix}Treasury Transaction Payload`);
+        logInput(prefix, payload.input);
+        logOutput(prefix, payload.output);
     }
 }
 
@@ -191,11 +261,17 @@ export function logSignature(prefix: string, unknownSignature?: ITypeBase<unknow
  * @param unknownInput The input to log.
  */
 export function logInput(prefix: string, unknownInput?: ITypeBase<unknown>): void {
-    if (unknownInput?.type === UTXO_INPUT_TYPE) {
-        const input = unknownInput as IUTXOInput;
-        logger(`${prefix}UTXO Input`);
-        logger(`${prefix}\tTransaction Id:`, input.transactionId);
-        logger(`${prefix}\tTransaction Output Index:`, input.transactionOutputIndex);
+    if (unknownInput) {
+        if (unknownInput.type === UTXO_INPUT_TYPE) {
+            const input = unknownInput as IUTXOInput;
+            logger(`${prefix}UTXO Input`);
+            logger(`${prefix}\tTransaction Id:`, input.transactionId);
+            logger(`${prefix}\tTransaction Output Index:`, input.transactionOutputIndex);
+        } else if (unknownInput.type === TREASURY_INPUT_TYPE) {
+            const input = unknownInput as ITreasuryInput;
+            logger(`${prefix}Treasury Input`);
+            logger(`${prefix}\tMilestone Hash:`, input.milestoneHash);
+        }
     }
 }
 
@@ -216,6 +292,10 @@ export function logOutput(prefix: string, unknownOutput?: ITypeBase<unknown>): v
             logger(`${prefix}Signature Locked Dust Allowance Output`);
             logAddress(`${prefix}\t\t`, output.address);
             logger(`${prefix}\t\tAmount:`, output.amount);
+        } else if (unknownOutput.type === TREASURY_OUTPUT_TYPE) {
+            const output = unknownOutput as ITreasuryOutput;
+            logger(`${prefix}Treasury Output`);
+            logger(`${prefix}\t\tAmount:`, output.amount);
         }
     }
 }
@@ -230,11 +310,25 @@ export function logUnlockBlock(prefix: string, unknownUnlockBlock?: ITypeBase<un
         if (unknownUnlockBlock.type === SIGNATURE_UNLOCK_BLOCK_TYPE) {
             const unlockBlock = unknownUnlockBlock as ISignatureUnlockBlock;
             logger(`${prefix}\tSignature Unlock Block`);
-            logSignature(`${prefix}\t\t\t`, unlockBlock.signature);
+            logSignature(`${prefix}\t\t`, unlockBlock.signature);
         } else if (unknownUnlockBlock.type === REFERENCE_UNLOCK_BLOCK_TYPE) {
             const unlockBlock = unknownUnlockBlock as IReferenceUnlockBlock;
             logger(`${prefix}\tReference Unlock Block`);
             logger(`${prefix}\t\tReference:`, unlockBlock.reference);
         }
+    }
+}
+
+/**
+ * Log fund to the console.
+ * @param prefix The prefix for the output.
+ * @param fund The fund to log.
+ */
+export function logFunds(prefix: string, fund?: IMigratedFunds): void {
+    if (fund) {
+        logger(`${prefix}\tFund`);
+        logger(`${prefix}\t\tTail Transaction Hash:`, fund.tailTransactionHash);
+        logAddress(`${prefix}\t\t`, fund.address);
+        logger(`${prefix}\t\tDeposit:`, fund.deposit);
     }
 }

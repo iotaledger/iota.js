@@ -1,5 +1,3 @@
-import { IReferenceUnlockBlock } from "./IReferenceUnlockBlock";
-import { ISignatureUnlockBlock } from "./ISignatureUnlockBlock";
 import { ITransactionEssence } from "./ITransactionEssence";
 import { ITypeBase } from "./ITypeBase";
 /**
@@ -17,5 +15,5 @@ export interface ITransactionPayload extends ITypeBase<0> {
     /**
      * The unlock blocks.
      */
-    unlockBlocks: (IReferenceUnlockBlock | ISignatureUnlockBlock)[];
+    unlockBlocks: ITypeBase<unknown>[];
 }

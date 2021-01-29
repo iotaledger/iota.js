@@ -216,4 +216,22 @@ export class ReadStream {
         }
         return val;
     }
+
+    /**
+     * Read a boolean from the stream.
+     * @param name The name of the data we are trying to read.
+     * @param moveIndex Move the index pointer on.
+     * @returns The value.
+     */
+    public readBoolean(name: string, moveIndex: boolean = true): boolean {
+        if (!this.hasRemaining(1)) {
+            throw new Error(`${name} length ${1
+                } exceeds the remaining data ${this.unused()}`);
+        }
+        const val = this._storage[this._readIndex];
+        if (moveIndex) {
+            this._readIndex += 1;
+        }
+        return val !== 0;
+    }
 }

@@ -657,6 +657,16 @@
 
 	});
 
+	var ITreasuryInput = createCommonjsModule(function (module, exports) {
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.TREASURY_INPUT_TYPE = void 0;
+	/**
+	 * The global type for the treasury input.
+	 */
+	exports.TREASURY_INPUT_TYPE = 1;
+
+	});
+
 	var IUTXOInput = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.UTXO_INPUT_TYPE = void 0;
@@ -669,7 +679,10 @@
 
 	var input = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.serializeUTXOInput = exports.deserializeUTXOInput = exports.serializeInput = exports.deserializeInput = exports.serializeInputs = exports.deserializeInputs = exports.MAX_INPUT_COUNT = exports.MIN_INPUT_COUNT = exports.MIN_UTXO_INPUT_LENGTH = exports.MIN_INPUT_LENGTH = void 0;
+	exports.serializeTreasuryInput = exports.deserializeTreasuryInput = exports.serializeUTXOInput = exports.deserializeUTXOInput = exports.serializeInput = exports.deserializeInput = exports.serializeInputs = exports.deserializeInputs = exports.MAX_INPUT_COUNT = exports.MIN_INPUT_COUNT = exports.MIN_TREASURY_INPUT_LENGTH = exports.MIN_UTXO_INPUT_LENGTH = exports.MIN_INPUT_LENGTH = void 0;
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
+
 
 
 	/**
@@ -680,6 +693,10 @@
 	 * The minimum length of a utxo input binary representation.
 	 */
 	exports.MIN_UTXO_INPUT_LENGTH = exports.MIN_INPUT_LENGTH + common.TRANSACTION_ID_LENGTH + common.UINT16_SIZE;
+	/**
+	 * The minimum length of a treasury input binary representation.
+	 */
+	exports.MIN_TREASURY_INPUT_LENGTH = exports.MIN_INPUT_LENGTH + common.TRANSACTION_ID_LENGTH;
 	/**
 	 * The minimum number of inputs.
 	 */
@@ -734,6 +751,9 @@
 	    if (type === IUTXOInput.UTXO_INPUT_TYPE) {
 	        input = deserializeUTXOInput(readStream);
 	    }
+	    else if (type === ITreasuryInput.TREASURY_INPUT_TYPE) {
+	        input = deserializeTreasuryInput(readStream);
+	    }
 	    else {
 	        throw new Error("Unrecognized input type " + type);
 	    }
@@ -748,6 +768,9 @@
 	function serializeInput(writeStream, object) {
 	    if (object.type === IUTXOInput.UTXO_INPUT_TYPE) {
 	        serializeUTXOInput(writeStream, object);
+	    }
+	    else if (object.type === ITreasuryInput.TREASURY_INPUT_TYPE) {
+	        serializeTreasuryInput(writeStream, object);
 	    }
 	    else {
 	        throw new Error("Unrecognized input type " + object.type);
@@ -787,6 +810,36 @@
 	    writeStream.writeUInt16("utxoInput.transactionOutputIndex", object.transactionOutputIndex);
 	}
 	exports.serializeUTXOInput = serializeUTXOInput;
+	/**
+	 * Deserialize the treasury input from binary.
+	 * @param readStream The stream to read the data from.
+	 * @returns The deserialized object.
+	 */
+	function deserializeTreasuryInput(readStream) {
+	    if (!readStream.hasRemaining(exports.MIN_TREASURY_INPUT_LENGTH)) {
+	        throw new Error("Treasury Input data is " + readStream.length() + " in length which is less than the minimimum size required of " + exports.MIN_TREASURY_INPUT_LENGTH);
+	    }
+	    var type = readStream.readByte("treasuryInput.type");
+	    if (type !== ITreasuryInput.TREASURY_INPUT_TYPE) {
+	        throw new Error("Type mismatch in treasuryInput " + type);
+	    }
+	    var milestoneHash = readStream.readFixedHex("treasuryInput.milestoneHash", common.TRANSACTION_ID_LENGTH);
+	    return {
+	        type: ITreasuryInput.TREASURY_INPUT_TYPE,
+	        milestoneHash: milestoneHash
+	    };
+	}
+	exports.deserializeTreasuryInput = deserializeTreasuryInput;
+	/**
+	 * Serialize the treasury input to binary.
+	 * @param writeStream The stream to write the data to.
+	 * @param object The object to serialize.
+	 */
+	function serializeTreasuryInput(writeStream, object) {
+	    writeStream.writeByte("treasuryInput.type", object.type);
+	    writeStream.writeFixedHex("treasuryInput.milestoneHash", common.TRANSACTION_ID_LENGTH, object.milestoneHash);
+	}
+	exports.serializeTreasuryInput = serializeTreasuryInput;
 
 	});
 
@@ -4269,6 +4322,16 @@
 
 	});
 
+	var ITreasuryTransactionPayload = createCommonjsModule(function (module, exports) {
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.TREASURY_TRANSACTION_PAYLOAD_TYPE = void 0;
+	/**
+	 * The global type for the payload.
+	 */
+	exports.TREASURY_TRANSACTION_PAYLOAD_TYPE = 4;
+
+	});
+
 	var ISigLockedDustAllowanceOutput = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE = void 0;
@@ -4289,11 +4352,22 @@
 
 	});
 
+	var ITreasuryOutput = createCommonjsModule(function (module, exports) {
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.TREASURY_OUTPUT_TYPE = void 0;
+	/**
+	 * The global type for the treasury output.
+	 */
+	exports.TREASURY_OUTPUT_TYPE = 2;
+
+	});
+
 	var output = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.serializeSigLockedDustAllowanceOutput = exports.deserializeSigLockedDustAllowanceOutput = exports.serializeSigLockedSingleOutput = exports.deserializeSigLockedSingleOutput = exports.serializeOutput = exports.deserializeOutput = exports.serializeOutputs = exports.deserializeOutputs = exports.MAX_OUTPUT_COUNT = exports.MIN_OUTPUT_COUNT = exports.MIN_SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_LENGTH = exports.MIN_SIG_LOCKED_SINGLE_OUTPUT_LENGTH = exports.MIN_OUTPUT_LENGTH = void 0;
+	exports.serializeTreasuryOutput = exports.deserializeTreasuryOutput = exports.serializeSigLockedDustAllowanceOutput = exports.deserializeSigLockedDustAllowanceOutput = exports.serializeSigLockedSingleOutput = exports.deserializeSigLockedSingleOutput = exports.serializeOutput = exports.deserializeOutput = exports.serializeOutputs = exports.deserializeOutputs = exports.MAX_OUTPUT_COUNT = exports.MIN_OUTPUT_COUNT = exports.MIN_TREASURY_OUTPUT_LENGTH = exports.MIN_SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_LENGTH = exports.MIN_SIG_LOCKED_SINGLE_OUTPUT_LENGTH = exports.MIN_OUTPUT_LENGTH = void 0;
 	// Copyright 2020 IOTA Stiftung
 	// SPDX-License-Identifier: Apache-2.0
+
 
 
 
@@ -4310,6 +4384,10 @@
 	 * The minimum length of a sig locked dust allowance output binary representation.
 	 */
 	exports.MIN_SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_LENGTH = exports.MIN_OUTPUT_LENGTH + address.MIN_ADDRESS_LENGTH + address.MIN_ED25519_ADDRESS_LENGTH;
+	/**
+	 * The minimum length of a treasury output binary representation.
+	 */
+	exports.MIN_TREASURY_OUTPUT_LENGTH = exports.MIN_OUTPUT_LENGTH + common.UINT64_SIZE;
 	/**
 	 * The minimum number of outputs.
 	 */
@@ -4367,6 +4445,9 @@
 	    else if (type === ISigLockedDustAllowanceOutput.SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE) {
 	        input = deserializeSigLockedDustAllowanceOutput(readStream);
 	    }
+	    else if (type === ITreasuryOutput.TREASURY_OUTPUT_TYPE) {
+	        input = deserializeTreasuryOutput(readStream);
+	    }
 	    else {
 	        throw new Error("Unrecognized output type " + type);
 	    }
@@ -4384,6 +4465,9 @@
 	    }
 	    else if (object.type === ISigLockedDustAllowanceOutput.SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE) {
 	        serializeSigLockedDustAllowanceOutput(writeStream, object);
+	    }
+	    else if (object.type === ITreasuryOutput.TREASURY_OUTPUT_TYPE) {
+	        serializeTreasuryOutput(writeStream, object);
 	    }
 	    else {
 	        throw new Error("Unrecognized output type " + object.type);
@@ -4456,6 +4540,36 @@
 	    writeStream.writeUInt64("sigLockedDustAllowanceOutput.amount", BigInt(object.amount));
 	}
 	exports.serializeSigLockedDustAllowanceOutput = serializeSigLockedDustAllowanceOutput;
+	/**
+	 * Deserialize the treasury output from binary.
+	 * @param readStream The stream to read the data from.
+	 * @returns The deserialized object.
+	 */
+	function deserializeTreasuryOutput(readStream) {
+	    if (!readStream.hasRemaining(exports.MIN_TREASURY_OUTPUT_LENGTH)) {
+	        throw new Error("Treasury Output data is " + readStream.length() + " in length which is less than the minimimum size required of " + exports.MIN_TREASURY_OUTPUT_LENGTH);
+	    }
+	    var type = readStream.readByte("treasuryOutput.type");
+	    if (type !== ITreasuryOutput.TREASURY_OUTPUT_TYPE) {
+	        throw new Error("Type mismatch in treasuryOutput " + type);
+	    }
+	    var amount = readStream.readUInt64("treasuryOutput.amount");
+	    return {
+	        type: ITreasuryOutput.TREASURY_OUTPUT_TYPE,
+	        amount: Number(amount)
+	    };
+	}
+	exports.deserializeTreasuryOutput = deserializeTreasuryOutput;
+	/**
+	 * Serialize the treasury output to binary.
+	 * @param writeStream The stream to write the data to.
+	 * @param object The object to serialize.
+	 */
+	function serializeTreasuryOutput(writeStream, object) {
+	    writeStream.writeByte("treasuryOutput.type", object.type);
+	    writeStream.writeUInt64("treasuryOutput.amount", BigInt(object.amount));
+	}
+	exports.serializeTreasuryOutput = serializeTreasuryOutput;
 
 	});
 
@@ -4784,9 +4898,12 @@
 
 	var payload = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.serializeReceiptPayload = exports.deserializeReceiptPayload = exports.serializeIndexationPayload = exports.deserializeIndexationPayload = exports.serializeMilestonePayload = exports.deserializeMilestonePayload = exports.serializeTransactionPayload = exports.deserializeTransactionPayload = exports.serializePayload = exports.deserializePayload = exports.MAX_INDEXATION_KEY_LENGTH = exports.MIN_INDEXATION_KEY_LENGTH = exports.MIN_RECEIPT_PAYLOAD_LENGTH = exports.MIN_TRANSACTION_PAYLOAD_LENGTH = exports.MIN_INDEXATION_PAYLOAD_LENGTH = exports.MIN_MILESTONE_PAYLOAD_LENGTH = exports.MIN_PAYLOAD_LENGTH = void 0;
+	exports.serializeTreasuryTransactionPayload = exports.deserializeTreasuryTransactionPayload = exports.serializeReceiptPayload = exports.deserializeReceiptPayload = exports.serializeIndexationPayload = exports.deserializeIndexationPayload = exports.serializeMilestonePayload = exports.deserializeMilestonePayload = exports.serializeTransactionPayload = exports.deserializeTransactionPayload = exports.serializePayload = exports.deserializePayload = exports.MAX_INDEXATION_KEY_LENGTH = exports.MIN_INDEXATION_KEY_LENGTH = exports.MIN_TREASURY_TRANSACTION_PAYLOAD_LENGTH = exports.MIN_RECEIPT_PAYLOAD_LENGTH = exports.MIN_TRANSACTION_PAYLOAD_LENGTH = exports.MIN_INDEXATION_PAYLOAD_LENGTH = exports.MIN_MILESTONE_PAYLOAD_LENGTH = exports.MIN_PAYLOAD_LENGTH = void 0;
 	// Copyright 2020 IOTA Stiftung
 	// SPDX-License-Identifier: Apache-2.0
+
+
+
 
 
 
@@ -4834,6 +4951,12 @@
 	    common.UINT16_SIZE + // numFunds
 	    funds.MIN_MIGRATED_FUNDS_LENGTH; // 1 Fund
 	/**
+	 * The minimum length of a treasure transaction payload binary representation.
+	 */
+	exports.MIN_TREASURY_TRANSACTION_PAYLOAD_LENGTH = exports.MIN_PAYLOAD_LENGTH +
+	    input.MIN_TREASURY_INPUT_LENGTH +
+	    output.MIN_TREASURY_OUTPUT_LENGTH;
+	/**
 	 * The minimum length of a indexation key.
 	 */
 	exports.MIN_INDEXATION_KEY_LENGTH = 1;
@@ -4869,6 +4992,9 @@
 	        else if (payloadType === IReceiptPayload.RECEIPT_PAYLOAD_TYPE) {
 	            payload = deserializeReceiptPayload(readStream);
 	        }
+	        else if (payloadType === ITreasuryTransactionPayload.TREASURY_TRANSACTION_PAYLOAD_TYPE) {
+	            payload = deserializeTreasuryTransactionPayload(readStream);
+	        }
 	        else {
 	            throw new Error("Unrecognized payload type " + payloadType);
 	        }
@@ -4898,6 +5024,9 @@
 	    }
 	    else if (object.type === IReceiptPayload.RECEIPT_PAYLOAD_TYPE) {
 	        serializeReceiptPayload(writeStream, object);
+	    }
+	    else if (object.type === ITreasuryTransactionPayload.TREASURY_TRANSACTION_PAYLOAD_TYPE) {
+	        serializeTreasuryTransactionPayload(writeStream, object);
 	    }
 	    else {
 	        throw new Error("Unrecognized transaction type " + object.type);
@@ -4939,7 +5068,7 @@
 	}
 	exports.deserializeTransactionPayload = deserializeTransactionPayload;
 	/**
-	 * Serialize the transaction payload essence to binary.
+	 * Serialize the transaction payload to binary.
 	 * @param writeStream The stream to write the data to.
 	 * @param object The object to serialize.
 	 */
@@ -5000,7 +5129,7 @@
 	}
 	exports.deserializeMilestonePayload = deserializeMilestonePayload;
 	/**
-	 * Serialize the milestone payload essence to binary.
+	 * Serialize the milestone payload to binary.
 	 * @param writeStream The stream to write the data to.
 	 * @param object The object to serialize.
 	 */
@@ -5046,7 +5175,7 @@
 	}
 	exports.deserializeIndexationPayload = deserializeIndexationPayload;
 	/**
-	 * Serialize the indexation payload essence to binary.
+	 * Serialize the indexation payload to binary.
 	 * @param writeStream The stream to write the data to.
 	 * @param object The object to serialize.
 	 */
@@ -5082,25 +5211,67 @@
 	        throw new Error("Type mismatch in payloadReceipt " + type);
 	    }
 	    var migratedAt = readStream.readUInt32("payloadReceipt.migratedAt");
+	    var final = readStream.readBoolean("payloadReceipt.final");
 	    var funds$1 = funds.deserializeFunds(readStream);
+	    var treasuryTransactionPayload = deserializePayload(readStream);
+	    if (!treasuryTransactionPayload || treasuryTransactionPayload.type !== ITreasuryTransactionPayload.TREASURY_TRANSACTION_PAYLOAD_TYPE) {
+	        throw new Error("payloadReceipts can only contain treasury payloads " + type);
+	    }
 	    return {
 	        type: IReceiptPayload.RECEIPT_PAYLOAD_TYPE,
 	        migratedAt: migratedAt,
-	        funds: funds$1
+	        final: final,
+	        funds: funds$1,
+	        transaction: treasuryTransactionPayload
 	    };
 	}
 	exports.deserializeReceiptPayload = deserializeReceiptPayload;
 	/**
-	 * Serialize the indexation payload essence to binary.
+	 * Serialize the receipt payload to binary.
 	 * @param writeStream The stream to write the data to.
 	 * @param object The object to serialize.
 	 */
 	function serializeReceiptPayload(writeStream, object) {
 	    writeStream.writeUInt32("payloadReceipt.type", object.type);
 	    writeStream.writeUInt32("payloadReceipt.migratedAt", object.migratedAt);
+	    writeStream.writeBoolean("payloadReceipt.final", object.final);
 	    funds.serializeFunds(writeStream, object.funds);
+	    serializePayload(writeStream, object.transaction);
 	}
 	exports.serializeReceiptPayload = serializeReceiptPayload;
+	/**
+	 * Deserialize the treasury transaction payload from binary.
+	 * @param readStream The stream to read the data from.
+	 * @returns The deserialized object.
+	 */
+	function deserializeTreasuryTransactionPayload(readStream) {
+	    if (!readStream.hasRemaining(exports.MIN_TREASURY_TRANSACTION_PAYLOAD_LENGTH)) {
+	        throw new Error("Treasure Transaction Payload data is " + readStream.length() + " in length which is less than the minimimum size required of " + exports.MIN_TREASURY_TRANSACTION_PAYLOAD_LENGTH);
+	    }
+	    var type = readStream.readUInt32("payloadTreasuryTransaction.type");
+	    if (type !== ITreasuryTransactionPayload.TREASURY_TRANSACTION_PAYLOAD_TYPE) {
+	        throw new Error("Type mismatch in payloadTreasuryTransaction " + type);
+	    }
+	    var input$1 = input.deserializeTreasuryInput(readStream);
+	    var output$1 = output.deserializeTreasuryOutput(readStream);
+	    return {
+	        type: ITreasuryTransactionPayload.TREASURY_TRANSACTION_PAYLOAD_TYPE,
+	        input: input$1,
+	        output: output$1
+	    };
+	}
+	exports.deserializeTreasuryTransactionPayload = deserializeTreasuryTransactionPayload;
+	/**
+	 * Serialize the treasury transaction payload to binary.
+	 * @param writeStream The stream to write the data to.
+	 * @param object The object to serialize.
+	 */
+	function serializeTreasuryTransactionPayload(writeStream, object) {
+	    writeStream.writeUInt32("payloadTreasuryTransaction.type", object.type);
+	    input.serializeTreasuryInput(writeStream, object.input);
+	    output.serializeTreasuryOutput(writeStream, object.output);
+	}
+	exports.serializeTreasuryTransactionPayload = serializeTreasuryTransactionPayload;
 
 	});
 
@@ -5776,6 +5947,23 @@
 	        }
 	        return val;
 	    };
+	    /**
+	     * Read a boolean from the stream.
+	     * @param name The name of the data we are trying to read.
+	     * @param moveIndex Move the index pointer on.
+	     * @returns The value.
+	     */
+	    ReadStream.prototype.readBoolean = function (name, moveIndex) {
+	        if (moveIndex === void 0) { moveIndex = true; }
+	        if (!this.hasRemaining(1)) {
+	            throw new Error(name + " length " + 1 + " exceeds the remaining data " + this.unused());
+	        }
+	        var val = this._storage[this._readIndex];
+	        if (moveIndex) {
+	            this._readIndex += 1;
+	        }
+	        return val !== 0;
+	    };
 	    return ReadStream;
 	}());
 	exports.ReadStream = ReadStream;
@@ -6398,6 +6586,15 @@
 	        this._storage.set(converter.Converter.utf8ToBytes(val), this._writeIndex);
 	        this._writeIndex += val.length;
 	        return val;
+	    };
+	    /**
+	     * Write a boolean to the stream.
+	     * @param name The name of the data we are trying to write.
+	     * @param val The data to write.
+	     */
+	    WriteStream.prototype.writeBoolean = function (name, val) {
+	        this.expand(1);
+	        this._storage[this._writeIndex++] = val ? 1 : 0;
 	    };
 	    /**
 	     * Expand the storage if there is not enough spave.
@@ -12209,7 +12406,11 @@
 
 	var logging = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.logUnlockBlock = exports.logOutput = exports.logInput = exports.logSignature = exports.logAddress = exports.logPayload = exports.logMessageMetadata = exports.logMessage = exports.logTips = exports.logInfo = exports.setLogger = void 0;
+	exports.logFunds = exports.logUnlockBlock = exports.logOutput = exports.logInput = exports.logSignature = exports.logAddress = exports.logTreasuryTransactionPayload = exports.logReceiptPayload = exports.logMilestonePayload = exports.logIndexationPayload = exports.logTransactionPayload = exports.logPayload = exports.logMessageMetadata = exports.logMessage = exports.logTips = exports.logInfo = exports.setLogger = void 0;
+
+
+
+
 
 
 
@@ -12320,53 +12521,121 @@
 	function logPayload(prefix, unknownPayload) {
 	    if (unknownPayload) {
 	        if (unknownPayload.type === ITransactionPayload.TRANSACTION_PAYLOAD_TYPE) {
-	            var payload = unknownPayload;
-	            logger(prefix + "Transaction Payload");
-	            if (payload.essence.type === ITransactionEssence.TRANSACTION_ESSENCE_TYPE) {
-	                if (payload.essence.inputs) {
-	                    logger(prefix + "\tInputs:", payload.essence.inputs.length);
-	                    for (var _i = 0, _a = payload.essence.inputs; _i < _a.length; _i++) {
-	                        var input = _a[_i];
-	                        logInput(prefix + "\t\t", input);
-	                    }
-	                }
-	                if (payload.essence.outputs) {
-	                    logger(prefix + "\tOutputs:", payload.essence.outputs.length);
-	                    for (var _b = 0, _c = payload.essence.outputs; _b < _c.length; _b++) {
-	                        var output = _c[_b];
-	                        logOutput(prefix + "\t\t", output);
-	                    }
-	                }
-	                logPayload(prefix + "\t", payload.essence.payload);
-	            }
-	            if (payload.unlockBlocks) {
-	                logger(prefix + "\tUnlock Blocks:", payload.unlockBlocks.length);
-	                for (var _d = 0, _e = payload.unlockBlocks; _d < _e.length; _d++) {
-	                    var unlockBlock = _e[_d];
-	                    logUnlockBlock(prefix + "\t\t", unlockBlock);
-	                }
-	            }
+	            logTransactionPayload(prefix, unknownPayload);
 	        }
 	        else if (unknownPayload.type === IMilestonePayload.MILESTONE_PAYLOAD_TYPE) {
-	            var payload = unknownPayload;
-	            logger(prefix + "Milestone Payload");
-	            logger(prefix + "\tIndex:", payload.index);
-	            logger(prefix + "\tTimestamp:", payload.timestamp);
-	            logger(prefix + "\tParent 1:", payload.parent1MessageId);
-	            logger(prefix + "\tParent 2:", payload.parent2MessageId);
-	            logger(prefix + "\tInclusion Merkle Proof:", payload.inclusionMerkleProof);
-	            logger(prefix + "\tPublic Keys:", payload.publicKeys);
-	            logger(prefix + "\tSignatures:", payload.signatures);
+	            logMilestonePayload(prefix, unknownPayload);
 	        }
 	        else if (unknownPayload.type === IIndexationPayload.INDEXATION_PAYLOAD_TYPE) {
-	            var payload = unknownPayload;
-	            logger(prefix + "Indexation Payload");
-	            logger(prefix + "\tIndex:", payload.index);
-	            logger(prefix + "\tData:", payload.data ? converter.Converter.hexToUtf8(payload.data) : "None");
+	            logIndexationPayload(prefix, unknownPayload);
+	        }
+	        else if (unknownPayload.type === IReceiptPayload.RECEIPT_PAYLOAD_TYPE) {
+	            logReceiptPayload(prefix, unknownPayload);
+	        }
+	        else if (unknownPayload.type === ITreasuryTransactionPayload.TREASURY_TRANSACTION_PAYLOAD_TYPE) {
+	            logTreasuryTransactionPayload(prefix, unknownPayload);
 	        }
 	    }
 	}
 	exports.logPayload = logPayload;
+	/**
+	 * Log a transaction payload to the console.
+	 * @param prefix The prefix for the output.
+	 * @param payload The payload.
+	 */
+	function logTransactionPayload(prefix, payload) {
+	    if (payload) {
+	        logger(prefix + "Transaction Payload");
+	        if (payload.essence.type === ITransactionEssence.TRANSACTION_ESSENCE_TYPE) {
+	            if (payload.essence.inputs) {
+	                logger(prefix + "\tInputs:", payload.essence.inputs.length);
+	                for (var _i = 0, _a = payload.essence.inputs; _i < _a.length; _i++) {
+	                    var input = _a[_i];
+	                    logInput(prefix + "\t\t", input);
+	                }
+	            }
+	            if (payload.essence.outputs) {
+	                logger(prefix + "\tOutputs:", payload.essence.outputs.length);
+	                for (var _b = 0, _c = payload.essence.outputs; _b < _c.length; _b++) {
+	                    var output = _c[_b];
+	                    logOutput(prefix + "\t\t", output);
+	                }
+	            }
+	            logPayload(prefix + "\t", payload.essence.payload);
+	        }
+	        if (payload.unlockBlocks) {
+	            logger(prefix + "\tUnlock Blocks:", payload.unlockBlocks.length);
+	            for (var _d = 0, _e = payload.unlockBlocks; _d < _e.length; _d++) {
+	                var unlockBlock = _e[_d];
+	                logUnlockBlock(prefix + "\t\t", unlockBlock);
+	            }
+	        }
+	    }
+	}
+	exports.logTransactionPayload = logTransactionPayload;
+	/**
+	 * Log a indexation payload to the console.
+	 * @param prefix The prefix for the output.
+	 * @param payload The payload.
+	 */
+	function logIndexationPayload(prefix, payload) {
+	    if (payload) {
+	        logger(prefix + "Indexation Payload");
+	        logger(prefix + "\tIndex:", payload.index);
+	        logger(prefix + "\tData:", payload.data ? converter.Converter.hexToUtf8(payload.data) : "None");
+	    }
+	}
+	exports.logIndexationPayload = logIndexationPayload;
+	/**
+	 * Log a milestone payload to the console.
+	 * @param prefix The prefix for the output.
+	 * @param payload The payload.
+	 */
+	function logMilestonePayload(prefix, payload) {
+	    if (payload) {
+	        logger(prefix + "Milestone Payload");
+	        logger(prefix + "\tIndex:", payload.index);
+	        logger(prefix + "\tTimestamp:", payload.timestamp);
+	        logger(prefix + "\tParent 1:", payload.parent1MessageId);
+	        logger(prefix + "\tParent 2:", payload.parent2MessageId);
+	        logger(prefix + "\tInclusion Merkle Proof:", payload.inclusionMerkleProof);
+	        logger(prefix + "\tPublic Keys:", payload.publicKeys);
+	        logger(prefix + "\tSignatures:", payload.signatures);
+	    }
+	}
+	exports.logMilestonePayload = logMilestonePayload;
+	/**
+	 * Log a receipt payload to the console.
+	 * @param prefix The prefix for the output.
+	 * @param payload The payload.
+	 */
+	function logReceiptPayload(prefix, payload) {
+	    if (payload) {
+	        logger(prefix + "Receipt Payload");
+	        logger(prefix + "\tMigrated At:", payload.migratedAt);
+	        logger(prefix + "\tFinal:", payload.final);
+	        logger(prefix + "\tFunds:", payload.funds.length);
+	        for (var _i = 0, _a = payload.funds; _i < _a.length; _i++) {
+	            var funds = _a[_i];
+	            logFunds(prefix + "\t\t", funds);
+	        }
+	        logTreasuryTransactionPayload(prefix + "\t\t", payload.transaction);
+	    }
+	}
+	exports.logReceiptPayload = logReceiptPayload;
+	/**
+	 * Log a treasury transaction payload to the console.
+	 * @param prefix The prefix for the output.
+	 * @param payload The payload.
+	 */
+	function logTreasuryTransactionPayload(prefix, payload) {
+	    if (payload) {
+	        logger(prefix + "Treasury Transaction Payload");
+	        logInput(prefix, payload.input);
+	        logOutput(prefix, payload.output);
+	    }
+	}
+	exports.logTreasuryTransactionPayload = logTreasuryTransactionPayload;
 	/**
 	 * Log an address to the console.
 	 * @param prefix The prefix for the output.
@@ -12400,11 +12669,18 @@
 	 * @param unknownInput The input to log.
 	 */
 	function logInput(prefix, unknownInput) {
-	    if ((unknownInput === null || unknownInput === void 0 ? void 0 : unknownInput.type) === IUTXOInput.UTXO_INPUT_TYPE) {
-	        var input = unknownInput;
-	        logger(prefix + "UTXO Input");
-	        logger(prefix + "\tTransaction Id:", input.transactionId);
-	        logger(prefix + "\tTransaction Output Index:", input.transactionOutputIndex);
+	    if (unknownInput) {
+	        if (unknownInput.type === IUTXOInput.UTXO_INPUT_TYPE) {
+	            var input = unknownInput;
+	            logger(prefix + "UTXO Input");
+	            logger(prefix + "\tTransaction Id:", input.transactionId);
+	            logger(prefix + "\tTransaction Output Index:", input.transactionOutputIndex);
+	        }
+	        else if (unknownInput.type === ITreasuryInput.TREASURY_INPUT_TYPE) {
+	            var input = unknownInput;
+	            logger(prefix + "Treasury Input");
+	            logger(prefix + "\tMilestone Hash:", input.milestoneHash);
+	        }
 	    }
 	}
 	exports.logInput = logInput;
@@ -12427,6 +12703,11 @@
 	            logAddress(prefix + "\t\t", output.address);
 	            logger(prefix + "\t\tAmount:", output.amount);
 	        }
+	        else if (unknownOutput.type === ITreasuryOutput.TREASURY_OUTPUT_TYPE) {
+	            var output = unknownOutput;
+	            logger(prefix + "Treasury Output");
+	            logger(prefix + "\t\tAmount:", output.amount);
+	        }
 	    }
 	}
 	exports.logOutput = logOutput;
@@ -12440,7 +12721,7 @@
 	        if (unknownUnlockBlock.type === ISignatureUnlockBlock.SIGNATURE_UNLOCK_BLOCK_TYPE) {
 	            var unlockBlock = unknownUnlockBlock;
 	            logger(prefix + "\tSignature Unlock Block");
-	            logSignature(prefix + "\t\t\t", unlockBlock.signature);
+	            logSignature(prefix + "\t\t", unlockBlock.signature);
 	        }
 	        else if (unknownUnlockBlock.type === IReferenceUnlockBlock.REFERENCE_UNLOCK_BLOCK_TYPE) {
 	            var unlockBlock = unknownUnlockBlock;
@@ -12450,6 +12731,20 @@
 	    }
 	}
 	exports.logUnlockBlock = logUnlockBlock;
+	/**
+	 * Log fund to the console.
+	 * @param prefix The prefix for the output.
+	 * @param fund The fund to log.
+	 */
+	function logFunds(prefix, fund) {
+	    if (fund) {
+	        logger(prefix + "\tFund");
+	        logger(prefix + "\t\tTail Transaction Hash:", fund.tailTransactionHash);
+	        logAddress(prefix + "\t\t", fund.address);
+	        logger(prefix + "\t\tDeposit:", fund.deposit);
+	    }
+	}
+	exports.logFunds = logFunds;
 
 	});
 
@@ -12673,6 +12968,9 @@
 	__exportStar(ISignatureUnlockBlock, exports);
 	__exportStar(ITransactionEssence, exports);
 	__exportStar(ITransactionPayload, exports);
+	__exportStar(ITreasuryInput, exports);
+	__exportStar(ITreasuryOutput, exports);
+	__exportStar(ITreasuryTransactionPayload, exports);
 	__exportStar(ITypeBase, exports);
 	__exportStar(IUTXOInput, exports);
 	__exportStar(ledgerInclusionState, exports);

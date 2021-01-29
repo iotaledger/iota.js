@@ -21,6 +21,7 @@ Keep track of the read index within a stream.
 - [getReadIndex](readstream.readstream.md#getreadindex)
 - [hasRemaining](readstream.readstream.md#hasremaining)
 - [length](readstream.readstream.md#length)
+- [readBoolean](readstream.readstream.md#readboolean)
 - [readByte](readstream.readstream.md#readbyte)
 - [readBytes](readstream.readstream.md#readbytes)
 - [readFixedHex](readstream.readstream.md#readfixedhex)
@@ -89,6 +90,25 @@ Get the length of the storage.
 **Returns:** *number*
 
 The storage length.
+
+___
+
+### readBoolean
+
+▸ **readBoolean**(`name`: *string*, `moveIndex?`: *boolean*): *boolean*
+
+Read a boolean from the stream.
+
+#### Parameters:
+
+Name | Type | Default value | Description |
+------ | ------ | ------ | ------ |
+`name` | *string* | - | The name of the data we are trying to read.   |
+`moveIndex` | *boolean* | true | Move the index pointer on.   |
+
+**Returns:** *boolean*
+
+The value.
 
 ___
 

@@ -6,11 +6,14 @@ import { IMilestonePayload, MILESTONE_PAYLOAD_TYPE } from "../models/IMilestoneP
 import { IReceiptPayload, RECEIPT_PAYLOAD_TYPE } from "../models/IReceiptPayload";
 import { TRANSACTION_ESSENCE_TYPE } from "../models/ITransactionEssence";
 import { ITransactionPayload, TRANSACTION_PAYLOAD_TYPE } from "../models/ITransactionPayload";
+import { ITreasuryTransactionPayload, TREASURY_TRANSACTION_PAYLOAD_TYPE } from "../models/ITreasuryTransactionPayload";
 import { ITypeBase } from "../models/ITypeBase";
 import { ReadStream } from "../utils/readStream";
 import { WriteStream } from "../utils/writeStream";
 import { BYTE_SIZE, MERKLE_PROOF_LENGTH, MESSAGE_ID_LENGTH, STRING_LENGTH, TYPE_LENGTH, UINT16_SIZE, UINT32_SIZE, UINT64_SIZE } from "./common";
 import { deserializeFunds, MIN_MIGRATED_FUNDS_LENGTH, serializeFunds } from "./funds";
+import { deserializeTreasuryInput, MIN_TREASURY_INPUT_LENGTH, serializeTreasuryInput } from "./input";
+import { deserializeTreasuryOutput, MIN_TREASURY_OUTPUT_LENGTH, serializeTreasuryOutput } from "./output";
 import { deserializeTransactionEssence, serializeTransactionEssence } from "./transaction";
 import { deserializeUnlockBlocks, serializeUnlockBlocks } from "./unlockBlock";
 
@@ -60,6 +63,15 @@ export const MIN_RECEIPT_PAYLOAD_LENGTH: number =
     MIN_MIGRATED_FUNDS_LENGTH; // 1 Fund
 
 /**
+ * The minimum length of a treasure transaction payload binary representation.
+ */
+export const MIN_TREASURY_TRANSACTION_PAYLOAD_LENGTH: number =
+    MIN_PAYLOAD_LENGTH +
+    MIN_TREASURY_INPUT_LENGTH +
+    MIN_TREASURY_OUTPUT_LENGTH;
+
+
+/**
  * The minimum length of a indexation key.
  */
 export const MIN_INDEXATION_KEY_LENGTH: number = 1;
@@ -74,8 +86,7 @@ export const MAX_INDEXATION_KEY_LENGTH: number = 64;
  * @param readStream The stream to read the data from.
  * @returns The deserialized object.
  */
-export function deserializePayload(readStream: ReadStream):
-    IIndexationPayload | IMilestonePayload | ITransactionPayload | IReceiptPayload | undefined {
+export function deserializePayload(readStream: ReadStream): ITypeBase<unknown> | undefined {
     if (!readStream.hasRemaining(MIN_PAYLOAD_LENGTH)) {
         throw new Error(`Payload data is ${readStream.length()
             } in length which is less than the minimimum size required of ${MIN_PAYLOAD_LENGTH}`);
@@ -88,7 +99,7 @@ export function deserializePayload(readStream: ReadStream):
             } exceeds the remaining data ${readStream.unused()}`);
     }
 
-    let payload: IIndexationPayload | IMilestonePayload | ITransactionPayload | IReceiptPayload | undefined;
+    let payload: ITypeBase<unknown> | undefined;
 
     if (payloadLength > 0) {
         const payloadType = readStream.readUInt32("payload.type", false);
@@ -101,6 +112,8 @@ export function deserializePayload(readStream: ReadStream):
             payload = deserializeIndexationPayload(readStream);
         } else if (payloadType === RECEIPT_PAYLOAD_TYPE) {
             payload = deserializeReceiptPayload(readStream);
+        } else if (payloadType === TREASURY_TRANSACTION_PAYLOAD_TYPE) {
+            payload = deserializeTreasuryTransactionPayload(readStream);
         } else {
             throw new Error(`Unrecognized payload type ${payloadType}`);
         }
@@ -114,8 +127,7 @@ export function deserializePayload(readStream: ReadStream):
  * @param writeStream The stream to write the data to.
  * @param object The object to serialize.
  */
-export function serializePayload(writeStream: WriteStream,
-    object: IIndexationPayload | IMilestonePayload | ITransactionPayload | IReceiptPayload | undefined): void {
+export function serializePayload(writeStream: WriteStream, object: ITypeBase<unknown> | undefined): void {
     // Store the location for the payload length and write 0
     // we will rewind and fill in once the size of the payload is known
     const payloadLengthWriteIndex = writeStream.getWriteIndex();
@@ -124,15 +136,17 @@ export function serializePayload(writeStream: WriteStream,
     if (!object) {
         // No other data to write
     } else if (object.type === TRANSACTION_PAYLOAD_TYPE) {
-        serializeTransactionPayload(writeStream, object);
+        serializeTransactionPayload(writeStream, object as ITransactionPayload);
     } else if (object.type === MILESTONE_PAYLOAD_TYPE) {
-        serializeMilestonePayload(writeStream, object);
+        serializeMilestonePayload(writeStream, object as IMilestonePayload);
     } else if (object.type === INDEXATION_PAYLOAD_TYPE) {
-        serializeIndexationPayload(writeStream, object);
+        serializeIndexationPayload(writeStream, object as IIndexationPayload);
     } else if (object.type === RECEIPT_PAYLOAD_TYPE) {
-        serializeReceiptPayload(writeStream, object);
+        serializeReceiptPayload(writeStream, object as IReceiptPayload);
+    } else if (object.type === TREASURY_TRANSACTION_PAYLOAD_TYPE) {
+        serializeTreasuryTransactionPayload(writeStream, object as ITreasuryTransactionPayload);
     } else {
-        throw new Error(`Unrecognized transaction type ${(object as ITypeBase<unknown>).type}`);
+        throw new Error(`Unrecognized transaction type ${object.type}`);
     }
 
     const endOfPayloadWriteIndex = writeStream.getWriteIndex();
@@ -176,12 +190,11 @@ export function deserializeTransactionPayload(readStream: ReadStream): ITransact
 }
 
 /**
- * Serialize the transaction payload essence to binary.
+ * Serialize the transaction payload to binary.
  * @param writeStream The stream to write the data to.
  * @param object The object to serialize.
  */
-export function serializeTransactionPayload(writeStream: WriteStream,
-    object: ITransactionPayload): void {
+export function serializeTransactionPayload(writeStream: WriteStream, object: ITransactionPayload): void {
     writeStream.writeUInt32("payloadMilestone.type", object.type);
 
     if (object.type === TRANSACTION_PAYLOAD_TYPE) {
@@ -218,7 +231,7 @@ export function deserializeMilestonePayload(readStream: ReadStream): IMilestoneP
         publicKeys.push(readStream.readFixedHex("payloadMilestone.publicKey", Ed25519.PUBLIC_KEY_SIZE));
     }
 
-    const receipt = deserializePayload(readStream);
+    const receipt = deserializePayload(readStream) as IReceiptPayload;
     if (receipt && receipt.type !== RECEIPT_PAYLOAD_TYPE) {
         throw new Error("Milestones only support embedded receipt payload type");
     }
@@ -243,7 +256,7 @@ export function deserializeMilestonePayload(readStream: ReadStream): IMilestoneP
 }
 
 /**
- * Serialize the milestone payload essence to binary.
+ * Serialize the milestone payload to binary.
  * @param writeStream The stream to write the data to.
  * @param object The object to serialize.
  */
@@ -297,7 +310,7 @@ export function deserializeIndexationPayload(readStream: ReadStream): IIndexatio
 }
 
 /**
- * Serialize the indexation payload essence to binary.
+ * Serialize the indexation payload to binary.
  * @param writeStream The stream to write the data to.
  * @param object The object to serialize.
  */
@@ -338,18 +351,25 @@ export function deserializeReceiptPayload(readStream: ReadStream): IReceiptPaylo
         throw new Error(`Type mismatch in payloadReceipt ${type}`);
     }
     const migratedAt = readStream.readUInt32("payloadReceipt.migratedAt");
+    const final = readStream.readBoolean("payloadReceipt.final");
 
     const funds = deserializeFunds(readStream);
+    const treasuryTransactionPayload = deserializePayload(readStream) as ITreasuryTransactionPayload;
+    if (!treasuryTransactionPayload || treasuryTransactionPayload.type !== TREASURY_TRANSACTION_PAYLOAD_TYPE) {
+        throw new Error(`payloadReceipts can only contain treasury payloads ${type}`);
+    }
 
     return {
         type: RECEIPT_PAYLOAD_TYPE,
         migratedAt,
-        funds
+        final,
+        funds,
+        transaction: treasuryTransactionPayload
     };
 }
 
 /**
- * Serialize the indexation payload essence to binary.
+ * Serialize the receipt payload to binary.
  * @param writeStream The stream to write the data to.
  * @param object The object to serialize.
  */
@@ -357,6 +377,45 @@ export function serializeReceiptPayload(writeStream: WriteStream,
     object: IReceiptPayload): void {
     writeStream.writeUInt32("payloadReceipt.type", object.type);
     writeStream.writeUInt32("payloadReceipt.migratedAt", object.migratedAt);
+    writeStream.writeBoolean("payloadReceipt.final", object.final);
 
     serializeFunds(writeStream, object.funds);
+    serializePayload(writeStream, object.transaction);
+}
+
+/**
+ * Deserialize the treasury transaction payload from binary.
+ * @param readStream The stream to read the data from.
+ * @returns The deserialized object.
+ */
+export function deserializeTreasuryTransactionPayload(readStream: ReadStream): ITreasuryTransactionPayload {
+    if (!readStream.hasRemaining(MIN_TREASURY_TRANSACTION_PAYLOAD_LENGTH)) {
+        throw new Error(`Treasure Transaction Payload data is ${readStream.length()
+            } in length which is less than the minimimum size required of ${MIN_TREASURY_TRANSACTION_PAYLOAD_LENGTH}`);
+    }
+
+    const type = readStream.readUInt32("payloadTreasuryTransaction.type");
+    if (type !== TREASURY_TRANSACTION_PAYLOAD_TYPE) {
+        throw new Error(`Type mismatch in payloadTreasuryTransaction ${type}`);
+    }
+    const input = deserializeTreasuryInput(readStream);
+    const output = deserializeTreasuryOutput(readStream);
+
+    return {
+        type: TREASURY_TRANSACTION_PAYLOAD_TYPE,
+        input,
+        output
+    };
+}
+
+/**
+ * Serialize the treasury transaction payload to binary.
+ * @param writeStream The stream to write the data to.
+ * @param object The object to serialize.
+ */
+export function serializeTreasuryTransactionPayload(writeStream: WriteStream,
+    object: ITreasuryTransactionPayload): void {
+    writeStream.writeUInt32("payloadTreasuryTransaction.type", object.type);
+    serializeTreasuryInput(writeStream, object.input);
+    serializeTreasuryOutput(writeStream, object.output);
 }

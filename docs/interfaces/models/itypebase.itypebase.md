@@ -38,6 +38,12 @@ Name |
 
   ↳ [*ITransactionPayload*](itransactionpayload.itransactionpayload.md)
 
+  ↳ [*ITreasuryInput*](itreasuryinput.itreasuryinput.md)
+
+  ↳ [*ITreasuryOutput*](itreasuryoutput.itreasuryoutput.md)
+
+  ↳ [*ITreasuryTransactionPayload*](itreasurytransactionpayload.itreasurytransactionpayload.md)
+
   ↳ [*IUTXOInput*](iutxoinput.iutxoinput.md)
 
 ## Table of contents
