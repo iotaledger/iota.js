@@ -5336,11 +5336,11 @@
 	/**
 	 * The minimum length of a message binary representation.
 	 */
-	var MIN_MESSAGE_LENGTH = common.UINT64_SIZE +
-	    common.BYTE_SIZE +
-	    (2 * common.MESSAGE_ID_LENGTH) +
-	    payload.MIN_PAYLOAD_LENGTH +
-	    common.UINT64_SIZE;
+	var MIN_MESSAGE_LENGTH = common.UINT64_SIZE + // Network id
+	    common.BYTE_SIZE + // Parent count
+	    common.MESSAGE_ID_LENGTH + // Single parent
+	    payload.MIN_PAYLOAD_LENGTH + // Min payload length
+	    common.UINT64_SIZE; // Nonce
 	/**
 	 * The maximum length of a message.
 	 */

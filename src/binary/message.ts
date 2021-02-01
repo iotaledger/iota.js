@@ -12,11 +12,12 @@ import { deserializePayload, MIN_PAYLOAD_LENGTH, serializePayload } from "./payl
 /**
  * The minimum length of a message binary representation.
  */
-const MIN_MESSAGE_LENGTH: number = UINT64_SIZE +
-    BYTE_SIZE +
-    (2 * MESSAGE_ID_LENGTH) +
-    MIN_PAYLOAD_LENGTH +
-    UINT64_SIZE;
+const MIN_MESSAGE_LENGTH: number =
+    UINT64_SIZE + // Network id
+    BYTE_SIZE + // Parent count
+    MESSAGE_ID_LENGTH + // Single parent
+    MIN_PAYLOAD_LENGTH + // Min payload length
+    UINT64_SIZE; // Nonce
 
 /**
  * The maximum length of a message.

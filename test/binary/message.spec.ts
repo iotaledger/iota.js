@@ -17,7 +17,7 @@ describe("Binary Message", () => {
     });
 
     test("Can fail with underflow max", () => {
-        const bytes = new Uint8Array(76);
+        const bytes = new Uint8Array(52);
         expect(() => deserializeMessage(new ReadStream(bytes))).toThrow("is less");
     });
 
