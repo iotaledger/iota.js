@@ -18,7 +18,7 @@ Milestone payload.
 
 - [inclusionMerkleProof](imilestonepayload.imilestonepayload.md#inclusionmerkleproof)
 - [index](imilestonepayload.imilestonepayload.md#index)
-- [parents](imilestonepayload.imilestonepayload.md#parents)
+- [parentMessageIds](imilestonepayload.imilestonepayload.md#parentmessageids)
 - [publicKeys](imilestonepayload.imilestonepayload.md#publickeys)
 - [receipt](imilestonepayload.imilestonepayload.md#receipt)
 - [signatures](imilestonepayload.imilestonepayload.md#signatures)
@@ -43,11 +43,11 @@ The index name.
 
 ___
 
-### parents
+### parentMessageIds
 
-• **parents**: *string*[]
+• **parentMessageIds**: *string*[]
 
-The parenst where this milestone attaches to.
+The parents where this milestone attaches to.
 
 ___
 

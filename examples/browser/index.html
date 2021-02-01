@@ -38,7 +38,7 @@
 
             const submitMessage = {
                 // Parents can be left undefined if you want the node to populate the field
-                parents: tipsResponse.tips,
+                parentMessageIds: tipsResponse.tipMessageIds.slice(0, Iota.MAX_NUMBER_PARENTS),
                 payload: {
                     type: 2,
                     index: "Foo",
@@ -79,7 +79,7 @@
             consoleLog("\tMessage Ids:", messages.messageIds);
             consoleLog();
 
-            const children = await client.messageChildren(tipsResponse.tips[0]);
+            const children = await client.messageChildren(tipsResponse.tipMessageIds[0]);
             consoleLog("Children");
             consoleLog("\tMessage Id:", children.messageId);
             consoleLog("\tMax Results:", children.maxResults);

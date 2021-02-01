@@ -63,9 +63,9 @@ export function logInfo(prefix: string, info: INodeInfo): void {
  * @param tipsResponse The tips to log.
  */
 export function logTips(prefix: string, tipsResponse: ITipsResponse): void {
-    if (tipsResponse.tips) {
-        for (let i = 0; i < tipsResponse.tips.length; i++) {
-            logger(`${prefix}\tTip ${i + 1} Message Id:`, tipsResponse.tips[i]);
+    if (tipsResponse.tipMessageIds) {
+        for (let i = 0; i < tipsResponse.tipMessageIds.length; i++) {
+            logger(`${prefix}\tTip ${i + 1} Message Id:`, tipsResponse.tipMessageIds[i]);
         }
     }
 }
@@ -77,9 +77,9 @@ export function logTips(prefix: string, tipsResponse: ITipsResponse): void {
  */
 export function logMessage(prefix: string, message: IMessage): void {
     logger(`${prefix}\tNetwork Id:`, message.networkId);
-    if (message.parents) {
-        for (let i = 0; i < message.parents.length; i++) {
-            logger(`${prefix}\tParent ${i + 1} Message Id:`, message.parents[i]);
+    if (message.parentMessageIds) {
+        for (let i = 0; i < message.parentMessageIds.length; i++) {
+            logger(`${prefix}\tParent ${i + 1} Message Id:`, message.parentMessageIds[i]);
         }
     }
     logPayload(`${prefix}\t`, message.payload);
@@ -95,9 +95,9 @@ export function logMessage(prefix: string, message: IMessage): void {
  */
 export function logMessageMetadata(prefix: string, messageMetadata: IMessageMetadata): void {
     logger(`${prefix}\tMessage Id:`, messageMetadata.messageId);
-    if (messageMetadata.parents) {
-        for (let i = 0; i < messageMetadata.parents.length; i++) {
-            logger(`${prefix}\tParent ${i + 1} Message Id:`, messageMetadata.parents[i]);
+    if (messageMetadata.parentMessageIds) {
+        for (let i = 0; i < messageMetadata.parentMessageIds.length; i++) {
+            logger(`${prefix}\tParent ${i + 1} Message Id:`, messageMetadata.parentMessageIds[i]);
         }
     }
     if (messageMetadata.isSolid !== undefined) {
@@ -201,8 +201,8 @@ export function logMilestonePayload(prefix: string, payload?: IMilestonePayload)
         logger(`${prefix}Milestone Payload`);
         logger(`${prefix}\tIndex:`, payload.index);
         logger(`${prefix}\tTimestamp:`, payload.timestamp);
-        for (let i = 0; i < payload.parents.length; i++) {
-            logger(`${prefix}\tParent ${i + 1}:`, payload.parents[i]);
+        for (let i = 0; i < payload.parentMessageIds.length; i++) {
+            logger(`${prefix}\tParent ${i + 1}:`, payload.parentMessageIds[i]);
         }
         logger(`${prefix}\tInclusion Merkle Proof:`, payload.inclusionMerkleProof);
         logger(`${prefix}\tPublic Keys:`, payload.publicKeys);

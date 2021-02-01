@@ -17,9 +17,9 @@ export interface IMilestonePayload extends ITypeBase<1> {
      */
     timestamp: number;
     /**
-     * The parenst where this milestone attaches to.
+     * The parents where this milestone attaches to.
      */
-    parents: string[];
+    parentMessageIds: string[];
     /**
      * The merkle proof inclusions.
      */

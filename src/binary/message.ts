@@ -72,7 +72,7 @@ export function deserializeMessage(readStream: ReadStream): IMessage {
 
     return {
         networkId: networkId.toString(10),
-        parents,
+        parentMessageIds: parents,
         payload,
         nonce: nonce.toString(10)
     };
@@ -86,24 +86,24 @@ export function deserializeMessage(readStream: ReadStream): IMessage {
 export function serializeMessage(writeStream: WriteStream, object: IMessage): void {
     writeStream.writeUInt64("message.networkId", BigInt(object.networkId ?? 0));
 
-    const numParents = object.parents?.length ?? 0;
+    const numParents = object.parentMessageIds?.length ?? 0;
     writeStream.writeByte("message.numParents", numParents);
 
-    if (object.parents) {
+    if (object.parentMessageIds) {
         if (numParents > MAX_NUMBER_PARENTS) {
             throw new Error(`A maximum of ${MAX_NUMBER_PARENTS
                 } parents is allowed, you provided ${numParents}`);
         }
-        if ((new Set(object.parents)).size !== numParents) {
+        if ((new Set(object.parentMessageIds)).size !== numParents) {
             throw new Error("The message parents must be unique");
         }
-        const sorted = object.parents.slice().sort();
+        const sorted = object.parentMessageIds.slice().sort();
         for (let i = 0; i < numParents; i++) {
-            if (sorted[i] !== object.parents[i]) {
+            if (sorted[i] !== object.parentMessageIds[i]) {
                 throw new Error("The message parents must be lexographically sorted");
             }
             writeStream.writeFixedHex(`message.parentMessageId${i + 1}`,
-                MESSAGE_ID_LENGTH, object.parents[i]);
+                MESSAGE_ID_LENGTH, object.parentMessageIds[i]);
         }
     }
 

@@ -23,20 +23,20 @@ export async function promote(client: IClient, messageId: string): Promise<{
 
     // Parents must be unique and lexicographically sorted
     // so don't add the messageId if it is already one of the tips
-    if (!tipsResponse.tips.includes(messageId)) {
-        tipsResponse.tips.push(messageId);
+    if (!tipsResponse.tipMessageIds.includes(messageId)) {
+        tipsResponse.tipMessageIds.unshift(messageId);
     }
 
-    // If we now exceed the max parents remove one
-    if (tipsResponse.tips.length > MAX_NUMBER_PARENTS) {
-        tipsResponse.tips.shift();
+    // If we now exceed the max parents remove as many as we need
+    if (tipsResponse.tipMessageIds.length > MAX_NUMBER_PARENTS) {
+        tipsResponse.tipMessageIds = tipsResponse.tipMessageIds.slice(0, MAX_NUMBER_PARENTS);
     }
 
     // Finally sort the list
-    tipsResponse.tips.sort();
+    tipsResponse.tipMessageIds.sort();
 
     const promoteMessage: IMessage = {
-        parents: tipsResponse.tips
+        parentMessageIds: tipsResponse.tipMessageIds
     };
 
     const promoteMessageId = await client.messageSubmit(promoteMessage);

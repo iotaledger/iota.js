@@ -14,12 +14,12 @@ Response from the tips endpoint.
 
 ### Properties
 
-- [tips](itipsresponse.itipsresponse.md#tips)
+- [tipMessageIds](itipsresponse.itipsresponse.md#tipmessageids)
 
 ## Properties
 
-### tips
+### tipMessageIds
 
-• **tips**: *string*[]
+• **tipMessageIds**: *string*[]
 
 The message ids of the tip.

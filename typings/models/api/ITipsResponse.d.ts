@@ -5,5 +5,5 @@ export interface ITipsResponse {
     /**
      * The message ids of the tip.
      */
-    tips: string[];
+    tipMessageIds: string[];
 }

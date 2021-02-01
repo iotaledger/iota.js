@@ -1,4 +1,4 @@
-import { Converter, deserializeMessage, IIndexationPayload, IMessage, INDEXATION_PAYLOAD_TYPE, ISigLockedSingleOutput, logInfo, logMessage, logMessageMetadata, logOutput, logTips, ReadStream, SingleNodeClient } from "@iota/iota.js";
+import { Converter, deserializeMessage, IMessage, INDEXATION_PAYLOAD_TYPE, ISigLockedSingleOutput, logInfo, logMessage, logMessageMetadata, logOutput, logTips, MAX_NUMBER_PARENTS, ReadStream, SingleNodeClient } from "@iota/iota.js";
 
 const API_ENDPOINT = "http://localhost:14265";
 
@@ -21,7 +21,7 @@ async function run() {
 
     const submitMessage: IMessage = {
         // Parents can be left undefined if you want the node to populate the field
-        parents: tipsResponse.tips,
+        parentMessageIds: tipsResponse.tipMessageIds.slice(0, MAX_NUMBER_PARENTS),
         payload: {
             type: INDEXATION_PAYLOAD_TYPE,
             index: "Foo",
@@ -61,7 +61,7 @@ async function run() {
     console.log("\tMessage Ids:", messages.messageIds);
     console.log();
 
-    const children = await client.messageChildren(tipsResponse.tips[0]);
+    const children = await client.messageChildren(tipsResponse.tipMessageIds[0]);
     console.log("Children");
     console.log("\tMessage Id:", children.messageId);
     console.log("\tMax Results:", children.maxResults);

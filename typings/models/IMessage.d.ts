@@ -12,7 +12,7 @@ export interface IMessage {
     /**
      * The parent message ids.
      */
-    parents?: string[];
+    parentMessageIds?: string[];
     /**
      * The payload contents.
      */

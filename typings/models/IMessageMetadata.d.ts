@@ -11,7 +11,7 @@ export interface IMessageMetadata {
     /**
      * The parent message ids.
      */
-    parents?: string[];
+    parentMessageIds?: string[];
     /**
      * Is the message solid.
      */

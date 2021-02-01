@@ -241,11 +241,11 @@ export function deserializeMilestonePayload(readStream: ReadStream): IMilestoneP
     const index = readStream.readUInt32("payloadMilestone.index");
     const timestamp = readStream.readUInt64("payloadMilestone.timestamp");
     const numParents = readStream.readByte("payloadMilestone.numParents");
-    const parents: string[] = [];
+    const parentMessageIds: string[] = [];
 
     for (let i = 0; i < numParents; i++) {
         const parentMessageId = readStream.readFixedHex(`payloadMilestone.parentMessageId${i + 1}`, MESSAGE_ID_LENGTH);
-        parents.push(parentMessageId);
+        parentMessageIds.push(parentMessageId);
     }
     const inclusionMerkleProof = readStream.readFixedHex("payloadMilestone.inclusionMerkleProof", MERKLE_PROOF_LENGTH);
     const publicKeysCount = readStream.readByte("payloadMilestone.publicKeysCount");
@@ -269,7 +269,7 @@ export function deserializeMilestonePayload(readStream: ReadStream): IMilestoneP
         type: MILESTONE_PAYLOAD_TYPE,
         index,
         timestamp: Number(timestamp),
-        parents,
+        parentMessageIds,
         inclusionMerkleProof,
         publicKeys,
         receipt,
@@ -288,27 +288,27 @@ export function serializeMilestonePayload(writeStream: WriteStream,
     writeStream.writeUInt32("payloadMilestone.index", object.index);
     writeStream.writeUInt64("payloadMilestone.timestamp", BigInt(object.timestamp));
 
-    if (object.parents.length < MIN_NUMBER_PARENTS) {
+    if (object.parentMessageIds.length < MIN_NUMBER_PARENTS) {
         throw new Error(`A minimum of ${MIN_NUMBER_PARENTS
-            } parents is allowed, you provided ${object.parents.length}`);
+            } parents is allowed, you provided ${object.parentMessageIds.length}`);
     }
-    if (object.parents.length > MAX_NUMBER_PARENTS) {
+    if (object.parentMessageIds.length > MAX_NUMBER_PARENTS) {
         throw new Error(`A maximum of ${MAX_NUMBER_PARENTS
-            } parents is allowed, you provided ${object.parents.length}`);
+            } parents is allowed, you provided ${object.parentMessageIds.length}`);
     }
-    if ((new Set(object.parents)).size !== object.parents.length) {
+    if ((new Set(object.parentMessageIds)).size !== object.parentMessageIds.length) {
         throw new Error("The milestone parents must be unique");
     }
-    const sorted = object.parents.slice().sort();
+    const sorted = object.parentMessageIds.slice().sort();
 
-    writeStream.writeByte("payloadMilestone.numParents", object.parents.length);
-    for (let i = 0; i < object.parents.length; i++) {
-        if (sorted[i] !== object.parents[i]) {
+    writeStream.writeByte("payloadMilestone.numParents", object.parentMessageIds.length);
+    for (let i = 0; i < object.parentMessageIds.length; i++) {
+        if (sorted[i] !== object.parentMessageIds[i]) {
             throw new Error("The milestone parents must be lexographically sorted");
         }
 
         writeStream.writeFixedHex(`payloadMilestone.parentMessageId${i + 1}`,
-            MESSAGE_ID_LENGTH, object.parents[i]);
+            MESSAGE_ID_LENGTH, object.parentMessageIds[i]);
     }
 
     writeStream.writeFixedHex("payloadMilestone.inclusionMerkleProof",

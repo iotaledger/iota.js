@@ -93,8 +93,10 @@ describe("Binary Payload", () => {
         expect(payload.type).toEqual(1);
         expect(payload.index).toEqual(1087);
         expect(payload.timestamp).toEqual(1605190003);
-        expect(payload.parents[0]).toEqual("c0ab1d1f6886ba6317634da6b2d957e7c987a9699dd3707d1e2751fcf4b8efe3");
-        expect(payload.parents[1]).toEqual("04ba147c9cc9bebd3b97310a23d385f33d8e67ac42868b69bc06f5468e3c0a02");
+        expect(payload.parentMessageIds[0])
+            .toEqual("c0ab1d1f6886ba6317634da6b2d957e7c987a9699dd3707d1e2751fcf4b8efe3");
+        expect(payload.parentMessageIds[1])
+            .toEqual("04ba147c9cc9bebd3b97310a23d385f33d8e67ac42868b69bc06f5468e3c0a02");
         expect(payload.inclusionMerkleProof)
             .toEqual("786a02f742015903c6c6fd852552d272912f4740e15847618a86e217f71f5419");
         expect(payload.publicKeys.length).toEqual(2);
@@ -168,7 +170,7 @@ describe("Binary Payload", () => {
             type: MILESTONE_PAYLOAD_TYPE,
             index: 1087,
             timestamp: 1605190003,
-            parents: [
+            parentMessageIds: [
                 "04ba147c9cc9bebd3b97310a23d385f33d8e67ac42868b69bc06f5468e3c0a02",
                 "c0ab1d1f6886ba6317634da6b2d957e7c987a9699dd3707d1e2751fcf4b8efe3"
             ],
@@ -194,8 +196,10 @@ describe("Binary Payload", () => {
         expect(deserialized.type).toEqual(1);
         expect(deserialized.index).toEqual(1087);
         expect(deserialized.timestamp).toEqual(1605190003);
-        expect(deserialized.parents[0]).toEqual("04ba147c9cc9bebd3b97310a23d385f33d8e67ac42868b69bc06f5468e3c0a02");
-        expect(deserialized.parents[1]).toEqual("c0ab1d1f6886ba6317634da6b2d957e7c987a9699dd3707d1e2751fcf4b8efe3");
+        expect(deserialized.parentMessageIds[0])
+            .toEqual("04ba147c9cc9bebd3b97310a23d385f33d8e67ac42868b69bc06f5468e3c0a02");
+        expect(deserialized.parentMessageIds[1])
+            .toEqual("c0ab1d1f6886ba6317634da6b2d957e7c987a9699dd3707d1e2751fcf4b8efe3");
         expect(deserialized.inclusionMerkleProof)
             .toEqual("786a02f742015903c6c6fd852552d272912f4740e15847618a86e217f71f5419");
         expect(deserialized.publicKeys.length).toEqual(2);
@@ -262,7 +266,7 @@ describe("Binary Payload", () => {
             type: MILESTONE_PAYLOAD_TYPE,
             index: 1087,
             timestamp: 1605190003,
-            parents: [
+            parentMessageIds: [
                 "04ba147c9cc9bebd3b97310a23d385f33d8e67ac42868b69bc06f5468e3c0a02",
                 "c0ab1d1f6886ba6317634da6b2d957e7c987a9699dd3707d1e2751fcf4b8efe3"
             ],
@@ -314,9 +318,9 @@ describe("Binary Payload", () => {
         expect(deserialized.type).toEqual(1);
         expect(deserialized.index).toEqual(1087);
         expect(deserialized.timestamp).toEqual(1605190003);
-        expect(deserialized.parents[0])
+        expect(deserialized.parentMessageIds[0])
             .toEqual("04ba147c9cc9bebd3b97310a23d385f33d8e67ac42868b69bc06f5468e3c0a02");
-        expect(deserialized.parents[1])
+        expect(deserialized.parentMessageIds[1])
             .toEqual("c0ab1d1f6886ba6317634da6b2d957e7c987a9699dd3707d1e2751fcf4b8efe3");
         expect(deserialized.inclusionMerkleProof)
             .toEqual("786a02f742015903c6c6fd852552d272912f4740e15847618a86e217f71f5419");

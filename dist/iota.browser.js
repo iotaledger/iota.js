@@ -5129,10 +5129,10 @@
 	    var index = readStream.readUInt32("payloadMilestone.index");
 	    var timestamp = readStream.readUInt64("payloadMilestone.timestamp");
 	    var numParents = readStream.readByte("payloadMilestone.numParents");
-	    var parents = [];
+	    var parentMessageIds = [];
 	    for (var i = 0; i < numParents; i++) {
 	        var parentMessageId = readStream.readFixedHex("payloadMilestone.parentMessageId" + (i + 1), common.MESSAGE_ID_LENGTH);
-	        parents.push(parentMessageId);
+	        parentMessageIds.push(parentMessageId);
 	    }
 	    var inclusionMerkleProof = readStream.readFixedHex("payloadMilestone.inclusionMerkleProof", common.MERKLE_PROOF_LENGTH);
 	    var publicKeysCount = readStream.readByte("payloadMilestone.publicKeysCount");
@@ -5153,7 +5153,7 @@
 	        type: IMilestonePayload.MILESTONE_PAYLOAD_TYPE,
 	        index: index,
 	        timestamp: Number(timestamp),
-	        parents: parents,
+	        parentMessageIds: parentMessageIds,
 	        inclusionMerkleProof: inclusionMerkleProof,
 	        publicKeys: publicKeys,
 	        receipt: receipt,
@@ -5170,22 +5170,22 @@
 	    writeStream.writeUInt32("payloadMilestone.type", object.type);
 	    writeStream.writeUInt32("payloadMilestone.index", object.index);
 	    writeStream.writeUInt64("payloadMilestone.timestamp", BigInt(object.timestamp));
-	    if (object.parents.length < message.MIN_NUMBER_PARENTS) {
-	        throw new Error("A minimum of " + message.MIN_NUMBER_PARENTS + " parents is allowed, you provided " + object.parents.length);
+	    if (object.parentMessageIds.length < message.MIN_NUMBER_PARENTS) {
+	        throw new Error("A minimum of " + message.MIN_NUMBER_PARENTS + " parents is allowed, you provided " + object.parentMessageIds.length);
 	    }
-	    if (object.parents.length > message.MAX_NUMBER_PARENTS) {
-	        throw new Error("A maximum of " + message.MAX_NUMBER_PARENTS + " parents is allowed, you provided " + object.parents.length);
+	    if (object.parentMessageIds.length > message.MAX_NUMBER_PARENTS) {
+	        throw new Error("A maximum of " + message.MAX_NUMBER_PARENTS + " parents is allowed, you provided " + object.parentMessageIds.length);
 	    }
-	    if ((new Set(object.parents)).size !== object.parents.length) {
+	    if ((new Set(object.parentMessageIds)).size !== object.parentMessageIds.length) {
 	        throw new Error("The milestone parents must be unique");
 	    }
-	    var sorted = object.parents.slice().sort();
-	    writeStream.writeByte("payloadMilestone.numParents", object.parents.length);
-	    for (var i = 0; i < object.parents.length; i++) {
-	        if (sorted[i] !== object.parents[i]) {
+	    var sorted = object.parentMessageIds.slice().sort();
+	    writeStream.writeByte("payloadMilestone.numParents", object.parentMessageIds.length);
+	    for (var i = 0; i < object.parentMessageIds.length; i++) {
+	        if (sorted[i] !== object.parentMessageIds[i]) {
 	            throw new Error("The milestone parents must be lexographically sorted");
 	        }
-	        writeStream.writeFixedHex("payloadMilestone.parentMessageId" + (i + 1), common.MESSAGE_ID_LENGTH, object.parents[i]);
+	        writeStream.writeFixedHex("payloadMilestone.parentMessageId" + (i + 1), common.MESSAGE_ID_LENGTH, object.parentMessageIds[i]);
 	    }
 	    writeStream.writeFixedHex("payloadMilestone.inclusionMerkleProof", common.MERKLE_PROOF_LENGTH, object.inclusionMerkleProof);
 	    writeStream.writeByte("payloadMilestone.publicKeysCount", object.publicKeys.length);
@@ -5383,7 +5383,7 @@
 	    }
 	    return {
 	        networkId: networkId.toString(10),
-	        parents: parents,
+	        parentMessageIds: parents,
 	        payload: payload$1,
 	        nonce: nonce.toString(10)
 	    };
@@ -5397,21 +5397,21 @@
 	function serializeMessage(writeStream, object) {
 	    var _a, _b, _c, _d;
 	    writeStream.writeUInt64("message.networkId", BigInt((_a = object.networkId) !== null && _a !== void 0 ? _a : 0));
-	    var numParents = (_c = (_b = object.parents) === null || _b === void 0 ? void 0 : _b.length) !== null && _c !== void 0 ? _c : 0;
+	    var numParents = (_c = (_b = object.parentMessageIds) === null || _b === void 0 ? void 0 : _b.length) !== null && _c !== void 0 ? _c : 0;
 	    writeStream.writeByte("message.numParents", numParents);
-	    if (object.parents) {
+	    if (object.parentMessageIds) {
 	        if (numParents > exports.MAX_NUMBER_PARENTS) {
 	            throw new Error("A maximum of " + exports.MAX_NUMBER_PARENTS + " parents is allowed, you provided " + numParents);
 	        }
-	        if ((new Set(object.parents)).size !== numParents) {
+	        if ((new Set(object.parentMessageIds)).size !== numParents) {
 	            throw new Error("The message parents must be unique");
 	        }
-	        var sorted = object.parents.slice().sort();
+	        var sorted = object.parentMessageIds.slice().sort();
 	        for (var i = 0; i < numParents; i++) {
-	            if (sorted[i] !== object.parents[i]) {
+	            if (sorted[i] !== object.parentMessageIds[i]) {
 	                throw new Error("The message parents must be lexographically sorted");
 	            }
-	            writeStream.writeFixedHex("message.parentMessageId" + (i + 1), common.MESSAGE_ID_LENGTH, object.parents[i]);
+	            writeStream.writeFixedHex("message.parentMessageId" + (i + 1), common.MESSAGE_ID_LENGTH, object.parentMessageIds[i]);
 	        }
 	    }
 	    if (object.payload &&
@@ -11229,17 +11229,17 @@
 	                    tipsResponse = _a.sent();
 	                    // Parents must be unique and lexicographically sorted
 	                    // so don't add the messageId if it is already one of the tips
-	                    if (!tipsResponse.tips.includes(messageId)) {
-	                        tipsResponse.tips.push(messageId);
+	                    if (!tipsResponse.tipMessageIds.includes(messageId)) {
+	                        tipsResponse.tipMessageIds.unshift(messageId);
 	                    }
-	                    // If we now exceed the max parents remove one
-	                    if (tipsResponse.tips.length > message.MAX_NUMBER_PARENTS) {
-	                        tipsResponse.tips.shift();
+	                    // If we now exceed the max parents remove as many as we need
+	                    if (tipsResponse.tipMessageIds.length > message.MAX_NUMBER_PARENTS) {
+	                        tipsResponse.tipMessageIds = tipsResponse.tipMessageIds.slice(0, message.MAX_NUMBER_PARENTS);
 	                    }
 	                    // Finally sort the list
-	                    tipsResponse.tips.sort();
+	                    tipsResponse.tipMessageIds.sort();
 	                    promoteMessage = {
-	                        parents: tipsResponse.tips
+	                        parentMessageIds: tipsResponse.tipMessageIds
 	                    };
 	                    return [4 /*yield*/, client.messageSubmit(promoteMessage)];
 	                case 3:
@@ -12613,9 +12613,9 @@
 	 * @param tipsResponse The tips to log.
 	 */
 	function logTips(prefix, tipsResponse) {
-	    if (tipsResponse.tips) {
-	        for (var i = 0; i < tipsResponse.tips.length; i++) {
-	            logger(prefix + "\tTip " + (i + 1) + " Message Id:", tipsResponse.tips[i]);
+	    if (tipsResponse.tipMessageIds) {
+	        for (var i = 0; i < tipsResponse.tipMessageIds.length; i++) {
+	            logger(prefix + "\tTip " + (i + 1) + " Message Id:", tipsResponse.tipMessageIds[i]);
 	        }
 	    }
 	}
@@ -12627,9 +12627,9 @@
 	 */
 	function logMessage(prefix, message) {
 	    logger(prefix + "\tNetwork Id:", message.networkId);
-	    if (message.parents) {
-	        for (var i = 0; i < message.parents.length; i++) {
-	            logger(prefix + "\tParent " + (i + 1) + " Message Id:", message.parents[i]);
+	    if (message.parentMessageIds) {
+	        for (var i = 0; i < message.parentMessageIds.length; i++) {
+	            logger(prefix + "\tParent " + (i + 1) + " Message Id:", message.parentMessageIds[i]);
 	        }
 	    }
 	    logPayload(prefix + "\t", message.payload);
@@ -12645,9 +12645,9 @@
 	 */
 	function logMessageMetadata(prefix, messageMetadata) {
 	    logger(prefix + "\tMessage Id:", messageMetadata.messageId);
-	    if (messageMetadata.parents) {
-	        for (var i = 0; i < messageMetadata.parents.length; i++) {
-	            logger(prefix + "\tParent " + (i + 1) + " Message Id:", messageMetadata.parents[i]);
+	    if (messageMetadata.parentMessageIds) {
+	        for (var i = 0; i < messageMetadata.parentMessageIds.length; i++) {
+	            logger(prefix + "\tParent " + (i + 1) + " Message Id:", messageMetadata.parentMessageIds[i]);
 	        }
 	    }
 	    if (messageMetadata.isSolid !== undefined) {
@@ -12753,8 +12753,8 @@
 	        logger(prefix + "Milestone Payload");
 	        logger(prefix + "\tIndex:", payload.index);
 	        logger(prefix + "\tTimestamp:", payload.timestamp);
-	        for (var i = 0; i < payload.parents.length; i++) {
-	            logger(prefix + "\tParent " + (i + 1) + ":", payload.parents[i]);
+	        for (var i = 0; i < payload.parentMessageIds.length; i++) {
+	            logger(prefix + "\tParent " + (i + 1) + ":", payload.parentMessageIds[i]);
 	        }
 	        logger(prefix + "\tInclusion Merkle Proof:", payload.inclusionMerkleProof);
 	        logger(prefix + "\tPublic Keys:", payload.publicKeys);
