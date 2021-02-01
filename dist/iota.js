@@ -863,6 +863,16 @@
 
 	});
 
+	var IReceiptPayload = createCommonjsModule(function (module, exports) {
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.RECEIPT_PAYLOAD_TYPE = void 0;
+	/**
+	 * The global type for the payload.
+	 */
+	exports.RECEIPT_PAYLOAD_TYPE = 3;
+
+	});
+
 	var ITransactionPayload = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.TRANSACTION_PAYLOAD_TYPE = void 0;
@@ -870,6 +880,16 @@
 	 * The global type for the payload.
 	 */
 	exports.TRANSACTION_PAYLOAD_TYPE = 0;
+
+	});
+
+	var ITreasuryTransactionPayload = createCommonjsModule(function (module, exports) {
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.TREASURY_TRANSACTION_PAYLOAD_TYPE = void 0;
+	/**
+	 * The global type for the payload.
+	 */
+	exports.TREASURY_TRANSACTION_PAYLOAD_TYPE = 4;
 
 	});
 
@@ -4302,16 +4322,6 @@
 
 	});
 
-	var IReceiptPayload = createCommonjsModule(function (module, exports) {
-	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.RECEIPT_PAYLOAD_TYPE = void 0;
-	/**
-	 * The global type for the payload.
-	 */
-	exports.RECEIPT_PAYLOAD_TYPE = 3;
-
-	});
-
 	var ITransactionEssence = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.TRANSACTION_ESSENCE_TYPE = void 0;
@@ -4319,16 +4329,6 @@
 	 * The global type for the transaction essence.
 	 */
 	exports.TRANSACTION_ESSENCE_TYPE = 0;
-
-	});
-
-	var ITreasuryTransactionPayload = createCommonjsModule(function (module, exports) {
-	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.TREASURY_TRANSACTION_PAYLOAD_TYPE = void 0;
-	/**
-	 * The global type for the payload.
-	 */
-	exports.TREASURY_TRANSACTION_PAYLOAD_TYPE = 4;
 
 	});
 
@@ -5000,9 +5000,6 @@
 	 * @returns The deserialized object.
 	 */
 	function deserializePayload(readStream) {
-	    if (!readStream.hasRemaining(exports.MIN_PAYLOAD_LENGTH)) {
-	        throw new Error("Payload data is " + readStream.length() + " in length which is less than the minimimum size required of " + exports.MIN_PAYLOAD_LENGTH);
-	    }
 	    var payloadLength = readStream.readUInt32("payload.length");
 	    if (!readStream.hasRemaining(payloadLength)) {
 	        throw new Error("Payload length " + payloadLength + " exceeds the remaining data " + readStream.unused());
@@ -5333,6 +5330,8 @@
 
 
 
+
+
 	/**
 	 * The minimum length of a message binary representation.
 	 */
@@ -5371,10 +5370,9 @@
 	    }
 	    var payload$1 = payload.deserializePayload(readStream);
 	    if (payload$1 &&
-	        payload$1.type !== ITransactionPayload.TRANSACTION_PAYLOAD_TYPE &&
-	        payload$1.type !== IIndexationPayload.INDEXATION_PAYLOAD_TYPE &&
-	        payload$1.type !== IMilestonePayload.MILESTONE_PAYLOAD_TYPE) {
-	        throw new Error("Messages can only contain transaction, indexation or milestone payloads");
+	        (payload$1.type === IReceiptPayload.RECEIPT_PAYLOAD_TYPE ||
+	            payload$1.type === ITreasuryTransactionPayload.TREASURY_TRANSACTION_PAYLOAD_TYPE)) {
+	        throw new Error("Messages can not contain receipt or treasury transaction payloads");
 	    }
 	    var nonce = readStream.readUInt64("message.nonce");
 	    var unused = readStream.unused();
@@ -5954,7 +5952,7 @@
 	    ReadStream.prototype.readByte = function (name, moveIndex) {
 	        if (moveIndex === void 0) { moveIndex = true; }
 	        if (!this.hasRemaining(1)) {
-	            throw new Error(name + " length " + 1 + " exceeds the remaining data " + this.unused());
+	            throw new Error(name + " length 1 exceeds the remaining data " + this.unused());
 	        }
 	        var val = this._storage[this._readIndex];
 	        if (moveIndex) {
@@ -5971,7 +5969,7 @@
 	    ReadStream.prototype.readUInt16 = function (name, moveIndex) {
 	        if (moveIndex === void 0) { moveIndex = true; }
 	        if (!this.hasRemaining(2)) {
-	            throw new Error(name + " length " + 2 + " exceeds the remaining data " + this.unused());
+	            throw new Error(name + " length 2 exceeds the remaining data " + this.unused());
 	        }
 	        var val = this._storage[this._readIndex] |
 	            (this._storage[this._readIndex + 1] << 8);
@@ -5989,7 +5987,7 @@
 	    ReadStream.prototype.readUInt32 = function (name, moveIndex) {
 	        if (moveIndex === void 0) { moveIndex = true; }
 	        if (!this.hasRemaining(4)) {
-	            throw new Error(name + " length " + 4 + " exceeds the remaining data " + this.unused());
+	            throw new Error(name + " length 4 exceeds the remaining data " + this.unused());
 	        }
 	        var val = (this._storage[this._readIndex]) |
 	            (this._storage[this._readIndex + 1] * 0x100) |
@@ -6009,7 +6007,7 @@
 	    ReadStream.prototype.readUInt64 = function (name, moveIndex) {
 	        if (moveIndex === void 0) { moveIndex = true; }
 	        if (!this.hasRemaining(8)) {
-	            throw new Error(name + " length " + 8 + " exceeds the remaining data " + this.unused());
+	            throw new Error(name + " length 8 exceeds the remaining data " + this.unused());
 	        }
 	        var val = bigIntHelper.BigIntHelper.read8(this._storage, this._readIndex);
 	        if (moveIndex) {
@@ -6044,7 +6042,7 @@
 	    ReadStream.prototype.readBoolean = function (name, moveIndex) {
 	        if (moveIndex === void 0) { moveIndex = true; }
 	        if (!this.hasRemaining(1)) {
-	            throw new Error(name + " length " + 1 + " exceeds the remaining data " + this.unused());
+	            throw new Error(name + " length 1 exceeds the remaining data " + this.unused());
 	        }
 	        var val = this._storage[this._readIndex];
 	        if (moveIndex) {
@@ -12174,21 +12172,13 @@
 	     */
 	    ConflictReason[ConflictReason["invalidSignature"] = 5] = "invalidSignature";
 	    /**
-	     * The input or output type used is unsupported.
-	     */
-	    ConflictReason[ConflictReason["unsupportedInputOrOutputType"] = 6] = "unsupportedInputOrOutputType";
-	    /**
-	     * The address type used is unsupported.
-	     */
-	    ConflictReason[ConflictReason["unsupportedAddressType"] = 7] = "unsupportedAddressType";
-	    /**
 	     * The dust allowance for the address is invalid.
 	     */
-	    ConflictReason[ConflictReason["invalidDustAllowance"] = 8] = "invalidDustAllowance";
+	    ConflictReason[ConflictReason["invalidDustAllowance"] = 6] = "invalidDustAllowance";
 	    /**
 	     * The semantic validation failed.
 	     */
-	    ConflictReason[ConflictReason["semanticValidationFailed"] = 9] = "semanticValidationFailed";
+	    ConflictReason[ConflictReason["semanticValidationFailed"] = 255] = "semanticValidationFailed";
 	})(exports.ConflictReason || (exports.ConflictReason = {}));
 
 	});
@@ -12478,8 +12468,6 @@
 	    _a[conflictReason.ConflictReason.inputUTXONotFound] = "The referenced UTXO cannot be found",
 	    _a[conflictReason.ConflictReason.inputOutputSumMismatch] = "The sum of the inputs and output values does not match",
 	    _a[conflictReason.ConflictReason.invalidSignature] = "The unlock block signature is invalid",
-	    _a[conflictReason.ConflictReason.unsupportedInputOrOutputType] = "The input or output type used is unsupported",
-	    _a[conflictReason.ConflictReason.unsupportedAddressType] = "The address type used is unsupported",
 	    _a[conflictReason.ConflictReason.invalidDustAllowance] = "The dust allowance for the address is invalid",
 	    _a[conflictReason.ConflictReason.semanticValidationFailed] = "The semantic validation failed",
 	    _a);

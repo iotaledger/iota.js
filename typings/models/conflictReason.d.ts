@@ -24,19 +24,11 @@ export declare enum ConflictReason {
      */
     invalidSignature = 5,
     /**
-     * The input or output type used is unsupported.
-     */
-    unsupportedInputOrOutputType = 6,
-    /**
-     * The address type used is unsupported.
-     */
-    unsupportedAddressType = 7,
-    /**
      * The dust allowance for the address is invalid.
      */
-    invalidDustAllowance = 8,
+    invalidDustAllowance = 6,
     /**
      * The semantic validation failed.
      */
-    semanticValidationFailed = 9
+    semanticValidationFailed = 255
 }

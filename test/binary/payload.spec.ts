@@ -15,12 +15,12 @@ import { WriteStream } from "../../src/utils/writeStream";
 describe("Binary Payload", () => {
     test("Can fail with underflow min", () => {
         const bytes = new Uint8Array();
-        expect(() => deserializePayload(new ReadStream(bytes))).toThrow("is less");
+        expect(() => deserializePayload(new ReadStream(bytes))).toThrow("exceeds the remaining");
     });
 
     test("Can fail with underflow max", () => {
         const bytes = new Uint8Array(3);
-        expect(() => deserializePayload(new ReadStream(bytes))).toThrow("is less");
+        expect(() => deserializePayload(new ReadStream(bytes))).toThrow("exceeds the remaining");
     });
 
     test("Can fail with undersize payload length", () => {

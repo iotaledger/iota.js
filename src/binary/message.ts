@@ -3,7 +3,9 @@
 import { INDEXATION_PAYLOAD_TYPE } from "../models/IIndexationPayload";
 import { IMessage } from "../models/IMessage";
 import { MILESTONE_PAYLOAD_TYPE } from "../models/IMilestonePayload";
+import { RECEIPT_PAYLOAD_TYPE } from "../models/IReceiptPayload";
 import { TRANSACTION_PAYLOAD_TYPE } from "../models/ITransactionPayload";
+import { TREASURY_TRANSACTION_PAYLOAD_TYPE } from "../models/ITreasuryTransactionPayload";
 import { ReadStream } from "../utils/readStream";
 import { WriteStream } from "../utils/writeStream";
 import { BYTE_SIZE, MESSAGE_ID_LENGTH, UINT64_SIZE } from "./common";
@@ -58,10 +60,9 @@ export function deserializeMessage(readStream: ReadStream): IMessage {
     const payload = deserializePayload(readStream);
 
     if (payload &&
-        payload.type !== TRANSACTION_PAYLOAD_TYPE &&
-        payload.type !== INDEXATION_PAYLOAD_TYPE &&
-        payload.type !== MILESTONE_PAYLOAD_TYPE) {
-        throw new Error("Messages can only contain transaction, indexation or milestone payloads");
+        (payload.type === RECEIPT_PAYLOAD_TYPE ||
+            payload.type === TREASURY_TRANSACTION_PAYLOAD_TYPE)) {
+        throw new Error("Messages can not contain receipt or treasury transaction payloads");
     }
 
     const nonce = readStream.readUInt64("message.nonce");

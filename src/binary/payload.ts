@@ -94,11 +94,6 @@ export function deserializePayload(readStream: ReadStream):
     ITreasuryTransactionPayload |
     IReceiptPayload |
     undefined {
-    if (!readStream.hasRemaining(MIN_PAYLOAD_LENGTH)) {
-        throw new Error(`Payload data is ${readStream.length()
-            } in length which is less than the minimimum size required of ${MIN_PAYLOAD_LENGTH}`);
-    }
-
     const payloadLength = readStream.readUInt32("payload.length");
 
     if (!readStream.hasRemaining(payloadLength)) {

@@ -122,8 +122,7 @@ export class ReadStream {
      */
     public readByte(name: string, moveIndex: boolean = true): number {
         if (!this.hasRemaining(1)) {
-            throw new Error(`${name} length ${1
-                } exceeds the remaining data ${this.unused()}`);
+            throw new Error(`${name} length 1 exceeds the remaining data ${this.unused()}`);
         }
         const val = this._storage[this._readIndex];
         if (moveIndex) {
@@ -140,8 +139,7 @@ export class ReadStream {
      */
     public readUInt16(name: string, moveIndex: boolean = true): number {
         if (!this.hasRemaining(2)) {
-            throw new Error(`${name} length ${2
-                } exceeds the remaining data ${this.unused()}`);
+            throw new Error(`${name} length 2 exceeds the remaining data ${this.unused()}`);
         }
         const val =
             this._storage[this._readIndex] |
@@ -161,8 +159,7 @@ export class ReadStream {
      */
     public readUInt32(name: string, moveIndex: boolean = true): number {
         if (!this.hasRemaining(4)) {
-            throw new Error(`${name} length ${4
-                } exceeds the remaining data ${this.unused()}`);
+            throw new Error(`${name} length 4 exceeds the remaining data ${this.unused()}`);
         }
 
         const val =
@@ -185,8 +182,7 @@ export class ReadStream {
      */
     public readUInt64(name: string, moveIndex: boolean = true): bigint {
         if (!this.hasRemaining(8)) {
-            throw new Error(`${name} length ${8
-                } exceeds the remaining data ${this.unused()}`);
+            throw new Error(`${name} length 8 exceeds the remaining data ${this.unused()}`);
         }
 
         const val = BigIntHelper.read8(this._storage, this._readIndex);
@@ -225,8 +221,7 @@ export class ReadStream {
      */
     public readBoolean(name: string, moveIndex: boolean = true): boolean {
         if (!this.hasRemaining(1)) {
-            throw new Error(`${name} length ${1
-                } exceeds the remaining data ${this.unused()}`);
+            throw new Error(`${name} length 1 exceeds the remaining data ${this.unused()}`);
         }
         const val = this._storage[this._readIndex];
         if (moveIndex) {

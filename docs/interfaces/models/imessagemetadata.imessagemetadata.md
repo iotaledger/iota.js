@@ -28,7 +28,7 @@ Response from the metadata endpoint.
 
 ### conflictReason
 
-• `Optional` **conflictReason**: *undefined* \| none \| inputUTXOAlreadySpent \| inputUTXOAlreadySpentInThisMilestone \| inputUTXONotFound \| inputOutputSumMismatch \| invalidSignature \| unsupportedInputOrOutputType \| unsupportedAddressType \| invalidDustAllowance \| semanticValidationFailed
+• `Optional` **conflictReason**: *undefined* \| none \| inputUTXOAlreadySpent \| inputUTXOAlreadySpentInThisMilestone \| inputUTXONotFound \| inputOutputSumMismatch \| invalidSignature \| invalidDustAllowance \| semanticValidationFailed
 
 The conflict reason.
 

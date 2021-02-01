@@ -13,12 +13,12 @@ import { WriteStream } from "../../src/utils/writeStream";
 describe("Binary Message", () => {
     test("Can fail with underflow min", () => {
         const bytes = Uint8Array.from([]);
-        expect(() => deserializeMessage(new ReadStream(bytes))).toThrow("is less");
+        expect(() => deserializeMessage(new ReadStream(bytes))).toThrow("less than the minimimum size");
     });
 
     test("Can fail with underflow max", () => {
         const bytes = new Uint8Array(52);
-        expect(() => deserializeMessage(new ReadStream(bytes))).toThrow("is less");
+        expect(() => deserializeMessage(new ReadStream(bytes))).toThrow("less than the minimimum size");
     });
 
     test("Can succeed with valid data", () => {
