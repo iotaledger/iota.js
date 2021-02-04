@@ -41,7 +41,7 @@ export interface IGossipMetrics {
     /**
      * The number of sent heartbeats.
      */
-    sentHeartbeats: string;
+    sentHeartbeats: number;
     /**
      * The number of dropped sent packets.
      */

@@ -86,7 +86,7 @@ ___
 
 ### sentHeartbeats
 
-• **sentHeartbeats**: *string*
+• **sentHeartbeats**: *number*
 
 The number of sent heartbeats.
 
