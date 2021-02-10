@@ -84,6 +84,12 @@ export class SingleNodeClient implements IClient {
     private readonly _password?: string;
 
     /**
+     * Authorization header.
+     * @internal
+     */
+    private readonly _authorizationHeader?: string;
+
+    /**
      * Create a new instance of client.
      * @param endpoint The endpoint.
      * @param options Options for the client.
@@ -98,9 +104,14 @@ export class SingleNodeClient implements IClient {
         this._timeout = options?.timeout;
         this._userName = options?.userName;
         this._password = options?.password;
+        this._authorizationHeader = options?.authorizationHeader;
 
         if (this._userName && this._password && !this._endpoint.startsWith("https")) {
             throw new Error("Basic authentication requires the endpoint to be https");
+        }
+
+        if (this._userName && this._password && this._authorizationHeader) {
+            throw new Error("You can not supply both user/pass and authorization header");
         }
     }
 
@@ -533,6 +544,11 @@ export class SingleNodeClient implements IClient {
             const userPass = Converter.bytesToBase64(Converter.utf8ToBytes(`${this._userName}:${this._password}`));
             headers = headers ?? {};
             headers.Authorization = `Basic ${userPass}`;
+        }
+
+        if (this._authorizationHeader) {
+            headers = headers ?? {};
+            headers.Authorization = this._authorizationHeader;
         }
 
         try {

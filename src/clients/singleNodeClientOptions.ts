@@ -27,4 +27,9 @@ export interface SingleNodeClientOptions {
      * Password for the endpoint.
      */
     password?: string;
+
+    /**
+     * Authorization header.
+     */
+    authorizationHeader?: string;
 }
