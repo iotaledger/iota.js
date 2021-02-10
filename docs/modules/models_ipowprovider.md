@@ -6,4 +6,4 @@
 
 ### Interfaces
 
-- [IPowProvider](../interfaces/models/ipowprovider.ipowprovider.md)
+- [IPowProvider](../interfaces/models_ipowprovider.ipowprovider.md)

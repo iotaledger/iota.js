@@ -6,4 +6,4 @@
 
 ### Interfaces
 
-- [IOutputResponse](../interfaces/models/api/ioutputresponse.ioutputresponse.md)
+- [IOutputResponse](../interfaces/models_api_ioutputresponse.ioutputresponse.md)

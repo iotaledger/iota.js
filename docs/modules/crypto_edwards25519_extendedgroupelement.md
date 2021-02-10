@@ -6,4 +6,4 @@
 
 ### Classes
 
-- [ExtendedGroupElement](../classes/crypto/edwards25519/extendedgroupelement.extendedgroupelement.md)
+- [ExtendedGroupElement](../classes/crypto_edwards25519_extendedgroupelement.extendedgroupelement.md)

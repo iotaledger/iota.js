@@ -6,7 +6,7 @@
 
 ### Classes
 
-- [Ed25519Seed](../classes/seedtypes/ed25519seed.ed25519seed.md)
+- [Ed25519Seed](../classes/seedtypes_ed25519seed.ed25519seed.md)
 
 ### Variables
 

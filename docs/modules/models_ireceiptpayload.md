@@ -6,7 +6,7 @@
 
 ### Interfaces
 
-- [IReceiptPayload](../interfaces/models/ireceiptpayload.ireceiptpayload.md)
+- [IReceiptPayload](../interfaces/models_ireceiptpayload.ireceiptpayload.md)
 
 ### Variables
 

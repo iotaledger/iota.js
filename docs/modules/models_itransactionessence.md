@@ -6,7 +6,7 @@
 
 ### Interfaces
 
-- [ITransactionEssence](../interfaces/models/itransactionessence.itransactionessence.md)
+- [ITransactionEssence](../interfaces/models_itransactionessence.itransactionessence.md)
 
 ### Variables
 

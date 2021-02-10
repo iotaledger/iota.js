@@ -6,4 +6,4 @@
 
 ### Interfaces
 
-- [IMqttStatus](../interfaces/models/imqttstatus.imqttstatus.md)
+- [IMqttStatus](../interfaces/models_imqttstatus.imqttstatus.md)

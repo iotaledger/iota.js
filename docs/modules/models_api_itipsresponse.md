@@ -6,4 +6,4 @@
 
 ### Interfaces
 
-- [ITipsResponse](../interfaces/models/api/itipsresponse.itipsresponse.md)
+- [ITipsResponse](../interfaces/models_api_itipsresponse.itipsresponse.md)

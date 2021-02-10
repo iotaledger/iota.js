@@ -6,7 +6,7 @@
 
 ### Interfaces
 
-- [IReferenceUnlockBlock](../interfaces/models/ireferenceunlockblock.ireferenceunlockblock.md)
+- [IReferenceUnlockBlock](../interfaces/models_ireferenceunlockblock.ireferenceunlockblock.md)
 
 ### Variables
 

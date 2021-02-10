@@ -6,4 +6,4 @@
 
 ### Classes
 
-- [Bip32Path](../classes/crypto/bip32path.bip32path.md)
+- [Bip32Path](../classes/crypto_bip32path.bip32path.md)

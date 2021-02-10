@@ -6,4 +6,4 @@
 
 ### Classes
 
-- [Bech32Helper](../classes/utils/bech32helper.bech32helper.md)
+- [Bech32Helper](../classes/utils_bech32helper.bech32helper.md)

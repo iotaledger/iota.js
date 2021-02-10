@@ -6,4 +6,4 @@
 
 ### Classes
 
-- [LocalPowProvider](../classes/pow/localpowprovider.localpowprovider.md)
+- [LocalPowProvider](../classes/pow_localpowprovider.localpowprovider.md)

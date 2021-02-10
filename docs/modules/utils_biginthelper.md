@@ -6,4 +6,4 @@
 
 ### Classes
 
-- [BigIntHelper](../classes/utils/biginthelper.biginthelper.md)
+- [BigIntHelper](../classes/utils_biginthelper.biginthelper.md)

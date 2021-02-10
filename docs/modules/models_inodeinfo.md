@@ -6,4 +6,4 @@
 
 ### Interfaces
 
-- [INodeInfo](../interfaces/models/inodeinfo.inodeinfo.md)
+- [INodeInfo](../interfaces/models_inodeinfo.inodeinfo.md)

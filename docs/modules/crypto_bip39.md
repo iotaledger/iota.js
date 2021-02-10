@@ -6,4 +6,4 @@
 
 ### Classes
 
-- [Bip39](../classes/crypto/bip39.bip39.md)
+- [Bip39](../classes/crypto_bip39.bip39.md)

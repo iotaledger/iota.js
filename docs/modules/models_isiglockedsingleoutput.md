@@ -6,7 +6,7 @@
 
 ### Interfaces
 
-- [ISigLockedSingleOutput](../interfaces/models/isiglockedsingleoutput.isiglockedsingleoutput.md)
+- [ISigLockedSingleOutput](../interfaces/models_isiglockedsingleoutput.isiglockedsingleoutput.md)
 
 ### Variables
 

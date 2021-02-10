@@ -6,4 +6,4 @@
 
 ### Interfaces
 
-- [IMigratedFunds](../interfaces/models/imigratedfunds.imigratedfunds.md)
+- [IMigratedFunds](../interfaces/models_imigratedfunds.imigratedfunds.md)

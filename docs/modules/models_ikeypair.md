@@ -6,4 +6,4 @@
 
 ### Interfaces
 
-- [IKeyPair](../interfaces/models/ikeypair.ikeypair.md)
+- [IKeyPair](../interfaces/models_ikeypair.ikeypair.md)

@@ -43,7 +43,7 @@ The minimum number of parents.
 
 ### deserializeMessage
 
-▸ **deserializeMessage**(`readStream`: [*ReadStream*](../classes/utils/readstream.readstream.md)): [*IMessage*](../interfaces/models/imessage.imessage.md)
+▸ **deserializeMessage**(`readStream`: [*ReadStream*](../classes/utils_readstream.readstream.md)): [*IMessage*](../interfaces/models_imessage.imessage.md)
 
 Deserialize the message from binary.
 
@@ -51,9 +51,9 @@ Deserialize the message from binary.
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`readStream` | [*ReadStream*](../classes/utils/readstream.readstream.md) | The message to deserialize.   |
+`readStream` | [*ReadStream*](../classes/utils_readstream.readstream.md) | The message to deserialize.   |
 
-**Returns:** [*IMessage*](../interfaces/models/imessage.imessage.md)
+**Returns:** [*IMessage*](../interfaces/models_imessage.imessage.md)
 
 The deserialized message.
 
@@ -61,7 +61,7 @@ ___
 
 ### serializeMessage
 
-▸ **serializeMessage**(`writeStream`: [*WriteStream*](../classes/utils/writestream.writestream.md), `object`: [*IMessage*](../interfaces/models/imessage.imessage.md)): *void*
+▸ **serializeMessage**(`writeStream`: [*WriteStream*](../classes/utils_writestream.writestream.md), `object`: [*IMessage*](../interfaces/models_imessage.imessage.md)): *void*
 
 Serialize the message essence to binary.
 
@@ -69,7 +69,7 @@ Serialize the message essence to binary.
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`writeStream` | [*WriteStream*](../classes/utils/writestream.writestream.md) | The stream to write the data to.   |
-`object` | [*IMessage*](../interfaces/models/imessage.imessage.md) | The object to serialize.    |
+`writeStream` | [*WriteStream*](../classes/utils_writestream.writestream.md) | The stream to write the data to.   |
+`object` | [*IMessage*](../interfaces/models_imessage.imessage.md) | The object to serialize.    |
 
 **Returns:** *void*

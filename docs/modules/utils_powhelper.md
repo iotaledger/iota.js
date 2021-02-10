@@ -6,4 +6,4 @@
 
 ### Classes
 
-- [PowHelper](../classes/utils/powhelper.powhelper.md)
+- [PowHelper](../classes/utils_powhelper.powhelper.md)

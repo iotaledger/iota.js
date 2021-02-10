@@ -6,4 +6,4 @@
 
 ### Interfaces
 
-- [IMessageMetadata](../interfaces/models/imessagemetadata.imessagemetadata.md)
+- [IMessageMetadata](../interfaces/models_imessagemetadata.imessagemetadata.md)

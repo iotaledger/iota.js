@@ -6,4 +6,4 @@
 
 ### Classes
 
-- [ArrayHelper](../classes/utils/arrayhelper.arrayhelper.md)
+- [ArrayHelper](../classes/utils_arrayhelper.arrayhelper.md)

@@ -6,4 +6,4 @@
 
 ### Classes
 
-- [ReadStream](../classes/utils/readstream.readstream.md)
+- [ReadStream](../classes/utils_readstream.readstream.md)

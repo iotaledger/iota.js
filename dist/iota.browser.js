@@ -6772,8 +6772,12 @@
 	        this._timeout = options === null || options === void 0 ? void 0 : options.timeout;
 	        this._userName = options === null || options === void 0 ? void 0 : options.userName;
 	        this._password = options === null || options === void 0 ? void 0 : options.password;
+	        this._authorizationHeader = options === null || options === void 0 ? void 0 : options.authorizationHeader;
 	        if (this._userName && this._password && !this._endpoint.startsWith("https")) {
 	            throw new Error("Basic authentication requires the endpoint to be https");
+	        }
+	        if (this._userName && this._password && this._authorizationHeader) {
+	            throw new Error("You can not supply both user/pass and authorization header");
 	        }
 	    }
 	    /**
@@ -7234,6 +7238,10 @@
 	                            userPass = converter.Converter.bytesToBase64(converter.Converter.utf8ToBytes(this._userName + ":" + this._password));
 	                            headers = headers !== null && headers !== void 0 ? headers : {};
 	                            headers.Authorization = "Basic " + userPass;
+	                        }
+	                        if (this._authorizationHeader) {
+	                            headers = headers !== null && headers !== void 0 ? headers : {};
+	                            headers.Authorization = this._authorizationHeader;
 	                        }
 	                        _a.label = 1;
 	                    case 1:

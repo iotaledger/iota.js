@@ -6,4 +6,4 @@
 
 ### Interfaces
 
-- [IMqttClient](../interfaces/models/imqttclient.imqttclient.md)
+- [IMqttClient](../interfaces/models_imqttclient.imqttclient.md)

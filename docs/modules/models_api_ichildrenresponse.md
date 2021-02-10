@@ -6,4 +6,4 @@
 
 ### Interfaces
 
-- [IChildrenResponse](../interfaces/models/api/ichildrenresponse.ichildrenresponse.md)
+- [IChildrenResponse](../interfaces/models_api_ichildrenresponse.ichildrenresponse.md)

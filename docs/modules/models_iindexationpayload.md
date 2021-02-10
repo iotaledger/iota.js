@@ -6,7 +6,7 @@
 
 ### Interfaces
 
-- [IIndexationPayload](../interfaces/models/iindexationpayload.iindexationpayload.md)
+- [IIndexationPayload](../interfaces/models_iindexationpayload.iindexationpayload.md)
 
 ### Variables
 

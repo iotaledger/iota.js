@@ -1192,6 +1192,9 @@ module.exports = {
         "unicorn/no-array-instanceof": [
             "error"
         ],
+        "unicorn/no-array-push-push": [
+            "off"
+        ],
         "unicorn/no-console-spaces": [
             "error"
         ],

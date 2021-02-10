@@ -6,4 +6,4 @@
 
 ### Interfaces
 
-- [IMessage](../interfaces/models/imessage.imessage.md)
+- [IMessage](../interfaces/models_imessage.imessage.md)

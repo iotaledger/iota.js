@@ -6,7 +6,7 @@
 
 ### Interfaces
 
-- [IEd25519Signature](../interfaces/models/ied25519signature.ied25519signature.md)
+- [IEd25519Signature](../interfaces/models_ied25519signature.ied25519signature.md)
 
 ### Variables
 

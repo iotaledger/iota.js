@@ -6,7 +6,7 @@
 
 ### Interfaces
 
-- [ITransactionPayload](../interfaces/models/itransactionpayload.itransactionpayload.md)
+- [ITransactionPayload](../interfaces/models_itransactionpayload.itransactionpayload.md)
 
 ### Variables
 

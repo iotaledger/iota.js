@@ -6,7 +6,7 @@
 
 ### Interfaces
 
-- [ISigLockedDustAllowanceOutput](../interfaces/models/isiglockeddustallowanceoutput.isiglockeddustallowanceoutput.md)
+- [ISigLockedDustAllowanceOutput](../interfaces/models_isiglockeddustallowanceoutput.isiglockeddustallowanceoutput.md)
 
 ### Variables
 

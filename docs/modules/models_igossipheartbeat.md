@@ -6,4 +6,4 @@
 
 ### Interfaces
 
-- [IGossipHeartbeat](../interfaces/models/igossipheartbeat.igossipheartbeat.md)
+- [IGossipHeartbeat](../interfaces/models_igossipheartbeat.igossipheartbeat.md)

@@ -45,7 +45,7 @@ The length of the tail hash length in bytes.
 
 ### deserializeFunds
 
-▸ **deserializeFunds**(`readStream`: [*ReadStream*](../classes/utils/readstream.readstream.md)): [*IMigratedFunds*](../interfaces/models/imigratedfunds.imigratedfunds.md)[]
+▸ **deserializeFunds**(`readStream`: [*ReadStream*](../classes/utils_readstream.readstream.md)): [*IMigratedFunds*](../interfaces/models_imigratedfunds.imigratedfunds.md)[]
 
 Deserialize the receipt payload funds from binary.
 
@@ -53,9 +53,9 @@ Deserialize the receipt payload funds from binary.
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`readStream` | [*ReadStream*](../classes/utils/readstream.readstream.md) | The stream to read the data from.   |
+`readStream` | [*ReadStream*](../classes/utils_readstream.readstream.md) | The stream to read the data from.   |
 
-**Returns:** [*IMigratedFunds*](../interfaces/models/imigratedfunds.imigratedfunds.md)[]
+**Returns:** [*IMigratedFunds*](../interfaces/models_imigratedfunds.imigratedfunds.md)[]
 
 The deserialized object.
 
@@ -63,7 +63,7 @@ ___
 
 ### deserializeMigratedFunds
 
-▸ **deserializeMigratedFunds**(`readStream`: [*ReadStream*](../classes/utils/readstream.readstream.md)): [*IMigratedFunds*](../interfaces/models/imigratedfunds.imigratedfunds.md)
+▸ **deserializeMigratedFunds**(`readStream`: [*ReadStream*](../classes/utils_readstream.readstream.md)): [*IMigratedFunds*](../interfaces/models_imigratedfunds.imigratedfunds.md)
 
 Deserialize the migrated fund from binary.
 
@@ -71,9 +71,9 @@ Deserialize the migrated fund from binary.
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`readStream` | [*ReadStream*](../classes/utils/readstream.readstream.md) | The stream to read the data from.   |
+`readStream` | [*ReadStream*](../classes/utils_readstream.readstream.md) | The stream to read the data from.   |
 
-**Returns:** [*IMigratedFunds*](../interfaces/models/imigratedfunds.imigratedfunds.md)
+**Returns:** [*IMigratedFunds*](../interfaces/models_imigratedfunds.imigratedfunds.md)
 
 The deserialized object.
 
@@ -81,7 +81,7 @@ ___
 
 ### serializeFunds
 
-▸ **serializeFunds**(`writeStream`: [*WriteStream*](../classes/utils/writestream.writestream.md), `objects`: [*IMigratedFunds*](../interfaces/models/imigratedfunds.imigratedfunds.md)[]): *void*
+▸ **serializeFunds**(`writeStream`: [*WriteStream*](../classes/utils_writestream.writestream.md), `objects`: [*IMigratedFunds*](../interfaces/models_imigratedfunds.imigratedfunds.md)[]): *void*
 
 Serialize the receipt payload funds to binary.
 
@@ -89,8 +89,8 @@ Serialize the receipt payload funds to binary.
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`writeStream` | [*WriteStream*](../classes/utils/writestream.writestream.md) | The stream to write the data to.   |
-`objects` | [*IMigratedFunds*](../interfaces/models/imigratedfunds.imigratedfunds.md)[] | The objects to serialize.    |
+`writeStream` | [*WriteStream*](../classes/utils_writestream.writestream.md) | The stream to write the data to.   |
+`objects` | [*IMigratedFunds*](../interfaces/models_imigratedfunds.imigratedfunds.md)[] | The objects to serialize.    |
 
 **Returns:** *void*
 
@@ -98,7 +98,7 @@ ___
 
 ### serializeMigratedFunds
 
-▸ **serializeMigratedFunds**(`writeStream`: [*WriteStream*](../classes/utils/writestream.writestream.md), `object`: [*IMigratedFunds*](../interfaces/models/imigratedfunds.imigratedfunds.md)): *void*
+▸ **serializeMigratedFunds**(`writeStream`: [*WriteStream*](../classes/utils_writestream.writestream.md), `object`: [*IMigratedFunds*](../interfaces/models_imigratedfunds.imigratedfunds.md)): *void*
 
 Serialize the migrated funds to binary.
 
@@ -106,7 +106,7 @@ Serialize the migrated funds to binary.
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`writeStream` | [*WriteStream*](../classes/utils/writestream.writestream.md) | The stream to write the data to.   |
-`object` | [*IMigratedFunds*](../interfaces/models/imigratedfunds.imigratedfunds.md) | The object to serialize.    |
+`writeStream` | [*WriteStream*](../classes/utils_writestream.writestream.md) | The stream to write the data to.   |
+`object` | [*IMigratedFunds*](../interfaces/models_imigratedfunds.imigratedfunds.md) | The object to serialize.    |
 
 **Returns:** *void*

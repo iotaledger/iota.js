@@ -6,4 +6,4 @@
 
 ### Classes
 
-- [RandomHelper](../classes/utils/randomhelper.randomhelper.md)
+- [RandomHelper](../classes/utils_randomhelper.randomhelper.md)

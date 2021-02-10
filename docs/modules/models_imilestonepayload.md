@@ -6,7 +6,7 @@
 
 ### Interfaces
 
-- [IMilestonePayload](../interfaces/models/imilestonepayload.imilestonepayload.md)
+- [IMilestonePayload](../interfaces/models_imilestonepayload.imilestonepayload.md)
 
 ### Variables
 

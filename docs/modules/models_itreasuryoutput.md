@@ -6,7 +6,7 @@
 
 ### Interfaces
 
-- [ITreasuryOutput](../interfaces/models/itreasuryoutput.itreasuryoutput.md)
+- [ITreasuryOutput](../interfaces/models_itreasuryoutput.itreasuryoutput.md)
 
 ### Variables
 

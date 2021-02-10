@@ -36,15 +36,18 @@ describe("Binary Output", () => {
         const deserialized = deserializeOutputs(new ReadStream(Converter.hexToBytes(hex)));
         expect(deserialized.length).toEqual(2);
         expect(deserialized[0].type).toEqual(0);
-        expect(deserialized[0].address.type).toEqual(1);
-        expect(deserialized[0].address.address)
+        const out0 = deserialized[0] as ISigLockedSingleOutput;
+        expect(out0.address.type).toEqual(1);
+        expect(out0.address.address)
             .toEqual("6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92");
-        expect(deserialized[0].amount).toEqual(123456);
+        expect(out0.amount).toEqual(123456);
+
         expect(deserialized[1].type).toEqual(0);
-        expect(deserialized[1].address.type).toEqual(1);
-        expect(deserialized[1].address.address)
+        const out1 = deserialized[1] as ISigLockedSingleOutput;
+        expect(out1.address.type).toEqual(1);
+        expect(out1.address.address)
             .toEqual("4566920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1");
-        expect(deserialized[1].amount).toEqual(987654);
+        expect(out1.amount).toEqual(987654);
     });
 
     test("Can serialize and deserialize output", () => {
@@ -63,8 +66,9 @@ describe("Binary Output", () => {
         expect(hex).toEqual("00016920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f9240e2010000000000");
         const deserialized = deserializeOutput(new ReadStream(Converter.hexToBytes(hex)));
         expect(deserialized.type).toEqual(0);
-        expect(deserialized.address.type).toEqual(1);
-        expect(deserialized.address.address)
+        const out0 = deserialized as ISigLockedSingleOutput;
+        expect(out0.type).toEqual(0);
+        expect(out0.address.address)
             .toEqual("6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92");
         expect(deserialized.amount).toEqual(123456);
     });

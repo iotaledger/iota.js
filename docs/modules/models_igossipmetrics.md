@@ -6,4 +6,4 @@
 
 ### Interfaces
 
-- [IGossipMetrics](../interfaces/models/igossipmetrics.igossipmetrics.md)
+- [IGossipMetrics](../interfaces/models_igossipmetrics.igossipmetrics.md)

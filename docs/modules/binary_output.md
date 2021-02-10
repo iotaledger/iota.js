@@ -78,7 +78,7 @@ The minimum length of a treasury output binary representation.
 
 ### deserializeOutput
 
-▸ **deserializeOutput**(`readStream`: [*ReadStream*](../classes/utils/readstream.readstream.md)): [*ISigLockedSingleOutput*](../interfaces/models/isiglockedsingleoutput.isiglockedsingleoutput.md) \| [*ISigLockedDustAllowanceOutput*](../interfaces/models/isiglockeddustallowanceoutput.isiglockeddustallowanceoutput.md) \| [*ITreasuryOutput*](../interfaces/models/itreasuryoutput.itreasuryoutput.md)
+▸ **deserializeOutput**(`readStream`: [*ReadStream*](../classes/utils_readstream.readstream.md)): [*ISigLockedSingleOutput*](../interfaces/models_isiglockedsingleoutput.isiglockedsingleoutput.md) \| [*ISigLockedDustAllowanceOutput*](../interfaces/models_isiglockeddustallowanceoutput.isiglockeddustallowanceoutput.md) \| [*ITreasuryOutput*](../interfaces/models_itreasuryoutput.itreasuryoutput.md)
 
 Deserialize the output from binary.
 
@@ -86,9 +86,9 @@ Deserialize the output from binary.
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`readStream` | [*ReadStream*](../classes/utils/readstream.readstream.md) | The stream to read the data from.   |
+`readStream` | [*ReadStream*](../classes/utils_readstream.readstream.md) | The stream to read the data from.   |
 
-**Returns:** [*ISigLockedSingleOutput*](../interfaces/models/isiglockedsingleoutput.isiglockedsingleoutput.md) \| [*ISigLockedDustAllowanceOutput*](../interfaces/models/isiglockeddustallowanceoutput.isiglockeddustallowanceoutput.md) \| [*ITreasuryOutput*](../interfaces/models/itreasuryoutput.itreasuryoutput.md)
+**Returns:** [*ISigLockedSingleOutput*](../interfaces/models_isiglockedsingleoutput.isiglockedsingleoutput.md) \| [*ISigLockedDustAllowanceOutput*](../interfaces/models_isiglockeddustallowanceoutput.isiglockeddustallowanceoutput.md) \| [*ITreasuryOutput*](../interfaces/models_itreasuryoutput.itreasuryoutput.md)
 
 The deserialized object.
 
@@ -96,7 +96,7 @@ ___
 
 ### deserializeOutputs
 
-▸ **deserializeOutputs**(`readStream`: [*ReadStream*](../classes/utils/readstream.readstream.md)): ([*ISigLockedSingleOutput*](../interfaces/models/isiglockedsingleoutput.isiglockedsingleoutput.md) \| [*ISigLockedDustAllowanceOutput*](../interfaces/models/isiglockeddustallowanceoutput.isiglockeddustallowanceoutput.md) \| [*ITreasuryOutput*](../interfaces/models/itreasuryoutput.itreasuryoutput.md))[]
+▸ **deserializeOutputs**(`readStream`: [*ReadStream*](../classes/utils_readstream.readstream.md)): ([*ISigLockedSingleOutput*](../interfaces/models_isiglockedsingleoutput.isiglockedsingleoutput.md) \| [*ISigLockedDustAllowanceOutput*](../interfaces/models_isiglockeddustallowanceoutput.isiglockeddustallowanceoutput.md) \| [*ITreasuryOutput*](../interfaces/models_itreasuryoutput.itreasuryoutput.md))[]
 
 Deserialize the outputs from binary.
 
@@ -104,9 +104,9 @@ Deserialize the outputs from binary.
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`readStream` | [*ReadStream*](../classes/utils/readstream.readstream.md) | The stream to read the data from.   |
+`readStream` | [*ReadStream*](../classes/utils_readstream.readstream.md) | The stream to read the data from.   |
 
-**Returns:** ([*ISigLockedSingleOutput*](../interfaces/models/isiglockedsingleoutput.isiglockedsingleoutput.md) \| [*ISigLockedDustAllowanceOutput*](../interfaces/models/isiglockeddustallowanceoutput.isiglockeddustallowanceoutput.md) \| [*ITreasuryOutput*](../interfaces/models/itreasuryoutput.itreasuryoutput.md))[]
+**Returns:** ([*ISigLockedSingleOutput*](../interfaces/models_isiglockedsingleoutput.isiglockedsingleoutput.md) \| [*ISigLockedDustAllowanceOutput*](../interfaces/models_isiglockeddustallowanceoutput.isiglockeddustallowanceoutput.md) \| [*ITreasuryOutput*](../interfaces/models_itreasuryoutput.itreasuryoutput.md))[]
 
 The deserialized object.
 
@@ -114,7 +114,7 @@ ___
 
 ### deserializeSigLockedDustAllowanceOutput
 
-▸ **deserializeSigLockedDustAllowanceOutput**(`readStream`: [*ReadStream*](../classes/utils/readstream.readstream.md)): [*ISigLockedDustAllowanceOutput*](../interfaces/models/isiglockeddustallowanceoutput.isiglockeddustallowanceoutput.md)
+▸ **deserializeSigLockedDustAllowanceOutput**(`readStream`: [*ReadStream*](../classes/utils_readstream.readstream.md)): [*ISigLockedDustAllowanceOutput*](../interfaces/models_isiglockeddustallowanceoutput.isiglockeddustallowanceoutput.md)
 
 Deserialize the signature locked dust allowance output from binary.
 
@@ -122,9 +122,9 @@ Deserialize the signature locked dust allowance output from binary.
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`readStream` | [*ReadStream*](../classes/utils/readstream.readstream.md) | The stream to read the data from.   |
+`readStream` | [*ReadStream*](../classes/utils_readstream.readstream.md) | The stream to read the data from.   |
 
-**Returns:** [*ISigLockedDustAllowanceOutput*](../interfaces/models/isiglockeddustallowanceoutput.isiglockeddustallowanceoutput.md)
+**Returns:** [*ISigLockedDustAllowanceOutput*](../interfaces/models_isiglockeddustallowanceoutput.isiglockeddustallowanceoutput.md)
 
 The deserialized object.
 
@@ -132,7 +132,7 @@ ___
 
 ### deserializeSigLockedSingleOutput
 
-▸ **deserializeSigLockedSingleOutput**(`readStream`: [*ReadStream*](../classes/utils/readstream.readstream.md)): [*ISigLockedSingleOutput*](../interfaces/models/isiglockedsingleoutput.isiglockedsingleoutput.md)
+▸ **deserializeSigLockedSingleOutput**(`readStream`: [*ReadStream*](../classes/utils_readstream.readstream.md)): [*ISigLockedSingleOutput*](../interfaces/models_isiglockedsingleoutput.isiglockedsingleoutput.md)
 
 Deserialize the signature locked single output from binary.
 
@@ -140,9 +140,9 @@ Deserialize the signature locked single output from binary.
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`readStream` | [*ReadStream*](../classes/utils/readstream.readstream.md) | The stream to read the data from.   |
+`readStream` | [*ReadStream*](../classes/utils_readstream.readstream.md) | The stream to read the data from.   |
 
-**Returns:** [*ISigLockedSingleOutput*](../interfaces/models/isiglockedsingleoutput.isiglockedsingleoutput.md)
+**Returns:** [*ISigLockedSingleOutput*](../interfaces/models_isiglockedsingleoutput.isiglockedsingleoutput.md)
 
 The deserialized object.
 
@@ -150,7 +150,7 @@ ___
 
 ### deserializeTreasuryOutput
 
-▸ **deserializeTreasuryOutput**(`readStream`: [*ReadStream*](../classes/utils/readstream.readstream.md)): [*ITreasuryOutput*](../interfaces/models/itreasuryoutput.itreasuryoutput.md)
+▸ **deserializeTreasuryOutput**(`readStream`: [*ReadStream*](../classes/utils_readstream.readstream.md)): [*ITreasuryOutput*](../interfaces/models_itreasuryoutput.itreasuryoutput.md)
 
 Deserialize the treasury output from binary.
 
@@ -158,9 +158,9 @@ Deserialize the treasury output from binary.
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`readStream` | [*ReadStream*](../classes/utils/readstream.readstream.md) | The stream to read the data from.   |
+`readStream` | [*ReadStream*](../classes/utils_readstream.readstream.md) | The stream to read the data from.   |
 
-**Returns:** [*ITreasuryOutput*](../interfaces/models/itreasuryoutput.itreasuryoutput.md)
+**Returns:** [*ITreasuryOutput*](../interfaces/models_itreasuryoutput.itreasuryoutput.md)
 
 The deserialized object.
 
@@ -168,7 +168,7 @@ ___
 
 ### serializeOutput
 
-▸ **serializeOutput**(`writeStream`: [*WriteStream*](../classes/utils/writestream.writestream.md), `object`: [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*number*\>): *void*
+▸ **serializeOutput**(`writeStream`: [*WriteStream*](../classes/utils_writestream.writestream.md), `object`: [*ITypeBase*](../interfaces/models_itypebase.itypebase.md)<*number*\>): *void*
 
 Serialize the output to binary.
 
@@ -176,8 +176,8 @@ Serialize the output to binary.
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`writeStream` | [*WriteStream*](../classes/utils/writestream.writestream.md) | The stream to write the data to.   |
-`object` | [*ITypeBase*](../interfaces/models/itypebase.itypebase.md)<*number*\> | The object to serialize.    |
+`writeStream` | [*WriteStream*](../classes/utils_writestream.writestream.md) | The stream to write the data to.   |
+`object` | [*ITypeBase*](../interfaces/models_itypebase.itypebase.md)<*number*\> | The object to serialize.    |
 
 **Returns:** *void*
 
@@ -185,7 +185,7 @@ ___
 
 ### serializeOutputs
 
-▸ **serializeOutputs**(`writeStream`: [*WriteStream*](../classes/utils/writestream.writestream.md), `objects`: ([*ISigLockedSingleOutput*](../interfaces/models/isiglockedsingleoutput.isiglockedsingleoutput.md) \| [*ISigLockedDustAllowanceOutput*](../interfaces/models/isiglockeddustallowanceoutput.isiglockeddustallowanceoutput.md) \| [*ITreasuryOutput*](../interfaces/models/itreasuryoutput.itreasuryoutput.md))[]): *void*
+▸ **serializeOutputs**(`writeStream`: [*WriteStream*](../classes/utils_writestream.writestream.md), `objects`: ([*ISigLockedSingleOutput*](../interfaces/models_isiglockedsingleoutput.isiglockedsingleoutput.md) \| [*ISigLockedDustAllowanceOutput*](../interfaces/models_isiglockeddustallowanceoutput.isiglockeddustallowanceoutput.md) \| [*ITreasuryOutput*](../interfaces/models_itreasuryoutput.itreasuryoutput.md))[]): *void*
 
 Serialize the outputs to binary.
 
@@ -193,8 +193,8 @@ Serialize the outputs to binary.
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`writeStream` | [*WriteStream*](../classes/utils/writestream.writestream.md) | The stream to write the data to.   |
-`objects` | ([*ISigLockedSingleOutput*](../interfaces/models/isiglockedsingleoutput.isiglockedsingleoutput.md) \| [*ISigLockedDustAllowanceOutput*](../interfaces/models/isiglockeddustallowanceoutput.isiglockeddustallowanceoutput.md) \| [*ITreasuryOutput*](../interfaces/models/itreasuryoutput.itreasuryoutput.md))[] | The objects to serialize.    |
+`writeStream` | [*WriteStream*](../classes/utils_writestream.writestream.md) | The stream to write the data to.   |
+`objects` | ([*ISigLockedSingleOutput*](../interfaces/models_isiglockedsingleoutput.isiglockedsingleoutput.md) \| [*ISigLockedDustAllowanceOutput*](../interfaces/models_isiglockeddustallowanceoutput.isiglockeddustallowanceoutput.md) \| [*ITreasuryOutput*](../interfaces/models_itreasuryoutput.itreasuryoutput.md))[] | The objects to serialize.    |
 
 **Returns:** *void*
 
@@ -202,7 +202,7 @@ ___
 
 ### serializeSigLockedDustAllowanceOutput
 
-▸ **serializeSigLockedDustAllowanceOutput**(`writeStream`: [*WriteStream*](../classes/utils/writestream.writestream.md), `object`: [*ISigLockedDustAllowanceOutput*](../interfaces/models/isiglockeddustallowanceoutput.isiglockeddustallowanceoutput.md)): *void*
+▸ **serializeSigLockedDustAllowanceOutput**(`writeStream`: [*WriteStream*](../classes/utils_writestream.writestream.md), `object`: [*ISigLockedDustAllowanceOutput*](../interfaces/models_isiglockeddustallowanceoutput.isiglockeddustallowanceoutput.md)): *void*
 
 Serialize the signature locked dust allowance output to binary.
 
@@ -210,8 +210,8 @@ Serialize the signature locked dust allowance output to binary.
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`writeStream` | [*WriteStream*](../classes/utils/writestream.writestream.md) | The stream to write the data to.   |
-`object` | [*ISigLockedDustAllowanceOutput*](../interfaces/models/isiglockeddustallowanceoutput.isiglockeddustallowanceoutput.md) | The object to serialize.    |
+`writeStream` | [*WriteStream*](../classes/utils_writestream.writestream.md) | The stream to write the data to.   |
+`object` | [*ISigLockedDustAllowanceOutput*](../interfaces/models_isiglockeddustallowanceoutput.isiglockeddustallowanceoutput.md) | The object to serialize.    |
 
 **Returns:** *void*
 
@@ -219,7 +219,7 @@ ___
 
 ### serializeSigLockedSingleOutput
 
-▸ **serializeSigLockedSingleOutput**(`writeStream`: [*WriteStream*](../classes/utils/writestream.writestream.md), `object`: [*ISigLockedSingleOutput*](../interfaces/models/isiglockedsingleoutput.isiglockedsingleoutput.md)): *void*
+▸ **serializeSigLockedSingleOutput**(`writeStream`: [*WriteStream*](../classes/utils_writestream.writestream.md), `object`: [*ISigLockedSingleOutput*](../interfaces/models_isiglockedsingleoutput.isiglockedsingleoutput.md)): *void*
 
 Serialize the signature locked single output to binary.
 
@@ -227,8 +227,8 @@ Serialize the signature locked single output to binary.
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`writeStream` | [*WriteStream*](../classes/utils/writestream.writestream.md) | The stream to write the data to.   |
-`object` | [*ISigLockedSingleOutput*](../interfaces/models/isiglockedsingleoutput.isiglockedsingleoutput.md) | The object to serialize.    |
+`writeStream` | [*WriteStream*](../classes/utils_writestream.writestream.md) | The stream to write the data to.   |
+`object` | [*ISigLockedSingleOutput*](../interfaces/models_isiglockedsingleoutput.isiglockedsingleoutput.md) | The object to serialize.    |
 
 **Returns:** *void*
 
@@ -236,7 +236,7 @@ ___
 
 ### serializeTreasuryOutput
 
-▸ **serializeTreasuryOutput**(`writeStream`: [*WriteStream*](../classes/utils/writestream.writestream.md), `object`: [*ITreasuryOutput*](../interfaces/models/itreasuryoutput.itreasuryoutput.md)): *void*
+▸ **serializeTreasuryOutput**(`writeStream`: [*WriteStream*](../classes/utils_writestream.writestream.md), `object`: [*ITreasuryOutput*](../interfaces/models_itreasuryoutput.itreasuryoutput.md)): *void*
 
 Serialize the treasury output to binary.
 
@@ -244,7 +244,7 @@ Serialize the treasury output to binary.
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`writeStream` | [*WriteStream*](../classes/utils/writestream.writestream.md) | The stream to write the data to.   |
-`object` | [*ITreasuryOutput*](../interfaces/models/itreasuryoutput.itreasuryoutput.md) | The object to serialize.    |
+`writeStream` | [*WriteStream*](../classes/utils_writestream.writestream.md) | The stream to write the data to.   |
+`object` | [*ITreasuryOutput*](../interfaces/models_itreasuryoutput.itreasuryoutput.md) | The object to serialize.    |
 
 **Returns:** *void*

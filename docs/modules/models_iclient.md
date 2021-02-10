@@ -6,4 +6,4 @@
 
 ### Interfaces
 
-- [IClient](../interfaces/models/iclient.iclient.md)
+- [IClient](../interfaces/models_iclient.iclient.md)

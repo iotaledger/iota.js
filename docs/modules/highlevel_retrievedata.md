@@ -12,7 +12,7 @@
 
 ### retrieveData
 
-▸ **retrieveData**(`client`: [*IClient*](../interfaces/models/iclient.iclient.md), `messageId`: *string*): *Promise*<{} \| *undefined*\>
+▸ **retrieveData**(`client`: [*IClient*](../interfaces/models_iclient.iclient.md), `messageId`: *string*): *Promise*<{} \| *undefined*\>
 
 Retrieve a data message.
 
@@ -20,7 +20,7 @@ Retrieve a data message.
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`client` | [*IClient*](../interfaces/models/iclient.iclient.md) | The client to send the transfer with.   |
+`client` | [*IClient*](../interfaces/models_iclient.iclient.md) | The client to send the transfer with.   |
 `messageId` | *string* | The message id of the data to get.   |
 
 **Returns:** *Promise*<{} \| *undefined*\>

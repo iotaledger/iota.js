@@ -6,4 +6,4 @@
 
 ### Interfaces
 
-- [ITypeBase](../interfaces/models/itypebase.itypebase.md)
+- [ITypeBase](../interfaces/models_itypebase.itypebase.md)

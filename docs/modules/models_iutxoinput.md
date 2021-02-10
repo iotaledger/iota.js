@@ -6,7 +6,7 @@
 
 ### Interfaces
 
-- [IUTXOInput](../interfaces/models/iutxoinput.iutxoinput.md)
+- [IUTXOInput](../interfaces/models_iutxoinput.iutxoinput.md)
 
 ### Variables
 

@@ -6,7 +6,7 @@
 
 ### Interfaces
 
-- [IEd25519Address](../interfaces/models/ied25519address.ied25519address.md)
+- [IEd25519Address](../interfaces/models_ied25519address.ied25519address.md)
 
 ### Variables
 

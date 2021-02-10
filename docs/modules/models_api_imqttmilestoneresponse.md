@@ -6,4 +6,4 @@
 
 ### Interfaces
 
-- [IMqttMilestoneResponse](../interfaces/models/api/imqttmilestoneresponse.imqttmilestoneresponse.md)
+- [IMqttMilestoneResponse](../interfaces/models_api_imqttmilestoneresponse.imqttmilestoneresponse.md)

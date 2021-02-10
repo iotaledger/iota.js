@@ -6,4 +6,4 @@
 
 ### Classes
 
-- [CachedGroupElement](../classes/crypto/edwards25519/cachedgroupelement.cachedgroupelement.md)
+- [CachedGroupElement](../classes/crypto_edwards25519_cachedgroupelement.cachedgroupelement.md)

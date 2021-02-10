@@ -6,4 +6,4 @@
 
 ### Interfaces
 
-- [IAddressResponse](../interfaces/models/api/iaddressresponse.iaddressresponse.md)
+- [IAddressResponse](../interfaces/models_api_iaddressresponse.iaddressresponse.md)

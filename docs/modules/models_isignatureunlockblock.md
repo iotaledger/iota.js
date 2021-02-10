@@ -6,7 +6,7 @@
 
 ### Interfaces
 
-- [ISignatureUnlockBlock](../interfaces/models/isignatureunlockblock.isignatureunlockblock.md)
+- [ISignatureUnlockBlock](../interfaces/models_isignatureunlockblock.isignatureunlockblock.md)
 
 ### Variables
 

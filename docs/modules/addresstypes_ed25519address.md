@@ -6,4 +6,4 @@
 
 ### Classes
 
-- [Ed25519Address](../classes/addresstypes/ed25519address.ed25519address.md)
+- [Ed25519Address](../classes/addresstypes_ed25519address.ed25519address.md)

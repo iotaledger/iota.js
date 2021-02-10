@@ -6,4 +6,4 @@
 
 ### Classes
 
-- [ProjectiveGroupElement](../classes/crypto/edwards25519/projectivegroupelement.projectivegroupelement.md)
+- [ProjectiveGroupElement](../classes/crypto_edwards25519_projectivegroupelement.projectivegroupelement.md)

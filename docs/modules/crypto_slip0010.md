@@ -6,4 +6,4 @@
 
 ### Classes
 
-- [Slip0010](../classes/crypto/slip0010.slip0010.md)
+- [Slip0010](../classes/crypto_slip0010.slip0010.md)

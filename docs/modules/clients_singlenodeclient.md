@@ -6,4 +6,4 @@
 
 ### Classes
 
-- [SingleNodeClient](../classes/clients/singlenodeclient.singlenodeclient.md)
+- [SingleNodeClient](../classes/clients_singlenodeclient.singlenodeclient.md)

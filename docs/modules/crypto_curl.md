@@ -6,4 +6,4 @@
 
 ### Classes
 
-- [Curl](../classes/crypto/curl.curl.md)
+- [Curl](../classes/crypto_curl.curl.md)

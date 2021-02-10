@@ -6,4 +6,4 @@
 
 ### Classes
 
-- [MqttClient](../classes/clients/mqttclient.mqttclient.md)
+- [MqttClient](../classes/clients_mqttclient.mqttclient.md)

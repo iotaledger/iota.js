@@ -6,7 +6,7 @@
 
 ### Interfaces
 
-- [ITreasuryTransactionPayload](../interfaces/models/itreasurytransactionpayload.itreasurytransactionpayload.md)
+- [ITreasuryTransactionPayload](../interfaces/models_itreasurytransactionpayload.itreasurytransactionpayload.md)
 
 ### Variables
 
