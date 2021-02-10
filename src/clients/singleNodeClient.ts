@@ -455,17 +455,43 @@ export class SingleNodeClient implements IClient {
             requestData ? JSON.stringify(requestData) : undefined
         );
 
-        const responseData: IResponse<U> = await response.json();
+        let errorMessage: string | undefined;
+        let errorCode: string | undefined;
 
-        if (response.ok && !responseData.error) {
-            return responseData.data;
+        if (response.ok) {
+            try {
+                const responseData: IResponse<U> = await response.json();
+
+                if (responseData.error) {
+                    errorMessage = responseData.error.message;
+                    errorCode = responseData.error.code;
+                } else {
+                    return responseData.data;
+                }
+            } catch {
+            }
+        }
+
+        if (!errorMessage) {
+            try {
+                const text = await response.text();
+                if (text.length > 0) {
+                    const match = /code=(\d+), message=(.*)/.exec(text);
+                    if (match?.length === 3) {
+                        errorCode = match[1];
+                        errorMessage = match[2];
+                    } else {
+                        errorMessage = text;
+                    }
+                }
+            } catch { }
         }
 
         throw new ClientError(
-            responseData.error?.message ?? response.statusText,
+            errorMessage ?? response.statusText,
             route,
             response.status,
-            responseData.error?.code
+            errorCode ?? response.status.toString()
         );
     }
 

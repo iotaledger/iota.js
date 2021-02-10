@@ -7152,21 +7152,54 @@
 	     * @internal
 	     */
 	    SingleNodeClient.prototype.fetchJson = function (method, route, requestData) {
-	        var _a, _b, _c;
 	        return __awaiter(this, void 0, void 0, function () {
-	            var response, responseData;
-	            return __generator(this, function (_d) {
-	                switch (_d.label) {
+	            var response, errorMessage, errorCode, responseData, text, match;
+	            return __generator(this, function (_c) {
+	                switch (_c.label) {
 	                    case 0: return [4 /*yield*/, this.fetchWithTimeout(method, "" + this._basePath + route, { "Content-Type": "application/json" }, requestData ? JSON.stringify(requestData) : undefined)];
 	                    case 1:
-	                        response = _d.sent();
-	                        return [4 /*yield*/, response.json()];
+	                        response = _c.sent();
+	                        if (!response.ok) return [3 /*break*/, 5];
+	                        _c.label = 2;
 	                    case 2:
-	                        responseData = _d.sent();
-	                        if (response.ok && !responseData.error) {
+	                        _c.trys.push([2, 4, , 5]);
+	                        return [4 /*yield*/, response.json()];
+	                    case 3:
+	                        responseData = _c.sent();
+	                        if (responseData.error) {
+	                            errorMessage = responseData.error.message;
+	                            errorCode = responseData.error.code;
+	                        }
+	                        else {
 	                            return [2 /*return*/, responseData.data];
 	                        }
-	                        throw new clientError.ClientError((_b = (_a = responseData.error) === null || _a === void 0 ? void 0 : _a.message) !== null && _b !== void 0 ? _b : response.statusText, route, response.status, (_c = responseData.error) === null || _c === void 0 ? void 0 : _c.code);
+	                        return [3 /*break*/, 5];
+	                    case 4:
+	                        _c.sent();
+	                        return [3 /*break*/, 5];
+	                    case 5:
+	                        if (!!errorMessage) return [3 /*break*/, 9];
+	                        _c.label = 6;
+	                    case 6:
+	                        _c.trys.push([6, 8, , 9]);
+	                        return [4 /*yield*/, response.text()];
+	                    case 7:
+	                        text = _c.sent();
+	                        if (text.length > 0) {
+	                            match = /code=(\d+), message=(.*)/.exec(text);
+	                            if ((match === null || match === void 0 ? void 0 : match.length) === 3) {
+	                                errorCode = match[1];
+	                                errorMessage = match[2];
+	                            }
+	                            else {
+	                                errorMessage = text;
+	                            }
+	                        }
+	                        return [3 /*break*/, 9];
+	                    case 8:
+	                        _c.sent();
+	                        return [3 /*break*/, 9];
+	                    case 9: throw new clientError.ClientError(errorMessage !== null && errorMessage !== void 0 ? errorMessage : response.statusText, route, response.status, errorCode !== null && errorCode !== void 0 ? errorCode : response.status.toString());
 	                }
 	            });
 	        });

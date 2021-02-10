@@ -9,7 +9,7 @@ export interface IResponse<T> {
     /**
      * Optional error in the response.
      */
-    error: {
+    error?: {
         /**
          * The code for the error response.
          */

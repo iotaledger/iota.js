@@ -35,13 +35,6 @@ ___
 
 ### error
 
-• **error**: { `code`: *string* ; `message`: *string*  }
+• `Optional` **error**: *undefined* \| { `code`: *string* ; `message`: *string*  }
 
 Optional error in the response.
-
-#### Type declaration:
-
-Name | Type | Description |
------- | ------ | ------ |
-`code` | *string* | The code for the error response.   |
-`message` | *string* | A more descriptive version of the error.   |
