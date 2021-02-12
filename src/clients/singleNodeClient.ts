@@ -243,7 +243,7 @@ export class SingleNodeClient implements IClient {
      * @returns The messageId.
      */
     public async messagesFind(indexationKey: string): Promise<IMessagesResponse> {
-        return this.fetchJson<unknown, IMessagesResponse>(
+        return this.fetchJson<never, IMessagesResponse>(
             "get",
             `messages?index=${encodeURIComponent(indexationKey)}`
         );
@@ -255,7 +255,7 @@ export class SingleNodeClient implements IClient {
      * @returns The messages children.
      */
     public async messageChildren(messageId: string): Promise<IChildrenResponse> {
-        return this.fetchJson<unknown, IChildrenResponse>(
+        return this.fetchJson<never, IChildrenResponse>(
             "get",
             `messages/${messageId}/children`
         );
@@ -267,7 +267,7 @@ export class SingleNodeClient implements IClient {
      * @returns The output details.
      */
     public async output(outputId: string): Promise<IOutputResponse> {
-        return this.fetchJson<unknown, IOutputResponse>(
+        return this.fetchJson<never, IOutputResponse>(
             "get",
             `outputs/${outputId}`
         );
@@ -279,7 +279,7 @@ export class SingleNodeClient implements IClient {
      * @returns The address details.
      */
     public async address(addressBech32: string): Promise<IAddressResponse> {
-        return this.fetchJson<unknown, IAddressResponse>(
+        return this.fetchJson<never, IAddressResponse>(
             "get",
             `addresses/${addressBech32}`
         );
@@ -301,7 +301,7 @@ export class SingleNodeClient implements IClient {
         if (includeSpent !== undefined) {
             queryParams.push(`include-spent=${includeSpent}`);
         }
-        return this.fetchJson<unknown, IAddressOutputsResponse>(
+        return this.fetchJson<never, IAddressOutputsResponse>(
             "get",
             `addresses/${addressBech32}/outputs${this.combineQueryParams(queryParams)}`
         );
@@ -316,7 +316,7 @@ export class SingleNodeClient implements IClient {
         if (!Converter.isHex(addressEd25519)) {
             throw new Error("The supplied address does not appear to be hex format");
         }
-        return this.fetchJson<unknown, IAddressResponse>(
+        return this.fetchJson<never, IAddressResponse>(
             "get",
             `addresses/ed25519/${addressEd25519}`
         );
@@ -341,7 +341,7 @@ export class SingleNodeClient implements IClient {
         if (includeSpent !== undefined) {
             queryParams.push(`include-spent=${includeSpent}`);
         }
-        return this.fetchJson<unknown, IAddressOutputsResponse>(
+        return this.fetchJson<never, IAddressOutputsResponse>(
             "get",
             `addresses/ed25519/${addressEd25519}/outputs${this.combineQueryParams(queryParams)}`
         );
@@ -353,7 +353,7 @@ export class SingleNodeClient implements IClient {
      * @returns The milestone details.
      */
     public async milestone(index: number): Promise<IMilestoneResponse> {
-        return this.fetchJson<unknown, IMilestoneResponse>(
+        return this.fetchJson<never, IMilestoneResponse>(
             "get",
             `milestones/${index}`
         );
@@ -365,7 +365,7 @@ export class SingleNodeClient implements IClient {
      * @returns The milestone utxo changes details.
      */
     public async milestoneUtxoChanges(index: number): Promise<IMilestoneUtxoChangesResponse> {
-        return this.fetchJson<unknown, IMilestoneUtxoChangesResponse>(
+        return this.fetchJson<never, IMilestoneUtxoChangesResponse>(
             "get",
             `milestones/${index}/utxo-changes`
         );
@@ -376,7 +376,7 @@ export class SingleNodeClient implements IClient {
      * @returns The list of peers.
      */
     public async peers(): Promise<IPeer[]> {
-        return this.fetchJson<unknown, IPeer[]>(
+        return this.fetchJson<never, IPeer[]>(
             "get",
             "peers"
         );
@@ -409,7 +409,7 @@ export class SingleNodeClient implements IClient {
      */
     public async peerDelete(peerId: string): Promise<void> {
         // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
-        return this.fetchJson<unknown, void>(
+        return this.fetchJson<never, void>(
             "delete",
             `peers/${peerId}`
         );
@@ -421,7 +421,7 @@ export class SingleNodeClient implements IClient {
      * @returns The details for the created peer.
      */
     public async peer(peerId: string): Promise<IPeer> {
-        return this.fetchJson<unknown, IPeer>(
+        return this.fetchJson<never, IPeer>(
             "get",
             `peers/${peerId}`
         );
