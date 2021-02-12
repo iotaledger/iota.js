@@ -4,6 +4,7 @@ import { serializeInput } from "../binary/input";
 import { serializeOutput } from "../binary/output";
 import { MAX_INDEXATION_KEY_LENGTH, MIN_INDEXATION_KEY_LENGTH } from "../binary/payload";
 import { serializeTransactionEssence } from "../binary/transaction";
+import { Blake2b } from "../crypto/blake2b";
 import { Ed25519 } from "../crypto/ed25519";
 import { IClient } from "../models/IClient";
 import { ED25519_ADDRESS_TYPE } from "../models/IEd25519Address";
@@ -167,6 +168,8 @@ export function buildTransactionPayload(
     serializeTransactionEssence(binaryEssence, transactionEssence);
     const essenceFinal = binaryEssence.finalBytes();
 
+    const essenceHash = Blake2b.sum256(essenceFinal);
+
     // Create the unlock blocks
     const unlockBlocks: (ISignatureUnlockBlock | IReferenceUnlockBlock)[] = [];
     const addressToUnlockBlock: {
@@ -190,7 +193,7 @@ export function buildTransactionPayload(
                     type: ED25519_SIGNATURE_TYPE,
                     publicKey: hexInputAddressPublic,
                     signature: Converter.bytesToHex(
-                        Ed25519.sign(input.addressKeyPair.privateKey, essenceFinal)
+                        Ed25519.sign(input.addressKeyPair.privateKey, essenceHash)
                     )
                 }
             });
