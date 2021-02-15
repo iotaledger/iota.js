@@ -1,0 +1,13 @@
+{
+  "name": "distributor",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "build-watch": "tsc --watch"
+  },
+  "dependencies": {
+    "@iota/iota.js": "file:../..",
+    "typescript": "^4.0.3"
+  }
+}
