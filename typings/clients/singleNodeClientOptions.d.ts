@@ -21,7 +21,9 @@ export interface SingleNodeClientOptions {
      */
     password?: string;
     /**
-     * Authorization header.
+     * Additional headers to include in the requests.
      */
-    authorizationHeader?: string;
+    headers?: {
+        [id: string]: string;
+    };
 }
