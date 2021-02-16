@@ -84,10 +84,10 @@ export class SingleNodeClient implements IClient {
     private readonly _password?: string;
 
     /**
-     * Authorization header.
+     * Additional headers to include in the requests.
      * @internal
      */
-    private readonly _authorizationHeader?: string;
+    private readonly _headers?: { [id: string]: string };
 
     /**
      * Create a new instance of client.
@@ -104,13 +104,13 @@ export class SingleNodeClient implements IClient {
         this._timeout = options?.timeout;
         this._userName = options?.userName;
         this._password = options?.password;
-        this._authorizationHeader = options?.authorizationHeader;
+        this._headers = options?.headers;
 
         if (this._userName && this._password && !this._endpoint.startsWith("https")) {
             throw new Error("Basic authentication requires the endpoint to be https");
         }
 
-        if (this._userName && this._password && this._authorizationHeader) {
+        if (this._userName && this._password && (this._headers?.authorization || this._headers?.Authorization)) {
             throw new Error("You can not supply both user/pass and authorization header");
         }
     }
@@ -566,15 +566,23 @@ export class SingleNodeClient implements IClient {
                 this._timeout);
         }
 
-        if (this._userName && this._password) {
-            const userPass = Converter.bytesToBase64(Converter.utf8ToBytes(`${this._userName}:${this._password}`));
-            headers = headers ?? {};
-            headers.Authorization = `Basic ${userPass}`;
+        const finalHeaders: Headers = new Headers();
+
+        if (headers) {
+            for (const header in headers) {
+                finalHeaders.set(header, headers[header]);
+            }
         }
 
-        if (this._authorizationHeader) {
-            headers = headers ?? {};
-            headers.Authorization = this._authorizationHeader;
+        if (this._userName && this._password) {
+            const userPass = Converter.bytesToBase64(Converter.utf8ToBytes(`${this._userName}:${this._password}`));
+            finalHeaders.set("Authorization", `Basic ${userPass}`);
+        }
+
+        if (this._headers) {
+            for (const header in this._headers) {
+                finalHeaders.set(header, this._headers[header]);
+            }
         }
 
         try {
@@ -582,7 +590,7 @@ export class SingleNodeClient implements IClient {
                 `${this._endpoint}${route}`,
                 {
                     method,
-                    headers,
+                    headers: finalHeaders,
                     body,
                     signal: controller ? controller.signal : undefined
                 }

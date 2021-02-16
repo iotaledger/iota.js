@@ -6762,7 +6762,7 @@
 	     * @param options Options for the client.
 	     */
 	    function SingleNodeClient(endpoint, options) {
-	        var _a;
+	        var _a, _b, _c;
 	        if (!endpoint) {
 	            throw new Error("The endpoint can not be empty");
 	        }
@@ -6772,11 +6772,11 @@
 	        this._timeout = options === null || options === void 0 ? void 0 : options.timeout;
 	        this._userName = options === null || options === void 0 ? void 0 : options.userName;
 	        this._password = options === null || options === void 0 ? void 0 : options.password;
-	        this._authorizationHeader = options === null || options === void 0 ? void 0 : options.authorizationHeader;
+	        this._headers = options === null || options === void 0 ? void 0 : options.headers;
 	        if (this._userName && this._password && !this._endpoint.startsWith("https")) {
 	            throw new Error("Basic authentication requires the endpoint to be https");
 	        }
-	        if (this._userName && this._password && this._authorizationHeader) {
+	        if (this._userName && this._password && (((_b = this._headers) === null || _b === void 0 ? void 0 : _b.authorization) || ((_c = this._headers) === null || _c === void 0 ? void 0 : _c.Authorization))) {
 	            throw new Error("You can not supply both user/pass and authorization header");
 	        }
 	    }
@@ -7255,7 +7255,7 @@
 	     */
 	    SingleNodeClient.prototype.fetchWithTimeout = function (method, route, headers, body) {
 	        return __awaiter(this, void 0, void 0, function () {
-	            var controller, timerId, userPass, response, err_1;
+	            var controller, timerId, finalHeaders, header, userPass, header, response, err_1;
 	            return __generator(this, function (_a) {
 	                switch (_a.label) {
 	                    case 0:
@@ -7267,21 +7267,27 @@
 	                                }
 	                            }, this._timeout);
 	                        }
+	                        finalHeaders = new Headers();
+	                        if (headers) {
+	                            for (header in headers) {
+	                                finalHeaders.set(header, headers[header]);
+	                            }
+	                        }
 	                        if (this._userName && this._password) {
 	                            userPass = converter.Converter.bytesToBase64(converter.Converter.utf8ToBytes(this._userName + ":" + this._password));
-	                            headers = headers !== null && headers !== void 0 ? headers : {};
-	                            headers.Authorization = "Basic " + userPass;
+	                            finalHeaders.set("Authorization", "Basic " + userPass);
 	                        }
-	                        if (this._authorizationHeader) {
-	                            headers = headers !== null && headers !== void 0 ? headers : {};
-	                            headers.Authorization = this._authorizationHeader;
+	                        if (this._headers) {
+	                            for (header in this._headers) {
+	                                finalHeaders.set(header, this._headers[header]);
+	                            }
 	                        }
 	                        _a.label = 1;
 	                    case 1:
 	                        _a.trys.push([1, 3, 4, 5]);
 	                        return [4 /*yield*/, fetch("" + this._endpoint + route, {
 	                                method: method,
-	                                headers: headers,
+	                                headers: finalHeaders,
 	                                body: body,
 	                                signal: controller ? controller.signal : undefined
 	                            })];
