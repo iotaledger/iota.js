@@ -566,23 +566,23 @@ export class SingleNodeClient implements IClient {
                 this._timeout);
         }
 
-        const finalHeaders: Headers = new Headers();
+        const finalHeaders: { [id: string]: string } = {};
+
+        if (this._headers) {
+            for (const header in this._headers) {
+                finalHeaders[header] = this._headers[header];
+            }
+        }
 
         if (headers) {
             for (const header in headers) {
-                finalHeaders.set(header, headers[header]);
+                finalHeaders[header] = headers[header];
             }
         }
 
         if (this._userName && this._password) {
             const userPass = Converter.bytesToBase64(Converter.utf8ToBytes(`${this._userName}:${this._password}`));
-            finalHeaders.set("Authorization", `Basic ${userPass}`);
-        }
-
-        if (this._headers) {
-            for (const header in this._headers) {
-                finalHeaders.set(header, this._headers[header]);
-            }
+            finalHeaders.Authorization = `Basic ${userPass}`;
         }
 
         try {

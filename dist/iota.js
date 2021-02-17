@@ -7255,7 +7255,7 @@
 	     */
 	    SingleNodeClient.prototype.fetchWithTimeout = function (method, route, headers, body) {
 	        return __awaiter(this, void 0, void 0, function () {
-	            var controller, timerId, finalHeaders, header, userPass, header, response, err_1;
+	            var controller, timerId, finalHeaders, header, header, userPass, response, err_1;
 	            return __generator(this, function (_a) {
 	                switch (_a.label) {
 	                    case 0:
@@ -7267,20 +7267,20 @@
 	                                }
 	                            }, this._timeout);
 	                        }
-	                        finalHeaders = new Headers();
+	                        finalHeaders = {};
+	                        if (this._headers) {
+	                            for (header in this._headers) {
+	                                finalHeaders[header] = this._headers[header];
+	                            }
+	                        }
 	                        if (headers) {
 	                            for (header in headers) {
-	                                finalHeaders.set(header, headers[header]);
+	                                finalHeaders[header] = headers[header];
 	                            }
 	                        }
 	                        if (this._userName && this._password) {
 	                            userPass = converter.Converter.bytesToBase64(converter.Converter.utf8ToBytes(this._userName + ":" + this._password));
-	                            finalHeaders.set("Authorization", "Basic " + userPass);
-	                        }
-	                        if (this._headers) {
-	                            for (header in this._headers) {
-	                                finalHeaders.set(header, this._headers[header]);
-	                            }
+	                            finalHeaders.Authorization = "Basic " + userPass;
 	                        }
 	                        _a.label = 1;
 	                    case 1:
