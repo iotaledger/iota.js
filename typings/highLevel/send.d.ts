@@ -19,7 +19,7 @@ import { IUTXOInput } from "../models/IUTXOInput";
  * @returns The id of the message created and the contructed message.
  */
 export declare function send(client: IClient, seed: ISeed, accountIndex: number, addressBech32: string, amount: number, indexation?: {
-    key: string;
+    key: Uint8Array;
     data?: Uint8Array;
 }, addressOptions?: {
     startIndex?: number;
@@ -44,7 +44,7 @@ export declare function send(client: IClient, seed: ISeed, accountIndex: number,
  * @returns The id of the message created and the contructed message.
  */
 export declare function sendEd25519(client: IClient, seed: ISeed, accountIndex: number, addressEd25519: string, amount: number, indexation?: {
-    key: string;
+    key: Uint8Array;
     data?: Uint8Array;
 }, addressOptions?: {
     startIndex?: number;
@@ -72,7 +72,7 @@ export declare function sendMultiple(client: IClient, seed: ISeed, accountIndex:
     amount: number;
     isDustAllowance?: boolean;
 }[], indexation?: {
-    key: string;
+    key: Uint8Array;
     data?: Uint8Array;
 }, addressOptions?: {
     startIndex?: number;
@@ -100,7 +100,7 @@ export declare function sendMultipleEd25519(client: IClient, seed: ISeed, accoun
     amount: number;
     isDustAllowance?: boolean;
 }[], indexation?: {
-    key: string;
+    key: Uint8Array;
     data?: Uint8Array;
 }, addressOptions?: {
     startIndex?: number;
@@ -128,7 +128,7 @@ export declare function sendWithAddressGenerator<T>(client: IClient, seed: ISeed
     amount: number;
     isDustAllowance?: boolean;
 }[], indexation?: {
-    key: string;
+    key: Uint8Array;
     data?: Uint8Array;
 }, zeroCount?: number): Promise<{
     messageId: string;

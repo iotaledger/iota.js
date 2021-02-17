@@ -297,7 +297,7 @@ ___
 
 ### messagesFind
 
-▸ **messagesFind**(`indexationKey`: *string*): *Promise*<[*IMessagesResponse*](../interfaces/models_api_imessagesresponse.imessagesresponse.md)\>
+▸ **messagesFind**(`indexationKey`: *Uint8Array*): *Promise*<[*IMessagesResponse*](../interfaces/models_api_imessagesresponse.imessagesresponse.md)\>
 
 Find messages by index.
 
@@ -305,7 +305,7 @@ Find messages by index.
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`indexationKey` | *string* | The index value.   |
+`indexationKey` | *Uint8Array* | The index value.   |
 
 **Returns:** *Promise*<[*IMessagesResponse*](../interfaces/models_api_imessagesresponse.imessagesresponse.md)\>
 

@@ -5,7 +5,7 @@ const API_ENDPOINT = "http://localhost:14265";
 async function run() {
     const client = new SingleNodeClient(API_ENDPOINT);
 
-    const myIndex = "MY-DATA-INDEX";
+    const myIndex = Converter.utf8ToBytes("MY-DATA-INDEX");
 
     for (let i = 0; i < 10; i++) {
         console.log("Sending Data")
@@ -24,7 +24,7 @@ async function run() {
         const firstResult = await retrieveData(client, found.messageIds[0]);
         if (firstResult) {
             console.log("First Result");
-            console.log("\tIndex: ", firstResult.index);
+            console.log("\tIndex: ",  Converter.bytesToUtf8(firstResult.index));
             console.log("\tData: ", firstResult.data ? Converter.bytesToUtf8(firstResult.data) : "None");
         }
 

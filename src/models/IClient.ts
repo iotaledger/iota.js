@@ -75,7 +75,7 @@ export interface IClient {
      * @param indexationKey The index value.
      * @returns The messageId.
      */
-    messagesFind(indexationKey: string): Promise<IMessagesResponse>;
+    messagesFind(indexationKey: Uint8Array): Promise<IMessagesResponse>;
 
     /**
      * Get the children of a message.

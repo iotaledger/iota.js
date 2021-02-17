@@ -44,7 +44,7 @@ export async function sendAdvanced(
         isDustAllowance?: boolean;
     }[],
     indexation?: {
-        key: string;
+        key: Uint8Array;
         data?: Uint8Array;
     }): Promise<{
         messageId: string;
@@ -86,7 +86,7 @@ export function buildTransactionPayload(
         isDustAllowance?: boolean;
     }[],
     indexation?: {
-        key: string;
+        key: Uint8Array;
         data?: Uint8Array;
     }): ITransactionPayload {
     if (!inputsAndSignatureKeyPairs || inputsAndSignatureKeyPairs.length === 0) {
@@ -157,7 +157,7 @@ export function buildTransactionPayload(
         payload: indexation
             ? {
                 type: INDEXATION_PAYLOAD_TYPE,
-                index: indexation.key,
+                index: Converter.bytesToHex(indexation.key),
                 data: indexation.data ? Converter.bytesToHex(indexation.data) : ""
             }
             : undefined

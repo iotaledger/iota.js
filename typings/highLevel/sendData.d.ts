@@ -7,7 +7,7 @@ import { IMessage } from "../models/IMessage";
  * @param indexationData The index data.
  * @returns The id of the message created and the message.
  */
-export declare function sendData(client: IClient, indexationKey: string, indexationData?: Uint8Array): Promise<{
+export declare function sendData(client: IClient, indexationKey: Uint8Array, indexationData?: Uint8Array): Promise<{
     message: IMessage;
     messageId: string;
 }>;

@@ -91,7 +91,7 @@ describe("Binary Message", () => {
 
     test("Can succeed with indexation data", () => {
         // eslint-disable-next-line max-len
-        const hex = "7b00000000000000029eca185fb38d44471b0c396c6c147c3a2a4c590dc5dac6431b698c58dcce449a26b9c0077037bf198b35306408e4a9b50430bdf0ea54f722cc4e7ce4f7ffba5e10000000020000000300466f6f030000004261720000000000000000";
+        const hex = "7b00000000000000029eca185fb38d44471b0c396c6c147c3a2a4c590dc5dac6431b698c58dcce449a26b9c0077037bf198b35306408e4a9b50430bdf0ea54f722cc4e7ce4f7ffba5e10000000020000000300666f6f030000004261720000000000000000";
         const message = deserializeMessage(new ReadStream(Converter.hexToBytes(hex)));
         expect(message.networkId).toEqual("123");
         expect(message.parentMessageIds).toBeDefined();
@@ -103,7 +103,7 @@ describe("Binary Message", () => {
         }
         const payload = message.payload as IIndexationPayload;
         expect(payload.type).toEqual(2);
-        expect(payload.index).toEqual("Foo");
+        expect(Converter.hexToUtf8(payload.index)).toEqual("foo");
         expect(payload.data).toBeDefined();
         if (payload.data) {
             expect(Converter.hexToUtf8(payload.data)).toEqual("Bar");
@@ -124,7 +124,7 @@ describe("Binary Message", () => {
 
     test("Can succeed with actual indexation data", () => {
         // eslint-disable-next-line max-len
-        const hex = "7b00000000000000029eca185fb38d44471b0c396c6c147c3a2a4c590dc5dac6431b698c58dcce449a26b9c0077037bf198b35306408e4a9b50430bdf0ea54f722cc4e7ce4f7ffba5e10000000020000000300466f6f030000004261720000000000000000";
+        const hex = "7b00000000000000029eca185fb38d44471b0c396c6c147c3a2a4c590dc5dac6431b698c58dcce449a26b9c0077037bf198b35306408e4a9b50430bdf0ea54f722cc4e7ce4f7ffba5e10000000020000000300666f6f030000004261720000000000000000";
         const message = deserializeMessage(new ReadStream(Converter.hexToBytes(hex)));
         expect(message.networkId).toEqual("123");
         expect(message.parentMessageIds).toBeDefined();
@@ -136,7 +136,7 @@ describe("Binary Message", () => {
         }
         const payload = message.payload as IIndexationPayload;
         expect(payload.type).toEqual(2);
-        expect(payload.index).toEqual("Foo");
+        expect(Converter.hexToUtf8(payload.index)).toEqual("foo");
         expect(payload.data).toBeDefined();
         if (payload.data) {
             expect(Converter.hexToUtf8(payload.data)).toEqual("Bar");

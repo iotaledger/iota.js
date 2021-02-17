@@ -22,7 +22,7 @@ export declare function sendAdvanced(client: IClient, inputsAndSignatureKeyPairs
     amount: number;
     isDustAllowance?: boolean;
 }[], indexation?: {
-    key: string;
+    key: Uint8Array;
     data?: Uint8Array;
 }): Promise<{
     messageId: string;
@@ -46,6 +46,6 @@ export declare function buildTransactionPayload(inputsAndSignatureKeyPairs: {
     amount: number;
     isDustAllowance?: boolean;
 }[], indexation?: {
-    key: string;
+    key: Uint8Array;
     data?: Uint8Array;
 }): ITransactionPayload;

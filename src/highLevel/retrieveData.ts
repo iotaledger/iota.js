@@ -12,7 +12,7 @@ import { Converter } from "../utils/converter";
  * @returns The message index and data.
  */
 export async function retrieveData(client: IClient, messageId: string): Promise<{
-    index: string;
+    index: Uint8Array;
     data?: Uint8Array;
 } | undefined> {
     const message = await client.message(messageId);
@@ -28,7 +28,7 @@ export async function retrieveData(client: IClient, messageId: string): Promise<
 
         if (indexationPayload) {
             return {
-                index: indexationPayload.index,
+                index: Converter.hexToBytes(indexationPayload.index),
                 data: indexationPayload.data ? Converter.hexToBytes(indexationPayload.data) : undefined
             };
         }

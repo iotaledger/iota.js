@@ -72,7 +72,7 @@ export declare class SingleNodeClient implements IClient {
      * @param indexationKey The index value.
      * @returns The messageId.
      */
-    messagesFind(indexationKey: string): Promise<IMessagesResponse>;
+    messagesFind(indexationKey: Uint8Array): Promise<IMessagesResponse>;
     /**
      * Get the children of a message.
      * @param messageId The id of the message to get the children for.

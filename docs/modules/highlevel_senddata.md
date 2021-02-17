@@ -12,7 +12,7 @@
 
 ### sendData
 
-▸ **sendData**(`client`: [*IClient*](../interfaces/models_iclient.iclient.md), `indexationKey`: *string*, `indexationData?`: Uint8Array): *Promise*<{}\>
+▸ **sendData**(`client`: [*IClient*](../interfaces/models_iclient.iclient.md), `indexationKey`: Uint8Array, `indexationData?`: Uint8Array): *Promise*<{}\>
 
 Send a data message.
 
@@ -21,7 +21,7 @@ Send a data message.
 Name | Type | Description |
 ------ | ------ | ------ |
 `client` | [*IClient*](../interfaces/models_iclient.iclient.md) | The client to send the transfer with.   |
-`indexationKey` | *string* | The index name.   |
+`indexationKey` | Uint8Array | The index name.   |
 `indexationData?` | Uint8Array | The index data.   |
 
 **Returns:** *Promise*<{}\>

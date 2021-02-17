@@ -6,6 +6,6 @@ import { IClient } from "../models/IClient";
  * @returns The message index and data.
  */
 export declare function retrieveData(client: IClient, messageId: string): Promise<{
-    index: string;
+    index: Uint8Array;
     data?: Uint8Array;
 } | undefined>;

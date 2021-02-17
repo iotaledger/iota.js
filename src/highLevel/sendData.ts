@@ -13,7 +13,7 @@ import { Converter } from "../utils/converter";
  * @param indexationData The index data.
  * @returns The id of the message created and the message.
  */
-export async function sendData(client: IClient, indexationKey: string, indexationData?: Uint8Array): Promise<{
+export async function sendData(client: IClient, indexationKey: Uint8Array, indexationData?: Uint8Array): Promise<{
     message: IMessage;
     messageId: string;
 }> {
@@ -33,7 +33,7 @@ export async function sendData(client: IClient, indexationKey: string, indexatio
 
     const indexationPayload: IIndexationPayload = {
         type: INDEXATION_PAYLOAD_TYPE,
-        index: indexationKey,
+        index: Converter.bytesToHex(indexationKey),
         data: indexationData ? Converter.bytesToHex(indexationData) : ""
     };
 
