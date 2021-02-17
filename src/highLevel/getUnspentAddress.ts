@@ -6,7 +6,7 @@ import { getUnspentAddresses } from "./getUnspentAddresses";
 
 /**
  * Get the first unspent address.
- * @param client The client to send the transfer with.
+ * @param client The client or node endpoint to send the transfer with.
  * @param seed The seed to use for address generation.
  * @param accountIndex The account index in the wallet.
  * @param addressOptions Optional address configuration for balance address lookups.
@@ -15,7 +15,7 @@ import { getUnspentAddresses } from "./getUnspentAddresses";
  * @returns The first unspent address.
  */
 export async function getUnspentAddress(
-    client: IClient,
+    client: IClient | string,
     seed: ISeed,
     accountIndex: number,
     addressOptions?: {

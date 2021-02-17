@@ -37,21 +37,26 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.retrieveData = void 0;
+// Copyright 2020 IOTA Stiftung
+// SPDX-License-Identifier: Apache-2.0
+var singleNodeClient_1 = require("../clients/singleNodeClient");
 var IIndexationPayload_1 = require("../models/IIndexationPayload");
 var ITransactionPayload_1 = require("../models/ITransactionPayload");
 var converter_1 = require("../utils/converter");
 /**
  * Retrieve a data message.
- * @param client The client to send the transfer with.
+ * @param client The client or node endpoint to retrieve the data with.
  * @param messageId The message id of the data to get.
  * @returns The message index and data.
  */
 function retrieveData(client, messageId) {
     return __awaiter(this, void 0, void 0, function () {
-        var message, indexationPayload;
+        var localClient, message, indexationPayload;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, client.message(messageId)];
+                case 0:
+                    localClient = typeof client === "string" ? new singleNodeClient_1.SingleNodeClient(client) : client;
+                    return [4 /*yield*/, localClient.message(messageId)];
                 case 1:
                     message = _a.sent();
                     if (message === null || message === void 0 ? void 0 : message.payload) {
@@ -75,4 +80,4 @@ function retrieveData(client, messageId) {
     });
 }
 exports.retrieveData = retrieveData;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicmV0cmlldmVEYXRhLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vc3JjL2hpZ2hMZXZlbC9yZXRyaWV2ZURhdGEudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O0FBR0EsbUVBQTJGO0FBQzNGLHFFQUF5RTtBQUN6RSxnREFBK0M7QUFFL0M7Ozs7O0dBS0c7QUFDSCxTQUFzQixZQUFZLENBQUMsTUFBZSxFQUFFLFNBQWlCOzs7Ozt3QkFJakQscUJBQU0sTUFBTSxDQUFDLE9BQU8sQ0FBQyxTQUFTLENBQUMsRUFBQTs7b0JBQXpDLE9BQU8sR0FBRyxTQUErQjtvQkFFL0MsSUFBSSxPQUFPLGFBQVAsT0FBTyx1QkFBUCxPQUFPLENBQUUsT0FBTyxFQUFFO3dCQUNkLGlCQUFpQixTQUFnQyxDQUFDO3dCQUV0RCxJQUFJLE9BQU8sQ0FBQyxPQUFPLENBQUMsSUFBSSxLQUFLLDhDQUF3QixFQUFFOzRCQUNuRCxpQkFBaUIsR0FBRyxPQUFPLENBQUMsT0FBTyxDQUFDLE9BQU8sQ0FBQyxPQUFPLENBQUM7eUJBQ3ZEOzZCQUFNLElBQUksT0FBTyxDQUFDLE9BQU8sQ0FBQyxJQUFJLEtBQUssNENBQXVCLEVBQUU7NEJBQ3pELGlCQUFpQixHQUFHLE9BQU8sQ0FBQyxPQUFPLENBQUM7eUJBQ3ZDO3dCQUVELElBQUksaUJBQWlCLEVBQUU7NEJBQ25CLHNCQUFPO29DQUNILEtBQUssRUFBRSxpQkFBaUIsQ0FBQyxLQUFLO29DQUM5QixJQUFJLEVBQUUsaUJBQWlCLENBQUMsSUFBSSxDQUFDLENBQUMsQ0FBQyxxQkFBUyxDQUFDLFVBQVUsQ0FBQyxpQkFBaUIsQ0FBQyxJQUFJLENBQUMsQ0FBQyxDQUFDLENBQUMsU0FBUztpQ0FDMUYsRUFBQzt5QkFDTDtxQkFDSjs7Ozs7Q0FDSjtBQXRCRCxvQ0FzQkMifQ==
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicmV0cmlldmVEYXRhLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vc3JjL2hpZ2hMZXZlbC9yZXRyaWV2ZURhdGEudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O0FBQUEsK0JBQStCO0FBQy9CLHNDQUFzQztBQUN0QyxnRUFBK0Q7QUFFL0QsbUVBQTJGO0FBQzNGLHFFQUF5RTtBQUN6RSxnREFBK0M7QUFFL0M7Ozs7O0dBS0c7QUFDSCxTQUFzQixZQUFZLENBQUMsTUFBd0IsRUFBRSxTQUFpQjs7Ozs7O29CQUlwRSxXQUFXLEdBQUcsT0FBTyxNQUFNLEtBQUssUUFBUSxDQUFDLENBQUMsQ0FBQyxJQUFJLG1DQUFnQixDQUFDLE1BQU0sQ0FBQyxDQUFDLENBQUMsQ0FBQyxNQUFNLENBQUM7b0JBRXZFLHFCQUFNLFdBQVcsQ0FBQyxPQUFPLENBQUMsU0FBUyxDQUFDLEVBQUE7O29CQUE5QyxPQUFPLEdBQUcsU0FBb0M7b0JBRXBELElBQUksT0FBTyxhQUFQLE9BQU8sdUJBQVAsT0FBTyxDQUFFLE9BQU8sRUFBRTt3QkFDZCxpQkFBaUIsU0FBZ0MsQ0FBQzt3QkFFdEQsSUFBSSxPQUFPLENBQUMsT0FBTyxDQUFDLElBQUksS0FBSyw4Q0FBd0IsRUFBRTs0QkFDbkQsaUJBQWlCLEdBQUcsT0FBTyxDQUFDLE9BQU8sQ0FBQyxPQUFPLENBQUMsT0FBTyxDQUFDO3lCQUN2RDs2QkFBTSxJQUFJLE9BQU8sQ0FBQyxPQUFPLENBQUMsSUFBSSxLQUFLLDRDQUF1QixFQUFFOzRCQUN6RCxpQkFBaUIsR0FBRyxPQUFPLENBQUMsT0FBTyxDQUFDO3lCQUN2Qzt3QkFFRCxJQUFJLGlCQUFpQixFQUFFOzRCQUNuQixzQkFBTztvQ0FDSCxLQUFLLEVBQUUsaUJBQWlCLENBQUMsS0FBSztvQ0FDOUIsSUFBSSxFQUFFLGlCQUFpQixDQUFDLElBQUksQ0FBQyxDQUFDLENBQUMscUJBQVMsQ0FBQyxVQUFVLENBQUMsaUJBQWlCLENBQUMsSUFBSSxDQUFDLENBQUMsQ0FBQyxDQUFDLFNBQVM7aUNBQzFGLEVBQUM7eUJBQ0w7cUJBQ0o7Ozs7O0NBQ0o7QUF4QkQsb0NBd0JDIn0=

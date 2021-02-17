@@ -1,5 +1,6 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
+import { SingleNodeClient } from "../clients/singleNodeClient";
 import { IClient } from "../models/IClient";
 import { IIndexationPayload, INDEXATION_PAYLOAD_TYPE } from "../models/IIndexationPayload";
 import { TRANSACTION_PAYLOAD_TYPE } from "../models/ITransactionPayload";
@@ -7,15 +8,17 @@ import { Converter } from "../utils/converter";
 
 /**
  * Retrieve a data message.
- * @param client The client to send the transfer with.
+ * @param client The client or node endpoint to retrieve the data with.
  * @param messageId The message id of the data to get.
  * @returns The message index and data.
  */
-export async function retrieveData(client: IClient, messageId: string): Promise<{
+export async function retrieveData(client: IClient | string, messageId: string): Promise<{
     index: string;
     data?: Uint8Array;
 } | undefined> {
-    const message = await client.message(messageId);
+    const localClient = typeof client === "string" ? new SingleNodeClient(client) : client;
+
+    const message = await localClient.message(messageId);
 
     if (message?.payload) {
         let indexationPayload: IIndexationPayload | undefined;

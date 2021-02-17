@@ -4,6 +4,7 @@ import { serializeInput } from "../binary/input";
 import { serializeOutput } from "../binary/output";
 import { MAX_INDEXATION_KEY_LENGTH, MIN_INDEXATION_KEY_LENGTH } from "../binary/payload";
 import { serializeTransactionEssence } from "../binary/transaction";
+import { SingleNodeClient } from "../clients/singleNodeClient";
 import { Ed25519 } from "../crypto/ed25519";
 import { IClient } from "../models/IClient";
 import { ED25519_ADDRESS_TYPE } from "../models/IEd25519Address";
@@ -23,7 +24,7 @@ import { WriteStream } from "../utils/writeStream";
 
 /**
  * Send a transfer from the balance on the seed.
- * @param client The client to send the transfer with.
+ * @param client The client or node endpoint to send the transfer with.
  * @param inputsAndSignatureKeyPairs The inputs with the signature key pairs needed to sign transfers.
  * @param outputs The outputs to send.
  * @param indexation Optional indexation data to associate with the transaction.
@@ -32,7 +33,7 @@ import { WriteStream } from "../utils/writeStream";
  * @returns The id of the message created and the remainder address if one was needed.
  */
 export async function sendAdvanced(
-    client: IClient,
+    client: IClient | string,
     inputsAndSignatureKeyPairs: {
         input: IUTXOInput;
         addressKeyPair: IKeyPair;
@@ -50,6 +51,8 @@ export async function sendAdvanced(
         messageId: string;
         message: IMessage;
     }> {
+    const localClient = typeof client === "string" ? new SingleNodeClient(client) : client;
+
     const transactionPayload = buildTransactionPayload(
         inputsAndSignatureKeyPairs, outputs, indexation);
 
@@ -57,7 +60,7 @@ export async function sendAdvanced(
         payload: transactionPayload
     };
 
-    const messageId = await client.messageSubmit(message);
+    const messageId = await localClient.messageSubmit(message);
 
     return {
         messageId,

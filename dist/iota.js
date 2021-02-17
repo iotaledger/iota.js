@@ -10974,9 +10974,10 @@
 
 
 
+
 	/**
 	 * Get all the unspent addresses.
-	 * @param client The client to send the transfer with.
+	 * @param client The client or node endpoint to send the transfer with.
 	 * @param seed The seed to use for address generation.
 	 * @param accountIndex The account index in the wallet.
 	 * @param addressOptions Optional address configuration for balance address lookups.
@@ -11000,7 +11001,7 @@
 	exports.getUnspentAddresses = getUnspentAddresses;
 	/**
 	 * Get all the unspent addresses using an address generator.
-	 * @param client The client to send the transfer with.
+	 * @param client The client or node endpoint to get the addresses from.
 	 * @param seed The seed to use for address generation.
 	 * @param initialAddressState The initial address state for calculating the addresses.
 	 * @param nextAddressPath Calculate the next address for inputs.
@@ -11013,10 +11014,12 @@
 	function getUnspentAddressesWithAddressGenerator(client, seed, initialAddressState, nextAddressPath, addressOptions) {
 	    var _a, _b;
 	    return __awaiter(this, void 0, void 0, function () {
-	        var nodeInfo, localRequiredLimit, localZeroCount, finished, allUnspent, isFirst, zeroBalance, path, addressSeed, ed25519Address$1, addressBytes, addressHex, addressResponse;
+	        var localClient, nodeInfo, localRequiredLimit, localZeroCount, finished, allUnspent, isFirst, zeroBalance, path, addressSeed, ed25519Address$1, addressBytes, addressHex, addressResponse;
 	        return __generator(this, function (_c) {
 	            switch (_c.label) {
-	                case 0: return [4 /*yield*/, client.info()];
+	                case 0:
+	                    localClient = typeof client === "string" ? new singleNodeClient.SingleNodeClient(client) : client;
+	                    return [4 /*yield*/, localClient.info()];
 	                case 1:
 	                    nodeInfo = _c.sent();
 	                    localRequiredLimit = (_a = addressOptions === null || addressOptions === void 0 ? void 0 : addressOptions.requiredCount) !== null && _a !== void 0 ? _a : Number.MAX_SAFE_INTEGER;
@@ -11033,7 +11036,7 @@
 	                    ed25519Address$1 = new ed25519Address.Ed25519Address(addressSeed.keyPair().publicKey);
 	                    addressBytes = ed25519Address$1.toAddress();
 	                    addressHex = converter.Converter.bytesToHex(addressBytes);
-	                    return [4 /*yield*/, client.addressEd25519(addressHex)];
+	                    return [4 /*yield*/, localClient.addressEd25519(addressHex)];
 	                case 3:
 	                    addressResponse = _c.sent();
 	                    // If there is no balance we increment the counter and end
@@ -11109,7 +11112,7 @@
 
 	/**
 	 * Get the balance for a list of addresses.
-	 * @param client The client to send the transfer with.
+	 * @param client The client or node endpoint to send the transfer with.
 	 * @param seed The seed.
 	 * @param accountIndex The account index in the wallet.
 	 * @param addressOptions Optional address configuration for balance address lookups.
@@ -11181,7 +11184,7 @@
 
 	/**
 	 * Get the first unspent address.
-	 * @param client The client to send the transfer with.
+	 * @param client The client or node endpoint to send the transfer with.
 	 * @param seed The seed to use for address generation.
 	 * @param accountIndex The account index in the wallet.
 	 * @param addressOptions Optional address configuration for balance address lookups.
@@ -11252,24 +11255,27 @@
 	// Copyright 2020 IOTA Stiftung
 	// SPDX-License-Identifier: Apache-2.0
 
+
 	/**
 	 * Promote an existing message.
-	 * @param client The client to perform the promote with.
+	 * @param client The clientor node endpoint to perform the promote with.
 	 * @param messageId The message to promote.
 	 * @returns The id and message that were promoted.
 	 */
 	function promote(client, messageId) {
 	    return __awaiter(this, void 0, void 0, function () {
-	        var message$1, tipsResponse, promoteMessage, promoteMessageId;
+	        var localClient, message$1, tipsResponse, promoteMessage, promoteMessageId;
 	        return __generator(this, function (_a) {
 	            switch (_a.label) {
-	                case 0: return [4 /*yield*/, client.message(messageId)];
+	                case 0:
+	                    localClient = typeof client === "string" ? new singleNodeClient.SingleNodeClient(client) : client;
+	                    return [4 /*yield*/, localClient.message(messageId)];
 	                case 1:
 	                    message$1 = _a.sent();
 	                    if (!message$1) {
 	                        throw new Error("The message does not exist.");
 	                    }
-	                    return [4 /*yield*/, client.tips()];
+	                    return [4 /*yield*/, localClient.tips()];
 	                case 2:
 	                    tipsResponse = _a.sent();
 	                    // Parents must be unique and lexicographically sorted
@@ -11286,7 +11292,7 @@
 	                    promoteMessage = {
 	                        parentMessageIds: tipsResponse.tipMessageIds
 	                    };
-	                    return [4 /*yield*/, client.messageSubmit(promoteMessage)];
+	                    return [4 /*yield*/, localClient.messageSubmit(promoteMessage)];
 	                case 3:
 	                    promoteMessageId = _a.sent();
 	                    return [2 /*return*/, {
@@ -11340,18 +11346,23 @@
 	};
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.reattach = void 0;
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
+
 	/**
 	 * Reattach an existing message.
-	 * @param client The client to perform the reattach with.
+	 * @param client The client or node endpoint to perform the reattach with.
 	 * @param messageId The message to reattach.
 	 * @returns The id and message that were reattached.
 	 */
 	function reattach(client, messageId) {
 	    return __awaiter(this, void 0, void 0, function () {
-	        var message, reattachMessage, reattachedMessageId;
+	        var localClient, message, reattachMessage, reattachedMessageId;
 	        return __generator(this, function (_a) {
 	            switch (_a.label) {
-	                case 0: return [4 /*yield*/, client.message(messageId)];
+	                case 0:
+	                    localClient = typeof client === "string" ? new singleNodeClient.SingleNodeClient(client) : client;
+	                    return [4 /*yield*/, localClient.message(messageId)];
 	                case 1:
 	                    message = _a.sent();
 	                    if (!message) {
@@ -11360,7 +11371,7 @@
 	                    reattachMessage = {
 	                        payload: message.payload
 	                    };
-	                    return [4 /*yield*/, client.messageSubmit(reattachMessage)];
+	                    return [4 /*yield*/, localClient.messageSubmit(reattachMessage)];
 	                case 2:
 	                    reattachedMessageId = _a.sent();
 	                    return [2 /*return*/, {
@@ -11414,21 +11425,26 @@
 	};
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.retrieveData = void 0;
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
+
 
 
 
 	/**
 	 * Retrieve a data message.
-	 * @param client The client to send the transfer with.
+	 * @param client The client or node endpoint to retrieve the data with.
 	 * @param messageId The message id of the data to get.
 	 * @returns The message index and data.
 	 */
 	function retrieveData(client, messageId) {
 	    return __awaiter(this, void 0, void 0, function () {
-	        var message, indexationPayload;
+	        var localClient, message, indexationPayload;
 	        return __generator(this, function (_a) {
 	            switch (_a.label) {
-	                case 0: return [4 /*yield*/, client.message(messageId)];
+	                case 0:
+	                    localClient = typeof client === "string" ? new singleNodeClient.SingleNodeClient(client) : client;
+	                    return [4 /*yield*/, localClient.message(messageId)];
 	                case 1:
 	                    message = _a.sent();
 	                    if (message === null || message === void 0 ? void 0 : message.payload) {
@@ -11494,20 +11510,25 @@
 	};
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.retry = void 0;
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
+
 
 
 	/**
 	 * Retry an existing message either by promoting or reattaching.
-	 * @param client The client to perform the retry with.
+	 * @param client The client or node endpoint to perform the retry with.
 	 * @param messageId The message to retry.
 	 * @returns The id and message that were retried.
 	 */
 	function retry(client, messageId) {
 	    return __awaiter(this, void 0, void 0, function () {
-	        var metadata;
+	        var localClient, metadata;
 	        return __generator(this, function (_a) {
 	            switch (_a.label) {
-	                case 0: return [4 /*yield*/, client.messageMetadata(messageId)];
+	                case 0:
+	                    localClient = typeof client === "string" ? new singleNodeClient.SingleNodeClient(client) : client;
+	                    return [4 /*yield*/, localClient.messageMetadata(messageId)];
 	                case 1:
 	                    metadata = _a.sent();
 	                    if (!metadata) {
@@ -11596,9 +11617,10 @@
 
 
 
+
 	/**
 	 * Send a transfer from the balance on the seed.
-	 * @param client The client to send the transfer with.
+	 * @param client The client or node endpoint to send the transfer with.
 	 * @param inputsAndSignatureKeyPairs The inputs with the signature key pairs needed to sign transfers.
 	 * @param outputs The outputs to send.
 	 * @param indexation Optional indexation data to associate with the transaction.
@@ -11608,15 +11630,16 @@
 	 */
 	function sendAdvanced(client, inputsAndSignatureKeyPairs, outputs, indexation) {
 	    return __awaiter(this, void 0, void 0, function () {
-	        var transactionPayload, message, messageId;
+	        var localClient, transactionPayload, message, messageId;
 	        return __generator(this, function (_a) {
 	            switch (_a.label) {
 	                case 0:
+	                    localClient = typeof client === "string" ? new singleNodeClient.SingleNodeClient(client) : client;
 	                    transactionPayload = buildTransactionPayload(inputsAndSignatureKeyPairs, outputs, indexation);
 	                    message = {
 	                        payload: transactionPayload
 	                    };
-	                    return [4 /*yield*/, client.messageSubmit(message)];
+	                    return [4 /*yield*/, localClient.messageSubmit(message)];
 	                case 1:
 	                    messageId = _a.sent();
 	                    return [2 /*return*/, {
@@ -11785,9 +11808,10 @@
 
 
 
+
 	/**
 	 * Send a transfer from the balance on the seed to a single output.
-	 * @param client The client to send the transfer with.
+	 * @param client The client or node endpoint to send the transfer with.
 	 * @param seed The seed to use for address generation.
 	 * @param accountIndex The account index in the wallet.
 	 * @param addressBech32 The address to send the funds to in bech32 format.
@@ -11810,7 +11834,7 @@
 	exports.send = send;
 	/**
 	 * Send a transfer from the balance on the seed to a single output.
-	 * @param client The client to send the transfer with.
+	 * @param client The client or node endpoint to send the transfer with.
 	 * @param seed The seed to use for address generation.
 	 * @param accountIndex The account index in the wallet.
 	 * @param addressEd25519 The address to send the funds to in ed25519 format.
@@ -11833,7 +11857,7 @@
 	exports.sendEd25519 = sendEd25519;
 	/**
 	 * Send a transfer from the balance on the seed to multiple outputs.
-	 * @param client The client to send the transfer with.
+	 * @param client The client or node endpoint to send the transfer with.
 	 * @param seed The seed to use for address generation.
 	 * @param accountIndex The account index in the wallet.
 	 * @param outputs The address to send the funds to in bech32 format and amounts.
@@ -11848,10 +11872,12 @@
 	function sendMultiple(client, seed, accountIndex, outputs, indexation, addressOptions) {
 	    var _a;
 	    return __awaiter(this, void 0, void 0, function () {
-	        var nodeInfo, hexOutputs;
+	        var localClient, nodeInfo, hexOutputs;
 	        return __generator(this, function (_b) {
 	            switch (_b.label) {
-	                case 0: return [4 /*yield*/, client.info()];
+	                case 0:
+	                    localClient = typeof client === "string" ? new singleNodeClient.SingleNodeClient(client) : client;
+	                    return [4 /*yield*/, localClient.info()];
 	                case 1:
 	                    nodeInfo = _b.sent();
 	                    hexOutputs = outputs.map(function (output) {
@@ -11878,7 +11904,7 @@
 	exports.sendMultiple = sendMultiple;
 	/**
 	 * Send a transfer from the balance on the seed.
-	 * @param client The client to send the transfer with.
+	 * @param client The client or node endpoint to send the transfer with.
 	 * @param seed The seed to use for address generation.
 	 * @param accountIndex The account index in the wallet.
 	 * @param outputs The outputs including address to send the funds to in ed25519 format and amount.
@@ -11912,7 +11938,7 @@
 	exports.sendMultipleEd25519 = sendMultipleEd25519;
 	/**
 	 * Send a transfer using account based indexing for the inputs.
-	 * @param client The client to send the transfer with.
+	 * @param client The client or node endpoint to send the transfer with.
 	 * @param seed The seed to use for address generation.
 	 * @param initialAddressState The initial address state for calculating the addresses.
 	 * @param nextAddressPath Calculate the next address for inputs.
@@ -11945,7 +11971,7 @@
 	exports.sendWithAddressGenerator = sendWithAddressGenerator;
 	/**
 	 * Calculate the inputs from the seed and basePath.
-	 * @param client The client to send the transfer with.
+	 * @param client The client or node endpoint to calculate the inputs with.
 	 * @param seed The seed to use for address generation.
 	 * @param initialAddressState The initial address state for calculating the addresses.
 	 * @param nextAddressPath Calculate the next address for inputs.
@@ -11956,10 +11982,11 @@
 	function calculateInputs(client, seed, initialAddressState, nextAddressPath, outputs, zeroCount) {
 	    if (zeroCount === void 0) { zeroCount = 5; }
 	    return __awaiter(this, void 0, void 0, function () {
-	        var requiredBalance, _i, outputs_1, output, consumedBalance, inputsAndSignatureKeyPairs, finished, isFirst, zeroBalance, path, addressSeed, addressKeyPair, ed25519Address$1, address, addressOutputIds, _a, _b, addressOutputId, addressOutput, input;
+	        var localClient, requiredBalance, _i, outputs_1, output, consumedBalance, inputsAndSignatureKeyPairs, finished, isFirst, zeroBalance, path, addressSeed, addressKeyPair, ed25519Address$1, address, addressOutputIds, _a, _b, addressOutputId, addressOutput, input;
 	        return __generator(this, function (_c) {
 	            switch (_c.label) {
 	                case 0:
+	                    localClient = typeof client === "string" ? new singleNodeClient.SingleNodeClient(client) : client;
 	                    requiredBalance = 0;
 	                    for (_i = 0, outputs_1 = outputs; _i < outputs_1.length; _i++) {
 	                        output = outputs_1[_i];
@@ -11978,7 +12005,7 @@
 	                    addressKeyPair = addressSeed.keyPair();
 	                    ed25519Address$1 = new ed25519Address.Ed25519Address(addressKeyPair.publicKey);
 	                    address = converter.Converter.bytesToHex(ed25519Address$1.toAddress());
-	                    return [4 /*yield*/, client.addressEd25519Outputs(address)];
+	                    return [4 /*yield*/, localClient.addressEd25519Outputs(address)];
 	                case 2:
 	                    addressOutputIds = _c.sent();
 	                    if (!(addressOutputIds.count === 0)) return [3 /*break*/, 3];
@@ -11993,7 +12020,7 @@
 	                case 4:
 	                    if (!(_a < _b.length)) return [3 /*break*/, 7];
 	                    addressOutputId = _b[_a];
-	                    return [4 /*yield*/, client.output(addressOutputId)];
+	                    return [4 /*yield*/, localClient.output(addressOutputId)];
 	                case 5:
 	                    addressOutput = _c.sent();
 	                    if (!addressOutput.isSpent &&
@@ -12093,19 +12120,21 @@
 
 
 
+
 	/**
 	 * Send a data message.
-	 * @param client The client to send the transfer with.
+	 * @param client The client or node endpoint to send the data with.
 	 * @param indexationKey The index name.
 	 * @param indexationData The index data.
 	 * @returns The id of the message created and the message.
 	 */
 	function sendData(client, indexationKey, indexationData) {
 	    return __awaiter(this, void 0, void 0, function () {
-	        var indexationPayload, message, messageId;
+	        var localClient, indexationPayload, message, messageId;
 	        return __generator(this, function (_a) {
 	            switch (_a.label) {
 	                case 0:
+	                    localClient = typeof client === "string" ? new singleNodeClient.SingleNodeClient(client) : client;
 	                    if (!indexationKey) {
 	                        throw new Error("indexationKey must not be empty");
 	                    }
@@ -12123,7 +12152,7 @@
 	                    message = {
 	                        payload: indexationPayload
 	                    };
-	                    return [4 /*yield*/, client.messageSubmit(message)];
+	                    return [4 /*yield*/, localClient.messageSubmit(message)];
 	                case 1:
 	                    messageId = _a.sent();
 	                    return [2 /*return*/, {

@@ -1,6 +1,7 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 import { MAX_INDEXATION_KEY_LENGTH, MIN_INDEXATION_KEY_LENGTH } from "../binary/payload";
+import { SingleNodeClient } from "../clients/singleNodeClient";
 import { IClient } from "../models/IClient";
 import { IIndexationPayload, INDEXATION_PAYLOAD_TYPE } from "../models/IIndexationPayload";
 import { IMessage } from "../models/IMessage";
@@ -8,15 +9,17 @@ import { Converter } from "../utils/converter";
 
 /**
  * Send a data message.
- * @param client The client to send the transfer with.
+ * @param client The client or node endpoint to send the data with.
  * @param indexationKey The index name.
  * @param indexationData The index data.
  * @returns The id of the message created and the message.
  */
-export async function sendData(client: IClient, indexationKey: string, indexationData?: Uint8Array): Promise<{
+export async function sendData(client: IClient | string, indexationKey: string, indexationData?: Uint8Array): Promise<{
     message: IMessage;
     messageId: string;
 }> {
+    const localClient = typeof client === "string" ? new SingleNodeClient(client) : client;
+
     if (!indexationKey) {
         throw new Error("indexationKey must not be empty");
     }
@@ -41,7 +44,7 @@ export async function sendData(client: IClient, indexationKey: string, indexatio
         payload: indexationPayload
     };
 
-    const messageId = await client.messageSubmit(message);
+    const messageId = await localClient.messageSubmit(message);
     return {
         message,
         messageId

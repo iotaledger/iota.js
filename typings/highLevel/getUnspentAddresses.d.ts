@@ -2,7 +2,7 @@ import { IClient } from "../models/IClient";
 import { ISeed } from "../models/ISeed";
 /**
  * Get all the unspent addresses.
- * @param client The client to send the transfer with.
+ * @param client The client or node endpoint to send the transfer with.
  * @param seed The seed to use for address generation.
  * @param accountIndex The account index in the wallet.
  * @param addressOptions Optional address configuration for balance address lookups.
@@ -11,7 +11,7 @@ import { ISeed } from "../models/ISeed";
  * @param addressOptions.requiredCount The max number of addresses to find.
  * @returns All the unspent addresses.
  */
-export declare function getUnspentAddresses(client: IClient, seed: ISeed, accountIndex: number, addressOptions?: {
+export declare function getUnspentAddresses(client: IClient | string, seed: ISeed, accountIndex: number, addressOptions?: {
     startIndex?: number;
     zeroCount?: number;
     requiredCount?: number;
@@ -22,7 +22,7 @@ export declare function getUnspentAddresses(client: IClient, seed: ISeed, accoun
 }[]>;
 /**
  * Get all the unspent addresses using an address generator.
- * @param client The client to send the transfer with.
+ * @param client The client or node endpoint to get the addresses from.
  * @param seed The seed to use for address generation.
  * @param initialAddressState The initial address state for calculating the addresses.
  * @param nextAddressPath Calculate the next address for inputs.
@@ -32,7 +32,7 @@ export declare function getUnspentAddresses(client: IClient, seed: ISeed, accoun
  * @param addressOptions.requiredCount The max number of addresses to find.
  * @returns All the unspent addresses.
  */
-export declare function getUnspentAddressesWithAddressGenerator<T>(client: IClient, seed: ISeed, initialAddressState: T, nextAddressPath: (addressState: T, isFirst: boolean) => string, addressOptions?: {
+export declare function getUnspentAddressesWithAddressGenerator<T>(client: IClient | string, seed: ISeed, initialAddressState: T, nextAddressPath: (addressState: T, isFirst: boolean) => string, addressOptions?: {
     startIndex?: number;
     zeroCount?: number;
     requiredCount?: number;

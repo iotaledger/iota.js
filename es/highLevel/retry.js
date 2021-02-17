@@ -37,20 +37,25 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.retry = void 0;
+// Copyright 2020 IOTA Stiftung
+// SPDX-License-Identifier: Apache-2.0
+var singleNodeClient_1 = require("../clients/singleNodeClient");
 var promote_1 = require("./promote");
 var reattach_1 = require("./reattach");
 /**
  * Retry an existing message either by promoting or reattaching.
- * @param client The client to perform the retry with.
+ * @param client The client or node endpoint to perform the retry with.
  * @param messageId The message to retry.
  * @returns The id and message that were retried.
  */
 function retry(client, messageId) {
     return __awaiter(this, void 0, void 0, function () {
-        var metadata;
+        var localClient, metadata;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, client.messageMetadata(messageId)];
+                case 0:
+                    localClient = typeof client === "string" ? new singleNodeClient_1.SingleNodeClient(client) : client;
+                    return [4 /*yield*/, localClient.messageMetadata(messageId)];
                 case 1:
                     metadata = _a.sent();
                     if (!metadata) {
@@ -68,4 +73,4 @@ function retry(client, messageId) {
     });
 }
 exports.retry = retry;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicmV0cnkuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi9zcmMvaGlnaExldmVsL3JldHJ5LnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7OztBQUlBLHFDQUFvQztBQUNwQyx1Q0FBc0M7QUFFdEM7Ozs7O0dBS0c7QUFDSCxTQUFzQixLQUFLLENBQUMsTUFBZSxFQUFFLFNBQWlCOzs7Ozt3QkFJekMscUJBQU0sTUFBTSxDQUFDLGVBQWUsQ0FBQyxTQUFTLENBQUMsRUFBQTs7b0JBQWxELFFBQVEsR0FBRyxTQUF1QztvQkFFeEQsSUFBSSxDQUFDLFFBQVEsRUFBRTt3QkFDWCxNQUFNLElBQUksS0FBSyxDQUFDLDZCQUE2QixDQUFDLENBQUM7cUJBQ2xEO29CQUVELElBQUksUUFBUSxDQUFDLGFBQWEsRUFBRTt3QkFDeEIsc0JBQU8saUJBQU8sQ0FBQyxNQUFNLEVBQUUsU0FBUyxDQUFDLEVBQUM7cUJBQ3JDO3lCQUFNLElBQUksUUFBUSxDQUFDLGNBQWMsRUFBRTt3QkFDaEMsc0JBQU8sbUJBQVEsQ0FBQyxNQUFNLEVBQUUsU0FBUyxDQUFDLEVBQUM7cUJBQ3RDO29CQUVELE1BQU0sSUFBSSxLQUFLLENBQUMsbURBQW1ELENBQUMsQ0FBQzs7OztDQUN4RTtBQWpCRCxzQkFpQkMifQ==
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicmV0cnkuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi9zcmMvaGlnaExldmVsL3JldHJ5LnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7OztBQUFBLCtCQUErQjtBQUMvQixzQ0FBc0M7QUFDdEMsZ0VBQStEO0FBRy9ELHFDQUFvQztBQUNwQyx1Q0FBc0M7QUFFdEM7Ozs7O0dBS0c7QUFDSCxTQUFzQixLQUFLLENBQUMsTUFBd0IsRUFBRSxTQUFpQjs7Ozs7O29CQUk3RCxXQUFXLEdBQUcsT0FBTyxNQUFNLEtBQUssUUFBUSxDQUFDLENBQUMsQ0FBQyxJQUFJLG1DQUFnQixDQUFDLE1BQU0sQ0FBQyxDQUFDLENBQUMsQ0FBQyxNQUFNLENBQUM7b0JBRXRFLHFCQUFNLFdBQVcsQ0FBQyxlQUFlLENBQUMsU0FBUyxDQUFDLEVBQUE7O29CQUF2RCxRQUFRLEdBQUcsU0FBNEM7b0JBRTdELElBQUksQ0FBQyxRQUFRLEVBQUU7d0JBQ1gsTUFBTSxJQUFJLEtBQUssQ0FBQyw2QkFBNkIsQ0FBQyxDQUFDO3FCQUNsRDtvQkFFRCxJQUFJLFFBQVEsQ0FBQyxhQUFhLEVBQUU7d0JBQ3hCLHNCQUFPLGlCQUFPLENBQUMsTUFBTSxFQUFFLFNBQVMsQ0FBQyxFQUFDO3FCQUNyQzt5QkFBTSxJQUFJLFFBQVEsQ0FBQyxjQUFjLEVBQUU7d0JBQ2hDLHNCQUFPLG1CQUFRLENBQUMsTUFBTSxFQUFFLFNBQVMsQ0FBQyxFQUFDO3FCQUN0QztvQkFFRCxNQUFNLElBQUksS0FBSyxDQUFDLG1EQUFtRCxDQUFDLENBQUM7Ozs7Q0FDeEU7QUFuQkQsc0JBbUJDIn0=

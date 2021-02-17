@@ -6,7 +6,7 @@ import { getUnspentAddresses } from "./getUnspentAddresses";
 
 /**
  * Get the balance for a list of addresses.
- * @param client The client to send the transfer with.
+ * @param client The client or node endpoint to send the transfer with.
  * @param seed The seed.
  * @param accountIndex The account index in the wallet.
  * @param addressOptions Optional address configuration for balance address lookups.
@@ -15,7 +15,7 @@ import { getUnspentAddresses } from "./getUnspentAddresses";
  * @returns The balance.
  */
 export async function getBalance(
-    client: IClient,
+    client: IClient | string,
     seed: ISeed,
     accountIndex: number,
     addressOptions?: {

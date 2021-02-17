@@ -1,11 +1,11 @@
 import { IClient } from "../models/IClient";
 /**
  * Retrieve a data message.
- * @param client The client to send the transfer with.
+ * @param client The client or node endpoint to retrieve the data with.
  * @param messageId The message id of the data to get.
  * @returns The message index and data.
  */
-export declare function retrieveData(client: IClient, messageId: string): Promise<{
+export declare function retrieveData(client: IClient | string, messageId: string): Promise<{
     index: string;
     data?: Uint8Array;
 } | undefined>;

@@ -1,6 +1,7 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 import { Ed25519Address } from "../addressTypes/ed25519Address";
+import { SingleNodeClient } from "../clients/singleNodeClient";
 import { Bip32Path } from "../crypto/bip32Path";
 import { IBip44GeneratorState } from "../models/IBip44GeneratorState";
 import { IClient } from "../models/IClient";
@@ -12,7 +13,7 @@ import { generateBip44Address } from "./addresses";
 
 /**
  * Get all the unspent addresses.
- * @param client The client to send the transfer with.
+ * @param client The client or node endpoint to send the transfer with.
  * @param seed The seed to use for address generation.
  * @param accountIndex The account index in the wallet.
  * @param addressOptions Optional address configuration for balance address lookups.
@@ -22,7 +23,7 @@ import { generateBip44Address } from "./addresses";
  * @returns All the unspent addresses.
  */
 export async function getUnspentAddresses(
-    client: IClient,
+    client: IClient | string,
     seed: ISeed,
     accountIndex: number,
     addressOptions?: {
@@ -49,7 +50,7 @@ export async function getUnspentAddresses(
 
 /**
  * Get all the unspent addresses using an address generator.
- * @param client The client to send the transfer with.
+ * @param client The client or node endpoint to get the addresses from.
  * @param seed The seed to use for address generation.
  * @param initialAddressState The initial address state for calculating the addresses.
  * @param nextAddressPath Calculate the next address for inputs.
@@ -60,7 +61,7 @@ export async function getUnspentAddresses(
  * @returns All the unspent addresses.
  */
 export async function getUnspentAddressesWithAddressGenerator<T>(
-    client: IClient,
+    client: IClient | string,
     seed: ISeed,
     initialAddressState: T,
     nextAddressPath: (addressState: T, isFirst: boolean) => string,
@@ -73,7 +74,9 @@ export async function getUnspentAddressesWithAddressGenerator<T>(
         path: string;
         balance: number;
     }[]> {
-    const nodeInfo = await client.info();
+    const localClient = typeof client === "string" ? new SingleNodeClient(client) : client;
+
+    const nodeInfo = await localClient.info();
     const localRequiredLimit = addressOptions?.requiredCount ?? Number.MAX_SAFE_INTEGER;
     const localZeroCount = addressOptions?.zeroCount ?? 20;
     let finished = false;
@@ -95,7 +98,7 @@ export async function getUnspentAddressesWithAddressGenerator<T>(
         const ed25519Address = new Ed25519Address(addressSeed.keyPair().publicKey);
         const addressBytes = ed25519Address.toAddress();
         const addressHex = Converter.bytesToHex(addressBytes);
-        const addressResponse = await client.addressEd25519(addressHex);
+        const addressResponse = await localClient.addressEd25519(addressHex);
 
         // If there is no balance we increment the counter and end
         // the text when we have reached the count

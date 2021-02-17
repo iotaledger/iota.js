@@ -1,25 +1,28 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 import { MAX_NUMBER_PARENTS } from "../binary/message";
+import { SingleNodeClient } from "../clients/singleNodeClient";
 import { IClient } from "../models/IClient";
 import { IMessage } from "../models/IMessage";
 
 /**
  * Promote an existing message.
- * @param client The client to perform the promote with.
+ * @param client The clientor node endpoint to perform the promote with.
  * @param messageId The message to promote.
  * @returns The id and message that were promoted.
  */
-export async function promote(client: IClient, messageId: string): Promise<{
+export async function promote(client: IClient | string, messageId: string): Promise<{
     message: IMessage;
     messageId: string;
 }> {
-    const message = await client.message(messageId);
+    const localClient = typeof client === "string" ? new SingleNodeClient(client) : client;
+
+    const message = await localClient.message(messageId);
     if (!message) {
         throw new Error("The message does not exist.");
     }
 
-    const tipsResponse = await client.tips();
+    const tipsResponse = await localClient.tips();
 
     // Parents must be unique and lexicographically sorted
     // so don't add the messageId if it is already one of the tips
@@ -39,7 +42,7 @@ export async function promote(client: IClient, messageId: string): Promise<{
         parentMessageIds: tipsResponse.tipMessageIds
     };
 
-    const promoteMessageId = await client.messageSubmit(promoteMessage);
+    const promoteMessageId = await localClient.messageSubmit(promoteMessage);
 
     return {
         message,
