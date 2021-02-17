@@ -12125,7 +12125,7 @@
 	 * Send a data message.
 	 * @param client The client or node endpoint to send the data with.
 	 * @param indexationKey The index name.
-	 * @param indexationData The index data.
+	 * @param indexationData The index data as either UTF8 text or Uint8Array bytes.
 	 * @returns The id of the message created and the message.
 	 */
 	function sendData(client, indexationKey, indexationData) {
@@ -12147,7 +12147,8 @@
 	                    indexationPayload = {
 	                        type: IIndexationPayload.INDEXATION_PAYLOAD_TYPE,
 	                        index: indexationKey,
-	                        data: indexationData ? converter.Converter.bytesToHex(indexationData) : ""
+	                        data: indexationData ? (typeof indexationData === "string"
+	                            ? converter.Converter.utf8ToHex(indexationData) : converter.Converter.bytesToHex(indexationData)) : ""
 	                    };
 	                    message = {
 	                        payload: indexationPayload
