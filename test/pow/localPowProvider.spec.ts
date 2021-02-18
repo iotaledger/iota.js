@@ -14,7 +14,7 @@ describe("LocalPowProvider", () => {
 
         const indexationPayload: IIndexationPayload = {
             type: INDEXATION_PAYLOAD_TYPE,
-            index: "hello world",
+            index: Converter.utf8ToHex("hello world"),
             data: Converter.bytesToHex(Uint8Array.from([1, 2, 3, 4]))
         };
 

@@ -5209,7 +5209,8 @@
 	    if (type !== IIndexationPayload.INDEXATION_PAYLOAD_TYPE) {
 	        throw new Error("Type mismatch in payloadIndexation " + type);
 	    }
-	    var index = readStream.readString("payloadIndexation.index");
+	    var indexLength = readStream.readUInt16("payloadIndexation.indexLength");
+	    var index = readStream.readFixedHex("payloadIndexation.index", indexLength);
 	    var dataLength = readStream.readUInt32("payloadIndexation.dataLength");
 	    var data = readStream.readFixedHex("payloadIndexation.data", dataLength);
 	    return {
@@ -5232,7 +5233,8 @@
 	        throw new Error("The indexation key length is " + object.index.length + ", which exceeds the maximum size of " + exports.MAX_INDEXATION_KEY_LENGTH);
 	    }
 	    writeStream.writeUInt32("payloadIndexation.type", object.type);
-	    writeStream.writeString("payloadIndexation.index", object.index);
+	    writeStream.writeUInt16("payloadIndexation.indexLength", object.index.length / 2);
+	    writeStream.writeFixedHex("payloadIndexation.index", object.index.length / 2, object.index);
 	    if (object.data) {
 	        writeStream.writeUInt32("payloadIndexation.dataLength", object.data.length / 2);
 	        writeStream.writeFixedHex("payloadIndexation.data", object.data.length / 2, object.data);
@@ -6016,24 +6018,6 @@
 	        return val;
 	    };
 	    /**
-	     * Read a string from the stream.
-	     * @param name The name of the data we are trying to read.
-	     * @param moveIndex Move the index pointer on.
-	     * @returns The string.
-	     */
-	    ReadStream.prototype.readString = function (name, moveIndex) {
-	        if (moveIndex === void 0) { moveIndex = true; }
-	        var stringLength = this.readUInt16(name);
-	        if (!this.hasRemaining(stringLength)) {
-	            throw new Error(name + " length " + stringLength + " exceeds the remaining data " + this.unused());
-	        }
-	        var val = converter.Converter.bytesToUtf8(this._storage, this._readIndex, stringLength);
-	        if (moveIndex) {
-	            this._readIndex += stringLength;
-	        }
-	        return val;
-	    };
-	    /**
 	     * Read a boolean from the stream.
 	     * @param name The name of the data we are trying to read.
 	     * @param moveIndex Move the index pointer on.
@@ -6661,19 +6645,6 @@
 	        this._writeIndex += 8;
 	    };
 	    /**
-	     * Write a string to the stream.
-	     * @param name The name of the data we are trying to write.
-	     * @param val The data to write.
-	     * @returns The string.
-	     */
-	    WriteStream.prototype.writeString = function (name, val) {
-	        this.writeUInt16(name, val.length);
-	        this.expand(val.length);
-	        this._storage.set(converter.Converter.utf8ToBytes(val), this._writeIndex);
-	        this._writeIndex += val.length;
-	        return val;
-	    };
-	    /**
 	     * Write a boolean to the stream.
 	     * @param name The name of the data we are trying to write.
 	     * @param val The data to write.
@@ -6940,13 +6911,15 @@
 	    };
 	    /**
 	     * Find messages by index.
-	     * @param indexationKey The index value.
+	     * @param indexationKey The index value as a byte array or UTF8 string.
 	     * @returns The messageId.
 	     */
 	    SingleNodeClient.prototype.messagesFind = function (indexationKey) {
 	        return __awaiter(this, void 0, void 0, function () {
 	            return __generator(this, function (_a) {
-	                return [2 /*return*/, this.fetchJson("get", "messages?index=" + encodeURIComponent(indexationKey))];
+	                return [2 /*return*/, this.fetchJson("get", "messages?index=" + (typeof indexationKey === "string"
+	                        ? converter.Converter.utf8ToHex(indexationKey)
+	                        : converter.Converter.bytesToHex(indexationKey)))];
 	            });
 	        });
 	    };
@@ -11457,7 +11430,7 @@
 	                        }
 	                        if (indexationPayload) {
 	                            return [2 /*return*/, {
-	                                    index: indexationPayload.index,
+	                                    index: converter.Converter.hexToBytes(indexationPayload.index),
 	                                    data: indexationPayload.data ? converter.Converter.hexToBytes(indexationPayload.data) : undefined
 	                                }];
 	                        }
@@ -11668,12 +11641,15 @@
 	    if (!outputs || outputs.length === 0) {
 	        throw new Error("You must specify some outputs");
 	    }
+	    var localIndexationKeyHex;
 	    if (indexation === null || indexation === void 0 ? void 0 : indexation.key) {
-	        if (indexation.key.length < payload.MIN_INDEXATION_KEY_LENGTH) {
-	            throw new Error("The indexation key length is " + indexation.key.length + ", which is below the minimum size of " + payload.MIN_INDEXATION_KEY_LENGTH);
+	        localIndexationKeyHex = typeof (indexation.key) === "string"
+	            ? converter.Converter.utf8ToHex(indexation.key) : converter.Converter.bytesToHex(indexation.key);
+	        if (localIndexationKeyHex.length / 2 < payload.MIN_INDEXATION_KEY_LENGTH) {
+	            throw new Error("The indexation key length is " + localIndexationKeyHex.length / 2 + ", which is below the minimum size of " + payload.MIN_INDEXATION_KEY_LENGTH);
 	        }
-	        if (indexation.key.length > payload.MAX_INDEXATION_KEY_LENGTH) {
-	            throw new Error("The indexation key length is " + indexation.key.length + ", which exceeds the maximum size of " + payload.MAX_INDEXATION_KEY_LENGTH);
+	        if (localIndexationKeyHex.length / 2 > payload.MAX_INDEXATION_KEY_LENGTH) {
+	            throw new Error("The indexation key length is " + localIndexationKeyHex.length / 2 + ", which exceeds the maximum size of " + payload.MAX_INDEXATION_KEY_LENGTH);
 	        }
 	    }
 	    var outputsWithSerialization = [];
@@ -11711,11 +11687,12 @@
 	        type: ITransactionEssence.TRANSACTION_ESSENCE_TYPE,
 	        inputs: sortedInputs.map(function (i) { return i.input; }),
 	        outputs: sortedOutputs.map(function (o) { return o.output; }),
-	        payload: indexation
+	        payload: localIndexationKeyHex
 	            ? {
 	                type: IIndexationPayload.INDEXATION_PAYLOAD_TYPE,
-	                index: indexation.key,
-	                data: indexation.data ? converter.Converter.bytesToHex(indexation.data) : ""
+	                index: localIndexationKeyHex,
+	                data: (indexation === null || indexation === void 0 ? void 0 : indexation.data) ? (typeof indexation.data === "string"
+	                    ? converter.Converter.utf8ToHex(indexation.data) : converter.Converter.bytesToHex(indexation.data)) : undefined
 	            }
 	            : undefined
 	    };
@@ -12132,7 +12109,7 @@
 	 */
 	function sendData(client, indexationKey, indexationData) {
 	    return __awaiter(this, void 0, void 0, function () {
-	        var localClient, indexationPayload, message, messageId;
+	        var localClient, localIndexationKeyHex, indexationPayload, message, messageId;
 	        return __generator(this, function (_a) {
 	            switch (_a.label) {
 	                case 0:
@@ -12140,17 +12117,19 @@
 	                    if (!indexationKey) {
 	                        throw new Error("indexationKey must not be empty");
 	                    }
-	                    if (indexationKey.length < payload.MIN_INDEXATION_KEY_LENGTH) {
-	                        throw new Error("The indexation key length is " + indexationKey.length + ", which is below the minimum size of " + payload.MIN_INDEXATION_KEY_LENGTH);
+	                    localIndexationKeyHex = typeof (indexationKey) === "string"
+	                        ? converter.Converter.utf8ToHex(indexationKey) : converter.Converter.bytesToHex(indexationKey);
+	                    if (localIndexationKeyHex.length / 2 < payload.MIN_INDEXATION_KEY_LENGTH) {
+	                        throw new Error("The indexation key length is " + localIndexationKeyHex.length / 2 + ", which is below the minimum size of " + payload.MIN_INDEXATION_KEY_LENGTH);
 	                    }
-	                    if (indexationKey.length > payload.MAX_INDEXATION_KEY_LENGTH) {
-	                        throw new Error("The indexation key length is " + indexationKey.length + ", which exceeds the maximum size of " + payload.MAX_INDEXATION_KEY_LENGTH);
+	                    if (localIndexationKeyHex.length / 2 > payload.MAX_INDEXATION_KEY_LENGTH) {
+	                        throw new Error("The indexation key length is " + localIndexationKeyHex.length / 2 + ", which exceeds the maximum size of " + payload.MAX_INDEXATION_KEY_LENGTH);
 	                    }
 	                    indexationPayload = {
 	                        type: IIndexationPayload.INDEXATION_PAYLOAD_TYPE,
-	                        index: indexationKey,
+	                        index: localIndexationKeyHex,
 	                        data: indexationData ? (typeof indexationData === "string"
-	                            ? converter.Converter.utf8ToHex(indexationData) : converter.Converter.bytesToHex(indexationData)) : ""
+	                            ? converter.Converter.utf8ToHex(indexationData) : converter.Converter.bytesToHex(indexationData)) : undefined
 	                    };
 	                    message = {
 	                        payload: indexationPayload
@@ -12805,7 +12784,7 @@
 	function logIndexationPayload(prefix, payload) {
 	    if (payload) {
 	        logger(prefix + "Indexation Payload");
-	        logger(prefix + "\tIndex:", payload.index);
+	        logger(prefix + "\tIndex:", converter.Converter.hexToUtf8(payload.index));
 	        logger(prefix + "\tData:", payload.data ? converter.Converter.hexToUtf8(payload.data) : "None");
 	    }
 	}

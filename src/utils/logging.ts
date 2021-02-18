@@ -186,7 +186,7 @@ export function logTransactionPayload(prefix: string, payload?: ITransactionPayl
 export function logIndexationPayload(prefix: string, payload?: IIndexationPayload): void {
     if (payload) {
         logger(`${prefix}Indexation Payload`);
-        logger(`${prefix}\tIndex:`, payload.index);
+        logger(`${prefix}\tIndex:`, Converter.hexToUtf8(payload.index));
         logger(`${prefix}\tData:`, payload.data ? Converter.hexToUtf8(payload.data) : "None");
     }
 }

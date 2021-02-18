@@ -37,8 +37,8 @@ export async function send(
     addressBech32: string,
     amount: number,
     indexation?: {
-        key: string;
-        data?: Uint8Array;
+        key: Uint8Array | string;
+        data?: Uint8Array | string;
     },
     addressOptions?: {
         startIndex?: number;
@@ -80,7 +80,7 @@ export async function sendEd25519(
     addressEd25519: string,
     amount: number,
     indexation?: {
-        key: string;
+        key: Uint8Array;
         data?: Uint8Array;
     },
     addressOptions?: {
@@ -125,8 +125,8 @@ export async function sendMultiple(
         isDustAllowance?: boolean;
     }[],
     indexation?: {
-        key: string;
-        data?: Uint8Array;
+        key: Uint8Array | string;
+        data?: Uint8Array | string;
     },
     addressOptions?: {
         startIndex?: number;
@@ -192,7 +192,7 @@ export async function sendMultipleEd25519(
         isDustAllowance?: boolean;
     }[],
     indexation?: {
-        key: string;
+        key: Uint8Array;
         data?: Uint8Array;
     },
     addressOptions?: {
@@ -252,8 +252,8 @@ export async function sendWithAddressGenerator<T>(
         isDustAllowance?: boolean;
     }[],
     indexation?: {
-        key: string;
-        data?: Uint8Array;
+        key: Uint8Array | string;
+        data?: Uint8Array | string;
     },
     zeroCount?: number
 ): Promise<{

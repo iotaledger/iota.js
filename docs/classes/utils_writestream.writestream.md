@@ -28,7 +28,6 @@ Keep track of the write index within a stream.
 - [writeByte](utils_writestream.writestream.md#writebyte)
 - [writeBytes](utils_writestream.writestream.md#writebytes)
 - [writeFixedHex](utils_writestream.writestream.md#writefixedhex)
-- [writeString](utils_writestream.writestream.md#writestring)
 - [writeUInt16](utils_writestream.writestream.md#writeuint16)
 - [writeUInt32](utils_writestream.writestream.md#writeuint32)
 - [writeUInt64](utils_writestream.writestream.md#writeuint64)
@@ -188,25 +187,6 @@ Name | Type | Description |
 `val` | *string* | The data to write.    |
 
 **Returns:** *void*
-
-___
-
-### writeString
-
-▸ **writeString**(`name`: *string*, `val`: *string*): *string*
-
-Write a string to the stream.
-
-#### Parameters:
-
-Name | Type | Description |
------- | ------ | ------ |
-`name` | *string* | The name of the data we are trying to write.   |
-`val` | *string* | The data to write.   |
-
-**Returns:** *string*
-
-The string.
 
 ___
 

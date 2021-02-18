@@ -74,26 +74,33 @@ async function run() {
 
     const amountToSend = 10000000;
 
-    const outputs : {
+    const outputs: {
         address: string;
         addressType: number,
         amount: number;
     }[] = [
-        // This is the transfer to the new address
-        {
-            address: newAddressHex,
-            addressType: ED25519_ADDRESS_TYPE,
-            amount: amountToSend
-        },
-        // Sending remainder back to genesis
-        {
-            address: genesisAddressHex,
-            addressType: ED25519_ADDRESS_TYPE,
-            amount: totalGenesis - amountToSend
-        }
-    ];
+            // This is the transfer to the new address
+            {
+                address: newAddressHex,
+                addressType: ED25519_ADDRESS_TYPE,
+                amount: amountToSend
+            },
+            // Sending remainder back to genesis
+            {
+                address: genesisAddressHex,
+                addressType: ED25519_ADDRESS_TYPE,
+                amount: totalGenesis - amountToSend
+            }
+        ];
 
-    const { messageId } = await sendAdvanced(client, inputsWithKeyPairs, outputs, { key: "WALLET", data: Converter.utf8ToBytes("Not trinity") });
+    const { messageId } = await sendAdvanced(
+        client,
+        inputsWithKeyPairs,
+        outputs,
+        {
+            key: Converter.utf8ToBytes("WALLET"),
+            data: Converter.utf8ToBytes("Not trinity")
+        });
 
     console.log("Created Message Id", messageId);
 

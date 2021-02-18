@@ -173,23 +173,6 @@ export class WriteStream {
     }
 
     /**
-     * Write a string to the stream.
-     * @param name The name of the data we are trying to write.
-     * @param val The data to write.
-     * @returns The string.
-     */
-    public writeString(name: string, val: string): string {
-        this.writeUInt16(name, val.length);
-
-        this.expand(val.length);
-
-        this._storage.set(Converter.utf8ToBytes(val), this._writeIndex);
-        this._writeIndex += val.length;
-
-        return val;
-    }
-
-    /**
      * Write a boolean to the stream.
      * @param name The name of the data we are trying to write.
      * @param val The data to write.

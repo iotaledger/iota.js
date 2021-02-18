@@ -77,7 +77,7 @@ describe("Binary Transaction", () => {
             ],
             payload: {
                 type: INDEXATION_PAYLOAD_TYPE,
-                index: "foo",
+                index: Converter.utf8ToHex("foo"),
                 data: Converter.utf8ToHex("bar")
             }
         };
@@ -105,7 +105,7 @@ describe("Binary Transaction", () => {
         expect(deserialized.payload).toBeDefined();
         if (deserialized.payload) {
             expect(deserialized.payload.type).toEqual(2);
-            expect(deserialized.payload.index).toEqual("foo");
+            expect(Converter.hexToUtf8(deserialized.payload.index)).toEqual("foo");
             expect(deserialized.payload.data).toBeDefined();
             if (deserialized.payload.data) {
                 expect(Converter.hexToUtf8(deserialized.payload.data)).toEqual("bar");

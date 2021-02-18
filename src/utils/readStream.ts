@@ -194,26 +194,6 @@ export class ReadStream {
     }
 
     /**
-     * Read a string from the stream.
-     * @param name The name of the data we are trying to read.
-     * @param moveIndex Move the index pointer on.
-     * @returns The string.
-     */
-    public readString(name: string, moveIndex: boolean = true): string {
-        const stringLength = this.readUInt16(name);
-
-        if (!this.hasRemaining(stringLength)) {
-            throw new Error(`${name} length ${stringLength
-                } exceeds the remaining data ${this.unused()}`);
-        }
-        const val = Converter.bytesToUtf8(this._storage, this._readIndex, stringLength);
-        if (moveIndex) {
-            this._readIndex += stringLength;
-        }
-        return val;
-    }
-
-    /**
      * Read a boolean from the stream.
      * @param name The name of the data we are trying to read.
      * @param moveIndex Move the index pointer on.

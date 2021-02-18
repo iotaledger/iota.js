@@ -25,7 +25,6 @@ Keep track of the read index within a stream.
 - [readByte](utils_readstream.readstream.md#readbyte)
 - [readBytes](utils_readstream.readstream.md#readbytes)
 - [readFixedHex](utils_readstream.readstream.md#readfixedhex)
-- [readString](utils_readstream.readstream.md#readstring)
 - [readUInt16](utils_readstream.readstream.md#readuint16)
 - [readUInt32](utils_readstream.readstream.md#readuint32)
 - [readUInt64](utils_readstream.readstream.md#readuint64)
@@ -168,25 +167,6 @@ Name | Type | Default value | Description |
 **Returns:** *string*
 
 The hex formatted data.
-
-___
-
-### readString
-
-▸ **readString**(`name`: *string*, `moveIndex?`: *boolean*): *string*
-
-Read a string from the stream.
-
-#### Parameters:
-
-Name | Type | Default value | Description |
------- | ------ | ------ | ------ |
-`name` | *string* | - | The name of the data we are trying to read.   |
-`moveIndex` | *boolean* | true | Move the index pointer on.   |
-
-**Returns:** *string*
-
-The string.
 
 ___
 

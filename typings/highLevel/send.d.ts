@@ -19,8 +19,8 @@ import { IUTXOInput } from "../models/IUTXOInput";
  * @returns The id of the message created and the contructed message.
  */
 export declare function send(client: IClient | string, seed: ISeed, accountIndex: number, addressBech32: string, amount: number, indexation?: {
-    key: string;
-    data?: Uint8Array;
+    key: Uint8Array | string;
+    data?: Uint8Array | string;
 }, addressOptions?: {
     startIndex?: number;
     zeroCount?: number;
@@ -44,7 +44,7 @@ export declare function send(client: IClient | string, seed: ISeed, accountIndex
  * @returns The id of the message created and the contructed message.
  */
 export declare function sendEd25519(client: IClient | string, seed: ISeed, accountIndex: number, addressEd25519: string, amount: number, indexation?: {
-    key: string;
+    key: Uint8Array;
     data?: Uint8Array;
 }, addressOptions?: {
     startIndex?: number;
@@ -72,8 +72,8 @@ export declare function sendMultiple(client: IClient | string, seed: ISeed, acco
     amount: number;
     isDustAllowance?: boolean;
 }[], indexation?: {
-    key: string;
-    data?: Uint8Array;
+    key: Uint8Array | string;
+    data?: Uint8Array | string;
 }, addressOptions?: {
     startIndex?: number;
     zeroCount?: number;
@@ -100,7 +100,7 @@ export declare function sendMultipleEd25519(client: IClient | string, seed: ISee
     amount: number;
     isDustAllowance?: boolean;
 }[], indexation?: {
-    key: string;
+    key: Uint8Array;
     data?: Uint8Array;
 }, addressOptions?: {
     startIndex?: number;
@@ -128,8 +128,8 @@ export declare function sendWithAddressGenerator<T>(client: IClient | string, se
     amount: number;
     isDustAllowance?: boolean;
 }[], indexation?: {
-    key: string;
-    data?: Uint8Array;
+    key: Uint8Array | string;
+    data?: Uint8Array | string;
 }, zeroCount?: number): Promise<{
     messageId: string;
     message: IMessage;

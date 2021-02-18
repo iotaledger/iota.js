@@ -46,8 +46,8 @@ export async function sendAdvanced(
         isDustAllowance?: boolean;
     }[],
     indexation?: {
-        key: string;
-        data?: Uint8Array;
+        key: Uint8Array | string;
+        data?: Uint8Array | string;
     }): Promise<{
         messageId: string;
         message: IMessage;
@@ -90,8 +90,8 @@ export function buildTransactionPayload(
         isDustAllowance?: boolean;
     }[],
     indexation?: {
-        key: string;
-        data?: Uint8Array;
+        key: Uint8Array | string;
+        data?: Uint8Array | string;
     }): ITransactionPayload {
     if (!inputsAndSignatureKeyPairs || inputsAndSignatureKeyPairs.length === 0) {
         throw new Error("You must specify some inputs");
@@ -99,14 +99,20 @@ export function buildTransactionPayload(
     if (!outputs || outputs.length === 0) {
         throw new Error("You must specify some outputs");
     }
+
+    let localIndexationKeyHex;
+
     if (indexation?.key) {
-        if (indexation.key.length < MIN_INDEXATION_KEY_LENGTH) {
-            throw new Error(`The indexation key length is ${indexation.key.length
+        localIndexationKeyHex = typeof (indexation.key) === "string"
+            ? Converter.utf8ToHex(indexation.key) : Converter.bytesToHex(indexation.key);
+
+        if (localIndexationKeyHex.length / 2 < MIN_INDEXATION_KEY_LENGTH) {
+            throw new Error(`The indexation key length is ${localIndexationKeyHex.length / 2
                 }, which is below the minimum size of ${MIN_INDEXATION_KEY_LENGTH}`);
         }
 
-        if (indexation.key.length > MAX_INDEXATION_KEY_LENGTH) {
-            throw new Error(`The indexation key length is ${indexation.key.length
+        if (localIndexationKeyHex.length / 2 > MAX_INDEXATION_KEY_LENGTH) {
+            throw new Error(`The indexation key length is ${localIndexationKeyHex.length / 2
                 }, which exceeds the maximum size of ${MAX_INDEXATION_KEY_LENGTH}`);
         }
     }
@@ -158,11 +164,12 @@ export function buildTransactionPayload(
         type: TRANSACTION_ESSENCE_TYPE,
         inputs: sortedInputs.map(i => i.input),
         outputs: sortedOutputs.map(o => o.output),
-        payload: indexation
+        payload: localIndexationKeyHex
             ? {
                 type: INDEXATION_PAYLOAD_TYPE,
-                index: indexation.key,
-                data: indexation.data ? Converter.bytesToHex(indexation.data) : ""
+                index: localIndexationKeyHex,
+                data: indexation?.data ? (typeof indexation.data === "string"
+                    ? Converter.utf8ToHex(indexation.data) : Converter.bytesToHex(indexation.data)) : undefined
             }
             : undefined
     };
