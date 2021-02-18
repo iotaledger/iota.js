@@ -19,9 +19,9 @@ describe("Binary Signature", () => {
         serializeSignature(serialized, object);
         const hex = serialized.finalHex();
         // eslint-disable-next-line max-len
-        expect(hex).toEqual("016920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f922c59d43952bda7ca60d3c2288ebc00703b4b60c928d277382cad5f57b02a90825f2d3a8509d6594498e0488f086d8fa3f13d9636d20e759eb5806ffe663bac0d");
+        expect(hex).toEqual("006920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f922c59d43952bda7ca60d3c2288ebc00703b4b60c928d277382cad5f57b02a90825f2d3a8509d6594498e0488f086d8fa3f13d9636d20e759eb5806ffe663bac0d");
         const deserialized = deserializeSignature(new ReadStream(Converter.hexToBytes(hex)));
-        expect(deserialized.type).toEqual(1);
+        expect(deserialized.type).toEqual(0);
         expect(deserialized.publicKey).toEqual("6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92");
         // eslint-disable-next-line max-len
         expect(deserialized.signature).toEqual("2c59d43952bda7ca60d3c2288ebc00703b4b60c928d277382cad5f57b02a90825f2d3a8509d6594498e0488f086d8fa3f13d9636d20e759eb5806ffe663bac0d");
@@ -39,9 +39,9 @@ describe("Binary Signature", () => {
         serializeEd25519Signature(serialized, object);
         const hex = serialized.finalHex();
         // eslint-disable-next-line max-len
-        expect(hex).toEqual("016920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f922c59d43952bda7ca60d3c2288ebc00703b4b60c928d277382cad5f57b02a90825f2d3a8509d6594498e0488f086d8fa3f13d9636d20e759eb5806ffe663bac0d");
+        expect(hex).toEqual("006920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f922c59d43952bda7ca60d3c2288ebc00703b4b60c928d277382cad5f57b02a90825f2d3a8509d6594498e0488f086d8fa3f13d9636d20e759eb5806ffe663bac0d");
         const deserialized = deserializeEd25519Signature(new ReadStream(Converter.hexToBytes(hex)));
-        expect(deserialized.type).toEqual(1);
+        expect(deserialized.type).toEqual(0);
         expect(deserialized.publicKey).toEqual("6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92");
         // eslint-disable-next-line max-len
         expect(deserialized.signature).toEqual("2c59d43952bda7ca60d3c2288ebc00703b4b60c928d277382cad5f57b02a90825f2d3a8509d6594498e0488f086d8fa3f13d9636d20e759eb5806ffe663bac0d");

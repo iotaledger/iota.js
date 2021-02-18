@@ -436,7 +436,7 @@
 	/**
 	 * The global type for the address type.
 	 */
-	exports.ED25519_ADDRESS_TYPE = 1;
+	exports.ED25519_ADDRESS_TYPE = 0;
 
 	});
 
@@ -4685,7 +4685,7 @@
 	/**
 	 * The global type for the signature type.
 	 */
-	exports.ED25519_SIGNATURE_TYPE = 1;
+	exports.ED25519_SIGNATURE_TYPE = 0;
 
 	});
 

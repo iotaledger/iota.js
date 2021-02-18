@@ -8,7 +8,7 @@ Ed25519Address address.
 
 ## Hierarchy
 
-* [*ITypeBase*](models_itypebase.itypebase.md)<*1*\>
+* [*ITypeBase*](models_itypebase.itypebase.md)<*0*\>
 
   ↳ **IEd25519Address**
 
@@ -31,7 +31,7 @@ ___
 
 ### type
 
-• **type**: *1*
+• **type**: *0*
 
 The type of the object.
 

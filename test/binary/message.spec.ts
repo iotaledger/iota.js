@@ -146,7 +146,7 @@ describe("Binary Message", () => {
 
     test("Can succeed with actual transaction data", () => {
         // eslint-disable-next-line max-len
-        const hex = "7b00000000000000024ccb0843016072b0d0d1c4265bc808ef8a80ae4ad70e10d6016e248e4e047235aac2a777c07473522122629124d7df647b2ea712386707e3687dd3a47cbdfa55f800000000000000000100002367ec318426c9f5d1115a6ac96f6c3cd2e53443713e0b63f0c266cbda7444740100020000013eb1ed78d420c8318972b8b0839420f502b25356270a48a430cb55a5e323f72364000000000000000001625d17d4a4b21cd5edeb57544b9d2d66ce22985fb61f17d1d7cae958d0068618f95c2dd3f7df090010000000020000000300666f6f030000006261720100000114fe414a9eccf9589b38c7c89a2fa5921b4b170ebefc04b6a812b3d02068cfd73163a90017ed5fe9530f52fb0d30836a453a37204f4d59e03012d82e0a946f31c930ac54f4a35aef9578b9dec9c12887404be353c5f7ebd88bcbefcc78e29c050000000000000000";
+        const hex = "7b00000000000000024ccb0843016072b0d0d1c4265bc808ef8a80ae4ad70e10d6016e248e4e047235aac2a777c07473522122629124d7df647b2ea712386707e3687dd3a47cbdfa55f800000000000000000100002367ec318426c9f5d1115a6ac96f6c3cd2e53443713e0b63f0c266cbda7444740100020000003eb1ed78d420c8318972b8b0839420f502b25356270a48a430cb55a5e323f72364000000000000000000625d17d4a4b21cd5edeb57544b9d2d66ce22985fb61f17d1d7cae958d0068618f95c2dd3f7df090010000000020000000300666f6f030000006261720100000014fe414a9eccf9589b38c7c89a2fa5921b4b170ebefc04b6a812b3d02068cfd73163a90017ed5fe9530f52fb0d30836a453a37204f4d59e03012d82e0a946f31c930ac54f4a35aef9578b9dec9c12887404be353c5f7ebd88bcbefcc78e29c050000000000000000";
         const message = deserializeMessage(new ReadStream(Converter.hexToBytes(hex)));
         expect(message.networkId).toEqual("123");
         expect(message.parentMessageIds).toBeDefined();
@@ -169,14 +169,14 @@ describe("Binary Message", () => {
         const sigLockedOutput1 = payload.essence.outputs[0] as ISigLockedSingleOutput;
         expect(payload.essence.outputs.length).toEqual(2);
         expect(sigLockedOutput1.type).toEqual(0);
-        expect(sigLockedOutput1.address.type).toEqual(1);
+        expect(sigLockedOutput1.address.type).toEqual(0);
         expect(sigLockedOutput1.address.address)
             .toEqual("3eb1ed78d420c8318972b8b0839420f502b25356270a48a430cb55a5e323f723");
         expect(sigLockedOutput1.amount).toEqual(100);
 
         const sigLockedOutput2 = payload.essence.outputs[1] as ISigLockedSingleOutput;
         expect(sigLockedOutput2.type).toEqual(0);
-        expect(sigLockedOutput2.address.type).toEqual(1);
+        expect(sigLockedOutput2.address.type).toEqual(0);
         expect(sigLockedOutput2.address.address)
             .toEqual("625d17d4a4b21cd5edeb57544b9d2d66ce22985fb61f17d1d7cae958d0068618");
         expect(sigLockedOutput2.amount).toEqual(2779530283277561);
