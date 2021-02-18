@@ -31,12 +31,12 @@ export async function sendData(
         ? Converter.utf8ToHex(indexationKey) : Converter.bytesToHex(indexationKey);
 
     if (localIndexationKeyHex.length / 2 < MIN_INDEXATION_KEY_LENGTH) {
-        throw new Error(`The indexation key length is ${indexationKey.length / 2
+        throw new Error(`The indexation key length is ${localIndexationKeyHex.length / 2
             }, which is below the minimum size of ${MIN_INDEXATION_KEY_LENGTH}`);
     }
 
-    if (indexationKey.length / 2 > MAX_INDEXATION_KEY_LENGTH) {
-        throw new Error(`The indexation key length is ${indexationKey.length / 2
+    if (localIndexationKeyHex.length / 2 > MAX_INDEXATION_KEY_LENGTH) {
+        throw new Error(`The indexation key length is ${localIndexationKeyHex.length / 2
             }, which exceeds the maximum size of ${MAX_INDEXATION_KEY_LENGTH}`);
     }
 

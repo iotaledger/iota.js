@@ -239,13 +239,15 @@ export class SingleNodeClient implements IClient {
 
     /**
      * Find messages by index.
-     * @param indexationKey The index value.
+     * @param indexationKey The index value as a byte array or UTF8 string.
      * @returns The messageId.
      */
-    public async messagesFind(indexationKey: Uint8Array): Promise<IMessagesResponse> {
+    public async messagesFind(indexationKey: Uint8Array | string): Promise<IMessagesResponse> {
         return this.fetchJson<never, IMessagesResponse>(
             "get",
-            `messages?index=${Converter.bytesToHex(indexationKey)}`
+            `messages?index=${typeof indexationKey === "string"
+                ? Converter.utf8ToHex(indexationKey)
+                : Converter.bytesToHex(indexationKey)}`
         );
     }
 

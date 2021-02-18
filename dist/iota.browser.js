@@ -11645,10 +11645,10 @@
 	        localIndexationKeyHex = typeof (indexation.key) === "string"
 	            ? converter.Converter.utf8ToHex(indexation.key) : converter.Converter.bytesToHex(indexation.key);
 	        if (localIndexationKeyHex.length / 2 < payload.MIN_INDEXATION_KEY_LENGTH) {
-	            throw new Error("The indexation key length is " + indexation.key.length / 2 + ", which is below the minimum size of " + payload.MIN_INDEXATION_KEY_LENGTH);
+	            throw new Error("The indexation key length is " + localIndexationKeyHex.length / 2 + ", which is below the minimum size of " + payload.MIN_INDEXATION_KEY_LENGTH);
 	        }
 	        if (localIndexationKeyHex.length / 2 > payload.MAX_INDEXATION_KEY_LENGTH) {
-	            throw new Error("The indexation key length is " + indexation.key.length / 2 + ", which exceeds the maximum size of " + payload.MAX_INDEXATION_KEY_LENGTH);
+	            throw new Error("The indexation key length is " + localIndexationKeyHex.length / 2 + ", which exceeds the maximum size of " + payload.MAX_INDEXATION_KEY_LENGTH);
 	        }
 	    }
 	    var outputsWithSerialization = [];
@@ -12118,10 +12118,10 @@
 	                    localIndexationKeyHex = typeof (indexationKey) === "string"
 	                        ? converter.Converter.utf8ToHex(indexationKey) : converter.Converter.bytesToHex(indexationKey);
 	                    if (localIndexationKeyHex.length / 2 < payload.MIN_INDEXATION_KEY_LENGTH) {
-	                        throw new Error("The indexation key length is " + indexationKey.length / 2 + ", which is below the minimum size of " + payload.MIN_INDEXATION_KEY_LENGTH);
+	                        throw new Error("The indexation key length is " + localIndexationKeyHex.length / 2 + ", which is below the minimum size of " + payload.MIN_INDEXATION_KEY_LENGTH);
 	                    }
-	                    if (indexationKey.length / 2 > payload.MAX_INDEXATION_KEY_LENGTH) {
-	                        throw new Error("The indexation key length is " + indexationKey.length / 2 + ", which exceeds the maximum size of " + payload.MAX_INDEXATION_KEY_LENGTH);
+	                    if (localIndexationKeyHex.length / 2 > payload.MAX_INDEXATION_KEY_LENGTH) {
+	                        throw new Error("The indexation key length is " + localIndexationKeyHex.length / 2 + ", which exceeds the maximum size of " + payload.MAX_INDEXATION_KEY_LENGTH);
 	                    }
 	                    indexationPayload = {
 	                        type: IIndexationPayload.INDEXATION_PAYLOAD_TYPE,
