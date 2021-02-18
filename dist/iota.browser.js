@@ -11618,6 +11618,7 @@
 
 
 
+
 	/**
 	 * Send a transfer from the balance on the seed.
 	 * @param client The client or node endpoint to send the transfer with.
@@ -11721,6 +11722,7 @@
 	    var binaryEssence = new writeStream.WriteStream();
 	    transaction.serializeTransactionEssence(binaryEssence, transactionEssence);
 	    var essenceFinal = binaryEssence.finalBytes();
+	    var essenceHash = blake2b.Blake2b.sum256(essenceFinal);
 	    // Create the unlock blocks
 	    var unlockBlocks = [];
 	    var addressToUnlockBlock = {};
@@ -11739,7 +11741,7 @@
 	                signature: {
 	                    type: IEd25519Signature.ED25519_SIGNATURE_TYPE,
 	                    publicKey: hexInputAddressPublic,
-	                    signature: converter.Converter.bytesToHex(ed25519.Ed25519.sign(input$1.addressKeyPair.privateKey, essenceFinal))
+	                    signature: converter.Converter.bytesToHex(ed25519.Ed25519.sign(input$1.addressKeyPair.privateKey, essenceHash))
 	                }
 	            });
 	            addressToUnlockBlock[hexInputAddressPublic] = {
