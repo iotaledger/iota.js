@@ -461,6 +461,10 @@ export class SingleNodeClient implements IClient {
         let errorCode: string | undefined;
 
         if (response.ok) {
+            if (response.status === 204) {
+                // No content
+                return {} as U;
+            }
             try {
                 const responseData: IResponse<U> = await response.json();
 

@@ -7133,6 +7133,10 @@
 	                    case 1:
 	                        response = _c.sent();
 	                        if (!response.ok) return [3 /*break*/, 5];
+	                        if (response.status === 204) {
+	                            // No content
+	                            return [2 /*return*/, {}];
+	                        }
 	                        _c.label = 2;
 	                    case 2:
 	                        _c.trys.push([2, 4, , 5]);
