@@ -13,7 +13,7 @@
 
 ### getUnspentAddresses
 
-▸ **getUnspentAddresses**(`client`: [*IClient*](../interfaces/models_iclient.iclient.md), `seed`: [*ISeed*](../interfaces/models_iseed.iseed.md), `accountIndex`: *number*, `addressOptions?`: {}): *Promise*<{}[]\>
+▸ **getUnspentAddresses**(`client`: [*IClient*](../interfaces/models_iclient.iclient.md) \| *string*, `seed`: [*ISeed*](../interfaces/models_iseed.iseed.md), `accountIndex`: *number*, `addressOptions?`: {}): *Promise*<{}[]\>
 
 Get all the unspent addresses.
 
@@ -21,7 +21,7 @@ Get all the unspent addresses.
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`client` | [*IClient*](../interfaces/models_iclient.iclient.md) | The client to send the transfer with.   |
+`client` | [*IClient*](../interfaces/models_iclient.iclient.md) \| *string* | The client or node endpoint to send the transfer with.   |
 `seed` | [*ISeed*](../interfaces/models_iseed.iseed.md) | The seed to use for address generation.   |
 `accountIndex` | *number* | The account index in the wallet.   |
 `addressOptions?` | {} | Optional address configuration for balance address lookups.   |
@@ -34,7 +34,7 @@ ___
 
 ### getUnspentAddressesWithAddressGenerator
 
-▸ **getUnspentAddressesWithAddressGenerator**<T\>(`client`: [*IClient*](../interfaces/models_iclient.iclient.md), `seed`: [*ISeed*](../interfaces/models_iseed.iseed.md), `initialAddressState`: T, `nextAddressPath`: (`addressState`: T, `isFirst`: *boolean*) => *string*, `addressOptions?`: {}): *Promise*<{}[]\>
+▸ **getUnspentAddressesWithAddressGenerator**<T\>(`client`: [*IClient*](../interfaces/models_iclient.iclient.md) \| *string*, `seed`: [*ISeed*](../interfaces/models_iseed.iseed.md), `initialAddressState`: T, `nextAddressPath`: (`addressState`: T, `isFirst`: *boolean*) => *string*, `addressOptions?`: {}): *Promise*<{}[]\>
 
 Get all the unspent addresses using an address generator.
 
@@ -48,7 +48,7 @@ Name |
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`client` | [*IClient*](../interfaces/models_iclient.iclient.md) | The client to send the transfer with.   |
+`client` | [*IClient*](../interfaces/models_iclient.iclient.md) \| *string* | The client or node endpoint to get the addresses from.   |
 `seed` | [*ISeed*](../interfaces/models_iseed.iseed.md) | The seed to use for address generation.   |
 `initialAddressState` | T | The initial address state for calculating the addresses.   |
 `nextAddressPath` | (`addressState`: T, `isFirst`: *boolean*) => *string* | Calculate the next address for inputs.   |

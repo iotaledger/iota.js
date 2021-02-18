@@ -33,7 +33,7 @@ ___
 
 ### sendAdvanced
 
-▸ **sendAdvanced**(`client`: [*IClient*](../interfaces/models_iclient.iclient.md), `inputsAndSignatureKeyPairs`: {}[], `outputs`: {}[], `indexation?`: {}): *Promise*<{}\>
+▸ **sendAdvanced**(`client`: [*IClient*](../interfaces/models_iclient.iclient.md) \| *string*, `inputsAndSignatureKeyPairs`: {}[], `outputs`: {}[], `indexation?`: {}): *Promise*<{}\>
 
 Send a transfer from the balance on the seed.
 
@@ -41,7 +41,7 @@ Send a transfer from the balance on the seed.
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`client` | [*IClient*](../interfaces/models_iclient.iclient.md) | The client to send the transfer with.   |
+`client` | [*IClient*](../interfaces/models_iclient.iclient.md) \| *string* | The client or node endpoint to send the transfer with.   |
 `inputsAndSignatureKeyPairs` | {}[] | The inputs with the signature key pairs needed to sign transfers.   |
 `outputs` | {}[] | The outputs to send.   |
 `indexation?` | {} | Optional indexation data to associate with the transaction.   |

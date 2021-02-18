@@ -40,39 +40,44 @@ exports.sendData = void 0;
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 var payload_1 = require("../binary/payload");
+var singleNodeClient_1 = require("../clients/singleNodeClient");
 var IIndexationPayload_1 = require("../models/IIndexationPayload");
 var converter_1 = require("../utils/converter");
 /**
  * Send a data message.
- * @param client The client to send the transfer with.
+ * @param client The client or node endpoint to send the data with.
  * @param indexationKey The index name.
- * @param indexationData The index data.
+ * @param indexationData The index data as either UTF8 text or Uint8Array bytes.
  * @returns The id of the message created and the message.
  */
 function sendData(client, indexationKey, indexationData) {
     return __awaiter(this, void 0, void 0, function () {
-        var indexationPayload, message, messageId;
+        var localClient, localIndexationKeyHex, indexationPayload, message, messageId;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
+                    localClient = typeof client === "string" ? new singleNodeClient_1.SingleNodeClient(client) : client;
                     if (!indexationKey) {
                         throw new Error("indexationKey must not be empty");
                     }
-                    if (indexationKey.length < payload_1.MIN_INDEXATION_KEY_LENGTH) {
-                        throw new Error("The indexation key length is " + indexationKey.length + ", which is below the minimum size of " + payload_1.MIN_INDEXATION_KEY_LENGTH);
+                    localIndexationKeyHex = typeof (indexationKey) === "string"
+                        ? converter_1.Converter.utf8ToHex(indexationKey) : converter_1.Converter.bytesToHex(indexationKey);
+                    if (localIndexationKeyHex.length / 2 < payload_1.MIN_INDEXATION_KEY_LENGTH) {
+                        throw new Error("The indexation key length is " + indexationKey.length / 2 + ", which is below the minimum size of " + payload_1.MIN_INDEXATION_KEY_LENGTH);
                     }
-                    if (indexationKey.length > payload_1.MAX_INDEXATION_KEY_LENGTH) {
-                        throw new Error("The indexation key length is " + indexationKey.length + ", which exceeds the maximum size of " + payload_1.MAX_INDEXATION_KEY_LENGTH);
+                    if (indexationKey.length / 2 > payload_1.MAX_INDEXATION_KEY_LENGTH) {
+                        throw new Error("The indexation key length is " + indexationKey.length / 2 + ", which exceeds the maximum size of " + payload_1.MAX_INDEXATION_KEY_LENGTH);
                     }
                     indexationPayload = {
                         type: IIndexationPayload_1.INDEXATION_PAYLOAD_TYPE,
-                        index: converter_1.Converter.bytesToHex(indexationKey),
-                        data: indexationData ? converter_1.Converter.bytesToHex(indexationData) : ""
+                        index: localIndexationKeyHex,
+                        data: indexationData ? (typeof indexationData === "string"
+                            ? converter_1.Converter.utf8ToHex(indexationData) : converter_1.Converter.bytesToHex(indexationData)) : undefined
                     };
                     message = {
                         payload: indexationPayload
                     };
-                    return [4 /*yield*/, client.messageSubmit(message)];
+                    return [4 /*yield*/, localClient.messageSubmit(message)];
                 case 1:
                     messageId = _a.sent();
                     return [2 /*return*/, {
@@ -84,4 +89,4 @@ function sendData(client, indexationKey, indexationData) {
     });
 }
 exports.sendData = sendData;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoic2VuZERhdGEuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi9zcmMvaGlnaExldmVsL3NlbmREYXRhLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7OztBQUFBLCtCQUErQjtBQUMvQixzQ0FBc0M7QUFDdEMsNkNBQXlGO0FBRXpGLG1FQUEyRjtBQUUzRixnREFBK0M7QUFFL0M7Ozs7OztHQU1HO0FBQ0gsU0FBc0IsUUFBUSxDQUFDLE1BQWUsRUFBRSxhQUF5QixFQUFFLGNBQTJCOzs7Ozs7b0JBSWxHLElBQUksQ0FBQyxhQUFhLEVBQUU7d0JBQ2hCLE1BQU0sSUFBSSxLQUFLLENBQUMsaUNBQWlDLENBQUMsQ0FBQztxQkFDdEQ7b0JBRUQsSUFBSSxhQUFhLENBQUMsTUFBTSxHQUFHLG1DQUF5QixFQUFFO3dCQUNsRCxNQUFNLElBQUksS0FBSyxDQUFDLGtDQUFnQyxhQUFhLENBQUMsTUFBTSw2Q0FDeEIsbUNBQTJCLENBQUMsQ0FBQztxQkFDNUU7b0JBRUQsSUFBSSxhQUFhLENBQUMsTUFBTSxHQUFHLG1DQUF5QixFQUFFO3dCQUNsRCxNQUFNLElBQUksS0FBSyxDQUFDLGtDQUFnQyxhQUFhLENBQUMsTUFBTSw0Q0FDekIsbUNBQTJCLENBQUMsQ0FBQztxQkFDM0U7b0JBRUssaUJBQWlCLEdBQXVCO3dCQUMxQyxJQUFJLEVBQUUsNENBQXVCO3dCQUM3QixLQUFLLEVBQUUscUJBQVMsQ0FBQyxVQUFVLENBQUMsYUFBYSxDQUFDO3dCQUMxQyxJQUFJLEVBQUUsY0FBYyxDQUFDLENBQUMsQ0FBQyxxQkFBUyxDQUFDLFVBQVUsQ0FBQyxjQUFjLENBQUMsQ0FBQyxDQUFDLENBQUMsRUFBRTtxQkFDbkUsQ0FBQztvQkFFSSxPQUFPLEdBQWE7d0JBQ3RCLE9BQU8sRUFBRSxpQkFBaUI7cUJBQzdCLENBQUM7b0JBRWdCLHFCQUFNLE1BQU0sQ0FBQyxhQUFhLENBQUMsT0FBTyxDQUFDLEVBQUE7O29CQUEvQyxTQUFTLEdBQUcsU0FBbUM7b0JBQ3JELHNCQUFPOzRCQUNILE9BQU8sU0FBQTs0QkFDUCxTQUFTLFdBQUE7eUJBQ1osRUFBQzs7OztDQUNMO0FBakNELDRCQWlDQyJ9
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoic2VuZERhdGEuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi9zcmMvaGlnaExldmVsL3NlbmREYXRhLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7OztBQUFBLCtCQUErQjtBQUMvQixzQ0FBc0M7QUFDdEMsNkNBQXlGO0FBQ3pGLGdFQUErRDtBQUUvRCxtRUFBMkY7QUFFM0YsZ0RBQStDO0FBRS9DOzs7Ozs7R0FNRztBQUNILFNBQXNCLFFBQVEsQ0FDMUIsTUFBd0IsRUFDeEIsYUFBa0MsRUFDbEMsY0FBb0M7Ozs7OztvQkFJOUIsV0FBVyxHQUFHLE9BQU8sTUFBTSxLQUFLLFFBQVEsQ0FBQyxDQUFDLENBQUMsSUFBSSxtQ0FBZ0IsQ0FBQyxNQUFNLENBQUMsQ0FBQyxDQUFDLENBQUMsTUFBTSxDQUFDO29CQUV2RixJQUFJLENBQUMsYUFBYSxFQUFFO3dCQUNoQixNQUFNLElBQUksS0FBSyxDQUFDLGlDQUFpQyxDQUFDLENBQUM7cUJBQ3REO29CQUVLLHFCQUFxQixHQUFHLE9BQU8sQ0FBQyxhQUFhLENBQUMsS0FBSyxRQUFRO3dCQUM3RCxDQUFDLENBQUMscUJBQVMsQ0FBQyxTQUFTLENBQUMsYUFBYSxDQUFDLENBQUMsQ0FBQyxDQUFDLHFCQUFTLENBQUMsVUFBVSxDQUFDLGFBQWEsQ0FBQyxDQUFDO29CQUUvRSxJQUFJLHFCQUFxQixDQUFDLE1BQU0sR0FBRyxDQUFDLEdBQUcsbUNBQXlCLEVBQUU7d0JBQzlELE1BQU0sSUFBSSxLQUFLLENBQUMsa0NBQWdDLGFBQWEsQ0FBQyxNQUFNLEdBQUcsQ0FBQyw2Q0FDNUIsbUNBQTJCLENBQUMsQ0FBQztxQkFDNUU7b0JBRUQsSUFBSSxhQUFhLENBQUMsTUFBTSxHQUFHLENBQUMsR0FBRyxtQ0FBeUIsRUFBRTt3QkFDdEQsTUFBTSxJQUFJLEtBQUssQ0FBQyxrQ0FBZ0MsYUFBYSxDQUFDLE1BQU0sR0FBRyxDQUFDLDRDQUM3QixtQ0FBMkIsQ0FBQyxDQUFDO3FCQUMzRTtvQkFFSyxpQkFBaUIsR0FBdUI7d0JBQzFDLElBQUksRUFBRSw0Q0FBdUI7d0JBQzdCLEtBQUssRUFBRSxxQkFBcUI7d0JBQzVCLElBQUksRUFBRSxjQUFjLENBQUMsQ0FBQyxDQUFDLENBQUMsT0FBTyxjQUFjLEtBQUssUUFBUTs0QkFDdEQsQ0FBQyxDQUFDLHFCQUFTLENBQUMsU0FBUyxDQUFDLGNBQWMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxxQkFBUyxDQUFDLFVBQVUsQ0FBQyxjQUFjLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxTQUFTO3FCQUNoRyxDQUFDO29CQUVJLE9BQU8sR0FBYTt3QkFDdEIsT0FBTyxFQUFFLGlCQUFpQjtxQkFDN0IsQ0FBQztvQkFFZ0IscUJBQU0sV0FBVyxDQUFDLGFBQWEsQ0FBQyxPQUFPLENBQUMsRUFBQTs7b0JBQXBELFNBQVMsR0FBRyxTQUF3QztvQkFDMUQsc0JBQU87NEJBQ0gsT0FBTyxTQUFBOzRCQUNQLFNBQVMsV0FBQTt5QkFDWixFQUFDOzs7O0NBQ0w7QUExQ0QsNEJBMENDIn0=

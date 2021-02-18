@@ -1,6 +1,7 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 import { Ed25519Address } from "../addressTypes/ed25519Address";
+import { SingleNodeClient } from "../clients/singleNodeClient";
 import { Bip32Path } from "../crypto/bip32Path";
 import { IBip44GeneratorState } from "../models/IBip44GeneratorState";
 import { IClient } from "../models/IClient";
@@ -16,7 +17,7 @@ import { sendAdvanced } from "./sendAdvanced";
 
 /**
  * Send a transfer from the balance on the seed to a single output.
- * @param client The client to send the transfer with.
+ * @param client The client or node endpoint to send the transfer with.
  * @param seed The seed to use for address generation.
  * @param accountIndex The account index in the wallet.
  * @param addressBech32 The address to send the funds to in bech32 format.
@@ -30,7 +31,7 @@ import { sendAdvanced } from "./sendAdvanced";
  * @returns The id of the message created and the contructed message.
  */
 export async function send(
-    client: IClient,
+    client: IClient | string,
     seed: ISeed,
     accountIndex: number,
     addressBech32: string,
@@ -59,7 +60,7 @@ export async function send(
 
 /**
  * Send a transfer from the balance on the seed to a single output.
- * @param client The client to send the transfer with.
+ * @param client The client or node endpoint to send the transfer with.
  * @param seed The seed to use for address generation.
  * @param accountIndex The account index in the wallet.
  * @param addressEd25519 The address to send the funds to in ed25519 format.
@@ -73,7 +74,7 @@ export async function send(
  * @returns The id of the message created and the contructed message.
  */
 export async function sendEd25519(
-    client: IClient,
+    client: IClient | string,
     seed: ISeed,
     accountIndex: number,
     addressEd25519: string,
@@ -102,7 +103,7 @@ export async function sendEd25519(
 
 /**
  * Send a transfer from the balance on the seed to multiple outputs.
- * @param client The client to send the transfer with.
+ * @param client The client or node endpoint to send the transfer with.
  * @param seed The seed to use for address generation.
  * @param accountIndex The account index in the wallet.
  * @param outputs The address to send the funds to in bech32 format and amounts.
@@ -115,7 +116,7 @@ export async function sendEd25519(
  * @returns The id of the message created and the contructed message.
  */
 export async function sendMultiple(
-    client: IClient,
+    client: IClient | string,
     seed: ISeed,
     accountIndex: number,
     outputs: {
@@ -135,7 +136,9 @@ export async function sendMultiple(
     messageId: string;
     message: IMessage;
 }> {
-    const nodeInfo = await client.info();
+    const localClient = typeof client === "string" ? new SingleNodeClient(client) : client;
+
+    const nodeInfo = await localClient.info();
     const hexOutputs = outputs.map(output => {
         const bech32Details = Bech32Helper.fromBech32(output.addressBech32, nodeInfo.bech32HRP);
         if (!bech32Details) {
@@ -167,7 +170,7 @@ export async function sendMultiple(
 
 /**
  * Send a transfer from the balance on the seed.
- * @param client The client to send the transfer with.
+ * @param client The client or node endpoint to send the transfer with.
  * @param seed The seed to use for address generation.
  * @param accountIndex The account index in the wallet.
  * @param outputs The outputs including address to send the funds to in ed25519 format and amount.
@@ -180,7 +183,7 @@ export async function sendMultiple(
  * @returns The id of the message created and the contructed message.
  */
 export async function sendMultipleEd25519(
-    client: IClient,
+    client: IClient | string,
     seed: ISeed,
     accountIndex: number,
     outputs: {
@@ -226,7 +229,7 @@ export async function sendMultipleEd25519(
 
 /**
  * Send a transfer using account based indexing for the inputs.
- * @param client The client to send the transfer with.
+ * @param client The client or node endpoint to send the transfer with.
  * @param seed The seed to use for address generation.
  * @param initialAddressState The initial address state for calculating the addresses.
  * @param nextAddressPath Calculate the next address for inputs.
@@ -238,7 +241,7 @@ export async function sendMultipleEd25519(
  * @returns The id of the message created and the contructed message.
  */
 export async function sendWithAddressGenerator<T>(
-    client: IClient,
+    client: IClient | string,
     seed: ISeed,
     initialAddressState: T,
     nextAddressPath: (addressState: T, isFirst: boolean) => string,
@@ -280,7 +283,7 @@ export async function sendWithAddressGenerator<T>(
 
 /**
  * Calculate the inputs from the seed and basePath.
- * @param client The client to send the transfer with.
+ * @param client The client or node endpoint to calculate the inputs with.
  * @param seed The seed to use for address generation.
  * @param initialAddressState The initial address state for calculating the addresses.
  * @param nextAddressPath Calculate the next address for inputs.
@@ -289,7 +292,7 @@ export async function sendWithAddressGenerator<T>(
  * @returns The id of the message created and the contructed message.
  */
 export async function calculateInputs<T>(
-    client: IClient,
+    client: IClient | string,
     seed: ISeed,
     initialAddressState: T,
     nextAddressPath: (addressState: T, isFirst: boolean) => string,
@@ -299,6 +302,8 @@ export async function calculateInputs<T>(
     input: IUTXOInput;
     addressKeyPair: IKeyPair;
 }[]> {
+    const localClient = typeof client === "string" ? new SingleNodeClient(client) : client;
+
     let requiredBalance = 0;
     for (const output of outputs) {
         requiredBalance += output.amount;
@@ -322,7 +327,7 @@ export async function calculateInputs<T>(
         const addressKeyPair = addressSeed.keyPair();
         const ed25519Address = new Ed25519Address(addressKeyPair.publicKey);
         const address = Converter.bytesToHex(ed25519Address.toAddress());
-        const addressOutputIds = await client.addressEd25519Outputs(address);
+        const addressOutputIds = await localClient.addressEd25519Outputs(address);
 
         if (addressOutputIds.count === 0) {
             zeroBalance++;
@@ -331,7 +336,7 @@ export async function calculateInputs<T>(
             }
         } else {
             for (const addressOutputId of addressOutputIds.outputIds) {
-                const addressOutput = await client.output(addressOutputId);
+                const addressOutput = await localClient.output(addressOutputId);
 
                 if (!addressOutput.isSpent &&
                     consumedBalance < requiredBalance) {
