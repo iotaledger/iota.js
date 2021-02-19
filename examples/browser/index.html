@@ -41,7 +41,7 @@
                 parentMessageIds: tipsResponse.tipMessageIds.slice(0, Iota.MAX_NUMBER_PARENTS),
                 payload: {
                     type: 2,
-                    index: "Foo",
+                    index: Iota.Converter.utf8ToHex("Foo"),
                     data: Iota.Converter.utf8ToHex("Bar")
                 }
             };
