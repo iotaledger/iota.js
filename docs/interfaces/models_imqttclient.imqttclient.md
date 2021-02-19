@@ -76,7 +76,7 @@ ___
 
 ### index
 
-▸ **index**(`index`: *string*, `callback`: (`topic`: *string*, `data`: [*IMessage*](models_imessage.imessage.md), `raw`: *Uint8Array*) => *void*): *string*
+▸ **index**(`index`: *string* \| *Uint8Array*, `callback`: (`topic`: *string*, `data`: [*IMessage*](models_imessage.imessage.md), `raw`: *Uint8Array*) => *void*): *string*
 
 Subscribe to get all messages for the specified index in object form.
 
@@ -84,7 +84,7 @@ Subscribe to get all messages for the specified index in object form.
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`index` | *string* | The index to monitor.   |
+`index` | *string* \| *Uint8Array* | The index to monitor as bytes or in UTF8.   |
 `callback` | (`topic`: *string*, `data`: [*IMessage*](models_imessage.imessage.md), `raw`: *Uint8Array*) => *void* | The callback which is called when new data arrives.   |
 
 **Returns:** *string*
@@ -95,7 +95,7 @@ ___
 
 ### indexRaw
 
-▸ **indexRaw**(`index`: *string*, `callback`: (`topic`: *string*, `data`: *Uint8Array*) => *void*): *string*
+▸ **indexRaw**(`index`: *string* \| *Uint8Array*, `callback`: (`topic`: *string*, `data`: *Uint8Array*) => *void*): *string*
 
 Subscribe to get all messages for the specified index in binary form.
 
@@ -103,7 +103,7 @@ Subscribe to get all messages for the specified index in binary form.
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`index` | *string* | The index to monitor.   |
+`index` | *string* \| *Uint8Array* | The index to monitor as bytes or in UTF8.   |
 `callback` | (`topic`: *string*, `data`: *Uint8Array*) => *void* | The callback which is called when new data arrives.   |
 
 **Returns:** *string*

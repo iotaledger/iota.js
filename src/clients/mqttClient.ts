@@ -198,9 +198,11 @@ export class MqttClient implements IMqttClient {
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    public indexRaw(index: string,
+    public indexRaw(index: Uint8Array | string,
         callback: (topic: string, data: Uint8Array) => void): string {
-        return this.internalSubscribe<Uint8Array>(`messages/indexation/${index}`, false,
+        return this.internalSubscribe<Uint8Array>(`messages/indexation/${typeof index === "string"
+            ? Converter.utf8ToHex(index)
+            : Converter.bytesToHex(index)}`, false,
             (topic, raw) => {
                 callback(
                     topic,
@@ -215,9 +217,11 @@ export class MqttClient implements IMqttClient {
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    public index(index: string,
+    public index(index: Uint8Array | string,
         callback: (topic: string, data: IMessage, raw: Uint8Array) => void): string {
-        return this.internalSubscribe<Uint8Array>(`messages/indexation/${index}`, false,
+        return this.internalSubscribe<Uint8Array>(`messages/indexation/${typeof index === "string"
+            ? Converter.utf8ToHex(index)
+            : Converter.bytesToHex(index)}`, false,
             (topic, raw) => {
                 callback(
                     topic,

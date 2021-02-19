@@ -6165,7 +6165,9 @@
 	     * @returns A subscription Id which can be used to unsubscribe.
 	     */
 	    MqttClient.prototype.indexRaw = function (index, callback) {
-	        return this.internalSubscribe("messages/indexation/" + index, false, function (topic, raw) {
+	        return this.internalSubscribe("messages/indexation/" + (typeof index === "string"
+	            ? converter.Converter.utf8ToHex(index)
+	            : converter.Converter.bytesToHex(index)), false, function (topic, raw) {
 	            callback(topic, raw);
 	        });
 	    };
@@ -6176,7 +6178,9 @@
 	     * @returns A subscription Id which can be used to unsubscribe.
 	     */
 	    MqttClient.prototype.index = function (index, callback) {
-	        return this.internalSubscribe("messages/indexation/" + index, false, function (topic, raw) {
+	        return this.internalSubscribe("messages/indexation/" + (typeof index === "string"
+	            ? converter.Converter.utf8ToHex(index)
+	            : converter.Converter.bytesToHex(index)), false, function (topic, raw) {
 	            callback(topic, message.deserializeMessage(new readStream.ReadStream(raw)), raw);
 	        });
 	    };
