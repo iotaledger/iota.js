@@ -182,7 +182,7 @@ export class Converter {
         if (value.length % 2 === 1) {
             return false;
         }
-        return /[\da-f]/gi.test(value);
+        return /^[\da-f]+$/g.test(value);
     }
 
     /**
