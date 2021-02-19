@@ -480,6 +480,16 @@ export class SingleNodeClient implements IClient {
 
         if (!errorMessage) {
             try {
+                const json = await response.json();
+                if (json.error) {
+                    errorMessage = json.error.message;
+                    errorCode = json.error.code;
+                }
+            } catch { }
+        }
+
+        if (!errorMessage) {
+            try {
                 const text = await response.text();
                 if (text.length > 0) {
                     const match = /code=(\d+), message=(.*)/.exec(text);
