@@ -43,7 +43,9 @@ async function run() {
         console.log("\nNo Peers");
     }
 
-    const addedPeer = await client.peerAdd('/ip4/127.0.0.1/tcp/15601', "fred");
+    const address = "/ip4/127.0.0.1/tcp/15601";
+    const peerId = "djhgkdjfghkdfjhdfkjghkdfgh";
+    const addedPeer = await client.peerAdd(`${address}/p2p/${peerId}`, "fred");
     console.log("Added Peer")
     console.log("\tId:", addedPeer.id);
 
