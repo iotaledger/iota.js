@@ -6075,12 +6075,13 @@
 	var MqttClient = /** @class */ (function () {
 	    /**
 	     * Create a new instace of MqttClient.
-	     * @param endpoint The endpoint to connect to.
+	     * @param endpoints The endpoint or endpoints list to connect to.
 	     * @param keepAliveTimeoutSeconds Timeout to reconnect if no messages received.
 	     */
-	    function MqttClient(endpoint, keepAliveTimeoutSeconds) {
+	    function MqttClient(endpoints, keepAliveTimeoutSeconds) {
 	        if (keepAliveTimeoutSeconds === void 0) { keepAliveTimeoutSeconds = 30; }
-	        this._endpoint = endpoint;
+	        this._endpoints = Array.isArray(endpoints) ? endpoints : [endpoints];
+	        this._endpointsIndex = 0;
 	        this._subscriptions = {};
 	        this._statusSubscriptions = {};
 	        this._lastMessageTime = -1;
@@ -6304,7 +6305,7 @@
 	            catch (err) {
 	                this.triggerStatusCallbacks({
 	                    type: "error",
-	                    message: "Subscribe to topic " + topic + " failed on " + this._endpoint,
+	                    message: "Subscribe to topic " + topic + " failed on " + this._endpoints[this._endpointsIndex],
 	                    state: this.calculateState(),
 	                    error: err
 	                });
@@ -6324,7 +6325,7 @@
 	            catch (err) {
 	                this.triggerStatusCallbacks({
 	                    type: "error",
-	                    message: "Unsubscribe from topic " + topic + " failed on " + this._endpoint,
+	                    message: "Unsubscribe from topic " + topic + " failed on " + this._endpoints[this._endpointsIndex],
 	                    state: this.calculateState(),
 	                    error: err
 	                });
@@ -6339,7 +6340,7 @@
 	        var _this = this;
 	        if (!this._client) {
 	            try {
-	                this._client = mqtt.connect(this._endpoint, {
+	                this._client = mqtt.connect(this._endpoints[this._endpointsIndex], {
 	                    keepalive: 0,
 	                    reconnectPeriod: this._keepAliveTimeoutSeconds * 1000
 	                });
@@ -6352,7 +6353,7 @@
 	                            _this.startKeepAlive();
 	                            _this.triggerStatusCallbacks({
 	                                type: "connect",
-	                                message: "Connection complete " + _this._endpoint,
+	                                message: "Connection complete " + _this._endpoints[_this._endpointsIndex],
 	                                state: _this.calculateState()
 	                            });
 	                        }
@@ -6360,7 +6361,7 @@
 	                    catch (err) {
 	                        _this.triggerStatusCallbacks({
 	                            type: "error",
-	                            message: "Subscribe to topics failed on " + _this._endpoint,
+	                            message: "Subscribe to topics failed on " + _this._endpoints[_this._endpointsIndex],
 	                            state: _this.calculateState(),
 	                            error: err
 	                        });
@@ -6373,19 +6374,21 @@
 	                this._client.on("error", function (err) {
 	                    _this.triggerStatusCallbacks({
 	                        type: "error",
-	                        message: "Error on " + _this._endpoint,
+	                        message: "Error on " + _this._endpoints[_this._endpointsIndex],
 	                        state: _this.calculateState(),
 	                        error: err
 	                    });
+	                    _this.nextClient();
 	                });
 	            }
 	            catch (err) {
 	                this.triggerStatusCallbacks({
 	                    type: "connect",
-	                    message: "Connection failed to " + this._endpoint,
+	                    message: "Connection failed to " + this._endpoints[this._endpointsIndex],
 	                    state: this.calculateState(),
 	                    error: err
 	                });
+	                this.nextClient();
 	            }
 	        }
 	    };
@@ -6405,7 +6408,7 @@
 	            catch (_a) { }
 	            this.triggerStatusCallbacks({
 	                type: "disconnect",
-	                message: "Disconnect complete " + this._endpoint,
+	                message: "Disconnect complete " + this._endpoints[this._endpointsIndex],
 	                state: this.calculateState()
 	            });
 	        }
@@ -6485,6 +6488,7 @@
 	    MqttClient.prototype.keepAlive = function () {
 	        if (Date.now() - this._lastMessageTime > (this._keepAliveTimeoutSeconds * 1000)) {
 	            this.mqttDisconnect();
+	            this.nextClient();
 	            this.mqttConnect();
 	        }
 	    };
@@ -6507,6 +6511,15 @@
 	            }
 	        }
 	        return state;
+	    };
+	    /**
+	     * If there has been a problem switch to the next client endpoint.
+	     */
+	    MqttClient.prototype.nextClient = function () {
+	        this._endpointsIndex++;
+	        if (this._endpointsIndex >= this._endpoints.length) {
+	            this._endpointsIndex = 0;
+	        }
 	    };
 	    return MqttClient;
 	}());

@@ -10,10 +10,10 @@ import { IMqttStatus } from "../models/IMqttStatus";
 export declare class MqttClient implements IMqttClient {
     /**
      * Create a new instace of MqttClient.
-     * @param endpoint The endpoint to connect to.
+     * @param endpoints The endpoint or endpoints list to connect to.
      * @param keepAliveTimeoutSeconds Timeout to reconnect if no messages received.
      */
-    constructor(endpoint: string, keepAliveTimeoutSeconds?: number);
+    constructor(endpoints: string | string[], keepAliveTimeoutSeconds?: number);
     /**
      * Subscribe to the latest milestone updates.
      * @param callback The callback which is called when new data arrives.
@@ -111,4 +111,8 @@ export declare class MqttClient implements IMqttClient {
      * @returns A subscription Id which can be used to unsubscribe.
      */
     statusChanged(callback: (data: IMqttStatus) => void): string;
+    /**
+     * If there has been a problem switch to the next client endpoint.
+     */
+    private nextClient;
 }

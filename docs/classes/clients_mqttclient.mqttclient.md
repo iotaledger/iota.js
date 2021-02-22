@@ -42,7 +42,7 @@ MQTT Client implementation for pub/sub communication.
 
 ### constructor
 
-\+ **new MqttClient**(`endpoint`: *string*, `keepAliveTimeoutSeconds?`: *number*): [*MqttClient*](clients_mqttclient.mqttclient.md)
+\+ **new MqttClient**(`endpoints`: *string* \| *string*[], `keepAliveTimeoutSeconds?`: *number*): [*MqttClient*](clients_mqttclient.mqttclient.md)
 
 Create a new instace of MqttClient.
 
@@ -50,7 +50,7 @@ Create a new instace of MqttClient.
 
 Name | Type | Default value | Description |
 ------ | ------ | ------ | ------ |
-`endpoint` | *string* | - | The endpoint to connect to.   |
+`endpoints` | *string* \| *string*[] | - | The endpoint or endpoints list to connect to.   |
 `keepAliveTimeoutSeconds` | *number* | 30 | Timeout to reconnect if no messages received.    |
 
 **Returns:** [*MqttClient*](clients_mqttclient.mqttclient.md)
