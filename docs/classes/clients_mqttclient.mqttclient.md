@@ -30,8 +30,8 @@ MQTT Client implementation for pub/sub communication.
 - [messages](clients_mqttclient.mqttclient.md#messages)
 - [messagesMetadata](clients_mqttclient.mqttclient.md#messagesmetadata)
 - [messagesRaw](clients_mqttclient.mqttclient.md#messagesraw)
+- [milestonesConfirmed](clients_mqttclient.mqttclient.md#milestonesconfirmed)
 - [milestonesLatest](clients_mqttclient.mqttclient.md#milestoneslatest)
-- [milestonesSolid](clients_mqttclient.mqttclient.md#milestonessolid)
 - [output](clients_mqttclient.mqttclient.md#output)
 - [statusChanged](clients_mqttclient.mqttclient.md#statuschanged)
 - [subscribeJson](clients_mqttclient.mqttclient.md#subscribejson)
@@ -206,11 +206,11 @@ A subscription Id which can be used to unsubscribe.
 
 ___
 
-### milestonesLatest
+### milestonesConfirmed
 
-▸ **milestonesLatest**(`callback`: (`topic`: *string*, `data`: [*IMqttMilestoneResponse*](../interfaces/models_api_imqttmilestoneresponse.imqttmilestoneresponse.md)) => *void*): *string*
+▸ **milestonesConfirmed**(`callback`: (`topic`: *string*, `data`: [*IMqttMilestoneResponse*](../interfaces/models_api_imqttmilestoneresponse.imqttmilestoneresponse.md)) => *void*): *string*
 
-Subscribe to the latest milestone updates.
+Subscribe to the latest confirmed milestone updates.
 
 #### Parameters:
 
@@ -224,11 +224,11 @@ A subscription Id which can be used to unsubscribe.
 
 ___
 
-### milestonesSolid
+### milestonesLatest
 
-▸ **milestonesSolid**(`callback`: (`topic`: *string*, `data`: [*IMqttMilestoneResponse*](../interfaces/models_api_imqttmilestoneresponse.imqttmilestoneresponse.md)) => *void*): *string*
+▸ **milestonesLatest**(`callback`: (`topic`: *string*, `data`: [*IMqttMilestoneResponse*](../interfaces/models_api_imqttmilestoneresponse.imqttmilestoneresponse.md)) => *void*): *string*
 
-Subscribe to the latest solid milestone updates.
+Subscribe to the latest milestone updates.
 
 #### Parameters:
 

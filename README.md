@@ -49,7 +49,7 @@ async function run() {
     console.log("\tIs Healthy:", info.isHealthy);
     console.log("\tNetwork Id:", info.networkId);
     console.log("\tLatest Milestone Index:", info.latestMilestoneIndex);
-    console.log("\tSolid Milestone Index:", info.solidMilestoneIndex);
+    console.log("\tConfirmed Milestone Index:", info.confirmedMilestoneIndex);
     console.log("\tPruning Index:", info.pruningIndex);
     console.log("\tFeatures:", info.features);
     console.log("\tMin PoW Score:", info.minPowScore);
@@ -108,7 +108,7 @@ There are also high level operations which make use of the API level methods:
 You can create a MQTT client which once connected can stream the following feeds.
 
 * milestonesLatest
-* milestonesSolid
+* milestonesConfirmed
 * messageMetadata - Metadata updates for a specified messageId
 * output - Output updates for a specified outputId
 * addressOutputs - Address output updates for a specified address

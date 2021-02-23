@@ -15,6 +15,7 @@ Response from the /info endpoint.
 ### Properties
 
 - [bech32HRP](models_inodeinfo.inodeinfo.md#bech32hrp)
+- [confirmedMilestoneIndex](models_inodeinfo.inodeinfo.md#confirmedmilestoneindex)
 - [features](models_inodeinfo.inodeinfo.md#features)
 - [isHealthy](models_inodeinfo.inodeinfo.md#ishealthy)
 - [latestMilestoneIndex](models_inodeinfo.inodeinfo.md#latestmilestoneindex)
@@ -22,7 +23,6 @@ Response from the /info endpoint.
 - [name](models_inodeinfo.inodeinfo.md#name)
 - [networkId](models_inodeinfo.inodeinfo.md#networkid)
 - [pruningIndex](models_inodeinfo.inodeinfo.md#pruningindex)
-- [solidMilestoneIndex](models_inodeinfo.inodeinfo.md#solidmilestoneindex)
 - [version](models_inodeinfo.inodeinfo.md#version)
 
 ## Properties
@@ -32,6 +32,14 @@ Response from the /info endpoint.
 • **bech32HRP**: *string*
 
 The human readable part of bech32 addresses.
+
+___
+
+### confirmedMilestoneIndex
+
+• **confirmedMilestoneIndex**: *number*
+
+The confirmed milestone index;
 
 ___
 
@@ -55,7 +63,7 @@ ___
 
 • **latestMilestoneIndex**: *number*
 
-The latest milestone message index;
+The latest milestone index;
 
 ___
 
@@ -88,14 +96,6 @@ ___
 • **pruningIndex**: *number*
 
 The pruning index;
-
-___
-
-### solidMilestoneIndex
-
-• **solidMilestoneIndex**: *number*
-
-The latest solid milestone message index;
 
 ___
 

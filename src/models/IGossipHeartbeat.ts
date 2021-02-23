@@ -8,6 +8,7 @@ export interface IGossipHeartbeat {
      * Solid milestone index.
      */
     solidMilestoneIndex: number;
+
     /**
      * Pruned milestone index.
      */

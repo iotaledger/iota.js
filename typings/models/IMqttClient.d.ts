@@ -14,11 +14,11 @@ export interface IMqttClient {
      */
     milestonesLatest(callback: (topic: string, data: IMqttMilestoneResponse) => void): string;
     /**
-     * Subscribe to the latest solid milestone updates.
+     * Subscribe to the latest confirmed milestone updates.
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    milestonesSolid(callback: (topic: string, data: IMqttMilestoneResponse) => void): string;
+    milestonesConfirmed(callback: (topic: string, data: IMqttMilestoneResponse) => void): string;
     /**
      * Subscribe to metadata updates for a specific message.
      * @param messageId The message to monitor.

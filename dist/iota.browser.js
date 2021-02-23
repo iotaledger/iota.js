@@ -6096,12 +6096,12 @@
 	        return this.internalSubscribe("milestones/latest", true, callback);
 	    };
 	    /**
-	     * Subscribe to the latest solid milestone updates.
+	     * Subscribe to the latest confirmed milestone updates.
 	     * @param callback The callback which is called when new data arrives.
 	     * @returns A subscription Id which can be used to unsubscribe.
 	     */
-	    MqttClient.prototype.milestonesSolid = function (callback) {
-	        return this.internalSubscribe("milestones/solid", true, callback);
+	    MqttClient.prototype.milestonesConfirmed = function (callback) {
+	        return this.internalSubscribe("milestones/confirmed", true, callback);
 	    };
 	    /**
 	     * Subscribe to metadata updates for a specific message.
@@ -12685,7 +12685,7 @@
 	    logger(prefix + "\tMin PoW Score:", info.minPowScore);
 	    logger(prefix + "\tBech32 HRP:", info.bech32HRP);
 	    logger(prefix + "\tLatest Milestone Index:", info.latestMilestoneIndex);
-	    logger(prefix + "\tSolid Milestone Index:", info.solidMilestoneIndex);
+	    logger(prefix + "\tConfirmed Milestone Index:", info.confirmedMilestoneIndex);
 	    logger(prefix + "\tPruning Index:", info.pruningIndex);
 	    logger(prefix + "\tFeatures:", info.features);
 	}

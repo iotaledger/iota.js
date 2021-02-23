@@ -18,4 +18,9 @@ export interface IAddressResponse {
      * The balance of the address.
      */
     balance: number;
+
+    /**
+     * The address is allowed to be sent dust.
+     */
+    dustAllowed: boolean;
 }

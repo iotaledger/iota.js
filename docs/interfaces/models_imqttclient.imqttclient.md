@@ -26,8 +26,8 @@ Client interface definition for API communication.
 - [messages](models_imqttclient.imqttclient.md#messages)
 - [messagesMetadata](models_imqttclient.imqttclient.md#messagesmetadata)
 - [messagesRaw](models_imqttclient.imqttclient.md#messagesraw)
+- [milestonesConfirmed](models_imqttclient.imqttclient.md#milestonesconfirmed)
 - [milestonesLatest](models_imqttclient.imqttclient.md#milestoneslatest)
-- [milestonesSolid](models_imqttclient.imqttclient.md#milestonessolid)
 - [output](models_imqttclient.imqttclient.md#output)
 - [statusChanged](models_imqttclient.imqttclient.md#statuschanged)
 - [subscribeJson](models_imqttclient.imqttclient.md#subscribejson)
@@ -185,11 +185,11 @@ A subscription Id which can be used to unsubscribe.
 
 ___
 
-### milestonesLatest
+### milestonesConfirmed
 
-▸ **milestonesLatest**(`callback`: (`topic`: *string*, `data`: [*IMqttMilestoneResponse*](models_api_imqttmilestoneresponse.imqttmilestoneresponse.md)) => *void*): *string*
+▸ **milestonesConfirmed**(`callback`: (`topic`: *string*, `data`: [*IMqttMilestoneResponse*](models_api_imqttmilestoneresponse.imqttmilestoneresponse.md)) => *void*): *string*
 
-Subscribe to the latest milestone updates.
+Subscribe to the latest confirmed milestone updates.
 
 #### Parameters:
 
@@ -203,11 +203,11 @@ A subscription Id which can be used to unsubscribe.
 
 ___
 
-### milestonesSolid
+### milestonesLatest
 
-▸ **milestonesSolid**(`callback`: (`topic`: *string*, `data`: [*IMqttMilestoneResponse*](models_api_imqttmilestoneresponse.imqttmilestoneresponse.md)) => *void*): *string*
+▸ **milestonesLatest**(`callback`: (`topic`: *string*, `data`: [*IMqttMilestoneResponse*](models_api_imqttmilestoneresponse.imqttmilestoneresponse.md)) => *void*): *string*
 
-Subscribe to the latest solid milestone updates.
+Subscribe to the latest milestone updates.
 
 #### Parameters:
 
