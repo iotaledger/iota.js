@@ -5229,8 +5229,8 @@
 	    if (object.index.length < exports.MIN_INDEXATION_KEY_LENGTH) {
 	        throw new Error("The indexation key length is " + object.index.length + ", which is below the minimum size of " + exports.MIN_INDEXATION_KEY_LENGTH);
 	    }
-	    if (object.index.length > exports.MAX_INDEXATION_KEY_LENGTH) {
-	        throw new Error("The indexation key length is " + object.index.length + ", which exceeds the maximum size of " + exports.MAX_INDEXATION_KEY_LENGTH);
+	    if (object.index.length / 2 > exports.MAX_INDEXATION_KEY_LENGTH) {
+	        throw new Error("The indexation key length is " + object.index.length / 2 + ", which exceeds the maximum size of " + exports.MAX_INDEXATION_KEY_LENGTH);
 	    }
 	    writeStream.writeUInt32("payloadIndexation.type", object.type);
 	    writeStream.writeUInt16("payloadIndexation.indexLength", object.index.length / 2);
@@ -5438,6 +5438,8 @@
 	        return extendStatics(d, b);
 	    };
 	    return function (d, b) {
+	        if (typeof b !== "function" && b !== null)
+	            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
 	        extendStatics(d, b);
 	        function __() { this.constructor = d; }
 	        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());

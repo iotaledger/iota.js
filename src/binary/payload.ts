@@ -359,8 +359,8 @@ export function serializeIndexationPayload(writeStream: WriteStream,
         throw new Error(`The indexation key length is ${object.index.length
             }, which is below the minimum size of ${MIN_INDEXATION_KEY_LENGTH}`);
     }
-    if (object.index.length > MAX_INDEXATION_KEY_LENGTH) {
-        throw new Error(`The indexation key length is ${object.index.length
+    if (object.index.length / 2 > MAX_INDEXATION_KEY_LENGTH) {
+        throw new Error(`The indexation key length is ${object.index.length / 2
             }, which exceeds the maximum size of ${MAX_INDEXATION_KEY_LENGTH}`);
     }
 
