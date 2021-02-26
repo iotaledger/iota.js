@@ -6,10 +6,6 @@
 
 The migrated funds for receipts.
 
-## Hierarchy
-
-* **IMigratedFunds**
-
 ## Table of contents
 
 ### Properties

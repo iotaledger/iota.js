@@ -6,10 +6,6 @@
 
 Message id response.
 
-## Hierarchy
-
-* **IMessageIdResponse**
-
 ## Table of contents
 
 ### Properties

@@ -5438,6 +5438,8 @@
 	        return extendStatics(d, b);
 	    };
 	    return function (d, b) {
+	        if (typeof b !== "function" && b !== null)
+	            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
 	        extendStatics(d, b);
 	        function __() { this.constructor = d; }
 	        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -7059,6 +7061,29 @@
 	        return __awaiter(this, void 0, void 0, function () {
 	            return __generator(this, function (_a) {
 	                return [2 /*return*/, this.fetchJson("get", "milestones/" + index + "/utxo-changes")];
+	            });
+	        });
+	    };
+	    /**
+	     * Get the current treasury output.
+	     * @returns The details for the treasury.
+	     */
+	    SingleNodeClient.prototype.treasury = function () {
+	        return __awaiter(this, void 0, void 0, function () {
+	            return __generator(this, function (_a) {
+	                return [2 /*return*/, this.fetchJson("get", "treasury")];
+	            });
+	        });
+	    };
+	    /**
+	     * Get all the stored receipts or those for a given migrated at index.
+	     * @param migratedAt The index the receipts were migrated at, if not supplied returns all stored receipts.
+	     * @returns The stored receipts.
+	     */
+	    SingleNodeClient.prototype.receipts = function (migratedAt) {
+	        return __awaiter(this, void 0, void 0, function () {
+	            return __generator(this, function (_a) {
+	                return [2 /*return*/, this.fetchJson("get", "receipts" + (migratedAt !== undefined ? "/" + migratedAt : ""))];
 	            });
 	        });
 	    };
@@ -12226,6 +12251,11 @@
 
 	});
 
+	var IReceiptsResponse = createCommonjsModule(function (module, exports) {
+	Object.defineProperty(exports, "__esModule", { value: true });
+
+	});
+
 	var IResponse = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 
@@ -12351,6 +12381,13 @@
 	});
 
 	var ISeed = createCommonjsModule(function (module, exports) {
+	Object.defineProperty(exports, "__esModule", { value: true });
+
+	});
+
+	var ITreasury = createCommonjsModule(function (module, exports) {
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
 	Object.defineProperty(exports, "__esModule", { value: true });
 
 	});
@@ -13184,6 +13221,7 @@
 	__exportStar(IMilestoneResponse, exports);
 	__exportStar(IMilestoneUtxoChangesResponse, exports);
 	__exportStar(IOutputResponse, exports);
+	__exportStar(IReceiptsResponse, exports);
 	__exportStar(IResponse, exports);
 	__exportStar(ITipsResponse, exports);
 	__exportStar(conflictReason, exports);
@@ -13213,6 +13251,7 @@
 	__exportStar(ISignatureUnlockBlock, exports);
 	__exportStar(ITransactionEssence, exports);
 	__exportStar(ITransactionPayload, exports);
+	__exportStar(ITreasury, exports);
 	__exportStar(ITreasuryInput, exports);
 	__exportStar(ITreasuryOutput, exports);
 	__exportStar(ITreasuryTransactionPayload, exports);

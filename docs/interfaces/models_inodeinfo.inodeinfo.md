@@ -6,10 +6,6 @@
 
 Response from the /info endpoint.
 
-## Hierarchy
-
-* **INodeInfo**
-
 ## Table of contents
 
 ### Properties

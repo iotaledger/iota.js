@@ -6,10 +6,6 @@
 
 Convert arrays to and from different formats.
 
-## Hierarchy
-
-* **Converter**
-
 ## Table of contents
 
 ### Constructors
@@ -49,7 +45,7 @@ Convert a base64 string to bytes.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `base64` | *string* | The base64 string.   |
 
 **Returns:** *Uint8Array*
@@ -67,7 +63,7 @@ Convert a binary string to bytes.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `binary` | *string* | The binary string.   |
 
 **Returns:** *Uint8Array*
@@ -85,7 +81,7 @@ Convert bytes to base64 string.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `bytes` | *Uint8Array* | The bytes to convert.   |
 
 **Returns:** *string*
@@ -103,7 +99,7 @@ Convert bytes to binary string.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `bytes` | *Uint8Array* | The bytes to convert.   |
 
 **Returns:** *string*
@@ -114,15 +110,15 @@ ___
 
 ### bytesToHex
 
-▸ `Static`**bytesToHex**(`array`: *ArrayLike*<*number*\>, `startIndex?`: *number*, `length?`: *number*, `reverse?`: *boolean*): *string*
+▸ `Static`**bytesToHex**(`array`: *ArrayLike*<number\>, `startIndex?`: *number*, `length?`: *number*, `reverse?`: *boolean*): *string*
 
 Encode a raw array to hex string.
 
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
-`array` | *ArrayLike*<*number*\> | The bytes to encode.   |
+:------ | :------ | :------ |
+`array` | *ArrayLike*<number\> | The bytes to encode.   |
 `startIndex?` | *number* | The index to start in the bytes.   |
 `length?` | *number* | The length of bytes to read.   |
 `reverse?` | *boolean* | Reverse the combine direction.   |
@@ -135,15 +131,15 @@ ___
 
 ### bytesToUtf8
 
-▸ `Static`**bytesToUtf8**(`array`: *ArrayLike*<*number*\>, `startIndex?`: *number*, `length?`: *number*): *string*
+▸ `Static`**bytesToUtf8**(`array`: *ArrayLike*<number\>, `startIndex?`: *number*, `length?`: *number*): *string*
 
 Encode a raw array to UTF8 string.
 
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
-`array` | *ArrayLike*<*number*\> | The bytes to encode.   |
+:------ | :------ | :------ |
+`array` | *ArrayLike*<number\> | The bytes to encode.   |
 `startIndex?` | *number* | The index to start in the bytes.   |
 `length?` | *number* | The length of bytes to read.   |
 
@@ -162,7 +158,7 @@ Decode a hex string to raw array.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `hex` | *string* | The hex to decode.   |
 `reverse?` | *boolean* | Store the characters in reverse.   |
 
@@ -181,7 +177,7 @@ Convert the hex text to text.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `hex` | *string* | The hex to convert.   |
 
 **Returns:** *string*
@@ -199,7 +195,7 @@ Is the data hex format.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `value` | *string* | The value to test.   |
 
 **Returns:** *boolean*
@@ -217,7 +213,7 @@ Convert a UTF8 string to raw array.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `utf8` | *string* | The text to decode.   |
 
 **Returns:** *Uint8Array*
@@ -235,7 +231,7 @@ Convert the UTF8 to hex.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `utf8` | *string* | The text to convert.   |
 
 **Returns:** *string*

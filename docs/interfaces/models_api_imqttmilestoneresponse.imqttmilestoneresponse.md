@@ -6,10 +6,6 @@
 
 Milestone.
 
-## Hierarchy
-
-* **IMqttMilestoneResponse**
-
 ## Table of contents
 
 ### Properties

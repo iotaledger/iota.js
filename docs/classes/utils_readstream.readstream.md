@@ -6,10 +6,6 @@
 
 Keep track of the read index within a stream.
 
-## Hierarchy
-
-* **ReadStream**
-
 ## Table of contents
 
 ### Constructors
@@ -42,7 +38,7 @@ Create a new instance of ReadStream.
 #### Parameters:
 
 Name | Type | Default value | Description |
------- | ------ | ------ | ------ |
+:------ | :------ | :------ | :------ |
 `storage` | *Uint8Array* | - | The data to access.   |
 `readStartIndex` | *number* | 0 | The index to start the reading from.    |
 
@@ -71,7 +67,7 @@ Does the storage have enough data remaining.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `remaining` | *number* | The amount of space needed.   |
 
 **Returns:** *boolean*
@@ -101,7 +97,7 @@ Read a boolean from the stream.
 #### Parameters:
 
 Name | Type | Default value | Description |
------- | ------ | ------ | ------ |
+:------ | :------ | :------ | :------ |
 `name` | *string* | - | The name of the data we are trying to read.   |
 `moveIndex` | *boolean* | true | Move the index pointer on.   |
 
@@ -120,7 +116,7 @@ Read a byte from the stream.
 #### Parameters:
 
 Name | Type | Default value | Description |
------- | ------ | ------ | ------ |
+:------ | :------ | :------ | :------ |
 `name` | *string* | - | The name of the data we are trying to read.   |
 `moveIndex` | *boolean* | true | Move the index pointer on.   |
 
@@ -139,7 +135,7 @@ Read an array of byte from the stream.
 #### Parameters:
 
 Name | Type | Default value | Description |
------- | ------ | ------ | ------ |
+:------ | :------ | :------ | :------ |
 `name` | *string* | - | The name of the data we are trying to read.   |
 `length` | *number* | - | The length of the array to read.   |
 `moveIndex` | *boolean* | true | Move the index pointer on.   |
@@ -159,7 +155,7 @@ Read fixed length as hex.
 #### Parameters:
 
 Name | Type | Default value | Description |
------- | ------ | ------ | ------ |
+:------ | :------ | :------ | :------ |
 `name` | *string* | - | The name of the data we are trying to read.   |
 `length` | *number* | - | The length of the data to read.   |
 `moveIndex` | *boolean* | true | Move the index pointer on.   |
@@ -179,7 +175,7 @@ Read a UInt16 from the stream.
 #### Parameters:
 
 Name | Type | Default value | Description |
------- | ------ | ------ | ------ |
+:------ | :------ | :------ | :------ |
 `name` | *string* | - | The name of the data we are trying to read.   |
 `moveIndex` | *boolean* | true | Move the index pointer on.   |
 
@@ -198,7 +194,7 @@ Read a UInt32 from the stream.
 #### Parameters:
 
 Name | Type | Default value | Description |
------- | ------ | ------ | ------ |
+:------ | :------ | :------ | :------ |
 `name` | *string* | - | The name of the data we are trying to read.   |
 `moveIndex` | *boolean* | true | Move the index pointer on.   |
 
@@ -217,7 +213,7 @@ Read a UInt64 from the stream.
 #### Parameters:
 
 Name | Type | Default value | Description |
------- | ------ | ------ | ------ |
+:------ | :------ | :------ | :------ |
 `name` | *string* | - | The name of the data we are trying to read.   |
 `moveIndex` | *boolean* | true | Move the index pointer on.   |
 
@@ -236,7 +232,7 @@ Set the current read index.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `readIndex` | *number* | The current read index.    |
 
 **Returns:** *void*

@@ -6,10 +6,6 @@
 
 Implementation of the password based key derivation function 2.
 
-## Hierarchy
-
-* **Pbkdf2**
-
 ## Table of contents
 
 ### Constructors
@@ -40,7 +36,7 @@ Derive a key from the parameters using Sha256.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `password` | *Uint8Array* | The password to derive the key from.   |
 `salt` | *Uint8Array* | The salt for the derivation.   |
 `iterations` | *number* | Numer of iterations to perform.   |
@@ -61,7 +57,7 @@ Derive a key from the parameters using Sha512.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `password` | *Uint8Array* | The password to derive the key from.   |
 `salt` | *Uint8Array* | The salt for the derivation.   |
 `iterations` | *number* | Numer of iterations to perform.   |

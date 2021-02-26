@@ -6,10 +6,6 @@
 
 Address details.
 
-## Hierarchy
-
-* **IAddressResponse**
-
 ## Table of contents
 
 ### Properties

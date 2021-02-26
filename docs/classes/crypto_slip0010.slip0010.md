@@ -7,10 +7,6 @@
 Class to help with slip0010 key derivation.
 https://github.com/satoshilabs/slips/blob/master/slip-0010.md
 
-## Hierarchy
-
-* **Slip0010**
-
 ## Table of contents
 
 ### Constructors
@@ -42,7 +38,7 @@ Derive a key from the path.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `seed` | *Uint8Array* | The seed.   |
 `path` | [*Bip32Path*](crypto_bip32path.bip32path.md) | The path.   |
 
@@ -61,7 +57,7 @@ Get the master key from the seed.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `seed` | *Uint8Array* | The seed to generate the master key from.   |
 
 **Returns:** *object*
@@ -79,7 +75,7 @@ Get the public key from the private key.
 #### Parameters:
 
 Name | Type | Default value | Description |
------- | ------ | ------ | ------ |
+:------ | :------ | :------ | :------ |
 `privateKey` | *Uint8Array* | - | The private key.   |
 `withZeroByte` | *boolean* | true | Include a zero bute prefix.   |
 

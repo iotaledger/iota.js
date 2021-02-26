@@ -6,10 +6,6 @@
 
 Implementation of Bip39 for mnemonic generation.
 
-## Hierarchy
-
-* **Bip39**
-
 ## Table of contents
 
 ### Constructors
@@ -44,7 +40,7 @@ Calculate the entropy checksum.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `entropy` | *Uint8Array* | The entropy to calculate the checksum for.   |
 
 **Returns:** *string*
@@ -62,7 +58,7 @@ Generate a mnemonic from the entropy.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `entropy` | *Uint8Array* | The entropy to generate   |
 
 **Returns:** *string*
@@ -80,7 +76,7 @@ Convert the mnemonic back to entropy.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `mnemonic` | *string* | The mnemonic to convert.   |
 
 **Returns:** *Uint8Array*
@@ -98,7 +94,7 @@ Convert a mnemonic to a seed.
 #### Parameters:
 
 Name | Type | Default value | Description |
------- | ------ | ------ | ------ |
+:------ | :------ | :------ | :------ |
 `mnemonic` | *string* | - | The mnemonic to convert.   |
 `password?` | *string* | - | The password to apply to the seed generation.   |
 `iterations` | *number* | 2048 | The number of iterations to perform on the password function, defaults to 2048.   |
@@ -119,7 +115,7 @@ Generate a random mnemonic.
 #### Parameters:
 
 Name | Type | Default value | Description |
------- | ------ | ------ | ------ |
+:------ | :------ | :------ | :------ |
 `length` | *number* | 256 | The length of the mnemonic to generate, defaults to 256.   |
 
 **Returns:** *string*
@@ -137,7 +133,7 @@ Set the wordlist and joining character.
 #### Parameters:
 
 Name | Type | Default value | Description |
------- | ------ | ------ | ------ |
+:------ | :------ | :------ | :------ |
 `wordlistData` | *string*[] | - | Array of words.   |
 `joiningChar` | *string* | " " | The character to join the words with.    |
 

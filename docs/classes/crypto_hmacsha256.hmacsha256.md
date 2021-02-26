@@ -7,10 +7,6 @@
 Class to help with HmacSha256 scheme.
 TypeScript conversion from https://github.com/emn178/js-sha256
 
-## Hierarchy
-
-* **HmacSha256**
-
 ## Table of contents
 
 ### Constructors
@@ -34,7 +30,7 @@ Create a new instance of HmacSha256.
 #### Parameters:
 
 Name | Type | Default value | Description |
------- | ------ | ------ | ------ |
+:------ | :------ | :------ | :------ |
 `key` | *Uint8Array* | - | The key for the hmac.   |
 `bits` | *number* | 256 | The number of bits.    |
 
@@ -63,7 +59,7 @@ Update the hash with the data.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `message` | *Uint8Array* | The data to update the hash with.   |
 
 **Returns:** [*HmacSha256*](crypto_hmacsha256.hmacsha256.md)
@@ -81,7 +77,7 @@ Perform Sum 256 on the data.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `key` | *Uint8Array* | The key for the hmac.   |
 `data` | *Uint8Array* | The data to operate on.   |
 

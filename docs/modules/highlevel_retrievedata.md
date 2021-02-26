@@ -12,17 +12,17 @@
 
 ### retrieveData
 
-▸ **retrieveData**(`client`: [*IClient*](../interfaces/models_iclient.iclient.md) \| *string*, `messageId`: *string*): *Promise*<{} \| *undefined*\>
+▸ **retrieveData**(`client`: [*IClient*](../interfaces/models_iclient.iclient.md) \| *string*, `messageId`: *string*): *Promise*<{} \| undefined\>
 
 Retrieve a data message.
 
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `client` | [*IClient*](../interfaces/models_iclient.iclient.md) \| *string* | The client or node endpoint to retrieve the data with.   |
 `messageId` | *string* | The message id of the data to get.   |
 
-**Returns:** *Promise*<{} \| *undefined*\>
+**Returns:** *Promise*<{} \| undefined\>
 
 The message index and data.

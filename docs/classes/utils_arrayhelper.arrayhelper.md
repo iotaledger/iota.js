@@ -6,10 +6,6 @@
 
 Array helper methods.
 
-## Hierarchy
-
-* **ArrayHelper**
-
 ## Table of contents
 
 ### Constructors
@@ -32,16 +28,16 @@ Array helper methods.
 
 ### equal
 
-▸ `Static`**equal**(`array1`: *undefined* \| *ArrayLike*<*unknown*\>, `array2`: *undefined* \| *ArrayLike*<*unknown*\>): *boolean*
+▸ `Static`**equal**(`array1`: *undefined* \| *ArrayLike*<unknown\>, `array2`: *undefined* \| *ArrayLike*<unknown\>): *boolean*
 
 Are the two array equals.
 
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
-`array1` | *undefined* \| *ArrayLike*<*unknown*\> | The first array.   |
-`array2` | *undefined* \| *ArrayLike*<*unknown*\> | The second array.   |
+:------ | :------ | :------ |
+`array1` | *undefined* \| *ArrayLike*<unknown\> | The first array.   |
+`array2` | *undefined* \| *ArrayLike*<unknown\> | The second array.   |
 
 **Returns:** *boolean*
 

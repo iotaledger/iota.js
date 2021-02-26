@@ -6,10 +6,6 @@
 
 Client interface definition for API communication.
 
-## Hierarchy
-
-* **IClient**
-
 ## Implemented by
 
 * [*SingleNodeClient*](../classes/clients_singlenodeclient.singlenodeclient.md)
@@ -38,7 +34,9 @@ Client interface definition for API communication.
 - [peerAdd](models_iclient.iclient.md#peeradd)
 - [peerDelete](models_iclient.iclient.md#peerdelete)
 - [peers](models_iclient.iclient.md#peers)
+- [receipts](models_iclient.iclient.md#receipts)
 - [tips](models_iclient.iclient.md#tips)
+- [treasury](models_iclient.iclient.md#treasury)
 
 ## Methods
 
@@ -51,7 +49,7 @@ Get the address details using bech32 address.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `addressBech32` | *string* | The address to get the details for.   |
 
 **Returns:** *Promise*<[*IAddressResponse*](models_api_iaddressresponse.iaddressresponse.md)\>
@@ -69,7 +67,7 @@ Get the address details using ed25519 address.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `addressEd25519` | *string* | The address to get the details for.   |
 
 **Returns:** *Promise*<[*IAddressResponse*](models_api_iaddressresponse.iaddressresponse.md)\>
@@ -87,7 +85,7 @@ Get the address outputs.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `addressEd25519` | *string* | The address to get the outputs for.   |
 `type?` | *number* | Filter the type of outputs you are looking up, defaults to all.   |
 `includeSpent?` | *boolean* | Filter the type of outputs you are looking up, defaults to false.   |
@@ -107,7 +105,7 @@ Get the address outputs using bech32 address.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `addressBech32` | *string* | The address to get the outputs for.   |
 `type?` | *number* | Filter the type of outputs you are looking up, defaults to all.   |
 `includeSpent?` | *boolean* | Filter the type of outputs you are looking up, defaults to false.   |
@@ -120,11 +118,11 @@ ___
 
 ### health
 
-▸ **health**(): *Promise*<*boolean*\>
+▸ **health**(): *Promise*<boolean\>
 
 Get the health of the node.
 
-**Returns:** *Promise*<*boolean*\>
+**Returns:** *Promise*<boolean\>
 
 True if the node is healthy.
 
@@ -151,7 +149,7 @@ Get the message data by id.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `messageId` | *string* | The message to get the data for.   |
 
 **Returns:** *Promise*<[*IMessage*](models_imessage.imessage.md)\>
@@ -169,7 +167,7 @@ Get the children of a message.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `messageId` | *string* | The id of the message to get the children for.   |
 
 **Returns:** *Promise*<[*IChildrenResponse*](models_api_ichildrenresponse.ichildrenresponse.md)\>
@@ -187,7 +185,7 @@ Get the message metadata by id.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `messageId` | *string* | The message to get the metadata for.   |
 
 **Returns:** *Promise*<[*IMessageMetadata*](models_imessagemetadata.imessagemetadata.md)\>
@@ -198,17 +196,17 @@ ___
 
 ### messageRaw
 
-▸ **messageRaw**(`messageId`: *string*): *Promise*<*Uint8Array*\>
+▸ **messageRaw**(`messageId`: *string*): *Promise*<Uint8Array\>
 
 Get the message raw data by id.
 
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `messageId` | *string* | The message to get the data for.   |
 
-**Returns:** *Promise*<*Uint8Array*\>
+**Returns:** *Promise*<Uint8Array\>
 
 The message raw data.
 
@@ -216,17 +214,17 @@ ___
 
 ### messageSubmit
 
-▸ **messageSubmit**(`message`: [*IMessage*](models_imessage.imessage.md)): *Promise*<*string*\>
+▸ **messageSubmit**(`message`: [*IMessage*](models_imessage.imessage.md)): *Promise*<string\>
 
 Submit message.
 
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `message` | [*IMessage*](models_imessage.imessage.md) | The message to submit.   |
 
-**Returns:** *Promise*<*string*\>
+**Returns:** *Promise*<string\>
 
 The messageId.
 
@@ -234,17 +232,17 @@ ___
 
 ### messageSubmitRaw
 
-▸ **messageSubmitRaw**(`message`: *Uint8Array*): *Promise*<*string*\>
+▸ **messageSubmitRaw**(`message`: *Uint8Array*): *Promise*<string\>
 
 Submit message in raw format.
 
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `message` | *Uint8Array* | The message to submit.   |
 
-**Returns:** *Promise*<*string*\>
+**Returns:** *Promise*<string\>
 
 The messageId.
 
@@ -259,7 +257,7 @@ Find messages by index.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `indexationKey` | *string* \| *Uint8Array* | The index value as a byte array or UTF8 string.   |
 
 **Returns:** *Promise*<[*IMessagesResponse*](models_api_imessagesresponse.imessagesresponse.md)\>
@@ -277,7 +275,7 @@ Get the requested milestone.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `index` | *number* | The index of the milestone to get.   |
 
 **Returns:** *Promise*<[*IMilestoneResponse*](models_api_imilestoneresponse.imilestoneresponse.md)\>
@@ -295,7 +293,7 @@ Get the requested milestone utxo changes.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `index` | *number* | The index of the milestone to request the changes for.   |
 
 **Returns:** *Promise*<[*IMilestoneUtxoChangesResponse*](models_api_imilestoneutxochangesresponse.imilestoneutxochangesresponse.md)\>
@@ -313,7 +311,7 @@ Find an output by its identifier.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `outputId` | *string* | The id of the output to get.   |
 
 **Returns:** *Promise*<[*IOutputResponse*](models_api_ioutputresponse.ioutputresponse.md)\>
@@ -331,7 +329,7 @@ Get a peer.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `peerId` | *string* | The peer to delete.   |
 
 **Returns:** *Promise*<[*IPeer*](models_ipeer.ipeer.md)\>
@@ -349,7 +347,7 @@ Add a new peer.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `multiAddress` | *string* | The address of the peer to add.   |
 `alias?` | *string* | An optional alias for the peer.   |
 
@@ -361,17 +359,17 @@ ___
 
 ### peerDelete
 
-▸ **peerDelete**(`peerId`: *string*): *Promise*<*void*\>
+▸ **peerDelete**(`peerId`: *string*): *Promise*<void\>
 
 Delete a peer.
 
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `peerId` | *string* | The peer to delete.   |
 
-**Returns:** *Promise*<*void*\>
+**Returns:** *Promise*<void\>
 
 Nothing.
 
@@ -389,6 +387,24 @@ The list of peers.
 
 ___
 
+### receipts
+
+▸ **receipts**(`migratedAt?`: *number*): *Promise*<[*IReceiptsResponse*](models_api_ireceiptsresponse.ireceiptsresponse.md)\>
+
+Get all the stored receipts or those for a given migrated at index.
+
+#### Parameters:
+
+Name | Type | Description |
+:------ | :------ | :------ |
+`migratedAt?` | *number* | The index the receipts were migrated at, if not supplied returns all stored receipts.   |
+
+**Returns:** *Promise*<[*IReceiptsResponse*](models_api_ireceiptsresponse.ireceiptsresponse.md)\>
+
+The stored receipts.
+
+___
+
 ### tips
 
 ▸ **tips**(): *Promise*<[*ITipsResponse*](models_api_itipsresponse.itipsresponse.md)\>
@@ -398,3 +414,15 @@ Get the tips from the node.
 **Returns:** *Promise*<[*ITipsResponse*](models_api_itipsresponse.itipsresponse.md)\>
 
 The tips.
+
+___
+
+### treasury
+
+▸ **treasury**(): *Promise*<[*ITreasury*](models_itreasury.itreasury.md)\>
+
+Get the current treasury output.
+
+**Returns:** *Promise*<[*ITreasury*](models_itreasury.itreasury.md)\>
+
+The details for the treasury.

@@ -7,10 +7,6 @@
 Class to help with Sha256 scheme.
 TypeScript conversion from https://github.com/emn178/js-sha256
 
-## Hierarchy
-
-* **Sha256**
-
 ## Table of contents
 
 ### Constructors
@@ -39,9 +35,9 @@ Create a new instance of Sha256.
 
 #### Parameters:
 
-Name | Type | Default value | Description |
------- | ------ | ------ | ------ |
-`bits` | *number* | ... | The number of bits.    |
+Name | Type | Description |
+:------ | :------ | :------ |
+`bits` | *number* | The number of bits.    |
 
 **Returns:** [*Sha256*](crypto_sha256.sha256.md)
 
@@ -84,7 +80,7 @@ Update the hash with the data.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `message` | *Uint8Array* | The data to update the hash with.   |
 
 **Returns:** [*Sha256*](crypto_sha256.sha256.md)
@@ -102,7 +98,7 @@ Perform Sum 224 on the data.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `data` | *Uint8Array* | The data to operate on.   |
 
 **Returns:** *Uint8Array*
@@ -120,7 +116,7 @@ Perform Sum 256 on the data.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `data` | *Uint8Array* | The data to operate on.   |
 
 **Returns:** *Uint8Array*

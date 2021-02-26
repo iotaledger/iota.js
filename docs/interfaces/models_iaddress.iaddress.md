@@ -6,10 +6,6 @@
 
 Interface defining address.
 
-## Hierarchy
-
-* **IAddress**
-
 ## Implemented by
 
 * [*Ed25519Address*](../classes/addresstypes_ed25519address.ed25519address.md)
@@ -44,7 +40,7 @@ Use the public key to validate the address.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `publicKey` | *Uint8Array* | - |
 `address` | *Uint8Array* | The address to verify.   |
 

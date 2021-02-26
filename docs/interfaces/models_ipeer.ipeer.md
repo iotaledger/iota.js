@@ -6,10 +6,6 @@
 
 Peer details.
 
-## Hierarchy
-
-* **IPeer**
-
 ## Table of contents
 
 ### Properties

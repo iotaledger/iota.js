@@ -6,10 +6,6 @@
 
 Message layout.
 
-## Hierarchy
-
-* **IMessage**
-
 ## Table of contents
 
 ### Properties
