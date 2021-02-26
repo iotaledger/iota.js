@@ -10,6 +10,7 @@ import { IMessagesResponse } from "../models/api/IMessagesResponse";
 import { IMilestoneResponse } from "../models/api/IMilestoneResponse";
 import { IMilestoneUtxoChangesResponse } from "../models/api/IMilestoneUtxoChangesResponse";
 import { IOutputResponse } from "../models/api/IOutputResponse";
+import { IReceiptsResponse } from "../models/api/IReceiptsResponse";
 import { IResponse } from "../models/api/IResponse";
 import { ITipsResponse } from "../models/api/ITipsResponse";
 import { IClient } from "../models/IClient";
@@ -18,6 +19,7 @@ import { IMessageMetadata } from "../models/IMessageMetadata";
 import { INodeInfo } from "../models/INodeInfo";
 import { IPeer } from "../models/IPeer";
 import { IPowProvider } from "../models/IPowProvider";
+import { ITreasury } from "../models/ITreasury";
 import { ArrayHelper } from "../utils/arrayHelper";
 import { BigIntHelper } from "../utils/bigIntHelper";
 import { Converter } from "../utils/converter";
@@ -370,6 +372,29 @@ export class SingleNodeClient implements IClient {
         return this.fetchJson<never, IMilestoneUtxoChangesResponse>(
             "get",
             `milestones/${index}/utxo-changes`
+        );
+    }
+
+    /**
+     * Get the current treasury output.
+     * @returns The details for the treasury.
+     */
+    public async treasury(): Promise<ITreasury> {
+        return this.fetchJson<never, ITreasury>(
+            "get",
+            "treasury"
+        );
+    }
+
+    /**
+     * Get all the stored receipts or those for a given migrated at index.
+     * @param migratedAt The index the receipts were migrated at, if not supplied returns all stored receipts.
+     * @returns The stored receipts.
+     */
+    public async receipts(migratedAt?: number): Promise<IReceiptsResponse> {
+        return this.fetchJson<never, IReceiptsResponse>(
+            "get",
+            `receipts${migratedAt !== undefined ? `/${migratedAt}` : ""}`
         );
     }
 
