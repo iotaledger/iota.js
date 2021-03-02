@@ -6,10 +6,6 @@
 
 Response from the metadata endpoint.
 
-## Hierarchy
-
-* **IMessageMetadata**
-
 ## Table of contents
 
 ### Properties

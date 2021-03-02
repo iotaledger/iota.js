@@ -6,10 +6,6 @@
 
 Gossip heartbeat.
 
-## Hierarchy
-
-* **IGossipHeartbeat**
-
 ## Table of contents
 
 ### Properties

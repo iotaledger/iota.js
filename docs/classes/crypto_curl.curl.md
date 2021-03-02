@@ -6,10 +6,6 @@
 
 Class to implement Curl sponge.
 
-## Hierarchy
-
-* **Curl**
-
 ## Table of contents
 
 ### Constructors
@@ -38,9 +34,9 @@ Create a new instance of Curl.
 
 #### Parameters:
 
-Name | Type | Default value | Description |
------- | ------ | ------ | ------ |
-`rounds` | *number* | ... | The number of rounds to perform.    |
+Name | Type | Description |
+:------ | :------ | :------ |
+`rounds` | *number* | The number of rounds to perform.    |
 
 **Returns:** [*Curl*](crypto_curl.curl.md)
 
@@ -71,7 +67,7 @@ Absorbs trits given an offset and length
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `trits` | *Int8Array* | The trits to absorb.   |
 `offset` | *number* | The offset to start abororbing from the array.   |
 `length` | *number* | The length of trits to absorb.    |
@@ -88,9 +84,9 @@ Get the state of the sponge.
 
 #### Parameters:
 
-Name | Type | Default value | Description |
------- | ------ | ------ | ------ |
-`len` | *number* | ... | The length of the state to get.   |
+Name | Type | Description |
+:------ | :------ | :------ |
+`len` | *number* | The length of the state to get.   |
 
 **Returns:** *Int8Array*
 
@@ -117,7 +113,7 @@ Squeezes trits given an offset and length
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `trits` | *Int8Array* | The trits to squeeze.   |
 `offset` | *number* | The offset to start squeezing from the array.   |
 `length` | *number* | The length of trits to squeeze.    |

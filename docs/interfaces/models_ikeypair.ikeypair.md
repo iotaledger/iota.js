@@ -6,10 +6,6 @@
 
 Definition of signature key pair.
 
-## Hierarchy
-
-* **IKeyPair**
-
 ## Table of contents
 
 ### Properties

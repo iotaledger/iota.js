@@ -6,10 +6,6 @@
 
 List of outputs for an address.
 
-## Hierarchy
-
-* **IAddressOutputsResponse**
-
 ## Table of contents
 
 ### Properties

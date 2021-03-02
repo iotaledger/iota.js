@@ -6,10 +6,6 @@
 
 Details of an output.
 
-## Hierarchy
-
-* **IOutputResponse**
-
 ## Table of contents
 
 ### Properties

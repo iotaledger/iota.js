@@ -6,10 +6,6 @@
 
 Gossip metrics.
 
-## Hierarchy
-
-* **IGossipMetrics**
-
 ## Table of contents
 
 ### Properties

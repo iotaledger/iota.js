@@ -5,12 +5,14 @@ import { IMessagesResponse } from "../models/api/IMessagesResponse";
 import { IMilestoneResponse } from "../models/api/IMilestoneResponse";
 import { IMilestoneUtxoChangesResponse } from "../models/api/IMilestoneUtxoChangesResponse";
 import { IOutputResponse } from "../models/api/IOutputResponse";
+import { IReceiptsResponse } from "../models/api/IReceiptsResponse";
 import { ITipsResponse } from "../models/api/ITipsResponse";
 import { IClient } from "../models/IClient";
 import { IMessage } from "../models/IMessage";
 import { IMessageMetadata } from "../models/IMessageMetadata";
 import { INodeInfo } from "../models/INodeInfo";
 import { IPeer } from "../models/IPeer";
+import { ITreasury } from "../models/ITreasury";
 import { SingleNodeClientOptions } from "./singleNodeClientOptions";
 /**
  * Client for API communication.
@@ -125,6 +127,17 @@ export declare class SingleNodeClient implements IClient {
      * @returns The milestone utxo changes details.
      */
     milestoneUtxoChanges(index: number): Promise<IMilestoneUtxoChangesResponse>;
+    /**
+     * Get the current treasury output.
+     * @returns The details for the treasury.
+     */
+    treasury(): Promise<ITreasury>;
+    /**
+     * Get all the stored receipts or those for a given migrated at index.
+     * @param migratedAt The index the receipts were migrated at, if not supplied returns all stored receipts.
+     * @returns The stored receipts.
+     */
+    receipts(migratedAt?: number): Promise<IReceiptsResponse>;
     /**
      * Get the list of peers.
      * @returns The list of peers.

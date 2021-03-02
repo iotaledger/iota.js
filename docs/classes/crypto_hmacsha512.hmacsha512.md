@@ -7,10 +7,6 @@
 Class to help with HmacSha512 scheme.
 TypeScript conversion from https://github.com/emn178/js-sha512
 
-## Hierarchy
-
-* **HmacSha512**
-
 ## Table of contents
 
 ### Constructors
@@ -34,7 +30,7 @@ Create a new instance of HmacSha512.
 #### Parameters:
 
 Name | Type | Default value | Description |
------- | ------ | ------ | ------ |
+:------ | :------ | :------ | :------ |
 `key` | *Uint8Array* | - | The key for the hmac.   |
 `bits` | *number* | 512 | The number of bits.    |
 
@@ -63,7 +59,7 @@ Update the hash with the data.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `message` | *Uint8Array* | The data to update the hash with.   |
 
 **Returns:** [*HmacSha512*](crypto_hmacsha512.hmacsha512.md)
@@ -81,7 +77,7 @@ Perform Sum 512 on the data.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `key` | *Uint8Array* | The key for the hmac.   |
 `data` | *Uint8Array* | The data to operate on.   |
 

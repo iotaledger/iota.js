@@ -6098,12 +6098,12 @@
 	        return this.internalSubscribe("milestones/latest", true, callback);
 	    };
 	    /**
-	     * Subscribe to the latest solid milestone updates.
+	     * Subscribe to the latest confirmed milestone updates.
 	     * @param callback The callback which is called when new data arrives.
 	     * @returns A subscription Id which can be used to unsubscribe.
 	     */
-	    MqttClient.prototype.milestonesSolid = function (callback) {
-	        return this.internalSubscribe("milestones/solid", true, callback);
+	    MqttClient.prototype.milestonesConfirmed = function (callback) {
+	        return this.internalSubscribe("milestones/confirmed", true, callback);
 	    };
 	    /**
 	     * Subscribe to metadata updates for a specific message.
@@ -7061,6 +7061,29 @@
 	        return __awaiter(this, void 0, void 0, function () {
 	            return __generator(this, function (_a) {
 	                return [2 /*return*/, this.fetchJson("get", "milestones/" + index + "/utxo-changes")];
+	            });
+	        });
+	    };
+	    /**
+	     * Get the current treasury output.
+	     * @returns The details for the treasury.
+	     */
+	    SingleNodeClient.prototype.treasury = function () {
+	        return __awaiter(this, void 0, void 0, function () {
+	            return __generator(this, function (_a) {
+	                return [2 /*return*/, this.fetchJson("get", "treasury")];
+	            });
+	        });
+	    };
+	    /**
+	     * Get all the stored receipts or those for a given migrated at index.
+	     * @param migratedAt The index the receipts were migrated at, if not supplied returns all stored receipts.
+	     * @returns The stored receipts.
+	     */
+	    SingleNodeClient.prototype.receipts = function (migratedAt) {
+	        return __awaiter(this, void 0, void 0, function () {
+	            return __generator(this, function (_a) {
+	                return [2 /*return*/, this.fetchJson("get", "receipts" + (migratedAt !== undefined ? "/" + migratedAt : ""))];
 	            });
 	        });
 	    };
@@ -12228,6 +12251,11 @@
 
 	});
 
+	var IReceiptsResponse = createCommonjsModule(function (module, exports) {
+	Object.defineProperty(exports, "__esModule", { value: true });
+
+	});
+
 	var IResponse = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 
@@ -12353,6 +12381,13 @@
 	});
 
 	var ISeed = createCommonjsModule(function (module, exports) {
+	Object.defineProperty(exports, "__esModule", { value: true });
+
+	});
+
+	var ITreasury = createCommonjsModule(function (module, exports) {
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
 	Object.defineProperty(exports, "__esModule", { value: true });
 
 	});
@@ -12687,7 +12722,7 @@
 	    logger(prefix + "\tMin PoW Score:", info.minPowScore);
 	    logger(prefix + "\tBech32 HRP:", info.bech32HRP);
 	    logger(prefix + "\tLatest Milestone Index:", info.latestMilestoneIndex);
-	    logger(prefix + "\tSolid Milestone Index:", info.solidMilestoneIndex);
+	    logger(prefix + "\tConfirmed Milestone Index:", info.confirmedMilestoneIndex);
 	    logger(prefix + "\tPruning Index:", info.pruningIndex);
 	    logger(prefix + "\tFeatures:", info.features);
 	}
@@ -13186,6 +13221,7 @@
 	__exportStar(IMilestoneResponse, exports);
 	__exportStar(IMilestoneUtxoChangesResponse, exports);
 	__exportStar(IOutputResponse, exports);
+	__exportStar(IReceiptsResponse, exports);
 	__exportStar(IResponse, exports);
 	__exportStar(ITipsResponse, exports);
 	__exportStar(conflictReason, exports);
@@ -13215,6 +13251,7 @@
 	__exportStar(ISignatureUnlockBlock, exports);
 	__exportStar(ITransactionEssence, exports);
 	__exportStar(ITransactionPayload, exports);
+	__exportStar(ITreasury, exports);
 	__exportStar(ITreasuryInput, exports);
 	__exportStar(ITreasuryOutput, exports);
 	__exportStar(ITreasuryTransactionPayload, exports);

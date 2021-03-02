@@ -6,10 +6,6 @@
 
 Response from the tips endpoint.
 
-## Hierarchy
-
-* **ITipsResponse**
-
 ## Table of contents
 
 ### Properties

@@ -113,13 +113,13 @@ export class MqttClient implements IMqttClient {
     }
 
     /**
-     * Subscribe to the latest solid milestone updates.
+     * Subscribe to the latest confirmed milestone updates.
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    public milestonesSolid(
+    public milestonesConfirmed(
         callback: (topic: string, data: IMqttMilestoneResponse) => void): string {
-        return this.internalSubscribe("milestones/solid", true, callback);
+        return this.internalSubscribe("milestones/confirmed", true, callback);
     }
 
     /**

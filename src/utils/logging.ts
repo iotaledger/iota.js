@@ -52,7 +52,7 @@ export function logInfo(prefix: string, info: INodeInfo): void {
     logger(`${prefix}\tMin PoW Score:`, info.minPowScore);
     logger(`${prefix}\tBech32 HRP:`, info.bech32HRP);
     logger(`${prefix}\tLatest Milestone Index:`, info.latestMilestoneIndex);
-    logger(`${prefix}\tSolid Milestone Index:`, info.solidMilestoneIndex);
+    logger(`${prefix}\tConfirmed Milestone Index:`, info.confirmedMilestoneIndex);
     logger(`${prefix}\tPruning Index:`, info.pruningIndex);
     logger(`${prefix}\tFeatures:`, info.features);
 }

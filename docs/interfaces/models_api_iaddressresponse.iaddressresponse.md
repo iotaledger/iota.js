@@ -6,10 +6,6 @@
 
 Address details.
 
-## Hierarchy
-
-* **IAddressResponse**
-
 ## Table of contents
 
 ### Properties
@@ -17,6 +13,7 @@ Address details.
 - [address](models_api_iaddressresponse.iaddressresponse.md#address)
 - [addressType](models_api_iaddressresponse.iaddressresponse.md#addresstype)
 - [balance](models_api_iaddressresponse.iaddressresponse.md#balance)
+- [dustAllowed](models_api_iaddressresponse.iaddressresponse.md#dustallowed)
 
 ## Properties
 
@@ -41,3 +38,11 @@ ___
 • **balance**: *number*
 
 The balance of the address.
+
+___
+
+### dustAllowed
+
+• **dustAllowed**: *boolean*
+
+The address is allowed to be sent dust.

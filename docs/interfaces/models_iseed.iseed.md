@@ -6,10 +6,6 @@
 
 Interface definitions for seed.
 
-## Hierarchy
-
-* **ISeed**
-
 ## Implemented by
 
 * [*Ed25519Seed*](../classes/seedtypes_ed25519seed.ed25519seed.md)
@@ -34,7 +30,7 @@ Generate a new seed from the path.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `path` | [*Bip32Path*](../classes/crypto_bip32path.bip32path.md) | The path to generate the seed for.   |
 
 **Returns:** [*ISeed*](models_iseed.iseed.md)
