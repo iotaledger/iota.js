@@ -9,5 +9,14 @@ export interface IReceiptsResponse {
     /**
      * The receipts.
      */
-    receipts: IReceiptPayload[];
+    receipts: {
+        /**
+         * The milestone index.
+         */
+        milestoneIndex: number;
+        /**
+         * The receipt.
+         */
+        receipt: IReceiptPayload;
+    }[];
 }
