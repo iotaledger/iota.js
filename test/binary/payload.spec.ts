@@ -140,7 +140,7 @@ describe("Binary Payload", () => {
         expect(payload.funds[0].deposit).toEqual(100);
         expect(payload.transaction.type).toEqual(4);
         expect(payload.transaction.input.type).toEqual(1);
-        expect(payload.transaction.input.milestoneHash).toEqual("c".repeat(64));
+        expect(payload.transaction.input.milestoneId).toEqual("c".repeat(64));
         expect(payload.transaction.output.type).toEqual(2);
         expect(payload.transaction.output.amount).toEqual(123);
     });
@@ -231,7 +231,7 @@ describe("Binary Payload", () => {
                 type: TREASURY_TRANSACTION_PAYLOAD_TYPE,
                 input: {
                     type: TREASURY_INPUT_TYPE,
-                    milestoneHash: "a".repeat(64)
+                    milestoneId: "a".repeat(64)
                 },
                 output: {
                     type: TREASURY_OUTPUT_TYPE,
@@ -256,7 +256,7 @@ describe("Binary Payload", () => {
         expect(deserialized.funds[0].deposit).toEqual(100);
         expect(deserialized.transaction.type).toEqual(4);
         expect(deserialized.transaction.input.type).toEqual(1);
-        expect(deserialized.transaction.input.milestoneHash).toEqual("a".repeat(64));
+        expect(deserialized.transaction.input.milestoneId).toEqual("a".repeat(64));
         expect(deserialized.transaction.output.type).toEqual(2);
         expect(deserialized.transaction.output.amount).toEqual(9876);
     });
@@ -293,7 +293,7 @@ describe("Binary Payload", () => {
                     type: TREASURY_TRANSACTION_PAYLOAD_TYPE,
                     input: {
                         type: TREASURY_INPUT_TYPE,
-                        milestoneHash: "a".repeat(64)
+                        milestoneId: "a".repeat(64)
                     },
                     output: {
                         type: TREASURY_OUTPUT_TYPE,

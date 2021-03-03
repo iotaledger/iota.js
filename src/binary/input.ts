@@ -161,11 +161,11 @@ export function deserializeTreasuryInput(readStream: ReadStream): ITreasuryInput
         throw new Error(`Type mismatch in treasuryInput ${type}`);
     }
 
-    const milestoneHash = readStream.readFixedHex("treasuryInput.milestoneHash", TRANSACTION_ID_LENGTH);
+    const milestoneId = readStream.readFixedHex("treasuryInput.milestoneId", TRANSACTION_ID_LENGTH);
 
     return {
         type: TREASURY_INPUT_TYPE,
-        milestoneHash
+        milestoneId
     };
 }
 
@@ -177,5 +177,5 @@ export function deserializeTreasuryInput(readStream: ReadStream): ITreasuryInput
 export function serializeTreasuryInput(writeStream: WriteStream,
     object: ITreasuryInput): void {
     writeStream.writeByte("treasuryInput.type", object.type);
-    writeStream.writeFixedHex("treasuryInput.milestoneHash", TRANSACTION_ID_LENGTH, object.milestoneHash);
+    writeStream.writeFixedHex("treasuryInput.milestoneId", TRANSACTION_ID_LENGTH, object.milestoneId);
 }

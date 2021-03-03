@@ -12,7 +12,7 @@ export const TREASURY_INPUT_TYPE = 1;
  */
 export interface ITreasuryInput extends ITypeBase<1> {
     /**
-     * The milestone hash of the input.
+     * The milestone id of the input.
      */
-    milestoneHash: string;
+    milestoneId: string;
 }

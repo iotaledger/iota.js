@@ -284,7 +284,7 @@ export function logInput(prefix: string, unknownInput?: IUTXOInput | ITreasuryIn
         } else if (unknownInput.type === TREASURY_INPUT_TYPE) {
             const input = unknownInput;
             logger(`${prefix}Treasury Input`);
-            logger(`${prefix}\tMilestone Hash:`, input.milestoneHash);
+            logger(`${prefix}\tMilestone Hash:`, input.milestoneId);
         }
     }
 }

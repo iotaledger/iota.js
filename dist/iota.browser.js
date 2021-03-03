@@ -822,10 +822,10 @@
 	    if (type !== ITreasuryInput.TREASURY_INPUT_TYPE) {
 	        throw new Error("Type mismatch in treasuryInput " + type);
 	    }
-	    var milestoneHash = readStream.readFixedHex("treasuryInput.milestoneHash", common.TRANSACTION_ID_LENGTH);
+	    var milestoneId = readStream.readFixedHex("treasuryInput.milestoneId", common.TRANSACTION_ID_LENGTH);
 	    return {
 	        type: ITreasuryInput.TREASURY_INPUT_TYPE,
-	        milestoneHash: milestoneHash
+	        milestoneId: milestoneId
 	    };
 	}
 	exports.deserializeTreasuryInput = deserializeTreasuryInput;
@@ -836,7 +836,7 @@
 	 */
 	function serializeTreasuryInput(writeStream, object) {
 	    writeStream.writeByte("treasuryInput.type", object.type);
-	    writeStream.writeFixedHex("treasuryInput.milestoneHash", common.TRANSACTION_ID_LENGTH, object.milestoneHash);
+	    writeStream.writeFixedHex("treasuryInput.milestoneId", common.TRANSACTION_ID_LENGTH, object.milestoneId);
 	}
 	exports.serializeTreasuryInput = serializeTreasuryInput;
 
@@ -12958,7 +12958,7 @@
 	        else if (unknownInput.type === ITreasuryInput.TREASURY_INPUT_TYPE) {
 	            var input = unknownInput;
 	            logger(prefix + "Treasury Input");
-	            logger(prefix + "\tMilestone Hash:", input.milestoneHash);
+	            logger(prefix + "\tMilestone Hash:", input.milestoneId);
 	        }
 	    }
 	}
