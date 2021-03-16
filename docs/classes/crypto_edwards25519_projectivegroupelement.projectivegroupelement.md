@@ -8,10 +8,6 @@ Group elements are members of the elliptic curve -x^2 + y^2 = 1 + d * x^2 *
 y^2 where d = -121665/121666.
 ProjectiveGroupElement: (X:Y:Z) satisfying x=X/Z, y=Y/Z
 
-## Hierarchy
-
-* **ProjectiveGroupElement**
-
 ## Table of contents
 
 ### Constructors
@@ -39,7 +35,7 @@ Create a new instance of CompletedGroupElement.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `X?` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | The X element.   |
 `Y?` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | The Y Element.   |
 `Z?` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | The Z Element.    |
@@ -84,7 +80,7 @@ B is the Ed25519 base point (x,4/5) with x positive.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `a` | *Uint8Array* | The a   |
 `A` | [*ExtendedGroupElement*](crypto_edwards25519_extendedgroupelement.extendedgroupelement.md) | The A   |
 `b` | *Uint8Array* | The b    |

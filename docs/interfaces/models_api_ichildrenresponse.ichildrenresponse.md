@@ -6,10 +6,6 @@
 
 List of children found.
 
-## Hierarchy
-
-* **IChildrenResponse**
-
 ## Table of contents
 
 ### Properties

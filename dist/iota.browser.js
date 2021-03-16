@@ -435,7 +435,7 @@
 	/**
 	 * The global type for the address type.
 	 */
-	exports.ED25519_ADDRESS_TYPE = 1;
+	exports.ED25519_ADDRESS_TYPE = 0;
 
 	});
 
@@ -822,10 +822,10 @@
 	    if (type !== ITreasuryInput.TREASURY_INPUT_TYPE) {
 	        throw new Error("Type mismatch in treasuryInput " + type);
 	    }
-	    var milestoneHash = readStream.readFixedHex("treasuryInput.milestoneHash", common.TRANSACTION_ID_LENGTH);
+	    var milestoneId = readStream.readFixedHex("treasuryInput.milestoneId", common.TRANSACTION_ID_LENGTH);
 	    return {
 	        type: ITreasuryInput.TREASURY_INPUT_TYPE,
-	        milestoneHash: milestoneHash
+	        milestoneId: milestoneId
 	    };
 	}
 	exports.deserializeTreasuryInput = deserializeTreasuryInput;
@@ -836,7 +836,7 @@
 	 */
 	function serializeTreasuryInput(writeStream, object) {
 	    writeStream.writeByte("treasuryInput.type", object.type);
-	    writeStream.writeFixedHex("treasuryInput.milestoneHash", common.TRANSACTION_ID_LENGTH, object.milestoneHash);
+	    writeStream.writeFixedHex("treasuryInput.milestoneId", common.TRANSACTION_ID_LENGTH, object.milestoneId);
 	}
 	exports.serializeTreasuryInput = serializeTreasuryInput;
 
@@ -4685,7 +4685,7 @@
 	/**
 	 * The global type for the signature type.
 	 */
-	exports.ED25519_SIGNATURE_TYPE = 1;
+	exports.ED25519_SIGNATURE_TYPE = 0;
 
 	});
 
@@ -5209,7 +5209,8 @@
 	    if (type !== IIndexationPayload.INDEXATION_PAYLOAD_TYPE) {
 	        throw new Error("Type mismatch in payloadIndexation " + type);
 	    }
-	    var index = readStream.readString("payloadIndexation.index");
+	    var indexLength = readStream.readUInt16("payloadIndexation.indexLength");
+	    var index = readStream.readFixedHex("payloadIndexation.index", indexLength);
 	    var dataLength = readStream.readUInt32("payloadIndexation.dataLength");
 	    var data = readStream.readFixedHex("payloadIndexation.data", dataLength);
 	    return {
@@ -5228,11 +5229,12 @@
 	    if (object.index.length < exports.MIN_INDEXATION_KEY_LENGTH) {
 	        throw new Error("The indexation key length is " + object.index.length + ", which is below the minimum size of " + exports.MIN_INDEXATION_KEY_LENGTH);
 	    }
-	    if (object.index.length > exports.MAX_INDEXATION_KEY_LENGTH) {
-	        throw new Error("The indexation key length is " + object.index.length + ", which exceeds the maximum size of " + exports.MAX_INDEXATION_KEY_LENGTH);
+	    if (object.index.length / 2 > exports.MAX_INDEXATION_KEY_LENGTH) {
+	        throw new Error("The indexation key length is " + object.index.length / 2 + ", which exceeds the maximum size of " + exports.MAX_INDEXATION_KEY_LENGTH);
 	    }
 	    writeStream.writeUInt32("payloadIndexation.type", object.type);
-	    writeStream.writeString("payloadIndexation.index", object.index);
+	    writeStream.writeUInt16("payloadIndexation.indexLength", object.index.length / 2);
+	    writeStream.writeFixedHex("payloadIndexation.index", object.index.length / 2, object.index);
 	    if (object.data) {
 	        writeStream.writeUInt32("payloadIndexation.dataLength", object.data.length / 2);
 	        writeStream.writeFixedHex("payloadIndexation.data", object.data.length / 2, object.data);
@@ -5436,6 +5438,8 @@
 	        return extendStatics(d, b);
 	    };
 	    return function (d, b) {
+	        if (typeof b !== "function" && b !== null)
+	            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
 	        extendStatics(d, b);
 	        function __() { this.constructor = d; }
 	        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -5776,7 +5780,7 @@
 	        if (value.length % 2 === 1) {
 	            return false;
 	        }
-	        return /[\da-f]/gi.test(value);
+	        return /^[\da-f]+$/g.test(value);
 	    };
 	    /**
 	     * Convert bytes to binary string.
@@ -6016,24 +6020,6 @@
 	        return val;
 	    };
 	    /**
-	     * Read a string from the stream.
-	     * @param name The name of the data we are trying to read.
-	     * @param moveIndex Move the index pointer on.
-	     * @returns The string.
-	     */
-	    ReadStream.prototype.readString = function (name, moveIndex) {
-	        if (moveIndex === void 0) { moveIndex = true; }
-	        var stringLength = this.readUInt16(name);
-	        if (!this.hasRemaining(stringLength)) {
-	            throw new Error(name + " length " + stringLength + " exceeds the remaining data " + this.unused());
-	        }
-	        var val = converter.Converter.bytesToUtf8(this._storage, this._readIndex, stringLength);
-	        if (moveIndex) {
-	            this._readIndex += stringLength;
-	        }
-	        return val;
-	    };
-	    /**
 	     * Read a boolean from the stream.
 	     * @param name The name of the data we are trying to read.
 	     * @param moveIndex Move the index pointer on.
@@ -6091,12 +6077,13 @@
 	var MqttClient = /** @class */ (function () {
 	    /**
 	     * Create a new instace of MqttClient.
-	     * @param endpoint The endpoint to connect to.
+	     * @param endpoints The endpoint or endpoints list to connect to.
 	     * @param keepAliveTimeoutSeconds Timeout to reconnect if no messages received.
 	     */
-	    function MqttClient(endpoint, keepAliveTimeoutSeconds) {
+	    function MqttClient(endpoints, keepAliveTimeoutSeconds) {
 	        if (keepAliveTimeoutSeconds === void 0) { keepAliveTimeoutSeconds = 30; }
-	        this._endpoint = endpoint;
+	        this._endpoints = Array.isArray(endpoints) ? endpoints : [endpoints];
+	        this._endpointsIndex = 0;
 	        this._subscriptions = {};
 	        this._statusSubscriptions = {};
 	        this._lastMessageTime = -1;
@@ -6111,12 +6098,12 @@
 	        return this.internalSubscribe("milestones/latest", true, callback);
 	    };
 	    /**
-	     * Subscribe to the latest solid milestone updates.
+	     * Subscribe to the latest confirmed milestone updates.
 	     * @param callback The callback which is called when new data arrives.
 	     * @returns A subscription Id which can be used to unsubscribe.
 	     */
-	    MqttClient.prototype.milestonesSolid = function (callback) {
-	        return this.internalSubscribe("milestones/solid", true, callback);
+	    MqttClient.prototype.milestonesConfirmed = function (callback) {
+	        return this.internalSubscribe("milestones/confirmed", true, callback);
 	    };
 	    /**
 	     * Subscribe to metadata updates for a specific message.
@@ -6181,7 +6168,9 @@
 	     * @returns A subscription Id which can be used to unsubscribe.
 	     */
 	    MqttClient.prototype.indexRaw = function (index, callback) {
-	        return this.internalSubscribe("messages/indexation/" + index, false, function (topic, raw) {
+	        return this.internalSubscribe("messages/indexation/" + (typeof index === "string"
+	            ? converter.Converter.utf8ToHex(index)
+	            : converter.Converter.bytesToHex(index)), false, function (topic, raw) {
 	            callback(topic, raw);
 	        });
 	    };
@@ -6192,7 +6181,9 @@
 	     * @returns A subscription Id which can be used to unsubscribe.
 	     */
 	    MqttClient.prototype.index = function (index, callback) {
-	        return this.internalSubscribe("messages/indexation/" + index, false, function (topic, raw) {
+	        return this.internalSubscribe("messages/indexation/" + (typeof index === "string"
+	            ? converter.Converter.utf8ToHex(index)
+	            : converter.Converter.bytesToHex(index)), false, function (topic, raw) {
 	            callback(topic, message.deserializeMessage(new readStream.ReadStream(raw)), raw);
 	        });
 	    };
@@ -6316,7 +6307,7 @@
 	            catch (err) {
 	                this.triggerStatusCallbacks({
 	                    type: "error",
-	                    message: "Subscribe to topic " + topic + " failed on " + this._endpoint,
+	                    message: "Subscribe to topic " + topic + " failed on " + this._endpoints[this._endpointsIndex],
 	                    state: this.calculateState(),
 	                    error: err
 	                });
@@ -6336,7 +6327,7 @@
 	            catch (err) {
 	                this.triggerStatusCallbacks({
 	                    type: "error",
-	                    message: "Unsubscribe from topic " + topic + " failed on " + this._endpoint,
+	                    message: "Unsubscribe from topic " + topic + " failed on " + this._endpoints[this._endpointsIndex],
 	                    state: this.calculateState(),
 	                    error: err
 	                });
@@ -6351,7 +6342,7 @@
 	        var _this = this;
 	        if (!this._client) {
 	            try {
-	                this._client = mqtt.connect(this._endpoint, {
+	                this._client = mqtt.connect(this._endpoints[this._endpointsIndex], {
 	                    keepalive: 0,
 	                    reconnectPeriod: this._keepAliveTimeoutSeconds * 1000
 	                });
@@ -6364,7 +6355,7 @@
 	                            _this.startKeepAlive();
 	                            _this.triggerStatusCallbacks({
 	                                type: "connect",
-	                                message: "Connection complete " + _this._endpoint,
+	                                message: "Connection complete " + _this._endpoints[_this._endpointsIndex],
 	                                state: _this.calculateState()
 	                            });
 	                        }
@@ -6372,7 +6363,7 @@
 	                    catch (err) {
 	                        _this.triggerStatusCallbacks({
 	                            type: "error",
-	                            message: "Subscribe to topics failed on " + _this._endpoint,
+	                            message: "Subscribe to topics failed on " + _this._endpoints[_this._endpointsIndex],
 	                            state: _this.calculateState(),
 	                            error: err
 	                        });
@@ -6385,19 +6376,21 @@
 	                this._client.on("error", function (err) {
 	                    _this.triggerStatusCallbacks({
 	                        type: "error",
-	                        message: "Error on " + _this._endpoint,
+	                        message: "Error on " + _this._endpoints[_this._endpointsIndex],
 	                        state: _this.calculateState(),
 	                        error: err
 	                    });
+	                    _this.nextClient();
 	                });
 	            }
 	            catch (err) {
 	                this.triggerStatusCallbacks({
 	                    type: "connect",
-	                    message: "Connection failed to " + this._endpoint,
+	                    message: "Connection failed to " + this._endpoints[this._endpointsIndex],
 	                    state: this.calculateState(),
 	                    error: err
 	                });
+	                this.nextClient();
 	            }
 	        }
 	    };
@@ -6417,7 +6410,7 @@
 	            catch (_a) { }
 	            this.triggerStatusCallbacks({
 	                type: "disconnect",
-	                message: "Disconnect complete " + this._endpoint,
+	                message: "Disconnect complete " + this._endpoints[this._endpointsIndex],
 	                state: this.calculateState()
 	            });
 	        }
@@ -6497,6 +6490,7 @@
 	    MqttClient.prototype.keepAlive = function () {
 	        if (Date.now() - this._lastMessageTime > (this._keepAliveTimeoutSeconds * 1000)) {
 	            this.mqttDisconnect();
+	            this.nextClient();
 	            this.mqttConnect();
 	        }
 	    };
@@ -6519,6 +6513,15 @@
 	            }
 	        }
 	        return state;
+	    };
+	    /**
+	     * If there has been a problem switch to the next client endpoint.
+	     */
+	    MqttClient.prototype.nextClient = function () {
+	        this._endpointsIndex++;
+	        if (this._endpointsIndex >= this._endpoints.length) {
+	            this._endpointsIndex = 0;
+	        }
 	    };
 	    return MqttClient;
 	}());
@@ -6661,19 +6664,6 @@
 	        this._writeIndex += 8;
 	    };
 	    /**
-	     * Write a string to the stream.
-	     * @param name The name of the data we are trying to write.
-	     * @param val The data to write.
-	     * @returns The string.
-	     */
-	    WriteStream.prototype.writeString = function (name, val) {
-	        this.writeUInt16(name, val.length);
-	        this.expand(val.length);
-	        this._storage.set(converter.Converter.utf8ToBytes(val), this._writeIndex);
-	        this._writeIndex += val.length;
-	        return val;
-	    };
-	    /**
 	     * Write a boolean to the stream.
 	     * @param name The name of the data we are trying to write.
 	     * @param val The data to write.
@@ -6762,7 +6752,7 @@
 	     * @param options Options for the client.
 	     */
 	    function SingleNodeClient(endpoint, options) {
-	        var _a;
+	        var _a, _b, _c;
 	        if (!endpoint) {
 	            throw new Error("The endpoint can not be empty");
 	        }
@@ -6772,11 +6762,11 @@
 	        this._timeout = options === null || options === void 0 ? void 0 : options.timeout;
 	        this._userName = options === null || options === void 0 ? void 0 : options.userName;
 	        this._password = options === null || options === void 0 ? void 0 : options.password;
-	        this._authorizationHeader = options === null || options === void 0 ? void 0 : options.authorizationHeader;
+	        this._headers = options === null || options === void 0 ? void 0 : options.headers;
 	        if (this._userName && this._password && !this._endpoint.startsWith("https")) {
 	            throw new Error("Basic authentication requires the endpoint to be https");
 	        }
-	        if (this._userName && this._password && this._authorizationHeader) {
+	        if (this._userName && this._password && (((_b = this._headers) === null || _b === void 0 ? void 0 : _b.authorization) || ((_c = this._headers) === null || _c === void 0 ? void 0 : _c.Authorization))) {
 	            throw new Error("You can not supply both user/pass and authorization header");
 	        }
 	    }
@@ -6940,13 +6930,15 @@
 	    };
 	    /**
 	     * Find messages by index.
-	     * @param indexationKey The index value.
+	     * @param indexationKey The index value as a byte array or UTF8 string.
 	     * @returns The messageId.
 	     */
 	    SingleNodeClient.prototype.messagesFind = function (indexationKey) {
 	        return __awaiter(this, void 0, void 0, function () {
 	            return __generator(this, function (_a) {
-	                return [2 /*return*/, this.fetchJson("get", "messages?index=" + encodeURIComponent(indexationKey))];
+	                return [2 /*return*/, this.fetchJson("get", "messages?index=" + (typeof indexationKey === "string"
+	                        ? converter.Converter.utf8ToHex(indexationKey)
+	                        : converter.Converter.bytesToHex(indexationKey)))];
 	            });
 	        });
 	    };
@@ -7073,6 +7065,29 @@
 	        });
 	    };
 	    /**
+	     * Get the current treasury output.
+	     * @returns The details for the treasury.
+	     */
+	    SingleNodeClient.prototype.treasury = function () {
+	        return __awaiter(this, void 0, void 0, function () {
+	            return __generator(this, function (_a) {
+	                return [2 /*return*/, this.fetchJson("get", "treasury")];
+	            });
+	        });
+	    };
+	    /**
+	     * Get all the stored receipts or those for a given migrated at index.
+	     * @param migratedAt The index the receipts were migrated at, if not supplied returns all stored receipts.
+	     * @returns The stored receipts.
+	     */
+	    SingleNodeClient.prototype.receipts = function (migratedAt) {
+	        return __awaiter(this, void 0, void 0, function () {
+	            return __generator(this, function (_a) {
+	                return [2 /*return*/, this.fetchJson("get", "receipts" + (migratedAt !== undefined ? "/" + migratedAt : ""))];
+	            });
+	        });
+	    };
+	    /**
 	     * Get the list of peers.
 	     * @returns The list of peers.
 	     */
@@ -7153,19 +7168,23 @@
 	     */
 	    SingleNodeClient.prototype.fetchJson = function (method, route, requestData) {
 	        return __awaiter(this, void 0, void 0, function () {
-	            var response, errorMessage, errorCode, responseData, text, match;
-	            return __generator(this, function (_c) {
-	                switch (_c.label) {
+	            var response, errorMessage, errorCode, responseData, json, text, match;
+	            return __generator(this, function (_d) {
+	                switch (_d.label) {
 	                    case 0: return [4 /*yield*/, this.fetchWithTimeout(method, "" + this._basePath + route, { "Content-Type": "application/json" }, requestData ? JSON.stringify(requestData) : undefined)];
 	                    case 1:
-	                        response = _c.sent();
+	                        response = _d.sent();
 	                        if (!response.ok) return [3 /*break*/, 5];
-	                        _c.label = 2;
+	                        if (response.status === 204) {
+	                            // No content
+	                            return [2 /*return*/, {}];
+	                        }
+	                        _d.label = 2;
 	                    case 2:
-	                        _c.trys.push([2, 4, , 5]);
+	                        _d.trys.push([2, 4, , 5]);
 	                        return [4 /*yield*/, response.json()];
 	                    case 3:
-	                        responseData = _c.sent();
+	                        responseData = _d.sent();
 	                        if (responseData.error) {
 	                            errorMessage = responseData.error.message;
 	                            errorCode = responseData.error.code;
@@ -7175,16 +7194,32 @@
 	                        }
 	                        return [3 /*break*/, 5];
 	                    case 4:
-	                        _c.sent();
+	                        _d.sent();
 	                        return [3 /*break*/, 5];
 	                    case 5:
 	                        if (!!errorMessage) return [3 /*break*/, 9];
-	                        _c.label = 6;
+	                        _d.label = 6;
 	                    case 6:
-	                        _c.trys.push([6, 8, , 9]);
-	                        return [4 /*yield*/, response.text()];
+	                        _d.trys.push([6, 8, , 9]);
+	                        return [4 /*yield*/, response.json()];
 	                    case 7:
-	                        text = _c.sent();
+	                        json = _d.sent();
+	                        if (json.error) {
+	                            errorMessage = json.error.message;
+	                            errorCode = json.error.code;
+	                        }
+	                        return [3 /*break*/, 9];
+	                    case 8:
+	                        _d.sent();
+	                        return [3 /*break*/, 9];
+	                    case 9:
+	                        if (!!errorMessage) return [3 /*break*/, 13];
+	                        _d.label = 10;
+	                    case 10:
+	                        _d.trys.push([10, 12, , 13]);
+	                        return [4 /*yield*/, response.text()];
+	                    case 11:
+	                        text = _d.sent();
 	                        if (text.length > 0) {
 	                            match = /code=(\d+), message=(.*)/.exec(text);
 	                            if ((match === null || match === void 0 ? void 0 : match.length) === 3) {
@@ -7195,11 +7230,11 @@
 	                                errorMessage = text;
 	                            }
 	                        }
-	                        return [3 /*break*/, 9];
-	                    case 8:
-	                        _c.sent();
-	                        return [3 /*break*/, 9];
-	                    case 9: throw new clientError.ClientError(errorMessage !== null && errorMessage !== void 0 ? errorMessage : response.statusText, route, response.status, errorCode !== null && errorCode !== void 0 ? errorCode : response.status.toString());
+	                        return [3 /*break*/, 13];
+	                    case 12:
+	                        _d.sent();
+	                        return [3 /*break*/, 13];
+	                    case 13: throw new clientError.ClientError(errorMessage !== null && errorMessage !== void 0 ? errorMessage : response.statusText, route, response.status, errorCode !== null && errorCode !== void 0 ? errorCode : response.status.toString());
 	                }
 	            });
 	        });
@@ -7255,7 +7290,7 @@
 	     */
 	    SingleNodeClient.prototype.fetchWithTimeout = function (method, route, headers, body) {
 	        return __awaiter(this, void 0, void 0, function () {
-	            var controller, timerId, userPass, response, err_1;
+	            var controller, timerId, finalHeaders, header, header, userPass, response, err_1;
 	            return __generator(this, function (_a) {
 	                switch (_a.label) {
 	                    case 0:
@@ -7267,21 +7302,27 @@
 	                                }
 	                            }, this._timeout);
 	                        }
+	                        finalHeaders = {};
+	                        if (this._headers) {
+	                            for (header in this._headers) {
+	                                finalHeaders[header] = this._headers[header];
+	                            }
+	                        }
+	                        if (headers) {
+	                            for (header in headers) {
+	                                finalHeaders[header] = headers[header];
+	                            }
+	                        }
 	                        if (this._userName && this._password) {
 	                            userPass = converter.Converter.bytesToBase64(converter.Converter.utf8ToBytes(this._userName + ":" + this._password));
-	                            headers = headers !== null && headers !== void 0 ? headers : {};
-	                            headers.Authorization = "Basic " + userPass;
-	                        }
-	                        if (this._authorizationHeader) {
-	                            headers = headers !== null && headers !== void 0 ? headers : {};
-	                            headers.Authorization = this._authorizationHeader;
+	                            finalHeaders.Authorization = "Basic " + userPass;
 	                        }
 	                        _a.label = 1;
 	                    case 1:
 	                        _a.trys.push([1, 3, 4, 5]);
 	                        return [4 /*yield*/, fetch("" + this._endpoint + route, {
 	                                method: method,
-	                                headers: headers,
+	                                headers: finalHeaders,
 	                                body: body,
 	                                signal: controller ? controller.signal : undefined
 	                            })];
@@ -10968,9 +11009,10 @@
 
 
 
+
 	/**
 	 * Get all the unspent addresses.
-	 * @param client The client to send the transfer with.
+	 * @param client The client or node endpoint to send the transfer with.
 	 * @param seed The seed to use for address generation.
 	 * @param accountIndex The account index in the wallet.
 	 * @param addressOptions Optional address configuration for balance address lookups.
@@ -10994,7 +11036,7 @@
 	exports.getUnspentAddresses = getUnspentAddresses;
 	/**
 	 * Get all the unspent addresses using an address generator.
-	 * @param client The client to send the transfer with.
+	 * @param client The client or node endpoint to get the addresses from.
 	 * @param seed The seed to use for address generation.
 	 * @param initialAddressState The initial address state for calculating the addresses.
 	 * @param nextAddressPath Calculate the next address for inputs.
@@ -11007,10 +11049,12 @@
 	function getUnspentAddressesWithAddressGenerator(client, seed, initialAddressState, nextAddressPath, addressOptions) {
 	    var _a, _b;
 	    return __awaiter(this, void 0, void 0, function () {
-	        var nodeInfo, localRequiredLimit, localZeroCount, finished, allUnspent, isFirst, zeroBalance, path, addressSeed, ed25519Address$1, addressBytes, addressHex, addressResponse;
+	        var localClient, nodeInfo, localRequiredLimit, localZeroCount, finished, allUnspent, isFirst, zeroBalance, path, addressSeed, ed25519Address$1, addressBytes, addressHex, addressResponse;
 	        return __generator(this, function (_c) {
 	            switch (_c.label) {
-	                case 0: return [4 /*yield*/, client.info()];
+	                case 0:
+	                    localClient = typeof client === "string" ? new singleNodeClient.SingleNodeClient(client) : client;
+	                    return [4 /*yield*/, localClient.info()];
 	                case 1:
 	                    nodeInfo = _c.sent();
 	                    localRequiredLimit = (_a = addressOptions === null || addressOptions === void 0 ? void 0 : addressOptions.requiredCount) !== null && _a !== void 0 ? _a : Number.MAX_SAFE_INTEGER;
@@ -11027,7 +11071,7 @@
 	                    ed25519Address$1 = new ed25519Address.Ed25519Address(addressSeed.keyPair().publicKey);
 	                    addressBytes = ed25519Address$1.toAddress();
 	                    addressHex = converter.Converter.bytesToHex(addressBytes);
-	                    return [4 /*yield*/, client.addressEd25519(addressHex)];
+	                    return [4 /*yield*/, localClient.addressEd25519(addressHex)];
 	                case 3:
 	                    addressResponse = _c.sent();
 	                    // If there is no balance we increment the counter and end
@@ -11103,7 +11147,7 @@
 
 	/**
 	 * Get the balance for a list of addresses.
-	 * @param client The client to send the transfer with.
+	 * @param client The client or node endpoint to send the transfer with.
 	 * @param seed The seed.
 	 * @param accountIndex The account index in the wallet.
 	 * @param addressOptions Optional address configuration for balance address lookups.
@@ -11175,7 +11219,7 @@
 
 	/**
 	 * Get the first unspent address.
-	 * @param client The client to send the transfer with.
+	 * @param client The client or node endpoint to send the transfer with.
 	 * @param seed The seed to use for address generation.
 	 * @param accountIndex The account index in the wallet.
 	 * @param addressOptions Optional address configuration for balance address lookups.
@@ -11246,24 +11290,27 @@
 	// Copyright 2020 IOTA Stiftung
 	// SPDX-License-Identifier: Apache-2.0
 
+
 	/**
 	 * Promote an existing message.
-	 * @param client The client to perform the promote with.
+	 * @param client The clientor node endpoint to perform the promote with.
 	 * @param messageId The message to promote.
 	 * @returns The id and message that were promoted.
 	 */
 	function promote(client, messageId) {
 	    return __awaiter(this, void 0, void 0, function () {
-	        var message$1, tipsResponse, promoteMessage, promoteMessageId;
+	        var localClient, message$1, tipsResponse, promoteMessage, promoteMessageId;
 	        return __generator(this, function (_a) {
 	            switch (_a.label) {
-	                case 0: return [4 /*yield*/, client.message(messageId)];
+	                case 0:
+	                    localClient = typeof client === "string" ? new singleNodeClient.SingleNodeClient(client) : client;
+	                    return [4 /*yield*/, localClient.message(messageId)];
 	                case 1:
 	                    message$1 = _a.sent();
 	                    if (!message$1) {
 	                        throw new Error("The message does not exist.");
 	                    }
-	                    return [4 /*yield*/, client.tips()];
+	                    return [4 /*yield*/, localClient.tips()];
 	                case 2:
 	                    tipsResponse = _a.sent();
 	                    // Parents must be unique and lexicographically sorted
@@ -11280,7 +11327,7 @@
 	                    promoteMessage = {
 	                        parentMessageIds: tipsResponse.tipMessageIds
 	                    };
-	                    return [4 /*yield*/, client.messageSubmit(promoteMessage)];
+	                    return [4 /*yield*/, localClient.messageSubmit(promoteMessage)];
 	                case 3:
 	                    promoteMessageId = _a.sent();
 	                    return [2 /*return*/, {
@@ -11334,18 +11381,23 @@
 	};
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.reattach = void 0;
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
+
 	/**
 	 * Reattach an existing message.
-	 * @param client The client to perform the reattach with.
+	 * @param client The client or node endpoint to perform the reattach with.
 	 * @param messageId The message to reattach.
 	 * @returns The id and message that were reattached.
 	 */
 	function reattach(client, messageId) {
 	    return __awaiter(this, void 0, void 0, function () {
-	        var message, reattachMessage, reattachedMessageId;
+	        var localClient, message, reattachMessage, reattachedMessageId;
 	        return __generator(this, function (_a) {
 	            switch (_a.label) {
-	                case 0: return [4 /*yield*/, client.message(messageId)];
+	                case 0:
+	                    localClient = typeof client === "string" ? new singleNodeClient.SingleNodeClient(client) : client;
+	                    return [4 /*yield*/, localClient.message(messageId)];
 	                case 1:
 	                    message = _a.sent();
 	                    if (!message) {
@@ -11354,7 +11406,7 @@
 	                    reattachMessage = {
 	                        payload: message.payload
 	                    };
-	                    return [4 /*yield*/, client.messageSubmit(reattachMessage)];
+	                    return [4 /*yield*/, localClient.messageSubmit(reattachMessage)];
 	                case 2:
 	                    reattachedMessageId = _a.sent();
 	                    return [2 /*return*/, {
@@ -11408,21 +11460,26 @@
 	};
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.retrieveData = void 0;
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
+
 
 
 
 	/**
 	 * Retrieve a data message.
-	 * @param client The client to send the transfer with.
+	 * @param client The client or node endpoint to retrieve the data with.
 	 * @param messageId The message id of the data to get.
 	 * @returns The message index and data.
 	 */
 	function retrieveData(client, messageId) {
 	    return __awaiter(this, void 0, void 0, function () {
-	        var message, indexationPayload;
+	        var localClient, message, indexationPayload;
 	        return __generator(this, function (_a) {
 	            switch (_a.label) {
-	                case 0: return [4 /*yield*/, client.message(messageId)];
+	                case 0:
+	                    localClient = typeof client === "string" ? new singleNodeClient.SingleNodeClient(client) : client;
+	                    return [4 /*yield*/, localClient.message(messageId)];
 	                case 1:
 	                    message = _a.sent();
 	                    if (message === null || message === void 0 ? void 0 : message.payload) {
@@ -11435,7 +11492,7 @@
 	                        }
 	                        if (indexationPayload) {
 	                            return [2 /*return*/, {
-	                                    index: indexationPayload.index,
+	                                    index: converter.Converter.hexToBytes(indexationPayload.index),
 	                                    data: indexationPayload.data ? converter.Converter.hexToBytes(indexationPayload.data) : undefined
 	                                }];
 	                        }
@@ -11488,20 +11545,25 @@
 	};
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.retry = void 0;
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
+
 
 
 	/**
 	 * Retry an existing message either by promoting or reattaching.
-	 * @param client The client to perform the retry with.
+	 * @param client The client or node endpoint to perform the retry with.
 	 * @param messageId The message to retry.
 	 * @returns The id and message that were retried.
 	 */
 	function retry(client, messageId) {
 	    return __awaiter(this, void 0, void 0, function () {
-	        var metadata;
+	        var localClient, metadata;
 	        return __generator(this, function (_a) {
 	            switch (_a.label) {
-	                case 0: return [4 /*yield*/, client.messageMetadata(messageId)];
+	                case 0:
+	                    localClient = typeof client === "string" ? new singleNodeClient.SingleNodeClient(client) : client;
+	                    return [4 /*yield*/, localClient.messageMetadata(messageId)];
 	                case 1:
 	                    metadata = _a.sent();
 	                    if (!metadata) {
@@ -11590,9 +11652,11 @@
 
 
 
+
+
 	/**
 	 * Send a transfer from the balance on the seed.
-	 * @param client The client to send the transfer with.
+	 * @param client The client or node endpoint to send the transfer with.
 	 * @param inputsAndSignatureKeyPairs The inputs with the signature key pairs needed to sign transfers.
 	 * @param outputs The outputs to send.
 	 * @param indexation Optional indexation data to associate with the transaction.
@@ -11602,15 +11666,16 @@
 	 */
 	function sendAdvanced(client, inputsAndSignatureKeyPairs, outputs, indexation) {
 	    return __awaiter(this, void 0, void 0, function () {
-	        var transactionPayload, message, messageId;
+	        var localClient, transactionPayload, message, messageId;
 	        return __generator(this, function (_a) {
 	            switch (_a.label) {
 	                case 0:
+	                    localClient = typeof client === "string" ? new singleNodeClient.SingleNodeClient(client) : client;
 	                    transactionPayload = buildTransactionPayload(inputsAndSignatureKeyPairs, outputs, indexation);
 	                    message = {
 	                        payload: transactionPayload
 	                    };
-	                    return [4 /*yield*/, client.messageSubmit(message)];
+	                    return [4 /*yield*/, localClient.messageSubmit(message)];
 	                case 1:
 	                    messageId = _a.sent();
 	                    return [2 /*return*/, {
@@ -11638,12 +11703,15 @@
 	    if (!outputs || outputs.length === 0) {
 	        throw new Error("You must specify some outputs");
 	    }
+	    var localIndexationKeyHex;
 	    if (indexation === null || indexation === void 0 ? void 0 : indexation.key) {
-	        if (indexation.key.length < payload.MIN_INDEXATION_KEY_LENGTH) {
-	            throw new Error("The indexation key length is " + indexation.key.length + ", which is below the minimum size of " + payload.MIN_INDEXATION_KEY_LENGTH);
+	        localIndexationKeyHex = typeof (indexation.key) === "string"
+	            ? converter.Converter.utf8ToHex(indexation.key) : converter.Converter.bytesToHex(indexation.key);
+	        if (localIndexationKeyHex.length / 2 < payload.MIN_INDEXATION_KEY_LENGTH) {
+	            throw new Error("The indexation key length is " + localIndexationKeyHex.length / 2 + ", which is below the minimum size of " + payload.MIN_INDEXATION_KEY_LENGTH);
 	        }
-	        if (indexation.key.length > payload.MAX_INDEXATION_KEY_LENGTH) {
-	            throw new Error("The indexation key length is " + indexation.key.length + ", which exceeds the maximum size of " + payload.MAX_INDEXATION_KEY_LENGTH);
+	        if (localIndexationKeyHex.length / 2 > payload.MAX_INDEXATION_KEY_LENGTH) {
+	            throw new Error("The indexation key length is " + localIndexationKeyHex.length / 2 + ", which exceeds the maximum size of " + payload.MAX_INDEXATION_KEY_LENGTH);
 	        }
 	    }
 	    var outputsWithSerialization = [];
@@ -11681,17 +11749,19 @@
 	        type: ITransactionEssence.TRANSACTION_ESSENCE_TYPE,
 	        inputs: sortedInputs.map(function (i) { return i.input; }),
 	        outputs: sortedOutputs.map(function (o) { return o.output; }),
-	        payload: indexation
+	        payload: localIndexationKeyHex
 	            ? {
 	                type: IIndexationPayload.INDEXATION_PAYLOAD_TYPE,
-	                index: indexation.key,
-	                data: indexation.data ? converter.Converter.bytesToHex(indexation.data) : ""
+	                index: localIndexationKeyHex,
+	                data: (indexation === null || indexation === void 0 ? void 0 : indexation.data) ? (typeof indexation.data === "string"
+	                    ? converter.Converter.utf8ToHex(indexation.data) : converter.Converter.bytesToHex(indexation.data)) : undefined
 	            }
 	            : undefined
 	    };
 	    var binaryEssence = new writeStream.WriteStream();
 	    transaction.serializeTransactionEssence(binaryEssence, transactionEssence);
 	    var essenceFinal = binaryEssence.finalBytes();
+	    var essenceHash = blake2b.Blake2b.sum256(essenceFinal);
 	    // Create the unlock blocks
 	    var unlockBlocks = [];
 	    var addressToUnlockBlock = {};
@@ -11710,7 +11780,7 @@
 	                signature: {
 	                    type: IEd25519Signature.ED25519_SIGNATURE_TYPE,
 	                    publicKey: hexInputAddressPublic,
-	                    signature: converter.Converter.bytesToHex(ed25519.Ed25519.sign(input$1.addressKeyPair.privateKey, essenceFinal))
+	                    signature: converter.Converter.bytesToHex(ed25519.Ed25519.sign(input$1.addressKeyPair.privateKey, essenceHash))
 	                }
 	            });
 	            addressToUnlockBlock[hexInputAddressPublic] = {
@@ -11779,9 +11849,10 @@
 
 
 
+
 	/**
 	 * Send a transfer from the balance on the seed to a single output.
-	 * @param client The client to send the transfer with.
+	 * @param client The client or node endpoint to send the transfer with.
 	 * @param seed The seed to use for address generation.
 	 * @param accountIndex The account index in the wallet.
 	 * @param addressBech32 The address to send the funds to in bech32 format.
@@ -11804,7 +11875,7 @@
 	exports.send = send;
 	/**
 	 * Send a transfer from the balance on the seed to a single output.
-	 * @param client The client to send the transfer with.
+	 * @param client The client or node endpoint to send the transfer with.
 	 * @param seed The seed to use for address generation.
 	 * @param accountIndex The account index in the wallet.
 	 * @param addressEd25519 The address to send the funds to in ed25519 format.
@@ -11827,7 +11898,7 @@
 	exports.sendEd25519 = sendEd25519;
 	/**
 	 * Send a transfer from the balance on the seed to multiple outputs.
-	 * @param client The client to send the transfer with.
+	 * @param client The client or node endpoint to send the transfer with.
 	 * @param seed The seed to use for address generation.
 	 * @param accountIndex The account index in the wallet.
 	 * @param outputs The address to send the funds to in bech32 format and amounts.
@@ -11842,10 +11913,12 @@
 	function sendMultiple(client, seed, accountIndex, outputs, indexation, addressOptions) {
 	    var _a;
 	    return __awaiter(this, void 0, void 0, function () {
-	        var nodeInfo, hexOutputs;
+	        var localClient, nodeInfo, hexOutputs;
 	        return __generator(this, function (_b) {
 	            switch (_b.label) {
-	                case 0: return [4 /*yield*/, client.info()];
+	                case 0:
+	                    localClient = typeof client === "string" ? new singleNodeClient.SingleNodeClient(client) : client;
+	                    return [4 /*yield*/, localClient.info()];
 	                case 1:
 	                    nodeInfo = _b.sent();
 	                    hexOutputs = outputs.map(function (output) {
@@ -11872,7 +11945,7 @@
 	exports.sendMultiple = sendMultiple;
 	/**
 	 * Send a transfer from the balance on the seed.
-	 * @param client The client to send the transfer with.
+	 * @param client The client or node endpoint to send the transfer with.
 	 * @param seed The seed to use for address generation.
 	 * @param accountIndex The account index in the wallet.
 	 * @param outputs The outputs including address to send the funds to in ed25519 format and amount.
@@ -11906,7 +11979,7 @@
 	exports.sendMultipleEd25519 = sendMultipleEd25519;
 	/**
 	 * Send a transfer using account based indexing for the inputs.
-	 * @param client The client to send the transfer with.
+	 * @param client The client or node endpoint to send the transfer with.
 	 * @param seed The seed to use for address generation.
 	 * @param initialAddressState The initial address state for calculating the addresses.
 	 * @param nextAddressPath Calculate the next address for inputs.
@@ -11939,7 +12012,7 @@
 	exports.sendWithAddressGenerator = sendWithAddressGenerator;
 	/**
 	 * Calculate the inputs from the seed and basePath.
-	 * @param client The client to send the transfer with.
+	 * @param client The client or node endpoint to calculate the inputs with.
 	 * @param seed The seed to use for address generation.
 	 * @param initialAddressState The initial address state for calculating the addresses.
 	 * @param nextAddressPath Calculate the next address for inputs.
@@ -11950,10 +12023,11 @@
 	function calculateInputs(client, seed, initialAddressState, nextAddressPath, outputs, zeroCount) {
 	    if (zeroCount === void 0) { zeroCount = 5; }
 	    return __awaiter(this, void 0, void 0, function () {
-	        var requiredBalance, _i, outputs_1, output, consumedBalance, inputsAndSignatureKeyPairs, finished, isFirst, zeroBalance, path, addressSeed, addressKeyPair, ed25519Address$1, address, addressOutputIds, _a, _b, addressOutputId, addressOutput, input;
+	        var localClient, requiredBalance, _i, outputs_1, output, consumedBalance, inputsAndSignatureKeyPairs, finished, isFirst, zeroBalance, path, addressSeed, addressKeyPair, ed25519Address$1, address, addressOutputIds, _a, _b, addressOutputId, addressOutput, input;
 	        return __generator(this, function (_c) {
 	            switch (_c.label) {
 	                case 0:
+	                    localClient = typeof client === "string" ? new singleNodeClient.SingleNodeClient(client) : client;
 	                    requiredBalance = 0;
 	                    for (_i = 0, outputs_1 = outputs; _i < outputs_1.length; _i++) {
 	                        output = outputs_1[_i];
@@ -11972,7 +12046,7 @@
 	                    addressKeyPair = addressSeed.keyPair();
 	                    ed25519Address$1 = new ed25519Address.Ed25519Address(addressKeyPair.publicKey);
 	                    address = converter.Converter.bytesToHex(ed25519Address$1.toAddress());
-	                    return [4 /*yield*/, client.addressEd25519Outputs(address)];
+	                    return [4 /*yield*/, localClient.addressEd25519Outputs(address)];
 	                case 2:
 	                    addressOutputIds = _c.sent();
 	                    if (!(addressOutputIds.count === 0)) return [3 /*break*/, 3];
@@ -11987,7 +12061,7 @@
 	                case 4:
 	                    if (!(_a < _b.length)) return [3 /*break*/, 7];
 	                    addressOutputId = _b[_a];
-	                    return [4 /*yield*/, client.output(addressOutputId)];
+	                    return [4 /*yield*/, localClient.output(addressOutputId)];
 	                case 5:
 	                    addressOutput = _c.sent();
 	                    if (!addressOutput.isSpent &&
@@ -12087,37 +12161,42 @@
 
 
 
+
 	/**
 	 * Send a data message.
-	 * @param client The client to send the transfer with.
+	 * @param client The client or node endpoint to send the data with.
 	 * @param indexationKey The index name.
-	 * @param indexationData The index data.
+	 * @param indexationData The index data as either UTF8 text or Uint8Array bytes.
 	 * @returns The id of the message created and the message.
 	 */
 	function sendData(client, indexationKey, indexationData) {
 	    return __awaiter(this, void 0, void 0, function () {
-	        var indexationPayload, message, messageId;
+	        var localClient, localIndexationKeyHex, indexationPayload, message, messageId;
 	        return __generator(this, function (_a) {
 	            switch (_a.label) {
 	                case 0:
+	                    localClient = typeof client === "string" ? new singleNodeClient.SingleNodeClient(client) : client;
 	                    if (!indexationKey) {
 	                        throw new Error("indexationKey must not be empty");
 	                    }
-	                    if (indexationKey.length < payload.MIN_INDEXATION_KEY_LENGTH) {
-	                        throw new Error("The indexation key length is " + indexationKey.length + ", which is below the minimum size of " + payload.MIN_INDEXATION_KEY_LENGTH);
+	                    localIndexationKeyHex = typeof (indexationKey) === "string"
+	                        ? converter.Converter.utf8ToHex(indexationKey) : converter.Converter.bytesToHex(indexationKey);
+	                    if (localIndexationKeyHex.length / 2 < payload.MIN_INDEXATION_KEY_LENGTH) {
+	                        throw new Error("The indexation key length is " + localIndexationKeyHex.length / 2 + ", which is below the minimum size of " + payload.MIN_INDEXATION_KEY_LENGTH);
 	                    }
-	                    if (indexationKey.length > payload.MAX_INDEXATION_KEY_LENGTH) {
-	                        throw new Error("The indexation key length is " + indexationKey.length + ", which exceeds the maximum size of " + payload.MAX_INDEXATION_KEY_LENGTH);
+	                    if (localIndexationKeyHex.length / 2 > payload.MAX_INDEXATION_KEY_LENGTH) {
+	                        throw new Error("The indexation key length is " + localIndexationKeyHex.length / 2 + ", which exceeds the maximum size of " + payload.MAX_INDEXATION_KEY_LENGTH);
 	                    }
 	                    indexationPayload = {
 	                        type: IIndexationPayload.INDEXATION_PAYLOAD_TYPE,
-	                        index: indexationKey,
-	                        data: indexationData ? converter.Converter.bytesToHex(indexationData) : ""
+	                        index: localIndexationKeyHex,
+	                        data: indexationData ? (typeof indexationData === "string"
+	                            ? converter.Converter.utf8ToHex(indexationData) : converter.Converter.bytesToHex(indexationData)) : undefined
 	                    };
 	                    message = {
 	                        payload: indexationPayload
 	                    };
-	                    return [4 /*yield*/, client.messageSubmit(message)];
+	                    return [4 /*yield*/, localClient.messageSubmit(message)];
 	                case 1:
 	                    messageId = _a.sent();
 	                    return [2 /*return*/, {
@@ -12168,6 +12247,11 @@
 	});
 
 	var IOutputResponse = createCommonjsModule(function (module, exports) {
+	Object.defineProperty(exports, "__esModule", { value: true });
+
+	});
+
+	var IReceiptsResponse = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 
 	});
@@ -12297,6 +12381,13 @@
 	});
 
 	var ISeed = createCommonjsModule(function (module, exports) {
+	Object.defineProperty(exports, "__esModule", { value: true });
+
+	});
+
+	var ITreasury = createCommonjsModule(function (module, exports) {
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
 	Object.defineProperty(exports, "__esModule", { value: true });
 
 	});
@@ -12631,7 +12722,7 @@
 	    logger(prefix + "\tMin PoW Score:", info.minPowScore);
 	    logger(prefix + "\tBech32 HRP:", info.bech32HRP);
 	    logger(prefix + "\tLatest Milestone Index:", info.latestMilestoneIndex);
-	    logger(prefix + "\tSolid Milestone Index:", info.solidMilestoneIndex);
+	    logger(prefix + "\tConfirmed Milestone Index:", info.confirmedMilestoneIndex);
 	    logger(prefix + "\tPruning Index:", info.pruningIndex);
 	    logger(prefix + "\tFeatures:", info.features);
 	}
@@ -12767,7 +12858,7 @@
 	function logIndexationPayload(prefix, payload) {
 	    if (payload) {
 	        logger(prefix + "Indexation Payload");
-	        logger(prefix + "\tIndex:", payload.index);
+	        logger(prefix + "\tIndex:", converter.Converter.hexToUtf8(payload.index));
 	        logger(prefix + "\tData:", payload.data ? converter.Converter.hexToUtf8(payload.data) : "None");
 	    }
 	}
@@ -12867,7 +12958,7 @@
 	        else if (unknownInput.type === ITreasuryInput.TREASURY_INPUT_TYPE) {
 	            var input = unknownInput;
 	            logger(prefix + "Treasury Input");
-	            logger(prefix + "\tMilestone Hash:", input.milestoneHash);
+	            logger(prefix + "\tMilestone Hash:", input.milestoneId);
 	        }
 	    }
 	}
@@ -13130,6 +13221,7 @@
 	__exportStar(IMilestoneResponse, exports);
 	__exportStar(IMilestoneUtxoChangesResponse, exports);
 	__exportStar(IOutputResponse, exports);
+	__exportStar(IReceiptsResponse, exports);
 	__exportStar(IResponse, exports);
 	__exportStar(ITipsResponse, exports);
 	__exportStar(conflictReason, exports);
@@ -13159,6 +13251,7 @@
 	__exportStar(ISignatureUnlockBlock, exports);
 	__exportStar(ITransactionEssence, exports);
 	__exportStar(ITransactionPayload, exports);
+	__exportStar(ITreasury, exports);
 	__exportStar(ITreasuryInput, exports);
 	__exportStar(ITreasuryOutput, exports);
 	__exportStar(ITreasuryTransactionPayload, exports);

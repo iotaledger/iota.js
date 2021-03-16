@@ -5,7 +5,7 @@ import { ITransactionPayload } from "../models/ITransactionPayload";
 import { IUTXOInput } from "../models/IUTXOInput";
 /**
  * Send a transfer from the balance on the seed.
- * @param client The client to send the transfer with.
+ * @param client The client or node endpoint to send the transfer with.
  * @param inputsAndSignatureKeyPairs The inputs with the signature key pairs needed to sign transfers.
  * @param outputs The outputs to send.
  * @param indexation Optional indexation data to associate with the transaction.
@@ -13,7 +13,7 @@ import { IUTXOInput } from "../models/IUTXOInput";
  * @param indexation.data Optional index data.
  * @returns The id of the message created and the remainder address if one was needed.
  */
-export declare function sendAdvanced(client: IClient, inputsAndSignatureKeyPairs: {
+export declare function sendAdvanced(client: IClient | string, inputsAndSignatureKeyPairs: {
     input: IUTXOInput;
     addressKeyPair: IKeyPair;
 }[], outputs: {
@@ -22,8 +22,8 @@ export declare function sendAdvanced(client: IClient, inputsAndSignatureKeyPairs
     amount: number;
     isDustAllowance?: boolean;
 }[], indexation?: {
-    key: string;
-    data?: Uint8Array;
+    key: Uint8Array | string;
+    data?: Uint8Array | string;
 }): Promise<{
     messageId: string;
     message: IMessage;
@@ -46,6 +46,6 @@ export declare function buildTransactionPayload(inputsAndSignatureKeyPairs: {
     amount: number;
     isDustAllowance?: boolean;
 }[], indexation?: {
-    key: string;
-    data?: Uint8Array;
+    key: Uint8Array | string;
+    data?: Uint8Array | string;
 }): ITransactionPayload;

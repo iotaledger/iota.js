@@ -6,10 +6,6 @@
 
 Helper methods for bigints.
 
-## Hierarchy
-
-* **BigIntHelper**
-
 ## Table of contents
 
 ### Constructors
@@ -55,7 +51,7 @@ Load 3 bytes from array as bigint.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `data` | *Uint8Array* | The input array.   |
 `byteOffset` | *number* | The start index to read from.   |
 
@@ -74,7 +70,7 @@ Load 4 bytes from array as bigint.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `data` | *Uint8Array* | The input array.   |
 `byteOffset` | *number* | The start index to read from.   |
 
@@ -93,7 +89,7 @@ Load 8 bytes from array as bigint.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `data` | *Uint8Array* | The data to read from.   |
 `byteOffset` | *number* | The start index to read from.   |
 
@@ -112,7 +108,7 @@ Convert a big int to bytes.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `value` | *bigint* | The bigint.   |
 `data` | *Uint8Array* | The buffer to write into.   |
 `byteOffset` | *number* | The start index to write from.    |

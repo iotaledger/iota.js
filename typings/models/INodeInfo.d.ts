@@ -27,13 +27,13 @@ export interface INodeInfo {
      */
     bech32HRP: string;
     /**
-     * The latest milestone message index;
+     * The latest milestone index;
      */
     latestMilestoneIndex: number;
     /**
-     * The latest solid milestone message index;
+     * The confirmed milestone index;
      */
-    solidMilestoneIndex: number;
+    confirmedMilestoneIndex: number;
     /**
      * The pruning index;
      */

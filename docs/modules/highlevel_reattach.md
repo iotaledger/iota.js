@@ -12,15 +12,15 @@
 
 ### reattach
 
-▸ **reattach**(`client`: [*IClient*](../interfaces/models_iclient.iclient.md), `messageId`: *string*): *Promise*<{}\>
+▸ **reattach**(`client`: [*IClient*](../interfaces/models_iclient.iclient.md) \| *string*, `messageId`: *string*): *Promise*<{}\>
 
 Reattach an existing message.
 
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
-`client` | [*IClient*](../interfaces/models_iclient.iclient.md) | The client to perform the reattach with.   |
+:------ | :------ | :------ |
+`client` | [*IClient*](../interfaces/models_iclient.iclient.md) \| *string* | The client or node endpoint to perform the reattach with.   |
 `messageId` | *string* | The message to reattach.   |
 
 **Returns:** *Promise*<{}\>

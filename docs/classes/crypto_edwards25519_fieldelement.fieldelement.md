@@ -10,10 +10,6 @@ t, entries t[0]...t[9], represents the integer t[0]+2^26 t[1]+2^51 t[2]+2^77
 t[3]+2^102 t[4]+...+2^230 t[9].  Bounds on each t[i] vary depending on
 context.
 
-## Hierarchy
-
-* **FieldElement**
-
 ## Table of contents
 
 ### Constructors
@@ -56,7 +52,7 @@ Create a new instance of FieldElement.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `values?` | *number*[] \| *Int32Array* | A set of values to initialize the array.    |
 
 **Returns:** [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md)
@@ -80,7 +76,7 @@ Add the elements and store in this.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `a` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | The a element.   |
 `b` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | The b element.    |
 
@@ -100,7 +96,7 @@ Preconditions: b in {0,1}.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `g` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | The g element.   |
 `b` | *number* | The b value.    |
 
@@ -129,7 +125,7 @@ Combine the element.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `h0` | *bigint* | The h0 component.   |
 `h1` | *bigint* | The h1 component.   |
 `h2` | *bigint* | The h2 component.   |
@@ -154,7 +150,7 @@ Populate from bytes.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `bytes` | *Uint8Array* | The bytes to populate from.    |
 
 **Returns:** *void*
@@ -176,7 +172,7 @@ Postconditions:
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `f` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | The f element.   |
 
 **Returns:** *object*
@@ -194,7 +190,7 @@ Invert
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `z` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | The elemnt to invert.    |
 
 **Returns:** *void*
@@ -260,7 +256,7 @@ With tighter constraints on inputs, can squeeze carries into: number.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `f` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | The f element.   |
 `g` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | The g element.    |
 
@@ -303,7 +299,7 @@ Perform the pow 22523 calculate.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `z` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | The element to operate on.    |
 
 **Returns:** *void*
@@ -325,7 +321,7 @@ Postconditions:
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `f` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | The f element.    |
 
 **Returns:** *void*
@@ -350,7 +346,7 @@ See fe_mul.c for discussion of implementation strategy.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `f` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | The f element.    |
 
 **Returns:** *void*
@@ -366,7 +362,7 @@ Subtract the elements and store in this.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `a` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | The a element.   |
 `b` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | The b element.    |
 
@@ -405,7 +401,7 @@ Proof:
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `bytes` | *Uint8Array* | The bytes to populate.    |
 
 **Returns:** *void*

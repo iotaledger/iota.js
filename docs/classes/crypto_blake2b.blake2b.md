@@ -7,10 +7,6 @@
 Class to help with Blake2B Signature scheme.
 TypeScript conversion from https://github.com/dcposch/blakejs
 
-## Hierarchy
-
-* **Blake2b**
-
 ## Table of contents
 
 ### Properties
@@ -50,7 +46,7 @@ Perform Sum 256 on the data.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `data` | *Uint8Array* | The data to operate on.   |
 `key?` | *Uint8Array* | Optional key for the hash.   |
 
@@ -69,7 +65,7 @@ Perform Sum 512 on the data.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `data` | *Uint8Array* | The data to operate on.   |
 `key?` | *Uint8Array* | Optional key for the hash.   |
 

@@ -8,10 +8,6 @@ Group elements are members of the elliptic curve -x^2 + y^2 = 1 + d * x^2 *
 y^2 where d = -121665/121666.
 CompletedGroupElement: ((X:Z),(Y:T)) satisfying x=X/Z, y=Y/T
 
-## Hierarchy
-
-* **CompletedGroupElement**
-
 ## Table of contents
 
 ### Constructors
@@ -45,7 +41,7 @@ Create a new instance of CompletedGroupElement.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `X?` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | The X element.   |
 `Y?` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | The Y Element.   |
 `Z?` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | The Z Element.   |
@@ -96,7 +92,7 @@ Group Element add
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `p` | [*ExtendedGroupElement*](crypto_edwards25519_extendedgroupelement.extendedgroupelement.md) | The extended group element.   |
 `q` | [*CachedGroupElement*](crypto_edwards25519_cachedgroupelement.cachedgroupelement.md) | The cached group element.    |
 
@@ -113,7 +109,7 @@ Mixed add.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `p` | [*ExtendedGroupElement*](crypto_edwards25519_extendedgroupelement.extendedgroupelement.md) | The p.   |
 `q` | [*PreComputedGroupElement*](crypto_edwards25519_precomputedgroupelement.precomputedgroupelement.md) | The q.    |
 
@@ -130,7 +126,7 @@ Mixed subtract.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `p` | [*ExtendedGroupElement*](crypto_edwards25519_extendedgroupelement.extendedgroupelement.md) | The p.   |
 `q` | [*PreComputedGroupElement*](crypto_edwards25519_precomputedgroupelement.precomputedgroupelement.md) | The q.    |
 
@@ -147,7 +143,7 @@ Group Element substract.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `p` | [*ExtendedGroupElement*](crypto_edwards25519_extendedgroupelement.extendedgroupelement.md) | The p.   |
 `q` | [*CachedGroupElement*](crypto_edwards25519_cachedgroupelement.cachedgroupelement.md) | The q.    |
 
@@ -164,7 +160,7 @@ Convert to extended element.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `e` | [*ExtendedGroupElement*](crypto_edwards25519_extendedgroupelement.extendedgroupelement.md) | The extended element to fill.    |
 
 **Returns:** *void*
@@ -180,7 +176,7 @@ Convert to projective element.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `p` | [*ProjectiveGroupElement*](crypto_edwards25519_projectivegroupelement.projectivegroupelement.md) | The projective element to fill.    |
 
 **Returns:** *void*

@@ -20,7 +20,13 @@ export class MqttClient implements IMqttClient {
      * What is the endpoint for the client.
      * @internal
      */
-    private readonly _endpoint: string;
+    private readonly _endpoints: string[];
+
+    /**
+     * What is the current endpoint we are using for the client.
+     * @internal
+     */
+    private _endpointsIndex: number;
 
     /**
      * Timeout to reconnect if no messages received.
@@ -84,11 +90,12 @@ export class MqttClient implements IMqttClient {
 
     /**
      * Create a new instace of MqttClient.
-     * @param endpoint The endpoint to connect to.
+     * @param endpoints The endpoint or endpoints list to connect to.
      * @param keepAliveTimeoutSeconds Timeout to reconnect if no messages received.
      */
-    constructor(endpoint: string, keepAliveTimeoutSeconds: number = 30) {
-        this._endpoint = endpoint;
+    constructor(endpoints: string | string[], keepAliveTimeoutSeconds: number = 30) {
+        this._endpoints = Array.isArray(endpoints) ? endpoints : [endpoints];
+        this._endpointsIndex = 0;
         this._subscriptions = {};
         this._statusSubscriptions = {};
         this._lastMessageTime = -1;
@@ -106,13 +113,13 @@ export class MqttClient implements IMqttClient {
     }
 
     /**
-     * Subscribe to the latest solid milestone updates.
+     * Subscribe to the latest confirmed milestone updates.
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    public milestonesSolid(
+    public milestonesConfirmed(
         callback: (topic: string, data: IMqttMilestoneResponse) => void): string {
-        return this.internalSubscribe("milestones/solid", true, callback);
+        return this.internalSubscribe("milestones/confirmed", true, callback);
     }
 
     /**
@@ -198,9 +205,11 @@ export class MqttClient implements IMqttClient {
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    public indexRaw(index: string,
+    public indexRaw(index: Uint8Array | string,
         callback: (topic: string, data: Uint8Array) => void): string {
-        return this.internalSubscribe<Uint8Array>(`messages/indexation/${index}`, false,
+        return this.internalSubscribe<Uint8Array>(`messages/indexation/${typeof index === "string"
+            ? Converter.utf8ToHex(index)
+            : Converter.bytesToHex(index)}`, false,
             (topic, raw) => {
                 callback(
                     topic,
@@ -215,9 +224,11 @@ export class MqttClient implements IMqttClient {
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    public index(index: string,
+    public index(index: Uint8Array | string,
         callback: (topic: string, data: IMessage, raw: Uint8Array) => void): string {
-        return this.internalSubscribe<Uint8Array>(`messages/indexation/${index}`, false,
+        return this.internalSubscribe<Uint8Array>(`messages/indexation/${typeof index === "string"
+            ? Converter.utf8ToHex(index)
+            : Converter.bytesToHex(index)}`, false,
             (topic, raw) => {
                 callback(
                     topic,
@@ -366,7 +377,7 @@ export class MqttClient implements IMqttClient {
             } catch (err) {
                 this.triggerStatusCallbacks({
                     type: "error",
-                    message: `Subscribe to topic ${topic} failed on ${this._endpoint}`,
+                    message: `Subscribe to topic ${topic} failed on ${this._endpoints[this._endpointsIndex]}`,
                     state: this.calculateState(),
                     error: err
                 });
@@ -386,7 +397,7 @@ export class MqttClient implements IMqttClient {
             } catch (err) {
                 this.triggerStatusCallbacks({
                     type: "error",
-                    message: `Unsubscribe from topic ${topic} failed on ${this._endpoint}`,
+                    message: `Unsubscribe from topic ${topic} failed on ${this._endpoints[this._endpointsIndex]}`,
                     state: this.calculateState(),
                     error: err
                 });
@@ -401,7 +412,7 @@ export class MqttClient implements IMqttClient {
     private mqttConnect(): void {
         if (!this._client) {
             try {
-                this._client = mqtt.connect(this._endpoint, {
+                this._client = mqtt.connect(this._endpoints[this._endpointsIndex], {
                     keepalive: 0,
                     reconnectPeriod: this._keepAliveTimeoutSeconds * 1000
                 });
@@ -415,14 +426,14 @@ export class MqttClient implements IMqttClient {
                             this.startKeepAlive();
                             this.triggerStatusCallbacks({
                                 type: "connect",
-                                message: `Connection complete ${this._endpoint}`,
+                                message: `Connection complete ${this._endpoints[this._endpointsIndex]}`,
                                 state: this.calculateState()
                             });
                         }
                     } catch (err) {
                         this.triggerStatusCallbacks({
                             type: "error",
-                            message: `Subscribe to topics failed on ${this._endpoint}`,
+                            message: `Subscribe to topics failed on ${this._endpoints[this._endpointsIndex]}`,
                             state: this.calculateState(),
                             error: err
                         });
@@ -437,18 +448,20 @@ export class MqttClient implements IMqttClient {
                 this._client.on("error", err => {
                     this.triggerStatusCallbacks({
                         type: "error",
-                        message: `Error on ${this._endpoint}`,
+                        message: `Error on ${this._endpoints[this._endpointsIndex]}`,
                         state: this.calculateState(),
                         error: err
                     });
+                    this.nextClient();
                 });
             } catch (err) {
                 this.triggerStatusCallbacks({
                     type: "connect",
-                    message: `Connection failed to ${this._endpoint}`,
+                    message: `Connection failed to ${this._endpoints[this._endpointsIndex]}`,
                     state: this.calculateState(),
                     error: err
                 });
+                this.nextClient();
             }
         }
     }
@@ -470,7 +483,7 @@ export class MqttClient implements IMqttClient {
 
             this.triggerStatusCallbacks({
                 type: "disconnect",
-                message: `Disconnect complete ${this._endpoint}`,
+                message: `Disconnect complete ${this._endpoints[this._endpointsIndex]}`,
                 state: this.calculateState()
             });
         }
@@ -553,6 +566,9 @@ export class MqttClient implements IMqttClient {
     private keepAlive(): void {
         if (Date.now() - this._lastMessageTime > (this._keepAliveTimeoutSeconds * 1000)) {
             this.mqttDisconnect();
+
+            this.nextClient();
+
             this.mqttConnect();
         }
     }
@@ -576,5 +592,15 @@ export class MqttClient implements IMqttClient {
         }
 
         return state;
+    }
+
+    /**
+     * If there has been a problem switch to the next client endpoint.
+     */
+    private nextClient(): void {
+        this._endpointsIndex++;
+        if (this._endpointsIndex >= this._endpoints.length) {
+            this._endpointsIndex = 0;
+        }
     }
 }

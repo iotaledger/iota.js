@@ -10,10 +10,10 @@ import { IMqttStatus } from "../models/IMqttStatus";
 export declare class MqttClient implements IMqttClient {
     /**
      * Create a new instace of MqttClient.
-     * @param endpoint The endpoint to connect to.
+     * @param endpoints The endpoint or endpoints list to connect to.
      * @param keepAliveTimeoutSeconds Timeout to reconnect if no messages received.
      */
-    constructor(endpoint: string, keepAliveTimeoutSeconds?: number);
+    constructor(endpoints: string | string[], keepAliveTimeoutSeconds?: number);
     /**
      * Subscribe to the latest milestone updates.
      * @param callback The callback which is called when new data arrives.
@@ -21,11 +21,11 @@ export declare class MqttClient implements IMqttClient {
      */
     milestonesLatest(callback: (topic: string, data: IMqttMilestoneResponse) => void): string;
     /**
-     * Subscribe to the latest solid milestone updates.
+     * Subscribe to the latest confirmed milestone updates.
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    milestonesSolid(callback: (topic: string, data: IMqttMilestoneResponse) => void): string;
+    milestonesConfirmed(callback: (topic: string, data: IMqttMilestoneResponse) => void): string;
     /**
      * Subscribe to metadata updates for a specific message.
      * @param messageId The message to monitor.
@@ -72,14 +72,14 @@ export declare class MqttClient implements IMqttClient {
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    indexRaw(index: string, callback: (topic: string, data: Uint8Array) => void): string;
+    indexRaw(index: Uint8Array | string, callback: (topic: string, data: Uint8Array) => void): string;
     /**
      * Subscribe to get all messages for the specified index in object form.
      * @param index The index to monitor.
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    index(index: string, callback: (topic: string, data: IMessage, raw: Uint8Array) => void): string;
+    index(index: Uint8Array | string, callback: (topic: string, data: IMessage, raw: Uint8Array) => void): string;
     /**
      * Subscribe to get the metadata for all the messages.
      * @param callback The callback which is called when new data arrives.
@@ -111,4 +111,8 @@ export declare class MqttClient implements IMqttClient {
      * @returns A subscription Id which can be used to unsubscribe.
      */
     statusChanged(callback: (data: IMqttStatus) => void): string;
+    /**
+     * If there has been a problem switch to the next client endpoint.
+     */
+    private nextClient;
 }

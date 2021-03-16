@@ -45,4 +45,28 @@ describe("Converter", () => {
     test("Can convert from hex to text", () => {
         expect(Converter.hexToUtf8("61626364")).toEqual("abcd");
     });
+
+    test("Invalid hex length", () => {
+        expect(Converter.isHex("aaa")).toEqual(false);
+    });
+
+    test("Invalid hex bytes capitals", () => {
+        expect(Converter.isHex("aaaB")).toEqual(false);
+    });
+
+    test("Invalid hex space", () => {
+        expect(Converter.isHex("aa bb")).toEqual(false);
+    });
+
+    test("Invalid hex alphabet", () => {
+        expect(Converter.isHex("aaaz")).toEqual(false);
+    });
+
+    test("Invalid non hex character", () => {
+        expect(Converter.isHex("0011223344556677889900aabbccddeeffgg")).toEqual(false);
+    });
+
+    test("Valid hex characters", () => {
+        expect(Converter.isHex("0011223344556677889900aabbccddeeff")).toEqual(true);
+    });
 });

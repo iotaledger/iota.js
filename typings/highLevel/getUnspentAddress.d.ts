@@ -2,7 +2,7 @@ import { IClient } from "../models/IClient";
 import { ISeed } from "../models/ISeed";
 /**
  * Get the first unspent address.
- * @param client The client to send the transfer with.
+ * @param client The client or node endpoint to send the transfer with.
  * @param seed The seed to use for address generation.
  * @param accountIndex The account index in the wallet.
  * @param addressOptions Optional address configuration for balance address lookups.
@@ -10,7 +10,7 @@ import { ISeed } from "../models/ISeed";
  * @param addressOptions.zeroCount The number of addresses with 0 balance during lookup before aborting.
  * @returns The first unspent address.
  */
-export declare function getUnspentAddress(client: IClient, seed: ISeed, accountIndex: number, addressOptions?: {
+export declare function getUnspentAddress(client: IClient | string, seed: ISeed, accountIndex: number, addressOptions?: {
     startIndex?: number;
     zeroCount?: number;
 }): Promise<{

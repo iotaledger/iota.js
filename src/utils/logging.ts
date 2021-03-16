@@ -52,7 +52,7 @@ export function logInfo(prefix: string, info: INodeInfo): void {
     logger(`${prefix}\tMin PoW Score:`, info.minPowScore);
     logger(`${prefix}\tBech32 HRP:`, info.bech32HRP);
     logger(`${prefix}\tLatest Milestone Index:`, info.latestMilestoneIndex);
-    logger(`${prefix}\tSolid Milestone Index:`, info.solidMilestoneIndex);
+    logger(`${prefix}\tConfirmed Milestone Index:`, info.confirmedMilestoneIndex);
     logger(`${prefix}\tPruning Index:`, info.pruningIndex);
     logger(`${prefix}\tFeatures:`, info.features);
 }
@@ -186,7 +186,7 @@ export function logTransactionPayload(prefix: string, payload?: ITransactionPayl
 export function logIndexationPayload(prefix: string, payload?: IIndexationPayload): void {
     if (payload) {
         logger(`${prefix}Indexation Payload`);
-        logger(`${prefix}\tIndex:`, payload.index);
+        logger(`${prefix}\tIndex:`, Converter.hexToUtf8(payload.index));
         logger(`${prefix}\tData:`, payload.data ? Converter.hexToUtf8(payload.data) : "None");
     }
 }
@@ -284,7 +284,7 @@ export function logInput(prefix: string, unknownInput?: IUTXOInput | ITreasuryIn
         } else if (unknownInput.type === TREASURY_INPUT_TYPE) {
             const input = unknownInput;
             logger(`${prefix}Treasury Input`);
-            logger(`${prefix}\tMilestone Hash:`, input.milestoneHash);
+            logger(`${prefix}\tMilestone Hash:`, input.milestoneId);
         }
     }
 }

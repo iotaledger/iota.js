@@ -6,10 +6,6 @@
 
 Definition of address generator state.
 
-## Hierarchy
-
-* **IBip44GeneratorState**
-
 ## Table of contents
 
 ### Properties

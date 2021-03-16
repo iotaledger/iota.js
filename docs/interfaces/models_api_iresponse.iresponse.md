@@ -9,12 +9,8 @@ Base response data.
 ## Type parameters
 
 Name |
------- |
+:------ |
 `T` |
-
-## Hierarchy
-
-* **IResponse**
 
 ## Table of contents
 

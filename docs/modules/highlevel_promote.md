@@ -12,15 +12,15 @@
 
 ### promote
 
-▸ **promote**(`client`: [*IClient*](../interfaces/models_iclient.iclient.md), `messageId`: *string*): *Promise*<{}\>
+▸ **promote**(`client`: [*IClient*](../interfaces/models_iclient.iclient.md) \| *string*, `messageId`: *string*): *Promise*<{}\>
 
 Promote an existing message.
 
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
-`client` | [*IClient*](../interfaces/models_iclient.iclient.md) | The client to perform the promote with.   |
+:------ | :------ | :------ |
+`client` | [*IClient*](../interfaces/models_iclient.iclient.md) \| *string* | The clientor node endpoint to perform the promote with.   |
 `messageId` | *string* | The message to promote.   |
 
 **Returns:** *Promise*<{}\>

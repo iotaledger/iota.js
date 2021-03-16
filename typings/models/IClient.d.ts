@@ -5,11 +5,13 @@ import { IMessagesResponse } from "./api/IMessagesResponse";
 import { IMilestoneResponse } from "./api/IMilestoneResponse";
 import { IMilestoneUtxoChangesResponse } from "./api/IMilestoneUtxoChangesResponse";
 import { IOutputResponse } from "./api/IOutputResponse";
+import { IReceiptsResponse } from "./api/IReceiptsResponse";
 import { ITipsResponse } from "./api/ITipsResponse";
 import { IMessage } from "./IMessage";
 import { IMessageMetadata } from "./IMessageMetadata";
 import { INodeInfo } from "./INodeInfo";
 import { IPeer } from "./IPeer";
+import { ITreasury } from "./ITreasury";
 /**
  * Client interface definition for API communication.
  */
@@ -61,10 +63,10 @@ export interface IClient {
     messageSubmitRaw(message: Uint8Array): Promise<string>;
     /**
      * Find messages by index.
-     * @param indexationKey The index value.
+     * @param indexationKey The index value as a byte array or UTF8 string.
      * @returns The messageId.
      */
-    messagesFind(indexationKey: string): Promise<IMessagesResponse>;
+    messagesFind(indexationKey: Uint8Array | string): Promise<IMessagesResponse>;
     /**
      * Get the children of a message.
      * @param messageId The id of the message to get the children for.
@@ -117,6 +119,17 @@ export interface IClient {
      * @returns The milestone utxo changes details.
      */
     milestoneUtxoChanges(index: number): Promise<IMilestoneUtxoChangesResponse>;
+    /**
+     * Get the current treasury output.
+     * @returns The details for the treasury.
+     */
+    treasury(): Promise<ITreasury>;
+    /**
+     * Get all the stored receipts or those for a given migrated at index.
+     * @param migratedAt The index the receipts were migrated at, if not supplied returns all stored receipts.
+     * @returns The stored receipts.
+     */
+    receipts(migratedAt?: number): Promise<IReceiptsResponse>;
     /**
      * Get the list of peers.
      * @returns The list of peers.

@@ -10,6 +10,7 @@ import { IMessagesResponse } from "../models/api/IMessagesResponse";
 import { IMilestoneResponse } from "../models/api/IMilestoneResponse";
 import { IMilestoneUtxoChangesResponse } from "../models/api/IMilestoneUtxoChangesResponse";
 import { IOutputResponse } from "../models/api/IOutputResponse";
+import { IReceiptsResponse } from "../models/api/IReceiptsResponse";
 import { IResponse } from "../models/api/IResponse";
 import { ITipsResponse } from "../models/api/ITipsResponse";
 import { IClient } from "../models/IClient";
@@ -18,6 +19,7 @@ import { IMessageMetadata } from "../models/IMessageMetadata";
 import { INodeInfo } from "../models/INodeInfo";
 import { IPeer } from "../models/IPeer";
 import { IPowProvider } from "../models/IPowProvider";
+import { ITreasury } from "../models/ITreasury";
 import { ArrayHelper } from "../utils/arrayHelper";
 import { BigIntHelper } from "../utils/bigIntHelper";
 import { Converter } from "../utils/converter";
@@ -84,10 +86,10 @@ export class SingleNodeClient implements IClient {
     private readonly _password?: string;
 
     /**
-     * Authorization header.
+     * Additional headers to include in the requests.
      * @internal
      */
-    private readonly _authorizationHeader?: string;
+    private readonly _headers?: { [id: string]: string };
 
     /**
      * Create a new instance of client.
@@ -104,13 +106,13 @@ export class SingleNodeClient implements IClient {
         this._timeout = options?.timeout;
         this._userName = options?.userName;
         this._password = options?.password;
-        this._authorizationHeader = options?.authorizationHeader;
+        this._headers = options?.headers;
 
         if (this._userName && this._password && !this._endpoint.startsWith("https")) {
             throw new Error("Basic authentication requires the endpoint to be https");
         }
 
-        if (this._userName && this._password && this._authorizationHeader) {
+        if (this._userName && this._password && (this._headers?.authorization || this._headers?.Authorization)) {
             throw new Error("You can not supply both user/pass and authorization header");
         }
     }
@@ -239,13 +241,15 @@ export class SingleNodeClient implements IClient {
 
     /**
      * Find messages by index.
-     * @param indexationKey The index value.
+     * @param indexationKey The index value as a byte array or UTF8 string.
      * @returns The messageId.
      */
-    public async messagesFind(indexationKey: string): Promise<IMessagesResponse> {
+    public async messagesFind(indexationKey: Uint8Array | string): Promise<IMessagesResponse> {
         return this.fetchJson<never, IMessagesResponse>(
             "get",
-            `messages?index=${encodeURIComponent(indexationKey)}`
+            `messages?index=${typeof indexationKey === "string"
+                ? Converter.utf8ToHex(indexationKey)
+                : Converter.bytesToHex(indexationKey)}`
         );
     }
 
@@ -372,6 +376,29 @@ export class SingleNodeClient implements IClient {
     }
 
     /**
+     * Get the current treasury output.
+     * @returns The details for the treasury.
+     */
+    public async treasury(): Promise<ITreasury> {
+        return this.fetchJson<never, ITreasury>(
+            "get",
+            "treasury"
+        );
+    }
+
+    /**
+     * Get all the stored receipts or those for a given migrated at index.
+     * @param migratedAt The index the receipts were migrated at, if not supplied returns all stored receipts.
+     * @returns The stored receipts.
+     */
+    public async receipts(migratedAt?: number): Promise<IReceiptsResponse> {
+        return this.fetchJson<never, IReceiptsResponse>(
+            "get",
+            `receipts${migratedAt !== undefined ? `/${migratedAt}` : ""}`
+        );
+    }
+
+    /**
      * Get the list of peers.
      * @returns The list of peers.
      */
@@ -459,6 +486,10 @@ export class SingleNodeClient implements IClient {
         let errorCode: string | undefined;
 
         if (response.ok) {
+            if (response.status === 204) {
+                // No content
+                return {} as U;
+            }
             try {
                 const responseData: IResponse<U> = await response.json();
 
@@ -470,6 +501,16 @@ export class SingleNodeClient implements IClient {
                 }
             } catch {
             }
+        }
+
+        if (!errorMessage) {
+            try {
+                const json = await response.json();
+                if (json.error) {
+                    errorMessage = json.error.message;
+                    errorCode = json.error.code;
+                }
+            } catch { }
         }
 
         if (!errorMessage) {
@@ -566,15 +607,23 @@ export class SingleNodeClient implements IClient {
                 this._timeout);
         }
 
-        if (this._userName && this._password) {
-            const userPass = Converter.bytesToBase64(Converter.utf8ToBytes(`${this._userName}:${this._password}`));
-            headers = headers ?? {};
-            headers.Authorization = `Basic ${userPass}`;
+        const finalHeaders: { [id: string]: string } = {};
+
+        if (this._headers) {
+            for (const header in this._headers) {
+                finalHeaders[header] = this._headers[header];
+            }
         }
 
-        if (this._authorizationHeader) {
-            headers = headers ?? {};
-            headers.Authorization = this._authorizationHeader;
+        if (headers) {
+            for (const header in headers) {
+                finalHeaders[header] = headers[header];
+            }
+        }
+
+        if (this._userName && this._password) {
+            const userPass = Converter.bytesToBase64(Converter.utf8ToBytes(`${this._userName}:${this._password}`));
+            finalHeaders.Authorization = `Basic ${userPass}`;
         }
 
         try {
@@ -582,7 +631,7 @@ export class SingleNodeClient implements IClient {
                 `${this._endpoint}${route}`,
                 {
                     method,
-                    headers,
+                    headers: finalHeaders,
                     body,
                     signal: controller ? controller.signal : undefined
                 }

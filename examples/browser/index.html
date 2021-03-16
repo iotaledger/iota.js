@@ -41,7 +41,7 @@
                 parentMessageIds: tipsResponse.tipMessageIds.slice(0, Iota.MAX_NUMBER_PARENTS),
                 payload: {
                     type: 2,
-                    index: "Foo",
+                    index: Iota.Converter.utf8ToHex("Foo"),
                     data: Iota.Converter.utf8ToHex("Bar")
                 }
             };
@@ -198,7 +198,15 @@
                 }
             ];
 
-            const { messageId } = await Iota.sendAdvanced(client, inputsWithKeyPairs, outputs, { key: "WALLET", data: Iota.Converter.utf8ToBytes("Not trinity") });
+            const { messageId } = await Iota.sendAdvanced(
+                client,
+                inputsWithKeyPairs,
+                outputs,
+                {
+                    key: Iota.Converter.utf8ToBytes("WALLET"),
+                    data: Iota.Converter.utf8ToBytes("Not trinity")
+                }
+            );
 
             consoleLog("Created Message Id", messageId);
 

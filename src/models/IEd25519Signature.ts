@@ -5,12 +5,12 @@ import { ITypeBase } from "./ITypeBase";
 /**
  * The global type for the signature type.
  */
-export const ED25519_SIGNATURE_TYPE = 1;
+export const ED25519_SIGNATURE_TYPE = 0;
 
 /**
  * Ed25519Signature signature.
  */
-export interface IEd25519Signature extends ITypeBase<1> {
+export interface IEd25519Signature extends ITypeBase<0> {
     /**
      * The public key.
      */

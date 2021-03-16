@@ -6,10 +6,6 @@
 
 Status message for MQTT Clients.
 
-## Hierarchy
-
-* **IMqttStatus**
-
 ## Table of contents
 
 ### Properties

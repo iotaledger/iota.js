@@ -16,16 +16,16 @@ Treasury Input.
 
 ### Properties
 
-- [milestoneHash](models_itreasuryinput.itreasuryinput.md#milestonehash)
+- [milestoneId](models_itreasuryinput.itreasuryinput.md#milestoneid)
 - [type](models_itreasuryinput.itreasuryinput.md#type)
 
 ## Properties
 
-### milestoneHash
+### milestoneId
 
-• **milestoneHash**: *string*
+• **milestoneId**: *string*
 
-The milestone hash of the input.
+The milestone id of the input.
 
 ___
 

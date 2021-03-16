@@ -9,7 +9,7 @@ Type of the object.
 ## Type parameters
 
 Name |
------- |
+:------ |
 `T` |
 
 ## Hierarchy

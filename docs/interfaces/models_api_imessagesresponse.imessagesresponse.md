@@ -6,10 +6,6 @@
 
 List of messages found.
 
-## Hierarchy
-
-* **IMessagesResponse**
-
 ## Table of contents
 
 ### Properties

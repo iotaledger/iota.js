@@ -6,10 +6,6 @@
 
 Class to help with bip32 paths.
 
-## Hierarchy
-
-* **Bip32Path**
-
 ## Table of contents
 
 ### Constructors
@@ -36,7 +32,7 @@ Create a new instance of Bip32Path.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `initialPath?` | *string* | Initial path to create.    |
 
 **Returns:** [*Bip32Path*](crypto_bip32path.bip32path.md)
@@ -74,7 +70,7 @@ Push a new index on to the path.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `index` | *number* | The index to add to the path.    |
 
 **Returns:** *void*
@@ -90,7 +86,7 @@ Push a new hardened index on to the path.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `index` | *number* | The index to add to the path.    |
 
 **Returns:** *void*
@@ -118,7 +114,7 @@ Construct a new path by cloning an existing one.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `bip32Path` | [*Bip32Path*](crypto_bip32path.bip32path.md) | The path to clone.   |
 
 **Returns:** [*Bip32Path*](crypto_bip32path.bip32path.md)

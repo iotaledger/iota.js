@@ -5,12 +5,12 @@ import { ITypeBase } from "./ITypeBase";
 /**
  * The global type for the address type.
  */
-export const ED25519_ADDRESS_TYPE = 1;
+export const ED25519_ADDRESS_TYPE = 0;
 
 /**
  * Ed25519Address address.
  */
-export interface IEd25519Address extends ITypeBase<1> {
+export interface IEd25519Address extends ITypeBase<0> {
     /**
      * The address.
      */

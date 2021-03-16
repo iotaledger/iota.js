@@ -20,7 +20,7 @@ Generate addresses based on the account indexing style.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `generatorState` | [*IBip44GeneratorState*](../interfaces/models_ibip44generatorstate.ibip44generatorstate.md) | The address state.   |
 `isFirst` | *boolean* | Is this the first address we are generating.   |
 
@@ -39,7 +39,7 @@ Generate a bip44 path based on all its parts.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `accountIndex` | *number* | The account index.   |
 `addressIndex` | *number* | The address index.   |
 `isInternal` | *boolean* | Is this an internal address.   |

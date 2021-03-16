@@ -6,10 +6,6 @@
 
 Milestone.
 
-## Hierarchy
-
-* **IMilestoneResponse**
-
 ## Table of contents
 
 ### Properties

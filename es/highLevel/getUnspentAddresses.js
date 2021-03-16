@@ -40,6 +40,7 @@ exports.getUnspentAddressesWithAddressGenerator = exports.getUnspentAddresses = 
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 var ed25519Address_1 = require("../addressTypes/ed25519Address");
+var singleNodeClient_1 = require("../clients/singleNodeClient");
 var bip32Path_1 = require("../crypto/bip32Path");
 var IEd25519Address_1 = require("../models/IEd25519Address");
 var bech32Helper_1 = require("../utils/bech32Helper");
@@ -47,7 +48,7 @@ var converter_1 = require("../utils/converter");
 var addresses_1 = require("./addresses");
 /**
  * Get all the unspent addresses.
- * @param client The client to send the transfer with.
+ * @param client The client or node endpoint to send the transfer with.
  * @param seed The seed to use for address generation.
  * @param accountIndex The account index in the wallet.
  * @param addressOptions Optional address configuration for balance address lookups.
@@ -71,7 +72,7 @@ function getUnspentAddresses(client, seed, accountIndex, addressOptions) {
 exports.getUnspentAddresses = getUnspentAddresses;
 /**
  * Get all the unspent addresses using an address generator.
- * @param client The client to send the transfer with.
+ * @param client The client or node endpoint to get the addresses from.
  * @param seed The seed to use for address generation.
  * @param initialAddressState The initial address state for calculating the addresses.
  * @param nextAddressPath Calculate the next address for inputs.
@@ -84,10 +85,12 @@ exports.getUnspentAddresses = getUnspentAddresses;
 function getUnspentAddressesWithAddressGenerator(client, seed, initialAddressState, nextAddressPath, addressOptions) {
     var _a, _b;
     return __awaiter(this, void 0, void 0, function () {
-        var nodeInfo, localRequiredLimit, localZeroCount, finished, allUnspent, isFirst, zeroBalance, path, addressSeed, ed25519Address, addressBytes, addressHex, addressResponse;
+        var localClient, nodeInfo, localRequiredLimit, localZeroCount, finished, allUnspent, isFirst, zeroBalance, path, addressSeed, ed25519Address, addressBytes, addressHex, addressResponse;
         return __generator(this, function (_c) {
             switch (_c.label) {
-                case 0: return [4 /*yield*/, client.info()];
+                case 0:
+                    localClient = typeof client === "string" ? new singleNodeClient_1.SingleNodeClient(client) : client;
+                    return [4 /*yield*/, localClient.info()];
                 case 1:
                     nodeInfo = _c.sent();
                     localRequiredLimit = (_a = addressOptions === null || addressOptions === void 0 ? void 0 : addressOptions.requiredCount) !== null && _a !== void 0 ? _a : Number.MAX_SAFE_INTEGER;
@@ -104,7 +107,7 @@ function getUnspentAddressesWithAddressGenerator(client, seed, initialAddressSta
                     ed25519Address = new ed25519Address_1.Ed25519Address(addressSeed.keyPair().publicKey);
                     addressBytes = ed25519Address.toAddress();
                     addressHex = converter_1.Converter.bytesToHex(addressBytes);
-                    return [4 /*yield*/, client.addressEd25519(addressHex)];
+                    return [4 /*yield*/, localClient.addressEd25519(addressHex)];
                 case 3:
                     addressResponse = _c.sent();
                     // If there is no balance we increment the counter and end
@@ -135,4 +138,4 @@ function getUnspentAddressesWithAddressGenerator(client, seed, initialAddressSta
     });
 }
 exports.getUnspentAddressesWithAddressGenerator = getUnspentAddressesWithAddressGenerator;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZ2V0VW5zcGVudEFkZHJlc3Nlcy5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy9oaWdoTGV2ZWwvZ2V0VW5zcGVudEFkZHJlc3Nlcy50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7QUFBQSwrQkFBK0I7QUFDL0Isc0NBQXNDO0FBQ3RDLGlFQUFnRTtBQUNoRSxpREFBZ0Q7QUFHaEQsNkRBQWlFO0FBRWpFLHNEQUFxRDtBQUNyRCxnREFBK0M7QUFDL0MseUNBQW1EO0FBRW5EOzs7Ozs7Ozs7O0dBVUc7QUFDSCxTQUFzQixtQkFBbUIsQ0FDckMsTUFBZSxFQUNmLElBQVcsRUFDWCxZQUFvQixFQUNwQixjQUlDOzs7O1lBS0Qsc0JBQU8sdUNBQXVDLENBQzFDLE1BQU0sRUFDTixJQUFJLEVBQ0o7b0JBQ0ksWUFBWSxjQUFBO29CQUNaLFlBQVksUUFBRSxjQUFjLGFBQWQsY0FBYyx1QkFBZCxjQUFjLENBQUUsVUFBVSxtQ0FBSSxDQUFDO29CQUM3QyxVQUFVLEVBQUUsS0FBSztpQkFDcEIsRUFDRCxnQ0FBb0IsRUFDcEIsY0FBYyxDQUNqQixFQUFDOzs7Q0FDTDtBQXhCRCxrREF3QkM7QUFFRDs7Ozs7Ozs7Ozs7R0FXRztBQUNILFNBQXNCLHVDQUF1QyxDQUN6RCxNQUFlLEVBQ2YsSUFBVyxFQUNYLG1CQUFzQixFQUN0QixlQUE4RCxFQUM5RCxjQUlDOzs7Ozs7d0JBS2dCLHFCQUFNLE1BQU0sQ0FBQyxJQUFJLEVBQUUsRUFBQTs7b0JBQTlCLFFBQVEsR0FBRyxTQUFtQjtvQkFDOUIsa0JBQWtCLFNBQUcsY0FBYyxhQUFkLGNBQWMsdUJBQWQsY0FBYyxDQUFFLGFBQWEsbUNBQUksTUFBTSxDQUFDLGdCQUFnQixDQUFDO29CQUM5RSxjQUFjLFNBQUcsY0FBYyxhQUFkLGNBQWMsdUJBQWQsY0FBYyxDQUFFLFNBQVMsbUNBQUksRUFBRSxDQUFDO29CQUNuRCxRQUFRLEdBQUcsS0FBSyxDQUFDO29CQUNmLFVBQVUsR0FJVixFQUFFLENBQUM7b0JBRUwsT0FBTyxHQUFHLElBQUksQ0FBQztvQkFDZixXQUFXLEdBQUcsQ0FBQyxDQUFDOzs7b0JBR1YsSUFBSSxHQUFHLGVBQWUsQ0FBQyxtQkFBbUIsRUFBRSxPQUFPLENBQUMsQ0FBQztvQkFDM0QsT0FBTyxHQUFHLEtBQUssQ0FBQztvQkFFVixXQUFXLEdBQUcsSUFBSSxDQUFDLG9CQUFvQixDQUFDLElBQUkscUJBQVMsQ0FBQyxJQUFJLENBQUMsQ0FBQyxDQUFDO29CQUU3RCxjQUFjLEdBQUcsSUFBSSwrQkFBYyxDQUFDLFdBQVcsQ0FBQyxPQUFPLEVBQUUsQ0FBQyxTQUFTLENBQUMsQ0FBQztvQkFDckUsWUFBWSxHQUFHLGNBQWMsQ0FBQyxTQUFTLEVBQUUsQ0FBQztvQkFDMUMsVUFBVSxHQUFHLHFCQUFTLENBQUMsVUFBVSxDQUFDLFlBQVksQ0FBQyxDQUFDO29CQUM5QixxQkFBTSxNQUFNLENBQUMsY0FBYyxDQUFDLFVBQVUsQ0FBQyxFQUFBOztvQkFBekQsZUFBZSxHQUFHLFNBQXVDO29CQUUvRCwwREFBMEQ7b0JBQzFELDBDQUEwQztvQkFDMUMsSUFBSSxlQUFlLENBQUMsT0FBTyxLQUFLLENBQUMsRUFBRTt3QkFDL0IsV0FBVyxFQUFFLENBQUM7d0JBQ2QsSUFBSSxXQUFXLElBQUksY0FBYyxFQUFFOzRCQUMvQixRQUFRLEdBQUcsSUFBSSxDQUFDO3lCQUNuQjtxQkFDSjt5QkFBTTt3QkFDSCxVQUFVLENBQUMsSUFBSSxDQUFDOzRCQUNaLE9BQU8sRUFBRSwyQkFBWSxDQUFDLFFBQVEsQ0FBQyxzQ0FBb0IsRUFBRSxZQUFZLEVBQUUsUUFBUSxDQUFDLFNBQVMsQ0FBQzs0QkFDdEYsSUFBSSxNQUFBOzRCQUNKLE9BQU8sRUFBRSxlQUFlLENBQUMsT0FBTzt5QkFDbkMsQ0FBQyxDQUFDO3dCQUVILElBQUksVUFBVSxDQUFDLE1BQU0sS0FBSyxrQkFBa0IsRUFBRTs0QkFDMUMsUUFBUSxHQUFHLElBQUksQ0FBQzt5QkFDbkI7cUJBQ0o7Ozt3QkFDSSxDQUFDLFFBQVE7O3dCQUVsQixzQkFBTyxVQUFVLEVBQUM7Ozs7Q0FDckI7QUEzREQsMEZBMkRDIn0=
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZ2V0VW5zcGVudEFkZHJlc3Nlcy5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy9oaWdoTGV2ZWwvZ2V0VW5zcGVudEFkZHJlc3Nlcy50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7QUFBQSwrQkFBK0I7QUFDL0Isc0NBQXNDO0FBQ3RDLGlFQUFnRTtBQUNoRSxnRUFBK0Q7QUFDL0QsaURBQWdEO0FBR2hELDZEQUFpRTtBQUVqRSxzREFBcUQ7QUFDckQsZ0RBQStDO0FBQy9DLHlDQUFtRDtBQUVuRDs7Ozs7Ozs7OztHQVVHO0FBQ0gsU0FBc0IsbUJBQW1CLENBQ3JDLE1BQXdCLEVBQ3hCLElBQVcsRUFDWCxZQUFvQixFQUNwQixjQUlDOzs7O1lBS0Qsc0JBQU8sdUNBQXVDLENBQzFDLE1BQU0sRUFDTixJQUFJLEVBQ0o7b0JBQ0ksWUFBWSxjQUFBO29CQUNaLFlBQVksRUFBRSxNQUFBLGNBQWMsYUFBZCxjQUFjLHVCQUFkLGNBQWMsQ0FBRSxVQUFVLG1DQUFJLENBQUM7b0JBQzdDLFVBQVUsRUFBRSxLQUFLO2lCQUNwQixFQUNELGdDQUFvQixFQUNwQixjQUFjLENBQ2pCLEVBQUM7OztDQUNMO0FBeEJELGtEQXdCQztBQUVEOzs7Ozs7Ozs7OztHQVdHO0FBQ0gsU0FBc0IsdUNBQXVDLENBQ3pELE1BQXdCLEVBQ3hCLElBQVcsRUFDWCxtQkFBc0IsRUFDdEIsZUFBOEQsRUFDOUQsY0FJQzs7Ozs7OztvQkFLSyxXQUFXLEdBQUcsT0FBTyxNQUFNLEtBQUssUUFBUSxDQUFDLENBQUMsQ0FBQyxJQUFJLG1DQUFnQixDQUFDLE1BQU0sQ0FBQyxDQUFDLENBQUMsQ0FBQyxNQUFNLENBQUM7b0JBRXRFLHFCQUFNLFdBQVcsQ0FBQyxJQUFJLEVBQUUsRUFBQTs7b0JBQW5DLFFBQVEsR0FBRyxTQUF3QjtvQkFDbkMsa0JBQWtCLEdBQUcsTUFBQSxjQUFjLGFBQWQsY0FBYyx1QkFBZCxjQUFjLENBQUUsYUFBYSxtQ0FBSSxNQUFNLENBQUMsZ0JBQWdCLENBQUM7b0JBQzlFLGNBQWMsR0FBRyxNQUFBLGNBQWMsYUFBZCxjQUFjLHVCQUFkLGNBQWMsQ0FBRSxTQUFTLG1DQUFJLEVBQUUsQ0FBQztvQkFDbkQsUUFBUSxHQUFHLEtBQUssQ0FBQztvQkFDZixVQUFVLEdBSVYsRUFBRSxDQUFDO29CQUVMLE9BQU8sR0FBRyxJQUFJLENBQUM7b0JBQ2YsV0FBVyxHQUFHLENBQUMsQ0FBQzs7O29CQUdWLElBQUksR0FBRyxlQUFlLENBQUMsbUJBQW1CLEVBQUUsT0FBTyxDQUFDLENBQUM7b0JBQzNELE9BQU8sR0FBRyxLQUFLLENBQUM7b0JBRVYsV0FBVyxHQUFHLElBQUksQ0FBQyxvQkFBb0IsQ0FBQyxJQUFJLHFCQUFTLENBQUMsSUFBSSxDQUFDLENBQUMsQ0FBQztvQkFFN0QsY0FBYyxHQUFHLElBQUksK0JBQWMsQ0FBQyxXQUFXLENBQUMsT0FBTyxFQUFFLENBQUMsU0FBUyxDQUFDLENBQUM7b0JBQ3JFLFlBQVksR0FBRyxjQUFjLENBQUMsU0FBUyxFQUFFLENBQUM7b0JBQzFDLFVBQVUsR0FBRyxxQkFBUyxDQUFDLFVBQVUsQ0FBQyxZQUFZLENBQUMsQ0FBQztvQkFDOUIscUJBQU0sV0FBVyxDQUFDLGNBQWMsQ0FBQyxVQUFVLENBQUMsRUFBQTs7b0JBQTlELGVBQWUsR0FBRyxTQUE0QztvQkFFcEUsMERBQTBEO29CQUMxRCwwQ0FBMEM7b0JBQzFDLElBQUksZUFBZSxDQUFDLE9BQU8sS0FBSyxDQUFDLEVBQUU7d0JBQy9CLFdBQVcsRUFBRSxDQUFDO3dCQUNkLElBQUksV0FBVyxJQUFJLGNBQWMsRUFBRTs0QkFDL0IsUUFBUSxHQUFHLElBQUksQ0FBQzt5QkFDbkI7cUJBQ0o7eUJBQU07d0JBQ0gsVUFBVSxDQUFDLElBQUksQ0FBQzs0QkFDWixPQUFPLEVBQUUsMkJBQVksQ0FBQyxRQUFRLENBQUMsc0NBQW9CLEVBQUUsWUFBWSxFQUFFLFFBQVEsQ0FBQyxTQUFTLENBQUM7NEJBQ3RGLElBQUksTUFBQTs0QkFDSixPQUFPLEVBQUUsZUFBZSxDQUFDLE9BQU87eUJBQ25DLENBQUMsQ0FBQzt3QkFFSCxJQUFJLFVBQVUsQ0FBQyxNQUFNLEtBQUssa0JBQWtCLEVBQUU7NEJBQzFDLFFBQVEsR0FBRyxJQUFJLENBQUM7eUJBQ25CO3FCQUNKOzs7d0JBQ0ksQ0FBQyxRQUFROzt3QkFFbEIsc0JBQU8sVUFBVSxFQUFDOzs7O0NBQ3JCO0FBN0RELDBGQTZEQyJ9

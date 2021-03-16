@@ -43,7 +43,7 @@ Deserialize the address from binary.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `readStream` | [*ReadStream*](../classes/utils_readstream.readstream.md) | The stream to read the data from.   |
 
 **Returns:** [*IEd25519Address*](../interfaces/models_ied25519address.ied25519address.md)
@@ -61,7 +61,7 @@ Deserialize the Ed25519 address from binary.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `readStream` | [*ReadStream*](../classes/utils_readstream.readstream.md) | The stream to read the data from.   |
 
 **Returns:** [*IEd25519Address*](../interfaces/models_ied25519address.ied25519address.md)
@@ -79,7 +79,7 @@ Serialize the address to binary.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `writeStream` | [*WriteStream*](../classes/utils_writestream.writestream.md) | The stream to write the data to.   |
 `object` | [*IEd25519Address*](../interfaces/models_ied25519address.ied25519address.md) | The object to serialize.    |
 
@@ -96,7 +96,7 @@ Serialize the ed25519 address to binary.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `writeStream` | [*WriteStream*](../classes/utils_writestream.writestream.md) | The stream to write the data to.   |
 `object` | [*IEd25519Address*](../interfaces/models_ied25519address.ied25519address.md) | The object to serialize.    |
 

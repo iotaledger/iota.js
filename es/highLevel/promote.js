@@ -40,24 +40,27 @@ exports.promote = void 0;
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 var message_1 = require("../binary/message");
+var singleNodeClient_1 = require("../clients/singleNodeClient");
 /**
  * Promote an existing message.
- * @param client The client to perform the promote with.
+ * @param client The clientor node endpoint to perform the promote with.
  * @param messageId The message to promote.
  * @returns The id and message that were promoted.
  */
 function promote(client, messageId) {
     return __awaiter(this, void 0, void 0, function () {
-        var message, tipsResponse, promoteMessage, promoteMessageId;
+        var localClient, message, tipsResponse, promoteMessage, promoteMessageId;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, client.message(messageId)];
+                case 0:
+                    localClient = typeof client === "string" ? new singleNodeClient_1.SingleNodeClient(client) : client;
+                    return [4 /*yield*/, localClient.message(messageId)];
                 case 1:
                     message = _a.sent();
                     if (!message) {
                         throw new Error("The message does not exist.");
                     }
-                    return [4 /*yield*/, client.tips()];
+                    return [4 /*yield*/, localClient.tips()];
                 case 2:
                     tipsResponse = _a.sent();
                     // Parents must be unique and lexicographically sorted
@@ -74,7 +77,7 @@ function promote(client, messageId) {
                     promoteMessage = {
                         parentMessageIds: tipsResponse.tipMessageIds
                     };
-                    return [4 /*yield*/, client.messageSubmit(promoteMessage)];
+                    return [4 /*yield*/, localClient.messageSubmit(promoteMessage)];
                 case 3:
                     promoteMessageId = _a.sent();
                     return [2 /*return*/, {
@@ -86,4 +89,4 @@ function promote(client, messageId) {
     });
 }
 exports.promote = promote;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicHJvbW90ZS5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy9oaWdoTGV2ZWwvcHJvbW90ZS50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7QUFBQSwrQkFBK0I7QUFDL0Isc0NBQXNDO0FBQ3RDLDZDQUF1RDtBQUl2RDs7Ozs7R0FLRztBQUNILFNBQXNCLE9BQU8sQ0FBQyxNQUFlLEVBQUUsU0FBaUI7Ozs7O3dCQUk1QyxxQkFBTSxNQUFNLENBQUMsT0FBTyxDQUFDLFNBQVMsQ0FBQyxFQUFBOztvQkFBekMsT0FBTyxHQUFHLFNBQStCO29CQUMvQyxJQUFJLENBQUMsT0FBTyxFQUFFO3dCQUNWLE1BQU0sSUFBSSxLQUFLLENBQUMsNkJBQTZCLENBQUMsQ0FBQztxQkFDbEQ7b0JBRW9CLHFCQUFNLE1BQU0sQ0FBQyxJQUFJLEVBQUUsRUFBQTs7b0JBQWxDLFlBQVksR0FBRyxTQUFtQjtvQkFFeEMsc0RBQXNEO29CQUN0RCw4REFBOEQ7b0JBQzlELElBQUksQ0FBQyxZQUFZLENBQUMsYUFBYSxDQUFDLFFBQVEsQ0FBQyxTQUFTLENBQUMsRUFBRTt3QkFDakQsWUFBWSxDQUFDLGFBQWEsQ0FBQyxPQUFPLENBQUMsU0FBUyxDQUFDLENBQUM7cUJBQ2pEO29CQUVELDZEQUE2RDtvQkFDN0QsSUFBSSxZQUFZLENBQUMsYUFBYSxDQUFDLE1BQU0sR0FBRyw0QkFBa0IsRUFBRTt3QkFDeEQsWUFBWSxDQUFDLGFBQWEsR0FBRyxZQUFZLENBQUMsYUFBYSxDQUFDLEtBQUssQ0FBQyxDQUFDLEVBQUUsNEJBQWtCLENBQUMsQ0FBQztxQkFDeEY7b0JBRUQsd0JBQXdCO29CQUN4QixZQUFZLENBQUMsYUFBYSxDQUFDLElBQUksRUFBRSxDQUFDO29CQUU1QixjQUFjLEdBQWE7d0JBQzdCLGdCQUFnQixFQUFFLFlBQVksQ0FBQyxhQUFhO3FCQUMvQyxDQUFDO29CQUV1QixxQkFBTSxNQUFNLENBQUMsYUFBYSxDQUFDLGNBQWMsQ0FBQyxFQUFBOztvQkFBN0QsZ0JBQWdCLEdBQUcsU0FBMEM7b0JBRW5FLHNCQUFPOzRCQUNILE9BQU8sU0FBQTs0QkFDUCxTQUFTLEVBQUUsZ0JBQWdCO3lCQUM5QixFQUFDOzs7O0NBQ0w7QUFuQ0QsMEJBbUNDIn0=
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicHJvbW90ZS5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy9oaWdoTGV2ZWwvcHJvbW90ZS50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7QUFBQSwrQkFBK0I7QUFDL0Isc0NBQXNDO0FBQ3RDLDZDQUF1RDtBQUN2RCxnRUFBK0Q7QUFJL0Q7Ozs7O0dBS0c7QUFDSCxTQUFzQixPQUFPLENBQUMsTUFBd0IsRUFBRSxTQUFpQjs7Ozs7O29CQUkvRCxXQUFXLEdBQUcsT0FBTyxNQUFNLEtBQUssUUFBUSxDQUFDLENBQUMsQ0FBQyxJQUFJLG1DQUFnQixDQUFDLE1BQU0sQ0FBQyxDQUFDLENBQUMsQ0FBQyxNQUFNLENBQUM7b0JBRXZFLHFCQUFNLFdBQVcsQ0FBQyxPQUFPLENBQUMsU0FBUyxDQUFDLEVBQUE7O29CQUE5QyxPQUFPLEdBQUcsU0FBb0M7b0JBQ3BELElBQUksQ0FBQyxPQUFPLEVBQUU7d0JBQ1YsTUFBTSxJQUFJLEtBQUssQ0FBQyw2QkFBNkIsQ0FBQyxDQUFDO3FCQUNsRDtvQkFFb0IscUJBQU0sV0FBVyxDQUFDLElBQUksRUFBRSxFQUFBOztvQkFBdkMsWUFBWSxHQUFHLFNBQXdCO29CQUU3QyxzREFBc0Q7b0JBQ3RELDhEQUE4RDtvQkFDOUQsSUFBSSxDQUFDLFlBQVksQ0FBQyxhQUFhLENBQUMsUUFBUSxDQUFDLFNBQVMsQ0FBQyxFQUFFO3dCQUNqRCxZQUFZLENBQUMsYUFBYSxDQUFDLE9BQU8sQ0FBQyxTQUFTLENBQUMsQ0FBQztxQkFDakQ7b0JBRUQsNkRBQTZEO29CQUM3RCxJQUFJLFlBQVksQ0FBQyxhQUFhLENBQUMsTUFBTSxHQUFHLDRCQUFrQixFQUFFO3dCQUN4RCxZQUFZLENBQUMsYUFBYSxHQUFHLFlBQVksQ0FBQyxhQUFhLENBQUMsS0FBSyxDQUFDLENBQUMsRUFBRSw0QkFBa0IsQ0FBQyxDQUFDO3FCQUN4RjtvQkFFRCx3QkFBd0I7b0JBQ3hCLFlBQVksQ0FBQyxhQUFhLENBQUMsSUFBSSxFQUFFLENBQUM7b0JBRTVCLGNBQWMsR0FBYTt3QkFDN0IsZ0JBQWdCLEVBQUUsWUFBWSxDQUFDLGFBQWE7cUJBQy9DLENBQUM7b0JBRXVCLHFCQUFNLFdBQVcsQ0FBQyxhQUFhLENBQUMsY0FBYyxDQUFDLEVBQUE7O29CQUFsRSxnQkFBZ0IsR0FBRyxTQUErQztvQkFFeEUsc0JBQU87NEJBQ0gsT0FBTyxTQUFBOzRCQUNQLFNBQVMsRUFBRSxnQkFBZ0I7eUJBQzlCLEVBQUM7Ozs7Q0FDTDtBQXJDRCwwQkFxQ0MifQ==

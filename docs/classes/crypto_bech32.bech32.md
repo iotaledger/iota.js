@@ -7,10 +7,6 @@
 Class to help with Bech32 encoding/decoding.
 Based on reference implementation https://github.com/sipa/bech32/blob/master/ref/javascript/bech32.js
 
-## Hierarchy
-
-* **Bech32**
-
 ## Table of contents
 
 ### Constructors
@@ -46,7 +42,7 @@ Decode a bech32 string.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `bech` | *string* | The text to decode.   |
 
 **Returns:** *undefined* \| {}
@@ -64,7 +60,7 @@ Decode a bech32 string to 5 bit array.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `bech` | *string* | The text to decode.   |
 
 **Returns:** *undefined* \| {}
@@ -82,7 +78,7 @@ Encode the buffer.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `humanReadablePart` | *string* | The header   |
 `data` | *Uint8Array* | The data to encode.   |
 
@@ -101,7 +97,7 @@ Encode the 5 bit data buffer.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `humanReadablePart` | *string* | The header   |
 `data5Bit` | *Uint8Array* | The data to encode.   |
 
@@ -120,7 +116,7 @@ Convert the 5 bit data to 8 bit.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `fiveBit` | *Uint8Array* | The 5 bit data to convert.   |
 
 **Returns:** *Uint8Array*
@@ -138,7 +134,7 @@ Does the given string match the bech32 pattern.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `humanReadablePart` | *string* | The human readable part.   |
 `bech32Text?` | *string* | The text to test.   |
 
@@ -157,7 +153,7 @@ Convert the input bytes into 5 bit data.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `bytes` | *Uint8Array* | The bytes to convert.   |
 
 **Returns:** *Uint8Array*

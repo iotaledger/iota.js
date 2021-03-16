@@ -37,18 +37,23 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reattach = void 0;
+// Copyright 2020 IOTA Stiftung
+// SPDX-License-Identifier: Apache-2.0
+var singleNodeClient_1 = require("../clients/singleNodeClient");
 /**
  * Reattach an existing message.
- * @param client The client to perform the reattach with.
+ * @param client The client or node endpoint to perform the reattach with.
  * @param messageId The message to reattach.
  * @returns The id and message that were reattached.
  */
 function reattach(client, messageId) {
     return __awaiter(this, void 0, void 0, function () {
-        var message, reattachMessage, reattachedMessageId;
+        var localClient, message, reattachMessage, reattachedMessageId;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, client.message(messageId)];
+                case 0:
+                    localClient = typeof client === "string" ? new singleNodeClient_1.SingleNodeClient(client) : client;
+                    return [4 /*yield*/, localClient.message(messageId)];
                 case 1:
                     message = _a.sent();
                     if (!message) {
@@ -57,7 +62,7 @@ function reattach(client, messageId) {
                     reattachMessage = {
                         payload: message.payload
                     };
-                    return [4 /*yield*/, client.messageSubmit(reattachMessage)];
+                    return [4 /*yield*/, localClient.messageSubmit(reattachMessage)];
                 case 2:
                     reattachedMessageId = _a.sent();
                     return [2 /*return*/, {
@@ -69,4 +74,4 @@ function reattach(client, messageId) {
     });
 }
 exports.reattach = reattach;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicmVhdHRhY2guanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi9zcmMvaGlnaExldmVsL3JlYXR0YWNoLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7OztBQUtBOzs7OztHQUtHO0FBQ0gsU0FBc0IsUUFBUSxDQUFDLE1BQWUsRUFBRSxTQUFpQjs7Ozs7d0JBSTdDLHFCQUFNLE1BQU0sQ0FBQyxPQUFPLENBQUMsU0FBUyxDQUFDLEVBQUE7O29CQUF6QyxPQUFPLEdBQUcsU0FBK0I7b0JBQy9DLElBQUksQ0FBQyxPQUFPLEVBQUU7d0JBQ1YsTUFBTSxJQUFJLEtBQUssQ0FBQyw2QkFBNkIsQ0FBQyxDQUFDO3FCQUNsRDtvQkFFSyxlQUFlLEdBQWE7d0JBQzlCLE9BQU8sRUFBRSxPQUFPLENBQUMsT0FBTztxQkFDM0IsQ0FBQztvQkFFMEIscUJBQU0sTUFBTSxDQUFDLGFBQWEsQ0FBQyxlQUFlLENBQUMsRUFBQTs7b0JBQWpFLG1CQUFtQixHQUFHLFNBQTJDO29CQUV2RSxzQkFBTzs0QkFDSCxPQUFPLFNBQUE7NEJBQ1AsU0FBUyxFQUFFLG1CQUFtQjt5QkFDakMsRUFBQzs7OztDQUNMO0FBbkJELDRCQW1CQyJ9
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicmVhdHRhY2guanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi9zcmMvaGlnaExldmVsL3JlYXR0YWNoLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7OztBQUFBLCtCQUErQjtBQUMvQixzQ0FBc0M7QUFDdEMsZ0VBQStEO0FBSS9EOzs7OztHQUtHO0FBQ0gsU0FBc0IsUUFBUSxDQUFDLE1BQXdCLEVBQUUsU0FBaUI7Ozs7OztvQkFJaEUsV0FBVyxHQUFHLE9BQU8sTUFBTSxLQUFLLFFBQVEsQ0FBQyxDQUFDLENBQUMsSUFBSSxtQ0FBZ0IsQ0FBQyxNQUFNLENBQUMsQ0FBQyxDQUFDLENBQUMsTUFBTSxDQUFDO29CQUV2RSxxQkFBTSxXQUFXLENBQUMsT0FBTyxDQUFDLFNBQVMsQ0FBQyxFQUFBOztvQkFBOUMsT0FBTyxHQUFHLFNBQW9DO29CQUNwRCxJQUFJLENBQUMsT0FBTyxFQUFFO3dCQUNWLE1BQU0sSUFBSSxLQUFLLENBQUMsNkJBQTZCLENBQUMsQ0FBQztxQkFDbEQ7b0JBRUssZUFBZSxHQUFhO3dCQUM5QixPQUFPLEVBQUUsT0FBTyxDQUFDLE9BQU87cUJBQzNCLENBQUM7b0JBRTBCLHFCQUFNLFdBQVcsQ0FBQyxhQUFhLENBQUMsZUFBZSxDQUFDLEVBQUE7O29CQUF0RSxtQkFBbUIsR0FBRyxTQUFnRDtvQkFFNUUsc0JBQU87NEJBQ0gsT0FBTyxTQUFBOzRCQUNQLFNBQVMsRUFBRSxtQkFBbUI7eUJBQ2pDLEVBQUM7Ozs7Q0FDTDtBQXJCRCw0QkFxQkMifQ==

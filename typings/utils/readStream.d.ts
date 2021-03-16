@@ -79,13 +79,6 @@ export declare class ReadStream {
      */
     readUInt64(name: string, moveIndex?: boolean): bigint;
     /**
-     * Read a string from the stream.
-     * @param name The name of the data we are trying to read.
-     * @param moveIndex Move the index pointer on.
-     * @returns The string.
-     */
-    readString(name: string, moveIndex?: boolean): string;
-    /**
      * Read a boolean from the stream.
      * @param name The name of the data we are trying to read.
      * @param moveIndex Move the index pointer on.

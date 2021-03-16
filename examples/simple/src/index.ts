@@ -24,7 +24,7 @@ async function run() {
         parentMessageIds: tipsResponse.tipMessageIds.slice(0, MAX_NUMBER_PARENTS),
         payload: {
             type: INDEXATION_PAYLOAD_TYPE,
-            index: "Foo",
+            index: Converter.utf8ToHex("Foo"),
             data: Converter.utf8ToHex("Bar")
         }
     };
@@ -53,7 +53,7 @@ async function run() {
     logMessage("", decoded);
     console.log();
 
-    const messages = await client.messagesFind("Foo");
+    const messages = await client.messagesFind(Converter.utf8ToBytes("Foo"));
     console.log("Messages");
     console.log("\tIndex:", messages.index);
     console.log("\tMax Results:", messages.maxResults);

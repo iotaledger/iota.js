@@ -336,7 +336,8 @@ export function deserializeIndexationPayload(readStream: ReadStream): IIndexatio
     if (type !== INDEXATION_PAYLOAD_TYPE) {
         throw new Error(`Type mismatch in payloadIndexation ${type}`);
     }
-    const index = readStream.readString("payloadIndexation.index");
+    const indexLength = readStream.readUInt16("payloadIndexation.indexLength");
+    const index = readStream.readFixedHex("payloadIndexation.index", indexLength);
     const dataLength = readStream.readUInt32("payloadIndexation.dataLength");
     const data = readStream.readFixedHex("payloadIndexation.data", dataLength);
 
@@ -358,13 +359,14 @@ export function serializeIndexationPayload(writeStream: WriteStream,
         throw new Error(`The indexation key length is ${object.index.length
             }, which is below the minimum size of ${MIN_INDEXATION_KEY_LENGTH}`);
     }
-    if (object.index.length > MAX_INDEXATION_KEY_LENGTH) {
-        throw new Error(`The indexation key length is ${object.index.length
+    if (object.index.length / 2 > MAX_INDEXATION_KEY_LENGTH) {
+        throw new Error(`The indexation key length is ${object.index.length / 2
             }, which exceeds the maximum size of ${MAX_INDEXATION_KEY_LENGTH}`);
     }
 
     writeStream.writeUInt32("payloadIndexation.type", object.type);
-    writeStream.writeString("payloadIndexation.index", object.index);
+    writeStream.writeUInt16("payloadIndexation.indexLength", object.index.length / 2);
+    writeStream.writeFixedHex("payloadIndexation.index", object.index.length / 2, object.index);
     if (object.data) {
         writeStream.writeUInt32("payloadIndexation.dataLength", object.data.length / 2);
         writeStream.writeFixedHex("payloadIndexation.data", object.data.length / 2, object.data);

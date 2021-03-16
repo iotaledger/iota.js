@@ -1,8 +1,9 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 import { deserializeTransactionEssence, serializeTransactionEssence } from "../../src/binary/transaction";
+import { ED25519_ADDRESS_TYPE } from "../../src/models/IEd25519Address";
 import { INDEXATION_PAYLOAD_TYPE } from "../../src/models/IIndexationPayload";
-import { ISigLockedSingleOutput } from "../../src/models/ISigLockedSingleOutput";
+import { ISigLockedSingleOutput, SIG_LOCKED_SINGLE_OUTPUT_TYPE } from "../../src/models/ISigLockedSingleOutput";
 import { ITransactionEssence, TRANSACTION_ESSENCE_TYPE } from "../../src/models/ITransactionEssence";
 import { IUTXOInput, UTXO_INPUT_TYPE } from "../../src/models/IUTXOInput";
 import { Converter } from "../../src/utils/converter";
@@ -22,9 +23,9 @@ describe("Binary Transaction", () => {
             ],
             outputs: [
                 {
-                    type: 0,
+                    type: SIG_LOCKED_SINGLE_OUTPUT_TYPE,
                     address: {
-                        type: 1,
+                        type: ED25519_ADDRESS_TYPE,
                         address: "b".repeat(64)
                     },
                     amount: 100
@@ -36,7 +37,7 @@ describe("Binary Transaction", () => {
         serializeTransactionEssence(serialized, object);
         const hex = serialized.finalHex();
         // eslint-disable-next-line max-len
-        expect(hex).toEqual("00010000aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa020001000001bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb640000000000000000000000");
+        expect(hex).toEqual("00010000aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa020001000000bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb640000000000000000000000");
         const deserialized = deserializeTransactionEssence(new ReadStream(Converter.hexToBytes(hex)));
         expect(deserialized.type).toEqual(0);
         expect(deserialized.inputs.length).toEqual(1);
@@ -49,7 +50,7 @@ describe("Binary Transaction", () => {
 
         const sigLockedOutput = deserialized.outputs[0] as ISigLockedSingleOutput;
         expect(sigLockedOutput.type).toEqual(0);
-        expect(sigLockedOutput.address.type).toEqual(1);
+        expect(sigLockedOutput.address.type).toEqual(0);
         expect(sigLockedOutput.address.address).toEqual("b".repeat(64));
         expect(sigLockedOutput.amount).toEqual(100);
         expect(deserialized.payload).toBeUndefined();
@@ -67,9 +68,9 @@ describe("Binary Transaction", () => {
             ],
             outputs: [
                 {
-                    type: 0,
+                    type: SIG_LOCKED_SINGLE_OUTPUT_TYPE,
                     address: {
-                        type: 1,
+                        type: ED25519_ADDRESS_TYPE,
                         address: "b".repeat(64)
                     },
                     amount: 100
@@ -77,7 +78,7 @@ describe("Binary Transaction", () => {
             ],
             payload: {
                 type: INDEXATION_PAYLOAD_TYPE,
-                index: "foo",
+                index: Converter.utf8ToHex("foo"),
                 data: Converter.utf8ToHex("bar")
             }
         };
@@ -86,7 +87,7 @@ describe("Binary Transaction", () => {
         serializeTransactionEssence(serialized, object);
         const hex = serialized.finalHex();
         // eslint-disable-next-line max-len
-        expect(hex).toEqual("00010000aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa020001000001bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb640000000000000010000000020000000300666f6f03000000626172");
+        expect(hex).toEqual("00010000aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa020001000000bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb640000000000000010000000020000000300666f6f03000000626172");
         const deserialized = deserializeTransactionEssence(new ReadStream(Converter.hexToBytes(hex)));
         expect(deserialized.type).toEqual(0);
         expect(deserialized.inputs.length).toEqual(1);
@@ -99,13 +100,13 @@ describe("Binary Transaction", () => {
 
         const sigLockedOutput = deserialized.outputs[0] as ISigLockedSingleOutput;
         expect(sigLockedOutput.type).toEqual(0);
-        expect(sigLockedOutput.address.type).toEqual(1);
+        expect(sigLockedOutput.address.type).toEqual(0);
         expect(sigLockedOutput.address.address).toEqual("b".repeat(64));
         expect(sigLockedOutput.amount).toEqual(100);
         expect(deserialized.payload).toBeDefined();
         if (deserialized.payload) {
             expect(deserialized.payload.type).toEqual(2);
-            expect(deserialized.payload.index).toEqual("foo");
+            expect(Converter.hexToUtf8(deserialized.payload.index)).toEqual("foo");
             expect(deserialized.payload.data).toBeDefined();
             if (deserialized.payload.data) {
                 expect(Converter.hexToUtf8(deserialized.payload.data)).toEqual("bar");

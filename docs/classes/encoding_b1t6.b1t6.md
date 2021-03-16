@@ -6,10 +6,6 @@
 
 Class implements the b1t6 encoding encoding which uses a group of 6 trits to encode each byte.
 
-## Hierarchy
-
-* **B1T6**
-
 ## Table of contents
 
 ### Constructors
@@ -40,7 +36,7 @@ Encode a byte array into trits.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `dst` | *Int8Array* | The destination array.   |
 `startIndex` | *number* | The start index to write in the array.   |
 `src` | *Uint8Array* | The source data.   |
@@ -60,7 +56,7 @@ The encoded length of the data.
 #### Parameters:
 
 Name | Type | Description |
------- | ------ | ------ |
+:------ | :------ | :------ |
 `data` | *Uint8Array* | The data.   |
 
 **Returns:** *number*
