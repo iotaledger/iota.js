@@ -4190,7 +4190,7 @@
 	     * @returns The key pair.
 	     */
 	    Ed25519.keyPairFromSeed = function (seed) {
-	        var privateKey = Ed25519.privateKeyFromSeed(seed);
+	        var privateKey = Ed25519.privateKeyFromSeed(seed.slice(0, Ed25519.SEED_SIZE));
 	        return {
 	            privateKey: privateKey,
 	            publicKey: Ed25519.publicKeyFromPrivateKey(privateKey)
@@ -10622,8 +10622,6 @@
 	            data[privateKey.length + 2] = indexValue >>> 16;
 	            data[privateKey.length + 3] = indexValue >>> 8;
 	            data[privateKey.length + 4] = indexValue & 0xFF;
-	            // TS definition for create only accepts string
-	            // in reality it accepts bytes, which is what we want to send
 	            var fullKey = new hmacSha512.HmacSha512(chainCode)
 	                .update(data)
 	                .digest();
@@ -12633,7 +12631,7 @@
 	     * @returns A new instance of Ed25519Seed.
 	     */
 	    Ed25519Seed.fromMnemonic = function (mnemonic) {
-	        return new Ed25519Seed(bip39.Bip39.mnemonicToSeed(mnemonic, undefined, 2048, 32));
+	        return new Ed25519Seed(bip39.Bip39.mnemonicToSeed(mnemonic));
 	    };
 	    /**
 	     * Get the key pair from the seed.
@@ -12662,11 +12660,6 @@
 	    Ed25519Seed.prototype.toBytes = function () {
 	        return this._secretKey;
 	    };
-	    /**
-	     * Size, in bytes, of private key seeds.
-	     * @internal
-	     */
-	    Ed25519Seed.SEED_SIZE_BYTES = 32;
 	    return Ed25519Seed;
 	}());
 	exports.Ed25519Seed = Ed25519Seed;

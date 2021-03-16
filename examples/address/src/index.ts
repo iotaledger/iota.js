@@ -1,6 +1,6 @@
 import { Bech32Helper, Bip32Path, Bip39, Converter, Ed25519Address, Ed25519Seed, ED25519_ADDRESS_TYPE, generateBip44Address, IOTA_BIP44_BASE_PATH, SingleNodeClient } from "@iota/iota.js";
 
-const API_ENDPOINT = "http://localhost:14265";
+const API_ENDPOINT = "http://localhost:14265/";
 
 async function run() {
     const client = new SingleNodeClient(API_ENDPOINT);
@@ -15,21 +15,7 @@ async function run() {
 
     // Generate the seed from the Mnemonic
     const baseSeed = Ed25519Seed.fromMnemonic(randomMnemonic);
-
     console.log("\tSeed", Converter.bytesToHex(baseSeed.toBytes()));
-
-    // Seed has public and private key
-    const baseSeedKeyPair = baseSeed.keyPair();
-    console.log("\tPrivate Key", Converter.bytesToHex(baseSeedKeyPair.privateKey));
-    console.log("\tPublic Key", Converter.bytesToHex(baseSeedKeyPair.publicKey));
-
-    // Get the address for the seed which is actually the Blake2b.sum256 of the public key
-    // display it in both Ed25519 and Bech 32 format
-    const baseEd25519Address = new Ed25519Address(baseSeedKeyPair.publicKey);
-    const basePublicKeyAddress = baseEd25519Address.toAddress();
-    console.log("\tPublic Key Address Ed25519", Converter.bytesToHex(basePublicKeyAddress));
-    console.log("\tPublic Key Address Bech32", Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, basePublicKeyAddress, info.bech32HRP));
-    console.log();
 
     // Generate the next addresses for your account.
     console.log();

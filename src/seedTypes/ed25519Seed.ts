@@ -17,12 +17,6 @@ export const ED25519_SEED_TYPE: number = 1;
  */
 export class Ed25519Seed implements ISeed {
     /**
-     * Size, in bytes, of private key seeds.
-     * @internal
-     */
-    public static SEED_SIZE_BYTES: number = 32;
-
-    /**
      * The secret key for the seed.
      * @internal
      */
@@ -42,7 +36,7 @@ export class Ed25519Seed implements ISeed {
      * @returns A new instance of Ed25519Seed.
      */
     public static fromMnemonic(mnemonic: string): Ed25519Seed {
-        return new Ed25519Seed(Bip39.mnemonicToSeed(mnemonic, undefined, 2048, 32));
+        return new Ed25519Seed(Bip39.mnemonicToSeed(mnemonic));
     }
 
     /**

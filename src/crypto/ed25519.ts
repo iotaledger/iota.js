@@ -52,13 +52,12 @@ export class Ed25519 {
         publicKey: Uint8Array;
         privateKey: Uint8Array;
     } {
-        const privateKey = Ed25519.privateKeyFromSeed(seed);
+        const privateKey = Ed25519.privateKeyFromSeed(seed.slice(0, Ed25519.SEED_SIZE));
         return {
             privateKey,
             publicKey: Ed25519.publicKeyFromPrivateKey(privateKey)
         };
     }
-
 
     /**
      * Calculates a private key from a seed.

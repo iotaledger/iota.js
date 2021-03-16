@@ -53,8 +53,6 @@ export class Slip0010 {
             data[privateKey.length + 3] = indexValue >>> 8;
             data[privateKey.length + 4] = indexValue & 0xFF;
 
-            // TS definition for create only accepts string
-            // in reality it accepts bytes, which is what we want to send
             const fullKey = new HmacSha512(chainCode)
                 .update(data)
                 .digest();

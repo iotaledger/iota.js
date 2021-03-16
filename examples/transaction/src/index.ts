@@ -8,23 +8,26 @@ async function run() {
     const nodeInfo = await client.info();
 
     // These are the default values from the Hornet alphanet configuration
-    const privateKey = "256a818b2aac458941f7274985a410e57fb750f3a3a67969ece5bd9ae7eef5b2f7868ab6bb55800b77b8b74191ad8285a9bf428ace579d541fda47661803ff44";
-    const publicKey = "f7868ab6bb55800b77b8b74191ad8285a9bf428ace579d541fda47661803ff44";
+    const mnemonic = "social wolf hungry label salute hover sudden rain disease upgrade throw quick amazing clinic night";
+
+    // Generate the seed from the Mnemonic
+    const genesisSeed = Ed25519Seed.fromMnemonic(mnemonic);
 
     console.log("Genesis");
-    console.log("\tPrivate Key:", privateKey);
-    console.log("\tPublic Key:", publicKey);
 
-    const genesisSeedKeyPair: IKeyPair = {
-        privateKey: Converter.hexToBytes(privateKey),
-        publicKey: Converter.hexToBytes(publicKey)
-    };
+    const genesisPath = new Bip32Path("m/44'/4218'/0'/0'/0'");
 
-    const ed25519Address = new Ed25519Address(genesisSeedKeyPair.publicKey);
-    const genesisAddress = ed25519Address.toAddress();
-    const genesisAddressHex = Converter.bytesToHex(genesisAddress);
-    console.log("\tAddress Ed25519:", genesisAddressHex);
-    console.log("\tAddress Bech32:", Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, genesisAddress, nodeInfo.bech32HRP));
+    const genesisWalletSeed = genesisSeed.generateSeedFromPath(genesisPath);
+    const genesisWalletKeyPair = genesisWalletSeed.keyPair();
+    console.log("\tSeed", Converter.bytesToHex(genesisWalletSeed.toBytes()));
+
+    // Get the address for the path seed which is actually the Blake2b.sum256 of the public key
+    // display it in both Ed25519 and Bech 32 format
+    const genesisEd25519Address = new Ed25519Address(genesisWalletKeyPair.publicKey);
+    const genesisWalletAddress = genesisEd25519Address.toAddress();
+    const genesisWalletAddressHex = Converter.bytesToHex(genesisWalletAddress);
+    console.log("\tAddress Ed25519", genesisWalletAddressHex);
+    console.log("\tAddress Bech32", Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, genesisWalletAddress, nodeInfo.bech32HRP));
 
     // Create a new seed for the wallet
     const walletSeed = new Ed25519Seed(Converter.hexToBytes("e57fb750f3a3a67969ece5bd9ae7eef5b2256a818b2aac458941f7274985a410"));
@@ -46,7 +49,7 @@ async function run() {
     // Because we are using the genesis address we must use send advanced as the input address is
     // not calculated from a Bip32 path, if you were doing a wallet to wallet transfer you can just use send
     // which calculates all the inputs/outputs for you
-    const genesisAddressOutputs = await client.addressEd25519Outputs(genesisAddressHex);
+    const genesisAddressOutputs = await client.addressEd25519Outputs(genesisWalletAddressHex);
 
     const inputsWithKeyPairs: {
         input: IUTXOInput;
@@ -64,7 +67,7 @@ async function run() {
                     transactionId: output.transactionId,
                     transactionOutputIndex: output.outputIndex
                 },
-                addressKeyPair: genesisSeedKeyPair
+                addressKeyPair: genesisWalletKeyPair
             });
             if (output.output.type === SIG_LOCKED_SINGLE_OUTPUT_TYPE) {
                 totalGenesis += (output.output as ISigLockedSingleOutput).amount;
@@ -87,7 +90,7 @@ async function run() {
             },
             // Sending remainder back to genesis
             {
-                address: genesisAddressHex,
+                address: genesisWalletAddressHex,
                 addressType: ED25519_ADDRESS_TYPE,
                 amount: totalGenesis - amountToSend
             }
