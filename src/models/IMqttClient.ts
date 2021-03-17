@@ -36,6 +36,24 @@ export interface IMqttClient {
         callback: (topic: string, data: IMessageMetadata) => void): string;
 
     /**
+     * Subscribe to message updates for a specific transactionId.
+     * @param transactionId The message to monitor.
+     * @param callback The callback which is called when new data arrives.
+     * @returns A subscription Id which can be used to unsubscribe.
+     */
+     transactionIncludedMessageRaw(transactionId: string,
+        callback: (topic: string, data: Uint8Array) => void): string;
+
+    /**
+     * Subscribe to message updates for a specific transactionId.
+     * @param transactionId The message to monitor.
+     * @param callback The callback which is called when new data arrives.
+     * @returns A subscription Id which can be used to unsubscribe.
+     */
+     transactionIncludedMessage(transactionId: string,
+        callback: (topic: string, data: IMessage, raw: Uint8Array) => void): string;
+
+    /**
      * Subscribe to updates for a specific output.
      * @param outputId The output to monitor.
      * @param callback The callback which is called when new data arrives.

@@ -249,6 +249,37 @@ export class MqttClient implements IMqttClient {
     }
 
     /**
+     * Subscribe to message updates for a specific transactionId.
+     * @param transactionId The message to monitor.
+     * @param callback The callback which is called when new data arrives.
+     * @returns A subscription Id which can be used to unsubscribe.
+     */
+    public transactionIncludedMessageRaw(
+        transactionId: string,
+        callback: (topic: string, data: Uint8Array) => void): string {
+            return this.internalSubscribe(`transactions/${transactionId}/included-message`, false, callback);
+    }
+
+    /**
+     * Subscribe to message updates for a specific transactionId.
+     * @param transactionId The message to monitor.
+     * @param callback The callback which is called when new data arrives.
+     * @returns A subscription Id which can be used to unsubscribe.
+     */
+     public transactionIncludedMessage(
+        transactionId: string,
+        callback: (topic: string, data: IMessage, raw: Uint8Array) => void): string {
+            return this.internalSubscribe<Uint8Array>(`transactions/${transactionId}/included-message`, false,
+            (topic, raw) => {
+                callback(
+                    topic,
+                    deserializeMessage(new ReadStream(raw)),
+                    raw
+                );
+            });
+    }
+
+    /**
      * Subscribe to another type of message as raw data.
      * @param customTopic The topic to subscribe to.
      * @param callback The callback which is called when new data arrives.

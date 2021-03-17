@@ -28,6 +28,8 @@ Client interface definition for API communication.
 - [statusChanged](models_imqttclient.imqttclient.md#statuschanged)
 - [subscribeJson](models_imqttclient.imqttclient.md#subscribejson)
 - [subscribeRaw](models_imqttclient.imqttclient.md#subscriberaw)
+- [transactionIncludedMessage](models_imqttclient.imqttclient.md#transactionincludedmessage)
+- [transactionIncludedMessageRaw](models_imqttclient.imqttclient.md#transactionincludedmessageraw)
 - [unsubscribe](models_imqttclient.imqttclient.md#unsubscribe)
 
 ## Methods
@@ -290,6 +292,44 @@ Subscribe to another type of message as raw data.
 Name | Type | Description |
 :------ | :------ | :------ |
 `customTopic` | *string* | The topic to subscribe to.   |
+`callback` | (`topic`: *string*, `data`: *Uint8Array*) => *void* | The callback which is called when new data arrives.   |
+
+**Returns:** *string*
+
+A subscription Id which can be used to unsubscribe.
+
+___
+
+### transactionIncludedMessage
+
+▸ **transactionIncludedMessage**(`transactionId`: *string*, `callback`: (`topic`: *string*, `data`: [*IMessage*](models_imessage.imessage.md), `raw`: *Uint8Array*) => *void*): *string*
+
+Subscribe to message updates for a specific transactionId.
+
+#### Parameters:
+
+Name | Type | Description |
+:------ | :------ | :------ |
+`transactionId` | *string* | The message to monitor.   |
+`callback` | (`topic`: *string*, `data`: [*IMessage*](models_imessage.imessage.md), `raw`: *Uint8Array*) => *void* | The callback which is called when new data arrives.   |
+
+**Returns:** *string*
+
+A subscription Id which can be used to unsubscribe.
+
+___
+
+### transactionIncludedMessageRaw
+
+▸ **transactionIncludedMessageRaw**(`transactionId`: *string*, `callback`: (`topic`: *string*, `data`: *Uint8Array*) => *void*): *string*
+
+Subscribe to message updates for a specific transactionId.
+
+#### Parameters:
+
+Name | Type | Description |
+:------ | :------ | :------ |
+`transactionId` | *string* | The message to monitor.   |
 `callback` | (`topic`: *string*, `data`: *Uint8Array*) => *void* | The callback which is called when new data arrives.   |
 
 **Returns:** *string*

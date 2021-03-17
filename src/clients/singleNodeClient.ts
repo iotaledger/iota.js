@@ -266,6 +266,18 @@ export class SingleNodeClient implements IClient {
     }
 
     /**
+     * Get the message that was included in the ledger for a transaction.
+     * @param transactionId The id of the transaction to get the included message for.
+     * @returns The message.
+     */
+    public async transactionIncludedMessage(transactionId: string): Promise<IMessage> {
+        return this.fetchJson<never, IMessage>(
+            "get",
+            `transactions/${transactionId}/included-message`
+        );
+    }
+
+    /**
      * Find an output by its identifier.
      * @param outputId The id of the output to get.
      * @returns The output details.

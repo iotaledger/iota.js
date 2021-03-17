@@ -36,6 +36,7 @@ Client interface definition for API communication.
 - [peers](models_iclient.iclient.md#peers)
 - [receipts](models_iclient.iclient.md#receipts)
 - [tips](models_iclient.iclient.md#tips)
+- [transactionIncludedMessage](models_iclient.iclient.md#transactionincludedmessage)
 - [treasury](models_iclient.iclient.md#treasury)
 
 ## Methods
@@ -414,6 +415,24 @@ Get the tips from the node.
 **Returns:** *Promise*<[*ITipsResponse*](models_api_itipsresponse.itipsresponse.md)\>
 
 The tips.
+
+___
+
+### transactionIncludedMessage
+
+▸ **transactionIncludedMessage**(`transactionId`: *string*): *Promise*<[*IMessage*](models_imessage.imessage.md)\>
+
+Get the message that was included in the ledger for a transaction.
+
+#### Parameters:
+
+Name | Type | Description |
+:------ | :------ | :------ |
+`transactionId` | *string* | The id of the transaction to get the included message for.   |
+
+**Returns:** *Promise*<[*IMessage*](models_imessage.imessage.md)\>
+
+The message.
 
 ___
 

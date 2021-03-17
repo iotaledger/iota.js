@@ -32,6 +32,8 @@ MQTT Client implementation for pub/sub communication.
 - [statusChanged](clients_mqttclient.mqttclient.md#statuschanged)
 - [subscribeJson](clients_mqttclient.mqttclient.md#subscribejson)
 - [subscribeRaw](clients_mqttclient.mqttclient.md#subscriberaw)
+- [transactionIncludedMessage](clients_mqttclient.mqttclient.md#transactionincludedmessage)
+- [transactionIncludedMessageRaw](clients_mqttclient.mqttclient.md#transactionincludedmessageraw)
 - [unsubscribe](clients_mqttclient.mqttclient.md#unsubscribe)
 
 ## Constructors
@@ -311,6 +313,44 @@ Subscribe to another type of message as raw data.
 Name | Type | Description |
 :------ | :------ | :------ |
 `customTopic` | *string* | The topic to subscribe to.   |
+`callback` | (`topic`: *string*, `data`: *Uint8Array*) => *void* | The callback which is called when new data arrives.   |
+
+**Returns:** *string*
+
+A subscription Id which can be used to unsubscribe.
+
+___
+
+### transactionIncludedMessage
+
+▸ **transactionIncludedMessage**(`transactionId`: *string*, `callback`: (`topic`: *string*, `data`: [*IMessage*](../interfaces/models_imessage.imessage.md), `raw`: *Uint8Array*) => *void*): *string*
+
+Subscribe to message updates for a specific transactionId.
+
+#### Parameters:
+
+Name | Type | Description |
+:------ | :------ | :------ |
+`transactionId` | *string* | The message to monitor.   |
+`callback` | (`topic`: *string*, `data`: [*IMessage*](../interfaces/models_imessage.imessage.md), `raw`: *Uint8Array*) => *void* | The callback which is called when new data arrives.   |
+
+**Returns:** *string*
+
+A subscription Id which can be used to unsubscribe.
+
+___
+
+### transactionIncludedMessageRaw
+
+▸ **transactionIncludedMessageRaw**(`transactionId`: *string*, `callback`: (`topic`: *string*, `data`: *Uint8Array*) => *void*): *string*
+
+Subscribe to message updates for a specific transactionId.
+
+#### Parameters:
+
+Name | Type | Description |
+:------ | :------ | :------ |
+`transactionId` | *string* | The message to monitor.   |
 `callback` | (`topic`: *string*, `data`: *Uint8Array*) => *void* | The callback which is called when new data arrives.   |
 
 **Returns:** *string*

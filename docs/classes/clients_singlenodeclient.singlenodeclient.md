@@ -40,6 +40,7 @@ Client for API communication.
 - [peers](clients_singlenodeclient.singlenodeclient.md#peers)
 - [receipts](clients_singlenodeclient.singlenodeclient.md#receipts)
 - [tips](clients_singlenodeclient.singlenodeclient.md#tips)
+- [transactionIncludedMessage](clients_singlenodeclient.singlenodeclient.md#transactionincludedmessage)
 - [treasury](clients_singlenodeclient.singlenodeclient.md#treasury)
 
 ## Constructors
@@ -477,6 +478,26 @@ Get the tips from the node.
 **Returns:** *Promise*<[*ITipsResponse*](../interfaces/models_api_itipsresponse.itipsresponse.md)\>
 
 The tips.
+
+Implementation of: [IClient](../interfaces/models_iclient.iclient.md)
+
+___
+
+### transactionIncludedMessage
+
+▸ **transactionIncludedMessage**(`transactionId`: *string*): *Promise*<[*IMessage*](../interfaces/models_imessage.imessage.md)\>
+
+Get the message that was included in the ledger for a transaction.
+
+#### Parameters:
+
+Name | Type | Description |
+:------ | :------ | :------ |
+`transactionId` | *string* | The id of the transaction to get the included message for.   |
+
+**Returns:** *Promise*<[*IMessage*](../interfaces/models_imessage.imessage.md)\>
+
+The message.
 
 Implementation of: [IClient](../interfaces/models_iclient.iclient.md)
 

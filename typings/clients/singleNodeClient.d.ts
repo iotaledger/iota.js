@@ -82,6 +82,12 @@ export declare class SingleNodeClient implements IClient {
      */
     messageChildren(messageId: string): Promise<IChildrenResponse>;
     /**
+     * Get the message that was included in the ledger for a transaction.
+     * @param transactionId The id of the transaction to get the included message for.
+     * @returns The message.
+     */
+    transactionIncludedMessage(transactionId: string): Promise<IMessage>;
+    /**
      * Find an output by its identifier.
      * @param outputId The id of the output to get.
      * @returns The output details.

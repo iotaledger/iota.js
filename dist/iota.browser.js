@@ -6196,6 +6196,26 @@
 	        return this.internalSubscribe("messages/referenced", true, callback);
 	    };
 	    /**
+	     * Subscribe to message updates for a specific transactionId.
+	     * @param transactionId The message to monitor.
+	     * @param callback The callback which is called when new data arrives.
+	     * @returns A subscription Id which can be used to unsubscribe.
+	     */
+	    MqttClient.prototype.transactionIncludedMessageRaw = function (transactionId, callback) {
+	        return this.internalSubscribe("transactions/" + transactionId + "/included-message", false, callback);
+	    };
+	    /**
+	     * Subscribe to message updates for a specific transactionId.
+	     * @param transactionId The message to monitor.
+	     * @param callback The callback which is called when new data arrives.
+	     * @returns A subscription Id which can be used to unsubscribe.
+	     */
+	    MqttClient.prototype.transactionIncludedMessage = function (transactionId, callback) {
+	        return this.internalSubscribe("transactions/" + transactionId + "/included-message", false, function (topic, raw) {
+	            callback(topic, message.deserializeMessage(new readStream.ReadStream(raw)), raw);
+	        });
+	    };
+	    /**
 	     * Subscribe to another type of message as raw data.
 	     * @param customTopic The topic to subscribe to.
 	     * @param callback The callback which is called when new data arrives.
@@ -6951,6 +6971,18 @@
 	        return __awaiter(this, void 0, void 0, function () {
 	            return __generator(this, function (_a) {
 	                return [2 /*return*/, this.fetchJson("get", "messages/" + messageId + "/children")];
+	            });
+	        });
+	    };
+	    /**
+	     * Get the message that was included in the ledger for a transaction.
+	     * @param transactionId The id of the transaction to get the included message for.
+	     * @returns The message.
+	     */
+	    SingleNodeClient.prototype.transactionIncludedMessage = function (transactionId) {
+	        return __awaiter(this, void 0, void 0, function () {
+	            return __generator(this, function (_a) {
+	                return [2 /*return*/, this.fetchJson("get", "transactions/" + transactionId + "/included-message")];
 	            });
 	        });
 	    };
