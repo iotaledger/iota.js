@@ -151,14 +151,14 @@ async function prepareInputAndOutputs(start = 0, addresses: AddressWithKeyPairs[
             ...outputs
                 .map((addressObject) => ({
                     // @ts-ignore
-                    address: Converter.bytesToHex(Bech32Helper.fromBech32(addressObject.address).addressBytes),
+                    address: Converter.bytesToHex(Bech32Helper.fromBech32(addressObject.address, nodeInfo.bech32HRP).addressBytes),
                     addressType: ED25519_ADDRESS_TYPE,
                     amount: AMOUNT
                 })),
             {
                 // @ts-ignore
                 // Send remainder to input address
-                address: Converter.bytesToHex(Bech32Helper.fromBech32(input.address).addressBytes),
+                address: Converter.bytesToHex(Bech32Helper.fromBech32(input.address, nodeInfo.bech32HRP).addressBytes),
                 addressType: ED25519_ADDRESS_TYPE,
                 amount: input.balance - (AMOUNT * outputs.length)
             }
