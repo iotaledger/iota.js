@@ -40,6 +40,11 @@ export interface INodeInfo {
     latestMilestoneIndex: number;
 
     /**
+     * The latest milestone timestamp;
+     */
+    latestMilestoneTimestamp: number;
+
+    /**
      * The confirmed milestone index;
      */
     confirmedMilestoneIndex: number;
@@ -53,4 +58,19 @@ export interface INodeInfo {
      * Features supported by the node.
      */
     features: string[];
+
+    /**
+     * Messages per second.
+     */
+    mps: number;
+
+    /**
+     * Referenced messages per second.
+     */
+    rmps: number;
+
+    /**
+     * The rate at which rates are being referenced.
+     */
+    referencedRate: number;
 }

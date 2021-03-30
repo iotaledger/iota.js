@@ -15,10 +15,14 @@ Response from the /info endpoint.
 - [features](models_inodeinfo.inodeinfo.md#features)
 - [isHealthy](models_inodeinfo.inodeinfo.md#ishealthy)
 - [latestMilestoneIndex](models_inodeinfo.inodeinfo.md#latestmilestoneindex)
+- [latestMilestoneTimestamp](models_inodeinfo.inodeinfo.md#latestmilestonetimestamp)
 - [minPowScore](models_inodeinfo.inodeinfo.md#minpowscore)
+- [mps](models_inodeinfo.inodeinfo.md#mps)
 - [name](models_inodeinfo.inodeinfo.md#name)
 - [networkId](models_inodeinfo.inodeinfo.md#networkid)
 - [pruningIndex](models_inodeinfo.inodeinfo.md#pruningindex)
+- [referencedRate](models_inodeinfo.inodeinfo.md#referencedrate)
+- [rmps](models_inodeinfo.inodeinfo.md#rmps)
 - [version](models_inodeinfo.inodeinfo.md#version)
 
 ## Properties
@@ -63,11 +67,27 @@ The latest milestone index;
 
 ___
 
+### latestMilestoneTimestamp
+
+• **latestMilestoneTimestamp**: *number*
+
+The latest milestone timestamp;
+
+___
+
 ### minPowScore
 
 • **minPowScore**: *number*
 
 The minimum score required for PoW.
+
+___
+
+### mps
+
+• **mps**: *number*
+
+Messages per second.
 
 ___
 
@@ -92,6 +112,22 @@ ___
 • **pruningIndex**: *number*
 
 The pruning index;
+
+___
+
+### referencedRate
+
+• **referencedRate**: *number*
+
+The rate at which rates are being referenced.
+
+___
+
+### rmps
+
+• **rmps**: *number*
+
+Referenced messages per second.
 
 ___
 
