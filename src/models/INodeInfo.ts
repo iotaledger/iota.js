@@ -62,12 +62,12 @@ export interface INodeInfo {
     /**
      * Messages per second.
      */
-    mps: number;
+    messagesPerSecond: number;
 
     /**
      * Referenced messages per second.
      */
-    rmps: number;
+    referencedMessagesPerSecond: number;
 
     /**
      * The rate at which rates are being referenced.

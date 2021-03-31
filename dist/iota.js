@@ -12747,7 +12747,11 @@
 	    logger(prefix + "\tMin PoW Score:", info.minPowScore);
 	    logger(prefix + "\tBech32 HRP:", info.bech32HRP);
 	    logger(prefix + "\tLatest Milestone Index:", info.latestMilestoneIndex);
+	    logger(prefix + "\tLatest Milestone Timestamp:", info.latestMilestoneTimestamp);
 	    logger(prefix + "\tConfirmed Milestone Index:", info.confirmedMilestoneIndex);
+	    logger(prefix + "\tMessages Per Second:", info.messagesPerSecond);
+	    logger(prefix + "\tReferenced Messages Per Second:", info.referencedMessagesPerSecond);
+	    logger(prefix + "\tReferenced Rate:", info.referencedRate);
 	    logger(prefix + "\tPruning Index:", info.pruningIndex);
 	    logger(prefix + "\tFeatures:", info.features);
 	}
