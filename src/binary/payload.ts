@@ -33,9 +33,10 @@ export const MIN_MILESTONE_PAYLOAD_LENGTH: number =
     MESSAGE_ID_LENGTH + // parent 1
     MESSAGE_ID_LENGTH + // parent 2
     MERKLE_PROOF_LENGTH + // merkle proof
+    (2 * UINT32_SIZE) + // Next pow score and pow score milestone index
     BYTE_SIZE + // publicKeysCount
     Ed25519.PUBLIC_KEY_SIZE + // 1 public key
-    BYTE_SIZE + // signatireCount
+    BYTE_SIZE + // signatureCount
     Ed25519.SIGNATURE_SIZE; // 1 signature
 
 /**
@@ -243,6 +244,10 @@ export function deserializeMilestonePayload(readStream: ReadStream): IMilestoneP
         parentMessageIds.push(parentMessageId);
     }
     const inclusionMerkleProof = readStream.readFixedHex("payloadMilestone.inclusionMerkleProof", MERKLE_PROOF_LENGTH);
+
+    const nextPoWScore = readStream.readUInt32("payloadMilestone.nextPoWScore");
+    const nextPoWScoreMilestoneIndex = readStream.readUInt32("payloadMilestone.nextPoWScoreMilestoneIndex");
+
     const publicKeysCount = readStream.readByte("payloadMilestone.publicKeysCount");
     const publicKeys = [];
     for (let i = 0; i < publicKeysCount; i++) {
@@ -266,6 +271,8 @@ export function deserializeMilestonePayload(readStream: ReadStream): IMilestoneP
         timestamp: Number(timestamp),
         parentMessageIds,
         inclusionMerkleProof,
+        nextPoWScore,
+        nextPoWScoreMilestoneIndex,
         publicKeys,
         receipt,
         signatures
@@ -308,6 +315,10 @@ export function serializeMilestonePayload(writeStream: WriteStream,
 
     writeStream.writeFixedHex("payloadMilestone.inclusionMerkleProof",
         MERKLE_PROOF_LENGTH, object.inclusionMerkleProof);
+
+    writeStream.writeUInt32("payloadMilestone.nextPowScore", object.nextPoWScore);
+    writeStream.writeUInt32("payloadMilestone.nextPowScoreMilestoneIndex", object.nextPoWScoreMilestoneIndex);
+
     writeStream.writeByte("payloadMilestone.publicKeysCount", object.publicKeys.length);
     for (let i = 0; i < object.publicKeys.length; i++) {
         writeStream.writeFixedHex("payloadMilestone.publicKey", Ed25519.PUBLIC_KEY_SIZE, object.publicKeys[i]);

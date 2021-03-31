@@ -25,6 +25,14 @@ export interface IMilestonePayload extends ITypeBase<1> {
      */
     inclusionMerkleProof: string;
     /**
+     * The next PoW score.
+     */
+    nextPoWScore: number;
+    /**
+     * The milestone at which the next PoW score becomes active.
+     */
+    nextPoWScoreMilestoneIndex: number;
+    /**
      * The public keys.
      */
     publicKeys: string[];

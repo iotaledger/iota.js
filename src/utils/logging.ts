@@ -205,6 +205,12 @@ export function logMilestonePayload(prefix: string, payload?: IMilestonePayload)
             logger(`${prefix}\tParent ${i + 1}:`, payload.parentMessageIds[i]);
         }
         logger(`${prefix}\tInclusion Merkle Proof:`, payload.inclusionMerkleProof);
+        if (payload.nextPoWScore) {
+            logger(`${prefix}\tNext PoW Score:`, payload.nextPoWScore);
+        }
+        if (payload.nextPoWScoreMilestoneIndex) {
+            logger(`${prefix}\tNext PoW Score Milestone Index:`, payload.nextPoWScoreMilestoneIndex);
+        }
         logger(`${prefix}\tPublic Keys:`, payload.publicKeys);
         logger(`${prefix}\tSignatures:`, payload.signatures);
         logReceiptPayload(`${prefix}\t`, payload.receipt);

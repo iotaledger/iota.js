@@ -18,6 +18,8 @@ Milestone payload.
 
 - [inclusionMerkleProof](models_imilestonepayload.imilestonepayload.md#inclusionmerkleproof)
 - [index](models_imilestonepayload.imilestonepayload.md#index)
+- [nextPoWScore](models_imilestonepayload.imilestonepayload.md#nextpowscore)
+- [nextPoWScoreMilestoneIndex](models_imilestonepayload.imilestonepayload.md#nextpowscoremilestoneindex)
 - [parentMessageIds](models_imilestonepayload.imilestonepayload.md#parentmessageids)
 - [publicKeys](models_imilestonepayload.imilestonepayload.md#publickeys)
 - [receipt](models_imilestonepayload.imilestonepayload.md#receipt)
@@ -40,6 +42,22 @@ ___
 • **index**: *number*
 
 The index name.
+
+___
+
+### nextPoWScore
+
+• **nextPoWScore**: *number*
+
+The next PoW score.
+
+___
+
+### nextPoWScoreMilestoneIndex
+
+• **nextPoWScoreMilestoneIndex**: *number*
+
+The milestone at which the next PoW score becomes active.
 
 ___
 

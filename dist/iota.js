@@ -4957,9 +4957,10 @@
 	    common.MESSAGE_ID_LENGTH + // parent 1
 	    common.MESSAGE_ID_LENGTH + // parent 2
 	    common.MERKLE_PROOF_LENGTH + // merkle proof
+	    (2 * common.UINT32_SIZE) + // Next pow score and pow score milestone index
 	    common.BYTE_SIZE + // publicKeysCount
 	    ed25519.Ed25519.PUBLIC_KEY_SIZE + // 1 public key
-	    common.BYTE_SIZE + // signatireCount
+	    common.BYTE_SIZE + // signatureCount
 	    ed25519.Ed25519.SIGNATURE_SIZE; // 1 signature
 	/**
 	 * The minimum length of an indexation payload binary representation.
@@ -5132,6 +5133,8 @@
 	        parentMessageIds.push(parentMessageId);
 	    }
 	    var inclusionMerkleProof = readStream.readFixedHex("payloadMilestone.inclusionMerkleProof", common.MERKLE_PROOF_LENGTH);
+	    var nextPoWScore = readStream.readUInt32("payloadMilestone.nextPoWScore");
+	    var nextPoWScoreMilestoneIndex = readStream.readUInt32("payloadMilestone.nextPoWScoreMilestoneIndex");
 	    var publicKeysCount = readStream.readByte("payloadMilestone.publicKeysCount");
 	    var publicKeys = [];
 	    for (var i = 0; i < publicKeysCount; i++) {
@@ -5152,6 +5155,8 @@
 	        timestamp: Number(timestamp),
 	        parentMessageIds: parentMessageIds,
 	        inclusionMerkleProof: inclusionMerkleProof,
+	        nextPoWScore: nextPoWScore,
+	        nextPoWScoreMilestoneIndex: nextPoWScoreMilestoneIndex,
 	        publicKeys: publicKeys,
 	        receipt: receipt,
 	        signatures: signatures
@@ -5185,6 +5190,8 @@
 	        writeStream.writeFixedHex("payloadMilestone.parentMessageId" + (i + 1), common.MESSAGE_ID_LENGTH, object.parentMessageIds[i]);
 	    }
 	    writeStream.writeFixedHex("payloadMilestone.inclusionMerkleProof", common.MERKLE_PROOF_LENGTH, object.inclusionMerkleProof);
+	    writeStream.writeUInt32("payloadMilestone.nextPowScore", object.nextPoWScore);
+	    writeStream.writeUInt32("payloadMilestone.nextPowScoreMilestoneIndex", object.nextPoWScoreMilestoneIndex);
 	    writeStream.writeByte("payloadMilestone.publicKeysCount", object.publicKeys.length);
 	    for (var i = 0; i < object.publicKeys.length; i++) {
 	        writeStream.writeFixedHex("payloadMilestone.publicKey", ed25519.Ed25519.PUBLIC_KEY_SIZE, object.publicKeys[i]);
@@ -12902,6 +12909,12 @@
 	            logger(prefix + "\tParent " + (i + 1) + ":", payload.parentMessageIds[i]);
 	        }
 	        logger(prefix + "\tInclusion Merkle Proof:", payload.inclusionMerkleProof);
+	        if (payload.nextPoWScore) {
+	            logger(prefix + "\tNext PoW Score:", payload.nextPoWScore);
+	        }
+	        if (payload.nextPoWScoreMilestoneIndex) {
+	            logger(prefix + "\tNext PoW Score Milestone Index:", payload.nextPoWScoreMilestoneIndex);
+	        }
 	        logger(prefix + "\tPublic Keys:", payload.publicKeys);
 	        logger(prefix + "\tSignatures:", payload.signatures);
 	        logReceiptPayload(prefix + "\t", payload.receipt);
