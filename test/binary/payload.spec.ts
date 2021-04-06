@@ -70,7 +70,7 @@ describe("Binary Payload", () => {
     });
 
     test("Can succeed with valid milestone data", () => {
-        const buffer = Buffer.alloc(319);
+        const buffer = Buffer.alloc(327);
         buffer.writeUInt32LE(315, 0); // Payload length
         buffer.writeUInt32LE(1, 4); // Payload type
         buffer.writeUInt32LE(1087, 8); // Milestone index
@@ -80,15 +80,17 @@ describe("Binary Payload", () => {
         buffer.write("04ba147c9cc9bebd3b97310a23d385f33d8e67ac42868b69bc06f5468e3c0a02", 53, "hex"); // Parent 2
         // eslint-disable-next-line max-len
         buffer.write("786a02f742015903c6c6fd852552d272912f4740e15847618a86e217f71f5419", 85, "hex"); // Inclusion Merkle proof
-        buffer.writeUInt8(2, 117); // Public Key count
-        buffer.write("ed3c3f1a319ff4e909cf2771d79fece0ac9bd9fd2ee49ea6c0885c9cb3b1248c", 118, "hex"); // Public Key
-        buffer.write("f6752f5f46a53364e2ee9c4d662d762a81efd51010282a75cd6bd03f28ef349c", 150, "hex"); // Public Key
-        buffer.writeUInt32LE(0, 182); // receipt type
-        buffer.writeUInt8(2, 186); // Signature count
+        buffer.writeUInt32LE(0, 117); // Next PoW Score
+        buffer.writeUInt32LE(0, 121); // Next PoW Score Milestone index
+        buffer.writeUInt8(2, 125); // Public Key count
+        buffer.write("ed3c3f1a319ff4e909cf2771d79fece0ac9bd9fd2ee49ea6c0885c9cb3b1248c", 126, "hex"); // Public Key
+        buffer.write("f6752f5f46a53364e2ee9c4d662d762a81efd51010282a75cd6bd03f28ef349c", 158, "hex"); // Public Key
+        buffer.writeUInt32LE(0, 190); // receipt type
+        buffer.writeUInt8(2, 194); // Signature count
         // eslint-disable-next-line max-len
-        buffer.write("f7a99cd2e2e80dd1c4d8ee63567d0ff5be00c3881568d155cf06607a6a78e2972b5d3b1e10dc60da214ae42abb95538f8faa872c90f60636427a36cf4739ac01", 187, "hex"); // Signature
+        buffer.write("f7a99cd2e2e80dd1c4d8ee63567d0ff5be00c3881568d155cf06607a6a78e2972b5d3b1e10dc60da214ae42abb95538f8faa872c90f60636427a36cf4739ac01", 195, "hex"); // Signature
         // eslint-disable-next-line max-len
-        buffer.write("fc7c1c3174cc0d120c7d522adb3dda549a5f742e082fc2921c740b1b8723bde457498c047cdf6a7759bf7d94b22960d260a1de550e65abadb1a00404d619060c", 251, "hex"); // Signature
+        buffer.write("fc7c1c3174cc0d120c7d522adb3dda549a5f742e082fc2921c740b1b8723bde457498c047cdf6a7759bf7d94b22960d260a1de550e65abadb1a00404d619060c", 259, "hex"); // Signature
         const payload = deserializePayload(new ReadStream(buffer)) as IMilestonePayload;
         expect(payload.type).toEqual(1);
         expect(payload.index).toEqual(1087);
@@ -99,6 +101,8 @@ describe("Binary Payload", () => {
             .toEqual("04ba147c9cc9bebd3b97310a23d385f33d8e67ac42868b69bc06f5468e3c0a02");
         expect(payload.inclusionMerkleProof)
             .toEqual("786a02f742015903c6c6fd852552d272912f4740e15847618a86e217f71f5419");
+        expect(payload.nextPoWScore).toEqual(0);
+        expect(payload.nextPoWScoreMilestoneIndex).toEqual(0);
         expect(payload.publicKeys.length).toEqual(2);
         expect(payload.publicKeys[0]).toEqual("ed3c3f1a319ff4e909cf2771d79fece0ac9bd9fd2ee49ea6c0885c9cb3b1248c");
         expect(payload.publicKeys[1]).toEqual("f6752f5f46a53364e2ee9c4d662d762a81efd51010282a75cd6bd03f28ef349c");
@@ -175,6 +179,8 @@ describe("Binary Payload", () => {
                 "c0ab1d1f6886ba6317634da6b2d957e7c987a9699dd3707d1e2751fcf4b8efe3"
             ],
             inclusionMerkleProof: "786a02f742015903c6c6fd852552d272912f4740e15847618a86e217f71f5419",
+            nextPoWScore: 0,
+            nextPoWScoreMilestoneIndex: 1,
             publicKeys: [
                 "ed3c3f1a319ff4e909cf2771d79fece0ac9bd9fd2ee49ea6c0885c9cb3b1248c",
                 "f6752f5f46a53364e2ee9c4d662d762a81efd51010282a75cd6bd03f28ef349c"
@@ -191,7 +197,7 @@ describe("Binary Payload", () => {
         serializeMilestonePayload(serialized, payload);
         const hex = serialized.finalHex();
         // eslint-disable-next-line max-len
-        expect(hex).toEqual("010000003f0400007341ad5f000000000204ba147c9cc9bebd3b97310a23d385f33d8e67ac42868b69bc06f5468e3c0a02c0ab1d1f6886ba6317634da6b2d957e7c987a9699dd3707d1e2751fcf4b8efe3786a02f742015903c6c6fd852552d272912f4740e15847618a86e217f71f541902ed3c3f1a319ff4e909cf2771d79fece0ac9bd9fd2ee49ea6c0885c9cb3b1248cf6752f5f46a53364e2ee9c4d662d762a81efd51010282a75cd6bd03f28ef349c0000000002f7a99cd2e2e80dd1c4d8ee63567d0ff5be00c3881568d155cf06607a6a78e2972b5d3b1e10dc60da214ae42abb95538f8faa872c90f60636427a36cf4739ac01fc7c1c3174cc0d120c7d522adb3dda549a5f742e082fc2921c740b1b8723bde457498c047cdf6a7759bf7d94b22960d260a1de550e65abadb1a00404d619060c");
+        expect(hex).toEqual("010000003f0400007341ad5f000000000204ba147c9cc9bebd3b97310a23d385f33d8e67ac42868b69bc06f5468e3c0a02c0ab1d1f6886ba6317634da6b2d957e7c987a9699dd3707d1e2751fcf4b8efe3786a02f742015903c6c6fd852552d272912f4740e15847618a86e217f71f5419000000000100000002ed3c3f1a319ff4e909cf2771d79fece0ac9bd9fd2ee49ea6c0885c9cb3b1248cf6752f5f46a53364e2ee9c4d662d762a81efd51010282a75cd6bd03f28ef349c0000000002f7a99cd2e2e80dd1c4d8ee63567d0ff5be00c3881568d155cf06607a6a78e2972b5d3b1e10dc60da214ae42abb95538f8faa872c90f60636427a36cf4739ac01fc7c1c3174cc0d120c7d522adb3dda549a5f742e082fc2921c740b1b8723bde457498c047cdf6a7759bf7d94b22960d260a1de550e65abadb1a00404d619060c");
         const deserialized = deserializeMilestonePayload(new ReadStream(Converter.hexToBytes(hex)));
         expect(deserialized.type).toEqual(1);
         expect(deserialized.index).toEqual(1087);
@@ -271,6 +277,8 @@ describe("Binary Payload", () => {
                 "c0ab1d1f6886ba6317634da6b2d957e7c987a9699dd3707d1e2751fcf4b8efe3"
             ],
             inclusionMerkleProof: "786a02f742015903c6c6fd852552d272912f4740e15847618a86e217f71f5419",
+            nextPoWScore: 0,
+            nextPoWScoreMilestoneIndex: 1,
             publicKeys: [
                 "ed3c3f1a319ff4e909cf2771d79fece0ac9bd9fd2ee49ea6c0885c9cb3b1248c",
                 "f6752f5f46a53364e2ee9c4d662d762a81efd51010282a75cd6bd03f28ef349c"
@@ -313,7 +321,7 @@ describe("Binary Payload", () => {
         serializeMilestonePayload(serialized, payload);
         const hex = serialized.finalHex();
         // eslint-disable-next-line max-len
-        expect(hex).toEqual("010000003f0400007341ad5f000000000204ba147c9cc9bebd3b97310a23d385f33d8e67ac42868b69bc06f5468e3c0a02c0ab1d1f6886ba6317634da6b2d957e7c987a9699dd3707d1e2751fcf4b8efe3786a02f742015903c6c6fd852552d272912f4740e15847618a86e217f71f541902ed3c3f1a319ff4e909cf2771d79fece0ac9bd9fd2ee49ea6c0885c9cb3b1248cf6752f5f46a53364e2ee9c4d662d762a81efd51010282a75cd6bd03f28ef349c970000000300000040e20100010100aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa00bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb64000000000000002e0000000400000001aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa02942600000000000002f7a99cd2e2e80dd1c4d8ee63567d0ff5be00c3881568d155cf06607a6a78e2972b5d3b1e10dc60da214ae42abb95538f8faa872c90f60636427a36cf4739ac01fc7c1c3174cc0d120c7d522adb3dda549a5f742e082fc2921c740b1b8723bde457498c047cdf6a7759bf7d94b22960d260a1de550e65abadb1a00404d619060c");
+        expect(hex).toEqual("010000003f0400007341ad5f000000000204ba147c9cc9bebd3b97310a23d385f33d8e67ac42868b69bc06f5468e3c0a02c0ab1d1f6886ba6317634da6b2d957e7c987a9699dd3707d1e2751fcf4b8efe3786a02f742015903c6c6fd852552d272912f4740e15847618a86e217f71f5419000000000100000002ed3c3f1a319ff4e909cf2771d79fece0ac9bd9fd2ee49ea6c0885c9cb3b1248cf6752f5f46a53364e2ee9c4d662d762a81efd51010282a75cd6bd03f28ef349c970000000300000040e20100010100aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa00bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb64000000000000002e0000000400000001aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa02942600000000000002f7a99cd2e2e80dd1c4d8ee63567d0ff5be00c3881568d155cf06607a6a78e2972b5d3b1e10dc60da214ae42abb95538f8faa872c90f60636427a36cf4739ac01fc7c1c3174cc0d120c7d522adb3dda549a5f742e082fc2921c740b1b8723bde457498c047cdf6a7759bf7d94b22960d260a1de550e65abadb1a00404d619060c");
         const deserialized = deserializeMilestonePayload(new ReadStream(Converter.hexToBytes(hex)));
         expect(deserialized.type).toEqual(1);
         expect(deserialized.index).toEqual(1087);
