@@ -35,7 +35,7 @@ Class to help with units formatting.
 
 ### UNIT\_MAP
 
-▪ `Readonly` `Static` **UNIT\_MAP**: *object*
+▪ `Static` `Readonly` **UNIT\_MAP**: *object*
 
 Map units.
 

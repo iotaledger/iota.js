@@ -41,7 +41,7 @@ ___
 
 ### payload
 
-• `Optional` **payload**: *undefined* \| [*IIndexationPayload*](models_iindexationpayload.iindexationpayload.md)
+• `Optional` **payload**: [*IIndexationPayload*](models_iindexationpayload.iindexationpayload.md)
 
 Indexation payload.
 

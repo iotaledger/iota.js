@@ -68,3 +68,5 @@ Name | Type | Description |
 **Returns:** *boolean*
 
 True if the data and address is verified.
+
+Implementation of: [IAddress](../interfaces/models_iaddress.iaddress.md)

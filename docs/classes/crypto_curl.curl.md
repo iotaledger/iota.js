@@ -44,7 +44,7 @@ Name | Type | Description |
 
 ### HASH\_LENGTH
 
-▪ `Readonly` `Static` **HASH\_LENGTH**: *number*= 243
+▪ `Static` `Readonly` **HASH\_LENGTH**: *number*= 243
 
 The Hash Length
 
@@ -52,7 +52,7 @@ ___
 
 ### STATE\_LENGTH
 
-▪ `Readonly` `Static` **STATE\_LENGTH**: *number*
+▪ `Static` `Readonly` **STATE\_LENGTH**: *number*
 
 The State Length.
 

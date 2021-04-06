@@ -24,7 +24,7 @@ Indexation payload.
 
 ### data
 
-• `Optional` **data**: *undefined* \| *string*
+• `Optional` **data**: *string*
 
 The index data.
 

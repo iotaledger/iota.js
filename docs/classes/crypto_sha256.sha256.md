@@ -45,7 +45,7 @@ Name | Type | Description |
 
 ### SIZE\_224
 
-▪ `Readonly` `Static` **SIZE\_224**: *number*= 224
+▪ `Static` `Readonly` **SIZE\_224**: *number*= 224
 
 Sha256 224.
 
@@ -53,7 +53,7 @@ ___
 
 ### SIZE\_256
 
-▪ `Readonly` `Static` **SIZE\_256**: *number*= 256
+▪ `Static` `Readonly` **SIZE\_256**: *number*= 256
 
 Sha256 256.
 

@@ -79,7 +79,7 @@ ___
 
 ### receipt
 
-• `Optional` **receipt**: *undefined* \| [*IReceiptPayload*](models_ireceiptpayload.ireceiptpayload.md)
+• `Optional` **receipt**: [*IReceiptPayload*](models_ireceiptpayload.ireceiptpayload.md)
 
 Receipt payload.
 

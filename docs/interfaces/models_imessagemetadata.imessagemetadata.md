@@ -24,7 +24,7 @@ Response from the metadata endpoint.
 
 ### conflictReason
 
-• `Optional` **conflictReason**: *undefined* \| none \| inputUTXOAlreadySpent \| inputUTXOAlreadySpentInThisMilestone \| inputUTXONotFound \| inputOutputSumMismatch \| invalidSignature \| invalidDustAllowance \| semanticValidationFailed
+• `Optional` **conflictReason**: ConflictReason
 
 The conflict reason.
 
@@ -40,7 +40,7 @@ ___
 
 ### ledgerInclusionState
 
-• `Optional` **ledgerInclusionState**: *undefined* \| *noTransaction* \| *included* \| *conflicting*
+• `Optional` **ledgerInclusionState**: [*LedgerInclusionState*](../modules/models_ledgerinclusionstate.md#ledgerinclusionstate)
 
 The ledger inclusion state.
 
@@ -56,7 +56,7 @@ ___
 
 ### milestoneIndex
 
-• `Optional` **milestoneIndex**: *undefined* \| *number*
+• `Optional` **milestoneIndex**: *number*
 
 Is this message a valid milestone.
 
@@ -64,7 +64,7 @@ ___
 
 ### parentMessageIds
 
-• `Optional` **parentMessageIds**: *undefined* \| *string*[]
+• `Optional` **parentMessageIds**: *string*[]
 
 The parent message ids.
 
@@ -72,7 +72,7 @@ ___
 
 ### referencedByMilestoneIndex
 
-• `Optional` **referencedByMilestoneIndex**: *undefined* \| *number*
+• `Optional` **referencedByMilestoneIndex**: *number*
 
 Is the message referenced by a milestone.
 
@@ -80,7 +80,7 @@ ___
 
 ### shouldPromote
 
-• `Optional` **shouldPromote**: *undefined* \| *boolean*
+• `Optional` **shouldPromote**: *boolean*
 
 Should the message be promoted.
 
@@ -88,6 +88,6 @@ ___
 
 ### shouldReattach
 
-• `Optional` **shouldReattach**: *undefined* \| *boolean*
+• `Optional` **shouldReattach**: *boolean*
 
 Should the message be reattached.

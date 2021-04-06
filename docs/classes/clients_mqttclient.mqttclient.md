@@ -72,6 +72,8 @@ Name | Type | Description |
 
 A subscription Id which can be used to unsubscribe.
 
+Implementation of: [IMqttClient](../interfaces/models_imqttclient.imqttclient.md)
+
 ___
 
 ### addressOutputs
@@ -90,6 +92,8 @@ Name | Type | Description |
 **Returns:** *string*
 
 A subscription Id which can be used to unsubscribe.
+
+Implementation of: [IMqttClient](../interfaces/models_imqttclient.imqttclient.md)
 
 ___
 
@@ -110,6 +114,8 @@ Name | Type | Description |
 
 A subscription Id which can be used to unsubscribe.
 
+Implementation of: [IMqttClient](../interfaces/models_imqttclient.imqttclient.md)
+
 ___
 
 ### indexRaw
@@ -128,6 +134,8 @@ Name | Type | Description |
 **Returns:** *string*
 
 A subscription Id which can be used to unsubscribe.
+
+Implementation of: [IMqttClient](../interfaces/models_imqttclient.imqttclient.md)
 
 ___
 
@@ -148,6 +156,8 @@ Name | Type | Description |
 
 A subscription Id which can be used to unsubscribe.
 
+Implementation of: [IMqttClient](../interfaces/models_imqttclient.imqttclient.md)
+
 ___
 
 ### messages
@@ -165,6 +175,8 @@ Name | Type | Description |
 **Returns:** *string*
 
 A subscription Id which can be used to unsubscribe.
+
+Implementation of: [IMqttClient](../interfaces/models_imqttclient.imqttclient.md)
 
 ___
 
@@ -184,6 +196,8 @@ Name | Type | Description |
 
 A subscription Id which can be used to unsubscribe.
 
+Implementation of: [IMqttClient](../interfaces/models_imqttclient.imqttclient.md)
+
 ___
 
 ### messagesRaw
@@ -201,6 +215,8 @@ Name | Type | Description |
 **Returns:** *string*
 
 A subscription Id which can be used to unsubscribe.
+
+Implementation of: [IMqttClient](../interfaces/models_imqttclient.imqttclient.md)
 
 ___
 
@@ -220,6 +236,8 @@ Name | Type | Description |
 
 A subscription Id which can be used to unsubscribe.
 
+Implementation of: [IMqttClient](../interfaces/models_imqttclient.imqttclient.md)
+
 ___
 
 ### milestonesLatest
@@ -237,6 +255,8 @@ Name | Type | Description |
 **Returns:** *string*
 
 A subscription Id which can be used to unsubscribe.
+
+Implementation of: [IMqttClient](../interfaces/models_imqttclient.imqttclient.md)
 
 ___
 
@@ -257,6 +277,8 @@ Name | Type | Description |
 
 A subscription Id which can be used to unsubscribe.
 
+Implementation of: [IMqttClient](../interfaces/models_imqttclient.imqttclient.md)
+
 ___
 
 ### statusChanged
@@ -274,6 +296,8 @@ Name | Type | Description |
 **Returns:** *string*
 
 A subscription Id which can be used to unsubscribe.
+
+Implementation of: [IMqttClient](../interfaces/models_imqttclient.imqttclient.md)
 
 ___
 
@@ -300,6 +324,8 @@ Name | Type | Description |
 
 A subscription Id which can be used to unsubscribe.
 
+Implementation of: [IMqttClient](../interfaces/models_imqttclient.imqttclient.md)
+
 ___
 
 ### subscribeRaw
@@ -318,6 +344,8 @@ Name | Type | Description |
 **Returns:** *string*
 
 A subscription Id which can be used to unsubscribe.
+
+Implementation of: [IMqttClient](../interfaces/models_imqttclient.imqttclient.md)
 
 ___
 
@@ -338,6 +366,8 @@ Name | Type | Description |
 
 A subscription Id which can be used to unsubscribe.
 
+Implementation of: [IMqttClient](../interfaces/models_imqttclient.imqttclient.md)
+
 ___
 
 ### transactionIncludedMessageRaw
@@ -356,6 +386,8 @@ Name | Type | Description |
 **Returns:** *string*
 
 A subscription Id which can be used to unsubscribe.
+
+Implementation of: [IMqttClient](../interfaces/models_imqttclient.imqttclient.md)
 
 ___
 

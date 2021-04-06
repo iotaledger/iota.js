@@ -19,7 +19,7 @@ Status message for MQTT Clients.
 
 ### error
 
-• `Optional` **error**: *undefined* \| Error
+• `Optional` **error**: Error
 
 Any errors.
 

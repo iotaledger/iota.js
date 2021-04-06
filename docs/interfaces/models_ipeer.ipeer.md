@@ -21,7 +21,7 @@ Peer details.
 
 ### alias
 
-• `Optional` **alias**: *undefined* \| *string*
+• `Optional` **alias**: *string*
 
 The alias of the peer.
 
@@ -37,9 +37,16 @@ ___
 
 ### gossip
 
-• `Optional` **gossip**: *undefined* \| { `heartbeat?`: *undefined* \| [*IGossipHeartbeat*](models_igossipheartbeat.igossipheartbeat.md) ; `metrics`: [*IGossipMetrics*](models_igossipmetrics.igossipmetrics.md)  }
+• `Optional` **gossip**: *object*
 
 Gossip metrics for the peer.
+
+#### Type declaration:
+
+Name | Type | Description |
+:------ | :------ | :------ |
+`heartbeat`? | [*IGossipHeartbeat*](models_igossipheartbeat.igossipheartbeat.md) | The peer heartbeat.   |
+`metrics` | [*IGossipMetrics*](models_igossipmetrics.igossipmetrics.md) | The peer metrics.   |
 
 ___
 

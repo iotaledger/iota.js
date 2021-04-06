@@ -8,7 +8,7 @@ async function run() {
     const nodeInfo = await client.info();
 
     // These are the default values from the Hornet alphanet configuration
-    const mnemonic = "social wolf hungry label salute hover sudden rain disease upgrade throw quick amazing clinic night";
+    const mnemonic = "giant dynamic museum toddler six deny defense ostrich bomb access mercy blood explain muscle shoot shallow glad autumn author calm heavy hawk abuse rally";
 
     // Generate the seed from the Mnemonic
     const genesisSeed = Ed25519Seed.fromMnemonic(mnemonic);
