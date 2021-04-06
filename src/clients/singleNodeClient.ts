@@ -56,18 +56,6 @@ export class SingleNodeClient implements IClient {
     private readonly _powProvider?: IPowProvider;
 
     /**
-     * The target score for pow.
-     * @internal
-     */
-    private _minPowScore?: number;
-
-    /**
-     * The network id from node info.
-     * @internal
-     */
-    private _networkId?: bigint;
-
-    /**
      * The Api request timeout.
      * @internal
      */
@@ -193,16 +181,12 @@ export class SingleNodeClient implements IClient {
 
         if (!message.nonce || message.nonce.length === 0) {
             if (this._powProvider) {
-                await this.populatePowInfo();
-                if (this._networkId && this._minPowScore) {
-                    BigIntHelper.write8(this._networkId, messageBytes, 0);
-                    message.networkId = this._networkId.toString();
+                const { networkId, minPowScore } = await this.getPowInfo();
+                BigIntHelper.write8(networkId, messageBytes, 0);
+                message.networkId = networkId.toString();
 
-                    const nonce = await this._powProvider.pow(messageBytes, this._minPowScore);
-                    message.nonce = nonce.toString(10);
-                } else {
-                    throw new Error(this._networkId ? "minPowScore is missing" : "networkId is missing");
-                }
+                const nonce = await this._powProvider.pow(messageBytes, minPowScore);
+                message.nonce = nonce.toString(10);
             } else {
                 message.nonce = "0";
             }
@@ -224,14 +208,10 @@ export class SingleNodeClient implements IClient {
                 }, which exceeds the maximum size of ${MAX_MESSAGE_LENGTH}`);
         }
         if (this._powProvider && ArrayHelper.equal(message.slice(-8), SingleNodeClient.NONCE_ZERO)) {
-            await this.populatePowInfo();
-            if (this._networkId && this._minPowScore) {
-                BigIntHelper.write8(this._networkId, message, 0);
-                const nonce = await this._powProvider.pow(message, this._minPowScore);
-                BigIntHelper.write8(nonce, message, message.length - 8);
-            } else {
-                throw new Error(this._networkId ? "minPowScore is missing" : "networkId is missing");
-            }
+            const { networkId, minPowScore } = await this.getPowInfo();
+            BigIntHelper.write8(networkId, message, 0);
+            const nonce = await this._powProvider.pow(message, minPowScore);
+            BigIntHelper.write8(nonce, message, message.length - 8);
         }
 
         const response = await this.fetchBinary<IMessageIdResponse>("post", "messages", message);
@@ -670,16 +650,20 @@ export class SingleNodeClient implements IClient {
 
     /**
      * Get the pow info from the node.
+     * @returns The networkId and the minPowScore.
      * @internal
      */
-    private async populatePowInfo(): Promise<void> {
-        if (!this._networkId || !this._minPowScore) {
-            const nodeInfo = await this.info();
+    private async getPowInfo(): Promise<{
+        networkId: bigint;
+        minPowScore: number;
+    }> {
+        const nodeInfo = await this.info();
 
-            const networkIdBytes = Blake2b.sum256(Converter.utf8ToBytes(nodeInfo.networkId));
-            this._networkId = BigIntHelper.read8(networkIdBytes, 0);
+        const networkIdBytes = Blake2b.sum256(Converter.utf8ToBytes(nodeInfo.networkId));
 
-            this._minPowScore = nodeInfo.minPowScore ?? 100;
-        }
+        return {
+            networkId: BigIntHelper.read8(networkIdBytes, 0),
+            minPowScore: nodeInfo.minPowScore
+        };
     }
 }
