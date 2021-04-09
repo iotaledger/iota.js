@@ -17,7 +17,7 @@ Response from the /info endpoint.
 - [latestMilestoneIndex](models_inodeinfo.inodeinfo.md#latestmilestoneindex)
 - [latestMilestoneTimestamp](models_inodeinfo.inodeinfo.md#latestmilestonetimestamp)
 - [messagesPerSecond](models_inodeinfo.inodeinfo.md#messagespersecond)
-- [minPowScore](models_inodeinfo.inodeinfo.md#minpowscore)
+- [minPoWScore](models_inodeinfo.inodeinfo.md#minpowscore)
 - [name](models_inodeinfo.inodeinfo.md#name)
 - [networkId](models_inodeinfo.inodeinfo.md#networkid)
 - [pruningIndex](models_inodeinfo.inodeinfo.md#pruningindex)
@@ -83,9 +83,9 @@ Messages per second.
 
 ___
 
-### minPowScore
+### minPoWScore
 
-• **minPowScore**: *number*
+• **minPoWScore**: *number*
 
 The minimum score required for PoW.
 

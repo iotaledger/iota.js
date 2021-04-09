@@ -52,7 +52,7 @@ async function run() {
     console.log("\tConfirmed Milestone Index:", info.confirmedMilestoneIndex);
     console.log("\tPruning Index:", info.pruningIndex);
     console.log("\tFeatures:", info.features);
-    console.log("\tMin PoW Score:", info.minPowScore);
+    console.log("\tMin PoW Score:", info.minPoWScore);
 }
 
 run()

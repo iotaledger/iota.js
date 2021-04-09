@@ -27,7 +27,7 @@ export interface INodeInfo {
     /**
      * The minimum score required for PoW.
      */
-    minPowScore: number;
+    minPoWScore: number;
 
     /**
      * The human readable part of bech32 addresses.

@@ -316,8 +316,8 @@ export function serializeMilestonePayload(writeStream: WriteStream,
     writeStream.writeFixedHex("payloadMilestone.inclusionMerkleProof",
         MERKLE_PROOF_LENGTH, object.inclusionMerkleProof);
 
-    writeStream.writeUInt32("payloadMilestone.nextPowScore", object.nextPoWScore);
-    writeStream.writeUInt32("payloadMilestone.nextPowScoreMilestoneIndex", object.nextPoWScoreMilestoneIndex);
+    writeStream.writeUInt32("payloadMilestone.nextPoWScore", object.nextPoWScore);
+    writeStream.writeUInt32("payloadMilestone.nextPoWScoreMilestoneIndex", object.nextPoWScoreMilestoneIndex);
 
     writeStream.writeByte("payloadMilestone.publicKeysCount", object.publicKeys.length);
     for (let i = 0; i < object.publicKeys.length; i++) {

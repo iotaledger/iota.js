@@ -265,8 +265,8 @@ function serializeMilestonePayload(writeStream, object) {
         writeStream.writeFixedHex("payloadMilestone.parentMessageId" + (i + 1), common_1.MESSAGE_ID_LENGTH, object.parentMessageIds[i]);
     }
     writeStream.writeFixedHex("payloadMilestone.inclusionMerkleProof", common_1.MERKLE_PROOF_LENGTH, object.inclusionMerkleProof);
-    writeStream.writeUInt32("payloadMilestone.nextPowScore", object.nextPoWScore);
-    writeStream.writeUInt32("payloadMilestone.nextPowScoreMilestoneIndex", object.nextPoWScoreMilestoneIndex);
+    writeStream.writeUInt32("payloadMilestone.nextPoWScore", object.nextPoWScore);
+    writeStream.writeUInt32("payloadMilestone.nextPoWScoreMilestoneIndex", object.nextPoWScoreMilestoneIndex);
     writeStream.writeByte("payloadMilestone.publicKeysCount", object.publicKeys.length);
     for (var i = 0; i < object.publicKeys.length; i++) {
         writeStream.writeFixedHex("payloadMilestone.publicKey", ed25519_1.Ed25519.PUBLIC_KEY_SIZE, object.publicKeys[i]);

@@ -162,7 +162,7 @@ var SingleNodeClient = /** @class */ (function () {
      */
     SingleNodeClient.prototype.messageSubmit = function (message) {
         return __awaiter(this, void 0, void 0, function () {
-            var writeStream, messageBytes, _a, networkId, minPowScore, nonce, response;
+            var writeStream, messageBytes, _a, networkId, minPoWScore, nonce, response;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -174,12 +174,12 @@ var SingleNodeClient = /** @class */ (function () {
                         }
                         if (!(!message.nonce || message.nonce.length === 0)) return [3 /*break*/, 4];
                         if (!this._powProvider) return [3 /*break*/, 3];
-                        return [4 /*yield*/, this.getPowInfo()];
+                        return [4 /*yield*/, this.getPoWInfo()];
                     case 1:
-                        _a = _b.sent(), networkId = _a.networkId, minPowScore = _a.minPowScore;
+                        _a = _b.sent(), networkId = _a.networkId, minPoWScore = _a.minPoWScore;
                         bigIntHelper_1.BigIntHelper.write8(networkId, messageBytes, 0);
                         message.networkId = networkId.toString();
-                        return [4 /*yield*/, this._powProvider.pow(messageBytes, minPowScore)];
+                        return [4 /*yield*/, this._powProvider.pow(messageBytes, minPoWScore)];
                     case 2:
                         nonce = _b.sent();
                         message.nonce = nonce.toString(10);
@@ -202,7 +202,7 @@ var SingleNodeClient = /** @class */ (function () {
      */
     SingleNodeClient.prototype.messageSubmitRaw = function (message) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, networkId, minPowScore, nonce, response;
+            var _a, networkId, minPoWScore, nonce, response;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -210,11 +210,11 @@ var SingleNodeClient = /** @class */ (function () {
                             throw new Error("The message length is " + message.length + ", which exceeds the maximum size of " + message_1.MAX_MESSAGE_LENGTH);
                         }
                         if (!(this._powProvider && arrayHelper_1.ArrayHelper.equal(message.slice(-8), SingleNodeClient.NONCE_ZERO))) return [3 /*break*/, 3];
-                        return [4 /*yield*/, this.getPowInfo()];
+                        return [4 /*yield*/, this.getPoWInfo()];
                     case 1:
-                        _a = _b.sent(), networkId = _a.networkId, minPowScore = _a.minPowScore;
+                        _a = _b.sent(), networkId = _a.networkId, minPoWScore = _a.minPoWScore;
                         bigIntHelper_1.BigIntHelper.write8(networkId, message, 0);
-                        return [4 /*yield*/, this._powProvider.pow(message, minPowScore)];
+                        return [4 /*yield*/, this._powProvider.pow(message, minPoWScore)];
                     case 2:
                         nonce = _b.sent();
                         bigIntHelper_1.BigIntHelper.write8(nonce, message, message.length - 8);
@@ -663,10 +663,10 @@ var SingleNodeClient = /** @class */ (function () {
     };
     /**
      * Get the pow info from the node.
-     * @returns The networkId and the minPowScore.
+     * @returns The networkId and the minPoWScore.
      * @internal
      */
-    SingleNodeClient.prototype.getPowInfo = function () {
+    SingleNodeClient.prototype.getPoWInfo = function () {
         return __awaiter(this, void 0, void 0, function () {
             var nodeInfo, networkIdBytes;
             return __generator(this, function (_a) {
@@ -677,7 +677,7 @@ var SingleNodeClient = /** @class */ (function () {
                         networkIdBytes = blake2b_1.Blake2b.sum256(converter_1.Converter.utf8ToBytes(nodeInfo.networkId));
                         return [2 /*return*/, {
                                 networkId: bigIntHelper_1.BigIntHelper.read8(networkIdBytes, 0),
-                                minPowScore: nodeInfo.minPowScore
+                                minPoWScore: nodeInfo.minPoWScore
                             }];
                 }
             });

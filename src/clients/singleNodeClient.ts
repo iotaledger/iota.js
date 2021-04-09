@@ -50,7 +50,7 @@ export class SingleNodeClient implements IClient {
     private readonly _basePath: string;
 
     /**
-     * Optional POW provider to be used for messages with nonce=0/undefined.
+     * Optional PoW provider to be used for messages with nonce=0/undefined.
      * @internal
      */
     private readonly _powProvider?: IPowProvider;
@@ -181,11 +181,11 @@ export class SingleNodeClient implements IClient {
 
         if (!message.nonce || message.nonce.length === 0) {
             if (this._powProvider) {
-                const { networkId, minPowScore } = await this.getPowInfo();
+                const { networkId, minPoWScore } = await this.getPoWInfo();
                 BigIntHelper.write8(networkId, messageBytes, 0);
                 message.networkId = networkId.toString();
 
-                const nonce = await this._powProvider.pow(messageBytes, minPowScore);
+                const nonce = await this._powProvider.pow(messageBytes, minPoWScore);
                 message.nonce = nonce.toString(10);
             } else {
                 message.nonce = "0";
@@ -208,9 +208,9 @@ export class SingleNodeClient implements IClient {
                 }, which exceeds the maximum size of ${MAX_MESSAGE_LENGTH}`);
         }
         if (this._powProvider && ArrayHelper.equal(message.slice(-8), SingleNodeClient.NONCE_ZERO)) {
-            const { networkId, minPowScore } = await this.getPowInfo();
+            const { networkId, minPoWScore } = await this.getPoWInfo();
             BigIntHelper.write8(networkId, message, 0);
-            const nonce = await this._powProvider.pow(message, minPowScore);
+            const nonce = await this._powProvider.pow(message, minPoWScore);
             BigIntHelper.write8(nonce, message, message.length - 8);
         }
 
@@ -650,12 +650,12 @@ export class SingleNodeClient implements IClient {
 
     /**
      * Get the pow info from the node.
-     * @returns The networkId and the minPowScore.
+     * @returns The networkId and the minPoWScore.
      * @internal
      */
-    private async getPowInfo(): Promise<{
+    private async getPoWInfo(): Promise<{
         networkId: bigint;
-        minPowScore: number;
+        minPoWScore: number;
     }> {
         const nodeInfo = await this.info();
 
@@ -663,7 +663,7 @@ export class SingleNodeClient implements IClient {
 
         return {
             networkId: BigIntHelper.read8(networkIdBytes, 0),
-            minPowScore: nodeInfo.minPowScore
+            minPoWScore: nodeInfo.minPoWScore
         };
     }
 }

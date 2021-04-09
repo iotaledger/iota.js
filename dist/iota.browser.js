@@ -5181,8 +5181,8 @@
 	        writeStream.writeFixedHex("payloadMilestone.parentMessageId" + (i + 1), common.MESSAGE_ID_LENGTH, object.parentMessageIds[i]);
 	    }
 	    writeStream.writeFixedHex("payloadMilestone.inclusionMerkleProof", common.MERKLE_PROOF_LENGTH, object.inclusionMerkleProof);
-	    writeStream.writeUInt32("payloadMilestone.nextPowScore", object.nextPoWScore);
-	    writeStream.writeUInt32("payloadMilestone.nextPowScoreMilestoneIndex", object.nextPoWScoreMilestoneIndex);
+	    writeStream.writeUInt32("payloadMilestone.nextPoWScore", object.nextPoWScore);
+	    writeStream.writeUInt32("payloadMilestone.nextPoWScoreMilestoneIndex", object.nextPoWScoreMilestoneIndex);
 	    writeStream.writeByte("payloadMilestone.publicKeysCount", object.publicKeys.length);
 	    for (var i = 0; i < object.publicKeys.length; i++) {
 	        writeStream.writeFixedHex("payloadMilestone.publicKey", ed25519.Ed25519.PUBLIC_KEY_SIZE, object.publicKeys[i]);
@@ -6876,7 +6876,7 @@
 	     */
 	    SingleNodeClient.prototype.messageSubmit = function (message$1) {
 	        return __awaiter(this, void 0, void 0, function () {
-	            var writeStream$1, messageBytes, _a, networkId, minPowScore, nonce, response;
+	            var writeStream$1, messageBytes, _a, networkId, minPoWScore, nonce, response;
 	            return __generator(this, function (_b) {
 	                switch (_b.label) {
 	                    case 0:
@@ -6888,12 +6888,12 @@
 	                        }
 	                        if (!(!message$1.nonce || message$1.nonce.length === 0)) return [3 /*break*/, 4];
 	                        if (!this._powProvider) return [3 /*break*/, 3];
-	                        return [4 /*yield*/, this.getPowInfo()];
+	                        return [4 /*yield*/, this.getPoWInfo()];
 	                    case 1:
-	                        _a = _b.sent(), networkId = _a.networkId, minPowScore = _a.minPowScore;
+	                        _a = _b.sent(), networkId = _a.networkId, minPoWScore = _a.minPoWScore;
 	                        bigIntHelper.BigIntHelper.write8(networkId, messageBytes, 0);
 	                        message$1.networkId = networkId.toString();
-	                        return [4 /*yield*/, this._powProvider.pow(messageBytes, minPowScore)];
+	                        return [4 /*yield*/, this._powProvider.pow(messageBytes, minPoWScore)];
 	                    case 2:
 	                        nonce = _b.sent();
 	                        message$1.nonce = nonce.toString(10);
@@ -6916,7 +6916,7 @@
 	     */
 	    SingleNodeClient.prototype.messageSubmitRaw = function (message$1) {
 	        return __awaiter(this, void 0, void 0, function () {
-	            var _a, networkId, minPowScore, nonce, response;
+	            var _a, networkId, minPoWScore, nonce, response;
 	            return __generator(this, function (_b) {
 	                switch (_b.label) {
 	                    case 0:
@@ -6924,11 +6924,11 @@
 	                            throw new Error("The message length is " + message$1.length + ", which exceeds the maximum size of " + message.MAX_MESSAGE_LENGTH);
 	                        }
 	                        if (!(this._powProvider && arrayHelper.ArrayHelper.equal(message$1.slice(-8), SingleNodeClient.NONCE_ZERO))) return [3 /*break*/, 3];
-	                        return [4 /*yield*/, this.getPowInfo()];
+	                        return [4 /*yield*/, this.getPoWInfo()];
 	                    case 1:
-	                        _a = _b.sent(), networkId = _a.networkId, minPowScore = _a.minPowScore;
+	                        _a = _b.sent(), networkId = _a.networkId, minPoWScore = _a.minPoWScore;
 	                        bigIntHelper.BigIntHelper.write8(networkId, message$1, 0);
-	                        return [4 /*yield*/, this._powProvider.pow(message$1, minPowScore)];
+	                        return [4 /*yield*/, this._powProvider.pow(message$1, minPoWScore)];
 	                    case 2:
 	                        nonce = _b.sent();
 	                        bigIntHelper.BigIntHelper.write8(nonce, message$1, message$1.length - 8);
@@ -7377,10 +7377,10 @@
 	    };
 	    /**
 	     * Get the pow info from the node.
-	     * @returns The networkId and the minPowScore.
+	     * @returns The networkId and the minPoWScore.
 	     * @internal
 	     */
-	    SingleNodeClient.prototype.getPowInfo = function () {
+	    SingleNodeClient.prototype.getPoWInfo = function () {
 	        return __awaiter(this, void 0, void 0, function () {
 	            var nodeInfo, networkIdBytes;
 	            return __generator(this, function (_a) {
@@ -7391,7 +7391,7 @@
 	                        networkIdBytes = blake2b.Blake2b.sum256(converter.Converter.utf8ToBytes(nodeInfo.networkId));
 	                        return [2 /*return*/, {
 	                                networkId: bigIntHelper.BigIntHelper.read8(networkIdBytes, 0),
-	                                minPowScore: nodeInfo.minPowScore
+	                                minPoWScore: nodeInfo.minPoWScore
 	                            }];
 	                }
 	            });
@@ -12710,7 +12710,7 @@
 	    logger(prefix + "\tVersion:", info.version);
 	    logger(prefix + "\tNetwork Id:", info.networkId);
 	    logger(prefix + "\tIs Healthy:", info.isHealthy);
-	    logger(prefix + "\tMin PoW Score:", info.minPowScore);
+	    logger(prefix + "\tMin PoW Score:", info.minPoWScore);
 	    logger(prefix + "\tBech32 HRP:", info.bech32HRP);
 	    logger(prefix + "\tLatest Milestone Index:", info.latestMilestoneIndex);
 	    logger(prefix + "\tLatest Milestone Timestamp:", info.latestMilestoneTimestamp);
