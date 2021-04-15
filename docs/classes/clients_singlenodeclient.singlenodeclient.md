@@ -22,6 +22,10 @@ Client for API communication.
 - [addressEd25519](clients_singlenodeclient.singlenodeclient.md#addressed25519)
 - [addressEd25519Outputs](clients_singlenodeclient.singlenodeclient.md#addressed25519outputs)
 - [addressOutputs](clients_singlenodeclient.singlenodeclient.md#addressoutputs)
+- [combineQueryParams](clients_singlenodeclient.singlenodeclient.md#combinequeryparams)
+- [fetchBinary](clients_singlenodeclient.singlenodeclient.md#fetchbinary)
+- [fetchJson](clients_singlenodeclient.singlenodeclient.md#fetchjson)
+- [fetchStatus](clients_singlenodeclient.singlenodeclient.md#fetchstatus)
 - [health](clients_singlenodeclient.singlenodeclient.md#health)
 - [info](clients_singlenodeclient.singlenodeclient.md#info)
 - [message](clients_singlenodeclient.singlenodeclient.md#message)
@@ -143,6 +147,95 @@ Name | Type | Description |
 The address outputs.
 
 Implementation of: [IClient](../interfaces/models_iclient.iclient.md)
+
+___
+
+### combineQueryParams
+
+▸ **combineQueryParams**(`queryParams`: *string*[]): *string*
+
+Combine the query params.
+
+#### Parameters:
+
+Name | Type | Description |
+:------ | :------ | :------ |
+`queryParams` | *string*[] | The quer params to combine.   |
+
+**Returns:** *string*
+
+The combined query params.
+
+___
+
+### fetchBinary
+
+▸ **fetchBinary**<T\>(`method`: *get* \| *post*, `route`: *string*, `requestData?`: *Uint8Array*): *Promise*<Uint8Array \| T\>
+
+Perform a request for binary data.
+
+#### Type parameters:
+
+Name |
+:------ |
+`T` |
+
+#### Parameters:
+
+Name | Type | Description |
+:------ | :------ | :------ |
+`method` | *get* \| *post* | The http method.   |
+`route` | *string* | The route of the request.   |
+`requestData?` | *Uint8Array* | Request to send to the endpoint.   |
+
+**Returns:** *Promise*<Uint8Array \| T\>
+
+The response.
+
+___
+
+### fetchJson
+
+▸ **fetchJson**<T, U\>(`method`: *get* \| *post* \| *delete*, `route`: *string*, `requestData?`: T): *Promise*<U\>
+
+Perform a request in json format.
+
+#### Type parameters:
+
+Name |
+:------ |
+`T` |
+`U` |
+
+#### Parameters:
+
+Name | Type | Description |
+:------ | :------ | :------ |
+`method` | *get* \| *post* \| *delete* | The http method.   |
+`route` | *string* | The route of the request.   |
+`requestData?` | T | Request to send to the endpoint.   |
+
+**Returns:** *Promise*<U\>
+
+The response.
+
+___
+
+### fetchStatus
+
+▸ **fetchStatus**(`route`: *string*): *Promise*<number\>
+
+Perform a request and just return the status.
+
+#### Parameters:
+
+Name | Type | Description |
+:------ | :------ | :------ |
+`route` | *string* | The route of the request.   |
+
+**Returns:** *Promise*<number\>
+
+The response.
 
 ___
 

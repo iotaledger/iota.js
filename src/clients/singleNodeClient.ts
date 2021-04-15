@@ -450,9 +450,8 @@ export class SingleNodeClient implements IClient {
      * Perform a request and just return the status.
      * @param route The route of the request.
      * @returns The response.
-     * @internal
      */
-    private async fetchStatus(route: string): Promise<number> {
+    public async fetchStatus(route: string): Promise<number> {
         const response = await this.fetchWithTimeout("get", route);
 
         return response.status;
@@ -464,9 +463,8 @@ export class SingleNodeClient implements IClient {
      * @param route The route of the request.
      * @param requestData Request to send to the endpoint.
      * @returns The response.
-     * @internal
      */
-    private async fetchJson<T, U>(method: "get" | "post" | "delete", route: string, requestData?: T): Promise<U> {
+    public async fetchJson<T, U>(method: "get" | "post" | "delete", route: string, requestData?: T): Promise<U> {
         const response = await this.fetchWithTimeout(
             method,
             `${this._basePath}${route}`,
@@ -534,9 +532,8 @@ export class SingleNodeClient implements IClient {
      * @param route The route of the request.
      * @param requestData Request to send to the endpoint.
      * @returns The response.
-     * @internal
      */
-    private async fetchBinary<T>(
+    public async fetchBinary<T>(
         method: "get" | "post",
         route: string,
         requestData?: Uint8Array): Promise<Uint8Array | T> {
@@ -580,7 +577,7 @@ export class SingleNodeClient implements IClient {
      * @returns The response.
      * @internal
      */
-    private async fetchWithTimeout(
+    public async fetchWithTimeout(
         method: "get" | "post" | "delete",
         route: string,
         headers?: { [id: string]: string },
@@ -644,7 +641,7 @@ export class SingleNodeClient implements IClient {
      * @param queryParams The quer params to combine.
      * @returns The combined query params.
      */
-    private combineQueryParams(queryParams: string[]): string {
+    public combineQueryParams(queryParams: string[]): string {
         return queryParams.length > 0 ? `?${queryParams.join("&")}` : "";
     }
 

@@ -169,9 +169,31 @@ export declare class SingleNodeClient implements IClient {
      */
     peer(peerId: string): Promise<IPeer>;
     /**
+     * Perform a request and just return the status.
+     * @param route The route of the request.
+     * @returns The response.
+     */
+    fetchStatus(route: string): Promise<number>;
+    /**
+     * Perform a request in json format.
+     * @param method The http method.
+     * @param route The route of the request.
+     * @param requestData Request to send to the endpoint.
+     * @returns The response.
+     */
+    fetchJson<T, U>(method: "get" | "post" | "delete", route: string, requestData?: T): Promise<U>;
+    /**
+     * Perform a request for binary data.
+     * @param method The http method.
+     * @param route The route of the request.
+     * @param requestData Request to send to the endpoint.
+     * @returns The response.
+     */
+    fetchBinary<T>(method: "get" | "post", route: string, requestData?: Uint8Array): Promise<Uint8Array | T>;
+    /**
      * Combine the query params.
      * @param queryParams The quer params to combine.
      * @returns The combined query params.
      */
-    private combineQueryParams;
+    combineQueryParams(queryParams: string[]): string;
 }
