@@ -31,9 +31,9 @@ Create a new instance of Ed25519Address.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`publicKey` | *Uint8Array* | The public key for the address.    |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `publicKey` | *Uint8Array* | The public key for the address. |
 
 **Returns:** [*Ed25519Address*](addresstypes_ed25519address.ed25519address.md)
 
@@ -61,9 +61,9 @@ Use the public key to validate the address.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`address` | *Uint8Array* | The address to verify.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `address` | *Uint8Array* | The address to verify. |
 
 **Returns:** *boolean*
 

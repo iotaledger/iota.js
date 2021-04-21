@@ -33,9 +33,9 @@ Create a new instance of Ed25519Seed.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`secretKeyBytes?` | *Uint8Array* | The bytes.    |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `secretKeyBytes?` | *Uint8Array* | The bytes. |
 
 **Returns:** [*Ed25519Seed*](seedtypes_ed25519seed.ed25519seed.md)
 
@@ -49,9 +49,9 @@ Generate a new seed from the path.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`path` | [*Bip32Path*](crypto_bip32path.bip32path.md) | The path to generate the seed for.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `path` | [*Bip32Path*](crypto_bip32path.bip32path.md) | The path to generate the seed for. |
 
 **Returns:** [*ISeed*](../interfaces/models_iseed.iseed.md)
 
@@ -97,9 +97,9 @@ Create the seed from a Bip39 mnemonic.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`mnemonic` | *string* | The mnemonic to create the seed from.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `mnemonic` | *string* | The mnemonic to create the seed from. |
 
 **Returns:** [*Ed25519Seed*](seedtypes_ed25519seed.ed25519seed.md)
 

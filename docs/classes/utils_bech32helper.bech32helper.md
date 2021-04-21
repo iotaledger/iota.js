@@ -57,10 +57,10 @@ Decode an address from bech32.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`bech32Text` | *string* | The bech32 text to decode.   |
-`humanReadablePart` | *string* | The human readable part to use.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `bech32Text` | *string* | The bech32 text to decode. |
+| `humanReadablePart` | *string* | The human readable part to use. |
 
 **Returns:** *undefined* \| {}
 
@@ -76,10 +76,10 @@ Does the provided string look like it might be an bech32 address with matching h
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`bech32Text` | *string* | The bech32 text to text.   |
-`humanReadablePart` | *string* | The human readable part to match.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `bech32Text` | *string* | The bech32 text to text. |
+| `humanReadablePart` | *string* | The human readable part to match. |
 
 **Returns:** *boolean*
 
@@ -95,11 +95,11 @@ Encode an address to bech32.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`addressType` | *number* | The address type to encode.   |
-`addressBytes` | *Uint8Array* | The address bytes to encode.   |
-`humanReadablePart` | *string* | The human readable part to use.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `addressType` | *number* | The address type to encode. |
+| `addressBytes` | *Uint8Array* | The address bytes to encode. |
+| `humanReadablePart` | *string* | The human readable part to use. |
 
 **Returns:** *string*
 

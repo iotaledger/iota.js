@@ -8,7 +8,7 @@ Receipt payload.
 
 ## Hierarchy
 
-* [*ITypeBase*](models_itypebase.itypebase.md)<*3*\>
+* [*ITypeBase*](models_itypebase.itypebase.md)<``3``\>
 
   ↳ **IReceiptPayload**
 
@@ -58,7 +58,7 @@ ___
 
 ### type
 
-• **type**: *3*
+• **type**: ``3``
 
 The type of the object.
 

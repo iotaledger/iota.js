@@ -12,6 +12,6 @@
 
 ### LedgerInclusionState
 
-Ƭ **LedgerInclusionState**: *noTransaction* \| *included* \| *conflicting*
+Ƭ **LedgerInclusionState**: ``"noTransaction"`` \| ``"included"`` \| ``"conflicting"``
 
 The different states of ledger inclusion.

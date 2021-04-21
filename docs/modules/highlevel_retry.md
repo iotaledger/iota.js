@@ -18,10 +18,10 @@ Retry an existing message either by promoting or reattaching.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`client` | [*IClient*](../interfaces/models_iclient.iclient.md) \| *string* | The client or node endpoint to perform the retry with.   |
-`messageId` | *string* | The message to retry.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `client` | [*IClient*](../interfaces/models_iclient.iclient.md) \| *string* | The client or node endpoint to perform the retry with. |
+| `messageId` | *string* | The message to retry. |
 
 **Returns:** *Promise*<{}\>
 

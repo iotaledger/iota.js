@@ -8,9 +8,9 @@ Base response data.
 
 ## Type parameters
 
-Name |
-:------ |
-`T` |
+| Name |
+| :------ |
+| `T` |
 
 ## Table of contents
 
@@ -37,7 +37,7 @@ Optional error in the response.
 
 #### Type declaration:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`code` | *string* | The code for the error response.   |
-`message` | *string* | A more descriptive version of the error.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `code` | *string* | The code for the error response. |
+| `message` | *string* | A more descriptive version of the error. |

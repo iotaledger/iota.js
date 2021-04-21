@@ -29,10 +29,10 @@ Create a new instance of HmacSha256.
 
 #### Parameters:
 
-Name | Type | Default value | Description |
-:------ | :------ | :------ | :------ |
-`key` | *Uint8Array* | - | The key for the hmac.   |
-`bits` | *number* | 256 | The number of bits.    |
+| Name | Type | Default value | Description |
+| :------ | :------ | :------ | :------ |
+| `key` | *Uint8Array* | - | The key for the hmac. |
+| `bits` | *number* | 256 | The number of bits. |
 
 **Returns:** [*HmacSha256*](crypto_hmacsha256.hmacsha256.md)
 
@@ -58,9 +58,9 @@ Update the hash with the data.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`message` | *Uint8Array* | The data to update the hash with.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `message` | *Uint8Array* | The data to update the hash with. |
 
 **Returns:** [*HmacSha256*](crypto_hmacsha256.hmacsha256.md)
 
@@ -76,10 +76,10 @@ Perform Sum 256 on the data.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`key` | *Uint8Array* | The key for the hmac.   |
-`data` | *Uint8Array* | The data to operate on.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `key` | *Uint8Array* | The key for the hmac. |
+| `data` | *Uint8Array* | The data to operate on. |
 
 **Returns:** *Uint8Array*
 

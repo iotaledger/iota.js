@@ -36,9 +36,9 @@ Perform the score calculation.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`message` | *Uint8Array* | The data to perform the score on   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `message` | *Uint8Array* | The data to perform the score on |
 
 **Returns:** *number*
 
@@ -54,10 +54,10 @@ Calculate the trailing zeros.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`powDigest` | *Uint8Array* | The pow digest.   |
-`nonce` | *bigint* | The nonce.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `powDigest` | *Uint8Array* | The pow digest. |
+| `nonce` | *bigint* | The nonce. |
 
 **Returns:** *number*
 
@@ -73,9 +73,9 @@ Find the number of trailing zeros.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`trits` | *Int8Array* | The trits to look for zeros.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `trits` | *Int8Array* | The trits to look for zeros. |
 
 **Returns:** *number*
 

@@ -22,7 +22,9 @@
 
 # About
 
-Experimental client library for IOTA Chrysalis network. Implemeted in TypeScript to strongly type the objects sent and received from the API.
+> This library is functionally complete, but it is recommended to use [iota.rs](https://github.com/iotaledger/iota.rs). The rust library will be more heavily maintained and is much more performant.
+
+Client library for IOTA Chrysalis network, implemeted in TypeScript to strongly type the objects sent and received from the API.
 
 Also includes High Level operations and MQTT support.
 

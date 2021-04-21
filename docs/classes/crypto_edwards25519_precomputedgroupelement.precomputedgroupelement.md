@@ -36,11 +36,11 @@ Create a new instance of PreComputedGroupElement.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`yPlusX?` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | Y + X Element.   |
-`yMinusX?` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | Y - X Element   |
-`xy2d?` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | XY2d Element.    |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `yPlusX?` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | Y + X Element. |
+| `yMinusX?` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | Y - X Element |
+| `xy2d?` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | XY2d Element. |
 
 **Returns:** [*PreComputedGroupElement*](crypto_edwards25519_precomputedgroupelement.precomputedgroupelement.md)
 
@@ -78,10 +78,10 @@ CMove the pre computed element.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`u` | [*PreComputedGroupElement*](crypto_edwards25519_precomputedgroupelement.precomputedgroupelement.md) | The u.   |
-`b` | *number* | The b.    |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `u` | [*PreComputedGroupElement*](crypto_edwards25519_precomputedgroupelement.precomputedgroupelement.md) | The u. |
+| `b` | *number* | The b. |
 
 **Returns:** *void*
 
@@ -95,10 +95,10 @@ Select point.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`pos` | *number* | The position.   |
-`b` | *number* | The index.    |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `pos` | *number* | The position. |
+| `b` | *number* | The index. |
 
 **Returns:** *void*
 

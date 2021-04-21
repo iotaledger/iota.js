@@ -16,6 +16,6 @@
 
 ### ED25519\_SIGNATURE\_TYPE
 
-• `Const` **ED25519\_SIGNATURE\_TYPE**: *0*= 0
+• `Const` **ED25519\_SIGNATURE\_TYPE**: ``0``= 0
 
 The global type for the signature type.

@@ -16,6 +16,6 @@
 
 ### MILESTONE\_PAYLOAD\_TYPE
 
-• `Const` **MILESTONE\_PAYLOAD\_TYPE**: *1*= 1
+• `Const` **MILESTONE\_PAYLOAD\_TYPE**: ``1``= 1
 
 The global type for the payload.

@@ -18,10 +18,10 @@ Promote an existing message.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`client` | [*IClient*](../interfaces/models_iclient.iclient.md) \| *string* | The clientor node endpoint to perform the promote with.   |
-`messageId` | *string* | The message to promote.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `client` | [*IClient*](../interfaces/models_iclient.iclient.md) \| *string* | The clientor node endpoint to perform the promote with. |
+| `messageId` | *string* | The message to promote. |
 
 **Returns:** *Promise*<{}\>
 

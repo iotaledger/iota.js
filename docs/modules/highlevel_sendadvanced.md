@@ -19,11 +19,11 @@ Build a transaction payload.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`inputsAndSignatureKeyPairs` | {}[] | The inputs with the signature key pairs needed to sign transfers.   |
-`outputs` | {}[] | The outputs to send.   |
-`indexation?` | *object* | Optional indexation data to associate with the transaction.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `inputsAndSignatureKeyPairs` | {}[] | The inputs with the signature key pairs needed to sign transfers. |
+| `outputs` | {}[] | The outputs to send. |
+| `indexation?` | *object* | Optional indexation data to associate with the transaction. |
 
 **Returns:** [*ITransactionPayload*](../interfaces/models_itransactionpayload.itransactionpayload.md)
 
@@ -39,12 +39,12 @@ Send a transfer from the balance on the seed.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`client` | [*IClient*](../interfaces/models_iclient.iclient.md) \| *string* | The client or node endpoint to send the transfer with.   |
-`inputsAndSignatureKeyPairs` | {}[] | The inputs with the signature key pairs needed to sign transfers.   |
-`outputs` | {}[] | The outputs to send.   |
-`indexation?` | *object* | Optional indexation data to associate with the transaction.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `client` | [*IClient*](../interfaces/models_iclient.iclient.md) \| *string* | The client or node endpoint to send the transfer with. |
+| `inputsAndSignatureKeyPairs` | {}[] | The inputs with the signature key pairs needed to sign transfers. |
+| `outputs` | {}[] | The outputs to send. |
+| `indexation?` | *object* | Optional indexation data to associate with the transaction. |
 
 **Returns:** *Promise*<{}\>
 

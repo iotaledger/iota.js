@@ -39,10 +39,10 @@ Use the public key to validate the address.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`publicKey` | *Uint8Array* | - |
-`address` | *Uint8Array* | The address to verify.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `publicKey` | *Uint8Array* | - |
+| `address` | *Uint8Array* | The address to verify. |
 
 **Returns:** *boolean*
 

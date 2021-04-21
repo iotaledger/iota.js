@@ -41,9 +41,9 @@ Decode a bech32 string.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`bech` | *string* | The text to decode.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `bech` | *string* | The text to decode. |
 
 **Returns:** *undefined* \| {}
 
@@ -59,9 +59,9 @@ Decode a bech32 string to 5 bit array.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`bech` | *string* | The text to decode.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `bech` | *string* | The text to decode. |
 
 **Returns:** *undefined* \| {}
 
@@ -77,10 +77,10 @@ Encode the buffer.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`humanReadablePart` | *string* | The header   |
-`data` | *Uint8Array* | The data to encode.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `humanReadablePart` | *string* | The header |
+| `data` | *Uint8Array* | The data to encode. |
 
 **Returns:** *string*
 
@@ -96,10 +96,10 @@ Encode the 5 bit data buffer.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`humanReadablePart` | *string* | The header   |
-`data5Bit` | *Uint8Array* | The data to encode.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `humanReadablePart` | *string* | The header |
+| `data5Bit` | *Uint8Array* | The data to encode. |
 
 **Returns:** *string*
 
@@ -115,9 +115,9 @@ Convert the 5 bit data to 8 bit.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`fiveBit` | *Uint8Array* | The 5 bit data to convert.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `fiveBit` | *Uint8Array* | The 5 bit data to convert. |
 
 **Returns:** *Uint8Array*
 
@@ -133,10 +133,10 @@ Does the given string match the bech32 pattern.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`humanReadablePart` | *string* | The human readable part.   |
-`bech32Text?` | *string* | The text to test.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `humanReadablePart` | *string* | The human readable part. |
+| `bech32Text?` | *string* | The text to test. |
 
 **Returns:** *boolean*
 
@@ -152,9 +152,9 @@ Convert the input bytes into 5 bit data.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`bytes` | *Uint8Array* | The bytes to convert.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `bytes` | *Uint8Array* | The bytes to convert. |
 
 **Returns:** *Uint8Array*
 

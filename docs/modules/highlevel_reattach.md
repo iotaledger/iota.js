@@ -18,10 +18,10 @@ Reattach an existing message.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`client` | [*IClient*](../interfaces/models_iclient.iclient.md) \| *string* | The client or node endpoint to perform the reattach with.   |
-`messageId` | *string* | The message to reattach.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `client` | [*IClient*](../interfaces/models_iclient.iclient.md) \| *string* | The client or node endpoint to perform the reattach with. |
+| `messageId` | *string* | The message to reattach. |
 
 **Returns:** *Promise*<{}\>
 

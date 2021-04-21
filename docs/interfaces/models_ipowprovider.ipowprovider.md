@@ -26,10 +26,10 @@ Perform pow on the message and return the nonce of at least targetScore.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`message` | *Uint8Array* | The message to process.   |
-`targetScore` | *number* | the target score.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `message` | *Uint8Array* | The message to process. |
+| `targetScore` | *number* | the target score. |
 
 **Returns:** *Promise*<bigint\>
 

@@ -55,9 +55,9 @@ Deserialize the reference unlock block from binary.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`readStream` | [*ReadStream*](../classes/utils_readstream.readstream.md) | The stream to read the data from.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `readStream` | [*ReadStream*](../classes/utils_readstream.readstream.md) | The stream to read the data from. |
 
 **Returns:** [*IReferenceUnlockBlock*](../interfaces/models_ireferenceunlockblock.ireferenceunlockblock.md)
 
@@ -73,9 +73,9 @@ Deserialize the signature unlock block from binary.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`readStream` | [*ReadStream*](../classes/utils_readstream.readstream.md) | The stream to read the data from.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `readStream` | [*ReadStream*](../classes/utils_readstream.readstream.md) | The stream to read the data from. |
 
 **Returns:** [*ISignatureUnlockBlock*](../interfaces/models_isignatureunlockblock.isignatureunlockblock.md)
 
@@ -91,9 +91,9 @@ Deserialize the unlock block from binary.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`readStream` | [*ReadStream*](../classes/utils_readstream.readstream.md) | The stream to read the data from.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `readStream` | [*ReadStream*](../classes/utils_readstream.readstream.md) | The stream to read the data from. |
 
 **Returns:** [*ISignatureUnlockBlock*](../interfaces/models_isignatureunlockblock.isignatureunlockblock.md) \| [*IReferenceUnlockBlock*](../interfaces/models_ireferenceunlockblock.ireferenceunlockblock.md)
 
@@ -109,9 +109,9 @@ Deserialize the unlock blocks from binary.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`readStream` | [*ReadStream*](../classes/utils_readstream.readstream.md) | The stream to read the data from.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `readStream` | [*ReadStream*](../classes/utils_readstream.readstream.md) | The stream to read the data from. |
 
 **Returns:** ([*ISignatureUnlockBlock*](../interfaces/models_isignatureunlockblock.isignatureunlockblock.md) \| [*IReferenceUnlockBlock*](../interfaces/models_ireferenceunlockblock.ireferenceunlockblock.md))[]
 
@@ -127,10 +127,10 @@ Serialize the reference unlock block to binary.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`writeStream` | [*WriteStream*](../classes/utils_writestream.writestream.md) | The stream to write the data to.   |
-`object` | [*IReferenceUnlockBlock*](../interfaces/models_ireferenceunlockblock.ireferenceunlockblock.md) | The object to serialize.    |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `writeStream` | [*WriteStream*](../classes/utils_writestream.writestream.md) | The stream to write the data to. |
+| `object` | [*IReferenceUnlockBlock*](../interfaces/models_ireferenceunlockblock.ireferenceunlockblock.md) | The object to serialize. |
 
 **Returns:** *void*
 
@@ -144,10 +144,10 @@ Serialize the signature unlock block to binary.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`writeStream` | [*WriteStream*](../classes/utils_writestream.writestream.md) | The stream to write the data to.   |
-`object` | [*ISignatureUnlockBlock*](../interfaces/models_isignatureunlockblock.isignatureunlockblock.md) | The object to serialize.    |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `writeStream` | [*WriteStream*](../classes/utils_writestream.writestream.md) | The stream to write the data to. |
+| `object` | [*ISignatureUnlockBlock*](../interfaces/models_isignatureunlockblock.isignatureunlockblock.md) | The object to serialize. |
 
 **Returns:** *void*
 
@@ -161,10 +161,10 @@ Serialize the unlock block to binary.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`writeStream` | [*WriteStream*](../classes/utils_writestream.writestream.md) | The stream to write the data to.   |
-`object` | [*ISignatureUnlockBlock*](../interfaces/models_isignatureunlockblock.isignatureunlockblock.md) \| [*IReferenceUnlockBlock*](../interfaces/models_ireferenceunlockblock.ireferenceunlockblock.md) | The object to serialize.    |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `writeStream` | [*WriteStream*](../classes/utils_writestream.writestream.md) | The stream to write the data to. |
+| `object` | [*ISignatureUnlockBlock*](../interfaces/models_isignatureunlockblock.isignatureunlockblock.md) \| [*IReferenceUnlockBlock*](../interfaces/models_ireferenceunlockblock.ireferenceunlockblock.md) | The object to serialize. |
 
 **Returns:** *void*
 
@@ -178,9 +178,9 @@ Serialize the unlock blocks to binary.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`writeStream` | [*WriteStream*](../classes/utils_writestream.writestream.md) | The stream to write the data to.   |
-`objects` | ([*ISignatureUnlockBlock*](../interfaces/models_isignatureunlockblock.isignatureunlockblock.md) \| [*IReferenceUnlockBlock*](../interfaces/models_ireferenceunlockblock.ireferenceunlockblock.md))[] | The objects to serialize.    |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `writeStream` | [*WriteStream*](../classes/utils_writestream.writestream.md) | The stream to write the data to. |
+| `objects` | ([*ISignatureUnlockBlock*](../interfaces/models_isignatureunlockblock.isignatureunlockblock.md) \| [*IReferenceUnlockBlock*](../interfaces/models_ireferenceunlockblock.ireferenceunlockblock.md))[] | The objects to serialize. |
 
 **Returns:** *void*

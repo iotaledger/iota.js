@@ -43,10 +43,10 @@ Gossip metrics for the peer.
 
 #### Type declaration:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`heartbeat`? | [*IGossipHeartbeat*](models_igossipheartbeat.igossipheartbeat.md) | The peer heartbeat.   |
-`metrics` | [*IGossipMetrics*](models_igossipmetrics.igossipmetrics.md) | The peer metrics.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `heartbeat?` | [*IGossipHeartbeat*](models_igossipheartbeat.igossipheartbeat.md) | The peer heartbeat. |
+| `metrics` | [*IGossipMetrics*](models_igossipmetrics.igossipmetrics.md) | The peer metrics. |
 
 ___
 

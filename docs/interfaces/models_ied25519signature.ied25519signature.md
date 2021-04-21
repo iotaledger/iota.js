@@ -8,7 +8,7 @@ Ed25519Signature signature.
 
 ## Hierarchy
 
-* [*ITypeBase*](models_itypebase.itypebase.md)<*0*\>
+* [*ITypeBase*](models_itypebase.itypebase.md)<``0``\>
 
   ↳ **IEd25519Signature**
 
@@ -40,7 +40,7 @@ ___
 
 ### type
 
-• **type**: *0*
+• **type**: ``0``
 
 The type of the object.
 

@@ -35,11 +35,11 @@ Encode a byte array into trits.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`dst` | *Int8Array* | The destination array.   |
-`startIndex` | *number* | The start index to write in the array.   |
-`src` | *Uint8Array* | The source data.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `dst` | *Int8Array* | The destination array. |
+| `startIndex` | *number* | The start index to write in the array. |
+| `src` | *Uint8Array* | The source data. |
 
 **Returns:** *number*
 
@@ -55,9 +55,9 @@ The encoded length of the data.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`data` | *Uint8Array* | The data.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `data` | *Uint8Array* | The data. |
 
 **Returns:** *number*
 

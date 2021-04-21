@@ -1297,6 +1297,9 @@ module.exports = {
         "unicorn/prefer-string-slice": [
             "error"
         ],
+        "unicorn/prefer-switch": [
+            "off"
+        ],
         "unicorn/prefer-text-content": [
             "error"
         ],

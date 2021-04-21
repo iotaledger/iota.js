@@ -34,10 +34,10 @@ Are the two array equals.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`array1` | *undefined* \| *ArrayLike*<unknown\> | The first array.   |
-`array2` | *undefined* \| *ArrayLike*<unknown\> | The second array.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `array1` | *undefined* \| *ArrayLike*<unknown\> | The first array. |
+| `array2` | *undefined* \| *ArrayLike*<unknown\> | The second array. |
 
 **Returns:** *boolean*
 

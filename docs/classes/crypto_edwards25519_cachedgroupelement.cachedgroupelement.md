@@ -29,12 +29,12 @@ Create a new instance of CachedGroupElement.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`yPlusX?` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | Y + X Element.   |
-`yMinusX?` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | Y - X Element   |
-`Z?` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | Z Element.   |
-`T2d?` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | T2d Element.    |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `yPlusX?` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | Y + X Element. |
+| `yMinusX?` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | Y - X Element |
+| `Z?` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | Z Element. |
+| `T2d?` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | T2d Element. |
 
 **Returns:** [*CachedGroupElement*](crypto_edwards25519_cachedgroupelement.cachedgroupelement.md)
 

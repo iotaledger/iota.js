@@ -8,7 +8,7 @@ Signature locked single output.
 
 ## Hierarchy
 
-* [*ITypeBase*](models_itypebase.itypebase.md)<*1*\>
+* [*ITypeBase*](models_itypebase.itypebase.md)<``1``\>
 
   ↳ **ISigLockedDustAllowanceOutput**
 
@@ -40,7 +40,7 @@ ___
 
 ### type
 
-• **type**: *1*
+• **type**: ``1``
 
 The type of the object.
 

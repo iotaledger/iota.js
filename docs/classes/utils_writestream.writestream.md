@@ -96,9 +96,9 @@ Set the current write index.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`writeIndex` | *number* | The current write index.    |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `writeIndex` | *number* | The current write index. |
 
 **Returns:** *void*
 
@@ -124,10 +124,10 @@ Write a boolean to the stream.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`name` | *string* | The name of the data we are trying to write.   |
-`val` | *boolean* | The data to write.    |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `name` | *string* | The name of the data we are trying to write. |
+| `val` | *boolean* | The data to write. |
 
 **Returns:** *void*
 
@@ -141,10 +141,10 @@ Write a byte to the stream.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`name` | *string* | The name of the data we are trying to write.   |
-`val` | *number* | The data to write.    |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `name` | *string* | The name of the data we are trying to write. |
+| `val` | *number* | The data to write. |
 
 **Returns:** *void*
 
@@ -158,11 +158,11 @@ Write fixed length stream.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`name` | *string* | The name of the data we are trying to write.   |
-`length` | *number* | The length of the data to write.   |
-`val` | *Uint8Array* | The data to write.    |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `name` | *string* | The name of the data we are trying to write. |
+| `length` | *number* | The length of the data to write. |
+| `val` | *Uint8Array* | The data to write. |
 
 **Returns:** *void*
 
@@ -176,11 +176,11 @@ Write fixed length stream.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`name` | *string* | The name of the data we are trying to write.   |
-`length` | *number* | The length of the data to write.   |
-`val` | *string* | The data to write.    |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `name` | *string* | The name of the data we are trying to write. |
+| `length` | *number* | The length of the data to write. |
+| `val` | *string* | The data to write. |
 
 **Returns:** *void*
 
@@ -194,10 +194,10 @@ Write a UInt16 to the stream.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`name` | *string* | The name of the data we are trying to write.   |
-`val` | *number* | The data to write.    |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `name` | *string* | The name of the data we are trying to write. |
+| `val` | *number* | The data to write. |
 
 **Returns:** *void*
 
@@ -211,10 +211,10 @@ Write a UInt32 to the stream.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`name` | *string* | The name of the data we are trying to write.   |
-`val` | *number* | The data to write.    |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `name` | *string* | The name of the data we are trying to write. |
+| `val` | *number* | The data to write. |
 
 **Returns:** *void*
 
@@ -228,9 +228,9 @@ Write a UInt64 to the stream.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`name` | *string* | The name of the data we are trying to write.   |
-`val` | *bigint* | The data to write.    |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `name` | *string* | The name of the data we are trying to write. |
+| `val` | *bigint* | The data to write. |
 
 **Returns:** *void*

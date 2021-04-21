@@ -42,12 +42,12 @@ Create a new instance of ExtendedGroupElement.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`X?` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | The X element.   |
-`Y?` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | The Y Element.   |
-`Z?` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | The Z Element.   |
-`T?` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | The T Element.    |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `X?` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | The X element. |
+| `Y?` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | The Y Element. |
+| `Z?` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | The Z Element. |
+| `T?` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | The T Element. |
 
 **Returns:** [*ExtendedGroupElement*](crypto_edwards25519_extendedgroupelement.extendedgroupelement.md)
 
@@ -94,9 +94,9 @@ CofactorEqual checks whether p, q are equal up to cofactor multiplication
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`q` | [*ExtendedGroupElement*](crypto_edwards25519_extendedgroupelement.extendedgroupelement.md) | The extended group element.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `q` | [*ExtendedGroupElement*](crypto_edwards25519_extendedgroupelement.extendedgroupelement.md) | The extended group element. |
 
 **Returns:** *boolean*
 
@@ -112,9 +112,9 @@ Double the element.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`cachedGroupElement` | [*CompletedGroupElement*](crypto_edwards25519_completedgroupelement.completedgroupelement.md) | The element to populate.    |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `cachedGroupElement` | [*CompletedGroupElement*](crypto_edwards25519_completedgroupelement.completedgroupelement.md) | The element to populate. |
 
 **Returns:** *void*
 
@@ -128,9 +128,9 @@ Populate the element from bytes.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`bytes` | *Uint8Array* | The butes to populate from.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `bytes` | *Uint8Array* | The butes to populate from. |
 
 **Returns:** *boolean*
 
@@ -150,9 +150,9 @@ Preconditions:
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`a` | *Uint8Array* | The a.    |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `a` | *Uint8Array* | The a. |
 
 **Returns:** *void*
 
@@ -166,9 +166,9 @@ Convert the element to bytes.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`bytes` | *Uint8Array* | The array to store the bytes in.    |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `bytes` | *Uint8Array* | The array to store the bytes in. |
 
 **Returns:** *void*
 
@@ -182,9 +182,9 @@ Convert to a cached group element.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`cacheGroupElement` | [*CachedGroupElement*](crypto_edwards25519_cachedgroupelement.cachedgroupelement.md) | The element to populate.    |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `cacheGroupElement` | [*CachedGroupElement*](crypto_edwards25519_cachedgroupelement.cachedgroupelement.md) | The element to populate. |
 
 **Returns:** *void*
 
@@ -198,9 +198,9 @@ Convert to a projective group element.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`projectiveGroupElement` | [*ProjectiveGroupElement*](crypto_edwards25519_projectivegroupelement.projectivegroupelement.md) | The element to populate.    |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `projectiveGroupElement` | [*ProjectiveGroupElement*](crypto_edwards25519_projectivegroupelement.projectivegroupelement.md) | The element to populate. |
 
 **Returns:** *void*
 

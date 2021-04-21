@@ -51,9 +51,9 @@ Format the value in the best units.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`value` | *number* | The value to format.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `value` | *number* | The value to format. |
 
 **Returns:** Units
 
@@ -69,11 +69,11 @@ Convert the value to different units.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`value` | *number* | The value to convert.   |
-`fromUnit` | Units | The form unit.   |
-`toUnit` | Units | The to unit.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `value` | *number* | The value to convert. |
+| `fromUnit` | Units | The form unit. |
+| `toUnit` | Units | The to unit. |
 
 **Returns:** *number*
 
@@ -89,10 +89,10 @@ Format the value in the best units.
 
 #### Parameters:
 
-Name | Type | Default value | Description |
-:------ | :------ | :------ | :------ |
-`value` | *number* | - | The value to format.   |
-`decimalPlaces` | *number* | 2 | The number of decimal places to display.   |
+| Name | Type | Default value | Description |
+| :------ | :------ | :------ | :------ |
+| `value` | *number* | - | The value to format. |
+| `decimalPlaces` | *number* | 2 | The number of decimal places to display. |
 
 **Returns:** *string*
 
@@ -108,11 +108,11 @@ Format the value in the best units.
 
 #### Parameters:
 
-Name | Type | Default value | Description |
-:------ | :------ | :------ | :------ |
-`value` | *number* | - | The value to format.   |
-`unit` | Units | - | The unit to format with.   |
-`decimalPlaces` | *number* | 2 | The number of decimal places to display.   |
+| Name | Type | Default value | Description |
+| :------ | :------ | :------ | :------ |
+| `value` | *number* | - | The value to format. |
+| `unit` | Units | - | The unit to format with. |
+| `decimalPlaces` | *number* | 2 | The number of decimal places to display. |
 
 **Returns:** *string*
 

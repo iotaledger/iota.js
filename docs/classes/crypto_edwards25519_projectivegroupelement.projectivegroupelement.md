@@ -34,11 +34,11 @@ Create a new instance of CompletedGroupElement.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`X?` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | The X element.   |
-`Y?` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | The Y Element.   |
-`Z?` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | The Z Element.    |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `X?` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | The X element. |
+| `Y?` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | The Y Element. |
+| `Z?` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | The Z Element. |
 
 **Returns:** [*ProjectiveGroupElement*](crypto_edwards25519_projectivegroupelement.projectivegroupelement.md)
 
@@ -79,10 +79,10 @@ B is the Ed25519 base point (x,4/5) with x positive.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`a` | *Uint8Array* | The a   |
-`A` | [*ExtendedGroupElement*](crypto_edwards25519_extendedgroupelement.extendedgroupelement.md) | The A   |
-`b` | *Uint8Array* | The b    |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `a` | *Uint8Array* | The a |
+| `A` | [*ExtendedGroupElement*](crypto_edwards25519_extendedgroupelement.extendedgroupelement.md) | The A |
+| `b` | *Uint8Array* | The b |
 
 **Returns:** *void*

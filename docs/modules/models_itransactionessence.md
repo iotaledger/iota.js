@@ -16,6 +16,6 @@
 
 ### TRANSACTION\_ESSENCE\_TYPE
 
-• `Const` **TRANSACTION\_ESSENCE\_TYPE**: *0*= 0
+• `Const` **TRANSACTION\_ESSENCE\_TYPE**: ``0``= 0
 
 The global type for the transaction essence.

@@ -20,9 +20,9 @@ Scalar Minimal returns true if the given scalar is less than the order of the Cu
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`scalar` | Uint8Array | The scalar.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `scalar` | Uint8Array | The scalar. |
 
 **Returns:** *boolean*
 
@@ -47,12 +47,12 @@ Output:
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`s` | Uint8Array | The scalar.   |
-`a` | Uint8Array | The a.   |
-`b` | Uint8Array | The b.   |
-`c` | Uint8Array | The c.    |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `s` | Uint8Array | The scalar. |
+| `a` | Uint8Array | The a. |
+| `b` | Uint8Array | The b. |
+| `c` | Uint8Array | The c. |
 
 **Returns:** *void*
 
@@ -67,9 +67,9 @@ where l = 2^252 + 27742317777372353535851937790883648493.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`out` | Uint8Array | s[0]+256*s[1]+...+256^31*s[31] = s mod l   |
-`s` | Uint8Array | s[0]+256*s[1]+...+256^63*s[63] = s    |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `out` | Uint8Array | s[0]+256*s[1]+...+256^31*s[31] = s mod l |
+| `s` | Uint8Array | s[0]+256*s[1]+...+256^63*s[63] = s |
 
 **Returns:** *void*

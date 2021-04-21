@@ -57,10 +57,10 @@ Create a new instance of client.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`endpoint` | *string* | The endpoint.   |
-`options?` | SingleNodeClientOptions | Options for the client.    |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `endpoint` | *string* | The endpoint. |
+| `options?` | SingleNodeClientOptions | Options for the client. |
 
 **Returns:** [*SingleNodeClient*](clients_singlenodeclient.singlenodeclient.md)
 
@@ -74,9 +74,9 @@ Get the address details.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`addressBech32` | *string* | The address to get the details for.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `addressBech32` | *string* | The address to get the details for. |
 
 **Returns:** *Promise*<[*IAddressResponse*](../interfaces/models_api_iaddressresponse.iaddressresponse.md)\>
 
@@ -94,9 +94,9 @@ Get the address detail using ed25519 address.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`addressEd25519` | *string* | The address to get the details for.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `addressEd25519` | *string* | The address to get the details for. |
 
 **Returns:** *Promise*<[*IAddressResponse*](../interfaces/models_api_iaddressresponse.iaddressresponse.md)\>
 
@@ -114,11 +114,11 @@ Get the address outputs using ed25519 address.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`addressEd25519` | *string* | The address to get the outputs for.   |
-`type?` | *number* | Filter the type of outputs you are looking up, defaults to all.   |
-`includeSpent?` | *boolean* | Filter the type of outputs you are looking up, defaults to false.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `addressEd25519` | *string* | The address to get the outputs for. |
+| `type?` | *number* | Filter the type of outputs you are looking up, defaults to all. |
+| `includeSpent?` | *boolean* | Filter the type of outputs you are looking up, defaults to false. |
 
 **Returns:** *Promise*<[*IAddressOutputsResponse*](../interfaces/models_api_iaddressoutputsresponse.iaddressoutputsresponse.md)\>
 
@@ -136,11 +136,11 @@ Get the address outputs.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`addressBech32` | *string* | The address to get the outputs for.   |
-`type?` | *number* | Filter the type of outputs you are looking up, defaults to all.   |
-`includeSpent?` | *boolean* | Filter the type of outputs you are looking up, defaults to false.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `addressBech32` | *string* | The address to get the outputs for. |
+| `type?` | *number* | Filter the type of outputs you are looking up, defaults to all. |
+| `includeSpent?` | *boolean* | Filter the type of outputs you are looking up, defaults to false. |
 
 **Returns:** *Promise*<[*IAddressOutputsResponse*](../interfaces/models_api_iaddressoutputsresponse.iaddressoutputsresponse.md)\>
 
@@ -158,9 +158,9 @@ Combine the query params.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`queryParams` | *string*[] | The quer params to combine.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `queryParams` | *string*[] | The quer params to combine. |
 
 **Returns:** *string*
 
@@ -170,23 +170,23 @@ ___
 
 ### fetchBinary
 
-▸ **fetchBinary**<T\>(`method`: *get* \| *post*, `route`: *string*, `requestData?`: *Uint8Array*): *Promise*<Uint8Array \| T\>
+▸ **fetchBinary**<T\>(`method`: ``"get"`` \| ``"post"``, `route`: *string*, `requestData?`: *Uint8Array*): *Promise*<Uint8Array \| T\>
 
 Perform a request for binary data.
 
 #### Type parameters:
 
-Name |
-:------ |
-`T` |
+| Name |
+| :------ |
+| `T` |
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`method` | *get* \| *post* | The http method.   |
-`route` | *string* | The route of the request.   |
-`requestData?` | *Uint8Array* | Request to send to the endpoint.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `method` | ``"get"`` \| ``"post"`` | The http method. |
+| `route` | *string* | The route of the request. |
+| `requestData?` | *Uint8Array* | Request to send to the endpoint. |
 
 **Returns:** *Promise*<Uint8Array \| T\>
 
@@ -196,24 +196,24 @@ ___
 
 ### fetchJson
 
-▸ **fetchJson**<T, U\>(`method`: *get* \| *post* \| *delete*, `route`: *string*, `requestData?`: T): *Promise*<U\>
+▸ **fetchJson**<T, U\>(`method`: ``"get"`` \| ``"post"`` \| ``"delete"``, `route`: *string*, `requestData?`: T): *Promise*<U\>
 
 Perform a request in json format.
 
 #### Type parameters:
 
-Name |
-:------ |
-`T` |
-`U` |
+| Name |
+| :------ |
+| `T` |
+| `U` |
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`method` | *get* \| *post* \| *delete* | The http method.   |
-`route` | *string* | The route of the request.   |
-`requestData?` | T | Request to send to the endpoint.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `method` | ``"get"`` \| ``"post"`` \| ``"delete"`` | The http method. |
+| `route` | *string* | The route of the request. |
+| `requestData?` | T | Request to send to the endpoint. |
 
 **Returns:** *Promise*<U\>
 
@@ -229,9 +229,9 @@ Perform a request and just return the status.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`route` | *string* | The route of the request.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `route` | *string* | The route of the request. |
 
 **Returns:** *Promise*<number\>
 
@@ -275,9 +275,9 @@ Get the message data by id.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`messageId` | *string* | The message to get the data for.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `messageId` | *string* | The message to get the data for. |
 
 **Returns:** *Promise*<[*IMessage*](../interfaces/models_imessage.imessage.md)\>
 
@@ -295,9 +295,9 @@ Get the children of a message.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`messageId` | *string* | The id of the message to get the children for.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `messageId` | *string* | The id of the message to get the children for. |
 
 **Returns:** *Promise*<[*IChildrenResponse*](../interfaces/models_api_ichildrenresponse.ichildrenresponse.md)\>
 
@@ -315,9 +315,9 @@ Get the message metadata by id.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`messageId` | *string* | The message to get the metadata for.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `messageId` | *string* | The message to get the metadata for. |
 
 **Returns:** *Promise*<[*IMessageMetadata*](../interfaces/models_imessagemetadata.imessagemetadata.md)\>
 
@@ -335,9 +335,9 @@ Get the message raw data by id.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`messageId` | *string* | The message to get the data for.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `messageId` | *string* | The message to get the data for. |
 
 **Returns:** *Promise*<Uint8Array\>
 
@@ -355,9 +355,9 @@ Submit message.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`message` | [*IMessage*](../interfaces/models_imessage.imessage.md) | The message to submit.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `message` | [*IMessage*](../interfaces/models_imessage.imessage.md) | The message to submit. |
 
 **Returns:** *Promise*<string\>
 
@@ -375,9 +375,9 @@ Submit message in raw format.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`message` | *Uint8Array* | The message to submit.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `message` | *Uint8Array* | The message to submit. |
 
 **Returns:** *Promise*<string\>
 
@@ -395,9 +395,9 @@ Find messages by index.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`indexationKey` | *string* \| *Uint8Array* | The index value as a byte array or UTF8 string.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `indexationKey` | *string* \| *Uint8Array* | The index value as a byte array or UTF8 string. |
 
 **Returns:** *Promise*<[*IMessagesResponse*](../interfaces/models_api_imessagesresponse.imessagesresponse.md)\>
 
@@ -415,9 +415,9 @@ Get the requested milestone.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`index` | *number* | The index of the milestone to get.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `index` | *number* | The index of the milestone to get. |
 
 **Returns:** *Promise*<[*IMilestoneResponse*](../interfaces/models_api_imilestoneresponse.imilestoneresponse.md)\>
 
@@ -435,9 +435,9 @@ Get the requested milestone utxo changes.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`index` | *number* | The index of the milestone to request the changes for.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `index` | *number* | The index of the milestone to request the changes for. |
 
 **Returns:** *Promise*<[*IMilestoneUtxoChangesResponse*](../interfaces/models_api_imilestoneutxochangesresponse.imilestoneutxochangesresponse.md)\>
 
@@ -455,9 +455,9 @@ Find an output by its identifier.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`outputId` | *string* | The id of the output to get.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `outputId` | *string* | The id of the output to get. |
 
 **Returns:** *Promise*<[*IOutputResponse*](../interfaces/models_api_ioutputresponse.ioutputresponse.md)\>
 
@@ -475,9 +475,9 @@ Get a peer.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`peerId` | *string* | The peer to delete.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `peerId` | *string* | The peer to delete. |
 
 **Returns:** *Promise*<[*IPeer*](../interfaces/models_ipeer.ipeer.md)\>
 
@@ -495,10 +495,10 @@ Add a new peer.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`multiAddress` | *string* | The address of the peer to add.   |
-`alias?` | *string* | An optional alias for the peer.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `multiAddress` | *string* | The address of the peer to add. |
+| `alias?` | *string* | An optional alias for the peer. |
 
 **Returns:** *Promise*<[*IPeer*](../interfaces/models_ipeer.ipeer.md)\>
 
@@ -516,9 +516,9 @@ Delete a peer.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`peerId` | *string* | The peer to delete.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `peerId` | *string* | The peer to delete. |
 
 **Returns:** *Promise*<void\>
 
@@ -550,9 +550,9 @@ Get all the stored receipts or those for a given migrated at index.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`migratedAt?` | *number* | The index the receipts were migrated at, if not supplied returns all stored receipts.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `migratedAt?` | *number* | The index the receipts were migrated at, if not supplied returns all stored receipts. |
 
 **Returns:** *Promise*<[*IReceiptsResponse*](../interfaces/models_api_ireceiptsresponse.ireceiptsresponse.md)\>
 
@@ -584,9 +584,9 @@ Get the message that was included in the ledger for a transaction.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`transactionId` | *string* | The id of the transaction to get the included message for.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `transactionId` | *string* | The id of the transaction to get the included message for. |
 
 **Returns:** *Promise*<[*IMessage*](../interfaces/models_imessage.imessage.md)\>
 

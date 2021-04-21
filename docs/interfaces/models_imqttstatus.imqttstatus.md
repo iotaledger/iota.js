@@ -35,7 +35,7 @@ ___
 
 ### state
 
-• **state**: *disconnected* \| *connected* \| *disconnecting* \| *connecting*
+• **state**: ``"disconnected"`` \| ``"connected"`` \| ``"disconnecting"`` \| ``"connecting"``
 
 The connection status.
 
@@ -43,6 +43,6 @@ ___
 
 ### type
 
-• **type**: *connect* \| *disconnect* \| *error* \| *subscription-add* \| *subscription-remove*
+• **type**: ``"connect"`` \| ``"disconnect"`` \| ``"error"`` \| ``"subscription-add"`` \| ``"subscription-remove"``
 
 The type of message.

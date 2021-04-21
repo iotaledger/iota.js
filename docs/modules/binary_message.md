@@ -49,9 +49,9 @@ Deserialize the message from binary.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`readStream` | [*ReadStream*](../classes/utils_readstream.readstream.md) | The message to deserialize.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `readStream` | [*ReadStream*](../classes/utils_readstream.readstream.md) | The message to deserialize. |
 
 **Returns:** [*IMessage*](../interfaces/models_imessage.imessage.md)
 
@@ -67,9 +67,9 @@ Serialize the message essence to binary.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`writeStream` | [*WriteStream*](../classes/utils_writestream.writestream.md) | The stream to write the data to.   |
-`object` | [*IMessage*](../interfaces/models_imessage.imessage.md) | The object to serialize.    |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `writeStream` | [*WriteStream*](../classes/utils_writestream.writestream.md) | The stream to write the data to. |
+| `object` | [*IMessage*](../interfaces/models_imessage.imessage.md) | The object to serialize. |
 
 **Returns:** *void*

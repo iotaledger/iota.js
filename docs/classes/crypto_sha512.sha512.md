@@ -36,9 +36,9 @@ Create a new instance of Sha512.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`bits` | *number* | The number of bits.    |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `bits` | *number* | The number of bits. |
 
 **Returns:** [*Sha512*](crypto_sha512.sha512.md)
 
@@ -96,9 +96,9 @@ Update the hash with the data.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`message` | *Uint8Array* | The data to update the hash with.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `message` | *Uint8Array* | The data to update the hash with. |
 
 **Returns:** [*Sha512*](crypto_sha512.sha512.md)
 
@@ -114,9 +114,9 @@ Perform Sum 512 on the data.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`data` | *Uint8Array* | The data to operate on.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `data` | *Uint8Array* | The data to operate on. |
 
 **Returns:** *Uint8Array*
 

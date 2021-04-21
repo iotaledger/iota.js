@@ -45,10 +45,10 @@ Perform Sum 256 on the data.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`data` | *Uint8Array* | The data to operate on.   |
-`key?` | *Uint8Array* | Optional key for the hash.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `data` | *Uint8Array* | The data to operate on. |
+| `key?` | *Uint8Array* | Optional key for the hash. |
 
 **Returns:** *Uint8Array*
 
@@ -64,10 +64,10 @@ Perform Sum 512 on the data.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`data` | *Uint8Array* | The data to operate on.   |
-`key?` | *Uint8Array* | Optional key for the hash.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `data` | *Uint8Array* | The data to operate on. |
+| `key?` | *Uint8Array* | Optional key for the hash. |
 
 **Returns:** *Uint8Array*
 

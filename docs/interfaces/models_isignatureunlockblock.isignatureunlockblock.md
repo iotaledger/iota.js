@@ -8,7 +8,7 @@ Signature unlock block.
 
 ## Hierarchy
 
-* [*ITypeBase*](models_itypebase.itypebase.md)<*0*\>
+* [*ITypeBase*](models_itypebase.itypebase.md)<``0``\>
 
   ↳ **ISignatureUnlockBlock**
 
@@ -31,7 +31,7 @@ ___
 
 ### type
 
-• **type**: *0*
+• **type**: ``0``
 
 The type of the object.
 

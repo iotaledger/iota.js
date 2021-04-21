@@ -8,7 +8,7 @@ Indexation payload.
 
 ## Hierarchy
 
-* [*ITypeBase*](models_itypebase.itypebase.md)<*2*\>
+* [*ITypeBase*](models_itypebase.itypebase.md)<``2``\>
 
   ↳ **IIndexationPayload**
 
@@ -40,7 +40,7 @@ ___
 
 ### type
 
-• **type**: *2*
+• **type**: ``2``
 
 The type of the object.
 

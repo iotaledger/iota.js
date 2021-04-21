@@ -35,9 +35,9 @@ Create a new instance of Sha256.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`bits` | *number* | The number of bits.    |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `bits` | *number* | The number of bits. |
 
 **Returns:** [*Sha256*](crypto_sha256.sha256.md)
 
@@ -79,9 +79,9 @@ Update the hash with the data.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`message` | *Uint8Array* | The data to update the hash with.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `message` | *Uint8Array* | The data to update the hash with. |
 
 **Returns:** [*Sha256*](crypto_sha256.sha256.md)
 
@@ -97,9 +97,9 @@ Perform Sum 224 on the data.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`data` | *Uint8Array* | The data to operate on.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `data` | *Uint8Array* | The data to operate on. |
 
 **Returns:** *Uint8Array*
 
@@ -115,9 +115,9 @@ Perform Sum 256 on the data.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`data` | *Uint8Array* | The data to operate on.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `data` | *Uint8Array* | The data to operate on. |
 
 **Returns:** *Uint8Array*
 

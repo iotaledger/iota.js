@@ -34,9 +34,9 @@ Generate a new random array.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`length` | *number* | The length of buffer to create.   |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `length` | *number* | The length of buffer to create. |
 
 **Returns:** *Uint8Array*
 

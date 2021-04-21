@@ -40,12 +40,12 @@ Create a new instance of CompletedGroupElement.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`X?` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | The X element.   |
-`Y?` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | The Y Element.   |
-`Z?` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | The Z Element.   |
-`T?` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | The T Element.    |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `X?` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | The X element. |
+| `Y?` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | The Y Element. |
+| `Z?` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | The Z Element. |
+| `T?` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | The T Element. |
 
 **Returns:** [*CompletedGroupElement*](crypto_edwards25519_completedgroupelement.completedgroupelement.md)
 
@@ -91,10 +91,10 @@ Group Element add
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`p` | [*ExtendedGroupElement*](crypto_edwards25519_extendedgroupelement.extendedgroupelement.md) | The extended group element.   |
-`q` | [*CachedGroupElement*](crypto_edwards25519_cachedgroupelement.cachedgroupelement.md) | The cached group element.    |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `p` | [*ExtendedGroupElement*](crypto_edwards25519_extendedgroupelement.extendedgroupelement.md) | The extended group element. |
+| `q` | [*CachedGroupElement*](crypto_edwards25519_cachedgroupelement.cachedgroupelement.md) | The cached group element. |
 
 **Returns:** *void*
 
@@ -108,10 +108,10 @@ Mixed add.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`p` | [*ExtendedGroupElement*](crypto_edwards25519_extendedgroupelement.extendedgroupelement.md) | The p.   |
-`q` | [*PreComputedGroupElement*](crypto_edwards25519_precomputedgroupelement.precomputedgroupelement.md) | The q.    |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `p` | [*ExtendedGroupElement*](crypto_edwards25519_extendedgroupelement.extendedgroupelement.md) | The p. |
+| `q` | [*PreComputedGroupElement*](crypto_edwards25519_precomputedgroupelement.precomputedgroupelement.md) | The q. |
 
 **Returns:** *void*
 
@@ -125,10 +125,10 @@ Mixed subtract.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`p` | [*ExtendedGroupElement*](crypto_edwards25519_extendedgroupelement.extendedgroupelement.md) | The p.   |
-`q` | [*PreComputedGroupElement*](crypto_edwards25519_precomputedgroupelement.precomputedgroupelement.md) | The q.    |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `p` | [*ExtendedGroupElement*](crypto_edwards25519_extendedgroupelement.extendedgroupelement.md) | The p. |
+| `q` | [*PreComputedGroupElement*](crypto_edwards25519_precomputedgroupelement.precomputedgroupelement.md) | The q. |
 
 **Returns:** *void*
 
@@ -142,10 +142,10 @@ Group Element substract.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`p` | [*ExtendedGroupElement*](crypto_edwards25519_extendedgroupelement.extendedgroupelement.md) | The p.   |
-`q` | [*CachedGroupElement*](crypto_edwards25519_cachedgroupelement.cachedgroupelement.md) | The q.    |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `p` | [*ExtendedGroupElement*](crypto_edwards25519_extendedgroupelement.extendedgroupelement.md) | The p. |
+| `q` | [*CachedGroupElement*](crypto_edwards25519_cachedgroupelement.cachedgroupelement.md) | The q. |
 
 **Returns:** *void*
 
@@ -159,9 +159,9 @@ Convert to extended element.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`e` | [*ExtendedGroupElement*](crypto_edwards25519_extendedgroupelement.extendedgroupelement.md) | The extended element to fill.    |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `e` | [*ExtendedGroupElement*](crypto_edwards25519_extendedgroupelement.extendedgroupelement.md) | The extended element to fill. |
 
 **Returns:** *void*
 
@@ -175,8 +175,8 @@ Convert to projective element.
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`p` | [*ProjectiveGroupElement*](crypto_edwards25519_projectivegroupelement.projectivegroupelement.md) | The projective element to fill.    |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `p` | [*ProjectiveGroupElement*](crypto_edwards25519_projectivegroupelement.projectivegroupelement.md) | The projective element to fill. |
 
 **Returns:** *void*
