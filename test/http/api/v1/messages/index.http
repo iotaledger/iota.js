@@ -1,5 +1,5 @@
 # Use https://marketplace.visualstudio.com/items?itemName=humao.rest-client to execute these in VSCode
 
 ### Message find by index
-GET http://localhost:14265/api/v1/messages?index=730ec9afbe2cf4ade373ca23674e6404ec5f4d71d6f62a8a7d40aee2d20b1355
+GET https://chrysalis-nodes.iota.org/api/v1/messages?index=730ec9afbe2cf4ade373ca23674e6404ec5f4d71d6f62a8a7d40aee2d20b1355
 Content-Type: application/json

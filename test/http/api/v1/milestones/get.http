@@ -1,5 +1,5 @@
 # Use https://marketplace.visualstudio.com/items?itemName=humao.rest-client to execute these in VSCode
 
 ### Milestones data
-GET http://localhost:14265/api/v1/milestones/1500
+GET https://chrysalis-nodes.iota.org/api/v1/milestones/1500
 Content-Type: application/json

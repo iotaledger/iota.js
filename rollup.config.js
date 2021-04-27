@@ -5,7 +5,8 @@ import { terser } from 'rollup-plugin-terser';
 
 const plugins = [
     replace({
-        "process.env.BROWSER": !!process.env.BROWSER
+        "process.env.BROWSER": !!process.env.BROWSER,
+        preventAssignment: true
     }),
     commonjs(),
     resolve({

@@ -1,0 +1,29 @@
+name: Library Build Main/Develop
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/**"
+      - ".github/workflows/main.yml"
+  pull_request:
+    branches: [develop]
+    paths:
+      - "src/**"
+      - ".github/workflows/develop.yml"
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js 12.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: "12"
+      - name: Client Build
+        run: |
+          npm install
+          npm run build

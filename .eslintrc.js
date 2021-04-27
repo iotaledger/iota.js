@@ -1261,6 +1261,9 @@ module.exports = {
         "unicorn/prefer-modern-dom-apis": [
             "error"
         ],
+        "unicorn/prefer-module": [
+            "off"
+        ],
         "unicorn/prefer-negative-index": [
             "error"
         ],

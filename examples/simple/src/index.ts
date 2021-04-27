@@ -1,6 +1,6 @@
 import { Converter, deserializeMessage, IMessage, INDEXATION_PAYLOAD_TYPE, ISigLockedSingleOutput, logInfo, logMessage, logMessageMetadata, logOutput, logTips, MAX_NUMBER_PARENTS, ReadStream, SingleNodeClient } from "@iota/iota.js";
 
-const API_ENDPOINT = "http://localhost:14265";
+const API_ENDPOINT = "https://chrysalis-nodes.iota.org";
 
 async function run() {
     const client = new SingleNodeClient(API_ENDPOINT);

@@ -1,5 +1,5 @@
 # Use https://marketplace.visualstudio.com/items?itemName=humao.rest-client to execute these in VSCode
 
 ### Message metadata
-GET http://localhost:14265/api/v1/messages/ffa06e855dbcc36925fe24ce92650826e71f3dd93901f329a0b8d78212d9ca1a/metadata
+GET https://chrysalis-nodes.iota.org/api/v1/messages/ffa06e855dbcc36925fe24ce92650826e71f3dd93901f329a0b8d78212d9ca1a/metadata
 Content-Type: application/json

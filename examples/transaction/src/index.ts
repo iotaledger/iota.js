@@ -1,6 +1,6 @@
 import { Bech32Helper, Bip32Path, Converter, Ed25519Address, Ed25519Seed, ED25519_ADDRESS_TYPE, getBalance, getUnspentAddress, getUnspentAddresses, IKeyPair, ISigLockedSingleOutput, IUTXOInput, sendAdvanced, SIG_LOCKED_SINGLE_OUTPUT_TYPE, SingleNodeClient, UTXO_INPUT_TYPE } from "@iota/iota.js";
 
-const API_ENDPOINT = "http://localhost:14265";
+const API_ENDPOINT = "https://chrysalis-nodes.iota.org";
 
 async function run() {
     const client = new SingleNodeClient(API_ENDPOINT);

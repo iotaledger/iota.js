@@ -1,7 +1,7 @@
 # Use https://marketplace.visualstudio.com/items?itemName=humao.rest-client to execute these in VSCode
 
 ### Health - returns 200 for health, 503 for unhealthy
-GET http://localhost:14265/health
+GET https://chrysalis-nodes.iota.org/health
 Content-Type: application/json
 
 

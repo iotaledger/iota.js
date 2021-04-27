@@ -1,5 +1,5 @@
 # Use https://marketplace.visualstudio.com/items?itemName=humao.rest-client to execute these in VSCode
 
 ### Peers List
-GET http://localhost:14265/api/v1/peers
+GET https://chrysalis-nodes.iota.org/api/v1/peers
 Content-Type: application/json

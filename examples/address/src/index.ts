@@ -1,6 +1,6 @@
 import { Bech32Helper, Bip32Path, Bip39, Converter, Ed25519Address, Ed25519Seed, ED25519_ADDRESS_TYPE, generateBip44Address, IOTA_BIP44_BASE_PATH, SingleNodeClient } from "@iota/iota.js";
 
-const API_ENDPOINT = "http://localhost:14265/";
+const API_ENDPOINT = "https://chrysalis-nodes.iota.org/";
 
 async function run() {
     const client = new SingleNodeClient(API_ENDPOINT);
