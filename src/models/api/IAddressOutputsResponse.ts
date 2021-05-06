@@ -28,4 +28,9 @@ export interface IAddressOutputsResponse {
      * The ids of the outputs.
      */
     outputIds: string[];
+
+    /**
+     * The ledger index at which these outputs where available at.
+     */
+    ledgerIndex: number;
 }

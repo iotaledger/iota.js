@@ -13,6 +13,7 @@ List of outputs for an address.
 - [address](models_api_iaddressoutputsresponse.iaddressoutputsresponse.md#address)
 - [addressType](models_api_iaddressoutputsresponse.iaddressoutputsresponse.md#addresstype)
 - [count](models_api_iaddressoutputsresponse.iaddressoutputsresponse.md#count)
+- [ledgerIndex](models_api_iaddressoutputsresponse.iaddressoutputsresponse.md#ledgerindex)
 - [maxResults](models_api_iaddressoutputsresponse.iaddressoutputsresponse.md#maxresults)
 - [outputIds](models_api_iaddressoutputsresponse.iaddressoutputsresponse.md#outputids)
 
@@ -39,6 +40,14 @@ ___
 • **count**: *number*
 
 The number of items returned.
+
+___
+
+### ledgerIndex
+
+• **ledgerIndex**: *number*
+
+The ledger index at which these outputs where available at.
 
 ___
 

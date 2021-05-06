@@ -23,4 +23,9 @@ export interface IAddressResponse {
      * The address is allowed to be sent dust.
      */
     dustAllowed: boolean;
+
+    /**
+     * The ledger index at which these outputs where available at.
+     */
+    ledgerIndex: number;
 }

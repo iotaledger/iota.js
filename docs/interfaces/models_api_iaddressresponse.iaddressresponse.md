@@ -14,6 +14,7 @@ Address details.
 - [addressType](models_api_iaddressresponse.iaddressresponse.md#addresstype)
 - [balance](models_api_iaddressresponse.iaddressresponse.md#balance)
 - [dustAllowed](models_api_iaddressresponse.iaddressresponse.md#dustallowed)
+- [ledgerIndex](models_api_iaddressresponse.iaddressresponse.md#ledgerindex)
 
 ## Properties
 
@@ -46,3 +47,11 @@ ___
 • **dustAllowed**: *boolean*
 
 The address is allowed to be sent dust.
+
+___
+
+### ledgerIndex
+
+• **ledgerIndex**: *number*
+
+The ledger index at which these outputs where available at.
