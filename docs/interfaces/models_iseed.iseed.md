@@ -8,7 +8,7 @@ Interface definitions for seed.
 
 ## Implemented by
 
-* [*Ed25519Seed*](../classes/seedtypes_ed25519seed.ed25519seed.md)
+- [*Ed25519Seed*](../classes/seedtypes_ed25519seed.ed25519seed.md)
 
 ## Table of contents
 
@@ -27,7 +27,7 @@ Interface definitions for seed.
 
 Generate a new seed from the path.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |

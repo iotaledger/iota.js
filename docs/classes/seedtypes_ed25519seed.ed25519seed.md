@@ -8,7 +8,7 @@ Class to help with seeds.
 
 ## Implements
 
-* [*ISeed*](../interfaces/models_iseed.iseed.md)
+- [*ISeed*](../interfaces/models_iseed.iseed.md)
 
 ## Table of contents
 
@@ -31,7 +31,7 @@ Class to help with seeds.
 
 Create a new instance of Ed25519Seed.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -47,7 +47,7 @@ Create a new instance of Ed25519Seed.
 
 Generate a new seed from the path.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -91,11 +91,11 @@ ___
 
 ### fromMnemonic
 
-▸ `Static`**fromMnemonic**(`mnemonic`: *string*): [*Ed25519Seed*](seedtypes_ed25519seed.ed25519seed.md)
+▸ `Static` **fromMnemonic**(`mnemonic`: *string*): [*Ed25519Seed*](seedtypes_ed25519seed.ed25519seed.md)
 
 Create the seed from a Bip39 mnemonic.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |

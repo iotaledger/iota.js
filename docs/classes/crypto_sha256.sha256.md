@@ -33,7 +33,7 @@ TypeScript conversion from https://github.com/emn178/js-sha256
 
 Create a new instance of Sha256.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -77,7 +77,7 @@ ___
 
 Update the hash with the data.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -91,11 +91,11 @@ ___
 
 ### sum224
 
-▸ `Static`**sum224**(`data`: *Uint8Array*): *Uint8Array*
+▸ `Static` **sum224**(`data`: *Uint8Array*): *Uint8Array*
 
 Perform Sum 224 on the data.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -109,11 +109,11 @@ ___
 
 ### sum256
 
-▸ `Static`**sum256**(`data`: *Uint8Array*): *Uint8Array*
+▸ `Static` **sum256**(`data`: *Uint8Array*): *Uint8Array*
 
 Perform Sum 256 on the data.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |

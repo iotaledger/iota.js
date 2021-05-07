@@ -14,7 +14,7 @@ Type of the object.
 
 ## Hierarchy
 
-* **ITypeBase**
+- **ITypeBase**
 
   ↳ [*IEd25519Address*](models_ied25519address.ied25519address.md)
 

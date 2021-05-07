@@ -32,7 +32,7 @@ ProjectiveGroupElement: (X:Y:Z) satisfying x=X/Z, y=Y/Z
 
 Create a new instance of CompletedGroupElement.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -77,7 +77,7 @@ where a = a[0]+256*a[1]+...+256^31 a[31].
 and b = b[0]+256*b[1]+...+256^31 b[31].
 B is the Ed25519 base point (x,4/5) with x positive.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |

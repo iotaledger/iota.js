@@ -8,7 +8,7 @@ Treasury Output.
 
 ## Hierarchy
 
-* [*ITypeBase*](models_itypebase.itypebase.md)<``2``\>
+- [*ITypeBase*](models_itypebase.itypebase.md)<``2``\>
 
   ↳ **ITreasuryOutput**
 

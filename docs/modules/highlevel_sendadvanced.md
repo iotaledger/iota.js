@@ -17,7 +17,7 @@
 
 Build a transaction payload.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -37,7 +37,7 @@ ___
 
 Send a transfer from the balance on the seed.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |

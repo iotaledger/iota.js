@@ -39,17 +39,17 @@ Class to help with units formatting.
 
 Map units.
 
-#### Type declaration:
+#### Type declaration
 
 ## Methods
 
 ### calculateBest
 
-▸ `Static`**calculateBest**(`value`: *number*): Units
+▸ `Static` **calculateBest**(`value`: *number*): Units
 
 Format the value in the best units.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -63,11 +63,11 @@ ___
 
 ### convertUnits
 
-▸ `Static`**convertUnits**(`value`: *number*, `fromUnit`: Units, `toUnit`: Units): *number*
+▸ `Static` **convertUnits**(`value`: *number*, `fromUnit`: Units, `toUnit`: Units): *number*
 
 Convert the value to different units.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -83,11 +83,11 @@ ___
 
 ### formatBest
 
-▸ `Static`**formatBest**(`value`: *number*, `decimalPlaces?`: *number*): *string*
+▸ `Static` **formatBest**(`value`: *number*, `decimalPlaces?`: *number*): *string*
 
 Format the value in the best units.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Default value | Description |
 | :------ | :------ | :------ | :------ |
@@ -102,11 +102,11 @@ ___
 
 ### formatUnits
 
-▸ `Static`**formatUnits**(`value`: *number*, `unit`: Units, `decimalPlaces?`: *number*): *string*
+▸ `Static` **formatUnits**(`value`: *number*, `unit`: Units, `decimalPlaces?`: *number*): *string*
 
 Format the value in the best units.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Default value | Description |
 | :------ | :------ | :------ | :------ |

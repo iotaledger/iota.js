@@ -35,7 +35,7 @@ ___
 
 Optional error in the response.
 
-#### Type declaration:
+#### Type declaration
 
 | Name | Type | Description |
 | :------ | :------ | :------ |

@@ -31,11 +31,11 @@ https://github.com/satoshilabs/slips/blob/master/slip-0010.md
 
 ### derivePath
 
-▸ `Static`**derivePath**(`seed`: *Uint8Array*, `path`: [*Bip32Path*](crypto_bip32path.bip32path.md)): *object*
+▸ `Static` **derivePath**(`seed`: *Uint8Array*, `path`: [*Bip32Path*](crypto_bip32path.bip32path.md)): *object*
 
 Derive a key from the path.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -50,11 +50,11 @@ ___
 
 ### getMasterKeyFromSeed
 
-▸ `Static`**getMasterKeyFromSeed**(`seed`: *Uint8Array*): *object*
+▸ `Static` **getMasterKeyFromSeed**(`seed`: *Uint8Array*): *object*
 
 Get the master key from the seed.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -68,11 +68,11 @@ ___
 
 ### getPublicKey
 
-▸ `Static`**getPublicKey**(`privateKey`: *Uint8Array*, `withZeroByte?`: *boolean*): *Uint8Array*
+▸ `Static` **getPublicKey**(`privateKey`: *Uint8Array*, `withZeroByte?`: *boolean*): *Uint8Array*
 
 Get the public key from the private key.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Default value | Description |
 | :------ | :------ | :------ | :------ |

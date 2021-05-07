@@ -49,7 +49,7 @@ context.
 
 Create a new instance of FieldElement.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -73,7 +73,7 @@ The data for the element.
 
 Add the elements and store in this.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -93,7 +93,7 @@ replace (f,g) with (f,g) if b == 0.
 
 Preconditions: b in {0,1}.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -122,7 +122,7 @@ ___
 
 Combine the element.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -147,7 +147,7 @@ ___
 
 Populate from bytes.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -169,7 +169,7 @@ Preconditions:
 Postconditions:
    |h| bounded by 1.1*2^25,1.1*2^24,1.1*2^25,1.1*2^24,etc.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -187,7 +187,7 @@ ___
 
 Invert
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -253,7 +253,7 @@ Can get away with 11 carries, but then data flow is much deeper.
 
 With tighter constraints on inputs, can squeeze carries into: number.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -296,7 +296,7 @@ ___
 
 Perform the pow 22523 calculate.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -318,7 +318,7 @@ Preconditions:
 Postconditions:
    |h| bounded by 1.1*2^25,1.1*2^24,1.1*2^25,1.1*2^24,etc.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -343,7 +343,7 @@ Postconditions:
    |h| bounded by 1.01*2^25,1.01*2^24,1.01*2^25,1.01*2^24,etc.
 See fe_mul.c for discussion of implementation strategy.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -359,7 +359,7 @@ ___
 
 Subtract the elements and store in this.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -398,7 +398,7 @@ Proof:
   Have q+2^(-255)x = 2^(-255)(h + 19 2^(-25) h9 + 2^(-1))
   so floor(2^(-255)(h + 19 2^(-25) h9 + 2^(-1))) = q.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |

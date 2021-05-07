@@ -38,11 +38,11 @@ Convert arrays to and from different formats.
 
 ### base64ToBytes
 
-▸ `Static`**base64ToBytes**(`base64`: *string*): *Uint8Array*
+▸ `Static` **base64ToBytes**(`base64`: *string*): *Uint8Array*
 
 Convert a base64 string to bytes.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -56,11 +56,11 @@ ___
 
 ### binaryToBytes
 
-▸ `Static`**binaryToBytes**(`binary`: *string*): *Uint8Array*
+▸ `Static` **binaryToBytes**(`binary`: *string*): *Uint8Array*
 
 Convert a binary string to bytes.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -74,11 +74,11 @@ ___
 
 ### bytesToBase64
 
-▸ `Static`**bytesToBase64**(`bytes`: *Uint8Array*): *string*
+▸ `Static` **bytesToBase64**(`bytes`: *Uint8Array*): *string*
 
 Convert bytes to base64 string.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -92,11 +92,11 @@ ___
 
 ### bytesToBinary
 
-▸ `Static`**bytesToBinary**(`bytes`: *Uint8Array*): *string*
+▸ `Static` **bytesToBinary**(`bytes`: *Uint8Array*): *string*
 
 Convert bytes to binary string.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -110,11 +110,11 @@ ___
 
 ### bytesToHex
 
-▸ `Static`**bytesToHex**(`array`: *ArrayLike*<number\>, `startIndex?`: *number*, `length?`: *number*, `reverse?`: *boolean*): *string*
+▸ `Static` **bytesToHex**(`array`: *ArrayLike*<number\>, `startIndex?`: *number*, `length?`: *number*, `reverse?`: *boolean*): *string*
 
 Encode a raw array to hex string.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -131,11 +131,11 @@ ___
 
 ### bytesToUtf8
 
-▸ `Static`**bytesToUtf8**(`array`: *ArrayLike*<number\>, `startIndex?`: *number*, `length?`: *number*): *string*
+▸ `Static` **bytesToUtf8**(`array`: *ArrayLike*<number\>, `startIndex?`: *number*, `length?`: *number*): *string*
 
 Encode a raw array to UTF8 string.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -151,11 +151,11 @@ ___
 
 ### hexToBytes
 
-▸ `Static`**hexToBytes**(`hex`: *string*, `reverse?`: *boolean*): *Uint8Array*
+▸ `Static` **hexToBytes**(`hex`: *string*, `reverse?`: *boolean*): *Uint8Array*
 
 Decode a hex string to raw array.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -170,11 +170,11 @@ ___
 
 ### hexToUtf8
 
-▸ `Static`**hexToUtf8**(`hex`: *string*): *string*
+▸ `Static` **hexToUtf8**(`hex`: *string*): *string*
 
 Convert the hex text to text.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -188,11 +188,11 @@ ___
 
 ### isHex
 
-▸ `Static`**isHex**(`value`: *string*): *boolean*
+▸ `Static` **isHex**(`value`: *string*): *boolean*
 
 Is the data hex format.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -206,11 +206,11 @@ ___
 
 ### utf8ToBytes
 
-▸ `Static`**utf8ToBytes**(`utf8`: *string*): *Uint8Array*
+▸ `Static` **utf8ToBytes**(`utf8`: *string*): *Uint8Array*
 
 Convert a UTF8 string to raw array.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -224,11 +224,11 @@ ___
 
 ### utf8ToHex
 
-▸ `Static`**utf8ToHex**(`utf8`: *string*): *string*
+▸ `Static` **utf8ToHex**(`utf8`: *string*): *string*
 
 Convert the UTF8 to hex.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |

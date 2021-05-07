@@ -8,7 +8,7 @@ Receipt payload.
 
 ## Hierarchy
 
-* [*ITypeBase*](models_itypebase.itypebase.md)<``4``\>
+- [*ITypeBase*](models_itypebase.itypebase.md)<``4``\>
 
   ↳ **ITreasuryTransactionPayload**
 

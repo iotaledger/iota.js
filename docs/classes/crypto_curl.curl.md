@@ -32,7 +32,7 @@ Class to implement Curl sponge.
 
 Create a new instance of Curl.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -64,7 +64,7 @@ The State Length.
 
 Absorbs trits given an offset and length
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -82,7 +82,7 @@ ___
 
 Get the state of the sponge.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -110,7 +110,7 @@ ___
 
 Squeezes trits given an offset and length
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |

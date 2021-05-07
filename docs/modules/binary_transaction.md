@@ -29,7 +29,7 @@ The minimum length of a transaction essence binary representation.
 
 Deserialize the transaction essence from binary.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -47,7 +47,7 @@ ___
 
 Serialize the transaction essence to binary.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |

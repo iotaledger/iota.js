@@ -8,7 +8,7 @@ Client for API communication.
 
 ## Implements
 
-* [*IClient*](../interfaces/models_iclient.iclient.md)
+- [*IClient*](../interfaces/models_iclient.iclient.md)
 
 ## Table of contents
 
@@ -55,7 +55,7 @@ Client for API communication.
 
 Create a new instance of client.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -72,7 +72,7 @@ Create a new instance of client.
 
 Get the address details.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -92,7 +92,7 @@ ___
 
 Get the address detail using ed25519 address.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -112,7 +112,7 @@ ___
 
 Get the address outputs using ed25519 address.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -134,7 +134,7 @@ ___
 
 Get the address outputs.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -156,7 +156,7 @@ ___
 
 Combine the query params.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -174,13 +174,13 @@ ___
 
 Perform a request for binary data.
 
-#### Type parameters:
+#### Type parameters
 
 | Name |
 | :------ |
 | `T` |
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -200,14 +200,14 @@ ___
 
 Perform a request in json format.
 
-#### Type parameters:
+#### Type parameters
 
 | Name |
 | :------ |
 | `T` |
 | `U` |
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -227,7 +227,7 @@ ___
 
 Perform a request and just return the status.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -273,7 +273,7 @@ ___
 
 Get the message data by id.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -293,7 +293,7 @@ ___
 
 Get the children of a message.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -313,7 +313,7 @@ ___
 
 Get the message metadata by id.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -333,7 +333,7 @@ ___
 
 Get the message raw data by id.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -353,7 +353,7 @@ ___
 
 Submit message.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -373,7 +373,7 @@ ___
 
 Submit message in raw format.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -393,7 +393,7 @@ ___
 
 Find messages by index.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -413,7 +413,7 @@ ___
 
 Get the requested milestone.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -433,7 +433,7 @@ ___
 
 Get the requested milestone utxo changes.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -453,7 +453,7 @@ ___
 
 Find an output by its identifier.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -473,7 +473,7 @@ ___
 
 Get a peer.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -493,7 +493,7 @@ ___
 
 Add a new peer.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -514,7 +514,7 @@ ___
 
 Delete a peer.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -548,7 +548,7 @@ ___
 
 Get all the stored receipts or those for a given migrated at index.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -582,7 +582,7 @@ ___
 
 Get the message that was included in the ledger for a transaction.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |

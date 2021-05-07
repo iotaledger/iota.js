@@ -94,7 +94,7 @@ ___
 
 Set the current write index.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -122,7 +122,7 @@ ___
 
 Write a boolean to the stream.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -139,7 +139,7 @@ ___
 
 Write a byte to the stream.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -156,7 +156,7 @@ ___
 
 Write fixed length stream.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -174,7 +174,7 @@ ___
 
 Write fixed length stream.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -192,7 +192,7 @@ ___
 
 Write a UInt16 to the stream.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -209,7 +209,7 @@ ___
 
 Write a UInt32 to the stream.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -226,7 +226,7 @@ ___
 
 Write a UInt64 to the stream.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |

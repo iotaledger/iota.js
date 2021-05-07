@@ -18,7 +18,7 @@
 
 Scalar Minimal returns true if the given scalar is less than the order of the Curve
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -45,7 +45,7 @@ Output:
   s[0]+256*s[1]+...+256^31*s[31] = (ab+c) mod l
   where l = 2^252 + 27742317777372353535851937790883648493.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -65,7 +65,7 @@ ___
 Scalar reduce.
 where l = 2^252 + 27742317777372353535851937790883648493.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |

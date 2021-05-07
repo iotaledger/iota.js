@@ -27,7 +27,7 @@ TypeScript conversion from https://github.com/emn178/js-sha512
 
 Create a new instance of HmacSha512.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Default value | Description |
 | :------ | :------ | :------ | :------ |
@@ -56,7 +56,7 @@ ___
 
 Update the hash with the data.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -70,11 +70,11 @@ ___
 
 ### sum512
 
-▸ `Static`**sum512**(`key`: *Uint8Array*, `data`: *Uint8Array*): *Uint8Array*
+▸ `Static` **sum512**(`key`: *Uint8Array*, `data`: *Uint8Array*): *Uint8Array*
 
 Perform Sum 512 on the data.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |

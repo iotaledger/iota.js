@@ -16,7 +16,7 @@
 
 Get the balance for a list of addresses.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |

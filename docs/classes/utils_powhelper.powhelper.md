@@ -30,11 +30,11 @@ Helper methods for POW.
 
 ### score
 
-▸ `Static`**score**(`message`: *Uint8Array*): *number*
+▸ `Static` **score**(`message`: *Uint8Array*): *number*
 
 Perform the score calculation.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -48,11 +48,11 @@ ___
 
 ### trailingZeros
 
-▸ `Static`**trailingZeros**(`powDigest`: *Uint8Array*, `nonce`: *bigint*): *number*
+▸ `Static` **trailingZeros**(`powDigest`: *Uint8Array*, `nonce`: *bigint*): *number*
 
 Calculate the trailing zeros.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -67,11 +67,11 @@ ___
 
 ### trinaryTrailingZeros
 
-▸ `Static`**trinaryTrailingZeros**(`trits`: *Int8Array*): *number*
+▸ `Static` **trinaryTrailingZeros**(`trits`: *Int8Array*): *number*
 
 Find the number of trailing zeros.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |

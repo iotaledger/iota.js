@@ -33,11 +33,11 @@ Implementation of Bip39 for mnemonic generation.
 
 ### entropyChecksumBits
 
-▸ `Static`**entropyChecksumBits**(`entropy`: *Uint8Array*): *string*
+▸ `Static` **entropyChecksumBits**(`entropy`: *Uint8Array*): *string*
 
 Calculate the entropy checksum.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -51,11 +51,11 @@ ___
 
 ### entropyToMnemonic
 
-▸ `Static`**entropyToMnemonic**(`entropy`: *Uint8Array*): *string*
+▸ `Static` **entropyToMnemonic**(`entropy`: *Uint8Array*): *string*
 
 Generate a mnemonic from the entropy.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -69,11 +69,11 @@ ___
 
 ### mnemonicToEntropy
 
-▸ `Static`**mnemonicToEntropy**(`mnemonic`: *string*): *Uint8Array*
+▸ `Static` **mnemonicToEntropy**(`mnemonic`: *string*): *Uint8Array*
 
 Convert the mnemonic back to entropy.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -87,11 +87,11 @@ ___
 
 ### mnemonicToSeed
 
-▸ `Static`**mnemonicToSeed**(`mnemonic`: *string*, `password?`: *string*, `iterations?`: *number*, `keyLength?`: *number*): *Uint8Array*
+▸ `Static` **mnemonicToSeed**(`mnemonic`: *string*, `password?`: *string*, `iterations?`: *number*, `keyLength?`: *number*): *Uint8Array*
 
 Convert a mnemonic to a seed.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Default value | Description |
 | :------ | :------ | :------ | :------ |
@@ -108,11 +108,11 @@ ___
 
 ### randomMnemonic
 
-▸ `Static`**randomMnemonic**(`length?`: *number*): *string*
+▸ `Static` **randomMnemonic**(`length?`: *number*): *string*
 
 Generate a random mnemonic.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Default value | Description |
 | :------ | :------ | :------ | :------ |
@@ -126,11 +126,11 @@ ___
 
 ### setWordList
 
-▸ `Static`**setWordList**(`wordlistData`: *string*[], `joiningChar?`: *string*): *void*
+▸ `Static` **setWordList**(`wordlistData`: *string*[], `joiningChar?`: *string*): *void*
 
 Set the wordlist and joining character.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Default value | Description |
 | :------ | :------ | :------ | :------ |

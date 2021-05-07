@@ -16,7 +16,7 @@
 
 Send a data message.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |

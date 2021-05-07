@@ -35,11 +35,11 @@ Based on reference implementation https://github.com/sipa/bech32/blob/master/ref
 
 ### decode
 
-▸ `Static`**decode**(`bech`: *string*): *undefined* \| {}
+▸ `Static` **decode**(`bech`: *string*): *undefined* \| {}
 
 Decode a bech32 string.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -53,11 +53,11 @@ ___
 
 ### decodeTo5BitArray
 
-▸ `Static`**decodeTo5BitArray**(`bech`: *string*): *undefined* \| {}
+▸ `Static` **decodeTo5BitArray**(`bech`: *string*): *undefined* \| {}
 
 Decode a bech32 string to 5 bit array.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -71,11 +71,11 @@ ___
 
 ### encode
 
-▸ `Static`**encode**(`humanReadablePart`: *string*, `data`: *Uint8Array*): *string*
+▸ `Static` **encode**(`humanReadablePart`: *string*, `data`: *Uint8Array*): *string*
 
 Encode the buffer.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -90,11 +90,11 @@ ___
 
 ### encode5BitArray
 
-▸ `Static`**encode5BitArray**(`humanReadablePart`: *string*, `data5Bit`: *Uint8Array*): *string*
+▸ `Static` **encode5BitArray**(`humanReadablePart`: *string*, `data5Bit`: *Uint8Array*): *string*
 
 Encode the 5 bit data buffer.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -109,11 +109,11 @@ ___
 
 ### from5Bit
 
-▸ `Static`**from5Bit**(`fiveBit`: *Uint8Array*): *Uint8Array*
+▸ `Static` **from5Bit**(`fiveBit`: *Uint8Array*): *Uint8Array*
 
 Convert the 5 bit data to 8 bit.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -127,11 +127,11 @@ ___
 
 ### matches
 
-▸ `Static`**matches**(`humanReadablePart`: *string*, `bech32Text?`: *string*): *boolean*
+▸ `Static` **matches**(`humanReadablePart`: *string*, `bech32Text?`: *string*): *boolean*
 
 Does the given string match the bech32 pattern.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -146,11 +146,11 @@ ___
 
 ### to5Bit
 
-▸ `Static`**to5Bit**(`bytes`: *Uint8Array*): *Uint8Array*
+▸ `Static` **to5Bit**(`bytes`: *Uint8Array*): *Uint8Array*
 
 Convert the input bytes into 5 bit data.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |

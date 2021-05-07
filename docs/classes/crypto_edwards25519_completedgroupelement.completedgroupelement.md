@@ -38,7 +38,7 @@ CompletedGroupElement: ((X:Z),(Y:T)) satisfying x=X/Z, y=Y/T
 
 Create a new instance of CompletedGroupElement.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -89,7 +89,7 @@ The Z Element.
 
 Group Element add
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -106,7 +106,7 @@ ___
 
 Mixed add.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -123,7 +123,7 @@ ___
 
 Mixed subtract.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -140,7 +140,7 @@ ___
 
 Group Element substract.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -157,7 +157,7 @@ ___
 
 Convert to extended element.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -173,7 +173,7 @@ ___
 
 Convert to projective element.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |

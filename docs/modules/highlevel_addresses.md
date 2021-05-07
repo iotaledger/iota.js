@@ -17,7 +17,7 @@
 
 Generate addresses based on the account indexing style.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -36,7 +36,7 @@ ___
 
 Generate a bip44 path based on all its parts.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |

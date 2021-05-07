@@ -32,7 +32,7 @@ Helper methods for bigints.
 
 ### random
 
-▸ `Static`**random**(): *bigint*
+▸ `Static` **random**(): *bigint*
 
 Generate a random bigint.
 
@@ -44,11 +44,11 @@ ___
 
 ### read3
 
-▸ `Static`**read3**(`data`: *Uint8Array*, `byteOffset`: *number*): *bigint*
+▸ `Static` **read3**(`data`: *Uint8Array*, `byteOffset`: *number*): *bigint*
 
 Load 3 bytes from array as bigint.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -63,11 +63,11 @@ ___
 
 ### read4
 
-▸ `Static`**read4**(`data`: *Uint8Array*, `byteOffset`: *number*): *bigint*
+▸ `Static` **read4**(`data`: *Uint8Array*, `byteOffset`: *number*): *bigint*
 
 Load 4 bytes from array as bigint.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -82,11 +82,11 @@ ___
 
 ### read8
 
-▸ `Static`**read8**(`data`: *Uint8Array*, `byteOffset`: *number*): *bigint*
+▸ `Static` **read8**(`data`: *Uint8Array*, `byteOffset`: *number*): *bigint*
 
 Load 8 bytes from array as bigint.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -101,11 +101,11 @@ ___
 
 ### write8
 
-▸ `Static`**write8**(`value`: *bigint*, `data`: *Uint8Array*, `byteOffset`: *number*): *void*
+▸ `Static` **write8**(`value`: *bigint*, `data`: *Uint8Array*, `byteOffset`: *number*): *void*
 
 Convert a big int to bytes.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |

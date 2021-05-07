@@ -8,7 +8,7 @@ Transaction payload.
 
 ## Hierarchy
 
-* [*ITypeBase*](models_itypebase.itypebase.md)<``0``\>
+- [*ITypeBase*](models_itypebase.itypebase.md)<``0``\>
 
   ↳ **ITransactionPayload**
 

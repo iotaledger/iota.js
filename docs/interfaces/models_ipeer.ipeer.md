@@ -41,7 +41,7 @@ ___
 
 Gossip metrics for the peer.
 
-#### Type declaration:
+#### Type declaration
 
 | Name | Type | Description |
 | :------ | :------ | :------ |

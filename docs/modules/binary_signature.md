@@ -40,7 +40,7 @@ The minimum length of a signature binary representation.
 
 Deserialize the Ed25519 signature from binary.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -58,7 +58,7 @@ ___
 
 Deserialize the signature from binary.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -76,7 +76,7 @@ ___
 
 Serialize the Ed25519 signature to binary.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -93,7 +93,7 @@ ___
 
 Serialize the signature to binary.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |

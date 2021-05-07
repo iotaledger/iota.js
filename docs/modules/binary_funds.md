@@ -49,7 +49,7 @@ The length of the tail hash length in bytes.
 
 Deserialize the receipt payload funds from binary.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -67,7 +67,7 @@ ___
 
 Deserialize the migrated fund from binary.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -85,7 +85,7 @@ ___
 
 Serialize the receipt payload funds to binary.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -102,7 +102,7 @@ ___
 
 Serialize the migrated funds to binary.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |

@@ -16,7 +16,7 @@
 
 Promote an existing message.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |

@@ -47,7 +47,7 @@ The minimum number of parents.
 
 Deserialize the message from binary.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -65,7 +65,7 @@ ___
 
 Serialize the message essence to binary.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |

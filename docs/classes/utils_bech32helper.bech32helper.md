@@ -51,11 +51,11 @@ The default human readable part of the bech32 addresses for testnet, currently '
 
 ### fromBech32
 
-▸ `Static`**fromBech32**(`bech32Text`: *string*, `humanReadablePart`: *string*): *undefined* \| {}
+▸ `Static` **fromBech32**(`bech32Text`: *string*, `humanReadablePart`: *string*): *undefined* \| {}
 
 Decode an address from bech32.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -70,11 +70,11 @@ ___
 
 ### matches
 
-▸ `Static`**matches**(`bech32Text`: *string*, `humanReadablePart`: *string*): *boolean*
+▸ `Static` **matches**(`bech32Text`: *string*, `humanReadablePart`: *string*): *boolean*
 
 Does the provided string look like it might be an bech32 address with matching hrp.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -89,11 +89,11 @@ ___
 
 ### toBech32
 
-▸ `Static`**toBech32**(`addressType`: *number*, `addressBytes`: *Uint8Array*, `humanReadablePart`: *string*): *string*
+▸ `Static` **toBech32**(`addressType`: *number*, `addressBytes`: *Uint8Array*, `humanReadablePart`: *string*): *string*
 
 Encode an address to bech32.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |

@@ -53,7 +53,7 @@ The minimum length of an unlock block binary representation.
 
 Deserialize the reference unlock block from binary.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -71,7 +71,7 @@ ___
 
 Deserialize the signature unlock block from binary.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -89,7 +89,7 @@ ___
 
 Deserialize the unlock block from binary.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -107,7 +107,7 @@ ___
 
 Deserialize the unlock blocks from binary.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -125,7 +125,7 @@ ___
 
 Serialize the reference unlock block to binary.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -142,7 +142,7 @@ ___
 
 Serialize the signature unlock block to binary.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -159,7 +159,7 @@ ___
 
 Serialize the unlock block to binary.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -176,7 +176,7 @@ ___
 
 Serialize the unlock blocks to binary.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |

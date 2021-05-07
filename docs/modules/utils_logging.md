@@ -32,7 +32,7 @@
 
 Log an address to the console.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -49,7 +49,7 @@ ___
 
 Log fund to the console.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -66,7 +66,7 @@ ___
 
 Log a indexation payload to the console.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -83,7 +83,7 @@ ___
 
 Log the node information.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -100,7 +100,7 @@ ___
 
 Log input to the console.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -117,7 +117,7 @@ ___
 
 Log a message to the console.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -134,7 +134,7 @@ ___
 
 Log the message metadata to the console.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -151,7 +151,7 @@ ___
 
 Log a milestone payload to the console.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -168,7 +168,7 @@ ___
 
 Log output to the console.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -185,7 +185,7 @@ ___
 
 Log a message to the console.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -202,7 +202,7 @@ ___
 
 Log a receipt payload to the console.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -219,7 +219,7 @@ ___
 
 Log signature to the console.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -236,7 +236,7 @@ ___
 
 Log the tips information.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -253,7 +253,7 @@ ___
 
 Log a transaction payload to the console.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -270,7 +270,7 @@ ___
 
 Log a treasury transaction payload to the console.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -287,7 +287,7 @@ ___
 
 Log unlock block to the console.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -304,7 +304,7 @@ ___
 
 Set the logger for output.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |

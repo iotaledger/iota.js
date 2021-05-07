@@ -8,7 +8,7 @@ Class to help with Ed25519 Signature scheme.
 
 ## Implements
 
-* [*IAddress*](../interfaces/models_iaddress.iaddress.md)
+- [*IAddress*](../interfaces/models_iaddress.iaddress.md)
 
 ## Table of contents
 
@@ -29,7 +29,7 @@ Class to help with Ed25519 Signature scheme.
 
 Create a new instance of Ed25519Address.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -59,7 +59,7 @@ ___
 
 Use the public key to validate the address.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |

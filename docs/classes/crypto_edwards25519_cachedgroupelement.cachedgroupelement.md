@@ -27,7 +27,7 @@ Cached group element.
 
 Create a new instance of CachedGroupElement.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |

@@ -29,11 +29,11 @@ Class implements the b1t6 encoding encoding which uses a group of 6 trits to enc
 
 ### encode
 
-▸ `Static`**encode**(`dst`: *Int8Array*, `startIndex`: *number*, `src`: *Uint8Array*): *number*
+▸ `Static` **encode**(`dst`: *Int8Array*, `startIndex`: *number*, `src`: *Uint8Array*): *number*
 
 Encode a byte array into trits.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -49,11 +49,11 @@ ___
 
 ### encodedLen
 
-▸ `Static`**encodedLen**(`data`: *Uint8Array*): *number*
+▸ `Static` **encodedLen**(`data`: *Uint8Array*): *number*
 
 The encoded length of the data.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |

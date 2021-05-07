@@ -8,7 +8,7 @@ Perform the POW on a message.
 
 ## Implemented by
 
-* [*LocalPowProvider*](../classes/pow_localpowprovider.localpowprovider.md)
+- [*LocalPowProvider*](../classes/pow_localpowprovider.localpowprovider.md)
 
 ## Table of contents
 
@@ -24,7 +24,7 @@ Perform the POW on a message.
 
 Perform pow on the message and return the nonce of at least targetScore.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |

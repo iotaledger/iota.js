@@ -8,7 +8,7 @@ Client interface definition for API communication.
 
 ## Implemented by
 
-* [*MqttClient*](../classes/clients_mqttclient.mqttclient.md)
+- [*MqttClient*](../classes/clients_mqttclient.mqttclient.md)
 
 ## Table of contents
 
@@ -40,7 +40,7 @@ Client interface definition for API communication.
 
 Subscribe to the ed25519 address for output updates.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -59,7 +59,7 @@ ___
 
 Subscribe to the address for output updates.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -78,7 +78,7 @@ ___
 
 Subscribe to get all messages for the specified index in object form.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -97,7 +97,7 @@ ___
 
 Subscribe to get all messages for the specified index in binary form.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -116,7 +116,7 @@ ___
 
 Subscribe to metadata updates for a specific message.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -135,7 +135,7 @@ ___
 
 Subscribe to get all messages in object form.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -153,7 +153,7 @@ ___
 
 Subscribe to get the metadata for all the messages.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -171,7 +171,7 @@ ___
 
 Subscribe to get all messages in binary form.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -189,7 +189,7 @@ ___
 
 Subscribe to the latest confirmed milestone updates.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -207,7 +207,7 @@ ___
 
 Subscribe to the latest milestone updates.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -225,7 +225,7 @@ ___
 
 Subscribe to updates for a specific output.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -244,7 +244,7 @@ ___
 
 Subscribe to changes in the client state.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -262,13 +262,13 @@ ___
 
 Subscribe to another type of message as json.
 
-#### Type parameters:
+#### Type parameters
 
 | Name |
 | :------ |
 | `T` |
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -287,7 +287,7 @@ ___
 
 Subscribe to another type of message as raw data.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -306,7 +306,7 @@ ___
 
 Subscribe to message updates for a specific transactionId.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -325,7 +325,7 @@ ___
 
 Subscribe to message updates for a specific transactionId.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -344,7 +344,7 @@ ___
 
 Remove a subscription.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |

@@ -8,7 +8,7 @@ Signature locked single output.
 
 ## Hierarchy
 
-* [*ITypeBase*](models_itypebase.itypebase.md)<``0``\>
+- [*ITypeBase*](models_itypebase.itypebase.md)<``0``\>
 
   ↳ **ISigLockedSingleOutput**
 

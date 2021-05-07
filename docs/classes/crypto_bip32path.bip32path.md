@@ -29,7 +29,7 @@ Class to help with bip32 paths.
 
 Create a new instance of Bip32Path.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -67,7 +67,7 @@ ___
 
 Push a new index on to the path.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -83,7 +83,7 @@ ___
 
 Push a new hardened index on to the path.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -107,11 +107,11 @@ ___
 
 ### fromPath
 
-▸ `Static`**fromPath**(`bip32Path`: [*Bip32Path*](crypto_bip32path.bip32path.md)): [*Bip32Path*](crypto_bip32path.bip32path.md)
+▸ `Static` **fromPath**(`bip32Path`: [*Bip32Path*](crypto_bip32path.bip32path.md)): [*Bip32Path*](crypto_bip32path.bip32path.md)
 
 Construct a new path by cloning an existing one.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |

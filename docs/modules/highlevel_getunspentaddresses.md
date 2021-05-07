@@ -17,7 +17,7 @@
 
 Get all the unspent addresses.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -38,13 +38,13 @@ ___
 
 Get all the unspent addresses using an address generator.
 
-#### Type parameters:
+#### Type parameters
 
 | Name |
 | :------ |
 | `T` |
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |

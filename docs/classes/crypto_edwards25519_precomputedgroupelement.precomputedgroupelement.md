@@ -34,7 +34,7 @@ PreComputedGroupElement: (y+x,y-x,2dxy)
 
 Create a new instance of PreComputedGroupElement.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -76,7 +76,7 @@ Y + X Element.
 
 CMove the pre computed element.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -93,7 +93,7 @@ ___
 
 Select point.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |

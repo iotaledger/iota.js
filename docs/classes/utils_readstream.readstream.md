@@ -35,7 +35,7 @@ Keep track of the read index within a stream.
 
 Create a new instance of ReadStream.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Default value | Description |
 | :------ | :------ | :------ | :------ |
@@ -64,7 +64,7 @@ ___
 
 Does the storage have enough data remaining.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -94,7 +94,7 @@ ___
 
 Read a boolean from the stream.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Default value | Description |
 | :------ | :------ | :------ | :------ |
@@ -113,7 +113,7 @@ ___
 
 Read a byte from the stream.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Default value | Description |
 | :------ | :------ | :------ | :------ |
@@ -132,7 +132,7 @@ ___
 
 Read an array of byte from the stream.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Default value | Description |
 | :------ | :------ | :------ | :------ |
@@ -152,7 +152,7 @@ ___
 
 Read fixed length as hex.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Default value | Description |
 | :------ | :------ | :------ | :------ |
@@ -172,7 +172,7 @@ ___
 
 Read a UInt16 from the stream.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Default value | Description |
 | :------ | :------ | :------ | :------ |
@@ -191,7 +191,7 @@ ___
 
 Read a UInt32 from the stream.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Default value | Description |
 | :------ | :------ | :------ | :------ |
@@ -210,7 +210,7 @@ ___
 
 Read a UInt64 from the stream.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Default value | Description |
 | :------ | :------ | :------ | :------ |
@@ -229,7 +229,7 @@ ___
 
 Set the current read index.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |

@@ -28,11 +28,11 @@ Class to help with random generation.
 
 ### generate
 
-▸ `Static`**generate**(`length`: *number*): *Uint8Array*
+▸ `Static` **generate**(`length`: *number*): *Uint8Array*
 
 Generate a new random array.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |

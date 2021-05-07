@@ -16,7 +16,7 @@
 
 Get the first unspent address.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |

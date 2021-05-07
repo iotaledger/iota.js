@@ -8,7 +8,7 @@ Treasury Input.
 
 ## Hierarchy
 
-* [*ITypeBase*](models_itypebase.itypebase.md)<``1``\>
+- [*ITypeBase*](models_itypebase.itypebase.md)<``1``\>
 
   ↳ **ITreasuryInput**
 

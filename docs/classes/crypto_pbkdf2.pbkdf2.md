@@ -29,11 +29,11 @@ Implementation of the password based key derivation function 2.
 
 ### sha256
 
-▸ `Static`**sha256**(`password`: *Uint8Array*, `salt`: *Uint8Array*, `iterations`: *number*, `keyLength`: *number*): *Uint8Array*
+▸ `Static` **sha256**(`password`: *Uint8Array*, `salt`: *Uint8Array*, `iterations`: *number*, `keyLength`: *number*): *Uint8Array*
 
 Derive a key from the parameters using Sha256.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -50,11 +50,11 @@ ___
 
 ### sha512
 
-▸ `Static`**sha512**(`password`: *Uint8Array*, `salt`: *Uint8Array*, `iterations`: *number*, `keyLength`: *number*): *Uint8Array*
+▸ `Static` **sha512**(`password`: *Uint8Array*, `salt`: *Uint8Array*, `iterations`: *number*, `keyLength`: *number*): *Uint8Array*
 
 Derive a key from the parameters using Sha512.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |

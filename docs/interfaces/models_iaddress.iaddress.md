@@ -8,7 +8,7 @@ Interface defining address.
 
 ## Implemented by
 
-* [*Ed25519Address*](../classes/addresstypes_ed25519address.ed25519address.md)
+- [*Ed25519Address*](../classes/addresstypes_ed25519address.ed25519address.md)
 
 ## Table of contents
 
@@ -37,7 +37,7 @@ ___
 
 Use the public key to validate the address.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |

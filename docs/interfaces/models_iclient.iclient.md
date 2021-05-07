@@ -8,7 +8,7 @@ Client interface definition for API communication.
 
 ## Implemented by
 
-* [*SingleNodeClient*](../classes/clients_singlenodeclient.singlenodeclient.md)
+- [*SingleNodeClient*](../classes/clients_singlenodeclient.singlenodeclient.md)
 
 ## Table of contents
 
@@ -47,7 +47,7 @@ Client interface definition for API communication.
 
 Get the address details using bech32 address.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -65,7 +65,7 @@ ___
 
 Get the address details using ed25519 address.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -83,7 +83,7 @@ ___
 
 Get the address outputs.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -103,7 +103,7 @@ ___
 
 Get the address outputs using bech32 address.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -147,7 +147,7 @@ ___
 
 Get the message data by id.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -165,7 +165,7 @@ ___
 
 Get the children of a message.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -183,7 +183,7 @@ ___
 
 Get the message metadata by id.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -201,7 +201,7 @@ ___
 
 Get the message raw data by id.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -219,7 +219,7 @@ ___
 
 Submit message.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -237,7 +237,7 @@ ___
 
 Submit message in raw format.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -255,7 +255,7 @@ ___
 
 Find messages by index.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -273,7 +273,7 @@ ___
 
 Get the requested milestone.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -291,7 +291,7 @@ ___
 
 Get the requested milestone utxo changes.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -309,7 +309,7 @@ ___
 
 Find an output by its identifier.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -327,7 +327,7 @@ ___
 
 Get a peer.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -345,7 +345,7 @@ ___
 
 Add a new peer.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -364,7 +364,7 @@ ___
 
 Delete a peer.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -394,7 +394,7 @@ ___
 
 Get all the stored receipts or those for a given migrated at index.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -424,7 +424,7 @@ ___
 
 Get the message that was included in the ledger for a transaction.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |

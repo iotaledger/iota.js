@@ -27,7 +27,7 @@ TypeScript conversion from https://github.com/emn178/js-sha256
 
 Create a new instance of HmacSha256.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Default value | Description |
 | :------ | :------ | :------ | :------ |
@@ -56,7 +56,7 @@ ___
 
 Update the hash with the data.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -70,11 +70,11 @@ ___
 
 ### sum256
 
-▸ `Static`**sum256**(`key`: *Uint8Array*, `data`: *Uint8Array*): *Uint8Array*
+▸ `Static` **sum256**(`key`: *Uint8Array*, `data`: *Uint8Array*): *Uint8Array*
 
 Perform Sum 256 on the data.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |

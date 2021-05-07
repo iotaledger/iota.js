@@ -21,13 +21,13 @@
 
 Calculate the inputs from the seed and basePath.
 
-#### Type parameters:
+#### Type parameters
 
 | Name |
 | :------ |
 | `T` |
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Default value | Description |
 | :------ | :------ | :------ | :------ |
@@ -50,7 +50,7 @@ ___
 
 Send a transfer from the balance on the seed to a single output.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -74,7 +74,7 @@ ___
 
 Send a transfer from the balance on the seed to a single output.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -98,7 +98,7 @@ ___
 
 Send a transfer from the balance on the seed to multiple outputs.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -121,7 +121,7 @@ ___
 
 Send a transfer from the balance on the seed.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -144,13 +144,13 @@ ___
 
 Send a transfer using account based indexing for the inputs.
 
-#### Type parameters:
+#### Type parameters
 
 | Name |
 | :------ |
 | `T` |
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |

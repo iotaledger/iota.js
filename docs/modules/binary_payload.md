@@ -102,7 +102,7 @@ The minimum length of a treasure transaction payload binary representation.
 
 Deserialize the indexation payload from binary.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -120,7 +120,7 @@ ___
 
 Deserialize the milestone payload from binary.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -138,7 +138,7 @@ ___
 
 Deserialize the payload from binary.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -156,7 +156,7 @@ ___
 
 Deserialize the receipt payload from binary.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -174,7 +174,7 @@ ___
 
 Deserialize the transaction payload from binary.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -192,7 +192,7 @@ ___
 
 Deserialize the treasury transaction payload from binary.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -210,7 +210,7 @@ ___
 
 Serialize the indexation payload to binary.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -227,7 +227,7 @@ ___
 
 Serialize the milestone payload to binary.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -244,7 +244,7 @@ ___
 
 Serialize the payload essence to binary.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -261,7 +261,7 @@ ___
 
 Serialize the receipt payload to binary.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -278,7 +278,7 @@ ___
 
 Serialize the transaction payload to binary.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -295,7 +295,7 @@ ___
 
 Serialize the treasury transaction payload to binary.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |

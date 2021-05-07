@@ -40,7 +40,7 @@ The minimum length of an ed25519 address binary representation.
 
 Deserialize the address from binary.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -58,7 +58,7 @@ ___
 
 Deserialize the Ed25519 address from binary.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -76,7 +76,7 @@ ___
 
 Serialize the address to binary.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -93,7 +93,7 @@ ___
 
 Serialize the ed25519 address to binary.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |

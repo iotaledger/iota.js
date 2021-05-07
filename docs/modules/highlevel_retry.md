@@ -16,7 +16,7 @@
 
 Retry an existing message either by promoting or reattaching.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |

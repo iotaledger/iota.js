@@ -9,7 +9,7 @@ WARNING - This is really slow.
 
 ## Implements
 
-* [*IPowProvider*](../interfaces/models_ipowprovider.ipowprovider.md)
+- [*IPowProvider*](../interfaces/models_ipowprovider.ipowprovider.md)
 
 ## Table of contents
 
@@ -37,7 +37,7 @@ WARNING - This is really slow.
 
 Perform pow on the message and return the nonce of at least targetScore.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |

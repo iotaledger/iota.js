@@ -40,7 +40,7 @@ ExtendedGroupElement: (X:Y:Z:T) satisfying x=X/Z, y=Y/Z, XY=ZT
 
 Create a new instance of ExtendedGroupElement.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -92,7 +92,7 @@ The Z Element.
 CofactorEqual checks whether p, q are equal up to cofactor multiplication
 (ie. if their difference is of small order).
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -110,7 +110,7 @@ ___
 
 Double the element.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -126,7 +126,7 @@ ___
 
 Populate the element from bytes.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -148,7 +148,7 @@ GeScalarMultBase computes h = a*B, where
 Preconditions:
  a[31] <= 127
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -164,7 +164,7 @@ ___
 
 Convert the element to bytes.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -180,7 +180,7 @@ ___
 
 Convert to a cached group element.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -196,7 +196,7 @@ ___
 
 Convert to a projective group element.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |

@@ -71,7 +71,7 @@ The minimum length of a utxo input binary representation.
 
 Deserialize the input from binary.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -89,7 +89,7 @@ ___
 
 Deserialize the inputs from binary.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -107,7 +107,7 @@ ___
 
 Deserialize the treasury input from binary.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -125,7 +125,7 @@ ___
 
 Deserialize the utxo input from binary.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -143,7 +143,7 @@ ___
 
 Serialize the input to binary.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -160,7 +160,7 @@ ___
 
 Serialize the inputs to binary.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -177,7 +177,7 @@ ___
 
 Serialize the treasury input to binary.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -194,7 +194,7 @@ ___
 
 Serialize the utxo input to binary.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |

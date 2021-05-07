@@ -82,7 +82,7 @@ The minimum length of a treasury output binary representation.
 
 Deserialize the output from binary.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -100,7 +100,7 @@ ___
 
 Deserialize the outputs from binary.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -118,7 +118,7 @@ ___
 
 Deserialize the signature locked dust allowance output from binary.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -136,7 +136,7 @@ ___
 
 Deserialize the signature locked single output from binary.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -154,7 +154,7 @@ ___
 
 Deserialize the treasury output from binary.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -172,7 +172,7 @@ ___
 
 Serialize the output to binary.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -189,7 +189,7 @@ ___
 
 Serialize the outputs to binary.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -206,7 +206,7 @@ ___
 
 Serialize the signature locked dust allowance output to binary.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -223,7 +223,7 @@ ___
 
 Serialize the signature locked single output to binary.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -240,7 +240,7 @@ ___
 
 Serialize the treasury output to binary.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |

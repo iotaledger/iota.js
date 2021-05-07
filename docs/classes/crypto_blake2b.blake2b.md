@@ -39,11 +39,11 @@ Blake2b 512.
 
 ### sum256
 
-▸ `Static`**sum256**(`data`: *Uint8Array*, `key?`: *Uint8Array*): *Uint8Array*
+▸ `Static` **sum256**(`data`: *Uint8Array*, `key?`: *Uint8Array*): *Uint8Array*
 
 Perform Sum 256 on the data.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -58,11 +58,11 @@ ___
 
 ### sum512
 
-▸ `Static`**sum512**(`data`: *Uint8Array*, `key?`: *Uint8Array*): *Uint8Array*
+▸ `Static` **sum512**(`data`: *Uint8Array*, `key?`: *Uint8Array*): *Uint8Array*
 
 Perform Sum 512 on the data.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |

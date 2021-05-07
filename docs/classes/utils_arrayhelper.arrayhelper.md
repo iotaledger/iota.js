@@ -28,11 +28,11 @@ Array helper methods.
 
 ### equal
 
-▸ `Static`**equal**(`array1`: *undefined* \| *ArrayLike*<unknown\>, `array2`: *undefined* \| *ArrayLike*<unknown\>): *boolean*
+▸ `Static` **equal**(`array1`: *undefined* \| *ArrayLike*<unknown\>, `array2`: *undefined* \| *ArrayLike*<unknown\>): *boolean*
 
 Are the two array equals.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
