@@ -1,5 +1,16 @@
 # Changelog
 
+## v1.5.1
+
+* Added ChaCha20
+* Added Poly1305
+* Added ChaCha20Poly1305
+* Added `ledgerIndex` to `IAddressOutputsResponse` and `IAddressResponse`
+
+## v1.5.0
+
+* A New Dawn
+
 ## v1.5.0-alpha.2
 
 * High level send, getBalance, getUnspentAddress and getUnspentAddresses functions are now passed accountIndex instead of Bip32 base path, the paths are calculated internally using the default path m/44'/4218'/{accountIndex}'/{isInternal}'/{addressIndex}'
