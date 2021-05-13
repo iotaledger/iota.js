@@ -31,6 +31,14 @@ module.exports = {
             "ignoreInternal": true
         }
     },
+    "ignorePatterns": [
+        ".eslintrc.js",
+        "rollup.config.js",
+        "jest.config.js",
+        "dist/**/*",
+        "es/**/*",
+        "typings/**/*"
+    ],
     "rules": {
         "@typescript-eslint/adjacent-overload-signatures": [
             "error"
