@@ -1709,7 +1709,7 @@
 	 * which is an extension of https://github.com/golang/crypto/tree/master/ed25519
 	 * which in a port of the “ref10” implementation of ed25519 from SUPERCOP
 	 */
-	const bigIntHelper_1$6 = bigIntHelper;
+	const bigIntHelper_1$5 = bigIntHelper;
 	const bigIntCommon_1$2 = bigIntCommon;
 	/**
 	 * Class for field element operations.
@@ -2038,16 +2038,16 @@
 	     * @param bytes The bytes to populate from.
 	     */
 	    fromBytes(bytes) {
-	        const h0 = bigIntHelper_1$6.BigIntHelper.read4(bytes, 0);
-	        const h1 = bigIntHelper_1$6.BigIntHelper.read3(bytes, 4) << bigIntCommon_1$2.BIG_ARR[6];
-	        const h2 = bigIntHelper_1$6.BigIntHelper.read3(bytes, 7) << bigIntCommon_1$2.BIG_ARR[5];
-	        const h3 = bigIntHelper_1$6.BigIntHelper.read3(bytes, 10) << bigIntCommon_1$2.BIG_ARR[3];
-	        const h4 = bigIntHelper_1$6.BigIntHelper.read3(bytes, 13) << bigIntCommon_1$2.BIG_ARR[2];
-	        const h5 = bigIntHelper_1$6.BigIntHelper.read4(bytes, 16);
-	        const h6 = bigIntHelper_1$6.BigIntHelper.read3(bytes, 20) << bigIntCommon_1$2.BIG_ARR[7];
-	        const h7 = bigIntHelper_1$6.BigIntHelper.read3(bytes, 23) << bigIntCommon_1$2.BIG_ARR[5];
-	        const h8 = bigIntHelper_1$6.BigIntHelper.read3(bytes, 26) << bigIntCommon_1$2.BIG_ARR[4];
-	        const h9 = (bigIntHelper_1$6.BigIntHelper.read3(bytes, 29) & bigIntCommon_1$2.BIG_8388607) << bigIntCommon_1$2.BIG_ARR[2];
+	        const h0 = bigIntHelper_1$5.BigIntHelper.read4(bytes, 0);
+	        const h1 = bigIntHelper_1$5.BigIntHelper.read3(bytes, 4) << bigIntCommon_1$2.BIG_ARR[6];
+	        const h2 = bigIntHelper_1$5.BigIntHelper.read3(bytes, 7) << bigIntCommon_1$2.BIG_ARR[5];
+	        const h3 = bigIntHelper_1$5.BigIntHelper.read3(bytes, 10) << bigIntCommon_1$2.BIG_ARR[3];
+	        const h4 = bigIntHelper_1$5.BigIntHelper.read3(bytes, 13) << bigIntCommon_1$2.BIG_ARR[2];
+	        const h5 = bigIntHelper_1$5.BigIntHelper.read4(bytes, 16);
+	        const h6 = bigIntHelper_1$5.BigIntHelper.read3(bytes, 20) << bigIntCommon_1$2.BIG_ARR[7];
+	        const h7 = bigIntHelper_1$5.BigIntHelper.read3(bytes, 23) << bigIntCommon_1$2.BIG_ARR[5];
+	        const h8 = bigIntHelper_1$5.BigIntHelper.read3(bytes, 26) << bigIntCommon_1$2.BIG_ARR[4];
+	        const h9 = (bigIntHelper_1$5.BigIntHelper.read3(bytes, 29) & bigIntCommon_1$2.BIG_8388607) << bigIntCommon_1$2.BIG_ARR[2];
 	        this.combine(h0, h1, h2, h3, h4, h5, h6, h7, h8, h9);
 	    }
 	    /**
@@ -3368,7 +3368,7 @@
 	 * which is an extension of https://github.com/golang/crypto/tree/master/ed25519
 	 * which in a port of the “ref10” implementation of ed25519 from SUPERCOP
 	 */
-	const bigIntHelper_1$5 = bigIntHelper;
+	const bigIntHelper_1$4 = bigIntHelper;
 	const bigIntCommon_1 = bigIntCommon;
 	const const_1 = _const;
 	/**
@@ -3388,42 +3388,42 @@
 	 * @param c The c.
 	 */
 	function scalarMulAdd(s, a, b, c) {
-	    const a0 = bigIntCommon_1.BIG_2097151 & bigIntHelper_1$5.BigIntHelper.read3(a, 0);
-	    const a1 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$5.BigIntHelper.read4(a, 2) >> bigIntCommon_1.BIG_ARR[5]);
-	    const a2 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$5.BigIntHelper.read3(a, 5) >> bigIntCommon_1.BIG_ARR[2]);
-	    const a3 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$5.BigIntHelper.read4(a, 7) >> bigIntCommon_1.BIG_ARR[7]);
-	    const a4 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$5.BigIntHelper.read4(a, 10) >> bigIntCommon_1.BIG_ARR[4]);
-	    const a5 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$5.BigIntHelper.read3(a, 13) >> bigIntCommon_1.BIG_ARR[1]);
-	    const a6 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$5.BigIntHelper.read4(a, 15) >> bigIntCommon_1.BIG_ARR[6]);
-	    const a7 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$5.BigIntHelper.read3(a, 18) >> bigIntCommon_1.BIG_ARR[3]);
-	    const a8 = bigIntCommon_1.BIG_2097151 & bigIntHelper_1$5.BigIntHelper.read3(a, 21);
-	    const a9 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$5.BigIntHelper.read4(a, 23) >> bigIntCommon_1.BIG_ARR[5]);
-	    const a10 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$5.BigIntHelper.read3(a, 26) >> bigIntCommon_1.BIG_ARR[2]);
-	    const a11 = (bigIntHelper_1$5.BigIntHelper.read4(a, 28) >> bigIntCommon_1.BIG_ARR[7]);
-	    const b0 = bigIntCommon_1.BIG_2097151 & bigIntHelper_1$5.BigIntHelper.read3(b, 0);
-	    const b1 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$5.BigIntHelper.read4(b, 2) >> bigIntCommon_1.BIG_ARR[5]);
-	    const b2 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$5.BigIntHelper.read3(b, 5) >> bigIntCommon_1.BIG_ARR[2]);
-	    const b3 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$5.BigIntHelper.read4(b, 7) >> bigIntCommon_1.BIG_ARR[7]);
-	    const b4 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$5.BigIntHelper.read4(b, 10) >> bigIntCommon_1.BIG_ARR[4]);
-	    const b5 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$5.BigIntHelper.read3(b, 13) >> bigIntCommon_1.BIG_ARR[1]);
-	    const b6 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$5.BigIntHelper.read4(b, 15) >> bigIntCommon_1.BIG_ARR[6]);
-	    const b7 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$5.BigIntHelper.read3(b, 18) >> bigIntCommon_1.BIG_ARR[3]);
-	    const b8 = bigIntCommon_1.BIG_2097151 & bigIntHelper_1$5.BigIntHelper.read3(b, 21);
-	    const b9 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$5.BigIntHelper.read4(b, 23) >> bigIntCommon_1.BIG_ARR[5]);
-	    const b10 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$5.BigIntHelper.read3(b, 26) >> bigIntCommon_1.BIG_ARR[2]);
-	    const b11 = (bigIntHelper_1$5.BigIntHelper.read4(b, 28) >> bigIntCommon_1.BIG_ARR[7]);
-	    const c0 = bigIntCommon_1.BIG_2097151 & bigIntHelper_1$5.BigIntHelper.read3(c, 0);
-	    const c1 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$5.BigIntHelper.read4(c, 2) >> bigIntCommon_1.BIG_ARR[5]);
-	    const c2 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$5.BigIntHelper.read3(c, 5) >> bigIntCommon_1.BIG_ARR[2]);
-	    const c3 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$5.BigIntHelper.read4(c, 7) >> bigIntCommon_1.BIG_ARR[7]);
-	    const c4 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$5.BigIntHelper.read4(c, 10) >> bigIntCommon_1.BIG_ARR[4]);
-	    const c5 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$5.BigIntHelper.read3(c, 13) >> bigIntCommon_1.BIG_ARR[1]);
-	    const c6 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$5.BigIntHelper.read4(c, 15) >> bigIntCommon_1.BIG_ARR[6]);
-	    const c7 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$5.BigIntHelper.read3(c, 18) >> bigIntCommon_1.BIG_ARR[3]);
-	    const c8 = bigIntCommon_1.BIG_2097151 & bigIntHelper_1$5.BigIntHelper.read3(c, 21);
-	    const c9 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$5.BigIntHelper.read4(c, 23) >> bigIntCommon_1.BIG_ARR[5]);
-	    const c10 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$5.BigIntHelper.read3(c, 26) >> bigIntCommon_1.BIG_ARR[2]);
-	    const c11 = (bigIntHelper_1$5.BigIntHelper.read4(c, 28) >> bigIntCommon_1.BIG_ARR[7]);
+	    const a0 = bigIntCommon_1.BIG_2097151 & bigIntHelper_1$4.BigIntHelper.read3(a, 0);
+	    const a1 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$4.BigIntHelper.read4(a, 2) >> bigIntCommon_1.BIG_ARR[5]);
+	    const a2 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$4.BigIntHelper.read3(a, 5) >> bigIntCommon_1.BIG_ARR[2]);
+	    const a3 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$4.BigIntHelper.read4(a, 7) >> bigIntCommon_1.BIG_ARR[7]);
+	    const a4 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$4.BigIntHelper.read4(a, 10) >> bigIntCommon_1.BIG_ARR[4]);
+	    const a5 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$4.BigIntHelper.read3(a, 13) >> bigIntCommon_1.BIG_ARR[1]);
+	    const a6 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$4.BigIntHelper.read4(a, 15) >> bigIntCommon_1.BIG_ARR[6]);
+	    const a7 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$4.BigIntHelper.read3(a, 18) >> bigIntCommon_1.BIG_ARR[3]);
+	    const a8 = bigIntCommon_1.BIG_2097151 & bigIntHelper_1$4.BigIntHelper.read3(a, 21);
+	    const a9 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$4.BigIntHelper.read4(a, 23) >> bigIntCommon_1.BIG_ARR[5]);
+	    const a10 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$4.BigIntHelper.read3(a, 26) >> bigIntCommon_1.BIG_ARR[2]);
+	    const a11 = (bigIntHelper_1$4.BigIntHelper.read4(a, 28) >> bigIntCommon_1.BIG_ARR[7]);
+	    const b0 = bigIntCommon_1.BIG_2097151 & bigIntHelper_1$4.BigIntHelper.read3(b, 0);
+	    const b1 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$4.BigIntHelper.read4(b, 2) >> bigIntCommon_1.BIG_ARR[5]);
+	    const b2 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$4.BigIntHelper.read3(b, 5) >> bigIntCommon_1.BIG_ARR[2]);
+	    const b3 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$4.BigIntHelper.read4(b, 7) >> bigIntCommon_1.BIG_ARR[7]);
+	    const b4 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$4.BigIntHelper.read4(b, 10) >> bigIntCommon_1.BIG_ARR[4]);
+	    const b5 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$4.BigIntHelper.read3(b, 13) >> bigIntCommon_1.BIG_ARR[1]);
+	    const b6 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$4.BigIntHelper.read4(b, 15) >> bigIntCommon_1.BIG_ARR[6]);
+	    const b7 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$4.BigIntHelper.read3(b, 18) >> bigIntCommon_1.BIG_ARR[3]);
+	    const b8 = bigIntCommon_1.BIG_2097151 & bigIntHelper_1$4.BigIntHelper.read3(b, 21);
+	    const b9 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$4.BigIntHelper.read4(b, 23) >> bigIntCommon_1.BIG_ARR[5]);
+	    const b10 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$4.BigIntHelper.read3(b, 26) >> bigIntCommon_1.BIG_ARR[2]);
+	    const b11 = (bigIntHelper_1$4.BigIntHelper.read4(b, 28) >> bigIntCommon_1.BIG_ARR[7]);
+	    const c0 = bigIntCommon_1.BIG_2097151 & bigIntHelper_1$4.BigIntHelper.read3(c, 0);
+	    const c1 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$4.BigIntHelper.read4(c, 2) >> bigIntCommon_1.BIG_ARR[5]);
+	    const c2 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$4.BigIntHelper.read3(c, 5) >> bigIntCommon_1.BIG_ARR[2]);
+	    const c3 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$4.BigIntHelper.read4(c, 7) >> bigIntCommon_1.BIG_ARR[7]);
+	    const c4 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$4.BigIntHelper.read4(c, 10) >> bigIntCommon_1.BIG_ARR[4]);
+	    const c5 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$4.BigIntHelper.read3(c, 13) >> bigIntCommon_1.BIG_ARR[1]);
+	    const c6 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$4.BigIntHelper.read4(c, 15) >> bigIntCommon_1.BIG_ARR[6]);
+	    const c7 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$4.BigIntHelper.read3(c, 18) >> bigIntCommon_1.BIG_ARR[3]);
+	    const c8 = bigIntCommon_1.BIG_2097151 & bigIntHelper_1$4.BigIntHelper.read3(c, 21);
+	    const c9 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$4.BigIntHelper.read4(c, 23) >> bigIntCommon_1.BIG_ARR[5]);
+	    const c10 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$4.BigIntHelper.read3(c, 26) >> bigIntCommon_1.BIG_ARR[2]);
+	    const c11 = (bigIntHelper_1$4.BigIntHelper.read4(c, 28) >> bigIntCommon_1.BIG_ARR[7]);
 	    const carry = new BigInt64Array(32);
 	    let s0 = c0 + (a0 * b0);
 	    let s1 = c1 + (a0 * b1) + (a1 * b0);
@@ -3802,30 +3802,30 @@
 	 * @param s s[0]+256*s[1]+...+256^63*s[63] = s
 	 */
 	function scalarReduce(out, s) {
-	    let s0 = bigIntCommon_1.BIG_2097151 & bigIntHelper_1$5.BigIntHelper.read3(s, 0);
-	    let s1 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$5.BigIntHelper.read4(s, 2) >> bigIntCommon_1.BIG_ARR[5]);
-	    let s2 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$5.BigIntHelper.read3(s, 5) >> bigIntCommon_1.BIG_ARR[2]);
-	    let s3 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$5.BigIntHelper.read4(s, 7) >> bigIntCommon_1.BIG_ARR[7]);
-	    let s4 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$5.BigIntHelper.read4(s, 10) >> bigIntCommon_1.BIG_ARR[4]);
-	    let s5 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$5.BigIntHelper.read3(s, 13) >> bigIntCommon_1.BIG_ARR[1]);
-	    let s6 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$5.BigIntHelper.read4(s, 15) >> bigIntCommon_1.BIG_ARR[6]);
-	    let s7 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$5.BigIntHelper.read3(s, 18) >> bigIntCommon_1.BIG_ARR[3]);
-	    let s8 = bigIntCommon_1.BIG_2097151 & bigIntHelper_1$5.BigIntHelper.read3(s, 21);
-	    let s9 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$5.BigIntHelper.read4(s, 23) >> bigIntCommon_1.BIG_ARR[5]);
-	    let s10 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$5.BigIntHelper.read3(s, 26) >> bigIntCommon_1.BIG_ARR[2]);
-	    let s11 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$5.BigIntHelper.read4(s, 28) >> bigIntCommon_1.BIG_ARR[7]);
-	    let s12 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$5.BigIntHelper.read4(s, 31) >> bigIntCommon_1.BIG_ARR[4]);
-	    let s13 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$5.BigIntHelper.read3(s, 34) >> bigIntCommon_1.BIG_ARR[1]);
-	    let s14 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$5.BigIntHelper.read4(s, 36) >> bigIntCommon_1.BIG_ARR[6]);
-	    let s15 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$5.BigIntHelper.read3(s, 39) >> bigIntCommon_1.BIG_ARR[3]);
-	    let s16 = bigIntCommon_1.BIG_2097151 & bigIntHelper_1$5.BigIntHelper.read3(s, 42);
-	    let s17 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$5.BigIntHelper.read4(s, 44) >> bigIntCommon_1.BIG_ARR[5]);
-	    let s18 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$5.BigIntHelper.read3(s, 47) >> bigIntCommon_1.BIG_ARR[2]);
-	    let s19 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$5.BigIntHelper.read4(s, 49) >> bigIntCommon_1.BIG_ARR[7]);
-	    let s20 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$5.BigIntHelper.read4(s, 52) >> bigIntCommon_1.BIG_ARR[4]);
-	    let s21 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$5.BigIntHelper.read3(s, 55) >> bigIntCommon_1.BIG_ARR[1]);
-	    let s22 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$5.BigIntHelper.read4(s, 57) >> bigIntCommon_1.BIG_ARR[6]);
-	    let s23 = (bigIntHelper_1$5.BigIntHelper.read4(s, 60) >> bigIntCommon_1.BIG_ARR[3]);
+	    let s0 = bigIntCommon_1.BIG_2097151 & bigIntHelper_1$4.BigIntHelper.read3(s, 0);
+	    let s1 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$4.BigIntHelper.read4(s, 2) >> bigIntCommon_1.BIG_ARR[5]);
+	    let s2 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$4.BigIntHelper.read3(s, 5) >> bigIntCommon_1.BIG_ARR[2]);
+	    let s3 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$4.BigIntHelper.read4(s, 7) >> bigIntCommon_1.BIG_ARR[7]);
+	    let s4 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$4.BigIntHelper.read4(s, 10) >> bigIntCommon_1.BIG_ARR[4]);
+	    let s5 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$4.BigIntHelper.read3(s, 13) >> bigIntCommon_1.BIG_ARR[1]);
+	    let s6 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$4.BigIntHelper.read4(s, 15) >> bigIntCommon_1.BIG_ARR[6]);
+	    let s7 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$4.BigIntHelper.read3(s, 18) >> bigIntCommon_1.BIG_ARR[3]);
+	    let s8 = bigIntCommon_1.BIG_2097151 & bigIntHelper_1$4.BigIntHelper.read3(s, 21);
+	    let s9 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$4.BigIntHelper.read4(s, 23) >> bigIntCommon_1.BIG_ARR[5]);
+	    let s10 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$4.BigIntHelper.read3(s, 26) >> bigIntCommon_1.BIG_ARR[2]);
+	    let s11 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$4.BigIntHelper.read4(s, 28) >> bigIntCommon_1.BIG_ARR[7]);
+	    let s12 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$4.BigIntHelper.read4(s, 31) >> bigIntCommon_1.BIG_ARR[4]);
+	    let s13 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$4.BigIntHelper.read3(s, 34) >> bigIntCommon_1.BIG_ARR[1]);
+	    let s14 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$4.BigIntHelper.read4(s, 36) >> bigIntCommon_1.BIG_ARR[6]);
+	    let s15 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$4.BigIntHelper.read3(s, 39) >> bigIntCommon_1.BIG_ARR[3]);
+	    let s16 = bigIntCommon_1.BIG_2097151 & bigIntHelper_1$4.BigIntHelper.read3(s, 42);
+	    let s17 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$4.BigIntHelper.read4(s, 44) >> bigIntCommon_1.BIG_ARR[5]);
+	    let s18 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$4.BigIntHelper.read3(s, 47) >> bigIntCommon_1.BIG_ARR[2]);
+	    let s19 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$4.BigIntHelper.read4(s, 49) >> bigIntCommon_1.BIG_ARR[7]);
+	    let s20 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$4.BigIntHelper.read4(s, 52) >> bigIntCommon_1.BIG_ARR[4]);
+	    let s21 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$4.BigIntHelper.read3(s, 55) >> bigIntCommon_1.BIG_ARR[1]);
+	    let s22 = bigIntCommon_1.BIG_2097151 & (bigIntHelper_1$4.BigIntHelper.read4(s, 57) >> bigIntCommon_1.BIG_ARR[6]);
+	    let s23 = (bigIntHelper_1$4.BigIntHelper.read4(s, 60) >> bigIntCommon_1.BIG_ARR[3]);
 	    s11 += s23 * bigIntCommon_1.BIG_666643;
 	    s12 += s23 * bigIntCommon_1.BIG_470296;
 	    s13 += s23 * bigIntCommon_1.BIG_654183;
@@ -4104,7 +4104,7 @@
 	 */
 	function scalarMinimal(scalar) {
 	    for (let i = 3; i >= 0; i--) {
-	        const v = bigIntHelper_1$5.BigIntHelper.read8(scalar, i * 8);
+	        const v = bigIntHelper_1$4.BigIntHelper.read8(scalar, i * 8);
 	        if (v > const_1.CONST_ORDER[i]) {
 	            return false;
 	        }
@@ -5792,7 +5792,7 @@
 	// Copyright 2020 IOTA Stiftung
 	// SPDX-License-Identifier: Apache-2.0
 	/* eslint-disable no-bitwise */
-	const bigIntHelper_1$4 = bigIntHelper;
+	const bigIntHelper_1$3 = bigIntHelper;
 	const converter_1$b = converter;
 	/**
 	 * Keep track of the read index within a stream.
@@ -5942,7 +5942,7 @@
 	        if (!this.hasRemaining(8)) {
 	            throw new Error(`${name} length 8 exceeds the remaining data ${this.unused()}`);
 	        }
-	        const val = bigIntHelper_1$4.BigIntHelper.read8(this._storage, this._readIndex);
+	        const val = bigIntHelper_1$3.BigIntHelper.read8(this._storage, this._readIndex);
 	        if (moveIndex) {
 	            this._readIndex += 8;
 	        }
@@ -6476,7 +6476,7 @@
 	// Copyright 2020 IOTA Stiftung
 	// SPDX-License-Identifier: Apache-2.0
 	/* eslint-disable no-bitwise */
-	const bigIntHelper_1$3 = bigIntHelper;
+	const bigIntHelper_1$2 = bigIntHelper;
 	const converter_1$9 = converter;
 	/**
 	 * Keep track of the write index within a stream.
@@ -6601,7 +6601,7 @@
 	     */
 	    writeUInt64(name, val) {
 	        this.expand(8);
-	        bigIntHelper_1$3.BigIntHelper.write8(val, this._storage, this._writeIndex);
+	        bigIntHelper_1$2.BigIntHelper.write8(val, this._storage, this._writeIndex);
 	        this._writeIndex += 8;
 	    }
 	    /**
@@ -6648,7 +6648,7 @@
 	const message_1$1 = message;
 	const blake2b_1$3 = blake2b;
 	const arrayHelper_1 = arrayHelper;
-	const bigIntHelper_1$2 = bigIntHelper;
+	const bigIntHelper_1$1 = bigIntHelper;
 	const converter_1$8 = converter;
 	const writeStream_1$1 = writeStream;
 	const clientError_1 = clientError;
@@ -6760,7 +6760,7 @@
 	            if (!message.nonce || message.nonce.length === 0) {
 	                if (this._powProvider) {
 	                    const { networkId, minPoWScore } = yield this.getPoWInfo();
-	                    bigIntHelper_1$2.BigIntHelper.write8(networkId, messageBytes, 0);
+	                    bigIntHelper_1$1.BigIntHelper.write8(networkId, messageBytes, 0);
 	                    message.networkId = networkId.toString();
 	                    const nonce = yield this._powProvider.pow(messageBytes, minPoWScore);
 	                    message.nonce = nonce.toString(10);
@@ -6785,9 +6785,9 @@
 	            }
 	            if (this._powProvider && arrayHelper_1.ArrayHelper.equal(message.slice(-8), SingleNodeClient.NONCE_ZERO)) {
 	                const { networkId, minPoWScore } = yield this.getPoWInfo();
-	                bigIntHelper_1$2.BigIntHelper.write8(networkId, message, 0);
+	                bigIntHelper_1$1.BigIntHelper.write8(networkId, message, 0);
 	                const nonce = yield this._powProvider.pow(message, minPoWScore);
-	                bigIntHelper_1$2.BigIntHelper.write8(nonce, message, message.length - 8);
+	                bigIntHelper_1$1.BigIntHelper.write8(nonce, message, message.length - 8);
 	            }
 	            const response = yield this.fetchBinary("post", "messages", message);
 	            return response.messageId;
@@ -7152,7 +7152,7 @@
 	            const nodeInfo = yield this.info();
 	            const networkIdBytes = blake2b_1$3.Blake2b.sum256(converter_1$8.Converter.utf8ToBytes(nodeInfo.networkId));
 	            return {
-	                networkId: bigIntHelper_1$2.BigIntHelper.read8(networkIdBytes, 0),
+	                networkId: bigIntHelper_1$1.BigIntHelper.read8(networkIdBytes, 0),
 	                minPoWScore: nodeInfo.minPoWScore
 	            };
 	        });
@@ -11274,7 +11274,9 @@
 	     * @internal
 	     */
 	    static encodeGroup(b) {
-	        const v = (b << 24 >> 24) + (B1T6.TRYTE_RADIX_HALF * B1T6.TRYTE_RADIX) + B1T6.TRYTE_RADIX_HALF;
+	        // (TRYTE_RADIX_HALF * TRYTE_RADIX) + TRYTE_RADIX_HALF;
+	        // (13 * 27) + 13
+	        const v = (b << 24 >> 24) + 364;
 	        const quo = Math.trunc(v / 27);
 	        const rem = Math.trunc(v % 27);
 	        return {
@@ -11313,16 +11315,6 @@
 	 * @internal
 	 */
 	B1T6.MIN_TRYTE_VALUE = -13;
-	/**
-	 * Radix for trytes.
-	 * @internal
-	 */
-	B1T6.TRYTE_RADIX = 27;
-	/**
-	 * Half radix for trytes to save recalculating.
-	 * @internal
-	 */
-	B1T6.TRYTE_RADIX_HALF = 13;
 	/**
 	 * Trites per tryte.
 	 * @internal
@@ -12455,9 +12447,9 @@
 	// SPDX-License-Identifier: Apache-2.0
 	/* eslint-disable no-bitwise */
 	const blake2b_1$1 = blake2b;
-	const curl_1$1 = curl;
-	const b1t6_1$1 = b1t6;
-	const bigIntHelper_1$1 = bigIntHelper;
+	const curl_1 = curl;
+	const b1t6_1 = b1t6;
+	const bigIntHelper_1 = bigIntHelper;
 	/**
 	 * Helper methods for POW.
 	 */
@@ -12471,9 +12463,18 @@
 	        // the PoW digest is the hash of msg without the nonce
 	        const powRelevantData = message.slice(0, -8);
 	        const powDigest = blake2b_1$1.Blake2b.sum256(powRelevantData);
-	        const nonce = bigIntHelper_1$1.BigIntHelper.read8(message, message.length - 8);
+	        const nonce = bigIntHelper_1.BigIntHelper.read8(message, message.length - 8);
 	        const zeros = PowHelper.trailingZeros(powDigest, nonce);
 	        return Math.pow(3, zeros) / message.length;
+	    }
+	    /**
+	     * Calculate the number of zeros required to get target score.
+	     * @param message The message to process.
+	     * @param targetScore the target score.
+	     * @returns The number of zeros to find.
+	     */
+	    static calculateTargetZeros(message, targetScore) {
+	        return Math.ceil(Math.log(message.length * targetScore) / this.LN3);
 	    }
 	    /**
 	     * Calculate the trailing zeros.
@@ -12482,15 +12483,15 @@
 	     * @returns The trailing zeros.
 	     */
 	    static trailingZeros(powDigest, nonce) {
-	        const buf = new Int8Array(curl_1$1.Curl.HASH_LENGTH);
-	        const digestTritsLen = b1t6_1$1.B1T6.encode(buf, 0, powDigest);
+	        const buf = new Int8Array(curl_1.Curl.HASH_LENGTH);
+	        const digestTritsLen = b1t6_1.B1T6.encode(buf, 0, powDigest);
 	        const biArr = new Uint8Array(8);
-	        bigIntHelper_1$1.BigIntHelper.write8(nonce, biArr, 0);
-	        b1t6_1$1.B1T6.encode(buf, digestTritsLen, biArr);
-	        const curl = new curl_1$1.Curl();
-	        curl.absorb(buf, 0, curl_1$1.Curl.HASH_LENGTH);
-	        const hash = new Int8Array(curl_1$1.Curl.HASH_LENGTH);
-	        curl.squeeze(hash, 0, curl_1$1.Curl.HASH_LENGTH);
+	        bigIntHelper_1.BigIntHelper.write8(nonce, biArr, 0);
+	        b1t6_1.B1T6.encode(buf, digestTritsLen, biArr);
+	        const curl = new curl_1.Curl();
+	        curl.absorb(buf, 0, curl_1.Curl.HASH_LENGTH);
+	        const hash = new Int8Array(curl_1.Curl.HASH_LENGTH);
+	        curl.squeeze(hash, 0, curl_1.Curl.HASH_LENGTH);
 	        return PowHelper.trinaryTrailingZeros(hash);
 	    }
 	    /**
@@ -12505,8 +12506,42 @@
 	        }
 	        return z;
 	    }
+	    /**
+	     * Perform the hash on the data until we reach target number of zeros.
+	     * @param powDigest The pow digest.
+	     * @param targetZeros The target number of zeros.
+	     * @param startIndex The index to start looking from.
+	     * @returns The nonce.
+	     */
+	    static performPow(powDigest, targetZeros, startIndex) {
+	        let nonce = BigInt(startIndex);
+	        let returnNonce;
+	        const buf = new Int8Array(curl_1.Curl.HASH_LENGTH);
+	        const digestTritsLen = b1t6_1.B1T6.encode(buf, 0, powDigest);
+	        const hash = new Int8Array(curl_1.Curl.HASH_LENGTH);
+	        const biArr = new Uint8Array(8);
+	        const curl = new curl_1.Curl();
+	        do {
+	            bigIntHelper_1.BigIntHelper.write8(nonce, biArr, 0);
+	            b1t6_1.B1T6.encode(buf, digestTritsLen, biArr);
+	            curl.reset();
+	            curl.absorb(buf, 0, curl_1.Curl.HASH_LENGTH);
+	            curl.squeeze(hash, 0, curl_1.Curl.HASH_LENGTH);
+	            if (PowHelper.trinaryTrailingZeros(hash) >= targetZeros) {
+	                returnNonce = nonce;
+	            }
+	            else {
+	                nonce++;
+	            }
+	        } while (returnNonce === undefined);
+	        return returnNonce !== null && returnNonce !== void 0 ? returnNonce : BigInt(0);
+	    }
 	}
 	powHelper.PowHelper = PowHelper;
+	/**
+	 * LN3 Const see https://oeis.org/A002391
+	 */
+	PowHelper.LN3 = 1.098612288668109691395245236922525704647490557822749451734694333;
 
 	var __awaiter = (commonjsGlobal && commonjsGlobal.__awaiter) || function (thisArg, _arguments, P, generator) {
 	    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -12522,22 +12557,12 @@
 	// Copyright 2020 IOTA Stiftung
 	// SPDX-License-Identifier: Apache-2.0
 	const blake2b_1 = blake2b;
-	const curl_1 = curl;
-	const b1t6_1 = b1t6;
-	const bigIntHelper_1 = bigIntHelper;
 	const powHelper_1 = powHelper;
 	/**
 	 * Local POW Provider.
 	 * WARNING - This is really slow.
 	 */
 	class LocalPowProvider {
-	    constructor() {
-	        /**
-	         * LN3 Const see https://oeis.org/A002391
-	         * @internal
-	         */
-	        this.LN3 = 1.098612288668109691395245236922525704647490557822749451734694333;
-	    }
 	    /**
 	     * Perform pow on the message and return the nonce of at least targetScore.
 	     * @param message The message to process.
@@ -12548,39 +12573,9 @@
 	        return __awaiter(this, void 0, void 0, function* () {
 	            const powRelevantData = message.slice(0, -8);
 	            const powDigest = blake2b_1.Blake2b.sum256(powRelevantData);
-	            const targetZeros = Math.ceil(Math.log((powRelevantData.length + 8) * targetScore) / this.LN3);
-	            return this.worker(powDigest, targetZeros);
+	            const targetZeros = powHelper_1.PowHelper.calculateTargetZeros(message, targetScore);
+	            return powHelper_1.PowHelper.performPow(powDigest, targetZeros, BigInt(0));
 	        });
-	    }
-	    /**
-	     * Perform the hash on the data until we reach target number of zeros.
-	     * @param powDigest The pow digest.
-	     * @param target The target number of zeros.
-	     * @returns The nonce.
-	     * @internal
-	     */
-	    worker(powDigest, target) {
-	        let nonce = BigInt(0);
-	        let returnNonce;
-	        const buf = new Int8Array(curl_1.Curl.HASH_LENGTH);
-	        const digestTritsLen = b1t6_1.B1T6.encode(buf, 0, powDigest);
-	        const hash = new Int8Array(curl_1.Curl.HASH_LENGTH);
-	        const biArr = new Uint8Array(8);
-	        const curl = new curl_1.Curl();
-	        do {
-	            bigIntHelper_1.BigIntHelper.write8(nonce, biArr, 0);
-	            b1t6_1.B1T6.encode(buf, digestTritsLen, biArr);
-	            curl.reset();
-	            curl.absorb(buf, 0, curl_1.Curl.HASH_LENGTH);
-	            curl.squeeze(hash, 0, curl_1.Curl.HASH_LENGTH);
-	            if (powHelper_1.PowHelper.trinaryTrailingZeros(hash) >= target) {
-	                returnNonce = nonce;
-	            }
-	            else {
-	                nonce++;
-	            }
-	        } while (returnNonce === undefined);
-	        return returnNonce !== null && returnNonce !== void 0 ? returnNonce : BigInt(0);
 	    }
 	}
 	localPowProvider.LocalPowProvider = LocalPowProvider;

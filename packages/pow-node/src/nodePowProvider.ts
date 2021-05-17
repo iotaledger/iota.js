@@ -1,0 +1,70 @@
+// Copyright 2020 IOTA Stiftung
+// SPDX-License-Identifier: Apache-2.0
+import { Blake2b, IPowProvider, PowHelper } from "@iota/iota.js";
+import os from "os";
+import path from "path";
+import { Worker } from "worker_threads";
+
+/**
+ * Node POW Provider.
+ */
+export class NodePowProvider implements IPowProvider {
+    /**
+     * The number of CPUs to utilise.
+     * @internal
+     */
+    private readonly _numCpus: number;
+
+    /**
+     * Create a new instance of NodePowProvider.
+     * @param numCpus The number of cpus, defaults to max CPUs.
+     */
+    constructor(numCpus?: number) {
+        this._numCpus = numCpus ?? os.cpus().length;
+    }
+
+    /**
+     * Perform pow on the message and return the nonce of at least targetScore.
+     * @param message The message to process.
+     * @param targetScore the target score.
+     * @returns The nonce.
+     */
+    public async pow(message: Uint8Array, targetScore: number): Promise<bigint> {
+        const powRelevantData = message.slice(0, -8);
+
+        const powDigest = Blake2b.sum256(powRelevantData);
+
+        const targetZeros = PowHelper.calculateTargetZeros(message, targetScore);
+
+        return new Promise<bigint>((resolve, reject) => {
+            const chunkSize = BigInt(18446744073709551615) / BigInt(this._numCpus);
+            const workers: Worker[] = [];
+            let hasFinished = false;
+            for (let i = 0; i < this._numCpus; i++) {
+                const worker = new Worker(path.join(__dirname, "pow-node.js"), {
+                    workerData: { powDigest, targetZeros, startIndex: chunkSize * BigInt(i) }
+                });
+
+                workers.push(worker);
+
+                worker.on("message", async msg => {
+                    hasFinished = true;
+                    for (let j = 0; j < workers.length; j++) {
+                        await workers[j].terminate();
+                    }
+                    resolve(BigInt(msg));
+                });
+
+                worker.on("error", err => {
+                    reject(err);
+                });
+
+                worker.on("exit", code => {
+                    if (!hasFinished && code !== 0) {
+                        reject(new Error(`Worker stopped with exit code ${code}`));
+                    }
+                });
+            }
+        });
+    }
+}

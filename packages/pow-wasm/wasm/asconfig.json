@@ -1,0 +1,20 @@
+{
+    "targets": {
+        "debug": {
+            "binaryFile": "build/debug.wasm",
+            "textFile": "build/debug.wat",
+            "sourceMap": true,
+            "debug": true
+        },
+        "release": {
+            "binaryFile": "build/release.wasm",
+            "textFile": "build/release.wat",
+            "sourceMap": true,
+            "optimizeLevel": 3,
+            "shrinkLevel": 1,
+            "converge": true,
+            "noAssert": true
+        }
+    },
+    "options": {}
+}

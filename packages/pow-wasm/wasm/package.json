@@ -1,0 +1,30 @@
+{
+    "name": "pow-wasm.js",
+    "description": "IOTA JavaScript Library for Performing Multi-Threaded PoW implemented in WASM",
+    "version": "1.0.0",
+    "keywords": [
+        "iota",
+        "pow",
+        "wasm"
+    ],
+    "authors": [
+        "Martyn Janes <martyn.janes@iota.org>"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/iotaledger/iota.js.git"
+    },
+    "license": "Apache-2.0",
+    "scripts": {
+        "test": "node tests",
+        "asbuild:untouched": "asc assembly/index.ts --target debug",
+        "asbuild:optimized": "asc assembly/index.ts --target release",
+        "asbuild": "npm run asbuild:untouched && npm run asbuild:optimized"
+    },
+    "dependencies": {
+        "@assemblyscript/loader": "^0.18.31"
+    },
+    "devDependencies": {
+        "assemblyscript": "^0.18.31"
+    }
+}

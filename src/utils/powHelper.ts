@@ -11,6 +11,11 @@ import { BigIntHelper } from "./bigIntHelper";
  */
 export class PowHelper {
     /**
+     * LN3 Const see https://oeis.org/A002391
+     */
+    public static readonly LN3: number = 1.098612288668109691395245236922525704647490557822749451734694333;
+
+    /**
      * Perform the score calculation.
      * @param message The data to perform the score on
      * @returns The score for the data.
@@ -26,6 +31,16 @@ export class PowHelper {
         const zeros = PowHelper.trailingZeros(powDigest, nonce);
 
         return Math.pow(3, zeros) / message.length;
+    }
+
+    /**
+     * Calculate the number of zeros required to get target score.
+     * @param message The message to process.
+     * @param targetScore the target score.
+     * @returns The number of zeros to find.
+     */
+    public static calculateTargetZeros(message: Uint8Array, targetScore: number): number {
+        return Math.ceil(Math.log(message.length * targetScore) / this.LN3);
     }
 
     /**
@@ -62,5 +77,40 @@ export class PowHelper {
             z++;
         }
         return z;
+    }
+
+    /**
+     * Perform the hash on the data until we reach target number of zeros.
+     * @param powDigest The pow digest.
+     * @param targetZeros The target number of zeros.
+     * @param startIndex The index to start looking from.
+     * @returns The nonce.
+     */
+    public static performPow(powDigest: Uint8Array, targetZeros: number, startIndex: bigint): bigint {
+        let nonce = BigInt(startIndex);
+        let returnNonce;
+
+        const buf: Int8Array = new Int8Array(Curl.HASH_LENGTH);
+        const digestTritsLen = B1T6.encode(buf, 0, powDigest);
+        const hash: Int8Array = new Int8Array(Curl.HASH_LENGTH);
+        const biArr = new Uint8Array(8);
+        const curl = new Curl();
+
+        do {
+            BigIntHelper.write8(nonce, biArr, 0);
+            B1T6.encode(buf, digestTritsLen, biArr);
+
+            curl.reset();
+            curl.absorb(buf, 0, Curl.HASH_LENGTH);
+            curl.squeeze(hash, 0, Curl.HASH_LENGTH);
+
+            if (PowHelper.trinaryTrailingZeros(hash) >= targetZeros) {
+                returnNonce = nonce;
+            } else {
+                nonce++;
+            }
+        } while (returnNonce === undefined);
+
+        return returnNonce ?? BigInt(0);
     }
 }

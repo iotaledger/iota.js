@@ -24,18 +24,6 @@ export class B1T6 {
     private static readonly MIN_TRYTE_VALUE: number = -13;
 
     /**
-     * Radix for trytes.
-     * @internal
-     */
-    private static readonly TRYTE_RADIX: number = 27;
-
-    /**
-     * Half radix for trytes to save recalculating.
-     * @internal
-     */
-    private static readonly TRYTE_RADIX_HALF: number = 13;
-
-    /**
      * Trites per tryte.
      * @internal
      */
@@ -75,7 +63,9 @@ export class B1T6 {
      * @internal
      */
     private static encodeGroup(b: number): { t1: number; t2: number } {
-        const v = (b << 24 >> 24) + (B1T6.TRYTE_RADIX_HALF * B1T6.TRYTE_RADIX) + B1T6.TRYTE_RADIX_HALF;
+        // (TRYTE_RADIX_HALF * TRYTE_RADIX) + TRYTE_RADIX_HALF;
+        // (13 * 27) + 13
+        const v = (b << 24 >> 24) + 364;
         const quo = Math.trunc(v / 27);
         const rem = Math.trunc(v % 27);
         return {

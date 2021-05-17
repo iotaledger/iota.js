@@ -1,0 +1,19 @@
+[package]
+name = "pow-neon"
+version = "1.0.0"
+authors = ["Martyn Janes <martyn@obany.com>"]
+license = "Apache-2.0"
+build = "build.rs"
+edition = "2018"
+exclude = ["artifacts.json", "index.node"]
+
+[lib]
+name = "pow_neon"
+crate-type = ["cdylib"]
+
+[build-dependencies]
+neon-build = "0.8.1"
+
+[dependencies]
+neon = "0.8.1"
+bee-pow = "0.1"

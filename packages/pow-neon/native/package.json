@@ -1,0 +1,5 @@
+{
+    "name": "@iota/pow-neon-native.js",
+    "main": "index.node",
+    "typings": "index.d.ts"
+}

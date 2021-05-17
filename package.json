@@ -22,11 +22,11 @@
     },
     "scripts": {
         "build-clean": "rimraf ./es/*",
-        "build-lint": "eslint src --ext .tsx,.ts",
+        "build-lint": "eslint src --ext .ts",
         "build-compile": "tsc",
         "build-watch": "tsc --watch",
         "build": "run-s build-clean build-lint build-compile",
-        "test-lint": "eslint test --ext .tsx,.ts",
+        "test-lint": "eslint test --ext .ts",
         "test-run": "jest",
         "test": "run-s test-lint test-run",
         "package-umd": "rollup --config rollup.config.js",
@@ -41,12 +41,6 @@
         "docs": "npm-run-all docs-clean docs-build",
         "dist": "run-s dist-clean build test package typings docs"
     },
-    "browserslist": [
-        ">0.2%",
-        "not dead",
-        "not ie <= 11",
-        "not op_mini all"
-    ],
     "engines": {
         "node": ">=12.0.0"
     },

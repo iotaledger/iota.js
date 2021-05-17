@@ -1,0 +1,74 @@
+{
+    "name": "@iota/pow-wasm.js",
+    "description": "IOTA JavaScript Library for Performing Multi-Threaded PoW on NodeJS using WASM implementation",
+    "version": "0.1.0",
+    "keywords": [
+        "iota",
+        "pow",
+        "wasm"
+    ],
+    "authors": [
+        "Martyn Janes <martyn.janes@iota.org>"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/iotaledger/iota.js.git"
+    },
+    "license": "Apache-2.0",
+    "scripts": {
+        "build-clean": "rimraf ./es/*",
+        "build-lint": "eslint src --ext .ts --resolve-plugins-relative-to .",
+        "build-compile": "tsc",
+        "build-watch": "tsc --watch",
+        "build": "run-s build-clean build-lint build-compile",
+        "test-lint": "eslint test --ext .ts --resolve-plugins-relative-to .",
+        "test-run": "jest",
+        "test": "run-s test-lint test-run",
+        "package-umd": "rollup --config rollup.config.js",
+        "package-umd-min": "rollup --config rollup.config.js --environment MINIFY:true",
+        "package": "run-s package-umd package-umd-min",
+        "dist-clean": "rimraf ./dist/* ./typings/*",
+        "typings": "tsc --emitDeclarationOnly --declaration true --declarationDir typings",
+        "dist": "run-s dist-clean build test package typings"
+    },
+    "engines": {
+        "node": ">=12.0.0"
+    },
+    "devDependencies": {
+        "@rollup/plugin-commonjs": "^19.0.0",
+        "@rollup/plugin-node-resolve": "^13.0.0",
+        "@rollup/plugin-replace": "^2.4.2",
+        "@types/jest": "^26.0.23",
+        "@typescript-eslint/eslint-plugin": "^4.23.0",
+        "@typescript-eslint/parser": "^4.23.0",
+        "cross-env": "^7.0.2",
+        "eslint": "^7.26.0",
+        "eslint-plugin-header": "^3.1.1",
+        "eslint-plugin-import": "^2.22.1",
+        "eslint-plugin-jsdoc": "^34.0.2",
+        "eslint-plugin-unicorn": "^32.0.1",
+        "jest": "^26.6.0",
+        "npm-run-all": "^4.1.5",
+        "rimraf": "^3.0.2",
+        "rollup": "^2.47.0",
+        "rollup-plugin-terser": "^7.0.2",
+        "ts-jest": "^26.5.6",
+        "ts-node": "^9.0.0",
+        "typedoc": "^0.20.36",
+        "typedoc-plugin-markdown": "^3.8.1",
+        "typescript": "^4.2.4"
+    },
+    "main": "dist/pow-wasm.js",
+    "module": "es/pow-wasm.js",
+    "typings": "typings/index.d.ts",
+    "files": [
+        "dist",
+        "lib",
+        "es",
+        "src",
+        "typings"
+    ],
+    "dependencies": {
+        "@iota/iota.js": "^1.5.1"
+    }
+}

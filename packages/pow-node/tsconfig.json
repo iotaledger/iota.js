@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "target": "es6",
+        "strict": true,
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "outDir": "./es",
+        "inlineSourceMap": true,
+        "esModuleInterop": true,
+        "stripInternal": true,
+        "resolveJsonModule": true
+    },
+    "include": [
+        "src"
+    ]
+}

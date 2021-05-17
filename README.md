@@ -127,14 +127,7 @@ You can see the model definitions for all the objects in the [typings](./typings
 
 ## Proof of Work
 
-A very simple local proof of work provider [./localPowProvider](./src/pow/localPowProvider.ts) is implemented but not used by default, it is recommended to use remote PoW with this library.
-The example is included for reference purposes, but should not be used as it is very slow.
-You can experiment using it or any other PoW implementation by passing it in the options parameter of the SingleNodeClient constructor.
-
-```js
-const client = new SingleNodeClient("https://chrysalis-nodes.iota.org", { powProvider: new LocalPowProvider() });
-```
-
+See [./README-POW.md](./README-POW.md)
 ## Additional Examples
 
 Please find other examples in the [./examples](./examples) folder.
@@ -144,6 +137,7 @@ Please find other examples in the [./examples](./examples) folder.
 * Data - Storing and retrieving data on the tangle.
 * Browser - Demonstrates direct inclusion and use of the library in an html page.
 * Peers - Demonstrates peer management.
+* Pow - Demonstrates using one of the other PoW packages.
 * Mqtt - Using mqtt to read streaming messages.
 * Browser Mqtt - Using mqtt to read streaming messages in the browser.
 
