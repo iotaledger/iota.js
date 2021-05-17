@@ -63,12 +63,11 @@
     "typings": "typings/index.d.ts",
     "files": [
         "dist",
-        "lib",
         "es",
         "src",
         "typings"
     ],
     "dependencies": {
-        "@iota/iota.js": "^1.5.1"
+        "@iota/iota.js": "^1.5.2"
     }
 }

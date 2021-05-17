@@ -68,7 +68,6 @@
     "files": [
         "dist/pow-neon.js",
         "dist/pow-neon.min.js",
-        "lib",
         "es",
         "src",
         "typings",
@@ -80,7 +79,7 @@
         "native/package.json"
     ],
     "dependencies": {
-        "@iota/iota.js": "^1.5.1",
+        "@iota/iota.js": "^1.5.2",
         "neon-cli": "^0.8.1"
     }
 }

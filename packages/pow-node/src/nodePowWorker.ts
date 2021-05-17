@@ -7,12 +7,12 @@ import { parentPort, workerData } from "worker_threads";
 /**
  * Perform the hash on the data until we reach target number of zeros.
  * @param powDigest The pow digest.
- * @param target The target number of zeros.
+ * @param targetZeros The target number of zeros.
  * @param startIndex The index to start looking from.
  * @returns The nonce.
  */
-export function doPow(powDigest: Uint8Array, target: number, startIndex: bigint): bigint {
-    return PowHelper.performPow(powDigest, target, startIndex);
+export function doPow(powDigest: Uint8Array, targetZeros: number, startIndex: bigint): bigint {
+    return PowHelper.performPow(powDigest, targetZeros, startIndex);
 }
 
 if (workerData && parentPort) {

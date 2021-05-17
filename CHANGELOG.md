@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.5.2
+
+* Refactored PoW core functionality to allow use by other PoW providers
+
 ## v1.5.1
 
 * Added ChaCha20

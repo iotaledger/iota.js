@@ -107,12 +107,12 @@ const worker_threads_1 = require$$3__default['default'];
 /**
  * Perform the hash on the data until we reach target number of zeros.
  * @param powDigest The pow digest.
- * @param target The target number of zeros.
+ * @param targetZeros The target number of zeros.
  * @param startIndex The index to start looking from.
  * @returns The nonce.
  */
-function doPow(powDigest, target, startIndex) {
-    return iota_js_1.PowHelper.performPow(powDigest, target, startIndex);
+function doPow(powDigest, targetZeros, startIndex) {
+    return iota_js_1.PowHelper.performPow(powDigest, targetZeros, startIndex);
 }
 nodePowWorker.doPow = doPow;
 if (worker_threads_1.workerData && worker_threads_1.parentPort) {
