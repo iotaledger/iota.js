@@ -66,7 +66,7 @@ It is multi-threaded and uses neon-bindings to run a native library built from r
 You can specify the number of threads to run the provider on by passing a number to the constructor, this defaults to the number of CPUs on the machine it is running.
 
 ```js
-import { NeonPowProvider } from "@iota/pow-wasm.js";
+import { NeonPowProvider } from "@iota/pow-neon.js";
 
 const client = new SingleNodeClient("https://chrysalis-nodes.iota.org", { powProvider: new NeonPowProvider() });
 ```
