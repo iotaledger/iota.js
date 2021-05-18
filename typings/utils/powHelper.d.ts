@@ -29,9 +29,10 @@ export declare class PowHelper {
     /**
      * Find the number of trailing zeros.
      * @param trits The trits to look for zeros.
+     * @param endPos The end position to start looking for zeros.
      * @returns The number of trailing zeros.
      */
-    static trinaryTrailingZeros(trits: Int8Array): number;
+    static trinaryTrailingZeros(trits: Int8Array, endPos?: number): number;
     /**
      * Perform the hash on the data until we reach target number of zeros.
      * @param powDigest The pow digest.

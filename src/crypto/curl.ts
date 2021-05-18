@@ -53,6 +53,32 @@ export class Curl {
     }
 
     /**
+     * Sponge transform function
+     * @param curlState The curl state to transform.
+     * @param round The number of rounds to use.
+     * @internal
+     */
+    public static transform(curlState: Int8Array, rounds: number): void {
+        let stateCopy;
+        let index = 0;
+
+        for (let round = 0; round < rounds; round++) {
+            stateCopy = curlState.slice();
+
+            for (let i = 0; i < Curl.STATE_LENGTH; i++) {
+                const lastVal = stateCopy[index];
+                if (index < 365) {
+                    index += 364;
+                } else {
+                    index -= 365;
+                }
+                const nextVal = stateCopy[index] << 2;
+                curlState[i] = Curl.TRUTH_TABLE[lastVal + nextVal + 5];
+            }
+        }
+    }
+
+    /**
      * Resets the state
      */
     public reset(): void {
@@ -80,7 +106,7 @@ export class Curl {
 
             this._state.set(trits.subarray(offset, offset + limit));
 
-            this.transform();
+            Curl.transform(this._state, this._rounds);
             length -= Curl.HASH_LENGTH;
             offset += limit;
         } while (length > 0);
@@ -98,27 +124,9 @@ export class Curl {
 
             trits.set(this._state.subarray(0, limit), offset);
 
-            this.transform();
+            Curl.transform(this._state, this._rounds);
             length -= Curl.HASH_LENGTH;
             offset += limit;
         } while (length > 0);
-    }
-
-    /**
-     * Sponge transform function
-     * @internal
-     */
-    private transform(): void {
-        let stateCopy;
-        let index = 0;
-
-        for (let round = 0; round < this._rounds; round++) {
-            stateCopy = this._state.slice();
-
-            for (let i = 0; i < Curl.STATE_LENGTH; i++) {
-                this._state[i] =
-                    Curl.TRUTH_TABLE[stateCopy[index] + (stateCopy[(index += index < 365 ? 364 : -365)] << 2) + 5];
-            }
-        }
     }
 }

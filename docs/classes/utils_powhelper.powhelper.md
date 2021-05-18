@@ -120,7 +120,7 @@ ___
 
 ### trinaryTrailingZeros
 
-▸ `Static` **trinaryTrailingZeros**(`trits`: *Int8Array*): *number*
+▸ `Static` **trinaryTrailingZeros**(`trits`: *Int8Array*, `endPos?`: *number*): *number*
 
 Find the number of trailing zeros.
 
@@ -129,6 +129,7 @@ Find the number of trailing zeros.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `trits` | *Int8Array* | The trits to look for zeros. |
+| `endPos` | *number* | The end position to start looking for zeros. |
 
 **Returns:** *number*
 

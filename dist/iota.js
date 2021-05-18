@@ -11004,6 +11004,30 @@
 	        this._rounds = rounds;
 	    }
 	    /**
+	     * Sponge transform function
+	     * @param curlState The curl state to transform.
+	     * @param round The number of rounds to use.
+	     * @internal
+	     */
+	    static transform(curlState, rounds) {
+	        let stateCopy;
+	        let index = 0;
+	        for (let round = 0; round < rounds; round++) {
+	            stateCopy = curlState.slice();
+	            for (let i = 0; i < Curl.STATE_LENGTH; i++) {
+	                const lastVal = stateCopy[index];
+	                if (index < 365) {
+	                    index += 364;
+	                }
+	                else {
+	                    index -= 365;
+	                }
+	                const nextVal = stateCopy[index] << 2;
+	                curlState[i] = Curl.TRUTH_TABLE[lastVal + nextVal + 5];
+	            }
+	        }
+	    }
+	    /**
 	     * Resets the state
 	     */
 	    reset() {
@@ -11027,7 +11051,7 @@
 	        do {
 	            const limit = length < Curl.HASH_LENGTH ? length : Curl.HASH_LENGTH;
 	            this._state.set(trits.subarray(offset, offset + limit));
-	            this.transform();
+	            Curl.transform(this._state, this._rounds);
 	            length -= Curl.HASH_LENGTH;
 	            offset += limit;
 	        } while (length > 0);
@@ -11042,25 +11066,10 @@
 	        do {
 	            const limit = length < Curl.HASH_LENGTH ? length : Curl.HASH_LENGTH;
 	            trits.set(this._state.subarray(0, limit), offset);
-	            this.transform();
+	            Curl.transform(this._state, this._rounds);
 	            length -= Curl.HASH_LENGTH;
 	            offset += limit;
 	        } while (length > 0);
-	    }
-	    /**
-	     * Sponge transform function
-	     * @internal
-	     */
-	    transform() {
-	        let stateCopy;
-	        let index = 0;
-	        for (let round = 0; round < this._rounds; round++) {
-	            stateCopy = this._state.slice();
-	            for (let i = 0; i < Curl.STATE_LENGTH; i++) {
-	                this._state[i] =
-	                    Curl.TRUTH_TABLE[stateCopy[index] + (stateCopy[(index += index < 365 ? 364 : -365)] << 2) + 5];
-	            }
-	        }
 	    }
 	}
 	curl.Curl = Curl;
@@ -11260,42 +11269,19 @@
 	    static encode(dst, startIndex, src) {
 	        let j = 0;
 	        for (let i = 0; i < src.length; i++) {
-	            const { t1, t2 } = B1T6.encodeGroup(src[i]);
-	            B1T6.storeTrits(dst, startIndex + j, t1);
-	            B1T6.storeTrits(dst, startIndex + j + B1T6.TRITS_PER_TRYTE, t2);
+	            // Convert to signed 8 bit value
+	            const v = (src[i] << 24 >> 24) + 364;
+	            const rem = Math.trunc(v % 27);
+	            const quo = Math.trunc(v / 27);
+	            dst[startIndex + j] = B1T6.TRYTE_VALUE_TO_TRITS[rem][0];
+	            dst[startIndex + j + 1] = B1T6.TRYTE_VALUE_TO_TRITS[rem][1];
+	            dst[startIndex + j + 2] = B1T6.TRYTE_VALUE_TO_TRITS[rem][2];
+	            dst[startIndex + j + 3] = B1T6.TRYTE_VALUE_TO_TRITS[quo][0];
+	            dst[startIndex + j + 4] = B1T6.TRYTE_VALUE_TO_TRITS[quo][1];
+	            dst[startIndex + j + 5] = B1T6.TRYTE_VALUE_TO_TRITS[quo][2];
 	            j += 6;
 	        }
 	        return j;
-	    }
-	    /**
-	     * Encode a group to trits.
-	     * @param b The value to encode.
-	     * @returns The trit groups.
-	     * @internal
-	     */
-	    static encodeGroup(b) {
-	        // (TRYTE_RADIX_HALF * TRYTE_RADIX) + TRYTE_RADIX_HALF;
-	        // (13 * 27) + 13
-	        const v = (b << 24 >> 24) + 364;
-	        const quo = Math.trunc(v / 27);
-	        const rem = Math.trunc(v % 27);
-	        return {
-	            t1: rem + B1T6.MIN_TRYTE_VALUE,
-	            t2: quo + B1T6.MIN_TRYTE_VALUE
-	        };
-	    }
-	    /**
-	     * Store the trits in the dest array.
-	     * @param trits The trits array.
-	     * @param startIndex The start index in the array to write.
-	     * @param value The value to write.
-	     * @internal
-	     */
-	    static storeTrits(trits, startIndex, value) {
-	        const idx = value - B1T6.MIN_TRYTE_VALUE;
-	        trits[startIndex] = B1T6.TRYTE_VALUE_TO_TRITS[idx][0];
-	        trits[startIndex + 1] = B1T6.TRYTE_VALUE_TO_TRITS[idx][1];
-	        trits[startIndex + 2] = B1T6.TRYTE_VALUE_TO_TRITS[idx][2];
 	    }
 	}
 	b1t6.B1T6 = B1T6;
@@ -11310,11 +11296,6 @@
 	    [-1, -1, 1], [0, -1, 1], [1, -1, 1], [-1, 0, 1], [0, 0, 1], [1, 0, 1],
 	    [-1, 1, 1], [0, 1, 1], [1, 1, 1]
 	];
-	/**
-	 * Minimum tryte value.
-	 * @internal
-	 */
-	B1T6.MIN_TRYTE_VALUE = -13;
 	/**
 	 * Trites per tryte.
 	 * @internal
@@ -12497,11 +12478,12 @@
 	    /**
 	     * Find the number of trailing zeros.
 	     * @param trits The trits to look for zeros.
+	     * @param endPos The end position to start looking for zeros.
 	     * @returns The number of trailing zeros.
 	     */
-	    static trinaryTrailingZeros(trits) {
+	    static trinaryTrailingZeros(trits, endPos = trits.length) {
 	        let z = 0;
-	        for (let i = trits.length - 1; i >= 0 && trits[i] === 0; i--) {
+	        for (let i = endPos - 1; i >= 0 && trits[i] === 0; i--) {
 	            z++;
 	        }
 	        return z;
@@ -12518,16 +12500,14 @@
 	        let returnNonce;
 	        const buf = new Int8Array(curl_1.Curl.HASH_LENGTH);
 	        const digestTritsLen = b1t6_1.B1T6.encode(buf, 0, powDigest);
-	        const hash = new Int8Array(curl_1.Curl.HASH_LENGTH);
 	        const biArr = new Uint8Array(8);
-	        const curl = new curl_1.Curl();
 	        do {
 	            bigIntHelper_1.BigIntHelper.write8(nonce, biArr, 0);
 	            b1t6_1.B1T6.encode(buf, digestTritsLen, biArr);
-	            curl.reset();
-	            curl.absorb(buf, 0, curl_1.Curl.HASH_LENGTH);
-	            curl.squeeze(hash, 0, curl_1.Curl.HASH_LENGTH);
-	            if (PowHelper.trinaryTrailingZeros(hash) >= targetZeros) {
+	            const curlState = new Int8Array(curl_1.Curl.STATE_LENGTH);
+	            curlState.set(buf, 0);
+	            curl_1.Curl.transform(curlState, 81);
+	            if (PowHelper.trinaryTrailingZeros(curlState, curl_1.Curl.HASH_LENGTH) >= targetZeros) {
 	                returnNonce = nonce;
 	            }
 	            else {

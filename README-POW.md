@@ -8,17 +8,22 @@ As you will see from the benchmarks provided below, the only viable option on cu
 
 Speeds for the PoW providers with a data length of 500 and target score of 400 are:
 
-* LocalPowProvider: 275s - Extremely slow
-* WasmPowProvider: 44s - Slow
-* NodePowProvider: 10s - Faster
-* NeonPowProvider: 0.1s - Fastest
+* LocalPowProvider (1 Thread): 126s - Extremely slow
+* WasmPowProvider (12 Threads): 7s - Slow
+* NodePowProvider (12 Threads): 5s - Faster
+* NeonPowProvider (12 Threads): 0.1s - Fastest
+
+* LocalPowProvider (1 Thread): 126s - Extremely slow
+* WasmPowProvider (1 Thread): 200s - Slow
+* NodePowProvider (1 Thread): 150s - Faster
+* NeonPowProvider (1 Thread): 3s - Fastest
 
 Speeds for the PoW providers with a data length of 500 and target score of 4000 (mainnet) are:
 
-* LocalPowProvider: xxxs - Didn't wait to find out
-* WasmPowProvider: 44s - Didn't wait to find out
-* NodePowProvider: 670s - Faster
-* NeonPowProvider: 4s - Fastest
+* LocalPowProvider (1 Thread): xxxs - Didn't wait to find out
+* WasmPowProvider (12 Threads): 371s - Slow
+* NodePowProvider (12 Threads): 266s - Faster
+* NeonPowProvider (12 Threads): 4s - Fastest
 
 ## LocalPowProvider
 

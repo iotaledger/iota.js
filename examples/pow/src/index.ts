@@ -8,9 +8,9 @@ async function run() {
     const targetScore = 100;
     const iterations = 1;
 
-    await doPow("Neon Pow", dataLength, targetScore, iterations, new NeonPowProvider())
-    await doPow("Node Pow", dataLength, targetScore, iterations, new NodePowProvider())
-    await doPow("Wasm Pow", dataLength, targetScore, iterations, new WasmPowProvider())
+    await doPow("Neon Pow", dataLength, targetScore, iterations, new NeonPowProvider(1))
+    await doPow("Node Pow", dataLength, targetScore, iterations, new NodePowProvider(1))
+    await doPow("Wasm Pow", dataLength, targetScore, iterations, new WasmPowProvider(1))
     await doPow("Local Pow", dataLength, targetScore, iterations, new LocalPowProvider())
 }
 

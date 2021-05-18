@@ -69,11 +69,12 @@ export class PowHelper {
     /**
      * Find the number of trailing zeros.
      * @param trits The trits to look for zeros.
+     * @param endPos The end position to start looking for zeros.
      * @returns The number of trailing zeros.
      */
-    public static trinaryTrailingZeros(trits: Int8Array): number {
+    public static trinaryTrailingZeros(trits: Int8Array, endPos: number = trits.length): number {
         let z: number = 0;
-        for (let i = trits.length - 1; i >= 0 && trits[i] === 0; i--) {
+        for (let i = endPos - 1; i >= 0 && trits[i] === 0; i--) {
             z++;
         }
         return z;
@@ -92,19 +93,17 @@ export class PowHelper {
 
         const buf: Int8Array = new Int8Array(Curl.HASH_LENGTH);
         const digestTritsLen = B1T6.encode(buf, 0, powDigest);
-        const hash: Int8Array = new Int8Array(Curl.HASH_LENGTH);
         const biArr = new Uint8Array(8);
-        const curl = new Curl();
 
         do {
             BigIntHelper.write8(nonce, biArr, 0);
             B1T6.encode(buf, digestTritsLen, biArr);
 
-            curl.reset();
-            curl.absorb(buf, 0, Curl.HASH_LENGTH);
-            curl.squeeze(hash, 0, Curl.HASH_LENGTH);
+            const curlState = new Int8Array(Curl.STATE_LENGTH);
+            curlState.set(buf, 0);
+            Curl.transform(curlState, 81);
 
-            if (PowHelper.trinaryTrailingZeros(hash) >= targetZeros) {
+            if (PowHelper.trinaryTrailingZeros(curlState, Curl.HASH_LENGTH) >= targetZeros) {
                 returnNonce = nonce;
             } else {
                 nonce++;

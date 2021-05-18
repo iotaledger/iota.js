@@ -18,12 +18,6 @@ export class B1T6 {
     ];
 
     /**
-     * Minimum tryte value.
-     * @internal
-     */
-    private static readonly MIN_TRYTE_VALUE: number = -13;
-
-    /**
      * Trites per tryte.
      * @internal
      */
@@ -48,44 +42,21 @@ export class B1T6 {
     public static encode(dst: Int8Array, startIndex: number, src: Uint8Array): number {
         let j = 0;
         for (let i = 0; i < src.length; i++) {
-            const { t1, t2 } = B1T6.encodeGroup(src[i]);
-            B1T6.storeTrits(dst, startIndex + j, t1);
-            B1T6.storeTrits(dst, startIndex + j + B1T6.TRITS_PER_TRYTE, t2);
+            // Convert to signed 8 bit value
+            const v = (src[i] << 24 >> 24) + 364;
+
+            const rem = Math.trunc(v % 27);
+            const quo = Math.trunc(v / 27);
+
+            dst[startIndex + j] = B1T6.TRYTE_VALUE_TO_TRITS[rem][0];
+            dst[startIndex + j + 1] = B1T6.TRYTE_VALUE_TO_TRITS[rem][1];
+            dst[startIndex + j + 2] = B1T6.TRYTE_VALUE_TO_TRITS[rem][2];
+            dst[startIndex + j + 3] = B1T6.TRYTE_VALUE_TO_TRITS[quo][0];
+            dst[startIndex + j + 4] = B1T6.TRYTE_VALUE_TO_TRITS[quo][1];
+            dst[startIndex + j + 5] = B1T6.TRYTE_VALUE_TO_TRITS[quo][2];
+
             j += 6;
         }
         return j;
-    }
-
-    /**
-     * Encode a group to trits.
-     * @param b The value to encode.
-     * @returns The trit groups.
-     * @internal
-     */
-    private static encodeGroup(b: number): { t1: number; t2: number } {
-        // (TRYTE_RADIX_HALF * TRYTE_RADIX) + TRYTE_RADIX_HALF;
-        // (13 * 27) + 13
-        const v = (b << 24 >> 24) + 364;
-        const quo = Math.trunc(v / 27);
-        const rem = Math.trunc(v % 27);
-        return {
-            t1: rem + B1T6.MIN_TRYTE_VALUE,
-            t2: quo + B1T6.MIN_TRYTE_VALUE
-        };
-    }
-
-    /**
-     * Store the trits in the dest array.
-     * @param trits The trits array.
-     * @param startIndex The start index in the array to write.
-     * @param value The value to write.
-     * @internal
-     */
-    private static storeTrits(trits: Int8Array, startIndex: number, value: number): void {
-        const idx = value - B1T6.MIN_TRYTE_VALUE;
-
-        trits[startIndex] = B1T6.TRYTE_VALUE_TO_TRITS[idx][0];
-        trits[startIndex + 1] = B1T6.TRYTE_VALUE_TO_TRITS[idx][1];
-        trits[startIndex + 2] = B1T6.TRYTE_VALUE_TO_TRITS[idx][2];
     }
 }
