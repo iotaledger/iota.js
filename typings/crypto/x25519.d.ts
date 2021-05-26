@@ -1,3 +1,6 @@
+/**
+ * Implementation of X25519.
+ */
 export declare class X25519 {
     /**
      * Convert Ed25519 private key to X25519 private key.

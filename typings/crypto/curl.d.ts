@@ -3,7 +3,7 @@
  */
 export declare class Curl {
     /**
-     * The Hash Length
+     * The Hash Length.
      */
     static readonly HASH_LENGTH: number;
     /**
@@ -16,7 +16,7 @@ export declare class Curl {
      */
     constructor(rounds?: number);
     /**
-     * Resets the state
+     * Resets the state.
      */
     reset(): void;
     /**
@@ -26,14 +26,14 @@ export declare class Curl {
      */
     rate(len?: number): Int8Array;
     /**
-     * Absorbs trits given an offset and length
+     * Absorbs trits given an offset and length.
      * @param trits The trits to absorb.
      * @param offset The offset to start abororbing from the array.
      * @param length The length of trits to absorb.
      */
     absorb(trits: Int8Array, offset: number, length: number): void;
     /**
-     * Squeezes trits given an offset and length
+     * Squeezes trits given an offset and length.
      * @param trits The trits to squeeze.
      * @param offset The offset to start squeezing from the array.
      * @param length The length of trits to squeeze.

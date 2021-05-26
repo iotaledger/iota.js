@@ -51,7 +51,7 @@ Client for API communication.
 
 ### constructor
 
-\+ **new SingleNodeClient**(`endpoint`: *string*, `options?`: SingleNodeClientOptions): [*SingleNodeClient*](clients_singlenodeclient.singlenodeclient.md)
+\+ **new SingleNodeClient**(`endpoint`: *string*, `options?`: [*SingleNodeClientOptions*](../interfaces/clients_singlenodeclientoptions.singlenodeclientoptions.md)): [*SingleNodeClient*](clients_singlenodeclient.singlenodeclient.md)
 
 Create a new instance of client.
 
@@ -60,7 +60,7 @@ Create a new instance of client.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `endpoint` | *string* | The endpoint. |
-| `options?` | SingleNodeClientOptions | Options for the client. |
+| `options?` | [*SingleNodeClientOptions*](../interfaces/clients_singlenodeclientoptions.singlenodeclientoptions.md) | Options for the client. |
 
 **Returns:** [*SingleNodeClient*](clients_singlenodeclient.singlenodeclient.md)
 

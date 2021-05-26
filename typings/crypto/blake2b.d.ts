@@ -1,6 +1,6 @@
 /**
  * Class to help with Blake2B Signature scheme.
- * TypeScript conversion from https://github.com/dcposch/blakejs
+ * TypeScript conversion from https://github.com/dcposch/blakejs.
  */
 export declare class Blake2b {
     /**

@@ -46,7 +46,7 @@ Create a new instance of Curl.
 
 ▪ `Static` `Readonly` **HASH\_LENGTH**: *number*= 243
 
-The Hash Length
+The Hash Length.
 
 ___
 
@@ -62,7 +62,7 @@ The State Length.
 
 ▸ **absorb**(`trits`: *Int8Array*, `offset`: *number*, `length`: *number*): *void*
 
-Absorbs trits given an offset and length
+Absorbs trits given an offset and length.
 
 #### Parameters
 
@@ -98,7 +98,7 @@ ___
 
 ▸ **reset**(): *void*
 
-Resets the state
+Resets the state.
 
 **Returns:** *void*
 
@@ -108,7 +108,7 @@ ___
 
 ▸ **squeeze**(`trits`: *Int8Array*, `offset`: *number*, `length`: *number*): *void*
 
-Squeezes trits given an offset and length
+Squeezes trits given an offset and length.
 
 #### Parameters
 

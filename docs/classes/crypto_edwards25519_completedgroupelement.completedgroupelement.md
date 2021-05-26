@@ -6,7 +6,7 @@
 
 Group elements are members of the elliptic curve -x^2 + y^2 = 1 + d * x^2 *
 y^2 where d = -121665/121666.
-CompletedGroupElement: ((X:Z),(Y:T)) satisfying x=X/Z, y=Y/T
+CompletedGroupElement: ((X:Z),(Y:T)) satisfying x=X/Z, y=Y/T.
 
 ## Table of contents
 
@@ -87,7 +87,7 @@ The Z Element.
 
 ▸ **add**(`p`: [*ExtendedGroupElement*](crypto_edwards25519_extendedgroupelement.extendedgroupelement.md), `q`: [*CachedGroupElement*](crypto_edwards25519_cachedgroupelement.cachedgroupelement.md)): *void*
 
-Group Element add
+Group Element add.
 
 #### Parameters
 

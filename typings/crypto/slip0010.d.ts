@@ -1,7 +1,7 @@
 import { Bip32Path } from "./bip32Path";
 /**
- * Class to help with slip0010 key derivation.
- * https://github.com/satoshilabs/slips/blob/master/slip-0010.md
+ * Class to help with slip0010 key derivation
+ * https://github.com/satoshilabs/slips/blob/master/slip-0010.md.
  */
 export declare class Slip0010 {
     /**

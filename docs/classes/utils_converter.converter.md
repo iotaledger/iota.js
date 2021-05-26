@@ -200,7 +200,7 @@ Is the data hex format.
 
 **Returns:** *boolean*
 
-true if the string is hex.
+True if the string is hex.
 
 ___
 

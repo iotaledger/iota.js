@@ -5,7 +5,7 @@
 [crypto/hmacSha512](../modules/crypto_hmacsha512.md).HmacSha512
 
 Class to help with HmacSha512 scheme.
-TypeScript conversion from https://github.com/emn178/js-sha512
+TypeScript conversion from https://github.com/emn178/js-sha512.
 
 ## Table of contents
 

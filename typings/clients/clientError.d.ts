@@ -1,3 +1,6 @@
+/**
+ * Class to represent errors from Client.
+ */
 export declare class ClientError extends Error {
     /**
      * The route the request was made to.

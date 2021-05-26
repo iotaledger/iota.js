@@ -1,6 +1,9 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 
+/**
+ * Reason for message conflicts.
+ */
 // eslint-disable-next-line no-shadow
 export enum ConflictReason {
     /**

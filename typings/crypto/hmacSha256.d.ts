@@ -1,6 +1,6 @@
 /**
  * Class to help with HmacSha256 scheme.
- * TypeScript conversion from https://github.com/emn178/js-sha256
+ * TypeScript conversion from https://github.com/emn178/js-sha256.
  */
 export declare class HmacSha256 {
     /**

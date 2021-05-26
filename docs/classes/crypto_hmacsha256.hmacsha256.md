@@ -5,7 +5,7 @@
 [crypto/hmacSha256](../modules/crypto_hmacsha256.md).HmacSha256
 
 Class to help with HmacSha256 scheme.
-TypeScript conversion from https://github.com/emn178/js-sha256
+TypeScript conversion from https://github.com/emn178/js-sha256.
 
 ## Table of contents
 

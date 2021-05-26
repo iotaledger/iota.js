@@ -4,7 +4,7 @@
 /**
  * This is a port of the Go code from https://github.com/hdevalence/ed25519consensus
  * which is an extension of https://github.com/golang/crypto/tree/master/ed25519
- * which in a port of the “ref10” implementation of ed25519 from SUPERCOP
+ * which in a port of the “ref10” implementation of ed25519 from SUPERCOP.
  */
 import { CONST_BASE } from "./const";
 import { FieldElement } from "./fieldElement";
@@ -12,7 +12,7 @@ import { FieldElement } from "./fieldElement";
 /**
  * Group elements are members of the elliptic curve -x^2 + y^2 = 1 + d * x^2 *
  * y^2 where d = -121665/121666.
- * PreComputedGroupElement: (y+x,y-x,2dxy)
+ * PreComputedGroupElement: (y+x,y-x,2dxy).
  */
 export class PreComputedGroupElement {
     /**
@@ -21,7 +21,7 @@ export class PreComputedGroupElement {
     public yPlusX: FieldElement;
 
     /**
-     * Y - X Element
+     * Y - X Element.
      */
     public yMinusX: FieldElement;
 
@@ -33,7 +33,7 @@ export class PreComputedGroupElement {
     /**
      * Create a new instance of PreComputedGroupElement.
      * @param yPlusX Y + X Element.
-     * @param yMinusX Y - X Element
+     * @param yMinusX Y - X Element.
      * @param xy2d XY2d Element.
      */
     constructor(yPlusX?: FieldElement, yMinusX?: FieldElement, xy2d?: FieldElement) {
@@ -88,7 +88,7 @@ export class PreComputedGroupElement {
     /**
      * Negative returns 1 if b < 0 and 0 otherwise.
      * @param b The b.
-     * @returns 1 if b < 0 and 0
+     * @returns 1 if b < 0 and 0.
      */
     private negative(b: number): number {
         return (b >> 31) & 1;
@@ -98,8 +98,8 @@ export class PreComputedGroupElement {
      * Equal returns 1 if b == c and 0 otherwise, assuming that b and c are
      * non-negative.
      * @param b The b.
-     * @param c the c.
-     * @returns 1 if b == c and 0
+     * @param c The c.
+     * @returns 1 if b == c and 0.
      */
     private equal(b: number, c: number): number {
         let x = (b ^ c) & 0xFFFFFFFF;

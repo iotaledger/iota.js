@@ -8,8 +8,8 @@ const converter_1 = require("../utils/converter");
 const ed25519_1 = require("./ed25519");
 const hmacSha512_1 = require("./hmacSha512");
 /**
- * Class to help with slip0010 key derivation.
- * https://github.com/satoshilabs/slips/blob/master/slip-0010.md
+ * Class to help with slip0010 key derivation
+ * https://github.com/satoshilabs/slips/blob/master/slip-0010.md.
  */
 class Slip0010 {
     /**

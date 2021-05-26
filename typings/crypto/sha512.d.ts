@@ -1,6 +1,6 @@
 /**
- * Class to help with Sha512 scheme.
- * TypeScript conversion from https://github.com/emn178/js-sha512
+ * Class to help with Sha512 scheme
+ * TypeScript conversion from https://github.com/emn178/js-sha512.
  */
 export declare class Sha512 {
     /**

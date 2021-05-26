@@ -7,7 +7,7 @@ exports.HmacSha256 = void 0;
 const sha256_1 = require("./sha256");
 /**
  * Class to help with HmacSha256 scheme.
- * TypeScript conversion from https://github.com/emn178/js-sha256
+ * TypeScript conversion from https://github.com/emn178/js-sha256.
  */
 class HmacSha256 {
     /**

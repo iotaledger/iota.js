@@ -1,3 +1,6 @@
+/**
+ * Implementation of the ChaCha29 cipher.
+ */
 export declare class ChaCha20 {
     /**
      * Create a new instance of ChaCha20.

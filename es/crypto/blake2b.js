@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Blake2b = void 0;
 /**
  * Class to help with Blake2B Signature scheme.
- * TypeScript conversion from https://github.com/dcposch/blakejs
+ * TypeScript conversion from https://github.com/dcposch/blakejs.
  */
 class Blake2b {
     /**

@@ -7,7 +7,7 @@ exports.scalarMinimal = exports.scalarReduce = exports.scalarMulAdd = void 0;
 /**
  * This is a port of the Go code from https://github.com/hdevalence/ed25519consensus
  * which is an extension of https://github.com/golang/crypto/tree/master/ed25519
- * which in a port of the “ref10” implementation of ed25519 from SUPERCOP
+ * which in a port of the “ref10” implementation of ed25519 from SUPERCOP.
  */
 const bigIntHelper_1 = require("../../utils/bigIntHelper");
 const bigIntCommon_1 = require("./bigIntCommon");
@@ -15,14 +15,14 @@ const const_1 = require("./const");
 /**
  * The scalars are GF(2^252 + 27742317777372353535851937790883648493).
  *
- * Input:
- *   a[0]+256*a[1]+...+256^31*a[31] = a
- *   b[0]+256*b[1]+...+256^31*b[31] = b
- *   c[0]+256*c[1]+...+256^31*c[31] = c
+ * Input
+ * a[0]+256*a[1]+...+256^31*a[31] = a
+ * b[0]+256*b[1]+...+256^31*b[31] = b
+ * c[0]+256*c[1]+...+256^31*c[31] = c.
  *
- * Output:
- *   s[0]+256*s[1]+...+256^31*s[31] = (ab+c) mod l
- *   where l = 2^252 + 27742317777372353535851937790883648493.
+ * Output
+ * s[0]+256*s[1]+...+256^31*s[31] = (ab+c) mod l
+ * where l = 2^252 + 27742317777372353535851937790883648493.
  * @param s The scalar.
  * @param a The a.
  * @param b The b.
@@ -437,10 +437,10 @@ function scalarMulAdd(s, a, b, c) {
 }
 exports.scalarMulAdd = scalarMulAdd;
 /**
- * Scalar reduce.
+ * Scalar reduce
  * where l = 2^252 + 27742317777372353535851937790883648493.
- * @param out s[0]+256*s[1]+...+256^31*s[31] = s mod l
- * @param s s[0]+256*s[1]+...+256^63*s[63] = s
+ * @param out Where s[0]+256*s[1]+...+256^31*s[31] = s mod l.
+ * @param s Where s[0]+256*s[1]+...+256^63*s[63] = s.
  */
 function scalarReduce(out, s) {
     let s0 = bigIntCommon_1.BIG_2097151 & bigIntHelper_1.BigIntHelper.read3(s, 0);
@@ -739,9 +739,9 @@ function scalarReduce(out, s) {
 }
 exports.scalarReduce = scalarReduce;
 /**
- * Scalar Minimal returns true if the given scalar is less than the order of the Curve
+ * Scalar Minimal returns true if the given scalar is less than the order of the Curve.
  * @param scalar The scalar.
- * @returns True if the given scalar is less than the order of the Curve
+ * @returns True if the given scalar is less than the order of the Curve.
  */
 function scalarMinimal(scalar) {
     for (let i = 3; i >= 0; i--) {

@@ -1,3 +1,6 @@
+/**
+ * Implementation of the ChaCha20Poly1305 cipher.
+ */
 export declare class ChaCha20Poly1305 {
     /**
      * Create a ChaCha20Poly1305 encryptor.
@@ -14,7 +17,7 @@ export declare class ChaCha20Poly1305 {
      */
     static decryptor(key: Uint8Array, nonce: Uint8Array): ChaCha20Poly1305;
     /**
-     * Set the AAD
+     * Set the AAD.
      * @param aad The aad to set.
      */
     setAAD(aad: Uint8Array): void;

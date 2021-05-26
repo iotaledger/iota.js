@@ -7,6 +7,9 @@
 
 import { BitHelper } from "../utils/bitHelper";
 
+/**
+ * Implementation of the ChaCha29 cipher.
+ */
 export class ChaCha20 {
     /**
      * The input from the key.

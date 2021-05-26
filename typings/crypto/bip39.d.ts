@@ -16,7 +16,7 @@ export declare class Bip39 {
     static randomMnemonic(length?: number): string;
     /**
      * Generate a mnemonic from the entropy.
-     * @param entropy The entropy to generate
+     * @param entropy The entropy to generate.
      * @returns The mnemonic.
      */
     static entropyToMnemonic(entropy: Uint8Array): string;

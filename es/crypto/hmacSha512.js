@@ -7,7 +7,7 @@ exports.HmacSha512 = void 0;
 const sha512_1 = require("./sha512");
 /**
  * Class to help with HmacSha512 scheme.
- * TypeScript conversion from https://github.com/emn178/js-sha512
+ * TypeScript conversion from https://github.com/emn178/js-sha512.
  */
 class HmacSha512 {
     /**

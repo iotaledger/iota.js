@@ -164,10 +164,10 @@ ___
 FieldElement.square calculates h = f*f. Can overlap h with f.
 
 Preconditions:
-   |f| bounded by 1.1*2^26,1.1*2^25,1.1*2^26,1.1*2^25,etc.
+|f| bounded by 1.1*2^26,1.1*2^25,1.1*2^26,1.1*2^25,etc.
 
 Postconditions:
-   |h| bounded by 1.1*2^25,1.1*2^24,1.1*2^25,1.1*2^24,etc.
+|h| bounded by 1.1*2^25,1.1*2^24,1.1*2^25,1.1*2^24,etc.
 
 #### Parameters
 
@@ -185,7 +185,7 @@ ___
 
 ▸ **invert**(`z`: [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md)): *void*
 
-Invert
+Invert.
 
 #### Parameters
 
@@ -229,11 +229,11 @@ Calculates h = f * g
 Can overlap h with f or g.
 
 Preconditions:
-   |f| bounded by 1.1*2^26,1.1*2^25,1.1*2^26,1.1*2^25,etc.
-   |g| bounded by 1.1*2^26,1.1*2^25,1.1*2^26,1.1*2^25,etc.
+|f| bounded by 1.1*2^26,1.1*2^25,1.1*2^26,1.1*2^25,etc.
+|g| bounded by 1.1*2^26,1.1*2^25,1.1*2^26,1.1*2^25,etc.
 
 Postconditions:
-   |h| bounded by 1.1*2^25,1.1*2^24,1.1*2^25,1.1*2^24,etc.
+|h| bounded by 1.1*2^25,1.1*2^24,1.1*2^25,1.1*2^24,etc.
 
 Notes on implementation strategy:
 
@@ -268,13 +268,13 @@ ___
 
 ▸ **neg**(): *void*
 
-Neg sets h = -f
+Neg sets h = -f.
 
 Preconditions:
-   |f| bounded by 1.1*2^25,1.1*2^24,1.1*2^25,1.1*2^24,etc.
+|f| bounded by 1.1*2^25,1.1*2^24,1.1*2^25,1.1*2^24,etc.
 
 Postconditions:
-   |h| bounded by 1.1*2^25,1.1*2^24,1.1*2^25,1.1*2^24,etc.
+|h| bounded by 1.1*2^25,1.1*2^24,1.1*2^25,1.1*2^24,etc.
 
 **Returns:** *void*
 
@@ -313,10 +313,10 @@ ___
 FieldElement.square calculates h = f*f. Can overlap h with f.
 
 Preconditions:
-   |f| bounded by 1.1*2^26,1.1*2^25,1.1*2^26,1.1*2^25,etc.
+|f| bounded by 1.1*2^26,1.1*2^25,1.1*2^26,1.1*2^25,etc.
 
 Postconditions:
-   |h| bounded by 1.1*2^25,1.1*2^24,1.1*2^25,1.1*2^24,etc.
+|h| bounded by 1.1*2^25,1.1*2^24,1.1*2^25,1.1*2^24,etc.
 
 #### Parameters
 
@@ -332,15 +332,15 @@ ___
 
 ▸ **square2**(`f`: [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md)): *void*
 
-Square2 sets h = 2 * f * f
+Square2 sets h = 2 * f * f.
 
 Can overlap h with f.
 
 Preconditions:
-   |f| bounded by 1.65*2^26,1.65*2^25,1.65*2^26,1.65*2^25,etc.
+|f| bounded by 1.65*2^26,1.65*2^25,1.65*2^26,1.65*2^25,etc.
 
 Postconditions:
-   |h| bounded by 1.01*2^25,1.01*2^24,1.01*2^25,1.01*2^24,etc.
+|h| bounded by 1.01*2^25,1.01*2^24,1.01*2^25,1.01*2^24,etc.
 See fe_mul.c for discussion of implementation strategy.
 
 #### Parameters
@@ -376,27 +376,27 @@ ___
 
 FieldElement.toBytes marshals h to s.
 Preconditions:
-  |h| bounded by 1.1*2^25,1.1*2^24,1.1*2^25,1.1*2^24,etc.
+|h| bounded by 1.1*2^25,1.1*2^24,1.1*2^25,1.1*2^24,etc.
 
 Write p=2^255-19; q=floor(h/p).
 Basic claim: q = floor(2^(-255)(h + 19 2^(-25)h9 + 2^(-1))).
 
 Proof:
-  Have |h|<=p so |q|<=1 so |19^2 2^(-255) q|<1/4.
-  Also have |h-2^230 h9|<2^230 so |19 2^(-255)(h-2^230 h9)|<1/4.
+Have |h|<=p so |q|<=1 so |19^2 2^(-255) q|<1/4.
+Also have |h-2^230 h9|<2^230 so |19 2^(-255)(h-2^230 h9)|<1/4.
 
-  Write y=2^(-1)-19^2 2^(-255)q-19 2^(-255)(h-2^230 h9).
-  Then 0<y<1.
+Write y=2^(-1)-19^2 2^(-255)q-19 2^(-255)(h-2^230 h9).
+Then 0<y<1.
 
-  Write r=h-pq.
-  Have 0<=r<=p-1=2^255-20.
-  Thus 0<=r+19(2^-255)r<r+19(2^-255)2^255<=2^255-1.
+Write r=h-pq.
+Have 0<=r<=p-1=2^255-20.
+Thus 0<=r+19(2^-255)r<r+19(2^-255)2^255<=2^255-1.
 
-  Write x=r+19(2^-255)r+y.
-  Then 0<x<2^255 so floor(2^(-255)x) = 0 so floor(q+2^(-255)x) = q.
+Write x=r+19(2^-255)r+y.
+Then 0<x<2^255 so floor(2^(-255)x) = 0 so floor(q+2^(-255)x) = q.
 
-  Have q+2^(-255)x = 2^(-255)(h + 19 2^(-25) h9 + 2^(-1))
-  so floor(2^(-255)(h + 19 2^(-25) h9 + 2^(-1))) = q.
+Have q+2^(-255)x = 2^(-255)(h + 19 2^(-25) h9 + 2^(-1))
+so floor(2^(-255)(h + 19 2^(-25) h9 + 2^(-1))) = q.
 
 #### Parameters
 

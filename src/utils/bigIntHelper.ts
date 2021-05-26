@@ -7,10 +7,10 @@ import { RandomHelper } from "./randomHelper";
  * Helper methods for bigints.
  */
 export class BigIntHelper {
-    /* @internal */
+    // @internal
     private static readonly BIG_32: bigint = BigInt(32);
 
-    /* @internal */
+    // @internal
     private static readonly BIG_32_MASK: bigint = BigInt(0xFFFFFFFF);
 
     /**

@@ -3,12 +3,15 @@
 /* eslint-disable no-bitwise */
 
 /**
- * This is a TypeScript port of https://github.com/katzenpost/core/blob/master/crypto/extra25519/extra25519.go
+ * This is a TypeScript port of https://github.com/katzenpost/core/blob/master/crypto/extra25519/extra25519.go.
  */
 import { Sha512 } from "../crypto/sha512";
 import { ExtendedGroupElement } from "./edwards25519/extendedGroupElement";
 import { FieldElement } from "./edwards25519/fieldElement";
 
+/**
+ * Implementation of X25519.
+ */
 export class X25519 {
     /**
      * Convert Ed25519 private key to X25519 private key.

@@ -5,7 +5,7 @@ import { Sha512 } from "./sha512";
 
 /**
  * Class to help with HmacSha512 scheme.
- * TypeScript conversion from https://github.com/emn178/js-sha512
+ * TypeScript conversion from https://github.com/emn178/js-sha512.
  */
 export class HmacSha512 {
     /**

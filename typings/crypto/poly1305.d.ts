@@ -1,3 +1,6 @@
+/**
+ * Implementation of Poly1305.
+ */
 export declare class Poly1305 {
     /**
      * Create a new instance of Poly1305.

@@ -47,7 +47,7 @@ export declare class Converter {
     /**
      * Is the data hex format.
      * @param value The value to test.
-     * @returns true if the string is hex.
+     * @returns True if the string is hex.
      */
     static isHex(value: string): boolean;
     /**

@@ -4,9 +4,8 @@
 
 [crypto/edwards25519/extendedGroupElement](../modules/crypto_edwards25519_extendedgroupelement.md).ExtendedGroupElement
 
-Group elements are members of the elliptic curve -x^2 + y^2 = 1 + d * x^2 *
-y^2 where d = -121665/121666.
-ExtendedGroupElement: (X:Y:Z:T) satisfying x=X/Z, y=Y/Z, XY=ZT
+Group elements are members of the elliptic curve -x^2 + y^2 = 1 + d * x^2 * y^2 where d = -121665/121666.
+ExtendedGroupElement: (X:Y:Z:T) satisfying x=X/Z, y=Y/Z, XY=ZT.
 
 ## Table of contents
 
@@ -90,7 +89,7 @@ The Z Element.
 ▸ **cofactorEqual**(`q`: [*ExtendedGroupElement*](crypto_edwards25519_extendedgroupelement.extendedgroupelement.md)): *boolean*
 
 CofactorEqual checks whether p, q are equal up to cofactor multiplication
-(ie. if their difference is of small order).
+ie if their difference is of small order.
 
 #### Parameters
 
@@ -143,10 +142,11 @@ ___
 ▸ **scalarMultBase**(`a`: *Uint8Array*): *void*
 
 GeScalarMultBase computes h = a*B, where
- a = a[0]+256*a[1]+...+256^31 a[31]
- B is the Ed25519 base point (x,4/5) with x positive.
+a = a[0]+256*a[1]+...+256^31 a[31]
+b is the Ed25519 base point (x,4/5) with x positive.
+
 Preconditions:
- a[31] <= 127
+A[31] <= 127.
 
 #### Parameters
 

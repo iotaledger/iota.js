@@ -3,6 +3,9 @@
 /* eslint-disable no-bitwise */
 // https://www.ietf.org/rfc/rfc8439.html
 
+/**
+ * Implementation of Poly1305.
+ */
 export class Poly1305 {
     /**
      * The buffer for storing the ongoing calculation.

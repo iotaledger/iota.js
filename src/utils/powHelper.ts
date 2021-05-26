@@ -11,13 +11,13 @@ import { BigIntHelper } from "./bigIntHelper";
  */
 export class PowHelper {
     /**
-     * LN3 Const see https://oeis.org/A002391
+     * LN3 Const see https://oeis.org/A002391.
      */
     public static readonly LN3: number = 1.098612288668109691395245236922525704647490557822749451734694333;
 
     /**
      * Perform the score calculation.
-     * @param message The data to perform the score on
+     * @param message The data to perform the score on.
      * @returns The score for the data.
      */
     public static score(message: Uint8Array): number {
@@ -36,7 +36,7 @@ export class PowHelper {
     /**
      * Calculate the number of zeros required to get target score.
      * @param message The message to process.
-     * @param targetScore the target score.
+     * @param targetScore The target score.
      * @returns The number of zeros to find.
      */
     public static calculateTargetZeros(message: Uint8Array, targetScore: number): number {

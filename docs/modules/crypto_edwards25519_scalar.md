@@ -16,7 +16,7 @@
 
 ▸ **scalarMinimal**(`scalar`: Uint8Array): *boolean*
 
-Scalar Minimal returns true if the given scalar is less than the order of the Curve
+Scalar Minimal returns true if the given scalar is less than the order of the Curve.
 
 #### Parameters
 
@@ -26,7 +26,7 @@ Scalar Minimal returns true if the given scalar is less than the order of the Cu
 
 **Returns:** *boolean*
 
-True if the given scalar is less than the order of the Curve
+True if the given scalar is less than the order of the Curve.
 
 ___
 
@@ -36,14 +36,14 @@ ___
 
 The scalars are GF(2^252 + 27742317777372353535851937790883648493).
 
-Input:
-  a[0]+256*a[1]+...+256^31*a[31] = a
-  b[0]+256*b[1]+...+256^31*b[31] = b
-  c[0]+256*c[1]+...+256^31*c[31] = c
+Input
+a[0]+256*a[1]+...+256^31*a[31] = a
+b[0]+256*b[1]+...+256^31*b[31] = b
+c[0]+256*c[1]+...+256^31*c[31] = c.
 
-Output:
-  s[0]+256*s[1]+...+256^31*s[31] = (ab+c) mod l
-  where l = 2^252 + 27742317777372353535851937790883648493.
+Output
+s[0]+256*s[1]+...+256^31*s[31] = (ab+c) mod l
+where l = 2^252 + 27742317777372353535851937790883648493.
 
 #### Parameters
 
@@ -62,14 +62,14 @@ ___
 
 ▸ **scalarReduce**(`out`: Uint8Array, `s`: Uint8Array): *void*
 
-Scalar reduce.
+Scalar reduce
 where l = 2^252 + 27742317777372353535851937790883648493.
 
 #### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `out` | Uint8Array | s[0]+256*s[1]+...+256^31*s[31] = s mod l |
-| `s` | Uint8Array | s[0]+256*s[1]+...+256^63*s[63] = s |
+| `out` | Uint8Array | Where s[0]+256*s[1]+...+256^31*s[31] = s mod l. |
+| `s` | Uint8Array | Where s[0]+256*s[1]+...+256^63*s[63] = s. |
 
 **Returns:** *void*

@@ -1,3 +1,6 @@
+/**
+ * Implementation of Ed25519.
+ */
 export declare class Ed25519 {
     /**
      * PublicKeySize is the size, in bytes, of public keys as used in this package.
@@ -27,7 +30,13 @@ export declare class Ed25519 {
      * @returns The key pair.
      */
     static keyPairFromSeed(seed: Uint8Array): {
+        /**
+         * The private key generated from the seed.
+         */
         publicKey: Uint8Array;
+        /**
+         * The public key generated from the seed.
+         */
         privateKey: Uint8Array;
     };
     /**
@@ -44,7 +53,7 @@ export declare class Ed25519 {
      */
     static sign(privateKey: Uint8Array, message: Uint8Array): Uint8Array;
     /**
-     * Verify reports whether sig is a valid signature of message by publicKey
+     * Verify reports whether sig is a valid signature of message by publicKey.
      * @param publicKey The public key to verify the signature.
      * @param message The message for the signature.
      * @param sig The signature.

@@ -5,7 +5,7 @@ import { Sha256 } from "./sha256";
 
 /**
  * Class to help with HmacSha256 scheme.
- * TypeScript conversion from https://github.com/emn178/js-sha256
+ * TypeScript conversion from https://github.com/emn178/js-sha256.
  */
 export class HmacSha256 {
     /**

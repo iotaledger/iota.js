@@ -7,7 +7,7 @@ const fieldElement_1 = require("./fieldElement");
 /**
  * Group elements are members of the elliptic curve -x^2 + y^2 = 1 + d * x^2 *
  * y^2 where d = -121665/121666.
- * CompletedGroupElement: ((X:Z),(Y:T)) satisfying x=X/Z, y=Y/T
+ * CompletedGroupElement: ((X:Z),(Y:T)) satisfying x=X/Z, y=Y/T.
  */
 class CompletedGroupElement {
     /**
@@ -24,7 +24,7 @@ class CompletedGroupElement {
         this.T = T !== null && T !== void 0 ? T : new fieldElement_1.FieldElement();
     }
     /**
-     * Group Element add
+     * Group Element add.
      * @param p The extended group element.
      * @param q The cached group element.
      */

@@ -1,18 +1,18 @@
 /**
  * Class to help with Bech32 encoding/decoding.
- * Based on reference implementation https://github.com/sipa/bech32/blob/master/ref/javascript/bech32.js
+ * Based on reference implementation https://github.com/sipa/bech32/blob/master/ref/javascript/bech32.js.
  */
 export declare class Bech32 {
     /**
      * Encode the buffer.
-     * @param humanReadablePart The header
+     * @param humanReadablePart The header.
      * @param data The data to encode.
      * @returns The encoded data.
      */
     static encode(humanReadablePart: string, data: Uint8Array): string;
     /**
      * Encode the 5 bit data buffer.
-     * @param humanReadablePart The header
+     * @param humanReadablePart The header.
      * @param data5Bit The data to encode.
      * @returns The encoded data.
      */

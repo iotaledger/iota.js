@@ -5,7 +5,7 @@
 [crypto/bech32](../modules/crypto_bech32.md).Bech32
 
 Class to help with Bech32 encoding/decoding.
-Based on reference implementation https://github.com/sipa/bech32/blob/master/ref/javascript/bech32.js
+Based on reference implementation https://github.com/sipa/bech32/blob/master/ref/javascript/bech32.js.
 
 ## Table of contents
 
@@ -79,7 +79,7 @@ Encode the buffer.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `humanReadablePart` | *string* | The header |
+| `humanReadablePart` | *string* | The header. |
 | `data` | *Uint8Array* | The data to encode. |
 
 **Returns:** *string*
@@ -98,7 +98,7 @@ Encode the 5 bit data buffer.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `humanReadablePart` | *string* | The header |
+| `humanReadablePart` | *string* | The header. |
 | `data5Bit` | *Uint8Array* | The data to encode. |
 
 **Returns:** *string*

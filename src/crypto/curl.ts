@@ -6,7 +6,7 @@
  */
 export class Curl {
     /**
-     * The Hash Length
+     * The Hash Length.
      */
     public static readonly HASH_LENGTH: number = 243;
 
@@ -79,7 +79,7 @@ export class Curl {
     }
 
     /**
-     * Resets the state
+     * Resets the state.
      */
     public reset(): void {
         this._state = new Int8Array(Curl.STATE_LENGTH);
@@ -95,7 +95,7 @@ export class Curl {
     }
 
     /**
-     * Absorbs trits given an offset and length
+     * Absorbs trits given an offset and length.
      * @param trits The trits to absorb.
      * @param offset The offset to start abororbing from the array.
      * @param length The length of trits to absorb.
@@ -113,7 +113,7 @@ export class Curl {
     }
 
     /**
-     * Squeezes trits given an offset and length
+     * Squeezes trits given an offset and length.
      * @param trits The trits to squeeze.
      * @param offset The offset to start squeezing from the array.
      * @param length The length of trits to squeeze.

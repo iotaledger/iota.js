@@ -3,19 +3,19 @@
  */
 export declare class PowHelper {
     /**
-     * LN3 Const see https://oeis.org/A002391
+     * LN3 Const see https://oeis.org/A002391.
      */
     static readonly LN3: number;
     /**
      * Perform the score calculation.
-     * @param message The data to perform the score on
+     * @param message The data to perform the score on.
      * @returns The score for the data.
      */
     static score(message: Uint8Array): number;
     /**
      * Calculate the number of zeros required to get target score.
      * @param message The message to process.
-     * @param targetScore the target score.
+     * @param targetScore The target score.
      * @returns The number of zeros to find.
      */
     static calculateTargetZeros(message: Uint8Array, targetScore: number): number;

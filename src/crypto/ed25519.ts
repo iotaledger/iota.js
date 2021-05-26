@@ -3,9 +3,9 @@
 /* eslint-disable no-bitwise */
 
 /**
- * This is a port of the Go code from https://github.com/hdevalence/ed25519consensus
- * which is an extension of https://github.com/golang/crypto/tree/master/ed25519
- * which in a port of the “ref10” implementation of ed25519 from SUPERCOP
+ * This is a port of the Go code from https://github.com/hdevalence/ed25519consensus.
+ * Which is an extension of https://github.com/golang/crypto/tree/master/ed25519.
+ * Which in a port of the “ref10” implementation of ed25519 from SUPERCOP.
  */
 import { Sha512 } from "../crypto/sha512";
 import { ArrayHelper } from "../utils/arrayHelper";
@@ -13,6 +13,9 @@ import { ExtendedGroupElement } from "./edwards25519/extendedGroupElement";
 import { ProjectiveGroupElement } from "./edwards25519/projectiveGroupElement";
 import { scalarMinimal, scalarMulAdd, scalarReduce } from "./edwards25519/scalar";
 
+/**
+ * Implementation of Ed25519.
+ */
 export class Ed25519 {
     /**
      * PublicKeySize is the size, in bytes, of public keys as used in this package.
@@ -49,7 +52,13 @@ export class Ed25519 {
      * @returns The key pair.
      */
     public static keyPairFromSeed(seed: Uint8Array): {
+        /**
+         * The private key generated from the seed.
+         */
         publicKey: Uint8Array;
+        /**
+         * The public key generated from the seed.
+         */
         privateKey: Uint8Array;
     } {
         const privateKey = Ed25519.privateKeyFromSeed(seed.slice(0, Ed25519.SEED_SIZE));
@@ -147,7 +156,7 @@ export class Ed25519 {
     }
 
     /**
-     * Verify reports whether sig is a valid signature of message by publicKey
+     * Verify reports whether sig is a valid signature of message by publicKey.
      * @param publicKey The public key to verify the signature.
      * @param message The message for the signature.
      * @param sig The signature.

@@ -59,7 +59,7 @@ Generate a mnemonic from the entropy.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `entropy` | *Uint8Array* | The entropy to generate |
+| `entropy` | *Uint8Array* | The entropy to generate. |
 
 **Returns:** *string*
 

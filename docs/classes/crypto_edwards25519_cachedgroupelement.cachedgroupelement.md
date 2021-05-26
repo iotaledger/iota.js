@@ -32,7 +32,7 @@ Create a new instance of CachedGroupElement.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `yPlusX?` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | Y + X Element. |
-| `yMinusX?` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | Y - X Element |
+| `yMinusX?` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | Y - X Element. |
 | `Z?` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | Z Element. |
 | `T2d?` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | T2d Element. |
 
@@ -60,7 +60,7 @@ ___
 
 • **yMinusX**: [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md)
 
-Y - X Element
+Y - X Element.
 
 ___
 

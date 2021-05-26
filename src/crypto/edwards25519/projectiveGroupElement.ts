@@ -4,7 +4,7 @@
 /**
  * This is a port of the Go code from https://github.com/hdevalence/ed25519consensus
  * which is an extension of https://github.com/golang/crypto/tree/master/ed25519
- * which in a port of the “ref10” implementation of ed25519 from SUPERCOP
+ * which in a port of the “ref10” implementation of ed25519 from SUPERCOP.
  */
 import { CachedGroupElement } from "./cachedGroupElement";
 import { CompletedGroupElement } from "./completedGroupElement";
@@ -14,8 +14,8 @@ import { FieldElement } from "./fieldElement";
 
 /**
  * Group elements are members of the elliptic curve -x^2 + y^2 = 1 + d * x^2 *
- * y^2 where d = -121665/121666.
- * ProjectiveGroupElement: (X:Y:Z) satisfying x=X/Z, y=Y/Z
+ * y^2 where d = -121665/121666
+ * ProjectiveGroupElement: (X:Y:Z) satisfying x=X/Z, y=Y/Z.
  */
 export class ProjectiveGroupElement {
     /**
@@ -45,13 +45,19 @@ export class ProjectiveGroupElement {
         this.Z = Z ?? new FieldElement();
     }
 
-
+    /**
+     * Zero the elements.
+     */
     public zero() {
         this.X.zero();
         this.Y.one();
         this.Z.one();
     }
 
+    /**
+     * Double the elements.
+     * @param r The elements.
+     */
     public double(r: CompletedGroupElement) {
         const t0 = new FieldElement();
         r.X.square(this.X);
@@ -65,6 +71,10 @@ export class ProjectiveGroupElement {
         r.T.sub(r.T, r.Z);
     }
 
+    /**
+     * Convert to extended form.
+     * @param r The extended element.
+     */
     public toExtended(r: ExtendedGroupElement) {
         r.X.mul(this.X, this.Z);
         r.Y.mul(this.Y, this.Z);
@@ -72,6 +82,10 @@ export class ProjectiveGroupElement {
         r.T.mul(this.X, this.Y);
     }
 
+    /**
+     * Convert the element to bytes.
+     * @param s The bytes.
+     */
     public toBytes(s: Uint8Array) {
         const recip = new FieldElement();
         const x = new FieldElement();
@@ -86,12 +100,12 @@ export class ProjectiveGroupElement {
 
     /**
      * GeDoubleScalarMultVartime sets r = a*A + b*B
-     * where a = a[0]+256*a[1]+...+256^31 a[31].
-     * and b = b[0]+256*b[1]+...+256^31 b[31].
+     * where a = a[0]+256*a[1]+...+256^31 a[31]
+     * and b = b[0]+256*b[1]+...+256^31 b[31]
      * B is the Ed25519 base point (x,4/5) with x positive.
-     * @param a The a
-     * @param A The A
-     * @param b The b
+     * @param a The a.
+     * @param A The A.
+     * @param b The b.
      */
     public doubleScalarMultVartime(a: Uint8Array, A: ExtendedGroupElement, b: Uint8Array) {
         const aSlide = new Int8Array(256);

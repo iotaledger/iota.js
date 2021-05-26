@@ -1,3 +1,6 @@
+/**
+ * Implementation of Zip215.
+ */
 export declare class Zip215 {
     /**
      * Verify reports whether sig is a valid signature of message by

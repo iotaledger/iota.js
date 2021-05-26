@@ -42,7 +42,7 @@ Perform pow on the message and return the nonce of at least targetScore.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `message` | *Uint8Array* | The message to process. |
-| `targetScore` | *number* | the target score. |
+| `targetScore` | *number* | The target score. |
 
 **Returns:** *Promise*<bigint\>
 

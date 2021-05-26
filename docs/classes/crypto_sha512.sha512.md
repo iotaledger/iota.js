@@ -4,8 +4,8 @@
 
 [crypto/sha512](../modules/crypto_sha512.md).Sha512
 
-Class to help with Sha512 scheme.
-TypeScript conversion from https://github.com/emn178/js-sha512
+Class to help with Sha512 scheme
+TypeScript conversion from https://github.com/emn178/js-sha512.
 
 ## Table of contents
 

@@ -39,7 +39,7 @@ ___
 
 • **confirmedMilestoneIndex**: *number*
 
-The confirmed milestone index;
+The confirmed milestone index.
 
 ___
 
@@ -63,7 +63,7 @@ ___
 
 • **latestMilestoneIndex**: *number*
 
-The latest milestone index;
+The latest milestone index.
 
 ___
 
@@ -71,7 +71,7 @@ ___
 
 • **latestMilestoneTimestamp**: *number*
 
-The latest milestone timestamp;
+The latest milestone timestamp.
 
 ___
 
@@ -111,7 +111,7 @@ ___
 
 • **pruningIndex**: *number*
 
-The pruning index;
+The pruning index.
 
 ___
 

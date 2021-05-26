@@ -2,8 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0
 /* eslint-disable no-bitwise */
 /**
- * Class to help with Sha512 scheme.
- * TypeScript conversion from https://github.com/emn178/js-sha512
+ * Class to help with Sha512 scheme
+ * TypeScript conversion from https://github.com/emn178/js-sha512.
  */
 export class Sha512 {
     /**

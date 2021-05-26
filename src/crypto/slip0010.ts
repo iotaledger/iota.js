@@ -7,8 +7,8 @@ import { Ed25519 } from "./ed25519";
 import { HmacSha512 } from "./hmacSha512";
 
 /**
- * Class to help with slip0010 key derivation.
- * https://github.com/satoshilabs/slips/blob/master/slip-0010.md
+ * Class to help with slip0010 key derivation
+ * https://github.com/satoshilabs/slips/blob/master/slip-0010.md.
  */
 export class Slip0010 {
     /**

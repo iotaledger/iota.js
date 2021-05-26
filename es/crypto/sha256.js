@@ -7,7 +7,7 @@ exports.Sha256 = void 0;
 /* eslint-disable unicorn/prefer-math-trunc */
 /**
  * Class to help with Sha256 scheme.
- * TypeScript conversion from https://github.com/emn178/js-sha256
+ * TypeScript conversion from https://github.com/emn178/js-sha256.
  */
 class Sha256 {
     /**

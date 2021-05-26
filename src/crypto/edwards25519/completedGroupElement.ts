@@ -10,7 +10,7 @@ import { ProjectiveGroupElement } from "./projectiveGroupElement";
 /**
  * Group elements are members of the elliptic curve -x^2 + y^2 = 1 + d * x^2 *
  * y^2 where d = -121665/121666.
- * CompletedGroupElement: ((X:Z),(Y:T)) satisfying x=X/Z, y=Y/T
+ * CompletedGroupElement: ((X:Z),(Y:T)) satisfying x=X/Z, y=Y/T.
  */
 export class CompletedGroupElement {
     /**
@@ -48,7 +48,7 @@ export class CompletedGroupElement {
     }
 
     /**
-     * Group Element add
+     * Group Element add.
      * @param p The extended group element.
      * @param q The cached group element.
      */

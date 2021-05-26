@@ -5,7 +5,7 @@
 [crypto/blake2b](../modules/crypto_blake2b.md).Blake2b
 
 Class to help with Blake2B Signature scheme.
-TypeScript conversion from https://github.com/dcposch/blakejs
+TypeScript conversion from https://github.com/dcposch/blakejs.
 
 ## Table of contents
 

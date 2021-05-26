@@ -38,7 +38,7 @@ Helper methods for POW.
 
 ▪ `Static` `Readonly` **LN3**: *number*= 1.098612288668109691395245236922525704647490557822749451734694333
 
-LN3 Const see https://oeis.org/A002391
+LN3 Const see https://oeis.org/A002391.
 
 ## Methods
 
@@ -53,7 +53,7 @@ Calculate the number of zeros required to get target score.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `message` | *Uint8Array* | The message to process. |
-| `targetScore` | *number* | the target score. |
+| `targetScore` | *number* | The target score. |
 
 **Returns:** *number*
 
@@ -91,7 +91,7 @@ Perform the score calculation.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `message` | *Uint8Array* | The data to perform the score on |
+| `message` | *Uint8Array* | The data to perform the score on. |
 
 **Returns:** *number*
 

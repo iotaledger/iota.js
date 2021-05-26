@@ -35,7 +35,7 @@ class Bip39 {
     }
     /**
      * Generate a mnemonic from the entropy.
-     * @param entropy The entropy to generate
+     * @param entropy The entropy to generate.
      * @returns The mnemonic.
      */
     static entropyToMnemonic(entropy) {

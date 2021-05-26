@@ -1,3 +1,6 @@
+/**
+ * Reason for message conflicts.
+ */
 export declare enum ConflictReason {
     /**
      * The message has no conflict.

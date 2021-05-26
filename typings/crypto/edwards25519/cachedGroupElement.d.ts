@@ -8,7 +8,7 @@ export declare class CachedGroupElement {
      */
     yPlusX: FieldElement;
     /**
-     * Y - X Element
+     * Y - X Element.
      */
     yMinusX: FieldElement;
     /**
@@ -22,7 +22,7 @@ export declare class CachedGroupElement {
     /**
      * Create a new instance of CachedGroupElement.
      * @param yPlusX Y + X Element.
-     * @param yMinusX Y - X Element
+     * @param yMinusX Y - X Element.
      * @param Z Z Element.
      * @param T2d T2d Element.
      */

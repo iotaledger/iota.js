@@ -6,6 +6,9 @@ import { BitHelper } from "../utils/bitHelper";
 import { ChaCha20 } from "./chaCha20";
 import { Poly1305 } from "./poly1305";
 
+/**
+ * Implementation of the ChaCha20Poly1305 cipher.
+ */
 export class ChaCha20Poly1305 {
     /**
      * Instance of chacha20.
@@ -86,7 +89,7 @@ export class ChaCha20Poly1305 {
     }
 
     /**
-     * Set the AAD
+     * Set the AAD.
      * @param aad The aad to set.
      */
     public setAAD(aad: Uint8Array): void {

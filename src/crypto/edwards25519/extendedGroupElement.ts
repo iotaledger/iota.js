@@ -5,7 +5,7 @@
 /**
  * This is a port of the Go code from https://github.com/hdevalence/ed25519consensus
  * which is an extension of https://github.com/golang/crypto/tree/master/ed25519
- * which in a port of the “ref10” implementation of ed25519 from SUPERCOP
+ * which is in turn a port of the “ref10” implementation of ed25519 from SUPERCOP.
  */
 import { ArrayHelper } from "../../utils/arrayHelper";
 import { CachedGroupElement } from "./cachedGroupElement";
@@ -16,9 +16,8 @@ import { PreComputedGroupElement } from "./preComputedGroupElement";
 import { ProjectiveGroupElement } from "./projectiveGroupElement";
 
 /**
- * Group elements are members of the elliptic curve -x^2 + y^2 = 1 + d * x^2 *
- * y^2 where d = -121665/121666.
- * ExtendedGroupElement: (X:Y:Z:T) satisfying x=X/Z, y=Y/Z, XY=ZT
+ * Group elements are members of the elliptic curve -x^2 + y^2 = 1 + d * x^2 * y^2 where d = -121665/121666.
+ * ExtendedGroupElement: (X:Y:Z:T) satisfying x=X/Z, y=Y/Z, XY=ZT.
  */
 export class ExtendedGroupElement {
     /**
@@ -172,10 +171,11 @@ export class ExtendedGroupElement {
 
     /**
      * GeScalarMultBase computes h = a*B, where
-     *  a = a[0]+256*a[1]+...+256^31 a[31]
-     *  B is the Ed25519 base point (x,4/5) with x positive.
+     * a = a[0]+256*a[1]+...+256^31 a[31]
+     * b is the Ed25519 base point (x,4/5) with x positive.
+     *
      * Preconditions:
-     *  a[31] <= 127
+     * A[31] <= 127.
      * @param a The a.
      */
     public scalarMultBase(a: Uint8Array): void {
@@ -226,7 +226,7 @@ export class ExtendedGroupElement {
 
     /**
      * CofactorEqual checks whether p, q are equal up to cofactor multiplication
-     * (ie. if their difference is of small order).
+     * ie if their difference is of small order.
      * @param q The extended group element.
      * @returns True if they are equal.
      */

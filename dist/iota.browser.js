@@ -38,7 +38,7 @@
 	blake2b.Blake2b = void 0;
 	/**
 	 * Class to help with Blake2B Signature scheme.
-	 * TypeScript conversion from https://github.com/dcposch/blakejs
+	 * TypeScript conversion from https://github.com/dcposch/blakejs.
 	 */
 	class Blake2b {
 	    /**
@@ -888,8 +888,8 @@
 	// SPDX-License-Identifier: Apache-2.0
 	/* eslint-disable no-bitwise */
 	/**
-	 * Class to help with Sha512 scheme.
-	 * TypeScript conversion from https://github.com/emn178/js-sha512
+	 * Class to help with Sha512 scheme
+	 * TypeScript conversion from https://github.com/emn178/js-sha512.
 	 */
 	class Sha512 {
 	    /**
@@ -1649,9 +1649,9 @@
 	    }
 	}
 	bigIntHelper.BigIntHelper = BigIntHelper;
-	/* @internal */
+	// @internal
 	BigIntHelper.BIG_32 = BigInt(32);
-	/* @internal */
+	// @internal
 	BigIntHelper.BIG_32_MASK = BigInt(0xFFFFFFFF);
 
 	var bigIntCommon = {};
@@ -1664,15 +1664,15 @@
 	/**
 	 * This is a port of the Go code from https://github.com/hdevalence/ed25519consensus
 	 * which is an extension of https://github.com/golang/crypto/tree/master/ed25519
-	 * which is in turn a port of the “ref10” implementation of ed25519 from SUPERCOP
+	 * which is in turn a port of the “ref10” implementation of ed25519 from SUPERCOP.
 	 */
-	/* @internal */
+	// @internal
 	bigIntCommon.BIG_1_SHIFTL_20 = BigInt(1) << BigInt(20);
-	/* @internal */
+	// @internal
 	bigIntCommon.BIG_1_SHIFTL_24 = BigInt(1) << BigInt(24);
-	/* @internal */
+	// @internal
 	bigIntCommon.BIG_1_SHIFTL_25 = BigInt(1) << BigInt(25);
-	/* @internal */
+	// @internal
 	bigIntCommon.BIG_ARR = [
 	    BigInt(0), BigInt(1), BigInt(2), BigInt(3), BigInt(4), BigInt(5),
 	    BigInt(6), BigInt(7), BigInt(8), BigInt(9), BigInt(10), BigInt(11),
@@ -1680,23 +1680,23 @@
 	    BigInt(18), BigInt(19), BigInt(20), BigInt(21), BigInt(22), BigInt(23),
 	    BigInt(24), BigInt(25), BigInt(26)
 	];
-	/* @internal */
+	// @internal
 	bigIntCommon.BIG_38 = BigInt(38);
-	/* @internal */
+	// @internal
 	bigIntCommon.BIG_666643 = BigInt(666643);
-	/* @internal */
+	// @internal
 	bigIntCommon.BIG_470296 = BigInt(470296);
-	/* @internal */
+	// @internal
 	bigIntCommon.BIG_654183 = BigInt(654183);
-	/* @internal */
+	// @internal
 	bigIntCommon.BIG_997805 = BigInt(997805);
-	/* @internal */
+	// @internal
 	bigIntCommon.BIG_136657 = BigInt(136657);
-	/* @internal */
+	// @internal
 	bigIntCommon.BIG_683901 = BigInt(683901);
-	/* @internal */
+	// @internal
 	bigIntCommon.BIG_2097151 = BigInt(2097151);
-	/* @internal */
+	// @internal
 	bigIntCommon.BIG_8388607 = BigInt(8388607);
 
 	// Copyright 2020 IOTA Stiftung
@@ -1707,7 +1707,7 @@
 	/**
 	 * This is a port of the Go code from https://github.com/hdevalence/ed25519consensus
 	 * which is an extension of https://github.com/golang/crypto/tree/master/ed25519
-	 * which in a port of the “ref10” implementation of ed25519 from SUPERCOP
+	 * which is in turn a port of the “ref10” implementation of ed25519 from SUPERCOP.
 	 */
 	const bigIntHelper_1$5 = bigIntHelper;
 	const bigIntCommon_1$2 = bigIntCommon;
@@ -1734,11 +1734,11 @@
 	     * Can overlap h with f or g.
 	     *
 	     * Preconditions:
-	     *    |f| bounded by 1.1*2^26,1.1*2^25,1.1*2^26,1.1*2^25,etc.
-	     *    |g| bounded by 1.1*2^26,1.1*2^25,1.1*2^26,1.1*2^25,etc.
+	     * |f| bounded by 1.1*2^26,1.1*2^25,1.1*2^26,1.1*2^25,etc.
+	     * |g| bounded by 1.1*2^26,1.1*2^25,1.1*2^26,1.1*2^25,etc.
 	     *
 	     * Postconditions:
-	     *    |h| bounded by 1.1*2^25,1.1*2^24,1.1*2^25,1.1*2^24,etc.
+	     * |h| bounded by 1.1*2^25,1.1*2^24,1.1*2^25,1.1*2^24,etc.
 	     *
 	     * Notes on implementation strategy:
 	     *
@@ -1914,10 +1914,10 @@
 	     * FieldElement.square calculates h = f*f. Can overlap h with f.
 	     *
 	     * Preconditions:
-	     *    |f| bounded by 1.1*2^26,1.1*2^25,1.1*2^26,1.1*2^25,etc.
+	     * |f| bounded by 1.1*2^26,1.1*2^25,1.1*2^26,1.1*2^25,etc.
 	     *
 	     * Postconditions:
-	     *    |h| bounded by 1.1*2^25,1.1*2^24,1.1*2^25,1.1*2^24,etc.
+	     * |h| bounded by 1.1*2^25,1.1*2^24,1.1*2^25,1.1*2^24,etc.
 	     * @param f The f element.
 	     */
 	    square(f) {
@@ -1928,10 +1928,10 @@
 	     * FieldElement.square calculates h = f*f. Can overlap h with f.
 	     *
 	     * Preconditions:
-	     *    |f| bounded by 1.1*2^26,1.1*2^25,1.1*2^26,1.1*2^25,etc.
+	     * |f| bounded by 1.1*2^26,1.1*2^25,1.1*2^26,1.1*2^25,etc.
 	     *
 	     * Postconditions:
-	     *    |h| bounded by 1.1*2^25,1.1*2^24,1.1*2^25,1.1*2^24,etc.
+	     * |h| bounded by 1.1*2^25,1.1*2^24,1.1*2^25,1.1*2^24,etc.
 	     * @param f The f element.
 	     * @returns The components.
 	     */
@@ -1973,15 +1973,15 @@
 	        };
 	    }
 	    /**
-	     * Square2 sets h = 2 * f * f
+	     * Square2 sets h = 2 * f * f.
 	     *
 	     * Can overlap h with f.
 	     *
 	     * Preconditions:
-	     *    |f| bounded by 1.65*2^26,1.65*2^25,1.65*2^26,1.65*2^25,etc.
+	     * |f| bounded by 1.65*2^26,1.65*2^25,1.65*2^26,1.65*2^25,etc.
 	     *
 	     * Postconditions:
-	     *    |h| bounded by 1.01*2^25,1.01*2^24,1.01*2^25,1.01*2^24,etc.
+	     * |h| bounded by 1.01*2^25,1.01*2^24,1.01*2^25,1.01*2^24,etc.
 	     * See fe_mul.c for discussion of implementation strategy.
 	     * @param f The f element.
 	     */
@@ -2053,27 +2053,27 @@
 	    /**
 	     * FieldElement.toBytes marshals h to s.
 	     * Preconditions:
-	     *   |h| bounded by 1.1*2^25,1.1*2^24,1.1*2^25,1.1*2^24,etc.
+	     * |h| bounded by 1.1*2^25,1.1*2^24,1.1*2^25,1.1*2^24,etc.
 	     *
 	     * Write p=2^255-19; q=floor(h/p).
 	     * Basic claim: q = floor(2^(-255)(h + 19 2^(-25)h9 + 2^(-1))).
 	     *
 	     * Proof:
-	     *   Have |h|<=p so |q|<=1 so |19^2 2^(-255) q|<1/4.
-	     *   Also have |h-2^230 h9|<2^230 so |19 2^(-255)(h-2^230 h9)|<1/4.
+	     * Have |h|<=p so |q|<=1 so |19^2 2^(-255) q|<1/4.
+	     * Also have |h-2^230 h9|<2^230 so |19 2^(-255)(h-2^230 h9)|<1/4.
 	     *
-	     *   Write y=2^(-1)-19^2 2^(-255)q-19 2^(-255)(h-2^230 h9).
-	     *   Then 0<y<1.
+	     * Write y=2^(-1)-19^2 2^(-255)q-19 2^(-255)(h-2^230 h9).
+	     * Then 0<y<1.
 	     *
-	     *   Write r=h-pq.
-	     *   Have 0<=r<=p-1=2^255-20.
-	     *   Thus 0<=r+19(2^-255)r<r+19(2^-255)2^255<=2^255-1.
+	     * Write r=h-pq.
+	     * Have 0<=r<=p-1=2^255-20.
+	     * Thus 0<=r+19(2^-255)r<r+19(2^-255)2^255<=2^255-1.
 	     *
-	     *   Write x=r+19(2^-255)r+y.
-	     *   Then 0<x<2^255 so floor(2^(-255)x) = 0 so floor(q+2^(-255)x) = q.
+	     * Write x=r+19(2^-255)r+y.
+	     * Then 0<x<2^255 so floor(2^(-255)x) = 0 so floor(q+2^(-255)x) = q.
 	     *
-	     *   Have q+2^(-255)x = 2^(-255)(h + 19 2^(-25) h9 + 2^(-1))
-	     *   so floor(2^(-255)(h + 19 2^(-25) h9 + 2^(-1))) = q.
+	     * Have q+2^(-255)x = 2^(-255)(h + 19 2^(-25) h9 + 2^(-1))
+	     * so floor(2^(-255)(h + 19 2^(-25) h9 + 2^(-1))) = q.
 	     * @param bytes The bytes to populate.
 	     */
 	    toBytes(bytes) {
@@ -2185,13 +2185,13 @@
 	        return (x & 1);
 	    }
 	    /**
-	     * Neg sets h = -f
+	     * Neg sets h = -f.
 	     *
 	     * Preconditions:
-	     *    |f| bounded by 1.1*2^25,1.1*2^24,1.1*2^25,1.1*2^24,etc.
+	     * |f| bounded by 1.1*2^25,1.1*2^24,1.1*2^25,1.1*2^24,etc.
 	     *
 	     * Postconditions:
-	     *    |h| bounded by 1.1*2^25,1.1*2^24,1.1*2^25,1.1*2^24,etc.
+	     * |h| bounded by 1.1*2^25,1.1*2^24,1.1*2^25,1.1*2^24,etc.
 	     */
 	    neg() {
 	        for (let i = 0; i < FieldElement.FIELD_ELEMENT_SIZE; i++) {
@@ -2199,7 +2199,7 @@
 	        }
 	    }
 	    /**
-	     * Invert
+	     * Invert.
 	     * @param z The elemnt to invert.
 	     */
 	    invert(z) {
@@ -2383,7 +2383,7 @@
 	    /**
 	     * Create a new instance of CachedGroupElement.
 	     * @param yPlusX Y + X Element.
-	     * @param yMinusX Y - X Element
+	     * @param yMinusX Y - X Element.
 	     * @param Z Z Element.
 	     * @param T2d T2d Element.
 	     */
@@ -2406,7 +2406,7 @@
 	/**
 	 * Group elements are members of the elliptic curve -x^2 + y^2 = 1 + d * x^2 *
 	 * y^2 where d = -121665/121666.
-	 * CompletedGroupElement: ((X:Z),(Y:T)) satisfying x=X/Z, y=Y/T
+	 * CompletedGroupElement: ((X:Z),(Y:T)) satisfying x=X/Z, y=Y/T.
 	 */
 	class CompletedGroupElement {
 	    /**
@@ -2423,7 +2423,7 @@
 	        this.T = T !== null && T !== void 0 ? T : new fieldElement_1$4.FieldElement();
 	    }
 	    /**
-	     * Group Element add
+	     * Group Element add.
 	     * @param p The extended group element.
 	     * @param q The cached group element.
 	     */
@@ -2530,20 +2530,20 @@
 	/**
 	 * This is a port of the Go code from https://github.com/hdevalence/ed25519consensus
 	 * which is an extension of https://github.com/golang/crypto/tree/master/ed25519
-	 * which in a port of the “ref10” implementation of ed25519 from SUPERCOP
+	 * which in a port of the “ref10” implementation of ed25519 from SUPERCOP.
 	 */
 	const const_1$3 = _const;
 	const fieldElement_1$3 = fieldElement;
 	/**
 	 * Group elements are members of the elliptic curve -x^2 + y^2 = 1 + d * x^2 *
 	 * y^2 where d = -121665/121666.
-	 * PreComputedGroupElement: (y+x,y-x,2dxy)
+	 * PreComputedGroupElement: (y+x,y-x,2dxy).
 	 */
 	class PreComputedGroupElement {
 	    /**
 	     * Create a new instance of PreComputedGroupElement.
 	     * @param yPlusX Y + X Element.
-	     * @param yMinusX Y - X Element
+	     * @param yMinusX Y - X Element.
 	     * @param xy2d XY2d Element.
 	     */
 	    constructor(yPlusX, yMinusX, xy2d) {
@@ -2591,7 +2591,7 @@
 	    /**
 	     * Negative returns 1 if b < 0 and 0 otherwise.
 	     * @param b The b.
-	     * @returns 1 if b < 0 and 0
+	     * @returns 1 if b < 0 and 0.
 	     */
 	    negative(b) {
 	        return (b >> 31) & 1;
@@ -2600,8 +2600,8 @@
 	     * Equal returns 1 if b == c and 0 otherwise, assuming that b and c are
 	     * non-negative.
 	     * @param b The b.
-	     * @param c the c.
-	     * @returns 1 if b == c and 0
+	     * @param c The c.
+	     * @returns 1 if b == c and 0.
 	     */
 	    equal(b, c) {
 	        let x = (b ^ c) & 0xFFFFFFFF;
@@ -2619,7 +2619,7 @@
 	/**
 	 * This is a port of the Go code from https://github.com/hdevalence/ed25519consensus
 	 * which is an extension of https://github.com/golang/crypto/tree/master/ed25519
-	 * which in a port of the “ref10” implementation of ed25519 from SUPERCOP
+	 * which is in turn a port of the “ref10” implementation of ed25519 from SUPERCOP.
 	 */
 	const bigIntCommon_1$1 = bigIntCommon;
 	const fieldElement_1$2 = fieldElement;
@@ -2981,7 +2981,7 @@
 	/**
 	 * This is a port of the Go code from https://github.com/hdevalence/ed25519consensus
 	 * which is an extension of https://github.com/golang/crypto/tree/master/ed25519
-	 * which in a port of the “ref10” implementation of ed25519 from SUPERCOP
+	 * which in a port of the “ref10” implementation of ed25519 from SUPERCOP.
 	 */
 	const cachedGroupElement_1$1 = cachedGroupElement;
 	const completedGroupElement_1$1 = completedGroupElement;
@@ -2990,8 +2990,8 @@
 	const fieldElement_1$1 = fieldElement;
 	/**
 	 * Group elements are members of the elliptic curve -x^2 + y^2 = 1 + d * x^2 *
-	 * y^2 where d = -121665/121666.
-	 * ProjectiveGroupElement: (X:Y:Z) satisfying x=X/Z, y=Y/Z
+	 * y^2 where d = -121665/121666
+	 * ProjectiveGroupElement: (X:Y:Z) satisfying x=X/Z, y=Y/Z.
 	 */
 	class ProjectiveGroupElement {
 	    /**
@@ -3005,11 +3005,18 @@
 	        this.Y = Y !== null && Y !== void 0 ? Y : new fieldElement_1$1.FieldElement();
 	        this.Z = Z !== null && Z !== void 0 ? Z : new fieldElement_1$1.FieldElement();
 	    }
+	    /**
+	     * Zero the elements.
+	     */
 	    zero() {
 	        this.X.zero();
 	        this.Y.one();
 	        this.Z.one();
 	    }
+	    /**
+	     * Double the elements.
+	     * @param r The elements.
+	     */
 	    double(r) {
 	        const t0 = new fieldElement_1$1.FieldElement();
 	        r.X.square(this.X);
@@ -3022,12 +3029,20 @@
 	        r.X.sub(t0, r.Y);
 	        r.T.sub(r.T, r.Z);
 	    }
+	    /**
+	     * Convert to extended form.
+	     * @param r The extended element.
+	     */
 	    toExtended(r) {
 	        r.X.mul(this.X, this.Z);
 	        r.Y.mul(this.Y, this.Z);
 	        r.Z.square(this.Z);
 	        r.T.mul(this.X, this.Y);
 	    }
+	    /**
+	     * Convert the element to bytes.
+	     * @param s The bytes.
+	     */
 	    toBytes(s) {
 	        const recip = new fieldElement_1$1.FieldElement();
 	        const x = new fieldElement_1$1.FieldElement();
@@ -3040,12 +3055,12 @@
 	    }
 	    /**
 	     * GeDoubleScalarMultVartime sets r = a*A + b*B
-	     * where a = a[0]+256*a[1]+...+256^31 a[31].
-	     * and b = b[0]+256*b[1]+...+256^31 b[31].
+	     * where a = a[0]+256*a[1]+...+256^31 a[31]
+	     * and b = b[0]+256*b[1]+...+256^31 b[31]
 	     * B is the Ed25519 base point (x,4/5) with x positive.
-	     * @param a The a
-	     * @param A The A
-	     * @param b The b
+	     * @param a The a.
+	     * @param A The A.
+	     * @param b The b.
 	     */
 	    doubleScalarMultVartime(a, A, b) {
 	        const aSlide = new Int8Array(256);
@@ -3148,7 +3163,7 @@
 	/**
 	 * This is a port of the Go code from https://github.com/hdevalence/ed25519consensus
 	 * which is an extension of https://github.com/golang/crypto/tree/master/ed25519
-	 * which in a port of the “ref10” implementation of ed25519 from SUPERCOP
+	 * which is in turn a port of the “ref10” implementation of ed25519 from SUPERCOP.
 	 */
 	const arrayHelper_1$2 = arrayHelper;
 	const cachedGroupElement_1 = cachedGroupElement;
@@ -3158,9 +3173,8 @@
 	const preComputedGroupElement_1 = preComputedGroupElement;
 	const projectiveGroupElement_1$2 = projectiveGroupElement;
 	/**
-	 * Group elements are members of the elliptic curve -x^2 + y^2 = 1 + d * x^2 *
-	 * y^2 where d = -121665/121666.
-	 * ExtendedGroupElement: (X:Y:Z:T) satisfying x=X/Z, y=Y/Z, XY=ZT
+	 * Group elements are members of the elliptic curve -x^2 + y^2 = 1 + d * x^2 * y^2 where d = -121665/121666.
+	 * ExtendedGroupElement: (X:Y:Z:T) satisfying x=X/Z, y=Y/Z, XY=ZT.
 	 */
 	class ExtendedGroupElement {
 	    /**
@@ -3277,10 +3291,11 @@
 	    }
 	    /**
 	     * GeScalarMultBase computes h = a*B, where
-	     *  a = a[0]+256*a[1]+...+256^31 a[31]
-	     *  B is the Ed25519 base point (x,4/5) with x positive.
+	     * a = a[0]+256*a[1]+...+256^31 a[31]
+	     * b is the Ed25519 base point (x,4/5) with x positive.
+	     *
 	     * Preconditions:
-	     *  a[31] <= 127
+	     * A[31] <= 127.
 	     * @param a The a.
 	     */
 	    scalarMultBase(a) {
@@ -3323,7 +3338,7 @@
 	    }
 	    /**
 	     * CofactorEqual checks whether p, q are equal up to cofactor multiplication
-	     * (ie. if their difference is of small order).
+	     * ie if their difference is of small order.
 	     * @param q The extended group element.
 	     * @returns True if they are equal.
 	     */
@@ -3366,7 +3381,7 @@
 	/**
 	 * This is a port of the Go code from https://github.com/hdevalence/ed25519consensus
 	 * which is an extension of https://github.com/golang/crypto/tree/master/ed25519
-	 * which in a port of the “ref10” implementation of ed25519 from SUPERCOP
+	 * which in a port of the “ref10” implementation of ed25519 from SUPERCOP.
 	 */
 	const bigIntHelper_1$4 = bigIntHelper;
 	const bigIntCommon_1 = bigIntCommon;
@@ -3374,14 +3389,14 @@
 	/**
 	 * The scalars are GF(2^252 + 27742317777372353535851937790883648493).
 	 *
-	 * Input:
-	 *   a[0]+256*a[1]+...+256^31*a[31] = a
-	 *   b[0]+256*b[1]+...+256^31*b[31] = b
-	 *   c[0]+256*c[1]+...+256^31*c[31] = c
+	 * Input
+	 * a[0]+256*a[1]+...+256^31*a[31] = a
+	 * b[0]+256*b[1]+...+256^31*b[31] = b
+	 * c[0]+256*c[1]+...+256^31*c[31] = c.
 	 *
-	 * Output:
-	 *   s[0]+256*s[1]+...+256^31*s[31] = (ab+c) mod l
-	 *   where l = 2^252 + 27742317777372353535851937790883648493.
+	 * Output
+	 * s[0]+256*s[1]+...+256^31*s[31] = (ab+c) mod l
+	 * where l = 2^252 + 27742317777372353535851937790883648493.
 	 * @param s The scalar.
 	 * @param a The a.
 	 * @param b The b.
@@ -3796,10 +3811,10 @@
 	}
 	scalar.scalarMulAdd = scalarMulAdd;
 	/**
-	 * Scalar reduce.
+	 * Scalar reduce
 	 * where l = 2^252 + 27742317777372353535851937790883648493.
-	 * @param out s[0]+256*s[1]+...+256^31*s[31] = s mod l
-	 * @param s s[0]+256*s[1]+...+256^63*s[63] = s
+	 * @param out Where s[0]+256*s[1]+...+256^31*s[31] = s mod l.
+	 * @param s Where s[0]+256*s[1]+...+256^63*s[63] = s.
 	 */
 	function scalarReduce(out, s) {
 	    let s0 = bigIntCommon_1.BIG_2097151 & bigIntHelper_1$4.BigIntHelper.read3(s, 0);
@@ -4098,9 +4113,9 @@
 	}
 	scalar.scalarReduce = scalarReduce;
 	/**
-	 * Scalar Minimal returns true if the given scalar is less than the order of the Curve
+	 * Scalar Minimal returns true if the given scalar is less than the order of the Curve.
 	 * @param scalar The scalar.
-	 * @returns True if the given scalar is less than the order of the Curve
+	 * @returns True if the given scalar is less than the order of the Curve.
 	 */
 	function scalarMinimal(scalar) {
 	    for (let i = 3; i >= 0; i--) {
@@ -4125,15 +4140,18 @@
 	Object.defineProperty(ed25519, "__esModule", { value: true });
 	ed25519.Ed25519 = void 0;
 	/**
-	 * This is a port of the Go code from https://github.com/hdevalence/ed25519consensus
-	 * which is an extension of https://github.com/golang/crypto/tree/master/ed25519
-	 * which in a port of the “ref10” implementation of ed25519 from SUPERCOP
+	 * This is a port of the Go code from https://github.com/hdevalence/ed25519consensus.
+	 * Which is an extension of https://github.com/golang/crypto/tree/master/ed25519.
+	 * Which in a port of the “ref10” implementation of ed25519 from SUPERCOP.
 	 */
 	const sha512_1$2 = sha512;
 	const arrayHelper_1$1 = arrayHelper;
 	const extendedGroupElement_1$1 = extendedGroupElement;
 	const projectiveGroupElement_1$1 = projectiveGroupElement;
 	const scalar_1$1 = scalar;
+	/**
+	 * Implementation of Ed25519.
+	 */
 	class Ed25519 {
 	    /**
 	     * Public returns the PublicKey corresponding to priv.
@@ -4221,7 +4239,7 @@
 	        return signature;
 	    }
 	    /**
-	     * Verify reports whether sig is a valid signature of message by publicKey
+	     * Verify reports whether sig is a valid signature of message by publicKey.
 	     * @param publicKey The public key to verify the signature.
 	     * @param message The message for the signature.
 	     * @param sig The signature.
@@ -5393,6 +5411,9 @@
 	// SPDX-License-Identifier: Apache-2.0
 	Object.defineProperty(clientError, "__esModule", { value: true });
 	clientError.ClientError = void 0;
+	/**
+	 * Class to represent errors from Client.
+	 */
 	class ClientError extends Error {
 	    /**
 	     * Create a new instance of ClientError.
@@ -5712,7 +5733,7 @@
 	    /**
 	     * Is the data hex format.
 	     * @param value The value to test.
-	     * @returns true if the string is hex.
+	     * @returns True if the string is hex.
 	     */
 	    static isHex(value) {
 	        if (value.length % 2 === 1) {
@@ -7178,12 +7199,12 @@
 	bech32.Bech32 = void 0;
 	/**
 	 * Class to help with Bech32 encoding/decoding.
-	 * Based on reference implementation https://github.com/sipa/bech32/blob/master/ref/javascript/bech32.js
+	 * Based on reference implementation https://github.com/sipa/bech32/blob/master/ref/javascript/bech32.js.
 	 */
 	class Bech32 {
 	    /**
 	     * Encode the buffer.
-	     * @param humanReadablePart The header
+	     * @param humanReadablePart The header.
 	     * @param data The data to encode.
 	     * @returns The encoded data.
 	     */
@@ -7192,7 +7213,7 @@
 	    }
 	    /**
 	     * Encode the 5 bit data buffer.
-	     * @param humanReadablePart The header
+	     * @param humanReadablePart The header.
 	     * @param data5Bit The data to encode.
 	     * @returns The encoded data.
 	     */
@@ -7500,7 +7521,7 @@
 	/* eslint-disable unicorn/prefer-math-trunc */
 	/**
 	 * Class to help with Sha256 scheme.
-	 * TypeScript conversion from https://github.com/emn178/js-sha256
+	 * TypeScript conversion from https://github.com/emn178/js-sha256.
 	 */
 	class Sha256 {
 	    /**
@@ -7831,7 +7852,7 @@
 	const sha256_1$1 = sha256;
 	/**
 	 * Class to help with HmacSha256 scheme.
-	 * TypeScript conversion from https://github.com/emn178/js-sha256
+	 * TypeScript conversion from https://github.com/emn178/js-sha256.
 	 */
 	class HmacSha256 {
 	    /**
@@ -7900,7 +7921,7 @@
 	const sha512_1$1 = sha512;
 	/**
 	 * Class to help with HmacSha512 scheme.
-	 * TypeScript conversion from https://github.com/emn178/js-sha512
+	 * TypeScript conversion from https://github.com/emn178/js-sha512.
 	 */
 	class HmacSha512 {
 	    /**
@@ -10134,7 +10155,7 @@
 	    }
 	    /**
 	     * Generate a mnemonic from the entropy.
-	     * @param entropy The entropy to generate
+	     * @param entropy The entropy to generate.
 	     * @returns The mnemonic.
 	     */
 	    static entropyToMnemonic(entropy) {
@@ -10285,6 +10306,9 @@
 	Object.defineProperty(chaCha20, "__esModule", { value: true });
 	chaCha20.ChaCha20 = void 0;
 	const bitHelper_1$1 = bitHelper;
+	/**
+	 * Implementation of the ChaCha29 cipher.
+	 */
 	class ChaCha20 {
 	    /**
 	     * Create a new instance of ChaCha20.
@@ -10416,6 +10440,9 @@
 	// https://www.ietf.org/rfc/rfc8439.html
 	Object.defineProperty(poly1305, "__esModule", { value: true });
 	poly1305.Poly1305 = void 0;
+	/**
+	 * Implementation of Poly1305.
+	 */
 	class Poly1305 {
 	    /**
 	     * Create a new instance of Poly1305.
@@ -10827,6 +10854,9 @@
 	const bitHelper_1 = bitHelper;
 	const chaCha20_1 = chaCha20;
 	const poly1305_1 = poly1305;
+	/**
+	 * Implementation of the ChaCha20Poly1305 cipher.
+	 */
 	class ChaCha20Poly1305 {
 	    /**
 	     * Create a new instance of ChaCha20Poly1305.
@@ -10862,7 +10892,7 @@
 	        return new ChaCha20Poly1305(key, nonce, true);
 	    }
 	    /**
-	     * Set the AAD
+	     * Set the AAD.
 	     * @param aad The aad to set.
 	     */
 	    setAAD(aad) {
@@ -11028,7 +11058,7 @@
 	        }
 	    }
 	    /**
-	     * Resets the state
+	     * Resets the state.
 	     */
 	    reset() {
 	        this._state = new Int8Array(Curl.STATE_LENGTH);
@@ -11042,7 +11072,7 @@
 	        return this._state.slice(0, len);
 	    }
 	    /**
-	     * Absorbs trits given an offset and length
+	     * Absorbs trits given an offset and length.
 	     * @param trits The trits to absorb.
 	     * @param offset The offset to start abororbing from the array.
 	     * @param length The length of trits to absorb.
@@ -11057,7 +11087,7 @@
 	        } while (length > 0);
 	    }
 	    /**
-	     * Squeezes trits given an offset and length
+	     * Squeezes trits given an offset and length.
 	     * @param trits The trits to squeeze.
 	     * @param offset The offset to start squeezing from the array.
 	     * @param length The length of trits to squeeze.
@@ -11074,7 +11104,7 @@
 	}
 	curl.Curl = Curl;
 	/**
-	 * The Hash Length
+	 * The Hash Length.
 	 */
 	Curl.HASH_LENGTH = 243;
 	/**
@@ -11103,8 +11133,8 @@
 	const ed25519_1$3 = ed25519;
 	const hmacSha512_1 = hmacSha512;
 	/**
-	 * Class to help with slip0010 key derivation.
-	 * https://github.com/satoshilabs/slips/blob/master/slip-0010.md
+	 * Class to help with slip0010 key derivation
+	 * https://github.com/satoshilabs/slips/blob/master/slip-0010.md.
 	 */
 	class Slip0010 {
 	    /**
@@ -11179,13 +11209,16 @@
 	/**
 	 * This is a port of the Go code from https://github.com/hdevalence/ed25519consensus
 	 * which is an extension of https://github.com/golang/crypto/tree/master/ed25519
-	 * which in a port of the “ref10” implementation of ed25519 from SUPERCOP
+	 * which in a port of the “ref10” implementation of ed25519 from SUPERCOP.
 	 */
 	const sha512_1 = sha512;
 	const ed25519_1$2 = ed25519;
 	const extendedGroupElement_1 = extendedGroupElement;
 	const projectiveGroupElement_1 = projectiveGroupElement;
 	const scalar_1 = scalar;
+	/**
+	 * Implementation of Zip215.
+	 */
 	class Zip215 {
 	    /**
 	     * Verify reports whether sig is a valid signature of message by
@@ -12335,7 +12368,7 @@
 	     */
 	    ConflictReason[ConflictReason["semanticValidationFailed"] = 255] = "semanticValidationFailed";
 	})(exports.ConflictReason || (exports.ConflictReason = {}));
-	//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiY29uZmxpY3RSZWFzb24uanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi9zcmMvbW9kZWxzL2NvbmZsaWN0UmVhc29uLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7QUFBQSwrQkFBK0I7QUFDL0Isc0NBQXNDOzs7QUFFdEMscUNBQXFDO0FBQ3JDLElBQVksY0F3Q1g7QUF4Q0QsV0FBWSxjQUFjO0lBQ3RCOztPQUVHO0lBQ0gsbURBQVEsQ0FBQTtJQUVSOztPQUVHO0lBQ0gscUZBQXlCLENBQUE7SUFFekI7O09BRUc7SUFDSCxtSEFBd0MsQ0FBQTtJQUV4Qzs7T0FFRztJQUNILDZFQUFxQixDQUFBO0lBRXJCOztPQUVHO0lBQ0gsdUZBQTBCLENBQUE7SUFFMUI7O09BRUc7SUFDSCwyRUFBb0IsQ0FBQTtJQUVwQjs7T0FFRztJQUNILG1GQUF3QixDQUFBO0lBRXhCOztPQUVHO0lBQ0gsNkZBQThCLENBQUE7QUFDbEMsQ0FBQyxFQXhDVyxjQUFjLEdBQWQsc0JBQWMsS0FBZCxzQkFBYyxRQXdDekIifQ==
+	//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiY29uZmxpY3RSZWFzb24uanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi9zcmMvbW9kZWxzL2NvbmZsaWN0UmVhc29uLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7QUFBQSwrQkFBK0I7QUFDL0Isc0NBQXNDOzs7QUFFdEM7O0dBRUc7QUFDSCxxQ0FBcUM7QUFDckMsSUFBWSxjQXdDWDtBQXhDRCxXQUFZLGNBQWM7SUFDdEI7O09BRUc7SUFDSCxtREFBUSxDQUFBO0lBRVI7O09BRUc7SUFDSCxxRkFBeUIsQ0FBQTtJQUV6Qjs7T0FFRztJQUNILG1IQUF3QyxDQUFBO0lBRXhDOztPQUVHO0lBQ0gsNkVBQXFCLENBQUE7SUFFckI7O09BRUc7SUFDSCx1RkFBMEIsQ0FBQTtJQUUxQjs7T0FFRztJQUNILDJFQUFvQixDQUFBO0lBRXBCOztPQUVHO0lBQ0gsbUZBQXdCLENBQUE7SUFFeEI7O09BRUc7SUFDSCw2RkFBOEIsQ0FBQTtBQUNsQyxDQUFDLEVBeENXLGNBQWMsR0FBZCxzQkFBYyxLQUFkLHNCQUFjLFFBd0N6QiJ9
 	}(conflictReason));
 
 	var IAddress = {};
@@ -12416,6 +12449,8 @@
 
 	var units = {};
 
+	// Copyright 2020 IOTA Stiftung
+	// SPDX-License-Identifier: Apache-2.0
 	Object.defineProperty(units, "__esModule", { value: true });
 
 	var localPowProvider = {};
@@ -12437,7 +12472,7 @@
 	class PowHelper {
 	    /**
 	     * Perform the score calculation.
-	     * @param message The data to perform the score on
+	     * @param message The data to perform the score on.
 	     * @returns The score for the data.
 	     */
 	    static score(message) {
@@ -12451,7 +12486,7 @@
 	    /**
 	     * Calculate the number of zeros required to get target score.
 	     * @param message The message to process.
-	     * @param targetScore the target score.
+	     * @param targetScore The target score.
 	     * @returns The number of zeros to find.
 	     */
 	    static calculateTargetZeros(message, targetScore) {
@@ -12519,7 +12554,7 @@
 	}
 	powHelper.PowHelper = PowHelper;
 	/**
-	 * LN3 Const see https://oeis.org/A002391
+	 * LN3 Const see https://oeis.org/A002391.
 	 */
 	PowHelper.LN3 = 1.098612288668109691395245236922525704647490557822749451734694333;
 
@@ -12546,7 +12581,7 @@
 	    /**
 	     * Perform pow on the message and return the nonce of at least targetScore.
 	     * @param message The message to process.
-	     * @param targetScore the target score.
+	     * @param targetScore The target score.
 	     * @returns The nonce.
 	     */
 	    pow(message, targetScore) {

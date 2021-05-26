@@ -5,7 +5,7 @@
 [crypto/sha256](../modules/crypto_sha256.md).Sha256
 
 Class to help with Sha256 scheme.
-TypeScript conversion from https://github.com/emn178/js-sha256
+TypeScript conversion from https://github.com/emn178/js-sha256.
 
 ## Table of contents
 

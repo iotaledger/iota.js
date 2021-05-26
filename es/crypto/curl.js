@@ -44,7 +44,7 @@ class Curl {
         }
     }
     /**
-     * Resets the state
+     * Resets the state.
      */
     reset() {
         this._state = new Int8Array(Curl.STATE_LENGTH);
@@ -58,7 +58,7 @@ class Curl {
         return this._state.slice(0, len);
     }
     /**
-     * Absorbs trits given an offset and length
+     * Absorbs trits given an offset and length.
      * @param trits The trits to absorb.
      * @param offset The offset to start abororbing from the array.
      * @param length The length of trits to absorb.
@@ -73,7 +73,7 @@ class Curl {
         } while (length > 0);
     }
     /**
-     * Squeezes trits given an offset and length
+     * Squeezes trits given an offset and length.
      * @param trits The trits to squeeze.
      * @param offset The offset to start squeezing from the array.
      * @param length The length of trits to squeeze.
@@ -90,7 +90,7 @@ class Curl {
 }
 exports.Curl = Curl;
 /**
- * The Hash Length
+ * The Hash Length.
  */
 Curl.HASH_LENGTH = 243;
 /**

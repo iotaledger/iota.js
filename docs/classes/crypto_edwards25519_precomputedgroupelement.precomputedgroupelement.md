@@ -6,7 +6,7 @@
 
 Group elements are members of the elliptic curve -x^2 + y^2 = 1 + d * x^2 *
 y^2 where d = -121665/121666.
-PreComputedGroupElement: (y+x,y-x,2dxy)
+PreComputedGroupElement: (y+x,y-x,2dxy).
 
 ## Table of contents
 
@@ -39,7 +39,7 @@ Create a new instance of PreComputedGroupElement.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `yPlusX?` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | Y + X Element. |
-| `yMinusX?` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | Y - X Element |
+| `yMinusX?` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | Y - X Element. |
 | `xy2d?` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | XY2d Element. |
 
 **Returns:** [*PreComputedGroupElement*](crypto_edwards25519_precomputedgroupelement.precomputedgroupelement.md)
@@ -58,7 +58,7 @@ ___
 
 • **yMinusX**: [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md)
 
-Y - X Element
+Y - X Element.
 
 ___
 

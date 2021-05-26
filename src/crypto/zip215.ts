@@ -4,7 +4,7 @@
 /**
  * This is a port of the Go code from https://github.com/hdevalence/ed25519consensus
  * which is an extension of https://github.com/golang/crypto/tree/master/ed25519
- * which in a port of the “ref10” implementation of ed25519 from SUPERCOP
+ * which in a port of the “ref10” implementation of ed25519 from SUPERCOP.
  */
 import { Sha512 } from "../crypto/sha512";
 import { Ed25519 } from "./ed25519";
@@ -12,6 +12,9 @@ import { ExtendedGroupElement } from "./edwards25519/extendedGroupElement";
 import { ProjectiveGroupElement } from "./edwards25519/projectiveGroupElement";
 import { scalarMinimal, scalarReduce } from "./edwards25519/scalar";
 
+/**
+ * Implementation of Zip215.
+ */
 export class Zip215 {
     /**
      * Verify reports whether sig is a valid signature of message by

@@ -2,9 +2,12 @@
 // SPDX-License-Identifier: Apache-2.0
 import { IPowProvider } from "../models/IPowProvider";
 
+/**
+ * Options used when constructing SingleNodeClient.
+ */
 export interface SingleNodeClientOptions {
     /**
-     * Base path for API location, defaults to /api/v1/
+     * Base path for API location, defaults to /api/v1/.
      */
     basePath?: string;
 

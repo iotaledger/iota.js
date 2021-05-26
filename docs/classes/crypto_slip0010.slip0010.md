@@ -4,8 +4,8 @@
 
 [crypto/slip0010](../modules/crypto_slip0010.md).Slip0010
 
-Class to help with slip0010 key derivation.
-https://github.com/satoshilabs/slips/blob/master/slip-0010.md
+Class to help with slip0010 key derivation
+https://github.com/satoshilabs/slips/blob/master/slip-0010.md.
 
 ## Table of contents
 

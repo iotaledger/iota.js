@@ -35,22 +35,22 @@ export interface INodeInfo {
     bech32HRP: string;
 
     /**
-     * The latest milestone index;
+     * The latest milestone index.
      */
     latestMilestoneIndex: number;
 
     /**
-     * The latest milestone timestamp;
+     * The latest milestone timestamp.
      */
     latestMilestoneTimestamp: number;
 
     /**
-     * The confirmed milestone index;
+     * The confirmed milestone index.
      */
     confirmedMilestoneIndex: number;
 
     /**
-     * The pruning index;
+     * The pruning index.
      */
     pruningIndex: number;
 
