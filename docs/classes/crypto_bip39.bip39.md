@@ -25,15 +25,13 @@ Implementation of Bip39 for mnemonic generation.
 
 ### constructor
 
-\+ **new Bip39**(): [*Bip39*](crypto_bip39.bip39.md)
-
-**Returns:** [*Bip39*](crypto_bip39.bip39.md)
+• **new Bip39**()
 
 ## Methods
 
 ### entropyChecksumBits
 
-▸ `Static` **entropyChecksumBits**(`entropy`: *Uint8Array*): *string*
+▸ `Static` **entropyChecksumBits**(`entropy`): `string`
 
 Calculate the entropy checksum.
 
@@ -41,9 +39,11 @@ Calculate the entropy checksum.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `entropy` | *Uint8Array* | The entropy to calculate the checksum for. |
+| `entropy` | `Uint8Array` | The entropy to calculate the checksum for. |
 
-**Returns:** *string*
+#### Returns
+
+`string`
 
 The checksum.
 
@@ -51,7 +51,7 @@ ___
 
 ### entropyToMnemonic
 
-▸ `Static` **entropyToMnemonic**(`entropy`: *Uint8Array*): *string*
+▸ `Static` **entropyToMnemonic**(`entropy`): `string`
 
 Generate a mnemonic from the entropy.
 
@@ -59,9 +59,11 @@ Generate a mnemonic from the entropy.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `entropy` | *Uint8Array* | The entropy to generate. |
+| `entropy` | `Uint8Array` | The entropy to generate. |
 
-**Returns:** *string*
+#### Returns
+
+`string`
 
 The mnemonic.
 
@@ -69,7 +71,7 @@ ___
 
 ### mnemonicToEntropy
 
-▸ `Static` **mnemonicToEntropy**(`mnemonic`: *string*): *Uint8Array*
+▸ `Static` **mnemonicToEntropy**(`mnemonic`): `Uint8Array`
 
 Convert the mnemonic back to entropy.
 
@@ -77,9 +79,11 @@ Convert the mnemonic back to entropy.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `mnemonic` | *string* | The mnemonic to convert. |
+| `mnemonic` | `string` | The mnemonic to convert. |
 
-**Returns:** *Uint8Array*
+#### Returns
+
+`Uint8Array`
 
 The entropy.
 
@@ -87,7 +91,7 @@ ___
 
 ### mnemonicToSeed
 
-▸ `Static` **mnemonicToSeed**(`mnemonic`: *string*, `password?`: *string*, `iterations?`: *number*, `keyLength?`: *number*): *Uint8Array*
+▸ `Static` **mnemonicToSeed**(`mnemonic`, `password?`, `iterations?`, `keyLength?`): `Uint8Array`
 
 Convert a mnemonic to a seed.
 
@@ -95,12 +99,14 @@ Convert a mnemonic to a seed.
 
 | Name | Type | Default value | Description |
 | :------ | :------ | :------ | :------ |
-| `mnemonic` | *string* | - | The mnemonic to convert. |
-| `password?` | *string* | - | The password to apply to the seed generation. |
-| `iterations` | *number* | 2048 | The number of iterations to perform on the password function, defaults to 2048. |
-| `keyLength` | *number* | 64 | The size of the key length to generate, defaults to 64. |
+| `mnemonic` | `string` | `undefined` | The mnemonic to convert. |
+| `password?` | `string` | `undefined` | The password to apply to the seed generation. |
+| `iterations` | `number` | 2048 | The number of iterations to perform on the password function, defaults to 2048. |
+| `keyLength` | `number` | 64 | The size of the key length to generate, defaults to 64. |
 
-**Returns:** *Uint8Array*
+#### Returns
+
+`Uint8Array`
 
 The seed.
 
@@ -108,7 +114,7 @@ ___
 
 ### randomMnemonic
 
-▸ `Static` **randomMnemonic**(`length?`: *number*): *string*
+▸ `Static` **randomMnemonic**(`length?`): `string`
 
 Generate a random mnemonic.
 
@@ -116,9 +122,11 @@ Generate a random mnemonic.
 
 | Name | Type | Default value | Description |
 | :------ | :------ | :------ | :------ |
-| `length` | *number* | 256 | The length of the mnemonic to generate, defaults to 256. |
+| `length` | `number` | 256 | The length of the mnemonic to generate, defaults to 256. |
 
-**Returns:** *string*
+#### Returns
+
+`string`
 
 The random mnemonic.
 
@@ -126,7 +134,7 @@ ___
 
 ### setWordList
 
-▸ `Static` **setWordList**(`wordlistData`: *string*[], `joiningChar?`: *string*): *void*
+▸ `Static` **setWordList**(`wordlistData`, `joiningChar?`): `void`
 
 Set the wordlist and joining character.
 
@@ -134,7 +142,9 @@ Set the wordlist and joining character.
 
 | Name | Type | Default value | Description |
 | :------ | :------ | :------ | :------ |
-| `wordlistData` | *string*[] | - | Array of words. |
-| `joiningChar` | *string* | " " | The character to join the words with. |
+| `wordlistData` | `string`[] | `undefined` | Array of words. |
+| `joiningChar` | `string` | " " | The character to join the words with. |
 
-**Returns:** *void*
+#### Returns
+
+`void`

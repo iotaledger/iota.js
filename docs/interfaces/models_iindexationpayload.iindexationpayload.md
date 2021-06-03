@@ -8,7 +8,7 @@ Indexation payload.
 
 ## Hierarchy
 
-- [*ITypeBase*](models_itypebase.itypebase.md)<``2``\>
+- [ITypeBase](models_itypebase.itypebase.md)<``2``\>
 
   ↳ **IIndexationPayload**
 
@@ -24,7 +24,7 @@ Indexation payload.
 
 ### data
 
-• `Optional` **data**: *string*
+• `Optional` **data**: `string`
 
 The index data.
 
@@ -32,7 +32,7 @@ ___
 
 ### index
 
-• **index**: *string*
+• **index**: `string`
 
 The index name.
 
@@ -44,4 +44,6 @@ ___
 
 The type of the object.
 
-Inherited from: [ITypeBase](models_itypebase.itypebase.md).[type](models_itypebase.itypebase.md#type)
+#### Inherited from
+
+[ITypeBase](models_itypebase.itypebase.md).[type](models_itypebase.itypebase.md#type)

@@ -32,21 +32,21 @@ Keep track of the write index within a stream.
 
 ### constructor
 
-\+ **new WriteStream**(): [*WriteStream*](utils_writestream.writestream.md)
+• **new WriteStream**()
 
 Create a new instance of ReadStream.
-
-**Returns:** [*WriteStream*](utils_writestream.writestream.md)
 
 ## Methods
 
 ### finalBytes
 
-▸ **finalBytes**(): *Uint8Array*
+▸ **finalBytes**(): `Uint8Array`
 
 Get the final stream as bytes.
 
-**Returns:** *Uint8Array*
+#### Returns
+
+`Uint8Array`
 
 The final stream.
 
@@ -54,11 +54,13 @@ ___
 
 ### finalHex
 
-▸ **finalHex**(): *string*
+▸ **finalHex**(): `string`
 
 Get the final stream as hex.
 
-**Returns:** *string*
+#### Returns
+
+`string`
 
 The final stream as hex.
 
@@ -66,11 +68,13 @@ ___
 
 ### getWriteIndex
 
-▸ **getWriteIndex**(): *number*
+▸ **getWriteIndex**(): `number`
 
 Get the current write index.
 
-**Returns:** *number*
+#### Returns
+
+`number`
 
 The current write index.
 
@@ -78,11 +82,13 @@ ___
 
 ### length
 
-▸ **length**(): *number*
+▸ **length**(): `number`
 
 Get the length of the stream.
 
-**Returns:** *number*
+#### Returns
+
+`number`
 
 The stream length.
 
@@ -90,7 +96,7 @@ ___
 
 ### setWriteIndex
 
-▸ **setWriteIndex**(`writeIndex`: *number*): *void*
+▸ **setWriteIndex**(`writeIndex`): `void`
 
 Set the current write index.
 
@@ -98,19 +104,23 @@ Set the current write index.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `writeIndex` | *number* | The current write index. |
+| `writeIndex` | `number` | The current write index. |
 
-**Returns:** *void*
+#### Returns
+
+`void`
 
 ___
 
 ### unused
 
-▸ **unused**(): *number*
+▸ **unused**(): `number`
 
 How much unused data is there.
 
-**Returns:** *number*
+#### Returns
+
+`number`
 
 The amount of unused data.
 
@@ -118,7 +128,7 @@ ___
 
 ### writeBoolean
 
-▸ **writeBoolean**(`name`: *string*, `val`: *boolean*): *void*
+▸ **writeBoolean**(`name`, `val`): `void`
 
 Write a boolean to the stream.
 
@@ -126,16 +136,18 @@ Write a boolean to the stream.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `name` | *string* | The name of the data we are trying to write. |
-| `val` | *boolean* | The data to write. |
+| `name` | `string` | The name of the data we are trying to write. |
+| `val` | `boolean` | The data to write. |
 
-**Returns:** *void*
+#### Returns
+
+`void`
 
 ___
 
 ### writeByte
 
-▸ **writeByte**(`name`: *string*, `val`: *number*): *void*
+▸ **writeByte**(`name`, `val`): `void`
 
 Write a byte to the stream.
 
@@ -143,16 +155,18 @@ Write a byte to the stream.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `name` | *string* | The name of the data we are trying to write. |
-| `val` | *number* | The data to write. |
+| `name` | `string` | The name of the data we are trying to write. |
+| `val` | `number` | The data to write. |
 
-**Returns:** *void*
+#### Returns
+
+`void`
 
 ___
 
 ### writeBytes
 
-▸ **writeBytes**(`name`: *string*, `length`: *number*, `val`: *Uint8Array*): *void*
+▸ **writeBytes**(`name`, `length`, `val`): `void`
 
 Write fixed length stream.
 
@@ -160,17 +174,19 @@ Write fixed length stream.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `name` | *string* | The name of the data we are trying to write. |
-| `length` | *number* | The length of the data to write. |
-| `val` | *Uint8Array* | The data to write. |
+| `name` | `string` | The name of the data we are trying to write. |
+| `length` | `number` | The length of the data to write. |
+| `val` | `Uint8Array` | The data to write. |
 
-**Returns:** *void*
+#### Returns
+
+`void`
 
 ___
 
 ### writeFixedHex
 
-▸ **writeFixedHex**(`name`: *string*, `length`: *number*, `val`: *string*): *void*
+▸ **writeFixedHex**(`name`, `length`, `val`): `void`
 
 Write fixed length stream.
 
@@ -178,17 +194,19 @@ Write fixed length stream.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `name` | *string* | The name of the data we are trying to write. |
-| `length` | *number* | The length of the data to write. |
-| `val` | *string* | The data to write. |
+| `name` | `string` | The name of the data we are trying to write. |
+| `length` | `number` | The length of the data to write. |
+| `val` | `string` | The data to write. |
 
-**Returns:** *void*
+#### Returns
+
+`void`
 
 ___
 
 ### writeUInt16
 
-▸ **writeUInt16**(`name`: *string*, `val`: *number*): *void*
+▸ **writeUInt16**(`name`, `val`): `void`
 
 Write a UInt16 to the stream.
 
@@ -196,16 +214,18 @@ Write a UInt16 to the stream.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `name` | *string* | The name of the data we are trying to write. |
-| `val` | *number* | The data to write. |
+| `name` | `string` | The name of the data we are trying to write. |
+| `val` | `number` | The data to write. |
 
-**Returns:** *void*
+#### Returns
+
+`void`
 
 ___
 
 ### writeUInt32
 
-▸ **writeUInt32**(`name`: *string*, `val`: *number*): *void*
+▸ **writeUInt32**(`name`, `val`): `void`
 
 Write a UInt32 to the stream.
 
@@ -213,16 +233,18 @@ Write a UInt32 to the stream.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `name` | *string* | The name of the data we are trying to write. |
-| `val` | *number* | The data to write. |
+| `name` | `string` | The name of the data we are trying to write. |
+| `val` | `number` | The data to write. |
 
-**Returns:** *void*
+#### Returns
+
+`void`
 
 ___
 
 ### writeUInt64
 
-▸ **writeUInt64**(`name`: *string*, `val`: *bigint*): *void*
+▸ **writeUInt64**(`name`, `val`): `void`
 
 Write a UInt64 to the stream.
 
@@ -230,7 +252,9 @@ Write a UInt64 to the stream.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `name` | *string* | The name of the data we are trying to write. |
-| `val` | *bigint* | The data to write. |
+| `name` | `string` | The name of the data we are trying to write. |
+| `val` | `bigint` | The data to write. |
 
-**Returns:** *void*
+#### Returns
+
+`void`

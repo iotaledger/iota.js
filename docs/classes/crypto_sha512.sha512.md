@@ -30,7 +30,7 @@ TypeScript conversion from https://github.com/emn178/js-sha512.
 
 ### constructor
 
-\+ **new Sha512**(`bits?`: *number*): [*Sha512*](crypto_sha512.sha512.md)
+• **new Sha512**(`bits?`)
 
 Create a new instance of Sha512.
 
@@ -38,15 +38,13 @@ Create a new instance of Sha512.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `bits` | *number* | The number of bits. |
-
-**Returns:** [*Sha512*](crypto_sha512.sha512.md)
+| `bits` | `number` | The number of bits. |
 
 ## Properties
 
 ### SIZE\_224
 
-▪ `Static` **SIZE\_224**: *number*= 224
+▪ `Static` **SIZE\_224**: `number` = 224
 
 Sha512 224.
 
@@ -54,7 +52,7 @@ ___
 
 ### SIZE\_256
 
-▪ `Static` **SIZE\_256**: *number*= 256
+▪ `Static` **SIZE\_256**: `number` = 256
 
 Sha512 256.
 
@@ -62,7 +60,7 @@ ___
 
 ### SIZE\_384
 
-▪ `Static` **SIZE\_384**: *number*= 384
+▪ `Static` **SIZE\_384**: `number` = 384
 
 Sha512 384.
 
@@ -70,7 +68,7 @@ ___
 
 ### SIZE\_512
 
-▪ `Static` **SIZE\_512**: *number*= 512
+▪ `Static` **SIZE\_512**: `number` = 512
 
 Sha512 512.
 
@@ -78,11 +76,13 @@ Sha512 512.
 
 ### digest
 
-▸ **digest**(): *Uint8Array*
+▸ **digest**(): `Uint8Array`
 
 Get the digest.
 
-**Returns:** *Uint8Array*
+#### Returns
+
+`Uint8Array`
 
 The digest.
 
@@ -90,7 +90,7 @@ ___
 
 ### update
 
-▸ **update**(`message`: *Uint8Array*): [*Sha512*](crypto_sha512.sha512.md)
+▸ **update**(`message`): [Sha512](crypto_sha512.sha512.md)
 
 Update the hash with the data.
 
@@ -98,9 +98,11 @@ Update the hash with the data.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `message` | *Uint8Array* | The data to update the hash with. |
+| `message` | `Uint8Array` | The data to update the hash with. |
 
-**Returns:** [*Sha512*](crypto_sha512.sha512.md)
+#### Returns
+
+[Sha512](crypto_sha512.sha512.md)
 
 The instance for chaining.
 
@@ -108,7 +110,7 @@ ___
 
 ### sum512
 
-▸ `Static` **sum512**(`data`: *Uint8Array*): *Uint8Array*
+▸ `Static` **sum512**(`data`): `Uint8Array`
 
 Perform Sum 512 on the data.
 
@@ -116,8 +118,10 @@ Perform Sum 512 on the data.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `data` | *Uint8Array* | The data to operate on. |
+| `data` | `Uint8Array` | The data to operate on. |
 
-**Returns:** *Uint8Array*
+#### Returns
+
+`Uint8Array`
 
 The sum 512 of the data.

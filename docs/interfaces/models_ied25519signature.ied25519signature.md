@@ -8,7 +8,7 @@ Ed25519Signature signature.
 
 ## Hierarchy
 
-- [*ITypeBase*](models_itypebase.itypebase.md)<``0``\>
+- [ITypeBase](models_itypebase.itypebase.md)<``0``\>
 
   ↳ **IEd25519Signature**
 
@@ -24,7 +24,7 @@ Ed25519Signature signature.
 
 ### publicKey
 
-• **publicKey**: *string*
+• **publicKey**: `string`
 
 The public key.
 
@@ -32,7 +32,7 @@ ___
 
 ### signature
 
-• **signature**: *string*
+• **signature**: `string`
 
 The signature.
 
@@ -44,4 +44,6 @@ ___
 
 The type of the object.
 
-Inherited from: [ITypeBase](models_itypebase.itypebase.md).[type](models_itypebase.itypebase.md#type)
+#### Inherited from
+
+[ITypeBase](models_itypebase.itypebase.md).[type](models_itypebase.itypebase.md#type)

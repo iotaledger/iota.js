@@ -23,7 +23,7 @@ TypeScript conversion from https://github.com/emn178/js-sha256.
 
 ### constructor
 
-\+ **new HmacSha256**(`key`: *Uint8Array*, `bits?`: *number*): [*HmacSha256*](crypto_hmacsha256.hmacsha256.md)
+• **new HmacSha256**(`key`, `bits?`)
 
 Create a new instance of HmacSha256.
 
@@ -31,20 +31,20 @@ Create a new instance of HmacSha256.
 
 | Name | Type | Default value | Description |
 | :------ | :------ | :------ | :------ |
-| `key` | *Uint8Array* | - | The key for the hmac. |
-| `bits` | *number* | 256 | The number of bits. |
-
-**Returns:** [*HmacSha256*](crypto_hmacsha256.hmacsha256.md)
+| `key` | `Uint8Array` | `undefined` | The key for the hmac. |
+| `bits` | `number` | 256 | The number of bits. |
 
 ## Methods
 
 ### digest
 
-▸ **digest**(): *Uint8Array*
+▸ **digest**(): `Uint8Array`
 
 Get the digest.
 
-**Returns:** *Uint8Array*
+#### Returns
+
+`Uint8Array`
 
 The digest.
 
@@ -52,7 +52,7 @@ ___
 
 ### update
 
-▸ **update**(`message`: *Uint8Array*): [*HmacSha256*](crypto_hmacsha256.hmacsha256.md)
+▸ **update**(`message`): [HmacSha256](crypto_hmacsha256.hmacsha256.md)
 
 Update the hash with the data.
 
@@ -60,9 +60,11 @@ Update the hash with the data.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `message` | *Uint8Array* | The data to update the hash with. |
+| `message` | `Uint8Array` | The data to update the hash with. |
 
-**Returns:** [*HmacSha256*](crypto_hmacsha256.hmacsha256.md)
+#### Returns
+
+[HmacSha256](crypto_hmacsha256.hmacsha256.md)
 
 The instance for chaining.
 
@@ -70,7 +72,7 @@ ___
 
 ### sum256
 
-▸ `Static` **sum256**(`key`: *Uint8Array*, `data`: *Uint8Array*): *Uint8Array*
+▸ `Static` **sum256**(`key`, `data`): `Uint8Array`
 
 Perform Sum 256 on the data.
 
@@ -78,9 +80,11 @@ Perform Sum 256 on the data.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `key` | *Uint8Array* | The key for the hmac. |
-| `data` | *Uint8Array* | The data to operate on. |
+| `key` | `Uint8Array` | The key for the hmac. |
+| `data` | `Uint8Array` | The data to operate on. |
 
-**Returns:** *Uint8Array*
+#### Returns
+
+`Uint8Array`
 
 The sum 256 of the data.

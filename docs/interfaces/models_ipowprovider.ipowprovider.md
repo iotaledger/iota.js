@@ -8,7 +8,7 @@ Perform the POW on a message.
 
 ## Implemented by
 
-- [*LocalPowProvider*](../classes/pow_localpowprovider.localpowprovider.md)
+- [LocalPowProvider](../classes/pow_localpowprovider.localpowprovider.md)
 
 ## Table of contents
 
@@ -20,7 +20,7 @@ Perform the POW on a message.
 
 ### pow
 
-▸ **pow**(`message`: *Uint8Array*, `targetScore`: *number*): *Promise*<bigint\>
+▸ **pow**(`message`, `targetScore`): `Promise`<bigint\>
 
 Perform pow on the message and return the nonce of at least targetScore.
 
@@ -28,9 +28,11 @@ Perform pow on the message and return the nonce of at least targetScore.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `message` | *Uint8Array* | The message to process. |
-| `targetScore` | *number* | The target score. |
+| `message` | `Uint8Array` | The message to process. |
+| `targetScore` | `number` | The target score. |
 
-**Returns:** *Promise*<bigint\>
+#### Returns
+
+`Promise`<bigint\>
 
 The nonce.

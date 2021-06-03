@@ -20,15 +20,13 @@ Implementation of Zip215.
 
 ### constructor
 
-\+ **new Zip215**(): [*Zip215*](crypto_zip215.zip215.md)
-
-**Returns:** [*Zip215*](crypto_zip215.zip215.md)
+• **new Zip215**()
 
 ## Methods
 
 ### verify
 
-▸ `Static` **verify**(`publicKey`: *Uint8Array*, `message`: *Uint8Array*, `sig`: *Uint8Array*): *boolean*
+▸ `Static` **verify**(`publicKey`, `message`, `sig`): `boolean`
 
 Verify reports whether sig is a valid signature of message by
 publicKey, using precisely-specified validation criteria (ZIP 215) suitable
@@ -38,10 +36,12 @@ for use in consensus-critical contexts.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `publicKey` | *Uint8Array* | The public key for the message. |
-| `message` | *Uint8Array* | The message content to validate. |
-| `sig` | *Uint8Array* | The signature to verify. |
+| `publicKey` | `Uint8Array` | The public key for the message. |
+| `message` | `Uint8Array` | The message content to validate. |
+| `sig` | `Uint8Array` | The signature to verify. |
 
-**Returns:** *boolean*
+#### Returns
+
+`boolean`
 
 True if the signature is valid.

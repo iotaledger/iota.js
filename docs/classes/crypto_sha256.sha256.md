@@ -29,7 +29,7 @@ TypeScript conversion from https://github.com/emn178/js-sha256.
 
 ### constructor
 
-\+ **new Sha256**(`bits?`: *number*): [*Sha256*](crypto_sha256.sha256.md)
+• **new Sha256**(`bits?`)
 
 Create a new instance of Sha256.
 
@@ -37,15 +37,13 @@ Create a new instance of Sha256.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `bits` | *number* | The number of bits. |
-
-**Returns:** [*Sha256*](crypto_sha256.sha256.md)
+| `bits` | `number` | The number of bits. |
 
 ## Properties
 
 ### SIZE\_224
 
-▪ `Static` `Readonly` **SIZE\_224**: *number*= 224
+▪ `Static` `Readonly` **SIZE\_224**: `number` = 224
 
 Sha256 224.
 
@@ -53,7 +51,7 @@ ___
 
 ### SIZE\_256
 
-▪ `Static` `Readonly` **SIZE\_256**: *number*= 256
+▪ `Static` `Readonly` **SIZE\_256**: `number` = 256
 
 Sha256 256.
 
@@ -61,11 +59,13 @@ Sha256 256.
 
 ### digest
 
-▸ **digest**(): *Uint8Array*
+▸ **digest**(): `Uint8Array`
 
 Get the digest.
 
-**Returns:** *Uint8Array*
+#### Returns
+
+`Uint8Array`
 
 The digest.
 
@@ -73,7 +73,7 @@ ___
 
 ### update
 
-▸ **update**(`message`: *Uint8Array*): [*Sha256*](crypto_sha256.sha256.md)
+▸ **update**(`message`): [Sha256](crypto_sha256.sha256.md)
 
 Update the hash with the data.
 
@@ -81,9 +81,11 @@ Update the hash with the data.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `message` | *Uint8Array* | The data to update the hash with. |
+| `message` | `Uint8Array` | The data to update the hash with. |
 
-**Returns:** [*Sha256*](crypto_sha256.sha256.md)
+#### Returns
+
+[Sha256](crypto_sha256.sha256.md)
 
 The instance for chaining.
 
@@ -91,7 +93,7 @@ ___
 
 ### sum224
 
-▸ `Static` **sum224**(`data`: *Uint8Array*): *Uint8Array*
+▸ `Static` **sum224**(`data`): `Uint8Array`
 
 Perform Sum 224 on the data.
 
@@ -99,9 +101,11 @@ Perform Sum 224 on the data.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `data` | *Uint8Array* | The data to operate on. |
+| `data` | `Uint8Array` | The data to operate on. |
 
-**Returns:** *Uint8Array*
+#### Returns
+
+`Uint8Array`
 
 The sum 224 of the data.
 
@@ -109,7 +113,7 @@ ___
 
 ### sum256
 
-▸ `Static` **sum256**(`data`: *Uint8Array*): *Uint8Array*
+▸ `Static` **sum256**(`data`): `Uint8Array`
 
 Perform Sum 256 on the data.
 
@@ -117,8 +121,10 @@ Perform Sum 256 on the data.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `data` | *Uint8Array* | The data to operate on. |
+| `data` | `Uint8Array` | The data to operate on. |
 
-**Returns:** *Uint8Array*
+#### Returns
+
+`Uint8Array`
 
 The sum 256 of the data.

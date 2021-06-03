@@ -24,7 +24,7 @@ Response from the metadata endpoint.
 
 ### conflictReason
 
-• `Optional` **conflictReason**: [*ConflictReason*](../enums/models_conflictreason.conflictreason.md)
+• `Optional` **conflictReason**: [ConflictReason](../enums/models_conflictreason.conflictreason.md)
 
 The conflict reason.
 
@@ -32,7 +32,7 @@ ___
 
 ### isSolid
 
-• **isSolid**: *boolean*
+• **isSolid**: `boolean`
 
 Is the message solid.
 
@@ -40,7 +40,7 @@ ___
 
 ### ledgerInclusionState
 
-• `Optional` **ledgerInclusionState**: [*LedgerInclusionState*](../modules/models_ledgerinclusionstate.md#ledgerinclusionstate)
+• `Optional` **ledgerInclusionState**: [LedgerInclusionState](../modules/models_ledgerinclusionstate.md#ledgerinclusionstate)
 
 The ledger inclusion state.
 
@@ -48,7 +48,7 @@ ___
 
 ### messageId
 
-• **messageId**: *string*
+• **messageId**: `string`
 
 The message id.
 
@@ -56,7 +56,7 @@ ___
 
 ### milestoneIndex
 
-• `Optional` **milestoneIndex**: *number*
+• `Optional` **milestoneIndex**: `number`
 
 Is this message a valid milestone.
 
@@ -64,7 +64,7 @@ ___
 
 ### parentMessageIds
 
-• `Optional` **parentMessageIds**: *string*[]
+• `Optional` **parentMessageIds**: `string`[]
 
 The parent message ids.
 
@@ -72,7 +72,7 @@ ___
 
 ### referencedByMilestoneIndex
 
-• `Optional` **referencedByMilestoneIndex**: *number*
+• `Optional` **referencedByMilestoneIndex**: `number`
 
 Is the message referenced by a milestone.
 
@@ -80,7 +80,7 @@ ___
 
 ### shouldPromote
 
-• `Optional` **shouldPromote**: *boolean*
+• `Optional` **shouldPromote**: `boolean`
 
 Should the message be promoted.
 
@@ -88,6 +88,6 @@ ___
 
 ### shouldReattach
 
-• `Optional` **shouldReattach**: *boolean*
+• `Optional` **shouldReattach**: `boolean`
 
 Should the message be reattached.

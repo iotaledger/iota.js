@@ -9,7 +9,7 @@ WARNING - This is really slow.
 
 ## Implements
 
-- [*IPowProvider*](../interfaces/models_ipowprovider.ipowprovider.md)
+- [IPowProvider](../interfaces/models_ipowprovider.ipowprovider.md)
 
 ## Table of contents
 
@@ -25,15 +25,13 @@ WARNING - This is really slow.
 
 ### constructor
 
-\+ **new LocalPowProvider**(): [*LocalPowProvider*](pow_localpowprovider.localpowprovider.md)
-
-**Returns:** [*LocalPowProvider*](pow_localpowprovider.localpowprovider.md)
+• **new LocalPowProvider**()
 
 ## Methods
 
 ### pow
 
-▸ **pow**(`message`: *Uint8Array*, `targetScore`: *number*): *Promise*<bigint\>
+▸ **pow**(`message`, `targetScore`): `Promise`<bigint\>
 
 Perform pow on the message and return the nonce of at least targetScore.
 
@@ -41,11 +39,15 @@ Perform pow on the message and return the nonce of at least targetScore.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `message` | *Uint8Array* | The message to process. |
-| `targetScore` | *number* | The target score. |
+| `message` | `Uint8Array` | The message to process. |
+| `targetScore` | `number` | The target score. |
 
-**Returns:** *Promise*<bigint\>
+#### Returns
+
+`Promise`<bigint\>
 
 The nonce.
 
-Implementation of: [IPowProvider](../interfaces/models_ipowprovider.ipowprovider.md)
+#### Implementation of
+
+[IPowProvider](../interfaces/models_ipowprovider.ipowprovider.md).[pow](../interfaces/models_ipowprovider.ipowprovider.md#pow)

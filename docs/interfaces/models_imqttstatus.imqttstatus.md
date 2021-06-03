@@ -19,7 +19,7 @@ Status message for MQTT Clients.
 
 ### error
 
-• `Optional` **error**: Error
+• `Optional` **error**: `Error`
 
 Any errors.
 
@@ -27,7 +27,7 @@ ___
 
 ### message
 
-• **message**: *string*
+• **message**: `string`
 
 Additional information about the status.
 

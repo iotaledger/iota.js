@@ -16,6 +16,6 @@
 
 ### SIG\_LOCKED\_SINGLE\_OUTPUT\_TYPE
 
-• `Const` **SIG\_LOCKED\_SINGLE\_OUTPUT\_TYPE**: ``0``= 0
+• `Const` **SIG\_LOCKED\_SINGLE\_OUTPUT\_TYPE**: ``0``
 
 The global type for the sig locked single output.

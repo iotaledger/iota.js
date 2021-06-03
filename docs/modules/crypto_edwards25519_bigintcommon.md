@@ -12,7 +12,7 @@
 
 ### BIG\_1\_SHIFTL\_20
 
-• `Const` **BIG\_1\_SHIFTL\_20**: *bigint*
+• `Const` **BIG\_1\_SHIFTL\_20**: `bigint`
 
 This is a port of the Go code from https://github.com/hdevalence/ed25519consensus
 which is an extension of https://github.com/golang/crypto/tree/master/ed25519

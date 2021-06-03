@@ -16,6 +16,6 @@
 
 ### RECEIPT\_PAYLOAD\_TYPE
 
-• `Const` **RECEIPT\_PAYLOAD\_TYPE**: ``3``= 3
+• `Const` **RECEIPT\_PAYLOAD\_TYPE**: ``3``
 
 The global type for the payload.

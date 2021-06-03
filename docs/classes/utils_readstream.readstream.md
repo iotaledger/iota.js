@@ -31,7 +31,7 @@ Keep track of the read index within a stream.
 
 ### constructor
 
-\+ **new ReadStream**(`storage`: *Uint8Array*, `readStartIndex?`: *number*): [*ReadStream*](utils_readstream.readstream.md)
+• **new ReadStream**(`storage`, `readStartIndex?`)
 
 Create a new instance of ReadStream.
 
@@ -39,20 +39,20 @@ Create a new instance of ReadStream.
 
 | Name | Type | Default value | Description |
 | :------ | :------ | :------ | :------ |
-| `storage` | *Uint8Array* | - | The data to access. |
-| `readStartIndex` | *number* | 0 | The index to start the reading from. |
-
-**Returns:** [*ReadStream*](utils_readstream.readstream.md)
+| `storage` | `Uint8Array` | `undefined` | The data to access. |
+| `readStartIndex` | `number` | 0 | The index to start the reading from. |
 
 ## Methods
 
 ### getReadIndex
 
-▸ **getReadIndex**(): *number*
+▸ **getReadIndex**(): `number`
 
 Get the current read index.
 
-**Returns:** *number*
+#### Returns
+
+`number`
 
 The current read index.
 
@@ -60,7 +60,7 @@ ___
 
 ### hasRemaining
 
-▸ **hasRemaining**(`remaining`: *number*): *boolean*
+▸ **hasRemaining**(`remaining`): `boolean`
 
 Does the storage have enough data remaining.
 
@@ -68,9 +68,11 @@ Does the storage have enough data remaining.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `remaining` | *number* | The amount of space needed. |
+| `remaining` | `number` | The amount of space needed. |
 
-**Returns:** *boolean*
+#### Returns
+
+`boolean`
 
 True if it has enough data.
 
@@ -78,11 +80,13 @@ ___
 
 ### length
 
-▸ **length**(): *number*
+▸ **length**(): `number`
 
 Get the length of the storage.
 
-**Returns:** *number*
+#### Returns
+
+`number`
 
 The storage length.
 
@@ -90,7 +94,7 @@ ___
 
 ### readBoolean
 
-▸ **readBoolean**(`name`: *string*, `moveIndex?`: *boolean*): *boolean*
+▸ **readBoolean**(`name`, `moveIndex?`): `boolean`
 
 Read a boolean from the stream.
 
@@ -98,10 +102,12 @@ Read a boolean from the stream.
 
 | Name | Type | Default value | Description |
 | :------ | :------ | :------ | :------ |
-| `name` | *string* | - | The name of the data we are trying to read. |
-| `moveIndex` | *boolean* | true | Move the index pointer on. |
+| `name` | `string` | `undefined` | The name of the data we are trying to read. |
+| `moveIndex` | `boolean` | true | Move the index pointer on. |
 
-**Returns:** *boolean*
+#### Returns
+
+`boolean`
 
 The value.
 
@@ -109,7 +115,7 @@ ___
 
 ### readByte
 
-▸ **readByte**(`name`: *string*, `moveIndex?`: *boolean*): *number*
+▸ **readByte**(`name`, `moveIndex?`): `number`
 
 Read a byte from the stream.
 
@@ -117,10 +123,12 @@ Read a byte from the stream.
 
 | Name | Type | Default value | Description |
 | :------ | :------ | :------ | :------ |
-| `name` | *string* | - | The name of the data we are trying to read. |
-| `moveIndex` | *boolean* | true | Move the index pointer on. |
+| `name` | `string` | `undefined` | The name of the data we are trying to read. |
+| `moveIndex` | `boolean` | true | Move the index pointer on. |
 
-**Returns:** *number*
+#### Returns
+
+`number`
 
 The value.
 
@@ -128,7 +136,7 @@ ___
 
 ### readBytes
 
-▸ **readBytes**(`name`: *string*, `length`: *number*, `moveIndex?`: *boolean*): *Uint8Array*
+▸ **readBytes**(`name`, `length`, `moveIndex?`): `Uint8Array`
 
 Read an array of byte from the stream.
 
@@ -136,11 +144,13 @@ Read an array of byte from the stream.
 
 | Name | Type | Default value | Description |
 | :------ | :------ | :------ | :------ |
-| `name` | *string* | - | The name of the data we are trying to read. |
-| `length` | *number* | - | The length of the array to read. |
-| `moveIndex` | *boolean* | true | Move the index pointer on. |
+| `name` | `string` | `undefined` | The name of the data we are trying to read. |
+| `length` | `number` | `undefined` | The length of the array to read. |
+| `moveIndex` | `boolean` | true | Move the index pointer on. |
 
-**Returns:** *Uint8Array*
+#### Returns
+
+`Uint8Array`
 
 The value.
 
@@ -148,7 +158,7 @@ ___
 
 ### readFixedHex
 
-▸ **readFixedHex**(`name`: *string*, `length`: *number*, `moveIndex?`: *boolean*): *string*
+▸ **readFixedHex**(`name`, `length`, `moveIndex?`): `string`
 
 Read fixed length as hex.
 
@@ -156,11 +166,13 @@ Read fixed length as hex.
 
 | Name | Type | Default value | Description |
 | :------ | :------ | :------ | :------ |
-| `name` | *string* | - | The name of the data we are trying to read. |
-| `length` | *number* | - | The length of the data to read. |
-| `moveIndex` | *boolean* | true | Move the index pointer on. |
+| `name` | `string` | `undefined` | The name of the data we are trying to read. |
+| `length` | `number` | `undefined` | The length of the data to read. |
+| `moveIndex` | `boolean` | true | Move the index pointer on. |
 
-**Returns:** *string*
+#### Returns
+
+`string`
 
 The hex formatted data.
 
@@ -168,7 +180,7 @@ ___
 
 ### readUInt16
 
-▸ **readUInt16**(`name`: *string*, `moveIndex?`: *boolean*): *number*
+▸ **readUInt16**(`name`, `moveIndex?`): `number`
 
 Read a UInt16 from the stream.
 
@@ -176,10 +188,12 @@ Read a UInt16 from the stream.
 
 | Name | Type | Default value | Description |
 | :------ | :------ | :------ | :------ |
-| `name` | *string* | - | The name of the data we are trying to read. |
-| `moveIndex` | *boolean* | true | Move the index pointer on. |
+| `name` | `string` | `undefined` | The name of the data we are trying to read. |
+| `moveIndex` | `boolean` | true | Move the index pointer on. |
 
-**Returns:** *number*
+#### Returns
+
+`number`
 
 The value.
 
@@ -187,7 +201,7 @@ ___
 
 ### readUInt32
 
-▸ **readUInt32**(`name`: *string*, `moveIndex?`: *boolean*): *number*
+▸ **readUInt32**(`name`, `moveIndex?`): `number`
 
 Read a UInt32 from the stream.
 
@@ -195,10 +209,12 @@ Read a UInt32 from the stream.
 
 | Name | Type | Default value | Description |
 | :------ | :------ | :------ | :------ |
-| `name` | *string* | - | The name of the data we are trying to read. |
-| `moveIndex` | *boolean* | true | Move the index pointer on. |
+| `name` | `string` | `undefined` | The name of the data we are trying to read. |
+| `moveIndex` | `boolean` | true | Move the index pointer on. |
 
-**Returns:** *number*
+#### Returns
+
+`number`
 
 The value.
 
@@ -206,7 +222,7 @@ ___
 
 ### readUInt64
 
-▸ **readUInt64**(`name`: *string*, `moveIndex?`: *boolean*): *bigint*
+▸ **readUInt64**(`name`, `moveIndex?`): `bigint`
 
 Read a UInt64 from the stream.
 
@@ -214,10 +230,12 @@ Read a UInt64 from the stream.
 
 | Name | Type | Default value | Description |
 | :------ | :------ | :------ | :------ |
-| `name` | *string* | - | The name of the data we are trying to read. |
-| `moveIndex` | *boolean* | true | Move the index pointer on. |
+| `name` | `string` | `undefined` | The name of the data we are trying to read. |
+| `moveIndex` | `boolean` | true | Move the index pointer on. |
 
-**Returns:** *bigint*
+#### Returns
+
+`bigint`
 
 The value.
 
@@ -225,7 +243,7 @@ ___
 
 ### setReadIndex
 
-▸ **setReadIndex**(`readIndex`: *number*): *void*
+▸ **setReadIndex**(`readIndex`): `void`
 
 Set the current read index.
 
@@ -233,18 +251,22 @@ Set the current read index.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `readIndex` | *number* | The current read index. |
+| `readIndex` | `number` | The current read index. |
 
-**Returns:** *void*
+#### Returns
+
+`void`
 
 ___
 
 ### unused
 
-▸ **unused**(): *number*
+▸ **unused**(): `number`
 
 How much unused data is there.
 
-**Returns:** *number*
+#### Returns
+
+`number`
 
 The amount of unused data.

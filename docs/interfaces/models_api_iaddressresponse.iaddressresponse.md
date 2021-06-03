@@ -20,7 +20,7 @@ Address details.
 
 ### address
 
-• **address**: *string*
+• **address**: `string`
 
 The address the details are for.
 
@@ -28,7 +28,7 @@ ___
 
 ### addressType
 
-• **addressType**: *number*
+• **addressType**: `number`
 
 The type for the address.
 
@@ -36,7 +36,7 @@ ___
 
 ### balance
 
-• **balance**: *number*
+• **balance**: `number`
 
 The balance of the address.
 
@@ -44,7 +44,7 @@ ___
 
 ### dustAllowed
 
-• **dustAllowed**: *boolean*
+• **dustAllowed**: `boolean`
 
 The address is allowed to be sent dust.
 
@@ -52,6 +52,6 @@ ___
 
 ### ledgerIndex
 
-• **ledgerIndex**: *number*
+• **ledgerIndex**: `number`
 
 The ledger index at which these outputs where available at.

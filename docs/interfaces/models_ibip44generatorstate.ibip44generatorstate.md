@@ -18,7 +18,7 @@ Definition of address generator state.
 
 ### accountIndex
 
-• **accountIndex**: *number*
+• **accountIndex**: `number`
 
 The account index.
 
@@ -26,7 +26,7 @@ ___
 
 ### addressIndex
 
-• **addressIndex**: *number*
+• **addressIndex**: `number`
 
 The address index.
 
@@ -34,6 +34,6 @@ ___
 
 ### isInternal
 
-• **isInternal**: *boolean*
+• **isInternal**: `boolean`
 
 Is this an internal address.

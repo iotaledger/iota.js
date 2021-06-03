@@ -23,7 +23,7 @@ Base response data.
 
 ### data
 
-• **data**: T
+• **data**: `T`
 
 The data in the response.
 
@@ -31,7 +31,7 @@ ___
 
 ### error
 
-• `Optional` **error**: *object*
+• `Optional` **error**: `Object`
 
 Optional error in the response.
 
@@ -39,5 +39,5 @@ Optional error in the response.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `code` | *string* | The code for the error response. |
-| `message` | *string* | A more descriptive version of the error. |
+| `code` | `string` | The code for the error response. |
+| `message` | `string` | A more descriptive version of the error. |

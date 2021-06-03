@@ -16,6 +16,6 @@
 
 ### TREASURY\_TRANSACTION\_PAYLOAD\_TYPE
 
-• `Const` **TREASURY\_TRANSACTION\_PAYLOAD\_TYPE**: ``4``= 4
+• `Const` **TREASURY\_TRANSACTION\_PAYLOAD\_TYPE**: ``4``
 
 The global type for the payload.

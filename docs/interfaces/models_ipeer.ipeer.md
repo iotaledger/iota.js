@@ -21,7 +21,7 @@ Peer details.
 
 ### alias
 
-• `Optional` **alias**: *string*
+• `Optional` **alias**: `string`
 
 The alias of the peer.
 
@@ -29,7 +29,7 @@ ___
 
 ### connected
 
-• **connected**: *boolean*
+• **connected**: `boolean`
 
 Is it connected.
 
@@ -37,7 +37,7 @@ ___
 
 ### gossip
 
-• `Optional` **gossip**: *object*
+• `Optional` **gossip**: `Object`
 
 Gossip metrics for the peer.
 
@@ -45,14 +45,14 @@ Gossip metrics for the peer.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `heartbeat?` | [*IGossipHeartbeat*](models_igossipheartbeat.igossipheartbeat.md) | The peer heartbeat. |
-| `metrics` | [*IGossipMetrics*](models_igossipmetrics.igossipmetrics.md) | The peer metrics. |
+| `heartbeat?` | [IGossipHeartbeat](models_igossipheartbeat.igossipheartbeat.md) | The peer heartbeat. |
+| `metrics` | [IGossipMetrics](models_igossipmetrics.igossipmetrics.md) | The peer metrics. |
 
 ___
 
 ### id
 
-• **id**: *string*
+• **id**: `string`
 
 The id of the peer.
 
@@ -60,7 +60,7 @@ ___
 
 ### multiAddresses
 
-• **multiAddresses**: *string*[]
+• **multiAddresses**: `string`[]
 
 The addresses of the peer.
 
@@ -68,6 +68,6 @@ ___
 
 ### relation
 
-• **relation**: *string*
+• **relation**: `string`
 
 The relation of the peer.

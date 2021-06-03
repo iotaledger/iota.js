@@ -16,6 +16,6 @@
 
 ### ED25519\_SEED\_TYPE
 
-• `Const` **ED25519\_SEED\_TYPE**: *number*= 1
+• `Const` **ED25519\_SEED\_TYPE**: `number` = 1
 
 The global type for the seed.

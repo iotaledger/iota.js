@@ -29,7 +29,7 @@ Response from the /info endpoint.
 
 ### bech32HRP
 
-• **bech32HRP**: *string*
+• **bech32HRP**: `string`
 
 The human readable part of bech32 addresses.
 
@@ -37,7 +37,7 @@ ___
 
 ### confirmedMilestoneIndex
 
-• **confirmedMilestoneIndex**: *number*
+• **confirmedMilestoneIndex**: `number`
 
 The confirmed milestone index.
 
@@ -45,7 +45,7 @@ ___
 
 ### features
 
-• **features**: *string*[]
+• **features**: `string`[]
 
 Features supported by the node.
 
@@ -53,7 +53,7 @@ ___
 
 ### isHealthy
 
-• **isHealthy**: *boolean*
+• **isHealthy**: `boolean`
 
 Is the node healthy.
 
@@ -61,7 +61,7 @@ ___
 
 ### latestMilestoneIndex
 
-• **latestMilestoneIndex**: *number*
+• **latestMilestoneIndex**: `number`
 
 The latest milestone index.
 
@@ -69,7 +69,7 @@ ___
 
 ### latestMilestoneTimestamp
 
-• **latestMilestoneTimestamp**: *number*
+• **latestMilestoneTimestamp**: `number`
 
 The latest milestone timestamp.
 
@@ -77,7 +77,7 @@ ___
 
 ### messagesPerSecond
 
-• **messagesPerSecond**: *number*
+• **messagesPerSecond**: `number`
 
 Messages per second.
 
@@ -85,7 +85,7 @@ ___
 
 ### minPoWScore
 
-• **minPoWScore**: *number*
+• **minPoWScore**: `number`
 
 The minimum score required for PoW.
 
@@ -93,7 +93,7 @@ ___
 
 ### name
 
-• **name**: *string*
+• **name**: `string`
 
 The name of the node software.
 
@@ -101,7 +101,7 @@ ___
 
 ### networkId
 
-• **networkId**: *string*
+• **networkId**: `string`
 
 The network id.
 
@@ -109,7 +109,7 @@ ___
 
 ### pruningIndex
 
-• **pruningIndex**: *number*
+• **pruningIndex**: `number`
 
 The pruning index.
 
@@ -117,7 +117,7 @@ ___
 
 ### referencedMessagesPerSecond
 
-• **referencedMessagesPerSecond**: *number*
+• **referencedMessagesPerSecond**: `number`
 
 Referenced messages per second.
 
@@ -125,7 +125,7 @@ ___
 
 ### referencedRate
 
-• **referencedRate**: *number*
+• **referencedRate**: `number`
 
 The rate at which rates are being referenced.
 
@@ -133,6 +133,6 @@ ___
 
 ### version
 
-• **version**: *string*
+• **version**: `string`
 
 The version of the software running on the node.

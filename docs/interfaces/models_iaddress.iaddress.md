@@ -8,7 +8,7 @@ Interface defining address.
 
 ## Implemented by
 
-- [*Ed25519Address*](../classes/addresstypes_ed25519address.ed25519address.md)
+- [Ed25519Address](../classes/addresstypes_ed25519address.ed25519address.md)
 
 ## Table of contents
 
@@ -21,11 +21,13 @@ Interface defining address.
 
 ### toAddress
 
-▸ **toAddress**(): *Uint8Array*
+▸ **toAddress**(): `Uint8Array`
 
 Convert the public key to an address.
 
-**Returns:** *Uint8Array*
+#### Returns
+
+`Uint8Array`
 
 The address.
 
@@ -33,7 +35,7 @@ ___
 
 ### verify
 
-▸ **verify**(`publicKey`: *Uint8Array*, `address`: *Uint8Array*): *boolean*
+▸ **verify**(`publicKey`, `address`): `boolean`
 
 Use the public key to validate the address.
 
@@ -41,9 +43,11 @@ Use the public key to validate the address.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `publicKey` | *Uint8Array* | - |
-| `address` | *Uint8Array* | The address to verify. |
+| `publicKey` | `Uint8Array` | - |
+| `address` | `Uint8Array` | The address to verify. |
 
-**Returns:** *boolean*
+#### Returns
+
+`boolean`
 
 True if the data and address is verified.

@@ -28,15 +28,13 @@ Helper methods for POW.
 
 ### constructor
 
-\+ **new PowHelper**(): [*PowHelper*](utils_powhelper.powhelper.md)
-
-**Returns:** [*PowHelper*](utils_powhelper.powhelper.md)
+• **new PowHelper**()
 
 ## Properties
 
 ### LN3
 
-▪ `Static` `Readonly` **LN3**: *number*= 1.098612288668109691395245236922525704647490557822749451734694333
+▪ `Static` `Readonly` **LN3**: `number` = 1.098612288668109691395245236922525704647490557822749451734694333
 
 LN3 Const see https://oeis.org/A002391.
 
@@ -44,7 +42,7 @@ LN3 Const see https://oeis.org/A002391.
 
 ### calculateTargetZeros
 
-▸ `Static` **calculateTargetZeros**(`message`: *Uint8Array*, `targetScore`: *number*): *number*
+▸ `Static` **calculateTargetZeros**(`message`, `targetScore`): `number`
 
 Calculate the number of zeros required to get target score.
 
@@ -52,10 +50,12 @@ Calculate the number of zeros required to get target score.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `message` | *Uint8Array* | The message to process. |
-| `targetScore` | *number* | The target score. |
+| `message` | `Uint8Array` | The message to process. |
+| `targetScore` | `number` | The target score. |
 
-**Returns:** *number*
+#### Returns
+
+`number`
 
 The number of zeros to find.
 
@@ -63,7 +63,7 @@ ___
 
 ### performPow
 
-▸ `Static` **performPow**(`powDigest`: *Uint8Array*, `targetZeros`: *number*, `startIndex`: *bigint*): *bigint*
+▸ `Static` **performPow**(`powDigest`, `targetZeros`, `startIndex`): `bigint`
 
 Perform the hash on the data until we reach target number of zeros.
 
@@ -71,11 +71,13 @@ Perform the hash on the data until we reach target number of zeros.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `powDigest` | *Uint8Array* | The pow digest. |
-| `targetZeros` | *number* | The target number of zeros. |
-| `startIndex` | *bigint* | The index to start looking from. |
+| `powDigest` | `Uint8Array` | The pow digest. |
+| `targetZeros` | `number` | The target number of zeros. |
+| `startIndex` | `bigint` | The index to start looking from. |
 
-**Returns:** *bigint*
+#### Returns
+
+`bigint`
 
 The nonce.
 
@@ -83,7 +85,7 @@ ___
 
 ### score
 
-▸ `Static` **score**(`message`: *Uint8Array*): *number*
+▸ `Static` **score**(`message`): `number`
 
 Perform the score calculation.
 
@@ -91,9 +93,11 @@ Perform the score calculation.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `message` | *Uint8Array* | The data to perform the score on. |
+| `message` | `Uint8Array` | The data to perform the score on. |
 
-**Returns:** *number*
+#### Returns
+
+`number`
 
 The score for the data.
 
@@ -101,7 +105,7 @@ ___
 
 ### trailingZeros
 
-▸ `Static` **trailingZeros**(`powDigest`: *Uint8Array*, `nonce`: *bigint*): *number*
+▸ `Static` **trailingZeros**(`powDigest`, `nonce`): `number`
 
 Calculate the trailing zeros.
 
@@ -109,10 +113,12 @@ Calculate the trailing zeros.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `powDigest` | *Uint8Array* | The pow digest. |
-| `nonce` | *bigint* | The nonce. |
+| `powDigest` | `Uint8Array` | The pow digest. |
+| `nonce` | `bigint` | The nonce. |
 
-**Returns:** *number*
+#### Returns
+
+`number`
 
 The trailing zeros.
 
@@ -120,7 +126,7 @@ ___
 
 ### trinaryTrailingZeros
 
-▸ `Static` **trinaryTrailingZeros**(`trits`: *Int8Array*, `endPos?`: *number*): *number*
+▸ `Static` **trinaryTrailingZeros**(`trits`, `endPos?`): `number`
 
 Find the number of trailing zeros.
 
@@ -128,9 +134,11 @@ Find the number of trailing zeros.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `trits` | *Int8Array* | The trits to look for zeros. |
-| `endPos` | *number* | The end position to start looking for zeros. |
+| `trits` | `Int8Array` | The trits to look for zeros. |
+| `endPos` | `number` | The end position to start looking for zeros. |
 
-**Returns:** *number*
+#### Returns
+
+`number`
 
 The number of trailing zeros.

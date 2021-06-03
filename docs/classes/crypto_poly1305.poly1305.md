@@ -22,7 +22,7 @@ Implementation of Poly1305.
 
 ### constructor
 
-\+ **new Poly1305**(`key`: *Uint8Array*): [*Poly1305*](crypto_poly1305.poly1305.md)
+• **new Poly1305**(`key`)
 
 Create a new instance of Poly1305.
 
@@ -30,19 +30,19 @@ Create a new instance of Poly1305.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `key` | *Uint8Array* | The key. |
-
-**Returns:** [*Poly1305*](crypto_poly1305.poly1305.md)
+| `key` | `Uint8Array` | The key. |
 
 ## Methods
 
 ### digest
 
-▸ **digest**(): *Uint8Array*
+▸ **digest**(): `Uint8Array`
 
 Get the digest for the hash.
 
-**Returns:** *Uint8Array*
+#### Returns
+
+`Uint8Array`
 
 The mac.
 
@@ -50,17 +50,19 @@ ___
 
 ### finish
 
-▸ **finish**(): *void*
+▸ **finish**(): `void`
 
 Finished the mac.
 
-**Returns:** *void*
+#### Returns
+
+`void`
 
 ___
 
 ### update
 
-▸ **update**(`input`: *Uint8Array*): [*Poly1305*](crypto_poly1305.poly1305.md)
+▸ **update**(`input`): [Poly1305](crypto_poly1305.poly1305.md)
 
 Update the hash.
 
@@ -68,8 +70,10 @@ Update the hash.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `input` | *Uint8Array* | The data to update with. |
+| `input` | `Uint8Array` | The data to update with. |
 
-**Returns:** [*Poly1305*](crypto_poly1305.poly1305.md)
+#### Returns
+
+[Poly1305](crypto_poly1305.poly1305.md)
 
 Hasher instance.

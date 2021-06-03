@@ -8,7 +8,7 @@ Class to help with Ed25519 Signature scheme.
 
 ## Implements
 
-- [*IAddress*](../interfaces/models_iaddress.iaddress.md)
+- [IAddress](../interfaces/models_iaddress.iaddress.md)
 
 ## Table of contents
 
@@ -25,7 +25,7 @@ Class to help with Ed25519 Signature scheme.
 
 ### constructor
 
-\+ **new Ed25519Address**(`publicKey`: *Uint8Array*): [*Ed25519Address*](addresstypes_ed25519address.ed25519address.md)
+• **new Ed25519Address**(`publicKey`)
 
 Create a new instance of Ed25519Address.
 
@@ -33,29 +33,31 @@ Create a new instance of Ed25519Address.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `publicKey` | *Uint8Array* | The public key for the address. |
-
-**Returns:** [*Ed25519Address*](addresstypes_ed25519address.ed25519address.md)
+| `publicKey` | `Uint8Array` | The public key for the address. |
 
 ## Methods
 
 ### toAddress
 
-▸ **toAddress**(): *Uint8Array*
+▸ **toAddress**(): `Uint8Array`
 
 Convert the public key to an address.
 
-**Returns:** *Uint8Array*
+#### Returns
+
+`Uint8Array`
 
 The address.
 
-Implementation of: [IAddress](../interfaces/models_iaddress.iaddress.md)
+#### Implementation of
+
+[IAddress](../interfaces/models_iaddress.iaddress.md).[toAddress](../interfaces/models_iaddress.iaddress.md#toaddress)
 
 ___
 
 ### verify
 
-▸ **verify**(`address`: *Uint8Array*): *boolean*
+▸ **verify**(`address`): `boolean`
 
 Use the public key to validate the address.
 
@@ -63,10 +65,14 @@ Use the public key to validate the address.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `address` | *Uint8Array* | The address to verify. |
+| `address` | `Uint8Array` | The address to verify. |
 
-**Returns:** *boolean*
+#### Returns
+
+`boolean`
 
 True if the data and address is verified.
 
-Implementation of: [IAddress](../interfaces/models_iaddress.iaddress.md)
+#### Implementation of
+
+[IAddress](../interfaces/models_iaddress.iaddress.md).[verify](../interfaces/models_iaddress.iaddress.md#verify)

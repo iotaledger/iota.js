@@ -23,7 +23,7 @@ TypeScript conversion from https://github.com/dcposch/blakejs.
 
 ### SIZE\_256
 
-▪ `Static` **SIZE\_256**: *number*= 32
+▪ `Static` **SIZE\_256**: `number` = 32
 
 Blake2b 256.
 
@@ -31,7 +31,7 @@ ___
 
 ### SIZE\_512
 
-▪ `Static` **SIZE\_512**: *number*= 64
+▪ `Static` **SIZE\_512**: `number` = 64
 
 Blake2b 512.
 
@@ -39,7 +39,7 @@ Blake2b 512.
 
 ### sum256
 
-▸ `Static` **sum256**(`data`: *Uint8Array*, `key?`: *Uint8Array*): *Uint8Array*
+▸ `Static` **sum256**(`data`, `key?`): `Uint8Array`
 
 Perform Sum 256 on the data.
 
@@ -47,10 +47,12 @@ Perform Sum 256 on the data.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `data` | *Uint8Array* | The data to operate on. |
-| `key?` | *Uint8Array* | Optional key for the hash. |
+| `data` | `Uint8Array` | The data to operate on. |
+| `key?` | `Uint8Array` | Optional key for the hash. |
 
-**Returns:** *Uint8Array*
+#### Returns
+
+`Uint8Array`
 
 The sum 256 of the data.
 
@@ -58,7 +60,7 @@ ___
 
 ### sum512
 
-▸ `Static` **sum512**(`data`: *Uint8Array*, `key?`: *Uint8Array*): *Uint8Array*
+▸ `Static` **sum512**(`data`, `key?`): `Uint8Array`
 
 Perform Sum 512 on the data.
 
@@ -66,9 +68,11 @@ Perform Sum 512 on the data.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `data` | *Uint8Array* | The data to operate on. |
-| `key?` | *Uint8Array* | Optional key for the hash. |
+| `data` | `Uint8Array` | The data to operate on. |
+| `key?` | `Uint8Array` | Optional key for the hash. |
 
-**Returns:** *Uint8Array*
+#### Returns
+
+`Uint8Array`
 
 The sum 512 of the data.

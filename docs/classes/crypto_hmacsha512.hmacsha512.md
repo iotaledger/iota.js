@@ -23,7 +23,7 @@ TypeScript conversion from https://github.com/emn178/js-sha512.
 
 ### constructor
 
-\+ **new HmacSha512**(`key`: *Uint8Array*, `bits?`: *number*): [*HmacSha512*](crypto_hmacsha512.hmacsha512.md)
+• **new HmacSha512**(`key`, `bits?`)
 
 Create a new instance of HmacSha512.
 
@@ -31,20 +31,20 @@ Create a new instance of HmacSha512.
 
 | Name | Type | Default value | Description |
 | :------ | :------ | :------ | :------ |
-| `key` | *Uint8Array* | - | The key for the hmac. |
-| `bits` | *number* | 512 | The number of bits. |
-
-**Returns:** [*HmacSha512*](crypto_hmacsha512.hmacsha512.md)
+| `key` | `Uint8Array` | `undefined` | The key for the hmac. |
+| `bits` | `number` | 512 | The number of bits. |
 
 ## Methods
 
 ### digest
 
-▸ **digest**(): *Uint8Array*
+▸ **digest**(): `Uint8Array`
 
 Get the digest.
 
-**Returns:** *Uint8Array*
+#### Returns
+
+`Uint8Array`
 
 The digest.
 
@@ -52,7 +52,7 @@ ___
 
 ### update
 
-▸ **update**(`message`: *Uint8Array*): [*HmacSha512*](crypto_hmacsha512.hmacsha512.md)
+▸ **update**(`message`): [HmacSha512](crypto_hmacsha512.hmacsha512.md)
 
 Update the hash with the data.
 
@@ -60,9 +60,11 @@ Update the hash with the data.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `message` | *Uint8Array* | The data to update the hash with. |
+| `message` | `Uint8Array` | The data to update the hash with. |
 
-**Returns:** [*HmacSha512*](crypto_hmacsha512.hmacsha512.md)
+#### Returns
+
+[HmacSha512](crypto_hmacsha512.hmacsha512.md)
 
 The instance for chaining.
 
@@ -70,7 +72,7 @@ ___
 
 ### sum512
 
-▸ `Static` **sum512**(`key`: *Uint8Array*, `data`: *Uint8Array*): *Uint8Array*
+▸ `Static` **sum512**(`key`, `data`): `Uint8Array`
 
 Perform Sum 512 on the data.
 
@@ -78,9 +80,11 @@ Perform Sum 512 on the data.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `key` | *Uint8Array* | The key for the hmac. |
-| `data` | *Uint8Array* | The data to operate on. |
+| `key` | `Uint8Array` | The key for the hmac. |
+| `data` | `Uint8Array` | The data to operate on. |
 
-**Returns:** *Uint8Array*
+#### Returns
+
+`Uint8Array`
 
 The sum 512 of the data.

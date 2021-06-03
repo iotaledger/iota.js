@@ -28,7 +28,7 @@
 
 ### logAddress
 
-▸ **logAddress**(`prefix`: *string*, `unknownAddress?`: [*IEd25519Address*](../interfaces/models_ied25519address.ied25519address.md)): *void*
+▸ **logAddress**(`prefix`, `unknownAddress?`): `void`
 
 Log an address to the console.
 
@@ -36,16 +36,18 @@ Log an address to the console.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `prefix` | *string* | The prefix for the output. |
-| `unknownAddress?` | [*IEd25519Address*](../interfaces/models_ied25519address.ied25519address.md) | The address to log. |
+| `prefix` | `string` | The prefix for the output. |
+| `unknownAddress?` | [IEd25519Address](../interfaces/models_ied25519address.ied25519address.md) | The address to log. |
 
-**Returns:** *void*
+#### Returns
+
+`void`
 
 ___
 
 ### logFunds
 
-▸ **logFunds**(`prefix`: *string*, `fund?`: [*IMigratedFunds*](../interfaces/models_imigratedfunds.imigratedfunds.md)): *void*
+▸ **logFunds**(`prefix`, `fund?`): `void`
 
 Log fund to the console.
 
@@ -53,16 +55,18 @@ Log fund to the console.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `prefix` | *string* | The prefix for the output. |
-| `fund?` | [*IMigratedFunds*](../interfaces/models_imigratedfunds.imigratedfunds.md) | The fund to log. |
+| `prefix` | `string` | The prefix for the output. |
+| `fund?` | [IMigratedFunds](../interfaces/models_imigratedfunds.imigratedfunds.md) | The fund to log. |
 
-**Returns:** *void*
+#### Returns
+
+`void`
 
 ___
 
 ### logIndexationPayload
 
-▸ **logIndexationPayload**(`prefix`: *string*, `payload?`: [*IIndexationPayload*](../interfaces/models_iindexationpayload.iindexationpayload.md)): *void*
+▸ **logIndexationPayload**(`prefix`, `payload?`): `void`
 
 Log a indexation payload to the console.
 
@@ -70,16 +74,18 @@ Log a indexation payload to the console.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `prefix` | *string* | The prefix for the output. |
-| `payload?` | [*IIndexationPayload*](../interfaces/models_iindexationpayload.iindexationpayload.md) | The payload. |
+| `prefix` | `string` | The prefix for the output. |
+| `payload?` | [IIndexationPayload](../interfaces/models_iindexationpayload.iindexationpayload.md) | The payload. |
 
-**Returns:** *void*
+#### Returns
+
+`void`
 
 ___
 
 ### logInfo
 
-▸ **logInfo**(`prefix`: *string*, `info`: [*INodeInfo*](../interfaces/models_inodeinfo.inodeinfo.md)): *void*
+▸ **logInfo**(`prefix`, `info`): `void`
 
 Log the node information.
 
@@ -87,16 +93,18 @@ Log the node information.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `prefix` | *string* | The prefix for the output. |
-| `info` | [*INodeInfo*](../interfaces/models_inodeinfo.inodeinfo.md) | The info to log. |
+| `prefix` | `string` | The prefix for the output. |
+| `info` | [INodeInfo](../interfaces/models_inodeinfo.inodeinfo.md) | The info to log. |
 
-**Returns:** *void*
+#### Returns
+
+`void`
 
 ___
 
 ### logInput
 
-▸ **logInput**(`prefix`: *string*, `unknownInput?`: [*IUTXOInput*](../interfaces/models_iutxoinput.iutxoinput.md) \| [*ITreasuryInput*](../interfaces/models_itreasuryinput.itreasuryinput.md)): *void*
+▸ **logInput**(`prefix`, `unknownInput?`): `void`
 
 Log input to the console.
 
@@ -104,16 +112,18 @@ Log input to the console.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `prefix` | *string* | The prefix for the output. |
-| `unknownInput?` | [*IUTXOInput*](../interfaces/models_iutxoinput.iutxoinput.md) \| [*ITreasuryInput*](../interfaces/models_itreasuryinput.itreasuryinput.md) | The input to log. |
+| `prefix` | `string` | The prefix for the output. |
+| `unknownInput?` | [IUTXOInput](../interfaces/models_iutxoinput.iutxoinput.md) \| [ITreasuryInput](../interfaces/models_itreasuryinput.itreasuryinput.md) | The input to log. |
 
-**Returns:** *void*
+#### Returns
+
+`void`
 
 ___
 
 ### logMessage
 
-▸ **logMessage**(`prefix`: *string*, `message`: [*IMessage*](../interfaces/models_imessage.imessage.md)): *void*
+▸ **logMessage**(`prefix`, `message`): `void`
 
 Log a message to the console.
 
@@ -121,16 +131,18 @@ Log a message to the console.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `prefix` | *string* | The prefix for the output. |
-| `message` | [*IMessage*](../interfaces/models_imessage.imessage.md) | The message to log. |
+| `prefix` | `string` | The prefix for the output. |
+| `message` | [IMessage](../interfaces/models_imessage.imessage.md) | The message to log. |
 
-**Returns:** *void*
+#### Returns
+
+`void`
 
 ___
 
 ### logMessageMetadata
 
-▸ **logMessageMetadata**(`prefix`: *string*, `messageMetadata`: [*IMessageMetadata*](../interfaces/models_imessagemetadata.imessagemetadata.md)): *void*
+▸ **logMessageMetadata**(`prefix`, `messageMetadata`): `void`
 
 Log the message metadata to the console.
 
@@ -138,16 +150,18 @@ Log the message metadata to the console.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `prefix` | *string* | The prefix for the output. |
-| `messageMetadata` | [*IMessageMetadata*](../interfaces/models_imessagemetadata.imessagemetadata.md) | The messageMetadata to log. |
+| `prefix` | `string` | The prefix for the output. |
+| `messageMetadata` | [IMessageMetadata](../interfaces/models_imessagemetadata.imessagemetadata.md) | The messageMetadata to log. |
 
-**Returns:** *void*
+#### Returns
+
+`void`
 
 ___
 
 ### logMilestonePayload
 
-▸ **logMilestonePayload**(`prefix`: *string*, `payload?`: [*IMilestonePayload*](../interfaces/models_imilestonepayload.imilestonepayload.md)): *void*
+▸ **logMilestonePayload**(`prefix`, `payload?`): `void`
 
 Log a milestone payload to the console.
 
@@ -155,16 +169,18 @@ Log a milestone payload to the console.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `prefix` | *string* | The prefix for the output. |
-| `payload?` | [*IMilestonePayload*](../interfaces/models_imilestonepayload.imilestonepayload.md) | The payload. |
+| `prefix` | `string` | The prefix for the output. |
+| `payload?` | [IMilestonePayload](../interfaces/models_imilestonepayload.imilestonepayload.md) | The payload. |
 
-**Returns:** *void*
+#### Returns
+
+`void`
 
 ___
 
 ### logOutput
 
-▸ **logOutput**(`prefix`: *string*, `unknownOutput?`: [*ISigLockedSingleOutput*](../interfaces/models_isiglockedsingleoutput.isiglockedsingleoutput.md) \| [*ISigLockedDustAllowanceOutput*](../interfaces/models_isiglockeddustallowanceoutput.isiglockeddustallowanceoutput.md) \| [*ITreasuryOutput*](../interfaces/models_itreasuryoutput.itreasuryoutput.md)): *void*
+▸ **logOutput**(`prefix`, `unknownOutput?`): `void`
 
 Log output to the console.
 
@@ -172,16 +188,18 @@ Log output to the console.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `prefix` | *string* | The prefix for the output. |
-| `unknownOutput?` | [*ISigLockedSingleOutput*](../interfaces/models_isiglockedsingleoutput.isiglockedsingleoutput.md) \| [*ISigLockedDustAllowanceOutput*](../interfaces/models_isiglockeddustallowanceoutput.isiglockeddustallowanceoutput.md) \| [*ITreasuryOutput*](../interfaces/models_itreasuryoutput.itreasuryoutput.md) | The output to log. |
+| `prefix` | `string` | The prefix for the output. |
+| `unknownOutput?` | [ISigLockedSingleOutput](../interfaces/models_isiglockedsingleoutput.isiglockedsingleoutput.md) \| [ISigLockedDustAllowanceOutput](../interfaces/models_isiglockeddustallowanceoutput.isiglockeddustallowanceoutput.md) \| [ITreasuryOutput](../interfaces/models_itreasuryoutput.itreasuryoutput.md) | The output to log. |
 
-**Returns:** *void*
+#### Returns
+
+`void`
 
 ___
 
 ### logPayload
 
-▸ **logPayload**(`prefix`: *string*, `unknownPayload?`: [*ITransactionPayload*](../interfaces/models_itransactionpayload.itransactionpayload.md) \| [*IMilestonePayload*](../interfaces/models_imilestonepayload.imilestonepayload.md) \| [*IIndexationPayload*](../interfaces/models_iindexationpayload.iindexationpayload.md) \| [*ITreasuryTransactionPayload*](../interfaces/models_itreasurytransactionpayload.itreasurytransactionpayload.md) \| [*IReceiptPayload*](../interfaces/models_ireceiptpayload.ireceiptpayload.md)): *void*
+▸ **logPayload**(`prefix`, `unknownPayload?`): `void`
 
 Log a message to the console.
 
@@ -189,16 +207,18 @@ Log a message to the console.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `prefix` | *string* | The prefix for the output. |
-| `unknownPayload?` | [*ITransactionPayload*](../interfaces/models_itransactionpayload.itransactionpayload.md) \| [*IMilestonePayload*](../interfaces/models_imilestonepayload.imilestonepayload.md) \| [*IIndexationPayload*](../interfaces/models_iindexationpayload.iindexationpayload.md) \| [*ITreasuryTransactionPayload*](../interfaces/models_itreasurytransactionpayload.itreasurytransactionpayload.md) \| [*IReceiptPayload*](../interfaces/models_ireceiptpayload.ireceiptpayload.md) | The payload. |
+| `prefix` | `string` | The prefix for the output. |
+| `unknownPayload?` | [ITransactionPayload](../interfaces/models_itransactionpayload.itransactionpayload.md) \| [IMilestonePayload](../interfaces/models_imilestonepayload.imilestonepayload.md) \| [IIndexationPayload](../interfaces/models_iindexationpayload.iindexationpayload.md) \| [ITreasuryTransactionPayload](../interfaces/models_itreasurytransactionpayload.itreasurytransactionpayload.md) \| [IReceiptPayload](../interfaces/models_ireceiptpayload.ireceiptpayload.md) | The payload. |
 
-**Returns:** *void*
+#### Returns
+
+`void`
 
 ___
 
 ### logReceiptPayload
 
-▸ **logReceiptPayload**(`prefix`: *string*, `payload?`: [*IReceiptPayload*](../interfaces/models_ireceiptpayload.ireceiptpayload.md)): *void*
+▸ **logReceiptPayload**(`prefix`, `payload?`): `void`
 
 Log a receipt payload to the console.
 
@@ -206,16 +226,18 @@ Log a receipt payload to the console.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `prefix` | *string* | The prefix for the output. |
-| `payload?` | [*IReceiptPayload*](../interfaces/models_ireceiptpayload.ireceiptpayload.md) | The payload. |
+| `prefix` | `string` | The prefix for the output. |
+| `payload?` | [IReceiptPayload](../interfaces/models_ireceiptpayload.ireceiptpayload.md) | The payload. |
 
-**Returns:** *void*
+#### Returns
+
+`void`
 
 ___
 
 ### logSignature
 
-▸ **logSignature**(`prefix`: *string*, `unknownSignature?`: [*IEd25519Signature*](../interfaces/models_ied25519signature.ied25519signature.md)): *void*
+▸ **logSignature**(`prefix`, `unknownSignature?`): `void`
 
 Log signature to the console.
 
@@ -223,16 +245,18 @@ Log signature to the console.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `prefix` | *string* | The prefix for the output. |
-| `unknownSignature?` | [*IEd25519Signature*](../interfaces/models_ied25519signature.ied25519signature.md) | The signature to log. |
+| `prefix` | `string` | The prefix for the output. |
+| `unknownSignature?` | [IEd25519Signature](../interfaces/models_ied25519signature.ied25519signature.md) | The signature to log. |
 
-**Returns:** *void*
+#### Returns
+
+`void`
 
 ___
 
 ### logTips
 
-▸ **logTips**(`prefix`: *string*, `tipsResponse`: [*ITipsResponse*](../interfaces/models_api_itipsresponse.itipsresponse.md)): *void*
+▸ **logTips**(`prefix`, `tipsResponse`): `void`
 
 Log the tips information.
 
@@ -240,16 +264,18 @@ Log the tips information.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `prefix` | *string* | The prefix for the output. |
-| `tipsResponse` | [*ITipsResponse*](../interfaces/models_api_itipsresponse.itipsresponse.md) | The tips to log. |
+| `prefix` | `string` | The prefix for the output. |
+| `tipsResponse` | [ITipsResponse](../interfaces/models_api_itipsresponse.itipsresponse.md) | The tips to log. |
 
-**Returns:** *void*
+#### Returns
+
+`void`
 
 ___
 
 ### logTransactionPayload
 
-▸ **logTransactionPayload**(`prefix`: *string*, `payload?`: [*ITransactionPayload*](../interfaces/models_itransactionpayload.itransactionpayload.md)): *void*
+▸ **logTransactionPayload**(`prefix`, `payload?`): `void`
 
 Log a transaction payload to the console.
 
@@ -257,16 +283,18 @@ Log a transaction payload to the console.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `prefix` | *string* | The prefix for the output. |
-| `payload?` | [*ITransactionPayload*](../interfaces/models_itransactionpayload.itransactionpayload.md) | The payload. |
+| `prefix` | `string` | The prefix for the output. |
+| `payload?` | [ITransactionPayload](../interfaces/models_itransactionpayload.itransactionpayload.md) | The payload. |
 
-**Returns:** *void*
+#### Returns
+
+`void`
 
 ___
 
 ### logTreasuryTransactionPayload
 
-▸ **logTreasuryTransactionPayload**(`prefix`: *string*, `payload?`: [*ITreasuryTransactionPayload*](../interfaces/models_itreasurytransactionpayload.itreasurytransactionpayload.md)): *void*
+▸ **logTreasuryTransactionPayload**(`prefix`, `payload?`): `void`
 
 Log a treasury transaction payload to the console.
 
@@ -274,16 +302,18 @@ Log a treasury transaction payload to the console.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `prefix` | *string* | The prefix for the output. |
-| `payload?` | [*ITreasuryTransactionPayload*](../interfaces/models_itreasurytransactionpayload.itreasurytransactionpayload.md) | The payload. |
+| `prefix` | `string` | The prefix for the output. |
+| `payload?` | [ITreasuryTransactionPayload](../interfaces/models_itreasurytransactionpayload.itreasurytransactionpayload.md) | The payload. |
 
-**Returns:** *void*
+#### Returns
+
+`void`
 
 ___
 
 ### logUnlockBlock
 
-▸ **logUnlockBlock**(`prefix`: *string*, `unknownUnlockBlock?`: [*ISignatureUnlockBlock*](../interfaces/models_isignatureunlockblock.isignatureunlockblock.md) \| [*IReferenceUnlockBlock*](../interfaces/models_ireferenceunlockblock.ireferenceunlockblock.md)): *void*
+▸ **logUnlockBlock**(`prefix`, `unknownUnlockBlock?`): `void`
 
 Log unlock block to the console.
 
@@ -291,16 +321,18 @@ Log unlock block to the console.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `prefix` | *string* | The prefix for the output. |
-| `unknownUnlockBlock?` | [*ISignatureUnlockBlock*](../interfaces/models_isignatureunlockblock.isignatureunlockblock.md) \| [*IReferenceUnlockBlock*](../interfaces/models_ireferenceunlockblock.ireferenceunlockblock.md) | The unlock block to log. |
+| `prefix` | `string` | The prefix for the output. |
+| `unknownUnlockBlock?` | [ISignatureUnlockBlock](../interfaces/models_isignatureunlockblock.isignatureunlockblock.md) \| [IReferenceUnlockBlock](../interfaces/models_ireferenceunlockblock.ireferenceunlockblock.md) | The unlock block to log. |
 
-**Returns:** *void*
+#### Returns
+
+`void`
 
 ___
 
 ### setLogger
 
-▸ **setLogger**(`log`: (`message`: *string*, `data?`: *unknown*) => *void*): *void*
+▸ **setLogger**(`log`): `void`
 
 Set the logger for output.
 
@@ -308,6 +340,8 @@ Set the logger for output.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `log` | (`message`: *string*, `data?`: *unknown*) => *void* | The logger. |
+| `log` | (`message`: `string`, `data?`: `unknown`) => `void` | The logger. |
 
-**Returns:** *void*
+#### Returns
+
+`void`

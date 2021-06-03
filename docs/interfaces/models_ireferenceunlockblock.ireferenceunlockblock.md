@@ -8,7 +8,7 @@ Reference unlock block.
 
 ## Hierarchy
 
-- [*ITypeBase*](models_itypebase.itypebase.md)<``1``\>
+- [ITypeBase](models_itypebase.itypebase.md)<``1``\>
 
   ↳ **IReferenceUnlockBlock**
 
@@ -23,7 +23,7 @@ Reference unlock block.
 
 ### reference
 
-• **reference**: *number*
+• **reference**: `number`
 
 The reference.
 
@@ -35,4 +35,6 @@ ___
 
 The type of the object.
 
-Inherited from: [ITypeBase](models_itypebase.itypebase.md).[type](models_itypebase.itypebase.md#type)
+#### Inherited from
+
+[ITypeBase](models_itypebase.itypebase.md).[type](models_itypebase.itypebase.md#type)

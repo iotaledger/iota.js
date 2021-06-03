@@ -8,7 +8,7 @@ Ed25519Address address.
 
 ## Hierarchy
 
-- [*ITypeBase*](models_itypebase.itypebase.md)<``0``\>
+- [ITypeBase](models_itypebase.itypebase.md)<``0``\>
 
   ↳ **IEd25519Address**
 
@@ -23,7 +23,7 @@ Ed25519Address address.
 
 ### address
 
-• **address**: *string*
+• **address**: `string`
 
 The address.
 
@@ -35,4 +35,6 @@ ___
 
 The type of the object.
 
-Inherited from: [ITypeBase](models_itypebase.itypebase.md).[type](models_itypebase.itypebase.md#type)
+#### Inherited from
+
+[ITypeBase](models_itypebase.itypebase.md).[type](models_itypebase.itypebase.md#type)

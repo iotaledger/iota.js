@@ -8,7 +8,7 @@ Client interface definition for API communication.
 
 ## Implemented by
 
-- [*SingleNodeClient*](../classes/clients_singlenodeclient.singlenodeclient.md)
+- [SingleNodeClient](../classes/clients_singlenodeclient.singlenodeclient.md)
 
 ## Table of contents
 
@@ -43,7 +43,7 @@ Client interface definition for API communication.
 
 ### address
 
-▸ **address**(`addressBech32`: *string*): *Promise*<[*IAddressResponse*](models_api_iaddressresponse.iaddressresponse.md)\>
+▸ **address**(`addressBech32`): `Promise`<[IAddressResponse](models_api_iaddressresponse.iaddressresponse.md)\>
 
 Get the address details using bech32 address.
 
@@ -51,9 +51,11 @@ Get the address details using bech32 address.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `addressBech32` | *string* | The address to get the details for. |
+| `addressBech32` | `string` | The address to get the details for. |
 
-**Returns:** *Promise*<[*IAddressResponse*](models_api_iaddressresponse.iaddressresponse.md)\>
+#### Returns
+
+`Promise`<[IAddressResponse](models_api_iaddressresponse.iaddressresponse.md)\>
 
 The address details.
 
@@ -61,7 +63,7 @@ ___
 
 ### addressEd25519
 
-▸ **addressEd25519**(`addressEd25519`: *string*): *Promise*<[*IAddressResponse*](models_api_iaddressresponse.iaddressresponse.md)\>
+▸ **addressEd25519**(`addressEd25519`): `Promise`<[IAddressResponse](models_api_iaddressresponse.iaddressresponse.md)\>
 
 Get the address details using ed25519 address.
 
@@ -69,9 +71,11 @@ Get the address details using ed25519 address.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `addressEd25519` | *string* | The address to get the details for. |
+| `addressEd25519` | `string` | The address to get the details for. |
 
-**Returns:** *Promise*<[*IAddressResponse*](models_api_iaddressresponse.iaddressresponse.md)\>
+#### Returns
+
+`Promise`<[IAddressResponse](models_api_iaddressresponse.iaddressresponse.md)\>
 
 The address details.
 
@@ -79,7 +83,7 @@ ___
 
 ### addressEd25519Outputs
 
-▸ **addressEd25519Outputs**(`addressEd25519`: *string*, `type?`: *number*, `includeSpent?`: *boolean*): *Promise*<[*IAddressOutputsResponse*](models_api_iaddressoutputsresponse.iaddressoutputsresponse.md)\>
+▸ **addressEd25519Outputs**(`addressEd25519`, `type?`, `includeSpent?`): `Promise`<[IAddressOutputsResponse](models_api_iaddressoutputsresponse.iaddressoutputsresponse.md)\>
 
 Get the address outputs.
 
@@ -87,11 +91,13 @@ Get the address outputs.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `addressEd25519` | *string* | The address to get the outputs for. |
-| `type?` | *number* | Filter the type of outputs you are looking up, defaults to all. |
-| `includeSpent?` | *boolean* | Filter the type of outputs you are looking up, defaults to false. |
+| `addressEd25519` | `string` | The address to get the outputs for. |
+| `type?` | `number` | Filter the type of outputs you are looking up, defaults to all. |
+| `includeSpent?` | `boolean` | Filter the type of outputs you are looking up, defaults to false. |
 
-**Returns:** *Promise*<[*IAddressOutputsResponse*](models_api_iaddressoutputsresponse.iaddressoutputsresponse.md)\>
+#### Returns
+
+`Promise`<[IAddressOutputsResponse](models_api_iaddressoutputsresponse.iaddressoutputsresponse.md)\>
 
 The address outputs.
 
@@ -99,7 +105,7 @@ ___
 
 ### addressOutputs
 
-▸ **addressOutputs**(`addressBech32`: *string*, `type?`: *number*, `includeSpent?`: *boolean*): *Promise*<[*IAddressOutputsResponse*](models_api_iaddressoutputsresponse.iaddressoutputsresponse.md)\>
+▸ **addressOutputs**(`addressBech32`, `type?`, `includeSpent?`): `Promise`<[IAddressOutputsResponse](models_api_iaddressoutputsresponse.iaddressoutputsresponse.md)\>
 
 Get the address outputs using bech32 address.
 
@@ -107,11 +113,13 @@ Get the address outputs using bech32 address.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `addressBech32` | *string* | The address to get the outputs for. |
-| `type?` | *number* | Filter the type of outputs you are looking up, defaults to all. |
-| `includeSpent?` | *boolean* | Filter the type of outputs you are looking up, defaults to false. |
+| `addressBech32` | `string` | The address to get the outputs for. |
+| `type?` | `number` | Filter the type of outputs you are looking up, defaults to all. |
+| `includeSpent?` | `boolean` | Filter the type of outputs you are looking up, defaults to false. |
 
-**Returns:** *Promise*<[*IAddressOutputsResponse*](models_api_iaddressoutputsresponse.iaddressoutputsresponse.md)\>
+#### Returns
+
+`Promise`<[IAddressOutputsResponse](models_api_iaddressoutputsresponse.iaddressoutputsresponse.md)\>
 
 The address outputs.
 
@@ -119,11 +127,13 @@ ___
 
 ### health
 
-▸ **health**(): *Promise*<boolean\>
+▸ **health**(): `Promise`<boolean\>
 
 Get the health of the node.
 
-**Returns:** *Promise*<boolean\>
+#### Returns
+
+`Promise`<boolean\>
 
 True if the node is healthy.
 
@@ -131,11 +141,13 @@ ___
 
 ### info
 
-▸ **info**(): *Promise*<[*INodeInfo*](models_inodeinfo.inodeinfo.md)\>
+▸ **info**(): `Promise`<[INodeInfo](models_inodeinfo.inodeinfo.md)\>
 
 Get the info about the node.
 
-**Returns:** *Promise*<[*INodeInfo*](models_inodeinfo.inodeinfo.md)\>
+#### Returns
+
+`Promise`<[INodeInfo](models_inodeinfo.inodeinfo.md)\>
 
 The node information.
 
@@ -143,7 +155,7 @@ ___
 
 ### message
 
-▸ **message**(`messageId`: *string*): *Promise*<[*IMessage*](models_imessage.imessage.md)\>
+▸ **message**(`messageId`): `Promise`<[IMessage](models_imessage.imessage.md)\>
 
 Get the message data by id.
 
@@ -151,9 +163,11 @@ Get the message data by id.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `messageId` | *string* | The message to get the data for. |
+| `messageId` | `string` | The message to get the data for. |
 
-**Returns:** *Promise*<[*IMessage*](models_imessage.imessage.md)\>
+#### Returns
+
+`Promise`<[IMessage](models_imessage.imessage.md)\>
 
 The message data.
 
@@ -161,7 +175,7 @@ ___
 
 ### messageChildren
 
-▸ **messageChildren**(`messageId`: *string*): *Promise*<[*IChildrenResponse*](models_api_ichildrenresponse.ichildrenresponse.md)\>
+▸ **messageChildren**(`messageId`): `Promise`<[IChildrenResponse](models_api_ichildrenresponse.ichildrenresponse.md)\>
 
 Get the children of a message.
 
@@ -169,9 +183,11 @@ Get the children of a message.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `messageId` | *string* | The id of the message to get the children for. |
+| `messageId` | `string` | The id of the message to get the children for. |
 
-**Returns:** *Promise*<[*IChildrenResponse*](models_api_ichildrenresponse.ichildrenresponse.md)\>
+#### Returns
+
+`Promise`<[IChildrenResponse](models_api_ichildrenresponse.ichildrenresponse.md)\>
 
 The messages children.
 
@@ -179,7 +195,7 @@ ___
 
 ### messageMetadata
 
-▸ **messageMetadata**(`messageId`: *string*): *Promise*<[*IMessageMetadata*](models_imessagemetadata.imessagemetadata.md)\>
+▸ **messageMetadata**(`messageId`): `Promise`<[IMessageMetadata](models_imessagemetadata.imessagemetadata.md)\>
 
 Get the message metadata by id.
 
@@ -187,9 +203,11 @@ Get the message metadata by id.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `messageId` | *string* | The message to get the metadata for. |
+| `messageId` | `string` | The message to get the metadata for. |
 
-**Returns:** *Promise*<[*IMessageMetadata*](models_imessagemetadata.imessagemetadata.md)\>
+#### Returns
+
+`Promise`<[IMessageMetadata](models_imessagemetadata.imessagemetadata.md)\>
 
 The message metadata.
 
@@ -197,7 +215,7 @@ ___
 
 ### messageRaw
 
-▸ **messageRaw**(`messageId`: *string*): *Promise*<Uint8Array\>
+▸ **messageRaw**(`messageId`): `Promise`<Uint8Array\>
 
 Get the message raw data by id.
 
@@ -205,9 +223,11 @@ Get the message raw data by id.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `messageId` | *string* | The message to get the data for. |
+| `messageId` | `string` | The message to get the data for. |
 
-**Returns:** *Promise*<Uint8Array\>
+#### Returns
+
+`Promise`<Uint8Array\>
 
 The message raw data.
 
@@ -215,7 +235,7 @@ ___
 
 ### messageSubmit
 
-▸ **messageSubmit**(`message`: [*IMessage*](models_imessage.imessage.md)): *Promise*<string\>
+▸ **messageSubmit**(`message`): `Promise`<string\>
 
 Submit message.
 
@@ -223,9 +243,11 @@ Submit message.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `message` | [*IMessage*](models_imessage.imessage.md) | The message to submit. |
+| `message` | [IMessage](models_imessage.imessage.md) | The message to submit. |
 
-**Returns:** *Promise*<string\>
+#### Returns
+
+`Promise`<string\>
 
 The messageId.
 
@@ -233,7 +255,7 @@ ___
 
 ### messageSubmitRaw
 
-▸ **messageSubmitRaw**(`message`: *Uint8Array*): *Promise*<string\>
+▸ **messageSubmitRaw**(`message`): `Promise`<string\>
 
 Submit message in raw format.
 
@@ -241,9 +263,11 @@ Submit message in raw format.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `message` | *Uint8Array* | The message to submit. |
+| `message` | `Uint8Array` | The message to submit. |
 
-**Returns:** *Promise*<string\>
+#### Returns
+
+`Promise`<string\>
 
 The messageId.
 
@@ -251,7 +275,7 @@ ___
 
 ### messagesFind
 
-▸ **messagesFind**(`indexationKey`: *string* \| *Uint8Array*): *Promise*<[*IMessagesResponse*](models_api_imessagesresponse.imessagesresponse.md)\>
+▸ **messagesFind**(`indexationKey`): `Promise`<[IMessagesResponse](models_api_imessagesresponse.imessagesresponse.md)\>
 
 Find messages by index.
 
@@ -259,9 +283,11 @@ Find messages by index.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `indexationKey` | *string* \| *Uint8Array* | The index value as a byte array or UTF8 string. |
+| `indexationKey` | `string` \| `Uint8Array` | The index value as a byte array or UTF8 string. |
 
-**Returns:** *Promise*<[*IMessagesResponse*](models_api_imessagesresponse.imessagesresponse.md)\>
+#### Returns
+
+`Promise`<[IMessagesResponse](models_api_imessagesresponse.imessagesresponse.md)\>
 
 The messageId.
 
@@ -269,7 +295,7 @@ ___
 
 ### milestone
 
-▸ **milestone**(`index`: *number*): *Promise*<[*IMilestoneResponse*](models_api_imilestoneresponse.imilestoneresponse.md)\>
+▸ **milestone**(`index`): `Promise`<[IMilestoneResponse](models_api_imilestoneresponse.imilestoneresponse.md)\>
 
 Get the requested milestone.
 
@@ -277,9 +303,11 @@ Get the requested milestone.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `index` | *number* | The index of the milestone to get. |
+| `index` | `number` | The index of the milestone to get. |
 
-**Returns:** *Promise*<[*IMilestoneResponse*](models_api_imilestoneresponse.imilestoneresponse.md)\>
+#### Returns
+
+`Promise`<[IMilestoneResponse](models_api_imilestoneresponse.imilestoneresponse.md)\>
 
 The milestone details.
 
@@ -287,7 +315,7 @@ ___
 
 ### milestoneUtxoChanges
 
-▸ **milestoneUtxoChanges**(`index`: *number*): *Promise*<[*IMilestoneUtxoChangesResponse*](models_api_imilestoneutxochangesresponse.imilestoneutxochangesresponse.md)\>
+▸ **milestoneUtxoChanges**(`index`): `Promise`<[IMilestoneUtxoChangesResponse](models_api_imilestoneutxochangesresponse.imilestoneutxochangesresponse.md)\>
 
 Get the requested milestone utxo changes.
 
@@ -295,9 +323,11 @@ Get the requested milestone utxo changes.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `index` | *number* | The index of the milestone to request the changes for. |
+| `index` | `number` | The index of the milestone to request the changes for. |
 
-**Returns:** *Promise*<[*IMilestoneUtxoChangesResponse*](models_api_imilestoneutxochangesresponse.imilestoneutxochangesresponse.md)\>
+#### Returns
+
+`Promise`<[IMilestoneUtxoChangesResponse](models_api_imilestoneutxochangesresponse.imilestoneutxochangesresponse.md)\>
 
 The milestone utxo changes details.
 
@@ -305,7 +335,7 @@ ___
 
 ### output
 
-▸ **output**(`outputId`: *string*): *Promise*<[*IOutputResponse*](models_api_ioutputresponse.ioutputresponse.md)\>
+▸ **output**(`outputId`): `Promise`<[IOutputResponse](models_api_ioutputresponse.ioutputresponse.md)\>
 
 Find an output by its identifier.
 
@@ -313,9 +343,11 @@ Find an output by its identifier.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `outputId` | *string* | The id of the output to get. |
+| `outputId` | `string` | The id of the output to get. |
 
-**Returns:** *Promise*<[*IOutputResponse*](models_api_ioutputresponse.ioutputresponse.md)\>
+#### Returns
+
+`Promise`<[IOutputResponse](models_api_ioutputresponse.ioutputresponse.md)\>
 
 The output details.
 
@@ -323,7 +355,7 @@ ___
 
 ### peer
 
-▸ **peer**(`peerId`: *string*): *Promise*<[*IPeer*](models_ipeer.ipeer.md)\>
+▸ **peer**(`peerId`): `Promise`<[IPeer](models_ipeer.ipeer.md)\>
 
 Get a peer.
 
@@ -331,9 +363,11 @@ Get a peer.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `peerId` | *string* | The peer to delete. |
+| `peerId` | `string` | The peer to delete. |
 
-**Returns:** *Promise*<[*IPeer*](models_ipeer.ipeer.md)\>
+#### Returns
+
+`Promise`<[IPeer](models_ipeer.ipeer.md)\>
 
 The details for the created peer.
 
@@ -341,7 +375,7 @@ ___
 
 ### peerAdd
 
-▸ **peerAdd**(`multiAddress`: *string*, `alias?`: *string*): *Promise*<[*IPeer*](models_ipeer.ipeer.md)\>
+▸ **peerAdd**(`multiAddress`, `alias?`): `Promise`<[IPeer](models_ipeer.ipeer.md)\>
 
 Add a new peer.
 
@@ -349,10 +383,12 @@ Add a new peer.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `multiAddress` | *string* | The address of the peer to add. |
-| `alias?` | *string* | An optional alias for the peer. |
+| `multiAddress` | `string` | The address of the peer to add. |
+| `alias?` | `string` | An optional alias for the peer. |
 
-**Returns:** *Promise*<[*IPeer*](models_ipeer.ipeer.md)\>
+#### Returns
+
+`Promise`<[IPeer](models_ipeer.ipeer.md)\>
 
 The details for the created peer.
 
@@ -360,7 +396,7 @@ ___
 
 ### peerDelete
 
-▸ **peerDelete**(`peerId`: *string*): *Promise*<void\>
+▸ **peerDelete**(`peerId`): `Promise`<void\>
 
 Delete a peer.
 
@@ -368,9 +404,11 @@ Delete a peer.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `peerId` | *string* | The peer to delete. |
+| `peerId` | `string` | The peer to delete. |
 
-**Returns:** *Promise*<void\>
+#### Returns
+
+`Promise`<void\>
 
 Nothing.
 
@@ -378,11 +416,13 @@ ___
 
 ### peers
 
-▸ **peers**(): *Promise*<[*IPeer*](models_ipeer.ipeer.md)[]\>
+▸ **peers**(): `Promise`<[IPeer](models_ipeer.ipeer.md)[]\>
 
 Get the list of peers.
 
-**Returns:** *Promise*<[*IPeer*](models_ipeer.ipeer.md)[]\>
+#### Returns
+
+`Promise`<[IPeer](models_ipeer.ipeer.md)[]\>
 
 The list of peers.
 
@@ -390,7 +430,7 @@ ___
 
 ### receipts
 
-▸ **receipts**(`migratedAt?`: *number*): *Promise*<[*IReceiptsResponse*](models_api_ireceiptsresponse.ireceiptsresponse.md)\>
+▸ **receipts**(`migratedAt?`): `Promise`<[IReceiptsResponse](models_api_ireceiptsresponse.ireceiptsresponse.md)\>
 
 Get all the stored receipts or those for a given migrated at index.
 
@@ -398,9 +438,11 @@ Get all the stored receipts or those for a given migrated at index.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `migratedAt?` | *number* | The index the receipts were migrated at, if not supplied returns all stored receipts. |
+| `migratedAt?` | `number` | The index the receipts were migrated at, if not supplied returns all stored receipts. |
 
-**Returns:** *Promise*<[*IReceiptsResponse*](models_api_ireceiptsresponse.ireceiptsresponse.md)\>
+#### Returns
+
+`Promise`<[IReceiptsResponse](models_api_ireceiptsresponse.ireceiptsresponse.md)\>
 
 The stored receipts.
 
@@ -408,11 +450,13 @@ ___
 
 ### tips
 
-▸ **tips**(): *Promise*<[*ITipsResponse*](models_api_itipsresponse.itipsresponse.md)\>
+▸ **tips**(): `Promise`<[ITipsResponse](models_api_itipsresponse.itipsresponse.md)\>
 
 Get the tips from the node.
 
-**Returns:** *Promise*<[*ITipsResponse*](models_api_itipsresponse.itipsresponse.md)\>
+#### Returns
+
+`Promise`<[ITipsResponse](models_api_itipsresponse.itipsresponse.md)\>
 
 The tips.
 
@@ -420,7 +464,7 @@ ___
 
 ### transactionIncludedMessage
 
-▸ **transactionIncludedMessage**(`transactionId`: *string*): *Promise*<[*IMessage*](models_imessage.imessage.md)\>
+▸ **transactionIncludedMessage**(`transactionId`): `Promise`<[IMessage](models_imessage.imessage.md)\>
 
 Get the message that was included in the ledger for a transaction.
 
@@ -428,9 +472,11 @@ Get the message that was included in the ledger for a transaction.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `transactionId` | *string* | The id of the transaction to get the included message for. |
+| `transactionId` | `string` | The id of the transaction to get the included message for. |
 
-**Returns:** *Promise*<[*IMessage*](models_imessage.imessage.md)\>
+#### Returns
+
+`Promise`<[IMessage](models_imessage.imessage.md)\>
 
 The message.
 
@@ -438,10 +484,12 @@ ___
 
 ### treasury
 
-▸ **treasury**(): *Promise*<[*ITreasury*](models_itreasury.itreasury.md)\>
+▸ **treasury**(): `Promise`<[ITreasury](models_itreasury.itreasury.md)\>
 
 Get the current treasury output.
 
-**Returns:** *Promise*<[*ITreasury*](models_itreasury.itreasury.md)\>
+#### Returns
+
+`Promise`<[ITreasury](models_itreasury.itreasury.md)\>
 
 The details for the treasury.

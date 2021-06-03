@@ -25,7 +25,7 @@ Class to help with bip32 paths.
 
 ### constructor
 
-\+ **new Bip32Path**(`initialPath?`: *string*): [*Bip32Path*](crypto_bip32path.bip32path.md)
+• **new Bip32Path**(`initialPath?`)
 
 Create a new instance of Bip32Path.
 
@@ -33,19 +33,19 @@ Create a new instance of Bip32Path.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `initialPath?` | *string* | Initial path to create. |
-
-**Returns:** [*Bip32Path*](crypto_bip32path.bip32path.md)
+| `initialPath?` | `string` | Initial path to create. |
 
 ## Methods
 
 ### numberSegments
 
-▸ **numberSegments**(): *number*[]
+▸ **numberSegments**(): `number`[]
 
 Get the segments.
 
-**Returns:** *number*[]
+#### Returns
+
+`number`[]
 
 The segments as numbers.
 
@@ -53,17 +53,19 @@ ___
 
 ### pop
 
-▸ **pop**(): *void*
+▸ **pop**(): `void`
 
 Pop an index from the path.
 
-**Returns:** *void*
+#### Returns
+
+`void`
 
 ___
 
 ### push
 
-▸ **push**(`index`: *number*): *void*
+▸ **push**(`index`): `void`
 
 Push a new index on to the path.
 
@@ -71,15 +73,17 @@ Push a new index on to the path.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `index` | *number* | The index to add to the path. |
+| `index` | `number` | The index to add to the path. |
 
-**Returns:** *void*
+#### Returns
+
+`void`
 
 ___
 
 ### pushHardened
 
-▸ **pushHardened**(`index`: *number*): *void*
+▸ **pushHardened**(`index`): `void`
 
 Push a new hardened index on to the path.
 
@@ -87,19 +91,23 @@ Push a new hardened index on to the path.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `index` | *number* | The index to add to the path. |
+| `index` | `number` | The index to add to the path. |
 
-**Returns:** *void*
+#### Returns
+
+`void`
 
 ___
 
 ### toString
 
-▸ **toString**(): *string*
+▸ **toString**(): `string`
 
 Converts the path to a string.
 
-**Returns:** *string*
+#### Returns
+
+`string`
 
 The path as a string.
 
@@ -107,7 +115,7 @@ ___
 
 ### fromPath
 
-▸ `Static` **fromPath**(`bip32Path`: [*Bip32Path*](crypto_bip32path.bip32path.md)): [*Bip32Path*](crypto_bip32path.bip32path.md)
+▸ `Static` **fromPath**(`bip32Path`): [Bip32Path](crypto_bip32path.bip32path.md)
 
 Construct a new path by cloning an existing one.
 
@@ -115,8 +123,10 @@ Construct a new path by cloning an existing one.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `bip32Path` | [*Bip32Path*](crypto_bip32path.bip32path.md) | The path to clone. |
+| `bip32Path` | [Bip32Path](crypto_bip32path.bip32path.md) | The path to clone. |
 
-**Returns:** [*Bip32Path*](crypto_bip32path.bip32path.md)
+#### Returns
+
+[Bip32Path](crypto_bip32path.bip32path.md)
 
 A new instance of Bip32Path.

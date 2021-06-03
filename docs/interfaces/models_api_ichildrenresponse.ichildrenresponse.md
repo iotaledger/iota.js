@@ -19,7 +19,7 @@ List of children found.
 
 ### childrenMessageIds
 
-• **childrenMessageIds**: *string*[]
+• **childrenMessageIds**: `string`[]
 
 The ids of the messages children.
 
@@ -27,7 +27,7 @@ ___
 
 ### count
 
-• **count**: *number*
+• **count**: `number`
 
 The number of items returned.
 
@@ -35,7 +35,7 @@ ___
 
 ### maxResults
 
-• **maxResults**: *number*
+• **maxResults**: `number`
 
 The max number of results returned.
 
@@ -43,6 +43,6 @@ ___
 
 ### messageId
 
-• **messageId**: *string*
+• **messageId**: `string`
 
 The message id that the children are for.

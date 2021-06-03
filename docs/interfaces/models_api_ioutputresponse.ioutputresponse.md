@@ -20,7 +20,7 @@ Details of an output.
 
 ### isSpent
 
-• **isSpent**: *boolean*
+• **isSpent**: `boolean`
 
 Is the output spent.
 
@@ -28,7 +28,7 @@ ___
 
 ### messageId
 
-• **messageId**: *string*
+• **messageId**: `string`
 
 The message id the output was contained in.
 
@@ -36,7 +36,7 @@ ___
 
 ### output
 
-• **output**: [*ISigLockedSingleOutput*](models_isiglockedsingleoutput.isiglockedsingleoutput.md) \| [*ISigLockedDustAllowanceOutput*](models_isiglockeddustallowanceoutput.isiglockeddustallowanceoutput.md)
+• **output**: [ISigLockedSingleOutput](models_isiglockedsingleoutput.isiglockedsingleoutput.md) \| [ISigLockedDustAllowanceOutput](models_isiglockeddustallowanceoutput.isiglockeddustallowanceoutput.md)
 
 The output.
 
@@ -44,7 +44,7 @@ ___
 
 ### outputIndex
 
-• **outputIndex**: *number*
+• **outputIndex**: `number`
 
 The index for the output.
 
@@ -52,6 +52,6 @@ ___
 
 ### transactionId
 
-• **transactionId**: *string*
+• **transactionId**: `string`
 
 The transaction id for the output.

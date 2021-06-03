@@ -16,6 +16,6 @@
 
 ### SIG\_LOCKED\_DUST\_ALLOWANCE\_OUTPUT\_TYPE
 
-• `Const` **SIG\_LOCKED\_DUST\_ALLOWANCE\_OUTPUT\_TYPE**: ``1``= 1
+• `Const` **SIG\_LOCKED\_DUST\_ALLOWANCE\_OUTPUT\_TYPE**: ``1``
 
 The global type for the sig locked dust allowance output.

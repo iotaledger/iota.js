@@ -8,7 +8,7 @@ Treasury Output.
 
 ## Hierarchy
 
-- [*ITypeBase*](models_itypebase.itypebase.md)<``2``\>
+- [ITypeBase](models_itypebase.itypebase.md)<``2``\>
 
   ↳ **ITreasuryOutput**
 
@@ -23,7 +23,7 @@ Treasury Output.
 
 ### amount
 
-• **amount**: *number*
+• **amount**: `number`
 
 The amount of the output.
 
@@ -35,4 +35,6 @@ ___
 
 The type of the object.
 
-Inherited from: [ITypeBase](models_itypebase.itypebase.md).[type](models_itypebase.itypebase.md#type)
+#### Inherited from
+
+[ITypeBase](models_itypebase.itypebase.md).[type](models_itypebase.itypebase.md#type)

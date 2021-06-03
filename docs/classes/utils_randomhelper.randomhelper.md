@@ -20,15 +20,13 @@ Class to help with random generation.
 
 ### constructor
 
-\+ **new RandomHelper**(): [*RandomHelper*](utils_randomhelper.randomhelper.md)
-
-**Returns:** [*RandomHelper*](utils_randomhelper.randomhelper.md)
+• **new RandomHelper**()
 
 ## Methods
 
 ### generate
 
-▸ `Static` **generate**(`length`: *number*): *Uint8Array*
+▸ `Static` **generate**(`length`): `Uint8Array`
 
 Generate a new random array.
 
@@ -36,8 +34,10 @@ Generate a new random array.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `length` | *number* | The length of buffer to create. |
+| `length` | `number` | The length of buffer to create. |
 
-**Returns:** *Uint8Array*
+#### Returns
+
+`Uint8Array`
 
 The random array.

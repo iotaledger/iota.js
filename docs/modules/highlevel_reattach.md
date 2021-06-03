@@ -12,7 +12,7 @@
 
 ### reattach
 
-▸ **reattach**(`client`: [*IClient*](../interfaces/models_iclient.iclient.md) \| *string*, `messageId`: *string*): *Promise*<{}\>
+▸ **reattach**(`client`, `messageId`): `Promise`<`Object`\>
 
 Reattach an existing message.
 
@@ -20,9 +20,11 @@ Reattach an existing message.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `client` | [*IClient*](../interfaces/models_iclient.iclient.md) \| *string* | The client or node endpoint to perform the reattach with. |
-| `messageId` | *string* | The message to reattach. |
+| `client` | [IClient](../interfaces/models_iclient.iclient.md) \| `string` | The client or node endpoint to perform the reattach with. |
+| `messageId` | `string` | The message to reattach. |
 
-**Returns:** *Promise*<{}\>
+#### Returns
+
+`Promise`<`Object`\>
 
 The id and message that were reattached.

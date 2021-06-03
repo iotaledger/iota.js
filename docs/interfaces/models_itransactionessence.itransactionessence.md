@@ -8,7 +8,7 @@ Transaction payload.
 
 ## Hierarchy
 
-- [*ITypeBase*](models_itypebase.itypebase.md)<``0``\>
+- [ITypeBase](models_itypebase.itypebase.md)<``0``\>
 
   ↳ **ITransactionEssence**
 
@@ -25,7 +25,7 @@ Transaction payload.
 
 ### inputs
 
-• **inputs**: [*IUTXOInput*](models_iutxoinput.iutxoinput.md)[]
+• **inputs**: [IUTXOInput](models_iutxoinput.iutxoinput.md)[]
 
 The inputs of the transaction.
 
@@ -33,7 +33,7 @@ ___
 
 ### outputs
 
-• **outputs**: ([*ISigLockedSingleOutput*](models_isiglockedsingleoutput.isiglockedsingleoutput.md) \| [*ISigLockedDustAllowanceOutput*](models_isiglockeddustallowanceoutput.isiglockeddustallowanceoutput.md))[]
+• **outputs**: ([ISigLockedSingleOutput](models_isiglockedsingleoutput.isiglockedsingleoutput.md) \| [ISigLockedDustAllowanceOutput](models_isiglockeddustallowanceoutput.isiglockeddustallowanceoutput.md))[]
 
 The outputs of the transaction.
 
@@ -41,7 +41,7 @@ ___
 
 ### payload
 
-• `Optional` **payload**: [*IIndexationPayload*](models_iindexationpayload.iindexationpayload.md)
+• `Optional` **payload**: [IIndexationPayload](models_iindexationpayload.iindexationpayload.md)
 
 Indexation payload.
 
@@ -53,4 +53,6 @@ ___
 
 The type of the object.
 
-Inherited from: [ITypeBase](models_itypebase.itypebase.md).[type](models_itypebase.itypebase.md#type)
+#### Inherited from
+
+[ITypeBase](models_itypebase.itypebase.md).[type](models_itypebase.itypebase.md#type)

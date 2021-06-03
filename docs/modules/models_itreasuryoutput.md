@@ -16,6 +16,6 @@
 
 ### TREASURY\_OUTPUT\_TYPE
 
-• `Const` **TREASURY\_OUTPUT\_TYPE**: ``2``= 2
+• `Const` **TREASURY\_OUTPUT\_TYPE**: ``2``
 
 The global type for the treasury output.

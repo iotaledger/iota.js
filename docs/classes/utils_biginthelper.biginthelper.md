@@ -24,19 +24,19 @@ Helper methods for bigints.
 
 ### constructor
 
-\+ **new BigIntHelper**(): [*BigIntHelper*](utils_biginthelper.biginthelper.md)
-
-**Returns:** [*BigIntHelper*](utils_biginthelper.biginthelper.md)
+• **new BigIntHelper**()
 
 ## Methods
 
 ### random
 
-▸ `Static` **random**(): *bigint*
+▸ `Static` **random**(): `bigint`
 
 Generate a random bigint.
 
-**Returns:** *bigint*
+#### Returns
+
+`bigint`
 
 The bitint.
 
@@ -44,7 +44,7 @@ ___
 
 ### read3
 
-▸ `Static` **read3**(`data`: *Uint8Array*, `byteOffset`: *number*): *bigint*
+▸ `Static` **read3**(`data`, `byteOffset`): `bigint`
 
 Load 3 bytes from array as bigint.
 
@@ -52,10 +52,12 @@ Load 3 bytes from array as bigint.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `data` | *Uint8Array* | The input array. |
-| `byteOffset` | *number* | The start index to read from. |
+| `data` | `Uint8Array` | The input array. |
+| `byteOffset` | `number` | The start index to read from. |
 
-**Returns:** *bigint*
+#### Returns
+
+`bigint`
 
 The bigint.
 
@@ -63,7 +65,7 @@ ___
 
 ### read4
 
-▸ `Static` **read4**(`data`: *Uint8Array*, `byteOffset`: *number*): *bigint*
+▸ `Static` **read4**(`data`, `byteOffset`): `bigint`
 
 Load 4 bytes from array as bigint.
 
@@ -71,10 +73,12 @@ Load 4 bytes from array as bigint.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `data` | *Uint8Array* | The input array. |
-| `byteOffset` | *number* | The start index to read from. |
+| `data` | `Uint8Array` | The input array. |
+| `byteOffset` | `number` | The start index to read from. |
 
-**Returns:** *bigint*
+#### Returns
+
+`bigint`
 
 The bigint.
 
@@ -82,7 +86,7 @@ ___
 
 ### read8
 
-▸ `Static` **read8**(`data`: *Uint8Array*, `byteOffset`: *number*): *bigint*
+▸ `Static` **read8**(`data`, `byteOffset`): `bigint`
 
 Load 8 bytes from array as bigint.
 
@@ -90,10 +94,12 @@ Load 8 bytes from array as bigint.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `data` | *Uint8Array* | The data to read from. |
-| `byteOffset` | *number* | The start index to read from. |
+| `data` | `Uint8Array` | The data to read from. |
+| `byteOffset` | `number` | The start index to read from. |
 
-**Returns:** *bigint*
+#### Returns
+
+`bigint`
 
 The bigint.
 
@@ -101,7 +107,7 @@ ___
 
 ### write8
 
-▸ `Static` **write8**(`value`: *bigint*, `data`: *Uint8Array*, `byteOffset`: *number*): *void*
+▸ `Static` **write8**(`value`, `data`, `byteOffset`): `void`
 
 Convert a big int to bytes.
 
@@ -109,8 +115,10 @@ Convert a big int to bytes.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `value` | *bigint* | The bigint. |
-| `data` | *Uint8Array* | The buffer to write into. |
-| `byteOffset` | *number* | The start index to write from. |
+| `value` | `bigint` | The bigint. |
+| `data` | `Uint8Array` | The buffer to write into. |
+| `byteOffset` | `number` | The start index to write from. |
 
-**Returns:** *void*
+#### Returns
+
+`void`

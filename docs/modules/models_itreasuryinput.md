@@ -16,6 +16,6 @@
 
 ### TREASURY\_INPUT\_TYPE
 
-• `Const` **TREASURY\_INPUT\_TYPE**: ``1``= 1
+• `Const` **TREASURY\_INPUT\_TYPE**: ``1``
 
 The global type for the treasury input.

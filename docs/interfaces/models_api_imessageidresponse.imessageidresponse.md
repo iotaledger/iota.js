@@ -16,6 +16,6 @@ Message id response.
 
 ### messageId
 
-• **messageId**: *string*
+• **messageId**: `string`
 
 The message id.

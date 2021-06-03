@@ -8,7 +8,7 @@ Transaction payload.
 
 ## Hierarchy
 
-- [*ITypeBase*](models_itypebase.itypebase.md)<``0``\>
+- [ITypeBase](models_itypebase.itypebase.md)<``0``\>
 
   ↳ **ITransactionPayload**
 
@@ -24,7 +24,7 @@ Transaction payload.
 
 ### essence
 
-• **essence**: [*ITransactionEssence*](models_itransactionessence.itransactionessence.md)
+• **essence**: [ITransactionEssence](models_itransactionessence.itransactionessence.md)
 
 The index name.
 
@@ -36,12 +36,14 @@ ___
 
 The type of the object.
 
-Inherited from: [ITypeBase](models_itypebase.itypebase.md).[type](models_itypebase.itypebase.md#type)
+#### Inherited from
+
+[ITypeBase](models_itypebase.itypebase.md).[type](models_itypebase.itypebase.md#type)
 
 ___
 
 ### unlockBlocks
 
-• **unlockBlocks**: ([*ISignatureUnlockBlock*](models_isignatureunlockblock.isignatureunlockblock.md) \| [*IReferenceUnlockBlock*](models_ireferenceunlockblock.ireferenceunlockblock.md))[]
+• **unlockBlocks**: ([ISignatureUnlockBlock](models_isignatureunlockblock.isignatureunlockblock.md) \| [IReferenceUnlockBlock](models_ireferenceunlockblock.ireferenceunlockblock.md))[]
 
 The unlock blocks.

@@ -32,7 +32,7 @@ ProjectiveGroupElement: (X:Y:Z) satisfying x=X/Z, y=Y/Z.
 
 ### constructor
 
-\+ **new ProjectiveGroupElement**(`X?`: [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md), `Y?`: [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md), `Z?`: [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md)): [*ProjectiveGroupElement*](crypto_edwards25519_projectivegroupelement.projectivegroupelement.md)
+• **new ProjectiveGroupElement**(`X?`, `Y?`, `Z?`)
 
 Create a new instance of CompletedGroupElement.
 
@@ -40,17 +40,15 @@ Create a new instance of CompletedGroupElement.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `X?` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | The X element. |
-| `Y?` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | The Y Element. |
-| `Z?` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | The Z Element. |
-
-**Returns:** [*ProjectiveGroupElement*](crypto_edwards25519_projectivegroupelement.projectivegroupelement.md)
+| `X?` | [FieldElement](crypto_edwards25519_fieldelement.fieldelement.md) | The X element. |
+| `Y?` | [FieldElement](crypto_edwards25519_fieldelement.fieldelement.md) | The Y Element. |
+| `Z?` | [FieldElement](crypto_edwards25519_fieldelement.fieldelement.md) | The Z Element. |
 
 ## Properties
 
 ### X
 
-• **X**: [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md)
+• **X**: [FieldElement](crypto_edwards25519_fieldelement.fieldelement.md)
 
 The X element.
 
@@ -58,7 +56,7 @@ ___
 
 ### Y
 
-• **Y**: [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md)
+• **Y**: [FieldElement](crypto_edwards25519_fieldelement.fieldelement.md)
 
 The Y Element.
 
@@ -66,7 +64,7 @@ ___
 
 ### Z
 
-• **Z**: [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md)
+• **Z**: [FieldElement](crypto_edwards25519_fieldelement.fieldelement.md)
 
 The Z Element.
 
@@ -74,7 +72,7 @@ The Z Element.
 
 ### double
 
-▸ **double**(`r`: [*CompletedGroupElement*](crypto_edwards25519_completedgroupelement.completedgroupelement.md)): *void*
+▸ **double**(`r`): `void`
 
 Double the elements.
 
@@ -82,15 +80,17 @@ Double the elements.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `r` | [*CompletedGroupElement*](crypto_edwards25519_completedgroupelement.completedgroupelement.md) | The elements. |
+| `r` | [CompletedGroupElement](crypto_edwards25519_completedgroupelement.completedgroupelement.md) | The elements. |
 
-**Returns:** *void*
+#### Returns
+
+`void`
 
 ___
 
 ### doubleScalarMultVartime
 
-▸ **doubleScalarMultVartime**(`a`: *Uint8Array*, `A`: [*ExtendedGroupElement*](crypto_edwards25519_extendedgroupelement.extendedgroupelement.md), `b`: *Uint8Array*): *void*
+▸ **doubleScalarMultVartime**(`a`, `A`, `b`): `void`
 
 GeDoubleScalarMultVartime sets r = a*A + b*B
 where a = a[0]+256*a[1]+...+256^31 a[31]
@@ -101,17 +101,19 @@ B is the Ed25519 base point (x,4/5) with x positive.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `a` | *Uint8Array* | The a. |
-| `A` | [*ExtendedGroupElement*](crypto_edwards25519_extendedgroupelement.extendedgroupelement.md) | The A. |
-| `b` | *Uint8Array* | The b. |
+| `a` | `Uint8Array` | The a. |
+| `A` | [ExtendedGroupElement](crypto_edwards25519_extendedgroupelement.extendedgroupelement.md) | The A. |
+| `b` | `Uint8Array` | The b. |
 
-**Returns:** *void*
+#### Returns
+
+`void`
 
 ___
 
 ### toBytes
 
-▸ **toBytes**(`s`: *Uint8Array*): *void*
+▸ **toBytes**(`s`): `void`
 
 Convert the element to bytes.
 
@@ -119,15 +121,17 @@ Convert the element to bytes.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `s` | *Uint8Array* | The bytes. |
+| `s` | `Uint8Array` | The bytes. |
 
-**Returns:** *void*
+#### Returns
+
+`void`
 
 ___
 
 ### toExtended
 
-▸ **toExtended**(`r`: [*ExtendedGroupElement*](crypto_edwards25519_extendedgroupelement.extendedgroupelement.md)): *void*
+▸ **toExtended**(`r`): `void`
 
 Convert to extended form.
 
@@ -135,16 +139,20 @@ Convert to extended form.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `r` | [*ExtendedGroupElement*](crypto_edwards25519_extendedgroupelement.extendedgroupelement.md) | The extended element. |
+| `r` | [ExtendedGroupElement](crypto_edwards25519_extendedgroupelement.extendedgroupelement.md) | The extended element. |
 
-**Returns:** *void*
+#### Returns
+
+`void`
 
 ___
 
 ### zero
 
-▸ **zero**(): *void*
+▸ **zero**(): `void`
 
 Zero the elements.
 
-**Returns:** *void*
+#### Returns
+
+`void`

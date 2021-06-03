@@ -16,6 +16,6 @@ Response from the tips endpoint.
 
 ### tipMessageIds
 
-• **tipMessageIds**: *string*[]
+• **tipMessageIds**: `string`[]
 
 The message ids of the tip.

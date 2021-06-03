@@ -8,7 +8,7 @@ Class to represent errors from Client.
 
 ## Hierarchy
 
-- *Error*
+- `Error`
 
   ↳ **ClientError**
 
@@ -33,7 +33,7 @@ Class to represent errors from Client.
 
 ### constructor
 
-\+ **new ClientError**(`message`: *string*, `route`: *string*, `httpStatus`: *number*, `code?`: *string*): [*ClientError*](clients_clienterror.clienterror.md)
+• **new ClientError**(`message`, `route`, `httpStatus`, `code?`)
 
 Create a new instance of ClientError.
 
@@ -41,20 +41,20 @@ Create a new instance of ClientError.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `message` | *string* | The message for the error. |
-| `route` | *string* | The route the request was made to. |
-| `httpStatus` | *number* | The http status code. |
-| `code?` | *string* | The code in the payload. |
+| `message` | `string` | The message for the error. |
+| `route` | `string` | The route the request was made to. |
+| `httpStatus` | `number` | The http status code. |
+| `code?` | `string` | The code in the payload. |
 
-**Returns:** [*ClientError*](clients_clienterror.clienterror.md)
+#### Overrides
 
-Overrides: Error.constructor
+Error.constructor
 
 ## Properties
 
 ### code
 
-• `Optional` **code**: *string*
+• `Optional` **code**: `string`
 
 The code return in the payload.
 
@@ -62,7 +62,7 @@ ___
 
 ### httpStatus
 
-• **httpStatus**: *number*
+• **httpStatus**: `number`
 
 The HTTP status code returned.
 
@@ -70,7 +70,7 @@ ___
 
 ### route
 
-• **route**: *string*
+• **route**: `string`
 
 The route the request was made to.
 
@@ -78,7 +78,7 @@ ___
 
 ### prepareStackTrace
 
-▪ `Static` `Optional` **prepareStackTrace**: (`err`: Error, `stackTraces`: CallSite[]) => *any*
+▪ `Static` `Optional` **prepareStackTrace**: (`err`: `Error`, `stackTraces`: `CallSite`[]) => `any`
 
 Optional override for formatting stack traces
 
@@ -86,24 +86,28 @@ Optional override for formatting stack traces
 
 #### Type declaration
 
-▸ (`err`: Error, `stackTraces`: CallSite[]): *any*
+▸ (`err`, `stackTraces`): `any`
 
-#### Parameters
+##### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `err` | Error |
-| `stackTraces` | CallSite[] |
+| `err` | `Error` |
+| `stackTraces` | `CallSite`[] |
 
-**Returns:** *any*
+##### Returns
 
-Inherited from: Error.prepareStackTrace
+`any`
+
+#### Inherited from
+
+Error.prepareStackTrace
 
 ## Methods
 
 ### captureStackTrace
 
-▸ `Static` **captureStackTrace**(`targetObject`: *object*, `constructorOpt?`: Function): *void*
+▸ `Static` **captureStackTrace**(`targetObject`, `constructorOpt?`): `void`
 
 Create .stack property on a target object
 
@@ -111,9 +115,13 @@ Create .stack property on a target object
 
 | Name | Type |
 | :------ | :------ |
-| `targetObject` | *object* |
-| `constructorOpt?` | Function |
+| `targetObject` | `object` |
+| `constructorOpt?` | `Function` |
 
-**Returns:** *void*
+#### Returns
 
-Inherited from: Error.captureStackTrace
+`void`
+
+#### Inherited from
+
+Error.captureStackTrace

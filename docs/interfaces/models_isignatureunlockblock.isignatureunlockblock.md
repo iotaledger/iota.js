@@ -8,7 +8,7 @@ Signature unlock block.
 
 ## Hierarchy
 
-- [*ITypeBase*](models_itypebase.itypebase.md)<``0``\>
+- [ITypeBase](models_itypebase.itypebase.md)<``0``\>
 
   ↳ **ISignatureUnlockBlock**
 
@@ -23,7 +23,7 @@ Signature unlock block.
 
 ### signature
 
-• **signature**: [*IEd25519Signature*](models_ied25519signature.ied25519signature.md)
+• **signature**: [IEd25519Signature](models_ied25519signature.ied25519signature.md)
 
 The signature.
 
@@ -35,4 +35,6 @@ ___
 
 The type of the object.
 
-Inherited from: [ITypeBase](models_itypebase.itypebase.md).[type](models_itypebase.itypebase.md#type)
+#### Inherited from
+
+[ITypeBase](models_itypebase.itypebase.md).[type](models_itypebase.itypebase.md#type)

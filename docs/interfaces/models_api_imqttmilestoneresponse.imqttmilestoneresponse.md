@@ -17,7 +17,7 @@ Milestone.
 
 ### index
 
-• **index**: *number*
+• **index**: `number`
 
 The milestone index.
 
@@ -25,6 +25,6 @@ ___
 
 ### timestamp
 
-• **timestamp**: *number*
+• **timestamp**: `number`
 
 The timestamp of the milestone.

@@ -35,7 +35,7 @@ ExtendedGroupElement: (X:Y:Z:T) satisfying x=X/Z, y=Y/Z, XY=ZT.
 
 ### constructor
 
-\+ **new ExtendedGroupElement**(`X?`: [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md), `Y?`: [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md), `Z?`: [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md), `T?`: [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md)): [*ExtendedGroupElement*](crypto_edwards25519_extendedgroupelement.extendedgroupelement.md)
+• **new ExtendedGroupElement**(`X?`, `Y?`, `Z?`, `T?`)
 
 Create a new instance of ExtendedGroupElement.
 
@@ -43,18 +43,16 @@ Create a new instance of ExtendedGroupElement.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `X?` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | The X element. |
-| `Y?` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | The Y Element. |
-| `Z?` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | The Z Element. |
-| `T?` | [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md) | The T Element. |
-
-**Returns:** [*ExtendedGroupElement*](crypto_edwards25519_extendedgroupelement.extendedgroupelement.md)
+| `X?` | [FieldElement](crypto_edwards25519_fieldelement.fieldelement.md) | The X element. |
+| `Y?` | [FieldElement](crypto_edwards25519_fieldelement.fieldelement.md) | The Y Element. |
+| `Z?` | [FieldElement](crypto_edwards25519_fieldelement.fieldelement.md) | The Z Element. |
+| `T?` | [FieldElement](crypto_edwards25519_fieldelement.fieldelement.md) | The T Element. |
 
 ## Properties
 
 ### T
 
-• **T**: [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md)
+• **T**: [FieldElement](crypto_edwards25519_fieldelement.fieldelement.md)
 
 The T Element.
 
@@ -62,7 +60,7 @@ ___
 
 ### X
 
-• **X**: [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md)
+• **X**: [FieldElement](crypto_edwards25519_fieldelement.fieldelement.md)
 
 The X element.
 
@@ -70,7 +68,7 @@ ___
 
 ### Y
 
-• **Y**: [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md)
+• **Y**: [FieldElement](crypto_edwards25519_fieldelement.fieldelement.md)
 
 The Y Element.
 
@@ -78,7 +76,7 @@ ___
 
 ### Z
 
-• **Z**: [*FieldElement*](crypto_edwards25519_fieldelement.fieldelement.md)
+• **Z**: [FieldElement](crypto_edwards25519_fieldelement.fieldelement.md)
 
 The Z Element.
 
@@ -86,7 +84,7 @@ The Z Element.
 
 ### cofactorEqual
 
-▸ **cofactorEqual**(`q`: [*ExtendedGroupElement*](crypto_edwards25519_extendedgroupelement.extendedgroupelement.md)): *boolean*
+▸ **cofactorEqual**(`q`): `boolean`
 
 CofactorEqual checks whether p, q are equal up to cofactor multiplication
 ie if their difference is of small order.
@@ -95,9 +93,11 @@ ie if their difference is of small order.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `q` | [*ExtendedGroupElement*](crypto_edwards25519_extendedgroupelement.extendedgroupelement.md) | The extended group element. |
+| `q` | [ExtendedGroupElement](crypto_edwards25519_extendedgroupelement.extendedgroupelement.md) | The extended group element. |
 
-**Returns:** *boolean*
+#### Returns
+
+`boolean`
 
 True if they are equal.
 
@@ -105,7 +105,7 @@ ___
 
 ### double
 
-▸ **double**(`cachedGroupElement`: [*CompletedGroupElement*](crypto_edwards25519_completedgroupelement.completedgroupelement.md)): *void*
+▸ **double**(`cachedGroupElement`): `void`
 
 Double the element.
 
@@ -113,15 +113,17 @@ Double the element.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `cachedGroupElement` | [*CompletedGroupElement*](crypto_edwards25519_completedgroupelement.completedgroupelement.md) | The element to populate. |
+| `cachedGroupElement` | [CompletedGroupElement](crypto_edwards25519_completedgroupelement.completedgroupelement.md) | The element to populate. |
 
-**Returns:** *void*
+#### Returns
+
+`void`
 
 ___
 
 ### fromBytes
 
-▸ **fromBytes**(`bytes`: *Uint8Array*): *boolean*
+▸ **fromBytes**(`bytes`): `boolean`
 
 Populate the element from bytes.
 
@@ -129,9 +131,11 @@ Populate the element from bytes.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `bytes` | *Uint8Array* | The butes to populate from. |
+| `bytes` | `Uint8Array` | The butes to populate from. |
 
-**Returns:** *boolean*
+#### Returns
+
+`boolean`
 
 False is non-zero check.
 
@@ -139,7 +143,7 @@ ___
 
 ### scalarMultBase
 
-▸ **scalarMultBase**(`a`: *Uint8Array*): *void*
+▸ **scalarMultBase**(`a`): `void`
 
 GeScalarMultBase computes h = a*B, where
 a = a[0]+256*a[1]+...+256^31 a[31]
@@ -152,15 +156,17 @@ A[31] <= 127.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `a` | *Uint8Array* | The a. |
+| `a` | `Uint8Array` | The a. |
 
-**Returns:** *void*
+#### Returns
+
+`void`
 
 ___
 
 ### toBytes
 
-▸ **toBytes**(`bytes`: *Uint8Array*): *void*
+▸ **toBytes**(`bytes`): `void`
 
 Convert the element to bytes.
 
@@ -168,15 +174,17 @@ Convert the element to bytes.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `bytes` | *Uint8Array* | The array to store the bytes in. |
+| `bytes` | `Uint8Array` | The array to store the bytes in. |
 
-**Returns:** *void*
+#### Returns
+
+`void`
 
 ___
 
 ### toCached
 
-▸ **toCached**(`cacheGroupElement`: [*CachedGroupElement*](crypto_edwards25519_cachedgroupelement.cachedgroupelement.md)): *void*
+▸ **toCached**(`cacheGroupElement`): `void`
 
 Convert to a cached group element.
 
@@ -184,15 +192,17 @@ Convert to a cached group element.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `cacheGroupElement` | [*CachedGroupElement*](crypto_edwards25519_cachedgroupelement.cachedgroupelement.md) | The element to populate. |
+| `cacheGroupElement` | [CachedGroupElement](crypto_edwards25519_cachedgroupelement.cachedgroupelement.md) | The element to populate. |
 
-**Returns:** *void*
+#### Returns
+
+`void`
 
 ___
 
 ### toProjective
 
-▸ **toProjective**(`projectiveGroupElement`: [*ProjectiveGroupElement*](crypto_edwards25519_projectivegroupelement.projectivegroupelement.md)): *void*
+▸ **toProjective**(`projectiveGroupElement`): `void`
 
 Convert to a projective group element.
 
@@ -200,16 +210,20 @@ Convert to a projective group element.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `projectiveGroupElement` | [*ProjectiveGroupElement*](crypto_edwards25519_projectivegroupelement.projectivegroupelement.md) | The element to populate. |
+| `projectiveGroupElement` | [ProjectiveGroupElement](crypto_edwards25519_projectivegroupelement.projectivegroupelement.md) | The element to populate. |
 
-**Returns:** *void*
+#### Returns
+
+`void`
 
 ___
 
 ### zero
 
-▸ **zero**(): *void*
+▸ **zero**(): `void`
 
 Zero the elements.
 
-**Returns:** *void*
+#### Returns
+
+`void`

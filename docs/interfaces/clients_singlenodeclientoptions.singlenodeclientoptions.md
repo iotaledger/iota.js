@@ -21,7 +21,7 @@ Options used when constructing SingleNodeClient.
 
 ### basePath
 
-• `Optional` **basePath**: *string*
+• `Optional` **basePath**: `string`
 
 Base path for API location, defaults to /api/v1/.
 
@@ -29,17 +29,19 @@ ___
 
 ### headers
 
-• `Optional` **headers**: *object*
+• `Optional` **headers**: `Object`
 
 Additional headers to include in the requests.
 
-#### Type declaration
+#### Index signature
+
+▪ [id: `string`]: `string`
 
 ___
 
 ### password
 
-• `Optional` **password**: *string*
+• `Optional` **password**: `string`
 
 Password for the endpoint.
 
@@ -47,7 +49,7 @@ ___
 
 ### powProvider
 
-• `Optional` **powProvider**: [*IPowProvider*](models_ipowprovider.ipowprovider.md)
+• `Optional` **powProvider**: [IPowProvider](models_ipowprovider.ipowprovider.md)
 
 Use a custom pow provider instead of the one on the node.
 
@@ -55,7 +57,7 @@ ___
 
 ### timeout
 
-• `Optional` **timeout**: *number*
+• `Optional` **timeout**: `number`
 
 Timeout for API requests.
 
@@ -63,6 +65,6 @@ ___
 
 ### userName
 
-• `Optional` **userName**: *string*
+• `Optional` **userName**: `string`
 
 Username for the endpoint.

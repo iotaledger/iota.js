@@ -8,7 +8,7 @@ Milestone payload.
 
 ## Hierarchy
 
-- [*ITypeBase*](models_itypebase.itypebase.md)<``1``\>
+- [ITypeBase](models_itypebase.itypebase.md)<``1``\>
 
   ↳ **IMilestonePayload**
 
@@ -31,7 +31,7 @@ Milestone payload.
 
 ### inclusionMerkleProof
 
-• **inclusionMerkleProof**: *string*
+• **inclusionMerkleProof**: `string`
 
 The merkle proof inclusions.
 
@@ -39,7 +39,7 @@ ___
 
 ### index
 
-• **index**: *number*
+• **index**: `number`
 
 The index name.
 
@@ -47,7 +47,7 @@ ___
 
 ### nextPoWScore
 
-• **nextPoWScore**: *number*
+• **nextPoWScore**: `number`
 
 The next PoW score.
 
@@ -55,7 +55,7 @@ ___
 
 ### nextPoWScoreMilestoneIndex
 
-• **nextPoWScoreMilestoneIndex**: *number*
+• **nextPoWScoreMilestoneIndex**: `number`
 
 The milestone at which the next PoW score becomes active.
 
@@ -63,7 +63,7 @@ ___
 
 ### parentMessageIds
 
-• **parentMessageIds**: *string*[]
+• **parentMessageIds**: `string`[]
 
 The parents where this milestone attaches to.
 
@@ -71,7 +71,7 @@ ___
 
 ### publicKeys
 
-• **publicKeys**: *string*[]
+• **publicKeys**: `string`[]
 
 The public keys.
 
@@ -79,7 +79,7 @@ ___
 
 ### receipt
 
-• `Optional` **receipt**: [*IReceiptPayload*](models_ireceiptpayload.ireceiptpayload.md)
+• `Optional` **receipt**: [IReceiptPayload](models_ireceiptpayload.ireceiptpayload.md)
 
 Receipt payload.
 
@@ -87,7 +87,7 @@ ___
 
 ### signatures
 
-• **signatures**: *string*[]
+• **signatures**: `string`[]
 
 The signatures.
 
@@ -95,7 +95,7 @@ ___
 
 ### timestamp
 
-• **timestamp**: *number*
+• **timestamp**: `number`
 
 The timestamp of the milestone.
 
@@ -107,4 +107,6 @@ ___
 
 The type of the object.
 
-Inherited from: [ITypeBase](models_itypebase.itypebase.md).[type](models_itypebase.itypebase.md#type)
+#### Inherited from
+
+[ITypeBase](models_itypebase.itypebase.md).[type](models_itypebase.itypebase.md#type)

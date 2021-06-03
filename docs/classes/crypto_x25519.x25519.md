@@ -21,15 +21,13 @@ Implementation of X25519.
 
 ### constructor
 
-\+ **new X25519**(): [*X25519*](crypto_x25519.x25519.md)
-
-**Returns:** [*X25519*](crypto_x25519.x25519.md)
+• **new X25519**()
 
 ## Methods
 
 ### convertPrivateKeyToX25519
 
-▸ `Static` **convertPrivateKeyToX25519**(`ed25519PrivateKey`: *Uint8Array*): *Uint8Array*
+▸ `Static` **convertPrivateKeyToX25519**(`ed25519PrivateKey`): `Uint8Array`
 
 Convert Ed25519 private key to X25519 private key.
 
@@ -37,9 +35,11 @@ Convert Ed25519 private key to X25519 private key.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `ed25519PrivateKey` | *Uint8Array* | The ed25519 private key to convert. |
+| `ed25519PrivateKey` | `Uint8Array` | The ed25519 private key to convert. |
 
-**Returns:** *Uint8Array*
+#### Returns
+
+`Uint8Array`
 
 The x25519 private key.
 
@@ -47,7 +47,7 @@ ___
 
 ### convertPublicKeyToX25519
 
-▸ `Static` **convertPublicKeyToX25519**(`ed25519PublicKey`: *Uint8Array*): *Uint8Array*
+▸ `Static` **convertPublicKeyToX25519**(`ed25519PublicKey`): `Uint8Array`
 
 Convert Ed25519 public key to X25519 public key.
 
@@ -55,8 +55,10 @@ Convert Ed25519 public key to X25519 public key.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `ed25519PublicKey` | *Uint8Array* | The ed25519 public key to convert. |
+| `ed25519PublicKey` | `Uint8Array` | The ed25519 public key to convert. |
 
-**Returns:** *Uint8Array*
+#### Returns
+
+`Uint8Array`
 
 The x25519 public key.

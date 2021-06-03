@@ -16,6 +16,6 @@
 
 ### UTXO\_INPUT\_TYPE
 
-• `Const` **UTXO\_INPUT\_TYPE**: ``0``= 0
+• `Const` **UTXO\_INPUT\_TYPE**: ``0``
 
 The global type for the input.

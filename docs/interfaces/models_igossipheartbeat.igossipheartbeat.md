@@ -20,7 +20,7 @@ Gossip heartbeat.
 
 ### connectedNeighbors
 
-• **connectedNeighbors**: *number*
+• **connectedNeighbors**: `number`
 
 Connected Neighbours.
 
@@ -28,7 +28,7 @@ ___
 
 ### latestMilestoneIndex
 
-• **latestMilestoneIndex**: *number*
+• **latestMilestoneIndex**: `number`
 
 Latest milestone index.
 
@@ -36,7 +36,7 @@ ___
 
 ### prunedMilestoneIndex
 
-• **prunedMilestoneIndex**: *number*
+• **prunedMilestoneIndex**: `number`
 
 Pruned milestone index.
 
@@ -44,7 +44,7 @@ ___
 
 ### solidMilestoneIndex
 
-• **solidMilestoneIndex**: *number*
+• **solidMilestoneIndex**: `number`
 
 Solid milestone index.
 
@@ -52,6 +52,6 @@ ___
 
 ### syncedNeighbors
 
-• **syncedNeighbors**: *number*
+• **syncedNeighbors**: `number`
 
 Synced neighbours.

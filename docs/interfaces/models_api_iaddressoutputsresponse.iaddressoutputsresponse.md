@@ -21,7 +21,7 @@ List of outputs for an address.
 
 ### address
 
-• **address**: *string*
+• **address**: `string`
 
 The address that the outputs are for.
 
@@ -29,7 +29,7 @@ ___
 
 ### addressType
 
-• **addressType**: *number*
+• **addressType**: `number`
 
 The type for the address.
 
@@ -37,7 +37,7 @@ ___
 
 ### count
 
-• **count**: *number*
+• **count**: `number`
 
 The number of items returned.
 
@@ -45,7 +45,7 @@ ___
 
 ### ledgerIndex
 
-• **ledgerIndex**: *number*
+• **ledgerIndex**: `number`
 
 The ledger index at which these outputs where available at.
 
@@ -53,7 +53,7 @@ ___
 
 ### maxResults
 
-• **maxResults**: *number*
+• **maxResults**: `number`
 
 The max number of results returned.
 
@@ -61,6 +61,6 @@ ___
 
 ### outputIds
 
-• **outputIds**: *string*[]
+• **outputIds**: `string`[]
 
 The ids of the outputs.

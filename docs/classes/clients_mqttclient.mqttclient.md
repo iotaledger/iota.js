@@ -8,7 +8,7 @@ MQTT Client implementation for pub/sub communication.
 
 ## Implements
 
-- [*IMqttClient*](../interfaces/models_imqttclient.imqttclient.md)
+- [IMqttClient](../interfaces/models_imqttclient.imqttclient.md)
 
 ## Table of contents
 
@@ -40,7 +40,7 @@ MQTT Client implementation for pub/sub communication.
 
 ### constructor
 
-\+ **new MqttClient**(`endpoints`: *string* \| *string*[], `keepAliveTimeoutSeconds?`: *number*): [*MqttClient*](clients_mqttclient.mqttclient.md)
+• **new MqttClient**(`endpoints`, `keepAliveTimeoutSeconds?`)
 
 Create a new instace of MqttClient.
 
@@ -48,16 +48,14 @@ Create a new instace of MqttClient.
 
 | Name | Type | Default value | Description |
 | :------ | :------ | :------ | :------ |
-| `endpoints` | *string* \| *string*[] | - | The endpoint or endpoints list to connect to. |
-| `keepAliveTimeoutSeconds` | *number* | 30 | Timeout to reconnect if no messages received. |
-
-**Returns:** [*MqttClient*](clients_mqttclient.mqttclient.md)
+| `endpoints` | `string` \| `string`[] | `undefined` | The endpoint or endpoints list to connect to. |
+| `keepAliveTimeoutSeconds` | `number` | 30 | Timeout to reconnect if no messages received. |
 
 ## Methods
 
 ### addressEd25519Outputs
 
-▸ **addressEd25519Outputs**(`addressEd25519`: *string*, `callback`: (`topic`: *string*, `data`: [*IOutputResponse*](../interfaces/models_api_ioutputresponse.ioutputresponse.md)) => *void*): *string*
+▸ **addressEd25519Outputs**(`addressEd25519`, `callback`): `string`
 
 Subscribe to the ed25519 address for output updates.
 
@@ -65,20 +63,24 @@ Subscribe to the ed25519 address for output updates.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `addressEd25519` | *string* | The address to monitor. |
-| `callback` | (`topic`: *string*, `data`: [*IOutputResponse*](../interfaces/models_api_ioutputresponse.ioutputresponse.md)) => *void* | The callback which is called when new data arrives. |
+| `addressEd25519` | `string` | The address to monitor. |
+| `callback` | (`topic`: `string`, `data`: [IOutputResponse](../interfaces/models_api_ioutputresponse.ioutputresponse.md)) => `void` | The callback which is called when new data arrives. |
 
-**Returns:** *string*
+#### Returns
+
+`string`
 
 A subscription Id which can be used to unsubscribe.
 
-Implementation of: [IMqttClient](../interfaces/models_imqttclient.imqttclient.md)
+#### Implementation of
+
+[IMqttClient](../interfaces/models_imqttclient.imqttclient.md).[addressEd25519Outputs](../interfaces/models_imqttclient.imqttclient.md#addressed25519outputs)
 
 ___
 
 ### addressOutputs
 
-▸ **addressOutputs**(`addressBech32`: *string*, `callback`: (`topic`: *string*, `data`: [*IOutputResponse*](../interfaces/models_api_ioutputresponse.ioutputresponse.md)) => *void*): *string*
+▸ **addressOutputs**(`addressBech32`, `callback`): `string`
 
 Subscribe to the address for output updates.
 
@@ -86,20 +88,24 @@ Subscribe to the address for output updates.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `addressBech32` | *string* | The address to monitor. |
-| `callback` | (`topic`: *string*, `data`: [*IOutputResponse*](../interfaces/models_api_ioutputresponse.ioutputresponse.md)) => *void* | The callback which is called when new data arrives. |
+| `addressBech32` | `string` | The address to monitor. |
+| `callback` | (`topic`: `string`, `data`: [IOutputResponse](../interfaces/models_api_ioutputresponse.ioutputresponse.md)) => `void` | The callback which is called when new data arrives. |
 
-**Returns:** *string*
+#### Returns
+
+`string`
 
 A subscription Id which can be used to unsubscribe.
 
-Implementation of: [IMqttClient](../interfaces/models_imqttclient.imqttclient.md)
+#### Implementation of
+
+[IMqttClient](../interfaces/models_imqttclient.imqttclient.md).[addressOutputs](../interfaces/models_imqttclient.imqttclient.md#addressoutputs)
 
 ___
 
 ### index
 
-▸ **index**(`index`: *string* \| *Uint8Array*, `callback`: (`topic`: *string*, `data`: [*IMessage*](../interfaces/models_imessage.imessage.md), `raw`: *Uint8Array*) => *void*): *string*
+▸ **index**(`index`, `callback`): `string`
 
 Subscribe to get all messages for the specified index in object form.
 
@@ -107,20 +113,24 @@ Subscribe to get all messages for the specified index in object form.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `index` | *string* \| *Uint8Array* | The index to monitor. |
-| `callback` | (`topic`: *string*, `data`: [*IMessage*](../interfaces/models_imessage.imessage.md), `raw`: *Uint8Array*) => *void* | The callback which is called when new data arrives. |
+| `index` | `string` \| `Uint8Array` | The index to monitor. |
+| `callback` | (`topic`: `string`, `data`: [IMessage](../interfaces/models_imessage.imessage.md), `raw`: `Uint8Array`) => `void` | The callback which is called when new data arrives. |
 
-**Returns:** *string*
+#### Returns
+
+`string`
 
 A subscription Id which can be used to unsubscribe.
 
-Implementation of: [IMqttClient](../interfaces/models_imqttclient.imqttclient.md)
+#### Implementation of
+
+[IMqttClient](../interfaces/models_imqttclient.imqttclient.md).[index](../interfaces/models_imqttclient.imqttclient.md#index)
 
 ___
 
 ### indexRaw
 
-▸ **indexRaw**(`index`: *string* \| *Uint8Array*, `callback`: (`topic`: *string*, `data`: *Uint8Array*) => *void*): *string*
+▸ **indexRaw**(`index`, `callback`): `string`
 
 Subscribe to get all messages for the specified index in binary form.
 
@@ -128,20 +138,24 @@ Subscribe to get all messages for the specified index in binary form.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `index` | *string* \| *Uint8Array* | The index to monitor. |
-| `callback` | (`topic`: *string*, `data`: *Uint8Array*) => *void* | The callback which is called when new data arrives. |
+| `index` | `string` \| `Uint8Array` | The index to monitor. |
+| `callback` | (`topic`: `string`, `data`: `Uint8Array`) => `void` | The callback which is called when new data arrives. |
 
-**Returns:** *string*
+#### Returns
+
+`string`
 
 A subscription Id which can be used to unsubscribe.
 
-Implementation of: [IMqttClient](../interfaces/models_imqttclient.imqttclient.md)
+#### Implementation of
+
+[IMqttClient](../interfaces/models_imqttclient.imqttclient.md).[indexRaw](../interfaces/models_imqttclient.imqttclient.md#indexraw)
 
 ___
 
 ### messageMetadata
 
-▸ **messageMetadata**(`messageId`: *string*, `callback`: (`topic`: *string*, `data`: [*IMessageMetadata*](../interfaces/models_imessagemetadata.imessagemetadata.md)) => *void*): *string*
+▸ **messageMetadata**(`messageId`, `callback`): `string`
 
 Subscribe to metadata updates for a specific message.
 
@@ -149,20 +163,24 @@ Subscribe to metadata updates for a specific message.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `messageId` | *string* | The message to monitor. |
-| `callback` | (`topic`: *string*, `data`: [*IMessageMetadata*](../interfaces/models_imessagemetadata.imessagemetadata.md)) => *void* | The callback which is called when new data arrives. |
+| `messageId` | `string` | The message to monitor. |
+| `callback` | (`topic`: `string`, `data`: [IMessageMetadata](../interfaces/models_imessagemetadata.imessagemetadata.md)) => `void` | The callback which is called when new data arrives. |
 
-**Returns:** *string*
+#### Returns
+
+`string`
 
 A subscription Id which can be used to unsubscribe.
 
-Implementation of: [IMqttClient](../interfaces/models_imqttclient.imqttclient.md)
+#### Implementation of
+
+[IMqttClient](../interfaces/models_imqttclient.imqttclient.md).[messageMetadata](../interfaces/models_imqttclient.imqttclient.md#messagemetadata)
 
 ___
 
 ### messages
 
-▸ **messages**(`callback`: (`topic`: *string*, `data`: [*IMessage*](../interfaces/models_imessage.imessage.md), `raw`: *Uint8Array*) => *void*): *string*
+▸ **messages**(`callback`): `string`
 
 Subscribe to get all messages in object form.
 
@@ -170,19 +188,23 @@ Subscribe to get all messages in object form.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `callback` | (`topic`: *string*, `data`: [*IMessage*](../interfaces/models_imessage.imessage.md), `raw`: *Uint8Array*) => *void* | The callback which is called when new data arrives. |
+| `callback` | (`topic`: `string`, `data`: [IMessage](../interfaces/models_imessage.imessage.md), `raw`: `Uint8Array`) => `void` | The callback which is called when new data arrives. |
 
-**Returns:** *string*
+#### Returns
+
+`string`
 
 A subscription Id which can be used to unsubscribe.
 
-Implementation of: [IMqttClient](../interfaces/models_imqttclient.imqttclient.md)
+#### Implementation of
+
+[IMqttClient](../interfaces/models_imqttclient.imqttclient.md).[messages](../interfaces/models_imqttclient.imqttclient.md#messages)
 
 ___
 
 ### messagesMetadata
 
-▸ **messagesMetadata**(`callback`: (`topic`: *string*, `data`: [*IMessageMetadata*](../interfaces/models_imessagemetadata.imessagemetadata.md)) => *void*): *string*
+▸ **messagesMetadata**(`callback`): `string`
 
 Subscribe to get the metadata for all the messages.
 
@@ -190,19 +212,23 @@ Subscribe to get the metadata for all the messages.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `callback` | (`topic`: *string*, `data`: [*IMessageMetadata*](../interfaces/models_imessagemetadata.imessagemetadata.md)) => *void* | The callback which is called when new data arrives. |
+| `callback` | (`topic`: `string`, `data`: [IMessageMetadata](../interfaces/models_imessagemetadata.imessagemetadata.md)) => `void` | The callback which is called when new data arrives. |
 
-**Returns:** *string*
+#### Returns
+
+`string`
 
 A subscription Id which can be used to unsubscribe.
 
-Implementation of: [IMqttClient](../interfaces/models_imqttclient.imqttclient.md)
+#### Implementation of
+
+[IMqttClient](../interfaces/models_imqttclient.imqttclient.md).[messagesMetadata](../interfaces/models_imqttclient.imqttclient.md#messagesmetadata)
 
 ___
 
 ### messagesRaw
 
-▸ **messagesRaw**(`callback`: (`topic`: *string*, `data`: *Uint8Array*) => *void*): *string*
+▸ **messagesRaw**(`callback`): `string`
 
 Subscribe to get all messages in binary form.
 
@@ -210,19 +236,23 @@ Subscribe to get all messages in binary form.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `callback` | (`topic`: *string*, `data`: *Uint8Array*) => *void* | The callback which is called when new data arrives. |
+| `callback` | (`topic`: `string`, `data`: `Uint8Array`) => `void` | The callback which is called when new data arrives. |
 
-**Returns:** *string*
+#### Returns
+
+`string`
 
 A subscription Id which can be used to unsubscribe.
 
-Implementation of: [IMqttClient](../interfaces/models_imqttclient.imqttclient.md)
+#### Implementation of
+
+[IMqttClient](../interfaces/models_imqttclient.imqttclient.md).[messagesRaw](../interfaces/models_imqttclient.imqttclient.md#messagesraw)
 
 ___
 
 ### milestonesConfirmed
 
-▸ **milestonesConfirmed**(`callback`: (`topic`: *string*, `data`: [*IMqttMilestoneResponse*](../interfaces/models_api_imqttmilestoneresponse.imqttmilestoneresponse.md)) => *void*): *string*
+▸ **milestonesConfirmed**(`callback`): `string`
 
 Subscribe to the latest confirmed milestone updates.
 
@@ -230,19 +260,23 @@ Subscribe to the latest confirmed milestone updates.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `callback` | (`topic`: *string*, `data`: [*IMqttMilestoneResponse*](../interfaces/models_api_imqttmilestoneresponse.imqttmilestoneresponse.md)) => *void* | The callback which is called when new data arrives. |
+| `callback` | (`topic`: `string`, `data`: [IMqttMilestoneResponse](../interfaces/models_api_imqttmilestoneresponse.imqttmilestoneresponse.md)) => `void` | The callback which is called when new data arrives. |
 
-**Returns:** *string*
+#### Returns
+
+`string`
 
 A subscription Id which can be used to unsubscribe.
 
-Implementation of: [IMqttClient](../interfaces/models_imqttclient.imqttclient.md)
+#### Implementation of
+
+[IMqttClient](../interfaces/models_imqttclient.imqttclient.md).[milestonesConfirmed](../interfaces/models_imqttclient.imqttclient.md#milestonesconfirmed)
 
 ___
 
 ### milestonesLatest
 
-▸ **milestonesLatest**(`callback`: (`topic`: *string*, `data`: [*IMqttMilestoneResponse*](../interfaces/models_api_imqttmilestoneresponse.imqttmilestoneresponse.md)) => *void*): *string*
+▸ **milestonesLatest**(`callback`): `string`
 
 Subscribe to the latest milestone updates.
 
@@ -250,19 +284,23 @@ Subscribe to the latest milestone updates.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `callback` | (`topic`: *string*, `data`: [*IMqttMilestoneResponse*](../interfaces/models_api_imqttmilestoneresponse.imqttmilestoneresponse.md)) => *void* | The callback which is called when new data arrives. |
+| `callback` | (`topic`: `string`, `data`: [IMqttMilestoneResponse](../interfaces/models_api_imqttmilestoneresponse.imqttmilestoneresponse.md)) => `void` | The callback which is called when new data arrives. |
 
-**Returns:** *string*
+#### Returns
+
+`string`
 
 A subscription Id which can be used to unsubscribe.
 
-Implementation of: [IMqttClient](../interfaces/models_imqttclient.imqttclient.md)
+#### Implementation of
+
+[IMqttClient](../interfaces/models_imqttclient.imqttclient.md).[milestonesLatest](../interfaces/models_imqttclient.imqttclient.md#milestoneslatest)
 
 ___
 
 ### output
 
-▸ **output**(`outputId`: *string*, `callback`: (`topic`: *string*, `data`: [*IOutputResponse*](../interfaces/models_api_ioutputresponse.ioutputresponse.md)) => *void*): *string*
+▸ **output**(`outputId`, `callback`): `string`
 
 Subscribe to updates for a specific output.
 
@@ -270,20 +308,24 @@ Subscribe to updates for a specific output.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `outputId` | *string* | The output to monitor. |
-| `callback` | (`topic`: *string*, `data`: [*IOutputResponse*](../interfaces/models_api_ioutputresponse.ioutputresponse.md)) => *void* | The callback which is called when new data arrives. |
+| `outputId` | `string` | The output to monitor. |
+| `callback` | (`topic`: `string`, `data`: [IOutputResponse](../interfaces/models_api_ioutputresponse.ioutputresponse.md)) => `void` | The callback which is called when new data arrives. |
 
-**Returns:** *string*
+#### Returns
+
+`string`
 
 A subscription Id which can be used to unsubscribe.
 
-Implementation of: [IMqttClient](../interfaces/models_imqttclient.imqttclient.md)
+#### Implementation of
+
+[IMqttClient](../interfaces/models_imqttclient.imqttclient.md).[output](../interfaces/models_imqttclient.imqttclient.md#output)
 
 ___
 
 ### statusChanged
 
-▸ **statusChanged**(`callback`: (`data`: [*IMqttStatus*](../interfaces/models_imqttstatus.imqttstatus.md)) => *void*): *string*
+▸ **statusChanged**(`callback`): `string`
 
 Subscribe to changes in the client state.
 
@@ -291,19 +333,23 @@ Subscribe to changes in the client state.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `callback` | (`data`: [*IMqttStatus*](../interfaces/models_imqttstatus.imqttstatus.md)) => *void* | Callback called when the state has changed. |
+| `callback` | (`data`: [IMqttStatus](../interfaces/models_imqttstatus.imqttstatus.md)) => `void` | Callback called when the state has changed. |
 
-**Returns:** *string*
+#### Returns
+
+`string`
 
 A subscription Id which can be used to unsubscribe.
 
-Implementation of: [IMqttClient](../interfaces/models_imqttclient.imqttclient.md)
+#### Implementation of
+
+[IMqttClient](../interfaces/models_imqttclient.imqttclient.md).[statusChanged](../interfaces/models_imqttclient.imqttclient.md#statuschanged)
 
 ___
 
 ### subscribeJson
 
-▸ **subscribeJson**<T\>(`customTopic`: *string*, `callback`: (`topic`: *string*, `data`: T) => *void*): *string*
+▸ **subscribeJson**<T\>(`customTopic`, `callback`): `string`
 
 Subscribe to another type of message as json.
 
@@ -317,20 +363,24 @@ Subscribe to another type of message as json.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `customTopic` | *string* | The topic to subscribe to. |
-| `callback` | (`topic`: *string*, `data`: T) => *void* | The callback which is called when new data arrives. |
+| `customTopic` | `string` | The topic to subscribe to. |
+| `callback` | (`topic`: `string`, `data`: `T`) => `void` | The callback which is called when new data arrives. |
 
-**Returns:** *string*
+#### Returns
+
+`string`
 
 A subscription Id which can be used to unsubscribe.
 
-Implementation of: [IMqttClient](../interfaces/models_imqttclient.imqttclient.md)
+#### Implementation of
+
+[IMqttClient](../interfaces/models_imqttclient.imqttclient.md).[subscribeJson](../interfaces/models_imqttclient.imqttclient.md#subscribejson)
 
 ___
 
 ### subscribeRaw
 
-▸ **subscribeRaw**(`customTopic`: *string*, `callback`: (`topic`: *string*, `data`: *Uint8Array*) => *void*): *string*
+▸ **subscribeRaw**(`customTopic`, `callback`): `string`
 
 Subscribe to another type of message as raw data.
 
@@ -338,20 +388,24 @@ Subscribe to another type of message as raw data.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `customTopic` | *string* | The topic to subscribe to. |
-| `callback` | (`topic`: *string*, `data`: *Uint8Array*) => *void* | The callback which is called when new data arrives. |
+| `customTopic` | `string` | The topic to subscribe to. |
+| `callback` | (`topic`: `string`, `data`: `Uint8Array`) => `void` | The callback which is called when new data arrives. |
 
-**Returns:** *string*
+#### Returns
+
+`string`
 
 A subscription Id which can be used to unsubscribe.
 
-Implementation of: [IMqttClient](../interfaces/models_imqttclient.imqttclient.md)
+#### Implementation of
+
+[IMqttClient](../interfaces/models_imqttclient.imqttclient.md).[subscribeRaw](../interfaces/models_imqttclient.imqttclient.md#subscriberaw)
 
 ___
 
 ### transactionIncludedMessage
 
-▸ **transactionIncludedMessage**(`transactionId`: *string*, `callback`: (`topic`: *string*, `data`: [*IMessage*](../interfaces/models_imessage.imessage.md), `raw`: *Uint8Array*) => *void*): *string*
+▸ **transactionIncludedMessage**(`transactionId`, `callback`): `string`
 
 Subscribe to message updates for a specific transactionId.
 
@@ -359,20 +413,24 @@ Subscribe to message updates for a specific transactionId.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `transactionId` | *string* | The message to monitor. |
-| `callback` | (`topic`: *string*, `data`: [*IMessage*](../interfaces/models_imessage.imessage.md), `raw`: *Uint8Array*) => *void* | The callback which is called when new data arrives. |
+| `transactionId` | `string` | The message to monitor. |
+| `callback` | (`topic`: `string`, `data`: [IMessage](../interfaces/models_imessage.imessage.md), `raw`: `Uint8Array`) => `void` | The callback which is called when new data arrives. |
 
-**Returns:** *string*
+#### Returns
+
+`string`
 
 A subscription Id which can be used to unsubscribe.
 
-Implementation of: [IMqttClient](../interfaces/models_imqttclient.imqttclient.md)
+#### Implementation of
+
+[IMqttClient](../interfaces/models_imqttclient.imqttclient.md).[transactionIncludedMessage](../interfaces/models_imqttclient.imqttclient.md#transactionincludedmessage)
 
 ___
 
 ### transactionIncludedMessageRaw
 
-▸ **transactionIncludedMessageRaw**(`transactionId`: *string*, `callback`: (`topic`: *string*, `data`: *Uint8Array*) => *void*): *string*
+▸ **transactionIncludedMessageRaw**(`transactionId`, `callback`): `string`
 
 Subscribe to message updates for a specific transactionId.
 
@@ -380,20 +438,24 @@ Subscribe to message updates for a specific transactionId.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `transactionId` | *string* | The message to monitor. |
-| `callback` | (`topic`: *string*, `data`: *Uint8Array*) => *void* | The callback which is called when new data arrives. |
+| `transactionId` | `string` | The message to monitor. |
+| `callback` | (`topic`: `string`, `data`: `Uint8Array`) => `void` | The callback which is called when new data arrives. |
 
-**Returns:** *string*
+#### Returns
+
+`string`
 
 A subscription Id which can be used to unsubscribe.
 
-Implementation of: [IMqttClient](../interfaces/models_imqttclient.imqttclient.md)
+#### Implementation of
+
+[IMqttClient](../interfaces/models_imqttclient.imqttclient.md).[transactionIncludedMessageRaw](../interfaces/models_imqttclient.imqttclient.md#transactionincludedmessageraw)
 
 ___
 
 ### unsubscribe
 
-▸ **unsubscribe**(`subscriptionId`: *string*): *void*
+▸ **unsubscribe**(`subscriptionId`): `void`
 
 Remove a subscription.
 
@@ -401,8 +463,12 @@ Remove a subscription.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `subscriptionId` | *string* | The subscription to remove. |
+| `subscriptionId` | `string` | The subscription to remove. |
 
-**Returns:** *void*
+#### Returns
 
-Implementation of: [IMqttClient](../interfaces/models_imqttclient.imqttclient.md)
+`void`
+
+#### Implementation of
+
+[IMqttClient](../interfaces/models_imqttclient.imqttclient.md).[unsubscribe](../interfaces/models_imqttclient.imqttclient.md#unsubscribe)

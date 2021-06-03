@@ -22,21 +22,25 @@ Implementation of the ChaCha20Poly1305 cipher.
 
 ### final
 
-▸ **final**(): *void*
+▸ **final**(): `void`
 
 Finalise the data.
 
-**Returns:** *void*
+#### Returns
+
+`void`
 
 ___
 
 ### getAuthTag
 
-▸ **getAuthTag**(): *Uint8Array*
+▸ **getAuthTag**(): `Uint8Array`
 
 Get the auth tag.
 
-**Returns:** *Uint8Array*
+#### Returns
+
+`Uint8Array`
 
 The auth tag.
 
@@ -44,7 +48,7 @@ ___
 
 ### setAAD
 
-▸ **setAAD**(`aad`: *Uint8Array*): *void*
+▸ **setAAD**(`aad`): `void`
 
 Set the AAD.
 
@@ -52,15 +56,17 @@ Set the AAD.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `aad` | *Uint8Array* | The aad to set. |
+| `aad` | `Uint8Array` | The aad to set. |
 
-**Returns:** *void*
+#### Returns
+
+`void`
 
 ___
 
 ### setAuthTag
 
-▸ **setAuthTag**(`authTag`: *Uint8Array*): *void*
+▸ **setAuthTag**(`authTag`): `void`
 
 Set the auth tag.
 
@@ -68,15 +74,17 @@ Set the auth tag.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `authTag` | *Uint8Array* | Set the auth tag. |
+| `authTag` | `Uint8Array` | Set the auth tag. |
 
-**Returns:** *void*
+#### Returns
+
+`void`
 
 ___
 
 ### update
 
-▸ **update**(`input`: *Uint8Array*): *Uint8Array*
+▸ **update**(`input`): `Uint8Array`
 
 Update the cipher with more data.
 
@@ -84,9 +92,11 @@ Update the cipher with more data.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `input` | *Uint8Array* | The input data to include. |
+| `input` | `Uint8Array` | The input data to include. |
 
-**Returns:** *Uint8Array*
+#### Returns
+
+`Uint8Array`
 
 The updated data.
 
@@ -94,7 +104,7 @@ ___
 
 ### decryptor
 
-▸ `Static` **decryptor**(`key`: *Uint8Array*, `nonce`: *Uint8Array*): [*ChaCha20Poly1305*](crypto_chacha20poly1305.chacha20poly1305.md)
+▸ `Static` **decryptor**(`key`, `nonce`): [ChaCha20Poly1305](crypto_chacha20poly1305.chacha20poly1305.md)
 
 Create a ChaCha20Poly1305 decryptor.
 
@@ -102,10 +112,12 @@ Create a ChaCha20Poly1305 decryptor.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `key` | *Uint8Array* | The key. |
-| `nonce` | *Uint8Array* | The nonce. |
+| `key` | `Uint8Array` | The key. |
+| `nonce` | `Uint8Array` | The nonce. |
 
-**Returns:** [*ChaCha20Poly1305*](crypto_chacha20poly1305.chacha20poly1305.md)
+#### Returns
+
+[ChaCha20Poly1305](crypto_chacha20poly1305.chacha20poly1305.md)
 
 Decryptor instance of ChaCha20Poly1305.
 
@@ -113,7 +125,7 @@ ___
 
 ### encryptor
 
-▸ `Static` **encryptor**(`key`: *Uint8Array*, `nonce`: *Uint8Array*): [*ChaCha20Poly1305*](crypto_chacha20poly1305.chacha20poly1305.md)
+▸ `Static` **encryptor**(`key`, `nonce`): [ChaCha20Poly1305](crypto_chacha20poly1305.chacha20poly1305.md)
 
 Create a ChaCha20Poly1305 encryptor.
 
@@ -121,9 +133,11 @@ Create a ChaCha20Poly1305 encryptor.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `key` | *Uint8Array* | The key. |
-| `nonce` | *Uint8Array* | The nonce. |
+| `key` | `Uint8Array` | The key. |
+| `nonce` | `Uint8Array` | The nonce. |
 
-**Returns:** [*ChaCha20Poly1305*](crypto_chacha20poly1305.chacha20poly1305.md)
+#### Returns
+
+[ChaCha20Poly1305](crypto_chacha20poly1305.chacha20poly1305.md)
 
 Encryptor instance of ChaCha20Poly1305.

@@ -16,6 +16,6 @@
 
 ### TRANSACTION\_PAYLOAD\_TYPE
 
-• `Const` **TRANSACTION\_PAYLOAD\_TYPE**: ``0``= 0
+• `Const` **TRANSACTION\_PAYLOAD\_TYPE**: ``0``
 
 The global type for the payload.

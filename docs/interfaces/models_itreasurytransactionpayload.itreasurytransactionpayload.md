@@ -8,7 +8,7 @@ Receipt payload.
 
 ## Hierarchy
 
-- [*ITypeBase*](models_itypebase.itypebase.md)<``4``\>
+- [ITypeBase](models_itypebase.itypebase.md)<``4``\>
 
   ↳ **ITreasuryTransactionPayload**
 
@@ -24,7 +24,7 @@ Receipt payload.
 
 ### input
 
-• **input**: [*ITreasuryInput*](models_itreasuryinput.itreasuryinput.md)
+• **input**: [ITreasuryInput](models_itreasuryinput.itreasuryinput.md)
 
 The input of this transaction.
 
@@ -32,7 +32,7 @@ ___
 
 ### output
 
-• **output**: [*ITreasuryOutput*](models_itreasuryoutput.itreasuryoutput.md)
+• **output**: [ITreasuryOutput](models_itreasuryoutput.itreasuryoutput.md)
 
 The output of this transaction.
 
@@ -44,4 +44,6 @@ ___
 
 The type of the object.
 
-Inherited from: [ITypeBase](models_itypebase.itypebase.md).[type](models_itypebase.itypebase.md#type)
+#### Inherited from
+
+[ITypeBase](models_itypebase.itypebase.md).[type](models_itypebase.itypebase.md#type)

@@ -18,7 +18,7 @@ The migrated funds for receipts.
 
 ### address
 
-• **address**: [*IEd25519Address*](models_ied25519address.ied25519address.md)
+• **address**: [IEd25519Address](models_ied25519address.ied25519address.md)
 
 The target address of the migrated funds.
 
@@ -26,7 +26,7 @@ ___
 
 ### deposit
 
-• **deposit**: *number*
+• **deposit**: `number`
 
 The amount of the deposit.
 
@@ -34,6 +34,6 @@ ___
 
 ### tailTransactionHash
 
-• **tailTransactionHash**: *string*
+• **tailTransactionHash**: `string`
 
 The tail transaction hash of the migration bundle.

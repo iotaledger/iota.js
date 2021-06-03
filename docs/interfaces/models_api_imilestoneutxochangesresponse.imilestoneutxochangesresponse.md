@@ -18,7 +18,7 @@ Milestone.
 
 ### consumedOutputs
 
-• **consumedOutputs**: *string*[]
+• **consumedOutputs**: `string`[]
 
 The output IDs (transaction hash + output index) of the consumed (spent) outputs.
 
@@ -26,7 +26,7 @@ ___
 
 ### createdOutputs
 
-• **createdOutputs**: *string*[]
+• **createdOutputs**: `string`[]
 
 The output IDs (transaction hash + output index) of the newly created outputs.
 
@@ -34,6 +34,6 @@ ___
 
 ### index
 
-• **index**: *number*
+• **index**: `number`
 
 The milestone index.

@@ -18,7 +18,7 @@ Milestone.
 
 ### index
 
-• **index**: *number*
+• **index**: `number`
 
 The milestone index.
 
@@ -26,7 +26,7 @@ ___
 
 ### messageId
 
-• **messageId**: *string*
+• **messageId**: `string`
 
 The message id of the milestone.
 
@@ -34,6 +34,6 @@ ___
 
 ### timestamp
 
-• **timestamp**: *number*
+• **timestamp**: `number`
 
 The timestamp of the milestone.

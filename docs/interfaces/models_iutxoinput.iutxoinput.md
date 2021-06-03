@@ -8,7 +8,7 @@ UTXO Transaction Input.
 
 ## Hierarchy
 
-- [*ITypeBase*](models_itypebase.itypebase.md)<``0``\>
+- [ITypeBase](models_itypebase.itypebase.md)<``0``\>
 
   ↳ **IUTXOInput**
 
@@ -24,7 +24,7 @@ UTXO Transaction Input.
 
 ### transactionId
 
-• **transactionId**: *string*
+• **transactionId**: `string`
 
 The transaction Id.
 
@@ -32,7 +32,7 @@ ___
 
 ### transactionOutputIndex
 
-• **transactionOutputIndex**: *number*
+• **transactionOutputIndex**: `number`
 
 The output index.
 
@@ -44,4 +44,6 @@ ___
 
 The type of the object.
 
-Inherited from: [ITypeBase](models_itypebase.itypebase.md).[type](models_itypebase.itypebase.md#type)
+#### Inherited from
+
+[ITypeBase](models_itypebase.itypebase.md).[type](models_itypebase.itypebase.md#type)

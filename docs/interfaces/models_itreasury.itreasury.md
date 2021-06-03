@@ -17,7 +17,7 @@ Treasury.
 
 ### amount
 
-• **amount**: *number*
+• **amount**: `number`
 
 The amount for the treasury.
 
@@ -25,6 +25,6 @@ ___
 
 ### milestoneId
 
-• **milestoneId**: *string*
+• **milestoneId**: `string`
 
 The milestone hash of the treasury.

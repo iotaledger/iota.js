@@ -12,7 +12,7 @@
 
 ### getBalance
 
-▸ **getBalance**(`client`: [*IClient*](../interfaces/models_iclient.iclient.md) \| *string*, `seed`: [*ISeed*](../interfaces/models_iseed.iseed.md), `accountIndex`: *number*, `addressOptions?`: {}): *Promise*<number\>
+▸ **getBalance**(`client`, `seed`, `accountIndex`, `addressOptions?`): `Promise`<number\>
 
 Get the balance for a list of addresses.
 
@@ -20,11 +20,13 @@ Get the balance for a list of addresses.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `client` | [*IClient*](../interfaces/models_iclient.iclient.md) \| *string* | The client or node endpoint to send the transfer with. |
-| `seed` | [*ISeed*](../interfaces/models_iseed.iseed.md) | The seed. |
-| `accountIndex` | *number* | The account index in the wallet. |
-| `addressOptions?` | *object* | Optional address configuration for balance address lookups. |
+| `client` | [IClient](../interfaces/models_iclient.iclient.md) \| `string` | The client or node endpoint to send the transfer with. |
+| `seed` | [ISeed](../interfaces/models_iseed.iseed.md) | The seed. |
+| `accountIndex` | `number` | The account index in the wallet. |
+| `addressOptions?` | `Object` | Optional address configuration for balance address lookups. |
 
-**Returns:** *Promise*<number\>
+#### Returns
+
+`Promise`<number\>
 
 The balance.

@@ -27,25 +27,21 @@ Class to help with units formatting.
 
 ### constructor
 
-\+ **new UnitsHelper**(): [*UnitsHelper*](utils_unitshelper.unitshelper.md)
-
-**Returns:** [*UnitsHelper*](utils_unitshelper.unitshelper.md)
+• **new UnitsHelper**()
 
 ## Properties
 
 ### UNIT\_MAP
 
-▪ `Static` `Readonly` **UNIT\_MAP**: *object*
+▪ `Static` `Readonly` **UNIT\_MAP**: `Object`
 
 Map units.
-
-#### Type declaration
 
 ## Methods
 
 ### calculateBest
 
-▸ `Static` **calculateBest**(`value`: *number*): [*Units*](../modules/models_units.md#units)
+▸ `Static` **calculateBest**(`value`): [Units](../modules/models_units.md#units)
 
 Format the value in the best units.
 
@@ -53,9 +49,11 @@ Format the value in the best units.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `value` | *number* | The value to format. |
+| `value` | `number` | The value to format. |
 
-**Returns:** [*Units*](../modules/models_units.md#units)
+#### Returns
+
+[Units](../modules/models_units.md#units)
 
 The best units for the value.
 
@@ -63,7 +61,7 @@ ___
 
 ### convertUnits
 
-▸ `Static` **convertUnits**(`value`: *number*, `fromUnit`: [*Units*](../modules/models_units.md#units), `toUnit`: [*Units*](../modules/models_units.md#units)): *number*
+▸ `Static` **convertUnits**(`value`, `fromUnit`, `toUnit`): `number`
 
 Convert the value to different units.
 
@@ -71,11 +69,13 @@ Convert the value to different units.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `value` | *number* | The value to convert. |
-| `fromUnit` | [*Units*](../modules/models_units.md#units) | The form unit. |
-| `toUnit` | [*Units*](../modules/models_units.md#units) | The to unit. |
+| `value` | `number` | The value to convert. |
+| `fromUnit` | [Units](../modules/models_units.md#units) | The form unit. |
+| `toUnit` | [Units](../modules/models_units.md#units) | The to unit. |
 
-**Returns:** *number*
+#### Returns
+
+`number`
 
 The formatted unit.
 
@@ -83,7 +83,7 @@ ___
 
 ### formatBest
 
-▸ `Static` **formatBest**(`value`: *number*, `decimalPlaces?`: *number*): *string*
+▸ `Static` **formatBest**(`value`, `decimalPlaces?`): `string`
 
 Format the value in the best units.
 
@@ -91,10 +91,12 @@ Format the value in the best units.
 
 | Name | Type | Default value | Description |
 | :------ | :------ | :------ | :------ |
-| `value` | *number* | - | The value to format. |
-| `decimalPlaces` | *number* | 2 | The number of decimal places to display. |
+| `value` | `number` | `undefined` | The value to format. |
+| `decimalPlaces` | `number` | 2 | The number of decimal places to display. |
 
-**Returns:** *string*
+#### Returns
+
+`string`
 
 The formated value.
 
@@ -102,7 +104,7 @@ ___
 
 ### formatUnits
 
-▸ `Static` **formatUnits**(`value`: *number*, `unit`: [*Units*](../modules/models_units.md#units), `decimalPlaces?`: *number*): *string*
+▸ `Static` **formatUnits**(`value`, `unit`, `decimalPlaces?`): `string`
 
 Format the value in the best units.
 
@@ -110,10 +112,12 @@ Format the value in the best units.
 
 | Name | Type | Default value | Description |
 | :------ | :------ | :------ | :------ |
-| `value` | *number* | - | The value to format. |
-| `unit` | [*Units*](../modules/models_units.md#units) | - | The unit to format with. |
-| `decimalPlaces` | *number* | 2 | The number of decimal places to display. |
+| `value` | `number` | `undefined` | The value to format. |
+| `unit` | [Units](../modules/models_units.md#units) | `undefined` | The unit to format with. |
+| `decimalPlaces` | `number` | 2 | The number of decimal places to display. |
 
-**Returns:** *string*
+#### Returns
+
+`string`
 
 The formated value.

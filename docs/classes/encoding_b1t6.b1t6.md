@@ -21,15 +21,13 @@ Class implements the b1t6 encoding encoding which uses a group of 6 trits to enc
 
 ### constructor
 
-\+ **new B1T6**(): [*B1T6*](encoding_b1t6.b1t6.md)
-
-**Returns:** [*B1T6*](encoding_b1t6.b1t6.md)
+• **new B1T6**()
 
 ## Methods
 
 ### encode
 
-▸ `Static` **encode**(`dst`: *Int8Array*, `startIndex`: *number*, `src`: *Uint8Array*): *number*
+▸ `Static` **encode**(`dst`, `startIndex`, `src`): `number`
 
 Encode a byte array into trits.
 
@@ -37,11 +35,13 @@ Encode a byte array into trits.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `dst` | *Int8Array* | The destination array. |
-| `startIndex` | *number* | The start index to write in the array. |
-| `src` | *Uint8Array* | The source data. |
+| `dst` | `Int8Array` | The destination array. |
+| `startIndex` | `number` | The start index to write in the array. |
+| `src` | `Uint8Array` | The source data. |
 
-**Returns:** *number*
+#### Returns
+
+`number`
 
 The length of the encode.
 
@@ -49,7 +49,7 @@ ___
 
 ### encodedLen
 
-▸ `Static` **encodedLen**(`data`: *Uint8Array*): *number*
+▸ `Static` **encodedLen**(`data`): `number`
 
 The encoded length of the data.
 
@@ -57,8 +57,10 @@ The encoded length of the data.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `data` | *Uint8Array* | The data. |
+| `data` | `Uint8Array` | The data. |
 
-**Returns:** *number*
+#### Returns
+
+`number`
 
 The encoded length.

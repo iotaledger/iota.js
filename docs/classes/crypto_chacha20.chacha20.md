@@ -22,7 +22,7 @@ Implementation of the ChaCha29 cipher.
 
 ### constructor
 
-\+ **new ChaCha20**(`key`: *Uint8Array*, `nonce`: *Uint8Array*, `counter?`: *number*): [*ChaCha20*](crypto_chacha20.chacha20.md)
+• **new ChaCha20**(`key`, `nonce`, `counter?`)
 
 Create a new instance of ChaCha20.
 
@@ -30,17 +30,15 @@ Create a new instance of ChaCha20.
 
 | Name | Type | Default value | Description |
 | :------ | :------ | :------ | :------ |
-| `key` | *Uint8Array* | - | The key. |
-| `nonce` | *Uint8Array* | - | The nonce. |
-| `counter` | *number* | 0 | Counter. |
-
-**Returns:** [*ChaCha20*](crypto_chacha20.chacha20.md)
+| `key` | `Uint8Array` | `undefined` | The key. |
+| `nonce` | `Uint8Array` | `undefined` | The nonce. |
+| `counter` | `number` | 0 | Counter. |
 
 ## Methods
 
 ### decrypt
 
-▸ **decrypt**(`data`: *Uint8Array*): *Uint8Array*
+▸ **decrypt**(`data`): `Uint8Array`
 
 Decrypt the data.
 
@@ -48,9 +46,11 @@ Decrypt the data.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `data` | *Uint8Array* | The source data to decrypt. |
+| `data` | `Uint8Array` | The source data to decrypt. |
 
-**Returns:** *Uint8Array*
+#### Returns
+
+`Uint8Array`
 
 The decrypted data.
 
@@ -58,7 +58,7 @@ ___
 
 ### encrypt
 
-▸ **encrypt**(`data`: *Uint8Array*): *Uint8Array*
+▸ **encrypt**(`data`): `Uint8Array`
 
 Encrypt the data.
 
@@ -66,9 +66,11 @@ Encrypt the data.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `data` | *Uint8Array* | The source data to encrypt. |
+| `data` | `Uint8Array` | The source data to encrypt. |
 
-**Returns:** *Uint8Array*
+#### Returns
+
+`Uint8Array`
 
 The encrypted data.
 
@@ -76,7 +78,7 @@ ___
 
 ### keyStream
 
-▸ **keyStream**(`length`: *number*): *Uint8Array*
+▸ **keyStream**(`length`): `Uint8Array`
 
 Create a keystream of the given length.
 
@@ -84,8 +86,10 @@ Create a keystream of the given length.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `length` | *number* | The length to create the keystream. |
+| `length` | `number` | The length to create the keystream. |
 
-**Returns:** *Uint8Array*
+#### Returns
+
+`Uint8Array`
 
 The keystream.

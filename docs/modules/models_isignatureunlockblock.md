@@ -16,6 +16,6 @@
 
 ### SIGNATURE\_UNLOCK\_BLOCK\_TYPE
 
-• `Const` **SIGNATURE\_UNLOCK\_BLOCK\_TYPE**: ``0``= 0
+• `Const` **SIGNATURE\_UNLOCK\_BLOCK\_TYPE**: ``0``
 
 The global type for the unlock block.

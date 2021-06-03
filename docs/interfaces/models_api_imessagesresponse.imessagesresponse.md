@@ -19,7 +19,7 @@ List of messages found.
 
 ### count
 
-• **count**: *number*
+• **count**: `number`
 
 The number of items returned.
 
@@ -27,7 +27,7 @@ ___
 
 ### index
 
-• **index**: *string*
+• **index**: `string`
 
 The index where the message were found.
 
@@ -35,7 +35,7 @@ ___
 
 ### maxResults
 
-• **maxResults**: *number*
+• **maxResults**: `number`
 
 The max number of results returned.
 
@@ -43,6 +43,6 @@ ___
 
 ### messageIds
 
-• **messageIds**: *string*[]
+• **messageIds**: `string`[]
 
 The ids of the messages returned.

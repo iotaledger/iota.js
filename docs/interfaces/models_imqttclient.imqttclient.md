@@ -8,7 +8,7 @@ Client interface definition for API communication.
 
 ## Implemented by
 
-- [*MqttClient*](../classes/clients_mqttclient.mqttclient.md)
+- [MqttClient](../classes/clients_mqttclient.mqttclient.md)
 
 ## Table of contents
 
@@ -36,7 +36,7 @@ Client interface definition for API communication.
 
 ### addressEd25519Outputs
 
-▸ **addressEd25519Outputs**(`addressEd25519`: *string*, `callback`: (`topic`: *string*, `data`: [*IOutputResponse*](models_api_ioutputresponse.ioutputresponse.md)) => *void*): *string*
+▸ **addressEd25519Outputs**(`addressEd25519`, `callback`): `string`
 
 Subscribe to the ed25519 address for output updates.
 
@@ -44,10 +44,12 @@ Subscribe to the ed25519 address for output updates.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `addressEd25519` | *string* | The address to monitor. |
-| `callback` | (`topic`: *string*, `data`: [*IOutputResponse*](models_api_ioutputresponse.ioutputresponse.md)) => *void* | The callback which is called when new data arrives. |
+| `addressEd25519` | `string` | The address to monitor. |
+| `callback` | (`topic`: `string`, `data`: [IOutputResponse](models_api_ioutputresponse.ioutputresponse.md)) => `void` | The callback which is called when new data arrives. |
 
-**Returns:** *string*
+#### Returns
+
+`string`
 
 A subscription Id which can be used to unsubscribe.
 
@@ -55,7 +57,7 @@ ___
 
 ### addressOutputs
 
-▸ **addressOutputs**(`addressBech32`: *string*, `callback`: (`topic`: *string*, `data`: [*IOutputResponse*](models_api_ioutputresponse.ioutputresponse.md)) => *void*): *string*
+▸ **addressOutputs**(`addressBech32`, `callback`): `string`
 
 Subscribe to the address for output updates.
 
@@ -63,10 +65,12 @@ Subscribe to the address for output updates.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `addressBech32` | *string* | The address to monitor. |
-| `callback` | (`topic`: *string*, `data`: [*IOutputResponse*](models_api_ioutputresponse.ioutputresponse.md)) => *void* | The callback which is called when new data arrives. |
+| `addressBech32` | `string` | The address to monitor. |
+| `callback` | (`topic`: `string`, `data`: [IOutputResponse](models_api_ioutputresponse.ioutputresponse.md)) => `void` | The callback which is called when new data arrives. |
 
-**Returns:** *string*
+#### Returns
+
+`string`
 
 A subscription Id which can be used to unsubscribe.
 
@@ -74,7 +78,7 @@ ___
 
 ### index
 
-▸ **index**(`index`: *string* \| *Uint8Array*, `callback`: (`topic`: *string*, `data`: [*IMessage*](models_imessage.imessage.md), `raw`: *Uint8Array*) => *void*): *string*
+▸ **index**(`index`, `callback`): `string`
 
 Subscribe to get all messages for the specified index in object form.
 
@@ -82,10 +86,12 @@ Subscribe to get all messages for the specified index in object form.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `index` | *string* \| *Uint8Array* | The index to monitor as bytes or in UTF8. |
-| `callback` | (`topic`: *string*, `data`: [*IMessage*](models_imessage.imessage.md), `raw`: *Uint8Array*) => *void* | The callback which is called when new data arrives. |
+| `index` | `string` \| `Uint8Array` | The index to monitor as bytes or in UTF8. |
+| `callback` | (`topic`: `string`, `data`: [IMessage](models_imessage.imessage.md), `raw`: `Uint8Array`) => `void` | The callback which is called when new data arrives. |
 
-**Returns:** *string*
+#### Returns
+
+`string`
 
 A subscription Id which can be used to unsubscribe.
 
@@ -93,7 +99,7 @@ ___
 
 ### indexRaw
 
-▸ **indexRaw**(`index`: *string* \| *Uint8Array*, `callback`: (`topic`: *string*, `data`: *Uint8Array*) => *void*): *string*
+▸ **indexRaw**(`index`, `callback`): `string`
 
 Subscribe to get all messages for the specified index in binary form.
 
@@ -101,10 +107,12 @@ Subscribe to get all messages for the specified index in binary form.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `index` | *string* \| *Uint8Array* | The index to monitor as bytes or in UTF8. |
-| `callback` | (`topic`: *string*, `data`: *Uint8Array*) => *void* | The callback which is called when new data arrives. |
+| `index` | `string` \| `Uint8Array` | The index to monitor as bytes or in UTF8. |
+| `callback` | (`topic`: `string`, `data`: `Uint8Array`) => `void` | The callback which is called when new data arrives. |
 
-**Returns:** *string*
+#### Returns
+
+`string`
 
 A subscription Id which can be used to unsubscribe.
 
@@ -112,7 +120,7 @@ ___
 
 ### messageMetadata
 
-▸ **messageMetadata**(`messageId`: *string*, `callback`: (`topic`: *string*, `data`: [*IMessageMetadata*](models_imessagemetadata.imessagemetadata.md)) => *void*): *string*
+▸ **messageMetadata**(`messageId`, `callback`): `string`
 
 Subscribe to metadata updates for a specific message.
 
@@ -120,10 +128,12 @@ Subscribe to metadata updates for a specific message.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `messageId` | *string* | The message to monitor. |
-| `callback` | (`topic`: *string*, `data`: [*IMessageMetadata*](models_imessagemetadata.imessagemetadata.md)) => *void* | The callback which is called when new data arrives. |
+| `messageId` | `string` | The message to monitor. |
+| `callback` | (`topic`: `string`, `data`: [IMessageMetadata](models_imessagemetadata.imessagemetadata.md)) => `void` | The callback which is called when new data arrives. |
 
-**Returns:** *string*
+#### Returns
+
+`string`
 
 A subscription Id which can be used to unsubscribe.
 
@@ -131,7 +141,7 @@ ___
 
 ### messages
 
-▸ **messages**(`callback`: (`topic`: *string*, `data`: [*IMessage*](models_imessage.imessage.md), `raw`: *Uint8Array*) => *void*): *string*
+▸ **messages**(`callback`): `string`
 
 Subscribe to get all messages in object form.
 
@@ -139,9 +149,11 @@ Subscribe to get all messages in object form.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `callback` | (`topic`: *string*, `data`: [*IMessage*](models_imessage.imessage.md), `raw`: *Uint8Array*) => *void* | The callback which is called when new data arrives. |
+| `callback` | (`topic`: `string`, `data`: [IMessage](models_imessage.imessage.md), `raw`: `Uint8Array`) => `void` | The callback which is called when new data arrives. |
 
-**Returns:** *string*
+#### Returns
+
+`string`
 
 A subscription Id which can be used to unsubscribe.
 
@@ -149,7 +161,7 @@ ___
 
 ### messagesMetadata
 
-▸ **messagesMetadata**(`callback`: (`topic`: *string*, `data`: [*IMessageMetadata*](models_imessagemetadata.imessagemetadata.md)) => *void*): *string*
+▸ **messagesMetadata**(`callback`): `string`
 
 Subscribe to get the metadata for all the messages.
 
@@ -157,9 +169,11 @@ Subscribe to get the metadata for all the messages.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `callback` | (`topic`: *string*, `data`: [*IMessageMetadata*](models_imessagemetadata.imessagemetadata.md)) => *void* | The callback which is called when new data arrives. |
+| `callback` | (`topic`: `string`, `data`: [IMessageMetadata](models_imessagemetadata.imessagemetadata.md)) => `void` | The callback which is called when new data arrives. |
 
-**Returns:** *string*
+#### Returns
+
+`string`
 
 A subscription Id which can be used to unsubscribe.
 
@@ -167,7 +181,7 @@ ___
 
 ### messagesRaw
 
-▸ **messagesRaw**(`callback`: (`topic`: *string*, `data`: *Uint8Array*) => *void*): *string*
+▸ **messagesRaw**(`callback`): `string`
 
 Subscribe to get all messages in binary form.
 
@@ -175,9 +189,11 @@ Subscribe to get all messages in binary form.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `callback` | (`topic`: *string*, `data`: *Uint8Array*) => *void* | The callback which is called when new data arrives. |
+| `callback` | (`topic`: `string`, `data`: `Uint8Array`) => `void` | The callback which is called when new data arrives. |
 
-**Returns:** *string*
+#### Returns
+
+`string`
 
 A subscription Id which can be used to unsubscribe.
 
@@ -185,7 +201,7 @@ ___
 
 ### milestonesConfirmed
 
-▸ **milestonesConfirmed**(`callback`: (`topic`: *string*, `data`: [*IMqttMilestoneResponse*](models_api_imqttmilestoneresponse.imqttmilestoneresponse.md)) => *void*): *string*
+▸ **milestonesConfirmed**(`callback`): `string`
 
 Subscribe to the latest confirmed milestone updates.
 
@@ -193,9 +209,11 @@ Subscribe to the latest confirmed milestone updates.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `callback` | (`topic`: *string*, `data`: [*IMqttMilestoneResponse*](models_api_imqttmilestoneresponse.imqttmilestoneresponse.md)) => *void* | The callback which is called when new data arrives. |
+| `callback` | (`topic`: `string`, `data`: [IMqttMilestoneResponse](models_api_imqttmilestoneresponse.imqttmilestoneresponse.md)) => `void` | The callback which is called when new data arrives. |
 
-**Returns:** *string*
+#### Returns
+
+`string`
 
 A subscription Id which can be used to unsubscribe.
 
@@ -203,7 +221,7 @@ ___
 
 ### milestonesLatest
 
-▸ **milestonesLatest**(`callback`: (`topic`: *string*, `data`: [*IMqttMilestoneResponse*](models_api_imqttmilestoneresponse.imqttmilestoneresponse.md)) => *void*): *string*
+▸ **milestonesLatest**(`callback`): `string`
 
 Subscribe to the latest milestone updates.
 
@@ -211,9 +229,11 @@ Subscribe to the latest milestone updates.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `callback` | (`topic`: *string*, `data`: [*IMqttMilestoneResponse*](models_api_imqttmilestoneresponse.imqttmilestoneresponse.md)) => *void* | The callback which is called when new data arrives. |
+| `callback` | (`topic`: `string`, `data`: [IMqttMilestoneResponse](models_api_imqttmilestoneresponse.imqttmilestoneresponse.md)) => `void` | The callback which is called when new data arrives. |
 
-**Returns:** *string*
+#### Returns
+
+`string`
 
 A subscription Id which can be used to unsubscribe.
 
@@ -221,7 +241,7 @@ ___
 
 ### output
 
-▸ **output**(`outputId`: *string*, `callback`: (`topic`: *string*, `data`: [*IOutputResponse*](models_api_ioutputresponse.ioutputresponse.md)) => *void*): *string*
+▸ **output**(`outputId`, `callback`): `string`
 
 Subscribe to updates for a specific output.
 
@@ -229,10 +249,12 @@ Subscribe to updates for a specific output.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `outputId` | *string* | The output to monitor. |
-| `callback` | (`topic`: *string*, `data`: [*IOutputResponse*](models_api_ioutputresponse.ioutputresponse.md)) => *void* | The callback which is called when new data arrives. |
+| `outputId` | `string` | The output to monitor. |
+| `callback` | (`topic`: `string`, `data`: [IOutputResponse](models_api_ioutputresponse.ioutputresponse.md)) => `void` | The callback which is called when new data arrives. |
 
-**Returns:** *string*
+#### Returns
+
+`string`
 
 A subscription Id which can be used to unsubscribe.
 
@@ -240,7 +262,7 @@ ___
 
 ### statusChanged
 
-▸ **statusChanged**(`callback`: (`status`: [*IMqttStatus*](models_imqttstatus.imqttstatus.md)) => *void*): *string*
+▸ **statusChanged**(`callback`): `string`
 
 Subscribe to changes in the client state.
 
@@ -248,9 +270,11 @@ Subscribe to changes in the client state.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `callback` | (`status`: [*IMqttStatus*](models_imqttstatus.imqttstatus.md)) => *void* | Callback called when the state has changed. |
+| `callback` | (`status`: [IMqttStatus](models_imqttstatus.imqttstatus.md)) => `void` | Callback called when the state has changed. |
 
-**Returns:** *string*
+#### Returns
+
+`string`
 
 A subscription Id which can be used to unsubscribe.
 
@@ -258,7 +282,7 @@ ___
 
 ### subscribeJson
 
-▸ **subscribeJson**<T\>(`customTopic`: *string*, `callback`: (`topic`: *string*, `data`: T) => *void*): *string*
+▸ **subscribeJson**<T\>(`customTopic`, `callback`): `string`
 
 Subscribe to another type of message as json.
 
@@ -272,10 +296,12 @@ Subscribe to another type of message as json.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `customTopic` | *string* | The topic to subscribe to. |
-| `callback` | (`topic`: *string*, `data`: T) => *void* | The callback which is called when new data arrives. |
+| `customTopic` | `string` | The topic to subscribe to. |
+| `callback` | (`topic`: `string`, `data`: `T`) => `void` | The callback which is called when new data arrives. |
 
-**Returns:** *string*
+#### Returns
+
+`string`
 
 A subscription Id which can be used to unsubscribe.
 
@@ -283,7 +309,7 @@ ___
 
 ### subscribeRaw
 
-▸ **subscribeRaw**(`customTopic`: *string*, `callback`: (`topic`: *string*, `data`: *Uint8Array*) => *void*): *string*
+▸ **subscribeRaw**(`customTopic`, `callback`): `string`
 
 Subscribe to another type of message as raw data.
 
@@ -291,10 +317,12 @@ Subscribe to another type of message as raw data.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `customTopic` | *string* | The topic to subscribe to. |
-| `callback` | (`topic`: *string*, `data`: *Uint8Array*) => *void* | The callback which is called when new data arrives. |
+| `customTopic` | `string` | The topic to subscribe to. |
+| `callback` | (`topic`: `string`, `data`: `Uint8Array`) => `void` | The callback which is called when new data arrives. |
 
-**Returns:** *string*
+#### Returns
+
+`string`
 
 A subscription Id which can be used to unsubscribe.
 
@@ -302,7 +330,7 @@ ___
 
 ### transactionIncludedMessage
 
-▸ **transactionIncludedMessage**(`transactionId`: *string*, `callback`: (`topic`: *string*, `data`: [*IMessage*](models_imessage.imessage.md), `raw`: *Uint8Array*) => *void*): *string*
+▸ **transactionIncludedMessage**(`transactionId`, `callback`): `string`
 
 Subscribe to message updates for a specific transactionId.
 
@@ -310,10 +338,12 @@ Subscribe to message updates for a specific transactionId.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `transactionId` | *string* | The message to monitor. |
-| `callback` | (`topic`: *string*, `data`: [*IMessage*](models_imessage.imessage.md), `raw`: *Uint8Array*) => *void* | The callback which is called when new data arrives. |
+| `transactionId` | `string` | The message to monitor. |
+| `callback` | (`topic`: `string`, `data`: [IMessage](models_imessage.imessage.md), `raw`: `Uint8Array`) => `void` | The callback which is called when new data arrives. |
 
-**Returns:** *string*
+#### Returns
+
+`string`
 
 A subscription Id which can be used to unsubscribe.
 
@@ -321,7 +351,7 @@ ___
 
 ### transactionIncludedMessageRaw
 
-▸ **transactionIncludedMessageRaw**(`transactionId`: *string*, `callback`: (`topic`: *string*, `data`: *Uint8Array*) => *void*): *string*
+▸ **transactionIncludedMessageRaw**(`transactionId`, `callback`): `string`
 
 Subscribe to message updates for a specific transactionId.
 
@@ -329,10 +359,12 @@ Subscribe to message updates for a specific transactionId.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `transactionId` | *string* | The message to monitor. |
-| `callback` | (`topic`: *string*, `data`: *Uint8Array*) => *void* | The callback which is called when new data arrives. |
+| `transactionId` | `string` | The message to monitor. |
+| `callback` | (`topic`: `string`, `data`: `Uint8Array`) => `void` | The callback which is called when new data arrives. |
 
-**Returns:** *string*
+#### Returns
+
+`string`
 
 A subscription Id which can be used to unsubscribe.
 
@@ -340,7 +372,7 @@ ___
 
 ### unsubscribe
 
-▸ **unsubscribe**(`subscriptionId`: *string*): *void*
+▸ **unsubscribe**(`subscriptionId`): `void`
 
 Remove a subscription.
 
@@ -348,6 +380,8 @@ Remove a subscription.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `subscriptionId` | *string* | The subscription to remove. |
+| `subscriptionId` | `string` | The subscription to remove. |
 
-**Returns:** *void*
+#### Returns
+
+`void`

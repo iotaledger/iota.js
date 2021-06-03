@@ -23,15 +23,13 @@ https://github.com/satoshilabs/slips/blob/master/slip-0010.md.
 
 ### constructor
 
-\+ **new Slip0010**(): [*Slip0010*](crypto_slip0010.slip0010.md)
-
-**Returns:** [*Slip0010*](crypto_slip0010.slip0010.md)
+• **new Slip0010**()
 
 ## Methods
 
 ### derivePath
 
-▸ `Static` **derivePath**(`seed`: *Uint8Array*, `path`: [*Bip32Path*](crypto_bip32path.bip32path.md)): *object*
+▸ `Static` **derivePath**(`seed`, `path`): `Object`
 
 Derive a key from the path.
 
@@ -39,10 +37,12 @@ Derive a key from the path.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `seed` | *Uint8Array* | The seed. |
-| `path` | [*Bip32Path*](crypto_bip32path.bip32path.md) | The path. |
+| `seed` | `Uint8Array` | The seed. |
+| `path` | [Bip32Path](crypto_bip32path.bip32path.md) | The path. |
 
-**Returns:** *object*
+#### Returns
+
+`Object`
 
 The key and chain code.
 
@@ -50,7 +50,7 @@ ___
 
 ### getMasterKeyFromSeed
 
-▸ `Static` **getMasterKeyFromSeed**(`seed`: *Uint8Array*): *object*
+▸ `Static` **getMasterKeyFromSeed**(`seed`): `Object`
 
 Get the master key from the seed.
 
@@ -58,9 +58,11 @@ Get the master key from the seed.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `seed` | *Uint8Array* | The seed to generate the master key from. |
+| `seed` | `Uint8Array` | The seed to generate the master key from. |
 
-**Returns:** *object*
+#### Returns
+
+`Object`
 
 The key and chain code.
 
@@ -68,7 +70,7 @@ ___
 
 ### getPublicKey
 
-▸ `Static` **getPublicKey**(`privateKey`: *Uint8Array*, `withZeroByte?`: *boolean*): *Uint8Array*
+▸ `Static` **getPublicKey**(`privateKey`, `withZeroByte?`): `Uint8Array`
 
 Get the public key from the private key.
 
@@ -76,9 +78,11 @@ Get the public key from the private key.
 
 | Name | Type | Default value | Description |
 | :------ | :------ | :------ | :------ |
-| `privateKey` | *Uint8Array* | - | The private key. |
-| `withZeroByte` | *boolean* | true | Include a zero bute prefix. |
+| `privateKey` | `Uint8Array` | `undefined` | The private key. |
+| `withZeroByte` | `boolean` | true | Include a zero bute prefix. |
 
-**Returns:** *Uint8Array*
+#### Returns
+
+`Uint8Array`
 
 The public key.

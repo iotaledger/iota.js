@@ -8,7 +8,7 @@ Receipt payload.
 
 ## Hierarchy
 
-- [*ITypeBase*](models_itypebase.itypebase.md)<``3``\>
+- [ITypeBase](models_itypebase.itypebase.md)<``3``\>
 
   ↳ **IReceiptPayload**
 
@@ -26,7 +26,7 @@ Receipt payload.
 
 ### final
 
-• **final**: *boolean*
+• **final**: `boolean`
 
 Whether this Receipt is the final one for a given migrated at index.
 
@@ -34,7 +34,7 @@ ___
 
 ### funds
 
-• **funds**: [*IMigratedFunds*](models_imigratedfunds.imigratedfunds.md)[]
+• **funds**: [IMigratedFunds](models_imigratedfunds.imigratedfunds.md)[]
 
 The index data.
 
@@ -42,7 +42,7 @@ ___
 
 ### migratedAt
 
-• **migratedAt**: *number*
+• **migratedAt**: `number`
 
 The milestone index at which the funds were migrated in the legacy network.
 
@@ -50,7 +50,7 @@ ___
 
 ### transaction
 
-• **transaction**: [*ITreasuryTransactionPayload*](models_itreasurytransactionpayload.itreasurytransactionpayload.md)
+• **transaction**: [ITreasuryTransactionPayload](models_itreasurytransactionpayload.itreasurytransactionpayload.md)
 
 The TreasuryTransaction used to fund the funds.
 
@@ -62,4 +62,6 @@ ___
 
 The type of the object.
 
-Inherited from: [ITypeBase](models_itypebase.itypebase.md).[type](models_itypebase.itypebase.md#type)
+#### Inherited from
+
+[ITypeBase](models_itypebase.itypebase.md).[type](models_itypebase.itypebase.md#type)

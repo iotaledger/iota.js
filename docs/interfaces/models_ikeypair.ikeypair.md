@@ -17,7 +17,7 @@ Definition of signature key pair.
 
 ### privateKey
 
-• **privateKey**: *Uint8Array*
+• **privateKey**: `Uint8Array`
 
 The private key.
 
@@ -25,6 +25,6 @@ ___
 
 ### publicKey
 
-• **publicKey**: *Uint8Array*
+• **publicKey**: `Uint8Array`
 
 The public key.

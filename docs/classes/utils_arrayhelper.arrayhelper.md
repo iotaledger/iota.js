@@ -20,15 +20,13 @@ Array helper methods.
 
 ### constructor
 
-\+ **new ArrayHelper**(): [*ArrayHelper*](utils_arrayhelper.arrayhelper.md)
-
-**Returns:** [*ArrayHelper*](utils_arrayhelper.arrayhelper.md)
+• **new ArrayHelper**()
 
 ## Methods
 
 ### equal
 
-▸ `Static` **equal**(`array1`: *undefined* \| *ArrayLike*<unknown\>, `array2`: *undefined* \| *ArrayLike*<unknown\>): *boolean*
+▸ `Static` **equal**(`array1`, `array2`): `boolean`
 
 Are the two array equals.
 
@@ -36,9 +34,11 @@ Are the two array equals.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `array1` | *undefined* \| *ArrayLike*<unknown\> | The first array. |
-| `array2` | *undefined* \| *ArrayLike*<unknown\> | The second array. |
+| `array1` | `undefined` \| `ArrayLike`<unknown\> | The first array. |
+| `array2` | `undefined` \| `ArrayLike`<unknown\> | The second array. |
 
-**Returns:** *boolean*
+#### Returns
+
+`boolean`
 
 True if the arrays are equal.

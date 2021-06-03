@@ -13,7 +13,7 @@
 
 ### generateBip44Address
 
-▸ **generateBip44Address**(`generatorState`: [*IBip44GeneratorState*](../interfaces/models_ibip44generatorstate.ibip44generatorstate.md), `isFirst`: *boolean*): *string*
+▸ **generateBip44Address**(`generatorState`, `isFirst`): `string`
 
 Generate addresses based on the account indexing style.
 
@@ -21,10 +21,12 @@ Generate addresses based on the account indexing style.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `generatorState` | [*IBip44GeneratorState*](../interfaces/models_ibip44generatorstate.ibip44generatorstate.md) | The address state. |
-| `isFirst` | *boolean* | Is this the first address we are generating. |
+| `generatorState` | [IBip44GeneratorState](../interfaces/models_ibip44generatorstate.ibip44generatorstate.md) | The address state. |
+| `isFirst` | `boolean` | Is this the first address we are generating. |
 
-**Returns:** *string*
+#### Returns
+
+`string`
 
 The key pair for the address.
 
@@ -32,7 +34,7 @@ ___
 
 ### generateBip44Path
 
-▸ **generateBip44Path**(`accountIndex`: *number*, `addressIndex`: *number*, `isInternal`: *boolean*): [*Bip32Path*](../classes/crypto_bip32path.bip32path.md)
+▸ **generateBip44Path**(`accountIndex`, `addressIndex`, `isInternal`): [Bip32Path](../classes/crypto_bip32path.bip32path.md)
 
 Generate a bip44 path based on all its parts.
 
@@ -40,10 +42,12 @@ Generate a bip44 path based on all its parts.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `accountIndex` | *number* | The account index. |
-| `addressIndex` | *number* | The address index. |
-| `isInternal` | *boolean* | Is this an internal address. |
+| `accountIndex` | `number` | The account index. |
+| `addressIndex` | `number` | The address index. |
+| `isInternal` | `boolean` | Is this an internal address. |
 
-**Returns:** [*Bip32Path*](../classes/crypto_bip32path.bip32path.md)
+#### Returns
+
+[Bip32Path](../classes/crypto_bip32path.bip32path.md)
 
 The generated address.

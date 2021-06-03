@@ -8,7 +8,7 @@ Signature locked single output.
 
 ## Hierarchy
 
-- [*ITypeBase*](models_itypebase.itypebase.md)<``0``\>
+- [ITypeBase](models_itypebase.itypebase.md)<``0``\>
 
   ↳ **ISigLockedSingleOutput**
 
@@ -24,7 +24,7 @@ Signature locked single output.
 
 ### address
 
-• **address**: [*IEd25519Address*](models_ied25519address.ied25519address.md)
+• **address**: [IEd25519Address](models_ied25519address.ied25519address.md)
 
 The address.
 
@@ -32,7 +32,7 @@ ___
 
 ### amount
 
-• **amount**: *number*
+• **amount**: `number`
 
 The amount of the output.
 
@@ -44,4 +44,6 @@ ___
 
 The type of the object.
 
-Inherited from: [ITypeBase](models_itypebase.itypebase.md).[type](models_itypebase.itypebase.md#type)
+#### Inherited from
+
+[ITypeBase](models_itypebase.itypebase.md).[type](models_itypebase.itypebase.md#type)

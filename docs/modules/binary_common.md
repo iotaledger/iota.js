@@ -22,7 +22,7 @@
 
 ### ARRAY\_LENGTH
 
-• `Const` **ARRAY\_LENGTH**: *number*
+• `Const` **ARRAY\_LENGTH**: `number`
 
 Byte length for an array length.
 
@@ -30,7 +30,7 @@ ___
 
 ### BYTE\_SIZE
 
-• `Const` **BYTE\_SIZE**: *number*= 1
+• `Const` **BYTE\_SIZE**: `number` = 1
 
 Byte length for a byte field.
 
@@ -38,7 +38,7 @@ ___
 
 ### MERKLE\_PROOF\_LENGTH
 
-• `Const` **MERKLE\_PROOF\_LENGTH**: *number*
+• `Const` **MERKLE\_PROOF\_LENGTH**: `number`
 
 Byte length for a merkle prrof.
 
@@ -46,7 +46,7 @@ ___
 
 ### MESSAGE\_ID\_LENGTH
 
-• `Const` **MESSAGE\_ID\_LENGTH**: *number*
+• `Const` **MESSAGE\_ID\_LENGTH**: `number`
 
 Byte length for a message id.
 
@@ -54,7 +54,7 @@ ___
 
 ### SMALL\_TYPE\_LENGTH
 
-• `Const` **SMALL\_TYPE\_LENGTH**: *number*
+• `Const` **SMALL\_TYPE\_LENGTH**: `number`
 
 Byte length for a small type length.
 
@@ -62,7 +62,7 @@ ___
 
 ### STRING\_LENGTH
 
-• `Const` **STRING\_LENGTH**: *number*
+• `Const` **STRING\_LENGTH**: `number`
 
 Byte length for a string length.
 
@@ -70,7 +70,7 @@ ___
 
 ### TRANSACTION\_ID\_LENGTH
 
-• `Const` **TRANSACTION\_ID\_LENGTH**: *number*
+• `Const` **TRANSACTION\_ID\_LENGTH**: `number`
 
 Byte length for a transaction id.
 
@@ -78,7 +78,7 @@ ___
 
 ### TYPE\_LENGTH
 
-• `Const` **TYPE\_LENGTH**: *number*
+• `Const` **TYPE\_LENGTH**: `number`
 
 Byte length for a type length.
 
@@ -86,7 +86,7 @@ ___
 
 ### UINT16\_SIZE
 
-• `Const` **UINT16\_SIZE**: *number*= 2
+• `Const` **UINT16\_SIZE**: `number` = 2
 
 Byte length for a uint16 field.
 
@@ -94,7 +94,7 @@ ___
 
 ### UINT32\_SIZE
 
-• `Const` **UINT32\_SIZE**: *number*= 4
+• `Const` **UINT32\_SIZE**: `number` = 4
 
 Byte length for a uint32 field.
 
@@ -102,6 +102,6 @@ ___
 
 ### UINT64\_SIZE
 
-• `Const` **UINT64\_SIZE**: *number*= 8
+• `Const` **UINT64\_SIZE**: `number` = 8
 
 Byte length for a uint64 field.

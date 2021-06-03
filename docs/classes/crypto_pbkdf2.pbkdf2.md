@@ -21,15 +21,13 @@ Implementation of the password based key derivation function 2.
 
 ### constructor
 
-\+ **new Pbkdf2**(): [*Pbkdf2*](crypto_pbkdf2.pbkdf2.md)
-
-**Returns:** [*Pbkdf2*](crypto_pbkdf2.pbkdf2.md)
+• **new Pbkdf2**()
 
 ## Methods
 
 ### sha256
 
-▸ `Static` **sha256**(`password`: *Uint8Array*, `salt`: *Uint8Array*, `iterations`: *number*, `keyLength`: *number*): *Uint8Array*
+▸ `Static` **sha256**(`password`, `salt`, `iterations`, `keyLength`): `Uint8Array`
 
 Derive a key from the parameters using Sha256.
 
@@ -37,12 +35,14 @@ Derive a key from the parameters using Sha256.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `password` | *Uint8Array* | The password to derive the key from. |
-| `salt` | *Uint8Array* | The salt for the derivation. |
-| `iterations` | *number* | Numer of iterations to perform. |
-| `keyLength` | *number* | The length of the key to derive. |
+| `password` | `Uint8Array` | The password to derive the key from. |
+| `salt` | `Uint8Array` | The salt for the derivation. |
+| `iterations` | `number` | Numer of iterations to perform. |
+| `keyLength` | `number` | The length of the key to derive. |
 
-**Returns:** *Uint8Array*
+#### Returns
+
+`Uint8Array`
 
 The derived key.
 
@@ -50,7 +50,7 @@ ___
 
 ### sha512
 
-▸ `Static` **sha512**(`password`: *Uint8Array*, `salt`: *Uint8Array*, `iterations`: *number*, `keyLength`: *number*): *Uint8Array*
+▸ `Static` **sha512**(`password`, `salt`, `iterations`, `keyLength`): `Uint8Array`
 
 Derive a key from the parameters using Sha512.
 
@@ -58,11 +58,13 @@ Derive a key from the parameters using Sha512.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `password` | *Uint8Array* | The password to derive the key from. |
-| `salt` | *Uint8Array* | The salt for the derivation. |
-| `iterations` | *number* | Numer of iterations to perform. |
-| `keyLength` | *number* | The length of the key to derive. |
+| `password` | `Uint8Array` | The password to derive the key from. |
+| `salt` | `Uint8Array` | The salt for the derivation. |
+| `iterations` | `number` | Numer of iterations to perform. |
+| `keyLength` | `number` | The length of the key to derive. |
 
-**Returns:** *Uint8Array*
+#### Returns
+
+`Uint8Array`
 
 The derived key.

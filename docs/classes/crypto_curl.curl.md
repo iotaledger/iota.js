@@ -28,7 +28,7 @@ Class to implement Curl sponge.
 
 ### constructor
 
-\+ **new Curl**(`rounds?`: *number*): [*Curl*](crypto_curl.curl.md)
+• **new Curl**(`rounds?`)
 
 Create a new instance of Curl.
 
@@ -36,15 +36,13 @@ Create a new instance of Curl.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `rounds` | *number* | The number of rounds to perform. |
-
-**Returns:** [*Curl*](crypto_curl.curl.md)
+| `rounds` | `number` | The number of rounds to perform. |
 
 ## Properties
 
 ### HASH\_LENGTH
 
-▪ `Static` `Readonly` **HASH\_LENGTH**: *number*= 243
+▪ `Static` `Readonly` **HASH\_LENGTH**: `number` = 243
 
 The Hash Length.
 
@@ -52,7 +50,7 @@ ___
 
 ### STATE\_LENGTH
 
-▪ `Static` `Readonly` **STATE\_LENGTH**: *number*
+▪ `Static` `Readonly` **STATE\_LENGTH**: `number`
 
 The State Length.
 
@@ -60,7 +58,7 @@ The State Length.
 
 ### absorb
 
-▸ **absorb**(`trits`: *Int8Array*, `offset`: *number*, `length`: *number*): *void*
+▸ **absorb**(`trits`, `offset`, `length`): `void`
 
 Absorbs trits given an offset and length.
 
@@ -68,17 +66,19 @@ Absorbs trits given an offset and length.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `trits` | *Int8Array* | The trits to absorb. |
-| `offset` | *number* | The offset to start abororbing from the array. |
-| `length` | *number* | The length of trits to absorb. |
+| `trits` | `Int8Array` | The trits to absorb. |
+| `offset` | `number` | The offset to start abororbing from the array. |
+| `length` | `number` | The length of trits to absorb. |
 
-**Returns:** *void*
+#### Returns
+
+`void`
 
 ___
 
 ### rate
 
-▸ **rate**(`len?`: *number*): *Int8Array*
+▸ **rate**(`len?`): `Int8Array`
 
 Get the state of the sponge.
 
@@ -86,9 +86,11 @@ Get the state of the sponge.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `len` | *number* | The length of the state to get. |
+| `len` | `number` | The length of the state to get. |
 
-**Returns:** *Int8Array*
+#### Returns
+
+`Int8Array`
 
 The state.
 
@@ -96,17 +98,19 @@ ___
 
 ### reset
 
-▸ **reset**(): *void*
+▸ **reset**(): `void`
 
 Resets the state.
 
-**Returns:** *void*
+#### Returns
+
+`void`
 
 ___
 
 ### squeeze
 
-▸ **squeeze**(`trits`: *Int8Array*, `offset`: *number*, `length`: *number*): *void*
+▸ **squeeze**(`trits`, `offset`, `length`): `void`
 
 Squeezes trits given an offset and length.
 
@@ -114,8 +118,10 @@ Squeezes trits given an offset and length.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `trits` | *Int8Array* | The trits to squeeze. |
-| `offset` | *number* | The offset to start squeezing from the array. |
-| `length` | *number* | The length of trits to squeeze. |
+| `trits` | `Int8Array` | The trits to squeeze. |
+| `offset` | `number` | The offset to start squeezing from the array. |
+| `length` | `number` | The length of trits to squeeze. |
 
-**Returns:** *void*
+#### Returns
+
+`void`

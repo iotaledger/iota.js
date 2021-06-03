@@ -26,7 +26,7 @@ Gossip metrics.
 
 ### droppedPackets
 
-• **droppedPackets**: *number*
+• **droppedPackets**: `number`
 
 The number of dropped sent packets.
 
@@ -34,7 +34,7 @@ ___
 
 ### knownMessages
 
-• **knownMessages**: *number*
+• **knownMessages**: `number`
 
 The number of known messages.
 
@@ -42,7 +42,7 @@ ___
 
 ### newMessages
 
-• **newMessages**: *number*
+• **newMessages**: `number`
 
 The number of new messages.
 
@@ -50,7 +50,7 @@ ___
 
 ### receivedHeartbeats
 
-• **receivedHeartbeats**: *number*
+• **receivedHeartbeats**: `number`
 
 The number of received heartbeats.
 
@@ -58,7 +58,7 @@ ___
 
 ### receivedMessageRequests
 
-• **receivedMessageRequests**: *number*
+• **receivedMessageRequests**: `number`
 
 The number of received message requests.
 
@@ -66,7 +66,7 @@ ___
 
 ### receivedMessages
 
-• **receivedMessages**: *number*
+• **receivedMessages**: `number`
 
 The number of received messages.
 
@@ -74,7 +74,7 @@ ___
 
 ### receivedMilestoneRequests
 
-• **receivedMilestoneRequests**: *number*
+• **receivedMilestoneRequests**: `number`
 
 The number of received milestone requests.
 
@@ -82,7 +82,7 @@ ___
 
 ### sentHeartbeats
 
-• **sentHeartbeats**: *number*
+• **sentHeartbeats**: `number`
 
 The number of sent heartbeats.
 
@@ -90,7 +90,7 @@ ___
 
 ### sentMessageRequests
 
-• **sentMessageRequests**: *number*
+• **sentMessageRequests**: `number`
 
 The number of sent message requests.
 
@@ -98,7 +98,7 @@ ___
 
 ### sentMessages
 
-• **sentMessages**: *number*
+• **sentMessages**: `number`
 
 The number of sent messages.
 
@@ -106,6 +106,6 @@ ___
 
 ### sentMilestoneRequests
 
-• **sentMilestoneRequests**: *number*
+• **sentMilestoneRequests**: `number`
 
 The number of sent miletsone requests.
