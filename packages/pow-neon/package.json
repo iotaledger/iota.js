@@ -1,7 +1,7 @@
 {
     "name": "@iota/pow-neon.js",
     "description": "IOTA JavaScript Library for Performing Multi-Threaded PoW on NodeJS",
-    "version": "0.1.2",
+    "version": "0.1.4",
     "keywords": [
         "iota",
         "pow"
@@ -76,7 +76,8 @@
         "native/build.rs",
         "native/cargo.*",
         "native/index.d.ts",
-        "native/package.json"
+        "native/package.json",
+        "copy-dist.js"
     ],
     "dependencies": {
         "@iota/iota.js": "^1.5.3",
