@@ -30,6 +30,7 @@ export * from "./crypto/poly1305";
 export * from "./crypto/sha256";
 export * from "./crypto/sha512";
 export * from "./crypto/slip0010";
+export * from "./crypto/x25519";
 export * from "./crypto/zip215";
 export * from "./encoding/b1t6";
 export * from "./highLevel/addresses";
