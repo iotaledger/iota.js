@@ -1,4 +1,7 @@
 # Changelog
+## v1.5.4
+
+* Local PoW autofills parentMessageIds if missing
 
 ## v1.5.3
 
