@@ -1,0 +1,1 @@
+require("fs").copyFileSync("./native/index.node", "./dist/native/index.node")

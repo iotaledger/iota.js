@@ -1,7 +1,7 @@
 {
     "name": "@iota/pow-neon.js",
     "description": "IOTA JavaScript Library for Performing Multi-Threaded PoW on NodeJS",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "keywords": [
         "iota",
         "pow"
@@ -30,8 +30,8 @@
         "typings": "tsc --emitDeclarationOnly --declaration true --declarationDir typings",
         "dist": "run-s dist-clean build test package typings",
         "neon-build": "neon build --release",
-        "neon-copy": "copyfiles ./native/index.node ./dist",
-        "install": "run-s neon-build neon-copy"
+        "neon-copy": "node ./copy-dist.js",
+        "postinstall": "npm run neon-build && npm run neon-copy"
     },
     "engines": {
         "node": ">=12.0.0"
