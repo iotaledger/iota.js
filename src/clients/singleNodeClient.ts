@@ -170,6 +170,24 @@ export class SingleNodeClient implements IClient {
      * @returns The messageId.
      */
     public async messageSubmit(message: IMessage): Promise<string> {
+        let minPoWScore = 0;
+        if (this._powProvider) {
+            // If there is a local pow provider and no networkId or parent message ids
+            // we must populate them, so that the they are not filled in by the
+            // node causing invalid pow calculation
+            const powInfo = await this.getPoWInfo();
+            minPoWScore = powInfo.minPoWScore;
+
+            if (!message.parentMessageIds || message.parentMessageIds.length === 0) {
+                const tips = await this.tips();
+                message.parentMessageIds = tips.tipMessageIds;
+            }
+
+            if (!message.networkId || message.networkId.length === 0) {
+                message.networkId = powInfo.networkId.toString();
+            }
+        }
+
         const writeStream = new WriteStream();
         serializeMessage(writeStream, message);
         const messageBytes = writeStream.finalBytes();
@@ -179,17 +197,9 @@ export class SingleNodeClient implements IClient {
                 }, which exceeds the maximum size of ${MAX_MESSAGE_LENGTH}`);
         }
 
-        if (!message.nonce || message.nonce.length === 0) {
-            if (this._powProvider) {
-                const { networkId, minPoWScore } = await this.getPoWInfo();
-                BigIntHelper.write8(networkId, messageBytes, 0);
-                message.networkId = networkId.toString();
-
-                const nonce = await this._powProvider.pow(messageBytes, minPoWScore);
-                message.nonce = nonce.toString(10);
-            } else {
-                message.nonce = "0";
-            }
+        if (this._powProvider) {
+            const nonce = await this._powProvider.pow(messageBytes, minPoWScore);
+            message.nonce = nonce.toString(10);
         }
 
         const response = await this.fetchJson<IMessage, IMessageIdResponse>("post", "messages", message);
