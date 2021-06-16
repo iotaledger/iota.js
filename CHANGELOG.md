@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.5.6
+
+* TypeScript import type
+
 ## v1.5.5
 
 * Modernise ES module format

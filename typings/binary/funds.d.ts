@@ -1,6 +1,6 @@
-import { IMigratedFunds } from "../models/IMigratedFunds";
-import { ReadStream } from "../utils/readStream";
-import { WriteStream } from "../utils/writeStream";
+import type { IMigratedFunds } from "../models/IMigratedFunds";
+import type { ReadStream } from "../utils/readStream";
+import type { WriteStream } from "../utils/writeStream";
 /**
  * The length of the tail hash length in bytes.
  */

@@ -1,10 +1,10 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 import { ITreasuryInput, TREASURY_INPUT_TYPE } from "../models/ITreasuryInput";
-import { ITypeBase } from "../models/ITypeBase";
+import type { ITypeBase } from "../models/ITypeBase";
 import { IUTXOInput, UTXO_INPUT_TYPE } from "../models/IUTXOInput";
-import { ReadStream } from "../utils/readStream";
-import { WriteStream } from "../utils/writeStream";
+import type { ReadStream } from "../utils/readStream";
+import type { WriteStream } from "../utils/writeStream";
 import { SMALL_TYPE_LENGTH, TRANSACTION_ID_LENGTH, UINT16_SIZE } from "./common";
 
 /**

@@ -1,8 +1,8 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import { IMigratedFunds } from "../models/IMigratedFunds";
-import { ReadStream } from "../utils/readStream";
-import { WriteStream } from "../utils/writeStream";
+import type { IMigratedFunds } from "../models/IMigratedFunds";
+import type { ReadStream } from "../utils/readStream";
+import type { WriteStream } from "../utils/writeStream";
 import { deserializeAddress, MIN_ED25519_ADDRESS_LENGTH, serializeAddress } from "./address";
 import { UINT64_SIZE } from "./common";
 

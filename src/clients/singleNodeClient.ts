@@ -2,30 +2,30 @@
 // SPDX-License-Identifier: Apache-2.0
 import { MAX_MESSAGE_LENGTH, serializeMessage } from "../binary/message";
 import { Blake2b } from "../crypto/blake2b";
-import { IAddressOutputsResponse } from "../models/api/IAddressOutputsResponse";
-import { IAddressResponse } from "../models/api/IAddressResponse";
-import { IChildrenResponse } from "../models/api/IChildrenResponse";
-import { IMessageIdResponse } from "../models/api/IMessageIdResponse";
-import { IMessagesResponse } from "../models/api/IMessagesResponse";
-import { IMilestoneResponse } from "../models/api/IMilestoneResponse";
-import { IMilestoneUtxoChangesResponse } from "../models/api/IMilestoneUtxoChangesResponse";
-import { IOutputResponse } from "../models/api/IOutputResponse";
-import { IReceiptsResponse } from "../models/api/IReceiptsResponse";
-import { IResponse } from "../models/api/IResponse";
-import { ITipsResponse } from "../models/api/ITipsResponse";
-import { IClient } from "../models/IClient";
-import { IMessage } from "../models/IMessage";
-import { IMessageMetadata } from "../models/IMessageMetadata";
-import { INodeInfo } from "../models/INodeInfo";
-import { IPeer } from "../models/IPeer";
-import { IPowProvider } from "../models/IPowProvider";
-import { ITreasury } from "../models/ITreasury";
+import type { IAddressOutputsResponse } from "../models/api/IAddressOutputsResponse";
+import type { IAddressResponse } from "../models/api/IAddressResponse";
+import type { IChildrenResponse } from "../models/api/IChildrenResponse";
+import type { IMessageIdResponse } from "../models/api/IMessageIdResponse";
+import type { IMessagesResponse } from "../models/api/IMessagesResponse";
+import type { IMilestoneResponse } from "../models/api/IMilestoneResponse";
+import type { IMilestoneUtxoChangesResponse } from "../models/api/IMilestoneUtxoChangesResponse";
+import type { IOutputResponse } from "../models/api/IOutputResponse";
+import type { IReceiptsResponse } from "../models/api/IReceiptsResponse";
+import type { IResponse } from "../models/api/IResponse";
+import type { ITipsResponse } from "../models/api/ITipsResponse";
+import type { IClient } from "../models/IClient";
+import type { IMessage } from "../models/IMessage";
+import type { IMessageMetadata } from "../models/IMessageMetadata";
+import type { INodeInfo } from "../models/INodeInfo";
+import type { IPeer } from "../models/IPeer";
+import type { IPowProvider } from "../models/IPowProvider";
+import type { ITreasury } from "../models/ITreasury";
 import { ArrayHelper } from "../utils/arrayHelper";
 import { BigIntHelper } from "../utils/bigIntHelper";
 import { Converter } from "../utils/converter";
 import { WriteStream } from "../utils/writeStream";
 import { ClientError } from "./clientError";
-import { SingleNodeClientOptions } from "./singleNodeClientOptions";
+import type { SingleNodeClientOptions } from "./singleNodeClientOptions";
 
 /**
  * Client for API communication.

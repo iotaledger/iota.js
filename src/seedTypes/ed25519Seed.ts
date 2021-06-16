@@ -1,11 +1,11 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import { Bip32Path } from "../crypto/bip32Path";
+import type { Bip32Path } from "../crypto/bip32Path";
 import { Bip39 } from "../crypto/bip39";
 import { Ed25519 } from "../crypto/ed25519";
 import { Slip0010 } from "../crypto/slip0010";
-import { IKeyPair } from "../models/IKeyPair";
-import { ISeed } from "../models/ISeed";
+import type { IKeyPair } from "../models/IKeyPair";
+import type { ISeed } from "../models/ISeed";
 
 /**
  * The global type for the seed.

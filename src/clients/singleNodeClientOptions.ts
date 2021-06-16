@@ -1,6 +1,6 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import { IPowProvider } from "../models/IPowProvider";
+import type { IPowProvider } from "../models/IPowProvider";
 
 /**
  * Options used when constructing SingleNodeClient.

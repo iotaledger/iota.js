@@ -1,9 +1,9 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import { IReferenceUnlockBlock } from "./IReferenceUnlockBlock";
-import { ISignatureUnlockBlock } from "./ISignatureUnlockBlock";
-import { ITransactionEssence } from "./ITransactionEssence";
-import { ITypeBase } from "./ITypeBase";
+import type { IReferenceUnlockBlock } from "./IReferenceUnlockBlock";
+import type { ISignatureUnlockBlock } from "./ISignatureUnlockBlock";
+import type { ITransactionEssence } from "./ITransactionEssence";
+import type { ITypeBase } from "./ITypeBase";
 
 /**
  * The global type for the payload.

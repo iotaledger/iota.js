@@ -2,8 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0
 import { Ed25519 } from "../crypto/ed25519";
 import { ED25519_SIGNATURE_TYPE, IEd25519Signature } from "../models/IEd25519Signature";
-import { ReadStream } from "../utils/readStream";
-import { WriteStream } from "../utils/writeStream";
+import type { ReadStream } from "../utils/readStream";
+import type { WriteStream } from "../utils/writeStream";
 import { SMALL_TYPE_LENGTH } from "./common";
 
 /**

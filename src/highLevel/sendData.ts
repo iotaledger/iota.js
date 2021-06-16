@@ -2,9 +2,9 @@
 // SPDX-License-Identifier: Apache-2.0
 import { MAX_INDEXATION_KEY_LENGTH, MIN_INDEXATION_KEY_LENGTH } from "../binary/payload";
 import { SingleNodeClient } from "../clients/singleNodeClient";
-import { IClient } from "../models/IClient";
+import type { IClient } from "../models/IClient";
 import { IIndexationPayload, INDEXATION_PAYLOAD_TYPE } from "../models/IIndexationPayload";
-import { IMessage } from "../models/IMessage";
+import type { IMessage } from "../models/IMessage";
 import { Converter } from "../utils/converter";
 
 /**

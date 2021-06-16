@@ -7,9 +7,9 @@ import { IReceiptPayload, RECEIPT_PAYLOAD_TYPE } from "../models/IReceiptPayload
 import { TRANSACTION_ESSENCE_TYPE } from "../models/ITransactionEssence";
 import { ITransactionPayload, TRANSACTION_PAYLOAD_TYPE } from "../models/ITransactionPayload";
 import { ITreasuryTransactionPayload, TREASURY_TRANSACTION_PAYLOAD_TYPE } from "../models/ITreasuryTransactionPayload";
-import { ITypeBase } from "../models/ITypeBase";
-import { ReadStream } from "../utils/readStream";
-import { WriteStream } from "../utils/writeStream";
+import type { ITypeBase } from "../models/ITypeBase";
+import type { ReadStream } from "../utils/readStream";
+import type { WriteStream } from "../utils/writeStream";
 import { BYTE_SIZE, MERKLE_PROOF_LENGTH, MESSAGE_ID_LENGTH, STRING_LENGTH, TYPE_LENGTH, UINT16_SIZE, UINT32_SIZE, UINT64_SIZE } from "./common";
 import { deserializeFunds, MIN_MIGRATED_FUNDS_LENGTH, serializeFunds } from "./funds";
 import { deserializeTreasuryInput, MIN_TREASURY_INPUT_LENGTH, serializeTreasuryInput } from "./input";

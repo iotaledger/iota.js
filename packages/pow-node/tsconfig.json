@@ -1,9 +1,10 @@
 {
     "compilerOptions": {
-        "target": "es6",
+        "target": "es2019",
         "strict": true,
-        "module": "commonjs",
+        "module": "es2020",
         "moduleResolution": "node",
+        "importsNotUsedAsValues": "error",
         "outDir": "./es",
         "inlineSourceMap": true,
         "esModuleInterop": true,

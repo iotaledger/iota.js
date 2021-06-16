@@ -1,6 +1,6 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import { ITypeBase } from "./ITypeBase";
+import type { ITypeBase } from "./ITypeBase";
 
 /**
  * The global type for the signature type.

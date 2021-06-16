@@ -4,6 +4,7 @@
         "strict": true,
         "module": "es2020",
         "moduleResolution": "node",
+        "importsNotUsedAsValues": "error",
         "outDir": "./es",
         "inlineSourceMap": true,
         "esModuleInterop": true,

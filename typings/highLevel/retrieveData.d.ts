@@ -1,4 +1,4 @@
-import { IClient } from "../models/IClient";
+import type { IClient } from "../models/IClient";
 /**
  * Retrieve a data message.
  * @param client The client or node endpoint to retrieve the data with.

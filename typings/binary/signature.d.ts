@@ -1,6 +1,6 @@
 import { IEd25519Signature } from "../models/IEd25519Signature";
-import { ReadStream } from "../utils/readStream";
-import { WriteStream } from "../utils/writeStream";
+import type { ReadStream } from "../utils/readStream";
+import type { WriteStream } from "../utils/writeStream";
 /**
  * The minimum length of a signature binary representation.
  */

@@ -3,9 +3,9 @@
 import { ISigLockedDustAllowanceOutput, SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE } from "../models/ISigLockedDustAllowanceOutput";
 import { ISigLockedSingleOutput, SIG_LOCKED_SINGLE_OUTPUT_TYPE } from "../models/ISigLockedSingleOutput";
 import { ITreasuryOutput, TREASURY_OUTPUT_TYPE } from "../models/ITreasuryOutput";
-import { ITypeBase } from "../models/ITypeBase";
-import { ReadStream } from "../utils/readStream";
-import { WriteStream } from "../utils/writeStream";
+import type { ITypeBase } from "../models/ITypeBase";
+import type { ReadStream } from "../utils/readStream";
+import type { WriteStream } from "../utils/writeStream";
 import { deserializeAddress, MIN_ADDRESS_LENGTH, MIN_ED25519_ADDRESS_LENGTH, serializeAddress } from "./address";
 import { SMALL_TYPE_LENGTH, UINT64_SIZE } from "./common";
 

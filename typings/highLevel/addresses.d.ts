@@ -1,5 +1,5 @@
 import { Bip32Path } from "../crypto/bip32Path";
-import { IBip44GeneratorState } from "../models/IBip44GeneratorState";
+import type { IBip44GeneratorState } from "../models/IBip44GeneratorState";
 export declare const IOTA_BIP44_BASE_PATH: string;
 /**
  * Generate a bip44 path based on all its parts.

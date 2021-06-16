@@ -1,5 +1,5 @@
-import { IGossipHeartbeat } from "./IGossipHeartbeat";
-import { IGossipMetrics } from "./IGossipMetrics";
+import type { IGossipHeartbeat } from "./IGossipHeartbeat";
+import type { IGossipMetrics } from "./IGossipMetrics";
 /**
  * Peer details.
  */

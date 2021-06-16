@@ -1,5 +1,5 @@
-import { IClient } from "../models/IClient";
-import { ISeed } from "../models/ISeed";
+import type { IClient } from "../models/IClient";
+import type { ISeed } from "../models/ISeed";
 /**
  * Get the first unspent address.
  * @param client The client or node endpoint to send the transfer with.

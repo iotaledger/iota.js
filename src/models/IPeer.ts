@@ -1,7 +1,7 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import { IGossipHeartbeat } from "./IGossipHeartbeat";
-import { IGossipMetrics } from "./IGossipMetrics";
+import type { IGossipHeartbeat } from "./IGossipHeartbeat";
+import type { IGossipMetrics } from "./IGossipMetrics";
 
 /**
  * Peer details.

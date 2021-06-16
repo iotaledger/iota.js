@@ -1,4 +1,4 @@
-import { IEd25519Address } from "./IEd25519Address";
+import type { IEd25519Address } from "./IEd25519Address";
 /**
  * The migrated funds for receipts.
  */

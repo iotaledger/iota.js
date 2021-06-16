@@ -1,9 +1,9 @@
 import { ISigLockedDustAllowanceOutput } from "../models/ISigLockedDustAllowanceOutput";
 import { ISigLockedSingleOutput } from "../models/ISigLockedSingleOutput";
 import { ITreasuryOutput } from "../models/ITreasuryOutput";
-import { ITypeBase } from "../models/ITypeBase";
-import { ReadStream } from "../utils/readStream";
-import { WriteStream } from "../utils/writeStream";
+import type { ITypeBase } from "../models/ITypeBase";
+import type { ReadStream } from "../utils/readStream";
+import type { WriteStream } from "../utils/writeStream";
 /**
  * The minimum length of an output binary representation.
  */

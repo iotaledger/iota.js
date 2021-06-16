@@ -1,19 +1,19 @@
-import { IAddressOutputsResponse } from "../models/api/IAddressOutputsResponse";
-import { IAddressResponse } from "../models/api/IAddressResponse";
-import { IChildrenResponse } from "../models/api/IChildrenResponse";
-import { IMessagesResponse } from "../models/api/IMessagesResponse";
-import { IMilestoneResponse } from "../models/api/IMilestoneResponse";
-import { IMilestoneUtxoChangesResponse } from "../models/api/IMilestoneUtxoChangesResponse";
-import { IOutputResponse } from "../models/api/IOutputResponse";
-import { IReceiptsResponse } from "../models/api/IReceiptsResponse";
-import { ITipsResponse } from "../models/api/ITipsResponse";
-import { IClient } from "../models/IClient";
-import { IMessage } from "../models/IMessage";
-import { IMessageMetadata } from "../models/IMessageMetadata";
-import { INodeInfo } from "../models/INodeInfo";
-import { IPeer } from "../models/IPeer";
-import { ITreasury } from "../models/ITreasury";
-import { SingleNodeClientOptions } from "./singleNodeClientOptions";
+import type { IAddressOutputsResponse } from "../models/api/IAddressOutputsResponse";
+import type { IAddressResponse } from "../models/api/IAddressResponse";
+import type { IChildrenResponse } from "../models/api/IChildrenResponse";
+import type { IMessagesResponse } from "../models/api/IMessagesResponse";
+import type { IMilestoneResponse } from "../models/api/IMilestoneResponse";
+import type { IMilestoneUtxoChangesResponse } from "../models/api/IMilestoneUtxoChangesResponse";
+import type { IOutputResponse } from "../models/api/IOutputResponse";
+import type { IReceiptsResponse } from "../models/api/IReceiptsResponse";
+import type { ITipsResponse } from "../models/api/ITipsResponse";
+import type { IClient } from "../models/IClient";
+import type { IMessage } from "../models/IMessage";
+import type { IMessageMetadata } from "../models/IMessageMetadata";
+import type { INodeInfo } from "../models/INodeInfo";
+import type { IPeer } from "../models/IPeer";
+import type { ITreasury } from "../models/ITreasury";
+import type { SingleNodeClientOptions } from "./singleNodeClientOptions";
 /**
  * Client for API communication.
  */

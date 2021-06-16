@@ -1,4 +1,4 @@
-import { IPowProvider } from "../models/IPowProvider";
+import type { IPowProvider } from "../models/IPowProvider";
 /**
  * Local POW Provider.
  * WARNING - This is really slow.

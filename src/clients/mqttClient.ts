@@ -2,12 +2,12 @@
 // SPDX-License-Identifier: Apache-2.0
 import * as mqtt from "mqtt";
 import { deserializeMessage } from "../binary/message";
-import { IMqttMilestoneResponse } from "../models/api/IMqttMilestoneResponse";
-import { IOutputResponse } from "../models/api/IOutputResponse";
-import { IMessage } from "../models/IMessage";
-import { IMessageMetadata } from "../models/IMessageMetadata";
-import { IMqttClient } from "../models/IMqttClient";
-import { IMqttStatus } from "../models/IMqttStatus";
+import type { IMqttMilestoneResponse } from "../models/api/IMqttMilestoneResponse";
+import type { IOutputResponse } from "../models/api/IOutputResponse";
+import type { IMessage } from "../models/IMessage";
+import type { IMessageMetadata } from "../models/IMessageMetadata";
+import type { IMqttClient } from "../models/IMqttClient";
+import type { IMqttStatus } from "../models/IMqttStatus";
 import { Converter } from "../utils/converter";
 import { RandomHelper } from "../utils/randomHelper";
 import { ReadStream } from "../utils/readStream";

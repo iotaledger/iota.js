@@ -1,6 +1,6 @@
-import { Bip32Path } from "../crypto/bip32Path";
-import { IKeyPair } from "../models/IKeyPair";
-import { ISeed } from "../models/ISeed";
+import type { Bip32Path } from "../crypto/bip32Path";
+import type { IKeyPair } from "../models/IKeyPair";
+import type { ISeed } from "../models/ISeed";
 /**
  * The global type for the seed.
  */

@@ -1,10 +1,10 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import { IIndexationPayload } from "./IIndexationPayload";
-import { ISigLockedDustAllowanceOutput } from "./ISigLockedDustAllowanceOutput";
-import { ISigLockedSingleOutput } from "./ISigLockedSingleOutput";
-import { ITypeBase } from "./ITypeBase";
-import { IUTXOInput } from "./IUTXOInput";
+import type { IIndexationPayload } from "./IIndexationPayload";
+import type { ISigLockedDustAllowanceOutput } from "./ISigLockedDustAllowanceOutput";
+import type { ISigLockedSingleOutput } from "./ISigLockedSingleOutput";
+import type { ITypeBase } from "./ITypeBase";
+import type { IUTXOInput } from "./IUTXOInput";
 
 /**
  * The global type for the transaction essence.

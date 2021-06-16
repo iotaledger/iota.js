@@ -134,6 +134,9 @@ module.exports = {
         "@typescript-eslint/no-dupe-class-members": [
             "error"
         ],
+        "@typescript-eslint/no-duplicate-imports": [
+            "error"
+        ],
         "@typescript-eslint/no-dynamic-delete": [
             "off"
         ],
@@ -680,10 +683,10 @@ module.exports = {
             "off"
         ],
         "no-duplicate-case": [
-            "error"
+            "off"
         ],
         "no-duplicate-imports": [
-            "error"
+            "off"
         ],
         "no-else-return": [
             "error"

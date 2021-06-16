@@ -1,9 +1,9 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 /* eslint-disable no-bitwise */
-import { IPowProvider } from "@iota/iota.js";
+import type { IPowProvider } from "@iota/iota.js";
 import os from "os";
-import module from "../native/index";
+import module from "../native/";
 
 /**
  * Neon POW Provider.
@@ -26,7 +26,7 @@ export class NeonPowProvider implements IPowProvider {
     /**
      * Perform pow on the message and return the nonce of at least targetScore.
      * @param message The message to process.
-     * @param targetScore the target score.
+     * @param targetScore The target score.
      * @returns The nonce.
      */
     public async pow(message: Uint8Array, targetScore: number): Promise<bigint> {

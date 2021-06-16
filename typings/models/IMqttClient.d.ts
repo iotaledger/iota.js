@@ -1,8 +1,8 @@
-import { IMqttMilestoneResponse } from "./api/IMqttMilestoneResponse";
-import { IOutputResponse } from "./api/IOutputResponse";
-import { IMessage } from "./IMessage";
-import { IMessageMetadata } from "./IMessageMetadata";
-import { IMqttStatus } from "./IMqttStatus";
+import type { IMqttMilestoneResponse } from "./api/IMqttMilestoneResponse";
+import type { IOutputResponse } from "./api/IOutputResponse";
+import type { IMessage } from "./IMessage";
+import type { IMessageMetadata } from "./IMessageMetadata";
+import type { IMqttStatus } from "./IMqttStatus";
 /**
  * Client interface definition for API communication.
  */

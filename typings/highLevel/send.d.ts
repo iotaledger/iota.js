@@ -1,7 +1,7 @@
-import { IClient } from "../models/IClient";
-import { IKeyPair } from "../models/IKeyPair";
-import { IMessage } from "../models/IMessage";
-import { ISeed } from "../models/ISeed";
+import type { IClient } from "../models/IClient";
+import type { IKeyPair } from "../models/IKeyPair";
+import type { IMessage } from "../models/IMessage";
+import type { ISeed } from "../models/ISeed";
 import { IUTXOInput } from "../models/IUTXOInput";
 /**
  * Send a transfer from the balance on the seed to a single output.

@@ -1,4 +1,4 @@
-import { IPowProvider } from "../models/IPowProvider";
+import type { IPowProvider } from "../models/IPowProvider";
 /**
  * Options used when constructing SingleNodeClient.
  */

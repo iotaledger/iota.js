@@ -1,7 +1,7 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 import { SingleNodeClient } from "../clients/singleNodeClient";
-import { IClient } from "../models/IClient";
+import type { IClient } from "../models/IClient";
 import { IIndexationPayload, INDEXATION_PAYLOAD_TYPE } from "../models/IIndexationPayload";
 import { TRANSACTION_PAYLOAD_TYPE } from "../models/ITransactionPayload";
 import { Converter } from "../utils/converter";

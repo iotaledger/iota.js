@@ -1,7 +1,7 @@
 import { IReferenceUnlockBlock } from "../models/IReferenceUnlockBlock";
 import { ISignatureUnlockBlock } from "../models/ISignatureUnlockBlock";
-import { ReadStream } from "../utils/readStream";
-import { WriteStream } from "../utils/writeStream";
+import type { ReadStream } from "../utils/readStream";
+import type { WriteStream } from "../utils/writeStream";
 /**
  * The minimum length of an unlock block binary representation.
  */

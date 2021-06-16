@@ -1,7 +1,7 @@
 import { ITreasuryInput } from "../models/ITreasuryInput";
 import { IUTXOInput } from "../models/IUTXOInput";
-import { ReadStream } from "../utils/readStream";
-import { WriteStream } from "../utils/writeStream";
+import type { ReadStream } from "../utils/readStream";
+import type { WriteStream } from "../utils/writeStream";
 /**
  * The minimum length of an input binary representation.
  */

@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 /* eslint-disable no-bitwise */
 import { Converter } from "../utils/converter";
-import { Bip32Path } from "./bip32Path";
+import type { Bip32Path } from "./bip32Path";
 import { Ed25519 } from "./ed25519";
 import { HmacSha512 } from "./hmacSha512";
 

@@ -1,5 +1,5 @@
-import { IClient } from "../models/IClient";
-import { IMessage } from "../models/IMessage";
+import type { IClient } from "../models/IClient";
+import type { IMessage } from "../models/IMessage";
 /**
  * Retry an existing message either by promoting or reattaching.
  * @param client The client or node endpoint to perform the retry with.

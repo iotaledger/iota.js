@@ -1,14 +1,15 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import { ITipsResponse } from "../models/api/ITipsResponse";
+import type { ITipsResponse } from "../models/api/ITipsResponse";
 import { ED25519_ADDRESS_TYPE, IEd25519Address } from "../models/IEd25519Address";
 import { ED25519_SIGNATURE_TYPE, IEd25519Signature } from "../models/IEd25519Signature";
-import { IIndexationPayload, INDEXATION_PAYLOAD_TYPE } from "../models/IIndexationPayload";
-import { IMessage } from "../models/IMessage";
-import { IMessageMetadata } from "../models/IMessageMetadata";
-import { IMigratedFunds } from "../models/IMigratedFunds";
+import type { IIndexationPayload } from "../models/IIndexationPayload";
+import { INDEXATION_PAYLOAD_TYPE } from "../models/IIndexationPayload";
+import type { IMessage } from "../models/IMessage";
+import type { IMessageMetadata } from "../models/IMessageMetadata";
+import type { IMigratedFunds } from "../models/IMigratedFunds";
 import { IMilestonePayload, MILESTONE_PAYLOAD_TYPE } from "../models/IMilestonePayload";
-import { INodeInfo } from "../models/INodeInfo";
+import type { INodeInfo } from "../models/INodeInfo";
 import { IReceiptPayload, RECEIPT_PAYLOAD_TYPE } from "../models/IReceiptPayload";
 import { IReferenceUnlockBlock, REFERENCE_UNLOCK_BLOCK_TYPE } from "../models/IReferenceUnlockBlock";
 import { ISigLockedDustAllowanceOutput, SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE } from "../models/ISigLockedDustAllowanceOutput";

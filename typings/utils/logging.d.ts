@@ -1,12 +1,12 @@
-import { ITipsResponse } from "../models/api/ITipsResponse";
+import type { ITipsResponse } from "../models/api/ITipsResponse";
 import { IEd25519Address } from "../models/IEd25519Address";
 import { IEd25519Signature } from "../models/IEd25519Signature";
-import { IIndexationPayload } from "../models/IIndexationPayload";
-import { IMessage } from "../models/IMessage";
-import { IMessageMetadata } from "../models/IMessageMetadata";
-import { IMigratedFunds } from "../models/IMigratedFunds";
+import type { IIndexationPayload } from "../models/IIndexationPayload";
+import type { IMessage } from "../models/IMessage";
+import type { IMessageMetadata } from "../models/IMessageMetadata";
+import type { IMigratedFunds } from "../models/IMigratedFunds";
 import { IMilestonePayload } from "../models/IMilestonePayload";
-import { INodeInfo } from "../models/INodeInfo";
+import type { INodeInfo } from "../models/INodeInfo";
 import { IReceiptPayload } from "../models/IReceiptPayload";
 import { IReferenceUnlockBlock } from "../models/IReferenceUnlockBlock";
 import { ISigLockedDustAllowanceOutput } from "../models/ISigLockedDustAllowanceOutput";

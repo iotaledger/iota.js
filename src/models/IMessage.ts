@@ -1,8 +1,8 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import { IIndexationPayload } from "./IIndexationPayload";
-import { IMilestonePayload } from "./IMilestonePayload";
-import { ITransactionPayload } from "./ITransactionPayload";
+import type { IIndexationPayload } from "./IIndexationPayload";
+import type { IMilestonePayload } from "./IMilestonePayload";
+import type { ITransactionPayload } from "./ITransactionPayload";
 
 /**
  * Message layout.

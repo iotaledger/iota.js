@@ -2,9 +2,9 @@
 // SPDX-License-Identifier: Apache-2.0
 import { IReferenceUnlockBlock, REFERENCE_UNLOCK_BLOCK_TYPE } from "../models/IReferenceUnlockBlock";
 import { ISignatureUnlockBlock, SIGNATURE_UNLOCK_BLOCK_TYPE } from "../models/ISignatureUnlockBlock";
-import { ITypeBase } from "../models/ITypeBase";
-import { ReadStream } from "../utils/readStream";
-import { WriteStream } from "../utils/writeStream";
+import type { ITypeBase } from "../models/ITypeBase";
+import type { ReadStream } from "../utils/readStream";
+import type { WriteStream } from "../utils/writeStream";
 import { SMALL_TYPE_LENGTH, UINT16_SIZE } from "./common";
 import { deserializeSignature, MIN_SIGNATURE_LENGTH, serializeSignature } from "./signature";
 

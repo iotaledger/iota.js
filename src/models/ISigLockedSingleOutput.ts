@@ -1,7 +1,7 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import { IEd25519Address } from "./IEd25519Address";
-import { ITypeBase } from "./ITypeBase";
+import type { IEd25519Address } from "./IEd25519Address";
+import type { ITypeBase } from "./ITypeBase";
 
 /**
  * The global type for the sig locked single output.

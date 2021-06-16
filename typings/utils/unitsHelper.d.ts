@@ -1,4 +1,4 @@
-import { Units } from "../models/units";
+import type { Units } from "../models/units";
 /**
  * Class to help with units formatting.
  */

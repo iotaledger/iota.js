@@ -1,5 +1,5 @@
-import { ConflictReason } from "./conflictReason";
-import { LedgerInclusionState } from "./ledgerInclusionState";
+import type { ConflictReason } from "./conflictReason";
+import type { LedgerInclusionState } from "./ledgerInclusionState";
 /**
  * Response from the metadata endpoint.
  */

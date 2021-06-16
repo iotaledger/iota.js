@@ -1,19 +1,19 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import { IAddressOutputsResponse } from "./api/IAddressOutputsResponse";
-import { IAddressResponse } from "./api/IAddressResponse";
-import { IChildrenResponse } from "./api/IChildrenResponse";
-import { IMessagesResponse } from "./api/IMessagesResponse";
-import { IMilestoneResponse } from "./api/IMilestoneResponse";
-import { IMilestoneUtxoChangesResponse } from "./api/IMilestoneUtxoChangesResponse";
-import { IOutputResponse } from "./api/IOutputResponse";
-import { IReceiptsResponse } from "./api/IReceiptsResponse";
-import { ITipsResponse } from "./api/ITipsResponse";
-import { IMessage } from "./IMessage";
-import { IMessageMetadata } from "./IMessageMetadata";
-import { INodeInfo } from "./INodeInfo";
-import { IPeer } from "./IPeer";
-import { ITreasury } from "./ITreasury";
+import type { IAddressOutputsResponse } from "./api/IAddressOutputsResponse";
+import type { IAddressResponse } from "./api/IAddressResponse";
+import type { IChildrenResponse } from "./api/IChildrenResponse";
+import type { IMessagesResponse } from "./api/IMessagesResponse";
+import type { IMilestoneResponse } from "./api/IMilestoneResponse";
+import type { IMilestoneUtxoChangesResponse } from "./api/IMilestoneUtxoChangesResponse";
+import type { IOutputResponse } from "./api/IOutputResponse";
+import type { IReceiptsResponse } from "./api/IReceiptsResponse";
+import type { ITipsResponse } from "./api/ITipsResponse";
+import type { IMessage } from "./IMessage";
+import type { IMessageMetadata } from "./IMessageMetadata";
+import type { INodeInfo } from "./INodeInfo";
+import type { IPeer } from "./IPeer";
+import type { ITreasury } from "./ITreasury";
 
 /**
  * Client interface definition for API communication.

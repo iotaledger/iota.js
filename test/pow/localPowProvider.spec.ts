@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 import { serializeMessage } from "../../src/binary/message";
 import { IIndexationPayload, INDEXATION_PAYLOAD_TYPE } from "../../src/models/IIndexationPayload";
-import { IMessage } from "../../src/models/IMessage";
+import type { IMessage } from "../../src/models/IMessage";
 import { LocalPowProvider } from "../../src/pow/localPowProvider";
 import { Converter } from "../../src/utils/converter";
 import { PowHelper } from "../../src/utils/powHelper";

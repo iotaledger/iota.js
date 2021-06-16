@@ -1,6 +1,6 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import { Units } from "../../src/models/units";
+import type { Units } from "../../src/models/units";
 import { UnitsHelper } from "../../src/utils/unitsHelper";
 
 describe("UnitsHelper", () => {

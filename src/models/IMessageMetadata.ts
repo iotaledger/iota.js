@@ -1,7 +1,7 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import { ConflictReason } from "./conflictReason";
-import { LedgerInclusionState } from "./ledgerInclusionState";
+import type { ConflictReason } from "./conflictReason";
+import type { LedgerInclusionState } from "./ledgerInclusionState";
 
 /**
  * Response from the metadata endpoint.

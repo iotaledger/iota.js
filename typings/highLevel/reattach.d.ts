@@ -1,5 +1,5 @@
-import { IClient } from "../models/IClient";
-import { IMessage } from "../models/IMessage";
+import type { IClient } from "../models/IClient";
+import type { IMessage } from "../models/IMessage";
 /**
  * Reattach an existing message.
  * @param client The client or node endpoint to perform the reattach with.

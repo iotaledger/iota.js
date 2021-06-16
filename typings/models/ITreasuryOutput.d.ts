@@ -1,4 +1,4 @@
-import { ITypeBase } from "./ITypeBase";
+import type { ITypeBase } from "./ITypeBase";
 /**
  * The global type for the treasury output.
  */

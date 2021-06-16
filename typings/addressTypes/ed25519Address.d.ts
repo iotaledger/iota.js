@@ -1,4 +1,4 @@
-import { IAddress } from "../models/IAddress";
+import type { IAddress } from "../models/IAddress";
 /**
  * Class to help with Ed25519 Signature scheme.
  */

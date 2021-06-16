@@ -1,6 +1,6 @@
-import { IMessage } from "../models/IMessage";
-import { ReadStream } from "../utils/readStream";
-import { WriteStream } from "../utils/writeStream";
+import type { IMessage } from "../models/IMessage";
+import type { ReadStream } from "../utils/readStream";
+import type { WriteStream } from "../utils/writeStream";
 /**
  * The maximum length of a message.
  */

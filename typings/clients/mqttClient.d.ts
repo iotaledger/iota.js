@@ -1,9 +1,9 @@
-import { IMqttMilestoneResponse } from "../models/api/IMqttMilestoneResponse";
-import { IOutputResponse } from "../models/api/IOutputResponse";
-import { IMessage } from "../models/IMessage";
-import { IMessageMetadata } from "../models/IMessageMetadata";
-import { IMqttClient } from "../models/IMqttClient";
-import { IMqttStatus } from "../models/IMqttStatus";
+import type { IMqttMilestoneResponse } from "../models/api/IMqttMilestoneResponse";
+import type { IOutputResponse } from "../models/api/IOutputResponse";
+import type { IMessage } from "../models/IMessage";
+import type { IMessageMetadata } from "../models/IMessageMetadata";
+import type { IMqttClient } from "../models/IMqttClient";
+import type { IMqttStatus } from "../models/IMqttStatus";
 /**
  * MQTT Client implementation for pub/sub communication.
  */

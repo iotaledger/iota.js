@@ -2,8 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0
 import { Ed25519Address } from "../addressTypes/ed25519Address";
 import { ED25519_ADDRESS_TYPE, IEd25519Address } from "../models/IEd25519Address";
-import { ReadStream } from "../utils/readStream";
-import { WriteStream } from "../utils/writeStream";
+import type { ReadStream } from "../utils/readStream";
+import type { WriteStream } from "../utils/writeStream";
 import { SMALL_TYPE_LENGTH } from "./common";
 
 /**

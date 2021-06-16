@@ -1,4 +1,4 @@
-import { IReceiptPayload } from "../IReceiptPayload";
+import type { IReceiptPayload } from "../IReceiptPayload";
 /**
  * Receipts response details.
  */

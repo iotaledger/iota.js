@@ -3,10 +3,10 @@
 import { Ed25519Address } from "../addressTypes/ed25519Address";
 import { SingleNodeClient } from "../clients/singleNodeClient";
 import { Bip32Path } from "../crypto/bip32Path";
-import { IBip44GeneratorState } from "../models/IBip44GeneratorState";
-import { IClient } from "../models/IClient";
+import type { IBip44GeneratorState } from "../models/IBip44GeneratorState";
+import type { IClient } from "../models/IClient";
 import { ED25519_ADDRESS_TYPE } from "../models/IEd25519Address";
-import { ISeed } from "../models/ISeed";
+import type { ISeed } from "../models/ISeed";
 import { Bech32Helper } from "../utils/bech32Helper";
 import { Converter } from "../utils/converter";
 import { generateBip44Address } from "./addresses";

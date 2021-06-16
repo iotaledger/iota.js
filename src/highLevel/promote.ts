@@ -2,8 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0
 import { MAX_NUMBER_PARENTS } from "../binary/message";
 import { SingleNodeClient } from "../clients/singleNodeClient";
-import { IClient } from "../models/IClient";
-import { IMessage } from "../models/IMessage";
+import type { IClient } from "../models/IClient";
+import type { IMessage } from "../models/IMessage";
 
 /**
  * Promote an existing message.

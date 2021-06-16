@@ -1,13 +1,13 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 import { INDEXATION_PAYLOAD_TYPE } from "../models/IIndexationPayload";
-import { IMessage } from "../models/IMessage";
+import type { IMessage } from "../models/IMessage";
 import { MILESTONE_PAYLOAD_TYPE } from "../models/IMilestonePayload";
 import { RECEIPT_PAYLOAD_TYPE } from "../models/IReceiptPayload";
 import { TRANSACTION_PAYLOAD_TYPE } from "../models/ITransactionPayload";
 import { TREASURY_TRANSACTION_PAYLOAD_TYPE } from "../models/ITreasuryTransactionPayload";
-import { ReadStream } from "../utils/readStream";
-import { WriteStream } from "../utils/writeStream";
+import type { ReadStream } from "../utils/readStream";
+import type { WriteStream } from "../utils/writeStream";
 import { BYTE_SIZE, MESSAGE_ID_LENGTH, UINT64_SIZE } from "./common";
 import { deserializePayload, MIN_PAYLOAD_LENGTH, serializePayload } from "./payload";
 

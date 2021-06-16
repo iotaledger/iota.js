@@ -1,7 +1,7 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import { IClient } from "../models/IClient";
-import { ISeed } from "../models/ISeed";
+import type { IClient } from "../models/IClient";
+import type { ISeed } from "../models/ISeed";
 import { getUnspentAddresses } from "./getUnspentAddresses";
 
 /**

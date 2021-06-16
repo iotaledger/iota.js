@@ -1,11 +1,11 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 
-import { CachedGroupElement } from "./cachedGroupElement";
-import { ExtendedGroupElement } from "./extendedGroupElement";
+import type { CachedGroupElement } from "./cachedGroupElement";
+import type { ExtendedGroupElement } from "./extendedGroupElement";
 import { FieldElement } from "./fieldElement";
-import { PreComputedGroupElement } from "./preComputedGroupElement";
-import { ProjectiveGroupElement } from "./projectiveGroupElement";
+import type { PreComputedGroupElement } from "./preComputedGroupElement";
+import type { ProjectiveGroupElement } from "./projectiveGroupElement";
 
 /**
  * Group elements are members of the elliptic curve -x^2 + y^2 = 1 + d * x^2 *

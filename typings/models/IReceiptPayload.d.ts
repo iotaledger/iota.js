@@ -1,6 +1,6 @@
-import { IMigratedFunds } from "./IMigratedFunds";
-import { ITreasuryTransactionPayload } from "./ITreasuryTransactionPayload";
-import { ITypeBase } from "./ITypeBase";
+import type { IMigratedFunds } from "./IMigratedFunds";
+import type { ITreasuryTransactionPayload } from "./ITreasuryTransactionPayload";
+import type { ITypeBase } from "./ITypeBase";
 /**
  * The global type for the payload.
  */

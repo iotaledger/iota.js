@@ -1,7 +1,7 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import { IEd25519Signature } from "./IEd25519Signature";
-import { ITypeBase } from "./ITypeBase";
+import type { IEd25519Signature } from "./IEd25519Signature";
+import type { ITypeBase } from "./ITypeBase";
 
 /**
  * The global type for the unlock block.

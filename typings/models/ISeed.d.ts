@@ -1,5 +1,5 @@
-import { Bip32Path } from "../crypto/bip32Path";
-import { IKeyPair } from "./IKeyPair";
+import type { Bip32Path } from "../crypto/bip32Path";
+import type { IKeyPair } from "./IKeyPair";
 /**
  * Interface definitions for seed.
  */
