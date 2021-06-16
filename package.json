@@ -1,7 +1,7 @@
 {
     "name": "@iota/iota.js",
     "description": "IOTA JavaScript Library",
-    "version": "1.5.4",
+    "version": "1.5.5",
     "keywords": [
         "iota",
         "client"
@@ -70,8 +70,16 @@
         "typescript": "^4.2.4"
     },
     "main": "dist/iota.js",
-    "browser": "dist/iota.browser.js",
-    "module": "es/index.js",
+    "exports": {
+        "node": {
+            "import": "./es/index.js",
+            "require": "./dist/index.js"
+        },
+        "browser": {
+            "import": "./es/index.browser.js",
+            "require": "./dist/index.browser.js"
+        }
+    },
     "typings": "typings/index.d.ts",
     "files": [
         "dist",

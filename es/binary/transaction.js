@@ -1,80 +1,75 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.serializeTransactionEssence = exports.deserializeTransactionEssence = exports.MIN_TRANSACTION_ESSENCE_LENGTH = void 0;
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-const IIndexationPayload_1 = require("../models/IIndexationPayload");
-const ISigLockedDustAllowanceOutput_1 = require("../models/ISigLockedDustAllowanceOutput");
-const ISigLockedSingleOutput_1 = require("../models/ISigLockedSingleOutput");
-const ITransactionEssence_1 = require("../models/ITransactionEssence");
-const IUTXOInput_1 = require("../models/IUTXOInput");
-const common_1 = require("./common");
-const input_1 = require("./input");
-const output_1 = require("./output");
-const payload_1 = require("./payload");
+import { INDEXATION_PAYLOAD_TYPE } from "../models/IIndexationPayload";
+import { SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE } from "../models/ISigLockedDustAllowanceOutput";
+import { SIG_LOCKED_SINGLE_OUTPUT_TYPE } from "../models/ISigLockedSingleOutput";
+import { TRANSACTION_ESSENCE_TYPE } from "../models/ITransactionEssence";
+import { UTXO_INPUT_TYPE } from "../models/IUTXOInput";
+import { ARRAY_LENGTH, SMALL_TYPE_LENGTH, UINT32_SIZE } from "./common";
+import { deserializeInputs, serializeInputs } from "./input";
+import { deserializeOutputs, serializeOutputs } from "./output";
+import { deserializePayload, serializePayload } from "./payload";
 /**
  * The minimum length of a transaction essence binary representation.
  */
-exports.MIN_TRANSACTION_ESSENCE_LENGTH = common_1.SMALL_TYPE_LENGTH + (2 * common_1.ARRAY_LENGTH) + common_1.UINT32_SIZE;
+export const MIN_TRANSACTION_ESSENCE_LENGTH = SMALL_TYPE_LENGTH + (2 * ARRAY_LENGTH) + UINT32_SIZE;
 /**
  * Deserialize the transaction essence from binary.
  * @param readStream The stream to read the data from.
  * @returns The deserialized object.
  */
-function deserializeTransactionEssence(readStream) {
-    if (!readStream.hasRemaining(exports.MIN_TRANSACTION_ESSENCE_LENGTH)) {
-        throw new Error(`Transaction essence data is ${readStream.length()} in length which is less than the minimimum size required of ${exports.MIN_TRANSACTION_ESSENCE_LENGTH}`);
+export function deserializeTransactionEssence(readStream) {
+    if (!readStream.hasRemaining(MIN_TRANSACTION_ESSENCE_LENGTH)) {
+        throw new Error(`Transaction essence data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_TRANSACTION_ESSENCE_LENGTH}`);
     }
     const type = readStream.readByte("transactionEssence.type");
-    if (type !== ITransactionEssence_1.TRANSACTION_ESSENCE_TYPE) {
+    if (type !== TRANSACTION_ESSENCE_TYPE) {
         throw new Error(`Type mismatch in transactionEssence ${type}`);
     }
-    const inputs = input_1.deserializeInputs(readStream);
-    const outputs = output_1.deserializeOutputs(readStream);
-    const payload = payload_1.deserializePayload(readStream);
-    if (payload && payload.type !== IIndexationPayload_1.INDEXATION_PAYLOAD_TYPE) {
+    const inputs = deserializeInputs(readStream);
+    const outputs = deserializeOutputs(readStream);
+    const payload = deserializePayload(readStream);
+    if (payload && payload.type !== INDEXATION_PAYLOAD_TYPE) {
         throw new Error("Transaction essence can only contain embedded Indexation Payload");
     }
     for (const input of inputs) {
-        if (input.type !== IUTXOInput_1.UTXO_INPUT_TYPE) {
+        if (input.type !== UTXO_INPUT_TYPE) {
             throw new Error("Transaction essence can only contain UTXO Inputs");
         }
     }
     for (const output of outputs) {
-        if (output.type !== ISigLockedSingleOutput_1.SIG_LOCKED_SINGLE_OUTPUT_TYPE &&
-            output.type !== ISigLockedDustAllowanceOutput_1.SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE) {
+        if (output.type !== SIG_LOCKED_SINGLE_OUTPUT_TYPE &&
+            output.type !== SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE) {
             throw new Error("Transaction essence can only contain sig locked single input or sig locked dust allowance outputs");
         }
     }
     return {
-        type: ITransactionEssence_1.TRANSACTION_ESSENCE_TYPE,
+        type: TRANSACTION_ESSENCE_TYPE,
         inputs: inputs,
         outputs: outputs,
         payload
     };
 }
-exports.deserializeTransactionEssence = deserializeTransactionEssence;
 /**
  * Serialize the transaction essence to binary.
  * @param writeStream The stream to write the data to.
  * @param object The object to serialize.
  */
-function serializeTransactionEssence(writeStream, object) {
+export function serializeTransactionEssence(writeStream, object) {
     writeStream.writeByte("transactionEssence.type", object.type);
     for (const input of object.inputs) {
-        if (input.type !== IUTXOInput_1.UTXO_INPUT_TYPE) {
+        if (input.type !== UTXO_INPUT_TYPE) {
             throw new Error("Transaction essence can only contain UTXO Inputs");
         }
     }
-    input_1.serializeInputs(writeStream, object.inputs);
+    serializeInputs(writeStream, object.inputs);
     for (const output of object.outputs) {
-        if (output.type !== ISigLockedSingleOutput_1.SIG_LOCKED_SINGLE_OUTPUT_TYPE &&
-            output.type !== ISigLockedDustAllowanceOutput_1.SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE) {
+        if (output.type !== SIG_LOCKED_SINGLE_OUTPUT_TYPE &&
+            output.type !== SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE) {
             throw new Error("Transaction essence can only contain sig locked single input or sig locked dust allowance outputs");
         }
     }
-    output_1.serializeOutputs(writeStream, object.outputs);
-    payload_1.serializePayload(writeStream, object.payload);
+    serializeOutputs(writeStream, object.outputs);
+    serializePayload(writeStream, object.payload);
 }
-exports.serializeTransactionEssence = serializeTransactionEssence;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoidHJhbnNhY3Rpb24uanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi9zcmMvYmluYXJ5L3RyYW5zYWN0aW9uLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7OztBQUFBLCtCQUErQjtBQUMvQixzQ0FBc0M7QUFDdEMscUVBQXVFO0FBQ3ZFLDJGQUErSDtBQUMvSCw2RUFBeUc7QUFDekcsdUVBQThGO0FBQzlGLHFEQUFtRTtBQUduRSxxQ0FBd0U7QUFDeEUsbUNBQTZEO0FBQzdELHFDQUFnRTtBQUNoRSx1Q0FBaUU7QUFFakU7O0dBRUc7QUFDVSxRQUFBLDhCQUE4QixHQUFXLDBCQUFpQixHQUFHLENBQUMsQ0FBQyxHQUFHLHFCQUFZLENBQUMsR0FBRyxvQkFBVyxDQUFDO0FBRTNHOzs7O0dBSUc7QUFDSCxTQUFnQiw2QkFBNkIsQ0FBQyxVQUFzQjtJQUNoRSxJQUFJLENBQUMsVUFBVSxDQUFDLFlBQVksQ0FBQyxzQ0FBOEIsQ0FBQyxFQUFFO1FBQzFELE1BQU0sSUFBSSxLQUFLLENBQUMsK0JBQStCLFVBQVUsQ0FBQyxNQUFNLEVBQzVELGdFQUFnRSxzQ0FBOEIsRUFBRSxDQUFDLENBQUM7S0FDekc7SUFFRCxNQUFNLElBQUksR0FBRyxVQUFVLENBQUMsUUFBUSxDQUFDLHlCQUF5QixDQUFDLENBQUM7SUFDNUQsSUFBSSxJQUFJLEtBQUssOENBQXdCLEVBQUU7UUFDbkMsTUFBTSxJQUFJLEtBQUssQ0FBQyx1Q0FBdUMsSUFBSSxFQUFFLENBQUMsQ0FBQztLQUNsRTtJQUVELE1BQU0sTUFBTSxHQUFHLHlCQUFpQixDQUFDLFVBQVUsQ0FBQyxDQUFDO0lBQzdDLE1BQU0sT0FBTyxHQUFHLDJCQUFrQixDQUFDLFVBQVUsQ0FBQyxDQUFDO0lBRS9DLE1BQU0sT0FBTyxHQUFHLDRCQUFrQixDQUFDLFVBQVUsQ0FBQyxDQUFDO0lBQy9DLElBQUksT0FBTyxJQUFJLE9BQU8sQ0FBQyxJQUFJLEtBQUssNENBQXVCLEVBQUU7UUFDckQsTUFBTSxJQUFJLEtBQUssQ0FBQyxrRUFBa0UsQ0FBQyxDQUFDO0tBQ3ZGO0lBRUQsS0FBSyxNQUFNLEtBQUssSUFBSSxNQUFNLEVBQUU7UUFDeEIsSUFBSSxLQUFLLENBQUMsSUFBSSxLQUFLLDRCQUFlLEVBQUU7WUFDaEMsTUFBTSxJQUFJLEtBQUssQ0FBQyxrREFBa0QsQ0FBQyxDQUFDO1NBQ3ZFO0tBQ0o7SUFFRCxLQUFLLE1BQU0sTUFBTSxJQUFJLE9BQU8sRUFBRTtRQUMxQixJQUFJLE1BQU0sQ0FBQyxJQUFJLEtBQUssc0RBQTZCO1lBQzdDLE1BQU0sQ0FBQyxJQUFJLEtBQUsscUVBQXFDLEVBQUU7WUFDdkQsTUFBTSxJQUFJLEtBQUssQ0FDWCxtR0FBbUcsQ0FDdEcsQ0FBQztTQUNMO0tBQ0o7SUFFRCxPQUFPO1FBQ0gsSUFBSSxFQUFFLDhDQUF3QjtRQUM5QixNQUFNLEVBQUUsTUFBc0I7UUFDOUIsT0FBTyxFQUFFLE9BQXFFO1FBQzlFLE9BQU87S0FDVixDQUFDO0FBQ04sQ0FBQztBQXhDRCxzRUF3Q0M7QUFFRDs7OztHQUlHO0FBQ0gsU0FBZ0IsMkJBQTJCLENBQUMsV0FBd0IsRUFDaEUsTUFBMkI7SUFDM0IsV0FBVyxDQUFDLFNBQVMsQ0FBQyx5QkFBeUIsRUFBRSxNQUFNLENBQUMsSUFBSSxDQUFDLENBQUM7SUFFOUQsS0FBSyxNQUFNLEtBQUssSUFBSSxNQUFNLENBQUMsTUFBTSxFQUFFO1FBQy9CLElBQUksS0FBSyxDQUFDLElBQUksS0FBSyw0QkFBZSxFQUFFO1lBQ2hDLE1BQU0sSUFBSSxLQUFLLENBQUMsa0RBQWtELENBQUMsQ0FBQztTQUN2RTtLQUNKO0lBRUQsdUJBQWUsQ0FBQyxXQUFXLEVBQUUsTUFBTSxDQUFDLE1BQU0sQ0FBQyxDQUFDO0lBRTVDLEtBQUssTUFBTSxNQUFNLElBQUksTUFBTSxDQUFDLE9BQU8sRUFBRTtRQUNqQyxJQUFJLE1BQU0sQ0FBQyxJQUFJLEtBQUssc0RBQTZCO1lBQzdDLE1BQU0sQ0FBQyxJQUFJLEtBQUsscUVBQXFDLEVBQUU7WUFDdkQsTUFBTSxJQUFJLEtBQUssQ0FDWCxtR0FBbUcsQ0FDdEcsQ0FBQztTQUNMO0tBQ0o7SUFFRCx5QkFBZ0IsQ0FBQyxXQUFXLEVBQUUsTUFBTSxDQUFDLE9BQU8sQ0FBQyxDQUFDO0lBQzlDLDBCQUFnQixDQUFDLFdBQVcsRUFBRSxNQUFNLENBQUMsT0FBTyxDQUFDLENBQUM7QUFDbEQsQ0FBQztBQXZCRCxrRUF1QkMifQ==
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoidHJhbnNhY3Rpb24uanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi9zcmMvYmluYXJ5L3RyYW5zYWN0aW9uLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLCtCQUErQjtBQUMvQixzQ0FBc0M7QUFDdEMsT0FBTyxFQUFFLHVCQUF1QixFQUFFLE1BQU0sOEJBQThCLENBQUM7QUFDdkUsT0FBTyxFQUFpQyxxQ0FBcUMsRUFBRSxNQUFNLHlDQUF5QyxDQUFDO0FBQy9ILE9BQU8sRUFBMEIsNkJBQTZCLEVBQUUsTUFBTSxrQ0FBa0MsQ0FBQztBQUN6RyxPQUFPLEVBQXVCLHdCQUF3QixFQUFFLE1BQU0sK0JBQStCLENBQUM7QUFDOUYsT0FBTyxFQUFjLGVBQWUsRUFBRSxNQUFNLHNCQUFzQixDQUFDO0FBR25FLE9BQU8sRUFBRSxZQUFZLEVBQUUsaUJBQWlCLEVBQUUsV0FBVyxFQUFFLE1BQU0sVUFBVSxDQUFDO0FBQ3hFLE9BQU8sRUFBRSxpQkFBaUIsRUFBRSxlQUFlLEVBQUUsTUFBTSxTQUFTLENBQUM7QUFDN0QsT0FBTyxFQUFFLGtCQUFrQixFQUFFLGdCQUFnQixFQUFFLE1BQU0sVUFBVSxDQUFDO0FBQ2hFLE9BQU8sRUFBRSxrQkFBa0IsRUFBRSxnQkFBZ0IsRUFBRSxNQUFNLFdBQVcsQ0FBQztBQUVqRTs7R0FFRztBQUNILE1BQU0sQ0FBQyxNQUFNLDhCQUE4QixHQUFXLGlCQUFpQixHQUFHLENBQUMsQ0FBQyxHQUFHLFlBQVksQ0FBQyxHQUFHLFdBQVcsQ0FBQztBQUUzRzs7OztHQUlHO0FBQ0gsTUFBTSxVQUFVLDZCQUE2QixDQUFDLFVBQXNCO0lBQ2hFLElBQUksQ0FBQyxVQUFVLENBQUMsWUFBWSxDQUFDLDhCQUE4QixDQUFDLEVBQUU7UUFDMUQsTUFBTSxJQUFJLEtBQUssQ0FBQywrQkFBK0IsVUFBVSxDQUFDLE1BQU0sRUFDNUQsZ0VBQWdFLDhCQUE4QixFQUFFLENBQUMsQ0FBQztLQUN6RztJQUVELE1BQU0sSUFBSSxHQUFHLFVBQVUsQ0FBQyxRQUFRLENBQUMseUJBQXlCLENBQUMsQ0FBQztJQUM1RCxJQUFJLElBQUksS0FBSyx3QkFBd0IsRUFBRTtRQUNuQyxNQUFNLElBQUksS0FBSyxDQUFDLHVDQUF1QyxJQUFJLEVBQUUsQ0FBQyxDQUFDO0tBQ2xFO0lBRUQsTUFBTSxNQUFNLEdBQUcsaUJBQWlCLENBQUMsVUFBVSxDQUFDLENBQUM7SUFDN0MsTUFBTSxPQUFPLEdBQUcsa0JBQWtCLENBQUMsVUFBVSxDQUFDLENBQUM7SUFFL0MsTUFBTSxPQUFPLEdBQUcsa0JBQWtCLENBQUMsVUFBVSxDQUFDLENBQUM7SUFDL0MsSUFBSSxPQUFPLElBQUksT0FBTyxDQUFDLElBQUksS0FBSyx1QkFBdUIsRUFBRTtRQUNyRCxNQUFNLElBQUksS0FBSyxDQUFDLGtFQUFrRSxDQUFDLENBQUM7S0FDdkY7SUFFRCxLQUFLLE1BQU0sS0FBSyxJQUFJLE1BQU0sRUFBRTtRQUN4QixJQUFJLEtBQUssQ0FBQyxJQUFJLEtBQUssZUFBZSxFQUFFO1lBQ2hDLE1BQU0sSUFBSSxLQUFLLENBQUMsa0RBQWtELENBQUMsQ0FBQztTQUN2RTtLQUNKO0lBRUQsS0FBSyxNQUFNLE1BQU0sSUFBSSxPQUFPLEVBQUU7UUFDMUIsSUFBSSxNQUFNLENBQUMsSUFBSSxLQUFLLDZCQUE2QjtZQUM3QyxNQUFNLENBQUMsSUFBSSxLQUFLLHFDQUFxQyxFQUFFO1lBQ3ZELE1BQU0sSUFBSSxLQUFLLENBQ1gsbUdBQW1HLENBQ3RHLENBQUM7U0FDTDtLQUNKO0lBRUQsT0FBTztRQUNILElBQUksRUFBRSx3QkFBd0I7UUFDOUIsTUFBTSxFQUFFLE1BQXNCO1FBQzlCLE9BQU8sRUFBRSxPQUFxRTtRQUM5RSxPQUFPO0tBQ1YsQ0FBQztBQUNOLENBQUM7QUFFRDs7OztHQUlHO0FBQ0gsTUFBTSxVQUFVLDJCQUEyQixDQUFDLFdBQXdCLEVBQ2hFLE1BQTJCO0lBQzNCLFdBQVcsQ0FBQyxTQUFTLENBQUMseUJBQXlCLEVBQUUsTUFBTSxDQUFDLElBQUksQ0FBQyxDQUFDO0lBRTlELEtBQUssTUFBTSxLQUFLLElBQUksTUFBTSxDQUFDLE1BQU0sRUFBRTtRQUMvQixJQUFJLEtBQUssQ0FBQyxJQUFJLEtBQUssZUFBZSxFQUFFO1lBQ2hDLE1BQU0sSUFBSSxLQUFLLENBQUMsa0RBQWtELENBQUMsQ0FBQztTQUN2RTtLQUNKO0lBRUQsZUFBZSxDQUFDLFdBQVcsRUFBRSxNQUFNLENBQUMsTUFBTSxDQUFDLENBQUM7SUFFNUMsS0FBSyxNQUFNLE1BQU0sSUFBSSxNQUFNLENBQUMsT0FBTyxFQUFFO1FBQ2pDLElBQUksTUFBTSxDQUFDLElBQUksS0FBSyw2QkFBNkI7WUFDN0MsTUFBTSxDQUFDLElBQUksS0FBSyxxQ0FBcUMsRUFBRTtZQUN2RCxNQUFNLElBQUksS0FBSyxDQUNYLG1HQUFtRyxDQUN0RyxDQUFDO1NBQ0w7S0FDSjtJQUVELGdCQUFnQixDQUFDLFdBQVcsRUFBRSxNQUFNLENBQUMsT0FBTyxDQUFDLENBQUM7SUFDOUMsZ0JBQWdCLENBQUMsV0FBVyxFQUFFLE1BQU0sQ0FBQyxPQUFPLENBQUMsQ0FBQztBQUNsRCxDQUFDIn0=

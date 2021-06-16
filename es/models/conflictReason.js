@@ -1,13 +1,10 @@
-"use strict";
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ConflictReason = void 0;
 /**
  * Reason for message conflicts.
  */
 // eslint-disable-next-line no-shadow
-var ConflictReason;
+export var ConflictReason;
 (function (ConflictReason) {
     /**
      * The message has no conflict.
@@ -41,5 +38,5 @@ var ConflictReason;
      * The semantic validation failed.
      */
     ConflictReason[ConflictReason["semanticValidationFailed"] = 255] = "semanticValidationFailed";
-})(ConflictReason = exports.ConflictReason || (exports.ConflictReason = {}));
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiY29uZmxpY3RSZWFzb24uanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi9zcmMvbW9kZWxzL2NvbmZsaWN0UmVhc29uLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7QUFBQSwrQkFBK0I7QUFDL0Isc0NBQXNDOzs7QUFFdEM7O0dBRUc7QUFDSCxxQ0FBcUM7QUFDckMsSUFBWSxjQXdDWDtBQXhDRCxXQUFZLGNBQWM7SUFDdEI7O09BRUc7SUFDSCxtREFBUSxDQUFBO0lBRVI7O09BRUc7SUFDSCxxRkFBeUIsQ0FBQTtJQUV6Qjs7T0FFRztJQUNILG1IQUF3QyxDQUFBO0lBRXhDOztPQUVHO0lBQ0gsNkVBQXFCLENBQUE7SUFFckI7O09BRUc7SUFDSCx1RkFBMEIsQ0FBQTtJQUUxQjs7T0FFRztJQUNILDJFQUFvQixDQUFBO0lBRXBCOztPQUVHO0lBQ0gsbUZBQXdCLENBQUE7SUFFeEI7O09BRUc7SUFDSCw2RkFBOEIsQ0FBQTtBQUNsQyxDQUFDLEVBeENXLGNBQWMsR0FBZCxzQkFBYyxLQUFkLHNCQUFjLFFBd0N6QiJ9
+})(ConflictReason || (ConflictReason = {}));
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiY29uZmxpY3RSZWFzb24uanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi9zcmMvbW9kZWxzL2NvbmZsaWN0UmVhc29uLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLCtCQUErQjtBQUMvQixzQ0FBc0M7QUFFdEM7O0dBRUc7QUFDSCxxQ0FBcUM7QUFDckMsTUFBTSxDQUFOLElBQVksY0F3Q1g7QUF4Q0QsV0FBWSxjQUFjO0lBQ3RCOztPQUVHO0lBQ0gsbURBQVEsQ0FBQTtJQUVSOztPQUVHO0lBQ0gscUZBQXlCLENBQUE7SUFFekI7O09BRUc7SUFDSCxtSEFBd0MsQ0FBQTtJQUV4Qzs7T0FFRztJQUNILDZFQUFxQixDQUFBO0lBRXJCOztPQUVHO0lBQ0gsdUZBQTBCLENBQUE7SUFFMUI7O09BRUc7SUFDSCwyRUFBb0IsQ0FBQTtJQUVwQjs7T0FFRztJQUNILG1GQUF3QixDQUFBO0lBRXhCOztPQUVHO0lBQ0gsNkZBQThCLENBQUE7QUFDbEMsQ0FBQyxFQXhDVyxjQUFjLEtBQWQsY0FBYyxRQXdDekIifQ==

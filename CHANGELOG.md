@@ -1,4 +1,9 @@
 # Changelog
+
+## v1.5.5
+
+* Modernise ES module format
+
 ## v1.5.4
 
 * Local PoW autofills parentMessageIds if missing

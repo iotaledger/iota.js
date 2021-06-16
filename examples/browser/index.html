@@ -20,7 +20,7 @@
 
         async function run() {
             Iota.setLogger(consoleLog);
-            const client = new Iota.SingleNodeClient("http://chrysalis-nodes.iota.org/");
+            const client = new Iota.SingleNodeClient("https://chrysalis-nodes.iota.org/");
 
             const health = await client.health();
             consoleLog("Is the node healthy", health ? "Yes" : "No");
