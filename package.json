@@ -42,7 +42,7 @@
         "dist": "run-s dist-clean build test package typings docs"
     },
     "engines": {
-        "node": ">=12.0.0"
+        "node": ">=14.0.0"
     },
     "devDependencies": {
         "@rollup/plugin-commonjs": "^19.0.0",
