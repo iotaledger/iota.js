@@ -71,12 +71,12 @@
     "main": "dist/iota.js",
     "exports": {
         "node": {
-            "import": "./es/index.js",
-            "require": "./dist/index.js"
+            "import": "./es/iota.js",
+            "require": "./dist/iota.js"
         },
         "browser": {
-            "import": "./es/index.browser.js",
-            "require": "./dist/index.browser.js"
+            "import": "./es/iota.browser.js",
+            "require": "./dist/iota.browser.js"
         }
     },
     "typings": "typings/index.d.ts",
