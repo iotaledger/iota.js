@@ -6,6 +6,7 @@ on:
     paths:
       - "src/**"
       - ".github/workflows/main.yml"
+  push:
   pull_request:
     branches: [develop]
     paths:
