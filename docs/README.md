@@ -49,6 +49,7 @@
 - [crypto/x25519](modules/crypto_x25519.md)
 - [crypto/zip215](modules/crypto_zip215.md)
 - [encoding/b1t6](modules/encoding_b1t6.md)
+- [encoding/base64](modules/encoding_base64.md)
 - [highLevel/addresses](modules/highlevel_addresses.md)
 - [highLevel/getBalance](modules/highlevel_getbalance.md)
 - [highLevel/getUnspentAddress](modules/highlevel_getunspentaddress.md)

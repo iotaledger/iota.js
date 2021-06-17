@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.5.7
+
+* Embedded Base64 implementation
+
 ## v1.5.6
 
 * TypeScript import type

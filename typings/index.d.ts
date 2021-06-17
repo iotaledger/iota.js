@@ -31,6 +31,7 @@ export * from "./crypto/slip0010";
 export * from "./crypto/x25519";
 export * from "./crypto/zip215";
 export * from "./encoding/b1t6";
+export * from "./encoding/base64";
 export * from "./highLevel/addresses";
 export * from "./highLevel/getBalance";
 export * from "./highLevel/getUnspentAddress";
