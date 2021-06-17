@@ -69,16 +69,21 @@
         "typescript": "^4.2.4"
     },
     "main": "dist/iota.js",
+    "browser": "dist/iota.browser.js",
     "exports": {
-        "node": {
-            "import": "./es/iota.js",
-            "require": "./dist/iota.js"
+        ".": {
+            "node": {
+                "import": "./es/index.node.js",
+                "require": "./dist/iota.js"
+            },
+            "browser": {
+                "import": "./es/index.browser.js",
+                "require": "./dist/iota.browser.js"
+            }
         },
-        "browser": {
-            "import": "./es/iota.browser.js",
-            "require": "./dist/iota.browser.js"
-        }
+        "./package.json": "./package.json"
     },
+    "module": "es/iota.js",
     "typings": "typings/index.d.ts",
     "files": [
         "dist",
