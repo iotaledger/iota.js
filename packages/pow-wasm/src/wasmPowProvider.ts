@@ -27,7 +27,7 @@ export class WasmPowProvider implements IPowProvider {
     /**
      * Perform pow on the message and return the nonce of at least targetScore.
      * @param message The message to process.
-     * @param targetScore the target score.
+     * @param targetScore The target score.
      * @returns The nonce.
      */
     public async pow(message: Uint8Array, targetScore: number): Promise<bigint> {

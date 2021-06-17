@@ -19,7 +19,7 @@ export class WasmPowProvider {
     /**
      * Perform pow on the message and return the nonce of at least targetScore.
      * @param message The message to process.
-     * @param targetScore the target score.
+     * @param targetScore The target score.
      * @returns The nonce.
      */
     async pow(message, targetScore) {
