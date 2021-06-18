@@ -1,4 +1,4 @@
-[@iota/iota.js](../README.md) / clients/mqttClient
+[@iota/iota.js](../README.md) / [Exports](../modules.md) / clients/mqttClient
 
 # Module: clients/mqttClient
 

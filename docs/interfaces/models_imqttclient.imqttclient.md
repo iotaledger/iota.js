@@ -1,4 +1,4 @@
-[@iota/iota.js](../README.md) / [models/IMqttClient](../modules/models_imqttclient.md) / IMqttClient
+[@iota/iota.js](../README.md) / [Exports](../modules.md) / [models/IMqttClient](../modules/models_imqttclient.md) / IMqttClient
 
 # Interface: IMqttClient
 
