@@ -1,1 +1,0 @@
-{"version":3,"sources":["../src/polyfill-node.ts"],"names":[],"mappings":"cAAA;AACA;AAEA;;AACA,IAAI,UAAU,IAAI,CAAC,UAAU,CAAC,KAA9B,EAAqC;AACjC;AACA,EAAA,UAAU,CAAC,KAAX,GAAmB,OAAO,CAAC,YAAD,CAA1B;AACH","sourceRoot":"","file":"polyfill-node.mjs"}

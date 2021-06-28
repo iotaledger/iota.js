@@ -1,1 +1,0 @@
-{"version":3,"sources":["../../src/clients/clientError.ts"],"names":[],"mappings":"AAAA;AACA;;AAEA;;AAEG;AACH,OAAM,MAAO,WAAP,SAA2B,KAA3B,CAAgC;AAgBlC;;;;;;AAMG;AACH,EAAA,WAAA,CAAY,OAAZ,EAA6B,KAA7B,EAA4C,UAA5C,EAAgE,IAAhE,EAA6E;AACzE,UAAM,OAAN;AACA,SAAK,KAAL,GAAa,KAAb;AACA,SAAK,UAAL,GAAkB,UAAlB;AACA,SAAK,IAAL,GAAY,IAAZ;AACH;;AA5BiC","sourceRoot":"","file":"clientError.mjs"}

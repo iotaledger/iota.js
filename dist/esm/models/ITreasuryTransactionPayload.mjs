@@ -2,4 +2,4 @@
  * The global type for the payload.
  */
 export const TREASURY_TRANSACTION_PAYLOAD_TYPE = 4;
-//# sourceMappingURL=ITreasuryTransactionPayload.mjs.map
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiSVRyZWFzdXJ5VHJhbnNhY3Rpb25QYXlsb2FkLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vc3JjL21vZGVscy9JVHJlYXN1cnlUcmFuc2FjdGlvblBheWxvYWQudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBTUE7O0dBRUc7QUFDSCxNQUFNLENBQUMsTUFBTSxpQ0FBaUMsR0FBRyxDQUFDLENBQUMifQ==
