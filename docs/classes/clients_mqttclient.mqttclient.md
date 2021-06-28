@@ -1,4 +1,4 @@
-[@iota/iota.js](../README.md) / [Exports](../modules.md) / [clients/mqttClient](../modules/clients_mqttclient.md) / MqttClient
+[@iota/iota.js](../README.md) / [clients/mqttClient](../modules/clients_mqttclient.md) / MqttClient
 
 # Class: MqttClient
 
@@ -8,7 +8,7 @@ MQTT Client implementation for pub/sub communication.
 
 ## Implements
 
-- [IMqttClient](../interfaces/models_imqttclient.imqttclient.md)
+- [`IMqttClient`](../interfaces/models_imqttclient.imqttclient.md)
 
 ## Table of contents
 
@@ -49,7 +49,7 @@ Create a new instace of MqttClient.
 | Name | Type | Default value | Description |
 | :------ | :------ | :------ | :------ |
 | `endpoints` | `string` \| `string`[] | `undefined` | The endpoint or endpoints list to connect to. |
-| `keepAliveTimeoutSeconds` | `number` | 30 | Timeout to reconnect if no messages received. |
+| `keepAliveTimeoutSeconds` | `number` | `30` | Timeout to reconnect if no messages received. |
 
 ## Methods
 
@@ -64,7 +64,7 @@ Subscribe to the ed25519 address for output updates.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `addressEd25519` | `string` | The address to monitor. |
-| `callback` | (`topic`: `string`, `data`: [IOutputResponse](../interfaces/models_api_ioutputresponse.ioutputresponse.md)) => `void` | The callback which is called when new data arrives. |
+| `callback` | (`topic`: `string`, `data`: [`IOutputResponse`](../interfaces/models_api_ioutputresponse.ioutputresponse.md)) => `void` | The callback which is called when new data arrives. |
 
 #### Returns
 
@@ -89,7 +89,7 @@ Subscribe to the address for output updates.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `addressBech32` | `string` | The address to monitor. |
-| `callback` | (`topic`: `string`, `data`: [IOutputResponse](../interfaces/models_api_ioutputresponse.ioutputresponse.md)) => `void` | The callback which is called when new data arrives. |
+| `callback` | (`topic`: `string`, `data`: [`IOutputResponse`](../interfaces/models_api_ioutputresponse.ioutputresponse.md)) => `void` | The callback which is called when new data arrives. |
 
 #### Returns
 
@@ -114,7 +114,7 @@ Subscribe to get all messages for the specified index in object form.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `index` | `string` \| `Uint8Array` | The index to monitor. |
-| `callback` | (`topic`: `string`, `data`: [IMessage](../interfaces/models_imessage.imessage.md), `raw`: `Uint8Array`) => `void` | The callback which is called when new data arrives. |
+| `callback` | (`topic`: `string`, `data`: [`IMessage`](../interfaces/models_imessage.imessage.md), `raw`: `Uint8Array`) => `void` | The callback which is called when new data arrives. |
 
 #### Returns
 
@@ -164,7 +164,7 @@ Subscribe to metadata updates for a specific message.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `messageId` | `string` | The message to monitor. |
-| `callback` | (`topic`: `string`, `data`: [IMessageMetadata](../interfaces/models_imessagemetadata.imessagemetadata.md)) => `void` | The callback which is called when new data arrives. |
+| `callback` | (`topic`: `string`, `data`: [`IMessageMetadata`](../interfaces/models_imessagemetadata.imessagemetadata.md)) => `void` | The callback which is called when new data arrives. |
 
 #### Returns
 
@@ -188,7 +188,7 @@ Subscribe to get all messages in object form.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `callback` | (`topic`: `string`, `data`: [IMessage](../interfaces/models_imessage.imessage.md), `raw`: `Uint8Array`) => `void` | The callback which is called when new data arrives. |
+| `callback` | (`topic`: `string`, `data`: [`IMessage`](../interfaces/models_imessage.imessage.md), `raw`: `Uint8Array`) => `void` | The callback which is called when new data arrives. |
 
 #### Returns
 
@@ -212,7 +212,7 @@ Subscribe to get the metadata for all the messages.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `callback` | (`topic`: `string`, `data`: [IMessageMetadata](../interfaces/models_imessagemetadata.imessagemetadata.md)) => `void` | The callback which is called when new data arrives. |
+| `callback` | (`topic`: `string`, `data`: [`IMessageMetadata`](../interfaces/models_imessagemetadata.imessagemetadata.md)) => `void` | The callback which is called when new data arrives. |
 
 #### Returns
 
@@ -260,7 +260,7 @@ Subscribe to the latest confirmed milestone updates.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `callback` | (`topic`: `string`, `data`: [IMqttMilestoneResponse](../interfaces/models_api_imqttmilestoneresponse.imqttmilestoneresponse.md)) => `void` | The callback which is called when new data arrives. |
+| `callback` | (`topic`: `string`, `data`: [`IMqttMilestoneResponse`](../interfaces/models_api_imqttmilestoneresponse.imqttmilestoneresponse.md)) => `void` | The callback which is called when new data arrives. |
 
 #### Returns
 
@@ -284,7 +284,7 @@ Subscribe to the latest milestone updates.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `callback` | (`topic`: `string`, `data`: [IMqttMilestoneResponse](../interfaces/models_api_imqttmilestoneresponse.imqttmilestoneresponse.md)) => `void` | The callback which is called when new data arrives. |
+| `callback` | (`topic`: `string`, `data`: [`IMqttMilestoneResponse`](../interfaces/models_api_imqttmilestoneresponse.imqttmilestoneresponse.md)) => `void` | The callback which is called when new data arrives. |
 
 #### Returns
 
@@ -309,7 +309,7 @@ Subscribe to updates for a specific output.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `outputId` | `string` | The output to monitor. |
-| `callback` | (`topic`: `string`, `data`: [IOutputResponse](../interfaces/models_api_ioutputresponse.ioutputresponse.md)) => `void` | The callback which is called when new data arrives. |
+| `callback` | (`topic`: `string`, `data`: [`IOutputResponse`](../interfaces/models_api_ioutputresponse.ioutputresponse.md)) => `void` | The callback which is called when new data arrives. |
 
 #### Returns
 
@@ -333,7 +333,7 @@ Subscribe to changes in the client state.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `callback` | (`data`: [IMqttStatus](../interfaces/models_imqttstatus.imqttstatus.md)) => `void` | Callback called when the state has changed. |
+| `callback` | (`data`: [`IMqttStatus`](../interfaces/models_imqttstatus.imqttstatus.md)) => `void` | Callback called when the state has changed. |
 
 #### Returns
 
@@ -349,7 +349,7 @@ ___
 
 ### subscribeJson
 
-▸ **subscribeJson**<T\>(`customTopic`, `callback`): `string`
+▸ **subscribeJson**<`T`\>(`customTopic`, `callback`): `string`
 
 Subscribe to another type of message as json.
 
@@ -414,7 +414,7 @@ Subscribe to message updates for a specific transactionId.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `transactionId` | `string` | The message to monitor. |
-| `callback` | (`topic`: `string`, `data`: [IMessage](../interfaces/models_imessage.imessage.md), `raw`: `Uint8Array`) => `void` | The callback which is called when new data arrives. |
+| `callback` | (`topic`: `string`, `data`: [`IMessage`](../interfaces/models_imessage.imessage.md), `raw`: `Uint8Array`) => `void` | The callback which is called when new data arrives. |
 
 #### Returns
 

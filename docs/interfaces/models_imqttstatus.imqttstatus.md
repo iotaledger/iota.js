@@ -1,4 +1,4 @@
-[@iota/iota.js](../README.md) / [Exports](../modules.md) / [models/IMqttStatus](../modules/models_imqttstatus.md) / IMqttStatus
+[@iota/iota.js](../README.md) / [models/IMqttStatus](../modules/models_imqttstatus.md) / IMqttStatus
 
 # Interface: IMqttStatus
 
