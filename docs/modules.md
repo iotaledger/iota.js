@@ -124,6 +124,8 @@
 - [utils/logging](modules/utils_logging.md)
 - [utils/powHelper](modules/utils_powhelper.md)
 - [utils/randomHelper](modules/utils_randomhelper.md)
+- [utils/randomHelper.browser](modules/utils_randomhelper_browser.md)
+- [utils/randomHelper.node](modules/utils_randomhelper_node.md)
 - [utils/readStream](modules/utils_readstream.md)
 - [utils/unitsHelper](modules/utils_unitshelper.md)
 - [utils/writeStream](modules/utils_writestream.md)
