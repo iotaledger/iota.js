@@ -50,7 +50,7 @@
         "@rollup/plugin-replace": "^2.4.2",
         "@types/jest": "^26.0.23",
         "@types/node-fetch": "^2.5.10",
-        "@typescript-eslint/eslint-plugin": "^4.28.0",
+        "@typescript-eslint/eslint-plugin": "^4.28.1",
         "@typescript-eslint/parser": "^4.28.0",
         "copyfiles": "^2.4.1",
         "cross-env": "^7.0.2",
