@@ -79,7 +79,7 @@
         "copy-dist.js"
     ],
     "dependencies": {
-        "@iota/iota.js": "^1.6.0",
+        "@iota/iota.js": "^1.6.1",
         "neon-cli": "^0.8.3"
     }
 }

@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.6.1
+
+* Remove package.json browser entry in favour of exports
+
 ## v1.6.0
 
 * Breaking Change - MQTT has moved to its own package @iota/mqtt.js
