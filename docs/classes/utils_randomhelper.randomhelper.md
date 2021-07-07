@@ -12,7 +12,7 @@ Class to help with random generation.
 
 - [constructor](utils_randomhelper.randomhelper.md#constructor)
 
-### Properties
+### Methods
 
 - [generate](utils_randomhelper.randomhelper.md#generate)
 
@@ -22,25 +22,21 @@ Class to help with random generation.
 
 • **new RandomHelper**()
 
-## Properties
+## Methods
 
 ### generate
 
-▪ `Static` **generate**: (`length`: `number`) => `Uint8Array`
-
-#### Type declaration
-
-▸ (`length`): `Uint8Array`
+▸ `Static` **generate**(`length`): `Uint8Array`
 
 Generate a new random array.
 
-##### Parameters
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `length` | `number` | The length of buffer to create. |
 
-##### Returns
+#### Returns
 
 `Uint8Array`
 

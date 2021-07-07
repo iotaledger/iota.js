@@ -1,4 +1,6 @@
 const fs = require("fs");
 
-fs.mkdirSync("./dist/native");
+try {
+    fs.mkdirSync("./dist/native");
+} catch (err) {}
 fs.copyFileSync("./native/index.node", "./dist/native/index.node");

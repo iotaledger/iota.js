@@ -1,0 +1,14 @@
+{
+  "name": "mqtt-client",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index"
+  },
+  "dependencies": {
+    "@iota/iota.js": "file:../../../../",
+    "@iota/mqtt.js": "file:../..",
+    "typescript": "^4.3.4"
+  }
+}

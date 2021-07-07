@@ -1,11 +1,13 @@
 # Changelog
 
-## v1.5.8
+## v1.6.0
 
+* Breaking Change - MQTT has moved to its own package @iota/mqtt.js
 * Improve ESM Modules format
 * ESM distribution is located in dist/esm directory
 * Renamed dist/iota.js to dist/cjs/index-node.js
 * Renamed dist/iota.browser.js to dist/cjs/index-browser.js
+* Improve platform detection for RandomHelper
 
 ## v1.5.7
 

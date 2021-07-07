@@ -1333,6 +1333,9 @@ module.exports = {
         "unicorn/prevent-abbreviations": [
             "off"
         ],
+        "unicorn/require-post-message-target-origin": [
+            "off"
+        ],
         "unicorn/string-content": [
             "off"
         ],

@@ -52,8 +52,6 @@
 - [IMilestonePayload](index_browser.md#imilestonepayload)
 - [IMilestoneResponse](index_browser.md#imilestoneresponse)
 - [IMilestoneUtxoChangesResponse](index_browser.md#imilestoneutxochangesresponse)
-- [IMqttClient](index_browser.md#imqttclient)
-- [IMqttStatus](index_browser.md#imqttstatus)
 - [INDEXATION\_PAYLOAD\_TYPE](index_browser.md#indexation_payload_type)
 - [INodeInfo](index_browser.md#inodeinfo)
 - [IOutputResponse](index_browser.md#ioutputresponse)
@@ -113,8 +111,8 @@
 - [MIN\_TREASURY\_TRANSACTION\_PAYLOAD\_LENGTH](index_browser.md#min_treasury_transaction_payload_length)
 - [MIN\_UNLOCK\_BLOCK\_LENGTH](index_browser.md#min_unlock_block_length)
 - [MIN\_UTXO\_INPUT\_LENGTH](index_browser.md#min_utxo_input_length)
-- [MqttClient](index_browser.md#mqttclient)
 - [Pbkdf2](index_browser.md#pbkdf2)
+- [PlatformHelper](index_browser.md#platformhelper)
 - [Poly1305](index_browser.md#poly1305)
 - [PowHelper](index_browser.md#powhelper)
 - [RECEIPT\_PAYLOAD\_TYPE](index_browser.md#receipt_payload_type)
@@ -517,18 +515,6 @@ Re-exports: [IMilestoneUtxoChangesResponse](../interfaces/models_api_imilestoneu
 
 ___
 
-### IMqttClient
-
-Re-exports: [IMqttClient](../interfaces/models_imqttclient.imqttclient.md)
-
-___
-
-### IMqttStatus
-
-Re-exports: [IMqttStatus](../interfaces/models_imqttstatus.imqttstatus.md)
-
-___
-
 ### INDEXATION\_PAYLOAD\_TYPE
 
 Re-exports: [INDEXATION\_PAYLOAD\_TYPE](models_iindexationpayload.md#indexation_payload_type)
@@ -883,15 +869,15 @@ Re-exports: [MIN\_UTXO\_INPUT\_LENGTH](binary_input.md#min_utxo_input_length)
 
 ___
 
-### MqttClient
-
-Re-exports: [MqttClient](../classes/clients_mqttclient.mqttclient.md)
-
-___
-
 ### Pbkdf2
 
 Re-exports: [Pbkdf2](../classes/crypto_pbkdf2.pbkdf2.md)
+
+___
+
+### PlatformHelper
+
+Re-exports: [PlatformHelper](../classes/utils_platformhelper.platformhelper.md)
 
 ___
 

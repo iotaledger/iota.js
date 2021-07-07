@@ -5,10 +5,13 @@ import { terser } from 'rollup-plugin-terser';
 
 const plugins = [
     replace({
+        "PlatformHelper.isNodeJs": !process.env.BROWSER,
+        "globalThis && globalThis.process && globalThis.process.version": !process.env.BROWSER,
         preventAssignment: true
     }),
     commonjs(),
     resolve({
+        browser: process.env.BROWSER
     })
 ];
 
@@ -26,19 +29,16 @@ export default {
         globals: {
             "node-fetch": "node-fetch",
             "crypto": "crypto",
-            "mqtt": "mqtt",
             "big-integer": "big-integer"
         }
     },
     external: (process.env.BROWSER
         ? [
-            "big-integer",
-            "mqtt"
+            "big-integer"
         ]
         : [
             "crypto",
-            "node-fetch",
-            "mqtt"
+            "node-fetch"
         ]),
     plugins
 }

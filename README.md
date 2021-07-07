@@ -12,7 +12,7 @@
   <a href="#example">Example</a> ◈
   <a href="#api-endpoints">Api Endpoints</a> ◈
   <a href="#high-level-operations">High Level Operations</a> ◈
-  <a href="#mqtt-operations">MQTT Operations</a> ◈
+  <a href="#mqtt">MQTT</a> ◈
   <a href="#models">Models</a> ◈
   <a href="#proof-of-work">Proof Of Work</a> ◈
   <a href="#additional-examples">Additional Examples</a> ◈
@@ -26,7 +26,7 @@
 
 Client library for IOTA chrysalis network, implemeted in TypeScript to strongly type the objects sent and received from the API.
 
-Also includes High Level operations and MQTT support.
+Also includes High Level operations and MQTT support via a package.
 
 Runs in both NodeJS and Browser environments.
 
@@ -105,21 +105,9 @@ There are also high level operations which make use of the API level methods:
 * sendAdvanced - Given a set of inputs with keypairs seed, path, list of destinations make multiple transfers, can also include index data.
 * sendData - Given index and data create a new data message.
 
-## MQTT Operations
+## MQTT
 
-You can create a MQTT client which once connected can stream the following feeds.
-
-* milestonesLatest
-* milestonesConfirmed
-* messageMetadata - Metadata updates for a specified messageId
-* output - Output updates for a specified outputId
-* addressOutputs - Address output updates for a specified address
-* address25519Outputs - Address output updates for a specified ed25519 address
-* messagesRaw - All messages in binary form
-* messages - All messaged decoded to objects
-* indexRaw - All messages for a specified indexation key in binary form
-* index - All messages for a specified indexation key in object form
-* messagesMetadata - All metadata updates
+MQTT has moved to a separate package, see [README.md](./packages/mqtt/README.md) 
 
 ## Models
 
@@ -138,8 +126,6 @@ Please find other examples in the [./examples](./examples) folder.
 * Browser - Demonstrates direct inclusion and use of the library in an html page.
 * Peers - Demonstrates peer management.
 * Pow - Demonstrates using one of the other PoW packages.
-* Mqtt - Using mqtt to read streaming messages.
-* Browser Mqtt - Using mqtt to read streaming messages in the browser.
 
 ## Supporting the project
 
