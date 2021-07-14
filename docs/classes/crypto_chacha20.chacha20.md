@@ -1,8 +1,8 @@
-[@iota/iota.js](../README.md) / [crypto/chaCha20](../modules/crypto_chacha20.md) / ChaCha20
+[@iota/iota.js](../README.md) / [crypto/chaCha20](../modules/crypto_chaCha20.md) / ChaCha20
 
 # Class: ChaCha20
 
-[crypto/chaCha20](../modules/crypto_chacha20.md).ChaCha20
+[crypto/chaCha20](../modules/crypto_chaCha20.md).ChaCha20
 
 Implementation of the ChaCha29 cipher.
 
@@ -10,13 +10,13 @@ Implementation of the ChaCha29 cipher.
 
 ### Constructors
 
-- [constructor](crypto_chacha20.chacha20.md#constructor)
+- [constructor](crypto_chaCha20.ChaCha20.md#constructor)
 
 ### Methods
 
-- [decrypt](crypto_chacha20.chacha20.md#decrypt)
-- [encrypt](crypto_chacha20.chacha20.md#encrypt)
-- [keyStream](crypto_chacha20.chacha20.md#keystream)
+- [decrypt](crypto_chaCha20.ChaCha20.md#decrypt)
+- [encrypt](crypto_chaCha20.ChaCha20.md#encrypt)
+- [keyStream](crypto_chaCha20.ChaCha20.md#keystream)
 
 ## Constructors
 

@@ -1,8 +1,8 @@
-[@iota/iota.js](../README.md) / [models/IMigratedFunds](../modules/models_imigratedfunds.md) / IMigratedFunds
+[@iota/iota.js](../README.md) / [models/IMigratedFunds](../modules/models_IMigratedFunds.md) / IMigratedFunds
 
 # Interface: IMigratedFunds
 
-[models/IMigratedFunds](../modules/models_imigratedfunds.md).IMigratedFunds
+[models/IMigratedFunds](../modules/models_IMigratedFunds.md).IMigratedFunds
 
 The migrated funds for receipts.
 
@@ -10,15 +10,15 @@ The migrated funds for receipts.
 
 ### Properties
 
-- [address](models_imigratedfunds.imigratedfunds.md#address)
-- [deposit](models_imigratedfunds.imigratedfunds.md#deposit)
-- [tailTransactionHash](models_imigratedfunds.imigratedfunds.md#tailtransactionhash)
+- [address](models_IMigratedFunds.IMigratedFunds.md#address)
+- [deposit](models_IMigratedFunds.IMigratedFunds.md#deposit)
+- [tailTransactionHash](models_IMigratedFunds.IMigratedFunds.md#tailtransactionhash)
 
 ## Properties
 
 ### address
 
-• **address**: [`IEd25519Address`](models_ied25519address.ied25519address.md)
+• **address**: [`IEd25519Address`](models_IEd25519Address.IEd25519Address.md)
 
 The target address of the migrated funds.
 

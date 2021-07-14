@@ -37,7 +37,7 @@ Log an address to the console.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `prefix` | `string` | The prefix for the output. |
-| `unknownAddress?` | [`IEd25519Address`](../interfaces/models_ied25519address.ied25519address.md) | The address to log. |
+| `unknownAddress?` | [`IEd25519Address`](../interfaces/models_IEd25519Address.IEd25519Address.md) | The address to log. |
 
 #### Returns
 
@@ -56,7 +56,7 @@ Log fund to the console.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `prefix` | `string` | The prefix for the output. |
-| `fund?` | [`IMigratedFunds`](../interfaces/models_imigratedfunds.imigratedfunds.md) | The fund to log. |
+| `fund?` | [`IMigratedFunds`](../interfaces/models_IMigratedFunds.IMigratedFunds.md) | The fund to log. |
 
 #### Returns
 
@@ -75,7 +75,7 @@ Log a indexation payload to the console.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `prefix` | `string` | The prefix for the output. |
-| `payload?` | [`IIndexationPayload`](../interfaces/models_iindexationpayload.iindexationpayload.md) | The payload. |
+| `payload?` | [`IIndexationPayload`](../interfaces/models_IIndexationPayload.IIndexationPayload.md) | The payload. |
 
 #### Returns
 
@@ -94,7 +94,7 @@ Log the node information.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `prefix` | `string` | The prefix for the output. |
-| `info` | [`INodeInfo`](../interfaces/models_inodeinfo.inodeinfo.md) | The info to log. |
+| `info` | [`INodeInfo`](../interfaces/models_INodeInfo.INodeInfo.md) | The info to log. |
 
 #### Returns
 
@@ -113,7 +113,7 @@ Log input to the console.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `prefix` | `string` | The prefix for the output. |
-| `unknownInput?` | [`IUTXOInput`](../interfaces/models_iutxoinput.iutxoinput.md) \| [`ITreasuryInput`](../interfaces/models_itreasuryinput.itreasuryinput.md) | The input to log. |
+| `unknownInput?` | [`IUTXOInput`](../interfaces/models_IUTXOInput.IUTXOInput.md) \| [`ITreasuryInput`](../interfaces/models_ITreasuryInput.ITreasuryInput.md) | The input to log. |
 
 #### Returns
 
@@ -132,7 +132,7 @@ Log a message to the console.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `prefix` | `string` | The prefix for the output. |
-| `message` | [`IMessage`](../interfaces/models_imessage.imessage.md) | The message to log. |
+| `message` | [`IMessage`](../interfaces/models_IMessage.IMessage.md) | The message to log. |
 
 #### Returns
 
@@ -151,7 +151,7 @@ Log the message metadata to the console.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `prefix` | `string` | The prefix for the output. |
-| `messageMetadata` | [`IMessageMetadata`](../interfaces/models_imessagemetadata.imessagemetadata.md) | The messageMetadata to log. |
+| `messageMetadata` | [`IMessageMetadata`](../interfaces/models_IMessageMetadata.IMessageMetadata.md) | The messageMetadata to log. |
 
 #### Returns
 
@@ -170,7 +170,7 @@ Log a milestone payload to the console.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `prefix` | `string` | The prefix for the output. |
-| `payload?` | [`IMilestonePayload`](../interfaces/models_imilestonepayload.imilestonepayload.md) | The payload. |
+| `payload?` | [`IMilestonePayload`](../interfaces/models_IMilestonePayload.IMilestonePayload.md) | The payload. |
 
 #### Returns
 
@@ -189,7 +189,7 @@ Log output to the console.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `prefix` | `string` | The prefix for the output. |
-| `unknownOutput?` | [`ISigLockedSingleOutput`](../interfaces/models_isiglockedsingleoutput.isiglockedsingleoutput.md) \| [`ISigLockedDustAllowanceOutput`](../interfaces/models_isiglockeddustallowanceoutput.isiglockeddustallowanceoutput.md) \| [`ITreasuryOutput`](../interfaces/models_itreasuryoutput.itreasuryoutput.md) | The output to log. |
+| `unknownOutput?` | [`ISigLockedSingleOutput`](../interfaces/models_ISigLockedSingleOutput.ISigLockedSingleOutput.md) \| [`ISigLockedDustAllowanceOutput`](../interfaces/models_ISigLockedDustAllowanceOutput.ISigLockedDustAllowanceOutput.md) \| [`ITreasuryOutput`](../interfaces/models_ITreasuryOutput.ITreasuryOutput.md) | The output to log. |
 
 #### Returns
 
@@ -208,7 +208,7 @@ Log a message to the console.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `prefix` | `string` | The prefix for the output. |
-| `unknownPayload?` | [`ITransactionPayload`](../interfaces/models_itransactionpayload.itransactionpayload.md) \| [`IMilestonePayload`](../interfaces/models_imilestonepayload.imilestonepayload.md) \| [`IIndexationPayload`](../interfaces/models_iindexationpayload.iindexationpayload.md) \| [`ITreasuryTransactionPayload`](../interfaces/models_itreasurytransactionpayload.itreasurytransactionpayload.md) \| [`IReceiptPayload`](../interfaces/models_ireceiptpayload.ireceiptpayload.md) | The payload. |
+| `unknownPayload?` | [`ITransactionPayload`](../interfaces/models_ITransactionPayload.ITransactionPayload.md) \| [`IMilestonePayload`](../interfaces/models_IMilestonePayload.IMilestonePayload.md) \| [`IIndexationPayload`](../interfaces/models_IIndexationPayload.IIndexationPayload.md) \| [`ITreasuryTransactionPayload`](../interfaces/models_ITreasuryTransactionPayload.ITreasuryTransactionPayload.md) \| [`IReceiptPayload`](../interfaces/models_IReceiptPayload.IReceiptPayload.md) | The payload. |
 
 #### Returns
 
@@ -227,7 +227,7 @@ Log a receipt payload to the console.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `prefix` | `string` | The prefix for the output. |
-| `payload?` | [`IReceiptPayload`](../interfaces/models_ireceiptpayload.ireceiptpayload.md) | The payload. |
+| `payload?` | [`IReceiptPayload`](../interfaces/models_IReceiptPayload.IReceiptPayload.md) | The payload. |
 
 #### Returns
 
@@ -246,7 +246,7 @@ Log signature to the console.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `prefix` | `string` | The prefix for the output. |
-| `unknownSignature?` | [`IEd25519Signature`](../interfaces/models_ied25519signature.ied25519signature.md) | The signature to log. |
+| `unknownSignature?` | [`IEd25519Signature`](../interfaces/models_IEd25519Signature.IEd25519Signature.md) | The signature to log. |
 
 #### Returns
 
@@ -265,7 +265,7 @@ Log the tips information.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `prefix` | `string` | The prefix for the output. |
-| `tipsResponse` | [`ITipsResponse`](../interfaces/models_api_itipsresponse.itipsresponse.md) | The tips to log. |
+| `tipsResponse` | [`ITipsResponse`](../interfaces/models_api_ITipsResponse.ITipsResponse.md) | The tips to log. |
 
 #### Returns
 
@@ -284,7 +284,7 @@ Log a transaction payload to the console.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `prefix` | `string` | The prefix for the output. |
-| `payload?` | [`ITransactionPayload`](../interfaces/models_itransactionpayload.itransactionpayload.md) | The payload. |
+| `payload?` | [`ITransactionPayload`](../interfaces/models_ITransactionPayload.ITransactionPayload.md) | The payload. |
 
 #### Returns
 
@@ -303,7 +303,7 @@ Log a treasury transaction payload to the console.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `prefix` | `string` | The prefix for the output. |
-| `payload?` | [`ITreasuryTransactionPayload`](../interfaces/models_itreasurytransactionpayload.itreasurytransactionpayload.md) | The payload. |
+| `payload?` | [`ITreasuryTransactionPayload`](../interfaces/models_ITreasuryTransactionPayload.ITreasuryTransactionPayload.md) | The payload. |
 
 #### Returns
 
@@ -322,7 +322,7 @@ Log unlock block to the console.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `prefix` | `string` | The prefix for the output. |
-| `unknownUnlockBlock?` | [`ISignatureUnlockBlock`](../interfaces/models_isignatureunlockblock.isignatureunlockblock.md) \| [`IReferenceUnlockBlock`](../interfaces/models_ireferenceunlockblock.ireferenceunlockblock.md) | The unlock block to log. |
+| `unknownUnlockBlock?` | [`ISignatureUnlockBlock`](../interfaces/models_ISignatureUnlockBlock.ISignatureUnlockBlock.md) \| [`IReferenceUnlockBlock`](../interfaces/models_IReferenceUnlockBlock.IReferenceUnlockBlock.md) | The unlock block to log. |
 
 #### Returns
 

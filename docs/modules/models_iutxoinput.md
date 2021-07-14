@@ -6,11 +6,11 @@
 
 ### Interfaces
 
-- [IUTXOInput](../interfaces/models_iutxoinput.iutxoinput.md)
+- [IUTXOInput](../interfaces/models_IUTXOInput.IUTXOInput.md)
 
 ### Variables
 
-- [UTXO\_INPUT\_TYPE](models_iutxoinput.md#utxo_input_type)
+- [UTXO\_INPUT\_TYPE](models_IUTXOInput.md#utxo_input_type)
 
 ## Variables
 

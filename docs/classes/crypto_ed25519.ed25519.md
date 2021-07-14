@@ -10,22 +10,22 @@ Implementation of Ed25519.
 
 ### Constructors
 
-- [constructor](crypto_ed25519.ed25519.md#constructor)
+- [constructor](crypto_ed25519.Ed25519.md#constructor)
 
 ### Properties
 
-- [PRIVATE\_KEY\_SIZE](crypto_ed25519.ed25519.md#private_key_size)
-- [PUBLIC\_KEY\_SIZE](crypto_ed25519.ed25519.md#public_key_size)
-- [SEED\_SIZE](crypto_ed25519.ed25519.md#seed_size)
-- [SIGNATURE\_SIZE](crypto_ed25519.ed25519.md#signature_size)
+- [PRIVATE\_KEY\_SIZE](crypto_ed25519.Ed25519.md#private_key_size)
+- [PUBLIC\_KEY\_SIZE](crypto_ed25519.Ed25519.md#public_key_size)
+- [SEED\_SIZE](crypto_ed25519.Ed25519.md#seed_size)
+- [SIGNATURE\_SIZE](crypto_ed25519.Ed25519.md#signature_size)
 
 ### Methods
 
-- [keyPairFromSeed](crypto_ed25519.ed25519.md#keypairfromseed)
-- [privateKeyFromSeed](crypto_ed25519.ed25519.md#privatekeyfromseed)
-- [publicKeyFromPrivateKey](crypto_ed25519.ed25519.md#publickeyfromprivatekey)
-- [sign](crypto_ed25519.ed25519.md#sign)
-- [verify](crypto_ed25519.ed25519.md#verify)
+- [keyPairFromSeed](crypto_ed25519.Ed25519.md#keypairfromseed)
+- [privateKeyFromSeed](crypto_ed25519.Ed25519.md#privatekeyfromseed)
+- [publicKeyFromPrivateKey](crypto_ed25519.Ed25519.md#publickeyfromprivatekey)
+- [sign](crypto_ed25519.Ed25519.md#sign)
+- [verify](crypto_ed25519.Ed25519.md#verify)
 
 ## Constructors
 

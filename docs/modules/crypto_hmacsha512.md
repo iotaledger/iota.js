@@ -6,4 +6,4 @@
 
 ### Classes
 
-- [HmacSha512](../classes/crypto_hmacsha512.hmacsha512.md)
+- [HmacSha512](../classes/crypto_hmacSha512.HmacSha512.md)

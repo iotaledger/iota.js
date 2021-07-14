@@ -6,11 +6,11 @@
 
 ### Interfaces
 
-- [ITreasuryTransactionPayload](../interfaces/models_itreasurytransactionpayload.itreasurytransactionpayload.md)
+- [ITreasuryTransactionPayload](../interfaces/models_ITreasuryTransactionPayload.ITreasuryTransactionPayload.md)
 
 ### Variables
 
-- [TREASURY\_TRANSACTION\_PAYLOAD\_TYPE](models_itreasurytransactionpayload.md#treasury_transaction_payload_type)
+- [TREASURY\_TRANSACTION\_PAYLOAD\_TYPE](models_ITreasuryTransactionPayload.md#treasury_transaction_payload_type)
 
 ## Variables
 

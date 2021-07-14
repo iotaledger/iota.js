@@ -11,17 +11,17 @@ Based on reference implementation https://github.com/sipa/bech32/blob/master/ref
 
 ### Constructors
 
-- [constructor](crypto_bech32.bech32.md#constructor)
+- [constructor](crypto_bech32.Bech32.md#constructor)
 
 ### Methods
 
-- [decode](crypto_bech32.bech32.md#decode)
-- [decodeTo5BitArray](crypto_bech32.bech32.md#decodeto5bitarray)
-- [encode](crypto_bech32.bech32.md#encode)
-- [encode5BitArray](crypto_bech32.bech32.md#encode5bitarray)
-- [from5Bit](crypto_bech32.bech32.md#from5bit)
-- [matches](crypto_bech32.bech32.md#matches)
-- [to5Bit](crypto_bech32.bech32.md#to5bit)
+- [decode](crypto_bech32.Bech32.md#decode)
+- [decodeTo5BitArray](crypto_bech32.Bech32.md#decodeto5bitarray)
+- [encode](crypto_bech32.Bech32.md#encode)
+- [encode5BitArray](crypto_bech32.Bech32.md#encode5bitarray)
+- [from5Bit](crypto_bech32.Bech32.md#from5bit)
+- [matches](crypto_bech32.Bech32.md#matches)
+- [to5Bit](crypto_bech32.Bech32.md#to5bit)
 
 ## Constructors
 

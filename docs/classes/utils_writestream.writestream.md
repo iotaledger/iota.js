@@ -1,8 +1,8 @@
-[@iota/iota.js](../README.md) / [utils/writeStream](../modules/utils_writestream.md) / WriteStream
+[@iota/iota.js](../README.md) / [utils/writeStream](../modules/utils_writeStream.md) / WriteStream
 
 # Class: WriteStream
 
-[utils/writeStream](../modules/utils_writestream.md).WriteStream
+[utils/writeStream](../modules/utils_writeStream.md).WriteStream
 
 Keep track of the write index within a stream.
 
@@ -10,23 +10,23 @@ Keep track of the write index within a stream.
 
 ### Constructors
 
-- [constructor](utils_writestream.writestream.md#constructor)
+- [constructor](utils_writeStream.WriteStream.md#constructor)
 
 ### Methods
 
-- [finalBytes](utils_writestream.writestream.md#finalbytes)
-- [finalHex](utils_writestream.writestream.md#finalhex)
-- [getWriteIndex](utils_writestream.writestream.md#getwriteindex)
-- [length](utils_writestream.writestream.md#length)
-- [setWriteIndex](utils_writestream.writestream.md#setwriteindex)
-- [unused](utils_writestream.writestream.md#unused)
-- [writeBoolean](utils_writestream.writestream.md#writeboolean)
-- [writeByte](utils_writestream.writestream.md#writebyte)
-- [writeBytes](utils_writestream.writestream.md#writebytes)
-- [writeFixedHex](utils_writestream.writestream.md#writefixedhex)
-- [writeUInt16](utils_writestream.writestream.md#writeuint16)
-- [writeUInt32](utils_writestream.writestream.md#writeuint32)
-- [writeUInt64](utils_writestream.writestream.md#writeuint64)
+- [finalBytes](utils_writeStream.WriteStream.md#finalbytes)
+- [finalHex](utils_writeStream.WriteStream.md#finalhex)
+- [getWriteIndex](utils_writeStream.WriteStream.md#getwriteindex)
+- [length](utils_writeStream.WriteStream.md#length)
+- [setWriteIndex](utils_writeStream.WriteStream.md#setwriteindex)
+- [unused](utils_writeStream.WriteStream.md#unused)
+- [writeBoolean](utils_writeStream.WriteStream.md#writeboolean)
+- [writeByte](utils_writeStream.WriteStream.md#writebyte)
+- [writeBytes](utils_writeStream.WriteStream.md#writebytes)
+- [writeFixedHex](utils_writeStream.WriteStream.md#writefixedhex)
+- [writeUInt16](utils_writeStream.WriteStream.md#writeuint16)
+- [writeUInt32](utils_writeStream.WriteStream.md#writeuint32)
+- [writeUInt64](utils_writeStream.WriteStream.md#writeuint64)
 
 ## Constructors
 

@@ -6,11 +6,11 @@
 
 ### Interfaces
 
-- [ITreasuryOutput](../interfaces/models_itreasuryoutput.itreasuryoutput.md)
+- [ITreasuryOutput](../interfaces/models_ITreasuryOutput.ITreasuryOutput.md)
 
 ### Variables
 
-- [TREASURY\_OUTPUT\_TYPE](models_itreasuryoutput.md#treasury_output_type)
+- [TREASURY\_OUTPUT\_TYPE](models_ITreasuryOutput.md#treasury_output_type)
 
 ## Variables
 

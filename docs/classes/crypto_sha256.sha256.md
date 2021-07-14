@@ -11,19 +11,19 @@ TypeScript conversion from https://github.com/emn178/js-sha256.
 
 ### Constructors
 
-- [constructor](crypto_sha256.sha256.md#constructor)
+- [constructor](crypto_sha256.Sha256.md#constructor)
 
 ### Properties
 
-- [SIZE\_224](crypto_sha256.sha256.md#size_224)
-- [SIZE\_256](crypto_sha256.sha256.md#size_256)
+- [SIZE\_224](crypto_sha256.Sha256.md#size_224)
+- [SIZE\_256](crypto_sha256.Sha256.md#size_256)
 
 ### Methods
 
-- [digest](crypto_sha256.sha256.md#digest)
-- [update](crypto_sha256.sha256.md#update)
-- [sum224](crypto_sha256.sha256.md#sum224)
-- [sum256](crypto_sha256.sha256.md#sum256)
+- [digest](crypto_sha256.Sha256.md#digest)
+- [update](crypto_sha256.Sha256.md#update)
+- [sum224](crypto_sha256.Sha256.md#sum224)
+- [sum256](crypto_sha256.Sha256.md#sum256)
 
 ## Constructors
 
@@ -73,7 +73,7 @@ ___
 
 ### update
 
-▸ **update**(`message`): [`Sha256`](crypto_sha256.sha256.md)
+▸ **update**(`message`): [`Sha256`](crypto_sha256.Sha256.md)
 
 Update the hash with the data.
 
@@ -85,7 +85,7 @@ Update the hash with the data.
 
 #### Returns
 
-[`Sha256`](crypto_sha256.sha256.md)
+[`Sha256`](crypto_sha256.Sha256.md)
 
 The instance for chaining.
 

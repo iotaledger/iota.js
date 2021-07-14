@@ -1,8 +1,8 @@
-[@iota/iota.js](../README.md) / [crypto/edwards25519/projectiveGroupElement](../modules/crypto_edwards25519_projectivegroupelement.md) / ProjectiveGroupElement
+[@iota/iota.js](../README.md) / [crypto/edwards25519/projectiveGroupElement](../modules/crypto_edwards25519_projectiveGroupElement.md) / ProjectiveGroupElement
 
 # Class: ProjectiveGroupElement
 
-[crypto/edwards25519/projectiveGroupElement](../modules/crypto_edwards25519_projectivegroupelement.md).ProjectiveGroupElement
+[crypto/edwards25519/projectiveGroupElement](../modules/crypto_edwards25519_projectiveGroupElement.md).ProjectiveGroupElement
 
 Group elements are members of the elliptic curve -x^2 + y^2 = 1 + d * x^2 *
 y^2 where d = -121665/121666
@@ -12,21 +12,21 @@ ProjectiveGroupElement: (X:Y:Z) satisfying x=X/Z, y=Y/Z.
 
 ### Constructors
 
-- [constructor](crypto_edwards25519_projectivegroupelement.projectivegroupelement.md#constructor)
+- [constructor](crypto_edwards25519_projectiveGroupElement.ProjectiveGroupElement.md#constructor)
 
 ### Properties
 
-- [X](crypto_edwards25519_projectivegroupelement.projectivegroupelement.md#x)
-- [Y](crypto_edwards25519_projectivegroupelement.projectivegroupelement.md#y)
-- [Z](crypto_edwards25519_projectivegroupelement.projectivegroupelement.md#z)
+- [X](crypto_edwards25519_projectiveGroupElement.ProjectiveGroupElement.md#x)
+- [Y](crypto_edwards25519_projectiveGroupElement.ProjectiveGroupElement.md#y)
+- [Z](crypto_edwards25519_projectiveGroupElement.ProjectiveGroupElement.md#z)
 
 ### Methods
 
-- [double](crypto_edwards25519_projectivegroupelement.projectivegroupelement.md#double)
-- [doubleScalarMultVartime](crypto_edwards25519_projectivegroupelement.projectivegroupelement.md#doublescalarmultvartime)
-- [toBytes](crypto_edwards25519_projectivegroupelement.projectivegroupelement.md#tobytes)
-- [toExtended](crypto_edwards25519_projectivegroupelement.projectivegroupelement.md#toextended)
-- [zero](crypto_edwards25519_projectivegroupelement.projectivegroupelement.md#zero)
+- [double](crypto_edwards25519_projectiveGroupElement.ProjectiveGroupElement.md#double)
+- [doubleScalarMultVartime](crypto_edwards25519_projectiveGroupElement.ProjectiveGroupElement.md#doublescalarmultvartime)
+- [toBytes](crypto_edwards25519_projectiveGroupElement.ProjectiveGroupElement.md#tobytes)
+- [toExtended](crypto_edwards25519_projectiveGroupElement.ProjectiveGroupElement.md#toextended)
+- [zero](crypto_edwards25519_projectiveGroupElement.ProjectiveGroupElement.md#zero)
 
 ## Constructors
 
@@ -40,15 +40,15 @@ Create a new instance of CompletedGroupElement.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `X?` | [`FieldElement`](crypto_edwards25519_fieldelement.fieldelement.md) | The X element. |
-| `Y?` | [`FieldElement`](crypto_edwards25519_fieldelement.fieldelement.md) | The Y Element. |
-| `Z?` | [`FieldElement`](crypto_edwards25519_fieldelement.fieldelement.md) | The Z Element. |
+| `X?` | [`FieldElement`](crypto_edwards25519_fieldElement.FieldElement.md) | The X element. |
+| `Y?` | [`FieldElement`](crypto_edwards25519_fieldElement.FieldElement.md) | The Y Element. |
+| `Z?` | [`FieldElement`](crypto_edwards25519_fieldElement.FieldElement.md) | The Z Element. |
 
 ## Properties
 
 ### X
 
-• **X**: [`FieldElement`](crypto_edwards25519_fieldelement.fieldelement.md)
+• **X**: [`FieldElement`](crypto_edwards25519_fieldElement.FieldElement.md)
 
 The X element.
 
@@ -56,7 +56,7 @@ ___
 
 ### Y
 
-• **Y**: [`FieldElement`](crypto_edwards25519_fieldelement.fieldelement.md)
+• **Y**: [`FieldElement`](crypto_edwards25519_fieldElement.FieldElement.md)
 
 The Y Element.
 
@@ -64,7 +64,7 @@ ___
 
 ### Z
 
-• **Z**: [`FieldElement`](crypto_edwards25519_fieldelement.fieldelement.md)
+• **Z**: [`FieldElement`](crypto_edwards25519_fieldElement.FieldElement.md)
 
 The Z Element.
 
@@ -80,7 +80,7 @@ Double the elements.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `r` | [`CompletedGroupElement`](crypto_edwards25519_completedgroupelement.completedgroupelement.md) | The elements. |
+| `r` | [`CompletedGroupElement`](crypto_edwards25519_completedGroupElement.CompletedGroupElement.md) | The elements. |
 
 #### Returns
 
@@ -102,7 +102,7 @@ B is the Ed25519 base point (x,4/5) with x positive.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `a` | `Uint8Array` | The a. |
-| `A` | [`ExtendedGroupElement`](crypto_edwards25519_extendedgroupelement.extendedgroupelement.md) | The A. |
+| `A` | [`ExtendedGroupElement`](crypto_edwards25519_extendedGroupElement.ExtendedGroupElement.md) | The A. |
 | `b` | `Uint8Array` | The b. |
 
 #### Returns
@@ -139,7 +139,7 @@ Convert to extended form.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `r` | [`ExtendedGroupElement`](crypto_edwards25519_extendedgroupelement.extendedgroupelement.md) | The extended element. |
+| `r` | [`ExtendedGroupElement`](crypto_edwards25519_extendedGroupElement.ExtendedGroupElement.md) | The extended element. |
 
 #### Returns
 

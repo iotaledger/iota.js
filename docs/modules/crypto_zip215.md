@@ -6,4 +6,4 @@
 
 ### Classes
 
-- [Zip215](../classes/crypto_zip215.zip215.md)
+- [Zip215](../classes/crypto_zip215.Zip215.md)

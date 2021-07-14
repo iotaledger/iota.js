@@ -6,11 +6,11 @@
 
 ### Interfaces
 
-- [IReceiptPayload](../interfaces/models_ireceiptpayload.ireceiptpayload.md)
+- [IReceiptPayload](../interfaces/models_IReceiptPayload.IReceiptPayload.md)
 
 ### Variables
 
-- [RECEIPT\_PAYLOAD\_TYPE](models_ireceiptpayload.md#receipt_payload_type)
+- [RECEIPT\_PAYLOAD\_TYPE](models_IReceiptPayload.md#receipt_payload_type)
 
 ## Variables
 

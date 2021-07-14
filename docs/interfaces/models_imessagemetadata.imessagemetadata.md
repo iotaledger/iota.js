@@ -1,8 +1,8 @@
-[@iota/iota.js](../README.md) / [models/IMessageMetadata](../modules/models_imessagemetadata.md) / IMessageMetadata
+[@iota/iota.js](../README.md) / [models/IMessageMetadata](../modules/models_IMessageMetadata.md) / IMessageMetadata
 
 # Interface: IMessageMetadata
 
-[models/IMessageMetadata](../modules/models_imessagemetadata.md).IMessageMetadata
+[models/IMessageMetadata](../modules/models_IMessageMetadata.md).IMessageMetadata
 
 Response from the metadata endpoint.
 
@@ -10,21 +10,21 @@ Response from the metadata endpoint.
 
 ### Properties
 
-- [conflictReason](models_imessagemetadata.imessagemetadata.md#conflictreason)
-- [isSolid](models_imessagemetadata.imessagemetadata.md#issolid)
-- [ledgerInclusionState](models_imessagemetadata.imessagemetadata.md#ledgerinclusionstate)
-- [messageId](models_imessagemetadata.imessagemetadata.md#messageid)
-- [milestoneIndex](models_imessagemetadata.imessagemetadata.md#milestoneindex)
-- [parentMessageIds](models_imessagemetadata.imessagemetadata.md#parentmessageids)
-- [referencedByMilestoneIndex](models_imessagemetadata.imessagemetadata.md#referencedbymilestoneindex)
-- [shouldPromote](models_imessagemetadata.imessagemetadata.md#shouldpromote)
-- [shouldReattach](models_imessagemetadata.imessagemetadata.md#shouldreattach)
+- [conflictReason](models_IMessageMetadata.IMessageMetadata.md#conflictreason)
+- [isSolid](models_IMessageMetadata.IMessageMetadata.md#issolid)
+- [ledgerInclusionState](models_IMessageMetadata.IMessageMetadata.md#ledgerinclusionstate)
+- [messageId](models_IMessageMetadata.IMessageMetadata.md#messageid)
+- [milestoneIndex](models_IMessageMetadata.IMessageMetadata.md#milestoneindex)
+- [parentMessageIds](models_IMessageMetadata.IMessageMetadata.md#parentmessageids)
+- [referencedByMilestoneIndex](models_IMessageMetadata.IMessageMetadata.md#referencedbymilestoneindex)
+- [shouldPromote](models_IMessageMetadata.IMessageMetadata.md#shouldpromote)
+- [shouldReattach](models_IMessageMetadata.IMessageMetadata.md#shouldreattach)
 
 ## Properties
 
 ### conflictReason
 
-• `Optional` **conflictReason**: [`ConflictReason`](../enums/models_conflictreason.conflictreason.md)
+• `Optional` **conflictReason**: [`ConflictReason`](../enums/models_conflictReason.ConflictReason.md)
 
 The conflict reason.
 
@@ -40,7 +40,7 @@ ___
 
 ### ledgerInclusionState
 
-• `Optional` **ledgerInclusionState**: [`LedgerInclusionState`](../modules/models_ledgerinclusionstate.md#ledgerinclusionstate)
+• `Optional` **ledgerInclusionState**: [`LedgerInclusionState`](../modules/models_ledgerInclusionState.md#ledgerinclusionstate)
 
 The ledger inclusion state.
 

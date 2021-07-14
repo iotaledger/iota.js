@@ -1,14 +1,14 @@
-[@iota/iota.js](../README.md) / [models/ITreasuryTransactionPayload](../modules/models_itreasurytransactionpayload.md) / ITreasuryTransactionPayload
+[@iota/iota.js](../README.md) / [models/ITreasuryTransactionPayload](../modules/models_ITreasuryTransactionPayload.md) / ITreasuryTransactionPayload
 
 # Interface: ITreasuryTransactionPayload
 
-[models/ITreasuryTransactionPayload](../modules/models_itreasurytransactionpayload.md).ITreasuryTransactionPayload
+[models/ITreasuryTransactionPayload](../modules/models_ITreasuryTransactionPayload.md).ITreasuryTransactionPayload
 
 Receipt payload.
 
 ## Hierarchy
 
-- [`ITypeBase`](models_itypebase.itypebase.md)<``4``\>
+- [`ITypeBase`](models_ITypeBase.ITypeBase.md)<``4``\>
 
   ↳ **`ITreasuryTransactionPayload`**
 
@@ -16,15 +16,15 @@ Receipt payload.
 
 ### Properties
 
-- [input](models_itreasurytransactionpayload.itreasurytransactionpayload.md#input)
-- [output](models_itreasurytransactionpayload.itreasurytransactionpayload.md#output)
-- [type](models_itreasurytransactionpayload.itreasurytransactionpayload.md#type)
+- [input](models_ITreasuryTransactionPayload.ITreasuryTransactionPayload.md#input)
+- [output](models_ITreasuryTransactionPayload.ITreasuryTransactionPayload.md#output)
+- [type](models_ITreasuryTransactionPayload.ITreasuryTransactionPayload.md#type)
 
 ## Properties
 
 ### input
 
-• **input**: [`ITreasuryInput`](models_itreasuryinput.itreasuryinput.md)
+• **input**: [`ITreasuryInput`](models_ITreasuryInput.ITreasuryInput.md)
 
 The input of this transaction.
 
@@ -32,7 +32,7 @@ ___
 
 ### output
 
-• **output**: [`ITreasuryOutput`](models_itreasuryoutput.itreasuryoutput.md)
+• **output**: [`ITreasuryOutput`](models_ITreasuryOutput.ITreasuryOutput.md)
 
 The output of this transaction.
 
@@ -46,4 +46,4 @@ The type of the object.
 
 #### Inherited from
 
-[ITypeBase](models_itypebase.itypebase.md).[type](models_itypebase.itypebase.md#type)
+[ITypeBase](models_ITypeBase.ITypeBase.md).[type](models_ITypeBase.ITypeBase.md#type)

@@ -10,16 +10,16 @@ Implementation of Bip39 for mnemonic generation.
 
 ### Constructors
 
-- [constructor](crypto_bip39.bip39.md#constructor)
+- [constructor](crypto_bip39.Bip39.md#constructor)
 
 ### Methods
 
-- [entropyChecksumBits](crypto_bip39.bip39.md#entropychecksumbits)
-- [entropyToMnemonic](crypto_bip39.bip39.md#entropytomnemonic)
-- [mnemonicToEntropy](crypto_bip39.bip39.md#mnemonictoentropy)
-- [mnemonicToSeed](crypto_bip39.bip39.md#mnemonictoseed)
-- [randomMnemonic](crypto_bip39.bip39.md#randommnemonic)
-- [setWordList](crypto_bip39.bip39.md#setwordlist)
+- [entropyChecksumBits](crypto_bip39.Bip39.md#entropychecksumbits)
+- [entropyToMnemonic](crypto_bip39.Bip39.md#entropytomnemonic)
+- [mnemonicToEntropy](crypto_bip39.Bip39.md#mnemonictoentropy)
+- [mnemonicToSeed](crypto_bip39.Bip39.md#mnemonictoseed)
+- [randomMnemonic](crypto_bip39.Bip39.md#randommnemonic)
+- [setWordList](crypto_bip39.Bip39.md#setwordlist)
 
 ## Constructors
 

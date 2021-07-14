@@ -10,11 +10,11 @@ Implementation of Zip215.
 
 ### Constructors
 
-- [constructor](crypto_zip215.zip215.md#constructor)
+- [constructor](crypto_zip215.Zip215.md#constructor)
 
 ### Methods
 
-- [verify](crypto_zip215.zip215.md#verify)
+- [verify](crypto_zip215.Zip215.md#verify)
 
 ## Constructors
 

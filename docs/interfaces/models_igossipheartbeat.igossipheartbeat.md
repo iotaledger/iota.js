@@ -1,8 +1,8 @@
-[@iota/iota.js](../README.md) / [models/IGossipHeartbeat](../modules/models_igossipheartbeat.md) / IGossipHeartbeat
+[@iota/iota.js](../README.md) / [models/IGossipHeartbeat](../modules/models_IGossipHeartbeat.md) / IGossipHeartbeat
 
 # Interface: IGossipHeartbeat
 
-[models/IGossipHeartbeat](../modules/models_igossipheartbeat.md).IGossipHeartbeat
+[models/IGossipHeartbeat](../modules/models_IGossipHeartbeat.md).IGossipHeartbeat
 
 Gossip heartbeat.
 
@@ -10,11 +10,11 @@ Gossip heartbeat.
 
 ### Properties
 
-- [connectedNeighbors](models_igossipheartbeat.igossipheartbeat.md#connectedneighbors)
-- [latestMilestoneIndex](models_igossipheartbeat.igossipheartbeat.md#latestmilestoneindex)
-- [prunedMilestoneIndex](models_igossipheartbeat.igossipheartbeat.md#prunedmilestoneindex)
-- [solidMilestoneIndex](models_igossipheartbeat.igossipheartbeat.md#solidmilestoneindex)
-- [syncedNeighbors](models_igossipheartbeat.igossipheartbeat.md#syncedneighbors)
+- [connectedNeighbors](models_IGossipHeartbeat.IGossipHeartbeat.md#connectedneighbors)
+- [latestMilestoneIndex](models_IGossipHeartbeat.IGossipHeartbeat.md#latestmilestoneindex)
+- [prunedMilestoneIndex](models_IGossipHeartbeat.IGossipHeartbeat.md#prunedmilestoneindex)
+- [solidMilestoneIndex](models_IGossipHeartbeat.IGossipHeartbeat.md#solidmilestoneindex)
+- [syncedNeighbors](models_IGossipHeartbeat.IGossipHeartbeat.md#syncedneighbors)
 
 ## Properties
 

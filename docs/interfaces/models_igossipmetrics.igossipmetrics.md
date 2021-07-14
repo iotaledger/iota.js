@@ -1,8 +1,8 @@
-[@iota/iota.js](../README.md) / [models/IGossipMetrics](../modules/models_igossipmetrics.md) / IGossipMetrics
+[@iota/iota.js](../README.md) / [models/IGossipMetrics](../modules/models_IGossipMetrics.md) / IGossipMetrics
 
 # Interface: IGossipMetrics
 
-[models/IGossipMetrics](../modules/models_igossipmetrics.md).IGossipMetrics
+[models/IGossipMetrics](../modules/models_IGossipMetrics.md).IGossipMetrics
 
 Gossip metrics.
 
@@ -10,17 +10,17 @@ Gossip metrics.
 
 ### Properties
 
-- [droppedPackets](models_igossipmetrics.igossipmetrics.md#droppedpackets)
-- [knownMessages](models_igossipmetrics.igossipmetrics.md#knownmessages)
-- [newMessages](models_igossipmetrics.igossipmetrics.md#newmessages)
-- [receivedHeartbeats](models_igossipmetrics.igossipmetrics.md#receivedheartbeats)
-- [receivedMessageRequests](models_igossipmetrics.igossipmetrics.md#receivedmessagerequests)
-- [receivedMessages](models_igossipmetrics.igossipmetrics.md#receivedmessages)
-- [receivedMilestoneRequests](models_igossipmetrics.igossipmetrics.md#receivedmilestonerequests)
-- [sentHeartbeats](models_igossipmetrics.igossipmetrics.md#sentheartbeats)
-- [sentMessageRequests](models_igossipmetrics.igossipmetrics.md#sentmessagerequests)
-- [sentMessages](models_igossipmetrics.igossipmetrics.md#sentmessages)
-- [sentMilestoneRequests](models_igossipmetrics.igossipmetrics.md#sentmilestonerequests)
+- [droppedPackets](models_IGossipMetrics.IGossipMetrics.md#droppedpackets)
+- [knownMessages](models_IGossipMetrics.IGossipMetrics.md#knownmessages)
+- [newMessages](models_IGossipMetrics.IGossipMetrics.md#newmessages)
+- [receivedHeartbeats](models_IGossipMetrics.IGossipMetrics.md#receivedheartbeats)
+- [receivedMessageRequests](models_IGossipMetrics.IGossipMetrics.md#receivedmessagerequests)
+- [receivedMessages](models_IGossipMetrics.IGossipMetrics.md#receivedmessages)
+- [receivedMilestoneRequests](models_IGossipMetrics.IGossipMetrics.md#receivedmilestonerequests)
+- [sentHeartbeats](models_IGossipMetrics.IGossipMetrics.md#sentheartbeats)
+- [sentMessageRequests](models_IGossipMetrics.IGossipMetrics.md#sentmessagerequests)
+- [sentMessages](models_IGossipMetrics.IGossipMetrics.md#sentmessages)
+- [sentMilestoneRequests](models_IGossipMetrics.IGossipMetrics.md#sentmilestonerequests)
 
 ## Properties
 

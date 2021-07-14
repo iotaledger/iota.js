@@ -1,8 +1,8 @@
-[@iota/iota.js](../README.md) / [models/api/IMessagesResponse](../modules/models_api_imessagesresponse.md) / IMessagesResponse
+[@iota/iota.js](../README.md) / [models/api/IMessagesResponse](../modules/models_api_IMessagesResponse.md) / IMessagesResponse
 
 # Interface: IMessagesResponse
 
-[models/api/IMessagesResponse](../modules/models_api_imessagesresponse.md).IMessagesResponse
+[models/api/IMessagesResponse](../modules/models_api_IMessagesResponse.md).IMessagesResponse
 
 List of messages found.
 
@@ -10,10 +10,10 @@ List of messages found.
 
 ### Properties
 
-- [count](models_api_imessagesresponse.imessagesresponse.md#count)
-- [index](models_api_imessagesresponse.imessagesresponse.md#index)
-- [maxResults](models_api_imessagesresponse.imessagesresponse.md#maxresults)
-- [messageIds](models_api_imessagesresponse.imessagesresponse.md#messageids)
+- [count](models_api_IMessagesResponse.IMessagesResponse.md#count)
+- [index](models_api_IMessagesResponse.IMessagesResponse.md#index)
+- [maxResults](models_api_IMessagesResponse.IMessagesResponse.md#maxresults)
+- [messageIds](models_api_IMessagesResponse.IMessagesResponse.md#messageids)
 
 ## Properties
 

@@ -6,4 +6,4 @@
 
 ### Interfaces
 
-- [IReceiptsResponse](../interfaces/models_api_ireceiptsresponse.ireceiptsresponse.md)
+- [IReceiptsResponse](../interfaces/models_api_IReceiptsResponse.IReceiptsResponse.md)

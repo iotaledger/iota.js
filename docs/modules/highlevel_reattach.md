@@ -6,7 +6,7 @@
 
 ### Functions
 
-- [reattach](highlevel_reattach.md#reattach)
+- [reattach](highLevel_reattach.md#reattach)
 
 ## Functions
 
@@ -20,7 +20,7 @@ Reattach an existing message.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `client` | [`IClient`](../interfaces/models_iclient.iclient.md) \| `string` | The client or node endpoint to perform the reattach with. |
+| `client` | [`IClient`](../interfaces/models_IClient.IClient.md) \| `string` | The client or node endpoint to perform the reattach with. |
 | `messageId` | `string` | The message to reattach. |
 
 #### Returns

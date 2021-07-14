@@ -1,14 +1,14 @@
-[@iota/iota.js](../README.md) / [models/IMilestonePayload](../modules/models_imilestonepayload.md) / IMilestonePayload
+[@iota/iota.js](../README.md) / [models/IMilestonePayload](../modules/models_IMilestonePayload.md) / IMilestonePayload
 
 # Interface: IMilestonePayload
 
-[models/IMilestonePayload](../modules/models_imilestonepayload.md).IMilestonePayload
+[models/IMilestonePayload](../modules/models_IMilestonePayload.md).IMilestonePayload
 
 Milestone payload.
 
 ## Hierarchy
 
-- [`ITypeBase`](models_itypebase.itypebase.md)<``1``\>
+- [`ITypeBase`](models_ITypeBase.ITypeBase.md)<``1``\>
 
   ↳ **`IMilestonePayload`**
 
@@ -16,16 +16,16 @@ Milestone payload.
 
 ### Properties
 
-- [inclusionMerkleProof](models_imilestonepayload.imilestonepayload.md#inclusionmerkleproof)
-- [index](models_imilestonepayload.imilestonepayload.md#index)
-- [nextPoWScore](models_imilestonepayload.imilestonepayload.md#nextpowscore)
-- [nextPoWScoreMilestoneIndex](models_imilestonepayload.imilestonepayload.md#nextpowscoremilestoneindex)
-- [parentMessageIds](models_imilestonepayload.imilestonepayload.md#parentmessageids)
-- [publicKeys](models_imilestonepayload.imilestonepayload.md#publickeys)
-- [receipt](models_imilestonepayload.imilestonepayload.md#receipt)
-- [signatures](models_imilestonepayload.imilestonepayload.md#signatures)
-- [timestamp](models_imilestonepayload.imilestonepayload.md#timestamp)
-- [type](models_imilestonepayload.imilestonepayload.md#type)
+- [inclusionMerkleProof](models_IMilestonePayload.IMilestonePayload.md#inclusionmerkleproof)
+- [index](models_IMilestonePayload.IMilestonePayload.md#index)
+- [nextPoWScore](models_IMilestonePayload.IMilestonePayload.md#nextpowscore)
+- [nextPoWScoreMilestoneIndex](models_IMilestonePayload.IMilestonePayload.md#nextpowscoremilestoneindex)
+- [parentMessageIds](models_IMilestonePayload.IMilestonePayload.md#parentmessageids)
+- [publicKeys](models_IMilestonePayload.IMilestonePayload.md#publickeys)
+- [receipt](models_IMilestonePayload.IMilestonePayload.md#receipt)
+- [signatures](models_IMilestonePayload.IMilestonePayload.md#signatures)
+- [timestamp](models_IMilestonePayload.IMilestonePayload.md#timestamp)
+- [type](models_IMilestonePayload.IMilestonePayload.md#type)
 
 ## Properties
 
@@ -79,7 +79,7 @@ ___
 
 ### receipt
 
-• `Optional` **receipt**: [`IReceiptPayload`](models_ireceiptpayload.ireceiptpayload.md)
+• `Optional` **receipt**: [`IReceiptPayload`](models_IReceiptPayload.IReceiptPayload.md)
 
 Receipt payload.
 
@@ -109,4 +109,4 @@ The type of the object.
 
 #### Inherited from
 
-[ITypeBase](models_itypebase.itypebase.md).[type](models_itypebase.itypebase.md#type)
+[ITypeBase](models_ITypeBase.ITypeBase.md).[type](models_ITypeBase.ITypeBase.md#type)

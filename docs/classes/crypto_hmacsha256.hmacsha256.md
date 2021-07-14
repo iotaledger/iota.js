@@ -1,8 +1,8 @@
-[@iota/iota.js](../README.md) / [crypto/hmacSha256](../modules/crypto_hmacsha256.md) / HmacSha256
+[@iota/iota.js](../README.md) / [crypto/hmacSha256](../modules/crypto_hmacSha256.md) / HmacSha256
 
 # Class: HmacSha256
 
-[crypto/hmacSha256](../modules/crypto_hmacsha256.md).HmacSha256
+[crypto/hmacSha256](../modules/crypto_hmacSha256.md).HmacSha256
 
 Class to help with HmacSha256 scheme.
 TypeScript conversion from https://github.com/emn178/js-sha256.
@@ -11,13 +11,13 @@ TypeScript conversion from https://github.com/emn178/js-sha256.
 
 ### Constructors
 
-- [constructor](crypto_hmacsha256.hmacsha256.md#constructor)
+- [constructor](crypto_hmacSha256.HmacSha256.md#constructor)
 
 ### Methods
 
-- [digest](crypto_hmacsha256.hmacsha256.md#digest)
-- [update](crypto_hmacsha256.hmacsha256.md#update)
-- [sum256](crypto_hmacsha256.hmacsha256.md#sum256)
+- [digest](crypto_hmacSha256.HmacSha256.md#digest)
+- [update](crypto_hmacSha256.HmacSha256.md#update)
+- [sum256](crypto_hmacSha256.HmacSha256.md#sum256)
 
 ## Constructors
 
@@ -52,7 +52,7 @@ ___
 
 ### update
 
-▸ **update**(`message`): [`HmacSha256`](crypto_hmacsha256.hmacsha256.md)
+▸ **update**(`message`): [`HmacSha256`](crypto_hmacSha256.HmacSha256.md)
 
 Update the hash with the data.
 
@@ -64,7 +64,7 @@ Update the hash with the data.
 
 #### Returns
 
-[`HmacSha256`](crypto_hmacsha256.hmacsha256.md)
+[`HmacSha256`](crypto_hmacSha256.HmacSha256.md)
 
 The instance for chaining.
 

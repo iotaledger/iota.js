@@ -6,8 +6,8 @@
 
 ### Functions
 
-- [generateBip44Address](highlevel_addresses.md#generatebip44address)
-- [generateBip44Path](highlevel_addresses.md#generatebip44path)
+- [generateBip44Address](highLevel_addresses.md#generatebip44address)
+- [generateBip44Path](highLevel_addresses.md#generatebip44path)
 
 ## Functions
 
@@ -21,7 +21,7 @@ Generate addresses based on the account indexing style.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `generatorState` | [`IBip44GeneratorState`](../interfaces/models_ibip44generatorstate.ibip44generatorstate.md) | The address state. |
+| `generatorState` | [`IBip44GeneratorState`](../interfaces/models_IBip44GeneratorState.IBip44GeneratorState.md) | The address state. |
 | `isFirst` | `boolean` | Is this the first address we are generating. |
 
 #### Returns
@@ -34,7 +34,7 @@ ___
 
 ### generateBip44Path
 
-▸ **generateBip44Path**(`accountIndex`, `addressIndex`, `isInternal`): [`Bip32Path`](../classes/crypto_bip32path.bip32path.md)
+▸ **generateBip44Path**(`accountIndex`, `addressIndex`, `isInternal`): [`Bip32Path`](../classes/crypto_bip32Path.Bip32Path.md)
 
 Generate a bip44 path based on all its parts.
 
@@ -48,6 +48,6 @@ Generate a bip44 path based on all its parts.
 
 #### Returns
 
-[`Bip32Path`](../classes/crypto_bip32path.bip32path.md)
+[`Bip32Path`](../classes/crypto_bip32Path.Bip32Path.md)
 
 The generated address.

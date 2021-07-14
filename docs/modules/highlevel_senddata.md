@@ -6,7 +6,7 @@
 
 ### Functions
 
-- [sendData](highlevel_senddata.md#senddata)
+- [sendData](highLevel_sendData.md#senddata)
 
 ## Functions
 
@@ -20,7 +20,7 @@ Send a data message.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `client` | [`IClient`](../interfaces/models_iclient.iclient.md) \| `string` | The client or node endpoint to send the data with. |
+| `client` | [`IClient`](../interfaces/models_IClient.IClient.md) \| `string` | The client or node endpoint to send the data with. |
 | `indexationKey` | `Uint8Array` \| `string` | The index name. |
 | `indexationData?` | `Uint8Array` \| `string` | The index data as either UTF8 text or Uint8Array bytes. |
 

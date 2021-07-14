@@ -10,12 +10,12 @@ Class implements the b1t6 encoding encoding which uses a group of 6 trits to enc
 
 ### Constructors
 
-- [constructor](encoding_b1t6.b1t6.md#constructor)
+- [constructor](encoding_b1t6.B1T6.md#constructor)
 
 ### Methods
 
-- [encode](encoding_b1t6.b1t6.md#encode)
-- [encodedLen](encoding_b1t6.b1t6.md#encodedlen)
+- [encode](encoding_b1t6.B1T6.md#encode)
+- [encodedLen](encoding_b1t6.B1T6.md#encodedlen)
 
 ## Constructors
 

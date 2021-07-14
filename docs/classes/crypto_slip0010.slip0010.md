@@ -11,13 +11,13 @@ https://github.com/satoshilabs/slips/blob/master/slip-0010.md.
 
 ### Constructors
 
-- [constructor](crypto_slip0010.slip0010.md#constructor)
+- [constructor](crypto_slip0010.Slip0010.md#constructor)
 
 ### Methods
 
-- [derivePath](crypto_slip0010.slip0010.md#derivepath)
-- [getMasterKeyFromSeed](crypto_slip0010.slip0010.md#getmasterkeyfromseed)
-- [getPublicKey](crypto_slip0010.slip0010.md#getpublickey)
+- [derivePath](crypto_slip0010.Slip0010.md#derivepath)
+- [getMasterKeyFromSeed](crypto_slip0010.Slip0010.md#getmasterkeyfromseed)
+- [getPublicKey](crypto_slip0010.Slip0010.md#getpublickey)
 
 ## Constructors
 
@@ -38,7 +38,7 @@ Derive a key from the path.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `seed` | `Uint8Array` | The seed. |
-| `path` | [`Bip32Path`](crypto_bip32path.bip32path.md) | The path. |
+| `path` | [`Bip32Path`](crypto_bip32Path.Bip32Path.md) | The path. |
 
 #### Returns
 

@@ -1,8 +1,8 @@
-[@iota/iota.js](../README.md) / [crypto/edwards25519/preComputedGroupElement](../modules/crypto_edwards25519_precomputedgroupelement.md) / PreComputedGroupElement
+[@iota/iota.js](../README.md) / [crypto/edwards25519/preComputedGroupElement](../modules/crypto_edwards25519_preComputedGroupElement.md) / PreComputedGroupElement
 
 # Class: PreComputedGroupElement
 
-[crypto/edwards25519/preComputedGroupElement](../modules/crypto_edwards25519_precomputedgroupelement.md).PreComputedGroupElement
+[crypto/edwards25519/preComputedGroupElement](../modules/crypto_edwards25519_preComputedGroupElement.md).PreComputedGroupElement
 
 Group elements are members of the elliptic curve -x^2 + y^2 = 1 + d * x^2 *
 y^2 where d = -121665/121666.
@@ -12,19 +12,19 @@ PreComputedGroupElement: (y+x,y-x,2dxy).
 
 ### Constructors
 
-- [constructor](crypto_edwards25519_precomputedgroupelement.precomputedgroupelement.md#constructor)
+- [constructor](crypto_edwards25519_preComputedGroupElement.PreComputedGroupElement.md#constructor)
 
 ### Properties
 
-- [xy2d](crypto_edwards25519_precomputedgroupelement.precomputedgroupelement.md#xy2d)
-- [yMinusX](crypto_edwards25519_precomputedgroupelement.precomputedgroupelement.md#yminusx)
-- [yPlusX](crypto_edwards25519_precomputedgroupelement.precomputedgroupelement.md#yplusx)
+- [xy2d](crypto_edwards25519_preComputedGroupElement.PreComputedGroupElement.md#xy2d)
+- [yMinusX](crypto_edwards25519_preComputedGroupElement.PreComputedGroupElement.md#yminusx)
+- [yPlusX](crypto_edwards25519_preComputedGroupElement.PreComputedGroupElement.md#yplusx)
 
 ### Methods
 
-- [cMove](crypto_edwards25519_precomputedgroupelement.precomputedgroupelement.md#cmove)
-- [selectPoint](crypto_edwards25519_precomputedgroupelement.precomputedgroupelement.md#selectpoint)
-- [zero](crypto_edwards25519_precomputedgroupelement.precomputedgroupelement.md#zero)
+- [cMove](crypto_edwards25519_preComputedGroupElement.PreComputedGroupElement.md#cmove)
+- [selectPoint](crypto_edwards25519_preComputedGroupElement.PreComputedGroupElement.md#selectpoint)
+- [zero](crypto_edwards25519_preComputedGroupElement.PreComputedGroupElement.md#zero)
 
 ## Constructors
 
@@ -38,15 +38,15 @@ Create a new instance of PreComputedGroupElement.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `yPlusX?` | [`FieldElement`](crypto_edwards25519_fieldelement.fieldelement.md) | Y + X Element. |
-| `yMinusX?` | [`FieldElement`](crypto_edwards25519_fieldelement.fieldelement.md) | Y - X Element. |
-| `xy2d?` | [`FieldElement`](crypto_edwards25519_fieldelement.fieldelement.md) | XY2d Element. |
+| `yPlusX?` | [`FieldElement`](crypto_edwards25519_fieldElement.FieldElement.md) | Y + X Element. |
+| `yMinusX?` | [`FieldElement`](crypto_edwards25519_fieldElement.FieldElement.md) | Y - X Element. |
+| `xy2d?` | [`FieldElement`](crypto_edwards25519_fieldElement.FieldElement.md) | XY2d Element. |
 
 ## Properties
 
 ### xy2d
 
-• **xy2d**: [`FieldElement`](crypto_edwards25519_fieldelement.fieldelement.md)
+• **xy2d**: [`FieldElement`](crypto_edwards25519_fieldElement.FieldElement.md)
 
 X Y 2 d Element.
 
@@ -54,7 +54,7 @@ ___
 
 ### yMinusX
 
-• **yMinusX**: [`FieldElement`](crypto_edwards25519_fieldelement.fieldelement.md)
+• **yMinusX**: [`FieldElement`](crypto_edwards25519_fieldElement.FieldElement.md)
 
 Y - X Element.
 
@@ -62,7 +62,7 @@ ___
 
 ### yPlusX
 
-• **yPlusX**: [`FieldElement`](crypto_edwards25519_fieldelement.fieldelement.md)
+• **yPlusX**: [`FieldElement`](crypto_edwards25519_fieldElement.FieldElement.md)
 
 Y + X Element.
 
@@ -78,7 +78,7 @@ CMove the pre computed element.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `u` | [`PreComputedGroupElement`](crypto_edwards25519_precomputedgroupelement.precomputedgroupelement.md) | The u. |
+| `u` | [`PreComputedGroupElement`](crypto_edwards25519_preComputedGroupElement.PreComputedGroupElement.md) | The u. |
 | `b` | `number` | The b. |
 
 #### Returns

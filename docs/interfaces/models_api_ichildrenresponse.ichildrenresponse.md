@@ -1,8 +1,8 @@
-[@iota/iota.js](../README.md) / [models/api/IChildrenResponse](../modules/models_api_ichildrenresponse.md) / IChildrenResponse
+[@iota/iota.js](../README.md) / [models/api/IChildrenResponse](../modules/models_api_IChildrenResponse.md) / IChildrenResponse
 
 # Interface: IChildrenResponse
 
-[models/api/IChildrenResponse](../modules/models_api_ichildrenresponse.md).IChildrenResponse
+[models/api/IChildrenResponse](../modules/models_api_IChildrenResponse.md).IChildrenResponse
 
 List of children found.
 
@@ -10,10 +10,10 @@ List of children found.
 
 ### Properties
 
-- [childrenMessageIds](models_api_ichildrenresponse.ichildrenresponse.md#childrenmessageids)
-- [count](models_api_ichildrenresponse.ichildrenresponse.md#count)
-- [maxResults](models_api_ichildrenresponse.ichildrenresponse.md#maxresults)
-- [messageId](models_api_ichildrenresponse.ichildrenresponse.md#messageid)
+- [childrenMessageIds](models_api_IChildrenResponse.IChildrenResponse.md#childrenmessageids)
+- [count](models_api_IChildrenResponse.IChildrenResponse.md#count)
+- [maxResults](models_api_IChildrenResponse.IChildrenResponse.md#maxresults)
+- [messageId](models_api_IChildrenResponse.IChildrenResponse.md#messageid)
 
 ## Properties
 

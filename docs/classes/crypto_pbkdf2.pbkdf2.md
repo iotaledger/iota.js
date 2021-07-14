@@ -10,12 +10,12 @@ Implementation of the password based key derivation function 2.
 
 ### Constructors
 
-- [constructor](crypto_pbkdf2.pbkdf2.md#constructor)
+- [constructor](crypto_pbkdf2.Pbkdf2.md#constructor)
 
 ### Methods
 
-- [sha256](crypto_pbkdf2.pbkdf2.md#sha256)
-- [sha512](crypto_pbkdf2.pbkdf2.md#sha512)
+- [sha256](crypto_pbkdf2.Pbkdf2.md#sha256)
+- [sha512](crypto_pbkdf2.Pbkdf2.md#sha512)
 
 ## Constructors
 

@@ -6,4 +6,4 @@
 
 ### Classes
 
-- [CompletedGroupElement](../classes/crypto_edwards25519_completedgroupelement.completedgroupelement.md)
+- [CompletedGroupElement](../classes/crypto_edwards25519_completedGroupElement.CompletedGroupElement.md)

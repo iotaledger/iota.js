@@ -6,7 +6,7 @@
 
 ### Type aliases
 
-- [LedgerInclusionState](models_ledgerinclusionstate.md#ledgerinclusionstate)
+- [LedgerInclusionState](models_ledgerInclusionState.md#ledgerinclusionstate)
 
 ## Type aliases
 

@@ -1,8 +1,8 @@
-[@iota/iota.js](../README.md) / [utils/unitsHelper](../modules/utils_unitshelper.md) / UnitsHelper
+[@iota/iota.js](../README.md) / [utils/unitsHelper](../modules/utils_unitsHelper.md) / UnitsHelper
 
 # Class: UnitsHelper
 
-[utils/unitsHelper](../modules/utils_unitshelper.md).UnitsHelper
+[utils/unitsHelper](../modules/utils_unitsHelper.md).UnitsHelper
 
 Class to help with units formatting.
 
@@ -10,18 +10,18 @@ Class to help with units formatting.
 
 ### Constructors
 
-- [constructor](utils_unitshelper.unitshelper.md#constructor)
+- [constructor](utils_unitsHelper.UnitsHelper.md#constructor)
 
 ### Properties
 
-- [UNIT\_MAP](utils_unitshelper.unitshelper.md#unit_map)
+- [UNIT\_MAP](utils_unitsHelper.UnitsHelper.md#unit_map)
 
 ### Methods
 
-- [calculateBest](utils_unitshelper.unitshelper.md#calculatebest)
-- [convertUnits](utils_unitshelper.unitshelper.md#convertunits)
-- [formatBest](utils_unitshelper.unitshelper.md#formatbest)
-- [formatUnits](utils_unitshelper.unitshelper.md#formatunits)
+- [calculateBest](utils_unitsHelper.UnitsHelper.md#calculatebest)
+- [convertUnits](utils_unitsHelper.UnitsHelper.md#convertunits)
+- [formatBest](utils_unitsHelper.UnitsHelper.md#formatbest)
+- [formatUnits](utils_unitsHelper.UnitsHelper.md#formatunits)
 
 ## Constructors
 

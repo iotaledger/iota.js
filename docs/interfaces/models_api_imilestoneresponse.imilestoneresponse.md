@@ -1,8 +1,8 @@
-[@iota/iota.js](../README.md) / [models/api/IMilestoneResponse](../modules/models_api_imilestoneresponse.md) / IMilestoneResponse
+[@iota/iota.js](../README.md) / [models/api/IMilestoneResponse](../modules/models_api_IMilestoneResponse.md) / IMilestoneResponse
 
 # Interface: IMilestoneResponse
 
-[models/api/IMilestoneResponse](../modules/models_api_imilestoneresponse.md).IMilestoneResponse
+[models/api/IMilestoneResponse](../modules/models_api_IMilestoneResponse.md).IMilestoneResponse
 
 Milestone.
 
@@ -10,9 +10,9 @@ Milestone.
 
 ### Properties
 
-- [index](models_api_imilestoneresponse.imilestoneresponse.md#index)
-- [messageId](models_api_imilestoneresponse.imilestoneresponse.md#messageid)
-- [timestamp](models_api_imilestoneresponse.imilestoneresponse.md#timestamp)
+- [index](models_api_IMilestoneResponse.IMilestoneResponse.md#index)
+- [messageId](models_api_IMilestoneResponse.IMilestoneResponse.md#messageid)
+- [timestamp](models_api_IMilestoneResponse.IMilestoneResponse.md#timestamp)
 
 ## Properties
 

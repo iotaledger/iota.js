@@ -1,25 +1,25 @@
-[@iota/iota.js](../README.md) / [addressTypes/ed25519Address](../modules/addresstypes_ed25519address.md) / Ed25519Address
+[@iota/iota.js](../README.md) / [addressTypes/ed25519Address](../modules/addressTypes_ed25519Address.md) / Ed25519Address
 
 # Class: Ed25519Address
 
-[addressTypes/ed25519Address](../modules/addresstypes_ed25519address.md).Ed25519Address
+[addressTypes/ed25519Address](../modules/addressTypes_ed25519Address.md).Ed25519Address
 
 Class to help with Ed25519 Signature scheme.
 
 ## Implements
 
-- [`IAddress`](../interfaces/models_iaddress.iaddress.md)
+- [`IAddress`](../interfaces/models_IAddress.IAddress.md)
 
 ## Table of contents
 
 ### Constructors
 
-- [constructor](addresstypes_ed25519address.ed25519address.md#constructor)
+- [constructor](addressTypes_ed25519Address.Ed25519Address.md#constructor)
 
 ### Methods
 
-- [toAddress](addresstypes_ed25519address.ed25519address.md#toaddress)
-- [verify](addresstypes_ed25519address.ed25519address.md#verify)
+- [toAddress](addressTypes_ed25519Address.Ed25519Address.md#toaddress)
+- [verify](addressTypes_ed25519Address.Ed25519Address.md#verify)
 
 ## Constructors
 
@@ -51,7 +51,7 @@ The address.
 
 #### Implementation of
 
-[IAddress](../interfaces/models_iaddress.iaddress.md).[toAddress](../interfaces/models_iaddress.iaddress.md#toaddress)
+[IAddress](../interfaces/models_IAddress.IAddress.md).[toAddress](../interfaces/models_IAddress.IAddress.md#toaddress)
 
 ___
 
@@ -75,4 +75,4 @@ True if the data and address is verified.
 
 #### Implementation of
 
-[IAddress](../interfaces/models_iaddress.iaddress.md).[verify](../interfaces/models_iaddress.iaddress.md#verify)
+[IAddress](../interfaces/models_IAddress.IAddress.md).[verify](../interfaces/models_IAddress.IAddress.md#verify)

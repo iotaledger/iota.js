@@ -1,8 +1,8 @@
-[@iota/iota.js](../README.md) / [utils/bigIntHelper](../modules/utils_biginthelper.md) / BigIntHelper
+[@iota/iota.js](../README.md) / [utils/bigIntHelper](../modules/utils_bigIntHelper.md) / BigIntHelper
 
 # Class: BigIntHelper
 
-[utils/bigIntHelper](../modules/utils_biginthelper.md).BigIntHelper
+[utils/bigIntHelper](../modules/utils_bigIntHelper.md).BigIntHelper
 
 Helper methods for bigints.
 
@@ -10,15 +10,15 @@ Helper methods for bigints.
 
 ### Constructors
 
-- [constructor](utils_biginthelper.biginthelper.md#constructor)
+- [constructor](utils_bigIntHelper.BigIntHelper.md#constructor)
 
 ### Methods
 
-- [random](utils_biginthelper.biginthelper.md#random)
-- [read3](utils_biginthelper.biginthelper.md#read3)
-- [read4](utils_biginthelper.biginthelper.md#read4)
-- [read8](utils_biginthelper.biginthelper.md#read8)
-- [write8](utils_biginthelper.biginthelper.md#write8)
+- [random](utils_bigIntHelper.BigIntHelper.md#random)
+- [read3](utils_bigIntHelper.BigIntHelper.md#read3)
+- [read4](utils_bigIntHelper.BigIntHelper.md#read4)
+- [read8](utils_bigIntHelper.BigIntHelper.md#read8)
+- [write8](utils_bigIntHelper.BigIntHelper.md#write8)
 
 ## Constructors
 

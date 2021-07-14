@@ -1,27 +1,27 @@
-[@iota/iota.js](../README.md) / [seedTypes/ed25519Seed](../modules/seedtypes_ed25519seed.md) / Ed25519Seed
+[@iota/iota.js](../README.md) / [seedTypes/ed25519Seed](../modules/seedTypes_ed25519Seed.md) / Ed25519Seed
 
 # Class: Ed25519Seed
 
-[seedTypes/ed25519Seed](../modules/seedtypes_ed25519seed.md).Ed25519Seed
+[seedTypes/ed25519Seed](../modules/seedTypes_ed25519Seed.md).Ed25519Seed
 
 Class to help with seeds.
 
 ## Implements
 
-- [`ISeed`](../interfaces/models_iseed.iseed.md)
+- [`ISeed`](../interfaces/models_ISeed.ISeed.md)
 
 ## Table of contents
 
 ### Constructors
 
-- [constructor](seedtypes_ed25519seed.ed25519seed.md#constructor)
+- [constructor](seedTypes_ed25519Seed.Ed25519Seed.md#constructor)
 
 ### Methods
 
-- [generateSeedFromPath](seedtypes_ed25519seed.ed25519seed.md#generateseedfrompath)
-- [keyPair](seedtypes_ed25519seed.ed25519seed.md#keypair)
-- [toBytes](seedtypes_ed25519seed.ed25519seed.md#tobytes)
-- [fromMnemonic](seedtypes_ed25519seed.ed25519seed.md#frommnemonic)
+- [generateSeedFromPath](seedTypes_ed25519Seed.Ed25519Seed.md#generateseedfrompath)
+- [keyPair](seedTypes_ed25519Seed.Ed25519Seed.md#keypair)
+- [toBytes](seedTypes_ed25519Seed.Ed25519Seed.md#tobytes)
+- [fromMnemonic](seedTypes_ed25519Seed.Ed25519Seed.md#frommnemonic)
 
 ## Constructors
 
@@ -41,7 +41,7 @@ Create a new instance of Ed25519Seed.
 
 ### generateSeedFromPath
 
-▸ **generateSeedFromPath**(`path`): [`ISeed`](../interfaces/models_iseed.iseed.md)
+▸ **generateSeedFromPath**(`path`): [`ISeed`](../interfaces/models_ISeed.ISeed.md)
 
 Generate a new seed from the path.
 
@@ -49,35 +49,35 @@ Generate a new seed from the path.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `path` | [`Bip32Path`](crypto_bip32path.bip32path.md) | The path to generate the seed for. |
+| `path` | [`Bip32Path`](crypto_bip32Path.Bip32Path.md) | The path to generate the seed for. |
 
 #### Returns
 
-[`ISeed`](../interfaces/models_iseed.iseed.md)
+[`ISeed`](../interfaces/models_ISeed.ISeed.md)
 
 The generated seed.
 
 #### Implementation of
 
-[ISeed](../interfaces/models_iseed.iseed.md).[generateSeedFromPath](../interfaces/models_iseed.iseed.md#generateseedfrompath)
+[ISeed](../interfaces/models_ISeed.ISeed.md).[generateSeedFromPath](../interfaces/models_ISeed.ISeed.md#generateseedfrompath)
 
 ___
 
 ### keyPair
 
-▸ **keyPair**(): [`IKeyPair`](../interfaces/models_ikeypair.ikeypair.md)
+▸ **keyPair**(): [`IKeyPair`](../interfaces/models_IKeyPair.IKeyPair.md)
 
 Get the key pair from the seed.
 
 #### Returns
 
-[`IKeyPair`](../interfaces/models_ikeypair.ikeypair.md)
+[`IKeyPair`](../interfaces/models_IKeyPair.IKeyPair.md)
 
 The key pair.
 
 #### Implementation of
 
-[ISeed](../interfaces/models_iseed.iseed.md).[keyPair](../interfaces/models_iseed.iseed.md#keypair)
+[ISeed](../interfaces/models_ISeed.ISeed.md).[keyPair](../interfaces/models_ISeed.ISeed.md#keypair)
 
 ___
 
@@ -95,13 +95,13 @@ The key as bytes.
 
 #### Implementation of
 
-[ISeed](../interfaces/models_iseed.iseed.md).[toBytes](../interfaces/models_iseed.iseed.md#tobytes)
+[ISeed](../interfaces/models_ISeed.ISeed.md).[toBytes](../interfaces/models_ISeed.ISeed.md#tobytes)
 
 ___
 
 ### fromMnemonic
 
-▸ `Static` **fromMnemonic**(`mnemonic`): [`Ed25519Seed`](seedtypes_ed25519seed.ed25519seed.md)
+▸ `Static` **fromMnemonic**(`mnemonic`): [`Ed25519Seed`](seedTypes_ed25519Seed.Ed25519Seed.md)
 
 Create the seed from a Bip39 mnemonic.
 
@@ -113,6 +113,6 @@ Create the seed from a Bip39 mnemonic.
 
 #### Returns
 
-[`Ed25519Seed`](seedtypes_ed25519seed.ed25519seed.md)
+[`Ed25519Seed`](seedTypes_ed25519Seed.Ed25519Seed.md)
 
 A new instance of Ed25519Seed.

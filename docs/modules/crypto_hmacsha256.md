@@ -6,4 +6,4 @@
 
 ### Classes
 
-- [HmacSha256](../classes/crypto_hmacsha256.hmacsha256.md)
+- [HmacSha256](../classes/crypto_hmacSha256.HmacSha256.md)

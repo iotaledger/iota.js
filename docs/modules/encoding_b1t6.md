@@ -6,4 +6,4 @@
 
 ### Classes
 
-- [B1T6](../classes/encoding_b1t6.b1t6.md)
+- [B1T6](../classes/encoding_b1t6.B1T6.md)

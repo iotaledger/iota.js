@@ -1,14 +1,14 @@
-[@iota/iota.js](../README.md) / [models/IReceiptPayload](../modules/models_ireceiptpayload.md) / IReceiptPayload
+[@iota/iota.js](../README.md) / [models/IReceiptPayload](../modules/models_IReceiptPayload.md) / IReceiptPayload
 
 # Interface: IReceiptPayload
 
-[models/IReceiptPayload](../modules/models_ireceiptpayload.md).IReceiptPayload
+[models/IReceiptPayload](../modules/models_IReceiptPayload.md).IReceiptPayload
 
 Receipt payload.
 
 ## Hierarchy
 
-- [`ITypeBase`](models_itypebase.itypebase.md)<``3``\>
+- [`ITypeBase`](models_ITypeBase.ITypeBase.md)<``3``\>
 
   ↳ **`IReceiptPayload`**
 
@@ -16,11 +16,11 @@ Receipt payload.
 
 ### Properties
 
-- [final](models_ireceiptpayload.ireceiptpayload.md#final)
-- [funds](models_ireceiptpayload.ireceiptpayload.md#funds)
-- [migratedAt](models_ireceiptpayload.ireceiptpayload.md#migratedat)
-- [transaction](models_ireceiptpayload.ireceiptpayload.md#transaction)
-- [type](models_ireceiptpayload.ireceiptpayload.md#type)
+- [final](models_IReceiptPayload.IReceiptPayload.md#final)
+- [funds](models_IReceiptPayload.IReceiptPayload.md#funds)
+- [migratedAt](models_IReceiptPayload.IReceiptPayload.md#migratedat)
+- [transaction](models_IReceiptPayload.IReceiptPayload.md#transaction)
+- [type](models_IReceiptPayload.IReceiptPayload.md#type)
 
 ## Properties
 
@@ -34,7 +34,7 @@ ___
 
 ### funds
 
-• **funds**: [`IMigratedFunds`](models_imigratedfunds.imigratedfunds.md)[]
+• **funds**: [`IMigratedFunds`](models_IMigratedFunds.IMigratedFunds.md)[]
 
 The index data.
 
@@ -50,7 +50,7 @@ ___
 
 ### transaction
 
-• **transaction**: [`ITreasuryTransactionPayload`](models_itreasurytransactionpayload.itreasurytransactionpayload.md)
+• **transaction**: [`ITreasuryTransactionPayload`](models_ITreasuryTransactionPayload.ITreasuryTransactionPayload.md)
 
 The TreasuryTransaction used to fund the funds.
 
@@ -64,4 +64,4 @@ The type of the object.
 
 #### Inherited from
 
-[ITypeBase](models_itypebase.itypebase.md).[type](models_itypebase.itypebase.md#type)
+[ITypeBase](models_ITypeBase.ITypeBase.md).[type](models_ITypeBase.ITypeBase.md#type)

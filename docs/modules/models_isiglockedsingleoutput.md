@@ -6,11 +6,11 @@
 
 ### Interfaces
 
-- [ISigLockedSingleOutput](../interfaces/models_isiglockedsingleoutput.isiglockedsingleoutput.md)
+- [ISigLockedSingleOutput](../interfaces/models_ISigLockedSingleOutput.ISigLockedSingleOutput.md)
 
 ### Variables
 
-- [SIG\_LOCKED\_SINGLE\_OUTPUT\_TYPE](models_isiglockedsingleoutput.md#sig_locked_single_output_type)
+- [SIG\_LOCKED\_SINGLE\_OUTPUT\_TYPE](models_ISigLockedSingleOutput.md#sig_locked_single_output_type)
 
 ## Variables
 

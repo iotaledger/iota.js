@@ -36,7 +36,7 @@ The minimum length of a signature binary representation.
 
 ### deserializeEd25519Signature
 
-▸ **deserializeEd25519Signature**(`readStream`): [`IEd25519Signature`](../interfaces/models_ied25519signature.ied25519signature.md)
+▸ **deserializeEd25519Signature**(`readStream`): [`IEd25519Signature`](../interfaces/models_IEd25519Signature.IEd25519Signature.md)
 
 Deserialize the Ed25519 signature from binary.
 
@@ -44,11 +44,11 @@ Deserialize the Ed25519 signature from binary.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `readStream` | [`ReadStream`](../classes/utils_readstream.readstream.md) | The stream to read the data from. |
+| `readStream` | [`ReadStream`](../classes/utils_readStream.ReadStream.md) | The stream to read the data from. |
 
 #### Returns
 
-[`IEd25519Signature`](../interfaces/models_ied25519signature.ied25519signature.md)
+[`IEd25519Signature`](../interfaces/models_IEd25519Signature.IEd25519Signature.md)
 
 The deserialized object.
 
@@ -56,7 +56,7 @@ ___
 
 ### deserializeSignature
 
-▸ **deserializeSignature**(`readStream`): [`IEd25519Signature`](../interfaces/models_ied25519signature.ied25519signature.md)
+▸ **deserializeSignature**(`readStream`): [`IEd25519Signature`](../interfaces/models_IEd25519Signature.IEd25519Signature.md)
 
 Deserialize the signature from binary.
 
@@ -64,11 +64,11 @@ Deserialize the signature from binary.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `readStream` | [`ReadStream`](../classes/utils_readstream.readstream.md) | The stream to read the data from. |
+| `readStream` | [`ReadStream`](../classes/utils_readStream.ReadStream.md) | The stream to read the data from. |
 
 #### Returns
 
-[`IEd25519Signature`](../interfaces/models_ied25519signature.ied25519signature.md)
+[`IEd25519Signature`](../interfaces/models_IEd25519Signature.IEd25519Signature.md)
 
 The deserialized object.
 
@@ -84,8 +84,8 @@ Serialize the Ed25519 signature to binary.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `writeStream` | [`WriteStream`](../classes/utils_writestream.writestream.md) | The stream to write the data to. |
-| `object` | [`IEd25519Signature`](../interfaces/models_ied25519signature.ied25519signature.md) | The object to serialize. |
+| `writeStream` | [`WriteStream`](../classes/utils_writeStream.WriteStream.md) | The stream to write the data to. |
+| `object` | [`IEd25519Signature`](../interfaces/models_IEd25519Signature.IEd25519Signature.md) | The object to serialize. |
 
 #### Returns
 
@@ -103,8 +103,8 @@ Serialize the signature to binary.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `writeStream` | [`WriteStream`](../classes/utils_writestream.writestream.md) | The stream to write the data to. |
-| `object` | [`IEd25519Signature`](../interfaces/models_ied25519signature.ied25519signature.md) | The object to serialize. |
+| `writeStream` | [`WriteStream`](../classes/utils_writeStream.WriteStream.md) | The stream to write the data to. |
+| `object` | [`IEd25519Signature`](../interfaces/models_IEd25519Signature.IEd25519Signature.md) | The object to serialize. |
 
 #### Returns
 

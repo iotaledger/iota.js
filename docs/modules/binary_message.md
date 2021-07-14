@@ -43,7 +43,7 @@ The minimum number of parents.
 
 ### deserializeMessage
 
-▸ **deserializeMessage**(`readStream`): [`IMessage`](../interfaces/models_imessage.imessage.md)
+▸ **deserializeMessage**(`readStream`): [`IMessage`](../interfaces/models_IMessage.IMessage.md)
 
 Deserialize the message from binary.
 
@@ -51,11 +51,11 @@ Deserialize the message from binary.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `readStream` | [`ReadStream`](../classes/utils_readstream.readstream.md) | The message to deserialize. |
+| `readStream` | [`ReadStream`](../classes/utils_readStream.ReadStream.md) | The message to deserialize. |
 
 #### Returns
 
-[`IMessage`](../interfaces/models_imessage.imessage.md)
+[`IMessage`](../interfaces/models_IMessage.IMessage.md)
 
 The deserialized message.
 
@@ -71,8 +71,8 @@ Serialize the message essence to binary.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `writeStream` | [`WriteStream`](../classes/utils_writestream.writestream.md) | The stream to write the data to. |
-| `object` | [`IMessage`](../interfaces/models_imessage.imessage.md) | The object to serialize. |
+| `writeStream` | [`WriteStream`](../classes/utils_writeStream.WriteStream.md) | The stream to write the data to. |
+| `object` | [`IMessage`](../interfaces/models_IMessage.IMessage.md) | The object to serialize. |
 
 #### Returns
 

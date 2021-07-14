@@ -1,8 +1,8 @@
-[@iota/iota.js](../README.md) / [models/ITypeBase](../modules/models_itypebase.md) / ITypeBase
+[@iota/iota.js](../README.md) / [models/ITypeBase](../modules/models_ITypeBase.md) / ITypeBase
 
 # Interface: ITypeBase<T\>
 
-[models/ITypeBase](../modules/models_itypebase.md).ITypeBase
+[models/ITypeBase](../modules/models_ITypeBase.md).ITypeBase
 
 Type of the object.
 
@@ -16,41 +16,41 @@ Type of the object.
 
 - **`ITypeBase`**
 
-  ↳ [`IEd25519Address`](models_ied25519address.ied25519address.md)
+  ↳ [`IEd25519Address`](models_IEd25519Address.IEd25519Address.md)
 
-  ↳ [`IEd25519Signature`](models_ied25519signature.ied25519signature.md)
+  ↳ [`IEd25519Signature`](models_IEd25519Signature.IEd25519Signature.md)
 
-  ↳ [`IIndexationPayload`](models_iindexationpayload.iindexationpayload.md)
+  ↳ [`IIndexationPayload`](models_IIndexationPayload.IIndexationPayload.md)
 
-  ↳ [`IMilestonePayload`](models_imilestonepayload.imilestonepayload.md)
+  ↳ [`IMilestonePayload`](models_IMilestonePayload.IMilestonePayload.md)
 
-  ↳ [`IReceiptPayload`](models_ireceiptpayload.ireceiptpayload.md)
+  ↳ [`IReceiptPayload`](models_IReceiptPayload.IReceiptPayload.md)
 
-  ↳ [`IReferenceUnlockBlock`](models_ireferenceunlockblock.ireferenceunlockblock.md)
+  ↳ [`IReferenceUnlockBlock`](models_IReferenceUnlockBlock.IReferenceUnlockBlock.md)
 
-  ↳ [`ISigLockedDustAllowanceOutput`](models_isiglockeddustallowanceoutput.isiglockeddustallowanceoutput.md)
+  ↳ [`ISigLockedDustAllowanceOutput`](models_ISigLockedDustAllowanceOutput.ISigLockedDustAllowanceOutput.md)
 
-  ↳ [`ISigLockedSingleOutput`](models_isiglockedsingleoutput.isiglockedsingleoutput.md)
+  ↳ [`ISigLockedSingleOutput`](models_ISigLockedSingleOutput.ISigLockedSingleOutput.md)
 
-  ↳ [`ISignatureUnlockBlock`](models_isignatureunlockblock.isignatureunlockblock.md)
+  ↳ [`ISignatureUnlockBlock`](models_ISignatureUnlockBlock.ISignatureUnlockBlock.md)
 
-  ↳ [`ITransactionEssence`](models_itransactionessence.itransactionessence.md)
+  ↳ [`ITransactionEssence`](models_ITransactionEssence.ITransactionEssence.md)
 
-  ↳ [`ITransactionPayload`](models_itransactionpayload.itransactionpayload.md)
+  ↳ [`ITransactionPayload`](models_ITransactionPayload.ITransactionPayload.md)
 
-  ↳ [`ITreasuryInput`](models_itreasuryinput.itreasuryinput.md)
+  ↳ [`ITreasuryInput`](models_ITreasuryInput.ITreasuryInput.md)
 
-  ↳ [`ITreasuryOutput`](models_itreasuryoutput.itreasuryoutput.md)
+  ↳ [`ITreasuryOutput`](models_ITreasuryOutput.ITreasuryOutput.md)
 
-  ↳ [`ITreasuryTransactionPayload`](models_itreasurytransactionpayload.itreasurytransactionpayload.md)
+  ↳ [`ITreasuryTransactionPayload`](models_ITreasuryTransactionPayload.ITreasuryTransactionPayload.md)
 
-  ↳ [`IUTXOInput`](models_iutxoinput.iutxoinput.md)
+  ↳ [`IUTXOInput`](models_IUTXOInput.IUTXOInput.md)
 
 ## Table of contents
 
 ### Properties
 
-- [type](models_itypebase.itypebase.md#type)
+- [type](models_ITypeBase.ITypeBase.md#type)
 
 ## Properties
 

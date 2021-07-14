@@ -6,4 +6,4 @@
 
 ### Classes
 
-- [Blake2b](../classes/crypto_blake2b.blake2b.md)
+- [Blake2b](../classes/crypto_blake2b.Blake2b.md)

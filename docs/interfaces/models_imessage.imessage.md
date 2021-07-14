@@ -1,8 +1,8 @@
-[@iota/iota.js](../README.md) / [models/IMessage](../modules/models_imessage.md) / IMessage
+[@iota/iota.js](../README.md) / [models/IMessage](../modules/models_IMessage.md) / IMessage
 
 # Interface: IMessage
 
-[models/IMessage](../modules/models_imessage.md).IMessage
+[models/IMessage](../modules/models_IMessage.md).IMessage
 
 Message layout.
 
@@ -10,10 +10,10 @@ Message layout.
 
 ### Properties
 
-- [networkId](models_imessage.imessage.md#networkid)
-- [nonce](models_imessage.imessage.md#nonce)
-- [parentMessageIds](models_imessage.imessage.md#parentmessageids)
-- [payload](models_imessage.imessage.md#payload)
+- [networkId](models_IMessage.IMessage.md#networkid)
+- [nonce](models_IMessage.IMessage.md#nonce)
+- [parentMessageIds](models_IMessage.IMessage.md#parentmessageids)
+- [payload](models_IMessage.IMessage.md#payload)
 
 ## Properties
 
@@ -43,6 +43,6 @@ ___
 
 ### payload
 
-• `Optional` **payload**: [`ITransactionPayload`](models_itransactionpayload.itransactionpayload.md) \| [`IMilestonePayload`](models_imilestonepayload.imilestonepayload.md) \| [`IIndexationPayload`](models_iindexationpayload.iindexationpayload.md)
+• `Optional` **payload**: [`ITransactionPayload`](models_ITransactionPayload.ITransactionPayload.md) \| [`IMilestonePayload`](models_IMilestonePayload.IMilestonePayload.md) \| [`IIndexationPayload`](models_IIndexationPayload.IIndexationPayload.md)
 
 The payload contents.

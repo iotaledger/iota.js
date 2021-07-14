@@ -1,14 +1,14 @@
-[@iota/iota.js](../README.md) / [models/ISigLockedSingleOutput](../modules/models_isiglockedsingleoutput.md) / ISigLockedSingleOutput
+[@iota/iota.js](../README.md) / [models/ISigLockedSingleOutput](../modules/models_ISigLockedSingleOutput.md) / ISigLockedSingleOutput
 
 # Interface: ISigLockedSingleOutput
 
-[models/ISigLockedSingleOutput](../modules/models_isiglockedsingleoutput.md).ISigLockedSingleOutput
+[models/ISigLockedSingleOutput](../modules/models_ISigLockedSingleOutput.md).ISigLockedSingleOutput
 
 Signature locked single output.
 
 ## Hierarchy
 
-- [`ITypeBase`](models_itypebase.itypebase.md)<``0``\>
+- [`ITypeBase`](models_ITypeBase.ITypeBase.md)<``0``\>
 
   ↳ **`ISigLockedSingleOutput`**
 
@@ -16,15 +16,15 @@ Signature locked single output.
 
 ### Properties
 
-- [address](models_isiglockedsingleoutput.isiglockedsingleoutput.md#address)
-- [amount](models_isiglockedsingleoutput.isiglockedsingleoutput.md#amount)
-- [type](models_isiglockedsingleoutput.isiglockedsingleoutput.md#type)
+- [address](models_ISigLockedSingleOutput.ISigLockedSingleOutput.md#address)
+- [amount](models_ISigLockedSingleOutput.ISigLockedSingleOutput.md#amount)
+- [type](models_ISigLockedSingleOutput.ISigLockedSingleOutput.md#type)
 
 ## Properties
 
 ### address
 
-• **address**: [`IEd25519Address`](models_ied25519address.ied25519address.md)
+• **address**: [`IEd25519Address`](models_IEd25519Address.IEd25519Address.md)
 
 The address.
 
@@ -46,4 +46,4 @@ The type of the object.
 
 #### Inherited from
 
-[ITypeBase](models_itypebase.itypebase.md).[type](models_itypebase.itypebase.md#type)
+[ITypeBase](models_ITypeBase.ITypeBase.md).[type](models_ITypeBase.ITypeBase.md#type)

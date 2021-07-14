@@ -6,4 +6,4 @@
 
 ### Interfaces
 
-- [IAddress](../interfaces/models_iaddress.iaddress.md)
+- [IAddress](../interfaces/models_IAddress.IAddress.md)

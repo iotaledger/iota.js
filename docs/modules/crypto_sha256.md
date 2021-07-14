@@ -6,4 +6,4 @@
 
 ### Classes
 
-- [Sha256](../classes/crypto_sha256.sha256.md)
+- [Sha256](../classes/crypto_sha256.Sha256.md)

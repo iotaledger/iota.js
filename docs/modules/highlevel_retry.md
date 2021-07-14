@@ -6,7 +6,7 @@
 
 ### Functions
 
-- [retry](highlevel_retry.md#retry)
+- [retry](highLevel_retry.md#retry)
 
 ## Functions
 
@@ -20,7 +20,7 @@ Retry an existing message either by promoting or reattaching.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `client` | [`IClient`](../interfaces/models_iclient.iclient.md) \| `string` | The client or node endpoint to perform the retry with. |
+| `client` | [`IClient`](../interfaces/models_IClient.IClient.md) \| `string` | The client or node endpoint to perform the retry with. |
 | `messageId` | `string` | The message to retry. |
 
 #### Returns

@@ -11,20 +11,20 @@ TypeScript conversion from https://github.com/emn178/js-sha512.
 
 ### Constructors
 
-- [constructor](crypto_sha512.sha512.md#constructor)
+- [constructor](crypto_sha512.Sha512.md#constructor)
 
 ### Properties
 
-- [SIZE\_224](crypto_sha512.sha512.md#size_224)
-- [SIZE\_256](crypto_sha512.sha512.md#size_256)
-- [SIZE\_384](crypto_sha512.sha512.md#size_384)
-- [SIZE\_512](crypto_sha512.sha512.md#size_512)
+- [SIZE\_224](crypto_sha512.Sha512.md#size_224)
+- [SIZE\_256](crypto_sha512.Sha512.md#size_256)
+- [SIZE\_384](crypto_sha512.Sha512.md#size_384)
+- [SIZE\_512](crypto_sha512.Sha512.md#size_512)
 
 ### Methods
 
-- [digest](crypto_sha512.sha512.md#digest)
-- [update](crypto_sha512.sha512.md#update)
-- [sum512](crypto_sha512.sha512.md#sum512)
+- [digest](crypto_sha512.Sha512.md#digest)
+- [update](crypto_sha512.Sha512.md#update)
+- [sum512](crypto_sha512.Sha512.md#sum512)
 
 ## Constructors
 
@@ -90,7 +90,7 @@ ___
 
 ### update
 
-▸ **update**(`message`): [`Sha512`](crypto_sha512.sha512.md)
+▸ **update**(`message`): [`Sha512`](crypto_sha512.Sha512.md)
 
 Update the hash with the data.
 
@@ -102,7 +102,7 @@ Update the hash with the data.
 
 #### Returns
 
-[`Sha512`](crypto_sha512.sha512.md)
+[`Sha512`](crypto_sha512.Sha512.md)
 
 The instance for chaining.
 

@@ -25,7 +25,7 @@ The minimum length of a transaction essence binary representation.
 
 ### deserializeTransactionEssence
 
-▸ **deserializeTransactionEssence**(`readStream`): [`ITransactionEssence`](../interfaces/models_itransactionessence.itransactionessence.md)
+▸ **deserializeTransactionEssence**(`readStream`): [`ITransactionEssence`](../interfaces/models_ITransactionEssence.ITransactionEssence.md)
 
 Deserialize the transaction essence from binary.
 
@@ -33,11 +33,11 @@ Deserialize the transaction essence from binary.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `readStream` | [`ReadStream`](../classes/utils_readstream.readstream.md) | The stream to read the data from. |
+| `readStream` | [`ReadStream`](../classes/utils_readStream.ReadStream.md) | The stream to read the data from. |
 
 #### Returns
 
-[`ITransactionEssence`](../interfaces/models_itransactionessence.itransactionessence.md)
+[`ITransactionEssence`](../interfaces/models_ITransactionEssence.ITransactionEssence.md)
 
 The deserialized object.
 
@@ -53,8 +53,8 @@ Serialize the transaction essence to binary.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `writeStream` | [`WriteStream`](../classes/utils_writestream.writestream.md) | The stream to write the data to. |
-| `object` | [`ITransactionEssence`](../interfaces/models_itransactionessence.itransactionessence.md) | The object to serialize. |
+| `writeStream` | [`WriteStream`](../classes/utils_writeStream.WriteStream.md) | The stream to write the data to. |
+| `object` | [`ITransactionEssence`](../interfaces/models_ITransactionEssence.ITransactionEssence.md) | The object to serialize. |
 
 #### Returns
 

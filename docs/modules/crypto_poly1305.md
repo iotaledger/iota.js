@@ -6,4 +6,4 @@
 
 ### Classes
 
-- [Poly1305](../classes/crypto_poly1305.poly1305.md)
+- [Poly1305](../classes/crypto_poly1305.Poly1305.md)

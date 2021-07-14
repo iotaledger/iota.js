@@ -1,14 +1,14 @@
-[@iota/iota.js](../README.md) / [models/ITreasuryInput](../modules/models_itreasuryinput.md) / ITreasuryInput
+[@iota/iota.js](../README.md) / [models/ITreasuryInput](../modules/models_ITreasuryInput.md) / ITreasuryInput
 
 # Interface: ITreasuryInput
 
-[models/ITreasuryInput](../modules/models_itreasuryinput.md).ITreasuryInput
+[models/ITreasuryInput](../modules/models_ITreasuryInput.md).ITreasuryInput
 
 Treasury Input.
 
 ## Hierarchy
 
-- [`ITypeBase`](models_itypebase.itypebase.md)<``1``\>
+- [`ITypeBase`](models_ITypeBase.ITypeBase.md)<``1``\>
 
   ↳ **`ITreasuryInput`**
 
@@ -16,8 +16,8 @@ Treasury Input.
 
 ### Properties
 
-- [milestoneId](models_itreasuryinput.itreasuryinput.md#milestoneid)
-- [type](models_itreasuryinput.itreasuryinput.md#type)
+- [milestoneId](models_ITreasuryInput.ITreasuryInput.md#milestoneid)
+- [type](models_ITreasuryInput.ITreasuryInput.md#type)
 
 ## Properties
 
@@ -37,4 +37,4 @@ The type of the object.
 
 #### Inherited from
 
-[ITypeBase](models_itypebase.itypebase.md).[type](models_itypebase.itypebase.md#type)
+[ITypeBase](models_ITypeBase.ITypeBase.md).[type](models_ITypeBase.ITypeBase.md#type)

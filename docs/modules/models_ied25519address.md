@@ -6,11 +6,11 @@
 
 ### Interfaces
 
-- [IEd25519Address](../interfaces/models_ied25519address.ied25519address.md)
+- [IEd25519Address](../interfaces/models_IEd25519Address.IEd25519Address.md)
 
 ### Variables
 
-- [ED25519\_ADDRESS\_TYPE](models_ied25519address.md#ed25519_address_type)
+- [ED25519\_ADDRESS\_TYPE](models_IEd25519Address.md#ed25519_address_type)
 
 ## Variables
 

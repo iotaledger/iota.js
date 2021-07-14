@@ -6,4 +6,4 @@
 
 ### Classes
 
-- [PlatformHelper](../classes/utils_platformhelper.platformhelper.md)
+- [PlatformHelper](../classes/utils_platformHelper.PlatformHelper.md)

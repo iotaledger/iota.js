@@ -6,4 +6,4 @@
 
 ### Classes
 
-- [Pbkdf2](../classes/crypto_pbkdf2.pbkdf2.md)
+- [Pbkdf2](../classes/crypto_pbkdf2.Pbkdf2.md)

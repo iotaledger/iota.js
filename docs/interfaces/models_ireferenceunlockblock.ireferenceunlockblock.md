@@ -1,14 +1,14 @@
-[@iota/iota.js](../README.md) / [models/IReferenceUnlockBlock](../modules/models_ireferenceunlockblock.md) / IReferenceUnlockBlock
+[@iota/iota.js](../README.md) / [models/IReferenceUnlockBlock](../modules/models_IReferenceUnlockBlock.md) / IReferenceUnlockBlock
 
 # Interface: IReferenceUnlockBlock
 
-[models/IReferenceUnlockBlock](../modules/models_ireferenceunlockblock.md).IReferenceUnlockBlock
+[models/IReferenceUnlockBlock](../modules/models_IReferenceUnlockBlock.md).IReferenceUnlockBlock
 
 Reference unlock block.
 
 ## Hierarchy
 
-- [`ITypeBase`](models_itypebase.itypebase.md)<``1``\>
+- [`ITypeBase`](models_ITypeBase.ITypeBase.md)<``1``\>
 
   ↳ **`IReferenceUnlockBlock`**
 
@@ -16,8 +16,8 @@ Reference unlock block.
 
 ### Properties
 
-- [reference](models_ireferenceunlockblock.ireferenceunlockblock.md#reference)
-- [type](models_ireferenceunlockblock.ireferenceunlockblock.md#type)
+- [reference](models_IReferenceUnlockBlock.IReferenceUnlockBlock.md#reference)
+- [type](models_IReferenceUnlockBlock.IReferenceUnlockBlock.md#type)
 
 ## Properties
 
@@ -37,4 +37,4 @@ The type of the object.
 
 #### Inherited from
 
-[ITypeBase](models_itypebase.itypebase.md).[type](models_itypebase.itypebase.md#type)
+[ITypeBase](models_ITypeBase.ITypeBase.md).[type](models_ITypeBase.ITypeBase.md#type)

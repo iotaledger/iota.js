@@ -6,4 +6,4 @@
 
 ### Classes
 
-- [FieldElement](../classes/crypto_edwards25519_fieldelement.fieldelement.md)
+- [FieldElement](../classes/crypto_edwards25519_fieldElement.FieldElement.md)

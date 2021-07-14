@@ -1,8 +1,8 @@
-[@iota/iota.js](../README.md) / [models/api/IAddressOutputsResponse](../modules/models_api_iaddressoutputsresponse.md) / IAddressOutputsResponse
+[@iota/iota.js](../README.md) / [models/api/IAddressOutputsResponse](../modules/models_api_IAddressOutputsResponse.md) / IAddressOutputsResponse
 
 # Interface: IAddressOutputsResponse
 
-[models/api/IAddressOutputsResponse](../modules/models_api_iaddressoutputsresponse.md).IAddressOutputsResponse
+[models/api/IAddressOutputsResponse](../modules/models_api_IAddressOutputsResponse.md).IAddressOutputsResponse
 
 List of outputs for an address.
 
@@ -10,12 +10,12 @@ List of outputs for an address.
 
 ### Properties
 
-- [address](models_api_iaddressoutputsresponse.iaddressoutputsresponse.md#address)
-- [addressType](models_api_iaddressoutputsresponse.iaddressoutputsresponse.md#addresstype)
-- [count](models_api_iaddressoutputsresponse.iaddressoutputsresponse.md#count)
-- [ledgerIndex](models_api_iaddressoutputsresponse.iaddressoutputsresponse.md#ledgerindex)
-- [maxResults](models_api_iaddressoutputsresponse.iaddressoutputsresponse.md#maxresults)
-- [outputIds](models_api_iaddressoutputsresponse.iaddressoutputsresponse.md#outputids)
+- [address](models_api_IAddressOutputsResponse.IAddressOutputsResponse.md#address)
+- [addressType](models_api_IAddressOutputsResponse.IAddressOutputsResponse.md#addresstype)
+- [count](models_api_IAddressOutputsResponse.IAddressOutputsResponse.md#count)
+- [ledgerIndex](models_api_IAddressOutputsResponse.IAddressOutputsResponse.md#ledgerindex)
+- [maxResults](models_api_IAddressOutputsResponse.IAddressOutputsResponse.md#maxresults)
+- [outputIds](models_api_IAddressOutputsResponse.IAddressOutputsResponse.md#outputids)
 
 ## Properties
 

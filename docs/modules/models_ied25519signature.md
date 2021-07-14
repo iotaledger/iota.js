@@ -6,11 +6,11 @@
 
 ### Interfaces
 
-- [IEd25519Signature](../interfaces/models_ied25519signature.ied25519signature.md)
+- [IEd25519Signature](../interfaces/models_IEd25519Signature.IEd25519Signature.md)
 
 ### Variables
 
-- [ED25519\_SIGNATURE\_TYPE](models_ied25519signature.md#ed25519_signature_type)
+- [ED25519\_SIGNATURE\_TYPE](models_IEd25519Signature.md#ed25519_signature_type)
 
 ## Variables
 

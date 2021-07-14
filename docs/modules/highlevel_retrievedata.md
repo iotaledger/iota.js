@@ -6,7 +6,7 @@
 
 ### Functions
 
-- [retrieveData](highlevel_retrievedata.md#retrievedata)
+- [retrieveData](highLevel_retrieveData.md#retrievedata)
 
 ## Functions
 
@@ -20,7 +20,7 @@ Retrieve a data message.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `client` | [`IClient`](../interfaces/models_iclient.iclient.md) \| `string` | The client or node endpoint to retrieve the data with. |
+| `client` | [`IClient`](../interfaces/models_IClient.IClient.md) \| `string` | The client or node endpoint to retrieve the data with. |
 | `messageId` | `string` | The message id of the data to get. |
 
 #### Returns

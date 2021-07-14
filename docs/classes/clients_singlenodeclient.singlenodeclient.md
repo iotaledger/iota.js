@@ -1,51 +1,51 @@
-[@iota/iota.js](../README.md) / [clients/singleNodeClient](../modules/clients_singlenodeclient.md) / SingleNodeClient
+[@iota/iota.js](../README.md) / [clients/singleNodeClient](../modules/clients_singleNodeClient.md) / SingleNodeClient
 
 # Class: SingleNodeClient
 
-[clients/singleNodeClient](../modules/clients_singlenodeclient.md).SingleNodeClient
+[clients/singleNodeClient](../modules/clients_singleNodeClient.md).SingleNodeClient
 
 Client for API communication.
 
 ## Implements
 
-- [`IClient`](../interfaces/models_iclient.iclient.md)
+- [`IClient`](../interfaces/models_IClient.IClient.md)
 
 ## Table of contents
 
 ### Constructors
 
-- [constructor](clients_singlenodeclient.singlenodeclient.md#constructor)
+- [constructor](clients_singleNodeClient.SingleNodeClient.md#constructor)
 
 ### Methods
 
-- [address](clients_singlenodeclient.singlenodeclient.md#address)
-- [addressEd25519](clients_singlenodeclient.singlenodeclient.md#addressed25519)
-- [addressEd25519Outputs](clients_singlenodeclient.singlenodeclient.md#addressed25519outputs)
-- [addressOutputs](clients_singlenodeclient.singlenodeclient.md#addressoutputs)
-- [combineQueryParams](clients_singlenodeclient.singlenodeclient.md#combinequeryparams)
-- [fetchBinary](clients_singlenodeclient.singlenodeclient.md#fetchbinary)
-- [fetchJson](clients_singlenodeclient.singlenodeclient.md#fetchjson)
-- [fetchStatus](clients_singlenodeclient.singlenodeclient.md#fetchstatus)
-- [health](clients_singlenodeclient.singlenodeclient.md#health)
-- [info](clients_singlenodeclient.singlenodeclient.md#info)
-- [message](clients_singlenodeclient.singlenodeclient.md#message)
-- [messageChildren](clients_singlenodeclient.singlenodeclient.md#messagechildren)
-- [messageMetadata](clients_singlenodeclient.singlenodeclient.md#messagemetadata)
-- [messageRaw](clients_singlenodeclient.singlenodeclient.md#messageraw)
-- [messageSubmit](clients_singlenodeclient.singlenodeclient.md#messagesubmit)
-- [messageSubmitRaw](clients_singlenodeclient.singlenodeclient.md#messagesubmitraw)
-- [messagesFind](clients_singlenodeclient.singlenodeclient.md#messagesfind)
-- [milestone](clients_singlenodeclient.singlenodeclient.md#milestone)
-- [milestoneUtxoChanges](clients_singlenodeclient.singlenodeclient.md#milestoneutxochanges)
-- [output](clients_singlenodeclient.singlenodeclient.md#output)
-- [peer](clients_singlenodeclient.singlenodeclient.md#peer)
-- [peerAdd](clients_singlenodeclient.singlenodeclient.md#peeradd)
-- [peerDelete](clients_singlenodeclient.singlenodeclient.md#peerdelete)
-- [peers](clients_singlenodeclient.singlenodeclient.md#peers)
-- [receipts](clients_singlenodeclient.singlenodeclient.md#receipts)
-- [tips](clients_singlenodeclient.singlenodeclient.md#tips)
-- [transactionIncludedMessage](clients_singlenodeclient.singlenodeclient.md#transactionincludedmessage)
-- [treasury](clients_singlenodeclient.singlenodeclient.md#treasury)
+- [address](clients_singleNodeClient.SingleNodeClient.md#address)
+- [addressEd25519](clients_singleNodeClient.SingleNodeClient.md#addressed25519)
+- [addressEd25519Outputs](clients_singleNodeClient.SingleNodeClient.md#addressed25519outputs)
+- [addressOutputs](clients_singleNodeClient.SingleNodeClient.md#addressoutputs)
+- [combineQueryParams](clients_singleNodeClient.SingleNodeClient.md#combinequeryparams)
+- [fetchBinary](clients_singleNodeClient.SingleNodeClient.md#fetchbinary)
+- [fetchJson](clients_singleNodeClient.SingleNodeClient.md#fetchjson)
+- [fetchStatus](clients_singleNodeClient.SingleNodeClient.md#fetchstatus)
+- [health](clients_singleNodeClient.SingleNodeClient.md#health)
+- [info](clients_singleNodeClient.SingleNodeClient.md#info)
+- [message](clients_singleNodeClient.SingleNodeClient.md#message)
+- [messageChildren](clients_singleNodeClient.SingleNodeClient.md#messagechildren)
+- [messageMetadata](clients_singleNodeClient.SingleNodeClient.md#messagemetadata)
+- [messageRaw](clients_singleNodeClient.SingleNodeClient.md#messageraw)
+- [messageSubmit](clients_singleNodeClient.SingleNodeClient.md#messagesubmit)
+- [messageSubmitRaw](clients_singleNodeClient.SingleNodeClient.md#messagesubmitraw)
+- [messagesFind](clients_singleNodeClient.SingleNodeClient.md#messagesfind)
+- [milestone](clients_singleNodeClient.SingleNodeClient.md#milestone)
+- [milestoneUtxoChanges](clients_singleNodeClient.SingleNodeClient.md#milestoneutxochanges)
+- [output](clients_singleNodeClient.SingleNodeClient.md#output)
+- [peer](clients_singleNodeClient.SingleNodeClient.md#peer)
+- [peerAdd](clients_singleNodeClient.SingleNodeClient.md#peeradd)
+- [peerDelete](clients_singleNodeClient.SingleNodeClient.md#peerdelete)
+- [peers](clients_singleNodeClient.SingleNodeClient.md#peers)
+- [receipts](clients_singleNodeClient.SingleNodeClient.md#receipts)
+- [tips](clients_singleNodeClient.SingleNodeClient.md#tips)
+- [transactionIncludedMessage](clients_singleNodeClient.SingleNodeClient.md#transactionincludedmessage)
+- [treasury](clients_singleNodeClient.SingleNodeClient.md#treasury)
 
 ## Constructors
 
@@ -60,13 +60,13 @@ Create a new instance of client.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `endpoint` | `string` | The endpoint. |
-| `options?` | [`SingleNodeClientOptions`](../interfaces/clients_singlenodeclientoptions.singlenodeclientoptions.md) | Options for the client. |
+| `options?` | [`SingleNodeClientOptions`](../interfaces/clients_singleNodeClientOptions.SingleNodeClientOptions.md) | Options for the client. |
 
 ## Methods
 
 ### address
 
-▸ **address**(`addressBech32`): `Promise`<[`IAddressResponse`](../interfaces/models_api_iaddressresponse.iaddressresponse.md)\>
+▸ **address**(`addressBech32`): `Promise`<[`IAddressResponse`](../interfaces/models_api_IAddressResponse.IAddressResponse.md)\>
 
 Get the address details.
 
@@ -78,19 +78,19 @@ Get the address details.
 
 #### Returns
 
-`Promise`<[`IAddressResponse`](../interfaces/models_api_iaddressresponse.iaddressresponse.md)\>
+`Promise`<[`IAddressResponse`](../interfaces/models_api_IAddressResponse.IAddressResponse.md)\>
 
 The address details.
 
 #### Implementation of
 
-[IClient](../interfaces/models_iclient.iclient.md).[address](../interfaces/models_iclient.iclient.md#address)
+[IClient](../interfaces/models_IClient.IClient.md).[address](../interfaces/models_IClient.IClient.md#address)
 
 ___
 
 ### addressEd25519
 
-▸ **addressEd25519**(`addressEd25519`): `Promise`<[`IAddressResponse`](../interfaces/models_api_iaddressresponse.iaddressresponse.md)\>
+▸ **addressEd25519**(`addressEd25519`): `Promise`<[`IAddressResponse`](../interfaces/models_api_IAddressResponse.IAddressResponse.md)\>
 
 Get the address detail using ed25519 address.
 
@@ -102,19 +102,19 @@ Get the address detail using ed25519 address.
 
 #### Returns
 
-`Promise`<[`IAddressResponse`](../interfaces/models_api_iaddressresponse.iaddressresponse.md)\>
+`Promise`<[`IAddressResponse`](../interfaces/models_api_IAddressResponse.IAddressResponse.md)\>
 
 The address details.
 
 #### Implementation of
 
-[IClient](../interfaces/models_iclient.iclient.md).[addressEd25519](../interfaces/models_iclient.iclient.md#addressed25519)
+[IClient](../interfaces/models_IClient.IClient.md).[addressEd25519](../interfaces/models_IClient.IClient.md#addressed25519)
 
 ___
 
 ### addressEd25519Outputs
 
-▸ **addressEd25519Outputs**(`addressEd25519`, `type?`, `includeSpent?`): `Promise`<[`IAddressOutputsResponse`](../interfaces/models_api_iaddressoutputsresponse.iaddressoutputsresponse.md)\>
+▸ **addressEd25519Outputs**(`addressEd25519`, `type?`, `includeSpent?`): `Promise`<[`IAddressOutputsResponse`](../interfaces/models_api_IAddressOutputsResponse.IAddressOutputsResponse.md)\>
 
 Get the address outputs using ed25519 address.
 
@@ -128,19 +128,19 @@ Get the address outputs using ed25519 address.
 
 #### Returns
 
-`Promise`<[`IAddressOutputsResponse`](../interfaces/models_api_iaddressoutputsresponse.iaddressoutputsresponse.md)\>
+`Promise`<[`IAddressOutputsResponse`](../interfaces/models_api_IAddressOutputsResponse.IAddressOutputsResponse.md)\>
 
 The address outputs.
 
 #### Implementation of
 
-[IClient](../interfaces/models_iclient.iclient.md).[addressEd25519Outputs](../interfaces/models_iclient.iclient.md#addressed25519outputs)
+[IClient](../interfaces/models_IClient.IClient.md).[addressEd25519Outputs](../interfaces/models_IClient.IClient.md#addressed25519outputs)
 
 ___
 
 ### addressOutputs
 
-▸ **addressOutputs**(`addressBech32`, `type?`, `includeSpent?`): `Promise`<[`IAddressOutputsResponse`](../interfaces/models_api_iaddressoutputsresponse.iaddressoutputsresponse.md)\>
+▸ **addressOutputs**(`addressBech32`, `type?`, `includeSpent?`): `Promise`<[`IAddressOutputsResponse`](../interfaces/models_api_IAddressOutputsResponse.IAddressOutputsResponse.md)\>
 
 Get the address outputs.
 
@@ -154,13 +154,13 @@ Get the address outputs.
 
 #### Returns
 
-`Promise`<[`IAddressOutputsResponse`](../interfaces/models_api_iaddressoutputsresponse.iaddressoutputsresponse.md)\>
+`Promise`<[`IAddressOutputsResponse`](../interfaces/models_api_IAddressOutputsResponse.IAddressOutputsResponse.md)\>
 
 The address outputs.
 
 #### Implementation of
 
-[IClient](../interfaces/models_iclient.iclient.md).[addressOutputs](../interfaces/models_iclient.iclient.md#addressoutputs)
+[IClient](../interfaces/models_IClient.IClient.md).[addressOutputs](../interfaces/models_IClient.IClient.md#addressoutputs)
 
 ___
 
@@ -275,31 +275,31 @@ True if the node is healthy.
 
 #### Implementation of
 
-[IClient](../interfaces/models_iclient.iclient.md).[health](../interfaces/models_iclient.iclient.md#health)
+[IClient](../interfaces/models_IClient.IClient.md).[health](../interfaces/models_IClient.IClient.md#health)
 
 ___
 
 ### info
 
-▸ **info**(): `Promise`<[`INodeInfo`](../interfaces/models_inodeinfo.inodeinfo.md)\>
+▸ **info**(): `Promise`<[`INodeInfo`](../interfaces/models_INodeInfo.INodeInfo.md)\>
 
 Get the info about the node.
 
 #### Returns
 
-`Promise`<[`INodeInfo`](../interfaces/models_inodeinfo.inodeinfo.md)\>
+`Promise`<[`INodeInfo`](../interfaces/models_INodeInfo.INodeInfo.md)\>
 
 The node information.
 
 #### Implementation of
 
-[IClient](../interfaces/models_iclient.iclient.md).[info](../interfaces/models_iclient.iclient.md#info)
+[IClient](../interfaces/models_IClient.IClient.md).[info](../interfaces/models_IClient.IClient.md#info)
 
 ___
 
 ### message
 
-▸ **message**(`messageId`): `Promise`<[`IMessage`](../interfaces/models_imessage.imessage.md)\>
+▸ **message**(`messageId`): `Promise`<[`IMessage`](../interfaces/models_IMessage.IMessage.md)\>
 
 Get the message data by id.
 
@@ -311,19 +311,19 @@ Get the message data by id.
 
 #### Returns
 
-`Promise`<[`IMessage`](../interfaces/models_imessage.imessage.md)\>
+`Promise`<[`IMessage`](../interfaces/models_IMessage.IMessage.md)\>
 
 The message data.
 
 #### Implementation of
 
-[IClient](../interfaces/models_iclient.iclient.md).[message](../interfaces/models_iclient.iclient.md#message)
+[IClient](../interfaces/models_IClient.IClient.md).[message](../interfaces/models_IClient.IClient.md#message)
 
 ___
 
 ### messageChildren
 
-▸ **messageChildren**(`messageId`): `Promise`<[`IChildrenResponse`](../interfaces/models_api_ichildrenresponse.ichildrenresponse.md)\>
+▸ **messageChildren**(`messageId`): `Promise`<[`IChildrenResponse`](../interfaces/models_api_IChildrenResponse.IChildrenResponse.md)\>
 
 Get the children of a message.
 
@@ -335,19 +335,19 @@ Get the children of a message.
 
 #### Returns
 
-`Promise`<[`IChildrenResponse`](../interfaces/models_api_ichildrenresponse.ichildrenresponse.md)\>
+`Promise`<[`IChildrenResponse`](../interfaces/models_api_IChildrenResponse.IChildrenResponse.md)\>
 
 The messages children.
 
 #### Implementation of
 
-[IClient](../interfaces/models_iclient.iclient.md).[messageChildren](../interfaces/models_iclient.iclient.md#messagechildren)
+[IClient](../interfaces/models_IClient.IClient.md).[messageChildren](../interfaces/models_IClient.IClient.md#messagechildren)
 
 ___
 
 ### messageMetadata
 
-▸ **messageMetadata**(`messageId`): `Promise`<[`IMessageMetadata`](../interfaces/models_imessagemetadata.imessagemetadata.md)\>
+▸ **messageMetadata**(`messageId`): `Promise`<[`IMessageMetadata`](../interfaces/models_IMessageMetadata.IMessageMetadata.md)\>
 
 Get the message metadata by id.
 
@@ -359,13 +359,13 @@ Get the message metadata by id.
 
 #### Returns
 
-`Promise`<[`IMessageMetadata`](../interfaces/models_imessagemetadata.imessagemetadata.md)\>
+`Promise`<[`IMessageMetadata`](../interfaces/models_IMessageMetadata.IMessageMetadata.md)\>
 
 The message metadata.
 
 #### Implementation of
 
-[IClient](../interfaces/models_iclient.iclient.md).[messageMetadata](../interfaces/models_iclient.iclient.md#messagemetadata)
+[IClient](../interfaces/models_IClient.IClient.md).[messageMetadata](../interfaces/models_IClient.IClient.md#messagemetadata)
 
 ___
 
@@ -389,7 +389,7 @@ The message raw data.
 
 #### Implementation of
 
-[IClient](../interfaces/models_iclient.iclient.md).[messageRaw](../interfaces/models_iclient.iclient.md#messageraw)
+[IClient](../interfaces/models_IClient.IClient.md).[messageRaw](../interfaces/models_IClient.IClient.md#messageraw)
 
 ___
 
@@ -403,7 +403,7 @@ Submit message.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `message` | [`IMessage`](../interfaces/models_imessage.imessage.md) | The message to submit. |
+| `message` | [`IMessage`](../interfaces/models_IMessage.IMessage.md) | The message to submit. |
 
 #### Returns
 
@@ -413,7 +413,7 @@ The messageId.
 
 #### Implementation of
 
-[IClient](../interfaces/models_iclient.iclient.md).[messageSubmit](../interfaces/models_iclient.iclient.md#messagesubmit)
+[IClient](../interfaces/models_IClient.IClient.md).[messageSubmit](../interfaces/models_IClient.IClient.md#messagesubmit)
 
 ___
 
@@ -437,13 +437,13 @@ The messageId.
 
 #### Implementation of
 
-[IClient](../interfaces/models_iclient.iclient.md).[messageSubmitRaw](../interfaces/models_iclient.iclient.md#messagesubmitraw)
+[IClient](../interfaces/models_IClient.IClient.md).[messageSubmitRaw](../interfaces/models_IClient.IClient.md#messagesubmitraw)
 
 ___
 
 ### messagesFind
 
-▸ **messagesFind**(`indexationKey`): `Promise`<[`IMessagesResponse`](../interfaces/models_api_imessagesresponse.imessagesresponse.md)\>
+▸ **messagesFind**(`indexationKey`): `Promise`<[`IMessagesResponse`](../interfaces/models_api_IMessagesResponse.IMessagesResponse.md)\>
 
 Find messages by index.
 
@@ -455,19 +455,19 @@ Find messages by index.
 
 #### Returns
 
-`Promise`<[`IMessagesResponse`](../interfaces/models_api_imessagesresponse.imessagesresponse.md)\>
+`Promise`<[`IMessagesResponse`](../interfaces/models_api_IMessagesResponse.IMessagesResponse.md)\>
 
 The messageId.
 
 #### Implementation of
 
-[IClient](../interfaces/models_iclient.iclient.md).[messagesFind](../interfaces/models_iclient.iclient.md#messagesfind)
+[IClient](../interfaces/models_IClient.IClient.md).[messagesFind](../interfaces/models_IClient.IClient.md#messagesfind)
 
 ___
 
 ### milestone
 
-▸ **milestone**(`index`): `Promise`<[`IMilestoneResponse`](../interfaces/models_api_imilestoneresponse.imilestoneresponse.md)\>
+▸ **milestone**(`index`): `Promise`<[`IMilestoneResponse`](../interfaces/models_api_IMilestoneResponse.IMilestoneResponse.md)\>
 
 Get the requested milestone.
 
@@ -479,19 +479,19 @@ Get the requested milestone.
 
 #### Returns
 
-`Promise`<[`IMilestoneResponse`](../interfaces/models_api_imilestoneresponse.imilestoneresponse.md)\>
+`Promise`<[`IMilestoneResponse`](../interfaces/models_api_IMilestoneResponse.IMilestoneResponse.md)\>
 
 The milestone details.
 
 #### Implementation of
 
-[IClient](../interfaces/models_iclient.iclient.md).[milestone](../interfaces/models_iclient.iclient.md#milestone)
+[IClient](../interfaces/models_IClient.IClient.md).[milestone](../interfaces/models_IClient.IClient.md#milestone)
 
 ___
 
 ### milestoneUtxoChanges
 
-▸ **milestoneUtxoChanges**(`index`): `Promise`<[`IMilestoneUtxoChangesResponse`](../interfaces/models_api_imilestoneutxochangesresponse.imilestoneutxochangesresponse.md)\>
+▸ **milestoneUtxoChanges**(`index`): `Promise`<[`IMilestoneUtxoChangesResponse`](../interfaces/models_api_IMilestoneUtxoChangesResponse.IMilestoneUtxoChangesResponse.md)\>
 
 Get the requested milestone utxo changes.
 
@@ -503,19 +503,19 @@ Get the requested milestone utxo changes.
 
 #### Returns
 
-`Promise`<[`IMilestoneUtxoChangesResponse`](../interfaces/models_api_imilestoneutxochangesresponse.imilestoneutxochangesresponse.md)\>
+`Promise`<[`IMilestoneUtxoChangesResponse`](../interfaces/models_api_IMilestoneUtxoChangesResponse.IMilestoneUtxoChangesResponse.md)\>
 
 The milestone utxo changes details.
 
 #### Implementation of
 
-[IClient](../interfaces/models_iclient.iclient.md).[milestoneUtxoChanges](../interfaces/models_iclient.iclient.md#milestoneutxochanges)
+[IClient](../interfaces/models_IClient.IClient.md).[milestoneUtxoChanges](../interfaces/models_IClient.IClient.md#milestoneutxochanges)
 
 ___
 
 ### output
 
-▸ **output**(`outputId`): `Promise`<[`IOutputResponse`](../interfaces/models_api_ioutputresponse.ioutputresponse.md)\>
+▸ **output**(`outputId`): `Promise`<[`IOutputResponse`](../interfaces/models_api_IOutputResponse.IOutputResponse.md)\>
 
 Find an output by its identifier.
 
@@ -527,19 +527,19 @@ Find an output by its identifier.
 
 #### Returns
 
-`Promise`<[`IOutputResponse`](../interfaces/models_api_ioutputresponse.ioutputresponse.md)\>
+`Promise`<[`IOutputResponse`](../interfaces/models_api_IOutputResponse.IOutputResponse.md)\>
 
 The output details.
 
 #### Implementation of
 
-[IClient](../interfaces/models_iclient.iclient.md).[output](../interfaces/models_iclient.iclient.md#output)
+[IClient](../interfaces/models_IClient.IClient.md).[output](../interfaces/models_IClient.IClient.md#output)
 
 ___
 
 ### peer
 
-▸ **peer**(`peerId`): `Promise`<[`IPeer`](../interfaces/models_ipeer.ipeer.md)\>
+▸ **peer**(`peerId`): `Promise`<[`IPeer`](../interfaces/models_IPeer.IPeer.md)\>
 
 Get a peer.
 
@@ -551,19 +551,19 @@ Get a peer.
 
 #### Returns
 
-`Promise`<[`IPeer`](../interfaces/models_ipeer.ipeer.md)\>
+`Promise`<[`IPeer`](../interfaces/models_IPeer.IPeer.md)\>
 
 The details for the created peer.
 
 #### Implementation of
 
-[IClient](../interfaces/models_iclient.iclient.md).[peer](../interfaces/models_iclient.iclient.md#peer)
+[IClient](../interfaces/models_IClient.IClient.md).[peer](../interfaces/models_IClient.IClient.md#peer)
 
 ___
 
 ### peerAdd
 
-▸ **peerAdd**(`multiAddress`, `alias?`): `Promise`<[`IPeer`](../interfaces/models_ipeer.ipeer.md)\>
+▸ **peerAdd**(`multiAddress`, `alias?`): `Promise`<[`IPeer`](../interfaces/models_IPeer.IPeer.md)\>
 
 Add a new peer.
 
@@ -576,13 +576,13 @@ Add a new peer.
 
 #### Returns
 
-`Promise`<[`IPeer`](../interfaces/models_ipeer.ipeer.md)\>
+`Promise`<[`IPeer`](../interfaces/models_IPeer.IPeer.md)\>
 
 The details for the created peer.
 
 #### Implementation of
 
-[IClient](../interfaces/models_iclient.iclient.md).[peerAdd](../interfaces/models_iclient.iclient.md#peeradd)
+[IClient](../interfaces/models_IClient.IClient.md).[peerAdd](../interfaces/models_IClient.IClient.md#peeradd)
 
 ___
 
@@ -606,31 +606,31 @@ Nothing.
 
 #### Implementation of
 
-[IClient](../interfaces/models_iclient.iclient.md).[peerDelete](../interfaces/models_iclient.iclient.md#peerdelete)
+[IClient](../interfaces/models_IClient.IClient.md).[peerDelete](../interfaces/models_IClient.IClient.md#peerdelete)
 
 ___
 
 ### peers
 
-▸ **peers**(): `Promise`<[`IPeer`](../interfaces/models_ipeer.ipeer.md)[]\>
+▸ **peers**(): `Promise`<[`IPeer`](../interfaces/models_IPeer.IPeer.md)[]\>
 
 Get the list of peers.
 
 #### Returns
 
-`Promise`<[`IPeer`](../interfaces/models_ipeer.ipeer.md)[]\>
+`Promise`<[`IPeer`](../interfaces/models_IPeer.IPeer.md)[]\>
 
 The list of peers.
 
 #### Implementation of
 
-[IClient](../interfaces/models_iclient.iclient.md).[peers](../interfaces/models_iclient.iclient.md#peers)
+[IClient](../interfaces/models_IClient.IClient.md).[peers](../interfaces/models_IClient.IClient.md#peers)
 
 ___
 
 ### receipts
 
-▸ **receipts**(`migratedAt?`): `Promise`<[`IReceiptsResponse`](../interfaces/models_api_ireceiptsresponse.ireceiptsresponse.md)\>
+▸ **receipts**(`migratedAt?`): `Promise`<[`IReceiptsResponse`](../interfaces/models_api_IReceiptsResponse.IReceiptsResponse.md)\>
 
 Get all the stored receipts or those for a given migrated at index.
 
@@ -642,37 +642,37 @@ Get all the stored receipts or those for a given migrated at index.
 
 #### Returns
 
-`Promise`<[`IReceiptsResponse`](../interfaces/models_api_ireceiptsresponse.ireceiptsresponse.md)\>
+`Promise`<[`IReceiptsResponse`](../interfaces/models_api_IReceiptsResponse.IReceiptsResponse.md)\>
 
 The stored receipts.
 
 #### Implementation of
 
-[IClient](../interfaces/models_iclient.iclient.md).[receipts](../interfaces/models_iclient.iclient.md#receipts)
+[IClient](../interfaces/models_IClient.IClient.md).[receipts](../interfaces/models_IClient.IClient.md#receipts)
 
 ___
 
 ### tips
 
-▸ **tips**(): `Promise`<[`ITipsResponse`](../interfaces/models_api_itipsresponse.itipsresponse.md)\>
+▸ **tips**(): `Promise`<[`ITipsResponse`](../interfaces/models_api_ITipsResponse.ITipsResponse.md)\>
 
 Get the tips from the node.
 
 #### Returns
 
-`Promise`<[`ITipsResponse`](../interfaces/models_api_itipsresponse.itipsresponse.md)\>
+`Promise`<[`ITipsResponse`](../interfaces/models_api_ITipsResponse.ITipsResponse.md)\>
 
 The tips.
 
 #### Implementation of
 
-[IClient](../interfaces/models_iclient.iclient.md).[tips](../interfaces/models_iclient.iclient.md#tips)
+[IClient](../interfaces/models_IClient.IClient.md).[tips](../interfaces/models_IClient.IClient.md#tips)
 
 ___
 
 ### transactionIncludedMessage
 
-▸ **transactionIncludedMessage**(`transactionId`): `Promise`<[`IMessage`](../interfaces/models_imessage.imessage.md)\>
+▸ **transactionIncludedMessage**(`transactionId`): `Promise`<[`IMessage`](../interfaces/models_IMessage.IMessage.md)\>
 
 Get the message that was included in the ledger for a transaction.
 
@@ -684,28 +684,28 @@ Get the message that was included in the ledger for a transaction.
 
 #### Returns
 
-`Promise`<[`IMessage`](../interfaces/models_imessage.imessage.md)\>
+`Promise`<[`IMessage`](../interfaces/models_IMessage.IMessage.md)\>
 
 The message.
 
 #### Implementation of
 
-[IClient](../interfaces/models_iclient.iclient.md).[transactionIncludedMessage](../interfaces/models_iclient.iclient.md#transactionincludedmessage)
+[IClient](../interfaces/models_IClient.IClient.md).[transactionIncludedMessage](../interfaces/models_IClient.IClient.md#transactionincludedmessage)
 
 ___
 
 ### treasury
 
-▸ **treasury**(): `Promise`<[`ITreasury`](../interfaces/models_itreasury.itreasury.md)\>
+▸ **treasury**(): `Promise`<[`ITreasury`](../interfaces/models_ITreasury.ITreasury.md)\>
 
 Get the current treasury output.
 
 #### Returns
 
-`Promise`<[`ITreasury`](../interfaces/models_itreasury.itreasury.md)\>
+`Promise`<[`ITreasury`](../interfaces/models_ITreasury.ITreasury.md)\>
 
 The details for the treasury.
 
 #### Implementation of
 
-[IClient](../interfaces/models_iclient.iclient.md).[treasury](../interfaces/models_iclient.iclient.md#treasury)
+[IClient](../interfaces/models_IClient.IClient.md).[treasury](../interfaces/models_IClient.IClient.md#treasury)

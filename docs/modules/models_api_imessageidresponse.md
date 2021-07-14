@@ -6,4 +6,4 @@
 
 ### Interfaces
 
-- [IMessageIdResponse](../interfaces/models_api_imessageidresponse.imessageidresponse.md)
+- [IMessageIdResponse](../interfaces/models_api_IMessageIdResponse.IMessageIdResponse.md)
