@@ -6,11 +6,11 @@
 
 ### Interfaces
 
-- [ITransactionPayload](../interfaces/models_itransactionpayload.itransactionpayload.md)
+- [ITransactionPayload](../interfaces/models_ITransactionPayload.ITransactionPayload.md)
 
 ### Variables
 
-- [TRANSACTION\_PAYLOAD\_TYPE](models_itransactionpayload.md#transaction_payload_type)
+- [TRANSACTION\_PAYLOAD\_TYPE](models_ITransactionPayload.md#transaction_payload_type)
 
 ## Variables
 

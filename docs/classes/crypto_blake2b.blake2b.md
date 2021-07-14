@@ -11,13 +11,13 @@ TypeScript conversion from https://github.com/dcposch/blakejs.
 
 ### Properties
 
-- [SIZE\_256](crypto_blake2b.blake2b.md#size_256)
-- [SIZE\_512](crypto_blake2b.blake2b.md#size_512)
+- [SIZE\_256](crypto_blake2b.Blake2b.md#size_256)
+- [SIZE\_512](crypto_blake2b.Blake2b.md#size_512)
 
 ### Methods
 
-- [sum256](crypto_blake2b.blake2b.md#sum256)
-- [sum512](crypto_blake2b.blake2b.md#sum512)
+- [sum256](crypto_blake2b.Blake2b.md#sum256)
+- [sum512](crypto_blake2b.Blake2b.md#sum512)
 
 ## Properties
 

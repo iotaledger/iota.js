@@ -1,8 +1,8 @@
-[@iota/iota.js](../README.md) / [models/api/IMessageIdResponse](../modules/models_api_imessageidresponse.md) / IMessageIdResponse
+[@iota/iota.js](../README.md) / [models/api/IMessageIdResponse](../modules/models_api_IMessageIdResponse.md) / IMessageIdResponse
 
 # Interface: IMessageIdResponse
 
-[models/api/IMessageIdResponse](../modules/models_api_imessageidresponse.md).IMessageIdResponse
+[models/api/IMessageIdResponse](../modules/models_api_IMessageIdResponse.md).IMessageIdResponse
 
 Message id response.
 
@@ -10,7 +10,7 @@ Message id response.
 
 ### Properties
 
-- [messageId](models_api_imessageidresponse.imessageidresponse.md#messageid)
+- [messageId](models_api_IMessageIdResponse.IMessageIdResponse.md#messageid)
 
 ## Properties
 

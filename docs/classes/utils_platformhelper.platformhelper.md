@@ -1,8 +1,8 @@
-[@iota/iota.js](../README.md) / [utils/platformHelper](../modules/utils_platformhelper.md) / PlatformHelper
+[@iota/iota.js](../README.md) / [utils/platformHelper](../modules/utils_platformHelper.md) / PlatformHelper
 
 # Class: PlatformHelper
 
-[utils/platformHelper](../modules/utils_platformhelper.md).PlatformHelper
+[utils/platformHelper](../modules/utils_platformHelper.md).PlatformHelper
 
 Class to help with random generation.
 
@@ -10,11 +10,11 @@ Class to help with random generation.
 
 ### Constructors
 
-- [constructor](utils_platformhelper.platformhelper.md#constructor)
+- [constructor](utils_platformHelper.PlatformHelper.md#constructor)
 
 ### Properties
 
-- [isNodeJs](utils_platformhelper.platformhelper.md#isnodejs)
+- [isNodeJs](utils_platformHelper.PlatformHelper.md#isnodejs)
 
 ## Constructors
 

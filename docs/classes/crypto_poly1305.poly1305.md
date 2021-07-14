@@ -10,13 +10,13 @@ Implementation of Poly1305.
 
 ### Constructors
 
-- [constructor](crypto_poly1305.poly1305.md#constructor)
+- [constructor](crypto_poly1305.Poly1305.md#constructor)
 
 ### Methods
 
-- [digest](crypto_poly1305.poly1305.md#digest)
-- [finish](crypto_poly1305.poly1305.md#finish)
-- [update](crypto_poly1305.poly1305.md#update)
+- [digest](crypto_poly1305.Poly1305.md#digest)
+- [finish](crypto_poly1305.Poly1305.md#finish)
+- [update](crypto_poly1305.Poly1305.md#update)
 
 ## Constructors
 
@@ -62,7 +62,7 @@ ___
 
 ### update
 
-▸ **update**(`input`): [`Poly1305`](crypto_poly1305.poly1305.md)
+▸ **update**(`input`): [`Poly1305`](crypto_poly1305.Poly1305.md)
 
 Update the hash.
 
@@ -74,6 +74,6 @@ Update the hash.
 
 #### Returns
 
-[`Poly1305`](crypto_poly1305.poly1305.md)
+[`Poly1305`](crypto_poly1305.Poly1305.md)
 
 Hasher instance.

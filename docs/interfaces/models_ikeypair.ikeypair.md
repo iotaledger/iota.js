@@ -1,8 +1,8 @@
-[@iota/iota.js](../README.md) / [models/IKeyPair](../modules/models_ikeypair.md) / IKeyPair
+[@iota/iota.js](../README.md) / [models/IKeyPair](../modules/models_IKeyPair.md) / IKeyPair
 
 # Interface: IKeyPair
 
-[models/IKeyPair](../modules/models_ikeypair.md).IKeyPair
+[models/IKeyPair](../modules/models_IKeyPair.md).IKeyPair
 
 Definition of signature key pair.
 
@@ -10,8 +10,8 @@ Definition of signature key pair.
 
 ### Properties
 
-- [privateKey](models_ikeypair.ikeypair.md#privatekey)
-- [publicKey](models_ikeypair.ikeypair.md#publickey)
+- [privateKey](models_IKeyPair.IKeyPair.md#privatekey)
+- [publicKey](models_IKeyPair.IKeyPair.md#publickey)
 
 ## Properties
 

@@ -1,8 +1,8 @@
-[@iota/iota.js](../README.md) / [models/conflictReason](../modules/models_conflictreason.md) / ConflictReason
+[@iota/iota.js](../README.md) / [models/conflictReason](../modules/models_conflictReason.md) / ConflictReason
 
 # Enumeration: ConflictReason
 
-[models/conflictReason](../modules/models_conflictreason.md).ConflictReason
+[models/conflictReason](../modules/models_conflictReason.md).ConflictReason
 
 Reason for message conflicts.
 
@@ -10,14 +10,14 @@ Reason for message conflicts.
 
 ### Enumeration members
 
-- [inputOutputSumMismatch](models_conflictreason.conflictreason.md#inputoutputsummismatch)
-- [inputUTXOAlreadySpent](models_conflictreason.conflictreason.md#inpututxoalreadyspent)
-- [inputUTXOAlreadySpentInThisMilestone](models_conflictreason.conflictreason.md#inpututxoalreadyspentinthismilestone)
-- [inputUTXONotFound](models_conflictreason.conflictreason.md#inpututxonotfound)
-- [invalidDustAllowance](models_conflictreason.conflictreason.md#invaliddustallowance)
-- [invalidSignature](models_conflictreason.conflictreason.md#invalidsignature)
-- [none](models_conflictreason.conflictreason.md#none)
-- [semanticValidationFailed](models_conflictreason.conflictreason.md#semanticvalidationfailed)
+- [inputOutputSumMismatch](models_conflictReason.ConflictReason.md#inputoutputsummismatch)
+- [inputUTXOAlreadySpent](models_conflictReason.ConflictReason.md#inpututxoalreadyspent)
+- [inputUTXOAlreadySpentInThisMilestone](models_conflictReason.ConflictReason.md#inpututxoalreadyspentinthismilestone)
+- [inputUTXONotFound](models_conflictReason.ConflictReason.md#inpututxonotfound)
+- [invalidDustAllowance](models_conflictReason.ConflictReason.md#invaliddustallowance)
+- [invalidSignature](models_conflictReason.ConflictReason.md#invalidsignature)
+- [none](models_conflictReason.ConflictReason.md#none)
+- [semanticValidationFailed](models_conflictReason.ConflictReason.md#semanticvalidationfailed)
 
 ## Enumeration members
 

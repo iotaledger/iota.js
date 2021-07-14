@@ -1,8 +1,8 @@
-[@iota/iota.js](../README.md) / [crypto/edwards25519/completedGroupElement](../modules/crypto_edwards25519_completedgroupelement.md) / CompletedGroupElement
+[@iota/iota.js](../README.md) / [crypto/edwards25519/completedGroupElement](../modules/crypto_edwards25519_completedGroupElement.md) / CompletedGroupElement
 
 # Class: CompletedGroupElement
 
-[crypto/edwards25519/completedGroupElement](../modules/crypto_edwards25519_completedgroupelement.md).CompletedGroupElement
+[crypto/edwards25519/completedGroupElement](../modules/crypto_edwards25519_completedGroupElement.md).CompletedGroupElement
 
 Group elements are members of the elliptic curve -x^2 + y^2 = 1 + d * x^2 *
 y^2 where d = -121665/121666.
@@ -12,23 +12,23 @@ CompletedGroupElement: ((X:Z),(Y:T)) satisfying x=X/Z, y=Y/T.
 
 ### Constructors
 
-- [constructor](crypto_edwards25519_completedgroupelement.completedgroupelement.md#constructor)
+- [constructor](crypto_edwards25519_completedGroupElement.CompletedGroupElement.md#constructor)
 
 ### Properties
 
-- [T](crypto_edwards25519_completedgroupelement.completedgroupelement.md#t)
-- [X](crypto_edwards25519_completedgroupelement.completedgroupelement.md#x)
-- [Y](crypto_edwards25519_completedgroupelement.completedgroupelement.md#y)
-- [Z](crypto_edwards25519_completedgroupelement.completedgroupelement.md#z)
+- [T](crypto_edwards25519_completedGroupElement.CompletedGroupElement.md#t)
+- [X](crypto_edwards25519_completedGroupElement.CompletedGroupElement.md#x)
+- [Y](crypto_edwards25519_completedGroupElement.CompletedGroupElement.md#y)
+- [Z](crypto_edwards25519_completedGroupElement.CompletedGroupElement.md#z)
 
 ### Methods
 
-- [add](crypto_edwards25519_completedgroupelement.completedgroupelement.md#add)
-- [mixedAdd](crypto_edwards25519_completedgroupelement.completedgroupelement.md#mixedadd)
-- [mixedSub](crypto_edwards25519_completedgroupelement.completedgroupelement.md#mixedsub)
-- [sub](crypto_edwards25519_completedgroupelement.completedgroupelement.md#sub)
-- [toExtended](crypto_edwards25519_completedgroupelement.completedgroupelement.md#toextended)
-- [toProjective](crypto_edwards25519_completedgroupelement.completedgroupelement.md#toprojective)
+- [add](crypto_edwards25519_completedGroupElement.CompletedGroupElement.md#add)
+- [mixedAdd](crypto_edwards25519_completedGroupElement.CompletedGroupElement.md#mixedadd)
+- [mixedSub](crypto_edwards25519_completedGroupElement.CompletedGroupElement.md#mixedsub)
+- [sub](crypto_edwards25519_completedGroupElement.CompletedGroupElement.md#sub)
+- [toExtended](crypto_edwards25519_completedGroupElement.CompletedGroupElement.md#toextended)
+- [toProjective](crypto_edwards25519_completedGroupElement.CompletedGroupElement.md#toprojective)
 
 ## Constructors
 
@@ -42,16 +42,16 @@ Create a new instance of CompletedGroupElement.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `X?` | [`FieldElement`](crypto_edwards25519_fieldelement.fieldelement.md) | The X element. |
-| `Y?` | [`FieldElement`](crypto_edwards25519_fieldelement.fieldelement.md) | The Y Element. |
-| `Z?` | [`FieldElement`](crypto_edwards25519_fieldelement.fieldelement.md) | The Z Element. |
-| `T?` | [`FieldElement`](crypto_edwards25519_fieldelement.fieldelement.md) | The T Element. |
+| `X?` | [`FieldElement`](crypto_edwards25519_fieldElement.FieldElement.md) | The X element. |
+| `Y?` | [`FieldElement`](crypto_edwards25519_fieldElement.FieldElement.md) | The Y Element. |
+| `Z?` | [`FieldElement`](crypto_edwards25519_fieldElement.FieldElement.md) | The Z Element. |
+| `T?` | [`FieldElement`](crypto_edwards25519_fieldElement.FieldElement.md) | The T Element. |
 
 ## Properties
 
 ### T
 
-• **T**: [`FieldElement`](crypto_edwards25519_fieldelement.fieldelement.md)
+• **T**: [`FieldElement`](crypto_edwards25519_fieldElement.FieldElement.md)
 
 The T Element.
 
@@ -59,7 +59,7 @@ ___
 
 ### X
 
-• **X**: [`FieldElement`](crypto_edwards25519_fieldelement.fieldelement.md)
+• **X**: [`FieldElement`](crypto_edwards25519_fieldElement.FieldElement.md)
 
 The X element.
 
@@ -67,7 +67,7 @@ ___
 
 ### Y
 
-• **Y**: [`FieldElement`](crypto_edwards25519_fieldelement.fieldelement.md)
+• **Y**: [`FieldElement`](crypto_edwards25519_fieldElement.FieldElement.md)
 
 The Y Element.
 
@@ -75,7 +75,7 @@ ___
 
 ### Z
 
-• **Z**: [`FieldElement`](crypto_edwards25519_fieldelement.fieldelement.md)
+• **Z**: [`FieldElement`](crypto_edwards25519_fieldElement.FieldElement.md)
 
 The Z Element.
 
@@ -91,8 +91,8 @@ Group Element add.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `p` | [`ExtendedGroupElement`](crypto_edwards25519_extendedgroupelement.extendedgroupelement.md) | The extended group element. |
-| `q` | [`CachedGroupElement`](crypto_edwards25519_cachedgroupelement.cachedgroupelement.md) | The cached group element. |
+| `p` | [`ExtendedGroupElement`](crypto_edwards25519_extendedGroupElement.ExtendedGroupElement.md) | The extended group element. |
+| `q` | [`CachedGroupElement`](crypto_edwards25519_cachedGroupElement.CachedGroupElement.md) | The cached group element. |
 
 #### Returns
 
@@ -110,8 +110,8 @@ Mixed add.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `p` | [`ExtendedGroupElement`](crypto_edwards25519_extendedgroupelement.extendedgroupelement.md) | The p. |
-| `q` | [`PreComputedGroupElement`](crypto_edwards25519_precomputedgroupelement.precomputedgroupelement.md) | The q. |
+| `p` | [`ExtendedGroupElement`](crypto_edwards25519_extendedGroupElement.ExtendedGroupElement.md) | The p. |
+| `q` | [`PreComputedGroupElement`](crypto_edwards25519_preComputedGroupElement.PreComputedGroupElement.md) | The q. |
 
 #### Returns
 
@@ -129,8 +129,8 @@ Mixed subtract.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `p` | [`ExtendedGroupElement`](crypto_edwards25519_extendedgroupelement.extendedgroupelement.md) | The p. |
-| `q` | [`PreComputedGroupElement`](crypto_edwards25519_precomputedgroupelement.precomputedgroupelement.md) | The q. |
+| `p` | [`ExtendedGroupElement`](crypto_edwards25519_extendedGroupElement.ExtendedGroupElement.md) | The p. |
+| `q` | [`PreComputedGroupElement`](crypto_edwards25519_preComputedGroupElement.PreComputedGroupElement.md) | The q. |
 
 #### Returns
 
@@ -148,8 +148,8 @@ Group Element substract.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `p` | [`ExtendedGroupElement`](crypto_edwards25519_extendedgroupelement.extendedgroupelement.md) | The p. |
-| `q` | [`CachedGroupElement`](crypto_edwards25519_cachedgroupelement.cachedgroupelement.md) | The q. |
+| `p` | [`ExtendedGroupElement`](crypto_edwards25519_extendedGroupElement.ExtendedGroupElement.md) | The p. |
+| `q` | [`CachedGroupElement`](crypto_edwards25519_cachedGroupElement.CachedGroupElement.md) | The q. |
 
 #### Returns
 
@@ -167,7 +167,7 @@ Convert to extended element.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `e` | [`ExtendedGroupElement`](crypto_edwards25519_extendedgroupelement.extendedgroupelement.md) | The extended element to fill. |
+| `e` | [`ExtendedGroupElement`](crypto_edwards25519_extendedGroupElement.ExtendedGroupElement.md) | The extended element to fill. |
 
 #### Returns
 
@@ -185,7 +185,7 @@ Convert to projective element.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `p` | [`ProjectiveGroupElement`](crypto_edwards25519_projectivegroupelement.projectivegroupelement.md) | The projective element to fill. |
+| `p` | [`ProjectiveGroupElement`](crypto_edwards25519_projectiveGroupElement.ProjectiveGroupElement.md) | The projective element to fill. |
 
 #### Returns
 

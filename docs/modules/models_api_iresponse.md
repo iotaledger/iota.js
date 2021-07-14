@@ -6,4 +6,4 @@
 
 ### Interfaces
 
-- [IResponse](../interfaces/models_api_iresponse.iresponse.md)
+- [IResponse](../interfaces/models_api_IResponse.IResponse.md)

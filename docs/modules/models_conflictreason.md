@@ -6,4 +6,4 @@
 
 ### Enumerations
 
-- [ConflictReason](../enums/models_conflictreason.conflictreason.md)
+- [ConflictReason](../enums/models_conflictReason.ConflictReason.md)

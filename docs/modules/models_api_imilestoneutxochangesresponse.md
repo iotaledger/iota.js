@@ -6,4 +6,4 @@
 
 ### Interfaces
 
-- [IMilestoneUtxoChangesResponse](../interfaces/models_api_imilestoneutxochangesresponse.imilestoneutxochangesresponse.md)
+- [IMilestoneUtxoChangesResponse](../interfaces/models_api_IMilestoneUtxoChangesResponse.IMilestoneUtxoChangesResponse.md)

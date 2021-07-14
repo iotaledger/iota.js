@@ -1,8 +1,8 @@
-[@iota/iota.js](../README.md) / [models/api/IResponse](../modules/models_api_iresponse.md) / IResponse
+[@iota/iota.js](../README.md) / [models/api/IResponse](../modules/models_api_IResponse.md) / IResponse
 
 # Interface: IResponse<T\>
 
-[models/api/IResponse](../modules/models_api_iresponse.md).IResponse
+[models/api/IResponse](../modules/models_api_IResponse.md).IResponse
 
 Base response data.
 
@@ -16,8 +16,8 @@ Base response data.
 
 ### Properties
 
-- [data](models_api_iresponse.iresponse.md#data)
-- [error](models_api_iresponse.iresponse.md#error)
+- [data](models_api_IResponse.IResponse.md#data)
+- [error](models_api_IResponse.IResponse.md#error)
 
 ## Properties
 

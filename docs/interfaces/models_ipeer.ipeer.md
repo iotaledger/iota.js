@@ -1,8 +1,8 @@
-[@iota/iota.js](../README.md) / [models/IPeer](../modules/models_ipeer.md) / IPeer
+[@iota/iota.js](../README.md) / [models/IPeer](../modules/models_IPeer.md) / IPeer
 
 # Interface: IPeer
 
-[models/IPeer](../modules/models_ipeer.md).IPeer
+[models/IPeer](../modules/models_IPeer.md).IPeer
 
 Peer details.
 
@@ -10,12 +10,12 @@ Peer details.
 
 ### Properties
 
-- [alias](models_ipeer.ipeer.md#alias)
-- [connected](models_ipeer.ipeer.md#connected)
-- [gossip](models_ipeer.ipeer.md#gossip)
-- [id](models_ipeer.ipeer.md#id)
-- [multiAddresses](models_ipeer.ipeer.md#multiaddresses)
-- [relation](models_ipeer.ipeer.md#relation)
+- [alias](models_IPeer.IPeer.md#alias)
+- [connected](models_IPeer.IPeer.md#connected)
+- [gossip](models_IPeer.IPeer.md#gossip)
+- [id](models_IPeer.IPeer.md#id)
+- [multiAddresses](models_IPeer.IPeer.md#multiaddresses)
+- [relation](models_IPeer.IPeer.md#relation)
 
 ## Properties
 
@@ -45,8 +45,8 @@ Gossip metrics for the peer.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `heartbeat?` | [`IGossipHeartbeat`](models_igossipheartbeat.igossipheartbeat.md) | The peer heartbeat. |
-| `metrics` | [`IGossipMetrics`](models_igossipmetrics.igossipmetrics.md) | The peer metrics. |
+| `heartbeat?` | [`IGossipHeartbeat`](models_IGossipHeartbeat.IGossipHeartbeat.md) | The peer heartbeat. |
+| `metrics` | [`IGossipMetrics`](models_IGossipMetrics.IGossipMetrics.md) | The peer metrics. |
 
 ___
 

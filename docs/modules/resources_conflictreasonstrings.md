@@ -6,7 +6,7 @@
 
 ### Variables
 
-- [CONFLICT\_REASON\_STRINGS](resources_conflictreasonstrings.md#conflict_reason_strings)
+- [CONFLICT\_REASON\_STRINGS](resources_conflictReasonStrings.md#conflict_reason_strings)
 
 ## Variables
 

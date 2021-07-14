@@ -1,14 +1,14 @@
-[@iota/iota.js](../README.md) / [models/ISigLockedDustAllowanceOutput](../modules/models_isiglockeddustallowanceoutput.md) / ISigLockedDustAllowanceOutput
+[@iota/iota.js](../README.md) / [models/ISigLockedDustAllowanceOutput](../modules/models_ISigLockedDustAllowanceOutput.md) / ISigLockedDustAllowanceOutput
 
 # Interface: ISigLockedDustAllowanceOutput
 
-[models/ISigLockedDustAllowanceOutput](../modules/models_isiglockeddustallowanceoutput.md).ISigLockedDustAllowanceOutput
+[models/ISigLockedDustAllowanceOutput](../modules/models_ISigLockedDustAllowanceOutput.md).ISigLockedDustAllowanceOutput
 
 Signature locked single output.
 
 ## Hierarchy
 
-- [`ITypeBase`](models_itypebase.itypebase.md)<``1``\>
+- [`ITypeBase`](models_ITypeBase.ITypeBase.md)<``1``\>
 
   ↳ **`ISigLockedDustAllowanceOutput`**
 
@@ -16,15 +16,15 @@ Signature locked single output.
 
 ### Properties
 
-- [address](models_isiglockeddustallowanceoutput.isiglockeddustallowanceoutput.md#address)
-- [amount](models_isiglockeddustallowanceoutput.isiglockeddustallowanceoutput.md#amount)
-- [type](models_isiglockeddustallowanceoutput.isiglockeddustallowanceoutput.md#type)
+- [address](models_ISigLockedDustAllowanceOutput.ISigLockedDustAllowanceOutput.md#address)
+- [amount](models_ISigLockedDustAllowanceOutput.ISigLockedDustAllowanceOutput.md#amount)
+- [type](models_ISigLockedDustAllowanceOutput.ISigLockedDustAllowanceOutput.md#type)
 
 ## Properties
 
 ### address
 
-• **address**: [`IEd25519Address`](models_ied25519address.ied25519address.md)
+• **address**: [`IEd25519Address`](models_IEd25519Address.IEd25519Address.md)
 
 The address.
 
@@ -46,4 +46,4 @@ The type of the object.
 
 #### Inherited from
 
-[ITypeBase](models_itypebase.itypebase.md).[type](models_itypebase.itypebase.md#type)
+[ITypeBase](models_ITypeBase.ITypeBase.md).[type](models_ITypeBase.ITypeBase.md#type)

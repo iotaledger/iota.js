@@ -1,20 +1,20 @@
-[@iota/iota.js](../README.md) / [models/IPowProvider](../modules/models_ipowprovider.md) / IPowProvider
+[@iota/iota.js](../README.md) / [models/IPowProvider](../modules/models_IPowProvider.md) / IPowProvider
 
 # Interface: IPowProvider
 
-[models/IPowProvider](../modules/models_ipowprovider.md).IPowProvider
+[models/IPowProvider](../modules/models_IPowProvider.md).IPowProvider
 
 Perform the POW on a message.
 
 ## Implemented by
 
-- [`LocalPowProvider`](../classes/pow_localpowprovider.localpowprovider.md)
+- [`LocalPowProvider`](../classes/pow_localPowProvider.LocalPowProvider.md)
 
 ## Table of contents
 
 ### Methods
 
-- [pow](models_ipowprovider.ipowprovider.md#pow)
+- [pow](models_IPowProvider.IPowProvider.md#pow)
 
 ## Methods
 

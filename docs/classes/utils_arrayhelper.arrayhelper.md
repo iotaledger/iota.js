@@ -1,8 +1,8 @@
-[@iota/iota.js](../README.md) / [utils/arrayHelper](../modules/utils_arrayhelper.md) / ArrayHelper
+[@iota/iota.js](../README.md) / [utils/arrayHelper](../modules/utils_arrayHelper.md) / ArrayHelper
 
 # Class: ArrayHelper
 
-[utils/arrayHelper](../modules/utils_arrayhelper.md).ArrayHelper
+[utils/arrayHelper](../modules/utils_arrayHelper.md).ArrayHelper
 
 Array helper methods.
 
@@ -10,11 +10,11 @@ Array helper methods.
 
 ### Constructors
 
-- [constructor](utils_arrayhelper.arrayhelper.md#constructor)
+- [constructor](utils_arrayHelper.ArrayHelper.md#constructor)
 
 ### Methods
 
-- [equal](utils_arrayhelper.arrayhelper.md#equal)
+- [equal](utils_arrayHelper.ArrayHelper.md#equal)
 
 ## Constructors
 

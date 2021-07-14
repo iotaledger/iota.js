@@ -1,49 +1,49 @@
-[@iota/iota.js](../README.md) / [models/IClient](../modules/models_iclient.md) / IClient
+[@iota/iota.js](../README.md) / [models/IClient](../modules/models_IClient.md) / IClient
 
 # Interface: IClient
 
-[models/IClient](../modules/models_iclient.md).IClient
+[models/IClient](../modules/models_IClient.md).IClient
 
 Client interface definition for API communication.
 
 ## Implemented by
 
-- [`SingleNodeClient`](../classes/clients_singlenodeclient.singlenodeclient.md)
+- [`SingleNodeClient`](../classes/clients_singleNodeClient.SingleNodeClient.md)
 
 ## Table of contents
 
 ### Methods
 
-- [address](models_iclient.iclient.md#address)
-- [addressEd25519](models_iclient.iclient.md#addressed25519)
-- [addressEd25519Outputs](models_iclient.iclient.md#addressed25519outputs)
-- [addressOutputs](models_iclient.iclient.md#addressoutputs)
-- [health](models_iclient.iclient.md#health)
-- [info](models_iclient.iclient.md#info)
-- [message](models_iclient.iclient.md#message)
-- [messageChildren](models_iclient.iclient.md#messagechildren)
-- [messageMetadata](models_iclient.iclient.md#messagemetadata)
-- [messageRaw](models_iclient.iclient.md#messageraw)
-- [messageSubmit](models_iclient.iclient.md#messagesubmit)
-- [messageSubmitRaw](models_iclient.iclient.md#messagesubmitraw)
-- [messagesFind](models_iclient.iclient.md#messagesfind)
-- [milestone](models_iclient.iclient.md#milestone)
-- [milestoneUtxoChanges](models_iclient.iclient.md#milestoneutxochanges)
-- [output](models_iclient.iclient.md#output)
-- [peer](models_iclient.iclient.md#peer)
-- [peerAdd](models_iclient.iclient.md#peeradd)
-- [peerDelete](models_iclient.iclient.md#peerdelete)
-- [peers](models_iclient.iclient.md#peers)
-- [receipts](models_iclient.iclient.md#receipts)
-- [tips](models_iclient.iclient.md#tips)
-- [transactionIncludedMessage](models_iclient.iclient.md#transactionincludedmessage)
-- [treasury](models_iclient.iclient.md#treasury)
+- [address](models_IClient.IClient.md#address)
+- [addressEd25519](models_IClient.IClient.md#addressed25519)
+- [addressEd25519Outputs](models_IClient.IClient.md#addressed25519outputs)
+- [addressOutputs](models_IClient.IClient.md#addressoutputs)
+- [health](models_IClient.IClient.md#health)
+- [info](models_IClient.IClient.md#info)
+- [message](models_IClient.IClient.md#message)
+- [messageChildren](models_IClient.IClient.md#messagechildren)
+- [messageMetadata](models_IClient.IClient.md#messagemetadata)
+- [messageRaw](models_IClient.IClient.md#messageraw)
+- [messageSubmit](models_IClient.IClient.md#messagesubmit)
+- [messageSubmitRaw](models_IClient.IClient.md#messagesubmitraw)
+- [messagesFind](models_IClient.IClient.md#messagesfind)
+- [milestone](models_IClient.IClient.md#milestone)
+- [milestoneUtxoChanges](models_IClient.IClient.md#milestoneutxochanges)
+- [output](models_IClient.IClient.md#output)
+- [peer](models_IClient.IClient.md#peer)
+- [peerAdd](models_IClient.IClient.md#peeradd)
+- [peerDelete](models_IClient.IClient.md#peerdelete)
+- [peers](models_IClient.IClient.md#peers)
+- [receipts](models_IClient.IClient.md#receipts)
+- [tips](models_IClient.IClient.md#tips)
+- [transactionIncludedMessage](models_IClient.IClient.md#transactionincludedmessage)
+- [treasury](models_IClient.IClient.md#treasury)
 
 ## Methods
 
 ### address
 
-▸ **address**(`addressBech32`): `Promise`<[`IAddressResponse`](models_api_iaddressresponse.iaddressresponse.md)\>
+▸ **address**(`addressBech32`): `Promise`<[`IAddressResponse`](models_api_IAddressResponse.IAddressResponse.md)\>
 
 Get the address details using bech32 address.
 
@@ -55,7 +55,7 @@ Get the address details using bech32 address.
 
 #### Returns
 
-`Promise`<[`IAddressResponse`](models_api_iaddressresponse.iaddressresponse.md)\>
+`Promise`<[`IAddressResponse`](models_api_IAddressResponse.IAddressResponse.md)\>
 
 The address details.
 
@@ -63,7 +63,7 @@ ___
 
 ### addressEd25519
 
-▸ **addressEd25519**(`addressEd25519`): `Promise`<[`IAddressResponse`](models_api_iaddressresponse.iaddressresponse.md)\>
+▸ **addressEd25519**(`addressEd25519`): `Promise`<[`IAddressResponse`](models_api_IAddressResponse.IAddressResponse.md)\>
 
 Get the address details using ed25519 address.
 
@@ -75,7 +75,7 @@ Get the address details using ed25519 address.
 
 #### Returns
 
-`Promise`<[`IAddressResponse`](models_api_iaddressresponse.iaddressresponse.md)\>
+`Promise`<[`IAddressResponse`](models_api_IAddressResponse.IAddressResponse.md)\>
 
 The address details.
 
@@ -83,7 +83,7 @@ ___
 
 ### addressEd25519Outputs
 
-▸ **addressEd25519Outputs**(`addressEd25519`, `type?`, `includeSpent?`): `Promise`<[`IAddressOutputsResponse`](models_api_iaddressoutputsresponse.iaddressoutputsresponse.md)\>
+▸ **addressEd25519Outputs**(`addressEd25519`, `type?`, `includeSpent?`): `Promise`<[`IAddressOutputsResponse`](models_api_IAddressOutputsResponse.IAddressOutputsResponse.md)\>
 
 Get the address outputs.
 
@@ -97,7 +97,7 @@ Get the address outputs.
 
 #### Returns
 
-`Promise`<[`IAddressOutputsResponse`](models_api_iaddressoutputsresponse.iaddressoutputsresponse.md)\>
+`Promise`<[`IAddressOutputsResponse`](models_api_IAddressOutputsResponse.IAddressOutputsResponse.md)\>
 
 The address outputs.
 
@@ -105,7 +105,7 @@ ___
 
 ### addressOutputs
 
-▸ **addressOutputs**(`addressBech32`, `type?`, `includeSpent?`): `Promise`<[`IAddressOutputsResponse`](models_api_iaddressoutputsresponse.iaddressoutputsresponse.md)\>
+▸ **addressOutputs**(`addressBech32`, `type?`, `includeSpent?`): `Promise`<[`IAddressOutputsResponse`](models_api_IAddressOutputsResponse.IAddressOutputsResponse.md)\>
 
 Get the address outputs using bech32 address.
 
@@ -119,7 +119,7 @@ Get the address outputs using bech32 address.
 
 #### Returns
 
-`Promise`<[`IAddressOutputsResponse`](models_api_iaddressoutputsresponse.iaddressoutputsresponse.md)\>
+`Promise`<[`IAddressOutputsResponse`](models_api_IAddressOutputsResponse.IAddressOutputsResponse.md)\>
 
 The address outputs.
 
@@ -141,13 +141,13 @@ ___
 
 ### info
 
-▸ **info**(): `Promise`<[`INodeInfo`](models_inodeinfo.inodeinfo.md)\>
+▸ **info**(): `Promise`<[`INodeInfo`](models_INodeInfo.INodeInfo.md)\>
 
 Get the info about the node.
 
 #### Returns
 
-`Promise`<[`INodeInfo`](models_inodeinfo.inodeinfo.md)\>
+`Promise`<[`INodeInfo`](models_INodeInfo.INodeInfo.md)\>
 
 The node information.
 
@@ -155,7 +155,7 @@ ___
 
 ### message
 
-▸ **message**(`messageId`): `Promise`<[`IMessage`](models_imessage.imessage.md)\>
+▸ **message**(`messageId`): `Promise`<[`IMessage`](models_IMessage.IMessage.md)\>
 
 Get the message data by id.
 
@@ -167,7 +167,7 @@ Get the message data by id.
 
 #### Returns
 
-`Promise`<[`IMessage`](models_imessage.imessage.md)\>
+`Promise`<[`IMessage`](models_IMessage.IMessage.md)\>
 
 The message data.
 
@@ -175,7 +175,7 @@ ___
 
 ### messageChildren
 
-▸ **messageChildren**(`messageId`): `Promise`<[`IChildrenResponse`](models_api_ichildrenresponse.ichildrenresponse.md)\>
+▸ **messageChildren**(`messageId`): `Promise`<[`IChildrenResponse`](models_api_IChildrenResponse.IChildrenResponse.md)\>
 
 Get the children of a message.
 
@@ -187,7 +187,7 @@ Get the children of a message.
 
 #### Returns
 
-`Promise`<[`IChildrenResponse`](models_api_ichildrenresponse.ichildrenresponse.md)\>
+`Promise`<[`IChildrenResponse`](models_api_IChildrenResponse.IChildrenResponse.md)\>
 
 The messages children.
 
@@ -195,7 +195,7 @@ ___
 
 ### messageMetadata
 
-▸ **messageMetadata**(`messageId`): `Promise`<[`IMessageMetadata`](models_imessagemetadata.imessagemetadata.md)\>
+▸ **messageMetadata**(`messageId`): `Promise`<[`IMessageMetadata`](models_IMessageMetadata.IMessageMetadata.md)\>
 
 Get the message metadata by id.
 
@@ -207,7 +207,7 @@ Get the message metadata by id.
 
 #### Returns
 
-`Promise`<[`IMessageMetadata`](models_imessagemetadata.imessagemetadata.md)\>
+`Promise`<[`IMessageMetadata`](models_IMessageMetadata.IMessageMetadata.md)\>
 
 The message metadata.
 
@@ -243,7 +243,7 @@ Submit message.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `message` | [`IMessage`](models_imessage.imessage.md) | The message to submit. |
+| `message` | [`IMessage`](models_IMessage.IMessage.md) | The message to submit. |
 
 #### Returns
 
@@ -275,7 +275,7 @@ ___
 
 ### messagesFind
 
-▸ **messagesFind**(`indexationKey`): `Promise`<[`IMessagesResponse`](models_api_imessagesresponse.imessagesresponse.md)\>
+▸ **messagesFind**(`indexationKey`): `Promise`<[`IMessagesResponse`](models_api_IMessagesResponse.IMessagesResponse.md)\>
 
 Find messages by index.
 
@@ -287,7 +287,7 @@ Find messages by index.
 
 #### Returns
 
-`Promise`<[`IMessagesResponse`](models_api_imessagesresponse.imessagesresponse.md)\>
+`Promise`<[`IMessagesResponse`](models_api_IMessagesResponse.IMessagesResponse.md)\>
 
 The messageId.
 
@@ -295,7 +295,7 @@ ___
 
 ### milestone
 
-▸ **milestone**(`index`): `Promise`<[`IMilestoneResponse`](models_api_imilestoneresponse.imilestoneresponse.md)\>
+▸ **milestone**(`index`): `Promise`<[`IMilestoneResponse`](models_api_IMilestoneResponse.IMilestoneResponse.md)\>
 
 Get the requested milestone.
 
@@ -307,7 +307,7 @@ Get the requested milestone.
 
 #### Returns
 
-`Promise`<[`IMilestoneResponse`](models_api_imilestoneresponse.imilestoneresponse.md)\>
+`Promise`<[`IMilestoneResponse`](models_api_IMilestoneResponse.IMilestoneResponse.md)\>
 
 The milestone details.
 
@@ -315,7 +315,7 @@ ___
 
 ### milestoneUtxoChanges
 
-▸ **milestoneUtxoChanges**(`index`): `Promise`<[`IMilestoneUtxoChangesResponse`](models_api_imilestoneutxochangesresponse.imilestoneutxochangesresponse.md)\>
+▸ **milestoneUtxoChanges**(`index`): `Promise`<[`IMilestoneUtxoChangesResponse`](models_api_IMilestoneUtxoChangesResponse.IMilestoneUtxoChangesResponse.md)\>
 
 Get the requested milestone utxo changes.
 
@@ -327,7 +327,7 @@ Get the requested milestone utxo changes.
 
 #### Returns
 
-`Promise`<[`IMilestoneUtxoChangesResponse`](models_api_imilestoneutxochangesresponse.imilestoneutxochangesresponse.md)\>
+`Promise`<[`IMilestoneUtxoChangesResponse`](models_api_IMilestoneUtxoChangesResponse.IMilestoneUtxoChangesResponse.md)\>
 
 The milestone utxo changes details.
 
@@ -335,7 +335,7 @@ ___
 
 ### output
 
-▸ **output**(`outputId`): `Promise`<[`IOutputResponse`](models_api_ioutputresponse.ioutputresponse.md)\>
+▸ **output**(`outputId`): `Promise`<[`IOutputResponse`](models_api_IOutputResponse.IOutputResponse.md)\>
 
 Find an output by its identifier.
 
@@ -347,7 +347,7 @@ Find an output by its identifier.
 
 #### Returns
 
-`Promise`<[`IOutputResponse`](models_api_ioutputresponse.ioutputresponse.md)\>
+`Promise`<[`IOutputResponse`](models_api_IOutputResponse.IOutputResponse.md)\>
 
 The output details.
 
@@ -355,7 +355,7 @@ ___
 
 ### peer
 
-▸ **peer**(`peerId`): `Promise`<[`IPeer`](models_ipeer.ipeer.md)\>
+▸ **peer**(`peerId`): `Promise`<[`IPeer`](models_IPeer.IPeer.md)\>
 
 Get a peer.
 
@@ -367,7 +367,7 @@ Get a peer.
 
 #### Returns
 
-`Promise`<[`IPeer`](models_ipeer.ipeer.md)\>
+`Promise`<[`IPeer`](models_IPeer.IPeer.md)\>
 
 The details for the created peer.
 
@@ -375,7 +375,7 @@ ___
 
 ### peerAdd
 
-▸ **peerAdd**(`multiAddress`, `alias?`): `Promise`<[`IPeer`](models_ipeer.ipeer.md)\>
+▸ **peerAdd**(`multiAddress`, `alias?`): `Promise`<[`IPeer`](models_IPeer.IPeer.md)\>
 
 Add a new peer.
 
@@ -388,7 +388,7 @@ Add a new peer.
 
 #### Returns
 
-`Promise`<[`IPeer`](models_ipeer.ipeer.md)\>
+`Promise`<[`IPeer`](models_IPeer.IPeer.md)\>
 
 The details for the created peer.
 
@@ -416,13 +416,13 @@ ___
 
 ### peers
 
-▸ **peers**(): `Promise`<[`IPeer`](models_ipeer.ipeer.md)[]\>
+▸ **peers**(): `Promise`<[`IPeer`](models_IPeer.IPeer.md)[]\>
 
 Get the list of peers.
 
 #### Returns
 
-`Promise`<[`IPeer`](models_ipeer.ipeer.md)[]\>
+`Promise`<[`IPeer`](models_IPeer.IPeer.md)[]\>
 
 The list of peers.
 
@@ -430,7 +430,7 @@ ___
 
 ### receipts
 
-▸ **receipts**(`migratedAt?`): `Promise`<[`IReceiptsResponse`](models_api_ireceiptsresponse.ireceiptsresponse.md)\>
+▸ **receipts**(`migratedAt?`): `Promise`<[`IReceiptsResponse`](models_api_IReceiptsResponse.IReceiptsResponse.md)\>
 
 Get all the stored receipts or those for a given migrated at index.
 
@@ -442,7 +442,7 @@ Get all the stored receipts or those for a given migrated at index.
 
 #### Returns
 
-`Promise`<[`IReceiptsResponse`](models_api_ireceiptsresponse.ireceiptsresponse.md)\>
+`Promise`<[`IReceiptsResponse`](models_api_IReceiptsResponse.IReceiptsResponse.md)\>
 
 The stored receipts.
 
@@ -450,13 +450,13 @@ ___
 
 ### tips
 
-▸ **tips**(): `Promise`<[`ITipsResponse`](models_api_itipsresponse.itipsresponse.md)\>
+▸ **tips**(): `Promise`<[`ITipsResponse`](models_api_ITipsResponse.ITipsResponse.md)\>
 
 Get the tips from the node.
 
 #### Returns
 
-`Promise`<[`ITipsResponse`](models_api_itipsresponse.itipsresponse.md)\>
+`Promise`<[`ITipsResponse`](models_api_ITipsResponse.ITipsResponse.md)\>
 
 The tips.
 
@@ -464,7 +464,7 @@ ___
 
 ### transactionIncludedMessage
 
-▸ **transactionIncludedMessage**(`transactionId`): `Promise`<[`IMessage`](models_imessage.imessage.md)\>
+▸ **transactionIncludedMessage**(`transactionId`): `Promise`<[`IMessage`](models_IMessage.IMessage.md)\>
 
 Get the message that was included in the ledger for a transaction.
 
@@ -476,7 +476,7 @@ Get the message that was included in the ledger for a transaction.
 
 #### Returns
 
-`Promise`<[`IMessage`](models_imessage.imessage.md)\>
+`Promise`<[`IMessage`](models_IMessage.IMessage.md)\>
 
 The message.
 
@@ -484,12 +484,12 @@ ___
 
 ### treasury
 
-▸ **treasury**(): `Promise`<[`ITreasury`](models_itreasury.itreasury.md)\>
+▸ **treasury**(): `Promise`<[`ITreasury`](models_ITreasury.ITreasury.md)\>
 
 Get the current treasury output.
 
 #### Returns
 
-`Promise`<[`ITreasury`](models_itreasury.itreasury.md)\>
+`Promise`<[`ITreasury`](models_ITreasury.ITreasury.md)\>
 
 The details for the treasury.

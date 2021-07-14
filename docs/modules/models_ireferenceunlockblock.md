@@ -6,11 +6,11 @@
 
 ### Interfaces
 
-- [IReferenceUnlockBlock](../interfaces/models_ireferenceunlockblock.ireferenceunlockblock.md)
+- [IReferenceUnlockBlock](../interfaces/models_IReferenceUnlockBlock.IReferenceUnlockBlock.md)
 
 ### Variables
 
-- [REFERENCE\_UNLOCK\_BLOCK\_TYPE](models_ireferenceunlockblock.md#reference_unlock_block_type)
+- [REFERENCE\_UNLOCK\_BLOCK\_TYPE](models_IReferenceUnlockBlock.md#reference_unlock_block_type)
 
 ## Variables
 

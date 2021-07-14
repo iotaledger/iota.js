@@ -6,4 +6,4 @@
 
 ### Interfaces
 
-- [ITreasury](../interfaces/models_itreasury.itreasury.md)
+- [ITreasury](../interfaces/models_ITreasury.ITreasury.md)

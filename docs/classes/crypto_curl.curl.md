@@ -10,19 +10,19 @@ Class to implement Curl sponge.
 
 ### Constructors
 
-- [constructor](crypto_curl.curl.md#constructor)
+- [constructor](crypto_curl.Curl.md#constructor)
 
 ### Properties
 
-- [HASH\_LENGTH](crypto_curl.curl.md#hash_length)
-- [STATE\_LENGTH](crypto_curl.curl.md#state_length)
+- [HASH\_LENGTH](crypto_curl.Curl.md#hash_length)
+- [STATE\_LENGTH](crypto_curl.Curl.md#state_length)
 
 ### Methods
 
-- [absorb](crypto_curl.curl.md#absorb)
-- [rate](crypto_curl.curl.md#rate)
-- [reset](crypto_curl.curl.md#reset)
-- [squeeze](crypto_curl.curl.md#squeeze)
+- [absorb](crypto_curl.Curl.md#absorb)
+- [rate](crypto_curl.Curl.md#rate)
+- [reset](crypto_curl.Curl.md#reset)
+- [squeeze](crypto_curl.Curl.md#squeeze)
 
 ## Constructors
 

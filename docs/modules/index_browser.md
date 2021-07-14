@@ -247,13 +247,13 @@ ___
 
 ### ArrayHelper
 
-Re-exports: [ArrayHelper](../classes/utils_arrayhelper.arrayhelper.md)
+Re-exports: [ArrayHelper](../classes/utils_arrayHelper.ArrayHelper.md)
 
 ___
 
 ### B1T6
 
-Re-exports: [B1T6](../classes/encoding_b1t6.b1t6.md)
+Re-exports: [B1T6](../classes/encoding_b1t6.B1T6.md)
 
 ___
 
@@ -265,397 +265,397 @@ ___
 
 ### Base64
 
-Re-exports: [Base64](../classes/encoding_base64.base64.md)
+Re-exports: [Base64](../classes/encoding_base64.Base64.md)
 
 ___
 
 ### Bech32
 
-Re-exports: [Bech32](../classes/crypto_bech32.bech32.md)
+Re-exports: [Bech32](../classes/crypto_bech32.Bech32.md)
 
 ___
 
 ### Bech32Helper
 
-Re-exports: [Bech32Helper](../classes/utils_bech32helper.bech32helper.md)
+Re-exports: [Bech32Helper](../classes/utils_bech32Helper.Bech32Helper.md)
 
 ___
 
 ### BigIntHelper
 
-Re-exports: [BigIntHelper](../classes/utils_biginthelper.biginthelper.md)
+Re-exports: [BigIntHelper](../classes/utils_bigIntHelper.BigIntHelper.md)
 
 ___
 
 ### Bip32Path
 
-Re-exports: [Bip32Path](../classes/crypto_bip32path.bip32path.md)
+Re-exports: [Bip32Path](../classes/crypto_bip32Path.Bip32Path.md)
 
 ___
 
 ### Bip39
 
-Re-exports: [Bip39](../classes/crypto_bip39.bip39.md)
+Re-exports: [Bip39](../classes/crypto_bip39.Bip39.md)
 
 ___
 
 ### Blake2b
 
-Re-exports: [Blake2b](../classes/crypto_blake2b.blake2b.md)
+Re-exports: [Blake2b](../classes/crypto_blake2b.Blake2b.md)
 
 ___
 
 ### CONFLICT\_REASON\_STRINGS
 
-Re-exports: [CONFLICT\_REASON\_STRINGS](resources_conflictreasonstrings.md#conflict_reason_strings)
+Re-exports: [CONFLICT\_REASON\_STRINGS](resources_conflictReasonStrings.md#conflict_reason_strings)
 
 ___
 
 ### ChaCha20
 
-Re-exports: [ChaCha20](../classes/crypto_chacha20.chacha20.md)
+Re-exports: [ChaCha20](../classes/crypto_chaCha20.ChaCha20.md)
 
 ___
 
 ### ChaCha20Poly1305
 
-Re-exports: [ChaCha20Poly1305](../classes/crypto_chacha20poly1305.chacha20poly1305.md)
+Re-exports: [ChaCha20Poly1305](../classes/crypto_chaCha20Poly1305.ChaCha20Poly1305.md)
 
 ___
 
 ### ClientError
 
-Re-exports: [ClientError](../classes/clients_clienterror.clienterror.md)
+Re-exports: [ClientError](../classes/clients_clientError.ClientError.md)
 
 ___
 
 ### ConflictReason
 
-Re-exports: [ConflictReason](../enums/models_conflictreason.conflictreason.md)
+Re-exports: [ConflictReason](../enums/models_conflictReason.ConflictReason.md)
 
 ___
 
 ### Converter
 
-Re-exports: [Converter](../classes/utils_converter.converter.md)
+Re-exports: [Converter](../classes/utils_converter.Converter.md)
 
 ___
 
 ### Curl
 
-Re-exports: [Curl](../classes/crypto_curl.curl.md)
+Re-exports: [Curl](../classes/crypto_curl.Curl.md)
 
 ___
 
 ### ED25519\_ADDRESS\_TYPE
 
-Re-exports: [ED25519\_ADDRESS\_TYPE](models_ied25519address.md#ed25519_address_type)
+Re-exports: [ED25519\_ADDRESS\_TYPE](models_IEd25519Address.md#ed25519_address_type)
 
 ___
 
 ### ED25519\_SEED\_TYPE
 
-Re-exports: [ED25519\_SEED\_TYPE](seedtypes_ed25519seed.md#ed25519_seed_type)
+Re-exports: [ED25519\_SEED\_TYPE](seedTypes_ed25519Seed.md#ed25519_seed_type)
 
 ___
 
 ### ED25519\_SIGNATURE\_TYPE
 
-Re-exports: [ED25519\_SIGNATURE\_TYPE](models_ied25519signature.md#ed25519_signature_type)
+Re-exports: [ED25519\_SIGNATURE\_TYPE](models_IEd25519Signature.md#ed25519_signature_type)
 
 ___
 
 ### Ed25519
 
-Re-exports: [Ed25519](../classes/crypto_ed25519.ed25519.md)
+Re-exports: [Ed25519](../classes/crypto_ed25519.Ed25519.md)
 
 ___
 
 ### Ed25519Address
 
-Re-exports: [Ed25519Address](../classes/addresstypes_ed25519address.ed25519address.md)
+Re-exports: [Ed25519Address](../classes/addressTypes_ed25519Address.Ed25519Address.md)
 
 ___
 
 ### Ed25519Seed
 
-Re-exports: [Ed25519Seed](../classes/seedtypes_ed25519seed.ed25519seed.md)
+Re-exports: [Ed25519Seed](../classes/seedTypes_ed25519Seed.Ed25519Seed.md)
 
 ___
 
 ### HmacSha256
 
-Re-exports: [HmacSha256](../classes/crypto_hmacsha256.hmacsha256.md)
+Re-exports: [HmacSha256](../classes/crypto_hmacSha256.HmacSha256.md)
 
 ___
 
 ### HmacSha512
 
-Re-exports: [HmacSha512](../classes/crypto_hmacsha512.hmacsha512.md)
+Re-exports: [HmacSha512](../classes/crypto_hmacSha512.HmacSha512.md)
 
 ___
 
 ### IAddress
 
-Re-exports: [IAddress](../interfaces/models_iaddress.iaddress.md)
+Re-exports: [IAddress](../interfaces/models_IAddress.IAddress.md)
 
 ___
 
 ### IAddressOutputsResponse
 
-Re-exports: [IAddressOutputsResponse](../interfaces/models_api_iaddressoutputsresponse.iaddressoutputsresponse.md)
+Re-exports: [IAddressOutputsResponse](../interfaces/models_api_IAddressOutputsResponse.IAddressOutputsResponse.md)
 
 ___
 
 ### IAddressResponse
 
-Re-exports: [IAddressResponse](../interfaces/models_api_iaddressresponse.iaddressresponse.md)
+Re-exports: [IAddressResponse](../interfaces/models_api_IAddressResponse.IAddressResponse.md)
 
 ___
 
 ### IBip44GeneratorState
 
-Re-exports: [IBip44GeneratorState](../interfaces/models_ibip44generatorstate.ibip44generatorstate.md)
+Re-exports: [IBip44GeneratorState](../interfaces/models_IBip44GeneratorState.IBip44GeneratorState.md)
 
 ___
 
 ### IChildrenResponse
 
-Re-exports: [IChildrenResponse](../interfaces/models_api_ichildrenresponse.ichildrenresponse.md)
+Re-exports: [IChildrenResponse](../interfaces/models_api_IChildrenResponse.IChildrenResponse.md)
 
 ___
 
 ### IClient
 
-Re-exports: [IClient](../interfaces/models_iclient.iclient.md)
+Re-exports: [IClient](../interfaces/models_IClient.IClient.md)
 
 ___
 
 ### IEd25519Address
 
-Re-exports: [IEd25519Address](../interfaces/models_ied25519address.ied25519address.md)
+Re-exports: [IEd25519Address](../interfaces/models_IEd25519Address.IEd25519Address.md)
 
 ___
 
 ### IEd25519Signature
 
-Re-exports: [IEd25519Signature](../interfaces/models_ied25519signature.ied25519signature.md)
+Re-exports: [IEd25519Signature](../interfaces/models_IEd25519Signature.IEd25519Signature.md)
 
 ___
 
 ### IGossipHeartbeat
 
-Re-exports: [IGossipHeartbeat](../interfaces/models_igossipheartbeat.igossipheartbeat.md)
+Re-exports: [IGossipHeartbeat](../interfaces/models_IGossipHeartbeat.IGossipHeartbeat.md)
 
 ___
 
 ### IGossipMetrics
 
-Re-exports: [IGossipMetrics](../interfaces/models_igossipmetrics.igossipmetrics.md)
+Re-exports: [IGossipMetrics](../interfaces/models_IGossipMetrics.IGossipMetrics.md)
 
 ___
 
 ### IIndexationPayload
 
-Re-exports: [IIndexationPayload](../interfaces/models_iindexationpayload.iindexationpayload.md)
+Re-exports: [IIndexationPayload](../interfaces/models_IIndexationPayload.IIndexationPayload.md)
 
 ___
 
 ### IKeyPair
 
-Re-exports: [IKeyPair](../interfaces/models_ikeypair.ikeypair.md)
+Re-exports: [IKeyPair](../interfaces/models_IKeyPair.IKeyPair.md)
 
 ___
 
 ### IMessage
 
-Re-exports: [IMessage](../interfaces/models_imessage.imessage.md)
+Re-exports: [IMessage](../interfaces/models_IMessage.IMessage.md)
 
 ___
 
 ### IMessageIdResponse
 
-Re-exports: [IMessageIdResponse](../interfaces/models_api_imessageidresponse.imessageidresponse.md)
+Re-exports: [IMessageIdResponse](../interfaces/models_api_IMessageIdResponse.IMessageIdResponse.md)
 
 ___
 
 ### IMessageMetadata
 
-Re-exports: [IMessageMetadata](../interfaces/models_imessagemetadata.imessagemetadata.md)
+Re-exports: [IMessageMetadata](../interfaces/models_IMessageMetadata.IMessageMetadata.md)
 
 ___
 
 ### IMessagesResponse
 
-Re-exports: [IMessagesResponse](../interfaces/models_api_imessagesresponse.imessagesresponse.md)
+Re-exports: [IMessagesResponse](../interfaces/models_api_IMessagesResponse.IMessagesResponse.md)
 
 ___
 
 ### IMigratedFunds
 
-Re-exports: [IMigratedFunds](../interfaces/models_imigratedfunds.imigratedfunds.md)
+Re-exports: [IMigratedFunds](../interfaces/models_IMigratedFunds.IMigratedFunds.md)
 
 ___
 
 ### IMilestonePayload
 
-Re-exports: [IMilestonePayload](../interfaces/models_imilestonepayload.imilestonepayload.md)
+Re-exports: [IMilestonePayload](../interfaces/models_IMilestonePayload.IMilestonePayload.md)
 
 ___
 
 ### IMilestoneResponse
 
-Re-exports: [IMilestoneResponse](../interfaces/models_api_imilestoneresponse.imilestoneresponse.md)
+Re-exports: [IMilestoneResponse](../interfaces/models_api_IMilestoneResponse.IMilestoneResponse.md)
 
 ___
 
 ### IMilestoneUtxoChangesResponse
 
-Re-exports: [IMilestoneUtxoChangesResponse](../interfaces/models_api_imilestoneutxochangesresponse.imilestoneutxochangesresponse.md)
+Re-exports: [IMilestoneUtxoChangesResponse](../interfaces/models_api_IMilestoneUtxoChangesResponse.IMilestoneUtxoChangesResponse.md)
 
 ___
 
 ### INDEXATION\_PAYLOAD\_TYPE
 
-Re-exports: [INDEXATION\_PAYLOAD\_TYPE](models_iindexationpayload.md#indexation_payload_type)
+Re-exports: [INDEXATION\_PAYLOAD\_TYPE](models_IIndexationPayload.md#indexation_payload_type)
 
 ___
 
 ### INodeInfo
 
-Re-exports: [INodeInfo](../interfaces/models_inodeinfo.inodeinfo.md)
+Re-exports: [INodeInfo](../interfaces/models_INodeInfo.INodeInfo.md)
 
 ___
 
 ### IOutputResponse
 
-Re-exports: [IOutputResponse](../interfaces/models_api_ioutputresponse.ioutputresponse.md)
+Re-exports: [IOutputResponse](../interfaces/models_api_IOutputResponse.IOutputResponse.md)
 
 ___
 
 ### IPeer
 
-Re-exports: [IPeer](../interfaces/models_ipeer.ipeer.md)
+Re-exports: [IPeer](../interfaces/models_IPeer.IPeer.md)
 
 ___
 
 ### IPowProvider
 
-Re-exports: [IPowProvider](../interfaces/models_ipowprovider.ipowprovider.md)
+Re-exports: [IPowProvider](../interfaces/models_IPowProvider.IPowProvider.md)
 
 ___
 
 ### IReceiptPayload
 
-Re-exports: [IReceiptPayload](../interfaces/models_ireceiptpayload.ireceiptpayload.md)
+Re-exports: [IReceiptPayload](../interfaces/models_IReceiptPayload.IReceiptPayload.md)
 
 ___
 
 ### IReceiptsResponse
 
-Re-exports: [IReceiptsResponse](../interfaces/models_api_ireceiptsresponse.ireceiptsresponse.md)
+Re-exports: [IReceiptsResponse](../interfaces/models_api_IReceiptsResponse.IReceiptsResponse.md)
 
 ___
 
 ### IReferenceUnlockBlock
 
-Re-exports: [IReferenceUnlockBlock](../interfaces/models_ireferenceunlockblock.ireferenceunlockblock.md)
+Re-exports: [IReferenceUnlockBlock](../interfaces/models_IReferenceUnlockBlock.IReferenceUnlockBlock.md)
 
 ___
 
 ### IResponse
 
-Re-exports: [IResponse](../interfaces/models_api_iresponse.iresponse.md)
+Re-exports: [IResponse](../interfaces/models_api_IResponse.IResponse.md)
 
 ___
 
 ### ISeed
 
-Re-exports: [ISeed](../interfaces/models_iseed.iseed.md)
+Re-exports: [ISeed](../interfaces/models_ISeed.ISeed.md)
 
 ___
 
 ### ISigLockedDustAllowanceOutput
 
-Re-exports: [ISigLockedDustAllowanceOutput](../interfaces/models_isiglockeddustallowanceoutput.isiglockeddustallowanceoutput.md)
+Re-exports: [ISigLockedDustAllowanceOutput](../interfaces/models_ISigLockedDustAllowanceOutput.ISigLockedDustAllowanceOutput.md)
 
 ___
 
 ### ISigLockedSingleOutput
 
-Re-exports: [ISigLockedSingleOutput](../interfaces/models_isiglockedsingleoutput.isiglockedsingleoutput.md)
+Re-exports: [ISigLockedSingleOutput](../interfaces/models_ISigLockedSingleOutput.ISigLockedSingleOutput.md)
 
 ___
 
 ### ISignatureUnlockBlock
 
-Re-exports: [ISignatureUnlockBlock](../interfaces/models_isignatureunlockblock.isignatureunlockblock.md)
+Re-exports: [ISignatureUnlockBlock](../interfaces/models_ISignatureUnlockBlock.ISignatureUnlockBlock.md)
 
 ___
 
 ### ITipsResponse
 
-Re-exports: [ITipsResponse](../interfaces/models_api_itipsresponse.itipsresponse.md)
+Re-exports: [ITipsResponse](../interfaces/models_api_ITipsResponse.ITipsResponse.md)
 
 ___
 
 ### ITransactionEssence
 
-Re-exports: [ITransactionEssence](../interfaces/models_itransactionessence.itransactionessence.md)
+Re-exports: [ITransactionEssence](../interfaces/models_ITransactionEssence.ITransactionEssence.md)
 
 ___
 
 ### ITransactionPayload
 
-Re-exports: [ITransactionPayload](../interfaces/models_itransactionpayload.itransactionpayload.md)
+Re-exports: [ITransactionPayload](../interfaces/models_ITransactionPayload.ITransactionPayload.md)
 
 ___
 
 ### ITreasury
 
-Re-exports: [ITreasury](../interfaces/models_itreasury.itreasury.md)
+Re-exports: [ITreasury](../interfaces/models_ITreasury.ITreasury.md)
 
 ___
 
 ### ITreasuryInput
 
-Re-exports: [ITreasuryInput](../interfaces/models_itreasuryinput.itreasuryinput.md)
+Re-exports: [ITreasuryInput](../interfaces/models_ITreasuryInput.ITreasuryInput.md)
 
 ___
 
 ### ITreasuryOutput
 
-Re-exports: [ITreasuryOutput](../interfaces/models_itreasuryoutput.itreasuryoutput.md)
+Re-exports: [ITreasuryOutput](../interfaces/models_ITreasuryOutput.ITreasuryOutput.md)
 
 ___
 
 ### ITreasuryTransactionPayload
 
-Re-exports: [ITreasuryTransactionPayload](../interfaces/models_itreasurytransactionpayload.itreasurytransactionpayload.md)
+Re-exports: [ITreasuryTransactionPayload](../interfaces/models_ITreasuryTransactionPayload.ITreasuryTransactionPayload.md)
 
 ___
 
 ### ITypeBase
 
-Re-exports: [ITypeBase](../interfaces/models_itypebase.itypebase.md)
+Re-exports: [ITypeBase](../interfaces/models_ITypeBase.ITypeBase.md)
 
 ___
 
 ### IUTXOInput
 
-Re-exports: [IUTXOInput](../interfaces/models_iutxoinput.iutxoinput.md)
+Re-exports: [IUTXOInput](../interfaces/models_IUTXOInput.IUTXOInput.md)
 
 ___
 
 ### LedgerInclusionState
 
-Re-exports: [LedgerInclusionState](models_ledgerinclusionstate.md#ledgerinclusionstate)
+Re-exports: [LedgerInclusionState](models_ledgerInclusionState.md#ledgerinclusionstate)
 
 ___
 
 ### LocalPowProvider
 
-Re-exports: [LocalPowProvider](../classes/pow_localpowprovider.localpowprovider.md)
+Re-exports: [LocalPowProvider](../classes/pow_localPowProvider.LocalPowProvider.md)
 
 ___
 
@@ -709,7 +709,7 @@ ___
 
 ### MILESTONE\_PAYLOAD\_TYPE
 
-Re-exports: [MILESTONE\_PAYLOAD\_TYPE](models_imilestonepayload.md#milestone_payload_type)
+Re-exports: [MILESTONE\_PAYLOAD\_TYPE](models_IMilestonePayload.md#milestone_payload_type)
 
 ___
 
@@ -799,7 +799,7 @@ ___
 
 ### MIN\_REFERENCE\_UNLOCK\_BLOCK\_LENGTH
 
-Re-exports: [MIN\_REFERENCE\_UNLOCK\_BLOCK\_LENGTH](binary_unlockblock.md#min_reference_unlock_block_length)
+Re-exports: [MIN\_REFERENCE\_UNLOCK\_BLOCK\_LENGTH](binary_unlockBlock.md#min_reference_unlock_block_length)
 
 ___
 
@@ -811,7 +811,7 @@ ___
 
 ### MIN\_SIGNATURE\_UNLOCK\_BLOCK\_LENGTH
 
-Re-exports: [MIN\_SIGNATURE\_UNLOCK\_BLOCK\_LENGTH](binary_unlockblock.md#min_signature_unlock_block_length)
+Re-exports: [MIN\_SIGNATURE\_UNLOCK\_BLOCK\_LENGTH](binary_unlockBlock.md#min_signature_unlock_block_length)
 
 ___
 
@@ -859,7 +859,7 @@ ___
 
 ### MIN\_UNLOCK\_BLOCK\_LENGTH
 
-Re-exports: [MIN\_UNLOCK\_BLOCK\_LENGTH](binary_unlockblock.md#min_unlock_block_length)
+Re-exports: [MIN\_UNLOCK\_BLOCK\_LENGTH](binary_unlockBlock.md#min_unlock_block_length)
 
 ___
 
@@ -871,67 +871,67 @@ ___
 
 ### Pbkdf2
 
-Re-exports: [Pbkdf2](../classes/crypto_pbkdf2.pbkdf2.md)
+Re-exports: [Pbkdf2](../classes/crypto_pbkdf2.Pbkdf2.md)
 
 ___
 
 ### PlatformHelper
 
-Re-exports: [PlatformHelper](../classes/utils_platformhelper.platformhelper.md)
+Re-exports: [PlatformHelper](../classes/utils_platformHelper.PlatformHelper.md)
 
 ___
 
 ### Poly1305
 
-Re-exports: [Poly1305](../classes/crypto_poly1305.poly1305.md)
+Re-exports: [Poly1305](../classes/crypto_poly1305.Poly1305.md)
 
 ___
 
 ### PowHelper
 
-Re-exports: [PowHelper](../classes/utils_powhelper.powhelper.md)
+Re-exports: [PowHelper](../classes/utils_powHelper.PowHelper.md)
 
 ___
 
 ### RECEIPT\_PAYLOAD\_TYPE
 
-Re-exports: [RECEIPT\_PAYLOAD\_TYPE](models_ireceiptpayload.md#receipt_payload_type)
+Re-exports: [RECEIPT\_PAYLOAD\_TYPE](models_IReceiptPayload.md#receipt_payload_type)
 
 ___
 
 ### REFERENCE\_UNLOCK\_BLOCK\_TYPE
 
-Re-exports: [REFERENCE\_UNLOCK\_BLOCK\_TYPE](models_ireferenceunlockblock.md#reference_unlock_block_type)
+Re-exports: [REFERENCE\_UNLOCK\_BLOCK\_TYPE](models_IReferenceUnlockBlock.md#reference_unlock_block_type)
 
 ___
 
 ### RandomHelper
 
-Re-exports: [RandomHelper](../classes/utils_randomhelper.randomhelper.md)
+Re-exports: [RandomHelper](../classes/utils_randomHelper.RandomHelper.md)
 
 ___
 
 ### ReadStream
 
-Re-exports: [ReadStream](../classes/utils_readstream.readstream.md)
+Re-exports: [ReadStream](../classes/utils_readStream.ReadStream.md)
 
 ___
 
 ### SIGNATURE\_UNLOCK\_BLOCK\_TYPE
 
-Re-exports: [SIGNATURE\_UNLOCK\_BLOCK\_TYPE](models_isignatureunlockblock.md#signature_unlock_block_type)
+Re-exports: [SIGNATURE\_UNLOCK\_BLOCK\_TYPE](models_ISignatureUnlockBlock.md#signature_unlock_block_type)
 
 ___
 
 ### SIG\_LOCKED\_DUST\_ALLOWANCE\_OUTPUT\_TYPE
 
-Re-exports: [SIG\_LOCKED\_DUST\_ALLOWANCE\_OUTPUT\_TYPE](models_isiglockeddustallowanceoutput.md#sig_locked_dust_allowance_output_type)
+Re-exports: [SIG\_LOCKED\_DUST\_ALLOWANCE\_OUTPUT\_TYPE](models_ISigLockedDustAllowanceOutput.md#sig_locked_dust_allowance_output_type)
 
 ___
 
 ### SIG\_LOCKED\_SINGLE\_OUTPUT\_TYPE
 
-Re-exports: [SIG\_LOCKED\_SINGLE\_OUTPUT\_TYPE](models_isiglockedsingleoutput.md#sig_locked_single_output_type)
+Re-exports: [SIG\_LOCKED\_SINGLE\_OUTPUT\_TYPE](models_ISigLockedSingleOutput.md#sig_locked_single_output_type)
 
 ___
 
@@ -949,31 +949,31 @@ ___
 
 ### Sha256
 
-Re-exports: [Sha256](../classes/crypto_sha256.sha256.md)
+Re-exports: [Sha256](../classes/crypto_sha256.Sha256.md)
 
 ___
 
 ### Sha512
 
-Re-exports: [Sha512](../classes/crypto_sha512.sha512.md)
+Re-exports: [Sha512](../classes/crypto_sha512.Sha512.md)
 
 ___
 
 ### SingleNodeClient
 
-Re-exports: [SingleNodeClient](../classes/clients_singlenodeclient.singlenodeclient.md)
+Re-exports: [SingleNodeClient](../classes/clients_singleNodeClient.SingleNodeClient.md)
 
 ___
 
 ### SingleNodeClientOptions
 
-Re-exports: [SingleNodeClientOptions](../interfaces/clients_singlenodeclientoptions.singlenodeclientoptions.md)
+Re-exports: [SingleNodeClientOptions](../interfaces/clients_singleNodeClientOptions.SingleNodeClientOptions.md)
 
 ___
 
 ### Slip0010
 
-Re-exports: [Slip0010](../classes/crypto_slip0010.slip0010.md)
+Re-exports: [Slip0010](../classes/crypto_slip0010.Slip0010.md)
 
 ___
 
@@ -985,7 +985,7 @@ ___
 
 ### TRANSACTION\_ESSENCE\_TYPE
 
-Re-exports: [TRANSACTION\_ESSENCE\_TYPE](models_itransactionessence.md#transaction_essence_type)
+Re-exports: [TRANSACTION\_ESSENCE\_TYPE](models_ITransactionEssence.md#transaction_essence_type)
 
 ___
 
@@ -997,25 +997,25 @@ ___
 
 ### TRANSACTION\_PAYLOAD\_TYPE
 
-Re-exports: [TRANSACTION\_PAYLOAD\_TYPE](models_itransactionpayload.md#transaction_payload_type)
+Re-exports: [TRANSACTION\_PAYLOAD\_TYPE](models_ITransactionPayload.md#transaction_payload_type)
 
 ___
 
 ### TREASURY\_INPUT\_TYPE
 
-Re-exports: [TREASURY\_INPUT\_TYPE](models_itreasuryinput.md#treasury_input_type)
+Re-exports: [TREASURY\_INPUT\_TYPE](models_ITreasuryInput.md#treasury_input_type)
 
 ___
 
 ### TREASURY\_OUTPUT\_TYPE
 
-Re-exports: [TREASURY\_OUTPUT\_TYPE](models_itreasuryoutput.md#treasury_output_type)
+Re-exports: [TREASURY\_OUTPUT\_TYPE](models_ITreasuryOutput.md#treasury_output_type)
 
 ___
 
 ### TREASURY\_TRANSACTION\_PAYLOAD\_TYPE
 
-Re-exports: [TREASURY\_TRANSACTION\_PAYLOAD\_TYPE](models_itreasurytransactionpayload.md#treasury_transaction_payload_type)
+Re-exports: [TREASURY\_TRANSACTION\_PAYLOAD\_TYPE](models_ITreasuryTransactionPayload.md#treasury_transaction_payload_type)
 
 ___
 
@@ -1045,7 +1045,7 @@ ___
 
 ### UTXO\_INPUT\_TYPE
 
-Re-exports: [UTXO\_INPUT\_TYPE](models_iutxoinput.md#utxo_input_type)
+Re-exports: [UTXO\_INPUT\_TYPE](models_IUTXOInput.md#utxo_input_type)
 
 ___
 
@@ -1057,37 +1057,37 @@ ___
 
 ### UnitsHelper
 
-Re-exports: [UnitsHelper](../classes/utils_unitshelper.unitshelper.md)
+Re-exports: [UnitsHelper](../classes/utils_unitsHelper.UnitsHelper.md)
 
 ___
 
 ### WriteStream
 
-Re-exports: [WriteStream](../classes/utils_writestream.writestream.md)
+Re-exports: [WriteStream](../classes/utils_writeStream.WriteStream.md)
 
 ___
 
 ### X25519
 
-Re-exports: [X25519](../classes/crypto_x25519.x25519.md)
+Re-exports: [X25519](../classes/crypto_x25519.X25519.md)
 
 ___
 
 ### Zip215
 
-Re-exports: [Zip215](../classes/crypto_zip215.zip215.md)
+Re-exports: [Zip215](../classes/crypto_zip215.Zip215.md)
 
 ___
 
 ### buildTransactionPayload
 
-Re-exports: [buildTransactionPayload](highlevel_sendadvanced.md#buildtransactionpayload)
+Re-exports: [buildTransactionPayload](highLevel_sendAdvanced.md#buildtransactionpayload)
 
 ___
 
 ### calculateInputs
 
-Re-exports: [calculateInputs](highlevel_send.md#calculateinputs)
+Re-exports: [calculateInputs](highLevel_send.md#calculateinputs)
 
 ___
 
@@ -1177,7 +1177,7 @@ ___
 
 ### deserializeReferenceUnlockBlock
 
-Re-exports: [deserializeReferenceUnlockBlock](binary_unlockblock.md#deserializereferenceunlockblock)
+Re-exports: [deserializeReferenceUnlockBlock](binary_unlockBlock.md#deserializereferenceunlockblock)
 
 ___
 
@@ -1201,7 +1201,7 @@ ___
 
 ### deserializeSignatureUnlockBlock
 
-Re-exports: [deserializeSignatureUnlockBlock](binary_unlockblock.md#deserializesignatureunlockblock)
+Re-exports: [deserializeSignatureUnlockBlock](binary_unlockBlock.md#deserializesignatureunlockblock)
 
 ___
 
@@ -1243,49 +1243,49 @@ ___
 
 ### deserializeUnlockBlock
 
-Re-exports: [deserializeUnlockBlock](binary_unlockblock.md#deserializeunlockblock)
+Re-exports: [deserializeUnlockBlock](binary_unlockBlock.md#deserializeunlockblock)
 
 ___
 
 ### deserializeUnlockBlocks
 
-Re-exports: [deserializeUnlockBlocks](binary_unlockblock.md#deserializeunlockblocks)
+Re-exports: [deserializeUnlockBlocks](binary_unlockBlock.md#deserializeunlockblocks)
 
 ___
 
 ### generateBip44Address
 
-Re-exports: [generateBip44Address](highlevel_addresses.md#generatebip44address)
+Re-exports: [generateBip44Address](highLevel_addresses.md#generatebip44address)
 
 ___
 
 ### generateBip44Path
 
-Re-exports: [generateBip44Path](highlevel_addresses.md#generatebip44path)
+Re-exports: [generateBip44Path](highLevel_addresses.md#generatebip44path)
 
 ___
 
 ### getBalance
 
-Re-exports: [getBalance](highlevel_getbalance.md#getbalance)
+Re-exports: [getBalance](highLevel_getBalance.md#getbalance)
 
 ___
 
 ### getUnspentAddress
 
-Re-exports: [getUnspentAddress](highlevel_getunspentaddress.md#getunspentaddress)
+Re-exports: [getUnspentAddress](highLevel_getUnspentAddress.md#getunspentaddress)
 
 ___
 
 ### getUnspentAddresses
 
-Re-exports: [getUnspentAddresses](highlevel_getunspentaddresses.md#getunspentaddresses)
+Re-exports: [getUnspentAddresses](highLevel_getUnspentAddresses.md#getunspentaddresses)
 
 ___
 
 ### getUnspentAddressesWithAddressGenerator
 
-Re-exports: [getUnspentAddressesWithAddressGenerator](highlevel_getunspentaddresses.md#getunspentaddresseswithaddressgenerator)
+Re-exports: [getUnspentAddressesWithAddressGenerator](highLevel_getUnspentAddresses.md#getunspentaddresseswithaddressgenerator)
 
 ___
 
@@ -1387,67 +1387,67 @@ ___
 
 ### promote
 
-Re-exports: [promote](highlevel_promote.md#promote)
+Re-exports: [promote](highLevel_promote.md#promote)
 
 ___
 
 ### reattach
 
-Re-exports: [reattach](highlevel_reattach.md#reattach)
+Re-exports: [reattach](highLevel_reattach.md#reattach)
 
 ___
 
 ### retrieveData
 
-Re-exports: [retrieveData](highlevel_retrievedata.md#retrievedata)
+Re-exports: [retrieveData](highLevel_retrieveData.md#retrievedata)
 
 ___
 
 ### retry
 
-Re-exports: [retry](highlevel_retry.md#retry)
+Re-exports: [retry](highLevel_retry.md#retry)
 
 ___
 
 ### send
 
-Re-exports: [send](highlevel_send.md#send)
+Re-exports: [send](highLevel_send.md#send)
 
 ___
 
 ### sendAdvanced
 
-Re-exports: [sendAdvanced](highlevel_sendadvanced.md#sendadvanced)
+Re-exports: [sendAdvanced](highLevel_sendAdvanced.md#sendadvanced)
 
 ___
 
 ### sendData
 
-Re-exports: [sendData](highlevel_senddata.md#senddata)
+Re-exports: [sendData](highLevel_sendData.md#senddata)
 
 ___
 
 ### sendEd25519
 
-Re-exports: [sendEd25519](highlevel_send.md#sended25519)
+Re-exports: [sendEd25519](highLevel_send.md#sended25519)
 
 ___
 
 ### sendMultiple
 
-Re-exports: [sendMultiple](highlevel_send.md#sendmultiple)
+Re-exports: [sendMultiple](highLevel_send.md#sendmultiple)
 
 ___
 
 ### sendMultipleEd25519
 
-Re-exports: [sendMultipleEd25519](highlevel_send.md#sendmultipleed25519)
+Re-exports: [sendMultipleEd25519](highLevel_send.md#sendmultipleed25519)
 
 ___
 
 ### sendWithAddressGenerator
 
-Re-exports: [sendWithAddressGenerator](highlevel_send.md#sendwithaddressgenerator)
+Re-exports: [sendWithAddressGenerator](highLevel_send.md#sendwithaddressgenerator)
 
 ___
 
@@ -1537,7 +1537,7 @@ ___
 
 ### serializeReferenceUnlockBlock
 
-Re-exports: [serializeReferenceUnlockBlock](binary_unlockblock.md#serializereferenceunlockblock)
+Re-exports: [serializeReferenceUnlockBlock](binary_unlockBlock.md#serializereferenceunlockblock)
 
 ___
 
@@ -1561,7 +1561,7 @@ ___
 
 ### serializeSignatureUnlockBlock
 
-Re-exports: [serializeSignatureUnlockBlock](binary_unlockblock.md#serializesignatureunlockblock)
+Re-exports: [serializeSignatureUnlockBlock](binary_unlockBlock.md#serializesignatureunlockblock)
 
 ___
 
@@ -1603,13 +1603,13 @@ ___
 
 ### serializeUnlockBlock
 
-Re-exports: [serializeUnlockBlock](binary_unlockblock.md#serializeunlockblock)
+Re-exports: [serializeUnlockBlock](binary_unlockBlock.md#serializeunlockblock)
 
 ___
 
 ### serializeUnlockBlocks
 
-Re-exports: [serializeUnlockBlocks](binary_unlockblock.md#serializeunlockblocks)
+Re-exports: [serializeUnlockBlocks](binary_unlockBlock.md#serializeunlockblocks)
 
 ___
 

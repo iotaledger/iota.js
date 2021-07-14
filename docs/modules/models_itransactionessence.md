@@ -6,11 +6,11 @@
 
 ### Interfaces
 
-- [ITransactionEssence](../interfaces/models_itransactionessence.itransactionessence.md)
+- [ITransactionEssence](../interfaces/models_ITransactionEssence.ITransactionEssence.md)
 
 ### Variables
 
-- [TRANSACTION\_ESSENCE\_TYPE](models_itransactionessence.md#transaction_essence_type)
+- [TRANSACTION\_ESSENCE\_TYPE](models_ITransactionEssence.md#transaction_essence_type)
 
 ## Variables
 

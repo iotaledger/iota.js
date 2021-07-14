@@ -1,8 +1,8 @@
-[@iota/iota.js](../README.md) / [utils/bech32Helper](../modules/utils_bech32helper.md) / Bech32Helper
+[@iota/iota.js](../README.md) / [utils/bech32Helper](../modules/utils_bech32Helper.md) / Bech32Helper
 
 # Class: Bech32Helper
 
-[utils/bech32Helper](../modules/utils_bech32helper.md).Bech32Helper
+[utils/bech32Helper](../modules/utils_bech32Helper.md).Bech32Helper
 
 Convert address to bech32.
 
@@ -10,18 +10,18 @@ Convert address to bech32.
 
 ### Constructors
 
-- [constructor](utils_bech32helper.bech32helper.md#constructor)
+- [constructor](utils_bech32Helper.Bech32Helper.md#constructor)
 
 ### Properties
 
-- [BECH32\_DEFAULT\_HRP\_MAIN](utils_bech32helper.bech32helper.md#bech32_default_hrp_main)
-- [BECH32\_DEFAULT\_HRP\_TEST](utils_bech32helper.bech32helper.md#bech32_default_hrp_test)
+- [BECH32\_DEFAULT\_HRP\_MAIN](utils_bech32Helper.Bech32Helper.md#bech32_default_hrp_main)
+- [BECH32\_DEFAULT\_HRP\_TEST](utils_bech32Helper.Bech32Helper.md#bech32_default_hrp_test)
 
 ### Methods
 
-- [fromBech32](utils_bech32helper.bech32helper.md#frombech32)
-- [matches](utils_bech32helper.bech32helper.md#matches)
-- [toBech32](utils_bech32helper.bech32helper.md#tobech32)
+- [fromBech32](utils_bech32Helper.Bech32Helper.md#frombech32)
+- [matches](utils_bech32Helper.Bech32Helper.md#matches)
+- [toBech32](utils_bech32Helper.Bech32Helper.md#tobech32)
 
 ## Constructors
 

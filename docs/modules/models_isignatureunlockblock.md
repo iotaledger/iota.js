@@ -6,11 +6,11 @@
 
 ### Interfaces
 
-- [ISignatureUnlockBlock](../interfaces/models_isignatureunlockblock.isignatureunlockblock.md)
+- [ISignatureUnlockBlock](../interfaces/models_ISignatureUnlockBlock.ISignatureUnlockBlock.md)
 
 ### Variables
 
-- [SIGNATURE\_UNLOCK\_BLOCK\_TYPE](models_isignatureunlockblock.md#signature_unlock_block_type)
+- [SIGNATURE\_UNLOCK\_BLOCK\_TYPE](models_ISignatureUnlockBlock.md#signature_unlock_block_type)
 
 ## Variables
 

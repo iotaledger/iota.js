@@ -1,8 +1,8 @@
-[@iota/iota.js](../README.md) / [utils/readStream](../modules/utils_readstream.md) / ReadStream
+[@iota/iota.js](../README.md) / [utils/readStream](../modules/utils_readStream.md) / ReadStream
 
 # Class: ReadStream
 
-[utils/readStream](../modules/utils_readstream.md).ReadStream
+[utils/readStream](../modules/utils_readStream.md).ReadStream
 
 Keep track of the read index within a stream.
 
@@ -10,22 +10,22 @@ Keep track of the read index within a stream.
 
 ### Constructors
 
-- [constructor](utils_readstream.readstream.md#constructor)
+- [constructor](utils_readStream.ReadStream.md#constructor)
 
 ### Methods
 
-- [getReadIndex](utils_readstream.readstream.md#getreadindex)
-- [hasRemaining](utils_readstream.readstream.md#hasremaining)
-- [length](utils_readstream.readstream.md#length)
-- [readBoolean](utils_readstream.readstream.md#readboolean)
-- [readByte](utils_readstream.readstream.md#readbyte)
-- [readBytes](utils_readstream.readstream.md#readbytes)
-- [readFixedHex](utils_readstream.readstream.md#readfixedhex)
-- [readUInt16](utils_readstream.readstream.md#readuint16)
-- [readUInt32](utils_readstream.readstream.md#readuint32)
-- [readUInt64](utils_readstream.readstream.md#readuint64)
-- [setReadIndex](utils_readstream.readstream.md#setreadindex)
-- [unused](utils_readstream.readstream.md#unused)
+- [getReadIndex](utils_readStream.ReadStream.md#getreadindex)
+- [hasRemaining](utils_readStream.ReadStream.md#hasremaining)
+- [length](utils_readStream.ReadStream.md#length)
+- [readBoolean](utils_readStream.ReadStream.md#readboolean)
+- [readByte](utils_readStream.ReadStream.md#readbyte)
+- [readBytes](utils_readStream.ReadStream.md#readbytes)
+- [readFixedHex](utils_readStream.ReadStream.md#readfixedhex)
+- [readUInt16](utils_readStream.ReadStream.md#readuint16)
+- [readUInt32](utils_readStream.ReadStream.md#readuint32)
+- [readUInt64](utils_readStream.ReadStream.md#readuint64)
+- [setReadIndex](utils_readStream.ReadStream.md#setreadindex)
+- [unused](utils_readStream.ReadStream.md#unused)
 
 ## Constructors
 

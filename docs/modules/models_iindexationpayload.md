@@ -6,11 +6,11 @@
 
 ### Interfaces
 
-- [IIndexationPayload](../interfaces/models_iindexationpayload.iindexationpayload.md)
+- [IIndexationPayload](../interfaces/models_IIndexationPayload.IIndexationPayload.md)
 
 ### Variables
 
-- [INDEXATION\_PAYLOAD\_TYPE](models_iindexationpayload.md#indexation_payload_type)
+- [INDEXATION\_PAYLOAD\_TYPE](models_IIndexationPayload.md#indexation_payload_type)
 
 ## Variables
 

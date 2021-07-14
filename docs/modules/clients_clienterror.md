@@ -6,4 +6,4 @@
 
 ### Classes
 
-- [ClientError](../classes/clients_clienterror.clienterror.md)
+- [ClientError](../classes/clients_clientError.ClientError.md)

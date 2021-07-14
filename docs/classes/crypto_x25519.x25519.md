@@ -10,12 +10,12 @@ Implementation of X25519.
 
 ### Constructors
 
-- [constructor](crypto_x25519.x25519.md#constructor)
+- [constructor](crypto_x25519.X25519.md#constructor)
 
 ### Methods
 
-- [convertPrivateKeyToX25519](crypto_x25519.x25519.md#convertprivatekeytox25519)
-- [convertPublicKeyToX25519](crypto_x25519.x25519.md#convertpublickeytox25519)
+- [convertPrivateKeyToX25519](crypto_x25519.X25519.md#convertprivatekeytox25519)
+- [convertPublicKeyToX25519](crypto_x25519.X25519.md#convertpublickeytox25519)
 
 ## Constructors
 

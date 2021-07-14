@@ -1,8 +1,8 @@
-[@iota/iota.js](../README.md) / [clients/clientError](../modules/clients_clienterror.md) / ClientError
+[@iota/iota.js](../README.md) / [clients/clientError](../modules/clients_clientError.md) / ClientError
 
 # Class: ClientError
 
-[clients/clientError](../modules/clients_clienterror.md).ClientError
+[clients/clientError](../modules/clients_clientError.md).ClientError
 
 Class to represent errors from Client.
 
@@ -16,18 +16,18 @@ Class to represent errors from Client.
 
 ### Constructors
 
-- [constructor](clients_clienterror.clienterror.md#constructor)
+- [constructor](clients_clientError.ClientError.md#constructor)
 
 ### Properties
 
-- [code](clients_clienterror.clienterror.md#code)
-- [httpStatus](clients_clienterror.clienterror.md#httpstatus)
-- [route](clients_clienterror.clienterror.md#route)
-- [prepareStackTrace](clients_clienterror.clienterror.md#preparestacktrace)
+- [code](clients_clientError.ClientError.md#code)
+- [httpStatus](clients_clientError.ClientError.md#httpstatus)
+- [route](clients_clientError.ClientError.md#route)
 
 ### Methods
 
-- [captureStackTrace](clients_clienterror.clienterror.md#capturestacktrace)
+- [captureStackTrace](clients_clientError.ClientError.md#capturestacktrace)
+- [prepareStackTrace](clients_clientError.ClientError.md#preparestacktrace)
 
 ## Constructors
 
@@ -74,33 +74,6 @@ ___
 
 The route the request was made to.
 
-___
-
-### prepareStackTrace
-
-▪ `Static` `Optional` **prepareStackTrace**: (`err`: `Error`, `stackTraces`: `CallSite`[]) => `any`
-
-#### Type declaration
-
-▸ (`err`, `stackTraces`): `any`
-
-Optional override for formatting stack traces
-
-##### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `err` | `Error` |
-| `stackTraces` | `CallSite`[] |
-
-##### Returns
-
-`any`
-
-#### Inherited from
-
-Error.prepareStackTrace
-
 ## Methods
 
 ### captureStackTrace
@@ -123,3 +96,28 @@ Create .stack property on a target object
 #### Inherited from
 
 Error.captureStackTrace
+
+___
+
+### prepareStackTrace
+
+▸ `Static` `Optional` **prepareStackTrace**(`err`, `stackTraces`): `any`
+
+Optional override for formatting stack traces
+
+**`see`** https://github.com/v8/v8/wiki/Stack%20Trace%20API#customizing-stack-traces
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `err` | `Error` |
+| `stackTraces` | `CallSite`[] |
+
+#### Returns
+
+`any`
+
+#### Inherited from
+
+Error.prepareStackTrace

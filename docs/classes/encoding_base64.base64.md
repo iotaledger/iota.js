@@ -11,13 +11,13 @@ Sourced from https://github.com/beatgammit/base64-js.
 
 ### Constructors
 
-- [constructor](encoding_base64.base64.md#constructor)
+- [constructor](encoding_base64.Base64.md#constructor)
 
 ### Methods
 
-- [byteLength](encoding_base64.base64.md#bytelength)
-- [decode](encoding_base64.base64.md#decode)
-- [encode](encoding_base64.base64.md#encode)
+- [byteLength](encoding_base64.Base64.md#bytelength)
+- [decode](encoding_base64.Base64.md#decode)
+- [encode](encoding_base64.Base64.md#encode)
 
 ## Constructors
 

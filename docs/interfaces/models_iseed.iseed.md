@@ -1,29 +1,29 @@
-[@iota/iota.js](../README.md) / [models/ISeed](../modules/models_iseed.md) / ISeed
+[@iota/iota.js](../README.md) / [models/ISeed](../modules/models_ISeed.md) / ISeed
 
 # Interface: ISeed
 
-[models/ISeed](../modules/models_iseed.md).ISeed
+[models/ISeed](../modules/models_ISeed.md).ISeed
 
 Interface definitions for seed.
 
 ## Implemented by
 
-- [`Ed25519Seed`](../classes/seedtypes_ed25519seed.ed25519seed.md)
+- [`Ed25519Seed`](../classes/seedTypes_ed25519Seed.Ed25519Seed.md)
 
 ## Table of contents
 
 ### Methods
 
-- [generateSeedFromPath](models_iseed.iseed.md#generateseedfrompath)
-- [keyPair](models_iseed.iseed.md#keypair)
-- [toBytes](models_iseed.iseed.md#tobytes)
-- [toString](models_iseed.iseed.md#tostring)
+- [generateSeedFromPath](models_ISeed.ISeed.md#generateseedfrompath)
+- [keyPair](models_ISeed.ISeed.md#keypair)
+- [toBytes](models_ISeed.ISeed.md#tobytes)
+- [toString](models_ISeed.ISeed.md#tostring)
 
 ## Methods
 
 ### generateSeedFromPath
 
-▸ **generateSeedFromPath**(`path`): [`ISeed`](models_iseed.iseed.md)
+▸ **generateSeedFromPath**(`path`): [`ISeed`](models_ISeed.ISeed.md)
 
 Generate a new seed from the path.
 
@@ -31,11 +31,11 @@ Generate a new seed from the path.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `path` | [`Bip32Path`](../classes/crypto_bip32path.bip32path.md) | The path to generate the seed for. |
+| `path` | [`Bip32Path`](../classes/crypto_bip32Path.Bip32Path.md) | The path to generate the seed for. |
 
 #### Returns
 
-[`ISeed`](models_iseed.iseed.md)
+[`ISeed`](models_ISeed.ISeed.md)
 
 The generated seed.
 
@@ -43,13 +43,13 @@ ___
 
 ### keyPair
 
-▸ **keyPair**(): [`IKeyPair`](models_ikeypair.ikeypair.md)
+▸ **keyPair**(): [`IKeyPair`](models_IKeyPair.IKeyPair.md)
 
 Get the key pair from the seed.
 
 #### Returns
 
-[`IKeyPair`](models_ikeypair.ikeypair.md)
+[`IKeyPair`](models_IKeyPair.IKeyPair.md)
 
 The key pair.
 

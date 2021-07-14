@@ -1,8 +1,8 @@
-[@iota/iota.js](../README.md) / [models/ITreasury](../modules/models_itreasury.md) / ITreasury
+[@iota/iota.js](../README.md) / [models/ITreasury](../modules/models_ITreasury.md) / ITreasury
 
 # Interface: ITreasury
 
-[models/ITreasury](../modules/models_itreasury.md).ITreasury
+[models/ITreasury](../modules/models_ITreasury.md).ITreasury
 
 Treasury.
 
@@ -10,8 +10,8 @@ Treasury.
 
 ### Properties
 
-- [amount](models_itreasury.itreasury.md#amount)
-- [milestoneId](models_itreasury.itreasury.md#milestoneid)
+- [amount](models_ITreasury.ITreasury.md#amount)
+- [milestoneId](models_ITreasury.ITreasury.md#milestoneid)
 
 ## Properties
 

@@ -6,4 +6,4 @@
 
 ### Interfaces
 
-- [IMilestoneResponse](../interfaces/models_api_imilestoneresponse.imilestoneresponse.md)
+- [IMilestoneResponse](../interfaces/models_api_IMilestoneResponse.IMilestoneResponse.md)

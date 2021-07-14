@@ -1,14 +1,14 @@
-[@iota/iota.js](../README.md) / [models/IUTXOInput](../modules/models_iutxoinput.md) / IUTXOInput
+[@iota/iota.js](../README.md) / [models/IUTXOInput](../modules/models_IUTXOInput.md) / IUTXOInput
 
 # Interface: IUTXOInput
 
-[models/IUTXOInput](../modules/models_iutxoinput.md).IUTXOInput
+[models/IUTXOInput](../modules/models_IUTXOInput.md).IUTXOInput
 
 UTXO Transaction Input.
 
 ## Hierarchy
 
-- [`ITypeBase`](models_itypebase.itypebase.md)<``0``\>
+- [`ITypeBase`](models_ITypeBase.ITypeBase.md)<``0``\>
 
   ↳ **`IUTXOInput`**
 
@@ -16,9 +16,9 @@ UTXO Transaction Input.
 
 ### Properties
 
-- [transactionId](models_iutxoinput.iutxoinput.md#transactionid)
-- [transactionOutputIndex](models_iutxoinput.iutxoinput.md#transactionoutputindex)
-- [type](models_iutxoinput.iutxoinput.md#type)
+- [transactionId](models_IUTXOInput.IUTXOInput.md#transactionid)
+- [transactionOutputIndex](models_IUTXOInput.IUTXOInput.md#transactionoutputindex)
+- [type](models_IUTXOInput.IUTXOInput.md#type)
 
 ## Properties
 
@@ -46,4 +46,4 @@ The type of the object.
 
 #### Inherited from
 
-[ITypeBase](models_itypebase.itypebase.md).[type](models_itypebase.itypebase.md#type)
+[ITypeBase](models_ITypeBase.ITypeBase.md).[type](models_ITypeBase.ITypeBase.md#type)

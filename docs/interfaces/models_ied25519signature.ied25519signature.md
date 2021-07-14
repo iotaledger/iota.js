@@ -1,14 +1,14 @@
-[@iota/iota.js](../README.md) / [models/IEd25519Signature](../modules/models_ied25519signature.md) / IEd25519Signature
+[@iota/iota.js](../README.md) / [models/IEd25519Signature](../modules/models_IEd25519Signature.md) / IEd25519Signature
 
 # Interface: IEd25519Signature
 
-[models/IEd25519Signature](../modules/models_ied25519signature.md).IEd25519Signature
+[models/IEd25519Signature](../modules/models_IEd25519Signature.md).IEd25519Signature
 
 Ed25519Signature signature.
 
 ## Hierarchy
 
-- [`ITypeBase`](models_itypebase.itypebase.md)<``0``\>
+- [`ITypeBase`](models_ITypeBase.ITypeBase.md)<``0``\>
 
   ↳ **`IEd25519Signature`**
 
@@ -16,9 +16,9 @@ Ed25519Signature signature.
 
 ### Properties
 
-- [publicKey](models_ied25519signature.ied25519signature.md#publickey)
-- [signature](models_ied25519signature.ied25519signature.md#signature)
-- [type](models_ied25519signature.ied25519signature.md#type)
+- [publicKey](models_IEd25519Signature.IEd25519Signature.md#publickey)
+- [signature](models_IEd25519Signature.IEd25519Signature.md#signature)
+- [type](models_IEd25519Signature.IEd25519Signature.md#type)
 
 ## Properties
 
@@ -46,4 +46,4 @@ The type of the object.
 
 #### Inherited from
 
-[ITypeBase](models_itypebase.itypebase.md).[type](models_itypebase.itypebase.md#type)
+[ITypeBase](models_ITypeBase.ITypeBase.md).[type](models_ITypeBase.ITypeBase.md#type)

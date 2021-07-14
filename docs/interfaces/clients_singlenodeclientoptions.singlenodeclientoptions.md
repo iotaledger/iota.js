@@ -1,8 +1,8 @@
-[@iota/iota.js](../README.md) / [clients/singleNodeClientOptions](../modules/clients_singlenodeclientoptions.md) / SingleNodeClientOptions
+[@iota/iota.js](../README.md) / [clients/singleNodeClientOptions](../modules/clients_singleNodeClientOptions.md) / SingleNodeClientOptions
 
 # Interface: SingleNodeClientOptions
 
-[clients/singleNodeClientOptions](../modules/clients_singlenodeclientoptions.md).SingleNodeClientOptions
+[clients/singleNodeClientOptions](../modules/clients_singleNodeClientOptions.md).SingleNodeClientOptions
 
 Options used when constructing SingleNodeClient.
 
@@ -10,12 +10,12 @@ Options used when constructing SingleNodeClient.
 
 ### Properties
 
-- [basePath](clients_singlenodeclientoptions.singlenodeclientoptions.md#basepath)
-- [headers](clients_singlenodeclientoptions.singlenodeclientoptions.md#headers)
-- [password](clients_singlenodeclientoptions.singlenodeclientoptions.md#password)
-- [powProvider](clients_singlenodeclientoptions.singlenodeclientoptions.md#powprovider)
-- [timeout](clients_singlenodeclientoptions.singlenodeclientoptions.md#timeout)
-- [userName](clients_singlenodeclientoptions.singlenodeclientoptions.md#username)
+- [basePath](clients_singleNodeClientOptions.SingleNodeClientOptions.md#basepath)
+- [headers](clients_singleNodeClientOptions.SingleNodeClientOptions.md#headers)
+- [password](clients_singleNodeClientOptions.SingleNodeClientOptions.md#password)
+- [powProvider](clients_singleNodeClientOptions.SingleNodeClientOptions.md#powprovider)
+- [timeout](clients_singleNodeClientOptions.SingleNodeClientOptions.md#timeout)
+- [userName](clients_singleNodeClientOptions.SingleNodeClientOptions.md#username)
 
 ## Properties
 
@@ -49,7 +49,7 @@ ___
 
 ### powProvider
 
-• `Optional` **powProvider**: [`IPowProvider`](models_ipowprovider.ipowprovider.md)
+• `Optional` **powProvider**: [`IPowProvider`](models_IPowProvider.IPowProvider.md)
 
 Use a custom pow provider instead of the one on the node.
 

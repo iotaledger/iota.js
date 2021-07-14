@@ -1,8 +1,8 @@
-[@iota/iota.js](../README.md) / [utils/powHelper](../modules/utils_powhelper.md) / PowHelper
+[@iota/iota.js](../README.md) / [utils/powHelper](../modules/utils_powHelper.md) / PowHelper
 
 # Class: PowHelper
 
-[utils/powHelper](../modules/utils_powhelper.md).PowHelper
+[utils/powHelper](../modules/utils_powHelper.md).PowHelper
 
 Helper methods for POW.
 
@@ -10,19 +10,19 @@ Helper methods for POW.
 
 ### Constructors
 
-- [constructor](utils_powhelper.powhelper.md#constructor)
+- [constructor](utils_powHelper.PowHelper.md#constructor)
 
 ### Properties
 
-- [LN3](utils_powhelper.powhelper.md#ln3)
+- [LN3](utils_powHelper.PowHelper.md#ln3)
 
 ### Methods
 
-- [calculateTargetZeros](utils_powhelper.powhelper.md#calculatetargetzeros)
-- [performPow](utils_powhelper.powhelper.md#performpow)
-- [score](utils_powhelper.powhelper.md#score)
-- [trailingZeros](utils_powhelper.powhelper.md#trailingzeros)
-- [trinaryTrailingZeros](utils_powhelper.powhelper.md#trinarytrailingzeros)
+- [calculateTargetZeros](utils_powHelper.PowHelper.md#calculatetargetzeros)
+- [performPow](utils_powHelper.PowHelper.md#performpow)
+- [score](utils_powHelper.PowHelper.md#score)
+- [trailingZeros](utils_powHelper.PowHelper.md#trailingzeros)
+- [trinaryTrailingZeros](utils_powHelper.PowHelper.md#trinarytrailingzeros)
 
 ## Constructors
 

@@ -6,11 +6,11 @@
 
 ### Interfaces
 
-- [ISigLockedDustAllowanceOutput](../interfaces/models_isiglockeddustallowanceoutput.isiglockeddustallowanceoutput.md)
+- [ISigLockedDustAllowanceOutput](../interfaces/models_ISigLockedDustAllowanceOutput.ISigLockedDustAllowanceOutput.md)
 
 ### Variables
 
-- [SIG\_LOCKED\_DUST\_ALLOWANCE\_OUTPUT\_TYPE](models_isiglockeddustallowanceoutput.md#sig_locked_dust_allowance_output_type)
+- [SIG\_LOCKED\_DUST\_ALLOWANCE\_OUTPUT\_TYPE](models_ISigLockedDustAllowanceOutput.md#sig_locked_dust_allowance_output_type)
 
 ## Variables
 

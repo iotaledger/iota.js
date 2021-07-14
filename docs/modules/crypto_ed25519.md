@@ -6,4 +6,4 @@
 
 ### Classes
 
-- [Ed25519](../classes/crypto_ed25519.ed25519.md)
+- [Ed25519](../classes/crypto_ed25519.Ed25519.md)

@@ -1,14 +1,14 @@
-[@iota/iota.js](../README.md) / [models/ITransactionPayload](../modules/models_itransactionpayload.md) / ITransactionPayload
+[@iota/iota.js](../README.md) / [models/ITransactionPayload](../modules/models_ITransactionPayload.md) / ITransactionPayload
 
 # Interface: ITransactionPayload
 
-[models/ITransactionPayload](../modules/models_itransactionpayload.md).ITransactionPayload
+[models/ITransactionPayload](../modules/models_ITransactionPayload.md).ITransactionPayload
 
 Transaction payload.
 
 ## Hierarchy
 
-- [`ITypeBase`](models_itypebase.itypebase.md)<``0``\>
+- [`ITypeBase`](models_ITypeBase.ITypeBase.md)<``0``\>
 
   ↳ **`ITransactionPayload`**
 
@@ -16,15 +16,15 @@ Transaction payload.
 
 ### Properties
 
-- [essence](models_itransactionpayload.itransactionpayload.md#essence)
-- [type](models_itransactionpayload.itransactionpayload.md#type)
-- [unlockBlocks](models_itransactionpayload.itransactionpayload.md#unlockblocks)
+- [essence](models_ITransactionPayload.ITransactionPayload.md#essence)
+- [type](models_ITransactionPayload.ITransactionPayload.md#type)
+- [unlockBlocks](models_ITransactionPayload.ITransactionPayload.md#unlockblocks)
 
 ## Properties
 
 ### essence
 
-• **essence**: [`ITransactionEssence`](models_itransactionessence.itransactionessence.md)
+• **essence**: [`ITransactionEssence`](models_ITransactionEssence.ITransactionEssence.md)
 
 The index name.
 
@@ -38,12 +38,12 @@ The type of the object.
 
 #### Inherited from
 
-[ITypeBase](models_itypebase.itypebase.md).[type](models_itypebase.itypebase.md#type)
+[ITypeBase](models_ITypeBase.ITypeBase.md).[type](models_ITypeBase.ITypeBase.md#type)
 
 ___
 
 ### unlockBlocks
 
-• **unlockBlocks**: ([`ISignatureUnlockBlock`](models_isignatureunlockblock.isignatureunlockblock.md) \| [`IReferenceUnlockBlock`](models_ireferenceunlockblock.ireferenceunlockblock.md))[]
+• **unlockBlocks**: ([`ISignatureUnlockBlock`](models_ISignatureUnlockBlock.ISignatureUnlockBlock.md) \| [`IReferenceUnlockBlock`](models_IReferenceUnlockBlock.IReferenceUnlockBlock.md))[]
 
 The unlock blocks.

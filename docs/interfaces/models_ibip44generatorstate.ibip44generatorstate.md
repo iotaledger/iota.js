@@ -1,8 +1,8 @@
-[@iota/iota.js](../README.md) / [models/IBip44GeneratorState](../modules/models_ibip44generatorstate.md) / IBip44GeneratorState
+[@iota/iota.js](../README.md) / [models/IBip44GeneratorState](../modules/models_IBip44GeneratorState.md) / IBip44GeneratorState
 
 # Interface: IBip44GeneratorState
 
-[models/IBip44GeneratorState](../modules/models_ibip44generatorstate.md).IBip44GeneratorState
+[models/IBip44GeneratorState](../modules/models_IBip44GeneratorState.md).IBip44GeneratorState
 
 Definition of address generator state.
 
@@ -10,9 +10,9 @@ Definition of address generator state.
 
 ### Properties
 
-- [accountIndex](models_ibip44generatorstate.ibip44generatorstate.md#accountindex)
-- [addressIndex](models_ibip44generatorstate.ibip44generatorstate.md#addressindex)
-- [isInternal](models_ibip44generatorstate.ibip44generatorstate.md#isinternal)
+- [accountIndex](models_IBip44GeneratorState.IBip44GeneratorState.md#accountindex)
+- [addressIndex](models_IBip44GeneratorState.IBip44GeneratorState.md#addressindex)
+- [isInternal](models_IBip44GeneratorState.IBip44GeneratorState.md#isinternal)
 
 ## Properties
 

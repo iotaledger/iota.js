@@ -6,4 +6,4 @@
 
 ### Classes
 
-- [ChaCha20Poly1305](../classes/crypto_chacha20poly1305.chacha20poly1305.md)
+- [ChaCha20Poly1305](../classes/crypto_chaCha20Poly1305.ChaCha20Poly1305.md)

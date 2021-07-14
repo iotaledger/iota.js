@@ -6,4 +6,4 @@
 
 ### Classes
 
-- [WriteStream](../classes/utils_writestream.writestream.md)
+- [WriteStream](../classes/utils_writeStream.WriteStream.md)

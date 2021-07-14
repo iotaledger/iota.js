@@ -6,4 +6,4 @@
 
 ### Classes
 
-- [PreComputedGroupElement](../classes/crypto_edwards25519_precomputedgroupelement.precomputedgroupelement.md)
+- [PreComputedGroupElement](../classes/crypto_edwards25519_preComputedGroupElement.PreComputedGroupElement.md)

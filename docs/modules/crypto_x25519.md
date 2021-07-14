@@ -6,4 +6,4 @@
 
 ### Classes
 
-- [X25519](../classes/crypto_x25519.x25519.md)
+- [X25519](../classes/crypto_x25519.X25519.md)

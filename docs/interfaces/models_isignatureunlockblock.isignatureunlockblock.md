@@ -1,14 +1,14 @@
-[@iota/iota.js](../README.md) / [models/ISignatureUnlockBlock](../modules/models_isignatureunlockblock.md) / ISignatureUnlockBlock
+[@iota/iota.js](../README.md) / [models/ISignatureUnlockBlock](../modules/models_ISignatureUnlockBlock.md) / ISignatureUnlockBlock
 
 # Interface: ISignatureUnlockBlock
 
-[models/ISignatureUnlockBlock](../modules/models_isignatureunlockblock.md).ISignatureUnlockBlock
+[models/ISignatureUnlockBlock](../modules/models_ISignatureUnlockBlock.md).ISignatureUnlockBlock
 
 Signature unlock block.
 
 ## Hierarchy
 
-- [`ITypeBase`](models_itypebase.itypebase.md)<``0``\>
+- [`ITypeBase`](models_ITypeBase.ITypeBase.md)<``0``\>
 
   ↳ **`ISignatureUnlockBlock`**
 
@@ -16,14 +16,14 @@ Signature unlock block.
 
 ### Properties
 
-- [signature](models_isignatureunlockblock.isignatureunlockblock.md#signature)
-- [type](models_isignatureunlockblock.isignatureunlockblock.md#type)
+- [signature](models_ISignatureUnlockBlock.ISignatureUnlockBlock.md#signature)
+- [type](models_ISignatureUnlockBlock.ISignatureUnlockBlock.md#type)
 
 ## Properties
 
 ### signature
 
-• **signature**: [`IEd25519Signature`](models_ied25519signature.ied25519signature.md)
+• **signature**: [`IEd25519Signature`](models_IEd25519Signature.IEd25519Signature.md)
 
 The signature.
 
@@ -37,4 +37,4 @@ The type of the object.
 
 #### Inherited from
 
-[ITypeBase](models_itypebase.itypebase.md).[type](models_itypebase.itypebase.md#type)
+[ITypeBase](models_ITypeBase.ITypeBase.md).[type](models_ITypeBase.ITypeBase.md#type)

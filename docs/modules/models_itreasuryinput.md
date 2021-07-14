@@ -6,11 +6,11 @@
 
 ### Interfaces
 
-- [ITreasuryInput](../interfaces/models_itreasuryinput.itreasuryinput.md)
+- [ITreasuryInput](../interfaces/models_ITreasuryInput.ITreasuryInput.md)
 
 ### Variables
 
-- [TREASURY\_INPUT\_TYPE](models_itreasuryinput.md#treasury_input_type)
+- [TREASURY\_INPUT\_TYPE](models_ITreasuryInput.md#treasury_input_type)
 
 ## Variables
 

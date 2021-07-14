@@ -6,11 +6,11 @@
 
 ### Interfaces
 
-- [IMilestonePayload](../interfaces/models_imilestonepayload.imilestonepayload.md)
+- [IMilestonePayload](../interfaces/models_IMilestonePayload.IMilestonePayload.md)
 
 ### Variables
 
-- [MILESTONE\_PAYLOAD\_TYPE](models_imilestonepayload.md#milestone_payload_type)
+- [MILESTONE\_PAYLOAD\_TYPE](models_IMilestonePayload.md#milestone_payload_type)
 
 ## Variables
 

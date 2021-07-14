@@ -6,4 +6,4 @@
 
 ### Classes
 
-- [UnitsHelper](../classes/utils_unitshelper.unitshelper.md)
+- [UnitsHelper](../classes/utils_unitsHelper.UnitsHelper.md)

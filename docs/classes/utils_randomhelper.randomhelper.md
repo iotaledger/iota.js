@@ -1,8 +1,8 @@
-[@iota/iota.js](../README.md) / [utils/randomHelper](../modules/utils_randomhelper.md) / RandomHelper
+[@iota/iota.js](../README.md) / [utils/randomHelper](../modules/utils_randomHelper.md) / RandomHelper
 
 # Class: RandomHelper
 
-[utils/randomHelper](../modules/utils_randomhelper.md).RandomHelper
+[utils/randomHelper](../modules/utils_randomHelper.md).RandomHelper
 
 Class to help with random generation.
 
@@ -10,11 +10,11 @@ Class to help with random generation.
 
 ### Constructors
 
-- [constructor](utils_randomhelper.randomhelper.md#constructor)
+- [constructor](utils_randomHelper.RandomHelper.md#constructor)
 
 ### Methods
 
-- [generate](utils_randomhelper.randomhelper.md#generate)
+- [generate](utils_randomHelper.RandomHelper.md#generate)
 
 ## Constructors
 

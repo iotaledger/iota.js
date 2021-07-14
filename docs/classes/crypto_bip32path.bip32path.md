@@ -1,8 +1,8 @@
-[@iota/iota.js](../README.md) / [crypto/bip32Path](../modules/crypto_bip32path.md) / Bip32Path
+[@iota/iota.js](../README.md) / [crypto/bip32Path](../modules/crypto_bip32Path.md) / Bip32Path
 
 # Class: Bip32Path
 
-[crypto/bip32Path](../modules/crypto_bip32path.md).Bip32Path
+[crypto/bip32Path](../modules/crypto_bip32Path.md).Bip32Path
 
 Class to help with bip32 paths.
 
@@ -10,16 +10,16 @@ Class to help with bip32 paths.
 
 ### Constructors
 
-- [constructor](crypto_bip32path.bip32path.md#constructor)
+- [constructor](crypto_bip32Path.Bip32Path.md#constructor)
 
 ### Methods
 
-- [numberSegments](crypto_bip32path.bip32path.md#numbersegments)
-- [pop](crypto_bip32path.bip32path.md#pop)
-- [push](crypto_bip32path.bip32path.md#push)
-- [pushHardened](crypto_bip32path.bip32path.md#pushhardened)
-- [toString](crypto_bip32path.bip32path.md#tostring)
-- [fromPath](crypto_bip32path.bip32path.md#frompath)
+- [numberSegments](crypto_bip32Path.Bip32Path.md#numbersegments)
+- [pop](crypto_bip32Path.Bip32Path.md#pop)
+- [push](crypto_bip32Path.Bip32Path.md#push)
+- [pushHardened](crypto_bip32Path.Bip32Path.md#pushhardened)
+- [toString](crypto_bip32Path.Bip32Path.md#tostring)
+- [fromPath](crypto_bip32Path.Bip32Path.md#frompath)
 
 ## Constructors
 
@@ -115,7 +115,7 @@ ___
 
 ### fromPath
 
-▸ `Static` **fromPath**(`bip32Path`): [`Bip32Path`](crypto_bip32path.bip32path.md)
+▸ `Static` **fromPath**(`bip32Path`): [`Bip32Path`](crypto_bip32Path.Bip32Path.md)
 
 Construct a new path by cloning an existing one.
 
@@ -123,10 +123,10 @@ Construct a new path by cloning an existing one.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `bip32Path` | [`Bip32Path`](crypto_bip32path.bip32path.md) | The path to clone. |
+| `bip32Path` | [`Bip32Path`](crypto_bip32Path.Bip32Path.md) | The path to clone. |
 
 #### Returns
 
-[`Bip32Path`](crypto_bip32path.bip32path.md)
+[`Bip32Path`](crypto_bip32Path.Bip32Path.md)
 
 A new instance of Bip32Path.

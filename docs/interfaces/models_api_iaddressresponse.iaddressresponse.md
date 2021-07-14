@@ -1,8 +1,8 @@
-[@iota/iota.js](../README.md) / [models/api/IAddressResponse](../modules/models_api_iaddressresponse.md) / IAddressResponse
+[@iota/iota.js](../README.md) / [models/api/IAddressResponse](../modules/models_api_IAddressResponse.md) / IAddressResponse
 
 # Interface: IAddressResponse
 
-[models/api/IAddressResponse](../modules/models_api_iaddressresponse.md).IAddressResponse
+[models/api/IAddressResponse](../modules/models_api_IAddressResponse.md).IAddressResponse
 
 Address details.
 
@@ -10,11 +10,11 @@ Address details.
 
 ### Properties
 
-- [address](models_api_iaddressresponse.iaddressresponse.md#address)
-- [addressType](models_api_iaddressresponse.iaddressresponse.md#addresstype)
-- [balance](models_api_iaddressresponse.iaddressresponse.md#balance)
-- [dustAllowed](models_api_iaddressresponse.iaddressresponse.md#dustallowed)
-- [ledgerIndex](models_api_iaddressresponse.iaddressresponse.md#ledgerindex)
+- [address](models_api_IAddressResponse.IAddressResponse.md#address)
+- [addressType](models_api_IAddressResponse.IAddressResponse.md#addresstype)
+- [balance](models_api_IAddressResponse.IAddressResponse.md#balance)
+- [dustAllowed](models_api_IAddressResponse.IAddressResponse.md#dustallowed)
+- [ledgerIndex](models_api_IAddressResponse.IAddressResponse.md#ledgerindex)
 
 ## Properties
 

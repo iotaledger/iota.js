@@ -6,4 +6,4 @@
 
 ### Classes
 
-- [Base64](../classes/encoding_base64.base64.md)
+- [Base64](../classes/encoding_base64.Base64.md)

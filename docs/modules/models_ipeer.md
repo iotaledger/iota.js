@@ -6,4 +6,4 @@
 
 ### Interfaces
 
-- [IPeer](../interfaces/models_ipeer.ipeer.md)
+- [IPeer](../interfaces/models_IPeer.IPeer.md)

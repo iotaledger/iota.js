@@ -10,21 +10,21 @@ Convert arrays to and from different formats.
 
 ### Constructors
 
-- [constructor](utils_converter.converter.md#constructor)
+- [constructor](utils_converter.Converter.md#constructor)
 
 ### Methods
 
-- [base64ToBytes](utils_converter.converter.md#base64tobytes)
-- [binaryToBytes](utils_converter.converter.md#binarytobytes)
-- [bytesToBase64](utils_converter.converter.md#bytestobase64)
-- [bytesToBinary](utils_converter.converter.md#bytestobinary)
-- [bytesToHex](utils_converter.converter.md#bytestohex)
-- [bytesToUtf8](utils_converter.converter.md#bytestoutf8)
-- [hexToBytes](utils_converter.converter.md#hextobytes)
-- [hexToUtf8](utils_converter.converter.md#hextoutf8)
-- [isHex](utils_converter.converter.md#ishex)
-- [utf8ToBytes](utils_converter.converter.md#utf8tobytes)
-- [utf8ToHex](utils_converter.converter.md#utf8tohex)
+- [base64ToBytes](utils_converter.Converter.md#base64tobytes)
+- [binaryToBytes](utils_converter.Converter.md#binarytobytes)
+- [bytesToBase64](utils_converter.Converter.md#bytestobase64)
+- [bytesToBinary](utils_converter.Converter.md#bytestobinary)
+- [bytesToHex](utils_converter.Converter.md#bytestohex)
+- [bytesToUtf8](utils_converter.Converter.md#bytestoutf8)
+- [hexToBytes](utils_converter.Converter.md#hextobytes)
+- [hexToUtf8](utils_converter.Converter.md#hextoutf8)
+- [isHex](utils_converter.Converter.md#ishex)
+- [utf8ToBytes](utils_converter.Converter.md#utf8tobytes)
+- [utf8ToHex](utils_converter.Converter.md#utf8tohex)
 
 ## Constructors
 

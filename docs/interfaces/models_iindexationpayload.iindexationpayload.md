@@ -1,14 +1,14 @@
-[@iota/iota.js](../README.md) / [models/IIndexationPayload](../modules/models_iindexationpayload.md) / IIndexationPayload
+[@iota/iota.js](../README.md) / [models/IIndexationPayload](../modules/models_IIndexationPayload.md) / IIndexationPayload
 
 # Interface: IIndexationPayload
 
-[models/IIndexationPayload](../modules/models_iindexationpayload.md).IIndexationPayload
+[models/IIndexationPayload](../modules/models_IIndexationPayload.md).IIndexationPayload
 
 Indexation payload.
 
 ## Hierarchy
 
-- [`ITypeBase`](models_itypebase.itypebase.md)<``2``\>
+- [`ITypeBase`](models_ITypeBase.ITypeBase.md)<``2``\>
 
   ↳ **`IIndexationPayload`**
 
@@ -16,9 +16,9 @@ Indexation payload.
 
 ### Properties
 
-- [data](models_iindexationpayload.iindexationpayload.md#data)
-- [index](models_iindexationpayload.iindexationpayload.md#index)
-- [type](models_iindexationpayload.iindexationpayload.md#type)
+- [data](models_IIndexationPayload.IIndexationPayload.md#data)
+- [index](models_IIndexationPayload.IIndexationPayload.md#index)
+- [type](models_IIndexationPayload.IIndexationPayload.md#type)
 
 ## Properties
 
@@ -46,4 +46,4 @@ The type of the object.
 
 #### Inherited from
 
-[ITypeBase](models_itypebase.itypebase.md).[type](models_itypebase.itypebase.md#type)
+[ITypeBase](models_ITypeBase.ITypeBase.md).[type](models_ITypeBase.ITypeBase.md#type)

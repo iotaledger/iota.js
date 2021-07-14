@@ -1,8 +1,8 @@
-[@iota/iota.js](../README.md) / [models/api/IMilestoneUtxoChangesResponse](../modules/models_api_imilestoneutxochangesresponse.md) / IMilestoneUtxoChangesResponse
+[@iota/iota.js](../README.md) / [models/api/IMilestoneUtxoChangesResponse](../modules/models_api_IMilestoneUtxoChangesResponse.md) / IMilestoneUtxoChangesResponse
 
 # Interface: IMilestoneUtxoChangesResponse
 
-[models/api/IMilestoneUtxoChangesResponse](../modules/models_api_imilestoneutxochangesresponse.md).IMilestoneUtxoChangesResponse
+[models/api/IMilestoneUtxoChangesResponse](../modules/models_api_IMilestoneUtxoChangesResponse.md).IMilestoneUtxoChangesResponse
 
 Milestone.
 
@@ -10,9 +10,9 @@ Milestone.
 
 ### Properties
 
-- [consumedOutputs](models_api_imilestoneutxochangesresponse.imilestoneutxochangesresponse.md#consumedoutputs)
-- [createdOutputs](models_api_imilestoneutxochangesresponse.imilestoneutxochangesresponse.md#createdoutputs)
-- [index](models_api_imilestoneutxochangesresponse.imilestoneutxochangesresponse.md#index)
+- [consumedOutputs](models_api_IMilestoneUtxoChangesResponse.IMilestoneUtxoChangesResponse.md#consumedoutputs)
+- [createdOutputs](models_api_IMilestoneUtxoChangesResponse.IMilestoneUtxoChangesResponse.md#createdoutputs)
+- [index](models_api_IMilestoneUtxoChangesResponse.IMilestoneUtxoChangesResponse.md#index)
 
 ## Properties
 

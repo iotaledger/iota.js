@@ -6,4 +6,4 @@
 
 ### Interfaces
 
-- [ISeed](../interfaces/models_iseed.iseed.md)
+- [ISeed](../interfaces/models_ISeed.ISeed.md)

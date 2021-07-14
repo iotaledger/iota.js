@@ -6,4 +6,4 @@
 
 ### Classes
 
-- [ChaCha20](../classes/crypto_chacha20.chacha20.md)
+- [ChaCha20](../classes/crypto_chaCha20.ChaCha20.md)

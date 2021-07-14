@@ -1,8 +1,8 @@
-[@iota/iota.js](../README.md) / [models/INodeInfo](../modules/models_inodeinfo.md) / INodeInfo
+[@iota/iota.js](../README.md) / [models/INodeInfo](../modules/models_INodeInfo.md) / INodeInfo
 
 # Interface: INodeInfo
 
-[models/INodeInfo](../modules/models_inodeinfo.md).INodeInfo
+[models/INodeInfo](../modules/models_INodeInfo.md).INodeInfo
 
 Response from the /info endpoint.
 
@@ -10,20 +10,20 @@ Response from the /info endpoint.
 
 ### Properties
 
-- [bech32HRP](models_inodeinfo.inodeinfo.md#bech32hrp)
-- [confirmedMilestoneIndex](models_inodeinfo.inodeinfo.md#confirmedmilestoneindex)
-- [features](models_inodeinfo.inodeinfo.md#features)
-- [isHealthy](models_inodeinfo.inodeinfo.md#ishealthy)
-- [latestMilestoneIndex](models_inodeinfo.inodeinfo.md#latestmilestoneindex)
-- [latestMilestoneTimestamp](models_inodeinfo.inodeinfo.md#latestmilestonetimestamp)
-- [messagesPerSecond](models_inodeinfo.inodeinfo.md#messagespersecond)
-- [minPoWScore](models_inodeinfo.inodeinfo.md#minpowscore)
-- [name](models_inodeinfo.inodeinfo.md#name)
-- [networkId](models_inodeinfo.inodeinfo.md#networkid)
-- [pruningIndex](models_inodeinfo.inodeinfo.md#pruningindex)
-- [referencedMessagesPerSecond](models_inodeinfo.inodeinfo.md#referencedmessagespersecond)
-- [referencedRate](models_inodeinfo.inodeinfo.md#referencedrate)
-- [version](models_inodeinfo.inodeinfo.md#version)
+- [bech32HRP](models_INodeInfo.INodeInfo.md#bech32hrp)
+- [confirmedMilestoneIndex](models_INodeInfo.INodeInfo.md#confirmedmilestoneindex)
+- [features](models_INodeInfo.INodeInfo.md#features)
+- [isHealthy](models_INodeInfo.INodeInfo.md#ishealthy)
+- [latestMilestoneIndex](models_INodeInfo.INodeInfo.md#latestmilestoneindex)
+- [latestMilestoneTimestamp](models_INodeInfo.INodeInfo.md#latestmilestonetimestamp)
+- [messagesPerSecond](models_INodeInfo.INodeInfo.md#messagespersecond)
+- [minPoWScore](models_INodeInfo.INodeInfo.md#minpowscore)
+- [name](models_INodeInfo.INodeInfo.md#name)
+- [networkId](models_INodeInfo.INodeInfo.md#networkid)
+- [pruningIndex](models_INodeInfo.INodeInfo.md#pruningindex)
+- [referencedMessagesPerSecond](models_INodeInfo.INodeInfo.md#referencedmessagespersecond)
+- [referencedRate](models_INodeInfo.INodeInfo.md#referencedrate)
+- [version](models_INodeInfo.INodeInfo.md#version)
 
 ## Properties
 

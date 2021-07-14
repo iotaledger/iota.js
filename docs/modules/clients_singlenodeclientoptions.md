@@ -6,4 +6,4 @@
 
 ### Interfaces
 
-- [SingleNodeClientOptions](../interfaces/clients_singlenodeclientoptions.singlenodeclientoptions.md)
+- [SingleNodeClientOptions](../interfaces/clients_singleNodeClientOptions.SingleNodeClientOptions.md)

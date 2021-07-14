@@ -1,8 +1,8 @@
-[@iota/iota.js](../README.md) / [crypto/hmacSha512](../modules/crypto_hmacsha512.md) / HmacSha512
+[@iota/iota.js](../README.md) / [crypto/hmacSha512](../modules/crypto_hmacSha512.md) / HmacSha512
 
 # Class: HmacSha512
 
-[crypto/hmacSha512](../modules/crypto_hmacsha512.md).HmacSha512
+[crypto/hmacSha512](../modules/crypto_hmacSha512.md).HmacSha512
 
 Class to help with HmacSha512 scheme.
 TypeScript conversion from https://github.com/emn178/js-sha512.
@@ -11,13 +11,13 @@ TypeScript conversion from https://github.com/emn178/js-sha512.
 
 ### Constructors
 
-- [constructor](crypto_hmacsha512.hmacsha512.md#constructor)
+- [constructor](crypto_hmacSha512.HmacSha512.md#constructor)
 
 ### Methods
 
-- [digest](crypto_hmacsha512.hmacsha512.md#digest)
-- [update](crypto_hmacsha512.hmacsha512.md#update)
-- [sum512](crypto_hmacsha512.hmacsha512.md#sum512)
+- [digest](crypto_hmacSha512.HmacSha512.md#digest)
+- [update](crypto_hmacSha512.HmacSha512.md#update)
+- [sum512](crypto_hmacSha512.HmacSha512.md#sum512)
 
 ## Constructors
 
@@ -52,7 +52,7 @@ ___
 
 ### update
 
-▸ **update**(`message`): [`HmacSha512`](crypto_hmacsha512.hmacsha512.md)
+▸ **update**(`message`): [`HmacSha512`](crypto_hmacSha512.HmacSha512.md)
 
 Update the hash with the data.
 
@@ -64,7 +64,7 @@ Update the hash with the data.
 
 #### Returns
 
-[`HmacSha512`](crypto_hmacsha512.hmacsha512.md)
+[`HmacSha512`](crypto_hmacSha512.HmacSha512.md)
 
 The instance for chaining.
 

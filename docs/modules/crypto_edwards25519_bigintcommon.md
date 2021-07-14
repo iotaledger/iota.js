@@ -6,7 +6,7 @@
 
 ### Variables
 
-- [BIG\_1\_SHIFTL\_20](crypto_edwards25519_bigintcommon.md#big_1_shiftl_20)
+- [BIG\_1\_SHIFTL\_20](crypto_edwards25519_bigIntCommon.md#big_1_shiftl_20)
 
 ## Variables
 

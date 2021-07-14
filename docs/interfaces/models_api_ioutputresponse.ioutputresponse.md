@@ -1,8 +1,8 @@
-[@iota/iota.js](../README.md) / [models/api/IOutputResponse](../modules/models_api_ioutputresponse.md) / IOutputResponse
+[@iota/iota.js](../README.md) / [models/api/IOutputResponse](../modules/models_api_IOutputResponse.md) / IOutputResponse
 
 # Interface: IOutputResponse
 
-[models/api/IOutputResponse](../modules/models_api_ioutputresponse.md).IOutputResponse
+[models/api/IOutputResponse](../modules/models_api_IOutputResponse.md).IOutputResponse
 
 Details of an output.
 
@@ -10,11 +10,11 @@ Details of an output.
 
 ### Properties
 
-- [isSpent](models_api_ioutputresponse.ioutputresponse.md#isspent)
-- [messageId](models_api_ioutputresponse.ioutputresponse.md#messageid)
-- [output](models_api_ioutputresponse.ioutputresponse.md#output)
-- [outputIndex](models_api_ioutputresponse.ioutputresponse.md#outputindex)
-- [transactionId](models_api_ioutputresponse.ioutputresponse.md#transactionid)
+- [isSpent](models_api_IOutputResponse.IOutputResponse.md#isspent)
+- [messageId](models_api_IOutputResponse.IOutputResponse.md#messageid)
+- [output](models_api_IOutputResponse.IOutputResponse.md#output)
+- [outputIndex](models_api_IOutputResponse.IOutputResponse.md#outputindex)
+- [transactionId](models_api_IOutputResponse.IOutputResponse.md#transactionid)
 
 ## Properties
 
@@ -36,7 +36,7 @@ ___
 
 ### output
 
-• **output**: [`ISigLockedSingleOutput`](models_isiglockedsingleoutput.isiglockedsingleoutput.md) \| [`ISigLockedDustAllowanceOutput`](models_isiglockeddustallowanceoutput.isiglockeddustallowanceoutput.md)
+• **output**: [`ISigLockedSingleOutput`](models_ISigLockedSingleOutput.ISigLockedSingleOutput.md) \| [`ISigLockedDustAllowanceOutput`](models_ISigLockedDustAllowanceOutput.ISigLockedDustAllowanceOutput.md)
 
 The output.
 
