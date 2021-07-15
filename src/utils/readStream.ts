@@ -72,7 +72,7 @@ export class ReadStream {
 
         if (readIndex >= this._storage.length) {
             throw new Error(`You cannot set the readIndex to ${readIndex
-            } as the stream is only ${this._storage.length} in length`);
+                } as the stream is only ${this._storage.length} in length`);
         }
     }
 

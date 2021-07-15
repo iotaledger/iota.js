@@ -28,7 +28,7 @@ export class BitHelper {
      * @param value The 32 bit value.
      * @internal
      */
-     public static u32To8LittleEndian(bytes: Uint8Array, startIndex: number, value: number): void {
+    public static u32To8LittleEndian(bytes: Uint8Array, startIndex: number, value: number): void {
         bytes[startIndex] = value;
         value >>>= 8;
         bytes[startIndex + 1] = value;
@@ -45,7 +45,7 @@ export class BitHelper {
      * @returns The rotated number.
      * @internal
      */
-     public static rotate(value: number, bits: number): number {
+    public static rotate(value: number, bits: number): number {
         return (value << bits) | (value >>> (32 - bits));
     }
 }

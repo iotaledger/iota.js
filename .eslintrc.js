@@ -573,7 +573,7 @@ module.exports = {
         "max-len": [
             "error",
             {
-                "ignorePattern": "^import",
+                "ignoreTemplateLiterals": true,
                 "code": 120
             }
         ],
