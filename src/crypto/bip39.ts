@@ -58,8 +58,7 @@ export class Bip39 {
 
         if (entropy.length % 4 !== 0 || entropy.length < 16 || entropy.length > 32) {
             throw new Error(
-                `The length of the entropy is invalid, it should be a multiple of 4, >= 16 and <= 32, it is ${
-                    entropy.length}`);
+                `The length of the entropy is invalid, it should be a multiple of 4, >= 16 and <= 32, it is ${entropy.length}`);
         }
 
         const bin = `${Converter.bytesToBinary(entropy)}${Bip39.entropyChecksumBits(entropy)}`;

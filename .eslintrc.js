@@ -574,6 +574,7 @@ module.exports = {
             "error",
             {
                 "ignorePattern": "^import",
+                "ignoreTemplateLiterals": true,
                 "code": 120
             }
         ],

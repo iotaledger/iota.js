@@ -5,7 +5,7 @@
  * Class to help with base64 Encoding/Decoding.
  * Sourced from https://github.com/beatgammit/base64-js.
  */
- export class Base64 {
+export class Base64 {
     /**
      * Alphabet table for encoding.
      * @internal
