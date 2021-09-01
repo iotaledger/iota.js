@@ -432,7 +432,7 @@ export class SingleNodeClient {
             return response;
         }
         catch (err) {
-            throw err.name === "AbortError" ? new Error("Timeout") : err;
+            throw err instanceof Error && err.name === "AbortError" ? new Error("Timeout") : err;
         }
         finally {
             if (timerId) {
