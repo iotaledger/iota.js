@@ -17,5 +17,5 @@ export interface IMqttStatus {
     /**
      * Any errors.
      */
-    error?: Error;
+    error?: unknown;
 }
