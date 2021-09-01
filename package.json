@@ -16,7 +16,7 @@
     "license": "Apache-2.0",
     "dependencies": {
         "big-integer": "^1.6.48",
-        "node-fetch": "^2.6.1"
+        "node-fetch": "^3.0.0"
     },
     "scripts": {
         "build-clean": "rimraf ./es/* ./typings/*",
