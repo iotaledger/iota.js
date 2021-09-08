@@ -97,7 +97,7 @@ export function buildTransactionPayload(inputsAndSignatureKeyPairs, outputs, ind
             serialized: writeStream.finalHex()
         };
     });
-    // Lexigraphically sort the inputs and outputs
+    // Lexicographically sort the inputs and outputs
     const sortedInputs = inputsAndSignatureKeyPairsSerialized.sort((a, b) => a.serialized.localeCompare(b.serialized));
     const sortedOutputs = outputsWithSerialization.sort((a, b) => a.serialized.localeCompare(b.serialized));
     const transactionEssence = {

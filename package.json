@@ -16,7 +16,7 @@
     "license": "Apache-2.0",
     "dependencies": {
         "big-integer": "^1.6.48",
-        "node-fetch": "^2.6.1"
+        "node-fetch": "2.6.1"
     },
     "scripts": {
         "build-clean": "rimraf ./es/* ./typings/*",
@@ -45,15 +45,15 @@
         "@rollup/plugin-node-resolve": "^13.0.4",
         "@rollup/plugin-replace": "^3.0.0",
         "@types/jest": "^27.0.1",
-        "@types/node-fetch": "^2.5.12",
-        "@typescript-eslint/eslint-plugin": "^4.30.0",
-        "@typescript-eslint/parser": "^4.30.0",
+        "@types/node-fetch": "2.5.12",
+        "@typescript-eslint/eslint-plugin": "^4.31.0",
+        "@typescript-eslint/parser": "^4.31.0",
         "copyfiles": "^2.4.1",
         "cross-env": "^7.0.2",
         "eslint": "^7.32.0",
         "eslint-plugin-header": "^3.1.1",
         "eslint-plugin-import": "^2.24.2",
-        "eslint-plugin-jsdoc": "^36.0.8",
+        "eslint-plugin-jsdoc": "^36.1.0",
         "eslint-plugin-unicorn": "^35.0.0",
         "jest": "^27.1.0",
         "npm-run-all": "^4.1.5",
