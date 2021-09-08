@@ -1,16 +1,16 @@
-name: Library Build Main/Develop
+name: Library Build Main/Dev
 
 on:
   push:
-    branches: [main, develop]
+    branches: [main, dev]
     paths:
       - "src/**"
       - ".github/workflows/main.yml"
   pull_request:
-    branches: [develop]
+    branches: [dev]
     paths:
       - "src/**"
-      - ".github/workflows/develop.yml"
+      - ".github/workflows/dev.yml"
 
 
 jobs:
