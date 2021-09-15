@@ -107,7 +107,7 @@ There are also high level operations which make use of the API level methods:
 
 ## MQTT
 
-MQTT has moved to a separate package, see [README.md](./packages/mqtt/README.md) 
+MQTT has moved to a separate package, see [README.md](./packages/mqtt/README.md)
 
 ## Models
 
@@ -116,9 +116,11 @@ You can see the model definitions for all the objects in the [typings](./typings
 ## Proof of Work
 
 See [./README-POW.md](./README-POW.md)
+
 ## Additional Examples
 
 Please find other examples in the [./examples](./examples) folder.
+
 * Simple - Performs basic API operations.
 * Address - Demonstrates address generation from a Bip39 mnemonic seed using raw and Bip32 path methods.
 * Transaction - Demonstrates how to send a transaction and call some of the other higher level functions.

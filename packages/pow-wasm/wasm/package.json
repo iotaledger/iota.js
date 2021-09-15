@@ -22,9 +22,9 @@
         "asbuild": "npm run asbuild:untouched && npm run asbuild:optimized"
     },
     "dependencies": {
-        "@assemblyscript/loader": "^0.18.31"
+        "@assemblyscript/loader": "^0.19.16"
     },
     "devDependencies": {
-        "assemblyscript": "^0.18.31"
+        "assemblyscript": "^0.19.16"
     }
 }
