@@ -64,6 +64,6 @@
         "typings"
     ],
     "dependencies": {
-        "@iota/iota.js": "^1.6.1"
+        "@iota/iota.js": "^1.6.2"
     }
 }
