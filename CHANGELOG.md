@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.6.2
+
+* Reinstate package.json browser field and add module field to improve packager compatibility
+
 ## v1.6.1
 
 * Remove package.json browser entry in favour of exports
