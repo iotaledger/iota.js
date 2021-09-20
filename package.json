@@ -1,7 +1,7 @@
 {
     "name": "@iota/iota.js",
     "description": "IOTA JavaScript Library",
-    "version": "1.6.2",
+    "version": "1.6.3",
     "keywords": [
         "iota",
         "client"

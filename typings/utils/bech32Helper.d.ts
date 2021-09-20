@@ -7,9 +7,9 @@ export declare class Bech32Helper {
      */
     static BECH32_DEFAULT_HRP_MAIN: string;
     /**
-     * The default human readable part of the bech32 addresses for testnet, currently 'atoi'.
+     * The default human readable part of the bech32 addresses for devnet, currently 'atoi'.
      */
-    static BECH32_DEFAULT_HRP_TEST: string;
+    static BECH32_DEFAULT_HRP_DEV: string;
     /**
      * Encode an address to bech32.
      * @param addressType The address type to encode.

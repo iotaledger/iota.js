@@ -10188,9 +10188,9 @@
      */
     Bech32Helper.BECH32_DEFAULT_HRP_MAIN = "iota";
     /**
-     * The default human readable part of the bech32 addresses for testnet, currently 'atoi'.
+     * The default human readable part of the bech32 addresses for devnet, currently 'atoi'.
      */
-    Bech32Helper.BECH32_DEFAULT_HRP_TEST = "atoi";
+    Bech32Helper.BECH32_DEFAULT_HRP_DEV = "atoi";
 
     // Copyright 2020 IOTA Stiftung
     /**

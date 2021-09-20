@@ -7,7 +7,7 @@ Convert address to bech32.
 ### Properties
 
 - [BECH32_DEFAULT_HRP_MAIN](Bech32Helper.md#bech32_default_hrp_main)
-- [BECH32_DEFAULT_HRP_TEST](Bech32Helper.md#bech32_default_hrp_test)
+- [BECH32_DEFAULT_HRP_DEV](Bech32Helper.md#bech32_default_hrp_dev)
 
 ### Methods
 
@@ -29,11 +29,11 @@ The default human readable part of the bech32 addresses for mainnet, currently '
 
 ___
 
-### BECH32\_DEFAULT\_HRP\_TEST
+### BECH32\_DEFAULT\_HRP\_DEV
 
-▪ `Static` **BECH32\_DEFAULT\_HRP\_TEST**: `string` = `"atoi"`
+▪ `Static` **BECH32\_DEFAULT\_HRP\_DEV**: `string` = `"atoi"`
 
-The default human readable part of the bech32 addresses for testnet, currently 'atoi'.
+The default human readable part of the bech32 addresses for devnet, currently 'atoi'.
 
 ## Methods
 

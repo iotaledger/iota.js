@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.6.3
+
+* Rename TESTNET to DEVNET
+
 ## v1.6.2
 
 * Reinstate package.json browser field and add module field to improve packager compatibility
