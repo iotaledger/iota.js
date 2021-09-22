@@ -19,7 +19,7 @@ class NeonPowProvider {
      * @param numCpus The number of cpus, defaults to max CPUs.
      */
     constructor(numCpus) {
-        this._numCpus = numCpus !== null && numCpus !== void 0 ? numCpus : os__default['default'].cpus().length;
+        this._numCpus = numCpus !== null && numCpus !== void 0 ? numCpus : os__default["default"].cpus().length;
     }
     /**
      * Perform pow on the message and return the nonce of at least targetScore.

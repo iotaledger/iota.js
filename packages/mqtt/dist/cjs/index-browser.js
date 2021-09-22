@@ -2,7 +2,7 @@
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@iota/iota.js'), require('mqtt')) :
     typeof define === 'function' && define.amd ? define(['exports', '@iota/iota.js', 'mqtt'], factory) :
     (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.IotaMqtt = {}, global.Iota, global.mqtt));
-}(this, (function (exports, iota_js, mqtt) { 'use strict';
+})(this, (function (exports, iota_js, mqtt) { 'use strict';
 
     function _interopNamespace(e) {
         if (e && e.__esModule) return e;
@@ -13,14 +13,12 @@
                     var d = Object.getOwnPropertyDescriptor(e, k);
                     Object.defineProperty(n, k, d.get ? d : {
                         enumerable: true,
-                        get: function () {
-                            return e[k];
-                        }
+                        get: function () { return e[k]; }
                     });
                 }
             });
         }
-        n['default'] = e;
+        n["default"] = e;
         return Object.freeze(n);
     }
 
@@ -502,4 +500,4 @@
 
     Object.defineProperty(exports, '__esModule', { value: true });
 
-})));
+}));

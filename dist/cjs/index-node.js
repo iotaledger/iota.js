@@ -1,8 +1,8 @@
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('node-fetch')) :
     typeof define === 'function' && define.amd ? define(['exports', 'node-fetch'], factory) :
-    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.Iota = {}, global['node-fetch']));
-}(this, (function (exports, require$$0) { 'use strict';
+    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.Iota = {}, global["node-fetch"]));
+})(this, (function (exports, require$$0) { 'use strict';
 
     function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
@@ -13,7 +13,7 @@
     // Fetch
     if (globalThis && !globalThis.fetch) {
         // eslint-disable-next-line @typescript-eslint/no-require-imports
-        globalThis.fetch = require$$0__default['default'];
+        globalThis.fetch = require$$0__default["default"];
     }
 
     // Copyright 2020 IOTA Stiftung
@@ -11809,4 +11809,4 @@
 
     Object.defineProperty(exports, '__esModule', { value: true });
 
-})));
+}));

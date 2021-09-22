@@ -23,7 +23,7 @@ class WasmPowProvider {
      * @param numCpus The number of cpus, defaults to max CPUs.
      */
     constructor(numCpus) {
-        this._numCpus = numCpus !== null && numCpus !== void 0 ? numCpus : os__default['default'].cpus().length;
+        this._numCpus = numCpus !== null && numCpus !== void 0 ? numCpus : os__default["default"].cpus().length;
     }
     /**
      * Perform pow on the message and return the nonce of at least targetScore.
@@ -40,7 +40,7 @@ class WasmPowProvider {
             const workers = [];
             let hasFinished = false;
             for (let i = 0; i < this._numCpus; i++) {
-                const worker = new worker_threads.Worker(path__default['default'].join(__dirname, "pow-wasm.js"), {
+                const worker = new worker_threads.Worker(path__default["default"].join(__dirname, "pow-wasm.js"), {
                     workerData: { powDigest, targetZeros, startIndex: chunkSize * BigInt(i) }
                 });
                 workers.push(worker);
@@ -73,7 +73,7 @@ class WasmPowProvider {
  * @returns The nonce.
  */
 async function doPow(powDigest, targetZeros, startIndex) {
-    const wasmData = await fs.promises.readFile(path__default['default'].join(__dirname, "../wasm/build/release.wasm"));
+    const wasmData = await fs.promises.readFile(path__default["default"].join(__dirname, "../wasm/build/release.wasm"));
     const wasmInstance = await WebAssembly.instantiate(wasmData, buildImports());
     const module = wasmInstance.instance.exports;
     for (let i = 0; i < powDigest.length; i++) {
