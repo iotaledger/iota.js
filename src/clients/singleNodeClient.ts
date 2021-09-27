@@ -1,5 +1,6 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
+import bigInt, { BigInteger } from "big-integer";
 import { MAX_MESSAGE_LENGTH, serializeMessage } from "../binary/message";
 import { Blake2b } from "../crypto/blake2b";
 import type { IAddressOutputsResponse } from "../models/api/IAddressOutputsResponse";
@@ -199,7 +200,7 @@ export class SingleNodeClient implements IClient {
 
         if (this._powProvider) {
             const nonce = await this._powProvider.pow(messageBytes, minPoWScore);
-            message.nonce = nonce.toString(10);
+            message.nonce = nonce.toString();
         }
 
         const response = await this.fetchJson<IMessage, IMessageIdResponse>("post", "messages", message);
@@ -221,7 +222,7 @@ export class SingleNodeClient implements IClient {
             const { networkId, minPoWScore } = await this.getPoWInfo();
             BigIntHelper.write8(networkId, message, 0);
             const nonce = await this._powProvider.pow(message, minPoWScore);
-            BigIntHelper.write8(nonce, message, message.length - 8);
+            BigIntHelper.write8(bigInt(nonce), message, message.length - 8);
         }
 
         const response = await this.fetchBinary<IMessageIdResponse>("post", "messages", message);
@@ -661,7 +662,7 @@ export class SingleNodeClient implements IClient {
      * @internal
      */
     private async getPoWInfo(): Promise<{
-        networkId: bigint;
+        networkId: BigInteger;
         minPoWScore: number;
     }> {
         const nodeInfo = await this.info();

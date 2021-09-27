@@ -11,11 +11,11 @@ import { parentPort, workerData } from "worker_threads";
  * @param startIndex The index to start looking from.
  * @returns The nonce.
  */
-export function doPow(powDigest: Uint8Array, targetZeros: number, startIndex: bigint): bigint {
+export function doPow(powDigest: Uint8Array, targetZeros: number, startIndex: string): string {
     return PowHelper.performPow(powDigest, targetZeros, startIndex);
 }
 
 if (workerData && parentPort) {
     const nonce = doPow(workerData.powDigest, workerData.targetZeros, workerData.startIndex);
-    parentPort.postMessage(nonce.toString());
+    parentPort.postMessage(nonce);
 }

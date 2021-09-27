@@ -1,5 +1,6 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
+import bigInt from "big-integer";
 import { INDEXATION_PAYLOAD_TYPE } from "../models/IIndexationPayload";
 import type { IMessage } from "../models/IMessage";
 import { MILESTONE_PAYLOAD_TYPE } from "../models/IMilestonePayload";
@@ -86,7 +87,7 @@ export function deserializeMessage(readStream: ReadStream): IMessage {
  * @param object The object to serialize.
  */
 export function serializeMessage(writeStream: WriteStream, object: IMessage): void {
-    writeStream.writeUInt64("message.networkId", BigInt(object.networkId ?? 0));
+    writeStream.writeUInt64("message.networkId", bigInt(object.networkId ?? "0"));
 
     const numParents = object.parentMessageIds?.length ?? 0;
     writeStream.writeByte("message.numParents", numParents);
@@ -118,5 +119,5 @@ export function serializeMessage(writeStream: WriteStream, object: IMessage): vo
 
     serializePayload(writeStream, object.payload);
 
-    writeStream.writeUInt64("message.nonce", BigInt(object.nonce ?? 0));
+    writeStream.writeUInt64("message.nonce", bigInt(object.nonce ?? "0"));
 }

@@ -230,7 +230,7 @@ Write a UInt64 to the stream.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `name` | `string` | The name of the data we are trying to write. |
-| `val` | `bigint` | The data to write. |
+| `val` | `BigInteger` | The data to write. |
 
 #### Returns
 

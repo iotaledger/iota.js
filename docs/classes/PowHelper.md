@@ -82,7 +82,7 @@ Calculate the trailing zeros.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `powDigest` | `Uint8Array` | The pow digest. |
-| `nonce` | `bigint` | The nonce. |
+| `nonce` | `BigInteger` | The nonce. |
 
 #### Returns
 
@@ -115,7 +115,7 @@ ___
 
 ### performPow
 
-▸ `Static` **performPow**(`powDigest`, `targetZeros`, `startIndex`): `bigint`
+▸ `Static` **performPow**(`powDigest`, `targetZeros`, `startIndex`): `string`
 
 Perform the hash on the data until we reach target number of zeros.
 
@@ -125,11 +125,11 @@ Perform the hash on the data until we reach target number of zeros.
 | :------ | :------ | :------ |
 | `powDigest` | `Uint8Array` | The pow digest. |
 | `targetZeros` | `number` | The target number of zeros. |
-| `startIndex` | `bigint` | The index to start looking from. |
+| `startIndex` | `string` | The index to start looking from. |
 
 #### Returns
 
-`bigint`
+`string`
 
 The nonce.
 

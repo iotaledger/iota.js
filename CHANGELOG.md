@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.7.0
+
+* Update all BigInt calculations to use big-integer lib instead of native, so that when polyfill is used e.g. in React Native the calculations work
+* Update IPowProvider interface so that BigInteger nonce is returned as string
+
 ## v1.6.3
 
 * Rename TESTNET to DEVNET

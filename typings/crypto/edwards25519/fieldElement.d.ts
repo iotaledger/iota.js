@@ -1,4 +1,10 @@
 /**
+ * This is a port of the Go code from https://github.com/hdevalence/ed25519consensus
+ * which is an extension of https://github.com/golang/crypto/tree/master/ed25519
+ * which is in turn a port of the “ref10” implementation of ed25519 from SUPERCOP.
+ */
+import { BigInteger } from "big-integer";
+/**
  * Class for field element operations.
  * FieldElement represents an element of the field GF(2^255 - 19).  An element
  * t, entries t[0]...t[9], represents the integer t[0]+2^26 t[1]+2^51 t[2]+2^77
@@ -64,7 +70,7 @@ export declare class FieldElement {
      * @param h8 The h8 component.
      * @param h9 The h9 component.
      */
-    combine(h0: bigint, h1: bigint, h2: bigint, h3: bigint, h4: bigint, h5: bigint, h6: bigint, h7: bigint, h8: bigint, h9: bigint): void;
+    combine(h0: BigInteger, h1: BigInteger, h2: BigInteger, h3: BigInteger, h4: BigInteger, h5: BigInteger, h6: BigInteger, h7: BigInteger, h8: BigInteger, h9: BigInteger): void;
     /**
      * FieldElement.square calculates h = f*f. Can overlap h with f.
      *
@@ -88,16 +94,16 @@ export declare class FieldElement {
      * @returns The components.
      */
     internalSquare(f: FieldElement): {
-        h0: bigint;
-        h1: bigint;
-        h2: bigint;
-        h3: bigint;
-        h4: bigint;
-        h5: bigint;
-        h6: bigint;
-        h7: bigint;
-        h8: bigint;
-        h9: bigint;
+        h0: BigInteger;
+        h1: BigInteger;
+        h2: BigInteger;
+        h3: BigInteger;
+        h4: BigInteger;
+        h5: BigInteger;
+        h6: BigInteger;
+        h7: BigInteger;
+        h8: BigInteger;
+        h9: BigInteger;
     };
     /**
      * Square2 sets h = 2 * f * f.

@@ -1,5 +1,6 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
+import bigInt from "big-integer";
 import { MAX_MESSAGE_LENGTH, serializeMessage } from "../binary/message.mjs";
 import { Blake2b } from "../crypto/blake2b.mjs";
 import { ArrayHelper } from "../utils/arrayHelper.mjs";
@@ -116,7 +117,7 @@ export class SingleNodeClient {
         }
         if (this._powProvider) {
             const nonce = await this._powProvider.pow(messageBytes, minPoWScore);
-            message.nonce = nonce.toString(10);
+            message.nonce = nonce.toString();
         }
         const response = await this.fetchJson("post", "messages", message);
         return response.messageId;
@@ -134,7 +135,7 @@ export class SingleNodeClient {
             const { networkId, minPoWScore } = await this.getPoWInfo();
             BigIntHelper.write8(networkId, message, 0);
             const nonce = await this._powProvider.pow(message, minPoWScore);
-            BigIntHelper.write8(nonce, message, message.length - 8);
+            BigIntHelper.write8(bigInt(nonce), message, message.length - 8);
         }
         const response = await this.fetchBinary("post", "messages", message);
         return response.messageId;

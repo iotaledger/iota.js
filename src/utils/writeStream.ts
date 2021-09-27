@@ -1,6 +1,7 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 /* eslint-disable no-bitwise */
+import type { BigInteger } from "big-integer";
 import { BigIntHelper } from "./bigIntHelper";
 import { Converter } from "./converter";
 
@@ -164,7 +165,7 @@ export class WriteStream {
      * @param name The name of the data we are trying to write.
      * @param val The data to write.
      */
-    public writeUInt64(name: string, val: bigint): void {
+    public writeUInt64(name: string, val: BigInteger): void {
         this.expand(8);
 
         BigIntHelper.write8(val, this._storage, this._writeIndex);

@@ -29,12 +29,12 @@ describe("PowHelper", () => {
     // });
 
     test("Perform pow from startIndex 0", () => {
-        const nonce = PowHelper.performPow(new Uint8Array(32).fill(1), 3, BigInt(0));
-        expect(nonce).toEqual(BigInt(86));
+        const nonce = PowHelper.performPow(new Uint8Array(32).fill(1), 3, "0");
+        expect(Number(nonce)).toEqual(86);
     });
 
     test("Perform pow from startIndex 4900", () => {
-        const nonce = PowHelper.performPow(new Uint8Array(32).fill(1), 8, BigInt(4900));
-        expect(nonce).toEqual(BigInt(4936));
+        const nonce = PowHelper.performPow(new Uint8Array(32).fill(1), 8, "4900");
+        expect(Number(nonce)).toEqual(4936);
     });
 });

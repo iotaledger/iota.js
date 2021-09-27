@@ -1,6 +1,7 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 /* eslint-disable no-bitwise */
+import type { BigInteger } from "big-integer";
 import { BigIntHelper } from "./bigIntHelper";
 import { Converter } from "./converter";
 
@@ -180,7 +181,7 @@ export class ReadStream {
      * @param moveIndex Move the index pointer on.
      * @returns The value.
      */
-    public readUInt64(name: string, moveIndex: boolean = true): bigint {
+    public readUInt64(name: string, moveIndex: boolean = true): BigInteger {
         if (!this.hasRemaining(8)) {
             throw new Error(`${name} length 8 exceeds the remaining data ${this.unused()}`);
         }

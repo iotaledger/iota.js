@@ -15,10 +15,10 @@ export class LocalPowProvider implements IPowProvider {
      * @param targetScore The target score.
      * @returns The nonce.
      */
-    public async pow(message: Uint8Array, targetScore: number): Promise<bigint> {
+    public async pow(message: Uint8Array, targetScore: number): Promise<string> {
         const powRelevantData = message.slice(0, -8);
         const powDigest = Blake2b.sum256(powRelevantData);
         const targetZeros = PowHelper.calculateTargetZeros(message, targetScore);
-        return PowHelper.performPow(powDigest, targetZeros, BigInt(0));
+        return PowHelper.performPow(powDigest, targetZeros, "0").toString();
     }
 }

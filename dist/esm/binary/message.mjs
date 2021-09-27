@@ -1,5 +1,6 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
+import bigInt from "big-integer";
 import { INDEXATION_PAYLOAD_TYPE } from "../models/IIndexationPayload.mjs";
 import { MILESTONE_PAYLOAD_TYPE } from "../models/IMilestonePayload.mjs";
 import { RECEIPT_PAYLOAD_TYPE } from "../models/IReceiptPayload.mjs";
@@ -68,7 +69,7 @@ export function deserializeMessage(readStream) {
  */
 export function serializeMessage(writeStream, object) {
     var _a, _b, _c, _d;
-    writeStream.writeUInt64("message.networkId", BigInt((_a = object.networkId) !== null && _a !== void 0 ? _a : 0));
+    writeStream.writeUInt64("message.networkId", bigInt((_a = object.networkId) !== null && _a !== void 0 ? _a : "0"));
     const numParents = (_c = (_b = object.parentMessageIds) === null || _b === void 0 ? void 0 : _b.length) !== null && _c !== void 0 ? _c : 0;
     writeStream.writeByte("message.numParents", numParents);
     if (object.parentMessageIds) {
@@ -93,5 +94,5 @@ export function serializeMessage(writeStream, object) {
         throw new Error("Messages can only contain transaction, indexation or milestone payloads");
     }
     serializePayload(writeStream, object.payload);
-    writeStream.writeUInt64("message.nonce", BigInt((_d = object.nonce) !== null && _d !== void 0 ? _d : 0));
+    writeStream.writeUInt64("message.nonce", bigInt((_d = object.nonce) !== null && _d !== void 0 ? _d : "0"));
 }

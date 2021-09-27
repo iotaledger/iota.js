@@ -1,20 +1,12 @@
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('big-integer')) :
     typeof define === 'function' && define.amd ? define(['exports', 'big-integer'], factory) :
-    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.Iota = {}, global["big-integer"]));
-})(this, (function (exports, require$$0) { 'use strict';
+    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.Iota = {}, global.bigInt));
+})(this, (function (exports, bigInt) { 'use strict';
 
     function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
-    var require$$0__default = /*#__PURE__*/_interopDefaultLegacy(require$$0);
-
-    // Copyright 2020 IOTA Stiftung
-    // SPDX-License-Identifier: Apache-2.0
-    // BigInt
-    if (globalThis && !globalThis.BigInt) {
-        // eslint-disable-next-line @typescript-eslint/no-require-imports
-        globalThis.BigInt = require$$0__default["default"];
-    }
+    var bigInt__default = /*#__PURE__*/_interopDefaultLegacy(bigInt);
 
     // Copyright 2020 IOTA Stiftung
     // SPDX-License-Identifier: Apache-2.0
@@ -503,6 +495,7 @@
         writeStream.writeFixedHex("ed25519Address.address", Ed25519Address.ADDRESS_LENGTH, object.address);
     }
 
+    // Copyright 2020 IOTA Stiftung
     /**
      * The length of the tail hash length in bytes.
      */
@@ -570,7 +563,7 @@
     function serializeMigratedFunds(writeStream, object) {
         writeStream.writeFixedHex("migratedFunds.tailTransactionHash", TAIL_HASH_LENGTH, object.tailTransactionHash);
         serializeAddress(writeStream, object.address);
-        writeStream.writeUInt64("migratedFunds.deposit", BigInt(object.deposit));
+        writeStream.writeUInt64("migratedFunds.deposit", bigInt__default["default"](object.deposit));
     }
 
     /**
@@ -1456,7 +1449,7 @@
             const v0 = (data[byteOffset + 0] +
                 (data[byteOffset + 1] << 8) +
                 (data[byteOffset + 2] << 16)) >>> 0;
-            return BigInt(v0);
+            return bigInt__default["default"](v0);
         }
         /**
          * Load 4 bytes from array as bigint.
@@ -1469,7 +1462,7 @@
                 (data[byteOffset + 1] << 8) +
                 (data[byteOffset + 2] << 16) +
                 (data[byteOffset + 3] << 24)) >>> 0;
-            return BigInt(v0);
+            return bigInt__default["default"](v0);
         }
         /**
          * Load 8 bytes from array as bigint.
@@ -1486,7 +1479,9 @@
                 (data[byteOffset + 5] << 8) +
                 (data[byteOffset + 6] << 16) +
                 (data[byteOffset + 7] << 24)) >>> 0;
-            return (BigInt(v1) << BigIntHelper.BIG_32) | BigInt(v0);
+            return bigInt__default["default"](v1)
+                .shiftLeft(BigIntHelper.BIG_32)
+                .or(v0);
         }
         /**
          * Convert a big int to bytes.
@@ -1495,8 +1490,8 @@
          * @param byteOffset The start index to write from.
          */
         static write8(value, data, byteOffset) {
-            const v0 = Number(value & BigIntHelper.BIG_32_MASK);
-            const v1 = Number((value >> BigIntHelper.BIG_32) & BigIntHelper.BIG_32_MASK);
+            const v0 = Number(value.and(BigIntHelper.BIG_32_MASK));
+            const v1 = Number((value.shiftRight(BigIntHelper.BIG_32)).and(BigIntHelper.BIG_32_MASK));
             data[byteOffset] = v0 & 0xFF;
             data[byteOffset + 1] = (v0 >> 8) & 0xFF;
             data[byteOffset + 2] = (v0 >> 16) & 0xFF;
@@ -1515,50 +1510,48 @@
         }
     }
     // @internal
-    BigIntHelper.BIG_32 = BigInt(32);
+    BigIntHelper.BIG_32 = bigInt__default["default"](32);
     // @internal
-    BigIntHelper.BIG_32_MASK = BigInt(0xFFFFFFFF);
+    BigIntHelper.BIG_32_MASK = bigInt__default["default"](0xFFFFFFFF);
 
     // Copyright 2020 IOTA Stiftung
-    // SPDX-License-Identifier: Apache-2.0
-    /* eslint-disable no-bitwise */
     /**
      * This is a port of the Go code from https://github.com/hdevalence/ed25519consensus
      * which is an extension of https://github.com/golang/crypto/tree/master/ed25519
      * which is in turn a port of the “ref10” implementation of ed25519 from SUPERCOP.
      */
     // @internal
-    const BIG_1_SHIFTL_20 = BigInt(1) << BigInt(20);
+    const BIG_1_SHIFTL_20 = bigInt__default["default"](1).shiftLeft(20);
     // @internal
-    const BIG_1_SHIFTL_24 = BigInt(1) << BigInt(24);
+    const BIG_1_SHIFTL_24 = bigInt__default["default"](1).shiftLeft(24);
     // @internal
-    const BIG_1_SHIFTL_25 = BigInt(1) << BigInt(25);
+    const BIG_1_SHIFTL_25 = bigInt__default["default"](1).shiftLeft(25);
     // @internal
     const BIG_ARR = [
-        BigInt(0), BigInt(1), BigInt(2), BigInt(3), BigInt(4), BigInt(5),
-        BigInt(6), BigInt(7), BigInt(8), BigInt(9), BigInt(10), BigInt(11),
-        BigInt(12), BigInt(13), BigInt(14), BigInt(15), BigInt(16), BigInt(17),
-        BigInt(18), BigInt(19), BigInt(20), BigInt(21), BigInt(22), BigInt(23),
-        BigInt(24), BigInt(25), BigInt(26)
+        bigInt__default["default"](0), bigInt__default["default"](1), bigInt__default["default"](2), bigInt__default["default"](3), bigInt__default["default"](4), bigInt__default["default"](5),
+        bigInt__default["default"](6), bigInt__default["default"](7), bigInt__default["default"](8), bigInt__default["default"](9), bigInt__default["default"](10), bigInt__default["default"](11),
+        bigInt__default["default"](12), bigInt__default["default"](13), bigInt__default["default"](14), bigInt__default["default"](15), bigInt__default["default"](16), bigInt__default["default"](17),
+        bigInt__default["default"](18), bigInt__default["default"](19), bigInt__default["default"](20), bigInt__default["default"](21), bigInt__default["default"](22), bigInt__default["default"](23),
+        bigInt__default["default"](24), bigInt__default["default"](25), bigInt__default["default"](26)
     ];
     // @internal
-    const BIG_38 = BigInt(38);
+    const BIG_38 = bigInt__default["default"](38);
     // @internal
-    const BIG_666643 = BigInt(666643);
+    const BIG_666643 = bigInt__default["default"](666643);
     // @internal
-    const BIG_470296 = BigInt(470296);
+    const BIG_470296 = bigInt__default["default"](470296);
     // @internal
-    const BIG_654183 = BigInt(654183);
+    const BIG_654183 = bigInt__default["default"](654183);
     // @internal
-    const BIG_997805 = BigInt(997805);
+    const BIG_997805 = bigInt__default["default"](997805);
     // @internal
-    const BIG_136657 = BigInt(136657);
+    const BIG_136657 = bigInt__default["default"](136657);
     // @internal
-    const BIG_683901 = BigInt(683901);
+    const BIG_683901 = bigInt__default["default"](683901);
     // @internal
-    const BIG_2097151 = BigInt(2097151);
+    const BIG_2097151 = bigInt__default["default"](2097151);
     // @internal
-    const BIG_8388607 = BigInt(8388607);
+    const BIG_8388607 = bigInt__default["default"](8388607);
 
     // Copyright 2020 IOTA Stiftung
     /**
@@ -1611,60 +1604,140 @@
          * @param g The g element.
          */
         mul(f, g) {
-            const f0 = BigInt(f.data[0]);
-            const f1 = BigInt(f.data[1]);
-            const f2 = BigInt(f.data[2]);
-            const f3 = BigInt(f.data[3]);
-            const f4 = BigInt(f.data[4]);
-            const f5 = BigInt(f.data[5]);
-            const f6 = BigInt(f.data[6]);
-            const f7 = BigInt(f.data[7]);
-            const f8 = BigInt(f.data[8]);
-            const f9 = BigInt(f.data[9]);
-            const f12 = BigInt(2 * f.data[1]);
-            const f32 = BigInt(2 * f.data[3]);
-            const f52 = BigInt(2 * f.data[5]);
-            const f72 = BigInt(2 * f.data[7]);
-            const f92 = BigInt(2 * f.data[9]);
-            const g0 = BigInt(g.data[0]);
-            const g1 = BigInt(g.data[1]);
-            const g2 = BigInt(g.data[2]);
-            const g3 = BigInt(g.data[3]);
-            const g4 = BigInt(g.data[4]);
-            const g5 = BigInt(g.data[5]);
-            const g6 = BigInt(g.data[6]);
-            const g7 = BigInt(g.data[7]);
-            const g8 = BigInt(g.data[8]);
-            const g9 = BigInt(g.data[9]);
-            const g119 = BigInt(19 * g.data[1]); /* 1.4*2^29 */
-            const g219 = BigInt(19 * g.data[2]); /* 1.4*2^30; still ok */
-            const g319 = BigInt(19 * g.data[3]);
-            const g419 = BigInt(19 * g.data[4]);
-            const g519 = BigInt(19 * g.data[5]);
-            const g619 = BigInt(19 * g.data[6]);
-            const g719 = BigInt(19 * g.data[7]);
-            const g819 = BigInt(19 * g.data[8]);
-            const g919 = BigInt(19 * g.data[9]);
-            const h0 = (f0 * g0) + (f12 * g919) + (f2 * g819) + (f32 * g719) +
-                (f4 * g619) + (f52 * g519) + (f6 * g419) + (f72 * g319) + (f8 * g219) + (f92 * g119);
-            const h1 = (f0 * g1) + (f1 * g0) + (f2 * g919) + (f3 * g819) + (f4 * g719) +
-                (f5 * g619) + (f6 * g519) + (f7 * g419) + (f8 * g319) + (f9 * g219);
-            const h2 = (f0 * g2) + (f12 * g1) + (f2 * g0) + (f32 * g919) + (f4 * g819) +
-                (f52 * g719) + (f6 * g619) + (f72 * g519) + (f8 * g419) + (f92 * g319);
-            const h3 = (f0 * g3) + (f1 * g2) + (f2 * g1) + (f3 * g0) + (f4 * g919) +
-                (f5 * g819) + (f6 * g719) + (f7 * g619) + (f8 * g519) + (f9 * g419);
-            const h4 = (f0 * g4) + (f12 * g3) + (f2 * g2) + (f32 * g1) + (f4 * g0) +
-                (f52 * g919) + (f6 * g819) + (f72 * g719) + (f8 * g619) + (f92 * g519);
-            const h5 = (f0 * g5) + (f1 * g4) + (f2 * g3) + (f3 * g2) + (f4 * g1) +
-                (f5 * g0) + (f6 * g919) + (f7 * g819) + (f8 * g719) + (f9 * g619);
-            const h6 = (f0 * g6) + (f12 * g5) + (f2 * g4) + (f32 * g3) + (f4 * g2) +
-                (f52 * g1) + (f6 * g0) + (f72 * g919) + (f8 * g819) + (f92 * g719);
-            const h7 = (f0 * g7) + (f1 * g6) + (f2 * g5) + (f3 * g4) + (f4 * g3) +
-                (f5 * g2) + (f6 * g1) + (f7 * g0) + (f8 * g919) + (f9 * g819);
-            const h8 = (f0 * g8) + (f12 * g7) + (f2 * g6) + (f32 * g5) + (f4 * g4) +
-                (f52 * g3) + (f6 * g2) + (f72 * g1) + (f8 * g0) + (f92 * g919);
-            const h9 = (f0 * g9) + (f1 * g8) + (f2 * g7) + (f3 * g6) + (f4 * g5) +
-                (f5 * g4) + (f6 * g3) + (f7 * g2) + (f8 * g1) + (f9 * g0);
+            const f0 = bigInt__default["default"](f.data[0]);
+            const f1 = bigInt__default["default"](f.data[1]);
+            const f2 = bigInt__default["default"](f.data[2]);
+            const f3 = bigInt__default["default"](f.data[3]);
+            const f4 = bigInt__default["default"](f.data[4]);
+            const f5 = bigInt__default["default"](f.data[5]);
+            const f6 = bigInt__default["default"](f.data[6]);
+            const f7 = bigInt__default["default"](f.data[7]);
+            const f8 = bigInt__default["default"](f.data[8]);
+            const f9 = bigInt__default["default"](f.data[9]);
+            const f12 = bigInt__default["default"](2 * f.data[1]);
+            const f32 = bigInt__default["default"](2 * f.data[3]);
+            const f52 = bigInt__default["default"](2 * f.data[5]);
+            const f72 = bigInt__default["default"](2 * f.data[7]);
+            const f92 = bigInt__default["default"](2 * f.data[9]);
+            const g0 = bigInt__default["default"](g.data[0]);
+            const g1 = bigInt__default["default"](g.data[1]);
+            const g2 = bigInt__default["default"](g.data[2]);
+            const g3 = bigInt__default["default"](g.data[3]);
+            const g4 = bigInt__default["default"](g.data[4]);
+            const g5 = bigInt__default["default"](g.data[5]);
+            const g6 = bigInt__default["default"](g.data[6]);
+            const g7 = bigInt__default["default"](g.data[7]);
+            const g8 = bigInt__default["default"](g.data[8]);
+            const g9 = bigInt__default["default"](g.data[9]);
+            const g119 = bigInt__default["default"](19 * g.data[1]); /* 1.4*2^29 */
+            const g219 = bigInt__default["default"](19 * g.data[2]); /* 1.4*2^30; still ok */
+            const g319 = bigInt__default["default"](19 * g.data[3]);
+            const g419 = bigInt__default["default"](19 * g.data[4]);
+            const g519 = bigInt__default["default"](19 * g.data[5]);
+            const g619 = bigInt__default["default"](19 * g.data[6]);
+            const g719 = bigInt__default["default"](19 * g.data[7]);
+            const g819 = bigInt__default["default"](19 * g.data[8]);
+            const g919 = bigInt__default["default"](19 * g.data[9]);
+            const h0 = f0.times(g0)
+                .plus(f12.times(g919))
+                .plus(f2.times(g819))
+                .plus(f32.times(g719))
+                .plus(f4.times(g619))
+                .plus(f52.times(g519))
+                .plus(f6.times(g419))
+                .plus(f72.times(g319))
+                .plus(f8.times(g219))
+                .plus(f92.times(g119));
+            const h1 = f0.times(g1)
+                .plus(f1.times(g0))
+                .plus(f2.times(g919))
+                .plus(f3.times(g819))
+                .plus(f4.times(g719))
+                .plus(f5.times(g619))
+                .plus(f6.times(g519))
+                .plus(f7.times(g419))
+                .plus(f8.times(g319))
+                .plus(f9.times(g219));
+            const h2 = f0.times(g2)
+                .plus(f12.times(g1))
+                .plus(f2.times(g0))
+                .plus(f32.times(g919))
+                .plus(f4.times(g819))
+                .plus(f52.times(g719))
+                .plus(f6.times(g619))
+                .plus(f72.times(g519))
+                .plus(f8.times(g419))
+                .plus(f92.times(g319));
+            const h3 = f0.times(g3)
+                .plus(f1.times(g2))
+                .plus(f2.times(g1))
+                .plus(f3.times(g0))
+                .plus(f4.times(g919))
+                .plus(f5.times(g819))
+                .plus(f6.times(g719))
+                .plus(f7.times(g619))
+                .plus(f8.times(g519))
+                .plus(f9.times(g419));
+            const h4 = f0.times(g4)
+                .plus(f12.times(g3))
+                .plus(f2.times(g2))
+                .plus(f32.times(g1))
+                .plus(f4.times(g0))
+                .plus(f52.times(g919))
+                .plus(f6.times(g819))
+                .plus(f72.times(g719))
+                .plus(f8.times(g619))
+                .plus(f92.times(g519));
+            const h5 = f0.times(g5)
+                .plus(f1.times(g4))
+                .plus(f2.times(g3))
+                .plus(f3.times(g2))
+                .plus(f4.times(g1))
+                .plus(f5.times(g0))
+                .plus(f6.times(g919))
+                .plus(f7.times(g819))
+                .plus(f8.times(g719))
+                .plus(f9.times(g619));
+            const h6 = f0.times(g6)
+                .plus(f12.times(g5))
+                .plus(f2.times(g4))
+                .plus(f32.times(g3))
+                .plus(f4.times(g2))
+                .plus(f52.times(g1))
+                .plus(f6.times(g0))
+                .plus(f72.times(g919))
+                .plus(f8.times(g819))
+                .plus(f92.times(g719));
+            const h7 = f0.times(g7)
+                .plus(f1.times(g6))
+                .plus(f2.times(g5))
+                .plus(f3.times(g4))
+                .plus(f4.times(g3))
+                .plus(f5.times(g2))
+                .plus(f6.times(g1))
+                .plus(f7.times(g0))
+                .plus(f8.times(g919))
+                .plus(f9.times(g819));
+            const h8 = f0.times(g8)
+                .plus(f12.times(g7))
+                .plus(f2.times(g6))
+                .plus(f32.times(g5))
+                .plus(f4.times(g4))
+                .plus(f52.times(g3))
+                .plus(f6.times(g2))
+                .plus(f72.times(g1))
+                .plus(f8.times(g0))
+                .plus(f92.times(g919));
+            const h9 = f0.times(g9)
+                .plus(f1.times(g8))
+                .plus(f2.times(g7))
+                .plus(f3.times(g6))
+                .plus(f4.times(g5))
+                .plus(f5.times(g4))
+                .plus(f6.times(g3))
+                .plus(f7.times(g2))
+                .plus(f8.times(g1))
+                .plus(f9.times(g0));
             this.combine(h0, h1, h2, h3, h4, h5, h6, h7, h8, h9);
         }
         /**
@@ -1689,64 +1762,64 @@
               |h1| <= (1.1*1.1*2^51*(1+1+19+19+19+19+19+19+19+19))
                 i.e. |h1| <= 1.5*2^58; narrower ranges for h3, h5, h7, h9
             */
-            c0 = (h0 + BIG_1_SHIFTL_25) >> BIG_ARR[26];
-            h1 += c0;
-            h0 -= c0 << BIG_ARR[26];
-            c4 = (h4 + BIG_1_SHIFTL_25) >> BIG_ARR[26];
-            h5 += c4;
-            h4 -= c4 << BIG_ARR[26];
+            c0 = (h0.plus(BIG_1_SHIFTL_25)).shiftRight(BIG_ARR[26]);
+            h1 = h1.plus(c0);
+            h0 = h0.minus(c0.shiftLeft(BIG_ARR[26]));
+            c4 = (h4.plus(BIG_1_SHIFTL_25)).shiftRight(BIG_ARR[26]);
+            h5 = h5.plus(c4);
+            h4 = h4.minus(c4.shiftLeft(BIG_ARR[26]));
             /* |h0| <= 2^25 */
             /* |h4| <= 2^25 */
             /* |h1| <= 1.51*2^58 */
             /* |h5| <= 1.51*2^58 */
-            const c1 = (h1 + BIG_1_SHIFTL_24) >> BIG_ARR[25];
-            h2 += c1;
-            h1 -= c1 << BIG_ARR[25];
-            const c5 = (h5 + BIG_1_SHIFTL_24) >> BIG_ARR[25];
-            h6 += c5;
-            h5 -= c5 << BIG_ARR[25];
+            const c1 = (h1.plus(BIG_1_SHIFTL_24)).shiftRight(BIG_ARR[25]);
+            h2 = h2.plus(c1);
+            h1 = h1.minus(c1.shiftLeft(BIG_ARR[25]));
+            const c5 = (h5.plus(BIG_1_SHIFTL_24)).shiftRight(BIG_ARR[25]);
+            h6 = h6.plus(c5);
+            h5 = h5.minus(c5.shiftLeft(BIG_ARR[25]));
             /* |h1| <= 2^24; from now on fits into: number */
             /* |h5| <= 2^24; from now on fits into: number */
             /* |h2| <= 1.21*2^59 */
             /* |h6| <= 1.21*2^59 */
-            const c2 = (h2 + BIG_1_SHIFTL_25) >> BIG_ARR[26];
-            h3 += c2;
-            h2 -= c2 << BIG_ARR[26];
-            const c6 = (h6 + BIG_1_SHIFTL_25) >> BIG_ARR[26];
-            h7 += c6;
-            h6 -= c6 << BIG_ARR[26];
+            const c2 = (h2.plus(BIG_1_SHIFTL_25)).shiftRight(BIG_ARR[26]);
+            h3 = h3.plus(c2);
+            h2 = h2.minus(c2.shiftLeft(BIG_ARR[26]));
+            const c6 = (h6.plus(BIG_1_SHIFTL_25)).shiftRight(BIG_ARR[26]);
+            h7 = h7.plus(c6);
+            h6 = h6.minus(c6.shiftLeft(BIG_ARR[26]));
             /* |h2| <= 2^25; from now on fits into: number unchanged */
             /* |h6| <= 2^25; from now on fits into: number unchanged */
             /* |h3| <= 1.51*2^58 */
             /* |h7| <= 1.51*2^58 */
-            const c3 = (h3 + BIG_1_SHIFTL_24) >> BIG_ARR[25];
-            h4 += c3;
-            h3 -= c3 << BIG_ARR[25];
-            const c7 = (h7 + BIG_1_SHIFTL_24) >> BIG_ARR[25];
-            h8 += c7;
-            h7 -= c7 << BIG_ARR[25];
+            const c3 = (h3.plus(BIG_1_SHIFTL_24)).shiftRight(BIG_ARR[25]);
+            h4 = h4.plus(c3);
+            h3 = h3.minus(c3.shiftLeft(BIG_ARR[25]));
+            const c7 = (h7.plus(BIG_1_SHIFTL_24)).shiftRight(BIG_ARR[25]);
+            h8 = h8.plus(c7);
+            h7 = h7.minus(c7.shiftLeft(BIG_ARR[25]));
             /* |h3| <= 2^24; from now on fits into: number unchanged */
             /* |h7| <= 2^24; from now on fits into: number unchanged */
             /* |h4| <= 1.52*2^33 */
             /* |h8| <= 1.52*2^33 */
-            c4 = (h4 + BIG_1_SHIFTL_25) >> BIG_ARR[26];
-            h5 += c4;
-            h4 -= c4 << BIG_ARR[26];
-            const c8 = (h8 + BIG_1_SHIFTL_25) >> BIG_ARR[26];
-            h9 += c8;
-            h8 -= c8 << BIG_ARR[26];
+            c4 = (h4.plus(BIG_1_SHIFTL_25)).shiftRight(BIG_ARR[26]);
+            h5 = h5.plus(c4);
+            h4 = h4.minus(c4.shiftLeft(BIG_ARR[26]));
+            const c8 = (h8.plus(BIG_1_SHIFTL_25)).shiftRight(BIG_ARR[26]);
+            h9 = h9.plus(c8);
+            h8 = h8.minus(c8.shiftLeft(BIG_ARR[26]));
             /* |h4| <= 2^25; from now on fits into: number unchanged */
             /* |h8| <= 2^25; from now on fits into: number unchanged */
             /* |h5| <= 1.01*2^24 */
             /* |h9| <= 1.51*2^58 */
-            const c9 = (h9 + BIG_1_SHIFTL_24) >> BIG_ARR[25];
-            h0 += c9 * BIG_ARR[19];
-            h9 -= c9 << BIG_ARR[25];
+            const c9 = (h9.plus(BIG_1_SHIFTL_24)).shiftRight(BIG_ARR[25]);
+            h0 = h0.plus(c9.times(BIG_ARR[19]));
+            h9 = h9.minus(c9.shiftLeft(BIG_ARR[25]));
             /* |h9| <= 2^24; from now on fits into: number unchanged */
             /* |h0| <= 1.8*2^37 */
-            c0 = (h0 + BIG_1_SHIFTL_25) >> BIG_ARR[26];
-            h1 += c0;
-            h0 -= c0 << BIG_ARR[26];
+            c0 = (h0.plus(BIG_1_SHIFTL_25)).shiftRight(BIG_ARR[26]);
+            h1 = h1.plus(c0);
+            h0 = h0.minus(c0.shiftLeft(BIG_ARR[26]));
             /* |h0| <= 2^25; from now on fits into: number unchanged */
             /* |h1| <= 1.01*2^24 */
             this.data[0] = Number(h0);
@@ -1786,40 +1859,85 @@
          * @returns The components.
          */
         internalSquare(f) {
-            const f0 = BigInt(f.data[0]);
-            const f1 = BigInt(f.data[1]);
-            const f2 = BigInt(f.data[2]);
-            const f3 = BigInt(f.data[3]);
-            const f4 = BigInt(f.data[4]);
-            const f5 = BigInt(f.data[5]);
-            const f6 = BigInt(f.data[6]);
-            const f7 = BigInt(f.data[7]);
-            const f8 = BigInt(f.data[8]);
-            const f9 = BigInt(f.data[9]);
-            const f02 = BigInt(2 * f.data[0]);
-            const f12 = BigInt(2 * f.data[1]);
-            const f22 = BigInt(2 * f.data[2]);
-            const f32 = BigInt(2 * f.data[3]);
-            const f42 = BigInt(2 * f.data[4]);
-            const f52 = BigInt(2 * f.data[5]);
-            const f62 = BigInt(2 * f.data[6]);
-            const f72 = BigInt(2 * f.data[7]);
-            const f538 = BIG_38 * f5; // 1.31*2^30
-            const f619 = BIG_ARR[19] * f6; // 1.31*2^30
-            const f738 = BIG_38 * f7; // 1.31*2^30
-            const f819 = BIG_ARR[19] * f8; // 1.31*2^30
-            const f938 = BIG_38 * f9; // 1.31*2^30
+            const f0 = bigInt__default["default"](f.data[0]);
+            const f1 = bigInt__default["default"](f.data[1]);
+            const f2 = bigInt__default["default"](f.data[2]);
+            const f3 = bigInt__default["default"](f.data[3]);
+            const f4 = bigInt__default["default"](f.data[4]);
+            const f5 = bigInt__default["default"](f.data[5]);
+            const f6 = bigInt__default["default"](f.data[6]);
+            const f7 = bigInt__default["default"](f.data[7]);
+            const f8 = bigInt__default["default"](f.data[8]);
+            const f9 = bigInt__default["default"](f.data[9]);
+            const f02 = bigInt__default["default"](2 * f.data[0]);
+            const f12 = bigInt__default["default"](2 * f.data[1]);
+            const f22 = bigInt__default["default"](2 * f.data[2]);
+            const f32 = bigInt__default["default"](2 * f.data[3]);
+            const f42 = bigInt__default["default"](2 * f.data[4]);
+            const f52 = bigInt__default["default"](2 * f.data[5]);
+            const f62 = bigInt__default["default"](2 * f.data[6]);
+            const f72 = bigInt__default["default"](2 * f.data[7]);
+            const f538 = BIG_38.times(f5); // 1.31*2^30
+            const f619 = BIG_ARR[19].times(f6); // 1.31*2^30
+            const f738 = BIG_38.times(f7); // 1.31*2^30
+            const f819 = BIG_ARR[19].times(f8); // 1.31*2^30
+            const f938 = BIG_38.times(f9); // 1.31*2^30
             return {
-                h0: (f0 * f0) + (f12 * f938) + (f22 * f819) + (f32 * f738) + (f42 * f619) + (f5 * f538),
-                h1: (f02 * f1) + (f2 * f938) + (f32 * f819) + (f4 * f738) + (f52 * f619),
-                h2: (f02 * f2) + (f12 * f1) + (f32 * f938) + (f42 * f819) + (f52 * f738) + (f6 * f619),
-                h3: (f02 * f3) + (f12 * f2) + (f4 * f938) + (f52 * f819) + (f6 * f738),
-                h4: (f02 * f4) + (f12 * f32) + (f2 * f2) + (f52 * f938) + (f62 * f819) + (f7 * f738),
-                h5: (f02 * f5) + (f12 * f4) + (f22 * f3) + (f6 * f938) + (f72 * f819),
-                h6: (f02 * f6) + (f12 * f52) + (f22 * f4) + (f32 * f3) + (f72 * f938) + (f8 * f819),
-                h7: (f02 * f7) + (f12 * f6) + (f22 * f5) + (f32 * f4) + (f8 * f938),
-                h8: (f02 * f8) + (f12 * f72) + (f22 * f6) + (f32 * f52) + (f4 * f4) + (f9 * f938),
-                h9: (f02 * f9) + (f12 * f8) + (f22 * f7) + (f32 * f6) + (f42 * f5)
+                h0: (f0.times(f0))
+                    .plus(f12.times(f938))
+                    .plus(f22.times(f819))
+                    .plus(f32.times(f738))
+                    .plus(f42.times(f619))
+                    .plus(f5.times(f538)),
+                h1: (f02.times(f1))
+                    .plus(f2.times(f938))
+                    .plus(f32.times(f819))
+                    .plus(f4.times(f738))
+                    .plus(f52.times(f619)),
+                h2: (f02.times(f2))
+                    .plus(f12.times(f1))
+                    .plus(f32.times(f938))
+                    .plus(f42.times(f819))
+                    .plus(f52.times(f738))
+                    .plus(f6.times(f619)),
+                h3: (f02.times(f3))
+                    .plus(f12.times(f2))
+                    .plus(f4.times(f938))
+                    .plus(f52.times(f819))
+                    .plus(f6.times(f738)),
+                h4: (f02.times(f4))
+                    .plus(f12.times(f32))
+                    .plus(f2.times(f2))
+                    .plus(f52.times(f938))
+                    .plus(f62.times(f819))
+                    .plus(f7.times(f738)),
+                h5: (f02.times(f5))
+                    .plus(f12.times(f4))
+                    .plus(f22.times(f3))
+                    .plus(f6.times(f938))
+                    .plus(f72.times(f819)),
+                h6: (f02.times(f6))
+                    .plus(f12.times(f52))
+                    .plus(f22.times(f4))
+                    .plus(f32.times(f3))
+                    .plus(f72.times(f938))
+                    .plus(f8.times(f819)),
+                h7: (f02.times(f7))
+                    .plus(f12.times(f6))
+                    .plus(f22.times(f5))
+                    .plus(f32.times(f4))
+                    .plus(f8.times(f938)),
+                h8: (f02.times(f8))
+                    .plus(f12.times(f72))
+                    .plus(f22.times(f6))
+                    .plus(f32.times(f52))
+                    .plus(f4.times(f4))
+                    .plus(f9.times(f938)),
+                h9: (f02.times(f9))
+                    .plus(f12.times(f8))
+                    .plus(f22.times(f7))
+                    .plus(f32.times(f6))
+                    .plus(f42.times(f5))
             };
         }
         /**
@@ -1837,16 +1955,16 @@
          */
         square2(f) {
             let { h0, h1, h2, h3, h4, h5, h6, h7, h8, h9 } = this.internalSquare(f);
-            h0 += h0;
-            h1 += h1;
-            h2 += h2;
-            h3 += h3;
-            h4 += h4;
-            h5 += h5;
-            h6 += h6;
-            h7 += h7;
-            h8 += h8;
-            h9 += h9;
+            h0 = h0.plus(h0);
+            h1 = h1.plus(h1);
+            h2 = h2.plus(h2);
+            h3 = h3.plus(h3);
+            h4 = h4.plus(h4);
+            h5 = h5.plus(h5);
+            h6 = h6.plus(h6);
+            h7 = h7.plus(h7);
+            h8 = h8.plus(h8);
+            h9 = h9.plus(h9);
             this.combine(h0, h1, h2, h3, h4, h5, h6, h7, h8, h9);
         }
         /**
@@ -1889,15 +2007,17 @@
          */
         fromBytes(bytes) {
             const h0 = BigIntHelper.read4(bytes, 0);
-            const h1 = BigIntHelper.read3(bytes, 4) << BIG_ARR[6];
-            const h2 = BigIntHelper.read3(bytes, 7) << BIG_ARR[5];
-            const h3 = BigIntHelper.read3(bytes, 10) << BIG_ARR[3];
-            const h4 = BigIntHelper.read3(bytes, 13) << BIG_ARR[2];
+            const h1 = BigIntHelper.read3(bytes, 4).shiftLeft(BIG_ARR[6]);
+            const h2 = BigIntHelper.read3(bytes, 7).shiftLeft(BIG_ARR[5]);
+            const h3 = BigIntHelper.read3(bytes, 10).shiftLeft(BIG_ARR[3]);
+            const h4 = BigIntHelper.read3(bytes, 13).shiftLeft(BIG_ARR[2]);
             const h5 = BigIntHelper.read4(bytes, 16);
-            const h6 = BigIntHelper.read3(bytes, 20) << BIG_ARR[7];
-            const h7 = BigIntHelper.read3(bytes, 23) << BIG_ARR[5];
-            const h8 = BigIntHelper.read3(bytes, 26) << BIG_ARR[4];
-            const h9 = (BigIntHelper.read3(bytes, 29) & BIG_8388607) << BIG_ARR[2];
+            const h6 = BigIntHelper.read3(bytes, 20).shiftLeft(BIG_ARR[7]);
+            const h7 = BigIntHelper.read3(bytes, 23).shiftLeft(BIG_ARR[5]);
+            const h8 = BigIntHelper.read3(bytes, 26).shiftLeft(BIG_ARR[4]);
+            const h9 = (BigIntHelper.read3(bytes, 29)
+                .and(BIG_8388607))
+                .shiftLeft(BIG_ARR[2]);
             this.combine(h0, h1, h2, h3, h4, h5, h6, h7, h8, h9);
         }
         /**
@@ -2442,7 +2562,7 @@
     // A is a constant in the Montgomery-form of curve25519.
     new FieldElement([486662, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
     // order is the order of Curve25519 in little-endian form.
-    const CONST_ORDER = [BigInt(0x5812631A5CF5D3ED), BigInt(0x14DEF9DEA2F79CD6), BIG_ARR[0], BigInt(0x1000000000000000)];
+    const CONST_ORDER = [bigInt__default["default"]("5812631A5CF5D3ED", 16), bigInt__default["default"]("14DEF9DEA2F79CD6", 16), BIG_ARR[0], bigInt__default["default"]("1000000000000000", 16)];
     // bi contains precomputed multiples of the base-point. See the Ed25519 paper
     // for a discussion about how these values are used.
     const CONST_BI = [
@@ -3164,411 +3284,538 @@
      * @param c The c.
      */
     function scalarMulAdd(s, a, b, c) {
-        const a0 = BIG_2097151 & BigIntHelper.read3(a, 0);
-        const a1 = BIG_2097151 & (BigIntHelper.read4(a, 2) >> BIG_ARR[5]);
-        const a2 = BIG_2097151 & (BigIntHelper.read3(a, 5) >> BIG_ARR[2]);
-        const a3 = BIG_2097151 & (BigIntHelper.read4(a, 7) >> BIG_ARR[7]);
-        const a4 = BIG_2097151 & (BigIntHelper.read4(a, 10) >> BIG_ARR[4]);
-        const a5 = BIG_2097151 & (BigIntHelper.read3(a, 13) >> BIG_ARR[1]);
-        const a6 = BIG_2097151 & (BigIntHelper.read4(a, 15) >> BIG_ARR[6]);
-        const a7 = BIG_2097151 & (BigIntHelper.read3(a, 18) >> BIG_ARR[3]);
-        const a8 = BIG_2097151 & BigIntHelper.read3(a, 21);
-        const a9 = BIG_2097151 & (BigIntHelper.read4(a, 23) >> BIG_ARR[5]);
-        const a10 = BIG_2097151 & (BigIntHelper.read3(a, 26) >> BIG_ARR[2]);
-        const a11 = (BigIntHelper.read4(a, 28) >> BIG_ARR[7]);
-        const b0 = BIG_2097151 & BigIntHelper.read3(b, 0);
-        const b1 = BIG_2097151 & (BigIntHelper.read4(b, 2) >> BIG_ARR[5]);
-        const b2 = BIG_2097151 & (BigIntHelper.read3(b, 5) >> BIG_ARR[2]);
-        const b3 = BIG_2097151 & (BigIntHelper.read4(b, 7) >> BIG_ARR[7]);
-        const b4 = BIG_2097151 & (BigIntHelper.read4(b, 10) >> BIG_ARR[4]);
-        const b5 = BIG_2097151 & (BigIntHelper.read3(b, 13) >> BIG_ARR[1]);
-        const b6 = BIG_2097151 & (BigIntHelper.read4(b, 15) >> BIG_ARR[6]);
-        const b7 = BIG_2097151 & (BigIntHelper.read3(b, 18) >> BIG_ARR[3]);
-        const b8 = BIG_2097151 & BigIntHelper.read3(b, 21);
-        const b9 = BIG_2097151 & (BigIntHelper.read4(b, 23) >> BIG_ARR[5]);
-        const b10 = BIG_2097151 & (BigIntHelper.read3(b, 26) >> BIG_ARR[2]);
-        const b11 = (BigIntHelper.read4(b, 28) >> BIG_ARR[7]);
-        const c0 = BIG_2097151 & BigIntHelper.read3(c, 0);
-        const c1 = BIG_2097151 & (BigIntHelper.read4(c, 2) >> BIG_ARR[5]);
-        const c2 = BIG_2097151 & (BigIntHelper.read3(c, 5) >> BIG_ARR[2]);
-        const c3 = BIG_2097151 & (BigIntHelper.read4(c, 7) >> BIG_ARR[7]);
-        const c4 = BIG_2097151 & (BigIntHelper.read4(c, 10) >> BIG_ARR[4]);
-        const c5 = BIG_2097151 & (BigIntHelper.read3(c, 13) >> BIG_ARR[1]);
-        const c6 = BIG_2097151 & (BigIntHelper.read4(c, 15) >> BIG_ARR[6]);
-        const c7 = BIG_2097151 & (BigIntHelper.read3(c, 18) >> BIG_ARR[3]);
-        const c8 = BIG_2097151 & BigIntHelper.read3(c, 21);
-        const c9 = BIG_2097151 & (BigIntHelper.read4(c, 23) >> BIG_ARR[5]);
-        const c10 = BIG_2097151 & (BigIntHelper.read3(c, 26) >> BIG_ARR[2]);
-        const c11 = (BigIntHelper.read4(c, 28) >> BIG_ARR[7]);
-        const carry = new BigInt64Array(32);
-        let s0 = c0 + (a0 * b0);
-        let s1 = c1 + (a0 * b1) + (a1 * b0);
-        let s2 = c2 + (a0 * b2) + (a1 * b1) + (a2 * b0);
-        let s3 = c3 + (a0 * b3) + (a1 * b2) + (a2 * b1) + (a3 * b0);
-        let s4 = c4 + (a0 * b4) + (a1 * b3) + (a2 * b2) + (a3 * b1) + (a4 * b0);
-        let s5 = c5 + (a0 * b5) + (a1 * b4) + (a2 * b3) + (a3 * b2) + (a4 * b1) + (a5 * b0);
-        let s6 = c6 + (a0 * b6) + (a1 * b5) + (a2 * b4) + (a3 * b3) + (a4 * b2) + (a5 * b1) + (a6 * b0);
-        let s7 = c7 + (a0 * b7) + (a1 * b6) + (a2 * b5) + (a3 * b4) + (a4 * b3) + (a5 * b2) + (a6 * b1) + (a7 * b0);
-        let s8 = c8 + (a0 * b8) + (a1 * b7) + (a2 * b6) + (a3 * b5) +
-            (a4 * b4) + (a5 * b3) + (a6 * b2) + (a7 * b1) + (a8 * b0);
-        let s9 = c9 + (a0 * b9) + (a1 * b8) + (a2 * b7) + (a3 * b6) +
-            (a4 * b5) + (a5 * b4) + (a6 * b3) + (a7 * b2) + (a8 * b1) + (a9 * b0);
-        let s10 = c10 + (a0 * b10) + (a1 * b9) + (a2 * b8) + (a3 * b7) + (a4 * b6) +
-            (a5 * b5) + (a6 * b4) + (a7 * b3) + (a8 * b2) + (a9 * b1) + (a10 * b0);
-        let s11 = c11 + (a0 * b11) + (a1 * b10) + (a2 * b9) + (a3 * b8) + (a4 * b7) +
-            (a5 * b6) + (a6 * b5) + (a7 * b4) + (a8 * b3) + (a9 * b2) + (a10 * b1) + (a11 * b0);
-        let s12 = (a1 * b11) + (a2 * b10) + (a3 * b9) + (a4 * b8) + (a5 * b7) +
-            (a6 * b6) + (a7 * b5) + (a8 * b4) + (a9 * b3) + (a10 * b2) + (a11 * b1);
-        let s13 = (a2 * b11) + (a3 * b10) + (a4 * b9) + (a5 * b8) + (a6 * b7) +
-            (a7 * b6) + (a8 * b5) + (a9 * b4) + (a10 * b3) + (a11 * b2);
-        let s14 = (a3 * b11) + (a4 * b10) + (a5 * b9) + (a6 * b8) + (a7 * b7) +
-            (a8 * b6) + (a9 * b5) + (a10 * b4) + (a11 * b3);
-        let s15 = (a4 * b11) + (a5 * b10) + (a6 * b9) + (a7 * b8) + (a8 * b7) + (a9 * b6) + (a10 * b5) + (a11 * b4);
-        let s16 = (a5 * b11) + (a6 * b10) + (a7 * b9) + (a8 * b8) + (a9 * b7) + (a10 * b6) + (a11 * b5);
-        let s17 = (a6 * b11) + (a7 * b10) + (a8 * b9) + (a9 * b8) + (a10 * b7) + (a11 * b6);
-        let s18 = (a7 * b11) + (a8 * b10) + (a9 * b9) + (a10 * b8) + (a11 * b7);
-        let s19 = (a8 * b11) + (a9 * b10) + (a10 * b9) + (a11 * b8);
-        let s20 = (a9 * b11) + (a10 * b10) + (a11 * b9);
-        let s21 = (a10 * b11) + (a11 * b10);
-        let s22 = (a11 * b11);
+        const a0 = BIG_2097151.and(BigIntHelper.read3(a, 0));
+        const a1 = BIG_2097151.and(BigIntHelper.read4(a, 2).shiftRight(BIG_ARR[5]));
+        const a2 = BIG_2097151.and(BigIntHelper.read3(a, 5).shiftRight(BIG_ARR[2]));
+        const a3 = BIG_2097151.and(BigIntHelper.read4(a, 7).shiftRight(BIG_ARR[7]));
+        const a4 = BIG_2097151.and(BigIntHelper.read4(a, 10).shiftRight(BIG_ARR[4]));
+        const a5 = BIG_2097151.and(BigIntHelper.read3(a, 13).shiftRight(BIG_ARR[1]));
+        const a6 = BIG_2097151.and(BigIntHelper.read4(a, 15).shiftRight(BIG_ARR[6]));
+        const a7 = BIG_2097151.and(BigIntHelper.read3(a, 18).shiftRight(BIG_ARR[3]));
+        const a8 = BIG_2097151.and(BigIntHelper.read3(a, 21));
+        const a9 = BIG_2097151.and(BigIntHelper.read4(a, 23).shiftRight(BIG_ARR[5]));
+        const a10 = BIG_2097151.and(BigIntHelper.read3(a, 26).shiftRight(BIG_ARR[2]));
+        const a11 = (BigIntHelper.read4(a, 28).shiftRight(BIG_ARR[7]));
+        const b0 = BIG_2097151.and(BigIntHelper.read3(b, 0));
+        const b1 = BIG_2097151.and(BigIntHelper.read4(b, 2).shiftRight(BIG_ARR[5]));
+        const b2 = BIG_2097151.and(BigIntHelper.read3(b, 5).shiftRight(BIG_ARR[2]));
+        const b3 = BIG_2097151.and(BigIntHelper.read4(b, 7).shiftRight(BIG_ARR[7]));
+        const b4 = BIG_2097151.and(BigIntHelper.read4(b, 10).shiftRight(BIG_ARR[4]));
+        const b5 = BIG_2097151.and(BigIntHelper.read3(b, 13).shiftRight(BIG_ARR[1]));
+        const b6 = BIG_2097151.and(BigIntHelper.read4(b, 15).shiftRight(BIG_ARR[6]));
+        const b7 = BIG_2097151.and(BigIntHelper.read3(b, 18).shiftRight(BIG_ARR[3]));
+        const b8 = BIG_2097151.and(BigIntHelper.read3(b, 21));
+        const b9 = BIG_2097151.and(BigIntHelper.read4(b, 23).shiftRight(BIG_ARR[5]));
+        const b10 = BIG_2097151.and(BigIntHelper.read3(b, 26).shiftRight(BIG_ARR[2]));
+        const b11 = (BigIntHelper.read4(b, 28).shiftRight(BIG_ARR[7]));
+        const c0 = BIG_2097151.and(BigIntHelper.read3(c, 0));
+        const c1 = BIG_2097151.and(BigIntHelper.read4(c, 2).shiftRight(BIG_ARR[5]));
+        const c2 = BIG_2097151.and(BigIntHelper.read3(c, 5).shiftRight(BIG_ARR[2]));
+        const c3 = BIG_2097151.and(BigIntHelper.read4(c, 7).shiftRight(BIG_ARR[7]));
+        const c4 = BIG_2097151.and(BigIntHelper.read4(c, 10).shiftRight(BIG_ARR[4]));
+        const c5 = BIG_2097151.and(BigIntHelper.read3(c, 13).shiftRight(BIG_ARR[1]));
+        const c6 = BIG_2097151.and(BigIntHelper.read4(c, 15).shiftRight(BIG_ARR[6]));
+        const c7 = BIG_2097151.and(BigIntHelper.read3(c, 18).shiftRight(BIG_ARR[3]));
+        const c8 = BIG_2097151.and(BigIntHelper.read3(c, 21));
+        const c9 = BIG_2097151.and(BigIntHelper.read4(c, 23).shiftRight(BIG_ARR[5]));
+        const c10 = BIG_2097151.and(BigIntHelper.read3(c, 26).shiftRight(BIG_ARR[2]));
+        const c11 = (BigIntHelper.read4(c, 28).shiftRight(BIG_ARR[7]));
+        const carry = [];
+        for (let i = 0; i < 32; i++) {
+            carry[i] = bigInt__default["default"](0);
+        }
+        let s0 = c0.add(a0.times(b0));
+        let s1 = c1.add((a0.times(b1))
+            .add(a1.times(b0)));
+        let s2 = c2.add((a0.times(b2))
+            .add(a1.times(b1))
+            .add(a2.times(b0)));
+        let s3 = c3.add((a0.times(b3))
+            .add(a1.times(b2))
+            .add(a2.times(b1))
+            .add(a3.times(b0)));
+        let s4 = c4.add((a0.times(b4))
+            .add(a1.times(b3))
+            .add(a2.times(b2))
+            .add(a3.times(b1))
+            .add(a4.times(b0)));
+        let s5 = c5.add((a0.times(b5))
+            .add(a1.times(b4))
+            .add(a2.times(b3))
+            .add(a3.times(b2))
+            .add(a4.times(b1))
+            .add(a5.times(b0)));
+        let s6 = c6.add((a0.times(b6))
+            .add(a1.times(b5))
+            .add(a2.times(b4))
+            .add(a3.times(b3))
+            .add(a4.times(b2))
+            .add(a5.times(b1))
+            .add(a6.times(b0)));
+        let s7 = c7.add((a0.times(b7))
+            .add(a1.times(b6))
+            .add(a2.times(b5))
+            .add(a3.times(b4))
+            .add(a4.times(b3))
+            .add(a5.times(b2))
+            .add(a6.times(b1)))
+            .add(a7.times(b0));
+        let s8 = c8.add((a0.times(b8))
+            .add(a1.times(b7))
+            .add(a2.times(b6))
+            .add(a3.times(b5))
+            .add(a4.times(b4))
+            .add(a5.times(b3))
+            .add(a6.times(b2))
+            .add(a7.times(b1))
+            .add(a8.times(b0)));
+        let s9 = c9.add(a0.times(b9))
+            .add(a1.times(b8))
+            .add(a2.times(b7))
+            .add(a3.times(b6))
+            .add(a4.times(b5))
+            .add(a5.times(b4))
+            .add(a6.times(b3))
+            .add(a7.times(b2))
+            .add(a8.times(b1))
+            .add(a9.times(b0));
+        let s10 = c10.add(a0.times(b10))
+            .add(a1.times(b9))
+            .add(a2.times(b8))
+            .add(a3.times(b7))
+            .add(a4.times(b6))
+            .add(a5.times(b5))
+            .add(a6.times(b4))
+            .add(a7.times(b3))
+            .add(a8.times(b2))
+            .add(a9.times(b1))
+            .add(a10.times(b0));
+        let s11 = c11.add(a0.times(b11))
+            .add(a1.times(b10))
+            .add(a2.times(b9))
+            .add(a3.times(b8))
+            .add(a4.times(b7))
+            .add(a5.times(b6))
+            .add(a6.times(b5))
+            .add(a7.times(b4))
+            .add(a8.times(b3))
+            .add(a9.times(b2))
+            .add(a10.times(b1))
+            .add(a11.times(b0));
+        let s12 = (a1.times(b11))
+            .add(a2.times(b10))
+            .add(a3.times(b9))
+            .add(a4.times(b8))
+            .add(a5.times(b7))
+            .add(a6.times(b6))
+            .add(a7.times(b5))
+            .add(a8.times(b4))
+            .add(a9.times(b3))
+            .add(a10.times(b2))
+            .add(a11.times(b1));
+        let s13 = (a2.times(b11))
+            .add(a3.times(b10))
+            .add(a4.times(b9))
+            .add(a5.times(b8))
+            .add(a6.times(b7))
+            .add(a7.times(b6))
+            .add(a8.times(b5))
+            .add(a9.times(b4))
+            .add(a10.times(b3))
+            .add(a11.times(b2));
+        let s14 = (a3.times(b11))
+            .add(a4.times(b10))
+            .add(a5.times(b9))
+            .add(a6.times(b8))
+            .add(a7.times(b7))
+            .add(a8.times(b6))
+            .add(a9.times(b5))
+            .add(a10.times(b4))
+            .add(a11.times(b3));
+        let s15 = (a4.times(b11))
+            .add(a5.times(b10))
+            .add(a6.times(b9))
+            .add(a7.times(b8))
+            .add(a8.times(b7))
+            .add(a9.times(b6))
+            .add(a10.times(b5))
+            .add(a11.times(b4));
+        let s16 = (a5.times(b11))
+            .add(a6.times(b10))
+            .add(a7.times(b9))
+            .add(a8.times(b8))
+            .add(a9.times(b7))
+            .add(a10.times(b6))
+            .add(a11.times(b5));
+        let s17 = (a6.times(b11))
+            .add(a7.times(b10))
+            .add(a8.times(b9))
+            .add(a9.times(b8))
+            .add(a10.times(b7))
+            .add(a11.times(b6));
+        let s18 = (a7.times(b11))
+            .add(a8.times(b10))
+            .add(a9.times(b9))
+            .add(a10.times(b8))
+            .add(a11.times(b7));
+        let s19 = (a8.times(b11))
+            .add(a9.times(b10))
+            .add(a10.times(b9))
+            .add(a11.times(b8));
+        let s20 = (a9.times(b11))
+            .add(a10.times(b10))
+            .add(a11.times(b9));
+        let s21 = (a10.times(b11))
+            .add(a11.times(b10));
+        let s22 = (a11.times(b11));
         let s23 = BIG_ARR[0];
-        carry[0] = (s0 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s1 += carry[0];
-        s0 -= carry[0] << BIG_ARR[21];
-        carry[2] = (s2 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s3 += carry[2];
-        s2 -= carry[2] << BIG_ARR[21];
-        carry[4] = (s4 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s5 += carry[4];
-        s4 -= carry[4] << BIG_ARR[21];
-        carry[6] = (s6 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s7 += carry[6];
-        s6 -= carry[6] << BIG_ARR[21];
-        carry[8] = (s8 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s9 += carry[8];
-        s8 -= carry[8] << BIG_ARR[21];
-        carry[10] = (s10 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s11 += carry[10];
-        s10 -= carry[10] << BIG_ARR[21];
-        carry[12] = (s12 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s13 += carry[12];
-        s12 -= carry[12] << BIG_ARR[21];
-        carry[14] = (s14 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s15 += carry[14];
-        s14 -= carry[14] << BIG_ARR[21];
-        carry[16] = (s16 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s17 += carry[16];
-        s16 -= carry[16] << BIG_ARR[21];
-        carry[18] = (s18 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s19 += carry[18];
-        s18 -= carry[18] << BIG_ARR[21];
-        carry[20] = (s20 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s21 += carry[20];
-        s20 -= carry[20] << BIG_ARR[21];
-        carry[22] = (s22 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s23 += carry[22];
-        s22 -= carry[22] << BIG_ARR[21];
-        carry[1] = (s1 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s2 += carry[1];
-        s1 -= carry[1] << BIG_ARR[21];
-        carry[3] = (s3 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s4 += carry[3];
-        s3 -= carry[3] << BIG_ARR[21];
-        carry[5] = (s5 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s6 += carry[5];
-        s5 -= carry[5] << BIG_ARR[21];
-        carry[7] = (s7 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s8 += carry[7];
-        s7 -= carry[7] << BIG_ARR[21];
-        carry[9] = (s9 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s10 += carry[9];
-        s9 -= carry[9] << BIG_ARR[21];
-        carry[11] = (s11 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s12 += carry[11];
-        s11 -= carry[11] << BIG_ARR[21];
-        carry[13] = (s13 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s14 += carry[13];
-        s13 -= carry[13] << BIG_ARR[21];
-        carry[15] = (s15 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s16 += carry[15];
-        s15 -= carry[15] << BIG_ARR[21];
-        carry[17] = (s17 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s18 += carry[17];
-        s17 -= carry[17] << BIG_ARR[21];
-        carry[19] = (s19 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s20 += carry[19];
-        s19 -= carry[19] << BIG_ARR[21];
-        carry[21] = (s21 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s22 += carry[21];
-        s21 -= carry[21] << BIG_ARR[21];
-        s11 += s23 * BIG_666643;
-        s12 += s23 * BIG_470296;
-        s13 += s23 * BIG_654183;
-        s14 -= s23 * BIG_997805;
-        s15 += s23 * BIG_136657;
-        s16 -= s23 * BIG_683901;
+        carry[0] = (s0.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s1 = s1.add(carry[0]);
+        s0 = s0.minus(carry[0].shiftLeft(BIG_ARR[21]));
+        carry[2] = (s2.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s3 = s3.add(carry[2]);
+        s2 = s2.minus(carry[2].shiftLeft(BIG_ARR[21]));
+        carry[4] = (s4.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s5 = s5.add(carry[4]);
+        s4 = s4.minus(carry[4].shiftLeft(BIG_ARR[21]));
+        carry[6] = (s6.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s7 = s7.add(carry[6]);
+        s6 = s6.minus(carry[6].shiftLeft(BIG_ARR[21]));
+        carry[8] = (s8.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s9 = s9.add(carry[8]);
+        s8 = s8.minus(carry[8].shiftLeft(BIG_ARR[21]));
+        carry[10] = (s10.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s11 = s11.add(carry[10]);
+        s10 = s10.minus(carry[10].shiftLeft(BIG_ARR[21]));
+        carry[12] = (s12.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s13 = s13.add(carry[12]);
+        s12 = s12.minus(carry[12].shiftLeft(BIG_ARR[21]));
+        carry[14] = (s14.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s15 = s15.add(carry[14]);
+        s14 = s14.minus(carry[14].shiftLeft(BIG_ARR[21]));
+        carry[16] = (s16.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s17 = s17.add(carry[16]);
+        s16 = s16.minus(carry[16].shiftLeft(BIG_ARR[21]));
+        carry[18] = (s18.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s19 = s19.add(carry[18]);
+        s18 = s18.minus(carry[18].shiftLeft(BIG_ARR[21]));
+        carry[20] = (s20.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s21 = s21.add(carry[20]);
+        s20 = s20.minus(carry[20].shiftLeft(BIG_ARR[21]));
+        carry[22] = (s22.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s23 = s23.add(carry[22]);
+        s22 = s22.minus(carry[22].shiftLeft(BIG_ARR[21]));
+        carry[1] = (s1.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s2 = s2.add(carry[1]);
+        s1 = s1.minus(carry[1].shiftLeft(BIG_ARR[21]));
+        carry[3] = (s3.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s4 = s4.add(carry[3]);
+        s3 = s3.minus(carry[3].shiftLeft(BIG_ARR[21]));
+        carry[5] = (s5.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s6 = s6.add(carry[5]);
+        s5 = s5.minus(carry[5].shiftLeft(BIG_ARR[21]));
+        carry[7] = (s7.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s8 = s8.add(carry[7]);
+        s7 = s7.minus(carry[7].shiftLeft(BIG_ARR[21]));
+        carry[9] = (s9.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s10 = s10.add(carry[9]);
+        s9 = s9.minus(carry[9].shiftLeft(BIG_ARR[21]));
+        carry[11] = (s11.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s12 = s12.add(carry[11]);
+        s11 = s11.minus(carry[11].shiftLeft(BIG_ARR[21]));
+        carry[13] = (s13.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s14 = s14.add(carry[13]);
+        s13 = s13.minus(carry[13].shiftLeft(BIG_ARR[21]));
+        carry[15] = (s15.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s16 = s16.add(carry[15]);
+        s15 = s15.minus(carry[15].shiftLeft(BIG_ARR[21]));
+        carry[17] = (s17.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s18 = s18.add(carry[17]);
+        s17 = s17.minus(carry[17].shiftLeft(BIG_ARR[21]));
+        carry[19] = (s19.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s20 = s20.add(carry[19]);
+        s19 = s19.minus(carry[19].shiftLeft(BIG_ARR[21]));
+        carry[21] = (s21.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s22 = s22.add(carry[21]);
+        s21 = s21.minus(carry[21].shiftLeft(BIG_ARR[21]));
+        s11 = s11.add(s23.times(BIG_666643));
+        s12 = s12.add(s23.times(BIG_470296));
+        s13 = s13.add(s23.times(BIG_654183));
+        s14 = s14.minus(s23.times(BIG_997805));
+        s15 = s15.add(s23.times(BIG_136657));
+        s16 = s16.minus(s23.times(BIG_683901));
         s23 = BIG_ARR[0];
-        s10 += s22 * BIG_666643;
-        s11 += s22 * BIG_470296;
-        s12 += s22 * BIG_654183;
-        s13 -= s22 * BIG_997805;
-        s14 += s22 * BIG_136657;
-        s15 -= s22 * BIG_683901;
+        s10 = s10.add(s22.times(BIG_666643));
+        s11 = s11.add(s22.times(BIG_470296));
+        s12 = s12.add(s22.times(BIG_654183));
+        s13 = s13.minus(s22.times(BIG_997805));
+        s14 = s14.add(s22.times(BIG_136657));
+        s15 = s15.minus(s22.times(BIG_683901));
         s22 = BIG_ARR[0];
-        s9 += s21 * BIG_666643;
-        s10 += s21 * BIG_470296;
-        s11 += s21 * BIG_654183;
-        s12 -= s21 * BIG_997805;
-        s13 += s21 * BIG_136657;
-        s14 -= s21 * BIG_683901;
+        s9 = s9.add(s21.times(BIG_666643));
+        s10 = s10.add(s21.times(BIG_470296));
+        s11 = s11.add(s21.times(BIG_654183));
+        s12 = s12.minus(s21.times(BIG_997805));
+        s13 = s13.add(s21.times(BIG_136657));
+        s14 = s14.minus(s21.times(BIG_683901));
         s21 = BIG_ARR[0];
-        s8 += s20 * BIG_666643;
-        s9 += s20 * BIG_470296;
-        s10 += s20 * BIG_654183;
-        s11 -= s20 * BIG_997805;
-        s12 += s20 * BIG_136657;
-        s13 -= s20 * BIG_683901;
+        s8 = s8.add(s20.times(BIG_666643));
+        s9 = s9.add(s20.times(BIG_470296));
+        s10 = s10.add(s20.times(BIG_654183));
+        s11 = s11.minus(s20.times(BIG_997805));
+        s12 = s12.add(s20.times(BIG_136657));
+        s13 = s13.minus(s20.times(BIG_683901));
         s20 = BIG_ARR[0];
-        s7 += s19 * BIG_666643;
-        s8 += s19 * BIG_470296;
-        s9 += s19 * BIG_654183;
-        s10 -= s19 * BIG_997805;
-        s11 += s19 * BIG_136657;
-        s12 -= s19 * BIG_683901;
+        s7 = s7.add(s19.times(BIG_666643));
+        s8 = s8.add(s19.times(BIG_470296));
+        s9 = s9.add(s19.times(BIG_654183));
+        s10 = s10.minus(s19.times(BIG_997805));
+        s11 = s11.add(s19.times(BIG_136657));
+        s12 = s12.minus(s19.times(BIG_683901));
         s19 = BIG_ARR[0];
-        s6 += s18 * BIG_666643;
-        s7 += s18 * BIG_470296;
-        s8 += s18 * BIG_654183;
-        s9 -= s18 * BIG_997805;
-        s10 += s18 * BIG_136657;
-        s11 -= s18 * BIG_683901;
+        s6 = s6.add(s18.times(BIG_666643));
+        s7 = s7.add(s18.times(BIG_470296));
+        s8 = s8.add(s18.times(BIG_654183));
+        s9 = s9.minus(s18.times(BIG_997805));
+        s10 = s10.add(s18.times(BIG_136657));
+        s11 = s11.minus(s18.times(BIG_683901));
         s18 = BIG_ARR[0];
-        carry[6] = (s6 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s7 += carry[6];
-        s6 -= carry[6] << BIG_ARR[21];
-        carry[8] = (s8 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s9 += carry[8];
-        s8 -= carry[8] << BIG_ARR[21];
-        carry[10] = (s10 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s11 += carry[10];
-        s10 -= carry[10] << BIG_ARR[21];
-        carry[12] = (s12 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s13 += carry[12];
-        s12 -= carry[12] << BIG_ARR[21];
-        carry[14] = (s14 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s15 += carry[14];
-        s14 -= carry[14] << BIG_ARR[21];
-        carry[16] = (s16 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s17 += carry[16];
-        s16 -= carry[16] << BIG_ARR[21];
-        carry[7] = (s7 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s8 += carry[7];
-        s7 -= carry[7] << BIG_ARR[21];
-        carry[9] = (s9 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s10 += carry[9];
-        s9 -= carry[9] << BIG_ARR[21];
-        carry[11] = (s11 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s12 += carry[11];
-        s11 -= carry[11] << BIG_ARR[21];
-        carry[13] = (s13 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s14 += carry[13];
-        s13 -= carry[13] << BIG_ARR[21];
-        carry[15] = (s15 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s16 += carry[15];
-        s15 -= carry[15] << BIG_ARR[21];
-        s5 += s17 * BIG_666643;
-        s6 += s17 * BIG_470296;
-        s7 += s17 * BIG_654183;
-        s8 -= s17 * BIG_997805;
-        s9 += s17 * BIG_136657;
-        s10 -= s17 * BIG_683901;
+        carry[6] = (s6.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s7 = s7.add(carry[6]);
+        s6 = s6.minus(carry[6].shiftLeft(BIG_ARR[21]));
+        carry[8] = (s8.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s9 = s9.add(carry[8]);
+        s8 = s8.minus(carry[8].shiftLeft(BIG_ARR[21]));
+        carry[10] = (s10.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s11 = s11.add(carry[10]);
+        s10 = s10.minus(carry[10].shiftLeft(BIG_ARR[21]));
+        carry[12] = (s12.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s13 = s13.add(carry[12]);
+        s12 = s12.minus(carry[12].shiftLeft(BIG_ARR[21]));
+        carry[14] = (s14.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s15 = s15.add(carry[14]);
+        s14 = s14.minus(carry[14].shiftLeft(BIG_ARR[21]));
+        carry[16] = (s16.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s17 = s17.add(carry[16]);
+        s16 = s16.minus(carry[16].shiftLeft(BIG_ARR[21]));
+        carry[7] = (s7.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s8 = s8.add(carry[7]);
+        s7 = s7.minus(carry[7].shiftLeft(BIG_ARR[21]));
+        carry[9] = (s9.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s10 = s10.add(carry[9]);
+        s9 = s9.minus(carry[9].shiftLeft(BIG_ARR[21]));
+        carry[11] = (s11.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s12 = s12.add(carry[11]);
+        s11 = s11.minus(carry[11].shiftLeft(BIG_ARR[21]));
+        carry[13] = (s13.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s14 = s14.add(carry[13]);
+        s13 = s13.minus(carry[13].shiftLeft(BIG_ARR[21]));
+        carry[15] = (s15.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s16 = s16.add(carry[15]);
+        s15 = s15.minus(carry[15].shiftLeft(BIG_ARR[21]));
+        s5 = s5.add(s17.times(BIG_666643));
+        s6 = s6.add(s17.times(BIG_470296));
+        s7 = s7.add(s17.times(BIG_654183));
+        s8 = s8.minus(s17.times(BIG_997805));
+        s9 = s9.add(s17.times(BIG_136657));
+        s10 = s10.minus(s17.times(BIG_683901));
         s17 = BIG_ARR[0];
-        s4 += s16 * BIG_666643;
-        s5 += s16 * BIG_470296;
-        s6 += s16 * BIG_654183;
-        s7 -= s16 * BIG_997805;
-        s8 += s16 * BIG_136657;
-        s9 -= s16 * BIG_683901;
+        s4 = s4.add(s16.times(BIG_666643));
+        s5 = s5.add(s16.times(BIG_470296));
+        s6 = s6.add(s16.times(BIG_654183));
+        s7 = s7.minus(s16.times(BIG_997805));
+        s8 = s8.add(s16.times(BIG_136657));
+        s9 = s9.minus(s16.times(BIG_683901));
         s16 = BIG_ARR[0];
-        s3 += s15 * BIG_666643;
-        s4 += s15 * BIG_470296;
-        s5 += s15 * BIG_654183;
-        s6 -= s15 * BIG_997805;
-        s7 += s15 * BIG_136657;
-        s8 -= s15 * BIG_683901;
+        s3 = s3.add(s15.times(BIG_666643));
+        s4 = s4.add(s15.times(BIG_470296));
+        s5 = s5.add(s15.times(BIG_654183));
+        s6 = s6.minus(s15.times(BIG_997805));
+        s7 = s7.add(s15.times(BIG_136657));
+        s8 = s8.minus(s15.times(BIG_683901));
         s15 = BIG_ARR[0];
-        s2 += s14 * BIG_666643;
-        s3 += s14 * BIG_470296;
-        s4 += s14 * BIG_654183;
-        s5 -= s14 * BIG_997805;
-        s6 += s14 * BIG_136657;
-        s7 -= s14 * BIG_683901;
+        s2 = s2.add(s14.times(BIG_666643));
+        s3 = s3.add(s14.times(BIG_470296));
+        s4 = s4.add(s14.times(BIG_654183));
+        s5 = s5.minus(s14.times(BIG_997805));
+        s6 = s6.add(s14.times(BIG_136657));
+        s7 = s7.minus(s14.times(BIG_683901));
         s14 = BIG_ARR[0];
-        s1 += s13 * BIG_666643;
-        s2 += s13 * BIG_470296;
-        s3 += s13 * BIG_654183;
-        s4 -= s13 * BIG_997805;
-        s5 += s13 * BIG_136657;
-        s6 -= s13 * BIG_683901;
+        s1 = s1.add(s13.times(BIG_666643));
+        s2 = s2.add(s13.times(BIG_470296));
+        s3 = s3.add(s13.times(BIG_654183));
+        s4 = s4.minus(s13.times(BIG_997805));
+        s5 = s5.add(s13.times(BIG_136657));
+        s6 = s6.minus(s13.times(BIG_683901));
         s13 = BIG_ARR[0];
-        s0 += s12 * BIG_666643;
-        s1 += s12 * BIG_470296;
-        s2 += s12 * BIG_654183;
-        s3 -= s12 * BIG_997805;
-        s4 += s12 * BIG_136657;
-        s5 -= s12 * BIG_683901;
+        s0 = s0.add(s12.times(BIG_666643));
+        s1 = s1.add(s12.times(BIG_470296));
+        s2 = s2.add(s12.times(BIG_654183));
+        s3 = s3.minus(s12.times(BIG_997805));
+        s4 = s4.add(s12.times(BIG_136657));
+        s5 = s5.minus(s12.times(BIG_683901));
         s12 = BIG_ARR[0];
-        carry[0] = (s0 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s1 += carry[0];
-        s0 -= carry[0] << BIG_ARR[21];
-        carry[2] = (s2 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s3 += carry[2];
-        s2 -= carry[2] << BIG_ARR[21];
-        carry[4] = (s4 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s5 += carry[4];
-        s4 -= carry[4] << BIG_ARR[21];
-        carry[6] = (s6 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s7 += carry[6];
-        s6 -= carry[6] << BIG_ARR[21];
-        carry[8] = (s8 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s9 += carry[8];
-        s8 -= carry[8] << BIG_ARR[21];
-        carry[10] = (s10 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s11 += carry[10];
-        s10 -= carry[10] << BIG_ARR[21];
-        carry[1] = (s1 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s2 += carry[1];
-        s1 -= carry[1] << BIG_ARR[21];
-        carry[3] = (s3 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s4 += carry[3];
-        s3 -= carry[3] << BIG_ARR[21];
-        carry[5] = (s5 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s6 += carry[5];
-        s5 -= carry[5] << BIG_ARR[21];
-        carry[7] = (s7 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s8 += carry[7];
-        s7 -= carry[7] << BIG_ARR[21];
-        carry[9] = (s9 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s10 += carry[9];
-        s9 -= carry[9] << BIG_ARR[21];
-        carry[11] = (s11 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s12 += carry[11];
-        s11 -= carry[11] << BIG_ARR[21];
-        s0 += s12 * BIG_666643;
-        s1 += s12 * BIG_470296;
-        s2 += s12 * BIG_654183;
-        s3 -= s12 * BIG_997805;
-        s4 += s12 * BIG_136657;
-        s5 -= s12 * BIG_683901;
+        carry[0] = (s0.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s1 = s1.add(carry[0]);
+        s0 = s0.minus(carry[0].shiftLeft(BIG_ARR[21]));
+        carry[2] = (s2.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s3 = s3.add(carry[2]);
+        s2 = s2.minus(carry[2].shiftLeft(BIG_ARR[21]));
+        carry[4] = (s4.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s5 = s5.add(carry[4]);
+        s4 = s4.minus(carry[4].shiftLeft(BIG_ARR[21]));
+        carry[6] = (s6.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s7 = s7.add(carry[6]);
+        s6 = s6.minus(carry[6].shiftLeft(BIG_ARR[21]));
+        carry[8] = (s8.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s9 = s9.add(carry[8]);
+        s8 = s8.minus(carry[8].shiftLeft(BIG_ARR[21]));
+        carry[10] = (s10.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s11 = s11.add(carry[10]);
+        s10 = s10.minus(carry[10].shiftLeft(BIG_ARR[21]));
+        carry[1] = (s1.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s2 = s2.add(carry[1]);
+        s1 = s1.minus(carry[1].shiftLeft(BIG_ARR[21]));
+        carry[3] = (s3.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s4 = s4.add(carry[3]);
+        s3 = s3.minus(carry[3].shiftLeft(BIG_ARR[21]));
+        carry[5] = (s5.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s6 = s6.add(carry[5]);
+        s5 = s5.minus(carry[5].shiftLeft(BIG_ARR[21]));
+        carry[7] = (s7.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s8 = s8.add(carry[7]);
+        s7 = s7.minus(carry[7].shiftLeft(BIG_ARR[21]));
+        carry[9] = (s9.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s10 = s10.add(carry[9]);
+        s9 = s9.minus(carry[9].shiftLeft(BIG_ARR[21]));
+        carry[11] = (s11.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s12 = s12.add(carry[11]);
+        s11 = s11.minus(carry[11].shiftLeft(BIG_ARR[21]));
+        s0 = s0.add(s12.times(BIG_666643));
+        s1 = s1.add(s12.times(BIG_470296));
+        s2 = s2.add(s12.times(BIG_654183));
+        s3 = s3.minus(s12.times(BIG_997805));
+        s4 = s4.add(s12.times(BIG_136657));
+        s5 = s5.minus(s12.times(BIG_683901));
         s12 = BIG_ARR[0];
-        carry[0] = s0 >> BIG_ARR[21];
-        s1 += carry[0];
-        s0 -= carry[0] << BIG_ARR[21];
-        carry[1] = s1 >> BIG_ARR[21];
-        s2 += carry[1];
-        s1 -= carry[1] << BIG_ARR[21];
-        carry[2] = s2 >> BIG_ARR[21];
-        s3 += carry[2];
-        s2 -= carry[2] << BIG_ARR[21];
-        carry[3] = s3 >> BIG_ARR[21];
-        s4 += carry[3];
-        s3 -= carry[3] << BIG_ARR[21];
-        carry[4] = s4 >> BIG_ARR[21];
-        s5 += carry[4];
-        s4 -= carry[4] << BIG_ARR[21];
-        carry[5] = s5 >> BIG_ARR[21];
-        s6 += carry[5];
-        s5 -= carry[5] << BIG_ARR[21];
-        carry[6] = s6 >> BIG_ARR[21];
-        s7 += carry[6];
-        s6 -= carry[6] << BIG_ARR[21];
-        carry[7] = s7 >> BIG_ARR[21];
-        s8 += carry[7];
-        s7 -= carry[7] << BIG_ARR[21];
-        carry[8] = s8 >> BIG_ARR[21];
-        s9 += carry[8];
-        s8 -= carry[8] << BIG_ARR[21];
-        carry[9] = s9 >> BIG_ARR[21];
-        s10 += carry[9];
-        s9 -= carry[9] << BIG_ARR[21];
-        carry[10] = s10 >> BIG_ARR[21];
-        s11 += carry[10];
-        s10 -= carry[10] << BIG_ARR[21];
-        carry[11] = s11 >> BIG_ARR[21];
-        s12 += carry[11];
-        s11 -= carry[11] << BIG_ARR[21];
-        s0 += s12 * BIG_666643;
-        s1 += s12 * BIG_470296;
-        s2 += s12 * BIG_654183;
-        s3 -= s12 * BIG_997805;
-        s4 += s12 * BIG_136657;
-        s5 -= s12 * BIG_683901;
+        carry[0] = s0.shiftRight(BIG_ARR[21]);
+        s1 = s1.add(carry[0]);
+        s0 = s0.minus(carry[0].shiftLeft(BIG_ARR[21]));
+        carry[1] = s1.shiftRight(BIG_ARR[21]);
+        s2 = s2.add(carry[1]);
+        s1 = s1.minus(carry[1].shiftLeft(BIG_ARR[21]));
+        carry[2] = s2.shiftRight(BIG_ARR[21]);
+        s3 = s3.add(carry[2]);
+        s2 = s2.minus(carry[2].shiftLeft(BIG_ARR[21]));
+        carry[3] = s3.shiftRight(BIG_ARR[21]);
+        s4 = s4.add(carry[3]);
+        s3 = s3.minus(carry[3].shiftLeft(BIG_ARR[21]));
+        carry[4] = s4.shiftRight(BIG_ARR[21]);
+        s5 = s5.add(carry[4]);
+        s4 = s4.minus(carry[4].shiftLeft(BIG_ARR[21]));
+        carry[5] = s5.shiftRight(BIG_ARR[21]);
+        s6 = s6.add(carry[5]);
+        s5 = s5.minus(carry[5].shiftLeft(BIG_ARR[21]));
+        carry[6] = s6.shiftRight(BIG_ARR[21]);
+        s7 = s7.add(carry[6]);
+        s6 = s6.minus(carry[6].shiftLeft(BIG_ARR[21]));
+        carry[7] = s7.shiftRight(BIG_ARR[21]);
+        s8 = s8.add(carry[7]);
+        s7 = s7.minus(carry[7].shiftLeft(BIG_ARR[21]));
+        carry[8] = s8.shiftRight(BIG_ARR[21]);
+        s9 = s9.add(carry[8]);
+        s8 = s8.minus(carry[8].shiftLeft(BIG_ARR[21]));
+        carry[9] = s9.shiftRight(BIG_ARR[21]);
+        s10 = s10.add(carry[9]);
+        s9 = s9.minus(carry[9].shiftLeft(BIG_ARR[21]));
+        carry[10] = s10.shiftRight(BIG_ARR[21]);
+        s11 = s11.add(carry[10]);
+        s10 = s10.minus(carry[10].shiftLeft(BIG_ARR[21]));
+        carry[11] = s11.shiftRight(BIG_ARR[21]);
+        s12 = s12.add(carry[11]);
+        s11 = s11.minus(carry[11].shiftLeft(BIG_ARR[21]));
+        s0 = s0.add(s12.times(BIG_666643));
+        s1 = s1.add(s12.times(BIG_470296));
+        s2 = s2.add(s12.times(BIG_654183));
+        s3 = s3.minus(s12.times(BIG_997805));
+        s4 = s4.add(s12.times(BIG_136657));
+        s5 = s5.minus(s12.times(BIG_683901));
         s12 = BIG_ARR[0];
-        carry[0] = s0 >> BIG_ARR[21];
-        s1 += carry[0];
-        s0 -= carry[0] << BIG_ARR[21];
-        carry[1] = s1 >> BIG_ARR[21];
-        s2 += carry[1];
-        s1 -= carry[1] << BIG_ARR[21];
-        carry[2] = s2 >> BIG_ARR[21];
-        s3 += carry[2];
-        s2 -= carry[2] << BIG_ARR[21];
-        carry[3] = s3 >> BIG_ARR[21];
-        s4 += carry[3];
-        s3 -= carry[3] << BIG_ARR[21];
-        carry[4] = s4 >> BIG_ARR[21];
-        s5 += carry[4];
-        s4 -= carry[4] << BIG_ARR[21];
-        carry[5] = s5 >> BIG_ARR[21];
-        s6 += carry[5];
-        s5 -= carry[5] << BIG_ARR[21];
-        carry[6] = s6 >> BIG_ARR[21];
-        s7 += carry[6];
-        s6 -= carry[6] << BIG_ARR[21];
-        carry[7] = s7 >> BIG_ARR[21];
-        s8 += carry[7];
-        s7 -= carry[7] << BIG_ARR[21];
-        carry[8] = s8 >> BIG_ARR[21];
-        s9 += carry[8];
-        s8 -= carry[8] << BIG_ARR[21];
-        carry[9] = s9 >> BIG_ARR[21];
-        s10 += carry[9];
-        s9 -= carry[9] << BIG_ARR[21];
-        carry[10] = s10 >> BIG_ARR[21];
-        s11 += carry[10];
-        s10 -= carry[10] << BIG_ARR[21];
-        s[0] = Number(s0 >> BIG_ARR[0]);
-        s[1] = Number(s0 >> BIG_ARR[8]);
-        s[2] = Number((s0 >> BIG_ARR[16]) | (s1 << BIG_ARR[5]));
-        s[3] = Number(s1 >> BIG_ARR[3]);
-        s[4] = Number(s1 >> BIG_ARR[11]);
-        s[5] = Number((s1 >> BIG_ARR[19]) | (s2 << BIG_ARR[2]));
-        s[6] = Number(s2 >> BIG_ARR[6]);
-        s[7] = Number((s2 >> BIG_ARR[14]) | (s3 << BIG_ARR[7]));
-        s[8] = Number(s3 >> BIG_ARR[1]);
-        s[9] = Number(s3 >> BIG_ARR[9]);
-        s[10] = Number((s3 >> BIG_ARR[17]) | (s4 << BIG_ARR[4]));
-        s[11] = Number(s4 >> BIG_ARR[4]);
-        s[12] = Number(s4 >> BIG_ARR[12]);
-        s[13] = Number((s4 >> BIG_ARR[20]) | (s5 << BIG_ARR[1]));
-        s[14] = Number(s5 >> BIG_ARR[7]);
-        s[15] = Number((s5 >> BIG_ARR[15]) | (s6 << BIG_ARR[6]));
-        s[16] = Number(s6 >> BIG_ARR[2]);
-        s[17] = Number(s6 >> BIG_ARR[10]);
-        s[18] = Number((s6 >> BIG_ARR[18]) | (s7 << BIG_ARR[3]));
-        s[19] = Number(s7 >> BIG_ARR[5]);
-        s[20] = Number(s7 >> BIG_ARR[13]);
-        s[21] = Number(s8 >> BIG_ARR[0]);
-        s[22] = Number(s8 >> BIG_ARR[8]);
-        s[23] = Number((s8 >> BIG_ARR[16]) | (s9 << BIG_ARR[5]));
-        s[24] = Number(s9 >> BIG_ARR[3]);
-        s[25] = Number(s9 >> BIG_ARR[11]);
-        s[26] = Number((s9 >> BIG_ARR[19]) | (s10 << BIG_ARR[2]));
-        s[27] = Number(s10 >> BIG_ARR[6]);
-        s[28] = Number((s10 >> BIG_ARR[14]) | (s11 << BIG_ARR[7]));
-        s[29] = Number(s11 >> BIG_ARR[1]);
-        s[30] = Number(s11 >> BIG_ARR[9]);
-        s[31] = Number(s11 >> BIG_ARR[17]);
+        carry[0] = s0.shiftRight(BIG_ARR[21]);
+        s1 = s1.add(carry[0]);
+        s0 = s0.minus(carry[0].shiftLeft(BIG_ARR[21]));
+        carry[1] = s1.shiftRight(BIG_ARR[21]);
+        s2 = s2.add(carry[1]);
+        s1 = s1.minus(carry[1].shiftLeft(BIG_ARR[21]));
+        carry[2] = s2.shiftRight(BIG_ARR[21]);
+        s3 = s3.add(carry[2]);
+        s2 = s2.minus(carry[2].shiftLeft(BIG_ARR[21]));
+        carry[3] = s3.shiftRight(BIG_ARR[21]);
+        s4 = s4.add(carry[3]);
+        s3 = s3.minus(carry[3].shiftLeft(BIG_ARR[21]));
+        carry[4] = s4.shiftRight(BIG_ARR[21]);
+        s5 = s5.add(carry[4]);
+        s4 = s4.minus(carry[4].shiftLeft(BIG_ARR[21]));
+        carry[5] = s5.shiftRight(BIG_ARR[21]);
+        s6 = s6.add(carry[5]);
+        s5 = s5.minus(carry[5].shiftLeft(BIG_ARR[21]));
+        carry[6] = s6.shiftRight(BIG_ARR[21]);
+        s7 = s7.add(carry[6]);
+        s6 = s6.minus(carry[6].shiftLeft(BIG_ARR[21]));
+        carry[7] = s7.shiftRight(BIG_ARR[21]);
+        s8 = s8.add(carry[7]);
+        s7 = s7.minus(carry[7].shiftLeft(BIG_ARR[21]));
+        carry[8] = s8.shiftRight(BIG_ARR[21]);
+        s9 = s9.add(carry[8]);
+        s8 = s8.minus(carry[8].shiftLeft(BIG_ARR[21]));
+        carry[9] = s9.shiftRight(BIG_ARR[21]);
+        s10 = s10.add(carry[9]);
+        s9 = s9.minus(carry[9].shiftLeft(BIG_ARR[21]));
+        carry[10] = s10.shiftRight(BIG_ARR[21]);
+        s11 = s11.add(carry[10]);
+        s10 = s10.minus(carry[10].shiftLeft(BIG_ARR[21]));
+        s[0] = s0.shiftRight(BIG_ARR[0]).toJSNumber();
+        s[1] = s0.shiftRight(BIG_ARR[8]).toJSNumber();
+        s[2] = (s0.shiftRight(BIG_ARR[16]).or(s1.shiftLeft(BIG_ARR[5])))
+            .toJSNumber();
+        s[3] = s1.shiftRight(BIG_ARR[3]).toJSNumber();
+        s[4] = s1.shiftRight(BIG_ARR[11]).toJSNumber();
+        s[5] = (s1.shiftRight(BIG_ARR[19]).or(s2.shiftLeft(BIG_ARR[2])))
+            .toJSNumber();
+        s[6] = s2.shiftRight(BIG_ARR[6]).toJSNumber();
+        s[7] = (s2.shiftRight(BIG_ARR[14]).or(s3.shiftLeft(BIG_ARR[7])))
+            .toJSNumber();
+        s[8] = s3.shiftRight(BIG_ARR[1]).toJSNumber();
+        s[9] = s3.shiftRight(BIG_ARR[9]).toJSNumber();
+        s[10] = (s3.shiftRight(BIG_ARR[17]).or(s4.shiftLeft(BIG_ARR[4])))
+            .toJSNumber();
+        s[11] = s4.shiftRight(BIG_ARR[4]).toJSNumber();
+        s[12] = s4.shiftRight(BIG_ARR[12]).toJSNumber();
+        s[13] = (s4.shiftRight(BIG_ARR[20])).or(s5.shiftLeft(BIG_ARR[1]))
+            .toJSNumber();
+        s[14] = s5.shiftRight(BIG_ARR[7]).toJSNumber();
+        s[15] = (s5.shiftRight(BIG_ARR[15]).or(s6.shiftLeft(BIG_ARR[6])))
+            .toJSNumber();
+        s[16] = s6.shiftRight(BIG_ARR[2]).toJSNumber();
+        s[17] = s6.shiftRight(BIG_ARR[10]).toJSNumber();
+        s[18] = (s6.shiftRight(BIG_ARR[18]).or(s7.shiftLeft(BIG_ARR[3])))
+            .toJSNumber();
+        s[19] = s7.shiftRight(BIG_ARR[5]).toJSNumber();
+        s[20] = s7.shiftRight(BIG_ARR[13]).toJSNumber();
+        s[21] = s8.shiftRight(BIG_ARR[0]).toJSNumber();
+        s[22] = s8.shiftRight(BIG_ARR[8]).toJSNumber();
+        s[23] = (s8.shiftRight(BIG_ARR[16]).or(s9.shiftLeft(BIG_ARR[5])))
+            .toJSNumber();
+        s[24] = s9.shiftRight(BIG_ARR[3]).toJSNumber();
+        s[25] = s9.shiftRight(BIG_ARR[11]).toJSNumber();
+        s[26] = (s9.shiftRight(BIG_ARR[19]).or(s10.shiftLeft(BIG_ARR[2])))
+            .toJSNumber();
+        s[27] = s10.shiftRight(BIG_ARR[6]).toJSNumber();
+        s[28] = (s10.shiftRight(BIG_ARR[14]).or(s11.shiftLeft(BIG_ARR[7])))
+            .toJSNumber();
+        s[29] = s11.shiftRight(BIG_ARR[1]).toJSNumber();
+        s[30] = s11.shiftRight(BIG_ARR[9]).toJSNumber();
+        s[31] = s11.shiftRight(BIG_ARR[17]).toJSNumber();
     }
     /**
      * Scalar reduce
@@ -3577,299 +3824,312 @@
      * @param s Where s[0]+256*s[1]+...+256^63*s[63] = s.
      */
     function scalarReduce(out, s) {
-        let s0 = BIG_2097151 & BigIntHelper.read3(s, 0);
-        let s1 = BIG_2097151 & (BigIntHelper.read4(s, 2) >> BIG_ARR[5]);
-        let s2 = BIG_2097151 & (BigIntHelper.read3(s, 5) >> BIG_ARR[2]);
-        let s3 = BIG_2097151 & (BigIntHelper.read4(s, 7) >> BIG_ARR[7]);
-        let s4 = BIG_2097151 & (BigIntHelper.read4(s, 10) >> BIG_ARR[4]);
-        let s5 = BIG_2097151 & (BigIntHelper.read3(s, 13) >> BIG_ARR[1]);
-        let s6 = BIG_2097151 & (BigIntHelper.read4(s, 15) >> BIG_ARR[6]);
-        let s7 = BIG_2097151 & (BigIntHelper.read3(s, 18) >> BIG_ARR[3]);
-        let s8 = BIG_2097151 & BigIntHelper.read3(s, 21);
-        let s9 = BIG_2097151 & (BigIntHelper.read4(s, 23) >> BIG_ARR[5]);
-        let s10 = BIG_2097151 & (BigIntHelper.read3(s, 26) >> BIG_ARR[2]);
-        let s11 = BIG_2097151 & (BigIntHelper.read4(s, 28) >> BIG_ARR[7]);
-        let s12 = BIG_2097151 & (BigIntHelper.read4(s, 31) >> BIG_ARR[4]);
-        let s13 = BIG_2097151 & (BigIntHelper.read3(s, 34) >> BIG_ARR[1]);
-        let s14 = BIG_2097151 & (BigIntHelper.read4(s, 36) >> BIG_ARR[6]);
-        let s15 = BIG_2097151 & (BigIntHelper.read3(s, 39) >> BIG_ARR[3]);
-        let s16 = BIG_2097151 & BigIntHelper.read3(s, 42);
-        let s17 = BIG_2097151 & (BigIntHelper.read4(s, 44) >> BIG_ARR[5]);
-        let s18 = BIG_2097151 & (BigIntHelper.read3(s, 47) >> BIG_ARR[2]);
-        let s19 = BIG_2097151 & (BigIntHelper.read4(s, 49) >> BIG_ARR[7]);
-        let s20 = BIG_2097151 & (BigIntHelper.read4(s, 52) >> BIG_ARR[4]);
-        let s21 = BIG_2097151 & (BigIntHelper.read3(s, 55) >> BIG_ARR[1]);
-        let s22 = BIG_2097151 & (BigIntHelper.read4(s, 57) >> BIG_ARR[6]);
-        let s23 = (BigIntHelper.read4(s, 60) >> BIG_ARR[3]);
-        s11 += s23 * BIG_666643;
-        s12 += s23 * BIG_470296;
-        s13 += s23 * BIG_654183;
-        s14 -= s23 * BIG_997805;
-        s15 += s23 * BIG_136657;
-        s16 -= s23 * BIG_683901;
+        let s0 = BIG_2097151.and(BigIntHelper.read3(s, 0));
+        let s1 = BIG_2097151.and(BigIntHelper.read4(s, 2).shiftRight(BIG_ARR[5]));
+        let s2 = BIG_2097151.and(BigIntHelper.read3(s, 5).shiftRight(BIG_ARR[2]));
+        let s3 = BIG_2097151.and(BigIntHelper.read4(s, 7).shiftRight(BIG_ARR[7]));
+        let s4 = BIG_2097151.and(BigIntHelper.read4(s, 10).shiftRight(BIG_ARR[4]));
+        let s5 = BIG_2097151.and(BigIntHelper.read3(s, 13).shiftRight(BIG_ARR[1]));
+        let s6 = BIG_2097151.and(BigIntHelper.read4(s, 15).shiftRight(BIG_ARR[6]));
+        let s7 = BIG_2097151.and(BigIntHelper.read3(s, 18).shiftRight(BIG_ARR[3]));
+        let s8 = BIG_2097151.and(BigIntHelper.read3(s, 21));
+        let s9 = BIG_2097151.and(BigIntHelper.read4(s, 23).shiftRight(BIG_ARR[5]));
+        let s10 = BIG_2097151.and(BigIntHelper.read3(s, 26).shiftRight(BIG_ARR[2]));
+        let s11 = BIG_2097151.and(BigIntHelper.read4(s, 28).shiftRight(BIG_ARR[7]));
+        let s12 = BIG_2097151.and(BigIntHelper.read4(s, 31).shiftRight(BIG_ARR[4]));
+        let s13 = BIG_2097151.and(BigIntHelper.read3(s, 34).shiftRight(BIG_ARR[1]));
+        let s14 = BIG_2097151.and(BigIntHelper.read4(s, 36).shiftRight(BIG_ARR[6]));
+        let s15 = BIG_2097151.and(BigIntHelper.read3(s, 39).shiftRight(BIG_ARR[3]));
+        let s16 = BIG_2097151.and(BigIntHelper.read3(s, 42));
+        let s17 = BIG_2097151.and(BigIntHelper.read4(s, 44).shiftRight(BIG_ARR[5]));
+        let s18 = BIG_2097151.and(BigIntHelper.read3(s, 47).shiftRight(BIG_ARR[2]));
+        let s19 = BIG_2097151.and(BigIntHelper.read4(s, 49).shiftRight(BIG_ARR[7]));
+        let s20 = BIG_2097151.and(BigIntHelper.read4(s, 52).shiftRight(BIG_ARR[4]));
+        let s21 = BIG_2097151.and(BigIntHelper.read3(s, 55).shiftRight(BIG_ARR[1]));
+        let s22 = BIG_2097151.and(BigIntHelper.read4(s, 57).shiftRight(BIG_ARR[6]));
+        let s23 = (BigIntHelper.read4(s, 60).shiftRight(BIG_ARR[3]));
+        s11 = s11.add(s23.times(BIG_666643));
+        s12 = s12.add(s23.times(BIG_470296));
+        s13 = s13.add(s23.times(BIG_654183));
+        s14 = s14.minus(s23.times(BIG_997805));
+        s15 = s15.add(s23.times(BIG_136657));
+        s16 = s16.minus(s23.times(BIG_683901));
         s23 = BIG_ARR[0];
-        s10 += s22 * BIG_666643;
-        s11 += s22 * BIG_470296;
-        s12 += s22 * BIG_654183;
-        s13 -= s22 * BIG_997805;
-        s14 += s22 * BIG_136657;
-        s15 -= s22 * BIG_683901;
+        s10 = s10.add(s22.times(BIG_666643));
+        s11 = s11.add(s22.times(BIG_470296));
+        s12 = s12.add(s22.times(BIG_654183));
+        s13 = s13.minus(s22.times(BIG_997805));
+        s14 = s14.add(s22.times(BIG_136657));
+        s15 = s15.minus(s22.times(BIG_683901));
         s22 = BIG_ARR[0];
-        s9 += s21 * BIG_666643;
-        s10 += s21 * BIG_470296;
-        s11 += s21 * BIG_654183;
-        s12 -= s21 * BIG_997805;
-        s13 += s21 * BIG_136657;
-        s14 -= s21 * BIG_683901;
+        s9 = s9.add(s21.times(BIG_666643));
+        s10 = s10.add(s21.times(BIG_470296));
+        s11 = s11.add(s21.times(BIG_654183));
+        s12 = s12.minus(s21.times(BIG_997805));
+        s13 = s13.add(s21.times(BIG_136657));
+        s14 = s14.minus(s21.times(BIG_683901));
         s21 = BIG_ARR[0];
-        s8 += s20 * BIG_666643;
-        s9 += s20 * BIG_470296;
-        s10 += s20 * BIG_654183;
-        s11 -= s20 * BIG_997805;
-        s12 += s20 * BIG_136657;
-        s13 -= s20 * BIG_683901;
+        s8 = s8.add(s20.times(BIG_666643));
+        s9 = s9.add(s20.times(BIG_470296));
+        s10 = s10.add(s20.times(BIG_654183));
+        s11 = s11.minus(s20.times(BIG_997805));
+        s12 = s12.add(s20.times(BIG_136657));
+        s13 = s13.minus(s20.times(BIG_683901));
         s20 = BIG_ARR[0];
-        s7 += s19 * BIG_666643;
-        s8 += s19 * BIG_470296;
-        s9 += s19 * BIG_654183;
-        s10 -= s19 * BIG_997805;
-        s11 += s19 * BIG_136657;
-        s12 -= s19 * BIG_683901;
+        s7 = s7.add(s19.times(BIG_666643));
+        s8 = s8.add(s19.times(BIG_470296));
+        s9 = s9.add(s19.times(BIG_654183));
+        s10 = s10.minus(s19.times(BIG_997805));
+        s11 = s11.add(s19.times(BIG_136657));
+        s12 = s12.minus(s19.times(BIG_683901));
         s19 = BIG_ARR[0];
-        s6 += s18 * BIG_666643;
-        s7 += s18 * BIG_470296;
-        s8 += s18 * BIG_654183;
-        s9 -= s18 * BIG_997805;
-        s10 += s18 * BIG_136657;
-        s11 -= s18 * BIG_683901;
+        s6 = s6.add(s18.times(BIG_666643));
+        s7 = s7.add(s18.times(BIG_470296));
+        s8 = s8.add(s18.times(BIG_654183));
+        s9 = s9.minus(s18.times(BIG_997805));
+        s10 = s10.add(s18.times(BIG_136657));
+        s11 = s11.minus(s18.times(BIG_683901));
         s18 = BIG_ARR[0];
-        const carry = new BigInt64Array(17);
-        carry[6] = (s6 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s7 += carry[6];
-        s6 -= carry[6] << BIG_ARR[21];
-        carry[8] = (s8 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s9 += carry[8];
-        s8 -= carry[8] << BIG_ARR[21];
-        carry[10] = (s10 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s11 += carry[10];
-        s10 -= carry[10] << BIG_ARR[21];
-        carry[12] = (s12 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s13 += carry[12];
-        s12 -= carry[12] << BIG_ARR[21];
-        carry[14] = (s14 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s15 += carry[14];
-        s14 -= carry[14] << BIG_ARR[21];
-        carry[16] = (s16 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s17 += carry[16];
-        s16 -= carry[16] << BIG_ARR[21];
-        carry[7] = (s7 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s8 += carry[7];
-        s7 -= carry[7] << BIG_ARR[21];
-        carry[9] = (s9 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s10 += carry[9];
-        s9 -= carry[9] << BIG_ARR[21];
-        carry[11] = (s11 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s12 += carry[11];
-        s11 -= carry[11] << BIG_ARR[21];
-        carry[13] = (s13 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s14 += carry[13];
-        s13 -= carry[13] << BIG_ARR[21];
-        carry[15] = (s15 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s16 += carry[15];
-        s15 -= carry[15] << BIG_ARR[21];
-        s5 += s17 * BIG_666643;
-        s6 += s17 * BIG_470296;
-        s7 += s17 * BIG_654183;
-        s8 -= s17 * BIG_997805;
-        s9 += s17 * BIG_136657;
-        s10 -= s17 * BIG_683901;
+        const carry = [];
+        for (let i = 0; i < 17; i++) {
+            carry[i] = bigInt__default["default"](0);
+        }
+        carry[6] = (s6.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s7 = s7.add(carry[6]);
+        s6 = s6.minus(carry[6].shiftLeft(BIG_ARR[21]));
+        carry[8] = (s8.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s9 = s9.add(carry[8]);
+        s8 = s8.minus(carry[8].shiftLeft(BIG_ARR[21]));
+        carry[10] = (s10.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s11 = s11.add(carry[10]);
+        s10 = s10.minus(carry[10].shiftLeft(BIG_ARR[21]));
+        carry[12] = (s12.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s13 = s13.add(carry[12]);
+        s12 = s12.minus(carry[12].shiftLeft(BIG_ARR[21]));
+        carry[14] = (s14.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s15 = s15.add(carry[14]);
+        s14 = s14.minus(carry[14].shiftLeft(BIG_ARR[21]));
+        carry[16] = (s16.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s17 = s17.add(carry[16]);
+        s16 = s16.minus(carry[16].shiftLeft(BIG_ARR[21]));
+        carry[7] = (s7.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s8 = s8.add(carry[7]);
+        s7 = s7.minus(carry[7].shiftLeft(BIG_ARR[21]));
+        carry[9] = (s9.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s10 = s10.add(carry[9]);
+        s9 = s9.minus(carry[9].shiftLeft(BIG_ARR[21]));
+        carry[11] = (s11.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s12 = s12.add(carry[11]);
+        s11 = s11.minus(carry[11].shiftLeft(BIG_ARR[21]));
+        carry[13] = (s13.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s14 = s14.add(carry[13]);
+        s13 = s13.minus(carry[13].shiftLeft(BIG_ARR[21]));
+        carry[15] = (s15.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s16 = s16.add(carry[15]);
+        s15 = s15.minus(carry[15].shiftLeft(BIG_ARR[21]));
+        s5 = s5.add(s17.times(BIG_666643));
+        s6 = s6.add(s17.times(BIG_470296));
+        s7 = s7.add(s17.times(BIG_654183));
+        s8 = s8.minus(s17.times(BIG_997805));
+        s9 = s9.add(s17.times(BIG_136657));
+        s10 = s10.minus(s17.times(BIG_683901));
         s17 = BIG_ARR[0];
-        s4 += s16 * BIG_666643;
-        s5 += s16 * BIG_470296;
-        s6 += s16 * BIG_654183;
-        s7 -= s16 * BIG_997805;
-        s8 += s16 * BIG_136657;
-        s9 -= s16 * BIG_683901;
+        s4 = s4.add(s16.times(BIG_666643));
+        s5 = s5.add(s16.times(BIG_470296));
+        s6 = s6.add(s16.times(BIG_654183));
+        s7 = s7.minus(s16.times(BIG_997805));
+        s8 = s8.add(s16.times(BIG_136657));
+        s9 = s9.minus(s16.times(BIG_683901));
         s16 = BIG_ARR[0];
-        s3 += s15 * BIG_666643;
-        s4 += s15 * BIG_470296;
-        s5 += s15 * BIG_654183;
-        s6 -= s15 * BIG_997805;
-        s7 += s15 * BIG_136657;
-        s8 -= s15 * BIG_683901;
+        s3 = s3.add(s15.times(BIG_666643));
+        s4 = s4.add(s15.times(BIG_470296));
+        s5 = s5.add(s15.times(BIG_654183));
+        s6 = s6.minus(s15.times(BIG_997805));
+        s7 = s7.add(s15.times(BIG_136657));
+        s8 = s8.minus(s15.times(BIG_683901));
         s15 = BIG_ARR[0];
-        s2 += s14 * BIG_666643;
-        s3 += s14 * BIG_470296;
-        s4 += s14 * BIG_654183;
-        s5 -= s14 * BIG_997805;
-        s6 += s14 * BIG_136657;
-        s7 -= s14 * BIG_683901;
+        s2 = s2.add(s14.times(BIG_666643));
+        s3 = s3.add(s14.times(BIG_470296));
+        s4 = s4.add(s14.times(BIG_654183));
+        s5 = s5.minus(s14.times(BIG_997805));
+        s6 = s6.add(s14.times(BIG_136657));
+        s7 = s7.minus(s14.times(BIG_683901));
         s14 = BIG_ARR[0];
-        s1 += s13 * BIG_666643;
-        s2 += s13 * BIG_470296;
-        s3 += s13 * BIG_654183;
-        s4 -= s13 * BIG_997805;
-        s5 += s13 * BIG_136657;
-        s6 -= s13 * BIG_683901;
+        s1 = s1.add(s13.times(BIG_666643));
+        s2 = s2.add(s13.times(BIG_470296));
+        s3 = s3.add(s13.times(BIG_654183));
+        s4 = s4.minus(s13.times(BIG_997805));
+        s5 = s5.add(s13.times(BIG_136657));
+        s6 = s6.minus(s13.times(BIG_683901));
         s13 = BIG_ARR[0];
-        s0 += s12 * BIG_666643;
-        s1 += s12 * BIG_470296;
-        s2 += s12 * BIG_654183;
-        s3 -= s12 * BIG_997805;
-        s4 += s12 * BIG_136657;
-        s5 -= s12 * BIG_683901;
+        s0 = s0.add(s12.times(BIG_666643));
+        s1 = s1.add(s12.times(BIG_470296));
+        s2 = s2.add(s12.times(BIG_654183));
+        s3 = s3.minus(s12.times(BIG_997805));
+        s4 = s4.add(s12.times(BIG_136657));
+        s5 = s5.minus(s12.times(BIG_683901));
         s12 = BIG_ARR[0];
-        carry[0] = (s0 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s1 += carry[0];
-        s0 -= carry[0] << BIG_ARR[21];
-        carry[2] = (s2 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s3 += carry[2];
-        s2 -= carry[2] << BIG_ARR[21];
-        carry[4] = (s4 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s5 += carry[4];
-        s4 -= carry[4] << BIG_ARR[21];
-        carry[6] = (s6 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s7 += carry[6];
-        s6 -= carry[6] << BIG_ARR[21];
-        carry[8] = (s8 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s9 += carry[8];
-        s8 -= carry[8] << BIG_ARR[21];
-        carry[10] = (s10 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s11 += carry[10];
-        s10 -= carry[10] << BIG_ARR[21];
-        carry[1] = (s1 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s2 += carry[1];
-        s1 -= carry[1] << BIG_ARR[21];
-        carry[3] = (s3 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s4 += carry[3];
-        s3 -= carry[3] << BIG_ARR[21];
-        carry[5] = (s5 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s6 += carry[5];
-        s5 -= carry[5] << BIG_ARR[21];
-        carry[7] = (s7 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s8 += carry[7];
-        s7 -= carry[7] << BIG_ARR[21];
-        carry[9] = (s9 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s10 += carry[9];
-        s9 -= carry[9] << BIG_ARR[21];
-        carry[11] = (s11 + BIG_1_SHIFTL_20) >> BIG_ARR[21];
-        s12 += carry[11];
-        s11 -= carry[11] << BIG_ARR[21];
-        s0 += s12 * BIG_666643;
-        s1 += s12 * BIG_470296;
-        s2 += s12 * BIG_654183;
-        s3 -= s12 * BIG_997805;
-        s4 += s12 * BIG_136657;
-        s5 -= s12 * BIG_683901;
+        carry[0] = (s0.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s1 = s1.add(carry[0]);
+        s0 = s0.minus(carry[0].shiftLeft(BIG_ARR[21]));
+        carry[2] = (s2.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s3 = s3.add(carry[2]);
+        s2 = s2.minus(carry[2].shiftLeft(BIG_ARR[21]));
+        carry[4] = (s4.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s5 = s5.add(carry[4]);
+        s4 = s4.minus(carry[4].shiftLeft(BIG_ARR[21]));
+        carry[6] = (s6.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s7 = s7.add(carry[6]);
+        s6 = s6.minus(carry[6].shiftLeft(BIG_ARR[21]));
+        carry[8] = (s8.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s9 = s9.add(carry[8]);
+        s8 = s8.minus(carry[8].shiftLeft(BIG_ARR[21]));
+        carry[10] = (s10.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s11 = s11.add(carry[10]);
+        s10 = s10.minus(carry[10].shiftLeft(BIG_ARR[21]));
+        carry[1] = (s1.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s2 = s2.add(carry[1]);
+        s1 = s1.minus(carry[1].shiftLeft(BIG_ARR[21]));
+        carry[3] = (s3.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s4 = s4.add(carry[3]);
+        s3 = s3.minus(carry[3].shiftLeft(BIG_ARR[21]));
+        carry[5] = (s5.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s6 = s6.add(carry[5]);
+        s5 = s5.minus(carry[5].shiftLeft(BIG_ARR[21]));
+        carry[7] = (s7.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s8 = s8.add(carry[7]);
+        s7 = s7.minus(carry[7].shiftLeft(BIG_ARR[21]));
+        carry[9] = (s9.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s10 = s10.add(carry[9]);
+        s9 = s9.minus(carry[9].shiftLeft(BIG_ARR[21]));
+        carry[11] = (s11.add(BIG_1_SHIFTL_20)).shiftRight(BIG_ARR[21]);
+        s12 = s12.add(carry[11]);
+        s11 = s11.minus(carry[11].shiftLeft(BIG_ARR[21]));
+        s0 = s0.add(s12.times(BIG_666643));
+        s1 = s1.add(s12.times(BIG_470296));
+        s2 = s2.add(s12.times(BIG_654183));
+        s3 = s3.minus(s12.times(BIG_997805));
+        s4 = s4.add(s12.times(BIG_136657));
+        s5 = s5.minus(s12.times(BIG_683901));
         s12 = BIG_ARR[0];
-        carry[0] = s0 >> BIG_ARR[21];
-        s1 += carry[0];
-        s0 -= carry[0] << BIG_ARR[21];
-        carry[1] = s1 >> BIG_ARR[21];
-        s2 += carry[1];
-        s1 -= carry[1] << BIG_ARR[21];
-        carry[2] = s2 >> BIG_ARR[21];
-        s3 += carry[2];
-        s2 -= carry[2] << BIG_ARR[21];
-        carry[3] = s3 >> BIG_ARR[21];
-        s4 += carry[3];
-        s3 -= carry[3] << BIG_ARR[21];
-        carry[4] = s4 >> BIG_ARR[21];
-        s5 += carry[4];
-        s4 -= carry[4] << BIG_ARR[21];
-        carry[5] = s5 >> BIG_ARR[21];
-        s6 += carry[5];
-        s5 -= carry[5] << BIG_ARR[21];
-        carry[6] = s6 >> BIG_ARR[21];
-        s7 += carry[6];
-        s6 -= carry[6] << BIG_ARR[21];
-        carry[7] = s7 >> BIG_ARR[21];
-        s8 += carry[7];
-        s7 -= carry[7] << BIG_ARR[21];
-        carry[8] = s8 >> BIG_ARR[21];
-        s9 += carry[8];
-        s8 -= carry[8] << BIG_ARR[21];
-        carry[9] = s9 >> BIG_ARR[21];
-        s10 += carry[9];
-        s9 -= carry[9] << BIG_ARR[21];
-        carry[10] = s10 >> BIG_ARR[21];
-        s11 += carry[10];
-        s10 -= carry[10] << BIG_ARR[21];
-        carry[11] = s11 >> BIG_ARR[21];
-        s12 += carry[11];
-        s11 -= carry[11] << BIG_ARR[21];
-        s0 += s12 * BIG_666643;
-        s1 += s12 * BIG_470296;
-        s2 += s12 * BIG_654183;
-        s3 -= s12 * BIG_997805;
-        s4 += s12 * BIG_136657;
-        s5 -= s12 * BIG_683901;
+        carry[0] = s0.shiftRight(BIG_ARR[21]);
+        s1 = s1.add(carry[0]);
+        s0 = s0.minus(carry[0].shiftLeft(BIG_ARR[21]));
+        carry[1] = s1.shiftRight(BIG_ARR[21]);
+        s2 = s2.add(carry[1]);
+        s1 = s1.minus(carry[1].shiftLeft(BIG_ARR[21]));
+        carry[2] = s2.shiftRight(BIG_ARR[21]);
+        s3 = s3.add(carry[2]);
+        s2 = s2.minus(carry[2].shiftLeft(BIG_ARR[21]));
+        carry[3] = s3.shiftRight(BIG_ARR[21]);
+        s4 = s4.add(carry[3]);
+        s3 = s3.minus(carry[3].shiftLeft(BIG_ARR[21]));
+        carry[4] = s4.shiftRight(BIG_ARR[21]);
+        s5 = s5.add(carry[4]);
+        s4 = s4.minus(carry[4].shiftLeft(BIG_ARR[21]));
+        carry[5] = s5.shiftRight(BIG_ARR[21]);
+        s6 = s6.add(carry[5]);
+        s5 = s5.minus(carry[5].shiftLeft(BIG_ARR[21]));
+        carry[6] = s6.shiftRight(BIG_ARR[21]);
+        s7 = s7.add(carry[6]);
+        s6 = s6.minus(carry[6].shiftLeft(BIG_ARR[21]));
+        carry[7] = s7.shiftRight(BIG_ARR[21]);
+        s8 = s8.add(carry[7]);
+        s7 = s7.minus(carry[7].shiftLeft(BIG_ARR[21]));
+        carry[8] = s8.shiftRight(BIG_ARR[21]);
+        s9 = s9.add(carry[8]);
+        s8 = s8.minus(carry[8].shiftLeft(BIG_ARR[21]));
+        carry[9] = s9.shiftRight(BIG_ARR[21]);
+        s10 = s10.add(carry[9]);
+        s9 = s9.minus(carry[9].shiftLeft(BIG_ARR[21]));
+        carry[10] = s10.shiftRight(BIG_ARR[21]);
+        s11 = s11.add(carry[10]);
+        s10 = s10.minus(carry[10].shiftLeft(BIG_ARR[21]));
+        carry[11] = s11.shiftRight(BIG_ARR[21]);
+        s12 = s12.add(carry[11]);
+        s11 = s11.minus(carry[11].shiftLeft(BIG_ARR[21]));
+        s0 = s0.add(s12.times(BIG_666643));
+        s1 = s1.add(s12.times(BIG_470296));
+        s2 = s2.add(s12.times(BIG_654183));
+        s3 = s3.minus(s12.times(BIG_997805));
+        s4 = s4.add(s12.times(BIG_136657));
+        s5 = s5.minus(s12.times(BIG_683901));
         s12 = BIG_ARR[0];
-        carry[0] = s0 >> BIG_ARR[21];
-        s1 += carry[0];
-        s0 -= carry[0] << BIG_ARR[21];
-        carry[1] = s1 >> BIG_ARR[21];
-        s2 += carry[1];
-        s1 -= carry[1] << BIG_ARR[21];
-        carry[2] = s2 >> BIG_ARR[21];
-        s3 += carry[2];
-        s2 -= carry[2] << BIG_ARR[21];
-        carry[3] = s3 >> BIG_ARR[21];
-        s4 += carry[3];
-        s3 -= carry[3] << BIG_ARR[21];
-        carry[4] = s4 >> BIG_ARR[21];
-        s5 += carry[4];
-        s4 -= carry[4] << BIG_ARR[21];
-        carry[5] = s5 >> BIG_ARR[21];
-        s6 += carry[5];
-        s5 -= carry[5] << BIG_ARR[21];
-        carry[6] = s6 >> BIG_ARR[21];
-        s7 += carry[6];
-        s6 -= carry[6] << BIG_ARR[21];
-        carry[7] = s7 >> BIG_ARR[21];
-        s8 += carry[7];
-        s7 -= carry[7] << BIG_ARR[21];
-        carry[8] = s8 >> BIG_ARR[21];
-        s9 += carry[8];
-        s8 -= carry[8] << BIG_ARR[21];
-        carry[9] = s9 >> BIG_ARR[21];
-        s10 += carry[9];
-        s9 -= carry[9] << BIG_ARR[21];
-        carry[10] = s10 >> BIG_ARR[21];
-        s11 += carry[10];
-        s10 -= carry[10] << BIG_ARR[21];
-        out[0] = Number(s0 >> BIG_ARR[0]);
-        out[1] = Number(s0 >> BIG_ARR[8]);
-        out[2] = Number((s0 >> BIG_ARR[16]) | (s1 << BIG_ARR[5]));
-        out[3] = Number(s1 >> BIG_ARR[3]);
-        out[4] = Number(s1 >> BIG_ARR[11]);
-        out[5] = Number((s1 >> BIG_ARR[19]) | (s2 << BIG_ARR[2]));
-        out[6] = Number(s2 >> BIG_ARR[6]);
-        out[7] = Number((s2 >> BIG_ARR[14]) | (s3 << BIG_ARR[7]));
-        out[8] = Number(s3 >> BIG_ARR[1]);
-        out[9] = Number(s3 >> BIG_ARR[9]);
-        out[10] = Number((s3 >> BIG_ARR[17]) | (s4 << BIG_ARR[4]));
-        out[11] = Number(s4 >> BIG_ARR[4]);
-        out[12] = Number(s4 >> BIG_ARR[12]);
-        out[13] = Number((s4 >> BIG_ARR[20]) | (s5 << BIG_ARR[1]));
-        out[14] = Number(s5 >> BIG_ARR[7]);
-        out[15] = Number((s5 >> BIG_ARR[15]) | (s6 << BIG_ARR[6]));
-        out[16] = Number(s6 >> BIG_ARR[2]);
-        out[17] = Number(s6 >> BIG_ARR[10]);
-        out[18] = Number((s6 >> BIG_ARR[18]) | (s7 << BIG_ARR[3]));
-        out[19] = Number(s7 >> BIG_ARR[5]);
-        out[20] = Number(s7 >> BIG_ARR[13]);
-        out[21] = Number(s8 >> BIG_ARR[0]);
-        out[22] = Number(s8 >> BIG_ARR[8]);
-        out[23] = Number((s8 >> BIG_ARR[16]) | (s9 << BIG_ARR[5]));
-        out[24] = Number(s9 >> BIG_ARR[3]);
-        out[25] = Number(s9 >> BIG_ARR[11]);
-        out[26] = Number((s9 >> BIG_ARR[19]) | (s10 << BIG_ARR[2]));
-        out[27] = Number(s10 >> BIG_ARR[6]);
-        out[28] = Number((s10 >> BIG_ARR[14]) | (s11 << BIG_ARR[7]));
-        out[29] = Number(s11 >> BIG_ARR[1]);
-        out[30] = Number(s11 >> BIG_ARR[9]);
-        out[31] = Number(s11 >> BIG_ARR[17]);
+        carry[0] = s0.shiftRight(BIG_ARR[21]);
+        s1 = s1.add(carry[0]);
+        s0 = s0.minus(carry[0].shiftLeft(BIG_ARR[21]));
+        carry[1] = s1.shiftRight(BIG_ARR[21]);
+        s2 = s2.add(carry[1]);
+        s1 = s1.minus(carry[1].shiftLeft(BIG_ARR[21]));
+        carry[2] = s2.shiftRight(BIG_ARR[21]);
+        s3 = s3.add(carry[2]);
+        s2 = s2.minus(carry[2].shiftLeft(BIG_ARR[21]));
+        carry[3] = s3.shiftRight(BIG_ARR[21]);
+        s4 = s4.add(carry[3]);
+        s3 = s3.minus(carry[3].shiftLeft(BIG_ARR[21]));
+        carry[4] = s4.shiftRight(BIG_ARR[21]);
+        s5 = s5.add(carry[4]);
+        s4 = s4.minus(carry[4].shiftLeft(BIG_ARR[21]));
+        carry[5] = s5.shiftRight(BIG_ARR[21]);
+        s6 = s6.add(carry[5]);
+        s5 = s5.minus(carry[5].shiftLeft(BIG_ARR[21]));
+        carry[6] = s6.shiftRight(BIG_ARR[21]);
+        s7 = s7.add(carry[6]);
+        s6 = s6.minus(carry[6].shiftLeft(BIG_ARR[21]));
+        carry[7] = s7.shiftRight(BIG_ARR[21]);
+        s8 = s8.add(carry[7]);
+        s7 = s7.minus(carry[7].shiftLeft(BIG_ARR[21]));
+        carry[8] = s8.shiftRight(BIG_ARR[21]);
+        s9 = s9.add(carry[8]);
+        s8 = s8.minus(carry[8].shiftLeft(BIG_ARR[21]));
+        carry[9] = s9.shiftRight(BIG_ARR[21]);
+        s10 = s10.add(carry[9]);
+        s9 = s9.minus(carry[9].shiftLeft(BIG_ARR[21]));
+        carry[10] = s10.shiftRight(BIG_ARR[21]);
+        s11 = s11.add(carry[10]);
+        s10 = s10.minus(carry[10].shiftLeft(BIG_ARR[21]));
+        out[0] = s0.shiftRight(BIG_ARR[0]).toJSNumber();
+        out[1] = s0.shiftRight(BIG_ARR[8]).toJSNumber();
+        out[2] = (s0.shiftRight(BIG_ARR[16])).or(s1.shiftLeft(BIG_ARR[5]))
+            .toJSNumber();
+        out[3] = s1.shiftRight(BIG_ARR[3]).toJSNumber();
+        out[4] = s1.shiftRight(BIG_ARR[11]).toJSNumber();
+        out[5] = (s1.shiftRight(BIG_ARR[19])).or(s2.shiftLeft(BIG_ARR[2]))
+            .toJSNumber();
+        out[6] = s2.shiftRight(BIG_ARR[6]).toJSNumber();
+        out[7] = (s2.shiftRight(BIG_ARR[14])).or(s3.shiftLeft(BIG_ARR[7]))
+            .toJSNumber();
+        out[8] = s3.shiftRight(BIG_ARR[1]).toJSNumber();
+        out[9] = s3.shiftRight(BIG_ARR[9]).toJSNumber();
+        out[10] = (s3.shiftRight(BIG_ARR[17]).or(s4.shiftLeft(BIG_ARR[4])))
+            .toJSNumber();
+        out[11] = s4.shiftRight(BIG_ARR[4]).toJSNumber();
+        out[12] = s4.shiftRight(BIG_ARR[12]).toJSNumber();
+        out[13] = (s4.shiftRight(BIG_ARR[20])).or(s5.shiftLeft(BIG_ARR[1]))
+            .toJSNumber();
+        out[14] = s5.shiftRight(BIG_ARR[7]).toJSNumber();
+        out[15] = (s5.shiftRight(BIG_ARR[15])).or(s6.shiftLeft(BIG_ARR[6]))
+            .toJSNumber();
+        out[16] = s6.shiftRight(BIG_ARR[2]).toJSNumber();
+        out[17] = s6.shiftRight(BIG_ARR[10]).toJSNumber();
+        out[18] = (s6.shiftRight(BIG_ARR[18])).or(s7.shiftLeft(BIG_ARR[3]))
+            .toJSNumber();
+        out[19] = s7.shiftRight(BIG_ARR[5]).toJSNumber();
+        out[20] = s7.shiftRight(BIG_ARR[13]).toJSNumber();
+        out[21] = s8.shiftRight(BIG_ARR[0]).toJSNumber();
+        out[22] = s8.shiftRight(BIG_ARR[8]).toJSNumber();
+        out[23] = (s8.shiftRight(BIG_ARR[16])).or(s9.shiftLeft(BIG_ARR[5]))
+            .toJSNumber();
+        out[24] = s9.shiftRight(BIG_ARR[3]).toJSNumber();
+        out[25] = s9.shiftRight(BIG_ARR[11]).toJSNumber();
+        out[26] = (s9.shiftRight(BIG_ARR[19]).or(s10.shiftLeft(BIG_ARR[2])))
+            .toJSNumber();
+        out[27] = s10.shiftRight(BIG_ARR[6]).toJSNumber();
+        out[28] = (s10.shiftRight(BIG_ARR[14]).or(s11.shiftLeft(BIG_ARR[7])))
+            .toJSNumber();
+        out[29] = s11.shiftRight(BIG_ARR[1]).toJSNumber();
+        out[30] = s11.shiftRight(BIG_ARR[9]).toJSNumber();
+        out[31] = s11.shiftRight(BIG_ARR[17]).toJSNumber();
     }
     /**
      * Scalar Minimal returns true if the given scalar is less than the order of the Curve.
@@ -4187,7 +4447,7 @@
     function serializeSigLockedSingleOutput(writeStream, object) {
         writeStream.writeByte("sigLockedSingleOutput.type", object.type);
         serializeAddress(writeStream, object.address);
-        writeStream.writeUInt64("sigLockedSingleOutput.amount", BigInt(object.amount));
+        writeStream.writeUInt64("sigLockedSingleOutput.amount", bigInt__default["default"](object.amount));
     }
     /**
      * Deserialize the signature locked dust allowance output from binary.
@@ -4218,7 +4478,7 @@
     function serializeSigLockedDustAllowanceOutput(writeStream, object) {
         writeStream.writeByte("sigLockedDustAllowanceOutput.type", object.type);
         serializeAddress(writeStream, object.address);
-        writeStream.writeUInt64("sigLockedDustAllowanceOutput.amount", BigInt(object.amount));
+        writeStream.writeUInt64("sigLockedDustAllowanceOutput.amount", bigInt__default["default"](object.amount));
     }
     /**
      * Deserialize the treasury output from binary.
@@ -4246,7 +4506,7 @@
      */
     function serializeTreasuryOutput(writeStream, object) {
         writeStream.writeByte("treasuryOutput.type", object.type);
-        writeStream.writeUInt64("treasuryOutput.amount", BigInt(object.amount));
+        writeStream.writeUInt64("treasuryOutput.amount", bigInt__default["default"](object.amount));
     }
 
     // Copyright 2020 IOTA Stiftung
@@ -4757,7 +5017,7 @@
     function serializeMilestonePayload(writeStream, object) {
         writeStream.writeUInt32("payloadMilestone.type", object.type);
         writeStream.writeUInt32("payloadMilestone.index", object.index);
-        writeStream.writeUInt64("payloadMilestone.timestamp", BigInt(object.timestamp));
+        writeStream.writeUInt64("payloadMilestone.timestamp", bigInt__default["default"](object.timestamp));
         if (object.parentMessageIds.length < MIN_NUMBER_PARENTS) {
             throw new Error(`A minimum of ${MIN_NUMBER_PARENTS} parents is allowed, you provided ${object.parentMessageIds.length}`);
         }
@@ -4968,7 +5228,7 @@
      */
     function serializeMessage(writeStream, object) {
         var _a, _b, _c, _d;
-        writeStream.writeUInt64("message.networkId", BigInt((_a = object.networkId) !== null && _a !== void 0 ? _a : 0));
+        writeStream.writeUInt64("message.networkId", bigInt__default["default"]((_a = object.networkId) !== null && _a !== void 0 ? _a : "0"));
         const numParents = (_c = (_b = object.parentMessageIds) === null || _b === void 0 ? void 0 : _b.length) !== null && _c !== void 0 ? _c : 0;
         writeStream.writeByte("message.numParents", numParents);
         if (object.parentMessageIds) {
@@ -4993,7 +5253,7 @@
             throw new Error("Messages can only contain transaction, indexation or milestone payloads");
         }
         serializePayload(writeStream, object.payload);
-        writeStream.writeUInt64("message.nonce", BigInt((_d = object.nonce) !== null && _d !== void 0 ? _d : 0));
+        writeStream.writeUInt64("message.nonce", bigInt__default["default"]((_d = object.nonce) !== null && _d !== void 0 ? _d : "0"));
     }
 
     // Copyright 2020 IOTA Stiftung
@@ -5396,7 +5656,6 @@
         }
     }
 
-    // Copyright 2020 IOTA Stiftung
     /**
      * Keep track of the write index within a stream.
      */
@@ -5660,7 +5919,7 @@
             }
             if (this._powProvider) {
                 const nonce = await this._powProvider.pow(messageBytes, minPoWScore);
-                message.nonce = nonce.toString(10);
+                message.nonce = nonce.toString();
             }
             const response = await this.fetchJson("post", "messages", message);
             return response.messageId;
@@ -5678,7 +5937,7 @@
                 const { networkId, minPoWScore } = await this.getPoWInfo();
                 BigIntHelper.write8(networkId, message, 0);
                 const nonce = await this._powProvider.pow(message, minPoWScore);
-                BigIntHelper.write8(nonce, message, message.length - 8);
+                BigIntHelper.write8(bigInt__default["default"](nonce), message, message.length - 8);
             }
             const response = await this.fetchBinary("post", "messages", message);
             return response.messageId;
@@ -10890,7 +11149,7 @@
          * @returns The nonce.
          */
         static performPow(powDigest, targetZeros, startIndex) {
-            let nonce = BigInt(startIndex);
+            let nonce = bigInt__default["default"](startIndex);
             let returnNonce;
             const buf = new Int8Array(Curl.HASH_LENGTH);
             const digestTritsLen = B1T6.encode(buf, 0, powDigest);
@@ -10905,10 +11164,10 @@
                     returnNonce = nonce;
                 }
                 else {
-                    nonce++;
+                    nonce = nonce.plus(1);
                 }
             } while (returnNonce === undefined);
-            return returnNonce !== null && returnNonce !== void 0 ? returnNonce : BigInt(0);
+            return returnNonce ? returnNonce.toString() : "0";
         }
     }
     /**
@@ -10932,7 +11191,7 @@
             const powRelevantData = message.slice(0, -8);
             const powDigest = Blake2b.sum256(powRelevantData);
             const targetZeros = PowHelper.calculateTargetZeros(message, targetScore);
-            return PowHelper.performPow(powDigest, targetZeros, BigInt(0));
+            return PowHelper.performPow(powDigest, targetZeros, "0").toString();
         }
     }
 
@@ -11323,7 +11582,6 @@
         }
     }
 
-    // Copyright 2020 IOTA Stiftung
     /**
      * Keep track of the read index within a stream.
      */

@@ -17,6 +17,6 @@ export class LocalPowProvider {
         const powRelevantData = message.slice(0, -8);
         const powDigest = Blake2b.sum256(powRelevantData);
         const targetZeros = PowHelper.calculateTargetZeros(message, targetScore);
-        return PowHelper.performPow(powDigest, targetZeros, BigInt(0));
+        return PowHelper.performPow(powDigest, targetZeros, "0").toString();
     }
 }

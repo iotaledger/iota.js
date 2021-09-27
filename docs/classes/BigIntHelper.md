@@ -20,7 +20,7 @@ Helper methods for bigints.
 
 ### read3
 
-▸ `Static` **read3**(`data`, `byteOffset`): `bigint`
+▸ `Static` **read3**(`data`, `byteOffset`): `BigInteger`
 
 Load 3 bytes from array as bigint.
 
@@ -33,7 +33,7 @@ Load 3 bytes from array as bigint.
 
 #### Returns
 
-`bigint`
+`BigInteger`
 
 The bigint.
 
@@ -41,7 +41,7 @@ ___
 
 ### read4
 
-▸ `Static` **read4**(`data`, `byteOffset`): `bigint`
+▸ `Static` **read4**(`data`, `byteOffset`): `BigInteger`
 
 Load 4 bytes from array as bigint.
 
@@ -54,7 +54,7 @@ Load 4 bytes from array as bigint.
 
 #### Returns
 
-`bigint`
+`BigInteger`
 
 The bigint.
 
@@ -62,7 +62,7 @@ ___
 
 ### read8
 
-▸ `Static` **read8**(`data`, `byteOffset`): `bigint`
+▸ `Static` **read8**(`data`, `byteOffset`): `BigInteger`
 
 Load 8 bytes from array as bigint.
 
@@ -75,7 +75,7 @@ Load 8 bytes from array as bigint.
 
 #### Returns
 
-`bigint`
+`BigInteger`
 
 The bigint.
 
@@ -91,7 +91,7 @@ Convert a big int to bytes.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `value` | `bigint` | The bigint. |
+| `value` | `BigInteger` | The bigint. |
 | `data` | `Uint8Array` | The buffer to write into. |
 | `byteOffset` | `number` | The start index to write from. |
 
@@ -103,13 +103,13 @@ ___
 
 ### random
 
-▸ `Static` **random**(): `bigint`
+▸ `Static` **random**(): `BigInteger`
 
 Generate a random bigint.
 
 #### Returns
 
-`bigint`
+`BigInteger`
 
 The bitint.
 

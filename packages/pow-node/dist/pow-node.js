@@ -40,7 +40,7 @@ class NodePowProvider {
             let hasFinished = false;
             for (let i = 0; i < this._numCpus; i++) {
                 const worker = new worker_threads.Worker(path__default["default"].join(__dirname, "pow-node.js"), {
-                    workerData: { powDigest, targetZeros, startIndex: chunkSize * BigInt(i) }
+                    workerData: { powDigest, targetZeros, startIndex: (chunkSize * BigInt(i)).toString() }
                 });
                 workers.push(worker);
                 worker.on("message", async (msg) => {
@@ -48,7 +48,7 @@ class NodePowProvider {
                     for (let j = 0; j < workers.length; j++) {
                         await workers[j].terminate();
                     }
-                    resolve(BigInt(msg));
+                    resolve(msg);
                 });
                 worker.on("error", err => {
                     reject(err);
@@ -76,7 +76,7 @@ function doPow(powDigest, targetZeros, startIndex) {
 }
 if (worker_threads.workerData && worker_threads.parentPort) {
     const nonce = doPow(worker_threads.workerData.powDigest, worker_threads.workerData.targetZeros, worker_threads.workerData.startIndex);
-    worker_threads.parentPort.postMessage(nonce.toString());
+    worker_threads.parentPort.postMessage(nonce);
 }
 
 exports.NodePowProvider = NodePowProvider;

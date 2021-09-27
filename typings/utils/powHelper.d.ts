@@ -1,3 +1,4 @@
+import { BigInteger } from "big-integer";
 /**
  * Helper methods for POW.
  */
@@ -25,7 +26,7 @@ export declare class PowHelper {
      * @param nonce The nonce.
      * @returns The trailing zeros.
      */
-    static trailingZeros(powDigest: Uint8Array, nonce: bigint): number;
+    static trailingZeros(powDigest: Uint8Array, nonce: BigInteger): number;
     /**
      * Find the number of trailing zeros.
      * @param trits The trits to look for zeros.
@@ -40,5 +41,5 @@ export declare class PowHelper {
      * @param startIndex The index to start looking from.
      * @returns The nonce.
      */
-    static performPow(powDigest: Uint8Array, targetZeros: number, startIndex: bigint): bigint;
+    static performPow(powDigest: Uint8Array, targetZeros: number, startIndex: string): string;
 }

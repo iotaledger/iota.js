@@ -1,4 +1,5 @@
-import { IPowProvider, LocalPowProvider, PowHelper, RandomHelper, BigIntHelper } from "@iota/iota.js";
+import bigInt from "big-integer";
+import { IPowProvider, LocalPowProvider, PowHelper, BigIntHelper } from "@iota/iota.js";
 import { NodePowProvider } from "@iota/pow-node.js";
 import { WasmPowProvider } from "@iota/pow-wasm.js";
 import { NeonPowProvider } from "@iota/pow-neon.js";
@@ -23,12 +24,12 @@ async function doPow(name: string, dataLength: number, targetScore: number, iter
     let totalTime = 0;
     for (let i = 0; i < iterations; i++) {
         const data = new Uint8Array(dataLength).fill(1);
-        BigIntHelper.write8(BigInt(0), data, data.length - 8);
+        BigIntHelper.write8(bigInt(0), data, data.length - 8);
         console.log("\tIteration", i + 1)
         const startTime = Date.now();
         const nonce = await powProvider.pow(data, targetScore)
         console.log("\tNonce", nonce);
-        BigIntHelper.write8(nonce, data, data.length - 8);
+        BigIntHelper.write8(bigInt(nonce), data, data.length - 8);
         const score = PowHelper.score(data);
         console.log("\tScore", score);
         totalTime += Date.now() - startTime;

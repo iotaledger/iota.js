@@ -29,11 +29,11 @@ export class NeonPowProvider implements IPowProvider {
      * @param targetScore The target score.
      * @returns The nonce.
      */
-    public async pow(message: Uint8Array, targetScore: number): Promise<bigint> {
+    public async pow(message: Uint8Array, targetScore: number): Promise<string> {
         const powRelevantData = message.slice(0, -8);
 
         const nonceArr = module.doPow(powRelevantData.buffer, targetScore, this._numCpus);
 
-        return BigInt(nonceArr[0]) | (BigInt(nonceArr[1]) << BigInt(32));
+        return (BigInt(nonceArr[0]) | (BigInt(nonceArr[1]) << BigInt(32))).toString();
     }
 }

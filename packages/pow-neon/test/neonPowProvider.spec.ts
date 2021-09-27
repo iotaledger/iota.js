@@ -6,6 +6,6 @@ describe("neonPowProvider", () => {
     test("can run the pow and get a result", async () => {
         const provider = new NeonPowProvider(1);
         const nonce = await provider.pow(new Uint8Array(500).fill(1), 400);
-        expect(nonce).toEqual(BigInt(589556));
+        expect(nonce).toEqual("589556");
     });
 });

@@ -1,7 +1,7 @@
 {
     "name": "@iota/pow-wasm.js",
     "description": "IOTA JavaScript Library for Performing Multi-Threaded PoW on NodeJS using WASM implementation",
-    "version": "0.2.0",
+    "version": "1.7.0",
     "keywords": [
         "iota",
         "pow",
@@ -66,6 +66,6 @@
         "wasm/build/release.wasm"
     ],
     "dependencies": {
-        "@iota/iota.js": "^1.6.3"
+        "@iota/iota.js": "^1.7.0"
     }
 }

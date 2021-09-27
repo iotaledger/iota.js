@@ -1,3 +1,4 @@
+import type { BigInteger } from "big-integer";
 /**
  * Keep track of the read index within a stream.
  */
@@ -77,7 +78,7 @@ export declare class ReadStream {
      * @param moveIndex Move the index pointer on.
      * @returns The value.
      */
-    readUInt64(name: string, moveIndex?: boolean): bigint;
+    readUInt64(name: string, moveIndex?: boolean): BigInteger;
     /**
      * Read a boolean from the stream.
      * @param name The name of the data we are trying to read.

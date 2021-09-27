@@ -1,5 +1,6 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
+import bigInt from "big-integer";
 import { Ed25519 } from "../crypto/ed25519.mjs";
 import { INDEXATION_PAYLOAD_TYPE } from "../models/IIndexationPayload.mjs";
 import { MILESTONE_PAYLOAD_TYPE } from "../models/IMilestonePayload.mjs";
@@ -238,7 +239,7 @@ export function deserializeMilestonePayload(readStream) {
 export function serializeMilestonePayload(writeStream, object) {
     writeStream.writeUInt32("payloadMilestone.type", object.type);
     writeStream.writeUInt32("payloadMilestone.index", object.index);
-    writeStream.writeUInt64("payloadMilestone.timestamp", BigInt(object.timestamp));
+    writeStream.writeUInt64("payloadMilestone.timestamp", bigInt(object.timestamp));
     if (object.parentMessageIds.length < MIN_NUMBER_PARENTS) {
         throw new Error(`A minimum of ${MIN_NUMBER_PARENTS} parents is allowed, you provided ${object.parentMessageIds.length}`);
     }

@@ -30,20 +30,20 @@ export class WasmPowProvider implements IPowProvider {
      * @param targetScore The target score.
      * @returns The nonce.
      */
-    public async pow(message: Uint8Array, targetScore: number): Promise<bigint> {
+    public async pow(message: Uint8Array, targetScore: number): Promise<string> {
         const powRelevantData = message.slice(0, -8);
 
         const powDigest = Blake2b.sum256(powRelevantData);
 
         const targetZeros = PowHelper.calculateTargetZeros(message, targetScore);
 
-        return new Promise<bigint>((resolve, reject) => {
+        return new Promise<string>((resolve, reject) => {
             const chunkSize = BigInt(18446744073709551615) / BigInt(this._numCpus);
             const workers: Worker[] = [];
             let hasFinished = false;
             for (let i = 0; i < this._numCpus; i++) {
                 const worker = new Worker(path.join(__dirname, "pow-wasm.js"), {
-                    workerData: { powDigest, targetZeros, startIndex: chunkSize * BigInt(i) }
+                    workerData: { powDigest, targetZeros, startIndex: (chunkSize * BigInt(i)).toString() }
                 });
 
                 workers.push(worker);
@@ -53,7 +53,7 @@ export class WasmPowProvider implements IPowProvider {
                     for (let j = 0; j < workers.length; j++) {
                         await workers[j].terminate();
                     }
-                    resolve(BigInt(msg));
+                    resolve(msg);
                 });
 
                 worker.on("error", err => {

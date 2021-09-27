@@ -1,6 +1,7 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 /* eslint-disable no-bitwise */
+import bigInt, { BigInteger } from "big-integer";
 import { Blake2b } from "../crypto/blake2b";
 import { Curl } from "../crypto/curl";
 import { B1T6 } from "../encoding/b1t6";
@@ -49,7 +50,7 @@ export class PowHelper {
      * @param nonce The nonce.
      * @returns The trailing zeros.
      */
-    public static trailingZeros(powDigest: Uint8Array, nonce: bigint): number {
+    public static trailingZeros(powDigest: Uint8Array, nonce: BigInteger): number {
         const buf = new Int8Array(Curl.HASH_LENGTH);
         const digestTritsLen = B1T6.encode(buf, 0, powDigest);
         const biArr = new Uint8Array(8);
@@ -87,8 +88,8 @@ export class PowHelper {
      * @param startIndex The index to start looking from.
      * @returns The nonce.
      */
-    public static performPow(powDigest: Uint8Array, targetZeros: number, startIndex: bigint): bigint {
-        let nonce = BigInt(startIndex);
+    public static performPow(powDigest: Uint8Array, targetZeros: number, startIndex: string): string {
+        let nonce = bigInt(startIndex);
         let returnNonce;
 
         const buf: Int8Array = new Int8Array(Curl.HASH_LENGTH);
@@ -106,10 +107,10 @@ export class PowHelper {
             if (PowHelper.trinaryTrailingZeros(curlState, Curl.HASH_LENGTH) >= targetZeros) {
                 returnNonce = nonce;
             } else {
-                nonce++;
+                nonce = nonce.plus(1);
             }
         } while (returnNonce === undefined);
 
-        return returnNonce ?? BigInt(0);
+        return returnNonce ? returnNonce.toString() : "0";
     }
 }

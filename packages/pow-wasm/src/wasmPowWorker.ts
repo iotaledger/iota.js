@@ -12,7 +12,7 @@ import { parentPort, workerData } from "worker_threads";
  * @param startIndex The index to start looking from.
  * @returns The nonce.
  */
-export async function doPow(powDigest: Uint8Array, targetZeros: number, startIndex: bigint): Promise<bigint> {
+export async function doPow(powDigest: Uint8Array, targetZeros: number, startIndex: string): Promise<string> {
     const wasmData = await promises.readFile(path.join(__dirname, "../wasm/build/release.wasm"));
     const wasmInstance = await WebAssembly.instantiate(wasmData, buildImports());
 
@@ -27,15 +27,16 @@ export async function doPow(powDigest: Uint8Array, targetZeros: number, startInd
         module.setDigest(i, powDigest[i]);
     }
 
-    const startIndexLo = startIndex & BigInt(0xFFFFFFFF);
-    const startIndexHigh = (startIndex >> BigInt(32)) & BigInt(0xFFFFFFFF);
+    const startIndexNum = BigInt(startIndex);
+    const startIndexLo = startIndexNum & BigInt(0xFFFFFFFF);
+    const startIndexHigh = (startIndexNum >> BigInt(32)) & BigInt(0xFFFFFFFF);
 
     module.powWorker(targetZeros, Number(startIndexLo), Number(startIndexHigh));
 
     const nonceLo = module.getNonceLo();
     const nonceHigh = module.getNonceHi();
 
-    return BigInt(nonceLo) | (BigInt(nonceHigh) << BigInt(32));
+    return (BigInt(nonceLo) | (BigInt(nonceHigh) << BigInt(32))).toString();
 }
 
 /**
@@ -63,7 +64,7 @@ if (workerData && parentPort) {
     doPow(workerData.powDigest, workerData.targetZeros, workerData.startIndex)
         .then(nonce => {
             if (parentPort) {
-                parentPort.postMessage(nonce.toString());
+                parentPort.postMessage(nonce);
             }
         })
         .catch(() => {

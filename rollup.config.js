@@ -29,7 +29,7 @@ export default {
         globals: {
             "node-fetch": "node-fetch",
             "crypto": "crypto",
-            "big-integer": "big-integer"
+            "big-integer": "bigInt"
         }
     },
     external: (process.env.BROWSER
@@ -37,6 +37,7 @@ export default {
             "big-integer"
         ]
         : [
+            "big-integer",
             "crypto",
             "node-fetch"
         ]),

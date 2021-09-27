@@ -1,6 +1,7 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 /* eslint-disable no-bitwise */
+import bigInt, { BigInteger } from "big-integer";
 import { RandomHelper } from "./randomHelper";
 
 /**
@@ -8,10 +9,10 @@ import { RandomHelper } from "./randomHelper";
  */
 export class BigIntHelper {
     // @internal
-    private static readonly BIG_32: bigint = BigInt(32);
+    private static readonly BIG_32: BigInteger = bigInt(32);
 
     // @internal
-    private static readonly BIG_32_MASK: bigint = BigInt(0xFFFFFFFF);
+    private static readonly BIG_32_MASK: BigInteger = bigInt(0xFFFFFFFF);
 
     /**
      * Load 3 bytes from array as bigint.
@@ -19,12 +20,12 @@ export class BigIntHelper {
      * @param byteOffset The start index to read from.
      * @returns The bigint.
      */
-    public static read3(data: Uint8Array, byteOffset: number): bigint {
+    public static read3(data: Uint8Array, byteOffset: number): BigInteger {
         const v0 = (data[byteOffset + 0] +
             (data[byteOffset + 1] << 8) +
             (data[byteOffset + 2] << 16)) >>> 0;
 
-        return BigInt(v0);
+        return bigInt(v0);
     }
 
     /**
@@ -33,13 +34,13 @@ export class BigIntHelper {
      * @param byteOffset The start index to read from.
      * @returns The bigint.
      */
-    public static read4(data: Uint8Array, byteOffset: number): bigint {
+    public static read4(data: Uint8Array, byteOffset: number): BigInteger {
         const v0 = (data[byteOffset + 0] +
             (data[byteOffset + 1] << 8) +
             (data[byteOffset + 2] << 16) +
             (data[byteOffset + 3] << 24)) >>> 0;
 
-        return BigInt(v0);
+        return bigInt(v0);
     }
 
     /**
@@ -48,7 +49,7 @@ export class BigIntHelper {
      * @param byteOffset The start index to read from.
      * @returns The bigint.
      */
-    public static read8(data: Uint8Array, byteOffset: number): bigint {
+    public static read8(data: Uint8Array, byteOffset: number): BigInteger {
         const v0 = (data[byteOffset + 0] +
             (data[byteOffset + 1] << 8) +
             (data[byteOffset + 2] << 16) +
@@ -59,7 +60,9 @@ export class BigIntHelper {
             (data[byteOffset + 6] << 16) +
             (data[byteOffset + 7] << 24)) >>> 0;
 
-        return (BigInt(v1) << BigIntHelper.BIG_32) | BigInt(v0);
+        return bigInt(v1)
+            .shiftLeft(BigIntHelper.BIG_32)
+            .or(v0);
     }
 
     /**
@@ -68,9 +71,9 @@ export class BigIntHelper {
      * @param data The buffer to write into.
      * @param byteOffset The start index to write from.
      */
-    public static write8(value: bigint, data: Uint8Array, byteOffset: number): void {
-        const v0 = Number(value & BigIntHelper.BIG_32_MASK);
-        const v1 = Number((value >> BigIntHelper.BIG_32) & BigIntHelper.BIG_32_MASK);
+    public static write8(value: BigInteger, data: Uint8Array, byteOffset: number): void {
+        const v0 = Number(value.and(BigIntHelper.BIG_32_MASK));
+        const v1 = Number((value.shiftRight(BigIntHelper.BIG_32)).and(BigIntHelper.BIG_32_MASK));
 
         data[byteOffset] = v0 & 0xFF;
         data[byteOffset + 1] = (v0 >> 8) & 0xFF;
@@ -86,7 +89,7 @@ export class BigIntHelper {
      * Generate a random bigint.
      * @returns The bitint.
      */
-    public static random(): bigint {
+    public static random(): BigInteger {
         return BigIntHelper.read8(RandomHelper.generate(8), 0);
     }
 }

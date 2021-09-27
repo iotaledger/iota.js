@@ -16,7 +16,7 @@ Perform the POW on a message.
 
 ### pow
 
-▸ **pow**(`message`, `targetScore`): `Promise`<`bigint`\>
+▸ **pow**(`message`, `targetScore`): `Promise`<`string`\>
 
 Perform pow on the message and return the nonce of at least targetScore.
 
@@ -29,6 +29,6 @@ Perform pow on the message and return the nonce of at least targetScore.
 
 #### Returns
 
-`Promise`<`bigint`\>
+`Promise`<`string`\>
 
-The nonce.
+The nonce as a string.

@@ -1,3 +1,4 @@
+import type { BigInteger } from "big-integer";
 /**
  * Keep track of the write index within a stream.
  */
@@ -73,7 +74,7 @@ export declare class WriteStream {
      * @param name The name of the data we are trying to write.
      * @param val The data to write.
      */
-    writeUInt64(name: string, val: bigint): void;
+    writeUInt64(name: string, val: BigInteger): void;
     /**
      * Write a boolean to the stream.
      * @param name The name of the data we are trying to write.

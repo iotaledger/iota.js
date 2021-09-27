@@ -1,6 +1,7 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 /* eslint-disable no-bitwise */
+import bigInt from "big-integer";
 import { Blake2b } from "../crypto/blake2b.mjs";
 import { Curl } from "../crypto/curl.mjs";
 import { B1T6 } from "../encoding/b1t6.mjs";
@@ -70,7 +71,7 @@ export class PowHelper {
      * @returns The nonce.
      */
     static performPow(powDigest, targetZeros, startIndex) {
-        let nonce = BigInt(startIndex);
+        let nonce = bigInt(startIndex);
         let returnNonce;
         const buf = new Int8Array(Curl.HASH_LENGTH);
         const digestTritsLen = B1T6.encode(buf, 0, powDigest);
@@ -85,10 +86,10 @@ export class PowHelper {
                 returnNonce = nonce;
             }
             else {
-                nonce++;
+                nonce = nonce.plus(1);
             }
         } while (returnNonce === undefined);
-        return returnNonce !== null && returnNonce !== void 0 ? returnNonce : BigInt(0);
+        return returnNonce ? returnNonce.toString() : "0";
     }
 }
 /**

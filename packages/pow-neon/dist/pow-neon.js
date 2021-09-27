@@ -30,7 +30,7 @@ class NeonPowProvider {
     async pow(message, targetScore) {
         const powRelevantData = message.slice(0, -8);
         const nonceArr = module$1.doPow(powRelevantData.buffer, targetScore, this._numCpus);
-        return BigInt(nonceArr[0]) | (BigInt(nonceArr[1]) << BigInt(32));
+        return (BigInt(nonceArr[0]) | (BigInt(nonceArr[1]) << BigInt(32))).toString();
     }
 }
 

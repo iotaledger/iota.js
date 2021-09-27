@@ -229,7 +229,7 @@ ___
 
 ### readUInt64
 
-▸ **readUInt64**(`name`, `moveIndex?`): `bigint`
+▸ **readUInt64**(`name`, `moveIndex?`): `BigInteger`
 
 Read a UInt64 from the stream.
 
@@ -242,7 +242,7 @@ Read a UInt64 from the stream.
 
 #### Returns
 
-`bigint`
+`BigInteger`
 
 The value.
 

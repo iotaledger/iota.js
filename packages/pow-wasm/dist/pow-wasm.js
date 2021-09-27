@@ -41,7 +41,7 @@ class WasmPowProvider {
             let hasFinished = false;
             for (let i = 0; i < this._numCpus; i++) {
                 const worker = new worker_threads.Worker(path__default["default"].join(__dirname, "pow-wasm.js"), {
-                    workerData: { powDigest, targetZeros, startIndex: chunkSize * BigInt(i) }
+                    workerData: { powDigest, targetZeros, startIndex: (chunkSize * BigInt(i)).toString() }
                 });
                 workers.push(worker);
                 worker.on("message", async (msg) => {
@@ -49,7 +49,7 @@ class WasmPowProvider {
                     for (let j = 0; j < workers.length; j++) {
                         await workers[j].terminate();
                     }
-                    resolve(BigInt(msg));
+                    resolve(msg);
                 });
                 worker.on("error", err => {
                     reject(err);
@@ -79,12 +79,13 @@ async function doPow(powDigest, targetZeros, startIndex) {
     for (let i = 0; i < powDigest.length; i++) {
         module.setDigest(i, powDigest[i]);
     }
-    const startIndexLo = startIndex & BigInt(0xFFFFFFFF);
-    const startIndexHigh = (startIndex >> BigInt(32)) & BigInt(0xFFFFFFFF);
+    const startIndexNum = BigInt(startIndex);
+    const startIndexLo = startIndexNum & BigInt(0xFFFFFFFF);
+    const startIndexHigh = (startIndexNum >> BigInt(32)) & BigInt(0xFFFFFFFF);
     module.powWorker(targetZeros, Number(startIndexLo), Number(startIndexHigh));
     const nonceLo = module.getNonceLo();
     const nonceHigh = module.getNonceHi();
-    return BigInt(nonceLo) | (BigInt(nonceHigh) << BigInt(32));
+    return (BigInt(nonceLo) | (BigInt(nonceHigh) << BigInt(32))).toString();
 }
 /**
  * Build the imports needed by AssemblyScript.
@@ -109,7 +110,7 @@ if (worker_threads.workerData && worker_threads.parentPort) {
     doPow(worker_threads.workerData.powDigest, worker_threads.workerData.targetZeros, worker_threads.workerData.startIndex)
         .then(nonce => {
         if (worker_threads.parentPort) {
-            worker_threads.parentPort.postMessage(nonce.toString());
+            worker_threads.parentPort.postMessage(nonce);
         }
     })
         .catch(() => {

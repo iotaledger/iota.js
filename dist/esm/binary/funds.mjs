@@ -1,3 +1,6 @@
+// Copyright 2020 IOTA Stiftung
+// SPDX-License-Identifier: Apache-2.0
+import bigInt from "big-integer";
 import { deserializeAddress, MIN_ED25519_ADDRESS_LENGTH, serializeAddress } from "./address.mjs";
 import { UINT64_SIZE } from "./common.mjs";
 /**
@@ -67,5 +70,5 @@ export function deserializeMigratedFunds(readStream) {
 export function serializeMigratedFunds(writeStream, object) {
     writeStream.writeFixedHex("migratedFunds.tailTransactionHash", TAIL_HASH_LENGTH, object.tailTransactionHash);
     serializeAddress(writeStream, object.address);
-    writeStream.writeUInt64("migratedFunds.deposit", BigInt(object.deposit));
+    writeStream.writeUInt64("migratedFunds.deposit", bigInt(object.deposit));
 }

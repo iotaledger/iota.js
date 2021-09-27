@@ -10,5 +10,5 @@ export declare class LocalPowProvider implements IPowProvider {
      * @param targetScore The target score.
      * @returns The nonce.
      */
-    pow(message: Uint8Array, targetScore: number): Promise<bigint>;
+    pow(message: Uint8Array, targetScore: number): Promise<string>;
 }

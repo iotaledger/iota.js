@@ -1,5 +1,6 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
+import bigInt from "big-integer";
 import { ISigLockedDustAllowanceOutput, SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE } from "../models/ISigLockedDustAllowanceOutput";
 import { ISigLockedSingleOutput, SIG_LOCKED_SINGLE_OUTPUT_TYPE } from "../models/ISigLockedSingleOutput";
 import { ITreasuryOutput, TREASURY_OUTPUT_TYPE } from "../models/ITreasuryOutput";
@@ -161,7 +162,7 @@ export function serializeSigLockedSingleOutput(writeStream: WriteStream,
     object: ISigLockedSingleOutput): void {
     writeStream.writeByte("sigLockedSingleOutput.type", object.type);
     serializeAddress(writeStream, object.address);
-    writeStream.writeUInt64("sigLockedSingleOutput.amount", BigInt(object.amount));
+    writeStream.writeUInt64("sigLockedSingleOutput.amount", bigInt(object.amount));
 }
 
 /**
@@ -200,7 +201,7 @@ export function serializeSigLockedDustAllowanceOutput(writeStream: WriteStream,
     object: ISigLockedDustAllowanceOutput): void {
     writeStream.writeByte("sigLockedDustAllowanceOutput.type", object.type);
     serializeAddress(writeStream, object.address);
-    writeStream.writeUInt64("sigLockedDustAllowanceOutput.amount", BigInt(object.amount));
+    writeStream.writeUInt64("sigLockedDustAllowanceOutput.amount", bigInt(object.amount));
 }
 
 /**
@@ -236,5 +237,5 @@ export function deserializeTreasuryOutput(readStream: ReadStream): ITreasuryOutp
 export function serializeTreasuryOutput(writeStream: WriteStream,
     object: ITreasuryOutput): void {
     writeStream.writeByte("treasuryOutput.type", object.type);
-    writeStream.writeUInt64("treasuryOutput.amount", BigInt(object.amount));
+    writeStream.writeUInt64("treasuryOutput.amount", bigInt(object.amount));
 }

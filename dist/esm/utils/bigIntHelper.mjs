@@ -1,6 +1,7 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 /* eslint-disable no-bitwise */
+import bigInt from "big-integer";
 import { RandomHelper } from "./randomHelper.mjs";
 /**
  * Helper methods for bigints.
@@ -16,7 +17,7 @@ export class BigIntHelper {
         const v0 = (data[byteOffset + 0] +
             (data[byteOffset + 1] << 8) +
             (data[byteOffset + 2] << 16)) >>> 0;
-        return BigInt(v0);
+        return bigInt(v0);
     }
     /**
      * Load 4 bytes from array as bigint.
@@ -29,7 +30,7 @@ export class BigIntHelper {
             (data[byteOffset + 1] << 8) +
             (data[byteOffset + 2] << 16) +
             (data[byteOffset + 3] << 24)) >>> 0;
-        return BigInt(v0);
+        return bigInt(v0);
     }
     /**
      * Load 8 bytes from array as bigint.
@@ -46,7 +47,9 @@ export class BigIntHelper {
             (data[byteOffset + 5] << 8) +
             (data[byteOffset + 6] << 16) +
             (data[byteOffset + 7] << 24)) >>> 0;
-        return (BigInt(v1) << BigIntHelper.BIG_32) | BigInt(v0);
+        return bigInt(v1)
+            .shiftLeft(BigIntHelper.BIG_32)
+            .or(v0);
     }
     /**
      * Convert a big int to bytes.
@@ -55,8 +58,8 @@ export class BigIntHelper {
      * @param byteOffset The start index to write from.
      */
     static write8(value, data, byteOffset) {
-        const v0 = Number(value & BigIntHelper.BIG_32_MASK);
-        const v1 = Number((value >> BigIntHelper.BIG_32) & BigIntHelper.BIG_32_MASK);
+        const v0 = Number(value.and(BigIntHelper.BIG_32_MASK));
+        const v1 = Number((value.shiftRight(BigIntHelper.BIG_32)).and(BigIntHelper.BIG_32_MASK));
         data[byteOffset] = v0 & 0xFF;
         data[byteOffset + 1] = (v0 >> 8) & 0xFF;
         data[byteOffset + 2] = (v0 >> 16) & 0xFF;
@@ -75,6 +78,6 @@ export class BigIntHelper {
     }
 }
 // @internal
-BigIntHelper.BIG_32 = BigInt(32);
+BigIntHelper.BIG_32 = bigInt(32);
 // @internal
-BigIntHelper.BIG_32_MASK = BigInt(0xFFFFFFFF);
+BigIntHelper.BIG_32_MASK = bigInt(0xFFFFFFFF);

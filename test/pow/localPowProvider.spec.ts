@@ -27,10 +27,10 @@ describe("LocalPowProvider", () => {
         const messageBytes = writeStream.finalBytes();
 
         const nonce = await pow.pow(messageBytes, 100);
-        expect(nonce).toEqual(BigInt(6569));
+        expect(nonce).toEqual("6569");
 
         const score = PowHelper.score(messageBytes);
 
-        expect(nonce).toBeGreaterThanOrEqual(score);
+        expect(Number.parseInt(nonce, 10)).toBeGreaterThanOrEqual(score);
     });
 });
