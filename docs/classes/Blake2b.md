@@ -7,8 +7,8 @@ TypeScript conversion from https://github.com/dcposch/blakejs.
 
 ### Properties
 
-- [SIZE_256](Blake2b.md#size_256)
-- [SIZE_512](Blake2b.md#size_512)
+- [SIZE\_256](Blake2b.md#size_256)
+- [SIZE\_512](Blake2b.md#size_512)
 
 ### Methods
 

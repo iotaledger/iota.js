@@ -6,7 +6,7 @@ Class to help with units formatting.
 
 ### Properties
 
-- [UNIT_MAP](UnitsHelper.md#unit_map)
+- [UNIT\_MAP](UnitsHelper.md#unit_map)
 
 ### Methods
 

@@ -6,8 +6,8 @@ Convert address to bech32.
 
 ### Properties
 
-- [BECH32_DEFAULT_HRP_MAIN](Bech32Helper.md#bech32_default_hrp_main)
-- [BECH32_DEFAULT_HRP_DEV](Bech32Helper.md#bech32_default_hrp_dev)
+- [BECH32\_DEFAULT\_HRP\_MAIN](Bech32Helper.md#bech32_default_hrp_main)
+- [BECH32\_DEFAULT\_HRP\_DEV](Bech32Helper.md#bech32_default_hrp_dev)
 
 ### Methods
 

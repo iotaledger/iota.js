@@ -6,8 +6,8 @@ Class to implement Curl sponge.
 
 ### Properties
 
-- [HASH_LENGTH](Curl.md#hash_length)
-- [STATE_LENGTH](Curl.md#state_length)
+- [HASH\_LENGTH](Curl.md#hash_length)
+- [STATE\_LENGTH](Curl.md#state_length)
 
 ### Constructors
 

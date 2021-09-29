@@ -16,7 +16,7 @@
     "license": "Apache-2.0",
     "dependencies": {
         "big-integer": "^1.6.49",
-        "node-fetch": "2.6.4"
+        "node-fetch": "2.6.5"
     },
     "scripts": {
         "build-clean": "rimraf ./es/* ./typings/*",
@@ -49,8 +49,8 @@
         "@rollup/plugin-replace": "^3.0.0",
         "@types/jest": "^27.0.2",
         "@types/node-fetch": "2.5.12",
-        "@typescript-eslint/eslint-plugin": "^4.31.2",
-        "@typescript-eslint/parser": "^4.31.2",
+        "@typescript-eslint/eslint-plugin": "^4.32.0",
+        "@typescript-eslint/parser": "^4.32.0",
         "copyfiles": "^2.4.1",
         "cross-env": "^7.0.3",
         "eslint": "^7.32.0",
@@ -58,7 +58,7 @@
         "eslint-plugin-import": "^2.24.2",
         "eslint-plugin-jsdoc": "^36.1.0",
         "eslint-plugin-unicorn": "^36.0.0",
-        "jest": "^27.2.1",
+        "jest": "^27.2.3",
         "npm-run-all": "^4.1.5",
         "rimraf": "^3.0.2",
         "rollup": "^2.57.0",
@@ -66,7 +66,7 @@
         "ts-jest": "^27.0.5",
         "ts-node": "^10.2.1",
         "typedoc": "^0.22.4",
-        "typedoc-plugin-markdown": "^3.11.0",
+        "typedoc-plugin-markdown": "^3.11.2",
         "typescript": "^4.4.3"
     },
     "main": "dist/cjs/index-node.js",
