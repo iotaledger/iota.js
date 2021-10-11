@@ -3,4 +3,10 @@ name: "CodeQL Config"
 queries:
     - uses: security-and-quality
 paths:
-    - src
+    - packages/iota/src
+    - packages/crypto/src
+    - packages/util/src
+    - packages/mqtt/src
+    - packages/pow-neon/src
+    - packages/pow-node/src
+    - packages/pow-wasm/src

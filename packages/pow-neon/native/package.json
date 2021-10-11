@@ -1,5 +1,8 @@
 {
     "name": "@iota/pow-neon-native.js",
     "main": "index.node",
-    "typings": "index.d.ts"
+    "typings": "index.d.ts",
+    "scripts": {
+        "dist": "cargo build --release"
+    }
 }

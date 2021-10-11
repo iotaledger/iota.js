@@ -20,6 +20,7 @@
         "packages/mqtt",
         "packages/pow-neon",
         "packages/pow-node",
+        "packages/pow-wasm/wasm",
         "packages/pow-wasm"
     ],
     "dependencies": {

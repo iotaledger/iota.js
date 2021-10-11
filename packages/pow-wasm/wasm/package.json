@@ -19,7 +19,8 @@
         "test": "node tests",
         "asbuild:untouched": "asc assembly/index.ts --target debug",
         "asbuild:optimized": "asc assembly/index.ts --target release",
-        "asbuild": "npm run asbuild:untouched && npm run asbuild:optimized"
+        "asbuild": "npm run asbuild:untouched && npm run asbuild:optimized",
+        "dist": "npm run asbuild:optimized"
     },
     "dependencies": {
         "@assemblyscript/loader": "^0.19.16"
