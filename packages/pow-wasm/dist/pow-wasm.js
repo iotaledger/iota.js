@@ -2,6 +2,7 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
+var crypto_js = require('@iota/crypto.js');
 var iota_js = require('@iota/iota.js');
 var os = require('os');
 var path = require('path');
@@ -33,7 +34,7 @@ class WasmPowProvider {
      */
     async pow(message, targetScore) {
         const powRelevantData = message.slice(0, -8);
-        const powDigest = iota_js.Blake2b.sum256(powRelevantData);
+        const powDigest = crypto_js.Blake2b.sum256(powRelevantData);
         const targetZeros = iota_js.PowHelper.calculateTargetZeros(message, targetScore);
         return new Promise((resolve, reject) => {
             const chunkSize = BigInt(18446744073709551615) / BigInt(this._numCpus);
@@ -80,8 +81,8 @@ async function doPow(powDigest, targetZeros, startIndex) {
         module.setDigest(i, powDigest[i]);
     }
     const startIndexNum = BigInt(startIndex);
-    const startIndexLo = startIndexNum & BigInt(0xFFFFFFFF);
-    const startIndexHigh = (startIndexNum >> BigInt(32)) & BigInt(0xFFFFFFFF);
+    const startIndexLo = startIndexNum & BigInt(0xffffffff);
+    const startIndexHigh = (startIndexNum >> BigInt(32)) & BigInt(0xffffffff);
     module.powWorker(targetZeros, Number(startIndexLo), Number(startIndexHigh));
     const nonceLo = module.getNonceLo();
     const nonceHigh = module.getNonceHi();
@@ -94,10 +95,8 @@ async function doPow(powDigest, targetZeros, startIndex) {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function buildImports() {
     const env = {
-        abort: (msg, file, line, colm) => {
-        },
-        trace: (msg, n, ...args) => {
-        },
+        abort: (msg, file, line, colm) => { },
+        trace: (msg, n, ...args) => { },
         seed: Date.now
     };
     return {

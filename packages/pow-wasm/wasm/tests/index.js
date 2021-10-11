@@ -10,6 +10,6 @@ const end = Date.now();
 const lo = myModule.getNonceLo();
 const hi = myModule.getNonceHi();
 const nonce = BigInt(lo) | (BigInt(hi) << BigInt(32));
-console.log("nonce", nonce)
+console.log("nonce", nonce);
 console.log("duration", end - start);
 assert(nonce, BigInt(4936));

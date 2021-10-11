@@ -1,6 +1,7 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import { Converter, deserializeMessage, IMessage, IMessageMetadata, IOutputResponse, RandomHelper, ReadStream } from "@iota/iota.js";
+import { deserializeMessage, IMessage, IMessageMetadata, IOutputResponse } from "@iota/iota.js";
+import { Converter, RandomHelper, ReadStream } from "@iota/util.js";
 import * as mqtt from "mqtt";
 import type { IMqttMilestoneResponse } from "../models/api/IMqttMilestoneResponse";
 import type { IMqttClient } from "../models/IMqttClient";
@@ -101,8 +102,7 @@ export class MqttClient implements IMqttClient {
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    public milestonesLatest(
-        callback: (topic: string, data: IMqttMilestoneResponse) => void): string {
+    public milestonesLatest(callback: (topic: string, data: IMqttMilestoneResponse) => void): string {
         return this.internalSubscribe("milestones/latest", true, callback);
     }
 
@@ -111,8 +111,7 @@ export class MqttClient implements IMqttClient {
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    public milestonesConfirmed(
-        callback: (topic: string, data: IMqttMilestoneResponse) => void): string {
+    public milestonesConfirmed(callback: (topic: string, data: IMqttMilestoneResponse) => void): string {
         return this.internalSubscribe("milestones/confirmed", true, callback);
     }
 
@@ -122,8 +121,7 @@ export class MqttClient implements IMqttClient {
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    public messageMetadata(messageId: string,
-        callback: (topic: string, data: IMessageMetadata) => void): string {
+    public messageMetadata(messageId: string, callback: (topic: string, data: IMessageMetadata) => void): string {
         return this.internalSubscribe(`messages/${messageId}/metadata`, true, callback);
     }
 
@@ -133,8 +131,7 @@ export class MqttClient implements IMqttClient {
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    public output(outputId: string,
-        callback: (topic: string, data: IOutputResponse) => void): string {
+    public output(outputId: string, callback: (topic: string, data: IOutputResponse) => void): string {
         return this.internalSubscribe(`outputs/${outputId}`, true, callback);
     }
 
@@ -144,8 +141,7 @@ export class MqttClient implements IMqttClient {
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    public addressOutputs(addressBech32: string,
-        callback: (topic: string, data: IOutputResponse) => void): string {
+    public addressOutputs(addressBech32: string, callback: (topic: string, data: IOutputResponse) => void): string {
         return this.internalSubscribe(`addresses/${addressBech32}/outputs`, true, callback);
     }
 
@@ -155,8 +151,10 @@ export class MqttClient implements IMqttClient {
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    public addressEd25519Outputs(addressEd25519: string,
-        callback: (topic: string, data: IOutputResponse) => void): string {
+    public addressEd25519Outputs(
+        addressEd25519: string,
+        callback: (topic: string, data: IOutputResponse) => void
+    ): string {
         return this.internalSubscribe(`addresses/ed25519/${addressEd25519}/outputs`, true, callback);
     }
 
@@ -165,15 +163,10 @@ export class MqttClient implements IMqttClient {
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    public messagesRaw(
-        callback: (topic: string, data: Uint8Array) => void): string {
-        return this.internalSubscribe<Uint8Array>("messages", false,
-            (topic, raw) => {
-                callback(
-                    topic,
-                    raw
-                );
-            });
+    public messagesRaw(callback: (topic: string, data: Uint8Array) => void): string {
+        return this.internalSubscribe<Uint8Array>("messages", false, (topic, raw) => {
+            callback(topic, raw);
+        });
     }
 
     /**
@@ -181,16 +174,10 @@ export class MqttClient implements IMqttClient {
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    public messages(
-        callback: (topic: string, data: IMessage, raw: Uint8Array) => void): string {
-        return this.internalSubscribe<Uint8Array>("messages", false,
-            (topic, raw) => {
-                callback(
-                    topic,
-                    deserializeMessage(new ReadStream(raw)),
-                    raw
-                );
-            });
+    public messages(callback: (topic: string, data: IMessage, raw: Uint8Array) => void): string {
+        return this.internalSubscribe<Uint8Array>("messages", false, (topic, raw) => {
+            callback(topic, deserializeMessage(new ReadStream(raw)), raw);
+        });
     }
 
     /**
@@ -199,17 +186,16 @@ export class MqttClient implements IMqttClient {
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    public indexRaw(index: Uint8Array | string,
-        callback: (topic: string, data: Uint8Array) => void): string {
-        return this.internalSubscribe<Uint8Array>(`messages/indexation/${typeof index === "string"
-            ? Converter.utf8ToHex(index)
-            : Converter.bytesToHex(index)}`, false,
+    public indexRaw(index: Uint8Array | string, callback: (topic: string, data: Uint8Array) => void): string {
+        return this.internalSubscribe<Uint8Array>(
+            `messages/indexation/${
+                typeof index === "string" ? Converter.utf8ToHex(index) : Converter.bytesToHex(index)
+            }`,
+            false,
             (topic, raw) => {
-                callback(
-                    topic,
-                    raw
-                );
-            });
+                callback(topic, raw);
+            }
+        );
     }
 
     /**
@@ -218,18 +204,19 @@ export class MqttClient implements IMqttClient {
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    public index(index: Uint8Array | string,
-        callback: (topic: string, data: IMessage, raw: Uint8Array) => void): string {
-        return this.internalSubscribe<Uint8Array>(`messages/indexation/${typeof index === "string"
-            ? Converter.utf8ToHex(index)
-            : Converter.bytesToHex(index)}`, false,
+    public index(
+        index: Uint8Array | string,
+        callback: (topic: string, data: IMessage, raw: Uint8Array) => void
+    ): string {
+        return this.internalSubscribe<Uint8Array>(
+            `messages/indexation/${
+                typeof index === "string" ? Converter.utf8ToHex(index) : Converter.bytesToHex(index)
+            }`,
+            false,
             (topic, raw) => {
-                callback(
-                    topic,
-                    deserializeMessage(new ReadStream(raw)),
-                    raw
-                );
-            });
+                callback(topic, deserializeMessage(new ReadStream(raw)), raw);
+            }
+        );
     }
 
     /**
@@ -237,8 +224,7 @@ export class MqttClient implements IMqttClient {
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    public messagesMetadata(
-        callback: (topic: string, data: IMessageMetadata) => void): string {
+    public messagesMetadata(callback: (topic: string, data: IMessageMetadata) => void): string {
         return this.internalSubscribe("messages/referenced", true, callback);
     }
 
@@ -250,7 +236,8 @@ export class MqttClient implements IMqttClient {
      */
     public transactionIncludedMessageRaw(
         transactionId: string,
-        callback: (topic: string, data: Uint8Array) => void): string {
+        callback: (topic: string, data: Uint8Array) => void
+    ): string {
         return this.internalSubscribe(`transactions/${transactionId}/included-message`, false, callback);
     }
 
@@ -262,15 +249,15 @@ export class MqttClient implements IMqttClient {
      */
     public transactionIncludedMessage(
         transactionId: string,
-        callback: (topic: string, data: IMessage, raw: Uint8Array) => void): string {
-        return this.internalSubscribe<Uint8Array>(`transactions/${transactionId}/included-message`, false,
+        callback: (topic: string, data: IMessage, raw: Uint8Array) => void
+    ): string {
+        return this.internalSubscribe<Uint8Array>(
+            `transactions/${transactionId}/included-message`,
+            false,
             (topic, raw) => {
-                callback(
-                    topic,
-                    deserializeMessage(new ReadStream(raw)),
-                    raw
-                );
-            });
+                callback(topic, deserializeMessage(new ReadStream(raw)), raw);
+            }
+        );
     }
 
     /**
@@ -279,8 +266,7 @@ export class MqttClient implements IMqttClient {
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    public subscribeRaw(customTopic: string,
-        callback: (topic: string, data: Uint8Array) => void): string {
+    public subscribeRaw(customTopic: string, callback: (topic: string, data: Uint8Array) => void): string {
         return this.internalSubscribe(customTopic, false, callback);
     }
 
@@ -290,8 +276,7 @@ export class MqttClient implements IMqttClient {
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    public subscribeJson<T>(customTopic: string,
-        callback: (topic: string, data: T) => void): string {
+    public subscribeJson<T>(customTopic: string, callback: (topic: string, data: T) => void): string {
         return this.internalSubscribe<T>(customTopic, true, callback);
     }
 
@@ -334,8 +319,7 @@ export class MqttClient implements IMqttClient {
      * @param callback Callback called when the state has changed.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    public statusChanged(
-        callback: (data: IMqttStatus) => void): string {
+    public statusChanged(callback: (data: IMqttStatus) => void): string {
         const subscriptionId = Converter.bytesToHex(RandomHelper.generate(32));
 
         this._statusSubscriptions[subscriptionId] = callback;
@@ -351,9 +335,11 @@ export class MqttClient implements IMqttClient {
      * @returns A subscription Id which can be used to unsubscribe.
      * @internal
      */
-    private internalSubscribe<T>(customTopic: string,
+    private internalSubscribe<T>(
+        customTopic: string,
         isJson: boolean,
-        callback: (topic: string, data: T) => void): string {
+        callback: (topic: string, data: T) => void
+    ): string {
         let isNewTopic = false;
 
         if (!this._subscriptions[customTopic]) {
@@ -504,7 +490,7 @@ export class MqttClient implements IMqttClient {
             try {
                 localClient.unsubscribe(Object.keys(this._subscriptions));
                 localClient.end();
-            } catch { }
+            } catch {}
 
             this.triggerStatusCallbacks({
                 type: "disconnect",
@@ -541,8 +527,7 @@ export class MqttClient implements IMqttClient {
                 } catch (err) {
                     this.triggerStatusCallbacks({
                         type: "error",
-                        message: `Triggering callback failed for topic ${topic
-                            } on subscription ${this._subscriptions[topic].subscriptionCallbacks[i].subscriptionId}`,
+                        message: `Triggering callback failed for topic ${topic} on subscription ${this._subscriptions[topic].subscriptionCallbacks[i].subscriptionId}`,
                         state: this.calculateState(),
                         error: err
                     });
@@ -570,7 +555,7 @@ export class MqttClient implements IMqttClient {
     private startKeepAlive(): void {
         this.stopKeepAlive();
         this._lastMessageTime = Date.now();
-        this._timerId = setInterval(() => this.keepAlive(), ((this._keepAliveTimeoutSeconds / 2) * 1000));
+        this._timerId = setInterval(() => this.keepAlive(), (this._keepAliveTimeoutSeconds / 2) * 1000);
     }
 
     /**
@@ -589,7 +574,7 @@ export class MqttClient implements IMqttClient {
      * @internal
      */
     private keepAlive(): void {
-        if (Date.now() - this._lastMessageTime > (this._keepAliveTimeoutSeconds * 1000)) {
+        if (Date.now() - this._lastMessageTime > this._keepAliveTimeoutSeconds * 1000) {
             this.mqttDisconnect();
 
             this.nextClient();

@@ -10,7 +10,6 @@ npm install @iota/pow-node.js
 
 ## Usage
 
-
 ```js
 import { SingleNodeClient } from "@iota/iota.js";
 import { NodePowProvider } from "@iota/pow-node.js";

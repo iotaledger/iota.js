@@ -7,8 +7,11 @@
 <body>
     <h1>iota.js Browser MQTT Example</h1>
     <pre id="console" style="max-height: 80vh; overflow-x: auto"></pre>
+    <script src="https://peterolson.github.io/BigInteger.js/BigInteger.min.js"></script>
     <script src="https://unpkg.com/mqtt@4.2.8/dist/mqtt.min.js"></script>
-    <script src="../../../../dist/cjs/index-browser.js"></script>
+    <script src="../../../../packages/util/dist/cjs/index-browser.js"></script>
+    <script src="../../../../packages/crypto/dist/cjs/index-browser.js"></script>
+    <script src="../../../../packages/iota/dist/cjs/index-browser.js"></script>
     <script src="../../dist/cjs/index-browser.js"></script>
     <script>
         function consoleLog(message, obj) {
@@ -21,7 +24,7 @@
         }
 
         async function run() {
-            const client = new IotaMqtt.MqttClient("ws://localhost:14265/mqtt");
+            const client = new IotaMqtt.MqttClient("wss://chrysalis-nodes.iota.org:443/mqtt");
 
             client.milestonesLatest((topic, data) => {
                 consoleLog(topic, data);

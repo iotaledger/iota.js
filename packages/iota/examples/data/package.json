@@ -1,0 +1,14 @@
+{
+    "name": "data",
+    "version": "1.0.0",
+    "main": "dist/index.js",
+    "scripts": {
+        "build": "tsc",
+        "start": "node dist/index"
+    },
+    "dependencies": {
+        "@iota/iota.js": "file:../../packages/iota",
+        "@iota/util.js": "file:../../packages/util",
+        "typescript": "^4.4.3"
+    }
+}

@@ -1,7 +1,7 @@
-import commonjs from '@rollup/plugin-commonjs';
-import resolve from '@rollup/plugin-node-resolve';
-import replace from '@rollup/plugin-replace';
-import { terser } from 'rollup-plugin-terser';
+import commonjs from "@rollup/plugin-commonjs";
+import resolve from "@rollup/plugin-node-resolve";
+import replace from "@rollup/plugin-replace";
+import { terser } from "rollup-plugin-terser";
 
 const plugins = [
     replace({
@@ -20,17 +20,16 @@ if (process.env.MINIFY) {
 export default {
     input: `./es/index.js`,
     output: {
-        file: `dist/pow-wasm${process.env.MINIFY ? '.min' : ''}.js`,
-        format: 'cjs',
-        name: 'PowWasm',
+        file: `dist/pow-wasm${process.env.MINIFY ? ".min" : ""}.js`,
+        format: "cjs",
+        name: "IotaPowWasm",
         compact: process.env.MINIFY,
         exports: "auto",
         globals: {
-            "@iota/iota.js": "@iota/iota.js"
+            "@iota/iota.js": "Iota",
+            "@iota/crypto.js": "IotaCrypto"
         }
     },
-    external: [
-        "@iota/iota.js"
-    ],
+    external: ["@iota/iota.js", "@iota/crypto.js"],
     plugins
-}
+};

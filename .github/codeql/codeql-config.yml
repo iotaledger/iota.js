@@ -1,6 +1,6 @@
 name: "CodeQL Config"
 
 queries:
-  - uses: security-and-quality
+    - uses: security-and-quality
 paths:
-  - src
+    - src

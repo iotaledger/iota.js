@@ -1,0 +1,13 @@
+.git
+.vscode
+coverage
+dist
+build
+target
+docs
+es
+node_modules
+typings
+*.md
+*.html
+package-lock.json

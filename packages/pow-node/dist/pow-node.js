@@ -2,6 +2,7 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
+var crypto_js = require('@iota/crypto.js');
 var iota_js = require('@iota/iota.js');
 var os = require('os');
 var path = require('path');
@@ -32,7 +33,7 @@ class NodePowProvider {
      */
     async pow(message, targetScore) {
         const powRelevantData = message.slice(0, -8);
-        const powDigest = iota_js.Blake2b.sum256(powRelevantData);
+        const powDigest = crypto_js.Blake2b.sum256(powRelevantData);
         const targetZeros = iota_js.PowHelper.calculateTargetZeros(message, targetScore);
         return new Promise((resolve, reject) => {
             const chunkSize = BigInt(18446744073709551615) / BigInt(this._numCpus);

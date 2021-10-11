@@ -1,7 +1,7 @@
 [package]
 name = "pow-neon"
 version = "1.0.0"
-authors = ["Martyn Janes <martyn@obany.com>"]
+authors = ["Martyn Janes <martyn.janes@iota.org>"]
 license = "Apache-2.0"
 build = "build.rs"
 edition = "2018"

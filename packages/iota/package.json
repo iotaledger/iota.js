@@ -1,0 +1,97 @@
+{
+    "name": "@iota/iota.js",
+    "description": "IOTA JavaScript Library",
+    "version": "1.8.0",
+    "keywords": [
+        "iota",
+        "client"
+    ],
+    "authors": [
+        "Martyn Janes <martyn.janes@iota.org>"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/iotaledger/iota.js.git"
+    },
+    "license": "Apache-2.0",
+    "dependencies": {
+        "big-integer": "^1.6.49",
+        "node-fetch": "2.6.5",
+        "@iota/util.js": "^1.8.0",
+        "@iota/crypto.js": "^1.8.0"
+    },
+    "scripts": {
+        "build-clean": "rimraf ./es/* ./typings/*",
+        "build-lint": "eslint src --ext .ts",
+        "build-compile": "tsc",
+        "build-watch": "tsc --watch",
+        "build": "run-s build-clean build-lint build-compile",
+        "test-clean": "rimraf ./coverage/*",
+        "test-lint": "eslint test --ext .ts",
+        "test-run": "jest",
+        "test": "run-s test-clean test-lint test-run",
+        "package-clean": "rimraf ./dist/*",
+        "package-esm": "copyfiles -u 1 es/**/* dist/esm",
+        "package-esm-rename": "node esm-modules.js ./dist/esm",
+        "package-umd": "rollup --config rollup.config.js",
+        "package-umd-min": "rollup --config rollup.config.js --environment MINIFY:true",
+        "package-umd-browser": "rollup --config rollup.config.js --environment BROWSER:true",
+        "package-umd-browser-min": "rollup --config rollup.config.js --environment BROWSER:true --environment MINIFY:true",
+        "package": "run-s package-clean package-esm package-esm-rename package-umd package-umd-min package-umd-browser package-umd-browser-min",
+        "docs-clean": "rimraf ./docs/*",
+        "docs-build": "typedoc --disableSources --excludePrivate --excludeInternal --excludeNotDocumented --theme markdown --hideBreadcrumbs --entryDocument api.md --readme none --hideGenerator --sort source-order --exclude ./**/src/index.ts --out ./docs ./src/index.ts",
+        "docs": "npm-run-all docs-clean docs-build",
+        "dist": "run-s build test package docs"
+    },
+    "engines": {
+        "node": ">=14.0.0"
+    },
+    "devDependencies": {
+        "@rollup/plugin-commonjs": "^20.0.0",
+        "@rollup/plugin-node-resolve": "^13.0.5",
+        "@rollup/plugin-replace": "^3.0.0",
+        "@types/jest": "^27.0.2",
+        "@types/node-fetch": "2.5.12",
+        "@typescript-eslint/eslint-plugin": "^4.33.0",
+        "@typescript-eslint/parser": "^4.33.0",
+        "copyfiles": "^2.4.1",
+        "cross-env": "^7.0.3",
+        "eslint": "^7.32.0",
+        "eslint-plugin-header": "^3.1.1",
+        "eslint-plugin-import": "^2.24.2",
+        "eslint-plugin-jsdoc": "^36.1.0",
+        "eslint-plugin-unicorn": "^36.0.0",
+        "jest": "^27.2.4",
+        "npm-run-all": "^4.1.5",
+        "rimraf": "^3.0.2",
+        "rollup": "^2.58.0",
+        "rollup-plugin-terser": "^7.0.2",
+        "ts-jest": "^27.0.5",
+        "ts-node": "^10.2.1",
+        "typedoc": "^0.22.5",
+        "typedoc-plugin-markdown": "^3.11.3",
+        "typescript": "^4.4.3"
+    },
+    "main": "dist/cjs/index-node.js",
+    "browser": "dist/cjs/index-browser.js",
+    "module": "dist/esm/index-browser.mjs",
+    "exports": {
+        ".": {
+            "node": {
+                "import": "./dist/esm/index-node.mjs",
+                "require": "./dist/cjs/index-node.js"
+            },
+            "browser": {
+                "import": "./dist/esm/index-browser.mjs",
+                "require": "./dist/cjs/index-browser.js"
+            }
+        },
+        "./package.json": "./package.json"
+    },
+    "typings": "typings/index.d.ts",
+    "files": [
+        "dist",
+        "src",
+        "typings"
+    ]
+}

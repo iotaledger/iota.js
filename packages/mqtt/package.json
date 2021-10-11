@@ -1,7 +1,7 @@
 {
     "name": "@iota/mqtt.js",
     "description": "IOTA JavaScript Library for Adding MQTT support",
-    "version": "1.7.0",
+    "version": "1.8.0",
     "keywords": [
         "iota",
         "mqtt"
@@ -20,9 +20,10 @@
         "build-compile": "tsc",
         "build-watch": "tsc --watch",
         "build": "run-s build-clean build-lint build-compile",
+        "test-clean": "rimraf ./coverage/*",
         "test-lint": "eslint test --ext .ts --resolve-plugins-relative-to .",
         "test-run": "jest",
-        "test": "run-s test-lint test-run",
+        "test": "run-s test-clean test-lint test-run",
         "package-clean": "rimraf ./dist/*",
         "package-esm": "copyfiles -u 1 es/**/* dist/esm",
         "package-esm-rename": "node esm-modules.js ./dist/esm",
@@ -82,7 +83,8 @@
         "typings"
     ],
     "dependencies": {
-        "@iota/iota.js": "^1.7.0",
+        "@iota/util.js": "^1.8.0",
+        "@iota/iota.js": "^1.8.0",
         "mqtt": "^4.2.8"
     }
 }

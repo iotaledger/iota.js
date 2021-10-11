@@ -1,6 +1,7 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import { Converter, deserializeMessage, RandomHelper, ReadStream } from "@iota/iota.js";
+import { deserializeMessage } from "@iota/iota.js";
+import { Converter, RandomHelper, ReadStream } from "@iota/util.js";
 import * as mqtt from "mqtt";
 /**
  * MQTT Client implementation for pub/sub communication.
@@ -98,9 +99,7 @@ export class MqttClient {
      * @returns A subscription Id which can be used to unsubscribe.
      */
     indexRaw(index, callback) {
-        return this.internalSubscribe(`messages/indexation/${typeof index === "string"
-            ? Converter.utf8ToHex(index)
-            : Converter.bytesToHex(index)}`, false, (topic, raw) => {
+        return this.internalSubscribe(`messages/indexation/${typeof index === "string" ? Converter.utf8ToHex(index) : Converter.bytesToHex(index)}`, false, (topic, raw) => {
             callback(topic, raw);
         });
     }
@@ -111,9 +110,7 @@ export class MqttClient {
      * @returns A subscription Id which can be used to unsubscribe.
      */
     index(index, callback) {
-        return this.internalSubscribe(`messages/indexation/${typeof index === "string"
-            ? Converter.utf8ToHex(index)
-            : Converter.bytesToHex(index)}`, false, (topic, raw) => {
+        return this.internalSubscribe(`messages/indexation/${typeof index === "string" ? Converter.utf8ToHex(index) : Converter.bytesToHex(index)}`, false, (topic, raw) => {
             callback(topic, deserializeMessage(new ReadStream(raw)), raw);
         });
     }
@@ -419,7 +416,7 @@ export class MqttClient {
     startKeepAlive() {
         this.stopKeepAlive();
         this._lastMessageTime = Date.now();
-        this._timerId = setInterval(() => this.keepAlive(), ((this._keepAliveTimeoutSeconds / 2) * 1000));
+        this._timerId = setInterval(() => this.keepAlive(), (this._keepAliveTimeoutSeconds / 2) * 1000);
     }
     /**
      * Stop the keep alive timer.
@@ -436,7 +433,7 @@ export class MqttClient {
      * @internal
      */
     keepAlive() {
-        if (Date.now() - this._lastMessageTime > (this._keepAliveTimeoutSeconds * 1000)) {
+        if (Date.now() - this._lastMessageTime > this._keepAliveTimeoutSeconds * 1000) {
             this.mqttDisconnect();
             this.nextClient();
             this.mqttConnect();

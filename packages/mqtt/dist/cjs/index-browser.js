@@ -1,8 +1,8 @@
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@iota/iota.js'), require('mqtt')) :
-    typeof define === 'function' && define.amd ? define(['exports', '@iota/iota.js', 'mqtt'], factory) :
-    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.IotaMqtt = {}, global.Iota, global.mqtt));
-})(this, (function (exports, iota_js, mqtt) { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@iota/iota.js'), require('@iota/util.js'), require('mqtt')) :
+    typeof define === 'function' && define.amd ? define(['exports', '@iota/iota.js', '@iota/util.js', 'mqtt'], factory) :
+    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.IotaMqtt = {}, global.Iota, global.IotaUtil, global.mqtt));
+})(this, (function (exports, iota_js, util_js, mqtt) { 'use strict';
 
     function _interopNamespace(e) {
         if (e && e.__esModule) return e;
@@ -111,7 +111,7 @@
          */
         messages(callback) {
             return this.internalSubscribe("messages", false, (topic, raw) => {
-                callback(topic, iota_js.deserializeMessage(new iota_js.ReadStream(raw)), raw);
+                callback(topic, iota_js.deserializeMessage(new util_js.ReadStream(raw)), raw);
             });
         }
         /**
@@ -121,9 +121,7 @@
          * @returns A subscription Id which can be used to unsubscribe.
          */
         indexRaw(index, callback) {
-            return this.internalSubscribe(`messages/indexation/${typeof index === "string"
-            ? iota_js.Converter.utf8ToHex(index)
-            : iota_js.Converter.bytesToHex(index)}`, false, (topic, raw) => {
+            return this.internalSubscribe(`messages/indexation/${typeof index === "string" ? util_js.Converter.utf8ToHex(index) : util_js.Converter.bytesToHex(index)}`, false, (topic, raw) => {
                 callback(topic, raw);
             });
         }
@@ -134,10 +132,8 @@
          * @returns A subscription Id which can be used to unsubscribe.
          */
         index(index, callback) {
-            return this.internalSubscribe(`messages/indexation/${typeof index === "string"
-            ? iota_js.Converter.utf8ToHex(index)
-            : iota_js.Converter.bytesToHex(index)}`, false, (topic, raw) => {
-                callback(topic, iota_js.deserializeMessage(new iota_js.ReadStream(raw)), raw);
+            return this.internalSubscribe(`messages/indexation/${typeof index === "string" ? util_js.Converter.utf8ToHex(index) : util_js.Converter.bytesToHex(index)}`, false, (topic, raw) => {
+                callback(topic, iota_js.deserializeMessage(new util_js.ReadStream(raw)), raw);
             });
         }
         /**
@@ -165,7 +161,7 @@
          */
         transactionIncludedMessage(transactionId, callback) {
             return this.internalSubscribe(`transactions/${transactionId}/included-message`, false, (topic, raw) => {
-                callback(topic, iota_js.deserializeMessage(new iota_js.ReadStream(raw)), raw);
+                callback(topic, iota_js.deserializeMessage(new util_js.ReadStream(raw)), raw);
             });
         }
         /**
@@ -224,7 +220,7 @@
          * @returns A subscription Id which can be used to unsubscribe.
          */
         statusChanged(callback) {
-            const subscriptionId = iota_js.Converter.bytesToHex(iota_js.RandomHelper.generate(32));
+            const subscriptionId = util_js.Converter.bytesToHex(util_js.RandomHelper.generate(32));
             this._statusSubscriptions[subscriptionId] = callback;
             return subscriptionId;
         }
@@ -245,7 +241,7 @@
                 };
                 isNewTopic = true;
             }
-            const subscriptionId = iota_js.Converter.bytesToHex(iota_js.RandomHelper.generate(32));
+            const subscriptionId = util_js.Converter.bytesToHex(util_js.RandomHelper.generate(32));
             this._subscriptions[customTopic].subscriptionCallbacks.push({
                 subscriptionId,
                 callback
@@ -442,7 +438,7 @@
         startKeepAlive() {
             this.stopKeepAlive();
             this._lastMessageTime = Date.now();
-            this._timerId = setInterval(() => this.keepAlive(), ((this._keepAliveTimeoutSeconds / 2) * 1000));
+            this._timerId = setInterval(() => this.keepAlive(), (this._keepAliveTimeoutSeconds / 2) * 1000);
         }
         /**
          * Stop the keep alive timer.
@@ -459,7 +455,7 @@
          * @internal
          */
         keepAlive() {
-            if (Date.now() - this._lastMessageTime > (this._keepAliveTimeoutSeconds * 1000)) {
+            if (Date.now() - this._lastMessageTime > this._keepAliveTimeoutSeconds * 1000) {
                 this.mqttDisconnect();
                 this.nextClient();
                 this.mqttConnect();

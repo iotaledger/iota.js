@@ -1,7 +1,7 @@
 {
     "name": "@iota/pow-neon.js",
     "description": "IOTA JavaScript Library for Performing Multi-Threaded PoW on NodeJS",
-    "version": "1.7.0",
+    "version": "1.8.0",
     "keywords": [
         "iota",
         "pow"
@@ -20,9 +20,10 @@
         "build-compile": "tsc",
         "build-watch": "tsc --watch",
         "build": "run-s build-clean build-lint build-compile",
+        "test-clean": "rimraf ./coverage/*",
         "test-lint": "eslint test --ext .ts --resolve-plugins-relative-to .",
         "test-run": "jest",
-        "test": "run-s test-lint test-run",
+        "test": "run-s test-clean test-lint test-run",
         "package-clean": "rimraf ./dist/*",
         "package-umd": "rollup --config rollup.config.js",
         "package-umd-min": "rollup --config rollup.config.js --environment MINIFY:true",
@@ -77,7 +78,7 @@
         "copy-dist.js"
     ],
     "dependencies": {
-        "@iota/iota.js": "^1.7.0",
+        "@iota/iota.js": "^1.8.0",
         "neon-cli": "^0.9.1"
     }
 }

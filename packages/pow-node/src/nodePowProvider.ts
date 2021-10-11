@@ -1,6 +1,7 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import { Blake2b, IPowProvider, PowHelper } from "@iota/iota.js";
+import { Blake2b } from "@iota/crypto.js";
+import { IPowProvider, PowHelper } from "@iota/iota.js";
 import os from "os";
 import path from "path";
 import { Worker } from "worker_threads";

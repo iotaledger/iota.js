@@ -24,9 +24,7 @@ You can create a MQTT client which once connected can stream the following feeds
 * index - All messages for a specified indexation key in object form
 * messagesMetadata - All metadata updates
 
-
 ## Usage
-
 
 ```js
 import { MqttClient } from "@iota/mqtt.js";
@@ -39,5 +37,6 @@ mqttClient.messages((topic, data, raw) => console.log(topic, data))
 ## Additional Examples
 
 Please find other examples in the [./examples](./examples) folder.
+
 * Mqtt - Using mqtt to read streaming messages.
 * Browser Mqtt - Using mqtt to read streaming messages in the browser.

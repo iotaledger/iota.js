@@ -3,6 +3,7 @@
 /* eslint-disable no-bitwise */
 import type { IPowProvider } from "@iota/iota.js";
 import os from "os";
+// eslint-disable-next-line unicorn/import-index
 import module from "../native/";
 
 /**

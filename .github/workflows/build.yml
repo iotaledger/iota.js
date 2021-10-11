@@ -1,31 +1,24 @@
 name: Library Build Main/Dev
 
 on:
-  push:
-    branches: [main, dev]
-    paths:
-      - "src/**"
-      - ".github/workflows/build.yml"
-  pull_request:
-    branches: [dev]
-    paths:
-      - "src/**"
-      - ".github/workflows/build.yml"
-
+    push:
+        branches: [main, dev]
+    pull_request:
+        branches: [dev]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+    build:
+        runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js 14.x
-        uses: actions/setup-node@v1
-        with:
-          node-version: "14"
-      - name: npm 7
-        run: npm install -g npm@7
-      - name: Client Build
-        run: |
-          npm install
-          npm run dist
+        steps:
+            - uses: actions/checkout@v2
+            - name: Use Node.js 14.x
+              uses: actions/setup-node@v1
+              with:
+                  node-version: "14"
+            - name: npm 7
+              run: npm install -g npm@7
+            - name: Build
+              run: |
+                  npm install
+                  npm run dist --workspaces

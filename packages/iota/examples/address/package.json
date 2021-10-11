@@ -1,0 +1,15 @@
+{
+    "name": "address",
+    "version": "1.0.0",
+    "main": "dist/index.js",
+    "scripts": {
+        "build": "tsc",
+        "start": "node dist/index"
+    },
+    "dependencies": {
+        "@iota/crypto.js": "file:../../packages/crypto",
+        "@iota/iota.js": "file:../../packages/iota",
+        "@iota/util.js": "file:../../packages/util",
+        "typescript": "^4.4.3"
+    }
+}
