@@ -36,7 +36,7 @@ class NodePowProvider {
         const powDigest = crypto_js.Blake2b.sum256(powRelevantData);
         const targetZeros = iota_js.PowHelper.calculateTargetZeros(message, targetScore);
         return new Promise((resolve, reject) => {
-            const chunkSize = BigInt(18446744073709551615) / BigInt(this._numCpus);
+            const chunkSize = BigInt("18446744073709551615") / BigInt(this._numCpus);
             const workers = [];
             let hasFinished = false;
             for (let i = 0; i < this._numCpus; i++) {

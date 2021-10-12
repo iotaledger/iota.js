@@ -12,8 +12,9 @@ import { B1T6 } from "../encoding/b1t6";
 export class PowHelper {
     /**
      * LN3 Const see https://oeis.org/A002391.
+     * 1.098612288668109691395245236922525704647490557822749451734694333 .
      */
-    public static readonly LN3: number = 1.098612288668109691395245236922525704647490557822749451734694333;
+    public static readonly LN3: number = 1.0986122886681098;
 
     /**
      * Perform the score calculation.

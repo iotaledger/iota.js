@@ -16,6 +16,10 @@ export function doPow(powDigest: Uint8Array, targetZeros: number, startIndex: st
 }
 
 if (workerData && parentPort) {
-    const nonce = doPow(workerData.powDigest, workerData.targetZeros, workerData.startIndex);
+    const nonce = doPow(
+        workerData.powDigest as Uint8Array,
+        workerData.targetZeros as number,
+        workerData.startIndex as string
+    );
     parentPort.postMessage(nonce);
 }

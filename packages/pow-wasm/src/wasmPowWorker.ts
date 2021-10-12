@@ -14,6 +14,7 @@ import { parentPort, workerData } from "worker_threads";
  */
 export async function doPow(powDigest: Uint8Array, targetZeros: number, startIndex: string): Promise<string> {
     const wasmData = await promises.readFile(path.join(__dirname, "../wasm/build/release.wasm"));
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     const wasmInstance = await WebAssembly.instantiate(wasmData, buildImports());
 
     const module = wasmInstance.instance.exports as {
@@ -46,8 +47,8 @@ export async function doPow(powDigest: Uint8Array, targetZeros: number, startInd
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function buildImports(): any {
     const env = {
-        abort: (msg: string, file: string, line: number, colm: number) => {},
-        trace: (msg: string, n: number, ...args: unknown[]) => {},
+        abort: (msg: string, file: string, line: number, colm: number) => { },
+        trace: (msg: string, n: number, ...args: unknown[]) => { },
         seed: Date.now
     };
 
@@ -59,7 +60,7 @@ function buildImports(): any {
 }
 
 if (workerData && parentPort) {
-    doPow(workerData.powDigest, workerData.targetZeros, workerData.startIndex)
+    doPow(workerData.powDigest as Uint8Array, workerData.targetZeros as number, workerData.startIndex as string)
         .then(nonce => {
             if (parentPort) {
                 parentPort.postMessage(nonce);

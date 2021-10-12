@@ -5,6 +5,7 @@ import { BigInteger } from "big-integer";
 export declare class PowHelper {
     /**
      * LN3 Const see https://oeis.org/A002391.
+     * 1.098612288668109691395245236922525704647490557822749451734694333 .
      */
     static readonly LN3: number;
     /**

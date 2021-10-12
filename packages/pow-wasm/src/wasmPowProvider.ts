@@ -39,7 +39,7 @@ export class WasmPowProvider implements IPowProvider {
         const targetZeros = PowHelper.calculateTargetZeros(message, targetScore);
 
         return new Promise<string>((resolve, reject) => {
-            const chunkSize = BigInt(18446744073709551615) / BigInt(this._numCpus);
+            const chunkSize = BigInt("18446744073709551615") / BigInt(this._numCpus);
             const workers: Worker[] = [];
             let hasFinished = false;
             for (let i = 0; i < this._numCpus; i++) {
@@ -49,7 +49,7 @@ export class WasmPowProvider implements IPowProvider {
 
                 workers.push(worker);
 
-                worker.on("message", async msg => {
+                worker.on("message", async (msg: string) => {
                     hasFinished = true;
                     for (let j = 0; j < workers.length; j++) {
                         await workers[j].terminate();

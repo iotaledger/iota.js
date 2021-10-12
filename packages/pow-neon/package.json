@@ -1,7 +1,7 @@
 {
     "name": "@iota/pow-neon.js",
     "description": "IOTA JavaScript Library for Performing Multi-Threaded PoW on NodeJS",
-    "version": "1.8.0",
+    "version": "1.8.1",
     "keywords": [
         "iota",
         "pow"
@@ -11,7 +11,8 @@
     ],
     "repository": {
         "type": "git",
-        "url": "https://github.com/iotaledger/iota.js.git"
+        "url": "https://github.com/iotaledger/iota.js.git",
+        "directory": "packages/pow-neon"
     },
     "license": "Apache-2.0",
     "scripts": {
@@ -41,15 +42,15 @@
         "@rollup/plugin-node-resolve": "^13.0.5",
         "@rollup/plugin-replace": "^3.0.0",
         "@types/jest": "^27.0.2",
-        "@typescript-eslint/eslint-plugin": "^4.33.0",
-        "@typescript-eslint/parser": "^4.33.0",
+        "@typescript-eslint/eslint-plugin": "4.33.0",
+        "@typescript-eslint/parser": "4.33.0",
         "copyfiles": "^2.4.1",
         "cross-env": "^7.0.3",
-        "eslint": "^7.32.0",
-        "eslint-plugin-header": "^3.1.1",
-        "eslint-plugin-import": "^2.24.2",
-        "eslint-plugin-jsdoc": "^36.1.1",
-        "eslint-plugin-unicorn": "^36.0.0",
+        "eslint": "7.32.0",
+        "eslint-plugin-header": "3.1.1",
+        "eslint-plugin-import": "2.24.2",
+        "eslint-plugin-jsdoc": "36.1.1",
+        "eslint-plugin-unicorn": "36.0.0",
         "jest": "^27.2.5",
         "npm-run-all": "^4.1.5",
         "rimraf": "^3.0.2",
@@ -57,7 +58,7 @@
         "rollup-plugin-natives": "^0.7.5",
         "rollup-plugin-terser": "^7.0.2",
         "ts-jest": "^27.0.5",
-        "ts-node": "^10.2.1",
+        "ts-node": "^10.3.0",
         "typescript": "^4.4.3"
     },
     "main": "dist/pow-neon.js",
@@ -78,7 +79,7 @@
         "copy-dist.js"
     ],
     "dependencies": {
-        "@iota/iota.js": "^1.8.0",
+        "@iota/iota.js": "^1.8.1",
         "neon-cli": "^0.9.1"
     }
 }

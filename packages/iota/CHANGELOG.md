@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.8.1
+
+* Bump version due to npm publish issue <https://status.npmjs.org/incidents/wy4002vc8ryc>
+
 ## v1.8.0
 
 * Separates crypto and utils into separate packages, this is a breaking change as some imports will need to change to point to the correct package.

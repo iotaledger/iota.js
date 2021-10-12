@@ -37,7 +37,7 @@ class WasmPowProvider {
         const powDigest = crypto_js.Blake2b.sum256(powRelevantData);
         const targetZeros = iota_js.PowHelper.calculateTargetZeros(message, targetScore);
         return new Promise((resolve, reject) => {
-            const chunkSize = BigInt(18446744073709551615) / BigInt(this._numCpus);
+            const chunkSize = BigInt("18446744073709551615") / BigInt(this._numCpus);
             const workers = [];
             let hasFinished = false;
             for (let i = 0; i < this._numCpus; i++) {
@@ -75,6 +75,7 @@ class WasmPowProvider {
  */
 async function doPow(powDigest, targetZeros, startIndex) {
     const wasmData = await fs.promises.readFile(path__default["default"].join(__dirname, "../wasm/build/release.wasm"));
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     const wasmInstance = await WebAssembly.instantiate(wasmData, buildImports());
     const module = wasmInstance.instance.exports;
     for (let i = 0; i < powDigest.length; i++) {

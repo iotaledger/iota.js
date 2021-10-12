@@ -12,7 +12,8 @@
     ],
     "repository": {
         "type": "git",
-        "url": "https://github.com/iotaledger/iota.js.git"
+        "url": "https://github.com/iotaledger/iota.js.git",
+        "directory": "packages/pow-wasm/wasm"
     },
     "license": "Apache-2.0",
     "scripts": {
@@ -23,9 +24,9 @@
         "dist": "npm run asbuild:optimized"
     },
     "dependencies": {
-        "@assemblyscript/loader": "^0.19.16"
+        "@assemblyscript/loader": "^0.19.17"
     },
     "devDependencies": {
-        "assemblyscript": "^0.19.16"
+        "assemblyscript": "^0.19.17"
     }
 }
