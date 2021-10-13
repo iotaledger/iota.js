@@ -16,7 +16,7 @@
     },
     "license": "Apache-2.0",
     "dependencies": {
-        "big-integer": "^1.6.49"
+        "big-integer": "^1.6.50"
     },
     "scripts": {
         "build-clean": "rimraf ./es/* ./typings/*",
