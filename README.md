@@ -21,7 +21,7 @@
 
 > This library is functionally complete, but it is recommended to use [iota.rs](https://github.com/iotaledger/iota.rs). The rust library will be more heavily maintained and is more performant.
 
-Client library for IOTA chrysalis network, implemeted in TypeScript to strongly type the objects sent and received from the API.
+Client library for IOTA chrysalis network, implemented in TypeScript to strongly type the objects sent and received from the API.
 
 Runs in both NodeJS and Browser environments.
 
@@ -59,7 +59,7 @@ run()
 
 ## Packages
 
-For more details on the main package see [@iota/iota.js](./packages/iota/README.md)
+For more details on the main package see [@iota/iota.js](./packages/iota/README.md).
 
 Other packages within the framework are.
 
