@@ -78,9 +78,9 @@ Get the state of the sponge.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `len` | `number` | The length of the state to get. |
+| Name | Type | Default value | Description |
+| :------ | :------ | :------ | :------ |
+| `len` | `number` | `Curl.HASH_LENGTH` | The length of the state to get. |
 
 #### Returns
 
@@ -138,6 +138,6 @@ Create a new instance of Curl.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `rounds` | `number` | The number of rounds to perform. |
+| Name | Type | Default value | Description |
+| :------ | :------ | :------ | :------ |
+| `rounds` | `number` | `Curl.NUMBER_OF_ROUNDS` | The number of rounds to perform. |

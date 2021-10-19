@@ -229,7 +229,7 @@
 
 ### MIN\_ADDRESS\_LENGTH
 
-• **MIN\_ADDRESS\_LENGTH**: `number`
+• **MIN\_ADDRESS\_LENGTH**: `number` = `SMALL_TYPE_LENGTH`
 
 The minimum length of an address binary representation.
 
@@ -277,7 +277,7 @@ ___
 
 ### MESSAGE\_ID\_LENGTH
 
-• **MESSAGE\_ID\_LENGTH**: `number`
+• **MESSAGE\_ID\_LENGTH**: `number` = `Blake2b.SIZE_256`
 
 Byte length for a message id.
 
@@ -285,7 +285,7 @@ ___
 
 ### TRANSACTION\_ID\_LENGTH
 
-• **TRANSACTION\_ID\_LENGTH**: `number`
+• **TRANSACTION\_ID\_LENGTH**: `number` = `Blake2b.SIZE_256`
 
 Byte length for a transaction id.
 
@@ -293,7 +293,7 @@ ___
 
 ### MERKLE\_PROOF\_LENGTH
 
-• **MERKLE\_PROOF\_LENGTH**: `number`
+• **MERKLE\_PROOF\_LENGTH**: `number` = `Blake2b.SIZE_256`
 
 Byte length for a merkle prrof.
 
@@ -301,7 +301,7 @@ ___
 
 ### TYPE\_LENGTH
 
-• **TYPE\_LENGTH**: `number`
+• **TYPE\_LENGTH**: `number` = `UINT32_SIZE`
 
 Byte length for a type length.
 
@@ -309,7 +309,7 @@ ___
 
 ### SMALL\_TYPE\_LENGTH
 
-• **SMALL\_TYPE\_LENGTH**: `number`
+• **SMALL\_TYPE\_LENGTH**: `number` = `BYTE_SIZE`
 
 Byte length for a small type length.
 
@@ -317,7 +317,7 @@ ___
 
 ### STRING\_LENGTH
 
-• **STRING\_LENGTH**: `number`
+• **STRING\_LENGTH**: `number` = `UINT16_SIZE`
 
 Byte length for a string length.
 
@@ -325,7 +325,7 @@ ___
 
 ### ARRAY\_LENGTH
 
-• **ARRAY\_LENGTH**: `number`
+• **ARRAY\_LENGTH**: `number` = `UINT16_SIZE`
 
 Byte length for an array length.
 
@@ -357,7 +357,7 @@ ___
 
 ### MIN\_INPUT\_LENGTH
 
-• **MIN\_INPUT\_LENGTH**: `number`
+• **MIN\_INPUT\_LENGTH**: `number` = `SMALL_TYPE_LENGTH`
 
 The minimum length of an input binary representation.
 
@@ -421,7 +421,7 @@ ___
 
 ### MIN\_OUTPUT\_LENGTH
 
-• **MIN\_OUTPUT\_LENGTH**: `number`
+• **MIN\_OUTPUT\_LENGTH**: `number` = `SMALL_TYPE_LENGTH`
 
 The minimum length of an output binary representation.
 
@@ -469,7 +469,7 @@ ___
 
 ### MIN\_PAYLOAD\_LENGTH
 
-• **MIN\_PAYLOAD\_LENGTH**: `number`
+• **MIN\_PAYLOAD\_LENGTH**: `number` = `TYPE_LENGTH`
 
 The minimum length of a payload binary representation.
 
@@ -533,7 +533,7 @@ ___
 
 ### MIN\_SIGNATURE\_LENGTH
 
-• **MIN\_SIGNATURE\_LENGTH**: `number`
+• **MIN\_SIGNATURE\_LENGTH**: `number` = `SMALL_TYPE_LENGTH`
 
 The minimum length of a signature binary representation.
 
@@ -557,7 +557,7 @@ ___
 
 ### MIN\_UNLOCK\_BLOCK\_LENGTH
 
-• **MIN\_UNLOCK\_BLOCK\_LENGTH**: `number`
+• **MIN\_UNLOCK\_BLOCK\_LENGTH**: `number` = `SMALL_TYPE_LENGTH`
 
 The minimum length of an unlock block binary representation.
 

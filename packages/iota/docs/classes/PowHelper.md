@@ -101,10 +101,10 @@ Find the number of trailing zeros.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `trits` | `Int8Array` | The trits to look for zeros. |
-| `endPos` | `number` | The end position to start looking for zeros. |
+| Name | Type | Default value | Description |
+| :------ | :------ | :------ | :------ |
+| `trits` | `Int8Array` | `undefined` | The trits to look for zeros. |
+| `endPos` | `number` | `trits.length` | The end position to start looking for zeros. |
 
 #### Returns
 
