@@ -70,7 +70,6 @@ export declare function sendEd25519(client: IClient | string, seed: ISeed, accou
 export declare function sendMultiple(client: IClient | string, seed: ISeed, accountIndex: number, outputs: {
     addressBech32: string;
     amount: number;
-    isDustAllowance?: boolean;
 }[], indexation?: {
     key: Uint8Array | string;
     data?: Uint8Array | string;
@@ -98,7 +97,6 @@ export declare function sendMultiple(client: IClient | string, seed: ISeed, acco
 export declare function sendMultipleEd25519(client: IClient | string, seed: ISeed, accountIndex: number, outputs: {
     addressEd25519: string;
     amount: number;
-    isDustAllowance?: boolean;
 }[], indexation?: {
     key: Uint8Array;
     data?: Uint8Array;
@@ -126,7 +124,6 @@ export declare function sendWithAddressGenerator<T>(client: IClient | string, se
     address: string;
     addressType: number;
     amount: number;
-    isDustAllowance?: boolean;
 }[], indexation?: {
     key: Uint8Array | string;
     data?: Uint8Array | string;

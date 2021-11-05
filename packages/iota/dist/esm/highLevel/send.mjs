@@ -72,8 +72,7 @@ export async function sendMultiple(client, seed, accountIndex, outputs, indexati
         return {
             address: Converter.bytesToHex(bech32Details.addressBytes),
             addressType: bech32Details.addressType,
-            amount: output.amount,
-            isDustAllowance: output.isDustAllowance
+            amount: output.amount
         };
     });
     return sendWithAddressGenerator(client, seed, {
@@ -101,8 +100,7 @@ export async function sendMultipleEd25519(client, seed, accountIndex, outputs, i
     const hexOutputs = outputs.map(output => ({
         address: output.addressEd25519,
         addressType: ED25519_ADDRESS_TYPE,
-        amount: output.amount,
-        isDustAllowance: output.isDustAllowance
+        amount: output.amount
     }));
     return sendWithAddressGenerator(client, seed, {
         accountIndex,

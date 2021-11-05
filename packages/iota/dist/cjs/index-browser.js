@@ -654,14 +654,14 @@
             }
         }
         for (const output of outputs) {
-            if (output.type !== SIMPLE_OUTPUT_TYPE && output.type !== SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE) {
-                throw new Error("Transaction essence can only contain sig locked single input or sig locked dust allowance outputs");
+            if (output.type !== SIMPLE_OUTPUT_TYPE) {
+                throw new Error("Transaction essence can only contain simple outputs");
             }
         }
         return {
             type: TRANSACTION_ESSENCE_TYPE,
             inputs: inputs,
-            outputs: outputs,
+            outputs,
             payload
         };
     }
@@ -2302,7 +2302,7 @@
         for (const output of outputs) {
             if (output.addressType === ED25519_ADDRESS_TYPE) {
                 const o = {
-                    type: output.isDustAllowance ? SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE : SIMPLE_OUTPUT_TYPE,
+                    type: SIMPLE_OUTPUT_TYPE,
                     address: {
                         type: output.addressType,
                         address: output.address
@@ -2448,8 +2448,7 @@
             return {
                 address: util_js.Converter.bytesToHex(bech32Details.addressBytes),
                 addressType: bech32Details.addressType,
-                amount: output.amount,
-                isDustAllowance: output.isDustAllowance
+                amount: output.amount
             };
         });
         return sendWithAddressGenerator(client, seed, {
@@ -2477,8 +2476,7 @@
         const hexOutputs = outputs.map(output => ({
             address: output.addressEd25519,
             addressType: ED25519_ADDRESS_TYPE,
-            amount: output.amount,
-            isDustAllowance: output.isDustAllowance
+            amount: output.amount
         }));
         return sendWithAddressGenerator(client, seed, {
             accountIndex,

@@ -20,7 +20,6 @@ export declare function sendAdvanced(client: IClient | string, inputsAndSignatur
     address: string;
     addressType: number;
     amount: number;
-    isDustAllowance?: boolean;
 }[], indexation?: {
     key: Uint8Array | string;
     data?: Uint8Array | string;
@@ -44,7 +43,6 @@ export declare function buildTransactionPayload(inputsAndSignatureKeyPairs: {
     address: string;
     addressType: number;
     amount: number;
-    isDustAllowance?: boolean;
 }[], indexation?: {
     key: Uint8Array | string;
     data?: Uint8Array | string;

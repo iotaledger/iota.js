@@ -109,7 +109,6 @@ export async function sendMultiple(
     outputs: {
         addressBech32: string;
         amount: number;
-        isDustAllowance?: boolean;
     }[],
     indexation?: {
         key: Uint8Array | string;
@@ -135,8 +134,7 @@ export async function sendMultiple(
         return {
             address: Converter.bytesToHex(bech32Details.addressBytes),
             addressType: bech32Details.addressType,
-            amount: output.amount,
-            isDustAllowance: output.isDustAllowance
+            amount: output.amount
         };
     });
 
@@ -176,7 +174,6 @@ export async function sendMultipleEd25519(
     outputs: {
         addressEd25519: string;
         amount: number;
-        isDustAllowance?: boolean;
     }[],
     indexation?: {
         key: Uint8Array;
@@ -193,8 +190,7 @@ export async function sendMultipleEd25519(
     const hexOutputs = outputs.map(output => ({
         address: output.addressEd25519,
         addressType: ED25519_ADDRESS_TYPE,
-        amount: output.amount,
-        isDustAllowance: output.isDustAllowance
+        amount: output.amount
     }));
 
     return sendWithAddressGenerator<IBip44GeneratorState>(
@@ -234,7 +230,6 @@ export async function sendWithAddressGenerator<T>(
         address: string;
         addressType: number;
         amount: number;
-        isDustAllowance?: boolean;
     }[],
     indexation?: {
         key: Uint8Array | string;

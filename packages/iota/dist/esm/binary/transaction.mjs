@@ -36,14 +36,14 @@ export function deserializeTransactionEssence(readStream) {
         }
     }
     for (const output of outputs) {
-        if (output.type !== SIMPLE_OUTPUT_TYPE && output.type !== SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE) {
-            throw new Error("Transaction essence can only contain sig locked single input or sig locked dust allowance outputs");
+        if (output.type !== SIMPLE_OUTPUT_TYPE) {
+            throw new Error("Transaction essence can only contain simple outputs");
         }
     }
     return {
         type: TRANSACTION_ESSENCE_TYPE,
         inputs: inputs,
-        outputs: outputs,
+        outputs,
         payload
     };
 }

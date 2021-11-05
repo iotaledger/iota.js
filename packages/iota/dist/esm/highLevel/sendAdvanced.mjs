@@ -11,7 +11,6 @@ import { SingleNodeClient } from "../clients/singleNodeClient.mjs";
 import { ED25519_ADDRESS_TYPE } from "../models/addresses/IEd25519Address.mjs";
 import { ED25519_SIGNATURE_TYPE } from "../models/IEd25519Signature.mjs";
 import { TRANSACTION_ESSENCE_TYPE } from "../models/ITransactionEssence.mjs";
-import { SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE } from "../models/outputs/ISigLockedDustAllowanceOutput.mjs";
 import { SIMPLE_OUTPUT_TYPE } from "../models/outputs/ISimpleOutput.mjs";
 import { INDEXATION_PAYLOAD_TYPE } from "../models/payloads/IIndexationPayload.mjs";
 import { TRANSACTION_PAYLOAD_TYPE } from "../models/payloads/ITransactionPayload.mjs";
@@ -72,7 +71,7 @@ export function buildTransactionPayload(inputsAndSignatureKeyPairs, outputs, ind
     for (const output of outputs) {
         if (output.addressType === ED25519_ADDRESS_TYPE) {
             const o = {
-                type: output.isDustAllowance ? SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE : SIMPLE_OUTPUT_TYPE,
+                type: SIMPLE_OUTPUT_TYPE,
                 address: {
                     type: output.addressType,
                     address: output.address

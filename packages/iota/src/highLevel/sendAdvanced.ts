@@ -15,10 +15,6 @@ import type { IKeyPair } from "../models/IKeyPair";
 import type { IMessage } from "../models/IMessage";
 import type { IUTXOInput } from "../models/inputs/IUTXOInput";
 import { ITransactionEssence, TRANSACTION_ESSENCE_TYPE } from "../models/ITransactionEssence";
-import {
-    ISigLockedDustAllowanceOutput,
-    SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE
-} from "../models/outputs/ISigLockedDustAllowanceOutput";
 import { ISimpleOutput, SIMPLE_OUTPUT_TYPE } from "../models/outputs/ISimpleOutput";
 import { INDEXATION_PAYLOAD_TYPE } from "../models/payloads/IIndexationPayload";
 import { ITransactionPayload, TRANSACTION_PAYLOAD_TYPE } from "../models/payloads/ITransactionPayload";
@@ -45,7 +41,6 @@ export async function sendAdvanced(
         address: string;
         addressType: number;
         amount: number;
-        isDustAllowance?: boolean;
     }[],
     indexation?: {
         key: Uint8Array | string;
@@ -89,7 +84,6 @@ export function buildTransactionPayload(
         address: string;
         addressType: number;
         amount: number;
-        isDustAllowance?: boolean;
     }[],
     indexation?: {
         key: Uint8Array | string;
@@ -127,14 +121,14 @@ export function buildTransactionPayload(
     }
 
     const outputsWithSerialization: {
-        output: ISigLockedDustAllowanceOutput | ISimpleOutput;
+        output: ISimpleOutput;
         serialized: string;
     }[] = [];
 
     for (const output of outputs) {
         if (output.addressType === ED25519_ADDRESS_TYPE) {
-            const o: ISigLockedDustAllowanceOutput | ISimpleOutput = {
-                type: output.isDustAllowance ? SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE : SIMPLE_OUTPUT_TYPE,
+            const o: ISimpleOutput = {
+                type: SIMPLE_OUTPUT_TYPE,
                 address: {
                     type: output.addressType,
                     address: output.address
