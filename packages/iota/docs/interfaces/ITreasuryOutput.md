@@ -12,18 +12,10 @@ Treasury Output.
 
 ### Properties
 
-- [amount](ITreasuryOutput.md#amount)
 - [type](ITreasuryOutput.md#type)
+- [amount](ITreasuryOutput.md#amount)
 
 ## Properties
-
-### amount
-
-• **amount**: `number`
-
-The amount of the output.
-
-___
 
 ### type
 
@@ -34,3 +26,11 @@ The type of the object.
 #### Inherited from
 
 [ITypeBase](ITypeBase.md).[type](ITypeBase.md#type)
+
+___
+
+### amount
+
+• **amount**: `number`
+
+The amount of the output.

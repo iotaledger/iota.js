@@ -2,11 +2,11 @@
 // SPDX-License-Identifier: Apache-2.0
 import { Converter, ReadStream, WriteStream } from "@iota/util.js";
 import { deserializeMessage, serializeMessage } from "../../src/binary/message";
-import type { IIndexationPayload } from "../../src/models/IIndexationPayload";
-import type { IMilestonePayload } from "../../src/models/IMilestonePayload";
-import type { ISigLockedSingleOutput } from "../../src/models/ISigLockedSingleOutput";
-import type { ISignatureUnlockBlock } from "../../src/models/ISignatureUnlockBlock";
-import type { ITransactionPayload } from "../../src/models/ITransactionPayload";
+import type { ISimpleOutput } from "../../src/models/outputs/ISimpleOutput";
+import type { IIndexationPayload } from "../../src/models/payloads/IIndexationPayload";
+import type { IMilestonePayload } from "../../src/models/payloads/IMilestonePayload";
+import type { ITransactionPayload } from "../../src/models/payloads/ITransactionPayload";
+import type { ISignatureUnlockBlock } from "../../src/models/unlockBlocks/ISignatureUnlockBlock";
 
 describe("Binary Message", () => {
     test("Can fail with underflow min", () => {
@@ -179,7 +179,7 @@ describe("Binary Message", () => {
         expect(utxoInput.transactionId).toEqual("2367ec318426c9f5d1115a6ac96f6c3cd2e53443713e0b63f0c266cbda744474");
         expect(utxoInput.transactionOutputIndex).toEqual(1);
 
-        const sigLockedOutput1 = payload.essence.outputs[0] as ISigLockedSingleOutput;
+        const sigLockedOutput1 = payload.essence.outputs[0] as ISimpleOutput;
         expect(payload.essence.outputs.length).toEqual(2);
         expect(sigLockedOutput1.type).toEqual(0);
         expect(sigLockedOutput1.address.type).toEqual(0);
@@ -188,7 +188,7 @@ describe("Binary Message", () => {
         );
         expect(sigLockedOutput1.amount).toEqual(100);
 
-        const sigLockedOutput2 = payload.essence.outputs[1] as ISigLockedSingleOutput;
+        const sigLockedOutput2 = payload.essence.outputs[1] as ISimpleOutput;
         expect(sigLockedOutput2.type).toEqual(0);
         expect(sigLockedOutput2.address.type).toEqual(0);
         expect(sigLockedOutput2.address.address).toEqual(

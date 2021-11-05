@@ -2,8 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0
 import { Converter, WriteStream } from "@iota/util.js";
 import { serializeMessage } from "../../src/binary/message";
-import { IIndexationPayload, INDEXATION_PAYLOAD_TYPE } from "../../src/models/IIndexationPayload";
 import type { IMessage } from "../../src/models/IMessage";
+import { IIndexationPayload, INDEXATION_PAYLOAD_TYPE } from "../../src/models/payloads/IIndexationPayload";
 import { LocalPowProvider } from "../../src/pow/localPowProvider";
 import { PowHelper } from "../../src/utils/powHelper";
 

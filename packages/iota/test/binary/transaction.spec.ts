@@ -2,11 +2,11 @@
 // SPDX-License-Identifier: Apache-2.0
 import { Converter, ReadStream, WriteStream } from "@iota/util.js";
 import { deserializeTransactionEssence, serializeTransactionEssence } from "../../src/binary/transaction";
-import { ED25519_ADDRESS_TYPE } from "../../src/models/IEd25519Address";
-import { INDEXATION_PAYLOAD_TYPE } from "../../src/models/IIndexationPayload";
-import { ISigLockedSingleOutput, SIG_LOCKED_SINGLE_OUTPUT_TYPE } from "../../src/models/ISigLockedSingleOutput";
+import { ED25519_ADDRESS_TYPE } from "../../src/models/addresses/IEd25519Address";
+import { IUTXOInput, UTXO_INPUT_TYPE } from "../../src/models/inputs/IUTXOInput";
 import { ITransactionEssence, TRANSACTION_ESSENCE_TYPE } from "../../src/models/ITransactionEssence";
-import { IUTXOInput, UTXO_INPUT_TYPE } from "../../src/models/IUTXOInput";
+import { ISimpleOutput, SIMPLE_OUTPUT_TYPE } from "../../src/models/outputs/ISimpleOutput";
+import { INDEXATION_PAYLOAD_TYPE } from "../../src/models/payloads/IIndexationPayload";
 
 describe("Binary Transaction", () => {
     test("Can serialize and deserialize transaction essence with no payload", () => {
@@ -21,13 +21,13 @@ describe("Binary Transaction", () => {
             ],
             outputs: [
                 {
-                    type: SIG_LOCKED_SINGLE_OUTPUT_TYPE,
+                    type: SIMPLE_OUTPUT_TYPE,
                     address: {
                         type: ED25519_ADDRESS_TYPE,
                         address: "b".repeat(64)
                     },
                     amount: 100
-                } as ISigLockedSingleOutput
+                } as ISimpleOutput
             ]
         };
 
@@ -47,7 +47,7 @@ describe("Binary Transaction", () => {
         expect(utxoInput.transactionOutputIndex).toEqual(2);
         expect(deserialized.outputs.length).toEqual(1);
 
-        const sigLockedOutput = deserialized.outputs[0] as ISigLockedSingleOutput;
+        const sigLockedOutput = deserialized.outputs[0] as ISimpleOutput;
         expect(sigLockedOutput.type).toEqual(0);
         expect(sigLockedOutput.address.type).toEqual(0);
         expect(sigLockedOutput.address.address).toEqual("b".repeat(64));
@@ -67,13 +67,13 @@ describe("Binary Transaction", () => {
             ],
             outputs: [
                 {
-                    type: SIG_LOCKED_SINGLE_OUTPUT_TYPE,
+                    type: SIMPLE_OUTPUT_TYPE,
                     address: {
                         type: ED25519_ADDRESS_TYPE,
                         address: "b".repeat(64)
                     },
                     amount: 100
-                } as ISigLockedSingleOutput
+                } as ISimpleOutput
             ],
             payload: {
                 type: INDEXATION_PAYLOAD_TYPE,
@@ -98,7 +98,7 @@ describe("Binary Transaction", () => {
         expect(utxoInput.transactionOutputIndex).toEqual(2);
         expect(deserialized.outputs.length).toEqual(1);
 
-        const sigLockedOutput = deserialized.outputs[0] as ISigLockedSingleOutput;
+        const sigLockedOutput = deserialized.outputs[0] as ISimpleOutput;
         expect(sigLockedOutput.type).toEqual(0);
         expect(sigLockedOutput.address.type).toEqual(0);
         expect(sigLockedOutput.address.address).toEqual("b".repeat(64));

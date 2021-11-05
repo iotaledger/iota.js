@@ -1,5 +1,5 @@
-import { REFERENCE_UNLOCK_BLOCK_TYPE } from "../models/IReferenceUnlockBlock.mjs";
-import { SIGNATURE_UNLOCK_BLOCK_TYPE } from "../models/ISignatureUnlockBlock.mjs";
+import { REFERENCE_UNLOCK_BLOCK_TYPE } from "../models/unlockBlocks/IReferenceUnlockBlock.mjs";
+import { SIGNATURE_UNLOCK_BLOCK_TYPE } from "../models/unlockBlocks/ISignatureUnlockBlock.mjs";
 import { SMALL_TYPE_LENGTH, UINT16_SIZE } from "./common.mjs";
 import { deserializeSignature, MIN_SIGNATURE_LENGTH, serializeSignature } from "./signature.mjs";
 /**

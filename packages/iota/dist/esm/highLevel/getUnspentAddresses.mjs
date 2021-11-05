@@ -4,7 +4,7 @@ import { Bip32Path } from "@iota/crypto.js";
 import { Converter } from "@iota/util.js";
 import { Ed25519Address } from "../addressTypes/ed25519Address.mjs";
 import { SingleNodeClient } from "../clients/singleNodeClient.mjs";
-import { ED25519_ADDRESS_TYPE } from "../models/IEd25519Address.mjs";
+import { ED25519_ADDRESS_TYPE } from "../models/addresses/IEd25519Address.mjs";
 import { Bech32Helper } from "../utils/bech32Helper.mjs";
 import { generateBip44Address } from "./addresses.mjs";
 /**

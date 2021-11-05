@@ -12,9 +12,53 @@ Type of the object.
 
 - **`ITypeBase`**
 
+  ↳ [`IAliasAddress`](IAliasAddress.md)
+
+  ↳ [`IBlsAddress`](IBlsAddress.md)
+
   ↳ [`IEd25519Address`](IEd25519Address.md)
 
+  ↳ [`INftAddress`](INftAddress.md)
+
+  ↳ [`IExpirationMilestoneIndexFeatureBlock`](IExpirationMilestoneIndexFeatureBlock.md)
+
+  ↳ [`IExpirationUnixFeatureBlock`](IExpirationUnixFeatureBlock.md)
+
+  ↳ [`IIndexationFeatureBlock`](IIndexationFeatureBlock.md)
+
+  ↳ [`IIssuerFeatureBlock`](IIssuerFeatureBlock.md)
+
+  ↳ [`IMetadataFeatureBlock`](IMetadataFeatureBlock.md)
+
+  ↳ [`IReturnFeatureBlock`](IReturnFeatureBlock.md)
+
+  ↳ [`ISenderFeatureBlock`](ISenderFeatureBlock.md)
+
+  ↳ [`ITimelockMilestoneIndexFeatureBlock`](ITimelockMilestoneIndexFeatureBlock.md)
+
+  ↳ [`ITimelockUnixFeatureBlock`](ITimelockUnixFeatureBlock.md)
+
   ↳ [`IEd25519Signature`](IEd25519Signature.md)
+
+  ↳ [`ITreasuryInput`](ITreasuryInput.md)
+
+  ↳ [`IUTXOInput`](IUTXOInput.md)
+
+  ↳ [`ITransactionEssence`](ITransactionEssence.md)
+
+  ↳ [`IAliasOutput`](IAliasOutput.md)
+
+  ↳ [`IExtendedOutput`](IExtendedOutput.md)
+
+  ↳ [`IFoundryOutput`](IFoundryOutput.md)
+
+  ↳ [`INftOutput`](INftOutput.md)
+
+  ↳ [`ISigLockedDustAllowanceOutput`](ISigLockedDustAllowanceOutput.md)
+
+  ↳ [`ISimpleOutput`](ISimpleOutput.md)
+
+  ↳ [`ITreasuryOutput`](ITreasuryOutput.md)
 
   ↳ [`IIndexationPayload`](IIndexationPayload.md)
 
@@ -22,25 +66,19 @@ Type of the object.
 
   ↳ [`IReceiptPayload`](IReceiptPayload.md)
 
-  ↳ [`IReferenceUnlockBlock`](IReferenceUnlockBlock.md)
-
-  ↳ [`ISigLockedDustAllowanceOutput`](ISigLockedDustAllowanceOutput.md)
-
-  ↳ [`ISigLockedSingleOutput`](ISigLockedSingleOutput.md)
-
-  ↳ [`ISignatureUnlockBlock`](ISignatureUnlockBlock.md)
-
-  ↳ [`ITransactionEssence`](ITransactionEssence.md)
-
   ↳ [`ITransactionPayload`](ITransactionPayload.md)
-
-  ↳ [`ITreasuryInput`](ITreasuryInput.md)
-
-  ↳ [`ITreasuryOutput`](ITreasuryOutput.md)
 
   ↳ [`ITreasuryTransactionPayload`](ITreasuryTransactionPayload.md)
 
-  ↳ [`IUTXOInput`](IUTXOInput.md)
+  ↳ [`ISimpleTokenScheme`](ISimpleTokenScheme.md)
+
+  ↳ [`IAliasUnlockBlock`](IAliasUnlockBlock.md)
+
+  ↳ [`INftUnlockBlock`](INftUnlockBlock.md)
+
+  ↳ [`IReferenceUnlockBlock`](IReferenceUnlockBlock.md)
+
+  ↳ [`ISignatureUnlockBlock`](ISignatureUnlockBlock.md)
 
 ## Table of contents
 

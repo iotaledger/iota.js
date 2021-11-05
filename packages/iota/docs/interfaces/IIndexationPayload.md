@@ -12,11 +12,23 @@ Indexation payload.
 
 ### Properties
 
+- [type](IIndexationPayload.md#type)
 - [index](IIndexationPayload.md#index)
 - [data](IIndexationPayload.md#data)
-- [type](IIndexationPayload.md#type)
 
 ## Properties
+
+### type
+
+• **type**: ``2``
+
+The type of the object.
+
+#### Inherited from
+
+[ITypeBase](ITypeBase.md).[type](ITypeBase.md#type)
+
+___
 
 ### index
 
@@ -31,15 +43,3 @@ ___
 • `Optional` **data**: `string`
 
 The index data.
-
-___
-
-### type
-
-• **type**: ``2``
-
-The type of the object.
-
-#### Inherited from
-
-[ITypeBase](ITypeBase.md).[type](ITypeBase.md#type)

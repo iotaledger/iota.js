@@ -1,6 +1,6 @@
 # Interface: ISignatureUnlockBlock
 
-Signature unlock block.
+An unlock block holding one or more signatures unlocking one or more inputs..
 
 ## Hierarchy
 
@@ -12,18 +12,10 @@ Signature unlock block.
 
 ### Properties
 
-- [signature](ISignatureUnlockBlock.md#signature)
 - [type](ISignatureUnlockBlock.md#type)
+- [signature](ISignatureUnlockBlock.md#signature)
 
 ## Properties
-
-### signature
-
-• **signature**: [`IEd25519Signature`](IEd25519Signature.md)
-
-The signature.
-
-___
 
 ### type
 
@@ -34,3 +26,11 @@ The type of the object.
 #### Inherited from
 
 [ITypeBase](ITypeBase.md).[type](ITypeBase.md#type)
+
+___
+
+### signature
+
+• **signature**: [`IEd25519Signature`](IEd25519Signature.md)
+
+The signature.

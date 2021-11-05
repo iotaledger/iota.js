@@ -12,8 +12,8 @@ import {
     serializeUnlockBlocks
 } from "../../src/binary/unlockBlock";
 import { ED25519_SIGNATURE_TYPE } from "../../src/models/IEd25519Signature";
-import { IReferenceUnlockBlock, REFERENCE_UNLOCK_BLOCK_TYPE } from "../../src/models/IReferenceUnlockBlock";
-import { ISignatureUnlockBlock, SIGNATURE_UNLOCK_BLOCK_TYPE } from "../../src/models/ISignatureUnlockBlock";
+import { IReferenceUnlockBlock, REFERENCE_UNLOCK_BLOCK_TYPE } from "../../src/models/unlockBlocks/IReferenceUnlockBlock";
+import { ISignatureUnlockBlock, SIGNATURE_UNLOCK_BLOCK_TYPE } from "../../src/models/unlockBlocks/ISignatureUnlockBlock";
 
 describe("Binary Unlock Block", () => {
     test("Can serialize and deserialize unlock blocks", () => {

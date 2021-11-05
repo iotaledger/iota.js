@@ -3,20 +3,20 @@
 import { Converter, ReadStream, WriteStream } from "@iota/util.js";
 import {
     deserializeIndexationPayload,
+    deserializeMilestonePayload,
     deserializePayload,
+    deserializeReceiptPayload,
     serializeIndexationPayload,
     serializeMilestonePayload,
-    deserializeMilestonePayload,
-    serializeReceiptPayload,
-    deserializeReceiptPayload
+    serializeReceiptPayload
 } from "../../src/binary/payload";
-import { ED25519_ADDRESS_TYPE } from "../../src/models/IEd25519Address";
-import { IIndexationPayload, INDEXATION_PAYLOAD_TYPE } from "../../src/models/IIndexationPayload";
-import { IMilestonePayload, MILESTONE_PAYLOAD_TYPE } from "../../src/models/IMilestonePayload";
-import { IReceiptPayload, RECEIPT_PAYLOAD_TYPE } from "../../src/models/IReceiptPayload";
-import { TREASURY_INPUT_TYPE } from "../../src/models/ITreasuryInput";
-import { TREASURY_OUTPUT_TYPE } from "../../src/models/ITreasuryOutput";
-import { TREASURY_TRANSACTION_PAYLOAD_TYPE } from "../../src/models/ITreasuryTransactionPayload";
+import { ED25519_ADDRESS_TYPE } from "../../src/models/addresses/IEd25519Address";
+import { TREASURY_INPUT_TYPE } from "../../src/models/inputs/ITreasuryInput";
+import { TREASURY_OUTPUT_TYPE } from "../../src/models/outputs/ITreasuryOutput";
+import { IIndexationPayload, INDEXATION_PAYLOAD_TYPE } from "../../src/models/payloads/IIndexationPayload";
+import { IMilestonePayload, MILESTONE_PAYLOAD_TYPE } from "../../src/models/payloads/IMilestonePayload";
+import { IReceiptPayload, RECEIPT_PAYLOAD_TYPE } from "../../src/models/payloads/IReceiptPayload";
+import { TREASURY_TRANSACTION_PAYLOAD_TYPE } from "../../src/models/payloads/ITreasuryTransactionPayload";
 
 describe("Binary Payload", () => {
     test("Can fail with underflow min", () => {

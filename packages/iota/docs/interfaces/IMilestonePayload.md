@@ -12,6 +12,7 @@ Milestone payload.
 
 ### Properties
 
+- [type](IMilestonePayload.md#type)
 - [index](IMilestonePayload.md#index)
 - [timestamp](IMilestonePayload.md#timestamp)
 - [parentMessageIds](IMilestonePayload.md#parentmessageids)
@@ -21,9 +22,20 @@ Milestone payload.
 - [publicKeys](IMilestonePayload.md#publickeys)
 - [signatures](IMilestonePayload.md#signatures)
 - [receipt](IMilestonePayload.md#receipt)
-- [type](IMilestonePayload.md#type)
 
 ## Properties
+
+### type
+
+• **type**: ``1``
+
+The type of the object.
+
+#### Inherited from
+
+[ITypeBase](ITypeBase.md).[type](ITypeBase.md#type)
+
+___
 
 ### index
 
@@ -94,15 +106,3 @@ ___
 • `Optional` **receipt**: [`IReceiptPayload`](IReceiptPayload.md)
 
 Receipt payload.
-
-___
-
-### type
-
-• **type**: ``1``
-
-The type of the object.
-
-#### Inherited from
-
-[ITypeBase](ITypeBase.md).[type](ITypeBase.md#type)

@@ -1,8 +1,8 @@
-import { INDEXATION_PAYLOAD_TYPE } from "../models/IIndexationPayload.mjs";
-import { SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE } from "../models/ISigLockedDustAllowanceOutput.mjs";
-import { SIG_LOCKED_SINGLE_OUTPUT_TYPE } from "../models/ISigLockedSingleOutput.mjs";
+import { UTXO_INPUT_TYPE } from "../models/inputs/IUTXOInput.mjs";
 import { TRANSACTION_ESSENCE_TYPE } from "../models/ITransactionEssence.mjs";
-import { UTXO_INPUT_TYPE } from "../models/IUTXOInput.mjs";
+import { SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE } from "../models/outputs/ISigLockedDustAllowanceOutput.mjs";
+import { SIMPLE_OUTPUT_TYPE } from "../models/outputs/ISimpleOutput.mjs";
+import { INDEXATION_PAYLOAD_TYPE } from "../models/payloads/IIndexationPayload.mjs";
 import { ARRAY_LENGTH, SMALL_TYPE_LENGTH, UINT32_SIZE } from "./common.mjs";
 import { deserializeInputs, serializeInputs } from "./input.mjs";
 import { deserializeOutputs, serializeOutputs } from "./output.mjs";
@@ -36,7 +36,7 @@ export function deserializeTransactionEssence(readStream) {
         }
     }
     for (const output of outputs) {
-        if (output.type !== SIG_LOCKED_SINGLE_OUTPUT_TYPE && output.type !== SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE) {
+        if (output.type !== SIMPLE_OUTPUT_TYPE && output.type !== SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE) {
             throw new Error("Transaction essence can only contain sig locked single input or sig locked dust allowance outputs");
         }
     }
@@ -61,7 +61,7 @@ export function serializeTransactionEssence(writeStream, object) {
     }
     serializeInputs(writeStream, object.inputs);
     for (const output of object.outputs) {
-        if (output.type !== SIG_LOCKED_SINGLE_OUTPUT_TYPE && output.type !== SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE) {
+        if (output.type !== SIMPLE_OUTPUT_TYPE && output.type !== SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE) {
             throw new Error("Transaction essence can only contain sig locked single input or sig locked dust allowance outputs");
         }
     }

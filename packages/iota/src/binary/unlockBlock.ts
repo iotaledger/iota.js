@@ -1,9 +1,10 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 import type { ReadStream, WriteStream } from "@iota/util.js";
-import { IReferenceUnlockBlock, REFERENCE_UNLOCK_BLOCK_TYPE } from "../models/IReferenceUnlockBlock";
-import { ISignatureUnlockBlock, SIGNATURE_UNLOCK_BLOCK_TYPE } from "../models/ISignatureUnlockBlock";
 import type { ITypeBase } from "../models/ITypeBase";
+import { IReferenceUnlockBlock, REFERENCE_UNLOCK_BLOCK_TYPE } from "../models/unlockBlocks/IReferenceUnlockBlock";
+import { ISignatureUnlockBlock, SIGNATURE_UNLOCK_BLOCK_TYPE } from "../models/unlockBlocks/ISignatureUnlockBlock";
+import type { UnlockBlockTypes } from "../models/unlockBlocks/unlockBlockTypes";
 import { SMALL_TYPE_LENGTH, UINT16_SIZE } from "./common";
 import { deserializeSignature, MIN_SIGNATURE_LENGTH, serializeSignature } from "./signature";
 
@@ -27,9 +28,9 @@ export const MIN_REFERENCE_UNLOCK_BLOCK_LENGTH: number = MIN_UNLOCK_BLOCK_LENGTH
  * @param readStream The stream to read the data from.
  * @returns The deserialized object.
  */
-export function deserializeUnlockBlocks(readStream: ReadStream): (ISignatureUnlockBlock | IReferenceUnlockBlock)[] {
+export function deserializeUnlockBlocks(readStream: ReadStream): UnlockBlockTypes[] {
     const numUnlockBlocks = readStream.readUInt16("transactionEssence.numUnlockBlocks");
-    const unlockBlocks: (ISignatureUnlockBlock | IReferenceUnlockBlock)[] = [];
+    const unlockBlocks: UnlockBlockTypes[] = [];
     for (let i = 0; i < numUnlockBlocks; i++) {
         unlockBlocks.push(deserializeUnlockBlock(readStream));
     }
@@ -43,7 +44,7 @@ export function deserializeUnlockBlocks(readStream: ReadStream): (ISignatureUnlo
  */
 export function serializeUnlockBlocks(
     writeStream: WriteStream,
-    objects: (ISignatureUnlockBlock | IReferenceUnlockBlock)[]
+    objects: UnlockBlockTypes[]
 ): void {
     writeStream.writeUInt16("transactionEssence.numUnlockBlocks", objects.length);
 
@@ -57,7 +58,7 @@ export function serializeUnlockBlocks(
  * @param readStream The stream to read the data from.
  * @returns The deserialized object.
  */
-export function deserializeUnlockBlock(readStream: ReadStream): ISignatureUnlockBlock | IReferenceUnlockBlock {
+export function deserializeUnlockBlock(readStream: ReadStream): UnlockBlockTypes {
     if (!readStream.hasRemaining(MIN_UNLOCK_BLOCK_LENGTH)) {
         throw new Error(
             `Unlock Block data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_UNLOCK_BLOCK_LENGTH}`
@@ -85,7 +86,7 @@ export function deserializeUnlockBlock(readStream: ReadStream): ISignatureUnlock
  */
 export function serializeUnlockBlock(
     writeStream: WriteStream,
-    object: ISignatureUnlockBlock | IReferenceUnlockBlock
+    object: UnlockBlockTypes
 ): void {
     if (object.type === SIGNATURE_UNLOCK_BLOCK_TYPE) {
         serializeSignatureUnlockBlock(writeStream, object);

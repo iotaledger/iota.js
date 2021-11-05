@@ -1,0 +1,5 @@
+/**
+ * The global type for the return feature block.
+ */
+export const RETURN_FEATURE_BLOCK_TYPE = 2;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiSVJldHVybkZlYXR1cmVCbG9jay5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uLy4uL3NyYy9tb2RlbHMvZmVhdHVyZUJsb2Nrcy9JUmV0dXJuRmVhdHVyZUJsb2NrLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUlBOztHQUVHO0FBQ0gsTUFBTSxDQUFDLE1BQU0seUJBQXlCLEdBQUcsQ0FBQyxDQUFDIn0=

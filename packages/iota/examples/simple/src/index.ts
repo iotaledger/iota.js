@@ -2,7 +2,7 @@ import {
     deserializeMessage,
     IMessage,
     INDEXATION_PAYLOAD_TYPE,
-    ISigLockedSingleOutput,
+    ISimpleOutput,
     logInfo,
     logMessage,
     logMessageMetadata,
@@ -98,7 +98,7 @@ async function run() {
     logOutput("\t", output.output);
     console.log();
 
-    const address = await client.addressEd25519((output.output as ISigLockedSingleOutput).address.address);
+    const address = await client.addressEd25519((output.output as ISimpleOutput).address.address);
     console.log("Address");
     console.log("\tAddress Type:", address.addressType);
     console.log("\tAddress:", address.address);
@@ -106,7 +106,7 @@ async function run() {
     console.log();
 
     const addressOutputs = await client.addressEd25519Outputs(
-        (output.output as ISigLockedSingleOutput).address.address
+        (output.output as ISimpleOutput).address.address
     );
     console.log("Address Outputs");
     console.log("\tAddress:", addressOutputs.address);

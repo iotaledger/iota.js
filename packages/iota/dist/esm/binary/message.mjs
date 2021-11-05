@@ -1,9 +1,9 @@
 import bigInt from "big-integer";
-import { INDEXATION_PAYLOAD_TYPE } from "../models/IIndexationPayload.mjs";
-import { MILESTONE_PAYLOAD_TYPE } from "../models/IMilestonePayload.mjs";
-import { RECEIPT_PAYLOAD_TYPE } from "../models/IReceiptPayload.mjs";
-import { TRANSACTION_PAYLOAD_TYPE } from "../models/ITransactionPayload.mjs";
-import { TREASURY_TRANSACTION_PAYLOAD_TYPE } from "../models/ITreasuryTransactionPayload.mjs";
+import { INDEXATION_PAYLOAD_TYPE } from "../models/payloads/IIndexationPayload.mjs";
+import { MILESTONE_PAYLOAD_TYPE } from "../models/payloads/IMilestonePayload.mjs";
+import { RECEIPT_PAYLOAD_TYPE } from "../models/payloads/IReceiptPayload.mjs";
+import { TRANSACTION_PAYLOAD_TYPE } from "../models/payloads/ITransactionPayload.mjs";
+import { TREASURY_TRANSACTION_PAYLOAD_TYPE } from "../models/payloads/ITreasuryTransactionPayload.mjs";
 import { BYTE_SIZE, MESSAGE_ID_LENGTH, UINT64_SIZE } from "./common.mjs";
 import { deserializePayload, MIN_PAYLOAD_LENGTH, serializePayload } from "./payload.mjs";
 /**

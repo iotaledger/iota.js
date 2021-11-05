@@ -2,12 +2,12 @@
 // SPDX-License-Identifier: Apache-2.0
 import type { ReadStream, WriteStream } from "@iota/util.js";
 import bigInt from "big-integer";
-import { INDEXATION_PAYLOAD_TYPE } from "../models/IIndexationPayload";
 import type { IMessage } from "../models/IMessage";
-import { MILESTONE_PAYLOAD_TYPE } from "../models/IMilestonePayload";
-import { RECEIPT_PAYLOAD_TYPE } from "../models/IReceiptPayload";
-import { TRANSACTION_PAYLOAD_TYPE } from "../models/ITransactionPayload";
-import { TREASURY_TRANSACTION_PAYLOAD_TYPE } from "../models/ITreasuryTransactionPayload";
+import { INDEXATION_PAYLOAD_TYPE } from "../models/payloads/IIndexationPayload";
+import { MILESTONE_PAYLOAD_TYPE } from "../models/payloads/IMilestonePayload";
+import { RECEIPT_PAYLOAD_TYPE } from "../models/payloads/IReceiptPayload";
+import { TRANSACTION_PAYLOAD_TYPE } from "../models/payloads/ITransactionPayload";
+import { TREASURY_TRANSACTION_PAYLOAD_TYPE } from "../models/payloads/ITreasuryTransactionPayload";
 import { BYTE_SIZE, MESSAGE_ID_LENGTH, UINT64_SIZE } from "./common";
 import { deserializePayload, MIN_PAYLOAD_LENGTH, serializePayload } from "./payload";
 

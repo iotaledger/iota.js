@@ -1,10 +1,9 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import type { IIndexationPayload } from "./IIndexationPayload";
-import type { ISigLockedDustAllowanceOutput } from "./ISigLockedDustAllowanceOutput";
-import type { ISigLockedSingleOutput } from "./ISigLockedSingleOutput";
+import type { OutputTypes } from "../models/outputs/outputTypes";
+import type { IUTXOInput } from "./inputs/IUTXOInput";
 import type { ITypeBase } from "./ITypeBase";
-import type { IUTXOInput } from "./IUTXOInput";
+import type { IIndexationPayload } from "./payloads/IIndexationPayload";
 
 /**
  * The global type for the transaction essence.
@@ -23,7 +22,7 @@ export interface ITransactionEssence extends ITypeBase<0> {
     /**
      * The outputs of the transaction.
      */
-    outputs: (ISigLockedSingleOutput | ISigLockedDustAllowanceOutput)[];
+    outputs: OutputTypes[];
 
     /**
      * Indexation payload.

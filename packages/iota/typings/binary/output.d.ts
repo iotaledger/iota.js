@@ -1,8 +1,9 @@
 import type { ReadStream, WriteStream } from "@iota/util.js";
-import { ISigLockedDustAllowanceOutput } from "../models/ISigLockedDustAllowanceOutput";
-import { ISigLockedSingleOutput } from "../models/ISigLockedSingleOutput";
-import { ITreasuryOutput } from "../models/ITreasuryOutput";
 import type { ITypeBase } from "../models/ITypeBase";
+import { ISigLockedDustAllowanceOutput } from "../models/outputs/ISigLockedDustAllowanceOutput";
+import { ISimpleOutput } from "../models/outputs/ISimpleOutput";
+import { ITreasuryOutput } from "../models/outputs/ITreasuryOutput";
+import type { OutputTypes } from "../models/outputs/outputTypes";
 /**
  * The minimum length of an output binary representation.
  */
@@ -32,19 +33,19 @@ export declare const MAX_OUTPUT_COUNT: number;
  * @param readStream The stream to read the data from.
  * @returns The deserialized object.
  */
-export declare function deserializeOutputs(readStream: ReadStream): (ISigLockedSingleOutput | ISigLockedDustAllowanceOutput | ITreasuryOutput)[];
+export declare function deserializeOutputs(readStream: ReadStream): OutputTypes[];
 /**
  * Serialize the outputs to binary.
  * @param writeStream The stream to write the data to.
  * @param objects The objects to serialize.
  */
-export declare function serializeOutputs(writeStream: WriteStream, objects: (ISigLockedSingleOutput | ISigLockedDustAllowanceOutput | ITreasuryOutput)[]): void;
+export declare function serializeOutputs(writeStream: WriteStream, objects: OutputTypes[]): void;
 /**
  * Deserialize the output from binary.
  * @param readStream The stream to read the data from.
  * @returns The deserialized object.
  */
-export declare function deserializeOutput(readStream: ReadStream): ISigLockedSingleOutput | ISigLockedDustAllowanceOutput | ITreasuryOutput;
+export declare function deserializeOutput(readStream: ReadStream): OutputTypes;
 /**
  * Serialize the output to binary.
  * @param writeStream The stream to write the data to.
@@ -56,13 +57,13 @@ export declare function serializeOutput(writeStream: WriteStream, object: ITypeB
  * @param readStream The stream to read the data from.
  * @returns The deserialized object.
  */
-export declare function deserializeSigLockedSingleOutput(readStream: ReadStream): ISigLockedSingleOutput;
+export declare function deserializeSimpleOutput(readStream: ReadStream): ISimpleOutput;
 /**
  * Serialize the signature locked single output to binary.
  * @param writeStream The stream to write the data to.
  * @param object The object to serialize.
  */
-export declare function serializeSigLockedSingleOutput(writeStream: WriteStream, object: ISigLockedSingleOutput): void;
+export declare function serializeSimpleOutput(writeStream: WriteStream, object: ISimpleOutput): void;
 /**
  * Deserialize the signature locked dust allowance output from binary.
  * @param readStream The stream to read the data from.

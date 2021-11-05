@@ -1,5 +1,6 @@
 import type { ReadStream, WriteStream } from "@iota/util.js";
-import { IEd25519Address } from "../models/IEd25519Address";
+import type { AddressTypes } from "../models/addresses/addressTypes";
+import { IEd25519Address } from "../models/addresses/IEd25519Address";
 /**
  * The minimum length of an address binary representation.
  */
@@ -13,13 +14,13 @@ export declare const MIN_ED25519_ADDRESS_LENGTH: number;
  * @param readStream The stream to read the data from.
  * @returns The deserialized object.
  */
-export declare function deserializeAddress(readStream: ReadStream): IEd25519Address;
+export declare function deserializeAddress(readStream: ReadStream): AddressTypes;
 /**
  * Serialize the address to binary.
  * @param writeStream The stream to write the data to.
  * @param object The object to serialize.
  */
-export declare function serializeAddress(writeStream: WriteStream, object: IEd25519Address): void;
+export declare function serializeAddress(writeStream: WriteStream, object: AddressTypes): void;
 /**
  * Deserialize the Ed25519 address from binary.
  * @param readStream The stream to read the data from.

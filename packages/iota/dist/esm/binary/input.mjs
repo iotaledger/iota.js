@@ -1,5 +1,5 @@
-import { TREASURY_INPUT_TYPE } from "../models/ITreasuryInput.mjs";
-import { UTXO_INPUT_TYPE } from "../models/IUTXOInput.mjs";
+import { TREASURY_INPUT_TYPE } from "../models/inputs/ITreasuryInput.mjs";
+import { UTXO_INPUT_TYPE } from "../models/inputs/IUTXOInput.mjs";
 import { SMALL_TYPE_LENGTH, TRANSACTION_ID_LENGTH, UINT16_SIZE } from "./common.mjs";
 /**
  * The minimum length of an input binary representation.

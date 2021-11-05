@@ -4,13 +4,14 @@
 import { Ed25519 } from "@iota/crypto.js";
 import type { ReadStream, WriteStream } from "@iota/util.js";
 import bigInt from "big-integer";
-import { IIndexationPayload, INDEXATION_PAYLOAD_TYPE } from "../models/IIndexationPayload";
-import { IMilestonePayload, MILESTONE_PAYLOAD_TYPE } from "../models/IMilestonePayload";
-import { IReceiptPayload, RECEIPT_PAYLOAD_TYPE } from "../models/IReceiptPayload";
 import { TRANSACTION_ESSENCE_TYPE } from "../models/ITransactionEssence";
-import { ITransactionPayload, TRANSACTION_PAYLOAD_TYPE } from "../models/ITransactionPayload";
-import { ITreasuryTransactionPayload, TREASURY_TRANSACTION_PAYLOAD_TYPE } from "../models/ITreasuryTransactionPayload";
 import type { ITypeBase } from "../models/ITypeBase";
+import { IIndexationPayload, INDEXATION_PAYLOAD_TYPE } from "../models/payloads/IIndexationPayload";
+import { IMilestonePayload, MILESTONE_PAYLOAD_TYPE } from "../models/payloads/IMilestonePayload";
+import { IReceiptPayload, RECEIPT_PAYLOAD_TYPE } from "../models/payloads/IReceiptPayload";
+import { ITransactionPayload, TRANSACTION_PAYLOAD_TYPE } from "../models/payloads/ITransactionPayload";
+import { ITreasuryTransactionPayload, TREASURY_TRANSACTION_PAYLOAD_TYPE } from "../models/payloads/ITreasuryTransactionPayload";
+import type { PayloadTypes } from "../models/payloads/payloadTypes";
 import {
     BYTE_SIZE,
     MERKLE_PROOF_LENGTH,
@@ -97,26 +98,14 @@ export const MAX_INDEXATION_KEY_LENGTH: number = 64;
  */
 export function deserializePayload(
     readStream: ReadStream
-):
-    | ITransactionPayload
-    | IMilestonePayload
-    | IIndexationPayload
-    | ITreasuryTransactionPayload
-    | IReceiptPayload
-    | undefined {
+): PayloadTypes | undefined {
     const payloadLength = readStream.readUInt32("payload.length");
 
     if (!readStream.hasRemaining(payloadLength)) {
         throw new Error(`Payload length ${payloadLength} exceeds the remaining data ${readStream.unused()}`);
     }
 
-    let payload:
-        | ITransactionPayload
-        | IMilestonePayload
-        | IIndexationPayload
-        | ITreasuryTransactionPayload
-        | IReceiptPayload
-        | undefined;
+    let payload: PayloadTypes | undefined;
 
     if (payloadLength > 0) {
         const payloadType = readStream.readUInt32("payload.type", false);
@@ -146,13 +135,7 @@ export function deserializePayload(
  */
 export function serializePayload(
     writeStream: WriteStream,
-    object:
-        | ITransactionPayload
-        | IMilestonePayload
-        | IIndexationPayload
-        | ITreasuryTransactionPayload
-        | IReceiptPayload
-        | undefined
+    object: PayloadTypes | undefined
 ): void {
     // Store the location for the payload length and write 0
     // we will rewind and fill in once the size of the payload is known
@@ -394,8 +377,7 @@ export function serializeIndexationPayload(writeStream: WriteStream, object: IIn
     }
     if (object.index.length / 2 > MAX_INDEXATION_KEY_LENGTH) {
         throw new Error(
-            `The indexation key length is ${
-                object.index.length / 2
+            `The indexation key length is ${object.index.length / 2
             }, which exceeds the maximum size of ${MAX_INDEXATION_KEY_LENGTH}`
         );
     }

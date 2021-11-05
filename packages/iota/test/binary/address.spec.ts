@@ -7,7 +7,7 @@ import {
     serializeAddress,
     serializeEd25519Address
 } from "../../src/binary/address";
-import { ED25519_ADDRESS_TYPE, IEd25519Address } from "../../src/models/IEd25519Address";
+import { ED25519_ADDRESS_TYPE, IEd25519Address } from "../../src/models/addresses/IEd25519Address";
 
 describe("Binary Address", () => {
     test("Can serialize and deserialize address", () => {

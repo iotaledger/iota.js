@@ -1,9 +1,10 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 import type { ReadStream, WriteStream } from "@iota/util.js";
-import { ITreasuryInput, TREASURY_INPUT_TYPE } from "../models/ITreasuryInput";
+import type { InputTypes } from "../models/inputs/inputTypes";
+import { ITreasuryInput, TREASURY_INPUT_TYPE } from "../models/inputs/ITreasuryInput";
+import { IUTXOInput, UTXO_INPUT_TYPE } from "../models/inputs/IUTXOInput";
 import type { ITypeBase } from "../models/ITypeBase";
-import { IUTXOInput, UTXO_INPUT_TYPE } from "../models/IUTXOInput";
 import { SMALL_TYPE_LENGTH, TRANSACTION_ID_LENGTH, UINT16_SIZE } from "./common";
 
 /**
@@ -36,10 +37,10 @@ export const MAX_INPUT_COUNT: number = 127;
  * @param readStream The stream to read the data from.
  * @returns The deserialized object.
  */
-export function deserializeInputs(readStream: ReadStream): (IUTXOInput | ITreasuryInput)[] {
+export function deserializeInputs(readStream: ReadStream): InputTypes[] {
     const numInputs = readStream.readUInt16("inputs.numInputs");
 
-    const inputs: (IUTXOInput | ITreasuryInput)[] = [];
+    const inputs: InputTypes[] = [];
     for (let i = 0; i < numInputs; i++) {
         inputs.push(deserializeInput(readStream));
     }
@@ -52,7 +53,7 @@ export function deserializeInputs(readStream: ReadStream): (IUTXOInput | ITreasu
  * @param writeStream The stream to write the data to.
  * @param objects The objects to serialize.
  */
-export function serializeInputs(writeStream: WriteStream, objects: (IUTXOInput | ITreasuryInput)[]): void {
+export function serializeInputs(writeStream: WriteStream, objects: InputTypes[]): void {
     if (objects.length < MIN_INPUT_COUNT) {
         throw new Error(`The minimum number of inputs is ${MIN_INPUT_COUNT}, you have provided ${objects.length}`);
     }
@@ -71,7 +72,7 @@ export function serializeInputs(writeStream: WriteStream, objects: (IUTXOInput |
  * @param readStream The stream to read the data from.
  * @returns The deserialized object.
  */
-export function deserializeInput(readStream: ReadStream): IUTXOInput | ITreasuryInput {
+export function deserializeInput(readStream: ReadStream): InputTypes {
     if (!readStream.hasRemaining(MIN_INPUT_LENGTH)) {
         throw new Error(
             `Input data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_INPUT_LENGTH}`
@@ -97,7 +98,7 @@ export function deserializeInput(readStream: ReadStream): IUTXOInput | ITreasury
  * @param writeStream The stream to write the data to.
  * @param object The object to serialize.
  */
-export function serializeInput(writeStream: WriteStream, object: IUTXOInput | ITreasuryInput): void {
+export function serializeInput(writeStream: WriteStream, object: InputTypes): void {
     if (object.type === UTXO_INPUT_TYPE) {
         serializeUTXOInput(writeStream, object);
     } else if (object.type === TREASURY_INPUT_TYPE) {

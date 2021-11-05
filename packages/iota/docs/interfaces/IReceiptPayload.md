@@ -12,13 +12,25 @@ Receipt payload.
 
 ### Properties
 
+- [type](IReceiptPayload.md#type)
 - [migratedAt](IReceiptPayload.md#migratedat)
 - [final](IReceiptPayload.md#final)
 - [funds](IReceiptPayload.md#funds)
 - [transaction](IReceiptPayload.md#transaction)
-- [type](IReceiptPayload.md#type)
 
 ## Properties
+
+### type
+
+• **type**: ``3``
+
+The type of the object.
+
+#### Inherited from
+
+[ITypeBase](ITypeBase.md).[type](ITypeBase.md#type)
+
+___
 
 ### migratedAt
 
@@ -49,15 +61,3 @@ ___
 • **transaction**: [`ITreasuryTransactionPayload`](ITreasuryTransactionPayload.md)
 
 The TreasuryTransaction used to fund the funds.
-
-___
-
-### type
-
-• **type**: ``3``
-
-The type of the object.
-
-#### Inherited from
-
-[ITypeBase](ITypeBase.md).[type](ITypeBase.md#type)

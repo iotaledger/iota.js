@@ -1,8 +1,8 @@
 import type { IClient } from "../models/IClient";
 import type { IKeyPair } from "../models/IKeyPair";
 import type { IMessage } from "../models/IMessage";
-import { ITransactionPayload } from "../models/ITransactionPayload";
-import type { IUTXOInput } from "../models/IUTXOInput";
+import type { IUTXOInput } from "../models/inputs/IUTXOInput";
+import { ITransactionPayload } from "../models/payloads/ITransactionPayload";
 /**
  * Send a transfer from the balance on the seed.
  * @param client The client or node endpoint to send the transfer with.

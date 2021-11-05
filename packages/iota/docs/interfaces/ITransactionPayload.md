@@ -12,11 +12,23 @@ Transaction payload.
 
 ### Properties
 
+- [type](ITransactionPayload.md#type)
 - [essence](ITransactionPayload.md#essence)
 - [unlockBlocks](ITransactionPayload.md#unlockblocks)
-- [type](ITransactionPayload.md#type)
 
 ## Properties
+
+### type
+
+• **type**: ``0``
+
+The type of the object.
+
+#### Inherited from
+
+[ITypeBase](ITypeBase.md).[type](ITypeBase.md#type)
+
+___
 
 ### essence
 
@@ -28,18 +40,6 @@ ___
 
 ### unlockBlocks
 
-• **unlockBlocks**: ([`ISignatureUnlockBlock`](ISignatureUnlockBlock.md) \| [`IReferenceUnlockBlock`](IReferenceUnlockBlock.md))[]
+• **unlockBlocks**: [`UnlockBlockTypes`](../api.md#unlockblocktypes)[]
 
 The unlock blocks.
-
-___
-
-### type
-
-• **type**: ``0``
-
-The type of the object.
-
-#### Inherited from
-
-[ITypeBase](ITypeBase.md).[type](ITypeBase.md#type)

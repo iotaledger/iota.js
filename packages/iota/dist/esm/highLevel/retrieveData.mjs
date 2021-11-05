@@ -2,8 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0
 import { Converter } from "@iota/util.js";
 import { SingleNodeClient } from "../clients/singleNodeClient.mjs";
-import { INDEXATION_PAYLOAD_TYPE } from "../models/IIndexationPayload.mjs";
-import { TRANSACTION_PAYLOAD_TYPE } from "../models/ITransactionPayload.mjs";
+import { INDEXATION_PAYLOAD_TYPE } from "../models/payloads/IIndexationPayload.mjs";
+import { TRANSACTION_PAYLOAD_TYPE } from "../models/payloads/ITransactionPayload.mjs";
 /**
  * Retrieve a data message.
  * @param client The client or node endpoint to retrieve the data with.

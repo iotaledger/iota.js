@@ -12,18 +12,10 @@ Treasury Input.
 
 ### Properties
 
-- [milestoneId](ITreasuryInput.md#milestoneid)
 - [type](ITreasuryInput.md#type)
+- [milestoneId](ITreasuryInput.md#milestoneid)
 
 ## Properties
-
-### milestoneId
-
-• **milestoneId**: `string`
-
-The milestone id of the input.
-
-___
 
 ### type
 
@@ -34,3 +26,11 @@ The type of the object.
 #### Inherited from
 
 [ITypeBase](ITypeBase.md).[type](ITypeBase.md#type)
+
+___
+
+### milestoneId
+
+• **milestoneId**: `string`
+
+The milestone id of the input.

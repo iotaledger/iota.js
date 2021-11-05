@@ -2,7 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0
 import type { ReadStream, WriteStream } from "@iota/util.js";
 import { Ed25519Address } from "../addressTypes/ed25519Address";
-import { ED25519_ADDRESS_TYPE, IEd25519Address } from "../models/IEd25519Address";
+import type { AddressTypes } from "../models/addresses/addressTypes";
+import { ED25519_ADDRESS_TYPE, IEd25519Address } from "../models/addresses/IEd25519Address";
 import { SMALL_TYPE_LENGTH } from "./common";
 
 /**
@@ -20,7 +21,7 @@ export const MIN_ED25519_ADDRESS_LENGTH: number = MIN_ADDRESS_LENGTH + Ed25519Ad
  * @param readStream The stream to read the data from.
  * @returns The deserialized object.
  */
-export function deserializeAddress(readStream: ReadStream): IEd25519Address {
+export function deserializeAddress(readStream: ReadStream): AddressTypes {
     if (!readStream.hasRemaining(MIN_ADDRESS_LENGTH)) {
         throw new Error(
             `Address data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_ADDRESS_LENGTH}`
@@ -44,7 +45,7 @@ export function deserializeAddress(readStream: ReadStream): IEd25519Address {
  * @param writeStream The stream to write the data to.
  * @param object The object to serialize.
  */
-export function serializeAddress(writeStream: WriteStream, object: IEd25519Address): void {
+export function serializeAddress(writeStream: WriteStream, object: AddressTypes): void {
     if (object.type === ED25519_ADDRESS_TYPE) {
         serializeEd25519Address(writeStream, object);
     } else {

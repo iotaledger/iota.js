@@ -9,7 +9,7 @@ import {
     serializeInputs,
     serializeUTXOInput
 } from "../../src/binary/input";
-import { IUTXOInput, UTXO_INPUT_TYPE } from "../../src/models/IUTXOInput";
+import { IUTXOInput, UTXO_INPUT_TYPE } from "../../src/models/inputs/IUTXOInput";
 
 describe("Binary Input", () => {
     test("Can serialize and deserialize inputs", () => {

@@ -29,7 +29,7 @@ ___
 
 ### outputs
 
-• **outputs**: ([`ISigLockedSingleOutput`](ISigLockedSingleOutput.md) \| [`ISigLockedDustAllowanceOutput`](ISigLockedDustAllowanceOutput.md))[]
+• **outputs**: [`OutputTypes`](../api.md#outputtypes)[]
 
 The outputs of the transaction.
 

@@ -1,6 +1,6 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import type { IEd25519Address } from "./IEd25519Address";
+import type { AddressTypes } from "../models/addresses/addressTypes";
 
 /**
  * The migrated funds for receipts.
@@ -14,7 +14,7 @@ export interface IMigratedFunds {
     /**
      * The target address of the migrated funds.
      */
-    address: IEd25519Address;
+    address: AddressTypes;
 
     /**
      * The amount of the deposit.

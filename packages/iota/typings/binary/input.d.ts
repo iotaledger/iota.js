@@ -1,6 +1,7 @@
 import type { ReadStream, WriteStream } from "@iota/util.js";
-import { ITreasuryInput } from "../models/ITreasuryInput";
-import { IUTXOInput } from "../models/IUTXOInput";
+import type { InputTypes } from "../models/inputs/inputTypes";
+import { ITreasuryInput } from "../models/inputs/ITreasuryInput";
+import { IUTXOInput } from "../models/inputs/IUTXOInput";
 /**
  * The minimum length of an input binary representation.
  */
@@ -26,25 +27,25 @@ export declare const MAX_INPUT_COUNT: number;
  * @param readStream The stream to read the data from.
  * @returns The deserialized object.
  */
-export declare function deserializeInputs(readStream: ReadStream): (IUTXOInput | ITreasuryInput)[];
+export declare function deserializeInputs(readStream: ReadStream): InputTypes[];
 /**
  * Serialize the inputs to binary.
  * @param writeStream The stream to write the data to.
  * @param objects The objects to serialize.
  */
-export declare function serializeInputs(writeStream: WriteStream, objects: (IUTXOInput | ITreasuryInput)[]): void;
+export declare function serializeInputs(writeStream: WriteStream, objects: InputTypes[]): void;
 /**
  * Deserialize the input from binary.
  * @param readStream The stream to read the data from.
  * @returns The deserialized object.
  */
-export declare function deserializeInput(readStream: ReadStream): IUTXOInput | ITreasuryInput;
+export declare function deserializeInput(readStream: ReadStream): InputTypes;
 /**
  * Serialize the input to binary.
  * @param writeStream The stream to write the data to.
  * @param object The object to serialize.
  */
-export declare function serializeInput(writeStream: WriteStream, object: IUTXOInput | ITreasuryInput): void;
+export declare function serializeInput(writeStream: WriteStream, object: InputTypes): void;
 /**
  * Deserialize the utxo input from binary.
  * @param readStream The stream to read the data from.

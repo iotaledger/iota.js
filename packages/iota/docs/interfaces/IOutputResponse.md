@@ -48,6 +48,6 @@ ___
 
 ### output
 
-• **output**: [`ISigLockedSingleOutput`](ISigLockedSingleOutput.md) \| [`ISigLockedDustAllowanceOutput`](ISigLockedDustAllowanceOutput.md)
+• **output**: [`OutputTypes`](../api.md#outputtypes)
 
 The output.

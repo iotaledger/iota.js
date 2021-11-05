@@ -1,5 +1,5 @@
 import { Ed25519Address } from "../addressTypes/ed25519Address.mjs";
-import { ED25519_ADDRESS_TYPE } from "../models/IEd25519Address.mjs";
+import { ED25519_ADDRESS_TYPE } from "../models/addresses/IEd25519Address.mjs";
 import { SMALL_TYPE_LENGTH } from "./common.mjs";
 /**
  * The minimum length of an address binary representation.

@@ -60,21 +60,40 @@
 - [MIN\_UNLOCK\_BLOCK\_LENGTH](api.md#min_unlock_block_length)
 - [MIN\_SIGNATURE\_UNLOCK\_BLOCK\_LENGTH](api.md#min_signature_unlock_block_length)
 - [MIN\_REFERENCE\_UNLOCK\_BLOCK\_LENGTH](api.md#min_reference_unlock_block_length)
-- [ED25519\_ADDRESS\_TYPE](api.md#ed25519_address_type)
 - [ED25519\_SIGNATURE\_TYPE](api.md#ed25519_signature_type)
+- [TRANSACTION\_ESSENCE\_TYPE](api.md#transaction_essence_type)
+- [ALIAS\_ADDRESS\_TYPE](api.md#alias_address_type)
+- [BLS\_ADDRESS\_TYPE](api.md#bls_address_type)
+- [ED25519\_ADDRESS\_TYPE](api.md#ed25519_address_type)
+- [NFT\_ADDRESS\_TYPE](api.md#nft_address_type)
+- [EXPIRATION\_MILESTONE\_INDEX\_FEATURE\_BLOCK\_TYPE](api.md#expiration_milestone_index_feature_block_type)
+- [EXPIRATION\_UNIX\_FEATURE\_BLOCK\_TYPE](api.md#expiration_unix_feature_block_type)
+- [INDEXATION\_FEATURE\_BLOCK\_TYPE](api.md#indexation_feature_block_type)
+- [ISSUER\_FEATURE\_BLOCK\_TYPE](api.md#issuer_feature_block_type)
+- [METADATA\_FEATURE\_BLOCK\_TYPE](api.md#metadata_feature_block_type)
+- [RETURN\_FEATURE\_BLOCK\_TYPE](api.md#return_feature_block_type)
+- [SENDER\_FEATURE\_BLOCK\_TYPE](api.md#sender_feature_block_type)
+- [TIMELOCK\_MILESTONE\_INDEX\_FEATURE\_BLOCK\_TYPE](api.md#timelock_milestone_index_feature_block_type)
+- [TIMELOCK\_UNIX\_FEATURE\_BLOCK\_TYPE](api.md#timelock_unix_feature_block_type)
+- [TREASURY\_INPUT\_TYPE](api.md#treasury_input_type)
+- [UTXO\_INPUT\_TYPE](api.md#utxo_input_type)
+- [ALIAS\_OUTPUT\_TYPE](api.md#alias_output_type)
+- [EXTENDED\_OUTPUT\_TYPE](api.md#extended_output_type)
+- [FOUNDRY\_OUTPUT\_TYPE](api.md#foundry_output_type)
+- [NFT\_OUTPUT\_TYPE](api.md#nft_output_type)
+- [SIG\_LOCKED\_DUST\_ALLOWANCE\_OUTPUT\_TYPE](api.md#sig_locked_dust_allowance_output_type)
+- [SIMPLE\_OUTPUT\_TYPE](api.md#simple_output_type)
+- [TREASURY\_OUTPUT\_TYPE](api.md#treasury_output_type)
 - [INDEXATION\_PAYLOAD\_TYPE](api.md#indexation_payload_type)
 - [MILESTONE\_PAYLOAD\_TYPE](api.md#milestone_payload_type)
 - [RECEIPT\_PAYLOAD\_TYPE](api.md#receipt_payload_type)
-- [REFERENCE\_UNLOCK\_BLOCK\_TYPE](api.md#reference_unlock_block_type)
-- [SIG\_LOCKED\_DUST\_ALLOWANCE\_OUTPUT\_TYPE](api.md#sig_locked_dust_allowance_output_type)
-- [SIG\_LOCKED\_SINGLE\_OUTPUT\_TYPE](api.md#sig_locked_single_output_type)
-- [SIGNATURE\_UNLOCK\_BLOCK\_TYPE](api.md#signature_unlock_block_type)
-- [TRANSACTION\_ESSENCE\_TYPE](api.md#transaction_essence_type)
 - [TRANSACTION\_PAYLOAD\_TYPE](api.md#transaction_payload_type)
-- [TREASURY\_INPUT\_TYPE](api.md#treasury_input_type)
-- [TREASURY\_OUTPUT\_TYPE](api.md#treasury_output_type)
 - [TREASURY\_TRANSACTION\_PAYLOAD\_TYPE](api.md#treasury_transaction_payload_type)
-- [UTXO\_INPUT\_TYPE](api.md#utxo_input_type)
+- [SIMPLE\_TOKEN\_SCHEME\_TYPE](api.md#simple_token_scheme_type)
+- [ALIAS\_UNLOCK\_BLOCK\_TYPE](api.md#alias_unlock_block_type)
+- [NFTUNLOCK\_BLOCK\_TYPE](api.md#nftunlock_block_type)
+- [REFERENCE\_UNLOCK\_BLOCK\_TYPE](api.md#reference_unlock_block_type)
+- [SIGNATURE\_UNLOCK\_BLOCK\_TYPE](api.md#signature_unlock_block_type)
 - [CONFLICT\_REASON\_STRINGS](api.md#conflict_reason_strings)
 - [ED25519\_SEED\_TYPE](api.md#ed25519_seed_type)
 
@@ -102,8 +121,8 @@
 - [serializeOutputs](api.md#serializeoutputs)
 - [deserializeOutput](api.md#deserializeoutput)
 - [serializeOutput](api.md#serializeoutput)
-- [deserializeSigLockedSingleOutput](api.md#deserializesiglockedsingleoutput)
-- [serializeSigLockedSingleOutput](api.md#serializesiglockedsingleoutput)
+- [deserializeSimpleOutput](api.md#deserializesimpleoutput)
+- [serializeSimpleOutput](api.md#serializesimpleoutput)
 - [deserializeSigLockedDustAllowanceOutput](api.md#deserializesiglockeddustallowanceoutput)
 - [serializeSigLockedDustAllowanceOutput](api.md#serializesiglockeddustallowanceoutput)
 - [deserializeTreasuryOutput](api.md#deserializetreasuryoutput)
@@ -177,33 +196,25 @@
 - [IAddress](interfaces/IAddress.md)
 - [IBip44GeneratorState](interfaces/IBip44GeneratorState.md)
 - [IClient](interfaces/IClient.md)
-- [IEd25519Address](interfaces/IEd25519Address.md)
 - [IEd25519Signature](interfaces/IEd25519Signature.md)
 - [IGossipHeartbeat](interfaces/IGossipHeartbeat.md)
 - [IGossipMetrics](interfaces/IGossipMetrics.md)
-- [IIndexationPayload](interfaces/IIndexationPayload.md)
 - [IKeyPair](interfaces/IKeyPair.md)
 - [IMessage](interfaces/IMessage.md)
 - [IMessageMetadata](interfaces/IMessageMetadata.md)
 - [IMigratedFunds](interfaces/IMigratedFunds.md)
-- [IMilestonePayload](interfaces/IMilestonePayload.md)
+- [INativeToken](interfaces/INativeToken.md)
 - [INodeInfo](interfaces/INodeInfo.md)
 - [IPeer](interfaces/IPeer.md)
 - [IPowProvider](interfaces/IPowProvider.md)
-- [IReceiptPayload](interfaces/IReceiptPayload.md)
-- [IReferenceUnlockBlock](interfaces/IReferenceUnlockBlock.md)
 - [ISeed](interfaces/ISeed.md)
-- [ISigLockedDustAllowanceOutput](interfaces/ISigLockedDustAllowanceOutput.md)
-- [ISigLockedSingleOutput](interfaces/ISigLockedSingleOutput.md)
-- [ISignatureUnlockBlock](interfaces/ISignatureUnlockBlock.md)
 - [ITransactionEssence](interfaces/ITransactionEssence.md)
-- [ITransactionPayload](interfaces/ITransactionPayload.md)
 - [ITreasury](interfaces/ITreasury.md)
-- [ITreasuryInput](interfaces/ITreasuryInput.md)
-- [ITreasuryOutput](interfaces/ITreasuryOutput.md)
-- [ITreasuryTransactionPayload](interfaces/ITreasuryTransactionPayload.md)
 - [ITypeBase](interfaces/ITypeBase.md)
-- [IUTXOInput](interfaces/IUTXOInput.md)
+- [IAliasAddress](interfaces/IAliasAddress.md)
+- [IBlsAddress](interfaces/IBlsAddress.md)
+- [IEd25519Address](interfaces/IEd25519Address.md)
+- [INftAddress](interfaces/INftAddress.md)
 - [IAddressOutputsResponse](interfaces/IAddressOutputsResponse.md)
 - [IAddressResponse](interfaces/IAddressResponse.md)
 - [IChildrenResponse](interfaces/IChildrenResponse.md)
@@ -215,15 +226,50 @@
 - [IReceiptsResponse](interfaces/IReceiptsResponse.md)
 - [IResponse](interfaces/IResponse.md)
 - [ITipsResponse](interfaces/ITipsResponse.md)
+- [IExpirationMilestoneIndexFeatureBlock](interfaces/IExpirationMilestoneIndexFeatureBlock.md)
+- [IExpirationUnixFeatureBlock](interfaces/IExpirationUnixFeatureBlock.md)
+- [IIndexationFeatureBlock](interfaces/IIndexationFeatureBlock.md)
+- [IIssuerFeatureBlock](interfaces/IIssuerFeatureBlock.md)
+- [IMetadataFeatureBlock](interfaces/IMetadataFeatureBlock.md)
+- [IReturnFeatureBlock](interfaces/IReturnFeatureBlock.md)
+- [ISenderFeatureBlock](interfaces/ISenderFeatureBlock.md)
+- [ITimelockMilestoneIndexFeatureBlock](interfaces/ITimelockMilestoneIndexFeatureBlock.md)
+- [ITimelockUnixFeatureBlock](interfaces/ITimelockUnixFeatureBlock.md)
+- [ITreasuryInput](interfaces/ITreasuryInput.md)
+- [IUTXOInput](interfaces/IUTXOInput.md)
+- [IAliasOutput](interfaces/IAliasOutput.md)
+- [IExtendedOutput](interfaces/IExtendedOutput.md)
+- [IFoundryOutput](interfaces/IFoundryOutput.md)
+- [INftOutput](interfaces/INftOutput.md)
+- [ISigLockedDustAllowanceOutput](interfaces/ISigLockedDustAllowanceOutput.md)
+- [ISimpleOutput](interfaces/ISimpleOutput.md)
+- [ITreasuryOutput](interfaces/ITreasuryOutput.md)
+- [IIndexationPayload](interfaces/IIndexationPayload.md)
+- [IMilestonePayload](interfaces/IMilestonePayload.md)
+- [IReceiptPayload](interfaces/IReceiptPayload.md)
+- [ITransactionPayload](interfaces/ITransactionPayload.md)
+- [ITreasuryTransactionPayload](interfaces/ITreasuryTransactionPayload.md)
+- [ISimpleTokenScheme](interfaces/ISimpleTokenScheme.md)
+- [IAliasUnlockBlock](interfaces/IAliasUnlockBlock.md)
+- [INftUnlockBlock](interfaces/INftUnlockBlock.md)
+- [IReferenceUnlockBlock](interfaces/IReferenceUnlockBlock.md)
+- [ISignatureUnlockBlock](interfaces/ISignatureUnlockBlock.md)
+
+### Type aliases
+
+- [AddressTypes](api.md#addresstypes)
+- [FeatureBlockTypes](api.md#featureblocktypes)
+- [InputTypes](api.md#inputtypes)
+- [LedgerInclusionState](api.md#ledgerinclusionstate)
+- [OutputTypes](api.md#outputtypes)
+- [PayloadTypes](api.md#payloadtypes)
+- [TokenSchemeTypes](api.md#tokenschemetypes)
+- [Units](api.md#units)
+- [UnlockBlockTypes](api.md#unlockblocktypes)
 
 ### Enumerations
 
 - [ConflictReason](enums/ConflictReason.md)
-
-### Type aliases
-
-- [LedgerInclusionState](api.md#ledgerinclusionstate)
-- [Units](api.md#units)
 
 ## Variables
 
@@ -579,19 +625,197 @@ The minimum length of a reference unlock block binary representation.
 
 ___
 
-### ED25519\_ADDRESS\_TYPE
-
-• **ED25519\_ADDRESS\_TYPE**: ``0``
-
-The global type for the address type.
-
-___
-
 ### ED25519\_SIGNATURE\_TYPE
 
 • **ED25519\_SIGNATURE\_TYPE**: ``0``
 
 The global type for the signature type.
+
+___
+
+### TRANSACTION\_ESSENCE\_TYPE
+
+• **TRANSACTION\_ESSENCE\_TYPE**: ``0``
+
+The global type for the transaction essence.
+
+___
+
+### ALIAS\_ADDRESS\_TYPE
+
+• **ALIAS\_ADDRESS\_TYPE**: ``8``
+
+The global type for the alias address type.
+
+___
+
+### BLS\_ADDRESS\_TYPE
+
+• **BLS\_ADDRESS\_TYPE**: ``1``
+
+The global type for the BLS address type.
+
+___
+
+### ED25519\_ADDRESS\_TYPE
+
+• **ED25519\_ADDRESS\_TYPE**: ``0``
+
+The global type for the ed25519 address type.
+
+___
+
+### NFT\_ADDRESS\_TYPE
+
+• **NFT\_ADDRESS\_TYPE**: ``16``
+
+The global type for the NFT address type.
+
+___
+
+### EXPIRATION\_MILESTONE\_INDEX\_FEATURE\_BLOCK\_TYPE
+
+• **EXPIRATION\_MILESTONE\_INDEX\_FEATURE\_BLOCK\_TYPE**: ``5``
+
+The global type for the expiration milestone feature block.
+
+___
+
+### EXPIRATION\_UNIX\_FEATURE\_BLOCK\_TYPE
+
+• **EXPIRATION\_UNIX\_FEATURE\_BLOCK\_TYPE**: ``6``
+
+The global type for the expiration unix feature block.
+
+___
+
+### INDEXATION\_FEATURE\_BLOCK\_TYPE
+
+• **INDEXATION\_FEATURE\_BLOCK\_TYPE**: ``8``
+
+The global type for the indexation feature block.
+
+___
+
+### ISSUER\_FEATURE\_BLOCK\_TYPE
+
+• **ISSUER\_FEATURE\_BLOCK\_TYPE**: ``1``
+
+The global type for the issuer feature block.
+
+___
+
+### METADATA\_FEATURE\_BLOCK\_TYPE
+
+• **METADATA\_FEATURE\_BLOCK\_TYPE**: ``7``
+
+The global type for the metadata feature block.
+
+___
+
+### RETURN\_FEATURE\_BLOCK\_TYPE
+
+• **RETURN\_FEATURE\_BLOCK\_TYPE**: ``2``
+
+The global type for the return feature block.
+
+___
+
+### SENDER\_FEATURE\_BLOCK\_TYPE
+
+• **SENDER\_FEATURE\_BLOCK\_TYPE**: ``0``
+
+The global type for the sender feature block.
+
+___
+
+### TIMELOCK\_MILESTONE\_INDEX\_FEATURE\_BLOCK\_TYPE
+
+• **TIMELOCK\_MILESTONE\_INDEX\_FEATURE\_BLOCK\_TYPE**: ``3``
+
+The global type for the timelock milestone feature block.
+
+___
+
+### TIMELOCK\_UNIX\_FEATURE\_BLOCK\_TYPE
+
+• **TIMELOCK\_UNIX\_FEATURE\_BLOCK\_TYPE**: ``4``
+
+The global type for the timelock unix feature block.
+
+___
+
+### TREASURY\_INPUT\_TYPE
+
+• **TREASURY\_INPUT\_TYPE**: ``1``
+
+The global type for the treasury input.
+
+___
+
+### UTXO\_INPUT\_TYPE
+
+• **UTXO\_INPUT\_TYPE**: ``0``
+
+The global type for the input.
+
+___
+
+### ALIAS\_OUTPUT\_TYPE
+
+• **ALIAS\_OUTPUT\_TYPE**: ``4``
+
+The global type for the alias output.
+
+___
+
+### EXTENDED\_OUTPUT\_TYPE
+
+• **EXTENDED\_OUTPUT\_TYPE**: ``3``
+
+The global type for the extended output.
+
+___
+
+### FOUNDRY\_OUTPUT\_TYPE
+
+• **FOUNDRY\_OUTPUT\_TYPE**: ``5``
+
+The global type for the foundry output.
+
+___
+
+### NFT\_OUTPUT\_TYPE
+
+• **NFT\_OUTPUT\_TYPE**: ``6``
+
+The global type for the NFT output.
+
+___
+
+### SIG\_LOCKED\_DUST\_ALLOWANCE\_OUTPUT\_TYPE
+
+• **SIG\_LOCKED\_DUST\_ALLOWANCE\_OUTPUT\_TYPE**: ``1``
+
+The global type for the sig locked dust allowance output.
+
+**`deprecated`**
+
+___
+
+### SIMPLE\_OUTPUT\_TYPE
+
+• **SIMPLE\_OUTPUT\_TYPE**: ``0``
+
+The global type for the simple output.
+
+___
+
+### TREASURY\_OUTPUT\_TYPE
+
+• **TREASURY\_OUTPUT\_TYPE**: ``2``
+
+The global type for the treasury output.
 
 ___
 
@@ -619,67 +843,11 @@ The global type for the payload.
 
 ___
 
-### REFERENCE\_UNLOCK\_BLOCK\_TYPE
-
-• **REFERENCE\_UNLOCK\_BLOCK\_TYPE**: ``1``
-
-The global type for the unlock block.
-
-___
-
-### SIG\_LOCKED\_DUST\_ALLOWANCE\_OUTPUT\_TYPE
-
-• **SIG\_LOCKED\_DUST\_ALLOWANCE\_OUTPUT\_TYPE**: ``1``
-
-The global type for the sig locked dust allowance output.
-
-___
-
-### SIG\_LOCKED\_SINGLE\_OUTPUT\_TYPE
-
-• **SIG\_LOCKED\_SINGLE\_OUTPUT\_TYPE**: ``0``
-
-The global type for the sig locked single output.
-
-___
-
-### SIGNATURE\_UNLOCK\_BLOCK\_TYPE
-
-• **SIGNATURE\_UNLOCK\_BLOCK\_TYPE**: ``0``
-
-The global type for the unlock block.
-
-___
-
-### TRANSACTION\_ESSENCE\_TYPE
-
-• **TRANSACTION\_ESSENCE\_TYPE**: ``0``
-
-The global type for the transaction essence.
-
-___
-
 ### TRANSACTION\_PAYLOAD\_TYPE
 
 • **TRANSACTION\_PAYLOAD\_TYPE**: ``0``
 
 The global type for the payload.
-
-___
-
-### TREASURY\_INPUT\_TYPE
-
-• **TREASURY\_INPUT\_TYPE**: ``1``
-
-The global type for the treasury input.
-
-___
-
-### TREASURY\_OUTPUT\_TYPE
-
-• **TREASURY\_OUTPUT\_TYPE**: ``2``
-
-The global type for the treasury output.
 
 ___
 
@@ -691,11 +859,43 @@ The global type for the payload.
 
 ___
 
-### UTXO\_INPUT\_TYPE
+### SIMPLE\_TOKEN\_SCHEME\_TYPE
 
-• **UTXO\_INPUT\_TYPE**: ``0``
+• **SIMPLE\_TOKEN\_SCHEME\_TYPE**: ``0``
 
-The global type for the input.
+The global type for the simple token scheme.
+
+___
+
+### ALIAS\_UNLOCK\_BLOCK\_TYPE
+
+• **ALIAS\_UNLOCK\_BLOCK\_TYPE**: ``2``
+
+The global type for the alias unlock block.
+
+___
+
+### NFTUNLOCK\_BLOCK\_TYPE
+
+• **NFTUNLOCK\_BLOCK\_TYPE**: ``3``
+
+The global type for the NFT unlock block.
+
+___
+
+### REFERENCE\_UNLOCK\_BLOCK\_TYPE
+
+• **REFERENCE\_UNLOCK\_BLOCK\_TYPE**: ``1``
+
+The global type for the reference unlock block.
+
+___
+
+### SIGNATURE\_UNLOCK\_BLOCK\_TYPE
+
+• **SIGNATURE\_UNLOCK\_BLOCK\_TYPE**: ``0``
+
+The global type for the unlock block.
 
 ___
 
@@ -717,7 +917,7 @@ The global type for the seed.
 
 ### deserializeAddress
 
-▸ **deserializeAddress**(`readStream`): [`IEd25519Address`](interfaces/IEd25519Address.md)
+▸ **deserializeAddress**(`readStream`): [`AddressTypes`](api.md#addresstypes)
 
 Deserialize the address from binary.
 
@@ -729,7 +929,7 @@ Deserialize the address from binary.
 
 #### Returns
 
-[`IEd25519Address`](interfaces/IEd25519Address.md)
+[`AddressTypes`](api.md#addresstypes)
 
 The deserialized object.
 
@@ -746,7 +946,7 @@ Serialize the address to binary.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `writeStream` | `WriteStream` | The stream to write the data to. |
-| `object` | [`IEd25519Address`](interfaces/IEd25519Address.md) | The object to serialize. |
+| `object` | [`AddressTypes`](api.md#addresstypes) | The object to serialize. |
 
 #### Returns
 
@@ -873,7 +1073,7 @@ ___
 
 ### deserializeInputs
 
-▸ **deserializeInputs**(`readStream`): ([`IUTXOInput`](interfaces/IUTXOInput.md) \| [`ITreasuryInput`](interfaces/ITreasuryInput.md))[]
+▸ **deserializeInputs**(`readStream`): [`InputTypes`](api.md#inputtypes)[]
 
 Deserialize the inputs from binary.
 
@@ -885,7 +1085,7 @@ Deserialize the inputs from binary.
 
 #### Returns
 
-([`IUTXOInput`](interfaces/IUTXOInput.md) \| [`ITreasuryInput`](interfaces/ITreasuryInput.md))[]
+[`InputTypes`](api.md#inputtypes)[]
 
 The deserialized object.
 
@@ -902,7 +1102,7 @@ Serialize the inputs to binary.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `writeStream` | `WriteStream` | The stream to write the data to. |
-| `objects` | ([`IUTXOInput`](interfaces/IUTXOInput.md) \| [`ITreasuryInput`](interfaces/ITreasuryInput.md))[] | The objects to serialize. |
+| `objects` | [`InputTypes`](api.md#inputtypes)[] | The objects to serialize. |
 
 #### Returns
 
@@ -912,7 +1112,7 @@ ___
 
 ### deserializeInput
 
-▸ **deserializeInput**(`readStream`): [`IUTXOInput`](interfaces/IUTXOInput.md) \| [`ITreasuryInput`](interfaces/ITreasuryInput.md)
+▸ **deserializeInput**(`readStream`): [`InputTypes`](api.md#inputtypes)
 
 Deserialize the input from binary.
 
@@ -924,7 +1124,7 @@ Deserialize the input from binary.
 
 #### Returns
 
-[`IUTXOInput`](interfaces/IUTXOInput.md) \| [`ITreasuryInput`](interfaces/ITreasuryInput.md)
+[`InputTypes`](api.md#inputtypes)
 
 The deserialized object.
 
@@ -941,7 +1141,7 @@ Serialize the input to binary.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `writeStream` | `WriteStream` | The stream to write the data to. |
-| `object` | [`IUTXOInput`](interfaces/IUTXOInput.md) \| [`ITreasuryInput`](interfaces/ITreasuryInput.md) | The object to serialize. |
+| `object` | [`InputTypes`](api.md#inputtypes) | The object to serialize. |
 
 #### Returns
 
@@ -1068,7 +1268,7 @@ ___
 
 ### deserializeOutputs
 
-▸ **deserializeOutputs**(`readStream`): ([`ISigLockedSingleOutput`](interfaces/ISigLockedSingleOutput.md) \| [`ISigLockedDustAllowanceOutput`](interfaces/ISigLockedDustAllowanceOutput.md) \| [`ITreasuryOutput`](interfaces/ITreasuryOutput.md))[]
+▸ **deserializeOutputs**(`readStream`): [`OutputTypes`](api.md#outputtypes)[]
 
 Deserialize the outputs from binary.
 
@@ -1080,7 +1280,7 @@ Deserialize the outputs from binary.
 
 #### Returns
 
-([`ISigLockedSingleOutput`](interfaces/ISigLockedSingleOutput.md) \| [`ISigLockedDustAllowanceOutput`](interfaces/ISigLockedDustAllowanceOutput.md) \| [`ITreasuryOutput`](interfaces/ITreasuryOutput.md))[]
+[`OutputTypes`](api.md#outputtypes)[]
 
 The deserialized object.
 
@@ -1097,7 +1297,7 @@ Serialize the outputs to binary.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `writeStream` | `WriteStream` | The stream to write the data to. |
-| `objects` | ([`ISigLockedSingleOutput`](interfaces/ISigLockedSingleOutput.md) \| [`ISigLockedDustAllowanceOutput`](interfaces/ISigLockedDustAllowanceOutput.md) \| [`ITreasuryOutput`](interfaces/ITreasuryOutput.md))[] | The objects to serialize. |
+| `objects` | [`OutputTypes`](api.md#outputtypes)[] | The objects to serialize. |
 
 #### Returns
 
@@ -1107,7 +1307,7 @@ ___
 
 ### deserializeOutput
 
-▸ **deserializeOutput**(`readStream`): [`ISigLockedSingleOutput`](interfaces/ISigLockedSingleOutput.md) \| [`ISigLockedDustAllowanceOutput`](interfaces/ISigLockedDustAllowanceOutput.md) \| [`ITreasuryOutput`](interfaces/ITreasuryOutput.md)
+▸ **deserializeOutput**(`readStream`): [`OutputTypes`](api.md#outputtypes)
 
 Deserialize the output from binary.
 
@@ -1119,7 +1319,7 @@ Deserialize the output from binary.
 
 #### Returns
 
-[`ISigLockedSingleOutput`](interfaces/ISigLockedSingleOutput.md) \| [`ISigLockedDustAllowanceOutput`](interfaces/ISigLockedDustAllowanceOutput.md) \| [`ITreasuryOutput`](interfaces/ITreasuryOutput.md)
+[`OutputTypes`](api.md#outputtypes)
 
 The deserialized object.
 
@@ -1144,9 +1344,9 @@ Serialize the output to binary.
 
 ___
 
-### deserializeSigLockedSingleOutput
+### deserializeSimpleOutput
 
-▸ **deserializeSigLockedSingleOutput**(`readStream`): [`ISigLockedSingleOutput`](interfaces/ISigLockedSingleOutput.md)
+▸ **deserializeSimpleOutput**(`readStream`): [`ISimpleOutput`](interfaces/ISimpleOutput.md)
 
 Deserialize the signature locked single output from binary.
 
@@ -1158,15 +1358,15 @@ Deserialize the signature locked single output from binary.
 
 #### Returns
 
-[`ISigLockedSingleOutput`](interfaces/ISigLockedSingleOutput.md)
+[`ISimpleOutput`](interfaces/ISimpleOutput.md)
 
 The deserialized object.
 
 ___
 
-### serializeSigLockedSingleOutput
+### serializeSimpleOutput
 
-▸ **serializeSigLockedSingleOutput**(`writeStream`, `object`): `void`
+▸ **serializeSimpleOutput**(`writeStream`, `object`): `void`
 
 Serialize the signature locked single output to binary.
 
@@ -1175,7 +1375,7 @@ Serialize the signature locked single output to binary.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `writeStream` | `WriteStream` | The stream to write the data to. |
-| `object` | [`ISigLockedSingleOutput`](interfaces/ISigLockedSingleOutput.md) | The object to serialize. |
+| `object` | [`ISimpleOutput`](interfaces/ISimpleOutput.md) | The object to serialize. |
 
 #### Returns
 
@@ -1263,7 +1463,7 @@ ___
 
 ### deserializePayload
 
-▸ **deserializePayload**(`readStream`): [`ITransactionPayload`](interfaces/ITransactionPayload.md) \| [`IMilestonePayload`](interfaces/IMilestonePayload.md) \| [`IIndexationPayload`](interfaces/IIndexationPayload.md) \| [`ITreasuryTransactionPayload`](interfaces/ITreasuryTransactionPayload.md) \| [`IReceiptPayload`](interfaces/IReceiptPayload.md) \| `undefined`
+▸ **deserializePayload**(`readStream`): [`PayloadTypes`](api.md#payloadtypes) \| `undefined`
 
 Deserialize the payload from binary.
 
@@ -1275,7 +1475,7 @@ Deserialize the payload from binary.
 
 #### Returns
 
-[`ITransactionPayload`](interfaces/ITransactionPayload.md) \| [`IMilestonePayload`](interfaces/IMilestonePayload.md) \| [`IIndexationPayload`](interfaces/IIndexationPayload.md) \| [`ITreasuryTransactionPayload`](interfaces/ITreasuryTransactionPayload.md) \| [`IReceiptPayload`](interfaces/IReceiptPayload.md) \| `undefined`
+[`PayloadTypes`](api.md#payloadtypes) \| `undefined`
 
 The deserialized object.
 
@@ -1292,7 +1492,7 @@ Serialize the payload essence to binary.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `writeStream` | `WriteStream` | The stream to write the data to. |
-| `object` | `undefined` \| [`ITransactionPayload`](interfaces/ITransactionPayload.md) \| [`IMilestonePayload`](interfaces/IMilestonePayload.md) \| [`IIndexationPayload`](interfaces/IIndexationPayload.md) \| [`ITreasuryTransactionPayload`](interfaces/ITreasuryTransactionPayload.md) \| [`IReceiptPayload`](interfaces/IReceiptPayload.md) | The object to serialize. |
+| `object` | `undefined` \| [`PayloadTypes`](api.md#payloadtypes) | The object to serialize. |
 
 #### Returns
 
@@ -1614,7 +1814,7 @@ ___
 
 ### deserializeUnlockBlocks
 
-▸ **deserializeUnlockBlocks**(`readStream`): ([`ISignatureUnlockBlock`](interfaces/ISignatureUnlockBlock.md) \| [`IReferenceUnlockBlock`](interfaces/IReferenceUnlockBlock.md))[]
+▸ **deserializeUnlockBlocks**(`readStream`): [`UnlockBlockTypes`](api.md#unlockblocktypes)[]
 
 Deserialize the unlock blocks from binary.
 
@@ -1626,7 +1826,7 @@ Deserialize the unlock blocks from binary.
 
 #### Returns
 
-([`ISignatureUnlockBlock`](interfaces/ISignatureUnlockBlock.md) \| [`IReferenceUnlockBlock`](interfaces/IReferenceUnlockBlock.md))[]
+[`UnlockBlockTypes`](api.md#unlockblocktypes)[]
 
 The deserialized object.
 
@@ -1643,7 +1843,7 @@ Serialize the unlock blocks to binary.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `writeStream` | `WriteStream` | The stream to write the data to. |
-| `objects` | ([`ISignatureUnlockBlock`](interfaces/ISignatureUnlockBlock.md) \| [`IReferenceUnlockBlock`](interfaces/IReferenceUnlockBlock.md))[] | The objects to serialize. |
+| `objects` | [`UnlockBlockTypes`](api.md#unlockblocktypes)[] | The objects to serialize. |
 
 #### Returns
 
@@ -1653,7 +1853,7 @@ ___
 
 ### deserializeUnlockBlock
 
-▸ **deserializeUnlockBlock**(`readStream`): [`ISignatureUnlockBlock`](interfaces/ISignatureUnlockBlock.md) \| [`IReferenceUnlockBlock`](interfaces/IReferenceUnlockBlock.md)
+▸ **deserializeUnlockBlock**(`readStream`): [`UnlockBlockTypes`](api.md#unlockblocktypes)
 
 Deserialize the unlock block from binary.
 
@@ -1665,7 +1865,7 @@ Deserialize the unlock block from binary.
 
 #### Returns
 
-[`ISignatureUnlockBlock`](interfaces/ISignatureUnlockBlock.md) \| [`IReferenceUnlockBlock`](interfaces/IReferenceUnlockBlock.md)
+[`UnlockBlockTypes`](api.md#unlockblocktypes)
 
 The deserialized object.
 
@@ -1682,7 +1882,7 @@ Serialize the unlock block to binary.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `writeStream` | `WriteStream` | The stream to write the data to. |
-| `object` | [`ISignatureUnlockBlock`](interfaces/ISignatureUnlockBlock.md) \| [`IReferenceUnlockBlock`](interfaces/IReferenceUnlockBlock.md) | The object to serialize. |
+| `object` | [`UnlockBlockTypes`](api.md#unlockblocktypes) | The object to serialize. |
 
 #### Returns
 
@@ -2331,7 +2531,7 @@ Log a message to the console.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `prefix` | `string` | The prefix for the output. |
-| `unknownPayload?` | [`ITransactionPayload`](interfaces/ITransactionPayload.md) \| [`IMilestonePayload`](interfaces/IMilestonePayload.md) \| [`IIndexationPayload`](interfaces/IIndexationPayload.md) \| [`ITreasuryTransactionPayload`](interfaces/ITreasuryTransactionPayload.md) \| [`IReceiptPayload`](interfaces/IReceiptPayload.md) | The payload. |
+| `unknownPayload?` | [`PayloadTypes`](api.md#payloadtypes) | The payload. |
 
 #### Returns
 
@@ -2445,7 +2645,7 @@ Log an address to the console.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `prefix` | `string` | The prefix for the output. |
-| `unknownAddress?` | [`IEd25519Address`](interfaces/IEd25519Address.md) | The address to log. |
+| `unknownAddress?` | [`AddressTypes`](api.md#addresstypes) | The address to log. |
 
 #### Returns
 
@@ -2455,7 +2655,7 @@ ___
 
 ### logSignature
 
-▸ **logSignature**(`prefix`, `unknownSignature?`): `void`
+▸ **logSignature**(`prefix`, `unknownSignature`): `void`
 
 Log signature to the console.
 
@@ -2464,7 +2664,7 @@ Log signature to the console.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `prefix` | `string` | The prefix for the output. |
-| `unknownSignature?` | [`IEd25519Signature`](interfaces/IEd25519Signature.md) | The signature to log. |
+| `unknownSignature` | `undefined` \| [`IEd25519Signature`](interfaces/IEd25519Signature.md) | The signature to log. |
 
 #### Returns
 
@@ -2483,7 +2683,7 @@ Log input to the console.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `prefix` | `string` | The prefix for the output. |
-| `unknownInput?` | [`IUTXOInput`](interfaces/IUTXOInput.md) \| [`ITreasuryInput`](interfaces/ITreasuryInput.md) | The input to log. |
+| `unknownInput?` | [`InputTypes`](api.md#inputtypes) | The input to log. |
 
 #### Returns
 
@@ -2502,7 +2702,7 @@ Log output to the console.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `prefix` | `string` | The prefix for the output. |
-| `unknownOutput?` | [`ISigLockedSingleOutput`](interfaces/ISigLockedSingleOutput.md) \| [`ISigLockedDustAllowanceOutput`](interfaces/ISigLockedDustAllowanceOutput.md) \| [`ITreasuryOutput`](interfaces/ITreasuryOutput.md) | The output to log. |
+| `unknownOutput?` | [`OutputTypes`](api.md#outputtypes) | The output to log. |
 
 #### Returns
 
@@ -2521,7 +2721,7 @@ Log unlock block to the console.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `prefix` | `string` | The prefix for the output. |
-| `unknownUnlockBlock?` | [`ISignatureUnlockBlock`](interfaces/ISignatureUnlockBlock.md) \| [`IReferenceUnlockBlock`](interfaces/IReferenceUnlockBlock.md) | The unlock block to log. |
+| `unknownUnlockBlock?` | [`UnlockBlockTypes`](api.md#unlockblocktypes) | The unlock block to log. |
 
 #### Returns
 
@@ -2548,6 +2748,30 @@ Log fund to the console.
 
 ## Type aliases
 
+### AddressTypes
+
+Ƭ **AddressTypes**: [`IEd25519Address`](interfaces/IEd25519Address.md) \| [`IAliasAddress`](interfaces/IAliasAddress.md) \| [`INftAddress`](interfaces/INftAddress.md) \| [`IBlsAddress`](interfaces/IBlsAddress.md)
+
+All of the address types.
+
+___
+
+### FeatureBlockTypes
+
+Ƭ **FeatureBlockTypes**: [`ISenderFeatureBlock`](interfaces/ISenderFeatureBlock.md) \| [`IIssuerFeatureBlock`](interfaces/IIssuerFeatureBlock.md) \| [`IReturnFeatureBlock`](interfaces/IReturnFeatureBlock.md) \| [`ITimelockMilestoneIndexFeatureBlock`](interfaces/ITimelockMilestoneIndexFeatureBlock.md) \| [`ITimelockUnixFeatureBlock`](interfaces/ITimelockUnixFeatureBlock.md) \| [`IExpirationMilestoneIndexFeatureBlock`](interfaces/IExpirationMilestoneIndexFeatureBlock.md) \| [`IExpirationUnixFeatureBlock`](interfaces/IExpirationUnixFeatureBlock.md) \| [`IMetadataFeatureBlock`](interfaces/IMetadataFeatureBlock.md) \| [`IIndexationFeatureBlock`](interfaces/IIndexationFeatureBlock.md)
+
+All of the feature block types.
+
+___
+
+### InputTypes
+
+Ƭ **InputTypes**: [`IUTXOInput`](interfaces/IUTXOInput.md) \| [`ITreasuryInput`](interfaces/ITreasuryInput.md)
+
+All of the input types.
+
+___
+
 ### LedgerInclusionState
 
 Ƭ **LedgerInclusionState**: ``"noTransaction"`` \| ``"included"`` \| ``"conflicting"``
@@ -2556,8 +2780,40 @@ The different states of ledger inclusion.
 
 ___
 
+### OutputTypes
+
+Ƭ **OutputTypes**: [`ISimpleOutput`](interfaces/ISimpleOutput.md) \| [`ISigLockedDustAllowanceOutput`](interfaces/ISigLockedDustAllowanceOutput.md) \| [`ITreasuryOutput`](interfaces/ITreasuryOutput.md) \| [`IExtendedOutput`](interfaces/IExtendedOutput.md) \| [`IAliasOutput`](interfaces/IAliasOutput.md) \| [`IFoundryOutput`](interfaces/IFoundryOutput.md) \| [`INftOutput`](interfaces/INftOutput.md)
+
+All of the output types.
+
+___
+
+### PayloadTypes
+
+Ƭ **PayloadTypes**: [`ITransactionPayload`](interfaces/ITransactionPayload.md) \| [`IMilestonePayload`](interfaces/IMilestonePayload.md) \| [`IReceiptPayload`](interfaces/IReceiptPayload.md) \| [`IIndexationPayload`](interfaces/IIndexationPayload.md) \| [`ITreasuryTransactionPayload`](interfaces/ITreasuryTransactionPayload.md)
+
+All of the payload types.
+
+___
+
+### TokenSchemeTypes
+
+Ƭ **TokenSchemeTypes**: [`ISimpleTokenScheme`](interfaces/ISimpleTokenScheme.md)
+
+All of the token scheme types.
+
+___
+
 ### Units
 
 Ƭ **Units**: ``"Pi"`` \| ``"Ti"`` \| ``"Gi"`` \| ``"Mi"`` \| ``"Ki"`` \| ``"i"``
 
 Units for the token.
+
+___
+
+### UnlockBlockTypes
+
+Ƭ **UnlockBlockTypes**: [`ISignatureUnlockBlock`](interfaces/ISignatureUnlockBlock.md) \| [`IReferenceUnlockBlock`](interfaces/IReferenceUnlockBlock.md) \| [`IAliasUnlockBlock`](interfaces/IAliasUnlockBlock.md) \| [`INftUnlockBlock`](interfaces/INftUnlockBlock.md)
+
+All of the unlock block types.

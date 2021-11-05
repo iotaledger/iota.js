@@ -5,8 +5,8 @@ import { Converter } from "@iota/util.js";
 import { MAX_INDEXATION_KEY_LENGTH, MIN_INDEXATION_KEY_LENGTH } from "../binary/payload";
 import { SingleNodeClient } from "../clients/singleNodeClient";
 import type { IClient } from "../models/IClient";
-import { IIndexationPayload, INDEXATION_PAYLOAD_TYPE } from "../models/IIndexationPayload";
 import type { IMessage } from "../models/IMessage";
+import { IIndexationPayload, INDEXATION_PAYLOAD_TYPE } from "../models/payloads/IIndexationPayload";
 
 /**
  * Send a data message.

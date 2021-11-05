@@ -1,22 +1,19 @@
+import type { UnlockBlockTypes } from "..";
+import type { AddressTypes } from "../models/addresses/addressTypes";
 import type { ITipsResponse } from "../models/api/ITipsResponse";
-import { IEd25519Address } from "../models/IEd25519Address";
 import { IEd25519Signature } from "../models/IEd25519Signature";
-import type { IIndexationPayload } from "../models/IIndexationPayload";
 import type { IMessage } from "../models/IMessage";
 import type { IMessageMetadata } from "../models/IMessageMetadata";
 import type { IMigratedFunds } from "../models/IMigratedFunds";
-import { IMilestonePayload } from "../models/IMilestonePayload";
 import type { INodeInfo } from "../models/INodeInfo";
-import { IReceiptPayload } from "../models/IReceiptPayload";
-import { IReferenceUnlockBlock } from "../models/IReferenceUnlockBlock";
-import { ISigLockedDustAllowanceOutput } from "../models/ISigLockedDustAllowanceOutput";
-import { ISigLockedSingleOutput } from "../models/ISigLockedSingleOutput";
-import { ISignatureUnlockBlock } from "../models/ISignatureUnlockBlock";
-import { ITransactionPayload } from "../models/ITransactionPayload";
-import { ITreasuryInput } from "../models/ITreasuryInput";
-import { ITreasuryOutput } from "../models/ITreasuryOutput";
-import { ITreasuryTransactionPayload } from "../models/ITreasuryTransactionPayload";
-import { IUTXOInput } from "../models/IUTXOInput";
+import type { InputTypes } from "../models/inputs/inputTypes";
+import type { OutputTypes } from "../models/outputs/outputTypes";
+import type { IIndexationPayload } from "../models/payloads/IIndexationPayload";
+import { IMilestonePayload } from "../models/payloads/IMilestonePayload";
+import { IReceiptPayload } from "../models/payloads/IReceiptPayload";
+import { ITransactionPayload } from "../models/payloads/ITransactionPayload";
+import { ITreasuryTransactionPayload } from "../models/payloads/ITreasuryTransactionPayload";
+import type { PayloadTypes } from "../models/payloads/payloadTypes";
 /**
  * Set the logger for output.
  * @param log The logger.
@@ -51,7 +48,7 @@ export declare function logMessageMetadata(prefix: string, messageMetadata: IMes
  * @param prefix The prefix for the output.
  * @param unknownPayload The payload.
  */
-export declare function logPayload(prefix: string, unknownPayload?: ITransactionPayload | IMilestonePayload | IIndexationPayload | ITreasuryTransactionPayload | IReceiptPayload): void;
+export declare function logPayload(prefix: string, unknownPayload?: PayloadTypes): void;
 /**
  * Log a transaction payload to the console.
  * @param prefix The prefix for the output.
@@ -87,31 +84,31 @@ export declare function logTreasuryTransactionPayload(prefix: string, payload?: 
  * @param prefix The prefix for the output.
  * @param unknownAddress The address to log.
  */
-export declare function logAddress(prefix: string, unknownAddress?: IEd25519Address): void;
+export declare function logAddress(prefix: string, unknownAddress?: AddressTypes): void;
 /**
  * Log signature to the console.
  * @param prefix The prefix for the output.
  * @param unknownSignature The signature to log.
  */
-export declare function logSignature(prefix: string, unknownSignature?: IEd25519Signature): void;
+export declare function logSignature(prefix: string, unknownSignature: IEd25519Signature | undefined): void;
 /**
  * Log input to the console.
  * @param prefix The prefix for the output.
  * @param unknownInput The input to log.
  */
-export declare function logInput(prefix: string, unknownInput?: IUTXOInput | ITreasuryInput): void;
+export declare function logInput(prefix: string, unknownInput?: InputTypes): void;
 /**
  * Log output to the console.
  * @param prefix The prefix for the output.
  * @param unknownOutput The output to log.
  */
-export declare function logOutput(prefix: string, unknownOutput?: ISigLockedSingleOutput | ISigLockedDustAllowanceOutput | ITreasuryOutput): void;
+export declare function logOutput(prefix: string, unknownOutput?: OutputTypes): void;
 /**
  * Log unlock block to the console.
  * @param prefix The prefix for the output.
  * @param unknownUnlockBlock The unlock block to log.
  */
-export declare function logUnlockBlock(prefix: string, unknownUnlockBlock?: ISignatureUnlockBlock | IReferenceUnlockBlock): void;
+export declare function logUnlockBlock(prefix: string, unknownUnlockBlock?: UnlockBlockTypes): void;
 /**
  * Log fund to the console.
  * @param prefix The prefix for the output.

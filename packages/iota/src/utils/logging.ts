@@ -1,30 +1,34 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 import { Converter } from "@iota/util.js";
+import type { UnlockBlockTypes } from "..";
+import type { AddressTypes } from "../models/addresses/addressTypes";
+import { ED25519_ADDRESS_TYPE } from "../models/addresses/IEd25519Address";
 import type { ITipsResponse } from "../models/api/ITipsResponse";
-import { ED25519_ADDRESS_TYPE, IEd25519Address } from "../models/IEd25519Address";
 import { ED25519_SIGNATURE_TYPE, IEd25519Signature } from "../models/IEd25519Signature";
-import type { IIndexationPayload } from "../models/IIndexationPayload";
-import { INDEXATION_PAYLOAD_TYPE } from "../models/IIndexationPayload";
 import type { IMessage } from "../models/IMessage";
 import type { IMessageMetadata } from "../models/IMessageMetadata";
 import type { IMigratedFunds } from "../models/IMigratedFunds";
-import { IMilestonePayload, MILESTONE_PAYLOAD_TYPE } from "../models/IMilestonePayload";
 import type { INodeInfo } from "../models/INodeInfo";
-import { IReceiptPayload, RECEIPT_PAYLOAD_TYPE } from "../models/IReceiptPayload";
-import { IReferenceUnlockBlock, REFERENCE_UNLOCK_BLOCK_TYPE } from "../models/IReferenceUnlockBlock";
-import {
-    ISigLockedDustAllowanceOutput,
-    SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE
-} from "../models/ISigLockedDustAllowanceOutput";
-import { ISigLockedSingleOutput, SIG_LOCKED_SINGLE_OUTPUT_TYPE } from "../models/ISigLockedSingleOutput";
-import { ISignatureUnlockBlock, SIGNATURE_UNLOCK_BLOCK_TYPE } from "../models/ISignatureUnlockBlock";
+import type { InputTypes } from "../models/inputs/inputTypes";
+import { TREASURY_INPUT_TYPE } from "../models/inputs/ITreasuryInput";
+import { UTXO_INPUT_TYPE } from "../models/inputs/IUTXOInput";
 import { TRANSACTION_ESSENCE_TYPE } from "../models/ITransactionEssence";
-import { ITransactionPayload, TRANSACTION_PAYLOAD_TYPE } from "../models/ITransactionPayload";
-import { ITreasuryInput, TREASURY_INPUT_TYPE } from "../models/ITreasuryInput";
-import { ITreasuryOutput, TREASURY_OUTPUT_TYPE } from "../models/ITreasuryOutput";
-import { ITreasuryTransactionPayload, TREASURY_TRANSACTION_PAYLOAD_TYPE } from "../models/ITreasuryTransactionPayload";
-import { IUTXOInput, UTXO_INPUT_TYPE } from "../models/IUTXOInput";
+import {
+    SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE
+} from "../models/outputs/ISigLockedDustAllowanceOutput";
+import { SIMPLE_OUTPUT_TYPE } from "../models/outputs/ISimpleOutput";
+import { TREASURY_OUTPUT_TYPE } from "../models/outputs/ITreasuryOutput";
+import type { OutputTypes } from "../models/outputs/outputTypes";
+import type { IIndexationPayload } from "../models/payloads/IIndexationPayload";
+import { INDEXATION_PAYLOAD_TYPE } from "../models/payloads/IIndexationPayload";
+import { IMilestonePayload, MILESTONE_PAYLOAD_TYPE } from "../models/payloads/IMilestonePayload";
+import { IReceiptPayload, RECEIPT_PAYLOAD_TYPE } from "../models/payloads/IReceiptPayload";
+import { ITransactionPayload, TRANSACTION_PAYLOAD_TYPE } from "../models/payloads/ITransactionPayload";
+import { ITreasuryTransactionPayload, TREASURY_TRANSACTION_PAYLOAD_TYPE } from "../models/payloads/ITreasuryTransactionPayload";
+import type { PayloadTypes } from "../models/payloads/payloadTypes";
+import { REFERENCE_UNLOCK_BLOCK_TYPE } from "../models/unlockBlocks/IReferenceUnlockBlock";
+import { SIGNATURE_UNLOCK_BLOCK_TYPE } from "../models/unlockBlocks/ISignatureUnlockBlock";
 
 /**
  * The logger used by the log methods.
@@ -137,12 +141,7 @@ export function logMessageMetadata(prefix: string, messageMetadata: IMessageMeta
  */
 export function logPayload(
     prefix: string,
-    unknownPayload?:
-        | ITransactionPayload
-        | IMilestonePayload
-        | IIndexationPayload
-        | ITreasuryTransactionPayload
-        | IReceiptPayload
+    unknownPayload?: PayloadTypes
 ): void {
     if (unknownPayload) {
         if (unknownPayload.type === TRANSACTION_PAYLOAD_TYPE) {
@@ -265,7 +264,7 @@ export function logTreasuryTransactionPayload(prefix: string, payload?: ITreasur
  * @param prefix The prefix for the output.
  * @param unknownAddress The address to log.
  */
-export function logAddress(prefix: string, unknownAddress?: IEd25519Address): void {
+export function logAddress(prefix: string, unknownAddress?: AddressTypes): void {
     if (unknownAddress?.type === ED25519_ADDRESS_TYPE) {
         const address = unknownAddress;
         logger(`${prefix}Ed25519 Address`);
@@ -278,7 +277,7 @@ export function logAddress(prefix: string, unknownAddress?: IEd25519Address): vo
  * @param prefix The prefix for the output.
  * @param unknownSignature The signature to log.
  */
-export function logSignature(prefix: string, unknownSignature?: IEd25519Signature): void {
+export function logSignature(prefix: string, unknownSignature: IEd25519Signature | undefined): void {
     if (unknownSignature?.type === ED25519_SIGNATURE_TYPE) {
         const signature = unknownSignature;
         logger(`${prefix}Ed25519 Signature`);
@@ -292,7 +291,7 @@ export function logSignature(prefix: string, unknownSignature?: IEd25519Signatur
  * @param prefix The prefix for the output.
  * @param unknownInput The input to log.
  */
-export function logInput(prefix: string, unknownInput?: IUTXOInput | ITreasuryInput): void {
+export function logInput(prefix: string, unknownInput?: InputTypes): void {
     if (unknownInput) {
         if (unknownInput.type === UTXO_INPUT_TYPE) {
             const input = unknownInput;
@@ -314,10 +313,10 @@ export function logInput(prefix: string, unknownInput?: IUTXOInput | ITreasuryIn
  */
 export function logOutput(
     prefix: string,
-    unknownOutput?: ISigLockedSingleOutput | ISigLockedDustAllowanceOutput | ITreasuryOutput
+    unknownOutput?: OutputTypes
 ): void {
     if (unknownOutput) {
-        if (unknownOutput.type === SIG_LOCKED_SINGLE_OUTPUT_TYPE) {
+        if (unknownOutput.type === SIMPLE_OUTPUT_TYPE) {
             const output = unknownOutput;
             logger(`${prefix}Signature Locked Single Output`);
             logAddress(`${prefix}\t\t`, output.address);
@@ -342,7 +341,7 @@ export function logOutput(
  */
 export function logUnlockBlock(
     prefix: string,
-    unknownUnlockBlock?: ISignatureUnlockBlock | IReferenceUnlockBlock
+    unknownUnlockBlock?: UnlockBlockTypes
 ): void {
     if (unknownUnlockBlock) {
         if (unknownUnlockBlock.type === SIGNATURE_UNLOCK_BLOCK_TYPE) {

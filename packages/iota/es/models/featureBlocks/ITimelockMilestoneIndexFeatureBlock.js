@@ -1,0 +1,5 @@
+/**
+ * The global type for the timelock milestone feature block.
+ */
+export const TIMELOCK_MILESTONE_INDEX_FEATURE_BLOCK_TYPE = 3;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiSVRpbWVsb2NrTWlsZXN0b25lSW5kZXhGZWF0dXJlQmxvY2suanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi9zcmMvbW9kZWxzL2ZlYXR1cmVCbG9ja3MvSVRpbWVsb2NrTWlsZXN0b25lSW5kZXhGZWF0dXJlQmxvY2sudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBSUE7O0dBRUc7QUFDSCxNQUFNLENBQUMsTUFBTSwyQ0FBMkMsR0FBRyxDQUFDLENBQUMifQ==

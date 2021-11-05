@@ -1,0 +1,6 @@
+/**
+ * The global type for the sig locked dust allowance output.
+ * @deprecated
+ */
+export const SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE = 1;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiSVNpZ0xvY2tlZER1c3RBbGxvd2FuY2VPdXRwdXQuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi9zcmMvbW9kZWxzL291dHB1dHMvSVNpZ0xvY2tlZER1c3RBbGxvd2FuY2VPdXRwdXQudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBS0E7OztHQUdHO0FBQ0gsTUFBTSxDQUFDLE1BQU0scUNBQXFDLEdBQUcsQ0FBQyxDQUFDIn0=

@@ -2,14 +2,14 @@
 // SPDX-License-Identifier: Apache-2.0
 /* eslint-disable no-mixed-operators */
 import type { ReadStream, WriteStream } from "@iota/util.js";
-import { INDEXATION_PAYLOAD_TYPE } from "../models/IIndexationPayload";
+import { IUTXOInput, UTXO_INPUT_TYPE } from "../models/inputs/IUTXOInput";
+import { ITransactionEssence, TRANSACTION_ESSENCE_TYPE } from "../models/ITransactionEssence";
 import {
     ISigLockedDustAllowanceOutput,
     SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE
-} from "../models/ISigLockedDustAllowanceOutput";
-import { ISigLockedSingleOutput, SIG_LOCKED_SINGLE_OUTPUT_TYPE } from "../models/ISigLockedSingleOutput";
-import { ITransactionEssence, TRANSACTION_ESSENCE_TYPE } from "../models/ITransactionEssence";
-import { IUTXOInput, UTXO_INPUT_TYPE } from "../models/IUTXOInput";
+} from "../models/outputs/ISigLockedDustAllowanceOutput";
+import { ISimpleOutput, SIMPLE_OUTPUT_TYPE } from "../models/outputs/ISimpleOutput";
+import { INDEXATION_PAYLOAD_TYPE } from "../models/payloads/IIndexationPayload";
 import { ARRAY_LENGTH, SMALL_TYPE_LENGTH, UINT32_SIZE } from "./common";
 import { deserializeInputs, serializeInputs } from "./input";
 import { deserializeOutputs, serializeOutputs } from "./output";
@@ -52,7 +52,7 @@ export function deserializeTransactionEssence(readStream: ReadStream): ITransact
     }
 
     for (const output of outputs) {
-        if (output.type !== SIG_LOCKED_SINGLE_OUTPUT_TYPE && output.type !== SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE) {
+        if (output.type !== SIMPLE_OUTPUT_TYPE && output.type !== SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE) {
             throw new Error(
                 "Transaction essence can only contain sig locked single input or sig locked dust allowance outputs"
             );
@@ -62,7 +62,7 @@ export function deserializeTransactionEssence(readStream: ReadStream): ITransact
     return {
         type: TRANSACTION_ESSENCE_TYPE,
         inputs: inputs as IUTXOInput[],
-        outputs: outputs as (ISigLockedSingleOutput | ISigLockedDustAllowanceOutput)[],
+        outputs: outputs as (ISimpleOutput | ISigLockedDustAllowanceOutput)[],
         payload
     };
 }
@@ -84,7 +84,7 @@ export function serializeTransactionEssence(writeStream: WriteStream, object: IT
     serializeInputs(writeStream, object.inputs);
 
     for (const output of object.outputs) {
-        if (output.type !== SIG_LOCKED_SINGLE_OUTPUT_TYPE && output.type !== SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE) {
+        if (output.type !== SIMPLE_OUTPUT_TYPE && output.type !== SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE) {
             throw new Error(
                 "Transaction essence can only contain sig locked single input or sig locked dust allowance outputs"
             );

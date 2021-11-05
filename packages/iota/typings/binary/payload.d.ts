@@ -1,9 +1,10 @@
 import type { ReadStream, WriteStream } from "@iota/util.js";
-import { IIndexationPayload } from "../models/IIndexationPayload";
-import { IMilestonePayload } from "../models/IMilestonePayload";
-import { IReceiptPayload } from "../models/IReceiptPayload";
-import { ITransactionPayload } from "../models/ITransactionPayload";
-import { ITreasuryTransactionPayload } from "../models/ITreasuryTransactionPayload";
+import { IIndexationPayload } from "../models/payloads/IIndexationPayload";
+import { IMilestonePayload } from "../models/payloads/IMilestonePayload";
+import { IReceiptPayload } from "../models/payloads/IReceiptPayload";
+import { ITransactionPayload } from "../models/payloads/ITransactionPayload";
+import { ITreasuryTransactionPayload } from "../models/payloads/ITreasuryTransactionPayload";
+import type { PayloadTypes } from "../models/payloads/payloadTypes";
 /**
  * The minimum length of a payload binary representation.
  */
@@ -41,13 +42,13 @@ export declare const MAX_INDEXATION_KEY_LENGTH: number;
  * @param readStream The stream to read the data from.
  * @returns The deserialized object.
  */
-export declare function deserializePayload(readStream: ReadStream): ITransactionPayload | IMilestonePayload | IIndexationPayload | ITreasuryTransactionPayload | IReceiptPayload | undefined;
+export declare function deserializePayload(readStream: ReadStream): PayloadTypes | undefined;
 /**
  * Serialize the payload essence to binary.
  * @param writeStream The stream to write the data to.
  * @param object The object to serialize.
  */
-export declare function serializePayload(writeStream: WriteStream, object: ITransactionPayload | IMilestonePayload | IIndexationPayload | ITreasuryTransactionPayload | IReceiptPayload | undefined): void;
+export declare function serializePayload(writeStream: WriteStream, object: PayloadTypes | undefined): void;
 /**
  * Deserialize the transaction payload from binary.
  * @param readStream The stream to read the data from.

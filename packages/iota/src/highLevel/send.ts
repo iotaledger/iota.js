@@ -4,13 +4,14 @@ import { Bip32Path } from "@iota/crypto.js";
 import { Converter } from "@iota/util.js";
 import { Ed25519Address } from "../addressTypes/ed25519Address";
 import { SingleNodeClient } from "../clients/singleNodeClient";
+import { ED25519_ADDRESS_TYPE } from "../models/addresses/IEd25519Address";
 import type { IBip44GeneratorState } from "../models/IBip44GeneratorState";
 import type { IClient } from "../models/IClient";
-import { ED25519_ADDRESS_TYPE } from "../models/IEd25519Address";
 import type { IKeyPair } from "../models/IKeyPair";
 import type { IMessage } from "../models/IMessage";
+import { IUTXOInput, UTXO_INPUT_TYPE } from "../models/inputs/IUTXOInput";
 import type { ISeed } from "../models/ISeed";
-import { IUTXOInput, UTXO_INPUT_TYPE } from "../models/IUTXOInput";
+import { SIMPLE_OUTPUT_TYPE } from "../models/outputs/ISimpleOutput";
 import { Bech32Helper } from "../utils/bech32Helper";
 import { generateBip44Address } from "./addresses";
 import { sendAdvanced } from "./sendAdvanced";
@@ -336,7 +337,8 @@ export async function calculateInputs<T>(
                         if (consumedBalance >= requiredBalance) {
                             // We didn't use all the balance from the last input
                             // so return the rest to the same address.
-                            if (consumedBalance - requiredBalance > 0) {
+                            if (consumedBalance - requiredBalance > 0 &&
+                                addressOutput.output.type === SIMPLE_OUTPUT_TYPE) {
                                 outputs.push({
                                     amount: consumedBalance - requiredBalance,
                                     address: addressOutput.output.address.address,

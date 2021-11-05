@@ -2,13 +2,14 @@
 // SPDX-License-Identifier: Apache-2.0
 import type { ReadStream, WriteStream } from "@iota/util.js";
 import bigInt from "big-integer";
+import type { ITypeBase } from "../models/ITypeBase";
 import {
     ISigLockedDustAllowanceOutput,
     SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE
-} from "../models/ISigLockedDustAllowanceOutput";
-import { ISigLockedSingleOutput, SIG_LOCKED_SINGLE_OUTPUT_TYPE } from "../models/ISigLockedSingleOutput";
-import { ITreasuryOutput, TREASURY_OUTPUT_TYPE } from "../models/ITreasuryOutput";
-import type { ITypeBase } from "../models/ITypeBase";
+} from "../models/outputs/ISigLockedDustAllowanceOutput";
+import { ISimpleOutput, SIMPLE_OUTPUT_TYPE } from "../models/outputs/ISimpleOutput";
+import { ITreasuryOutput, TREASURY_OUTPUT_TYPE } from "../models/outputs/ITreasuryOutput";
+import type { OutputTypes } from "../models/outputs/outputTypes";
 import { deserializeAddress, MIN_ADDRESS_LENGTH, MIN_ED25519_ADDRESS_LENGTH, serializeAddress } from "./address";
 import { SMALL_TYPE_LENGTH, UINT64_SIZE } from "./common";
 
@@ -51,10 +52,10 @@ export const MAX_OUTPUT_COUNT: number = 127;
  */
 export function deserializeOutputs(
     readStream: ReadStream
-): (ISigLockedSingleOutput | ISigLockedDustAllowanceOutput | ITreasuryOutput)[] {
+): OutputTypes[] {
     const numOutputs = readStream.readUInt16("outputs.numOutputs");
 
-    const inputs: (ISigLockedSingleOutput | ISigLockedDustAllowanceOutput | ITreasuryOutput)[] = [];
+    const inputs: OutputTypes[] = [];
     for (let i = 0; i < numOutputs; i++) {
         inputs.push(deserializeOutput(readStream));
     }
@@ -69,7 +70,7 @@ export function deserializeOutputs(
  */
 export function serializeOutputs(
     writeStream: WriteStream,
-    objects: (ISigLockedSingleOutput | ISigLockedDustAllowanceOutput | ITreasuryOutput)[]
+    objects: OutputTypes[]
 ): void {
     if (objects.length < MIN_OUTPUT_COUNT) {
         throw new Error(`The minimum number of outputs is ${MIN_OUTPUT_COUNT}, you have provided ${objects.length}`);
@@ -92,7 +93,7 @@ export function serializeOutputs(
  */
 export function deserializeOutput(
     readStream: ReadStream
-): ISigLockedSingleOutput | ISigLockedDustAllowanceOutput | ITreasuryOutput {
+): OutputTypes {
     if (!readStream.hasRemaining(MIN_OUTPUT_LENGTH)) {
         throw new Error(
             `Output data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_OUTPUT_LENGTH}`
@@ -102,8 +103,8 @@ export function deserializeOutput(
     const type = readStream.readByte("output.type", false);
     let input;
 
-    if (type === SIG_LOCKED_SINGLE_OUTPUT_TYPE) {
-        input = deserializeSigLockedSingleOutput(readStream);
+    if (type === SIMPLE_OUTPUT_TYPE) {
+        input = deserializeSimpleOutput(readStream);
     } else if (type === SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE) {
         input = deserializeSigLockedDustAllowanceOutput(readStream);
     } else if (type === TREASURY_OUTPUT_TYPE) {
@@ -121,8 +122,8 @@ export function deserializeOutput(
  * @param object The object to serialize.
  */
 export function serializeOutput(writeStream: WriteStream, object: ITypeBase<number>): void {
-    if (object.type === SIG_LOCKED_SINGLE_OUTPUT_TYPE) {
-        serializeSigLockedSingleOutput(writeStream, object as ISigLockedSingleOutput);
+    if (object.type === SIMPLE_OUTPUT_TYPE) {
+        serializeSimpleOutput(writeStream, object as ISimpleOutput);
     } else if (object.type === SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE) {
         serializeSigLockedDustAllowanceOutput(writeStream, object as ISigLockedDustAllowanceOutput);
     } else if (object.type === TREASURY_OUTPUT_TYPE) {
@@ -137,23 +138,23 @@ export function serializeOutput(writeStream: WriteStream, object: ITypeBase<numb
  * @param readStream The stream to read the data from.
  * @returns The deserialized object.
  */
-export function deserializeSigLockedSingleOutput(readStream: ReadStream): ISigLockedSingleOutput {
+export function deserializeSimpleOutput(readStream: ReadStream): ISimpleOutput {
     if (!readStream.hasRemaining(MIN_SIG_LOCKED_SINGLE_OUTPUT_LENGTH)) {
         throw new Error(
             `Signature Locked Single Output data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_SIG_LOCKED_SINGLE_OUTPUT_LENGTH}`
         );
     }
 
-    const type = readStream.readByte("sigLockedSingleOutput.type");
-    if (type !== SIG_LOCKED_SINGLE_OUTPUT_TYPE) {
-        throw new Error(`Type mismatch in sigLockedSingleOutput ${type}`);
+    const type = readStream.readByte("simpleOutput.type");
+    if (type !== SIMPLE_OUTPUT_TYPE) {
+        throw new Error(`Type mismatch in simpleOutput ${type}`);
     }
 
     const address = deserializeAddress(readStream);
-    const amount = readStream.readUInt64("sigLockedSingleOutput.amount");
+    const amount = readStream.readUInt64("simpleOutput.amount");
 
     return {
-        type: SIG_LOCKED_SINGLE_OUTPUT_TYPE,
+        type: SIMPLE_OUTPUT_TYPE,
         address,
         amount: Number(amount)
     };
@@ -164,10 +165,10 @@ export function deserializeSigLockedSingleOutput(readStream: ReadStream): ISigLo
  * @param writeStream The stream to write the data to.
  * @param object The object to serialize.
  */
-export function serializeSigLockedSingleOutput(writeStream: WriteStream, object: ISigLockedSingleOutput): void {
-    writeStream.writeByte("sigLockedSingleOutput.type", object.type);
+export function serializeSimpleOutput(writeStream: WriteStream, object: ISimpleOutput): void {
+    writeStream.writeByte("simpleOutput.type", object.type);
     serializeAddress(writeStream, object.address);
-    writeStream.writeUInt64("sigLockedSingleOutput.amount", bigInt(object.amount));
+    writeStream.writeUInt64("simpleOutput.amount", bigInt(object.amount));
 }
 
 /**

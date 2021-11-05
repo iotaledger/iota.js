@@ -3,8 +3,8 @@
 import { Converter } from "@iota/util.js";
 import { SingleNodeClient } from "../clients/singleNodeClient";
 import type { IClient } from "../models/IClient";
-import { IIndexationPayload, INDEXATION_PAYLOAD_TYPE } from "../models/IIndexationPayload";
-import { TRANSACTION_PAYLOAD_TYPE } from "../models/ITransactionPayload";
+import { IIndexationPayload, INDEXATION_PAYLOAD_TYPE } from "../models/payloads/IIndexationPayload";
+import { TRANSACTION_PAYLOAD_TYPE } from "../models/payloads/ITransactionPayload";
 
 /**
  * Retrieve a data message.

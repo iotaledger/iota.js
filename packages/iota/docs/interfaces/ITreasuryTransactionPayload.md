@@ -12,11 +12,23 @@ Receipt payload.
 
 ### Properties
 
+- [type](ITreasuryTransactionPayload.md#type)
 - [input](ITreasuryTransactionPayload.md#input)
 - [output](ITreasuryTransactionPayload.md#output)
-- [type](ITreasuryTransactionPayload.md#type)
 
 ## Properties
+
+### type
+
+• **type**: ``4``
+
+The type of the object.
+
+#### Inherited from
+
+[ITypeBase](ITypeBase.md).[type](ITypeBase.md#type)
+
+___
 
 ### input
 
@@ -31,15 +43,3 @@ ___
 • **output**: [`ITreasuryOutput`](ITreasuryOutput.md)
 
 The output of this transaction.
-
-___
-
-### type
-
-• **type**: ``4``
-
-The type of the object.
-
-#### Inherited from
-
-[ITypeBase](ITypeBase.md).[type](ITypeBase.md#type)

@@ -12,18 +12,10 @@ Ed25519Address address.
 
 ### Properties
 
-- [address](IEd25519Address.md#address)
 - [type](IEd25519Address.md#type)
+- [address](IEd25519Address.md#address)
 
 ## Properties
-
-### address
-
-• **address**: `string`
-
-The address.
-
-___
 
 ### type
 
@@ -34,3 +26,11 @@ The type of the object.
 #### Inherited from
 
 [ITypeBase](ITypeBase.md).[type](ITypeBase.md#type)
+
+___
+
+### address
+
+• **address**: `string`
+
+The address.

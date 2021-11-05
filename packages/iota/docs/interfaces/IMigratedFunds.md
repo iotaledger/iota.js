@@ -22,7 +22,7 @@ ___
 
 ### address
 
-• **address**: [`IEd25519Address`](IEd25519Address.md)
+• **address**: [`AddressTypes`](../api.md#addresstypes)
 
 The target address of the migrated funds.
 

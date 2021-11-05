@@ -8,22 +8,22 @@ import { serializeOutput } from "../binary/output";
 import { MAX_INDEXATION_KEY_LENGTH, MIN_INDEXATION_KEY_LENGTH } from "../binary/payload";
 import { serializeTransactionEssence } from "../binary/transaction";
 import { SingleNodeClient } from "../clients/singleNodeClient";
+import { ED25519_ADDRESS_TYPE } from "../models/addresses/IEd25519Address";
 import type { IClient } from "../models/IClient";
-import { ED25519_ADDRESS_TYPE } from "../models/IEd25519Address";
 import { ED25519_SIGNATURE_TYPE } from "../models/IEd25519Signature";
-import { INDEXATION_PAYLOAD_TYPE } from "../models/IIndexationPayload";
 import type { IKeyPair } from "../models/IKeyPair";
 import type { IMessage } from "../models/IMessage";
-import { IReferenceUnlockBlock, REFERENCE_UNLOCK_BLOCK_TYPE } from "../models/IReferenceUnlockBlock";
+import type { IUTXOInput } from "../models/inputs/IUTXOInput";
+import { ITransactionEssence, TRANSACTION_ESSENCE_TYPE } from "../models/ITransactionEssence";
 import {
     ISigLockedDustAllowanceOutput,
     SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE
-} from "../models/ISigLockedDustAllowanceOutput";
-import { ISigLockedSingleOutput, SIG_LOCKED_SINGLE_OUTPUT_TYPE } from "../models/ISigLockedSingleOutput";
-import { ISignatureUnlockBlock, SIGNATURE_UNLOCK_BLOCK_TYPE } from "../models/ISignatureUnlockBlock";
-import { ITransactionEssence, TRANSACTION_ESSENCE_TYPE } from "../models/ITransactionEssence";
-import { ITransactionPayload, TRANSACTION_PAYLOAD_TYPE } from "../models/ITransactionPayload";
-import type { IUTXOInput } from "../models/IUTXOInput";
+} from "../models/outputs/ISigLockedDustAllowanceOutput";
+import { ISimpleOutput, SIMPLE_OUTPUT_TYPE } from "../models/outputs/ISimpleOutput";
+import { INDEXATION_PAYLOAD_TYPE } from "../models/payloads/IIndexationPayload";
+import { ITransactionPayload, TRANSACTION_PAYLOAD_TYPE } from "../models/payloads/ITransactionPayload";
+import { IReferenceUnlockBlock, REFERENCE_UNLOCK_BLOCK_TYPE } from "../models/unlockBlocks/IReferenceUnlockBlock";
+import { ISignatureUnlockBlock, SIGNATURE_UNLOCK_BLOCK_TYPE } from "../models/unlockBlocks/ISignatureUnlockBlock";
 
 /**
  * Send a transfer from the balance on the seed.
@@ -113,30 +113,28 @@ export function buildTransactionPayload(
 
         if (localIndexationKeyHex.length / 2 < MIN_INDEXATION_KEY_LENGTH) {
             throw new Error(
-                `The indexation key length is ${
-                    localIndexationKeyHex.length / 2
+                `The indexation key length is ${localIndexationKeyHex.length / 2
                 }, which is below the minimum size of ${MIN_INDEXATION_KEY_LENGTH}`
             );
         }
 
         if (localIndexationKeyHex.length / 2 > MAX_INDEXATION_KEY_LENGTH) {
             throw new Error(
-                `The indexation key length is ${
-                    localIndexationKeyHex.length / 2
+                `The indexation key length is ${localIndexationKeyHex.length / 2
                 }, which exceeds the maximum size of ${MAX_INDEXATION_KEY_LENGTH}`
             );
         }
     }
 
     const outputsWithSerialization: {
-        output: ISigLockedDustAllowanceOutput | ISigLockedSingleOutput;
+        output: ISigLockedDustAllowanceOutput | ISimpleOutput;
         serialized: string;
     }[] = [];
 
     for (const output of outputs) {
         if (output.addressType === ED25519_ADDRESS_TYPE) {
-            const o: ISigLockedDustAllowanceOutput | ISigLockedSingleOutput = {
-                type: output.isDustAllowance ? SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE : SIG_LOCKED_SINGLE_OUTPUT_TYPE,
+            const o: ISigLockedDustAllowanceOutput | ISimpleOutput = {
+                type: output.isDustAllowance ? SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE : SIMPLE_OUTPUT_TYPE,
                 address: {
                     type: output.addressType,
                     address: output.address
@@ -177,14 +175,14 @@ export function buildTransactionPayload(
         outputs: sortedOutputs.map(o => o.output),
         payload: localIndexationKeyHex
             ? {
-                  type: INDEXATION_PAYLOAD_TYPE,
-                  index: localIndexationKeyHex,
-                  data: indexation?.data
-                      ? typeof indexation.data === "string"
-                          ? Converter.utf8ToHex(indexation.data)
-                          : Converter.bytesToHex(indexation.data)
-                      : undefined
-              }
+                type: INDEXATION_PAYLOAD_TYPE,
+                index: localIndexationKeyHex,
+                data: indexation?.data
+                    ? typeof indexation.data === "string"
+                        ? Converter.utf8ToHex(indexation.data)
+                        : Converter.bytesToHex(indexation.data)
+                    : undefined
+            }
             : undefined
     };
 

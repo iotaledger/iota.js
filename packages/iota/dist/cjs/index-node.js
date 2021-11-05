@@ -52,7 +52,7 @@
     Ed25519Address.ADDRESS_LENGTH = crypto_js.Blake2b.SIZE_256;
 
     /**
-     * The global type for the address type.
+     * The global type for the ed25519 address type.
      */
     const ED25519_ADDRESS_TYPE = 0;
 
@@ -431,13 +431,14 @@
 
     /**
      * The global type for the sig locked dust allowance output.
+     * @deprecated
      */
     const SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE = 1;
 
     /**
-     * The global type for the sig locked single output.
+     * The global type for the simple output.
      */
-    const SIG_LOCKED_SINGLE_OUTPUT_TYPE = 0;
+    const SIMPLE_OUTPUT_TYPE = 0;
 
     /**
      * The global type for the treasury output.
@@ -509,8 +510,8 @@
         }
         const type = readStream.readByte("output.type", false);
         let input;
-        if (type === SIG_LOCKED_SINGLE_OUTPUT_TYPE) {
-            input = deserializeSigLockedSingleOutput(readStream);
+        if (type === SIMPLE_OUTPUT_TYPE) {
+            input = deserializeSimpleOutput(readStream);
         }
         else if (type === SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE) {
             input = deserializeSigLockedDustAllowanceOutput(readStream);
@@ -529,8 +530,8 @@
      * @param object The object to serialize.
      */
     function serializeOutput(writeStream, object) {
-        if (object.type === SIG_LOCKED_SINGLE_OUTPUT_TYPE) {
-            serializeSigLockedSingleOutput(writeStream, object);
+        if (object.type === SIMPLE_OUTPUT_TYPE) {
+            serializeSimpleOutput(writeStream, object);
         }
         else if (object.type === SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE) {
             serializeSigLockedDustAllowanceOutput(writeStream, object);
@@ -547,18 +548,18 @@
      * @param readStream The stream to read the data from.
      * @returns The deserialized object.
      */
-    function deserializeSigLockedSingleOutput(readStream) {
+    function deserializeSimpleOutput(readStream) {
         if (!readStream.hasRemaining(MIN_SIG_LOCKED_SINGLE_OUTPUT_LENGTH)) {
             throw new Error(`Signature Locked Single Output data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_SIG_LOCKED_SINGLE_OUTPUT_LENGTH}`);
         }
-        const type = readStream.readByte("sigLockedSingleOutput.type");
-        if (type !== SIG_LOCKED_SINGLE_OUTPUT_TYPE) {
-            throw new Error(`Type mismatch in sigLockedSingleOutput ${type}`);
+        const type = readStream.readByte("simpleOutput.type");
+        if (type !== SIMPLE_OUTPUT_TYPE) {
+            throw new Error(`Type mismatch in simpleOutput ${type}`);
         }
         const address = deserializeAddress(readStream);
-        const amount = readStream.readUInt64("sigLockedSingleOutput.amount");
+        const amount = readStream.readUInt64("simpleOutput.amount");
         return {
-            type: SIG_LOCKED_SINGLE_OUTPUT_TYPE,
+            type: SIMPLE_OUTPUT_TYPE,
             address,
             amount: Number(amount)
         };
@@ -568,10 +569,10 @@
      * @param writeStream The stream to write the data to.
      * @param object The object to serialize.
      */
-    function serializeSigLockedSingleOutput(writeStream, object) {
-        writeStream.writeByte("sigLockedSingleOutput.type", object.type);
+    function serializeSimpleOutput(writeStream, object) {
+        writeStream.writeByte("simpleOutput.type", object.type);
         serializeAddress(writeStream, object.address);
-        writeStream.writeUInt64("sigLockedSingleOutput.amount", bigInt__default["default"](object.amount));
+        writeStream.writeUInt64("simpleOutput.amount", bigInt__default["default"](object.amount));
     }
     /**
      * Deserialize the signature locked dust allowance output from binary.
@@ -662,7 +663,7 @@
             }
         }
         for (const output of outputs) {
-            if (output.type !== SIG_LOCKED_SINGLE_OUTPUT_TYPE && output.type !== SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE) {
+            if (output.type !== SIMPLE_OUTPUT_TYPE && output.type !== SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE) {
                 throw new Error("Transaction essence can only contain sig locked single input or sig locked dust allowance outputs");
             }
         }
@@ -687,7 +688,7 @@
         }
         serializeInputs(writeStream, object.inputs);
         for (const output of object.outputs) {
-            if (output.type !== SIG_LOCKED_SINGLE_OUTPUT_TYPE && output.type !== SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE) {
+            if (output.type !== SIMPLE_OUTPUT_TYPE && output.type !== SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE) {
                 throw new Error("Transaction essence can only contain sig locked single input or sig locked dust allowance outputs");
             }
         }
@@ -696,7 +697,7 @@
     }
 
     /**
-     * The global type for the unlock block.
+     * The global type for the reference unlock block.
      */
     const REFERENCE_UNLOCK_BLOCK_TYPE = 1;
 
@@ -2310,7 +2311,7 @@
         for (const output of outputs) {
             if (output.addressType === ED25519_ADDRESS_TYPE) {
                 const o = {
-                    type: output.isDustAllowance ? SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE : SIG_LOCKED_SINGLE_OUTPUT_TYPE,
+                    type: output.isDustAllowance ? SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE : SIMPLE_OUTPUT_TYPE,
                     address: {
                         type: output.addressType,
                         address: output.address
@@ -2574,7 +2575,8 @@
                             if (consumedBalance >= requiredBalance) {
                                 // We didn't use all the balance from the last input
                                 // so return the rest to the same address.
-                                if (consumedBalance - requiredBalance > 0) {
+                                if (consumedBalance - requiredBalance > 0 &&
+                                    addressOutput.output.type === SIMPLE_OUTPUT_TYPE) {
                                     outputs.push({
                                         amount: consumedBalance - requiredBalance,
                                         address: addressOutput.output.address.address,
@@ -2633,6 +2635,21 @@
         };
     }
 
+    /**
+     * The global type for the alias address type.
+     */
+    const ALIAS_ADDRESS_TYPE = 8;
+
+    /**
+     * The global type for the BLS address type.
+     */
+    const BLS_ADDRESS_TYPE = 1;
+
+    /**
+     * The global type for the NFT address type.
+     */
+    const NFT_ADDRESS_TYPE = 16;
+
     // Copyright 2020 IOTA Stiftung
     // SPDX-License-Identifier: Apache-2.0
     /**
@@ -2674,6 +2691,86 @@
          */
         ConflictReason[ConflictReason["semanticValidationFailed"] = 255] = "semanticValidationFailed";
     })(exports.ConflictReason || (exports.ConflictReason = {}));
+
+    /**
+     * The global type for the expiration milestone feature block.
+     */
+    const EXPIRATION_MILESTONE_INDEX_FEATURE_BLOCK_TYPE = 5;
+
+    /**
+     * The global type for the expiration unix feature block.
+     */
+    const EXPIRATION_UNIX_FEATURE_BLOCK_TYPE = 6;
+
+    /**
+     * The global type for the indexation feature block.
+     */
+    const INDEXATION_FEATURE_BLOCK_TYPE = 8;
+
+    /**
+     * The global type for the issuer feature block.
+     */
+    const ISSUER_FEATURE_BLOCK_TYPE = 1;
+
+    /**
+     * The global type for the metadata feature block.
+     */
+    const METADATA_FEATURE_BLOCK_TYPE = 7;
+
+    /**
+     * The global type for the return feature block.
+     */
+    const RETURN_FEATURE_BLOCK_TYPE = 2;
+
+    /**
+     * The global type for the sender feature block.
+     */
+    const SENDER_FEATURE_BLOCK_TYPE = 0;
+
+    /**
+     * The global type for the timelock milestone feature block.
+     */
+    const TIMELOCK_MILESTONE_INDEX_FEATURE_BLOCK_TYPE = 3;
+
+    /**
+     * The global type for the timelock unix feature block.
+     */
+    const TIMELOCK_UNIX_FEATURE_BLOCK_TYPE = 4;
+
+    /**
+     * The global type for the alias output.
+     */
+    const ALIAS_OUTPUT_TYPE = 4;
+
+    /**
+     * The global type for the extended output.
+     */
+    const EXTENDED_OUTPUT_TYPE = 3;
+
+    /**
+     * The global type for the foundry output.
+     */
+    const FOUNDRY_OUTPUT_TYPE = 5;
+
+    /**
+     * The global type for the NFT output.
+     */
+    const NFT_OUTPUT_TYPE = 6;
+
+    /**
+     * The global type for the simple token scheme.
+     */
+    const SIMPLE_TOKEN_SCHEME_TYPE = 0;
+
+    /**
+     * The global type for the alias unlock block.
+     */
+    const ALIAS_UNLOCK_BLOCK_TYPE = 2;
+
+    /**
+     * The global type for the NFT unlock block.
+     */
+    const NFTUNLOCK_BLOCK_TYPE = 3;
 
     // Copyright 2020 IOTA Stiftung
     /**
@@ -3125,7 +3222,7 @@
      */
     function logOutput(prefix, unknownOutput) {
         if (unknownOutput) {
-            if (unknownOutput.type === SIG_LOCKED_SINGLE_OUTPUT_TYPE) {
+            if (unknownOutput.type === SIMPLE_OUTPUT_TYPE) {
                 const output = unknownOutput;
                 logger(`${prefix}Signature Locked Single Output`);
                 logAddress(`${prefix}\t\t`, output.address);
@@ -3296,8 +3393,12 @@
         Pi: { val: 1000000000000000, dp: 15 }
     };
 
+    exports.ALIAS_ADDRESS_TYPE = ALIAS_ADDRESS_TYPE;
+    exports.ALIAS_OUTPUT_TYPE = ALIAS_OUTPUT_TYPE;
+    exports.ALIAS_UNLOCK_BLOCK_TYPE = ALIAS_UNLOCK_BLOCK_TYPE;
     exports.ARRAY_LENGTH = ARRAY_LENGTH;
     exports.B1T6 = B1T6;
+    exports.BLS_ADDRESS_TYPE = BLS_ADDRESS_TYPE;
     exports.BYTE_SIZE = BYTE_SIZE;
     exports.Bech32Helper = Bech32Helper;
     exports.CONFLICT_REASON_STRINGS = CONFLICT_REASON_STRINGS;
@@ -3305,10 +3406,16 @@
     exports.ED25519_ADDRESS_TYPE = ED25519_ADDRESS_TYPE;
     exports.ED25519_SEED_TYPE = ED25519_SEED_TYPE;
     exports.ED25519_SIGNATURE_TYPE = ED25519_SIGNATURE_TYPE;
+    exports.EXPIRATION_MILESTONE_INDEX_FEATURE_BLOCK_TYPE = EXPIRATION_MILESTONE_INDEX_FEATURE_BLOCK_TYPE;
+    exports.EXPIRATION_UNIX_FEATURE_BLOCK_TYPE = EXPIRATION_UNIX_FEATURE_BLOCK_TYPE;
+    exports.EXTENDED_OUTPUT_TYPE = EXTENDED_OUTPUT_TYPE;
     exports.Ed25519Address = Ed25519Address;
     exports.Ed25519Seed = Ed25519Seed;
+    exports.FOUNDRY_OUTPUT_TYPE = FOUNDRY_OUTPUT_TYPE;
+    exports.INDEXATION_FEATURE_BLOCK_TYPE = INDEXATION_FEATURE_BLOCK_TYPE;
     exports.INDEXATION_PAYLOAD_TYPE = INDEXATION_PAYLOAD_TYPE;
     exports.IOTA_BIP44_BASE_PATH = IOTA_BIP44_BASE_PATH;
+    exports.ISSUER_FEATURE_BLOCK_TYPE = ISSUER_FEATURE_BLOCK_TYPE;
     exports.LocalPowProvider = LocalPowProvider;
     exports.MAX_FUNDS_COUNT = MAX_FUNDS_COUNT;
     exports.MAX_INDEXATION_KEY_LENGTH = MAX_INDEXATION_KEY_LENGTH;
@@ -3318,6 +3425,7 @@
     exports.MAX_OUTPUT_COUNT = MAX_OUTPUT_COUNT;
     exports.MERKLE_PROOF_LENGTH = MERKLE_PROOF_LENGTH;
     exports.MESSAGE_ID_LENGTH = MESSAGE_ID_LENGTH;
+    exports.METADATA_FEATURE_BLOCK_TYPE = METADATA_FEATURE_BLOCK_TYPE;
     exports.MILESTONE_PAYLOAD_TYPE = MILESTONE_PAYLOAD_TYPE;
     exports.MIN_ADDRESS_LENGTH = MIN_ADDRESS_LENGTH;
     exports.MIN_ED25519_ADDRESS_LENGTH = MIN_ED25519_ADDRESS_LENGTH;
@@ -3345,16 +3453,24 @@
     exports.MIN_TREASURY_TRANSACTION_PAYLOAD_LENGTH = MIN_TREASURY_TRANSACTION_PAYLOAD_LENGTH;
     exports.MIN_UNLOCK_BLOCK_LENGTH = MIN_UNLOCK_BLOCK_LENGTH;
     exports.MIN_UTXO_INPUT_LENGTH = MIN_UTXO_INPUT_LENGTH;
+    exports.NFTUNLOCK_BLOCK_TYPE = NFTUNLOCK_BLOCK_TYPE;
+    exports.NFT_ADDRESS_TYPE = NFT_ADDRESS_TYPE;
+    exports.NFT_OUTPUT_TYPE = NFT_OUTPUT_TYPE;
     exports.PowHelper = PowHelper;
     exports.RECEIPT_PAYLOAD_TYPE = RECEIPT_PAYLOAD_TYPE;
     exports.REFERENCE_UNLOCK_BLOCK_TYPE = REFERENCE_UNLOCK_BLOCK_TYPE;
+    exports.RETURN_FEATURE_BLOCK_TYPE = RETURN_FEATURE_BLOCK_TYPE;
+    exports.SENDER_FEATURE_BLOCK_TYPE = SENDER_FEATURE_BLOCK_TYPE;
     exports.SIGNATURE_UNLOCK_BLOCK_TYPE = SIGNATURE_UNLOCK_BLOCK_TYPE;
     exports.SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE = SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE;
-    exports.SIG_LOCKED_SINGLE_OUTPUT_TYPE = SIG_LOCKED_SINGLE_OUTPUT_TYPE;
+    exports.SIMPLE_OUTPUT_TYPE = SIMPLE_OUTPUT_TYPE;
+    exports.SIMPLE_TOKEN_SCHEME_TYPE = SIMPLE_TOKEN_SCHEME_TYPE;
     exports.SMALL_TYPE_LENGTH = SMALL_TYPE_LENGTH;
     exports.STRING_LENGTH = STRING_LENGTH;
     exports.SingleNodeClient = SingleNodeClient;
     exports.TAIL_HASH_LENGTH = TAIL_HASH_LENGTH;
+    exports.TIMELOCK_MILESTONE_INDEX_FEATURE_BLOCK_TYPE = TIMELOCK_MILESTONE_INDEX_FEATURE_BLOCK_TYPE;
+    exports.TIMELOCK_UNIX_FEATURE_BLOCK_TYPE = TIMELOCK_UNIX_FEATURE_BLOCK_TYPE;
     exports.TRANSACTION_ESSENCE_TYPE = TRANSACTION_ESSENCE_TYPE;
     exports.TRANSACTION_ID_LENGTH = TRANSACTION_ID_LENGTH;
     exports.TRANSACTION_PAYLOAD_TYPE = TRANSACTION_PAYLOAD_TYPE;
@@ -3385,9 +3501,9 @@
     exports.deserializeReceiptPayload = deserializeReceiptPayload;
     exports.deserializeReferenceUnlockBlock = deserializeReferenceUnlockBlock;
     exports.deserializeSigLockedDustAllowanceOutput = deserializeSigLockedDustAllowanceOutput;
-    exports.deserializeSigLockedSingleOutput = deserializeSigLockedSingleOutput;
     exports.deserializeSignature = deserializeSignature;
     exports.deserializeSignatureUnlockBlock = deserializeSignatureUnlockBlock;
+    exports.deserializeSimpleOutput = deserializeSimpleOutput;
     exports.deserializeTransactionEssence = deserializeTransactionEssence;
     exports.deserializeTransactionPayload = deserializeTransactionPayload;
     exports.deserializeTreasuryInput = deserializeTreasuryInput;
@@ -3445,9 +3561,9 @@
     exports.serializeReceiptPayload = serializeReceiptPayload;
     exports.serializeReferenceUnlockBlock = serializeReferenceUnlockBlock;
     exports.serializeSigLockedDustAllowanceOutput = serializeSigLockedDustAllowanceOutput;
-    exports.serializeSigLockedSingleOutput = serializeSigLockedSingleOutput;
     exports.serializeSignature = serializeSignature;
     exports.serializeSignatureUnlockBlock = serializeSignatureUnlockBlock;
+    exports.serializeSimpleOutput = serializeSimpleOutput;
     exports.serializeTransactionEssence = serializeTransactionEssence;
     exports.serializeTransactionPayload = serializeTransactionPayload;
     exports.serializeTreasuryInput = serializeTreasuryInput;
