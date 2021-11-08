@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0
 import { Converter } from "@iota/util.js";
 import { ED25519_ADDRESS_TYPE } from "../models/addresses/IEd25519Address.mjs";
-import { ED25519_SIGNATURE_TYPE } from "../models/IEd25519Signature.mjs";
 import { TREASURY_INPUT_TYPE } from "../models/inputs/ITreasuryInput.mjs";
 import { UTXO_INPUT_TYPE } from "../models/inputs/IUTXOInput.mjs";
 import { TRANSACTION_ESSENCE_TYPE } from "../models/ITransactionEssence.mjs";
@@ -14,6 +13,7 @@ import { MILESTONE_PAYLOAD_TYPE } from "../models/payloads/IMilestonePayload.mjs
 import { RECEIPT_PAYLOAD_TYPE } from "../models/payloads/IReceiptPayload.mjs";
 import { TRANSACTION_PAYLOAD_TYPE } from "../models/payloads/ITransactionPayload.mjs";
 import { TREASURY_TRANSACTION_PAYLOAD_TYPE } from "../models/payloads/ITreasuryTransactionPayload.mjs";
+import { ED25519_SIGNATURE_TYPE } from "../models/signatures/IEd25519Signature.mjs";
 import { REFERENCE_UNLOCK_BLOCK_TYPE } from "../models/unlockBlocks/IReferenceUnlockBlock.mjs";
 import { SIGNATURE_UNLOCK_BLOCK_TYPE } from "../models/unlockBlocks/ISignatureUnlockBlock.mjs";
 /**
@@ -116,24 +116,24 @@ export function logMessageMetadata(prefix, messageMetadata) {
 /**
  * Log a message to the console.
  * @param prefix The prefix for the output.
- * @param unknownPayload The payload.
+ * @param payload The payload.
  */
-export function logPayload(prefix, unknownPayload) {
-    if (unknownPayload) {
-        if (unknownPayload.type === TRANSACTION_PAYLOAD_TYPE) {
-            logTransactionPayload(prefix, unknownPayload);
+export function logPayload(prefix, payload) {
+    if (payload) {
+        if (payload.type === TRANSACTION_PAYLOAD_TYPE) {
+            logTransactionPayload(prefix, payload);
         }
-        else if (unknownPayload.type === MILESTONE_PAYLOAD_TYPE) {
-            logMilestonePayload(prefix, unknownPayload);
+        else if (payload.type === MILESTONE_PAYLOAD_TYPE) {
+            logMilestonePayload(prefix, payload);
         }
-        else if (unknownPayload.type === INDEXATION_PAYLOAD_TYPE) {
-            logIndexationPayload(prefix, unknownPayload);
+        else if (payload.type === INDEXATION_PAYLOAD_TYPE) {
+            logIndexationPayload(prefix, payload);
         }
-        else if (unknownPayload.type === RECEIPT_PAYLOAD_TYPE) {
-            logReceiptPayload(prefix, unknownPayload);
+        else if (payload.type === RECEIPT_PAYLOAD_TYPE) {
+            logReceiptPayload(prefix, payload);
         }
-        else if (unknownPayload.type === TREASURY_TRANSACTION_PAYLOAD_TYPE) {
-            logTreasuryTransactionPayload(prefix, unknownPayload);
+        else if (payload.type === TREASURY_TRANSACTION_PAYLOAD_TYPE) {
+            logTreasuryTransactionPayload(prefix, payload);
         }
     }
 }
@@ -236,11 +236,10 @@ export function logTreasuryTransactionPayload(prefix, payload) {
 /**
  * Log an address to the console.
  * @param prefix The prefix for the output.
- * @param unknownAddress The address to log.
+ * @param address The address to log.
  */
-export function logAddress(prefix, unknownAddress) {
-    if ((unknownAddress === null || unknownAddress === void 0 ? void 0 : unknownAddress.type) === ED25519_ADDRESS_TYPE) {
-        const address = unknownAddress;
+export function logAddress(prefix, address) {
+    if ((address === null || address === void 0 ? void 0 : address.type) === ED25519_ADDRESS_TYPE) {
         logger(`${prefix}Ed25519 Address`);
         logger(`${prefix}\tAddress:`, address.address);
     }
@@ -248,11 +247,10 @@ export function logAddress(prefix, unknownAddress) {
 /**
  * Log signature to the console.
  * @param prefix The prefix for the output.
- * @param unknownSignature The signature to log.
+ * @param signature The signature to log.
  */
-export function logSignature(prefix, unknownSignature) {
-    if ((unknownSignature === null || unknownSignature === void 0 ? void 0 : unknownSignature.type) === ED25519_SIGNATURE_TYPE) {
-        const signature = unknownSignature;
+export function logSignature(prefix, signature) {
+    if ((signature === null || signature === void 0 ? void 0 : signature.type) === ED25519_SIGNATURE_TYPE) {
         logger(`${prefix}Ed25519 Signature`);
         logger(`${prefix}\tPublic Key:`, signature.publicKey);
         logger(`${prefix}\tSignature:`, signature.signature);
@@ -261,18 +259,16 @@ export function logSignature(prefix, unknownSignature) {
 /**
  * Log input to the console.
  * @param prefix The prefix for the output.
- * @param unknownInput The input to log.
+ * @param input The input to log.
  */
-export function logInput(prefix, unknownInput) {
-    if (unknownInput) {
-        if (unknownInput.type === UTXO_INPUT_TYPE) {
-            const input = unknownInput;
+export function logInput(prefix, input) {
+    if (input) {
+        if (input.type === UTXO_INPUT_TYPE) {
             logger(`${prefix}UTXO Input`);
             logger(`${prefix}\tTransaction Id:`, input.transactionId);
             logger(`${prefix}\tTransaction Output Index:`, input.transactionOutputIndex);
         }
-        else if (unknownInput.type === TREASURY_INPUT_TYPE) {
-            const input = unknownInput;
+        else if (input.type === TREASURY_INPUT_TYPE) {
             logger(`${prefix}Treasury Input`);
             logger(`${prefix}\tMilestone Hash:`, input.milestoneId);
         }
@@ -281,24 +277,21 @@ export function logInput(prefix, unknownInput) {
 /**
  * Log output to the console.
  * @param prefix The prefix for the output.
- * @param unknownOutput The output to log.
+ * @param output The output to log.
  */
-export function logOutput(prefix, unknownOutput) {
-    if (unknownOutput) {
-        if (unknownOutput.type === SIMPLE_OUTPUT_TYPE) {
-            const output = unknownOutput;
+export function logOutput(prefix, output) {
+    if (output) {
+        if (output.type === SIMPLE_OUTPUT_TYPE) {
             logger(`${prefix}Signature Locked Single Output`);
             logAddress(`${prefix}\t\t`, output.address);
             logger(`${prefix}\t\tAmount:`, output.amount);
         }
-        else if (unknownOutput.type === SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE) {
-            const output = unknownOutput;
+        else if (output.type === SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE) {
             logger(`${prefix}Signature Locked Dust Allowance Output`);
             logAddress(`${prefix}\t\t`, output.address);
             logger(`${prefix}\t\tAmount:`, output.amount);
         }
-        else if (unknownOutput.type === TREASURY_OUTPUT_TYPE) {
-            const output = unknownOutput;
+        else if (output.type === TREASURY_OUTPUT_TYPE) {
             logger(`${prefix}Treasury Output`);
             logger(`${prefix}\t\tAmount:`, output.amount);
         }
@@ -307,17 +300,15 @@ export function logOutput(prefix, unknownOutput) {
 /**
  * Log unlock block to the console.
  * @param prefix The prefix for the output.
- * @param unknownUnlockBlock The unlock block to log.
+ * @param unlockBlock The unlock block to log.
  */
-export function logUnlockBlock(prefix, unknownUnlockBlock) {
-    if (unknownUnlockBlock) {
-        if (unknownUnlockBlock.type === SIGNATURE_UNLOCK_BLOCK_TYPE) {
-            const unlockBlock = unknownUnlockBlock;
+export function logUnlockBlock(prefix, unlockBlock) {
+    if (unlockBlock) {
+        if (unlockBlock.type === SIGNATURE_UNLOCK_BLOCK_TYPE) {
             logger(`${prefix}\tSignature Unlock Block`);
             logSignature(`${prefix}\t\t`, unlockBlock.signature);
         }
-        else if (unknownUnlockBlock.type === REFERENCE_UNLOCK_BLOCK_TYPE) {
-            const unlockBlock = unknownUnlockBlock;
+        else if (unlockBlock.type === REFERENCE_UNLOCK_BLOCK_TYPE) {
             logger(`${prefix}\tReference Unlock Block`);
             logger(`${prefix}\t\tReference:`, unlockBlock.reference);
         }

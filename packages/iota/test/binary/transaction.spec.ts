@@ -1,7 +1,7 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 import { Converter, ReadStream, WriteStream } from "@iota/util.js";
-import { deserializeTransactionEssence, serializeTransactionEssence } from "../../src/binary/transaction";
+import { deserializeTransactionEssence, serializeTransactionEssence } from "../../src/binary/transactionEssence";
 import { ED25519_ADDRESS_TYPE } from "../../src/models/addresses/IEd25519Address";
 import { IUTXOInput, UTXO_INPUT_TYPE } from "../../src/models/inputs/IUTXOInput";
 import { ITransactionEssence, TRANSACTION_ESSENCE_TYPE } from "../../src/models/ITransactionEssence";

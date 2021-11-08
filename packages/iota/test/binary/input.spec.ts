@@ -4,11 +4,13 @@ import { Converter, ReadStream, WriteStream } from "@iota/util.js";
 import {
     deserializeInput,
     deserializeInputs,
-    deserializeUTXOInput,
     serializeInput,
-    serializeInputs,
+    serializeInputs
+} from "../../src/binary/inputs/inputs";
+import {
+    deserializeUTXOInput,
     serializeUTXOInput
-} from "../../src/binary/input";
+} from "../../src/binary/inputs/utxoInput";
 import { IUTXOInput, UTXO_INPUT_TYPE } from "../../src/models/inputs/IUTXOInput";
 
 describe("Binary Input", () => {

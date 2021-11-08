@@ -1,5 +1,5 @@
-import type { IEd25519Signature } from "../IEd25519Signature";
 import type { ITypeBase } from "../ITypeBase";
+import type { IEd25519Signature } from "../signatures/IEd25519Signature";
 /**
  * The global type for the unlock block.
  */

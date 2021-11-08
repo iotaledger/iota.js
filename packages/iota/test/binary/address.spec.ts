@@ -3,10 +3,12 @@
 import { Converter, ReadStream, WriteStream } from "@iota/util.js";
 import {
     deserializeAddress,
+    serializeAddress
+} from "../../src/binary/addresses/addresses";
+import {
     deserializeEd25519Address,
-    serializeAddress,
     serializeEd25519Address
-} from "../../src/binary/address";
+} from "../../src/binary/addresses/ed25519Address";
 import { ED25519_ADDRESS_TYPE, IEd25519Address } from "../../src/models/addresses/IEd25519Address";
 
 describe("Binary Address", () => {

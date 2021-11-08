@@ -3,15 +3,18 @@
 import { Converter, ReadStream, WriteStream } from "@iota/util.js";
 import {
     deserializeReferenceUnlockBlock,
+    serializeReferenceUnlockBlock
+} from "../../src/binary/unlockBlocks/referenceUnlockBlock";
+import {
+    deserializeSignatureUnlockBlock, serializeSignatureUnlockBlock
+} from "../../src/binary/unlockBlocks/signatureUnlockBlock";
+import {
     deserializeUnlockBlock,
     deserializeUnlockBlocks,
-    serializeSignatureUnlockBlock,
-    deserializeSignatureUnlockBlock,
-    serializeReferenceUnlockBlock,
     serializeUnlockBlock,
     serializeUnlockBlocks
-} from "../../src/binary/unlockBlock";
-import { ED25519_SIGNATURE_TYPE } from "../../src/models/IEd25519Signature";
+} from "../../src/binary/unlockBlocks/unlockBlocks";
+import { ED25519_SIGNATURE_TYPE } from "../../src/models/signatures/IEd25519Signature";
 import { IReferenceUnlockBlock, REFERENCE_UNLOCK_BLOCK_TYPE } from "../../src/models/unlockBlocks/IReferenceUnlockBlock";
 import { ISignatureUnlockBlock, SIGNATURE_UNLOCK_BLOCK_TYPE } from "../../src/models/unlockBlocks/ISignatureUnlockBlock";
 

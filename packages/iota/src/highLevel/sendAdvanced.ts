@@ -3,14 +3,13 @@
 /* eslint-disable unicorn/no-nested-ternary */
 import { Blake2b, Ed25519 } from "@iota/crypto.js";
 import { Converter, WriteStream } from "@iota/util.js";
-import { serializeInput } from "../binary/input";
-import { serializeOutput } from "../binary/output";
-import { MAX_INDEXATION_KEY_LENGTH, MIN_INDEXATION_KEY_LENGTH } from "../binary/payload";
-import { serializeTransactionEssence } from "../binary/transaction";
+import { serializeInput } from "../binary/inputs/inputs";
+import { serializeOutput } from "../binary/outputs/outputs";
+import { MAX_INDEXATION_KEY_LENGTH, MIN_INDEXATION_KEY_LENGTH } from "../binary/payloads/indexationPayload";
+import { serializeTransactionEssence } from "../binary/transactionEssence";
 import { SingleNodeClient } from "../clients/singleNodeClient";
 import { ED25519_ADDRESS_TYPE } from "../models/addresses/IEd25519Address";
 import type { IClient } from "../models/IClient";
-import { ED25519_SIGNATURE_TYPE } from "../models/IEd25519Signature";
 import type { IKeyPair } from "../models/IKeyPair";
 import type { IMessage } from "../models/IMessage";
 import type { IUTXOInput } from "../models/inputs/IUTXOInput";
@@ -18,6 +17,7 @@ import { ITransactionEssence, TRANSACTION_ESSENCE_TYPE } from "../models/ITransa
 import { ISimpleOutput, SIMPLE_OUTPUT_TYPE } from "../models/outputs/ISimpleOutput";
 import { INDEXATION_PAYLOAD_TYPE } from "../models/payloads/IIndexationPayload";
 import { ITransactionPayload, TRANSACTION_PAYLOAD_TYPE } from "../models/payloads/ITransactionPayload";
+import { ED25519_SIGNATURE_TYPE } from "../models/signatures/IEd25519Signature";
 import { IReferenceUnlockBlock, REFERENCE_UNLOCK_BLOCK_TYPE } from "../models/unlockBlocks/IReferenceUnlockBlock";
 import { ISignatureUnlockBlock, SIGNATURE_UNLOCK_BLOCK_TYPE } from "../models/unlockBlocks/ISignatureUnlockBlock";
 

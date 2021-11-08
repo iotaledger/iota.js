@@ -58,9 +58,9 @@
 
     // Copyright 2020 IOTA Stiftung
     /**
-     * Byte length for a byte field.
+     * Byte length for a uint8 field.
      */
-    const BYTE_SIZE = 1;
+    const UINT8_SIZE = 1;
     /**
      * Byte length for a uint16 field.
      */
@@ -92,7 +92,7 @@
     /**
      * Byte length for a small type length.
      */
-    const SMALL_TYPE_LENGTH = BYTE_SIZE;
+    const SMALL_TYPE_LENGTH = UINT8_SIZE;
     /**
      * Byte length for a string length.
      */
@@ -103,13 +103,42 @@
     const ARRAY_LENGTH = UINT16_SIZE;
 
     /**
-     * The minimum length of an address binary representation.
-     */
-    const MIN_ADDRESS_LENGTH = SMALL_TYPE_LENGTH;
-    /**
      * The minimum length of an ed25519 address binary representation.
      */
-    const MIN_ED25519_ADDRESS_LENGTH = MIN_ADDRESS_LENGTH + Ed25519Address.ADDRESS_LENGTH;
+    const MIN_ED25519_ADDRESS_LENGTH = SMALL_TYPE_LENGTH + Ed25519Address.ADDRESS_LENGTH;
+    /**
+     * Deserialize the Ed25519 address from binary.
+     * @param readStream The stream to read the data from.
+     * @returns The deserialized object.
+     */
+    function deserializeEd25519Address(readStream) {
+        if (!readStream.hasRemaining(MIN_ED25519_ADDRESS_LENGTH)) {
+            throw new Error(`Ed25519 address data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_ED25519_ADDRESS_LENGTH}`);
+        }
+        const type = readStream.readByte("ed25519Address.type");
+        if (type !== ED25519_ADDRESS_TYPE) {
+            throw new Error(`Type mismatch in ed25519Address ${type}`);
+        }
+        const address = readStream.readFixedHex("ed25519Address.address", Ed25519Address.ADDRESS_LENGTH);
+        return {
+            type: ED25519_ADDRESS_TYPE,
+            address
+        };
+    }
+    /**
+     * Serialize the ed25519 address to binary.
+     * @param writeStream The stream to write the data to.
+     * @param object The object to serialize.
+     */
+    function serializeEd25519Address(writeStream, object) {
+        writeStream.writeByte("ed25519Address.type", object.type);
+        writeStream.writeFixedHex("ed25519Address.address", Ed25519Address.ADDRESS_LENGTH, object.address);
+    }
+
+    /**
+     * The minimum length of an address binary representation.
+     */
+    const MIN_ADDRESS_LENGTH = MIN_ED25519_ADDRESS_LENGTH;
     /**
      * Deserialize the address from binary.
      * @param readStream The stream to read the data from.
@@ -142,34 +171,6 @@
             throw new Error(`Unrecognized address type ${object.type}`);
         }
     }
-    /**
-     * Deserialize the Ed25519 address from binary.
-     * @param readStream The stream to read the data from.
-     * @returns The deserialized object.
-     */
-    function deserializeEd25519Address(readStream) {
-        if (!readStream.hasRemaining(MIN_ED25519_ADDRESS_LENGTH)) {
-            throw new Error(`Ed25519 address data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_ED25519_ADDRESS_LENGTH}`);
-        }
-        const type = readStream.readByte("ed25519Address.type");
-        if (type !== ED25519_ADDRESS_TYPE) {
-            throw new Error(`Type mismatch in ed25519Address ${type}`);
-        }
-        const address = readStream.readFixedHex("ed25519Address.address", Ed25519Address.ADDRESS_LENGTH);
-        return {
-            type: ED25519_ADDRESS_TYPE,
-            address
-        };
-    }
-    /**
-     * Serialize the ed25519 address to binary.
-     * @param writeStream The stream to write the data to.
-     * @param object The object to serialize.
-     */
-    function serializeEd25519Address(writeStream, object) {
-        writeStream.writeByte("ed25519Address.type", object.type);
-        writeStream.writeFixedHex("ed25519Address.address", Ed25519Address.ADDRESS_LENGTH, object.address);
-    }
 
     /**
      * The length of the tail hash length in bytes.
@@ -179,7 +180,7 @@
      * The minimum length of a migrated fund binary representation.
      */
     const MIN_MIGRATED_FUNDS_LENGTH = TAIL_HASH_LENGTH + // tailTransactionHash
-        MIN_ED25519_ADDRESS_LENGTH + // address
+        MIN_ADDRESS_LENGTH + // address
         UINT64_SIZE; // deposit
     /**
      * The maximum number of funds.
@@ -252,17 +253,78 @@
     const UTXO_INPUT_TYPE = 0;
 
     /**
-     * The minimum length of an input binary representation.
+     * The minimum length of a treasury input binary representation.
      */
-    const MIN_INPUT_LENGTH = SMALL_TYPE_LENGTH;
+    const MIN_TREASURY_INPUT_LENGTH = SMALL_TYPE_LENGTH + TRANSACTION_ID_LENGTH;
+    /**
+     * Deserialize the treasury input from binary.
+     * @param readStream The stream to read the data from.
+     * @returns The deserialized object.
+     */
+    function deserializeTreasuryInput(readStream) {
+        if (!readStream.hasRemaining(MIN_TREASURY_INPUT_LENGTH)) {
+            throw new Error(`Treasury Input data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_TREASURY_INPUT_LENGTH}`);
+        }
+        const type = readStream.readByte("treasuryInput.type");
+        if (type !== TREASURY_INPUT_TYPE) {
+            throw new Error(`Type mismatch in treasuryInput ${type}`);
+        }
+        const milestoneId = readStream.readFixedHex("treasuryInput.milestoneId", TRANSACTION_ID_LENGTH);
+        return {
+            type: TREASURY_INPUT_TYPE,
+            milestoneId
+        };
+    }
+    /**
+     * Serialize the treasury input to binary.
+     * @param writeStream The stream to write the data to.
+     * @param object The object to serialize.
+     */
+    function serializeTreasuryInput(writeStream, object) {
+        writeStream.writeByte("treasuryInput.type", object.type);
+        writeStream.writeFixedHex("treasuryInput.milestoneId", TRANSACTION_ID_LENGTH, object.milestoneId);
+    }
+
     /**
      * The minimum length of a utxo input binary representation.
      */
-    const MIN_UTXO_INPUT_LENGTH = MIN_INPUT_LENGTH + TRANSACTION_ID_LENGTH + UINT16_SIZE;
+    const MIN_UTXO_INPUT_LENGTH = SMALL_TYPE_LENGTH + TRANSACTION_ID_LENGTH + UINT16_SIZE;
     /**
-     * The minimum length of a treasury input binary representation.
+     * Deserialize the utxo input from binary.
+     * @param readStream The stream to read the data from.
+     * @returns The deserialized object.
      */
-    const MIN_TREASURY_INPUT_LENGTH = MIN_INPUT_LENGTH + TRANSACTION_ID_LENGTH;
+    function deserializeUTXOInput(readStream) {
+        if (!readStream.hasRemaining(MIN_UTXO_INPUT_LENGTH)) {
+            throw new Error(`UTXO Input data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_UTXO_INPUT_LENGTH}`);
+        }
+        const type = readStream.readByte("utxoInput.type");
+        if (type !== UTXO_INPUT_TYPE) {
+            throw new Error(`Type mismatch in utxoInput ${type}`);
+        }
+        const transactionId = readStream.readFixedHex("utxoInput.transactionId", TRANSACTION_ID_LENGTH);
+        const transactionOutputIndex = readStream.readUInt16("utxoInput.transactionOutputIndex");
+        return {
+            type: UTXO_INPUT_TYPE,
+            transactionId,
+            transactionOutputIndex
+        };
+    }
+    /**
+     * Serialize the utxo input to binary.
+     * @param writeStream The stream to write the data to.
+     * @param object The object to serialize.
+     */
+    function serializeUTXOInput(writeStream, object) {
+        writeStream.writeByte("utxoInput.type", object.type);
+        writeStream.writeFixedHex("utxoInput.transactionId", TRANSACTION_ID_LENGTH, object.transactionId);
+        writeStream.writeUInt16("utxoInput.transactionOutputIndex", object.transactionOutputIndex);
+    }
+
+    /**
+     * The minimum length of an input binary representation.
+     */
+    const MIN_INPUT_LENGTH = Math.min(MIN_UTXO_INPUT_LENGTH, MIN_TREASURY_INPUT_LENGTH);
     /**
      * The minimum number of inputs.
      */
@@ -339,65 +401,6 @@
             throw new Error(`Unrecognized input type ${object.type}`);
         }
     }
-    /**
-     * Deserialize the utxo input from binary.
-     * @param readStream The stream to read the data from.
-     * @returns The deserialized object.
-     */
-    function deserializeUTXOInput(readStream) {
-        if (!readStream.hasRemaining(MIN_UTXO_INPUT_LENGTH)) {
-            throw new Error(`UTXO Input data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_UTXO_INPUT_LENGTH}`);
-        }
-        const type = readStream.readByte("utxoInput.type");
-        if (type !== UTXO_INPUT_TYPE) {
-            throw new Error(`Type mismatch in utxoInput ${type}`);
-        }
-        const transactionId = readStream.readFixedHex("utxoInput.transactionId", TRANSACTION_ID_LENGTH);
-        const transactionOutputIndex = readStream.readUInt16("utxoInput.transactionOutputIndex");
-        return {
-            type: UTXO_INPUT_TYPE,
-            transactionId,
-            transactionOutputIndex
-        };
-    }
-    /**
-     * Serialize the utxo input to binary.
-     * @param writeStream The stream to write the data to.
-     * @param object The object to serialize.
-     */
-    function serializeUTXOInput(writeStream, object) {
-        writeStream.writeByte("utxoInput.type", object.type);
-        writeStream.writeFixedHex("utxoInput.transactionId", TRANSACTION_ID_LENGTH, object.transactionId);
-        writeStream.writeUInt16("utxoInput.transactionOutputIndex", object.transactionOutputIndex);
-    }
-    /**
-     * Deserialize the treasury input from binary.
-     * @param readStream The stream to read the data from.
-     * @returns The deserialized object.
-     */
-    function deserializeTreasuryInput(readStream) {
-        if (!readStream.hasRemaining(MIN_TREASURY_INPUT_LENGTH)) {
-            throw new Error(`Treasury Input data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_TREASURY_INPUT_LENGTH}`);
-        }
-        const type = readStream.readByte("treasuryInput.type");
-        if (type !== TREASURY_INPUT_TYPE) {
-            throw new Error(`Type mismatch in treasuryInput ${type}`);
-        }
-        const milestoneId = readStream.readFixedHex("treasuryInput.milestoneId", TRANSACTION_ID_LENGTH);
-        return {
-            type: TREASURY_INPUT_TYPE,
-            milestoneId
-        };
-    }
-    /**
-     * Serialize the treasury input to binary.
-     * @param writeStream The stream to write the data to.
-     * @param object The object to serialize.
-     */
-    function serializeTreasuryInput(writeStream, object) {
-        writeStream.writeByte("treasuryInput.type", object.type);
-        writeStream.writeFixedHex("treasuryInput.milestoneId", TRANSACTION_ID_LENGTH, object.milestoneId);
-    }
 
     /**
      * The global type for the payload.
@@ -425,538 +428,12 @@
     const TREASURY_TRANSACTION_PAYLOAD_TYPE = 4;
 
     /**
-     * The global type for the transaction essence.
-     */
-    const TRANSACTION_ESSENCE_TYPE = 0;
-
-    /**
-     * The global type for the sig locked dust allowance output.
-     * @deprecated
-     */
-    const SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE = 1;
-
-    /**
-     * The global type for the simple output.
-     */
-    const SIMPLE_OUTPUT_TYPE = 0;
-
-    /**
-     * The global type for the treasury output.
-     */
-    const TREASURY_OUTPUT_TYPE = 2;
-
-    /**
-     * The minimum length of an output binary representation.
-     */
-    const MIN_OUTPUT_LENGTH = SMALL_TYPE_LENGTH;
-    /**
-     * The minimum length of a sig locked single output binary representation.
-     */
-    const MIN_SIG_LOCKED_SINGLE_OUTPUT_LENGTH = MIN_OUTPUT_LENGTH + MIN_ADDRESS_LENGTH + MIN_ED25519_ADDRESS_LENGTH;
-    /**
-     * The minimum length of a sig locked dust allowance output binary representation.
-     */
-    const MIN_SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_LENGTH = MIN_OUTPUT_LENGTH + MIN_ADDRESS_LENGTH + MIN_ED25519_ADDRESS_LENGTH;
-    /**
-     * The minimum length of a treasury output binary representation.
-     */
-    const MIN_TREASURY_OUTPUT_LENGTH = MIN_OUTPUT_LENGTH + UINT64_SIZE;
-    /**
-     * The minimum number of outputs.
-     */
-    const MIN_OUTPUT_COUNT = 1;
-    /**
-     * The maximum number of outputs.
-     */
-    const MAX_OUTPUT_COUNT = 127;
-    /**
-     * Deserialize the outputs from binary.
-     * @param readStream The stream to read the data from.
-     * @returns The deserialized object.
-     */
-    function deserializeOutputs(readStream) {
-        const numOutputs = readStream.readUInt16("outputs.numOutputs");
-        const inputs = [];
-        for (let i = 0; i < numOutputs; i++) {
-            inputs.push(deserializeOutput(readStream));
-        }
-        return inputs;
-    }
-    /**
-     * Serialize the outputs to binary.
-     * @param writeStream The stream to write the data to.
-     * @param objects The objects to serialize.
-     */
-    function serializeOutputs(writeStream, objects) {
-        if (objects.length < MIN_OUTPUT_COUNT) {
-            throw new Error(`The minimum number of outputs is ${MIN_OUTPUT_COUNT}, you have provided ${objects.length}`);
-        }
-        if (objects.length > MAX_OUTPUT_COUNT) {
-            throw new Error(`The maximum number of outputs is ${MAX_OUTPUT_COUNT}, you have provided ${objects.length}`);
-        }
-        writeStream.writeUInt16("outputs.numOutputs", objects.length);
-        for (let i = 0; i < objects.length; i++) {
-            serializeOutput(writeStream, objects[i]);
-        }
-    }
-    /**
-     * Deserialize the output from binary.
-     * @param readStream The stream to read the data from.
-     * @returns The deserialized object.
-     */
-    function deserializeOutput(readStream) {
-        if (!readStream.hasRemaining(MIN_OUTPUT_LENGTH)) {
-            throw new Error(`Output data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_OUTPUT_LENGTH}`);
-        }
-        const type = readStream.readByte("output.type", false);
-        let input;
-        if (type === SIMPLE_OUTPUT_TYPE) {
-            input = deserializeSimpleOutput(readStream);
-        }
-        else if (type === SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE) {
-            input = deserializeSigLockedDustAllowanceOutput(readStream);
-        }
-        else if (type === TREASURY_OUTPUT_TYPE) {
-            input = deserializeTreasuryOutput(readStream);
-        }
-        else {
-            throw new Error(`Unrecognized output type ${type}`);
-        }
-        return input;
-    }
-    /**
-     * Serialize the output to binary.
-     * @param writeStream The stream to write the data to.
-     * @param object The object to serialize.
-     */
-    function serializeOutput(writeStream, object) {
-        if (object.type === SIMPLE_OUTPUT_TYPE) {
-            serializeSimpleOutput(writeStream, object);
-        }
-        else if (object.type === SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE) {
-            serializeSigLockedDustAllowanceOutput(writeStream, object);
-        }
-        else if (object.type === TREASURY_OUTPUT_TYPE) {
-            serializeTreasuryOutput(writeStream, object);
-        }
-        else {
-            throw new Error(`Unrecognized output type ${object.type}`);
-        }
-    }
-    /**
-     * Deserialize the signature locked single output from binary.
-     * @param readStream The stream to read the data from.
-     * @returns The deserialized object.
-     */
-    function deserializeSimpleOutput(readStream) {
-        if (!readStream.hasRemaining(MIN_SIG_LOCKED_SINGLE_OUTPUT_LENGTH)) {
-            throw new Error(`Signature Locked Single Output data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_SIG_LOCKED_SINGLE_OUTPUT_LENGTH}`);
-        }
-        const type = readStream.readByte("simpleOutput.type");
-        if (type !== SIMPLE_OUTPUT_TYPE) {
-            throw new Error(`Type mismatch in simpleOutput ${type}`);
-        }
-        const address = deserializeAddress(readStream);
-        const amount = readStream.readUInt64("simpleOutput.amount");
-        return {
-            type: SIMPLE_OUTPUT_TYPE,
-            address,
-            amount: Number(amount)
-        };
-    }
-    /**
-     * Serialize the signature locked single output to binary.
-     * @param writeStream The stream to write the data to.
-     * @param object The object to serialize.
-     */
-    function serializeSimpleOutput(writeStream, object) {
-        writeStream.writeByte("simpleOutput.type", object.type);
-        serializeAddress(writeStream, object.address);
-        writeStream.writeUInt64("simpleOutput.amount", bigInt__default["default"](object.amount));
-    }
-    /**
-     * Deserialize the signature locked dust allowance output from binary.
-     * @param readStream The stream to read the data from.
-     * @returns The deserialized object.
-     */
-    function deserializeSigLockedDustAllowanceOutput(readStream) {
-        if (!readStream.hasRemaining(MIN_SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_LENGTH)) {
-            throw new Error(`Signature Locked Dust Allowance Output data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_LENGTH}`);
-        }
-        const type = readStream.readByte("sigLockedDustAllowanceOutput.type");
-        if (type !== SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE) {
-            throw new Error(`Type mismatch in sigLockedDustAllowanceOutput ${type}`);
-        }
-        const address = deserializeAddress(readStream);
-        const amount = readStream.readUInt64("sigLockedDustAllowanceOutput.amount");
-        return {
-            type: SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE,
-            address,
-            amount: Number(amount)
-        };
-    }
-    /**
-     * Serialize the signature locked dust allowance output to binary.
-     * @param writeStream The stream to write the data to.
-     * @param object The object to serialize.
-     */
-    function serializeSigLockedDustAllowanceOutput(writeStream, object) {
-        writeStream.writeByte("sigLockedDustAllowanceOutput.type", object.type);
-        serializeAddress(writeStream, object.address);
-        writeStream.writeUInt64("sigLockedDustAllowanceOutput.amount", bigInt__default["default"](object.amount));
-    }
-    /**
-     * Deserialize the treasury output from binary.
-     * @param readStream The stream to read the data from.
-     * @returns The deserialized object.
-     */
-    function deserializeTreasuryOutput(readStream) {
-        if (!readStream.hasRemaining(MIN_TREASURY_OUTPUT_LENGTH)) {
-            throw new Error(`Treasury Output data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_TREASURY_OUTPUT_LENGTH}`);
-        }
-        const type = readStream.readByte("treasuryOutput.type");
-        if (type !== TREASURY_OUTPUT_TYPE) {
-            throw new Error(`Type mismatch in treasuryOutput ${type}`);
-        }
-        const amount = readStream.readUInt64("treasuryOutput.amount");
-        return {
-            type: TREASURY_OUTPUT_TYPE,
-            amount: Number(amount)
-        };
-    }
-    /**
-     * Serialize the treasury output to binary.
-     * @param writeStream The stream to write the data to.
-     * @param object The object to serialize.
-     */
-    function serializeTreasuryOutput(writeStream, object) {
-        writeStream.writeByte("treasuryOutput.type", object.type);
-        writeStream.writeUInt64("treasuryOutput.amount", bigInt__default["default"](object.amount));
-    }
-
-    /**
-     * The minimum length of a transaction essence binary representation.
-     */
-    const MIN_TRANSACTION_ESSENCE_LENGTH = SMALL_TYPE_LENGTH + 2 * ARRAY_LENGTH + UINT32_SIZE;
-    /**
-     * Deserialize the transaction essence from binary.
-     * @param readStream The stream to read the data from.
-     * @returns The deserialized object.
-     */
-    function deserializeTransactionEssence(readStream) {
-        if (!readStream.hasRemaining(MIN_TRANSACTION_ESSENCE_LENGTH)) {
-            throw new Error(`Transaction essence data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_TRANSACTION_ESSENCE_LENGTH}`);
-        }
-        const type = readStream.readByte("transactionEssence.type");
-        if (type !== TRANSACTION_ESSENCE_TYPE) {
-            throw new Error(`Type mismatch in transactionEssence ${type}`);
-        }
-        const inputs = deserializeInputs(readStream);
-        const outputs = deserializeOutputs(readStream);
-        const payload = deserializePayload(readStream);
-        if (payload && payload.type !== INDEXATION_PAYLOAD_TYPE) {
-            throw new Error("Transaction essence can only contain embedded Indexation Payload");
-        }
-        for (const input of inputs) {
-            if (input.type !== UTXO_INPUT_TYPE) {
-                throw new Error("Transaction essence can only contain UTXO Inputs");
-            }
-        }
-        for (const output of outputs) {
-            if (output.type !== SIMPLE_OUTPUT_TYPE) {
-                throw new Error("Transaction essence can only contain simple outputs");
-            }
-        }
-        return {
-            type: TRANSACTION_ESSENCE_TYPE,
-            inputs: inputs,
-            outputs,
-            payload
-        };
-    }
-    /**
-     * Serialize the transaction essence to binary.
-     * @param writeStream The stream to write the data to.
-     * @param object The object to serialize.
-     */
-    function serializeTransactionEssence(writeStream, object) {
-        writeStream.writeByte("transactionEssence.type", object.type);
-        for (const input of object.inputs) {
-            if (input.type !== UTXO_INPUT_TYPE) {
-                throw new Error("Transaction essence can only contain UTXO Inputs");
-            }
-        }
-        serializeInputs(writeStream, object.inputs);
-        for (const output of object.outputs) {
-            if (output.type !== SIMPLE_OUTPUT_TYPE && output.type !== SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE) {
-                throw new Error("Transaction essence can only contain sig locked single input or sig locked dust allowance outputs");
-            }
-        }
-        serializeOutputs(writeStream, object.outputs);
-        serializePayload(writeStream, object.payload);
-    }
-
-    /**
-     * The global type for the reference unlock block.
-     */
-    const REFERENCE_UNLOCK_BLOCK_TYPE = 1;
-
-    /**
-     * The global type for the unlock block.
-     */
-    const SIGNATURE_UNLOCK_BLOCK_TYPE = 0;
-
-    /**
-     * The global type for the signature type.
-     */
-    const ED25519_SIGNATURE_TYPE = 0;
-
-    // Copyright 2020 IOTA Stiftung
-    /**
-     * The minimum length of a signature binary representation.
-     */
-    const MIN_SIGNATURE_LENGTH = SMALL_TYPE_LENGTH;
-    /**
-     * The minimum length of an ed25519 signature binary representation.
-     */
-    const MIN_ED25519_SIGNATURE_LENGTH = MIN_SIGNATURE_LENGTH + crypto_js.Ed25519.SIGNATURE_SIZE + crypto_js.Ed25519.PUBLIC_KEY_SIZE;
-    /**
-     * Deserialize the signature from binary.
-     * @param readStream The stream to read the data from.
-     * @returns The deserialized object.
-     */
-    function deserializeSignature(readStream) {
-        if (!readStream.hasRemaining(MIN_SIGNATURE_LENGTH)) {
-            throw new Error(`Signature data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_SIGNATURE_LENGTH}`);
-        }
-        const type = readStream.readByte("signature.type", false);
-        let input;
-        if (type === ED25519_SIGNATURE_TYPE) {
-            input = deserializeEd25519Signature(readStream);
-        }
-        else {
-            throw new Error(`Unrecognized signature type ${type}`);
-        }
-        return input;
-    }
-    /**
-     * Serialize the signature to binary.
-     * @param writeStream The stream to write the data to.
-     * @param object The object to serialize.
-     */
-    function serializeSignature(writeStream, object) {
-        if (object.type === ED25519_SIGNATURE_TYPE) {
-            serializeEd25519Signature(writeStream, object);
-        }
-        else {
-            throw new Error(`Unrecognized signature type ${object.type}`);
-        }
-    }
-    /**
-     * Deserialize the Ed25519 signature from binary.
-     * @param readStream The stream to read the data from.
-     * @returns The deserialized object.
-     */
-    function deserializeEd25519Signature(readStream) {
-        if (!readStream.hasRemaining(MIN_ED25519_SIGNATURE_LENGTH)) {
-            throw new Error(`Ed25519 signature data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_ED25519_SIGNATURE_LENGTH}`);
-        }
-        const type = readStream.readByte("ed25519Signature.type");
-        if (type !== ED25519_SIGNATURE_TYPE) {
-            throw new Error(`Type mismatch in ed25519Signature ${type}`);
-        }
-        const publicKey = readStream.readFixedHex("ed25519Signature.publicKey", crypto_js.Ed25519.PUBLIC_KEY_SIZE);
-        const signature = readStream.readFixedHex("ed25519Signature.signature", crypto_js.Ed25519.SIGNATURE_SIZE);
-        return {
-            type: ED25519_SIGNATURE_TYPE,
-            publicKey,
-            signature
-        };
-    }
-    /**
-     * Serialize the Ed25519 signature to binary.
-     * @param writeStream The stream to write the data to.
-     * @param object The object to serialize.
-     */
-    function serializeEd25519Signature(writeStream, object) {
-        writeStream.writeByte("ed25519Signature.type", object.type);
-        writeStream.writeFixedHex("ed25519Signature.publicKey", crypto_js.Ed25519.PUBLIC_KEY_SIZE, object.publicKey);
-        writeStream.writeFixedHex("ed25519Signature.signature", crypto_js.Ed25519.SIGNATURE_SIZE, object.signature);
-    }
-
-    /**
-     * The minimum length of an unlock block binary representation.
-     */
-    const MIN_UNLOCK_BLOCK_LENGTH = SMALL_TYPE_LENGTH;
-    /**
-     * The minimum length of a signature unlock block binary representation.
-     */
-    const MIN_SIGNATURE_UNLOCK_BLOCK_LENGTH = MIN_UNLOCK_BLOCK_LENGTH + MIN_SIGNATURE_LENGTH;
-    /**
-     * The minimum length of a reference unlock block binary representation.
-     */
-    const MIN_REFERENCE_UNLOCK_BLOCK_LENGTH = MIN_UNLOCK_BLOCK_LENGTH + UINT16_SIZE;
-    /**
-     * Deserialize the unlock blocks from binary.
-     * @param readStream The stream to read the data from.
-     * @returns The deserialized object.
-     */
-    function deserializeUnlockBlocks(readStream) {
-        const numUnlockBlocks = readStream.readUInt16("transactionEssence.numUnlockBlocks");
-        const unlockBlocks = [];
-        for (let i = 0; i < numUnlockBlocks; i++) {
-            unlockBlocks.push(deserializeUnlockBlock(readStream));
-        }
-        return unlockBlocks;
-    }
-    /**
-     * Serialize the unlock blocks to binary.
-     * @param writeStream The stream to write the data to.
-     * @param objects The objects to serialize.
-     */
-    function serializeUnlockBlocks(writeStream, objects) {
-        writeStream.writeUInt16("transactionEssence.numUnlockBlocks", objects.length);
-        for (let i = 0; i < objects.length; i++) {
-            serializeUnlockBlock(writeStream, objects[i]);
-        }
-    }
-    /**
-     * Deserialize the unlock block from binary.
-     * @param readStream The stream to read the data from.
-     * @returns The deserialized object.
-     */
-    function deserializeUnlockBlock(readStream) {
-        if (!readStream.hasRemaining(MIN_UNLOCK_BLOCK_LENGTH)) {
-            throw new Error(`Unlock Block data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_UNLOCK_BLOCK_LENGTH}`);
-        }
-        const type = readStream.readByte("unlockBlock.type", false);
-        let unlockBlock;
-        if (type === SIGNATURE_UNLOCK_BLOCK_TYPE) {
-            unlockBlock = deserializeSignatureUnlockBlock(readStream);
-        }
-        else if (type === REFERENCE_UNLOCK_BLOCK_TYPE) {
-            unlockBlock = deserializeReferenceUnlockBlock(readStream);
-        }
-        else {
-            throw new Error(`Unrecognized unlock block type ${type}`);
-        }
-        return unlockBlock;
-    }
-    /**
-     * Serialize the unlock block to binary.
-     * @param writeStream The stream to write the data to.
-     * @param object The object to serialize.
-     */
-    function serializeUnlockBlock(writeStream, object) {
-        if (object.type === SIGNATURE_UNLOCK_BLOCK_TYPE) {
-            serializeSignatureUnlockBlock(writeStream, object);
-        }
-        else if (object.type === REFERENCE_UNLOCK_BLOCK_TYPE) {
-            serializeReferenceUnlockBlock(writeStream, object);
-        }
-        else {
-            throw new Error(`Unrecognized unlock block type ${object.type}`);
-        }
-    }
-    /**
-     * Deserialize the signature unlock block from binary.
-     * @param readStream The stream to read the data from.
-     * @returns The deserialized object.
-     */
-    function deserializeSignatureUnlockBlock(readStream) {
-        if (!readStream.hasRemaining(MIN_SIGNATURE_UNLOCK_BLOCK_LENGTH)) {
-            throw new Error(`Signature Unlock Block data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_SIGNATURE_UNLOCK_BLOCK_LENGTH}`);
-        }
-        const type = readStream.readByte("signatureUnlockBlock.type");
-        if (type !== SIGNATURE_UNLOCK_BLOCK_TYPE) {
-            throw new Error(`Type mismatch in signatureUnlockBlock ${type}`);
-        }
-        const signature = deserializeSignature(readStream);
-        return {
-            type: SIGNATURE_UNLOCK_BLOCK_TYPE,
-            signature
-        };
-    }
-    /**
-     * Serialize the signature unlock block to binary.
-     * @param writeStream The stream to write the data to.
-     * @param object The object to serialize.
-     */
-    function serializeSignatureUnlockBlock(writeStream, object) {
-        writeStream.writeByte("signatureUnlockBlock.type", object.type);
-        serializeSignature(writeStream, object.signature);
-    }
-    /**
-     * Deserialize the reference unlock block from binary.
-     * @param readStream The stream to read the data from.
-     * @returns The deserialized object.
-     */
-    function deserializeReferenceUnlockBlock(readStream) {
-        if (!readStream.hasRemaining(MIN_REFERENCE_UNLOCK_BLOCK_LENGTH)) {
-            throw new Error(`Reference Unlock Block data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_REFERENCE_UNLOCK_BLOCK_LENGTH}`);
-        }
-        const type = readStream.readByte("referenceUnlockBlock.type");
-        if (type !== REFERENCE_UNLOCK_BLOCK_TYPE) {
-            throw new Error(`Type mismatch in referenceUnlockBlock ${type}`);
-        }
-        const reference = readStream.readUInt16("referenceUnlockBlock.reference");
-        return {
-            type: REFERENCE_UNLOCK_BLOCK_TYPE,
-            reference
-        };
-    }
-    /**
-     * Serialize the reference unlock block to binary.
-     * @param writeStream The stream to write the data to.
-     * @param object The object to serialize.
-     */
-    function serializeReferenceUnlockBlock(writeStream, object) {
-        writeStream.writeByte("referenceUnlockBlock.type", object.type);
-        writeStream.writeUInt16("referenceUnlockBlock.reference", object.reference);
-    }
-
-    // Copyright 2020 IOTA Stiftung
-    /**
-     * The minimum length of a payload binary representation.
-     */
-    const MIN_PAYLOAD_LENGTH = TYPE_LENGTH;
-    /**
-     * The minimum length of a milestone payload binary representation.
-     */
-    const MIN_MILESTONE_PAYLOAD_LENGTH = MIN_PAYLOAD_LENGTH + // min payload
-        UINT32_SIZE + // index
-        UINT64_SIZE + // timestamp
-        MESSAGE_ID_LENGTH + // parent 1
-        MESSAGE_ID_LENGTH + // parent 2
-        MERKLE_PROOF_LENGTH + // merkle proof
-        2 * UINT32_SIZE + // Next pow score and pow score milestone index
-        BYTE_SIZE + // publicKeysCount
-        crypto_js.Ed25519.PUBLIC_KEY_SIZE + // 1 public key
-        BYTE_SIZE + // signatureCount
-        crypto_js.Ed25519.SIGNATURE_SIZE; // 1 signature
-    /**
      * The minimum length of an indexation payload binary representation.
      */
-    const MIN_INDEXATION_PAYLOAD_LENGTH = MIN_PAYLOAD_LENGTH + // min payload
+    const MIN_INDEXATION_PAYLOAD_LENGTH = TYPE_LENGTH + // min payload
         STRING_LENGTH + // index length
         1 + // index min 1 byte
         STRING_LENGTH; // data length
-    /**
-     * The minimum length of a transaction payload binary representation.
-     */
-    const MIN_TRANSACTION_PAYLOAD_LENGTH = MIN_PAYLOAD_LENGTH + // min payload
-        UINT32_SIZE; // essence type
-    /**
-     * The minimum length of a receipt payload binary representation.
-     */
-    const MIN_RECEIPT_PAYLOAD_LENGTH = MIN_PAYLOAD_LENGTH +
-        UINT32_SIZE + // migratedAt
-        UINT16_SIZE + // numFunds
-        MIN_MIGRATED_FUNDS_LENGTH; // 1 Fund
-    /**
-     * The minimum length of a treasure transaction payload binary representation.
-     */
-    const MIN_TREASURY_TRANSACTION_PAYLOAD_LENGTH = MIN_PAYLOAD_LENGTH + MIN_TREASURY_INPUT_LENGTH + MIN_TREASURY_OUTPUT_LENGTH;
     /**
      * The minimum length of a indexation key.
      */
@@ -966,117 +443,67 @@
      */
     const MAX_INDEXATION_KEY_LENGTH = 64;
     /**
-     * Deserialize the payload from binary.
+     * Deserialize the indexation payload from binary.
      * @param readStream The stream to read the data from.
      * @returns The deserialized object.
      */
-    function deserializePayload(readStream) {
-        const payloadLength = readStream.readUInt32("payload.length");
-        if (!readStream.hasRemaining(payloadLength)) {
-            throw new Error(`Payload length ${payloadLength} exceeds the remaining data ${readStream.unused()}`);
+    function deserializeIndexationPayload(readStream) {
+        if (!readStream.hasRemaining(MIN_INDEXATION_PAYLOAD_LENGTH)) {
+            throw new Error(`Indexation Payload data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_INDEXATION_PAYLOAD_LENGTH}`);
         }
-        let payload;
-        if (payloadLength > 0) {
-            const payloadType = readStream.readUInt32("payload.type", false);
-            if (payloadType === TRANSACTION_PAYLOAD_TYPE) {
-                payload = deserializeTransactionPayload(readStream);
-            }
-            else if (payloadType === MILESTONE_PAYLOAD_TYPE) {
-                payload = deserializeMilestonePayload(readStream);
-            }
-            else if (payloadType === INDEXATION_PAYLOAD_TYPE) {
-                payload = deserializeIndexationPayload(readStream);
-            }
-            else if (payloadType === RECEIPT_PAYLOAD_TYPE) {
-                payload = deserializeReceiptPayload(readStream);
-            }
-            else if (payloadType === TREASURY_TRANSACTION_PAYLOAD_TYPE) {
-                payload = deserializeTreasuryTransactionPayload(readStream);
-            }
-            else {
-                throw new Error(`Unrecognized payload type ${payloadType}`);
-            }
+        const type = readStream.readUInt32("payloadIndexation.type");
+        if (type !== INDEXATION_PAYLOAD_TYPE) {
+            throw new Error(`Type mismatch in payloadIndexation ${type}`);
         }
-        return payload;
-    }
-    /**
-     * Serialize the payload essence to binary.
-     * @param writeStream The stream to write the data to.
-     * @param object The object to serialize.
-     */
-    function serializePayload(writeStream, object) {
-        // Store the location for the payload length and write 0
-        // we will rewind and fill in once the size of the payload is known
-        const payloadLengthWriteIndex = writeStream.getWriteIndex();
-        writeStream.writeUInt32("payload.length", 0);
-        if (!object) ;
-        else if (object.type === TRANSACTION_PAYLOAD_TYPE) {
-            serializeTransactionPayload(writeStream, object);
-        }
-        else if (object.type === MILESTONE_PAYLOAD_TYPE) {
-            serializeMilestonePayload(writeStream, object);
-        }
-        else if (object.type === INDEXATION_PAYLOAD_TYPE) {
-            serializeIndexationPayload(writeStream, object);
-        }
-        else if (object.type === RECEIPT_PAYLOAD_TYPE) {
-            serializeReceiptPayload(writeStream, object);
-        }
-        else if (object.type === TREASURY_TRANSACTION_PAYLOAD_TYPE) {
-            serializeTreasuryTransactionPayload(writeStream, object);
-        }
-        else {
-            throw new Error(`Unrecognized transaction type ${object.type}`);
-        }
-        const endOfPayloadWriteIndex = writeStream.getWriteIndex();
-        writeStream.setWriteIndex(payloadLengthWriteIndex);
-        writeStream.writeUInt32("payload.length", endOfPayloadWriteIndex - payloadLengthWriteIndex - UINT32_SIZE);
-        writeStream.setWriteIndex(endOfPayloadWriteIndex);
-    }
-    /**
-     * Deserialize the transaction payload from binary.
-     * @param readStream The stream to read the data from.
-     * @returns The deserialized object.
-     */
-    function deserializeTransactionPayload(readStream) {
-        if (!readStream.hasRemaining(MIN_TRANSACTION_PAYLOAD_LENGTH)) {
-            throw new Error(`Transaction Payload data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_TRANSACTION_PAYLOAD_LENGTH}`);
-        }
-        const type = readStream.readUInt32("payloadTransaction.type");
-        if (type !== TRANSACTION_PAYLOAD_TYPE) {
-            throw new Error(`Type mismatch in payloadTransaction ${type}`);
-        }
-        const essenceType = readStream.readByte("payloadTransaction.essenceType", false);
-        let essence;
-        let unlockBlocks;
-        if (essenceType === TRANSACTION_ESSENCE_TYPE) {
-            essence = deserializeTransactionEssence(readStream);
-            unlockBlocks = deserializeUnlockBlocks(readStream);
-        }
-        else {
-            throw new Error(`Unrecognized transaction essence type ${type}`);
-        }
+        const indexLength = readStream.readUInt16("payloadIndexation.indexLength");
+        const index = readStream.readFixedHex("payloadIndexation.index", indexLength);
+        const dataLength = readStream.readUInt32("payloadIndexation.dataLength");
+        const data = readStream.readFixedHex("payloadIndexation.data", dataLength);
         return {
-            type: TRANSACTION_PAYLOAD_TYPE,
-            essence,
-            unlockBlocks
+            type: INDEXATION_PAYLOAD_TYPE,
+            index,
+            data
         };
     }
     /**
-     * Serialize the transaction payload to binary.
+     * Serialize the indexation payload to binary.
      * @param writeStream The stream to write the data to.
      * @param object The object to serialize.
      */
-    function serializeTransactionPayload(writeStream, object) {
-        writeStream.writeUInt32("payloadMilestone.type", object.type);
-        if (object.type === TRANSACTION_PAYLOAD_TYPE) {
-            serializeTransactionEssence(writeStream, object.essence);
-            serializeUnlockBlocks(writeStream, object.unlockBlocks);
+    function serializeIndexationPayload(writeStream, object) {
+        if (object.index.length < MIN_INDEXATION_KEY_LENGTH) {
+            throw new Error(`The indexation key length is ${object.index.length}, which is below the minimum size of ${MIN_INDEXATION_KEY_LENGTH}`);
+        }
+        if (object.index.length / 2 > MAX_INDEXATION_KEY_LENGTH) {
+            throw new Error(`The indexation key length is ${object.index.length / 2}, which exceeds the maximum size of ${MAX_INDEXATION_KEY_LENGTH}`);
+        }
+        writeStream.writeUInt32("payloadIndexation.type", object.type);
+        writeStream.writeUInt16("payloadIndexation.indexLength", object.index.length / 2);
+        writeStream.writeFixedHex("payloadIndexation.index", object.index.length / 2, object.index);
+        if (object.data) {
+            writeStream.writeUInt32("payloadIndexation.dataLength", object.data.length / 2);
+            writeStream.writeFixedHex("payloadIndexation.data", object.data.length / 2, object.data);
         }
         else {
-            throw new Error(`Unrecognized transaction type ${object.type}`);
+            writeStream.writeUInt32("payloadIndexation.dataLength", 0);
         }
     }
+
+    // Copyright 2020 IOTA Stiftung
+    /**
+     * The minimum length of a milestone payload binary representation.
+     */
+    const MIN_MILESTONE_PAYLOAD_LENGTH = TYPE_LENGTH + // min payload
+        UINT32_SIZE + // index
+        UINT64_SIZE + // timestamp
+        MESSAGE_ID_LENGTH + // parent 1
+        MESSAGE_ID_LENGTH + // parent 2
+        MERKLE_PROOF_LENGTH + // merkle proof
+        2 * UINT32_SIZE + // Next pow score and pow score milestone index
+        UINT8_SIZE + // publicKeysCount
+        crypto_js.Ed25519.PUBLIC_KEY_SIZE + // 1 public key
+        UINT8_SIZE + // signatureCount
+        crypto_js.Ed25519.SIGNATURE_SIZE; // 1 signature
     /**
      * Deserialize the milestone payload from binary.
      * @param readStream The stream to read the data from.
@@ -1167,52 +594,14 @@
             writeStream.writeFixedHex("payloadMilestone.signature", crypto_js.Ed25519.SIGNATURE_SIZE, object.signatures[i]);
         }
     }
+
     /**
-     * Deserialize the indexation payload from binary.
-     * @param readStream The stream to read the data from.
-     * @returns The deserialized object.
+     * The minimum length of a receipt payload binary representation.
      */
-    function deserializeIndexationPayload(readStream) {
-        if (!readStream.hasRemaining(MIN_INDEXATION_PAYLOAD_LENGTH)) {
-            throw new Error(`Indexation Payload data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_INDEXATION_PAYLOAD_LENGTH}`);
-        }
-        const type = readStream.readUInt32("payloadIndexation.type");
-        if (type !== INDEXATION_PAYLOAD_TYPE) {
-            throw new Error(`Type mismatch in payloadIndexation ${type}`);
-        }
-        const indexLength = readStream.readUInt16("payloadIndexation.indexLength");
-        const index = readStream.readFixedHex("payloadIndexation.index", indexLength);
-        const dataLength = readStream.readUInt32("payloadIndexation.dataLength");
-        const data = readStream.readFixedHex("payloadIndexation.data", dataLength);
-        return {
-            type: INDEXATION_PAYLOAD_TYPE,
-            index,
-            data
-        };
-    }
-    /**
-     * Serialize the indexation payload to binary.
-     * @param writeStream The stream to write the data to.
-     * @param object The object to serialize.
-     */
-    function serializeIndexationPayload(writeStream, object) {
-        if (object.index.length < MIN_INDEXATION_KEY_LENGTH) {
-            throw new Error(`The indexation key length is ${object.index.length}, which is below the minimum size of ${MIN_INDEXATION_KEY_LENGTH}`);
-        }
-        if (object.index.length / 2 > MAX_INDEXATION_KEY_LENGTH) {
-            throw new Error(`The indexation key length is ${object.index.length / 2}, which exceeds the maximum size of ${MAX_INDEXATION_KEY_LENGTH}`);
-        }
-        writeStream.writeUInt32("payloadIndexation.type", object.type);
-        writeStream.writeUInt16("payloadIndexation.indexLength", object.index.length / 2);
-        writeStream.writeFixedHex("payloadIndexation.index", object.index.length / 2, object.index);
-        if (object.data) {
-            writeStream.writeUInt32("payloadIndexation.dataLength", object.data.length / 2);
-            writeStream.writeFixedHex("payloadIndexation.data", object.data.length / 2, object.data);
-        }
-        else {
-            writeStream.writeUInt32("payloadIndexation.dataLength", 0);
-        }
-    }
+    const MIN_RECEIPT_PAYLOAD_LENGTH = TYPE_LENGTH +
+        UINT32_SIZE + // migratedAt
+        UINT16_SIZE + // numFunds
+        MIN_MIGRATED_FUNDS_LENGTH; // 1 Fund
     /**
      * Deserialize the receipt payload from binary.
      * @param readStream The stream to read the data from.
@@ -1253,6 +642,558 @@
         serializeFunds(writeStream, object.funds);
         serializePayload(writeStream, object.transaction);
     }
+
+    /**
+     * The global type for the transaction essence.
+     */
+    const TRANSACTION_ESSENCE_TYPE = 0;
+
+    /**
+     * The global type for the sig locked dust allowance output.
+     * @deprecated
+     */
+    const SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE = 1;
+
+    /**
+     * The global type for the simple output.
+     */
+    const SIMPLE_OUTPUT_TYPE = 0;
+
+    /**
+     * The global type for the treasury output.
+     */
+    const TREASURY_OUTPUT_TYPE = 2;
+
+    /**
+     * The minimum length of a sig locked dust allowance output binary representation.
+     */
+    const MIN_SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_LENGTH = SMALL_TYPE_LENGTH + MIN_ADDRESS_LENGTH + UINT64_SIZE;
+    /**
+     * Deserialize the signature locked dust allowance output from binary.
+     * @param readStream The stream to read the data from.
+     * @returns The deserialized object.
+     */
+    function deserializeSigLockedDustAllowanceOutput(readStream) {
+        if (!readStream.hasRemaining(MIN_SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_LENGTH)) {
+            throw new Error(`Signature Locked Dust Allowance Output data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_LENGTH}`);
+        }
+        const type = readStream.readByte("sigLockedDustAllowanceOutput.type");
+        if (type !== SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE) {
+            throw new Error(`Type mismatch in sigLockedDustAllowanceOutput ${type}`);
+        }
+        const address = deserializeAddress(readStream);
+        const amount = readStream.readUInt64("sigLockedDustAllowanceOutput.amount");
+        return {
+            type: SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE,
+            address,
+            amount: Number(amount)
+        };
+    }
+    /**
+     * Serialize the signature locked dust allowance output to binary.
+     * @param writeStream The stream to write the data to.
+     * @param object The object to serialize.
+     */
+    function serializeSigLockedDustAllowanceOutput(writeStream, object) {
+        writeStream.writeByte("sigLockedDustAllowanceOutput.type", object.type);
+        serializeAddress(writeStream, object.address);
+        writeStream.writeUInt64("sigLockedDustAllowanceOutput.amount", bigInt__default["default"](object.amount));
+    }
+
+    /**
+     * The minimum length of a simple output binary representation.
+     */
+    const MIN_SIMPLE_OUTPUT_LENGTH = SMALL_TYPE_LENGTH + MIN_ADDRESS_LENGTH + UINT64_SIZE;
+    /**
+     * Deserialize the simple output from binary.
+     * @param readStream The stream to read the data from.
+     * @returns The deserialized object.
+     */
+    function deserializeSimpleOutput(readStream) {
+        if (!readStream.hasRemaining(MIN_SIMPLE_OUTPUT_LENGTH)) {
+            throw new Error(`Simple Output data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_SIMPLE_OUTPUT_LENGTH}`);
+        }
+        const type = readStream.readByte("simpleOutput.type");
+        if (type !== SIMPLE_OUTPUT_TYPE) {
+            throw new Error(`Type mismatch in simpleOutput ${type}`);
+        }
+        const address = deserializeAddress(readStream);
+        const amount = readStream.readUInt64("simpleOutput.amount");
+        return {
+            type: SIMPLE_OUTPUT_TYPE,
+            address,
+            amount: Number(amount)
+        };
+    }
+    /**
+     * Serialize the simple output to binary.
+     * @param writeStream The stream to write the data to.
+     * @param object The object to serialize.
+     */
+    function serializeSimpleOutput(writeStream, object) {
+        writeStream.writeByte("simpleOutput.type", object.type);
+        serializeAddress(writeStream, object.address);
+        writeStream.writeUInt64("simpleOutput.amount", bigInt__default["default"](object.amount));
+    }
+
+    /**
+     * The minimum length of a treasury output binary representation.
+     */
+    const MIN_TREASURY_OUTPUT_LENGTH = SMALL_TYPE_LENGTH + UINT64_SIZE;
+    /**
+     * Deserialize the treasury output from binary.
+     * @param readStream The stream to read the data from.
+     * @returns The deserialized object.
+     */
+    function deserializeTreasuryOutput(readStream) {
+        if (!readStream.hasRemaining(MIN_TREASURY_OUTPUT_LENGTH)) {
+            throw new Error(`Treasury Output data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_TREASURY_OUTPUT_LENGTH}`);
+        }
+        const type = readStream.readByte("treasuryOutput.type");
+        if (type !== TREASURY_OUTPUT_TYPE) {
+            throw new Error(`Type mismatch in treasuryOutput ${type}`);
+        }
+        const amount = readStream.readUInt64("treasuryOutput.amount");
+        return {
+            type: TREASURY_OUTPUT_TYPE,
+            amount: Number(amount)
+        };
+    }
+    /**
+     * Serialize the treasury output to binary.
+     * @param writeStream The stream to write the data to.
+     * @param object The object to serialize.
+     */
+    function serializeTreasuryOutput(writeStream, object) {
+        writeStream.writeByte("treasuryOutput.type", object.type);
+        writeStream.writeUInt64("treasuryOutput.amount", bigInt__default["default"](object.amount));
+    }
+
+    /**
+     * The minimum length of an output binary representation.
+     */
+    const MIN_OUTPUT_LENGTH = Math.min(MIN_SIMPLE_OUTPUT_LENGTH, MIN_SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_LENGTH);
+    /**
+     * The minimum number of outputs.
+     */
+    const MIN_OUTPUT_COUNT = 1;
+    /**
+     * The maximum number of outputs.
+     */
+    const MAX_OUTPUT_COUNT = 127;
+    /**
+     * Deserialize the outputs from binary.
+     * @param readStream The stream to read the data from.
+     * @returns The deserialized object.
+     */
+    function deserializeOutputs(readStream) {
+        const numOutputs = readStream.readUInt16("outputs.numOutputs");
+        const inputs = [];
+        for (let i = 0; i < numOutputs; i++) {
+            inputs.push(deserializeOutput(readStream));
+        }
+        return inputs;
+    }
+    /**
+     * Serialize the outputs to binary.
+     * @param writeStream The stream to write the data to.
+     * @param objects The objects to serialize.
+     */
+    function serializeOutputs(writeStream, objects) {
+        if (objects.length < MIN_OUTPUT_COUNT) {
+            throw new Error(`The minimum number of outputs is ${MIN_OUTPUT_COUNT}, you have provided ${objects.length}`);
+        }
+        if (objects.length > MAX_OUTPUT_COUNT) {
+            throw new Error(`The maximum number of outputs is ${MAX_OUTPUT_COUNT}, you have provided ${objects.length}`);
+        }
+        writeStream.writeUInt16("outputs.numOutputs", objects.length);
+        for (let i = 0; i < objects.length; i++) {
+            serializeOutput(writeStream, objects[i]);
+        }
+    }
+    /**
+     * Deserialize the output from binary.
+     * @param readStream The stream to read the data from.
+     * @returns The deserialized object.
+     */
+    function deserializeOutput(readStream) {
+        if (!readStream.hasRemaining(MIN_OUTPUT_LENGTH)) {
+            throw new Error(`Output data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_OUTPUT_LENGTH}`);
+        }
+        const type = readStream.readByte("output.type", false);
+        let input;
+        if (type === SIMPLE_OUTPUT_TYPE) {
+            input = deserializeSimpleOutput(readStream);
+        }
+        else if (type === SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE) {
+            input = deserializeSigLockedDustAllowanceOutput(readStream);
+        }
+        else if (type === TREASURY_OUTPUT_TYPE) {
+            input = deserializeTreasuryOutput(readStream);
+        }
+        else {
+            throw new Error(`Unrecognized output type ${type}`);
+        }
+        return input;
+    }
+    /**
+     * Serialize the output to binary.
+     * @param writeStream The stream to write the data to.
+     * @param object The object to serialize.
+     */
+    function serializeOutput(writeStream, object) {
+        if (object.type === SIMPLE_OUTPUT_TYPE) {
+            serializeSimpleOutput(writeStream, object);
+        }
+        else if (object.type === SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE) {
+            serializeSigLockedDustAllowanceOutput(writeStream, object);
+        }
+        else if (object.type === TREASURY_OUTPUT_TYPE) {
+            serializeTreasuryOutput(writeStream, object);
+        }
+        else {
+            throw new Error(`Unrecognized output type ${object.type}`);
+        }
+    }
+
+    /**
+     * The minimum length of a transaction essence binary representation.
+     */
+    const MIN_TRANSACTION_ESSENCE_LENGTH = SMALL_TYPE_LENGTH + 2 * ARRAY_LENGTH + UINT32_SIZE;
+    /**
+     * Deserialize the transaction essence from binary.
+     * @param readStream The stream to read the data from.
+     * @returns The deserialized object.
+     */
+    function deserializeTransactionEssence(readStream) {
+        if (!readStream.hasRemaining(MIN_TRANSACTION_ESSENCE_LENGTH)) {
+            throw new Error(`Transaction essence data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_TRANSACTION_ESSENCE_LENGTH}`);
+        }
+        const type = readStream.readByte("transactionEssence.type");
+        if (type !== TRANSACTION_ESSENCE_TYPE) {
+            throw new Error(`Type mismatch in transactionEssence ${type}`);
+        }
+        const inputs = deserializeInputs(readStream);
+        const outputs = deserializeOutputs(readStream);
+        const payload = deserializePayload(readStream);
+        if (payload && payload.type !== INDEXATION_PAYLOAD_TYPE) {
+            throw new Error("Transaction essence can only contain embedded Indexation Payload");
+        }
+        for (const input of inputs) {
+            if (input.type !== UTXO_INPUT_TYPE) {
+                throw new Error("Transaction essence can only contain UTXO Inputs");
+            }
+        }
+        for (const output of outputs) {
+            if (output.type !== SIMPLE_OUTPUT_TYPE) {
+                throw new Error("Transaction essence can only contain simple outputs");
+            }
+        }
+        return {
+            type: TRANSACTION_ESSENCE_TYPE,
+            inputs: inputs,
+            outputs,
+            payload
+        };
+    }
+    /**
+     * Serialize the transaction essence to binary.
+     * @param writeStream The stream to write the data to.
+     * @param object The object to serialize.
+     */
+    function serializeTransactionEssence(writeStream, object) {
+        writeStream.writeByte("transactionEssence.type", object.type);
+        for (const input of object.inputs) {
+            if (input.type !== UTXO_INPUT_TYPE) {
+                throw new Error("Transaction essence can only contain UTXO Inputs");
+            }
+        }
+        serializeInputs(writeStream, object.inputs);
+        for (const output of object.outputs) {
+            if (output.type !== SIMPLE_OUTPUT_TYPE && output.type !== SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE) {
+                throw new Error("Transaction essence can only contain sig locked single input or sig locked dust allowance outputs");
+            }
+        }
+        serializeOutputs(writeStream, object.outputs);
+        serializePayload(writeStream, object.payload);
+    }
+
+    /**
+     * The global type for the reference unlock block.
+     */
+    const REFERENCE_UNLOCK_BLOCK_TYPE = 1;
+
+    /**
+     * The global type for the unlock block.
+     */
+    const SIGNATURE_UNLOCK_BLOCK_TYPE = 0;
+
+    /**
+     * The minimum length of a reference unlock block binary representation.
+     */
+    const MIN_REFERENCE_UNLOCK_BLOCK_LENGTH = SMALL_TYPE_LENGTH + UINT16_SIZE;
+    /**
+     * Deserialize the reference unlock block from binary.
+     * @param readStream The stream to read the data from.
+     * @returns The deserialized object.
+     */
+    function deserializeReferenceUnlockBlock(readStream) {
+        if (!readStream.hasRemaining(MIN_REFERENCE_UNLOCK_BLOCK_LENGTH)) {
+            throw new Error(`Reference Unlock Block data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_REFERENCE_UNLOCK_BLOCK_LENGTH}`);
+        }
+        const type = readStream.readByte("referenceUnlockBlock.type");
+        if (type !== REFERENCE_UNLOCK_BLOCK_TYPE) {
+            throw new Error(`Type mismatch in referenceUnlockBlock ${type}`);
+        }
+        const reference = readStream.readUInt16("referenceUnlockBlock.reference");
+        return {
+            type: REFERENCE_UNLOCK_BLOCK_TYPE,
+            reference
+        };
+    }
+    /**
+     * Serialize the reference unlock block to binary.
+     * @param writeStream The stream to write the data to.
+     * @param object The object to serialize.
+     */
+    function serializeReferenceUnlockBlock(writeStream, object) {
+        writeStream.writeByte("referenceUnlockBlock.type", object.type);
+        writeStream.writeUInt16("referenceUnlockBlock.reference", object.reference);
+    }
+
+    /**
+     * The global type for the signature type.
+     */
+    const ED25519_SIGNATURE_TYPE = 0;
+
+    // Copyright 2020 IOTA Stiftung
+    /**
+     * The minimum length of an ed25519 signature binary representation.
+     */
+    const MIN_ED25519_SIGNATURE_LENGTH = SMALL_TYPE_LENGTH + crypto_js.Ed25519.SIGNATURE_SIZE + crypto_js.Ed25519.PUBLIC_KEY_SIZE;
+    /**
+     * Deserialize the Ed25519 signature from binary.
+     * @param readStream The stream to read the data from.
+     * @returns The deserialized object.
+     */
+    function deserializeEd25519Signature(readStream) {
+        if (!readStream.hasRemaining(MIN_ED25519_SIGNATURE_LENGTH)) {
+            throw new Error(`Ed25519 signature data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_ED25519_SIGNATURE_LENGTH}`);
+        }
+        const type = readStream.readByte("ed25519Signature.type");
+        if (type !== ED25519_SIGNATURE_TYPE) {
+            throw new Error(`Type mismatch in ed25519Signature ${type}`);
+        }
+        const publicKey = readStream.readFixedHex("ed25519Signature.publicKey", crypto_js.Ed25519.PUBLIC_KEY_SIZE);
+        const signature = readStream.readFixedHex("ed25519Signature.signature", crypto_js.Ed25519.SIGNATURE_SIZE);
+        return {
+            type: ED25519_SIGNATURE_TYPE,
+            publicKey,
+            signature
+        };
+    }
+    /**
+     * Serialize the Ed25519 signature to binary.
+     * @param writeStream The stream to write the data to.
+     * @param object The object to serialize.
+     */
+    function serializeEd25519Signature(writeStream, object) {
+        writeStream.writeByte("ed25519Signature.type", object.type);
+        writeStream.writeFixedHex("ed25519Signature.publicKey", crypto_js.Ed25519.PUBLIC_KEY_SIZE, object.publicKey);
+        writeStream.writeFixedHex("ed25519Signature.signature", crypto_js.Ed25519.SIGNATURE_SIZE, object.signature);
+    }
+
+    /**
+     * The minimum length of a signature binary representation.
+     */
+    const MIN_SIGNATURE_LENGTH = MIN_ED25519_SIGNATURE_LENGTH;
+    /**
+     * Deserialize the signature from binary.
+     * @param readStream The stream to read the data from.
+     * @returns The deserialized object.
+     */
+    function deserializeSignature(readStream) {
+        if (!readStream.hasRemaining(MIN_SIGNATURE_LENGTH)) {
+            throw new Error(`Signature data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_SIGNATURE_LENGTH}`);
+        }
+        const type = readStream.readByte("signature.type", false);
+        let input;
+        if (type === ED25519_SIGNATURE_TYPE) {
+            input = deserializeEd25519Signature(readStream);
+        }
+        else {
+            throw new Error(`Unrecognized signature type ${type}`);
+        }
+        return input;
+    }
+    /**
+     * Serialize the signature to binary.
+     * @param writeStream The stream to write the data to.
+     * @param object The object to serialize.
+     */
+    function serializeSignature(writeStream, object) {
+        if (object.type === ED25519_SIGNATURE_TYPE) {
+            serializeEd25519Signature(writeStream, object);
+        }
+        else {
+            throw new Error(`Unrecognized signature type ${object.type}`);
+        }
+    }
+
+    /**
+     * The minimum length of a signature unlock block binary representation.
+     */
+    const MIN_SIGNATURE_UNLOCK_BLOCK_LENGTH = SMALL_TYPE_LENGTH + MIN_SIGNATURE_LENGTH;
+    /**
+     * Deserialize the signature unlock block from binary.
+     * @param readStream The stream to read the data from.
+     * @returns The deserialized object.
+     */
+    function deserializeSignatureUnlockBlock(readStream) {
+        if (!readStream.hasRemaining(MIN_SIGNATURE_UNLOCK_BLOCK_LENGTH)) {
+            throw new Error(`Signature Unlock Block data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_SIGNATURE_UNLOCK_BLOCK_LENGTH}`);
+        }
+        const type = readStream.readByte("signatureUnlockBlock.type");
+        if (type !== SIGNATURE_UNLOCK_BLOCK_TYPE) {
+            throw new Error(`Type mismatch in signatureUnlockBlock ${type}`);
+        }
+        const signature = deserializeSignature(readStream);
+        return {
+            type: SIGNATURE_UNLOCK_BLOCK_TYPE,
+            signature
+        };
+    }
+    /**
+     * Serialize the signature unlock block to binary.
+     * @param writeStream The stream to write the data to.
+     * @param object The object to serialize.
+     */
+    function serializeSignatureUnlockBlock(writeStream, object) {
+        writeStream.writeByte("signatureUnlockBlock.type", object.type);
+        serializeSignature(writeStream, object.signature);
+    }
+
+    /**
+     * The minimum length of an unlock block binary representation.
+     */
+    const MIN_UNLOCK_BLOCK_LENGTH = Math.min(MIN_SIGNATURE_UNLOCK_BLOCK_LENGTH, MIN_REFERENCE_UNLOCK_BLOCK_LENGTH);
+    /**
+     * Deserialize the unlock blocks from binary.
+     * @param readStream The stream to read the data from.
+     * @returns The deserialized object.
+     */
+    function deserializeUnlockBlocks(readStream) {
+        const numUnlockBlocks = readStream.readUInt16("transactionEssence.numUnlockBlocks");
+        const unlockBlocks = [];
+        for (let i = 0; i < numUnlockBlocks; i++) {
+            unlockBlocks.push(deserializeUnlockBlock(readStream));
+        }
+        return unlockBlocks;
+    }
+    /**
+     * Serialize the unlock blocks to binary.
+     * @param writeStream The stream to write the data to.
+     * @param objects The objects to serialize.
+     */
+    function serializeUnlockBlocks(writeStream, objects) {
+        writeStream.writeUInt16("transactionEssence.numUnlockBlocks", objects.length);
+        for (let i = 0; i < objects.length; i++) {
+            serializeUnlockBlock(writeStream, objects[i]);
+        }
+    }
+    /**
+     * Deserialize the unlock block from binary.
+     * @param readStream The stream to read the data from.
+     * @returns The deserialized object.
+     */
+    function deserializeUnlockBlock(readStream) {
+        if (!readStream.hasRemaining(MIN_UNLOCK_BLOCK_LENGTH)) {
+            throw new Error(`Unlock Block data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_UNLOCK_BLOCK_LENGTH}`);
+        }
+        const type = readStream.readByte("unlockBlock.type", false);
+        let unlockBlock;
+        if (type === SIGNATURE_UNLOCK_BLOCK_TYPE) {
+            unlockBlock = deserializeSignatureUnlockBlock(readStream);
+        }
+        else if (type === REFERENCE_UNLOCK_BLOCK_TYPE) {
+            unlockBlock = deserializeReferenceUnlockBlock(readStream);
+        }
+        else {
+            throw new Error(`Unrecognized unlock block type ${type}`);
+        }
+        return unlockBlock;
+    }
+    /**
+     * Serialize the unlock block to binary.
+     * @param writeStream The stream to write the data to.
+     * @param object The object to serialize.
+     */
+    function serializeUnlockBlock(writeStream, object) {
+        if (object.type === SIGNATURE_UNLOCK_BLOCK_TYPE) {
+            serializeSignatureUnlockBlock(writeStream, object);
+        }
+        else if (object.type === REFERENCE_UNLOCK_BLOCK_TYPE) {
+            serializeReferenceUnlockBlock(writeStream, object);
+        }
+        else {
+            throw new Error(`Unrecognized unlock block type ${object.type}`);
+        }
+    }
+
+    /**
+     * The minimum length of a transaction payload binary representation.
+     */
+    const MIN_TRANSACTION_PAYLOAD_LENGTH = TYPE_LENGTH + // min payload
+        UINT32_SIZE; // essence type
+    /**
+     * Deserialize the transaction payload from binary.
+     * @param readStream The stream to read the data from.
+     * @returns The deserialized object.
+     */
+    function deserializeTransactionPayload(readStream) {
+        if (!readStream.hasRemaining(MIN_TRANSACTION_PAYLOAD_LENGTH)) {
+            throw new Error(`Transaction Payload data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_TRANSACTION_PAYLOAD_LENGTH}`);
+        }
+        const type = readStream.readUInt32("payloadTransaction.type");
+        if (type !== TRANSACTION_PAYLOAD_TYPE) {
+            throw new Error(`Type mismatch in payloadTransaction ${type}`);
+        }
+        const essenceType = readStream.readByte("payloadTransaction.essenceType", false);
+        let essence;
+        let unlockBlocks;
+        if (essenceType === TRANSACTION_ESSENCE_TYPE) {
+            essence = deserializeTransactionEssence(readStream);
+            unlockBlocks = deserializeUnlockBlocks(readStream);
+        }
+        else {
+            throw new Error(`Unrecognized transaction essence type ${type}`);
+        }
+        return {
+            type: TRANSACTION_PAYLOAD_TYPE,
+            essence,
+            unlockBlocks
+        };
+    }
+    /**
+     * Serialize the transaction payload to binary.
+     * @param writeStream The stream to write the data to.
+     * @param object The object to serialize.
+     */
+    function serializeTransactionPayload(writeStream, object) {
+        writeStream.writeUInt32("payloadMilestone.type", object.type);
+        if (object.type === TRANSACTION_PAYLOAD_TYPE) {
+            serializeTransactionEssence(writeStream, object.essence);
+            serializeUnlockBlocks(writeStream, object.unlockBlocks);
+        }
+        else {
+            throw new Error(`Unrecognized transaction type ${object.type}`);
+        }
+    }
+
+    /**
+     * The minimum length of a treasure transaction payload binary representation.
+     */
+    const MIN_TREASURY_TRANSACTION_PAYLOAD_LENGTH = TYPE_LENGTH + MIN_TREASURY_INPUT_LENGTH + MIN_TREASURY_OUTPUT_LENGTH;
     /**
      * Deserialize the treasury transaction payload from binary.
      * @param readStream The stream to read the data from.
@@ -1286,10 +1227,83 @@
     }
 
     /**
+     * The minimum length of a payload binary representation.
+     */
+    const MIN_PAYLOAD_LENGTH = Math.min(MIN_TRANSACTION_PAYLOAD_LENGTH, MIN_MILESTONE_PAYLOAD_LENGTH, MIN_INDEXATION_PAYLOAD_LENGTH, MIN_RECEIPT_PAYLOAD_LENGTH, MIN_TREASURY_TRANSACTION_PAYLOAD_LENGTH);
+    /**
+     * Deserialize the payload from binary.
+     * @param readStream The stream to read the data from.
+     * @returns The deserialized object.
+     */
+    function deserializePayload(readStream) {
+        const payloadLength = readStream.readUInt32("payload.length");
+        if (!readStream.hasRemaining(payloadLength)) {
+            throw new Error(`Payload length ${payloadLength} exceeds the remaining data ${readStream.unused()}`);
+        }
+        let payload;
+        if (payloadLength > 0) {
+            const payloadType = readStream.readUInt32("payload.type", false);
+            if (payloadType === TRANSACTION_PAYLOAD_TYPE) {
+                payload = deserializeTransactionPayload(readStream);
+            }
+            else if (payloadType === MILESTONE_PAYLOAD_TYPE) {
+                payload = deserializeMilestonePayload(readStream);
+            }
+            else if (payloadType === INDEXATION_PAYLOAD_TYPE) {
+                payload = deserializeIndexationPayload(readStream);
+            }
+            else if (payloadType === RECEIPT_PAYLOAD_TYPE) {
+                payload = deserializeReceiptPayload(readStream);
+            }
+            else if (payloadType === TREASURY_TRANSACTION_PAYLOAD_TYPE) {
+                payload = deserializeTreasuryTransactionPayload(readStream);
+            }
+            else {
+                throw new Error(`Unrecognized payload type ${payloadType}`);
+            }
+        }
+        return payload;
+    }
+    /**
+     * Serialize the payload essence to binary.
+     * @param writeStream The stream to write the data to.
+     * @param object The object to serialize.
+     */
+    function serializePayload(writeStream, object) {
+        // Store the location for the payload length and write 0
+        // we will rewind and fill in once the size of the payload is known
+        const payloadLengthWriteIndex = writeStream.getWriteIndex();
+        writeStream.writeUInt32("payload.length", 0);
+        if (!object) ;
+        else if (object.type === TRANSACTION_PAYLOAD_TYPE) {
+            serializeTransactionPayload(writeStream, object);
+        }
+        else if (object.type === MILESTONE_PAYLOAD_TYPE) {
+            serializeMilestonePayload(writeStream, object);
+        }
+        else if (object.type === INDEXATION_PAYLOAD_TYPE) {
+            serializeIndexationPayload(writeStream, object);
+        }
+        else if (object.type === RECEIPT_PAYLOAD_TYPE) {
+            serializeReceiptPayload(writeStream, object);
+        }
+        else if (object.type === TREASURY_TRANSACTION_PAYLOAD_TYPE) {
+            serializeTreasuryTransactionPayload(writeStream, object);
+        }
+        else {
+            throw new Error(`Unrecognized transaction type ${object.type}`);
+        }
+        const endOfPayloadWriteIndex = writeStream.getWriteIndex();
+        writeStream.setWriteIndex(payloadLengthWriteIndex);
+        writeStream.writeUInt32("payload.length", endOfPayloadWriteIndex - payloadLengthWriteIndex - UINT32_SIZE);
+        writeStream.setWriteIndex(endOfPayloadWriteIndex);
+    }
+
+    /**
      * The minimum length of a message binary representation.
      */
     const MIN_MESSAGE_LENGTH = UINT64_SIZE + // Network id
-        BYTE_SIZE + // Parent count
+        UINT8_SIZE + // Parent count
         MESSAGE_ID_LENGTH + // Single parent
         MIN_PAYLOAD_LENGTH + // Min payload length
         UINT64_SIZE; // Nonce
@@ -3051,24 +3065,24 @@
     /**
      * Log a message to the console.
      * @param prefix The prefix for the output.
-     * @param unknownPayload The payload.
+     * @param payload The payload.
      */
-    function logPayload(prefix, unknownPayload) {
-        if (unknownPayload) {
-            if (unknownPayload.type === TRANSACTION_PAYLOAD_TYPE) {
-                logTransactionPayload(prefix, unknownPayload);
+    function logPayload(prefix, payload) {
+        if (payload) {
+            if (payload.type === TRANSACTION_PAYLOAD_TYPE) {
+                logTransactionPayload(prefix, payload);
             }
-            else if (unknownPayload.type === MILESTONE_PAYLOAD_TYPE) {
-                logMilestonePayload(prefix, unknownPayload);
+            else if (payload.type === MILESTONE_PAYLOAD_TYPE) {
+                logMilestonePayload(prefix, payload);
             }
-            else if (unknownPayload.type === INDEXATION_PAYLOAD_TYPE) {
-                logIndexationPayload(prefix, unknownPayload);
+            else if (payload.type === INDEXATION_PAYLOAD_TYPE) {
+                logIndexationPayload(prefix, payload);
             }
-            else if (unknownPayload.type === RECEIPT_PAYLOAD_TYPE) {
-                logReceiptPayload(prefix, unknownPayload);
+            else if (payload.type === RECEIPT_PAYLOAD_TYPE) {
+                logReceiptPayload(prefix, payload);
             }
-            else if (unknownPayload.type === TREASURY_TRANSACTION_PAYLOAD_TYPE) {
-                logTreasuryTransactionPayload(prefix, unknownPayload);
+            else if (payload.type === TREASURY_TRANSACTION_PAYLOAD_TYPE) {
+                logTreasuryTransactionPayload(prefix, payload);
             }
         }
     }
@@ -3171,11 +3185,10 @@
     /**
      * Log an address to the console.
      * @param prefix The prefix for the output.
-     * @param unknownAddress The address to log.
+     * @param address The address to log.
      */
-    function logAddress(prefix, unknownAddress) {
-        if ((unknownAddress === null || unknownAddress === void 0 ? void 0 : unknownAddress.type) === ED25519_ADDRESS_TYPE) {
-            const address = unknownAddress;
+    function logAddress(prefix, address) {
+        if ((address === null || address === void 0 ? void 0 : address.type) === ED25519_ADDRESS_TYPE) {
             logger(`${prefix}Ed25519 Address`);
             logger(`${prefix}\tAddress:`, address.address);
         }
@@ -3183,11 +3196,10 @@
     /**
      * Log signature to the console.
      * @param prefix The prefix for the output.
-     * @param unknownSignature The signature to log.
+     * @param signature The signature to log.
      */
-    function logSignature(prefix, unknownSignature) {
-        if ((unknownSignature === null || unknownSignature === void 0 ? void 0 : unknownSignature.type) === ED25519_SIGNATURE_TYPE) {
-            const signature = unknownSignature;
+    function logSignature(prefix, signature) {
+        if ((signature === null || signature === void 0 ? void 0 : signature.type) === ED25519_SIGNATURE_TYPE) {
             logger(`${prefix}Ed25519 Signature`);
             logger(`${prefix}\tPublic Key:`, signature.publicKey);
             logger(`${prefix}\tSignature:`, signature.signature);
@@ -3196,18 +3208,16 @@
     /**
      * Log input to the console.
      * @param prefix The prefix for the output.
-     * @param unknownInput The input to log.
+     * @param input The input to log.
      */
-    function logInput(prefix, unknownInput) {
-        if (unknownInput) {
-            if (unknownInput.type === UTXO_INPUT_TYPE) {
-                const input = unknownInput;
+    function logInput(prefix, input) {
+        if (input) {
+            if (input.type === UTXO_INPUT_TYPE) {
                 logger(`${prefix}UTXO Input`);
                 logger(`${prefix}\tTransaction Id:`, input.transactionId);
                 logger(`${prefix}\tTransaction Output Index:`, input.transactionOutputIndex);
             }
-            else if (unknownInput.type === TREASURY_INPUT_TYPE) {
-                const input = unknownInput;
+            else if (input.type === TREASURY_INPUT_TYPE) {
                 logger(`${prefix}Treasury Input`);
                 logger(`${prefix}\tMilestone Hash:`, input.milestoneId);
             }
@@ -3216,24 +3226,21 @@
     /**
      * Log output to the console.
      * @param prefix The prefix for the output.
-     * @param unknownOutput The output to log.
+     * @param output The output to log.
      */
-    function logOutput(prefix, unknownOutput) {
-        if (unknownOutput) {
-            if (unknownOutput.type === SIMPLE_OUTPUT_TYPE) {
-                const output = unknownOutput;
+    function logOutput(prefix, output) {
+        if (output) {
+            if (output.type === SIMPLE_OUTPUT_TYPE) {
                 logger(`${prefix}Signature Locked Single Output`);
                 logAddress(`${prefix}\t\t`, output.address);
                 logger(`${prefix}\t\tAmount:`, output.amount);
             }
-            else if (unknownOutput.type === SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE) {
-                const output = unknownOutput;
+            else if (output.type === SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE) {
                 logger(`${prefix}Signature Locked Dust Allowance Output`);
                 logAddress(`${prefix}\t\t`, output.address);
                 logger(`${prefix}\t\tAmount:`, output.amount);
             }
-            else if (unknownOutput.type === TREASURY_OUTPUT_TYPE) {
-                const output = unknownOutput;
+            else if (output.type === TREASURY_OUTPUT_TYPE) {
                 logger(`${prefix}Treasury Output`);
                 logger(`${prefix}\t\tAmount:`, output.amount);
             }
@@ -3242,17 +3249,15 @@
     /**
      * Log unlock block to the console.
      * @param prefix The prefix for the output.
-     * @param unknownUnlockBlock The unlock block to log.
+     * @param unlockBlock The unlock block to log.
      */
-    function logUnlockBlock(prefix, unknownUnlockBlock) {
-        if (unknownUnlockBlock) {
-            if (unknownUnlockBlock.type === SIGNATURE_UNLOCK_BLOCK_TYPE) {
-                const unlockBlock = unknownUnlockBlock;
+    function logUnlockBlock(prefix, unlockBlock) {
+        if (unlockBlock) {
+            if (unlockBlock.type === SIGNATURE_UNLOCK_BLOCK_TYPE) {
                 logger(`${prefix}\tSignature Unlock Block`);
                 logSignature(`${prefix}\t\t`, unlockBlock.signature);
             }
-            else if (unknownUnlockBlock.type === REFERENCE_UNLOCK_BLOCK_TYPE) {
-                const unlockBlock = unknownUnlockBlock;
+            else if (unlockBlock.type === REFERENCE_UNLOCK_BLOCK_TYPE) {
                 logger(`${prefix}\tReference Unlock Block`);
                 logger(`${prefix}\t\tReference:`, unlockBlock.reference);
             }
@@ -3397,7 +3402,6 @@
     exports.ARRAY_LENGTH = ARRAY_LENGTH;
     exports.B1T6 = B1T6;
     exports.BLS_ADDRESS_TYPE = BLS_ADDRESS_TYPE;
-    exports.BYTE_SIZE = BYTE_SIZE;
     exports.Bech32Helper = Bech32Helper;
     exports.CONFLICT_REASON_STRINGS = CONFLICT_REASON_STRINGS;
     exports.ClientError = ClientError;
@@ -3416,7 +3420,6 @@
     exports.ISSUER_FEATURE_BLOCK_TYPE = ISSUER_FEATURE_BLOCK_TYPE;
     exports.LocalPowProvider = LocalPowProvider;
     exports.MAX_FUNDS_COUNT = MAX_FUNDS_COUNT;
-    exports.MAX_INDEXATION_KEY_LENGTH = MAX_INDEXATION_KEY_LENGTH;
     exports.MAX_INPUT_COUNT = MAX_INPUT_COUNT;
     exports.MAX_MESSAGE_LENGTH = MAX_MESSAGE_LENGTH;
     exports.MAX_NUMBER_PARENTS = MAX_NUMBER_PARENTS;
@@ -3428,27 +3431,21 @@
     exports.MIN_ADDRESS_LENGTH = MIN_ADDRESS_LENGTH;
     exports.MIN_ED25519_ADDRESS_LENGTH = MIN_ED25519_ADDRESS_LENGTH;
     exports.MIN_ED25519_SIGNATURE_LENGTH = MIN_ED25519_SIGNATURE_LENGTH;
-    exports.MIN_INDEXATION_KEY_LENGTH = MIN_INDEXATION_KEY_LENGTH;
-    exports.MIN_INDEXATION_PAYLOAD_LENGTH = MIN_INDEXATION_PAYLOAD_LENGTH;
     exports.MIN_INPUT_COUNT = MIN_INPUT_COUNT;
     exports.MIN_INPUT_LENGTH = MIN_INPUT_LENGTH;
     exports.MIN_MIGRATED_FUNDS_LENGTH = MIN_MIGRATED_FUNDS_LENGTH;
-    exports.MIN_MILESTONE_PAYLOAD_LENGTH = MIN_MILESTONE_PAYLOAD_LENGTH;
     exports.MIN_NUMBER_PARENTS = MIN_NUMBER_PARENTS;
     exports.MIN_OUTPUT_COUNT = MIN_OUTPUT_COUNT;
     exports.MIN_OUTPUT_LENGTH = MIN_OUTPUT_LENGTH;
     exports.MIN_PAYLOAD_LENGTH = MIN_PAYLOAD_LENGTH;
-    exports.MIN_RECEIPT_PAYLOAD_LENGTH = MIN_RECEIPT_PAYLOAD_LENGTH;
     exports.MIN_REFERENCE_UNLOCK_BLOCK_LENGTH = MIN_REFERENCE_UNLOCK_BLOCK_LENGTH;
     exports.MIN_SIGNATURE_LENGTH = MIN_SIGNATURE_LENGTH;
     exports.MIN_SIGNATURE_UNLOCK_BLOCK_LENGTH = MIN_SIGNATURE_UNLOCK_BLOCK_LENGTH;
     exports.MIN_SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_LENGTH = MIN_SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_LENGTH;
-    exports.MIN_SIG_LOCKED_SINGLE_OUTPUT_LENGTH = MIN_SIG_LOCKED_SINGLE_OUTPUT_LENGTH;
+    exports.MIN_SIMPLE_OUTPUT_LENGTH = MIN_SIMPLE_OUTPUT_LENGTH;
     exports.MIN_TRANSACTION_ESSENCE_LENGTH = MIN_TRANSACTION_ESSENCE_LENGTH;
-    exports.MIN_TRANSACTION_PAYLOAD_LENGTH = MIN_TRANSACTION_PAYLOAD_LENGTH;
     exports.MIN_TREASURY_INPUT_LENGTH = MIN_TREASURY_INPUT_LENGTH;
     exports.MIN_TREASURY_OUTPUT_LENGTH = MIN_TREASURY_OUTPUT_LENGTH;
-    exports.MIN_TREASURY_TRANSACTION_PAYLOAD_LENGTH = MIN_TREASURY_TRANSACTION_PAYLOAD_LENGTH;
     exports.MIN_UNLOCK_BLOCK_LENGTH = MIN_UNLOCK_BLOCK_LENGTH;
     exports.MIN_UTXO_INPUT_LENGTH = MIN_UTXO_INPUT_LENGTH;
     exports.NFTUNLOCK_BLOCK_TYPE = NFTUNLOCK_BLOCK_TYPE;
@@ -3479,6 +3476,7 @@
     exports.UINT16_SIZE = UINT16_SIZE;
     exports.UINT32_SIZE = UINT32_SIZE;
     exports.UINT64_SIZE = UINT64_SIZE;
+    exports.UINT8_SIZE = UINT8_SIZE;
     exports.UTXO_INPUT_TYPE = UTXO_INPUT_TYPE;
     exports.UnitsHelper = UnitsHelper;
     exports.buildTransactionPayload = buildTransactionPayload;
@@ -3487,26 +3485,21 @@
     exports.deserializeEd25519Address = deserializeEd25519Address;
     exports.deserializeEd25519Signature = deserializeEd25519Signature;
     exports.deserializeFunds = deserializeFunds;
-    exports.deserializeIndexationPayload = deserializeIndexationPayload;
     exports.deserializeInput = deserializeInput;
     exports.deserializeInputs = deserializeInputs;
     exports.deserializeMessage = deserializeMessage;
     exports.deserializeMigratedFunds = deserializeMigratedFunds;
-    exports.deserializeMilestonePayload = deserializeMilestonePayload;
     exports.deserializeOutput = deserializeOutput;
     exports.deserializeOutputs = deserializeOutputs;
     exports.deserializePayload = deserializePayload;
-    exports.deserializeReceiptPayload = deserializeReceiptPayload;
     exports.deserializeReferenceUnlockBlock = deserializeReferenceUnlockBlock;
     exports.deserializeSigLockedDustAllowanceOutput = deserializeSigLockedDustAllowanceOutput;
     exports.deserializeSignature = deserializeSignature;
     exports.deserializeSignatureUnlockBlock = deserializeSignatureUnlockBlock;
     exports.deserializeSimpleOutput = deserializeSimpleOutput;
     exports.deserializeTransactionEssence = deserializeTransactionEssence;
-    exports.deserializeTransactionPayload = deserializeTransactionPayload;
     exports.deserializeTreasuryInput = deserializeTreasuryInput;
     exports.deserializeTreasuryOutput = deserializeTreasuryOutput;
-    exports.deserializeTreasuryTransactionPayload = deserializeTreasuryTransactionPayload;
     exports.deserializeUTXOInput = deserializeUTXOInput;
     exports.deserializeUnlockBlock = deserializeUnlockBlock;
     exports.deserializeUnlockBlocks = deserializeUnlockBlocks;
@@ -3547,26 +3540,21 @@
     exports.serializeEd25519Address = serializeEd25519Address;
     exports.serializeEd25519Signature = serializeEd25519Signature;
     exports.serializeFunds = serializeFunds;
-    exports.serializeIndexationPayload = serializeIndexationPayload;
     exports.serializeInput = serializeInput;
     exports.serializeInputs = serializeInputs;
     exports.serializeMessage = serializeMessage;
     exports.serializeMigratedFunds = serializeMigratedFunds;
-    exports.serializeMilestonePayload = serializeMilestonePayload;
     exports.serializeOutput = serializeOutput;
     exports.serializeOutputs = serializeOutputs;
     exports.serializePayload = serializePayload;
-    exports.serializeReceiptPayload = serializeReceiptPayload;
     exports.serializeReferenceUnlockBlock = serializeReferenceUnlockBlock;
     exports.serializeSigLockedDustAllowanceOutput = serializeSigLockedDustAllowanceOutput;
     exports.serializeSignature = serializeSignature;
     exports.serializeSignatureUnlockBlock = serializeSignatureUnlockBlock;
     exports.serializeSimpleOutput = serializeSimpleOutput;
     exports.serializeTransactionEssence = serializeTransactionEssence;
-    exports.serializeTransactionPayload = serializeTransactionPayload;
     exports.serializeTreasuryInput = serializeTreasuryInput;
     exports.serializeTreasuryOutput = serializeTreasuryOutput;
-    exports.serializeTreasuryTransactionPayload = serializeTreasuryTransactionPayload;
     exports.serializeUTXOInput = serializeUTXOInput;
     exports.serializeUnlockBlock = serializeUnlockBlock;
     exports.serializeUnlockBlocks = serializeUnlockBlocks;

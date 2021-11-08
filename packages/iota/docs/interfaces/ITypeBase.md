@@ -38,8 +38,6 @@ Type of the object.
 
   ↳ [`ITimelockUnixFeatureBlock`](ITimelockUnixFeatureBlock.md)
 
-  ↳ [`IEd25519Signature`](IEd25519Signature.md)
-
   ↳ [`ITreasuryInput`](ITreasuryInput.md)
 
   ↳ [`IUTXOInput`](IUTXOInput.md)
@@ -69,6 +67,8 @@ Type of the object.
   ↳ [`ITransactionPayload`](ITransactionPayload.md)
 
   ↳ [`ITreasuryTransactionPayload`](ITreasuryTransactionPayload.md)
+
+  ↳ [`IEd25519Signature`](IEd25519Signature.md)
 
   ↳ [`ISimpleTokenScheme`](ISimpleTokenScheme.md)
 

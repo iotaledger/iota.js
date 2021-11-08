@@ -3,8 +3,8 @@
 import type { ReadStream, WriteStream } from "@iota/util.js";
 import bigInt from "big-integer";
 import type { IMigratedFunds } from "../models/IMigratedFunds";
-import { deserializeAddress, MIN_ED25519_ADDRESS_LENGTH, serializeAddress } from "./address";
-import { UINT64_SIZE } from "./common";
+import { deserializeAddress, MIN_ADDRESS_LENGTH, serializeAddress } from "./addresses/addresses";
+import { UINT64_SIZE } from "./commonDataTypes";
 
 /**
  * The length of the tail hash length in bytes.
@@ -16,7 +16,7 @@ export const TAIL_HASH_LENGTH: number = 49;
  */
 export const MIN_MIGRATED_FUNDS_LENGTH: number =
     TAIL_HASH_LENGTH + // tailTransactionHash
-    MIN_ED25519_ADDRESS_LENGTH + // address
+    MIN_ADDRESS_LENGTH + // address
     UINT64_SIZE; // deposit
 
 /**

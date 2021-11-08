@@ -18,7 +18,7 @@
 
 - [MIN\_ADDRESS\_LENGTH](api.md#min_address_length)
 - [MIN\_ED25519\_ADDRESS\_LENGTH](api.md#min_ed25519_address_length)
-- [BYTE\_SIZE](api.md#byte_size)
+- [UINT8\_SIZE](api.md#uint8_size)
 - [UINT16\_SIZE](api.md#uint16_size)
 - [UINT32\_SIZE](api.md#uint32_size)
 - [UINT64\_SIZE](api.md#uint64_size)
@@ -33,34 +33,26 @@
 - [MIN\_MIGRATED\_FUNDS\_LENGTH](api.md#min_migrated_funds_length)
 - [MAX\_FUNDS\_COUNT](api.md#max_funds_count)
 - [MIN\_INPUT\_LENGTH](api.md#min_input_length)
-- [MIN\_UTXO\_INPUT\_LENGTH](api.md#min_utxo_input_length)
-- [MIN\_TREASURY\_INPUT\_LENGTH](api.md#min_treasury_input_length)
 - [MIN\_INPUT\_COUNT](api.md#min_input_count)
 - [MAX\_INPUT\_COUNT](api.md#max_input_count)
+- [MIN\_TREASURY\_INPUT\_LENGTH](api.md#min_treasury_input_length)
+- [MIN\_UTXO\_INPUT\_LENGTH](api.md#min_utxo_input_length)
 - [MAX\_MESSAGE\_LENGTH](api.md#max_message_length)
 - [MAX\_NUMBER\_PARENTS](api.md#max_number_parents)
 - [MIN\_NUMBER\_PARENTS](api.md#min_number_parents)
 - [MIN\_OUTPUT\_LENGTH](api.md#min_output_length)
-- [MIN\_SIG\_LOCKED\_SINGLE\_OUTPUT\_LENGTH](api.md#min_sig_locked_single_output_length)
-- [MIN\_SIG\_LOCKED\_DUST\_ALLOWANCE\_OUTPUT\_LENGTH](api.md#min_sig_locked_dust_allowance_output_length)
-- [MIN\_TREASURY\_OUTPUT\_LENGTH](api.md#min_treasury_output_length)
 - [MIN\_OUTPUT\_COUNT](api.md#min_output_count)
 - [MAX\_OUTPUT\_COUNT](api.md#max_output_count)
+- [MIN\_SIG\_LOCKED\_DUST\_ALLOWANCE\_OUTPUT\_LENGTH](api.md#min_sig_locked_dust_allowance_output_length)
+- [MIN\_SIMPLE\_OUTPUT\_LENGTH](api.md#min_simple_output_length)
+- [MIN\_TREASURY\_OUTPUT\_LENGTH](api.md#min_treasury_output_length)
 - [MIN\_PAYLOAD\_LENGTH](api.md#min_payload_length)
-- [MIN\_MILESTONE\_PAYLOAD\_LENGTH](api.md#min_milestone_payload_length)
-- [MIN\_INDEXATION\_PAYLOAD\_LENGTH](api.md#min_indexation_payload_length)
-- [MIN\_TRANSACTION\_PAYLOAD\_LENGTH](api.md#min_transaction_payload_length)
-- [MIN\_RECEIPT\_PAYLOAD\_LENGTH](api.md#min_receipt_payload_length)
-- [MIN\_TREASURY\_TRANSACTION\_PAYLOAD\_LENGTH](api.md#min_treasury_transaction_payload_length)
-- [MIN\_INDEXATION\_KEY\_LENGTH](api.md#min_indexation_key_length)
-- [MAX\_INDEXATION\_KEY\_LENGTH](api.md#max_indexation_key_length)
-- [MIN\_SIGNATURE\_LENGTH](api.md#min_signature_length)
 - [MIN\_ED25519\_SIGNATURE\_LENGTH](api.md#min_ed25519_signature_length)
+- [MIN\_SIGNATURE\_LENGTH](api.md#min_signature_length)
 - [MIN\_TRANSACTION\_ESSENCE\_LENGTH](api.md#min_transaction_essence_length)
-- [MIN\_UNLOCK\_BLOCK\_LENGTH](api.md#min_unlock_block_length)
-- [MIN\_SIGNATURE\_UNLOCK\_BLOCK\_LENGTH](api.md#min_signature_unlock_block_length)
 - [MIN\_REFERENCE\_UNLOCK\_BLOCK\_LENGTH](api.md#min_reference_unlock_block_length)
-- [ED25519\_SIGNATURE\_TYPE](api.md#ed25519_signature_type)
+- [MIN\_SIGNATURE\_UNLOCK\_BLOCK\_LENGTH](api.md#min_signature_unlock_block_length)
+- [MIN\_UNLOCK\_BLOCK\_LENGTH](api.md#min_unlock_block_length)
 - [TRANSACTION\_ESSENCE\_TYPE](api.md#transaction_essence_type)
 - [ALIAS\_ADDRESS\_TYPE](api.md#alias_address_type)
 - [BLS\_ADDRESS\_TYPE](api.md#bls_address_type)
@@ -89,6 +81,7 @@
 - [RECEIPT\_PAYLOAD\_TYPE](api.md#receipt_payload_type)
 - [TRANSACTION\_PAYLOAD\_TYPE](api.md#transaction_payload_type)
 - [TREASURY\_TRANSACTION\_PAYLOAD\_TYPE](api.md#treasury_transaction_payload_type)
+- [ED25519\_SIGNATURE\_TYPE](api.md#ed25519_signature_type)
 - [SIMPLE\_TOKEN\_SCHEME\_TYPE](api.md#simple_token_scheme_type)
 - [ALIAS\_UNLOCK\_BLOCK\_TYPE](api.md#alias_unlock_block_type)
 - [NFTUNLOCK\_BLOCK\_TYPE](api.md#nftunlock_block_type)
@@ -111,48 +104,38 @@
 - [serializeInputs](api.md#serializeinputs)
 - [deserializeInput](api.md#deserializeinput)
 - [serializeInput](api.md#serializeinput)
-- [deserializeUTXOInput](api.md#deserializeutxoinput)
-- [serializeUTXOInput](api.md#serializeutxoinput)
 - [deserializeTreasuryInput](api.md#deserializetreasuryinput)
 - [serializeTreasuryInput](api.md#serializetreasuryinput)
+- [deserializeUTXOInput](api.md#deserializeutxoinput)
+- [serializeUTXOInput](api.md#serializeutxoinput)
 - [deserializeMessage](api.md#deserializemessage)
 - [serializeMessage](api.md#serializemessage)
 - [deserializeOutputs](api.md#deserializeoutputs)
 - [serializeOutputs](api.md#serializeoutputs)
 - [deserializeOutput](api.md#deserializeoutput)
 - [serializeOutput](api.md#serializeoutput)
-- [deserializeSimpleOutput](api.md#deserializesimpleoutput)
-- [serializeSimpleOutput](api.md#serializesimpleoutput)
 - [deserializeSigLockedDustAllowanceOutput](api.md#deserializesiglockeddustallowanceoutput)
 - [serializeSigLockedDustAllowanceOutput](api.md#serializesiglockeddustallowanceoutput)
+- [deserializeSimpleOutput](api.md#deserializesimpleoutput)
+- [serializeSimpleOutput](api.md#serializesimpleoutput)
 - [deserializeTreasuryOutput](api.md#deserializetreasuryoutput)
 - [serializeTreasuryOutput](api.md#serializetreasuryoutput)
 - [deserializePayload](api.md#deserializepayload)
 - [serializePayload](api.md#serializepayload)
-- [deserializeTransactionPayload](api.md#deserializetransactionpayload)
-- [serializeTransactionPayload](api.md#serializetransactionpayload)
-- [deserializeMilestonePayload](api.md#deserializemilestonepayload)
-- [serializeMilestonePayload](api.md#serializemilestonepayload)
-- [deserializeIndexationPayload](api.md#deserializeindexationpayload)
-- [serializeIndexationPayload](api.md#serializeindexationpayload)
-- [deserializeReceiptPayload](api.md#deserializereceiptpayload)
-- [serializeReceiptPayload](api.md#serializereceiptpayload)
-- [deserializeTreasuryTransactionPayload](api.md#deserializetreasurytransactionpayload)
-- [serializeTreasuryTransactionPayload](api.md#serializetreasurytransactionpayload)
-- [deserializeSignature](api.md#deserializesignature)
-- [serializeSignature](api.md#serializesignature)
 - [deserializeEd25519Signature](api.md#deserializeed25519signature)
 - [serializeEd25519Signature](api.md#serializeed25519signature)
+- [deserializeSignature](api.md#deserializesignature)
+- [serializeSignature](api.md#serializesignature)
 - [deserializeTransactionEssence](api.md#deserializetransactionessence)
 - [serializeTransactionEssence](api.md#serializetransactionessence)
+- [deserializeReferenceUnlockBlock](api.md#deserializereferenceunlockblock)
+- [serializeReferenceUnlockBlock](api.md#serializereferenceunlockblock)
+- [deserializeSignatureUnlockBlock](api.md#deserializesignatureunlockblock)
+- [serializeSignatureUnlockBlock](api.md#serializesignatureunlockblock)
 - [deserializeUnlockBlocks](api.md#deserializeunlockblocks)
 - [serializeUnlockBlocks](api.md#serializeunlockblocks)
 - [deserializeUnlockBlock](api.md#deserializeunlockblock)
 - [serializeUnlockBlock](api.md#serializeunlockblock)
-- [deserializeSignatureUnlockBlock](api.md#deserializesignatureunlockblock)
-- [serializeSignatureUnlockBlock](api.md#serializesignatureunlockblock)
-- [deserializeReferenceUnlockBlock](api.md#deserializereferenceunlockblock)
-- [serializeReferenceUnlockBlock](api.md#serializereferenceunlockblock)
 - [generateBip44Path](api.md#generatebip44path)
 - [generateBip44Address](api.md#generatebip44address)
 - [getBalance](api.md#getbalance)
@@ -196,7 +179,6 @@
 - [IAddress](interfaces/IAddress.md)
 - [IBip44GeneratorState](interfaces/IBip44GeneratorState.md)
 - [IClient](interfaces/IClient.md)
-- [IEd25519Signature](interfaces/IEd25519Signature.md)
 - [IGossipHeartbeat](interfaces/IGossipHeartbeat.md)
 - [IGossipMetrics](interfaces/IGossipMetrics.md)
 - [IKeyPair](interfaces/IKeyPair.md)
@@ -249,6 +231,7 @@
 - [IReceiptPayload](interfaces/IReceiptPayload.md)
 - [ITransactionPayload](interfaces/ITransactionPayload.md)
 - [ITreasuryTransactionPayload](interfaces/ITreasuryTransactionPayload.md)
+- [IEd25519Signature](interfaces/IEd25519Signature.md)
 - [ISimpleTokenScheme](interfaces/ISimpleTokenScheme.md)
 - [IAliasUnlockBlock](interfaces/IAliasUnlockBlock.md)
 - [INftUnlockBlock](interfaces/INftUnlockBlock.md)
@@ -263,6 +246,7 @@
 - [LedgerInclusionState](api.md#ledgerinclusionstate)
 - [OutputTypes](api.md#outputtypes)
 - [PayloadTypes](api.md#payloadtypes)
+- [SignatureTypes](api.md#signaturetypes)
 - [TokenSchemeTypes](api.md#tokenschemetypes)
 - [Units](api.md#units)
 - [UnlockBlockTypes](api.md#unlockblocktypes)
@@ -275,7 +259,7 @@
 
 ### MIN\_ADDRESS\_LENGTH
 
-• **MIN\_ADDRESS\_LENGTH**: `number` = `SMALL_TYPE_LENGTH`
+• **MIN\_ADDRESS\_LENGTH**: `number` = `MIN_ED25519_ADDRESS_LENGTH`
 
 The minimum length of an address binary representation.
 
@@ -289,11 +273,11 @@ The minimum length of an ed25519 address binary representation.
 
 ___
 
-### BYTE\_SIZE
+### UINT8\_SIZE
 
-• **BYTE\_SIZE**: `number` = `1`
+• **UINT8\_SIZE**: `number` = `1`
 
-Byte length for a byte field.
+Byte length for a uint8 field.
 
 ___
 
@@ -355,7 +339,7 @@ ___
 
 ### SMALL\_TYPE\_LENGTH
 
-• **SMALL\_TYPE\_LENGTH**: `number` = `BYTE_SIZE`
+• **SMALL\_TYPE\_LENGTH**: `number` = `UINT8_SIZE`
 
 Byte length for a small type length.
 
@@ -403,25 +387,9 @@ ___
 
 ### MIN\_INPUT\_LENGTH
 
-• **MIN\_INPUT\_LENGTH**: `number` = `SMALL_TYPE_LENGTH`
+• **MIN\_INPUT\_LENGTH**: `number`
 
 The minimum length of an input binary representation.
-
-___
-
-### MIN\_UTXO\_INPUT\_LENGTH
-
-• **MIN\_UTXO\_INPUT\_LENGTH**: `number`
-
-The minimum length of a utxo input binary representation.
-
-___
-
-### MIN\_TREASURY\_INPUT\_LENGTH
-
-• **MIN\_TREASURY\_INPUT\_LENGTH**: `number`
-
-The minimum length of a treasury input binary representation.
 
 ___
 
@@ -438,6 +406,22 @@ ___
 • **MAX\_INPUT\_COUNT**: `number` = `127`
 
 The maximum number of inputs.
+
+___
+
+### MIN\_TREASURY\_INPUT\_LENGTH
+
+• **MIN\_TREASURY\_INPUT\_LENGTH**: `number`
+
+The minimum length of a treasury input binary representation.
+
+___
+
+### MIN\_UTXO\_INPUT\_LENGTH
+
+• **MIN\_UTXO\_INPUT\_LENGTH**: `number`
+
+The minimum length of a utxo input binary representation.
 
 ___
 
@@ -467,33 +451,9 @@ ___
 
 ### MIN\_OUTPUT\_LENGTH
 
-• **MIN\_OUTPUT\_LENGTH**: `number` = `SMALL_TYPE_LENGTH`
+• **MIN\_OUTPUT\_LENGTH**: `number`
 
 The minimum length of an output binary representation.
-
-___
-
-### MIN\_SIG\_LOCKED\_SINGLE\_OUTPUT\_LENGTH
-
-• **MIN\_SIG\_LOCKED\_SINGLE\_OUTPUT\_LENGTH**: `number`
-
-The minimum length of a sig locked single output binary representation.
-
-___
-
-### MIN\_SIG\_LOCKED\_DUST\_ALLOWANCE\_OUTPUT\_LENGTH
-
-• **MIN\_SIG\_LOCKED\_DUST\_ALLOWANCE\_OUTPUT\_LENGTH**: `number`
-
-The minimum length of a sig locked dust allowance output binary representation.
-
-___
-
-### MIN\_TREASURY\_OUTPUT\_LENGTH
-
-• **MIN\_TREASURY\_OUTPUT\_LENGTH**: `number`
-
-The minimum length of a treasury output binary representation.
 
 ___
 
@@ -513,75 +473,35 @@ The maximum number of outputs.
 
 ___
 
+### MIN\_SIG\_LOCKED\_DUST\_ALLOWANCE\_OUTPUT\_LENGTH
+
+• **MIN\_SIG\_LOCKED\_DUST\_ALLOWANCE\_OUTPUT\_LENGTH**: `number`
+
+The minimum length of a sig locked dust allowance output binary representation.
+
+___
+
+### MIN\_SIMPLE\_OUTPUT\_LENGTH
+
+• **MIN\_SIMPLE\_OUTPUT\_LENGTH**: `number`
+
+The minimum length of a simple output binary representation.
+
+___
+
+### MIN\_TREASURY\_OUTPUT\_LENGTH
+
+• **MIN\_TREASURY\_OUTPUT\_LENGTH**: `number`
+
+The minimum length of a treasury output binary representation.
+
+___
+
 ### MIN\_PAYLOAD\_LENGTH
 
-• **MIN\_PAYLOAD\_LENGTH**: `number` = `TYPE_LENGTH`
+• **MIN\_PAYLOAD\_LENGTH**: `number`
 
 The minimum length of a payload binary representation.
-
-___
-
-### MIN\_MILESTONE\_PAYLOAD\_LENGTH
-
-• **MIN\_MILESTONE\_PAYLOAD\_LENGTH**: `number`
-
-The minimum length of a milestone payload binary representation.
-
-___
-
-### MIN\_INDEXATION\_PAYLOAD\_LENGTH
-
-• **MIN\_INDEXATION\_PAYLOAD\_LENGTH**: `number`
-
-The minimum length of an indexation payload binary representation.
-
-___
-
-### MIN\_TRANSACTION\_PAYLOAD\_LENGTH
-
-• **MIN\_TRANSACTION\_PAYLOAD\_LENGTH**: `number`
-
-The minimum length of a transaction payload binary representation.
-
-___
-
-### MIN\_RECEIPT\_PAYLOAD\_LENGTH
-
-• **MIN\_RECEIPT\_PAYLOAD\_LENGTH**: `number`
-
-The minimum length of a receipt payload binary representation.
-
-___
-
-### MIN\_TREASURY\_TRANSACTION\_PAYLOAD\_LENGTH
-
-• **MIN\_TREASURY\_TRANSACTION\_PAYLOAD\_LENGTH**: `number`
-
-The minimum length of a treasure transaction payload binary representation.
-
-___
-
-### MIN\_INDEXATION\_KEY\_LENGTH
-
-• **MIN\_INDEXATION\_KEY\_LENGTH**: `number` = `1`
-
-The minimum length of a indexation key.
-
-___
-
-### MAX\_INDEXATION\_KEY\_LENGTH
-
-• **MAX\_INDEXATION\_KEY\_LENGTH**: `number` = `64`
-
-The maximum length of a indexation key.
-
-___
-
-### MIN\_SIGNATURE\_LENGTH
-
-• **MIN\_SIGNATURE\_LENGTH**: `number` = `SMALL_TYPE_LENGTH`
-
-The minimum length of a signature binary representation.
 
 ___
 
@@ -593,27 +513,19 @@ The minimum length of an ed25519 signature binary representation.
 
 ___
 
+### MIN\_SIGNATURE\_LENGTH
+
+• **MIN\_SIGNATURE\_LENGTH**: `number` = `MIN_ED25519_SIGNATURE_LENGTH`
+
+The minimum length of a signature binary representation.
+
+___
+
 ### MIN\_TRANSACTION\_ESSENCE\_LENGTH
 
 • **MIN\_TRANSACTION\_ESSENCE\_LENGTH**: `number`
 
 The minimum length of a transaction essence binary representation.
-
-___
-
-### MIN\_UNLOCK\_BLOCK\_LENGTH
-
-• **MIN\_UNLOCK\_BLOCK\_LENGTH**: `number` = `SMALL_TYPE_LENGTH`
-
-The minimum length of an unlock block binary representation.
-
-___
-
-### MIN\_SIGNATURE\_UNLOCK\_BLOCK\_LENGTH
-
-• **MIN\_SIGNATURE\_UNLOCK\_BLOCK\_LENGTH**: `number`
-
-The minimum length of a signature unlock block binary representation.
 
 ___
 
@@ -625,11 +537,19 @@ The minimum length of a reference unlock block binary representation.
 
 ___
 
-### ED25519\_SIGNATURE\_TYPE
+### MIN\_SIGNATURE\_UNLOCK\_BLOCK\_LENGTH
 
-• **ED25519\_SIGNATURE\_TYPE**: ``0``
+• **MIN\_SIGNATURE\_UNLOCK\_BLOCK\_LENGTH**: `number`
 
-The global type for the signature type.
+The minimum length of a signature unlock block binary representation.
+
+___
+
+### MIN\_UNLOCK\_BLOCK\_LENGTH
+
+• **MIN\_UNLOCK\_BLOCK\_LENGTH**: `number`
+
+The minimum length of an unlock block binary representation.
 
 ___
 
@@ -856,6 +776,14 @@ ___
 • **TREASURY\_TRANSACTION\_PAYLOAD\_TYPE**: ``4``
 
 The global type for the payload.
+
+___
+
+### ED25519\_SIGNATURE\_TYPE
+
+• **ED25519\_SIGNATURE\_TYPE**: ``0``
+
+The global type for the signature type.
 
 ___
 
@@ -1149,45 +1077,6 @@ Serialize the input to binary.
 
 ___
 
-### deserializeUTXOInput
-
-▸ **deserializeUTXOInput**(`readStream`): [`IUTXOInput`](interfaces/IUTXOInput.md)
-
-Deserialize the utxo input from binary.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `readStream` | `ReadStream` | The stream to read the data from. |
-
-#### Returns
-
-[`IUTXOInput`](interfaces/IUTXOInput.md)
-
-The deserialized object.
-
-___
-
-### serializeUTXOInput
-
-▸ **serializeUTXOInput**(`writeStream`, `object`): `void`
-
-Serialize the utxo input to binary.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `writeStream` | `WriteStream` | The stream to write the data to. |
-| `object` | [`IUTXOInput`](interfaces/IUTXOInput.md) | The object to serialize. |
-
-#### Returns
-
-`void`
-
-___
-
 ### deserializeTreasuryInput
 
 ▸ **deserializeTreasuryInput**(`readStream`): [`ITreasuryInput`](interfaces/ITreasuryInput.md)
@@ -1220,6 +1109,45 @@ Serialize the treasury input to binary.
 | :------ | :------ | :------ |
 | `writeStream` | `WriteStream` | The stream to write the data to. |
 | `object` | [`ITreasuryInput`](interfaces/ITreasuryInput.md) | The object to serialize. |
+
+#### Returns
+
+`void`
+
+___
+
+### deserializeUTXOInput
+
+▸ **deserializeUTXOInput**(`readStream`): [`IUTXOInput`](interfaces/IUTXOInput.md)
+
+Deserialize the utxo input from binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `readStream` | `ReadStream` | The stream to read the data from. |
+
+#### Returns
+
+[`IUTXOInput`](interfaces/IUTXOInput.md)
+
+The deserialized object.
+
+___
+
+### serializeUTXOInput
+
+▸ **serializeUTXOInput**(`writeStream`, `object`): `void`
+
+Serialize the utxo input to binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `writeStream` | `WriteStream` | The stream to write the data to. |
+| `object` | [`IUTXOInput`](interfaces/IUTXOInput.md) | The object to serialize. |
 
 #### Returns
 
@@ -1344,45 +1272,6 @@ Serialize the output to binary.
 
 ___
 
-### deserializeSimpleOutput
-
-▸ **deserializeSimpleOutput**(`readStream`): [`ISimpleOutput`](interfaces/ISimpleOutput.md)
-
-Deserialize the signature locked single output from binary.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `readStream` | `ReadStream` | The stream to read the data from. |
-
-#### Returns
-
-[`ISimpleOutput`](interfaces/ISimpleOutput.md)
-
-The deserialized object.
-
-___
-
-### serializeSimpleOutput
-
-▸ **serializeSimpleOutput**(`writeStream`, `object`): `void`
-
-Serialize the signature locked single output to binary.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `writeStream` | `WriteStream` | The stream to write the data to. |
-| `object` | [`ISimpleOutput`](interfaces/ISimpleOutput.md) | The object to serialize. |
-
-#### Returns
-
-`void`
-
-___
-
 ### deserializeSigLockedDustAllowanceOutput
 
 ▸ **deserializeSigLockedDustAllowanceOutput**(`readStream`): [`ISigLockedDustAllowanceOutput`](interfaces/ISigLockedDustAllowanceOutput.md)
@@ -1415,6 +1304,45 @@ Serialize the signature locked dust allowance output to binary.
 | :------ | :------ | :------ |
 | `writeStream` | `WriteStream` | The stream to write the data to. |
 | `object` | [`ISigLockedDustAllowanceOutput`](interfaces/ISigLockedDustAllowanceOutput.md) | The object to serialize. |
+
+#### Returns
+
+`void`
+
+___
+
+### deserializeSimpleOutput
+
+▸ **deserializeSimpleOutput**(`readStream`): [`ISimpleOutput`](interfaces/ISimpleOutput.md)
+
+Deserialize the simple output from binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `readStream` | `ReadStream` | The stream to read the data from. |
+
+#### Returns
+
+[`ISimpleOutput`](interfaces/ISimpleOutput.md)
+
+The deserialized object.
+
+___
+
+### serializeSimpleOutput
+
+▸ **serializeSimpleOutput**(`writeStream`, `object`): `void`
+
+Serialize the simple output to binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `writeStream` | `WriteStream` | The stream to write the data to. |
+| `object` | [`ISimpleOutput`](interfaces/ISimpleOutput.md) | The object to serialize. |
 
 #### Returns
 
@@ -1500,240 +1428,6 @@ Serialize the payload essence to binary.
 
 ___
 
-### deserializeTransactionPayload
-
-▸ **deserializeTransactionPayload**(`readStream`): [`ITransactionPayload`](interfaces/ITransactionPayload.md)
-
-Deserialize the transaction payload from binary.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `readStream` | `ReadStream` | The stream to read the data from. |
-
-#### Returns
-
-[`ITransactionPayload`](interfaces/ITransactionPayload.md)
-
-The deserialized object.
-
-___
-
-### serializeTransactionPayload
-
-▸ **serializeTransactionPayload**(`writeStream`, `object`): `void`
-
-Serialize the transaction payload to binary.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `writeStream` | `WriteStream` | The stream to write the data to. |
-| `object` | [`ITransactionPayload`](interfaces/ITransactionPayload.md) | The object to serialize. |
-
-#### Returns
-
-`void`
-
-___
-
-### deserializeMilestonePayload
-
-▸ **deserializeMilestonePayload**(`readStream`): [`IMilestonePayload`](interfaces/IMilestonePayload.md)
-
-Deserialize the milestone payload from binary.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `readStream` | `ReadStream` | The stream to read the data from. |
-
-#### Returns
-
-[`IMilestonePayload`](interfaces/IMilestonePayload.md)
-
-The deserialized object.
-
-___
-
-### serializeMilestonePayload
-
-▸ **serializeMilestonePayload**(`writeStream`, `object`): `void`
-
-Serialize the milestone payload to binary.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `writeStream` | `WriteStream` | The stream to write the data to. |
-| `object` | [`IMilestonePayload`](interfaces/IMilestonePayload.md) | The object to serialize. |
-
-#### Returns
-
-`void`
-
-___
-
-### deserializeIndexationPayload
-
-▸ **deserializeIndexationPayload**(`readStream`): [`IIndexationPayload`](interfaces/IIndexationPayload.md)
-
-Deserialize the indexation payload from binary.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `readStream` | `ReadStream` | The stream to read the data from. |
-
-#### Returns
-
-[`IIndexationPayload`](interfaces/IIndexationPayload.md)
-
-The deserialized object.
-
-___
-
-### serializeIndexationPayload
-
-▸ **serializeIndexationPayload**(`writeStream`, `object`): `void`
-
-Serialize the indexation payload to binary.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `writeStream` | `WriteStream` | The stream to write the data to. |
-| `object` | [`IIndexationPayload`](interfaces/IIndexationPayload.md) | The object to serialize. |
-
-#### Returns
-
-`void`
-
-___
-
-### deserializeReceiptPayload
-
-▸ **deserializeReceiptPayload**(`readStream`): [`IReceiptPayload`](interfaces/IReceiptPayload.md)
-
-Deserialize the receipt payload from binary.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `readStream` | `ReadStream` | The stream to read the data from. |
-
-#### Returns
-
-[`IReceiptPayload`](interfaces/IReceiptPayload.md)
-
-The deserialized object.
-
-___
-
-### serializeReceiptPayload
-
-▸ **serializeReceiptPayload**(`writeStream`, `object`): `void`
-
-Serialize the receipt payload to binary.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `writeStream` | `WriteStream` | The stream to write the data to. |
-| `object` | [`IReceiptPayload`](interfaces/IReceiptPayload.md) | The object to serialize. |
-
-#### Returns
-
-`void`
-
-___
-
-### deserializeTreasuryTransactionPayload
-
-▸ **deserializeTreasuryTransactionPayload**(`readStream`): [`ITreasuryTransactionPayload`](interfaces/ITreasuryTransactionPayload.md)
-
-Deserialize the treasury transaction payload from binary.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `readStream` | `ReadStream` | The stream to read the data from. |
-
-#### Returns
-
-[`ITreasuryTransactionPayload`](interfaces/ITreasuryTransactionPayload.md)
-
-The deserialized object.
-
-___
-
-### serializeTreasuryTransactionPayload
-
-▸ **serializeTreasuryTransactionPayload**(`writeStream`, `object`): `void`
-
-Serialize the treasury transaction payload to binary.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `writeStream` | `WriteStream` | The stream to write the data to. |
-| `object` | [`ITreasuryTransactionPayload`](interfaces/ITreasuryTransactionPayload.md) | The object to serialize. |
-
-#### Returns
-
-`void`
-
-___
-
-### deserializeSignature
-
-▸ **deserializeSignature**(`readStream`): [`IEd25519Signature`](interfaces/IEd25519Signature.md)
-
-Deserialize the signature from binary.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `readStream` | `ReadStream` | The stream to read the data from. |
-
-#### Returns
-
-[`IEd25519Signature`](interfaces/IEd25519Signature.md)
-
-The deserialized object.
-
-___
-
-### serializeSignature
-
-▸ **serializeSignature**(`writeStream`, `object`): `void`
-
-Serialize the signature to binary.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `writeStream` | `WriteStream` | The stream to write the data to. |
-| `object` | [`IEd25519Signature`](interfaces/IEd25519Signature.md) | The object to serialize. |
-
-#### Returns
-
-`void`
-
-___
-
 ### deserializeEd25519Signature
 
 ▸ **deserializeEd25519Signature**(`readStream`): [`IEd25519Signature`](interfaces/IEd25519Signature.md)
@@ -1759,6 +1453,45 @@ ___
 ▸ **serializeEd25519Signature**(`writeStream`, `object`): `void`
 
 Serialize the Ed25519 signature to binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `writeStream` | `WriteStream` | The stream to write the data to. |
+| `object` | [`IEd25519Signature`](interfaces/IEd25519Signature.md) | The object to serialize. |
+
+#### Returns
+
+`void`
+
+___
+
+### deserializeSignature
+
+▸ **deserializeSignature**(`readStream`): [`SignatureTypes`](api.md#signaturetypes)
+
+Deserialize the signature from binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `readStream` | `ReadStream` | The stream to read the data from. |
+
+#### Returns
+
+[`SignatureTypes`](api.md#signaturetypes)
+
+The deserialized object.
+
+___
+
+### serializeSignature
+
+▸ **serializeSignature**(`writeStream`, `object`): `void`
+
+Serialize the signature to binary.
 
 #### Parameters
 
@@ -1805,6 +1538,84 @@ Serialize the transaction essence to binary.
 | :------ | :------ | :------ |
 | `writeStream` | `WriteStream` | The stream to write the data to. |
 | `object` | [`ITransactionEssence`](interfaces/ITransactionEssence.md) | The object to serialize. |
+
+#### Returns
+
+`void`
+
+___
+
+### deserializeReferenceUnlockBlock
+
+▸ **deserializeReferenceUnlockBlock**(`readStream`): [`IReferenceUnlockBlock`](interfaces/IReferenceUnlockBlock.md)
+
+Deserialize the reference unlock block from binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `readStream` | `ReadStream` | The stream to read the data from. |
+
+#### Returns
+
+[`IReferenceUnlockBlock`](interfaces/IReferenceUnlockBlock.md)
+
+The deserialized object.
+
+___
+
+### serializeReferenceUnlockBlock
+
+▸ **serializeReferenceUnlockBlock**(`writeStream`, `object`): `void`
+
+Serialize the reference unlock block to binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `writeStream` | `WriteStream` | The stream to write the data to. |
+| `object` | [`IReferenceUnlockBlock`](interfaces/IReferenceUnlockBlock.md) | The object to serialize. |
+
+#### Returns
+
+`void`
+
+___
+
+### deserializeSignatureUnlockBlock
+
+▸ **deserializeSignatureUnlockBlock**(`readStream`): [`ISignatureUnlockBlock`](interfaces/ISignatureUnlockBlock.md)
+
+Deserialize the signature unlock block from binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `readStream` | `ReadStream` | The stream to read the data from. |
+
+#### Returns
+
+[`ISignatureUnlockBlock`](interfaces/ISignatureUnlockBlock.md)
+
+The deserialized object.
+
+___
+
+### serializeSignatureUnlockBlock
+
+▸ **serializeSignatureUnlockBlock**(`writeStream`, `object`): `void`
+
+Serialize the signature unlock block to binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `writeStream` | `WriteStream` | The stream to write the data to. |
+| `object` | [`ISignatureUnlockBlock`](interfaces/ISignatureUnlockBlock.md) | The object to serialize. |
 
 #### Returns
 
@@ -1883,84 +1694,6 @@ Serialize the unlock block to binary.
 | :------ | :------ | :------ |
 | `writeStream` | `WriteStream` | The stream to write the data to. |
 | `object` | [`UnlockBlockTypes`](api.md#unlockblocktypes) | The object to serialize. |
-
-#### Returns
-
-`void`
-
-___
-
-### deserializeSignatureUnlockBlock
-
-▸ **deserializeSignatureUnlockBlock**(`readStream`): [`ISignatureUnlockBlock`](interfaces/ISignatureUnlockBlock.md)
-
-Deserialize the signature unlock block from binary.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `readStream` | `ReadStream` | The stream to read the data from. |
-
-#### Returns
-
-[`ISignatureUnlockBlock`](interfaces/ISignatureUnlockBlock.md)
-
-The deserialized object.
-
-___
-
-### serializeSignatureUnlockBlock
-
-▸ **serializeSignatureUnlockBlock**(`writeStream`, `object`): `void`
-
-Serialize the signature unlock block to binary.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `writeStream` | `WriteStream` | The stream to write the data to. |
-| `object` | [`ISignatureUnlockBlock`](interfaces/ISignatureUnlockBlock.md) | The object to serialize. |
-
-#### Returns
-
-`void`
-
-___
-
-### deserializeReferenceUnlockBlock
-
-▸ **deserializeReferenceUnlockBlock**(`readStream`): [`IReferenceUnlockBlock`](interfaces/IReferenceUnlockBlock.md)
-
-Deserialize the reference unlock block from binary.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `readStream` | `ReadStream` | The stream to read the data from. |
-
-#### Returns
-
-[`IReferenceUnlockBlock`](interfaces/IReferenceUnlockBlock.md)
-
-The deserialized object.
-
-___
-
-### serializeReferenceUnlockBlock
-
-▸ **serializeReferenceUnlockBlock**(`writeStream`, `object`): `void`
-
-Serialize the reference unlock block to binary.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `writeStream` | `WriteStream` | The stream to write the data to. |
-| `object` | [`IReferenceUnlockBlock`](interfaces/IReferenceUnlockBlock.md) | The object to serialize. |
 
 #### Returns
 
@@ -2522,7 +2255,7 @@ ___
 
 ### logPayload
 
-▸ **logPayload**(`prefix`, `unknownPayload?`): `void`
+▸ **logPayload**(`prefix`, `payload?`): `void`
 
 Log a message to the console.
 
@@ -2531,7 +2264,7 @@ Log a message to the console.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `prefix` | `string` | The prefix for the output. |
-| `unknownPayload?` | [`PayloadTypes`](api.md#payloadtypes) | The payload. |
+| `payload?` | [`PayloadTypes`](api.md#payloadtypes) | The payload. |
 
 #### Returns
 
@@ -2636,7 +2369,7 @@ ___
 
 ### logAddress
 
-▸ **logAddress**(`prefix`, `unknownAddress?`): `void`
+▸ **logAddress**(`prefix`, `address?`): `void`
 
 Log an address to the console.
 
@@ -2645,7 +2378,7 @@ Log an address to the console.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `prefix` | `string` | The prefix for the output. |
-| `unknownAddress?` | [`AddressTypes`](api.md#addresstypes) | The address to log. |
+| `address?` | [`AddressTypes`](api.md#addresstypes) | The address to log. |
 
 #### Returns
 
@@ -2655,7 +2388,7 @@ ___
 
 ### logSignature
 
-▸ **logSignature**(`prefix`, `unknownSignature`): `void`
+▸ **logSignature**(`prefix`, `signature?`): `void`
 
 Log signature to the console.
 
@@ -2664,7 +2397,7 @@ Log signature to the console.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `prefix` | `string` | The prefix for the output. |
-| `unknownSignature` | `undefined` \| [`IEd25519Signature`](interfaces/IEd25519Signature.md) | The signature to log. |
+| `signature?` | [`IEd25519Signature`](interfaces/IEd25519Signature.md) | The signature to log. |
 
 #### Returns
 
@@ -2674,7 +2407,7 @@ ___
 
 ### logInput
 
-▸ **logInput**(`prefix`, `unknownInput?`): `void`
+▸ **logInput**(`prefix`, `input?`): `void`
 
 Log input to the console.
 
@@ -2683,7 +2416,7 @@ Log input to the console.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `prefix` | `string` | The prefix for the output. |
-| `unknownInput?` | [`InputTypes`](api.md#inputtypes) | The input to log. |
+| `input?` | [`InputTypes`](api.md#inputtypes) | The input to log. |
 
 #### Returns
 
@@ -2693,7 +2426,7 @@ ___
 
 ### logOutput
 
-▸ **logOutput**(`prefix`, `unknownOutput?`): `void`
+▸ **logOutput**(`prefix`, `output?`): `void`
 
 Log output to the console.
 
@@ -2702,7 +2435,7 @@ Log output to the console.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `prefix` | `string` | The prefix for the output. |
-| `unknownOutput?` | [`OutputTypes`](api.md#outputtypes) | The output to log. |
+| `output?` | [`OutputTypes`](api.md#outputtypes) | The output to log. |
 
 #### Returns
 
@@ -2712,7 +2445,7 @@ ___
 
 ### logUnlockBlock
 
-▸ **logUnlockBlock**(`prefix`, `unknownUnlockBlock?`): `void`
+▸ **logUnlockBlock**(`prefix`, `unlockBlock?`): `void`
 
 Log unlock block to the console.
 
@@ -2721,7 +2454,7 @@ Log unlock block to the console.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `prefix` | `string` | The prefix for the output. |
-| `unknownUnlockBlock?` | [`UnlockBlockTypes`](api.md#unlockblocktypes) | The unlock block to log. |
+| `unlockBlock?` | [`UnlockBlockTypes`](api.md#unlockblocktypes) | The unlock block to log. |
 
 #### Returns
 
@@ -2793,6 +2526,14 @@ ___
 Ƭ **PayloadTypes**: [`ITransactionPayload`](interfaces/ITransactionPayload.md) \| [`IMilestonePayload`](interfaces/IMilestonePayload.md) \| [`IReceiptPayload`](interfaces/IReceiptPayload.md) \| [`IIndexationPayload`](interfaces/IIndexationPayload.md) \| [`ITreasuryTransactionPayload`](interfaces/ITreasuryTransactionPayload.md)
 
 All of the payload types.
+
+___
+
+### SignatureTypes
+
+Ƭ **SignatureTypes**: [`IEd25519Signature`](interfaces/IEd25519Signature.md)
+
+All of the signature types.
 
 ___
 

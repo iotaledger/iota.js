@@ -1,7 +1,5 @@
-import type { UnlockBlockTypes } from "..";
 import type { AddressTypes } from "../models/addresses/addressTypes";
 import type { ITipsResponse } from "../models/api/ITipsResponse";
-import { IEd25519Signature } from "../models/IEd25519Signature";
 import type { IMessage } from "../models/IMessage";
 import type { IMessageMetadata } from "../models/IMessageMetadata";
 import type { IMigratedFunds } from "../models/IMigratedFunds";
@@ -14,6 +12,8 @@ import { IReceiptPayload } from "../models/payloads/IReceiptPayload";
 import { ITransactionPayload } from "../models/payloads/ITransactionPayload";
 import { ITreasuryTransactionPayload } from "../models/payloads/ITreasuryTransactionPayload";
 import type { PayloadTypes } from "../models/payloads/payloadTypes";
+import type { SignatureTypes } from "../models/signatures/signatureTypes";
+import type { UnlockBlockTypes } from "../models/unlockBlocks/unlockBlockTypes";
 /**
  * Set the logger for output.
  * @param log The logger.
@@ -46,9 +46,9 @@ export declare function logMessageMetadata(prefix: string, messageMetadata: IMes
 /**
  * Log a message to the console.
  * @param prefix The prefix for the output.
- * @param unknownPayload The payload.
+ * @param payload The payload.
  */
-export declare function logPayload(prefix: string, unknownPayload?: PayloadTypes): void;
+export declare function logPayload(prefix: string, payload?: PayloadTypes): void;
 /**
  * Log a transaction payload to the console.
  * @param prefix The prefix for the output.
@@ -82,33 +82,33 @@ export declare function logTreasuryTransactionPayload(prefix: string, payload?: 
 /**
  * Log an address to the console.
  * @param prefix The prefix for the output.
- * @param unknownAddress The address to log.
+ * @param address The address to log.
  */
-export declare function logAddress(prefix: string, unknownAddress?: AddressTypes): void;
+export declare function logAddress(prefix: string, address?: AddressTypes): void;
 /**
  * Log signature to the console.
  * @param prefix The prefix for the output.
- * @param unknownSignature The signature to log.
+ * @param signature The signature to log.
  */
-export declare function logSignature(prefix: string, unknownSignature: IEd25519Signature | undefined): void;
+export declare function logSignature(prefix: string, signature?: SignatureTypes): void;
 /**
  * Log input to the console.
  * @param prefix The prefix for the output.
- * @param unknownInput The input to log.
+ * @param input The input to log.
  */
-export declare function logInput(prefix: string, unknownInput?: InputTypes): void;
+export declare function logInput(prefix: string, input?: InputTypes): void;
 /**
  * Log output to the console.
  * @param prefix The prefix for the output.
- * @param unknownOutput The output to log.
+ * @param output The output to log.
  */
-export declare function logOutput(prefix: string, unknownOutput?: OutputTypes): void;
+export declare function logOutput(prefix: string, output?: OutputTypes): void;
 /**
  * Log unlock block to the console.
  * @param prefix The prefix for the output.
- * @param unknownUnlockBlock The unlock block to log.
+ * @param unlockBlock The unlock block to log.
  */
-export declare function logUnlockBlock(prefix: string, unknownUnlockBlock?: UnlockBlockTypes): void;
+export declare function logUnlockBlock(prefix: string, unlockBlock?: UnlockBlockTypes): void;
 /**
  * Log fund to the console.
  * @param prefix The prefix for the output.

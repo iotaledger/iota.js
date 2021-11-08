@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 /* eslint-disable unicorn/no-nested-ternary */
 import { Converter } from "@iota/util.js";
-import { MAX_INDEXATION_KEY_LENGTH, MIN_INDEXATION_KEY_LENGTH } from "../binary/payload.mjs";
+import { MAX_INDEXATION_KEY_LENGTH, MIN_INDEXATION_KEY_LENGTH } from "../binary/payloads/indexationPayload.mjs";
 import { SingleNodeClient } from "../clients/singleNodeClient.mjs";
 import { INDEXATION_PAYLOAD_TYPE } from "../models/payloads/IIndexationPayload.mjs";
 /**

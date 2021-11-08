@@ -4,11 +4,13 @@ import { Converter, ReadStream, WriteStream } from "@iota/util.js";
 import {
     deserializeOutput,
     deserializeOutputs,
-    deserializeSimpleOutput,
     serializeOutput,
-    serializeOutputs,
+    serializeOutputs
+} from "../../src/binary/outputs/outputs";
+import {
+    deserializeSimpleOutput,
     serializeSimpleOutput
-} from "../../src/binary/output";
+} from "../../src/binary/outputs/simpleOutput";
 import { ED25519_ADDRESS_TYPE } from "../../src/models/addresses/IEd25519Address";
 import { ISimpleOutput, SIMPLE_OUTPUT_TYPE } from "../../src/models/outputs/ISimpleOutput";
 

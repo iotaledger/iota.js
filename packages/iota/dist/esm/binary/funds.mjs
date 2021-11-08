@@ -1,6 +1,6 @@
 import bigInt from "big-integer";
-import { deserializeAddress, MIN_ED25519_ADDRESS_LENGTH, serializeAddress } from "./address.mjs";
-import { UINT64_SIZE } from "./common.mjs";
+import { deserializeAddress, MIN_ADDRESS_LENGTH, serializeAddress } from "./addresses/addresses.mjs";
+import { UINT64_SIZE } from "./commonDataTypes.mjs";
 /**
  * The length of the tail hash length in bytes.
  */
@@ -9,7 +9,7 @@ export const TAIL_HASH_LENGTH = 49;
  * The minimum length of a migrated fund binary representation.
  */
 export const MIN_MIGRATED_FUNDS_LENGTH = TAIL_HASH_LENGTH + // tailTransactionHash
-    MIN_ED25519_ADDRESS_LENGTH + // address
+    MIN_ADDRESS_LENGTH + // address
     UINT64_SIZE; // deposit
 /**
  * The maximum number of funds.

@@ -2,12 +2,12 @@
 // SPDX-License-Identifier: Apache-2.0
 import { Converter, ReadStream, WriteStream } from "@iota/util.js";
 import {
-    deserializeSignature,
-    deserializeEd25519Signature,
-    serializeSignature,
-    serializeEd25519Signature
-} from "../../src/binary/signature";
-import { ED25519_SIGNATURE_TYPE, IEd25519Signature } from "../../src/models/IEd25519Signature";
+    deserializeEd25519Signature, serializeEd25519Signature
+} from "../../src/binary/signatures/ed25519Signature";
+import {
+    deserializeSignature, serializeSignature
+} from "../../src/binary/signatures/signatures";
+import { ED25519_SIGNATURE_TYPE, IEd25519Signature } from "../../src/models/signatures/IEd25519Signature";
 
 describe("Binary Signature", () => {
     test("Can serialize and deserialize signature", () => {

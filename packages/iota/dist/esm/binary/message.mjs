@@ -4,13 +4,13 @@ import { MILESTONE_PAYLOAD_TYPE } from "../models/payloads/IMilestonePayload.mjs
 import { RECEIPT_PAYLOAD_TYPE } from "../models/payloads/IReceiptPayload.mjs";
 import { TRANSACTION_PAYLOAD_TYPE } from "../models/payloads/ITransactionPayload.mjs";
 import { TREASURY_TRANSACTION_PAYLOAD_TYPE } from "../models/payloads/ITreasuryTransactionPayload.mjs";
-import { BYTE_SIZE, MESSAGE_ID_LENGTH, UINT64_SIZE } from "./common.mjs";
-import { deserializePayload, MIN_PAYLOAD_LENGTH, serializePayload } from "./payload.mjs";
+import { UINT8_SIZE, MESSAGE_ID_LENGTH, UINT64_SIZE } from "./commonDataTypes.mjs";
+import { deserializePayload, MIN_PAYLOAD_LENGTH, serializePayload } from "./payloads/payloads.mjs";
 /**
  * The minimum length of a message binary representation.
  */
 const MIN_MESSAGE_LENGTH = UINT64_SIZE + // Network id
-    BYTE_SIZE + // Parent count
+    UINT8_SIZE + // Parent count
     MESSAGE_ID_LENGTH + // Single parent
     MIN_PAYLOAD_LENGTH + // Min payload length
     UINT64_SIZE; // Nonce

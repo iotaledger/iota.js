@@ -12,11 +12,23 @@ Ed25519Signature signature.
 
 ### Properties
 
+- [type](IEd25519Signature.md#type)
 - [publicKey](IEd25519Signature.md#publickey)
 - [signature](IEd25519Signature.md#signature)
-- [type](IEd25519Signature.md#type)
 
 ## Properties
+
+### type
+
+• **type**: ``0``
+
+The type of the object.
+
+#### Inherited from
+
+[ITypeBase](ITypeBase.md).[type](ITypeBase.md#type)
+
+___
 
 ### publicKey
 
@@ -31,15 +43,3 @@ ___
 • **signature**: `string`
 
 The signature.
-
-___
-
-### type
-
-• **type**: ``0``
-
-The type of the object.
-
-#### Inherited from
-
-[ITypeBase](ITypeBase.md).[type](ITypeBase.md#type)

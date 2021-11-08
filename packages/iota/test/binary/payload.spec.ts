@@ -3,13 +3,19 @@
 import { Converter, ReadStream, WriteStream } from "@iota/util.js";
 import {
     deserializeIndexationPayload,
+    serializeIndexationPayload
+} from "../../src/binary/payloads/indexationPayload";
+import {
     deserializeMilestonePayload,
-    deserializePayload,
+    serializeMilestonePayload
+} from "../../src/binary/payloads/milestonePayload";
+import {
+    deserializePayload
+} from "../../src/binary/payloads/payloads";
+import {
     deserializeReceiptPayload,
-    serializeIndexationPayload,
-    serializeMilestonePayload,
     serializeReceiptPayload
-} from "../../src/binary/payload";
+} from "../../src/binary/payloads/receiptPayload";
 import { ED25519_ADDRESS_TYPE } from "../../src/models/addresses/IEd25519Address";
 import { TREASURY_INPUT_TYPE } from "../../src/models/inputs/ITreasuryInput";
 import { TREASURY_OUTPUT_TYPE } from "../../src/models/outputs/ITreasuryOutput";
