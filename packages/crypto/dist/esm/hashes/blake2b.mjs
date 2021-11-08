@@ -16,6 +16,18 @@ export class Blake2b {
         this._m = new Uint32Array(32);
     }
     /**
+     * Perform Sum 160 on the data.
+     * @param data The data to operate on.
+     * @param key Optional key for the hash.
+     * @returns The sum 160 of the data.
+     */
+    static sum160(data, key) {
+        const b2b = new Blake2b();
+        const ctx = b2b.init(Blake2b.SIZE_160, key);
+        b2b.update(ctx, data);
+        return b2b.final(ctx);
+    }
+    /**
      * Perform Sum 256 on the data.
      * @param data The data to operate on.
      * @param key Optional key for the hash.
@@ -261,6 +273,10 @@ export class Blake2b {
         this._v[b + 1] = (xor0 >>> 31) ^ (xor1 << 1);
     }
 }
+/**
+ * Blake2b 160.
+ */
+Blake2b.SIZE_160 = 20;
 /**
  * Blake2b 256.
  */

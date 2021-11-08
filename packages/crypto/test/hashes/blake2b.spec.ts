@@ -30,11 +30,23 @@ describe("Blake2b", () => {
         for (const test of testData) {
             if (test.hash === "blake2b") {
                 if (test.key === "") {
-                    const sum = Blake2b.sum512(Converter.hexToBytes(test.in));
-                    expect(Converter.bytesToHex(sum)).toEqual(test.out);
+                    const sum512 = Blake2b.sum512(Converter.hexToBytes(test.in));
+                    expect(Converter.bytesToHex(sum512)).toEqual(test.out512);
+
+                    const sum256 = Blake2b.sum256(Converter.hexToBytes(test.in));
+                    expect(Converter.bytesToHex(sum256)).toEqual(test.out256);
+
+                    const sum160 = Blake2b.sum160(Converter.hexToBytes(test.in));
+                    expect(Converter.bytesToHex(sum160)).toEqual(test.out160);
                 } else {
-                    const sum = Blake2b.sum512(Converter.hexToBytes(test.in), Converter.hexToBytes(test.key));
-                    expect(Converter.bytesToHex(sum)).toEqual(test.out);
+                    const sum512 = Blake2b.sum512(Converter.hexToBytes(test.in), Converter.hexToBytes(test.key));
+                    expect(Converter.bytesToHex(sum512)).toEqual(test.out512);
+
+                    const sum256 = Blake2b.sum256(Converter.hexToBytes(test.in), Converter.hexToBytes(test.key));
+                    expect(Converter.bytesToHex(sum256)).toEqual(test.out256);
+
+                    const sum160 = Blake2b.sum160(Converter.hexToBytes(test.in), Converter.hexToBytes(test.key));
+                    expect(Converter.bytesToHex(sum160)).toEqual(test.out160);
                 }
             }
         }

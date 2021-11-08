@@ -7,15 +7,25 @@ TypeScript conversion from https://github.com/dcposch/blakejs.
 
 ### Properties
 
+- [SIZE\_160](Blake2b.md#size_160)
 - [SIZE\_256](Blake2b.md#size_256)
 - [SIZE\_512](Blake2b.md#size_512)
 
 ### Methods
 
+- [sum160](Blake2b.md#sum160)
 - [sum256](Blake2b.md#sum256)
 - [sum512](Blake2b.md#sum512)
 
 ## Properties
+
+### SIZE\_160
+
+▪ `Static` **SIZE\_160**: `number` = `20`
+
+Blake2b 160.
+
+___
 
 ### SIZE\_256
 
@@ -32,6 +42,27 @@ ___
 Blake2b 512.
 
 ## Methods
+
+### sum160
+
+▸ `Static` **sum160**(`data`, `key?`): `Uint8Array`
+
+Perform Sum 160 on the data.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `data` | `Uint8Array` | The data to operate on. |
+| `key?` | `Uint8Array` | Optional key for the hash. |
+
+#### Returns
+
+`Uint8Array`
+
+The sum 160 of the data.
+
+___
 
 ### sum256
 

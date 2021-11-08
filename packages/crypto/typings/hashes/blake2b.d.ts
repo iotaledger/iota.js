@@ -4,6 +4,10 @@
  */
 export declare class Blake2b {
     /**
+     * Blake2b 160.
+     */
+    static SIZE_160: number;
+    /**
      * Blake2b 256.
      */
     static SIZE_256: number;
@@ -11,6 +15,13 @@ export declare class Blake2b {
      * Blake2b 512.
      */
     static SIZE_512: number;
+    /**
+     * Perform Sum 160 on the data.
+     * @param data The data to operate on.
+     * @param key Optional key for the hash.
+     * @returns The sum 160 of the data.
+     */
+    static sum160(data: Uint8Array, key?: Uint8Array): Uint8Array;
     /**
      * Perform Sum 256 on the data.
      * @param data The data to operate on.
