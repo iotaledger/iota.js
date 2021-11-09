@@ -459,6 +459,7 @@ module.exports = {
         "unicorn/no-array-instanceof": ["error"],
         "unicorn/no-array-push-push": ["off"],
         "unicorn/no-console-spaces": ["error"],
+        "unicorn/no-empty-file": ["off"],
         "unicorn/no-fn-reference-in-iterator": ["error"],
         "unicorn/no-for-loop": ["off"],
         "unicorn/no-hex-escape": ["error"],
