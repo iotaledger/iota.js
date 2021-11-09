@@ -67,7 +67,6 @@ export class Blake2b {
 
     /**
      * Create a new instance of Blake2b.
-     * @internal
      */
     constructor() {
         this._v = new Uint32Array(32);
@@ -114,76 +113,12 @@ export class Blake2b {
     }
 
     /**
-     * Compression.
-     * Note we're representing 16 uint64s as 32 uint32s
-     * @param ctx The context.
-     * @param ctx.b Array.
-     * @param ctx.h Array.
-     * @param ctx.t Number.
-     * @param ctx.c Number.
-     * @param ctx.outlen The output length.
-     * @param last Is this the last block.
-     * @internal
-     */
-    private compress(
-        ctx: {
-            b: Uint8Array;
-            h: Uint32Array;
-            t: number;
-            c: number;
-            outlen: number;
-        },
-        last: boolean
-    ): void {
-        let i = 0;
-
-        // init work variables
-        for (i = 0; i < 16; i++) {
-            this._v[i] = ctx.h[i];
-            this._v[i + 16] = Blake2b.BLAKE2B_IV32[i];
-        }
-
-        // low 64 bits of offset
-        this._v[24] ^= ctx.t;
-        this._v[25] ^= ctx.t / 0x100000000;
-        // high 64 bits not supported, offset may not be higher than 2**53-1
-
-        // last block flag set ?
-        if (last) {
-            this._v[28] = ~this._v[28];
-            this._v[29] = ~this._v[29];
-        }
-
-        // get little-endian words
-        for (i = 0; i < 32; i++) {
-            this._m[i] = this.b2bGet32(ctx.b, 4 * i);
-        }
-
-        // twelve rounds of mixing
-        for (i = 0; i < 12; i++) {
-            this.b2bG(0, 8, 16, 24, Blake2b.SIGMA82[i * 16 + 0], Blake2b.SIGMA82[i * 16 + 1]);
-            this.b2bG(2, 10, 18, 26, Blake2b.SIGMA82[i * 16 + 2], Blake2b.SIGMA82[i * 16 + 3]);
-            this.b2bG(4, 12, 20, 28, Blake2b.SIGMA82[i * 16 + 4], Blake2b.SIGMA82[i * 16 + 5]);
-            this.b2bG(6, 14, 22, 30, Blake2b.SIGMA82[i * 16 + 6], Blake2b.SIGMA82[i * 16 + 7]);
-            this.b2bG(0, 10, 20, 30, Blake2b.SIGMA82[i * 16 + 8], Blake2b.SIGMA82[i * 16 + 9]);
-            this.b2bG(2, 12, 22, 24, Blake2b.SIGMA82[i * 16 + 10], Blake2b.SIGMA82[i * 16 + 11]);
-            this.b2bG(4, 14, 16, 26, Blake2b.SIGMA82[i * 16 + 12], Blake2b.SIGMA82[i * 16 + 13]);
-            this.b2bG(6, 8, 18, 28, Blake2b.SIGMA82[i * 16 + 14], Blake2b.SIGMA82[i * 16 + 15]);
-        }
-
-        for (i = 0; i < 16; i++) {
-            ctx.h[i] = ctx.h[i] ^ this._v[i] ^ this._v[i + 16];
-        }
-    }
-
-    /**
      * Creates a BLAKE2b hashing context.
      * @param outlen Output length between 1 and 64 bytes.
      * @param key Optional key.
      * @returns The initialized context.
-     * @internal
      */
-    private init(
+    public init(
         outlen: number,
         key?: Uint8Array
     ): {
@@ -235,9 +170,8 @@ export class Blake2b {
      * @param ctx.c Number.
      * @param ctx.outlen The output length.
      * @param input The data to hash.
-     * @internal
      */
-    private update(
+    public update(
         ctx: {
             b: Uint8Array;
             h: Uint32Array;
@@ -267,9 +201,8 @@ export class Blake2b {
      * @param ctx.c Number.
      * @param ctx.outlen The output length.
      * @returns The final data.
-     * @internal
      */
-    private final(ctx: { b: Uint8Array; h: Uint32Array; t: number; c: number; outlen: number }): Uint8Array {
+    public final(ctx: { b: Uint8Array; h: Uint32Array; t: number; c: number; outlen: number }): Uint8Array {
         ctx.t += ctx.c; // mark last block offset
 
         while (ctx.c < 128) {
@@ -387,5 +320,68 @@ export class Blake2b {
         xor1 = this._v[b + 1] ^ this._v[c + 1];
         this._v[b] = (xor1 >>> 31) ^ (xor0 << 1);
         this._v[b + 1] = (xor0 >>> 31) ^ (xor1 << 1);
+    }
+
+    /**
+     * Compression.
+     * Note we're representing 16 uint64s as 32 uint32s
+     * @param ctx The context.
+     * @param ctx.b Array.
+     * @param ctx.h Array.
+     * @param ctx.t Number.
+     * @param ctx.c Number.
+     * @param ctx.outlen The output length.
+     * @param last Is this the last block.
+     * @internal
+     */
+    private compress(
+        ctx: {
+            b: Uint8Array;
+            h: Uint32Array;
+            t: number;
+            c: number;
+            outlen: number;
+        },
+        last: boolean
+    ): void {
+        let i = 0;
+
+        // init work variables
+        for (i = 0; i < 16; i++) {
+            this._v[i] = ctx.h[i];
+            this._v[i + 16] = Blake2b.BLAKE2B_IV32[i];
+        }
+
+        // low 64 bits of offset
+        this._v[24] ^= ctx.t;
+        this._v[25] ^= ctx.t / 0x100000000;
+        // high 64 bits not supported, offset may not be higher than 2**53-1
+
+        // last block flag set ?
+        if (last) {
+            this._v[28] = ~this._v[28];
+            this._v[29] = ~this._v[29];
+        }
+
+        // get little-endian words
+        for (i = 0; i < 32; i++) {
+            this._m[i] = this.b2bGet32(ctx.b, 4 * i);
+        }
+
+        // twelve rounds of mixing
+        for (i = 0; i < 12; i++) {
+            this.b2bG(0, 8, 16, 24, Blake2b.SIGMA82[i * 16 + 0], Blake2b.SIGMA82[i * 16 + 1]);
+            this.b2bG(2, 10, 18, 26, Blake2b.SIGMA82[i * 16 + 2], Blake2b.SIGMA82[i * 16 + 3]);
+            this.b2bG(4, 12, 20, 28, Blake2b.SIGMA82[i * 16 + 4], Blake2b.SIGMA82[i * 16 + 5]);
+            this.b2bG(6, 14, 22, 30, Blake2b.SIGMA82[i * 16 + 6], Blake2b.SIGMA82[i * 16 + 7]);
+            this.b2bG(0, 10, 20, 30, Blake2b.SIGMA82[i * 16 + 8], Blake2b.SIGMA82[i * 16 + 9]);
+            this.b2bG(2, 12, 22, 24, Blake2b.SIGMA82[i * 16 + 10], Blake2b.SIGMA82[i * 16 + 11]);
+            this.b2bG(4, 14, 16, 26, Blake2b.SIGMA82[i * 16 + 12], Blake2b.SIGMA82[i * 16 + 13]);
+            this.b2bG(6, 8, 18, 28, Blake2b.SIGMA82[i * 16 + 14], Blake2b.SIGMA82[i * 16 + 15]);
+        }
+
+        for (i = 0; i < 16; i++) {
+            ctx.h[i] = ctx.h[i] ^ this._v[i] ^ this._v[i + 16];
+        }
     }
 }

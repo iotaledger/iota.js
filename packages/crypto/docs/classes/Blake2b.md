@@ -16,6 +16,13 @@ TypeScript conversion from https://github.com/dcposch/blakejs.
 - [sum160](Blake2b.md#sum160)
 - [sum256](Blake2b.md#sum256)
 - [sum512](Blake2b.md#sum512)
+- [init](Blake2b.md#init)
+- [update](Blake2b.md#update)
+- [final](Blake2b.md#final)
+
+### Constructors
+
+- [constructor](Blake2b.md#constructor)
 
 ## Properties
 
@@ -103,3 +110,71 @@ Perform Sum 512 on the data.
 `Uint8Array`
 
 The sum 512 of the data.
+
+___
+
+### init
+
+▸ **init**(`outlen`, `key?`): `Object`
+
+Creates a BLAKE2b hashing context.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `outlen` | `number` | Output length between 1 and 64 bytes. |
+| `key?` | `Uint8Array` | Optional key. |
+
+#### Returns
+
+`Object`
+
+The initialized context.
+
+___
+
+### update
+
+▸ **update**(`ctx`, `input`): `void`
+
+Updates a BLAKE2b streaming hash.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `ctx` | `Object` | The context. |
+| `input` | `Uint8Array` | The data to hash. |
+
+#### Returns
+
+`void`
+
+___
+
+### final
+
+▸ **final**(`ctx`): `Uint8Array`
+
+Completes a BLAKE2b streaming hash.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `ctx` | `Object` | The context. |
+
+#### Returns
+
+`Uint8Array`
+
+The final data.
+
+## Constructors
+
+### constructor
+
+• **new Blake2b**()
+
+Create a new instance of Blake2b.
