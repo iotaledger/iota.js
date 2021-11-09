@@ -4,9 +4,7 @@
 import type { ReadStream, WriteStream } from "@iota/util.js";
 import { TRANSACTION_ESSENCE_TYPE } from "../../models/ITransactionEssence";
 import { ITransactionPayload, TRANSACTION_PAYLOAD_TYPE } from "../../models/payloads/ITransactionPayload";
-import {
-    TYPE_LENGTH, UINT32_SIZE
-} from "../commonDataTypes";
+import { TYPE_LENGTH, UINT32_SIZE } from "../commonDataTypes";
 import { deserializeTransactionEssence, serializeTransactionEssence } from "../transactionEssence";
 import { deserializeUnlockBlocks, serializeUnlockBlocks } from "../unlockBlocks/unlockBlocks";
 

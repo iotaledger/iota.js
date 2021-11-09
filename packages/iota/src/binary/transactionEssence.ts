@@ -4,9 +4,7 @@
 import type { ReadStream, WriteStream } from "@iota/util.js";
 import { IUTXOInput, UTXO_INPUT_TYPE } from "../models/inputs/IUTXOInput";
 import { ITransactionEssence, TRANSACTION_ESSENCE_TYPE } from "../models/ITransactionEssence";
-import {
-    SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE
-} from "../models/outputs/ISigLockedDustAllowanceOutput";
+import { SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE } from "../models/outputs/ISigLockedDustAllowanceOutput";
 import { SIMPLE_OUTPUT_TYPE } from "../models/outputs/ISimpleOutput";
 import { INDEXATION_PAYLOAD_TYPE } from "../models/payloads/IIndexationPayload";
 import { ARRAY_LENGTH, SMALL_TYPE_LENGTH, UINT32_SIZE } from "./commonDataTypes";
@@ -52,9 +50,7 @@ export function deserializeTransactionEssence(readStream: ReadStream): ITransact
 
     for (const output of outputs) {
         if (output.type !== SIMPLE_OUTPUT_TYPE) {
-            throw new Error(
-                "Transaction essence can only contain simple outputs"
-            );
+            throw new Error("Transaction essence can only contain simple outputs");
         }
     }
 

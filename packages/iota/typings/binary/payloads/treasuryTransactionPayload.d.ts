@@ -1,7 +1,7 @@
 import type { ReadStream, WriteStream } from "@iota/util.js";
 import { ITreasuryTransactionPayload } from "../../models/payloads/ITreasuryTransactionPayload";
 /**
- * The minimum length of a treasure transaction payload binary representation.
+ * The minimum length of a treasury transaction payload binary representation.
  */
 export declare const MIN_TREASURY_TRANSACTION_PAYLOAD_LENGTH: number;
 /**

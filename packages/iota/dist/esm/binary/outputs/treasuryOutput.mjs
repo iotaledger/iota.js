@@ -4,7 +4,8 @@ import { SMALL_TYPE_LENGTH, UINT64_SIZE } from "../commonDataTypes.mjs";
 /**
  * The minimum length of a treasury output binary representation.
  */
-export const MIN_TREASURY_OUTPUT_LENGTH = SMALL_TYPE_LENGTH + UINT64_SIZE;
+export const MIN_TREASURY_OUTPUT_LENGTH = SMALL_TYPE_LENGTH + // Type
+    UINT64_SIZE; // Amount
 /**
  * Deserialize the treasury output from binary.
  * @param readStream The stream to read the data from.

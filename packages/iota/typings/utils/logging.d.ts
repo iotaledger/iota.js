@@ -1,8 +1,10 @@
 import type { AddressTypes } from "../models/addresses/addressTypes";
 import type { ITipsResponse } from "../models/api/ITipsResponse";
+import type { FeatureBlockTypes } from "../models/featureBlocks/featureBlockTypes";
 import type { IMessage } from "../models/IMessage";
 import type { IMessageMetadata } from "../models/IMessageMetadata";
 import type { IMigratedFunds } from "../models/IMigratedFunds";
+import type { INativeToken } from "../models/INativeToken";
 import type { INodeInfo } from "../models/INodeInfo";
 import type { InputTypes } from "../models/inputs/inputTypes";
 import type { OutputTypes } from "../models/outputs/outputTypes";
@@ -13,6 +15,7 @@ import { ITransactionPayload } from "../models/payloads/ITransactionPayload";
 import { ITreasuryTransactionPayload } from "../models/payloads/ITreasuryTransactionPayload";
 import type { PayloadTypes } from "../models/payloads/payloadTypes";
 import type { SignatureTypes } from "../models/signatures/signatureTypes";
+import type { TokenSchemeTypes } from "../models/tokenSchemes/tokenSchemeTypes";
 import type { UnlockBlockTypes } from "../models/unlockBlocks/unlockBlockTypes";
 /**
  * Set the logger for output.
@@ -115,3 +118,27 @@ export declare function logUnlockBlock(prefix: string, unlockBlock?: UnlockBlock
  * @param fund The fund to log.
  */
 export declare function logFunds(prefix: string, fund?: IMigratedFunds): void;
+/**
+ * Log native tokens to the console.
+ * @param prefix The prefix for the output.
+ * @param nativeTokens The native tokens.
+ */
+export declare function logNativeTokens(prefix: string, nativeTokens: INativeToken[]): void;
+/**
+ * Log token scheme to the console.
+ * @param prefix The prefix for the output.
+ * @param tokenScheme The native tokens.
+ */
+export declare function logTokenScheme(prefix: string, tokenScheme: TokenSchemeTypes): void;
+/**
+ * Log feature blocks to the console.
+ * @param prefix The prefix for the output.
+ * @param featureBlocks The native tokens.
+ */
+export declare function logFeatureBlocks(prefix: string, featureBlocks: FeatureBlockTypes[]): void;
+/**
+ * Log feature block to the console.
+ * @param prefix The prefix for the output.
+ * @param featureBlock The native tokens.
+ */
+export declare function logFeatureBlock(prefix: string, featureBlock: FeatureBlockTypes): void;

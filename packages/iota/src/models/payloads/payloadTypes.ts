@@ -9,8 +9,9 @@ import type { ITreasuryTransactionPayload } from "./ITreasuryTransactionPayload"
 /**
  * All of the payload types.
  */
-export type PayloadTypes = ITransactionPayload |
-    IMilestonePayload |
-    IReceiptPayload |
-    IIndexationPayload |
-    ITreasuryTransactionPayload;
+export type PayloadTypes =
+    | ITransactionPayload
+    | IMilestonePayload
+    | IReceiptPayload
+    | IIndexationPayload
+    | ITreasuryTransactionPayload;

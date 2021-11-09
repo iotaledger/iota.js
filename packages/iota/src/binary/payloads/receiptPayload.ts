@@ -4,11 +4,7 @@
 import type { ReadStream, WriteStream } from "@iota/util.js";
 import { IReceiptPayload, RECEIPT_PAYLOAD_TYPE } from "../../models/payloads/IReceiptPayload";
 import { TREASURY_TRANSACTION_PAYLOAD_TYPE } from "../../models/payloads/ITreasuryTransactionPayload";
-import {
-    TYPE_LENGTH,
-    UINT16_SIZE,
-    UINT32_SIZE
-} from "../commonDataTypes";
+import { TYPE_LENGTH, UINT16_SIZE, UINT32_SIZE } from "../commonDataTypes";
 import { deserializeFunds, MIN_MIGRATED_FUNDS_LENGTH, serializeFunds } from "../funds";
 import { deserializePayload, serializePayload } from "./payloads";
 

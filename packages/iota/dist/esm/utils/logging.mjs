@@ -1,10 +1,26 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 import { Converter } from "@iota/util.js";
+import { ALIAS_ADDRESS_TYPE } from "../models/addresses/IAliasAddress.mjs";
+import { BLS_ADDRESS_TYPE } from "../models/addresses/IBlsAddress.mjs";
 import { ED25519_ADDRESS_TYPE } from "../models/addresses/IEd25519Address.mjs";
+import { NFT_ADDRESS_TYPE } from "../models/addresses/INftAddress.mjs";
+import { EXPIRATION_MILESTONE_INDEX_FEATURE_BLOCK_TYPE } from "../models/featureBlocks/IExpirationMilestoneIndexFeatureBlock.mjs";
+import { EXPIRATION_UNIX_FEATURE_BLOCK_TYPE } from "../models/featureBlocks/IExpirationUnixFeatureBlock.mjs";
+import { INDEXATION_FEATURE_BLOCK_TYPE } from "../models/featureBlocks/IIndexationFeatureBlock.mjs";
+import { ISSUER_FEATURE_BLOCK_TYPE } from "../models/featureBlocks/IIssuerFeatureBlock.mjs";
+import { METADATA_FEATURE_BLOCK_TYPE } from "../models/featureBlocks/IMetadataFeatureBlock.mjs";
+import { RETURN_FEATURE_BLOCK_TYPE } from "../models/featureBlocks/IReturnFeatureBlock.mjs";
+import { SENDER_FEATURE_BLOCK_TYPE } from "../models/featureBlocks/ISenderFeatureBlock.mjs";
+import { TIMELOCK_MILESTONE_INDEX_FEATURE_BLOCK_TYPE } from "../models/featureBlocks/ITimelockMilestoneIndexFeatureBlock.mjs";
+import { TIMELOCK_UNIX_FEATURE_BLOCK_TYPE } from "../models/featureBlocks/ITimelockUnixFeatureBlock.mjs";
 import { TREASURY_INPUT_TYPE } from "../models/inputs/ITreasuryInput.mjs";
 import { UTXO_INPUT_TYPE } from "../models/inputs/IUTXOInput.mjs";
 import { TRANSACTION_ESSENCE_TYPE } from "../models/ITransactionEssence.mjs";
+import { ALIAS_OUTPUT_TYPE } from "../models/outputs/IAliasOutput.mjs";
+import { EXTENDED_OUTPUT_TYPE } from "../models/outputs/IExtendedOutput.mjs";
+import { FOUNDRY_OUTPUT_TYPE } from "../models/outputs/IFoundryOutput.mjs";
+import { NFT_OUTPUT_TYPE } from "../models/outputs/INftOutput.mjs";
 import { SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE } from "../models/outputs/ISigLockedDustAllowanceOutput.mjs";
 import { SIMPLE_OUTPUT_TYPE } from "../models/outputs/ISimpleOutput.mjs";
 import { TREASURY_OUTPUT_TYPE } from "../models/outputs/ITreasuryOutput.mjs";
@@ -14,6 +30,9 @@ import { RECEIPT_PAYLOAD_TYPE } from "../models/payloads/IReceiptPayload.mjs";
 import { TRANSACTION_PAYLOAD_TYPE } from "../models/payloads/ITransactionPayload.mjs";
 import { TREASURY_TRANSACTION_PAYLOAD_TYPE } from "../models/payloads/ITreasuryTransactionPayload.mjs";
 import { ED25519_SIGNATURE_TYPE } from "../models/signatures/IEd25519Signature.mjs";
+import { SIMPLE_TOKEN_SCHEME_TYPE } from "../models/tokenSchemes/ISimpleTokenScheme.mjs";
+import { ALIAS_UNLOCK_BLOCK_TYPE } from "../models/unlockBlocks/IAliasUnlockBlock.mjs";
+import { NFT_UNLOCK_BLOCK_TYPE } from "../models/unlockBlocks/INftUnlockBlock.mjs";
 import { REFERENCE_UNLOCK_BLOCK_TYPE } from "../models/unlockBlocks/IReferenceUnlockBlock.mjs";
 import { SIGNATURE_UNLOCK_BLOCK_TYPE } from "../models/unlockBlocks/ISignatureUnlockBlock.mjs";
 /**
@@ -243,6 +262,18 @@ export function logAddress(prefix, address) {
         logger(`${prefix}Ed25519 Address`);
         logger(`${prefix}\tAddress:`, address.address);
     }
+    else if ((address === null || address === void 0 ? void 0 : address.type) === BLS_ADDRESS_TYPE) {
+        logger(`${prefix}BLS Address`);
+        logger(`${prefix}\tAddress:`, address.address);
+    }
+    else if ((address === null || address === void 0 ? void 0 : address.type) === ALIAS_ADDRESS_TYPE) {
+        logger(`${prefix}Alias Address`);
+        logger(`${prefix}\tAddress:`, address.address);
+    }
+    else if ((address === null || address === void 0 ? void 0 : address.type) === NFT_ADDRESS_TYPE) {
+        logger(`${prefix}NFT Address`);
+        logger(`${prefix}\tAddress:`, address.address);
+    }
 }
 /**
  * Log signature to the console.
@@ -295,6 +326,49 @@ export function logOutput(prefix, output) {
             logger(`${prefix}Treasury Output`);
             logger(`${prefix}\t\tAmount:`, output.amount);
         }
+        else if (output.type === EXTENDED_OUTPUT_TYPE) {
+            logger(`${prefix}Extended Output`);
+            logAddress(`${prefix}\t\tS`, output.address);
+            logger(`${prefix}\t\tAmount:`, output.amount);
+            logNativeTokens(`${prefix}\t\t`, output.nativeTokens);
+            logFeatureBlocks(`${prefix}\t\t`, output.blocks);
+        }
+        else if (output.type === ALIAS_OUTPUT_TYPE) {
+            logger(`${prefix}Alias Output`);
+            logger(`${prefix}\t\tAmount:`, output.amount);
+            logNativeTokens(`${prefix}\t\t`, output.nativeTokens);
+            logger(`${prefix}\t\tAlias Id:`, output.aliasId);
+            logger(`${prefix}State Controller`);
+            logAddress(`${prefix}\t\t`, output.stateController);
+            logger(`${prefix}Governance Controller`);
+            logAddress(`${prefix}\t\t`, output.governanceController);
+            logger(`${prefix}\t\tState Index:`, output.stateIndex);
+            logger(`${prefix}\t\tState Metadata:`, output.stateMetadata);
+            logger(`${prefix}\t\tFoundry Counter:`, output.foundryCounter);
+            logFeatureBlocks(`${prefix}\t\t`, output.blocks);
+        }
+        else if (output.type === FOUNDRY_OUTPUT_TYPE) {
+            logger(`${prefix}Foundry Output`);
+            logger(`${prefix}\t\tAmount:`, output.amount);
+            logNativeTokens(`${prefix}\t\t`, output.nativeTokens);
+            logAddress(`${prefix}\t\tS`, output.address);
+            logger(`${prefix}\t\tSerial Number:`, output.serialNumber);
+            logger(`${prefix}\t\tToken Tag:`, output.tokenTag);
+            logger(`${prefix}\t\tCirculating Supply:`, output.circulatingSupply);
+            logger(`${prefix}\t\tMaximum Supply:`, output.maximumSupply);
+            logger(`${prefix}State Controller`);
+            logTokenScheme(`${prefix}\t\t`, output.tokenScheme);
+            logFeatureBlocks(`${prefix}\t\t`, output.blocks);
+        }
+        else if (output.type === NFT_OUTPUT_TYPE) {
+            logger(`${prefix}NFT Output`);
+            logAddress(`${prefix}\t\tS`, output.address);
+            logger(`${prefix}\t\tAmount:`, output.amount);
+            logNativeTokens(`${prefix}\t\t`, output.nativeTokens);
+            logger(`${prefix}\t\tNFT Id:`, output.nftId);
+            logger(`${prefix}\t\tImmutable Data:`, output.immutableData);
+            logFeatureBlocks(`${prefix}\t\t`, output.blocks);
+        }
     }
 }
 /**
@@ -312,6 +386,14 @@ export function logUnlockBlock(prefix, unlockBlock) {
             logger(`${prefix}\tReference Unlock Block`);
             logger(`${prefix}\t\tReference:`, unlockBlock.reference);
         }
+        else if (unlockBlock.type === ALIAS_UNLOCK_BLOCK_TYPE) {
+            logger(`${prefix}\tAlias Unlock Block`);
+            logger(`${prefix}\t\tReference:`, unlockBlock.reference);
+        }
+        else if (unlockBlock.type === NFT_UNLOCK_BLOCK_TYPE) {
+            logger(`${prefix}\tNFT Unlock Block`);
+            logger(`${prefix}\t\tReference:`, unlockBlock.reference);
+        }
     }
 }
 /**
@@ -325,5 +407,81 @@ export function logFunds(prefix, fund) {
         logger(`${prefix}\t\tTail Transaction Hash:`, fund.tailTransactionHash);
         logAddress(`${prefix}\t\t`, fund.address);
         logger(`${prefix}\t\tDeposit:`, fund.deposit);
+    }
+}
+/**
+ * Log native tokens to the console.
+ * @param prefix The prefix for the output.
+ * @param nativeTokens The native tokens.
+ */
+export function logNativeTokens(prefix, nativeTokens) {
+    logger(`${prefix}Native Tokens`);
+    for (const nativeToken of nativeTokens) {
+        logger(`${prefix}\t\tId:`, nativeToken.id);
+        logger(`${prefix}\t\tAmount:`, nativeToken.amount);
+    }
+}
+/**
+ * Log token scheme to the console.
+ * @param prefix The prefix for the output.
+ * @param tokenScheme The native tokens.
+ */
+export function logTokenScheme(prefix, tokenScheme) {
+    if (tokenScheme.type === SIMPLE_TOKEN_SCHEME_TYPE) {
+        logger(`${prefix}\tSimple Token Scheme`);
+    }
+}
+/**
+ * Log feature blocks to the console.
+ * @param prefix The prefix for the output.
+ * @param featureBlocks The native tokens.
+ */
+export function logFeatureBlocks(prefix, featureBlocks) {
+    logger(`${prefix}Native Tokens`);
+    for (const featureBlock of featureBlocks) {
+        logFeatureBlock(`${prefix}\t\t`, featureBlock);
+    }
+}
+/**
+ * Log feature block to the console.
+ * @param prefix The prefix for the output.
+ * @param featureBlock The native tokens.
+ */
+export function logFeatureBlock(prefix, featureBlock) {
+    if (featureBlock.type === SENDER_FEATURE_BLOCK_TYPE) {
+        logger(`${prefix}\tSender Feature Block`);
+        logAddress(`${prefix}\t\t`, featureBlock.address);
+    }
+    else if (featureBlock.type === ISSUER_FEATURE_BLOCK_TYPE) {
+        logger(`${prefix}\tIssuer Feature Block`);
+        logAddress(`${prefix}\t\t`, featureBlock.address);
+    }
+    else if (featureBlock.type === RETURN_FEATURE_BLOCK_TYPE) {
+        logger(`${prefix}\tReturn Feature Block`);
+        logger(`${prefix}\t\tAmount:`, featureBlock.amount);
+    }
+    else if (featureBlock.type === TIMELOCK_MILESTONE_INDEX_FEATURE_BLOCK_TYPE) {
+        logger(`${prefix}\tTimelock Milestone Index Feature Block`);
+        logger(`${prefix}\t\tMilestone Index:`, featureBlock.milestoneIndex);
+    }
+    else if (featureBlock.type === TIMELOCK_UNIX_FEATURE_BLOCK_TYPE) {
+        logger(`${prefix}\tTimelock Unix Feature Block`);
+        logger(`${prefix}\t\tUnix Time:`, featureBlock.unixTime);
+    }
+    else if (featureBlock.type === EXPIRATION_MILESTONE_INDEX_FEATURE_BLOCK_TYPE) {
+        logger(`${prefix}\tExpiration Milestone Index Feature Block`);
+        logger(`${prefix}\t\tMilestone Index:`, featureBlock.milestoneIndex);
+    }
+    else if (featureBlock.type === EXPIRATION_UNIX_FEATURE_BLOCK_TYPE) {
+        logger(`${prefix}\tExpiration Unix Feature Block`);
+        logger(`${prefix}\t\tUnix Time:`, featureBlock.unixTime);
+    }
+    else if (featureBlock.type === METADATA_FEATURE_BLOCK_TYPE) {
+        logger(`${prefix}\tMetadata Feature Block`);
+        logger(`${prefix}\t\tData:`, featureBlock.data);
+    }
+    else if (featureBlock.type === INDEXATION_FEATURE_BLOCK_TYPE) {
+        logger(`${prefix}\tIndexation Feature Block`);
+        logger(`${prefix}\t\tIndexation Tag:`, featureBlock.tag);
     }
 }

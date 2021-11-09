@@ -1,9 +1,13 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 import type { ReadStream, WriteStream } from "@iota/util.js";
-import type { SignatureTypes } from "../..";
 import { ED25519_SIGNATURE_TYPE } from "../../models/signatures/IEd25519Signature";
-import { deserializeEd25519Signature, MIN_ED25519_SIGNATURE_LENGTH, serializeEd25519Signature } from "./ed25519Signature";
+import type { SignatureTypes } from "../../models/signatures/signatureTypes";
+import {
+    deserializeEd25519Signature,
+    MIN_ED25519_SIGNATURE_LENGTH,
+    serializeEd25519Signature
+} from "./ed25519Signature";
 
 /**
  * The minimum length of a signature binary representation.
@@ -23,15 +27,15 @@ export function deserializeSignature(readStream: ReadStream): SignatureTypes {
     }
 
     const type = readStream.readByte("signature.type", false);
-    let input;
+    let signature;
 
     if (type === ED25519_SIGNATURE_TYPE) {
-        input = deserializeEd25519Signature(readStream);
+        signature = deserializeEd25519Signature(readStream);
     } else {
         throw new Error(`Unrecognized signature type ${type}`);
     }
 
-    return input;
+    return signature;
 }
 
 /**

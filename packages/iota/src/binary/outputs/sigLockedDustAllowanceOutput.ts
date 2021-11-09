@@ -13,7 +13,9 @@ import { SMALL_TYPE_LENGTH, UINT64_SIZE } from "../commonDataTypes";
  * The minimum length of a sig locked dust allowance output binary representation.
  */
 export const MIN_SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_LENGTH: number =
-    SMALL_TYPE_LENGTH + MIN_ADDRESS_LENGTH + UINT64_SIZE;
+    SMALL_TYPE_LENGTH + // Type
+    MIN_ADDRESS_LENGTH + // Address
+    UINT64_SIZE; // Amount
 
 /**
  * Deserialize the signature locked dust allowance output from binary.

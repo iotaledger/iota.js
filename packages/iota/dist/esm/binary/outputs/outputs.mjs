@@ -1,13 +1,21 @@
+import { ALIAS_OUTPUT_TYPE } from "../../models/outputs/IAliasOutput.mjs";
+import { EXTENDED_OUTPUT_TYPE } from "../../models/outputs/IExtendedOutput.mjs";
+import { FOUNDRY_OUTPUT_TYPE } from "../../models/outputs/IFoundryOutput.mjs";
+import { NFT_OUTPUT_TYPE } from "../../models/outputs/INftOutput.mjs";
 import { SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE } from "../../models/outputs/ISigLockedDustAllowanceOutput.mjs";
 import { SIMPLE_OUTPUT_TYPE } from "../../models/outputs/ISimpleOutput.mjs";
 import { TREASURY_OUTPUT_TYPE } from "../../models/outputs/ITreasuryOutput.mjs";
+import { deserializeAliasOutput, MIN_ALIAS_OUTPUT_LENGTH, serializeAliasOutput } from "./aliasOutput.mjs";
+import { deserializeExtendedOutput, MIN_EXTENDED_OUTPUT_LENGTH, serializeExtendedOutput } from "./extendedOutput.mjs";
+import { deserializeFoundryOutput, MIN_FOUNDRY_OUTPUT_LENGTH, serializeFoundryOutput } from "./foundryOutput.mjs";
+import { deserializeNftOutput, MIN_NFT_OUTPUT_LENGTH, serializeNftOutput } from "./nftOutput.mjs";
 import { deserializeSigLockedDustAllowanceOutput, MIN_SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_LENGTH, serializeSigLockedDustAllowanceOutput } from "./sigLockedDustAllowanceOutput.mjs";
 import { deserializeSimpleOutput, MIN_SIMPLE_OUTPUT_LENGTH, serializeSimpleOutput } from "./simpleOutput.mjs";
-import { deserializeTreasuryOutput, serializeTreasuryOutput } from "./treasuryOutput.mjs";
+import { deserializeTreasuryOutput, MIN_TREASURY_OUTPUT_LENGTH, serializeTreasuryOutput } from "./treasuryOutput.mjs";
 /**
  * The minimum length of an output binary representation.
  */
-export const MIN_OUTPUT_LENGTH = Math.min(MIN_SIMPLE_OUTPUT_LENGTH, MIN_SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_LENGTH);
+export const MIN_OUTPUT_LENGTH = Math.min(MIN_SIMPLE_OUTPUT_LENGTH, MIN_SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_LENGTH, MIN_TREASURY_OUTPUT_LENGTH, MIN_FOUNDRY_OUTPUT_LENGTH, MIN_EXTENDED_OUTPUT_LENGTH, MIN_NFT_OUTPUT_LENGTH, MIN_ALIAS_OUTPUT_LENGTH);
 /**
  * The minimum number of outputs.
  */
@@ -23,11 +31,11 @@ export const MAX_OUTPUT_COUNT = 127;
  */
 export function deserializeOutputs(readStream) {
     const numOutputs = readStream.readUInt16("outputs.numOutputs");
-    const inputs = [];
+    const outputs = [];
     for (let i = 0; i < numOutputs; i++) {
-        inputs.push(deserializeOutput(readStream));
+        outputs.push(deserializeOutput(readStream));
     }
-    return inputs;
+    return outputs;
 }
 /**
  * Serialize the outputs to binary.
@@ -56,20 +64,32 @@ export function deserializeOutput(readStream) {
         throw new Error(`Output data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_OUTPUT_LENGTH}`);
     }
     const type = readStream.readByte("output.type", false);
-    let input;
+    let output;
     if (type === SIMPLE_OUTPUT_TYPE) {
-        input = deserializeSimpleOutput(readStream);
+        output = deserializeSimpleOutput(readStream);
     }
     else if (type === SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE) {
-        input = deserializeSigLockedDustAllowanceOutput(readStream);
+        output = deserializeSigLockedDustAllowanceOutput(readStream);
     }
     else if (type === TREASURY_OUTPUT_TYPE) {
-        input = deserializeTreasuryOutput(readStream);
+        output = deserializeTreasuryOutput(readStream);
+    }
+    else if (type === EXTENDED_OUTPUT_TYPE) {
+        output = deserializeExtendedOutput(readStream);
+    }
+    else if (type === FOUNDRY_OUTPUT_TYPE) {
+        output = deserializeFoundryOutput(readStream);
+    }
+    else if (type === NFT_OUTPUT_TYPE) {
+        output = deserializeNftOutput(readStream);
+    }
+    else if (type === ALIAS_OUTPUT_TYPE) {
+        output = deserializeAliasOutput(readStream);
     }
     else {
         throw new Error(`Unrecognized output type ${type}`);
     }
-    return input;
+    return output;
 }
 /**
  * Serialize the output to binary.
@@ -85,6 +105,18 @@ export function serializeOutput(writeStream, object) {
     }
     else if (object.type === TREASURY_OUTPUT_TYPE) {
         serializeTreasuryOutput(writeStream, object);
+    }
+    else if (object.type === EXTENDED_OUTPUT_TYPE) {
+        serializeExtendedOutput(writeStream, object);
+    }
+    else if (object.type === FOUNDRY_OUTPUT_TYPE) {
+        serializeFoundryOutput(writeStream, object);
+    }
+    else if (object.type === NFT_OUTPUT_TYPE) {
+        serializeNftOutput(writeStream, object);
+    }
+    else if (object.type === ALIAS_OUTPUT_TYPE) {
+        serializeAliasOutput(writeStream, object);
     }
     else {
         throw new Error(`Unrecognized output type ${object.type}`);

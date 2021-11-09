@@ -9,35 +9,46 @@ import { RECEIPT_PAYLOAD_TYPE } from "../../models/payloads/IReceiptPayload";
 import { TRANSACTION_PAYLOAD_TYPE } from "../../models/payloads/ITransactionPayload";
 import { TREASURY_TRANSACTION_PAYLOAD_TYPE } from "../../models/payloads/ITreasuryTransactionPayload";
 import type { PayloadTypes } from "../../models/payloads/payloadTypes";
+import { UINT32_SIZE } from "../commonDataTypes";
 import {
-    UINT32_SIZE
-} from "../commonDataTypes";
-import { deserializeIndexationPayload, MIN_INDEXATION_PAYLOAD_LENGTH, serializeIndexationPayload } from "./indexationPayload";
-import { deserializeMilestonePayload, MIN_MILESTONE_PAYLOAD_LENGTH, serializeMilestonePayload } from "./milestonePayload";
+    deserializeIndexationPayload,
+    MIN_INDEXATION_PAYLOAD_LENGTH,
+    serializeIndexationPayload
+} from "./indexationPayload";
+import {
+    deserializeMilestonePayload,
+    MIN_MILESTONE_PAYLOAD_LENGTH,
+    serializeMilestonePayload
+} from "./milestonePayload";
 import { deserializeReceiptPayload, MIN_RECEIPT_PAYLOAD_LENGTH, serializeReceiptPayload } from "./receiptPayload";
-import { deserializeTransactionPayload, MIN_TRANSACTION_PAYLOAD_LENGTH, serializeTransactionPayload } from "./transactionPayload";
-import { deserializeTreasuryTransactionPayload, MIN_TREASURY_TRANSACTION_PAYLOAD_LENGTH, serializeTreasuryTransactionPayload } from "./treasuryTransactionPayload";
+import {
+    deserializeTransactionPayload,
+    MIN_TRANSACTION_PAYLOAD_LENGTH,
+    serializeTransactionPayload
+} from "./transactionPayload";
+import {
+    deserializeTreasuryTransactionPayload,
+    MIN_TREASURY_TRANSACTION_PAYLOAD_LENGTH,
+    serializeTreasuryTransactionPayload
+} from "./treasuryTransactionPayload";
 
 /**
  * The minimum length of a payload binary representation.
  */
-export const MIN_PAYLOAD_LENGTH: number =
-    Math.min(
-        MIN_TRANSACTION_PAYLOAD_LENGTH,
-        MIN_MILESTONE_PAYLOAD_LENGTH,
-        MIN_INDEXATION_PAYLOAD_LENGTH,
-        MIN_RECEIPT_PAYLOAD_LENGTH,
-        MIN_TREASURY_TRANSACTION_PAYLOAD_LENGTH
-    );
+export const MIN_PAYLOAD_LENGTH: number = Math.min(
+    MIN_TRANSACTION_PAYLOAD_LENGTH,
+    MIN_MILESTONE_PAYLOAD_LENGTH,
+    MIN_INDEXATION_PAYLOAD_LENGTH,
+    MIN_RECEIPT_PAYLOAD_LENGTH,
+    MIN_TREASURY_TRANSACTION_PAYLOAD_LENGTH
+);
 
 /**
  * Deserialize the payload from binary.
  * @param readStream The stream to read the data from.
  * @returns The deserialized object.
  */
-export function deserializePayload(
-    readStream: ReadStream
-): PayloadTypes | undefined {
+export function deserializePayload(readStream: ReadStream): PayloadTypes | undefined {
     const payloadLength = readStream.readUInt32("payload.length");
 
     if (!readStream.hasRemaining(payloadLength)) {
@@ -72,10 +83,7 @@ export function deserializePayload(
  * @param writeStream The stream to write the data to.
  * @param object The object to serialize.
  */
-export function serializePayload(
-    writeStream: WriteStream,
-    object: PayloadTypes | undefined
-): void {
+export function serializePayload(writeStream: WriteStream, object: PayloadTypes | undefined): void {
     // Store the location for the payload length and write 0
     // we will rewind and fill in once the size of the payload is known
     const payloadLengthWriteIndex = writeStream.getWriteIndex();

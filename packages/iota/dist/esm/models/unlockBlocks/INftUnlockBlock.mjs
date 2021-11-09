@@ -1,4 +1,4 @@
 /**
  * The global type for the NFT unlock block.
  */
-export const NFTUNLOCK_BLOCK_TYPE = 3;
+export const NFT_UNLOCK_BLOCK_TYPE = 3;

@@ -43,9 +43,24 @@
     Ed25519Address.ADDRESS_LENGTH = crypto_js.Blake2b.SIZE_256;
 
     /**
+     * The global type for the alias address type.
+     */
+    const ALIAS_ADDRESS_TYPE = 8;
+
+    /**
+     * The global type for the BLS address type.
+     */
+    const BLS_ADDRESS_TYPE = 1;
+
+    /**
      * The global type for the ed25519 address type.
      */
     const ED25519_ADDRESS_TYPE = 0;
+
+    /**
+     * The global type for the NFT address type.
+     */
+    const NFT_ADDRESS_TYPE = 16;
 
     // Copyright 2020 IOTA Stiftung
     /**
@@ -64,6 +79,10 @@
      * Byte length for a uint64 field.
      */
     const UINT64_SIZE = 8;
+    /**
+     * Byte length for a uint256 field.
+     */
+    const UINT256_SIZE = 32;
     /**
      * Byte length for a message id.
      */
@@ -92,6 +111,80 @@
      * Byte length for an array length.
      */
     const ARRAY_LENGTH = UINT16_SIZE;
+
+    /**
+     * The length of an alias address.
+     */
+    const ALIAS_ADDRESS_LENGTH = 20;
+    /**
+     * The minimum length of an alias address binary representation.
+     */
+    const MIN_ALIAS_ADDRESS_LENGTH = SMALL_TYPE_LENGTH + ALIAS_ADDRESS_LENGTH;
+    /**
+     * Deserialize the alias address from binary.
+     * @param readStream The stream to read the data from.
+     * @returns The deserialized object.
+     */
+    function deserializeAliasAddress(readStream) {
+        if (!readStream.hasRemaining(MIN_ALIAS_ADDRESS_LENGTH)) {
+            throw new Error(`Alias address data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_ALIAS_ADDRESS_LENGTH}`);
+        }
+        const type = readStream.readByte("aliasAddress.type");
+        if (type !== ALIAS_ADDRESS_TYPE) {
+            throw new Error(`Type mismatch in aliasAddress ${type}`);
+        }
+        const address = readStream.readFixedHex("aliasAddress.address", ALIAS_ADDRESS_LENGTH);
+        return {
+            type: ALIAS_ADDRESS_TYPE,
+            address
+        };
+    }
+    /**
+     * Serialize the alias address to binary.
+     * @param writeStream The stream to write the data to.
+     * @param object The object to serialize.
+     */
+    function serializeAliasAddress(writeStream, object) {
+        writeStream.writeByte("aliasAddress.type", object.type);
+        writeStream.writeFixedHex("aliasAddress.address", ALIAS_ADDRESS_LENGTH, object.address);
+    }
+
+    /**
+     * The length of a BLS address.
+     */
+    const BLS_ADDRESS_LENGTH = 32;
+    /**
+     * The minimum length of an bls address binary representation.
+     */
+    const MIN_BLS_ADDRESS_LENGTH = SMALL_TYPE_LENGTH + BLS_ADDRESS_LENGTH;
+    /**
+     * Deserialize the bls address from binary.
+     * @param readStream The stream to read the data from.
+     * @returns The deserialized object.
+     */
+    function deserializeBlsAddress(readStream) {
+        if (!readStream.hasRemaining(MIN_BLS_ADDRESS_LENGTH)) {
+            throw new Error(`BLS address data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_BLS_ADDRESS_LENGTH}`);
+        }
+        const type = readStream.readByte("blsAddress.type");
+        if (type !== BLS_ADDRESS_TYPE) {
+            throw new Error(`Type mismatch in blsAddress ${type}`);
+        }
+        const address = readStream.readFixedHex("blsAddress.address", BLS_ADDRESS_LENGTH);
+        return {
+            type: BLS_ADDRESS_TYPE,
+            address
+        };
+    }
+    /**
+     * Serialize the bls address to binary.
+     * @param writeStream The stream to write the data to.
+     * @param object The object to serialize.
+     */
+    function serializeBlsAddress(writeStream, object) {
+        writeStream.writeByte("blsAddress.type", object.type);
+        writeStream.writeFixedHex("blsAddress.address", BLS_ADDRESS_LENGTH, object.address);
+    }
 
     /**
      * The minimum length of an ed25519 address binary representation.
@@ -127,9 +220,46 @@
     }
 
     /**
+     * The length of an NFT address.
+     */
+    const NFT_ADDRESS_LENGTH = 20;
+    /**
+     * The minimum length of an nft address binary representation.
+     */
+    const MIN_NFT_ADDRESS_LENGTH = SMALL_TYPE_LENGTH + NFT_ADDRESS_LENGTH;
+    /**
+     * Deserialize the nft address from binary.
+     * @param readStream The stream to read the data from.
+     * @returns The deserialized object.
+     */
+    function deserializeNftAddress(readStream) {
+        if (!readStream.hasRemaining(MIN_NFT_ADDRESS_LENGTH)) {
+            throw new Error(`NFT address data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_NFT_ADDRESS_LENGTH}`);
+        }
+        const type = readStream.readByte("nftAddress.type");
+        if (type !== NFT_ADDRESS_TYPE) {
+            throw new Error(`Type mismatch in nftAddress ${type}`);
+        }
+        const address = readStream.readFixedHex("nftAddress.address", NFT_ADDRESS_LENGTH);
+        return {
+            type: NFT_ADDRESS_TYPE,
+            address
+        };
+    }
+    /**
+     * Serialize the nft address to binary.
+     * @param writeStream The stream to write the data to.
+     * @param object The object to serialize.
+     */
+    function serializeNftAddress(writeStream, object) {
+        writeStream.writeByte("nftAddress.type", object.type);
+        writeStream.writeFixedHex("nftAddress.address", NFT_ADDRESS_LENGTH, object.address);
+    }
+
+    /**
      * The minimum length of an address binary representation.
      */
-    const MIN_ADDRESS_LENGTH = MIN_ED25519_ADDRESS_LENGTH;
+    const MIN_ADDRESS_LENGTH = Math.min(MIN_ED25519_ADDRESS_LENGTH, MIN_ALIAS_ADDRESS_LENGTH, MIN_BLS_ADDRESS_LENGTH, MIN_NFT_ADDRESS_LENGTH);
     /**
      * Deserialize the address from binary.
      * @param readStream The stream to read the data from.
@@ -143,6 +273,15 @@
         let address;
         if (type === ED25519_ADDRESS_TYPE) {
             address = deserializeEd25519Address(readStream);
+        }
+        else if (type === ALIAS_ADDRESS_TYPE) {
+            address = deserializeAliasAddress(readStream);
+        }
+        else if (type === BLS_ADDRESS_TYPE) {
+            address = deserializeBlsAddress(readStream);
+        }
+        else if (type === NFT_ADDRESS_TYPE) {
+            address = deserializeNftAddress(readStream);
         }
         else {
             throw new Error(`Unrecognized address type ${type}`);
@@ -158,8 +297,476 @@
         if (object.type === ED25519_ADDRESS_TYPE) {
             serializeEd25519Address(writeStream, object);
         }
+        else if (object.type === ALIAS_ADDRESS_TYPE) {
+            serializeAliasAddress(writeStream, object);
+        }
+        else if (object.type === BLS_ADDRESS_TYPE) {
+            serializeBlsAddress(writeStream, object);
+        }
+        else if (object.type === NFT_ADDRESS_TYPE) {
+            serializeNftAddress(writeStream, object);
+        }
         else {
             throw new Error(`Unrecognized address type ${object.type}`);
+        }
+    }
+
+    /**
+     * The global type for the expiration milestone feature block.
+     */
+    const EXPIRATION_MILESTONE_INDEX_FEATURE_BLOCK_TYPE = 5;
+
+    /**
+     * The minimum length of a expiration milestone index feature block binary representation.
+     */
+    const MIN_EXPIRATION_MILESTONE_INDEX_FEATURE_BLOCK_LENGTH = SMALL_TYPE_LENGTH + UINT32_SIZE;
+    /**
+     * Deserialize the expiration milestone index feature block from binary.
+     * @param readStream The stream to read the data from.
+     * @returns The deserialized object.
+     */
+    function deserializeExpirationMilestoneIndexFeatureBlock(readStream) {
+        if (!readStream.hasRemaining(MIN_EXPIRATION_MILESTONE_INDEX_FEATURE_BLOCK_LENGTH)) {
+            throw new Error(`ExpirationMilestoneIndex Feature Block data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_EXPIRATION_MILESTONE_INDEX_FEATURE_BLOCK_LENGTH}`);
+        }
+        const type = readStream.readByte("expirationMilestoneIndexFeatureBlock.type");
+        if (type !== EXPIRATION_MILESTONE_INDEX_FEATURE_BLOCK_TYPE) {
+            throw new Error(`Type mismatch in expirationMilestoneIndexFeatureBlock ${type}`);
+        }
+        const milestoneIndex = readStream.readUInt32("expirationMilestoneIndexFeatureBlock.milestoneIndex");
+        return {
+            type: EXPIRATION_MILESTONE_INDEX_FEATURE_BLOCK_TYPE,
+            milestoneIndex
+        };
+    }
+    /**
+     * Serialize the expiration milestone index feature block to binary.
+     * @param writeStream The stream to write the data to.
+     * @param object The object to serialize.
+     */
+    function serializeExpirationMilestoneIndexFeatureBlock(writeStream, object) {
+        writeStream.writeByte("expirationMilestoneIndexFeatureBlock.type", object.type);
+        writeStream.writeUInt32("expirationMilestoneIndexFeatureBlock.milestoneIndex", object.milestoneIndex);
+    }
+
+    /**
+     * The global type for the expiration unix feature block.
+     */
+    const EXPIRATION_UNIX_FEATURE_BLOCK_TYPE = 6;
+
+    /**
+     * The minimum length of a expiration unix feature block binary representation.
+     */
+    const MIN_EXPIRATION_UNIX_FEATURE_BLOCK_LENGTH = SMALL_TYPE_LENGTH + UINT32_SIZE;
+    /**
+     * Deserialize the expiration unix feature block from binary.
+     * @param readStream The stream to read the data from.
+     * @returns The deserialized object.
+     */
+    function deserializeExpirationUnixFeatureBlock(readStream) {
+        if (!readStream.hasRemaining(MIN_EXPIRATION_UNIX_FEATURE_BLOCK_LENGTH)) {
+            throw new Error(`ExpirationUnix Feature Block data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_EXPIRATION_UNIX_FEATURE_BLOCK_LENGTH}`);
+        }
+        const type = readStream.readByte("expirationUnixFeatureBlock.type");
+        if (type !== EXPIRATION_UNIX_FEATURE_BLOCK_TYPE) {
+            throw new Error(`Type mismatch in expirationUnixFeatureBlock ${type}`);
+        }
+        const unixTime = readStream.readUInt32("expirationUnixFeatureBlock.unixTime");
+        return {
+            type: EXPIRATION_UNIX_FEATURE_BLOCK_TYPE,
+            unixTime
+        };
+    }
+    /**
+     * Serialize the expiration unix feature block to binary.
+     * @param writeStream The stream to write the data to.
+     * @param object The object to serialize.
+     */
+    function serializeExpirationUnixFeatureBlock(writeStream, object) {
+        writeStream.writeByte("expirationUnixFeatureBlock.type", object.type);
+        writeStream.writeUInt32("expirationUnixFeatureBlock.unixTime", object.unixTime);
+    }
+
+    /**
+     * The global type for the indexation feature block.
+     */
+    const INDEXATION_FEATURE_BLOCK_TYPE = 8;
+
+    /**
+     * The global type for the issuer feature block.
+     */
+    const ISSUER_FEATURE_BLOCK_TYPE = 1;
+
+    /**
+     * The global type for the metadata feature block.
+     */
+    const METADATA_FEATURE_BLOCK_TYPE = 7;
+
+    /**
+     * The global type for the return feature block.
+     */
+    const RETURN_FEATURE_BLOCK_TYPE = 2;
+
+    /**
+     * The global type for the sender feature block.
+     */
+    const SENDER_FEATURE_BLOCK_TYPE = 0;
+
+    /**
+     * The global type for the timelock milestone feature block.
+     */
+    const TIMELOCK_MILESTONE_INDEX_FEATURE_BLOCK_TYPE = 3;
+
+    /**
+     * The global type for the timelock unix feature block.
+     */
+    const TIMELOCK_UNIX_FEATURE_BLOCK_TYPE = 4;
+
+    /**
+     * The minimum length of a indexation feature block binary representation.
+     */
+    const MIN_INDEXATION_FEATURE_BLOCK_LENGTH = SMALL_TYPE_LENGTH + UINT32_SIZE;
+    /**
+     * Deserialize the indexation feature block from binary.
+     * @param readStream The stream to read the data from.
+     * @returns The deserialized object.
+     */
+    function deserializeIndexationFeatureBlock(readStream) {
+        if (!readStream.hasRemaining(MIN_INDEXATION_FEATURE_BLOCK_LENGTH)) {
+            throw new Error(`Indexation Feature Block data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_INDEXATION_FEATURE_BLOCK_LENGTH}`);
+        }
+        const type = readStream.readByte("indexationFeatureBlock.type");
+        if (type !== INDEXATION_FEATURE_BLOCK_TYPE) {
+            throw new Error(`Type mismatch in indexationFeatureBlock ${type}`);
+        }
+        const tagLength = readStream.readUInt32("indexationFeatureBlock.tagLength");
+        const tag = readStream.readFixedHex("indexationFeatureBlock.tag", tagLength);
+        return {
+            type: INDEXATION_FEATURE_BLOCK_TYPE,
+            tag
+        };
+    }
+    /**
+     * Serialize the indexation feature block to binary.
+     * @param writeStream The stream to write the data to.
+     * @param object The object to serialize.
+     */
+    function serializeIndexationFeatureBlock(writeStream, object) {
+        writeStream.writeByte("indexationFeatureBlock.type", object.type);
+        writeStream.writeUInt32("indexationFeatureBlock.tagLength", object.tag.length / 2);
+        writeStream.writeFixedHex("indexationFeatureBlock.tag", object.tag.length / 2, object.tag);
+    }
+
+    /**
+     * The minimum length of a issuer feature block binary representation.
+     */
+    const MIN_ISSUER_FEATURE_BLOCK_LENGTH = SMALL_TYPE_LENGTH + MIN_ADDRESS_LENGTH;
+    /**
+     * Deserialize the issuer feature block from binary.
+     * @param readStream The stream to read the data from.
+     * @returns The deserialized object.
+     */
+    function deserializeIssuerFeatureBlock(readStream) {
+        if (!readStream.hasRemaining(MIN_ISSUER_FEATURE_BLOCK_LENGTH)) {
+            throw new Error(`Issuer Feature Block data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_ISSUER_FEATURE_BLOCK_LENGTH}`);
+        }
+        const type = readStream.readByte("issuerFeatureBlock.type");
+        if (type !== ISSUER_FEATURE_BLOCK_TYPE) {
+            throw new Error(`Type mismatch in issuerFeatureBlock ${type}`);
+        }
+        const address = deserializeAddress(readStream);
+        return {
+            type: ISSUER_FEATURE_BLOCK_TYPE,
+            address
+        };
+    }
+    /**
+     * Serialize the issuer feature block to binary.
+     * @param writeStream The stream to write the data to.
+     * @param object The object to serialize.
+     */
+    function serializeIssuerFeatureBlock(writeStream, object) {
+        writeStream.writeByte("issuerFeatureBlock.type", object.type);
+        serializeAddress(writeStream, object.address);
+    }
+
+    /**
+     * The minimum length of a metadata feature block binary representation.
+     */
+    const MIN_METADATA_FEATURE_BLOCK_LENGTH = SMALL_TYPE_LENGTH + UINT32_SIZE;
+    /**
+     * Deserialize the metadata feature block from binary.
+     * @param readStream The stream to read the data from.
+     * @returns The deserialized object.
+     */
+    function deserializeMetadataFeatureBlock(readStream) {
+        if (!readStream.hasRemaining(MIN_METADATA_FEATURE_BLOCK_LENGTH)) {
+            throw new Error(`Metadata Feature Block data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_METADATA_FEATURE_BLOCK_LENGTH}`);
+        }
+        const type = readStream.readByte("metadataFeatureBlock.type");
+        if (type !== METADATA_FEATURE_BLOCK_TYPE) {
+            throw new Error(`Type mismatch in metadataFeatureBlock ${type}`);
+        }
+        const dataLength = readStream.readUInt32("metadataFeatureBlock.dataLength");
+        const data = readStream.readFixedHex("metadataFeatureBlock.data", dataLength);
+        return {
+            type: METADATA_FEATURE_BLOCK_TYPE,
+            data
+        };
+    }
+    /**
+     * Serialize the metadata feature block to binary.
+     * @param writeStream The stream to write the data to.
+     * @param object The object to serialize.
+     */
+    function serializeMetadataFeatureBlock(writeStream, object) {
+        writeStream.writeByte("metadataFeatureBlock.type", object.type);
+        writeStream.writeUInt32("metadataFeatureBlock.dataLength", object.data.length / 2);
+        writeStream.writeFixedHex("metadataFeatureBlock.data", object.data.length / 2, object.data);
+    }
+
+    /**
+     * The minimum length of a return feature block binary representation.
+     */
+    const MIN_RETURN_FEATURE_BLOCK_LENGTH = SMALL_TYPE_LENGTH + UINT64_SIZE;
+    /**
+     * Deserialize the return feature block from binary.
+     * @param readStream The stream to read the data from.
+     * @returns The deserialized object.
+     */
+    function deserializeReturnFeatureBlock(readStream) {
+        if (!readStream.hasRemaining(MIN_RETURN_FEATURE_BLOCK_LENGTH)) {
+            throw new Error(`Return Feature Block data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_RETURN_FEATURE_BLOCK_LENGTH}`);
+        }
+        const type = readStream.readByte("returnFeatureBlock.type");
+        if (type !== RETURN_FEATURE_BLOCK_TYPE) {
+            throw new Error(`Type mismatch in returnFeatureBlock ${type}`);
+        }
+        const amount = readStream.readUInt64("returnFeatureBlock.amount");
+        return {
+            type: RETURN_FEATURE_BLOCK_TYPE,
+            amount: Number(amount)
+        };
+    }
+    /**
+     * Serialize the return feature block to binary.
+     * @param writeStream The stream to write the data to.
+     * @param object The object to serialize.
+     */
+    function serializeReturnFeatureBlock(writeStream, object) {
+        writeStream.writeByte("returnFeatureBlock.type", object.type);
+        writeStream.writeUInt64("returnFeatureBlock.amount", bigInt__default["default"](object.amount));
+    }
+
+    /**
+     * The minimum length of a sender feature block binary representation.
+     */
+    const MIN_SENDER_FEATURE_BLOCK_LENGTH = SMALL_TYPE_LENGTH + MIN_ADDRESS_LENGTH;
+    /**
+     * Deserialize the sender feature block from binary.
+     * @param readStream The stream to read the data from.
+     * @returns The deserialized object.
+     */
+    function deserializeSenderFeatureBlock(readStream) {
+        if (!readStream.hasRemaining(MIN_SENDER_FEATURE_BLOCK_LENGTH)) {
+            throw new Error(`Sender Feature Block data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_SENDER_FEATURE_BLOCK_LENGTH}`);
+        }
+        const type = readStream.readByte("senderFeatureBlock.type");
+        if (type !== SENDER_FEATURE_BLOCK_TYPE) {
+            throw new Error(`Type mismatch in senderFeatureBlock ${type}`);
+        }
+        const address = deserializeAddress(readStream);
+        return {
+            type: SENDER_FEATURE_BLOCK_TYPE,
+            address
+        };
+    }
+    /**
+     * Serialize the sender feature block to binary.
+     * @param writeStream The stream to write the data to.
+     * @param object The object to serialize.
+     */
+    function serializeSenderFeatureBlock(writeStream, object) {
+        writeStream.writeByte("senderFeatureBlock.type", object.type);
+        serializeAddress(writeStream, object.address);
+    }
+
+    /**
+     * The minimum length of a timelock milestone index feature block binary representation.
+     */
+    const MIN_TIMELOCK_MILESTONE_INDEX_FEATURE_BLOCK_LENGTH = SMALL_TYPE_LENGTH + UINT32_SIZE;
+    /**
+     * Deserialize the timelock milestone index feature block from binary.
+     * @param readStream The stream to read the data from.
+     * @returns The deserialized object.
+     */
+    function deserializeTimelockMilestoneIndexFeatureBlock(readStream) {
+        if (!readStream.hasRemaining(MIN_TIMELOCK_MILESTONE_INDEX_FEATURE_BLOCK_LENGTH)) {
+            throw new Error(`TimelockMilestoneIndex Feature Block data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_TIMELOCK_MILESTONE_INDEX_FEATURE_BLOCK_LENGTH}`);
+        }
+        const type = readStream.readByte("timelockMilestoneIndexFeatureBlock.type");
+        if (type !== TIMELOCK_MILESTONE_INDEX_FEATURE_BLOCK_TYPE) {
+            throw new Error(`Type mismatch in timelockMilestoneIndexFeatureBlock ${type}`);
+        }
+        const milestoneIndex = readStream.readUInt32("timelockMilestoneIndexFeatureBlock.milestoneIndex");
+        return {
+            type: TIMELOCK_MILESTONE_INDEX_FEATURE_BLOCK_TYPE,
+            milestoneIndex
+        };
+    }
+    /**
+     * Serialize the timelock milestone index feature block to binary.
+     * @param writeStream The stream to write the data to.
+     * @param object The object to serialize.
+     */
+    function serializeTimelockMilestoneIndexFeatureBlock(writeStream, object) {
+        writeStream.writeByte("timelockMilestoneIndexFeatureBlock.type", object.type);
+        writeStream.writeUInt32("timelockMilestoneIndexFeatureBlock.milestoneIndex", object.milestoneIndex);
+    }
+
+    /**
+     * The minimum length of a timelock unix feature block binary representation.
+     */
+    const MIN_TIMELOCK_UNIX_FEATURE_BLOCK_LENGTH = SMALL_TYPE_LENGTH + UINT32_SIZE;
+    /**
+     * Deserialize the timelock unix feature block from binary.
+     * @param readStream The stream to read the data from.
+     * @returns The deserialized object.
+     */
+    function deserializeTimelockUnixFeatureBlock(readStream) {
+        if (!readStream.hasRemaining(MIN_TIMELOCK_UNIX_FEATURE_BLOCK_LENGTH)) {
+            throw new Error(`TimelockUnix Feature Block data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_TIMELOCK_UNIX_FEATURE_BLOCK_LENGTH}`);
+        }
+        const type = readStream.readByte("timelockUnixFeatureBlock.type");
+        if (type !== TIMELOCK_UNIX_FEATURE_BLOCK_TYPE) {
+            throw new Error(`Type mismatch in timelockUnixFeatureBlock ${type}`);
+        }
+        const unixTime = readStream.readUInt32("timelockUnixFeatureBlock.unixTime");
+        return {
+            type: TIMELOCK_UNIX_FEATURE_BLOCK_TYPE,
+            unixTime
+        };
+    }
+    /**
+     * Serialize the timelock unix feature block to binary.
+     * @param writeStream The stream to write the data to.
+     * @param object The object to serialize.
+     */
+    function serializeTimelockUnixFeatureBlock(writeStream, object) {
+        writeStream.writeByte("timelockUnixFeatureBlock.type", object.type);
+        writeStream.writeUInt32("timelockUnixFeatureBlock.unixTime", object.unixTime);
+    }
+
+    /**
+     * The minimum length of a feature blocks tokens list.
+     */
+    const MIN_FEATURE_BLOCKS_LENGTH = UINT16_SIZE;
+    /**
+     * The minimum length of a feature block binary representation.
+     */
+    const MIN_FEATURE_BLOCK_LENGTH = Math.min(MIN_SENDER_FEATURE_BLOCK_LENGTH, MIN_ISSUER_FEATURE_BLOCK_LENGTH, MIN_RETURN_FEATURE_BLOCK_LENGTH, MIN_TIMELOCK_MILESTONE_INDEX_FEATURE_BLOCK_LENGTH, MIN_TIMELOCK_UNIX_FEATURE_BLOCK_LENGTH, MIN_EXPIRATION_MILESTONE_INDEX_FEATURE_BLOCK_LENGTH, MIN_EXPIRATION_UNIX_FEATURE_BLOCK_LENGTH, MIN_METADATA_FEATURE_BLOCK_LENGTH, MIN_INDEXATION_FEATURE_BLOCK_LENGTH);
+    /**
+     * Deserialize the feature blocks from binary.
+     * @param readStream The stream to read the data from.
+     * @returns The deserialized object.
+     */
+    function deserializeFeatureBlocks(readStream) {
+        const numFeatureBlocks = readStream.readUInt16("featureBlocks.numFeatureBlocks");
+        const featureBlocks = [];
+        for (let i = 0; i < numFeatureBlocks; i++) {
+            featureBlocks.push(deserializeFeatureBlock(readStream));
+        }
+        return featureBlocks;
+    }
+    /**
+     * Serialize the feature blocks to binary.
+     * @param writeStream The stream to write the data to.
+     * @param objects The objects to serialize.
+     */
+    function serializeFeatureBlocks(writeStream, objects) {
+        writeStream.writeUInt16("featureBlocks.numFeatureBlocks", objects.length);
+        for (let i = 0; i < objects.length; i++) {
+            serializeFeatureBlock(writeStream, objects[i]);
+        }
+    }
+    /**
+     * Deserialize the feature block from binary.
+     * @param readStream The stream to read the data from.
+     * @returns The deserialized object.
+     */
+    function deserializeFeatureBlock(readStream) {
+        if (!readStream.hasRemaining(MIN_FEATURE_BLOCK_LENGTH)) {
+            throw new Error(`Feature block data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_FEATURE_BLOCK_LENGTH}`);
+        }
+        const type = readStream.readByte("featureBlock.type", false);
+        let input;
+        if (type === SENDER_FEATURE_BLOCK_TYPE) {
+            input = deserializeSenderFeatureBlock(readStream);
+        }
+        else if (type === ISSUER_FEATURE_BLOCK_TYPE) {
+            input = deserializeIssuerFeatureBlock(readStream);
+        }
+        else if (type === RETURN_FEATURE_BLOCK_TYPE) {
+            input = deserializeReturnFeatureBlock(readStream);
+        }
+        else if (type === TIMELOCK_MILESTONE_INDEX_FEATURE_BLOCK_TYPE) {
+            input = deserializeTimelockMilestoneIndexFeatureBlock(readStream);
+        }
+        else if (type === TIMELOCK_UNIX_FEATURE_BLOCK_TYPE) {
+            input = deserializeTimelockUnixFeatureBlock(readStream);
+        }
+        else if (type === EXPIRATION_MILESTONE_INDEX_FEATURE_BLOCK_TYPE) {
+            input = deserializeExpirationMilestoneIndexFeatureBlock(readStream);
+        }
+        else if (type === EXPIRATION_UNIX_FEATURE_BLOCK_TYPE) {
+            input = deserializeExpirationUnixFeatureBlock(readStream);
+        }
+        else if (type === METADATA_FEATURE_BLOCK_TYPE) {
+            input = deserializeMetadataFeatureBlock(readStream);
+        }
+        else if (type === INDEXATION_FEATURE_BLOCK_TYPE) {
+            input = deserializeIndexationFeatureBlock(readStream);
+        }
+        else {
+            throw new Error(`Unrecognized feature block type ${type}`);
+        }
+        return input;
+    }
+    /**
+     * Serialize the feature block to binary.
+     * @param writeStream The stream to write the data to.
+     * @param object The object to serialize.
+     */
+    function serializeFeatureBlock(writeStream, object) {
+        if (object.type === SENDER_FEATURE_BLOCK_TYPE) {
+            serializeSenderFeatureBlock(writeStream, object);
+        }
+        else if (object.type === ISSUER_FEATURE_BLOCK_TYPE) {
+            serializeIssuerFeatureBlock(writeStream, object);
+        }
+        else if (object.type === RETURN_FEATURE_BLOCK_TYPE) {
+            serializeReturnFeatureBlock(writeStream, object);
+        }
+        else if (object.type === TIMELOCK_MILESTONE_INDEX_FEATURE_BLOCK_TYPE) {
+            serializeTimelockMilestoneIndexFeatureBlock(writeStream, object);
+        }
+        else if (object.type === TIMELOCK_UNIX_FEATURE_BLOCK_TYPE) {
+            serializeTimelockUnixFeatureBlock(writeStream, object);
+        }
+        else if (object.type === EXPIRATION_MILESTONE_INDEX_FEATURE_BLOCK_TYPE) {
+            serializeExpirationMilestoneIndexFeatureBlock(writeStream, object);
+        }
+        else if (object.type === EXPIRATION_UNIX_FEATURE_BLOCK_TYPE) {
+            serializeExpirationUnixFeatureBlock(writeStream, object);
+        }
+        else if (object.type === METADATA_FEATURE_BLOCK_TYPE) {
+            serializeMetadataFeatureBlock(writeStream, object);
+        }
+        else if (object.type === INDEXATION_FEATURE_BLOCK_TYPE) {
+            serializeIndexationFeatureBlock(writeStream, object);
+        }
+        else {
+            throw new Error(`Unrecognized feature block type ${object.type}`);
         }
     }
 
@@ -651,14 +1258,415 @@
     const SIMPLE_OUTPUT_TYPE = 0;
 
     /**
+     * The global type for the alias output.
+     */
+    const ALIAS_OUTPUT_TYPE = 4;
+
+    /**
+     * The global type for the extended output.
+     */
+    const EXTENDED_OUTPUT_TYPE = 3;
+
+    /**
+     * The global type for the foundry output.
+     */
+    const FOUNDRY_OUTPUT_TYPE = 5;
+
+    /**
+     * The global type for the NFT output.
+     */
+    const NFT_OUTPUT_TYPE = 6;
+
+    /**
      * The global type for the treasury output.
      */
     const TREASURY_OUTPUT_TYPE = 2;
 
     /**
+     * The minimum length of a native tokens list.
+     */
+    const MIN_NATIVE_TOKENS_LENGTH = UINT16_SIZE;
+    /**
+     * The length of a native token tag.
+     */
+    const NATIVE_TOKEN_TAG_LENGTH = 12;
+    /**
+     * The length of a foundry id.
+     */
+    const FOUNDRY_ID_LENGTH = MIN_ALIAS_ADDRESS_LENGTH + UINT32_SIZE + UINT8_SIZE;
+    /**
+     * The length of a native token id.
+     */
+    const NATIVE_TOKEN_ID_LENGTH = FOUNDRY_ID_LENGTH + NATIVE_TOKEN_TAG_LENGTH;
+    /**
+     * Deserialize the natovetokens from binary.
+     * @param readStream The stream to read the data from.
+     * @returns The deserialized object.
+     */
+    function deserializeNativeTokens(readStream) {
+        const numNativeTokens = readStream.readUInt16("nativeTokens.numNativeTokens");
+        const nativeTokens = [];
+        for (let i = 0; i < numNativeTokens; i++) {
+            nativeTokens.push(deserializeNativeToken(readStream));
+        }
+        return nativeTokens;
+    }
+    /**
+     * Serialize the natove tokens to binary.
+     * @param writeStream The stream to write the data to.
+     * @param object The object to serialize.
+     */
+    function serializeNativeTokens(writeStream, object) {
+        writeStream.writeUInt16("nativeTokens.numNativeTokens", object.length);
+        for (let i = 0; i < object.length; i++) {
+            serializeNativeToken(writeStream, object[i]);
+        }
+    }
+    /**
+     * Deserialize the native token from binary.
+     * @param readStream The stream to read the data from.
+     * @returns The deserialized object.
+     */
+    function deserializeNativeToken(readStream) {
+        const id = readStream.readFixedHex("nativeToken.id", NATIVE_TOKEN_ID_LENGTH);
+        const amount = readStream.readUInt256("nativeToken.amount");
+        return {
+            id,
+            amount: amount.toString()
+        };
+    }
+    /**
+     * Serialize the native token to binary.
+     * @param writeStream The stream to write the data to.
+     * @param object The object to serialize.
+     */
+    function serializeNativeToken(writeStream, object) {
+        writeStream.writeFixedHex("nativeToken.id", NATIVE_TOKEN_ID_LENGTH, object.id);
+        writeStream.writeUInt256("nativeToken.amount", bigInt__default["default"](object.amount));
+    }
+
+    /**
+     * The length of an alias id.
+     */
+    const ALIAS_ID_LENGTH = 20;
+    /**
+     * The minimum length of a alias output binary representation.
+     */
+    const MIN_ALIAS_OUTPUT_LENGTH = SMALL_TYPE_LENGTH + // Type
+        UINT64_SIZE + // Amount
+        MIN_NATIVE_TOKENS_LENGTH + // Native Tokens
+        ALIAS_ID_LENGTH + // Alias Id
+        MIN_ADDRESS_LENGTH + // State Controller
+        MIN_ADDRESS_LENGTH + // Governance Controller
+        UINT32_SIZE + // State Index
+        UINT32_SIZE + // State Metatata Length
+        UINT32_SIZE + // Foundry counter
+        MIN_FEATURE_BLOCKS_LENGTH; // Feature Blocks
+    /**
+     * Deserialize the alias output from binary.
+     * @param readStream The stream to read the data from.
+     * @returns The deserialized object.
+     */
+    function deserializeAliasOutput(readStream) {
+        if (!readStream.hasRemaining(MIN_ALIAS_OUTPUT_LENGTH)) {
+            throw new Error(`Alias Output data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_ALIAS_OUTPUT_LENGTH}`);
+        }
+        const type = readStream.readByte("aliasOutput.type");
+        if (type !== ALIAS_OUTPUT_TYPE) {
+            throw new Error(`Type mismatch in aliasOutput ${type}`);
+        }
+        const amount = readStream.readUInt64("aliasOutput.amount");
+        const nativeTokens = deserializeNativeTokens(readStream);
+        const aliasId = readStream.readFixedHex("aliasOutput.aliasId", ALIAS_ID_LENGTH);
+        const stateController = deserializeAddress(readStream);
+        const governanceController = deserializeAddress(readStream);
+        const stateIndex = readStream.readUInt32("aliasOutput.stateIndex");
+        const stateMetadataLength = readStream.readUInt32("aliasOutput.stateMetadataLength");
+        const stateMetadata = readStream.readFixedHex("aliasOutput.stateMetadata", stateMetadataLength);
+        const foundryCounter = readStream.readUInt32("aliasOutput.foundryCounter");
+        const featureBlocks = deserializeFeatureBlocks(readStream);
+        return {
+            type: ALIAS_OUTPUT_TYPE,
+            amount: Number(amount),
+            nativeTokens,
+            aliasId,
+            stateController,
+            governanceController,
+            stateIndex,
+            stateMetadata,
+            foundryCounter,
+            blocks: featureBlocks
+        };
+    }
+    /**
+     * Serialize the alias output to binary.
+     * @param writeStream The stream to write the data to.
+     * @param object The object to serialize.
+     */
+    function serializeAliasOutput(writeStream, object) {
+        writeStream.writeByte("aliasOutput.type", object.type);
+        writeStream.writeUInt64("aliasOutput.amount", bigInt__default["default"](object.amount));
+        serializeNativeTokens(writeStream, object.nativeTokens);
+        writeStream.writeFixedHex("aliasOutput.aliasId", ALIAS_ID_LENGTH, object.aliasId);
+        serializeAddress(writeStream, object.stateController);
+        serializeAddress(writeStream, object.governanceController);
+        writeStream.writeUInt32("aliasOutput.stateIndex", object.stateIndex);
+        writeStream.writeUInt32("aliasOutput.stateMetadataLength", object.stateMetadata.length / 2);
+        writeStream.writeFixedHex("aliasOutput.stateMetadata", object.stateMetadata.length / 2, object.stateMetadata);
+        writeStream.writeUInt32("aliasOutput.foundryCounter", object.foundryCounter);
+        serializeFeatureBlocks(writeStream, object.blocks);
+    }
+
+    /**
+     * The minimum length of a extended output binary representation.
+     */
+    const MIN_EXTENDED_OUTPUT_LENGTH = SMALL_TYPE_LENGTH + // Type
+        UINT64_SIZE + // Amount
+        MIN_NATIVE_TOKENS_LENGTH + // Native Tokens
+        MIN_ADDRESS_LENGTH + // Address
+        MIN_FEATURE_BLOCKS_LENGTH; // Feature Blocks
+    /**
+     * Deserialize the extended output from binary.
+     * @param readStream The stream to read the data from.
+     * @returns The deserialized object.
+     */
+    function deserializeExtendedOutput(readStream) {
+        if (!readStream.hasRemaining(MIN_EXTENDED_OUTPUT_LENGTH)) {
+            throw new Error(`Extended Output data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_EXTENDED_OUTPUT_LENGTH}`);
+        }
+        const type = readStream.readByte("extendedOutput.type");
+        if (type !== EXTENDED_OUTPUT_TYPE) {
+            throw new Error(`Type mismatch in extendedOutput ${type}`);
+        }
+        const amount = readStream.readUInt64("extendedOutput.amount");
+        const nativeTokens = deserializeNativeTokens(readStream);
+        const address = deserializeAddress(readStream);
+        const featureBlocks = deserializeFeatureBlocks(readStream);
+        return {
+            type: EXTENDED_OUTPUT_TYPE,
+            amount: Number(amount),
+            address,
+            nativeTokens,
+            blocks: featureBlocks
+        };
+    }
+    /**
+     * Serialize the extended output to binary.
+     * @param writeStream The stream to write the data to.
+     * @param object The object to serialize.
+     */
+    function serializeExtendedOutput(writeStream, object) {
+        writeStream.writeByte("extendedOutput.type", object.type);
+        writeStream.writeUInt64("extendedOutput.amount", bigInt__default["default"](object.amount));
+        serializeNativeTokens(writeStream, object.nativeTokens);
+        serializeAddress(writeStream, object.address);
+        serializeFeatureBlocks(writeStream, object.blocks);
+    }
+
+    /**
+     * The global type for the simple token scheme.
+     */
+    const SIMPLE_TOKEN_SCHEME_TYPE = 0;
+
+    /**
+     * The minimum length of an simple token scheme binary representation.
+     */
+    const MIN_SIMPLE_TOKEN_SCHEME_LENGTH = SMALL_TYPE_LENGTH;
+    /**
+     * Deserialize the simple token scheme from binary.
+     * @param readStream The stream to read the data from.
+     * @returns The deserialized object.
+     */
+    function deserializeSimpleTokenScheme(readStream) {
+        if (!readStream.hasRemaining(MIN_SIMPLE_TOKEN_SCHEME_LENGTH)) {
+            throw new Error(`Simple Token Scheme data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_SIMPLE_TOKEN_SCHEME_LENGTH}`);
+        }
+        const type = readStream.readByte("simpleTokenScheme.type");
+        if (type !== SIMPLE_TOKEN_SCHEME_TYPE) {
+            throw new Error(`Type mismatch in simpleTokenScheme ${type}`);
+        }
+        return {
+            type: SIMPLE_TOKEN_SCHEME_TYPE
+        };
+    }
+    /**
+     * Serialize the simple token scheme to binary.
+     * @param writeStream The stream to write the data to.
+     * @param object The object to serialize.
+     */
+    function serializeSimpleTokenScheme(writeStream, object) {
+        writeStream.writeByte("simpleTokenScheme.type", object.type);
+    }
+
+    /**
+     * The minimum length of a simple token scheme binary representation.
+     */
+    const MIN_TOKEN_SCHEME_LENGTH = MIN_SIMPLE_TOKEN_SCHEME_LENGTH;
+    /**
+     * Deserialize the token scheme from binary.
+     * @param readStream The stream to read the data from.
+     * @returns The deserialized object.
+     */
+    function deserializeTokenScheme(readStream) {
+        if (!readStream.hasRemaining(MIN_TOKEN_SCHEME_LENGTH)) {
+            throw new Error(`Token Scheme data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_TOKEN_SCHEME_LENGTH}`);
+        }
+        const type = readStream.readByte("tokenScheme.type", false);
+        let tokenScheme;
+        if (type === SIMPLE_TOKEN_SCHEME_TYPE) {
+            tokenScheme = deserializeSimpleTokenScheme(readStream);
+        }
+        else {
+            throw new Error(`Unrecognized token scheme type ${type}`);
+        }
+        return tokenScheme;
+    }
+    /**
+     * Serialize the token scheme to binary.
+     * @param writeStream The stream to write the data to.
+     * @param object The object to serialize.
+     */
+    function serializeTokenScheme(writeStream, object) {
+        if (object.type === SIMPLE_TOKEN_SCHEME_TYPE) {
+            serializeSimpleTokenScheme(writeStream, object);
+        }
+        else {
+            throw new Error(`Unrecognized simple token scheme type ${object.type}`);
+        }
+    }
+
+    /**
+     * The minimum length of a foundry output binary representation.
+     */
+    const MIN_FOUNDRY_OUTPUT_LENGTH = SMALL_TYPE_LENGTH + // Type
+        UINT64_SIZE + // Amount
+        MIN_NATIVE_TOKENS_LENGTH + // Native tokens
+        MIN_ADDRESS_LENGTH + // Address
+        UINT32_SIZE + // Serial Number
+        NATIVE_TOKEN_TAG_LENGTH + // Token Tag
+        UINT256_SIZE + // Circulating Supply
+        UINT256_SIZE + // Maximum Supply
+        MIN_TOKEN_SCHEME_LENGTH + // Token scheme length
+        MIN_FEATURE_BLOCKS_LENGTH;
+    /**
+     * Deserialize the foundry output from binary.
+     * @param readStream The stream to read the data from.
+     * @returns The deserialized object.
+     */
+    function deserializeFoundryOutput(readStream) {
+        if (!readStream.hasRemaining(MIN_FOUNDRY_OUTPUT_LENGTH)) {
+            throw new Error(`Foundry Output data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_FOUNDRY_OUTPUT_LENGTH}`);
+        }
+        const type = readStream.readByte("foundryOutput.type");
+        if (type !== FOUNDRY_OUTPUT_TYPE) {
+            throw new Error(`Type mismatch in foundryOutput ${type}`);
+        }
+        const amount = readStream.readUInt64("foundryOutput.amount");
+        const nativeTokens = deserializeNativeTokens(readStream);
+        const address = deserializeAddress(readStream);
+        const serialNumber = readStream.readUInt32("foundryOutput.serialNumber");
+        const tokenTag = readStream.readFixedHex("foundryOutput.tokenTag", NATIVE_TOKEN_TAG_LENGTH);
+        const circulatingSupply = readStream.readUInt256("foundryOutput.circulatingSupply");
+        const maximumSupply = readStream.readUInt256("foundryOutput.maximumSupply");
+        const tokenScheme = deserializeTokenScheme(readStream);
+        const featureBlocks = deserializeFeatureBlocks(readStream);
+        return {
+            type: FOUNDRY_OUTPUT_TYPE,
+            amount: Number(amount),
+            nativeTokens,
+            address,
+            serialNumber,
+            tokenTag,
+            circulatingSupply: circulatingSupply.toString(),
+            maximumSupply: maximumSupply.toString(),
+            tokenScheme,
+            blocks: featureBlocks
+        };
+    }
+    /**
+     * Serialize the foundry output to binary.
+     * @param writeStream The stream to write the data to.
+     * @param object The object to serialize.
+     */
+    function serializeFoundryOutput(writeStream, object) {
+        writeStream.writeByte("foundryOutput.type", object.type);
+        writeStream.writeUInt64("foundryOutput.amount", bigInt__default["default"](object.amount));
+        serializeNativeTokens(writeStream, object.nativeTokens);
+        serializeAddress(writeStream, object.address);
+        writeStream.writeUInt32("foundryOutput.serialNumber", object.serialNumber);
+        writeStream.writeFixedHex("foundryOutput.tokenTag", NATIVE_TOKEN_TAG_LENGTH, object.tokenTag);
+        writeStream.writeUInt256("foundryOutput.circulatingSupply", bigInt__default["default"](object.circulatingSupply));
+        writeStream.writeUInt256("foundryOutput.maximumSupply", bigInt__default["default"](object.maximumSupply));
+        serializeTokenScheme(writeStream, object.tokenScheme);
+        serializeFeatureBlocks(writeStream, object.blocks);
+    }
+
+    /**
+     * The length of an NFT Id.
+     */
+    const NFT_ID_LENGTH = 20;
+    /**
+     * The minimum length of a nft output binary representation.
+     */
+    const MIN_NFT_OUTPUT_LENGTH = SMALL_TYPE_LENGTH + // Type
+        UINT64_SIZE + // Amount
+        MIN_NATIVE_TOKENS_LENGTH + // Native tokens
+        MIN_ADDRESS_LENGTH + // Address
+        NFT_ID_LENGTH + // Nft Id
+        UINT32_SIZE + // Immutable data length
+        MIN_FEATURE_BLOCKS_LENGTH; // Feature Blocks
+    /**
+     * Deserialize the nft output from binary.
+     * @param readStream The stream to read the data from.
+     * @returns The deserialized object.
+     */
+    function deserializeNftOutput(readStream) {
+        if (!readStream.hasRemaining(MIN_NFT_OUTPUT_LENGTH)) {
+            throw new Error(`NFT Output data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_NFT_OUTPUT_LENGTH}`);
+        }
+        const type = readStream.readByte("nftOutput.type");
+        if (type !== NFT_OUTPUT_TYPE) {
+            throw new Error(`Type mismatch in nftOutput ${type}`);
+        }
+        const amount = readStream.readUInt64("nftOutput.amount");
+        const nativeTokens = deserializeNativeTokens(readStream);
+        const address = deserializeAddress(readStream);
+        const nftId = readStream.readFixedHex("nftOutput.nftId", NFT_ID_LENGTH);
+        const immutableMetadataLength = readStream.readUInt32("nftOutput.immutableMetadataLength");
+        const immutableData = readStream.readFixedHex("nftOutput.immutableMetadata", immutableMetadataLength);
+        const featureBlocks = deserializeFeatureBlocks(readStream);
+        return {
+            type: NFT_OUTPUT_TYPE,
+            amount: Number(amount),
+            nativeTokens,
+            address,
+            nftId,
+            immutableData,
+            blocks: featureBlocks
+        };
+    }
+    /**
+     * Serialize the nft output to binary.
+     * @param writeStream The stream to write the data to.
+     * @param object The object to serialize.
+     */
+    function serializeNftOutput(writeStream, object) {
+        writeStream.writeByte("nftOutput.type", object.type);
+        writeStream.writeUInt64("nftOutput.amount", bigInt__default["default"](object.amount));
+        serializeNativeTokens(writeStream, object.nativeTokens);
+        serializeAddress(writeStream, object.address);
+        writeStream.writeFixedHex("nftOutput.nftId", NFT_ID_LENGTH, object.nftId);
+        writeStream.writeUInt32("nftOutput.immutableMetadataLength", object.immutableData.length / 2);
+        writeStream.writeFixedHex("nftOutput.immutableMetadata", object.immutableData.length / 2, object.immutableData);
+        serializeFeatureBlocks(writeStream, object.blocks);
+    }
+
+    /**
      * The minimum length of a sig locked dust allowance output binary representation.
      */
-    const MIN_SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_LENGTH = SMALL_TYPE_LENGTH + MIN_ADDRESS_LENGTH + UINT64_SIZE;
+    const MIN_SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_LENGTH = SMALL_TYPE_LENGTH + // Type
+        MIN_ADDRESS_LENGTH + // Address
+        UINT64_SIZE; // Amount
     /**
      * Deserialize the signature locked dust allowance output from binary.
      * @param readStream The stream to read the data from.
@@ -694,7 +1702,9 @@
     /**
      * The minimum length of a simple output binary representation.
      */
-    const MIN_SIMPLE_OUTPUT_LENGTH = SMALL_TYPE_LENGTH + MIN_ADDRESS_LENGTH + UINT64_SIZE;
+    const MIN_SIMPLE_OUTPUT_LENGTH = SMALL_TYPE_LENGTH + // Type
+        MIN_ADDRESS_LENGTH + // Address
+        UINT64_SIZE; // Amount
     /**
      * Deserialize the simple output from binary.
      * @param readStream The stream to read the data from.
@@ -730,7 +1740,8 @@
     /**
      * The minimum length of a treasury output binary representation.
      */
-    const MIN_TREASURY_OUTPUT_LENGTH = SMALL_TYPE_LENGTH + UINT64_SIZE;
+    const MIN_TREASURY_OUTPUT_LENGTH = SMALL_TYPE_LENGTH + // Type
+        UINT64_SIZE; // Amount
     /**
      * Deserialize the treasury output from binary.
      * @param readStream The stream to read the data from.
@@ -763,7 +1774,7 @@
     /**
      * The minimum length of an output binary representation.
      */
-    const MIN_OUTPUT_LENGTH = Math.min(MIN_SIMPLE_OUTPUT_LENGTH, MIN_SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_LENGTH);
+    const MIN_OUTPUT_LENGTH = Math.min(MIN_SIMPLE_OUTPUT_LENGTH, MIN_SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_LENGTH, MIN_TREASURY_OUTPUT_LENGTH, MIN_FOUNDRY_OUTPUT_LENGTH, MIN_EXTENDED_OUTPUT_LENGTH, MIN_NFT_OUTPUT_LENGTH, MIN_ALIAS_OUTPUT_LENGTH);
     /**
      * The minimum number of outputs.
      */
@@ -779,11 +1790,11 @@
      */
     function deserializeOutputs(readStream) {
         const numOutputs = readStream.readUInt16("outputs.numOutputs");
-        const inputs = [];
+        const outputs = [];
         for (let i = 0; i < numOutputs; i++) {
-            inputs.push(deserializeOutput(readStream));
+            outputs.push(deserializeOutput(readStream));
         }
-        return inputs;
+        return outputs;
     }
     /**
      * Serialize the outputs to binary.
@@ -812,20 +1823,32 @@
             throw new Error(`Output data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_OUTPUT_LENGTH}`);
         }
         const type = readStream.readByte("output.type", false);
-        let input;
+        let output;
         if (type === SIMPLE_OUTPUT_TYPE) {
-            input = deserializeSimpleOutput(readStream);
+            output = deserializeSimpleOutput(readStream);
         }
         else if (type === SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE) {
-            input = deserializeSigLockedDustAllowanceOutput(readStream);
+            output = deserializeSigLockedDustAllowanceOutput(readStream);
         }
         else if (type === TREASURY_OUTPUT_TYPE) {
-            input = deserializeTreasuryOutput(readStream);
+            output = deserializeTreasuryOutput(readStream);
+        }
+        else if (type === EXTENDED_OUTPUT_TYPE) {
+            output = deserializeExtendedOutput(readStream);
+        }
+        else if (type === FOUNDRY_OUTPUT_TYPE) {
+            output = deserializeFoundryOutput(readStream);
+        }
+        else if (type === NFT_OUTPUT_TYPE) {
+            output = deserializeNftOutput(readStream);
+        }
+        else if (type === ALIAS_OUTPUT_TYPE) {
+            output = deserializeAliasOutput(readStream);
         }
         else {
             throw new Error(`Unrecognized output type ${type}`);
         }
-        return input;
+        return output;
     }
     /**
      * Serialize the output to binary.
@@ -841,6 +1864,18 @@
         }
         else if (object.type === TREASURY_OUTPUT_TYPE) {
             serializeTreasuryOutput(writeStream, object);
+        }
+        else if (object.type === EXTENDED_OUTPUT_TYPE) {
+            serializeExtendedOutput(writeStream, object);
+        }
+        else if (object.type === FOUNDRY_OUTPUT_TYPE) {
+            serializeFoundryOutput(writeStream, object);
+        }
+        else if (object.type === NFT_OUTPUT_TYPE) {
+            serializeNftOutput(writeStream, object);
+        }
+        else if (object.type === ALIAS_OUTPUT_TYPE) {
+            serializeAliasOutput(writeStream, object);
         }
         else {
             throw new Error(`Unrecognized output type ${object.type}`);
@@ -1008,14 +2043,14 @@
             throw new Error(`Signature data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_SIGNATURE_LENGTH}`);
         }
         const type = readStream.readByte("signature.type", false);
-        let input;
+        let signature;
         if (type === ED25519_SIGNATURE_TYPE) {
-            input = deserializeEd25519Signature(readStream);
+            signature = deserializeEd25519Signature(readStream);
         }
         else {
             throw new Error(`Unrecognized signature type ${type}`);
         }
-        return input;
+        return signature;
     }
     /**
      * Serialize the signature to binary.
@@ -1182,7 +2217,7 @@
     }
 
     /**
-     * The minimum length of a treasure transaction payload binary representation.
+     * The minimum length of a treasury transaction payload binary representation.
      */
     const MIN_TREASURY_TRANSACTION_PAYLOAD_LENGTH = TYPE_LENGTH + MIN_TREASURY_INPUT_LENGTH + MIN_TREASURY_OUTPUT_LENGTH;
     /**
@@ -1192,7 +2227,7 @@
      */
     function deserializeTreasuryTransactionPayload(readStream) {
         if (!readStream.hasRemaining(MIN_TREASURY_TRANSACTION_PAYLOAD_LENGTH)) {
-            throw new Error(`Treasure Transaction Payload data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_TREASURY_TRANSACTION_PAYLOAD_LENGTH}`);
+            throw new Error(`Treasury Transaction Payload data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_TREASURY_TRANSACTION_PAYLOAD_LENGTH}`);
         }
         const type = readStream.readUInt32("payloadTreasuryTransaction.type");
         if (type !== TREASURY_TRANSACTION_PAYLOAD_TYPE) {
@@ -1375,6 +2410,82 @@
         }
         serializePayload(writeStream, object.payload);
         writeStream.writeUInt64("message.nonce", bigInt__default["default"]((_d = object.nonce) !== null && _d !== void 0 ? _d : "0"));
+    }
+
+    /**
+     * The global type for the alias unlock block.
+     */
+    const ALIAS_UNLOCK_BLOCK_TYPE = 2;
+
+    /**
+     * The minimum length of a alias unlock block binary representation.
+     */
+    const MIN_ALIAS_UNLOCK_BLOCK_LENGTH = SMALL_TYPE_LENGTH + UINT16_SIZE;
+    /**
+     * Deserialize the alias unlock block from binary.
+     * @param readStream The stream to read the data from.
+     * @returns The deserialized object.
+     */
+    function deserializeAliasUnlockBlock(readStream) {
+        if (!readStream.hasRemaining(MIN_ALIAS_UNLOCK_BLOCK_LENGTH)) {
+            throw new Error(`Alias Unlock Block data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_ALIAS_UNLOCK_BLOCK_LENGTH}`);
+        }
+        const type = readStream.readByte("aliasUnlockBlock.type");
+        if (type !== ALIAS_UNLOCK_BLOCK_TYPE) {
+            throw new Error(`Type mismatch in aliasUnlockBlock ${type}`);
+        }
+        const reference = readStream.readUInt16("aliasUnlockBlock.reference");
+        return {
+            type: ALIAS_UNLOCK_BLOCK_TYPE,
+            reference
+        };
+    }
+    /**
+     * Serialize the alias unlock block to binary.
+     * @param writeStream The stream to write the data to.
+     * @param object The object to serialize.
+     */
+    function serializeAliasUnlockBlock(writeStream, object) {
+        writeStream.writeByte("aliasUnlockBlock.type", object.type);
+        writeStream.writeUInt16("aliasUnlockBlock.reference", object.reference);
+    }
+
+    /**
+     * The global type for the NFT unlock block.
+     */
+    const NFT_UNLOCK_BLOCK_TYPE = 3;
+
+    /**
+     * The minimum length of a nft unlock block binary representation.
+     */
+    const MIN_NFT_UNLOCK_BLOCK_LENGTH = SMALL_TYPE_LENGTH + UINT16_SIZE;
+    /**
+     * Deserialize the nft unlock block from binary.
+     * @param readStream The stream to read the data from.
+     * @returns The deserialized object.
+     */
+    function deserializeNftUnlockBlock(readStream) {
+        if (!readStream.hasRemaining(MIN_NFT_UNLOCK_BLOCK_LENGTH)) {
+            throw new Error(`Nft Unlock Block data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_NFT_UNLOCK_BLOCK_LENGTH}`);
+        }
+        const type = readStream.readByte("nftUnlockBlock.type");
+        if (type !== NFT_UNLOCK_BLOCK_TYPE) {
+            throw new Error(`Type mismatch in nftUnlockBlock ${type}`);
+        }
+        const reference = readStream.readUInt16("nftUnlockBlock.reference");
+        return {
+            type: NFT_UNLOCK_BLOCK_TYPE,
+            reference
+        };
+    }
+    /**
+     * Serialize the nft unlock block to binary.
+     * @param writeStream The stream to write the data to.
+     * @param object The object to serialize.
+     */
+    function serializeNftUnlockBlock(writeStream, object) {
+        writeStream.writeByte("nftUnlockBlock.type", object.type);
+        writeStream.writeUInt16("nftUnlockBlock.reference", object.reference);
     }
 
     // Copyright 2020 IOTA Stiftung
@@ -2638,21 +3749,6 @@
         };
     }
 
-    /**
-     * The global type for the alias address type.
-     */
-    const ALIAS_ADDRESS_TYPE = 8;
-
-    /**
-     * The global type for the BLS address type.
-     */
-    const BLS_ADDRESS_TYPE = 1;
-
-    /**
-     * The global type for the NFT address type.
-     */
-    const NFT_ADDRESS_TYPE = 16;
-
     // Copyright 2020 IOTA Stiftung
     // SPDX-License-Identifier: Apache-2.0
     /**
@@ -2694,86 +3790,6 @@
          */
         ConflictReason[ConflictReason["semanticValidationFailed"] = 255] = "semanticValidationFailed";
     })(exports.ConflictReason || (exports.ConflictReason = {}));
-
-    /**
-     * The global type for the expiration milestone feature block.
-     */
-    const EXPIRATION_MILESTONE_INDEX_FEATURE_BLOCK_TYPE = 5;
-
-    /**
-     * The global type for the expiration unix feature block.
-     */
-    const EXPIRATION_UNIX_FEATURE_BLOCK_TYPE = 6;
-
-    /**
-     * The global type for the indexation feature block.
-     */
-    const INDEXATION_FEATURE_BLOCK_TYPE = 8;
-
-    /**
-     * The global type for the issuer feature block.
-     */
-    const ISSUER_FEATURE_BLOCK_TYPE = 1;
-
-    /**
-     * The global type for the metadata feature block.
-     */
-    const METADATA_FEATURE_BLOCK_TYPE = 7;
-
-    /**
-     * The global type for the return feature block.
-     */
-    const RETURN_FEATURE_BLOCK_TYPE = 2;
-
-    /**
-     * The global type for the sender feature block.
-     */
-    const SENDER_FEATURE_BLOCK_TYPE = 0;
-
-    /**
-     * The global type for the timelock milestone feature block.
-     */
-    const TIMELOCK_MILESTONE_INDEX_FEATURE_BLOCK_TYPE = 3;
-
-    /**
-     * The global type for the timelock unix feature block.
-     */
-    const TIMELOCK_UNIX_FEATURE_BLOCK_TYPE = 4;
-
-    /**
-     * The global type for the alias output.
-     */
-    const ALIAS_OUTPUT_TYPE = 4;
-
-    /**
-     * The global type for the extended output.
-     */
-    const EXTENDED_OUTPUT_TYPE = 3;
-
-    /**
-     * The global type for the foundry output.
-     */
-    const FOUNDRY_OUTPUT_TYPE = 5;
-
-    /**
-     * The global type for the NFT output.
-     */
-    const NFT_OUTPUT_TYPE = 6;
-
-    /**
-     * The global type for the simple token scheme.
-     */
-    const SIMPLE_TOKEN_SCHEME_TYPE = 0;
-
-    /**
-     * The global type for the alias unlock block.
-     */
-    const ALIAS_UNLOCK_BLOCK_TYPE = 2;
-
-    /**
-     * The global type for the NFT unlock block.
-     */
-    const NFTUNLOCK_BLOCK_TYPE = 3;
 
     // Copyright 2020 IOTA Stiftung
     /**
@@ -3183,6 +4199,18 @@
             logger(`${prefix}Ed25519 Address`);
             logger(`${prefix}\tAddress:`, address.address);
         }
+        else if ((address === null || address === void 0 ? void 0 : address.type) === BLS_ADDRESS_TYPE) {
+            logger(`${prefix}BLS Address`);
+            logger(`${prefix}\tAddress:`, address.address);
+        }
+        else if ((address === null || address === void 0 ? void 0 : address.type) === ALIAS_ADDRESS_TYPE) {
+            logger(`${prefix}Alias Address`);
+            logger(`${prefix}\tAddress:`, address.address);
+        }
+        else if ((address === null || address === void 0 ? void 0 : address.type) === NFT_ADDRESS_TYPE) {
+            logger(`${prefix}NFT Address`);
+            logger(`${prefix}\tAddress:`, address.address);
+        }
     }
     /**
      * Log signature to the console.
@@ -3235,6 +4263,49 @@
                 logger(`${prefix}Treasury Output`);
                 logger(`${prefix}\t\tAmount:`, output.amount);
             }
+            else if (output.type === EXTENDED_OUTPUT_TYPE) {
+                logger(`${prefix}Extended Output`);
+                logAddress(`${prefix}\t\tS`, output.address);
+                logger(`${prefix}\t\tAmount:`, output.amount);
+                logNativeTokens(`${prefix}\t\t`, output.nativeTokens);
+                logFeatureBlocks(`${prefix}\t\t`, output.blocks);
+            }
+            else if (output.type === ALIAS_OUTPUT_TYPE) {
+                logger(`${prefix}Alias Output`);
+                logger(`${prefix}\t\tAmount:`, output.amount);
+                logNativeTokens(`${prefix}\t\t`, output.nativeTokens);
+                logger(`${prefix}\t\tAlias Id:`, output.aliasId);
+                logger(`${prefix}State Controller`);
+                logAddress(`${prefix}\t\t`, output.stateController);
+                logger(`${prefix}Governance Controller`);
+                logAddress(`${prefix}\t\t`, output.governanceController);
+                logger(`${prefix}\t\tState Index:`, output.stateIndex);
+                logger(`${prefix}\t\tState Metadata:`, output.stateMetadata);
+                logger(`${prefix}\t\tFoundry Counter:`, output.foundryCounter);
+                logFeatureBlocks(`${prefix}\t\t`, output.blocks);
+            }
+            else if (output.type === FOUNDRY_OUTPUT_TYPE) {
+                logger(`${prefix}Foundry Output`);
+                logger(`${prefix}\t\tAmount:`, output.amount);
+                logNativeTokens(`${prefix}\t\t`, output.nativeTokens);
+                logAddress(`${prefix}\t\tS`, output.address);
+                logger(`${prefix}\t\tSerial Number:`, output.serialNumber);
+                logger(`${prefix}\t\tToken Tag:`, output.tokenTag);
+                logger(`${prefix}\t\tCirculating Supply:`, output.circulatingSupply);
+                logger(`${prefix}\t\tMaximum Supply:`, output.maximumSupply);
+                logger(`${prefix}State Controller`);
+                logTokenScheme(`${prefix}\t\t`, output.tokenScheme);
+                logFeatureBlocks(`${prefix}\t\t`, output.blocks);
+            }
+            else if (output.type === NFT_OUTPUT_TYPE) {
+                logger(`${prefix}NFT Output`);
+                logAddress(`${prefix}\t\tS`, output.address);
+                logger(`${prefix}\t\tAmount:`, output.amount);
+                logNativeTokens(`${prefix}\t\t`, output.nativeTokens);
+                logger(`${prefix}\t\tNFT Id:`, output.nftId);
+                logger(`${prefix}\t\tImmutable Data:`, output.immutableData);
+                logFeatureBlocks(`${prefix}\t\t`, output.blocks);
+            }
         }
     }
     /**
@@ -3252,6 +4323,14 @@
                 logger(`${prefix}\tReference Unlock Block`);
                 logger(`${prefix}\t\tReference:`, unlockBlock.reference);
             }
+            else if (unlockBlock.type === ALIAS_UNLOCK_BLOCK_TYPE) {
+                logger(`${prefix}\tAlias Unlock Block`);
+                logger(`${prefix}\t\tReference:`, unlockBlock.reference);
+            }
+            else if (unlockBlock.type === NFT_UNLOCK_BLOCK_TYPE) {
+                logger(`${prefix}\tNFT Unlock Block`);
+                logger(`${prefix}\t\tReference:`, unlockBlock.reference);
+            }
         }
     }
     /**
@@ -3265,6 +4344,82 @@
             logger(`${prefix}\t\tTail Transaction Hash:`, fund.tailTransactionHash);
             logAddress(`${prefix}\t\t`, fund.address);
             logger(`${prefix}\t\tDeposit:`, fund.deposit);
+        }
+    }
+    /**
+     * Log native tokens to the console.
+     * @param prefix The prefix for the output.
+     * @param nativeTokens The native tokens.
+     */
+    function logNativeTokens(prefix, nativeTokens) {
+        logger(`${prefix}Native Tokens`);
+        for (const nativeToken of nativeTokens) {
+            logger(`${prefix}\t\tId:`, nativeToken.id);
+            logger(`${prefix}\t\tAmount:`, nativeToken.amount);
+        }
+    }
+    /**
+     * Log token scheme to the console.
+     * @param prefix The prefix for the output.
+     * @param tokenScheme The native tokens.
+     */
+    function logTokenScheme(prefix, tokenScheme) {
+        if (tokenScheme.type === SIMPLE_TOKEN_SCHEME_TYPE) {
+            logger(`${prefix}\tSimple Token Scheme`);
+        }
+    }
+    /**
+     * Log feature blocks to the console.
+     * @param prefix The prefix for the output.
+     * @param featureBlocks The native tokens.
+     */
+    function logFeatureBlocks(prefix, featureBlocks) {
+        logger(`${prefix}Native Tokens`);
+        for (const featureBlock of featureBlocks) {
+            logFeatureBlock(`${prefix}\t\t`, featureBlock);
+        }
+    }
+    /**
+     * Log feature block to the console.
+     * @param prefix The prefix for the output.
+     * @param featureBlock The native tokens.
+     */
+    function logFeatureBlock(prefix, featureBlock) {
+        if (featureBlock.type === SENDER_FEATURE_BLOCK_TYPE) {
+            logger(`${prefix}\tSender Feature Block`);
+            logAddress(`${prefix}\t\t`, featureBlock.address);
+        }
+        else if (featureBlock.type === ISSUER_FEATURE_BLOCK_TYPE) {
+            logger(`${prefix}\tIssuer Feature Block`);
+            logAddress(`${prefix}\t\t`, featureBlock.address);
+        }
+        else if (featureBlock.type === RETURN_FEATURE_BLOCK_TYPE) {
+            logger(`${prefix}\tReturn Feature Block`);
+            logger(`${prefix}\t\tAmount:`, featureBlock.amount);
+        }
+        else if (featureBlock.type === TIMELOCK_MILESTONE_INDEX_FEATURE_BLOCK_TYPE) {
+            logger(`${prefix}\tTimelock Milestone Index Feature Block`);
+            logger(`${prefix}\t\tMilestone Index:`, featureBlock.milestoneIndex);
+        }
+        else if (featureBlock.type === TIMELOCK_UNIX_FEATURE_BLOCK_TYPE) {
+            logger(`${prefix}\tTimelock Unix Feature Block`);
+            logger(`${prefix}\t\tUnix Time:`, featureBlock.unixTime);
+        }
+        else if (featureBlock.type === EXPIRATION_MILESTONE_INDEX_FEATURE_BLOCK_TYPE) {
+            logger(`${prefix}\tExpiration Milestone Index Feature Block`);
+            logger(`${prefix}\t\tMilestone Index:`, featureBlock.milestoneIndex);
+        }
+        else if (featureBlock.type === EXPIRATION_UNIX_FEATURE_BLOCK_TYPE) {
+            logger(`${prefix}\tExpiration Unix Feature Block`);
+            logger(`${prefix}\t\tUnix Time:`, featureBlock.unixTime);
+        }
+        else if (featureBlock.type === METADATA_FEATURE_BLOCK_TYPE) {
+            logger(`${prefix}\tMetadata Feature Block`);
+            logger(`${prefix}\t\tData:`, featureBlock.data);
+        }
+        else if (featureBlock.type === INDEXATION_FEATURE_BLOCK_TYPE) {
+            logger(`${prefix}\tIndexation Feature Block`);
+            logger(`${prefix}\t\tIndexation Tag:`, featureBlock.tag);
         }
     }
 
@@ -3387,11 +4542,14 @@
         Pi: { val: 1000000000000000, dp: 15 }
     };
 
+    exports.ALIAS_ADDRESS_LENGTH = ALIAS_ADDRESS_LENGTH;
     exports.ALIAS_ADDRESS_TYPE = ALIAS_ADDRESS_TYPE;
+    exports.ALIAS_ID_LENGTH = ALIAS_ID_LENGTH;
     exports.ALIAS_OUTPUT_TYPE = ALIAS_OUTPUT_TYPE;
     exports.ALIAS_UNLOCK_BLOCK_TYPE = ALIAS_UNLOCK_BLOCK_TYPE;
     exports.ARRAY_LENGTH = ARRAY_LENGTH;
     exports.B1T6 = B1T6;
+    exports.BLS_ADDRESS_LENGTH = BLS_ADDRESS_LENGTH;
     exports.BLS_ADDRESS_TYPE = BLS_ADDRESS_TYPE;
     exports.Bech32Helper = Bech32Helper;
     exports.CONFLICT_REASON_STRINGS = CONFLICT_REASON_STRINGS;
@@ -3420,28 +4578,52 @@
     exports.METADATA_FEATURE_BLOCK_TYPE = METADATA_FEATURE_BLOCK_TYPE;
     exports.MILESTONE_PAYLOAD_TYPE = MILESTONE_PAYLOAD_TYPE;
     exports.MIN_ADDRESS_LENGTH = MIN_ADDRESS_LENGTH;
+    exports.MIN_ALIAS_ADDRESS_LENGTH = MIN_ALIAS_ADDRESS_LENGTH;
+    exports.MIN_ALIAS_OUTPUT_LENGTH = MIN_ALIAS_OUTPUT_LENGTH;
+    exports.MIN_ALIAS_UNLOCK_BLOCK_LENGTH = MIN_ALIAS_UNLOCK_BLOCK_LENGTH;
+    exports.MIN_BLS_ADDRESS_LENGTH = MIN_BLS_ADDRESS_LENGTH;
     exports.MIN_ED25519_ADDRESS_LENGTH = MIN_ED25519_ADDRESS_LENGTH;
     exports.MIN_ED25519_SIGNATURE_LENGTH = MIN_ED25519_SIGNATURE_LENGTH;
+    exports.MIN_EXPIRATION_MILESTONE_INDEX_FEATURE_BLOCK_LENGTH = MIN_EXPIRATION_MILESTONE_INDEX_FEATURE_BLOCK_LENGTH;
+    exports.MIN_EXPIRATION_UNIX_FEATURE_BLOCK_LENGTH = MIN_EXPIRATION_UNIX_FEATURE_BLOCK_LENGTH;
+    exports.MIN_EXTENDED_OUTPUT_LENGTH = MIN_EXTENDED_OUTPUT_LENGTH;
+    exports.MIN_FEATURE_BLOCKS_LENGTH = MIN_FEATURE_BLOCKS_LENGTH;
+    exports.MIN_FEATURE_BLOCK_LENGTH = MIN_FEATURE_BLOCK_LENGTH;
+    exports.MIN_FOUNDRY_OUTPUT_LENGTH = MIN_FOUNDRY_OUTPUT_LENGTH;
+    exports.MIN_INDEXATION_FEATURE_BLOCK_LENGTH = MIN_INDEXATION_FEATURE_BLOCK_LENGTH;
     exports.MIN_INPUT_COUNT = MIN_INPUT_COUNT;
     exports.MIN_INPUT_LENGTH = MIN_INPUT_LENGTH;
+    exports.MIN_ISSUER_FEATURE_BLOCK_LENGTH = MIN_ISSUER_FEATURE_BLOCK_LENGTH;
+    exports.MIN_METADATA_FEATURE_BLOCK_LENGTH = MIN_METADATA_FEATURE_BLOCK_LENGTH;
     exports.MIN_MIGRATED_FUNDS_LENGTH = MIN_MIGRATED_FUNDS_LENGTH;
+    exports.MIN_NFT_ADDRESS_LENGTH = MIN_NFT_ADDRESS_LENGTH;
+    exports.MIN_NFT_OUTPUT_LENGTH = MIN_NFT_OUTPUT_LENGTH;
+    exports.MIN_NFT_UNLOCK_BLOCK_LENGTH = MIN_NFT_UNLOCK_BLOCK_LENGTH;
     exports.MIN_NUMBER_PARENTS = MIN_NUMBER_PARENTS;
     exports.MIN_OUTPUT_COUNT = MIN_OUTPUT_COUNT;
     exports.MIN_OUTPUT_LENGTH = MIN_OUTPUT_LENGTH;
     exports.MIN_PAYLOAD_LENGTH = MIN_PAYLOAD_LENGTH;
     exports.MIN_REFERENCE_UNLOCK_BLOCK_LENGTH = MIN_REFERENCE_UNLOCK_BLOCK_LENGTH;
+    exports.MIN_RETURN_FEATURE_BLOCK_LENGTH = MIN_RETURN_FEATURE_BLOCK_LENGTH;
+    exports.MIN_SENDER_FEATURE_BLOCK_LENGTH = MIN_SENDER_FEATURE_BLOCK_LENGTH;
     exports.MIN_SIGNATURE_LENGTH = MIN_SIGNATURE_LENGTH;
     exports.MIN_SIGNATURE_UNLOCK_BLOCK_LENGTH = MIN_SIGNATURE_UNLOCK_BLOCK_LENGTH;
     exports.MIN_SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_LENGTH = MIN_SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_LENGTH;
     exports.MIN_SIMPLE_OUTPUT_LENGTH = MIN_SIMPLE_OUTPUT_LENGTH;
+    exports.MIN_SIMPLE_TOKEN_SCHEME_LENGTH = MIN_SIMPLE_TOKEN_SCHEME_LENGTH;
+    exports.MIN_TIMELOCK_MILESTONE_INDEX_FEATURE_BLOCK_LENGTH = MIN_TIMELOCK_MILESTONE_INDEX_FEATURE_BLOCK_LENGTH;
+    exports.MIN_TIMELOCK_UNIX_FEATURE_BLOCK_LENGTH = MIN_TIMELOCK_UNIX_FEATURE_BLOCK_LENGTH;
+    exports.MIN_TOKEN_SCHEME_LENGTH = MIN_TOKEN_SCHEME_LENGTH;
     exports.MIN_TRANSACTION_ESSENCE_LENGTH = MIN_TRANSACTION_ESSENCE_LENGTH;
     exports.MIN_TREASURY_INPUT_LENGTH = MIN_TREASURY_INPUT_LENGTH;
     exports.MIN_TREASURY_OUTPUT_LENGTH = MIN_TREASURY_OUTPUT_LENGTH;
     exports.MIN_UNLOCK_BLOCK_LENGTH = MIN_UNLOCK_BLOCK_LENGTH;
     exports.MIN_UTXO_INPUT_LENGTH = MIN_UTXO_INPUT_LENGTH;
-    exports.NFTUNLOCK_BLOCK_TYPE = NFTUNLOCK_BLOCK_TYPE;
+    exports.NFT_ADDRESS_LENGTH = NFT_ADDRESS_LENGTH;
     exports.NFT_ADDRESS_TYPE = NFT_ADDRESS_TYPE;
+    exports.NFT_ID_LENGTH = NFT_ID_LENGTH;
     exports.NFT_OUTPUT_TYPE = NFT_OUTPUT_TYPE;
+    exports.NFT_UNLOCK_BLOCK_TYPE = NFT_UNLOCK_BLOCK_TYPE;
     exports.PowHelper = PowHelper;
     exports.RECEIPT_PAYLOAD_TYPE = RECEIPT_PAYLOAD_TYPE;
     exports.REFERENCE_UNLOCK_BLOCK_TYPE = REFERENCE_UNLOCK_BLOCK_TYPE;
@@ -3465,6 +4647,7 @@
     exports.TREASURY_TRANSACTION_PAYLOAD_TYPE = TREASURY_TRANSACTION_PAYLOAD_TYPE;
     exports.TYPE_LENGTH = TYPE_LENGTH;
     exports.UINT16_SIZE = UINT16_SIZE;
+    exports.UINT256_SIZE = UINT256_SIZE;
     exports.UINT32_SIZE = UINT32_SIZE;
     exports.UINT64_SIZE = UINT64_SIZE;
     exports.UINT8_SIZE = UINT8_SIZE;
@@ -3473,21 +4656,43 @@
     exports.buildTransactionPayload = buildTransactionPayload;
     exports.calculateInputs = calculateInputs;
     exports.deserializeAddress = deserializeAddress;
+    exports.deserializeAliasAddress = deserializeAliasAddress;
+    exports.deserializeAliasOutput = deserializeAliasOutput;
+    exports.deserializeAliasUnlockBlock = deserializeAliasUnlockBlock;
+    exports.deserializeBlsAddress = deserializeBlsAddress;
     exports.deserializeEd25519Address = deserializeEd25519Address;
     exports.deserializeEd25519Signature = deserializeEd25519Signature;
+    exports.deserializeExpirationMilestoneIndexFeatureBlock = deserializeExpirationMilestoneIndexFeatureBlock;
+    exports.deserializeExpirationUnixFeatureBlock = deserializeExpirationUnixFeatureBlock;
+    exports.deserializeExtendedOutput = deserializeExtendedOutput;
+    exports.deserializeFeatureBlock = deserializeFeatureBlock;
+    exports.deserializeFeatureBlocks = deserializeFeatureBlocks;
+    exports.deserializeFoundryOutput = deserializeFoundryOutput;
     exports.deserializeFunds = deserializeFunds;
+    exports.deserializeIndexationFeatureBlock = deserializeIndexationFeatureBlock;
     exports.deserializeInput = deserializeInput;
     exports.deserializeInputs = deserializeInputs;
+    exports.deserializeIssuerFeatureBlock = deserializeIssuerFeatureBlock;
     exports.deserializeMessage = deserializeMessage;
+    exports.deserializeMetadataFeatureBlock = deserializeMetadataFeatureBlock;
     exports.deserializeMigratedFunds = deserializeMigratedFunds;
+    exports.deserializeNftAddress = deserializeNftAddress;
+    exports.deserializeNftOutput = deserializeNftOutput;
+    exports.deserializeNftUnlockBlock = deserializeNftUnlockBlock;
     exports.deserializeOutput = deserializeOutput;
     exports.deserializeOutputs = deserializeOutputs;
     exports.deserializePayload = deserializePayload;
     exports.deserializeReferenceUnlockBlock = deserializeReferenceUnlockBlock;
+    exports.deserializeReturnFeatureBlock = deserializeReturnFeatureBlock;
+    exports.deserializeSenderFeatureBlock = deserializeSenderFeatureBlock;
     exports.deserializeSigLockedDustAllowanceOutput = deserializeSigLockedDustAllowanceOutput;
     exports.deserializeSignature = deserializeSignature;
     exports.deserializeSignatureUnlockBlock = deserializeSignatureUnlockBlock;
     exports.deserializeSimpleOutput = deserializeSimpleOutput;
+    exports.deserializeSimpleTokenScheme = deserializeSimpleTokenScheme;
+    exports.deserializeTimelockMilestoneIndexFeatureBlock = deserializeTimelockMilestoneIndexFeatureBlock;
+    exports.deserializeTimelockUnixFeatureBlock = deserializeTimelockUnixFeatureBlock;
+    exports.deserializeTokenScheme = deserializeTokenScheme;
     exports.deserializeTransactionEssence = deserializeTransactionEssence;
     exports.deserializeTreasuryInput = deserializeTreasuryInput;
     exports.deserializeTreasuryOutput = deserializeTreasuryOutput;
@@ -3501,6 +4706,8 @@
     exports.getUnspentAddresses = getUnspentAddresses;
     exports.getUnspentAddressesWithAddressGenerator = getUnspentAddressesWithAddressGenerator;
     exports.logAddress = logAddress;
+    exports.logFeatureBlock = logFeatureBlock;
+    exports.logFeatureBlocks = logFeatureBlocks;
     exports.logFunds = logFunds;
     exports.logIndexationPayload = logIndexationPayload;
     exports.logInfo = logInfo;
@@ -3508,11 +4715,13 @@
     exports.logMessage = logMessage;
     exports.logMessageMetadata = logMessageMetadata;
     exports.logMilestonePayload = logMilestonePayload;
+    exports.logNativeTokens = logNativeTokens;
     exports.logOutput = logOutput;
     exports.logPayload = logPayload;
     exports.logReceiptPayload = logReceiptPayload;
     exports.logSignature = logSignature;
     exports.logTips = logTips;
+    exports.logTokenScheme = logTokenScheme;
     exports.logTransactionPayload = logTransactionPayload;
     exports.logTreasuryTransactionPayload = logTreasuryTransactionPayload;
     exports.logUnlockBlock = logUnlockBlock;
@@ -3528,21 +4737,43 @@
     exports.sendMultipleEd25519 = sendMultipleEd25519;
     exports.sendWithAddressGenerator = sendWithAddressGenerator;
     exports.serializeAddress = serializeAddress;
+    exports.serializeAliasAddress = serializeAliasAddress;
+    exports.serializeAliasOutput = serializeAliasOutput;
+    exports.serializeAliasUnlockBlock = serializeAliasUnlockBlock;
+    exports.serializeBlsAddress = serializeBlsAddress;
     exports.serializeEd25519Address = serializeEd25519Address;
     exports.serializeEd25519Signature = serializeEd25519Signature;
+    exports.serializeExpirationMilestoneIndexFeatureBlock = serializeExpirationMilestoneIndexFeatureBlock;
+    exports.serializeExpirationUnixFeatureBlock = serializeExpirationUnixFeatureBlock;
+    exports.serializeExtendedOutput = serializeExtendedOutput;
+    exports.serializeFeatureBlock = serializeFeatureBlock;
+    exports.serializeFeatureBlocks = serializeFeatureBlocks;
+    exports.serializeFoundryOutput = serializeFoundryOutput;
     exports.serializeFunds = serializeFunds;
+    exports.serializeIndexationFeatureBlock = serializeIndexationFeatureBlock;
     exports.serializeInput = serializeInput;
     exports.serializeInputs = serializeInputs;
+    exports.serializeIssuerFeatureBlock = serializeIssuerFeatureBlock;
     exports.serializeMessage = serializeMessage;
+    exports.serializeMetadataFeatureBlock = serializeMetadataFeatureBlock;
     exports.serializeMigratedFunds = serializeMigratedFunds;
+    exports.serializeNftAddress = serializeNftAddress;
+    exports.serializeNftOutput = serializeNftOutput;
+    exports.serializeNftUnlockBlock = serializeNftUnlockBlock;
     exports.serializeOutput = serializeOutput;
     exports.serializeOutputs = serializeOutputs;
     exports.serializePayload = serializePayload;
     exports.serializeReferenceUnlockBlock = serializeReferenceUnlockBlock;
+    exports.serializeReturnFeatureBlock = serializeReturnFeatureBlock;
+    exports.serializeSenderFeatureBlock = serializeSenderFeatureBlock;
     exports.serializeSigLockedDustAllowanceOutput = serializeSigLockedDustAllowanceOutput;
     exports.serializeSignature = serializeSignature;
     exports.serializeSignatureUnlockBlock = serializeSignatureUnlockBlock;
     exports.serializeSimpleOutput = serializeSimpleOutput;
+    exports.serializeSimpleTokenScheme = serializeSimpleTokenScheme;
+    exports.serializeTimelockMilestoneIndexFeatureBlock = serializeTimelockMilestoneIndexFeatureBlock;
+    exports.serializeTimelockUnixFeatureBlock = serializeTimelockUnixFeatureBlock;
+    exports.serializeTokenScheme = serializeTokenScheme;
     exports.serializeTransactionEssence = serializeTransactionEssence;
     exports.serializeTreasuryInput = serializeTreasuryInput;
     exports.serializeTreasuryOutput = serializeTreasuryOutput;

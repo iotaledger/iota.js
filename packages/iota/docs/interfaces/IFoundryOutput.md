@@ -39,7 +39,7 @@ ___
 
 ### address
 
-• **address**: [`IAliasAddress`](IAliasAddress.md)
+• **address**: [`AddressTypes`](../api.md#addresstypes)
 
 The address associated with the output.
 

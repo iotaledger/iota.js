@@ -14,14 +14,14 @@ export function deserializeSignature(readStream) {
         throw new Error(`Signature data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_SIGNATURE_LENGTH}`);
     }
     const type = readStream.readByte("signature.type", false);
-    let input;
+    let signature;
     if (type === ED25519_SIGNATURE_TYPE) {
-        input = deserializeEd25519Signature(readStream);
+        signature = deserializeEd25519Signature(readStream);
     }
     else {
         throw new Error(`Unrecognized signature type ${type}`);
     }
-    return input;
+    return signature;
 }
 /**
  * Serialize the signature to binary.

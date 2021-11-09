@@ -3,10 +3,7 @@
 /* eslint-disable no-mixed-operators */
 import type { ReadStream, WriteStream } from "@iota/util.js";
 import { IIndexationPayload, INDEXATION_PAYLOAD_TYPE } from "../../models/payloads/IIndexationPayload";
-import {
-    STRING_LENGTH,
-    TYPE_LENGTH
-} from "../commonDataTypes";
+import { STRING_LENGTH, TYPE_LENGTH } from "../commonDataTypes";
 
 /**
  * The minimum length of an indexation payload binary representation.
@@ -68,7 +65,8 @@ export function serializeIndexationPayload(writeStream: WriteStream, object: IIn
     }
     if (object.index.length / 2 > MAX_INDEXATION_KEY_LENGTH) {
         throw new Error(
-            `The indexation key length is ${object.index.length / 2
+            `The indexation key length is ${
+                object.index.length / 2
             }, which exceeds the maximum size of ${MAX_INDEXATION_KEY_LENGTH}`
         );
     }

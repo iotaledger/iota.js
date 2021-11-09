@@ -1,7 +1,7 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import type { IAliasAddress } from "../addresses/IAliasAddress";
-import type { IMetadataFeatureBlock } from "../featureBlocks/IMetadataFeatureBlock";
+import type { AddressTypes } from "../addresses/addressTypes";
+import type { FeatureBlockTypes } from "../featureBlocks/featureBlockTypes";
 import type { INativeToken } from "../INativeToken";
 import type { ITypeBase } from "../ITypeBase";
 
@@ -17,7 +17,7 @@ export interface INftOutput extends ITypeBase<6> {
     /**
      * The address associated with the output.
      */
-    address: IAliasAddress;
+    address: AddressTypes;
 
     /**
      * The amount of IOTA tokens held by the output.
@@ -32,7 +32,7 @@ export interface INftOutput extends ITypeBase<6> {
     /**
      * Unique identifier of the NFT, which is the BLAKE2b-160 hash of the Output ID that created it.
      */
-    nftId: number;
+    nftId: string;
 
     /**
      * Binary metadata attached immutably to the NFT.
@@ -42,5 +42,5 @@ export interface INftOutput extends ITypeBase<6> {
     /**
      * Blocks contained by the output.
      */
-    blocks: IMetadataFeatureBlock[];
+    blocks: FeatureBlockTypes[];
 }

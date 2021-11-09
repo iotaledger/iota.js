@@ -1,5 +1,5 @@
 import type { ReadStream, WriteStream } from "@iota/util.js";
-import type { SignatureTypes } from "../..";
+import type { SignatureTypes } from "../../models/signatures/signatureTypes";
 /**
  * The minimum length of a signature binary representation.
  */

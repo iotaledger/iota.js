@@ -8,8 +8,11 @@ import { IMilestonePayload, MILESTONE_PAYLOAD_TYPE } from "../../models/payloads
 import { IReceiptPayload, RECEIPT_PAYLOAD_TYPE } from "../../models/payloads/IReceiptPayload";
 import {
     MERKLE_PROOF_LENGTH,
-    MESSAGE_ID_LENGTH, TYPE_LENGTH, UINT32_SIZE,
-    UINT64_SIZE, UINT8_SIZE
+    MESSAGE_ID_LENGTH,
+    TYPE_LENGTH,
+    UINT32_SIZE,
+    UINT64_SIZE,
+    UINT8_SIZE
 } from "../commonDataTypes";
 import { MAX_NUMBER_PARENTS, MIN_NUMBER_PARENTS } from "../message";
 import { deserializePayload, serializePayload } from "./payloads";

@@ -63,7 +63,7 @@ ___
 
 ### stateController
 
-• **stateController**: [`IEd25519Address`](IEd25519Address.md) \| [`IAliasAddress`](IAliasAddress.md)
+• **stateController**: [`AddressTypes`](../api.md#addresstypes)
 
 The address that controls the output.
 
@@ -71,7 +71,7 @@ ___
 
 ### governanceController
 
-• **governanceController**: [`IEd25519Address`](IEd25519Address.md) \| [`IAliasAddress`](IAliasAddress.md)
+• **governanceController**: [`AddressTypes`](../api.md#addresstypes)
 
 The address that governs the output.
 
@@ -103,6 +103,6 @@ ___
 
 ### blocks
 
-• **blocks**: ([`IIssuerFeatureBlock`](IIssuerFeatureBlock.md) \| [`IMetadataFeatureBlock`](IMetadataFeatureBlock.md))[]
+• **blocks**: [`FeatureBlockTypes`](../api.md#featureblocktypes)[]
 
 Blocks contained by the output.

@@ -5,7 +5,9 @@ import { SMALL_TYPE_LENGTH, UINT64_SIZE } from "../commonDataTypes.mjs";
 /**
  * The minimum length of a simple output binary representation.
  */
-export const MIN_SIMPLE_OUTPUT_LENGTH = SMALL_TYPE_LENGTH + MIN_ADDRESS_LENGTH + UINT64_SIZE;
+export const MIN_SIMPLE_OUTPUT_LENGTH = SMALL_TYPE_LENGTH + // Type
+    MIN_ADDRESS_LENGTH + // Address
+    UINT64_SIZE; // Amount
 /**
  * Deserialize the simple output from binary.
  * @param readStream The stream to read the data from.

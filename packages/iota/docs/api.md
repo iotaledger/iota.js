@@ -17,11 +17,18 @@
 ### Variables
 
 - [MIN\_ADDRESS\_LENGTH](api.md#min_address_length)
+- [ALIAS\_ADDRESS\_LENGTH](api.md#alias_address_length)
+- [MIN\_ALIAS\_ADDRESS\_LENGTH](api.md#min_alias_address_length)
+- [BLS\_ADDRESS\_LENGTH](api.md#bls_address_length)
+- [MIN\_BLS\_ADDRESS\_LENGTH](api.md#min_bls_address_length)
 - [MIN\_ED25519\_ADDRESS\_LENGTH](api.md#min_ed25519_address_length)
+- [NFT\_ADDRESS\_LENGTH](api.md#nft_address_length)
+- [MIN\_NFT\_ADDRESS\_LENGTH](api.md#min_nft_address_length)
 - [UINT8\_SIZE](api.md#uint8_size)
 - [UINT16\_SIZE](api.md#uint16_size)
 - [UINT32\_SIZE](api.md#uint32_size)
 - [UINT64\_SIZE](api.md#uint64_size)
+- [UINT256\_SIZE](api.md#uint256_size)
 - [MESSAGE\_ID\_LENGTH](api.md#message_id_length)
 - [TRANSACTION\_ID\_LENGTH](api.md#transaction_id_length)
 - [MERKLE\_PROOF\_LENGTH](api.md#merkle_proof_length)
@@ -29,6 +36,17 @@
 - [SMALL\_TYPE\_LENGTH](api.md#small_type_length)
 - [STRING\_LENGTH](api.md#string_length)
 - [ARRAY\_LENGTH](api.md#array_length)
+- [MIN\_EXPIRATION\_MILESTONE\_INDEX\_FEATURE\_BLOCK\_LENGTH](api.md#min_expiration_milestone_index_feature_block_length)
+- [MIN\_EXPIRATION\_UNIX\_FEATURE\_BLOCK\_LENGTH](api.md#min_expiration_unix_feature_block_length)
+- [MIN\_FEATURE\_BLOCKS\_LENGTH](api.md#min_feature_blocks_length)
+- [MIN\_FEATURE\_BLOCK\_LENGTH](api.md#min_feature_block_length)
+- [MIN\_INDEXATION\_FEATURE\_BLOCK\_LENGTH](api.md#min_indexation_feature_block_length)
+- [MIN\_ISSUER\_FEATURE\_BLOCK\_LENGTH](api.md#min_issuer_feature_block_length)
+- [MIN\_METADATA\_FEATURE\_BLOCK\_LENGTH](api.md#min_metadata_feature_block_length)
+- [MIN\_RETURN\_FEATURE\_BLOCK\_LENGTH](api.md#min_return_feature_block_length)
+- [MIN\_SENDER\_FEATURE\_BLOCK\_LENGTH](api.md#min_sender_feature_block_length)
+- [MIN\_TIMELOCK\_MILESTONE\_INDEX\_FEATURE\_BLOCK\_LENGTH](api.md#min_timelock_milestone_index_feature_block_length)
+- [MIN\_TIMELOCK\_UNIX\_FEATURE\_BLOCK\_LENGTH](api.md#min_timelock_unix_feature_block_length)
 - [TAIL\_HASH\_LENGTH](api.md#tail_hash_length)
 - [MIN\_MIGRATED\_FUNDS\_LENGTH](api.md#min_migrated_funds_length)
 - [MAX\_FUNDS\_COUNT](api.md#max_funds_count)
@@ -40,6 +58,12 @@
 - [MAX\_MESSAGE\_LENGTH](api.md#max_message_length)
 - [MAX\_NUMBER\_PARENTS](api.md#max_number_parents)
 - [MIN\_NUMBER\_PARENTS](api.md#min_number_parents)
+- [ALIAS\_ID\_LENGTH](api.md#alias_id_length)
+- [MIN\_ALIAS\_OUTPUT\_LENGTH](api.md#min_alias_output_length)
+- [MIN\_EXTENDED\_OUTPUT\_LENGTH](api.md#min_extended_output_length)
+- [MIN\_FOUNDRY\_OUTPUT\_LENGTH](api.md#min_foundry_output_length)
+- [NFT\_ID\_LENGTH](api.md#nft_id_length)
+- [MIN\_NFT\_OUTPUT\_LENGTH](api.md#min_nft_output_length)
 - [MIN\_OUTPUT\_LENGTH](api.md#min_output_length)
 - [MIN\_OUTPUT\_COUNT](api.md#min_output_count)
 - [MAX\_OUTPUT\_COUNT](api.md#max_output_count)
@@ -49,7 +73,11 @@
 - [MIN\_PAYLOAD\_LENGTH](api.md#min_payload_length)
 - [MIN\_ED25519\_SIGNATURE\_LENGTH](api.md#min_ed25519_signature_length)
 - [MIN\_SIGNATURE\_LENGTH](api.md#min_signature_length)
+- [MIN\_SIMPLE\_TOKEN\_SCHEME\_LENGTH](api.md#min_simple_token_scheme_length)
+- [MIN\_TOKEN\_SCHEME\_LENGTH](api.md#min_token_scheme_length)
 - [MIN\_TRANSACTION\_ESSENCE\_LENGTH](api.md#min_transaction_essence_length)
+- [MIN\_ALIAS\_UNLOCK\_BLOCK\_LENGTH](api.md#min_alias_unlock_block_length)
+- [MIN\_NFT\_UNLOCK\_BLOCK\_LENGTH](api.md#min_nft_unlock_block_length)
 - [MIN\_REFERENCE\_UNLOCK\_BLOCK\_LENGTH](api.md#min_reference_unlock_block_length)
 - [MIN\_SIGNATURE\_UNLOCK\_BLOCK\_LENGTH](api.md#min_signature_unlock_block_length)
 - [MIN\_UNLOCK\_BLOCK\_LENGTH](api.md#min_unlock_block_length)
@@ -84,7 +112,7 @@
 - [ED25519\_SIGNATURE\_TYPE](api.md#ed25519_signature_type)
 - [SIMPLE\_TOKEN\_SCHEME\_TYPE](api.md#simple_token_scheme_type)
 - [ALIAS\_UNLOCK\_BLOCK\_TYPE](api.md#alias_unlock_block_type)
-- [NFTUNLOCK\_BLOCK\_TYPE](api.md#nftunlock_block_type)
+- [NFT\_UNLOCK\_BLOCK\_TYPE](api.md#nft_unlock_block_type)
 - [REFERENCE\_UNLOCK\_BLOCK\_TYPE](api.md#reference_unlock_block_type)
 - [SIGNATURE\_UNLOCK\_BLOCK\_TYPE](api.md#signature_unlock_block_type)
 - [CONFLICT\_REASON\_STRINGS](api.md#conflict_reason_strings)
@@ -94,8 +122,36 @@
 
 - [deserializeAddress](api.md#deserializeaddress)
 - [serializeAddress](api.md#serializeaddress)
+- [deserializeAliasAddress](api.md#deserializealiasaddress)
+- [serializeAliasAddress](api.md#serializealiasaddress)
+- [deserializeBlsAddress](api.md#deserializeblsaddress)
+- [serializeBlsAddress](api.md#serializeblsaddress)
 - [deserializeEd25519Address](api.md#deserializeed25519address)
 - [serializeEd25519Address](api.md#serializeed25519address)
+- [deserializeNftAddress](api.md#deserializenftaddress)
+- [serializeNftAddress](api.md#serializenftaddress)
+- [deserializeExpirationMilestoneIndexFeatureBlock](api.md#deserializeexpirationmilestoneindexfeatureblock)
+- [serializeExpirationMilestoneIndexFeatureBlock](api.md#serializeexpirationmilestoneindexfeatureblock)
+- [deserializeExpirationUnixFeatureBlock](api.md#deserializeexpirationunixfeatureblock)
+- [serializeExpirationUnixFeatureBlock](api.md#serializeexpirationunixfeatureblock)
+- [deserializeFeatureBlocks](api.md#deserializefeatureblocks)
+- [serializeFeatureBlocks](api.md#serializefeatureblocks)
+- [deserializeFeatureBlock](api.md#deserializefeatureblock)
+- [serializeFeatureBlock](api.md#serializefeatureblock)
+- [deserializeIndexationFeatureBlock](api.md#deserializeindexationfeatureblock)
+- [serializeIndexationFeatureBlock](api.md#serializeindexationfeatureblock)
+- [deserializeIssuerFeatureBlock](api.md#deserializeissuerfeatureblock)
+- [serializeIssuerFeatureBlock](api.md#serializeissuerfeatureblock)
+- [deserializeMetadataFeatureBlock](api.md#deserializemetadatafeatureblock)
+- [serializeMetadataFeatureBlock](api.md#serializemetadatafeatureblock)
+- [deserializeReturnFeatureBlock](api.md#deserializereturnfeatureblock)
+- [serializeReturnFeatureBlock](api.md#serializereturnfeatureblock)
+- [deserializeSenderFeatureBlock](api.md#deserializesenderfeatureblock)
+- [serializeSenderFeatureBlock](api.md#serializesenderfeatureblock)
+- [deserializeTimelockMilestoneIndexFeatureBlock](api.md#deserializetimelockmilestoneindexfeatureblock)
+- [serializeTimelockMilestoneIndexFeatureBlock](api.md#serializetimelockmilestoneindexfeatureblock)
+- [deserializeTimelockUnixFeatureBlock](api.md#deserializetimelockunixfeatureblock)
+- [serializeTimelockUnixFeatureBlock](api.md#serializetimelockunixfeatureblock)
 - [deserializeFunds](api.md#deserializefunds)
 - [serializeFunds](api.md#serializefunds)
 - [deserializeMigratedFunds](api.md#deserializemigratedfunds)
@@ -110,6 +166,14 @@
 - [serializeUTXOInput](api.md#serializeutxoinput)
 - [deserializeMessage](api.md#deserializemessage)
 - [serializeMessage](api.md#serializemessage)
+- [deserializeAliasOutput](api.md#deserializealiasoutput)
+- [serializeAliasOutput](api.md#serializealiasoutput)
+- [deserializeExtendedOutput](api.md#deserializeextendedoutput)
+- [serializeExtendedOutput](api.md#serializeextendedoutput)
+- [deserializeFoundryOutput](api.md#deserializefoundryoutput)
+- [serializeFoundryOutput](api.md#serializefoundryoutput)
+- [deserializeNftOutput](api.md#deserializenftoutput)
+- [serializeNftOutput](api.md#serializenftoutput)
 - [deserializeOutputs](api.md#deserializeoutputs)
 - [serializeOutputs](api.md#serializeoutputs)
 - [deserializeOutput](api.md#deserializeoutput)
@@ -126,8 +190,16 @@
 - [serializeEd25519Signature](api.md#serializeed25519signature)
 - [deserializeSignature](api.md#deserializesignature)
 - [serializeSignature](api.md#serializesignature)
+- [deserializeSimpleTokenScheme](api.md#deserializesimpletokenscheme)
+- [serializeSimpleTokenScheme](api.md#serializesimpletokenscheme)
+- [deserializeTokenScheme](api.md#deserializetokenscheme)
+- [serializeTokenScheme](api.md#serializetokenscheme)
 - [deserializeTransactionEssence](api.md#deserializetransactionessence)
 - [serializeTransactionEssence](api.md#serializetransactionessence)
+- [deserializeAliasUnlockBlock](api.md#deserializealiasunlockblock)
+- [serializeAliasUnlockBlock](api.md#serializealiasunlockblock)
+- [deserializeNftUnlockBlock](api.md#deserializenftunlockblock)
+- [serializeNftUnlockBlock](api.md#serializenftunlockblock)
 - [deserializeReferenceUnlockBlock](api.md#deserializereferenceunlockblock)
 - [serializeReferenceUnlockBlock](api.md#serializereferenceunlockblock)
 - [deserializeSignatureUnlockBlock](api.md#deserializesignatureunlockblock)
@@ -172,6 +244,10 @@
 - [logOutput](api.md#logoutput)
 - [logUnlockBlock](api.md#logunlockblock)
 - [logFunds](api.md#logfunds)
+- [logNativeTokens](api.md#lognativetokens)
+- [logTokenScheme](api.md#logtokenscheme)
+- [logFeatureBlocks](api.md#logfeatureblocks)
+- [logFeatureBlock](api.md#logfeatureblock)
 
 ### Interfaces
 
@@ -259,9 +335,41 @@
 
 ### MIN\_ADDRESS\_LENGTH
 
-• **MIN\_ADDRESS\_LENGTH**: `number` = `MIN_ED25519_ADDRESS_LENGTH`
+• **MIN\_ADDRESS\_LENGTH**: `number`
 
 The minimum length of an address binary representation.
+
+___
+
+### ALIAS\_ADDRESS\_LENGTH
+
+• **ALIAS\_ADDRESS\_LENGTH**: `number` = `20`
+
+The length of an alias address.
+
+___
+
+### MIN\_ALIAS\_ADDRESS\_LENGTH
+
+• **MIN\_ALIAS\_ADDRESS\_LENGTH**: `number`
+
+The minimum length of an alias address binary representation.
+
+___
+
+### BLS\_ADDRESS\_LENGTH
+
+• **BLS\_ADDRESS\_LENGTH**: `number` = `32`
+
+The length of a BLS address.
+
+___
+
+### MIN\_BLS\_ADDRESS\_LENGTH
+
+• **MIN\_BLS\_ADDRESS\_LENGTH**: `number`
+
+The minimum length of an bls address binary representation.
 
 ___
 
@@ -270,6 +378,22 @@ ___
 • **MIN\_ED25519\_ADDRESS\_LENGTH**: `number`
 
 The minimum length of an ed25519 address binary representation.
+
+___
+
+### NFT\_ADDRESS\_LENGTH
+
+• **NFT\_ADDRESS\_LENGTH**: `number` = `20`
+
+The length of an NFT address.
+
+___
+
+### MIN\_NFT\_ADDRESS\_LENGTH
+
+• **MIN\_NFT\_ADDRESS\_LENGTH**: `number`
+
+The minimum length of an nft address binary representation.
 
 ___
 
@@ -302,6 +426,14 @@ ___
 • **UINT64\_SIZE**: `number` = `8`
 
 Byte length for a uint64 field.
+
+___
+
+### UINT256\_SIZE
+
+• **UINT256\_SIZE**: `number` = `32`
+
+Byte length for a uint256 field.
 
 ___
 
@@ -358,6 +490,94 @@ ___
 • **ARRAY\_LENGTH**: `number` = `UINT16_SIZE`
 
 Byte length for an array length.
+
+___
+
+### MIN\_EXPIRATION\_MILESTONE\_INDEX\_FEATURE\_BLOCK\_LENGTH
+
+• **MIN\_EXPIRATION\_MILESTONE\_INDEX\_FEATURE\_BLOCK\_LENGTH**: `number`
+
+The minimum length of a expiration milestone index feature block binary representation.
+
+___
+
+### MIN\_EXPIRATION\_UNIX\_FEATURE\_BLOCK\_LENGTH
+
+• **MIN\_EXPIRATION\_UNIX\_FEATURE\_BLOCK\_LENGTH**: `number`
+
+The minimum length of a expiration unix feature block binary representation.
+
+___
+
+### MIN\_FEATURE\_BLOCKS\_LENGTH
+
+• **MIN\_FEATURE\_BLOCKS\_LENGTH**: `number` = `UINT16_SIZE`
+
+The minimum length of a feature blocks tokens list.
+
+___
+
+### MIN\_FEATURE\_BLOCK\_LENGTH
+
+• **MIN\_FEATURE\_BLOCK\_LENGTH**: `number`
+
+The minimum length of a feature block binary representation.
+
+___
+
+### MIN\_INDEXATION\_FEATURE\_BLOCK\_LENGTH
+
+• **MIN\_INDEXATION\_FEATURE\_BLOCK\_LENGTH**: `number`
+
+The minimum length of a indexation feature block binary representation.
+
+___
+
+### MIN\_ISSUER\_FEATURE\_BLOCK\_LENGTH
+
+• **MIN\_ISSUER\_FEATURE\_BLOCK\_LENGTH**: `number`
+
+The minimum length of a issuer feature block binary representation.
+
+___
+
+### MIN\_METADATA\_FEATURE\_BLOCK\_LENGTH
+
+• **MIN\_METADATA\_FEATURE\_BLOCK\_LENGTH**: `number`
+
+The minimum length of a metadata feature block binary representation.
+
+___
+
+### MIN\_RETURN\_FEATURE\_BLOCK\_LENGTH
+
+• **MIN\_RETURN\_FEATURE\_BLOCK\_LENGTH**: `number`
+
+The minimum length of a return feature block binary representation.
+
+___
+
+### MIN\_SENDER\_FEATURE\_BLOCK\_LENGTH
+
+• **MIN\_SENDER\_FEATURE\_BLOCK\_LENGTH**: `number`
+
+The minimum length of a sender feature block binary representation.
+
+___
+
+### MIN\_TIMELOCK\_MILESTONE\_INDEX\_FEATURE\_BLOCK\_LENGTH
+
+• **MIN\_TIMELOCK\_MILESTONE\_INDEX\_FEATURE\_BLOCK\_LENGTH**: `number`
+
+The minimum length of a timelock milestone index feature block binary representation.
+
+___
+
+### MIN\_TIMELOCK\_UNIX\_FEATURE\_BLOCK\_LENGTH
+
+• **MIN\_TIMELOCK\_UNIX\_FEATURE\_BLOCK\_LENGTH**: `number`
+
+The minimum length of a timelock unix feature block binary representation.
 
 ___
 
@@ -449,6 +669,54 @@ The minimum number of parents.
 
 ___
 
+### ALIAS\_ID\_LENGTH
+
+• **ALIAS\_ID\_LENGTH**: `number` = `20`
+
+The length of an alias id.
+
+___
+
+### MIN\_ALIAS\_OUTPUT\_LENGTH
+
+• **MIN\_ALIAS\_OUTPUT\_LENGTH**: `number`
+
+The minimum length of a alias output binary representation.
+
+___
+
+### MIN\_EXTENDED\_OUTPUT\_LENGTH
+
+• **MIN\_EXTENDED\_OUTPUT\_LENGTH**: `number`
+
+The minimum length of a extended output binary representation.
+
+___
+
+### MIN\_FOUNDRY\_OUTPUT\_LENGTH
+
+• **MIN\_FOUNDRY\_OUTPUT\_LENGTH**: `number`
+
+The minimum length of a foundry output binary representation.
+
+___
+
+### NFT\_ID\_LENGTH
+
+• **NFT\_ID\_LENGTH**: `number` = `20`
+
+The length of an NFT Id.
+
+___
+
+### MIN\_NFT\_OUTPUT\_LENGTH
+
+• **MIN\_NFT\_OUTPUT\_LENGTH**: `number`
+
+The minimum length of a nft output binary representation.
+
+___
+
 ### MIN\_OUTPUT\_LENGTH
 
 • **MIN\_OUTPUT\_LENGTH**: `number`
@@ -521,11 +789,43 @@ The minimum length of a signature binary representation.
 
 ___
 
+### MIN\_SIMPLE\_TOKEN\_SCHEME\_LENGTH
+
+• **MIN\_SIMPLE\_TOKEN\_SCHEME\_LENGTH**: `number` = `SMALL_TYPE_LENGTH`
+
+The minimum length of an simple token scheme binary representation.
+
+___
+
+### MIN\_TOKEN\_SCHEME\_LENGTH
+
+• **MIN\_TOKEN\_SCHEME\_LENGTH**: `number` = `MIN_SIMPLE_TOKEN_SCHEME_LENGTH`
+
+The minimum length of a simple token scheme binary representation.
+
+___
+
 ### MIN\_TRANSACTION\_ESSENCE\_LENGTH
 
 • **MIN\_TRANSACTION\_ESSENCE\_LENGTH**: `number`
 
 The minimum length of a transaction essence binary representation.
+
+___
+
+### MIN\_ALIAS\_UNLOCK\_BLOCK\_LENGTH
+
+• **MIN\_ALIAS\_UNLOCK\_BLOCK\_LENGTH**: `number`
+
+The minimum length of a alias unlock block binary representation.
+
+___
+
+### MIN\_NFT\_UNLOCK\_BLOCK\_LENGTH
+
+• **MIN\_NFT\_UNLOCK\_BLOCK\_LENGTH**: `number`
+
+The minimum length of a nft unlock block binary representation.
 
 ___
 
@@ -803,9 +1103,9 @@ The global type for the alias unlock block.
 
 ___
 
-### NFTUNLOCK\_BLOCK\_TYPE
+### NFT\_UNLOCK\_BLOCK\_TYPE
 
-• **NFTUNLOCK\_BLOCK\_TYPE**: ``3``
+• **NFT\_UNLOCK\_BLOCK\_TYPE**: ``3``
 
 The global type for the NFT unlock block.
 
@@ -874,7 +1174,85 @@ Serialize the address to binary.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `writeStream` | `WriteStream` | The stream to write the data to. |
-| `object` | [`AddressTypes`](api.md#addresstypes) | The object to serialize. |
+| `object` | [`ITypeBase`](interfaces/ITypeBase.md)<`number`\> | The object to serialize. |
+
+#### Returns
+
+`void`
+
+___
+
+### deserializeAliasAddress
+
+▸ **deserializeAliasAddress**(`readStream`): [`IAliasAddress`](interfaces/IAliasAddress.md)
+
+Deserialize the alias address from binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `readStream` | `ReadStream` | The stream to read the data from. |
+
+#### Returns
+
+[`IAliasAddress`](interfaces/IAliasAddress.md)
+
+The deserialized object.
+
+___
+
+### serializeAliasAddress
+
+▸ **serializeAliasAddress**(`writeStream`, `object`): `void`
+
+Serialize the alias address to binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `writeStream` | `WriteStream` | The stream to write the data to. |
+| `object` | [`IAliasAddress`](interfaces/IAliasAddress.md) | The object to serialize. |
+
+#### Returns
+
+`void`
+
+___
+
+### deserializeBlsAddress
+
+▸ **deserializeBlsAddress**(`readStream`): [`IBlsAddress`](interfaces/IBlsAddress.md)
+
+Deserialize the bls address from binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `readStream` | `ReadStream` | The stream to read the data from. |
+
+#### Returns
+
+[`IBlsAddress`](interfaces/IBlsAddress.md)
+
+The deserialized object.
+
+___
+
+### serializeBlsAddress
+
+▸ **serializeBlsAddress**(`writeStream`, `object`): `void`
+
+Serialize the bls address to binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `writeStream` | `WriteStream` | The stream to write the data to. |
+| `object` | [`IBlsAddress`](interfaces/IBlsAddress.md) | The object to serialize. |
 
 #### Returns
 
@@ -914,6 +1292,474 @@ Serialize the ed25519 address to binary.
 | :------ | :------ | :------ |
 | `writeStream` | `WriteStream` | The stream to write the data to. |
 | `object` | [`IEd25519Address`](interfaces/IEd25519Address.md) | The object to serialize. |
+
+#### Returns
+
+`void`
+
+___
+
+### deserializeNftAddress
+
+▸ **deserializeNftAddress**(`readStream`): [`INftAddress`](interfaces/INftAddress.md)
+
+Deserialize the nft address from binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `readStream` | `ReadStream` | The stream to read the data from. |
+
+#### Returns
+
+[`INftAddress`](interfaces/INftAddress.md)
+
+The deserialized object.
+
+___
+
+### serializeNftAddress
+
+▸ **serializeNftAddress**(`writeStream`, `object`): `void`
+
+Serialize the nft address to binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `writeStream` | `WriteStream` | The stream to write the data to. |
+| `object` | [`INftAddress`](interfaces/INftAddress.md) | The object to serialize. |
+
+#### Returns
+
+`void`
+
+___
+
+### deserializeExpirationMilestoneIndexFeatureBlock
+
+▸ **deserializeExpirationMilestoneIndexFeatureBlock**(`readStream`): [`IExpirationMilestoneIndexFeatureBlock`](interfaces/IExpirationMilestoneIndexFeatureBlock.md)
+
+Deserialize the expiration milestone index feature block from binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `readStream` | `ReadStream` | The stream to read the data from. |
+
+#### Returns
+
+[`IExpirationMilestoneIndexFeatureBlock`](interfaces/IExpirationMilestoneIndexFeatureBlock.md)
+
+The deserialized object.
+
+___
+
+### serializeExpirationMilestoneIndexFeatureBlock
+
+▸ **serializeExpirationMilestoneIndexFeatureBlock**(`writeStream`, `object`): `void`
+
+Serialize the expiration milestone index feature block to binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `writeStream` | `WriteStream` | The stream to write the data to. |
+| `object` | [`IExpirationMilestoneIndexFeatureBlock`](interfaces/IExpirationMilestoneIndexFeatureBlock.md) | The object to serialize. |
+
+#### Returns
+
+`void`
+
+___
+
+### deserializeExpirationUnixFeatureBlock
+
+▸ **deserializeExpirationUnixFeatureBlock**(`readStream`): [`IExpirationUnixFeatureBlock`](interfaces/IExpirationUnixFeatureBlock.md)
+
+Deserialize the expiration unix feature block from binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `readStream` | `ReadStream` | The stream to read the data from. |
+
+#### Returns
+
+[`IExpirationUnixFeatureBlock`](interfaces/IExpirationUnixFeatureBlock.md)
+
+The deserialized object.
+
+___
+
+### serializeExpirationUnixFeatureBlock
+
+▸ **serializeExpirationUnixFeatureBlock**(`writeStream`, `object`): `void`
+
+Serialize the expiration unix feature block to binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `writeStream` | `WriteStream` | The stream to write the data to. |
+| `object` | [`IExpirationUnixFeatureBlock`](interfaces/IExpirationUnixFeatureBlock.md) | The object to serialize. |
+
+#### Returns
+
+`void`
+
+___
+
+### deserializeFeatureBlocks
+
+▸ **deserializeFeatureBlocks**(`readStream`): [`FeatureBlockTypes`](api.md#featureblocktypes)[]
+
+Deserialize the feature blocks from binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `readStream` | `ReadStream` | The stream to read the data from. |
+
+#### Returns
+
+[`FeatureBlockTypes`](api.md#featureblocktypes)[]
+
+The deserialized object.
+
+___
+
+### serializeFeatureBlocks
+
+▸ **serializeFeatureBlocks**(`writeStream`, `objects`): `void`
+
+Serialize the feature blocks to binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `writeStream` | `WriteStream` | The stream to write the data to. |
+| `objects` | [`FeatureBlockTypes`](api.md#featureblocktypes)[] | The objects to serialize. |
+
+#### Returns
+
+`void`
+
+___
+
+### deserializeFeatureBlock
+
+▸ **deserializeFeatureBlock**(`readStream`): [`FeatureBlockTypes`](api.md#featureblocktypes)
+
+Deserialize the feature block from binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `readStream` | `ReadStream` | The stream to read the data from. |
+
+#### Returns
+
+[`FeatureBlockTypes`](api.md#featureblocktypes)
+
+The deserialized object.
+
+___
+
+### serializeFeatureBlock
+
+▸ **serializeFeatureBlock**(`writeStream`, `object`): `void`
+
+Serialize the feature block to binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `writeStream` | `WriteStream` | The stream to write the data to. |
+| `object` | [`ITypeBase`](interfaces/ITypeBase.md)<`number`\> | The object to serialize. |
+
+#### Returns
+
+`void`
+
+___
+
+### deserializeIndexationFeatureBlock
+
+▸ **deserializeIndexationFeatureBlock**(`readStream`): [`IIndexationFeatureBlock`](interfaces/IIndexationFeatureBlock.md)
+
+Deserialize the indexation feature block from binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `readStream` | `ReadStream` | The stream to read the data from. |
+
+#### Returns
+
+[`IIndexationFeatureBlock`](interfaces/IIndexationFeatureBlock.md)
+
+The deserialized object.
+
+___
+
+### serializeIndexationFeatureBlock
+
+▸ **serializeIndexationFeatureBlock**(`writeStream`, `object`): `void`
+
+Serialize the indexation feature block to binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `writeStream` | `WriteStream` | The stream to write the data to. |
+| `object` | [`IIndexationFeatureBlock`](interfaces/IIndexationFeatureBlock.md) | The object to serialize. |
+
+#### Returns
+
+`void`
+
+___
+
+### deserializeIssuerFeatureBlock
+
+▸ **deserializeIssuerFeatureBlock**(`readStream`): [`IIssuerFeatureBlock`](interfaces/IIssuerFeatureBlock.md)
+
+Deserialize the issuer feature block from binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `readStream` | `ReadStream` | The stream to read the data from. |
+
+#### Returns
+
+[`IIssuerFeatureBlock`](interfaces/IIssuerFeatureBlock.md)
+
+The deserialized object.
+
+___
+
+### serializeIssuerFeatureBlock
+
+▸ **serializeIssuerFeatureBlock**(`writeStream`, `object`): `void`
+
+Serialize the issuer feature block to binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `writeStream` | `WriteStream` | The stream to write the data to. |
+| `object` | [`IIssuerFeatureBlock`](interfaces/IIssuerFeatureBlock.md) | The object to serialize. |
+
+#### Returns
+
+`void`
+
+___
+
+### deserializeMetadataFeatureBlock
+
+▸ **deserializeMetadataFeatureBlock**(`readStream`): [`IMetadataFeatureBlock`](interfaces/IMetadataFeatureBlock.md)
+
+Deserialize the metadata feature block from binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `readStream` | `ReadStream` | The stream to read the data from. |
+
+#### Returns
+
+[`IMetadataFeatureBlock`](interfaces/IMetadataFeatureBlock.md)
+
+The deserialized object.
+
+___
+
+### serializeMetadataFeatureBlock
+
+▸ **serializeMetadataFeatureBlock**(`writeStream`, `object`): `void`
+
+Serialize the metadata feature block to binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `writeStream` | `WriteStream` | The stream to write the data to. |
+| `object` | [`IMetadataFeatureBlock`](interfaces/IMetadataFeatureBlock.md) | The object to serialize. |
+
+#### Returns
+
+`void`
+
+___
+
+### deserializeReturnFeatureBlock
+
+▸ **deserializeReturnFeatureBlock**(`readStream`): [`IReturnFeatureBlock`](interfaces/IReturnFeatureBlock.md)
+
+Deserialize the return feature block from binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `readStream` | `ReadStream` | The stream to read the data from. |
+
+#### Returns
+
+[`IReturnFeatureBlock`](interfaces/IReturnFeatureBlock.md)
+
+The deserialized object.
+
+___
+
+### serializeReturnFeatureBlock
+
+▸ **serializeReturnFeatureBlock**(`writeStream`, `object`): `void`
+
+Serialize the return feature block to binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `writeStream` | `WriteStream` | The stream to write the data to. |
+| `object` | [`IReturnFeatureBlock`](interfaces/IReturnFeatureBlock.md) | The object to serialize. |
+
+#### Returns
+
+`void`
+
+___
+
+### deserializeSenderFeatureBlock
+
+▸ **deserializeSenderFeatureBlock**(`readStream`): [`ISenderFeatureBlock`](interfaces/ISenderFeatureBlock.md)
+
+Deserialize the sender feature block from binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `readStream` | `ReadStream` | The stream to read the data from. |
+
+#### Returns
+
+[`ISenderFeatureBlock`](interfaces/ISenderFeatureBlock.md)
+
+The deserialized object.
+
+___
+
+### serializeSenderFeatureBlock
+
+▸ **serializeSenderFeatureBlock**(`writeStream`, `object`): `void`
+
+Serialize the sender feature block to binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `writeStream` | `WriteStream` | The stream to write the data to. |
+| `object` | [`ISenderFeatureBlock`](interfaces/ISenderFeatureBlock.md) | The object to serialize. |
+
+#### Returns
+
+`void`
+
+___
+
+### deserializeTimelockMilestoneIndexFeatureBlock
+
+▸ **deserializeTimelockMilestoneIndexFeatureBlock**(`readStream`): [`ITimelockMilestoneIndexFeatureBlock`](interfaces/ITimelockMilestoneIndexFeatureBlock.md)
+
+Deserialize the timelock milestone index feature block from binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `readStream` | `ReadStream` | The stream to read the data from. |
+
+#### Returns
+
+[`ITimelockMilestoneIndexFeatureBlock`](interfaces/ITimelockMilestoneIndexFeatureBlock.md)
+
+The deserialized object.
+
+___
+
+### serializeTimelockMilestoneIndexFeatureBlock
+
+▸ **serializeTimelockMilestoneIndexFeatureBlock**(`writeStream`, `object`): `void`
+
+Serialize the timelock milestone index feature block to binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `writeStream` | `WriteStream` | The stream to write the data to. |
+| `object` | [`ITimelockMilestoneIndexFeatureBlock`](interfaces/ITimelockMilestoneIndexFeatureBlock.md) | The object to serialize. |
+
+#### Returns
+
+`void`
+
+___
+
+### deserializeTimelockUnixFeatureBlock
+
+▸ **deserializeTimelockUnixFeatureBlock**(`readStream`): [`ITimelockUnixFeatureBlock`](interfaces/ITimelockUnixFeatureBlock.md)
+
+Deserialize the timelock unix feature block from binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `readStream` | `ReadStream` | The stream to read the data from. |
+
+#### Returns
+
+[`ITimelockUnixFeatureBlock`](interfaces/ITimelockUnixFeatureBlock.md)
+
+The deserialized object.
+
+___
+
+### serializeTimelockUnixFeatureBlock
+
+▸ **serializeTimelockUnixFeatureBlock**(`writeStream`, `object`): `void`
+
+Serialize the timelock unix feature block to binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `writeStream` | `WriteStream` | The stream to write the data to. |
+| `object` | [`ITimelockUnixFeatureBlock`](interfaces/ITimelockUnixFeatureBlock.md) | The object to serialize. |
 
 #### Returns
 
@@ -1187,6 +2033,162 @@ Serialize the message essence to binary.
 | :------ | :------ | :------ |
 | `writeStream` | `WriteStream` | The stream to write the data to. |
 | `object` | [`IMessage`](interfaces/IMessage.md) | The object to serialize. |
+
+#### Returns
+
+`void`
+
+___
+
+### deserializeAliasOutput
+
+▸ **deserializeAliasOutput**(`readStream`): [`IAliasOutput`](interfaces/IAliasOutput.md)
+
+Deserialize the alias output from binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `readStream` | `ReadStream` | The stream to read the data from. |
+
+#### Returns
+
+[`IAliasOutput`](interfaces/IAliasOutput.md)
+
+The deserialized object.
+
+___
+
+### serializeAliasOutput
+
+▸ **serializeAliasOutput**(`writeStream`, `object`): `void`
+
+Serialize the alias output to binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `writeStream` | `WriteStream` | The stream to write the data to. |
+| `object` | [`IAliasOutput`](interfaces/IAliasOutput.md) | The object to serialize. |
+
+#### Returns
+
+`void`
+
+___
+
+### deserializeExtendedOutput
+
+▸ **deserializeExtendedOutput**(`readStream`): [`IExtendedOutput`](interfaces/IExtendedOutput.md)
+
+Deserialize the extended output from binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `readStream` | `ReadStream` | The stream to read the data from. |
+
+#### Returns
+
+[`IExtendedOutput`](interfaces/IExtendedOutput.md)
+
+The deserialized object.
+
+___
+
+### serializeExtendedOutput
+
+▸ **serializeExtendedOutput**(`writeStream`, `object`): `void`
+
+Serialize the extended output to binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `writeStream` | `WriteStream` | The stream to write the data to. |
+| `object` | [`IExtendedOutput`](interfaces/IExtendedOutput.md) | The object to serialize. |
+
+#### Returns
+
+`void`
+
+___
+
+### deserializeFoundryOutput
+
+▸ **deserializeFoundryOutput**(`readStream`): [`IFoundryOutput`](interfaces/IFoundryOutput.md)
+
+Deserialize the foundry output from binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `readStream` | `ReadStream` | The stream to read the data from. |
+
+#### Returns
+
+[`IFoundryOutput`](interfaces/IFoundryOutput.md)
+
+The deserialized object.
+
+___
+
+### serializeFoundryOutput
+
+▸ **serializeFoundryOutput**(`writeStream`, `object`): `void`
+
+Serialize the foundry output to binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `writeStream` | `WriteStream` | The stream to write the data to. |
+| `object` | [`IFoundryOutput`](interfaces/IFoundryOutput.md) | The object to serialize. |
+
+#### Returns
+
+`void`
+
+___
+
+### deserializeNftOutput
+
+▸ **deserializeNftOutput**(`readStream`): [`INftOutput`](interfaces/INftOutput.md)
+
+Deserialize the nft output from binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `readStream` | `ReadStream` | The stream to read the data from. |
+
+#### Returns
+
+[`INftOutput`](interfaces/INftOutput.md)
+
+The deserialized object.
+
+___
+
+### serializeNftOutput
+
+▸ **serializeNftOutput**(`writeStream`, `object`): `void`
+
+Serialize the nft output to binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `writeStream` | `WriteStream` | The stream to write the data to. |
+| `object` | [`INftOutput`](interfaces/INftOutput.md) | The object to serialize. |
 
 #### Returns
 
@@ -1506,6 +2508,84 @@ Serialize the signature to binary.
 
 ___
 
+### deserializeSimpleTokenScheme
+
+▸ **deserializeSimpleTokenScheme**(`readStream`): [`ISimpleTokenScheme`](interfaces/ISimpleTokenScheme.md)
+
+Deserialize the simple token scheme from binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `readStream` | `ReadStream` | The stream to read the data from. |
+
+#### Returns
+
+[`ISimpleTokenScheme`](interfaces/ISimpleTokenScheme.md)
+
+The deserialized object.
+
+___
+
+### serializeSimpleTokenScheme
+
+▸ **serializeSimpleTokenScheme**(`writeStream`, `object`): `void`
+
+Serialize the simple token scheme to binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `writeStream` | `WriteStream` | The stream to write the data to. |
+| `object` | [`ISimpleTokenScheme`](interfaces/ISimpleTokenScheme.md) | The object to serialize. |
+
+#### Returns
+
+`void`
+
+___
+
+### deserializeTokenScheme
+
+▸ **deserializeTokenScheme**(`readStream`): [`TokenSchemeTypes`](api.md#tokenschemetypes)
+
+Deserialize the token scheme from binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `readStream` | `ReadStream` | The stream to read the data from. |
+
+#### Returns
+
+[`TokenSchemeTypes`](api.md#tokenschemetypes)
+
+The deserialized object.
+
+___
+
+### serializeTokenScheme
+
+▸ **serializeTokenScheme**(`writeStream`, `object`): `void`
+
+Serialize the token scheme to binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `writeStream` | `WriteStream` | The stream to write the data to. |
+| `object` | [`ISimpleTokenScheme`](interfaces/ISimpleTokenScheme.md) | The object to serialize. |
+
+#### Returns
+
+`void`
+
+___
+
 ### deserializeTransactionEssence
 
 ▸ **deserializeTransactionEssence**(`readStream`): [`ITransactionEssence`](interfaces/ITransactionEssence.md)
@@ -1538,6 +2618,84 @@ Serialize the transaction essence to binary.
 | :------ | :------ | :------ |
 | `writeStream` | `WriteStream` | The stream to write the data to. |
 | `object` | [`ITransactionEssence`](interfaces/ITransactionEssence.md) | The object to serialize. |
+
+#### Returns
+
+`void`
+
+___
+
+### deserializeAliasUnlockBlock
+
+▸ **deserializeAliasUnlockBlock**(`readStream`): [`IAliasUnlockBlock`](interfaces/IAliasUnlockBlock.md)
+
+Deserialize the alias unlock block from binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `readStream` | `ReadStream` | The stream to read the data from. |
+
+#### Returns
+
+[`IAliasUnlockBlock`](interfaces/IAliasUnlockBlock.md)
+
+The deserialized object.
+
+___
+
+### serializeAliasUnlockBlock
+
+▸ **serializeAliasUnlockBlock**(`writeStream`, `object`): `void`
+
+Serialize the alias unlock block to binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `writeStream` | `WriteStream` | The stream to write the data to. |
+| `object` | [`IAliasUnlockBlock`](interfaces/IAliasUnlockBlock.md) | The object to serialize. |
+
+#### Returns
+
+`void`
+
+___
+
+### deserializeNftUnlockBlock
+
+▸ **deserializeNftUnlockBlock**(`readStream`): [`INftUnlockBlock`](interfaces/INftUnlockBlock.md)
+
+Deserialize the nft unlock block from binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `readStream` | `ReadStream` | The stream to read the data from. |
+
+#### Returns
+
+[`INftUnlockBlock`](interfaces/INftUnlockBlock.md)
+
+The deserialized object.
+
+___
+
+### serializeNftUnlockBlock
+
+▸ **serializeNftUnlockBlock**(`writeStream`, `object`): `void`
+
+Serialize the nft unlock block to binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `writeStream` | `WriteStream` | The stream to write the data to. |
+| `object` | [`INftUnlockBlock`](interfaces/INftUnlockBlock.md) | The object to serialize. |
 
 #### Returns
 
@@ -2474,6 +3632,82 @@ Log fund to the console.
 | :------ | :------ | :------ |
 | `prefix` | `string` | The prefix for the output. |
 | `fund?` | [`IMigratedFunds`](interfaces/IMigratedFunds.md) | The fund to log. |
+
+#### Returns
+
+`void`
+
+___
+
+### logNativeTokens
+
+▸ **logNativeTokens**(`prefix`, `nativeTokens`): `void`
+
+Log native tokens to the console.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `prefix` | `string` | The prefix for the output. |
+| `nativeTokens` | [`INativeToken`](interfaces/INativeToken.md)[] | The native tokens. |
+
+#### Returns
+
+`void`
+
+___
+
+### logTokenScheme
+
+▸ **logTokenScheme**(`prefix`, `tokenScheme`): `void`
+
+Log token scheme to the console.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `prefix` | `string` | The prefix for the output. |
+| `tokenScheme` | [`ISimpleTokenScheme`](interfaces/ISimpleTokenScheme.md) | The native tokens. |
+
+#### Returns
+
+`void`
+
+___
+
+### logFeatureBlocks
+
+▸ **logFeatureBlocks**(`prefix`, `featureBlocks`): `void`
+
+Log feature blocks to the console.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `prefix` | `string` | The prefix for the output. |
+| `featureBlocks` | [`FeatureBlockTypes`](api.md#featureblocktypes)[] | The native tokens. |
+
+#### Returns
+
+`void`
+
+___
+
+### logFeatureBlock
+
+▸ **logFeatureBlock**(`prefix`, `featureBlock`): `void`
+
+Log feature block to the console.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `prefix` | `string` | The prefix for the output. |
+| `featureBlock` | [`FeatureBlockTypes`](api.md#featureblocktypes) | The native tokens. |
 
 #### Returns
 

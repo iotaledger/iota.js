@@ -3,7 +3,7 @@ import { TYPE_LENGTH } from "../commonDataTypes.mjs";
 import { deserializeTreasuryInput, MIN_TREASURY_INPUT_LENGTH, serializeTreasuryInput } from "../inputs/treasuryInput.mjs";
 import { deserializeTreasuryOutput, MIN_TREASURY_OUTPUT_LENGTH, serializeTreasuryOutput } from "../outputs/treasuryOutput.mjs";
 /**
- * The minimum length of a treasure transaction payload binary representation.
+ * The minimum length of a treasury transaction payload binary representation.
  */
 export const MIN_TREASURY_TRANSACTION_PAYLOAD_LENGTH = TYPE_LENGTH + MIN_TREASURY_INPUT_LENGTH + MIN_TREASURY_OUTPUT_LENGTH;
 /**
@@ -13,7 +13,7 @@ export const MIN_TREASURY_TRANSACTION_PAYLOAD_LENGTH = TYPE_LENGTH + MIN_TREASUR
  */
 export function deserializeTreasuryTransactionPayload(readStream) {
     if (!readStream.hasRemaining(MIN_TREASURY_TRANSACTION_PAYLOAD_LENGTH)) {
-        throw new Error(`Treasure Transaction Payload data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_TREASURY_TRANSACTION_PAYLOAD_LENGTH}`);
+        throw new Error(`Treasury Transaction Payload data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_TREASURY_TRANSACTION_PAYLOAD_LENGTH}`);
     }
     const type = readStream.readUInt32("payloadTreasuryTransaction.type");
     if (type !== TREASURY_TRANSACTION_PAYLOAD_TYPE) {

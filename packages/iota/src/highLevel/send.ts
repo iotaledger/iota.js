@@ -332,8 +332,10 @@ export async function calculateInputs<T>(
                         if (consumedBalance >= requiredBalance) {
                             // We didn't use all the balance from the last input
                             // so return the rest to the same address.
-                            if (consumedBalance - requiredBalance > 0 &&
-                                addressOutput.output.type === SIMPLE_OUTPUT_TYPE) {
+                            if (
+                                consumedBalance - requiredBalance > 0 &&
+                                addressOutput.output.type === SIMPLE_OUTPUT_TYPE
+                            ) {
                                 outputs.push({
                                     amount: consumedBalance - requiredBalance,
                                     address: addressOutput.output.address.address,

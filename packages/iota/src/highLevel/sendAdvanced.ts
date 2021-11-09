@@ -107,14 +107,16 @@ export function buildTransactionPayload(
 
         if (localIndexationKeyHex.length / 2 < MIN_INDEXATION_KEY_LENGTH) {
             throw new Error(
-                `The indexation key length is ${localIndexationKeyHex.length / 2
+                `The indexation key length is ${
+                    localIndexationKeyHex.length / 2
                 }, which is below the minimum size of ${MIN_INDEXATION_KEY_LENGTH}`
             );
         }
 
         if (localIndexationKeyHex.length / 2 > MAX_INDEXATION_KEY_LENGTH) {
             throw new Error(
-                `The indexation key length is ${localIndexationKeyHex.length / 2
+                `The indexation key length is ${
+                    localIndexationKeyHex.length / 2
                 }, which exceeds the maximum size of ${MAX_INDEXATION_KEY_LENGTH}`
             );
         }
@@ -169,14 +171,14 @@ export function buildTransactionPayload(
         outputs: sortedOutputs.map(o => o.output),
         payload: localIndexationKeyHex
             ? {
-                type: INDEXATION_PAYLOAD_TYPE,
-                index: localIndexationKeyHex,
-                data: indexation?.data
-                    ? typeof indexation.data === "string"
-                        ? Converter.utf8ToHex(indexation.data)
-                        : Converter.bytesToHex(indexation.data)
-                    : undefined
-            }
+                  type: INDEXATION_PAYLOAD_TYPE,
+                  index: localIndexationKeyHex,
+                  data: indexation?.data
+                      ? typeof indexation.data === "string"
+                          ? Converter.utf8ToHex(indexation.data)
+                          : Converter.bytesToHex(indexation.data)
+                      : undefined
+              }
             : undefined
     };
 

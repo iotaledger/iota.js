@@ -1,4 +1,4 @@
-import type { IAliasAddress } from "../addresses/IAliasAddress";
+import type { AddressTypes } from "../../models/addresses/addressTypes";
 import type { IMetadataFeatureBlock } from "../featureBlocks/IMetadataFeatureBlock";
 import type { INativeToken } from "../INativeToken";
 import type { ITypeBase } from "../ITypeBase";
@@ -14,7 +14,7 @@ export interface IFoundryOutput extends ITypeBase<5> {
     /**
      * The address associated with the output.
      */
-    address: IAliasAddress;
+    address: AddressTypes;
     /**
      * The amount of IOTA tokens held by the output.
      */

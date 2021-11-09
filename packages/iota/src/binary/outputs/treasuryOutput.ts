@@ -8,7 +8,9 @@ import { SMALL_TYPE_LENGTH, UINT64_SIZE } from "../commonDataTypes";
 /**
  * The minimum length of a treasury output binary representation.
  */
-export const MIN_TREASURY_OUTPUT_LENGTH: number = SMALL_TYPE_LENGTH + UINT64_SIZE;
+export const MIN_TREASURY_OUTPUT_LENGTH: number =
+    SMALL_TYPE_LENGTH + // Type
+    UINT64_SIZE; // Amount
 
 /**
  * Deserialize the treasury output from binary.

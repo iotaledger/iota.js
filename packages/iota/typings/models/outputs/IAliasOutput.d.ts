@@ -1,7 +1,5 @@
-import type { IAliasAddress } from "../addresses/IAliasAddress";
-import type { IEd25519Address } from "../addresses/IEd25519Address";
-import type { IIssuerFeatureBlock } from "../featureBlocks/IIssuerFeatureBlock";
-import type { IMetadataFeatureBlock } from "../featureBlocks/IMetadataFeatureBlock";
+import type { AddressTypes } from "../../models/addresses/addressTypes";
+import type { FeatureBlockTypes } from "../../models/featureBlocks/featureBlockTypes";
 import type { INativeToken } from "../INativeToken";
 import type { ITypeBase } from "../ITypeBase";
 /**
@@ -27,11 +25,11 @@ export interface IAliasOutput extends ITypeBase<4> {
     /**
      * The address that controls the output.
      */
-    stateController: IEd25519Address | IAliasAddress;
+    stateController: AddressTypes;
     /**
      * The address that governs the output.
      */
-    governanceController: IEd25519Address | IAliasAddress;
+    governanceController: AddressTypes;
     /**
      * A counter that must increase by 1 every time the alias is state transitioned.
      */
@@ -47,5 +45,5 @@ export interface IAliasOutput extends ITypeBase<4> {
     /**
      * Blocks contained by the output.
      */
-    blocks: (IIssuerFeatureBlock | IMetadataFeatureBlock)[];
+    blocks: FeatureBlockTypes[];
 }

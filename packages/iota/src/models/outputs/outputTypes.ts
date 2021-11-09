@@ -11,10 +11,11 @@ import type { ITreasuryOutput } from "./ITreasuryOutput";
 /**
  * All of the output types.
  */
-export type OutputTypes = ISimpleOutput |
-    ISigLockedDustAllowanceOutput |
-    ITreasuryOutput |
-    IExtendedOutput |
-    IAliasOutput |
-    IFoundryOutput |
-    INftOutput;
+export type OutputTypes =
+    | ISimpleOutput
+    | ISigLockedDustAllowanceOutput
+    | ITreasuryOutput
+    | IExtendedOutput
+    | IAliasOutput
+    | IFoundryOutput
+    | INftOutput;

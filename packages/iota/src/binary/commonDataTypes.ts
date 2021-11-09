@@ -23,6 +23,11 @@ export const UINT32_SIZE: number = 4;
 export const UINT64_SIZE: number = 8;
 
 /**
+ * Byte length for a uint256 field.
+ */
+export const UINT256_SIZE: number = 32;
+
+/**
  * Byte length for a message id.
  */
 export const MESSAGE_ID_LENGTH: number = Blake2b.SIZE_256;

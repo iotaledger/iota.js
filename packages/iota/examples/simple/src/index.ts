@@ -105,9 +105,7 @@ async function run() {
     console.log("\tBalance:", address.balance);
     console.log();
 
-    const addressOutputs = await client.addressEd25519Outputs(
-        (output.output as ISimpleOutput).address.address
-    );
+    const addressOutputs = await client.addressEd25519Outputs((output.output as ISimpleOutput).address.address);
     console.log("Address Outputs");
     console.log("\tAddress:", addressOutputs.address);
     console.log("\tMax Results:", addressOutputs.maxResults);

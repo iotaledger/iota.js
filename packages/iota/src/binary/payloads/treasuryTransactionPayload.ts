@@ -2,15 +2,20 @@
 // SPDX-License-Identifier: Apache-2.0
 /* eslint-disable no-mixed-operators */
 import type { ReadStream, WriteStream } from "@iota/util.js";
-import { ITreasuryTransactionPayload, TREASURY_TRANSACTION_PAYLOAD_TYPE } from "../../models/payloads/ITreasuryTransactionPayload";
 import {
-    TYPE_LENGTH
-} from "../commonDataTypes";
+    ITreasuryTransactionPayload,
+    TREASURY_TRANSACTION_PAYLOAD_TYPE
+} from "../../models/payloads/ITreasuryTransactionPayload";
+import { TYPE_LENGTH } from "../commonDataTypes";
 import { deserializeTreasuryInput, MIN_TREASURY_INPUT_LENGTH, serializeTreasuryInput } from "../inputs/treasuryInput";
-import { deserializeTreasuryOutput, MIN_TREASURY_OUTPUT_LENGTH, serializeTreasuryOutput } from "../outputs/treasuryOutput";
+import {
+    deserializeTreasuryOutput,
+    MIN_TREASURY_OUTPUT_LENGTH,
+    serializeTreasuryOutput
+} from "../outputs/treasuryOutput";
 
 /**
- * The minimum length of a treasure transaction payload binary representation.
+ * The minimum length of a treasury transaction payload binary representation.
  */
 export const MIN_TREASURY_TRANSACTION_PAYLOAD_LENGTH: number =
     TYPE_LENGTH + MIN_TREASURY_INPUT_LENGTH + MIN_TREASURY_OUTPUT_LENGTH;
@@ -23,7 +28,7 @@ export const MIN_TREASURY_TRANSACTION_PAYLOAD_LENGTH: number =
 export function deserializeTreasuryTransactionPayload(readStream: ReadStream): ITreasuryTransactionPayload {
     if (!readStream.hasRemaining(MIN_TREASURY_TRANSACTION_PAYLOAD_LENGTH)) {
         throw new Error(
-            `Treasure Transaction Payload data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_TREASURY_TRANSACTION_PAYLOAD_LENGTH}`
+            `Treasury Transaction Payload data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_TREASURY_TRANSACTION_PAYLOAD_LENGTH}`
         );
     }
 

@@ -36,7 +36,7 @@ ___
 
 ### address
 
-• **address**: [`IAliasAddress`](IAliasAddress.md)
+• **address**: [`AddressTypes`](../api.md#addresstypes)
 
 The address associated with the output.
 
@@ -60,7 +60,7 @@ ___
 
 ### nftId
 
-• **nftId**: `number`
+• **nftId**: `string`
 
 Unique identifier of the NFT, which is the BLAKE2b-160 hash of the Output ID that created it.
 
@@ -76,6 +76,6 @@ ___
 
 ### blocks
 
-• **blocks**: [`IMetadataFeatureBlock`](IMetadataFeatureBlock.md)[]
+• **blocks**: [`FeatureBlockTypes`](../api.md#featureblocktypes)[]
 
 Blocks contained by the output.

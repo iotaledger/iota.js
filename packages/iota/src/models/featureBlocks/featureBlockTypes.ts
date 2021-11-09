@@ -13,12 +13,13 @@ import type { ITimelockUnixFeatureBlock } from "./ITimelockUnixFeatureBlock";
 /**
  * All of the feature block types.
  */
-export type FeatureBlockTypes = ISenderFeatureBlock |
-    IIssuerFeatureBlock |
-    IReturnFeatureBlock |
-    ITimelockMilestoneIndexFeatureBlock |
-    ITimelockUnixFeatureBlock |
-    IExpirationMilestoneIndexFeatureBlock |
-    IExpirationUnixFeatureBlock |
-    IMetadataFeatureBlock |
-    IIndexationFeatureBlock;
+export type FeatureBlockTypes =
+    | ISenderFeatureBlock
+    | IIssuerFeatureBlock
+    | IReturnFeatureBlock
+    | ITimelockMilestoneIndexFeatureBlock
+    | ITimelockUnixFeatureBlock
+    | IExpirationMilestoneIndexFeatureBlock
+    | IExpirationUnixFeatureBlock
+    | IMetadataFeatureBlock
+    | IIndexationFeatureBlock;

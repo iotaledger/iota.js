@@ -15,6 +15,10 @@ export declare const UINT32_SIZE: number;
  */
 export declare const UINT64_SIZE: number;
 /**
+ * Byte length for a uint256 field.
+ */
+export declare const UINT256_SIZE: number;
+/**
  * Byte length for a message id.
  */
 export declare const MESSAGE_ID_LENGTH: number;

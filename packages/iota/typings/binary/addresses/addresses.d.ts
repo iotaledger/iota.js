@@ -1,5 +1,6 @@
 import type { ReadStream, WriteStream } from "@iota/util.js";
 import type { AddressTypes } from "../../models/addresses/addressTypes";
+import type { ITypeBase } from "../../models/ITypeBase";
 /**
  * The minimum length of an address binary representation.
  */
@@ -15,4 +16,4 @@ export declare function deserializeAddress(readStream: ReadStream): AddressTypes
  * @param writeStream The stream to write the data to.
  * @param object The object to serialize.
  */
-export declare function serializeAddress(writeStream: WriteStream, object: AddressTypes): void;
+export declare function serializeAddress(writeStream: WriteStream, object: ITypeBase<number>): void;
