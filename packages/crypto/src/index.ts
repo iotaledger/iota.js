@@ -19,4 +19,3 @@ export * from "./signatures/x25519";
 export * from "./signatures/zip215";
 export * from "./utils/arrayHelper";
 export * from "./utils/bitHelper";
-

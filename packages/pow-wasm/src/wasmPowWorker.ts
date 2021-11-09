@@ -47,8 +47,8 @@ export async function doPow(powDigest: Uint8Array, targetZeros: number, startInd
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function buildImports(): any {
     const env = {
-        abort: (msg: string, file: string, line: number, colm: number) => { },
-        trace: (msg: string, n: number, ...args: unknown[]) => { },
+        abort: (msg: string, file: string, line: number, colm: number) => {},
+        trace: (msg: string, n: number, ...args: unknown[]) => {},
         seed: Date.now
     };
 
