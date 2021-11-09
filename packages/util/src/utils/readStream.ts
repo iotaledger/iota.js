@@ -192,6 +192,25 @@ export class ReadStream {
     }
 
     /**
+     * Read a UInt256 from the stream.
+     * @param name The name of the data we are trying to read.
+     * @param moveIndex Move the index pointer on.
+     * @returns The value.
+     */
+    public readUInt256(name: string, moveIndex: boolean = true): BigInteger {
+        if (!this.hasRemaining(32)) {
+            throw new Error(`${name} length 32 exceeds the remaining data ${this.unused()}`);
+        }
+
+        const val = BigIntHelper.read32(this._storage, this._readIndex);
+
+        if (moveIndex) {
+            this._readIndex += 32;
+        }
+        return val;
+    }
+
+    /**
      * Read a boolean from the stream.
      * @param name The name of the data we are trying to read.
      * @param moveIndex Move the index pointer on.

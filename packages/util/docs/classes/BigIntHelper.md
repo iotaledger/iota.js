@@ -9,7 +9,9 @@ Helper methods for bigints.
 - [read3](BigIntHelper.md#read3)
 - [read4](BigIntHelper.md#read4)
 - [read8](BigIntHelper.md#read8)
+- [read32](BigIntHelper.md#read32)
 - [write8](BigIntHelper.md#write8)
+- [write32](BigIntHelper.md#write32)
 - [random](BigIntHelper.md#random)
 
 ### Constructors
@@ -81,6 +83,27 @@ The bigint.
 
 ___
 
+### read32
+
+▸ `Static` **read32**(`data`, `byteOffset`): `BigInteger`
+
+Load 32 bytes (256 bits) from array as bigint.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `data` | `Uint8Array` | The data to read from. |
+| `byteOffset` | `number` | The start index to read from. |
+
+#### Returns
+
+`BigInteger`
+
+The bigint.
+
+___
+
 ### write8
 
 ▸ `Static` **write8**(`value`, `data`, `byteOffset`): `void`
@@ -101,17 +124,43 @@ Convert a big int to bytes.
 
 ___
 
+### write32
+
+▸ `Static` **write32**(`value`, `data`, `byteOffset`): `void`
+
+Convert a big int 32 bytes (256 bits) to bytes.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `value` | `BigInteger` | The bigint. |
+| `data` | `Uint8Array` | The buffer to write into. |
+| `byteOffset` | `number` | The start index to write from. |
+
+#### Returns
+
+`void`
+
+___
+
 ### random
 
-▸ `Static` **random**(): `BigInteger`
+▸ `Static` **random**(`length?`): `BigInteger`
 
 Generate a random bigint.
+
+#### Parameters
+
+| Name | Type | Default value | Description |
+| :------ | :------ | :------ | :------ |
+| `length` | `number` | `8` | The length of the bigint to generate. |
 
 #### Returns
 
 `BigInteger`
 
-The bitint.
+The bigint.
 
 ## Constructors
 

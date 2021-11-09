@@ -4,6 +4,7 @@
 /* eslint-disable newline-per-chained-call */
 /* eslint-disable no-mixed-operators */
 import bigInt from "big-integer";
+import { Converter } from "./converter.mjs";
 import { RandomHelper } from "./randomHelper.mjs";
 /**
  * Helper methods for bigints.
@@ -40,17 +41,22 @@ export class BigIntHelper {
      * @returns The bigint.
      */
     static read8(data, byteOffset) {
-        const v0 = (data[byteOffset + 0] +
-            (data[byteOffset + 1] << 8) +
-            (data[byteOffset + 2] << 16) +
-            (data[byteOffset + 3] << 24)) >>>
-            0;
-        const v1 = (data[byteOffset + 4] +
-            (data[byteOffset + 5] << 8) +
-            (data[byteOffset + 6] << 16) +
-            (data[byteOffset + 7] << 24)) >>>
-            0;
-        return bigInt(v1).shiftLeft(BigIntHelper.BIG_32).or(v0);
+        const bytes = data.slice(byteOffset, byteOffset + 8);
+        // convert to little endian hex by reversing the bytes
+        const hex = Converter.bytesToHex(bytes, undefined, undefined, true);
+        return bigInt(hex, 16);
+    }
+    /**
+     * Load 32 bytes (256 bits) from array as bigint.
+     * @param data The data to read from.
+     * @param byteOffset The start index to read from.
+     * @returns The bigint.
+     */
+    static read32(data, byteOffset) {
+        const bytes = data.slice(byteOffset, byteOffset + 32);
+        // convert to little endian hex by reversing the bytes
+        const hex = Converter.bytesToHex(bytes, undefined, undefined, true);
+        return bigInt(hex, 16);
     }
     /**
      * Convert a big int to bytes.
@@ -59,26 +65,33 @@ export class BigIntHelper {
      * @param byteOffset The start index to write from.
      */
     static write8(value, data, byteOffset) {
-        const v0 = Number(value.and(BigIntHelper.BIG_32_MASK));
-        const v1 = Number(value.shiftRight(BigIntHelper.BIG_32).and(BigIntHelper.BIG_32_MASK));
-        data[byteOffset] = v0 & 0xff;
-        data[byteOffset + 1] = (v0 >> 8) & 0xff;
-        data[byteOffset + 2] = (v0 >> 16) & 0xff;
-        data[byteOffset + 3] = (v0 >> 24) & 0xff;
-        data[byteOffset + 4] = v1 & 0xff;
-        data[byteOffset + 5] = (v1 >> 8) & 0xff;
-        data[byteOffset + 6] = (v1 >> 16) & 0xff;
-        data[byteOffset + 7] = (v1 >> 24) & 0xff;
+        let hex = value.toString(16);
+        // Hex is twice the length of the bytes for padding
+        hex = hex.padStart(16, "0");
+        // Reverse so little endian
+        const littleEndian = Converter.hexToBytes(hex, true);
+        data.set(littleEndian, byteOffset);
+    }
+    /**
+     * Convert a big int 32 bytes (256 bits) to bytes.
+     * @param value The bigint.
+     * @param data The buffer to write into.
+     * @param byteOffset The start index to write from.
+     */
+    static write32(value, data, byteOffset) {
+        let hex = value.toString(16);
+        // Hex is twice the length of the bytes for padding
+        hex = hex.padStart(64, "0");
+        // Reverse so little endian
+        const littleEndian = Converter.hexToBytes(hex, true);
+        data.set(littleEndian, byteOffset);
     }
     /**
      * Generate a random bigint.
-     * @returns The bitint.
+     * @param length The length of the bigint to generate.
+     * @returns The bigint.
      */
-    static random() {
-        return BigIntHelper.read8(RandomHelper.generate(8), 0);
+    static random(length = 8) {
+        return bigInt(Converter.bytesToHex(RandomHelper.generate(length)), 16);
     }
 }
-// @internal
-BigIntHelper.BIG_32 = bigInt(32);
-// @internal
-BigIntHelper.BIG_32_MASK = bigInt(0xffffffff);

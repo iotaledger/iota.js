@@ -232,121 +232,6 @@
     };
 
     // Copyright 2020 IOTA Stiftung
-    // SPDX-License-Identifier: Apache-2.0
-    /**
-     * Class to help with random generation.
-     */
-    class PlatformHelper {
-    }
-    /**
-     * Is this the browser.
-     * @returns True if running in browser.
-     */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    PlatformHelper.isNodeJs = true;
-
-    // Copyright 2020 IOTA Stiftung
-    /**
-     * Class to help with random generation.
-     */
-    class RandomHelper {
-        /**
-         * Generate a new random array.
-         * @param length The length of buffer to create.
-         * @returns The random array.
-         */
-        static generate(length) {
-            {
-                // eslint-disable-next-line @typescript-eslint/no-var-requires,@typescript-eslint/no-require-imports
-                const crypto = require("crypto");
-                return crypto.randomBytes(length);
-                // Keep this as else return so that packager keeps only one side
-                // of the if based on platform
-                // eslint-disable-next-line no-else-return
-            }
-        }
-    }
-
-    // Copyright 2020 IOTA Stiftung
-    /**
-     * Helper methods for bigints.
-     */
-    class BigIntHelper {
-        /**
-         * Load 3 bytes from array as bigint.
-         * @param data The input array.
-         * @param byteOffset The start index to read from.
-         * @returns The bigint.
-         */
-        static read3(data, byteOffset) {
-            const v0 = (data[byteOffset + 0] + (data[byteOffset + 1] << 8) + (data[byteOffset + 2] << 16)) >>> 0;
-            return bigInt__default["default"](v0);
-        }
-        /**
-         * Load 4 bytes from array as bigint.
-         * @param data The input array.
-         * @param byteOffset The start index to read from.
-         * @returns The bigint.
-         */
-        static read4(data, byteOffset) {
-            const v0 = (data[byteOffset + 0] +
-                (data[byteOffset + 1] << 8) +
-                (data[byteOffset + 2] << 16) +
-                (data[byteOffset + 3] << 24)) >>>
-                0;
-            return bigInt__default["default"](v0);
-        }
-        /**
-         * Load 8 bytes from array as bigint.
-         * @param data The data to read from.
-         * @param byteOffset The start index to read from.
-         * @returns The bigint.
-         */
-        static read8(data, byteOffset) {
-            const v0 = (data[byteOffset + 0] +
-                (data[byteOffset + 1] << 8) +
-                (data[byteOffset + 2] << 16) +
-                (data[byteOffset + 3] << 24)) >>>
-                0;
-            const v1 = (data[byteOffset + 4] +
-                (data[byteOffset + 5] << 8) +
-                (data[byteOffset + 6] << 16) +
-                (data[byteOffset + 7] << 24)) >>>
-                0;
-            return bigInt__default["default"](v1).shiftLeft(BigIntHelper.BIG_32).or(v0);
-        }
-        /**
-         * Convert a big int to bytes.
-         * @param value The bigint.
-         * @param data The buffer to write into.
-         * @param byteOffset The start index to write from.
-         */
-        static write8(value, data, byteOffset) {
-            const v0 = Number(value.and(BigIntHelper.BIG_32_MASK));
-            const v1 = Number(value.shiftRight(BigIntHelper.BIG_32).and(BigIntHelper.BIG_32_MASK));
-            data[byteOffset] = v0 & 0xff;
-            data[byteOffset + 1] = (v0 >> 8) & 0xff;
-            data[byteOffset + 2] = (v0 >> 16) & 0xff;
-            data[byteOffset + 3] = (v0 >> 24) & 0xff;
-            data[byteOffset + 4] = v1 & 0xff;
-            data[byteOffset + 5] = (v1 >> 8) & 0xff;
-            data[byteOffset + 6] = (v1 >> 16) & 0xff;
-            data[byteOffset + 7] = (v1 >> 24) & 0xff;
-        }
-        /**
-         * Generate a random bigint.
-         * @returns The bitint.
-         */
-        static random() {
-            return BigIntHelper.read8(RandomHelper.generate(8), 0);
-        }
-    }
-    // @internal
-    BigIntHelper.BIG_32 = bigInt__default["default"](32);
-    // @internal
-    BigIntHelper.BIG_32_MASK = bigInt__default["default"](0xffffffff);
-
-    // Copyright 2020 IOTA Stiftung
     /**
      * Convert arrays to and from different formats.
      */
@@ -560,6 +445,133 @@
         }
     }
 
+    // Copyright 2020 IOTA Stiftung
+    // SPDX-License-Identifier: Apache-2.0
+    /**
+     * Class to help with random generation.
+     */
+    class PlatformHelper {
+    }
+    /**
+     * Is this the browser.
+     * @returns True if running in browser.
+     */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    PlatformHelper.isNodeJs = true;
+
+    // Copyright 2020 IOTA Stiftung
+    /**
+     * Class to help with random generation.
+     */
+    class RandomHelper {
+        /**
+         * Generate a new random array.
+         * @param length The length of buffer to create.
+         * @returns The random array.
+         */
+        static generate(length) {
+            {
+                // eslint-disable-next-line @typescript-eslint/no-var-requires,@typescript-eslint/no-require-imports
+                const crypto = require("crypto");
+                return crypto.randomBytes(length);
+                // Keep this as else return so that packager keeps only one side
+                // of the if based on platform
+                // eslint-disable-next-line no-else-return
+            }
+        }
+    }
+
+    // Copyright 2020 IOTA Stiftung
+    /**
+     * Helper methods for bigints.
+     */
+    class BigIntHelper {
+        /**
+         * Load 3 bytes from array as bigint.
+         * @param data The input array.
+         * @param byteOffset The start index to read from.
+         * @returns The bigint.
+         */
+        static read3(data, byteOffset) {
+            const v0 = (data[byteOffset + 0] + (data[byteOffset + 1] << 8) + (data[byteOffset + 2] << 16)) >>> 0;
+            return bigInt__default["default"](v0);
+        }
+        /**
+         * Load 4 bytes from array as bigint.
+         * @param data The input array.
+         * @param byteOffset The start index to read from.
+         * @returns The bigint.
+         */
+        static read4(data, byteOffset) {
+            const v0 = (data[byteOffset + 0] +
+                (data[byteOffset + 1] << 8) +
+                (data[byteOffset + 2] << 16) +
+                (data[byteOffset + 3] << 24)) >>>
+                0;
+            return bigInt__default["default"](v0);
+        }
+        /**
+         * Load 8 bytes from array as bigint.
+         * @param data The data to read from.
+         * @param byteOffset The start index to read from.
+         * @returns The bigint.
+         */
+        static read8(data, byteOffset) {
+            const bytes = data.slice(byteOffset, byteOffset + 8);
+            // convert to little endian hex by reversing the bytes
+            const hex = Converter.bytesToHex(bytes, undefined, undefined, true);
+            return bigInt__default["default"](hex, 16);
+        }
+        /**
+         * Load 32 bytes (256 bits) from array as bigint.
+         * @param data The data to read from.
+         * @param byteOffset The start index to read from.
+         * @returns The bigint.
+         */
+        static read32(data, byteOffset) {
+            const bytes = data.slice(byteOffset, byteOffset + 32);
+            // convert to little endian hex by reversing the bytes
+            const hex = Converter.bytesToHex(bytes, undefined, undefined, true);
+            return bigInt__default["default"](hex, 16);
+        }
+        /**
+         * Convert a big int to bytes.
+         * @param value The bigint.
+         * @param data The buffer to write into.
+         * @param byteOffset The start index to write from.
+         */
+        static write8(value, data, byteOffset) {
+            let hex = value.toString(16);
+            // Hex is twice the length of the bytes for padding
+            hex = hex.padStart(16, "0");
+            // Reverse so little endian
+            const littleEndian = Converter.hexToBytes(hex, true);
+            data.set(littleEndian, byteOffset);
+        }
+        /**
+         * Convert a big int 32 bytes (256 bits) to bytes.
+         * @param value The bigint.
+         * @param data The buffer to write into.
+         * @param byteOffset The start index to write from.
+         */
+        static write32(value, data, byteOffset) {
+            let hex = value.toString(16);
+            // Hex is twice the length of the bytes for padding
+            hex = hex.padStart(64, "0");
+            // Reverse so little endian
+            const littleEndian = Converter.hexToBytes(hex, true);
+            data.set(littleEndian, byteOffset);
+        }
+        /**
+         * Generate a random bigint.
+         * @param length The length of the bigint to generate.
+         * @returns The bigint.
+         */
+        static random(length = 8) {
+            return bigInt__default["default"](Converter.bytesToHex(RandomHelper.generate(length)), 16);
+        }
+    }
+
     /**
      * Keep track of the read index within a stream.
      */
@@ -713,6 +725,22 @@
             return val;
         }
         /**
+         * Read a UInt256 from the stream.
+         * @param name The name of the data we are trying to read.
+         * @param moveIndex Move the index pointer on.
+         * @returns The value.
+         */
+        readUInt256(name, moveIndex = true) {
+            if (!this.hasRemaining(32)) {
+                throw new Error(`${name} length 32 exceeds the remaining data ${this.unused()}`);
+            }
+            const val = BigIntHelper.read32(this._storage, this._readIndex);
+            if (moveIndex) {
+                this._readIndex += 32;
+            }
+            return val;
+        }
+        /**
          * Read a boolean from the stream.
          * @param name The name of the data we are trying to read.
          * @param moveIndex Move the index pointer on.
@@ -855,6 +883,16 @@
             this.expand(8);
             BigIntHelper.write8(val, this._storage, this._writeIndex);
             this._writeIndex += 8;
+        }
+        /**
+         * Write a UInt256 to the stream.
+         * @param name The name of the data we are trying to write.
+         * @param val The data to write.
+         */
+        writeUInt256(name, val) {
+            this.expand(32);
+            BigIntHelper.write32(val, this._storage, this._writeIndex);
+            this._writeIndex += 32;
         }
         /**
          * Write a boolean to the stream.

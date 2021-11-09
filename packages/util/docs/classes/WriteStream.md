@@ -22,6 +22,7 @@ Keep track of the write index within a stream.
 - [writeUInt16](WriteStream.md#writeuint16)
 - [writeUInt32](WriteStream.md#writeuint32)
 - [writeUInt64](WriteStream.md#writeuint64)
+- [writeUInt256](WriteStream.md#writeuint256)
 - [writeBoolean](WriteStream.md#writeboolean)
 
 ## Constructors
@@ -224,6 +225,25 @@ ___
 ▸ **writeUInt64**(`name`, `val`): `void`
 
 Write a UInt64 to the stream.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `name` | `string` | The name of the data we are trying to write. |
+| `val` | `BigInteger` | The data to write. |
+
+#### Returns
+
+`void`
+
+___
+
+### writeUInt256
+
+▸ **writeUInt256**(`name`, `val`): `void`
+
+Write a UInt256 to the stream.
 
 #### Parameters
 

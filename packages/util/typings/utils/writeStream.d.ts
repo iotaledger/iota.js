@@ -76,6 +76,12 @@ export declare class WriteStream {
      */
     writeUInt64(name: string, val: BigInteger): void;
     /**
+     * Write a UInt256 to the stream.
+     * @param name The name of the data we are trying to write.
+     * @param val The data to write.
+     */
+    writeUInt256(name: string, val: BigInteger): void;
+    /**
      * Write a boolean to the stream.
      * @param name The name of the data we are trying to write.
      * @param val The data to write.

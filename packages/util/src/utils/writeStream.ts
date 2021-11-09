@@ -176,6 +176,19 @@ export class WriteStream {
     }
 
     /**
+     * Write a UInt256 to the stream.
+     * @param name The name of the data we are trying to write.
+     * @param val The data to write.
+     */
+    public writeUInt256(name: string, val: BigInteger): void {
+        this.expand(32);
+
+        BigIntHelper.write32(val, this._storage, this._writeIndex);
+
+        this._writeIndex += 32;
+    }
+
+    /**
      * Write a boolean to the stream.
      * @param name The name of the data we are trying to write.
      * @param val The data to write.

@@ -21,6 +21,7 @@ Keep track of the read index within a stream.
 - [readUInt16](ReadStream.md#readuint16)
 - [readUInt32](ReadStream.md#readuint32)
 - [readUInt64](ReadStream.md#readuint64)
+- [readUInt256](ReadStream.md#readuint256)
 - [readBoolean](ReadStream.md#readboolean)
 
 ## Constructors
@@ -232,6 +233,27 @@ ___
 ▸ **readUInt64**(`name`, `moveIndex?`): `BigInteger`
 
 Read a UInt64 from the stream.
+
+#### Parameters
+
+| Name | Type | Default value | Description |
+| :------ | :------ | :------ | :------ |
+| `name` | `string` | `undefined` | The name of the data we are trying to read. |
+| `moveIndex` | `boolean` | `true` | Move the index pointer on. |
+
+#### Returns
+
+`BigInteger`
+
+The value.
+
+___
+
+### readUInt256
+
+▸ **readUInt256**(`name`, `moveIndex?`): `BigInteger`
+
+Read a UInt256 from the stream.
 
 #### Parameters
 
