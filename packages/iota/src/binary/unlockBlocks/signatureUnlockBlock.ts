@@ -22,7 +22,7 @@ export function deserializeSignatureUnlockBlock(readStream: ReadStream): ISignat
         );
     }
 
-    const type = readStream.readByte("signatureUnlockBlock.type");
+    const type = readStream.readUInt8("signatureUnlockBlock.type");
     if (type !== SIGNATURE_UNLOCK_BLOCK_TYPE) {
         throw new Error(`Type mismatch in signatureUnlockBlock ${type}`);
     }
@@ -41,6 +41,6 @@ export function deserializeSignatureUnlockBlock(readStream: ReadStream): ISignat
  * @param object The object to serialize.
  */
 export function serializeSignatureUnlockBlock(writeStream: WriteStream, object: ISignatureUnlockBlock): void {
-    writeStream.writeByte("signatureUnlockBlock.type", object.type);
+    writeStream.writeUInt8("signatureUnlockBlock.type", object.type);
     serializeSignature(writeStream, object.signature);
 }

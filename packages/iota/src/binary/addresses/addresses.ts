@@ -34,7 +34,7 @@ export function deserializeAddress(readStream: ReadStream): AddressTypes {
         );
     }
 
-    const type = readStream.readByte("address.type", false);
+    const type = readStream.readUInt8("address.type", false);
     let address;
 
     if (type === ED25519_ADDRESS_TYPE) {

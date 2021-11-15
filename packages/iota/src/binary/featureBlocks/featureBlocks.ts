@@ -135,7 +135,7 @@ export function deserializeFeatureBlock(readStream: ReadStream): FeatureBlockTyp
         );
     }
 
-    const type = readStream.readByte("featureBlock.type", false);
+    const type = readStream.readUInt8("featureBlock.type", false);
     let input;
 
     if (type === SENDER_FEATURE_BLOCK_TYPE) {

@@ -29,7 +29,7 @@ export function deserializeTransactionEssence(readStream: ReadStream): ITransact
         );
     }
 
-    const type = readStream.readByte("transactionEssence.type");
+    const type = readStream.readUInt8("transactionEssence.type");
     if (type !== TRANSACTION_ESSENCE_TYPE) {
         throw new Error(`Type mismatch in transactionEssence ${type}`);
     }
@@ -68,7 +68,7 @@ export function deserializeTransactionEssence(readStream: ReadStream): ITransact
  * @param object The object to serialize.
  */
 export function serializeTransactionEssence(writeStream: WriteStream, object: ITransactionEssence): void {
-    writeStream.writeByte("transactionEssence.type", object.type);
+    writeStream.writeUInt8("transactionEssence.type", object.type);
 
     for (const input of object.inputs) {
         if (input.type !== UTXO_INPUT_TYPE) {

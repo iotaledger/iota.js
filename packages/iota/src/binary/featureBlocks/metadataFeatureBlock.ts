@@ -21,7 +21,7 @@ export function deserializeMetadataFeatureBlock(readStream: ReadStream): IMetada
         );
     }
 
-    const type = readStream.readByte("metadataFeatureBlock.type");
+    const type = readStream.readUInt8("metadataFeatureBlock.type");
     if (type !== METADATA_FEATURE_BLOCK_TYPE) {
         throw new Error(`Type mismatch in metadataFeatureBlock ${type}`);
     }
@@ -41,7 +41,7 @@ export function deserializeMetadataFeatureBlock(readStream: ReadStream): IMetada
  * @param object The object to serialize.
  */
 export function serializeMetadataFeatureBlock(writeStream: WriteStream, object: IMetadataFeatureBlock): void {
-    writeStream.writeByte("metadataFeatureBlock.type", object.type);
+    writeStream.writeUInt8("metadataFeatureBlock.type", object.type);
     writeStream.writeUInt32("metadataFeatureBlock.dataLength", object.data.length / 2);
     writeStream.writeFixedHex("metadataFeatureBlock.data", object.data.length / 2, object.data);
 }

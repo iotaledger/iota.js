@@ -130,7 +130,7 @@ export class WriteStream {
      * @param name The name of the data we are trying to write.
      * @param val The data to write.
      */
-    public writeByte(name: string, val: number): void {
+    public writeUInt8(name: string, val: number): void {
         this.expand(1);
 
         this._storage[this._writeIndex++] = val & 0xff;

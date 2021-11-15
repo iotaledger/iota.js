@@ -32,7 +32,7 @@ export function deserializeTransactionPayload(readStream: ReadStream): ITransact
         throw new Error(`Type mismatch in payloadTransaction ${type}`);
     }
 
-    const essenceType = readStream.readByte("payloadTransaction.essenceType", false);
+    const essenceType = readStream.readUInt8("payloadTransaction.essenceType", false);
     let essence;
     let unlockBlocks;
 

@@ -23,7 +23,7 @@ export function deserializeEd25519Signature(readStream: ReadStream): IEd25519Sig
         );
     }
 
-    const type = readStream.readByte("ed25519Signature.type");
+    const type = readStream.readUInt8("ed25519Signature.type");
     if (type !== ED25519_SIGNATURE_TYPE) {
         throw new Error(`Type mismatch in ed25519Signature ${type}`);
     }
@@ -44,7 +44,7 @@ export function deserializeEd25519Signature(readStream: ReadStream): IEd25519Sig
  * @param object The object to serialize.
  */
 export function serializeEd25519Signature(writeStream: WriteStream, object: IEd25519Signature): void {
-    writeStream.writeByte("ed25519Signature.type", object.type);
+    writeStream.writeUInt8("ed25519Signature.type", object.type);
     writeStream.writeFixedHex("ed25519Signature.publicKey", Ed25519.PUBLIC_KEY_SIZE, object.publicKey);
     writeStream.writeFixedHex("ed25519Signature.signature", Ed25519.SIGNATURE_SIZE, object.signature);
 }

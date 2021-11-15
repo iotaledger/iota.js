@@ -26,7 +26,7 @@ export function deserializeSimpleOutput(readStream: ReadStream): ISimpleOutput {
         );
     }
 
-    const type = readStream.readByte("simpleOutput.type");
+    const type = readStream.readUInt8("simpleOutput.type");
     if (type !== SIMPLE_OUTPUT_TYPE) {
         throw new Error(`Type mismatch in simpleOutput ${type}`);
     }
@@ -47,7 +47,7 @@ export function deserializeSimpleOutput(readStream: ReadStream): ISimpleOutput {
  * @param object The object to serialize.
  */
 export function serializeSimpleOutput(writeStream: WriteStream, object: ISimpleOutput): void {
-    writeStream.writeByte("simpleOutput.type", object.type);
+    writeStream.writeUInt8("simpleOutput.type", object.type);
     serializeAddress(writeStream, object.address);
     writeStream.writeUInt64("simpleOutput.amount", bigInt(object.amount));
 }

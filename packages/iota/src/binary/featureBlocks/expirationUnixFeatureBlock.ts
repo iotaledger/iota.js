@@ -24,7 +24,7 @@ export function deserializeExpirationUnixFeatureBlock(readStream: ReadStream): I
         );
     }
 
-    const type = readStream.readByte("expirationUnixFeatureBlock.type");
+    const type = readStream.readUInt8("expirationUnixFeatureBlock.type");
     if (type !== EXPIRATION_UNIX_FEATURE_BLOCK_TYPE) {
         throw new Error(`Type mismatch in expirationUnixFeatureBlock ${type}`);
     }
@@ -46,6 +46,6 @@ export function serializeExpirationUnixFeatureBlock(
     writeStream: WriteStream,
     object: IExpirationUnixFeatureBlock
 ): void {
-    writeStream.writeByte("expirationUnixFeatureBlock.type", object.type);
+    writeStream.writeUInt8("expirationUnixFeatureBlock.type", object.type);
     writeStream.writeUInt32("expirationUnixFeatureBlock.unixTime", object.unixTime);
 }

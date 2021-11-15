@@ -24,12 +24,12 @@ export function deserializeIndexationFeatureBlock(readStream: ReadStream): IInde
         );
     }
 
-    const type = readStream.readByte("indexationFeatureBlock.type");
+    const type = readStream.readUInt8("indexationFeatureBlock.type");
     if (type !== INDEXATION_FEATURE_BLOCK_TYPE) {
         throw new Error(`Type mismatch in indexationFeatureBlock ${type}`);
     }
 
-    const tagLength = readStream.readByte("indexationFeatureBlock.tagLength");
+    const tagLength = readStream.readUInt8("indexationFeatureBlock.tagLength");
     const tag = readStream.readFixedHex("indexationFeatureBlock.tag", tagLength);
 
     return {
@@ -44,7 +44,7 @@ export function deserializeIndexationFeatureBlock(readStream: ReadStream): IInde
  * @param object The object to serialize.
  */
 export function serializeIndexationFeatureBlock(writeStream: WriteStream, object: IIndexationFeatureBlock): void {
-    writeStream.writeByte("indexationFeatureBlock.type", object.type);
-    writeStream.writeByte("indexationFeatureBlock.tagLength", object.tag.length / 2);
+    writeStream.writeUInt8("indexationFeatureBlock.type", object.type);
+    writeStream.writeUInt8("indexationFeatureBlock.tagLength", object.tag.length / 2);
     writeStream.writeFixedHex("indexationFeatureBlock.tag", object.tag.length / 2, object.tag);
 }

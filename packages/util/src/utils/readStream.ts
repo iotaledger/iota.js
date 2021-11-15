@@ -121,7 +121,7 @@ export class ReadStream {
      * @param moveIndex Move the index pointer on.
      * @returns The value.
      */
-    public readByte(name: string, moveIndex: boolean = true): number {
+    public readUInt8(name: string, moveIndex: boolean = true): number {
         if (!this.hasRemaining(1)) {
             throw new Error(`${name} length 1 exceeds the remaining data ${this.unused()}`);
         }

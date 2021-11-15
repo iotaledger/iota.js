@@ -21,7 +21,7 @@ export function deserializeTreasuryInput(readStream: ReadStream): ITreasuryInput
         );
     }
 
-    const type = readStream.readByte("treasuryInput.type");
+    const type = readStream.readUInt8("treasuryInput.type");
     if (type !== TREASURY_INPUT_TYPE) {
         throw new Error(`Type mismatch in treasuryInput ${type}`);
     }
@@ -40,6 +40,6 @@ export function deserializeTreasuryInput(readStream: ReadStream): ITreasuryInput
  * @param object The object to serialize.
  */
 export function serializeTreasuryInput(writeStream: WriteStream, object: ITreasuryInput): void {
-    writeStream.writeByte("treasuryInput.type", object.type);
+    writeStream.writeUInt8("treasuryInput.type", object.type);
     writeStream.writeFixedHex("treasuryInput.milestoneId", TRANSACTION_ID_LENGTH, object.milestoneId);
 }

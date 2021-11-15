@@ -21,7 +21,7 @@ export function deserializeUTXOInput(readStream: ReadStream): IUTXOInput {
         );
     }
 
-    const type = readStream.readByte("utxoInput.type");
+    const type = readStream.readUInt8("utxoInput.type");
     if (type !== UTXO_INPUT_TYPE) {
         throw new Error(`Type mismatch in utxoInput ${type}`);
     }
@@ -42,7 +42,7 @@ export function deserializeUTXOInput(readStream: ReadStream): IUTXOInput {
  * @param object The object to serialize.
  */
 export function serializeUTXOInput(writeStream: WriteStream, object: IUTXOInput): void {
-    writeStream.writeByte("utxoInput.type", object.type);
+    writeStream.writeUInt8("utxoInput.type", object.type);
     writeStream.writeFixedHex("utxoInput.transactionId", TRANSACTION_ID_LENGTH, object.transactionId);
     writeStream.writeUInt16("utxoInput.transactionOutputIndex", object.transactionOutputIndex);
 }

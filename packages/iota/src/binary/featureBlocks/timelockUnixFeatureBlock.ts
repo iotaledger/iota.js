@@ -24,7 +24,7 @@ export function deserializeTimelockUnixFeatureBlock(readStream: ReadStream): ITi
         );
     }
 
-    const type = readStream.readByte("timelockUnixFeatureBlock.type");
+    const type = readStream.readUInt8("timelockUnixFeatureBlock.type");
     if (type !== TIMELOCK_UNIX_FEATURE_BLOCK_TYPE) {
         throw new Error(`Type mismatch in timelockUnixFeatureBlock ${type}`);
     }
@@ -43,6 +43,6 @@ export function deserializeTimelockUnixFeatureBlock(readStream: ReadStream): ITi
  * @param object The object to serialize.
  */
 export function serializeTimelockUnixFeatureBlock(writeStream: WriteStream, object: ITimelockUnixFeatureBlock): void {
-    writeStream.writeByte("timelockUnixFeatureBlock.type", object.type);
+    writeStream.writeUInt8("timelockUnixFeatureBlock.type", object.type);
     writeStream.writeUInt32("timelockUnixFeatureBlock.unixTime", object.unixTime);
 }

@@ -26,7 +26,7 @@ export function deserializeSignature(readStream: ReadStream): SignatureTypes {
         );
     }
 
-    const type = readStream.readByte("signature.type", false);
+    const type = readStream.readUInt8("signature.type", false);
     let signature;
 
     if (type === ED25519_SIGNATURE_TYPE) {

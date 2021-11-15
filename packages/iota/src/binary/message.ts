@@ -50,7 +50,7 @@ export function deserializeMessage(readStream: ReadStream): IMessage {
 
     const networkId = readStream.readUInt64("message.networkId");
 
-    const numParents = readStream.readByte("message.numParents");
+    const numParents = readStream.readUInt8("message.numParents");
     const parents: string[] = [];
 
     for (let i = 0; i < numParents; i++) {
@@ -88,7 +88,7 @@ export function serializeMessage(writeStream: WriteStream, object: IMessage): vo
     writeStream.writeUInt64("message.networkId", bigInt(object.networkId ?? "0"));
 
     const numParents = object.parentMessageIds?.length ?? 0;
-    writeStream.writeByte("message.numParents", numParents);
+    writeStream.writeUInt8("message.numParents", numParents);
 
     if (object.parentMessageIds) {
         if (numParents > MAX_NUMBER_PARENTS) {

@@ -22,7 +22,7 @@ export function deserializeIssuerFeatureBlock(readStream: ReadStream): IIssuerFe
         );
     }
 
-    const type = readStream.readByte("issuerFeatureBlock.type");
+    const type = readStream.readUInt8("issuerFeatureBlock.type");
     if (type !== ISSUER_FEATURE_BLOCK_TYPE) {
         throw new Error(`Type mismatch in issuerFeatureBlock ${type}`);
     }
@@ -41,6 +41,6 @@ export function deserializeIssuerFeatureBlock(readStream: ReadStream): IIssuerFe
  * @param object The object to serialize.
  */
 export function serializeIssuerFeatureBlock(writeStream: WriteStream, object: IIssuerFeatureBlock): void {
-    writeStream.writeByte("issuerFeatureBlock.type", object.type);
+    writeStream.writeUInt8("issuerFeatureBlock.type", object.type);
     serializeAddress(writeStream, object.address);
 }

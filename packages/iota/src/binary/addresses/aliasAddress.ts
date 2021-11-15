@@ -26,7 +26,7 @@ export function deserializeAliasAddress(readStream: ReadStream): IAliasAddress {
         );
     }
 
-    const type = readStream.readByte("aliasAddress.type");
+    const type = readStream.readUInt8("aliasAddress.type");
     if (type !== ALIAS_ADDRESS_TYPE) {
         throw new Error(`Type mismatch in aliasAddress ${type}`);
     }
@@ -45,6 +45,6 @@ export function deserializeAliasAddress(readStream: ReadStream): IAliasAddress {
  * @param object The object to serialize.
  */
 export function serializeAliasAddress(writeStream: WriteStream, object: IAliasAddress): void {
-    writeStream.writeByte("aliasAddress.type", object.type);
+    writeStream.writeUInt8("aliasAddress.type", object.type);
     writeStream.writeFixedHex("aliasAddress.address", ALIAS_ADDRESS_LENGTH, object.address);
 }

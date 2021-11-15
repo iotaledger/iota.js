@@ -44,7 +44,7 @@ export function deserializeAliasOutput(readStream: ReadStream): IAliasOutput {
         );
     }
 
-    const type = readStream.readByte("aliasOutput.type");
+    const type = readStream.readUInt8("aliasOutput.type");
     if (type !== ALIAS_OUTPUT_TYPE) {
         throw new Error(`Type mismatch in aliasOutput ${type}`);
     }
@@ -88,7 +88,7 @@ export function deserializeAliasOutput(readStream: ReadStream): IAliasOutput {
  * @param object The object to serialize.
  */
 export function serializeAliasOutput(writeStream: WriteStream, object: IAliasOutput): void {
-    writeStream.writeByte("aliasOutput.type", object.type);
+    writeStream.writeUInt8("aliasOutput.type", object.type);
     writeStream.writeUInt64("aliasOutput.amount", bigInt(object.amount));
 
     serializeNativeTokens(writeStream, object.nativeTokens);

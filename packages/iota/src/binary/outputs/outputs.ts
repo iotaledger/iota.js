@@ -96,7 +96,7 @@ export function deserializeOutput(readStream: ReadStream): OutputTypes {
         );
     }
 
-    const type = readStream.readByte("output.type", false);
+    const type = readStream.readUInt8("output.type", false);
     let output;
 
     if (type === SIMPLE_OUTPUT_TYPE) {

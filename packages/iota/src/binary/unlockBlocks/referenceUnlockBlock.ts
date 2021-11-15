@@ -21,7 +21,7 @@ export function deserializeReferenceUnlockBlock(readStream: ReadStream): IRefere
         );
     }
 
-    const type = readStream.readByte("referenceUnlockBlock.type");
+    const type = readStream.readUInt8("referenceUnlockBlock.type");
     if (type !== REFERENCE_UNLOCK_BLOCK_TYPE) {
         throw new Error(`Type mismatch in referenceUnlockBlock ${type}`);
     }
@@ -40,6 +40,6 @@ export function deserializeReferenceUnlockBlock(readStream: ReadStream): IRefere
  * @param object The object to serialize.
  */
 export function serializeReferenceUnlockBlock(writeStream: WriteStream, object: IReferenceUnlockBlock): void {
-    writeStream.writeByte("referenceUnlockBlock.type", object.type);
+    writeStream.writeUInt8("referenceUnlockBlock.type", object.type);
     writeStream.writeUInt16("referenceUnlockBlock.reference", object.reference);
 }

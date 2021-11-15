@@ -47,7 +47,7 @@ export function deserializeFoundryOutput(readStream: ReadStream): IFoundryOutput
         );
     }
 
-    const type = readStream.readByte("foundryOutput.type");
+    const type = readStream.readUInt8("foundryOutput.type");
     if (type !== FOUNDRY_OUTPUT_TYPE) {
         throw new Error(`Type mismatch in foundryOutput ${type}`);
     }
@@ -89,7 +89,7 @@ export function deserializeFoundryOutput(readStream: ReadStream): IFoundryOutput
  * @param object The object to serialize.
  */
 export function serializeFoundryOutput(writeStream: WriteStream, object: IFoundryOutput): void {
-    writeStream.writeByte("foundryOutput.type", object.type);
+    writeStream.writeUInt8("foundryOutput.type", object.type);
     writeStream.writeUInt64("foundryOutput.amount", bigInt(object.amount));
 
     serializeNativeTokens(writeStream, object.nativeTokens);

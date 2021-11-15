@@ -70,7 +70,7 @@ export function deserializeInput(readStream: ReadStream): InputTypes {
         );
     }
 
-    const type = readStream.readByte("input.type", false);
+    const type = readStream.readUInt8("input.type", false);
     let input;
 
     if (type === UTXO_INPUT_TYPE) {

@@ -22,7 +22,7 @@ export function deserializeReturnFeatureBlock(readStream: ReadStream): IReturnFe
         );
     }
 
-    const type = readStream.readByte("returnFeatureBlock.type");
+    const type = readStream.readUInt8("returnFeatureBlock.type");
     if (type !== RETURN_FEATURE_BLOCK_TYPE) {
         throw new Error(`Type mismatch in returnFeatureBlock ${type}`);
     }
@@ -41,6 +41,6 @@ export function deserializeReturnFeatureBlock(readStream: ReadStream): IReturnFe
  * @param object The object to serialize.
  */
 export function serializeReturnFeatureBlock(writeStream: WriteStream, object: IReturnFeatureBlock): void {
-    writeStream.writeByte("returnFeatureBlock.type", object.type);
+    writeStream.writeUInt8("returnFeatureBlock.type", object.type);
     writeStream.writeUInt64("returnFeatureBlock.amount", bigInt(object.amount));
 }

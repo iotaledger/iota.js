@@ -34,7 +34,7 @@ export function deserializeExtendedOutput(readStream: ReadStream): IExtendedOutp
         );
     }
 
-    const type = readStream.readByte("extendedOutput.type");
+    const type = readStream.readUInt8("extendedOutput.type");
     if (type !== EXTENDED_OUTPUT_TYPE) {
         throw new Error(`Type mismatch in extendedOutput ${type}`);
     }
@@ -62,7 +62,7 @@ export function deserializeExtendedOutput(readStream: ReadStream): IExtendedOutp
  * @param object The object to serialize.
  */
 export function serializeExtendedOutput(writeStream: WriteStream, object: IExtendedOutput): void {
-    writeStream.writeByte("extendedOutput.type", object.type);
+    writeStream.writeUInt8("extendedOutput.type", object.type);
     writeStream.writeUInt64("extendedOutput.amount", bigInt(object.amount));
 
     serializeNativeTokens(writeStream, object.nativeTokens);

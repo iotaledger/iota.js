@@ -26,7 +26,7 @@ export function deserializeTimelockMilestoneIndexFeatureBlock(
         );
     }
 
-    const type = readStream.readByte("timelockMilestoneIndexFeatureBlock.type");
+    const type = readStream.readUInt8("timelockMilestoneIndexFeatureBlock.type");
     if (type !== TIMELOCK_MILESTONE_INDEX_FEATURE_BLOCK_TYPE) {
         throw new Error(`Type mismatch in timelockMilestoneIndexFeatureBlock ${type}`);
     }
@@ -48,6 +48,6 @@ export function serializeTimelockMilestoneIndexFeatureBlock(
     writeStream: WriteStream,
     object: ITimelockMilestoneIndexFeatureBlock
 ): void {
-    writeStream.writeByte("timelockMilestoneIndexFeatureBlock.type", object.type);
+    writeStream.writeUInt8("timelockMilestoneIndexFeatureBlock.type", object.type);
     writeStream.writeUInt32("timelockMilestoneIndexFeatureBlock.milestoneIndex", object.milestoneIndex);
 }

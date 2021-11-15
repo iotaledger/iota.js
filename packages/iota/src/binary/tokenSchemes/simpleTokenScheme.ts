@@ -21,7 +21,7 @@ export function deserializeSimpleTokenScheme(readStream: ReadStream): ISimpleTok
         );
     }
 
-    const type = readStream.readByte("simpleTokenScheme.type");
+    const type = readStream.readUInt8("simpleTokenScheme.type");
     if (type !== SIMPLE_TOKEN_SCHEME_TYPE) {
         throw new Error(`Type mismatch in simpleTokenScheme ${type}`);
     }
@@ -37,5 +37,5 @@ export function deserializeSimpleTokenScheme(readStream: ReadStream): ISimpleTok
  * @param object The object to serialize.
  */
 export function serializeSimpleTokenScheme(writeStream: WriteStream, object: ISimpleTokenScheme): void {
-    writeStream.writeByte("simpleTokenScheme.type", object.type);
+    writeStream.writeUInt8("simpleTokenScheme.type", object.type);
 }

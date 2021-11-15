@@ -21,7 +21,7 @@ export function deserializeNftUnlockBlock(readStream: ReadStream): INftUnlockBlo
         );
     }
 
-    const type = readStream.readByte("nftUnlockBlock.type");
+    const type = readStream.readUInt8("nftUnlockBlock.type");
     if (type !== NFT_UNLOCK_BLOCK_TYPE) {
         throw new Error(`Type mismatch in nftUnlockBlock ${type}`);
     }
@@ -40,6 +40,6 @@ export function deserializeNftUnlockBlock(readStream: ReadStream): INftUnlockBlo
  * @param object The object to serialize.
  */
 export function serializeNftUnlockBlock(writeStream: WriteStream, object: INftUnlockBlock): void {
-    writeStream.writeByte("nftUnlockBlock.type", object.type);
+    writeStream.writeUInt8("nftUnlockBlock.type", object.type);
     writeStream.writeUInt16("nftUnlockBlock.reference", object.reference);
 }

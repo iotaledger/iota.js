@@ -21,7 +21,7 @@ export function deserializeAliasUnlockBlock(readStream: ReadStream): IAliasUnloc
         );
     }
 
-    const type = readStream.readByte("aliasUnlockBlock.type");
+    const type = readStream.readUInt8("aliasUnlockBlock.type");
     if (type !== ALIAS_UNLOCK_BLOCK_TYPE) {
         throw new Error(`Type mismatch in aliasUnlockBlock ${type}`);
     }
@@ -40,6 +40,6 @@ export function deserializeAliasUnlockBlock(readStream: ReadStream): IAliasUnloc
  * @param object The object to serialize.
  */
 export function serializeAliasUnlockBlock(writeStream: WriteStream, object: IAliasUnlockBlock): void {
-    writeStream.writeByte("aliasUnlockBlock.type", object.type);
+    writeStream.writeUInt8("aliasUnlockBlock.type", object.type);
     writeStream.writeUInt16("aliasUnlockBlock.reference", object.reference);
 }

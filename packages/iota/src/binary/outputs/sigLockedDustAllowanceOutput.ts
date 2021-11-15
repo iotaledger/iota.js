@@ -29,7 +29,7 @@ export function deserializeSigLockedDustAllowanceOutput(readStream: ReadStream):
         );
     }
 
-    const type = readStream.readByte("sigLockedDustAllowanceOutput.type");
+    const type = readStream.readUInt8("sigLockedDustAllowanceOutput.type");
     if (type !== SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE) {
         throw new Error(`Type mismatch in sigLockedDustAllowanceOutput ${type}`);
     }
@@ -53,7 +53,7 @@ export function serializeSigLockedDustAllowanceOutput(
     writeStream: WriteStream,
     object: ISigLockedDustAllowanceOutput
 ): void {
-    writeStream.writeByte("sigLockedDustAllowanceOutput.type", object.type);
+    writeStream.writeUInt8("sigLockedDustAllowanceOutput.type", object.type);
     serializeAddress(writeStream, object.address);
     writeStream.writeUInt64("sigLockedDustAllowanceOutput.amount", bigInt(object.amount));
 }

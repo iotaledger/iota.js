@@ -26,7 +26,7 @@ export function deserializeTokenScheme(readStream: ReadStream): TokenSchemeTypes
         );
     }
 
-    const type = readStream.readByte("tokenScheme.type", false);
+    const type = readStream.readUInt8("tokenScheme.type", false);
     let tokenScheme;
 
     if (type === SIMPLE_TOKEN_SCHEME_TYPE) {

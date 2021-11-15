@@ -22,7 +22,7 @@ export function deserializeEd25519Address(readStream: ReadStream): IEd25519Addre
         );
     }
 
-    const type = readStream.readByte("ed25519Address.type");
+    const type = readStream.readUInt8("ed25519Address.type");
     if (type !== ED25519_ADDRESS_TYPE) {
         throw new Error(`Type mismatch in ed25519Address ${type}`);
     }
@@ -41,6 +41,6 @@ export function deserializeEd25519Address(readStream: ReadStream): IEd25519Addre
  * @param object The object to serialize.
  */
 export function serializeEd25519Address(writeStream: WriteStream, object: IEd25519Address): void {
-    writeStream.writeByte("ed25519Address.type", object.type);
+    writeStream.writeUInt8("ed25519Address.type", object.type);
     writeStream.writeFixedHex("ed25519Address.address", Ed25519Address.ADDRESS_LENGTH, object.address);
 }

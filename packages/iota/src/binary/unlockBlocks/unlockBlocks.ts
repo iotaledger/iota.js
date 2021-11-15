@@ -63,7 +63,7 @@ export function deserializeUnlockBlock(readStream: ReadStream): UnlockBlockTypes
         );
     }
 
-    const type = readStream.readByte("unlockBlock.type", false);
+    const type = readStream.readUInt8("unlockBlock.type", false);
     let unlockBlock;
 
     if (type === SIGNATURE_UNLOCK_BLOCK_TYPE) {

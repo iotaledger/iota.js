@@ -51,7 +51,7 @@ export function deserializeMilestonePayload(readStream: ReadStream): IMilestoneP
     }
     const index = readStream.readUInt32("payloadMilestone.index");
     const timestamp = readStream.readUInt64("payloadMilestone.timestamp");
-    const numParents = readStream.readByte("payloadMilestone.numParents");
+    const numParents = readStream.readUInt8("payloadMilestone.numParents");
     const parentMessageIds: string[] = [];
 
     for (let i = 0; i < numParents; i++) {
@@ -63,7 +63,7 @@ export function deserializeMilestonePayload(readStream: ReadStream): IMilestoneP
     const nextPoWScore = readStream.readUInt32("payloadMilestone.nextPoWScore");
     const nextPoWScoreMilestoneIndex = readStream.readUInt32("payloadMilestone.nextPoWScoreMilestoneIndex");
 
-    const publicKeysCount = readStream.readByte("payloadMilestone.publicKeysCount");
+    const publicKeysCount = readStream.readUInt8("payloadMilestone.publicKeysCount");
     const publicKeys = [];
     for (let i = 0; i < publicKeysCount; i++) {
         publicKeys.push(readStream.readFixedHex("payloadMilestone.publicKey", Ed25519.PUBLIC_KEY_SIZE));
@@ -74,7 +74,7 @@ export function deserializeMilestonePayload(readStream: ReadStream): IMilestoneP
         throw new Error("Milestones only support embedded receipt payload type");
     }
 
-    const signaturesCount = readStream.readByte("payloadMilestone.signaturesCount");
+    const signaturesCount = readStream.readUInt8("payloadMilestone.signaturesCount");
     const signatures = [];
     for (let i = 0; i < signaturesCount; i++) {
         signatures.push(readStream.readFixedHex("payloadMilestone.signature", Ed25519.SIGNATURE_SIZE));
@@ -119,7 +119,7 @@ export function serializeMilestonePayload(writeStream: WriteStream, object: IMil
     }
     const sorted = object.parentMessageIds.slice().sort();
 
-    writeStream.writeByte("payloadMilestone.numParents", object.parentMessageIds.length);
+    writeStream.writeUInt8("payloadMilestone.numParents", object.parentMessageIds.length);
     for (let i = 0; i < object.parentMessageIds.length; i++) {
         if (sorted[i] !== object.parentMessageIds[i]) {
             throw new Error("The milestone parents must be lexographically sorted");
@@ -141,14 +141,14 @@ export function serializeMilestonePayload(writeStream: WriteStream, object: IMil
     writeStream.writeUInt32("payloadMilestone.nextPoWScore", object.nextPoWScore);
     writeStream.writeUInt32("payloadMilestone.nextPoWScoreMilestoneIndex", object.nextPoWScoreMilestoneIndex);
 
-    writeStream.writeByte("payloadMilestone.publicKeysCount", object.publicKeys.length);
+    writeStream.writeUInt8("payloadMilestone.publicKeysCount", object.publicKeys.length);
     for (let i = 0; i < object.publicKeys.length; i++) {
         writeStream.writeFixedHex("payloadMilestone.publicKey", Ed25519.PUBLIC_KEY_SIZE, object.publicKeys[i]);
     }
 
     serializePayload(writeStream, object.receipt as IReceiptPayload);
 
-    writeStream.writeByte("payloadMilestone.signaturesCount", object.signatures.length);
+    writeStream.writeUInt8("payloadMilestone.signaturesCount", object.signatures.length);
     for (let i = 0; i < object.signatures.length; i++) {
         writeStream.writeFixedHex("payloadMilestone.signature", Ed25519.SIGNATURE_SIZE, object.signatures[i]);
     }

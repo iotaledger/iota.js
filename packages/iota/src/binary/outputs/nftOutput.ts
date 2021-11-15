@@ -41,7 +41,7 @@ export function deserializeNftOutput(readStream: ReadStream): INftOutput {
         );
     }
 
-    const type = readStream.readByte("nftOutput.type");
+    const type = readStream.readUInt8("nftOutput.type");
     if (type !== NFT_OUTPUT_TYPE) {
         throw new Error(`Type mismatch in nftOutput ${type}`);
     }
@@ -76,7 +76,7 @@ export function deserializeNftOutput(readStream: ReadStream): INftOutput {
  * @param object The object to serialize.
  */
 export function serializeNftOutput(writeStream: WriteStream, object: INftOutput): void {
-    writeStream.writeByte("nftOutput.type", object.type);
+    writeStream.writeUInt8("nftOutput.type", object.type);
     writeStream.writeUInt64("nftOutput.amount", bigInt(object.amount));
     serializeNativeTokens(writeStream, object.nativeTokens);
     serializeAddress(writeStream, object.address);
