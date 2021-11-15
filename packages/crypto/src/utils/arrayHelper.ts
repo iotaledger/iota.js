@@ -11,9 +11,7 @@ export class ArrayHelper {
      * @param array2 The second array.
      * @returns True if the arrays are equal.
      */
-     public static equal(
-        array1: ArrayLike<unknown> | undefined,
-        array2: ArrayLike<unknown> | undefined): boolean {
+    public static equal(array1: ArrayLike<unknown> | undefined, array2: ArrayLike<unknown> | undefined): boolean {
         if (!array1 || !array2 || array1.length !== array2.length) {
             return false;
         }

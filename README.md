@@ -1,27 +1,8 @@
-<h2 align="center">iota.js</h2>
-
-<p align="center">
-  <a href="https://discord.iota.org/" style="text-decoration:none;"><img src="https://img.shields.io/badge/Discord-9cf.svg?logo=discord" alt="Discord"></a>
-    <a href="https://iota.stackexchange.com/" style="text-decoration:none;"><img src="https://img.shields.io/badge/StackExchange-9cf.svg?logo=stackexchange" alt="StackExchange"></a>
-    <a href="https://github.com/iotaledger/iota.js/blob/main/LICENSE" style="text-decoration:none;"><img src="https://img.shields.io/github/license/iotaledger/iota.js.svg" alt="Apache-2.0 license"></a>
-</p>
-      
-<p align="center">
-  <a href="#about">About</a> ◈
-  <a href="#prerequisites">Prerequisites</a> ◈
-  <a href="#example">Example</a> ◈
-  <a href="#packages">Packages</a> ◈
-  <a href="#proof-of-work">Proof Of Work</a> ◈
-  <a href="#examples">Examples</a> ◈
-  <a href="#supporting-the-project">Supporting the project</a> ◈
-  <a href="#joining-the-discussion">Joining the discussion</a> 
-</p>
-
-# About
+# iota.js
 
 > This library is functionally complete, but it is recommended to use [iota.rs](https://github.com/iotaledger/iota.rs). The rust library will be more heavily maintained and is more performant.
 
-Client library for IOTA chrysalis network, implemented in TypeScript to strongly type the objects sent and received from the API.
+Mono-repo containing client and supporting packages for the IOTA chrysalis network, implemented in TypeScript to strongly type the objects sent and received from the API.
 
 Runs in both NodeJS and Browser environments.
 
@@ -66,6 +47,9 @@ Other packages within the framework are.
 * [@iota/util.js](./packages/util/README.md) - Utility classes and methods.
 * [@iota/crypto.js](./packages/crypto/README.md) - Cryptographic implementations.
 * [@iota/mqtt.js](./packages/mqtt/README.md) - MQTT Client.
+* [@iota/pow-neon.js](./packages/pow-neon/README.md) - PoW as a multi-threaded Neon Rust binding.
+* [@iota/pow-node.js](./packages/mqtt/README.md) - PoW as a multi-threaded node module.
+* [@iota/pow-wasm.js](./packages/pow-wasm/README.md) - PoW as a multi-threaded WASM module.
 
 ## Examples
 
@@ -88,3 +72,7 @@ See our [contributing guidelines](.github/CONTRIBUTING.md) for more information.
 ## Joining the discussion
 
 If you want to get involved in the community, need help with getting set up, have any issues or just want to discuss IOTA, feel free to join our [Discord](https://discord.iota.org/).
+
+## License
+
+The separate packages all contain their own licenses.
