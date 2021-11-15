@@ -61,12 +61,33 @@ export class Blake2b {
     private _m: Uint32Array;
 
     /**
-     * Create a new instance of Blake2b.
+     * The context for the current hash.
      * @internal
      */
-    constructor() {
+    private _context: {
+        b: Uint8Array;
+        h: Uint32Array;
+        t: number;
+        c: number;
+        outlen: number;
+    };
+
+    /**
+     * Create a new instance of Blake2b.
+     * @param outlen Output length between 1 and 64 bytes.
+     * @param key Optional key.
+     */
+    constructor(outlen: number, key?: Uint8Array) {
         this._v = new Uint32Array(32);
         this._m = new Uint32Array(32);
+        this._context = {
+            b: new Uint8Array(128),
+            h: new Uint32Array(16),
+            t: 0, // input count
+            c: 0, // pointer within buffer
+            outlen // output length in bytes
+        };
+        this.init(outlen, key);
     }
 
     /**
@@ -76,10 +97,9 @@ export class Blake2b {
      * @returns The sum 256 of the data.
      */
     public static sum256(data: Uint8Array, key?: Uint8Array): Uint8Array {
-        const b2b = new Blake2b();
-        const ctx = b2b.init(Blake2b.SIZE_256, key);
-        b2b.update(ctx, data);
-        return b2b.final(ctx);
+        const b2b = new Blake2b(Blake2b.SIZE_256, key);
+        b2b.update(data);
+        return b2b.final();
     }
 
     /**
@@ -89,45 +109,96 @@ export class Blake2b {
      * @returns The sum 512 of the data.
      */
     public static sum512(data: Uint8Array, key?: Uint8Array): Uint8Array {
-        const b2b = new Blake2b();
-        const ctx = b2b.init(Blake2b.SIZE_512, key);
-        b2b.update(ctx, data);
-        return b2b.final(ctx);
+        const b2b = new Blake2b(Blake2b.SIZE_512, key);
+        b2b.update(data);
+        return b2b.final();
+    }
+
+    /**
+     * Updates a BLAKE2b streaming hash.
+     * @param input The data to hash.
+     */
+    public update(input: Uint8Array): void {
+        for (let i = 0; i < input.length; i++) {
+            if (this._context.c === 128) {
+                // buffer full ?
+                this._context.t += this._context.c; // add counters
+                this.compress(false); // compress (not last)
+                this._context.c = 0; // counter to zero
+            }
+            this._context.b[this._context.c++] = input[i];
+        }
+    }
+
+    /**
+     * Completes a BLAKE2b streaming hash.
+     * @returns The final data.
+     */
+    public final(): Uint8Array {
+        this._context.t += this._context.c; // mark last block offset
+
+        while (this._context.c < 128) {
+            // fill up with zeros
+            this._context.b[this._context.c++] = 0;
+        }
+        this.compress(true); // final block flag = 1
+
+        // little endian convert and store
+        const out = new Uint8Array(this._context.outlen);
+        for (let i = 0; i < this._context.outlen; i++) {
+            out[i] = this._context.h[i >> 2] >> (8 * (i & 3));
+        }
+        return out;
+    }
+
+    /**
+     * Creates a BLAKE2b hashing context.
+     * @param outlen Output length between 1 and 64 bytes.
+     * @param key Optional key.
+     * @returns The initialized context.
+     * @internal
+     */
+    private init(outlen: number, key?: Uint8Array): void {
+        if (outlen <= 0 || outlen > 64) {
+            throw new Error("Illegal output length, expected 0 < length <= 64");
+        }
+        if (key && key.length > 64) {
+            throw new Error("Illegal key, expected Uint8Array with 0 < length <= 64");
+        }
+
+        // initialize hash state
+        for (let i = 0; i < 16; i++) {
+            this._context.h[i] = Blake2b.BLAKE2B_IV32[i];
+        }
+        const keylen = key ? key.length : 0;
+        this._context.h[0] ^= 0x01010000 ^ (keylen << 8) ^ outlen;
+
+        // key the hash, if applicable
+        if (key) {
+            this.update(key);
+            // at the end
+            this._context.c = 128;
+        }
     }
 
     /**
      * Compression.
      * Note we're representing 16 uint64s as 32 uint32s
-     * @param ctx The context.
-     * @param ctx.b Array.
-     * @param ctx.h Array.
-     * @param ctx.t Number.
-     * @param ctx.c Number.
-     * @param ctx.outlen The output length.
      * @param last Is this the last block.
      * @internal
      */
-    private compress(
-        ctx: {
-            b: Uint8Array;
-            h: Uint32Array;
-            t: number;
-            c: number;
-            outlen: number;
-        },
-        last: boolean
-    ): void {
+    private compress(last: boolean): void {
         let i = 0;
 
         // init work variables
         for (i = 0; i < 16; i++) {
-            this._v[i] = ctx.h[i];
+            this._v[i] = this._context.h[i];
             this._v[i + 16] = Blake2b.BLAKE2B_IV32[i];
         }
 
         // low 64 bits of offset
-        this._v[24] ^= ctx.t;
-        this._v[25] ^= ctx.t / 0x100000000;
+        this._v[24] ^= this._context.t;
+        this._v[25] ^= this._context.t / 0x100000000;
         // high 64 bits not supported, offset may not be higher than 2**53-1
 
         // last block flag set ?
@@ -138,7 +209,7 @@ export class Blake2b {
 
         // get little-endian words
         for (i = 0; i < 32; i++) {
-            this._m[i] = this.b2bGet32(ctx.b, 4 * i);
+            this._m[i] = this.b2bGet32(this._context.b, 4 * i);
         }
 
         // twelve rounds of mixing
@@ -154,118 +225,8 @@ export class Blake2b {
         }
 
         for (i = 0; i < 16; i++) {
-            ctx.h[i] = ctx.h[i] ^ this._v[i] ^ this._v[i + 16];
+            this._context.h[i] = this._context.h[i] ^ this._v[i] ^ this._v[i + 16];
         }
-    }
-
-    /**
-     * Creates a BLAKE2b hashing context.
-     * @param outlen Output length between 1 and 64 bytes.
-     * @param key Optional key.
-     * @returns The initialized context.
-     * @internal
-     */
-    private init(
-        outlen: number,
-        key?: Uint8Array
-    ): {
-        b: Uint8Array;
-        h: Uint32Array;
-        t: number;
-        c: number;
-        outlen: number;
-    } {
-        if (outlen <= 0 || outlen > 64) {
-            throw new Error("Illegal output length, expected 0 < length <= 64");
-        }
-        if (key && key.length > 64) {
-            throw new Error("Illegal key, expected Uint8Array with 0 < length <= 64");
-        }
-
-        // state, 'param block'
-        const ctx = {
-            b: new Uint8Array(128),
-            h: new Uint32Array(16),
-            t: 0, // input count
-            c: 0, // pointer within buffer
-            outlen // output length in bytes
-        };
-
-        // initialize hash state
-        for (let i = 0; i < 16; i++) {
-            ctx.h[i] = Blake2b.BLAKE2B_IV32[i];
-        }
-        const keylen = key ? key.length : 0;
-        ctx.h[0] ^= 0x01010000 ^ (keylen << 8) ^ outlen;
-
-        // key the hash, if applicable
-        if (key) {
-            this.update(ctx, key);
-            // at the end
-            ctx.c = 128;
-        }
-
-        return ctx;
-    }
-
-    /**
-     * Updates a BLAKE2b streaming hash.
-     * @param ctx The context.
-     * @param ctx.b Array.
-     * @param ctx.h Array.
-     * @param ctx.t Number.
-     * @param ctx.c Number.
-     * @param ctx.outlen The output length.
-     * @param input The data to hash.
-     * @internal
-     */
-    private update(
-        ctx: {
-            b: Uint8Array;
-            h: Uint32Array;
-            t: number;
-            c: number;
-            outlen: number;
-        },
-        input: Uint8Array
-    ): void {
-        for (let i = 0; i < input.length; i++) {
-            if (ctx.c === 128) {
-                // buffer full ?
-                ctx.t += ctx.c; // add counters
-                this.compress(ctx, false); // compress (not last)
-                ctx.c = 0; // counter to zero
-            }
-            ctx.b[ctx.c++] = input[i];
-        }
-    }
-
-    /**
-     * Completes a BLAKE2b streaming hash.
-     * @param ctx The context.
-     * @param ctx.b Array.
-     * @param ctx.h Array.
-     * @param ctx.t Number.
-     * @param ctx.c Number.
-     * @param ctx.outlen The output length.
-     * @returns The final data.
-     * @internal
-     */
-    private final(ctx: { b: Uint8Array; h: Uint32Array; t: number; c: number; outlen: number }): Uint8Array {
-        ctx.t += ctx.c; // mark last block offset
-
-        while (ctx.c < 128) {
-            // fill up with zeros
-            ctx.b[ctx.c++] = 0;
-        }
-        this.compress(ctx, true); // final block flag = 1
-
-        // little endian convert and store
-        const out = new Uint8Array(ctx.outlen);
-        for (let i = 0; i < ctx.outlen; i++) {
-            out[i] = ctx.h[i >> 2] >> (8 * (i & 3));
-        }
-        return out;
     }
 
     /**
