@@ -29,7 +29,7 @@ export function deserializeIndexationFeatureBlock(readStream: ReadStream): IInde
         throw new Error(`Type mismatch in indexationFeatureBlock ${type}`);
     }
 
-    const tagLength = readStream.readUInt32("indexationFeatureBlock.tagLength");
+    const tagLength = readStream.readByte("indexationFeatureBlock.tagLength");
     const tag = readStream.readFixedHex("indexationFeatureBlock.tag", tagLength);
 
     return {
@@ -45,6 +45,6 @@ export function deserializeIndexationFeatureBlock(readStream: ReadStream): IInde
  */
 export function serializeIndexationFeatureBlock(writeStream: WriteStream, object: IIndexationFeatureBlock): void {
     writeStream.writeByte("indexationFeatureBlock.type", object.type);
-    writeStream.writeUInt32("indexationFeatureBlock.tagLength", object.tag.length / 2);
+    writeStream.writeByte("indexationFeatureBlock.tagLength", object.tag.length / 2);
     writeStream.writeFixedHex("indexationFeatureBlock.tag", object.tag.length / 2, object.tag);
 }
