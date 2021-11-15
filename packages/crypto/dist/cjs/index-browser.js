@@ -996,10 +996,23 @@
     class Blake2b {
         /**
          * Create a new instance of Blake2b.
+<<<<<<< HEAD
+=======
+         * @param outlen Output length between 1 and 64 bytes.
+         * @param key Optional key.
+>>>>>>> dev
          */
-        constructor() {
+        constructor(outlen, key) {
             this._v = new Uint32Array(32);
             this._m = new Uint32Array(32);
+            this._context = {
+                b: new Uint8Array(128),
+                h: new Uint32Array(16),
+                t: 0,
+                c: 0,
+                outlen // output length in bytes
+            };
+            this.init(outlen, key);
         }
         /**
          * Perform Sum 160 on the data.
@@ -1020,10 +1033,9 @@
          * @returns The sum 256 of the data.
          */
         static sum256(data, key) {
-            const b2b = new Blake2b();
-            const ctx = b2b.init(Blake2b.SIZE_256, key);
-            b2b.update(ctx, data);
-            return b2b.final(ctx);
+            const b2b = new Blake2b(Blake2b.SIZE_256, key);
+            b2b.update(data);
+            return b2b.final();
         }
         /**
          * Perform Sum 512 on the data.
@@ -1032,12 +1044,47 @@
          * @returns The sum 512 of the data.
          */
         static sum512(data, key) {
-            const b2b = new Blake2b();
-            const ctx = b2b.init(Blake2b.SIZE_512, key);
-            b2b.update(ctx, data);
-            return b2b.final(ctx);
+            const b2b = new Blake2b(Blake2b.SIZE_512, key);
+            b2b.update(data);
+            return b2b.final();
         }
         /**
+<<<<<<< HEAD
+=======
+         * Updates a BLAKE2b streaming hash.
+         * @param input The data to hash.
+         */
+        update(input) {
+            for (let i = 0; i < input.length; i++) {
+                if (this._context.c === 128) {
+                    // buffer full ?
+                    this._context.t += this._context.c; // add counters
+                    this.compress(false); // compress (not last)
+                    this._context.c = 0; // counter to zero
+                }
+                this._context.b[this._context.c++] = input[i];
+            }
+        }
+        /**
+         * Completes a BLAKE2b streaming hash.
+         * @returns The final data.
+         */
+        final() {
+            this._context.t += this._context.c; // mark last block offset
+            while (this._context.c < 128) {
+                // fill up with zeros
+                this._context.b[this._context.c++] = 0;
+            }
+            this.compress(true); // final block flag = 1
+            // little endian convert and store
+            const out = new Uint8Array(this._context.outlen);
+            for (let i = 0; i < this._context.outlen; i++) {
+                out[i] = this._context.h[i >> 2] >> (8 * (i & 3));
+            }
+            return out;
+        }
+        /**
+>>>>>>> dev
          * Creates a BLAKE2b hashing context.
          * @param outlen Output length between 1 and 64 bytes.
          * @param key Optional key.
@@ -1050,29 +1097,21 @@
             if (key && key.length > 64) {
                 throw new Error("Illegal key, expected Uint8Array with 0 < length <= 64");
             }
-            // state, 'param block'
-            const ctx = {
-                b: new Uint8Array(128),
-                h: new Uint32Array(16),
-                t: 0,
-                c: 0,
-                outlen // output length in bytes
-            };
             // initialize hash state
             for (let i = 0; i < 16; i++) {
-                ctx.h[i] = Blake2b.BLAKE2B_IV32[i];
+                this._context.h[i] = Blake2b.BLAKE2B_IV32[i];
             }
             const keylen = key ? key.length : 0;
-            ctx.h[0] ^= 0x01010000 ^ (keylen << 8) ^ outlen;
+            this._context.h[0] ^= 0x01010000 ^ (keylen << 8) ^ outlen;
             // key the hash, if applicable
             if (key) {
-                this.update(ctx, key);
+                this.update(key);
                 // at the end
-                ctx.c = 128;
+                this._context.c = 128;
             }
-            return ctx;
         }
         /**
+<<<<<<< HEAD
          * Updates a BLAKE2b streaming hash.
          * @param ctx The context.
          * @param ctx.b Array.
@@ -1081,17 +1120,21 @@
          * @param ctx.c Number.
          * @param ctx.outlen The output length.
          * @param input The data to hash.
+=======
+         * Compression.
+         * Note we're representing 16 uint64s as 32 uint32s
+         * @param last Is this the last block.
+         * @internal
+>>>>>>> dev
          */
-        update(ctx, input) {
-            for (let i = 0; i < input.length; i++) {
-                if (ctx.c === 128) {
-                    // buffer full ?
-                    ctx.t += ctx.c; // add counters
-                    this.compress(ctx, false); // compress (not last)
-                    ctx.c = 0; // counter to zero
-                }
-                ctx.b[ctx.c++] = input[i];
+        compress(last) {
+            let i = 0;
+            // init work variables
+            for (i = 0; i < 16; i++) {
+                this._v[i] = this._context.h[i];
+                this._v[i + 16] = Blake2b.BLAKE2B_IV32[i];
             }
+<<<<<<< HEAD
         }
         /**
          * Completes a BLAKE2b streaming hash.
@@ -1108,14 +1151,35 @@
             while (ctx.c < 128) {
                 // fill up with zeros
                 ctx.b[ctx.c++] = 0;
+=======
+            // low 64 bits of offset
+            this._v[24] ^= this._context.t;
+            this._v[25] ^= this._context.t / 0x100000000;
+            // high 64 bits not supported, offset may not be higher than 2**53-1
+            // last block flag set ?
+            if (last) {
+                this._v[28] = ~this._v[28];
+                this._v[29] = ~this._v[29];
+>>>>>>> dev
             }
-            this.compress(ctx, true); // final block flag = 1
-            // little endian convert and store
-            const out = new Uint8Array(ctx.outlen);
-            for (let i = 0; i < ctx.outlen; i++) {
-                out[i] = ctx.h[i >> 2] >> (8 * (i & 3));
+            // get little-endian words
+            for (i = 0; i < 32; i++) {
+                this._m[i] = this.b2bGet32(this._context.b, 4 * i);
             }
-            return out;
+            // twelve rounds of mixing
+            for (i = 0; i < 12; i++) {
+                this.b2bG(0, 8, 16, 24, Blake2b.SIGMA82[i * 16 + 0], Blake2b.SIGMA82[i * 16 + 1]);
+                this.b2bG(2, 10, 18, 26, Blake2b.SIGMA82[i * 16 + 2], Blake2b.SIGMA82[i * 16 + 3]);
+                this.b2bG(4, 12, 20, 28, Blake2b.SIGMA82[i * 16 + 4], Blake2b.SIGMA82[i * 16 + 5]);
+                this.b2bG(6, 14, 22, 30, Blake2b.SIGMA82[i * 16 + 6], Blake2b.SIGMA82[i * 16 + 7]);
+                this.b2bG(0, 10, 20, 30, Blake2b.SIGMA82[i * 16 + 8], Blake2b.SIGMA82[i * 16 + 9]);
+                this.b2bG(2, 12, 22, 24, Blake2b.SIGMA82[i * 16 + 10], Blake2b.SIGMA82[i * 16 + 11]);
+                this.b2bG(4, 14, 16, 26, Blake2b.SIGMA82[i * 16 + 12], Blake2b.SIGMA82[i * 16 + 13]);
+                this.b2bG(6, 8, 18, 28, Blake2b.SIGMA82[i * 16 + 14], Blake2b.SIGMA82[i * 16 + 15]);
+            }
+            for (i = 0; i < 16; i++) {
+                this._context.h[i] = this._context.h[i] ^ this._v[i] ^ this._v[i + 16];
+            }
         }
         /**
          * 64-bit unsigned addition
@@ -1400,6 +1464,304 @@
      * @internal
      */
     Curl.TRUTH_TABLE = [1, 0, -1, 2, 1, -1, 0, 2, -1, 1, 0];
+
+    // Copyright 2020 IOTA Stiftung
+    // SPDX-License-Identifier: Apache-2.0
+    /* eslint-disable no-bitwise */
+    /**
+     * Class to help with Sha1 scheme.
+     * TypeScript conversion from https://github.com/emn178/js-sha1.
+     * Although this algorithm should not be use in most cases, it is the
+     * default and most widely support for generating TOTP/HOTP codes.
+     */
+    class Sha1 {
+        /**
+         * Create a new instance of Sha1.
+         */
+        constructor() {
+            /**
+             * Blocks.
+             * @internal
+             */
+            this.blocks = [];
+            this.blocks = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+            this.h0 = 0x67452301;
+            this.h1 = 0xefcdab89;
+            this.h2 = 0x98badcfe;
+            this.h3 = 0x10325476;
+            this.h4 = 0xc3d2e1f0;
+            this.block = 0;
+            this.start = 0;
+            this.bytes = 0;
+            this.hBytes = 0;
+            this.lastByteIndex = 0;
+            this.finalized = false;
+            this.hashed = false;
+            this.first = true;
+        }
+        /**
+         * Perform Sum on the data.
+         * @param data The data to operate on.
+         * @returns The sum of the data.
+         */
+        static sum(data) {
+            const b2b = new Sha1();
+            b2b.update(data);
+            return b2b.digest();
+        }
+        /**
+         * Update the hash with the data.
+         * @param message The data to update the hash with.
+         * @returns The instance for chaining.
+         * @throws Error if the hash has already been finalized.
+         */
+        update(message) {
+            if (this.finalized) {
+                throw new Error("The hash has already been finalized.");
+            }
+            let index = 0;
+            let i;
+            const length = message.length;
+            const blocks = this.blocks;
+            while (index < length) {
+                if (this.hashed) {
+                    this.hashed = false;
+                    blocks[0] = this.block;
+                    blocks[1] = 0;
+                    blocks[2] = 0;
+                    blocks[3] = 0;
+                    blocks[4] = 0;
+                    blocks[5] = 0;
+                    blocks[6] = 0;
+                    blocks[7] = 0;
+                    blocks[8] = 0;
+                    blocks[9] = 0;
+                    blocks[10] = 0;
+                    blocks[11] = 0;
+                    blocks[12] = 0;
+                    blocks[13] = 0;
+                    blocks[14] = 0;
+                    blocks[15] = 0;
+                    blocks[16] = 0;
+                }
+                for (i = this.start; index < length && i < 64; ++index) {
+                    blocks[i >> 2] |= message[index] << Sha1._SHIFT[i++ & 3];
+                }
+                this.lastByteIndex = i;
+                this.bytes += i - this.start;
+                if (i >= 64) {
+                    this.block = blocks[16];
+                    this.start = i - 64;
+                    this.hash();
+                    this.hashed = true;
+                }
+                else {
+                    this.start = i;
+                }
+            }
+            if (this.bytes > 4294967295) {
+                this.hBytes += Math.trunc(this.bytes / 4294967296);
+                this.bytes %= 4294967296;
+            }
+            return this;
+        }
+        /**
+         * Get the digest.
+         * @returns The digest.
+         */
+        digest() {
+            this.finalize();
+            const h0 = this.h0;
+            const h1 = this.h1;
+            const h2 = this.h2;
+            const h3 = this.h3;
+            const h4 = this.h4;
+            return Uint8Array.from([
+                (h0 >> 24) & 0xff,
+                (h0 >> 16) & 0xff,
+                (h0 >> 8) & 0xff,
+                h0 & 0xff,
+                (h1 >> 24) & 0xff,
+                (h1 >> 16) & 0xff,
+                (h1 >> 8) & 0xff,
+                h1 & 0xff,
+                (h2 >> 24) & 0xff,
+                (h2 >> 16) & 0xff,
+                (h2 >> 8) & 0xff,
+                h2 & 0xff,
+                (h3 >> 24) & 0xff,
+                (h3 >> 16) & 0xff,
+                (h3 >> 8) & 0xff,
+                h3 & 0xff,
+                (h4 >> 24) & 0xff,
+                (h4 >> 16) & 0xff,
+                (h4 >> 8) & 0xff,
+                h4 & 0xff
+            ]);
+        }
+        /**
+         * Finalize the hash.
+         * @internal
+         */
+        finalize() {
+            if (this.finalized) {
+                return;
+            }
+            this.finalized = true;
+            const blocks = this.blocks;
+            const i = this.lastByteIndex;
+            blocks[16] = this.block;
+            blocks[i >> 2] |= Sha1._EXTRA[i & 3];
+            this.block = blocks[16];
+            if (i >= 56) {
+                if (!this.hashed) {
+                    this.hash();
+                }
+                blocks[0] = this.block;
+                blocks[1] = 0;
+                blocks[2] = 0;
+                blocks[3] = 0;
+                blocks[4] = 0;
+                blocks[5] = 0;
+                blocks[6] = 0;
+                blocks[7] = 0;
+                blocks[8] = 0;
+                blocks[9] = 0;
+                blocks[10] = 0;
+                blocks[11] = 0;
+                blocks[12] = 0;
+                blocks[13] = 0;
+                blocks[14] = 0;
+                blocks[15] = 0;
+                blocks[16] = 0;
+            }
+            blocks[14] = (this.hBytes << 3) | (this.bytes >>> 29);
+            blocks[15] = this.bytes << 3;
+            this.hash();
+        }
+        /**
+         * Perform the hash.
+         * @internal
+         */
+        hash() {
+            let a = this.h0;
+            let b = this.h1;
+            let c = this.h2;
+            let d = this.h3;
+            let e = this.h4;
+            let f;
+            let j;
+            let t;
+            const blocks = this.blocks;
+            for (j = 16; j < 80; ++j) {
+                t = blocks[j - 3] ^ blocks[j - 8] ^ blocks[j - 14] ^ blocks[j - 16];
+                blocks[j] = (t << 1) | (t >>> 31);
+            }
+            for (j = 0; j < 20; j += 5) {
+                f = (b & c) | (~b & d);
+                t = (a << 5) | (a >>> 27);
+                e = Math.trunc(t + f + e + 1518500249 + blocks[j]);
+                b = (b << 30) | (b >>> 2);
+                f = (a & b) | (~a & c);
+                t = (e << 5) | (e >>> 27);
+                d = Math.trunc(t + f + d + 1518500249 + blocks[j + 1]);
+                a = (a << 30) | (a >>> 2);
+                f = (e & a) | (~e & b);
+                t = (d << 5) | (d >>> 27);
+                c = Math.trunc(t + f + c + 1518500249 + blocks[j + 2]);
+                e = (e << 30) | (e >>> 2);
+                f = (d & e) | (~d & a);
+                t = (c << 5) | (c >>> 27);
+                b = Math.trunc(t + f + b + 1518500249 + blocks[j + 3]);
+                d = (d << 30) | (d >>> 2);
+                f = (c & d) | (~c & e);
+                t = (b << 5) | (b >>> 27);
+                a = Math.trunc(t + f + a + 1518500249 + blocks[j + 4]);
+                c = (c << 30) | (c >>> 2);
+            }
+            for (; j < 40; j += 5) {
+                f = b ^ c ^ d;
+                t = (a << 5) | (a >>> 27);
+                e = Math.trunc(t + f + e + 1859775393 + blocks[j]);
+                b = (b << 30) | (b >>> 2);
+                f = a ^ b ^ c;
+                t = (e << 5) | (e >>> 27);
+                d = Math.trunc(t + f + d + 1859775393 + blocks[j + 1]);
+                a = (a << 30) | (a >>> 2);
+                f = e ^ a ^ b;
+                t = (d << 5) | (d >>> 27);
+                c = Math.trunc(t + f + c + 1859775393 + blocks[j + 2]);
+                e = (e << 30) | (e >>> 2);
+                f = d ^ e ^ a;
+                t = (c << 5) | (c >>> 27);
+                b = Math.trunc(t + f + b + 1859775393 + blocks[j + 3]);
+                d = (d << 30) | (d >>> 2);
+                f = c ^ d ^ e;
+                t = (b << 5) | (b >>> 27);
+                a = Math.trunc(t + f + a + 1859775393 + blocks[j + 4]);
+                c = (c << 30) | (c >>> 2);
+            }
+            for (; j < 60; j += 5) {
+                f = (b & c) | (b & d) | (c & d);
+                t = (a << 5) | (a >>> 27);
+                e = Math.trunc(t + f + e - 1894007588 + blocks[j]);
+                b = (b << 30) | (b >>> 2);
+                f = (a & b) | (a & c) | (b & c);
+                t = (e << 5) | (e >>> 27);
+                d = Math.trunc(t + f + d - 1894007588 + blocks[j + 1]);
+                a = (a << 30) | (a >>> 2);
+                f = (e & a) | (e & b) | (a & b);
+                t = (d << 5) | (d >>> 27);
+                c = Math.trunc(t + f + c - 1894007588 + blocks[j + 2]);
+                e = (e << 30) | (e >>> 2);
+                f = (d & e) | (d & a) | (e & a);
+                t = (c << 5) | (c >>> 27);
+                b = Math.trunc(t + f + b - 1894007588 + blocks[j + 3]);
+                d = (d << 30) | (d >>> 2);
+                f = (c & d) | (c & e) | (d & e);
+                t = (b << 5) | (b >>> 27);
+                a = Math.trunc(t + f + a - 1894007588 + blocks[j + 4]);
+                c = (c << 30) | (c >>> 2);
+            }
+            for (; j < 80; j += 5) {
+                f = b ^ c ^ d;
+                t = (a << 5) | (a >>> 27);
+                e = Math.trunc(t + f + e - 899497514 + blocks[j]);
+                b = (b << 30) | (b >>> 2);
+                f = a ^ b ^ c;
+                t = (e << 5) | (e >>> 27);
+                d = Math.trunc(t + f + d - 899497514 + blocks[j + 1]);
+                a = (a << 30) | (a >>> 2);
+                f = e ^ a ^ b;
+                t = (d << 5) | (d >>> 27);
+                c = Math.trunc(t + f + c - 899497514 + blocks[j + 2]);
+                e = (e << 30) | (e >>> 2);
+                f = d ^ e ^ a;
+                t = (c << 5) | (c >>> 27);
+                b = Math.trunc(t + f + b - 899497514 + blocks[j + 3]);
+                d = (d << 30) | (d >>> 2);
+                f = c ^ d ^ e;
+                t = (b << 5) | (b >>> 27);
+                a = Math.trunc(t + f + a - 899497514 + blocks[j + 4]);
+                c = (c << 30) | (c >>> 2);
+            }
+            this.h0 = Math.trunc(this.h0 + a);
+            this.h1 = Math.trunc(this.h1 + b);
+            this.h2 = Math.trunc(this.h2 + c);
+            this.h3 = Math.trunc(this.h3 + d);
+            this.h4 = Math.trunc(this.h4 + e);
+        }
+    }
+    /**
+     * Extra constants.
+     * @internal
+     */
+    Sha1._EXTRA = [-2147483648, 8388608, 32768, 128];
+    /**
+     * Shift constants.
+     * @internal
+     */
+    Sha1._SHIFT = [24, 16, 8, 0];
 
     // Copyright 2020 IOTA Stiftung
     // SPDX-License-Identifier: Apache-2.0
@@ -9296,6 +9658,64 @@
 
     // Copyright 2020 IOTA Stiftung
     /**
+     * Class to help with HmacSha1 scheme.
+     * TypeScript conversion from https://github.com/emn178/js-sha1.
+     */
+    class HmacSha1 {
+        /**
+         * Create a new instance of HmacSha1.
+         * @param key The key for the hmac.
+         */
+        constructor(key) {
+            this._sha1 = new Sha1();
+            if (key.length > 64) {
+                // eslint-disable-next-line newline-per-chained-call
+                key = new Sha1().update(key).digest();
+            }
+            this._oKeyPad = new Uint8Array(64);
+            const iKeyPad = new Uint8Array(64);
+            for (let i = 0; i < 64; ++i) {
+                const b = key[i] || 0;
+                this._oKeyPad[i] = 0x5c ^ b;
+                iKeyPad[i] = 0x36 ^ b;
+            }
+            this._sha1.update(iKeyPad);
+        }
+        /**
+         * Perform Sum on the data.
+         * @param key The key for the hmac.
+         * @param data The data to operate on.
+         * @returns The sum of the data.
+         */
+        static sum(key, data) {
+            const b2b = new HmacSha1(key);
+            b2b.update(data);
+            return b2b.digest();
+        }
+        /**
+         * Update the hash with the data.
+         * @param message The data to update the hash with.
+         * @returns The instance for chaining.
+         */
+        update(message) {
+            this._sha1.update(message);
+            return this;
+        }
+        /**
+         * Get the digest.
+         * @returns The digest.
+         */
+        digest() {
+            const innerHash = this._sha1.digest();
+            const finalSha256 = new Sha1();
+            finalSha256.update(this._oKeyPad);
+            finalSha256.update(innerHash);
+            return finalSha256.digest();
+        }
+    }
+
+    // Copyright 2020 IOTA Stiftung
+    /**
      * Implementation of X25519.
      */
     class X25519 {
@@ -9416,10 +9836,12 @@
     exports.ChaCha20Poly1305 = ChaCha20Poly1305;
     exports.Curl = Curl;
     exports.Ed25519 = Ed25519;
+    exports.HmacSha1 = HmacSha1;
     exports.HmacSha256 = HmacSha256;
     exports.HmacSha512 = HmacSha512;
     exports.Pbkdf2 = Pbkdf2;
     exports.Poly1305 = Poly1305;
+    exports.Sha1 = Sha1;
     exports.Sha256 = Sha256;
     exports.Sha512 = Sha512;
     exports.Slip0010 = Slip0010;

@@ -17,6 +17,7 @@ export declare class Blake2b {
     static SIZE_512: number;
     /**
      * Create a new instance of Blake2b.
+<<<<<<< HEAD
      */
     constructor();
     /**
@@ -26,6 +27,12 @@ export declare class Blake2b {
      * @returns The sum 160 of the data.
      */
     static sum160(data: Uint8Array, key?: Uint8Array): Uint8Array;
+=======
+     * @param outlen Output length between 1 and 64 bytes.
+     * @param key Optional key.
+     */
+    constructor(outlen: number, key?: Uint8Array);
+>>>>>>> dev
     /**
      * Perform Sum 256 on the data.
      * @param data The data to operate on.
@@ -41,6 +48,7 @@ export declare class Blake2b {
      */
     static sum512(data: Uint8Array, key?: Uint8Array): Uint8Array;
     /**
+<<<<<<< HEAD
      * Creates a BLAKE2b hashing context.
      * @param outlen Output length between 1 and 64 bytes.
      * @param key Optional key.
@@ -87,4 +95,15 @@ export declare class Blake2b {
         c: number;
         outlen: number;
     }): Uint8Array;
+=======
+     * Updates a BLAKE2b streaming hash.
+     * @param input The data to hash.
+     */
+    update(input: Uint8Array): void;
+    /**
+     * Completes a BLAKE2b streaming hash.
+     * @returns The final data.
+     */
+    final(): Uint8Array;
+>>>>>>> dev
 }

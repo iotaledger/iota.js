@@ -2,7 +2,10 @@
 // SPDX-License-Identifier: Apache-2.0
 import { Base64 } from "../../src/encoding/base64";
 import { Converter } from "../../src/utils/converter";
+import testData from "./base64.json";
 
+// Test vectors
+// https://datatracker.ietf.org/doc/html/rfc4648#section-10
 describe("Base64Helper", () => {
     test("Can encode bytes to base64", () => {
         expect(Base64.encode(new Uint8Array([1, 2, 3, 4]))).toEqual("AQIDBA==");
@@ -12,24 +15,15 @@ describe("Base64Helper", () => {
         expect(Base64.decode("AQIDBA==")).toEqual(new Uint8Array([1, 2, 3, 4]));
     });
 
-    test("Can decode base64 strings to bytes", () => {
-        // https://datatracker.ietf.org/doc/html/rfc4648#section-10
-        expect(Converter.bytesToUtf8(Base64.decode(""))).toEqual("");
-        expect(Converter.bytesToUtf8(Base64.decode("Zg=="))).toEqual("f");
-        expect(Converter.bytesToUtf8(Base64.decode("Zm8="))).toEqual("fo");
-        expect(Converter.bytesToUtf8(Base64.decode("Zm9v"))).toEqual("foo");
-        expect(Converter.bytesToUtf8(Base64.decode("Zm9vYg=="))).toEqual("foob");
-        expect(Converter.bytesToUtf8(Base64.decode("Zm9vYmE="))).toEqual("fooba");
-        expect(Converter.bytesToUtf8(Base64.decode("Zm9vYmFy"))).toEqual("foobar");
+    test("Can encode base64 strings to bytes", () => {
+        for (const test of testData) {
+            expect(Base64.encode(Converter.utf8ToBytes(test.decoded))).toEqual(test.encoded);
+        }
     });
 
-    test("Can encode bytes to base 64 strings", () => {
-        expect(Base64.encode(Converter.utf8ToBytes(""))).toEqual("");
-        expect(Base64.encode(Converter.utf8ToBytes("f"))).toEqual("Zg==");
-        expect(Base64.encode(Converter.utf8ToBytes("fo"))).toEqual("Zm8=");
-        expect(Base64.encode(Converter.utf8ToBytes("foo"))).toEqual("Zm9v");
-        expect(Base64.encode(Converter.utf8ToBytes("foob"))).toEqual("Zm9vYg==");
-        expect(Base64.encode(Converter.utf8ToBytes("fooba"))).toEqual("Zm9vYmE=");
-        expect(Base64.encode(Converter.utf8ToBytes("foobar"))).toEqual("Zm9vYmFy");
+    test("Can decode base64 bytes to string", () => {
+        for (const test of testData) {
+            expect(Converter.bytesToUtf8(Base64.decode(test.encoded))).toEqual(test.decoded);
+        }
     });
 });

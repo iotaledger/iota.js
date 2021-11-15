@@ -1,0 +1,30 @@
+[
+    {
+        "decoded": "",
+        "encoded": ""
+    },
+    {
+        "decoded": "f",
+        "encoded": "Zg=="
+    },
+    {
+        "decoded": "fo",
+        "encoded": "Zm8="
+    },
+    {
+        "decoded": "foo",
+        "encoded": "Zm9v"
+    },
+    {
+        "decoded": "foob",
+        "encoded": "Zm9vYg=="
+    },
+    {
+        "decoded": "fooba",
+        "encoded": "Zm9vYmE="
+    },
+    {
+        "decoded": "foobar",
+        "encoded": "Zm9vYmFy"
+    }
+]

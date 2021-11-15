@@ -16,7 +16,10 @@ TypeScript conversion from https://github.com/dcposch/blakejs.
 - [sum160](Blake2b.md#sum160)
 - [sum256](Blake2b.md#sum256)
 - [sum512](Blake2b.md#sum512)
+<<<<<<< HEAD
 - [init](Blake2b.md#init)
+=======
+>>>>>>> dev
 - [update](Blake2b.md#update)
 - [final](Blake2b.md#final)
 
@@ -113,6 +116,7 @@ The sum 512 of the data.
 
 ___
 
+<<<<<<< HEAD
 ### init
 
 ▸ **init**(`outlen`, `key?`): `Object`
@@ -137,6 +141,11 @@ ___
 ### update
 
 ▸ **update**(`ctx`, `input`): `void`
+=======
+### update
+
+▸ **update**(`input`): `void`
+>>>>>>> dev
 
 Updates a BLAKE2b streaming hash.
 
@@ -144,7 +153,10 @@ Updates a BLAKE2b streaming hash.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
+<<<<<<< HEAD
 | `ctx` | `Object` | The context. |
+=======
+>>>>>>> dev
 | `input` | `Uint8Array` | The data to hash. |
 
 #### Returns
@@ -155,6 +167,7 @@ ___
 
 ### final
 
+<<<<<<< HEAD
 ▸ **final**(`ctx`): `Uint8Array`
 
 Completes a BLAKE2b streaming hash.
@@ -165,6 +178,12 @@ Completes a BLAKE2b streaming hash.
 | :------ | :------ | :------ |
 | `ctx` | `Object` | The context. |
 
+=======
+▸ **final**(): `Uint8Array`
+
+Completes a BLAKE2b streaming hash.
+
+>>>>>>> dev
 #### Returns
 
 `Uint8Array`
@@ -175,6 +194,19 @@ The final data.
 
 ### constructor
 
+<<<<<<< HEAD
 • **new Blake2b**()
 
 Create a new instance of Blake2b.
+=======
+• **new Blake2b**(`outlen`, `key?`)
+
+Create a new instance of Blake2b.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `outlen` | `number` | Output length between 1 and 64 bytes. |
+| `key?` | `Uint8Array` | Optional key. |
+>>>>>>> dev
