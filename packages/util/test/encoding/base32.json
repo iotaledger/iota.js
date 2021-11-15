@@ -1,0 +1,30 @@
+[
+    {
+        "decoded": "",
+        "encoded": ""
+    },
+    {
+        "decoded": "f",
+        "encoded": "MY======"
+    },
+    {
+        "decoded": "fo",
+        "encoded": "MZXQ===="
+    },
+    {
+        "decoded": "foo",
+        "encoded": "MZXW6==="
+    },
+    {
+        "decoded": "foob",
+        "encoded": "MZXW6YQ="
+    },
+    {
+        "decoded": "fooba",
+        "encoded": "MZXW6YTB"
+    },
+    {
+        "decoded": "foobar",
+        "encoded": "MZXW6YTBOI======"
+    }
+]
