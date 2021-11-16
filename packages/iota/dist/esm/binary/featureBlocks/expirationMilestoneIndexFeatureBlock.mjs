@@ -13,7 +13,7 @@ export function deserializeExpirationMilestoneIndexFeatureBlock(readStream) {
     if (!readStream.hasRemaining(MIN_EXPIRATION_MILESTONE_INDEX_FEATURE_BLOCK_LENGTH)) {
         throw new Error(`ExpirationMilestoneIndex Feature Block data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_EXPIRATION_MILESTONE_INDEX_FEATURE_BLOCK_LENGTH}`);
     }
-    const type = readStream.readByte("expirationMilestoneIndexFeatureBlock.type");
+    const type = readStream.readUInt8("expirationMilestoneIndexFeatureBlock.type");
     if (type !== EXPIRATION_MILESTONE_INDEX_FEATURE_BLOCK_TYPE) {
         throw new Error(`Type mismatch in expirationMilestoneIndexFeatureBlock ${type}`);
     }
@@ -29,6 +29,6 @@ export function deserializeExpirationMilestoneIndexFeatureBlock(readStream) {
  * @param object The object to serialize.
  */
 export function serializeExpirationMilestoneIndexFeatureBlock(writeStream, object) {
-    writeStream.writeByte("expirationMilestoneIndexFeatureBlock.type", object.type);
+    writeStream.writeUInt8("expirationMilestoneIndexFeatureBlock.type", object.type);
     writeStream.writeUInt32("expirationMilestoneIndexFeatureBlock.milestoneIndex", object.milestoneIndex);
 }

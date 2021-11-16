@@ -21,7 +21,7 @@ export function deserializeTransactionPayload(readStream) {
     if (type !== TRANSACTION_PAYLOAD_TYPE) {
         throw new Error(`Type mismatch in payloadTransaction ${type}`);
     }
-    const essenceType = readStream.readByte("payloadTransaction.essenceType", false);
+    const essenceType = readStream.readUInt8("payloadTransaction.essenceType", false);
     let essence;
     let unlockBlocks;
     if (essenceType === TRANSACTION_ESSENCE_TYPE) {

@@ -22,9 +22,9 @@ export const NFT_ID_LENGTH: number = 20;
  */
 export const MIN_NFT_OUTPUT_LENGTH: number =
     SMALL_TYPE_LENGTH + // Type
+    MIN_ADDRESS_LENGTH + // Address
     UINT64_SIZE + // Amount
     MIN_NATIVE_TOKENS_LENGTH + // Native tokens
-    MIN_ADDRESS_LENGTH + // Address
     NFT_ID_LENGTH + // Nft Id
     UINT32_SIZE + // Immutable data length
     MIN_FEATURE_BLOCKS_LENGTH; // Feature Blocks
@@ -46,12 +46,9 @@ export function deserializeNftOutput(readStream: ReadStream): INftOutput {
         throw new Error(`Type mismatch in nftOutput ${type}`);
     }
 
-    const amount = readStream.readUInt64("nftOutput.amount");
-
-    const nativeTokens = deserializeNativeTokens(readStream);
-
     const address = deserializeAddress(readStream);
-
+    const amount = readStream.readUInt64("nftOutput.amount");
+    const nativeTokens = deserializeNativeTokens(readStream);
     const nftId = readStream.readFixedHex("nftOutput.nftId", NFT_ID_LENGTH);
 
     const immutableMetadataLength = readStream.readUInt32("nftOutput.immutableMetadataLength");
@@ -77,12 +74,11 @@ export function deserializeNftOutput(readStream: ReadStream): INftOutput {
  */
 export function serializeNftOutput(writeStream: WriteStream, object: INftOutput): void {
     writeStream.writeUInt8("nftOutput.type", object.type);
+
+    serializeAddress(writeStream, object.address);
     writeStream.writeUInt64("nftOutput.amount", bigInt(object.amount));
     serializeNativeTokens(writeStream, object.nativeTokens);
-    serializeAddress(writeStream, object.address);
-
     writeStream.writeFixedHex("nftOutput.nftId", NFT_ID_LENGTH, object.nftId);
-
     writeStream.writeUInt32("nftOutput.immutableMetadataLength", object.immutableData.length / 2);
     writeStream.writeFixedHex("nftOutput.immutableMetadata", object.immutableData.length / 2, object.immutableData);
 

@@ -8,9 +8,9 @@ import { deserializeNativeTokens, serializeNativeTokens, MIN_NATIVE_TOKENS_LENGT
  * The minimum length of a extended output binary representation.
  */
 export const MIN_EXTENDED_OUTPUT_LENGTH = SMALL_TYPE_LENGTH + // Type
+    MIN_ADDRESS_LENGTH + // Address
     UINT64_SIZE + // Amount
     MIN_NATIVE_TOKENS_LENGTH + // Native Tokens
-    MIN_ADDRESS_LENGTH + // Address
     MIN_FEATURE_BLOCKS_LENGTH; // Feature Blocks
 /**
  * Deserialize the extended output from binary.
@@ -21,13 +21,13 @@ export function deserializeExtendedOutput(readStream) {
     if (!readStream.hasRemaining(MIN_EXTENDED_OUTPUT_LENGTH)) {
         throw new Error(`Extended Output data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_EXTENDED_OUTPUT_LENGTH}`);
     }
-    const type = readStream.readByte("extendedOutput.type");
+    const type = readStream.readUInt8("extendedOutput.type");
     if (type !== EXTENDED_OUTPUT_TYPE) {
         throw new Error(`Type mismatch in extendedOutput ${type}`);
     }
+    const address = deserializeAddress(readStream);
     const amount = readStream.readUInt64("extendedOutput.amount");
     const nativeTokens = deserializeNativeTokens(readStream);
-    const address = deserializeAddress(readStream);
     const featureBlocks = deserializeFeatureBlocks(readStream);
     return {
         type: EXTENDED_OUTPUT_TYPE,
@@ -43,9 +43,9 @@ export function deserializeExtendedOutput(readStream) {
  * @param object The object to serialize.
  */
 export function serializeExtendedOutput(writeStream, object) {
-    writeStream.writeByte("extendedOutput.type", object.type);
+    writeStream.writeUInt8("extendedOutput.type", object.type);
+    serializeAddress(writeStream, object.address);
     writeStream.writeUInt64("extendedOutput.amount", bigInt(object.amount));
     serializeNativeTokens(writeStream, object.nativeTokens);
-    serializeAddress(writeStream, object.address);
     serializeFeatureBlocks(writeStream, object.blocks);
 }

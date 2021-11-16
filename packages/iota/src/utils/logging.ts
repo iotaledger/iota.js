@@ -8,12 +8,12 @@ import { ED25519_ADDRESS_TYPE } from "../models/addresses/IEd25519Address";
 import { NFT_ADDRESS_TYPE } from "../models/addresses/INftAddress";
 import type { ITipsResponse } from "../models/api/ITipsResponse";
 import type { FeatureBlockTypes } from "../models/featureBlocks/featureBlockTypes";
+import { DUST_DEPOSIT_RETURN_FEATURE_BLOCK_TYPE } from "../models/featureBlocks/IDustDepositReturnFeatureBlock";
 import { EXPIRATION_MILESTONE_INDEX_FEATURE_BLOCK_TYPE } from "../models/featureBlocks/IExpirationMilestoneIndexFeatureBlock";
 import { EXPIRATION_UNIX_FEATURE_BLOCK_TYPE } from "../models/featureBlocks/IExpirationUnixFeatureBlock";
 import { INDEXATION_FEATURE_BLOCK_TYPE } from "../models/featureBlocks/IIndexationFeatureBlock";
 import { ISSUER_FEATURE_BLOCK_TYPE } from "../models/featureBlocks/IIssuerFeatureBlock";
 import { METADATA_FEATURE_BLOCK_TYPE } from "../models/featureBlocks/IMetadataFeatureBlock";
-import { RETURN_FEATURE_BLOCK_TYPE } from "../models/featureBlocks/IReturnFeatureBlock";
 import { SENDER_FEATURE_BLOCK_TYPE } from "../models/featureBlocks/ISenderFeatureBlock";
 import { TIMELOCK_MILESTONE_INDEX_FEATURE_BLOCK_TYPE } from "../models/featureBlocks/ITimelockMilestoneIndexFeatureBlock";
 import { TIMELOCK_UNIX_FEATURE_BLOCK_TYPE } from "../models/featureBlocks/ITimelockUnixFeatureBlock";
@@ -478,8 +478,8 @@ export function logFeatureBlock(prefix: string, featureBlock: FeatureBlockTypes)
     } else if (featureBlock.type === ISSUER_FEATURE_BLOCK_TYPE) {
         logger(`${prefix}\tIssuer Feature Block`);
         logAddress(`${prefix}\t\t`, featureBlock.address);
-    } else if (featureBlock.type === RETURN_FEATURE_BLOCK_TYPE) {
-        logger(`${prefix}\tReturn Feature Block`);
+    } else if (featureBlock.type === DUST_DEPOSIT_RETURN_FEATURE_BLOCK_TYPE) {
+        logger(`${prefix}\tDust Deposit Return Feature Block`);
         logger(`${prefix}\t\tAmount:`, featureBlock.amount);
     } else if (featureBlock.type === TIMELOCK_MILESTONE_INDEX_FEATURE_BLOCK_TYPE) {
         logger(`${prefix}\tTimelock Milestone Index Feature Block`);

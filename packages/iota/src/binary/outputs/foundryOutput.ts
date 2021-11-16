@@ -25,9 +25,9 @@ import { deserializeTokenScheme, MIN_TOKEN_SCHEME_LENGTH, serializeTokenScheme }
  */
 export const MIN_FOUNDRY_OUTPUT_LENGTH: number =
     SMALL_TYPE_LENGTH + // Type
+    MIN_ADDRESS_LENGTH + // Address
     UINT64_SIZE + // Amount
     MIN_NATIVE_TOKENS_LENGTH + // Native tokens
-    MIN_ADDRESS_LENGTH + // Address
     UINT32_SIZE + // Serial Number
     NATIVE_TOKEN_TAG_LENGTH + // Token Tag
     UINT256_SIZE + // Circulating Supply
@@ -52,21 +52,14 @@ export function deserializeFoundryOutput(readStream: ReadStream): IFoundryOutput
         throw new Error(`Type mismatch in foundryOutput ${type}`);
     }
 
-    const amount = readStream.readUInt64("foundryOutput.amount");
-
-    const nativeTokens = deserializeNativeTokens(readStream);
-
     const address = deserializeAddress(readStream) as IAliasAddress;
-
+    const amount = readStream.readUInt64("foundryOutput.amount");
+    const nativeTokens = deserializeNativeTokens(readStream);
     const serialNumber = readStream.readUInt32("foundryOutput.serialNumber");
-
     const tokenTag = readStream.readFixedHex("foundryOutput.tokenTag", NATIVE_TOKEN_TAG_LENGTH);
-
     const circulatingSupply = readStream.readUInt256("foundryOutput.circulatingSupply");
     const maximumSupply = readStream.readUInt256("foundryOutput.maximumSupply");
-
     const tokenScheme = deserializeTokenScheme(readStream);
-
     const featureBlocks = deserializeFeatureBlocks(readStream);
 
     return {
@@ -90,20 +83,14 @@ export function deserializeFoundryOutput(readStream: ReadStream): IFoundryOutput
  */
 export function serializeFoundryOutput(writeStream: WriteStream, object: IFoundryOutput): void {
     writeStream.writeUInt8("foundryOutput.type", object.type);
-    writeStream.writeUInt64("foundryOutput.amount", bigInt(object.amount));
-
-    serializeNativeTokens(writeStream, object.nativeTokens);
 
     serializeAddress(writeStream, object.address);
-
+    writeStream.writeUInt64("foundryOutput.amount", bigInt(object.amount));
+    serializeNativeTokens(writeStream, object.nativeTokens);
     writeStream.writeUInt32("foundryOutput.serialNumber", object.serialNumber);
-
     writeStream.writeFixedHex("foundryOutput.tokenTag", NATIVE_TOKEN_TAG_LENGTH, object.tokenTag);
-
     writeStream.writeUInt256("foundryOutput.circulatingSupply", bigInt(object.circulatingSupply));
     writeStream.writeUInt256("foundryOutput.maximumSupply", bigInt(object.maximumSupply));
-
     serializeTokenScheme(writeStream, object.tokenScheme);
-
     serializeFeatureBlocks(writeStream, object.blocks);
 }

@@ -15,7 +15,7 @@ export function deserializeTreasuryOutput(readStream) {
     if (!readStream.hasRemaining(MIN_TREASURY_OUTPUT_LENGTH)) {
         throw new Error(`Treasury Output data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_TREASURY_OUTPUT_LENGTH}`);
     }
-    const type = readStream.readByte("treasuryOutput.type");
+    const type = readStream.readUInt8("treasuryOutput.type");
     if (type !== TREASURY_OUTPUT_TYPE) {
         throw new Error(`Type mismatch in treasuryOutput ${type}`);
     }
@@ -31,6 +31,6 @@ export function deserializeTreasuryOutput(readStream) {
  * @param object The object to serialize.
  */
 export function serializeTreasuryOutput(writeStream, object) {
-    writeStream.writeByte("treasuryOutput.type", object.type);
+    writeStream.writeUInt8("treasuryOutput.type", object.type);
     writeStream.writeUInt64("treasuryOutput.amount", bigInt(object.amount));
 }

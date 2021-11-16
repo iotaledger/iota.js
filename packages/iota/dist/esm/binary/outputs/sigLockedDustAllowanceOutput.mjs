@@ -17,7 +17,7 @@ export function deserializeSigLockedDustAllowanceOutput(readStream) {
     if (!readStream.hasRemaining(MIN_SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_LENGTH)) {
         throw new Error(`Signature Locked Dust Allowance Output data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_LENGTH}`);
     }
-    const type = readStream.readByte("sigLockedDustAllowanceOutput.type");
+    const type = readStream.readUInt8("sigLockedDustAllowanceOutput.type");
     if (type !== SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE) {
         throw new Error(`Type mismatch in sigLockedDustAllowanceOutput ${type}`);
     }
@@ -35,7 +35,7 @@ export function deserializeSigLockedDustAllowanceOutput(readStream) {
  * @param object The object to serialize.
  */
 export function serializeSigLockedDustAllowanceOutput(writeStream, object) {
-    writeStream.writeByte("sigLockedDustAllowanceOutput.type", object.type);
+    writeStream.writeUInt8("sigLockedDustAllowanceOutput.type", object.type);
     serializeAddress(writeStream, object.address);
     writeStream.writeUInt64("sigLockedDustAllowanceOutput.amount", bigInt(object.amount));
 }

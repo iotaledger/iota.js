@@ -18,7 +18,7 @@ Keep track of the write index within a stream.
 - [setWriteIndex](WriteStream.md#setwriteindex)
 - [writeFixedHex](WriteStream.md#writefixedhex)
 - [writeBytes](WriteStream.md#writebytes)
-- [writeByte](WriteStream.md#writebyte)
+- [writeUInt8](WriteStream.md#writeuint8)
 - [writeUInt16](WriteStream.md#writeuint16)
 - [writeUInt32](WriteStream.md#writeuint32)
 - [writeUInt64](WriteStream.md#writeuint64)
@@ -163,9 +163,9 @@ Write fixed length stream.
 
 ___
 
-### writeByte
+### writeUInt8
 
-▸ **writeByte**(`name`, `val`): `void`
+▸ **writeUInt8**(`name`, `val`): `void`
 
 Write a byte to the stream.
 

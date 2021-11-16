@@ -17,7 +17,7 @@ Keep track of the read index within a stream.
 - [setReadIndex](ReadStream.md#setreadindex)
 - [readFixedHex](ReadStream.md#readfixedhex)
 - [readBytes](ReadStream.md#readbytes)
-- [readByte](ReadStream.md#readbyte)
+- [readUInt8](ReadStream.md#readuint8)
 - [readUInt16](ReadStream.md#readuint16)
 - [readUInt32](ReadStream.md#readuint32)
 - [readUInt64](ReadStream.md#readuint64)
@@ -165,9 +165,9 @@ The value.
 
 ___
 
-### readByte
+### readUInt8
 
-▸ **readByte**(`name`, `moveIndex?`): `number`
+▸ **readUInt8**(`name`, `moveIndex?`): `number`
 
 Read a byte from the stream.
 

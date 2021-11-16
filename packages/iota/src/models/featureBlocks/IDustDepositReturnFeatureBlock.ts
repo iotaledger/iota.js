@@ -3,14 +3,14 @@
 import type { ITypeBase } from "../ITypeBase";
 
 /**
- * The global type for the return feature block.
+ * The global type for the dust deposit return feature block.
  */
-export const RETURN_FEATURE_BLOCK_TYPE = 2;
+export const DUST_DEPOSIT_RETURN_FEATURE_BLOCK_TYPE = 2;
 
 /**
  * Return feature block.
  */
-export interface IReturnFeatureBlock extends ITypeBase<2> {
+export interface IDustDepositReturnFeatureBlock extends ITypeBase<2> {
     /**
      * Amount of IOTA tokens the consuming transaction should deposit to the address defined in Sender Block.
      */

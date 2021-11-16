@@ -14,7 +14,7 @@ export function deserializeSenderFeatureBlock(readStream) {
     if (!readStream.hasRemaining(MIN_SENDER_FEATURE_BLOCK_LENGTH)) {
         throw new Error(`Sender Feature Block data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_SENDER_FEATURE_BLOCK_LENGTH}`);
     }
-    const type = readStream.readByte("senderFeatureBlock.type");
+    const type = readStream.readUInt8("senderFeatureBlock.type");
     if (type !== SENDER_FEATURE_BLOCK_TYPE) {
         throw new Error(`Type mismatch in senderFeatureBlock ${type}`);
     }
@@ -30,6 +30,6 @@ export function deserializeSenderFeatureBlock(readStream) {
  * @param object The object to serialize.
  */
 export function serializeSenderFeatureBlock(writeStream, object) {
-    writeStream.writeByte("senderFeatureBlock.type", object.type);
+    writeStream.writeUInt8("senderFeatureBlock.type", object.type);
     serializeAddress(writeStream, object.address);
 }

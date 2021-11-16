@@ -14,7 +14,7 @@ export function deserializeIssuerFeatureBlock(readStream) {
     if (!readStream.hasRemaining(MIN_ISSUER_FEATURE_BLOCK_LENGTH)) {
         throw new Error(`Issuer Feature Block data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_ISSUER_FEATURE_BLOCK_LENGTH}`);
     }
-    const type = readStream.readByte("issuerFeatureBlock.type");
+    const type = readStream.readUInt8("issuerFeatureBlock.type");
     if (type !== ISSUER_FEATURE_BLOCK_TYPE) {
         throw new Error(`Type mismatch in issuerFeatureBlock ${type}`);
     }
@@ -30,6 +30,6 @@ export function deserializeIssuerFeatureBlock(readStream) {
  * @param object The object to serialize.
  */
 export function serializeIssuerFeatureBlock(writeStream, object) {
-    writeStream.writeByte("issuerFeatureBlock.type", object.type);
+    writeStream.writeUInt8("issuerFeatureBlock.type", object.type);
     serializeAddress(writeStream, object.address);
 }

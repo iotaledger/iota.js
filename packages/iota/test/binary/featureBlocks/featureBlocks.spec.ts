@@ -30,7 +30,7 @@ describe("Binary Feature Blocks", () => {
         serializeFeatureBlocks(serialized, featureBlocks);
         const hex = serialized.finalHex();
         expect(hex).toEqual(
-            "020000006920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f9201006920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
+            "0200006920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f9201006920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
         );
         const deserialized = deserializeFeatureBlocks(new ReadStream(Converter.hexToBytes(hex)));
         expect(deserialized.length).toEqual(2);

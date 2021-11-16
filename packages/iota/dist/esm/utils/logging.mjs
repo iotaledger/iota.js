@@ -5,12 +5,12 @@ import { ALIAS_ADDRESS_TYPE } from "../models/addresses/IAliasAddress.mjs";
 import { BLS_ADDRESS_TYPE } from "../models/addresses/IBlsAddress.mjs";
 import { ED25519_ADDRESS_TYPE } from "../models/addresses/IEd25519Address.mjs";
 import { NFT_ADDRESS_TYPE } from "../models/addresses/INftAddress.mjs";
+import { DUST_DEPOSIT_RETURN_FEATURE_BLOCK_TYPE } from "../models/featureBlocks/IDustDepositReturnFeatureBlock.mjs";
 import { EXPIRATION_MILESTONE_INDEX_FEATURE_BLOCK_TYPE } from "../models/featureBlocks/IExpirationMilestoneIndexFeatureBlock.mjs";
 import { EXPIRATION_UNIX_FEATURE_BLOCK_TYPE } from "../models/featureBlocks/IExpirationUnixFeatureBlock.mjs";
 import { INDEXATION_FEATURE_BLOCK_TYPE } from "../models/featureBlocks/IIndexationFeatureBlock.mjs";
 import { ISSUER_FEATURE_BLOCK_TYPE } from "../models/featureBlocks/IIssuerFeatureBlock.mjs";
 import { METADATA_FEATURE_BLOCK_TYPE } from "../models/featureBlocks/IMetadataFeatureBlock.mjs";
-import { RETURN_FEATURE_BLOCK_TYPE } from "../models/featureBlocks/IReturnFeatureBlock.mjs";
 import { SENDER_FEATURE_BLOCK_TYPE } from "../models/featureBlocks/ISenderFeatureBlock.mjs";
 import { TIMELOCK_MILESTONE_INDEX_FEATURE_BLOCK_TYPE } from "../models/featureBlocks/ITimelockMilestoneIndexFeatureBlock.mjs";
 import { TIMELOCK_UNIX_FEATURE_BLOCK_TYPE } from "../models/featureBlocks/ITimelockUnixFeatureBlock.mjs";
@@ -456,8 +456,8 @@ export function logFeatureBlock(prefix, featureBlock) {
         logger(`${prefix}\tIssuer Feature Block`);
         logAddress(`${prefix}\t\t`, featureBlock.address);
     }
-    else if (featureBlock.type === RETURN_FEATURE_BLOCK_TYPE) {
-        logger(`${prefix}\tReturn Feature Block`);
+    else if (featureBlock.type === DUST_DEPOSIT_RETURN_FEATURE_BLOCK_TYPE) {
+        logger(`${prefix}\tDust Deposit Return Feature Block`);
         logger(`${prefix}\t\tAmount:`, featureBlock.amount);
     }
     else if (featureBlock.type === TIMELOCK_MILESTONE_INDEX_FEATURE_BLOCK_TYPE) {

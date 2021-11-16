@@ -13,7 +13,7 @@ export function deserializeUTXOInput(readStream) {
     if (!readStream.hasRemaining(MIN_UTXO_INPUT_LENGTH)) {
         throw new Error(`UTXO Input data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_UTXO_INPUT_LENGTH}`);
     }
-    const type = readStream.readByte("utxoInput.type");
+    const type = readStream.readUInt8("utxoInput.type");
     if (type !== UTXO_INPUT_TYPE) {
         throw new Error(`Type mismatch in utxoInput ${type}`);
     }
@@ -31,7 +31,7 @@ export function deserializeUTXOInput(readStream) {
  * @param object The object to serialize.
  */
 export function serializeUTXOInput(writeStream, object) {
-    writeStream.writeByte("utxoInput.type", object.type);
+    writeStream.writeUInt8("utxoInput.type", object.type);
     writeStream.writeFixedHex("utxoInput.transactionId", TRANSACTION_ID_LENGTH, object.transactionId);
     writeStream.writeUInt16("utxoInput.transactionOutputIndex", object.transactionOutputIndex);
 }

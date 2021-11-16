@@ -3,6 +3,10 @@
 import type { ReadStream, WriteStream } from "@iota/util.js";
 import type { FeatureBlockTypes } from "../../models/featureBlocks/featureBlockTypes";
 import {
+    DUST_DEPOSIT_RETURN_FEATURE_BLOCK_TYPE,
+    IDustDepositReturnFeatureBlock
+} from "../../models/featureBlocks/IDustDepositReturnFeatureBlock";
+import {
     EXPIRATION_MILESTONE_INDEX_FEATURE_BLOCK_TYPE,
     IExpirationMilestoneIndexFeatureBlock
 } from "../../models/featureBlocks/IExpirationMilestoneIndexFeatureBlock";
@@ -16,7 +20,6 @@ import {
 } from "../../models/featureBlocks/IIndexationFeatureBlock";
 import { IIssuerFeatureBlock, ISSUER_FEATURE_BLOCK_TYPE } from "../../models/featureBlocks/IIssuerFeatureBlock";
 import { IMetadataFeatureBlock, METADATA_FEATURE_BLOCK_TYPE } from "../../models/featureBlocks/IMetadataFeatureBlock";
-import { IReturnFeatureBlock, RETURN_FEATURE_BLOCK_TYPE } from "../../models/featureBlocks/IReturnFeatureBlock";
 import { ISenderFeatureBlock, SENDER_FEATURE_BLOCK_TYPE } from "../../models/featureBlocks/ISenderFeatureBlock";
 import {
     ITimelockMilestoneIndexFeatureBlock,
@@ -27,7 +30,12 @@ import {
     TIMELOCK_UNIX_FEATURE_BLOCK_TYPE
 } from "../../models/featureBlocks/ITimelockUnixFeatureBlock";
 import type { ITypeBase } from "../../models/ITypeBase";
-import { UINT16_SIZE } from "../commonDataTypes";
+import { UINT8_SIZE } from "../commonDataTypes";
+import {
+    deserializeDustDepositReturnFeatureBlock,
+    MIN_DUST_DEPOSIT_RETURN_FEATURE_BLOCK_LENGTH,
+    serializeDustDepositReturnFeatureBlock
+} from "./dustDepositReturnFeatureBlock";
 import {
     deserializeExpirationMilestoneIndexFeatureBlock,
     MIN_EXPIRATION_MILESTONE_INDEX_FEATURE_BLOCK_LENGTH,
@@ -54,11 +62,6 @@ import {
     serializeMetadataFeatureBlock
 } from "./metadataFeatureBlock";
 import {
-    deserializeReturnFeatureBlock,
-    MIN_RETURN_FEATURE_BLOCK_LENGTH,
-    serializeReturnFeatureBlock
-} from "./returnFeatureBlock";
-import {
     deserializeSenderFeatureBlock,
     MIN_SENDER_FEATURE_BLOCK_LENGTH,
     serializeSenderFeatureBlock
@@ -77,7 +80,7 @@ import {
 /**
  * The minimum length of a feature blocks tokens list.
  */
-export const MIN_FEATURE_BLOCKS_LENGTH: number = UINT16_SIZE;
+export const MIN_FEATURE_BLOCKS_LENGTH: number = UINT8_SIZE;
 
 /**
  * The minimum length of a feature block binary representation.
@@ -85,7 +88,7 @@ export const MIN_FEATURE_BLOCKS_LENGTH: number = UINT16_SIZE;
 export const MIN_FEATURE_BLOCK_LENGTH: number = Math.min(
     MIN_SENDER_FEATURE_BLOCK_LENGTH,
     MIN_ISSUER_FEATURE_BLOCK_LENGTH,
-    MIN_RETURN_FEATURE_BLOCK_LENGTH,
+    MIN_DUST_DEPOSIT_RETURN_FEATURE_BLOCK_LENGTH,
     MIN_TIMELOCK_MILESTONE_INDEX_FEATURE_BLOCK_LENGTH,
     MIN_TIMELOCK_UNIX_FEATURE_BLOCK_LENGTH,
     MIN_EXPIRATION_MILESTONE_INDEX_FEATURE_BLOCK_LENGTH,
@@ -100,7 +103,7 @@ export const MIN_FEATURE_BLOCK_LENGTH: number = Math.min(
  * @returns The deserialized object.
  */
 export function deserializeFeatureBlocks(readStream: ReadStream): FeatureBlockTypes[] {
-    const numFeatureBlocks = readStream.readUInt16("featureBlocks.numFeatureBlocks");
+    const numFeatureBlocks = readStream.readUInt8("featureBlocks.numFeatureBlocks");
 
     const featureBlocks: FeatureBlockTypes[] = [];
     for (let i = 0; i < numFeatureBlocks; i++) {
@@ -116,7 +119,7 @@ export function deserializeFeatureBlocks(readStream: ReadStream): FeatureBlockTy
  * @param objects The objects to serialize.
  */
 export function serializeFeatureBlocks(writeStream: WriteStream, objects: FeatureBlockTypes[]): void {
-    writeStream.writeUInt16("featureBlocks.numFeatureBlocks", objects.length);
+    writeStream.writeUInt8("featureBlocks.numFeatureBlocks", objects.length);
 
     for (let i = 0; i < objects.length; i++) {
         serializeFeatureBlock(writeStream, objects[i]);
@@ -142,8 +145,8 @@ export function deserializeFeatureBlock(readStream: ReadStream): FeatureBlockTyp
         input = deserializeSenderFeatureBlock(readStream);
     } else if (type === ISSUER_FEATURE_BLOCK_TYPE) {
         input = deserializeIssuerFeatureBlock(readStream);
-    } else if (type === RETURN_FEATURE_BLOCK_TYPE) {
-        input = deserializeReturnFeatureBlock(readStream);
+    } else if (type === DUST_DEPOSIT_RETURN_FEATURE_BLOCK_TYPE) {
+        input = deserializeDustDepositReturnFeatureBlock(readStream);
     } else if (type === TIMELOCK_MILESTONE_INDEX_FEATURE_BLOCK_TYPE) {
         input = deserializeTimelockMilestoneIndexFeatureBlock(readStream);
     } else if (type === TIMELOCK_UNIX_FEATURE_BLOCK_TYPE) {
@@ -173,8 +176,8 @@ export function serializeFeatureBlock(writeStream: WriteStream, object: ITypeBas
         serializeSenderFeatureBlock(writeStream, object as ISenderFeatureBlock);
     } else if (object.type === ISSUER_FEATURE_BLOCK_TYPE) {
         serializeIssuerFeatureBlock(writeStream, object as IIssuerFeatureBlock);
-    } else if (object.type === RETURN_FEATURE_BLOCK_TYPE) {
-        serializeReturnFeatureBlock(writeStream, object as IReturnFeatureBlock);
+    } else if (object.type === DUST_DEPOSIT_RETURN_FEATURE_BLOCK_TYPE) {
+        serializeDustDepositReturnFeatureBlock(writeStream, object as IDustDepositReturnFeatureBlock);
     } else if (object.type === TIMELOCK_MILESTONE_INDEX_FEATURE_BLOCK_TYPE) {
         serializeTimelockMilestoneIndexFeatureBlock(writeStream, object as ITimelockMilestoneIndexFeatureBlock);
     } else if (object.type === TIMELOCK_UNIX_FEATURE_BLOCK_TYPE) {

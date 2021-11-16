@@ -36,7 +36,7 @@ export function deserializeMessage(readStream) {
         throw new Error(`Message data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_MESSAGE_LENGTH}`);
     }
     const networkId = readStream.readUInt64("message.networkId");
-    const numParents = readStream.readByte("message.numParents");
+    const numParents = readStream.readUInt8("message.numParents");
     const parents = [];
     for (let i = 0; i < numParents; i++) {
         const parentMessageId = readStream.readFixedHex(`message.parentMessageId${i}`, MESSAGE_ID_LENGTH);
@@ -67,7 +67,7 @@ export function serializeMessage(writeStream, object) {
     var _a, _b, _c, _d;
     writeStream.writeUInt64("message.networkId", bigInt((_a = object.networkId) !== null && _a !== void 0 ? _a : "0"));
     const numParents = (_c = (_b = object.parentMessageIds) === null || _b === void 0 ? void 0 : _b.length) !== null && _c !== void 0 ? _c : 0;
-    writeStream.writeByte("message.numParents", numParents);
+    writeStream.writeUInt8("message.numParents", numParents);
     if (object.parentMessageIds) {
         if (numParents > MAX_NUMBER_PARENTS) {
             throw new Error(`A maximum of ${MAX_NUMBER_PARENTS} parents is allowed, you provided ${numParents}`);

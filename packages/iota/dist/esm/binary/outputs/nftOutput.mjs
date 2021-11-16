@@ -12,9 +12,9 @@ export const NFT_ID_LENGTH = 20;
  * The minimum length of a nft output binary representation.
  */
 export const MIN_NFT_OUTPUT_LENGTH = SMALL_TYPE_LENGTH + // Type
+    MIN_ADDRESS_LENGTH + // Address
     UINT64_SIZE + // Amount
     MIN_NATIVE_TOKENS_LENGTH + // Native tokens
-    MIN_ADDRESS_LENGTH + // Address
     NFT_ID_LENGTH + // Nft Id
     UINT32_SIZE + // Immutable data length
     MIN_FEATURE_BLOCKS_LENGTH; // Feature Blocks
@@ -27,13 +27,13 @@ export function deserializeNftOutput(readStream) {
     if (!readStream.hasRemaining(MIN_NFT_OUTPUT_LENGTH)) {
         throw new Error(`NFT Output data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_NFT_OUTPUT_LENGTH}`);
     }
-    const type = readStream.readByte("nftOutput.type");
+    const type = readStream.readUInt8("nftOutput.type");
     if (type !== NFT_OUTPUT_TYPE) {
         throw new Error(`Type mismatch in nftOutput ${type}`);
     }
+    const address = deserializeAddress(readStream);
     const amount = readStream.readUInt64("nftOutput.amount");
     const nativeTokens = deserializeNativeTokens(readStream);
-    const address = deserializeAddress(readStream);
     const nftId = readStream.readFixedHex("nftOutput.nftId", NFT_ID_LENGTH);
     const immutableMetadataLength = readStream.readUInt32("nftOutput.immutableMetadataLength");
     const immutableData = readStream.readFixedHex("nftOutput.immutableMetadata", immutableMetadataLength);
@@ -54,10 +54,10 @@ export function deserializeNftOutput(readStream) {
  * @param object The object to serialize.
  */
 export function serializeNftOutput(writeStream, object) {
-    writeStream.writeByte("nftOutput.type", object.type);
+    writeStream.writeUInt8("nftOutput.type", object.type);
+    serializeAddress(writeStream, object.address);
     writeStream.writeUInt64("nftOutput.amount", bigInt(object.amount));
     serializeNativeTokens(writeStream, object.nativeTokens);
-    serializeAddress(writeStream, object.address);
     writeStream.writeFixedHex("nftOutput.nftId", NFT_ID_LENGTH, object.nftId);
     writeStream.writeUInt32("nftOutput.immutableMetadataLength", object.immutableData.length / 2);
     writeStream.writeFixedHex("nftOutput.immutableMetadata", object.immutableData.length / 2, object.immutableData);

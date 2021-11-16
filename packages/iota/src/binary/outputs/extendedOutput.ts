@@ -17,9 +17,9 @@ import { deserializeNativeTokens, serializeNativeTokens, MIN_NATIVE_TOKENS_LENGT
  */
 export const MIN_EXTENDED_OUTPUT_LENGTH: number =
     SMALL_TYPE_LENGTH + // Type
+    MIN_ADDRESS_LENGTH + // Address
     UINT64_SIZE + // Amount
     MIN_NATIVE_TOKENS_LENGTH + // Native Tokens
-    MIN_ADDRESS_LENGTH + // Address
     MIN_FEATURE_BLOCKS_LENGTH; // Feature Blocks
 
 /**
@@ -39,12 +39,9 @@ export function deserializeExtendedOutput(readStream: ReadStream): IExtendedOutp
         throw new Error(`Type mismatch in extendedOutput ${type}`);
     }
 
-    const amount = readStream.readUInt64("extendedOutput.amount");
-
-    const nativeTokens = deserializeNativeTokens(readStream);
-
     const address = deserializeAddress(readStream);
-
+    const amount = readStream.readUInt64("extendedOutput.amount");
+    const nativeTokens = deserializeNativeTokens(readStream);
     const featureBlocks = deserializeFeatureBlocks(readStream);
 
     return {
@@ -63,10 +60,9 @@ export function deserializeExtendedOutput(readStream: ReadStream): IExtendedOutp
  */
 export function serializeExtendedOutput(writeStream: WriteStream, object: IExtendedOutput): void {
     writeStream.writeUInt8("extendedOutput.type", object.type);
-    writeStream.writeUInt64("extendedOutput.amount", bigInt(object.amount));
-
-    serializeNativeTokens(writeStream, object.nativeTokens);
 
     serializeAddress(writeStream, object.address);
+    writeStream.writeUInt64("extendedOutput.amount", bigInt(object.amount));
+    serializeNativeTokens(writeStream, object.nativeTokens);
     serializeFeatureBlocks(writeStream, object.blocks);
 }

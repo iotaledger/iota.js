@@ -39,7 +39,7 @@ export function deserializeUnlockBlock(readStream) {
     if (!readStream.hasRemaining(MIN_UNLOCK_BLOCK_LENGTH)) {
         throw new Error(`Unlock Block data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_UNLOCK_BLOCK_LENGTH}`);
     }
-    const type = readStream.readByte("unlockBlock.type", false);
+    const type = readStream.readUInt8("unlockBlock.type", false);
     let unlockBlock;
     if (type === SIGNATURE_UNLOCK_BLOCK_TYPE) {
         unlockBlock = deserializeSignatureUnlockBlock(readStream);

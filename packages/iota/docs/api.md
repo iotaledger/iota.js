@@ -36,6 +36,7 @@
 - [SMALL\_TYPE\_LENGTH](api.md#small_type_length)
 - [STRING\_LENGTH](api.md#string_length)
 - [ARRAY\_LENGTH](api.md#array_length)
+- [MIN\_DUST\_DEPOSIT\_RETURN\_FEATURE\_BLOCK\_LENGTH](api.md#min_dust_deposit_return_feature_block_length)
 - [MIN\_EXPIRATION\_MILESTONE\_INDEX\_FEATURE\_BLOCK\_LENGTH](api.md#min_expiration_milestone_index_feature_block_length)
 - [MIN\_EXPIRATION\_UNIX\_FEATURE\_BLOCK\_LENGTH](api.md#min_expiration_unix_feature_block_length)
 - [MIN\_FEATURE\_BLOCKS\_LENGTH](api.md#min_feature_blocks_length)
@@ -43,7 +44,6 @@
 - [MIN\_INDEXATION\_FEATURE\_BLOCK\_LENGTH](api.md#min_indexation_feature_block_length)
 - [MIN\_ISSUER\_FEATURE\_BLOCK\_LENGTH](api.md#min_issuer_feature_block_length)
 - [MIN\_METADATA\_FEATURE\_BLOCK\_LENGTH](api.md#min_metadata_feature_block_length)
-- [MIN\_RETURN\_FEATURE\_BLOCK\_LENGTH](api.md#min_return_feature_block_length)
 - [MIN\_SENDER\_FEATURE\_BLOCK\_LENGTH](api.md#min_sender_feature_block_length)
 - [MIN\_TIMELOCK\_MILESTONE\_INDEX\_FEATURE\_BLOCK\_LENGTH](api.md#min_timelock_milestone_index_feature_block_length)
 - [MIN\_TIMELOCK\_UNIX\_FEATURE\_BLOCK\_LENGTH](api.md#min_timelock_unix_feature_block_length)
@@ -86,12 +86,12 @@
 - [BLS\_ADDRESS\_TYPE](api.md#bls_address_type)
 - [ED25519\_ADDRESS\_TYPE](api.md#ed25519_address_type)
 - [NFT\_ADDRESS\_TYPE](api.md#nft_address_type)
+- [DUST\_DEPOSIT\_RETURN\_FEATURE\_BLOCK\_TYPE](api.md#dust_deposit_return_feature_block_type)
 - [EXPIRATION\_MILESTONE\_INDEX\_FEATURE\_BLOCK\_TYPE](api.md#expiration_milestone_index_feature_block_type)
 - [EXPIRATION\_UNIX\_FEATURE\_BLOCK\_TYPE](api.md#expiration_unix_feature_block_type)
 - [INDEXATION\_FEATURE\_BLOCK\_TYPE](api.md#indexation_feature_block_type)
 - [ISSUER\_FEATURE\_BLOCK\_TYPE](api.md#issuer_feature_block_type)
 - [METADATA\_FEATURE\_BLOCK\_TYPE](api.md#metadata_feature_block_type)
-- [RETURN\_FEATURE\_BLOCK\_TYPE](api.md#return_feature_block_type)
 - [SENDER\_FEATURE\_BLOCK\_TYPE](api.md#sender_feature_block_type)
 - [TIMELOCK\_MILESTONE\_INDEX\_FEATURE\_BLOCK\_TYPE](api.md#timelock_milestone_index_feature_block_type)
 - [TIMELOCK\_UNIX\_FEATURE\_BLOCK\_TYPE](api.md#timelock_unix_feature_block_type)
@@ -130,6 +130,8 @@
 - [serializeEd25519Address](api.md#serializeed25519address)
 - [deserializeNftAddress](api.md#deserializenftaddress)
 - [serializeNftAddress](api.md#serializenftaddress)
+- [deserializeDustDepositReturnFeatureBlock](api.md#deserializedustdepositreturnfeatureblock)
+- [serializeDustDepositReturnFeatureBlock](api.md#serializedustdepositreturnfeatureblock)
 - [deserializeExpirationMilestoneIndexFeatureBlock](api.md#deserializeexpirationmilestoneindexfeatureblock)
 - [serializeExpirationMilestoneIndexFeatureBlock](api.md#serializeexpirationmilestoneindexfeatureblock)
 - [deserializeExpirationUnixFeatureBlock](api.md#deserializeexpirationunixfeatureblock)
@@ -144,8 +146,6 @@
 - [serializeIssuerFeatureBlock](api.md#serializeissuerfeatureblock)
 - [deserializeMetadataFeatureBlock](api.md#deserializemetadatafeatureblock)
 - [serializeMetadataFeatureBlock](api.md#serializemetadatafeatureblock)
-- [deserializeReturnFeatureBlock](api.md#deserializereturnfeatureblock)
-- [serializeReturnFeatureBlock](api.md#serializereturnfeatureblock)
 - [deserializeSenderFeatureBlock](api.md#deserializesenderfeatureblock)
 - [serializeSenderFeatureBlock](api.md#serializesenderfeatureblock)
 - [deserializeTimelockMilestoneIndexFeatureBlock](api.md#deserializetimelockmilestoneindexfeatureblock)
@@ -284,12 +284,12 @@
 - [IReceiptsResponse](interfaces/IReceiptsResponse.md)
 - [IResponse](interfaces/IResponse.md)
 - [ITipsResponse](interfaces/ITipsResponse.md)
+- [IDustDepositReturnFeatureBlock](interfaces/IDustDepositReturnFeatureBlock.md)
 - [IExpirationMilestoneIndexFeatureBlock](interfaces/IExpirationMilestoneIndexFeatureBlock.md)
 - [IExpirationUnixFeatureBlock](interfaces/IExpirationUnixFeatureBlock.md)
 - [IIndexationFeatureBlock](interfaces/IIndexationFeatureBlock.md)
 - [IIssuerFeatureBlock](interfaces/IIssuerFeatureBlock.md)
 - [IMetadataFeatureBlock](interfaces/IMetadataFeatureBlock.md)
-- [IReturnFeatureBlock](interfaces/IReturnFeatureBlock.md)
 - [ISenderFeatureBlock](interfaces/ISenderFeatureBlock.md)
 - [ITimelockMilestoneIndexFeatureBlock](interfaces/ITimelockMilestoneIndexFeatureBlock.md)
 - [ITimelockUnixFeatureBlock](interfaces/ITimelockUnixFeatureBlock.md)
@@ -493,6 +493,14 @@ Byte length for an array length.
 
 ___
 
+### MIN\_DUST\_DEPOSIT\_RETURN\_FEATURE\_BLOCK\_LENGTH
+
+• **MIN\_DUST\_DEPOSIT\_RETURN\_FEATURE\_BLOCK\_LENGTH**: `number`
+
+The minimum length of a return feature block binary representation.
+
+___
+
 ### MIN\_EXPIRATION\_MILESTONE\_INDEX\_FEATURE\_BLOCK\_LENGTH
 
 • **MIN\_EXPIRATION\_MILESTONE\_INDEX\_FEATURE\_BLOCK\_LENGTH**: `number`
@@ -511,7 +519,7 @@ ___
 
 ### MIN\_FEATURE\_BLOCKS\_LENGTH
 
-• **MIN\_FEATURE\_BLOCKS\_LENGTH**: `number` = `UINT16_SIZE`
+• **MIN\_FEATURE\_BLOCKS\_LENGTH**: `number` = `UINT8_SIZE`
 
 The minimum length of a feature blocks tokens list.
 
@@ -546,14 +554,6 @@ ___
 • **MIN\_METADATA\_FEATURE\_BLOCK\_LENGTH**: `number`
 
 The minimum length of a metadata feature block binary representation.
-
-___
-
-### MIN\_RETURN\_FEATURE\_BLOCK\_LENGTH
-
-• **MIN\_RETURN\_FEATURE\_BLOCK\_LENGTH**: `number`
-
-The minimum length of a return feature block binary representation.
 
 ___
 
@@ -893,6 +893,14 @@ The global type for the NFT address type.
 
 ___
 
+### DUST\_DEPOSIT\_RETURN\_FEATURE\_BLOCK\_TYPE
+
+• **DUST\_DEPOSIT\_RETURN\_FEATURE\_BLOCK\_TYPE**: ``2``
+
+The global type for the dust deposit return feature block.
+
+___
+
 ### EXPIRATION\_MILESTONE\_INDEX\_FEATURE\_BLOCK\_TYPE
 
 • **EXPIRATION\_MILESTONE\_INDEX\_FEATURE\_BLOCK\_TYPE**: ``5``
@@ -930,14 +938,6 @@ ___
 • **METADATA\_FEATURE\_BLOCK\_TYPE**: ``7``
 
 The global type for the metadata feature block.
-
-___
-
-### RETURN\_FEATURE\_BLOCK\_TYPE
-
-• **RETURN\_FEATURE\_BLOCK\_TYPE**: ``2``
-
-The global type for the return feature block.
 
 ___
 
@@ -1338,6 +1338,45 @@ Serialize the nft address to binary.
 
 ___
 
+### deserializeDustDepositReturnFeatureBlock
+
+▸ **deserializeDustDepositReturnFeatureBlock**(`readStream`): [`IDustDepositReturnFeatureBlock`](interfaces/IDustDepositReturnFeatureBlock.md)
+
+Deserialize the dust deposit return feature block from binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `readStream` | `ReadStream` | The stream to read the data from. |
+
+#### Returns
+
+[`IDustDepositReturnFeatureBlock`](interfaces/IDustDepositReturnFeatureBlock.md)
+
+The deserialized object.
+
+___
+
+### serializeDustDepositReturnFeatureBlock
+
+▸ **serializeDustDepositReturnFeatureBlock**(`writeStream`, `object`): `void`
+
+Serialize the dust deposit return feature block to binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `writeStream` | `WriteStream` | The stream to write the data to. |
+| `object` | [`IDustDepositReturnFeatureBlock`](interfaces/IDustDepositReturnFeatureBlock.md) | The object to serialize. |
+
+#### Returns
+
+`void`
+
+___
+
 ### deserializeExpirationMilestoneIndexFeatureBlock
 
 ▸ **deserializeExpirationMilestoneIndexFeatureBlock**(`readStream`): [`IExpirationMilestoneIndexFeatureBlock`](interfaces/IExpirationMilestoneIndexFeatureBlock.md)
@@ -1604,45 +1643,6 @@ Serialize the metadata feature block to binary.
 | :------ | :------ | :------ |
 | `writeStream` | `WriteStream` | The stream to write the data to. |
 | `object` | [`IMetadataFeatureBlock`](interfaces/IMetadataFeatureBlock.md) | The object to serialize. |
-
-#### Returns
-
-`void`
-
-___
-
-### deserializeReturnFeatureBlock
-
-▸ **deserializeReturnFeatureBlock**(`readStream`): [`IReturnFeatureBlock`](interfaces/IReturnFeatureBlock.md)
-
-Deserialize the return feature block from binary.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `readStream` | `ReadStream` | The stream to read the data from. |
-
-#### Returns
-
-[`IReturnFeatureBlock`](interfaces/IReturnFeatureBlock.md)
-
-The deserialized object.
-
-___
-
-### serializeReturnFeatureBlock
-
-▸ **serializeReturnFeatureBlock**(`writeStream`, `object`): `void`
-
-Serialize the return feature block to binary.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `writeStream` | `WriteStream` | The stream to write the data to. |
-| `object` | [`IReturnFeatureBlock`](interfaces/IReturnFeatureBlock.md) | The object to serialize. |
 
 #### Returns
 
@@ -3725,7 +3725,7 @@ ___
 
 ### FeatureBlockTypes
 
-Ƭ **FeatureBlockTypes**: [`ISenderFeatureBlock`](interfaces/ISenderFeatureBlock.md) \| [`IIssuerFeatureBlock`](interfaces/IIssuerFeatureBlock.md) \| [`IReturnFeatureBlock`](interfaces/IReturnFeatureBlock.md) \| [`ITimelockMilestoneIndexFeatureBlock`](interfaces/ITimelockMilestoneIndexFeatureBlock.md) \| [`ITimelockUnixFeatureBlock`](interfaces/ITimelockUnixFeatureBlock.md) \| [`IExpirationMilestoneIndexFeatureBlock`](interfaces/IExpirationMilestoneIndexFeatureBlock.md) \| [`IExpirationUnixFeatureBlock`](interfaces/IExpirationUnixFeatureBlock.md) \| [`IMetadataFeatureBlock`](interfaces/IMetadataFeatureBlock.md) \| [`IIndexationFeatureBlock`](interfaces/IIndexationFeatureBlock.md)
+Ƭ **FeatureBlockTypes**: [`ISenderFeatureBlock`](interfaces/ISenderFeatureBlock.md) \| [`IIssuerFeatureBlock`](interfaces/IIssuerFeatureBlock.md) \| [`IDustDepositReturnFeatureBlock`](interfaces/IDustDepositReturnFeatureBlock.md) \| [`ITimelockMilestoneIndexFeatureBlock`](interfaces/ITimelockMilestoneIndexFeatureBlock.md) \| [`ITimelockUnixFeatureBlock`](interfaces/ITimelockUnixFeatureBlock.md) \| [`IExpirationMilestoneIndexFeatureBlock`](interfaces/IExpirationMilestoneIndexFeatureBlock.md) \| [`IExpirationUnixFeatureBlock`](interfaces/IExpirationUnixFeatureBlock.md) \| [`IMetadataFeatureBlock`](interfaces/IMetadataFeatureBlock.md) \| [`IIndexationFeatureBlock`](interfaces/IIndexationFeatureBlock.md)
 
 All of the feature block types.
 

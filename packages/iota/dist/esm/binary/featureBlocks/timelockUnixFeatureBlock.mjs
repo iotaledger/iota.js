@@ -13,7 +13,7 @@ export function deserializeTimelockUnixFeatureBlock(readStream) {
     if (!readStream.hasRemaining(MIN_TIMELOCK_UNIX_FEATURE_BLOCK_LENGTH)) {
         throw new Error(`TimelockUnix Feature Block data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_TIMELOCK_UNIX_FEATURE_BLOCK_LENGTH}`);
     }
-    const type = readStream.readByte("timelockUnixFeatureBlock.type");
+    const type = readStream.readUInt8("timelockUnixFeatureBlock.type");
     if (type !== TIMELOCK_UNIX_FEATURE_BLOCK_TYPE) {
         throw new Error(`Type mismatch in timelockUnixFeatureBlock ${type}`);
     }
@@ -29,6 +29,6 @@ export function deserializeTimelockUnixFeatureBlock(readStream) {
  * @param object The object to serialize.
  */
 export function serializeTimelockUnixFeatureBlock(writeStream, object) {
-    writeStream.writeByte("timelockUnixFeatureBlock.type", object.type);
+    writeStream.writeUInt8("timelockUnixFeatureBlock.type", object.type);
     writeStream.writeUInt32("timelockUnixFeatureBlock.unixTime", object.unixTime);
 }

@@ -19,7 +19,7 @@ export function deserializeAddress(readStream) {
     if (!readStream.hasRemaining(MIN_ADDRESS_LENGTH)) {
         throw new Error(`Address data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_ADDRESS_LENGTH}`);
     }
-    const type = readStream.readByte("address.type", false);
+    const type = readStream.readUInt8("address.type", false);
     let address;
     if (type === ED25519_ADDRESS_TYPE) {
         address = deserializeEd25519Address(readStream);

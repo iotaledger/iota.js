@@ -13,7 +13,7 @@ export function deserializeMetadataFeatureBlock(readStream) {
     if (!readStream.hasRemaining(MIN_METADATA_FEATURE_BLOCK_LENGTH)) {
         throw new Error(`Metadata Feature Block data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_METADATA_FEATURE_BLOCK_LENGTH}`);
     }
-    const type = readStream.readByte("metadataFeatureBlock.type");
+    const type = readStream.readUInt8("metadataFeatureBlock.type");
     if (type !== METADATA_FEATURE_BLOCK_TYPE) {
         throw new Error(`Type mismatch in metadataFeatureBlock ${type}`);
     }
@@ -30,7 +30,7 @@ export function deserializeMetadataFeatureBlock(readStream) {
  * @param object The object to serialize.
  */
 export function serializeMetadataFeatureBlock(writeStream, object) {
-    writeStream.writeByte("metadataFeatureBlock.type", object.type);
+    writeStream.writeUInt8("metadataFeatureBlock.type", object.type);
     writeStream.writeUInt32("metadataFeatureBlock.dataLength", object.data.length / 2);
     writeStream.writeFixedHex("metadataFeatureBlock.data", object.data.length / 2, object.data);
 }

@@ -30,7 +30,7 @@ export function deserializeAliasOutput(readStream) {
     if (!readStream.hasRemaining(MIN_ALIAS_OUTPUT_LENGTH)) {
         throw new Error(`Alias Output data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_ALIAS_OUTPUT_LENGTH}`);
     }
-    const type = readStream.readByte("aliasOutput.type");
+    const type = readStream.readUInt8("aliasOutput.type");
     if (type !== ALIAS_OUTPUT_TYPE) {
         throw new Error(`Type mismatch in aliasOutput ${type}`);
     }
@@ -63,7 +63,7 @@ export function deserializeAliasOutput(readStream) {
  * @param object The object to serialize.
  */
 export function serializeAliasOutput(writeStream, object) {
-    writeStream.writeByte("aliasOutput.type", object.type);
+    writeStream.writeUInt8("aliasOutput.type", object.type);
     writeStream.writeUInt64("aliasOutput.amount", bigInt(object.amount));
     serializeNativeTokens(writeStream, object.nativeTokens);
     writeStream.writeFixedHex("aliasOutput.aliasId", ALIAS_ID_LENGTH, object.aliasId);

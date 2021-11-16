@@ -1,4 +1,4 @@
-# Interface: IReturnFeatureBlock
+# Interface: IDustDepositReturnFeatureBlock
 
 Return feature block.
 
@@ -6,14 +6,14 @@ Return feature block.
 
 - [`ITypeBase`](ITypeBase.md)<``2``\>
 
-  ↳ **`IReturnFeatureBlock`**
+  ↳ **`IDustDepositReturnFeatureBlock`**
 
 ## Table of contents
 
 ### Properties
 
-- [type](IReturnFeatureBlock.md#type)
-- [amount](IReturnFeatureBlock.md#amount)
+- [type](IDustDepositReturnFeatureBlock.md#type)
+- [amount](IDustDepositReturnFeatureBlock.md#amount)
 
 ## Properties
 

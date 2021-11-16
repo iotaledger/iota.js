@@ -5,12 +5,14 @@ import {
     IIndexationFeatureBlock,
     INDEXATION_FEATURE_BLOCK_TYPE
 } from "../../models/featureBlocks/IIndexationFeatureBlock";
-import { SMALL_TYPE_LENGTH, UINT32_SIZE } from "../commonDataTypes";
+import { SMALL_TYPE_LENGTH, UINT8_SIZE } from "../commonDataTypes";
 
 /**
  * The minimum length of a indexation feature block binary representation.
  */
-export const MIN_INDEXATION_FEATURE_BLOCK_LENGTH: number = SMALL_TYPE_LENGTH + UINT32_SIZE;
+export const MIN_INDEXATION_FEATURE_BLOCK_LENGTH: number =
+    SMALL_TYPE_LENGTH + // Type
+    UINT8_SIZE; // Length
 
 /**
  * Deserialize the indexation feature block from binary.

@@ -13,7 +13,7 @@ export function deserializeReferenceUnlockBlock(readStream) {
     if (!readStream.hasRemaining(MIN_REFERENCE_UNLOCK_BLOCK_LENGTH)) {
         throw new Error(`Reference Unlock Block data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_REFERENCE_UNLOCK_BLOCK_LENGTH}`);
     }
-    const type = readStream.readByte("referenceUnlockBlock.type");
+    const type = readStream.readUInt8("referenceUnlockBlock.type");
     if (type !== REFERENCE_UNLOCK_BLOCK_TYPE) {
         throw new Error(`Type mismatch in referenceUnlockBlock ${type}`);
     }
@@ -29,6 +29,6 @@ export function deserializeReferenceUnlockBlock(readStream) {
  * @param object The object to serialize.
  */
 export function serializeReferenceUnlockBlock(writeStream, object) {
-    writeStream.writeByte("referenceUnlockBlock.type", object.type);
+    writeStream.writeUInt8("referenceUnlockBlock.type", object.type);
     writeStream.writeUInt16("referenceUnlockBlock.reference", object.reference);
 }

@@ -13,7 +13,7 @@ export function deserializeNftUnlockBlock(readStream) {
     if (!readStream.hasRemaining(MIN_NFT_UNLOCK_BLOCK_LENGTH)) {
         throw new Error(`Nft Unlock Block data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_NFT_UNLOCK_BLOCK_LENGTH}`);
     }
-    const type = readStream.readByte("nftUnlockBlock.type");
+    const type = readStream.readUInt8("nftUnlockBlock.type");
     if (type !== NFT_UNLOCK_BLOCK_TYPE) {
         throw new Error(`Type mismatch in nftUnlockBlock ${type}`);
     }
@@ -29,6 +29,6 @@ export function deserializeNftUnlockBlock(readStream) {
  * @param object The object to serialize.
  */
 export function serializeNftUnlockBlock(writeStream, object) {
-    writeStream.writeByte("nftUnlockBlock.type", object.type);
+    writeStream.writeUInt8("nftUnlockBlock.type", object.type);
     writeStream.writeUInt16("nftUnlockBlock.reference", object.reference);
 }

@@ -13,7 +13,7 @@ export function deserializeSignature(readStream) {
     if (!readStream.hasRemaining(MIN_SIGNATURE_LENGTH)) {
         throw new Error(`Signature data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_SIGNATURE_LENGTH}`);
     }
-    const type = readStream.readByte("signature.type", false);
+    const type = readStream.readUInt8("signature.type", false);
     let signature;
     if (type === ED25519_SIGNATURE_TYPE) {
         signature = deserializeEd25519Signature(readStream);

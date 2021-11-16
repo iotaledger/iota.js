@@ -14,7 +14,7 @@ export function deserializeSignatureUnlockBlock(readStream) {
     if (!readStream.hasRemaining(MIN_SIGNATURE_UNLOCK_BLOCK_LENGTH)) {
         throw new Error(`Signature Unlock Block data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_SIGNATURE_UNLOCK_BLOCK_LENGTH}`);
     }
-    const type = readStream.readByte("signatureUnlockBlock.type");
+    const type = readStream.readUInt8("signatureUnlockBlock.type");
     if (type !== SIGNATURE_UNLOCK_BLOCK_TYPE) {
         throw new Error(`Type mismatch in signatureUnlockBlock ${type}`);
     }
@@ -30,6 +30,6 @@ export function deserializeSignatureUnlockBlock(readStream) {
  * @param object The object to serialize.
  */
 export function serializeSignatureUnlockBlock(writeStream, object) {
-    writeStream.writeByte("signatureUnlockBlock.type", object.type);
+    writeStream.writeUInt8("signatureUnlockBlock.type", object.type);
     serializeSignature(writeStream, object.signature);
 }

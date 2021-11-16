@@ -20,7 +20,7 @@ export function deserializeTransactionEssence(readStream) {
     if (!readStream.hasRemaining(MIN_TRANSACTION_ESSENCE_LENGTH)) {
         throw new Error(`Transaction essence data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_TRANSACTION_ESSENCE_LENGTH}`);
     }
-    const type = readStream.readByte("transactionEssence.type");
+    const type = readStream.readUInt8("transactionEssence.type");
     if (type !== TRANSACTION_ESSENCE_TYPE) {
         throw new Error(`Type mismatch in transactionEssence ${type}`);
     }
@@ -53,7 +53,7 @@ export function deserializeTransactionEssence(readStream) {
  * @param object The object to serialize.
  */
 export function serializeTransactionEssence(writeStream, object) {
-    writeStream.writeByte("transactionEssence.type", object.type);
+    writeStream.writeUInt8("transactionEssence.type", object.type);
     for (const input of object.inputs) {
         if (input.type !== UTXO_INPUT_TYPE) {
             throw new Error("Transaction essence can only contain UTXO Inputs");

@@ -56,7 +56,7 @@ export declare class WriteStream {
      * @param name The name of the data we are trying to write.
      * @param val The data to write.
      */
-    writeByte(name: string, val: number): void;
+    writeUInt8(name: string, val: number): void;
     /**
      * Write a UInt16 to the stream.
      * @param name The name of the data we are trying to write.

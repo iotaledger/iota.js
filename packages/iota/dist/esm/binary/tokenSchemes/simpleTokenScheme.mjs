@@ -13,7 +13,7 @@ export function deserializeSimpleTokenScheme(readStream) {
     if (!readStream.hasRemaining(MIN_SIMPLE_TOKEN_SCHEME_LENGTH)) {
         throw new Error(`Simple Token Scheme data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_SIMPLE_TOKEN_SCHEME_LENGTH}`);
     }
-    const type = readStream.readByte("simpleTokenScheme.type");
+    const type = readStream.readUInt8("simpleTokenScheme.type");
     if (type !== SIMPLE_TOKEN_SCHEME_TYPE) {
         throw new Error(`Type mismatch in simpleTokenScheme ${type}`);
     }
@@ -27,5 +27,5 @@ export function deserializeSimpleTokenScheme(readStream) {
  * @param object The object to serialize.
  */
 export function serializeSimpleTokenScheme(writeStream, object) {
-    writeStream.writeByte("simpleTokenScheme.type", object.type);
+    writeStream.writeUInt8("simpleTokenScheme.type", object.type);
 }

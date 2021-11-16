@@ -57,7 +57,7 @@ export declare class ReadStream {
      * @param moveIndex Move the index pointer on.
      * @returns The value.
      */
-    readByte(name: string, moveIndex?: boolean): number;
+    readUInt8(name: string, moveIndex?: boolean): number;
     /**
      * Read a UInt16 from the stream.
      * @param name The name of the data we are trying to read.

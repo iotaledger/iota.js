@@ -63,7 +63,7 @@ export function deserializeOutput(readStream) {
     if (!readStream.hasRemaining(MIN_OUTPUT_LENGTH)) {
         throw new Error(`Output data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_OUTPUT_LENGTH}`);
     }
-    const type = readStream.readByte("output.type", false);
+    const type = readStream.readUInt8("output.type", false);
     let output;
     if (type === SIMPLE_OUTPUT_TYPE) {
         output = deserializeSimpleOutput(readStream);

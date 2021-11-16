@@ -20,6 +20,8 @@ Type of the object.
 
   ↳ [`INftAddress`](INftAddress.md)
 
+  ↳ [`IDustDepositReturnFeatureBlock`](IDustDepositReturnFeatureBlock.md)
+
   ↳ [`IExpirationMilestoneIndexFeatureBlock`](IExpirationMilestoneIndexFeatureBlock.md)
 
   ↳ [`IExpirationUnixFeatureBlock`](IExpirationUnixFeatureBlock.md)
@@ -29,8 +31,6 @@ Type of the object.
   ↳ [`IIssuerFeatureBlock`](IIssuerFeatureBlock.md)
 
   ↳ [`IMetadataFeatureBlock`](IMetadataFeatureBlock.md)
-
-  ↳ [`IReturnFeatureBlock`](IReturnFeatureBlock.md)
 
   ↳ [`ISenderFeatureBlock`](ISenderFeatureBlock.md)
 

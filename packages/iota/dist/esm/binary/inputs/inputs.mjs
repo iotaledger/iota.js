@@ -53,7 +53,7 @@ export function deserializeInput(readStream) {
     if (!readStream.hasRemaining(MIN_INPUT_LENGTH)) {
         throw new Error(`Input data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_INPUT_LENGTH}`);
     }
-    const type = readStream.readByte("input.type", false);
+    const type = readStream.readUInt8("input.type", false);
     let input;
     if (type === UTXO_INPUT_TYPE) {
         input = deserializeUTXOInput(readStream);

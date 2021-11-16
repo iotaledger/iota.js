@@ -13,7 +13,7 @@ export function deserializeTokenScheme(readStream) {
     if (!readStream.hasRemaining(MIN_TOKEN_SCHEME_LENGTH)) {
         throw new Error(`Token Scheme data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_TOKEN_SCHEME_LENGTH}`);
     }
-    const type = readStream.readByte("tokenScheme.type", false);
+    const type = readStream.readUInt8("tokenScheme.type", false);
     let tokenScheme;
     if (type === SIMPLE_TOKEN_SCHEME_TYPE) {
         tokenScheme = deserializeSimpleTokenScheme(readStream);

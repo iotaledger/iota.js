@@ -17,7 +17,7 @@ export function deserializeSimpleOutput(readStream) {
     if (!readStream.hasRemaining(MIN_SIMPLE_OUTPUT_LENGTH)) {
         throw new Error(`Simple Output data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_SIMPLE_OUTPUT_LENGTH}`);
     }
-    const type = readStream.readByte("simpleOutput.type");
+    const type = readStream.readUInt8("simpleOutput.type");
     if (type !== SIMPLE_OUTPUT_TYPE) {
         throw new Error(`Type mismatch in simpleOutput ${type}`);
     }
@@ -35,7 +35,7 @@ export function deserializeSimpleOutput(readStream) {
  * @param object The object to serialize.
  */
 export function serializeSimpleOutput(writeStream, object) {
-    writeStream.writeByte("simpleOutput.type", object.type);
+    writeStream.writeUInt8("simpleOutput.type", object.type);
     serializeAddress(writeStream, object.address);
     writeStream.writeUInt64("simpleOutput.amount", bigInt(object.amount));
 }

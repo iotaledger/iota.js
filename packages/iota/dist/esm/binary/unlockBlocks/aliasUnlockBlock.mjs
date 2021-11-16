@@ -13,7 +13,7 @@ export function deserializeAliasUnlockBlock(readStream) {
     if (!readStream.hasRemaining(MIN_ALIAS_UNLOCK_BLOCK_LENGTH)) {
         throw new Error(`Alias Unlock Block data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_ALIAS_UNLOCK_BLOCK_LENGTH}`);
     }
-    const type = readStream.readByte("aliasUnlockBlock.type");
+    const type = readStream.readUInt8("aliasUnlockBlock.type");
     if (type !== ALIAS_UNLOCK_BLOCK_TYPE) {
         throw new Error(`Type mismatch in aliasUnlockBlock ${type}`);
     }
@@ -29,6 +29,6 @@ export function deserializeAliasUnlockBlock(readStream) {
  * @param object The object to serialize.
  */
 export function serializeAliasUnlockBlock(writeStream, object) {
-    writeStream.writeByte("aliasUnlockBlock.type", object.type);
+    writeStream.writeUInt8("aliasUnlockBlock.type", object.type);
     writeStream.writeUInt16("aliasUnlockBlock.reference", object.reference);
 }

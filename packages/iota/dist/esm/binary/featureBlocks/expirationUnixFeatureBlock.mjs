@@ -13,7 +13,7 @@ export function deserializeExpirationUnixFeatureBlock(readStream) {
     if (!readStream.hasRemaining(MIN_EXPIRATION_UNIX_FEATURE_BLOCK_LENGTH)) {
         throw new Error(`ExpirationUnix Feature Block data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_EXPIRATION_UNIX_FEATURE_BLOCK_LENGTH}`);
     }
-    const type = readStream.readByte("expirationUnixFeatureBlock.type");
+    const type = readStream.readUInt8("expirationUnixFeatureBlock.type");
     if (type !== EXPIRATION_UNIX_FEATURE_BLOCK_TYPE) {
         throw new Error(`Type mismatch in expirationUnixFeatureBlock ${type}`);
     }
@@ -29,6 +29,6 @@ export function deserializeExpirationUnixFeatureBlock(readStream) {
  * @param object The object to serialize.
  */
 export function serializeExpirationUnixFeatureBlock(writeStream, object) {
-    writeStream.writeByte("expirationUnixFeatureBlock.type", object.type);
+    writeStream.writeUInt8("expirationUnixFeatureBlock.type", object.type);
     writeStream.writeUInt32("expirationUnixFeatureBlock.unixTime", object.unixTime);
 }

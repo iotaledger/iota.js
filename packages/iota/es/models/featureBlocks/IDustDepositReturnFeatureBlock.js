@@ -1,0 +1,5 @@
+/**
+ * The global type for the dust deposit return feature block.
+ */
+export const DUST_DEPOSIT_RETURN_FEATURE_BLOCK_TYPE = 2;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiSUR1c3REZXBvc2l0UmV0dXJuRmVhdHVyZUJsb2NrLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vLi4vc3JjL21vZGVscy9mZWF0dXJlQmxvY2tzL0lEdXN0RGVwb3NpdFJldHVybkZlYXR1cmVCbG9jay50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFJQTs7R0FFRztBQUNILE1BQU0sQ0FBQyxNQUFNLHNDQUFzQyxHQUFHLENBQUMsQ0FBQyJ9

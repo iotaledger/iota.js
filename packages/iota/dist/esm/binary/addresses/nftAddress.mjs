@@ -17,7 +17,7 @@ export function deserializeNftAddress(readStream) {
     if (!readStream.hasRemaining(MIN_NFT_ADDRESS_LENGTH)) {
         throw new Error(`NFT address data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_NFT_ADDRESS_LENGTH}`);
     }
-    const type = readStream.readByte("nftAddress.type");
+    const type = readStream.readUInt8("nftAddress.type");
     if (type !== NFT_ADDRESS_TYPE) {
         throw new Error(`Type mismatch in nftAddress ${type}`);
     }
@@ -33,6 +33,6 @@ export function deserializeNftAddress(readStream) {
  * @param object The object to serialize.
  */
 export function serializeNftAddress(writeStream, object) {
-    writeStream.writeByte("nftAddress.type", object.type);
+    writeStream.writeUInt8("nftAddress.type", object.type);
     writeStream.writeFixedHex("nftAddress.address", NFT_ADDRESS_LENGTH, object.address);
 }
