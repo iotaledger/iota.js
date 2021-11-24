@@ -1912,7 +1912,7 @@ ___
 
 ### promote
 
-▸ **promote**(`client`, `messageId`): `Promise`<`Object`\>
+▸ **promote**(`client`, `messageId`): `Promise`<{}\>
 
 Promote an existing message.
 
@@ -1925,7 +1925,7 @@ Promote an existing message.
 
 #### Returns
 
-`Promise`<`Object`\>
+`Promise`<{}\>
 
 The id and message that were promoted.
 
@@ -1933,7 +1933,7 @@ ___
 
 ### reattach
 
-▸ **reattach**(`client`, `messageId`): `Promise`<`Object`\>
+▸ **reattach**(`client`, `messageId`): `Promise`<{}\>
 
 Reattach an existing message.
 
@@ -1946,7 +1946,7 @@ Reattach an existing message.
 
 #### Returns
 
-`Promise`<`Object`\>
+`Promise`<{}\>
 
 The id and message that were reattached.
 
@@ -1975,7 +1975,7 @@ ___
 
 ### retry
 
-▸ **retry**(`client`, `messageId`): `Promise`<`Object`\>
+▸ **retry**(`client`, `messageId`): `Promise`<{}\>
 
 Retry an existing message either by promoting or reattaching.
 
@@ -1988,7 +1988,7 @@ Retry an existing message either by promoting or reattaching.
 
 #### Returns
 
-`Promise`<`Object`\>
+`Promise`<{}\>
 
 The id and message that were retried.
 
@@ -1996,7 +1996,7 @@ ___
 
 ### send
 
-▸ **send**(`client`, `seed`, `accountIndex`, `addressBech32`, `amount`, `indexation?`, `addressOptions?`): `Promise`<`Object`\>
+▸ **send**(`client`, `seed`, `accountIndex`, `addressBech32`, `amount`, `indexation?`, `addressOptions?`): `Promise`<{}\>
 
 Send a transfer from the balance on the seed to a single output.
 
@@ -2014,7 +2014,7 @@ Send a transfer from the balance on the seed to a single output.
 
 #### Returns
 
-`Promise`<`Object`\>
+`Promise`<{}\>
 
 The id of the message created and the contructed message.
 
@@ -2022,7 +2022,7 @@ ___
 
 ### sendEd25519
 
-▸ **sendEd25519**(`client`, `seed`, `accountIndex`, `addressEd25519`, `amount`, `indexation?`, `addressOptions?`): `Promise`<`Object`\>
+▸ **sendEd25519**(`client`, `seed`, `accountIndex`, `addressEd25519`, `amount`, `indexation?`, `addressOptions?`): `Promise`<{}\>
 
 Send a transfer from the balance on the seed to a single output.
 
@@ -2040,7 +2040,7 @@ Send a transfer from the balance on the seed to a single output.
 
 #### Returns
 
-`Promise`<`Object`\>
+`Promise`<{}\>
 
 The id of the message created and the contructed message.
 
@@ -2048,7 +2048,7 @@ ___
 
 ### sendMultiple
 
-▸ **sendMultiple**(`client`, `seed`, `accountIndex`, `outputs`, `indexation?`, `addressOptions?`): `Promise`<`Object`\>
+▸ **sendMultiple**(`client`, `seed`, `accountIndex`, `outputs`, `indexation?`, `addressOptions?`): `Promise`<{}\>
 
 Send a transfer from the balance on the seed to multiple outputs.
 
@@ -2065,7 +2065,7 @@ Send a transfer from the balance on the seed to multiple outputs.
 
 #### Returns
 
-`Promise`<`Object`\>
+`Promise`<{}\>
 
 The id of the message created and the contructed message.
 
@@ -2073,7 +2073,7 @@ ___
 
 ### sendMultipleEd25519
 
-▸ **sendMultipleEd25519**(`client`, `seed`, `accountIndex`, `outputs`, `indexation?`, `addressOptions?`): `Promise`<`Object`\>
+▸ **sendMultipleEd25519**(`client`, `seed`, `accountIndex`, `outputs`, `indexation?`, `addressOptions?`): `Promise`<{}\>
 
 Send a transfer from the balance on the seed.
 
@@ -2090,7 +2090,7 @@ Send a transfer from the balance on the seed.
 
 #### Returns
 
-`Promise`<`Object`\>
+`Promise`<{}\>
 
 The id of the message created and the contructed message.
 
@@ -2098,7 +2098,7 @@ ___
 
 ### sendWithAddressGenerator
 
-▸ **sendWithAddressGenerator**<`T`\>(`client`, `seed`, `initialAddressState`, `nextAddressPath`, `outputs`, `indexation?`, `zeroCount?`): `Promise`<`Object`\>
+▸ **sendWithAddressGenerator**<`T`\>(`client`, `seed`, `initialAddressState`, `nextAddressPath`, `outputs`, `indexation?`, `zeroCount?`): `Promise`<{}\>
 
 Send a transfer using account based indexing for the inputs.
 
@@ -2122,7 +2122,7 @@ Send a transfer using account based indexing for the inputs.
 
 #### Returns
 
-`Promise`<`Object`\>
+`Promise`<{}\>
 
 The id of the message created and the contructed message.
 
@@ -2161,7 +2161,7 @@ ___
 
 ### sendAdvanced
 
-▸ **sendAdvanced**(`client`, `inputsAndSignatureKeyPairs`, `outputs`, `indexation?`): `Promise`<`Object`\>
+▸ **sendAdvanced**(`client`, `inputsAndSignatureKeyPairs`, `outputs`, `indexation?`): `Promise`<{}\>
 
 Send a transfer from the balance on the seed.
 
@@ -2176,7 +2176,7 @@ Send a transfer from the balance on the seed.
 
 #### Returns
 
-`Promise`<`Object`\>
+`Promise`<{}\>
 
 The id of the message created and the remainder address if one was needed.
 
@@ -2206,7 +2206,7 @@ ___
 
 ### sendData
 
-▸ **sendData**(`client`, `indexationKey`, `indexationData?`): `Promise`<`Object`\>
+▸ **sendData**(`client`, `indexationKey`, `indexationData?`): `Promise`<{}\>
 
 Send a data message.
 
@@ -2220,7 +2220,7 @@ Send a data message.
 
 #### Returns
 
-`Promise`<`Object`\>
+`Promise`<{}\>
 
 The id of the message created and the message.
 
