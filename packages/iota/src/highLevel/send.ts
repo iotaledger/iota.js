@@ -228,7 +228,7 @@ export async function sendWithAddressGenerator<T>(
     client: IClient | string,
     seed: ISeed,
     initialAddressState: T,
-    nextAddressPath: (addressState: T, isFirst: boolean) => string,
+    nextAddressPath: (addressState: T) => string,
     outputs: {
         address: string;
         addressType: number;
@@ -268,7 +268,7 @@ export async function calculateInputs<T>(
     client: IClient | string,
     seed: ISeed,
     initialAddressState: T,
-    nextAddressPath: (addressState: T, isFirst: boolean) => string,
+    nextAddressPath: (addressState: T) => string,
     outputs: { address: string; addressType: number; amount: number }[],
     zeroCount: number = 5
 ): Promise<
@@ -290,12 +290,10 @@ export async function calculateInputs<T>(
         addressKeyPair: IKeyPair;
     }[] = [];
     let finished = false;
-    let isFirst = true;
     let zeroBalance = 0;
 
     do {
-        const path = nextAddressPath(initialAddressState, isFirst);
-        isFirst = false;
+        const path = nextAddressPath(initialAddressState);
 
         const addressSeed = seed.generateSeedFromPath(new Bip32Path(path));
 

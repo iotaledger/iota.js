@@ -67,7 +67,7 @@ export async function getUnspentAddressesWithAddressGenerator<T>(
     client: IClient | string,
     seed: ISeed,
     initialAddressState: T,
-    nextAddressPath: (addressState: T, isFirst: boolean) => string,
+    nextAddressPath: (addressState: T) => string,
     addressOptions?: {
         startIndex?: number;
         zeroCount?: number;
@@ -92,12 +92,10 @@ export async function getUnspentAddressesWithAddressGenerator<T>(
         balance: number;
     }[] = [];
 
-    let isFirst = true;
     let zeroBalance = 0;
 
     do {
-        const path = nextAddressPath(initialAddressState, isFirst);
-        isFirst = false;
+        const path = nextAddressPath(initialAddressState);
 
         const addressSeed = seed.generateSeedFromPath(new Bip32Path(path));
 

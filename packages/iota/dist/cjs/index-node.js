@@ -2073,11 +2073,9 @@
         const localZeroCount = (_b = addressOptions === null || addressOptions === void 0 ? void 0 : addressOptions.zeroCount) !== null && _b !== void 0 ? _b : 20;
         let finished = false;
         const allUnspent = [];
-        let isFirst = true;
         let zeroBalance = 0;
         do {
-            const path = nextAddressPath(initialAddressState, isFirst);
-            isFirst = false;
+            const path = nextAddressPath(initialAddressState);
             const addressSeed = seed.generateSeedFromPath(new crypto_js.Bip32Path(path));
             const ed25519Address = new Ed25519Address(addressSeed.keyPair().publicKey);
             const addressBytes = ed25519Address.toAddress();
@@ -2530,11 +2528,9 @@
         let consumedBalance = 0;
         const inputsAndSignatureKeyPairs = [];
         let finished = false;
-        let isFirst = true;
         let zeroBalance = 0;
         do {
-            const path = nextAddressPath(initialAddressState, isFirst);
-            isFirst = false;
+            const path = nextAddressPath(initialAddressState);
             const addressSeed = seed.generateSeedFromPath(new crypto_js.Bip32Path(path));
             const addressKeyPair = addressSeed.keyPair();
             const ed25519Address = new Ed25519Address(addressKeyPair.publicKey);

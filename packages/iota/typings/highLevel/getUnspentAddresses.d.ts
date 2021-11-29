@@ -32,7 +32,7 @@ export declare function getUnspentAddresses(client: IClient | string, seed: ISee
  * @param addressOptions.requiredCount The max number of addresses to find.
  * @returns All the unspent addresses.
  */
-export declare function getUnspentAddressesWithAddressGenerator<T>(client: IClient | string, seed: ISeed, initialAddressState: T, nextAddressPath: (addressState: T, isFirst: boolean) => string, addressOptions?: {
+export declare function getUnspentAddressesWithAddressGenerator<T>(client: IClient | string, seed: ISeed, initialAddressState: T, nextAddressPath: (addressState: T) => string, addressOptions?: {
     startIndex?: number;
     zeroCount?: number;
     requiredCount?: number;

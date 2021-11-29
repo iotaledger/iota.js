@@ -122,7 +122,7 @@ export declare function sendMultipleEd25519(client: IClient | string, seed: ISee
  * @param zeroCount The number of addresses with 0 balance during lookup before aborting.
  * @returns The id of the message created and the contructed message.
  */
-export declare function sendWithAddressGenerator<T>(client: IClient | string, seed: ISeed, initialAddressState: T, nextAddressPath: (addressState: T, isFirst: boolean) => string, outputs: {
+export declare function sendWithAddressGenerator<T>(client: IClient | string, seed: ISeed, initialAddressState: T, nextAddressPath: (addressState: T) => string, outputs: {
     address: string;
     addressType: number;
     amount: number;
@@ -144,7 +144,7 @@ export declare function sendWithAddressGenerator<T>(client: IClient | string, se
  * @param zeroCount Abort when the number of zero balances is exceeded.
  * @returns The id of the message created and the contructed message.
  */
-export declare function calculateInputs<T>(client: IClient | string, seed: ISeed, initialAddressState: T, nextAddressPath: (addressState: T, isFirst: boolean) => string, outputs: {
+export declare function calculateInputs<T>(client: IClient | string, seed: ISeed, initialAddressState: T, nextAddressPath: (addressState: T) => string, outputs: {
     address: string;
     addressType: number;
     amount: number;
