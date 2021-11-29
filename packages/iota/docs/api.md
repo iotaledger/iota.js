@@ -1792,7 +1792,7 @@ ___
 
 ### generateBip44Address
 
-▸ **generateBip44Address**(`generatorState`, `isFirst`): `string`
+▸ **generateBip44Address**(`generatorState`): `string`
 
 Generate addresses based on the account indexing style.
 
@@ -1801,7 +1801,6 @@ Generate addresses based on the account indexing style.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `generatorState` | [`IBip44GeneratorState`](interfaces/IBip44GeneratorState.md) | The address state. |
-| `isFirst` | `boolean` | Is this the first address we are generating. |
 
 #### Returns
 

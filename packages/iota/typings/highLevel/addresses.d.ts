@@ -15,7 +15,6 @@ export declare function generateBip44Path(accountIndex: number, addressIndex: nu
  * @param generatorState.accountIndex The index of the account to calculate.
  * @param generatorState.addressIndex The index of the address to calculate.
  * @param generatorState.isInternal Are we generating an internal address.
- * @param isFirst Is this the first address we are generating.
  * @returns The key pair for the address.
  */
-export declare function generateBip44Address(generatorState: IBip44GeneratorState, isFirst: boolean): string;
+export declare function generateBip44Address(generatorState: IBip44GeneratorState): string;

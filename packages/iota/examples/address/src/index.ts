@@ -36,7 +36,7 @@ async function run() {
         isInternal: false
     };
     for (let i = 0; i < 6; i++) {
-        const path = generateBip44Address(addressGeneratorAccountState, i === 0);
+        const path = generateBip44Address(addressGeneratorAccountState);
 
         console.log(`Wallet Index ${path}`);
 

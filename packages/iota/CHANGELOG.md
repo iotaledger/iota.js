@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.8.3
+
+* Simplified Bip44 Address generation logic, added tests
+
 ## v1.8.2
 
 * Dependency Update
