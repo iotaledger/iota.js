@@ -41,7 +41,7 @@
         "@rollup/plugin-replace": "^3.0.0",
         "@types/jest": "^27.0.3",
         "@typescript-eslint/eslint-plugin": "5.4.0",
-        "@typescript-eslint/parser": "^5.4.0",
+        "@typescript-eslint/parser": "^5.5.0",
         "cross-env": "^7.0.3",
         "eslint": "^8.3.0",
         "eslint-plugin-header": "^3.1.1",
