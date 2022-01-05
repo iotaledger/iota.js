@@ -42,7 +42,7 @@
         "@rollup/plugin-node-resolve": "^13.0.6",
         "@rollup/plugin-replace": "^3.0.0",
         "@types/jest": "^27.0.3",
-        "@typescript-eslint/eslint-plugin": "^5.5.0",
+        "@typescript-eslint/eslint-plugin": "^5.9.0",
         "@typescript-eslint/parser": "^5.5.0",
         "copyfiles": "^2.4.1",
         "cross-env": "^7.0.3",
