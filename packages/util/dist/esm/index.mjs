@@ -5,7 +5,6 @@ export * from "./encoding/base58.mjs";
 export * from "./encoding/base64.mjs";
 export * from "./utils/bigIntHelper.mjs";
 export * from "./utils/converter.mjs";
-export * from "./utils/platformHelper.mjs";
 export * from "./utils/randomHelper.mjs";
 export * from "./utils/readStream.mjs";
 export * from "./utils/writeStream.mjs";

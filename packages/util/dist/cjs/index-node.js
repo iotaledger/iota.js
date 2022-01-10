@@ -1,12 +1,34 @@
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('big-integer')) :
-    typeof define === 'function' && define.amd ? define(['exports', 'big-integer'], factory) :
-    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.IotaUtil = {}, global.bigInt));
-})(this, (function (exports, bigInt) { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('crypto'), require('big-integer')) :
+    typeof define === 'function' && define.amd ? define(['exports', 'crypto', 'big-integer'], factory) :
+    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.IotaUtil = {}, global.crypto, global.bigInt));
+})(this, (function (exports, crypto, bigInt) { 'use strict';
 
     function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
     var bigInt__default = /*#__PURE__*/_interopDefaultLegacy(bigInt);
+
+    // Copyright 2020 IOTA Stiftung
+    // SPDX-License-Identifier: Apache-2.0
+    /**
+     * Class to help with random generation.
+     */
+    class RandomHelper {
+        /**
+         * Generate a new random array.
+         * @param length The length of buffer to create.
+         * @returns The random array.
+         */
+        static generate(length) {
+            return RandomHelper.randomPolyfill ? RandomHelper.randomPolyfill(length) : new Uint8Array(length);
+        }
+    }
+
+    // Copyright 2020 IOTA Stiftung
+    // Random
+    if (!RandomHelper.randomPolyfill) {
+        RandomHelper.randomPolyfill = length => crypto.randomBytes(length);
+    }
 
     // Copyright 2020 IOTA Stiftung
     // SPDX-License-Identifier: Apache-2.0
@@ -412,42 +434,6 @@
         "121": 50,
         "122": 51
     };
-
-    // Copyright 2020 IOTA Stiftung
-    // SPDX-License-Identifier: Apache-2.0
-    /**
-     * Class to help with random generation.
-     */
-    class PlatformHelper {
-    }
-    /**
-     * Is this the browser.
-     * @returns True if running in browser.
-     */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    PlatformHelper.isNodeJs = true;
-
-    // Copyright 2020 IOTA Stiftung
-    /**
-     * Class to help with random generation.
-     */
-    class RandomHelper {
-        /**
-         * Generate a new random array.
-         * @param length The length of buffer to create.
-         * @returns The random array.
-         */
-        static generate(length) {
-            {
-                // eslint-disable-next-line @typescript-eslint/no-var-requires,@typescript-eslint/no-require-imports
-                const crypto = require("crypto");
-                return crypto.randomBytes(length);
-                // Keep this as else return so that packager keeps only one side
-                // of the if based on platform
-                // eslint-disable-next-line no-else-return
-            }
-        }
-    }
 
     // Copyright 2020 IOTA Stiftung
     /**
@@ -1070,7 +1056,6 @@
     exports.Base64 = Base64;
     exports.BigIntHelper = BigIntHelper;
     exports.Converter = Converter;
-    exports.PlatformHelper = PlatformHelper;
     exports.RandomHelper = RandomHelper;
     exports.ReadStream = ReadStream;
     exports.WriteStream = WriteStream;

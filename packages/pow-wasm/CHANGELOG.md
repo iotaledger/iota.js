@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.8.5
+
+* New ESM Packaging
+
 ## v1.8.2
 
 * Dependency Update

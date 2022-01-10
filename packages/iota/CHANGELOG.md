@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.8.5
+
+* New ESM Packaging
+
 ## v1.8.4
 
 * Removed isFirst flag from address generators.

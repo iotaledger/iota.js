@@ -5,8 +5,6 @@ import { terser } from "rollup-plugin-terser";
 
 const plugins = [
     replace({
-        "PlatformHelper.isNodeJs": !process.env.BROWSER,
-        "globalThis && globalThis.process && globalThis.process.version": !process.env.BROWSER,
         preventAssignment: true
     }),
     commonjs(),

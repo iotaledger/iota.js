@@ -10,6 +10,32 @@
 
     // Copyright 2020 IOTA Stiftung
     // SPDX-License-Identifier: Apache-2.0
+    /**
+     * Class to help with random generation.
+     */
+    class RandomHelper {
+        /**
+         * Generate a new random array.
+         * @param length The length of buffer to create.
+         * @returns The random array.
+         */
+        static generate(length) {
+            return RandomHelper.randomPolyfill ? RandomHelper.randomPolyfill(length) : new Uint8Array(length);
+        }
+    }
+
+    // Copyright 2020 IOTA Stiftung
+    // Random
+    if (!RandomHelper.randomPolyfill) {
+        RandomHelper.randomPolyfill = length => {
+            const randomBytes = new Uint8Array(length);
+            window.crypto.getRandomValues(randomBytes);
+            return randomBytes;
+        };
+    }
+
+    // Copyright 2020 IOTA Stiftung
+    // SPDX-License-Identifier: Apache-2.0
     /* eslint-disable no-bitwise */
     /**
      * Class to help with base32 Encoding/Decoding using RFC4648.
@@ -412,39 +438,6 @@
         "121": 50,
         "122": 51
     };
-
-    // Copyright 2020 IOTA Stiftung
-    // SPDX-License-Identifier: Apache-2.0
-    /**
-     * Class to help with random generation.
-     */
-    class PlatformHelper {
-    }
-    /**
-     * Is this the browser.
-     * @returns True if running in browser.
-     */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    PlatformHelper.isNodeJs = false;
-
-    // Copyright 2020 IOTA Stiftung
-    /**
-     * Class to help with random generation.
-     */
-    class RandomHelper {
-        /**
-         * Generate a new random array.
-         * @param length The length of buffer to create.
-         * @returns The random array.
-         */
-        static generate(length) {
-            {
-                const randomBytes = new Uint8Array(length);
-                window.crypto.getRandomValues(randomBytes);
-                return randomBytes;
-            }
-        }
-    }
 
     // Copyright 2020 IOTA Stiftung
     /**
@@ -1067,7 +1060,6 @@
     exports.Base64 = Base64;
     exports.BigIntHelper = BigIntHelper;
     exports.Converter = Converter;
-    exports.PlatformHelper = PlatformHelper;
     exports.RandomHelper = RandomHelper;
     exports.ReadStream = ReadStream;
     exports.WriteStream = WriteStream;
