@@ -2883,7 +2883,7 @@ ___
 
 ### generateBip44Address
 
-▸ **generateBip44Address**(`generatorState`, `isFirst`): `string`
+▸ **generateBip44Address**(`generatorState`): `string`
 
 Generate addresses based on the account indexing style.
 
@@ -2892,7 +2892,6 @@ Generate addresses based on the account indexing style.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `generatorState` | [`IBip44GeneratorState`](interfaces/IBip44GeneratorState.md) | The address state. |
-| `isFirst` | `boolean` | Is this the first address we are generating. |
 
 #### Returns
 
@@ -2990,7 +2989,7 @@ Get all the unspent addresses using an address generator.
 | `client` | `string` \| [`IClient`](interfaces/IClient.md) | The client or node endpoint to get the addresses from. |
 | `seed` | [`ISeed`](interfaces/ISeed.md) | The seed to use for address generation. |
 | `initialAddressState` | `T` | The initial address state for calculating the addresses. |
-| `nextAddressPath` | (`addressState`: `T`, `isFirst`: `boolean`) => `string` | Calculate the next address for inputs. |
+| `nextAddressPath` | (`addressState`: `T`) => `string` | Calculate the next address for inputs. |
 | `addressOptions?` | `Object` | Optional address configuration for balance address lookups. |
 
 #### Returns
@@ -3003,7 +3002,7 @@ ___
 
 ### promote
 
-▸ **promote**(`client`, `messageId`): `Promise`<`Object`\>
+▸ **promote**(`client`, `messageId`): `Promise`<{}\>
 
 Promote an existing message.
 
@@ -3016,7 +3015,7 @@ Promote an existing message.
 
 #### Returns
 
-`Promise`<`Object`\>
+`Promise`<{}\>
 
 The id and message that were promoted.
 
@@ -3024,7 +3023,7 @@ ___
 
 ### reattach
 
-▸ **reattach**(`client`, `messageId`): `Promise`<`Object`\>
+▸ **reattach**(`client`, `messageId`): `Promise`<{}\>
 
 Reattach an existing message.
 
@@ -3037,7 +3036,7 @@ Reattach an existing message.
 
 #### Returns
 
-`Promise`<`Object`\>
+`Promise`<{}\>
 
 The id and message that were reattached.
 
@@ -3066,7 +3065,7 @@ ___
 
 ### retry
 
-▸ **retry**(`client`, `messageId`): `Promise`<`Object`\>
+▸ **retry**(`client`, `messageId`): `Promise`<{}\>
 
 Retry an existing message either by promoting or reattaching.
 
@@ -3079,7 +3078,7 @@ Retry an existing message either by promoting or reattaching.
 
 #### Returns
 
-`Promise`<`Object`\>
+`Promise`<{}\>
 
 The id and message that were retried.
 
@@ -3087,7 +3086,7 @@ ___
 
 ### send
 
-▸ **send**(`client`, `seed`, `accountIndex`, `addressBech32`, `amount`, `indexation?`, `addressOptions?`): `Promise`<`Object`\>
+▸ **send**(`client`, `seed`, `accountIndex`, `addressBech32`, `amount`, `indexation?`, `addressOptions?`): `Promise`<{}\>
 
 Send a transfer from the balance on the seed to a single output.
 
@@ -3105,7 +3104,7 @@ Send a transfer from the balance on the seed to a single output.
 
 #### Returns
 
-`Promise`<`Object`\>
+`Promise`<{}\>
 
 The id of the message created and the contructed message.
 
@@ -3113,7 +3112,7 @@ ___
 
 ### sendEd25519
 
-▸ **sendEd25519**(`client`, `seed`, `accountIndex`, `addressEd25519`, `amount`, `indexation?`, `addressOptions?`): `Promise`<`Object`\>
+▸ **sendEd25519**(`client`, `seed`, `accountIndex`, `addressEd25519`, `amount`, `indexation?`, `addressOptions?`): `Promise`<{}\>
 
 Send a transfer from the balance on the seed to a single output.
 
@@ -3131,7 +3130,7 @@ Send a transfer from the balance on the seed to a single output.
 
 #### Returns
 
-`Promise`<`Object`\>
+`Promise`<{}\>
 
 The id of the message created and the contructed message.
 
@@ -3139,7 +3138,7 @@ ___
 
 ### sendMultiple
 
-▸ **sendMultiple**(`client`, `seed`, `accountIndex`, `outputs`, `indexation?`, `addressOptions?`): `Promise`<`Object`\>
+▸ **sendMultiple**(`client`, `seed`, `accountIndex`, `outputs`, `indexation?`, `addressOptions?`): `Promise`<{}\>
 
 Send a transfer from the balance on the seed to multiple outputs.
 
@@ -3156,7 +3155,7 @@ Send a transfer from the balance on the seed to multiple outputs.
 
 #### Returns
 
-`Promise`<`Object`\>
+`Promise`<{}\>
 
 The id of the message created and the contructed message.
 
@@ -3164,7 +3163,7 @@ ___
 
 ### sendMultipleEd25519
 
-▸ **sendMultipleEd25519**(`client`, `seed`, `accountIndex`, `outputs`, `indexation?`, `addressOptions?`): `Promise`<`Object`\>
+▸ **sendMultipleEd25519**(`client`, `seed`, `accountIndex`, `outputs`, `indexation?`, `addressOptions?`): `Promise`<{}\>
 
 Send a transfer from the balance on the seed.
 
@@ -3181,7 +3180,7 @@ Send a transfer from the balance on the seed.
 
 #### Returns
 
-`Promise`<`Object`\>
+`Promise`<{}\>
 
 The id of the message created and the contructed message.
 
@@ -3189,7 +3188,7 @@ ___
 
 ### sendWithAddressGenerator
 
-▸ **sendWithAddressGenerator**<`T`\>(`client`, `seed`, `initialAddressState`, `nextAddressPath`, `outputs`, `indexation?`, `zeroCount?`): `Promise`<`Object`\>
+▸ **sendWithAddressGenerator**<`T`\>(`client`, `seed`, `initialAddressState`, `nextAddressPath`, `outputs`, `indexation?`, `zeroCount?`): `Promise`<{}\>
 
 Send a transfer using account based indexing for the inputs.
 
@@ -3206,14 +3205,14 @@ Send a transfer using account based indexing for the inputs.
 | `client` | `string` \| [`IClient`](interfaces/IClient.md) | The client or node endpoint to send the transfer with. |
 | `seed` | [`ISeed`](interfaces/ISeed.md) | The seed to use for address generation. |
 | `initialAddressState` | `T` | The initial address state for calculating the addresses. |
-| `nextAddressPath` | (`addressState`: `T`, `isFirst`: `boolean`) => `string` | Calculate the next address for inputs. |
+| `nextAddressPath` | (`addressState`: `T`) => `string` | Calculate the next address for inputs. |
 | `outputs` | {}[] | The address to send the funds to in bech32 format and amounts. |
 | `indexation?` | `Object` | Optional indexation data to associate with the transaction. |
 | `zeroCount?` | `number` | The number of addresses with 0 balance during lookup before aborting. |
 
 #### Returns
 
-`Promise`<`Object`\>
+`Promise`<{}\>
 
 The id of the message created and the contructed message.
 
@@ -3238,7 +3237,7 @@ Calculate the inputs from the seed and basePath.
 | `client` | `string` \| [`IClient`](interfaces/IClient.md) | `undefined` | The client or node endpoint to calculate the inputs with. |
 | `seed` | [`ISeed`](interfaces/ISeed.md) | `undefined` | The seed to use for address generation. |
 | `initialAddressState` | `T` | `undefined` | The initial address state for calculating the addresses. |
-| `nextAddressPath` | (`addressState`: `T`, `isFirst`: `boolean`) => `string` | `undefined` | Calculate the next address for inputs. |
+| `nextAddressPath` | (`addressState`: `T`) => `string` | `undefined` | Calculate the next address for inputs. |
 | `outputs` | {}[] | `undefined` | The outputs to send. |
 | `zeroCount` | `number` | `5` | Abort when the number of zero balances is exceeded. |
 
@@ -3252,7 +3251,7 @@ ___
 
 ### sendAdvanced
 
-▸ **sendAdvanced**(`client`, `inputsAndSignatureKeyPairs`, `outputs`, `indexation?`): `Promise`<`Object`\>
+▸ **sendAdvanced**(`client`, `inputsAndSignatureKeyPairs`, `outputs`, `indexation?`): `Promise`<{}\>
 
 Send a transfer from the balance on the seed.
 
@@ -3267,7 +3266,7 @@ Send a transfer from the balance on the seed.
 
 #### Returns
 
-`Promise`<`Object`\>
+`Promise`<{}\>
 
 The id of the message created and the remainder address if one was needed.
 
@@ -3297,7 +3296,7 @@ ___
 
 ### sendData
 
-▸ **sendData**(`client`, `indexationKey`, `indexationData?`): `Promise`<`Object`\>
+▸ **sendData**(`client`, `indexationKey`, `indexationData?`): `Promise`<{}\>
 
 Send a data message.
 
@@ -3311,7 +3310,7 @@ Send a data message.
 
 #### Returns
 
-`Promise`<`Object`\>
+`Promise`<{}\>
 
 The id of the message created and the message.
 

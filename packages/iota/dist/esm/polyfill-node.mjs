@@ -4,5 +4,5 @@
 // Fetch
 if (globalThis && !globalThis.fetch) {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
-    globalThis.fetch = require("node-fetch");
+    globalThis.fetch = (await import("node-fetch")).default;
 }

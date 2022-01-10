@@ -22,25 +22,21 @@ export function generateBip44Path(accountIndex, addressIndex, isInternal) {
  * @param generatorState.accountIndex The index of the account to calculate.
  * @param generatorState.addressIndex The index of the address to calculate.
  * @param generatorState.isInternal Are we generating an internal address.
- * @param isFirst Is this the first address we are generating.
  * @returns The key pair for the address.
  */
-export function generateBip44Address(generatorState, isFirst) {
-    // Not the first address so increment the counters.
-    if (!isFirst) {
-        // Flip-flop between internal and external
-        // and then increment the address Index
-        if (!generatorState.isInternal) {
-            generatorState.isInternal = true;
-        }
-        else {
-            generatorState.isInternal = false;
-            generatorState.addressIndex++;
-        }
-    }
+export function generateBip44Address(generatorState) {
     const path = new Bip32Path(IOTA_BIP44_BASE_PATH);
     path.pushHardened(generatorState.accountIndex);
     path.pushHardened(generatorState.isInternal ? 1 : 0);
     path.pushHardened(generatorState.addressIndex);
+    // Flip-flop between internal and external
+    // and then increment the address Index
+    if (!generatorState.isInternal) {
+        generatorState.isInternal = true;
+    }
+    else {
+        generatorState.isInternal = false;
+        generatorState.addressIndex++;
+    }
     return path.toString();
 }

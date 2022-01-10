@@ -148,11 +148,9 @@ export async function calculateInputs(client, seed, initialAddressState, nextAdd
     let consumedBalance = 0;
     const inputsAndSignatureKeyPairs = [];
     let finished = false;
-    let isFirst = true;
     let zeroBalance = 0;
     do {
-        const path = nextAddressPath(initialAddressState, isFirst);
-        isFirst = false;
+        const path = nextAddressPath(initialAddressState);
         const addressSeed = seed.generateSeedFromPath(new Bip32Path(path));
         const addressKeyPair = addressSeed.keyPair();
         const ed25519Address = new Ed25519Address(addressKeyPair.publicKey);

@@ -476,6 +476,7 @@ module.exports = {
         "unicorn/number-literal-case": ["off"],
         "unicorn/numeric-separators-style": ["off"],
         "unicorn/prefer-add-event-listener": ["error"],
+        "unicorn/prefer-code-point": ["off"],
         "unicorn/prefer-dataset": ["error"],
         "unicorn/prefer-event-key": ["error"],
         "unicorn/prefer-flat-map": ["error"],

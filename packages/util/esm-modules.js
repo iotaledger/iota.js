@@ -21,6 +21,8 @@ async function processDir(dir) {
                 content = content.replace(/import(.*)\"\.(.*)\";/g, 'import$1".$2.mjs";');
                 content = content.replace(/export(.*)\"\.(.*)\";/g, 'export$1".$2.mjs";');
 
+                content = content.replace(/require\("(.*)"\);/g, '(await import("$1")).default;');
+
                 const sourceMapUrlRegexp = new RegExp("//# sourceMappingURL=data:application/json;base64,(.*)");
                 content = content.replace(sourceMapUrlRegexp, "");
                 await fs.writeFile(fullEntry, content, "utf-8");
