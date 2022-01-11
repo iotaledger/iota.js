@@ -26,10 +26,16 @@ Client for API communication.
 - [messageChildren](SingleNodeClient.md#messagechildren)
 - [transactionIncludedMessage](SingleNodeClient.md#transactionincludedmessage)
 - [output](SingleNodeClient.md#output)
+- [outputs](SingleNodeClient.md#outputs)
 - [address](SingleNodeClient.md#address)
 - [addressOutputs](SingleNodeClient.md#addressoutputs)
 - [addressEd25519](SingleNodeClient.md#addressed25519)
 - [addressEd25519Outputs](SingleNodeClient.md#addressed25519outputs)
+- [addressAliasOutputs](SingleNodeClient.md#addressaliasoutputs)
+- [addressNftOutputs](SingleNodeClient.md#addressnftoutputs)
+- [alias](SingleNodeClient.md#alias)
+- [nft](SingleNodeClient.md#nft)
+- [foundry](SingleNodeClient.md#foundry)
 - [milestone](SingleNodeClient.md#milestone)
 - [milestoneUtxoChanges](SingleNodeClient.md#milestoneutxochanges)
 - [treasury](SingleNodeClient.md#treasury)
@@ -330,6 +336,33 @@ The output details.
 
 ___
 
+### outputs
+
+▸ **outputs**(`type`, `issuer?`, `sender?`, `index?`): `Promise`<[`IOutputsResponse`](../interfaces/IOutputsResponse.md)\>
+
+Find outputs by type.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `type` | `number` | The type of the output to get. |
+| `issuer?` | `string` | The issuer of the output. |
+| `sender?` | `string` | The sender of the output. |
+| `index?` | `string` | The index associated with the output. |
+
+#### Returns
+
+`Promise`<[`IOutputsResponse`](../interfaces/IOutputsResponse.md)\>
+
+The outputs with the requested parameters.
+
+#### Implementation of
+
+[IClient](../interfaces/IClient.md).[outputs](../interfaces/IClient.md#outputs)
+
+___
+
 ### address
 
 ▸ **address**(`addressBech32`): `Promise`<[`IAddressResponse`](../interfaces/IAddressResponse.md)\>
@@ -356,7 +389,7 @@ ___
 
 ### addressOutputs
 
-▸ **addressOutputs**(`addressBech32`, `type?`, `includeSpent?`): `Promise`<[`IAddressOutputsResponse`](../interfaces/IAddressOutputsResponse.md)\>
+▸ **addressOutputs**(`addressBech32`, `type?`): `Promise`<[`IAddressOutputsResponse`](../interfaces/IAddressOutputsResponse.md)\>
 
 Get the address outputs.
 
@@ -366,7 +399,6 @@ Get the address outputs.
 | :------ | :------ | :------ |
 | `addressBech32` | `string` | The address to get the outputs for. |
 | `type?` | `number` | Filter the type of outputs you are looking up, defaults to all. |
-| `includeSpent?` | `boolean` | Filter the type of outputs you are looking up, defaults to false. |
 
 #### Returns
 
@@ -406,7 +438,7 @@ ___
 
 ### addressEd25519Outputs
 
-▸ **addressEd25519Outputs**(`addressEd25519`, `type?`, `includeSpent?`): `Promise`<[`IAddressOutputsResponse`](../interfaces/IAddressOutputsResponse.md)\>
+▸ **addressEd25519Outputs**(`addressEd25519`, `type?`): `Promise`<[`IAddressOutputsResponse`](../interfaces/IAddressOutputsResponse.md)\>
 
 Get the address outputs using ed25519 address.
 
@@ -416,7 +448,6 @@ Get the address outputs using ed25519 address.
 | :------ | :------ | :------ |
 | `addressEd25519` | `string` | The address to get the outputs for. |
 | `type?` | `number` | Filter the type of outputs you are looking up, defaults to all. |
-| `includeSpent?` | `boolean` | Filter the type of outputs you are looking up, defaults to false. |
 
 #### Returns
 
@@ -427,6 +458,128 @@ The address outputs.
 #### Implementation of
 
 [IClient](../interfaces/IClient.md).[addressEd25519Outputs](../interfaces/IClient.md#addressed25519outputs)
+
+___
+
+### addressAliasOutputs
+
+▸ **addressAliasOutputs**(`addressAlias`, `type?`): `Promise`<[`IAddressOutputsResponse`](../interfaces/IAddressOutputsResponse.md)\>
+
+Get the address outputs for an alias address.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `addressAlias` | `string` | The address to get the outputs for. |
+| `type?` | `number` | Filter the type of outputs you are looking up, defaults to all. |
+
+#### Returns
+
+`Promise`<[`IAddressOutputsResponse`](../interfaces/IAddressOutputsResponse.md)\>
+
+The address outputs.
+
+#### Implementation of
+
+[IClient](../interfaces/IClient.md).[addressAliasOutputs](../interfaces/IClient.md#addressaliasoutputs)
+
+___
+
+### addressNftOutputs
+
+▸ **addressNftOutputs**(`addressNft`, `type?`): `Promise`<[`IAddressOutputsResponse`](../interfaces/IAddressOutputsResponse.md)\>
+
+Get the address outputs for an NFT address.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `addressNft` | `string` | The address to get the outputs for. |
+| `type?` | `number` | Filter the type of outputs you are looking up, defaults to all. |
+
+#### Returns
+
+`Promise`<[`IAddressOutputsResponse`](../interfaces/IAddressOutputsResponse.md)\>
+
+The address outputs.
+
+#### Implementation of
+
+[IClient](../interfaces/IClient.md).[addressNftOutputs](../interfaces/IClient.md#addressnftoutputs)
+
+___
+
+### alias
+
+▸ **alias**(`aliasId`): `Promise`<[`IOutputsResponse`](../interfaces/IOutputsResponse.md)\>
+
+Get the outputs for an alias.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `aliasId` | `string` | The alias to get the outputs for. |
+
+#### Returns
+
+`Promise`<[`IOutputsResponse`](../interfaces/IOutputsResponse.md)\>
+
+The outputs.
+
+#### Implementation of
+
+[IClient](../interfaces/IClient.md).[alias](../interfaces/IClient.md#alias)
+
+___
+
+### nft
+
+▸ **nft**(`nftId`): `Promise`<[`IOutputsResponse`](../interfaces/IOutputsResponse.md)\>
+
+Get the outputs for an NFT.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `nftId` | `string` | The NFT to get the outputs for. |
+
+#### Returns
+
+`Promise`<[`IOutputsResponse`](../interfaces/IOutputsResponse.md)\>
+
+The outputs.
+
+#### Implementation of
+
+[IClient](../interfaces/IClient.md).[nft](../interfaces/IClient.md#nft)
+
+___
+
+### foundry
+
+▸ **foundry**(`foundryId`): `Promise`<[`IOutputsResponse`](../interfaces/IOutputsResponse.md)\>
+
+Get the outputs for a foundry.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `foundryId` | `string` | The foundry to get the outputs for. |
+
+#### Returns
+
+`Promise`<[`IOutputsResponse`](../interfaces/IOutputsResponse.md)\>
+
+The outputs.
+
+#### Implementation of
+
+[IClient](../interfaces/IClient.md).[foundry](../interfaces/IClient.md#foundry)
 
 ___
 

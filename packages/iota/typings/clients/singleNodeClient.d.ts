@@ -5,6 +5,7 @@ import type { IMessagesResponse } from "../models/api/IMessagesResponse";
 import type { IMilestoneResponse } from "../models/api/IMilestoneResponse";
 import type { IMilestoneUtxoChangesResponse } from "../models/api/IMilestoneUtxoChangesResponse";
 import type { IOutputResponse } from "../models/api/IOutputResponse";
+import type { IOutputsResponse } from "../models/api/IOutputsResponse";
 import type { IReceiptsResponse } from "../models/api/IReceiptsResponse";
 import type { ITipsResponse } from "../models/api/ITipsResponse";
 import type { IClient } from "../models/IClient";
@@ -94,6 +95,15 @@ export declare class SingleNodeClient implements IClient {
      */
     output(outputId: string): Promise<IOutputResponse>;
     /**
+     * Find outputs by type.
+     * @param type The type of the output to get.
+     * @param issuer The issuer of the output.
+     * @param sender The sender of the output.
+     * @param index The index associated with the output.
+     * @returns The outputs with the requested parameters.
+     */
+    outputs(type: number, issuer?: string, sender?: string, index?: string): Promise<IOutputsResponse>;
+    /**
      * Get the address details.
      * @param addressBech32 The address to get the details for.
      * @returns The address details.
@@ -103,10 +113,9 @@ export declare class SingleNodeClient implements IClient {
      * Get the address outputs.
      * @param addressBech32 The address to get the outputs for.
      * @param type Filter the type of outputs you are looking up, defaults to all.
-     * @param includeSpent Filter the type of outputs you are looking up, defaults to false.
      * @returns The address outputs.
      */
-    addressOutputs(addressBech32: string, type?: number, includeSpent?: boolean): Promise<IAddressOutputsResponse>;
+    addressOutputs(addressBech32: string, type?: number): Promise<IAddressOutputsResponse>;
     /**
      * Get the address detail using ed25519 address.
      * @param addressEd25519 The address to get the details for.
@@ -117,10 +126,41 @@ export declare class SingleNodeClient implements IClient {
      * Get the address outputs using ed25519 address.
      * @param addressEd25519 The address to get the outputs for.
      * @param type Filter the type of outputs you are looking up, defaults to all.
-     * @param includeSpent Filter the type of outputs you are looking up, defaults to false.
      * @returns The address outputs.
      */
-    addressEd25519Outputs(addressEd25519: string, type?: number, includeSpent?: boolean): Promise<IAddressOutputsResponse>;
+    addressEd25519Outputs(addressEd25519: string, type?: number): Promise<IAddressOutputsResponse>;
+    /**
+     * Get the address outputs for an alias address.
+     * @param addressAlias The address to get the outputs for.
+     * @param type Filter the type of outputs you are looking up, defaults to all.
+     * @returns The address outputs.
+     */
+    addressAliasOutputs(addressAlias: string, type?: number): Promise<IAddressOutputsResponse>;
+    /**
+     * Get the address outputs for an NFT address.
+     * @param addressNft The address to get the outputs for.
+     * @param type Filter the type of outputs you are looking up, defaults to all.
+     * @returns The address outputs.
+     */
+    addressNftOutputs(addressNft: string, type?: number): Promise<IAddressOutputsResponse>;
+    /**
+     * Get the outputs for an alias.
+     * @param aliasId The alias to get the outputs for.
+     * @returns The outputs.
+     */
+    alias(aliasId: string): Promise<IOutputsResponse>;
+    /**
+     * Get the outputs for an NFT.
+     * @param nftId The NFT to get the outputs for.
+     * @returns The outputs.
+     */
+    nft(nftId: string): Promise<IOutputsResponse>;
+    /**
+     * Get the outputs for a foundry.
+     * @param foundryId The foundry to get the outputs for.
+     * @returns The outputs.
+     */
+    foundry(foundryId: string): Promise<IOutputsResponse>;
     /**
      * Get the requested milestone.
      * @param index The index of the milestone to get.

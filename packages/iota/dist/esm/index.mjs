@@ -69,6 +69,7 @@ export * from "./models/api/IMessagesResponse.mjs";
 export * from "./models/api/IMilestoneResponse.mjs";
 export * from "./models/api/IMilestoneUtxoChangesResponse.mjs";
 export * from "./models/api/IOutputResponse.mjs";
+export * from "./models/api/IOutputsResponse.mjs";
 export * from "./models/api/IReceiptsResponse.mjs";
 export * from "./models/api/IResponse.mjs";
 export * from "./models/api/ITipsResponse.mjs";

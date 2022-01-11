@@ -12,6 +12,7 @@ import type { IMessagesResponse } from "../models/api/IMessagesResponse";
 import type { IMilestoneResponse } from "../models/api/IMilestoneResponse";
 import type { IMilestoneUtxoChangesResponse } from "../models/api/IMilestoneUtxoChangesResponse";
 import type { IOutputResponse } from "../models/api/IOutputResponse";
+import type { IOutputsResponse } from "../models/api/IOutputsResponse";
 import type { IReceiptsResponse } from "../models/api/IReceiptsResponse";
 import type { IResponse } from "../models/api/IResponse";
 import type { ITipsResponse } from "../models/api/ITipsResponse";
@@ -237,10 +238,9 @@ export class SingleNodeClient implements IClient {
     public async messagesFind(indexationKey: Uint8Array | string): Promise<IMessagesResponse> {
         return this.fetchJson<never, IMessagesResponse>(
             "get",
-            `messages?index=${
-                typeof indexationKey === "string"
-                    ? Converter.utf8ToHex(indexationKey)
-                    : Converter.bytesToHex(indexationKey)
+            `messages?index=${typeof indexationKey === "string"
+                ? Converter.utf8ToHex(indexationKey)
+                : Converter.bytesToHex(indexationKey)
             }`
         );
     }
@@ -273,6 +273,34 @@ export class SingleNodeClient implements IClient {
     }
 
     /**
+     * Find outputs by type.
+     * @param type The type of the output to get.
+     * @param issuer The issuer of the output.
+     * @param sender The sender of the output.
+     * @param index The index associated with the output.
+     * @returns The outputs with the requested parameters.
+     */
+    public async outputs(type: number, issuer?: string, sender?: string, index?: string): Promise<IOutputsResponse> {
+        const queryParams = [];
+        if (type !== undefined) {
+            queryParams.push(`type=${type}`);
+        }
+        if (issuer !== undefined) {
+            queryParams.push(`issuer=${issuer}`);
+        }
+        if (sender !== undefined) {
+            queryParams.push(`sender=${sender}`);
+        }
+        if (index !== undefined) {
+            queryParams.push(`index=${index}`);
+        }
+        return this.fetchJson<never, IOutputsResponse>(
+            "get",
+            `outputs${this.combineQueryParams(queryParams)}`
+        );
+    }
+
+    /**
      * Get the address details.
      * @param addressBech32 The address to get the details for.
      * @returns The address details.
@@ -285,20 +313,12 @@ export class SingleNodeClient implements IClient {
      * Get the address outputs.
      * @param addressBech32 The address to get the outputs for.
      * @param type Filter the type of outputs you are looking up, defaults to all.
-     * @param includeSpent Filter the type of outputs you are looking up, defaults to false.
      * @returns The address outputs.
      */
-    public async addressOutputs(
-        addressBech32: string,
-        type?: number,
-        includeSpent?: boolean
-    ): Promise<IAddressOutputsResponse> {
+    public async addressOutputs(addressBech32: string, type?: number): Promise<IAddressOutputsResponse> {
         const queryParams = [];
         if (type !== undefined) {
             queryParams.push(`type=${type}`);
-        }
-        if (includeSpent !== undefined) {
-            queryParams.push(`include-spent=${includeSpent}`);
         }
         return this.fetchJson<never, IAddressOutputsResponse>(
             "get",
@@ -322,14 +342,9 @@ export class SingleNodeClient implements IClient {
      * Get the address outputs using ed25519 address.
      * @param addressEd25519 The address to get the outputs for.
      * @param type Filter the type of outputs you are looking up, defaults to all.
-     * @param includeSpent Filter the type of outputs you are looking up, defaults to false.
      * @returns The address outputs.
      */
-    public async addressEd25519Outputs(
-        addressEd25519: string,
-        type?: number,
-        includeSpent?: boolean
-    ): Promise<IAddressOutputsResponse> {
+    public async addressEd25519Outputs(addressEd25519: string, type?: number): Promise<IAddressOutputsResponse> {
         if (!Converter.isHex(addressEd25519)) {
             throw new Error("The supplied address does not appear to be hex format");
         }
@@ -337,12 +352,85 @@ export class SingleNodeClient implements IClient {
         if (type !== undefined) {
             queryParams.push(`type=${type}`);
         }
-        if (includeSpent !== undefined) {
-            queryParams.push(`include-spent=${includeSpent}`);
-        }
         return this.fetchJson<never, IAddressOutputsResponse>(
             "get",
             `addresses/ed25519/${addressEd25519}/outputs${this.combineQueryParams(queryParams)}`
+        );
+    }
+
+    /**
+     * Get the address outputs for an alias address.
+     * @param addressAlias The address to get the outputs for.
+     * @param type Filter the type of outputs you are looking up, defaults to all.
+     * @returns The address outputs.
+     */
+    public async addressAliasOutputs(addressAlias: string, type?: number): Promise<IAddressOutputsResponse> {
+        if (!Converter.isHex(addressAlias)) {
+            throw new Error("The supplied address does not appear to be hex format");
+        }
+        const queryParams = [];
+        if (type !== undefined) {
+            queryParams.push(`type=${type}`);
+        }
+        return this.fetchJson<never, IAddressOutputsResponse>(
+            "get",
+            `addresses/alias/${addressAlias}/outputs${this.combineQueryParams(queryParams)}`
+        );
+    }
+
+    /**
+     * Get the address outputs for an NFT address.
+     * @param addressNft The address to get the outputs for.
+     * @param type Filter the type of outputs you are looking up, defaults to all.
+     * @returns The address outputs.
+     */
+    public async addressNftOutputs(addressNft: string, type?: number): Promise<IAddressOutputsResponse> {
+        if (!Converter.isHex(addressNft)) {
+            throw new Error("The supplied address does not appear to be hex format");
+        }
+        const queryParams = [];
+        if (type !== undefined) {
+            queryParams.push(`type=${type}`);
+        }
+        return this.fetchJson<never, IAddressOutputsResponse>(
+            "get",
+            `addresses/nft/${addressNft}/outputs${this.combineQueryParams(queryParams)}`
+        );
+    }
+
+    /**
+     * Get the outputs for an alias.
+     * @param aliasId The alias to get the outputs for.
+     * @returns The outputs.
+     */
+    public async alias(aliasId: string): Promise<IOutputsResponse> {
+        return this.fetchJson<never, IOutputsResponse>(
+            "get",
+            `aliases/${aliasId}`
+        );
+    }
+
+    /**
+     * Get the outputs for an NFT.
+     * @param nftId The NFT to get the outputs for.
+     * @returns The outputs.
+     */
+    public async nft(nftId: string): Promise<IOutputsResponse> {
+        return this.fetchJson<never, IOutputsResponse>(
+            "get",
+            `nft/${nftId}`
+        );
+    }
+
+    /**
+     * Get the outputs for a foundry.
+     * @param foundryId The foundry to get the outputs for.
+     * @returns The outputs.
+     */
+    public async foundry(foundryId: string): Promise<IOutputsResponse> {
+        return this.fetchJson<never, IOutputsResponse>(
+            "get",
+            `foundries/${foundryId}`
         );
     }
 
@@ -473,7 +561,7 @@ export class SingleNodeClient implements IClient {
                 } else {
                     return responseData.data;
                 }
-            } catch {}
+            } catch { }
         }
 
         if (!errorMessage) {
@@ -483,7 +571,7 @@ export class SingleNodeClient implements IClient {
                     errorMessage = json.error.message;
                     errorCode = json.error.code;
                 }
-            } catch {}
+            } catch { }
         }
 
         if (!errorMessage) {
@@ -498,7 +586,7 @@ export class SingleNodeClient implements IClient {
                         errorMessage = text;
                     }
                 }
-            } catch {}
+            } catch { }
         }
 
         throw new ClientError(

@@ -172,6 +172,30 @@ export class SingleNodeClient {
         return this.fetchJson("get", `outputs/${outputId}`);
     }
     /**
+     * Find outputs by type.
+     * @param type The type of the output to get.
+     * @param issuer The issuer of the output.
+     * @param sender The sender of the output.
+     * @param index The index associated with the output.
+     * @returns The outputs with the requested parameters.
+     */
+    async outputs(type, issuer, sender, index) {
+        const queryParams = [];
+        if (type !== undefined) {
+            queryParams.push(`type=${type}`);
+        }
+        if (issuer !== undefined) {
+            queryParams.push(`issuer=${issuer}`);
+        }
+        if (sender !== undefined) {
+            queryParams.push(`sender=${sender}`);
+        }
+        if (index !== undefined) {
+            queryParams.push(`index=${index}`);
+        }
+        return this.fetchJson("get", `outputs${this.combineQueryParams(queryParams)}`);
+    }
+    /**
      * Get the address details.
      * @param addressBech32 The address to get the details for.
      * @returns The address details.
@@ -183,16 +207,12 @@ export class SingleNodeClient {
      * Get the address outputs.
      * @param addressBech32 The address to get the outputs for.
      * @param type Filter the type of outputs you are looking up, defaults to all.
-     * @param includeSpent Filter the type of outputs you are looking up, defaults to false.
      * @returns The address outputs.
      */
-    async addressOutputs(addressBech32, type, includeSpent) {
+    async addressOutputs(addressBech32, type) {
         const queryParams = [];
         if (type !== undefined) {
             queryParams.push(`type=${type}`);
-        }
-        if (includeSpent !== undefined) {
-            queryParams.push(`include-spent=${includeSpent}`);
         }
         return this.fetchJson("get", `addresses/${addressBech32}/outputs${this.combineQueryParams(queryParams)}`);
     }
@@ -211,10 +231,9 @@ export class SingleNodeClient {
      * Get the address outputs using ed25519 address.
      * @param addressEd25519 The address to get the outputs for.
      * @param type Filter the type of outputs you are looking up, defaults to all.
-     * @param includeSpent Filter the type of outputs you are looking up, defaults to false.
      * @returns The address outputs.
      */
-    async addressEd25519Outputs(addressEd25519, type, includeSpent) {
+    async addressEd25519Outputs(addressEd25519, type) {
         if (!Converter.isHex(addressEd25519)) {
             throw new Error("The supplied address does not appear to be hex format");
         }
@@ -222,10 +241,63 @@ export class SingleNodeClient {
         if (type !== undefined) {
             queryParams.push(`type=${type}`);
         }
-        if (includeSpent !== undefined) {
-            queryParams.push(`include-spent=${includeSpent}`);
-        }
         return this.fetchJson("get", `addresses/ed25519/${addressEd25519}/outputs${this.combineQueryParams(queryParams)}`);
+    }
+    /**
+     * Get the address outputs for an alias address.
+     * @param addressAlias The address to get the outputs for.
+     * @param type Filter the type of outputs you are looking up, defaults to all.
+     * @returns The address outputs.
+     */
+    async addressAliasOutputs(addressAlias, type) {
+        if (!Converter.isHex(addressAlias)) {
+            throw new Error("The supplied address does not appear to be hex format");
+        }
+        const queryParams = [];
+        if (type !== undefined) {
+            queryParams.push(`type=${type}`);
+        }
+        return this.fetchJson("get", `addresses/alias/${addressAlias}/outputs${this.combineQueryParams(queryParams)}`);
+    }
+    /**
+     * Get the address outputs for an NFT address.
+     * @param addressNft The address to get the outputs for.
+     * @param type Filter the type of outputs you are looking up, defaults to all.
+     * @returns The address outputs.
+     */
+    async addressNftOutputs(addressNft, type) {
+        if (!Converter.isHex(addressNft)) {
+            throw new Error("The supplied address does not appear to be hex format");
+        }
+        const queryParams = [];
+        if (type !== undefined) {
+            queryParams.push(`type=${type}`);
+        }
+        return this.fetchJson("get", `addresses/nft/${addressNft}/outputs${this.combineQueryParams(queryParams)}`);
+    }
+    /**
+     * Get the outputs for an alias.
+     * @param aliasId The alias to get the outputs for.
+     * @returns The outputs.
+     */
+    async alias(aliasId) {
+        return this.fetchJson("get", `aliases/${aliasId}`);
+    }
+    /**
+     * Get the outputs for an NFT.
+     * @param nftId The NFT to get the outputs for.
+     * @returns The outputs.
+     */
+    async nft(nftId) {
+        return this.fetchJson("get", `nft/${nftId}`);
+    }
+    /**
+     * Get the outputs for a foundry.
+     * @param foundryId The foundry to get the outputs for.
+     * @returns The outputs.
+     */
+    async foundry(foundryId) {
+        return this.fetchJson("get", `foundries/${foundryId}`);
     }
     /**
      * Get the requested milestone.

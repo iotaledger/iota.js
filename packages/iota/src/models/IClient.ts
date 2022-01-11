@@ -7,6 +7,7 @@ import type { IMessagesResponse } from "./api/IMessagesResponse";
 import type { IMilestoneResponse } from "./api/IMilestoneResponse";
 import type { IMilestoneUtxoChangesResponse } from "./api/IMilestoneUtxoChangesResponse";
 import type { IOutputResponse } from "./api/IOutputResponse";
+import type { IOutputsResponse } from "./api/IOutputsResponse";
 import type { IReceiptsResponse } from "./api/IReceiptsResponse";
 import type { ITipsResponse } from "./api/ITipsResponse";
 import type { IMessage } from "./IMessage";
@@ -101,6 +102,16 @@ export interface IClient {
     output(outputId: string): Promise<IOutputResponse>;
 
     /**
+     * Find outputs by type.
+     * @param type The type of the outputs to get.
+     * @param issuer The issuer of the output.
+     * @param sender The sender of the output.
+     * @param index The index associated with the output.
+     * @returns The outputs with the requested parameters.
+     */
+    outputs(type: number, issuer?: string, sender?: string, index?: string): Promise<IOutputsResponse>;
+
+    /**
      * Get the address details using bech32 address.
      * @param addressBech32 The address to get the details for.
      * @returns The address details.
@@ -111,30 +122,61 @@ export interface IClient {
      * Get the address outputs using bech32 address.
      * @param addressBech32 The address to get the outputs for.
      * @param type Filter the type of outputs you are looking up, defaults to all.
-     * @param includeSpent Filter the type of outputs you are looking up, defaults to false.
      * @returns The address outputs.
      */
-    addressOutputs(addressBech32: string, type?: number, includeSpent?: boolean): Promise<IAddressOutputsResponse>;
+    addressOutputs(addressBech32: string, type?: number): Promise<IAddressOutputsResponse>;
 
     /**
-     * Get the address details using ed25519 address.
+     * Get the address details for an ed25519 address.
      * @param addressEd25519 The address to get the details for.
      * @returns The address details.
      */
     addressEd25519(addressEd25519: string): Promise<IAddressResponse>;
 
     /**
-     * Get the address outputs.
+     * Get the address outputs for an ed25519 address.
      * @param addressEd25519 The address to get the outputs for.
      * @param type Filter the type of outputs you are looking up, defaults to all.
-     * @param includeSpent Filter the type of outputs you are looking up, defaults to false.
      * @returns The address outputs.
      */
-    addressEd25519Outputs(
-        addressEd25519: string,
-        type?: number,
-        includeSpent?: boolean
-    ): Promise<IAddressOutputsResponse>;
+    addressEd25519Outputs(addressEd25519: string, type?: number): Promise<IAddressOutputsResponse>;
+
+    /**
+     * Get the address outputs for an alias address.
+     * @param addressAlias The address to get the outputs for.
+     * @param type Filter the type of outputs you are looking up, defaults to all.
+     * @returns The address outputs.
+     */
+    addressAliasOutputs(addressAlias: string, type?: number): Promise<IAddressOutputsResponse>;
+
+    /**
+     * Get the address outputs for an NFT address.
+     * @param addressNft The address to get the outputs for.
+     * @param type Filter the type of outputs you are looking up, defaults to all.
+     * @returns The address outputs.
+     */
+    addressNftOutputs(addressNft: string, type?: number): Promise<IAddressOutputsResponse>;
+
+    /**
+     * Get the outputs for an alias.
+     * @param aliasId The alias to get the outputs for.
+     * @returns The outputs.
+     */
+    alias(aliasId: string): Promise<IOutputsResponse>;
+
+    /**
+     * Get the outputs for an NFT.
+     * @param nftId The NFT to get the outputs for.
+     * @returns The outputs.
+     */
+    nft(nftId: string): Promise<IOutputsResponse>;
+
+    /**
+     * Get the outputs for a foundry.
+     * @param foundryId The foundry to get the outputs for.
+     * @returns The outputs.
+     */
+    foundry(foundryId: string): Promise<IOutputsResponse>;
 
     /**
      * Get the requested milestone.

@@ -2,6 +2,12 @@
 
 List of outputs for an address.
 
+## Hierarchy
+
+- [`IOutputsResponse`](IOutputsResponse.md)
+
+  ↳ **`IAddressOutputsResponse`**
+
 ## Table of contents
 
 ### Properties
@@ -37,6 +43,10 @@ ___
 
 The max number of results returned.
 
+#### Inherited from
+
+[IOutputsResponse](IOutputsResponse.md).[maxResults](IOutputsResponse.md#maxresults)
+
 ___
 
 ### count
@@ -44,6 +54,10 @@ ___
 • **count**: `number`
 
 The number of items returned.
+
+#### Inherited from
+
+[IOutputsResponse](IOutputsResponse.md).[count](IOutputsResponse.md#count)
 
 ___
 
@@ -53,6 +67,10 @@ ___
 
 The ids of the outputs.
 
+#### Inherited from
+
+[IOutputsResponse](IOutputsResponse.md).[outputIds](IOutputsResponse.md#outputids)
+
 ___
 
 ### ledgerIndex
@@ -60,3 +78,7 @@ ___
 • **ledgerIndex**: `number`
 
 The ledger index at which these outputs where available at.
+
+#### Inherited from
+
+[IOutputsResponse](IOutputsResponse.md).[ledgerIndex](IOutputsResponse.md#ledgerindex)

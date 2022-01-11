@@ -281,6 +281,7 @@
 - [IMilestoneResponse](interfaces/IMilestoneResponse.md)
 - [IMilestoneUtxoChangesResponse](interfaces/IMilestoneUtxoChangesResponse.md)
 - [IOutputResponse](interfaces/IOutputResponse.md)
+- [IOutputsResponse](interfaces/IOutputsResponse.md)
 - [IReceiptsResponse](interfaces/IReceiptsResponse.md)
 - [IResponse](interfaces/IResponse.md)
 - [ITipsResponse](interfaces/ITipsResponse.md)
