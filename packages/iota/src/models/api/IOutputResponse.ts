@@ -27,6 +27,21 @@ export interface IOutputResponse {
     isSpent: boolean;
 
     /**
+     * The milestone index at which this output was booked into the ledger.
+     */
+    milestoneIndex: number;
+
+    /**
+     * The milestone timestamp this output was booked in the ledger.
+     */
+    milestoneTimestamp: number;
+
+    /**
+     * The ledger index at which these output was available at.
+     */
+    ledgerIndex: number;
+
+    /**
      * The output.
      */
     output: OutputTypes;
