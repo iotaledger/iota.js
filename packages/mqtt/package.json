@@ -1,7 +1,7 @@
 {
     "name": "@iota/mqtt.js",
     "description": "IOTA JavaScript Library for Adding MQTT support",
-    "version": "1.8.5",
+    "version": "1.8.6",
     "keywords": [
         "iota",
         "mqtt"
@@ -84,8 +84,8 @@
         "typings"
     ],
     "dependencies": {
-        "@iota/util.js": "^1.8.5",
-        "@iota/iota.js": "^1.8.5",
+        "@iota/util.js": "^1.8.6",
+        "@iota/iota.js": "^1.8.6",
         "mqtt": "^4.3.4"
     }
 }

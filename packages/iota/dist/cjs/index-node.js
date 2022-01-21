@@ -13,8 +13,12 @@
     // SPDX-License-Identifier: Apache-2.0
     // Fetch
     if (globalThis && !globalThis.fetch) {
-        // eslint-disable-next-line @typescript-eslint/no-require-imports
-        globalThis.fetch = require$$0__default["default"];
+        // eslint-disable-next-line @typescript-eslint/no-require-imports,@typescript-eslint/no-var-requires
+        const fetch = require$$0__default["default"];
+        globalThis.Headers = fetch.Headers;
+        globalThis.Request = fetch.Request;
+        globalThis.Response = fetch.Response;
+        globalThis.fetch = fetch;
     }
 
     // Copyright 2020 IOTA Stiftung

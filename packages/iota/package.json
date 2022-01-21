@@ -1,7 +1,7 @@
 {
     "name": "@iota/iota.js",
     "description": "IOTA JavaScript Library",
-    "version": "1.8.5",
+    "version": "1.8.6",
     "keywords": [
         "iota",
         "client"
@@ -18,8 +18,8 @@
     "dependencies": {
         "big-integer": "^1.6.51",
         "node-fetch": "2.6.7",
-        "@iota/util.js": "^1.8.5",
-        "@iota/crypto.js": "^1.8.5"
+        "@iota/util.js": "^1.8.6",
+        "@iota/crypto.js": "^1.8.6"
     },
     "scripts": {
         "build-clean": "rimraf ./es/* ./typings/*",
