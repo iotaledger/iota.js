@@ -3,8 +3,8 @@
 
 // Fetch
 if (globalThis && !globalThis.fetch) {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const fetch = require('node-fetch');
+    // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires
+    const fetch = require("node-fetch");
     globalThis.Headers = fetch.Headers;
     globalThis.Request = fetch.Request;
     globalThis.Response = fetch.Response;
