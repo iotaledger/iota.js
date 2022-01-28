@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.8.6
+
+* Expand node-fetch polyfill
+
 ## v1.8.5
 
 * New ESM Packaging

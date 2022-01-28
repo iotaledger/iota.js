@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.8.6
+
+* Version alignment
+
 ## v1.8.5
 
 * New ESM Packaging
