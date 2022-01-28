@@ -1,7 +1,7 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import type { AddressTypes } from "../../models/addresses/addressTypes";
 import type { FeatureBlockTypes } from "../../models/featureBlocks/featureBlockTypes";
+import type { UnlockConditionTypes } from "../../models/unlockConditions/unlockConditionTypes";
 import type { INativeToken } from "../INativeToken";
 import type { ITypeBase } from "../ITypeBase";
 
@@ -30,16 +30,6 @@ export interface IAliasOutput extends ITypeBase<4> {
     aliasId: string;
 
     /**
-     * The address that controls the output.
-     */
-    stateController: AddressTypes;
-
-    /**
-     * The address that governs the output.
-     */
-    governanceController: AddressTypes;
-
-    /**
      * A counter that must increase by 1 every time the alias is state transitioned.
      */
     stateIndex: number;
@@ -53,6 +43,11 @@ export interface IAliasOutput extends ITypeBase<4> {
      * A counter that denotes the number of foundries created by this alias account.
      */
     foundryCounter: number;
+
+    /**
+     * The unlock conditions for the output.
+     */
+    unlockConditions: UnlockConditionTypes[];
 
     /**
      * Blocks contained by the output.

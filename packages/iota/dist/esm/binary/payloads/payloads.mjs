@@ -1,18 +1,18 @@
-import { INDEXATION_PAYLOAD_TYPE } from "../../models/payloads/IIndexationPayload.mjs";
 import { MILESTONE_PAYLOAD_TYPE } from "../../models/payloads/IMilestonePayload.mjs";
 import { RECEIPT_PAYLOAD_TYPE } from "../../models/payloads/IReceiptPayload.mjs";
+import { TAGGED_DATA_PAYLOAD_TYPE } from "../../models/payloads/ITaggedDataPayload.mjs";
 import { TRANSACTION_PAYLOAD_TYPE } from "../../models/payloads/ITransactionPayload.mjs";
 import { TREASURY_TRANSACTION_PAYLOAD_TYPE } from "../../models/payloads/ITreasuryTransactionPayload.mjs";
 import { UINT32_SIZE } from "../commonDataTypes.mjs";
-import { deserializeIndexationPayload, MIN_INDEXATION_PAYLOAD_LENGTH, serializeIndexationPayload } from "./indexationPayload.mjs";
 import { deserializeMilestonePayload, MIN_MILESTONE_PAYLOAD_LENGTH, serializeMilestonePayload } from "./milestonePayload.mjs";
 import { deserializeReceiptPayload, MIN_RECEIPT_PAYLOAD_LENGTH, serializeReceiptPayload } from "./receiptPayload.mjs";
+import { deserializeTaggedDataPayload, MIN_TAGGED_DATA_PAYLOAD_LENGTH, serializeTaggedDataPayload } from "./taggedDataPayload.mjs";
 import { deserializeTransactionPayload, MIN_TRANSACTION_PAYLOAD_LENGTH, serializeTransactionPayload } from "./transactionPayload.mjs";
 import { deserializeTreasuryTransactionPayload, MIN_TREASURY_TRANSACTION_PAYLOAD_LENGTH, serializeTreasuryTransactionPayload } from "./treasuryTransactionPayload.mjs";
 /**
  * The minimum length of a payload binary representation.
  */
-export const MIN_PAYLOAD_LENGTH = Math.min(MIN_TRANSACTION_PAYLOAD_LENGTH, MIN_MILESTONE_PAYLOAD_LENGTH, MIN_INDEXATION_PAYLOAD_LENGTH, MIN_RECEIPT_PAYLOAD_LENGTH, MIN_TREASURY_TRANSACTION_PAYLOAD_LENGTH);
+export const MIN_PAYLOAD_LENGTH = Math.min(MIN_TRANSACTION_PAYLOAD_LENGTH, MIN_MILESTONE_PAYLOAD_LENGTH, MIN_TAGGED_DATA_PAYLOAD_LENGTH, MIN_RECEIPT_PAYLOAD_LENGTH, MIN_TREASURY_TRANSACTION_PAYLOAD_LENGTH);
 /**
  * Deserialize the payload from binary.
  * @param readStream The stream to read the data from.
@@ -32,14 +32,14 @@ export function deserializePayload(readStream) {
         else if (payloadType === MILESTONE_PAYLOAD_TYPE) {
             payload = deserializeMilestonePayload(readStream);
         }
-        else if (payloadType === INDEXATION_PAYLOAD_TYPE) {
-            payload = deserializeIndexationPayload(readStream);
-        }
         else if (payloadType === RECEIPT_PAYLOAD_TYPE) {
             payload = deserializeReceiptPayload(readStream);
         }
         else if (payloadType === TREASURY_TRANSACTION_PAYLOAD_TYPE) {
             payload = deserializeTreasuryTransactionPayload(readStream);
+        }
+        else if (payloadType === TAGGED_DATA_PAYLOAD_TYPE) {
+            payload = deserializeTaggedDataPayload(readStream);
         }
         else {
             throw new Error(`Unrecognized payload type ${payloadType}`);
@@ -66,14 +66,14 @@ export function serializePayload(writeStream, object) {
     else if (object.type === MILESTONE_PAYLOAD_TYPE) {
         serializeMilestonePayload(writeStream, object);
     }
-    else if (object.type === INDEXATION_PAYLOAD_TYPE) {
-        serializeIndexationPayload(writeStream, object);
-    }
     else if (object.type === RECEIPT_PAYLOAD_TYPE) {
         serializeReceiptPayload(writeStream, object);
     }
     else if (object.type === TREASURY_TRANSACTION_PAYLOAD_TYPE) {
         serializeTreasuryTransactionPayload(writeStream, object);
+    }
+    else if (object.type === TAGGED_DATA_PAYLOAD_TYPE) {
+        serializeTaggedDataPayload(writeStream, object);
     }
     else {
         throw new Error(`Unrecognized transaction type ${object.type}`);

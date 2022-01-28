@@ -3,15 +3,15 @@
 /* eslint-disable unicorn/no-nested-ternary */
 import { Blake2b, Ed25519 } from "@iota/crypto.js";
 import { Converter, WriteStream } from "@iota/util.js";
+import { EXTENDED_OUTPUT_TYPE } from "...mjs";
 import { serializeInput } from "../binary/inputs/inputs.mjs";
 import { serializeOutput } from "../binary/outputs/outputs.mjs";
-import { MAX_INDEXATION_KEY_LENGTH, MIN_INDEXATION_KEY_LENGTH } from "../binary/payloads/indexationPayload.mjs";
+import { MAX_TAG_LENGTH } from "../binary/payloads/taggedDataPayload.mjs";
 import { serializeTransactionEssence } from "../binary/transactionEssence.mjs";
 import { SingleNodeClient } from "../clients/singleNodeClient.mjs";
 import { ED25519_ADDRESS_TYPE } from "../models/addresses/IEd25519Address.mjs";
 import { TRANSACTION_ESSENCE_TYPE } from "../models/ITransactionEssence.mjs";
-import { SIMPLE_OUTPUT_TYPE } from "../models/outputs/ISimpleOutput.mjs";
-import { INDEXATION_PAYLOAD_TYPE } from "../models/payloads/IIndexationPayload.mjs";
+import { TAGGED_DATA_PAYLOAD_TYPE } from "../models/payloads/ITaggedDataPayload.mjs";
 import { TRANSACTION_PAYLOAD_TYPE } from "../models/payloads/ITransactionPayload.mjs";
 import { ED25519_SIGNATURE_TYPE } from "../models/signatures/IEd25519Signature.mjs";
 import { REFERENCE_UNLOCK_BLOCK_TYPE } from "../models/unlockBlocks/IReferenceUnlockBlock.mjs";
@@ -21,14 +21,14 @@ import { SIGNATURE_UNLOCK_BLOCK_TYPE } from "../models/unlockBlocks/ISignatureUn
  * @param client The client or node endpoint to send the transfer with.
  * @param inputsAndSignatureKeyPairs The inputs with the signature key pairs needed to sign transfers.
  * @param outputs The outputs to send.
- * @param indexation Optional indexation data to associate with the transaction.
- * @param indexation.key Indexation key.
- * @param indexation.data Optional index data.
+ * @param taggedData Optional tagged data to associate with the transaction.
+ * @param taggedData.tag Optional tag.
+ * @param taggedData.data Optional data.
  * @returns The id of the message created and the remainder address if one was needed.
  */
-export async function sendAdvanced(client, inputsAndSignatureKeyPairs, outputs, indexation) {
+export async function sendAdvanced(client, inputsAndSignatureKeyPairs, outputs, taggedData) {
     const localClient = typeof client === "string" ? new SingleNodeClient(client) : client;
-    const transactionPayload = buildTransactionPayload(inputsAndSignatureKeyPairs, outputs, indexation);
+    const transactionPayload = buildTransactionPayload(inputsAndSignatureKeyPairs, outputs, taggedData);
     const message = {
         payload: transactionPayload
     };
@@ -42,41 +42,41 @@ export async function sendAdvanced(client, inputsAndSignatureKeyPairs, outputs, 
  * Build a transaction payload.
  * @param inputsAndSignatureKeyPairs The inputs with the signature key pairs needed to sign transfers.
  * @param outputs The outputs to send.
- * @param indexation Optional indexation data to associate with the transaction.
- * @param indexation.key Indexation key.
- * @param indexation.data Optional index data.
+ * @param taggedData Optional tagged data to associate with the transaction.
+ * @param taggedData.tag Optional tag.
+ * @param taggedData.data Optional index data.
  * @returns The transaction payload.
  */
-export function buildTransactionPayload(inputsAndSignatureKeyPairs, outputs, indexation) {
+export function buildTransactionPayload(inputsAndSignatureKeyPairs, outputs, taggedData) {
     if (!inputsAndSignatureKeyPairs || inputsAndSignatureKeyPairs.length === 0) {
         throw new Error("You must specify some inputs");
     }
     if (!outputs || outputs.length === 0) {
         throw new Error("You must specify some outputs");
     }
-    let localIndexationKeyHex;
-    if (indexation === null || indexation === void 0 ? void 0 : indexation.key) {
-        localIndexationKeyHex =
-            typeof indexation.key === "string"
-                ? Converter.utf8ToHex(indexation.key)
-                : Converter.bytesToHex(indexation.key);
-        if (localIndexationKeyHex.length / 2 < MIN_INDEXATION_KEY_LENGTH) {
-            throw new Error(`The indexation key length is ${localIndexationKeyHex.length / 2}, which is below the minimum size of ${MIN_INDEXATION_KEY_LENGTH}`);
-        }
-        if (localIndexationKeyHex.length / 2 > MAX_INDEXATION_KEY_LENGTH) {
-            throw new Error(`The indexation key length is ${localIndexationKeyHex.length / 2}, which exceeds the maximum size of ${MAX_INDEXATION_KEY_LENGTH}`);
+    let localTagHex;
+    if (taggedData === null || taggedData === void 0 ? void 0 : taggedData.tag) {
+        localTagHex =
+            typeof taggedData.tag === "string"
+                ? Converter.utf8ToHex(taggedData.tag)
+                : Converter.bytesToHex(taggedData.tag);
+        if (localTagHex.length / 2 > MAX_TAG_LENGTH) {
+            throw new Error(`The tag length is ${localTagHex.length / 2}, which exceeds the maximum size of ${MAX_TAG_LENGTH}`);
         }
     }
     const outputsWithSerialization = [];
     for (const output of outputs) {
         if (output.addressType === ED25519_ADDRESS_TYPE) {
             const o = {
-                type: SIMPLE_OUTPUT_TYPE,
+                type: EXTENDED_OUTPUT_TYPE,
                 address: {
                     type: output.addressType,
                     address: output.address
                 },
-                amount: output.amount
+                amount: output.amount,
+                nativeTokens: [],
+                unlockConditions: [],
+                blocks: []
             };
             const writeStream = new WriteStream();
             serializeOutput(writeStream, o);
@@ -104,14 +104,14 @@ export function buildTransactionPayload(inputsAndSignatureKeyPairs, outputs, ind
         type: TRANSACTION_ESSENCE_TYPE,
         inputs: sortedInputs.map(i => i.input),
         outputs: sortedOutputs.map(o => o.output),
-        payload: localIndexationKeyHex
+        payload: taggedData
             ? {
-                type: INDEXATION_PAYLOAD_TYPE,
-                index: localIndexationKeyHex,
-                data: (indexation === null || indexation === void 0 ? void 0 : indexation.data)
-                    ? typeof indexation.data === "string"
-                        ? Converter.utf8ToHex(indexation.data)
-                        : Converter.bytesToHex(indexation.data)
+                type: TAGGED_DATA_PAYLOAD_TYPE,
+                tag: localTagHex,
+                data: (taggedData === null || taggedData === void 0 ? void 0 : taggedData.data)
+                    ? typeof taggedData.data === "string"
+                        ? Converter.utf8ToHex(taggedData.data)
+                        : Converter.bytesToHex(taggedData.data)
                     : undefined
             }
             : undefined

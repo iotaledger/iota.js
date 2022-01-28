@@ -1,9 +1,9 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import type { AddressTypes } from "../addresses/addressTypes";
 import type { FeatureBlockTypes } from "../featureBlocks/featureBlockTypes";
 import type { INativeToken } from "../INativeToken";
 import type { ITypeBase } from "../ITypeBase";
+import type { UnlockConditionTypes } from "../unlockConditions/unlockConditionTypes";
 
 /**
  * The global type for the NFT output.
@@ -14,11 +14,6 @@ export const NFT_OUTPUT_TYPE = 6;
  * NFT output.
  */
 export interface INftOutput extends ITypeBase<6> {
-    /**
-     * The address associated with the output.
-     */
-    address: AddressTypes;
-
     /**
      * The amount of IOTA tokens held by the output.
      */
@@ -38,6 +33,11 @@ export interface INftOutput extends ITypeBase<6> {
      * Binary metadata attached immutably to the NFT.
      */
     immutableData: string;
+
+    /**
+     * The unlock conditions for the output.
+     */
+    unlockConditions: UnlockConditionTypes[];
 
     /**
      * Blocks contained by the output.

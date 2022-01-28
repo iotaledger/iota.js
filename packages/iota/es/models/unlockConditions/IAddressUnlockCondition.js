@@ -1,0 +1,5 @@
+/**
+ * The global type for the address unlock condition.
+ */
+export const ADDRESS_UNLOCK_CONDITION_TYPE = 0;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiSUFkZHJlc3NVbmxvY2tDb25kaXRpb24uanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi9zcmMvbW9kZWxzL3VubG9ja0NvbmRpdGlvbnMvSUFkZHJlc3NVbmxvY2tDb25kaXRpb24udHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBS0E7O0dBRUc7QUFDSCxNQUFNLENBQUMsTUFBTSw2QkFBNkIsR0FBRyxDQUFDLENBQUMifQ==

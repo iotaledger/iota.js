@@ -19,6 +19,7 @@ import {
     serializeNativeTokens
 } from "../nativeTokens";
 import { deserializeTokenScheme, MIN_TOKEN_SCHEME_LENGTH, serializeTokenScheme } from "../tokenSchemes/tokenSchemes";
+import { deserializeUnlockConditions, MIN_UNLOCK_CONDITIONS_LENGTH, serializeUnlockConditions } from "../unlockConditions/unlockConditions";
 
 /**
  * The minimum length of a foundry output binary representation.
@@ -33,6 +34,7 @@ export const MIN_FOUNDRY_OUTPUT_LENGTH: number =
     UINT256_SIZE + // Circulating Supply
     UINT256_SIZE + // Maximum Supply
     MIN_TOKEN_SCHEME_LENGTH + // Token scheme length
+    MIN_UNLOCK_CONDITIONS_LENGTH +
     MIN_FEATURE_BLOCKS_LENGTH;
 
 /**
@@ -60,7 +62,8 @@ export function deserializeFoundryOutput(readStream: ReadStream): IFoundryOutput
     const circulatingSupply = readStream.readUInt256("foundryOutput.circulatingSupply");
     const maximumSupply = readStream.readUInt256("foundryOutput.maximumSupply");
     const tokenScheme = deserializeTokenScheme(readStream);
-    const featureBlocks = deserializeFeatureBlocks(readStream);
+    const unlockConditions = deserializeUnlockConditions(readStream);
+    const blocks = deserializeFeatureBlocks(readStream);
 
     return {
         type: FOUNDRY_OUTPUT_TYPE,
@@ -72,7 +75,8 @@ export function deserializeFoundryOutput(readStream: ReadStream): IFoundryOutput
         circulatingSupply: circulatingSupply.toString(),
         maximumSupply: maximumSupply.toString(),
         tokenScheme,
-        blocks: featureBlocks as IMetadataFeatureBlock[]
+        unlockConditions,
+        blocks: blocks as IMetadataFeatureBlock[]
     };
 }
 
@@ -92,5 +96,6 @@ export function serializeFoundryOutput(writeStream: WriteStream, object: IFoundr
     writeStream.writeUInt256("foundryOutput.circulatingSupply", bigInt(object.circulatingSupply));
     writeStream.writeUInt256("foundryOutput.maximumSupply", bigInt(object.maximumSupply));
     serializeTokenScheme(writeStream, object.tokenScheme);
+    serializeUnlockConditions(writeStream, object.unlockConditions);
     serializeFeatureBlocks(writeStream, object.blocks);
 }

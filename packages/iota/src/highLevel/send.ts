@@ -11,7 +11,7 @@ import type { IKeyPair } from "../models/IKeyPair";
 import type { IMessage } from "../models/IMessage";
 import { IUTXOInput, UTXO_INPUT_TYPE } from "../models/inputs/IUTXOInput";
 import type { ISeed } from "../models/ISeed";
-import { SIMPLE_OUTPUT_TYPE } from "../models/outputs/ISimpleOutput";
+import { EXTENDED_OUTPUT_TYPE } from "../models/outputs/IExtendedOutput";
 import { Bech32Helper } from "../utils/bech32Helper";
 import { generateBip44Address } from "./addresses";
 import { sendAdvanced } from "./sendAdvanced";
@@ -23,9 +23,9 @@ import { sendAdvanced } from "./sendAdvanced";
  * @param accountIndex The account index in the wallet.
  * @param addressBech32 The address to send the funds to in bech32 format.
  * @param amount The amount to send.
- * @param indexation Optional indexation data to associate with the transaction.
- * @param indexation.key Indexation key.
- * @param indexation.data Optional index data.
+ * @param taggedData Optional tagged data to associate with the transaction.
+ * @param taggedData.tag Optional tag.
+ * @param taggedData.data Optional data.
  * @param addressOptions Optional address configuration for balance address lookups.
  * @param addressOptions.startIndex The start index for the wallet count address, defaults to 0.
  * @param addressOptions.zeroCount The number of addresses with 0 balance during lookup before aborting.
@@ -37,8 +37,8 @@ export async function send(
     accountIndex: number,
     addressBech32: string,
     amount: number,
-    indexation?: {
-        key: Uint8Array | string;
+    taggedData?: {
+        tag?: Uint8Array | string;
         data?: Uint8Array | string;
     },
     addressOptions?: {
@@ -49,7 +49,7 @@ export async function send(
     messageId: string;
     message: IMessage;
 }> {
-    return sendMultiple(client, seed, accountIndex, [{ addressBech32, amount }], indexation, addressOptions);
+    return sendMultiple(client, seed, accountIndex, [{ addressBech32, amount }], taggedData, addressOptions);
 }
 
 /**
@@ -59,9 +59,9 @@ export async function send(
  * @param accountIndex The account index in the wallet.
  * @param addressEd25519 The address to send the funds to in ed25519 format.
  * @param amount The amount to send.
- * @param indexation Optional indexation data to associate with the transaction.
- * @param indexation.key Indexation key.
- * @param indexation.data Optional index data.
+ * @param taggedData Optional tagged data to associate with the transaction.
+ * @param taggedData.tag Optional tag.
+ * @param taggedData.data Optional data.
  * @param addressOptions Optional address configuration for balance address lookups.
  * @param addressOptions.startIndex The start index for the wallet count address, defaults to 0.
  * @param addressOptions.zeroCount The number of addresses with 0 balance during lookup before aborting.
@@ -73,8 +73,8 @@ export async function sendEd25519(
     accountIndex: number,
     addressEd25519: string,
     amount: number,
-    indexation?: {
-        key: Uint8Array;
+    taggedData?: {
+        tag: Uint8Array;
         data?: Uint8Array;
     },
     addressOptions?: {
@@ -85,7 +85,7 @@ export async function sendEd25519(
     messageId: string;
     message: IMessage;
 }> {
-    return sendMultipleEd25519(client, seed, accountIndex, [{ addressEd25519, amount }], indexation, addressOptions);
+    return sendMultipleEd25519(client, seed, accountIndex, [{ addressEd25519, amount }], taggedData, addressOptions);
 }
 
 /**
@@ -94,9 +94,9 @@ export async function sendEd25519(
  * @param seed The seed to use for address generation.
  * @param accountIndex The account index in the wallet.
  * @param outputs The address to send the funds to in bech32 format and amounts.
- * @param indexation Optional indexation data to associate with the transaction.
- * @param indexation.key Indexation key.
- * @param indexation.data Optional index data.
+ * @param taggedData Optional tagged data to associate with the transaction.
+ * @param taggedData.tag Optional tag.
+ * @param taggedData.data Optional data.
  * @param addressOptions Optional address configuration for balance address lookups.
  * @param addressOptions.startIndex The start index for the wallet count address, defaults to 0.
  * @param addressOptions.zeroCount The number of addresses with 0 balance during lookup before aborting.
@@ -110,8 +110,8 @@ export async function sendMultiple(
         addressBech32: string;
         amount: number;
     }[],
-    indexation?: {
-        key: Uint8Array | string;
+    taggedData?: {
+        tag?: Uint8Array | string;
         data?: Uint8Array | string;
     },
     addressOptions?: {
@@ -148,7 +148,7 @@ export async function sendMultiple(
         },
         generateBip44Address,
         hexOutputs,
-        indexation,
+        taggedData,
         addressOptions?.zeroCount
     );
 }
@@ -159,9 +159,9 @@ export async function sendMultiple(
  * @param seed The seed to use for address generation.
  * @param accountIndex The account index in the wallet.
  * @param outputs The outputs including address to send the funds to in ed25519 format and amount.
- * @param indexation Optional indexation data to associate with the transaction.
- * @param indexation.key Indexation key.
- * @param indexation.data Optional index data.
+ * @param taggedData Optional tagged data to associate with the transaction.
+ * @param taggedData.tag Optional tag.
+ * @param taggedData.data Optional data.
  * @param addressOptions Optional address configuration for balance address lookups.
  * @param addressOptions.startIndex The start index for the wallet count address, defaults to 0.
  * @param addressOptions.zeroCount The number of addresses with 0 balance during lookup before aborting.
@@ -175,8 +175,8 @@ export async function sendMultipleEd25519(
         addressEd25519: string;
         amount: number;
     }[],
-    indexation?: {
-        key: Uint8Array;
+    taggedData?: {
+        tag: Uint8Array;
         data?: Uint8Array;
     },
     addressOptions?: {
@@ -203,7 +203,7 @@ export async function sendMultipleEd25519(
         },
         generateBip44Address,
         hexOutputs,
-        indexation,
+        taggedData,
         addressOptions?.zeroCount
     );
 }
@@ -215,9 +215,9 @@ export async function sendMultipleEd25519(
  * @param initialAddressState The initial address state for calculating the addresses.
  * @param nextAddressPath Calculate the next address for inputs.
  * @param outputs The address to send the funds to in bech32 format and amounts.
- * @param indexation Optional indexation data to associate with the transaction.
- * @param indexation.key Indexation key.
- * @param indexation.data Optional index data.
+ * @param taggedData Optional tagged data to associate with the transaction.
+ * @param taggedData.tag Optional tag.
+ * @param taggedData.data Optional data.
  * @param zeroCount The number of addresses with 0 balance during lookup before aborting.
  * @returns The id of the message created and the contructed message.
  */
@@ -231,8 +231,8 @@ export async function sendWithAddressGenerator<T>(
         addressType: number;
         amount: number;
     }[],
-    indexation?: {
-        key: Uint8Array | string;
+    taggedData?: {
+        tag?: Uint8Array | string;
         data?: Uint8Array | string;
     },
     zeroCount?: number
@@ -242,7 +242,7 @@ export async function sendWithAddressGenerator<T>(
 }> {
     const inputsAndKeys = await calculateInputs(client, seed, initialAddressState, nextAddressPath, outputs, zeroCount);
 
-    const response = await sendAdvanced(client, inputsAndKeys, outputs, indexation);
+    const response = await sendAdvanced(client, inputsAndKeys, outputs, taggedData);
 
     return {
         messageId: response.messageId,
@@ -332,7 +332,7 @@ export async function calculateInputs<T>(
                             // so return the rest to the same address.
                             if (
                                 consumedBalance - requiredBalance > 0 &&
-                                addressOutput.output.type === SIMPLE_OUTPUT_TYPE
+                                addressOutput.output.type === EXTENDED_OUTPUT_TYPE
                             ) {
                                 outputs.push({
                                     amount: consumedBalance - requiredBalance,

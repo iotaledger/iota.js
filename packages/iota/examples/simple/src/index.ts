@@ -1,8 +1,8 @@
 import {
     deserializeMessage,
     IMessage,
-    INDEXATION_PAYLOAD_TYPE,
-    ISimpleOutput,
+    TAGGED_DATA_PAYLOAD_TYPE,
+    IExtendedOutput,
     logInfo,
     logMessage,
     logMessageMetadata,
@@ -36,8 +36,8 @@ async function run() {
         // Parents can be left undefined if you want the node to populate the field
         parentMessageIds: tipsResponse.tipMessageIds.slice(0, MAX_NUMBER_PARENTS),
         payload: {
-            type: INDEXATION_PAYLOAD_TYPE,
-            index: Converter.utf8ToHex("Foo"),
+            type: TAGGED_DATA_PAYLOAD_TYPE,
+            tag: Converter.utf8ToHex("Foo"),
             data: Converter.utf8ToHex("Bar")
         }
     };
@@ -98,14 +98,14 @@ async function run() {
     logOutput("\t", output.output);
     console.log();
 
-    const address = await client.addressEd25519((output.output as ISimpleOutput).address.address);
+    const address = await client.addressEd25519((output.output as IExtendedOutput).address.address);
     console.log("Address");
     console.log("\tAddress Type:", address.addressType);
     console.log("\tAddress:", address.address);
     console.log("\tBalance:", address.balance);
     console.log();
 
-    const addressOutputs = await client.addressEd25519Outputs((output.output as ISimpleOutput).address.address);
+    const addressOutputs = await client.addressEd25519Outputs((output.output as IExtendedOutput).address.address);
     console.log("Address Outputs");
     console.log("\tAddress:", addressOutputs.address);
     console.log("\tMax Results:", addressOutputs.maxResults);

@@ -2,55 +2,15 @@
 // SPDX-License-Identifier: Apache-2.0
 import type { ReadStream, WriteStream } from "@iota/util.js";
 import type { FeatureBlockTypes } from "../../models/featureBlocks/featureBlockTypes";
-import {
-    DUST_DEPOSIT_RETURN_FEATURE_BLOCK_TYPE,
-    IDustDepositReturnFeatureBlock
-} from "../../models/featureBlocks/IDustDepositReturnFeatureBlock";
-import {
-    EXPIRATION_MILESTONE_INDEX_FEATURE_BLOCK_TYPE,
-    IExpirationMilestoneIndexFeatureBlock
-} from "../../models/featureBlocks/IExpirationMilestoneIndexFeatureBlock";
-import {
-    EXPIRATION_UNIX_FEATURE_BLOCK_TYPE,
-    IExpirationUnixFeatureBlock
-} from "../../models/featureBlocks/IExpirationUnixFeatureBlock";
-import {
-    IIndexationFeatureBlock,
-    INDEXATION_FEATURE_BLOCK_TYPE
-} from "../../models/featureBlocks/IIndexationFeatureBlock";
 import { IIssuerFeatureBlock, ISSUER_FEATURE_BLOCK_TYPE } from "../../models/featureBlocks/IIssuerFeatureBlock";
 import { IMetadataFeatureBlock, METADATA_FEATURE_BLOCK_TYPE } from "../../models/featureBlocks/IMetadataFeatureBlock";
 import { ISenderFeatureBlock, SENDER_FEATURE_BLOCK_TYPE } from "../../models/featureBlocks/ISenderFeatureBlock";
 import {
-    ITimelockMilestoneIndexFeatureBlock,
-    TIMELOCK_MILESTONE_INDEX_FEATURE_BLOCK_TYPE
-} from "../../models/featureBlocks/ITimelockMilestoneIndexFeatureBlock";
-import {
-    ITimelockUnixFeatureBlock,
-    TIMELOCK_UNIX_FEATURE_BLOCK_TYPE
-} from "../../models/featureBlocks/ITimelockUnixFeatureBlock";
+    ITagFeatureBlock,
+    TAG_FEATURE_BLOCK_TYPE
+} from "../../models/featureBlocks/ITagFeatureBlock";
 import type { ITypeBase } from "../../models/ITypeBase";
 import { UINT8_SIZE } from "../commonDataTypes";
-import {
-    deserializeDustDepositReturnFeatureBlock,
-    MIN_DUST_DEPOSIT_RETURN_FEATURE_BLOCK_LENGTH,
-    serializeDustDepositReturnFeatureBlock
-} from "./dustDepositReturnFeatureBlock";
-import {
-    deserializeExpirationMilestoneIndexFeatureBlock,
-    MIN_EXPIRATION_MILESTONE_INDEX_FEATURE_BLOCK_LENGTH,
-    serializeExpirationMilestoneIndexFeatureBlock
-} from "./expirationMilestoneIndexFeatureBlock";
-import {
-    deserializeExpirationUnixFeatureBlock,
-    MIN_EXPIRATION_UNIX_FEATURE_BLOCK_LENGTH,
-    serializeExpirationUnixFeatureBlock
-} from "./expirationUnixFeatureBlock";
-import {
-    deserializeIndexationFeatureBlock,
-    MIN_INDEXATION_FEATURE_BLOCK_LENGTH,
-    serializeIndexationFeatureBlock
-} from "./indexationFeatureBlock";
 import {
     deserializeIssuerFeatureBlock,
     MIN_ISSUER_FEATURE_BLOCK_LENGTH,
@@ -67,15 +27,10 @@ import {
     serializeSenderFeatureBlock
 } from "./senderFeatureBlock";
 import {
-    deserializeTimelockMilestoneIndexFeatureBlock,
-    MIN_TIMELOCK_MILESTONE_INDEX_FEATURE_BLOCK_LENGTH,
-    serializeTimelockMilestoneIndexFeatureBlock
-} from "./timelockMilestoneIndexFeatureBlock";
-import {
-    deserializeTimelockUnixFeatureBlock,
-    MIN_TIMELOCK_UNIX_FEATURE_BLOCK_LENGTH,
-    serializeTimelockUnixFeatureBlock
-} from "./timelockUnixFeatureBlock";
+    deserializeTagFeatureBlock,
+    MIN_TAG_FEATURE_BLOCK_LENGTH,
+    serializeTagFeatureBlock
+} from "./tagFeatureBlock";
 
 /**
  * The minimum length of a feature blocks tokens list.
@@ -88,13 +43,8 @@ export const MIN_FEATURE_BLOCKS_LENGTH: number = UINT8_SIZE;
 export const MIN_FEATURE_BLOCK_LENGTH: number = Math.min(
     MIN_SENDER_FEATURE_BLOCK_LENGTH,
     MIN_ISSUER_FEATURE_BLOCK_LENGTH,
-    MIN_DUST_DEPOSIT_RETURN_FEATURE_BLOCK_LENGTH,
-    MIN_TIMELOCK_MILESTONE_INDEX_FEATURE_BLOCK_LENGTH,
-    MIN_TIMELOCK_UNIX_FEATURE_BLOCK_LENGTH,
-    MIN_EXPIRATION_MILESTONE_INDEX_FEATURE_BLOCK_LENGTH,
-    MIN_EXPIRATION_UNIX_FEATURE_BLOCK_LENGTH,
     MIN_METADATA_FEATURE_BLOCK_LENGTH,
-    MIN_INDEXATION_FEATURE_BLOCK_LENGTH
+    MIN_TAG_FEATURE_BLOCK_LENGTH
 );
 
 /**
@@ -145,20 +95,10 @@ export function deserializeFeatureBlock(readStream: ReadStream): FeatureBlockTyp
         input = deserializeSenderFeatureBlock(readStream);
     } else if (type === ISSUER_FEATURE_BLOCK_TYPE) {
         input = deserializeIssuerFeatureBlock(readStream);
-    } else if (type === DUST_DEPOSIT_RETURN_FEATURE_BLOCK_TYPE) {
-        input = deserializeDustDepositReturnFeatureBlock(readStream);
-    } else if (type === TIMELOCK_MILESTONE_INDEX_FEATURE_BLOCK_TYPE) {
-        input = deserializeTimelockMilestoneIndexFeatureBlock(readStream);
-    } else if (type === TIMELOCK_UNIX_FEATURE_BLOCK_TYPE) {
-        input = deserializeTimelockUnixFeatureBlock(readStream);
-    } else if (type === EXPIRATION_MILESTONE_INDEX_FEATURE_BLOCK_TYPE) {
-        input = deserializeExpirationMilestoneIndexFeatureBlock(readStream);
-    } else if (type === EXPIRATION_UNIX_FEATURE_BLOCK_TYPE) {
-        input = deserializeExpirationUnixFeatureBlock(readStream);
     } else if (type === METADATA_FEATURE_BLOCK_TYPE) {
         input = deserializeMetadataFeatureBlock(readStream);
-    } else if (type === INDEXATION_FEATURE_BLOCK_TYPE) {
-        input = deserializeIndexationFeatureBlock(readStream);
+    } else if (type === TAG_FEATURE_BLOCK_TYPE) {
+        input = deserializeTagFeatureBlock(readStream);
     } else {
         throw new Error(`Unrecognized feature block type ${type}`);
     }
@@ -176,20 +116,10 @@ export function serializeFeatureBlock(writeStream: WriteStream, object: ITypeBas
         serializeSenderFeatureBlock(writeStream, object as ISenderFeatureBlock);
     } else if (object.type === ISSUER_FEATURE_BLOCK_TYPE) {
         serializeIssuerFeatureBlock(writeStream, object as IIssuerFeatureBlock);
-    } else if (object.type === DUST_DEPOSIT_RETURN_FEATURE_BLOCK_TYPE) {
-        serializeDustDepositReturnFeatureBlock(writeStream, object as IDustDepositReturnFeatureBlock);
-    } else if (object.type === TIMELOCK_MILESTONE_INDEX_FEATURE_BLOCK_TYPE) {
-        serializeTimelockMilestoneIndexFeatureBlock(writeStream, object as ITimelockMilestoneIndexFeatureBlock);
-    } else if (object.type === TIMELOCK_UNIX_FEATURE_BLOCK_TYPE) {
-        serializeTimelockUnixFeatureBlock(writeStream, object as ITimelockUnixFeatureBlock);
-    } else if (object.type === EXPIRATION_MILESTONE_INDEX_FEATURE_BLOCK_TYPE) {
-        serializeExpirationMilestoneIndexFeatureBlock(writeStream, object as IExpirationMilestoneIndexFeatureBlock);
-    } else if (object.type === EXPIRATION_UNIX_FEATURE_BLOCK_TYPE) {
-        serializeExpirationUnixFeatureBlock(writeStream, object as IExpirationUnixFeatureBlock);
     } else if (object.type === METADATA_FEATURE_BLOCK_TYPE) {
         serializeMetadataFeatureBlock(writeStream, object as IMetadataFeatureBlock);
-    } else if (object.type === INDEXATION_FEATURE_BLOCK_TYPE) {
-        serializeIndexationFeatureBlock(writeStream, object as IIndexationFeatureBlock);
+    } else if (object.type === TAG_FEATURE_BLOCK_TYPE) {
+        serializeTagFeatureBlock(writeStream, object as ITagFeatureBlock);
     } else {
         throw new Error(`Unrecognized feature block type ${object.type}`);
     }

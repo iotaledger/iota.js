@@ -16,6 +16,7 @@ Extended output.
 - [address](IExtendedOutput.md#address)
 - [amount](IExtendedOutput.md#amount)
 - [nativeTokens](IExtendedOutput.md#nativetokens)
+- [unlockConditions](IExtendedOutput.md#unlockconditions)
 - [blocks](IExtendedOutput.md#blocks)
 
 ## Properties
@@ -53,6 +54,14 @@ ___
 • **nativeTokens**: [`INativeToken`](INativeToken.md)[]
 
 The native tokens held by the output.
+
+___
+
+### unlockConditions
+
+• **unlockConditions**: [`UnlockConditionTypes`](../api.md#unlockconditiontypes)[]
+
+The unlock conditions for the output.
 
 ___
 

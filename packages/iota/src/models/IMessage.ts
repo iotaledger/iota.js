@@ -1,7 +1,7 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import type { IIndexationPayload } from "./payloads/IIndexationPayload";
 import type { IMilestonePayload } from "./payloads/IMilestonePayload";
+import type { ITaggedDataPayload } from "./payloads/ITaggedDataPayload";
 import type { ITransactionPayload } from "./payloads/ITransactionPayload";
 
 /**
@@ -21,7 +21,7 @@ export interface IMessage {
     /**
      * The payload contents.
      */
-    payload?: ITransactionPayload | IMilestonePayload | IIndexationPayload;
+    payload?: ITransactionPayload | IMilestonePayload | ITaggedDataPayload;
 
     /**
      * The nonce for the message.

@@ -37,9 +37,9 @@ ___
 
 ### payload
 
-• `Optional` **payload**: [`IIndexationPayload`](IIndexationPayload.md)
+• `Optional` **payload**: [`ITaggedDataPayload`](ITaggedDataPayload.md)
 
-Indexation payload.
+Tagged data payload.
 
 ___
 

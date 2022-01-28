@@ -2,39 +2,36 @@
 // SPDX-License-Identifier: Apache-2.0
 /* eslint-disable unicorn/no-nested-ternary */
 import { Converter } from "@iota/util.js";
-import { MAX_INDEXATION_KEY_LENGTH, MIN_INDEXATION_KEY_LENGTH } from "../binary/payloads/indexationPayload";
+import { MAX_TAG_LENGTH } from "../binary/payloads/taggedDataPayload";
 import { SingleNodeClient } from "../clients/singleNodeClient";
-import { INDEXATION_PAYLOAD_TYPE } from "../models/payloads/IIndexationPayload";
+import { TAGGED_DATA_PAYLOAD_TYPE } from "../models/payloads/ITaggedDataPayload";
 /**
  * Send a data message.
  * @param client The client or node endpoint to send the data with.
- * @param indexationKey The index name.
- * @param indexationData The index data as either UTF8 text or Uint8Array bytes.
+ * @param tag The tag for the data.
+ * @param data The data as either UTF8 text or Uint8Array bytes.
  * @returns The id of the message created and the message.
  */
-export async function sendData(client, indexationKey, indexationData) {
+export async function sendData(client, tag, data) {
     const localClient = typeof client === "string" ? new SingleNodeClient(client) : client;
-    if (!indexationKey) {
-        throw new Error("indexationKey must not be empty");
+    let localTagHex;
+    if (tag) {
+        localTagHex = typeof tag === "string" ? Converter.utf8ToHex(tag) : Converter.bytesToHex(tag);
+        if (localTagHex.length / 2 > MAX_TAG_LENGTH) {
+            throw new Error(`The tag length is ${localTagHex.length / 2}, which exceeds the maximum size of ${MAX_TAG_LENGTH}`);
+        }
     }
-    const localIndexationKeyHex = typeof indexationKey === "string" ? Converter.utf8ToHex(indexationKey) : Converter.bytesToHex(indexationKey);
-    if (localIndexationKeyHex.length / 2 < MIN_INDEXATION_KEY_LENGTH) {
-        throw new Error(`The indexation key length is ${localIndexationKeyHex.length / 2}, which is below the minimum size of ${MIN_INDEXATION_KEY_LENGTH}`);
-    }
-    if (localIndexationKeyHex.length / 2 > MAX_INDEXATION_KEY_LENGTH) {
-        throw new Error(`The indexation key length is ${localIndexationKeyHex.length / 2}, which exceeds the maximum size of ${MAX_INDEXATION_KEY_LENGTH}`);
-    }
-    const indexationPayload = {
-        type: INDEXATION_PAYLOAD_TYPE,
-        index: localIndexationKeyHex,
-        data: indexationData
-            ? typeof indexationData === "string"
-                ? Converter.utf8ToHex(indexationData)
-                : Converter.bytesToHex(indexationData)
+    const taggedDataPayload = {
+        type: TAGGED_DATA_PAYLOAD_TYPE,
+        tag: localTagHex,
+        data: data
+            ? typeof data === "string"
+                ? Converter.utf8ToHex(data)
+                : Converter.bytesToHex(data)
             : undefined
     };
     const message = {
-        payload: indexationPayload
+        payload: taggedDataPayload
     };
     const messageId = await localClient.messageSubmit(message);
     return {
@@ -42,4 +39,4 @@ export async function sendData(client, indexationKey, indexationData) {
         messageId
     };
 }
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoic2VuZERhdGEuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi9zcmMvaGlnaExldmVsL3NlbmREYXRhLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLCtCQUErQjtBQUMvQixzQ0FBc0M7QUFDdEMsOENBQThDO0FBQzlDLE9BQU8sRUFBRSxTQUFTLEVBQUUsTUFBTSxlQUFlLENBQUM7QUFDMUMsT0FBTyxFQUFFLHlCQUF5QixFQUFFLHlCQUF5QixFQUFFLE1BQU0sc0NBQXNDLENBQUM7QUFDNUcsT0FBTyxFQUFFLGdCQUFnQixFQUFFLE1BQU0sNkJBQTZCLENBQUM7QUFHL0QsT0FBTyxFQUFzQix1QkFBdUIsRUFBRSxNQUFNLHVDQUF1QyxDQUFDO0FBRXBHOzs7Ozs7R0FNRztBQUNILE1BQU0sQ0FBQyxLQUFLLFVBQVUsUUFBUSxDQUMxQixNQUF3QixFQUN4QixhQUFrQyxFQUNsQyxjQUFvQztJQUtwQyxNQUFNLFdBQVcsR0FBRyxPQUFPLE1BQU0sS0FBSyxRQUFRLENBQUMsQ0FBQyxDQUFDLElBQUksZ0JBQWdCLENBQUMsTUFBTSxDQUFDLENBQUMsQ0FBQyxDQUFDLE1BQU0sQ0FBQztJQUV2RixJQUFJLENBQUMsYUFBYSxFQUFFO1FBQ2hCLE1BQU0sSUFBSSxLQUFLLENBQUMsaUNBQWlDLENBQUMsQ0FBQztLQUN0RDtJQUVELE1BQU0scUJBQXFCLEdBQ3ZCLE9BQU8sYUFBYSxLQUFLLFFBQVEsQ0FBQyxDQUFDLENBQUMsU0FBUyxDQUFDLFNBQVMsQ0FBQyxhQUFhLENBQUMsQ0FBQyxDQUFDLENBQUMsU0FBUyxDQUFDLFVBQVUsQ0FBQyxhQUFhLENBQUMsQ0FBQztJQUVqSCxJQUFJLHFCQUFxQixDQUFDLE1BQU0sR0FBRyxDQUFDLEdBQUcseUJBQXlCLEVBQUU7UUFDOUQsTUFBTSxJQUFJLEtBQUssQ0FDWCxnQ0FDSSxxQkFBcUIsQ0FBQyxNQUFNLEdBQUcsQ0FDbkMsd0NBQXdDLHlCQUF5QixFQUFFLENBQ3RFLENBQUM7S0FDTDtJQUVELElBQUkscUJBQXFCLENBQUMsTUFBTSxHQUFHLENBQUMsR0FBRyx5QkFBeUIsRUFBRTtRQUM5RCxNQUFNLElBQUksS0FBSyxDQUNYLGdDQUNJLHFCQUFxQixDQUFDLE1BQU0sR0FBRyxDQUNuQyx1Q0FBdUMseUJBQXlCLEVBQUUsQ0FDckUsQ0FBQztLQUNMO0lBRUQsTUFBTSxpQkFBaUIsR0FBdUI7UUFDMUMsSUFBSSxFQUFFLHVCQUF1QjtRQUM3QixLQUFLLEVBQUUscUJBQXFCO1FBQzVCLElBQUksRUFBRSxjQUFjO1lBQ2hCLENBQUMsQ0FBQyxPQUFPLGNBQWMsS0FBSyxRQUFRO2dCQUNoQyxDQUFDLENBQUMsU0FBUyxDQUFDLFNBQVMsQ0FBQyxjQUFjLENBQUM7Z0JBQ3JDLENBQUMsQ0FBQyxTQUFTLENBQUMsVUFBVSxDQUFDLGNBQWMsQ0FBQztZQUMxQyxDQUFDLENBQUMsU0FBUztLQUNsQixDQUFDO0lBRUYsTUFBTSxPQUFPLEdBQWE7UUFDdEIsT0FBTyxFQUFFLGlCQUFpQjtLQUM3QixDQUFDO0lBRUYsTUFBTSxTQUFTLEdBQUcsTUFBTSxXQUFXLENBQUMsYUFBYSxDQUFDLE9BQU8sQ0FBQyxDQUFDO0lBQzNELE9BQU87UUFDSCxPQUFPO1FBQ1AsU0FBUztLQUNaLENBQUM7QUFDTixDQUFDIn0=
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoic2VuZERhdGEuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi9zcmMvaGlnaExldmVsL3NlbmREYXRhLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLCtCQUErQjtBQUMvQixzQ0FBc0M7QUFDdEMsOENBQThDO0FBQzlDLE9BQU8sRUFBRSxTQUFTLEVBQUUsTUFBTSxlQUFlLENBQUM7QUFDMUMsT0FBTyxFQUFFLGNBQWMsRUFBRSxNQUFNLHNDQUFzQyxDQUFDO0FBQ3RFLE9BQU8sRUFBRSxnQkFBZ0IsRUFBRSxNQUFNLDZCQUE2QixDQUFDO0FBRy9ELE9BQU8sRUFBc0Isd0JBQXdCLEVBQUUsTUFBTSx1Q0FBdUMsQ0FBQztBQUVyRzs7Ozs7O0dBTUc7QUFDSCxNQUFNLENBQUMsS0FBSyxVQUFVLFFBQVEsQ0FDMUIsTUFBd0IsRUFDeEIsR0FBeUIsRUFDekIsSUFBMEI7SUFLMUIsTUFBTSxXQUFXLEdBQUcsT0FBTyxNQUFNLEtBQUssUUFBUSxDQUFDLENBQUMsQ0FBQyxJQUFJLGdCQUFnQixDQUFDLE1BQU0sQ0FBQyxDQUFDLENBQUMsQ0FBQyxNQUFNLENBQUM7SUFFdkYsSUFBSSxXQUFXLENBQUM7SUFFaEIsSUFBSSxHQUFHLEVBQUU7UUFDTCxXQUFXLEdBQUcsT0FBTyxHQUFHLEtBQUssUUFBUSxDQUFDLENBQUMsQ0FBQyxTQUFTLENBQUMsU0FBUyxDQUFDLEdBQUcsQ0FBQyxDQUFDLENBQUMsQ0FBQyxTQUFTLENBQUMsVUFBVSxDQUFDLEdBQUcsQ0FBQyxDQUFDO1FBRTdGLElBQUksV0FBVyxDQUFDLE1BQU0sR0FBRyxDQUFDLEdBQUcsY0FBYyxFQUFFO1lBQ3pDLE1BQU0sSUFBSSxLQUFLLENBQ1gscUJBQXFCLFdBQVcsQ0FBQyxNQUFNLEdBQUcsQ0FDMUMsdUNBQXVDLGNBQWMsRUFBRSxDQUMxRCxDQUFDO1NBQ0w7S0FDSjtJQUVELE1BQU0saUJBQWlCLEdBQXVCO1FBQzFDLElBQUksRUFBRSx3QkFBd0I7UUFDOUIsR0FBRyxFQUFFLFdBQVc7UUFDaEIsSUFBSSxFQUFFLElBQUk7WUFDTixDQUFDLENBQUMsT0FBTyxJQUFJLEtBQUssUUFBUTtnQkFDdEIsQ0FBQyxDQUFDLFNBQVMsQ0FBQyxTQUFTLENBQUMsSUFBSSxDQUFDO2dCQUMzQixDQUFDLENBQUMsU0FBUyxDQUFDLFVBQVUsQ0FBQyxJQUFJLENBQUM7WUFDaEMsQ0FBQyxDQUFDLFNBQVM7S0FDbEIsQ0FBQztJQUVGLE1BQU0sT0FBTyxHQUFhO1FBQ3RCLE9BQU8sRUFBRSxpQkFBaUI7S0FDN0IsQ0FBQztJQUVGLE1BQU0sU0FBUyxHQUFHLE1BQU0sV0FBVyxDQUFDLGFBQWEsQ0FBQyxPQUFPLENBQUMsQ0FBQztJQUMzRCxPQUFPO1FBQ0gsT0FBTztRQUNQLFNBQVM7S0FDWixDQUFDO0FBQ04sQ0FBQyJ9

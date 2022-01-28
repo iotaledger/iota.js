@@ -1,0 +1,5 @@
+/**
+ * The global type for the governor unlock condition.
+ */
+export const GOVERNOR_UNLOCK_CONDITION_TYPE = 5;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiSUdvdmVybm9yVW5sb2NrQ29uZGl0aW9uLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vLi4vc3JjL21vZGVscy91bmxvY2tDb25kaXRpb25zL0lHb3Zlcm5vclVubG9ja0NvbmRpdGlvbi50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFLQTs7R0FFRztBQUNILE1BQU0sQ0FBQyxNQUFNLDhCQUE4QixHQUFHLENBQUMsQ0FBQyJ9

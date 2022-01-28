@@ -13,11 +13,11 @@ NFT output.
 ### Properties
 
 - [type](INftOutput.md#type)
-- [address](INftOutput.md#address)
 - [amount](INftOutput.md#amount)
 - [nativeTokens](INftOutput.md#nativetokens)
 - [nftId](INftOutput.md#nftid)
 - [immutableData](INftOutput.md#immutabledata)
+- [unlockConditions](INftOutput.md#unlockconditions)
 - [blocks](INftOutput.md#blocks)
 
 ## Properties
@@ -31,14 +31,6 @@ The type of the object.
 #### Inherited from
 
 [ITypeBase](ITypeBase.md).[type](ITypeBase.md#type)
-
-___
-
-### address
-
-• **address**: [`AddressTypes`](../api.md#addresstypes)
-
-The address associated with the output.
 
 ___
 
@@ -71,6 +63,14 @@ ___
 • **immutableData**: `string`
 
 Binary metadata attached immutably to the NFT.
+
+___
+
+### unlockConditions
+
+• **unlockConditions**: [`UnlockConditionTypes`](../api.md#unlockconditiontypes)[]
+
+The unlock conditions for the output.
 
 ___
 

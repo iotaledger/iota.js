@@ -8,15 +8,16 @@ import type { INativeToken } from "../models/INativeToken";
 import type { INodeInfo } from "../models/INodeInfo";
 import type { InputTypes } from "../models/inputs/inputTypes";
 import type { OutputTypes } from "../models/outputs/outputTypes";
-import type { IIndexationPayload } from "../models/payloads/IIndexationPayload";
 import { IMilestonePayload } from "../models/payloads/IMilestonePayload";
 import { IReceiptPayload } from "../models/payloads/IReceiptPayload";
+import type { ITaggedDataPayload } from "../models/payloads/ITaggedDataPayload";
 import { ITransactionPayload } from "../models/payloads/ITransactionPayload";
 import { ITreasuryTransactionPayload } from "../models/payloads/ITreasuryTransactionPayload";
 import type { PayloadTypes } from "../models/payloads/payloadTypes";
 import type { SignatureTypes } from "../models/signatures/signatureTypes";
 import type { TokenSchemeTypes } from "../models/tokenSchemes/tokenSchemeTypes";
 import type { UnlockBlockTypes } from "../models/unlockBlocks/unlockBlockTypes";
+import type { UnlockConditionTypes } from "../models/unlockConditions/unlockConditionTypes";
 /**
  * Set the logger for output.
  * @param log The logger.
@@ -59,11 +60,11 @@ export declare function logPayload(prefix: string, payload?: PayloadTypes): void
  */
 export declare function logTransactionPayload(prefix: string, payload?: ITransactionPayload): void;
 /**
- * Log a indexation payload to the console.
+ * Log a tagged data payload to the console.
  * @param prefix The prefix for the output.
  * @param payload The payload.
  */
-export declare function logIndexationPayload(prefix: string, payload?: IIndexationPayload): void;
+export declare function logTaggedDataPayload(prefix: string, payload?: ITaggedDataPayload): void;
 /**
  * Log a milestone payload to the console.
  * @param prefix The prefix for the output.
@@ -127,18 +128,30 @@ export declare function logNativeTokens(prefix: string, nativeTokens: INativeTok
 /**
  * Log token scheme to the console.
  * @param prefix The prefix for the output.
- * @param tokenScheme The native tokens.
+ * @param tokenScheme The token scheme.
  */
 export declare function logTokenScheme(prefix: string, tokenScheme: TokenSchemeTypes): void;
 /**
  * Log feature blocks to the console.
  * @param prefix The prefix for the output.
- * @param featureBlocks The native tokens.
+ * @param featureBlocks The deature blocks.
  */
 export declare function logFeatureBlocks(prefix: string, featureBlocks: FeatureBlockTypes[]): void;
 /**
  * Log feature block to the console.
  * @param prefix The prefix for the output.
- * @param featureBlock The native tokens.
+ * @param featureBlock The feature block.
  */
 export declare function logFeatureBlock(prefix: string, featureBlock: FeatureBlockTypes): void;
+/**
+ * Log unlock conditions to the console.
+ * @param prefix The prefix for the output.
+ * @param unlockConditions The unlock conditions.
+ */
+export declare function logUnlockConditions(prefix: string, unlockConditions: UnlockConditionTypes[]): void;
+/**
+ * Log feature block to the console.
+ * @param prefix The prefix for the output.
+ * @param unlockCondition The unlock condition.
+ */
+export declare function logUnlockCondition(prefix: string, unlockCondition: UnlockConditionTypes): void;

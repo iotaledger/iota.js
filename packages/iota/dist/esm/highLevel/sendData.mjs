@@ -2,39 +2,36 @@
 // SPDX-License-Identifier: Apache-2.0
 /* eslint-disable unicorn/no-nested-ternary */
 import { Converter } from "@iota/util.js";
-import { MAX_INDEXATION_KEY_LENGTH, MIN_INDEXATION_KEY_LENGTH } from "../binary/payloads/indexationPayload.mjs";
+import { MAX_TAG_LENGTH } from "../binary/payloads/taggedDataPayload.mjs";
 import { SingleNodeClient } from "../clients/singleNodeClient.mjs";
-import { INDEXATION_PAYLOAD_TYPE } from "../models/payloads/IIndexationPayload.mjs";
+import { TAGGED_DATA_PAYLOAD_TYPE } from "../models/payloads/ITaggedDataPayload.mjs";
 /**
  * Send a data message.
  * @param client The client or node endpoint to send the data with.
- * @param indexationKey The index name.
- * @param indexationData The index data as either UTF8 text or Uint8Array bytes.
+ * @param tag The tag for the data.
+ * @param data The data as either UTF8 text or Uint8Array bytes.
  * @returns The id of the message created and the message.
  */
-export async function sendData(client, indexationKey, indexationData) {
+export async function sendData(client, tag, data) {
     const localClient = typeof client === "string" ? new SingleNodeClient(client) : client;
-    if (!indexationKey) {
-        throw new Error("indexationKey must not be empty");
+    let localTagHex;
+    if (tag) {
+        localTagHex = typeof tag === "string" ? Converter.utf8ToHex(tag) : Converter.bytesToHex(tag);
+        if (localTagHex.length / 2 > MAX_TAG_LENGTH) {
+            throw new Error(`The tag length is ${localTagHex.length / 2}, which exceeds the maximum size of ${MAX_TAG_LENGTH}`);
+        }
     }
-    const localIndexationKeyHex = typeof indexationKey === "string" ? Converter.utf8ToHex(indexationKey) : Converter.bytesToHex(indexationKey);
-    if (localIndexationKeyHex.length / 2 < MIN_INDEXATION_KEY_LENGTH) {
-        throw new Error(`The indexation key length is ${localIndexationKeyHex.length / 2}, which is below the minimum size of ${MIN_INDEXATION_KEY_LENGTH}`);
-    }
-    if (localIndexationKeyHex.length / 2 > MAX_INDEXATION_KEY_LENGTH) {
-        throw new Error(`The indexation key length is ${localIndexationKeyHex.length / 2}, which exceeds the maximum size of ${MAX_INDEXATION_KEY_LENGTH}`);
-    }
-    const indexationPayload = {
-        type: INDEXATION_PAYLOAD_TYPE,
-        index: localIndexationKeyHex,
-        data: indexationData
-            ? typeof indexationData === "string"
-                ? Converter.utf8ToHex(indexationData)
-                : Converter.bytesToHex(indexationData)
+    const taggedDataPayload = {
+        type: TAGGED_DATA_PAYLOAD_TYPE,
+        tag: localTagHex,
+        data: data
+            ? typeof data === "string"
+                ? Converter.utf8ToHex(data)
+                : Converter.bytesToHex(data)
             : undefined
     };
     const message = {
-        payload: indexationPayload
+        payload: taggedDataPayload
     };
     const messageId = await localClient.messageSubmit(message);
     return {

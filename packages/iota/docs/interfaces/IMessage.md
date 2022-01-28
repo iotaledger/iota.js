@@ -31,7 +31,7 @@ ___
 
 ### payload
 
-• `Optional` **payload**: [`ITransactionPayload`](ITransactionPayload.md) \| [`IMilestonePayload`](IMilestonePayload.md) \| [`IIndexationPayload`](IIndexationPayload.md)
+• `Optional` **payload**: [`ITransactionPayload`](ITransactionPayload.md) \| [`IMilestonePayload`](IMilestonePayload.md) \| [`ITaggedDataPayload`](ITaggedDataPayload.md)
 
 The payload contents.
 

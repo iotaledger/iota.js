@@ -1,0 +1,5 @@
+/**
+ * The global type for the timelock unlock condition.
+ */
+export const TIMELOCK_UNLOCK_CONDITION_TYPE = 2;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiSVRpbWVsb2NrVW5sb2NrQ29uZGl0aW9uLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vLi4vc3JjL21vZGVscy91bmxvY2tDb25kaXRpb25zL0lUaW1lbG9ja1VubG9ja0NvbmRpdGlvbi50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFJQTs7R0FFRztBQUNILE1BQU0sQ0FBQyxNQUFNLDhCQUE4QixHQUFHLENBQUMsQ0FBQyJ9

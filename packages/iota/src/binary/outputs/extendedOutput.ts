@@ -6,11 +6,10 @@ import { EXTENDED_OUTPUT_TYPE, IExtendedOutput } from "../../models/outputs/IExt
 import { deserializeAddress, MIN_ADDRESS_LENGTH, serializeAddress } from "../addresses/addresses";
 import { SMALL_TYPE_LENGTH, UINT64_SIZE } from "../commonDataTypes";
 import {
-    deserializeFeatureBlocks,
-    serializeFeatureBlocks,
-    MIN_FEATURE_BLOCKS_LENGTH
+    deserializeFeatureBlocks, MIN_FEATURE_BLOCKS_LENGTH, serializeFeatureBlocks
 } from "../featureBlocks/featureBlocks";
-import { deserializeNativeTokens, serializeNativeTokens, MIN_NATIVE_TOKENS_LENGTH } from "../nativeTokens";
+import { deserializeNativeTokens, MIN_NATIVE_TOKENS_LENGTH, serializeNativeTokens } from "../nativeTokens";
+import { deserializeUnlockConditions, MIN_UNLOCK_CONDITIONS_LENGTH, serializeUnlockConditions } from "../unlockConditions/unlockConditions";
 
 /**
  * The minimum length of a extended output binary representation.
@@ -20,6 +19,7 @@ export const MIN_EXTENDED_OUTPUT_LENGTH: number =
     MIN_ADDRESS_LENGTH + // Address
     UINT64_SIZE + // Amount
     MIN_NATIVE_TOKENS_LENGTH + // Native Tokens
+    MIN_UNLOCK_CONDITIONS_LENGTH + // Unlock conditions
     MIN_FEATURE_BLOCKS_LENGTH; // Feature Blocks
 
 /**
@@ -42,6 +42,7 @@ export function deserializeExtendedOutput(readStream: ReadStream): IExtendedOutp
     const address = deserializeAddress(readStream);
     const amount = readStream.readUInt64("extendedOutput.amount");
     const nativeTokens = deserializeNativeTokens(readStream);
+    const unlockConditions = deserializeUnlockConditions(readStream);
     const featureBlocks = deserializeFeatureBlocks(readStream);
 
     return {
@@ -49,6 +50,7 @@ export function deserializeExtendedOutput(readStream: ReadStream): IExtendedOutp
         amount: Number(amount),
         address,
         nativeTokens,
+        unlockConditions,
         blocks: featureBlocks
     };
 }
@@ -64,5 +66,6 @@ export function serializeExtendedOutput(writeStream: WriteStream, object: IExten
     serializeAddress(writeStream, object.address);
     writeStream.writeUInt64("extendedOutput.amount", bigInt(object.amount));
     serializeNativeTokens(writeStream, object.nativeTokens);
+    serializeUnlockConditions(writeStream, object.unlockConditions);
     serializeFeatureBlocks(writeStream, object.blocks);
 }

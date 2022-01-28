@@ -2,9 +2,9 @@
 // SPDX-License-Identifier: Apache-2.0
 import { ReadStream } from "@iota/util.js";
 import { deserializePayload } from "../../../src/binary/payloads/payloads";
-import type { IIndexationPayload } from "../../../src/models/payloads/IIndexationPayload";
 import type { IMilestonePayload } from "../../../src/models/payloads/IMilestonePayload";
 import type { IReceiptPayload } from "../../../src/models/payloads/IReceiptPayload";
+import type { ITaggedDataPayload } from "../../../src/models/payloads/ITaggedDataPayload";
 
 describe("Binary Payload", () => {
     test("Can fail with underflow min", () => {
@@ -30,10 +30,10 @@ describe("Binary Payload", () => {
         expect(() => deserializePayload(new ReadStream(buffer))).toThrow("Unrecognized payload");
     });
 
-    test("Can fail with indexation payload too small", () => {
+    test("Can fail with tagged data payload too small", () => {
         const buffer = Buffer.alloc(8);
         buffer.writeUInt32LE(4, 0); // Payload length
-        buffer.writeUInt32LE(2, 4); // Payload type
+        buffer.writeUInt32LE(5, 4); // Payload type
         expect(() => deserializePayload(new ReadStream(buffer))).toThrow("minimimum size");
     });
 
@@ -51,16 +51,16 @@ describe("Binary Payload", () => {
         expect(() => deserializePayload(new ReadStream(buffer))).toThrow("minimimum size");
     });
 
-    test("Can succeed with valid indexation data", () => {
-        const buffer = Buffer.alloc(14);
+    test("Can succeed with valid tagged data", () => {
+        const buffer = Buffer.alloc(13);
         buffer.writeUInt32LE(8, 0); // Payload length
-        buffer.writeUInt32LE(2, 4); // Payload type
-        buffer.writeUInt16LE(0, 8); // Indexation index length
-        buffer.writeUInt16LE(0, 10); // Indexation data length
-        const payload = deserializePayload(new ReadStream(buffer)) as IIndexationPayload;
-        expect(payload.type).toEqual(2);
-        expect(payload.index).toEqual("");
-        expect(payload.data).toEqual("");
+        buffer.writeUInt32LE(5, 4); // Payload type
+        buffer.writeUInt8(0, 8); // Tag length
+        buffer.writeUInt32LE(0, 9); // Data length
+        const payload = deserializePayload(new ReadStream(buffer)) as ITaggedDataPayload;
+        expect(payload.type).toEqual(5);
+        expect(payload.tag).toEqual(undefined);
+        expect(payload.data).toEqual(undefined);
     });
 
     test("Can succeed with valid milestone data", () => {

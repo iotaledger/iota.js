@@ -6,31 +6,18 @@ import { ALIAS_OUTPUT_TYPE, IAliasOutput } from "../../models/outputs/IAliasOutp
 import { EXTENDED_OUTPUT_TYPE, IExtendedOutput } from "../../models/outputs/IExtendedOutput";
 import { FOUNDRY_OUTPUT_TYPE, IFoundryOutput } from "../../models/outputs/IFoundryOutput";
 import { INftOutput, NFT_OUTPUT_TYPE } from "../../models/outputs/INftOutput";
-import {
-    ISigLockedDustAllowanceOutput,
-    SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE
-} from "../../models/outputs/ISigLockedDustAllowanceOutput";
-import { ISimpleOutput, SIMPLE_OUTPUT_TYPE } from "../../models/outputs/ISimpleOutput";
 import { ITreasuryOutput, TREASURY_OUTPUT_TYPE } from "../../models/outputs/ITreasuryOutput";
 import type { OutputTypes } from "../../models/outputs/outputTypes";
 import { deserializeAliasOutput, MIN_ALIAS_OUTPUT_LENGTH, serializeAliasOutput } from "./aliasOutput";
 import { deserializeExtendedOutput, MIN_EXTENDED_OUTPUT_LENGTH, serializeExtendedOutput } from "./extendedOutput";
 import { deserializeFoundryOutput, MIN_FOUNDRY_OUTPUT_LENGTH, serializeFoundryOutput } from "./foundryOutput";
 import { deserializeNftOutput, MIN_NFT_OUTPUT_LENGTH, serializeNftOutput } from "./nftOutput";
-import {
-    deserializeSigLockedDustAllowanceOutput,
-    MIN_SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_LENGTH,
-    serializeSigLockedDustAllowanceOutput
-} from "./sigLockedDustAllowanceOutput";
-import { deserializeSimpleOutput, MIN_SIMPLE_OUTPUT_LENGTH, serializeSimpleOutput } from "./simpleOutput";
 import { deserializeTreasuryOutput, MIN_TREASURY_OUTPUT_LENGTH, serializeTreasuryOutput } from "./treasuryOutput";
 
 /**
  * The minimum length of an output binary representation.
  */
 export const MIN_OUTPUT_LENGTH: number = Math.min(
-    MIN_SIMPLE_OUTPUT_LENGTH,
-    MIN_SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_LENGTH,
     MIN_TREASURY_OUTPUT_LENGTH,
     MIN_FOUNDRY_OUTPUT_LENGTH,
     MIN_EXTENDED_OUTPUT_LENGTH,
@@ -99,11 +86,7 @@ export function deserializeOutput(readStream: ReadStream): OutputTypes {
     const type = readStream.readUInt8("output.type", false);
     let output;
 
-    if (type === SIMPLE_OUTPUT_TYPE) {
-        output = deserializeSimpleOutput(readStream);
-    } else if (type === SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE) {
-        output = deserializeSigLockedDustAllowanceOutput(readStream);
-    } else if (type === TREASURY_OUTPUT_TYPE) {
+    if (type === TREASURY_OUTPUT_TYPE) {
         output = deserializeTreasuryOutput(readStream);
     } else if (type === EXTENDED_OUTPUT_TYPE) {
         output = deserializeExtendedOutput(readStream);
@@ -126,11 +109,7 @@ export function deserializeOutput(readStream: ReadStream): OutputTypes {
  * @param object The object to serialize.
  */
 export function serializeOutput(writeStream: WriteStream, object: ITypeBase<number>): void {
-    if (object.type === SIMPLE_OUTPUT_TYPE) {
-        serializeSimpleOutput(writeStream, object as ISimpleOutput);
-    } else if (object.type === SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE) {
-        serializeSigLockedDustAllowanceOutput(writeStream, object as ISigLockedDustAllowanceOutput);
-    } else if (object.type === TREASURY_OUTPUT_TYPE) {
+    if (object.type === TREASURY_OUTPUT_TYPE) {
         serializeTreasuryOutput(writeStream, object as ITreasuryOutput);
     } else if (object.type === EXTENDED_OUTPUT_TYPE) {
         serializeExtendedOutput(writeStream, object as IExtendedOutput);

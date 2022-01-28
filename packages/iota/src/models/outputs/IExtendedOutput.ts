@@ -4,6 +4,7 @@ import type { AddressTypes } from "../addresses/addressTypes";
 import type { FeatureBlockTypes } from "../featureBlocks/featureBlockTypes";
 import type { INativeToken } from "../INativeToken";
 import type { ITypeBase } from "../ITypeBase";
+import type { UnlockConditionTypes } from "../unlockConditions/unlockConditionTypes";
 
 /**
  * The global type for the extended output.
@@ -28,6 +29,11 @@ export interface IExtendedOutput extends ITypeBase<3> {
      * The native tokens held by the output.
      */
     nativeTokens: INativeToken[];
+
+    /**
+     * The unlock conditions for the output.
+     */
+    unlockConditions: UnlockConditionTypes[];
 
     /**
      * Blocks contained by the output.

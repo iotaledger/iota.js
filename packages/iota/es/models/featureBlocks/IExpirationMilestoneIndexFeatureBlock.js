@@ -1,5 +1,0 @@
-/**
- * The global type for the expiration milestone feature block.
- */
-export const EXPIRATION_MILESTONE_INDEX_FEATURE_BLOCK_TYPE = 5;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiSUV4cGlyYXRpb25NaWxlc3RvbmVJbmRleEZlYXR1cmVCbG9jay5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uLy4uL3NyYy9tb2RlbHMvZmVhdHVyZUJsb2Nrcy9JRXhwaXJhdGlvbk1pbGVzdG9uZUluZGV4RmVhdHVyZUJsb2NrLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUlBOztHQUVHO0FBQ0gsTUFBTSxDQUFDLE1BQU0sNkNBQTZDLEdBQUcsQ0FBQyxDQUFDIn0=

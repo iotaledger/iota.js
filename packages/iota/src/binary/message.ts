@@ -3,12 +3,12 @@
 import type { ReadStream, WriteStream } from "@iota/util.js";
 import bigInt from "big-integer";
 import type { IMessage } from "../models/IMessage";
-import { INDEXATION_PAYLOAD_TYPE } from "../models/payloads/IIndexationPayload";
 import { MILESTONE_PAYLOAD_TYPE } from "../models/payloads/IMilestonePayload";
 import { RECEIPT_PAYLOAD_TYPE } from "../models/payloads/IReceiptPayload";
+import { TAGGED_DATA_PAYLOAD_TYPE } from "../models/payloads/ITaggedDataPayload";
 import { TRANSACTION_PAYLOAD_TYPE } from "../models/payloads/ITransactionPayload";
 import { TREASURY_TRANSACTION_PAYLOAD_TYPE } from "../models/payloads/ITreasuryTransactionPayload";
-import { UINT8_SIZE, MESSAGE_ID_LENGTH, UINT64_SIZE } from "./commonDataTypes";
+import { MESSAGE_ID_LENGTH, UINT64_SIZE, UINT8_SIZE } from "./commonDataTypes";
 import { deserializePayload, MIN_PAYLOAD_LENGTH, serializePayload } from "./payloads/payloads";
 
 /**
@@ -109,10 +109,10 @@ export function serializeMessage(writeStream: WriteStream, object: IMessage): vo
     if (
         object.payload &&
         object.payload.type !== TRANSACTION_PAYLOAD_TYPE &&
-        object.payload.type !== INDEXATION_PAYLOAD_TYPE &&
-        object.payload.type !== MILESTONE_PAYLOAD_TYPE
+        object.payload.type !== MILESTONE_PAYLOAD_TYPE &&
+        object.payload.type !== TAGGED_DATA_PAYLOAD_TYPE
     ) {
-        throw new Error("Messages can only contain transaction, indexation or milestone payloads");
+        throw new Error("Messages can only contain transaction, milestone or tagged data payloads");
     }
 
     serializePayload(writeStream, object.payload);

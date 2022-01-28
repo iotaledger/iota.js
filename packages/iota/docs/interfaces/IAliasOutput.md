@@ -16,11 +16,10 @@ Alias output.
 - [amount](IAliasOutput.md#amount)
 - [nativeTokens](IAliasOutput.md#nativetokens)
 - [aliasId](IAliasOutput.md#aliasid)
-- [stateController](IAliasOutput.md#statecontroller)
-- [governanceController](IAliasOutput.md#governancecontroller)
 - [stateIndex](IAliasOutput.md#stateindex)
 - [stateMetadata](IAliasOutput.md#statemetadata)
 - [foundryCounter](IAliasOutput.md#foundrycounter)
+- [unlockConditions](IAliasOutput.md#unlockconditions)
 - [blocks](IAliasOutput.md#blocks)
 
 ## Properties
@@ -61,22 +60,6 @@ Unique identifier of the alias, which is the BLAKE2b-160 hash of the Output ID t
 
 ___
 
-### stateController
-
-• **stateController**: [`AddressTypes`](../api.md#addresstypes)
-
-The address that controls the output.
-
-___
-
-### governanceController
-
-• **governanceController**: [`AddressTypes`](../api.md#addresstypes)
-
-The address that governs the output.
-
-___
-
 ### stateIndex
 
 • **stateIndex**: `number`
@@ -98,6 +81,14 @@ ___
 • **foundryCounter**: `number`
 
 A counter that denotes the number of foundries created by this alias account.
+
+___
+
+### unlockConditions
+
+• **unlockConditions**: [`UnlockConditionTypes`](../api.md#unlockconditiontypes)[]
+
+The unlock conditions for the output.
 
 ___
 

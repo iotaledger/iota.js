@@ -36,17 +36,12 @@
 - [SMALL\_TYPE\_LENGTH](api.md#small_type_length)
 - [STRING\_LENGTH](api.md#string_length)
 - [ARRAY\_LENGTH](api.md#array_length)
-- [MIN\_DUST\_DEPOSIT\_RETURN\_FEATURE\_BLOCK\_LENGTH](api.md#min_dust_deposit_return_feature_block_length)
-- [MIN\_EXPIRATION\_MILESTONE\_INDEX\_FEATURE\_BLOCK\_LENGTH](api.md#min_expiration_milestone_index_feature_block_length)
-- [MIN\_EXPIRATION\_UNIX\_FEATURE\_BLOCK\_LENGTH](api.md#min_expiration_unix_feature_block_length)
 - [MIN\_FEATURE\_BLOCKS\_LENGTH](api.md#min_feature_blocks_length)
 - [MIN\_FEATURE\_BLOCK\_LENGTH](api.md#min_feature_block_length)
-- [MIN\_INDEXATION\_FEATURE\_BLOCK\_LENGTH](api.md#min_indexation_feature_block_length)
 - [MIN\_ISSUER\_FEATURE\_BLOCK\_LENGTH](api.md#min_issuer_feature_block_length)
 - [MIN\_METADATA\_FEATURE\_BLOCK\_LENGTH](api.md#min_metadata_feature_block_length)
 - [MIN\_SENDER\_FEATURE\_BLOCK\_LENGTH](api.md#min_sender_feature_block_length)
-- [MIN\_TIMELOCK\_MILESTONE\_INDEX\_FEATURE\_BLOCK\_LENGTH](api.md#min_timelock_milestone_index_feature_block_length)
-- [MIN\_TIMELOCK\_UNIX\_FEATURE\_BLOCK\_LENGTH](api.md#min_timelock_unix_feature_block_length)
+- [MIN\_TAG\_FEATURE\_BLOCK\_LENGTH](api.md#min_tag_feature_block_length)
 - [TAIL\_HASH\_LENGTH](api.md#tail_hash_length)
 - [MIN\_MIGRATED\_FUNDS\_LENGTH](api.md#min_migrated_funds_length)
 - [MAX\_FUNDS\_COUNT](api.md#max_funds_count)
@@ -67,8 +62,6 @@
 - [MIN\_OUTPUT\_LENGTH](api.md#min_output_length)
 - [MIN\_OUTPUT\_COUNT](api.md#min_output_count)
 - [MAX\_OUTPUT\_COUNT](api.md#max_output_count)
-- [MIN\_SIG\_LOCKED\_DUST\_ALLOWANCE\_OUTPUT\_LENGTH](api.md#min_sig_locked_dust_allowance_output_length)
-- [MIN\_SIMPLE\_OUTPUT\_LENGTH](api.md#min_simple_output_length)
 - [MIN\_TREASURY\_OUTPUT\_LENGTH](api.md#min_treasury_output_length)
 - [MIN\_PAYLOAD\_LENGTH](api.md#min_payload_length)
 - [MIN\_ED25519\_SIGNATURE\_LENGTH](api.md#min_ed25519_signature_length)
@@ -81,32 +74,33 @@
 - [MIN\_REFERENCE\_UNLOCK\_BLOCK\_LENGTH](api.md#min_reference_unlock_block_length)
 - [MIN\_SIGNATURE\_UNLOCK\_BLOCK\_LENGTH](api.md#min_signature_unlock_block_length)
 - [MIN\_UNLOCK\_BLOCK\_LENGTH](api.md#min_unlock_block_length)
+- [MIN\_ADDRESS\_UNLOCK\_CONDITION\_LENGTH](api.md#min_address_unlock_condition_length)
+- [MIN\_DUST\_DEPOSIT\_RETURN\_UNLOCK\_CONDITION\_LENGTH](api.md#min_dust_deposit_return_unlock_condition_length)
+- [MIN\_EXPIRATION\_UNLOCK\_CONDITION\_LENGTH](api.md#min_expiration_unlock_condition_length)
+- [MIN\_GOVERNOR\_UNLOCK\_CONDITION\_LENGTH](api.md#min_governor_unlock_condition_length)
+- [MIN\_STATE\_CONTROLLER\_UNLOCK\_CONDITION\_LENGTH](api.md#min_state_controller_unlock_condition_length)
+- [MIN\_TIMELOCK\_UNLOCK\_CONDITION\_LENGTH](api.md#min_timelock_unlock_condition_length)
+- [MIN\_UNLOCK\_CONDITIONS\_LENGTH](api.md#min_unlock_conditions_length)
+- [MIN\_UNLOCK\_CONDITION\_LENGTH](api.md#min_unlock_condition_length)
 - [TRANSACTION\_ESSENCE\_TYPE](api.md#transaction_essence_type)
 - [ALIAS\_ADDRESS\_TYPE](api.md#alias_address_type)
 - [BLS\_ADDRESS\_TYPE](api.md#bls_address_type)
 - [ED25519\_ADDRESS\_TYPE](api.md#ed25519_address_type)
 - [NFT\_ADDRESS\_TYPE](api.md#nft_address_type)
-- [DUST\_DEPOSIT\_RETURN\_FEATURE\_BLOCK\_TYPE](api.md#dust_deposit_return_feature_block_type)
-- [EXPIRATION\_MILESTONE\_INDEX\_FEATURE\_BLOCK\_TYPE](api.md#expiration_milestone_index_feature_block_type)
-- [EXPIRATION\_UNIX\_FEATURE\_BLOCK\_TYPE](api.md#expiration_unix_feature_block_type)
-- [INDEXATION\_FEATURE\_BLOCK\_TYPE](api.md#indexation_feature_block_type)
 - [ISSUER\_FEATURE\_BLOCK\_TYPE](api.md#issuer_feature_block_type)
 - [METADATA\_FEATURE\_BLOCK\_TYPE](api.md#metadata_feature_block_type)
 - [SENDER\_FEATURE\_BLOCK\_TYPE](api.md#sender_feature_block_type)
-- [TIMELOCK\_MILESTONE\_INDEX\_FEATURE\_BLOCK\_TYPE](api.md#timelock_milestone_index_feature_block_type)
-- [TIMELOCK\_UNIX\_FEATURE\_BLOCK\_TYPE](api.md#timelock_unix_feature_block_type)
+- [TAG\_FEATURE\_BLOCK\_TYPE](api.md#tag_feature_block_type)
 - [TREASURY\_INPUT\_TYPE](api.md#treasury_input_type)
 - [UTXO\_INPUT\_TYPE](api.md#utxo_input_type)
 - [ALIAS\_OUTPUT\_TYPE](api.md#alias_output_type)
 - [EXTENDED\_OUTPUT\_TYPE](api.md#extended_output_type)
 - [FOUNDRY\_OUTPUT\_TYPE](api.md#foundry_output_type)
 - [NFT\_OUTPUT\_TYPE](api.md#nft_output_type)
-- [SIG\_LOCKED\_DUST\_ALLOWANCE\_OUTPUT\_TYPE](api.md#sig_locked_dust_allowance_output_type)
-- [SIMPLE\_OUTPUT\_TYPE](api.md#simple_output_type)
 - [TREASURY\_OUTPUT\_TYPE](api.md#treasury_output_type)
-- [INDEXATION\_PAYLOAD\_TYPE](api.md#indexation_payload_type)
 - [MILESTONE\_PAYLOAD\_TYPE](api.md#milestone_payload_type)
 - [RECEIPT\_PAYLOAD\_TYPE](api.md#receipt_payload_type)
+- [TAGGED\_DATA\_PAYLOAD\_TYPE](api.md#tagged_data_payload_type)
 - [TRANSACTION\_PAYLOAD\_TYPE](api.md#transaction_payload_type)
 - [TREASURY\_TRANSACTION\_PAYLOAD\_TYPE](api.md#treasury_transaction_payload_type)
 - [ED25519\_SIGNATURE\_TYPE](api.md#ed25519_signature_type)
@@ -115,6 +109,12 @@
 - [NFT\_UNLOCK\_BLOCK\_TYPE](api.md#nft_unlock_block_type)
 - [REFERENCE\_UNLOCK\_BLOCK\_TYPE](api.md#reference_unlock_block_type)
 - [SIGNATURE\_UNLOCK\_BLOCK\_TYPE](api.md#signature_unlock_block_type)
+- [ADDRESS\_UNLOCK\_CONDITION\_TYPE](api.md#address_unlock_condition_type)
+- [DUST\_DEPOSIT\_RETURN\_UNLOCK\_CONDITION\_TYPE](api.md#dust_deposit_return_unlock_condition_type)
+- [EXPIRATION\_UNLOCK\_CONDITION\_TYPE](api.md#expiration_unlock_condition_type)
+- [GOVERNOR\_UNLOCK\_CONDITION\_TYPE](api.md#governor_unlock_condition_type)
+- [STATE\_CONTROLLER\_UNLOCK\_CONDITION\_TYPE](api.md#state_controller_unlock_condition_type)
+- [TIMELOCK\_UNLOCK\_CONDITION\_TYPE](api.md#timelock_unlock_condition_type)
 - [CONFLICT\_REASON\_STRINGS](api.md#conflict_reason_strings)
 - [ED25519\_SEED\_TYPE](api.md#ed25519_seed_type)
 
@@ -130,28 +130,18 @@
 - [serializeEd25519Address](api.md#serializeed25519address)
 - [deserializeNftAddress](api.md#deserializenftaddress)
 - [serializeNftAddress](api.md#serializenftaddress)
-- [deserializeDustDepositReturnFeatureBlock](api.md#deserializedustdepositreturnfeatureblock)
-- [serializeDustDepositReturnFeatureBlock](api.md#serializedustdepositreturnfeatureblock)
-- [deserializeExpirationMilestoneIndexFeatureBlock](api.md#deserializeexpirationmilestoneindexfeatureblock)
-- [serializeExpirationMilestoneIndexFeatureBlock](api.md#serializeexpirationmilestoneindexfeatureblock)
-- [deserializeExpirationUnixFeatureBlock](api.md#deserializeexpirationunixfeatureblock)
-- [serializeExpirationUnixFeatureBlock](api.md#serializeexpirationunixfeatureblock)
 - [deserializeFeatureBlocks](api.md#deserializefeatureblocks)
 - [serializeFeatureBlocks](api.md#serializefeatureblocks)
 - [deserializeFeatureBlock](api.md#deserializefeatureblock)
 - [serializeFeatureBlock](api.md#serializefeatureblock)
-- [deserializeIndexationFeatureBlock](api.md#deserializeindexationfeatureblock)
-- [serializeIndexationFeatureBlock](api.md#serializeindexationfeatureblock)
 - [deserializeIssuerFeatureBlock](api.md#deserializeissuerfeatureblock)
 - [serializeIssuerFeatureBlock](api.md#serializeissuerfeatureblock)
 - [deserializeMetadataFeatureBlock](api.md#deserializemetadatafeatureblock)
 - [serializeMetadataFeatureBlock](api.md#serializemetadatafeatureblock)
 - [deserializeSenderFeatureBlock](api.md#deserializesenderfeatureblock)
 - [serializeSenderFeatureBlock](api.md#serializesenderfeatureblock)
-- [deserializeTimelockMilestoneIndexFeatureBlock](api.md#deserializetimelockmilestoneindexfeatureblock)
-- [serializeTimelockMilestoneIndexFeatureBlock](api.md#serializetimelockmilestoneindexfeatureblock)
-- [deserializeTimelockUnixFeatureBlock](api.md#deserializetimelockunixfeatureblock)
-- [serializeTimelockUnixFeatureBlock](api.md#serializetimelockunixfeatureblock)
+- [deserializeTagFeatureBlock](api.md#deserializetagfeatureblock)
+- [serializeTagFeatureBlock](api.md#serializetagfeatureblock)
 - [deserializeFunds](api.md#deserializefunds)
 - [serializeFunds](api.md#serializefunds)
 - [deserializeMigratedFunds](api.md#deserializemigratedfunds)
@@ -178,10 +168,6 @@
 - [serializeOutputs](api.md#serializeoutputs)
 - [deserializeOutput](api.md#deserializeoutput)
 - [serializeOutput](api.md#serializeoutput)
-- [deserializeSigLockedDustAllowanceOutput](api.md#deserializesiglockeddustallowanceoutput)
-- [serializeSigLockedDustAllowanceOutput](api.md#serializesiglockeddustallowanceoutput)
-- [deserializeSimpleOutput](api.md#deserializesimpleoutput)
-- [serializeSimpleOutput](api.md#serializesimpleoutput)
 - [deserializeTreasuryOutput](api.md#deserializetreasuryoutput)
 - [serializeTreasuryOutput](api.md#serializetreasuryoutput)
 - [deserializePayload](api.md#deserializepayload)
@@ -208,6 +194,22 @@
 - [serializeUnlockBlocks](api.md#serializeunlockblocks)
 - [deserializeUnlockBlock](api.md#deserializeunlockblock)
 - [serializeUnlockBlock](api.md#serializeunlockblock)
+- [deserializeAddressUnlockCondition](api.md#deserializeaddressunlockcondition)
+- [serializeAddressUnlockCondition](api.md#serializeaddressunlockcondition)
+- [deserializeDustDepositReturnUnlockCondition](api.md#deserializedustdepositreturnunlockcondition)
+- [serializeDustDepositReturnUnlockCondition](api.md#serializedustdepositreturnunlockcondition)
+- [deserializeExpirationUnlockCondition](api.md#deserializeexpirationunlockcondition)
+- [serializeExpirationUnlockCondition](api.md#serializeexpirationunlockcondition)
+- [deserializeGovernorUnlockCondition](api.md#deserializegovernorunlockcondition)
+- [serializeGovernorUnlockCondition](api.md#serializegovernorunlockcondition)
+- [deserializeStateControllerUnlockCondition](api.md#deserializestatecontrollerunlockcondition)
+- [serializeStateControllerUnlockCondition](api.md#serializestatecontrollerunlockcondition)
+- [deserializeTimelockUnlockCondition](api.md#deserializetimelockunlockcondition)
+- [serializeTimelockUnlockCondition](api.md#serializetimelockunlockcondition)
+- [deserializeUnlockConditions](api.md#deserializeunlockconditions)
+- [serializeUnlockConditions](api.md#serializeunlockconditions)
+- [deserializeUnlockCondition](api.md#deserializeunlockcondition)
+- [serializeUnlockCondition](api.md#serializeunlockcondition)
 - [generateBip44Path](api.md#generatebip44path)
 - [generateBip44Address](api.md#generatebip44address)
 - [getBalance](api.md#getbalance)
@@ -234,7 +236,7 @@
 - [logMessageMetadata](api.md#logmessagemetadata)
 - [logPayload](api.md#logpayload)
 - [logTransactionPayload](api.md#logtransactionpayload)
-- [logIndexationPayload](api.md#logindexationpayload)
+- [logTaggedDataPayload](api.md#logtaggeddatapayload)
 - [logMilestonePayload](api.md#logmilestonepayload)
 - [logReceiptPayload](api.md#logreceiptpayload)
 - [logTreasuryTransactionPayload](api.md#logtreasurytransactionpayload)
@@ -248,6 +250,8 @@
 - [logTokenScheme](api.md#logtokenscheme)
 - [logFeatureBlocks](api.md#logfeatureblocks)
 - [logFeatureBlock](api.md#logfeatureblock)
+- [logUnlockConditions](api.md#logunlockconditions)
+- [logUnlockCondition](api.md#logunlockcondition)
 
 ### Interfaces
 
@@ -285,27 +289,20 @@
 - [IReceiptsResponse](interfaces/IReceiptsResponse.md)
 - [IResponse](interfaces/IResponse.md)
 - [ITipsResponse](interfaces/ITipsResponse.md)
-- [IDustDepositReturnFeatureBlock](interfaces/IDustDepositReturnFeatureBlock.md)
-- [IExpirationMilestoneIndexFeatureBlock](interfaces/IExpirationMilestoneIndexFeatureBlock.md)
-- [IExpirationUnixFeatureBlock](interfaces/IExpirationUnixFeatureBlock.md)
-- [IIndexationFeatureBlock](interfaces/IIndexationFeatureBlock.md)
 - [IIssuerFeatureBlock](interfaces/IIssuerFeatureBlock.md)
 - [IMetadataFeatureBlock](interfaces/IMetadataFeatureBlock.md)
 - [ISenderFeatureBlock](interfaces/ISenderFeatureBlock.md)
-- [ITimelockMilestoneIndexFeatureBlock](interfaces/ITimelockMilestoneIndexFeatureBlock.md)
-- [ITimelockUnixFeatureBlock](interfaces/ITimelockUnixFeatureBlock.md)
+- [ITagFeatureBlock](interfaces/ITagFeatureBlock.md)
 - [ITreasuryInput](interfaces/ITreasuryInput.md)
 - [IUTXOInput](interfaces/IUTXOInput.md)
 - [IAliasOutput](interfaces/IAliasOutput.md)
 - [IExtendedOutput](interfaces/IExtendedOutput.md)
 - [IFoundryOutput](interfaces/IFoundryOutput.md)
 - [INftOutput](interfaces/INftOutput.md)
-- [ISigLockedDustAllowanceOutput](interfaces/ISigLockedDustAllowanceOutput.md)
-- [ISimpleOutput](interfaces/ISimpleOutput.md)
 - [ITreasuryOutput](interfaces/ITreasuryOutput.md)
-- [IIndexationPayload](interfaces/IIndexationPayload.md)
 - [IMilestonePayload](interfaces/IMilestonePayload.md)
 - [IReceiptPayload](interfaces/IReceiptPayload.md)
+- [ITaggedDataPayload](interfaces/ITaggedDataPayload.md)
 - [ITransactionPayload](interfaces/ITransactionPayload.md)
 - [ITreasuryTransactionPayload](interfaces/ITreasuryTransactionPayload.md)
 - [IEd25519Signature](interfaces/IEd25519Signature.md)
@@ -314,6 +311,12 @@
 - [INftUnlockBlock](interfaces/INftUnlockBlock.md)
 - [IReferenceUnlockBlock](interfaces/IReferenceUnlockBlock.md)
 - [ISignatureUnlockBlock](interfaces/ISignatureUnlockBlock.md)
+- [IAddressUnlockCondition](interfaces/IAddressUnlockCondition.md)
+- [IDustDepositReturnUnlockCondition](interfaces/IDustDepositReturnUnlockCondition.md)
+- [IExpirationUnlockCondition](interfaces/IExpirationUnlockCondition.md)
+- [IGovernorUnlockCondition](interfaces/IGovernorUnlockCondition.md)
+- [IStateControllerUnlockCondition](interfaces/IStateControllerUnlockCondition.md)
+- [ITimelockUnlockCondition](interfaces/ITimelockUnlockCondition.md)
 
 ### Type aliases
 
@@ -327,6 +330,7 @@
 - [TokenSchemeTypes](api.md#tokenschemetypes)
 - [Units](api.md#units)
 - [UnlockBlockTypes](api.md#unlockblocktypes)
+- [UnlockConditionTypes](api.md#unlockconditiontypes)
 
 ### Enumerations
 
@@ -494,30 +498,6 @@ Byte length for an array length.
 
 ___
 
-### MIN\_DUST\_DEPOSIT\_RETURN\_FEATURE\_BLOCK\_LENGTH
-
-• **MIN\_DUST\_DEPOSIT\_RETURN\_FEATURE\_BLOCK\_LENGTH**: `number`
-
-The minimum length of a return feature block binary representation.
-
-___
-
-### MIN\_EXPIRATION\_MILESTONE\_INDEX\_FEATURE\_BLOCK\_LENGTH
-
-• **MIN\_EXPIRATION\_MILESTONE\_INDEX\_FEATURE\_BLOCK\_LENGTH**: `number`
-
-The minimum length of a expiration milestone index feature block binary representation.
-
-___
-
-### MIN\_EXPIRATION\_UNIX\_FEATURE\_BLOCK\_LENGTH
-
-• **MIN\_EXPIRATION\_UNIX\_FEATURE\_BLOCK\_LENGTH**: `number`
-
-The minimum length of a expiration unix feature block binary representation.
-
-___
-
 ### MIN\_FEATURE\_BLOCKS\_LENGTH
 
 • **MIN\_FEATURE\_BLOCKS\_LENGTH**: `number` = `UINT8_SIZE`
@@ -531,14 +511,6 @@ ___
 • **MIN\_FEATURE\_BLOCK\_LENGTH**: `number`
 
 The minimum length of a feature block binary representation.
-
-___
-
-### MIN\_INDEXATION\_FEATURE\_BLOCK\_LENGTH
-
-• **MIN\_INDEXATION\_FEATURE\_BLOCK\_LENGTH**: `number`
-
-The minimum length of a indexation feature block binary representation.
 
 ___
 
@@ -566,19 +538,11 @@ The minimum length of a sender feature block binary representation.
 
 ___
 
-### MIN\_TIMELOCK\_MILESTONE\_INDEX\_FEATURE\_BLOCK\_LENGTH
+### MIN\_TAG\_FEATURE\_BLOCK\_LENGTH
 
-• **MIN\_TIMELOCK\_MILESTONE\_INDEX\_FEATURE\_BLOCK\_LENGTH**: `number`
+• **MIN\_TAG\_FEATURE\_BLOCK\_LENGTH**: `number`
 
-The minimum length of a timelock milestone index feature block binary representation.
-
-___
-
-### MIN\_TIMELOCK\_UNIX\_FEATURE\_BLOCK\_LENGTH
-
-• **MIN\_TIMELOCK\_UNIX\_FEATURE\_BLOCK\_LENGTH**: `number`
-
-The minimum length of a timelock unix feature block binary representation.
+The minimum length of a tag feature block binary representation.
 
 ___
 
@@ -742,22 +706,6 @@ The maximum number of outputs.
 
 ___
 
-### MIN\_SIG\_LOCKED\_DUST\_ALLOWANCE\_OUTPUT\_LENGTH
-
-• **MIN\_SIG\_LOCKED\_DUST\_ALLOWANCE\_OUTPUT\_LENGTH**: `number`
-
-The minimum length of a sig locked dust allowance output binary representation.
-
-___
-
-### MIN\_SIMPLE\_OUTPUT\_LENGTH
-
-• **MIN\_SIMPLE\_OUTPUT\_LENGTH**: `number`
-
-The minimum length of a simple output binary representation.
-
-___
-
 ### MIN\_TREASURY\_OUTPUT\_LENGTH
 
 • **MIN\_TREASURY\_OUTPUT\_LENGTH**: `number`
@@ -854,6 +802,70 @@ The minimum length of an unlock block binary representation.
 
 ___
 
+### MIN\_ADDRESS\_UNLOCK\_CONDITION\_LENGTH
+
+• **MIN\_ADDRESS\_UNLOCK\_CONDITION\_LENGTH**: `number`
+
+The minimum length of an address unlock condition binary representation.
+
+___
+
+### MIN\_DUST\_DEPOSIT\_RETURN\_UNLOCK\_CONDITION\_LENGTH
+
+• **MIN\_DUST\_DEPOSIT\_RETURN\_UNLOCK\_CONDITION\_LENGTH**: `number`
+
+The minimum length of an dust deposit return unlock condition binary representation.
+
+___
+
+### MIN\_EXPIRATION\_UNLOCK\_CONDITION\_LENGTH
+
+• **MIN\_EXPIRATION\_UNLOCK\_CONDITION\_LENGTH**: `number`
+
+The minimum length of an expiration unlock condition binary representation.
+
+___
+
+### MIN\_GOVERNOR\_UNLOCK\_CONDITION\_LENGTH
+
+• **MIN\_GOVERNOR\_UNLOCK\_CONDITION\_LENGTH**: `number`
+
+The minimum length of an governor unlock condition binary representation.
+
+___
+
+### MIN\_STATE\_CONTROLLER\_UNLOCK\_CONDITION\_LENGTH
+
+• **MIN\_STATE\_CONTROLLER\_UNLOCK\_CONDITION\_LENGTH**: `number`
+
+The minimum length of an state controller unlock condition binary representation.
+
+___
+
+### MIN\_TIMELOCK\_UNLOCK\_CONDITION\_LENGTH
+
+• **MIN\_TIMELOCK\_UNLOCK\_CONDITION\_LENGTH**: `number`
+
+The minimum length of an timelock unlock condition binary representation.
+
+___
+
+### MIN\_UNLOCK\_CONDITIONS\_LENGTH
+
+• **MIN\_UNLOCK\_CONDITIONS\_LENGTH**: `number` = `UINT8_SIZE`
+
+The minimum length of a unlock conditions list.
+
+___
+
+### MIN\_UNLOCK\_CONDITION\_LENGTH
+
+• **MIN\_UNLOCK\_CONDITION\_LENGTH**: `number`
+
+The minimum length of a unlock conditions binary representation.
+
+___
+
 ### TRANSACTION\_ESSENCE\_TYPE
 
 • **TRANSACTION\_ESSENCE\_TYPE**: ``0``
@@ -894,38 +906,6 @@ The global type for the NFT address type.
 
 ___
 
-### DUST\_DEPOSIT\_RETURN\_FEATURE\_BLOCK\_TYPE
-
-• **DUST\_DEPOSIT\_RETURN\_FEATURE\_BLOCK\_TYPE**: ``2``
-
-The global type for the dust deposit return feature block.
-
-___
-
-### EXPIRATION\_MILESTONE\_INDEX\_FEATURE\_BLOCK\_TYPE
-
-• **EXPIRATION\_MILESTONE\_INDEX\_FEATURE\_BLOCK\_TYPE**: ``5``
-
-The global type for the expiration milestone feature block.
-
-___
-
-### EXPIRATION\_UNIX\_FEATURE\_BLOCK\_TYPE
-
-• **EXPIRATION\_UNIX\_FEATURE\_BLOCK\_TYPE**: ``6``
-
-The global type for the expiration unix feature block.
-
-___
-
-### INDEXATION\_FEATURE\_BLOCK\_TYPE
-
-• **INDEXATION\_FEATURE\_BLOCK\_TYPE**: ``8``
-
-The global type for the indexation feature block.
-
-___
-
 ### ISSUER\_FEATURE\_BLOCK\_TYPE
 
 • **ISSUER\_FEATURE\_BLOCK\_TYPE**: ``1``
@@ -936,7 +916,7 @@ ___
 
 ### METADATA\_FEATURE\_BLOCK\_TYPE
 
-• **METADATA\_FEATURE\_BLOCK\_TYPE**: ``7``
+• **METADATA\_FEATURE\_BLOCK\_TYPE**: ``2``
 
 The global type for the metadata feature block.
 
@@ -950,19 +930,11 @@ The global type for the sender feature block.
 
 ___
 
-### TIMELOCK\_MILESTONE\_INDEX\_FEATURE\_BLOCK\_TYPE
+### TAG\_FEATURE\_BLOCK\_TYPE
 
-• **TIMELOCK\_MILESTONE\_INDEX\_FEATURE\_BLOCK\_TYPE**: ``3``
+• **TAG\_FEATURE\_BLOCK\_TYPE**: ``3``
 
-The global type for the timelock milestone feature block.
-
-___
-
-### TIMELOCK\_UNIX\_FEATURE\_BLOCK\_TYPE
-
-• **TIMELOCK\_UNIX\_FEATURE\_BLOCK\_TYPE**: ``4``
-
-The global type for the timelock unix feature block.
+The global type for the tag feature block.
 
 ___
 
@@ -1014,37 +986,11 @@ The global type for the NFT output.
 
 ___
 
-### SIG\_LOCKED\_DUST\_ALLOWANCE\_OUTPUT\_TYPE
-
-• **SIG\_LOCKED\_DUST\_ALLOWANCE\_OUTPUT\_TYPE**: ``1``
-
-The global type for the sig locked dust allowance output.
-
-**`deprecated`**
-
-___
-
-### SIMPLE\_OUTPUT\_TYPE
-
-• **SIMPLE\_OUTPUT\_TYPE**: ``0``
-
-The global type for the simple output.
-
-___
-
 ### TREASURY\_OUTPUT\_TYPE
 
 • **TREASURY\_OUTPUT\_TYPE**: ``2``
 
 The global type for the treasury output.
-
-___
-
-### INDEXATION\_PAYLOAD\_TYPE
-
-• **INDEXATION\_PAYLOAD\_TYPE**: ``2``
-
-The global type for the payload.
 
 ___
 
@@ -1059,6 +1005,14 @@ ___
 ### RECEIPT\_PAYLOAD\_TYPE
 
 • **RECEIPT\_PAYLOAD\_TYPE**: ``3``
+
+The global type for the payload.
+
+___
+
+### TAGGED\_DATA\_PAYLOAD\_TYPE
+
+• **TAGGED\_DATA\_PAYLOAD\_TYPE**: ``5``
 
 The global type for the payload.
 
@@ -1125,6 +1079,54 @@ ___
 • **SIGNATURE\_UNLOCK\_BLOCK\_TYPE**: ``0``
 
 The global type for the unlock block.
+
+___
+
+### ADDRESS\_UNLOCK\_CONDITION\_TYPE
+
+• **ADDRESS\_UNLOCK\_CONDITION\_TYPE**: ``0``
+
+The global type for the address unlock condition.
+
+___
+
+### DUST\_DEPOSIT\_RETURN\_UNLOCK\_CONDITION\_TYPE
+
+• **DUST\_DEPOSIT\_RETURN\_UNLOCK\_CONDITION\_TYPE**: ``1``
+
+The global type for the dust deposit return unlock condition.
+
+___
+
+### EXPIRATION\_UNLOCK\_CONDITION\_TYPE
+
+• **EXPIRATION\_UNLOCK\_CONDITION\_TYPE**: ``3``
+
+The global type for the expiration unlock condition.
+
+___
+
+### GOVERNOR\_UNLOCK\_CONDITION\_TYPE
+
+• **GOVERNOR\_UNLOCK\_CONDITION\_TYPE**: ``5``
+
+The global type for the governor unlock condition.
+
+___
+
+### STATE\_CONTROLLER\_UNLOCK\_CONDITION\_TYPE
+
+• **STATE\_CONTROLLER\_UNLOCK\_CONDITION\_TYPE**: ``4``
+
+The global type for the state controller unlock condition.
+
+___
+
+### TIMELOCK\_UNLOCK\_CONDITION\_TYPE
+
+• **TIMELOCK\_UNLOCK\_CONDITION\_TYPE**: ``2``
+
+The global type for the timelock unlock condition.
 
 ___
 
@@ -1339,123 +1341,6 @@ Serialize the nft address to binary.
 
 ___
 
-### deserializeDustDepositReturnFeatureBlock
-
-▸ **deserializeDustDepositReturnFeatureBlock**(`readStream`): [`IDustDepositReturnFeatureBlock`](interfaces/IDustDepositReturnFeatureBlock.md)
-
-Deserialize the dust deposit return feature block from binary.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `readStream` | `ReadStream` | The stream to read the data from. |
-
-#### Returns
-
-[`IDustDepositReturnFeatureBlock`](interfaces/IDustDepositReturnFeatureBlock.md)
-
-The deserialized object.
-
-___
-
-### serializeDustDepositReturnFeatureBlock
-
-▸ **serializeDustDepositReturnFeatureBlock**(`writeStream`, `object`): `void`
-
-Serialize the dust deposit return feature block to binary.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `writeStream` | `WriteStream` | The stream to write the data to. |
-| `object` | [`IDustDepositReturnFeatureBlock`](interfaces/IDustDepositReturnFeatureBlock.md) | The object to serialize. |
-
-#### Returns
-
-`void`
-
-___
-
-### deserializeExpirationMilestoneIndexFeatureBlock
-
-▸ **deserializeExpirationMilestoneIndexFeatureBlock**(`readStream`): [`IExpirationMilestoneIndexFeatureBlock`](interfaces/IExpirationMilestoneIndexFeatureBlock.md)
-
-Deserialize the expiration milestone index feature block from binary.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `readStream` | `ReadStream` | The stream to read the data from. |
-
-#### Returns
-
-[`IExpirationMilestoneIndexFeatureBlock`](interfaces/IExpirationMilestoneIndexFeatureBlock.md)
-
-The deserialized object.
-
-___
-
-### serializeExpirationMilestoneIndexFeatureBlock
-
-▸ **serializeExpirationMilestoneIndexFeatureBlock**(`writeStream`, `object`): `void`
-
-Serialize the expiration milestone index feature block to binary.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `writeStream` | `WriteStream` | The stream to write the data to. |
-| `object` | [`IExpirationMilestoneIndexFeatureBlock`](interfaces/IExpirationMilestoneIndexFeatureBlock.md) | The object to serialize. |
-
-#### Returns
-
-`void`
-
-___
-
-### deserializeExpirationUnixFeatureBlock
-
-▸ **deserializeExpirationUnixFeatureBlock**(`readStream`): [`IExpirationUnixFeatureBlock`](interfaces/IExpirationUnixFeatureBlock.md)
-
-Deserialize the expiration unix feature block from binary.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `readStream` | `ReadStream` | The stream to read the data from. |
-
-#### Returns
-
-[`IExpirationUnixFeatureBlock`](interfaces/IExpirationUnixFeatureBlock.md)
-
-The deserialized object.
-
-___
-
-### serializeExpirationUnixFeatureBlock
-
-▸ **serializeExpirationUnixFeatureBlock**(`writeStream`, `object`): `void`
-
-Serialize the expiration unix feature block to binary.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `writeStream` | `WriteStream` | The stream to write the data to. |
-| `object` | [`IExpirationUnixFeatureBlock`](interfaces/IExpirationUnixFeatureBlock.md) | The object to serialize. |
-
-#### Returns
-
-`void`
-
-___
-
 ### deserializeFeatureBlocks
 
 ▸ **deserializeFeatureBlocks**(`readStream`): [`FeatureBlockTypes`](api.md#featureblocktypes)[]
@@ -1527,45 +1412,6 @@ Serialize the feature block to binary.
 | :------ | :------ | :------ |
 | `writeStream` | `WriteStream` | The stream to write the data to. |
 | `object` | [`ITypeBase`](interfaces/ITypeBase.md)<`number`\> | The object to serialize. |
-
-#### Returns
-
-`void`
-
-___
-
-### deserializeIndexationFeatureBlock
-
-▸ **deserializeIndexationFeatureBlock**(`readStream`): [`IIndexationFeatureBlock`](interfaces/IIndexationFeatureBlock.md)
-
-Deserialize the indexation feature block from binary.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `readStream` | `ReadStream` | The stream to read the data from. |
-
-#### Returns
-
-[`IIndexationFeatureBlock`](interfaces/IIndexationFeatureBlock.md)
-
-The deserialized object.
-
-___
-
-### serializeIndexationFeatureBlock
-
-▸ **serializeIndexationFeatureBlock**(`writeStream`, `object`): `void`
-
-Serialize the indexation feature block to binary.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `writeStream` | `WriteStream` | The stream to write the data to. |
-| `object` | [`IIndexationFeatureBlock`](interfaces/IIndexationFeatureBlock.md) | The object to serialize. |
 
 #### Returns
 
@@ -1690,50 +1536,11 @@ Serialize the sender feature block to binary.
 
 ___
 
-### deserializeTimelockMilestoneIndexFeatureBlock
+### deserializeTagFeatureBlock
 
-▸ **deserializeTimelockMilestoneIndexFeatureBlock**(`readStream`): [`ITimelockMilestoneIndexFeatureBlock`](interfaces/ITimelockMilestoneIndexFeatureBlock.md)
+▸ **deserializeTagFeatureBlock**(`readStream`): [`ITagFeatureBlock`](interfaces/ITagFeatureBlock.md)
 
-Deserialize the timelock milestone index feature block from binary.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `readStream` | `ReadStream` | The stream to read the data from. |
-
-#### Returns
-
-[`ITimelockMilestoneIndexFeatureBlock`](interfaces/ITimelockMilestoneIndexFeatureBlock.md)
-
-The deserialized object.
-
-___
-
-### serializeTimelockMilestoneIndexFeatureBlock
-
-▸ **serializeTimelockMilestoneIndexFeatureBlock**(`writeStream`, `object`): `void`
-
-Serialize the timelock milestone index feature block to binary.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `writeStream` | `WriteStream` | The stream to write the data to. |
-| `object` | [`ITimelockMilestoneIndexFeatureBlock`](interfaces/ITimelockMilestoneIndexFeatureBlock.md) | The object to serialize. |
-
-#### Returns
-
-`void`
-
-___
-
-### deserializeTimelockUnixFeatureBlock
-
-▸ **deserializeTimelockUnixFeatureBlock**(`readStream`): [`ITimelockUnixFeatureBlock`](interfaces/ITimelockUnixFeatureBlock.md)
-
-Deserialize the timelock unix feature block from binary.
+Deserialize the tag feature block from binary.
 
 #### Parameters
 
@@ -1743,24 +1550,24 @@ Deserialize the timelock unix feature block from binary.
 
 #### Returns
 
-[`ITimelockUnixFeatureBlock`](interfaces/ITimelockUnixFeatureBlock.md)
+[`ITagFeatureBlock`](interfaces/ITagFeatureBlock.md)
 
 The deserialized object.
 
 ___
 
-### serializeTimelockUnixFeatureBlock
+### serializeTagFeatureBlock
 
-▸ **serializeTimelockUnixFeatureBlock**(`writeStream`, `object`): `void`
+▸ **serializeTagFeatureBlock**(`writeStream`, `object`): `void`
 
-Serialize the timelock unix feature block to binary.
+Serialize the tag feature block to binary.
 
 #### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `writeStream` | `WriteStream` | The stream to write the data to. |
-| `object` | [`ITimelockUnixFeatureBlock`](interfaces/ITimelockUnixFeatureBlock.md) | The object to serialize. |
+| `object` | [`ITagFeatureBlock`](interfaces/ITagFeatureBlock.md) | The object to serialize. |
 
 #### Returns
 
@@ -2275,84 +2082,6 @@ Serialize the output to binary.
 
 ___
 
-### deserializeSigLockedDustAllowanceOutput
-
-▸ **deserializeSigLockedDustAllowanceOutput**(`readStream`): [`ISigLockedDustAllowanceOutput`](interfaces/ISigLockedDustAllowanceOutput.md)
-
-Deserialize the signature locked dust allowance output from binary.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `readStream` | `ReadStream` | The stream to read the data from. |
-
-#### Returns
-
-[`ISigLockedDustAllowanceOutput`](interfaces/ISigLockedDustAllowanceOutput.md)
-
-The deserialized object.
-
-___
-
-### serializeSigLockedDustAllowanceOutput
-
-▸ **serializeSigLockedDustAllowanceOutput**(`writeStream`, `object`): `void`
-
-Serialize the signature locked dust allowance output to binary.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `writeStream` | `WriteStream` | The stream to write the data to. |
-| `object` | [`ISigLockedDustAllowanceOutput`](interfaces/ISigLockedDustAllowanceOutput.md) | The object to serialize. |
-
-#### Returns
-
-`void`
-
-___
-
-### deserializeSimpleOutput
-
-▸ **deserializeSimpleOutput**(`readStream`): [`ISimpleOutput`](interfaces/ISimpleOutput.md)
-
-Deserialize the simple output from binary.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `readStream` | `ReadStream` | The stream to read the data from. |
-
-#### Returns
-
-[`ISimpleOutput`](interfaces/ISimpleOutput.md)
-
-The deserialized object.
-
-___
-
-### serializeSimpleOutput
-
-▸ **serializeSimpleOutput**(`writeStream`, `object`): `void`
-
-Serialize the simple output to binary.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `writeStream` | `WriteStream` | The stream to write the data to. |
-| `object` | [`ISimpleOutput`](interfaces/ISimpleOutput.md) | The object to serialize. |
-
-#### Returns
-
-`void`
-
-___
-
 ### deserializeTreasuryOutput
 
 ▸ **deserializeTreasuryOutput**(`readStream`): [`ITreasuryOutput`](interfaces/ITreasuryOutput.md)
@@ -2860,6 +2589,318 @@ Serialize the unlock block to binary.
 
 ___
 
+### deserializeAddressUnlockCondition
+
+▸ **deserializeAddressUnlockCondition**(`readStream`): [`IAddressUnlockCondition`](interfaces/IAddressUnlockCondition.md)
+
+Deserialize the address unlock condition from binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `readStream` | `ReadStream` | The stream to read the data from. |
+
+#### Returns
+
+[`IAddressUnlockCondition`](interfaces/IAddressUnlockCondition.md)
+
+The deserialized object.
+
+___
+
+### serializeAddressUnlockCondition
+
+▸ **serializeAddressUnlockCondition**(`writeStream`, `object`): `void`
+
+Serialize the address unlock condition to binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `writeStream` | `WriteStream` | The stream to write the data to. |
+| `object` | [`IAddressUnlockCondition`](interfaces/IAddressUnlockCondition.md) | The object to serialize. |
+
+#### Returns
+
+`void`
+
+___
+
+### deserializeDustDepositReturnUnlockCondition
+
+▸ **deserializeDustDepositReturnUnlockCondition**(`readStream`): [`IDustDepositReturnUnlockCondition`](interfaces/IDustDepositReturnUnlockCondition.md)
+
+Deserialize the dust deposit return unlock condition from binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `readStream` | `ReadStream` | The stream to read the data from. |
+
+#### Returns
+
+[`IDustDepositReturnUnlockCondition`](interfaces/IDustDepositReturnUnlockCondition.md)
+
+The deserialized object.
+
+___
+
+### serializeDustDepositReturnUnlockCondition
+
+▸ **serializeDustDepositReturnUnlockCondition**(`writeStream`, `object`): `void`
+
+Serialize the dust deposit return unlock condition to binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `writeStream` | `WriteStream` | The stream to write the data to. |
+| `object` | [`IDustDepositReturnUnlockCondition`](interfaces/IDustDepositReturnUnlockCondition.md) | The object to serialize. |
+
+#### Returns
+
+`void`
+
+___
+
+### deserializeExpirationUnlockCondition
+
+▸ **deserializeExpirationUnlockCondition**(`readStream`): [`IExpirationUnlockCondition`](interfaces/IExpirationUnlockCondition.md)
+
+Deserialize the expiration unlock condition from binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `readStream` | `ReadStream` | The stream to read the data from. |
+
+#### Returns
+
+[`IExpirationUnlockCondition`](interfaces/IExpirationUnlockCondition.md)
+
+The deserialized object.
+
+___
+
+### serializeExpirationUnlockCondition
+
+▸ **serializeExpirationUnlockCondition**(`writeStream`, `object`): `void`
+
+Serialize the expiration unlock condition to binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `writeStream` | `WriteStream` | The stream to write the data to. |
+| `object` | [`IExpirationUnlockCondition`](interfaces/IExpirationUnlockCondition.md) | The object to serialize. |
+
+#### Returns
+
+`void`
+
+___
+
+### deserializeGovernorUnlockCondition
+
+▸ **deserializeGovernorUnlockCondition**(`readStream`): [`IGovernorUnlockCondition`](interfaces/IGovernorUnlockCondition.md)
+
+Deserialize the governor unlock condition from binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `readStream` | `ReadStream` | The stream to read the data from. |
+
+#### Returns
+
+[`IGovernorUnlockCondition`](interfaces/IGovernorUnlockCondition.md)
+
+The deserialized object.
+
+___
+
+### serializeGovernorUnlockCondition
+
+▸ **serializeGovernorUnlockCondition**(`writeStream`, `object`): `void`
+
+Serialize the governor unlock condition to binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `writeStream` | `WriteStream` | The stream to write the data to. |
+| `object` | [`IGovernorUnlockCondition`](interfaces/IGovernorUnlockCondition.md) | The object to serialize. |
+
+#### Returns
+
+`void`
+
+___
+
+### deserializeStateControllerUnlockCondition
+
+▸ **deserializeStateControllerUnlockCondition**(`readStream`): [`IStateControllerUnlockCondition`](interfaces/IStateControllerUnlockCondition.md)
+
+Deserialize the state controller unlock condition from binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `readStream` | `ReadStream` | The stream to read the data from. |
+
+#### Returns
+
+[`IStateControllerUnlockCondition`](interfaces/IStateControllerUnlockCondition.md)
+
+The deserialized object.
+
+___
+
+### serializeStateControllerUnlockCondition
+
+▸ **serializeStateControllerUnlockCondition**(`writeStream`, `object`): `void`
+
+Serialize the state controller unlock condition to binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `writeStream` | `WriteStream` | The stream to write the data to. |
+| `object` | [`IStateControllerUnlockCondition`](interfaces/IStateControllerUnlockCondition.md) | The object to serialize. |
+
+#### Returns
+
+`void`
+
+___
+
+### deserializeTimelockUnlockCondition
+
+▸ **deserializeTimelockUnlockCondition**(`readStream`): [`ITimelockUnlockCondition`](interfaces/ITimelockUnlockCondition.md)
+
+Deserialize the timelock unlock condition from binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `readStream` | `ReadStream` | The stream to read the data from. |
+
+#### Returns
+
+[`ITimelockUnlockCondition`](interfaces/ITimelockUnlockCondition.md)
+
+The deserialized object.
+
+___
+
+### serializeTimelockUnlockCondition
+
+▸ **serializeTimelockUnlockCondition**(`writeStream`, `object`): `void`
+
+Serialize the timelock unlock condition to binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `writeStream` | `WriteStream` | The stream to write the data to. |
+| `object` | [`ITimelockUnlockCondition`](interfaces/ITimelockUnlockCondition.md) | The object to serialize. |
+
+#### Returns
+
+`void`
+
+___
+
+### deserializeUnlockConditions
+
+▸ **deserializeUnlockConditions**(`readStream`): [`UnlockConditionTypes`](api.md#unlockconditiontypes)[]
+
+Deserialize the unlock conditions from binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `readStream` | `ReadStream` | The stream to read the data from. |
+
+#### Returns
+
+[`UnlockConditionTypes`](api.md#unlockconditiontypes)[]
+
+The deserialized object.
+
+___
+
+### serializeUnlockConditions
+
+▸ **serializeUnlockConditions**(`writeStream`, `objects`): `void`
+
+Serialize the unlock conditions to binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `writeStream` | `WriteStream` | The stream to write the data to. |
+| `objects` | [`UnlockConditionTypes`](api.md#unlockconditiontypes)[] | The objects to serialize. |
+
+#### Returns
+
+`void`
+
+___
+
+### deserializeUnlockCondition
+
+▸ **deserializeUnlockCondition**(`readStream`): [`UnlockConditionTypes`](api.md#unlockconditiontypes)
+
+Deserialize the unlock condition from binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `readStream` | `ReadStream` | The stream to read the data from. |
+
+#### Returns
+
+[`UnlockConditionTypes`](api.md#unlockconditiontypes)
+
+The deserialized object.
+
+___
+
+### serializeUnlockCondition
+
+▸ **serializeUnlockCondition**(`writeStream`, `object`): `void`
+
+Serialize the unlock condition to binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `writeStream` | `WriteStream` | The stream to write the data to. |
+| `object` | [`ITypeBase`](interfaces/ITypeBase.md)<`number`\> | The object to serialize. |
+
+#### Returns
+
+`void`
+
+___
+
 ### generateBip44Path
 
 ▸ **generateBip44Path**(`accountIndex`, `addressIndex`, `isInternal`): `Bip32Path`
@@ -3060,7 +3101,7 @@ Retrieve a data message.
 
 `Promise`<{} \| `undefined`\>
 
-The message index and data.
+The message tag and data.
 
 ___
 
@@ -3087,7 +3128,7 @@ ___
 
 ### send
 
-▸ **send**(`client`, `seed`, `accountIndex`, `addressBech32`, `amount`, `indexation?`, `addressOptions?`): `Promise`<{}\>
+▸ **send**(`client`, `seed`, `accountIndex`, `addressBech32`, `amount`, `taggedData?`, `addressOptions?`): `Promise`<{}\>
 
 Send a transfer from the balance on the seed to a single output.
 
@@ -3100,7 +3141,7 @@ Send a transfer from the balance on the seed to a single output.
 | `accountIndex` | `number` | The account index in the wallet. |
 | `addressBech32` | `string` | The address to send the funds to in bech32 format. |
 | `amount` | `number` | The amount to send. |
-| `indexation?` | `Object` | Optional indexation data to associate with the transaction. |
+| `taggedData?` | `Object` | Optional tagged data to associate with the transaction. |
 | `addressOptions?` | `Object` | Optional address configuration for balance address lookups. |
 
 #### Returns
@@ -3113,7 +3154,7 @@ ___
 
 ### sendEd25519
 
-▸ **sendEd25519**(`client`, `seed`, `accountIndex`, `addressEd25519`, `amount`, `indexation?`, `addressOptions?`): `Promise`<{}\>
+▸ **sendEd25519**(`client`, `seed`, `accountIndex`, `addressEd25519`, `amount`, `taggedData?`, `addressOptions?`): `Promise`<{}\>
 
 Send a transfer from the balance on the seed to a single output.
 
@@ -3126,7 +3167,7 @@ Send a transfer from the balance on the seed to a single output.
 | `accountIndex` | `number` | The account index in the wallet. |
 | `addressEd25519` | `string` | The address to send the funds to in ed25519 format. |
 | `amount` | `number` | The amount to send. |
-| `indexation?` | `Object` | Optional indexation data to associate with the transaction. |
+| `taggedData?` | `Object` | Optional tagged data to associate with the transaction. |
 | `addressOptions?` | `Object` | Optional address configuration for balance address lookups. |
 
 #### Returns
@@ -3139,7 +3180,7 @@ ___
 
 ### sendMultiple
 
-▸ **sendMultiple**(`client`, `seed`, `accountIndex`, `outputs`, `indexation?`, `addressOptions?`): `Promise`<{}\>
+▸ **sendMultiple**(`client`, `seed`, `accountIndex`, `outputs`, `taggedData?`, `addressOptions?`): `Promise`<{}\>
 
 Send a transfer from the balance on the seed to multiple outputs.
 
@@ -3151,7 +3192,7 @@ Send a transfer from the balance on the seed to multiple outputs.
 | `seed` | [`ISeed`](interfaces/ISeed.md) | The seed to use for address generation. |
 | `accountIndex` | `number` | The account index in the wallet. |
 | `outputs` | {}[] | The address to send the funds to in bech32 format and amounts. |
-| `indexation?` | `Object` | Optional indexation data to associate with the transaction. |
+| `taggedData?` | `Object` | Optional tagged data to associate with the transaction. |
 | `addressOptions?` | `Object` | Optional address configuration for balance address lookups. |
 
 #### Returns
@@ -3164,7 +3205,7 @@ ___
 
 ### sendMultipleEd25519
 
-▸ **sendMultipleEd25519**(`client`, `seed`, `accountIndex`, `outputs`, `indexation?`, `addressOptions?`): `Promise`<{}\>
+▸ **sendMultipleEd25519**(`client`, `seed`, `accountIndex`, `outputs`, `taggedData?`, `addressOptions?`): `Promise`<{}\>
 
 Send a transfer from the balance on the seed.
 
@@ -3176,7 +3217,7 @@ Send a transfer from the balance on the seed.
 | `seed` | [`ISeed`](interfaces/ISeed.md) | The seed to use for address generation. |
 | `accountIndex` | `number` | The account index in the wallet. |
 | `outputs` | {}[] | The outputs including address to send the funds to in ed25519 format and amount. |
-| `indexation?` | `Object` | Optional indexation data to associate with the transaction. |
+| `taggedData?` | `Object` | Optional tagged data to associate with the transaction. |
 | `addressOptions?` | `Object` | Optional address configuration for balance address lookups. |
 
 #### Returns
@@ -3189,7 +3230,7 @@ ___
 
 ### sendWithAddressGenerator
 
-▸ **sendWithAddressGenerator**<`T`\>(`client`, `seed`, `initialAddressState`, `nextAddressPath`, `outputs`, `indexation?`, `zeroCount?`): `Promise`<{}\>
+▸ **sendWithAddressGenerator**<`T`\>(`client`, `seed`, `initialAddressState`, `nextAddressPath`, `outputs`, `taggedData?`, `zeroCount?`): `Promise`<{}\>
 
 Send a transfer using account based indexing for the inputs.
 
@@ -3208,7 +3249,7 @@ Send a transfer using account based indexing for the inputs.
 | `initialAddressState` | `T` | The initial address state for calculating the addresses. |
 | `nextAddressPath` | (`addressState`: `T`) => `string` | Calculate the next address for inputs. |
 | `outputs` | {}[] | The address to send the funds to in bech32 format and amounts. |
-| `indexation?` | `Object` | Optional indexation data to associate with the transaction. |
+| `taggedData?` | `Object` | Optional tagged data to associate with the transaction. |
 | `zeroCount?` | `number` | The number of addresses with 0 balance during lookup before aborting. |
 
 #### Returns
@@ -3252,7 +3293,7 @@ ___
 
 ### sendAdvanced
 
-▸ **sendAdvanced**(`client`, `inputsAndSignatureKeyPairs`, `outputs`, `indexation?`): `Promise`<{}\>
+▸ **sendAdvanced**(`client`, `inputsAndSignatureKeyPairs`, `outputs`, `taggedData?`): `Promise`<{}\>
 
 Send a transfer from the balance on the seed.
 
@@ -3263,7 +3304,7 @@ Send a transfer from the balance on the seed.
 | `client` | `string` \| [`IClient`](interfaces/IClient.md) | The client or node endpoint to send the transfer with. |
 | `inputsAndSignatureKeyPairs` | {}[] | The inputs with the signature key pairs needed to sign transfers. |
 | `outputs` | {}[] | The outputs to send. |
-| `indexation?` | `Object` | Optional indexation data to associate with the transaction. |
+| `taggedData?` | `Object` | Optional tagged data to associate with the transaction. |
 
 #### Returns
 
@@ -3275,7 +3316,7 @@ ___
 
 ### buildTransactionPayload
 
-▸ **buildTransactionPayload**(`inputsAndSignatureKeyPairs`, `outputs`, `indexation?`): [`ITransactionPayload`](interfaces/ITransactionPayload.md)
+▸ **buildTransactionPayload**(`inputsAndSignatureKeyPairs`, `outputs`, `taggedData?`): [`ITransactionPayload`](interfaces/ITransactionPayload.md)
 
 Build a transaction payload.
 
@@ -3285,7 +3326,7 @@ Build a transaction payload.
 | :------ | :------ | :------ |
 | `inputsAndSignatureKeyPairs` | {}[] | The inputs with the signature key pairs needed to sign transfers. |
 | `outputs` | {}[] | The outputs to send. |
-| `indexation?` | `Object` | Optional indexation data to associate with the transaction. |
+| `taggedData?` | `Object` | Optional tagged data to associate with the transaction. |
 
 #### Returns
 
@@ -3297,7 +3338,7 @@ ___
 
 ### sendData
 
-▸ **sendData**(`client`, `indexationKey`, `indexationData?`): `Promise`<{}\>
+▸ **sendData**(`client`, `tag?`, `data?`): `Promise`<{}\>
 
 Send a data message.
 
@@ -3306,8 +3347,8 @@ Send a data message.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `client` | `string` \| [`IClient`](interfaces/IClient.md) | The client or node endpoint to send the data with. |
-| `indexationKey` | `string` \| `Uint8Array` | The index name. |
-| `indexationData?` | `string` \| `Uint8Array` | The index data as either UTF8 text or Uint8Array bytes. |
+| `tag?` | `string` \| `Uint8Array` | The tag for the data. |
+| `data?` | `string` \| `Uint8Array` | The data as either UTF8 text or Uint8Array bytes. |
 
 #### Returns
 
@@ -3449,18 +3490,18 @@ Log a transaction payload to the console.
 
 ___
 
-### logIndexationPayload
+### logTaggedDataPayload
 
-▸ **logIndexationPayload**(`prefix`, `payload?`): `void`
+▸ **logTaggedDataPayload**(`prefix`, `payload?`): `void`
 
-Log a indexation payload to the console.
+Log a tagged data payload to the console.
 
 #### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `prefix` | `string` | The prefix for the output. |
-| `payload?` | [`IIndexationPayload`](interfaces/IIndexationPayload.md) | The payload. |
+| `payload?` | [`ITaggedDataPayload`](interfaces/ITaggedDataPayload.md) | The payload. |
 
 #### Returns
 
@@ -3669,7 +3710,7 @@ Log token scheme to the console.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `prefix` | `string` | The prefix for the output. |
-| `tokenScheme` | [`ISimpleTokenScheme`](interfaces/ISimpleTokenScheme.md) | The native tokens. |
+| `tokenScheme` | [`ISimpleTokenScheme`](interfaces/ISimpleTokenScheme.md) | The token scheme. |
 
 #### Returns
 
@@ -3688,7 +3729,7 @@ Log feature blocks to the console.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `prefix` | `string` | The prefix for the output. |
-| `featureBlocks` | [`FeatureBlockTypes`](api.md#featureblocktypes)[] | The native tokens. |
+| `featureBlocks` | [`FeatureBlockTypes`](api.md#featureblocktypes)[] | The deature blocks. |
 
 #### Returns
 
@@ -3707,7 +3748,45 @@ Log feature block to the console.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `prefix` | `string` | The prefix for the output. |
-| `featureBlock` | [`FeatureBlockTypes`](api.md#featureblocktypes) | The native tokens. |
+| `featureBlock` | [`FeatureBlockTypes`](api.md#featureblocktypes) | The feature block. |
+
+#### Returns
+
+`void`
+
+___
+
+### logUnlockConditions
+
+▸ **logUnlockConditions**(`prefix`, `unlockConditions`): `void`
+
+Log unlock conditions to the console.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `prefix` | `string` | The prefix for the output. |
+| `unlockConditions` | [`UnlockConditionTypes`](api.md#unlockconditiontypes)[] | The unlock conditions. |
+
+#### Returns
+
+`void`
+
+___
+
+### logUnlockCondition
+
+▸ **logUnlockCondition**(`prefix`, `unlockCondition`): `void`
+
+Log feature block to the console.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `prefix` | `string` | The prefix for the output. |
+| `unlockCondition` | [`UnlockConditionTypes`](api.md#unlockconditiontypes) | The unlock condition. |
 
 #### Returns
 
@@ -3725,7 +3804,7 @@ ___
 
 ### FeatureBlockTypes
 
-Ƭ **FeatureBlockTypes**: [`ISenderFeatureBlock`](interfaces/ISenderFeatureBlock.md) \| [`IIssuerFeatureBlock`](interfaces/IIssuerFeatureBlock.md) \| [`IDustDepositReturnFeatureBlock`](interfaces/IDustDepositReturnFeatureBlock.md) \| [`ITimelockMilestoneIndexFeatureBlock`](interfaces/ITimelockMilestoneIndexFeatureBlock.md) \| [`ITimelockUnixFeatureBlock`](interfaces/ITimelockUnixFeatureBlock.md) \| [`IExpirationMilestoneIndexFeatureBlock`](interfaces/IExpirationMilestoneIndexFeatureBlock.md) \| [`IExpirationUnixFeatureBlock`](interfaces/IExpirationUnixFeatureBlock.md) \| [`IMetadataFeatureBlock`](interfaces/IMetadataFeatureBlock.md) \| [`IIndexationFeatureBlock`](interfaces/IIndexationFeatureBlock.md)
+Ƭ **FeatureBlockTypes**: [`ISenderFeatureBlock`](interfaces/ISenderFeatureBlock.md) \| [`IIssuerFeatureBlock`](interfaces/IIssuerFeatureBlock.md) \| [`IMetadataFeatureBlock`](interfaces/IMetadataFeatureBlock.md) \| [`ITagFeatureBlock`](interfaces/ITagFeatureBlock.md)
 
 All of the feature block types.
 
@@ -3749,7 +3828,7 @@ ___
 
 ### OutputTypes
 
-Ƭ **OutputTypes**: [`ISimpleOutput`](interfaces/ISimpleOutput.md) \| [`ISigLockedDustAllowanceOutput`](interfaces/ISigLockedDustAllowanceOutput.md) \| [`ITreasuryOutput`](interfaces/ITreasuryOutput.md) \| [`IExtendedOutput`](interfaces/IExtendedOutput.md) \| [`IAliasOutput`](interfaces/IAliasOutput.md) \| [`IFoundryOutput`](interfaces/IFoundryOutput.md) \| [`INftOutput`](interfaces/INftOutput.md)
+Ƭ **OutputTypes**: [`ITreasuryOutput`](interfaces/ITreasuryOutput.md) \| [`IExtendedOutput`](interfaces/IExtendedOutput.md) \| [`IAliasOutput`](interfaces/IAliasOutput.md) \| [`IFoundryOutput`](interfaces/IFoundryOutput.md) \| [`INftOutput`](interfaces/INftOutput.md)
 
 All of the output types.
 
@@ -3757,7 +3836,7 @@ ___
 
 ### PayloadTypes
 
-Ƭ **PayloadTypes**: [`ITransactionPayload`](interfaces/ITransactionPayload.md) \| [`IMilestonePayload`](interfaces/IMilestonePayload.md) \| [`IReceiptPayload`](interfaces/IReceiptPayload.md) \| [`IIndexationPayload`](interfaces/IIndexationPayload.md) \| [`ITreasuryTransactionPayload`](interfaces/ITreasuryTransactionPayload.md)
+Ƭ **PayloadTypes**: [`ITransactionPayload`](interfaces/ITransactionPayload.md) \| [`IMilestonePayload`](interfaces/IMilestonePayload.md) \| [`IReceiptPayload`](interfaces/IReceiptPayload.md) \| [`ITreasuryTransactionPayload`](interfaces/ITreasuryTransactionPayload.md) \| [`ITaggedDataPayload`](interfaces/ITaggedDataPayload.md)
 
 All of the payload types.
 
@@ -3792,3 +3871,11 @@ ___
 Ƭ **UnlockBlockTypes**: [`ISignatureUnlockBlock`](interfaces/ISignatureUnlockBlock.md) \| [`IReferenceUnlockBlock`](interfaces/IReferenceUnlockBlock.md) \| [`IAliasUnlockBlock`](interfaces/IAliasUnlockBlock.md) \| [`INftUnlockBlock`](interfaces/INftUnlockBlock.md)
 
 All of the unlock block types.
+
+___
+
+### UnlockConditionTypes
+
+Ƭ **UnlockConditionTypes**: [`IAddressUnlockCondition`](interfaces/IAddressUnlockCondition.md) \| [`IDustDepositReturnUnlockCondition`](interfaces/IDustDepositReturnUnlockCondition.md) \| [`ITimelockUnlockCondition`](interfaces/ITimelockUnlockCondition.md) \| [`IExpirationUnlockCondition`](interfaces/IExpirationUnlockCondition.md) \| [`IStateControllerUnlockCondition`](interfaces/IStateControllerUnlockCondition.md) \| [`IGovernorUnlockCondition`](interfaces/IGovernorUnlockCondition.md)
+
+All of the unlock condition types.

@@ -4,9 +4,7 @@
 import type { ReadStream, WriteStream } from "@iota/util.js";
 import { IUTXOInput, UTXO_INPUT_TYPE } from "../models/inputs/IUTXOInput";
 import { ITransactionEssence, TRANSACTION_ESSENCE_TYPE } from "../models/ITransactionEssence";
-import { SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE } from "../models/outputs/ISigLockedDustAllowanceOutput";
-import { SIMPLE_OUTPUT_TYPE } from "../models/outputs/ISimpleOutput";
-import { INDEXATION_PAYLOAD_TYPE } from "../models/payloads/IIndexationPayload";
+import { TAGGED_DATA_PAYLOAD_TYPE } from "../models/payloads/ITaggedDataPayload";
 import { ARRAY_LENGTH, SMALL_TYPE_LENGTH, UINT32_SIZE } from "./commonDataTypes";
 import { deserializeInputs, serializeInputs } from "./inputs/inputs";
 import { deserializeOutputs, serializeOutputs } from "./outputs/outputs";
@@ -38,19 +36,13 @@ export function deserializeTransactionEssence(readStream: ReadStream): ITransact
     const outputs = deserializeOutputs(readStream);
 
     const payload = deserializePayload(readStream);
-    if (payload && payload.type !== INDEXATION_PAYLOAD_TYPE) {
-        throw new Error("Transaction essence can only contain embedded Indexation Payload");
+    if (payload && payload.type !== TAGGED_DATA_PAYLOAD_TYPE) {
+        throw new Error("Transaction essence can only contain embedded Tagged Data Payload");
     }
 
     for (const input of inputs) {
         if (input.type !== UTXO_INPUT_TYPE) {
             throw new Error("Transaction essence can only contain UTXO Inputs");
-        }
-    }
-
-    for (const output of outputs) {
-        if (output.type !== SIMPLE_OUTPUT_TYPE) {
-            throw new Error("Transaction essence can only contain simple outputs");
         }
     }
 
@@ -77,15 +69,6 @@ export function serializeTransactionEssence(writeStream: WriteStream, object: IT
     }
 
     serializeInputs(writeStream, object.inputs);
-
-    for (const output of object.outputs) {
-        if (output.type !== SIMPLE_OUTPUT_TYPE && output.type !== SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE) {
-            throw new Error(
-                "Transaction essence can only contain sig locked single input or sig locked dust allowance outputs"
-            );
-        }
-    }
-
     serializeOutputs(writeStream, object.outputs);
     serializePayload(writeStream, object.payload);
 }

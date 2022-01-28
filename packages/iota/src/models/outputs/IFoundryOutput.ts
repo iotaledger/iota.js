@@ -5,6 +5,7 @@ import type { IMetadataFeatureBlock } from "../featureBlocks/IMetadataFeatureBlo
 import type { INativeToken } from "../INativeToken";
 import type { ITypeBase } from "../ITypeBase";
 import type { TokenSchemeTypes } from "../tokenSchemes/tokenSchemeTypes";
+import type { UnlockConditionTypes } from "../unlockConditions/unlockConditionTypes";
 
 /**
  * The global type for the foundry output.
@@ -54,6 +55,11 @@ export interface IFoundryOutput extends ITypeBase<5> {
      * The token scheme for the foundry.
      */
     tokenScheme: TokenSchemeTypes;
+
+    /**
+     * The unlock conditions for the output.
+     */
+    unlockConditions: UnlockConditionTypes[];
 
     /**
      * Blocks contained by the output.

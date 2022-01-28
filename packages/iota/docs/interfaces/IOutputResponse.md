@@ -10,6 +10,9 @@ Details of an output.
 - [transactionId](IOutputResponse.md#transactionid)
 - [outputIndex](IOutputResponse.md#outputindex)
 - [isSpent](IOutputResponse.md#isspent)
+- [milestoneIndex](IOutputResponse.md#milestoneindex)
+- [milestoneTimestamp](IOutputResponse.md#milestonetimestamp)
+- [ledgerIndex](IOutputResponse.md#ledgerindex)
 - [output](IOutputResponse.md#output)
 
 ## Properties
@@ -43,6 +46,30 @@ ___
 • **isSpent**: `boolean`
 
 Is the output spent.
+
+___
+
+### milestoneIndex
+
+• **milestoneIndex**: `number`
+
+The milestone index at which this output was booked into the ledger.
+
+___
+
+### milestoneTimestamp
+
+• **milestoneTimestamp**: `number`
+
+The milestone timestamp this output was booked in the ledger.
+
+___
+
+### ledgerIndex
+
+• **ledgerIndex**: `number`
+
+The ledger index at which these output was available at.
 
 ___
 

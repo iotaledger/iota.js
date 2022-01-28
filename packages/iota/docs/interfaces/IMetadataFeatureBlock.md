@@ -4,7 +4,7 @@ Metadata feature block.
 
 ## Hierarchy
 
-- [`ITypeBase`](ITypeBase.md)<``7``\>
+- [`ITypeBase`](ITypeBase.md)<``2``\>
 
   ↳ **`IMetadataFeatureBlock`**
 
@@ -19,7 +19,7 @@ Metadata feature block.
 
 ### type
 
-• **type**: ``7``
+• **type**: ``2``
 
 The type of the object.
 

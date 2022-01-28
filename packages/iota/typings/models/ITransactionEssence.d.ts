@@ -1,7 +1,7 @@
 import type { OutputTypes } from "../models/outputs/outputTypes";
 import type { IUTXOInput } from "./inputs/IUTXOInput";
 import type { ITypeBase } from "./ITypeBase";
-import type { IIndexationPayload } from "./payloads/IIndexationPayload";
+import type { ITaggedDataPayload } from "./payloads/ITaggedDataPayload";
 /**
  * The global type for the transaction essence.
  */
@@ -19,7 +19,7 @@ export interface ITransactionEssence extends ITypeBase<0> {
      */
     outputs: OutputTypes[];
     /**
-     * Indexation payload.
+     * Tagged data payload.
      */
-    payload?: IIndexationPayload;
+    payload?: ITaggedDataPayload;
 }

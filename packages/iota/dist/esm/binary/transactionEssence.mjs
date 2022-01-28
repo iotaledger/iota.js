@@ -1,8 +1,6 @@
 import { UTXO_INPUT_TYPE } from "../models/inputs/IUTXOInput.mjs";
 import { TRANSACTION_ESSENCE_TYPE } from "../models/ITransactionEssence.mjs";
-import { SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE } from "../models/outputs/ISigLockedDustAllowanceOutput.mjs";
-import { SIMPLE_OUTPUT_TYPE } from "../models/outputs/ISimpleOutput.mjs";
-import { INDEXATION_PAYLOAD_TYPE } from "../models/payloads/IIndexationPayload.mjs";
+import { TAGGED_DATA_PAYLOAD_TYPE } from "../models/payloads/ITaggedDataPayload.mjs";
 import { ARRAY_LENGTH, SMALL_TYPE_LENGTH, UINT32_SIZE } from "./commonDataTypes.mjs";
 import { deserializeInputs, serializeInputs } from "./inputs/inputs.mjs";
 import { deserializeOutputs, serializeOutputs } from "./outputs/outputs.mjs";
@@ -27,17 +25,12 @@ export function deserializeTransactionEssence(readStream) {
     const inputs = deserializeInputs(readStream);
     const outputs = deserializeOutputs(readStream);
     const payload = deserializePayload(readStream);
-    if (payload && payload.type !== INDEXATION_PAYLOAD_TYPE) {
-        throw new Error("Transaction essence can only contain embedded Indexation Payload");
+    if (payload && payload.type !== TAGGED_DATA_PAYLOAD_TYPE) {
+        throw new Error("Transaction essence can only contain embedded Tagged Data Payload");
     }
     for (const input of inputs) {
         if (input.type !== UTXO_INPUT_TYPE) {
             throw new Error("Transaction essence can only contain UTXO Inputs");
-        }
-    }
-    for (const output of outputs) {
-        if (output.type !== SIMPLE_OUTPUT_TYPE) {
-            throw new Error("Transaction essence can only contain simple outputs");
         }
     }
     return {
@@ -60,11 +53,6 @@ export function serializeTransactionEssence(writeStream, object) {
         }
     }
     serializeInputs(writeStream, object.inputs);
-    for (const output of object.outputs) {
-        if (output.type !== SIMPLE_OUTPUT_TYPE && output.type !== SIG_LOCKED_DUST_ALLOWANCE_OUTPUT_TYPE) {
-            throw new Error("Transaction essence can only contain sig locked single input or sig locked dust allowance outputs");
-        }
-    }
     serializeOutputs(writeStream, object.outputs);
     serializePayload(writeStream, object.payload);
 }

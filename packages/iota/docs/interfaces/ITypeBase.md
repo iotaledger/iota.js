@@ -20,23 +20,13 @@ Type of the object.
 
   ↳ [`INftAddress`](INftAddress.md)
 
-  ↳ [`IDustDepositReturnFeatureBlock`](IDustDepositReturnFeatureBlock.md)
-
-  ↳ [`IExpirationMilestoneIndexFeatureBlock`](IExpirationMilestoneIndexFeatureBlock.md)
-
-  ↳ [`IExpirationUnixFeatureBlock`](IExpirationUnixFeatureBlock.md)
-
-  ↳ [`IIndexationFeatureBlock`](IIndexationFeatureBlock.md)
-
   ↳ [`IIssuerFeatureBlock`](IIssuerFeatureBlock.md)
 
   ↳ [`IMetadataFeatureBlock`](IMetadataFeatureBlock.md)
 
   ↳ [`ISenderFeatureBlock`](ISenderFeatureBlock.md)
 
-  ↳ [`ITimelockMilestoneIndexFeatureBlock`](ITimelockMilestoneIndexFeatureBlock.md)
-
-  ↳ [`ITimelockUnixFeatureBlock`](ITimelockUnixFeatureBlock.md)
+  ↳ [`ITagFeatureBlock`](ITagFeatureBlock.md)
 
   ↳ [`ITreasuryInput`](ITreasuryInput.md)
 
@@ -52,17 +42,13 @@ Type of the object.
 
   ↳ [`INftOutput`](INftOutput.md)
 
-  ↳ [`ISigLockedDustAllowanceOutput`](ISigLockedDustAllowanceOutput.md)
-
-  ↳ [`ISimpleOutput`](ISimpleOutput.md)
-
   ↳ [`ITreasuryOutput`](ITreasuryOutput.md)
-
-  ↳ [`IIndexationPayload`](IIndexationPayload.md)
 
   ↳ [`IMilestonePayload`](IMilestonePayload.md)
 
   ↳ [`IReceiptPayload`](IReceiptPayload.md)
+
+  ↳ [`ITaggedDataPayload`](ITaggedDataPayload.md)
 
   ↳ [`ITransactionPayload`](ITransactionPayload.md)
 
@@ -79,6 +65,18 @@ Type of the object.
   ↳ [`IReferenceUnlockBlock`](IReferenceUnlockBlock.md)
 
   ↳ [`ISignatureUnlockBlock`](ISignatureUnlockBlock.md)
+
+  ↳ [`IAddressUnlockCondition`](IAddressUnlockCondition.md)
+
+  ↳ [`IDustDepositReturnUnlockCondition`](IDustDepositReturnUnlockCondition.md)
+
+  ↳ [`IExpirationUnlockCondition`](IExpirationUnlockCondition.md)
+
+  ↳ [`IGovernorUnlockCondition`](IGovernorUnlockCondition.md)
+
+  ↳ [`IStateControllerUnlockCondition`](IStateControllerUnlockCondition.md)
+
+  ↳ [`ITimelockUnlockCondition`](ITimelockUnlockCondition.md)
 
 ## Table of contents
 

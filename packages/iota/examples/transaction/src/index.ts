@@ -8,10 +8,10 @@ import {
     getUnspentAddress,
     getUnspentAddresses,
     IKeyPair,
-    ISimpleOutput,
+    IExtendedOutput,
     IUTXOInput,
     sendAdvanced,
-    SIMPLE_OUTPUT_TYPE,
+    EXTENDED_OUTPUT_TYPE,
     SingleNodeClient,
     UTXO_INPUT_TYPE
 } from "@iota/iota.js";
@@ -95,8 +95,8 @@ async function run() {
                 },
                 addressKeyPair: genesisWalletKeyPair
             });
-            if (output.output.type === SIMPLE_OUTPUT_TYPE) {
-                totalGenesis += (output.output as ISimpleOutput).amount;
+            if (output.output.type === EXTENDED_OUTPUT_TYPE) {
+                totalGenesis += (output.output as IExtendedOutput).amount;
             }
         }
     }

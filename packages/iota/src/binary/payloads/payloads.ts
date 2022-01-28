@@ -3,24 +3,24 @@
 /* eslint-disable no-mixed-operators */
 import type { ReadStream, WriteStream } from "@iota/util.js";
 import type { ITypeBase } from "../../models/ITypeBase";
-import { INDEXATION_PAYLOAD_TYPE } from "../../models/payloads/IIndexationPayload";
 import { MILESTONE_PAYLOAD_TYPE } from "../../models/payloads/IMilestonePayload";
 import { RECEIPT_PAYLOAD_TYPE } from "../../models/payloads/IReceiptPayload";
+import { TAGGED_DATA_PAYLOAD_TYPE } from "../../models/payloads/ITaggedDataPayload";
 import { TRANSACTION_PAYLOAD_TYPE } from "../../models/payloads/ITransactionPayload";
 import { TREASURY_TRANSACTION_PAYLOAD_TYPE } from "../../models/payloads/ITreasuryTransactionPayload";
 import type { PayloadTypes } from "../../models/payloads/payloadTypes";
 import { UINT32_SIZE } from "../commonDataTypes";
-import {
-    deserializeIndexationPayload,
-    MIN_INDEXATION_PAYLOAD_LENGTH,
-    serializeIndexationPayload
-} from "./indexationPayload";
 import {
     deserializeMilestonePayload,
     MIN_MILESTONE_PAYLOAD_LENGTH,
     serializeMilestonePayload
 } from "./milestonePayload";
 import { deserializeReceiptPayload, MIN_RECEIPT_PAYLOAD_LENGTH, serializeReceiptPayload } from "./receiptPayload";
+import {
+    deserializeTaggedDataPayload,
+    MIN_TAGGED_DATA_PAYLOAD_LENGTH,
+    serializeTaggedDataPayload
+} from "./taggedDataPayload";
 import {
     deserializeTransactionPayload,
     MIN_TRANSACTION_PAYLOAD_LENGTH,
@@ -38,7 +38,7 @@ import {
 export const MIN_PAYLOAD_LENGTH: number = Math.min(
     MIN_TRANSACTION_PAYLOAD_LENGTH,
     MIN_MILESTONE_PAYLOAD_LENGTH,
-    MIN_INDEXATION_PAYLOAD_LENGTH,
+    MIN_TAGGED_DATA_PAYLOAD_LENGTH,
     MIN_RECEIPT_PAYLOAD_LENGTH,
     MIN_TREASURY_TRANSACTION_PAYLOAD_LENGTH
 );
@@ -64,12 +64,12 @@ export function deserializePayload(readStream: ReadStream): PayloadTypes | undef
             payload = deserializeTransactionPayload(readStream);
         } else if (payloadType === MILESTONE_PAYLOAD_TYPE) {
             payload = deserializeMilestonePayload(readStream);
-        } else if (payloadType === INDEXATION_PAYLOAD_TYPE) {
-            payload = deserializeIndexationPayload(readStream);
         } else if (payloadType === RECEIPT_PAYLOAD_TYPE) {
             payload = deserializeReceiptPayload(readStream);
         } else if (payloadType === TREASURY_TRANSACTION_PAYLOAD_TYPE) {
             payload = deserializeTreasuryTransactionPayload(readStream);
+        } else if (payloadType === TAGGED_DATA_PAYLOAD_TYPE) {
+            payload = deserializeTaggedDataPayload(readStream);
         } else {
             throw new Error(`Unrecognized payload type ${payloadType}`);
         }
@@ -95,12 +95,12 @@ export function serializePayload(writeStream: WriteStream, object: PayloadTypes 
         serializeTransactionPayload(writeStream, object);
     } else if (object.type === MILESTONE_PAYLOAD_TYPE) {
         serializeMilestonePayload(writeStream, object);
-    } else if (object.type === INDEXATION_PAYLOAD_TYPE) {
-        serializeIndexationPayload(writeStream, object);
     } else if (object.type === RECEIPT_PAYLOAD_TYPE) {
         serializeReceiptPayload(writeStream, object);
     } else if (object.type === TREASURY_TRANSACTION_PAYLOAD_TYPE) {
         serializeTreasuryTransactionPayload(writeStream, object);
+    } else if (object.type === TAGGED_DATA_PAYLOAD_TYPE) {
+        serializeTaggedDataPayload(writeStream, object);
     } else {
         throw new Error(`Unrecognized transaction type ${(object as ITypeBase<number>).type}`);
     }

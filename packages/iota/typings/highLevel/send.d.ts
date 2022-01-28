@@ -10,16 +10,16 @@ import type { ISeed } from "../models/ISeed";
  * @param accountIndex The account index in the wallet.
  * @param addressBech32 The address to send the funds to in bech32 format.
  * @param amount The amount to send.
- * @param indexation Optional indexation data to associate with the transaction.
- * @param indexation.key Indexation key.
- * @param indexation.data Optional index data.
+ * @param taggedData Optional tagged data to associate with the transaction.
+ * @param taggedData.tag Optional tag.
+ * @param taggedData.data Optional data.
  * @param addressOptions Optional address configuration for balance address lookups.
  * @param addressOptions.startIndex The start index for the wallet count address, defaults to 0.
  * @param addressOptions.zeroCount The number of addresses with 0 balance during lookup before aborting.
  * @returns The id of the message created and the contructed message.
  */
-export declare function send(client: IClient | string, seed: ISeed, accountIndex: number, addressBech32: string, amount: number, indexation?: {
-    key: Uint8Array | string;
+export declare function send(client: IClient | string, seed: ISeed, accountIndex: number, addressBech32: string, amount: number, taggedData?: {
+    tag?: Uint8Array | string;
     data?: Uint8Array | string;
 }, addressOptions?: {
     startIndex?: number;
@@ -35,16 +35,16 @@ export declare function send(client: IClient | string, seed: ISeed, accountIndex
  * @param accountIndex The account index in the wallet.
  * @param addressEd25519 The address to send the funds to in ed25519 format.
  * @param amount The amount to send.
- * @param indexation Optional indexation data to associate with the transaction.
- * @param indexation.key Indexation key.
- * @param indexation.data Optional index data.
+ * @param taggedData Optional tagged data to associate with the transaction.
+ * @param taggedData.tag Optional tag.
+ * @param taggedData.data Optional data.
  * @param addressOptions Optional address configuration for balance address lookups.
  * @param addressOptions.startIndex The start index for the wallet count address, defaults to 0.
  * @param addressOptions.zeroCount The number of addresses with 0 balance during lookup before aborting.
  * @returns The id of the message created and the contructed message.
  */
-export declare function sendEd25519(client: IClient | string, seed: ISeed, accountIndex: number, addressEd25519: string, amount: number, indexation?: {
-    key: Uint8Array;
+export declare function sendEd25519(client: IClient | string, seed: ISeed, accountIndex: number, addressEd25519: string, amount: number, taggedData?: {
+    tag: Uint8Array;
     data?: Uint8Array;
 }, addressOptions?: {
     startIndex?: number;
@@ -59,9 +59,9 @@ export declare function sendEd25519(client: IClient | string, seed: ISeed, accou
  * @param seed The seed to use for address generation.
  * @param accountIndex The account index in the wallet.
  * @param outputs The address to send the funds to in bech32 format and amounts.
- * @param indexation Optional indexation data to associate with the transaction.
- * @param indexation.key Indexation key.
- * @param indexation.data Optional index data.
+ * @param taggedData Optional tagged data to associate with the transaction.
+ * @param taggedData.tag Optional tag.
+ * @param taggedData.data Optional data.
  * @param addressOptions Optional address configuration for balance address lookups.
  * @param addressOptions.startIndex The start index for the wallet count address, defaults to 0.
  * @param addressOptions.zeroCount The number of addresses with 0 balance during lookup before aborting.
@@ -70,8 +70,8 @@ export declare function sendEd25519(client: IClient | string, seed: ISeed, accou
 export declare function sendMultiple(client: IClient | string, seed: ISeed, accountIndex: number, outputs: {
     addressBech32: string;
     amount: number;
-}[], indexation?: {
-    key: Uint8Array | string;
+}[], taggedData?: {
+    tag?: Uint8Array | string;
     data?: Uint8Array | string;
 }, addressOptions?: {
     startIndex?: number;
@@ -86,9 +86,9 @@ export declare function sendMultiple(client: IClient | string, seed: ISeed, acco
  * @param seed The seed to use for address generation.
  * @param accountIndex The account index in the wallet.
  * @param outputs The outputs including address to send the funds to in ed25519 format and amount.
- * @param indexation Optional indexation data to associate with the transaction.
- * @param indexation.key Indexation key.
- * @param indexation.data Optional index data.
+ * @param taggedData Optional tagged data to associate with the transaction.
+ * @param taggedData.tag Optional tag.
+ * @param taggedData.data Optional data.
  * @param addressOptions Optional address configuration for balance address lookups.
  * @param addressOptions.startIndex The start index for the wallet count address, defaults to 0.
  * @param addressOptions.zeroCount The number of addresses with 0 balance during lookup before aborting.
@@ -97,8 +97,8 @@ export declare function sendMultiple(client: IClient | string, seed: ISeed, acco
 export declare function sendMultipleEd25519(client: IClient | string, seed: ISeed, accountIndex: number, outputs: {
     addressEd25519: string;
     amount: number;
-}[], indexation?: {
-    key: Uint8Array;
+}[], taggedData?: {
+    tag: Uint8Array;
     data?: Uint8Array;
 }, addressOptions?: {
     startIndex?: number;
@@ -114,9 +114,9 @@ export declare function sendMultipleEd25519(client: IClient | string, seed: ISee
  * @param initialAddressState The initial address state for calculating the addresses.
  * @param nextAddressPath Calculate the next address for inputs.
  * @param outputs The address to send the funds to in bech32 format and amounts.
- * @param indexation Optional indexation data to associate with the transaction.
- * @param indexation.key Indexation key.
- * @param indexation.data Optional index data.
+ * @param taggedData Optional tagged data to associate with the transaction.
+ * @param taggedData.tag Optional tag.
+ * @param taggedData.data Optional data.
  * @param zeroCount The number of addresses with 0 balance during lookup before aborting.
  * @returns The id of the message created and the contructed message.
  */
@@ -124,8 +124,8 @@ export declare function sendWithAddressGenerator<T>(client: IClient | string, se
     address: string;
     addressType: number;
     amount: number;
-}[], indexation?: {
-    key: Uint8Array | string;
+}[], taggedData?: {
+    tag?: Uint8Array | string;
     data?: Uint8Array | string;
 }, zeroCount?: number): Promise<{
     messageId: string;

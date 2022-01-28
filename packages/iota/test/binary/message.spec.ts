@@ -2,9 +2,9 @@
 // SPDX-License-Identifier: Apache-2.0
 import { Converter, ReadStream, WriteStream } from "@iota/util.js";
 import { deserializeMessage, serializeMessage } from "../../src/binary/message";
-import type { ISimpleOutput } from "../../src/models/outputs/ISimpleOutput";
-import type { IIndexationPayload } from "../../src/models/payloads/IIndexationPayload";
+import type { IExtendedOutput } from "../../src/models/outputs/IExtendedOutput";
 import type { IMilestonePayload } from "../../src/models/payloads/IMilestonePayload";
+import type { ITaggedDataPayload } from "../../src/models/payloads/ITaggedDataPayload";
 import type { ITransactionPayload } from "../../src/models/payloads/ITransactionPayload";
 import type { ISignatureUnlockBlock } from "../../src/models/unlockBlocks/ISignatureUnlockBlock";
 
@@ -20,16 +20,16 @@ describe("Binary Message", () => {
     });
 
     test("Can succeed with valid data", () => {
-        const buffer = Buffer.alloc(95);
+        const buffer = Buffer.alloc(94);
         buffer.writeBigUInt64LE(BigInt(123), 0);
         buffer.writeUInt8(2, 8);
         buffer.write("4594267ca0446739d5e4c6dcf060d640aafb68ab929aa2bb8c2bcdce8b3bc89e", 9, "hex");
         buffer.write("6901c7b37adbddfc3fc170773632489f263af4decc9ed5813c849a07319ecd73", 41, "hex");
         buffer.writeUInt32LE(8, 73); // Payload length
-        buffer.writeUInt32LE(2, 77); // Payload type
-        buffer.writeUInt16LE(0, 81); // Indexation index length
-        buffer.writeUInt32LE(0, 83); // Indexation data length
-        buffer.writeBigUInt64LE(BigInt(0), 87); // Nonce
+        buffer.writeUInt32LE(5, 77); // Payload type
+        buffer.writeUInt8(0, 81); // Tag length
+        buffer.writeUInt32LE(0, 82); // Data length
+        buffer.writeBigUInt64LE(BigInt(0), 86); // Nonce
         const message = deserializeMessage(new ReadStream(buffer));
         expect(message.networkId).toEqual("123");
         expect(message.parentMessageIds).toBeDefined();
@@ -45,16 +45,16 @@ describe("Binary Message", () => {
     });
 
     test("Can fail with additional data", () => {
-        const buffer = Buffer.alloc(96);
+        const buffer = Buffer.alloc(95);
         buffer.writeBigUInt64LE(BigInt(123), 0);
         buffer.writeUInt8(2, 8);
         buffer.write("4594267ca0446739d5e4c6dcf060d640aafb68ab929aa2bb8c2bcdce8b3bc89e", 9, "hex");
         buffer.write("6901c7b37adbddfc3fc170773632489f263af4decc9ed5813c849a07319ecd73", 41, "hex");
         buffer.writeUInt32LE(8, 73); // Payload length
-        buffer.writeUInt32LE(2, 77); // Payload type
-        buffer.writeUInt16LE(0, 81); // Indexation index length
-        buffer.writeUInt32LE(0, 83); // Indexation data length
-        buffer.writeBigUInt64LE(BigInt(0), 87); // Nonce
+        buffer.writeUInt32LE(5, 77); // Payload type
+        buffer.writeUInt8(0, 81); // Tag length
+        buffer.writeUInt32LE(0, 82); // Data length
+        buffer.writeBigUInt64LE(BigInt(0), 86); // Nonce
         expect(() => deserializeMessage(new ReadStream(buffer))).toThrow("unused data");
     });
 
@@ -96,23 +96,26 @@ describe("Binary Message", () => {
         expect(message.nonce).toEqual("12253");
     });
 
-    test("Can succeed with indexation data", () => {
+    test("Can succeed with tagged data", () => {
         const hex =
-            "7b00000000000000029eca185fb38d44471b0c396c6c147c3a2a4c590dc5dac6431b698c58dcce449a26b9c0077037bf198b35306408e4a9b50430bdf0ea54f722cc4e7ce4f7ffba5e10000000020000000300666f6f030000004261720000000000000000";
+            "7b000000000000000226b9c0077037bf198b35306408e4a9b50430bdf0ea54f722cc4e7ce4f7ffba5e9eca185fb38d44471b0c396c6c147c3a2a4c590dc5dac6431b698c58dcce449a0f0000000500000003666f6f030000004261720000000000000000";
         const message = deserializeMessage(new ReadStream(Converter.hexToBytes(hex)));
         expect(message.networkId).toEqual("123");
         expect(message.parentMessageIds).toBeDefined();
         if (message.parentMessageIds) {
             expect(message.parentMessageIds[0]).toEqual(
-                "9eca185fb38d44471b0c396c6c147c3a2a4c590dc5dac6431b698c58dcce449a"
-            );
-            expect(message.parentMessageIds[1]).toEqual(
                 "26b9c0077037bf198b35306408e4a9b50430bdf0ea54f722cc4e7ce4f7ffba5e"
             );
+            expect(message.parentMessageIds[1]).toEqual(
+                "9eca185fb38d44471b0c396c6c147c3a2a4c590dc5dac6431b698c58dcce449a"
+            );
         }
-        const payload = message.payload as IIndexationPayload;
-        expect(payload.type).toEqual(2);
-        expect(Converter.hexToUtf8(payload.index)).toEqual("foo");
+        const payload = message.payload as ITaggedDataPayload;
+        expect(payload.type).toEqual(5);
+        expect(payload.tag).toBeDefined();
+        if (payload.tag) {
+            expect(Converter.hexToUtf8(payload.tag)).toEqual("foo");
+        }
         expect(payload.data).toBeDefined();
         if (payload.data) {
             expect(Converter.hexToUtf8(payload.data)).toEqual("Bar");
@@ -132,33 +135,9 @@ describe("Binary Message", () => {
         expect(hex).toEqual(finalHex);
     });
 
-    test("Can succeed with actual indexation data", () => {
-        const hex =
-            "7b00000000000000029eca185fb38d44471b0c396c6c147c3a2a4c590dc5dac6431b698c58dcce449a26b9c0077037bf198b35306408e4a9b50430bdf0ea54f722cc4e7ce4f7ffba5e10000000020000000300666f6f030000004261720000000000000000";
-        const message = deserializeMessage(new ReadStream(Converter.hexToBytes(hex)));
-        expect(message.networkId).toEqual("123");
-        expect(message.parentMessageIds).toBeDefined();
-        if (message.parentMessageIds) {
-            expect(message.parentMessageIds[0]).toEqual(
-                "9eca185fb38d44471b0c396c6c147c3a2a4c590dc5dac6431b698c58dcce449a"
-            );
-            expect(message.parentMessageIds[1]).toEqual(
-                "26b9c0077037bf198b35306408e4a9b50430bdf0ea54f722cc4e7ce4f7ffba5e"
-            );
-        }
-        const payload = message.payload as IIndexationPayload;
-        expect(payload.type).toEqual(2);
-        expect(Converter.hexToUtf8(payload.index)).toEqual("foo");
-        expect(payload.data).toBeDefined();
-        if (payload.data) {
-            expect(Converter.hexToUtf8(payload.data)).toEqual("Bar");
-        }
-        expect(message.nonce).toEqual("0");
-    });
-
     test("Can succeed with actual transaction data", () => {
         const hex =
-            "7b00000000000000024ccb0843016072b0d0d1c4265bc808ef8a80ae4ad70e10d6016e248e4e047235aac2a777c07473522122629124d7df647b2ea712386707e3687dd3a47cbdfa55f800000000000000000100002367ec318426c9f5d1115a6ac96f6c3cd2e53443713e0b63f0c266cbda7444740100020000003eb1ed78d420c8318972b8b0839420f502b25356270a48a430cb55a5e323f72364000000000000000000625d17d4a4b21cd5edeb57544b9d2d66ce22985fb61f17d1d7cae958d0068618f95c2dd3f7df090010000000020000000300666f6f030000006261720100000014fe414a9eccf9589b38c7c89a2fa5921b4b170ebefc04b6a812b3d02068cfd73163a90017ed5fe9530f52fb0d30836a453a37204f4d59e03012d82e0a946f31c930ac54f4a35aef9578b9dec9c12887404be353c5f7ebd88bcbefcc78e29c050000000000000000";
+            "7b00000000000000024ccb0843016072b0d0d1c4265bc808ef8a80ae4ad70e10d6016e248e4e047235aac2a777c07473522122629124d7df647b2ea712386707e3687dd3a47cbdfa55fc00000000000000000100002367ec318426c9f5d1115a6ac96f6c3cd2e53443713e0b63f0c266cbda7444740100020003003eb1ed78d420c8318972b8b0839420f502b25356270a48a430cb55a5e323f7236400000000000000000000000300625d17d4a4b21cd5edeb57544b9d2d66ce22985fb61f17d1d7cae958d0068618f95c2dd3f7df0900000000000c0000000500000003666f6f000000000100000014fe414a9eccf9589b38c7c89a2fa5921b4b170ebefc04b6a812b3d02068cfd73163a90017ed5fe9530f52fb0d30836a453a37204f4d59e03012d82e0a946f31c930ac54f4a35aef9578b9dec9c12887404be353c5f7ebd88bcbefcc78e29c050000000000000000";
         const message = deserializeMessage(new ReadStream(Converter.hexToBytes(hex)));
         expect(message.networkId).toEqual("123");
         expect(message.parentMessageIds).toBeDefined();
@@ -179,22 +158,31 @@ describe("Binary Message", () => {
         expect(utxoInput.transactionId).toEqual("2367ec318426c9f5d1115a6ac96f6c3cd2e53443713e0b63f0c266cbda744474");
         expect(utxoInput.transactionOutputIndex).toEqual(1);
 
-        const sigLockedOutput1 = payload.essence.outputs[0] as ISimpleOutput;
+        const extendedOutput1 = payload.essence.outputs[0] as IExtendedOutput;
         expect(payload.essence.outputs.length).toEqual(2);
-        expect(sigLockedOutput1.type).toEqual(0);
-        expect(sigLockedOutput1.address.type).toEqual(0);
-        expect(sigLockedOutput1.address.address).toEqual(
+        expect(extendedOutput1.type).toEqual(3);
+        expect(extendedOutput1.address.type).toEqual(0);
+        expect(extendedOutput1.address.address).toEqual(
             "3eb1ed78d420c8318972b8b0839420f502b25356270a48a430cb55a5e323f723"
         );
-        expect(sigLockedOutput1.amount).toEqual(100);
+        expect(extendedOutput1.amount).toEqual(100);
 
-        const sigLockedOutput2 = payload.essence.outputs[1] as ISimpleOutput;
-        expect(sigLockedOutput2.type).toEqual(0);
-        expect(sigLockedOutput2.address.type).toEqual(0);
-        expect(sigLockedOutput2.address.address).toEqual(
+        const extendedOutput2 = payload.essence.outputs[1] as IExtendedOutput;
+        expect(extendedOutput2.type).toEqual(3);
+        expect(extendedOutput2.address.type).toEqual(0);
+        expect(extendedOutput2.address.address).toEqual(
             "625d17d4a4b21cd5edeb57544b9d2d66ce22985fb61f17d1d7cae958d0068618"
         );
-        expect(sigLockedOutput2.amount).toEqual(2779530283277561);
+        expect(extendedOutput2.amount).toEqual(2779530283277561);
+
+        expect(payload.essence.payload).toBeDefined();
+        if (payload.essence.payload) {
+            expect(payload.essence.payload.type).toEqual(5);
+            expect(payload.essence.payload.tag).toBeDefined();
+            if (payload.essence.payload.tag) {
+                expect(Converter.hexToUtf8(payload.essence.payload.tag)).toEqual("foo");
+            }
+        }
 
         expect(payload.unlockBlocks.length).toEqual(1);
 

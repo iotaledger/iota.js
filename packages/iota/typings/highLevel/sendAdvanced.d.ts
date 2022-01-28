@@ -8,9 +8,9 @@ import { ITransactionPayload } from "../models/payloads/ITransactionPayload";
  * @param client The client or node endpoint to send the transfer with.
  * @param inputsAndSignatureKeyPairs The inputs with the signature key pairs needed to sign transfers.
  * @param outputs The outputs to send.
- * @param indexation Optional indexation data to associate with the transaction.
- * @param indexation.key Indexation key.
- * @param indexation.data Optional index data.
+ * @param taggedData Optional tagged data to associate with the transaction.
+ * @param taggedData.tag Optional tag.
+ * @param taggedData.data Optional data.
  * @returns The id of the message created and the remainder address if one was needed.
  */
 export declare function sendAdvanced(client: IClient | string, inputsAndSignatureKeyPairs: {
@@ -20,8 +20,8 @@ export declare function sendAdvanced(client: IClient | string, inputsAndSignatur
     address: string;
     addressType: number;
     amount: number;
-}[], indexation?: {
-    key: Uint8Array | string;
+}[], taggedData?: {
+    tag?: Uint8Array | string;
     data?: Uint8Array | string;
 }): Promise<{
     messageId: string;
@@ -31,9 +31,9 @@ export declare function sendAdvanced(client: IClient | string, inputsAndSignatur
  * Build a transaction payload.
  * @param inputsAndSignatureKeyPairs The inputs with the signature key pairs needed to sign transfers.
  * @param outputs The outputs to send.
- * @param indexation Optional indexation data to associate with the transaction.
- * @param indexation.key Indexation key.
- * @param indexation.data Optional index data.
+ * @param taggedData Optional tagged data to associate with the transaction.
+ * @param taggedData.tag Optional tag.
+ * @param taggedData.data Optional index data.
  * @returns The transaction payload.
  */
 export declare function buildTransactionPayload(inputsAndSignatureKeyPairs: {
@@ -43,7 +43,7 @@ export declare function buildTransactionPayload(inputsAndSignatureKeyPairs: {
     address: string;
     addressType: number;
     amount: number;
-}[], indexation?: {
-    key: Uint8Array | string;
+}[], taggedData?: {
+    tag?: Uint8Array | string;
     data?: Uint8Array | string;
 }): ITransactionPayload;

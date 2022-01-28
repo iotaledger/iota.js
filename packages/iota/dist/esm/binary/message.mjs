@@ -1,10 +1,10 @@
 import bigInt from "big-integer";
-import { INDEXATION_PAYLOAD_TYPE } from "../models/payloads/IIndexationPayload.mjs";
 import { MILESTONE_PAYLOAD_TYPE } from "../models/payloads/IMilestonePayload.mjs";
 import { RECEIPT_PAYLOAD_TYPE } from "../models/payloads/IReceiptPayload.mjs";
+import { TAGGED_DATA_PAYLOAD_TYPE } from "../models/payloads/ITaggedDataPayload.mjs";
 import { TRANSACTION_PAYLOAD_TYPE } from "../models/payloads/ITransactionPayload.mjs";
 import { TREASURY_TRANSACTION_PAYLOAD_TYPE } from "../models/payloads/ITreasuryTransactionPayload.mjs";
-import { UINT8_SIZE, MESSAGE_ID_LENGTH, UINT64_SIZE } from "./commonDataTypes.mjs";
+import { MESSAGE_ID_LENGTH, UINT64_SIZE, UINT8_SIZE } from "./commonDataTypes.mjs";
 import { deserializePayload, MIN_PAYLOAD_LENGTH, serializePayload } from "./payloads/payloads.mjs";
 /**
  * The minimum length of a message binary representation.
@@ -85,9 +85,9 @@ export function serializeMessage(writeStream, object) {
     }
     if (object.payload &&
         object.payload.type !== TRANSACTION_PAYLOAD_TYPE &&
-        object.payload.type !== INDEXATION_PAYLOAD_TYPE &&
-        object.payload.type !== MILESTONE_PAYLOAD_TYPE) {
-        throw new Error("Messages can only contain transaction, indexation or milestone payloads");
+        object.payload.type !== MILESTONE_PAYLOAD_TYPE &&
+        object.payload.type !== TAGGED_DATA_PAYLOAD_TYPE) {
+        throw new Error("Messages can only contain transaction, milestone or tagged data payloads");
     }
     serializePayload(writeStream, object.payload);
     writeStream.writeUInt64("message.nonce", bigInt((_d = object.nonce) !== null && _d !== void 0 ? _d : "0"));

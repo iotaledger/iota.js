@@ -1,5 +1,0 @@
-/**
- * The global type for the indexation feature block.
- */
-export const INDEXATION_FEATURE_BLOCK_TYPE = 8;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiSUluZGV4YXRpb25GZWF0dXJlQmxvY2suanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi9zcmMvbW9kZWxzL2ZlYXR1cmVCbG9ja3MvSUluZGV4YXRpb25GZWF0dXJlQmxvY2sudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBSUE7O0dBRUc7QUFDSCxNQUFNLENBQUMsTUFBTSw2QkFBNkIsR0FBRyxDQUFDLENBQUMifQ==

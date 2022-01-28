@@ -1,0 +1,5 @@
+/**
+ * The global type for the payload.
+ */
+export const TAGGED_DATA_PAYLOAD_TYPE = 5;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiSVRhZ2dlZERhdGFQYXlsb2FkLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vLi4vc3JjL21vZGVscy9wYXlsb2Fkcy9JVGFnZ2VkRGF0YVBheWxvYWQudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBSUE7O0dBRUc7QUFDSCxNQUFNLENBQUMsTUFBTSx3QkFBd0IsR0FBRyxDQUFDLENBQUMifQ==

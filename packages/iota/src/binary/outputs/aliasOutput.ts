@@ -3,14 +3,12 @@
 import type { ReadStream, WriteStream } from "@iota/util.js";
 import bigInt from "big-integer";
 import { ALIAS_OUTPUT_TYPE, IAliasOutput } from "../../models/outputs/IAliasOutput";
-import { deserializeAddress, MIN_ADDRESS_LENGTH, serializeAddress } from "../addresses/addresses";
 import { SMALL_TYPE_LENGTH, UINT32_SIZE, UINT64_SIZE } from "../commonDataTypes";
 import {
-    deserializeFeatureBlocks,
-    serializeFeatureBlocks,
-    MIN_FEATURE_BLOCKS_LENGTH
+    deserializeFeatureBlocks, MIN_FEATURE_BLOCKS_LENGTH, serializeFeatureBlocks
 } from "../featureBlocks/featureBlocks";
-import { deserializeNativeTokens, serializeNativeTokens, MIN_NATIVE_TOKENS_LENGTH } from "../nativeTokens";
+import { deserializeNativeTokens, MIN_NATIVE_TOKENS_LENGTH, serializeNativeTokens } from "../nativeTokens";
+import { deserializeUnlockConditions, MIN_UNLOCK_CONDITIONS_LENGTH, serializeUnlockConditions } from "../unlockConditions/unlockConditions";
 
 /**
  * The length of an alias id.
@@ -25,11 +23,10 @@ export const MIN_ALIAS_OUTPUT_LENGTH: number =
     UINT64_SIZE + // Amount
     MIN_NATIVE_TOKENS_LENGTH + // Native Tokens
     ALIAS_ID_LENGTH + // Alias Id
-    MIN_ADDRESS_LENGTH + // State Controller
-    MIN_ADDRESS_LENGTH + // Governance Controller
     UINT32_SIZE + // State Index
     UINT32_SIZE + // State Metatata Length
     UINT32_SIZE + // Foundry counter
+    MIN_UNLOCK_CONDITIONS_LENGTH + // Unlock conditions
     MIN_FEATURE_BLOCKS_LENGTH; // Feature Blocks
 
 /**
@@ -55,10 +52,6 @@ export function deserializeAliasOutput(readStream: ReadStream): IAliasOutput {
 
     const aliasId = readStream.readFixedHex("aliasOutput.aliasId", ALIAS_ID_LENGTH);
 
-    const stateController = deserializeAddress(readStream);
-
-    const governanceController = deserializeAddress(readStream);
-
     const stateIndex = readStream.readUInt32("aliasOutput.stateIndex");
 
     const stateMetadataLength = readStream.readUInt32("aliasOutput.stateMetadataLength");
@@ -66,19 +59,20 @@ export function deserializeAliasOutput(readStream: ReadStream): IAliasOutput {
 
     const foundryCounter = readStream.readUInt32("aliasOutput.foundryCounter");
 
-    const featureBlocks = deserializeFeatureBlocks(readStream);
+    const unlockConditions = deserializeUnlockConditions(readStream);
+
+    const blocks = deserializeFeatureBlocks(readStream);
 
     return {
         type: ALIAS_OUTPUT_TYPE,
         amount: Number(amount),
         nativeTokens,
         aliasId,
-        stateController,
-        governanceController,
         stateIndex,
         stateMetadata,
         foundryCounter,
-        blocks: featureBlocks
+        unlockConditions,
+        blocks
     };
 }
 
@@ -95,15 +89,14 @@ export function serializeAliasOutput(writeStream: WriteStream, object: IAliasOut
 
     writeStream.writeFixedHex("aliasOutput.aliasId", ALIAS_ID_LENGTH, object.aliasId);
 
-    serializeAddress(writeStream, object.stateController);
-    serializeAddress(writeStream, object.governanceController);
-
     writeStream.writeUInt32("aliasOutput.stateIndex", object.stateIndex);
 
     writeStream.writeUInt32("aliasOutput.stateMetadataLength", object.stateMetadata.length / 2);
     writeStream.writeFixedHex("aliasOutput.stateMetadata", object.stateMetadata.length / 2, object.stateMetadata);
 
     writeStream.writeUInt32("aliasOutput.foundryCounter", object.foundryCounter);
+
+    serializeUnlockConditions(writeStream, object.unlockConditions);
 
     serializeFeatureBlocks(writeStream, object.blocks);
 }

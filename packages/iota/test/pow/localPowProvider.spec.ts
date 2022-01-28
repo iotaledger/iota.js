@@ -3,7 +3,7 @@
 import { Converter, WriteStream } from "@iota/util.js";
 import { serializeMessage } from "../../src/binary/message";
 import type { IMessage } from "../../src/models/IMessage";
-import { IIndexationPayload, INDEXATION_PAYLOAD_TYPE } from "../../src/models/payloads/IIndexationPayload";
+import { ITaggedDataPayload, TAGGED_DATA_PAYLOAD_TYPE } from "../../src/models/payloads/ITaggedDataPayload";
 import { LocalPowProvider } from "../../src/pow/localPowProvider";
 import { PowHelper } from "../../src/utils/powHelper";
 
@@ -11,14 +11,14 @@ describe("LocalPowProvider", () => {
     test("Calculate from an empty message", async () => {
         const pow = new LocalPowProvider();
 
-        const indexationPayload: IIndexationPayload = {
-            type: INDEXATION_PAYLOAD_TYPE,
-            index: Converter.utf8ToHex("hello world"),
+        const taggedDataPayload: ITaggedDataPayload = {
+            type: TAGGED_DATA_PAYLOAD_TYPE,
+            tag: Converter.utf8ToHex("hello world"),
             data: Converter.bytesToHex(Uint8Array.from([1, 2, 3, 4]))
         };
 
         const message: IMessage = {
-            payload: indexationPayload
+            payload: taggedDataPayload
         };
 
         const writeStream = new WriteStream();
@@ -26,7 +26,7 @@ describe("LocalPowProvider", () => {
         const messageBytes = writeStream.finalBytes();
 
         const nonce = await pow.pow(messageBytes, 100);
-        expect(nonce).toEqual("6569");
+        expect(nonce).toEqual("3686");
 
         const score = PowHelper.score(messageBytes);
 

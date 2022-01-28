@@ -5,6 +5,7 @@ import { SMALL_TYPE_LENGTH, UINT256_SIZE, UINT32_SIZE, UINT64_SIZE } from "../co
 import { deserializeFeatureBlocks, MIN_FEATURE_BLOCKS_LENGTH, serializeFeatureBlocks } from "../featureBlocks/featureBlocks.mjs";
 import { deserializeNativeTokens, MIN_NATIVE_TOKENS_LENGTH, NATIVE_TOKEN_TAG_LENGTH, serializeNativeTokens } from "../nativeTokens.mjs";
 import { deserializeTokenScheme, MIN_TOKEN_SCHEME_LENGTH, serializeTokenScheme } from "../tokenSchemes/tokenSchemes.mjs";
+import { deserializeUnlockConditions, MIN_UNLOCK_CONDITIONS_LENGTH, serializeUnlockConditions } from "../unlockConditions/unlockConditions.mjs";
 /**
  * The minimum length of a foundry output binary representation.
  */
@@ -17,6 +18,7 @@ export const MIN_FOUNDRY_OUTPUT_LENGTH = SMALL_TYPE_LENGTH + // Type
     UINT256_SIZE + // Circulating Supply
     UINT256_SIZE + // Maximum Supply
     MIN_TOKEN_SCHEME_LENGTH + // Token scheme length
+    MIN_UNLOCK_CONDITIONS_LENGTH +
     MIN_FEATURE_BLOCKS_LENGTH;
 /**
  * Deserialize the foundry output from binary.
@@ -39,7 +41,8 @@ export function deserializeFoundryOutput(readStream) {
     const circulatingSupply = readStream.readUInt256("foundryOutput.circulatingSupply");
     const maximumSupply = readStream.readUInt256("foundryOutput.maximumSupply");
     const tokenScheme = deserializeTokenScheme(readStream);
-    const featureBlocks = deserializeFeatureBlocks(readStream);
+    const unlockConditions = deserializeUnlockConditions(readStream);
+    const blocks = deserializeFeatureBlocks(readStream);
     return {
         type: FOUNDRY_OUTPUT_TYPE,
         amount: Number(amount),
@@ -50,7 +53,8 @@ export function deserializeFoundryOutput(readStream) {
         circulatingSupply: circulatingSupply.toString(),
         maximumSupply: maximumSupply.toString(),
         tokenScheme,
-        blocks: featureBlocks
+        unlockConditions,
+        blocks: blocks
     };
 }
 /**
@@ -68,5 +72,6 @@ export function serializeFoundryOutput(writeStream, object) {
     writeStream.writeUInt256("foundryOutput.circulatingSupply", bigInt(object.circulatingSupply));
     writeStream.writeUInt256("foundryOutput.maximumSupply", bigInt(object.maximumSupply));
     serializeTokenScheme(writeStream, object.tokenScheme);
+    serializeUnlockConditions(writeStream, object.unlockConditions);
     serializeFeatureBlocks(writeStream, object.blocks);
 }

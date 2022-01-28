@@ -21,6 +21,7 @@ Foundry output.
 - [circulatingSupply](IFoundryOutput.md#circulatingsupply)
 - [maximumSupply](IFoundryOutput.md#maximumsupply)
 - [tokenScheme](IFoundryOutput.md#tokenscheme)
+- [unlockConditions](IFoundryOutput.md#unlockconditions)
 - [blocks](IFoundryOutput.md#blocks)
 
 ## Properties
@@ -98,6 +99,14 @@ ___
 • **tokenScheme**: [`ISimpleTokenScheme`](ISimpleTokenScheme.md)
 
 The token scheme for the foundry.
+
+___
+
+### unlockConditions
+
+• **unlockConditions**: [`UnlockConditionTypes`](../api.md#unlockconditiontypes)[]
+
+The unlock conditions for the output.
 
 ___
 
