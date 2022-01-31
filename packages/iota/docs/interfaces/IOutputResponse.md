@@ -10,8 +10,10 @@ Details of an output.
 - [transactionId](IOutputResponse.md#transactionid)
 - [outputIndex](IOutputResponse.md#outputindex)
 - [isSpent](IOutputResponse.md#isspent)
-- [milestoneIndex](IOutputResponse.md#milestoneindex)
-- [milestoneTimestamp](IOutputResponse.md#milestonetimestamp)
+- [milestoneIndexSpent](IOutputResponse.md#milestoneindexspent)
+- [milestoneTimestampSpent](IOutputResponse.md#milestonetimestampspent)
+- [milestoneIndexBooked](IOutputResponse.md#milestoneindexbooked)
+- [milestoneTimestampBooked](IOutputResponse.md#milestonetimestampbooked)
 - [ledgerIndex](IOutputResponse.md#ledgerindex)
 - [output](IOutputResponse.md#output)
 
@@ -49,17 +51,33 @@ Is the output spent.
 
 ___
 
-### milestoneIndex
+### milestoneIndexSpent
 
-• **milestoneIndex**: `number`
+• **milestoneIndexSpent**: `number`
+
+The milestone index at which this output was spent.
+
+___
+
+### milestoneTimestampSpent
+
+• **milestoneTimestampSpent**: `number`
+
+The milestone timestamp this output was spent.
+
+___
+
+### milestoneIndexBooked
+
+• **milestoneIndexBooked**: `number`
 
 The milestone index at which this output was booked into the ledger.
 
 ___
 
-### milestoneTimestamp
+### milestoneTimestampBooked
 
-• **milestoneTimestamp**: `number`
+• **milestoneTimestampBooked**: `number`
 
 The milestone timestamp this output was booked in the ledger.
 

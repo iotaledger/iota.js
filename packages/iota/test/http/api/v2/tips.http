@@ -1,5 +1,9 @@
 # Use https://marketplace.visualstudio.com/items?itemName=humao.rest-client to execute these in VSCode
 
 ### Tips
-GET https://chrysalis-nodes.iota.org/api/v1/tips
+GET http://localhost:14265/api/v2/tips
+Content-Type: application/json
+
+### Tips
+GET https://chrysalis-nodes.iota.org/api/v2/tips
 Content-Type: application/json

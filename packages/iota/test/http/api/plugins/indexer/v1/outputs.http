@@ -1,0 +1,6 @@
+# Use https://marketplace.visualstudio.com/items?itemName=humao.rest-client to execute these in VSCode
+
+### Outputs by address
+GET http://localhost:14265/api/plugins/indexer/v1/outputs?address=atoi1qpszqzadsym6wpppd6z037dvlejmjuke7s24hm95s9fg9vpua7vluehe53e
+Content-Type: application/json
+

@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "main": "dist/index.js",
     "scripts": {
-        "build": "tsc",
+        "dist": "tsc",
         "start": "node dist/index"
     },
     "dependencies": {
