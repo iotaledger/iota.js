@@ -2994,9 +2994,25 @@
          * Find outputs using filter options.
          * @param filterOptions The options for filtering.
          * @param filterOptions.addressBech32 Filter outputs that are unlockable by the address.
-         * @param filterOptions.requiresDustReturn Filter outputs by those with a dust return.
+         * @param filterOptions.hasDustReturnCondition Filter for outputs having a dust return unlock condition.
+         * @param filterOptions.dustReturnAddressBech32 Filter for outputs with a certain dust return address.
+         * @param filterOptions.hasExpirationCondition Filter for outputs having an expiration unlock condition.
+         * @param filterOptions.expirationReturnAddressBech32 Filter for outputs with a certain expiration return address.
+         * @param filterOptions.expiresBefore Filter for outputs that expire before a certain unix time.
+         * @param filterOptions.expiresAfter Filter for outputs that expire after a certain unix time.
+         * @param filterOptions.expiresBeforeMilestone Filter for outputs that expire before a certain milestone index.
+         * @param filterOptions.expiresAfterMilestone Filter for outputs that expire after a certain milestone index.
+         * @param filterOptions.hasTimelockCondition Filter for outputs having a timelock unlock condition.
+         * @param filterOptions.timelockedBefore Filter for outputs that are timelocked before a certain unix time.
+         * @param filterOptions.timelockedAfter Filter for outputs that are timelocked after a certain unix time.
+         * @param filterOptions.timelockedBeforeMilestone Filter for outputs that are timelocked before a certain
+         * milestone index.
+         * @param filterOptions.timelockedAfterMilestone Filter for outputs that are timelocked after a certain
+         * milestone index.
          * @param filterOptions.senderBech32 Filter outputs by the sender.
          * @param filterOptions.tagHex Filter outputs by the tag in hex format.
+         * @param filterOptions.createdBefore Filter for outputs that were created before the given time.
+         * @param filterOptions.createdAfter Filter for outputs that were created after the given time.
          * @param filterOptions.pageSize Set the page size for the response.
          * @param filterOptions.offset Request the items from the given offset, return from a previous request.
          * @returns The outputs with the requested filters.
@@ -3007,14 +3023,56 @@
                 if (filterOptions.addressBech32 !== undefined) {
                     queryParams.push(`address=${filterOptions.addressBech32}`);
                 }
-                if (filterOptions.requiresDustReturn) {
-                    queryParams.push(`requiresDustReturn=${filterOptions.requiresDustReturn}`);
+                if (filterOptions.hasDustReturnCondition) {
+                    queryParams.push(`hasDustReturnCondition=${filterOptions.hasDustReturnCondition}`);
+                }
+                if (filterOptions.dustReturnAddressBech32 !== undefined) {
+                    queryParams.push(`dustReturnAddress=${filterOptions.dustReturnAddressBech32}`);
+                }
+                if (filterOptions.hasExpirationCondition) {
+                    queryParams.push(`hasExpirationCondition=${filterOptions.hasExpirationCondition}`);
+                }
+                if (filterOptions.expirationReturnAddressBech32 !== undefined) {
+                    queryParams.push(`expirationReturnAddress=${filterOptions.expirationReturnAddressBech32}`);
+                }
+                if (filterOptions.expiresBefore !== undefined) {
+                    queryParams.push(`expiresBefore=${filterOptions.expiresBefore}`);
+                }
+                if (filterOptions.expiresAfter !== undefined) {
+                    queryParams.push(`expiresAfter=${filterOptions.expiresAfter}`);
+                }
+                if (filterOptions.expiresBeforeMilestone !== undefined) {
+                    queryParams.push(`expiresBeforeMilestone=${filterOptions.expiresBeforeMilestone}`);
+                }
+                if (filterOptions.expiresAfterMilestone !== undefined) {
+                    queryParams.push(`expiresAfterMilestone=${filterOptions.expiresAfterMilestone}`);
+                }
+                if (filterOptions.hasTimelockCondition !== undefined) {
+                    queryParams.push(`hasTimelockCondition=${filterOptions.hasTimelockCondition}`);
+                }
+                if (filterOptions.timelockedBefore !== undefined) {
+                    queryParams.push(`timelockedBefore=${filterOptions.timelockedBefore}`);
+                }
+                if (filterOptions.timelockedAfter !== undefined) {
+                    queryParams.push(`timelockedAfter=${filterOptions.timelockedAfter}`);
+                }
+                if (filterOptions.timelockedBeforeMilestone !== undefined) {
+                    queryParams.push(`timelockedBeforeMilestone=${filterOptions.timelockedBeforeMilestone}`);
+                }
+                if (filterOptions.timelockedAfterMilestone !== undefined) {
+                    queryParams.push(`timelockedAfterMilestone=${filterOptions.timelockedAfterMilestone}`);
                 }
                 if (filterOptions.senderBech32 !== undefined) {
                     queryParams.push(`sender=${filterOptions.senderBech32}`);
                 }
                 if (filterOptions.tagHex !== undefined) {
                     queryParams.push(`tag=${filterOptions.tagHex}`);
+                }
+                if (filterOptions.createdBefore !== undefined) {
+                    queryParams.push(`createdBefore=${filterOptions.createdBefore}`);
+                }
+                if (filterOptions.createdAfter !== undefined) {
+                    queryParams.push(`createdAfter=${filterOptions.createdAfter}`);
                 }
                 if (filterOptions.pageSize !== undefined) {
                     queryParams.push(`pageSize=${filterOptions.pageSize}`);
@@ -3032,6 +3090,8 @@
          * @param filterOptions.governorBech32 Filter for a certain governance controller address.
          * @param filterOptions.issuerBech32 Filter for a certain issuer.
          * @param filterOptions.senderBech32 Filter outputs by the sender.
+         * @param filterOptions.createdBefore Filter for outputs that were created before the given time.
+         * @param filterOptions.createdAfter Filter for outputs that were created after the given time.
          * @param filterOptions.pageSize Set the page size for the response.
          * @param filterOptions.offset Request the items from the given offset, return from a previous request.
          * @returns The outputs with the requested filters.
@@ -3050,6 +3110,12 @@
                 }
                 if (filterOptions.senderBech32 !== undefined) {
                     queryParams.push(`sender=${filterOptions.senderBech32}`);
+                }
+                if (filterOptions.createdBefore !== undefined) {
+                    queryParams.push(`createdBefore=${filterOptions.createdBefore}`);
+                }
+                if (filterOptions.createdAfter !== undefined) {
+                    queryParams.push(`createdAfter=${filterOptions.createdAfter}`);
                 }
                 if (filterOptions.pageSize !== undefined) {
                     queryParams.push(`pageSize=${filterOptions.pageSize}`);
@@ -3075,10 +3141,26 @@
          * Find nfts using filter options.
          * @param filterOptions The options for filtering.
          * @param filterOptions.addressBech32 Filter outputs that are unlockable by the address.
-         * @param filterOptions.requiresDustReturn Filter outputs by those with a dust return.
+         * @param filterOptions.hasDustReturnCondition Filter for outputs having a dust return unlock condition.
+         * @param filterOptions.dustReturnAddressBech32 Filter for outputs with a certain dust return address.
+         * @param filterOptions.hasExpirationCondition Filter for outputs having an expiration unlock condition.
+         * @param filterOptions.expirationReturnAddressBech32 Filter for outputs with a certain expiration return address.
+         * @param filterOptions.expiresBefore Filter for outputs that expire before a certain unix time.
+         * @param filterOptions.expiresAfter Filter for outputs that expire after a certain unix time.
+         * @param filterOptions.expiresBeforeMilestone Filter for outputs that expire before a certain milestone index.
+         * @param filterOptions.expiresAfterMilestone Filter for outputs that expire after a certain milestone index.
+         * @param filterOptions.hasTimelockCondition Filter for outputs having a timelock unlock condition.
+         * @param filterOptions.timelockedBefore Filter for outputs that are timelocked before a certain unix time.
+         * @param filterOptions.timelockedAfter Filter for outputs that are timelocked after a certain unix time.
+         * @param filterOptions.timelockedBeforeMilestone Filter for outputs that are timelocked before a certain
+         * milestone index.
+         * @param filterOptions.timelockedAfterMilestone Filter for outputs that are timelocked after a certain
+         * milestone index.
          * @param filterOptions.issuerBech32 Filter outputs by the issuer.
          * @param filterOptions.senderBech32 Filter outputs by the sender.
          * @param filterOptions.tagHex Filter outputs by the tag in hex format.
+         * @param filterOptions.createdBefore Filter for outputs that were created before the given time.
+         * @param filterOptions.createdAfter Filter for outputs that were created after the given time.
          * @param filterOptions.pageSize Set the page size for the response.
          * @param filterOptions.offset Request the items from the given offset, return from a previous request.
          * @returns The outputs with the requested filters.
@@ -3089,8 +3171,44 @@
                 if (filterOptions.addressBech32 !== undefined) {
                     queryParams.push(`address=${filterOptions.addressBech32}`);
                 }
-                if (filterOptions.requiresDustReturn) {
-                    queryParams.push(`requiresDustReturn=${filterOptions.requiresDustReturn}`);
+                if (filterOptions.hasDustReturnCondition) {
+                    queryParams.push(`hasDustReturnCondition=${filterOptions.hasDustReturnCondition}`);
+                }
+                if (filterOptions.dustReturnAddressBech32 !== undefined) {
+                    queryParams.push(`dustReturnAddress=${filterOptions.dustReturnAddressBech32}`);
+                }
+                if (filterOptions.hasExpirationCondition) {
+                    queryParams.push(`hasExpirationCondition=${filterOptions.hasExpirationCondition}`);
+                }
+                if (filterOptions.expirationReturnAddressBech32 !== undefined) {
+                    queryParams.push(`expirationReturnAddress=${filterOptions.expirationReturnAddressBech32}`);
+                }
+                if (filterOptions.expiresBefore !== undefined) {
+                    queryParams.push(`expiresBefore=${filterOptions.expiresBefore}`);
+                }
+                if (filterOptions.expiresAfter !== undefined) {
+                    queryParams.push(`expiresAfter=${filterOptions.expiresAfter}`);
+                }
+                if (filterOptions.expiresBeforeMilestone !== undefined) {
+                    queryParams.push(`expiresBeforeMilestone=${filterOptions.expiresBeforeMilestone}`);
+                }
+                if (filterOptions.expiresAfterMilestone !== undefined) {
+                    queryParams.push(`expiresAfterMilestone=${filterOptions.expiresAfterMilestone}`);
+                }
+                if (filterOptions.hasTimelockCondition !== undefined) {
+                    queryParams.push(`hasTimelockCondition=${filterOptions.hasTimelockCondition}`);
+                }
+                if (filterOptions.timelockedBefore !== undefined) {
+                    queryParams.push(`timelockedBefore=${filterOptions.timelockedBefore}`);
+                }
+                if (filterOptions.timelockedAfter !== undefined) {
+                    queryParams.push(`timelockedAfter=${filterOptions.timelockedAfter}`);
+                }
+                if (filterOptions.timelockedBeforeMilestone !== undefined) {
+                    queryParams.push(`timelockedBeforeMilestone=${filterOptions.timelockedBeforeMilestone}`);
+                }
+                if (filterOptions.timelockedAfterMilestone !== undefined) {
+                    queryParams.push(`timelockedAfterMilestone=${filterOptions.timelockedAfterMilestone}`);
                 }
                 if (filterOptions.issuerBech32 !== undefined) {
                     queryParams.push(`issuer=${filterOptions.issuerBech32}`);
@@ -3101,6 +3219,12 @@
                 if (filterOptions.tagHex !== undefined) {
                     queryParams.push(`tag=${filterOptions.tagHex}`);
                 }
+                if (filterOptions.createdBefore !== undefined) {
+                    queryParams.push(`createdBefore=${filterOptions.createdBefore}`);
+                }
+                if (filterOptions.createdAfter !== undefined) {
+                    queryParams.push(`createdAfter=${filterOptions.createdAfter}`);
+                }
                 if (filterOptions.pageSize !== undefined) {
                     queryParams.push(`pageSize=${filterOptions.pageSize}`);
                 }
@@ -3108,7 +3232,7 @@
                     queryParams.push(`offset=${filterOptions.offset}`);
                 }
             }
-            return this._client.pluginFetch(this._basePluginPath, "get", "nft", queryParams);
+            return this._client.pluginFetch(this._basePluginPath, "get", "nfts", queryParams);
         }
         /**
          * Get the output for a nft.
@@ -3119,12 +3243,14 @@
             if (!util_js.Converter.isHex(nftId)) {
                 throw new Error("The nft id does not appear to be hex format");
             }
-            return this._client.pluginFetch(this._basePluginPath, "get", `nft/${nftId}`);
+            return this._client.pluginFetch(this._basePluginPath, "get", `nfts/${nftId}`);
         }
         /**
          * Find foundries using filter options.
          * @param filterOptions The options for filtering.
          * @param filterOptions.addressBech32 Filter outputs that are unlockable by the address.
+         * @param filterOptions.createdBefore Filter for outputs that were created before the given time.
+         * @param filterOptions.createdAfter Filter for outputs that were created after the given time.
          * @param filterOptions.pageSize Set the page size for the response.
          * @param filterOptions.offset Request the items from the given offset, return from a previous request.
          * @returns The outputs with the requested filters.
@@ -3134,6 +3260,12 @@
             if (filterOptions) {
                 if (filterOptions.addressBech32 !== undefined) {
                     queryParams.push(`address=${filterOptions.addressBech32}`);
+                }
+                if (filterOptions.createdBefore !== undefined) {
+                    queryParams.push(`createdBefore=${filterOptions.createdBefore}`);
+                }
+                if (filterOptions.createdAfter !== undefined) {
+                    queryParams.push(`createdAfter=${filterOptions.createdAfter}`);
                 }
                 if (filterOptions.pageSize !== undefined) {
                     queryParams.push(`pageSize=${filterOptions.pageSize}`);
