@@ -52,14 +52,15 @@ describe("Binary Payload", () => {
     });
 
     test("Can succeed with valid tagged data", () => {
-        const buffer = Buffer.alloc(13);
+        const buffer = Buffer.alloc(14);
         buffer.writeUInt32LE(8, 0); // Payload length
         buffer.writeUInt32LE(5, 4); // Payload type
-        buffer.writeUInt8(0, 8); // Tag length
-        buffer.writeUInt32LE(0, 9); // Data length
+        buffer.writeUInt8(1, 8); // Tag length
+        buffer.writeUInt8(65, 9); // Tag data
+        buffer.writeUInt32LE(0, 10); // Data length
         const payload = deserializePayload(new ReadStream(buffer)) as ITaggedDataPayload;
         expect(payload.type).toEqual(5);
-        expect(payload.tag).toEqual(undefined);
+        expect(payload.tag).toEqual("41");
         expect(payload.data).toEqual(undefined);
     });
 

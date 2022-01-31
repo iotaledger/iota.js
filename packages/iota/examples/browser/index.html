@@ -23,7 +23,8 @@
 
         async function run() {
             Iota.setLogger(consoleLog);
-            const client = new Iota.SingleNodeClient("https://chrysalis-nodes.iota.org/");
+            //const client = new Iota.SingleNodeClient("https://chrysalis-nodes.iota.org/");
+            const client = new Iota.SingleNodeClient("http://localhost:14265/");
 
             const health = await client.health();
             consoleLog("Is the node healthy", health ? "Yes" : "No");
@@ -43,8 +44,8 @@
                 // Parents can be left undefined if you want the node to populate the field
                 parentMessageIds: tipsResponse.tipMessageIds.slice(0, Iota.MAX_NUMBER_PARENTS),
                 payload: {
-                    type: 2,
-                    index: IotaUtil.Converter.utf8ToHex("Foo"),
+                    type: Iota.TAGGED_DATA_PAYLOAD_TYPE,
+                    tag: IotaUtil.Converter.utf8ToHex("Foo"),
                     data: IotaUtil.Converter.utf8ToHex("Bar")
                 }
             };
@@ -74,14 +75,6 @@
             Iota.logMessage("", decoded);
             consoleLog();
 
-            const messages = await client.messagesFind("Foo");
-            consoleLog("Messages");
-            consoleLog("\tIndex:", messages.index);
-            consoleLog("\tMax Results:", messages.maxResults);
-            consoleLog("\tCount:", messages.count);
-            consoleLog("\tMessage Ids:", messages.messageIds);
-            consoleLog();
-
             const children = await client.messageChildren(tipsResponse.tipMessageIds[0]);
             consoleLog("Children");
             consoleLog("\tMessage Id:", children.messageId);
@@ -104,20 +97,6 @@
             consoleLog("\tOutput Index:", output.outputIndex);
             consoleLog("\tIs Spent:", output.isSpent);
             Iota.logOutput("\t", output.output);
-            consoleLog();
-
-            const address = await client.addressEd25519(output.output.address.address);
-            consoleLog("Address");
-            consoleLog("\tAddress:", address.address);
-            consoleLog("\tBalance:", address.balance);
-            consoleLog();
-
-            const addressOutputs = await client.addressEd25519Outputs(output.output.address.address);
-            consoleLog("Address Outputs");
-            consoleLog("\tAddress:", addressOutputs.address);
-            consoleLog("\tMax Results:", addressOutputs.maxResults);
-            consoleLog("\tCount:", addressOutputs.count);
-            consoleLog("\tOutput Ids:", addressOutputs.outputIds);
             consoleLog();
 
             await doTransfer(client, info);
@@ -143,8 +122,9 @@
             const genesisEd25519Address = new Iota.Ed25519Address(genesisWalletKeyPair.publicKey);
             const genesisWalletAddress = genesisEd25519Address.toAddress();
             const genesisWalletAddressHex = IotaUtil.Converter.bytesToHex(genesisWalletAddress);
+            const genesisWalletAddressBech32 = Iota.Bech32Helper.toBech32(Iota.ED25519_ADDRESS_TYPE, genesisWalletAddress, nodeInfo.bech32HRP);
             consoleLog("\tAddress Ed25519", genesisWalletAddressHex);
-            consoleLog("\tAddress Bech32", Iota.Bech32Helper.toBech32(Iota.ED25519_ADDRESS_TYPE, genesisWalletAddress, nodeInfo.bech32HRP));
+            consoleLog("\tAddress Bech32", genesisWalletAddressBech32);
 
             // Create a new seed for the wallet
             const walletSeed = new Iota.Ed25519Seed(IotaUtil.Converter.hexToBytes("e57fb750f3a3a67969ece5bd9ae7eef5b2256a818b2aac458941f7274985a410"));
@@ -155,25 +135,27 @@
             const walletEd25519Address = new Iota.Ed25519Address(walletAddressSeed.keyPair().publicKey);
             const newAddress = walletEd25519Address.toAddress();
             const newAddressHex = IotaUtil.Converter.bytesToHex(newAddress);
+            const newAddressBech32 = Iota.Bech32Helper.toBech32(Iota.ED25519_ADDRESS_TYPE, newAddress, nodeInfo.bech32HRP);
 
             consoleLog("Wallet 1");
             consoleLog("\tSeed:", IotaUtil.Converter.bytesToHex(walletSeed.toBytes()));
             consoleLog("\tPath:", walletPath.toString());
             consoleLog(`\tAddress Ed25519 ${walletPath.toString()}:`, newAddressHex);
-            consoleLog(`\tAddress Bech32 ${walletPath.toString()}:`, Iota.Bech32Helper.toBech32(Iota.ED25519_ADDRESS_TYPE, newAddress, nodeInfo.bech32HRP));
+            consoleLog(`\tAddress Bech32 ${walletPath.toString()}:`, newAddressBech32);
             consoleLog();
 
             // Because we are using the genesis address we must use send advanced as the input address is
             // not calculated from a Bip32 path, if you were doing a wallet to wallet transfer you can just use send
             // which calculates all the inputs/outputs for you
-            const genesisAddressOutputs = await client.addressEd25519Outputs(genesisWalletAddressHex);
+            const indexerPlugin = new Iota.IndexerPluginClient(client);
+            const genesisAddressOutputs = await indexerPlugin.outputs({ addressBech32: genesisWalletAddressBech32 });
 
             const inputsWithKeyPairs = [];
 
             let totalGenesis = 0;
 
-            for (let i = 0; i < genesisAddressOutputs.outputIds.length; i++) {
-                const output = await client.output(genesisAddressOutputs.outputIds[i]);
+            for (let i = 0; i < genesisAddressOutputs.data.length; i++) {
+                const output = await client.output(genesisAddressOutputs.data[i]);
                 if (!output.isSpent) {
                     inputsWithKeyPairs.push({
                         input: {
@@ -209,7 +191,7 @@
                 inputsWithKeyPairs,
                 outputs,
                 {
-                    key: IotaUtil.Converter.utf8ToBytes("WALLET"),
+                    tag: IotaUtil.Converter.utf8ToBytes("WALLET"),
                     data: IotaUtil.Converter.utf8ToBytes("Not trinity")
                 }
             );

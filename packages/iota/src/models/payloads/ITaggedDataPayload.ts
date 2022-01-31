@@ -14,7 +14,7 @@ export interface ITaggedDataPayload extends ITypeBase<5> {
     /**
      * The tag to use to categorize the data.
      */
-    tag?: string;
+    tag: string;
 
     /**
      * The index data.

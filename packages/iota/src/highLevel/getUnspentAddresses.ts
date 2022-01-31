@@ -1,13 +1,15 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 import { Bip32Path } from "@iota/crypto.js";
-import { Converter } from "@iota/util.js";
 import { Ed25519Address } from "../addressTypes/ed25519Address";
+import { IndexerPluginClient } from "../clients/plugins/indexerPluginClient";
 import { SingleNodeClient } from "../clients/singleNodeClient";
 import { ED25519_ADDRESS_TYPE } from "../models/addresses/IEd25519Address";
+import type { IOutputsResponse } from "../models/api/plugins/indexer/IOutputsResponse";
 import type { IBip44GeneratorState } from "../models/IBip44GeneratorState";
 import type { IClient } from "../models/IClient";
 import type { ISeed } from "../models/ISeed";
+import { EXTENDED_OUTPUT_TYPE } from "../models/outputs/IExtendedOutput";
 import { Bech32Helper } from "../utils/bech32Helper";
 import { generateBip44Address } from "./addresses";
 
@@ -82,7 +84,8 @@ export async function getUnspentAddressesWithAddressGenerator<T>(
 > {
     const localClient = typeof client === "string" ? new SingleNodeClient(client) : client;
 
-    const nodeInfo = await localClient.info();
+    const bech32Hrp = await localClient.bech32Hrp();
+
     const localRequiredLimit = addressOptions?.requiredCount ?? Number.MAX_SAFE_INTEGER;
     const localZeroCount = addressOptions?.zeroCount ?? 20;
     let finished = false;
@@ -101,21 +104,22 @@ export async function getUnspentAddressesWithAddressGenerator<T>(
 
         const ed25519Address = new Ed25519Address(addressSeed.keyPair().publicKey);
         const addressBytes = ed25519Address.toAddress();
-        const addressHex = Converter.bytesToHex(addressBytes);
-        const addressResponse = await localClient.addressEd25519(addressHex);
+        const addressBech32 = Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, addressBytes, bech32Hrp);
+
+        const balance = await calculateAddressBalance(localClient, addressBech32);
 
         // If there is no balance we increment the counter and end
         // the text when we have reached the count
-        if (addressResponse.balance === 0) {
+        if (balance === 0) {
             zeroBalance++;
             if (zeroBalance >= localZeroCount) {
                 finished = true;
             }
         } else {
             allUnspent.push({
-                address: Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, addressBytes, nodeInfo.bech32HRP),
+                address: addressBech32,
                 path,
-                balance: addressResponse.balance
+                balance
             });
 
             if (allUnspent.length === localRequiredLimit) {
@@ -125,4 +129,36 @@ export async function getUnspentAddressesWithAddressGenerator<T>(
     } while (!finished);
 
     return allUnspent;
+}
+
+/**
+ * Calculate address balance for an address.
+ * @param client The client for communications.
+ * @param addressBech32 The address in bech32 format.
+ * @returns The unspent balance.
+ */
+export async function calculateAddressBalance(client: IClient, addressBech32: string): Promise<number> {
+    const indexerPlugin = new IndexerPluginClient(client);
+
+    let count = 0;
+    let nextOffset;
+    let balance = 0;
+    do {
+        const outputResponse: IOutputsResponse =
+            await indexerPlugin.outputs({
+                addressBech32,
+                pageSize: 20,
+                offset: nextOffset
+            });
+        count = outputResponse.count;
+        nextOffset = outputResponse.offset;
+        for (const outputId of outputResponse.data) {
+            const output = await client.output(outputId);
+            if (output.output.type === EXTENDED_OUTPUT_TYPE && !output.isSpent) {
+                balance += output.output.amount;
+            }
+        }
+    } while (count > 0 && nextOffset);
+
+    return balance;
 }

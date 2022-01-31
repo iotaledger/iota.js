@@ -15,12 +15,13 @@ export class SingleNodeClient {
      * @param options Options for the client.
      */
     constructor(endpoint, options) {
-        var _a, _b, _c;
+        var _a, _b, _c, _d;
         if (!endpoint) {
             throw new Error("The endpoint can not be empty");
         }
         this._endpoint = endpoint.replace(/\/+$/, "");
-        this._basePath = (_a = options === null || options === void 0 ? void 0 : options.basePath) !== null && _a !== void 0 ? _a : "/api/v1/";
+        this._basePath = (_a = options === null || options === void 0 ? void 0 : options.basePath) !== null && _a !== void 0 ? _a : "/api/v2/";
+        this._basePluginPath = (_b = options === null || options === void 0 ? void 0 : options.basePluginPath) !== null && _b !== void 0 ? _b : "/api/plugins/";
         this._powProvider = options === null || options === void 0 ? void 0 : options.powProvider;
         this._timeout = options === null || options === void 0 ? void 0 : options.timeout;
         this._userName = options === null || options === void 0 ? void 0 : options.userName;
@@ -29,7 +30,7 @@ export class SingleNodeClient {
         if (this._userName && this._password && !this._endpoint.startsWith("https")) {
             throw new Error("Basic authentication requires the endpoint to be https");
         }
-        if (this._userName && this._password && (((_b = this._headers) === null || _b === void 0 ? void 0 : _b.authorization) || ((_c = this._headers) === null || _c === void 0 ? void 0 : _c.Authorization))) {
+        if (this._userName && this._password && (((_c = this._headers) === null || _c === void 0 ? void 0 : _c.authorization) || ((_d = this._headers) === null || _d === void 0 ? void 0 : _d.Authorization))) {
             throw new Error("You can not supply both user/pass and authorization header");
         }
     }
@@ -52,14 +53,14 @@ export class SingleNodeClient {
      * @returns The node information.
      */
     async info() {
-        return this.fetchJson("get", "info");
+        return this.fetchJson(this._basePath, "get", "info");
     }
     /**
      * Get the tips from the node.
      * @returns The tips.
      */
     async tips() {
-        return this.fetchJson("get", "tips");
+        return this.fetchJson(this._basePath, "get", "tips");
     }
     /**
      * Get the message data by id.
@@ -67,7 +68,7 @@ export class SingleNodeClient {
      * @returns The message data.
      */
     async message(messageId) {
-        return this.fetchJson("get", `messages/${messageId}`);
+        return this.fetchJson(this._basePath, "get", `messages/${messageId}`);
     }
     /**
      * Get the message metadata by id.
@@ -75,7 +76,7 @@ export class SingleNodeClient {
      * @returns The message metadata.
      */
     async messageMetadata(messageId) {
-        return this.fetchJson("get", `messages/${messageId}/metadata`);
+        return this.fetchJson(this._basePath, "get", `messages/${messageId}/metadata`);
     }
     /**
      * Get the message raw data by id.
@@ -83,7 +84,7 @@ export class SingleNodeClient {
      * @returns The message raw data.
      */
     async messageRaw(messageId) {
-        return this.fetchBinary("get", `messages/${messageId}/raw`);
+        return this.fetchBinary(this._basePath, "get", `messages/${messageId}/raw`);
     }
     /**
      * Submit message.
@@ -116,7 +117,7 @@ export class SingleNodeClient {
             const nonce = await this._powProvider.pow(messageBytes, minPoWScore);
             message.nonce = nonce.toString();
         }
-        const response = await this.fetchJson("post", "messages", message);
+        const response = await this.fetchJson(this._basePath, "post", "messages", message);
         return response.messageId;
     }
     /**
@@ -134,18 +135,8 @@ export class SingleNodeClient {
             const nonce = await this._powProvider.pow(message, minPoWScore);
             BigIntHelper.write8(bigInt(nonce), message, message.length - 8);
         }
-        const response = await this.fetchBinary("post", "messages", message);
+        const response = await this.fetchBinary(this._basePath, "post", "messages", message);
         return response.messageId;
-    }
-    /**
-     * Find messages by index.
-     * @param indexationKey The index value as a byte array or UTF8 string.
-     * @returns The messageId.
-     */
-    async messagesFind(indexationKey) {
-        return this.fetchJson("get", `messages?index=${typeof indexationKey === "string"
-            ? Converter.utf8ToHex(indexationKey)
-            : Converter.bytesToHex(indexationKey)}`);
     }
     /**
      * Get the children of a message.
@@ -153,7 +144,7 @@ export class SingleNodeClient {
      * @returns The messages children.
      */
     async messageChildren(messageId) {
-        return this.fetchJson("get", `messages/${messageId}/children`);
+        return this.fetchJson(this._basePath, "get", `messages/${messageId}/children`);
     }
     /**
      * Get the message that was included in the ledger for a transaction.
@@ -161,7 +152,7 @@ export class SingleNodeClient {
      * @returns The message.
      */
     async transactionIncludedMessage(transactionId) {
-        return this.fetchJson("get", `transactions/${transactionId}/included-message`);
+        return this.fetchJson(this._basePath, "get", `transactions/${transactionId}/included-message`);
     }
     /**
      * Find an output by its identifier.
@@ -169,135 +160,7 @@ export class SingleNodeClient {
      * @returns The output details.
      */
     async output(outputId) {
-        return this.fetchJson("get", `outputs/${outputId}`);
-    }
-    /**
-     * Find outputs by type.
-     * @param type The type of the output to get.
-     * @param issuer The issuer of the output.
-     * @param sender The sender of the output.
-     * @param index The index associated with the output.
-     * @returns The outputs with the requested parameters.
-     */
-    async outputs(type, issuer, sender, index) {
-        const queryParams = [];
-        if (type !== undefined) {
-            queryParams.push(`type=${type}`);
-        }
-        if (issuer !== undefined) {
-            queryParams.push(`issuer=${issuer}`);
-        }
-        if (sender !== undefined) {
-            queryParams.push(`sender=${sender}`);
-        }
-        if (index !== undefined) {
-            queryParams.push(`index=${index}`);
-        }
-        return this.fetchJson("get", `outputs${this.combineQueryParams(queryParams)}`);
-    }
-    /**
-     * Get the address details.
-     * @param addressBech32 The address to get the details for.
-     * @returns The address details.
-     */
-    async address(addressBech32) {
-        return this.fetchJson("get", `addresses/${addressBech32}`);
-    }
-    /**
-     * Get the address outputs.
-     * @param addressBech32 The address to get the outputs for.
-     * @param type Filter the type of outputs you are looking up, defaults to all.
-     * @returns The address outputs.
-     */
-    async addressOutputs(addressBech32, type) {
-        const queryParams = [];
-        if (type !== undefined) {
-            queryParams.push(`type=${type}`);
-        }
-        return this.fetchJson("get", `addresses/${addressBech32}/outputs${this.combineQueryParams(queryParams)}`);
-    }
-    /**
-     * Get the address detail using ed25519 address.
-     * @param addressEd25519 The address to get the details for.
-     * @returns The address details.
-     */
-    async addressEd25519(addressEd25519) {
-        if (!Converter.isHex(addressEd25519)) {
-            throw new Error("The supplied address does not appear to be hex format");
-        }
-        return this.fetchJson("get", `addresses/ed25519/${addressEd25519}`);
-    }
-    /**
-     * Get the address outputs using ed25519 address.
-     * @param addressEd25519 The address to get the outputs for.
-     * @param type Filter the type of outputs you are looking up, defaults to all.
-     * @returns The address outputs.
-     */
-    async addressEd25519Outputs(addressEd25519, type) {
-        if (!Converter.isHex(addressEd25519)) {
-            throw new Error("The supplied address does not appear to be hex format");
-        }
-        const queryParams = [];
-        if (type !== undefined) {
-            queryParams.push(`type=${type}`);
-        }
-        return this.fetchJson("get", `addresses/ed25519/${addressEd25519}/outputs${this.combineQueryParams(queryParams)}`);
-    }
-    /**
-     * Get the address outputs for an alias address.
-     * @param addressAlias The address to get the outputs for.
-     * @param type Filter the type of outputs you are looking up, defaults to all.
-     * @returns The address outputs.
-     */
-    async addressAliasOutputs(addressAlias, type) {
-        if (!Converter.isHex(addressAlias)) {
-            throw new Error("The supplied address does not appear to be hex format");
-        }
-        const queryParams = [];
-        if (type !== undefined) {
-            queryParams.push(`type=${type}`);
-        }
-        return this.fetchJson("get", `addresses/alias/${addressAlias}/outputs${this.combineQueryParams(queryParams)}`);
-    }
-    /**
-     * Get the address outputs for an NFT address.
-     * @param addressNft The address to get the outputs for.
-     * @param type Filter the type of outputs you are looking up, defaults to all.
-     * @returns The address outputs.
-     */
-    async addressNftOutputs(addressNft, type) {
-        if (!Converter.isHex(addressNft)) {
-            throw new Error("The supplied address does not appear to be hex format");
-        }
-        const queryParams = [];
-        if (type !== undefined) {
-            queryParams.push(`type=${type}`);
-        }
-        return this.fetchJson("get", `addresses/nft/${addressNft}/outputs${this.combineQueryParams(queryParams)}`);
-    }
-    /**
-     * Get the outputs for an alias.
-     * @param aliasId The alias to get the outputs for.
-     * @returns The outputs.
-     */
-    async alias(aliasId) {
-        return this.fetchJson("get", `aliases/${aliasId}`);
-    }
-    /**
-     * Get the outputs for an NFT.
-     * @param nftId The NFT to get the outputs for.
-     * @returns The outputs.
-     */
-    async nft(nftId) {
-        return this.fetchJson("get", `nft/${nftId}`);
-    }
-    /**
-     * Get the outputs for a foundry.
-     * @param foundryId The foundry to get the outputs for.
-     * @returns The outputs.
-     */
-    async foundry(foundryId) {
-        return this.fetchJson("get", `foundries/${foundryId}`);
+        return this.fetchJson(this._basePath, "get", `outputs/${outputId}`);
     }
     /**
      * Get the requested milestone.
@@ -305,7 +168,7 @@ export class SingleNodeClient {
      * @returns The milestone details.
      */
     async milestone(index) {
-        return this.fetchJson("get", `milestones/${index}`);
+        return this.fetchJson(this._basePath, "get", `milestones/${index}`);
     }
     /**
      * Get the requested milestone utxo changes.
@@ -313,14 +176,14 @@ export class SingleNodeClient {
      * @returns The milestone utxo changes details.
      */
     async milestoneUtxoChanges(index) {
-        return this.fetchJson("get", `milestones/${index}/utxo-changes`);
+        return this.fetchJson(this._basePath, "get", `milestones/${index}/utxo-changes`);
     }
     /**
      * Get the current treasury output.
      * @returns The details for the treasury.
      */
     async treasury() {
-        return this.fetchJson("get", "treasury");
+        return this.fetchJson(this._basePath, "get", "treasury");
     }
     /**
      * Get all the stored receipts or those for a given migrated at index.
@@ -328,14 +191,14 @@ export class SingleNodeClient {
      * @returns The stored receipts.
      */
     async receipts(migratedAt) {
-        return this.fetchJson("get", `receipts${migratedAt !== undefined ? `/${migratedAt}` : ""}`);
+        return this.fetchJson(this._basePath, "get", `receipts${migratedAt !== undefined ? `/${migratedAt}` : ""}`);
     }
     /**
      * Get the list of peers.
      * @returns The list of peers.
      */
     async peers() {
-        return this.fetchJson("get", "peers");
+        return this.fetchJson(this._basePath, "get", "peers");
     }
     /**
      * Add a new peer.
@@ -344,7 +207,7 @@ export class SingleNodeClient {
      * @returns The details for the created peer.
      */
     async peerAdd(multiAddress, alias) {
-        return this.fetchJson("post", "peers", {
+        return this.fetchJson(this._basePath, "post", "peers", {
             multiAddress,
             alias
         });
@@ -356,7 +219,7 @@ export class SingleNodeClient {
      */
     async peerDelete(peerId) {
         // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
-        return this.fetchJson("delete", `peers/${peerId}`);
+        return this.fetchJson(this._basePath, "delete", `peers/${peerId}`);
     }
     /**
      * Get a peer.
@@ -364,12 +227,36 @@ export class SingleNodeClient {
      * @returns The details for the created peer.
      */
     async peer(peerId) {
-        return this.fetchJson("get", `peers/${peerId}`);
+        return this.fetchJson(this._basePath, "get", `peers/${peerId}`);
+    }
+    /**
+     * Get the bech 32 human readable part.
+     * @returns The bech 32 human readable part.
+     */
+    async bech32Hrp() {
+        if (this._bech32Hrp === undefined) {
+            const info = await this.info();
+            this._bech32Hrp = info.bech32HRP;
+        }
+        return this._bech32Hrp;
+    }
+    /**
+     * Extension method which provides request methods for plugins.
+     * @param basePluginPath The base path for the plugin eg indexer/v1/ .
+     * @param method The http method.
+     * @param methodPath The path for the plugin request.
+     * @param queryParams Additional query params for the request.
+     * @param request The request object.
+     * @returns The response object.
+     */
+    async pluginFetch(basePluginPath, method, methodPath, queryParams, request) {
+        return this.fetchJson(this._basePluginPath, method, `${basePluginPath}${methodPath}${this.combineQueryParams(queryParams)}`, request, false);
     }
     /**
      * Perform a request and just return the status.
      * @param route The route of the request.
      * @returns The response.
+     * @internal
      */
     async fetchStatus(route) {
         const response = await this.fetchWithTimeout("get", route);
@@ -377,13 +264,16 @@ export class SingleNodeClient {
     }
     /**
      * Perform a request in json format.
+     * @param basePath The base path for the request.
      * @param method The http method.
      * @param route The route of the request.
      * @param requestData Request to send to the endpoint.
+     * @param responseIsWrapped The response is wrapped in a data envelope.
      * @returns The response.
+     * @internal
      */
-    async fetchJson(method, route, requestData) {
-        const response = await this.fetchWithTimeout(method, `${this._basePath}${route}`, { "Content-Type": "application/json" }, requestData ? JSON.stringify(requestData) : undefined);
+    async fetchJson(basePath, method, route, requestData, responseIsWrapped = true) {
+        const response = await this.fetchWithTimeout(method, `${basePath}${route}`, { "Content-Type": "application/json" }, requestData ? JSON.stringify(requestData) : undefined);
         let errorMessage;
         let errorCode;
         if (response.ok) {
@@ -392,13 +282,25 @@ export class SingleNodeClient {
                 return {};
             }
             try {
-                const responseData = await response.json();
-                if (responseData.error) {
-                    errorMessage = responseData.error.message;
-                    errorCode = responseData.error.code;
+                if (responseIsWrapped) {
+                    const responseData = await response.json();
+                    if (responseData.error) {
+                        errorMessage = responseData.error.message;
+                        errorCode = responseData.error.code;
+                    }
+                    else {
+                        return responseData.data;
+                    }
                 }
                 else {
-                    return responseData.data;
+                    const responseData = await response.json();
+                    if (responseData.error) {
+                        errorMessage = responseData.error.message;
+                        errorCode = responseData.error.code;
+                    }
+                    else {
+                        return responseData;
+                    }
                 }
             }
             catch { }
@@ -433,14 +335,16 @@ export class SingleNodeClient {
     }
     /**
      * Perform a request for binary data.
+     * @param basePath The base path for the request.
      * @param method The http method.
      * @param route The route of the request.
      * @param requestData Request to send to the endpoint.
      * @returns The response.
+     * @internal
      */
-    async fetchBinary(method, route, requestData) {
+    async fetchBinary(basePath, method, route, requestData) {
         var _a, _b, _c;
-        const response = await this.fetchWithTimeout(method, `${this._basePath}${route}`, { "Content-Type": "application/octet-stream" }, requestData);
+        const response = await this.fetchWithTimeout(method, `${basePath}${route}`, { "Content-Type": "application/octet-stream" }, requestData);
         let responseData;
         if (response.ok) {
             if (method === "get") {
@@ -515,7 +419,7 @@ export class SingleNodeClient {
      * @returns The combined query params.
      */
     combineQueryParams(queryParams) {
-        return queryParams.length > 0 ? `?${queryParams.join("&")}` : "";
+        return queryParams && queryParams.length > 0 ? `?${queryParams.join("&")}` : "";
     }
     /**
      * Get the pow info from the node.

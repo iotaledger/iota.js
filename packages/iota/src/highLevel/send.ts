@@ -2,7 +2,9 @@
 // SPDX-License-Identifier: Apache-2.0
 import { Bip32Path } from "@iota/crypto.js";
 import { Converter } from "@iota/util.js";
+import { ADDRESS_UNLOCK_CONDITION_TYPE } from "..";
 import { Ed25519Address } from "../addressTypes/ed25519Address";
+import { IndexerPluginClient } from "../clients/plugins/indexerPluginClient";
 import { SingleNodeClient } from "../clients/singleNodeClient";
 import { ED25519_ADDRESS_TYPE } from "../models/addresses/IEd25519Address";
 import type { IBip44GeneratorState } from "../models/IBip44GeneratorState";
@@ -38,7 +40,7 @@ export async function send(
     addressBech32: string,
     amount: number,
     taggedData?: {
-        tag?: Uint8Array | string;
+        tag: Uint8Array | string;
         data?: Uint8Array | string;
     },
     addressOptions?: {
@@ -111,7 +113,7 @@ export async function sendMultiple(
         amount: number;
     }[],
     taggedData?: {
-        tag?: Uint8Array | string;
+        tag: Uint8Array | string;
         data?: Uint8Array | string;
     },
     addressOptions?: {
@@ -124,9 +126,9 @@ export async function sendMultiple(
 }> {
     const localClient = typeof client === "string" ? new SingleNodeClient(client) : client;
 
-    const nodeInfo = await localClient.info();
+    const bech32Hrp = await localClient.bech32Hrp();
     const hexOutputs = outputs.map(output => {
-        const bech32Details = Bech32Helper.fromBech32(output.addressBech32, nodeInfo.bech32HRP);
+        const bech32Details = Bech32Helper.fromBech32(output.addressBech32, bech32Hrp);
         if (!bech32Details) {
             throw new Error("Unable to decode bech32 address");
         }
@@ -232,7 +234,7 @@ export async function sendWithAddressGenerator<T>(
         amount: number;
     }[],
     taggedData?: {
-        tag?: Uint8Array | string;
+        tag: Uint8Array | string;
         data?: Uint8Array | string;
     },
     zeroCount?: number
@@ -275,6 +277,8 @@ export async function calculateInputs<T>(
 > {
     const localClient = typeof client === "string" ? new SingleNodeClient(client) : client;
 
+    const bech32Hrp = await localClient.bech32Hrp();
+
     let requiredBalance = 0;
     for (const output of outputs) {
         requiredBalance += output.amount;
@@ -295,8 +299,11 @@ export async function calculateInputs<T>(
 
         const addressKeyPair = addressSeed.keyPair();
         const ed25519Address = new Ed25519Address(addressKeyPair.publicKey);
-        const address = Converter.bytesToHex(ed25519Address.toAddress());
-        const addressOutputIds = await localClient.addressEd25519Outputs(address);
+        const addressBytes = ed25519Address.toAddress();
+
+        const indexerPlugin = new IndexerPluginClient(client);
+        const addressOutputIds = await indexerPlugin.outputs(
+            { addressBech32: Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, addressBytes, bech32Hrp) });
 
         if (addressOutputIds.count === 0) {
             zeroBalance++;
@@ -304,7 +311,7 @@ export async function calculateInputs<T>(
                 finished = true;
             }
         } else {
-            for (const addressOutputId of addressOutputIds.outputIds) {
+            for (const addressOutputId of addressOutputIds.data) {
                 const addressOutput = await localClient.output(addressOutputId);
 
                 if (!addressOutput.isSpent && consumedBalance < requiredBalance) {
@@ -334,11 +341,16 @@ export async function calculateInputs<T>(
                                 consumedBalance - requiredBalance > 0 &&
                                 addressOutput.output.type === EXTENDED_OUTPUT_TYPE
                             ) {
-                                outputs.push({
-                                    amount: consumedBalance - requiredBalance,
-                                    address: addressOutput.output.address.address,
-                                    addressType: addressOutput.output.address.type
-                                });
+                                const addressUnlockCondition = addressOutput.output.unlockConditions
+                                    .find(u => u.type === ADDRESS_UNLOCK_CONDITION_TYPE);
+                                if (addressUnlockCondition &&
+                                    addressUnlockCondition.type === ADDRESS_UNLOCK_CONDITION_TYPE) {
+                                    outputs.push({
+                                        amount: consumedBalance - requiredBalance,
+                                        address: addressUnlockCondition.address.address,
+                                        addressType: addressUnlockCondition.address.type
+                                    });
+                                }
                             }
                             finished = true;
                         }

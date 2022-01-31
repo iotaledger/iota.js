@@ -980,6 +980,10 @@
         UINT8_SIZE + // tag length
         UINT32_SIZE; // data length
     /**
+     * The minimum length of a tag.
+     */
+    const MIN_TAG_LENGTH = 1;
+    /**
      * The maximum length of a tag.
      */
     const MAX_TAG_LENGTH = 64;
@@ -997,10 +1001,7 @@
             throw new Error(`Type mismatch in payloadTaggedData ${type}`);
         }
         const tagLength = readStream.readUInt8("payloadTaggedData.tagLength");
-        let tag;
-        if (tagLength > 0) {
-            tag = readStream.readFixedHex("payloadTaggedData.tag", tagLength);
-        }
+        const tag = readStream.readFixedHex("payloadTaggedData.tag", tagLength);
         let data;
         const dataLength = readStream.readUInt32("payloadTaggedData.dataLength");
         if (dataLength > 0) {
@@ -1018,17 +1019,15 @@
      * @param object The object to serialize.
      */
     function serializeTaggedDataPayload(writeStream, object) {
+        if (object.tag.length < MIN_TAG_LENGTH) {
+            throw new Error(`The tag length is ${object.tag.length / 2}, which is less than the minimum size of ${MIN_TAG_LENGTH}`);
+        }
         if (object.tag && object.tag.length / 2 > MAX_TAG_LENGTH) {
             throw new Error(`The tag length is ${object.tag.length / 2}, which exceeds the maximum size of ${MAX_TAG_LENGTH}`);
         }
         writeStream.writeUInt32("payloadTaggedData.type", object.type);
-        if (object.tag) {
-            writeStream.writeUInt8("payloadTaggedData.tagLength", object.tag.length / 2);
-            writeStream.writeFixedHex("payloadTaggedData.tag", object.tag.length / 2, object.tag);
-        }
-        else {
-            writeStream.writeUInt8("payloadTaggedData.tagLength", 0);
-        }
+        writeStream.writeUInt8("payloadTaggedData.tagLength", object.tag.length / 2);
+        writeStream.writeFixedHex("payloadTaggedData.tag", object.tag.length / 2, object.tag);
         if (object.data) {
             writeStream.writeUInt32("payloadTaggedData.dataLength", object.data.length / 2);
             writeStream.writeFixedHex("payloadTaggedData.data", object.data.length / 2, object.data);
@@ -1535,7 +1534,9 @@
         writeStream.writeFixedHex("aliasOutput.aliasId", ALIAS_ID_LENGTH, object.aliasId);
         writeStream.writeUInt32("aliasOutput.stateIndex", object.stateIndex);
         writeStream.writeUInt32("aliasOutput.stateMetadataLength", object.stateMetadata.length / 2);
-        writeStream.writeFixedHex("aliasOutput.stateMetadata", object.stateMetadata.length / 2, object.stateMetadata);
+        if (object.stateMetadata.length > 0) {
+            writeStream.writeFixedHex("aliasOutput.stateMetadata", object.stateMetadata.length / 2, object.stateMetadata);
+        }
         writeStream.writeUInt32("aliasOutput.foundryCounter", object.foundryCounter);
         serializeUnlockConditions(writeStream, object.unlockConditions);
         serializeFeatureBlocks(writeStream, object.blocks);
@@ -1545,7 +1546,6 @@
      * The minimum length of a extended output binary representation.
      */
     const MIN_EXTENDED_OUTPUT_LENGTH = SMALL_TYPE_LENGTH + // Type
-        MIN_ADDRESS_LENGTH + // Address
         UINT64_SIZE + // Amount
         MIN_NATIVE_TOKENS_LENGTH + // Native Tokens
         MIN_UNLOCK_CONDITIONS_LENGTH + // Unlock conditions
@@ -1563,7 +1563,6 @@
         if (type !== EXTENDED_OUTPUT_TYPE) {
             throw new Error(`Type mismatch in extendedOutput ${type}`);
         }
-        const address = deserializeAddress(readStream);
         const amount = readStream.readUInt64("extendedOutput.amount");
         const nativeTokens = deserializeNativeTokens(readStream);
         const unlockConditions = deserializeUnlockConditions(readStream);
@@ -1571,7 +1570,6 @@
         return {
             type: EXTENDED_OUTPUT_TYPE,
             amount: Number(amount),
-            address,
             nativeTokens,
             unlockConditions,
             blocks: featureBlocks
@@ -1584,7 +1582,6 @@
      */
     function serializeExtendedOutput(writeStream, object) {
         writeStream.writeUInt8("extendedOutput.type", object.type);
-        serializeAddress(writeStream, object.address);
         writeStream.writeUInt64("extendedOutput.amount", bigInt__default["default"](object.amount));
         serializeNativeTokens(writeStream, object.nativeTokens);
         serializeUnlockConditions(writeStream, object.unlockConditions);
@@ -1667,7 +1664,6 @@
      * The minimum length of a foundry output binary representation.
      */
     const MIN_FOUNDRY_OUTPUT_LENGTH = SMALL_TYPE_LENGTH + // Type
-        MIN_ADDRESS_LENGTH + // Address
         UINT64_SIZE + // Amount
         MIN_NATIVE_TOKENS_LENGTH + // Native tokens
         UINT32_SIZE + // Serial Number
@@ -1690,7 +1686,6 @@
         if (type !== FOUNDRY_OUTPUT_TYPE) {
             throw new Error(`Type mismatch in foundryOutput ${type}`);
         }
-        const address = deserializeAddress(readStream);
         const amount = readStream.readUInt64("foundryOutput.amount");
         const nativeTokens = deserializeNativeTokens(readStream);
         const serialNumber = readStream.readUInt32("foundryOutput.serialNumber");
@@ -1704,7 +1699,6 @@
             type: FOUNDRY_OUTPUT_TYPE,
             amount: Number(amount),
             nativeTokens,
-            address,
             serialNumber,
             tokenTag,
             circulatingSupply: circulatingSupply.toString(),
@@ -1721,7 +1715,6 @@
      */
     function serializeFoundryOutput(writeStream, object) {
         writeStream.writeUInt8("foundryOutput.type", object.type);
-        serializeAddress(writeStream, object.address);
         writeStream.writeUInt64("foundryOutput.amount", bigInt__default["default"](object.amount));
         serializeNativeTokens(writeStream, object.nativeTokens);
         writeStream.writeUInt32("foundryOutput.serialNumber", object.serialNumber);
@@ -2554,12 +2547,13 @@
          * @param options Options for the client.
          */
         constructor(endpoint, options) {
-            var _a, _b, _c;
+            var _a, _b, _c, _d;
             if (!endpoint) {
                 throw new Error("The endpoint can not be empty");
             }
             this._endpoint = endpoint.replace(/\/+$/, "");
-            this._basePath = (_a = options === null || options === void 0 ? void 0 : options.basePath) !== null && _a !== void 0 ? _a : "/api/v1/";
+            this._basePath = (_a = options === null || options === void 0 ? void 0 : options.basePath) !== null && _a !== void 0 ? _a : "/api/v2/";
+            this._basePluginPath = (_b = options === null || options === void 0 ? void 0 : options.basePluginPath) !== null && _b !== void 0 ? _b : "/api/plugins/";
             this._powProvider = options === null || options === void 0 ? void 0 : options.powProvider;
             this._timeout = options === null || options === void 0 ? void 0 : options.timeout;
             this._userName = options === null || options === void 0 ? void 0 : options.userName;
@@ -2568,7 +2562,7 @@
             if (this._userName && this._password && !this._endpoint.startsWith("https")) {
                 throw new Error("Basic authentication requires the endpoint to be https");
             }
-            if (this._userName && this._password && (((_b = this._headers) === null || _b === void 0 ? void 0 : _b.authorization) || ((_c = this._headers) === null || _c === void 0 ? void 0 : _c.Authorization))) {
+            if (this._userName && this._password && (((_c = this._headers) === null || _c === void 0 ? void 0 : _c.authorization) || ((_d = this._headers) === null || _d === void 0 ? void 0 : _d.Authorization))) {
                 throw new Error("You can not supply both user/pass and authorization header");
             }
         }
@@ -2591,14 +2585,14 @@
          * @returns The node information.
          */
         async info() {
-            return this.fetchJson("get", "info");
+            return this.fetchJson(this._basePath, "get", "info");
         }
         /**
          * Get the tips from the node.
          * @returns The tips.
          */
         async tips() {
-            return this.fetchJson("get", "tips");
+            return this.fetchJson(this._basePath, "get", "tips");
         }
         /**
          * Get the message data by id.
@@ -2606,7 +2600,7 @@
          * @returns The message data.
          */
         async message(messageId) {
-            return this.fetchJson("get", `messages/${messageId}`);
+            return this.fetchJson(this._basePath, "get", `messages/${messageId}`);
         }
         /**
          * Get the message metadata by id.
@@ -2614,7 +2608,7 @@
          * @returns The message metadata.
          */
         async messageMetadata(messageId) {
-            return this.fetchJson("get", `messages/${messageId}/metadata`);
+            return this.fetchJson(this._basePath, "get", `messages/${messageId}/metadata`);
         }
         /**
          * Get the message raw data by id.
@@ -2622,7 +2616,7 @@
          * @returns The message raw data.
          */
         async messageRaw(messageId) {
-            return this.fetchBinary("get", `messages/${messageId}/raw`);
+            return this.fetchBinary(this._basePath, "get", `messages/${messageId}/raw`);
         }
         /**
          * Submit message.
@@ -2655,7 +2649,7 @@
                 const nonce = await this._powProvider.pow(messageBytes, minPoWScore);
                 message.nonce = nonce.toString();
             }
-            const response = await this.fetchJson("post", "messages", message);
+            const response = await this.fetchJson(this._basePath, "post", "messages", message);
             return response.messageId;
         }
         /**
@@ -2673,18 +2667,8 @@
                 const nonce = await this._powProvider.pow(message, minPoWScore);
                 util_js.BigIntHelper.write8(bigInt__default["default"](nonce), message, message.length - 8);
             }
-            const response = await this.fetchBinary("post", "messages", message);
+            const response = await this.fetchBinary(this._basePath, "post", "messages", message);
             return response.messageId;
-        }
-        /**
-         * Find messages by index.
-         * @param indexationKey The index value as a byte array or UTF8 string.
-         * @returns The messageId.
-         */
-        async messagesFind(indexationKey) {
-            return this.fetchJson("get", `messages?index=${typeof indexationKey === "string"
-            ? util_js.Converter.utf8ToHex(indexationKey)
-            : util_js.Converter.bytesToHex(indexationKey)}`);
         }
         /**
          * Get the children of a message.
@@ -2692,7 +2676,7 @@
          * @returns The messages children.
          */
         async messageChildren(messageId) {
-            return this.fetchJson("get", `messages/${messageId}/children`);
+            return this.fetchJson(this._basePath, "get", `messages/${messageId}/children`);
         }
         /**
          * Get the message that was included in the ledger for a transaction.
@@ -2700,7 +2684,7 @@
          * @returns The message.
          */
         async transactionIncludedMessage(transactionId) {
-            return this.fetchJson("get", `transactions/${transactionId}/included-message`);
+            return this.fetchJson(this._basePath, "get", `transactions/${transactionId}/included-message`);
         }
         /**
          * Find an output by its identifier.
@@ -2708,135 +2692,7 @@
          * @returns The output details.
          */
         async output(outputId) {
-            return this.fetchJson("get", `outputs/${outputId}`);
-        }
-        /**
-         * Find outputs by type.
-         * @param type The type of the output to get.
-         * @param issuer The issuer of the output.
-         * @param sender The sender of the output.
-         * @param index The index associated with the output.
-         * @returns The outputs with the requested parameters.
-         */
-        async outputs(type, issuer, sender, index) {
-            const queryParams = [];
-            if (type !== undefined) {
-                queryParams.push(`type=${type}`);
-            }
-            if (issuer !== undefined) {
-                queryParams.push(`issuer=${issuer}`);
-            }
-            if (sender !== undefined) {
-                queryParams.push(`sender=${sender}`);
-            }
-            if (index !== undefined) {
-                queryParams.push(`index=${index}`);
-            }
-            return this.fetchJson("get", `outputs${this.combineQueryParams(queryParams)}`);
-        }
-        /**
-         * Get the address details.
-         * @param addressBech32 The address to get the details for.
-         * @returns The address details.
-         */
-        async address(addressBech32) {
-            return this.fetchJson("get", `addresses/${addressBech32}`);
-        }
-        /**
-         * Get the address outputs.
-         * @param addressBech32 The address to get the outputs for.
-         * @param type Filter the type of outputs you are looking up, defaults to all.
-         * @returns The address outputs.
-         */
-        async addressOutputs(addressBech32, type) {
-            const queryParams = [];
-            if (type !== undefined) {
-                queryParams.push(`type=${type}`);
-            }
-            return this.fetchJson("get", `addresses/${addressBech32}/outputs${this.combineQueryParams(queryParams)}`);
-        }
-        /**
-         * Get the address detail using ed25519 address.
-         * @param addressEd25519 The address to get the details for.
-         * @returns The address details.
-         */
-        async addressEd25519(addressEd25519) {
-            if (!util_js.Converter.isHex(addressEd25519)) {
-                throw new Error("The supplied address does not appear to be hex format");
-            }
-            return this.fetchJson("get", `addresses/ed25519/${addressEd25519}`);
-        }
-        /**
-         * Get the address outputs using ed25519 address.
-         * @param addressEd25519 The address to get the outputs for.
-         * @param type Filter the type of outputs you are looking up, defaults to all.
-         * @returns The address outputs.
-         */
-        async addressEd25519Outputs(addressEd25519, type) {
-            if (!util_js.Converter.isHex(addressEd25519)) {
-                throw new Error("The supplied address does not appear to be hex format");
-            }
-            const queryParams = [];
-            if (type !== undefined) {
-                queryParams.push(`type=${type}`);
-            }
-            return this.fetchJson("get", `addresses/ed25519/${addressEd25519}/outputs${this.combineQueryParams(queryParams)}`);
-        }
-        /**
-         * Get the address outputs for an alias address.
-         * @param addressAlias The address to get the outputs for.
-         * @param type Filter the type of outputs you are looking up, defaults to all.
-         * @returns The address outputs.
-         */
-        async addressAliasOutputs(addressAlias, type) {
-            if (!util_js.Converter.isHex(addressAlias)) {
-                throw new Error("The supplied address does not appear to be hex format");
-            }
-            const queryParams = [];
-            if (type !== undefined) {
-                queryParams.push(`type=${type}`);
-            }
-            return this.fetchJson("get", `addresses/alias/${addressAlias}/outputs${this.combineQueryParams(queryParams)}`);
-        }
-        /**
-         * Get the address outputs for an NFT address.
-         * @param addressNft The address to get the outputs for.
-         * @param type Filter the type of outputs you are looking up, defaults to all.
-         * @returns The address outputs.
-         */
-        async addressNftOutputs(addressNft, type) {
-            if (!util_js.Converter.isHex(addressNft)) {
-                throw new Error("The supplied address does not appear to be hex format");
-            }
-            const queryParams = [];
-            if (type !== undefined) {
-                queryParams.push(`type=${type}`);
-            }
-            return this.fetchJson("get", `addresses/nft/${addressNft}/outputs${this.combineQueryParams(queryParams)}`);
-        }
-        /**
-         * Get the outputs for an alias.
-         * @param aliasId The alias to get the outputs for.
-         * @returns The outputs.
-         */
-        async alias(aliasId) {
-            return this.fetchJson("get", `aliases/${aliasId}`);
-        }
-        /**
-         * Get the outputs for an NFT.
-         * @param nftId The NFT to get the outputs for.
-         * @returns The outputs.
-         */
-        async nft(nftId) {
-            return this.fetchJson("get", `nft/${nftId}`);
-        }
-        /**
-         * Get the outputs for a foundry.
-         * @param foundryId The foundry to get the outputs for.
-         * @returns The outputs.
-         */
-        async foundry(foundryId) {
-            return this.fetchJson("get", `foundries/${foundryId}`);
+            return this.fetchJson(this._basePath, "get", `outputs/${outputId}`);
         }
         /**
          * Get the requested milestone.
@@ -2844,7 +2700,7 @@
          * @returns The milestone details.
          */
         async milestone(index) {
-            return this.fetchJson("get", `milestones/${index}`);
+            return this.fetchJson(this._basePath, "get", `milestones/${index}`);
         }
         /**
          * Get the requested milestone utxo changes.
@@ -2852,14 +2708,14 @@
          * @returns The milestone utxo changes details.
          */
         async milestoneUtxoChanges(index) {
-            return this.fetchJson("get", `milestones/${index}/utxo-changes`);
+            return this.fetchJson(this._basePath, "get", `milestones/${index}/utxo-changes`);
         }
         /**
          * Get the current treasury output.
          * @returns The details for the treasury.
          */
         async treasury() {
-            return this.fetchJson("get", "treasury");
+            return this.fetchJson(this._basePath, "get", "treasury");
         }
         /**
          * Get all the stored receipts or those for a given migrated at index.
@@ -2867,14 +2723,14 @@
          * @returns The stored receipts.
          */
         async receipts(migratedAt) {
-            return this.fetchJson("get", `receipts${migratedAt !== undefined ? `/${migratedAt}` : ""}`);
+            return this.fetchJson(this._basePath, "get", `receipts${migratedAt !== undefined ? `/${migratedAt}` : ""}`);
         }
         /**
          * Get the list of peers.
          * @returns The list of peers.
          */
         async peers() {
-            return this.fetchJson("get", "peers");
+            return this.fetchJson(this._basePath, "get", "peers");
         }
         /**
          * Add a new peer.
@@ -2883,7 +2739,7 @@
          * @returns The details for the created peer.
          */
         async peerAdd(multiAddress, alias) {
-            return this.fetchJson("post", "peers", {
+            return this.fetchJson(this._basePath, "post", "peers", {
                 multiAddress,
                 alias
             });
@@ -2895,7 +2751,7 @@
          */
         async peerDelete(peerId) {
             // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
-            return this.fetchJson("delete", `peers/${peerId}`);
+            return this.fetchJson(this._basePath, "delete", `peers/${peerId}`);
         }
         /**
          * Get a peer.
@@ -2903,12 +2759,36 @@
          * @returns The details for the created peer.
          */
         async peer(peerId) {
-            return this.fetchJson("get", `peers/${peerId}`);
+            return this.fetchJson(this._basePath, "get", `peers/${peerId}`);
+        }
+        /**
+         * Get the bech 32 human readable part.
+         * @returns The bech 32 human readable part.
+         */
+        async bech32Hrp() {
+            if (this._bech32Hrp === undefined) {
+                const info = await this.info();
+                this._bech32Hrp = info.bech32HRP;
+            }
+            return this._bech32Hrp;
+        }
+        /**
+         * Extension method which provides request methods for plugins.
+         * @param basePluginPath The base path for the plugin eg indexer/v1/ .
+         * @param method The http method.
+         * @param methodPath The path for the plugin request.
+         * @param queryParams Additional query params for the request.
+         * @param request The request object.
+         * @returns The response object.
+         */
+        async pluginFetch(basePluginPath, method, methodPath, queryParams, request) {
+            return this.fetchJson(this._basePluginPath, method, `${basePluginPath}${methodPath}${this.combineQueryParams(queryParams)}`, request, false);
         }
         /**
          * Perform a request and just return the status.
          * @param route The route of the request.
          * @returns The response.
+         * @internal
          */
         async fetchStatus(route) {
             const response = await this.fetchWithTimeout("get", route);
@@ -2916,13 +2796,16 @@
         }
         /**
          * Perform a request in json format.
+         * @param basePath The base path for the request.
          * @param method The http method.
          * @param route The route of the request.
          * @param requestData Request to send to the endpoint.
+         * @param responseIsWrapped The response is wrapped in a data envelope.
          * @returns The response.
+         * @internal
          */
-        async fetchJson(method, route, requestData) {
-            const response = await this.fetchWithTimeout(method, `${this._basePath}${route}`, { "Content-Type": "application/json" }, requestData ? JSON.stringify(requestData) : undefined);
+        async fetchJson(basePath, method, route, requestData, responseIsWrapped = true) {
+            const response = await this.fetchWithTimeout(method, `${basePath}${route}`, { "Content-Type": "application/json" }, requestData ? JSON.stringify(requestData) : undefined);
             let errorMessage;
             let errorCode;
             if (response.ok) {
@@ -2931,13 +2814,25 @@
                     return {};
                 }
                 try {
-                    const responseData = await response.json();
-                    if (responseData.error) {
-                        errorMessage = responseData.error.message;
-                        errorCode = responseData.error.code;
+                    if (responseIsWrapped) {
+                        const responseData = await response.json();
+                        if (responseData.error) {
+                            errorMessage = responseData.error.message;
+                            errorCode = responseData.error.code;
+                        }
+                        else {
+                            return responseData.data;
+                        }
                     }
                     else {
-                        return responseData.data;
+                        const responseData = await response.json();
+                        if (responseData.error) {
+                            errorMessage = responseData.error.message;
+                            errorCode = responseData.error.code;
+                        }
+                        else {
+                            return responseData;
+                        }
                     }
                 }
                 catch { }
@@ -2972,14 +2867,16 @@
         }
         /**
          * Perform a request for binary data.
+         * @param basePath The base path for the request.
          * @param method The http method.
          * @param route The route of the request.
          * @param requestData Request to send to the endpoint.
          * @returns The response.
+         * @internal
          */
-        async fetchBinary(method, route, requestData) {
+        async fetchBinary(basePath, method, route, requestData) {
             var _a, _b, _c;
-            const response = await this.fetchWithTimeout(method, `${this._basePath}${route}`, { "Content-Type": "application/octet-stream" }, requestData);
+            const response = await this.fetchWithTimeout(method, `${basePath}${route}`, { "Content-Type": "application/octet-stream" }, requestData);
             let responseData;
             if (response.ok) {
                 if (method === "get") {
@@ -3054,7 +2951,7 @@
          * @returns The combined query params.
          */
         combineQueryParams(queryParams) {
-            return queryParams.length > 0 ? `?${queryParams.join("&")}` : "";
+            return queryParams && queryParams.length > 0 ? `?${queryParams.join("&")}` : "";
         }
         /**
          * Get the pow info from the node.
@@ -3075,6 +2972,190 @@
      * @internal
      */
     SingleNodeClient.NONCE_ZERO = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 0]);
+
+    // Copyright 2020 IOTA Stiftung
+    /**
+     * Indexer plugin which provides access to the indexer plugin API.
+     */
+    class IndexerPluginClient {
+        /**
+         * Create a new instance of IndexerPluginClient.
+         * @param client The client for communications.
+         * @param options Options for the plugin.
+         * @param options.basePluginPath Base path for the plugin routes,
+         * relative to client basePluginPath, defaults to indexer/v1/ .
+         */
+        constructor(client, options) {
+            var _a;
+            this._client = typeof client === "string" ? new SingleNodeClient(client) : client;
+            this._basePluginPath = (_a = options === null || options === void 0 ? void 0 : options.basePluginPath) !== null && _a !== void 0 ? _a : "indexer/v1/";
+        }
+        /**
+         * Find outputs using filter options.
+         * @param filterOptions The options for filtering.
+         * @param filterOptions.addressBech32 Filter outputs that are unlockable by the address.
+         * @param filterOptions.requiresDustReturn Filter outputs by those with a dust return.
+         * @param filterOptions.senderBech32 Filter outputs by the sender.
+         * @param filterOptions.tagHex Filter outputs by the tag in hex format.
+         * @param filterOptions.pageSize Set the page size for the response.
+         * @param filterOptions.offset Request the items from the given offset, return from a previous request.
+         * @returns The outputs with the requested filters.
+         */
+        async outputs(filterOptions) {
+            const queryParams = [];
+            if (filterOptions) {
+                if (filterOptions.addressBech32 !== undefined) {
+                    queryParams.push(`address=${filterOptions.addressBech32}`);
+                }
+                if (filterOptions.requiresDustReturn) {
+                    queryParams.push(`requiresDustReturn=${filterOptions.requiresDustReturn}`);
+                }
+                if (filterOptions.senderBech32 !== undefined) {
+                    queryParams.push(`sender=${filterOptions.senderBech32}`);
+                }
+                if (filterOptions.tagHex !== undefined) {
+                    queryParams.push(`tag=${filterOptions.tagHex}`);
+                }
+                if (filterOptions.pageSize !== undefined) {
+                    queryParams.push(`pageSize=${filterOptions.pageSize}`);
+                }
+                if (filterOptions.offset !== undefined) {
+                    queryParams.push(`offset=${filterOptions.offset}`);
+                }
+            }
+            return this._client.pluginFetch(this._basePluginPath, "get", "outputs", queryParams);
+        }
+        /**
+         * Find alises using filter options.
+         * @param filterOptions The options for filtering.
+         * @param filterOptions.stateControllerBech32 Filter for a certain state controller address.
+         * @param filterOptions.governorBech32 Filter for a certain governance controller address.
+         * @param filterOptions.issuerBech32 Filter for a certain issuer.
+         * @param filterOptions.senderBech32 Filter outputs by the sender.
+         * @param filterOptions.pageSize Set the page size for the response.
+         * @param filterOptions.offset Request the items from the given offset, return from a previous request.
+         * @returns The outputs with the requested filters.
+         */
+        async aliases(filterOptions) {
+            const queryParams = [];
+            if (filterOptions) {
+                if (filterOptions.stateControllerBech32 !== undefined) {
+                    queryParams.push(`stateController=${filterOptions.stateControllerBech32}`);
+                }
+                if (filterOptions.governorBech32 !== undefined) {
+                    queryParams.push(`governor=${filterOptions.governorBech32}`);
+                }
+                if (filterOptions.issuerBech32 !== undefined) {
+                    queryParams.push(`issuer=${filterOptions.issuerBech32}`);
+                }
+                if (filterOptions.senderBech32 !== undefined) {
+                    queryParams.push(`sender=${filterOptions.senderBech32}`);
+                }
+                if (filterOptions.pageSize !== undefined) {
+                    queryParams.push(`pageSize=${filterOptions.pageSize}`);
+                }
+                if (filterOptions.offset !== undefined) {
+                    queryParams.push(`offset=${filterOptions.offset}`);
+                }
+            }
+            return this._client.pluginFetch(this._basePluginPath, "get", "aliases", queryParams);
+        }
+        /**
+         * Get the output for an alias.
+         * @param aliasId The alias to get the output for.
+         * @returns The output.
+         */
+        async alias(aliasId) {
+            if (!util_js.Converter.isHex(aliasId)) {
+                throw new Error("The alias id does not appear to be hex format");
+            }
+            return this._client.pluginFetch(this._basePluginPath, "get", `aliases/${aliasId}`);
+        }
+        /**
+         * Find nfts using filter options.
+         * @param filterOptions The options for filtering.
+         * @param filterOptions.addressBech32 Filter outputs that are unlockable by the address.
+         * @param filterOptions.requiresDustReturn Filter outputs by those with a dust return.
+         * @param filterOptions.issuerBech32 Filter outputs by the issuer.
+         * @param filterOptions.senderBech32 Filter outputs by the sender.
+         * @param filterOptions.tagHex Filter outputs by the tag in hex format.
+         * @param filterOptions.pageSize Set the page size for the response.
+         * @param filterOptions.offset Request the items from the given offset, return from a previous request.
+         * @returns The outputs with the requested filters.
+         */
+        async nfts(filterOptions) {
+            const queryParams = [];
+            if (filterOptions) {
+                if (filterOptions.addressBech32 !== undefined) {
+                    queryParams.push(`address=${filterOptions.addressBech32}`);
+                }
+                if (filterOptions.requiresDustReturn) {
+                    queryParams.push(`requiresDustReturn=${filterOptions.requiresDustReturn}`);
+                }
+                if (filterOptions.issuerBech32 !== undefined) {
+                    queryParams.push(`issuer=${filterOptions.issuerBech32}`);
+                }
+                if (filterOptions.senderBech32 !== undefined) {
+                    queryParams.push(`sender=${filterOptions.senderBech32}`);
+                }
+                if (filterOptions.tagHex !== undefined) {
+                    queryParams.push(`tag=${filterOptions.tagHex}`);
+                }
+                if (filterOptions.pageSize !== undefined) {
+                    queryParams.push(`pageSize=${filterOptions.pageSize}`);
+                }
+                if (filterOptions.offset !== undefined) {
+                    queryParams.push(`offset=${filterOptions.offset}`);
+                }
+            }
+            return this._client.pluginFetch(this._basePluginPath, "get", "nft", queryParams);
+        }
+        /**
+         * Get the output for a nft.
+         * @param nftId The nft to get the output for.
+         * @returns The output.
+         */
+        async nft(nftId) {
+            if (!util_js.Converter.isHex(nftId)) {
+                throw new Error("The nft id does not appear to be hex format");
+            }
+            return this._client.pluginFetch(this._basePluginPath, "get", `nft/${nftId}`);
+        }
+        /**
+         * Find foundries using filter options.
+         * @param filterOptions The options for filtering.
+         * @param filterOptions.addressBech32 Filter outputs that are unlockable by the address.
+         * @param filterOptions.pageSize Set the page size for the response.
+         * @param filterOptions.offset Request the items from the given offset, return from a previous request.
+         * @returns The outputs with the requested filters.
+         */
+        async foundries(filterOptions) {
+            const queryParams = [];
+            if (filterOptions) {
+                if (filterOptions.addressBech32 !== undefined) {
+                    queryParams.push(`address=${filterOptions.addressBech32}`);
+                }
+                if (filterOptions.pageSize !== undefined) {
+                    queryParams.push(`pageSize=${filterOptions.pageSize}`);
+                }
+                if (filterOptions.offset !== undefined) {
+                    queryParams.push(`offset=${filterOptions.offset}`);
+                }
+            }
+            return this._client.pluginFetch(this._basePluginPath, "get", "foundries", queryParams);
+        }
+        /**
+         * Get the output for a foundry.
+         * @param foundryId The foundry to get the output for.
+         * @returns The output.
+         */
+        async foundry(foundryId) {
+            if (!util_js.Converter.isHex(foundryId)) {
+                throw new Error("The foundry id does not appear to be hex format");
+            }
+            return this._client.pluginFetch(this._basePluginPath, "get", `foundries/${foundryId}`);
+        }
+    }
 
     // Copyright 2020 IOTA Stiftung
     // SPDX-License-Identifier: Apache-2.0
@@ -3291,7 +3372,7 @@
     async function getUnspentAddressesWithAddressGenerator(client, seed, initialAddressState, nextAddressPath, addressOptions) {
         var _a, _b;
         const localClient = typeof client === "string" ? new SingleNodeClient(client) : client;
-        const nodeInfo = await localClient.info();
+        const bech32Hrp = await localClient.bech32Hrp();
         const localRequiredLimit = (_a = addressOptions === null || addressOptions === void 0 ? void 0 : addressOptions.requiredCount) !== null && _a !== void 0 ? _a : Number.MAX_SAFE_INTEGER;
         const localZeroCount = (_b = addressOptions === null || addressOptions === void 0 ? void 0 : addressOptions.zeroCount) !== null && _b !== void 0 ? _b : 20;
         let finished = false;
@@ -3302,11 +3383,11 @@
             const addressSeed = seed.generateSeedFromPath(new crypto_js.Bip32Path(path));
             const ed25519Address = new Ed25519Address(addressSeed.keyPair().publicKey);
             const addressBytes = ed25519Address.toAddress();
-            const addressHex = util_js.Converter.bytesToHex(addressBytes);
-            const addressResponse = await localClient.addressEd25519(addressHex);
+            const addressBech32 = Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, addressBytes, bech32Hrp);
+            const balance = await calculateAddressBalance(localClient, addressBech32);
             // If there is no balance we increment the counter and end
             // the text when we have reached the count
-            if (addressResponse.balance === 0) {
+            if (balance === 0) {
                 zeroBalance++;
                 if (zeroBalance >= localZeroCount) {
                     finished = true;
@@ -3314,9 +3395,9 @@
             }
             else {
                 allUnspent.push({
-                    address: Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, addressBytes, nodeInfo.bech32HRP),
+                    address: addressBech32,
                     path,
-                    balance: addressResponse.balance
+                    balance
                 });
                 if (allUnspent.length === localRequiredLimit) {
                     finished = true;
@@ -3324,6 +3405,34 @@
             }
         } while (!finished);
         return allUnspent;
+    }
+    /**
+     * Calculate address balance for an address.
+     * @param client The client for communications.
+     * @param addressBech32 The address in bech32 format.
+     * @returns The unspent balance.
+     */
+    async function calculateAddressBalance(client, addressBech32) {
+        const indexerPlugin = new IndexerPluginClient(client);
+        let count = 0;
+        let nextOffset;
+        let balance = 0;
+        do {
+            const outputResponse = await indexerPlugin.outputs({
+                addressBech32,
+                pageSize: 20,
+                offset: nextOffset
+            });
+            count = outputResponse.count;
+            nextOffset = outputResponse.offset;
+            for (const outputId of outputResponse.data) {
+                const output = await client.output(outputId);
+                if (output.output.type === EXTENDED_OUTPUT_TYPE && !output.isSpent) {
+                    balance += output.output.amount;
+                }
+            }
+        } while (count > 0 && nextOffset);
+        return balance;
     }
 
     /**
@@ -3442,7 +3551,7 @@
             }
             if (taggedDataPayload) {
                 return {
-                    tag: taggedDataPayload.tag ? util_js.Converter.hexToBytes(taggedDataPayload.tag) : undefined,
+                    tag: util_js.Converter.hexToBytes(taggedDataPayload.tag),
                     data: taggedDataPayload.data ? util_js.Converter.hexToBytes(taggedDataPayload.data) : undefined
                 };
             }
@@ -3511,11 +3620,13 @@
             throw new Error("You must specify some outputs");
         }
         let localTagHex;
-        if (taggedData === null || taggedData === void 0 ? void 0 : taggedData.tag) {
-            localTagHex =
-                typeof taggedData.tag === "string"
-                    ? util_js.Converter.utf8ToHex(taggedData.tag)
-                    : util_js.Converter.bytesToHex(taggedData.tag);
+        if (taggedData) {
+            localTagHex = typeof (taggedData === null || taggedData === void 0 ? void 0 : taggedData.tag) === "string"
+                ? util_js.Converter.utf8ToHex(taggedData.tag)
+                : util_js.Converter.bytesToHex(taggedData.tag);
+            if (localTagHex.length / 2 < MIN_TAG_LENGTH) {
+                throw new Error(`The tag length is ${localTagHex.length / 2}, which is less than the minimum size of ${MIN_TAG_LENGTH}`);
+            }
             if (localTagHex.length / 2 > MAX_TAG_LENGTH) {
                 throw new Error(`The tag length is ${localTagHex.length / 2}, which exceeds the maximum size of ${MAX_TAG_LENGTH}`);
             }
@@ -3525,13 +3636,17 @@
             if (output.addressType === ED25519_ADDRESS_TYPE) {
                 const o = {
                     type: EXTENDED_OUTPUT_TYPE,
-                    address: {
-                        type: output.addressType,
-                        address: output.address
-                    },
                     amount: output.amount,
                     nativeTokens: [],
-                    unlockConditions: [],
+                    unlockConditions: [
+                        {
+                            type: ADDRESS_UNLOCK_CONDITION_TYPE,
+                            address: {
+                                type: output.addressType,
+                                address: output.address
+                            }
+                        }
+                    ],
                     blocks: []
                 };
                 const writeStream = new util_js.WriteStream();
@@ -3560,7 +3675,7 @@
             type: TRANSACTION_ESSENCE_TYPE,
             inputs: sortedInputs.map(i => i.input),
             outputs: sortedOutputs.map(o => o.output),
-            payload: taggedData
+            payload: localTagHex
                 ? {
                     type: TAGGED_DATA_PAYLOAD_TYPE,
                     tag: localTagHex,
@@ -3664,9 +3779,9 @@
     async function sendMultiple(client, seed, accountIndex, outputs, taggedData, addressOptions) {
         var _a;
         const localClient = typeof client === "string" ? new SingleNodeClient(client) : client;
-        const nodeInfo = await localClient.info();
+        const bech32Hrp = await localClient.bech32Hrp();
         const hexOutputs = outputs.map(output => {
-            const bech32Details = Bech32Helper.fromBech32(output.addressBech32, nodeInfo.bech32HRP);
+            const bech32Details = Bech32Helper.fromBech32(output.addressBech32, bech32Hrp);
             if (!bech32Details) {
                 throw new Error("Unable to decode bech32 address");
             }
@@ -3742,6 +3857,7 @@
      */
     async function calculateInputs(client, seed, initialAddressState, nextAddressPath, outputs, zeroCount = 5) {
         const localClient = typeof client === "string" ? new SingleNodeClient(client) : client;
+        const bech32Hrp = await localClient.bech32Hrp();
         let requiredBalance = 0;
         for (const output of outputs) {
             requiredBalance += output.amount;
@@ -3755,8 +3871,9 @@
             const addressSeed = seed.generateSeedFromPath(new crypto_js.Bip32Path(path));
             const addressKeyPair = addressSeed.keyPair();
             const ed25519Address = new Ed25519Address(addressKeyPair.publicKey);
-            const address = util_js.Converter.bytesToHex(ed25519Address.toAddress());
-            const addressOutputIds = await localClient.addressEd25519Outputs(address);
+            const addressBytes = ed25519Address.toAddress();
+            const indexerPlugin = new IndexerPluginClient(client);
+            const addressOutputIds = await indexerPlugin.outputs({ addressBech32: Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, addressBytes, bech32Hrp) });
             if (addressOutputIds.count === 0) {
                 zeroBalance++;
                 if (zeroBalance >= zeroCount) {
@@ -3764,7 +3881,7 @@
                 }
             }
             else {
-                for (const addressOutputId of addressOutputIds.outputIds) {
+                for (const addressOutputId of addressOutputIds.data) {
                     const addressOutput = await localClient.output(addressOutputId);
                     if (!addressOutput.isSpent && consumedBalance < requiredBalance) {
                         if (addressOutput.output.amount === 0) {
@@ -3789,11 +3906,16 @@
                                 // so return the rest to the same address.
                                 if (consumedBalance - requiredBalance > 0 &&
                                     addressOutput.output.type === EXTENDED_OUTPUT_TYPE) {
-                                    outputs.push({
-                                        amount: consumedBalance - requiredBalance,
-                                        address: addressOutput.output.address.address,
-                                        addressType: addressOutput.output.address.type
-                                    });
+                                    const addressUnlockCondition = addressOutput.output.unlockConditions
+                                        .find(u => u.type === ADDRESS_UNLOCK_CONDITION_TYPE);
+                                    if (addressUnlockCondition &&
+                                        addressUnlockCondition.type === ADDRESS_UNLOCK_CONDITION_TYPE) {
+                                        outputs.push({
+                                            amount: consumedBalance - requiredBalance,
+                                            address: addressUnlockCondition.address.address,
+                                            addressType: addressUnlockCondition.address.type
+                                        });
+                                    }
                                 }
                                 finished = true;
                             }
@@ -3818,12 +3940,12 @@
      */
     async function sendData(client, tag, data) {
         const localClient = typeof client === "string" ? new SingleNodeClient(client) : client;
-        let localTagHex;
-        if (tag) {
-            localTagHex = typeof tag === "string" ? util_js.Converter.utf8ToHex(tag) : util_js.Converter.bytesToHex(tag);
-            if (localTagHex.length / 2 > MAX_TAG_LENGTH) {
-                throw new Error(`The tag length is ${localTagHex.length / 2}, which exceeds the maximum size of ${MAX_TAG_LENGTH}`);
-            }
+        const localTagHex = typeof tag === "string" ? util_js.Converter.utf8ToHex(tag) : util_js.Converter.bytesToHex(tag);
+        if (localTagHex.length / 2 < MIN_TAG_LENGTH) {
+            throw new Error(`The tag length is ${localTagHex.length / 2}, which is less than the minimum size of ${MIN_TAG_LENGTH}`);
+        }
+        if (localTagHex.length / 2 > MAX_TAG_LENGTH) {
+            throw new Error(`The tag length is ${localTagHex.length / 2}, which exceeds the maximum size of ${MAX_TAG_LENGTH}`);
         }
         const taggedDataPayload = {
             type: TAGGED_DATA_PAYLOAD_TYPE,
@@ -4350,7 +4472,6 @@
             }
             else if (output.type === EXTENDED_OUTPUT_TYPE) {
                 logger(`${prefix}Extended Output`);
-                logAddress(`${prefix}\t\tS`, output.address);
                 logger(`${prefix}\t\tAmount:`, output.amount);
                 logNativeTokens(`${prefix}\t\t`, output.nativeTokens);
                 logUnlockConditions(`${prefix}\t\t`, output.unlockConditions);
@@ -4371,7 +4492,6 @@
                 logger(`${prefix}Foundry Output`);
                 logger(`${prefix}\t\tAmount:`, output.amount);
                 logNativeTokens(`${prefix}\t\t`, output.nativeTokens);
-                logAddress(`${prefix}\t\tS`, output.address);
                 logger(`${prefix}\t\tSerial Number:`, output.serialNumber);
                 logger(`${prefix}\t\tToken Tag:`, output.tokenTag);
                 logger(`${prefix}\t\tCirculating Supply:`, output.circulatingSupply);
@@ -4457,7 +4577,7 @@
      * @param featureBlocks The deature blocks.
      */
     function logFeatureBlocks(prefix, featureBlocks) {
-        logger(`${prefix}Native Tokens`);
+        logger(`${prefix}Feature Blocks`);
         for (const featureBlock of featureBlocks) {
             logFeatureBlock(`${prefix}\t\t`, featureBlock);
         }
@@ -4491,7 +4611,7 @@
      * @param unlockConditions The unlock conditions.
      */
     function logUnlockConditions(prefix, unlockConditions) {
-        logger(`${prefix}Native Tokens`);
+        logger(`${prefix}Unlock Conditions`);
         for (const unlockCondition of unlockConditions) {
             logUnlockCondition(`${prefix}\t\t`, unlockCondition);
         }
@@ -4507,7 +4627,7 @@
             logAddress(`${prefix}\t\t`, unlockCondition.address);
         }
         else if (unlockCondition.type === DUST_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE) {
-            logger(`${prefix}\tDust Deposity Return Unlock Condition`);
+            logger(`${prefix}\tDust Deposit Return Unlock Condition`);
             logAddress(`${prefix}\t\t`, unlockCondition.returnAddress);
             logger(`${prefix}\t\tAmount:`, unlockCondition.amount);
         }
@@ -4676,6 +4796,7 @@
     exports.GOVERNOR_UNLOCK_CONDITION_TYPE = GOVERNOR_UNLOCK_CONDITION_TYPE;
     exports.IOTA_BIP44_BASE_PATH = IOTA_BIP44_BASE_PATH;
     exports.ISSUER_FEATURE_BLOCK_TYPE = ISSUER_FEATURE_BLOCK_TYPE;
+    exports.IndexerPluginClient = IndexerPluginClient;
     exports.LocalPowProvider = LocalPowProvider;
     exports.MAX_FUNDS_COUNT = MAX_FUNDS_COUNT;
     exports.MAX_INPUT_COUNT = MAX_INPUT_COUNT;
@@ -4763,6 +4884,7 @@
     exports.UTXO_INPUT_TYPE = UTXO_INPUT_TYPE;
     exports.UnitsHelper = UnitsHelper;
     exports.buildTransactionPayload = buildTransactionPayload;
+    exports.calculateAddressBalance = calculateAddressBalance;
     exports.calculateInputs = calculateInputs;
     exports.deserializeAddress = deserializeAddress;
     exports.deserializeAddressUnlockCondition = deserializeAddressUnlockCondition;

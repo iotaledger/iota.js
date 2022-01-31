@@ -317,7 +317,6 @@ export function logOutput(prefix, output) {
         }
         else if (output.type === EXTENDED_OUTPUT_TYPE) {
             logger(`${prefix}Extended Output`);
-            logAddress(`${prefix}\t\tS`, output.address);
             logger(`${prefix}\t\tAmount:`, output.amount);
             logNativeTokens(`${prefix}\t\t`, output.nativeTokens);
             logUnlockConditions(`${prefix}\t\t`, output.unlockConditions);
@@ -338,7 +337,6 @@ export function logOutput(prefix, output) {
             logger(`${prefix}Foundry Output`);
             logger(`${prefix}\t\tAmount:`, output.amount);
             logNativeTokens(`${prefix}\t\t`, output.nativeTokens);
-            logAddress(`${prefix}\t\tS`, output.address);
             logger(`${prefix}\t\tSerial Number:`, output.serialNumber);
             logger(`${prefix}\t\tToken Tag:`, output.tokenTag);
             logger(`${prefix}\t\tCirculating Supply:`, output.circulatingSupply);
@@ -424,7 +422,7 @@ export function logTokenScheme(prefix, tokenScheme) {
  * @param featureBlocks The deature blocks.
  */
 export function logFeatureBlocks(prefix, featureBlocks) {
-    logger(`${prefix}Native Tokens`);
+    logger(`${prefix}Feature Blocks`);
     for (const featureBlock of featureBlocks) {
         logFeatureBlock(`${prefix}\t\t`, featureBlock);
     }
@@ -458,7 +456,7 @@ export function logFeatureBlock(prefix, featureBlock) {
  * @param unlockConditions The unlock conditions.
  */
 export function logUnlockConditions(prefix, unlockConditions) {
-    logger(`${prefix}Native Tokens`);
+    logger(`${prefix}Unlock Conditions`);
     for (const unlockCondition of unlockConditions) {
         logUnlockCondition(`${prefix}\t\t`, unlockCondition);
     }
@@ -474,7 +472,7 @@ export function logUnlockCondition(prefix, unlockCondition) {
         logAddress(`${prefix}\t\t`, unlockCondition.address);
     }
     else if (unlockCondition.type === DUST_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE) {
-        logger(`${prefix}\tDust Deposity Return Unlock Condition`);
+        logger(`${prefix}\tDust Deposit Return Unlock Condition`);
         logAddress(`${prefix}\t\t`, unlockCondition.returnAddress);
         logger(`${prefix}\t\tAmount:`, unlockCondition.amount);
     }

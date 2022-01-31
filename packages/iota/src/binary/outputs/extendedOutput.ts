@@ -3,7 +3,6 @@
 import type { ReadStream, WriteStream } from "@iota/util.js";
 import bigInt from "big-integer";
 import { EXTENDED_OUTPUT_TYPE, IExtendedOutput } from "../../models/outputs/IExtendedOutput";
-import { deserializeAddress, MIN_ADDRESS_LENGTH, serializeAddress } from "../addresses/addresses";
 import { SMALL_TYPE_LENGTH, UINT64_SIZE } from "../commonDataTypes";
 import {
     deserializeFeatureBlocks, MIN_FEATURE_BLOCKS_LENGTH, serializeFeatureBlocks
@@ -16,7 +15,6 @@ import { deserializeUnlockConditions, MIN_UNLOCK_CONDITIONS_LENGTH, serializeUnl
  */
 export const MIN_EXTENDED_OUTPUT_LENGTH: number =
     SMALL_TYPE_LENGTH + // Type
-    MIN_ADDRESS_LENGTH + // Address
     UINT64_SIZE + // Amount
     MIN_NATIVE_TOKENS_LENGTH + // Native Tokens
     MIN_UNLOCK_CONDITIONS_LENGTH + // Unlock conditions
@@ -39,7 +37,6 @@ export function deserializeExtendedOutput(readStream: ReadStream): IExtendedOutp
         throw new Error(`Type mismatch in extendedOutput ${type}`);
     }
 
-    const address = deserializeAddress(readStream);
     const amount = readStream.readUInt64("extendedOutput.amount");
     const nativeTokens = deserializeNativeTokens(readStream);
     const unlockConditions = deserializeUnlockConditions(readStream);
@@ -48,7 +45,6 @@ export function deserializeExtendedOutput(readStream: ReadStream): IExtendedOutp
     return {
         type: EXTENDED_OUTPUT_TYPE,
         amount: Number(amount),
-        address,
         nativeTokens,
         unlockConditions,
         blocks: featureBlocks
@@ -63,7 +59,6 @@ export function deserializeExtendedOutput(readStream: ReadStream): IExtendedOutp
 export function serializeExtendedOutput(writeStream: WriteStream, object: IExtendedOutput): void {
     writeStream.writeUInt8("extendedOutput.type", object.type);
 
-    serializeAddress(writeStream, object.address);
     writeStream.writeUInt64("extendedOutput.amount", bigInt(object.amount));
     serializeNativeTokens(writeStream, object.nativeTokens);
     serializeUnlockConditions(writeStream, object.unlockConditions);

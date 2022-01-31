@@ -13,7 +13,6 @@ Foundry output.
 ### Properties
 
 - [type](IFoundryOutput.md#type)
-- [address](IFoundryOutput.md#address)
 - [amount](IFoundryOutput.md#amount)
 - [nativeTokens](IFoundryOutput.md#nativetokens)
 - [serialNumber](IFoundryOutput.md#serialnumber)
@@ -35,14 +34,6 @@ The type of the object.
 #### Inherited from
 
 [ITypeBase](ITypeBase.md).[type](ITypeBase.md#type)
-
-___
-
-### address
-
-• **address**: [`AddressTypes`](../api.md#addresstypes)
-
-The address associated with the output.
 
 ___
 

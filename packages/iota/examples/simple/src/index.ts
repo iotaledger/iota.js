@@ -2,7 +2,6 @@ import {
     deserializeMessage,
     IMessage,
     TAGGED_DATA_PAYLOAD_TYPE,
-    IExtendedOutput,
     logInfo,
     logMessage,
     logMessageMetadata,
@@ -13,7 +12,8 @@ import {
 } from "@iota/iota.js";
 import { Converter, ReadStream } from "@iota/util.js";
 
-const API_ENDPOINT = "https://chrysalis-nodes.iota.org";
+// const API_ENDPOINT = "https://chrysalis-nodes.iota.org/";
+const API_ENDPOINT = "http://localhost:14265/";
 
 async function run() {
     const client = new SingleNodeClient(API_ENDPOINT);
@@ -66,14 +66,6 @@ async function run() {
     logMessage("", decoded);
     console.log();
 
-    const messages = await client.messagesFind(Converter.utf8ToBytes("Foo"));
-    console.log("Messages");
-    console.log("\tIndex:", messages.index);
-    console.log("\tMax Results:", messages.maxResults);
-    console.log("\tCount:", messages.count);
-    console.log("\tMessage Ids:", messages.messageIds);
-    console.log();
-
     const children = await client.messageChildren(tipsResponse.tipMessageIds[0]);
     console.log("Children");
     console.log("\tMessage Id:", children.messageId);
@@ -96,21 +88,6 @@ async function run() {
     console.log("\tOutput Index:", output.outputIndex);
     console.log("\tIs Spent:", output.isSpent);
     logOutput("\t", output.output);
-    console.log();
-
-    const address = await client.addressEd25519((output.output as IExtendedOutput).address.address);
-    console.log("Address");
-    console.log("\tAddress Type:", address.addressType);
-    console.log("\tAddress:", address.address);
-    console.log("\tBalance:", address.balance);
-    console.log();
-
-    const addressOutputs = await client.addressEd25519Outputs((output.output as IExtendedOutput).address.address);
-    console.log("Address Outputs");
-    console.log("\tAddress:", addressOutputs.address);
-    console.log("\tMax Results:", addressOutputs.maxResults);
-    console.log("\tCount:", addressOutputs.count);
-    console.log("\tOutput Ids:", addressOutputs.outputIds);
     console.log();
 }
 

@@ -7,6 +7,7 @@ import { UTXO_INPUT_TYPE } from "../../src/models/inputs/IUTXOInput";
 import { ITransactionEssence, TRANSACTION_ESSENCE_TYPE } from "../../src/models/ITransactionEssence";
 import { EXTENDED_OUTPUT_TYPE, IExtendedOutput } from "../../src/models/outputs/IExtendedOutput";
 import { TAGGED_DATA_PAYLOAD_TYPE } from "../../src/models/payloads/ITaggedDataPayload";
+import { ADDRESS_UNLOCK_CONDITION_TYPE, IAddressUnlockCondition } from "../../src/models/unlockConditions/IAddressUnlockCondition";
 
 describe("Binary Transaction", () => {
     test("Can serialize and deserialize transaction essence with no payload", () => {
@@ -22,13 +23,17 @@ describe("Binary Transaction", () => {
             outputs: [
                 {
                     type: EXTENDED_OUTPUT_TYPE,
-                    address: {
-                        type: ED25519_ADDRESS_TYPE,
-                        address: "b".repeat(64)
-                    },
                     amount: 100,
                     nativeTokens: [],
-                    unlockConditions: [],
+                    unlockConditions: [
+                        {
+                            type: ADDRESS_UNLOCK_CONDITION_TYPE,
+                            address: {
+                                type: ED25519_ADDRESS_TYPE,
+                                address: "b".repeat(64)
+                            }
+                        }
+                    ],
                     blocks: []
                 }
             ]
@@ -38,7 +43,7 @@ describe("Binary Transaction", () => {
         serializeTransactionEssence(serialized, object);
         const hex = serialized.finalHex();
         expect(hex).toEqual(
-            "00010000aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa020001000300bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb64000000000000000000000000000000"
+            "00010000aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa020001000364000000000000000000010000bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb0000000000"
         );
         const deserialized = deserializeTransactionEssence(new ReadStream(Converter.hexToBytes(hex)));
         expect(deserialized.type).toEqual(0);
@@ -52,8 +57,10 @@ describe("Binary Transaction", () => {
 
         const extendedOutput = deserialized.outputs[0] as IExtendedOutput;
         expect(extendedOutput.type).toEqual(3);
-        expect(extendedOutput.address.type).toEqual(0);
-        expect(extendedOutput.address.address).toEqual("b".repeat(64));
+        expect(extendedOutput.unlockConditions.length).toEqual(1);
+        const unlockCondition = extendedOutput.unlockConditions[0] as IAddressUnlockCondition;
+        expect(unlockCondition.address.type).toEqual(0);
+        expect(unlockCondition.address.address).toEqual("b".repeat(64));
         expect(extendedOutput.amount).toEqual(100);
         expect(deserialized.payload).toBeUndefined();
     });
@@ -71,13 +78,17 @@ describe("Binary Transaction", () => {
             outputs: [
                 {
                     type: EXTENDED_OUTPUT_TYPE,
-                    address: {
-                        type: ED25519_ADDRESS_TYPE,
-                        address: "b".repeat(64)
-                    },
                     amount: 100,
                     nativeTokens: [],
-                    unlockConditions: [],
+                    unlockConditions: [
+                        {
+                            type: ADDRESS_UNLOCK_CONDITION_TYPE,
+                            address: {
+                                type: ED25519_ADDRESS_TYPE,
+                                address: "b".repeat(64)
+                            }
+                        }
+                    ],
                     blocks: []
                 }
             ],
@@ -92,7 +103,7 @@ describe("Binary Transaction", () => {
         serializeTransactionEssence(serialized, object);
         const hex = serialized.finalHex();
         expect(hex).toEqual(
-            "00010000aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa020001000300bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb6400000000000000000000000f0000000500000003666f6f03000000626172"
+            "00010000aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa020001000364000000000000000000010000bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb000f0000000500000003666f6f03000000626172"
         );
         const deserialized = deserializeTransactionEssence(new ReadStream(Converter.hexToBytes(hex)));
         expect(deserialized.type).toEqual(0);
@@ -106,8 +117,10 @@ describe("Binary Transaction", () => {
 
         const extendedOutput = deserialized.outputs[0] as IExtendedOutput;
         expect(extendedOutput.type).toEqual(3);
-        expect(extendedOutput.address.type).toEqual(0);
-        expect(extendedOutput.address.address).toEqual("b".repeat(64));
+        expect(extendedOutput.unlockConditions.length).toEqual(1);
+        const unlockCondition = extendedOutput.unlockConditions[0] as IAddressUnlockCondition;
+        expect(unlockCondition.address.type).toEqual(0);
+        expect(unlockCondition.address.address).toEqual("b".repeat(64));
         expect(extendedOutput.amount).toEqual(100);
         expect(deserialized.payload).toBeDefined();
         if (deserialized.payload) {

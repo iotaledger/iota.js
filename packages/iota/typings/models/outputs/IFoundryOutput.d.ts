@@ -1,4 +1,3 @@
-import type { AddressTypes } from "../../models/addresses/addressTypes";
 import type { IMetadataFeatureBlock } from "../featureBlocks/IMetadataFeatureBlock";
 import type { INativeToken } from "../INativeToken";
 import type { ITypeBase } from "../ITypeBase";
@@ -12,10 +11,6 @@ export declare const FOUNDRY_OUTPUT_TYPE = 5;
  * Foundry output.
  */
 export interface IFoundryOutput extends ITypeBase<5> {
-    /**
-     * The address associated with the output.
-     */
-    address: AddressTypes;
     /**
      * The amount of IOTA tokens held by the output.
      */

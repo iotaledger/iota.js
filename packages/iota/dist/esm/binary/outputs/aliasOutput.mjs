@@ -66,7 +66,9 @@ export function serializeAliasOutput(writeStream, object) {
     writeStream.writeFixedHex("aliasOutput.aliasId", ALIAS_ID_LENGTH, object.aliasId);
     writeStream.writeUInt32("aliasOutput.stateIndex", object.stateIndex);
     writeStream.writeUInt32("aliasOutput.stateMetadataLength", object.stateMetadata.length / 2);
-    writeStream.writeFixedHex("aliasOutput.stateMetadata", object.stateMetadata.length / 2, object.stateMetadata);
+    if (object.stateMetadata.length > 0) {
+        writeStream.writeFixedHex("aliasOutput.stateMetadata", object.stateMetadata.length / 2, object.stateMetadata);
+    }
     writeStream.writeUInt32("aliasOutput.foundryCounter", object.foundryCounter);
     serializeUnlockConditions(writeStream, object.unlockConditions);
     serializeFeatureBlocks(writeStream, object.blocks);

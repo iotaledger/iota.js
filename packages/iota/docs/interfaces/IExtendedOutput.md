@@ -13,7 +13,6 @@ Extended output.
 ### Properties
 
 - [type](IExtendedOutput.md#type)
-- [address](IExtendedOutput.md#address)
 - [amount](IExtendedOutput.md#amount)
 - [nativeTokens](IExtendedOutput.md#nativetokens)
 - [unlockConditions](IExtendedOutput.md#unlockconditions)
@@ -30,14 +29,6 @@ The type of the object.
 #### Inherited from
 
 [ITypeBase](ITypeBase.md).[type](ITypeBase.md#type)
-
-___
-
-### address
-
-• **address**: [`AddressTypes`](../api.md#addresstypes)
-
-The address.
 
 ___
 

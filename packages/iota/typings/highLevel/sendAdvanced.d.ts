@@ -21,7 +21,7 @@ export declare function sendAdvanced(client: IClient | string, inputsAndSignatur
     addressType: number;
     amount: number;
 }[], taggedData?: {
-    tag?: Uint8Array | string;
+    tag: Uint8Array | string;
     data?: Uint8Array | string;
 }): Promise<{
     messageId: string;
@@ -44,6 +44,6 @@ export declare function buildTransactionPayload(inputsAndSignatureKeyPairs: {
     addressType: number;
     amount: number;
 }[], taggedData?: {
-    tag?: Uint8Array | string;
+    tag: Uint8Array | string;
     data?: Uint8Array | string;
 }): ITransactionPayload;

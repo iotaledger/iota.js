@@ -58,4 +58,8 @@ export interface INodeInfo {
      * The rate at which rates are being referenced.
      */
     referencedRate: number;
+    /**
+     * The plugins the node exposes.
+     */
+    plugins: string[];
 }

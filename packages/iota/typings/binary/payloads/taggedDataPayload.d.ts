@@ -5,6 +5,10 @@ import { ITaggedDataPayload } from "../../models/payloads/ITaggedDataPayload";
  */
 export declare const MIN_TAGGED_DATA_PAYLOAD_LENGTH: number;
 /**
+ * The minimum length of a tag.
+ */
+export declare const MIN_TAG_LENGTH: number;
+/**
  * The maximum length of a tag.
  */
 export declare const MAX_TAG_LENGTH: number;

@@ -22,20 +22,9 @@ Client for API communication.
 - [messageRaw](SingleNodeClient.md#messageraw)
 - [messageSubmit](SingleNodeClient.md#messagesubmit)
 - [messageSubmitRaw](SingleNodeClient.md#messagesubmitraw)
-- [messagesFind](SingleNodeClient.md#messagesfind)
 - [messageChildren](SingleNodeClient.md#messagechildren)
 - [transactionIncludedMessage](SingleNodeClient.md#transactionincludedmessage)
 - [output](SingleNodeClient.md#output)
-- [outputs](SingleNodeClient.md#outputs)
-- [address](SingleNodeClient.md#address)
-- [addressOutputs](SingleNodeClient.md#addressoutputs)
-- [addressEd25519](SingleNodeClient.md#addressed25519)
-- [addressEd25519Outputs](SingleNodeClient.md#addressed25519outputs)
-- [addressAliasOutputs](SingleNodeClient.md#addressaliasoutputs)
-- [addressNftOutputs](SingleNodeClient.md#addressnftoutputs)
-- [alias](SingleNodeClient.md#alias)
-- [nft](SingleNodeClient.md#nft)
-- [foundry](SingleNodeClient.md#foundry)
 - [milestone](SingleNodeClient.md#milestone)
 - [milestoneUtxoChanges](SingleNodeClient.md#milestoneutxochanges)
 - [treasury](SingleNodeClient.md#treasury)
@@ -44,10 +33,8 @@ Client for API communication.
 - [peerAdd](SingleNodeClient.md#peeradd)
 - [peerDelete](SingleNodeClient.md#peerdelete)
 - [peer](SingleNodeClient.md#peer)
-- [fetchStatus](SingleNodeClient.md#fetchstatus)
-- [fetchJson](SingleNodeClient.md#fetchjson)
-- [fetchBinary](SingleNodeClient.md#fetchbinary)
-- [combineQueryParams](SingleNodeClient.md#combinequeryparams)
+- [bech32Hrp](SingleNodeClient.md#bech32hrp)
+- [pluginFetch](SingleNodeClient.md#pluginfetch)
 
 ## Constructors
 
@@ -240,30 +227,6 @@ The messageId.
 
 ___
 
-### messagesFind
-
-▸ **messagesFind**(`indexationKey`): `Promise`<[`IMessagesResponse`](../interfaces/IMessagesResponse.md)\>
-
-Find messages by index.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `indexationKey` | `string` \| `Uint8Array` | The index value as a byte array or UTF8 string. |
-
-#### Returns
-
-`Promise`<[`IMessagesResponse`](../interfaces/IMessagesResponse.md)\>
-
-The messageId.
-
-#### Implementation of
-
-[IClient](../interfaces/IClient.md).[messagesFind](../interfaces/IClient.md#messagesfind)
-
-___
-
 ### messageChildren
 
 ▸ **messageChildren**(`messageId`): `Promise`<[`IChildrenResponse`](../interfaces/IChildrenResponse.md)\>
@@ -333,253 +296,6 @@ The output details.
 #### Implementation of
 
 [IClient](../interfaces/IClient.md).[output](../interfaces/IClient.md#output)
-
-___
-
-### outputs
-
-▸ **outputs**(`type`, `issuer?`, `sender?`, `index?`): `Promise`<[`IOutputsResponse`](../interfaces/IOutputsResponse.md)\>
-
-Find outputs by type.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `type` | `number` | The type of the output to get. |
-| `issuer?` | `string` | The issuer of the output. |
-| `sender?` | `string` | The sender of the output. |
-| `index?` | `string` | The index associated with the output. |
-
-#### Returns
-
-`Promise`<[`IOutputsResponse`](../interfaces/IOutputsResponse.md)\>
-
-The outputs with the requested parameters.
-
-#### Implementation of
-
-[IClient](../interfaces/IClient.md).[outputs](../interfaces/IClient.md#outputs)
-
-___
-
-### address
-
-▸ **address**(`addressBech32`): `Promise`<[`IAddressResponse`](../interfaces/IAddressResponse.md)\>
-
-Get the address details.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `addressBech32` | `string` | The address to get the details for. |
-
-#### Returns
-
-`Promise`<[`IAddressResponse`](../interfaces/IAddressResponse.md)\>
-
-The address details.
-
-#### Implementation of
-
-[IClient](../interfaces/IClient.md).[address](../interfaces/IClient.md#address)
-
-___
-
-### addressOutputs
-
-▸ **addressOutputs**(`addressBech32`, `type?`): `Promise`<[`IAddressOutputsResponse`](../interfaces/IAddressOutputsResponse.md)\>
-
-Get the address outputs.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `addressBech32` | `string` | The address to get the outputs for. |
-| `type?` | `number` | Filter the type of outputs you are looking up, defaults to all. |
-
-#### Returns
-
-`Promise`<[`IAddressOutputsResponse`](../interfaces/IAddressOutputsResponse.md)\>
-
-The address outputs.
-
-#### Implementation of
-
-[IClient](../interfaces/IClient.md).[addressOutputs](../interfaces/IClient.md#addressoutputs)
-
-___
-
-### addressEd25519
-
-▸ **addressEd25519**(`addressEd25519`): `Promise`<[`IAddressResponse`](../interfaces/IAddressResponse.md)\>
-
-Get the address detail using ed25519 address.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `addressEd25519` | `string` | The address to get the details for. |
-
-#### Returns
-
-`Promise`<[`IAddressResponse`](../interfaces/IAddressResponse.md)\>
-
-The address details.
-
-#### Implementation of
-
-[IClient](../interfaces/IClient.md).[addressEd25519](../interfaces/IClient.md#addressed25519)
-
-___
-
-### addressEd25519Outputs
-
-▸ **addressEd25519Outputs**(`addressEd25519`, `type?`): `Promise`<[`IAddressOutputsResponse`](../interfaces/IAddressOutputsResponse.md)\>
-
-Get the address outputs using ed25519 address.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `addressEd25519` | `string` | The address to get the outputs for. |
-| `type?` | `number` | Filter the type of outputs you are looking up, defaults to all. |
-
-#### Returns
-
-`Promise`<[`IAddressOutputsResponse`](../interfaces/IAddressOutputsResponse.md)\>
-
-The address outputs.
-
-#### Implementation of
-
-[IClient](../interfaces/IClient.md).[addressEd25519Outputs](../interfaces/IClient.md#addressed25519outputs)
-
-___
-
-### addressAliasOutputs
-
-▸ **addressAliasOutputs**(`addressAlias`, `type?`): `Promise`<[`IAddressOutputsResponse`](../interfaces/IAddressOutputsResponse.md)\>
-
-Get the address outputs for an alias address.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `addressAlias` | `string` | The address to get the outputs for. |
-| `type?` | `number` | Filter the type of outputs you are looking up, defaults to all. |
-
-#### Returns
-
-`Promise`<[`IAddressOutputsResponse`](../interfaces/IAddressOutputsResponse.md)\>
-
-The address outputs.
-
-#### Implementation of
-
-[IClient](../interfaces/IClient.md).[addressAliasOutputs](../interfaces/IClient.md#addressaliasoutputs)
-
-___
-
-### addressNftOutputs
-
-▸ **addressNftOutputs**(`addressNft`, `type?`): `Promise`<[`IAddressOutputsResponse`](../interfaces/IAddressOutputsResponse.md)\>
-
-Get the address outputs for an NFT address.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `addressNft` | `string` | The address to get the outputs for. |
-| `type?` | `number` | Filter the type of outputs you are looking up, defaults to all. |
-
-#### Returns
-
-`Promise`<[`IAddressOutputsResponse`](../interfaces/IAddressOutputsResponse.md)\>
-
-The address outputs.
-
-#### Implementation of
-
-[IClient](../interfaces/IClient.md).[addressNftOutputs](../interfaces/IClient.md#addressnftoutputs)
-
-___
-
-### alias
-
-▸ **alias**(`aliasId`): `Promise`<[`IOutputsResponse`](../interfaces/IOutputsResponse.md)\>
-
-Get the outputs for an alias.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `aliasId` | `string` | The alias to get the outputs for. |
-
-#### Returns
-
-`Promise`<[`IOutputsResponse`](../interfaces/IOutputsResponse.md)\>
-
-The outputs.
-
-#### Implementation of
-
-[IClient](../interfaces/IClient.md).[alias](../interfaces/IClient.md#alias)
-
-___
-
-### nft
-
-▸ **nft**(`nftId`): `Promise`<[`IOutputsResponse`](../interfaces/IOutputsResponse.md)\>
-
-Get the outputs for an NFT.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `nftId` | `string` | The NFT to get the outputs for. |
-
-#### Returns
-
-`Promise`<[`IOutputsResponse`](../interfaces/IOutputsResponse.md)\>
-
-The outputs.
-
-#### Implementation of
-
-[IClient](../interfaces/IClient.md).[nft](../interfaces/IClient.md#nft)
-
-___
-
-### foundry
-
-▸ **foundry**(`foundryId`): `Promise`<[`IOutputsResponse`](../interfaces/IOutputsResponse.md)\>
-
-Get the outputs for a foundry.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `foundryId` | `string` | The foundry to get the outputs for. |
-
-#### Returns
-
-`Promise`<[`IOutputsResponse`](../interfaces/IOutputsResponse.md)\>
-
-The outputs.
-
-#### Implementation of
-
-[IClient](../interfaces/IClient.md).[foundry](../interfaces/IClient.md#foundry)
 
 ___
 
@@ -764,97 +480,53 @@ The details for the created peer.
 
 ___
 
-### fetchStatus
+### bech32Hrp
 
-▸ **fetchStatus**(`route`): `Promise`<`number`\>
+▸ **bech32Hrp**(): `Promise`<`string`\>
 
-Perform a request and just return the status.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `route` | `string` | The route of the request. |
+Get the bech 32 human readable part.
 
 #### Returns
 
-`Promise`<`number`\>
+`Promise`<`string`\>
 
-The response.
+The bech 32 human readable part.
+
+#### Implementation of
+
+[IClient](../interfaces/IClient.md).[bech32Hrp](../interfaces/IClient.md#bech32hrp)
 
 ___
 
-### fetchJson
+### pluginFetch
 
-▸ **fetchJson**<`T`, `U`\>(`method`, `route`, `requestData?`): `Promise`<`U`\>
+▸ **pluginFetch**<`T`, `S`\>(`basePluginPath`, `method`, `methodPath`, `queryParams?`, `request?`): `Promise`<`S`\>
 
-Perform a request in json format.
+Extension method which provides request methods for plugins.
 
 #### Type parameters
 
 | Name |
 | :------ |
 | `T` |
-| `U` |
+| `S` |
 
 #### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
+| `basePluginPath` | `string` | The base path for the plugin eg indexer/v1/ . |
 | `method` | ``"get"`` \| ``"post"`` \| ``"delete"`` | The http method. |
-| `route` | `string` | The route of the request. |
-| `requestData?` | `T` | Request to send to the endpoint. |
+| `methodPath` | `string` | The path for the plugin request. |
+| `queryParams?` | `string`[] | Additional query params for the request. |
+| `request?` | `T` | The request object. |
 
 #### Returns
 
-`Promise`<`U`\>
+`Promise`<`S`\>
 
-The response.
+The response object.
 
-___
+#### Implementation of
 
-### fetchBinary
-
-▸ **fetchBinary**<`T`\>(`method`, `route`, `requestData?`): `Promise`<`Uint8Array` \| `T`\>
-
-Perform a request for binary data.
-
-#### Type parameters
-
-| Name |
-| :------ |
-| `T` |
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `method` | ``"get"`` \| ``"post"`` | The http method. |
-| `route` | `string` | The route of the request. |
-| `requestData?` | `Uint8Array` | Request to send to the endpoint. |
-
-#### Returns
-
-`Promise`<`Uint8Array` \| `T`\>
-
-The response.
-
-___
-
-### combineQueryParams
-
-▸ **combineQueryParams**(`queryParams`): `string`
-
-Combine the query params.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `queryParams` | `string`[] | The quer params to combine. |
-
-#### Returns
-
-`string`
-
-The combined query params.
+[IClient](../interfaces/IClient.md).[pluginFetch](../interfaces/IClient.md#pluginfetch)

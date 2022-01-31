@@ -1,6 +1,5 @@
 import bigInt from "big-integer";
 import { FOUNDRY_OUTPUT_TYPE } from "../../models/outputs/IFoundryOutput.mjs";
-import { deserializeAddress, MIN_ADDRESS_LENGTH, serializeAddress } from "../addresses/addresses.mjs";
 import { SMALL_TYPE_LENGTH, UINT256_SIZE, UINT32_SIZE, UINT64_SIZE } from "../commonDataTypes.mjs";
 import { deserializeFeatureBlocks, MIN_FEATURE_BLOCKS_LENGTH, serializeFeatureBlocks } from "../featureBlocks/featureBlocks.mjs";
 import { deserializeNativeTokens, MIN_NATIVE_TOKENS_LENGTH, NATIVE_TOKEN_TAG_LENGTH, serializeNativeTokens } from "../nativeTokens.mjs";
@@ -10,7 +9,6 @@ import { deserializeUnlockConditions, MIN_UNLOCK_CONDITIONS_LENGTH, serializeUnl
  * The minimum length of a foundry output binary representation.
  */
 export const MIN_FOUNDRY_OUTPUT_LENGTH = SMALL_TYPE_LENGTH + // Type
-    MIN_ADDRESS_LENGTH + // Address
     UINT64_SIZE + // Amount
     MIN_NATIVE_TOKENS_LENGTH + // Native tokens
     UINT32_SIZE + // Serial Number
@@ -33,7 +31,6 @@ export function deserializeFoundryOutput(readStream) {
     if (type !== FOUNDRY_OUTPUT_TYPE) {
         throw new Error(`Type mismatch in foundryOutput ${type}`);
     }
-    const address = deserializeAddress(readStream);
     const amount = readStream.readUInt64("foundryOutput.amount");
     const nativeTokens = deserializeNativeTokens(readStream);
     const serialNumber = readStream.readUInt32("foundryOutput.serialNumber");
@@ -47,7 +44,6 @@ export function deserializeFoundryOutput(readStream) {
         type: FOUNDRY_OUTPUT_TYPE,
         amount: Number(amount),
         nativeTokens,
-        address,
         serialNumber,
         tokenTag,
         circulatingSupply: circulatingSupply.toString(),
@@ -64,7 +60,6 @@ export function deserializeFoundryOutput(readStream) {
  */
 export function serializeFoundryOutput(writeStream, object) {
     writeStream.writeUInt8("foundryOutput.type", object.type);
-    serializeAddress(writeStream, object.address);
     writeStream.writeUInt64("foundryOutput.amount", bigInt(object.amount));
     serializeNativeTokens(writeStream, object.nativeTokens);
     writeStream.writeUInt32("foundryOutput.serialNumber", object.serialNumber);

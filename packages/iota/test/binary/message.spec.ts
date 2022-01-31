@@ -7,6 +7,7 @@ import type { IMilestonePayload } from "../../src/models/payloads/IMilestonePayl
 import type { ITaggedDataPayload } from "../../src/models/payloads/ITaggedDataPayload";
 import type { ITransactionPayload } from "../../src/models/payloads/ITransactionPayload";
 import type { ISignatureUnlockBlock } from "../../src/models/unlockBlocks/ISignatureUnlockBlock";
+import type { IAddressUnlockCondition } from "../../src/models/unlockConditions/IAddressUnlockCondition";
 
 describe("Binary Message", () => {
     test("Can fail with underflow min", () => {
@@ -137,7 +138,7 @@ describe("Binary Message", () => {
 
     test("Can succeed with actual transaction data", () => {
         const hex =
-            "7b00000000000000024ccb0843016072b0d0d1c4265bc808ef8a80ae4ad70e10d6016e248e4e047235aac2a777c07473522122629124d7df647b2ea712386707e3687dd3a47cbdfa55fc00000000000000000100002367ec318426c9f5d1115a6ac96f6c3cd2e53443713e0b63f0c266cbda7444740100020003003eb1ed78d420c8318972b8b0839420f502b25356270a48a430cb55a5e323f7236400000000000000000000000300625d17d4a4b21cd5edeb57544b9d2d66ce22985fb61f17d1d7cae958d0068618f95c2dd3f7df0900000000000c0000000500000003666f6f000000000100000014fe414a9eccf9589b38c7c89a2fa5921b4b170ebefc04b6a812b3d02068cfd73163a90017ed5fe9530f52fb0d30836a453a37204f4d59e03012d82e0a946f31c930ac54f4a35aef9578b9dec9c12887404be353c5f7ebd88bcbefcc78e29c050000000000000000";
+            "7b00000000000000024ccb0843016072b0d0d1c4265bc808ef8a80ae4ad70e10d6016e248e4e047235aac2a777c07473522122629124d7df647b2ea712386707e3687dd3a47cbdfa55fe00000000000000000100002367ec318426c9f5d1115a6ac96f6c3cd2e53443713e0b63f0c266cbda7444740100020003640000000000000000000100003eb1ed78d420c8318972b8b0839420f502b25356270a48a430cb55a5e323f7230003f95c2dd3f7df09000000010000625d17d4a4b21cd5edeb57544b9d2d66ce22985fb61f17d1d7cae958d0068618000c0000000500000003666f6f000000000100000014fe414a9eccf9589b38c7c89a2fa5921b4b170ebefc04b6a812b3d02068cfd73163a90017ed5fe9530f52fb0d30836a453a37204f4d59e03012d82e0a946f31c930ac54f4a35aef9578b9dec9c12887404be353c5f7ebd88bcbefcc78e29c050000000000000000";
         const message = deserializeMessage(new ReadStream(Converter.hexToBytes(hex)));
         expect(message.networkId).toEqual("123");
         expect(message.parentMessageIds).toBeDefined();
@@ -161,16 +162,20 @@ describe("Binary Message", () => {
         const extendedOutput1 = payload.essence.outputs[0] as IExtendedOutput;
         expect(payload.essence.outputs.length).toEqual(2);
         expect(extendedOutput1.type).toEqual(3);
-        expect(extendedOutput1.address.type).toEqual(0);
-        expect(extendedOutput1.address.address).toEqual(
+        expect(extendedOutput1.unlockConditions.length).toEqual(1);
+        const unlockCondition = extendedOutput1.unlockConditions[0] as IAddressUnlockCondition;
+        expect(unlockCondition.address.type).toEqual(0);
+        expect(unlockCondition.address.address).toEqual(
             "3eb1ed78d420c8318972b8b0839420f502b25356270a48a430cb55a5e323f723"
         );
         expect(extendedOutput1.amount).toEqual(100);
 
         const extendedOutput2 = payload.essence.outputs[1] as IExtendedOutput;
         expect(extendedOutput2.type).toEqual(3);
-        expect(extendedOutput2.address.type).toEqual(0);
-        expect(extendedOutput2.address.address).toEqual(
+        expect(extendedOutput2.unlockConditions.length).toEqual(1);
+        const unlockCondition2 = extendedOutput2.unlockConditions[0] as IAddressUnlockCondition;
+        expect(unlockCondition2.address.type).toEqual(0);
+        expect(unlockCondition2.address.address).toEqual(
             "625d17d4a4b21cd5edeb57544b9d2d66ce22985fb61f17d1d7cae958d0068618"
         );
         expect(extendedOutput2.amount).toEqual(2779530283277561);

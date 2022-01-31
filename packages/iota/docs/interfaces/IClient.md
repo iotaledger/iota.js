@@ -18,20 +18,9 @@ Client interface definition for API communication.
 - [messageRaw](IClient.md#messageraw)
 - [messageSubmit](IClient.md#messagesubmit)
 - [messageSubmitRaw](IClient.md#messagesubmitraw)
-- [messagesFind](IClient.md#messagesfind)
 - [messageChildren](IClient.md#messagechildren)
 - [transactionIncludedMessage](IClient.md#transactionincludedmessage)
 - [output](IClient.md#output)
-- [outputs](IClient.md#outputs)
-- [address](IClient.md#address)
-- [addressOutputs](IClient.md#addressoutputs)
-- [addressEd25519](IClient.md#addressed25519)
-- [addressEd25519Outputs](IClient.md#addressed25519outputs)
-- [addressAliasOutputs](IClient.md#addressaliasoutputs)
-- [addressNftOutputs](IClient.md#addressnftoutputs)
-- [alias](IClient.md#alias)
-- [nft](IClient.md#nft)
-- [foundry](IClient.md#foundry)
 - [milestone](IClient.md#milestone)
 - [milestoneUtxoChanges](IClient.md#milestoneutxochanges)
 - [treasury](IClient.md#treasury)
@@ -40,6 +29,8 @@ Client interface definition for API communication.
 - [peerAdd](IClient.md#peeradd)
 - [peerDelete](IClient.md#peerdelete)
 - [peer](IClient.md#peer)
+- [bech32Hrp](IClient.md#bech32hrp)
+- [pluginFetch](IClient.md#pluginfetch)
 
 ## Methods
 
@@ -185,26 +176,6 @@ The messageId.
 
 ___
 
-### messagesFind
-
-▸ **messagesFind**(`indexationKey`): `Promise`<[`IMessagesResponse`](IMessagesResponse.md)\>
-
-Find messages by index.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `indexationKey` | `string` \| `Uint8Array` | The index value as a byte array or UTF8 string. |
-
-#### Returns
-
-`Promise`<[`IMessagesResponse`](IMessagesResponse.md)\>
-
-The messageId.
-
-___
-
 ### messageChildren
 
 ▸ **messageChildren**(`messageId`): `Promise`<[`IChildrenResponse`](IChildrenResponse.md)\>
@@ -262,213 +233,6 @@ Find an output by its identifier.
 `Promise`<[`IOutputResponse`](IOutputResponse.md)\>
 
 The output details.
-
-___
-
-### outputs
-
-▸ **outputs**(`type`, `issuer?`, `sender?`, `index?`): `Promise`<[`IOutputsResponse`](IOutputsResponse.md)\>
-
-Find outputs by type.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `type` | `number` | The type of the outputs to get. |
-| `issuer?` | `string` | The issuer of the output. |
-| `sender?` | `string` | The sender of the output. |
-| `index?` | `string` | The index associated with the output. |
-
-#### Returns
-
-`Promise`<[`IOutputsResponse`](IOutputsResponse.md)\>
-
-The outputs with the requested parameters.
-
-___
-
-### address
-
-▸ **address**(`addressBech32`): `Promise`<[`IAddressResponse`](IAddressResponse.md)\>
-
-Get the address details using bech32 address.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `addressBech32` | `string` | The address to get the details for. |
-
-#### Returns
-
-`Promise`<[`IAddressResponse`](IAddressResponse.md)\>
-
-The address details.
-
-___
-
-### addressOutputs
-
-▸ **addressOutputs**(`addressBech32`, `type?`): `Promise`<[`IAddressOutputsResponse`](IAddressOutputsResponse.md)\>
-
-Get the address outputs using bech32 address.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `addressBech32` | `string` | The address to get the outputs for. |
-| `type?` | `number` | Filter the type of outputs you are looking up, defaults to all. |
-
-#### Returns
-
-`Promise`<[`IAddressOutputsResponse`](IAddressOutputsResponse.md)\>
-
-The address outputs.
-
-___
-
-### addressEd25519
-
-▸ **addressEd25519**(`addressEd25519`): `Promise`<[`IAddressResponse`](IAddressResponse.md)\>
-
-Get the address details for an ed25519 address.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `addressEd25519` | `string` | The address to get the details for. |
-
-#### Returns
-
-`Promise`<[`IAddressResponse`](IAddressResponse.md)\>
-
-The address details.
-
-___
-
-### addressEd25519Outputs
-
-▸ **addressEd25519Outputs**(`addressEd25519`, `type?`): `Promise`<[`IAddressOutputsResponse`](IAddressOutputsResponse.md)\>
-
-Get the address outputs for an ed25519 address.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `addressEd25519` | `string` | The address to get the outputs for. |
-| `type?` | `number` | Filter the type of outputs you are looking up, defaults to all. |
-
-#### Returns
-
-`Promise`<[`IAddressOutputsResponse`](IAddressOutputsResponse.md)\>
-
-The address outputs.
-
-___
-
-### addressAliasOutputs
-
-▸ **addressAliasOutputs**(`addressAlias`, `type?`): `Promise`<[`IAddressOutputsResponse`](IAddressOutputsResponse.md)\>
-
-Get the address outputs for an alias address.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `addressAlias` | `string` | The address to get the outputs for. |
-| `type?` | `number` | Filter the type of outputs you are looking up, defaults to all. |
-
-#### Returns
-
-`Promise`<[`IAddressOutputsResponse`](IAddressOutputsResponse.md)\>
-
-The address outputs.
-
-___
-
-### addressNftOutputs
-
-▸ **addressNftOutputs**(`addressNft`, `type?`): `Promise`<[`IAddressOutputsResponse`](IAddressOutputsResponse.md)\>
-
-Get the address outputs for an NFT address.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `addressNft` | `string` | The address to get the outputs for. |
-| `type?` | `number` | Filter the type of outputs you are looking up, defaults to all. |
-
-#### Returns
-
-`Promise`<[`IAddressOutputsResponse`](IAddressOutputsResponse.md)\>
-
-The address outputs.
-
-___
-
-### alias
-
-▸ **alias**(`aliasId`): `Promise`<[`IOutputsResponse`](IOutputsResponse.md)\>
-
-Get the outputs for an alias.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `aliasId` | `string` | The alias to get the outputs for. |
-
-#### Returns
-
-`Promise`<[`IOutputsResponse`](IOutputsResponse.md)\>
-
-The outputs.
-
-___
-
-### nft
-
-▸ **nft**(`nftId`): `Promise`<[`IOutputsResponse`](IOutputsResponse.md)\>
-
-Get the outputs for an NFT.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `nftId` | `string` | The NFT to get the outputs for. |
-
-#### Returns
-
-`Promise`<[`IOutputsResponse`](IOutputsResponse.md)\>
-
-The outputs.
-
-___
-
-### foundry
-
-▸ **foundry**(`foundryId`): `Promise`<[`IOutputsResponse`](IOutputsResponse.md)\>
-
-Get the outputs for a foundry.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `foundryId` | `string` | The foundry to get the outputs for. |
-
-#### Returns
-
-`Promise`<[`IOutputsResponse`](IOutputsResponse.md)\>
-
-The outputs.
 
 ___
 
@@ -618,3 +382,48 @@ Get a peer.
 `Promise`<[`IPeer`](IPeer.md)\>
 
 The details for the created peer.
+
+___
+
+### bech32Hrp
+
+▸ **bech32Hrp**(): `Promise`<`string`\>
+
+Get the bech 32 human readable part.
+
+#### Returns
+
+`Promise`<`string`\>
+
+The bech 32 human readable part.
+
+___
+
+### pluginFetch
+
+▸ **pluginFetch**<`T`, `S`\>(`basePluginPath`, `method`, `methodPath`, `queryParams?`, `request?`): `Promise`<`S`\>
+
+Extension method which provides request methods for plugins.
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+| `S` |
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `basePluginPath` | `string` | The base path for the plugin eg indexer/v1/ . |
+| `method` | ``"get"`` \| ``"post"`` \| ``"delete"`` | The http method. |
+| `methodPath` | `string` | The path for the plugin request. |
+| `queryParams?` | `string`[] | Additional query params for the request. |
+| `request?` | `T` | The request object. |
+
+#### Returns
+
+`Promise`<`S`\>
+
+The response object.

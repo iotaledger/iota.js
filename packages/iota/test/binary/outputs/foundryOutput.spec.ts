@@ -5,6 +5,7 @@ import { deserializeFoundryOutput, serializeFoundryOutput } from "../../../src/b
 import { ED25519_ADDRESS_TYPE } from "../../../src/models/addresses/IEd25519Address";
 import { FOUNDRY_OUTPUT_TYPE, IFoundryOutput } from "../../../src/models/outputs/IFoundryOutput";
 import { SIMPLE_TOKEN_SCHEME_TYPE } from "../../../src/models/tokenSchemes/ISimpleTokenScheme";
+import { ADDRESS_UNLOCK_CONDITION_TYPE, IAddressUnlockCondition } from "../../../src/models/unlockConditions/IAddressUnlockCondition";
 
 describe("Binary Foundry Output", () => {
     test("Can serialize and deserialize foundry output", () => {
@@ -21,10 +22,6 @@ describe("Binary Foundry Output", () => {
                     amount: "6666666666666666666"
                 }
             ],
-            address: {
-                type: ED25519_ADDRESS_TYPE,
-                address: "6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5faaa2"
-            },
             serialNumber: 387548,
             tokenTag: "1".repeat(24),
             circulatingSupply: "1111111122222222",
@@ -32,7 +29,15 @@ describe("Binary Foundry Output", () => {
             tokenScheme: {
                 type: SIMPLE_TOKEN_SCHEME_TYPE
             },
-            unlockConditions: [],
+            unlockConditions: [
+                {
+                    type: ADDRESS_UNLOCK_CONDITION_TYPE,
+                    address: {
+                        type: ED25519_ADDRESS_TYPE,
+                        address: "6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5faaa2"
+                    }
+                }
+            ],
             blocks: []
         };
 
@@ -40,12 +45,14 @@ describe("Binary Foundry Output", () => {
         serializeFoundryOutput(serialized, object);
         const hex = serialized.finalHex();
         expect(hex).toEqual(
-            "05006920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5faaa240e201000000000002000000000000000000000000000000000000000000000000000000000000000000000000000000e338d6da574c194d0000000000000000000000000000000000000000000000001111111111111111111111111111111111111111111111111111111111111111111111111111aaaa9a0603c2845c000000000000000000000000000000000000000000000000dce905001111111111111111111111118efcbeb78cf20300000000000000000000000000000000000000000000000000556ed46e19e50700000000000000000000000000000000000000000000000000000000"
+            "0540e201000000000002000000000000000000000000000000000000000000000000000000000000000000000000000000e338d6da574c194d0000000000000000000000000000000000000000000000001111111111111111111111111111111111111111111111111111111111111111111111111111aaaa9a0603c2845c000000000000000000000000000000000000000000000000dce905001111111111111111111111118efcbeb78cf20300000000000000000000000000000000000000000000000000556ed46e19e50700000000000000000000000000000000000000000000000000000100006920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5faaa200"
         );
         const deserialized = deserializeFoundryOutput(new ReadStream(Converter.hexToBytes(hex)));
         expect(deserialized.type).toEqual(5);
-        expect(deserialized.address.type).toEqual(0);
-        expect(deserialized.address.address).toEqual(
+        expect(deserialized.unlockConditions.length).toEqual(1);
+        const addressUnlockCondition = deserialized.unlockConditions[0] as IAddressUnlockCondition;
+        expect(addressUnlockCondition.address.type).toEqual(0);
+        expect(addressUnlockCondition.address.address).toEqual(
             "6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5faaa2"
         );
         expect(deserialized.amount).toEqual(123456);

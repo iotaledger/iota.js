@@ -41,3 +41,10 @@ export declare function getUnspentAddressesWithAddressGenerator<T>(client: IClie
     path: string;
     balance: number;
 }[]>;
+/**
+ * Calculate address balance for an address.
+ * @param client The client for communications.
+ * @param addressBech32 The address in bech32 format.
+ * @returns The unspent balance.
+ */
+export declare function calculateAddressBalance(client: IClient, addressBech32: string): Promise<number>;

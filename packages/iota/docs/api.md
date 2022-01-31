@@ -6,6 +6,7 @@
 
 - [Ed25519Address](classes/Ed25519Address.md)
 - [ClientError](classes/ClientError.md)
+- [IndexerPluginClient](classes/IndexerPluginClient.md)
 - [SingleNodeClient](classes/SingleNodeClient.md)
 - [B1T6](classes/B1T6.md)
 - [LocalPowProvider](classes/LocalPowProvider.md)
@@ -216,6 +217,7 @@
 - [getUnspentAddress](api.md#getunspentaddress)
 - [getUnspentAddresses](api.md#getunspentaddresses)
 - [getUnspentAddressesWithAddressGenerator](api.md#getunspentaddresseswithaddressgenerator)
+- [calculateAddressBalance](api.md#calculateaddressbalance)
 - [promote](api.md#promote)
 - [reattach](api.md#reattach)
 - [retrieveData](api.md#retrievedata)
@@ -277,18 +279,15 @@
 - [IBlsAddress](interfaces/IBlsAddress.md)
 - [IEd25519Address](interfaces/IEd25519Address.md)
 - [INftAddress](interfaces/INftAddress.md)
-- [IAddressOutputsResponse](interfaces/IAddressOutputsResponse.md)
-- [IAddressResponse](interfaces/IAddressResponse.md)
 - [IChildrenResponse](interfaces/IChildrenResponse.md)
 - [IMessageIdResponse](interfaces/IMessageIdResponse.md)
-- [IMessagesResponse](interfaces/IMessagesResponse.md)
 - [IMilestoneResponse](interfaces/IMilestoneResponse.md)
 - [IMilestoneUtxoChangesResponse](interfaces/IMilestoneUtxoChangesResponse.md)
 - [IOutputResponse](interfaces/IOutputResponse.md)
-- [IOutputsResponse](interfaces/IOutputsResponse.md)
 - [IReceiptsResponse](interfaces/IReceiptsResponse.md)
 - [IResponse](interfaces/IResponse.md)
 - [ITipsResponse](interfaces/ITipsResponse.md)
+- [IOutputsResponse](interfaces/IOutputsResponse.md)
 - [IIssuerFeatureBlock](interfaces/IIssuerFeatureBlock.md)
 - [IMetadataFeatureBlock](interfaces/IMetadataFeatureBlock.md)
 - [ISenderFeatureBlock](interfaces/ISenderFeatureBlock.md)
@@ -3042,6 +3041,27 @@ All the unspent addresses.
 
 ___
 
+### calculateAddressBalance
+
+▸ **calculateAddressBalance**(`client`, `addressBech32`): `Promise`<`number`\>
+
+Calculate address balance for an address.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `client` | [`IClient`](interfaces/IClient.md) | The client for communications. |
+| `addressBech32` | `string` | The address in bech32 format. |
+
+#### Returns
+
+`Promise`<`number`\>
+
+The unspent balance.
+
+___
+
 ### promote
 
 ▸ **promote**(`client`, `messageId`): `Promise`<{}\>
@@ -3338,7 +3358,7 @@ ___
 
 ### sendData
 
-▸ **sendData**(`client`, `tag?`, `data?`): `Promise`<{}\>
+▸ **sendData**(`client`, `tag`, `data?`): `Promise`<{}\>
 
 Send a data message.
 
@@ -3347,7 +3367,7 @@ Send a data message.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `client` | `string` \| [`IClient`](interfaces/IClient.md) | The client or node endpoint to send the data with. |
-| `tag?` | `string` \| `Uint8Array` | The tag for the data. |
+| `tag` | `string` \| `Uint8Array` | The tag for the data. |
 | `data?` | `string` \| `Uint8Array` | The data as either UTF8 text or Uint8Array bytes. |
 
 #### Returns

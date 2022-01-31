@@ -19,7 +19,7 @@ import type { ISeed } from "../models/ISeed";
  * @returns The id of the message created and the contructed message.
  */
 export declare function send(client: IClient | string, seed: ISeed, accountIndex: number, addressBech32: string, amount: number, taggedData?: {
-    tag?: Uint8Array | string;
+    tag: Uint8Array | string;
     data?: Uint8Array | string;
 }, addressOptions?: {
     startIndex?: number;
@@ -71,7 +71,7 @@ export declare function sendMultiple(client: IClient | string, seed: ISeed, acco
     addressBech32: string;
     amount: number;
 }[], taggedData?: {
-    tag?: Uint8Array | string;
+    tag: Uint8Array | string;
     data?: Uint8Array | string;
 }, addressOptions?: {
     startIndex?: number;
@@ -125,7 +125,7 @@ export declare function sendWithAddressGenerator<T>(client: IClient | string, se
     addressType: number;
     amount: number;
 }[], taggedData?: {
-    tag?: Uint8Array | string;
+    tag: Uint8Array | string;
     data?: Uint8Array | string;
 }, zeroCount?: number): Promise<{
     messageId: string;

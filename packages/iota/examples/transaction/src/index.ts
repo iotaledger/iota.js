@@ -13,11 +13,13 @@ import {
     sendAdvanced,
     EXTENDED_OUTPUT_TYPE,
     SingleNodeClient,
-    UTXO_INPUT_TYPE
+    UTXO_INPUT_TYPE,
+    IndexerPluginClient
 } from "@iota/iota.js";
 import { Converter } from "@iota/util.js";
 
-const API_ENDPOINT = "https://chrysalis-nodes.iota.org";
+// const API_ENDPOINT = "https://chrysalis-nodes.iota.org/";
+const API_ENDPOINT = "http://localhost:14265/";
 
 async function run() {
     const client = new SingleNodeClient(API_ENDPOINT);
@@ -44,11 +46,9 @@ async function run() {
     const genesisEd25519Address = new Ed25519Address(genesisWalletKeyPair.publicKey);
     const genesisWalletAddress = genesisEd25519Address.toAddress();
     const genesisWalletAddressHex = Converter.bytesToHex(genesisWalletAddress);
+    const genesisWalletAddressBech32 = Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, genesisWalletAddress, nodeInfo.bech32HRP);
     console.log("\tAddress Ed25519", genesisWalletAddressHex);
-    console.log(
-        "\tAddress Bech32",
-        Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, genesisWalletAddress, nodeInfo.bech32HRP)
-    );
+    console.log("\tAddress Bech32", genesisWalletAddressBech32);
 
     // Create a new seed for the wallet
     const walletSeed = new Ed25519Seed(
@@ -75,7 +75,8 @@ async function run() {
     // Because we are using the genesis address we must use send advanced as the input address is
     // not calculated from a Bip32 path, if you were doing a wallet to wallet transfer you can just use send
     // which calculates all the inputs/outputs for you
-    const genesisAddressOutputs = await client.addressEd25519Outputs(genesisWalletAddressHex);
+    const indexerPlugin = new IndexerPluginClient(client);
+    const genesisAddressOutputs = await indexerPlugin.outputs({ addressBech32: genesisWalletAddressBech32 });
 
     const inputsWithKeyPairs: {
         input: IUTXOInput;
@@ -84,8 +85,8 @@ async function run() {
 
     let totalGenesis = 0;
 
-    for (let i = 0; i < genesisAddressOutputs.outputIds.length; i++) {
-        const output = await client.output(genesisAddressOutputs.outputIds[i]);
+    for (let i = 0; i < genesisAddressOutputs.data.length; i++) {
+        const output = await client.output(genesisAddressOutputs.data[i]);
         if (!output.isSpent) {
             inputsWithKeyPairs.push({
                 input: {
@@ -108,23 +109,23 @@ async function run() {
         addressType: number;
         amount: number;
     }[] = [
-        // This is the transfer to the new address
-        {
-            address: newAddressHex,
-            addressType: ED25519_ADDRESS_TYPE,
-            amount: amountToSend
-        },
-        // Sending remainder back to genesis
-        {
-            address: genesisWalletAddressHex,
-            addressType: ED25519_ADDRESS_TYPE,
-            amount: totalGenesis - amountToSend
-        }
-    ];
+            // This is the transfer to the new address
+            {
+                address: newAddressHex,
+                addressType: ED25519_ADDRESS_TYPE,
+                amount: amountToSend
+            },
+            // Sending remainder back to genesis
+            {
+                address: genesisWalletAddressHex,
+                addressType: ED25519_ADDRESS_TYPE,
+                amount: totalGenesis - amountToSend
+            }
+        ];
 
     const { messageId } = await sendAdvanced(client, inputsWithKeyPairs, outputs, {
-        key: Converter.utf8ToBytes("WALLET"),
-        data: Converter.utf8ToBytes("Not trinity")
+        tag: Converter.utf8ToBytes("WALLET"),
+        data: Converter.utf8ToBytes("Fireflea")
     });
 
     console.log("Created Message Id", messageId);

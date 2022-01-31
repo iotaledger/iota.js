@@ -23,7 +23,7 @@ export async function retrieveData(client, messageId) {
         }
         if (taggedDataPayload) {
             return {
-                tag: taggedDataPayload.tag ? Converter.hexToBytes(taggedDataPayload.tag) : undefined,
+                tag: Converter.hexToBytes(taggedDataPayload.tag),
                 data: taggedDataPayload.data ? Converter.hexToBytes(taggedDataPayload.data) : undefined
             };
         }

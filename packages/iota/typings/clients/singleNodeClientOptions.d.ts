@@ -4,9 +4,13 @@ import type { IPowProvider } from "../models/IPowProvider";
  */
 export interface SingleNodeClientOptions {
     /**
-     * Base path for API location, defaults to /api/v1/.
+     * Base path for API location, defaults to /api/v2/.
      */
     basePath?: string;
+    /**
+     * Base path for API plugin location, defaults to /api/plugins/.
+     */
+    basePluginPath?: string;
     /**
      * Use a custom pow provider instead of the one on the node.
      */

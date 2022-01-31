@@ -10,7 +10,8 @@ import {
     SingleNodeClient
 } from "@iota/iota.js";
 
-const API_ENDPOINT = "https://chrysalis-nodes.iota.org/";
+// const API_ENDPOINT = "https://chrysalis-nodes.iota.org/";
+const API_ENDPOINT = "http://localhost:14265/";
 
 async function run() {
     const client = new SingleNodeClient(API_ENDPOINT);

@@ -1,11 +1,7 @@
-import type { IAddressOutputsResponse } from "../models/api/IAddressOutputsResponse";
-import type { IAddressResponse } from "../models/api/IAddressResponse";
 import type { IChildrenResponse } from "../models/api/IChildrenResponse";
-import type { IMessagesResponse } from "../models/api/IMessagesResponse";
 import type { IMilestoneResponse } from "../models/api/IMilestoneResponse";
 import type { IMilestoneUtxoChangesResponse } from "../models/api/IMilestoneUtxoChangesResponse";
 import type { IOutputResponse } from "../models/api/IOutputResponse";
-import type { IOutputsResponse } from "../models/api/IOutputsResponse";
 import type { IReceiptsResponse } from "../models/api/IReceiptsResponse";
 import type { ITipsResponse } from "../models/api/ITipsResponse";
 import type { IClient } from "../models/IClient";
@@ -71,12 +67,6 @@ export declare class SingleNodeClient implements IClient {
      */
     messageSubmitRaw(message: Uint8Array): Promise<string>;
     /**
-     * Find messages by index.
-     * @param indexationKey The index value as a byte array or UTF8 string.
-     * @returns The messageId.
-     */
-    messagesFind(indexationKey: Uint8Array | string): Promise<IMessagesResponse>;
-    /**
      * Get the children of a message.
      * @param messageId The id of the message to get the children for.
      * @returns The messages children.
@@ -94,73 +84,6 @@ export declare class SingleNodeClient implements IClient {
      * @returns The output details.
      */
     output(outputId: string): Promise<IOutputResponse>;
-    /**
-     * Find outputs by type.
-     * @param type The type of the output to get.
-     * @param issuer The issuer of the output.
-     * @param sender The sender of the output.
-     * @param index The index associated with the output.
-     * @returns The outputs with the requested parameters.
-     */
-    outputs(type: number, issuer?: string, sender?: string, index?: string): Promise<IOutputsResponse>;
-    /**
-     * Get the address details.
-     * @param addressBech32 The address to get the details for.
-     * @returns The address details.
-     */
-    address(addressBech32: string): Promise<IAddressResponse>;
-    /**
-     * Get the address outputs.
-     * @param addressBech32 The address to get the outputs for.
-     * @param type Filter the type of outputs you are looking up, defaults to all.
-     * @returns The address outputs.
-     */
-    addressOutputs(addressBech32: string, type?: number): Promise<IAddressOutputsResponse>;
-    /**
-     * Get the address detail using ed25519 address.
-     * @param addressEd25519 The address to get the details for.
-     * @returns The address details.
-     */
-    addressEd25519(addressEd25519: string): Promise<IAddressResponse>;
-    /**
-     * Get the address outputs using ed25519 address.
-     * @param addressEd25519 The address to get the outputs for.
-     * @param type Filter the type of outputs you are looking up, defaults to all.
-     * @returns The address outputs.
-     */
-    addressEd25519Outputs(addressEd25519: string, type?: number): Promise<IAddressOutputsResponse>;
-    /**
-     * Get the address outputs for an alias address.
-     * @param addressAlias The address to get the outputs for.
-     * @param type Filter the type of outputs you are looking up, defaults to all.
-     * @returns The address outputs.
-     */
-    addressAliasOutputs(addressAlias: string, type?: number): Promise<IAddressOutputsResponse>;
-    /**
-     * Get the address outputs for an NFT address.
-     * @param addressNft The address to get the outputs for.
-     * @param type Filter the type of outputs you are looking up, defaults to all.
-     * @returns The address outputs.
-     */
-    addressNftOutputs(addressNft: string, type?: number): Promise<IAddressOutputsResponse>;
-    /**
-     * Get the outputs for an alias.
-     * @param aliasId The alias to get the outputs for.
-     * @returns The outputs.
-     */
-    alias(aliasId: string): Promise<IOutputsResponse>;
-    /**
-     * Get the outputs for an NFT.
-     * @param nftId The NFT to get the outputs for.
-     * @returns The outputs.
-     */
-    nft(nftId: string): Promise<IOutputsResponse>;
-    /**
-     * Get the outputs for a foundry.
-     * @param foundryId The foundry to get the outputs for.
-     * @returns The outputs.
-     */
-    foundry(foundryId: string): Promise<IOutputsResponse>;
     /**
      * Get the requested milestone.
      * @param index The index of the milestone to get.
@@ -209,31 +132,24 @@ export declare class SingleNodeClient implements IClient {
      */
     peer(peerId: string): Promise<IPeer>;
     /**
-     * Perform a request and just return the status.
-     * @param route The route of the request.
-     * @returns The response.
+     * Get the bech 32 human readable part.
+     * @returns The bech 32 human readable part.
      */
-    fetchStatus(route: string): Promise<number>;
+    bech32Hrp(): Promise<string>;
     /**
-     * Perform a request in json format.
+     * Extension method which provides request methods for plugins.
+     * @param basePluginPath The base path for the plugin eg indexer/v1/ .
      * @param method The http method.
-     * @param route The route of the request.
-     * @param requestData Request to send to the endpoint.
-     * @returns The response.
+     * @param methodPath The path for the plugin request.
+     * @param queryParams Additional query params for the request.
+     * @param request The request object.
+     * @returns The response object.
      */
-    fetchJson<T, U>(method: "get" | "post" | "delete", route: string, requestData?: T): Promise<U>;
-    /**
-     * Perform a request for binary data.
-     * @param method The http method.
-     * @param route The route of the request.
-     * @param requestData Request to send to the endpoint.
-     * @returns The response.
-     */
-    fetchBinary<T>(method: "get" | "post", route: string, requestData?: Uint8Array): Promise<Uint8Array | T>;
+    pluginFetch<T, S>(basePluginPath: string, method: "get" | "post" | "delete", methodPath: string, queryParams?: string[], request?: T): Promise<S>;
     /**
      * Combine the query params.
      * @param queryParams The quer params to combine.
      * @returns The combined query params.
      */
-    combineQueryParams(queryParams: string[]): string;
+    private combineQueryParams;
 }

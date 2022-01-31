@@ -1,29 +1,40 @@
 # Interface: IOutputsResponse
 
-Details of an outputs response.
-
-## Hierarchy
-
-- **`IOutputsResponse`**
-
-  ↳ [`IAddressOutputsResponse`](IAddressOutputsResponse.md)
+Details of an outputs response from the indexer plugin.
 
 ## Table of contents
 
 ### Properties
 
-- [maxResults](IOutputsResponse.md#maxresults)
-- [count](IOutputsResponse.md#count)
-- [outputIds](IOutputsResponse.md#outputids)
 - [ledgerIndex](IOutputsResponse.md#ledgerindex)
+- [limit](IOutputsResponse.md#limit)
+- [offset](IOutputsResponse.md#offset)
+- [count](IOutputsResponse.md#count)
+- [data](IOutputsResponse.md#data)
 
 ## Properties
 
-### maxResults
+### ledgerIndex
 
-• **maxResults**: `number`
+• **ledgerIndex**: `number`
 
-The max number of results returned.
+The ledger index at which these outputs where available at.
+
+___
+
+### limit
+
+• **limit**: `number`
+
+The maximum count of results that are returned by the node.
+
+___
+
+### offset
+
+• **offset**: `string`
+
+The offset to use for getting the next results.
 
 ___
 
@@ -31,20 +42,12 @@ ___
 
 • **count**: `number`
 
-The number of items returned.
+The actual count of results that are returned.
 
 ___
 
-### outputIds
+### data
 
-• **outputIds**: `string`[]
+• **data**: `string`[]
 
-The ids of the outputs.
-
-___
-
-### ledgerIndex
-
-• **ledgerIndex**: `number`
-
-The ledger index at which these outputs where available at.
+The output IDs (transaction hash + output index) of the outputs on this address.

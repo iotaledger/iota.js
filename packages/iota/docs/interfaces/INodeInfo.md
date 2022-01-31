@@ -20,6 +20,7 @@ Response from the /info endpoint.
 - [messagesPerSecond](INodeInfo.md#messagespersecond)
 - [referencedMessagesPerSecond](INodeInfo.md#referencedmessagespersecond)
 - [referencedRate](INodeInfo.md#referencedrate)
+- [plugins](INodeInfo.md#plugins)
 
 ## Properties
 
@@ -132,3 +133,11 @@ ___
 • **referencedRate**: `number`
 
 The rate at which rates are being referenced.
+
+___
+
+### plugins
+
+• **plugins**: `string`[]
+
+The plugins the node exposes.

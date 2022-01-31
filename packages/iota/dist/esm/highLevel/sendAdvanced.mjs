@@ -3,14 +3,15 @@
 /* eslint-disable unicorn/no-nested-ternary */
 import { Blake2b, Ed25519 } from "@iota/crypto.js";
 import { Converter, WriteStream } from "@iota/util.js";
-import { EXTENDED_OUTPUT_TYPE } from "...mjs";
+import { ADDRESS_UNLOCK_CONDITION_TYPE } from "...mjs";
 import { serializeInput } from "../binary/inputs/inputs.mjs";
 import { serializeOutput } from "../binary/outputs/outputs.mjs";
-import { MAX_TAG_LENGTH } from "../binary/payloads/taggedDataPayload.mjs";
+import { MAX_TAG_LENGTH, MIN_TAG_LENGTH } from "../binary/payloads/taggedDataPayload.mjs";
 import { serializeTransactionEssence } from "../binary/transactionEssence.mjs";
 import { SingleNodeClient } from "../clients/singleNodeClient.mjs";
 import { ED25519_ADDRESS_TYPE } from "../models/addresses/IEd25519Address.mjs";
 import { TRANSACTION_ESSENCE_TYPE } from "../models/ITransactionEssence.mjs";
+import { EXTENDED_OUTPUT_TYPE } from "../models/outputs/IExtendedOutput.mjs";
 import { TAGGED_DATA_PAYLOAD_TYPE } from "../models/payloads/ITaggedDataPayload.mjs";
 import { TRANSACTION_PAYLOAD_TYPE } from "../models/payloads/ITransactionPayload.mjs";
 import { ED25519_SIGNATURE_TYPE } from "../models/signatures/IEd25519Signature.mjs";
@@ -55,11 +56,13 @@ export function buildTransactionPayload(inputsAndSignatureKeyPairs, outputs, tag
         throw new Error("You must specify some outputs");
     }
     let localTagHex;
-    if (taggedData === null || taggedData === void 0 ? void 0 : taggedData.tag) {
-        localTagHex =
-            typeof taggedData.tag === "string"
-                ? Converter.utf8ToHex(taggedData.tag)
-                : Converter.bytesToHex(taggedData.tag);
+    if (taggedData) {
+        localTagHex = typeof (taggedData === null || taggedData === void 0 ? void 0 : taggedData.tag) === "string"
+            ? Converter.utf8ToHex(taggedData.tag)
+            : Converter.bytesToHex(taggedData.tag);
+        if (localTagHex.length / 2 < MIN_TAG_LENGTH) {
+            throw new Error(`The tag length is ${localTagHex.length / 2}, which is less than the minimum size of ${MIN_TAG_LENGTH}`);
+        }
         if (localTagHex.length / 2 > MAX_TAG_LENGTH) {
             throw new Error(`The tag length is ${localTagHex.length / 2}, which exceeds the maximum size of ${MAX_TAG_LENGTH}`);
         }
@@ -69,13 +72,17 @@ export function buildTransactionPayload(inputsAndSignatureKeyPairs, outputs, tag
         if (output.addressType === ED25519_ADDRESS_TYPE) {
             const o = {
                 type: EXTENDED_OUTPUT_TYPE,
-                address: {
-                    type: output.addressType,
-                    address: output.address
-                },
                 amount: output.amount,
                 nativeTokens: [],
-                unlockConditions: [],
+                unlockConditions: [
+                    {
+                        type: ADDRESS_UNLOCK_CONDITION_TYPE,
+                        address: {
+                            type: output.addressType,
+                            address: output.address
+                        }
+                    }
+                ],
                 blocks: []
             };
             const writeStream = new WriteStream();
@@ -104,7 +111,7 @@ export function buildTransactionPayload(inputsAndSignatureKeyPairs, outputs, tag
         type: TRANSACTION_ESSENCE_TYPE,
         inputs: sortedInputs.map(i => i.input),
         outputs: sortedOutputs.map(o => o.output),
-        payload: taggedData
+        payload: localTagHex
             ? {
                 type: TAGGED_DATA_PAYLOAD_TYPE,
                 tag: localTagHex,

@@ -4,15 +4,12 @@ import { Converter, ReadStream, WriteStream } from "@iota/util.js";
 import { deserializeExtendedOutput, serializeExtendedOutput } from "../../../src/binary/outputs/extendedOutput";
 import { ED25519_ADDRESS_TYPE } from "../../../src/models/addresses/IEd25519Address";
 import { EXTENDED_OUTPUT_TYPE, IExtendedOutput } from "../../../src/models/outputs/IExtendedOutput";
+import { ADDRESS_UNLOCK_CONDITION_TYPE, IAddressUnlockCondition } from "../../../src/models/unlockConditions/IAddressUnlockCondition";
 
 describe("Binary Extended Output", () => {
     test("Can serialize and deserialize extended output", () => {
         const object: IExtendedOutput = {
             type: EXTENDED_OUTPUT_TYPE,
-            address: {
-                type: ED25519_ADDRESS_TYPE,
-                address: "6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
-            },
             amount: 123456,
             nativeTokens: [
                 {
@@ -24,7 +21,15 @@ describe("Binary Extended Output", () => {
                     amount: "6666666666666666666"
                 }
             ],
-            unlockConditions: [],
+            unlockConditions: [
+                {
+                    type: ADDRESS_UNLOCK_CONDITION_TYPE,
+                    address: {
+                        type: ED25519_ADDRESS_TYPE,
+                        address: "6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
+                    }
+                }
+            ],
             blocks: []
         };
 
@@ -32,12 +37,14 @@ describe("Binary Extended Output", () => {
         serializeExtendedOutput(serialized, object);
         const hex = serialized.finalHex();
         expect(hex).toEqual(
-            "03006920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f9240e201000000000002000000000000000000000000000000000000000000000000000000000000000000000000000000e338d6da574c194d0000000000000000000000000000000000000000000000001111111111111111111111111111111111111111111111111111111111111111111111111111aaaa9a0603c2845c0000000000000000000000000000000000000000000000000000"
+            "0340e201000000000002000000000000000000000000000000000000000000000000000000000000000000000000000000e338d6da574c194d0000000000000000000000000000000000000000000000001111111111111111111111111111111111111111111111111111111111111111111111111111aaaa9a0603c2845c0000000000000000000000000000000000000000000000000100006920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f9200"
         );
         const deserialized = deserializeExtendedOutput(new ReadStream(Converter.hexToBytes(hex)));
         expect(deserialized.type).toEqual(3);
-        expect(deserialized.address.type).toEqual(0);
-        expect(deserialized.address.address).toEqual(
+        expect(deserialized.unlockConditions.length).toEqual(1);
+        const unlockCondition = deserialized.unlockConditions[0] as IAddressUnlockCondition;
+        expect(unlockCondition.address.type).toEqual(0);
+        expect(unlockCondition.address.address).toEqual(
             "6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
         );
         expect(deserialized.amount).toEqual(123456);

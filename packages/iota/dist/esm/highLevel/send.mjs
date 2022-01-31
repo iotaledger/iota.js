@@ -2,7 +2,9 @@
 // SPDX-License-Identifier: Apache-2.0
 import { Bip32Path } from "@iota/crypto.js";
 import { Converter } from "@iota/util.js";
+import { ADDRESS_UNLOCK_CONDITION_TYPE } from "...mjs";
 import { Ed25519Address } from "../addressTypes/ed25519Address.mjs";
+import { IndexerPluginClient } from "../clients/plugins/indexerPluginClient.mjs";
 import { SingleNodeClient } from "../clients/singleNodeClient.mjs";
 import { ED25519_ADDRESS_TYPE } from "../models/addresses/IEd25519Address.mjs";
 import { UTXO_INPUT_TYPE } from "../models/inputs/IUTXOInput.mjs";
@@ -63,9 +65,9 @@ export async function sendEd25519(client, seed, accountIndex, addressEd25519, am
 export async function sendMultiple(client, seed, accountIndex, outputs, taggedData, addressOptions) {
     var _a;
     const localClient = typeof client === "string" ? new SingleNodeClient(client) : client;
-    const nodeInfo = await localClient.info();
+    const bech32Hrp = await localClient.bech32Hrp();
     const hexOutputs = outputs.map(output => {
-        const bech32Details = Bech32Helper.fromBech32(output.addressBech32, nodeInfo.bech32HRP);
+        const bech32Details = Bech32Helper.fromBech32(output.addressBech32, bech32Hrp);
         if (!bech32Details) {
             throw new Error("Unable to decode bech32 address");
         }
@@ -141,6 +143,7 @@ export async function sendWithAddressGenerator(client, seed, initialAddressState
  */
 export async function calculateInputs(client, seed, initialAddressState, nextAddressPath, outputs, zeroCount = 5) {
     const localClient = typeof client === "string" ? new SingleNodeClient(client) : client;
+    const bech32Hrp = await localClient.bech32Hrp();
     let requiredBalance = 0;
     for (const output of outputs) {
         requiredBalance += output.amount;
@@ -154,8 +157,9 @@ export async function calculateInputs(client, seed, initialAddressState, nextAdd
         const addressSeed = seed.generateSeedFromPath(new Bip32Path(path));
         const addressKeyPair = addressSeed.keyPair();
         const ed25519Address = new Ed25519Address(addressKeyPair.publicKey);
-        const address = Converter.bytesToHex(ed25519Address.toAddress());
-        const addressOutputIds = await localClient.addressEd25519Outputs(address);
+        const addressBytes = ed25519Address.toAddress();
+        const indexerPlugin = new IndexerPluginClient(client);
+        const addressOutputIds = await indexerPlugin.outputs({ addressBech32: Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, addressBytes, bech32Hrp) });
         if (addressOutputIds.count === 0) {
             zeroBalance++;
             if (zeroBalance >= zeroCount) {
@@ -163,7 +167,7 @@ export async function calculateInputs(client, seed, initialAddressState, nextAdd
             }
         }
         else {
-            for (const addressOutputId of addressOutputIds.outputIds) {
+            for (const addressOutputId of addressOutputIds.data) {
                 const addressOutput = await localClient.output(addressOutputId);
                 if (!addressOutput.isSpent && consumedBalance < requiredBalance) {
                     if (addressOutput.output.amount === 0) {
@@ -188,11 +192,16 @@ export async function calculateInputs(client, seed, initialAddressState, nextAdd
                             // so return the rest to the same address.
                             if (consumedBalance - requiredBalance > 0 &&
                                 addressOutput.output.type === EXTENDED_OUTPUT_TYPE) {
-                                outputs.push({
-                                    amount: consumedBalance - requiredBalance,
-                                    address: addressOutput.output.address.address,
-                                    addressType: addressOutput.output.address.type
-                                });
+                                const addressUnlockCondition = addressOutput.output.unlockConditions
+                                    .find(u => u.type === ADDRESS_UNLOCK_CONDITION_TYPE);
+                                if (addressUnlockCondition &&
+                                    addressUnlockCondition.type === ADDRESS_UNLOCK_CONDITION_TYPE) {
+                                    outputs.push({
+                                        amount: consumedBalance - requiredBalance,
+                                        address: addressUnlockCondition.address.address,
+                                        addressType: addressUnlockCondition.address.type
+                                    });
+                                }
                             }
                             finished = true;
                         }

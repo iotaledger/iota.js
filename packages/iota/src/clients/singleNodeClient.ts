@@ -4,15 +4,11 @@ import { ArrayHelper, Blake2b } from "@iota/crypto.js";
 import { BigIntHelper, Converter, WriteStream } from "@iota/util.js";
 import bigInt, { BigInteger } from "big-integer";
 import { MAX_MESSAGE_LENGTH, serializeMessage } from "../binary/message";
-import type { IAddressOutputsResponse } from "../models/api/IAddressOutputsResponse";
-import type { IAddressResponse } from "../models/api/IAddressResponse";
 import type { IChildrenResponse } from "../models/api/IChildrenResponse";
 import type { IMessageIdResponse } from "../models/api/IMessageIdResponse";
-import type { IMessagesResponse } from "../models/api/IMessagesResponse";
 import type { IMilestoneResponse } from "../models/api/IMilestoneResponse";
 import type { IMilestoneUtxoChangesResponse } from "../models/api/IMilestoneUtxoChangesResponse";
 import type { IOutputResponse } from "../models/api/IOutputResponse";
-import type { IOutputsResponse } from "../models/api/IOutputsResponse";
 import type { IReceiptsResponse } from "../models/api/IReceiptsResponse";
 import type { IResponse } from "../models/api/IResponse";
 import type { ITipsResponse } from "../models/api/ITipsResponse";
@@ -49,6 +45,12 @@ export class SingleNodeClient implements IClient {
     private readonly _basePath: string;
 
     /**
+     * The base plugin path for the API.
+     * @internal
+     */
+    private readonly _basePluginPath: string;
+
+    /**
      * Optional PoW provider to be used for messages with nonce=0/undefined.
      * @internal
      */
@@ -79,6 +81,12 @@ export class SingleNodeClient implements IClient {
     private readonly _headers?: { [id: string]: string };
 
     /**
+     * Cached bech32 HRP from the info endpoint.
+     * @internal
+     */
+    private _bech32Hrp?: string;
+
+    /**
      * Create a new instance of client.
      * @param endpoint The endpoint.
      * @param options Options for the client.
@@ -88,7 +96,8 @@ export class SingleNodeClient implements IClient {
             throw new Error("The endpoint can not be empty");
         }
         this._endpoint = endpoint.replace(/\/+$/, "");
-        this._basePath = options?.basePath ?? "/api/v1/";
+        this._basePath = options?.basePath ?? "/api/v2/";
+        this._basePluginPath = options?.basePluginPath ?? "/api/plugins/";
         this._powProvider = options?.powProvider;
         this._timeout = options?.timeout;
         this._userName = options?.userName;
@@ -125,7 +134,7 @@ export class SingleNodeClient implements IClient {
      * @returns The node information.
      */
     public async info(): Promise<INodeInfo> {
-        return this.fetchJson<never, INodeInfo>("get", "info");
+        return this.fetchJson<never, INodeInfo>(this._basePath, "get", "info");
     }
 
     /**
@@ -133,7 +142,7 @@ export class SingleNodeClient implements IClient {
      * @returns The tips.
      */
     public async tips(): Promise<ITipsResponse> {
-        return this.fetchJson<never, ITipsResponse>("get", "tips");
+        return this.fetchJson<never, ITipsResponse>(this._basePath, "get", "tips");
     }
 
     /**
@@ -142,7 +151,7 @@ export class SingleNodeClient implements IClient {
      * @returns The message data.
      */
     public async message(messageId: string): Promise<IMessage> {
-        return this.fetchJson<never, IMessage>("get", `messages/${messageId}`);
+        return this.fetchJson<never, IMessage>(this._basePath, "get", `messages/${messageId}`);
     }
 
     /**
@@ -151,7 +160,7 @@ export class SingleNodeClient implements IClient {
      * @returns The message metadata.
      */
     public async messageMetadata(messageId: string): Promise<IMessageMetadata> {
-        return this.fetchJson<never, IMessageMetadata>("get", `messages/${messageId}/metadata`);
+        return this.fetchJson<never, IMessageMetadata>(this._basePath, "get", `messages/${messageId}/metadata`);
     }
 
     /**
@@ -160,7 +169,7 @@ export class SingleNodeClient implements IClient {
      * @returns The message raw data.
      */
     public async messageRaw(messageId: string): Promise<Uint8Array> {
-        return this.fetchBinary("get", `messages/${messageId}/raw`);
+        return this.fetchBinary(this._basePath, "get", `messages/${messageId}/raw`);
     }
 
     /**
@@ -202,7 +211,7 @@ export class SingleNodeClient implements IClient {
             message.nonce = nonce.toString();
         }
 
-        const response = await this.fetchJson<IMessage, IMessageIdResponse>("post", "messages", message);
+        const response = await this.fetchJson<IMessage, IMessageIdResponse>(this._basePath, "post", "messages", message);
 
         return response.messageId;
     }
@@ -225,24 +234,9 @@ export class SingleNodeClient implements IClient {
             BigIntHelper.write8(bigInt(nonce), message, message.length - 8);
         }
 
-        const response = await this.fetchBinary<IMessageIdResponse>("post", "messages", message);
+        const response = await this.fetchBinary<IMessageIdResponse>(this._basePath, "post", "messages", message);
 
         return (response as IMessageIdResponse).messageId;
-    }
-
-    /**
-     * Find messages by index.
-     * @param indexationKey The index value as a byte array or UTF8 string.
-     * @returns The messageId.
-     */
-    public async messagesFind(indexationKey: Uint8Array | string): Promise<IMessagesResponse> {
-        return this.fetchJson<never, IMessagesResponse>(
-            "get",
-            `messages?index=${typeof indexationKey === "string"
-                ? Converter.utf8ToHex(indexationKey)
-                : Converter.bytesToHex(indexationKey)
-            }`
-        );
     }
 
     /**
@@ -251,7 +245,7 @@ export class SingleNodeClient implements IClient {
      * @returns The messages children.
      */
     public async messageChildren(messageId: string): Promise<IChildrenResponse> {
-        return this.fetchJson<never, IChildrenResponse>("get", `messages/${messageId}/children`);
+        return this.fetchJson<never, IChildrenResponse>(this._basePath, "get", `messages/${messageId}/children`);
     }
 
     /**
@@ -260,7 +254,7 @@ export class SingleNodeClient implements IClient {
      * @returns The message.
      */
     public async transactionIncludedMessage(transactionId: string): Promise<IMessage> {
-        return this.fetchJson<never, IMessage>("get", `transactions/${transactionId}/included-message`);
+        return this.fetchJson<never, IMessage>(this._basePath, "get", `transactions/${transactionId}/included-message`);
     }
 
     /**
@@ -269,169 +263,7 @@ export class SingleNodeClient implements IClient {
      * @returns The output details.
      */
     public async output(outputId: string): Promise<IOutputResponse> {
-        return this.fetchJson<never, IOutputResponse>("get", `outputs/${outputId}`);
-    }
-
-    /**
-     * Find outputs by type.
-     * @param type The type of the output to get.
-     * @param issuer The issuer of the output.
-     * @param sender The sender of the output.
-     * @param index The index associated with the output.
-     * @returns The outputs with the requested parameters.
-     */
-    public async outputs(type: number, issuer?: string, sender?: string, index?: string): Promise<IOutputsResponse> {
-        const queryParams = [];
-        if (type !== undefined) {
-            queryParams.push(`type=${type}`);
-        }
-        if (issuer !== undefined) {
-            queryParams.push(`issuer=${issuer}`);
-        }
-        if (sender !== undefined) {
-            queryParams.push(`sender=${sender}`);
-        }
-        if (index !== undefined) {
-            queryParams.push(`index=${index}`);
-        }
-        return this.fetchJson<never, IOutputsResponse>(
-            "get",
-            `outputs${this.combineQueryParams(queryParams)}`
-        );
-    }
-
-    /**
-     * Get the address details.
-     * @param addressBech32 The address to get the details for.
-     * @returns The address details.
-     */
-    public async address(addressBech32: string): Promise<IAddressResponse> {
-        return this.fetchJson<never, IAddressResponse>("get", `addresses/${addressBech32}`);
-    }
-
-    /**
-     * Get the address outputs.
-     * @param addressBech32 The address to get the outputs for.
-     * @param type Filter the type of outputs you are looking up, defaults to all.
-     * @returns The address outputs.
-     */
-    public async addressOutputs(addressBech32: string, type?: number): Promise<IAddressOutputsResponse> {
-        const queryParams = [];
-        if (type !== undefined) {
-            queryParams.push(`type=${type}`);
-        }
-        return this.fetchJson<never, IAddressOutputsResponse>(
-            "get",
-            `addresses/${addressBech32}/outputs${this.combineQueryParams(queryParams)}`
-        );
-    }
-
-    /**
-     * Get the address detail using ed25519 address.
-     * @param addressEd25519 The address to get the details for.
-     * @returns The address details.
-     */
-    public async addressEd25519(addressEd25519: string): Promise<IAddressResponse> {
-        if (!Converter.isHex(addressEd25519)) {
-            throw new Error("The supplied address does not appear to be hex format");
-        }
-        return this.fetchJson<never, IAddressResponse>("get", `addresses/ed25519/${addressEd25519}`);
-    }
-
-    /**
-     * Get the address outputs using ed25519 address.
-     * @param addressEd25519 The address to get the outputs for.
-     * @param type Filter the type of outputs you are looking up, defaults to all.
-     * @returns The address outputs.
-     */
-    public async addressEd25519Outputs(addressEd25519: string, type?: number): Promise<IAddressOutputsResponse> {
-        if (!Converter.isHex(addressEd25519)) {
-            throw new Error("The supplied address does not appear to be hex format");
-        }
-        const queryParams = [];
-        if (type !== undefined) {
-            queryParams.push(`type=${type}`);
-        }
-        return this.fetchJson<never, IAddressOutputsResponse>(
-            "get",
-            `addresses/ed25519/${addressEd25519}/outputs${this.combineQueryParams(queryParams)}`
-        );
-    }
-
-    /**
-     * Get the address outputs for an alias address.
-     * @param addressAlias The address to get the outputs for.
-     * @param type Filter the type of outputs you are looking up, defaults to all.
-     * @returns The address outputs.
-     */
-    public async addressAliasOutputs(addressAlias: string, type?: number): Promise<IAddressOutputsResponse> {
-        if (!Converter.isHex(addressAlias)) {
-            throw new Error("The supplied address does not appear to be hex format");
-        }
-        const queryParams = [];
-        if (type !== undefined) {
-            queryParams.push(`type=${type}`);
-        }
-        return this.fetchJson<never, IAddressOutputsResponse>(
-            "get",
-            `addresses/alias/${addressAlias}/outputs${this.combineQueryParams(queryParams)}`
-        );
-    }
-
-    /**
-     * Get the address outputs for an NFT address.
-     * @param addressNft The address to get the outputs for.
-     * @param type Filter the type of outputs you are looking up, defaults to all.
-     * @returns The address outputs.
-     */
-    public async addressNftOutputs(addressNft: string, type?: number): Promise<IAddressOutputsResponse> {
-        if (!Converter.isHex(addressNft)) {
-            throw new Error("The supplied address does not appear to be hex format");
-        }
-        const queryParams = [];
-        if (type !== undefined) {
-            queryParams.push(`type=${type}`);
-        }
-        return this.fetchJson<never, IAddressOutputsResponse>(
-            "get",
-            `addresses/nft/${addressNft}/outputs${this.combineQueryParams(queryParams)}`
-        );
-    }
-
-    /**
-     * Get the outputs for an alias.
-     * @param aliasId The alias to get the outputs for.
-     * @returns The outputs.
-     */
-    public async alias(aliasId: string): Promise<IOutputsResponse> {
-        return this.fetchJson<never, IOutputsResponse>(
-            "get",
-            `aliases/${aliasId}`
-        );
-    }
-
-    /**
-     * Get the outputs for an NFT.
-     * @param nftId The NFT to get the outputs for.
-     * @returns The outputs.
-     */
-    public async nft(nftId: string): Promise<IOutputsResponse> {
-        return this.fetchJson<never, IOutputsResponse>(
-            "get",
-            `nft/${nftId}`
-        );
-    }
-
-    /**
-     * Get the outputs for a foundry.
-     * @param foundryId The foundry to get the outputs for.
-     * @returns The outputs.
-     */
-    public async foundry(foundryId: string): Promise<IOutputsResponse> {
-        return this.fetchJson<never, IOutputsResponse>(
-            "get",
-            `foundries/${foundryId}`
-        );
+        return this.fetchJson<never, IOutputResponse>(this._basePath, "get", `outputs/${outputId}`);
     }
 
     /**
@@ -440,7 +272,7 @@ export class SingleNodeClient implements IClient {
      * @returns The milestone details.
      */
     public async milestone(index: number): Promise<IMilestoneResponse> {
-        return this.fetchJson<never, IMilestoneResponse>("get", `milestones/${index}`);
+        return this.fetchJson<never, IMilestoneResponse>(this._basePath, "get", `milestones/${index}`);
     }
 
     /**
@@ -449,7 +281,7 @@ export class SingleNodeClient implements IClient {
      * @returns The milestone utxo changes details.
      */
     public async milestoneUtxoChanges(index: number): Promise<IMilestoneUtxoChangesResponse> {
-        return this.fetchJson<never, IMilestoneUtxoChangesResponse>("get", `milestones/${index}/utxo-changes`);
+        return this.fetchJson<never, IMilestoneUtxoChangesResponse>(this._basePath, "get", `milestones/${index}/utxo-changes`);
     }
 
     /**
@@ -457,7 +289,7 @@ export class SingleNodeClient implements IClient {
      * @returns The details for the treasury.
      */
     public async treasury(): Promise<ITreasury> {
-        return this.fetchJson<never, ITreasury>("get", "treasury");
+        return this.fetchJson<never, ITreasury>(this._basePath, "get", "treasury");
     }
 
     /**
@@ -467,6 +299,7 @@ export class SingleNodeClient implements IClient {
      */
     public async receipts(migratedAt?: number): Promise<IReceiptsResponse> {
         return this.fetchJson<never, IReceiptsResponse>(
+            this._basePath,
             "get",
             `receipts${migratedAt !== undefined ? `/${migratedAt}` : ""}`
         );
@@ -477,7 +310,7 @@ export class SingleNodeClient implements IClient {
      * @returns The list of peers.
      */
     public async peers(): Promise<IPeer[]> {
-        return this.fetchJson<never, IPeer[]>("get", "peers");
+        return this.fetchJson<never, IPeer[]>(this._basePath, "get", "peers");
     }
 
     /**
@@ -493,7 +326,7 @@ export class SingleNodeClient implements IClient {
                 alias?: string;
             },
             IPeer
-        >("post", "peers", {
+        >(this._basePath, "post", "peers", {
             multiAddress,
             alias
         });
@@ -506,7 +339,7 @@ export class SingleNodeClient implements IClient {
      */
     public async peerDelete(peerId: string): Promise<void> {
         // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
-        return this.fetchJson<never, void>("delete", `peers/${peerId}`);
+        return this.fetchJson<never, void>(this._basePath, "delete", `peers/${peerId}`);
     }
 
     /**
@@ -515,15 +348,42 @@ export class SingleNodeClient implements IClient {
      * @returns The details for the created peer.
      */
     public async peer(peerId: string): Promise<IPeer> {
-        return this.fetchJson<never, IPeer>("get", `peers/${peerId}`);
+        return this.fetchJson<never, IPeer>(this._basePath, "get", `peers/${peerId}`);
+    }
+
+    /**
+     * Get the bech 32 human readable part.
+     * @returns The bech 32 human readable part.
+     */
+    public async bech32Hrp(): Promise<string> {
+        if (this._bech32Hrp === undefined) {
+            const info = await this.info();
+            this._bech32Hrp = info.bech32HRP;
+        }
+
+        return this._bech32Hrp;
+    }
+
+    /**
+     * Extension method which provides request methods for plugins.
+     * @param basePluginPath The base path for the plugin eg indexer/v1/ .
+     * @param method The http method.
+     * @param methodPath The path for the plugin request.
+     * @param queryParams Additional query params for the request.
+     * @param request The request object.
+     * @returns The response object.
+     */
+    public async pluginFetch<T, S>(basePluginPath: string, method: "get" | "post" | "delete", methodPath: string, queryParams?: string[], request?: T): Promise<S> {
+        return this.fetchJson<T, S>(this._basePluginPath, method, `${basePluginPath}${methodPath}${this.combineQueryParams(queryParams)}`, request, false);
     }
 
     /**
      * Perform a request and just return the status.
      * @param route The route of the request.
      * @returns The response.
+     * @internal
      */
-    public async fetchStatus(route: string): Promise<number> {
+    private async fetchStatus(route: string): Promise<number> {
         const response = await this.fetchWithTimeout("get", route);
 
         return response.status;
@@ -531,15 +391,18 @@ export class SingleNodeClient implements IClient {
 
     /**
      * Perform a request in json format.
+     * @param basePath The base path for the request.
      * @param method The http method.
      * @param route The route of the request.
      * @param requestData Request to send to the endpoint.
+     * @param responseIsWrapped The response is wrapped in a data envelope.
      * @returns The response.
+     * @internal
      */
-    public async fetchJson<T, U>(method: "get" | "post" | "delete", route: string, requestData?: T): Promise<U> {
+    private async fetchJson<T, U>(basePath: string, method: "get" | "post" | "delete", route: string, requestData?: T, responseIsWrapped: boolean = true): Promise<U> {
         const response = await this.fetchWithTimeout(
             method,
-            `${this._basePath}${route}`,
+            `${basePath}${route}`,
             { "Content-Type": "application/json" },
             requestData ? JSON.stringify(requestData) : undefined
         );
@@ -553,13 +416,24 @@ export class SingleNodeClient implements IClient {
                 return {} as U;
             }
             try {
-                const responseData: IResponse<U> = await response.json();
+                if (responseIsWrapped) {
+                    const responseData: IResponse<U> = await response.json();
 
-                if (responseData.error) {
-                    errorMessage = responseData.error.message;
-                    errorCode = responseData.error.code;
+                    if (responseData.error) {
+                        errorMessage = responseData.error.message;
+                        errorCode = responseData.error.code;
+                    } else {
+                        return responseData.data;
+                    }
                 } else {
-                    return responseData.data;
+                    const responseData: U & { error: { code: string; message: string } } = await response.json();
+
+                    if (responseData.error) {
+                        errorMessage = responseData.error.message;
+                        errorCode = responseData.error.code;
+                    } else {
+                        return responseData;
+                    }
                 }
             } catch { }
         }
@@ -599,19 +473,22 @@ export class SingleNodeClient implements IClient {
 
     /**
      * Perform a request for binary data.
+     * @param basePath The base path for the request.
      * @param method The http method.
      * @param route The route of the request.
      * @param requestData Request to send to the endpoint.
      * @returns The response.
+     * @internal
      */
-    public async fetchBinary<T>(
+    private async fetchBinary<T>(
+        basePath: string,
         method: "get" | "post",
         route: string,
         requestData?: Uint8Array
     ): Promise<Uint8Array | T> {
         const response = await this.fetchWithTimeout(
             method,
-            `${this._basePath}${route}`,
+            `${basePath}${route}`,
             { "Content-Type": "application/octet-stream" },
             requestData
         );
@@ -649,7 +526,7 @@ export class SingleNodeClient implements IClient {
      * @returns The response.
      * @internal
      */
-    public async fetchWithTimeout(
+    private async fetchWithTimeout(
         method: "get" | "post" | "delete",
         route: string,
         headers?: { [id: string]: string },
@@ -709,8 +586,8 @@ export class SingleNodeClient implements IClient {
      * @param queryParams The quer params to combine.
      * @returns The combined query params.
      */
-    public combineQueryParams(queryParams: string[]): string {
-        return queryParams.length > 0 ? `?${queryParams.join("&")}` : "";
+    private combineQueryParams(queryParams?: string[]): string {
+        return queryParams && queryParams.length > 0 ? `?${queryParams.join("&")}` : "";
     }
 
     /**

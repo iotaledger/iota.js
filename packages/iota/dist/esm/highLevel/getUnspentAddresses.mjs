@@ -1,10 +1,11 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 import { Bip32Path } from "@iota/crypto.js";
-import { Converter } from "@iota/util.js";
 import { Ed25519Address } from "../addressTypes/ed25519Address.mjs";
+import { IndexerPluginClient } from "../clients/plugins/indexerPluginClient.mjs";
 import { SingleNodeClient } from "../clients/singleNodeClient.mjs";
 import { ED25519_ADDRESS_TYPE } from "../models/addresses/IEd25519Address.mjs";
+import { EXTENDED_OUTPUT_TYPE } from "../models/outputs/IExtendedOutput.mjs";
 import { Bech32Helper } from "../utils/bech32Helper.mjs";
 import { generateBip44Address } from "./addresses.mjs";
 /**
@@ -41,7 +42,7 @@ export async function getUnspentAddresses(client, seed, accountIndex, addressOpt
 export async function getUnspentAddressesWithAddressGenerator(client, seed, initialAddressState, nextAddressPath, addressOptions) {
     var _a, _b;
     const localClient = typeof client === "string" ? new SingleNodeClient(client) : client;
-    const nodeInfo = await localClient.info();
+    const bech32Hrp = await localClient.bech32Hrp();
     const localRequiredLimit = (_a = addressOptions === null || addressOptions === void 0 ? void 0 : addressOptions.requiredCount) !== null && _a !== void 0 ? _a : Number.MAX_SAFE_INTEGER;
     const localZeroCount = (_b = addressOptions === null || addressOptions === void 0 ? void 0 : addressOptions.zeroCount) !== null && _b !== void 0 ? _b : 20;
     let finished = false;
@@ -52,11 +53,11 @@ export async function getUnspentAddressesWithAddressGenerator(client, seed, init
         const addressSeed = seed.generateSeedFromPath(new Bip32Path(path));
         const ed25519Address = new Ed25519Address(addressSeed.keyPair().publicKey);
         const addressBytes = ed25519Address.toAddress();
-        const addressHex = Converter.bytesToHex(addressBytes);
-        const addressResponse = await localClient.addressEd25519(addressHex);
+        const addressBech32 = Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, addressBytes, bech32Hrp);
+        const balance = await calculateAddressBalance(localClient, addressBech32);
         // If there is no balance we increment the counter and end
         // the text when we have reached the count
-        if (addressResponse.balance === 0) {
+        if (balance === 0) {
             zeroBalance++;
             if (zeroBalance >= localZeroCount) {
                 finished = true;
@@ -64,9 +65,9 @@ export async function getUnspentAddressesWithAddressGenerator(client, seed, init
         }
         else {
             allUnspent.push({
-                address: Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, addressBytes, nodeInfo.bech32HRP),
+                address: addressBech32,
                 path,
-                balance: addressResponse.balance
+                balance
             });
             if (allUnspent.length === localRequiredLimit) {
                 finished = true;
@@ -74,4 +75,32 @@ export async function getUnspentAddressesWithAddressGenerator(client, seed, init
         }
     } while (!finished);
     return allUnspent;
+}
+/**
+ * Calculate address balance for an address.
+ * @param client The client for communications.
+ * @param addressBech32 The address in bech32 format.
+ * @returns The unspent balance.
+ */
+export async function calculateAddressBalance(client, addressBech32) {
+    const indexerPlugin = new IndexerPluginClient(client);
+    let count = 0;
+    let nextOffset;
+    let balance = 0;
+    do {
+        const outputResponse = await indexerPlugin.outputs({
+            addressBech32,
+            pageSize: 20,
+            offset: nextOffset
+        });
+        count = outputResponse.count;
+        nextOffset = outputResponse.offset;
+        for (const outputId of outputResponse.data) {
+            const output = await client.output(outputId);
+            if (output.output.type === EXTENDED_OUTPUT_TYPE && !output.isSpent) {
+                balance += output.output.amount;
+            }
+        }
+    } while (count > 0 && nextOffset);
+    return balance;
 }

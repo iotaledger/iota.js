@@ -32,7 +32,7 @@ ___
 
 ### tag
 
-• `Optional` **tag**: `string`
+• **tag**: `string`
 
 The tag to use to categorize the data.
 

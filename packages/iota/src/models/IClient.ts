@@ -1,13 +1,9 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import type { IAddressOutputsResponse } from "./api/IAddressOutputsResponse";
-import type { IAddressResponse } from "./api/IAddressResponse";
 import type { IChildrenResponse } from "./api/IChildrenResponse";
-import type { IMessagesResponse } from "./api/IMessagesResponse";
 import type { IMilestoneResponse } from "./api/IMilestoneResponse";
 import type { IMilestoneUtxoChangesResponse } from "./api/IMilestoneUtxoChangesResponse";
 import type { IOutputResponse } from "./api/IOutputResponse";
-import type { IOutputsResponse } from "./api/IOutputsResponse";
 import type { IReceiptsResponse } from "./api/IReceiptsResponse";
 import type { ITipsResponse } from "./api/ITipsResponse";
 import type { IMessage } from "./IMessage";
@@ -74,13 +70,6 @@ export interface IClient {
     messageSubmitRaw(message: Uint8Array): Promise<string>;
 
     /**
-     * Find messages by index.
-     * @param indexationKey The index value as a byte array or UTF8 string.
-     * @returns The messageId.
-     */
-    messagesFind(indexationKey: Uint8Array | string): Promise<IMessagesResponse>;
-
-    /**
      * Get the children of a message.
      * @param messageId The id of the message to get the children for.
      * @returns The messages children.
@@ -100,83 +89,6 @@ export interface IClient {
      * @returns The output details.
      */
     output(outputId: string): Promise<IOutputResponse>;
-
-    /**
-     * Find outputs by type.
-     * @param type The type of the outputs to get.
-     * @param issuer The issuer of the output.
-     * @param sender The sender of the output.
-     * @param index The index associated with the output.
-     * @returns The outputs with the requested parameters.
-     */
-    outputs(type: number, issuer?: string, sender?: string, index?: string): Promise<IOutputsResponse>;
-
-    /**
-     * Get the address details using bech32 address.
-     * @param addressBech32 The address to get the details for.
-     * @returns The address details.
-     */
-    address(addressBech32: string): Promise<IAddressResponse>;
-
-    /**
-     * Get the address outputs using bech32 address.
-     * @param addressBech32 The address to get the outputs for.
-     * @param type Filter the type of outputs you are looking up, defaults to all.
-     * @returns The address outputs.
-     */
-    addressOutputs(addressBech32: string, type?: number): Promise<IAddressOutputsResponse>;
-
-    /**
-     * Get the address details for an ed25519 address.
-     * @param addressEd25519 The address to get the details for.
-     * @returns The address details.
-     */
-    addressEd25519(addressEd25519: string): Promise<IAddressResponse>;
-
-    /**
-     * Get the address outputs for an ed25519 address.
-     * @param addressEd25519 The address to get the outputs for.
-     * @param type Filter the type of outputs you are looking up, defaults to all.
-     * @returns The address outputs.
-     */
-    addressEd25519Outputs(addressEd25519: string, type?: number): Promise<IAddressOutputsResponse>;
-
-    /**
-     * Get the address outputs for an alias address.
-     * @param addressAlias The address to get the outputs for.
-     * @param type Filter the type of outputs you are looking up, defaults to all.
-     * @returns The address outputs.
-     */
-    addressAliasOutputs(addressAlias: string, type?: number): Promise<IAddressOutputsResponse>;
-
-    /**
-     * Get the address outputs for an NFT address.
-     * @param addressNft The address to get the outputs for.
-     * @param type Filter the type of outputs you are looking up, defaults to all.
-     * @returns The address outputs.
-     */
-    addressNftOutputs(addressNft: string, type?: number): Promise<IAddressOutputsResponse>;
-
-    /**
-     * Get the outputs for an alias.
-     * @param aliasId The alias to get the outputs for.
-     * @returns The outputs.
-     */
-    alias(aliasId: string): Promise<IOutputsResponse>;
-
-    /**
-     * Get the outputs for an NFT.
-     * @param nftId The NFT to get the outputs for.
-     * @returns The outputs.
-     */
-    nft(nftId: string): Promise<IOutputsResponse>;
-
-    /**
-     * Get the outputs for a foundry.
-     * @param foundryId The foundry to get the outputs for.
-     * @returns The outputs.
-     */
-    foundry(foundryId: string): Promise<IOutputsResponse>;
 
     /**
      * Get the requested milestone.
@@ -232,4 +144,21 @@ export interface IClient {
      * @returns The details for the created peer.
      */
     peer(peerId: string): Promise<IPeer>;
+
+    /**
+     * Get the bech 32 human readable part.
+     * @returns The bech 32 human readable part.
+     */
+    bech32Hrp(): Promise<string>;
+
+    /**
+     * Extension method which provides request methods for plugins.
+     * @param basePluginPath The base path for the plugin eg indexer/v1/ .
+     * @param method The http method.
+     * @param methodPath The path for the plugin request.
+     * @param queryParams Additional query params for the request.
+     * @param request The request object.
+     * @returns The response object.
+     */
+    pluginFetch<T, S>(basePluginPath: string, method: "get" | "post" | "delete", methodPath: string, queryParams?: string[], request?: T): Promise<S>;
 }

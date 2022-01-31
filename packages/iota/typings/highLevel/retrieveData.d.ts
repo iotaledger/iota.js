@@ -6,6 +6,6 @@ import type { IClient } from "../models/IClient";
  * @returns The message tag and data.
  */
 export declare function retrieveData(client: IClient | string, messageId: string): Promise<{
-    tag?: Uint8Array;
+    tag: Uint8Array;
     data?: Uint8Array;
 } | undefined>;

@@ -3,10 +3,10 @@
 /* eslint-disable unicorn/no-nested-ternary */
 import { Blake2b, Ed25519 } from "@iota/crypto.js";
 import { Converter, WriteStream } from "@iota/util.js";
-import { EXTENDED_OUTPUT_TYPE, IExtendedOutput } from "..";
+import { ADDRESS_UNLOCK_CONDITION_TYPE } from "..";
 import { serializeInput } from "../binary/inputs/inputs";
 import { serializeOutput } from "../binary/outputs/outputs";
-import { MAX_TAG_LENGTH } from "../binary/payloads/taggedDataPayload";
+import { MAX_TAG_LENGTH, MIN_TAG_LENGTH } from "../binary/payloads/taggedDataPayload";
 import { serializeTransactionEssence } from "../binary/transactionEssence";
 import { SingleNodeClient } from "../clients/singleNodeClient";
 import { ED25519_ADDRESS_TYPE } from "../models/addresses/IEd25519Address";
@@ -15,6 +15,7 @@ import type { IKeyPair } from "../models/IKeyPair";
 import type { IMessage } from "../models/IMessage";
 import type { IUTXOInput } from "../models/inputs/IUTXOInput";
 import { ITransactionEssence, TRANSACTION_ESSENCE_TYPE } from "../models/ITransactionEssence";
+import { EXTENDED_OUTPUT_TYPE, IExtendedOutput } from "../models/outputs/IExtendedOutput";
 import { TAGGED_DATA_PAYLOAD_TYPE } from "../models/payloads/ITaggedDataPayload";
 import { ITransactionPayload, TRANSACTION_PAYLOAD_TYPE } from "../models/payloads/ITransactionPayload";
 import { ED25519_SIGNATURE_TYPE } from "../models/signatures/IEd25519Signature";
@@ -43,7 +44,7 @@ export async function sendAdvanced(
         amount: number;
     }[],
     taggedData?: {
-        tag?: Uint8Array | string;
+        tag: Uint8Array | string;
         data?: Uint8Array | string;
     }
 ): Promise<{
@@ -86,7 +87,7 @@ export function buildTransactionPayload(
         amount: number;
     }[],
     taggedData?: {
-        tag?: Uint8Array | string;
+        tag: Uint8Array | string;
         data?: Uint8Array | string;
     }
 ): ITransactionPayload {
@@ -99,16 +100,21 @@ export function buildTransactionPayload(
 
     let localTagHex;
 
-    if (taggedData?.tag) {
-        localTagHex =
-            typeof taggedData.tag === "string"
-                ? Converter.utf8ToHex(taggedData.tag)
-                : Converter.bytesToHex(taggedData.tag);
+    if (taggedData) {
+        localTagHex = typeof taggedData?.tag === "string"
+            ? Converter.utf8ToHex(taggedData.tag)
+            : Converter.bytesToHex(taggedData.tag);
+
+        if (localTagHex.length / 2 < MIN_TAG_LENGTH) {
+            throw new Error(
+                `The tag length is ${localTagHex.length / 2
+                }, which is less than the minimum size of ${MIN_TAG_LENGTH}`
+            );
+        }
 
         if (localTagHex.length / 2 > MAX_TAG_LENGTH) {
             throw new Error(
-                `The tag length is ${
-                    localTagHex.length / 2
+                `The tag length is ${localTagHex.length / 2
                 }, which exceeds the maximum size of ${MAX_TAG_LENGTH}`
             );
         }
@@ -123,13 +129,17 @@ export function buildTransactionPayload(
         if (output.addressType === ED25519_ADDRESS_TYPE) {
             const o: IExtendedOutput = {
                 type: EXTENDED_OUTPUT_TYPE,
-                address: {
-                    type: output.addressType,
-                    address: output.address
-                },
                 amount: output.amount,
                 nativeTokens: [],
-                unlockConditions: [],
+                unlockConditions: [
+                    {
+                        type: ADDRESS_UNLOCK_CONDITION_TYPE,
+                        address: {
+                            type: output.addressType,
+                            address: output.address
+                        }
+                    }
+                ],
                 blocks: []
             };
             const writeStream = new WriteStream();
@@ -164,16 +174,16 @@ export function buildTransactionPayload(
         type: TRANSACTION_ESSENCE_TYPE,
         inputs: sortedInputs.map(i => i.input),
         outputs: sortedOutputs.map(o => o.output),
-        payload: taggedData
+        payload: localTagHex
             ? {
-                  type: TAGGED_DATA_PAYLOAD_TYPE,
-                  tag: localTagHex,
-                  data: taggedData?.data
-                      ? typeof taggedData.data === "string"
-                          ? Converter.utf8ToHex(taggedData.data)
-                          : Converter.bytesToHex(taggedData.data)
-                      : undefined
-              }
+                type: TAGGED_DATA_PAYLOAD_TYPE,
+                tag: localTagHex,
+                data: taggedData?.data
+                    ? typeof taggedData.data === "string"
+                        ? Converter.utf8ToHex(taggedData.data)
+                        : Converter.bytesToHex(taggedData.data)
+                    : undefined
+            }
             : undefined
     };
 
