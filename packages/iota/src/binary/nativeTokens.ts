@@ -4,12 +4,12 @@ import type { ReadStream, WriteStream } from "@iota/util.js";
 import bigInt from "big-integer";
 import type { INativeToken } from "../models/INativeToken";
 import { MIN_ALIAS_ADDRESS_LENGTH } from "./addresses/aliasAddress";
-import { UINT16_SIZE, UINT32_SIZE, UINT8_SIZE } from "./commonDataTypes";
+import { UINT32_SIZE, UINT8_SIZE } from "./commonDataTypes";
 
 /**
  * The minimum length of a native tokens list.
  */
-export const MIN_NATIVE_TOKENS_LENGTH: number = UINT16_SIZE;
+export const MIN_NATIVE_TOKENS_LENGTH: number = UINT8_SIZE;
 
 /**
  * The length of a native token tag.
@@ -32,7 +32,7 @@ export const NATIVE_TOKEN_ID_LENGTH: number = FOUNDRY_ID_LENGTH + NATIVE_TOKEN_T
  * @returns The deserialized object.
  */
 export function deserializeNativeTokens(readStream: ReadStream): INativeToken[] {
-    const numNativeTokens = readStream.readUInt16("nativeTokens.numNativeTokens");
+    const numNativeTokens = readStream.readUInt8("nativeTokens.numNativeTokens");
     const nativeTokens: INativeToken[] = [];
 
     for (let i = 0; i < numNativeTokens; i++) {
@@ -48,7 +48,7 @@ export function deserializeNativeTokens(readStream: ReadStream): INativeToken[] 
  * @param object The object to serialize.
  */
 export function serializeNativeTokens(writeStream: WriteStream, object: INativeToken[]): void {
-    writeStream.writeUInt16("nativeTokens.numNativeTokens", object.length);
+    writeStream.writeUInt8("nativeTokens.numNativeTokens", object.length);
     for (let i = 0; i < object.length; i++) {
         serializeNativeToken(writeStream, object[i]);
     }

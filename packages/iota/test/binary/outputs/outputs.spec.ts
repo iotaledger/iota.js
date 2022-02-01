@@ -51,7 +51,7 @@ describe("Binary Outputs", () => {
         serializeOutputs(serialized, outputs);
         const hex = serialized.finalHex();
         expect(hex).toEqual(
-            "02000340e201000000000000000100006920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92000306120f000000000000000100004566920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f100"
+            "02000340e2010000000000000100006920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92000306120f0000000000000100004566920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f100"
         );
         const deserialized = deserializeOutputs(new ReadStream(Converter.hexToBytes(hex)));
         expect(deserialized.length).toEqual(2);
@@ -94,7 +94,7 @@ describe("Binary Outputs", () => {
         const serialized = new WriteStream();
         serializeOutput(serialized, object);
         const hex = serialized.finalHex();
-        expect(hex).toEqual("0340e201000000000000000100006920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f9200");
+        expect(hex).toEqual("0340e2010000000000000100006920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f9200");
         const deserialized = deserializeOutput(new ReadStream(Converter.hexToBytes(hex)));
         expect(deserialized.type).toEqual(3);
         const out0 = deserialized as IExtendedOutput;

@@ -1070,7 +1070,7 @@
     /**
      * The minimum length of a native tokens list.
      */
-    const MIN_NATIVE_TOKENS_LENGTH = UINT16_SIZE;
+    const MIN_NATIVE_TOKENS_LENGTH = UINT8_SIZE;
     /**
      * The length of a native token tag.
      */
@@ -1089,7 +1089,7 @@
      * @returns The deserialized object.
      */
     function deserializeNativeTokens(readStream) {
-        const numNativeTokens = readStream.readUInt16("nativeTokens.numNativeTokens");
+        const numNativeTokens = readStream.readUInt8("nativeTokens.numNativeTokens");
         const nativeTokens = [];
         for (let i = 0; i < numNativeTokens; i++) {
             nativeTokens.push(deserializeNativeToken(readStream));
@@ -1102,7 +1102,7 @@
      * @param object The object to serialize.
      */
     function serializeNativeTokens(writeStream, object) {
-        writeStream.writeUInt16("nativeTokens.numNativeTokens", object.length);
+        writeStream.writeUInt8("nativeTokens.numNativeTokens", object.length);
         for (let i = 0; i < object.length; i++) {
             serializeNativeToken(writeStream, object[i]);
         }

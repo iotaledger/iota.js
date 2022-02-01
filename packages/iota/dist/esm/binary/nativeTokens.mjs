@@ -1,10 +1,10 @@
 import bigInt from "big-integer";
 import { MIN_ALIAS_ADDRESS_LENGTH } from "./addresses/aliasAddress.mjs";
-import { UINT16_SIZE, UINT32_SIZE, UINT8_SIZE } from "./commonDataTypes.mjs";
+import { UINT32_SIZE, UINT8_SIZE } from "./commonDataTypes.mjs";
 /**
  * The minimum length of a native tokens list.
  */
-export const MIN_NATIVE_TOKENS_LENGTH = UINT16_SIZE;
+export const MIN_NATIVE_TOKENS_LENGTH = UINT8_SIZE;
 /**
  * The length of a native token tag.
  */
@@ -23,7 +23,7 @@ export const NATIVE_TOKEN_ID_LENGTH = FOUNDRY_ID_LENGTH + NATIVE_TOKEN_TAG_LENGT
  * @returns The deserialized object.
  */
 export function deserializeNativeTokens(readStream) {
-    const numNativeTokens = readStream.readUInt16("nativeTokens.numNativeTokens");
+    const numNativeTokens = readStream.readUInt8("nativeTokens.numNativeTokens");
     const nativeTokens = [];
     for (let i = 0; i < numNativeTokens; i++) {
         nativeTokens.push(deserializeNativeToken(readStream));
@@ -36,7 +36,7 @@ export function deserializeNativeTokens(readStream) {
  * @param object The object to serialize.
  */
 export function serializeNativeTokens(writeStream, object) {
-    writeStream.writeUInt16("nativeTokens.numNativeTokens", object.length);
+    writeStream.writeUInt8("nativeTokens.numNativeTokens", object.length);
     for (let i = 0; i < object.length; i++) {
         serializeNativeToken(writeStream, object[i]);
     }
