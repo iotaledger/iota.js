@@ -54,7 +54,7 @@
         "@types/jest": "^27.4.0",
         "@types/node-fetch": "2.5.12",
         "@typescript-eslint/eslint-plugin": "5.10.1",
-        "@typescript-eslint/parser": "^5.10.1",
+        "@typescript-eslint/parser": "^5.10.2",
         "copyfiles": "^2.4.1",
         "cross-env": "^7.0.3",
         "eslint": "^8.7.0",
