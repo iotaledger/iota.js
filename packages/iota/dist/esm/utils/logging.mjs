@@ -320,7 +320,7 @@ export function logOutput(prefix, output) {
             logger(`${prefix}\t\tAmount:`, output.amount);
             logNativeTokens(`${prefix}\t\t`, output.nativeTokens);
             logUnlockConditions(`${prefix}\t\t`, output.unlockConditions);
-            logFeatureBlocks(`${prefix}\t\t`, output.blocks);
+            logFeatureBlocks(`${prefix}\t\t`, output.featureBlocks);
         }
         else if (output.type === ALIAS_OUTPUT_TYPE) {
             logger(`${prefix}Alias Output`);
@@ -331,7 +331,7 @@ export function logOutput(prefix, output) {
             logger(`${prefix}\t\tState Metadata:`, output.stateMetadata);
             logger(`${prefix}\t\tFoundry Counter:`, output.foundryCounter);
             logUnlockConditions(`${prefix}\t\t`, output.unlockConditions);
-            logFeatureBlocks(`${prefix}\t\t`, output.blocks);
+            logFeatureBlocks(`${prefix}\t\t`, output.featureBlocks);
         }
         else if (output.type === FOUNDRY_OUTPUT_TYPE) {
             logger(`${prefix}Foundry Output`);
@@ -343,7 +343,7 @@ export function logOutput(prefix, output) {
             logger(`${prefix}\t\tMaximum Supply:`, output.maximumSupply);
             logTokenScheme(`${prefix}\t\t`, output.tokenScheme);
             logUnlockConditions(`${prefix}\t\t`, output.unlockConditions);
-            logFeatureBlocks(`${prefix}\t\t`, output.blocks);
+            logFeatureBlocks(`${prefix}\t\t`, output.featureBlocks);
         }
         else if (output.type === NFT_OUTPUT_TYPE) {
             logger(`${prefix}NFT Output`);
@@ -352,7 +352,7 @@ export function logOutput(prefix, output) {
             logger(`${prefix}\t\tNFT Id:`, output.nftId);
             logger(`${prefix}\t\tImmutable Data:`, output.immutableData);
             logUnlockConditions(`${prefix}\t\t`, output.unlockConditions);
-            logFeatureBlocks(`${prefix}\t\t`, output.blocks);
+            logFeatureBlocks(`${prefix}\t\t`, output.featureBlocks);
         }
     }
 }

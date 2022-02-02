@@ -61,7 +61,7 @@ export function deserializeAliasOutput(readStream: ReadStream): IAliasOutput {
 
     const unlockConditions = deserializeUnlockConditions(readStream);
 
-    const blocks = deserializeFeatureBlocks(readStream);
+    const featureBlocks = deserializeFeatureBlocks(readStream);
 
     return {
         type: ALIAS_OUTPUT_TYPE,
@@ -72,7 +72,7 @@ export function deserializeAliasOutput(readStream: ReadStream): IAliasOutput {
         stateMetadata,
         foundryCounter,
         unlockConditions,
-        blocks
+        featureBlocks
     };
 }
 
@@ -100,5 +100,5 @@ export function serializeAliasOutput(writeStream: WriteStream, object: IAliasOut
 
     serializeUnlockConditions(writeStream, object.unlockConditions);
 
-    serializeFeatureBlocks(writeStream, object.blocks);
+    serializeFeatureBlocks(writeStream, object.featureBlocks);
 }

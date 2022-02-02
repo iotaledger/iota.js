@@ -41,7 +41,7 @@ export function deserializeAliasOutput(readStream) {
     const stateMetadata = readStream.readFixedHex("aliasOutput.stateMetadata", stateMetadataLength);
     const foundryCounter = readStream.readUInt32("aliasOutput.foundryCounter");
     const unlockConditions = deserializeUnlockConditions(readStream);
-    const blocks = deserializeFeatureBlocks(readStream);
+    const featureBlocks = deserializeFeatureBlocks(readStream);
     return {
         type: ALIAS_OUTPUT_TYPE,
         amount: Number(amount),
@@ -51,7 +51,7 @@ export function deserializeAliasOutput(readStream) {
         stateMetadata,
         foundryCounter,
         unlockConditions,
-        blocks
+        featureBlocks
     };
 }
 /**
@@ -71,5 +71,5 @@ export function serializeAliasOutput(writeStream, object) {
     }
     writeStream.writeUInt32("aliasOutput.foundryCounter", object.foundryCounter);
     serializeUnlockConditions(writeStream, object.unlockConditions);
-    serializeFeatureBlocks(writeStream, object.blocks);
+    serializeFeatureBlocks(writeStream, object.featureBlocks);
 }

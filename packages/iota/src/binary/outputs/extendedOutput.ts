@@ -47,7 +47,7 @@ export function deserializeExtendedOutput(readStream: ReadStream): IExtendedOutp
         amount: Number(amount),
         nativeTokens,
         unlockConditions,
-        blocks: featureBlocks
+        featureBlocks
     };
 }
 
@@ -62,5 +62,5 @@ export function serializeExtendedOutput(writeStream: WriteStream, object: IExten
     writeStream.writeUInt64("extendedOutput.amount", bigInt(object.amount));
     serializeNativeTokens(writeStream, object.nativeTokens);
     serializeUnlockConditions(writeStream, object.unlockConditions);
-    serializeFeatureBlocks(writeStream, object.blocks);
+    serializeFeatureBlocks(writeStream, object.featureBlocks);
 }

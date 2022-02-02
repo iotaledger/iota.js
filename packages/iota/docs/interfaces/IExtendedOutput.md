@@ -16,7 +16,7 @@ Extended output.
 - [amount](IExtendedOutput.md#amount)
 - [nativeTokens](IExtendedOutput.md#nativetokens)
 - [unlockConditions](IExtendedOutput.md#unlockconditions)
-- [blocks](IExtendedOutput.md#blocks)
+- [featureBlocks](IExtendedOutput.md#featureblocks)
 
 ## Properties
 
@@ -56,8 +56,8 @@ The unlock conditions for the output.
 
 ___
 
-### blocks
+### featureBlocks
 
-• **blocks**: [`FeatureBlockTypes`](../api.md#featureblocktypes)[]
+• **featureBlocks**: [`FeatureBlockTypes`](../api.md#featureblocktypes)[]
 
-Blocks contained by the output.
+Feature blocks contained by the output.

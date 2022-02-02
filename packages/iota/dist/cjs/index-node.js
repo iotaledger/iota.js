@@ -1509,7 +1509,7 @@
         const stateMetadata = readStream.readFixedHex("aliasOutput.stateMetadata", stateMetadataLength);
         const foundryCounter = readStream.readUInt32("aliasOutput.foundryCounter");
         const unlockConditions = deserializeUnlockConditions(readStream);
-        const blocks = deserializeFeatureBlocks(readStream);
+        const featureBlocks = deserializeFeatureBlocks(readStream);
         return {
             type: ALIAS_OUTPUT_TYPE,
             amount: Number(amount),
@@ -1519,7 +1519,7 @@
             stateMetadata,
             foundryCounter,
             unlockConditions,
-            blocks
+            featureBlocks
         };
     }
     /**
@@ -1539,7 +1539,7 @@
         }
         writeStream.writeUInt32("aliasOutput.foundryCounter", object.foundryCounter);
         serializeUnlockConditions(writeStream, object.unlockConditions);
-        serializeFeatureBlocks(writeStream, object.blocks);
+        serializeFeatureBlocks(writeStream, object.featureBlocks);
     }
 
     /**
@@ -1572,7 +1572,7 @@
             amount: Number(amount),
             nativeTokens,
             unlockConditions,
-            blocks: featureBlocks
+            featureBlocks
         };
     }
     /**
@@ -1585,7 +1585,7 @@
         writeStream.writeUInt64("extendedOutput.amount", bigInt__default["default"](object.amount));
         serializeNativeTokens(writeStream, object.nativeTokens);
         serializeUnlockConditions(writeStream, object.unlockConditions);
-        serializeFeatureBlocks(writeStream, object.blocks);
+        serializeFeatureBlocks(writeStream, object.featureBlocks);
     }
 
     /**
@@ -1694,7 +1694,7 @@
         const maximumSupply = readStream.readUInt256("foundryOutput.maximumSupply");
         const tokenScheme = deserializeTokenScheme(readStream);
         const unlockConditions = deserializeUnlockConditions(readStream);
-        const blocks = deserializeFeatureBlocks(readStream);
+        const featureBlocks = deserializeFeatureBlocks(readStream);
         return {
             type: FOUNDRY_OUTPUT_TYPE,
             amount: Number(amount),
@@ -1705,7 +1705,7 @@
             maximumSupply: maximumSupply.toString(),
             tokenScheme,
             unlockConditions,
-            blocks: blocks
+            featureBlocks: featureBlocks
         };
     }
     /**
@@ -1723,7 +1723,7 @@
         writeStream.writeUInt256("foundryOutput.maximumSupply", bigInt__default["default"](object.maximumSupply));
         serializeTokenScheme(writeStream, object.tokenScheme);
         serializeUnlockConditions(writeStream, object.unlockConditions);
-        serializeFeatureBlocks(writeStream, object.blocks);
+        serializeFeatureBlocks(writeStream, object.featureBlocks);
     }
 
     /**
@@ -1759,7 +1759,7 @@
         const immutableMetadataLength = readStream.readUInt32("nftOutput.immutableMetadataLength");
         const immutableData = readStream.readFixedHex("nftOutput.immutableMetadata", immutableMetadataLength);
         const unlockConditions = deserializeUnlockConditions(readStream);
-        const blocks = deserializeFeatureBlocks(readStream);
+        const featureBlocks = deserializeFeatureBlocks(readStream);
         return {
             type: NFT_OUTPUT_TYPE,
             amount: Number(amount),
@@ -1767,7 +1767,7 @@
             nftId,
             immutableData,
             unlockConditions,
-            blocks
+            featureBlocks
         };
     }
     /**
@@ -1783,7 +1783,7 @@
         writeStream.writeUInt32("nftOutput.immutableMetadataLength", object.immutableData.length / 2);
         writeStream.writeFixedHex("nftOutput.immutableMetadata", object.immutableData.length / 2, object.immutableData);
         serializeUnlockConditions(writeStream, object.unlockConditions);
-        serializeFeatureBlocks(writeStream, object.blocks);
+        serializeFeatureBlocks(writeStream, object.featureBlocks);
     }
 
     /**
@@ -3779,7 +3779,7 @@
                             }
                         }
                     ],
-                    blocks: []
+                    featureBlocks: []
                 };
                 const writeStream = new util_js.WriteStream();
                 serializeOutput(writeStream, o);
@@ -4607,7 +4607,7 @@
                 logger(`${prefix}\t\tAmount:`, output.amount);
                 logNativeTokens(`${prefix}\t\t`, output.nativeTokens);
                 logUnlockConditions(`${prefix}\t\t`, output.unlockConditions);
-                logFeatureBlocks(`${prefix}\t\t`, output.blocks);
+                logFeatureBlocks(`${prefix}\t\t`, output.featureBlocks);
             }
             else if (output.type === ALIAS_OUTPUT_TYPE) {
                 logger(`${prefix}Alias Output`);
@@ -4618,7 +4618,7 @@
                 logger(`${prefix}\t\tState Metadata:`, output.stateMetadata);
                 logger(`${prefix}\t\tFoundry Counter:`, output.foundryCounter);
                 logUnlockConditions(`${prefix}\t\t`, output.unlockConditions);
-                logFeatureBlocks(`${prefix}\t\t`, output.blocks);
+                logFeatureBlocks(`${prefix}\t\t`, output.featureBlocks);
             }
             else if (output.type === FOUNDRY_OUTPUT_TYPE) {
                 logger(`${prefix}Foundry Output`);
@@ -4630,7 +4630,7 @@
                 logger(`${prefix}\t\tMaximum Supply:`, output.maximumSupply);
                 logTokenScheme(`${prefix}\t\t`, output.tokenScheme);
                 logUnlockConditions(`${prefix}\t\t`, output.unlockConditions);
-                logFeatureBlocks(`${prefix}\t\t`, output.blocks);
+                logFeatureBlocks(`${prefix}\t\t`, output.featureBlocks);
             }
             else if (output.type === NFT_OUTPUT_TYPE) {
                 logger(`${prefix}NFT Output`);
@@ -4639,7 +4639,7 @@
                 logger(`${prefix}\t\tNFT Id:`, output.nftId);
                 logger(`${prefix}\t\tImmutable Data:`, output.immutableData);
                 logUnlockConditions(`${prefix}\t\t`, output.unlockConditions);
-                logFeatureBlocks(`${prefix}\t\t`, output.blocks);
+                logFeatureBlocks(`${prefix}\t\t`, output.featureBlocks);
             }
         }
     }

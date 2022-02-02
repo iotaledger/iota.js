@@ -30,7 +30,7 @@ describe("Binary Extended Output", () => {
                     }
                 }
             ],
-            blocks: []
+            featureBlocks: []
         };
 
         const serialized = new WriteStream();

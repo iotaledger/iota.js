@@ -38,7 +38,7 @@ describe("Binary Foundry Output", () => {
                     }
                 }
             ],
-            blocks: []
+            featureBlocks: []
         };
 
         const serialized = new WriteStream();

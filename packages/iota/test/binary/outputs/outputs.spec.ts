@@ -28,7 +28,7 @@ describe("Binary Outputs", () => {
                         }
                     }
                 ],
-                blocks: []
+                featureBlocks: []
             },
             {
                 type: EXTENDED_OUTPUT_TYPE,
@@ -43,7 +43,7 @@ describe("Binary Outputs", () => {
                         }
                     }
                 ],
-                blocks: []
+                featureBlocks: []
             }
         ];
 
@@ -88,7 +88,7 @@ describe("Binary Outputs", () => {
                     }
                 }
             ],
-            blocks: []
+            featureBlocks: []
         };
 
         const serialized = new WriteStream();

@@ -18,7 +18,7 @@ NFT output.
 - [nftId](INftOutput.md#nftid)
 - [immutableData](INftOutput.md#immutabledata)
 - [unlockConditions](INftOutput.md#unlockconditions)
-- [blocks](INftOutput.md#blocks)
+- [featureBlocks](INftOutput.md#featureblocks)
 
 ## Properties
 
@@ -74,8 +74,8 @@ The unlock conditions for the output.
 
 ___
 
-### blocks
+### featureBlocks
 
-• **blocks**: [`FeatureBlockTypes`](../api.md#featureblocktypes)[]
+• **featureBlocks**: [`FeatureBlockTypes`](../api.md#featureblocktypes)[]
 
-Blocks contained by the output.
+Feature blocks contained by the output.

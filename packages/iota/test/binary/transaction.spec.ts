@@ -34,7 +34,7 @@ describe("Binary Transaction", () => {
                             }
                         }
                     ],
-                    blocks: []
+                    featureBlocks: []
                 }
             ]
         };
@@ -89,7 +89,7 @@ describe("Binary Transaction", () => {
                             }
                         }
                     ],
-                    blocks: []
+                    featureBlocks: []
                 }
             ],
             payload: {

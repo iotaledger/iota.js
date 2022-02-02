@@ -23,7 +23,7 @@ export interface IExtendedOutput extends ITypeBase<3> {
      */
     unlockConditions: UnlockConditionTypes[];
     /**
-     * Blocks contained by the output.
+     * Feature blocks contained by the output.
      */
-    blocks: FeatureBlockTypes[];
+    featureBlocks: FeatureBlockTypes[];
 }

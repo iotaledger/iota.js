@@ -43,7 +43,7 @@ describe("Binary Alias Output", () => {
                     }
                 }
             ],
-            blocks: []
+            featureBlocks: []
         };
 
         const serialized = new WriteStream();

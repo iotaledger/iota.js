@@ -140,7 +140,7 @@ export function buildTransactionPayload(
                         }
                     }
                 ],
-                blocks: []
+                featureBlocks: []
             };
             const writeStream = new WriteStream();
             serializeOutput(writeStream, o);

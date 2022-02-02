@@ -59,7 +59,7 @@ export function deserializeFoundryOutput(readStream: ReadStream): IFoundryOutput
     const maximumSupply = readStream.readUInt256("foundryOutput.maximumSupply");
     const tokenScheme = deserializeTokenScheme(readStream);
     const unlockConditions = deserializeUnlockConditions(readStream);
-    const blocks = deserializeFeatureBlocks(readStream);
+    const featureBlocks = deserializeFeatureBlocks(readStream);
 
     return {
         type: FOUNDRY_OUTPUT_TYPE,
@@ -71,7 +71,7 @@ export function deserializeFoundryOutput(readStream: ReadStream): IFoundryOutput
         maximumSupply: maximumSupply.toString(),
         tokenScheme,
         unlockConditions,
-        blocks: blocks as IMetadataFeatureBlock[]
+        featureBlocks: featureBlocks as IMetadataFeatureBlock[]
     };
 }
 
@@ -91,5 +91,5 @@ export function serializeFoundryOutput(writeStream: WriteStream, object: IFoundr
     writeStream.writeUInt256("foundryOutput.maximumSupply", bigInt(object.maximumSupply));
     serializeTokenScheme(writeStream, object.tokenScheme);
     serializeUnlockConditions(writeStream, object.unlockConditions);
-    serializeFeatureBlocks(writeStream, object.blocks);
+    serializeFeatureBlocks(writeStream, object.featureBlocks);
 }

@@ -83,7 +83,7 @@ export function buildTransactionPayload(inputsAndSignatureKeyPairs, outputs, tag
                         }
                     }
                 ],
-                blocks: []
+                featureBlocks: []
             };
             const writeStream = new WriteStream();
             serializeOutput(writeStream, o);

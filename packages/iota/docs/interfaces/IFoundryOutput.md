@@ -21,7 +21,7 @@ Foundry output.
 - [maximumSupply](IFoundryOutput.md#maximumsupply)
 - [tokenScheme](IFoundryOutput.md#tokenscheme)
 - [unlockConditions](IFoundryOutput.md#unlockconditions)
-- [blocks](IFoundryOutput.md#blocks)
+- [featureBlocks](IFoundryOutput.md#featureblocks)
 
 ## Properties
 
@@ -101,8 +101,8 @@ The unlock conditions for the output.
 
 ___
 
-### blocks
+### featureBlocks
 
-• **blocks**: [`IMetadataFeatureBlock`](IMetadataFeatureBlock.md)[]
+• **featureBlocks**: [`IMetadataFeatureBlock`](IMetadataFeatureBlock.md)[]
 
-Blocks contained by the output.
+Feature blocks contained by the output.
