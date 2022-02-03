@@ -2,6 +2,7 @@
     "name": "pow",
     "version": "1.0.0",
     "main": "dist/index.js",
+    "private": true,
     "scripts": {
         "dist": "tsc",
         "start": "node dist/index"

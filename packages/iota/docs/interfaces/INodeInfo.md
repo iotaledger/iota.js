@@ -8,18 +8,10 @@ Response from the /info endpoint.
 
 - [name](INodeInfo.md#name)
 - [version](INodeInfo.md#version)
-- [isHealthy](INodeInfo.md#ishealthy)
-- [networkId](INodeInfo.md#networkid)
-- [minPoWScore](INodeInfo.md#minpowscore)
-- [bech32HRP](INodeInfo.md#bech32hrp)
-- [latestMilestoneIndex](INodeInfo.md#latestmilestoneindex)
-- [latestMilestoneTimestamp](INodeInfo.md#latestmilestonetimestamp)
-- [confirmedMilestoneIndex](INodeInfo.md#confirmedmilestoneindex)
-- [pruningIndex](INodeInfo.md#pruningindex)
+- [status](INodeInfo.md#status)
+- [protocol](INodeInfo.md#protocol)
+- [metrics](INodeInfo.md#metrics)
 - [features](INodeInfo.md#features)
-- [messagesPerSecond](INodeInfo.md#messagespersecond)
-- [referencedMessagesPerSecond](INodeInfo.md#referencedmessagespersecond)
-- [referencedRate](INodeInfo.md#referencedrate)
 - [plugins](INodeInfo.md#plugins)
 
 ## Properties
@@ -40,67 +32,27 @@ The version of the software running on the node.
 
 ___
 
-### isHealthy
+### status
 
-• **isHealthy**: `boolean`
+• **status**: [`INodeInfoStatus`](INodeInfoStatus.md)
 
-Is the node healthy.
-
-___
-
-### networkId
-
-• **networkId**: `string`
-
-The network id.
+The status of the node.
 
 ___
 
-### minPoWScore
+### protocol
 
-• **minPoWScore**: `number`
+• **protocol**: [`INodeInfoProtocol`](INodeInfoProtocol.md)
 
-The minimum score required for PoW.
-
-___
-
-### bech32HRP
-
-• **bech32HRP**: `string`
-
-The human readable part of bech32 addresses.
+The protocol information of the node.
 
 ___
 
-### latestMilestoneIndex
+### metrics
 
-• **latestMilestoneIndex**: `number`
+• **metrics**: [`INodeInfoMetrics`](INodeInfoMetrics.md)
 
-The latest milestone index.
-
-___
-
-### latestMilestoneTimestamp
-
-• **latestMilestoneTimestamp**: `number`
-
-The latest milestone timestamp.
-
-___
-
-### confirmedMilestoneIndex
-
-• **confirmedMilestoneIndex**: `number`
-
-The confirmed milestone index.
-
-___
-
-### pruningIndex
-
-• **pruningIndex**: `number`
-
-The pruning index.
+The metrics for the node.
 
 ___
 
@@ -109,30 +61,6 @@ ___
 • **features**: `string`[]
 
 Features supported by the node.
-
-___
-
-### messagesPerSecond
-
-• **messagesPerSecond**: `number`
-
-Messages per second.
-
-___
-
-### referencedMessagesPerSecond
-
-• **referencedMessagesPerSecond**: `number`
-
-Referenced messages per second.
-
-___
-
-### referencedRate
-
-• **referencedRate**: `number`
-
-The rate at which rates are being referenced.
 
 ___
 

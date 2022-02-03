@@ -85,22 +85,22 @@ export async function getUnspentAddressesWithAddressGenerator(client, seed, init
 export async function calculateAddressBalance(client, addressBech32) {
     const indexerPlugin = new IndexerPluginClient(client);
     let count = 0;
-    let nextOffset;
+    let cursor;
     let balance = 0;
     do {
         const outputResponse = await indexerPlugin.outputs({
             addressBech32,
             pageSize: 20,
-            offset: nextOffset
+            cursor
         });
-        count = outputResponse.count;
-        nextOffset = outputResponse.offset;
-        for (const outputId of outputResponse.data) {
+        count = outputResponse.items.length;
+        cursor = outputResponse.cursor;
+        for (const outputId of outputResponse.items) {
             const output = await client.output(outputId);
             if (output.output.type === EXTENDED_OUTPUT_TYPE && !output.isSpent) {
                 balance += output.output.amount;
             }
         }
-    } while (count > 0 && nextOffset);
+    } while (count > 0 && cursor);
     return balance;
 }

@@ -4,6 +4,3 @@
 GET http://localhost:14265/api/v2/milestones/1
 Content-Type: application/json
 
-### Milestones data
-GET https://chrysalis-nodes.iota.org/api/v2/milestones/1
-Content-Type: application/json

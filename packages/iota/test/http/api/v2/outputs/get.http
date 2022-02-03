@@ -3,9 +3,3 @@
 ### Outputs data
 GET http://localhost:14265/api/v2/outputs/00000000000000000000000000000000000000000000000000000000000000000000
 Content-Type: application/json
-
-
-### Outputs data
-GET https://chrysalis-nodes.iota.org/api/v2/outputs/00000000000000000000000000000000000000000000000000000000000000000000
-Content-Type: application/json
-

@@ -5,7 +5,7 @@ This package provides local proof of work multi-threaded for NodeJS, it is still
 ## Install
 
 ```shell
-npm install @iota/pow-node.js
+npm install @iota/pow-node.js@1.9.0-stardust.1
 ```
 
 ## Usage
@@ -14,5 +14,5 @@ npm install @iota/pow-node.js
 import { SingleNodeClient } from "@iota/iota.js";
 import { NodePowProvider } from "@iota/pow-node.js";
 
-const client = new SingleNodeClient("https://chrysalis-nodes.iota.org", { powProvider: new NodePowProvider() });
+const client = new SingleNodeClient("http://localhost:14265/", { powProvider: new NodePowProvider() });
 ```

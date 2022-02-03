@@ -4,6 +4,3 @@
 GET http://localhost:14265/
 Content-Type: application/json
 
-### Root - Should return a 403 forbidden
-GET https://chrysalis-nodes.iota.org/
-Content-Type: application/json

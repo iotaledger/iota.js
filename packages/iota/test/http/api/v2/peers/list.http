@@ -4,6 +4,3 @@
 GET http://localhost:14265/api/v2/peers
 Content-Type: application/json
 
-### Peers List
-GET https://chrysalis-nodes.iota.org/api/v2/peers
-Content-Type: application/json

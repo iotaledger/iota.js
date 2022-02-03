@@ -7,10 +7,9 @@ Details of an outputs response from the indexer plugin.
 ### Properties
 
 - [ledgerIndex](IOutputsResponse.md#ledgerindex)
-- [limit](IOutputsResponse.md#limit)
-- [offset](IOutputsResponse.md#offset)
-- [count](IOutputsResponse.md#count)
-- [data](IOutputsResponse.md#data)
+- [pageSize](IOutputsResponse.md#pagesize)
+- [cursor](IOutputsResponse.md#cursor)
+- [items](IOutputsResponse.md#items)
 
 ## Properties
 
@@ -22,32 +21,24 @@ The ledger index at which these outputs where available at.
 
 ___
 
-### limit
+### pageSize
 
-• **limit**: `number`
+• **pageSize**: `string`
 
 The maximum count of results that are returned by the node.
 
 ___
 
-### offset
+### cursor
 
-• **offset**: `string`
+• `Optional` **cursor**: `string`
 
-The offset to use for getting the next results.
-
-___
-
-### count
-
-• **count**: `number`
-
-The actual count of results that are returned.
+The cursor to use for getting the next results.
 
 ___
 
-### data
+### items
 
-• **data**: `string`[]
+• **items**: `string`[]
 
 The output IDs (transaction hash + output index) of the outputs on this address.

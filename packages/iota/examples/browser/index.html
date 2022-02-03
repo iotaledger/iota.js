@@ -23,7 +23,6 @@
 
         async function run() {
             Iota.setLogger(consoleLog);
-            //const client = new Iota.SingleNodeClient("https://chrysalis-nodes.iota.org/");
             const client = new Iota.SingleNodeClient("http://localhost:14265/");
 
             const health = await client.health();
@@ -83,7 +82,7 @@
             consoleLog("\tChildren Message Ids:", children.childrenMessageIds);
             consoleLog();
 
-            const milestone = await client.milestone(info.latestMilestoneIndex);
+            const milestone = await client.milestone(info.status.latestMilestoneIndex);
             consoleLog("Milestone");
             consoleLog("\tMilestone Index:", milestone.index);
             consoleLog("\tMessage Id:", milestone.messageId);
@@ -122,7 +121,7 @@
             const genesisEd25519Address = new Iota.Ed25519Address(genesisWalletKeyPair.publicKey);
             const genesisWalletAddress = genesisEd25519Address.toAddress();
             const genesisWalletAddressHex = IotaUtil.Converter.bytesToHex(genesisWalletAddress);
-            const genesisWalletAddressBech32 = Iota.Bech32Helper.toBech32(Iota.ED25519_ADDRESS_TYPE, genesisWalletAddress, nodeInfo.bech32HRP);
+            const genesisWalletAddressBech32 = Iota.Bech32Helper.toBech32(Iota.ED25519_ADDRESS_TYPE, genesisWalletAddress, nodeInfo.protocol.bech32HRP);
             consoleLog("\tAddress Ed25519", genesisWalletAddressHex);
             consoleLog("\tAddress Bech32", genesisWalletAddressBech32);
 
@@ -135,7 +134,7 @@
             const walletEd25519Address = new Iota.Ed25519Address(walletAddressSeed.keyPair().publicKey);
             const newAddress = walletEd25519Address.toAddress();
             const newAddressHex = IotaUtil.Converter.bytesToHex(newAddress);
-            const newAddressBech32 = Iota.Bech32Helper.toBech32(Iota.ED25519_ADDRESS_TYPE, newAddress, nodeInfo.bech32HRP);
+            const newAddressBech32 = Iota.Bech32Helper.toBech32(Iota.ED25519_ADDRESS_TYPE, newAddress, nodeInfo.protocol.bech32HRP);
 
             consoleLog("Wallet 1");
             consoleLog("\tSeed:", IotaUtil.Converter.bytesToHex(walletSeed.toBytes()));
@@ -154,8 +153,8 @@
 
             let totalGenesis = 0;
 
-            for (let i = 0; i < genesisAddressOutputs.data.length; i++) {
-                const output = await client.output(genesisAddressOutputs.data[i]);
+            for (let i = 0; i < genesisAddressOutputs.items.length; i++) {
+                const output = await client.output(genesisAddressOutputs.items[i]);
                 if (!output.isSpent) {
                     inputsWithKeyPairs.push({
                         input: {

@@ -24,7 +24,7 @@
         }
 
         async function run() {
-            const client = new IotaMqtt.MqttClient("wss://chrysalis-nodes.iota.org:443/mqtt");
+            const client = new IotaMqtt.MqttClient("wss://localhost:443/mqtt");
 
             client.milestonesLatest((topic, data) => {
                 consoleLog(topic, data);

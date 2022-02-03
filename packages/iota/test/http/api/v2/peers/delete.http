@@ -2,6 +2,3 @@
 
 ### Delete Peer
 DELETE http://localhost:14265/api/v2/peers/12D3KooWGdr8M5KX8KuKaXSiKfHJstdVnRkadYmupF7tFk2HrRoA
-
-### Delete Peer
-DELETE https://chrysalis-nodes.iota.org/api/v2/peers/12D3KooWGdr8M5KX8KuKaXSiKfHJstdVnRkadYmupF7tFk2HrRoA

@@ -236,7 +236,7 @@ export class SingleNodeClient {
     async bech32Hrp() {
         if (this._bech32Hrp === undefined) {
             const info = await this.info();
-            this._bech32Hrp = info.bech32HRP;
+            this._bech32Hrp = info.protocol.bech32HRP;
         }
         return this._bech32Hrp;
     }
@@ -250,7 +250,7 @@ export class SingleNodeClient {
      * @returns The response object.
      */
     async pluginFetch(basePluginPath, method, methodPath, queryParams, request) {
-        return this.fetchJson(this._basePluginPath, method, `${basePluginPath}${methodPath}${this.combineQueryParams(queryParams)}`, request, false);
+        return this.fetchJson(this._basePluginPath, method, `${basePluginPath}${methodPath}${this.combineQueryParams(queryParams)}`, request);
     }
     /**
      * Perform a request and just return the status.
@@ -268,11 +268,10 @@ export class SingleNodeClient {
      * @param method The http method.
      * @param route The route of the request.
      * @param requestData Request to send to the endpoint.
-     * @param responseIsWrapped The response is wrapped in a data envelope.
      * @returns The response.
      * @internal
      */
-    async fetchJson(basePath, method, route, requestData, responseIsWrapped = true) {
+    async fetchJson(basePath, method, route, requestData) {
         const response = await this.fetchWithTimeout(method, `${basePath}${route}`, { "Content-Type": "application/json" }, requestData ? JSON.stringify(requestData) : undefined);
         let errorMessage;
         let errorCode;
@@ -282,25 +281,13 @@ export class SingleNodeClient {
                 return {};
             }
             try {
-                if (responseIsWrapped) {
-                    const responseData = await response.json();
-                    if (responseData.error) {
-                        errorMessage = responseData.error.message;
-                        errorCode = responseData.error.code;
-                    }
-                    else {
-                        return responseData.data;
-                    }
+                const responseData = await response.json();
+                if (responseData.error) {
+                    errorMessage = responseData.error.message;
+                    errorCode = responseData.error.code;
                 }
                 else {
-                    const responseData = await response.json();
-                    if (responseData.error) {
-                        errorMessage = responseData.error.message;
-                        errorCode = responseData.error.code;
-                    }
-                    else {
-                        return responseData;
-                    }
+                    return responseData;
                 }
             }
             catch { }
@@ -428,10 +415,10 @@ export class SingleNodeClient {
      */
     async getPoWInfo() {
         const nodeInfo = await this.info();
-        const networkIdBytes = Blake2b.sum256(Converter.utf8ToBytes(nodeInfo.networkId));
+        const networkIdBytes = Blake2b.sum256(Converter.utf8ToBytes(nodeInfo.protocol.networkName));
         return {
             networkId: BigIntHelper.read8(networkIdBytes, 0),
-            minPoWScore: nodeInfo.minPoWScore
+            minPoWScore: nodeInfo.protocol.minPoWScore
         };
     }
 }

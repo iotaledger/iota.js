@@ -3,7 +3,3 @@
 ### Tips
 GET http://localhost:14265/api/v2/tips
 Content-Type: application/json
-
-### Tips
-GET https://chrysalis-nodes.iota.org/api/v2/tips
-Content-Type: application/json

@@ -1,3 +1,6 @@
+import type { INodeInfoMetrics } from "./INodeInfoMetrics";
+import type { INodeInfoProtocol } from "./INodeInfoProtocol";
+import type { INodeInfoStatus } from "./INodeInfoStatus";
 /**
  * Response from the /info endpoint.
  */
@@ -11,53 +14,21 @@ export interface INodeInfo {
      */
     version: string;
     /**
-     * Is the node healthy.
+     * The status of the node.
      */
-    isHealthy: boolean;
+    status: INodeInfoStatus;
     /**
-     * The network id.
+     * The protocol information of the node.
      */
-    networkId: string;
+    protocol: INodeInfoProtocol;
     /**
-     * The minimum score required for PoW.
+     * The metrics for the node.
      */
-    minPoWScore: number;
-    /**
-     * The human readable part of bech32 addresses.
-     */
-    bech32HRP: string;
-    /**
-     * The latest milestone index.
-     */
-    latestMilestoneIndex: number;
-    /**
-     * The latest milestone timestamp.
-     */
-    latestMilestoneTimestamp: number;
-    /**
-     * The confirmed milestone index.
-     */
-    confirmedMilestoneIndex: number;
-    /**
-     * The pruning index.
-     */
-    pruningIndex: number;
+    metrics: INodeInfoMetrics;
     /**
      * Features supported by the node.
      */
     features: string[];
-    /**
-     * Messages per second.
-     */
-    messagesPerSecond: number;
-    /**
-     * Referenced messages per second.
-     */
-    referencedMessagesPerSecond: number;
-    /**
-     * The rate at which rates are being referenced.
-     */
-    referencedRate: number;
     /**
      * The plugins the node exposes.
      */

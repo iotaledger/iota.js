@@ -9,7 +9,7 @@ You will need the rust toolchain installed so that the native module can be buil
 ## Install
 
 ```shell
-npm install @iota/pow-neon.js
+npm install @iota/pow-neon.js@1.9.0-stardust.1
 ```
 
 ## Usage
@@ -18,5 +18,5 @@ npm install @iota/pow-neon.js
 import { SingleNodeClient } from "@iota/iota.js";
 import { NeonPowProvider } from "@iota/pow-neon.js";
 
-const client = new SingleNeonClient("https://chrysalis-nodes.iota.org", { powProvider: new NeonPowProvider() });
+const client = new SingleNeonClient("http://localhost:14265/", { powProvider: new NeonPowProvider() });
 ```

@@ -10,7 +10,6 @@ import {
     SingleNodeClient
 } from "@iota/iota.js";
 
-// const API_ENDPOINT = "https://chrysalis-nodes.iota.org/";
 const API_ENDPOINT = "http://localhost:14265/";
 
 async function run() {
@@ -52,7 +51,7 @@ async function run() {
         console.log("\tAddress Ed25519", Converter.bytesToHex(indexPublicKeyAddress));
         console.log(
             "\tAddress Bech32",
-            Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, indexPublicKeyAddress, info.bech32HRP)
+            Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, indexPublicKeyAddress, info.protocol.bech32HRP)
         );
         console.log();
     }
@@ -89,7 +88,7 @@ async function run() {
         console.log("\tAddress Ed25519", Converter.bytesToHex(indexPublicKeyAddress));
         console.log(
             "\tAddress Bech32",
-            Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, indexPublicKeyAddress, info.bech32HRP)
+            Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, indexPublicKeyAddress, info.protocol.bech32HRP)
         );
         console.log();
 

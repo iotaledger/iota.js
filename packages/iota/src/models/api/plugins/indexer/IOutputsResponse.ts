@@ -13,20 +13,15 @@ export interface IOutputsResponse {
     /**
      * The maximum count of results that are returned by the node.
      */
-    limit: number;
+    pageSize: string;
 
     /**
-     * The offset to use for getting the next results.
+     * The cursor to use for getting the next results.
      */
-    offset: string;
-
-    /**
-     * The actual count of results that are returned.
-     */
-    count: number;
+    cursor?: string;
 
     /**
      * The output IDs (transaction hash + output index) of the outputs on this address.
      */
-    data: string[];
+    items: string[];
 }

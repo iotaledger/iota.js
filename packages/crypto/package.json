@@ -1,7 +1,7 @@
 {
     "name": "@iota/crypto.js",
     "description": "IOTA JavaScript Cryptography Library",
-    "version": "1.8.6",
+    "version": "1.9.0-stardust.1",
     "keywords": [
         "iota",
         "client"
@@ -17,7 +17,7 @@
     "license": "Apache-2.0",
     "dependencies": {
         "big-integer": "^1.6.51",
-        "@iota/util.js": "^1.8.6"
+        "@iota/util.js": "^1.9.0-stardust.1"
     },
     "scripts": {
         "build-clean": "rimraf ./es/* ./typings/*",

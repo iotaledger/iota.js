@@ -42,7 +42,7 @@ export class IndexerPluginClient {
      * @param filterOptions.createdBefore Filter for outputs that were created before the given time.
      * @param filterOptions.createdAfter Filter for outputs that were created after the given time.
      * @param filterOptions.pageSize Set the page size for the response.
-     * @param filterOptions.offset Request the items from the given offset, return from a previous request.
+     * @param filterOptions.cursor Request the items from the given cursor, returned from a previous request.
      * @returns The outputs with the requested filters.
      */
     async outputs(filterOptions) {
@@ -105,8 +105,8 @@ export class IndexerPluginClient {
             if (filterOptions.pageSize !== undefined) {
                 queryParams.push(`pageSize=${filterOptions.pageSize}`);
             }
-            if (filterOptions.offset !== undefined) {
-                queryParams.push(`offset=${filterOptions.offset}`);
+            if (filterOptions.cursor !== undefined) {
+                queryParams.push(`cursor=${filterOptions.cursor}`);
             }
         }
         return this._client.pluginFetch(this._basePluginPath, "get", "outputs", queryParams);
@@ -121,7 +121,7 @@ export class IndexerPluginClient {
      * @param filterOptions.createdBefore Filter for outputs that were created before the given time.
      * @param filterOptions.createdAfter Filter for outputs that were created after the given time.
      * @param filterOptions.pageSize Set the page size for the response.
-     * @param filterOptions.offset Request the items from the given offset, return from a previous request.
+     * @param filterOptions.cursor Request the items from the given cursor, returned from a previous request.
      * @returns The outputs with the requested filters.
      */
     async aliases(filterOptions) {
@@ -148,8 +148,8 @@ export class IndexerPluginClient {
             if (filterOptions.pageSize !== undefined) {
                 queryParams.push(`pageSize=${filterOptions.pageSize}`);
             }
-            if (filterOptions.offset !== undefined) {
-                queryParams.push(`offset=${filterOptions.offset}`);
+            if (filterOptions.cursor !== undefined) {
+                queryParams.push(`cursor=${filterOptions.cursor}`);
             }
         }
         return this._client.pluginFetch(this._basePluginPath, "get", "aliases", queryParams);
@@ -190,7 +190,7 @@ export class IndexerPluginClient {
      * @param filterOptions.createdBefore Filter for outputs that were created before the given time.
      * @param filterOptions.createdAfter Filter for outputs that were created after the given time.
      * @param filterOptions.pageSize Set the page size for the response.
-     * @param filterOptions.offset Request the items from the given offset, return from a previous request.
+     * @param filterOptions.cursor Request the items from the given cursor, returned from a previous request.
      * @returns The outputs with the requested filters.
      */
     async nfts(filterOptions) {
@@ -256,8 +256,8 @@ export class IndexerPluginClient {
             if (filterOptions.pageSize !== undefined) {
                 queryParams.push(`pageSize=${filterOptions.pageSize}`);
             }
-            if (filterOptions.offset !== undefined) {
-                queryParams.push(`offset=${filterOptions.offset}`);
+            if (filterOptions.cursor !== undefined) {
+                queryParams.push(`cursor=${filterOptions.cursor}`);
             }
         }
         return this._client.pluginFetch(this._basePluginPath, "get", "nfts", queryParams);
@@ -280,7 +280,7 @@ export class IndexerPluginClient {
      * @param filterOptions.createdBefore Filter for outputs that were created before the given time.
      * @param filterOptions.createdAfter Filter for outputs that were created after the given time.
      * @param filterOptions.pageSize Set the page size for the response.
-     * @param filterOptions.offset Request the items from the given offset, return from a previous request.
+     * @param filterOptions.cursor Request the items from the given cursor, returned from a previous request.
      * @returns The outputs with the requested filters.
      */
     async foundries(filterOptions) {
@@ -298,8 +298,8 @@ export class IndexerPluginClient {
             if (filterOptions.pageSize !== undefined) {
                 queryParams.push(`pageSize=${filterOptions.pageSize}`);
             }
-            if (filterOptions.offset !== undefined) {
-                queryParams.push(`offset=${filterOptions.offset}`);
+            if (filterOptions.cursor !== undefined) {
+                queryParams.push(`cursor=${filterOptions.cursor}`);
             }
         }
         return this._client.pluginFetch(this._basePluginPath, "get", "foundries", queryParams);

@@ -4,9 +4,3 @@
 GET http://localhost:14265/health
 Content-Type: application/json
 
-### Health - returns 200 for health, 503 for unhealthy
-GET https://chrysalis-nodes.iota.org/health
-Content-Type: application/json
-
-
-

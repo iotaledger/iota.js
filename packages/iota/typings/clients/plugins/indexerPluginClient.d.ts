@@ -46,7 +46,7 @@ export declare class IndexerPluginClient {
      * @param filterOptions.createdBefore Filter for outputs that were created before the given time.
      * @param filterOptions.createdAfter Filter for outputs that were created after the given time.
      * @param filterOptions.pageSize Set the page size for the response.
-     * @param filterOptions.offset Request the items from the given offset, return from a previous request.
+     * @param filterOptions.cursor Request the items from the given cursor, returned from a previous request.
      * @returns The outputs with the requested filters.
      */
     outputs(filterOptions?: {
@@ -69,7 +69,7 @@ export declare class IndexerPluginClient {
         createdBefore?: number;
         createdAfter?: number;
         pageSize?: number;
-        offset?: string;
+        cursor?: string;
     }): Promise<IOutputsResponse>;
     /**
      * Find alises using filter options.
@@ -81,7 +81,7 @@ export declare class IndexerPluginClient {
      * @param filterOptions.createdBefore Filter for outputs that were created before the given time.
      * @param filterOptions.createdAfter Filter for outputs that were created after the given time.
      * @param filterOptions.pageSize Set the page size for the response.
-     * @param filterOptions.offset Request the items from the given offset, return from a previous request.
+     * @param filterOptions.cursor Request the items from the given cursor, returned from a previous request.
      * @returns The outputs with the requested filters.
      */
     aliases(filterOptions?: {
@@ -92,7 +92,7 @@ export declare class IndexerPluginClient {
         createdBefore?: number;
         createdAfter?: number;
         pageSize?: number;
-        offset?: string;
+        cursor?: string;
     }): Promise<IOutputsResponse>;
     /**
      * Get the output for an alias.
@@ -125,7 +125,7 @@ export declare class IndexerPluginClient {
      * @param filterOptions.createdBefore Filter for outputs that were created before the given time.
      * @param filterOptions.createdAfter Filter for outputs that were created after the given time.
      * @param filterOptions.pageSize Set the page size for the response.
-     * @param filterOptions.offset Request the items from the given offset, return from a previous request.
+     * @param filterOptions.cursor Request the items from the given cursor, returned from a previous request.
      * @returns The outputs with the requested filters.
      */
     nfts(filterOptions?: {
@@ -149,7 +149,7 @@ export declare class IndexerPluginClient {
         createdBefore?: number;
         createdAfter?: number;
         pageSize?: number;
-        offset?: string;
+        cursor?: string;
     }): Promise<IOutputsResponse>;
     /**
      * Get the output for a nft.
@@ -164,7 +164,7 @@ export declare class IndexerPluginClient {
      * @param filterOptions.createdBefore Filter for outputs that were created before the given time.
      * @param filterOptions.createdAfter Filter for outputs that were created after the given time.
      * @param filterOptions.pageSize Set the page size for the response.
-     * @param filterOptions.offset Request the items from the given offset, return from a previous request.
+     * @param filterOptions.cursor Request the items from the given cursor, returned from a previous request.
      * @returns The outputs with the requested filters.
      */
     foundries(filterOptions?: {
@@ -172,7 +172,7 @@ export declare class IndexerPluginClient {
         createdBefore?: number;
         createdAfter?: number;
         pageSize?: number;
-        offset?: string;
+        cursor?: string;
     }): Promise<IOutputsResponse>;
     /**
      * Get the output for a foundry.

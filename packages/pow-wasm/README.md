@@ -5,7 +5,7 @@ This package provides local proof of work multi-threaded for NodeJS implemented 
 ## Install
 
 ```shell
-npm install @iota/pow-wasm.js
+npm install @iota/pow-wasm.js@1.9.0-stardust.1
 ```
 
 ## Usage
@@ -14,5 +14,5 @@ npm install @iota/pow-wasm.js
 import { SingleNodeClient } from "@iota/iota.js";
 import { WasmPowProvider } from "@iota/pow-wasm.js";
 
-const client = new SingleNodeClient("https://chrysalis-nodes.iota.org", { powProvider: new WasmPowProvider() });
+const client = new SingleNodeClient("http://localhost:14265/", { powProvider: new WasmPowProvider() });
 ```

@@ -81,18 +81,30 @@ export function setLogger(log: (message: string, data?: unknown) => void): void 
 export function logInfo(prefix: string, info: INodeInfo): void {
     logger(`${prefix}\tName:`, info.name);
     logger(`${prefix}\tVersion:`, info.version);
-    logger(`${prefix}\tNetwork Id:`, info.networkId);
-    logger(`${prefix}\tIs Healthy:`, info.isHealthy);
-    logger(`${prefix}\tMin PoW Score:`, info.minPoWScore);
-    logger(`${prefix}\tBech32 HRP:`, info.bech32HRP);
-    logger(`${prefix}\tLatest Milestone Index:`, info.latestMilestoneIndex);
-    logger(`${prefix}\tLatest Milestone Timestamp:`, info.latestMilestoneTimestamp);
-    logger(`${prefix}\tConfirmed Milestone Index:`, info.confirmedMilestoneIndex);
-    logger(`${prefix}\tMessages Per Second:`, info.messagesPerSecond);
-    logger(`${prefix}\tReferenced Messages Per Second:`, info.referencedMessagesPerSecond);
-    logger(`${prefix}\tReferenced Rate:`, info.referencedRate);
-    logger(`${prefix}\tPruning Index:`, info.pruningIndex);
+
+    logger(`${prefix}\t\tStatus`);
+    logger(`${prefix}\t\t\tIs Healthy:`, info.status.isHealthy);
+    logger(`${prefix}\t\t\tLatest Milestone Index:`, info.status.latestMilestoneIndex);
+    logger(`${prefix}\t\t\tLatest Milestone Timestamp:`, info.status.latestMilestoneTimestamp);
+    logger(`${prefix}\t\t\tConfirmed Milestone Index:`, info.status.confirmedMilestoneIndex);
+    logger(`${prefix}\t\t\tPruning Index:`, info.status.pruningIndex);
+
+    logger(`${prefix}\t\tProtocol`);
+    logger(`${prefix}\t\t\tNetwork Name:`, info.protocol.networkName);
+    logger(`${prefix}\t\t\tBech32 HRP:`, info.protocol.bech32HRP);
+    logger(`${prefix}\t\t\tMin PoW Score:`, info.protocol.minPoWScore);
+    logger(`${prefix}\t\t\tRent`);
+    logger(`${prefix}\t\t\t\tVByte Cost:`, info.protocol.rentStructure.vByteCost);
+    logger(`${prefix}\t\t\t\tVByte Factor Data:`, info.protocol.rentStructure.vByteFactorData);
+    logger(`${prefix}\t\t\t\tVByte Factor Key:`, info.protocol.rentStructure.vByteFactorKey);
+
+    logger(`${prefix}\t\tMetrics`);
+    logger(`${prefix}\t\t\tMessages Per Second:`, info.metrics.messagesPerSecond);
+    logger(`${prefix}\t\t\tReferenced Messages Per Second:`, info.metrics.referencedMessagesPerSecond);
+    logger(`${prefix}\t\t\tReferenced Rate:`, info.metrics.referencedRate);
+
     logger(`${prefix}\tFeatures:`, info.features);
+    logger(`${prefix}\tPlugins:`, info.plugins);
 }
 
 /**

@@ -1,7 +1,6 @@
 import { retrieveData, sendData, SingleNodeClient } from "@iota/iota.js";
 import { Converter } from "@iota/util.js";
 
-// const API_ENDPOINT = "https://chrysalis-nodes.iota.org/";
 const API_ENDPOINT = "http://localhost:14265/";
 
 async function run() {

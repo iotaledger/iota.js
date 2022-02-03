@@ -160,14 +160,14 @@ export async function calculateInputs(client, seed, initialAddressState, nextAdd
         const addressBytes = ed25519Address.toAddress();
         const indexerPlugin = new IndexerPluginClient(client);
         const addressOutputIds = await indexerPlugin.outputs({ addressBech32: Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, addressBytes, bech32Hrp) });
-        if (addressOutputIds.count === 0) {
+        if (addressOutputIds.items.length === 0) {
             zeroBalance++;
             if (zeroBalance >= zeroCount) {
                 finished = true;
             }
         }
         else {
-            for (const addressOutputId of addressOutputIds.data) {
+            for (const addressOutputId of addressOutputIds.items) {
                 const addressOutput = await localClient.output(addressOutputId);
                 if (!addressOutput.isSpent && consumedBalance < requiredBalance) {
                     if (addressOutput.output.amount === 0) {

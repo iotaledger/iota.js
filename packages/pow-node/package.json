@@ -1,7 +1,7 @@
 {
     "name": "@iota/pow-node.js",
     "description": "IOTA JavaScript Library for Performing Multi-Threaded PoW on NodeJS",
-    "version": "1.8.6",
+    "version": "1.9.0-stardust.1",
     "keywords": [
         "iota",
         "pow"
@@ -66,7 +66,7 @@
         "typings"
     ],
     "dependencies": {
-        "@iota/crypto.js": "^1.8.6",
-        "@iota/iota.js": "^1.8.6"
+        "@iota/crypto.js": "^1.9.0-stardust.1",
+        "@iota/iota.js": "^1.9.0-stardust.1"
     }
 }

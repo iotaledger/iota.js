@@ -8,7 +8,7 @@ describe("Client", () => {
     });
 
     test("Can be constructed with local url", async () => {
-        const client = new SingleNodeClient("https://localhost:14265/");
+        const client = new SingleNodeClient("http://localhost:14265/");
         expect(client).toBeDefined();
     });
 

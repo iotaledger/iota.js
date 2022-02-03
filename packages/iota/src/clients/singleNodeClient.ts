@@ -358,7 +358,7 @@ export class SingleNodeClient implements IClient {
     public async bech32Hrp(): Promise<string> {
         if (this._bech32Hrp === undefined) {
             const info = await this.info();
-            this._bech32Hrp = info.bech32HRP;
+            this._bech32Hrp = info.protocol.bech32HRP;
         }
 
         return this._bech32Hrp;
@@ -374,7 +374,7 @@ export class SingleNodeClient implements IClient {
      * @returns The response object.
      */
     public async pluginFetch<T, S>(basePluginPath: string, method: "get" | "post" | "delete", methodPath: string, queryParams?: string[], request?: T): Promise<S> {
-        return this.fetchJson<T, S>(this._basePluginPath, method, `${basePluginPath}${methodPath}${this.combineQueryParams(queryParams)}`, request, false);
+        return this.fetchJson<T, S>(this._basePluginPath, method, `${basePluginPath}${methodPath}${this.combineQueryParams(queryParams)}`, request);
     }
 
     /**
@@ -395,11 +395,10 @@ export class SingleNodeClient implements IClient {
      * @param method The http method.
      * @param route The route of the request.
      * @param requestData Request to send to the endpoint.
-     * @param responseIsWrapped The response is wrapped in a data envelope.
      * @returns The response.
      * @internal
      */
-    private async fetchJson<T, U>(basePath: string, method: "get" | "post" | "delete", route: string, requestData?: T, responseIsWrapped: boolean = true): Promise<U> {
+    private async fetchJson<T, U>(basePath: string, method: "get" | "post" | "delete", route: string, requestData?: T): Promise<U> {
         const response = await this.fetchWithTimeout(
             method,
             `${basePath}${route}`,
@@ -416,24 +415,13 @@ export class SingleNodeClient implements IClient {
                 return {} as U;
             }
             try {
-                if (responseIsWrapped) {
-                    const responseData: IResponse<U> = await response.json();
+                const responseData: U & { error?: { code: string; message: string } } = await response.json();
 
-                    if (responseData.error) {
-                        errorMessage = responseData.error.message;
-                        errorCode = responseData.error.code;
-                    } else {
-                        return responseData.data;
-                    }
+                if (responseData.error) {
+                    errorMessage = responseData.error.message;
+                    errorCode = responseData.error.code;
                 } else {
-                    const responseData: U & { error: { code: string; message: string } } = await response.json();
-
-                    if (responseData.error) {
-                        errorMessage = responseData.error.message;
-                        errorCode = responseData.error.code;
-                    } else {
-                        return responseData;
-                    }
+                    return responseData;
                 }
             } catch { }
         }
@@ -601,11 +589,11 @@ export class SingleNodeClient implements IClient {
     }> {
         const nodeInfo = await this.info();
 
-        const networkIdBytes = Blake2b.sum256(Converter.utf8ToBytes(nodeInfo.networkId));
+        const networkIdBytes = Blake2b.sum256(Converter.utf8ToBytes(nodeInfo.protocol.networkName));
 
         return {
             networkId: BigIntHelper.read8(networkIdBytes, 0),
-            minPoWScore: nodeInfo.minPoWScore
+            minPoWScore: nodeInfo.protocol.minPoWScore
         };
     }
 }

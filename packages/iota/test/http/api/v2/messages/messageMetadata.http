@@ -4,8 +4,3 @@
 GET http://localhost:14265/api/v2/messages/62832812d5ef48dcec4185bc09f4a68d9e481cf92d83c9a9151c098a34226fd6/metadata
 Content-Type: application/json
 
-
-
-### Message metadata
-GET https://chrysalis-nodes.iota.org/api/v2/messages/62832812d5ef48dcec4185bc09f4a68d9e481cf92d83c9a9151c098a34226fd6/metadata
-Content-Type: application/json

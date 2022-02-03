@@ -4,6 +4,3 @@
 GET http://localhost:14265/api/v2/info
 Content-Type: application/json
 
-### Info
-GET https://chrysalis-nodes.iota.org/api/v2/info
-Content-Type: application/json

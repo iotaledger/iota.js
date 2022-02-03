@@ -8,12 +8,3 @@ Content-Type: application/json
     "multiAddress": "/ip4/127.0.0.1/tcp/15601",
     "alias": "fred"
 }
-
-### Add Peer
-POST https://chrysalis-nodes.iota.org/api/v2/peers
-Content-Type: application/json
-
-{
-    "multiAddress": "/ip4/127.0.0.1/tcp/15601",
-    "alias": "fred"
-}

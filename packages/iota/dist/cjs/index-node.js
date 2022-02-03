@@ -2768,7 +2768,7 @@
         async bech32Hrp() {
             if (this._bech32Hrp === undefined) {
                 const info = await this.info();
-                this._bech32Hrp = info.bech32HRP;
+                this._bech32Hrp = info.protocol.bech32HRP;
             }
             return this._bech32Hrp;
         }
@@ -2782,7 +2782,7 @@
          * @returns The response object.
          */
         async pluginFetch(basePluginPath, method, methodPath, queryParams, request) {
-            return this.fetchJson(this._basePluginPath, method, `${basePluginPath}${methodPath}${this.combineQueryParams(queryParams)}`, request, false);
+            return this.fetchJson(this._basePluginPath, method, `${basePluginPath}${methodPath}${this.combineQueryParams(queryParams)}`, request);
         }
         /**
          * Perform a request and just return the status.
@@ -2800,11 +2800,10 @@
          * @param method The http method.
          * @param route The route of the request.
          * @param requestData Request to send to the endpoint.
-         * @param responseIsWrapped The response is wrapped in a data envelope.
          * @returns The response.
          * @internal
          */
-        async fetchJson(basePath, method, route, requestData, responseIsWrapped = true) {
+        async fetchJson(basePath, method, route, requestData) {
             const response = await this.fetchWithTimeout(method, `${basePath}${route}`, { "Content-Type": "application/json" }, requestData ? JSON.stringify(requestData) : undefined);
             let errorMessage;
             let errorCode;
@@ -2814,25 +2813,13 @@
                     return {};
                 }
                 try {
-                    if (responseIsWrapped) {
-                        const responseData = await response.json();
-                        if (responseData.error) {
-                            errorMessage = responseData.error.message;
-                            errorCode = responseData.error.code;
-                        }
-                        else {
-                            return responseData.data;
-                        }
+                    const responseData = await response.json();
+                    if (responseData.error) {
+                        errorMessage = responseData.error.message;
+                        errorCode = responseData.error.code;
                     }
                     else {
-                        const responseData = await response.json();
-                        if (responseData.error) {
-                            errorMessage = responseData.error.message;
-                            errorCode = responseData.error.code;
-                        }
-                        else {
-                            return responseData;
-                        }
+                        return responseData;
                     }
                 }
                 catch { }
@@ -2960,10 +2947,10 @@
          */
         async getPoWInfo() {
             const nodeInfo = await this.info();
-            const networkIdBytes = crypto_js.Blake2b.sum256(util_js.Converter.utf8ToBytes(nodeInfo.networkId));
+            const networkIdBytes = crypto_js.Blake2b.sum256(util_js.Converter.utf8ToBytes(nodeInfo.protocol.networkName));
             return {
                 networkId: util_js.BigIntHelper.read8(networkIdBytes, 0),
-                minPoWScore: nodeInfo.minPoWScore
+                minPoWScore: nodeInfo.protocol.minPoWScore
             };
         }
     }
@@ -3014,7 +3001,7 @@
          * @param filterOptions.createdBefore Filter for outputs that were created before the given time.
          * @param filterOptions.createdAfter Filter for outputs that were created after the given time.
          * @param filterOptions.pageSize Set the page size for the response.
-         * @param filterOptions.offset Request the items from the given offset, return from a previous request.
+         * @param filterOptions.cursor Request the items from the given cursor, returned from a previous request.
          * @returns The outputs with the requested filters.
          */
         async outputs(filterOptions) {
@@ -3077,8 +3064,8 @@
                 if (filterOptions.pageSize !== undefined) {
                     queryParams.push(`pageSize=${filterOptions.pageSize}`);
                 }
-                if (filterOptions.offset !== undefined) {
-                    queryParams.push(`offset=${filterOptions.offset}`);
+                if (filterOptions.cursor !== undefined) {
+                    queryParams.push(`cursor=${filterOptions.cursor}`);
                 }
             }
             return this._client.pluginFetch(this._basePluginPath, "get", "outputs", queryParams);
@@ -3093,7 +3080,7 @@
          * @param filterOptions.createdBefore Filter for outputs that were created before the given time.
          * @param filterOptions.createdAfter Filter for outputs that were created after the given time.
          * @param filterOptions.pageSize Set the page size for the response.
-         * @param filterOptions.offset Request the items from the given offset, return from a previous request.
+         * @param filterOptions.cursor Request the items from the given cursor, returned from a previous request.
          * @returns The outputs with the requested filters.
          */
         async aliases(filterOptions) {
@@ -3120,8 +3107,8 @@
                 if (filterOptions.pageSize !== undefined) {
                     queryParams.push(`pageSize=${filterOptions.pageSize}`);
                 }
-                if (filterOptions.offset !== undefined) {
-                    queryParams.push(`offset=${filterOptions.offset}`);
+                if (filterOptions.cursor !== undefined) {
+                    queryParams.push(`cursor=${filterOptions.cursor}`);
                 }
             }
             return this._client.pluginFetch(this._basePluginPath, "get", "aliases", queryParams);
@@ -3162,7 +3149,7 @@
          * @param filterOptions.createdBefore Filter for outputs that were created before the given time.
          * @param filterOptions.createdAfter Filter for outputs that were created after the given time.
          * @param filterOptions.pageSize Set the page size for the response.
-         * @param filterOptions.offset Request the items from the given offset, return from a previous request.
+         * @param filterOptions.cursor Request the items from the given cursor, returned from a previous request.
          * @returns The outputs with the requested filters.
          */
         async nfts(filterOptions) {
@@ -3228,8 +3215,8 @@
                 if (filterOptions.pageSize !== undefined) {
                     queryParams.push(`pageSize=${filterOptions.pageSize}`);
                 }
-                if (filterOptions.offset !== undefined) {
-                    queryParams.push(`offset=${filterOptions.offset}`);
+                if (filterOptions.cursor !== undefined) {
+                    queryParams.push(`cursor=${filterOptions.cursor}`);
                 }
             }
             return this._client.pluginFetch(this._basePluginPath, "get", "nfts", queryParams);
@@ -3252,7 +3239,7 @@
          * @param filterOptions.createdBefore Filter for outputs that were created before the given time.
          * @param filterOptions.createdAfter Filter for outputs that were created after the given time.
          * @param filterOptions.pageSize Set the page size for the response.
-         * @param filterOptions.offset Request the items from the given offset, return from a previous request.
+         * @param filterOptions.cursor Request the items from the given cursor, returned from a previous request.
          * @returns The outputs with the requested filters.
          */
         async foundries(filterOptions) {
@@ -3270,8 +3257,8 @@
                 if (filterOptions.pageSize !== undefined) {
                     queryParams.push(`pageSize=${filterOptions.pageSize}`);
                 }
-                if (filterOptions.offset !== undefined) {
-                    queryParams.push(`offset=${filterOptions.offset}`);
+                if (filterOptions.cursor !== undefined) {
+                    queryParams.push(`cursor=${filterOptions.cursor}`);
                 }
             }
             return this._client.pluginFetch(this._basePluginPath, "get", "foundries", queryParams);
@@ -3547,23 +3534,23 @@
     async function calculateAddressBalance(client, addressBech32) {
         const indexerPlugin = new IndexerPluginClient(client);
         let count = 0;
-        let nextOffset;
+        let cursor;
         let balance = 0;
         do {
             const outputResponse = await indexerPlugin.outputs({
                 addressBech32,
                 pageSize: 20,
-                offset: nextOffset
+                cursor
             });
-            count = outputResponse.count;
-            nextOffset = outputResponse.offset;
-            for (const outputId of outputResponse.data) {
+            count = outputResponse.items.length;
+            cursor = outputResponse.cursor;
+            for (const outputId of outputResponse.items) {
                 const output = await client.output(outputId);
                 if (output.output.type === EXTENDED_OUTPUT_TYPE && !output.isSpent) {
                     balance += output.output.amount;
                 }
             }
-        } while (count > 0 && nextOffset);
+        } while (count > 0 && cursor);
         return balance;
     }
 
@@ -4006,14 +3993,14 @@
             const addressBytes = ed25519Address.toAddress();
             const indexerPlugin = new IndexerPluginClient(client);
             const addressOutputIds = await indexerPlugin.outputs({ addressBech32: Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, addressBytes, bech32Hrp) });
-            if (addressOutputIds.count === 0) {
+            if (addressOutputIds.items.length === 0) {
                 zeroBalance++;
                 if (zeroBalance >= zeroCount) {
                     finished = true;
                 }
             }
             else {
-                for (const addressOutputId of addressOutputIds.data) {
+                for (const addressOutputId of addressOutputIds.items) {
                     const addressOutput = await localClient.output(addressOutputId);
                     if (!addressOutput.isSpent && consumedBalance < requiredBalance) {
                         if (addressOutput.output.amount === 0) {
@@ -4344,18 +4331,26 @@
     function logInfo(prefix, info) {
         logger(`${prefix}\tName:`, info.name);
         logger(`${prefix}\tVersion:`, info.version);
-        logger(`${prefix}\tNetwork Id:`, info.networkId);
-        logger(`${prefix}\tIs Healthy:`, info.isHealthy);
-        logger(`${prefix}\tMin PoW Score:`, info.minPoWScore);
-        logger(`${prefix}\tBech32 HRP:`, info.bech32HRP);
-        logger(`${prefix}\tLatest Milestone Index:`, info.latestMilestoneIndex);
-        logger(`${prefix}\tLatest Milestone Timestamp:`, info.latestMilestoneTimestamp);
-        logger(`${prefix}\tConfirmed Milestone Index:`, info.confirmedMilestoneIndex);
-        logger(`${prefix}\tMessages Per Second:`, info.messagesPerSecond);
-        logger(`${prefix}\tReferenced Messages Per Second:`, info.referencedMessagesPerSecond);
-        logger(`${prefix}\tReferenced Rate:`, info.referencedRate);
-        logger(`${prefix}\tPruning Index:`, info.pruningIndex);
+        logger(`${prefix}\t\tStatus`);
+        logger(`${prefix}\t\t\tIs Healthy:`, info.status.isHealthy);
+        logger(`${prefix}\t\t\tLatest Milestone Index:`, info.status.latestMilestoneIndex);
+        logger(`${prefix}\t\t\tLatest Milestone Timestamp:`, info.status.latestMilestoneTimestamp);
+        logger(`${prefix}\t\t\tConfirmed Milestone Index:`, info.status.confirmedMilestoneIndex);
+        logger(`${prefix}\t\t\tPruning Index:`, info.status.pruningIndex);
+        logger(`${prefix}\t\tProtocol`);
+        logger(`${prefix}\t\t\tNetwork Name:`, info.protocol.networkName);
+        logger(`${prefix}\t\t\tBech32 HRP:`, info.protocol.bech32HRP);
+        logger(`${prefix}\t\t\tMin PoW Score:`, info.protocol.minPoWScore);
+        logger(`${prefix}\t\t\tRent`);
+        logger(`${prefix}\t\t\t\tVByte Cost:`, info.protocol.rentStructure.vByteCost);
+        logger(`${prefix}\t\t\t\tVByte Factor Data:`, info.protocol.rentStructure.vByteFactorData);
+        logger(`${prefix}\t\t\t\tVByte Factor Key:`, info.protocol.rentStructure.vByteFactorKey);
+        logger(`${prefix}\t\tMetrics`);
+        logger(`${prefix}\t\t\tMessages Per Second:`, info.metrics.messagesPerSecond);
+        logger(`${prefix}\t\t\tReferenced Messages Per Second:`, info.metrics.referencedMessagesPerSecond);
+        logger(`${prefix}\t\t\tReferenced Rate:`, info.metrics.referencedRate);
         logger(`${prefix}\tFeatures:`, info.features);
+        logger(`${prefix}\tPlugins:`, info.plugins);
     }
     /**
      * Log the tips information.

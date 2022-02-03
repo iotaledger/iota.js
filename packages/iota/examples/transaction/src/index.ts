@@ -18,7 +18,6 @@ import {
 } from "@iota/iota.js";
 import { Converter } from "@iota/util.js";
 
-// const API_ENDPOINT = "https://chrysalis-nodes.iota.org/";
 const API_ENDPOINT = "http://localhost:14265/";
 
 async function run() {
@@ -46,7 +45,7 @@ async function run() {
     const genesisEd25519Address = new Ed25519Address(genesisWalletKeyPair.publicKey);
     const genesisWalletAddress = genesisEd25519Address.toAddress();
     const genesisWalletAddressHex = Converter.bytesToHex(genesisWalletAddress);
-    const genesisWalletAddressBech32 = Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, genesisWalletAddress, nodeInfo.bech32HRP);
+    const genesisWalletAddressBech32 = Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, genesisWalletAddress, nodeInfo.protocol.bech32HRP);
     console.log("\tAddress Ed25519", genesisWalletAddressHex);
     console.log("\tAddress Bech32", genesisWalletAddressBech32);
 
@@ -68,7 +67,7 @@ async function run() {
     console.log(`\tAddress Ed25519 ${walletPath.toString()}:`, newAddressHex);
     console.log(
         `\tAddress Bech32 ${walletPath.toString()}:`,
-        Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, newAddress, nodeInfo.bech32HRP)
+        Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, newAddress, nodeInfo.protocol.bech32HRP)
     );
     console.log();
 
@@ -85,8 +84,8 @@ async function run() {
 
     let totalGenesis = 0;
 
-    for (let i = 0; i < genesisAddressOutputs.data.length; i++) {
-        const output = await client.output(genesisAddressOutputs.data[i]);
+    for (let i = 0; i < genesisAddressOutputs.items.length; i++) {
+        const output = await client.output(genesisAddressOutputs.items[i]);
         if (!output.isSpent) {
             inputsWithKeyPairs.push({
                 input: {
