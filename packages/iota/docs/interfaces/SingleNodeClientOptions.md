@@ -9,6 +9,7 @@ Options used when constructing SingleNodeClient.
 - [basePath](SingleNodeClientOptions.md#basepath)
 - [basePluginPath](SingleNodeClientOptions.md#basepluginpath)
 - [powProvider](SingleNodeClientOptions.md#powprovider)
+- [protocolVersion](SingleNodeClientOptions.md#protocolversion)
 - [timeout](SingleNodeClientOptions.md#timeout)
 - [userName](SingleNodeClientOptions.md#username)
 - [password](SingleNodeClientOptions.md#password)
@@ -37,6 +38,14 @@ ___
 • `Optional` **powProvider**: [`IPowProvider`](IPowProvider.md)
 
 Use a custom pow provider instead of the one on the node.
+
+___
+
+### protocolVersion
+
+• `Optional` **protocolVersion**: `number`
+
+The protocol version for messages.
 
 ___
 

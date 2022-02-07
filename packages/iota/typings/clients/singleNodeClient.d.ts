@@ -137,6 +137,16 @@ export declare class SingleNodeClient implements IClient {
      */
     bech32Hrp(): Promise<string>;
     /**
+     * Get the network name.
+     * @returns The network name.
+     */
+    networkName(): Promise<string>;
+    /**
+     * Get the network id.
+     * @returns The network id as the blake256 bytes.
+     */
+    networkId(): Promise<Uint8Array>;
+    /**
      * Extension method which provides request methods for plugins.
      * @param basePluginPath The base path for the plugin eg indexer/v1/ .
      * @param method The http method.

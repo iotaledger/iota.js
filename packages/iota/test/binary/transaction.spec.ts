@@ -5,7 +5,7 @@ import { deserializeTransactionEssence, serializeTransactionEssence } from "../.
 import { ED25519_ADDRESS_TYPE } from "../../src/models/addresses/IEd25519Address";
 import { UTXO_INPUT_TYPE } from "../../src/models/inputs/IUTXOInput";
 import { ITransactionEssence, TRANSACTION_ESSENCE_TYPE } from "../../src/models/ITransactionEssence";
-import { EXTENDED_OUTPUT_TYPE, IExtendedOutput } from "../../src/models/outputs/IExtendedOutput";
+import { BASIC_OUTPUT_TYPE, IBasicOutput } from "../../src/models/outputs/IBasicOutput";
 import { TAGGED_DATA_PAYLOAD_TYPE } from "../../src/models/payloads/ITaggedDataPayload";
 import { ADDRESS_UNLOCK_CONDITION_TYPE, IAddressUnlockCondition } from "../../src/models/unlockConditions/IAddressUnlockCondition";
 
@@ -13,6 +13,7 @@ describe("Binary Transaction", () => {
     test("Can serialize and deserialize transaction essence with no payload", () => {
         const object: ITransactionEssence = {
             type: TRANSACTION_ESSENCE_TYPE,
+            networkId: "123",
             inputs: [
                 {
                     type: UTXO_INPUT_TYPE,
@@ -20,9 +21,10 @@ describe("Binary Transaction", () => {
                     transactionOutputIndex: 2
                 }
             ],
+            inputsCommitment: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
             outputs: [
                 {
-                    type: EXTENDED_OUTPUT_TYPE,
+                    type: BASIC_OUTPUT_TYPE,
                     amount: 100,
                     nativeTokens: [],
                     unlockConditions: [
@@ -43,7 +45,7 @@ describe("Binary Transaction", () => {
         serializeTransactionEssence(serialized, object);
         const hex = serialized.finalHex();
         expect(hex).toEqual(
-            "00010000aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa0200010003640000000000000000010000bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb0000000000"
+            "007b00000000000000010000aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa0200aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa010003640000000000000000010000bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb0000000000"
         );
         const deserialized = deserializeTransactionEssence(new ReadStream(Converter.hexToBytes(hex)));
         expect(deserialized.type).toEqual(0);
@@ -55,19 +57,20 @@ describe("Binary Transaction", () => {
         expect(utxoInput.transactionOutputIndex).toEqual(2);
         expect(deserialized.outputs.length).toEqual(1);
 
-        const extendedOutput = deserialized.outputs[0] as IExtendedOutput;
-        expect(extendedOutput.type).toEqual(3);
-        expect(extendedOutput.unlockConditions.length).toEqual(1);
-        const unlockCondition = extendedOutput.unlockConditions[0] as IAddressUnlockCondition;
+        const basicOutput = deserialized.outputs[0] as IBasicOutput;
+        expect(basicOutput.type).toEqual(3);
+        expect(basicOutput.unlockConditions.length).toEqual(1);
+        const unlockCondition = basicOutput.unlockConditions[0] as IAddressUnlockCondition;
         expect(unlockCondition.address.type).toEqual(0);
         expect(unlockCondition.address.address).toEqual("b".repeat(64));
-        expect(extendedOutput.amount).toEqual(100);
+        expect(basicOutput.amount).toEqual(100);
         expect(deserialized.payload).toBeUndefined();
     });
 
     test("Can serialize and deserialize transaction essence with tagged data payload", () => {
         const object: ITransactionEssence = {
             type: TRANSACTION_ESSENCE_TYPE,
+            networkId: "123",
             inputs: [
                 {
                     type: UTXO_INPUT_TYPE,
@@ -75,9 +78,10 @@ describe("Binary Transaction", () => {
                     transactionOutputIndex: 2
                 }
             ],
+            inputsCommitment: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
             outputs: [
                 {
-                    type: EXTENDED_OUTPUT_TYPE,
+                    type: BASIC_OUTPUT_TYPE,
                     amount: 100,
                     nativeTokens: [],
                     unlockConditions: [
@@ -103,7 +107,7 @@ describe("Binary Transaction", () => {
         serializeTransactionEssence(serialized, object);
         const hex = serialized.finalHex();
         expect(hex).toEqual(
-            "00010000aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa0200010003640000000000000000010000bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb000f0000000500000003666f6f03000000626172"
+            "007b00000000000000010000aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa0200aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa010003640000000000000000010000bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb000f0000000500000003666f6f03000000626172"
         );
         const deserialized = deserializeTransactionEssence(new ReadStream(Converter.hexToBytes(hex)));
         expect(deserialized.type).toEqual(0);
@@ -115,13 +119,13 @@ describe("Binary Transaction", () => {
         expect(utxoInput.transactionOutputIndex).toEqual(2);
         expect(deserialized.outputs.length).toEqual(1);
 
-        const extendedOutput = deserialized.outputs[0] as IExtendedOutput;
-        expect(extendedOutput.type).toEqual(3);
-        expect(extendedOutput.unlockConditions.length).toEqual(1);
-        const unlockCondition = extendedOutput.unlockConditions[0] as IAddressUnlockCondition;
+        const basicOutput = deserialized.outputs[0] as IBasicOutput;
+        expect(basicOutput.type).toEqual(3);
+        expect(basicOutput.unlockConditions.length).toEqual(1);
+        const unlockCondition = basicOutput.unlockConditions[0] as IAddressUnlockCondition;
         expect(unlockCondition.address.type).toEqual(0);
         expect(unlockCondition.address.address).toEqual("b".repeat(64));
-        expect(extendedOutput.amount).toEqual(100);
+        expect(basicOutput.amount).toEqual(100);
         expect(deserialized.payload).toBeDefined();
         if (deserialized.payload) {
             expect(deserialized.payload.type).toEqual(5);

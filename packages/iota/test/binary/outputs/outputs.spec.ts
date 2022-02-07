@@ -8,7 +8,7 @@ import {
     serializeOutputs
 } from "../../../src/binary/outputs/outputs";
 import { ED25519_ADDRESS_TYPE } from "../../../src/models/addresses/IEd25519Address";
-import { EXTENDED_OUTPUT_TYPE, IExtendedOutput } from "../../../src/models/outputs/IExtendedOutput";
+import { BASIC_OUTPUT_TYPE, IBasicOutput } from "../../../src/models/outputs/IBasicOutput";
 import type { OutputTypes } from "../../../src/models/outputs/outputTypes";
 import { ADDRESS_UNLOCK_CONDITION_TYPE, IAddressUnlockCondition } from "../../../src/models/unlockConditions/IAddressUnlockCondition";
 
@@ -16,7 +16,7 @@ describe("Binary Outputs", () => {
     test("Can serialize and deserialize outputs", () => {
         const outputs: OutputTypes[] = [
             {
-                type: EXTENDED_OUTPUT_TYPE,
+                type: BASIC_OUTPUT_TYPE,
                 amount: 123456,
                 nativeTokens: [],
                 unlockConditions: [
@@ -31,7 +31,7 @@ describe("Binary Outputs", () => {
                 featureBlocks: []
             },
             {
-                type: EXTENDED_OUTPUT_TYPE,
+                type: BASIC_OUTPUT_TYPE,
                 amount: 987654,
                 nativeTokens: [],
                 unlockConditions: [
@@ -56,7 +56,7 @@ describe("Binary Outputs", () => {
         const deserialized = deserializeOutputs(new ReadStream(Converter.hexToBytes(hex)));
         expect(deserialized.length).toEqual(2);
         expect(deserialized[0].type).toEqual(3);
-        const out0 = deserialized[0] as IExtendedOutput;
+        const out0 = deserialized[0] as IBasicOutput;
 
         expect(out0.unlockConditions.length).toEqual(1);
         const unlockCondition0 = out0.unlockConditions[0] as IAddressUnlockCondition;
@@ -65,7 +65,7 @@ describe("Binary Outputs", () => {
         expect(out0.amount).toEqual(123456);
 
         expect(deserialized[1].type).toEqual(3);
-        const out1 = deserialized[1] as IExtendedOutput;
+        const out1 = deserialized[1] as IBasicOutput;
 
         expect(out1.unlockConditions.length).toEqual(1);
         const unlockCondition1 = out1.unlockConditions[0] as IAddressUnlockCondition;
@@ -75,8 +75,8 @@ describe("Binary Outputs", () => {
     });
 
     test("Can serialize and deserialize output", () => {
-        const object: IExtendedOutput = {
-            type: EXTENDED_OUTPUT_TYPE,
+        const object: IBasicOutput = {
+            type: BASIC_OUTPUT_TYPE,
             amount: 123456,
             nativeTokens: [],
             unlockConditions: [
@@ -97,7 +97,7 @@ describe("Binary Outputs", () => {
         expect(hex).toEqual("0340e2010000000000000100006920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f9200");
         const deserialized = deserializeOutput(new ReadStream(Converter.hexToBytes(hex)));
         expect(deserialized.type).toEqual(3);
-        const out0 = deserialized as IExtendedOutput;
+        const out0 = deserialized as IBasicOutput;
         expect(out0.type).toEqual(3);
 
         expect(out0.unlockConditions.length).toEqual(1);

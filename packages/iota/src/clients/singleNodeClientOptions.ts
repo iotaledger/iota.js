@@ -22,6 +22,11 @@ export interface SingleNodeClientOptions {
     powProvider?: IPowProvider;
 
     /**
+     * The protocol version for messages.
+     */
+    protocolVersion?: number;
+
+    /**
      * Timeout for API requests.
      */
     timeout?: number;

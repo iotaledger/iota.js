@@ -9,7 +9,7 @@ import type { IOutputsResponse } from "../models/api/plugins/indexer/IOutputsRes
 import type { IBip44GeneratorState } from "../models/IBip44GeneratorState";
 import type { IClient } from "../models/IClient";
 import type { ISeed } from "../models/ISeed";
-import { EXTENDED_OUTPUT_TYPE } from "../models/outputs/IExtendedOutput";
+import { BASIC_OUTPUT_TYPE } from "../models/outputs/IBasicOutput";
 import { Bech32Helper } from "../utils/bech32Helper";
 import { generateBip44Address } from "./addresses";
 
@@ -154,7 +154,7 @@ export async function calculateAddressBalance(client: IClient, addressBech32: st
         cursor = outputResponse.cursor;
         for (const outputId of outputResponse.items) {
             const output = await client.output(outputId);
-            if (output.output.type === EXTENDED_OUTPUT_TYPE && !output.isSpent) {
+            if (output.output.type === BASIC_OUTPUT_TYPE && !output.isSpent) {
                 balance += output.output.amount;
             }
         }

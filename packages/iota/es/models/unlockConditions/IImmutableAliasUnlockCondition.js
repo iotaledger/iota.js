@@ -1,0 +1,5 @@
+/**
+ * The global type for the immutable alias unlock condition.
+ */
+export const IMMUTABLE_ALIAS_UNLOCK_CONDITION_TYPE = 6;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiSUltbXV0YWJsZUFsaWFzVW5sb2NrQ29uZGl0aW9uLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vLi4vc3JjL21vZGVscy91bmxvY2tDb25kaXRpb25zL0lJbW11dGFibGVBbGlhc1VubG9ja0NvbmRpdGlvbi50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFLQTs7R0FFRztBQUNILE1BQU0sQ0FBQyxNQUFNLHFDQUFxQyxHQUFHLENBQUMsQ0FBQyJ9

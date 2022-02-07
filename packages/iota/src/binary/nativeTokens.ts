@@ -27,6 +27,11 @@ export const FOUNDRY_ID_LENGTH: number = MIN_ALIAS_ADDRESS_LENGTH + UINT32_SIZE 
 export const NATIVE_TOKEN_ID_LENGTH: number = FOUNDRY_ID_LENGTH + NATIVE_TOKEN_TAG_LENGTH;
 
 /**
+ * The maximum number of native tokens.
+ */
+export const MAX_NATIVE_TOKEN_COUNT: number = 64;
+
+/**
  * Deserialize the natovetokens from binary.
  * @param readStream The stream to read the data from.
  * @returns The deserialized object.

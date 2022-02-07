@@ -3,8 +3,9 @@
 import type { IAddressUnlockCondition } from "./IAddressUnlockCondition";
 import type { IDustDepositReturnUnlockCondition } from "./IDustDepositReturnUnlockCondition";
 import type { IExpirationUnlockCondition } from "./IExpirationUnlockCondition";
-import type { IGovernorUnlockCondition } from "./IGovernorUnlockCondition";
-import type { IStateControllerUnlockCondition } from "./IStateControllerUnlockCondition";
+import type { IGovernorAddressUnlockCondition } from "./IGovernorAddressUnlockCondition";
+import type { IImmutableAliasUnlockCondition } from "./IImmutableAliasUnlockCondition";
+import type { IStateControllerAddressUnlockCondition } from "./IStateControllerAddressUnlockCondition";
 import type { ITimelockUnlockCondition } from "./ITimelockUnlockCondition";
 
 /**
@@ -15,5 +16,6 @@ export type UnlockConditionTypes =
     IDustDepositReturnUnlockCondition |
     ITimelockUnlockCondition |
     IExpirationUnlockCondition |
-    IStateControllerUnlockCondition |
-    IGovernorUnlockCondition;
+    IStateControllerAddressUnlockCondition |
+    IGovernorAddressUnlockCondition |
+    IImmutableAliasUnlockCondition;

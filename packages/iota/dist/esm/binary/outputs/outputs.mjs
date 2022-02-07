@@ -1,17 +1,18 @@
 import { ALIAS_OUTPUT_TYPE } from "../../models/outputs/IAliasOutput.mjs";
-import { EXTENDED_OUTPUT_TYPE } from "../../models/outputs/IExtendedOutput.mjs";
+import { BASIC_OUTPUT_TYPE } from "../../models/outputs/IBasicOutput.mjs";
 import { FOUNDRY_OUTPUT_TYPE } from "../../models/outputs/IFoundryOutput.mjs";
 import { NFT_OUTPUT_TYPE } from "../../models/outputs/INftOutput.mjs";
 import { TREASURY_OUTPUT_TYPE } from "../../models/outputs/ITreasuryOutput.mjs";
+import { MAX_NATIVE_TOKEN_COUNT } from "../nativeTokens.mjs";
 import { deserializeAliasOutput, MIN_ALIAS_OUTPUT_LENGTH, serializeAliasOutput } from "./aliasOutput.mjs";
-import { deserializeExtendedOutput, MIN_EXTENDED_OUTPUT_LENGTH, serializeExtendedOutput } from "./extendedOutput.mjs";
+import { deserializeBasicOutput, MIN_BASIC_OUTPUT_LENGTH, serializeBasicOutput } from "./basicOutput.mjs";
 import { deserializeFoundryOutput, MIN_FOUNDRY_OUTPUT_LENGTH, serializeFoundryOutput } from "./foundryOutput.mjs";
 import { deserializeNftOutput, MIN_NFT_OUTPUT_LENGTH, serializeNftOutput } from "./nftOutput.mjs";
 import { deserializeTreasuryOutput, MIN_TREASURY_OUTPUT_LENGTH, serializeTreasuryOutput } from "./treasuryOutput.mjs";
 /**
  * The minimum length of an output binary representation.
  */
-export const MIN_OUTPUT_LENGTH = Math.min(MIN_TREASURY_OUTPUT_LENGTH, MIN_FOUNDRY_OUTPUT_LENGTH, MIN_EXTENDED_OUTPUT_LENGTH, MIN_NFT_OUTPUT_LENGTH, MIN_ALIAS_OUTPUT_LENGTH);
+export const MIN_OUTPUT_LENGTH = Math.min(MIN_TREASURY_OUTPUT_LENGTH, MIN_FOUNDRY_OUTPUT_LENGTH, MIN_BASIC_OUTPUT_LENGTH, MIN_NFT_OUTPUT_LENGTH, MIN_ALIAS_OUTPUT_LENGTH);
 /**
  * The minimum number of outputs.
  */
@@ -19,7 +20,7 @@ export const MIN_OUTPUT_COUNT = 1;
 /**
  * The maximum number of outputs.
  */
-export const MAX_OUTPUT_COUNT = 127;
+export const MAX_OUTPUT_COUNT = 128;
 /**
  * Deserialize the outputs from binary.
  * @param readStream The stream to read the data from.
@@ -46,8 +47,19 @@ export function serializeOutputs(writeStream, objects) {
         throw new Error(`The maximum number of outputs is ${MAX_OUTPUT_COUNT}, you have provided ${objects.length}`);
     }
     writeStream.writeUInt16("outputs.numOutputs", objects.length);
+    let nativeTokenCount = 0;
     for (let i = 0; i < objects.length; i++) {
         serializeOutput(writeStream, objects[i]);
+        if (objects[i].type === BASIC_OUTPUT_TYPE ||
+            objects[i].type === ALIAS_OUTPUT_TYPE ||
+            objects[i].type === FOUNDRY_OUTPUT_TYPE ||
+            objects[i].type === NFT_OUTPUT_TYPE) {
+            const common = objects[i];
+            nativeTokenCount += common.nativeTokens.length;
+        }
+    }
+    if (nativeTokenCount > MAX_NATIVE_TOKEN_COUNT) {
+        throw new Error(`The maximum number of native tokens is ${MAX_NATIVE_TOKEN_COUNT}, you have provided ${nativeTokenCount}`);
     }
 }
 /**
@@ -64,8 +76,8 @@ export function deserializeOutput(readStream) {
     if (type === TREASURY_OUTPUT_TYPE) {
         output = deserializeTreasuryOutput(readStream);
     }
-    else if (type === EXTENDED_OUTPUT_TYPE) {
-        output = deserializeExtendedOutput(readStream);
+    else if (type === BASIC_OUTPUT_TYPE) {
+        output = deserializeBasicOutput(readStream);
     }
     else if (type === FOUNDRY_OUTPUT_TYPE) {
         output = deserializeFoundryOutput(readStream);
@@ -90,8 +102,8 @@ export function serializeOutput(writeStream, object) {
     if (object.type === TREASURY_OUTPUT_TYPE) {
         serializeTreasuryOutput(writeStream, object);
     }
-    else if (object.type === EXTENDED_OUTPUT_TYPE) {
-        serializeExtendedOutput(writeStream, object);
+    else if (object.type === BASIC_OUTPUT_TYPE) {
+        serializeBasicOutput(writeStream, object);
     }
     else if (object.type === FOUNDRY_OUTPUT_TYPE) {
         serializeFoundryOutput(writeStream, object);

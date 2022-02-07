@@ -1,16 +1,18 @@
 import { ADDRESS_UNLOCK_CONDITION_TYPE } from "../../models/unlockConditions/IAddressUnlockCondition.mjs";
 import { DUST_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE } from "../../models/unlockConditions/IDustDepositReturnUnlockCondition.mjs";
 import { EXPIRATION_UNLOCK_CONDITION_TYPE } from "../../models/unlockConditions/IExpirationUnlockCondition.mjs";
-import { GOVERNOR_UNLOCK_CONDITION_TYPE } from "../../models/unlockConditions/IGovernorUnlockCondition.mjs";
-import { STATE_CONTROLLER_UNLOCK_CONDITION_TYPE } from "../../models/unlockConditions/IStateControllerUnlockCondition.mjs";
+import { GOVERNOR_ADDRESS_UNLOCK_CONDITION_TYPE } from "../../models/unlockConditions/IGovernorAddressUnlockCondition.mjs";
+import { IMMUTABLE_ALIAS_UNLOCK_CONDITION_TYPE } from "../../models/unlockConditions/IImmutableAliasUnlockCondition.mjs";
+import { STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE } from "../../models/unlockConditions/IStateControllerAddressUnlockCondition.mjs";
 import { TIMELOCK_UNLOCK_CONDITION_TYPE } from "../../models/unlockConditions/ITimelockUnlockCondition.mjs";
 import { UINT8_SIZE } from "../commonDataTypes.mjs";
 import { deserializeAddressUnlockCondition, MIN_ADDRESS_UNLOCK_CONDITION_LENGTH, serializeAddressUnlockCondition } from "../unlockConditions/addressUnlockCondition.mjs";
 import { deserializeDustDepositReturnUnlockCondition, MIN_DUST_DEPOSIT_RETURN_UNLOCK_CONDITION_LENGTH, serializeDustDepositReturnUnlockCondition } from "../unlockConditions/dustDepositReturnUnlockCondition.mjs";
 import { deserializeExpirationUnlockCondition, MIN_EXPIRATION_UNLOCK_CONDITION_LENGTH, serializeExpirationUnlockCondition } from "../unlockConditions/expirationUnlockCondition.mjs";
-import { deserializeGovernorUnlockCondition, MIN_GOVERNOR_UNLOCK_CONDITION_LENGTH, serializeGovernorUnlockCondition } from "../unlockConditions/governorUnlockCondition.mjs";
-import { deserializeStateControllerUnlockCondition, MIN_STATE_CONTROLLER_UNLOCK_CONDITION_LENGTH, serializeStateControllerUnlockCondition } from "../unlockConditions/stateControllerUnlockCondition.mjs";
+import { deserializeImmutableAliasUnlockCondition, MIN_IMMUTABLE_ALIAS_UNLOCK_CONDITION_LENGTH, serializeImmutableAliasUnlockCondition } from "../unlockConditions/immutableAliasUnlockCondition.mjs";
 import { deserializeTimelockUnlockCondition, MIN_TIMELOCK_UNLOCK_CONDITION_LENGTH, serializeTimelockUnlockCondition } from "../unlockConditions/timelockUnlockCondition.mjs";
+import { deserializeGovernorAddressUnlockCondition, MIN_GOVERNOR_ADDRESS_UNLOCK_CONDITION_LENGTH, serializeGovernorAddressUnlockCondition } from "./governorAddressUnlockCondition.mjs";
+import { deserializeStateControllerAddressUnlockCondition, MIN_STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_LENGTH, serializeStateControllerAddressUnlockCondition } from "./stateControllerAddressUnlockCondition.mjs";
 /**
  * The minimum length of a unlock conditions list.
  */
@@ -18,7 +20,7 @@ export const MIN_UNLOCK_CONDITIONS_LENGTH = UINT8_SIZE;
 /**
  * The minimum length of a unlock conditions binary representation.
  */
-export const MIN_UNLOCK_CONDITION_LENGTH = Math.min(MIN_ADDRESS_UNLOCK_CONDITION_LENGTH, MIN_DUST_DEPOSIT_RETURN_UNLOCK_CONDITION_LENGTH, MIN_TIMELOCK_UNLOCK_CONDITION_LENGTH, MIN_EXPIRATION_UNLOCK_CONDITION_LENGTH, MIN_STATE_CONTROLLER_UNLOCK_CONDITION_LENGTH, MIN_GOVERNOR_UNLOCK_CONDITION_LENGTH);
+export const MIN_UNLOCK_CONDITION_LENGTH = Math.min(MIN_ADDRESS_UNLOCK_CONDITION_LENGTH, MIN_DUST_DEPOSIT_RETURN_UNLOCK_CONDITION_LENGTH, MIN_TIMELOCK_UNLOCK_CONDITION_LENGTH, MIN_EXPIRATION_UNLOCK_CONDITION_LENGTH, MIN_STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_LENGTH, MIN_GOVERNOR_ADDRESS_UNLOCK_CONDITION_LENGTH, MIN_IMMUTABLE_ALIAS_UNLOCK_CONDITION_LENGTH);
 /**
  * Deserialize the unlock conditions from binary.
  * @param readStream The stream to read the data from.
@@ -66,11 +68,14 @@ export function deserializeUnlockCondition(readStream) {
     else if (type === EXPIRATION_UNLOCK_CONDITION_TYPE) {
         input = deserializeExpirationUnlockCondition(readStream);
     }
-    else if (type === STATE_CONTROLLER_UNLOCK_CONDITION_TYPE) {
-        input = deserializeStateControllerUnlockCondition(readStream);
+    else if (type === STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE) {
+        input = deserializeStateControllerAddressUnlockCondition(readStream);
     }
-    else if (type === GOVERNOR_UNLOCK_CONDITION_TYPE) {
-        input = deserializeGovernorUnlockCondition(readStream);
+    else if (type === GOVERNOR_ADDRESS_UNLOCK_CONDITION_TYPE) {
+        input = deserializeGovernorAddressUnlockCondition(readStream);
+    }
+    else if (type === IMMUTABLE_ALIAS_UNLOCK_CONDITION_TYPE) {
+        input = deserializeImmutableAliasUnlockCondition(readStream);
     }
     else {
         throw new Error(`Unrecognized unlock condition type ${type}`);
@@ -95,11 +100,14 @@ export function serializeUnlockCondition(writeStream, object) {
     else if (object.type === EXPIRATION_UNLOCK_CONDITION_TYPE) {
         serializeExpirationUnlockCondition(writeStream, object);
     }
-    else if (object.type === STATE_CONTROLLER_UNLOCK_CONDITION_TYPE) {
-        serializeStateControllerUnlockCondition(writeStream, object);
+    else if (object.type === STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE) {
+        serializeStateControllerAddressUnlockCondition(writeStream, object);
     }
-    else if (object.type === GOVERNOR_UNLOCK_CONDITION_TYPE) {
-        serializeGovernorUnlockCondition(writeStream, object);
+    else if (object.type === GOVERNOR_ADDRESS_UNLOCK_CONDITION_TYPE) {
+        serializeGovernorAddressUnlockCondition(writeStream, object);
+    }
+    else if (object.type === IMMUTABLE_ALIAS_UNLOCK_CONDITION_TYPE) {
+        serializeImmutableAliasUnlockCondition(writeStream, object);
     }
     else {
         throw new Error(`Unrecognized unlock condition type ${object.type}`);

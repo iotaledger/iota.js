@@ -6,6 +6,8 @@ NFT output.
 
 - [`ITypeBase`](ITypeBase.md)<``6``\>
 
+- [`ICommonOutput`](ICommonOutput.md)
+
   ↳ **`INftOutput`**
 
 ## Table of contents
@@ -13,12 +15,12 @@ NFT output.
 ### Properties
 
 - [type](INftOutput.md#type)
-- [amount](INftOutput.md#amount)
 - [nativeTokens](INftOutput.md#nativetokens)
-- [nftId](INftOutput.md#nftid)
-- [immutableData](INftOutput.md#immutabledata)
 - [unlockConditions](INftOutput.md#unlockconditions)
 - [featureBlocks](INftOutput.md#featureblocks)
+- [amount](INftOutput.md#amount)
+- [nftId](INftOutput.md#nftid)
+- [immutableBlocks](INftOutput.md#immutableblocks)
 
 ## Properties
 
@@ -34,19 +36,47 @@ The type of the object.
 
 ___
 
-### amount
-
-• **amount**: `number`
-
-The amount of IOTA tokens held by the output.
-
-___
-
 ### nativeTokens
 
 • **nativeTokens**: [`INativeToken`](INativeToken.md)[]
 
 The native tokens held by the output.
+
+#### Inherited from
+
+[ICommonOutput](ICommonOutput.md).[nativeTokens](ICommonOutput.md#nativetokens)
+
+___
+
+### unlockConditions
+
+• **unlockConditions**: [`UnlockConditionTypes`](../api.md#unlockconditiontypes)[]
+
+The unlock conditions for the output.
+
+#### Inherited from
+
+[ICommonOutput](ICommonOutput.md).[unlockConditions](ICommonOutput.md#unlockconditions)
+
+___
+
+### featureBlocks
+
+• **featureBlocks**: [`FeatureBlockTypes`](../api.md#featureblocktypes)[]
+
+Feature blocks contained by the output.
+
+#### Inherited from
+
+[ICommonOutput](ICommonOutput.md).[featureBlocks](ICommonOutput.md#featureblocks)
+
+___
+
+### amount
+
+• **amount**: `number`
+
+The amount of IOTA tokens held by the output.
 
 ___
 
@@ -58,24 +88,8 @@ Unique identifier of the NFT, which is the BLAKE2b-160 hash of the Output ID tha
 
 ___
 
-### immutableData
+### immutableBlocks
 
-• **immutableData**: `string`
+• **immutableBlocks**: [`FeatureBlockTypes`](../api.md#featureblocktypes)[]
 
-Binary metadata attached immutably to the NFT.
-
-___
-
-### unlockConditions
-
-• **unlockConditions**: [`UnlockConditionTypes`](../api.md#unlockconditiontypes)[]
-
-The unlock conditions for the output.
-
-___
-
-### featureBlocks
-
-• **featureBlocks**: [`FeatureBlockTypes`](../api.md#featureblocktypes)[]
-
-Feature blocks contained by the output.
+Immutable blocks contained by the output.

@@ -6,18 +6,18 @@ Message layout.
 
 ### Properties
 
-- [networkId](IMessage.md#networkid)
+- [protocolVersion](IMessage.md#protocolversion)
 - [parentMessageIds](IMessage.md#parentmessageids)
 - [payload](IMessage.md#payload)
 - [nonce](IMessage.md#nonce)
 
 ## Properties
 
-### networkId
+### protocolVersion
 
-• `Optional` **networkId**: `string`
+• `Optional` **protocolVersion**: `number`
 
-The network id of the message.
+The protocol version under which this message operates.
 
 ___
 

@@ -9,7 +9,7 @@ import { deserializePayload, MIN_PAYLOAD_LENGTH, serializePayload } from "./payl
 /**
  * The minimum length of a message binary representation.
  */
-const MIN_MESSAGE_LENGTH = UINT64_SIZE + // Network id
+const MIN_MESSAGE_LENGTH = UINT8_SIZE + // Protocol Version
     UINT8_SIZE + // Parent count
     MESSAGE_ID_LENGTH + // Single parent
     MIN_PAYLOAD_LENGTH + // Min payload length
@@ -35,7 +35,7 @@ export function deserializeMessage(readStream) {
     if (!readStream.hasRemaining(MIN_MESSAGE_LENGTH)) {
         throw new Error(`Message data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_MESSAGE_LENGTH}`);
     }
-    const networkId = readStream.readUInt64("message.networkId");
+    const protocolVersion = readStream.readUInt8("message.protocolVersion");
     const numParents = readStream.readUInt8("message.numParents");
     const parents = [];
     for (let i = 0; i < numParents; i++) {
@@ -52,7 +52,7 @@ export function deserializeMessage(readStream) {
         throw new Error(`Message data length ${readStream.length()} has unused data ${unused}`);
     }
     return {
-        networkId: networkId.toString(10),
+        protocolVersion,
         parentMessageIds: parents,
         payload,
         nonce: nonce.toString(10)
@@ -65,7 +65,7 @@ export function deserializeMessage(readStream) {
  */
 export function serializeMessage(writeStream, object) {
     var _a, _b, _c, _d;
-    writeStream.writeUInt64("message.networkId", bigInt((_a = object.networkId) !== null && _a !== void 0 ? _a : "0"));
+    writeStream.writeUInt8("message.protocolVersion", (_a = object.protocolVersion) !== null && _a !== void 0 ? _a : 0);
     const numParents = (_c = (_b = object.parentMessageIds) === null || _b === void 0 ? void 0 : _b.length) !== null && _c !== void 0 ? _c : 0;
     writeStream.writeUInt8("message.numParents", numParents);
     if (object.parentMessageIds) {

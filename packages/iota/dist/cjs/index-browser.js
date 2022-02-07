@@ -711,7 +711,7 @@
     /**
      * The maximum number of inputs.
      */
-    const MAX_INPUT_COUNT = 127;
+    const MAX_INPUT_COUNT = 128;
     /**
      * Deserialize the inputs from binary.
      * @param readStream The stream to read the data from.
@@ -1024,10 +1024,15 @@
         }
     }
 
+    // Copyright 2020 IOTA Stiftung
     /**
      * The global type for the transaction essence.
      */
     const TRANSACTION_ESSENCE_TYPE = 0;
+    /**
+     * Inputs commitment size.
+     */
+    const INPUTS_COMMITMENT_SIZE = crypto_js.Blake2b.SIZE_256;
 
     /**
      * The global type for the alias output.
@@ -1035,9 +1040,9 @@
     const ALIAS_OUTPUT_TYPE = 4;
 
     /**
-     * The global type for the extended output.
+     * The global type for the basic output.
      */
-    const EXTENDED_OUTPUT_TYPE = 3;
+    const BASIC_OUTPUT_TYPE = 3;
 
     /**
      * The global type for the foundry output.
@@ -1070,6 +1075,10 @@
      * The length of a native token id.
      */
     const NATIVE_TOKEN_ID_LENGTH = FOUNDRY_ID_LENGTH + NATIVE_TOKEN_TAG_LENGTH;
+    /**
+     * The maximum number of native tokens.
+     */
+    const MAX_NATIVE_TOKEN_COUNT = 64;
     /**
      * Deserialize the natovetokens from binary.
      * @param readStream The stream to read the data from.
@@ -1133,14 +1142,19 @@
     const EXPIRATION_UNLOCK_CONDITION_TYPE = 3;
 
     /**
-     * The global type for the governor unlock condition.
+     * The global type for the governor address unlock condition.
      */
-    const GOVERNOR_UNLOCK_CONDITION_TYPE = 5;
+    const GOVERNOR_ADDRESS_UNLOCK_CONDITION_TYPE = 5;
+
+    /**
+     * The global type for the immutable alias unlock condition.
+     */
+    const IMMUTABLE_ALIAS_UNLOCK_CONDITION_TYPE = 6;
 
     /**
      * The global type for the state controller unlock condition.
      */
-    const STATE_CONTROLLER_UNLOCK_CONDITION_TYPE = 4;
+    const STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE = 4;
 
     /**
      * The global type for the timelock unlock condition.
@@ -1261,68 +1275,35 @@
     }
 
     /**
-     * The minimum length of an governor unlock condition binary representation.
+     * The minimum length of an immutable alias unlock condition binary representation.
      */
-    const MIN_GOVERNOR_UNLOCK_CONDITION_LENGTH = SMALL_TYPE_LENGTH + MIN_ADDRESS_LENGTH;
+    const MIN_IMMUTABLE_ALIAS_UNLOCK_CONDITION_LENGTH = SMALL_TYPE_LENGTH + MIN_ADDRESS_LENGTH;
     /**
-     * Deserialize the governor unlock condition from binary.
+     * Deserialize the immutable alias unlock condition from binary.
      * @param readStream The stream to read the data from.
      * @returns The deserialized object.
      */
-    function deserializeGovernorUnlockCondition(readStream) {
-        if (!readStream.hasRemaining(MIN_GOVERNOR_UNLOCK_CONDITION_LENGTH)) {
-            throw new Error(`Governor unlock condition data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_GOVERNOR_UNLOCK_CONDITION_LENGTH}`);
+    function deserializeImmutableAliasUnlockCondition(readStream) {
+        if (!readStream.hasRemaining(MIN_IMMUTABLE_ALIAS_UNLOCK_CONDITION_LENGTH)) {
+            throw new Error(`Immutable Alias unlock condition data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_IMMUTABLE_ALIAS_UNLOCK_CONDITION_LENGTH}`);
         }
-        const type = readStream.readUInt8("governorUnlockCondition.type");
-        if (type !== GOVERNOR_UNLOCK_CONDITION_TYPE) {
-            throw new Error(`Type mismatch in governorUnlockCondition ${type}`);
+        const type = readStream.readUInt8("immutableAliasUnlockCondition.type");
+        if (type !== IMMUTABLE_ALIAS_UNLOCK_CONDITION_TYPE) {
+            throw new Error(`Type mismatch in immutableAliasUnlockCondition ${type}`);
         }
         const address = deserializeAddress(readStream);
         return {
-            type: GOVERNOR_UNLOCK_CONDITION_TYPE,
+            type: IMMUTABLE_ALIAS_UNLOCK_CONDITION_TYPE,
             address
         };
     }
     /**
-     * Serialize the governor unlock condition to binary.
+     * Serialize the immutable alias unlock condition to binary.
      * @param writeStream The stream to write the data to.
      * @param object The object to serialize.
      */
-    function serializeGovernorUnlockCondition(writeStream, object) {
-        writeStream.writeUInt8("governorUnlockCondition.type", object.type);
-        serializeAddress(writeStream, object.address);
-    }
-
-    /**
-     * The minimum length of an state controller unlock condition binary representation.
-     */
-    const MIN_STATE_CONTROLLER_UNLOCK_CONDITION_LENGTH = SMALL_TYPE_LENGTH + MIN_ADDRESS_LENGTH;
-    /**
-     * Deserialize the state controller unlock condition from binary.
-     * @param readStream The stream to read the data from.
-     * @returns The deserialized object.
-     */
-    function deserializeStateControllerUnlockCondition(readStream) {
-        if (!readStream.hasRemaining(MIN_STATE_CONTROLLER_UNLOCK_CONDITION_LENGTH)) {
-            throw new Error(`State controller unlock condition data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_STATE_CONTROLLER_UNLOCK_CONDITION_LENGTH}`);
-        }
-        const type = readStream.readUInt8("stateControllerUnlockCondition.type");
-        if (type !== STATE_CONTROLLER_UNLOCK_CONDITION_TYPE) {
-            throw new Error(`Type mismatch in stateControllerUnlockCondition ${type}`);
-        }
-        const address = deserializeAddress(readStream);
-        return {
-            type: STATE_CONTROLLER_UNLOCK_CONDITION_TYPE,
-            address
-        };
-    }
-    /**
-     * Serialize the state controller unlock condition to binary.
-     * @param writeStream The stream to write the data to.
-     * @param object The object to serialize.
-     */
-    function serializeStateControllerUnlockCondition(writeStream, object) {
-        writeStream.writeUInt8("stateControllerUnlockCondition.type", object.type);
+    function serializeImmutableAliasUnlockCondition(writeStream, object) {
+        writeStream.writeUInt8("immutableAliasUnlockCondition.type", object.type);
         serializeAddress(writeStream, object.address);
     }
 
@@ -1365,13 +1346,79 @@
     }
 
     /**
+     * The minimum length of an governor unlock condition binary representation.
+     */
+    const MIN_GOVERNOR_ADDRESS_UNLOCK_CONDITION_LENGTH = SMALL_TYPE_LENGTH + MIN_ADDRESS_LENGTH;
+    /**
+     * Deserialize the governor address unlock condition from binary.
+     * @param readStream The stream to read the data from.
+     * @returns The deserialized object.
+     */
+    function deserializeGovernorAddressUnlockCondition(readStream) {
+        if (!readStream.hasRemaining(MIN_GOVERNOR_ADDRESS_UNLOCK_CONDITION_LENGTH)) {
+            throw new Error(`Governor unlock condition data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_GOVERNOR_ADDRESS_UNLOCK_CONDITION_LENGTH}`);
+        }
+        const type = readStream.readUInt8("governorUnlockCondition.type");
+        if (type !== GOVERNOR_ADDRESS_UNLOCK_CONDITION_TYPE) {
+            throw new Error(`Type mismatch in governorUnlockCondition ${type}`);
+        }
+        const address = deserializeAddress(readStream);
+        return {
+            type: GOVERNOR_ADDRESS_UNLOCK_CONDITION_TYPE,
+            address
+        };
+    }
+    /**
+     * Serialize the governor address unlock condition to binary.
+     * @param writeStream The stream to write the data to.
+     * @param object The object to serialize.
+     */
+    function serializeGovernorAddressUnlockCondition(writeStream, object) {
+        writeStream.writeUInt8("governorUnlockCondition.type", object.type);
+        serializeAddress(writeStream, object.address);
+    }
+
+    /**
+     * The minimum length of an state controller address unlock condition binary representation.
+     */
+    const MIN_STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_LENGTH = SMALL_TYPE_LENGTH + MIN_ADDRESS_LENGTH;
+    /**
+     * Deserialize the state controller address unlock condition from binary.
+     * @param readStream The stream to read the data from.
+     * @returns The deserialized object.
+     */
+    function deserializeStateControllerAddressUnlockCondition(readStream) {
+        if (!readStream.hasRemaining(MIN_STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_LENGTH)) {
+            throw new Error(`State controller addres unlock condition data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_LENGTH}`);
+        }
+        const type = readStream.readUInt8("stateControllerAddresUnlockCondition.type");
+        if (type !== STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE) {
+            throw new Error(`Type mismatch in stateControllerAddresUnlockCondition ${type}`);
+        }
+        const address = deserializeAddress(readStream);
+        return {
+            type: STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE,
+            address
+        };
+    }
+    /**
+     * Serialize the state controller address unlock condition to binary.
+     * @param writeStream The stream to write the data to.
+     * @param object The object to serialize.
+     */
+    function serializeStateControllerAddressUnlockCondition(writeStream, object) {
+        writeStream.writeUInt8("stateControllerAddressUnlockCondition.type", object.type);
+        serializeAddress(writeStream, object.address);
+    }
+
+    /**
      * The minimum length of a unlock conditions list.
      */
     const MIN_UNLOCK_CONDITIONS_LENGTH = UINT8_SIZE;
     /**
      * The minimum length of a unlock conditions binary representation.
      */
-    const MIN_UNLOCK_CONDITION_LENGTH = Math.min(MIN_ADDRESS_UNLOCK_CONDITION_LENGTH, MIN_DUST_DEPOSIT_RETURN_UNLOCK_CONDITION_LENGTH, MIN_TIMELOCK_UNLOCK_CONDITION_LENGTH, MIN_EXPIRATION_UNLOCK_CONDITION_LENGTH, MIN_STATE_CONTROLLER_UNLOCK_CONDITION_LENGTH, MIN_GOVERNOR_UNLOCK_CONDITION_LENGTH);
+    const MIN_UNLOCK_CONDITION_LENGTH = Math.min(MIN_ADDRESS_UNLOCK_CONDITION_LENGTH, MIN_DUST_DEPOSIT_RETURN_UNLOCK_CONDITION_LENGTH, MIN_TIMELOCK_UNLOCK_CONDITION_LENGTH, MIN_EXPIRATION_UNLOCK_CONDITION_LENGTH, MIN_STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_LENGTH, MIN_GOVERNOR_ADDRESS_UNLOCK_CONDITION_LENGTH, MIN_IMMUTABLE_ALIAS_UNLOCK_CONDITION_LENGTH);
     /**
      * Deserialize the unlock conditions from binary.
      * @param readStream The stream to read the data from.
@@ -1419,11 +1466,14 @@
         else if (type === EXPIRATION_UNLOCK_CONDITION_TYPE) {
             input = deserializeExpirationUnlockCondition(readStream);
         }
-        else if (type === STATE_CONTROLLER_UNLOCK_CONDITION_TYPE) {
-            input = deserializeStateControllerUnlockCondition(readStream);
+        else if (type === STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE) {
+            input = deserializeStateControllerAddressUnlockCondition(readStream);
         }
-        else if (type === GOVERNOR_UNLOCK_CONDITION_TYPE) {
-            input = deserializeGovernorUnlockCondition(readStream);
+        else if (type === GOVERNOR_ADDRESS_UNLOCK_CONDITION_TYPE) {
+            input = deserializeGovernorAddressUnlockCondition(readStream);
+        }
+        else if (type === IMMUTABLE_ALIAS_UNLOCK_CONDITION_TYPE) {
+            input = deserializeImmutableAliasUnlockCondition(readStream);
         }
         else {
             throw new Error(`Unrecognized unlock condition type ${type}`);
@@ -1448,11 +1498,14 @@
         else if (object.type === EXPIRATION_UNLOCK_CONDITION_TYPE) {
             serializeExpirationUnlockCondition(writeStream, object);
         }
-        else if (object.type === STATE_CONTROLLER_UNLOCK_CONDITION_TYPE) {
-            serializeStateControllerUnlockCondition(writeStream, object);
+        else if (object.type === STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE) {
+            serializeStateControllerAddressUnlockCondition(writeStream, object);
         }
-        else if (object.type === GOVERNOR_UNLOCK_CONDITION_TYPE) {
-            serializeGovernorUnlockCondition(writeStream, object);
+        else if (object.type === GOVERNOR_ADDRESS_UNLOCK_CONDITION_TYPE) {
+            serializeGovernorAddressUnlockCondition(writeStream, object);
+        }
+        else if (object.type === IMMUTABLE_ALIAS_UNLOCK_CONDITION_TYPE) {
+            serializeImmutableAliasUnlockCondition(writeStream, object);
         }
         else {
             throw new Error(`Unrecognized unlock condition type ${object.type}`);
@@ -1474,7 +1527,8 @@
         UINT32_SIZE + // State Metatata Length
         UINT32_SIZE + // Foundry counter
         MIN_UNLOCK_CONDITIONS_LENGTH + // Unlock conditions
-        MIN_FEATURE_BLOCKS_LENGTH; // Feature Blocks
+        MIN_FEATURE_BLOCKS_LENGTH + // Feature Blocks
+        MIN_FEATURE_BLOCKS_LENGTH; // Immutable blocks
     /**
      * Deserialize the alias output from binary.
      * @param readStream The stream to read the data from.
@@ -1497,6 +1551,7 @@
         const foundryCounter = readStream.readUInt32("aliasOutput.foundryCounter");
         const unlockConditions = deserializeUnlockConditions(readStream);
         const featureBlocks = deserializeFeatureBlocks(readStream);
+        const immutableBlocks = deserializeFeatureBlocks(readStream);
         return {
             type: ALIAS_OUTPUT_TYPE,
             amount: Number(amount),
@@ -1506,7 +1561,8 @@
             stateMetadata,
             foundryCounter,
             unlockConditions,
-            featureBlocks
+            featureBlocks,
+            immutableBlocks
         };
     }
     /**
@@ -1527,35 +1583,36 @@
         writeStream.writeUInt32("aliasOutput.foundryCounter", object.foundryCounter);
         serializeUnlockConditions(writeStream, object.unlockConditions);
         serializeFeatureBlocks(writeStream, object.featureBlocks);
+        serializeFeatureBlocks(writeStream, object.immutableBlocks);
     }
 
     /**
-     * The minimum length of a extended output binary representation.
+     * The minimum length of a basic output binary representation.
      */
-    const MIN_EXTENDED_OUTPUT_LENGTH = SMALL_TYPE_LENGTH + // Type
+    const MIN_BASIC_OUTPUT_LENGTH = SMALL_TYPE_LENGTH + // Type
         UINT64_SIZE + // Amount
         MIN_NATIVE_TOKENS_LENGTH + // Native Tokens
         MIN_UNLOCK_CONDITIONS_LENGTH + // Unlock conditions
         MIN_FEATURE_BLOCKS_LENGTH; // Feature Blocks
     /**
-     * Deserialize the extended output from binary.
+     * Deserialize the basic output from binary.
      * @param readStream The stream to read the data from.
      * @returns The deserialized object.
      */
-    function deserializeExtendedOutput(readStream) {
-        if (!readStream.hasRemaining(MIN_EXTENDED_OUTPUT_LENGTH)) {
-            throw new Error(`Extended Output data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_EXTENDED_OUTPUT_LENGTH}`);
+    function deserializeBasicOutput(readStream) {
+        if (!readStream.hasRemaining(MIN_BASIC_OUTPUT_LENGTH)) {
+            throw new Error(`Basic Output data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_BASIC_OUTPUT_LENGTH}`);
         }
-        const type = readStream.readUInt8("extendedOutput.type");
-        if (type !== EXTENDED_OUTPUT_TYPE) {
-            throw new Error(`Type mismatch in extendedOutput ${type}`);
+        const type = readStream.readUInt8("basicOutput.type");
+        if (type !== BASIC_OUTPUT_TYPE) {
+            throw new Error(`Type mismatch in basicOutput ${type}`);
         }
-        const amount = readStream.readUInt64("extendedOutput.amount");
+        const amount = readStream.readUInt64("basicOutput.amount");
         const nativeTokens = deserializeNativeTokens(readStream);
         const unlockConditions = deserializeUnlockConditions(readStream);
         const featureBlocks = deserializeFeatureBlocks(readStream);
         return {
-            type: EXTENDED_OUTPUT_TYPE,
+            type: BASIC_OUTPUT_TYPE,
             amount: Number(amount),
             nativeTokens,
             unlockConditions,
@@ -1563,13 +1620,13 @@
         };
     }
     /**
-     * Serialize the extended output to binary.
+     * Serialize the basic output to binary.
      * @param writeStream The stream to write the data to.
      * @param object The object to serialize.
      */
-    function serializeExtendedOutput(writeStream, object) {
-        writeStream.writeUInt8("extendedOutput.type", object.type);
-        writeStream.writeUInt64("extendedOutput.amount", bigInt__default["default"](object.amount));
+    function serializeBasicOutput(writeStream, object) {
+        writeStream.writeUInt8("basicOutput.type", object.type);
+        writeStream.writeUInt64("basicOutput.amount", bigInt__default["default"](object.amount));
         serializeNativeTokens(writeStream, object.nativeTokens);
         serializeUnlockConditions(writeStream, object.unlockConditions);
         serializeFeatureBlocks(writeStream, object.featureBlocks);
@@ -1658,8 +1715,9 @@
         UINT256_SIZE + // Circulating Supply
         UINT256_SIZE + // Maximum Supply
         MIN_TOKEN_SCHEME_LENGTH + // Token scheme length
-        MIN_UNLOCK_CONDITIONS_LENGTH +
-        MIN_FEATURE_BLOCKS_LENGTH;
+        MIN_UNLOCK_CONDITIONS_LENGTH + // Unlock conditions
+        MIN_FEATURE_BLOCKS_LENGTH + // Feature Blocks
+        MIN_FEATURE_BLOCKS_LENGTH; // Immutable blocks
     /**
      * Deserialize the foundry output from binary.
      * @param readStream The stream to read the data from.
@@ -1682,6 +1740,7 @@
         const tokenScheme = deserializeTokenScheme(readStream);
         const unlockConditions = deserializeUnlockConditions(readStream);
         const featureBlocks = deserializeFeatureBlocks(readStream);
+        const immutableBlocks = deserializeFeatureBlocks(readStream);
         return {
             type: FOUNDRY_OUTPUT_TYPE,
             amount: Number(amount),
@@ -1692,7 +1751,8 @@
             maximumSupply: maximumSupply.toString(),
             tokenScheme,
             unlockConditions,
-            featureBlocks: featureBlocks
+            featureBlocks: featureBlocks,
+            immutableBlocks
         };
     }
     /**
@@ -1711,6 +1771,7 @@
         serializeTokenScheme(writeStream, object.tokenScheme);
         serializeUnlockConditions(writeStream, object.unlockConditions);
         serializeFeatureBlocks(writeStream, object.featureBlocks);
+        serializeFeatureBlocks(writeStream, object.immutableBlocks);
     }
 
     /**
@@ -1724,9 +1785,9 @@
         UINT64_SIZE + // Amount
         MIN_NATIVE_TOKENS_LENGTH + // Native tokens
         NFT_ID_LENGTH + // Nft Id
-        UINT32_SIZE + // Immutable data length
         MIN_UNLOCK_CONDITIONS_LENGTH + // Unlock conditions
-        MIN_FEATURE_BLOCKS_LENGTH; // Feature Blocks
+        MIN_FEATURE_BLOCKS_LENGTH + // Feature Blocks
+        MIN_FEATURE_BLOCKS_LENGTH; // Immutable blocks
     /**
      * Deserialize the nft output from binary.
      * @param readStream The stream to read the data from.
@@ -1743,18 +1804,17 @@
         const amount = readStream.readUInt64("nftOutput.amount");
         const nativeTokens = deserializeNativeTokens(readStream);
         const nftId = readStream.readFixedHex("nftOutput.nftId", NFT_ID_LENGTH);
-        const immutableMetadataLength = readStream.readUInt32("nftOutput.immutableMetadataLength");
-        const immutableData = readStream.readFixedHex("nftOutput.immutableMetadata", immutableMetadataLength);
         const unlockConditions = deserializeUnlockConditions(readStream);
         const featureBlocks = deserializeFeatureBlocks(readStream);
+        const immutableBlocks = deserializeFeatureBlocks(readStream);
         return {
             type: NFT_OUTPUT_TYPE,
             amount: Number(amount),
             nativeTokens,
             nftId,
-            immutableData,
             unlockConditions,
-            featureBlocks
+            featureBlocks,
+            immutableBlocks
         };
     }
     /**
@@ -1767,10 +1827,9 @@
         writeStream.writeUInt64("nftOutput.amount", bigInt__default["default"](object.amount));
         serializeNativeTokens(writeStream, object.nativeTokens);
         writeStream.writeFixedHex("nftOutput.nftId", NFT_ID_LENGTH, object.nftId);
-        writeStream.writeUInt32("nftOutput.immutableMetadataLength", object.immutableData.length / 2);
-        writeStream.writeFixedHex("nftOutput.immutableMetadata", object.immutableData.length / 2, object.immutableData);
         serializeUnlockConditions(writeStream, object.unlockConditions);
         serializeFeatureBlocks(writeStream, object.featureBlocks);
+        serializeFeatureBlocks(writeStream, object.immutableBlocks);
     }
 
     /**
@@ -1810,7 +1869,7 @@
     /**
      * The minimum length of an output binary representation.
      */
-    const MIN_OUTPUT_LENGTH = Math.min(MIN_TREASURY_OUTPUT_LENGTH, MIN_FOUNDRY_OUTPUT_LENGTH, MIN_EXTENDED_OUTPUT_LENGTH, MIN_NFT_OUTPUT_LENGTH, MIN_ALIAS_OUTPUT_LENGTH);
+    const MIN_OUTPUT_LENGTH = Math.min(MIN_TREASURY_OUTPUT_LENGTH, MIN_FOUNDRY_OUTPUT_LENGTH, MIN_BASIC_OUTPUT_LENGTH, MIN_NFT_OUTPUT_LENGTH, MIN_ALIAS_OUTPUT_LENGTH);
     /**
      * The minimum number of outputs.
      */
@@ -1818,7 +1877,7 @@
     /**
      * The maximum number of outputs.
      */
-    const MAX_OUTPUT_COUNT = 127;
+    const MAX_OUTPUT_COUNT = 128;
     /**
      * Deserialize the outputs from binary.
      * @param readStream The stream to read the data from.
@@ -1845,8 +1904,19 @@
             throw new Error(`The maximum number of outputs is ${MAX_OUTPUT_COUNT}, you have provided ${objects.length}`);
         }
         writeStream.writeUInt16("outputs.numOutputs", objects.length);
+        let nativeTokenCount = 0;
         for (let i = 0; i < objects.length; i++) {
             serializeOutput(writeStream, objects[i]);
+            if (objects[i].type === BASIC_OUTPUT_TYPE ||
+                objects[i].type === ALIAS_OUTPUT_TYPE ||
+                objects[i].type === FOUNDRY_OUTPUT_TYPE ||
+                objects[i].type === NFT_OUTPUT_TYPE) {
+                const common = objects[i];
+                nativeTokenCount += common.nativeTokens.length;
+            }
+        }
+        if (nativeTokenCount > MAX_NATIVE_TOKEN_COUNT) {
+            throw new Error(`The maximum number of native tokens is ${MAX_NATIVE_TOKEN_COUNT}, you have provided ${nativeTokenCount}`);
         }
     }
     /**
@@ -1863,8 +1933,8 @@
         if (type === TREASURY_OUTPUT_TYPE) {
             output = deserializeTreasuryOutput(readStream);
         }
-        else if (type === EXTENDED_OUTPUT_TYPE) {
-            output = deserializeExtendedOutput(readStream);
+        else if (type === BASIC_OUTPUT_TYPE) {
+            output = deserializeBasicOutput(readStream);
         }
         else if (type === FOUNDRY_OUTPUT_TYPE) {
             output = deserializeFoundryOutput(readStream);
@@ -1889,8 +1959,8 @@
         if (object.type === TREASURY_OUTPUT_TYPE) {
             serializeTreasuryOutput(writeStream, object);
         }
-        else if (object.type === EXTENDED_OUTPUT_TYPE) {
-            serializeExtendedOutput(writeStream, object);
+        else if (object.type === BASIC_OUTPUT_TYPE) {
+            serializeBasicOutput(writeStream, object);
         }
         else if (object.type === FOUNDRY_OUTPUT_TYPE) {
             serializeFoundryOutput(writeStream, object);
@@ -1909,7 +1979,12 @@
     /**
      * The minimum length of a transaction essence binary representation.
      */
-    const MIN_TRANSACTION_ESSENCE_LENGTH = SMALL_TYPE_LENGTH + 2 * ARRAY_LENGTH + UINT32_SIZE;
+    const MIN_TRANSACTION_ESSENCE_LENGTH = SMALL_TYPE_LENGTH + // type
+        UINT64_SIZE + // network id
+        ARRAY_LENGTH + // input count
+        INPUTS_COMMITMENT_SIZE + // input commitments
+        ARRAY_LENGTH + // output count
+        UINT32_SIZE; // payload type
     /**
      * Deserialize the transaction essence from binary.
      * @param readStream The stream to read the data from.
@@ -1923,7 +1998,9 @@
         if (type !== TRANSACTION_ESSENCE_TYPE) {
             throw new Error(`Type mismatch in transactionEssence ${type}`);
         }
+        const networkId = readStream.readUInt64("message.networkId");
         const inputs = deserializeInputs(readStream);
+        const inputsCommitment = readStream.readFixedHex("transactionEssence.inputsCommitment", INPUTS_COMMITMENT_SIZE);
         const outputs = deserializeOutputs(readStream);
         const payload = deserializePayload(readStream);
         if (payload && payload.type !== TAGGED_DATA_PAYLOAD_TYPE) {
@@ -1936,7 +2013,9 @@
         }
         return {
             type: TRANSACTION_ESSENCE_TYPE,
+            networkId: networkId.toString(10),
             inputs: inputs,
+            inputsCommitment,
             outputs,
             payload
         };
@@ -1947,13 +2026,16 @@
      * @param object The object to serialize.
      */
     function serializeTransactionEssence(writeStream, object) {
+        var _a;
         writeStream.writeUInt8("transactionEssence.type", object.type);
+        writeStream.writeUInt64("message.networkId", bigInt__default["default"]((_a = object.networkId) !== null && _a !== void 0 ? _a : "0"));
         for (const input of object.inputs) {
             if (input.type !== UTXO_INPUT_TYPE) {
                 throw new Error("Transaction essence can only contain UTXO Inputs");
             }
         }
         serializeInputs(writeStream, object.inputs);
+        writeStream.writeFixedHex("transactionEssence.inputsCommitment", INPUTS_COMMITMENT_SIZE, object.inputsCommitment);
         serializeOutputs(writeStream, object.outputs);
         serializePayload(writeStream, object.payload);
     }
@@ -2342,7 +2424,7 @@
     /**
      * The minimum length of a message binary representation.
      */
-    const MIN_MESSAGE_LENGTH = UINT64_SIZE + // Network id
+    const MIN_MESSAGE_LENGTH = UINT8_SIZE + // Protocol Version
         UINT8_SIZE + // Parent count
         MESSAGE_ID_LENGTH + // Single parent
         MIN_PAYLOAD_LENGTH + // Min payload length
@@ -2368,7 +2450,7 @@
         if (!readStream.hasRemaining(MIN_MESSAGE_LENGTH)) {
             throw new Error(`Message data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_MESSAGE_LENGTH}`);
         }
-        const networkId = readStream.readUInt64("message.networkId");
+        const protocolVersion = readStream.readUInt8("message.protocolVersion");
         const numParents = readStream.readUInt8("message.numParents");
         const parents = [];
         for (let i = 0; i < numParents; i++) {
@@ -2385,7 +2467,7 @@
             throw new Error(`Message data length ${readStream.length()} has unused data ${unused}`);
         }
         return {
-            networkId: networkId.toString(10),
+            protocolVersion,
             parentMessageIds: parents,
             payload,
             nonce: nonce.toString(10)
@@ -2398,7 +2480,7 @@
      */
     function serializeMessage(writeStream, object) {
         var _a, _b, _c, _d;
-        writeStream.writeUInt64("message.networkId", bigInt__default["default"]((_a = object.networkId) !== null && _a !== void 0 ? _a : "0"));
+        writeStream.writeUInt8("message.protocolVersion", (_a = object.protocolVersion) !== null && _a !== void 0 ? _a : 0);
         const numParents = (_c = (_b = object.parentMessageIds) === null || _b === void 0 ? void 0 : _b.length) !== null && _c !== void 0 ? _c : 0;
         writeStream.writeUInt8("message.numParents", numParents);
         if (object.parentMessageIds) {
@@ -2534,7 +2616,7 @@
          * @param options Options for the client.
          */
         constructor(endpoint, options) {
-            var _a, _b, _c, _d;
+            var _a, _b, _c, _d, _e;
             if (!endpoint) {
                 throw new Error("The endpoint can not be empty");
             }
@@ -2546,10 +2628,11 @@
             this._userName = options === null || options === void 0 ? void 0 : options.userName;
             this._password = options === null || options === void 0 ? void 0 : options.password;
             this._headers = options === null || options === void 0 ? void 0 : options.headers;
+            this._protocolVersion = (_c = options === null || options === void 0 ? void 0 : options.protocolVersion) !== null && _c !== void 0 ? _c : 1;
             if (this._userName && this._password && !this._endpoint.startsWith("https")) {
                 throw new Error("Basic authentication requires the endpoint to be https");
             }
-            if (this._userName && this._password && (((_c = this._headers) === null || _c === void 0 ? void 0 : _c.authorization) || ((_d = this._headers) === null || _d === void 0 ? void 0 : _d.Authorization))) {
+            if (this._userName && this._password && (((_d = this._headers) === null || _d === void 0 ? void 0 : _d.authorization) || ((_e = this._headers) === null || _e === void 0 ? void 0 : _e.Authorization))) {
                 throw new Error("You can not supply both user/pass and authorization header");
             }
         }
@@ -2611,19 +2694,20 @@
          * @returns The messageId.
          */
         async messageSubmit(message) {
+            var _a, _b;
+            message.protocolVersion = this._protocolVersion;
             let minPoWScore = 0;
             if (this._powProvider) {
                 // If there is a local pow provider and no networkId or parent message ids
                 // we must populate them, so that the they are not filled in by the
                 // node causing invalid pow calculation
-                const powInfo = await this.getPoWInfo();
-                minPoWScore = powInfo.minPoWScore;
+                if (this._protocol === undefined) {
+                    await this.populateProtocolInfoCache();
+                }
+                minPoWScore = (_b = (_a = this._protocol) === null || _a === void 0 ? void 0 : _a.minPoWScore) !== null && _b !== void 0 ? _b : 0;
                 if (!message.parentMessageIds || message.parentMessageIds.length === 0) {
                     const tips = await this.tips();
                     message.parentMessageIds = tips.tipMessageIds;
-                }
-                if (!message.networkId || message.networkId.length === 0) {
-                    message.networkId = powInfo.networkId.toString();
                 }
             }
             const writeStream = new util_js.WriteStream();
@@ -2645,13 +2729,16 @@
          * @returns The messageId.
          */
         async messageSubmitRaw(message) {
+            var _a, _b;
             if (message.length > MAX_MESSAGE_LENGTH) {
                 throw new Error(`The message length is ${message.length}, which exceeds the maximum size of ${MAX_MESSAGE_LENGTH}`);
             }
+            message[0] = this._protocolVersion;
             if (this._powProvider && crypto_js.ArrayHelper.equal(message.slice(-8), SingleNodeClient.NONCE_ZERO)) {
-                const { networkId, minPoWScore } = await this.getPoWInfo();
-                util_js.BigIntHelper.write8(networkId, message, 0);
-                const nonce = await this._powProvider.pow(message, minPoWScore);
+                if (this._protocol === undefined) {
+                    await this.populateProtocolInfoCache();
+                }
+                const nonce = await this._powProvider.pow(message, (_b = (_a = this._protocol) === null || _a === void 0 ? void 0 : _a.minPoWScore) !== null && _b !== void 0 ? _b : 0);
                 util_js.BigIntHelper.write8(bigInt__default["default"](nonce), message, message.length - 8);
             }
             const response = await this.fetchBinary(this._basePath, "post", "messages", message);
@@ -2753,11 +2840,33 @@
          * @returns The bech 32 human readable part.
          */
         async bech32Hrp() {
-            if (this._bech32Hrp === undefined) {
-                const info = await this.info();
-                this._bech32Hrp = info.protocol.bech32HRP;
+            var _a, _b;
+            if (this._protocol === undefined) {
+                await this.populateProtocolInfoCache();
             }
-            return this._bech32Hrp;
+            return (_b = (_a = this._protocol) === null || _a === void 0 ? void 0 : _a.bech32HRP) !== null && _b !== void 0 ? _b : "";
+        }
+        /**
+         * Get the network name.
+         * @returns The network name.
+         */
+        async networkName() {
+            var _a, _b;
+            if (this._protocol === undefined) {
+                await this.populateProtocolInfoCache();
+            }
+            return (_b = (_a = this._protocol) === null || _a === void 0 ? void 0 : _a.networkName) !== null && _b !== void 0 ? _b : "";
+        }
+        /**
+         * Get the network id.
+         * @returns The network id as the blake256 bytes.
+         */
+        async networkId() {
+            var _a, _b;
+            if (this._protocol === undefined) {
+                await this.populateProtocolInfoCache();
+            }
+            return crypto_js.Blake2b.sum256(util_js.Converter.utf8ToBytes((_b = (_a = this._protocol) === null || _a === void 0 ? void 0 : _a.networkName) !== null && _b !== void 0 ? _b : ""));
         }
         /**
          * Extension method which provides request methods for plugins.
@@ -2780,6 +2889,16 @@
         async fetchStatus(route) {
             const response = await this.fetchWithTimeout("get", route);
             return response.status;
+        }
+        /**
+         * Populate the info cached fields.
+         * @internal
+         */
+        async populateProtocolInfoCache() {
+            if (this._protocol === undefined) {
+                const info = await this.info();
+                this._protocol = info.protocol;
+            }
         }
         /**
          * Perform a request in json format.
@@ -2926,19 +3045,6 @@
          */
         combineQueryParams(queryParams) {
             return queryParams && queryParams.length > 0 ? `?${queryParams.join("&")}` : "";
-        }
-        /**
-         * Get the pow info from the node.
-         * @returns The networkId and the minPoWScore.
-         * @internal
-         */
-        async getPoWInfo() {
-            const nodeInfo = await this.info();
-            const networkIdBytes = crypto_js.Blake2b.sum256(util_js.Converter.utf8ToBytes(nodeInfo.protocol.networkName));
-            return {
-                networkId: util_js.BigIntHelper.read8(networkIdBytes, 0),
-                minPoWScore: nodeInfo.protocol.minPoWScore
-            };
         }
     }
     /**
@@ -3533,7 +3639,7 @@
             cursor = outputResponse.cursor;
             for (const outputId of outputResponse.items) {
                 const output = await client.output(outputId);
-                if (output.output.type === EXTENDED_OUTPUT_TYPE && !output.isSpent) {
+                if (output.output.type === BASIC_OUTPUT_TYPE && !output.isSpent) {
                     balance += output.output.amount;
                 }
             }
@@ -3741,7 +3847,7 @@
         for (const output of outputs) {
             if (output.addressType === ED25519_ADDRESS_TYPE) {
                 const o = {
-                    type: EXTENDED_OUTPUT_TYPE,
+                    type: BASIC_OUTPUT_TYPE,
                     amount: output.amount,
                     nativeTokens: [],
                     unlockConditions: [
@@ -3780,6 +3886,7 @@
         const transactionEssence = {
             type: TRANSACTION_ESSENCE_TYPE,
             inputs: sortedInputs.map(i => i.input),
+            inputsCommitment: "a".repeat(64),
             outputs: sortedOutputs.map(o => o.output),
             payload: localTagHex
                 ? {
@@ -4011,7 +4118,7 @@
                                 // We didn't use all the balance from the last input
                                 // so return the rest to the same address.
                                 if (consumedBalance - requiredBalance > 0 &&
-                                    addressOutput.output.type === EXTENDED_OUTPUT_TYPE) {
+                                    addressOutput.output.type === BASIC_OUTPUT_TYPE) {
                                     const addressUnlockCondition = addressOutput.output.unlockConditions
                                         .find(u => u.type === ADDRESS_UNLOCK_CONDITION_TYPE);
                                     if (addressUnlockCondition &&
@@ -4357,7 +4464,7 @@
      * @param message The message to log.
      */
     function logMessage(prefix, message) {
-        logger(`${prefix}\tNetwork Id:`, message.networkId);
+        logger(`${prefix}\tProtocol Version:`, message.protocolVersion);
         if (message.parentMessageIds) {
             for (let i = 0; i < message.parentMessageIds.length; i++) {
                 logger(`${prefix}\tParent ${i + 1} Message Id:`, message.parentMessageIds[i]);
@@ -4433,12 +4540,14 @@
         if (payload) {
             logger(`${prefix}Transaction Payload`);
             if (payload.essence.type === TRANSACTION_ESSENCE_TYPE) {
+                logger(`${prefix}\tNetwork Id:`, payload.essence.networkId);
                 if (payload.essence.inputs) {
                     logger(`${prefix}\tInputs:`, payload.essence.inputs.length);
                     for (const input of payload.essence.inputs) {
                         logInput(`${prefix}\t\t`, input);
                     }
                 }
+                logger(`${prefix}\tInputs Commitment:`, payload.essence.inputsCommitment);
                 if (payload.essence.outputs) {
                     logger(`${prefix}\tOutputs:`, payload.essence.outputs.length);
                     for (const output of payload.essence.outputs) {
@@ -4584,8 +4693,8 @@
                 logger(`${prefix}Treasury Output`);
                 logger(`${prefix}\t\tAmount:`, output.amount);
             }
-            else if (output.type === EXTENDED_OUTPUT_TYPE) {
-                logger(`${prefix}Extended Output`);
+            else if (output.type === BASIC_OUTPUT_TYPE) {
+                logger(`${prefix}Basic Output`);
                 logger(`${prefix}\t\tAmount:`, output.amount);
                 logNativeTokens(`${prefix}\t\t`, output.nativeTokens);
                 logUnlockConditions(`${prefix}\t\t`, output.unlockConditions);
@@ -4601,6 +4710,7 @@
                 logger(`${prefix}\t\tFoundry Counter:`, output.foundryCounter);
                 logUnlockConditions(`${prefix}\t\t`, output.unlockConditions);
                 logFeatureBlocks(`${prefix}\t\t`, output.featureBlocks);
+                logImmutableFeatureBlocks(`${prefix}\t\t`, output.immutableBlocks);
             }
             else if (output.type === FOUNDRY_OUTPUT_TYPE) {
                 logger(`${prefix}Foundry Output`);
@@ -4613,15 +4723,16 @@
                 logTokenScheme(`${prefix}\t\t`, output.tokenScheme);
                 logUnlockConditions(`${prefix}\t\t`, output.unlockConditions);
                 logFeatureBlocks(`${prefix}\t\t`, output.featureBlocks);
+                logImmutableFeatureBlocks(`${prefix}\t\t`, output.immutableBlocks);
             }
             else if (output.type === NFT_OUTPUT_TYPE) {
                 logger(`${prefix}NFT Output`);
                 logger(`${prefix}\t\tAmount:`, output.amount);
                 logNativeTokens(`${prefix}\t\t`, output.nativeTokens);
                 logger(`${prefix}\t\tNFT Id:`, output.nftId);
-                logger(`${prefix}\t\tImmutable Data:`, output.immutableData);
                 logUnlockConditions(`${prefix}\t\t`, output.unlockConditions);
                 logFeatureBlocks(`${prefix}\t\t`, output.featureBlocks);
+                logImmutableFeatureBlocks(`${prefix}\t\t`, output.immutableBlocks);
             }
         }
     }
@@ -4697,6 +4808,17 @@
         }
     }
     /**
+     * Log immutable blocks to the console.
+     * @param prefix The prefix for the output.
+     * @param immutableFeatureBlocks The deature blocks.
+     */
+    function logImmutableFeatureBlocks(prefix, immutableFeatureBlocks) {
+        logger(`${prefix}Immutable Feature Blocks`);
+        for (const featureBlock of immutableFeatureBlocks) {
+            logFeatureBlock(`${prefix}\t\t`, featureBlock);
+        }
+    }
+    /**
      * Log feature block to the console.
      * @param prefix The prefix for the output.
      * @param featureBlock The feature block.
@@ -4756,12 +4878,16 @@
             logger(`${prefix}\t\tMilestone Index:`, unlockCondition.milestoneIndex);
             logger(`${prefix}\t\tUnixTime:`, unlockCondition.unixTime);
         }
-        else if (unlockCondition.type === STATE_CONTROLLER_UNLOCK_CONDITION_TYPE) {
-            logger(`${prefix}\tState Controller Unlock Condition`);
+        else if (unlockCondition.type === STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE) {
+            logger(`${prefix}\tState Controller Address Unlock Condition`);
             logAddress(`${prefix}\t\t`, unlockCondition.address);
         }
-        else if (unlockCondition.type === GOVERNOR_UNLOCK_CONDITION_TYPE) {
-            logger(`${prefix}\tGovernor Unlock Condition`);
+        else if (unlockCondition.type === GOVERNOR_ADDRESS_UNLOCK_CONDITION_TYPE) {
+            logger(`${prefix}\tGovernor Address Unlock Condition`);
+            logAddress(`${prefix}\t\t`, unlockCondition.address);
+        }
+        else if (unlockCondition.type === IMMUTABLE_ALIAS_UNLOCK_CONDITION_TYPE) {
+            logger(`${prefix}\tImmutable Alias Unlock Condition`);
             logAddress(`${prefix}\t\t`, unlockCondition.address);
         }
     }
@@ -4893,6 +5019,7 @@
     exports.ALIAS_UNLOCK_BLOCK_TYPE = ALIAS_UNLOCK_BLOCK_TYPE;
     exports.ARRAY_LENGTH = ARRAY_LENGTH;
     exports.B1T6 = B1T6;
+    exports.BASIC_OUTPUT_TYPE = BASIC_OUTPUT_TYPE;
     exports.BLS_ADDRESS_LENGTH = BLS_ADDRESS_LENGTH;
     exports.BLS_ADDRESS_TYPE = BLS_ADDRESS_TYPE;
     exports.Bech32Helper = Bech32Helper;
@@ -4903,11 +5030,12 @@
     exports.ED25519_SEED_TYPE = ED25519_SEED_TYPE;
     exports.ED25519_SIGNATURE_TYPE = ED25519_SIGNATURE_TYPE;
     exports.EXPIRATION_UNLOCK_CONDITION_TYPE = EXPIRATION_UNLOCK_CONDITION_TYPE;
-    exports.EXTENDED_OUTPUT_TYPE = EXTENDED_OUTPUT_TYPE;
     exports.Ed25519Address = Ed25519Address;
     exports.Ed25519Seed = Ed25519Seed;
     exports.FOUNDRY_OUTPUT_TYPE = FOUNDRY_OUTPUT_TYPE;
-    exports.GOVERNOR_UNLOCK_CONDITION_TYPE = GOVERNOR_UNLOCK_CONDITION_TYPE;
+    exports.GOVERNOR_ADDRESS_UNLOCK_CONDITION_TYPE = GOVERNOR_ADDRESS_UNLOCK_CONDITION_TYPE;
+    exports.IMMUTABLE_ALIAS_UNLOCK_CONDITION_TYPE = IMMUTABLE_ALIAS_UNLOCK_CONDITION_TYPE;
+    exports.INPUTS_COMMITMENT_SIZE = INPUTS_COMMITMENT_SIZE;
     exports.IOTA_BIP44_BASE_PATH = IOTA_BIP44_BASE_PATH;
     exports.ISSUER_FEATURE_BLOCK_TYPE = ISSUER_FEATURE_BLOCK_TYPE;
     exports.IndexerPluginClient = IndexerPluginClient;
@@ -4926,16 +5054,17 @@
     exports.MIN_ALIAS_ADDRESS_LENGTH = MIN_ALIAS_ADDRESS_LENGTH;
     exports.MIN_ALIAS_OUTPUT_LENGTH = MIN_ALIAS_OUTPUT_LENGTH;
     exports.MIN_ALIAS_UNLOCK_BLOCK_LENGTH = MIN_ALIAS_UNLOCK_BLOCK_LENGTH;
+    exports.MIN_BASIC_OUTPUT_LENGTH = MIN_BASIC_OUTPUT_LENGTH;
     exports.MIN_BLS_ADDRESS_LENGTH = MIN_BLS_ADDRESS_LENGTH;
     exports.MIN_DUST_DEPOSIT_RETURN_UNLOCK_CONDITION_LENGTH = MIN_DUST_DEPOSIT_RETURN_UNLOCK_CONDITION_LENGTH;
     exports.MIN_ED25519_ADDRESS_LENGTH = MIN_ED25519_ADDRESS_LENGTH;
     exports.MIN_ED25519_SIGNATURE_LENGTH = MIN_ED25519_SIGNATURE_LENGTH;
     exports.MIN_EXPIRATION_UNLOCK_CONDITION_LENGTH = MIN_EXPIRATION_UNLOCK_CONDITION_LENGTH;
-    exports.MIN_EXTENDED_OUTPUT_LENGTH = MIN_EXTENDED_OUTPUT_LENGTH;
     exports.MIN_FEATURE_BLOCKS_LENGTH = MIN_FEATURE_BLOCKS_LENGTH;
     exports.MIN_FEATURE_BLOCK_LENGTH = MIN_FEATURE_BLOCK_LENGTH;
     exports.MIN_FOUNDRY_OUTPUT_LENGTH = MIN_FOUNDRY_OUTPUT_LENGTH;
-    exports.MIN_GOVERNOR_UNLOCK_CONDITION_LENGTH = MIN_GOVERNOR_UNLOCK_CONDITION_LENGTH;
+    exports.MIN_GOVERNOR_ADDRESS_UNLOCK_CONDITION_LENGTH = MIN_GOVERNOR_ADDRESS_UNLOCK_CONDITION_LENGTH;
+    exports.MIN_IMMUTABLE_ALIAS_UNLOCK_CONDITION_LENGTH = MIN_IMMUTABLE_ALIAS_UNLOCK_CONDITION_LENGTH;
     exports.MIN_INPUT_COUNT = MIN_INPUT_COUNT;
     exports.MIN_INPUT_LENGTH = MIN_INPUT_LENGTH;
     exports.MIN_ISSUER_FEATURE_BLOCK_LENGTH = MIN_ISSUER_FEATURE_BLOCK_LENGTH;
@@ -4953,7 +5082,7 @@
     exports.MIN_SIGNATURE_LENGTH = MIN_SIGNATURE_LENGTH;
     exports.MIN_SIGNATURE_UNLOCK_BLOCK_LENGTH = MIN_SIGNATURE_UNLOCK_BLOCK_LENGTH;
     exports.MIN_SIMPLE_TOKEN_SCHEME_LENGTH = MIN_SIMPLE_TOKEN_SCHEME_LENGTH;
-    exports.MIN_STATE_CONTROLLER_UNLOCK_CONDITION_LENGTH = MIN_STATE_CONTROLLER_UNLOCK_CONDITION_LENGTH;
+    exports.MIN_STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_LENGTH = MIN_STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_LENGTH;
     exports.MIN_TAG_FEATURE_BLOCK_LENGTH = MIN_TAG_FEATURE_BLOCK_LENGTH;
     exports.MIN_TIMELOCK_UNLOCK_CONDITION_LENGTH = MIN_TIMELOCK_UNLOCK_CONDITION_LENGTH;
     exports.MIN_TOKEN_SCHEME_LENGTH = MIN_TOKEN_SCHEME_LENGTH;
@@ -4976,7 +5105,7 @@
     exports.SIGNATURE_UNLOCK_BLOCK_TYPE = SIGNATURE_UNLOCK_BLOCK_TYPE;
     exports.SIMPLE_TOKEN_SCHEME_TYPE = SIMPLE_TOKEN_SCHEME_TYPE;
     exports.SMALL_TYPE_LENGTH = SMALL_TYPE_LENGTH;
-    exports.STATE_CONTROLLER_UNLOCK_CONDITION_TYPE = STATE_CONTROLLER_UNLOCK_CONDITION_TYPE;
+    exports.STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE = STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE;
     exports.STRING_LENGTH = STRING_LENGTH;
     exports.SingleNodeClient = SingleNodeClient;
     exports.TAGGED_DATA_PAYLOAD_TYPE = TAGGED_DATA_PAYLOAD_TYPE;
@@ -5005,17 +5134,18 @@
     exports.deserializeAliasAddress = deserializeAliasAddress;
     exports.deserializeAliasOutput = deserializeAliasOutput;
     exports.deserializeAliasUnlockBlock = deserializeAliasUnlockBlock;
+    exports.deserializeBasicOutput = deserializeBasicOutput;
     exports.deserializeBlsAddress = deserializeBlsAddress;
     exports.deserializeDustDepositReturnUnlockCondition = deserializeDustDepositReturnUnlockCondition;
     exports.deserializeEd25519Address = deserializeEd25519Address;
     exports.deserializeEd25519Signature = deserializeEd25519Signature;
     exports.deserializeExpirationUnlockCondition = deserializeExpirationUnlockCondition;
-    exports.deserializeExtendedOutput = deserializeExtendedOutput;
     exports.deserializeFeatureBlock = deserializeFeatureBlock;
     exports.deserializeFeatureBlocks = deserializeFeatureBlocks;
     exports.deserializeFoundryOutput = deserializeFoundryOutput;
     exports.deserializeFunds = deserializeFunds;
-    exports.deserializeGovernorUnlockCondition = deserializeGovernorUnlockCondition;
+    exports.deserializeGovernorAddressUnlockCondition = deserializeGovernorAddressUnlockCondition;
+    exports.deserializeImmutableAliasUnlockCondition = deserializeImmutableAliasUnlockCondition;
     exports.deserializeInput = deserializeInput;
     exports.deserializeInputs = deserializeInputs;
     exports.deserializeIssuerFeatureBlock = deserializeIssuerFeatureBlock;
@@ -5033,7 +5163,7 @@
     exports.deserializeSignature = deserializeSignature;
     exports.deserializeSignatureUnlockBlock = deserializeSignatureUnlockBlock;
     exports.deserializeSimpleTokenScheme = deserializeSimpleTokenScheme;
-    exports.deserializeStateControllerUnlockCondition = deserializeStateControllerUnlockCondition;
+    exports.deserializeStateControllerAddressUnlockCondition = deserializeStateControllerAddressUnlockCondition;
     exports.deserializeTagFeatureBlock = deserializeTagFeatureBlock;
     exports.deserializeTimelockUnlockCondition = deserializeTimelockUnlockCondition;
     exports.deserializeTokenScheme = deserializeTokenScheme;
@@ -5055,6 +5185,7 @@
     exports.logFeatureBlock = logFeatureBlock;
     exports.logFeatureBlocks = logFeatureBlocks;
     exports.logFunds = logFunds;
+    exports.logImmutableFeatureBlocks = logImmutableFeatureBlocks;
     exports.logInfo = logInfo;
     exports.logInput = logInput;
     exports.logMessage = logMessage;
@@ -5089,17 +5220,18 @@
     exports.serializeAliasAddress = serializeAliasAddress;
     exports.serializeAliasOutput = serializeAliasOutput;
     exports.serializeAliasUnlockBlock = serializeAliasUnlockBlock;
+    exports.serializeBasicOutput = serializeBasicOutput;
     exports.serializeBlsAddress = serializeBlsAddress;
     exports.serializeDustDepositReturnUnlockCondition = serializeDustDepositReturnUnlockCondition;
     exports.serializeEd25519Address = serializeEd25519Address;
     exports.serializeEd25519Signature = serializeEd25519Signature;
     exports.serializeExpirationUnlockCondition = serializeExpirationUnlockCondition;
-    exports.serializeExtendedOutput = serializeExtendedOutput;
     exports.serializeFeatureBlock = serializeFeatureBlock;
     exports.serializeFeatureBlocks = serializeFeatureBlocks;
     exports.serializeFoundryOutput = serializeFoundryOutput;
     exports.serializeFunds = serializeFunds;
-    exports.serializeGovernorUnlockCondition = serializeGovernorUnlockCondition;
+    exports.serializeGovernorAddressUnlockCondition = serializeGovernorAddressUnlockCondition;
+    exports.serializeImmutableAliasUnlockCondition = serializeImmutableAliasUnlockCondition;
     exports.serializeInput = serializeInput;
     exports.serializeInputs = serializeInputs;
     exports.serializeIssuerFeatureBlock = serializeIssuerFeatureBlock;
@@ -5117,7 +5249,7 @@
     exports.serializeSignature = serializeSignature;
     exports.serializeSignatureUnlockBlock = serializeSignatureUnlockBlock;
     exports.serializeSimpleTokenScheme = serializeSimpleTokenScheme;
-    exports.serializeStateControllerUnlockCondition = serializeStateControllerUnlockCondition;
+    exports.serializeStateControllerAddressUnlockCondition = serializeStateControllerAddressUnlockCondition;
     exports.serializeTagFeatureBlock = serializeTagFeatureBlock;
     exports.serializeTimelockUnlockCondition = serializeTimelockUnlockCondition;
     exports.serializeTokenScheme = serializeTokenScheme;

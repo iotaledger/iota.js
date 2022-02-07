@@ -19,7 +19,8 @@ export const MIN_ALIAS_OUTPUT_LENGTH = SMALL_TYPE_LENGTH + // Type
     UINT32_SIZE + // State Metatata Length
     UINT32_SIZE + // Foundry counter
     MIN_UNLOCK_CONDITIONS_LENGTH + // Unlock conditions
-    MIN_FEATURE_BLOCKS_LENGTH; // Feature Blocks
+    MIN_FEATURE_BLOCKS_LENGTH + // Feature Blocks
+    MIN_FEATURE_BLOCKS_LENGTH; // Immutable blocks
 /**
  * Deserialize the alias output from binary.
  * @param readStream The stream to read the data from.
@@ -42,6 +43,7 @@ export function deserializeAliasOutput(readStream) {
     const foundryCounter = readStream.readUInt32("aliasOutput.foundryCounter");
     const unlockConditions = deserializeUnlockConditions(readStream);
     const featureBlocks = deserializeFeatureBlocks(readStream);
+    const immutableBlocks = deserializeFeatureBlocks(readStream);
     return {
         type: ALIAS_OUTPUT_TYPE,
         amount: Number(amount),
@@ -51,7 +53,8 @@ export function deserializeAliasOutput(readStream) {
         stateMetadata,
         foundryCounter,
         unlockConditions,
-        featureBlocks
+        featureBlocks,
+        immutableBlocks
     };
 }
 /**
@@ -72,4 +75,5 @@ export function serializeAliasOutput(writeStream, object) {
     writeStream.writeUInt32("aliasOutput.foundryCounter", object.foundryCounter);
     serializeUnlockConditions(writeStream, object.unlockConditions);
     serializeFeatureBlocks(writeStream, object.featureBlocks);
+    serializeFeatureBlocks(writeStream, object.immutableBlocks);
 }

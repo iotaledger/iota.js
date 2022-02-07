@@ -1,8 +1,7 @@
-import type { IMetadataFeatureBlock } from "../featureBlocks/IMetadataFeatureBlock";
-import type { INativeToken } from "../INativeToken";
+import type { FeatureBlockTypes } from "../featureBlocks/featureBlockTypes";
 import type { ITypeBase } from "../ITypeBase";
 import type { TokenSchemeTypes } from "../tokenSchemes/tokenSchemeTypes";
-import type { UnlockConditionTypes } from "../unlockConditions/unlockConditionTypes";
+import type { ICommonOutput } from "./ICommonOutput";
 /**
  * The global type for the foundry output.
  */
@@ -10,15 +9,11 @@ export declare const FOUNDRY_OUTPUT_TYPE = 5;
 /**
  * Foundry output.
  */
-export interface IFoundryOutput extends ITypeBase<5> {
+export interface IFoundryOutput extends ITypeBase<5>, ICommonOutput {
     /**
      * The amount of IOTA tokens held by the output.
      */
     amount: number;
-    /**
-     * The native tokens held by the output.
-     */
-    nativeTokens: INativeToken[];
     /**
      * The serial number of the foundry with respect to the controlling alias.
      */
@@ -40,11 +35,7 @@ export interface IFoundryOutput extends ITypeBase<5> {
      */
     tokenScheme: TokenSchemeTypes;
     /**
-     * The unlock conditions for the output.
+     * Immutable blocks contained by the output.
      */
-    unlockConditions: UnlockConditionTypes[];
-    /**
-     * Feature blocks contained by the output.
-     */
-    featureBlocks: IMetadataFeatureBlock[];
+    immutableBlocks: FeatureBlockTypes[];
 }

@@ -15,7 +15,7 @@ import { deserializePayload, MIN_PAYLOAD_LENGTH, serializePayload } from "./payl
  * The minimum length of a message binary representation.
  */
 const MIN_MESSAGE_LENGTH: number =
-    UINT64_SIZE + // Network id
+    UINT8_SIZE + // Protocol Version
     UINT8_SIZE + // Parent count
     MESSAGE_ID_LENGTH + // Single parent
     MIN_PAYLOAD_LENGTH + // Min payload length
@@ -48,8 +48,7 @@ export function deserializeMessage(readStream: ReadStream): IMessage {
         );
     }
 
-    const networkId = readStream.readUInt64("message.networkId");
-
+    const protocolVersion = readStream.readUInt8("message.protocolVersion");
     const numParents = readStream.readUInt8("message.numParents");
     const parents: string[] = [];
 
@@ -72,7 +71,7 @@ export function deserializeMessage(readStream: ReadStream): IMessage {
     }
 
     return {
-        networkId: networkId.toString(10),
+        protocolVersion,
         parentMessageIds: parents,
         payload,
         nonce: nonce.toString(10)
@@ -85,7 +84,7 @@ export function deserializeMessage(readStream: ReadStream): IMessage {
  * @param object The object to serialize.
  */
 export function serializeMessage(writeStream: WriteStream, object: IMessage): void {
-    writeStream.writeUInt64("message.networkId", bigInt(object.networkId ?? "0"));
+    writeStream.writeUInt8("message.protocolVersion", object.protocolVersion ?? 0);
 
     const numParents = object.parentMessageIds?.length ?? 0;
     writeStream.writeUInt8("message.numParents", numParents);

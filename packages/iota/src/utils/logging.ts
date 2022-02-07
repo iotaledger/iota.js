@@ -22,7 +22,7 @@ import { TREASURY_INPUT_TYPE } from "../models/inputs/ITreasuryInput";
 import { UTXO_INPUT_TYPE } from "../models/inputs/IUTXOInput";
 import { TRANSACTION_ESSENCE_TYPE } from "../models/ITransactionEssence";
 import { ALIAS_OUTPUT_TYPE } from "../models/outputs/IAliasOutput";
-import { EXTENDED_OUTPUT_TYPE } from "../models/outputs/IExtendedOutput";
+import { BASIC_OUTPUT_TYPE } from "../models/outputs/IBasicOutput";
 import { FOUNDRY_OUTPUT_TYPE } from "../models/outputs/IFoundryOutput";
 import { NFT_OUTPUT_TYPE } from "../models/outputs/INftOutput";
 import { TREASURY_OUTPUT_TYPE } from "../models/outputs/ITreasuryOutput";
@@ -49,8 +49,9 @@ import type { UnlockBlockTypes } from "../models/unlockBlocks/unlockBlockTypes";
 import { ADDRESS_UNLOCK_CONDITION_TYPE } from "../models/unlockConditions/IAddressUnlockCondition";
 import { DUST_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE } from "../models/unlockConditions/IDustDepositReturnUnlockCondition";
 import { EXPIRATION_UNLOCK_CONDITION_TYPE } from "../models/unlockConditions/IExpirationUnlockCondition";
-import { GOVERNOR_UNLOCK_CONDITION_TYPE } from "../models/unlockConditions/IGovernorUnlockCondition";
-import { STATE_CONTROLLER_UNLOCK_CONDITION_TYPE } from "../models/unlockConditions/IStateControllerUnlockCondition";
+import { GOVERNOR_ADDRESS_UNLOCK_CONDITION_TYPE } from "../models/unlockConditions/IGovernorAddressUnlockCondition";
+import { IMMUTABLE_ALIAS_UNLOCK_CONDITION_TYPE } from "../models/unlockConditions/IImmutableAliasUnlockCondition";
+import { STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE } from "../models/unlockConditions/IStateControllerAddressUnlockCondition";
 import { TIMELOCK_UNLOCK_CONDITION_TYPE } from "../models/unlockConditions/ITimelockUnlockCondition";
 import type { UnlockConditionTypes } from "../models/unlockConditions/unlockConditionTypes";
 
@@ -126,7 +127,7 @@ export function logTips(prefix: string, tipsResponse: ITipsResponse): void {
  * @param message The message to log.
  */
 export function logMessage(prefix: string, message: IMessage): void {
-    logger(`${prefix}\tNetwork Id:`, message.networkId);
+    logger(`${prefix}\tProtocol Version:`, message.protocolVersion);
     if (message.parentMessageIds) {
         for (let i = 0; i < message.parentMessageIds.length; i++) {
             logger(`${prefix}\tParent ${i + 1} Message Id:`, message.parentMessageIds[i]);
@@ -201,12 +202,15 @@ export function logTransactionPayload(prefix: string, payload?: ITransactionPayl
     if (payload) {
         logger(`${prefix}Transaction Payload`);
         if (payload.essence.type === TRANSACTION_ESSENCE_TYPE) {
+            logger(`${prefix}\tNetwork Id:`, payload.essence.networkId);
+
             if (payload.essence.inputs) {
                 logger(`${prefix}\tInputs:`, payload.essence.inputs.length);
                 for (const input of payload.essence.inputs) {
                     logInput(`${prefix}\t\t`, input);
                 }
             }
+            logger(`${prefix}\tInputs Commitment:`, payload.essence.inputsCommitment);
             if (payload.essence.outputs) {
                 logger(`${prefix}\tOutputs:`, payload.essence.outputs.length);
                 for (const output of payload.essence.outputs) {
@@ -355,8 +359,8 @@ export function logOutput(prefix: string, output?: OutputTypes): void {
         if (output.type === TREASURY_OUTPUT_TYPE) {
             logger(`${prefix}Treasury Output`);
             logger(`${prefix}\t\tAmount:`, output.amount);
-        } else if (output.type === EXTENDED_OUTPUT_TYPE) {
-            logger(`${prefix}Extended Output`);
+        } else if (output.type === BASIC_OUTPUT_TYPE) {
+            logger(`${prefix}Basic Output`);
             logger(`${prefix}\t\tAmount:`, output.amount);
             logNativeTokens(`${prefix}\t\t`, output.nativeTokens);
             logUnlockConditions(`${prefix}\t\t`, output.unlockConditions);
@@ -371,6 +375,7 @@ export function logOutput(prefix: string, output?: OutputTypes): void {
             logger(`${prefix}\t\tFoundry Counter:`, output.foundryCounter);
             logUnlockConditions(`${prefix}\t\t`, output.unlockConditions);
             logFeatureBlocks(`${prefix}\t\t`, output.featureBlocks);
+            logImmutableFeatureBlocks(`${prefix}\t\t`, output.immutableBlocks);
         } else if (output.type === FOUNDRY_OUTPUT_TYPE) {
             logger(`${prefix}Foundry Output`);
             logger(`${prefix}\t\tAmount:`, output.amount);
@@ -382,14 +387,15 @@ export function logOutput(prefix: string, output?: OutputTypes): void {
             logTokenScheme(`${prefix}\t\t`, output.tokenScheme);
             logUnlockConditions(`${prefix}\t\t`, output.unlockConditions);
             logFeatureBlocks(`${prefix}\t\t`, output.featureBlocks);
+            logImmutableFeatureBlocks(`${prefix}\t\t`, output.immutableBlocks);
         } else if (output.type === NFT_OUTPUT_TYPE) {
             logger(`${prefix}NFT Output`);
             logger(`${prefix}\t\tAmount:`, output.amount);
             logNativeTokens(`${prefix}\t\t`, output.nativeTokens);
             logger(`${prefix}\t\tNFT Id:`, output.nftId);
-            logger(`${prefix}\t\tImmutable Data:`, output.immutableData);
             logUnlockConditions(`${prefix}\t\t`, output.unlockConditions);
             logFeatureBlocks(`${prefix}\t\t`, output.featureBlocks);
+            logImmutableFeatureBlocks(`${prefix}\t\t`, output.immutableBlocks);
         }
     }
 }
@@ -468,6 +474,18 @@ export function logFeatureBlocks(prefix: string, featureBlocks: FeatureBlockType
 }
 
 /**
+ * Log immutable blocks to the console.
+ * @param prefix The prefix for the output.
+ * @param immutableFeatureBlocks The deature blocks.
+ */
+ export function logImmutableFeatureBlocks(prefix: string, immutableFeatureBlocks: FeatureBlockTypes[]): void {
+    logger(`${prefix}Immutable Feature Blocks`);
+    for (const featureBlock of immutableFeatureBlocks) {
+        logFeatureBlock(`${prefix}\t\t`, featureBlock);
+    }
+}
+
+/**
  * Log feature block to the console.
  * @param prefix The prefix for the output.
  * @param featureBlock The feature block.
@@ -522,11 +540,14 @@ export function logUnlockCondition(prefix: string, unlockCondition: UnlockCondit
         logAddress(`${prefix}\t\t`, unlockCondition.returnAddress);
         logger(`${prefix}\t\tMilestone Index:`, unlockCondition.milestoneIndex);
         logger(`${prefix}\t\tUnixTime:`, unlockCondition.unixTime);
-    } else if (unlockCondition.type === STATE_CONTROLLER_UNLOCK_CONDITION_TYPE) {
-        logger(`${prefix}\tState Controller Unlock Condition`);
+    } else if (unlockCondition.type === STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE) {
+        logger(`${prefix}\tState Controller Address Unlock Condition`);
         logAddress(`${prefix}\t\t`, unlockCondition.address);
-    } else if (unlockCondition.type === GOVERNOR_UNLOCK_CONDITION_TYPE) {
-        logger(`${prefix}\tGovernor Unlock Condition`);
+    } else if (unlockCondition.type === GOVERNOR_ADDRESS_UNLOCK_CONDITION_TYPE) {
+        logger(`${prefix}\tGovernor Address Unlock Condition`);
+        logAddress(`${prefix}\t\t`, unlockCondition.address);
+    } else if (unlockCondition.type === IMMUTABLE_ALIAS_UNLOCK_CONDITION_TYPE) {
+        logger(`${prefix}\tImmutable Alias Unlock Condition`);
         logAddress(`${prefix}\t\t`, unlockCondition.address);
     }
 }

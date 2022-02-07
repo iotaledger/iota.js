@@ -3,7 +3,7 @@
 import type { ReadStream, WriteStream } from "@iota/util.js";
 import bigInt from "big-integer";
 import { INftOutput, NFT_OUTPUT_TYPE } from "../../models/outputs/INftOutput";
-import { SMALL_TYPE_LENGTH, UINT32_SIZE, UINT64_SIZE } from "../commonDataTypes";
+import { SMALL_TYPE_LENGTH, UINT64_SIZE } from "../commonDataTypes";
 import {
     deserializeFeatureBlocks,
     MIN_FEATURE_BLOCKS_LENGTH,
@@ -25,9 +25,9 @@ export const MIN_NFT_OUTPUT_LENGTH: number =
     UINT64_SIZE + // Amount
     MIN_NATIVE_TOKENS_LENGTH + // Native tokens
     NFT_ID_LENGTH + // Nft Id
-    UINT32_SIZE + // Immutable data length
     MIN_UNLOCK_CONDITIONS_LENGTH + // Unlock conditions
-    MIN_FEATURE_BLOCKS_LENGTH; // Feature Blocks
+    MIN_FEATURE_BLOCKS_LENGTH + // Feature Blocks
+    MIN_FEATURE_BLOCKS_LENGTH; // Immutable blocks
 
 /**
  * Deserialize the nft output from binary.
@@ -50,19 +50,18 @@ export function deserializeNftOutput(readStream: ReadStream): INftOutput {
     const nativeTokens = deserializeNativeTokens(readStream);
     const nftId = readStream.readFixedHex("nftOutput.nftId", NFT_ID_LENGTH);
 
-    const immutableMetadataLength = readStream.readUInt32("nftOutput.immutableMetadataLength");
-    const immutableData = readStream.readFixedHex("nftOutput.immutableMetadata", immutableMetadataLength);
     const unlockConditions = deserializeUnlockConditions(readStream);
     const featureBlocks = deserializeFeatureBlocks(readStream);
+    const immutableBlocks = deserializeFeatureBlocks(readStream);
 
     return {
         type: NFT_OUTPUT_TYPE,
         amount: Number(amount),
         nativeTokens,
         nftId,
-        immutableData,
         unlockConditions,
-        featureBlocks
+        featureBlocks,
+        immutableBlocks
     };
 }
 
@@ -77,9 +76,8 @@ export function serializeNftOutput(writeStream: WriteStream, object: INftOutput)
     writeStream.writeUInt64("nftOutput.amount", bigInt(object.amount));
     serializeNativeTokens(writeStream, object.nativeTokens);
     writeStream.writeFixedHex("nftOutput.nftId", NFT_ID_LENGTH, object.nftId);
-    writeStream.writeUInt32("nftOutput.immutableMetadataLength", object.immutableData.length / 2);
-    writeStream.writeFixedHex("nftOutput.immutableMetadata", object.immutableData.length / 2, object.immutableData);
 
     serializeUnlockConditions(writeStream, object.unlockConditions);
     serializeFeatureBlocks(writeStream, object.featureBlocks);
+    serializeFeatureBlocks(writeStream, object.immutableBlocks);
 }

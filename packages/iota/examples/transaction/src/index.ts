@@ -8,10 +8,10 @@ import {
     getUnspentAddress,
     getUnspentAddresses,
     IKeyPair,
-    IExtendedOutput,
+    IBasicOutput,
     IUTXOInput,
     sendAdvanced,
-    EXTENDED_OUTPUT_TYPE,
+    BASIC_OUTPUT_TYPE,
     SingleNodeClient,
     UTXO_INPUT_TYPE,
     IndexerPluginClient
@@ -95,8 +95,8 @@ async function run() {
                 },
                 addressKeyPair: genesisWalletKeyPair
             });
-            if (output.output.type === EXTENDED_OUTPUT_TYPE) {
-                totalGenesis += (output.output as IExtendedOutput).amount;
+            if (output.output.type === BASIC_OUTPUT_TYPE) {
+                totalGenesis += (output.output as IBasicOutput).amount;
             }
         }
     }

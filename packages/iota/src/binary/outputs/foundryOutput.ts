@@ -31,8 +31,9 @@ export const MIN_FOUNDRY_OUTPUT_LENGTH: number =
     UINT256_SIZE + // Circulating Supply
     UINT256_SIZE + // Maximum Supply
     MIN_TOKEN_SCHEME_LENGTH + // Token scheme length
-    MIN_UNLOCK_CONDITIONS_LENGTH +
-    MIN_FEATURE_BLOCKS_LENGTH;
+    MIN_UNLOCK_CONDITIONS_LENGTH + // Unlock conditions
+    MIN_FEATURE_BLOCKS_LENGTH + // Feature Blocks
+    MIN_FEATURE_BLOCKS_LENGTH; // Immutable blocks
 
 /**
  * Deserialize the foundry output from binary.
@@ -60,6 +61,7 @@ export function deserializeFoundryOutput(readStream: ReadStream): IFoundryOutput
     const tokenScheme = deserializeTokenScheme(readStream);
     const unlockConditions = deserializeUnlockConditions(readStream);
     const featureBlocks = deserializeFeatureBlocks(readStream);
+    const immutableBlocks = deserializeFeatureBlocks(readStream);
 
     return {
         type: FOUNDRY_OUTPUT_TYPE,
@@ -71,7 +73,8 @@ export function deserializeFoundryOutput(readStream: ReadStream): IFoundryOutput
         maximumSupply: maximumSupply.toString(),
         tokenScheme,
         unlockConditions,
-        featureBlocks: featureBlocks as IMetadataFeatureBlock[]
+        featureBlocks: featureBlocks as IMetadataFeatureBlock[],
+        immutableBlocks
     };
 }
 
@@ -92,4 +95,5 @@ export function serializeFoundryOutput(writeStream: WriteStream, object: IFoundr
     serializeTokenScheme(writeStream, object.tokenScheme);
     serializeUnlockConditions(writeStream, object.unlockConditions);
     serializeFeatureBlocks(writeStream, object.featureBlocks);
+    serializeFeatureBlocks(writeStream, object.immutableBlocks);
 }

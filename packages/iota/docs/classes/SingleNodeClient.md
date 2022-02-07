@@ -34,6 +34,8 @@ Client for API communication.
 - [peerDelete](SingleNodeClient.md#peerdelete)
 - [peer](SingleNodeClient.md#peer)
 - [bech32Hrp](SingleNodeClient.md#bech32hrp)
+- [networkName](SingleNodeClient.md#networkname)
+- [networkId](SingleNodeClient.md#networkid)
 - [pluginFetch](SingleNodeClient.md#pluginfetch)
 
 ## Constructors
@@ -495,6 +497,34 @@ The bech 32 human readable part.
 #### Implementation of
 
 [IClient](../interfaces/IClient.md).[bech32Hrp](../interfaces/IClient.md#bech32hrp)
+
+___
+
+### networkName
+
+▸ **networkName**(): `Promise`<`string`\>
+
+Get the network name.
+
+#### Returns
+
+`Promise`<`string`\>
+
+The network name.
+
+___
+
+### networkId
+
+▸ **networkId**(): `Promise`<`Uint8Array`\>
+
+Get the network id.
+
+#### Returns
+
+`Promise`<`Uint8Array`\>
+
+The network id as the blake256 bytes.
 
 ___
 

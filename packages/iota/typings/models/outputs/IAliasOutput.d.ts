@@ -1,7 +1,6 @@
-import type { FeatureBlockTypes } from "../../models/featureBlocks/featureBlockTypes";
-import type { UnlockConditionTypes } from "../../models/unlockConditions/unlockConditionTypes";
-import type { INativeToken } from "../INativeToken";
+import type { FeatureBlockTypes } from "../featureBlocks/featureBlockTypes";
 import type { ITypeBase } from "../ITypeBase";
+import type { ICommonOutput } from "./ICommonOutput";
 /**
  * The global type for the alias output.
  */
@@ -9,15 +8,11 @@ export declare const ALIAS_OUTPUT_TYPE = 4;
 /**
  * Alias output.
  */
-export interface IAliasOutput extends ITypeBase<4> {
+export interface IAliasOutput extends ITypeBase<4>, ICommonOutput {
     /**
      * The amount of IOTA tokens held by the output.
      */
     amount: number;
-    /**
-     * The native tokens held by the output.
-     */
-    nativeTokens: INativeToken[];
     /**
      * Unique identifier of the alias, which is the BLAKE2b-160 hash of the Output ID that created it.
      */
@@ -35,11 +30,7 @@ export interface IAliasOutput extends ITypeBase<4> {
      */
     foundryCounter: number;
     /**
-     * The unlock conditions for the output.
+     * Immutable blocks contained by the output.
      */
-    unlockConditions: UnlockConditionTypes[];
-    /**
-     * Feature blocks contained by the output.
-     */
-    featureBlocks: FeatureBlockTypes[];
+    immutableBlocks: FeatureBlockTypes[];
 }

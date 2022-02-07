@@ -1,9 +1,8 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 import type { FeatureBlockTypes } from "../featureBlocks/featureBlockTypes";
-import type { INativeToken } from "../INativeToken";
 import type { ITypeBase } from "../ITypeBase";
-import type { UnlockConditionTypes } from "../unlockConditions/unlockConditionTypes";
+import type { ICommonOutput } from "./ICommonOutput";
 
 /**
  * The global type for the NFT output.
@@ -13,16 +12,11 @@ export const NFT_OUTPUT_TYPE = 6;
 /**
  * NFT output.
  */
-export interface INftOutput extends ITypeBase<6> {
+export interface INftOutput extends ITypeBase<6>, ICommonOutput {
     /**
      * The amount of IOTA tokens held by the output.
      */
     amount: number;
-
-    /**
-     * The native tokens held by the output.
-     */
-    nativeTokens: INativeToken[];
 
     /**
      * Unique identifier of the NFT, which is the BLAKE2b-160 hash of the Output ID that created it.
@@ -30,17 +24,7 @@ export interface INftOutput extends ITypeBase<6> {
     nftId: string;
 
     /**
-     * Binary metadata attached immutably to the NFT.
+     * Immutable blocks contained by the output.
      */
-    immutableData: string;
-
-    /**
-     * The unlock conditions for the output.
-     */
-    unlockConditions: UnlockConditionTypes[];
-
-    /**
-     * Feature blocks contained by the output.
-     */
-    featureBlocks: FeatureBlockTypes[];
+    immutableBlocks: FeatureBlockTypes[];
 }

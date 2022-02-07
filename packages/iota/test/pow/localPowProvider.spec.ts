@@ -18,6 +18,7 @@ describe("LocalPowProvider", () => {
         };
 
         const message: IMessage = {
+            protocolVersion: 1,
             payload: taggedDataPayload
         };
 
@@ -26,7 +27,7 @@ describe("LocalPowProvider", () => {
         const messageBytes = writeStream.finalBytes();
 
         const nonce = await pow.pow(messageBytes, 100);
-        expect(nonce).toEqual("3686");
+        expect(nonce).toEqual("6071");
 
         const score = PowHelper.score(messageBytes);
 

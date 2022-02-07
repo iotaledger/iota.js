@@ -36,7 +36,7 @@ Type of the object.
 
   ↳ [`IAliasOutput`](IAliasOutput.md)
 
-  ↳ [`IExtendedOutput`](IExtendedOutput.md)
+  ↳ [`IBasicOutput`](IBasicOutput.md)
 
   ↳ [`IFoundryOutput`](IFoundryOutput.md)
 
@@ -72,9 +72,11 @@ Type of the object.
 
   ↳ [`IExpirationUnlockCondition`](IExpirationUnlockCondition.md)
 
-  ↳ [`IGovernorUnlockCondition`](IGovernorUnlockCondition.md)
+  ↳ [`IGovernorAddressUnlockCondition`](IGovernorAddressUnlockCondition.md)
 
-  ↳ [`IStateControllerUnlockCondition`](IStateControllerUnlockCondition.md)
+  ↳ [`IImmutableAliasUnlockCondition`](IImmutableAliasUnlockCondition.md)
+
+  ↳ [`IStateControllerAddressUnlockCondition`](IStateControllerAddressUnlockCondition.md)
 
   ↳ [`ITimelockUnlockCondition`](ITimelockUnlockCondition.md)
 

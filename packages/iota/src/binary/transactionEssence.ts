@@ -2,10 +2,11 @@
 // SPDX-License-Identifier: Apache-2.0
 /* eslint-disable no-mixed-operators */
 import type { ReadStream, WriteStream } from "@iota/util.js";
+import bigInt from "big-integer";
 import { IUTXOInput, UTXO_INPUT_TYPE } from "../models/inputs/IUTXOInput";
-import { ITransactionEssence, TRANSACTION_ESSENCE_TYPE } from "../models/ITransactionEssence";
+import { INPUTS_COMMITMENT_SIZE, ITransactionEssence, TRANSACTION_ESSENCE_TYPE } from "../models/ITransactionEssence";
 import { TAGGED_DATA_PAYLOAD_TYPE } from "../models/payloads/ITaggedDataPayload";
-import { ARRAY_LENGTH, SMALL_TYPE_LENGTH, UINT32_SIZE } from "./commonDataTypes";
+import { ARRAY_LENGTH, SMALL_TYPE_LENGTH, UINT32_SIZE, UINT64_SIZE } from "./commonDataTypes";
 import { deserializeInputs, serializeInputs } from "./inputs/inputs";
 import { deserializeOutputs, serializeOutputs } from "./outputs/outputs";
 import { deserializePayload, serializePayload } from "./payloads/payloads";
@@ -13,7 +14,13 @@ import { deserializePayload, serializePayload } from "./payloads/payloads";
 /**
  * The minimum length of a transaction essence binary representation.
  */
-export const MIN_TRANSACTION_ESSENCE_LENGTH: number = SMALL_TYPE_LENGTH + 2 * ARRAY_LENGTH + UINT32_SIZE;
+export const MIN_TRANSACTION_ESSENCE_LENGTH: number =
+    SMALL_TYPE_LENGTH + // type
+    UINT64_SIZE + // network id
+    ARRAY_LENGTH + // input count
+    INPUTS_COMMITMENT_SIZE + // input commitments
+    ARRAY_LENGTH + // output count
+    UINT32_SIZE; // payload type
 
 /**
  * Deserialize the transaction essence from binary.
@@ -32,7 +39,10 @@ export function deserializeTransactionEssence(readStream: ReadStream): ITransact
         throw new Error(`Type mismatch in transactionEssence ${type}`);
     }
 
+    const networkId = readStream.readUInt64("message.networkId");
+
     const inputs = deserializeInputs(readStream);
+    const inputsCommitment = readStream.readFixedHex("transactionEssence.inputsCommitment", INPUTS_COMMITMENT_SIZE);
     const outputs = deserializeOutputs(readStream);
 
     const payload = deserializePayload(readStream);
@@ -48,7 +58,9 @@ export function deserializeTransactionEssence(readStream: ReadStream): ITransact
 
     return {
         type: TRANSACTION_ESSENCE_TYPE,
+        networkId: networkId.toString(10),
         inputs: inputs as IUTXOInput[],
+        inputsCommitment,
         outputs,
         payload
     };
@@ -62,6 +74,8 @@ export function deserializeTransactionEssence(readStream: ReadStream): ITransact
 export function serializeTransactionEssence(writeStream: WriteStream, object: ITransactionEssence): void {
     writeStream.writeUInt8("transactionEssence.type", object.type);
 
+    writeStream.writeUInt64("message.networkId", bigInt(object.networkId ?? "0"));
+
     for (const input of object.inputs) {
         if (input.type !== UTXO_INPUT_TYPE) {
             throw new Error("Transaction essence can only contain UTXO Inputs");
@@ -69,6 +83,8 @@ export function serializeTransactionEssence(writeStream: WriteStream, object: IT
     }
 
     serializeInputs(writeStream, object.inputs);
+    writeStream.writeFixedHex("transactionEssence.inputsCommitment", INPUTS_COMMITMENT_SIZE, object.inputsCommitment);
+
     serializeOutputs(writeStream, object.outputs);
     serializePayload(writeStream, object.payload);
 }

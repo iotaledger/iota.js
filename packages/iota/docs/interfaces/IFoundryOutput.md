@@ -6,6 +6,8 @@ Foundry output.
 
 - [`ITypeBase`](ITypeBase.md)<``5``\>
 
+- [`ICommonOutput`](ICommonOutput.md)
+
   ↳ **`IFoundryOutput`**
 
 ## Table of contents
@@ -13,15 +15,16 @@ Foundry output.
 ### Properties
 
 - [type](IFoundryOutput.md#type)
-- [amount](IFoundryOutput.md#amount)
 - [nativeTokens](IFoundryOutput.md#nativetokens)
+- [unlockConditions](IFoundryOutput.md#unlockconditions)
+- [featureBlocks](IFoundryOutput.md#featureblocks)
+- [amount](IFoundryOutput.md#amount)
 - [serialNumber](IFoundryOutput.md#serialnumber)
 - [tokenTag](IFoundryOutput.md#tokentag)
 - [circulatingSupply](IFoundryOutput.md#circulatingsupply)
 - [maximumSupply](IFoundryOutput.md#maximumsupply)
 - [tokenScheme](IFoundryOutput.md#tokenscheme)
-- [unlockConditions](IFoundryOutput.md#unlockconditions)
-- [featureBlocks](IFoundryOutput.md#featureblocks)
+- [immutableBlocks](IFoundryOutput.md#immutableblocks)
 
 ## Properties
 
@@ -37,19 +40,47 @@ The type of the object.
 
 ___
 
-### amount
-
-• **amount**: `number`
-
-The amount of IOTA tokens held by the output.
-
-___
-
 ### nativeTokens
 
 • **nativeTokens**: [`INativeToken`](INativeToken.md)[]
 
 The native tokens held by the output.
+
+#### Inherited from
+
+[ICommonOutput](ICommonOutput.md).[nativeTokens](ICommonOutput.md#nativetokens)
+
+___
+
+### unlockConditions
+
+• **unlockConditions**: [`UnlockConditionTypes`](../api.md#unlockconditiontypes)[]
+
+The unlock conditions for the output.
+
+#### Inherited from
+
+[ICommonOutput](ICommonOutput.md).[unlockConditions](ICommonOutput.md#unlockconditions)
+
+___
+
+### featureBlocks
+
+• **featureBlocks**: [`FeatureBlockTypes`](../api.md#featureblocktypes)[]
+
+Feature blocks contained by the output.
+
+#### Inherited from
+
+[ICommonOutput](ICommonOutput.md).[featureBlocks](ICommonOutput.md#featureblocks)
+
+___
+
+### amount
+
+• **amount**: `number`
+
+The amount of IOTA tokens held by the output.
 
 ___
 
@@ -93,16 +124,8 @@ The token scheme for the foundry.
 
 ___
 
-### unlockConditions
+### immutableBlocks
 
-• **unlockConditions**: [`UnlockConditionTypes`](../api.md#unlockconditiontypes)[]
+• **immutableBlocks**: [`FeatureBlockTypes`](../api.md#featureblocktypes)[]
 
-The unlock conditions for the output.
-
-___
-
-### featureBlocks
-
-• **featureBlocks**: [`IMetadataFeatureBlock`](IMetadataFeatureBlock.md)[]
-
-Feature blocks contained by the output.
+Immutable blocks contained by the output.

@@ -3,7 +3,6 @@
 /* eslint-disable unicorn/no-nested-ternary */
 import { Blake2b, Ed25519 } from "@iota/crypto.js";
 import { Converter, WriteStream } from "@iota/util.js";
-import { ADDRESS_UNLOCK_CONDITION_TYPE } from "...mjs";
 import { serializeInput } from "../binary/inputs/inputs.mjs";
 import { serializeOutput } from "../binary/outputs/outputs.mjs";
 import { MAX_TAG_LENGTH, MIN_TAG_LENGTH } from "../binary/payloads/taggedDataPayload.mjs";
@@ -11,12 +10,13 @@ import { serializeTransactionEssence } from "../binary/transactionEssence.mjs";
 import { SingleNodeClient } from "../clients/singleNodeClient.mjs";
 import { ED25519_ADDRESS_TYPE } from "../models/addresses/IEd25519Address.mjs";
 import { TRANSACTION_ESSENCE_TYPE } from "../models/ITransactionEssence.mjs";
-import { EXTENDED_OUTPUT_TYPE } from "../models/outputs/IExtendedOutput.mjs";
+import { BASIC_OUTPUT_TYPE } from "../models/outputs/IBasicOutput.mjs";
 import { TAGGED_DATA_PAYLOAD_TYPE } from "../models/payloads/ITaggedDataPayload.mjs";
 import { TRANSACTION_PAYLOAD_TYPE } from "../models/payloads/ITransactionPayload.mjs";
 import { ED25519_SIGNATURE_TYPE } from "../models/signatures/IEd25519Signature.mjs";
 import { REFERENCE_UNLOCK_BLOCK_TYPE } from "../models/unlockBlocks/IReferenceUnlockBlock.mjs";
 import { SIGNATURE_UNLOCK_BLOCK_TYPE } from "../models/unlockBlocks/ISignatureUnlockBlock.mjs";
+import { ADDRESS_UNLOCK_CONDITION_TYPE } from "../models/unlockConditions/IAddressUnlockCondition.mjs";
 /**
  * Send a transfer from the balance on the seed.
  * @param client The client or node endpoint to send the transfer with.
@@ -71,7 +71,7 @@ export function buildTransactionPayload(inputsAndSignatureKeyPairs, outputs, tag
     for (const output of outputs) {
         if (output.addressType === ED25519_ADDRESS_TYPE) {
             const o = {
-                type: EXTENDED_OUTPUT_TYPE,
+                type: BASIC_OUTPUT_TYPE,
                 amount: output.amount,
                 nativeTokens: [],
                 unlockConditions: [
@@ -110,6 +110,7 @@ export function buildTransactionPayload(inputsAndSignatureKeyPairs, outputs, tag
     const transactionEssence = {
         type: TRANSACTION_ESSENCE_TYPE,
         inputs: sortedInputs.map(i => i.input),
+        inputsCommitment: "a".repeat(64),
         outputs: sortedOutputs.map(o => o.output),
         payload: localTagHex
             ? {

@@ -3,13 +3,15 @@
 import type { ReadStream, WriteStream } from "@iota/util.js";
 import type { ITypeBase } from "../../models/ITypeBase";
 import { ALIAS_OUTPUT_TYPE, IAliasOutput } from "../../models/outputs/IAliasOutput";
-import { EXTENDED_OUTPUT_TYPE, IExtendedOutput } from "../../models/outputs/IExtendedOutput";
+import { BASIC_OUTPUT_TYPE, IBasicOutput } from "../../models/outputs/IBasicOutput";
+import type { ICommonOutput } from "../../models/outputs/ICommonOutput";
 import { FOUNDRY_OUTPUT_TYPE, IFoundryOutput } from "../../models/outputs/IFoundryOutput";
 import { INftOutput, NFT_OUTPUT_TYPE } from "../../models/outputs/INftOutput";
 import { ITreasuryOutput, TREASURY_OUTPUT_TYPE } from "../../models/outputs/ITreasuryOutput";
 import type { OutputTypes } from "../../models/outputs/outputTypes";
+import { MAX_NATIVE_TOKEN_COUNT } from "../nativeTokens";
 import { deserializeAliasOutput, MIN_ALIAS_OUTPUT_LENGTH, serializeAliasOutput } from "./aliasOutput";
-import { deserializeExtendedOutput, MIN_EXTENDED_OUTPUT_LENGTH, serializeExtendedOutput } from "./extendedOutput";
+import { deserializeBasicOutput, MIN_BASIC_OUTPUT_LENGTH, serializeBasicOutput } from "./basicOutput";
 import { deserializeFoundryOutput, MIN_FOUNDRY_OUTPUT_LENGTH, serializeFoundryOutput } from "./foundryOutput";
 import { deserializeNftOutput, MIN_NFT_OUTPUT_LENGTH, serializeNftOutput } from "./nftOutput";
 import { deserializeTreasuryOutput, MIN_TREASURY_OUTPUT_LENGTH, serializeTreasuryOutput } from "./treasuryOutput";
@@ -20,7 +22,7 @@ import { deserializeTreasuryOutput, MIN_TREASURY_OUTPUT_LENGTH, serializeTreasur
 export const MIN_OUTPUT_LENGTH: number = Math.min(
     MIN_TREASURY_OUTPUT_LENGTH,
     MIN_FOUNDRY_OUTPUT_LENGTH,
-    MIN_EXTENDED_OUTPUT_LENGTH,
+    MIN_BASIC_OUTPUT_LENGTH,
     MIN_NFT_OUTPUT_LENGTH,
     MIN_ALIAS_OUTPUT_LENGTH
 );
@@ -33,7 +35,7 @@ export const MIN_OUTPUT_COUNT: number = 1;
 /**
  * The maximum number of outputs.
  */
-export const MAX_OUTPUT_COUNT: number = 127;
+export const MAX_OUTPUT_COUNT: number = 128;
 
 /**
  * Deserialize the outputs from binary.
@@ -66,8 +68,21 @@ export function serializeOutputs(writeStream: WriteStream, objects: OutputTypes[
 
     writeStream.writeUInt16("outputs.numOutputs", objects.length);
 
+    let nativeTokenCount = 0;
     for (let i = 0; i < objects.length; i++) {
         serializeOutput(writeStream, objects[i]);
+
+        if (
+            objects[i].type === BASIC_OUTPUT_TYPE ||
+            objects[i].type === ALIAS_OUTPUT_TYPE ||
+            objects[i].type === FOUNDRY_OUTPUT_TYPE ||
+            objects[i].type === NFT_OUTPUT_TYPE) {
+            const common = objects[i] as ICommonOutput;
+            nativeTokenCount += common.nativeTokens.length;
+        }
+    }
+    if (nativeTokenCount > MAX_NATIVE_TOKEN_COUNT) {
+        throw new Error(`The maximum number of native tokens is ${MAX_NATIVE_TOKEN_COUNT}, you have provided ${nativeTokenCount}`);
     }
 }
 
@@ -88,8 +103,8 @@ export function deserializeOutput(readStream: ReadStream): OutputTypes {
 
     if (type === TREASURY_OUTPUT_TYPE) {
         output = deserializeTreasuryOutput(readStream);
-    } else if (type === EXTENDED_OUTPUT_TYPE) {
-        output = deserializeExtendedOutput(readStream);
+    } else if (type === BASIC_OUTPUT_TYPE) {
+        output = deserializeBasicOutput(readStream);
     } else if (type === FOUNDRY_OUTPUT_TYPE) {
         output = deserializeFoundryOutput(readStream);
     } else if (type === NFT_OUTPUT_TYPE) {
@@ -111,8 +126,8 @@ export function deserializeOutput(readStream: ReadStream): OutputTypes {
 export function serializeOutput(writeStream: WriteStream, object: ITypeBase<number>): void {
     if (object.type === TREASURY_OUTPUT_TYPE) {
         serializeTreasuryOutput(writeStream, object as ITreasuryOutput);
-    } else if (object.type === EXTENDED_OUTPUT_TYPE) {
-        serializeExtendedOutput(writeStream, object as IExtendedOutput);
+    } else if (object.type === BASIC_OUTPUT_TYPE) {
+        serializeBasicOutput(writeStream, object as IBasicOutput);
     } else if (object.type === FOUNDRY_OUTPUT_TYPE) {
         serializeFoundryOutput(writeStream, object as IFoundryOutput);
     } else if (object.type === NFT_OUTPUT_TYPE) {

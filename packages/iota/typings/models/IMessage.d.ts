@@ -6,9 +6,9 @@ import type { ITransactionPayload } from "./payloads/ITransactionPayload";
  */
 export interface IMessage {
     /**
-     * The network id of the message.
+     * The protocol version under which this message operates.
      */
-    networkId?: string;
+    protocolVersion?: number;
     /**
      * The parent message ids.
      */

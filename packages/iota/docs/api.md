@@ -56,7 +56,7 @@
 - [MIN\_NUMBER\_PARENTS](api.md#min_number_parents)
 - [ALIAS\_ID\_LENGTH](api.md#alias_id_length)
 - [MIN\_ALIAS\_OUTPUT\_LENGTH](api.md#min_alias_output_length)
-- [MIN\_EXTENDED\_OUTPUT\_LENGTH](api.md#min_extended_output_length)
+- [MIN\_BASIC\_OUTPUT\_LENGTH](api.md#min_basic_output_length)
 - [MIN\_FOUNDRY\_OUTPUT\_LENGTH](api.md#min_foundry_output_length)
 - [NFT\_ID\_LENGTH](api.md#nft_id_length)
 - [MIN\_NFT\_OUTPUT\_LENGTH](api.md#min_nft_output_length)
@@ -78,12 +78,14 @@
 - [MIN\_ADDRESS\_UNLOCK\_CONDITION\_LENGTH](api.md#min_address_unlock_condition_length)
 - [MIN\_DUST\_DEPOSIT\_RETURN\_UNLOCK\_CONDITION\_LENGTH](api.md#min_dust_deposit_return_unlock_condition_length)
 - [MIN\_EXPIRATION\_UNLOCK\_CONDITION\_LENGTH](api.md#min_expiration_unlock_condition_length)
-- [MIN\_GOVERNOR\_UNLOCK\_CONDITION\_LENGTH](api.md#min_governor_unlock_condition_length)
-- [MIN\_STATE\_CONTROLLER\_UNLOCK\_CONDITION\_LENGTH](api.md#min_state_controller_unlock_condition_length)
+- [MIN\_GOVERNOR\_ADDRESS\_UNLOCK\_CONDITION\_LENGTH](api.md#min_governor_address_unlock_condition_length)
+- [MIN\_IMMUTABLE\_ALIAS\_UNLOCK\_CONDITION\_LENGTH](api.md#min_immutable_alias_unlock_condition_length)
+- [MIN\_STATE\_CONTROLLER\_ADDRESS\_UNLOCK\_CONDITION\_LENGTH](api.md#min_state_controller_address_unlock_condition_length)
 - [MIN\_TIMELOCK\_UNLOCK\_CONDITION\_LENGTH](api.md#min_timelock_unlock_condition_length)
 - [MIN\_UNLOCK\_CONDITIONS\_LENGTH](api.md#min_unlock_conditions_length)
 - [MIN\_UNLOCK\_CONDITION\_LENGTH](api.md#min_unlock_condition_length)
 - [TRANSACTION\_ESSENCE\_TYPE](api.md#transaction_essence_type)
+- [INPUTS\_COMMITMENT\_SIZE](api.md#inputs_commitment_size)
 - [ALIAS\_ADDRESS\_TYPE](api.md#alias_address_type)
 - [BLS\_ADDRESS\_TYPE](api.md#bls_address_type)
 - [ED25519\_ADDRESS\_TYPE](api.md#ed25519_address_type)
@@ -95,7 +97,7 @@
 - [TREASURY\_INPUT\_TYPE](api.md#treasury_input_type)
 - [UTXO\_INPUT\_TYPE](api.md#utxo_input_type)
 - [ALIAS\_OUTPUT\_TYPE](api.md#alias_output_type)
-- [EXTENDED\_OUTPUT\_TYPE](api.md#extended_output_type)
+- [BASIC\_OUTPUT\_TYPE](api.md#basic_output_type)
 - [FOUNDRY\_OUTPUT\_TYPE](api.md#foundry_output_type)
 - [NFT\_OUTPUT\_TYPE](api.md#nft_output_type)
 - [TREASURY\_OUTPUT\_TYPE](api.md#treasury_output_type)
@@ -113,8 +115,9 @@
 - [ADDRESS\_UNLOCK\_CONDITION\_TYPE](api.md#address_unlock_condition_type)
 - [DUST\_DEPOSIT\_RETURN\_UNLOCK\_CONDITION\_TYPE](api.md#dust_deposit_return_unlock_condition_type)
 - [EXPIRATION\_UNLOCK\_CONDITION\_TYPE](api.md#expiration_unlock_condition_type)
-- [GOVERNOR\_UNLOCK\_CONDITION\_TYPE](api.md#governor_unlock_condition_type)
-- [STATE\_CONTROLLER\_UNLOCK\_CONDITION\_TYPE](api.md#state_controller_unlock_condition_type)
+- [GOVERNOR\_ADDRESS\_UNLOCK\_CONDITION\_TYPE](api.md#governor_address_unlock_condition_type)
+- [IMMUTABLE\_ALIAS\_UNLOCK\_CONDITION\_TYPE](api.md#immutable_alias_unlock_condition_type)
+- [STATE\_CONTROLLER\_ADDRESS\_UNLOCK\_CONDITION\_TYPE](api.md#state_controller_address_unlock_condition_type)
 - [TIMELOCK\_UNLOCK\_CONDITION\_TYPE](api.md#timelock_unlock_condition_type)
 - [CONFLICT\_REASON\_STRINGS](api.md#conflict_reason_strings)
 - [ED25519\_SEED\_TYPE](api.md#ed25519_seed_type)
@@ -159,8 +162,8 @@
 - [serializeMessage](api.md#serializemessage)
 - [deserializeAliasOutput](api.md#deserializealiasoutput)
 - [serializeAliasOutput](api.md#serializealiasoutput)
-- [deserializeExtendedOutput](api.md#deserializeextendedoutput)
-- [serializeExtendedOutput](api.md#serializeextendedoutput)
+- [deserializeBasicOutput](api.md#deserializebasicoutput)
+- [serializeBasicOutput](api.md#serializebasicoutput)
 - [deserializeFoundryOutput](api.md#deserializefoundryoutput)
 - [serializeFoundryOutput](api.md#serializefoundryoutput)
 - [deserializeNftOutput](api.md#deserializenftoutput)
@@ -201,10 +204,12 @@
 - [serializeDustDepositReturnUnlockCondition](api.md#serializedustdepositreturnunlockcondition)
 - [deserializeExpirationUnlockCondition](api.md#deserializeexpirationunlockcondition)
 - [serializeExpirationUnlockCondition](api.md#serializeexpirationunlockcondition)
-- [deserializeGovernorUnlockCondition](api.md#deserializegovernorunlockcondition)
-- [serializeGovernorUnlockCondition](api.md#serializegovernorunlockcondition)
-- [deserializeStateControllerUnlockCondition](api.md#deserializestatecontrollerunlockcondition)
-- [serializeStateControllerUnlockCondition](api.md#serializestatecontrollerunlockcondition)
+- [deserializeGovernorAddressUnlockCondition](api.md#deserializegovernoraddressunlockcondition)
+- [serializeGovernorAddressUnlockCondition](api.md#serializegovernoraddressunlockcondition)
+- [deserializeImmutableAliasUnlockCondition](api.md#deserializeimmutablealiasunlockcondition)
+- [serializeImmutableAliasUnlockCondition](api.md#serializeimmutablealiasunlockcondition)
+- [deserializeStateControllerAddressUnlockCondition](api.md#deserializestatecontrolleraddressunlockcondition)
+- [serializeStateControllerAddressUnlockCondition](api.md#serializestatecontrolleraddressunlockcondition)
 - [deserializeTimelockUnlockCondition](api.md#deserializetimelockunlockcondition)
 - [serializeTimelockUnlockCondition](api.md#serializetimelockunlockcondition)
 - [deserializeUnlockConditions](api.md#deserializeunlockconditions)
@@ -251,6 +256,7 @@
 - [logNativeTokens](api.md#lognativetokens)
 - [logTokenScheme](api.md#logtokenscheme)
 - [logFeatureBlocks](api.md#logfeatureblocks)
+- [logImmutableFeatureBlocks](api.md#logimmutablefeatureblocks)
 - [logFeatureBlock](api.md#logfeatureblock)
 - [logUnlockConditions](api.md#logunlockconditions)
 - [logUnlockCondition](api.md#logunlockcondition)
@@ -299,7 +305,8 @@
 - [ITreasuryInput](interfaces/ITreasuryInput.md)
 - [IUTXOInput](interfaces/IUTXOInput.md)
 - [IAliasOutput](interfaces/IAliasOutput.md)
-- [IExtendedOutput](interfaces/IExtendedOutput.md)
+- [IBasicOutput](interfaces/IBasicOutput.md)
+- [ICommonOutput](interfaces/ICommonOutput.md)
 - [IFoundryOutput](interfaces/IFoundryOutput.md)
 - [INftOutput](interfaces/INftOutput.md)
 - [ITreasuryOutput](interfaces/ITreasuryOutput.md)
@@ -317,8 +324,9 @@
 - [IAddressUnlockCondition](interfaces/IAddressUnlockCondition.md)
 - [IDustDepositReturnUnlockCondition](interfaces/IDustDepositReturnUnlockCondition.md)
 - [IExpirationUnlockCondition](interfaces/IExpirationUnlockCondition.md)
-- [IGovernorUnlockCondition](interfaces/IGovernorUnlockCondition.md)
-- [IStateControllerUnlockCondition](interfaces/IStateControllerUnlockCondition.md)
+- [IGovernorAddressUnlockCondition](interfaces/IGovernorAddressUnlockCondition.md)
+- [IImmutableAliasUnlockCondition](interfaces/IImmutableAliasUnlockCondition.md)
+- [IStateControllerAddressUnlockCondition](interfaces/IStateControllerAddressUnlockCondition.md)
 - [ITimelockUnlockCondition](interfaces/ITimelockUnlockCondition.md)
 
 ### Type aliases
@@ -591,7 +599,7 @@ ___
 
 ### MAX\_INPUT\_COUNT
 
-• **MAX\_INPUT\_COUNT**: `number` = `127`
+• **MAX\_INPUT\_COUNT**: `number` = `128`
 
 The maximum number of inputs.
 
@@ -653,11 +661,11 @@ The minimum length of a alias output binary representation.
 
 ___
 
-### MIN\_EXTENDED\_OUTPUT\_LENGTH
+### MIN\_BASIC\_OUTPUT\_LENGTH
 
-• **MIN\_EXTENDED\_OUTPUT\_LENGTH**: `number`
+• **MIN\_BASIC\_OUTPUT\_LENGTH**: `number`
 
-The minimum length of a extended output binary representation.
+The minimum length of a basic output binary representation.
 
 ___
 
@@ -703,7 +711,7 @@ ___
 
 ### MAX\_OUTPUT\_COUNT
 
-• **MAX\_OUTPUT\_COUNT**: `number` = `127`
+• **MAX\_OUTPUT\_COUNT**: `number` = `128`
 
 The maximum number of outputs.
 
@@ -829,19 +837,27 @@ The minimum length of an expiration unlock condition binary representation.
 
 ___
 
-### MIN\_GOVERNOR\_UNLOCK\_CONDITION\_LENGTH
+### MIN\_GOVERNOR\_ADDRESS\_UNLOCK\_CONDITION\_LENGTH
 
-• **MIN\_GOVERNOR\_UNLOCK\_CONDITION\_LENGTH**: `number`
+• **MIN\_GOVERNOR\_ADDRESS\_UNLOCK\_CONDITION\_LENGTH**: `number`
 
 The minimum length of an governor unlock condition binary representation.
 
 ___
 
-### MIN\_STATE\_CONTROLLER\_UNLOCK\_CONDITION\_LENGTH
+### MIN\_IMMUTABLE\_ALIAS\_UNLOCK\_CONDITION\_LENGTH
 
-• **MIN\_STATE\_CONTROLLER\_UNLOCK\_CONDITION\_LENGTH**: `number`
+• **MIN\_IMMUTABLE\_ALIAS\_UNLOCK\_CONDITION\_LENGTH**: `number`
 
-The minimum length of an state controller unlock condition binary representation.
+The minimum length of an immutable alias unlock condition binary representation.
+
+___
+
+### MIN\_STATE\_CONTROLLER\_ADDRESS\_UNLOCK\_CONDITION\_LENGTH
+
+• **MIN\_STATE\_CONTROLLER\_ADDRESS\_UNLOCK\_CONDITION\_LENGTH**: `number`
+
+The minimum length of an state controller address unlock condition binary representation.
 
 ___
 
@@ -874,6 +890,14 @@ ___
 • **TRANSACTION\_ESSENCE\_TYPE**: ``0``
 
 The global type for the transaction essence.
+
+___
+
+### INPUTS\_COMMITMENT\_SIZE
+
+• **INPUTS\_COMMITMENT\_SIZE**: `number` = `Blake2b.SIZE_256`
+
+Inputs commitment size.
 
 ___
 
@@ -965,11 +989,11 @@ The global type for the alias output.
 
 ___
 
-### EXTENDED\_OUTPUT\_TYPE
+### BASIC\_OUTPUT\_TYPE
 
-• **EXTENDED\_OUTPUT\_TYPE**: ``3``
+• **BASIC\_OUTPUT\_TYPE**: ``3``
 
-The global type for the extended output.
+The global type for the basic output.
 
 ___
 
@@ -1109,17 +1133,25 @@ The global type for the expiration unlock condition.
 
 ___
 
-### GOVERNOR\_UNLOCK\_CONDITION\_TYPE
+### GOVERNOR\_ADDRESS\_UNLOCK\_CONDITION\_TYPE
 
-• **GOVERNOR\_UNLOCK\_CONDITION\_TYPE**: ``5``
+• **GOVERNOR\_ADDRESS\_UNLOCK\_CONDITION\_TYPE**: ``5``
 
-The global type for the governor unlock condition.
+The global type for the governor address unlock condition.
 
 ___
 
-### STATE\_CONTROLLER\_UNLOCK\_CONDITION\_TYPE
+### IMMUTABLE\_ALIAS\_UNLOCK\_CONDITION\_TYPE
 
-• **STATE\_CONTROLLER\_UNLOCK\_CONDITION\_TYPE**: ``4``
+• **IMMUTABLE\_ALIAS\_UNLOCK\_CONDITION\_TYPE**: ``6``
+
+The global type for the immutable alias unlock condition.
+
+___
+
+### STATE\_CONTROLLER\_ADDRESS\_UNLOCK\_CONDITION\_TYPE
+
+• **STATE\_CONTROLLER\_ADDRESS\_UNLOCK\_CONDITION\_TYPE**: ``4``
 
 The global type for the state controller unlock condition.
 
@@ -1890,11 +1922,11 @@ Serialize the alias output to binary.
 
 ___
 
-### deserializeExtendedOutput
+### deserializeBasicOutput
 
-▸ **deserializeExtendedOutput**(`readStream`): [`IExtendedOutput`](interfaces/IExtendedOutput.md)
+▸ **deserializeBasicOutput**(`readStream`): [`IBasicOutput`](interfaces/IBasicOutput.md)
 
-Deserialize the extended output from binary.
+Deserialize the basic output from binary.
 
 #### Parameters
 
@@ -1904,24 +1936,24 @@ Deserialize the extended output from binary.
 
 #### Returns
 
-[`IExtendedOutput`](interfaces/IExtendedOutput.md)
+[`IBasicOutput`](interfaces/IBasicOutput.md)
 
 The deserialized object.
 
 ___
 
-### serializeExtendedOutput
+### serializeBasicOutput
 
-▸ **serializeExtendedOutput**(`writeStream`, `object`): `void`
+▸ **serializeBasicOutput**(`writeStream`, `object`): `void`
 
-Serialize the extended output to binary.
+Serialize the basic output to binary.
 
 #### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `writeStream` | `WriteStream` | The stream to write the data to. |
-| `object` | [`IExtendedOutput`](interfaces/IExtendedOutput.md) | The object to serialize. |
+| `object` | [`IBasicOutput`](interfaces/IBasicOutput.md) | The object to serialize. |
 
 #### Returns
 
@@ -2709,11 +2741,11 @@ Serialize the expiration unlock condition to binary.
 
 ___
 
-### deserializeGovernorUnlockCondition
+### deserializeGovernorAddressUnlockCondition
 
-▸ **deserializeGovernorUnlockCondition**(`readStream`): [`IGovernorUnlockCondition`](interfaces/IGovernorUnlockCondition.md)
+▸ **deserializeGovernorAddressUnlockCondition**(`readStream`): [`IGovernorAddressUnlockCondition`](interfaces/IGovernorAddressUnlockCondition.md)
 
-Deserialize the governor unlock condition from binary.
+Deserialize the governor address unlock condition from binary.
 
 #### Parameters
 
@@ -2723,24 +2755,24 @@ Deserialize the governor unlock condition from binary.
 
 #### Returns
 
-[`IGovernorUnlockCondition`](interfaces/IGovernorUnlockCondition.md)
+[`IGovernorAddressUnlockCondition`](interfaces/IGovernorAddressUnlockCondition.md)
 
 The deserialized object.
 
 ___
 
-### serializeGovernorUnlockCondition
+### serializeGovernorAddressUnlockCondition
 
-▸ **serializeGovernorUnlockCondition**(`writeStream`, `object`): `void`
+▸ **serializeGovernorAddressUnlockCondition**(`writeStream`, `object`): `void`
 
-Serialize the governor unlock condition to binary.
+Serialize the governor address unlock condition to binary.
 
 #### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `writeStream` | `WriteStream` | The stream to write the data to. |
-| `object` | [`IGovernorUnlockCondition`](interfaces/IGovernorUnlockCondition.md) | The object to serialize. |
+| `object` | [`IGovernorAddressUnlockCondition`](interfaces/IGovernorAddressUnlockCondition.md) | The object to serialize. |
 
 #### Returns
 
@@ -2748,11 +2780,11 @@ Serialize the governor unlock condition to binary.
 
 ___
 
-### deserializeStateControllerUnlockCondition
+### deserializeImmutableAliasUnlockCondition
 
-▸ **deserializeStateControllerUnlockCondition**(`readStream`): [`IStateControllerUnlockCondition`](interfaces/IStateControllerUnlockCondition.md)
+▸ **deserializeImmutableAliasUnlockCondition**(`readStream`): [`IImmutableAliasUnlockCondition`](interfaces/IImmutableAliasUnlockCondition.md)
 
-Deserialize the state controller unlock condition from binary.
+Deserialize the immutable alias unlock condition from binary.
 
 #### Parameters
 
@@ -2762,24 +2794,63 @@ Deserialize the state controller unlock condition from binary.
 
 #### Returns
 
-[`IStateControllerUnlockCondition`](interfaces/IStateControllerUnlockCondition.md)
+[`IImmutableAliasUnlockCondition`](interfaces/IImmutableAliasUnlockCondition.md)
 
 The deserialized object.
 
 ___
 
-### serializeStateControllerUnlockCondition
+### serializeImmutableAliasUnlockCondition
 
-▸ **serializeStateControllerUnlockCondition**(`writeStream`, `object`): `void`
+▸ **serializeImmutableAliasUnlockCondition**(`writeStream`, `object`): `void`
 
-Serialize the state controller unlock condition to binary.
+Serialize the immutable alias unlock condition to binary.
 
 #### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `writeStream` | `WriteStream` | The stream to write the data to. |
-| `object` | [`IStateControllerUnlockCondition`](interfaces/IStateControllerUnlockCondition.md) | The object to serialize. |
+| `object` | [`IImmutableAliasUnlockCondition`](interfaces/IImmutableAliasUnlockCondition.md) | The object to serialize. |
+
+#### Returns
+
+`void`
+
+___
+
+### deserializeStateControllerAddressUnlockCondition
+
+▸ **deserializeStateControllerAddressUnlockCondition**(`readStream`): [`IStateControllerAddressUnlockCondition`](interfaces/IStateControllerAddressUnlockCondition.md)
+
+Deserialize the state controller address unlock condition from binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `readStream` | `ReadStream` | The stream to read the data from. |
+
+#### Returns
+
+[`IStateControllerAddressUnlockCondition`](interfaces/IStateControllerAddressUnlockCondition.md)
+
+The deserialized object.
+
+___
+
+### serializeStateControllerAddressUnlockCondition
+
+▸ **serializeStateControllerAddressUnlockCondition**(`writeStream`, `object`): `void`
+
+Serialize the state controller address unlock condition to binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `writeStream` | `WriteStream` | The stream to write the data to. |
+| `object` | [`IStateControllerAddressUnlockCondition`](interfaces/IStateControllerAddressUnlockCondition.md) | The object to serialize. |
 
 #### Returns
 
@@ -3761,6 +3832,25 @@ Log feature blocks to the console.
 
 ___
 
+### logImmutableFeatureBlocks
+
+▸ **logImmutableFeatureBlocks**(`prefix`, `immutableFeatureBlocks`): `void`
+
+Log immutable blocks to the console.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `prefix` | `string` | The prefix for the output. |
+| `immutableFeatureBlocks` | [`FeatureBlockTypes`](api.md#featureblocktypes)[] | The deature blocks. |
+
+#### Returns
+
+`void`
+
+___
+
 ### logFeatureBlock
 
 ▸ **logFeatureBlock**(`prefix`, `featureBlock`): `void`
@@ -3852,7 +3942,7 @@ ___
 
 ### OutputTypes
 
-Ƭ **OutputTypes**: [`ITreasuryOutput`](interfaces/ITreasuryOutput.md) \| [`IExtendedOutput`](interfaces/IExtendedOutput.md) \| [`IAliasOutput`](interfaces/IAliasOutput.md) \| [`IFoundryOutput`](interfaces/IFoundryOutput.md) \| [`INftOutput`](interfaces/INftOutput.md)
+Ƭ **OutputTypes**: [`ITreasuryOutput`](interfaces/ITreasuryOutput.md) \| [`IBasicOutput`](interfaces/IBasicOutput.md) \| [`IAliasOutput`](interfaces/IAliasOutput.md) \| [`IFoundryOutput`](interfaces/IFoundryOutput.md) \| [`INftOutput`](interfaces/INftOutput.md)
 
 All of the output types.
 
@@ -3900,6 +3990,6 @@ ___
 
 ### UnlockConditionTypes
 
-Ƭ **UnlockConditionTypes**: [`IAddressUnlockCondition`](interfaces/IAddressUnlockCondition.md) \| [`IDustDepositReturnUnlockCondition`](interfaces/IDustDepositReturnUnlockCondition.md) \| [`ITimelockUnlockCondition`](interfaces/ITimelockUnlockCondition.md) \| [`IExpirationUnlockCondition`](interfaces/IExpirationUnlockCondition.md) \| [`IStateControllerUnlockCondition`](interfaces/IStateControllerUnlockCondition.md) \| [`IGovernorUnlockCondition`](interfaces/IGovernorUnlockCondition.md)
+Ƭ **UnlockConditionTypes**: [`IAddressUnlockCondition`](interfaces/IAddressUnlockCondition.md) \| [`IDustDepositReturnUnlockCondition`](interfaces/IDustDepositReturnUnlockCondition.md) \| [`ITimelockUnlockCondition`](interfaces/ITimelockUnlockCondition.md) \| [`IExpirationUnlockCondition`](interfaces/IExpirationUnlockCondition.md) \| [`IStateControllerAddressUnlockCondition`](interfaces/IStateControllerAddressUnlockCondition.md) \| [`IGovernorAddressUnlockCondition`](interfaces/IGovernorAddressUnlockCondition.md) \| [`IImmutableAliasUnlockCondition`](interfaces/IImmutableAliasUnlockCondition.md)
 
 All of the unlock condition types.

@@ -5,7 +5,7 @@ import { Ed25519Address } from "../addressTypes/ed25519Address.mjs";
 import { IndexerPluginClient } from "../clients/plugins/indexerPluginClient.mjs";
 import { SingleNodeClient } from "../clients/singleNodeClient.mjs";
 import { ED25519_ADDRESS_TYPE } from "../models/addresses/IEd25519Address.mjs";
-import { EXTENDED_OUTPUT_TYPE } from "../models/outputs/IExtendedOutput.mjs";
+import { BASIC_OUTPUT_TYPE } from "../models/outputs/IBasicOutput.mjs";
 import { Bech32Helper } from "../utils/bech32Helper.mjs";
 import { generateBip44Address } from "./addresses.mjs";
 /**
@@ -97,7 +97,7 @@ export async function calculateAddressBalance(client, addressBech32) {
         cursor = outputResponse.cursor;
         for (const outputId of outputResponse.items) {
             const output = await client.output(outputId);
-            if (output.output.type === EXTENDED_OUTPUT_TYPE && !output.isSpent) {
+            if (output.output.type === BASIC_OUTPUT_TYPE && !output.isSpent) {
                 balance += output.output.amount;
             }
         }

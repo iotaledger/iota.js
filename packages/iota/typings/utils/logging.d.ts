@@ -138,6 +138,12 @@ export declare function logTokenScheme(prefix: string, tokenScheme: TokenSchemeT
  */
 export declare function logFeatureBlocks(prefix: string, featureBlocks: FeatureBlockTypes[]): void;
 /**
+ * Log immutable blocks to the console.
+ * @param prefix The prefix for the output.
+ * @param immutableFeatureBlocks The deature blocks.
+ */
+export declare function logImmutableFeatureBlocks(prefix: string, immutableFeatureBlocks: FeatureBlockTypes[]): void;
+/**
  * Log feature block to the console.
  * @param prefix The prefix for the output.
  * @param featureBlock The feature block.

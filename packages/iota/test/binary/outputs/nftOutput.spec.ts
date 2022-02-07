@@ -20,16 +20,16 @@ describe("Binary Nft Output", () => {
                 }
             ],
             nftId: "1".repeat(40),
-            immutableData: "1111111122222222",
             unlockConditions: [],
-            featureBlocks: []
+            featureBlocks: [],
+            immutableBlocks: []
         };
 
         const serialized = new WriteStream();
         serializeNftOutput(serialized, object);
         const hex = serialized.finalHex();
         expect(hex).toEqual(
-            "0640e2010000000000020000000000000000000000000000000000000000000000000000000000000000000000000000e338d6da574c194d0000000000000000000000000000000000000000000000001111111111111111111111111111111111111111111111111111111111111111111111111111aaaa9a0603c2845c00000000000000000000000000000000000000000000000011111111111111111111111111111111111111110800000011111111222222220000"
+            "0640e2010000000000020000000000000000000000000000000000000000000000000000000000000000000000000000e338d6da574c194d0000000000000000000000000000000000000000000000001111111111111111111111111111111111111111111111111111111111111111111111111111aaaa9a0603c2845c0000000000000000000000000000000000000000000000001111111111111111111111111111111111111111000000"
         );
         const deserialized = deserializeNftOutput(new ReadStream(Converter.hexToBytes(hex)));
         expect(deserialized.type).toEqual(6);
@@ -40,6 +40,5 @@ describe("Binary Nft Output", () => {
         expect(deserialized.nativeTokens[1].id).toEqual("1".repeat(76));
         expect(deserialized.nativeTokens[1].amount).toEqual("6666666666666666666");
         expect(deserialized.nftId).toEqual("1".repeat(40));
-        expect(deserialized.immutableData).toEqual("1111111122222222");
     });
 });

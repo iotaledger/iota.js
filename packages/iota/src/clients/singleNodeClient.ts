@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 import { ArrayHelper, Blake2b } from "@iota/crypto.js";
 import { BigIntHelper, Converter, WriteStream } from "@iota/util.js";
-import bigInt, { BigInteger } from "big-integer";
+import bigInt from "big-integer";
 import { MAX_MESSAGE_LENGTH, serializeMessage } from "../binary/message";
 import type { IChildrenResponse } from "../models/api/IChildrenResponse";
 import type { IMessageIdResponse } from "../models/api/IMessageIdResponse";
@@ -16,6 +16,7 @@ import type { IClient } from "../models/IClient";
 import type { IMessage } from "../models/IMessage";
 import type { IMessageMetadata } from "../models/IMessageMetadata";
 import type { INodeInfo } from "../models/INodeInfo";
+import type { INodeInfoProtocol } from "../models/INodeInfoProtocol";
 import type { IPeer } from "../models/IPeer";
 import type { IPowProvider } from "../models/IPowProvider";
 import type { ITreasury } from "../models/ITreasury";
@@ -81,10 +82,16 @@ export class SingleNodeClient implements IClient {
     private readonly _headers?: { [id: string]: string };
 
     /**
-     * Cached bech32 HRP from the info endpoint.
+     * Cached protocol info.
      * @internal
      */
-    private _bech32Hrp?: string;
+    private _protocol?: INodeInfoProtocol;
+
+    /**
+     * The protocol version for messages.
+     * @internal
+     */
+    private readonly _protocolVersion: number;
 
     /**
      * Create a new instance of client.
@@ -103,6 +110,7 @@ export class SingleNodeClient implements IClient {
         this._userName = options?.userName;
         this._password = options?.password;
         this._headers = options?.headers;
+        this._protocolVersion = options?.protocolVersion ?? 1;
 
         if (this._userName && this._password && !this._endpoint.startsWith("https")) {
             throw new Error("Basic authentication requires the endpoint to be https");
@@ -178,21 +186,21 @@ export class SingleNodeClient implements IClient {
      * @returns The messageId.
      */
     public async messageSubmit(message: IMessage): Promise<string> {
+        message.protocolVersion = this._protocolVersion;
+
         let minPoWScore = 0;
         if (this._powProvider) {
             // If there is a local pow provider and no networkId or parent message ids
             // we must populate them, so that the they are not filled in by the
             // node causing invalid pow calculation
-            const powInfo = await this.getPoWInfo();
-            minPoWScore = powInfo.minPoWScore;
+            if (this._protocol === undefined) {
+                await this.populateProtocolInfoCache();
+            }
+            minPoWScore = this._protocol?.minPoWScore ?? 0;
 
             if (!message.parentMessageIds || message.parentMessageIds.length === 0) {
                 const tips = await this.tips();
                 message.parentMessageIds = tips.tipMessageIds;
-            }
-
-            if (!message.networkId || message.networkId.length === 0) {
-                message.networkId = powInfo.networkId.toString();
             }
         }
 
@@ -227,10 +235,14 @@ export class SingleNodeClient implements IClient {
                 `The message length is ${message.length}, which exceeds the maximum size of ${MAX_MESSAGE_LENGTH}`
             );
         }
+
+        message[0] = this._protocolVersion;
+
         if (this._powProvider && ArrayHelper.equal(message.slice(-8), SingleNodeClient.NONCE_ZERO)) {
-            const { networkId, minPoWScore } = await this.getPoWInfo();
-            BigIntHelper.write8(networkId, message, 0);
-            const nonce = await this._powProvider.pow(message, minPoWScore);
+            if (this._protocol === undefined) {
+                await this.populateProtocolInfoCache();
+            }
+            const nonce = await this._powProvider.pow(message, this._protocol?.minPoWScore ?? 0);
             BigIntHelper.write8(bigInt(nonce), message, message.length - 8);
         }
 
@@ -356,12 +368,35 @@ export class SingleNodeClient implements IClient {
      * @returns The bech 32 human readable part.
      */
     public async bech32Hrp(): Promise<string> {
-        if (this._bech32Hrp === undefined) {
-            const info = await this.info();
-            this._bech32Hrp = info.protocol.bech32HRP;
+        if (this._protocol === undefined) {
+            await this.populateProtocolInfoCache();
         }
 
-        return this._bech32Hrp;
+        return this._protocol?.bech32HRP ?? "";
+    }
+
+    /**
+     * Get the network name.
+     * @returns The network name.
+     */
+    public async networkName(): Promise<string> {
+        if (this._protocol === undefined) {
+            await this.populateProtocolInfoCache();
+        }
+
+        return this._protocol?.networkName ?? "";
+    }
+
+    /**
+     * Get the network id.
+     * @returns The network id as the blake256 bytes.
+     */
+    public async networkId(): Promise<Uint8Array> {
+        if (this._protocol === undefined) {
+            await this.populateProtocolInfoCache();
+        }
+
+        return Blake2b.sum256(Converter.utf8ToBytes(this._protocol?.networkName ?? ""));
     }
 
     /**
@@ -387,6 +422,17 @@ export class SingleNodeClient implements IClient {
         const response = await this.fetchWithTimeout("get", route);
 
         return response.status;
+    }
+
+    /**
+     * Populate the info cached fields.
+     * @internal
+     */
+    private async populateProtocolInfoCache(): Promise<void> {
+        if (this._protocol === undefined) {
+            const info = await this.info();
+            this._protocol = info.protocol;
+        }
     }
 
     /**
@@ -576,24 +622,5 @@ export class SingleNodeClient implements IClient {
      */
     private combineQueryParams(queryParams?: string[]): string {
         return queryParams && queryParams.length > 0 ? `?${queryParams.join("&")}` : "";
-    }
-
-    /**
-     * Get the pow info from the node.
-     * @returns The networkId and the minPoWScore.
-     * @internal
-     */
-    private async getPoWInfo(): Promise<{
-        networkId: BigInteger;
-        minPoWScore: number;
-    }> {
-        const nodeInfo = await this.info();
-
-        const networkIdBytes = Blake2b.sum256(Converter.utf8ToBytes(nodeInfo.protocol.networkName));
-
-        return {
-            networkId: BigIntHelper.read8(networkIdBytes, 0),
-            minPoWScore: nodeInfo.protocol.minPoWScore
-        };
     }
 }

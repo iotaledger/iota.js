@@ -15,7 +15,7 @@ export class SingleNodeClient {
      * @param options Options for the client.
      */
     constructor(endpoint, options) {
-        var _a, _b, _c, _d;
+        var _a, _b, _c, _d, _e;
         if (!endpoint) {
             throw new Error("The endpoint can not be empty");
         }
@@ -27,10 +27,11 @@ export class SingleNodeClient {
         this._userName = options === null || options === void 0 ? void 0 : options.userName;
         this._password = options === null || options === void 0 ? void 0 : options.password;
         this._headers = options === null || options === void 0 ? void 0 : options.headers;
+        this._protocolVersion = (_c = options === null || options === void 0 ? void 0 : options.protocolVersion) !== null && _c !== void 0 ? _c : 1;
         if (this._userName && this._password && !this._endpoint.startsWith("https")) {
             throw new Error("Basic authentication requires the endpoint to be https");
         }
-        if (this._userName && this._password && (((_c = this._headers) === null || _c === void 0 ? void 0 : _c.authorization) || ((_d = this._headers) === null || _d === void 0 ? void 0 : _d.Authorization))) {
+        if (this._userName && this._password && (((_d = this._headers) === null || _d === void 0 ? void 0 : _d.authorization) || ((_e = this._headers) === null || _e === void 0 ? void 0 : _e.Authorization))) {
             throw new Error("You can not supply both user/pass and authorization header");
         }
     }
@@ -92,19 +93,20 @@ export class SingleNodeClient {
      * @returns The messageId.
      */
     async messageSubmit(message) {
+        var _a, _b;
+        message.protocolVersion = this._protocolVersion;
         let minPoWScore = 0;
         if (this._powProvider) {
             // If there is a local pow provider and no networkId or parent message ids
             // we must populate them, so that the they are not filled in by the
             // node causing invalid pow calculation
-            const powInfo = await this.getPoWInfo();
-            minPoWScore = powInfo.minPoWScore;
+            if (this._protocol === undefined) {
+                await this.populateProtocolInfoCache();
+            }
+            minPoWScore = (_b = (_a = this._protocol) === null || _a === void 0 ? void 0 : _a.minPoWScore) !== null && _b !== void 0 ? _b : 0;
             if (!message.parentMessageIds || message.parentMessageIds.length === 0) {
                 const tips = await this.tips();
                 message.parentMessageIds = tips.tipMessageIds;
-            }
-            if (!message.networkId || message.networkId.length === 0) {
-                message.networkId = powInfo.networkId.toString();
             }
         }
         const writeStream = new WriteStream();
@@ -126,13 +128,16 @@ export class SingleNodeClient {
      * @returns The messageId.
      */
     async messageSubmitRaw(message) {
+        var _a, _b;
         if (message.length > MAX_MESSAGE_LENGTH) {
             throw new Error(`The message length is ${message.length}, which exceeds the maximum size of ${MAX_MESSAGE_LENGTH}`);
         }
+        message[0] = this._protocolVersion;
         if (this._powProvider && ArrayHelper.equal(message.slice(-8), SingleNodeClient.NONCE_ZERO)) {
-            const { networkId, minPoWScore } = await this.getPoWInfo();
-            BigIntHelper.write8(networkId, message, 0);
-            const nonce = await this._powProvider.pow(message, minPoWScore);
+            if (this._protocol === undefined) {
+                await this.populateProtocolInfoCache();
+            }
+            const nonce = await this._powProvider.pow(message, (_b = (_a = this._protocol) === null || _a === void 0 ? void 0 : _a.minPoWScore) !== null && _b !== void 0 ? _b : 0);
             BigIntHelper.write8(bigInt(nonce), message, message.length - 8);
         }
         const response = await this.fetchBinary(this._basePath, "post", "messages", message);
@@ -234,11 +239,33 @@ export class SingleNodeClient {
      * @returns The bech 32 human readable part.
      */
     async bech32Hrp() {
-        if (this._bech32Hrp === undefined) {
-            const info = await this.info();
-            this._bech32Hrp = info.protocol.bech32HRP;
+        var _a, _b;
+        if (this._protocol === undefined) {
+            await this.populateProtocolInfoCache();
         }
-        return this._bech32Hrp;
+        return (_b = (_a = this._protocol) === null || _a === void 0 ? void 0 : _a.bech32HRP) !== null && _b !== void 0 ? _b : "";
+    }
+    /**
+     * Get the network name.
+     * @returns The network name.
+     */
+    async networkName() {
+        var _a, _b;
+        if (this._protocol === undefined) {
+            await this.populateProtocolInfoCache();
+        }
+        return (_b = (_a = this._protocol) === null || _a === void 0 ? void 0 : _a.networkName) !== null && _b !== void 0 ? _b : "";
+    }
+    /**
+     * Get the network id.
+     * @returns The network id as the blake256 bytes.
+     */
+    async networkId() {
+        var _a, _b;
+        if (this._protocol === undefined) {
+            await this.populateProtocolInfoCache();
+        }
+        return Blake2b.sum256(Converter.utf8ToBytes((_b = (_a = this._protocol) === null || _a === void 0 ? void 0 : _a.networkName) !== null && _b !== void 0 ? _b : ""));
     }
     /**
      * Extension method which provides request methods for plugins.
@@ -261,6 +288,16 @@ export class SingleNodeClient {
     async fetchStatus(route) {
         const response = await this.fetchWithTimeout("get", route);
         return response.status;
+    }
+    /**
+     * Populate the info cached fields.
+     * @internal
+     */
+    async populateProtocolInfoCache() {
+        if (this._protocol === undefined) {
+            const info = await this.info();
+            this._protocol = info.protocol;
+        }
     }
     /**
      * Perform a request in json format.
@@ -407,19 +444,6 @@ export class SingleNodeClient {
      */
     combineQueryParams(queryParams) {
         return queryParams && queryParams.length > 0 ? `?${queryParams.join("&")}` : "";
-    }
-    /**
-     * Get the pow info from the node.
-     * @returns The networkId and the minPoWScore.
-     * @internal
-     */
-    async getPoWInfo() {
-        const nodeInfo = await this.info();
-        const networkIdBytes = Blake2b.sum256(Converter.utf8ToBytes(nodeInfo.protocol.networkName));
-        return {
-            networkId: BigIntHelper.read8(networkIdBytes, 0),
-            minPoWScore: nodeInfo.protocol.minPoWScore
-        };
     }
 }
 /**

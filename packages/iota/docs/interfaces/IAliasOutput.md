@@ -6,6 +6,8 @@ Alias output.
 
 - [`ITypeBase`](ITypeBase.md)<``4``\>
 
+- [`ICommonOutput`](ICommonOutput.md)
+
   ↳ **`IAliasOutput`**
 
 ## Table of contents
@@ -14,11 +16,12 @@ Alias output.
 
 - [type](IAliasOutput.md#type)
 - [amount](IAliasOutput.md#amount)
-- [nativeTokens](IAliasOutput.md#nativetokens)
 - [aliasId](IAliasOutput.md#aliasid)
 - [stateIndex](IAliasOutput.md#stateindex)
 - [stateMetadata](IAliasOutput.md#statemetadata)
 - [foundryCounter](IAliasOutput.md#foundrycounter)
+- [immutableBlocks](IAliasOutput.md#immutableblocks)
+- [nativeTokens](IAliasOutput.md#nativetokens)
 - [unlockConditions](IAliasOutput.md#unlockconditions)
 - [featureBlocks](IAliasOutput.md#featureblocks)
 
@@ -41,14 +44,6 @@ ___
 • **amount**: `number`
 
 The amount of IOTA tokens held by the output.
-
-___
-
-### nativeTokens
-
-• **nativeTokens**: [`INativeToken`](INativeToken.md)[]
-
-The native tokens held by the output.
 
 ___
 
@@ -84,11 +79,35 @@ A counter that denotes the number of foundries created by this alias account.
 
 ___
 
+### immutableBlocks
+
+• **immutableBlocks**: [`FeatureBlockTypes`](../api.md#featureblocktypes)[]
+
+Immutable blocks contained by the output.
+
+___
+
+### nativeTokens
+
+• **nativeTokens**: [`INativeToken`](INativeToken.md)[]
+
+The native tokens held by the output.
+
+#### Inherited from
+
+[ICommonOutput](ICommonOutput.md).[nativeTokens](ICommonOutput.md#nativetokens)
+
+___
+
 ### unlockConditions
 
 • **unlockConditions**: [`UnlockConditionTypes`](../api.md#unlockconditiontypes)[]
 
 The unlock conditions for the output.
+
+#### Inherited from
+
+[ICommonOutput](ICommonOutput.md).[unlockConditions](ICommonOutput.md#unlockconditions)
 
 ___
 
@@ -97,3 +116,7 @@ ___
 • **featureBlocks**: [`FeatureBlockTypes`](../api.md#featureblocktypes)[]
 
 Feature blocks contained by the output.
+
+#### Inherited from
+
+[ICommonOutput](ICommonOutput.md).[featureBlocks](ICommonOutput.md#featureblocks)

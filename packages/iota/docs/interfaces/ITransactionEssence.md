@@ -12,18 +12,36 @@ Transaction payload.
 
 ### Properties
 
+- [networkId](ITransactionEssence.md#networkid)
 - [inputs](ITransactionEssence.md#inputs)
+- [inputsCommitment](ITransactionEssence.md#inputscommitment)
 - [outputs](ITransactionEssence.md#outputs)
 - [payload](ITransactionEssence.md#payload)
 - [type](ITransactionEssence.md#type)
 
 ## Properties
 
+### networkId
+
+• `Optional` **networkId**: `string`
+
+The network id of the message.
+
+___
+
 ### inputs
 
 • **inputs**: [`IUTXOInput`](IUTXOInput.md)[]
 
 The inputs of the transaction.
+
+___
+
+### inputsCommitment
+
+• **inputsCommitment**: `string`
+
+The commitment to the referenced inputs.
 
 ___
 

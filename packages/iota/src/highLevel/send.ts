@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0
 import { Bip32Path } from "@iota/crypto.js";
 import { Converter } from "@iota/util.js";
-import { ADDRESS_UNLOCK_CONDITION_TYPE } from "..";
 import { Ed25519Address } from "../addressTypes/ed25519Address";
 import { IndexerPluginClient } from "../clients/plugins/indexerPluginClient";
 import { SingleNodeClient } from "../clients/singleNodeClient";
@@ -13,7 +12,8 @@ import type { IKeyPair } from "../models/IKeyPair";
 import type { IMessage } from "../models/IMessage";
 import { IUTXOInput, UTXO_INPUT_TYPE } from "../models/inputs/IUTXOInput";
 import type { ISeed } from "../models/ISeed";
-import { EXTENDED_OUTPUT_TYPE } from "../models/outputs/IExtendedOutput";
+import { BASIC_OUTPUT_TYPE } from "../models/outputs/IBasicOutput";
+import { ADDRESS_UNLOCK_CONDITION_TYPE } from "../models/unlockConditions/IAddressUnlockCondition";
 import { Bech32Helper } from "../utils/bech32Helper";
 import { generateBip44Address } from "./addresses";
 import { sendAdvanced } from "./sendAdvanced";
@@ -339,7 +339,7 @@ export async function calculateInputs<T>(
                             // so return the rest to the same address.
                             if (
                                 consumedBalance - requiredBalance > 0 &&
-                                addressOutput.output.type === EXTENDED_OUTPUT_TYPE
+                                addressOutput.output.type === BASIC_OUTPUT_TYPE
                             ) {
                                 const addressUnlockCondition = addressOutput.output.unlockConditions
                                     .find(u => u.type === ADDRESS_UNLOCK_CONDITION_TYPE);

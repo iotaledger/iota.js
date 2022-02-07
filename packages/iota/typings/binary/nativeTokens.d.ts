@@ -17,6 +17,10 @@ export declare const FOUNDRY_ID_LENGTH: number;
  */
 export declare const NATIVE_TOKEN_ID_LENGTH: number;
 /**
+ * The maximum number of native tokens.
+ */
+export declare const MAX_NATIVE_TOKEN_COUNT: number;
+/**
  * Deserialize the natovetokens from binary.
  * @param readStream The stream to read the data from.
  * @returns The deserialized object.

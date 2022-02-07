@@ -21,7 +21,7 @@ export const MIN_INPUT_COUNT: number = 1;
 /**
  * The maximum number of inputs.
  */
-export const MAX_INPUT_COUNT: number = 127;
+export const MAX_INPUT_COUNT: number = 128;
 
 /**
  * Deserialize the inputs from binary.

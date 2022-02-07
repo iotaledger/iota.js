@@ -13,7 +13,7 @@ export const MIN_INPUT_COUNT = 1;
 /**
  * The maximum number of inputs.
  */
-export const MAX_INPUT_COUNT = 127;
+export const MAX_INPUT_COUNT = 128;
 /**
  * Deserialize the inputs from binary.
  * @param readStream The stream to read the data from.

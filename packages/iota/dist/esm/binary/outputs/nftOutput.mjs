@@ -1,6 +1,6 @@
 import bigInt from "big-integer";
 import { NFT_OUTPUT_TYPE } from "../../models/outputs/INftOutput.mjs";
-import { SMALL_TYPE_LENGTH, UINT32_SIZE, UINT64_SIZE } from "../commonDataTypes.mjs";
+import { SMALL_TYPE_LENGTH, UINT64_SIZE } from "../commonDataTypes.mjs";
 import { deserializeFeatureBlocks, MIN_FEATURE_BLOCKS_LENGTH, serializeFeatureBlocks } from "../featureBlocks/featureBlocks.mjs";
 import { deserializeNativeTokens, MIN_NATIVE_TOKENS_LENGTH, serializeNativeTokens } from "../nativeTokens.mjs";
 import { deserializeUnlockConditions, MIN_UNLOCK_CONDITIONS_LENGTH, serializeUnlockConditions } from "../unlockConditions/unlockConditions.mjs";
@@ -15,9 +15,9 @@ export const MIN_NFT_OUTPUT_LENGTH = SMALL_TYPE_LENGTH + // Type
     UINT64_SIZE + // Amount
     MIN_NATIVE_TOKENS_LENGTH + // Native tokens
     NFT_ID_LENGTH + // Nft Id
-    UINT32_SIZE + // Immutable data length
     MIN_UNLOCK_CONDITIONS_LENGTH + // Unlock conditions
-    MIN_FEATURE_BLOCKS_LENGTH; // Feature Blocks
+    MIN_FEATURE_BLOCKS_LENGTH + // Feature Blocks
+    MIN_FEATURE_BLOCKS_LENGTH; // Immutable blocks
 /**
  * Deserialize the nft output from binary.
  * @param readStream The stream to read the data from.
@@ -34,18 +34,17 @@ export function deserializeNftOutput(readStream) {
     const amount = readStream.readUInt64("nftOutput.amount");
     const nativeTokens = deserializeNativeTokens(readStream);
     const nftId = readStream.readFixedHex("nftOutput.nftId", NFT_ID_LENGTH);
-    const immutableMetadataLength = readStream.readUInt32("nftOutput.immutableMetadataLength");
-    const immutableData = readStream.readFixedHex("nftOutput.immutableMetadata", immutableMetadataLength);
     const unlockConditions = deserializeUnlockConditions(readStream);
     const featureBlocks = deserializeFeatureBlocks(readStream);
+    const immutableBlocks = deserializeFeatureBlocks(readStream);
     return {
         type: NFT_OUTPUT_TYPE,
         amount: Number(amount),
         nativeTokens,
         nftId,
-        immutableData,
         unlockConditions,
-        featureBlocks
+        featureBlocks,
+        immutableBlocks
     };
 }
 /**
@@ -58,8 +57,7 @@ export function serializeNftOutput(writeStream, object) {
     writeStream.writeUInt64("nftOutput.amount", bigInt(object.amount));
     serializeNativeTokens(writeStream, object.nativeTokens);
     writeStream.writeFixedHex("nftOutput.nftId", NFT_ID_LENGTH, object.nftId);
-    writeStream.writeUInt32("nftOutput.immutableMetadataLength", object.immutableData.length / 2);
-    writeStream.writeFixedHex("nftOutput.immutableMetadata", object.immutableData.length / 2, object.immutableData);
     serializeUnlockConditions(writeStream, object.unlockConditions);
     serializeFeatureBlocks(writeStream, object.featureBlocks);
+    serializeFeatureBlocks(writeStream, object.immutableBlocks);
 }
