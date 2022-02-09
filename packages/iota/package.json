@@ -17,7 +17,7 @@
     "license": "Apache-2.0",
     "dependencies": {
         "big-integer": "^1.6.51",
-        "node-fetch": "2.6.7",
+        "node-fetch": "3.2.0",
         "@iota/util.js": "^1.8.6",
         "@iota/crypto.js": "^1.8.6"
     },
