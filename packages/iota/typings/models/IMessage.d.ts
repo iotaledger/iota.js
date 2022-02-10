@@ -2,6 +2,10 @@ import type { IMilestonePayload } from "./payloads/IMilestonePayload";
 import type { ITaggedDataPayload } from "./payloads/ITaggedDataPayload";
 import type { ITransactionPayload } from "./payloads/ITransactionPayload";
 /**
+ * The default protocol version.
+ */
+export declare const DEFAULT_PROTOCOL_VERSION: number;
+/**
  * Message layout.
  */
 export interface IMessage {

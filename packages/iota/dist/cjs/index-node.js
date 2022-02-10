@@ -795,6 +795,11 @@
     }
 
     /**
+     * The default protocol version.
+     */
+    const DEFAULT_PROTOCOL_VERSION = 2;
+
+    /**
      * The global type for the payload.
      */
     const MILESTONE_PAYLOAD_TYPE = 1;
@@ -2493,7 +2498,7 @@
      */
     function serializeMessage(writeStream, object) {
         var _a, _b, _c, _d;
-        writeStream.writeUInt8("message.protocolVersion", (_a = object.protocolVersion) !== null && _a !== void 0 ? _a : 0);
+        writeStream.writeUInt8("message.protocolVersion", (_a = object.protocolVersion) !== null && _a !== void 0 ? _a : DEFAULT_PROTOCOL_VERSION);
         const numParents = (_c = (_b = object.parentMessageIds) === null || _b === void 0 ? void 0 : _b.length) !== null && _c !== void 0 ? _c : 0;
         writeStream.writeUInt8("message.numParents", numParents);
         if (object.parentMessageIds) {
@@ -2641,7 +2646,7 @@
             this._userName = options === null || options === void 0 ? void 0 : options.userName;
             this._password = options === null || options === void 0 ? void 0 : options.password;
             this._headers = options === null || options === void 0 ? void 0 : options.headers;
-            this._protocolVersion = (_c = options === null || options === void 0 ? void 0 : options.protocolVersion) !== null && _c !== void 0 ? _c : 1;
+            this._protocolVersion = (_c = options === null || options === void 0 ? void 0 : options.protocolVersion) !== null && _c !== void 0 ? _c : DEFAULT_PROTOCOL_VERSION;
             if (this._userName && this._password && !this._endpoint.startsWith("https")) {
                 throw new Error("Basic authentication requires the endpoint to be https");
             }
@@ -3876,9 +3881,11 @@
                 };
                 const writeStream = new util_js.WriteStream();
                 serializeOutput(writeStream, o);
+                const finalBytes = writeStream.finalBytes();
                 outputsWithSerialization.push({
                     output: o,
-                    serialized: writeStream.finalHex()
+                    serializedBytes: finalBytes,
+                    serializedHex: util_js.Converter.bytesToHex(finalBytes)
                 });
             }
             else {
@@ -3888,18 +3895,25 @@
         const inputsAndSignatureKeyPairsSerialized = inputsAndSignatureKeyPairs.map(i => {
             const writeStream = new util_js.WriteStream();
             serializeInput(writeStream, i.input);
+            const finalBytes = writeStream.finalBytes();
             return {
                 ...i,
-                serialized: writeStream.finalHex()
+                serializedBytes: finalBytes,
+                serializedHex: util_js.Converter.bytesToHex(finalBytes)
             };
         });
         // Lexicographically sort the inputs and outputs
-        const sortedInputs = inputsAndSignatureKeyPairsSerialized.sort((a, b) => a.serialized.localeCompare(b.serialized));
-        const sortedOutputs = outputsWithSerialization.sort((a, b) => a.serialized.localeCompare(b.serialized));
+        const sortedInputs = inputsAndSignatureKeyPairsSerialized.sort((a, b) => a.serializedHex.localeCompare(b.serializedHex));
+        const sortedOutputs = outputsWithSerialization.sort((a, b) => a.serializedHex.localeCompare(b.serializedHex));
+        const inputsCommitmentHasher = new crypto_js.Blake2b(crypto_js.Blake2b.SIZE_256);
+        for (const input of sortedInputs) {
+            inputsCommitmentHasher.update(input.serializedBytes);
+        }
+        const inputsCommitment = util_js.Converter.bytesToHex(inputsCommitmentHasher.final());
         const transactionEssence = {
             type: TRANSACTION_ESSENCE_TYPE,
             inputs: sortedInputs.map(i => i.input),
-            inputsCommitment: "a".repeat(64),
+            inputsCommitment,
             outputs: sortedOutputs.map(o => o.output),
             payload: localTagHex
                 ? {
@@ -5038,6 +5052,7 @@
     exports.Bech32Helper = Bech32Helper;
     exports.CONFLICT_REASON_STRINGS = CONFLICT_REASON_STRINGS;
     exports.ClientError = ClientError;
+    exports.DEFAULT_PROTOCOL_VERSION = DEFAULT_PROTOCOL_VERSION;
     exports.DUST_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE = DUST_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE;
     exports.ED25519_ADDRESS_TYPE = ED25519_ADDRESS_TYPE;
     exports.ED25519_SEED_TYPE = ED25519_SEED_TYPE;

@@ -5,6 +5,11 @@ import type { ITaggedDataPayload } from "./payloads/ITaggedDataPayload";
 import type { ITransactionPayload } from "./payloads/ITransactionPayload";
 
 /**
+ * The default protocol version.
+ */
+export const DEFAULT_PROTOCOL_VERSION: number = 2;
+
+/**
  * Message layout.
  */
 export interface IMessage {

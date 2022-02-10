@@ -1,5 +1,5 @@
 import type { ReadStream, WriteStream } from "@iota/util.js";
-import type { IMessage } from "../models/IMessage";
+import { IMessage } from "../models/IMessage";
 /**
  * The maximum length of a message.
  */

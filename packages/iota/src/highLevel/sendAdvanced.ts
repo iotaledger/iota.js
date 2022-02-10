@@ -122,7 +122,8 @@ export function buildTransactionPayload(
 
     const outputsWithSerialization: {
         output: IBasicOutput;
-        serialized: string;
+        serializedBytes: Uint8Array;
+        serializedHex: string;
     }[] = [];
 
     for (const output of outputs) {
@@ -144,9 +145,11 @@ export function buildTransactionPayload(
             };
             const writeStream = new WriteStream();
             serializeOutput(writeStream, o);
+            const finalBytes = writeStream.finalBytes();
             outputsWithSerialization.push({
                 output: o,
-                serialized: writeStream.finalHex()
+                serializedBytes: finalBytes,
+                serializedHex: Converter.bytesToHex(finalBytes)
             });
         } else {
             throw new Error(`Unrecognized output address type ${output.addressType}`);
@@ -156,24 +159,34 @@ export function buildTransactionPayload(
     const inputsAndSignatureKeyPairsSerialized: {
         input: IUTXOInput;
         addressKeyPair: IKeyPair;
-        serialized: string;
+        serializedBytes: Uint8Array;
+        serializedHex: string;
     }[] = inputsAndSignatureKeyPairs.map(i => {
         const writeStream = new WriteStream();
         serializeInput(writeStream, i.input);
+        const finalBytes = writeStream.finalBytes();
         return {
             ...i,
-            serialized: writeStream.finalHex()
+            serializedBytes: finalBytes,
+            serializedHex: Converter.bytesToHex(finalBytes)
         };
     });
 
     // Lexicographically sort the inputs and outputs
-    const sortedInputs = inputsAndSignatureKeyPairsSerialized.sort((a, b) => a.serialized.localeCompare(b.serialized));
-    const sortedOutputs = outputsWithSerialization.sort((a, b) => a.serialized.localeCompare(b.serialized));
+    const sortedInputs = inputsAndSignatureKeyPairsSerialized.sort(
+        (a, b) => a.serializedHex.localeCompare(b.serializedHex));
+    const sortedOutputs = outputsWithSerialization.sort((a, b) => a.serializedHex.localeCompare(b.serializedHex));
+
+    const inputsCommitmentHasher = new Blake2b(Blake2b.SIZE_256);
+    for (const input of sortedInputs) {
+        inputsCommitmentHasher.update(input.serializedBytes);
+    }
+    const inputsCommitment = Converter.bytesToHex(inputsCommitmentHasher.final());
 
     const transactionEssence: ITransactionEssence = {
         type: TRANSACTION_ESSENCE_TYPE,
         inputs: sortedInputs.map(i => i.input),
-        inputsCommitment: "a".repeat(64),
+        inputsCommitment,
         outputs: sortedOutputs.map(o => o.output),
         payload: localTagHex
             ? {

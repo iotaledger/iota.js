@@ -1,4 +1,5 @@
 import bigInt from "big-integer";
+import { DEFAULT_PROTOCOL_VERSION } from "../models/IMessage.mjs";
 import { MILESTONE_PAYLOAD_TYPE } from "../models/payloads/IMilestonePayload.mjs";
 import { RECEIPT_PAYLOAD_TYPE } from "../models/payloads/IReceiptPayload.mjs";
 import { TAGGED_DATA_PAYLOAD_TYPE } from "../models/payloads/ITaggedDataPayload.mjs";
@@ -65,7 +66,7 @@ export function deserializeMessage(readStream) {
  */
 export function serializeMessage(writeStream, object) {
     var _a, _b, _c, _d;
-    writeStream.writeUInt8("message.protocolVersion", (_a = object.protocolVersion) !== null && _a !== void 0 ? _a : 0);
+    writeStream.writeUInt8("message.protocolVersion", (_a = object.protocolVersion) !== null && _a !== void 0 ? _a : DEFAULT_PROTOCOL_VERSION);
     const numParents = (_c = (_b = object.parentMessageIds) === null || _b === void 0 ? void 0 : _b.length) !== null && _c !== void 0 ? _c : 0;
     writeStream.writeUInt8("message.numParents", numParents);
     if (object.parentMessageIds) {

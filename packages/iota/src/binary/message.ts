@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 import type { ReadStream, WriteStream } from "@iota/util.js";
 import bigInt from "big-integer";
-import type { IMessage } from "../models/IMessage";
+import { DEFAULT_PROTOCOL_VERSION, IMessage } from "../models/IMessage";
 import { MILESTONE_PAYLOAD_TYPE } from "../models/payloads/IMilestonePayload";
 import { RECEIPT_PAYLOAD_TYPE } from "../models/payloads/IReceiptPayload";
 import { TAGGED_DATA_PAYLOAD_TYPE } from "../models/payloads/ITaggedDataPayload";
@@ -84,7 +84,7 @@ export function deserializeMessage(readStream: ReadStream): IMessage {
  * @param object The object to serialize.
  */
 export function serializeMessage(writeStream: WriteStream, object: IMessage): void {
-    writeStream.writeUInt8("message.protocolVersion", object.protocolVersion ?? 0);
+    writeStream.writeUInt8("message.protocolVersion", object.protocolVersion ?? DEFAULT_PROTOCOL_VERSION);
 
     const numParents = object.parentMessageIds?.length ?? 0;
     writeStream.writeUInt8("message.numParents", numParents);

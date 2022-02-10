@@ -87,9 +87,11 @@ export function buildTransactionPayload(inputsAndSignatureKeyPairs, outputs, tag
             };
             const writeStream = new WriteStream();
             serializeOutput(writeStream, o);
+            const finalBytes = writeStream.finalBytes();
             outputsWithSerialization.push({
                 output: o,
-                serialized: writeStream.finalHex()
+                serializedBytes: finalBytes,
+                serializedHex: Converter.bytesToHex(finalBytes)
             });
         }
         else {
@@ -99,18 +101,25 @@ export function buildTransactionPayload(inputsAndSignatureKeyPairs, outputs, tag
     const inputsAndSignatureKeyPairsSerialized = inputsAndSignatureKeyPairs.map(i => {
         const writeStream = new WriteStream();
         serializeInput(writeStream, i.input);
+        const finalBytes = writeStream.finalBytes();
         return {
             ...i,
-            serialized: writeStream.finalHex()
+            serializedBytes: finalBytes,
+            serializedHex: Converter.bytesToHex(finalBytes)
         };
     });
     // Lexicographically sort the inputs and outputs
-    const sortedInputs = inputsAndSignatureKeyPairsSerialized.sort((a, b) => a.serialized.localeCompare(b.serialized));
-    const sortedOutputs = outputsWithSerialization.sort((a, b) => a.serialized.localeCompare(b.serialized));
+    const sortedInputs = inputsAndSignatureKeyPairsSerialized.sort((a, b) => a.serializedHex.localeCompare(b.serializedHex));
+    const sortedOutputs = outputsWithSerialization.sort((a, b) => a.serializedHex.localeCompare(b.serializedHex));
+    const inputsCommitmentHasher = new Blake2b(Blake2b.SIZE_256);
+    for (const input of sortedInputs) {
+        inputsCommitmentHasher.update(input.serializedBytes);
+    }
+    const inputsCommitment = Converter.bytesToHex(inputsCommitmentHasher.final());
     const transactionEssence = {
         type: TRANSACTION_ESSENCE_TYPE,
         inputs: sortedInputs.map(i => i.input),
-        inputsCommitment: "a".repeat(64),
+        inputsCommitment,
         outputs: sortedOutputs.map(o => o.output),
         payload: localTagHex
             ? {

@@ -5,7 +5,7 @@ import type { IOutputResponse } from "../models/api/IOutputResponse";
 import type { IReceiptsResponse } from "../models/api/IReceiptsResponse";
 import type { ITipsResponse } from "../models/api/ITipsResponse";
 import type { IClient } from "../models/IClient";
-import type { IMessage } from "../models/IMessage";
+import { IMessage } from "../models/IMessage";
 import type { IMessageMetadata } from "../models/IMessageMetadata";
 import type { INodeInfo } from "../models/INodeInfo";
 import type { IPeer } from "../models/IPeer";

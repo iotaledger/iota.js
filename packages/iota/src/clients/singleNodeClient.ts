@@ -13,7 +13,7 @@ import type { IReceiptsResponse } from "../models/api/IReceiptsResponse";
 import type { IResponse } from "../models/api/IResponse";
 import type { ITipsResponse } from "../models/api/ITipsResponse";
 import type { IClient } from "../models/IClient";
-import type { IMessage } from "../models/IMessage";
+import { DEFAULT_PROTOCOL_VERSION, IMessage } from "../models/IMessage";
 import type { IMessageMetadata } from "../models/IMessageMetadata";
 import type { INodeInfo } from "../models/INodeInfo";
 import type { INodeInfoProtocol } from "../models/INodeInfoProtocol";
@@ -34,9 +34,9 @@ export class SingleNodeClient implements IClient {
     private static readonly NONCE_ZERO: Uint8Array = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 0]);
 
     /**
-     * The endpoint for the API.
-     * @internal
-     */
+    * The endpoint for the API.
+    * @internal
+    */
     private readonly _endpoint: string;
 
     /**
@@ -110,7 +110,7 @@ export class SingleNodeClient implements IClient {
         this._userName = options?.userName;
         this._password = options?.password;
         this._headers = options?.headers;
-        this._protocolVersion = options?.protocolVersion ?? 1;
+        this._protocolVersion = options?.protocolVersion ?? DEFAULT_PROTOCOL_VERSION;
 
         if (this._userName && this._password && !this._endpoint.startsWith("https")) {
             throw new Error("Basic authentication requires the endpoint to be https");

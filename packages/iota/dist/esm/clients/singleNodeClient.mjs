@@ -4,6 +4,7 @@ import { ArrayHelper, Blake2b } from "@iota/crypto.js";
 import { BigIntHelper, Converter, WriteStream } from "@iota/util.js";
 import bigInt from "big-integer";
 import { MAX_MESSAGE_LENGTH, serializeMessage } from "../binary/message.mjs";
+import { DEFAULT_PROTOCOL_VERSION } from "../models/IMessage.mjs";
 import { ClientError } from "./clientError.mjs";
 /**
  * Client for API communication.
@@ -27,7 +28,7 @@ export class SingleNodeClient {
         this._userName = options === null || options === void 0 ? void 0 : options.userName;
         this._password = options === null || options === void 0 ? void 0 : options.password;
         this._headers = options === null || options === void 0 ? void 0 : options.headers;
-        this._protocolVersion = (_c = options === null || options === void 0 ? void 0 : options.protocolVersion) !== null && _c !== void 0 ? _c : 1;
+        this._protocolVersion = (_c = options === null || options === void 0 ? void 0 : options.protocolVersion) !== null && _c !== void 0 ? _c : DEFAULT_PROTOCOL_VERSION;
         if (this._userName && this._password && !this._endpoint.startsWith("https")) {
             throw new Error("Basic authentication requires the endpoint to be https");
         }

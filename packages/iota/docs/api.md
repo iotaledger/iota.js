@@ -84,6 +84,7 @@
 - [MIN\_TIMELOCK\_UNLOCK\_CONDITION\_LENGTH](api.md#min_timelock_unlock_condition_length)
 - [MIN\_UNLOCK\_CONDITIONS\_LENGTH](api.md#min_unlock_conditions_length)
 - [MIN\_UNLOCK\_CONDITION\_LENGTH](api.md#min_unlock_condition_length)
+- [DEFAULT\_PROTOCOL\_VERSION](api.md#default_protocol_version)
 - [TRANSACTION\_ESSENCE\_TYPE](api.md#transaction_essence_type)
 - [INPUTS\_COMMITMENT\_SIZE](api.md#inputs_commitment_size)
 - [ALIAS\_ADDRESS\_TYPE](api.md#alias_address_type)
@@ -882,6 +883,14 @@ ___
 • **MIN\_UNLOCK\_CONDITION\_LENGTH**: `number`
 
 The minimum length of a unlock conditions binary representation.
+
+___
+
+### DEFAULT\_PROTOCOL\_VERSION
+
+• **DEFAULT\_PROTOCOL\_VERSION**: `number` = `2`
+
+The default protocol version.
 
 ___
 
