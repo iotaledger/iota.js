@@ -41,6 +41,9 @@ export declare class IndexerPluginClient {
      * milestone index.
      * @param filterOptions.timelockedAfterMilestone Filter for outputs that are timelocked after a certain
      * milestone index.
+     * @param filterOptions.hasNativeTokens Filter for outputs having native tokens.
+     * @param filterOptions.minNativeTokenCount Filter for outputs that have at least an amount of native tokens.
+     * @param filterOptions.maxNativeTokenCount Filter for outputs that have at the most an amount of native tokens.
      * @param filterOptions.senderBech32 Filter outputs by the sender.
      * @param filterOptions.tagHex Filter outputs by the tag in hex format.
      * @param filterOptions.createdBefore Filter for outputs that were created before the given time.
@@ -64,6 +67,9 @@ export declare class IndexerPluginClient {
         timelockedAfter?: number;
         timelockedBeforeMilestone?: number;
         timelockedAfterMilestone?: number;
+        hasNativeTokens?: boolean;
+        minNativeTokenCount?: number;
+        maxNativeTokenCount?: number;
         senderBech32?: string;
         tagHex?: string;
         createdBefore?: number;
@@ -76,6 +82,9 @@ export declare class IndexerPluginClient {
      * @param filterOptions The options for filtering.
      * @param filterOptions.stateControllerBech32 Filter for a certain state controller address.
      * @param filterOptions.governorBech32 Filter for a certain governance controller address.
+     * @param filterOptions.hasNativeTokens Filter for outputs having native tokens.
+     * @param filterOptions.minNativeTokenCount Filter for outputs that have at least an amount of native tokens.
+     * @param filterOptions.maxNativeTokenCount Filter for outputs that have at the most an amount of native tokens.
      * @param filterOptions.issuerBech32 Filter for a certain issuer.
      * @param filterOptions.senderBech32 Filter outputs by the sender.
      * @param filterOptions.createdBefore Filter for outputs that were created before the given time.
@@ -89,6 +98,9 @@ export declare class IndexerPluginClient {
         governorBech32?: boolean;
         issuerBech32?: string;
         senderBech32?: string;
+        hasNativeTokens?: boolean;
+        minNativeTokenCount?: number;
+        maxNativeTokenCount?: number;
         createdBefore?: number;
         createdAfter?: number;
         pageSize?: number;
@@ -119,6 +131,9 @@ export declare class IndexerPluginClient {
      * milestone index.
      * @param filterOptions.timelockedAfterMilestone Filter for outputs that are timelocked after a certain
      * milestone index.
+     * @param filterOptions.hasNativeTokens Filter for outputs having native tokens.
+     * @param filterOptions.minNativeTokenCount Filter for outputs that have at least an amount of native tokens.
+     * @param filterOptions.maxNativeTokenCount Filter for outputs that have at the most an amount of native tokens.
      * @param filterOptions.issuerBech32 Filter outputs by the issuer.
      * @param filterOptions.senderBech32 Filter outputs by the sender.
      * @param filterOptions.tagHex Filter outputs by the tag in hex format.
@@ -143,6 +158,9 @@ export declare class IndexerPluginClient {
         timelockedAfter?: number;
         timelockedBeforeMilestone?: number;
         timelockedAfterMilestone?: number;
+        hasNativeTokens?: boolean;
+        minNativeTokenCount?: number;
+        maxNativeTokenCount?: number;
         issuerBech32?: string;
         senderBech32?: string;
         tagHex?: string;
@@ -160,7 +178,10 @@ export declare class IndexerPluginClient {
     /**
      * Find foundries using filter options.
      * @param filterOptions The options for filtering.
-     * @param filterOptions.addressBech32 Filter outputs that are unlockable by the address.
+     * @param filterOptions.aliasAddressBech32 Filter outputs that are unlockable by the address.
+     * @param filterOptions.hasNativeTokens Filter for outputs having native tokens.
+     * @param filterOptions.minNativeTokenCount Filter for outputs that have at least an amount of native tokens.
+     * @param filterOptions.maxNativeTokenCount Filter for outputs that have at the most an amount of native tokens.
      * @param filterOptions.createdBefore Filter for outputs that were created before the given time.
      * @param filterOptions.createdAfter Filter for outputs that were created after the given time.
      * @param filterOptions.pageSize Set the page size for the response.
@@ -168,7 +189,10 @@ export declare class IndexerPluginClient {
      * @returns The outputs with the requested filters.
      */
     foundries(filterOptions?: {
-        addressBech32?: string;
+        aliasAddressBech32?: string;
+        hasNativeTokens?: boolean;
+        minNativeTokenCount?: number;
+        maxNativeTokenCount?: number;
         createdBefore?: number;
         createdAfter?: number;
         pageSize?: number;

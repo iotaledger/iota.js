@@ -3107,6 +3107,9 @@
          * milestone index.
          * @param filterOptions.timelockedAfterMilestone Filter for outputs that are timelocked after a certain
          * milestone index.
+         * @param filterOptions.hasNativeTokens Filter for outputs having native tokens.
+         * @param filterOptions.minNativeTokenCount Filter for outputs that have at least an amount of native tokens.
+         * @param filterOptions.maxNativeTokenCount Filter for outputs that have at the most an amount of native tokens.
          * @param filterOptions.senderBech32 Filter outputs by the sender.
          * @param filterOptions.tagHex Filter outputs by the tag in hex format.
          * @param filterOptions.createdBefore Filter for outputs that were created before the given time.
@@ -3154,11 +3157,26 @@
                 if (filterOptions.timelockedAfter !== undefined) {
                     queryParams.push(`timelockedAfter=${filterOptions.timelockedAfter}`);
                 }
+                if (filterOptions.timelockedBefore !== undefined) {
+                    queryParams.push(`timelockedBefore=${filterOptions.timelockedBefore}`);
+                }
+                if (filterOptions.timelockedAfter !== undefined) {
+                    queryParams.push(`timelockedAfter=${filterOptions.timelockedAfter}`);
+                }
                 if (filterOptions.timelockedBeforeMilestone !== undefined) {
                     queryParams.push(`timelockedBeforeMilestone=${filterOptions.timelockedBeforeMilestone}`);
                 }
                 if (filterOptions.timelockedAfterMilestone !== undefined) {
                     queryParams.push(`timelockedAfterMilestone=${filterOptions.timelockedAfterMilestone}`);
+                }
+                if (filterOptions.hasNativeTokens !== undefined) {
+                    queryParams.push(`hasNativeTokens=${filterOptions.hasNativeTokens}`);
+                }
+                if (filterOptions.minNativeTokenCount !== undefined) {
+                    queryParams.push(`minNativeTokenCount=${filterOptions.minNativeTokenCount}`);
+                }
+                if (filterOptions.maxNativeTokenCount !== undefined) {
+                    queryParams.push(`maxNativeTokenCount=${filterOptions.maxNativeTokenCount}`);
                 }
                 if (filterOptions.senderBech32 !== undefined) {
                     queryParams.push(`sender=${filterOptions.senderBech32}`);
@@ -3186,6 +3204,9 @@
          * @param filterOptions The options for filtering.
          * @param filterOptions.stateControllerBech32 Filter for a certain state controller address.
          * @param filterOptions.governorBech32 Filter for a certain governance controller address.
+         * @param filterOptions.hasNativeTokens Filter for outputs having native tokens.
+         * @param filterOptions.minNativeTokenCount Filter for outputs that have at least an amount of native tokens.
+         * @param filterOptions.maxNativeTokenCount Filter for outputs that have at the most an amount of native tokens.
          * @param filterOptions.issuerBech32 Filter for a certain issuer.
          * @param filterOptions.senderBech32 Filter outputs by the sender.
          * @param filterOptions.createdBefore Filter for outputs that were created before the given time.
@@ -3202,6 +3223,15 @@
                 }
                 if (filterOptions.governorBech32 !== undefined) {
                     queryParams.push(`governor=${filterOptions.governorBech32}`);
+                }
+                if (filterOptions.hasNativeTokens !== undefined) {
+                    queryParams.push(`hasNativeTokens=${filterOptions.hasNativeTokens}`);
+                }
+                if (filterOptions.minNativeTokenCount !== undefined) {
+                    queryParams.push(`minNativeTokenCount=${filterOptions.minNativeTokenCount}`);
+                }
+                if (filterOptions.maxNativeTokenCount !== undefined) {
+                    queryParams.push(`maxNativeTokenCount=${filterOptions.maxNativeTokenCount}`);
                 }
                 if (filterOptions.issuerBech32 !== undefined) {
                     queryParams.push(`issuer=${filterOptions.issuerBech32}`);
@@ -3254,6 +3284,9 @@
          * milestone index.
          * @param filterOptions.timelockedAfterMilestone Filter for outputs that are timelocked after a certain
          * milestone index.
+         * @param filterOptions.hasNativeTokens Filter for outputs having native tokens.
+         * @param filterOptions.minNativeTokenCount Filter for outputs that have at least an amount of native tokens.
+         * @param filterOptions.maxNativeTokenCount Filter for outputs that have at the most an amount of native tokens.
          * @param filterOptions.issuerBech32 Filter outputs by the issuer.
          * @param filterOptions.senderBech32 Filter outputs by the sender.
          * @param filterOptions.tagHex Filter outputs by the tag in hex format.
@@ -3308,6 +3341,15 @@
                 if (filterOptions.timelockedAfterMilestone !== undefined) {
                     queryParams.push(`timelockedAfterMilestone=${filterOptions.timelockedAfterMilestone}`);
                 }
+                if (filterOptions.hasNativeTokens !== undefined) {
+                    queryParams.push(`hasNativeTokens=${filterOptions.hasNativeTokens}`);
+                }
+                if (filterOptions.minNativeTokenCount !== undefined) {
+                    queryParams.push(`minNativeTokenCount=${filterOptions.minNativeTokenCount}`);
+                }
+                if (filterOptions.maxNativeTokenCount !== undefined) {
+                    queryParams.push(`maxNativeTokenCount=${filterOptions.maxNativeTokenCount}`);
+                }
                 if (filterOptions.issuerBech32 !== undefined) {
                     queryParams.push(`issuer=${filterOptions.issuerBech32}`);
                 }
@@ -3346,7 +3388,10 @@
         /**
          * Find foundries using filter options.
          * @param filterOptions The options for filtering.
-         * @param filterOptions.addressBech32 Filter outputs that are unlockable by the address.
+         * @param filterOptions.aliasAddressBech32 Filter outputs that are unlockable by the address.
+         * @param filterOptions.hasNativeTokens Filter for outputs having native tokens.
+         * @param filterOptions.minNativeTokenCount Filter for outputs that have at least an amount of native tokens.
+         * @param filterOptions.maxNativeTokenCount Filter for outputs that have at the most an amount of native tokens.
          * @param filterOptions.createdBefore Filter for outputs that were created before the given time.
          * @param filterOptions.createdAfter Filter for outputs that were created after the given time.
          * @param filterOptions.pageSize Set the page size for the response.
@@ -3356,8 +3401,17 @@
         async foundries(filterOptions) {
             const queryParams = [];
             if (filterOptions) {
-                if (filterOptions.addressBech32 !== undefined) {
-                    queryParams.push(`address=${filterOptions.addressBech32}`);
+                if (filterOptions.aliasAddressBech32 !== undefined) {
+                    queryParams.push(`aliasAddress=${filterOptions.aliasAddressBech32}`);
+                }
+                if (filterOptions.hasNativeTokens !== undefined) {
+                    queryParams.push(`hasNativeTokens=${filterOptions.hasNativeTokens}`);
+                }
+                if (filterOptions.minNativeTokenCount !== undefined) {
+                    queryParams.push(`minNativeTokenCount=${filterOptions.minNativeTokenCount}`);
+                }
+                if (filterOptions.maxNativeTokenCount !== undefined) {
+                    queryParams.push(`maxNativeTokenCount=${filterOptions.maxNativeTokenCount}`);
                 }
                 if (filterOptions.createdBefore !== undefined) {
                     queryParams.push(`createdBefore=${filterOptions.createdBefore}`);
