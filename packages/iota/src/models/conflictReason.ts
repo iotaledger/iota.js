@@ -37,9 +37,9 @@ export enum ConflictReason {
     invalidSignature = 5,
 
     /**
-     * The dust allowance for the address is invalid.
+     * The networkId in the essence does not match the nodes configuration.
      */
-    invalidDustAllowance = 6,
+    invalidNetworkId = 6,
 
     /**
      * The semantic validation failed.

@@ -12,7 +12,7 @@ Reason for message conflicts.
 - [inputUTXONotFound](ConflictReason.md#inpututxonotfound)
 - [inputOutputSumMismatch](ConflictReason.md#inputoutputsummismatch)
 - [invalidSignature](ConflictReason.md#invalidsignature)
-- [invalidDustAllowance](ConflictReason.md#invaliddustallowance)
+- [invalidNetworkId](ConflictReason.md#invalidnetworkid)
 - [semanticValidationFailed](ConflictReason.md#semanticvalidationfailed)
 
 ## Enumeration members
@@ -65,11 +65,11 @@ The unlock block signature is invalid.
 
 ___
 
-### invalidDustAllowance
+### invalidNetworkId
 
-• **invalidDustAllowance** = `6`
+• **invalidNetworkId** = `6`
 
-The dust allowance for the address is invalid.
+The networkId in the essence does not match the nodes configuration.
 
 ___
 

@@ -11,6 +11,6 @@ export const CONFLICT_REASON_STRINGS = {
     [ConflictReason.inputUTXONotFound]: "The referenced UTXO cannot be found",
     [ConflictReason.inputOutputSumMismatch]: "The sum of the inputs and output values does not match",
     [ConflictReason.invalidSignature]: "The unlock block signature is invalid",
-    [ConflictReason.invalidDustAllowance]: "The dust allowance for the address is invalid",
+    [ConflictReason.invalidNetworkId]: "The networkId in the essence does not match the nodes configuration",
     [ConflictReason.semanticValidationFailed]: "The semantic validation failed"
 };

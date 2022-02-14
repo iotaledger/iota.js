@@ -31,9 +31,9 @@ export var ConflictReason;
      */
     ConflictReason[ConflictReason["invalidSignature"] = 5] = "invalidSignature";
     /**
-     * The dust allowance for the address is invalid.
+     * The networkId in the essence does not match the nodes configuration.
      */
-    ConflictReason[ConflictReason["invalidDustAllowance"] = 6] = "invalidDustAllowance";
+    ConflictReason[ConflictReason["invalidNetworkId"] = 6] = "invalidNetworkId";
     /**
      * The semantic validation failed.
      */

@@ -4226,9 +4226,9 @@
          */
         ConflictReason[ConflictReason["invalidSignature"] = 5] = "invalidSignature";
         /**
-         * The dust allowance for the address is invalid.
+         * The networkId in the essence does not match the nodes configuration.
          */
-        ConflictReason[ConflictReason["invalidDustAllowance"] = 6] = "invalidDustAllowance";
+        ConflictReason[ConflictReason["invalidNetworkId"] = 6] = "invalidNetworkId";
         /**
          * The semantic validation failed.
          */
@@ -4359,7 +4359,7 @@
         [exports.ConflictReason.inputUTXONotFound]: "The referenced UTXO cannot be found",
         [exports.ConflictReason.inputOutputSumMismatch]: "The sum of the inputs and output values does not match",
         [exports.ConflictReason.invalidSignature]: "The unlock block signature is invalid",
-        [exports.ConflictReason.invalidDustAllowance]: "The dust allowance for the address is invalid",
+        [exports.ConflictReason.invalidNetworkId]: "The networkId in the essence does not match the nodes configuration",
         [exports.ConflictReason.semanticValidationFailed]: "The semantic validation failed"
     };
 
