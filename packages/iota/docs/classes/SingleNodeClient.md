@@ -33,9 +33,7 @@ Client for API communication.
 - [peerAdd](SingleNodeClient.md#peeradd)
 - [peerDelete](SingleNodeClient.md#peerdelete)
 - [peer](SingleNodeClient.md#peer)
-- [bech32Hrp](SingleNodeClient.md#bech32hrp)
-- [networkName](SingleNodeClient.md#networkname)
-- [networkId](SingleNodeClient.md#networkid)
+- [protocolInfo](SingleNodeClient.md#protocolinfo)
 - [pluginFetch](SingleNodeClient.md#pluginfetch)
 
 ## Constructors
@@ -482,49 +480,21 @@ The details for the created peer.
 
 ___
 
-### bech32Hrp
+### protocolInfo
 
-▸ **bech32Hrp**(): `Promise`<`string`\>
+▸ **protocolInfo**(): `Promise`<{}\>
 
-Get the bech 32 human readable part.
+Get the protocol info from the node.
 
 #### Returns
 
-`Promise`<`string`\>
+`Promise`<{}\>
 
-The bech 32 human readable part.
+The protocol info.
 
 #### Implementation of
 
-[IClient](../interfaces/IClient.md).[bech32Hrp](../interfaces/IClient.md#bech32hrp)
-
-___
-
-### networkName
-
-▸ **networkName**(): `Promise`<`string`\>
-
-Get the network name.
-
-#### Returns
-
-`Promise`<`string`\>
-
-The network name.
-
-___
-
-### networkId
-
-▸ **networkId**(): `Promise`<`Uint8Array`\>
-
-Get the network id.
-
-#### Returns
-
-`Promise`<`Uint8Array`\>
-
-The network id as the blake256 bytes.
+[IClient](../interfaces/IClient.md).[protocolInfo](../interfaces/IClient.md#protocolinfo)
 
 ___
 

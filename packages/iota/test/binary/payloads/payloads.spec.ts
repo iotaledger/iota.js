@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 import { ReadStream } from "@iota/util.js";
 import { deserializePayload } from "../../../src/binary/payloads/payloads";
+import type { IEd25519Address } from "../../../src/models/addresses/IEd25519Address";
 import type { IMilestonePayload } from "../../../src/models/payloads/IMilestonePayload";
 import type { IReceiptPayload } from "../../../src/models/payloads/IReceiptPayload";
 import type { ITaggedDataPayload } from "../../../src/models/payloads/ITaggedDataPayload";
@@ -141,7 +142,7 @@ describe("Binary Payload", () => {
         expect(payload.funds.length).toEqual(1);
         expect(payload.funds[0].tailTransactionHash).toEqual("a".repeat(98));
         expect(payload.funds[0].address.type).toEqual(0);
-        expect(payload.funds[0].address.address).toEqual("b".repeat(64));
+        expect((payload.funds[0].address as IEd25519Address).pubKeyHash).toEqual("b".repeat(64));
         expect(payload.funds[0].deposit).toEqual(100);
         expect(payload.transaction.type).toEqual(4);
         expect(payload.transaction.input.type).toEqual(1);

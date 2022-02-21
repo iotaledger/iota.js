@@ -21,10 +21,10 @@ export function deserializeAliasAddress(readStream) {
     if (type !== ALIAS_ADDRESS_TYPE) {
         throw new Error(`Type mismatch in aliasAddress ${type}`);
     }
-    const address = readStream.readFixedHex("aliasAddress.address", ALIAS_ADDRESS_LENGTH);
+    const address = readStream.readFixedHex("aliasAddress.aliasId", ALIAS_ADDRESS_LENGTH);
     return {
         type: ALIAS_ADDRESS_TYPE,
-        address
+        aliasId: address
     };
 }
 /**
@@ -34,5 +34,5 @@ export function deserializeAliasAddress(readStream) {
  */
 export function serializeAliasAddress(writeStream, object) {
     writeStream.writeUInt8("aliasAddress.type", object.type);
-    writeStream.writeFixedHex("aliasAddress.address", ALIAS_ADDRESS_LENGTH, object.address);
+    writeStream.writeFixedHex("aliasAddress.aliasId", ALIAS_ADDRESS_LENGTH, object.aliasId);
 }

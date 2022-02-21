@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 import { Converter, ReadStream, WriteStream } from "@iota/util.js";
 import { deserializeAliasOutput, serializeAliasOutput } from "../../../src/binary/outputs/aliasOutput";
-import { ED25519_ADDRESS_TYPE } from "../../../src/models/addresses/IEd25519Address";
+import { ED25519_ADDRESS_TYPE, IEd25519Address } from "../../../src/models/addresses/IEd25519Address";
 import { ALIAS_OUTPUT_TYPE, IAliasOutput } from "../../../src/models/outputs/IAliasOutput";
 import { GOVERNOR_ADDRESS_UNLOCK_CONDITION_TYPE, IGovernorAddressUnlockCondition } from "../../../src/models/unlockConditions/IGovernorAddressUnlockCondition";
 import { IStateControllerAddressUnlockCondition, STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE } from "../../../src/models/unlockConditions/IStateControllerAddressUnlockCondition";
@@ -32,14 +32,14 @@ describe("Binary Alias Output", () => {
                     type: STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE,
                     address: {
                         type: ED25519_ADDRESS_TYPE,
-                        address: "6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5faaa2"
+                        pubKeyHash: "6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5faaa2"
                     }
                 },
                 {
                     type: GOVERNOR_ADDRESS_UNLOCK_CONDITION_TYPE,
                     address: {
                         type: ED25519_ADDRESS_TYPE,
-                        address: "6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
+                        pubKeyHash: "6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
                     }
                 }
             ],
@@ -70,13 +70,13 @@ describe("Binary Alias Output", () => {
         const stateControllerUnlockCondition =
             deserialized.unlockConditions[0] as IStateControllerAddressUnlockCondition;
         expect(stateControllerUnlockCondition.address.type).toEqual(0);
-        expect(stateControllerUnlockCondition.address.address).toEqual(
+        expect((stateControllerUnlockCondition.address as IEd25519Address).pubKeyHash).toEqual(
             "6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5faaa2"
         );
         expect(deserialized.unlockConditions[1].type).toEqual(5);
         const governorUnlockCondition = deserialized.unlockConditions[1] as IGovernorAddressUnlockCondition;
         expect(governorUnlockCondition.address.type).toEqual(0);
-        expect(governorUnlockCondition.address.address).toEqual(
+        expect((governorUnlockCondition.address as IEd25519Address).pubKeyHash).toEqual(
             "6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
         );
     });

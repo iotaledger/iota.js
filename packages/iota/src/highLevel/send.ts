@@ -126,9 +126,10 @@ export async function sendMultiple(
 }> {
     const localClient = typeof client === "string" ? new SingleNodeClient(client) : client;
 
-    const bech32Hrp = await localClient.bech32Hrp();
+    const protocolInfo = await localClient.protocolInfo();
+
     const hexOutputs = outputs.map(output => {
-        const bech32Details = Bech32Helper.fromBech32(output.addressBech32, bech32Hrp);
+        const bech32Details = Bech32Helper.fromBech32(output.addressBech32, protocolInfo.bech32HRP);
         if (!bech32Details) {
             throw new Error("Unable to decode bech32 address");
         }
@@ -277,7 +278,7 @@ export async function calculateInputs<T>(
 > {
     const localClient = typeof client === "string" ? new SingleNodeClient(client) : client;
 
-    const bech32Hrp = await localClient.bech32Hrp();
+    const protocolInfo = await localClient.protocolInfo();
 
     let requiredBalance = 0;
     for (const output of outputs) {
@@ -303,7 +304,7 @@ export async function calculateInputs<T>(
 
         const indexerPlugin = new IndexerPluginClient(client);
         const addressOutputIds = await indexerPlugin.outputs(
-            { addressBech32: Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, addressBytes, bech32Hrp) });
+            { addressBech32: Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, addressBytes, protocolInfo.bech32HRP) });
 
         if (addressOutputIds.items.length === 0) {
             zeroBalance++;
@@ -344,10 +345,11 @@ export async function calculateInputs<T>(
                                 const addressUnlockCondition = addressOutput.output.unlockConditions
                                     .find(u => u.type === ADDRESS_UNLOCK_CONDITION_TYPE);
                                 if (addressUnlockCondition &&
-                                    addressUnlockCondition.type === ADDRESS_UNLOCK_CONDITION_TYPE) {
+                                    addressUnlockCondition.type === ADDRESS_UNLOCK_CONDITION_TYPE &&
+                                    addressUnlockCondition.address.type === ED25519_ADDRESS_TYPE) {
                                     outputs.push({
                                         amount: consumedBalance - requiredBalance,
-                                        address: addressUnlockCondition.address.address,
+                                        address: addressUnlockCondition.address.pubKeyHash,
                                         addressType: addressUnlockCondition.address.type
                                     });
                                 }

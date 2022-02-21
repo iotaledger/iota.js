@@ -1,7 +1,6 @@
 export * from "./addressTypes/ed25519Address";
 export * from "./binary/addresses/addresses";
 export * from "./binary/addresses/aliasAddress";
-export * from "./binary/addresses/blsAddress";
 export * from "./binary/addresses/ed25519Address";
 export * from "./binary/addresses/nftAddress";
 export * from "./binary/commonDataTypes";
@@ -58,7 +57,6 @@ export * from "./highLevel/sendAdvanced";
 export * from "./highLevel/sendData";
 export * from "./models/addresses/addressTypes";
 export * from "./models/addresses/IAliasAddress";
-export * from "./models/addresses/IBlsAddress";
 export * from "./models/addresses/IEd25519Address";
 export * from "./models/addresses/INftAddress";
 export * from "./models/api/IChildrenResponse";

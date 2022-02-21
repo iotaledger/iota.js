@@ -146,10 +146,30 @@ export interface IClient {
     peer(peerId: string): Promise<IPeer>;
 
     /**
-     * Get the bech 32 human readable part.
-     * @returns The bech 32 human readable part.
+     * Get the protocol info from the node.
+     * @returns The protocol info.
      */
-    bech32Hrp(): Promise<string>;
+    protocolInfo(): Promise<{
+        /**
+         * The human friendly name of the network on which the node operates on.
+         */
+        networkName: string;
+
+        /**
+         * The network id as a string encoded 64 bit number.
+         */
+        networkId: string;
+
+        /**
+         * The human readable part of bech32 addresses.
+         */
+        bech32HRP: string;
+
+        /**
+         * The minimum score required for PoW.
+         */
+        minPoWScore: number;
+    }>;
 
     /**
      * Extension method which provides request methods for plugins.

@@ -28,7 +28,7 @@ export function deserializeTransactionEssence(readStream) {
     if (type !== TRANSACTION_ESSENCE_TYPE) {
         throw new Error(`Type mismatch in transactionEssence ${type}`);
     }
-    const networkId = readStream.readUInt64("message.networkId");
+    const networkId = readStream.readUInt64("transactionEssence.networkId");
     const inputs = deserializeInputs(readStream);
     const inputsCommitment = readStream.readFixedHex("transactionEssence.inputsCommitment", INPUTS_COMMITMENT_SIZE);
     const outputs = deserializeOutputs(readStream);
@@ -58,7 +58,7 @@ export function deserializeTransactionEssence(readStream) {
 export function serializeTransactionEssence(writeStream, object) {
     var _a;
     writeStream.writeUInt8("transactionEssence.type", object.type);
-    writeStream.writeUInt64("message.networkId", bigInt((_a = object.networkId) !== null && _a !== void 0 ? _a : "0"));
+    writeStream.writeUInt64("transactionEssence.networkId", bigInt((_a = object.networkId) !== null && _a !== void 0 ? _a : "0"));
     for (const input of object.inputs) {
         if (input.type !== UTXO_INPUT_TYPE) {
             throw new Error("Transaction essence can only contain UTXO Inputs");

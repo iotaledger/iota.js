@@ -27,11 +27,11 @@ export function deserializeEd25519Address(readStream: ReadStream): IEd25519Addre
         throw new Error(`Type mismatch in ed25519Address ${type}`);
     }
 
-    const address = readStream.readFixedHex("ed25519Address.address", Ed25519Address.ADDRESS_LENGTH);
+    const address = readStream.readFixedHex("ed25519Address.pubKeyHash", Ed25519Address.ADDRESS_LENGTH);
 
     return {
         type: ED25519_ADDRESS_TYPE,
-        address
+        pubKeyHash: address
     };
 }
 
@@ -42,5 +42,5 @@ export function deserializeEd25519Address(readStream: ReadStream): IEd25519Addre
  */
 export function serializeEd25519Address(writeStream: WriteStream, object: IEd25519Address): void {
     writeStream.writeUInt8("ed25519Address.type", object.type);
-    writeStream.writeFixedHex("ed25519Address.address", Ed25519Address.ADDRESS_LENGTH, object.address);
+    writeStream.writeFixedHex("ed25519Address.pubKeyHash", Ed25519Address.ADDRESS_LENGTH, object.pubKeyHash);
 }

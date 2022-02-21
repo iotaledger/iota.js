@@ -14,8 +14,6 @@ Type of the object.
 
   ↳ [`IAliasAddress`](IAliasAddress.md)
 
-  ↳ [`IBlsAddress`](IBlsAddress.md)
-
   ↳ [`IEd25519Address`](IEd25519Address.md)
 
   ↳ [`INftAddress`](INftAddress.md)

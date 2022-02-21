@@ -236,37 +236,15 @@ export class SingleNodeClient {
         return this.fetchJson(this._basePath, "get", `peers/${peerId}`);
     }
     /**
-     * Get the bech 32 human readable part.
-     * @returns The bech 32 human readable part.
+     * Get the protocol info from the node.
+     * @returns The protocol info.
      */
-    async bech32Hrp() {
-        var _a, _b;
+    async protocolInfo() {
         if (this._protocol === undefined) {
             await this.populateProtocolInfoCache();
         }
-        return (_b = (_a = this._protocol) === null || _a === void 0 ? void 0 : _a.bech32HRP) !== null && _b !== void 0 ? _b : "";
-    }
-    /**
-     * Get the network name.
-     * @returns The network name.
-     */
-    async networkName() {
-        var _a, _b;
-        if (this._protocol === undefined) {
-            await this.populateProtocolInfoCache();
-        }
-        return (_b = (_a = this._protocol) === null || _a === void 0 ? void 0 : _a.networkName) !== null && _b !== void 0 ? _b : "";
-    }
-    /**
-     * Get the network id.
-     * @returns The network id as the blake256 bytes.
-     */
-    async networkId() {
-        var _a, _b;
-        if (this._protocol === undefined) {
-            await this.populateProtocolInfoCache();
-        }
-        return Blake2b.sum256(Converter.utf8ToBytes((_b = (_a = this._protocol) === null || _a === void 0 ? void 0 : _a.networkName) !== null && _b !== void 0 ? _b : ""));
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        return this._protocol;
     }
     /**
      * Extension method which provides request methods for plugins.
@@ -297,7 +275,13 @@ export class SingleNodeClient {
     async populateProtocolInfoCache() {
         if (this._protocol === undefined) {
             const info = await this.info();
-            this._protocol = info.protocol;
+            const networkIdBytes = Blake2b.sum256(Converter.utf8ToBytes(info.protocol.networkName));
+            this._protocol = {
+                networkName: info.protocol.networkName,
+                networkId: BigIntHelper.read8(networkIdBytes, 0).toString(),
+                bech32HRP: info.protocol.bech32HRP,
+                minPoWScore: info.protocol.minPoWScore
+            };
         }
     }
     /**

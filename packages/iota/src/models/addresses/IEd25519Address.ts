@@ -12,7 +12,7 @@ export const ED25519_ADDRESS_TYPE = 0;
  */
 export interface IEd25519Address extends ITypeBase<0> {
     /**
-     * The address.
+     * The public key hash.
      */
-    address: string;
+    pubKeyHash: string;
 }

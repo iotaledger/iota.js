@@ -8,7 +8,7 @@ describe("Binary Alias Address", () => {
     test("Can serialize and deserialize alias address", () => {
         const object: IAliasAddress = {
             type: ALIAS_ADDRESS_TYPE,
-            address: "6920b176f613ec7be59e68fc68f597eb3393af80"
+            aliasId: "6920b176f613ec7be59e68fc68f597eb3393af80"
         };
 
         const serialized = new WriteStream();
@@ -17,6 +17,6 @@ describe("Binary Alias Address", () => {
         expect(hex).toEqual("086920b176f613ec7be59e68fc68f597eb3393af80");
         const deserialized = deserializeAliasAddress(new ReadStream(Converter.hexToBytes(hex)));
         expect(deserialized.type).toEqual(8);
-        expect(deserialized.address).toEqual("6920b176f613ec7be59e68fc68f597eb3393af80");
+        expect(deserialized.aliasId).toEqual("6920b176f613ec7be59e68fc68f597eb3393af80");
     });
 });

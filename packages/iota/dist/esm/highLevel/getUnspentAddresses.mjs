@@ -42,7 +42,7 @@ export async function getUnspentAddresses(client, seed, accountIndex, addressOpt
 export async function getUnspentAddressesWithAddressGenerator(client, seed, initialAddressState, nextAddressPath, addressOptions) {
     var _a, _b;
     const localClient = typeof client === "string" ? new SingleNodeClient(client) : client;
-    const bech32Hrp = await localClient.bech32Hrp();
+    const protocolInfo = await localClient.protocolInfo();
     const localRequiredLimit = (_a = addressOptions === null || addressOptions === void 0 ? void 0 : addressOptions.requiredCount) !== null && _a !== void 0 ? _a : Number.MAX_SAFE_INTEGER;
     const localZeroCount = (_b = addressOptions === null || addressOptions === void 0 ? void 0 : addressOptions.zeroCount) !== null && _b !== void 0 ? _b : 20;
     let finished = false;
@@ -53,7 +53,7 @@ export async function getUnspentAddressesWithAddressGenerator(client, seed, init
         const addressSeed = seed.generateSeedFromPath(new Bip32Path(path));
         const ed25519Address = new Ed25519Address(addressSeed.keyPair().publicKey);
         const addressBytes = ed25519Address.toAddress();
-        const addressBech32 = Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, addressBytes, bech32Hrp);
+        const addressBech32 = Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, addressBytes, protocolInfo.bech32HRP);
         const balance = await calculateAddressBalance(localClient, addressBech32);
         // If there is no balance we increment the counter and end
         // the text when we have reached the count

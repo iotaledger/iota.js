@@ -13,7 +13,7 @@ NFT address.
 ### Properties
 
 - [type](INftAddress.md#type)
-- [address](INftAddress.md#address)
+- [nftId](INftAddress.md#nftid)
 
 ## Properties
 
@@ -29,8 +29,8 @@ The type of the object.
 
 ___
 
-### address
+### nftId
 
-• **address**: `string`
+• **nftId**: `string`
 
-The address.
+The NFT Id.

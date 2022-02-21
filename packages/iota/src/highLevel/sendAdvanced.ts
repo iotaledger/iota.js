@@ -55,6 +55,9 @@ export async function sendAdvanced(
 
     const transactionPayload = buildTransactionPayload(inputsAndSignatureKeyPairs, outputs, taggedData);
 
+    const protocolInfo = await localClient.protocolInfo();
+    transactionPayload.essence.networkId = protocolInfo.networkId;
+
     const message: IMessage = {
         payload: transactionPayload
     };
@@ -137,7 +140,7 @@ export function buildTransactionPayload(
                         type: ADDRESS_UNLOCK_CONDITION_TYPE,
                         address: {
                             type: output.addressType,
-                            address: output.address
+                            pubKeyHash: output.address
                         }
                     }
                 ],

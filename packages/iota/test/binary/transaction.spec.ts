@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 import { Converter, ReadStream, WriteStream } from "@iota/util.js";
 import { deserializeTransactionEssence, serializeTransactionEssence } from "../../src/binary/transactionEssence";
-import { ED25519_ADDRESS_TYPE } from "../../src/models/addresses/IEd25519Address";
+import { ED25519_ADDRESS_TYPE, IEd25519Address } from "../../src/models/addresses/IEd25519Address";
 import { UTXO_INPUT_TYPE } from "../../src/models/inputs/IUTXOInput";
 import { ITransactionEssence, TRANSACTION_ESSENCE_TYPE } from "../../src/models/ITransactionEssence";
 import { BASIC_OUTPUT_TYPE, IBasicOutput } from "../../src/models/outputs/IBasicOutput";
@@ -32,7 +32,7 @@ describe("Binary Transaction", () => {
                             type: ADDRESS_UNLOCK_CONDITION_TYPE,
                             address: {
                                 type: ED25519_ADDRESS_TYPE,
-                                address: "b".repeat(64)
+                                pubKeyHash: "b".repeat(64)
                             }
                         }
                     ],
@@ -62,7 +62,7 @@ describe("Binary Transaction", () => {
         expect(basicOutput.unlockConditions.length).toEqual(1);
         const unlockCondition = basicOutput.unlockConditions[0] as IAddressUnlockCondition;
         expect(unlockCondition.address.type).toEqual(0);
-        expect(unlockCondition.address.address).toEqual("b".repeat(64));
+        expect((unlockCondition.address as IEd25519Address).pubKeyHash).toEqual("b".repeat(64));
         expect(basicOutput.amount).toEqual(100);
         expect(deserialized.payload).toBeUndefined();
     });
@@ -89,7 +89,7 @@ describe("Binary Transaction", () => {
                             type: ADDRESS_UNLOCK_CONDITION_TYPE,
                             address: {
                                 type: ED25519_ADDRESS_TYPE,
-                                address: "b".repeat(64)
+                                pubKeyHash: "b".repeat(64)
                             }
                         }
                     ],
@@ -124,7 +124,7 @@ describe("Binary Transaction", () => {
         expect(basicOutput.unlockConditions.length).toEqual(1);
         const unlockCondition = basicOutput.unlockConditions[0] as IAddressUnlockCondition;
         expect(unlockCondition.address.type).toEqual(0);
-        expect(unlockCondition.address.address).toEqual("b".repeat(64));
+        expect((unlockCondition.address as IEd25519Address).pubKeyHash).toEqual("b".repeat(64));
         expect(basicOutput.amount).toEqual(100);
         expect(deserialized.payload).toBeDefined();
         if (deserialized.payload) {

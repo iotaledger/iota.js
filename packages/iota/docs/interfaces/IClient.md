@@ -29,7 +29,7 @@ Client interface definition for API communication.
 - [peerAdd](IClient.md#peeradd)
 - [peerDelete](IClient.md#peerdelete)
 - [peer](IClient.md#peer)
-- [bech32Hrp](IClient.md#bech32hrp)
+- [protocolInfo](IClient.md#protocolinfo)
 - [pluginFetch](IClient.md#pluginfetch)
 
 ## Methods
@@ -385,17 +385,17 @@ The details for the created peer.
 
 ___
 
-### bech32Hrp
+### protocolInfo
 
-▸ **bech32Hrp**(): `Promise`<`string`\>
+▸ **protocolInfo**(): `Promise`<{ `networkName`: `string` ; `networkId`: `string` ; `bech32HRP`: `string` ; `minPoWScore`: `number`  }\>
 
-Get the bech 32 human readable part.
+Get the protocol info from the node.
 
 #### Returns
 
-`Promise`<`string`\>
+`Promise`<{ `networkName`: `string` ; `networkId`: `string` ; `bech32HRP`: `string` ; `minPoWScore`: `number`  }\>
 
-The bech 32 human readable part.
+The protocol info.
 
 ___
 

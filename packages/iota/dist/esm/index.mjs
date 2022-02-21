@@ -3,7 +3,6 @@
 export * from "./addressTypes/ed25519Address.mjs";
 export * from "./binary/addresses/addresses.mjs";
 export * from "./binary/addresses/aliasAddress.mjs";
-export * from "./binary/addresses/blsAddress.mjs";
 export * from "./binary/addresses/ed25519Address.mjs";
 export * from "./binary/addresses/nftAddress.mjs";
 export * from "./binary/commonDataTypes.mjs";
@@ -60,7 +59,6 @@ export * from "./highLevel/sendAdvanced.mjs";
 export * from "./highLevel/sendData.mjs";
 export * from "./models/addresses/addressTypes.mjs";
 export * from "./models/addresses/IAliasAddress.mjs";
-export * from "./models/addresses/IBlsAddress.mjs";
 export * from "./models/addresses/IEd25519Address.mjs";
 export * from "./models/addresses/INftAddress.mjs";
 export * from "./models/api/IChildrenResponse.mjs";

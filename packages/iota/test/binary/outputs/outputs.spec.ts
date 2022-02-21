@@ -7,7 +7,7 @@ import {
     serializeOutput,
     serializeOutputs
 } from "../../../src/binary/outputs/outputs";
-import { ED25519_ADDRESS_TYPE } from "../../../src/models/addresses/IEd25519Address";
+import { ED25519_ADDRESS_TYPE, IEd25519Address } from "../../../src/models/addresses/IEd25519Address";
 import { BASIC_OUTPUT_TYPE, IBasicOutput } from "../../../src/models/outputs/IBasicOutput";
 import type { OutputTypes } from "../../../src/models/outputs/outputTypes";
 import { ADDRESS_UNLOCK_CONDITION_TYPE, IAddressUnlockCondition } from "../../../src/models/unlockConditions/IAddressUnlockCondition";
@@ -24,7 +24,7 @@ describe("Binary Outputs", () => {
                         type: ADDRESS_UNLOCK_CONDITION_TYPE,
                         address: {
                             type: ED25519_ADDRESS_TYPE,
-                            address: "6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
+                            pubKeyHash: "6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
                         }
                     }
                 ],
@@ -39,7 +39,7 @@ describe("Binary Outputs", () => {
                         type: ADDRESS_UNLOCK_CONDITION_TYPE,
                         address: {
                             type: ED25519_ADDRESS_TYPE,
-                            address: "4566920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1"
+                            pubKeyHash: "4566920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1"
                         }
                     }
                 ],
@@ -61,7 +61,7 @@ describe("Binary Outputs", () => {
         expect(out0.unlockConditions.length).toEqual(1);
         const unlockCondition0 = out0.unlockConditions[0] as IAddressUnlockCondition;
         expect(unlockCondition0.address.type).toEqual(0);
-        expect(unlockCondition0.address.address).toEqual("6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92");
+        expect((unlockCondition0.address as IEd25519Address).pubKeyHash).toEqual("6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92");
         expect(out0.amount).toEqual(123456);
 
         expect(deserialized[1].type).toEqual(3);
@@ -70,7 +70,7 @@ describe("Binary Outputs", () => {
         expect(out1.unlockConditions.length).toEqual(1);
         const unlockCondition1 = out1.unlockConditions[0] as IAddressUnlockCondition;
         expect(unlockCondition1.address.type).toEqual(0);
-        expect(unlockCondition1.address.address).toEqual("4566920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1");
+        expect((unlockCondition1.address as IEd25519Address).pubKeyHash).toEqual("4566920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1");
         expect(out1.amount).toEqual(987654);
     });
 
@@ -84,7 +84,7 @@ describe("Binary Outputs", () => {
                     type: ADDRESS_UNLOCK_CONDITION_TYPE,
                     address: {
                         type: ED25519_ADDRESS_TYPE,
-                        address: "6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
+                        pubKeyHash: "6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
                     }
                 }
             ],
@@ -102,7 +102,7 @@ describe("Binary Outputs", () => {
 
         expect(out0.unlockConditions.length).toEqual(1);
         const unlockCondition0 = out0.unlockConditions[0] as IAddressUnlockCondition;
-        expect(unlockCondition0.address.address).toEqual("6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92");
+        expect((unlockCondition0.address as IEd25519Address).pubKeyHash).toEqual("6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92");
         expect(deserialized.amount).toEqual(123456);
     });
 });

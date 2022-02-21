@@ -8,7 +8,7 @@ export declare const ALIAS_ADDRESS_TYPE = 8;
  */
 export interface IAliasAddress extends ITypeBase<8> {
     /**
-     * The address.
+     * The alias id.
      */
-    address: string;
+    aliasId: string;
 }

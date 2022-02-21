@@ -13,7 +13,7 @@ Alias address.
 ### Properties
 
 - [type](IAliasAddress.md#type)
-- [address](IAliasAddress.md#address)
+- [aliasId](IAliasAddress.md#aliasid)
 
 ## Properties
 
@@ -29,8 +29,8 @@ The type of the object.
 
 ___
 
-### address
+### aliasId
 
-• **address**: `string`
+• **aliasId**: `string`
 
-The address.
+The alias id.

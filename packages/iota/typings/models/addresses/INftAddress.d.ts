@@ -8,7 +8,7 @@ export declare const NFT_ADDRESS_TYPE = 16;
  */
 export interface INftAddress extends ITypeBase<16> {
     /**
-     * The address.
+     * The NFT Id.
      */
-    address: string;
+    nftId: string;
 }

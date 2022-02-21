@@ -8,7 +8,7 @@ describe("Binary Nft Address", () => {
     test("Can serialize and deserialize nft address", () => {
         const object: INftAddress = {
             type: NFT_ADDRESS_TYPE,
-            address: "6920b176f613ec7be59e68fc68f597eb3393af80"
+            nftId: "6920b176f613ec7be59e68fc68f597eb3393af80"
         };
 
         const serialized = new WriteStream();
@@ -17,6 +17,6 @@ describe("Binary Nft Address", () => {
         expect(hex).toEqual("106920b176f613ec7be59e68fc68f597eb3393af80");
         const deserialized = deserializeNftAddress(new ReadStream(Converter.hexToBytes(hex)));
         expect(deserialized.type).toEqual(16);
-        expect(deserialized.address).toEqual("6920b176f613ec7be59e68fc68f597eb3393af80");
+        expect(deserialized.nftId).toEqual("6920b176f613ec7be59e68fc68f597eb3393af80");
     });
 });

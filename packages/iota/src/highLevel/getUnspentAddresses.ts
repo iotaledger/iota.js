@@ -84,7 +84,7 @@ export async function getUnspentAddressesWithAddressGenerator<T>(
 > {
     const localClient = typeof client === "string" ? new SingleNodeClient(client) : client;
 
-    const bech32Hrp = await localClient.bech32Hrp();
+    const protocolInfo = await localClient.protocolInfo();
 
     const localRequiredLimit = addressOptions?.requiredCount ?? Number.MAX_SAFE_INTEGER;
     const localZeroCount = addressOptions?.zeroCount ?? 20;
@@ -104,7 +104,7 @@ export async function getUnspentAddressesWithAddressGenerator<T>(
 
         const ed25519Address = new Ed25519Address(addressSeed.keyPair().publicKey);
         const addressBytes = ed25519Address.toAddress();
-        const addressBech32 = Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, addressBytes, bech32Hrp);
+        const addressBech32 = Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, addressBytes, protocolInfo.bech32HRP);
 
         const balance = await calculateAddressBalance(localClient, addressBech32);
 

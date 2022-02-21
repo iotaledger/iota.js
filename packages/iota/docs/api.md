@@ -20,8 +20,6 @@
 - [MIN\_ADDRESS\_LENGTH](api.md#min_address_length)
 - [ALIAS\_ADDRESS\_LENGTH](api.md#alias_address_length)
 - [MIN\_ALIAS\_ADDRESS\_LENGTH](api.md#min_alias_address_length)
-- [BLS\_ADDRESS\_LENGTH](api.md#bls_address_length)
-- [MIN\_BLS\_ADDRESS\_LENGTH](api.md#min_bls_address_length)
 - [MIN\_ED25519\_ADDRESS\_LENGTH](api.md#min_ed25519_address_length)
 - [NFT\_ADDRESS\_LENGTH](api.md#nft_address_length)
 - [MIN\_NFT\_ADDRESS\_LENGTH](api.md#min_nft_address_length)
@@ -88,7 +86,6 @@
 - [TRANSACTION\_ESSENCE\_TYPE](api.md#transaction_essence_type)
 - [INPUTS\_COMMITMENT\_SIZE](api.md#inputs_commitment_size)
 - [ALIAS\_ADDRESS\_TYPE](api.md#alias_address_type)
-- [BLS\_ADDRESS\_TYPE](api.md#bls_address_type)
 - [ED25519\_ADDRESS\_TYPE](api.md#ed25519_address_type)
 - [NFT\_ADDRESS\_TYPE](api.md#nft_address_type)
 - [ISSUER\_FEATURE\_BLOCK\_TYPE](api.md#issuer_feature_block_type)
@@ -129,8 +126,6 @@
 - [serializeAddress](api.md#serializeaddress)
 - [deserializeAliasAddress](api.md#deserializealiasaddress)
 - [serializeAliasAddress](api.md#serializealiasaddress)
-- [deserializeBlsAddress](api.md#deserializeblsaddress)
-- [serializeBlsAddress](api.md#serializeblsaddress)
 - [deserializeEd25519Address](api.md#deserializeed25519address)
 - [serializeEd25519Address](api.md#serializeed25519address)
 - [deserializeNftAddress](api.md#deserializenftaddress)
@@ -287,7 +282,6 @@
 - [ITreasury](interfaces/ITreasury.md)
 - [ITypeBase](interfaces/ITypeBase.md)
 - [IAliasAddress](interfaces/IAliasAddress.md)
-- [IBlsAddress](interfaces/IBlsAddress.md)
 - [IEd25519Address](interfaces/IEd25519Address.md)
 - [INftAddress](interfaces/INftAddress.md)
 - [IChildrenResponse](interfaces/IChildrenResponse.md)
@@ -371,22 +365,6 @@ ___
 • **MIN\_ALIAS\_ADDRESS\_LENGTH**: `number`
 
 The minimum length of an alias address binary representation.
-
-___
-
-### BLS\_ADDRESS\_LENGTH
-
-• **BLS\_ADDRESS\_LENGTH**: `number` = `32`
-
-The length of a BLS address.
-
-___
-
-### MIN\_BLS\_ADDRESS\_LENGTH
-
-• **MIN\_BLS\_ADDRESS\_LENGTH**: `number`
-
-The minimum length of an bls address binary representation.
 
 ___
 
@@ -918,14 +896,6 @@ The global type for the alias address type.
 
 ___
 
-### BLS\_ADDRESS\_TYPE
-
-• **BLS\_ADDRESS\_TYPE**: ``1``
-
-The global type for the BLS address type.
-
-___
-
 ### ED25519\_ADDRESS\_TYPE
 
 • **ED25519\_ADDRESS\_TYPE**: ``0``
@@ -1261,45 +1231,6 @@ Serialize the alias address to binary.
 | :------ | :------ | :------ |
 | `writeStream` | `WriteStream` | The stream to write the data to. |
 | `object` | [`IAliasAddress`](interfaces/IAliasAddress.md) | The object to serialize. |
-
-#### Returns
-
-`void`
-
-___
-
-### deserializeBlsAddress
-
-▸ **deserializeBlsAddress**(`readStream`): [`IBlsAddress`](interfaces/IBlsAddress.md)
-
-Deserialize the bls address from binary.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `readStream` | `ReadStream` | The stream to read the data from. |
-
-#### Returns
-
-[`IBlsAddress`](interfaces/IBlsAddress.md)
-
-The deserialized object.
-
-___
-
-### serializeBlsAddress
-
-▸ **serializeBlsAddress**(`writeStream`, `object`): `void`
-
-Serialize the bls address to binary.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `writeStream` | `WriteStream` | The stream to write the data to. |
-| `object` | [`IBlsAddress`](interfaces/IBlsAddress.md) | The object to serialize. |
 
 #### Returns
 
@@ -3919,7 +3850,7 @@ Log feature block to the console.
 
 ### AddressTypes
 
-Ƭ **AddressTypes**: [`IEd25519Address`](interfaces/IEd25519Address.md) \| [`IAliasAddress`](interfaces/IAliasAddress.md) \| [`INftAddress`](interfaces/INftAddress.md) \| [`IBlsAddress`](interfaces/IBlsAddress.md)
+Ƭ **AddressTypes**: [`IEd25519Address`](interfaces/IEd25519Address.md) \| [`IAliasAddress`](interfaces/IAliasAddress.md) \| [`INftAddress`](interfaces/INftAddress.md)
 
 All of the address types.
 

@@ -30,6 +30,8 @@ import { ADDRESS_UNLOCK_CONDITION_TYPE } from "../models/unlockConditions/IAddre
 export async function sendAdvanced(client, inputsAndSignatureKeyPairs, outputs, taggedData) {
     const localClient = typeof client === "string" ? new SingleNodeClient(client) : client;
     const transactionPayload = buildTransactionPayload(inputsAndSignatureKeyPairs, outputs, taggedData);
+    const protocolInfo = await localClient.protocolInfo();
+    transactionPayload.essence.networkId = protocolInfo.networkId;
     const message = {
         payload: transactionPayload
     };
@@ -79,7 +81,7 @@ export function buildTransactionPayload(inputsAndSignatureKeyPairs, outputs, tag
                         type: ADDRESS_UNLOCK_CONDITION_TYPE,
                         address: {
                             type: output.addressType,
-                            address: output.address
+                            pubKeyHash: output.address
                         }
                     }
                 ],

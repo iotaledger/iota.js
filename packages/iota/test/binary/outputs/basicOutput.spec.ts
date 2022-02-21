@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 import { Converter, ReadStream, WriteStream } from "@iota/util.js";
 import { deserializeBasicOutput, serializeBasicOutput } from "../../../src/binary/outputs/basicOutput";
-import { ED25519_ADDRESS_TYPE } from "../../../src/models/addresses/IEd25519Address";
+import { ED25519_ADDRESS_TYPE, IEd25519Address } from "../../../src/models/addresses/IEd25519Address";
 import { BASIC_OUTPUT_TYPE, IBasicOutput } from "../../../src/models/outputs/IBasicOutput";
 import { ADDRESS_UNLOCK_CONDITION_TYPE, IAddressUnlockCondition } from "../../../src/models/unlockConditions/IAddressUnlockCondition";
 
@@ -26,7 +26,7 @@ describe("Binary Basic Output", () => {
                     type: ADDRESS_UNLOCK_CONDITION_TYPE,
                     address: {
                         type: ED25519_ADDRESS_TYPE,
-                        address: "6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
+                        pubKeyHash: "6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
                     }
                 }
             ],
@@ -44,7 +44,7 @@ describe("Binary Basic Output", () => {
         expect(deserialized.unlockConditions.length).toEqual(1);
         const unlockCondition = deserialized.unlockConditions[0] as IAddressUnlockCondition;
         expect(unlockCondition.address.type).toEqual(0);
-        expect(unlockCondition.address.address).toEqual(
+        expect((unlockCondition.address as IEd25519Address).pubKeyHash).toEqual(
             "6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
         );
         expect(deserialized.amount).toEqual(123456);

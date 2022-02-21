@@ -3,7 +3,6 @@
 import { Converter } from "@iota/util.js";
 import type { AddressTypes } from "../models/addresses/addressTypes";
 import { ALIAS_ADDRESS_TYPE } from "../models/addresses/IAliasAddress";
-import { BLS_ADDRESS_TYPE } from "../models/addresses/IBlsAddress";
 import { ED25519_ADDRESS_TYPE } from "../models/addresses/IEd25519Address";
 import { NFT_ADDRESS_TYPE } from "../models/addresses/INftAddress";
 import type { ITipsResponse } from "../models/api/ITipsResponse";
@@ -305,16 +304,13 @@ export function logTreasuryTransactionPayload(prefix: string, payload?: ITreasur
 export function logAddress(prefix: string, address?: AddressTypes): void {
     if (address?.type === ED25519_ADDRESS_TYPE) {
         logger(`${prefix}Ed25519 Address`);
-        logger(`${prefix}\tAddress:`, address.address);
-    } else if (address?.type === BLS_ADDRESS_TYPE) {
-        logger(`${prefix}BLS Address`);
-        logger(`${prefix}\tAddress:`, address.address);
+        logger(`${prefix}\tPublic Key Hash:`, address.pubKeyHash);
     } else if (address?.type === ALIAS_ADDRESS_TYPE) {
         logger(`${prefix}Alias Address`);
-        logger(`${prefix}\tAddress:`, address.address);
+        logger(`${prefix}\tAlias Id:`, address.aliasId);
     } else if (address?.type === NFT_ADDRESS_TYPE) {
         logger(`${prefix}NFT Address`);
-        logger(`${prefix}\tAddress:`, address.address);
+        logger(`${prefix}\tNFT Id:`, address.nftId);
     }
 }
 

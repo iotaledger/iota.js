@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 import { Converter, ReadStream, WriteStream } from "@iota/util.js";
 import { deserializeReceiptPayload, serializeReceiptPayload } from "../../../src/binary/payloads/receiptPayload";
-import { ED25519_ADDRESS_TYPE } from "../../../src/models/addresses/IEd25519Address";
+import { ED25519_ADDRESS_TYPE, IEd25519Address } from "../../../src/models/addresses/IEd25519Address";
 import { TREASURY_INPUT_TYPE } from "../../../src/models/inputs/ITreasuryInput";
 import { TREASURY_OUTPUT_TYPE } from "../../../src/models/outputs/ITreasuryOutput";
 import { IReceiptPayload, RECEIPT_PAYLOAD_TYPE } from "../../../src/models/payloads/IReceiptPayload";
@@ -19,7 +19,7 @@ describe("Binary Receipt Payload", () => {
                     tailTransactionHash: "a".repeat(98),
                     address: {
                         type: ED25519_ADDRESS_TYPE,
-                        address: "b".repeat(64)
+                        pubKeyHash: "b".repeat(64)
                     },
                     deposit: 100
                 }
@@ -50,7 +50,7 @@ describe("Binary Receipt Payload", () => {
         expect(deserialized.funds.length).toEqual(1);
         expect(deserialized.funds[0].tailTransactionHash).toEqual("a".repeat(98));
         expect(deserialized.funds[0].address.type).toEqual(0);
-        expect(deserialized.funds[0].address.address).toEqual("b".repeat(64));
+        expect((deserialized.funds[0].address as IEd25519Address).pubKeyHash).toEqual("b".repeat(64));
         expect(deserialized.funds[0].deposit).toEqual(100);
         expect(deserialized.transaction.type).toEqual(4);
         expect(deserialized.transaction.input.type).toEqual(1);

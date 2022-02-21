@@ -39,7 +39,7 @@ export function deserializeTransactionEssence(readStream: ReadStream): ITransact
         throw new Error(`Type mismatch in transactionEssence ${type}`);
     }
 
-    const networkId = readStream.readUInt64("message.networkId");
+    const networkId = readStream.readUInt64("transactionEssence.networkId");
 
     const inputs = deserializeInputs(readStream);
     const inputsCommitment = readStream.readFixedHex("transactionEssence.inputsCommitment", INPUTS_COMMITMENT_SIZE);
@@ -74,7 +74,7 @@ export function deserializeTransactionEssence(readStream: ReadStream): ITransact
 export function serializeTransactionEssence(writeStream: WriteStream, object: ITransactionEssence): void {
     writeStream.writeUInt8("transactionEssence.type", object.type);
 
-    writeStream.writeUInt64("message.networkId", bigInt(object.networkId ?? "0"));
+    writeStream.writeUInt64("transactionEssence.networkId", bigInt(object.networkId ?? "0"));
 
     for (const input of object.inputs) {
         if (input.type !== UTXO_INPUT_TYPE) {

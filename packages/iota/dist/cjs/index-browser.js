@@ -48,11 +48,6 @@
     const ALIAS_ADDRESS_TYPE = 8;
 
     /**
-     * The global type for the BLS address type.
-     */
-    const BLS_ADDRESS_TYPE = 1;
-
-    /**
      * The global type for the ed25519 address type.
      */
     const ED25519_ADDRESS_TYPE = 0;
@@ -133,10 +128,10 @@
         if (type !== ALIAS_ADDRESS_TYPE) {
             throw new Error(`Type mismatch in aliasAddress ${type}`);
         }
-        const address = readStream.readFixedHex("aliasAddress.address", ALIAS_ADDRESS_LENGTH);
+        const address = readStream.readFixedHex("aliasAddress.aliasId", ALIAS_ADDRESS_LENGTH);
         return {
             type: ALIAS_ADDRESS_TYPE,
-            address
+            aliasId: address
         };
     }
     /**
@@ -146,44 +141,7 @@
      */
     function serializeAliasAddress(writeStream, object) {
         writeStream.writeUInt8("aliasAddress.type", object.type);
-        writeStream.writeFixedHex("aliasAddress.address", ALIAS_ADDRESS_LENGTH, object.address);
-    }
-
-    /**
-     * The length of a BLS address.
-     */
-    const BLS_ADDRESS_LENGTH = 32;
-    /**
-     * The minimum length of an bls address binary representation.
-     */
-    const MIN_BLS_ADDRESS_LENGTH = SMALL_TYPE_LENGTH + BLS_ADDRESS_LENGTH;
-    /**
-     * Deserialize the bls address from binary.
-     * @param readStream The stream to read the data from.
-     * @returns The deserialized object.
-     */
-    function deserializeBlsAddress(readStream) {
-        if (!readStream.hasRemaining(MIN_BLS_ADDRESS_LENGTH)) {
-            throw new Error(`BLS address data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_BLS_ADDRESS_LENGTH}`);
-        }
-        const type = readStream.readUInt8("blsAddress.type");
-        if (type !== BLS_ADDRESS_TYPE) {
-            throw new Error(`Type mismatch in blsAddress ${type}`);
-        }
-        const address = readStream.readFixedHex("blsAddress.address", BLS_ADDRESS_LENGTH);
-        return {
-            type: BLS_ADDRESS_TYPE,
-            address
-        };
-    }
-    /**
-     * Serialize the bls address to binary.
-     * @param writeStream The stream to write the data to.
-     * @param object The object to serialize.
-     */
-    function serializeBlsAddress(writeStream, object) {
-        writeStream.writeUInt8("blsAddress.type", object.type);
-        writeStream.writeFixedHex("blsAddress.address", BLS_ADDRESS_LENGTH, object.address);
+        writeStream.writeFixedHex("aliasAddress.aliasId", ALIAS_ADDRESS_LENGTH, object.aliasId);
     }
 
     /**
@@ -203,10 +161,10 @@
         if (type !== ED25519_ADDRESS_TYPE) {
             throw new Error(`Type mismatch in ed25519Address ${type}`);
         }
-        const address = readStream.readFixedHex("ed25519Address.address", Ed25519Address.ADDRESS_LENGTH);
+        const address = readStream.readFixedHex("ed25519Address.pubKeyHash", Ed25519Address.ADDRESS_LENGTH);
         return {
             type: ED25519_ADDRESS_TYPE,
-            address
+            pubKeyHash: address
         };
     }
     /**
@@ -216,7 +174,7 @@
      */
     function serializeEd25519Address(writeStream, object) {
         writeStream.writeUInt8("ed25519Address.type", object.type);
-        writeStream.writeFixedHex("ed25519Address.address", Ed25519Address.ADDRESS_LENGTH, object.address);
+        writeStream.writeFixedHex("ed25519Address.pubKeyHash", Ed25519Address.ADDRESS_LENGTH, object.pubKeyHash);
     }
 
     /**
@@ -240,10 +198,10 @@
         if (type !== NFT_ADDRESS_TYPE) {
             throw new Error(`Type mismatch in nftAddress ${type}`);
         }
-        const address = readStream.readFixedHex("nftAddress.address", NFT_ADDRESS_LENGTH);
+        const address = readStream.readFixedHex("nftAddress.nftId", NFT_ADDRESS_LENGTH);
         return {
             type: NFT_ADDRESS_TYPE,
-            address
+            nftId: address
         };
     }
     /**
@@ -253,13 +211,13 @@
      */
     function serializeNftAddress(writeStream, object) {
         writeStream.writeUInt8("nftAddress.type", object.type);
-        writeStream.writeFixedHex("nftAddress.address", NFT_ADDRESS_LENGTH, object.address);
+        writeStream.writeFixedHex("nftAddress.nftId", NFT_ADDRESS_LENGTH, object.nftId);
     }
 
     /**
      * The minimum length of an address binary representation.
      */
-    const MIN_ADDRESS_LENGTH = Math.min(MIN_ED25519_ADDRESS_LENGTH, MIN_ALIAS_ADDRESS_LENGTH, MIN_BLS_ADDRESS_LENGTH, MIN_NFT_ADDRESS_LENGTH);
+    const MIN_ADDRESS_LENGTH = Math.min(MIN_ED25519_ADDRESS_LENGTH, MIN_ALIAS_ADDRESS_LENGTH, MIN_NFT_ADDRESS_LENGTH);
     /**
      * Deserialize the address from binary.
      * @param readStream The stream to read the data from.
@@ -276,9 +234,6 @@
         }
         else if (type === ALIAS_ADDRESS_TYPE) {
             address = deserializeAliasAddress(readStream);
-        }
-        else if (type === BLS_ADDRESS_TYPE) {
-            address = deserializeBlsAddress(readStream);
         }
         else if (type === NFT_ADDRESS_TYPE) {
             address = deserializeNftAddress(readStream);
@@ -299,9 +254,6 @@
         }
         else if (object.type === ALIAS_ADDRESS_TYPE) {
             serializeAliasAddress(writeStream, object);
-        }
-        else if (object.type === BLS_ADDRESS_TYPE) {
-            serializeBlsAddress(writeStream, object);
         }
         else if (object.type === NFT_ADDRESS_TYPE) {
             serializeNftAddress(writeStream, object);
@@ -2003,7 +1955,7 @@
         if (type !== TRANSACTION_ESSENCE_TYPE) {
             throw new Error(`Type mismatch in transactionEssence ${type}`);
         }
-        const networkId = readStream.readUInt64("message.networkId");
+        const networkId = readStream.readUInt64("transactionEssence.networkId");
         const inputs = deserializeInputs(readStream);
         const inputsCommitment = readStream.readFixedHex("transactionEssence.inputsCommitment", INPUTS_COMMITMENT_SIZE);
         const outputs = deserializeOutputs(readStream);
@@ -2033,7 +1985,7 @@
     function serializeTransactionEssence(writeStream, object) {
         var _a;
         writeStream.writeUInt8("transactionEssence.type", object.type);
-        writeStream.writeUInt64("message.networkId", bigInt__default["default"]((_a = object.networkId) !== null && _a !== void 0 ? _a : "0"));
+        writeStream.writeUInt64("transactionEssence.networkId", bigInt__default["default"]((_a = object.networkId) !== null && _a !== void 0 ? _a : "0"));
         for (const input of object.inputs) {
             if (input.type !== UTXO_INPUT_TYPE) {
                 throw new Error("Transaction essence can only contain UTXO Inputs");
@@ -2841,37 +2793,15 @@
             return this.fetchJson(this._basePath, "get", `peers/${peerId}`);
         }
         /**
-         * Get the bech 32 human readable part.
-         * @returns The bech 32 human readable part.
+         * Get the protocol info from the node.
+         * @returns The protocol info.
          */
-        async bech32Hrp() {
-            var _a, _b;
+        async protocolInfo() {
             if (this._protocol === undefined) {
                 await this.populateProtocolInfoCache();
             }
-            return (_b = (_a = this._protocol) === null || _a === void 0 ? void 0 : _a.bech32HRP) !== null && _b !== void 0 ? _b : "";
-        }
-        /**
-         * Get the network name.
-         * @returns The network name.
-         */
-        async networkName() {
-            var _a, _b;
-            if (this._protocol === undefined) {
-                await this.populateProtocolInfoCache();
-            }
-            return (_b = (_a = this._protocol) === null || _a === void 0 ? void 0 : _a.networkName) !== null && _b !== void 0 ? _b : "";
-        }
-        /**
-         * Get the network id.
-         * @returns The network id as the blake256 bytes.
-         */
-        async networkId() {
-            var _a, _b;
-            if (this._protocol === undefined) {
-                await this.populateProtocolInfoCache();
-            }
-            return crypto_js.Blake2b.sum256(util_js.Converter.utf8ToBytes((_b = (_a = this._protocol) === null || _a === void 0 ? void 0 : _a.networkName) !== null && _b !== void 0 ? _b : ""));
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            return this._protocol;
         }
         /**
          * Extension method which provides request methods for plugins.
@@ -2902,7 +2832,13 @@
         async populateProtocolInfoCache() {
             if (this._protocol === undefined) {
                 const info = await this.info();
-                this._protocol = info.protocol;
+                const networkIdBytes = crypto_js.Blake2b.sum256(util_js.Converter.utf8ToBytes(info.protocol.networkName));
+                this._protocol = {
+                    networkName: info.protocol.networkName,
+                    networkId: util_js.BigIntHelper.read8(networkIdBytes, 0).toString(),
+                    bech32HRP: info.protocol.bech32HRP,
+                    minPoWScore: info.protocol.minPoWScore
+                };
             }
         }
         /**
@@ -3643,7 +3579,7 @@
     async function getUnspentAddressesWithAddressGenerator(client, seed, initialAddressState, nextAddressPath, addressOptions) {
         var _a, _b;
         const localClient = typeof client === "string" ? new SingleNodeClient(client) : client;
-        const bech32Hrp = await localClient.bech32Hrp();
+        const protocolInfo = await localClient.protocolInfo();
         const localRequiredLimit = (_a = addressOptions === null || addressOptions === void 0 ? void 0 : addressOptions.requiredCount) !== null && _a !== void 0 ? _a : Number.MAX_SAFE_INTEGER;
         const localZeroCount = (_b = addressOptions === null || addressOptions === void 0 ? void 0 : addressOptions.zeroCount) !== null && _b !== void 0 ? _b : 20;
         let finished = false;
@@ -3654,7 +3590,7 @@
             const addressSeed = seed.generateSeedFromPath(new crypto_js.Bip32Path(path));
             const ed25519Address = new Ed25519Address(addressSeed.keyPair().publicKey);
             const addressBytes = ed25519Address.toAddress();
-            const addressBech32 = Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, addressBytes, bech32Hrp);
+            const addressBech32 = Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, addressBytes, protocolInfo.bech32HRP);
             const balance = await calculateAddressBalance(localClient, addressBech32);
             // If there is no balance we increment the counter and end
             // the text when we have reached the count
@@ -3865,6 +3801,8 @@
     async function sendAdvanced(client, inputsAndSignatureKeyPairs, outputs, taggedData) {
         const localClient = typeof client === "string" ? new SingleNodeClient(client) : client;
         const transactionPayload = buildTransactionPayload(inputsAndSignatureKeyPairs, outputs, taggedData);
+        const protocolInfo = await localClient.protocolInfo();
+        transactionPayload.essence.networkId = protocolInfo.networkId;
         const message = {
             payload: transactionPayload
         };
@@ -3914,7 +3852,7 @@
                             type: ADDRESS_UNLOCK_CONDITION_TYPE,
                             address: {
                                 type: output.addressType,
-                                address: output.address
+                                pubKeyHash: output.address
                             }
                         }
                     ],
@@ -4060,9 +3998,9 @@
     async function sendMultiple(client, seed, accountIndex, outputs, taggedData, addressOptions) {
         var _a;
         const localClient = typeof client === "string" ? new SingleNodeClient(client) : client;
-        const bech32Hrp = await localClient.bech32Hrp();
+        const protocolInfo = await localClient.protocolInfo();
         const hexOutputs = outputs.map(output => {
-            const bech32Details = Bech32Helper.fromBech32(output.addressBech32, bech32Hrp);
+            const bech32Details = Bech32Helper.fromBech32(output.addressBech32, protocolInfo.bech32HRP);
             if (!bech32Details) {
                 throw new Error("Unable to decode bech32 address");
             }
@@ -4138,7 +4076,7 @@
      */
     async function calculateInputs(client, seed, initialAddressState, nextAddressPath, outputs, zeroCount = 5) {
         const localClient = typeof client === "string" ? new SingleNodeClient(client) : client;
-        const bech32Hrp = await localClient.bech32Hrp();
+        const protocolInfo = await localClient.protocolInfo();
         let requiredBalance = 0;
         for (const output of outputs) {
             requiredBalance += output.amount;
@@ -4154,7 +4092,7 @@
             const ed25519Address = new Ed25519Address(addressKeyPair.publicKey);
             const addressBytes = ed25519Address.toAddress();
             const indexerPlugin = new IndexerPluginClient(client);
-            const addressOutputIds = await indexerPlugin.outputs({ addressBech32: Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, addressBytes, bech32Hrp) });
+            const addressOutputIds = await indexerPlugin.outputs({ addressBech32: Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, addressBytes, protocolInfo.bech32HRP) });
             if (addressOutputIds.items.length === 0) {
                 zeroBalance++;
                 if (zeroBalance >= zeroCount) {
@@ -4190,10 +4128,11 @@
                                     const addressUnlockCondition = addressOutput.output.unlockConditions
                                         .find(u => u.type === ADDRESS_UNLOCK_CONDITION_TYPE);
                                     if (addressUnlockCondition &&
-                                        addressUnlockCondition.type === ADDRESS_UNLOCK_CONDITION_TYPE) {
+                                        addressUnlockCondition.type === ADDRESS_UNLOCK_CONDITION_TYPE &&
+                                        addressUnlockCondition.address.type === ED25519_ADDRESS_TYPE) {
                                         outputs.push({
                                             amount: consumedBalance - requiredBalance,
-                                            address: addressUnlockCondition.address.address,
+                                            address: addressUnlockCondition.address.pubKeyHash,
                                             addressType: addressUnlockCondition.address.type
                                         });
                                     }
@@ -4705,19 +4644,15 @@
     function logAddress(prefix, address) {
         if ((address === null || address === void 0 ? void 0 : address.type) === ED25519_ADDRESS_TYPE) {
             logger(`${prefix}Ed25519 Address`);
-            logger(`${prefix}\tAddress:`, address.address);
-        }
-        else if ((address === null || address === void 0 ? void 0 : address.type) === BLS_ADDRESS_TYPE) {
-            logger(`${prefix}BLS Address`);
-            logger(`${prefix}\tAddress:`, address.address);
+            logger(`${prefix}\tPublic Key Hash:`, address.pubKeyHash);
         }
         else if ((address === null || address === void 0 ? void 0 : address.type) === ALIAS_ADDRESS_TYPE) {
             logger(`${prefix}Alias Address`);
-            logger(`${prefix}\tAddress:`, address.address);
+            logger(`${prefix}\tAlias Id:`, address.aliasId);
         }
         else if ((address === null || address === void 0 ? void 0 : address.type) === NFT_ADDRESS_TYPE) {
             logger(`${prefix}NFT Address`);
-            logger(`${prefix}\tAddress:`, address.address);
+            logger(`${prefix}\tNFT Id:`, address.nftId);
         }
     }
     /**
@@ -5088,8 +5023,6 @@
     exports.ARRAY_LENGTH = ARRAY_LENGTH;
     exports.B1T6 = B1T6;
     exports.BASIC_OUTPUT_TYPE = BASIC_OUTPUT_TYPE;
-    exports.BLS_ADDRESS_LENGTH = BLS_ADDRESS_LENGTH;
-    exports.BLS_ADDRESS_TYPE = BLS_ADDRESS_TYPE;
     exports.Bech32Helper = Bech32Helper;
     exports.CONFLICT_REASON_STRINGS = CONFLICT_REASON_STRINGS;
     exports.ClientError = ClientError;
@@ -5124,7 +5057,6 @@
     exports.MIN_ALIAS_OUTPUT_LENGTH = MIN_ALIAS_OUTPUT_LENGTH;
     exports.MIN_ALIAS_UNLOCK_BLOCK_LENGTH = MIN_ALIAS_UNLOCK_BLOCK_LENGTH;
     exports.MIN_BASIC_OUTPUT_LENGTH = MIN_BASIC_OUTPUT_LENGTH;
-    exports.MIN_BLS_ADDRESS_LENGTH = MIN_BLS_ADDRESS_LENGTH;
     exports.MIN_DUST_DEPOSIT_RETURN_UNLOCK_CONDITION_LENGTH = MIN_DUST_DEPOSIT_RETURN_UNLOCK_CONDITION_LENGTH;
     exports.MIN_ED25519_ADDRESS_LENGTH = MIN_ED25519_ADDRESS_LENGTH;
     exports.MIN_ED25519_SIGNATURE_LENGTH = MIN_ED25519_SIGNATURE_LENGTH;
@@ -5204,7 +5136,6 @@
     exports.deserializeAliasOutput = deserializeAliasOutput;
     exports.deserializeAliasUnlockBlock = deserializeAliasUnlockBlock;
     exports.deserializeBasicOutput = deserializeBasicOutput;
-    exports.deserializeBlsAddress = deserializeBlsAddress;
     exports.deserializeDustDepositReturnUnlockCondition = deserializeDustDepositReturnUnlockCondition;
     exports.deserializeEd25519Address = deserializeEd25519Address;
     exports.deserializeEd25519Signature = deserializeEd25519Signature;
@@ -5290,7 +5221,6 @@
     exports.serializeAliasOutput = serializeAliasOutput;
     exports.serializeAliasUnlockBlock = serializeAliasUnlockBlock;
     exports.serializeBasicOutput = serializeBasicOutput;
-    exports.serializeBlsAddress = serializeBlsAddress;
     exports.serializeDustDepositReturnUnlockCondition = serializeDustDepositReturnUnlockCondition;
     exports.serializeEd25519Address = serializeEd25519Address;
     exports.serializeEd25519Signature = serializeEd25519Signature;

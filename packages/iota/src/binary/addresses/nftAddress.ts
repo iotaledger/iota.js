@@ -31,11 +31,11 @@ export function deserializeNftAddress(readStream: ReadStream): INftAddress {
         throw new Error(`Type mismatch in nftAddress ${type}`);
     }
 
-    const address = readStream.readFixedHex("nftAddress.address", NFT_ADDRESS_LENGTH);
+    const address = readStream.readFixedHex("nftAddress.nftId", NFT_ADDRESS_LENGTH);
 
     return {
         type: NFT_ADDRESS_TYPE,
-        address
+        nftId: address
     };
 }
 
@@ -46,5 +46,5 @@ export function deserializeNftAddress(readStream: ReadStream): INftAddress {
  */
 export function serializeNftAddress(writeStream: WriteStream, object: INftAddress): void {
     writeStream.writeUInt8("nftAddress.type", object.type);
-    writeStream.writeFixedHex("nftAddress.address", NFT_ADDRESS_LENGTH, object.address);
+    writeStream.writeFixedHex("nftAddress.nftId", NFT_ADDRESS_LENGTH, object.nftId);
 }

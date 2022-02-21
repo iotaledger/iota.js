@@ -13,7 +13,7 @@ Ed25519Address address.
 ### Properties
 
 - [type](IEd25519Address.md#type)
-- [address](IEd25519Address.md#address)
+- [pubKeyHash](IEd25519Address.md#pubkeyhash)
 
 ## Properties
 
@@ -29,8 +29,8 @@ The type of the object.
 
 ___
 
-### address
+### pubKeyHash
 
-• **address**: `string`
+• **pubKeyHash**: `string`
 
-The address.
+The public key hash.

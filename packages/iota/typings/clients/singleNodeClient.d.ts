@@ -132,20 +132,15 @@ export declare class SingleNodeClient implements IClient {
      */
     peer(peerId: string): Promise<IPeer>;
     /**
-     * Get the bech 32 human readable part.
-     * @returns The bech 32 human readable part.
+     * Get the protocol info from the node.
+     * @returns The protocol info.
      */
-    bech32Hrp(): Promise<string>;
-    /**
-     * Get the network name.
-     * @returns The network name.
-     */
-    networkName(): Promise<string>;
-    /**
-     * Get the network id.
-     * @returns The network id as the blake256 bytes.
-     */
-    networkId(): Promise<Uint8Array>;
+    protocolInfo(): Promise<{
+        networkName: string;
+        networkId: string;
+        bech32HRP: string;
+        minPoWScore: number;
+    }>;
     /**
      * Extension method which provides request methods for plugins.
      * @param basePluginPath The base path for the plugin eg indexer/v1/ .

@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0
 import { Converter } from "@iota/util.js";
 import { ALIAS_ADDRESS_TYPE } from "../models/addresses/IAliasAddress.mjs";
-import { BLS_ADDRESS_TYPE } from "../models/addresses/IBlsAddress.mjs";
 import { ED25519_ADDRESS_TYPE } from "../models/addresses/IEd25519Address.mjs";
 import { NFT_ADDRESS_TYPE } from "../models/addresses/INftAddress.mjs";
 import { ISSUER_FEATURE_BLOCK_TYPE } from "../models/featureBlocks/IIssuerFeatureBlock.mjs";
@@ -270,19 +269,15 @@ export function logTreasuryTransactionPayload(prefix, payload) {
 export function logAddress(prefix, address) {
     if ((address === null || address === void 0 ? void 0 : address.type) === ED25519_ADDRESS_TYPE) {
         logger(`${prefix}Ed25519 Address`);
-        logger(`${prefix}\tAddress:`, address.address);
-    }
-    else if ((address === null || address === void 0 ? void 0 : address.type) === BLS_ADDRESS_TYPE) {
-        logger(`${prefix}BLS Address`);
-        logger(`${prefix}\tAddress:`, address.address);
+        logger(`${prefix}\tPublic Key Hash:`, address.pubKeyHash);
     }
     else if ((address === null || address === void 0 ? void 0 : address.type) === ALIAS_ADDRESS_TYPE) {
         logger(`${prefix}Alias Address`);
-        logger(`${prefix}\tAddress:`, address.address);
+        logger(`${prefix}\tAlias Id:`, address.aliasId);
     }
     else if ((address === null || address === void 0 ? void 0 : address.type) === NFT_ADDRESS_TYPE) {
         logger(`${prefix}NFT Address`);
-        logger(`${prefix}\tAddress:`, address.address);
+        logger(`${prefix}\tNFT Id:`, address.nftId);
     }
 }
 /**

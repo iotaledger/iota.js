@@ -16,7 +16,6 @@ import type { IClient } from "../models/IClient";
 import { DEFAULT_PROTOCOL_VERSION, IMessage } from "../models/IMessage";
 import type { IMessageMetadata } from "../models/IMessageMetadata";
 import type { INodeInfo } from "../models/INodeInfo";
-import type { INodeInfoProtocol } from "../models/INodeInfoProtocol";
 import type { IPeer } from "../models/IPeer";
 import type { IPowProvider } from "../models/IPowProvider";
 import type { ITreasury } from "../models/ITreasury";
@@ -85,7 +84,27 @@ export class SingleNodeClient implements IClient {
      * Cached protocol info.
      * @internal
      */
-    private _protocol?: INodeInfoProtocol;
+    private _protocol?: {
+        /**
+         * The human friendly name of the network on which the node operates on.
+         */
+        networkName: string;
+
+        /**
+         * The network id as a string encoded 64 bit number.
+         */
+        networkId: string;
+
+        /**
+         * The human readable part of bech32 addresses.
+         */
+        bech32HRP: string;
+
+        /**
+         * The minimum score required for PoW.
+         */
+        minPoWScore: number;
+    };
 
     /**
      * The protocol version for messages.
@@ -364,39 +383,21 @@ export class SingleNodeClient implements IClient {
     }
 
     /**
-     * Get the bech 32 human readable part.
-     * @returns The bech 32 human readable part.
+     * Get the protocol info from the node.
+     * @returns The protocol info.
      */
-    public async bech32Hrp(): Promise<string> {
+    public async protocolInfo(): Promise<{
+        networkName: string;
+        networkId: string;
+        bech32HRP: string;
+        minPoWScore: number;
+    }> {
         if (this._protocol === undefined) {
             await this.populateProtocolInfoCache();
         }
 
-        return this._protocol?.bech32HRP ?? "";
-    }
-
-    /**
-     * Get the network name.
-     * @returns The network name.
-     */
-    public async networkName(): Promise<string> {
-        if (this._protocol === undefined) {
-            await this.populateProtocolInfoCache();
-        }
-
-        return this._protocol?.networkName ?? "";
-    }
-
-    /**
-     * Get the network id.
-     * @returns The network id as the blake256 bytes.
-     */
-    public async networkId(): Promise<Uint8Array> {
-        if (this._protocol === undefined) {
-            await this.populateProtocolInfoCache();
-        }
-
-        return Blake2b.sum256(Converter.utf8ToBytes(this._protocol?.networkName ?? ""));
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        return this._protocol!;
     }
 
     /**
@@ -431,7 +432,15 @@ export class SingleNodeClient implements IClient {
     private async populateProtocolInfoCache(): Promise<void> {
         if (this._protocol === undefined) {
             const info = await this.info();
-            this._protocol = info.protocol;
+
+            const networkIdBytes = Blake2b.sum256(Converter.utf8ToBytes(info.protocol.networkName));
+
+            this._protocol = {
+                networkName: info.protocol.networkName,
+                networkId: BigIntHelper.read8(networkIdBytes, 0).toString(),
+                bech32HRP: info.protocol.bech32HRP,
+                minPoWScore: info.protocol.minPoWScore
+            };
         }
     }
 
