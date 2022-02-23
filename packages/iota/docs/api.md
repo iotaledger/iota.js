@@ -346,7 +346,7 @@
 
 ### MIN\_ADDRESS\_LENGTH
 
-• **MIN\_ADDRESS\_LENGTH**: `number`
+• `Const` **MIN\_ADDRESS\_LENGTH**: `number`
 
 The minimum length of an address binary representation.
 
@@ -354,7 +354,7 @@ ___
 
 ### ALIAS\_ADDRESS\_LENGTH
 
-• **ALIAS\_ADDRESS\_LENGTH**: `number` = `20`
+• `Const` **ALIAS\_ADDRESS\_LENGTH**: `number` = `20`
 
 The length of an alias address.
 
@@ -362,7 +362,7 @@ ___
 
 ### MIN\_ALIAS\_ADDRESS\_LENGTH
 
-• **MIN\_ALIAS\_ADDRESS\_LENGTH**: `number`
+• `Const` **MIN\_ALIAS\_ADDRESS\_LENGTH**: `number`
 
 The minimum length of an alias address binary representation.
 
@@ -370,7 +370,7 @@ ___
 
 ### MIN\_ED25519\_ADDRESS\_LENGTH
 
-• **MIN\_ED25519\_ADDRESS\_LENGTH**: `number`
+• `Const` **MIN\_ED25519\_ADDRESS\_LENGTH**: `number`
 
 The minimum length of an ed25519 address binary representation.
 
@@ -378,7 +378,7 @@ ___
 
 ### NFT\_ADDRESS\_LENGTH
 
-• **NFT\_ADDRESS\_LENGTH**: `number` = `20`
+• `Const` **NFT\_ADDRESS\_LENGTH**: `number` = `20`
 
 The length of an NFT address.
 
@@ -386,7 +386,7 @@ ___
 
 ### MIN\_NFT\_ADDRESS\_LENGTH
 
-• **MIN\_NFT\_ADDRESS\_LENGTH**: `number`
+• `Const` **MIN\_NFT\_ADDRESS\_LENGTH**: `number`
 
 The minimum length of an nft address binary representation.
 
@@ -394,7 +394,7 @@ ___
 
 ### UINT8\_SIZE
 
-• **UINT8\_SIZE**: `number` = `1`
+• `Const` **UINT8\_SIZE**: `number` = `1`
 
 Byte length for a uint8 field.
 
@@ -402,7 +402,7 @@ ___
 
 ### UINT16\_SIZE
 
-• **UINT16\_SIZE**: `number` = `2`
+• `Const` **UINT16\_SIZE**: `number` = `2`
 
 Byte length for a uint16 field.
 
@@ -410,7 +410,7 @@ ___
 
 ### UINT32\_SIZE
 
-• **UINT32\_SIZE**: `number` = `4`
+• `Const` **UINT32\_SIZE**: `number` = `4`
 
 Byte length for a uint32 field.
 
@@ -418,7 +418,7 @@ ___
 
 ### UINT64\_SIZE
 
-• **UINT64\_SIZE**: `number` = `8`
+• `Const` **UINT64\_SIZE**: `number` = `8`
 
 Byte length for a uint64 field.
 
@@ -426,7 +426,7 @@ ___
 
 ### UINT256\_SIZE
 
-• **UINT256\_SIZE**: `number` = `32`
+• `Const` **UINT256\_SIZE**: `number` = `32`
 
 Byte length for a uint256 field.
 
@@ -434,7 +434,7 @@ ___
 
 ### MESSAGE\_ID\_LENGTH
 
-• **MESSAGE\_ID\_LENGTH**: `number` = `Blake2b.SIZE_256`
+• `Const` **MESSAGE\_ID\_LENGTH**: `number` = `Blake2b.SIZE_256`
 
 Byte length for a message id.
 
@@ -442,7 +442,7 @@ ___
 
 ### TRANSACTION\_ID\_LENGTH
 
-• **TRANSACTION\_ID\_LENGTH**: `number` = `Blake2b.SIZE_256`
+• `Const` **TRANSACTION\_ID\_LENGTH**: `number` = `Blake2b.SIZE_256`
 
 Byte length for a transaction id.
 
@@ -450,7 +450,7 @@ ___
 
 ### MERKLE\_PROOF\_LENGTH
 
-• **MERKLE\_PROOF\_LENGTH**: `number` = `Blake2b.SIZE_256`
+• `Const` **MERKLE\_PROOF\_LENGTH**: `number` = `Blake2b.SIZE_256`
 
 Byte length for a merkle prrof.
 
@@ -458,7 +458,7 @@ ___
 
 ### TYPE\_LENGTH
 
-• **TYPE\_LENGTH**: `number` = `UINT32_SIZE`
+• `Const` **TYPE\_LENGTH**: `number` = `UINT32_SIZE`
 
 Byte length for a type length.
 
@@ -466,7 +466,7 @@ ___
 
 ### SMALL\_TYPE\_LENGTH
 
-• **SMALL\_TYPE\_LENGTH**: `number` = `UINT8_SIZE`
+• `Const` **SMALL\_TYPE\_LENGTH**: `number` = `UINT8_SIZE`
 
 Byte length for a small type length.
 
@@ -474,7 +474,7 @@ ___
 
 ### STRING\_LENGTH
 
-• **STRING\_LENGTH**: `number` = `UINT16_SIZE`
+• `Const` **STRING\_LENGTH**: `number` = `UINT16_SIZE`
 
 Byte length for a string length.
 
@@ -482,7 +482,7 @@ ___
 
 ### ARRAY\_LENGTH
 
-• **ARRAY\_LENGTH**: `number` = `UINT16_SIZE`
+• `Const` **ARRAY\_LENGTH**: `number` = `UINT16_SIZE`
 
 Byte length for an array length.
 
@@ -490,7 +490,7 @@ ___
 
 ### MIN\_FEATURE\_BLOCKS\_LENGTH
 
-• **MIN\_FEATURE\_BLOCKS\_LENGTH**: `number` = `UINT8_SIZE`
+• `Const` **MIN\_FEATURE\_BLOCKS\_LENGTH**: `number` = `UINT8_SIZE`
 
 The minimum length of a feature blocks tokens list.
 
@@ -498,7 +498,7 @@ ___
 
 ### MIN\_FEATURE\_BLOCK\_LENGTH
 
-• **MIN\_FEATURE\_BLOCK\_LENGTH**: `number`
+• `Const` **MIN\_FEATURE\_BLOCK\_LENGTH**: `number`
 
 The minimum length of a feature block binary representation.
 
@@ -506,7 +506,7 @@ ___
 
 ### MIN\_ISSUER\_FEATURE\_BLOCK\_LENGTH
 
-• **MIN\_ISSUER\_FEATURE\_BLOCK\_LENGTH**: `number`
+• `Const` **MIN\_ISSUER\_FEATURE\_BLOCK\_LENGTH**: `number`
 
 The minimum length of a issuer feature block binary representation.
 
@@ -514,7 +514,7 @@ ___
 
 ### MIN\_METADATA\_FEATURE\_BLOCK\_LENGTH
 
-• **MIN\_METADATA\_FEATURE\_BLOCK\_LENGTH**: `number`
+• `Const` **MIN\_METADATA\_FEATURE\_BLOCK\_LENGTH**: `number`
 
 The minimum length of a metadata feature block binary representation.
 
@@ -522,7 +522,7 @@ ___
 
 ### MIN\_SENDER\_FEATURE\_BLOCK\_LENGTH
 
-• **MIN\_SENDER\_FEATURE\_BLOCK\_LENGTH**: `number`
+• `Const` **MIN\_SENDER\_FEATURE\_BLOCK\_LENGTH**: `number`
 
 The minimum length of a sender feature block binary representation.
 
@@ -530,7 +530,7 @@ ___
 
 ### MIN\_TAG\_FEATURE\_BLOCK\_LENGTH
 
-• **MIN\_TAG\_FEATURE\_BLOCK\_LENGTH**: `number`
+• `Const` **MIN\_TAG\_FEATURE\_BLOCK\_LENGTH**: `number`
 
 The minimum length of a tag feature block binary representation.
 
@@ -538,7 +538,7 @@ ___
 
 ### TAIL\_HASH\_LENGTH
 
-• **TAIL\_HASH\_LENGTH**: `number` = `49`
+• `Const` **TAIL\_HASH\_LENGTH**: `number` = `49`
 
 The length of the tail hash length in bytes.
 
@@ -546,7 +546,7 @@ ___
 
 ### MIN\_MIGRATED\_FUNDS\_LENGTH
 
-• **MIN\_MIGRATED\_FUNDS\_LENGTH**: `number`
+• `Const` **MIN\_MIGRATED\_FUNDS\_LENGTH**: `number`
 
 The minimum length of a migrated fund binary representation.
 
@@ -554,7 +554,7 @@ ___
 
 ### MAX\_FUNDS\_COUNT
 
-• **MAX\_FUNDS\_COUNT**: `number` = `127`
+• `Const` **MAX\_FUNDS\_COUNT**: `number` = `127`
 
 The maximum number of funds.
 
@@ -562,7 +562,7 @@ ___
 
 ### MIN\_INPUT\_LENGTH
 
-• **MIN\_INPUT\_LENGTH**: `number`
+• `Const` **MIN\_INPUT\_LENGTH**: `number`
 
 The minimum length of an input binary representation.
 
@@ -570,7 +570,7 @@ ___
 
 ### MIN\_INPUT\_COUNT
 
-• **MIN\_INPUT\_COUNT**: `number` = `1`
+• `Const` **MIN\_INPUT\_COUNT**: `number` = `1`
 
 The minimum number of inputs.
 
@@ -578,7 +578,7 @@ ___
 
 ### MAX\_INPUT\_COUNT
 
-• **MAX\_INPUT\_COUNT**: `number` = `128`
+• `Const` **MAX\_INPUT\_COUNT**: `number` = `128`
 
 The maximum number of inputs.
 
@@ -586,7 +586,7 @@ ___
 
 ### MIN\_TREASURY\_INPUT\_LENGTH
 
-• **MIN\_TREASURY\_INPUT\_LENGTH**: `number`
+• `Const` **MIN\_TREASURY\_INPUT\_LENGTH**: `number`
 
 The minimum length of a treasury input binary representation.
 
@@ -594,7 +594,7 @@ ___
 
 ### MIN\_UTXO\_INPUT\_LENGTH
 
-• **MIN\_UTXO\_INPUT\_LENGTH**: `number`
+• `Const` **MIN\_UTXO\_INPUT\_LENGTH**: `number`
 
 The minimum length of a utxo input binary representation.
 
@@ -602,7 +602,7 @@ ___
 
 ### MAX\_MESSAGE\_LENGTH
 
-• **MAX\_MESSAGE\_LENGTH**: `number` = `32768`
+• `Const` **MAX\_MESSAGE\_LENGTH**: `number` = `32768`
 
 The maximum length of a message.
 
@@ -610,7 +610,7 @@ ___
 
 ### MAX\_NUMBER\_PARENTS
 
-• **MAX\_NUMBER\_PARENTS**: `number` = `8`
+• `Const` **MAX\_NUMBER\_PARENTS**: `number` = `8`
 
 The maximum number of parents.
 
@@ -618,7 +618,7 @@ ___
 
 ### MIN\_NUMBER\_PARENTS
 
-• **MIN\_NUMBER\_PARENTS**: `number` = `1`
+• `Const` **MIN\_NUMBER\_PARENTS**: `number` = `1`
 
 The minimum number of parents.
 
@@ -626,7 +626,7 @@ ___
 
 ### ALIAS\_ID\_LENGTH
 
-• **ALIAS\_ID\_LENGTH**: `number` = `20`
+• `Const` **ALIAS\_ID\_LENGTH**: `number` = `20`
 
 The length of an alias id.
 
@@ -634,7 +634,7 @@ ___
 
 ### MIN\_ALIAS\_OUTPUT\_LENGTH
 
-• **MIN\_ALIAS\_OUTPUT\_LENGTH**: `number`
+• `Const` **MIN\_ALIAS\_OUTPUT\_LENGTH**: `number`
 
 The minimum length of a alias output binary representation.
 
@@ -642,7 +642,7 @@ ___
 
 ### MIN\_BASIC\_OUTPUT\_LENGTH
 
-• **MIN\_BASIC\_OUTPUT\_LENGTH**: `number`
+• `Const` **MIN\_BASIC\_OUTPUT\_LENGTH**: `number`
 
 The minimum length of a basic output binary representation.
 
@@ -650,7 +650,7 @@ ___
 
 ### MIN\_FOUNDRY\_OUTPUT\_LENGTH
 
-• **MIN\_FOUNDRY\_OUTPUT\_LENGTH**: `number`
+• `Const` **MIN\_FOUNDRY\_OUTPUT\_LENGTH**: `number`
 
 The minimum length of a foundry output binary representation.
 
@@ -658,7 +658,7 @@ ___
 
 ### NFT\_ID\_LENGTH
 
-• **NFT\_ID\_LENGTH**: `number` = `20`
+• `Const` **NFT\_ID\_LENGTH**: `number` = `20`
 
 The length of an NFT Id.
 
@@ -666,7 +666,7 @@ ___
 
 ### MIN\_NFT\_OUTPUT\_LENGTH
 
-• **MIN\_NFT\_OUTPUT\_LENGTH**: `number`
+• `Const` **MIN\_NFT\_OUTPUT\_LENGTH**: `number`
 
 The minimum length of a nft output binary representation.
 
@@ -674,7 +674,7 @@ ___
 
 ### MIN\_OUTPUT\_LENGTH
 
-• **MIN\_OUTPUT\_LENGTH**: `number`
+• `Const` **MIN\_OUTPUT\_LENGTH**: `number`
 
 The minimum length of an output binary representation.
 
@@ -682,7 +682,7 @@ ___
 
 ### MIN\_OUTPUT\_COUNT
 
-• **MIN\_OUTPUT\_COUNT**: `number` = `1`
+• `Const` **MIN\_OUTPUT\_COUNT**: `number` = `1`
 
 The minimum number of outputs.
 
@@ -690,7 +690,7 @@ ___
 
 ### MAX\_OUTPUT\_COUNT
 
-• **MAX\_OUTPUT\_COUNT**: `number` = `128`
+• `Const` **MAX\_OUTPUT\_COUNT**: `number` = `128`
 
 The maximum number of outputs.
 
@@ -698,7 +698,7 @@ ___
 
 ### MIN\_TREASURY\_OUTPUT\_LENGTH
 
-• **MIN\_TREASURY\_OUTPUT\_LENGTH**: `number`
+• `Const` **MIN\_TREASURY\_OUTPUT\_LENGTH**: `number`
 
 The minimum length of a treasury output binary representation.
 
@@ -706,7 +706,7 @@ ___
 
 ### MIN\_PAYLOAD\_LENGTH
 
-• **MIN\_PAYLOAD\_LENGTH**: `number`
+• `Const` **MIN\_PAYLOAD\_LENGTH**: `number`
 
 The minimum length of a payload binary representation.
 
@@ -714,7 +714,7 @@ ___
 
 ### MIN\_ED25519\_SIGNATURE\_LENGTH
 
-• **MIN\_ED25519\_SIGNATURE\_LENGTH**: `number`
+• `Const` **MIN\_ED25519\_SIGNATURE\_LENGTH**: `number`
 
 The minimum length of an ed25519 signature binary representation.
 
@@ -722,7 +722,7 @@ ___
 
 ### MIN\_SIGNATURE\_LENGTH
 
-• **MIN\_SIGNATURE\_LENGTH**: `number` = `MIN_ED25519_SIGNATURE_LENGTH`
+• `Const` **MIN\_SIGNATURE\_LENGTH**: `number` = `MIN_ED25519_SIGNATURE_LENGTH`
 
 The minimum length of a signature binary representation.
 
@@ -730,7 +730,7 @@ ___
 
 ### MIN\_SIMPLE\_TOKEN\_SCHEME\_LENGTH
 
-• **MIN\_SIMPLE\_TOKEN\_SCHEME\_LENGTH**: `number` = `SMALL_TYPE_LENGTH`
+• `Const` **MIN\_SIMPLE\_TOKEN\_SCHEME\_LENGTH**: `number` = `SMALL_TYPE_LENGTH`
 
 The minimum length of an simple token scheme binary representation.
 
@@ -738,7 +738,7 @@ ___
 
 ### MIN\_TOKEN\_SCHEME\_LENGTH
 
-• **MIN\_TOKEN\_SCHEME\_LENGTH**: `number` = `MIN_SIMPLE_TOKEN_SCHEME_LENGTH`
+• `Const` **MIN\_TOKEN\_SCHEME\_LENGTH**: `number` = `MIN_SIMPLE_TOKEN_SCHEME_LENGTH`
 
 The minimum length of a simple token scheme binary representation.
 
@@ -746,7 +746,7 @@ ___
 
 ### MIN\_TRANSACTION\_ESSENCE\_LENGTH
 
-• **MIN\_TRANSACTION\_ESSENCE\_LENGTH**: `number`
+• `Const` **MIN\_TRANSACTION\_ESSENCE\_LENGTH**: `number`
 
 The minimum length of a transaction essence binary representation.
 
@@ -754,7 +754,7 @@ ___
 
 ### MIN\_ALIAS\_UNLOCK\_BLOCK\_LENGTH
 
-• **MIN\_ALIAS\_UNLOCK\_BLOCK\_LENGTH**: `number`
+• `Const` **MIN\_ALIAS\_UNLOCK\_BLOCK\_LENGTH**: `number`
 
 The minimum length of a alias unlock block binary representation.
 
@@ -762,7 +762,7 @@ ___
 
 ### MIN\_NFT\_UNLOCK\_BLOCK\_LENGTH
 
-• **MIN\_NFT\_UNLOCK\_BLOCK\_LENGTH**: `number`
+• `Const` **MIN\_NFT\_UNLOCK\_BLOCK\_LENGTH**: `number`
 
 The minimum length of a nft unlock block binary representation.
 
@@ -770,7 +770,7 @@ ___
 
 ### MIN\_REFERENCE\_UNLOCK\_BLOCK\_LENGTH
 
-• **MIN\_REFERENCE\_UNLOCK\_BLOCK\_LENGTH**: `number`
+• `Const` **MIN\_REFERENCE\_UNLOCK\_BLOCK\_LENGTH**: `number`
 
 The minimum length of a reference unlock block binary representation.
 
@@ -778,7 +778,7 @@ ___
 
 ### MIN\_SIGNATURE\_UNLOCK\_BLOCK\_LENGTH
 
-• **MIN\_SIGNATURE\_UNLOCK\_BLOCK\_LENGTH**: `number`
+• `Const` **MIN\_SIGNATURE\_UNLOCK\_BLOCK\_LENGTH**: `number`
 
 The minimum length of a signature unlock block binary representation.
 
@@ -786,7 +786,7 @@ ___
 
 ### MIN\_UNLOCK\_BLOCK\_LENGTH
 
-• **MIN\_UNLOCK\_BLOCK\_LENGTH**: `number`
+• `Const` **MIN\_UNLOCK\_BLOCK\_LENGTH**: `number`
 
 The minimum length of an unlock block binary representation.
 
@@ -794,7 +794,7 @@ ___
 
 ### MIN\_ADDRESS\_UNLOCK\_CONDITION\_LENGTH
 
-• **MIN\_ADDRESS\_UNLOCK\_CONDITION\_LENGTH**: `number`
+• `Const` **MIN\_ADDRESS\_UNLOCK\_CONDITION\_LENGTH**: `number`
 
 The minimum length of an address unlock condition binary representation.
 
@@ -802,7 +802,7 @@ ___
 
 ### MIN\_DUST\_DEPOSIT\_RETURN\_UNLOCK\_CONDITION\_LENGTH
 
-• **MIN\_DUST\_DEPOSIT\_RETURN\_UNLOCK\_CONDITION\_LENGTH**: `number`
+• `Const` **MIN\_DUST\_DEPOSIT\_RETURN\_UNLOCK\_CONDITION\_LENGTH**: `number`
 
 The minimum length of an dust deposit return unlock condition binary representation.
 
@@ -810,7 +810,7 @@ ___
 
 ### MIN\_EXPIRATION\_UNLOCK\_CONDITION\_LENGTH
 
-• **MIN\_EXPIRATION\_UNLOCK\_CONDITION\_LENGTH**: `number`
+• `Const` **MIN\_EXPIRATION\_UNLOCK\_CONDITION\_LENGTH**: `number`
 
 The minimum length of an expiration unlock condition binary representation.
 
@@ -818,7 +818,7 @@ ___
 
 ### MIN\_GOVERNOR\_ADDRESS\_UNLOCK\_CONDITION\_LENGTH
 
-• **MIN\_GOVERNOR\_ADDRESS\_UNLOCK\_CONDITION\_LENGTH**: `number`
+• `Const` **MIN\_GOVERNOR\_ADDRESS\_UNLOCK\_CONDITION\_LENGTH**: `number`
 
 The minimum length of an governor unlock condition binary representation.
 
@@ -826,7 +826,7 @@ ___
 
 ### MIN\_IMMUTABLE\_ALIAS\_UNLOCK\_CONDITION\_LENGTH
 
-• **MIN\_IMMUTABLE\_ALIAS\_UNLOCK\_CONDITION\_LENGTH**: `number`
+• `Const` **MIN\_IMMUTABLE\_ALIAS\_UNLOCK\_CONDITION\_LENGTH**: `number`
 
 The minimum length of an immutable alias unlock condition binary representation.
 
@@ -834,7 +834,7 @@ ___
 
 ### MIN\_STATE\_CONTROLLER\_ADDRESS\_UNLOCK\_CONDITION\_LENGTH
 
-• **MIN\_STATE\_CONTROLLER\_ADDRESS\_UNLOCK\_CONDITION\_LENGTH**: `number`
+• `Const` **MIN\_STATE\_CONTROLLER\_ADDRESS\_UNLOCK\_CONDITION\_LENGTH**: `number`
 
 The minimum length of an state controller address unlock condition binary representation.
 
@@ -842,7 +842,7 @@ ___
 
 ### MIN\_TIMELOCK\_UNLOCK\_CONDITION\_LENGTH
 
-• **MIN\_TIMELOCK\_UNLOCK\_CONDITION\_LENGTH**: `number`
+• `Const` **MIN\_TIMELOCK\_UNLOCK\_CONDITION\_LENGTH**: `number`
 
 The minimum length of an timelock unlock condition binary representation.
 
@@ -850,7 +850,7 @@ ___
 
 ### MIN\_UNLOCK\_CONDITIONS\_LENGTH
 
-• **MIN\_UNLOCK\_CONDITIONS\_LENGTH**: `number` = `UINT8_SIZE`
+• `Const` **MIN\_UNLOCK\_CONDITIONS\_LENGTH**: `number` = `UINT8_SIZE`
 
 The minimum length of a unlock conditions list.
 
@@ -858,7 +858,7 @@ ___
 
 ### MIN\_UNLOCK\_CONDITION\_LENGTH
 
-• **MIN\_UNLOCK\_CONDITION\_LENGTH**: `number`
+• `Const` **MIN\_UNLOCK\_CONDITION\_LENGTH**: `number`
 
 The minimum length of a unlock conditions binary representation.
 
@@ -866,7 +866,7 @@ ___
 
 ### DEFAULT\_PROTOCOL\_VERSION
 
-• **DEFAULT\_PROTOCOL\_VERSION**: `number` = `2`
+• `Const` **DEFAULT\_PROTOCOL\_VERSION**: `number` = `2`
 
 The default protocol version.
 
@@ -874,7 +874,7 @@ ___
 
 ### TRANSACTION\_ESSENCE\_TYPE
 
-• **TRANSACTION\_ESSENCE\_TYPE**: ``0``
+• `Const` **TRANSACTION\_ESSENCE\_TYPE**: ``0``
 
 The global type for the transaction essence.
 
@@ -882,7 +882,7 @@ ___
 
 ### INPUTS\_COMMITMENT\_SIZE
 
-• **INPUTS\_COMMITMENT\_SIZE**: `number` = `Blake2b.SIZE_256`
+• `Const` **INPUTS\_COMMITMENT\_SIZE**: `number` = `Blake2b.SIZE_256`
 
 Inputs commitment size.
 
@@ -890,7 +890,7 @@ ___
 
 ### ALIAS\_ADDRESS\_TYPE
 
-• **ALIAS\_ADDRESS\_TYPE**: ``8``
+• `Const` **ALIAS\_ADDRESS\_TYPE**: ``8``
 
 The global type for the alias address type.
 
@@ -898,7 +898,7 @@ ___
 
 ### ED25519\_ADDRESS\_TYPE
 
-• **ED25519\_ADDRESS\_TYPE**: ``0``
+• `Const` **ED25519\_ADDRESS\_TYPE**: ``0``
 
 The global type for the ed25519 address type.
 
@@ -906,7 +906,7 @@ ___
 
 ### NFT\_ADDRESS\_TYPE
 
-• **NFT\_ADDRESS\_TYPE**: ``16``
+• `Const` **NFT\_ADDRESS\_TYPE**: ``16``
 
 The global type for the NFT address type.
 
@@ -914,7 +914,7 @@ ___
 
 ### ISSUER\_FEATURE\_BLOCK\_TYPE
 
-• **ISSUER\_FEATURE\_BLOCK\_TYPE**: ``1``
+• `Const` **ISSUER\_FEATURE\_BLOCK\_TYPE**: ``1``
 
 The global type for the issuer feature block.
 
@@ -922,7 +922,7 @@ ___
 
 ### METADATA\_FEATURE\_BLOCK\_TYPE
 
-• **METADATA\_FEATURE\_BLOCK\_TYPE**: ``2``
+• `Const` **METADATA\_FEATURE\_BLOCK\_TYPE**: ``2``
 
 The global type for the metadata feature block.
 
@@ -930,7 +930,7 @@ ___
 
 ### SENDER\_FEATURE\_BLOCK\_TYPE
 
-• **SENDER\_FEATURE\_BLOCK\_TYPE**: ``0``
+• `Const` **SENDER\_FEATURE\_BLOCK\_TYPE**: ``0``
 
 The global type for the sender feature block.
 
@@ -938,7 +938,7 @@ ___
 
 ### TAG\_FEATURE\_BLOCK\_TYPE
 
-• **TAG\_FEATURE\_BLOCK\_TYPE**: ``3``
+• `Const` **TAG\_FEATURE\_BLOCK\_TYPE**: ``3``
 
 The global type for the tag feature block.
 
@@ -946,7 +946,7 @@ ___
 
 ### TREASURY\_INPUT\_TYPE
 
-• **TREASURY\_INPUT\_TYPE**: ``1``
+• `Const` **TREASURY\_INPUT\_TYPE**: ``1``
 
 The global type for the treasury input.
 
@@ -954,7 +954,7 @@ ___
 
 ### UTXO\_INPUT\_TYPE
 
-• **UTXO\_INPUT\_TYPE**: ``0``
+• `Const` **UTXO\_INPUT\_TYPE**: ``0``
 
 The global type for the input.
 
@@ -962,7 +962,7 @@ ___
 
 ### ALIAS\_OUTPUT\_TYPE
 
-• **ALIAS\_OUTPUT\_TYPE**: ``4``
+• `Const` **ALIAS\_OUTPUT\_TYPE**: ``4``
 
 The global type for the alias output.
 
@@ -970,7 +970,7 @@ ___
 
 ### BASIC\_OUTPUT\_TYPE
 
-• **BASIC\_OUTPUT\_TYPE**: ``3``
+• `Const` **BASIC\_OUTPUT\_TYPE**: ``3``
 
 The global type for the basic output.
 
@@ -978,7 +978,7 @@ ___
 
 ### FOUNDRY\_OUTPUT\_TYPE
 
-• **FOUNDRY\_OUTPUT\_TYPE**: ``5``
+• `Const` **FOUNDRY\_OUTPUT\_TYPE**: ``5``
 
 The global type for the foundry output.
 
@@ -986,7 +986,7 @@ ___
 
 ### NFT\_OUTPUT\_TYPE
 
-• **NFT\_OUTPUT\_TYPE**: ``6``
+• `Const` **NFT\_OUTPUT\_TYPE**: ``6``
 
 The global type for the NFT output.
 
@@ -994,7 +994,7 @@ ___
 
 ### TREASURY\_OUTPUT\_TYPE
 
-• **TREASURY\_OUTPUT\_TYPE**: ``2``
+• `Const` **TREASURY\_OUTPUT\_TYPE**: ``2``
 
 The global type for the treasury output.
 
@@ -1002,7 +1002,7 @@ ___
 
 ### MILESTONE\_PAYLOAD\_TYPE
 
-• **MILESTONE\_PAYLOAD\_TYPE**: ``1``
+• `Const` **MILESTONE\_PAYLOAD\_TYPE**: ``1``
 
 The global type for the payload.
 
@@ -1010,7 +1010,7 @@ ___
 
 ### RECEIPT\_PAYLOAD\_TYPE
 
-• **RECEIPT\_PAYLOAD\_TYPE**: ``3``
+• `Const` **RECEIPT\_PAYLOAD\_TYPE**: ``3``
 
 The global type for the payload.
 
@@ -1018,7 +1018,7 @@ ___
 
 ### TAGGED\_DATA\_PAYLOAD\_TYPE
 
-• **TAGGED\_DATA\_PAYLOAD\_TYPE**: ``5``
+• `Const` **TAGGED\_DATA\_PAYLOAD\_TYPE**: ``5``
 
 The global type for the payload.
 
@@ -1026,7 +1026,7 @@ ___
 
 ### TRANSACTION\_PAYLOAD\_TYPE
 
-• **TRANSACTION\_PAYLOAD\_TYPE**: ``0``
+• `Const` **TRANSACTION\_PAYLOAD\_TYPE**: ``0``
 
 The global type for the payload.
 
@@ -1034,7 +1034,7 @@ ___
 
 ### TREASURY\_TRANSACTION\_PAYLOAD\_TYPE
 
-• **TREASURY\_TRANSACTION\_PAYLOAD\_TYPE**: ``4``
+• `Const` **TREASURY\_TRANSACTION\_PAYLOAD\_TYPE**: ``4``
 
 The global type for the payload.
 
@@ -1042,7 +1042,7 @@ ___
 
 ### ED25519\_SIGNATURE\_TYPE
 
-• **ED25519\_SIGNATURE\_TYPE**: ``0``
+• `Const` **ED25519\_SIGNATURE\_TYPE**: ``0``
 
 The global type for the signature type.
 
@@ -1050,7 +1050,7 @@ ___
 
 ### SIMPLE\_TOKEN\_SCHEME\_TYPE
 
-• **SIMPLE\_TOKEN\_SCHEME\_TYPE**: ``0``
+• `Const` **SIMPLE\_TOKEN\_SCHEME\_TYPE**: ``0``
 
 The global type for the simple token scheme.
 
@@ -1058,7 +1058,7 @@ ___
 
 ### ALIAS\_UNLOCK\_BLOCK\_TYPE
 
-• **ALIAS\_UNLOCK\_BLOCK\_TYPE**: ``2``
+• `Const` **ALIAS\_UNLOCK\_BLOCK\_TYPE**: ``2``
 
 The global type for the alias unlock block.
 
@@ -1066,7 +1066,7 @@ ___
 
 ### NFT\_UNLOCK\_BLOCK\_TYPE
 
-• **NFT\_UNLOCK\_BLOCK\_TYPE**: ``3``
+• `Const` **NFT\_UNLOCK\_BLOCK\_TYPE**: ``3``
 
 The global type for the NFT unlock block.
 
@@ -1074,7 +1074,7 @@ ___
 
 ### REFERENCE\_UNLOCK\_BLOCK\_TYPE
 
-• **REFERENCE\_UNLOCK\_BLOCK\_TYPE**: ``1``
+• `Const` **REFERENCE\_UNLOCK\_BLOCK\_TYPE**: ``1``
 
 The global type for the reference unlock block.
 
@@ -1082,7 +1082,7 @@ ___
 
 ### SIGNATURE\_UNLOCK\_BLOCK\_TYPE
 
-• **SIGNATURE\_UNLOCK\_BLOCK\_TYPE**: ``0``
+• `Const` **SIGNATURE\_UNLOCK\_BLOCK\_TYPE**: ``0``
 
 The global type for the unlock block.
 
@@ -1090,7 +1090,7 @@ ___
 
 ### ADDRESS\_UNLOCK\_CONDITION\_TYPE
 
-• **ADDRESS\_UNLOCK\_CONDITION\_TYPE**: ``0``
+• `Const` **ADDRESS\_UNLOCK\_CONDITION\_TYPE**: ``0``
 
 The global type for the address unlock condition.
 
@@ -1098,7 +1098,7 @@ ___
 
 ### DUST\_DEPOSIT\_RETURN\_UNLOCK\_CONDITION\_TYPE
 
-• **DUST\_DEPOSIT\_RETURN\_UNLOCK\_CONDITION\_TYPE**: ``1``
+• `Const` **DUST\_DEPOSIT\_RETURN\_UNLOCK\_CONDITION\_TYPE**: ``1``
 
 The global type for the dust deposit return unlock condition.
 
@@ -1106,7 +1106,7 @@ ___
 
 ### EXPIRATION\_UNLOCK\_CONDITION\_TYPE
 
-• **EXPIRATION\_UNLOCK\_CONDITION\_TYPE**: ``3``
+• `Const` **EXPIRATION\_UNLOCK\_CONDITION\_TYPE**: ``3``
 
 The global type for the expiration unlock condition.
 
@@ -1114,7 +1114,7 @@ ___
 
 ### GOVERNOR\_ADDRESS\_UNLOCK\_CONDITION\_TYPE
 
-• **GOVERNOR\_ADDRESS\_UNLOCK\_CONDITION\_TYPE**: ``5``
+• `Const` **GOVERNOR\_ADDRESS\_UNLOCK\_CONDITION\_TYPE**: ``5``
 
 The global type for the governor address unlock condition.
 
@@ -1122,7 +1122,7 @@ ___
 
 ### IMMUTABLE\_ALIAS\_UNLOCK\_CONDITION\_TYPE
 
-• **IMMUTABLE\_ALIAS\_UNLOCK\_CONDITION\_TYPE**: ``6``
+• `Const` **IMMUTABLE\_ALIAS\_UNLOCK\_CONDITION\_TYPE**: ``6``
 
 The global type for the immutable alias unlock condition.
 
@@ -1130,7 +1130,7 @@ ___
 
 ### STATE\_CONTROLLER\_ADDRESS\_UNLOCK\_CONDITION\_TYPE
 
-• **STATE\_CONTROLLER\_ADDRESS\_UNLOCK\_CONDITION\_TYPE**: ``4``
+• `Const` **STATE\_CONTROLLER\_ADDRESS\_UNLOCK\_CONDITION\_TYPE**: ``4``
 
 The global type for the state controller unlock condition.
 
@@ -1138,7 +1138,7 @@ ___
 
 ### TIMELOCK\_UNLOCK\_CONDITION\_TYPE
 
-• **TIMELOCK\_UNLOCK\_CONDITION\_TYPE**: ``2``
+• `Const` **TIMELOCK\_UNLOCK\_CONDITION\_TYPE**: ``2``
 
 The global type for the timelock unlock condition.
 
@@ -1146,7 +1146,7 @@ ___
 
 ### CONFLICT\_REASON\_STRINGS
 
-• **CONFLICT\_REASON\_STRINGS**: { [key in ConflictReason]: string }
+• `Const` **CONFLICT\_REASON\_STRINGS**: { [key in ConflictReason]: string }
 
 Conflict reason strings.
 
@@ -1154,7 +1154,7 @@ ___
 
 ### ED25519\_SEED\_TYPE
 
-• **ED25519\_SEED\_TYPE**: `number` = `1`
+• `Const` **ED25519\_SEED\_TYPE**: `number` = `1`
 
 The global type for the seed.
 

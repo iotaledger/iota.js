@@ -25,9 +25,9 @@
         "dist": "npm run asbuild:optimized"
     },
     "dependencies": {
-        "@assemblyscript/loader": "^0.19.22"
+        "@assemblyscript/loader": "^0.19.23"
     },
     "devDependencies": {
-        "assemblyscript": "^0.19.22"
+        "assemblyscript": "^0.19.23"
     }
 }
