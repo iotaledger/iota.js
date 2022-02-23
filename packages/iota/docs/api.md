@@ -229,7 +229,7 @@
 
 ### MIN\_ADDRESS\_LENGTH
 
-• **MIN\_ADDRESS\_LENGTH**: `number` = `SMALL_TYPE_LENGTH`
+• `Const` **MIN\_ADDRESS\_LENGTH**: `number` = `SMALL_TYPE_LENGTH`
 
 The minimum length of an address binary representation.
 
@@ -237,7 +237,7 @@ ___
 
 ### MIN\_ED25519\_ADDRESS\_LENGTH
 
-• **MIN\_ED25519\_ADDRESS\_LENGTH**: `number`
+• `Const` **MIN\_ED25519\_ADDRESS\_LENGTH**: `number`
 
 The minimum length of an ed25519 address binary representation.
 
@@ -245,7 +245,7 @@ ___
 
 ### BYTE\_SIZE
 
-• **BYTE\_SIZE**: `number` = `1`
+• `Const` **BYTE\_SIZE**: `number` = `1`
 
 Byte length for a byte field.
 
@@ -253,7 +253,7 @@ ___
 
 ### UINT16\_SIZE
 
-• **UINT16\_SIZE**: `number` = `2`
+• `Const` **UINT16\_SIZE**: `number` = `2`
 
 Byte length for a uint16 field.
 
@@ -261,7 +261,7 @@ ___
 
 ### UINT32\_SIZE
 
-• **UINT32\_SIZE**: `number` = `4`
+• `Const` **UINT32\_SIZE**: `number` = `4`
 
 Byte length for a uint32 field.
 
@@ -269,7 +269,7 @@ ___
 
 ### UINT64\_SIZE
 
-• **UINT64\_SIZE**: `number` = `8`
+• `Const` **UINT64\_SIZE**: `number` = `8`
 
 Byte length for a uint64 field.
 
@@ -277,7 +277,7 @@ ___
 
 ### MESSAGE\_ID\_LENGTH
 
-• **MESSAGE\_ID\_LENGTH**: `number` = `Blake2b.SIZE_256`
+• `Const` **MESSAGE\_ID\_LENGTH**: `number` = `Blake2b.SIZE_256`
 
 Byte length for a message id.
 
@@ -285,7 +285,7 @@ ___
 
 ### TRANSACTION\_ID\_LENGTH
 
-• **TRANSACTION\_ID\_LENGTH**: `number` = `Blake2b.SIZE_256`
+• `Const` **TRANSACTION\_ID\_LENGTH**: `number` = `Blake2b.SIZE_256`
 
 Byte length for a transaction id.
 
@@ -293,7 +293,7 @@ ___
 
 ### MERKLE\_PROOF\_LENGTH
 
-• **MERKLE\_PROOF\_LENGTH**: `number` = `Blake2b.SIZE_256`
+• `Const` **MERKLE\_PROOF\_LENGTH**: `number` = `Blake2b.SIZE_256`
 
 Byte length for a merkle prrof.
 
@@ -301,7 +301,7 @@ ___
 
 ### TYPE\_LENGTH
 
-• **TYPE\_LENGTH**: `number` = `UINT32_SIZE`
+• `Const` **TYPE\_LENGTH**: `number` = `UINT32_SIZE`
 
 Byte length for a type length.
 
@@ -309,7 +309,7 @@ ___
 
 ### SMALL\_TYPE\_LENGTH
 
-• **SMALL\_TYPE\_LENGTH**: `number` = `BYTE_SIZE`
+• `Const` **SMALL\_TYPE\_LENGTH**: `number` = `BYTE_SIZE`
 
 Byte length for a small type length.
 
@@ -317,7 +317,7 @@ ___
 
 ### STRING\_LENGTH
 
-• **STRING\_LENGTH**: `number` = `UINT16_SIZE`
+• `Const` **STRING\_LENGTH**: `number` = `UINT16_SIZE`
 
 Byte length for a string length.
 
@@ -325,7 +325,7 @@ ___
 
 ### ARRAY\_LENGTH
 
-• **ARRAY\_LENGTH**: `number` = `UINT16_SIZE`
+• `Const` **ARRAY\_LENGTH**: `number` = `UINT16_SIZE`
 
 Byte length for an array length.
 
@@ -333,7 +333,7 @@ ___
 
 ### TAIL\_HASH\_LENGTH
 
-• **TAIL\_HASH\_LENGTH**: `number` = `49`
+• `Const` **TAIL\_HASH\_LENGTH**: `number` = `49`
 
 The length of the tail hash length in bytes.
 
@@ -341,7 +341,7 @@ ___
 
 ### MIN\_MIGRATED\_FUNDS\_LENGTH
 
-• **MIN\_MIGRATED\_FUNDS\_LENGTH**: `number`
+• `Const` **MIN\_MIGRATED\_FUNDS\_LENGTH**: `number`
 
 The minimum length of a migrated fund binary representation.
 
@@ -349,7 +349,7 @@ ___
 
 ### MAX\_FUNDS\_COUNT
 
-• **MAX\_FUNDS\_COUNT**: `number` = `127`
+• `Const` **MAX\_FUNDS\_COUNT**: `number` = `127`
 
 The maximum number of funds.
 
@@ -357,7 +357,7 @@ ___
 
 ### MIN\_INPUT\_LENGTH
 
-• **MIN\_INPUT\_LENGTH**: `number` = `SMALL_TYPE_LENGTH`
+• `Const` **MIN\_INPUT\_LENGTH**: `number` = `SMALL_TYPE_LENGTH`
 
 The minimum length of an input binary representation.
 
@@ -365,7 +365,7 @@ ___
 
 ### MIN\_UTXO\_INPUT\_LENGTH
 
-• **MIN\_UTXO\_INPUT\_LENGTH**: `number`
+• `Const` **MIN\_UTXO\_INPUT\_LENGTH**: `number`
 
 The minimum length of a utxo input binary representation.
 
@@ -373,7 +373,7 @@ ___
 
 ### MIN\_TREASURY\_INPUT\_LENGTH
 
-• **MIN\_TREASURY\_INPUT\_LENGTH**: `number`
+• `Const` **MIN\_TREASURY\_INPUT\_LENGTH**: `number`
 
 The minimum length of a treasury input binary representation.
 
@@ -381,7 +381,7 @@ ___
 
 ### MIN\_INPUT\_COUNT
 
-• **MIN\_INPUT\_COUNT**: `number` = `1`
+• `Const` **MIN\_INPUT\_COUNT**: `number` = `1`
 
 The minimum number of inputs.
 
@@ -389,7 +389,7 @@ ___
 
 ### MAX\_INPUT\_COUNT
 
-• **MAX\_INPUT\_COUNT**: `number` = `127`
+• `Const` **MAX\_INPUT\_COUNT**: `number` = `127`
 
 The maximum number of inputs.
 
@@ -397,7 +397,7 @@ ___
 
 ### MAX\_MESSAGE\_LENGTH
 
-• **MAX\_MESSAGE\_LENGTH**: `number` = `32768`
+• `Const` **MAX\_MESSAGE\_LENGTH**: `number` = `32768`
 
 The maximum length of a message.
 
@@ -405,7 +405,7 @@ ___
 
 ### MAX\_NUMBER\_PARENTS
 
-• **MAX\_NUMBER\_PARENTS**: `number` = `8`
+• `Const` **MAX\_NUMBER\_PARENTS**: `number` = `8`
 
 The maximum number of parents.
 
@@ -413,7 +413,7 @@ ___
 
 ### MIN\_NUMBER\_PARENTS
 
-• **MIN\_NUMBER\_PARENTS**: `number` = `1`
+• `Const` **MIN\_NUMBER\_PARENTS**: `number` = `1`
 
 The minimum number of parents.
 
@@ -421,7 +421,7 @@ ___
 
 ### MIN\_OUTPUT\_LENGTH
 
-• **MIN\_OUTPUT\_LENGTH**: `number` = `SMALL_TYPE_LENGTH`
+• `Const` **MIN\_OUTPUT\_LENGTH**: `number` = `SMALL_TYPE_LENGTH`
 
 The minimum length of an output binary representation.
 
@@ -429,7 +429,7 @@ ___
 
 ### MIN\_SIG\_LOCKED\_SINGLE\_OUTPUT\_LENGTH
 
-• **MIN\_SIG\_LOCKED\_SINGLE\_OUTPUT\_LENGTH**: `number`
+• `Const` **MIN\_SIG\_LOCKED\_SINGLE\_OUTPUT\_LENGTH**: `number`
 
 The minimum length of a sig locked single output binary representation.
 
@@ -437,7 +437,7 @@ ___
 
 ### MIN\_SIG\_LOCKED\_DUST\_ALLOWANCE\_OUTPUT\_LENGTH
 
-• **MIN\_SIG\_LOCKED\_DUST\_ALLOWANCE\_OUTPUT\_LENGTH**: `number`
+• `Const` **MIN\_SIG\_LOCKED\_DUST\_ALLOWANCE\_OUTPUT\_LENGTH**: `number`
 
 The minimum length of a sig locked dust allowance output binary representation.
 
@@ -445,7 +445,7 @@ ___
 
 ### MIN\_TREASURY\_OUTPUT\_LENGTH
 
-• **MIN\_TREASURY\_OUTPUT\_LENGTH**: `number`
+• `Const` **MIN\_TREASURY\_OUTPUT\_LENGTH**: `number`
 
 The minimum length of a treasury output binary representation.
 
@@ -453,7 +453,7 @@ ___
 
 ### MIN\_OUTPUT\_COUNT
 
-• **MIN\_OUTPUT\_COUNT**: `number` = `1`
+• `Const` **MIN\_OUTPUT\_COUNT**: `number` = `1`
 
 The minimum number of outputs.
 
@@ -461,7 +461,7 @@ ___
 
 ### MAX\_OUTPUT\_COUNT
 
-• **MAX\_OUTPUT\_COUNT**: `number` = `127`
+• `Const` **MAX\_OUTPUT\_COUNT**: `number` = `127`
 
 The maximum number of outputs.
 
@@ -469,7 +469,7 @@ ___
 
 ### MIN\_PAYLOAD\_LENGTH
 
-• **MIN\_PAYLOAD\_LENGTH**: `number` = `TYPE_LENGTH`
+• `Const` **MIN\_PAYLOAD\_LENGTH**: `number` = `TYPE_LENGTH`
 
 The minimum length of a payload binary representation.
 
@@ -477,7 +477,7 @@ ___
 
 ### MIN\_MILESTONE\_PAYLOAD\_LENGTH
 
-• **MIN\_MILESTONE\_PAYLOAD\_LENGTH**: `number`
+• `Const` **MIN\_MILESTONE\_PAYLOAD\_LENGTH**: `number`
 
 The minimum length of a milestone payload binary representation.
 
@@ -485,7 +485,7 @@ ___
 
 ### MIN\_INDEXATION\_PAYLOAD\_LENGTH
 
-• **MIN\_INDEXATION\_PAYLOAD\_LENGTH**: `number`
+• `Const` **MIN\_INDEXATION\_PAYLOAD\_LENGTH**: `number`
 
 The minimum length of an indexation payload binary representation.
 
@@ -493,7 +493,7 @@ ___
 
 ### MIN\_TRANSACTION\_PAYLOAD\_LENGTH
 
-• **MIN\_TRANSACTION\_PAYLOAD\_LENGTH**: `number`
+• `Const` **MIN\_TRANSACTION\_PAYLOAD\_LENGTH**: `number`
 
 The minimum length of a transaction payload binary representation.
 
@@ -501,7 +501,7 @@ ___
 
 ### MIN\_RECEIPT\_PAYLOAD\_LENGTH
 
-• **MIN\_RECEIPT\_PAYLOAD\_LENGTH**: `number`
+• `Const` **MIN\_RECEIPT\_PAYLOAD\_LENGTH**: `number`
 
 The minimum length of a receipt payload binary representation.
 
@@ -509,7 +509,7 @@ ___
 
 ### MIN\_TREASURY\_TRANSACTION\_PAYLOAD\_LENGTH
 
-• **MIN\_TREASURY\_TRANSACTION\_PAYLOAD\_LENGTH**: `number`
+• `Const` **MIN\_TREASURY\_TRANSACTION\_PAYLOAD\_LENGTH**: `number`
 
 The minimum length of a treasure transaction payload binary representation.
 
@@ -517,7 +517,7 @@ ___
 
 ### MIN\_INDEXATION\_KEY\_LENGTH
 
-• **MIN\_INDEXATION\_KEY\_LENGTH**: `number` = `1`
+• `Const` **MIN\_INDEXATION\_KEY\_LENGTH**: `number` = `1`
 
 The minimum length of a indexation key.
 
@@ -525,7 +525,7 @@ ___
 
 ### MAX\_INDEXATION\_KEY\_LENGTH
 
-• **MAX\_INDEXATION\_KEY\_LENGTH**: `number` = `64`
+• `Const` **MAX\_INDEXATION\_KEY\_LENGTH**: `number` = `64`
 
 The maximum length of a indexation key.
 
@@ -533,7 +533,7 @@ ___
 
 ### MIN\_SIGNATURE\_LENGTH
 
-• **MIN\_SIGNATURE\_LENGTH**: `number` = `SMALL_TYPE_LENGTH`
+• `Const` **MIN\_SIGNATURE\_LENGTH**: `number` = `SMALL_TYPE_LENGTH`
 
 The minimum length of a signature binary representation.
 
@@ -541,7 +541,7 @@ ___
 
 ### MIN\_ED25519\_SIGNATURE\_LENGTH
 
-• **MIN\_ED25519\_SIGNATURE\_LENGTH**: `number`
+• `Const` **MIN\_ED25519\_SIGNATURE\_LENGTH**: `number`
 
 The minimum length of an ed25519 signature binary representation.
 
@@ -549,7 +549,7 @@ ___
 
 ### MIN\_TRANSACTION\_ESSENCE\_LENGTH
 
-• **MIN\_TRANSACTION\_ESSENCE\_LENGTH**: `number`
+• `Const` **MIN\_TRANSACTION\_ESSENCE\_LENGTH**: `number`
 
 The minimum length of a transaction essence binary representation.
 
@@ -557,7 +557,7 @@ ___
 
 ### MIN\_UNLOCK\_BLOCK\_LENGTH
 
-• **MIN\_UNLOCK\_BLOCK\_LENGTH**: `number` = `SMALL_TYPE_LENGTH`
+• `Const` **MIN\_UNLOCK\_BLOCK\_LENGTH**: `number` = `SMALL_TYPE_LENGTH`
 
 The minimum length of an unlock block binary representation.
 
@@ -565,7 +565,7 @@ ___
 
 ### MIN\_SIGNATURE\_UNLOCK\_BLOCK\_LENGTH
 
-• **MIN\_SIGNATURE\_UNLOCK\_BLOCK\_LENGTH**: `number`
+• `Const` **MIN\_SIGNATURE\_UNLOCK\_BLOCK\_LENGTH**: `number`
 
 The minimum length of a signature unlock block binary representation.
 
@@ -573,7 +573,7 @@ ___
 
 ### MIN\_REFERENCE\_UNLOCK\_BLOCK\_LENGTH
 
-• **MIN\_REFERENCE\_UNLOCK\_BLOCK\_LENGTH**: `number`
+• `Const` **MIN\_REFERENCE\_UNLOCK\_BLOCK\_LENGTH**: `number`
 
 The minimum length of a reference unlock block binary representation.
 
@@ -581,7 +581,7 @@ ___
 
 ### ED25519\_ADDRESS\_TYPE
 
-• **ED25519\_ADDRESS\_TYPE**: ``0``
+• `Const` **ED25519\_ADDRESS\_TYPE**: ``0``
 
 The global type for the address type.
 
@@ -589,7 +589,7 @@ ___
 
 ### ED25519\_SIGNATURE\_TYPE
 
-• **ED25519\_SIGNATURE\_TYPE**: ``0``
+• `Const` **ED25519\_SIGNATURE\_TYPE**: ``0``
 
 The global type for the signature type.
 
@@ -597,7 +597,7 @@ ___
 
 ### INDEXATION\_PAYLOAD\_TYPE
 
-• **INDEXATION\_PAYLOAD\_TYPE**: ``2``
+• `Const` **INDEXATION\_PAYLOAD\_TYPE**: ``2``
 
 The global type for the payload.
 
@@ -605,7 +605,7 @@ ___
 
 ### MILESTONE\_PAYLOAD\_TYPE
 
-• **MILESTONE\_PAYLOAD\_TYPE**: ``1``
+• `Const` **MILESTONE\_PAYLOAD\_TYPE**: ``1``
 
 The global type for the payload.
 
@@ -613,7 +613,7 @@ ___
 
 ### RECEIPT\_PAYLOAD\_TYPE
 
-• **RECEIPT\_PAYLOAD\_TYPE**: ``3``
+• `Const` **RECEIPT\_PAYLOAD\_TYPE**: ``3``
 
 The global type for the payload.
 
@@ -621,7 +621,7 @@ ___
 
 ### REFERENCE\_UNLOCK\_BLOCK\_TYPE
 
-• **REFERENCE\_UNLOCK\_BLOCK\_TYPE**: ``1``
+• `Const` **REFERENCE\_UNLOCK\_BLOCK\_TYPE**: ``1``
 
 The global type for the unlock block.
 
@@ -629,7 +629,7 @@ ___
 
 ### SIG\_LOCKED\_DUST\_ALLOWANCE\_OUTPUT\_TYPE
 
-• **SIG\_LOCKED\_DUST\_ALLOWANCE\_OUTPUT\_TYPE**: ``1``
+• `Const` **SIG\_LOCKED\_DUST\_ALLOWANCE\_OUTPUT\_TYPE**: ``1``
 
 The global type for the sig locked dust allowance output.
 
@@ -637,7 +637,7 @@ ___
 
 ### SIG\_LOCKED\_SINGLE\_OUTPUT\_TYPE
 
-• **SIG\_LOCKED\_SINGLE\_OUTPUT\_TYPE**: ``0``
+• `Const` **SIG\_LOCKED\_SINGLE\_OUTPUT\_TYPE**: ``0``
 
 The global type for the sig locked single output.
 
@@ -645,7 +645,7 @@ ___
 
 ### SIGNATURE\_UNLOCK\_BLOCK\_TYPE
 
-• **SIGNATURE\_UNLOCK\_BLOCK\_TYPE**: ``0``
+• `Const` **SIGNATURE\_UNLOCK\_BLOCK\_TYPE**: ``0``
 
 The global type for the unlock block.
 
@@ -653,7 +653,7 @@ ___
 
 ### TRANSACTION\_ESSENCE\_TYPE
 
-• **TRANSACTION\_ESSENCE\_TYPE**: ``0``
+• `Const` **TRANSACTION\_ESSENCE\_TYPE**: ``0``
 
 The global type for the transaction essence.
 
@@ -661,7 +661,7 @@ ___
 
 ### TRANSACTION\_PAYLOAD\_TYPE
 
-• **TRANSACTION\_PAYLOAD\_TYPE**: ``0``
+• `Const` **TRANSACTION\_PAYLOAD\_TYPE**: ``0``
 
 The global type for the payload.
 
@@ -669,7 +669,7 @@ ___
 
 ### TREASURY\_INPUT\_TYPE
 
-• **TREASURY\_INPUT\_TYPE**: ``1``
+• `Const` **TREASURY\_INPUT\_TYPE**: ``1``
 
 The global type for the treasury input.
 
@@ -677,7 +677,7 @@ ___
 
 ### TREASURY\_OUTPUT\_TYPE
 
-• **TREASURY\_OUTPUT\_TYPE**: ``2``
+• `Const` **TREASURY\_OUTPUT\_TYPE**: ``2``
 
 The global type for the treasury output.
 
@@ -685,7 +685,7 @@ ___
 
 ### TREASURY\_TRANSACTION\_PAYLOAD\_TYPE
 
-• **TREASURY\_TRANSACTION\_PAYLOAD\_TYPE**: ``4``
+• `Const` **TREASURY\_TRANSACTION\_PAYLOAD\_TYPE**: ``4``
 
 The global type for the payload.
 
@@ -693,7 +693,7 @@ ___
 
 ### UTXO\_INPUT\_TYPE
 
-• **UTXO\_INPUT\_TYPE**: ``0``
+• `Const` **UTXO\_INPUT\_TYPE**: ``0``
 
 The global type for the input.
 
@@ -701,7 +701,7 @@ ___
 
 ### CONFLICT\_REASON\_STRINGS
 
-• **CONFLICT\_REASON\_STRINGS**: { [key in ConflictReason]: string }
+• `Const` **CONFLICT\_REASON\_STRINGS**: { [key in ConflictReason]: string }
 
 Conflict reason strings.
 
@@ -709,7 +709,7 @@ ___
 
 ### ED25519\_SEED\_TYPE
 
-• **ED25519\_SEED\_TYPE**: `number` = `1`
+• `Const` **ED25519\_SEED\_TYPE**: `number` = `1`
 
 The global type for the seed.
 

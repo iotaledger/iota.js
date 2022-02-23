@@ -11,7 +11,9 @@
         "stripInternal": true,
         "resolveJsonModule": true,
         "declaration": true,
-        "declarationDir": "typings"
+        "declarationDir": "typings",
+        "forceConsistentCasingInFileNames": true,
+        "importHelpers": true
     },
     "include": ["src"]
 }
