@@ -7,10 +7,6 @@ import {
     IAddressUnlockCondition
 } from "../../models/unlockConditions/IAddressUnlockCondition";
 import {
-    DUST_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE,
-    IDustDepositReturnUnlockCondition
-} from "../../models/unlockConditions/IDustDepositReturnUnlockCondition";
-import {
     EXPIRATION_UNLOCK_CONDITION_TYPE,
     IExpirationUnlockCondition
 } from "../../models/unlockConditions/IExpirationUnlockCondition";
@@ -25,6 +21,9 @@ import {
     IStateControllerAddressUnlockCondition, STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE
 } from "../../models/unlockConditions/IStateControllerAddressUnlockCondition";
 import {
+    IStorageDepositReturnUnlockCondition, STORAGE_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE
+} from "../../models/unlockConditions/IStorageDepositReturnUnlockCondition";
+import {
     ITimelockUnlockCondition, TIMELOCK_UNLOCK_CONDITION_TYPE
 } from "../../models/unlockConditions/ITimelockUnlockCondition";
 import type { UnlockConditionTypes } from "../../models/unlockConditions/unlockConditionTypes";
@@ -34,11 +33,6 @@ import {
     MIN_ADDRESS_UNLOCK_CONDITION_LENGTH,
     serializeAddressUnlockCondition
 } from "../unlockConditions/addressUnlockCondition";
-import {
-    deserializeDustDepositReturnUnlockCondition,
-    MIN_DUST_DEPOSIT_RETURN_UNLOCK_CONDITION_LENGTH,
-    serializeDustDepositReturnUnlockCondition
-} from "../unlockConditions/dustDepositReturnUnlockCondition";
 import {
     deserializeExpirationUnlockCondition,
     MIN_EXPIRATION_UNLOCK_CONDITION_LENGTH,
@@ -64,6 +58,11 @@ import {
     MIN_STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_LENGTH,
     serializeStateControllerAddressUnlockCondition
 } from "./stateControllerAddressUnlockCondition";
+import {
+    deserializeStorageDepositReturnUnlockCondition,
+    MIN_STORAGE_DEPOSIT_RETURN_UNLOCK_CONDITION_LENGTH,
+    serializeStorageDepositReturnUnlockCondition
+} from "./storageDepositReturnUnlockCondition";
 
 /**
  * The minimum length of a unlock conditions list.
@@ -75,7 +74,7 @@ export const MIN_UNLOCK_CONDITIONS_LENGTH: number = UINT8_SIZE;
  */
 export const MIN_UNLOCK_CONDITION_LENGTH: number = Math.min(
     MIN_ADDRESS_UNLOCK_CONDITION_LENGTH,
-    MIN_DUST_DEPOSIT_RETURN_UNLOCK_CONDITION_LENGTH,
+    MIN_STORAGE_DEPOSIT_RETURN_UNLOCK_CONDITION_LENGTH,
     MIN_TIMELOCK_UNLOCK_CONDITION_LENGTH,
     MIN_EXPIRATION_UNLOCK_CONDITION_LENGTH,
     MIN_STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_LENGTH,
@@ -129,8 +128,8 @@ export function deserializeUnlockCondition(readStream: ReadStream): UnlockCondit
 
     if (type === ADDRESS_UNLOCK_CONDITION_TYPE) {
         input = deserializeAddressUnlockCondition(readStream);
-    } else if (type === DUST_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE) {
-        input = deserializeDustDepositReturnUnlockCondition(readStream);
+    } else if (type === STORAGE_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE) {
+        input = deserializeStorageDepositReturnUnlockCondition(readStream);
     } else if (type === TIMELOCK_UNLOCK_CONDITION_TYPE) {
         input = deserializeTimelockUnlockCondition(readStream);
     } else if (type === EXPIRATION_UNLOCK_CONDITION_TYPE) {
@@ -156,8 +155,8 @@ export function deserializeUnlockCondition(readStream: ReadStream): UnlockCondit
 export function serializeUnlockCondition(writeStream: WriteStream, object: ITypeBase<number>): void {
     if (object.type === ADDRESS_UNLOCK_CONDITION_TYPE) {
         serializeAddressUnlockCondition(writeStream, object as IAddressUnlockCondition);
-    } else if (object.type === DUST_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE) {
-        serializeDustDepositReturnUnlockCondition(writeStream, object as IDustDepositReturnUnlockCondition);
+    } else if (object.type === STORAGE_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE) {
+        serializeStorageDepositReturnUnlockCondition(writeStream, object as IStorageDepositReturnUnlockCondition);
     } else if (object.type === TIMELOCK_UNLOCK_CONDITION_TYPE) {
         serializeTimelockUnlockCondition(writeStream, object as ITimelockUnlockCondition);
     } else if (object.type === EXPIRATION_UNLOCK_CONDITION_TYPE) {

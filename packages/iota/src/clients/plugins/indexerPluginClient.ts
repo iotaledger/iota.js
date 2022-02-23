@@ -37,8 +37,8 @@ export class IndexerPluginClient {
      * Find outputs using filter options.
      * @param filterOptions The options for filtering.
      * @param filterOptions.addressBech32 Filter outputs that are unlockable by the address.
-     * @param filterOptions.hasDustReturnCondition Filter for outputs having a dust return unlock condition.
-     * @param filterOptions.dustReturnAddressBech32 Filter for outputs with a certain dust return address.
+     * @param filterOptions.hasStorageReturnCondition Filter for outputs having a storage return unlock condition.
+     * @param filterOptions.storageReturnAddressBech32 Filter for outputs with a certain storage return address.
      * @param filterOptions.hasExpirationCondition Filter for outputs having an expiration unlock condition.
      * @param filterOptions.expirationReturnAddressBech32 Filter for outputs with a certain expiration return address.
      * @param filterOptions.expiresBefore Filter for outputs that expire before a certain unix time.
@@ -65,8 +65,8 @@ export class IndexerPluginClient {
      */
     public async outputs(filterOptions?: {
         addressBech32?: string;
-        hasDustReturnCondition?: boolean;
-        dustReturnAddressBech32?: string;
+        hasStorageReturnCondition?: boolean;
+        storageReturnAddressBech32?: string;
         hasExpirationCondition?: boolean;
         expirationReturnAddressBech32?: string;
         expiresBefore?: number;
@@ -93,11 +93,11 @@ export class IndexerPluginClient {
             if (filterOptions.addressBech32 !== undefined) {
                 queryParams.push(`address=${filterOptions.addressBech32}`);
             }
-            if (filterOptions.hasDustReturnCondition) {
-                queryParams.push(`hasDustReturnCondition=${filterOptions.hasDustReturnCondition}`);
+            if (filterOptions.hasStorageReturnCondition) {
+                queryParams.push(`hasStorageReturnCondition=${filterOptions.hasStorageReturnCondition}`);
             }
-            if (filterOptions.dustReturnAddressBech32 !== undefined) {
-                queryParams.push(`dustReturnAddress=${filterOptions.dustReturnAddressBech32}`);
+            if (filterOptions.storageReturnAddressBech32 !== undefined) {
+                queryParams.push(`storageReturnAddress=${filterOptions.storageReturnAddressBech32}`);
             }
             if (filterOptions.hasExpirationCondition) {
                 queryParams.push(`hasExpirationCondition=${filterOptions.hasExpirationCondition}`);
@@ -267,8 +267,8 @@ export class IndexerPluginClient {
      * Find nfts using filter options.
      * @param filterOptions The options for filtering.
      * @param filterOptions.addressBech32 Filter outputs that are unlockable by the address.
-     * @param filterOptions.hasDustReturnCondition Filter for outputs having a dust return unlock condition.
-     * @param filterOptions.dustReturnAddressBech32 Filter for outputs with a certain dust return address.
+     * @param filterOptions.hasStorageReturnCondition Filter for outputs having a storage return unlock condition.
+     * @param filterOptions.storageReturnAddressBech32 Filter for outputs with a certain storage return address.
      * @param filterOptions.hasExpirationCondition Filter for outputs having an expiration unlock condition.
      * @param filterOptions.expirationReturnAddressBech32 Filter for outputs with a certain expiration return address.
      * @param filterOptions.expiresBefore Filter for outputs that expire before a certain unix time.
@@ -296,8 +296,8 @@ export class IndexerPluginClient {
      */
     public async nfts(filterOptions?: {
         addressBech32?: string;
-        hasDustReturnCondition?: boolean;
-        dustReturnAddressBech32?: string;
+        hasStorageReturnCondition?: boolean;
+        storageReturnAddressBech32?: string;
         hasExpirationCondition?: boolean;
         expirationReturnAddressBech32?: string;
         expiresBefore?: number;
@@ -325,11 +325,11 @@ export class IndexerPluginClient {
             if (filterOptions.addressBech32 !== undefined) {
                 queryParams.push(`address=${filterOptions.addressBech32}`);
             }
-            if (filterOptions.hasDustReturnCondition) {
-                queryParams.push(`hasDustReturnCondition=${filterOptions.hasDustReturnCondition}`);
+            if (filterOptions.hasStorageReturnCondition) {
+                queryParams.push(`hasStorageReturnCondition=${filterOptions.hasStorageReturnCondition}`);
             }
-            if (filterOptions.dustReturnAddressBech32 !== undefined) {
-                queryParams.push(`dustReturnAddress=${filterOptions.dustReturnAddressBech32}`);
+            if (filterOptions.storageReturnAddressBech32 !== undefined) {
+                queryParams.push(`storageReturnAddress=${filterOptions.storageReturnAddressBech32}`);
             }
             if (filterOptions.hasExpirationCondition) {
                 queryParams.push(`hasExpirationCondition=${filterOptions.hasExpirationCondition}`);

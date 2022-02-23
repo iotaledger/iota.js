@@ -1102,11 +1102,6 @@
     const ADDRESS_UNLOCK_CONDITION_TYPE = 0;
 
     /**
-     * The global type for the dust deposit return unlock condition.
-     */
-    const DUST_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE = 1;
-
-    /**
      * The global type for the expiration unlock condition.
      */
     const EXPIRATION_UNLOCK_CONDITION_TYPE = 3;
@@ -1125,6 +1120,11 @@
      * The global type for the state controller unlock condition.
      */
     const STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE = 4;
+
+    /**
+     * The global type for the storage deposit return unlock condition.
+     */
+    const STORAGE_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE = 1;
 
     /**
      * The global type for the timelock unlock condition.
@@ -1162,44 +1162,6 @@
     function serializeAddressUnlockCondition(writeStream, object) {
         writeStream.writeUInt8("addressUnlockCondition.type", object.type);
         serializeAddress(writeStream, object.address);
-    }
-
-    /**
-     * The minimum length of an dust deposit return unlock condition binary representation.
-     */
-    const MIN_DUST_DEPOSIT_RETURN_UNLOCK_CONDITION_LENGTH = SMALL_TYPE_LENGTH +
-        MIN_ADDRESS_LENGTH +
-        UINT64_SIZE;
-    /**
-     * Deserialize the dust deposit return unlock condition from binary.
-     * @param readStream The stream to read the data from.
-     * @returns The deserialized object.
-     */
-    function deserializeDustDepositReturnUnlockCondition(readStream) {
-        if (!readStream.hasRemaining(MIN_DUST_DEPOSIT_RETURN_UNLOCK_CONDITION_LENGTH)) {
-            throw new Error(`Dust deposit return unlock condition data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_DUST_DEPOSIT_RETURN_UNLOCK_CONDITION_LENGTH}`);
-        }
-        const type = readStream.readUInt8("dustDepositReturnUnlockCondition.type");
-        if (type !== DUST_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE) {
-            throw new Error(`Type mismatch in dustDepositReturnUnlockCondition ${type}`);
-        }
-        const returnAddress = deserializeAddress(readStream);
-        const amount = readStream.readUInt64("dustDepositReturnUnlockCondition.amount");
-        return {
-            type: DUST_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE,
-            returnAddress,
-            amount: Number(amount)
-        };
-    }
-    /**
-     * Serialize the dust deposit return unlock condition to binary.
-     * @param writeStream The stream to write the data to.
-     * @param object The object to serialize.
-     */
-    function serializeDustDepositReturnUnlockCondition(writeStream, object) {
-        writeStream.writeUInt8("dustDepositReturnUnlockCondition.type", object.type);
-        serializeAddress(writeStream, object.returnAddress);
-        writeStream.writeUInt64("dustDepositReturnUnlockCondition.amount", bigInt__default["default"](object.amount));
     }
 
     /**
@@ -1382,13 +1344,51 @@
     }
 
     /**
+     * The minimum length of an storage deposit return unlock condition binary representation.
+     */
+    const MIN_STORAGE_DEPOSIT_RETURN_UNLOCK_CONDITION_LENGTH = SMALL_TYPE_LENGTH +
+        MIN_ADDRESS_LENGTH +
+        UINT64_SIZE;
+    /**
+     * Deserialize the storage deposit return unlock condition from binary.
+     * @param readStream The stream to read the data from.
+     * @returns The deserialized object.
+     */
+    function deserializeStorageDepositReturnUnlockCondition(readStream) {
+        if (!readStream.hasRemaining(MIN_STORAGE_DEPOSIT_RETURN_UNLOCK_CONDITION_LENGTH)) {
+            throw new Error(`Storage deposit return unlock condition data is ${readStream.length()} in length which is less than the minimimum size required of ${MIN_STORAGE_DEPOSIT_RETURN_UNLOCK_CONDITION_LENGTH}`);
+        }
+        const type = readStream.readUInt8("storageDepositReturnUnlockCondition.type");
+        if (type !== STORAGE_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE) {
+            throw new Error(`Type mismatch in storagDepositReturnUnlockCondition ${type}`);
+        }
+        const returnAddress = deserializeAddress(readStream);
+        const amount = readStream.readUInt64("storageDepositReturnUnlockCondition.amount");
+        return {
+            type: STORAGE_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE,
+            returnAddress,
+            amount: Number(amount)
+        };
+    }
+    /**
+     * Serialize the storage deposit return unlock condition to binary.
+     * @param writeStream The stream to write the data to.
+     * @param object The object to serialize.
+     */
+    function serializeStorageDepositReturnUnlockCondition(writeStream, object) {
+        writeStream.writeUInt8("storageDepositReturnUnlockCondition.type", object.type);
+        serializeAddress(writeStream, object.returnAddress);
+        writeStream.writeUInt64("storageDepositReturnUnlockCondition.amount", bigInt__default["default"](object.amount));
+    }
+
+    /**
      * The minimum length of a unlock conditions list.
      */
     const MIN_UNLOCK_CONDITIONS_LENGTH = UINT8_SIZE;
     /**
      * The minimum length of a unlock conditions binary representation.
      */
-    const MIN_UNLOCK_CONDITION_LENGTH = Math.min(MIN_ADDRESS_UNLOCK_CONDITION_LENGTH, MIN_DUST_DEPOSIT_RETURN_UNLOCK_CONDITION_LENGTH, MIN_TIMELOCK_UNLOCK_CONDITION_LENGTH, MIN_EXPIRATION_UNLOCK_CONDITION_LENGTH, MIN_STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_LENGTH, MIN_GOVERNOR_ADDRESS_UNLOCK_CONDITION_LENGTH, MIN_IMMUTABLE_ALIAS_UNLOCK_CONDITION_LENGTH);
+    const MIN_UNLOCK_CONDITION_LENGTH = Math.min(MIN_ADDRESS_UNLOCK_CONDITION_LENGTH, MIN_STORAGE_DEPOSIT_RETURN_UNLOCK_CONDITION_LENGTH, MIN_TIMELOCK_UNLOCK_CONDITION_LENGTH, MIN_EXPIRATION_UNLOCK_CONDITION_LENGTH, MIN_STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_LENGTH, MIN_GOVERNOR_ADDRESS_UNLOCK_CONDITION_LENGTH, MIN_IMMUTABLE_ALIAS_UNLOCK_CONDITION_LENGTH);
     /**
      * Deserialize the unlock conditions from binary.
      * @param readStream The stream to read the data from.
@@ -1427,8 +1427,8 @@
         if (type === ADDRESS_UNLOCK_CONDITION_TYPE) {
             input = deserializeAddressUnlockCondition(readStream);
         }
-        else if (type === DUST_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE) {
-            input = deserializeDustDepositReturnUnlockCondition(readStream);
+        else if (type === STORAGE_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE) {
+            input = deserializeStorageDepositReturnUnlockCondition(readStream);
         }
         else if (type === TIMELOCK_UNLOCK_CONDITION_TYPE) {
             input = deserializeTimelockUnlockCondition(readStream);
@@ -1459,8 +1459,8 @@
         if (object.type === ADDRESS_UNLOCK_CONDITION_TYPE) {
             serializeAddressUnlockCondition(writeStream, object);
         }
-        else if (object.type === DUST_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE) {
-            serializeDustDepositReturnUnlockCondition(writeStream, object);
+        else if (object.type === STORAGE_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE) {
+            serializeStorageDepositReturnUnlockCondition(writeStream, object);
         }
         else if (object.type === TIMELOCK_UNLOCK_CONDITION_TYPE) {
             serializeTimelockUnlockCondition(writeStream, object);
@@ -3028,8 +3028,8 @@
          * Find outputs using filter options.
          * @param filterOptions The options for filtering.
          * @param filterOptions.addressBech32 Filter outputs that are unlockable by the address.
-         * @param filterOptions.hasDustReturnCondition Filter for outputs having a dust return unlock condition.
-         * @param filterOptions.dustReturnAddressBech32 Filter for outputs with a certain dust return address.
+         * @param filterOptions.hasStorageReturnCondition Filter for outputs having a storage return unlock condition.
+         * @param filterOptions.storageReturnAddressBech32 Filter for outputs with a certain storage return address.
          * @param filterOptions.hasExpirationCondition Filter for outputs having an expiration unlock condition.
          * @param filterOptions.expirationReturnAddressBech32 Filter for outputs with a certain expiration return address.
          * @param filterOptions.expiresBefore Filter for outputs that expire before a certain unix time.
@@ -3060,11 +3060,11 @@
                 if (filterOptions.addressBech32 !== undefined) {
                     queryParams.push(`address=${filterOptions.addressBech32}`);
                 }
-                if (filterOptions.hasDustReturnCondition) {
-                    queryParams.push(`hasDustReturnCondition=${filterOptions.hasDustReturnCondition}`);
+                if (filterOptions.hasStorageReturnCondition) {
+                    queryParams.push(`hasStorageReturnCondition=${filterOptions.hasStorageReturnCondition}`);
                 }
-                if (filterOptions.dustReturnAddressBech32 !== undefined) {
-                    queryParams.push(`dustReturnAddress=${filterOptions.dustReturnAddressBech32}`);
+                if (filterOptions.storageReturnAddressBech32 !== undefined) {
+                    queryParams.push(`storageReturnAddress=${filterOptions.storageReturnAddressBech32}`);
                 }
                 if (filterOptions.hasExpirationCondition) {
                     queryParams.push(`hasExpirationCondition=${filterOptions.hasExpirationCondition}`);
@@ -3205,8 +3205,8 @@
          * Find nfts using filter options.
          * @param filterOptions The options for filtering.
          * @param filterOptions.addressBech32 Filter outputs that are unlockable by the address.
-         * @param filterOptions.hasDustReturnCondition Filter for outputs having a dust return unlock condition.
-         * @param filterOptions.dustReturnAddressBech32 Filter for outputs with a certain dust return address.
+         * @param filterOptions.hasStorageReturnCondition Filter for outputs having a storage return unlock condition.
+         * @param filterOptions.storageReturnAddressBech32 Filter for outputs with a certain storage return address.
          * @param filterOptions.hasExpirationCondition Filter for outputs having an expiration unlock condition.
          * @param filterOptions.expirationReturnAddressBech32 Filter for outputs with a certain expiration return address.
          * @param filterOptions.expiresBefore Filter for outputs that expire before a certain unix time.
@@ -3238,11 +3238,11 @@
                 if (filterOptions.addressBech32 !== undefined) {
                     queryParams.push(`address=${filterOptions.addressBech32}`);
                 }
-                if (filterOptions.hasDustReturnCondition) {
-                    queryParams.push(`hasDustReturnCondition=${filterOptions.hasDustReturnCondition}`);
+                if (filterOptions.hasStorageReturnCondition) {
+                    queryParams.push(`hasStorageReturnCondition=${filterOptions.hasStorageReturnCondition}`);
                 }
-                if (filterOptions.dustReturnAddressBech32 !== undefined) {
-                    queryParams.push(`dustReturnAddress=${filterOptions.dustReturnAddressBech32}`);
+                if (filterOptions.storageReturnAddressBech32 !== undefined) {
+                    queryParams.push(`storageReturnAddress=${filterOptions.storageReturnAddressBech32}`);
                 }
                 if (filterOptions.hasExpirationCondition) {
                     queryParams.push(`hasExpirationCondition=${filterOptions.hasExpirationCondition}`);
@@ -4878,8 +4878,8 @@
             logger(`${prefix}\tAddress Unlock Condition`);
             logAddress(`${prefix}\t\t`, unlockCondition.address);
         }
-        else if (unlockCondition.type === DUST_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE) {
-            logger(`${prefix}\tDust Deposit Return Unlock Condition`);
+        else if (unlockCondition.type === STORAGE_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE) {
+            logger(`${prefix}\tStorage Deposit Return Unlock Condition`);
             logAddress(`${prefix}\t\t`, unlockCondition.returnAddress);
             logger(`${prefix}\t\tAmount:`, unlockCondition.amount);
         }
@@ -5040,7 +5040,6 @@
     exports.CONFLICT_REASON_STRINGS = CONFLICT_REASON_STRINGS;
     exports.ClientError = ClientError;
     exports.DEFAULT_PROTOCOL_VERSION = DEFAULT_PROTOCOL_VERSION;
-    exports.DUST_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE = DUST_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE;
     exports.ED25519_ADDRESS_TYPE = ED25519_ADDRESS_TYPE;
     exports.ED25519_SEED_TYPE = ED25519_SEED_TYPE;
     exports.ED25519_SIGNATURE_TYPE = ED25519_SIGNATURE_TYPE;
@@ -5070,7 +5069,6 @@
     exports.MIN_ALIAS_OUTPUT_LENGTH = MIN_ALIAS_OUTPUT_LENGTH;
     exports.MIN_ALIAS_UNLOCK_BLOCK_LENGTH = MIN_ALIAS_UNLOCK_BLOCK_LENGTH;
     exports.MIN_BASIC_OUTPUT_LENGTH = MIN_BASIC_OUTPUT_LENGTH;
-    exports.MIN_DUST_DEPOSIT_RETURN_UNLOCK_CONDITION_LENGTH = MIN_DUST_DEPOSIT_RETURN_UNLOCK_CONDITION_LENGTH;
     exports.MIN_ED25519_ADDRESS_LENGTH = MIN_ED25519_ADDRESS_LENGTH;
     exports.MIN_ED25519_SIGNATURE_LENGTH = MIN_ED25519_SIGNATURE_LENGTH;
     exports.MIN_EXPIRATION_UNLOCK_CONDITION_LENGTH = MIN_EXPIRATION_UNLOCK_CONDITION_LENGTH;
@@ -5097,6 +5095,7 @@
     exports.MIN_SIGNATURE_UNLOCK_BLOCK_LENGTH = MIN_SIGNATURE_UNLOCK_BLOCK_LENGTH;
     exports.MIN_SIMPLE_TOKEN_SCHEME_LENGTH = MIN_SIMPLE_TOKEN_SCHEME_LENGTH;
     exports.MIN_STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_LENGTH = MIN_STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_LENGTH;
+    exports.MIN_STORAGE_DEPOSIT_RETURN_UNLOCK_CONDITION_LENGTH = MIN_STORAGE_DEPOSIT_RETURN_UNLOCK_CONDITION_LENGTH;
     exports.MIN_TAG_FEATURE_BLOCK_LENGTH = MIN_TAG_FEATURE_BLOCK_LENGTH;
     exports.MIN_TIMELOCK_UNLOCK_CONDITION_LENGTH = MIN_TIMELOCK_UNLOCK_CONDITION_LENGTH;
     exports.MIN_TOKEN_SCHEME_LENGTH = MIN_TOKEN_SCHEME_LENGTH;
@@ -5120,6 +5119,7 @@
     exports.SIMPLE_TOKEN_SCHEME_TYPE = SIMPLE_TOKEN_SCHEME_TYPE;
     exports.SMALL_TYPE_LENGTH = SMALL_TYPE_LENGTH;
     exports.STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE = STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE;
+    exports.STORAGE_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE = STORAGE_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE;
     exports.STRING_LENGTH = STRING_LENGTH;
     exports.SingleNodeClient = SingleNodeClient;
     exports.TAGGED_DATA_PAYLOAD_TYPE = TAGGED_DATA_PAYLOAD_TYPE;
@@ -5149,7 +5149,6 @@
     exports.deserializeAliasOutput = deserializeAliasOutput;
     exports.deserializeAliasUnlockBlock = deserializeAliasUnlockBlock;
     exports.deserializeBasicOutput = deserializeBasicOutput;
-    exports.deserializeDustDepositReturnUnlockCondition = deserializeDustDepositReturnUnlockCondition;
     exports.deserializeEd25519Address = deserializeEd25519Address;
     exports.deserializeEd25519Signature = deserializeEd25519Signature;
     exports.deserializeExpirationUnlockCondition = deserializeExpirationUnlockCondition;
@@ -5177,6 +5176,7 @@
     exports.deserializeSignatureUnlockBlock = deserializeSignatureUnlockBlock;
     exports.deserializeSimpleTokenScheme = deserializeSimpleTokenScheme;
     exports.deserializeStateControllerAddressUnlockCondition = deserializeStateControllerAddressUnlockCondition;
+    exports.deserializeStorageDepositReturnUnlockCondition = deserializeStorageDepositReturnUnlockCondition;
     exports.deserializeTagFeatureBlock = deserializeTagFeatureBlock;
     exports.deserializeTimelockUnlockCondition = deserializeTimelockUnlockCondition;
     exports.deserializeTokenScheme = deserializeTokenScheme;
@@ -5234,7 +5234,6 @@
     exports.serializeAliasOutput = serializeAliasOutput;
     exports.serializeAliasUnlockBlock = serializeAliasUnlockBlock;
     exports.serializeBasicOutput = serializeBasicOutput;
-    exports.serializeDustDepositReturnUnlockCondition = serializeDustDepositReturnUnlockCondition;
     exports.serializeEd25519Address = serializeEd25519Address;
     exports.serializeEd25519Signature = serializeEd25519Signature;
     exports.serializeExpirationUnlockCondition = serializeExpirationUnlockCondition;
@@ -5262,6 +5261,7 @@
     exports.serializeSignatureUnlockBlock = serializeSignatureUnlockBlock;
     exports.serializeSimpleTokenScheme = serializeSimpleTokenScheme;
     exports.serializeStateControllerAddressUnlockCondition = serializeStateControllerAddressUnlockCondition;
+    exports.serializeStorageDepositReturnUnlockCondition = serializeStorageDepositReturnUnlockCondition;
     exports.serializeTagFeatureBlock = serializeTagFeatureBlock;
     exports.serializeTimelockUnlockCondition = serializeTimelockUnlockCondition;
     exports.serializeTokenScheme = serializeTokenScheme;

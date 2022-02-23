@@ -1,20 +1,20 @@
-# Interface: IDustDepositReturnUnlockCondition
+# Interface: IStorageDepositReturnUnlockCondition
 
-Dust Desposit Return Unlock Condition.
+Storage Desposit Return Unlock Condition.
 
 ## Hierarchy
 
 - [`ITypeBase`](ITypeBase.md)<``1``\>
 
-  ↳ **`IDustDepositReturnUnlockCondition`**
+  ↳ **`IStorageDepositReturnUnlockCondition`**
 
 ## Table of contents
 
 ### Properties
 
-- [type](IDustDepositReturnUnlockCondition.md#type)
-- [returnAddress](IDustDepositReturnUnlockCondition.md#returnaddress)
-- [amount](IDustDepositReturnUnlockCondition.md#amount)
+- [type](IStorageDepositReturnUnlockCondition.md#type)
+- [returnAddress](IStorageDepositReturnUnlockCondition.md#returnaddress)
+- [amount](IStorageDepositReturnUnlockCondition.md#amount)
 
 ## Properties
 

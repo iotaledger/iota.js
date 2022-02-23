@@ -74,11 +74,11 @@
 - [MIN\_SIGNATURE\_UNLOCK\_BLOCK\_LENGTH](api.md#min_signature_unlock_block_length)
 - [MIN\_UNLOCK\_BLOCK\_LENGTH](api.md#min_unlock_block_length)
 - [MIN\_ADDRESS\_UNLOCK\_CONDITION\_LENGTH](api.md#min_address_unlock_condition_length)
-- [MIN\_DUST\_DEPOSIT\_RETURN\_UNLOCK\_CONDITION\_LENGTH](api.md#min_dust_deposit_return_unlock_condition_length)
 - [MIN\_EXPIRATION\_UNLOCK\_CONDITION\_LENGTH](api.md#min_expiration_unlock_condition_length)
 - [MIN\_GOVERNOR\_ADDRESS\_UNLOCK\_CONDITION\_LENGTH](api.md#min_governor_address_unlock_condition_length)
 - [MIN\_IMMUTABLE\_ALIAS\_UNLOCK\_CONDITION\_LENGTH](api.md#min_immutable_alias_unlock_condition_length)
 - [MIN\_STATE\_CONTROLLER\_ADDRESS\_UNLOCK\_CONDITION\_LENGTH](api.md#min_state_controller_address_unlock_condition_length)
+- [MIN\_STORAGE\_DEPOSIT\_RETURN\_UNLOCK\_CONDITION\_LENGTH](api.md#min_storage_deposit_return_unlock_condition_length)
 - [MIN\_TIMELOCK\_UNLOCK\_CONDITION\_LENGTH](api.md#min_timelock_unlock_condition_length)
 - [MIN\_UNLOCK\_CONDITIONS\_LENGTH](api.md#min_unlock_conditions_length)
 - [MIN\_UNLOCK\_CONDITION\_LENGTH](api.md#min_unlock_condition_length)
@@ -111,11 +111,11 @@
 - [REFERENCE\_UNLOCK\_BLOCK\_TYPE](api.md#reference_unlock_block_type)
 - [SIGNATURE\_UNLOCK\_BLOCK\_TYPE](api.md#signature_unlock_block_type)
 - [ADDRESS\_UNLOCK\_CONDITION\_TYPE](api.md#address_unlock_condition_type)
-- [DUST\_DEPOSIT\_RETURN\_UNLOCK\_CONDITION\_TYPE](api.md#dust_deposit_return_unlock_condition_type)
 - [EXPIRATION\_UNLOCK\_CONDITION\_TYPE](api.md#expiration_unlock_condition_type)
 - [GOVERNOR\_ADDRESS\_UNLOCK\_CONDITION\_TYPE](api.md#governor_address_unlock_condition_type)
 - [IMMUTABLE\_ALIAS\_UNLOCK\_CONDITION\_TYPE](api.md#immutable_alias_unlock_condition_type)
 - [STATE\_CONTROLLER\_ADDRESS\_UNLOCK\_CONDITION\_TYPE](api.md#state_controller_address_unlock_condition_type)
+- [STORAGE\_DEPOSIT\_RETURN\_UNLOCK\_CONDITION\_TYPE](api.md#storage_deposit_return_unlock_condition_type)
 - [TIMELOCK\_UNLOCK\_CONDITION\_TYPE](api.md#timelock_unlock_condition_type)
 - [CONFLICT\_REASON\_STRINGS](api.md#conflict_reason_strings)
 - [ED25519\_SEED\_TYPE](api.md#ed25519_seed_type)
@@ -196,8 +196,6 @@
 - [serializeUnlockBlock](api.md#serializeunlockblock)
 - [deserializeAddressUnlockCondition](api.md#deserializeaddressunlockcondition)
 - [serializeAddressUnlockCondition](api.md#serializeaddressunlockcondition)
-- [deserializeDustDepositReturnUnlockCondition](api.md#deserializedustdepositreturnunlockcondition)
-- [serializeDustDepositReturnUnlockCondition](api.md#serializedustdepositreturnunlockcondition)
 - [deserializeExpirationUnlockCondition](api.md#deserializeexpirationunlockcondition)
 - [serializeExpirationUnlockCondition](api.md#serializeexpirationunlockcondition)
 - [deserializeGovernorAddressUnlockCondition](api.md#deserializegovernoraddressunlockcondition)
@@ -206,6 +204,8 @@
 - [serializeImmutableAliasUnlockCondition](api.md#serializeimmutablealiasunlockcondition)
 - [deserializeStateControllerAddressUnlockCondition](api.md#deserializestatecontrolleraddressunlockcondition)
 - [serializeStateControllerAddressUnlockCondition](api.md#serializestatecontrolleraddressunlockcondition)
+- [deserializeStorageDepositReturnUnlockCondition](api.md#deserializestoragedepositreturnunlockcondition)
+- [serializeStorageDepositReturnUnlockCondition](api.md#serializestoragedepositreturnunlockcondition)
 - [deserializeTimelockUnlockCondition](api.md#deserializetimelockunlockcondition)
 - [serializeTimelockUnlockCondition](api.md#serializetimelockunlockcondition)
 - [deserializeUnlockConditions](api.md#deserializeunlockconditions)
@@ -317,11 +317,11 @@
 - [IReferenceUnlockBlock](interfaces/IReferenceUnlockBlock.md)
 - [ISignatureUnlockBlock](interfaces/ISignatureUnlockBlock.md)
 - [IAddressUnlockCondition](interfaces/IAddressUnlockCondition.md)
-- [IDustDepositReturnUnlockCondition](interfaces/IDustDepositReturnUnlockCondition.md)
 - [IExpirationUnlockCondition](interfaces/IExpirationUnlockCondition.md)
 - [IGovernorAddressUnlockCondition](interfaces/IGovernorAddressUnlockCondition.md)
 - [IImmutableAliasUnlockCondition](interfaces/IImmutableAliasUnlockCondition.md)
 - [IStateControllerAddressUnlockCondition](interfaces/IStateControllerAddressUnlockCondition.md)
+- [IStorageDepositReturnUnlockCondition](interfaces/IStorageDepositReturnUnlockCondition.md)
 - [ITimelockUnlockCondition](interfaces/ITimelockUnlockCondition.md)
 
 ### Type aliases
@@ -800,14 +800,6 @@ The minimum length of an address unlock condition binary representation.
 
 ___
 
-### MIN\_DUST\_DEPOSIT\_RETURN\_UNLOCK\_CONDITION\_LENGTH
-
-• `Const` **MIN\_DUST\_DEPOSIT\_RETURN\_UNLOCK\_CONDITION\_LENGTH**: `number`
-
-The minimum length of an dust deposit return unlock condition binary representation.
-
-___
-
 ### MIN\_EXPIRATION\_UNLOCK\_CONDITION\_LENGTH
 
 • `Const` **MIN\_EXPIRATION\_UNLOCK\_CONDITION\_LENGTH**: `number`
@@ -837,6 +829,14 @@ ___
 • `Const` **MIN\_STATE\_CONTROLLER\_ADDRESS\_UNLOCK\_CONDITION\_LENGTH**: `number`
 
 The minimum length of an state controller address unlock condition binary representation.
+
+___
+
+### MIN\_STORAGE\_DEPOSIT\_RETURN\_UNLOCK\_CONDITION\_LENGTH
+
+• `Const` **MIN\_STORAGE\_DEPOSIT\_RETURN\_UNLOCK\_CONDITION\_LENGTH**: `number`
+
+The minimum length of an storage deposit return unlock condition binary representation.
 
 ___
 
@@ -1096,14 +1096,6 @@ The global type for the address unlock condition.
 
 ___
 
-### DUST\_DEPOSIT\_RETURN\_UNLOCK\_CONDITION\_TYPE
-
-• `Const` **DUST\_DEPOSIT\_RETURN\_UNLOCK\_CONDITION\_TYPE**: ``1``
-
-The global type for the dust deposit return unlock condition.
-
-___
-
 ### EXPIRATION\_UNLOCK\_CONDITION\_TYPE
 
 • `Const` **EXPIRATION\_UNLOCK\_CONDITION\_TYPE**: ``3``
@@ -1133,6 +1125,14 @@ ___
 • `Const` **STATE\_CONTROLLER\_ADDRESS\_UNLOCK\_CONDITION\_TYPE**: ``4``
 
 The global type for the state controller unlock condition.
+
+___
+
+### STORAGE\_DEPOSIT\_RETURN\_UNLOCK\_CONDITION\_TYPE
+
+• `Const` **STORAGE\_DEPOSIT\_RETURN\_UNLOCK\_CONDITION\_TYPE**: ``1``
+
+The global type for the storage deposit return unlock condition.
 
 ___
 
@@ -2603,45 +2603,6 @@ Serialize the address unlock condition to binary.
 
 ___
 
-### deserializeDustDepositReturnUnlockCondition
-
-▸ **deserializeDustDepositReturnUnlockCondition**(`readStream`): [`IDustDepositReturnUnlockCondition`](interfaces/IDustDepositReturnUnlockCondition.md)
-
-Deserialize the dust deposit return unlock condition from binary.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `readStream` | `ReadStream` | The stream to read the data from. |
-
-#### Returns
-
-[`IDustDepositReturnUnlockCondition`](interfaces/IDustDepositReturnUnlockCondition.md)
-
-The deserialized object.
-
-___
-
-### serializeDustDepositReturnUnlockCondition
-
-▸ **serializeDustDepositReturnUnlockCondition**(`writeStream`, `object`): `void`
-
-Serialize the dust deposit return unlock condition to binary.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `writeStream` | `WriteStream` | The stream to write the data to. |
-| `object` | [`IDustDepositReturnUnlockCondition`](interfaces/IDustDepositReturnUnlockCondition.md) | The object to serialize. |
-
-#### Returns
-
-`void`
-
-___
-
 ### deserializeExpirationUnlockCondition
 
 ▸ **deserializeExpirationUnlockCondition**(`readStream`): [`IExpirationUnlockCondition`](interfaces/IExpirationUnlockCondition.md)
@@ -2791,6 +2752,45 @@ Serialize the state controller address unlock condition to binary.
 | :------ | :------ | :------ |
 | `writeStream` | `WriteStream` | The stream to write the data to. |
 | `object` | [`IStateControllerAddressUnlockCondition`](interfaces/IStateControllerAddressUnlockCondition.md) | The object to serialize. |
+
+#### Returns
+
+`void`
+
+___
+
+### deserializeStorageDepositReturnUnlockCondition
+
+▸ **deserializeStorageDepositReturnUnlockCondition**(`readStream`): [`IStorageDepositReturnUnlockCondition`](interfaces/IStorageDepositReturnUnlockCondition.md)
+
+Deserialize the storage deposit return unlock condition from binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `readStream` | `ReadStream` | The stream to read the data from. |
+
+#### Returns
+
+[`IStorageDepositReturnUnlockCondition`](interfaces/IStorageDepositReturnUnlockCondition.md)
+
+The deserialized object.
+
+___
+
+### serializeStorageDepositReturnUnlockCondition
+
+▸ **serializeStorageDepositReturnUnlockCondition**(`writeStream`, `object`): `void`
+
+Serialize the storage deposit return unlock condition to binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `writeStream` | `WriteStream` | The stream to write the data to. |
+| `object` | [`IStorageDepositReturnUnlockCondition`](interfaces/IStorageDepositReturnUnlockCondition.md) | The object to serialize. |
 
 #### Returns
 
@@ -3930,6 +3930,6 @@ ___
 
 ### UnlockConditionTypes
 
-Ƭ **UnlockConditionTypes**: [`IAddressUnlockCondition`](interfaces/IAddressUnlockCondition.md) \| [`IDustDepositReturnUnlockCondition`](interfaces/IDustDepositReturnUnlockCondition.md) \| [`ITimelockUnlockCondition`](interfaces/ITimelockUnlockCondition.md) \| [`IExpirationUnlockCondition`](interfaces/IExpirationUnlockCondition.md) \| [`IStateControllerAddressUnlockCondition`](interfaces/IStateControllerAddressUnlockCondition.md) \| [`IGovernorAddressUnlockCondition`](interfaces/IGovernorAddressUnlockCondition.md) \| [`IImmutableAliasUnlockCondition`](interfaces/IImmutableAliasUnlockCondition.md)
+Ƭ **UnlockConditionTypes**: [`IAddressUnlockCondition`](interfaces/IAddressUnlockCondition.md) \| [`IStorageDepositReturnUnlockCondition`](interfaces/IStorageDepositReturnUnlockCondition.md) \| [`ITimelockUnlockCondition`](interfaces/ITimelockUnlockCondition.md) \| [`IExpirationUnlockCondition`](interfaces/IExpirationUnlockCondition.md) \| [`IStateControllerAddressUnlockCondition`](interfaces/IStateControllerAddressUnlockCondition.md) \| [`IGovernorAddressUnlockCondition`](interfaces/IGovernorAddressUnlockCondition.md) \| [`IImmutableAliasUnlockCondition`](interfaces/IImmutableAliasUnlockCondition.md)
 
 All of the unlock condition types.

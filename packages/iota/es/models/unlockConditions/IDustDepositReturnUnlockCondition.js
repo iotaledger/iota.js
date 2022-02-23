@@ -1,5 +1,0 @@
-/**
- * The global type for the dust deposit return unlock condition.
- */
-export const DUST_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE = 1;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiSUR1c3REZXBvc2l0UmV0dXJuVW5sb2NrQ29uZGl0aW9uLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vLi4vc3JjL21vZGVscy91bmxvY2tDb25kaXRpb25zL0lEdXN0RGVwb3NpdFJldHVyblVubG9ja0NvbmRpdGlvbi50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFLQTs7R0FFRztBQUNILE1BQU0sQ0FBQyxNQUFNLHlDQUF5QyxHQUFHLENBQUMsQ0FBQyJ9

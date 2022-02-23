@@ -28,11 +28,11 @@ import { NFT_UNLOCK_BLOCK_TYPE } from "../models/unlockBlocks/INftUnlockBlock.mj
 import { REFERENCE_UNLOCK_BLOCK_TYPE } from "../models/unlockBlocks/IReferenceUnlockBlock.mjs";
 import { SIGNATURE_UNLOCK_BLOCK_TYPE } from "../models/unlockBlocks/ISignatureUnlockBlock.mjs";
 import { ADDRESS_UNLOCK_CONDITION_TYPE } from "../models/unlockConditions/IAddressUnlockCondition.mjs";
-import { DUST_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE } from "../models/unlockConditions/IDustDepositReturnUnlockCondition.mjs";
 import { EXPIRATION_UNLOCK_CONDITION_TYPE } from "../models/unlockConditions/IExpirationUnlockCondition.mjs";
 import { GOVERNOR_ADDRESS_UNLOCK_CONDITION_TYPE } from "../models/unlockConditions/IGovernorAddressUnlockCondition.mjs";
 import { IMMUTABLE_ALIAS_UNLOCK_CONDITION_TYPE } from "../models/unlockConditions/IImmutableAliasUnlockCondition.mjs";
 import { STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE } from "../models/unlockConditions/IStateControllerAddressUnlockCondition.mjs";
+import { STORAGE_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE } from "../models/unlockConditions/IStorageDepositReturnUnlockCondition.mjs";
 import { TIMELOCK_UNLOCK_CONDITION_TYPE } from "../models/unlockConditions/ITimelockUnlockCondition.mjs";
 /**
  * The logger used by the log methods.
@@ -490,8 +490,8 @@ export function logUnlockCondition(prefix, unlockCondition) {
         logger(`${prefix}\tAddress Unlock Condition`);
         logAddress(`${prefix}\t\t`, unlockCondition.address);
     }
-    else if (unlockCondition.type === DUST_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE) {
-        logger(`${prefix}\tDust Deposit Return Unlock Condition`);
+    else if (unlockCondition.type === STORAGE_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE) {
+        logger(`${prefix}\tStorage Deposit Return Unlock Condition`);
         logAddress(`${prefix}\t\t`, unlockCondition.returnAddress);
         logger(`${prefix}\t\tAmount:`, unlockCondition.amount);
     }

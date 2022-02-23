@@ -46,11 +46,11 @@ import { REFERENCE_UNLOCK_BLOCK_TYPE } from "../models/unlockBlocks/IReferenceUn
 import { SIGNATURE_UNLOCK_BLOCK_TYPE } from "../models/unlockBlocks/ISignatureUnlockBlock";
 import type { UnlockBlockTypes } from "../models/unlockBlocks/unlockBlockTypes";
 import { ADDRESS_UNLOCK_CONDITION_TYPE } from "../models/unlockConditions/IAddressUnlockCondition";
-import { DUST_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE } from "../models/unlockConditions/IDustDepositReturnUnlockCondition";
 import { EXPIRATION_UNLOCK_CONDITION_TYPE } from "../models/unlockConditions/IExpirationUnlockCondition";
 import { GOVERNOR_ADDRESS_UNLOCK_CONDITION_TYPE } from "../models/unlockConditions/IGovernorAddressUnlockCondition";
 import { IMMUTABLE_ALIAS_UNLOCK_CONDITION_TYPE } from "../models/unlockConditions/IImmutableAliasUnlockCondition";
 import { STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE } from "../models/unlockConditions/IStateControllerAddressUnlockCondition";
+import { STORAGE_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE } from "../models/unlockConditions/IStorageDepositReturnUnlockCondition";
 import { TIMELOCK_UNLOCK_CONDITION_TYPE } from "../models/unlockConditions/ITimelockUnlockCondition";
 import type { UnlockConditionTypes } from "../models/unlockConditions/unlockConditionTypes";
 
@@ -523,8 +523,8 @@ export function logUnlockCondition(prefix: string, unlockCondition: UnlockCondit
     if (unlockCondition.type === ADDRESS_UNLOCK_CONDITION_TYPE) {
         logger(`${prefix}\tAddress Unlock Condition`);
         logAddress(`${prefix}\t\t`, unlockCondition.address);
-    } else if (unlockCondition.type === DUST_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE) {
-        logger(`${prefix}\tDust Deposit Return Unlock Condition`);
+    } else if (unlockCondition.type === STORAGE_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE) {
+        logger(`${prefix}\tStorage Deposit Return Unlock Condition`);
         logAddress(`${prefix}\t\t`, unlockCondition.returnAddress);
         logger(`${prefix}\t\tAmount:`, unlockCondition.amount);
     } else if (unlockCondition.type === TIMELOCK_UNLOCK_CONDITION_TYPE) {

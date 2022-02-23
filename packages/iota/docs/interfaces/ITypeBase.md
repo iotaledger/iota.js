@@ -66,8 +66,6 @@ Type of the object.
 
   ↳ [`IAddressUnlockCondition`](IAddressUnlockCondition.md)
 
-  ↳ [`IDustDepositReturnUnlockCondition`](IDustDepositReturnUnlockCondition.md)
-
   ↳ [`IExpirationUnlockCondition`](IExpirationUnlockCondition.md)
 
   ↳ [`IGovernorAddressUnlockCondition`](IGovernorAddressUnlockCondition.md)
@@ -75,6 +73,8 @@ Type of the object.
   ↳ [`IImmutableAliasUnlockCondition`](IImmutableAliasUnlockCondition.md)
 
   ↳ [`IStateControllerAddressUnlockCondition`](IStateControllerAddressUnlockCondition.md)
+
+  ↳ [`IStorageDepositReturnUnlockCondition`](IStorageDepositReturnUnlockCondition.md)
 
   ↳ [`ITimelockUnlockCondition`](ITimelockUnlockCondition.md)
 

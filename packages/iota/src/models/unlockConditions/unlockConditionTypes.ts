@@ -1,11 +1,11 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 import type { IAddressUnlockCondition } from "./IAddressUnlockCondition";
-import type { IDustDepositReturnUnlockCondition } from "./IDustDepositReturnUnlockCondition";
 import type { IExpirationUnlockCondition } from "./IExpirationUnlockCondition";
 import type { IGovernorAddressUnlockCondition } from "./IGovernorAddressUnlockCondition";
 import type { IImmutableAliasUnlockCondition } from "./IImmutableAliasUnlockCondition";
 import type { IStateControllerAddressUnlockCondition } from "./IStateControllerAddressUnlockCondition";
+import type { IStorageDepositReturnUnlockCondition } from "./IStorageDepositReturnUnlockCondition";
 import type { ITimelockUnlockCondition } from "./ITimelockUnlockCondition";
 
 /**
@@ -13,7 +13,7 @@ import type { ITimelockUnlockCondition } from "./ITimelockUnlockCondition";
  */
 export type UnlockConditionTypes =
     IAddressUnlockCondition |
-    IDustDepositReturnUnlockCondition |
+    IStorageDepositReturnUnlockCondition |
     ITimelockUnlockCondition |
     IExpirationUnlockCondition |
     IStateControllerAddressUnlockCondition |
