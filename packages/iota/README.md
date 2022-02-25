@@ -43,30 +43,9 @@ run()
     .catch((err) => console.error(err));
 ```
 
-## API Endpoints
+## API
 
-These methods are implemented on the API client.
-
-* health() - Is the node healthy.
-* info() - Get the information about a node.
-* tips() - The tips for the tangle.
-* message(messageId) - Get a message.
-* messageMetadata(messageId) - Get the metadata for a message.
-* messageRaw(messageId) - Get the raw message bytes.
-* messageSubmit(message) - Submit a new message to the tangle.
-* messageSubmitRaw(message) - Submit a new message to the tangle as bytes.
-* messageChildren(messageId) - Find the children of a message.
-* messagesFind(index) - Find messages by indexation key.
-* output(outputId) - Get an output by id.
-* address(address) - Get an address details using bech32 address.
-* addressOutputs(address) - Get address outputs using bech32 address.
-* addressEd25519(address) - Get address details using ed25519 address.
-* addressEd25519Outputs(address) - Get address outputs using ed25519 address.
-* milestone(index) - Get the milestone details.
-* peers() - Get a list of peers.
-* peerAdd() - Add a peer.
-* peerDelete() - Delete a peer.
-* peer() - Get the details of a peer.
+The class and method documentation can be found in [./docs/api.md](./docs/api.md)
 
 ## High level operations
 

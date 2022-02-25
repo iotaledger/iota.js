@@ -67,7 +67,6 @@
     "files": [
         "dist/pow-neon.js",
         "dist/pow-neon.min.js",
-        "es",
         "src",
         "typings",
         "native/src",

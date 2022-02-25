@@ -62,7 +62,6 @@
     "typings": "typings/index.d.ts",
     "files": [
         "dist",
-        "es",
         "src",
         "typings",
         "wasm/build/release.wasm"
