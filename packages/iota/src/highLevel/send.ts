@@ -76,7 +76,7 @@ export async function sendEd25519(
     addressEd25519: string,
     amount: number,
     taggedData?: {
-        tag: Uint8Array;
+        tag?: Uint8Array;
         data?: Uint8Array;
     },
     addressOptions?: {
@@ -235,7 +235,7 @@ export async function sendWithAddressGenerator<T>(
         amount: number;
     }[],
     taggedData?: {
-        tag: Uint8Array | string;
+        tag?: Uint8Array | string;
         data?: Uint8Array | string;
     },
     zeroCount?: number

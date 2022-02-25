@@ -17,7 +17,7 @@ import { ITaggedDataPayload, TAGGED_DATA_PAYLOAD_TYPE } from "../models/payloads
  */
 export async function sendData(
     client: IClient | string,
-    tag: Uint8Array | string,
+    tag?: Uint8Array | string,
     data?: Uint8Array | string
 ): Promise<{
     message: IMessage;
