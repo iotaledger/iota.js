@@ -21,4 +21,4 @@ console.log(Converter.bytesToHex(sum));
 
 ## API
 
-The class and method documentation can be found in [./docs/API.md](./docs/API.md)
+The class and method documentation can be found in [./docs/api.md](./docs/api.md)
