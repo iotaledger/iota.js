@@ -1,5 +1,0 @@
-/**
- * The global type for the alias unlock block.
- */
-export const ALIAS_UNLOCK_BLOCK_TYPE = 2;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiSUFsaWFzVW5sb2NrQmxvY2suanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi9zcmMvbW9kZWxzL3VubG9ja0Jsb2Nrcy9JQWxpYXNVbmxvY2tCbG9jay50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFJQTs7R0FFRztBQUNILE1BQU0sQ0FBQyxNQUFNLHVCQUF1QixHQUFHLENBQUMsQ0FBQyJ9

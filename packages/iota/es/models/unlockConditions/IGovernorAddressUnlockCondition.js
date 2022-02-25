@@ -1,5 +1,0 @@
-/**
- * The global type for the governor address unlock condition.
- */
-export const GOVERNOR_ADDRESS_UNLOCK_CONDITION_TYPE = 5;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiSUdvdmVybm9yQWRkcmVzc1VubG9ja0NvbmRpdGlvbi5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uLy4uL3NyYy9tb2RlbHMvdW5sb2NrQ29uZGl0aW9ucy9JR292ZXJub3JBZGRyZXNzVW5sb2NrQ29uZGl0aW9uLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUtBOztHQUVHO0FBQ0gsTUFBTSxDQUFDLE1BQU0sc0NBQXNDLEdBQUcsQ0FBQyxDQUFDIn0=

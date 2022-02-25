@@ -1,5 +1,0 @@
-/**
- * The global type for the tag feature block.
- */
-export const TAG_FEATURE_BLOCK_TYPE = 3;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiSVRhZ0ZlYXR1cmVCbG9jay5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uLy4uL3NyYy9tb2RlbHMvZmVhdHVyZUJsb2Nrcy9JVGFnRmVhdHVyZUJsb2NrLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUlBOztHQUVHO0FBQ0gsTUFBTSxDQUFDLE1BQU0sc0JBQXNCLEdBQUcsQ0FBQyxDQUFDIn0=

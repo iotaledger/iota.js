@@ -1,5 +1,0 @@
-/**
- * The global type for the signature type.
- */
-export const ED25519_SIGNATURE_TYPE = 0;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiSUVkMjU1MTlTaWduYXR1cmUuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi9zcmMvbW9kZWxzL3NpZ25hdHVyZXMvSUVkMjU1MTlTaWduYXR1cmUudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBSUE7O0dBRUc7QUFDSCxNQUFNLENBQUMsTUFBTSxzQkFBc0IsR0FBRyxDQUFDLENBQUMifQ==

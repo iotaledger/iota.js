@@ -1,5 +1,0 @@
-/**
- * The global type for the unlock block.
- */
-export const SIGNATURE_UNLOCK_BLOCK_TYPE = 0;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiSVNpZ25hdHVyZVVubG9ja0Jsb2NrLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vLi4vc3JjL21vZGVscy91bmxvY2tCbG9ja3MvSVNpZ25hdHVyZVVubG9ja0Jsb2NrLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUtBOztHQUVHO0FBQ0gsTUFBTSxDQUFDLE1BQU0sMkJBQTJCLEdBQUcsQ0FBQyxDQUFDIn0=

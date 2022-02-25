@@ -1,5 +1,0 @@
-/**
- * The global type for the metadata feature block.
- */
-export const METADATA_FEATURE_BLOCK_TYPE = 2;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiSU1ldGFkYXRhRmVhdHVyZUJsb2NrLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vLi4vc3JjL21vZGVscy9mZWF0dXJlQmxvY2tzL0lNZXRhZGF0YUZlYXR1cmVCbG9jay50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFJQTs7R0FFRztBQUNILE1BQU0sQ0FBQyxNQUFNLDJCQUEyQixHQUFHLENBQUMsQ0FBQyJ9

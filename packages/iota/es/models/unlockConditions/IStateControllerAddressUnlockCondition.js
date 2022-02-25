@@ -1,5 +1,0 @@
-/**
- * The global type for the state controller unlock condition.
- */
-export const STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE = 4;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiSVN0YXRlQ29udHJvbGxlckFkZHJlc3NVbmxvY2tDb25kaXRpb24uanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi9zcmMvbW9kZWxzL3VubG9ja0NvbmRpdGlvbnMvSVN0YXRlQ29udHJvbGxlckFkZHJlc3NVbmxvY2tDb25kaXRpb24udHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBS0E7O0dBRUc7QUFDSCxNQUFNLENBQUMsTUFBTSw4Q0FBOEMsR0FBRyxDQUFDLENBQUMifQ==

@@ -1,5 +1,0 @@
-/**
- * The global type for the issuer feature block.
- */
-export const ISSUER_FEATURE_BLOCK_TYPE = 1;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiSUlzc3VlckZlYXR1cmVCbG9jay5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uLy4uL3NyYy9tb2RlbHMvZmVhdHVyZUJsb2Nrcy9JSXNzdWVyRmVhdHVyZUJsb2NrLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUtBOztHQUVHO0FBQ0gsTUFBTSxDQUFDLE1BQU0seUJBQXlCLEdBQUcsQ0FBQyxDQUFDIn0=

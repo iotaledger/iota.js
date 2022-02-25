@@ -1,5 +1,0 @@
-/**
- * The global type for the expiration unlock condition.
- */
-export const EXPIRATION_UNLOCK_CONDITION_TYPE = 3;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiSUV4cGlyYXRpb25VbmxvY2tDb25kaXRpb24uanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi9zcmMvbW9kZWxzL3VubG9ja0NvbmRpdGlvbnMvSUV4cGlyYXRpb25VbmxvY2tDb25kaXRpb24udHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBS0E7O0dBRUc7QUFDSCxNQUFNLENBQUMsTUFBTSxnQ0FBZ0MsR0FBRyxDQUFDLENBQUMifQ==
