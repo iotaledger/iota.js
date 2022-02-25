@@ -3373,7 +3373,7 @@ ___
 
 ### sendData
 
-▸ **sendData**(`client`, `tag`, `data?`): `Promise`<{}\>
+▸ **sendData**(`client`, `tag?`, `data?`): `Promise`<{}\>
 
 Send a data message.
 
@@ -3382,7 +3382,7 @@ Send a data message.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `client` | `string` \| [`IClient`](interfaces/IClient.md) | The client or node endpoint to send the data with. |
-| `tag` | `string` \| `Uint8Array` | The tag for the data. |
+| `tag?` | `string` \| `Uint8Array` | The tag for the data. |
 | `data?` | `string` \| `Uint8Array` | The data as either UTF8 text or Uint8Array bytes. |
 
 #### Returns

@@ -103,7 +103,7 @@ export function buildTransactionPayload(
 
     let localTagHex;
 
-    if (taggedData) {
+    if (taggedData?.tag) {
         localTagHex = typeof taggedData?.tag === "string"
             ? Converter.utf8ToHex(taggedData.tag)
             : Converter.bytesToHex(taggedData.tag);

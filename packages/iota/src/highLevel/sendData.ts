@@ -25,23 +25,31 @@ export async function sendData(
 }> {
     const localClient = typeof client === "string" ? new SingleNodeClient(client) : client;
 
-    const localTagHex = typeof tag === "string" ? Converter.utf8ToHex(tag) : Converter.bytesToHex(tag);
+    let localTagHex;
+    if (tag) {
+        localTagHex = typeof tag === "string"
+            ? Converter.utf8ToHex(tag)
+            : Converter.bytesToHex(tag);
 
-    if (localTagHex.length / 2 > MAX_TAG_LENGTH) {
-        throw new Error(
-            `The tag length is ${localTagHex.length / 2
-            }, which exceeds the maximum size of ${MAX_TAG_LENGTH}`
-        );
+        if (localTagHex?.length / 2 > MAX_TAG_LENGTH) {
+            throw new Error(
+                `The tag length is ${localTagHex.length / 2
+                }, which exceeds the maximum size of ${MAX_TAG_LENGTH}`
+            );
+        }
+    }
+
+    let localDataHex;
+    if (data) {
+        localDataHex = typeof data === "string"
+            ? Converter.utf8ToHex(data)
+            : Converter.bytesToHex(data);
     }
 
     const taggedDataPayload: ITaggedDataPayload = {
         type: TAGGED_DATA_PAYLOAD_TYPE,
         tag: localTagHex,
-        data: data
-            ? typeof data === "string"
-                ? Converter.utf8ToHex(data)
-                : Converter.bytesToHex(data)
-            : undefined
+        data: localDataHex
     };
 
     const message: IMessage = {
