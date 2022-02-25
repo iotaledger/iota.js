@@ -17,18 +17,18 @@
         "packages/util",
         "packages/crypto",
         "packages/iota",
+        "packages/mqtt",
+        "packages/pow-neon",
+        "packages/pow-node",
+        "packages/pow-wasm/wasm",
+        "packages/pow-wasm",
         "packages/iota/examples/address",
         "packages/iota/examples/data",
         "packages/iota/examples/peers",
         "packages/iota/examples/pow",
         "packages/iota/examples/simple",
         "packages/iota/examples/transaction",
-        "packages/mqtt",
-        "packages/mqtt/examples/mqtt-client",
-        "packages/pow-neon",
-        "packages/pow-node",
-        "packages/pow-wasm/wasm",
-        "packages/pow-wasm"
+        "packages/mqtt/examples/mqtt-client"
     ],
     "dependencies": {
         "prettier": "^2.4.1"
