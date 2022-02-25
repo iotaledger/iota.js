@@ -5,7 +5,9 @@
         "module": "commonjs",
         "moduleResolution": "node",
         "outDir": "./dist",
-        "inlineSourceMap": true
+        "inlineSourceMap": true,
+        "forceConsistentCasingInFileNames": true,
+        "importHelpers": true
     },
     "include": ["src"]
 }
