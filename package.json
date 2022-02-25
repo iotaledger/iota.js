@@ -18,6 +18,7 @@
         "packages/crypto",
         "packages/iota",
         "packages/mqtt",
+        "packages/pow-neon/native",
         "packages/pow-neon",
         "packages/pow-node",
         "packages/pow-wasm/wasm",
