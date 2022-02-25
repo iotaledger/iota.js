@@ -26,7 +26,7 @@ async function run() {
         const firstResult = await retrieveData(client, messageIds[i]);
         if (firstResult) {
             console.log("Message");
-            console.log("\tTag: ", Converter.bytesToUtf8(firstResult.tag));
+            console.log("\tTag: ", firstResult.tag ? Converter.bytesToUtf8(firstResult.tag) : "None");
             console.log("\tData: ", firstResult.data ? Converter.bytesToUtf8(firstResult.data) : "None");
         }
     }
