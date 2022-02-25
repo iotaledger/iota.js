@@ -1,4 +1,4 @@
-name: Library Build Main/Dev
+name: Library Build Stardust
 
 on:
     push:
