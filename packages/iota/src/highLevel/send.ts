@@ -40,7 +40,7 @@ export async function send(
     addressBech32: string,
     amount: number,
     taggedData?: {
-        tag: Uint8Array | string;
+        tag?: Uint8Array | string;
         data?: Uint8Array | string;
     },
     addressOptions?: {
@@ -113,7 +113,7 @@ export async function sendMultiple(
         amount: number;
     }[],
     taggedData?: {
-        tag: Uint8Array | string;
+        tag?: Uint8Array | string;
         data?: Uint8Array | string;
     },
     addressOptions?: {
@@ -179,7 +179,7 @@ export async function sendMultipleEd25519(
         amount: number;
     }[],
     taggedData?: {
-        tag: Uint8Array;
+        tag?: Uint8Array;
         data?: Uint8Array;
     },
     addressOptions?: {

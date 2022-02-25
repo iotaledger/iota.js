@@ -17,7 +17,7 @@ export async function retrieveData(
     messageId: string
 ): Promise<
     | {
-          tag: Uint8Array;
+          tag?: Uint8Array;
           data?: Uint8Array;
       }
     | undefined
@@ -37,7 +37,7 @@ export async function retrieveData(
 
         if (taggedDataPayload) {
             return {
-                tag: Converter.hexToBytes(taggedDataPayload.tag),
+                tag: taggedDataPayload.tag ? Converter.hexToBytes(taggedDataPayload.tag) : undefined,
                 data: taggedDataPayload.data ? Converter.hexToBytes(taggedDataPayload.data) : undefined
             };
         }

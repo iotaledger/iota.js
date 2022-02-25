@@ -5,7 +5,7 @@ import { Blake2b, Ed25519 } from "@iota/crypto.js";
 import { Converter, WriteStream } from "@iota/util.js";
 import { serializeInput } from "../binary/inputs/inputs";
 import { serializeOutput } from "../binary/outputs/outputs";
-import { MAX_TAG_LENGTH, MIN_TAG_LENGTH } from "../binary/payloads/taggedDataPayload";
+import { MAX_TAG_LENGTH } from "../binary/payloads/taggedDataPayload";
 import { serializeTransactionEssence } from "../binary/transactionEssence";
 import { SingleNodeClient } from "../clients/singleNodeClient";
 import { ED25519_ADDRESS_TYPE } from "../models/addresses/IEd25519Address";
@@ -44,7 +44,7 @@ export async function sendAdvanced(
         amount: number;
     }[],
     taggedData?: {
-        tag: Uint8Array | string;
+        tag?: Uint8Array | string;
         data?: Uint8Array | string;
     }
 ): Promise<{
@@ -90,7 +90,7 @@ export function buildTransactionPayload(
         amount: number;
     }[],
     taggedData?: {
-        tag: Uint8Array | string;
+        tag?: Uint8Array | string;
         data?: Uint8Array | string;
     }
 ): ITransactionPayload {
@@ -107,13 +107,6 @@ export function buildTransactionPayload(
         localTagHex = typeof taggedData?.tag === "string"
             ? Converter.utf8ToHex(taggedData.tag)
             : Converter.bytesToHex(taggedData.tag);
-
-        if (localTagHex.length / 2 < MIN_TAG_LENGTH) {
-            throw new Error(
-                `The tag length is ${localTagHex.length / 2
-                }, which is less than the minimum size of ${MIN_TAG_LENGTH}`
-            );
-        }
 
         if (localTagHex.length / 2 > MAX_TAG_LENGTH) {
             throw new Error(
