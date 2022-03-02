@@ -58,20 +58,30 @@ export interface IMqttClient {
     output(outputId: string, callback: (topic: string, data: IOutputResponse) => void): string;
 
     /**
-     * Subscribe to the address for output updates.
+     * Subscribe to the output with specific unlock condition and address.
+     * @param condition The condition to monitor.
      * @param addressBech32 The address to monitor.
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    addressOutputs(addressBech32: string, callback: (topic: string, data: IOutputResponse) => void): string;
+    outputByConditionAndAddress(
+        condition: string,
+        addressBech32: string,
+        callback: (topic: string, data: IOutputResponse) => void
+    ): string;
 
     /**
-     * Subscribe to the ed25519 address for output updates.
-     * @param addressEd25519 The address to monitor.
+     * Subscribe to the spent outputs with specific unlock condition and address.
+     * @param condition The condition to monitor.
+     * @param addressBech32 The address to monitor.
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    addressEd25519Outputs(addressEd25519: string, callback: (topic: string, data: IOutputResponse) => void): string;
+    outputSpentByConditionAndAddress(
+        condition: string,
+        addressBech32: string,
+        callback: (topic: string, data: IOutputResponse) => void
+    ): string;
 
     /**
      * Subscribe to get all messages in binary form.

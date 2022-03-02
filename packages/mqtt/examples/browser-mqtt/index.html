@@ -38,7 +38,7 @@
                 consoleLog(topic, data);
             });
 
-            client.index((topic, data) => {
+            client.taggedData((topic, data) => {
                 consoleLog(topic, data);
             });
 

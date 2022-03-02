@@ -17,10 +17,6 @@ async function run() {
 
     mqttClient.output("0".repeat(68), (topic, data) => console.log(topic, data));
 
-    mqttClient.addressOutputs("6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92", (topic, data) =>
-        console.log(topic, data)
-    );
-
     mqttClient.messagesRaw((topic, data) => console.log(topic, data));
 
     mqttClient.messages((topic, data, raw) => console.log(topic, data));

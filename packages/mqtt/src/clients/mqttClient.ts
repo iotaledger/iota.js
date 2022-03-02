@@ -136,26 +136,33 @@ export class MqttClient implements IMqttClient {
     }
 
     /**
-     * Subscribe to the address for output updates.
+     * Subscribe to the output with specific unlock condition and address.
+     * @param condition The condition to monitor.
      * @param addressBech32 The address to monitor.
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    public addressOutputs(addressBech32: string, callback: (topic: string, data: IOutputResponse) => void): string {
-        return this.internalSubscribe(`addresses/${addressBech32}/outputs`, true, callback);
+    public outputByConditionAndAddress(
+        condition: string,
+        addressBech32: string,
+        callback: (topic: string, data: IOutputResponse) => void
+    ): string {
+        return this.internalSubscribe(`outputs/unlock/${condition}/${addressBech32}`, true, callback);
     }
 
     /**
-     * Subscribe to the ed25519 address for output updates.
-     * @param addressEd25519 The address to monitor.
+     * Subscribe to the spent outputs with specific unlock condition and address.
+     * @param condition The condition to monitor.
+     * @param addressBech32 The address to monitor.
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    public addressEd25519Outputs(
-        addressEd25519: string,
+    public outputSpentByConditionAndAddress(
+        condition: string,
+        addressBech32: string,
         callback: (topic: string, data: IOutputResponse) => void
     ): string {
-        return this.internalSubscribe(`addresses/ed25519/${addressEd25519}/outputs`, true, callback);
+        return this.internalSubscribe(`outputs/unlock/${condition}/${addressBech32}/spent`, true, callback);
     }
 
     /**
@@ -188,8 +195,7 @@ export class MqttClient implements IMqttClient {
      */
     public taggedRaw(tag: Uint8Array | string, callback: (topic: string, data: Uint8Array) => void): string {
         return this.internalSubscribe<Uint8Array>(
-            `messages/taggedData/${
-                typeof tag === "string" ? Converter.utf8ToHex(tag) : Converter.bytesToHex(tag)
+            `messages/taggedData/${typeof tag === "string" ? Converter.utf8ToHex(tag) : Converter.bytesToHex(tag)
             }`,
             false,
             (topic, raw) => {
@@ -209,8 +215,7 @@ export class MqttClient implements IMqttClient {
         callback: (topic: string, data: IMessage, raw: Uint8Array) => void
     ): string {
         return this.internalSubscribe<Uint8Array>(
-            `messages/taggedData/${
-                typeof tag === "string" ? Converter.utf8ToHex(tag) : Converter.bytesToHex(tag)
+            `messages/taggedData/${typeof tag === "string" ? Converter.utf8ToHex(tag) : Converter.bytesToHex(tag)
             }`,
             false,
             (topic, raw) => {
@@ -490,7 +495,7 @@ export class MqttClient implements IMqttClient {
             try {
                 localClient.unsubscribe(Object.keys(this._subscriptions));
                 localClient.end();
-            } catch {}
+            } catch { }
 
             this.triggerStatusCallbacks({
                 type: "disconnect",
