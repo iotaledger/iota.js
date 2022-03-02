@@ -181,15 +181,15 @@ export class MqttClient implements IMqttClient {
     }
 
     /**
-     * Subscribe to get all messages for the specified index in binary form.
-     * @param index The index to monitor.
+     * Subscribe to get all messages for the specified tagged in binary form.
+     * @param tag The tag to monitor.
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    public indexRaw(index: Uint8Array | string, callback: (topic: string, data: Uint8Array) => void): string {
+    public taggedRaw(tag: Uint8Array | string, callback: (topic: string, data: Uint8Array) => void): string {
         return this.internalSubscribe<Uint8Array>(
-            `messages/indexation/${
-                typeof index === "string" ? Converter.utf8ToHex(index) : Converter.bytesToHex(index)
+            `messages/taggedData/${
+                typeof tag === "string" ? Converter.utf8ToHex(tag) : Converter.bytesToHex(tag)
             }`,
             false,
             (topic, raw) => {
@@ -199,18 +199,18 @@ export class MqttClient implements IMqttClient {
     }
 
     /**
-     * Subscribe to get all messages for the specified index in object form.
-     * @param index The index to monitor.
+     * Subscribe to get all messages for the specified tagged in object form.
+     * @param tag The tat to monitor.
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    public index(
-        index: Uint8Array | string,
+    public tagged(
+        tag: Uint8Array | string,
         callback: (topic: string, data: IMessage, raw: Uint8Array) => void
     ): string {
         return this.internalSubscribe<Uint8Array>(
-            `messages/indexation/${
-                typeof index === "string" ? Converter.utf8ToHex(index) : Converter.bytesToHex(index)
+            `messages/taggedData/${
+                typeof tag === "string" ? Converter.utf8ToHex(tag) : Converter.bytesToHex(tag)
             }`,
             false,
             (topic, raw) => {
