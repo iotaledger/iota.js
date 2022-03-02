@@ -36,17 +36,16 @@
         "node": ">=12.0.0"
     },
     "devDependencies": {
-        "@rollup/plugin-commonjs": "^21.0.1",
+        "@rollup/plugin-commonjs": "^21.0.2",
         "@rollup/plugin-node-resolve": "^13.1.3",
-        "@rollup/plugin-replace": "^3.1.0",
         "@types/jest": "^27.4.1",
-        "@typescript-eslint/eslint-plugin": "5.12.1",
-        "@typescript-eslint/parser": "^5.12.1",
+        "@typescript-eslint/eslint-plugin": "5.13.0",
+        "@typescript-eslint/parser": "^5.13.0",
         "cross-env": "^7.0.3",
-        "eslint": "^8.9.0",
+        "eslint": "^8.10.0",
         "eslint-plugin-header": "^3.1.1",
         "eslint-plugin-import": "^2.25.4",
-        "eslint-plugin-jsdoc": "^37.9.4",
+        "eslint-plugin-jsdoc": "^37.9.6",
         "eslint-plugin-unicorn": "^41.0.0",
         "jest": "^27.5.1",
         "npm-run-all": "^4.1.5",
@@ -54,8 +53,8 @@
         "rollup": "^2.68.0",
         "rollup-plugin-terser": "^7.0.2",
         "ts-jest": "^27.1.3",
-        "ts-node": "^10.5.0",
-        "typescript": "^4.5.5"
+        "ts-node": "^10.6.0",
+        "typescript": "^4.6.2"
     },
     "main": "dist/pow-wasm.js",
     "module": "es/pow-wasm.js",
