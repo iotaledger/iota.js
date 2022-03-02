@@ -1,8 +1,7 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 /* eslint-disable no-mixed-operators */
-import type { ReadStream, WriteStream } from "@iota/util.js";
-import bigInt from "big-integer";
+import type { HexHelper, ReadStream, WriteStream } from "@iota/util.js";
 import { IUTXOInput, UTXO_INPUT_TYPE } from "../models/inputs/IUTXOInput";
 import { INPUTS_COMMITMENT_SIZE, ITransactionEssence, TRANSACTION_ESSENCE_TYPE } from "../models/ITransactionEssence";
 import { TAGGED_DATA_PAYLOAD_TYPE } from "../models/payloads/ITaggedDataPayload";
@@ -58,7 +57,7 @@ export function deserializeTransactionEssence(readStream: ReadStream): ITransact
 
     return {
         type: TRANSACTION_ESSENCE_TYPE,
-        networkId: networkId.toString(10),
+        networkId: HexHelper.fromBigInt(networkId),
         inputs: inputs as IUTXOInput[],
         inputsCommitment,
         outputs,
@@ -74,7 +73,7 @@ export function deserializeTransactionEssence(readStream: ReadStream): ITransact
 export function serializeTransactionEssence(writeStream: WriteStream, object: ITransactionEssence): void {
     writeStream.writeUInt8("transactionEssence.type", object.type);
 
-    writeStream.writeUInt64("transactionEssence.networkId", bigInt(object.networkId ?? "0"));
+    writeStream.writeUInt64("transactionEssence.networkId", HexHelper.toBigInt(object.networkId ?? "0x00"));
 
     for (const input of object.inputs) {
         if (input.type !== UTXO_INPUT_TYPE) {

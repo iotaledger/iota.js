@@ -1,7 +1,6 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import type { ReadStream, WriteStream } from "@iota/util.js";
-import bigInt from "big-integer";
+import type { HexHelper, ReadStream, WriteStream } from "@iota/util.js";
 import { DEFAULT_PROTOCOL_VERSION, IMessage } from "../models/IMessage";
 import { MILESTONE_PAYLOAD_TYPE } from "../models/payloads/IMilestonePayload";
 import { RECEIPT_PAYLOAD_TYPE } from "../models/payloads/IReceiptPayload";
@@ -74,7 +73,7 @@ export function deserializeMessage(readStream: ReadStream): IMessage {
         protocolVersion,
         parentMessageIds: parents,
         payload,
-        nonce: nonce.toString(10)
+        nonce: HexHelper.fromBigInt(nonce)
     };
 }
 
@@ -116,5 +115,5 @@ export function serializeMessage(writeStream: WriteStream, object: IMessage): vo
 
     serializePayload(writeStream, object.payload);
 
-    writeStream.writeUInt64("message.nonce", bigInt(object.nonce ?? "0"));
+    writeStream.writeUInt64("message.nonce", HexHelper.toBigInt(object.nonce ?? "0x00"));
 }

@@ -9,6 +9,7 @@
 - [Base64](classes/Base64.md)
 - [BigIntHelper](classes/BigIntHelper.md)
 - [Converter](classes/Converter.md)
+- [HexHelper](classes/HexHelper.md)
 - [RandomHelper](classes/RandomHelper.md)
 - [ReadStream](classes/ReadStream.md)
 - [WriteStream](classes/WriteStream.md)
