@@ -1,7 +1,7 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 /* eslint-disable no-mixed-operators */
-import type { HexHelper, ReadStream, WriteStream } from "@iota/util.js";
+import { HexHelper, ReadStream, WriteStream } from "@iota/util.js";
 import { IUTXOInput, UTXO_INPUT_TYPE } from "../models/inputs/IUTXOInput";
 import { INPUTS_COMMITMENT_SIZE, ITransactionEssence, TRANSACTION_ESSENCE_TYPE } from "../models/ITransactionEssence";
 import { TAGGED_DATA_PAYLOAD_TYPE } from "../models/payloads/ITaggedDataPayload";

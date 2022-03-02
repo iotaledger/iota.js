@@ -1,6 +1,6 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import type { HexHelper, ReadStream, WriteStream } from "@iota/util.js";
+import { HexHelper, ReadStream, WriteStream } from "@iota/util.js";
 import { DEFAULT_PROTOCOL_VERSION, IMessage } from "../models/IMessage";
 import { MILESTONE_PAYLOAD_TYPE } from "../models/payloads/IMilestonePayload";
 import { RECEIPT_PAYLOAD_TYPE } from "../models/payloads/IReceiptPayload";

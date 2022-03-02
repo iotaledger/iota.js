@@ -25,9 +25,9 @@ async function run() {
 
     mqttClient.messages((topic, data, raw) => console.log(topic, data));
 
-    mqttClient.index("aa", (topic, data, raw) => console.log(topic, data));
+    mqttClient.tagged("aa", (topic, data, raw) => console.log(topic, data));
 
-    mqttClient.indexRaw("aa", (topic, data) => console.log(topic, data));
+    mqttClient.taggedRaw("aa", (topic, data) => console.log(topic, data));
 
     mqttClient.messagesMetadata((topic, data) => console.log(topic, data));
 }

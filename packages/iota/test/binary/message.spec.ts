@@ -43,7 +43,7 @@ describe("Binary Message", () => {
                 "6901c7b37adbddfc3fc170773632489f263af4decc9ed5813c849a07319ecd73"
             );
         }
-        expect(message.nonce).toEqual("0");
+        expect(message.nonce).toEqual("0x0");
     });
 
     test("Can fail with additional data", () => {
@@ -95,7 +95,7 @@ describe("Binary Message", () => {
         expect(payload.signatures[1]).toEqual(
             "fc7c1c3174cc0d120c7d522adb3dda549a5f742e082fc2921c740b1b8723bde457498c047cdf6a7759bf7d94b22960d260a1de550e65abadb1a00404d619060c"
         );
-        expect(message.nonce).toEqual("12253");
+        expect(message.nonce).toEqual("0x2fdd");
     });
 
     test("Can succeed with tagged data", () => {
@@ -122,7 +122,7 @@ describe("Binary Message", () => {
         if (payload.data) {
             expect(Converter.hexToUtf8(payload.data)).toEqual("Bar");
         }
-        expect(message.nonce).toEqual("0");
+        expect(message.nonce).toEqual("0x0");
     });
 
     test("Can succeed with actual milestone data", () => {
@@ -154,7 +154,7 @@ describe("Binary Message", () => {
         const payload = message.payload as ITransactionPayload;
         expect(payload.type).toEqual(0);
         expect(payload.essence.type).toEqual(0);
-        expect(payload.essence.networkId).toEqual("123");
+        expect(payload.essence.networkId).toEqual("0x7b");
         expect(payload.essence.inputs.length).toEqual(1);
         expect(payload.essence.inputs[0].type).toEqual(0);
         const utxoInput = payload.essence.inputs[0];
@@ -202,6 +202,6 @@ describe("Binary Message", () => {
         expect(sigUnlockBlock.signature.signature).toEqual(
             "3163a90017ed5fe9530f52fb0d30836a453a37204f4d59e03012d82e0a946f31c930ac54f4a35aef9578b9dec9c12887404be353c5f7ebd88bcbefcc78e29c05"
         );
-        expect(message.nonce).toEqual("0");
+        expect(message.nonce).toEqual("0x0");
     });
 });

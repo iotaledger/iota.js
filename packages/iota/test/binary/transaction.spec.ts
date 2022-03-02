@@ -13,7 +13,7 @@ describe("Binary Transaction", () => {
     test("Can serialize and deserialize transaction essence with no payload", () => {
         const object: ITransactionEssence = {
             type: TRANSACTION_ESSENCE_TYPE,
-            networkId: "123",
+            networkId: "0x7b",
             inputs: [
                 {
                     type: UTXO_INPUT_TYPE,
@@ -70,7 +70,7 @@ describe("Binary Transaction", () => {
     test("Can serialize and deserialize transaction essence with tagged data payload", () => {
         const object: ITransactionEssence = {
             type: TRANSACTION_ESSENCE_TYPE,
-            networkId: "123",
+            networkId: "0x7b",
             inputs: [
                 {
                     type: UTXO_INPUT_TYPE,

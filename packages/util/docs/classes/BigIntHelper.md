@@ -13,8 +13,6 @@ Helper methods for bigints.
 - [write8](BigIntHelper.md#write8)
 - [write32](BigIntHelper.md#write32)
 - [random](BigIntHelper.md#random)
-- [toHex](BigIntHelper.md#tohex)
-- [fromHex](BigIntHelper.md#fromhex)
 
 ### Constructors
 
@@ -163,46 +161,6 @@ Generate a random bigint.
 `BigInteger`
 
 The bigint.
-
-___
-
-### toHex
-
-▸ `Static` **toHex**(`value`): `string`
-
-Convert the big int to hex string.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `value` | `BigInteger` | The big int value to convert. |
-
-#### Returns
-
-`string`
-
-The hex encoded big int.
-
-___
-
-### fromHex
-
-▸ `Static` **fromHex**(`hex`): `BigInteger`
-
-Convert the hex string to a big int.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `hex` | `string` | The hex value to convert. |
-
-#### Returns
-
-`BigInteger`
-
-The big int.
 
 ## Constructors
 
