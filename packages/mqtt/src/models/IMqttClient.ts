@@ -1,6 +1,6 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import type { IMessage, IMessageMetadata, IOutputResponse } from "@iota/iota.js";
+import type { IMessage, IMessageMetadata, IOutputResponse, IReceiptsResponse } from "@iota/iota.js";
 import type { IMqttMilestoneResponse } from "./api/IMqttMilestoneResponse";
 import type { IMqttStatus } from "./IMqttStatus";
 
@@ -23,12 +23,101 @@ export interface IMqttClient {
     milestonesConfirmed(callback: (topic: string, data: IMqttMilestoneResponse) => void): string;
 
     /**
+     * Subscribe to get all messages in binary form.
+     * @param callback The callback which is called when new data arrives.
+     * @returns A subscription Id which can be used to unsubscribe.
+     */
+    messagesRaw(callback: (topic: string, data: Uint8Array) => void): string;
+
+    /**
+     * Subscribe to get all messages in object form.
+     * @param callback The callback which is called when new data arrives.
+     * @returns A subscription Id which can be used to unsubscribe.
+     */
+    messages(callback: (topic: string, data: IMessage) => void): string;
+
+    /**
+     * Subscribe to get the metadata for all the messages.
+     * @param callback The callback which is called when new data arrives.
+     * @returns A subscription Id which can be used to unsubscribe.
+     */
+    messagesReferenced(callback: (topic: string, data: IMessageMetadata) => void): string;
+
+    /**
+     * Subscribe to all transaction messages in their raw form.
+     * @param callback The callback which is called when new data arrives.
+     * @returns A subscription Id which can be used to unsubscribe.
+     */
+    messagesTransactionRaw(callback: (topic: string, data: Uint8Array) => void): string;
+
+    /**
+     * Subscribe to all transaction messages.
+     * @param callback The callback which is called when new data arrives.
+     * @returns A subscription Id which can be used to unsubscribe.
+     */
+    messagesTransaction(callback: (topic: string, data: IMessage) => void): string;
+
+    /**
+     * Subscribe to transaction messages with tagged data in their raw form.
+     * @param tag The tag to look for, or all tagged transactions if undefined.
+     * @param callback The callback which is called when new data arrives.
+     * @returns A subscription Id which can be used to unsubscribe.
+     */
+    messagesTransactionTaggedDataRaw(
+        tag: Uint8Array | string | undefined,
+        callback: (topic: string, data: Uint8Array) => void): string;
+
+    /**
+     * Subscribe to all transaction messages with tagged data.
+     * @param tag The tag to look for, or all tagged transactions if undefined.
+     * @param callback The callback which is called when new data arrives.
+     * @returns A subscription Id which can be used to unsubscribe.
+     */
+    messagesTransactionTaggedData(
+        tag: Uint8Array | string | undefined,
+        callback: (topic: string, data: IMessage) => void): string;
+
+    /**
+     * Subscribe to all milestone messages in their raw form.
+     * @param callback The callback which is called when new data arrives.
+     * @returns A subscription Id which can be used to unsubscribe.
+     */
+    messagesMilestoneRaw(callback: (topic: string, data: Uint8Array) => void): string;
+
+    /**
+     * Subscribe to all milestone messages.
+     * @param callback The callback which is called when new data arrives.
+     * @returns A subscription Id which can be used to unsubscribe.
+     */
+    messagesMilestone(callback: (topic: string, data: IMessage) => void): string;
+
+    /**
+     * Subscribe to get all messages for the specified tag in binary form.
+     * @param tag The tag to monitor as bytes or in hex, undefined for all messages.
+     * @param callback The callback which is called when new data arrives.
+     * @returns A subscription Id which can be used to unsubscribe.
+     */
+    messagesTaggedRaw(
+        tag: Uint8Array | string | undefined,
+        callback: (topic: string, data: Uint8Array) => void): string;
+
+    /**
+     * Subscribe to get all messages for the specified tag in object form.
+     * @param tag The tag to monitor as bytes or in hex, undefined for all messages.
+     * @param callback The callback which is called when new data arrives.
+     * @returns A subscription Id which can be used to unsubscribe.
+     */
+    messagesTagged(
+        tag: Uint8Array | string | undefined,
+        callback: (topic: string, data: IMessage) => void): string;
+
+    /**
      * Subscribe to metadata updates for a specific message.
      * @param messageId The message to monitor.
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    messageMetadata(messageId: string, callback: (topic: string, data: IMessageMetadata) => void): string;
+    messagesMetadata(messageId: string, callback: (topic: string, data: IMessageMetadata) => void): string;
 
     /**
      * Subscribe to message updates for a specific transactionId.
@@ -46,7 +135,7 @@ export interface IMqttClient {
      */
     transactionIncludedMessage(
         transactionId: string,
-        callback: (topic: string, data: IMessage, raw: Uint8Array) => void
+        callback: (topic: string, data: IMessage) => void
     ): string;
 
     /**
@@ -84,41 +173,11 @@ export interface IMqttClient {
     ): string;
 
     /**
-     * Subscribe to get all messages in binary form.
+     * Subscribe to the receive all receipts.
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    messagesRaw(callback: (topic: string, data: Uint8Array) => void): string;
-
-    /**
-     * Subscribe to get all messages in object form.
-     * @param callback The callback which is called when new data arrives.
-     * @returns A subscription Id which can be used to unsubscribe.
-     */
-    messages(callback: (topic: string, data: IMessage, raw: Uint8Array) => void): string;
-
-    /**
-     * Subscribe to get all messages for the specified tag in binary form.
-     * @param tag The tag to monitor as bytes or in UTF8.
-     * @param callback The callback which is called when new data arrives.
-     * @returns A subscription Id which can be used to unsubscribe.
-     */
-    taggedRaw(tag: Uint8Array | string, callback: (topic: string, data: Uint8Array) => void): string;
-
-    /**
-     * Subscribe to get all messages for the specified tag in object form.
-     * @param tag The tag to monitor as bytes or in UTF8.
-     * @param callback The callback which is called when new data arrives.
-     * @returns A subscription Id which can be used to unsubscribe.
-     */
-    tagged(tag: Uint8Array | string, callback: (topic: string, data: IMessage, raw: Uint8Array) => void): string;
-
-    /**
-     * Subscribe to get the metadata for all the messages.
-     * @param callback The callback which is called when new data arrives.
-     * @returns A subscription Id which can be used to unsubscribe.
-     */
-    messagesMetadata(callback: (topic: string, data: IMessageMetadata) => void): string;
+    receipts(callback: (topic: string, data: IReceiptsResponse) => void): string;
 
     /**
      * Subscribe to another type of message as raw data.
