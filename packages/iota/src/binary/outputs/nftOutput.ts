@@ -1,7 +1,6 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import type { ReadStream, WriteStream } from "@iota/util.js";
-import bigInt from "big-integer";
+import { HexHelper, ReadStream, WriteStream } from "@iota/util.js";
 import { INftOutput, NFT_OUTPUT_TYPE } from "../../models/outputs/INftOutput";
 import { SMALL_TYPE_LENGTH, UINT64_SIZE } from "../commonDataTypes";
 import {
@@ -56,7 +55,7 @@ export function deserializeNftOutput(readStream: ReadStream): INftOutput {
 
     return {
         type: NFT_OUTPUT_TYPE,
-        amount: Number(amount),
+        amount: HexHelper.fromBigInt(amount),
         nativeTokens,
         nftId,
         unlockConditions,
@@ -73,7 +72,7 @@ export function deserializeNftOutput(readStream: ReadStream): INftOutput {
 export function serializeNftOutput(writeStream: WriteStream, object: INftOutput): void {
     writeStream.writeUInt8("nftOutput.type", object.type);
 
-    writeStream.writeUInt64("nftOutput.amount", bigInt(object.amount));
+    writeStream.writeUInt64("nftOutput.amount", HexHelper.toBigInt(object.amount));
     serializeNativeTokens(writeStream, object.nativeTokens);
     writeStream.writeFixedHex("nftOutput.nftId", NFT_ID_LENGTH, object.nftId);
 

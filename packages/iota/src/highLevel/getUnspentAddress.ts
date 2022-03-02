@@ -1,5 +1,6 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
+import type { BigInteger } from "big-integer";
 import type { IClient } from "../models/IClient";
 import type { ISeed } from "../models/ISeed";
 import { getUnspentAddresses } from "./getUnspentAddresses";
@@ -26,7 +27,7 @@ export async function getUnspentAddress(
     | {
           address: string;
           path: string;
-          balance: number;
+          balance: BigInteger;
       }
     | undefined
 > {

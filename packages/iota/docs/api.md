@@ -874,7 +874,7 @@ ___
 
 ### TRANSACTION\_ESSENCE\_TYPE
 
-• `Const` **TRANSACTION\_ESSENCE\_TYPE**: ``0``
+• `Const` **TRANSACTION\_ESSENCE\_TYPE**: ``1``
 
 The global type for the transaction essence.
 
@@ -1026,7 +1026,7 @@ ___
 
 ### TRANSACTION\_PAYLOAD\_TYPE
 
-• `Const` **TRANSACTION\_PAYLOAD\_TYPE**: ``0``
+• `Const` **TRANSACTION\_PAYLOAD\_TYPE**: ``6``
 
 The global type for the payload.
 
@@ -2959,7 +2959,7 @@ ___
 
 ### getBalance
 
-▸ **getBalance**(`client`, `seed`, `accountIndex`, `addressOptions?`): `Promise`<`number`\>
+▸ **getBalance**(`client`, `seed`, `accountIndex`, `addressOptions?`): `Promise`<`BigInteger`\>
 
 Get the balance for a list of addresses.
 
@@ -2974,7 +2974,7 @@ Get the balance for a list of addresses.
 
 #### Returns
 
-`Promise`<`number`\>
+`Promise`<`BigInteger`\>
 
 The balance.
 
@@ -3058,7 +3058,7 @@ ___
 
 ### calculateAddressBalance
 
-▸ **calculateAddressBalance**(`client`, `addressBech32`): `Promise`<`number`\>
+▸ **calculateAddressBalance**(`client`, `addressBech32`): `Promise`<`BigInteger`\>
 
 Calculate address balance for an address.
 
@@ -3071,7 +3071,7 @@ Calculate address balance for an address.
 
 #### Returns
 
-`Promise`<`number`\>
+`Promise`<`BigInteger`\>
 
 The unspent balance.
 
@@ -3175,7 +3175,7 @@ Send a transfer from the balance on the seed to a single output.
 | `seed` | [`ISeed`](interfaces/ISeed.md) | The seed to use for address generation. |
 | `accountIndex` | `number` | The account index in the wallet. |
 | `addressBech32` | `string` | The address to send the funds to in bech32 format. |
-| `amount` | `number` | The amount to send. |
+| `amount` | `BigInteger` | The amount to send. |
 | `taggedData?` | `Object` | Optional tagged data to associate with the transaction. |
 | `addressOptions?` | `Object` | Optional address configuration for balance address lookups. |
 
@@ -3201,7 +3201,7 @@ Send a transfer from the balance on the seed to a single output.
 | `seed` | [`ISeed`](interfaces/ISeed.md) | The seed to use for address generation. |
 | `accountIndex` | `number` | The account index in the wallet. |
 | `addressEd25519` | `string` | The address to send the funds to in ed25519 format. |
-| `amount` | `number` | The amount to send. |
+| `amount` | `BigInteger` | The amount to send. |
 | `taggedData?` | `Object` | Optional tagged data to associate with the transaction. |
 | `addressOptions?` | `Object` | Optional address configuration for balance address lookups. |
 

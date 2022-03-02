@@ -14,5 +14,5 @@ export interface ITreasuryOutput extends ITypeBase<2> {
     /**
      * The amount of the output.
      */
-    amount: number;
+    amount: string;
 }

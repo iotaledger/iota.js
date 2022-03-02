@@ -13,5 +13,5 @@ export interface ITreasury {
     /**
      * The amount for the treasury.
      */
-    amount: number;
+    amount: string;
 }

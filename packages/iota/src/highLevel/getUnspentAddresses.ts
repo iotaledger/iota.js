@@ -1,6 +1,8 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 import { Bip32Path } from "@iota/crypto.js";
+import { HexHelper } from "@iota/util.js";
+import bigInt, { BigInteger } from "big-integer";
 import { Ed25519Address } from "../addressTypes/ed25519Address";
 import { IndexerPluginClient } from "../clients/plugins/indexerPluginClient";
 import { SingleNodeClient } from "../clients/singleNodeClient";
@@ -37,7 +39,7 @@ export async function getUnspentAddresses(
     {
         address: string;
         path: string;
-        balance: number;
+        balance: BigInteger;
     }[]
 > {
     return getUnspentAddressesWithAddressGenerator<IBip44GeneratorState>(
@@ -79,7 +81,7 @@ export async function getUnspentAddressesWithAddressGenerator<T>(
     {
         address: string;
         path: string;
-        balance: number;
+        balance: BigInteger;
     }[]
 > {
     const localClient = typeof client === "string" ? new SingleNodeClient(client) : client;
@@ -92,7 +94,7 @@ export async function getUnspentAddressesWithAddressGenerator<T>(
     const allUnspent: {
         address: string;
         path: string;
-        balance: number;
+        balance: BigInteger;
     }[] = [];
 
     let zeroBalance = 0;
@@ -110,7 +112,7 @@ export async function getUnspentAddressesWithAddressGenerator<T>(
 
         // If there is no balance we increment the counter and end
         // the text when we have reached the count
-        if (balance === 0) {
+        if (balance.equals(bigInt(0))) {
             zeroBalance++;
             if (zeroBalance >= localZeroCount) {
                 finished = true;
@@ -137,12 +139,12 @@ export async function getUnspentAddressesWithAddressGenerator<T>(
  * @param addressBech32 The address in bech32 format.
  * @returns The unspent balance.
  */
-export async function calculateAddressBalance(client: IClient, addressBech32: string): Promise<number> {
+export async function calculateAddressBalance(client: IClient, addressBech32: string): Promise<BigInteger> {
     const indexerPlugin = new IndexerPluginClient(client);
 
     let count = 0;
     let cursor;
-    let balance = 0;
+    let balance: BigInteger = bigInt(0);
     do {
         const outputResponse: IOutputsResponse =
             await indexerPlugin.outputs({
@@ -155,7 +157,7 @@ export async function calculateAddressBalance(client: IClient, addressBech32: st
         for (const outputId of outputResponse.items) {
             const output = await client.output(outputId);
             if (output.output.type === BASIC_OUTPUT_TYPE && !output.isSpent) {
-                balance += output.output.amount;
+                balance = balance.add(HexHelper.toBigInt(output.output.amount));
             }
         }
     } while (count > 0 && cursor);

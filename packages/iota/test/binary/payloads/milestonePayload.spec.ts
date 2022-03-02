@@ -90,7 +90,7 @@ describe("Binary Miletsone Payload", () => {
                             type: ED25519_ADDRESS_TYPE,
                             pubKeyHash: "b".repeat(64)
                         },
-                        deposit: 100
+                        deposit: "0x64"
                     }
                 ],
                 transaction: {
@@ -101,7 +101,7 @@ describe("Binary Miletsone Payload", () => {
                     },
                     output: {
                         type: TREASURY_OUTPUT_TYPE,
-                        amount: 9876
+                        amount: "0x2694"
                     }
                 }
             },
@@ -141,7 +141,7 @@ describe("Binary Miletsone Payload", () => {
             expect(deserialized.receipt.funds[0].tailTransactionHash).toEqual("a".repeat(98));
             expect(deserialized.receipt.funds[0].address.type).toEqual(0);
             expect((deserialized.receipt.funds[0].address as IEd25519Address).pubKeyHash).toEqual("b".repeat(64));
-            expect(deserialized.receipt.funds[0].deposit).toEqual(100);
+            expect(deserialized.receipt.funds[0].deposit).toEqual("0x64");
         }
         expect(deserialized.signatures.length).toEqual(2);
         expect(deserialized.signatures[0]).toEqual(

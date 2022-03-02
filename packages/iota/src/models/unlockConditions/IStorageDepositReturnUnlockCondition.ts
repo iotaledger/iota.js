@@ -20,5 +20,5 @@ export interface IStorageDepositReturnUnlockCondition extends ITypeBase<1> {
     /**
      * Amount of IOTA tokens the consuming transaction should deposit to the address defined in return address.
      */
-    amount: number;
+    amount: string;
 }

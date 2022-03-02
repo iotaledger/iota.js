@@ -17,7 +17,7 @@ export interface IFoundryOutput extends ITypeBase<5>, ICommonOutput {
     /**
      * The amount of IOTA tokens held by the output.
      */
-    amount: number;
+    amount: string;
 
     /**
      * The serial number of the foundry with respect to the controlling alias.

@@ -1,7 +1,6 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import type { ReadStream, WriteStream } from "@iota/util.js";
-import bigInt from "big-integer";
+import { HexHelper, ReadStream, WriteStream } from "@iota/util.js";
 import { BASIC_OUTPUT_TYPE, IBasicOutput } from "../../models/outputs/IBasicOutput";
 import { SMALL_TYPE_LENGTH, UINT64_SIZE } from "../commonDataTypes";
 import {
@@ -44,7 +43,7 @@ export function deserializeBasicOutput(readStream: ReadStream): IBasicOutput {
 
     return {
         type: BASIC_OUTPUT_TYPE,
-        amount: Number(amount),
+        amount: HexHelper.fromBigInt(amount),
         nativeTokens,
         unlockConditions,
         featureBlocks
@@ -59,7 +58,7 @@ export function deserializeBasicOutput(readStream: ReadStream): IBasicOutput {
 export function serializeBasicOutput(writeStream: WriteStream, object: IBasicOutput): void {
     writeStream.writeUInt8("basicOutput.type", object.type);
 
-    writeStream.writeUInt64("basicOutput.amount", bigInt(object.amount));
+    writeStream.writeUInt64("basicOutput.amount", HexHelper.toBigInt(object.amount));
     serializeNativeTokens(writeStream, object.nativeTokens);
     serializeUnlockConditions(writeStream, object.unlockConditions);
     serializeFeatureBlocks(writeStream, object.featureBlocks);

@@ -2,7 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0
 /* eslint-disable unicorn/no-nested-ternary */
 import { Blake2b, Ed25519 } from "@iota/crypto.js";
-import { Converter, WriteStream } from "@iota/util.js";
+import { Converter, HexHelper, WriteStream } from "@iota/util.js";
+import type { BigInteger } from "big-integer";
 import { serializeInput } from "../binary/inputs/inputs";
 import { serializeOutput } from "../binary/outputs/outputs";
 import { MAX_TAG_LENGTH } from "../binary/payloads/taggedDataPayload";
@@ -41,7 +42,7 @@ export async function sendAdvanced(
     outputs: {
         address: string;
         addressType: number;
-        amount: number;
+        amount: BigInteger;
     }[],
     taggedData?: {
         tag?: Uint8Array | string;
@@ -87,7 +88,7 @@ export function buildTransactionPayload(
     outputs: {
         address: string;
         addressType: number;
-        amount: number;
+        amount: BigInteger;
     }[],
     taggedData?: {
         tag?: Uint8Array | string;
@@ -126,7 +127,7 @@ export function buildTransactionPayload(
         if (output.addressType === ED25519_ADDRESS_TYPE) {
             const o: IBasicOutput = {
                 type: BASIC_OUTPUT_TYPE,
-                amount: output.amount,
+                amount: HexHelper.fromBigInt(output.amount),
                 nativeTokens: [],
                 unlockConditions: [
                     {

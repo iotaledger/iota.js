@@ -1,7 +1,6 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import type { ReadStream, WriteStream } from "@iota/util.js";
-import bigInt from "big-integer";
+import { HexHelper, ReadStream, WriteStream } from "@iota/util.js";
 import { ALIAS_OUTPUT_TYPE, IAliasOutput } from "../../models/outputs/IAliasOutput";
 import { SMALL_TYPE_LENGTH, UINT32_SIZE, UINT64_SIZE } from "../commonDataTypes";
 import {
@@ -68,7 +67,7 @@ export function deserializeAliasOutput(readStream: ReadStream): IAliasOutput {
 
     return {
         type: ALIAS_OUTPUT_TYPE,
-        amount: Number(amount),
+        amount: HexHelper.fromBigInt(amount),
         nativeTokens,
         aliasId,
         stateIndex,
@@ -87,7 +86,7 @@ export function deserializeAliasOutput(readStream: ReadStream): IAliasOutput {
  */
 export function serializeAliasOutput(writeStream: WriteStream, object: IAliasOutput): void {
     writeStream.writeUInt8("aliasOutput.type", object.type);
-    writeStream.writeUInt64("aliasOutput.amount", bigInt(object.amount));
+    writeStream.writeUInt64("aliasOutput.amount", HexHelper.toBigInt(object.amount));
 
     serializeNativeTokens(writeStream, object.nativeTokens);
 

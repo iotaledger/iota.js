@@ -17,7 +17,7 @@ describe("Binary Outputs", () => {
         const outputs: OutputTypes[] = [
             {
                 type: BASIC_OUTPUT_TYPE,
-                amount: 123456,
+                amount: "0x1e240",
                 nativeTokens: [],
                 unlockConditions: [
                     {
@@ -32,7 +32,7 @@ describe("Binary Outputs", () => {
             },
             {
                 type: BASIC_OUTPUT_TYPE,
-                amount: 987654,
+                amount: "0xf1206",
                 nativeTokens: [],
                 unlockConditions: [
                     {
@@ -62,7 +62,7 @@ describe("Binary Outputs", () => {
         const unlockCondition0 = out0.unlockConditions[0] as IAddressUnlockCondition;
         expect(unlockCondition0.address.type).toEqual(0);
         expect((unlockCondition0.address as IEd25519Address).pubKeyHash).toEqual("6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92");
-        expect(out0.amount).toEqual(123456);
+        expect(out0.amount).toEqual("0x1e240");
 
         expect(deserialized[1].type).toEqual(3);
         const out1 = deserialized[1] as IBasicOutput;
@@ -71,13 +71,13 @@ describe("Binary Outputs", () => {
         const unlockCondition1 = out1.unlockConditions[0] as IAddressUnlockCondition;
         expect(unlockCondition1.address.type).toEqual(0);
         expect((unlockCondition1.address as IEd25519Address).pubKeyHash).toEqual("4566920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1");
-        expect(out1.amount).toEqual(987654);
+        expect(out1.amount).toEqual("0xf1206");
     });
 
     test("Can serialize and deserialize output", () => {
         const object: IBasicOutput = {
             type: BASIC_OUTPUT_TYPE,
-            amount: 123456,
+            amount: "0x1e240",
             nativeTokens: [],
             unlockConditions: [
                 {
@@ -103,6 +103,6 @@ describe("Binary Outputs", () => {
         expect(out0.unlockConditions.length).toEqual(1);
         const unlockCondition0 = out0.unlockConditions[0] as IAddressUnlockCondition;
         expect((unlockCondition0.address as IEd25519Address).pubKeyHash).toEqual("6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92");
-        expect(deserialized.amount).toEqual(123456);
+        expect(deserialized.amount).toEqual("0x1e240");
     });
 });

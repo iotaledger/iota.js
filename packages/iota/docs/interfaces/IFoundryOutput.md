@@ -78,7 +78,7 @@ ___
 
 ### amount
 
-• **amount**: `number`
+• **amount**: `string`
 
 The amount of IOTA tokens held by the output.
 

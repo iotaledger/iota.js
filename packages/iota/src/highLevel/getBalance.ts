@@ -1,5 +1,6 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
+import bigInt, { BigInteger } from "big-integer";
 import type { IClient } from "../models/IClient";
 import type { ISeed } from "../models/ISeed";
 import { getUnspentAddresses } from "./getUnspentAddresses";
@@ -22,12 +23,12 @@ export async function getBalance(
         startIndex?: number;
         zeroCount?: number;
     }
-): Promise<number> {
+): Promise<BigInteger> {
     const allUnspent = await getUnspentAddresses(client, seed, accountIndex, addressOptions);
 
-    let total = 0;
+    let total: BigInteger = bigInt(0);
     for (const output of allUnspent) {
-        total += output.balance;
+        total = total.plus(output.balance);
     }
 
     return total;

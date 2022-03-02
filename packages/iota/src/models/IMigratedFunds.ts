@@ -19,5 +19,5 @@ export interface IMigratedFunds {
     /**
      * The amount of the deposit.
      */
-    deposit: number;
+    deposit: string;
 }

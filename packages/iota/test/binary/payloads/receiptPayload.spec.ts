@@ -21,7 +21,7 @@ describe("Binary Receipt Payload", () => {
                         type: ED25519_ADDRESS_TYPE,
                         pubKeyHash: "b".repeat(64)
                     },
-                    deposit: 100
+                    deposit: "0x64"
                 }
             ],
             transaction: {
@@ -32,7 +32,7 @@ describe("Binary Receipt Payload", () => {
                 },
                 output: {
                     type: TREASURY_OUTPUT_TYPE,
-                    amount: 9876
+                    amount: "0x2694"
                 }
             }
         };
@@ -51,11 +51,11 @@ describe("Binary Receipt Payload", () => {
         expect(deserialized.funds[0].tailTransactionHash).toEqual("a".repeat(98));
         expect(deserialized.funds[0].address.type).toEqual(0);
         expect((deserialized.funds[0].address as IEd25519Address).pubKeyHash).toEqual("b".repeat(64));
-        expect(deserialized.funds[0].deposit).toEqual(100);
+        expect(deserialized.funds[0].deposit).toEqual("0x64");
         expect(deserialized.transaction.type).toEqual(4);
         expect(deserialized.transaction.input.type).toEqual(1);
         expect(deserialized.transaction.input.milestoneId).toEqual("a".repeat(64));
         expect(deserialized.transaction.output.type).toEqual(2);
-        expect(deserialized.transaction.output.amount).toEqual(9876);
+        expect(deserialized.transaction.output.amount).toEqual("0x2694");
     });
 });

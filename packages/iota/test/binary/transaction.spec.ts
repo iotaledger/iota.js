@@ -25,7 +25,7 @@ describe("Binary Transaction", () => {
             outputs: [
                 {
                     type: BASIC_OUTPUT_TYPE,
-                    amount: 100,
+                    amount: "0x64",
                     nativeTokens: [],
                     unlockConditions: [
                         {
@@ -63,7 +63,7 @@ describe("Binary Transaction", () => {
         const unlockCondition = basicOutput.unlockConditions[0] as IAddressUnlockCondition;
         expect(unlockCondition.address.type).toEqual(0);
         expect((unlockCondition.address as IEd25519Address).pubKeyHash).toEqual("b".repeat(64));
-        expect(basicOutput.amount).toEqual(100);
+        expect(basicOutput.amount).toEqual("0x64");
         expect(deserialized.payload).toBeUndefined();
     });
 
@@ -82,7 +82,7 @@ describe("Binary Transaction", () => {
             outputs: [
                 {
                     type: BASIC_OUTPUT_TYPE,
-                    amount: 100,
+                    amount: "0x64",
                     nativeTokens: [],
                     unlockConditions: [
                         {
@@ -125,7 +125,7 @@ describe("Binary Transaction", () => {
         const unlockCondition = basicOutput.unlockConditions[0] as IAddressUnlockCondition;
         expect(unlockCondition.address.type).toEqual(0);
         expect((unlockCondition.address as IEd25519Address).pubKeyHash).toEqual("b".repeat(64));
-        expect(basicOutput.amount).toEqual(100);
+        expect(basicOutput.amount).toEqual("0x64");
         expect(deserialized.payload).toBeDefined();
         if (deserialized.payload) {
             expect(deserialized.payload.type).toEqual(5);

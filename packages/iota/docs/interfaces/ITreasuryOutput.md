@@ -31,6 +31,6 @@ ___
 
 ### amount
 
-• **amount**: `number`
+• **amount**: `string`
 
 The amount of the output.

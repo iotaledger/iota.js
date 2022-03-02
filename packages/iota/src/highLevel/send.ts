@@ -1,7 +1,8 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 import { Bip32Path } from "@iota/crypto.js";
-import { Converter } from "@iota/util.js";
+import { Converter, HexHelper } from "@iota/util.js";
+import bigInt, { BigInteger } from "big-integer";
 import { Ed25519Address } from "../addressTypes/ed25519Address";
 import { IndexerPluginClient } from "../clients/plugins/indexerPluginClient";
 import { SingleNodeClient } from "../clients/singleNodeClient";
@@ -38,7 +39,7 @@ export async function send(
     seed: ISeed,
     accountIndex: number,
     addressBech32: string,
-    amount: number,
+    amount: BigInteger,
     taggedData?: {
         tag?: Uint8Array | string;
         data?: Uint8Array | string;
@@ -74,7 +75,7 @@ export async function sendEd25519(
     seed: ISeed,
     accountIndex: number,
     addressEd25519: string,
-    amount: number,
+    amount: BigInteger,
     taggedData?: {
         tag?: Uint8Array;
         data?: Uint8Array;
@@ -110,7 +111,7 @@ export async function sendMultiple(
     accountIndex: number,
     outputs: {
         addressBech32: string;
-        amount: number;
+        amount: BigInteger;
     }[],
     taggedData?: {
         tag?: Uint8Array | string;
@@ -176,7 +177,7 @@ export async function sendMultipleEd25519(
     accountIndex: number,
     outputs: {
         addressEd25519: string;
-        amount: number;
+        amount: BigInteger;
     }[],
     taggedData?: {
         tag?: Uint8Array;
@@ -232,7 +233,7 @@ export async function sendWithAddressGenerator<T>(
     outputs: {
         address: string;
         addressType: number;
-        amount: number;
+        amount: BigInteger;
     }[],
     taggedData?: {
         tag?: Uint8Array | string;
@@ -268,7 +269,7 @@ export async function calculateInputs<T>(
     seed: ISeed,
     initialAddressState: T,
     nextAddressPath: (addressState: T) => string,
-    outputs: { address: string; addressType: number; amount: number }[],
+    outputs: { address: string; addressType: number; amount: BigInteger }[],
     zeroCount: number = 5
 ): Promise<
     {
@@ -280,12 +281,12 @@ export async function calculateInputs<T>(
 
     const protocolInfo = await localClient.protocolInfo();
 
-    let requiredBalance = 0;
+    let requiredBalance: BigInteger = bigInt(0);
     for (const output of outputs) {
-        requiredBalance += output.amount;
+        requiredBalance = requiredBalance.plus(output.amount);
     }
 
-    let consumedBalance = 0;
+    let consumedBalance: BigInteger = bigInt(0);
     const inputsAndSignatureKeyPairs: {
         input: IUTXOInput;
         addressKeyPair: IKeyPair;
@@ -315,14 +316,14 @@ export async function calculateInputs<T>(
             for (const addressOutputId of addressOutputIds.items) {
                 const addressOutput = await localClient.output(addressOutputId);
 
-                if (!addressOutput.isSpent && consumedBalance < requiredBalance) {
-                    if (addressOutput.output.amount === 0) {
+                if (!addressOutput.isSpent && consumedBalance.lesser(requiredBalance)) {
+                    if (HexHelper.toBigInt(addressOutput.output.amount).equals(0)) {
                         zeroBalance++;
                         if (zeroBalance >= zeroCount) {
                             finished = true;
                         }
                     } else {
-                        consumedBalance += addressOutput.output.amount;
+                        consumedBalance = consumedBalance.plus(addressOutput.output.amount);
 
                         const input: IUTXOInput = {
                             type: UTXO_INPUT_TYPE,
@@ -339,7 +340,7 @@ export async function calculateInputs<T>(
                             // We didn't use all the balance from the last input
                             // so return the rest to the same address.
                             if (
-                                consumedBalance - requiredBalance > 0 &&
+                                consumedBalance.minus(requiredBalance).greater(0) &&
                                 addressOutput.output.type === BASIC_OUTPUT_TYPE
                             ) {
                                 const addressUnlockCondition = addressOutput.output.unlockConditions
@@ -348,7 +349,7 @@ export async function calculateInputs<T>(
                                     addressUnlockCondition.type === ADDRESS_UNLOCK_CONDITION_TYPE &&
                                     addressUnlockCondition.address.type === ED25519_ADDRESS_TYPE) {
                                     outputs.push({
-                                        amount: consumedBalance - requiredBalance,
+                                        amount: consumedBalance.minus(requiredBalance),
                                         address: addressUnlockCondition.address.pubKeyHash,
                                         addressType: addressUnlockCondition.address.type
                                     });

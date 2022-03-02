@@ -4,7 +4,7 @@ Transaction payload.
 
 ## Hierarchy
 
-- [`ITypeBase`](ITypeBase.md)<``0``\>
+- [`ITypeBase`](ITypeBase.md)<``6``\>
 
   ↳ **`ITransactionPayload`**
 
@@ -20,7 +20,7 @@ Transaction payload.
 
 ### type
 
-• **type**: ``0``
+• **type**: ``6``
 
 The type of the object.
 

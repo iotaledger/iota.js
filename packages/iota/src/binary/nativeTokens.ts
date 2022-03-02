@@ -1,7 +1,6 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import type { ReadStream, WriteStream } from "@iota/util.js";
-import bigInt from "big-integer";
+import { HexHelper, ReadStream, WriteStream } from "@iota/util.js";
 import type { INativeToken } from "../models/INativeToken";
 import { MIN_ALIAS_ADDRESS_LENGTH } from "./addresses/aliasAddress";
 import { UINT32_SIZE, UINT8_SIZE } from "./commonDataTypes";
@@ -70,7 +69,7 @@ export function deserializeNativeToken(readStream: ReadStream): INativeToken {
 
     return {
         id,
-        amount: amount.toString()
+        amount: HexHelper.fromBigInt(amount)
     };
 }
 
@@ -81,5 +80,5 @@ export function deserializeNativeToken(readStream: ReadStream): INativeToken {
  */
 export function serializeNativeToken(writeStream: WriteStream, object: INativeToken): void {
     writeStream.writeFixedHex("nativeToken.id", NATIVE_TOKEN_ID_LENGTH, object.id);
-    writeStream.writeUInt256("nativeToken.amount", bigInt(object.amount));
+    writeStream.writeUInt256("nativeToken.amount", HexHelper.toBigInt(object.amount));
 }

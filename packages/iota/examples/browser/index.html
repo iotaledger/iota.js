@@ -14,7 +14,7 @@
     <script>
         function consoleLog(message, obj) {
             const con = document.getElementById("console");
-            con.innerHTML += (message || "").replace("\t", "&nbsp;&nbsp;&nbsp;") + " " + (obj ? JSON.stringify(obj) : "") + "<br/>";
+            con.innerHTML += (message || "").replace("\t", "&nbsp;&nbsp;&nbsp;") + " " + (obj !== undefined ? JSON.stringify(obj) : "") + "<br/>";
         }
         function consoleLink(lnk) {
             const con = document.getElementById("console");
@@ -151,7 +151,7 @@
 
             const inputsWithKeyPairs = [];
 
-            let totalGenesis = 0;
+            let totalGenesis = bigInt(0);
 
             for (let i = 0; i < genesisAddressOutputs.items.length; i++) {
                 const output = await client.output(genesisAddressOutputs.items[i]);
@@ -164,11 +164,11 @@
                         },
                         addressKeyPair: genesisWalletKeyPair
                     });
-                    totalGenesis += output.output.amount;
+                    totalGenesis = totalGenesis.plus(output.output.amount);
                 }
             }
 
-            const amountToSend = 10000000;
+            const amountToSend = bigInt(10000000);
 
             const outputs = [
                 // This is the transfer to the new address
@@ -181,7 +181,7 @@
                 {
                     address: genesisWalletAddressHex,
                     addressType: Iota.ED25519_ADDRESS_TYPE,
-                    amount: totalGenesis - amountToSend
+                    amount: totalGenesis.minus(amountToSend)
                 }
             ];
 

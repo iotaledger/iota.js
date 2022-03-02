@@ -30,6 +30,6 @@ ___
 
 ### deposit
 
-• **deposit**: `number`
+• **deposit**: `string`
 
 The amount of the deposit.

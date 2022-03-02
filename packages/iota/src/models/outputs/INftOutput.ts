@@ -16,7 +16,7 @@ export interface INftOutput extends ITypeBase<6>, ICommonOutput {
     /**
      * The amount of IOTA tokens held by the output.
      */
-    amount: number;
+    amount: string;
 
     /**
      * Unique identifier of the NFT, which is the BLAKE2b-160 hash of the Output ID that created it.

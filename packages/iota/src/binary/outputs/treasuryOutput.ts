@@ -1,7 +1,6 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import type { ReadStream, WriteStream } from "@iota/util.js";
-import bigInt from "big-integer";
+import { HexHelper, ReadStream, WriteStream } from "@iota/util.js";
 import { ITreasuryOutput, TREASURY_OUTPUT_TYPE } from "../../models/outputs/ITreasuryOutput";
 import { SMALL_TYPE_LENGTH, UINT64_SIZE } from "../commonDataTypes";
 
@@ -33,7 +32,7 @@ export function deserializeTreasuryOutput(readStream: ReadStream): ITreasuryOutp
 
     return {
         type: TREASURY_OUTPUT_TYPE,
-        amount: Number(amount)
+        amount: HexHelper.fromBigInt(amount)
     };
 }
 
@@ -44,5 +43,5 @@ export function deserializeTreasuryOutput(readStream: ReadStream): ITreasuryOutp
  */
 export function serializeTreasuryOutput(writeStream: WriteStream, object: ITreasuryOutput): void {
     writeStream.writeUInt8("treasuryOutput.type", object.type);
-    writeStream.writeUInt64("treasuryOutput.amount", bigInt(object.amount));
+    writeStream.writeUInt64("treasuryOutput.amount", HexHelper.toBigInt(object.amount));
 }

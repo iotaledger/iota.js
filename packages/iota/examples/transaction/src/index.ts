@@ -1,22 +1,17 @@
 import { Bip32Path } from "@iota/crypto.js";
 import {
-    Bech32Helper,
+    BASIC_OUTPUT_TYPE, Bech32Helper,
     Ed25519Address,
     Ed25519Seed,
     ED25519_ADDRESS_TYPE,
     getBalance,
     getUnspentAddress,
-    getUnspentAddresses,
-    IKeyPair,
-    IBasicOutput,
-    IUTXOInput,
-    sendAdvanced,
-    BASIC_OUTPUT_TYPE,
-    SingleNodeClient,
-    UTXO_INPUT_TYPE,
-    IndexerPluginClient
+    getUnspentAddresses, IBasicOutput, IKeyPair, IndexerPluginClient, IUTXOInput,
+    sendAdvanced, SingleNodeClient,
+    UTXO_INPUT_TYPE
 } from "@iota/iota.js";
 import { Converter } from "@iota/util.js";
+import bigInt, { BigInteger } from "big-integer";
 
 const API_ENDPOINT = "http://localhost:14265/";
 
@@ -82,7 +77,7 @@ async function run() {
         addressKeyPair: IKeyPair;
     }[] = [];
 
-    let totalGenesis = 0;
+    let totalGenesis: BigInteger = bigInt(0);
 
     for (let i = 0; i < genesisAddressOutputs.items.length; i++) {
         const output = await client.output(genesisAddressOutputs.items[i]);
@@ -96,17 +91,17 @@ async function run() {
                 addressKeyPair: genesisWalletKeyPair
             });
             if (output.output.type === BASIC_OUTPUT_TYPE) {
-                totalGenesis += (output.output as IBasicOutput).amount;
+                totalGenesis = totalGenesis.plus((output.output as IBasicOutput).amount);
             }
         }
     }
 
-    const amountToSend = 10000000;
+    const amountToSend = bigInt(10000000);
 
     const outputs: {
         address: string;
         addressType: number;
-        amount: number;
+        amount: BigInteger;
     }[] = [
             // This is the transfer to the new address
             {
@@ -118,7 +113,7 @@ async function run() {
             {
                 address: genesisWalletAddressHex,
                 addressType: ED25519_ADDRESS_TYPE,
-                amount: totalGenesis - amountToSend
+                amount: totalGenesis.minus(amountToSend)
             }
         ];
 

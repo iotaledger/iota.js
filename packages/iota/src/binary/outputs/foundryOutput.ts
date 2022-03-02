@@ -1,7 +1,6 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import type { ReadStream, WriteStream } from "@iota/util.js";
-import bigInt from "big-integer";
+import { HexHelper, ReadStream, WriteStream } from "@iota/util.js";
 import type { IMetadataFeatureBlock } from "../../models/featureBlocks/IMetadataFeatureBlock";
 import { FOUNDRY_OUTPUT_TYPE, IFoundryOutput } from "../../models/outputs/IFoundryOutput";
 import { SMALL_TYPE_LENGTH, UINT256_SIZE, UINT32_SIZE, UINT64_SIZE } from "../commonDataTypes";
@@ -65,12 +64,12 @@ export function deserializeFoundryOutput(readStream: ReadStream): IFoundryOutput
 
     return {
         type: FOUNDRY_OUTPUT_TYPE,
-        amount: Number(amount),
+        amount: HexHelper.fromBigInt(amount),
         nativeTokens,
         serialNumber,
         tokenTag,
-        circulatingSupply: circulatingSupply.toString(),
-        maximumSupply: maximumSupply.toString(),
+        circulatingSupply: HexHelper.fromBigInt(circulatingSupply),
+        maximumSupply: HexHelper.fromBigInt(maximumSupply),
         tokenScheme,
         unlockConditions,
         featureBlocks: featureBlocks as IMetadataFeatureBlock[],
@@ -86,12 +85,12 @@ export function deserializeFoundryOutput(readStream: ReadStream): IFoundryOutput
 export function serializeFoundryOutput(writeStream: WriteStream, object: IFoundryOutput): void {
     writeStream.writeUInt8("foundryOutput.type", object.type);
 
-    writeStream.writeUInt64("foundryOutput.amount", bigInt(object.amount));
+    writeStream.writeUInt64("foundryOutput.amount", HexHelper.toBigInt(object.amount));
     serializeNativeTokens(writeStream, object.nativeTokens);
     writeStream.writeUInt32("foundryOutput.serialNumber", object.serialNumber);
     writeStream.writeFixedHex("foundryOutput.tokenTag", NATIVE_TOKEN_TAG_LENGTH, object.tokenTag);
-    writeStream.writeUInt256("foundryOutput.circulatingSupply", bigInt(object.circulatingSupply));
-    writeStream.writeUInt256("foundryOutput.maximumSupply", bigInt(object.maximumSupply));
+    writeStream.writeUInt256("foundryOutput.circulatingSupply", HexHelper.toBigInt(object.circulatingSupply));
+    writeStream.writeUInt256("foundryOutput.maximumSupply", HexHelper.toBigInt(object.maximumSupply));
     serializeTokenScheme(writeStream, object.tokenScheme);
     serializeUnlockConditions(writeStream, object.unlockConditions);
     serializeFeatureBlocks(writeStream, object.featureBlocks);

@@ -36,7 +36,7 @@ ___
 
 ### amount
 
-• **amount**: `number`
+• **amount**: `string`
 
 The amount of IOTA coins to held by the output.
 

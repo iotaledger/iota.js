@@ -15,5 +15,5 @@ export interface IBasicOutput extends ITypeBase<3>, ICommonOutput {
     /**
      * The amount of IOTA coins to held by the output.
      */
-    amount: number;
+    amount: string;
 }

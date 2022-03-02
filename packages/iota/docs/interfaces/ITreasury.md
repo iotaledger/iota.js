@@ -21,6 +21,6 @@ ___
 
 ### amount
 
-• **amount**: `number`
+• **amount**: `string`
 
 The amount for the treasury.

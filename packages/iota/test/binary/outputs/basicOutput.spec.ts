@@ -10,15 +10,15 @@ describe("Binary Basic Output", () => {
     test("Can serialize and deserialize basic output", () => {
         const object: IBasicOutput = {
             type: BASIC_OUTPUT_TYPE,
-            amount: 123456,
+            amount: "0x1e240",
             nativeTokens: [
                 {
                     id: "0".repeat(76),
-                    amount: "5555555555555555555"
+                    amount: "0x64"
                 },
                 {
                     id: "1".repeat(76),
-                    amount: "6666666666666666666"
+                    amount: "0xc8"
                 }
             ],
             unlockConditions: [
@@ -37,7 +37,7 @@ describe("Binary Basic Output", () => {
         serializeBasicOutput(serialized, object);
         const hex = serialized.finalHex();
         expect(hex).toEqual(
-            "0340e2010000000000020000000000000000000000000000000000000000000000000000000000000000000000000000e338d6da574c194d0000000000000000000000000000000000000000000000001111111111111111111111111111111111111111111111111111111111111111111111111111aaaa9a0603c2845c0000000000000000000000000000000000000000000000000100006920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f9200"
+            "0340e201000000000002000000000000000000000000000000000000000000000000000000000000000000000000000064000000000000000000000000000000000000000000000000000000000000001111111111111111111111111111111111111111111111111111111111111111111111111111c8000000000000000000000000000000000000000000000000000000000000000100006920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f9200"
         );
         const deserialized = deserializeBasicOutput(new ReadStream(Converter.hexToBytes(hex)));
         expect(deserialized.type).toEqual(3);
@@ -47,11 +47,11 @@ describe("Binary Basic Output", () => {
         expect((unlockCondition.address as IEd25519Address).pubKeyHash).toEqual(
             "6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
         );
-        expect(deserialized.amount).toEqual(123456);
+        expect(deserialized.amount).toEqual("0x1e240");
         expect(deserialized.nativeTokens.length).toEqual(2);
         expect(deserialized.nativeTokens[0].id).toEqual("0".repeat(76));
-        expect(deserialized.nativeTokens[0].amount).toEqual("5555555555555555555");
+        expect(deserialized.nativeTokens[0].amount).toEqual("0x64");
         expect(deserialized.nativeTokens[1].id).toEqual("1".repeat(76));
-        expect(deserialized.nativeTokens[1].amount).toEqual("6666666666666666666");
+        expect(deserialized.nativeTokens[1].amount).toEqual("0xc8");
     });
 });

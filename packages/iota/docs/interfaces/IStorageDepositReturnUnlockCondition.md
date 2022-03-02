@@ -40,6 +40,6 @@ ___
 
 ### amount
 
-• **amount**: `number`
+• **amount**: `string`
 
 Amount of IOTA tokens the consuming transaction should deposit to the address defined in return address.

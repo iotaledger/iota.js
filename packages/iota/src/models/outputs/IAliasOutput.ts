@@ -16,7 +16,7 @@ export interface IAliasOutput extends ITypeBase<4>, ICommonOutput {
     /**
      * The amount of IOTA tokens held by the output.
      */
-    amount: number;
+    amount: string;
 
     /**
      * Unique identifier of the alias, which is the BLAKE2b-160 hash of the Output ID that created it.

@@ -171,7 +171,7 @@ describe("Binary Message", () => {
         expect((unlockCondition.address as IEd25519Address).pubKeyHash).toEqual(
             "3eb1ed78d420c8318972b8b0839420f502b25356270a48a430cb55a5e323f723"
         );
-        expect(basicOutput1.amount).toEqual(100);
+        expect(basicOutput1.amount).toEqual("0x64");
 
         const basicOutput2 = payload.essence.outputs[1] as IBasicOutput;
         expect(basicOutput2.type).toEqual(3);
@@ -181,7 +181,7 @@ describe("Binary Message", () => {
         expect((unlockCondition2.address as IEd25519Address).pubKeyHash).toEqual(
             "625d17d4a4b21cd5edeb57544b9d2d66ce22985fb61f17d1d7cae958d0068618"
         );
-        expect(basicOutput2.amount).toEqual(2779530283277561);
+        expect(basicOutput2.amount).toEqual("0x9dff7d32d5cf9");
 
         expect(payload.essence.payload).toBeDefined();
         if (payload.essence.payload) {

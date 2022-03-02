@@ -143,11 +143,11 @@ describe("Binary Payload", () => {
         expect(payload.funds[0].tailTransactionHash).toEqual("a".repeat(98));
         expect(payload.funds[0].address.type).toEqual(0);
         expect((payload.funds[0].address as IEd25519Address).pubKeyHash).toEqual("b".repeat(64));
-        expect(payload.funds[0].deposit).toEqual(100);
+        expect(payload.funds[0].deposit).toEqual("0x64");
         expect(payload.transaction.type).toEqual(4);
         expect(payload.transaction.input.type).toEqual(1);
         expect(payload.transaction.input.milestoneId).toEqual("c".repeat(64));
         expect(payload.transaction.output.type).toEqual(2);
-        expect(payload.transaction.output.amount).toEqual(123);
+        expect(payload.transaction.output.amount).toEqual("0x7b");
     });
 });
