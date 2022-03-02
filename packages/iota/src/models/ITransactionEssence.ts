@@ -9,7 +9,7 @@ import type { ITaggedDataPayload } from "./payloads/ITaggedDataPayload";
 /**
  * The global type for the transaction essence.
  */
-export const TRANSACTION_ESSENCE_TYPE = 0;
+export const TRANSACTION_ESSENCE_TYPE = 1;
 
 /**
  * Inputs commitment size.
@@ -19,7 +19,7 @@ export const INPUTS_COMMITMENT_SIZE: number = Blake2b.SIZE_256;
 /**
  * Transaction payload.
  */
-export interface ITransactionEssence extends ITypeBase<0> {
+export interface ITransactionEssence extends ITypeBase<1> {
     /**
      * The network id of the message.
      */

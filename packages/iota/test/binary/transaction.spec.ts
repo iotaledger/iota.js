@@ -45,10 +45,10 @@ describe("Binary Transaction", () => {
         serializeTransactionEssence(serialized, object);
         const hex = serialized.finalHex();
         expect(hex).toEqual(
-            "007b00000000000000010000aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa0200aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa010003640000000000000000010000bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb0000000000"
+            "017b00000000000000010000aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa0200aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa010003640000000000000000010000bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb0000000000"
         );
         const deserialized = deserializeTransactionEssence(new ReadStream(Converter.hexToBytes(hex)));
-        expect(deserialized.type).toEqual(0);
+        expect(deserialized.type).toEqual(1);
         expect(deserialized.inputs.length).toEqual(1);
 
         const utxoInput = deserialized.inputs[0];
@@ -107,10 +107,10 @@ describe("Binary Transaction", () => {
         serializeTransactionEssence(serialized, object);
         const hex = serialized.finalHex();
         expect(hex).toEqual(
-            "007b00000000000000010000aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa0200aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa010003640000000000000000010000bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb000f0000000500000003666f6f03000000626172"
+            "017b00000000000000010000aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa0200aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa010003640000000000000000010000bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb000f0000000500000003666f6f03000000626172"
         );
         const deserialized = deserializeTransactionEssence(new ReadStream(Converter.hexToBytes(hex)));
-        expect(deserialized.type).toEqual(0);
+        expect(deserialized.type).toEqual(1);
         expect(deserialized.inputs.length).toEqual(1);
 
         const utxoInput = deserialized.inputs[0];

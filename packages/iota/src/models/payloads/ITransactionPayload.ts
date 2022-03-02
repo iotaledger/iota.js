@@ -7,12 +7,12 @@ import type { UnlockBlockTypes } from "../unlockBlocks/unlockBlockTypes";
 /**
  * The global type for the payload.
  */
-export const TRANSACTION_PAYLOAD_TYPE = 0;
+export const TRANSACTION_PAYLOAD_TYPE = 6;
 
 /**
  * Transaction payload.
  */
-export interface ITransactionPayload extends ITypeBase<0> {
+export interface ITransactionPayload extends ITypeBase<6> {
     /**
      * The index name.
      */
