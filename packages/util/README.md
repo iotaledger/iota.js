@@ -5,7 +5,7 @@ The code in the package is mostly utility classes for the rest of the packages t
 ## Install
 
 ```shell
-npm install @iota/util.js@1.9.0-stardust.1
+npm install @iota/util.js@1.9.0-stardust.2
 ```
 
 ## Usage
