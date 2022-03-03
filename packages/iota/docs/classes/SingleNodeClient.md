@@ -25,6 +25,8 @@ Client for API communication.
 - [messageChildren](SingleNodeClient.md#messagechildren)
 - [transactionIncludedMessage](SingleNodeClient.md#transactionincludedmessage)
 - [output](SingleNodeClient.md#output)
+- [outputMetadata](SingleNodeClient.md#outputmetadata)
+- [outputRaw](SingleNodeClient.md#outputraw)
 - [milestone](SingleNodeClient.md#milestone)
 - [milestoneUtxoChanges](SingleNodeClient.md#milestoneutxochanges)
 - [treasury](SingleNodeClient.md#treasury)
@@ -279,7 +281,7 @@ ___
 
 ▸ **output**(`outputId`): `Promise`<[`IOutputResponse`](../interfaces/IOutputResponse.md)\>
 
-Find an output by its identifier.
+Get an output by its identifier.
 
 #### Parameters
 
@@ -296,6 +298,54 @@ The output details.
 #### Implementation of
 
 [IClient](../interfaces/IClient.md).[output](../interfaces/IClient.md#output)
+
+___
+
+### outputMetadata
+
+▸ **outputMetadata**(`outputId`): `Promise`<[`IOutputMetadataResponse`](../interfaces/IOutputMetadataResponse.md)\>
+
+Get an outputs metadata by its identifier.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `outputId` | `string` | The id of the output to get the metadata for. |
+
+#### Returns
+
+`Promise`<[`IOutputMetadataResponse`](../interfaces/IOutputMetadataResponse.md)\>
+
+The output metadata.
+
+#### Implementation of
+
+[IClient](../interfaces/IClient.md).[outputMetadata](../interfaces/IClient.md#outputmetadata)
+
+___
+
+### outputRaw
+
+▸ **outputRaw**(`outputId`): `Promise`<`Uint8Array`\>
+
+Get an outputs raw data.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `outputId` | `string` | The id of the output to get the raw data for. |
+
+#### Returns
+
+`Promise`<`Uint8Array`\>
+
+The output raw bytes.
+
+#### Implementation of
+
+[IClient](../interfaces/IClient.md).[outputRaw](../interfaces/IClient.md#outputraw)
 
 ___
 

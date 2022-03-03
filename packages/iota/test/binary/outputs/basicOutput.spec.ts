@@ -10,14 +10,14 @@ describe("Binary Basic Output", () => {
     test("Can serialize and deserialize basic output", () => {
         const object: IBasicOutput = {
             type: BASIC_OUTPUT_TYPE,
-            amount: "0x1e240",
+            amount: "123456",
             nativeTokens: [
                 {
-                    id: "0".repeat(76),
+                    id: "0x0000000000000000000000000000000000000000000000000000000000000000000000000000",
                     amount: "0x64"
                 },
                 {
-                    id: "1".repeat(76),
+                    id: "0x1111111111111111111111111111111111111111111111111111111111111111111111111111",
                     amount: "0xc8"
                 }
             ],
@@ -26,7 +26,7 @@ describe("Binary Basic Output", () => {
                     type: ADDRESS_UNLOCK_CONDITION_TYPE,
                     address: {
                         type: ED25519_ADDRESS_TYPE,
-                        pubKeyHash: "6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
+                        pubKeyHash: "0x6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
                     }
                 }
             ],
@@ -45,13 +45,13 @@ describe("Binary Basic Output", () => {
         const unlockCondition = deserialized.unlockConditions[0] as IAddressUnlockCondition;
         expect(unlockCondition.address.type).toEqual(0);
         expect((unlockCondition.address as IEd25519Address).pubKeyHash).toEqual(
-            "6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
+            "0x6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
         );
-        expect(deserialized.amount).toEqual("0x1e240");
+        expect(deserialized.amount).toEqual("123456");
         expect(deserialized.nativeTokens.length).toEqual(2);
-        expect(deserialized.nativeTokens[0].id).toEqual("0".repeat(76));
+        expect(deserialized.nativeTokens[0].id).toEqual("0x0000000000000000000000000000000000000000000000000000000000000000000000000000");
         expect(deserialized.nativeTokens[0].amount).toEqual("0x64");
-        expect(deserialized.nativeTokens[1].id).toEqual("1".repeat(76));
+        expect(deserialized.nativeTokens[1].id).toEqual("0x1111111111111111111111111111111111111111111111111111111111111111111111111111");
         expect(deserialized.nativeTokens[1].amount).toEqual("0xc8");
     });
 });

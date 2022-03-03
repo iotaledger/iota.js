@@ -5,6 +5,7 @@
 import type { BigInteger } from "big-integer";
 import { BigIntHelper } from "./bigIntHelper";
 import { Converter } from "./converter";
+import { HexHelper } from "./hexHelper";
 
 /**
  * Keep track of the read index within a stream.
@@ -90,11 +91,11 @@ export class ReadStream {
         if (!this.hasRemaining(length)) {
             throw new Error(`${name} length ${length} exceeds the remaining data ${this.unused()}`);
         }
-        const hex = Converter.bytesToHex(this._storage, this._readIndex, length);
+        const hex = Converter.bytesToHex(this._storage, false, this._readIndex, length);
         if (moveIndex) {
             this._readIndex += length;
         }
-        return hex;
+        return HexHelper.addPrefix(hex);
     }
 
     /**

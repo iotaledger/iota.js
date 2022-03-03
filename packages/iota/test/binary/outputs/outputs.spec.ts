@@ -17,14 +17,14 @@ describe("Binary Outputs", () => {
         const outputs: OutputTypes[] = [
             {
                 type: BASIC_OUTPUT_TYPE,
-                amount: "0x1e240",
+                amount: "123456",
                 nativeTokens: [],
                 unlockConditions: [
                     {
                         type: ADDRESS_UNLOCK_CONDITION_TYPE,
                         address: {
                             type: ED25519_ADDRESS_TYPE,
-                            pubKeyHash: "6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
+                            pubKeyHash: "0x6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
                         }
                     }
                 ],
@@ -32,14 +32,14 @@ describe("Binary Outputs", () => {
             },
             {
                 type: BASIC_OUTPUT_TYPE,
-                amount: "0xf1206",
+                amount: "987654",
                 nativeTokens: [],
                 unlockConditions: [
                     {
                         type: ADDRESS_UNLOCK_CONDITION_TYPE,
                         address: {
                             type: ED25519_ADDRESS_TYPE,
-                            pubKeyHash: "4566920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1"
+                            pubKeyHash: "0x4566920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1"
                         }
                     }
                 ],
@@ -61,8 +61,8 @@ describe("Binary Outputs", () => {
         expect(out0.unlockConditions.length).toEqual(1);
         const unlockCondition0 = out0.unlockConditions[0] as IAddressUnlockCondition;
         expect(unlockCondition0.address.type).toEqual(0);
-        expect((unlockCondition0.address as IEd25519Address).pubKeyHash).toEqual("6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92");
-        expect(out0.amount).toEqual("0x1e240");
+        expect((unlockCondition0.address as IEd25519Address).pubKeyHash).toEqual("0x6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92");
+        expect(out0.amount).toEqual("123456");
 
         expect(deserialized[1].type).toEqual(3);
         const out1 = deserialized[1] as IBasicOutput;
@@ -70,21 +70,21 @@ describe("Binary Outputs", () => {
         expect(out1.unlockConditions.length).toEqual(1);
         const unlockCondition1 = out1.unlockConditions[0] as IAddressUnlockCondition;
         expect(unlockCondition1.address.type).toEqual(0);
-        expect((unlockCondition1.address as IEd25519Address).pubKeyHash).toEqual("4566920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1");
-        expect(out1.amount).toEqual("0xf1206");
+        expect((unlockCondition1.address as IEd25519Address).pubKeyHash).toEqual("0x4566920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1");
+        expect(out1.amount).toEqual("987654");
     });
 
     test("Can serialize and deserialize output", () => {
         const object: IBasicOutput = {
             type: BASIC_OUTPUT_TYPE,
-            amount: "0x1e240",
+            amount: "123456",
             nativeTokens: [],
             unlockConditions: [
                 {
                     type: ADDRESS_UNLOCK_CONDITION_TYPE,
                     address: {
                         type: ED25519_ADDRESS_TYPE,
-                        pubKeyHash: "6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
+                        pubKeyHash: "0x6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
                     }
                 }
             ],
@@ -102,7 +102,7 @@ describe("Binary Outputs", () => {
 
         expect(out0.unlockConditions.length).toEqual(1);
         const unlockCondition0 = out0.unlockConditions[0] as IAddressUnlockCondition;
-        expect((unlockCondition0.address as IEd25519Address).pubKeyHash).toEqual("6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92");
-        expect(deserialized.amount).toEqual("0x1e240");
+        expect((unlockCondition0.address as IEd25519Address).pubKeyHash).toEqual("0x6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92");
+        expect(deserialized.amount).toEqual("123456");
     });
 });

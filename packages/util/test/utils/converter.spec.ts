@@ -10,7 +10,7 @@ describe("Converter", () => {
 
     test("Can convert from bytes to hex reverse", () => {
         const bytes = Uint8Array.from([97, 98, 99, 100]);
-        expect(Converter.bytesToHex(bytes, undefined, undefined, true)).toEqual("64636261");
+        expect(Converter.bytesToHex(bytes, false, undefined, undefined, true)).toEqual("64636261");
     });
 
     test("Can convert from hex to bytes", () => {

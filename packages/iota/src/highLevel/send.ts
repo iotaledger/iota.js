@@ -1,7 +1,7 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 import { Bip32Path } from "@iota/crypto.js";
-import { Converter, HexHelper } from "@iota/util.js";
+import { Converter } from "@iota/util.js";
 import bigInt, { BigInteger } from "big-integer";
 import { Ed25519Address } from "../addressTypes/ed25519Address";
 import { IndexerPluginClient } from "../clients/plugins/indexerPluginClient";
@@ -14,6 +14,7 @@ import type { IMessage } from "../models/IMessage";
 import { IUTXOInput, UTXO_INPUT_TYPE } from "../models/inputs/IUTXOInput";
 import type { ISeed } from "../models/ISeed";
 import { BASIC_OUTPUT_TYPE } from "../models/outputs/IBasicOutput";
+import type { OutputTypes } from "../models/outputs/outputTypes";
 import { ADDRESS_UNLOCK_CONDITION_TYPE } from "../models/unlockConditions/IAddressUnlockCondition";
 import { Bech32Helper } from "../utils/bech32Helper";
 import { generateBip44Address } from "./addresses";
@@ -136,7 +137,7 @@ export async function sendMultiple(
         }
 
         return {
-            address: Converter.bytesToHex(bech32Details.addressBytes),
+            address: Converter.bytesToHex(bech32Details.addressBytes, true),
             addressType: bech32Details.addressType,
             amount: output.amount
         };
@@ -275,6 +276,7 @@ export async function calculateInputs<T>(
     {
         input: IUTXOInput;
         addressKeyPair: IKeyPair;
+        consumingOutput: OutputTypes;
     }[]
 > {
     const localClient = typeof client === "string" ? new SingleNodeClient(client) : client;
@@ -290,6 +292,7 @@ export async function calculateInputs<T>(
     const inputsAndSignatureKeyPairs: {
         input: IUTXOInput;
         addressKeyPair: IKeyPair;
+        consumingOutput: OutputTypes;
     }[] = [];
     let finished = false;
     let zeroBalance = 0;
@@ -317,7 +320,7 @@ export async function calculateInputs<T>(
                 const addressOutput = await localClient.output(addressOutputId);
 
                 if (!addressOutput.isSpent && consumedBalance.lesser(requiredBalance)) {
-                    if (HexHelper.toBigInt(addressOutput.output.amount).equals(0)) {
+                    if (bigInt(addressOutput.output.amount).equals(0)) {
                         zeroBalance++;
                         if (zeroBalance >= zeroCount) {
                             finished = true;
@@ -333,7 +336,8 @@ export async function calculateInputs<T>(
 
                         inputsAndSignatureKeyPairs.push({
                             input,
-                            addressKeyPair
+                            addressKeyPair,
+                            consumingOutput: addressOutput.output
                         });
 
                         if (consumedBalance >= requiredBalance) {

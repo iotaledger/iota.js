@@ -68,18 +68,19 @@ ___
 
 ### bytesToHex
 
-▸ `Static` **bytesToHex**(`array`, `startIndex?`, `length?`, `reverse?`): `string`
+▸ `Static` **bytesToHex**(`array`, `includePrefix?`, `startIndex?`, `length?`, `reverse?`): `string`
 
 Encode a raw array to hex string.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `array` | `ArrayLike`<`number`\> | The bytes to encode. |
-| `startIndex?` | `number` | The index to start in the bytes. |
-| `length?` | `number` | The length of bytes to read. |
-| `reverse?` | `boolean` | Reverse the combine direction. |
+| Name | Type | Default value | Description |
+| :------ | :------ | :------ | :------ |
+| `array` | `ArrayLike`<`number`\> | `undefined` | The bytes to encode. |
+| `includePrefix` | `boolean` | `false` | Include the 0x prefix on the returned hex. |
+| `startIndex?` | `number` | `undefined` | The index to start in the bytes. |
+| `length?` | `number` | `undefined` | The length of bytes to read. |
+| `reverse?` | `boolean` | `undefined` | Reverse the combine direction. |
 
 #### Returns
 
@@ -112,15 +113,16 @@ ___
 
 ### utf8ToHex
 
-▸ `Static` **utf8ToHex**(`utf8`): `string`
+▸ `Static` **utf8ToHex**(`utf8`, `includePrefix?`): `string`
 
 Convert the UTF8 to hex.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `utf8` | `string` | The text to convert. |
+| Name | Type | Default value | Description |
+| :------ | :------ | :------ | :------ |
+| `utf8` | `string` | `undefined` | The text to convert. |
+| `includePrefix` | `boolean` | `false` | Include the 0x prefix on the returned hex. |
 
 #### Returns
 
@@ -152,15 +154,16 @@ ___
 
 ### isHex
 
-▸ `Static` **isHex**(`value`): `boolean`
+▸ `Static` **isHex**(`value`, `allowPrefix?`): `boolean`
 
 Is the data hex format.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `value` | `string` | The value to test. |
+| Name | Type | Default value | Description |
+| :------ | :------ | :------ | :------ |
+| `value` | `string` | `undefined` | The value to test. |
+| `allowPrefix` | `boolean` | `false` | Allow the hex to have the 0x prefix. |
 
 #### Returns
 

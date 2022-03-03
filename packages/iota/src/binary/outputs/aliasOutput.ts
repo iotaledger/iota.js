@@ -1,6 +1,7 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 import { HexHelper, ReadStream, WriteStream } from "@iota/util.js";
+import bigInt from "big-integer";
 import { ALIAS_OUTPUT_TYPE, IAliasOutput } from "../../models/outputs/IAliasOutput";
 import { SMALL_TYPE_LENGTH, UINT32_SIZE, UINT64_SIZE } from "../commonDataTypes";
 import {
@@ -67,7 +68,7 @@ export function deserializeAliasOutput(readStream: ReadStream): IAliasOutput {
 
     return {
         type: ALIAS_OUTPUT_TYPE,
-        amount: HexHelper.fromBigInt(amount),
+        amount: amount.toString(),
         nativeTokens,
         aliasId,
         stateIndex,
@@ -86,7 +87,7 @@ export function deserializeAliasOutput(readStream: ReadStream): IAliasOutput {
  */
 export function serializeAliasOutput(writeStream: WriteStream, object: IAliasOutput): void {
     writeStream.writeUInt8("aliasOutput.type", object.type);
-    writeStream.writeUInt64("aliasOutput.amount", HexHelper.toBigInt(object.amount));
+    writeStream.writeUInt64("aliasOutput.amount", bigInt(object.amount));
 
     serializeNativeTokens(writeStream, object.nativeTokens);
 
@@ -94,9 +95,10 @@ export function serializeAliasOutput(writeStream: WriteStream, object: IAliasOut
 
     writeStream.writeUInt32("aliasOutput.stateIndex", object.stateIndex);
 
-    writeStream.writeUInt32("aliasOutput.stateMetadataLength", object.stateMetadata.length / 2);
-    if (object.stateMetadata.length > 0) {
-        writeStream.writeFixedHex("aliasOutput.stateMetadata", object.stateMetadata.length / 2, object.stateMetadata);
+    const stateMetadata = HexHelper.stripPrefix(object.stateMetadata);
+    writeStream.writeUInt32("aliasOutput.stateMetadataLength", stateMetadata.length / 2);
+    if (stateMetadata.length > 0) {
+        writeStream.writeFixedHex("aliasOutput.stateMetadata", stateMetadata.length / 2, stateMetadata);
     }
 
     writeStream.writeUInt32("aliasOutput.foundryCounter", object.foundryCounter);

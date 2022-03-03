@@ -1,6 +1,7 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import { HexHelper, ReadStream, WriteStream } from "@iota/util.js";
+import type { ReadStream, WriteStream } from "@iota/util.js";
+import bigInt from "big-integer";
 import { IStorageDepositReturnUnlockCondition, STORAGE_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE } from "../../models/unlockConditions/IStorageDepositReturnUnlockCondition";
 import { deserializeAddress, MIN_ADDRESS_LENGTH, serializeAddress } from "../addresses/addresses";
 import { SMALL_TYPE_LENGTH, UINT64_SIZE } from "../commonDataTypes";
@@ -37,7 +38,7 @@ export function deserializeStorageDepositReturnUnlockCondition(readStream: ReadS
     return {
         type: STORAGE_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE,
         returnAddress,
-        amount: HexHelper.fromBigInt(amount)
+        amount: amount.toString()
     };
 }
 
@@ -50,5 +51,5 @@ export function serializeStorageDepositReturnUnlockCondition(
     writeStream: WriteStream, object: IStorageDepositReturnUnlockCondition): void {
     writeStream.writeUInt8("storageDepositReturnUnlockCondition.type", object.type);
     serializeAddress(writeStream, object.returnAddress);
-    writeStream.writeUInt64("storageDepositReturnUnlockCondition.amount", HexHelper.toBigInt(object.amount));
+    writeStream.writeUInt64("storageDepositReturnUnlockCondition.amount", bigInt(object.amount));
 }

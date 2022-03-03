@@ -288,6 +288,7 @@
 - [IMessageIdResponse](interfaces/IMessageIdResponse.md)
 - [IMilestoneResponse](interfaces/IMilestoneResponse.md)
 - [IMilestoneUtxoChangesResponse](interfaces/IMilestoneUtxoChangesResponse.md)
+- [IOutputMetadataResponse](interfaces/IOutputMetadataResponse.md)
 - [IOutputResponse](interfaces/IOutputResponse.md)
 - [IReceiptsResponse](interfaces/IReceiptsResponse.md)
 - [IResponse](interfaces/IResponse.md)
@@ -3351,7 +3352,7 @@ ___
 
 ### buildTransactionPayload
 
-▸ **buildTransactionPayload**(`inputsAndSignatureKeyPairs`, `outputs`, `taggedData?`): [`ITransactionPayload`](interfaces/ITransactionPayload.md)
+▸ **buildTransactionPayload**(`networkId`, `inputsAndSignatureKeyPairs`, `outputs`, `taggedData?`): [`ITransactionPayload`](interfaces/ITransactionPayload.md)
 
 Build a transaction payload.
 
@@ -3359,6 +3360,7 @@ Build a transaction payload.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
+| `networkId` | `string` | The network id we are sending the payload on. |
 | `inputsAndSignatureKeyPairs` | {}[] | The inputs with the signature key pairs needed to sign transfers. |
 | `outputs` | {}[] | The outputs to send. |
 | `taggedData?` | `Object` | Optional tagged data to associate with the transaction. |

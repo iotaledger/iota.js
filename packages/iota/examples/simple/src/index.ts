@@ -10,7 +10,7 @@ import {
     MAX_NUMBER_PARENTS,
     SingleNodeClient
 } from "@iota/iota.js";
-import { Converter, ReadStream } from "@iota/util.js";
+import { Converter, HexHelper, ReadStream } from "@iota/util.js";
 
 const API_ENDPOINT = "http://localhost:14265/";
 
@@ -36,8 +36,8 @@ async function run() {
         parentMessageIds: tipsResponse.tipMessageIds.slice(0, MAX_NUMBER_PARENTS),
         payload: {
             type: TAGGED_DATA_PAYLOAD_TYPE,
-            tag: Converter.utf8ToHex("Foo"),
-            data: Converter.utf8ToHex("Bar")
+            tag: Converter.utf8ToHex("Foo", true),
+            data: Converter.utf8ToHex("Bar", true)
         }
     };
 
@@ -58,7 +58,7 @@ async function run() {
 
     const messageRaw = await client.messageRaw(messageId);
     console.log("Message Raw");
-    console.log("\tRaw:", Converter.bytesToHex(messageRaw));
+    console.log("\tRaw:", Converter.bytesToHex(messageRaw, true));
     console.log();
     const decoded = deserializeMessage(new ReadStream(messageRaw));
     console.log("Message Decoded");
@@ -80,7 +80,7 @@ async function run() {
     console.log("\tTimestamp:", milestone.timestamp);
     console.log();
 
-    const output = await client.output("00000000000000000000000000000000000000000000000000000000000000000000");
+    const output = await client.output("0x00000000000000000000000000000000000000000000000000000000000000000000");
     console.log("Output");
     console.log("\tMessage Id:", output.messageId);
     console.log("\tTransaction Id:", output.transactionId);

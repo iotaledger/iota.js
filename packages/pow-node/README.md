@@ -5,7 +5,7 @@ This package provides local proof of work multi-threaded for NodeJS, it is still
 ## Install
 
 ```shell
-npm install @iota/pow-node.js@1.9.0-stardust.2
+npm install @iota/pow-node.js@1.9.0-stardust.3
 ```
 
 ## Usage

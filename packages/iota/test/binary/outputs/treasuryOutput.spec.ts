@@ -8,7 +8,7 @@ describe("Binary Treasury Output", () => {
     test("Can serialize and deserialize treasury output", () => {
         const object: ITreasuryOutput = {
             type: TREASURY_OUTPUT_TYPE,
-            amount: "0x1e240"
+            amount: "123456"
         };
 
         const serialized = new WriteStream();
@@ -17,6 +17,6 @@ describe("Binary Treasury Output", () => {
         expect(hex).toEqual("0240e2010000000000");
         const deserialized = deserializeTreasuryOutput(new ReadStream(Converter.hexToBytes(hex)));
         expect(deserialized.type).toEqual(2);
-        expect(deserialized.amount).toEqual("0x1e240");
+        expect(deserialized.amount).toEqual("123456");
     });
 });

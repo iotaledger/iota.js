@@ -8,6 +8,7 @@ import type { IChildrenResponse } from "../models/api/IChildrenResponse";
 import type { IMessageIdResponse } from "../models/api/IMessageIdResponse";
 import type { IMilestoneResponse } from "../models/api/IMilestoneResponse";
 import type { IMilestoneUtxoChangesResponse } from "../models/api/IMilestoneUtxoChangesResponse";
+import type { IOutputMetadataResponse } from "../models/api/IOutputMetadataResponse";
 import type { IOutputResponse } from "../models/api/IOutputResponse";
 import type { IReceiptsResponse } from "../models/api/IReceiptsResponse";
 import type { IResponse } from "../models/api/IResponse";
@@ -91,7 +92,7 @@ export class SingleNodeClient implements IClient {
         networkName: string;
 
         /**
-         * The network id as a string encoded 64 bit number.
+         * The network id as a hex encoded 64 bit number.
          */
         networkId: string;
 
@@ -289,13 +290,31 @@ export class SingleNodeClient implements IClient {
     }
 
     /**
-     * Find an output by its identifier.
+     * Get an output by its identifier.
      * @param outputId The id of the output to get.
      * @returns The output details.
      */
     public async output(outputId: string): Promise<IOutputResponse> {
         return this.fetchJson<never, IOutputResponse>(this._basePath, "get", `outputs/${outputId}`);
     }
+
+    /**
+     * Get an outputs metadata by its identifier.
+     * @param outputId The id of the output to get the metadata for.
+     * @returns The output metadata.
+     */
+    public async outputMetadata(outputId: string): Promise<IOutputMetadataResponse> {
+        return this.fetchJson<never, IOutputResponse>(this._basePath, "get", `outputs/${outputId}/metadata`);
+    }
+
+    /**
+     * Get an outputs raw data.
+     * @param outputId The id of the output to get the raw data for.
+     * @returns The output raw bytes.
+     */
+     public async outputRaw(outputId: string): Promise<Uint8Array> {
+        return this.fetchBinary(this._basePath, "get", `outputs/${outputId}/raw`);
+     }
 
     /**
      * Get the requested milestone.

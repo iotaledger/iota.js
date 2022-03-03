@@ -8,18 +8,18 @@ describe("Binary Nft Output", () => {
     test("Can serialize and deserialize nft output", () => {
         const object: INftOutput = {
             type: NFT_OUTPUT_TYPE,
-            amount: "0x1e240",
+            amount: "123456",
             nativeTokens: [
                 {
-                    id: "0".repeat(76),
+                    id: "0x0000000000000000000000000000000000000000000000000000000000000000000000000000",
                     amount: "0x64"
                 },
                 {
-                    id: "1".repeat(76),
+                    id: "0x1111111111111111111111111111111111111111111111111111111111111111111111111111",
                     amount: "0xc8"
                 }
             ],
-            nftId: "1".repeat(40),
+            nftId: "0x1111111111111111111111111111111111111111",
             unlockConditions: [],
             featureBlocks: [],
             immutableBlocks: []
@@ -33,12 +33,12 @@ describe("Binary Nft Output", () => {
         );
         const deserialized = deserializeNftOutput(new ReadStream(Converter.hexToBytes(hex)));
         expect(deserialized.type).toEqual(6);
-        expect(deserialized.amount).toEqual("0x1e240");
+        expect(deserialized.amount).toEqual("123456");
         expect(deserialized.nativeTokens.length).toEqual(2);
-        expect(deserialized.nativeTokens[0].id).toEqual("0".repeat(76));
+        expect(deserialized.nativeTokens[0].id).toEqual("0x0000000000000000000000000000000000000000000000000000000000000000000000000000");
         expect(deserialized.nativeTokens[0].amount).toEqual("0x64");
-        expect(deserialized.nativeTokens[1].id).toEqual("1".repeat(76));
+        expect(deserialized.nativeTokens[1].id).toEqual("0x1111111111111111111111111111111111111111111111111111111111111111111111111111");
         expect(deserialized.nativeTokens[1].amount).toEqual("0xc8");
-        expect(deserialized.nftId).toEqual("1".repeat(40));
+        expect(deserialized.nftId).toEqual("0x1111111111111111111111111111111111111111");
     });
 });

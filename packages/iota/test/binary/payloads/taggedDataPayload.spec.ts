@@ -11,8 +11,8 @@ describe("Binary Tagged Data Payload", () => {
     test("Can serialize and deserialize tagged data payload", () => {
         const payload: ITaggedDataPayload = {
             type: TAGGED_DATA_PAYLOAD_TYPE,
-            tag: Converter.utf8ToHex("foo"),
-            data: Converter.utf8ToHex("bar")
+            tag: Converter.utf8ToHex("foo", true),
+            data: Converter.utf8ToHex("bar", true)
         };
 
         const serialized = new WriteStream();

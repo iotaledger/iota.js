@@ -6,10 +6,11 @@ Helper methods for hex conversions.
 
 ### Methods
 
-- [fromBigInt](HexHelper.md#frombigint)
-- [toBigInt](HexHelper.md#tobigint)
-- [fromNumber](HexHelper.md#fromnumber)
-- [toNumber](HexHelper.md#tonumber)
+- [fromBigInt256](HexHelper.md#frombigint256)
+- [toBigInt256](HexHelper.md#tobigint256)
+- [stripPrefix](HexHelper.md#stripprefix)
+- [addPrefix](HexHelper.md#addprefix)
+- [hasPrefix](HexHelper.md#hasprefix)
 
 ### Constructors
 
@@ -17,11 +18,11 @@ Helper methods for hex conversions.
 
 ## Methods
 
-### fromBigInt
+### fromBigInt256
 
-▸ `Static` **fromBigInt**(`value`): `string`
+▸ `Static` **fromBigInt256**(`value`): `string`
 
-Convert the big int to hex string.
+Convert the big int 256 bit to hex string.
 
 #### Parameters
 
@@ -37,9 +38,9 @@ The hex encoded big int.
 
 ___
 
-### toBigInt
+### toBigInt256
 
-▸ `Static` **toBigInt**(`hex`): `BigInteger`
+▸ `Static` **toBigInt256**(`hex`): `BigInteger`
 
 Convert the hex string to a big int.
 
@@ -57,43 +58,63 @@ The big int.
 
 ___
 
-### fromNumber
+### stripPrefix
 
-▸ `Static` **fromNumber**(`value`): `string`
+▸ `Static` **stripPrefix**(`hex`): `string`
 
-Convert the number to hex string.
+Strip the 0x prefix if it exists.
 
 #### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `value` | `number` | The number value to convert. |
+| `hex` | `string` | The hex value to strip. |
 
 #### Returns
 
 `string`
 
-The hex encoded number.
+The stripped hex without the prefix.
 
 ___
 
-### toNumber
+### addPrefix
 
-▸ `Static` **toNumber**(`hex`): `number`
+▸ `Static` **addPrefix**(`hex`): `string`
 
-Convert the hex string to a number.
+Add the 0x prefix if it does not exist.
 
 #### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `hex` | `string` | The hex value to convert. |
+| `hex` | `string` | The hex value to add the prefix to. |
 
 #### Returns
 
-`number`
+`string`
 
-The number.
+The hex with the prefix.
+
+___
+
+### hasPrefix
+
+▸ `Static` **hasPrefix**(`hex`): `boolean`
+
+Does the hex string have the prefix.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `hex` | `string` | The hex value to check for the prefix. |
+
+#### Returns
+
+`boolean`
+
+True if the hex string has the prefix.
 
 ## Constructors
 

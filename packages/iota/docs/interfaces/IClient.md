@@ -21,6 +21,8 @@ Client interface definition for API communication.
 - [messageChildren](IClient.md#messagechildren)
 - [transactionIncludedMessage](IClient.md#transactionincludedmessage)
 - [output](IClient.md#output)
+- [outputMetadata](IClient.md#outputmetadata)
+- [outputRaw](IClient.md#outputraw)
 - [milestone](IClient.md#milestone)
 - [milestoneUtxoChanges](IClient.md#milestoneutxochanges)
 - [treasury](IClient.md#treasury)
@@ -220,7 +222,7 @@ ___
 
 ▸ **output**(`outputId`): `Promise`<[`IOutputResponse`](IOutputResponse.md)\>
 
-Find an output by its identifier.
+Get an output by its identifier.
 
 #### Parameters
 
@@ -233,6 +235,46 @@ Find an output by its identifier.
 `Promise`<[`IOutputResponse`](IOutputResponse.md)\>
 
 The output details.
+
+___
+
+### outputMetadata
+
+▸ **outputMetadata**(`outputId`): `Promise`<[`IOutputMetadataResponse`](IOutputMetadataResponse.md)\>
+
+Get an outputs metadata by its identifier.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `outputId` | `string` | The id of the output to get the metadata for. |
+
+#### Returns
+
+`Promise`<[`IOutputMetadataResponse`](IOutputMetadataResponse.md)\>
+
+The output metadata.
+
+___
+
+### outputRaw
+
+▸ **outputRaw**(`outputId`): `Promise`<`Uint8Array`\>
+
+Get an outputs raw data.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `outputId` | `string` | The id of the output to get the raw data for. |
+
+#### Returns
+
+`Promise`<`Uint8Array`\>
+
+The output metadata.
 
 ___
 

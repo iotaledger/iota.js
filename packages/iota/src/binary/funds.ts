@@ -1,6 +1,7 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import { HexHelper, ReadStream, WriteStream } from "@iota/util.js";
+import type { ReadStream, WriteStream } from "@iota/util.js";
+import bigInt from "big-integer";
 import type { IMigratedFunds } from "../models/IMigratedFunds";
 import { deserializeAddress, MIN_ADDRESS_LENGTH, serializeAddress } from "./addresses/addresses";
 import { UINT64_SIZE } from "./commonDataTypes";
@@ -74,7 +75,7 @@ export function deserializeMigratedFunds(readStream: ReadStream): IMigratedFunds
     return {
         tailTransactionHash,
         address,
-        deposit: HexHelper.fromBigInt(deposit)
+        deposit: deposit.toString()
     };
 }
 
@@ -86,5 +87,5 @@ export function deserializeMigratedFunds(readStream: ReadStream): IMigratedFunds
 export function serializeMigratedFunds(writeStream: WriteStream, object: IMigratedFunds): void {
     writeStream.writeFixedHex("migratedFunds.tailTransactionHash", TAIL_HASH_LENGTH, object.tailTransactionHash);
     serializeAddress(writeStream, object.address);
-    writeStream.writeUInt64("migratedFunds.deposit", HexHelper.toBigInt(object.deposit));
+    writeStream.writeUInt64("migratedFunds.deposit", bigInt(object.deposit));
 }

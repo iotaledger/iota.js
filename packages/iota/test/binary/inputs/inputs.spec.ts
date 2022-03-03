@@ -15,12 +15,12 @@ describe("Binary Input", () => {
         const inputs: InputTypes[] = [
             {
                 type: UTXO_INPUT_TYPE,
-                transactionId: "6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92",
+                transactionId: "0x6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92",
                 transactionOutputIndex: 12345
             },
             {
                 type: UTXO_INPUT_TYPE,
-                transactionId: "4566920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1",
+                transactionId: "0x4566920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1",
                 transactionOutputIndex: 23456
             }
         ];
@@ -35,19 +35,19 @@ describe("Binary Input", () => {
         expect(deserialized.length).toEqual(2);
         expect(deserialized[0].type).toEqual(0);
         const in0 = deserialized[0] as IUTXOInput;
-        expect(in0.transactionId).toEqual("6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92");
+        expect(in0.transactionId).toEqual("0x6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92");
         expect(in0.transactionOutputIndex).toEqual(12345);
 
         expect(deserialized[1].type).toEqual(0);
         const in1 = deserialized[1] as IUTXOInput;
-        expect(in1.transactionId).toEqual("4566920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1");
+        expect(in1.transactionId).toEqual("0x4566920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1");
         expect(in1.transactionOutputIndex).toEqual(23456);
     });
 
     test("Can serialize and deserialize input", () => {
         const object: IUTXOInput = {
             type: UTXO_INPUT_TYPE,
-            transactionId: "6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92",
+            transactionId: "0x6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92",
             transactionOutputIndex: 12345
         };
 
@@ -58,7 +58,7 @@ describe("Binary Input", () => {
         const deserialized = deserializeInput(new ReadStream(Converter.hexToBytes(hex)));
         expect(deserialized.type).toEqual(0);
         const in0 = deserialized as IUTXOInput;
-        expect(in0.transactionId).toEqual("6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92");
+        expect(in0.transactionId).toEqual("0x6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92");
         expect(in0.transactionOutputIndex).toEqual(12345);
     });
 });

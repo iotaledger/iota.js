@@ -3,6 +3,7 @@
 import type { IChildrenResponse } from "./api/IChildrenResponse";
 import type { IMilestoneResponse } from "./api/IMilestoneResponse";
 import type { IMilestoneUtxoChangesResponse } from "./api/IMilestoneUtxoChangesResponse";
+import type { IOutputMetadataResponse } from "./api/IOutputMetadataResponse";
 import type { IOutputResponse } from "./api/IOutputResponse";
 import type { IReceiptsResponse } from "./api/IReceiptsResponse";
 import type { ITipsResponse } from "./api/ITipsResponse";
@@ -84,11 +85,25 @@ export interface IClient {
     transactionIncludedMessage(transactionId: string): Promise<IMessage>;
 
     /**
-     * Find an output by its identifier.
+     * Get an output by its identifier.
      * @param outputId The id of the output to get.
      * @returns The output details.
      */
     output(outputId: string): Promise<IOutputResponse>;
+
+    /**
+     * Get an outputs metadata by its identifier.
+     * @param outputId The id of the output to get the metadata for.
+     * @returns The output metadata.
+     */
+    outputMetadata(outputId: string): Promise<IOutputMetadataResponse>;
+
+    /**
+     * Get an outputs raw data.
+     * @param outputId The id of the output to get the raw data for.
+     * @returns The output metadata.
+     */
+    outputRaw(outputId: string): Promise<Uint8Array>;
 
     /**
      * Get the requested milestone.

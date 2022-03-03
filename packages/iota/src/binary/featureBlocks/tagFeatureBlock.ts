@@ -1,6 +1,6 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import type { ReadStream, WriteStream } from "@iota/util.js";
+import { HexHelper, ReadStream, WriteStream } from "@iota/util.js";
 import {
     ITagFeatureBlock,
     TAG_FEATURE_BLOCK_TYPE
@@ -47,6 +47,7 @@ export function deserializeTagFeatureBlock(readStream: ReadStream): ITagFeatureB
  */
 export function serializeTagFeatureBlock(writeStream: WriteStream, object: ITagFeatureBlock): void {
     writeStream.writeUInt8("tagFeatureBlock.type", object.type);
-    writeStream.writeUInt8("tagFeatureBlock.tagLength", object.tag.length / 2);
-    writeStream.writeFixedHex("tagFeatureBlock.tag", object.tag.length / 2, object.tag);
+    const tag = HexHelper.stripPrefix(object.tag);
+    writeStream.writeUInt8("tagFeatureBlock.tagLength", tag.length / 2);
+    writeStream.writeFixedHex("tagFeatureBlock.tag", tag.length / 2, tag);
 }

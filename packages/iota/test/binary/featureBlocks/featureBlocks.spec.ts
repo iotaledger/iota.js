@@ -14,14 +14,14 @@ describe("Binary Feature Blocks", () => {
                 type: SENDER_FEATURE_BLOCK_TYPE,
                 address: {
                     type: ED25519_ADDRESS_TYPE,
-                    pubKeyHash: "6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
+                    pubKeyHash: "0x6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
                 }
             },
             {
                 type: ISSUER_FEATURE_BLOCK_TYPE,
                 address: {
                     type: ED25519_ADDRESS_TYPE,
-                    pubKeyHash: "6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
+                    pubKeyHash: "0x6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
                 }
             }
         ];
@@ -37,11 +37,11 @@ describe("Binary Feature Blocks", () => {
         expect(deserialized[0].type).toEqual(0);
         const fb0 = deserialized[0] as ISenderFeatureBlock;
         expect(fb0.address.type).toEqual(0);
-        expect((fb0.address as IEd25519Address).pubKeyHash).toEqual("6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92");
+        expect((fb0.address as IEd25519Address).pubKeyHash).toEqual("0x6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92");
 
         expect(deserialized[1].type).toEqual(1);
         const fb1 = deserialized[1] as IIssuerFeatureBlock;
         expect(fb1.address.type).toEqual(0);
-        expect((fb1.address as IEd25519Address).pubKeyHash).toEqual("6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92");
+        expect((fb1.address as IEd25519Address).pubKeyHash).toEqual("0x6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92");
     });
 });

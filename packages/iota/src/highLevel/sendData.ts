@@ -1,7 +1,7 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 /* eslint-disable unicorn/no-nested-ternary */
-import { Converter } from "@iota/util.js";
+import { Converter, HexHelper } from "@iota/util.js";
 import { MAX_TAG_LENGTH } from "../binary/payloads/taggedDataPayload";
 import { SingleNodeClient } from "../clients/singleNodeClient";
 import type { IClient } from "../models/IClient";
@@ -26,12 +26,15 @@ export async function sendData(
     const localClient = typeof client === "string" ? new SingleNodeClient(client) : client;
 
     let localTagHex;
+    let localDataHex;
+
     if (tag) {
         localTagHex = typeof tag === "string"
-            ? Converter.utf8ToHex(tag)
-            : Converter.bytesToHex(tag);
+            ? Converter.utf8ToHex(tag, true)
+            : Converter.bytesToHex(tag, true);
 
-        if (localTagHex?.length / 2 > MAX_TAG_LENGTH) {
+        // Length is -2 becuase we have added the 0x prefix
+        if ((localTagHex.length - 2) / 2 > MAX_TAG_LENGTH) {
             throw new Error(
                 `The tag length is ${localTagHex.length / 2
                 }, which exceeds the maximum size of ${MAX_TAG_LENGTH}`
@@ -39,11 +42,10 @@ export async function sendData(
         }
     }
 
-    let localDataHex;
     if (data) {
-        localDataHex = typeof data === "string"
-            ? Converter.utf8ToHex(data)
-            : Converter.bytesToHex(data);
+        localDataHex = HexHelper.addPrefix(typeof data === "string"
+            ? Converter.utf8ToHex(data, true)
+            : Converter.bytesToHex(data, true));
     }
 
     const taggedDataPayload: ITaggedDataPayload = {

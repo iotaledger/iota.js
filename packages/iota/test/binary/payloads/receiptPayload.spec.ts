@@ -16,23 +16,23 @@ describe("Binary Receipt Payload", () => {
             final: true,
             funds: [
                 {
-                    tailTransactionHash: "a".repeat(98),
+                    tailTransactionHash: "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
                     address: {
                         type: ED25519_ADDRESS_TYPE,
-                        pubKeyHash: "b".repeat(64)
+                        pubKeyHash: "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
                     },
-                    deposit: "0x64"
+                    deposit: "100"
                 }
             ],
             transaction: {
                 type: TREASURY_TRANSACTION_PAYLOAD_TYPE,
                 input: {
                     type: TREASURY_INPUT_TYPE,
-                    milestoneId: "a".repeat(64)
+                    milestoneId: "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
                 },
                 output: {
                     type: TREASURY_OUTPUT_TYPE,
-                    amount: "0x2694"
+                    amount: "9876"
                 }
             }
         };
@@ -48,14 +48,14 @@ describe("Binary Receipt Payload", () => {
         expect(deserialized.migratedAt).toEqual(123456);
         expect(deserialized.final).toEqual(true);
         expect(deserialized.funds.length).toEqual(1);
-        expect(deserialized.funds[0].tailTransactionHash).toEqual("a".repeat(98));
+        expect(deserialized.funds[0].tailTransactionHash).toEqual("0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
         expect(deserialized.funds[0].address.type).toEqual(0);
-        expect((deserialized.funds[0].address as IEd25519Address).pubKeyHash).toEqual("b".repeat(64));
-        expect(deserialized.funds[0].deposit).toEqual("0x64");
+        expect((deserialized.funds[0].address as IEd25519Address).pubKeyHash).toEqual("0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
+        expect(deserialized.funds[0].deposit).toEqual("100");
         expect(deserialized.transaction.type).toEqual(4);
         expect(deserialized.transaction.input.type).toEqual(1);
-        expect(deserialized.transaction.input.milestoneId).toEqual("a".repeat(64));
+        expect(deserialized.transaction.input.milestoneId).toEqual("0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
         expect(deserialized.transaction.output.type).toEqual(2);
-        expect(deserialized.transaction.output.amount).toEqual("0x2694");
+        expect(deserialized.transaction.output.amount).toEqual("9876");
     });
 });

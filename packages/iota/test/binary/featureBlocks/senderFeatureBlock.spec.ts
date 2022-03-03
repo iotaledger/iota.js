@@ -14,7 +14,7 @@ describe("Binary Sender Feature Block", () => {
             type: SENDER_FEATURE_BLOCK_TYPE,
             address: {
                 type: ED25519_ADDRESS_TYPE,
-                pubKeyHash: "6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
+                pubKeyHash: "0x6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
             }
         };
 
@@ -26,7 +26,7 @@ describe("Binary Sender Feature Block", () => {
         expect(deserialized.type).toEqual(0);
         expect(deserialized.address.type).toEqual(0);
         expect((deserialized.address as IEd25519Address).pubKeyHash).toEqual(
-            "6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
+            "0x6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
         );
     });
 });

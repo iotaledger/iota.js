@@ -9,7 +9,7 @@ describe("Binary Address", () => {
     test("Can serialize and deserialize address", () => {
         const object: AddressTypes = {
             type: ED25519_ADDRESS_TYPE,
-            pubKeyHash: "6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
+            pubKeyHash: "0x6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
         };
 
         const serialized = new WriteStream();
@@ -18,6 +18,6 @@ describe("Binary Address", () => {
         expect(hex).toEqual("006920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92");
         const deserialized = deserializeAddress(new ReadStream(Converter.hexToBytes(hex)));
         expect(deserialized.type).toEqual(0);
-        expect((deserialized as IEd25519Address).pubKeyHash).toEqual("6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92");
+        expect((deserialized as IEd25519Address).pubKeyHash).toEqual("0x6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92");
     });
 });

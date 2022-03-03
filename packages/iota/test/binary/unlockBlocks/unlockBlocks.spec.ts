@@ -25,9 +25,9 @@ describe("Binary Unlock Block", () => {
                 type: SIGNATURE_UNLOCK_BLOCK_TYPE,
                 signature: {
                     type: ED25519_SIGNATURE_TYPE,
-                    publicKey: "6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92",
+                    publicKey: "0x6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92",
                     signature:
-                        "2c59d43952bda7ca60d3c2288ebc00703b4b60c928d277382cad5f57b02a90825f2d3a8509d6594498e0488f086d8fa3f13d9636d20e759eb5806ffe663bac0d"
+                        "0x2c59d43952bda7ca60d3c2288ebc00703b4b60c928d277382cad5f57b02a90825f2d3a8509d6594498e0488f086d8fa3f13d9636d20e759eb5806ffe663bac0d"
                 }
             },
             {
@@ -47,9 +47,9 @@ describe("Binary Unlock Block", () => {
         const obj1 = deserialized[0] as ISignatureUnlockBlock;
         expect(obj1.type).toEqual(0);
         expect(obj1.signature.type).toEqual(0);
-        expect(obj1.signature.publicKey).toEqual("6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92");
+        expect(obj1.signature.publicKey).toEqual("0x6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92");
         expect(obj1.signature.signature).toEqual(
-            "2c59d43952bda7ca60d3c2288ebc00703b4b60c928d277382cad5f57b02a90825f2d3a8509d6594498e0488f086d8fa3f13d9636d20e759eb5806ffe663bac0d"
+            "0x2c59d43952bda7ca60d3c2288ebc00703b4b60c928d277382cad5f57b02a90825f2d3a8509d6594498e0488f086d8fa3f13d9636d20e759eb5806ffe663bac0d"
         );
         const obj2 = deserialized[1] as IReferenceUnlockBlock;
         expect(obj2.type).toEqual(1);

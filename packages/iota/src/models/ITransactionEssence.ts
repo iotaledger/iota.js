@@ -23,7 +23,7 @@ export interface ITransactionEssence extends ITypeBase<1> {
     /**
      * The network id of the message.
      */
-    networkId?: string;
+    networkId: string;
 
     /**
      * The inputs of the transaction.

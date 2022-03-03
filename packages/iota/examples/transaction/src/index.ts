@@ -7,6 +7,7 @@ import {
     getBalance,
     getUnspentAddress,
     getUnspentAddresses, IBasicOutput, IKeyPair, IndexerPluginClient, IUTXOInput,
+    OutputTypes,
     sendAdvanced, SingleNodeClient,
     UTXO_INPUT_TYPE
 } from "@iota/iota.js";
@@ -39,7 +40,7 @@ async function run() {
     // display it in both Ed25519 and Bech 32 format
     const genesisEd25519Address = new Ed25519Address(genesisWalletKeyPair.publicKey);
     const genesisWalletAddress = genesisEd25519Address.toAddress();
-    const genesisWalletAddressHex = Converter.bytesToHex(genesisWalletAddress);
+    const genesisWalletAddressHex = Converter.bytesToHex(genesisWalletAddress, true);
     const genesisWalletAddressBech32 = Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, genesisWalletAddress, nodeInfo.protocol.bech32HRP);
     console.log("\tAddress Ed25519", genesisWalletAddressHex);
     console.log("\tAddress Bech32", genesisWalletAddressBech32);
@@ -54,7 +55,7 @@ async function run() {
     const walletAddressSeed = walletSeed.generateSeedFromPath(walletPath);
     const walletEd25519Address = new Ed25519Address(walletAddressSeed.keyPair().publicKey);
     const newAddress = walletEd25519Address.toAddress();
-    const newAddressHex = Converter.bytesToHex(newAddress);
+    const newAddressHex = Converter.bytesToHex(newAddress, true);
 
     console.log("Wallet 1");
     console.log("\tSeed:", Converter.bytesToHex(walletSeed.toBytes()));
@@ -75,6 +76,7 @@ async function run() {
     const inputsWithKeyPairs: {
         input: IUTXOInput;
         addressKeyPair: IKeyPair;
+        consumingOutput: OutputTypes;
     }[] = [];
 
     let totalGenesis: BigInteger = bigInt(0);
@@ -88,7 +90,8 @@ async function run() {
                     transactionId: output.transactionId,
                     transactionOutputIndex: output.outputIndex
                 },
-                addressKeyPair: genesisWalletKeyPair
+                addressKeyPair: genesisWalletKeyPair,
+                consumingOutput: output.output
             });
             if (output.output.type === BASIC_OUTPUT_TYPE) {
                 totalGenesis = totalGenesis.plus((output.output as IBasicOutput).amount);

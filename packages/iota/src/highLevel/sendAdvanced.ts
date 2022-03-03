@@ -4,7 +4,7 @@
 import { Blake2b, Ed25519 } from "@iota/crypto.js";
 import { Converter, HexHelper, WriteStream } from "@iota/util.js";
 import type { BigInteger } from "big-integer";
-import { serializeInput } from "../binary/inputs/inputs";
+import { TRANSACTION_ID_LENGTH } from "../binary/commonDataTypes";
 import { serializeOutput } from "../binary/outputs/outputs";
 import { MAX_TAG_LENGTH } from "../binary/payloads/taggedDataPayload";
 import { serializeTransactionEssence } from "../binary/transactionEssence";
@@ -16,11 +16,13 @@ import type { IMessage } from "../models/IMessage";
 import type { IUTXOInput } from "../models/inputs/IUTXOInput";
 import { ITransactionEssence, TRANSACTION_ESSENCE_TYPE } from "../models/ITransactionEssence";
 import { BASIC_OUTPUT_TYPE, IBasicOutput } from "../models/outputs/IBasicOutput";
+import type { OutputTypes } from "../models/outputs/outputTypes";
 import { TAGGED_DATA_PAYLOAD_TYPE } from "../models/payloads/ITaggedDataPayload";
 import { ITransactionPayload, TRANSACTION_PAYLOAD_TYPE } from "../models/payloads/ITransactionPayload";
 import { ED25519_SIGNATURE_TYPE } from "../models/signatures/IEd25519Signature";
-import { IReferenceUnlockBlock, REFERENCE_UNLOCK_BLOCK_TYPE } from "../models/unlockBlocks/IReferenceUnlockBlock";
-import { ISignatureUnlockBlock, SIGNATURE_UNLOCK_BLOCK_TYPE } from "../models/unlockBlocks/ISignatureUnlockBlock";
+import { REFERENCE_UNLOCK_BLOCK_TYPE } from "../models/unlockBlocks/IReferenceUnlockBlock";
+import { SIGNATURE_UNLOCK_BLOCK_TYPE } from "../models/unlockBlocks/ISignatureUnlockBlock";
+import type { UnlockBlockTypes } from "../models/unlockBlocks/unlockBlockTypes";
 import { ADDRESS_UNLOCK_CONDITION_TYPE } from "../models/unlockConditions/IAddressUnlockCondition";
 
 /**
@@ -38,6 +40,7 @@ export async function sendAdvanced(
     inputsAndSignatureKeyPairs: {
         input: IUTXOInput;
         addressKeyPair: IKeyPair;
+        consumingOutput: OutputTypes;
     }[],
     outputs: {
         address: string;
@@ -54,10 +57,10 @@ export async function sendAdvanced(
 }> {
     const localClient = typeof client === "string" ? new SingleNodeClient(client) : client;
 
-    const transactionPayload = buildTransactionPayload(inputsAndSignatureKeyPairs, outputs, taggedData);
-
     const protocolInfo = await localClient.protocolInfo();
-    transactionPayload.essence.networkId = protocolInfo.networkId;
+
+    const transactionPayload = buildTransactionPayload(
+        protocolInfo.networkId, inputsAndSignatureKeyPairs, outputs, taggedData);
 
     const message: IMessage = {
         payload: transactionPayload
@@ -73,6 +76,7 @@ export async function sendAdvanced(
 
 /**
  * Build a transaction payload.
+ * @param networkId The network id we are sending the payload on.
  * @param inputsAndSignatureKeyPairs The inputs with the signature key pairs needed to sign transfers.
  * @param outputs The outputs to send.
  * @param taggedData Optional tagged data to associate with the transaction.
@@ -81,9 +85,11 @@ export async function sendAdvanced(
  * @returns The transaction payload.
  */
 export function buildTransactionPayload(
+    networkId: string,
     inputsAndSignatureKeyPairs: {
         input: IUTXOInput;
         addressKeyPair: IKeyPair;
+        consumingOutput: OutputTypes;
     }[],
     outputs: {
         address: string;
@@ -103,18 +109,26 @@ export function buildTransactionPayload(
     }
 
     let localTagHex;
+    let localDataHex;
 
     if (taggedData?.tag) {
         localTagHex = typeof taggedData?.tag === "string"
-            ? Converter.utf8ToHex(taggedData.tag)
-            : Converter.bytesToHex(taggedData.tag);
+            ? Converter.utf8ToHex(taggedData.tag, true)
+            : Converter.bytesToHex(taggedData.tag, true);
 
-        if (localTagHex.length / 2 > MAX_TAG_LENGTH) {
+        // Length is -2 becuase we have added the 0x prefix
+        if ((localTagHex.length - 2) / 2 > MAX_TAG_LENGTH) {
             throw new Error(
                 `The tag length is ${localTagHex.length / 2
                 }, which exceeds the maximum size of ${MAX_TAG_LENGTH}`
             );
         }
+    }
+
+    if (taggedData?.data) {
+        localDataHex = HexHelper.addPrefix(typeof taggedData.data === "string"
+            ? Converter.utf8ToHex(taggedData.data, true)
+            : Converter.bytesToHex(taggedData.data, true));
     }
 
     const outputsWithSerialization: {
@@ -127,7 +141,7 @@ export function buildTransactionPayload(
         if (output.addressType === ED25519_ADDRESS_TYPE) {
             const o: IBasicOutput = {
                 type: BASIC_OUTPUT_TYPE,
-                amount: HexHelper.fromBigInt(output.amount),
+                amount: output.amount.toString(),
                 nativeTokens: [],
                 unlockConditions: [
                     {
@@ -156,44 +170,44 @@ export function buildTransactionPayload(
     const inputsAndSignatureKeyPairsSerialized: {
         input: IUTXOInput;
         addressKeyPair: IKeyPair;
-        serializedBytes: Uint8Array;
-        serializedHex: string;
+        consumingOutputBytes: Uint8Array;
+        inputIdHex: string;
     }[] = inputsAndSignatureKeyPairs.map(i => {
+        const writeStreamId = new WriteStream();
+        writeStreamId.writeFixedHex("transactionId", TRANSACTION_ID_LENGTH, i.input.transactionId);
+        writeStreamId.writeUInt16("transactionOutputIndex", i.input.transactionOutputIndex);
+
         const writeStream = new WriteStream();
-        serializeInput(writeStream, i.input);
-        const finalBytes = writeStream.finalBytes();
+        serializeOutput(writeStream, i.consumingOutput);
         return {
             ...i,
-            serializedBytes: finalBytes,
-            serializedHex: Converter.bytesToHex(finalBytes)
+            inputIdHex: writeStreamId.finalHex(),
+            consumingOutputBytes: writeStream.finalBytes()
         };
     });
 
     // Lexicographically sort the inputs and outputs
     const sortedInputs = inputsAndSignatureKeyPairsSerialized.sort(
-        (a, b) => a.serializedHex.localeCompare(b.serializedHex));
+        (a, b) => a.inputIdHex.localeCompare(b.inputIdHex));
     const sortedOutputs = outputsWithSerialization.sort((a, b) => a.serializedHex.localeCompare(b.serializedHex));
 
     const inputsCommitmentHasher = new Blake2b(Blake2b.SIZE_256);
     for (const input of sortedInputs) {
-        inputsCommitmentHasher.update(input.serializedBytes);
+        inputsCommitmentHasher.update(input.consumingOutputBytes);
     }
-    const inputsCommitment = Converter.bytesToHex(inputsCommitmentHasher.final());
+    const inputsCommitment = Converter.bytesToHex(inputsCommitmentHasher.final(), true);
 
     const transactionEssence: ITransactionEssence = {
         type: TRANSACTION_ESSENCE_TYPE,
+        networkId,
         inputs: sortedInputs.map(i => i.input),
         inputsCommitment,
         outputs: sortedOutputs.map(o => o.output),
-        payload: localTagHex
+        payload: localTagHex || localTagHex
             ? {
                 type: TAGGED_DATA_PAYLOAD_TYPE,
                 tag: localTagHex,
-                data: taggedData?.data
-                    ? typeof taggedData.data === "string"
-                        ? Converter.utf8ToHex(taggedData.data)
-                        : Converter.bytesToHex(taggedData.data)
-                    : undefined
+                data: localDataHex
             }
             : undefined
     };
@@ -205,7 +219,7 @@ export function buildTransactionPayload(
     const essenceHash = Blake2b.sum256(essenceFinal);
 
     // Create the unlock blocks
-    const unlockBlocks: (ISignatureUnlockBlock | IReferenceUnlockBlock)[] = [];
+    const unlockBlocks: UnlockBlockTypes[] = [];
     const addressToUnlockBlock: {
         [address: string]: {
             keyPair: IKeyPair;
@@ -214,7 +228,7 @@ export function buildTransactionPayload(
     } = {};
 
     for (const input of sortedInputs) {
-        const hexInputAddressPublic = Converter.bytesToHex(input.addressKeyPair.publicKey);
+        const hexInputAddressPublic = Converter.bytesToHex(input.addressKeyPair.publicKey, true);
         if (addressToUnlockBlock[hexInputAddressPublic]) {
             unlockBlocks.push({
                 type: REFERENCE_UNLOCK_BLOCK_TYPE,
@@ -226,7 +240,7 @@ export function buildTransactionPayload(
                 signature: {
                     type: ED25519_SIGNATURE_TYPE,
                     publicKey: hexInputAddressPublic,
-                    signature: Converter.bytesToHex(Ed25519.sign(input.addressKeyPair.privateKey, essenceHash))
+                    signature: Converter.bytesToHex(Ed25519.sign(input.addressKeyPair.privateKey, essenceHash), true)
                 }
             });
             addressToUnlockBlock[hexInputAddressPublic] = {

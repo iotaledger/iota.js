@@ -8,7 +8,7 @@ describe("Binary Treasury Input", () => {
     test("Can serialize and deserialize treasury input", () => {
         const object: ITreasuryInput = {
             type: TREASURY_INPUT_TYPE,
-            milestoneId: "2".repeat(64)
+            milestoneId: "0x2222222222222222222222222222222222222222222222222222222222222222"
         };
 
         const serialized = new WriteStream();
@@ -17,6 +17,6 @@ describe("Binary Treasury Input", () => {
         expect(hex).toEqual("012222222222222222222222222222222222222222222222222222222222222222");
         const deserialized = deserializeTreasuryInput(new ReadStream(Converter.hexToBytes(hex)));
         expect(deserialized.type).toEqual(1);
-        expect(deserialized.milestoneId).toEqual("2".repeat(64));
+        expect(deserialized.milestoneId).toEqual("0x2222222222222222222222222222222222222222222222222222222222222222");
     });
 });

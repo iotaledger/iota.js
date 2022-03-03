@@ -1,6 +1,6 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import type { ReadStream, WriteStream } from "@iota/util.js";
+import { HexHelper, ReadStream, WriteStream } from "@iota/util.js";
 import { IMetadataFeatureBlock, METADATA_FEATURE_BLOCK_TYPE } from "../../models/featureBlocks/IMetadataFeatureBlock";
 import { SMALL_TYPE_LENGTH, UINT32_SIZE } from "../commonDataTypes";
 
@@ -42,6 +42,7 @@ export function deserializeMetadataFeatureBlock(readStream: ReadStream): IMetada
  */
 export function serializeMetadataFeatureBlock(writeStream: WriteStream, object: IMetadataFeatureBlock): void {
     writeStream.writeUInt8("metadataFeatureBlock.type", object.type);
-    writeStream.writeUInt32("metadataFeatureBlock.dataLength", object.data.length / 2);
-    writeStream.writeFixedHex("metadataFeatureBlock.data", object.data.length / 2, object.data);
+    const data = HexHelper.stripPrefix(object.data);
+    writeStream.writeUInt32("metadataFeatureBlock.dataLength", data.length / 2);
+    writeStream.writeFixedHex("metadataFeatureBlock.data", data.length / 2, data);
 }

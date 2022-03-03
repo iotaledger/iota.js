@@ -50,7 +50,7 @@ export class BigIntHelper {
         const bytes = data.slice(byteOffset, byteOffset + 8);
 
         // convert to little endian hex by reversing the bytes
-        const hex = Converter.bytesToHex(bytes, undefined, undefined, true);
+        const hex = Converter.bytesToHex(bytes, false, undefined, undefined, true);
 
         return bigInt(hex, 16);
     }
@@ -65,7 +65,7 @@ export class BigIntHelper {
         const bytes = data.slice(byteOffset, byteOffset + 32);
 
         // convert to little endian hex by reversing the bytes
-        const hex = Converter.bytesToHex(bytes, undefined, undefined, true);
+        const hex = Converter.bytesToHex(bytes, false, undefined, undefined, true);
 
         return bigInt(hex, 16);
     }

@@ -1,6 +1,6 @@
 # Changelog
 
-## v1.9.0-stardust.2
+## v1.9.0-stardust.3
 
 * Stardust alpha release
 

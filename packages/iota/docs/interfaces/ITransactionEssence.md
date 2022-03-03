@@ -23,7 +23,7 @@ Transaction payload.
 
 ### networkId
 
-• `Optional` **networkId**: `string`
+• **networkId**: `string`
 
 The network id of the message.
 

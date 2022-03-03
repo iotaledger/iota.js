@@ -1,7 +1,7 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 /* eslint-disable no-mixed-operators */
-import type { ReadStream, WriteStream } from "@iota/util.js";
+import { HexHelper, ReadStream, WriteStream } from "@iota/util.js";
 import { ITaggedDataPayload, TAGGED_DATA_PAYLOAD_TYPE } from "../../models/payloads/ITaggedDataPayload";
 import { UINT8_SIZE, TYPE_LENGTH, UINT32_SIZE } from "../commonDataTypes";
 
@@ -47,8 +47,8 @@ export function deserializeTaggedDataPayload(readStream: ReadStream): ITaggedDat
 
     return {
         type: TAGGED_DATA_PAYLOAD_TYPE,
-        tag,
-        data
+        tag: tag ? HexHelper.addPrefix(tag) : undefined,
+        data: data ? HexHelper.addPrefix(data) : undefined
     };
 }
 
@@ -66,16 +66,19 @@ export function serializeTaggedDataPayload(writeStream: WriteStream, object: ITa
         );
     }
 
+
     writeStream.writeUInt32("payloadTaggedData.type", object.type);
     if (object.tag) {
-        writeStream.writeUInt8("payloadTaggedData.tagLength", object.tag.length / 2);
-        writeStream.writeFixedHex("payloadTaggedData.tag", object.tag.length / 2, object.tag);
+        const tag = HexHelper.stripPrefix(object.tag);
+        writeStream.writeUInt8("payloadTaggedData.tagLength", tag.length / 2);
+        writeStream.writeFixedHex("payloadTaggedData.tag", tag.length / 2, tag);
     } else {
         writeStream.writeUInt32("payloadTaggedData.tagLength", 0);
     }
     if (object.data) {
-        writeStream.writeUInt32("payloadTaggedData.dataLength", object.data.length / 2);
-        writeStream.writeFixedHex("payloadTaggedData.data", object.data.length / 2, object.data);
+        const data = HexHelper.stripPrefix(object.data);
+        writeStream.writeUInt32("payloadTaggedData.dataLength", data.length / 2);
+        writeStream.writeFixedHex("payloadTaggedData.data", data.length / 2, data);
     } else {
         writeStream.writeUInt32("payloadTaggedData.dataLength", 0);
     }

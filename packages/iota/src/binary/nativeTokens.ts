@@ -69,7 +69,7 @@ export function deserializeNativeToken(readStream: ReadStream): INativeToken {
 
     return {
         id,
-        amount: HexHelper.fromBigInt(amount)
+        amount: HexHelper.fromBigInt256(amount)
     };
 }
 
@@ -80,5 +80,5 @@ export function deserializeNativeToken(readStream: ReadStream): INativeToken {
  */
 export function serializeNativeToken(writeStream: WriteStream, object: INativeToken): void {
     writeStream.writeFixedHex("nativeToken.id", NATIVE_TOKEN_ID_LENGTH, object.id);
-    writeStream.writeUInt256("nativeToken.amount", HexHelper.toBigInt(object.amount));
+    writeStream.writeUInt256("nativeToken.amount", HexHelper.toBigInt256(object.amount));
 }

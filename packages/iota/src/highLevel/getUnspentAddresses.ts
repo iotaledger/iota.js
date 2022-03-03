@@ -1,7 +1,6 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 import { Bip32Path } from "@iota/crypto.js";
-import { HexHelper } from "@iota/util.js";
 import bigInt, { BigInteger } from "big-integer";
 import { Ed25519Address } from "../addressTypes/ed25519Address";
 import { IndexerPluginClient } from "../clients/plugins/indexerPluginClient";
@@ -157,7 +156,7 @@ export async function calculateAddressBalance(client: IClient, addressBech32: st
         for (const outputId of outputResponse.items) {
             const output = await client.output(outputId);
             if (output.output.type === BASIC_OUTPUT_TYPE && !output.isSpent) {
-                balance = balance.add(HexHelper.toBigInt(output.output.amount));
+                balance = balance.add(bigInt(output.output.amount));
             }
         }
     } while (count > 0 && cursor);

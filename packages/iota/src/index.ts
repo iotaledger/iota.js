@@ -65,6 +65,7 @@ export * from "./models/api/IChildrenResponse";
 export * from "./models/api/IMessageIdResponse";
 export * from "./models/api/IMilestoneResponse";
 export * from "./models/api/IMilestoneUtxoChangesResponse";
+export * from "./models/api/IOutputMetadataResponse";
 export * from "./models/api/IOutputResponse";
 export * from "./models/api/IReceiptsResponse";
 export * from "./models/api/IResponse";

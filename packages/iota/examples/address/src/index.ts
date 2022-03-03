@@ -43,12 +43,12 @@ async function run() {
         const addressSeed = baseSeed.generateSeedFromPath(new Bip32Path(path));
         const addressKeyPair = addressSeed.keyPair();
 
-        console.log("\tPrivate Key", Converter.bytesToHex(addressKeyPair.privateKey));
-        console.log("\tPublic Key", Converter.bytesToHex(addressKeyPair.publicKey));
+        console.log("\tPrivate Key", Converter.bytesToHex(addressKeyPair.privateKey, true));
+        console.log("\tPublic Key", Converter.bytesToHex(addressKeyPair.publicKey, true));
 
         const indexEd25519Address = new Ed25519Address(addressKeyPair.publicKey);
         const indexPublicKeyAddress = indexEd25519Address.toAddress();
-        console.log("\tAddress Ed25519", Converter.bytesToHex(indexPublicKeyAddress));
+        console.log("\tAddress Ed25519", Converter.bytesToHex(indexPublicKeyAddress, true));
         console.log(
             "\tAddress Bech32",
             Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, indexPublicKeyAddress, info.protocol.bech32HRP)
@@ -78,14 +78,14 @@ async function run() {
 
         // Get the public and private keys for the path seed
         const indexSeedKeyPair = indexSeed.keyPair();
-        console.log("\tPrivate Key", Converter.bytesToHex(indexSeedKeyPair.privateKey));
-        console.log("\tPublic Key", Converter.bytesToHex(indexSeedKeyPair.publicKey));
+        console.log("\tPrivate Key", Converter.bytesToHex(indexSeedKeyPair.privateKey, true));
+        console.log("\tPublic Key", Converter.bytesToHex(indexSeedKeyPair.publicKey, true));
 
         // Get the address for the path seed which is actually the Blake2b.sum256 of the public key
         // display it in both Ed25519 and Bech 32 format
         const indexEd25519Address = new Ed25519Address(indexSeedKeyPair.publicKey);
         const indexPublicKeyAddress = indexEd25519Address.toAddress();
-        console.log("\tAddress Ed25519", Converter.bytesToHex(indexPublicKeyAddress));
+        console.log("\tAddress Ed25519", Converter.bytesToHex(indexPublicKeyAddress, true));
         console.log(
             "\tAddress Bech32",
             Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, indexPublicKeyAddress, info.protocol.bech32HRP)

@@ -5,6 +5,7 @@
 import type { BigInteger } from "big-integer";
 import { BigIntHelper } from "./bigIntHelper";
 import { Converter } from "./converter";
+import { HexHelper } from "./hexHelper";
 
 /**
  * Keep track of the write index within a stream.
@@ -97,18 +98,20 @@ export class WriteStream {
      * @param val The data to write.
      */
     public writeFixedHex(name: string, length: number, val: string): void {
-        if (!Converter.isHex(val)) {
+        const strippedVal = HexHelper.stripPrefix(val);
+
+        if (!Converter.isHex(strippedVal)) {
             throw new Error(`The ${name} should be in hex format`);
         }
 
         // Hex should be twice the length as each byte is 2 characters
-        if (length * 2 !== val.length) {
-            throw new Error(`${name} length ${val.length} does not match expected length ${length * 2}`);
+        if (length * 2 !== strippedVal.length) {
+            throw new Error(`${name} length ${strippedVal.length} does not match expected length ${length * 2}`);
         }
 
         this.expand(length);
 
-        this._storage.set(Converter.hexToBytes(val), this._writeIndex);
+        this._storage.set(Converter.hexToBytes(strippedVal), this._writeIndex);
         this._writeIndex += length;
     }
 
