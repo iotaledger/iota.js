@@ -1,8 +1,5 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-/* eslint-disable no-bitwise */
-/* eslint-disable newline-per-chained-call */
-/* eslint-disable no-mixed-operators */
 import bigInt, { BigInteger } from "big-integer";
 
 /**
@@ -10,11 +7,19 @@ import bigInt, { BigInteger } from "big-integer";
  */
 export class HexHelper {
     /**
+     * Const defining the maximum value for a 256 bit int.
+     */
+    public static readonly BIG_INT_MAX_256_BIT: BigInteger = bigInt("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", 16);
+
+    /**
      * Convert the big int 256 bit to hex string.
      * @param value The big int value to convert.
      * @returns The hex encoded big int.
      */
     public static fromBigInt256(value: BigInteger): string {
+        if (value.gt(HexHelper.BIG_INT_MAX_256_BIT)) {
+            return HexHelper.addPrefix(HexHelper.BIG_INT_MAX_256_BIT.toString(16));
+        }
         return HexHelper.addPrefix(value.toString(16));
     }
 
@@ -24,7 +29,13 @@ export class HexHelper {
      * @returns The big int.
      */
     public static toBigInt256(hex: string): BigInteger {
-        return bigInt(HexHelper.stripPrefix(hex), 16);
+        const bi = bigInt(HexHelper.stripPrefix(hex), 16);
+
+        if (bi.greater(HexHelper.BIG_INT_MAX_256_BIT)) {
+            return HexHelper.BIG_INT_MAX_256_BIT;
+        }
+
+        return bi;
     }
 
     /**

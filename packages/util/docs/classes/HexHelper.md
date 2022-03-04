@@ -4,6 +4,10 @@ Helper methods for hex conversions.
 
 ## Table of contents
 
+### Properties
+
+- [BIG\_INT\_MAX\_256\_BIT](HexHelper.md#big_int_max_256_bit)
+
 ### Methods
 
 - [fromBigInt256](HexHelper.md#frombigint256)
@@ -15,6 +19,14 @@ Helper methods for hex conversions.
 ### Constructors
 
 - [constructor](HexHelper.md#constructor)
+
+## Properties
+
+### BIG\_INT\_MAX\_256\_BIT
+
+▪ `Static` `Readonly` **BIG\_INT\_MAX\_256\_BIT**: `BigInteger`
+
+Const defining the maximum value for a 256 bit int.
 
 ## Methods
 
