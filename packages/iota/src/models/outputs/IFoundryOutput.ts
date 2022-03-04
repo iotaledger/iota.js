@@ -30,9 +30,14 @@ export interface IFoundryOutput extends ITypeBase<5>, ICommonOutput {
     tokenTag: string;
 
     /**
-     * Circulating supply of tokens controlled by this foundry.
+     * Amount of tokens minted by this foundry.
      */
-    circulatingSupply: string;
+    mintedTokens: string;
+
+    /**
+     * Amount of tokens melted by this foundry.
+     */
+    meltedTokens: string;
 
     /**
      * Maximum supply of tokens controlled by this foundry.

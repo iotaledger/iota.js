@@ -56,7 +56,8 @@ export function deserializeFoundryOutput(readStream: ReadStream): IFoundryOutput
     const nativeTokens = deserializeNativeTokens(readStream);
     const serialNumber = readStream.readUInt32("foundryOutput.serialNumber");
     const tokenTag = readStream.readFixedHex("foundryOutput.tokenTag", NATIVE_TOKEN_TAG_LENGTH);
-    const circulatingSupply = readStream.readUInt256("foundryOutput.circulatingSupply");
+    const mintedTokens = readStream.readUInt256("foundryOutput.mintedTokens");
+    const meltedTokens = readStream.readUInt256("foundryOutput.meltedTokens");
     const maximumSupply = readStream.readUInt256("foundryOutput.maximumSupply");
     const tokenScheme = deserializeTokenScheme(readStream);
     const unlockConditions = deserializeUnlockConditions(readStream);
@@ -69,7 +70,8 @@ export function deserializeFoundryOutput(readStream: ReadStream): IFoundryOutput
         nativeTokens,
         serialNumber,
         tokenTag,
-        circulatingSupply: HexHelper.fromBigInt256(circulatingSupply),
+        mintedTokens: HexHelper.fromBigInt256(mintedTokens),
+        meltedTokens: HexHelper.fromBigInt256(meltedTokens),
         maximumSupply: HexHelper.fromBigInt256(maximumSupply),
         tokenScheme,
         unlockConditions,
@@ -90,7 +92,8 @@ export function serializeFoundryOutput(writeStream: WriteStream, object: IFoundr
     serializeNativeTokens(writeStream, object.nativeTokens);
     writeStream.writeUInt32("foundryOutput.serialNumber", object.serialNumber);
     writeStream.writeFixedHex("foundryOutput.tokenTag", NATIVE_TOKEN_TAG_LENGTH, object.tokenTag);
-    writeStream.writeUInt256("foundryOutput.circulatingSupply", HexHelper.toBigInt256(object.circulatingSupply));
+    writeStream.writeUInt256("foundryOutput.mintedTokens", HexHelper.toBigInt256(object.mintedTokens));
+    writeStream.writeUInt256("foundryOutput.meltedTokens", HexHelper.toBigInt256(object.meltedTokens));
     writeStream.writeUInt256("foundryOutput.maximumSupply", HexHelper.toBigInt256(object.maximumSupply));
     serializeTokenScheme(writeStream, object.tokenScheme);
     serializeUnlockConditions(writeStream, object.unlockConditions);

@@ -378,7 +378,8 @@ export function logOutput(prefix: string, output?: OutputTypes): void {
             logNativeTokens(`${prefix}\t\t`, output.nativeTokens);
             logger(`${prefix}\t\tSerial Number:`, output.serialNumber);
             logger(`${prefix}\t\tToken Tag:`, output.tokenTag);
-            logger(`${prefix}\t\tCirculating Supply:`, output.circulatingSupply);
+            logger(`${prefix}\t\tMinted Tokens:`, output.mintedTokens);
+            logger(`${prefix}\t\tMelted Tokens:`, output.meltedTokens);
             logger(`${prefix}\t\tMaximum Supply:`, output.maximumSupply);
             logTokenScheme(`${prefix}\t\t`, output.tokenScheme);
             logUnlockConditions(`${prefix}\t\t`, output.unlockConditions);
