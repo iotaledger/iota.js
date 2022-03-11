@@ -11,3 +11,6 @@ updates:
           - L - Awaiting reviews
           - dependencies
       versioning-strategy: increase
+      ignore:
+      - dependency-name: "node-fetch"
+        versions: ["3.x", "4.x"]
