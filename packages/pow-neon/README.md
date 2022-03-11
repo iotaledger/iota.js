@@ -9,7 +9,7 @@ You will need the rust toolchain installed so that the native module can be buil
 ## Install
 
 ```shell
-npm install @iota/pow-neon.js@1.9.0-stardust.3
+npm install @iota/pow-neon.js@1.9.0-stardust.4
 ```
 
 ## Usage
