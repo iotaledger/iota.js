@@ -3,15 +3,13 @@
 import { Bip32Path } from "@iota/crypto.js";
 import bigInt, { BigInteger } from "big-integer";
 import { Ed25519Address } from "../addressTypes/ed25519Address";
-import { IndexerPluginClient } from "../clients/plugins/indexerPluginClient";
 import { SingleNodeClient } from "../clients/singleNodeClient";
 import { ED25519_ADDRESS_TYPE } from "../models/addresses/IEd25519Address";
-import type { IOutputsResponse } from "../models/api/plugins/indexer/IOutputsResponse";
 import type { IBip44GeneratorState } from "../models/IBip44GeneratorState";
 import type { IClient } from "../models/IClient";
 import type { ISeed } from "../models/ISeed";
-import { BASIC_OUTPUT_TYPE } from "../models/outputs/IBasicOutput";
 import { Bech32Helper } from "../utils/bech32Helper";
+import { addressBalance } from "./addressBalance";
 import { generateBip44Address } from "./addresses";
 
 /**
@@ -107,11 +105,11 @@ export async function getUnspentAddressesWithAddressGenerator<T>(
         const addressBytes = ed25519Address.toAddress();
         const addressBech32 = Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, addressBytes, protocolInfo.bech32HRP);
 
-        const balance = await calculateAddressBalance(localClient, addressBech32);
+        const balance = await addressBalance(localClient, addressBech32);
 
         // If there is no balance we increment the counter and end
         // the text when we have reached the count
-        if (balance.equals(bigInt(0))) {
+        if (balance.balance.equals(bigInt(0))) {
             zeroBalance++;
             if (zeroBalance >= localZeroCount) {
                 finished = true;
@@ -120,7 +118,7 @@ export async function getUnspentAddressesWithAddressGenerator<T>(
             allUnspent.push({
                 address: addressBech32,
                 path,
-                balance
+                balance: balance.balance
             });
 
             if (allUnspent.length === localRequiredLimit) {
@@ -130,36 +128,4 @@ export async function getUnspentAddressesWithAddressGenerator<T>(
     } while (!finished);
 
     return allUnspent;
-}
-
-/**
- * Calculate address balance for an address.
- * @param client The client for communications.
- * @param addressBech32 The address in bech32 format.
- * @returns The unspent balance.
- */
-export async function calculateAddressBalance(client: IClient, addressBech32: string): Promise<BigInteger> {
-    const indexerPlugin = new IndexerPluginClient(client);
-
-    let count = 0;
-    let cursor;
-    let balance: BigInteger = bigInt(0);
-    do {
-        const outputResponse: IOutputsResponse =
-            await indexerPlugin.outputs({
-                addressBech32,
-                pageSize: 20,
-                cursor
-            });
-        count = outputResponse.items.length;
-        cursor = outputResponse.cursor;
-        for (const outputId of outputResponse.items) {
-            const output = await client.output(outputId);
-            if (output.output.type === BASIC_OUTPUT_TYPE && !output.isSpent) {
-                balance = balance.add(bigInt(output.output.amount));
-            }
-        }
-    } while (count > 0 && cursor);
-
-    return balance;
 }

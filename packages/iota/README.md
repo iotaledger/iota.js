@@ -51,6 +51,7 @@ The class and method documentation can be found in [./docs/api.md](./docs/api.md
 
 There are also high level operations which make use of the API level methods:
 
+* addressBalance - Get the balance and native tokens for an address.
 * getBalance - Given a seed and account index calculate the total balance available on it's addresses.
 * getUnspentAddress - Given a seed, account index, and start index find the next unspent address.
 * getUnspentAddresses - Given a seed, account index, and start index find all the unspent addresses.

@@ -212,13 +212,13 @@
 - [serializeUnlockConditions](api.md#serializeunlockconditions)
 - [deserializeUnlockCondition](api.md#deserializeunlockcondition)
 - [serializeUnlockCondition](api.md#serializeunlockcondition)
+- [addressBalance](api.md#addressbalance)
 - [generateBip44Path](api.md#generatebip44path)
 - [generateBip44Address](api.md#generatebip44address)
 - [getBalance](api.md#getbalance)
 - [getUnspentAddress](api.md#getunspentaddress)
 - [getUnspentAddresses](api.md#getunspentaddresses)
 - [getUnspentAddressesWithAddressGenerator](api.md#getunspentaddresseswithaddressgenerator)
-- [calculateAddressBalance](api.md#calculateaddressbalance)
 - [promote](api.md#promote)
 - [reattach](api.md#reattach)
 - [retrieveData](api.md#retrievedata)
@@ -2916,6 +2916,27 @@ Serialize the unlock condition to binary.
 
 ___
 
+### addressBalance
+
+▸ **addressBalance**(`client`, `addressBech32`): `Promise`<{}\>
+
+Get the balance for an address.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `client` | `string` \| [`IClient`](interfaces/IClient.md) | The client or node endpoint to get the information from. |
+| `addressBech32` | `string` | The address to get the balances for. |
+
+#### Returns
+
+`Promise`<{}\>
+
+The balance.
+
+___
+
 ### generateBip44Path
 
 ▸ **generateBip44Path**(`accountIndex`, `addressIndex`, `isInternal`): `Bip32Path`
@@ -3054,27 +3075,6 @@ Get all the unspent addresses using an address generator.
 `Promise`<{}[]\>
 
 All the unspent addresses.
-
-___
-
-### calculateAddressBalance
-
-▸ **calculateAddressBalance**(`client`, `addressBech32`): `Promise`<`BigInteger`\>
-
-Calculate address balance for an address.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `client` | [`IClient`](interfaces/IClient.md) | The client for communications. |
-| `addressBech32` | `string` | The address in bech32 format. |
-
-#### Returns
-
-`Promise`<`BigInteger`\>
-
-The unspent balance.
 
 ___
 

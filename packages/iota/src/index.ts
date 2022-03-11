@@ -46,6 +46,7 @@ export * from "./clients/plugins/indexerPluginClient";
 export * from "./clients/singleNodeClient";
 export * from "./clients/singleNodeClientOptions";
 export * from "./encoding/b1t6";
+export * from "./highLevel/addressBalance";
 export * from "./highLevel/addresses";
 export * from "./highLevel/getBalance";
 export * from "./highLevel/getUnspentAddress";
