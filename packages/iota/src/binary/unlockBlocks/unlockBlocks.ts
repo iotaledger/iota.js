@@ -2,9 +2,21 @@
 // SPDX-License-Identifier: Apache-2.0
 import type { ReadStream, WriteStream } from "@iota/util.js";
 import type { ITypeBase } from "../../models/ITypeBase";
+import { ALIAS_UNLOCK_BLOCK_TYPE } from "../../models/unlockBlocks/IAliasUnlockBlock";
+import { NFT_UNLOCK_BLOCK_TYPE } from "../../models/unlockBlocks/INftUnlockBlock";
 import { REFERENCE_UNLOCK_BLOCK_TYPE } from "../../models/unlockBlocks/IReferenceUnlockBlock";
 import { SIGNATURE_UNLOCK_BLOCK_TYPE } from "../../models/unlockBlocks/ISignatureUnlockBlock";
 import type { UnlockBlockTypes } from "../../models/unlockBlocks/unlockBlockTypes";
+import {
+    deserializeAliasUnlockBlock,
+    MIN_ALIAS_UNLOCK_BLOCK_LENGTH,
+    serializeAliasUnlockBlock
+} from "./aliasUnlockBlock";
+import {
+    deserializeNftUnlockBlock,
+    MIN_NFT_UNLOCK_BLOCK_LENGTH,
+    serializeNftUnlockBlock
+} from "./nftUnlockBlock";
 import {
     deserializeReferenceUnlockBlock,
     MIN_REFERENCE_UNLOCK_BLOCK_LENGTH,
@@ -21,7 +33,9 @@ import {
  */
 export const MIN_UNLOCK_BLOCK_LENGTH: number = Math.min(
     MIN_SIGNATURE_UNLOCK_BLOCK_LENGTH,
-    MIN_REFERENCE_UNLOCK_BLOCK_LENGTH
+    MIN_REFERENCE_UNLOCK_BLOCK_LENGTH,
+    MIN_ALIAS_UNLOCK_BLOCK_LENGTH,
+    MIN_NFT_UNLOCK_BLOCK_LENGTH
 );
 
 /**
@@ -70,6 +84,10 @@ export function deserializeUnlockBlock(readStream: ReadStream): UnlockBlockTypes
         unlockBlock = deserializeSignatureUnlockBlock(readStream);
     } else if (type === REFERENCE_UNLOCK_BLOCK_TYPE) {
         unlockBlock = deserializeReferenceUnlockBlock(readStream);
+    } else if (type === ALIAS_UNLOCK_BLOCK_TYPE) {
+        unlockBlock = deserializeAliasUnlockBlock(readStream);
+    } else if (type === NFT_UNLOCK_BLOCK_TYPE) {
+        unlockBlock = deserializeNftUnlockBlock(readStream);
     } else {
         throw new Error(`Unrecognized unlock block type ${type}`);
     }
@@ -87,6 +105,10 @@ export function serializeUnlockBlock(writeStream: WriteStream, object: UnlockBlo
         serializeSignatureUnlockBlock(writeStream, object);
     } else if (object.type === REFERENCE_UNLOCK_BLOCK_TYPE) {
         serializeReferenceUnlockBlock(writeStream, object);
+    } else if (object.type === ALIAS_UNLOCK_BLOCK_TYPE) {
+        serializeAliasUnlockBlock(writeStream, object);
+    } else if (object.type === NFT_UNLOCK_BLOCK_TYPE) {
+        serializeNftUnlockBlock(writeStream, object);
     } else {
         throw new Error(`Unrecognized unlock block type ${(object as ITypeBase<number>).type}`);
     }

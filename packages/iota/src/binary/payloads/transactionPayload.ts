@@ -56,7 +56,7 @@ export function deserializeTransactionPayload(readStream: ReadStream): ITransact
  * @param object The object to serialize.
  */
 export function serializeTransactionPayload(writeStream: WriteStream, object: ITransactionPayload): void {
-    writeStream.writeUInt32("payloadMilestone.type", object.type);
+    writeStream.writeUInt32("payloadTransaction.type", object.type);
 
     if (object.type === TRANSACTION_PAYLOAD_TYPE) {
         serializeTransactionEssence(writeStream, object.essence);

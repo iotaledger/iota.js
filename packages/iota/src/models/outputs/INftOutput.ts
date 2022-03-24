@@ -26,5 +26,5 @@ export interface INftOutput extends ITypeBase<6>, ICommonOutput {
     /**
      * Immutable blocks contained by the output.
      */
-    immutableBlocks: FeatureBlockTypes[];
+    immutableFeatureBlocks: FeatureBlockTypes[];
 }

@@ -371,7 +371,7 @@ export function logOutput(prefix: string, output?: OutputTypes): void {
             logger(`${prefix}\t\tFoundry Counter:`, output.foundryCounter);
             logUnlockConditions(`${prefix}\t\t`, output.unlockConditions);
             logFeatureBlocks(`${prefix}\t\t`, output.featureBlocks);
-            logImmutableFeatureBlocks(`${prefix}\t\t`, output.immutableBlocks);
+            logImmutableFeatureBlocks(`${prefix}\t\t`, output.immutableFeatureBlocks);
         } else if (output.type === FOUNDRY_OUTPUT_TYPE) {
             logger(`${prefix}Foundry Output`);
             logger(`${prefix}\t\tAmount:`, output.amount);
@@ -384,7 +384,7 @@ export function logOutput(prefix: string, output?: OutputTypes): void {
             logTokenScheme(`${prefix}\t\t`, output.tokenScheme);
             logUnlockConditions(`${prefix}\t\t`, output.unlockConditions);
             logFeatureBlocks(`${prefix}\t\t`, output.featureBlocks);
-            logImmutableFeatureBlocks(`${prefix}\t\t`, output.immutableBlocks);
+            logImmutableFeatureBlocks(`${prefix}\t\t`, output.immutableFeatureBlocks);
         } else if (output.type === NFT_OUTPUT_TYPE) {
             logger(`${prefix}NFT Output`);
             logger(`${prefix}\t\tAmount:`, output.amount);
@@ -392,7 +392,7 @@ export function logOutput(prefix: string, output?: OutputTypes): void {
             logger(`${prefix}\t\tNFT Id:`, output.nftId);
             logUnlockConditions(`${prefix}\t\t`, output.unlockConditions);
             logFeatureBlocks(`${prefix}\t\t`, output.featureBlocks);
-            logImmutableFeatureBlocks(`${prefix}\t\t`, output.immutableBlocks);
+            logImmutableFeatureBlocks(`${prefix}\t\t`, output.immutableFeatureBlocks);
         }
     }
 }

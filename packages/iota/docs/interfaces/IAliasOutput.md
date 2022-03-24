@@ -20,7 +20,7 @@ Alias output.
 - [stateIndex](IAliasOutput.md#stateindex)
 - [stateMetadata](IAliasOutput.md#statemetadata)
 - [foundryCounter](IAliasOutput.md#foundrycounter)
-- [immutableBlocks](IAliasOutput.md#immutableblocks)
+- [immutableFeatureBlocks](IAliasOutput.md#immutablefeatureblocks)
 - [nativeTokens](IAliasOutput.md#nativetokens)
 - [unlockConditions](IAliasOutput.md#unlockconditions)
 - [featureBlocks](IAliasOutput.md#featureblocks)
@@ -79,9 +79,9 @@ A counter that denotes the number of foundries created by this alias account.
 
 ___
 
-### immutableBlocks
+### immutableFeatureBlocks
 
-• **immutableBlocks**: [`FeatureBlockTypes`](../api.md#featureblocktypes)[]
+• **immutableFeatureBlocks**: [`FeatureBlockTypes`](../api.md#featureblocktypes)[]
 
 Immutable blocks contained by the output.
 

@@ -41,5 +41,5 @@ export interface IAliasOutput extends ITypeBase<4>, ICommonOutput {
     /**
      * Immutable blocks contained by the output.
      */
-    immutableBlocks: FeatureBlockTypes[];
+    immutableFeatureBlocks: FeatureBlockTypes[];
 }

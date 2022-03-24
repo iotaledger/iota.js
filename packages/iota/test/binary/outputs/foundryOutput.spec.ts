@@ -40,7 +40,7 @@ describe("Binary Foundry Output", () => {
                 }
             ],
             featureBlocks: [],
-            immutableBlocks: []
+            immutableFeatureBlocks: []
         };
 
         const serialized = new WriteStream();

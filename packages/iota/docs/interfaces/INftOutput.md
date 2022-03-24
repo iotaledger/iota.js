@@ -20,7 +20,7 @@ NFT output.
 - [featureBlocks](INftOutput.md#featureblocks)
 - [amount](INftOutput.md#amount)
 - [nftId](INftOutput.md#nftid)
-- [immutableBlocks](INftOutput.md#immutableblocks)
+- [immutableFeatureBlocks](INftOutput.md#immutablefeatureblocks)
 
 ## Properties
 
@@ -88,8 +88,8 @@ Unique identifier of the NFT, which is the BLAKE2b-160 hash of the Output ID tha
 
 ___
 
-### immutableBlocks
+### immutableFeatureBlocks
 
-• **immutableBlocks**: [`FeatureBlockTypes`](../api.md#featureblocktypes)[]
+• **immutableFeatureBlocks**: [`FeatureBlockTypes`](../api.md#featureblocktypes)[]
 
 Immutable blocks contained by the output.

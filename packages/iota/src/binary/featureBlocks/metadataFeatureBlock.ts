@@ -26,7 +26,7 @@ export function deserializeMetadataFeatureBlock(readStream: ReadStream): IMetada
         throw new Error(`Type mismatch in metadataFeatureBlock ${type}`);
     }
 
-    const dataLength = readStream.readUInt32("metadataFeatureBlock.dataLength");
+    const dataLength = readStream.readUInt16("metadataFeatureBlock.dataLength");
     const data = readStream.readFixedHex("metadataFeatureBlock.data", dataLength);
 
     return {
@@ -43,6 +43,6 @@ export function deserializeMetadataFeatureBlock(readStream: ReadStream): IMetada
 export function serializeMetadataFeatureBlock(writeStream: WriteStream, object: IMetadataFeatureBlock): void {
     writeStream.writeUInt8("metadataFeatureBlock.type", object.type);
     const data = HexHelper.stripPrefix(object.data);
-    writeStream.writeUInt32("metadataFeatureBlock.dataLength", data.length / 2);
+    writeStream.writeUInt16("metadataFeatureBlock.dataLength", data.length / 2);
     writeStream.writeFixedHex("metadataFeatureBlock.data", data.length / 2, data);
 }

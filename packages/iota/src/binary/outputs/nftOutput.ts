@@ -52,7 +52,7 @@ export function deserializeNftOutput(readStream: ReadStream): INftOutput {
 
     const unlockConditions = deserializeUnlockConditions(readStream);
     const featureBlocks = deserializeFeatureBlocks(readStream);
-    const immutableBlocks = deserializeFeatureBlocks(readStream);
+    const immutableFeatureBlocks = deserializeFeatureBlocks(readStream);
 
     return {
         type: NFT_OUTPUT_TYPE,
@@ -61,7 +61,7 @@ export function deserializeNftOutput(readStream: ReadStream): INftOutput {
         nftId,
         unlockConditions,
         featureBlocks,
-        immutableBlocks
+        immutableFeatureBlocks
     };
 }
 
@@ -79,5 +79,5 @@ export function serializeNftOutput(writeStream: WriteStream, object: INftOutput)
 
     serializeUnlockConditions(writeStream, object.unlockConditions);
     serializeFeatureBlocks(writeStream, object.featureBlocks);
-    serializeFeatureBlocks(writeStream, object.immutableBlocks);
+    serializeFeatureBlocks(writeStream, object.immutableFeatureBlocks);
 }

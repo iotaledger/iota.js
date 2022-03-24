@@ -25,7 +25,7 @@ Foundry output.
 - [meltedTokens](IFoundryOutput.md#meltedtokens)
 - [maximumSupply](IFoundryOutput.md#maximumsupply)
 - [tokenScheme](IFoundryOutput.md#tokenscheme)
-- [immutableBlocks](IFoundryOutput.md#immutableblocks)
+- [immutableFeatureBlocks](IFoundryOutput.md#immutablefeatureblocks)
 
 ## Properties
 
@@ -133,8 +133,8 @@ The token scheme for the foundry.
 
 ___
 
-### immutableBlocks
+### immutableFeatureBlocks
 
-• **immutableBlocks**: [`FeatureBlockTypes`](../api.md#featureblocktypes)[]
+• **immutableFeatureBlocks**: [`FeatureBlockTypes`](../api.md#featureblocktypes)[]
 
 Immutable blocks contained by the output.

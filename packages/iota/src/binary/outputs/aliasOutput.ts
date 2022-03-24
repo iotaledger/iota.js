@@ -55,7 +55,7 @@ export function deserializeAliasOutput(readStream: ReadStream): IAliasOutput {
 
     const stateIndex = readStream.readUInt32("aliasOutput.stateIndex");
 
-    const stateMetadataLength = readStream.readUInt32("aliasOutput.stateMetadataLength");
+    const stateMetadataLength = readStream.readUInt16("aliasOutput.stateMetadataLength");
     const stateMetadata = readStream.readFixedHex("aliasOutput.stateMetadata", stateMetadataLength);
 
     const foundryCounter = readStream.readUInt32("aliasOutput.foundryCounter");
@@ -64,7 +64,7 @@ export function deserializeAliasOutput(readStream: ReadStream): IAliasOutput {
 
     const featureBlocks = deserializeFeatureBlocks(readStream);
 
-    const immutableBlocks = deserializeFeatureBlocks(readStream);
+    const immutableFeatureBlocks = deserializeFeatureBlocks(readStream);
 
     return {
         type: ALIAS_OUTPUT_TYPE,
@@ -76,7 +76,7 @@ export function deserializeAliasOutput(readStream: ReadStream): IAliasOutput {
         foundryCounter,
         unlockConditions,
         featureBlocks,
-        immutableBlocks
+        immutableFeatureBlocks
     };
 }
 
@@ -96,7 +96,7 @@ export function serializeAliasOutput(writeStream: WriteStream, object: IAliasOut
     writeStream.writeUInt32("aliasOutput.stateIndex", object.stateIndex);
 
     const stateMetadata = HexHelper.stripPrefix(object.stateMetadata);
-    writeStream.writeUInt32("aliasOutput.stateMetadataLength", stateMetadata.length / 2);
+    writeStream.writeUInt16("aliasOutput.stateMetadataLength", stateMetadata.length / 2);
     if (stateMetadata.length > 0) {
         writeStream.writeFixedHex("aliasOutput.stateMetadata", stateMetadata.length / 2, stateMetadata);
     }
@@ -106,5 +106,5 @@ export function serializeAliasOutput(writeStream: WriteStream, object: IAliasOut
     serializeUnlockConditions(writeStream, object.unlockConditions);
 
     serializeFeatureBlocks(writeStream, object.featureBlocks);
-    serializeFeatureBlocks(writeStream, object.immutableBlocks);
+    serializeFeatureBlocks(writeStream, object.immutableFeatureBlocks);
 }

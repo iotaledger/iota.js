@@ -62,7 +62,7 @@ export function deserializeFoundryOutput(readStream: ReadStream): IFoundryOutput
     const tokenScheme = deserializeTokenScheme(readStream);
     const unlockConditions = deserializeUnlockConditions(readStream);
     const featureBlocks = deserializeFeatureBlocks(readStream);
-    const immutableBlocks = deserializeFeatureBlocks(readStream);
+    const immutableFeatureBlocks = deserializeFeatureBlocks(readStream);
 
     return {
         type: FOUNDRY_OUTPUT_TYPE,
@@ -76,7 +76,7 @@ export function deserializeFoundryOutput(readStream: ReadStream): IFoundryOutput
         tokenScheme,
         unlockConditions,
         featureBlocks: featureBlocks as IMetadataFeatureBlock[],
-        immutableBlocks
+        immutableFeatureBlocks
     };
 }
 
@@ -98,5 +98,5 @@ export function serializeFoundryOutput(writeStream: WriteStream, object: IFoundr
     serializeTokenScheme(writeStream, object.tokenScheme);
     serializeUnlockConditions(writeStream, object.unlockConditions);
     serializeFeatureBlocks(writeStream, object.featureBlocks);
-    serializeFeatureBlocks(writeStream, object.immutableBlocks);
+    serializeFeatureBlocks(writeStream, object.immutableFeatureBlocks);
 }

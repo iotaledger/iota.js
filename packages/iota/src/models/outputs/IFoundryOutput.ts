@@ -52,5 +52,5 @@ export interface IFoundryOutput extends ITypeBase<5>, ICommonOutput {
     /**
      * Immutable blocks contained by the output.
      */
-    immutableBlocks: FeatureBlockTypes[];
+    immutableFeatureBlocks: FeatureBlockTypes[];
 }
