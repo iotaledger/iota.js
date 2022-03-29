@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.9.0-stardust.5
+
+* Stardust message serialization fix
+
 ## v1.9.0-stardust.4
 
 * Stardust alpha release
