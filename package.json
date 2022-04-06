@@ -24,7 +24,7 @@
         "packages/pow-wasm"
     ],
     "dependencies": {
-        "prettier": "^2.4.1"
+        "prettier": "^2.6.2"
     },
     "scripts": {
         "dist-neon": "npm run postinstall --prefix packages/pow-neon",
