@@ -4,7 +4,7 @@ Milestone payload.
 
 ## Hierarchy
 
-- [`ITypeBase`](ITypeBase.md)<``1``\>
+- [`ITypeBase`](ITypeBase.md)<``7``\>
 
   ↳ **`IMilestonePayload`**
 
@@ -27,7 +27,7 @@ Milestone payload.
 
 ### type
 
-• **type**: ``1``
+• **type**: ``7``
 
 The type of the object.
 
@@ -87,7 +87,7 @@ ___
 
 ### metadata
 
-• **metadata**: `string`[]
+• **metadata**: `string`
 
 Hex-encoded binary data with 0x prefix.
 
@@ -95,7 +95,7 @@ ___
 
 ### signatures
 
-• **signatures**: `string`[]
+• **signatures**: [`IEd25519Signature`](IEd25519Signature.md)[]
 
 The signatures.
 

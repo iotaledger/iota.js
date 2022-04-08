@@ -731,7 +731,7 @@ ___
 
 ### MIN\_SIMPLE\_TOKEN\_SCHEME\_LENGTH
 
-• `Const` **MIN\_SIMPLE\_TOKEN\_SCHEME\_LENGTH**: `number` = `SMALL_TYPE_LENGTH`
+• `Const` **MIN\_SIMPLE\_TOKEN\_SCHEME\_LENGTH**: `number`
 
 The minimum length of an simple token scheme binary representation.
 
@@ -1003,7 +1003,7 @@ ___
 
 ### MILESTONE\_PAYLOAD\_TYPE
 
-• `Const` **MILESTONE\_PAYLOAD\_TYPE**: ``1``
+• `Const` **MILESTONE\_PAYLOAD\_TYPE**: ``7``
 
 The global type for the payload.
 

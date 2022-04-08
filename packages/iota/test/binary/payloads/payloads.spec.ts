@@ -75,7 +75,6 @@ describe("Binary Payload", () => {
         buffer.write("c0ab1d1f6886ba6317634da6b2d957e7c987a9699dd3707d1e2751fcf4b8efe3", 21, "hex"); // Parent 1
         buffer.write("04ba147c9cc9bebd3b97310a23d385f33d8e67ac42868b69bc06f5468e3c0a02", 53, "hex"); // Parent 2
         buffer.write("786a02f742015903c6c6fd852552d272912f4740e15847618a86e217f71f5419", 85, "hex"); // Inclusion Merkle proof
-        
         buffer.writeUInt32LE(0, 117); // Next PoW Score
         buffer.writeUInt32LE(0, 121); // Next PoW Score Milestone index
         buffer.writeUInt16LE(8, 125); // metadata count
@@ -117,7 +116,7 @@ describe("Binary Payload", () => {
         expect(payload.nextPoWScoreMilestoneIndex).toEqual(0);
         expect(payload.metadata).toEqual(
             "0x1111111122222222"
-        );    
+        );
         expect(payload.receipt).toBeUndefined();
         expect(payload.signatures.length).toEqual(2);
         expect(payload.signatures[0].type).toEqual(0);

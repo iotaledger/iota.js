@@ -4,7 +4,7 @@ import type { ReadStream, WriteStream } from "@iota/util.js";
 import bigInt from "big-integer";
 import type { IMetadataFeatureBlock } from "../../models/featureBlocks/IMetadataFeatureBlock";
 import { FOUNDRY_OUTPUT_TYPE, IFoundryOutput } from "../../models/outputs/IFoundryOutput";
-import { SMALL_TYPE_LENGTH, UINT256_SIZE, UINT32_SIZE, UINT64_SIZE } from "../commonDataTypes";
+import { SMALL_TYPE_LENGTH, UINT32_SIZE, UINT64_SIZE } from "../commonDataTypes";
 import {
     deserializeFeatureBlocks,
     MIN_FEATURE_BLOCKS_LENGTH,

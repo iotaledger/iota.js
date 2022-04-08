@@ -9,7 +9,7 @@ import { SMALL_TYPE_LENGTH, UINT256_SIZE } from "../commonDataTypes";
  * The minimum length of an simple token scheme binary representation.
  */
 export const MIN_SIMPLE_TOKEN_SCHEME_LENGTH: number =
-    SMALL_TYPE_LENGTH + //type
+    SMALL_TYPE_LENGTH + // type
     UINT256_SIZE + // Minted
     UINT256_SIZE + // Melted
     UINT256_SIZE; // Maximum Supply;

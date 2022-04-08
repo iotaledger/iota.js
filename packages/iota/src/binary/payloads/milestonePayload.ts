@@ -13,12 +13,12 @@ import {
     UINT8_SIZE,
     UINT16_SIZE,
     UINT32_SIZE,
-    UINT64_SIZE    
+    UINT64_SIZE
 } from "../commonDataTypes";
 import { MAX_NUMBER_PARENTS, MIN_NUMBER_PARENTS } from "../message";
-import { deserializePayload, serializePayload } from "./payloads";
-import { deserializeSignature, serializeSignature } from "../signatures/signatures";
 import { MIN_ED25519_SIGNATURE_LENGTH } from "../signatures/ed25519Signature";
+import { deserializeSignature, serializeSignature } from "../signatures/signatures";
+import { deserializePayload, serializePayload } from "./payloads";
 
 /**
  * The minimum length of a milestone payload binary representation.
@@ -31,7 +31,7 @@ export const MIN_MILESTONE_PAYLOAD_LENGTH: number =
     MESSAGE_ID_LENGTH + // parent 2
     MERKLE_PROOF_LENGTH + // merkle proof
     2 * UINT32_SIZE + // Next pow score and pow score milestone index
-    UINT16_SIZE + //metadata
+    UINT16_SIZE + // metadata
     UINT8_SIZE + // signatureCount
     MIN_ED25519_SIGNATURE_LENGTH; // 1 signature
 
@@ -145,7 +145,7 @@ export function serializeMilestonePayload(writeStream: WriteStream, object: IMil
     if (metadata.length > 0) {
         writeStream.writeFixedHex("payloadMilestone.metadata", metadata.length / 2, metadata);
     }
-    
+
     serializePayload(writeStream, object.receipt as IReceiptPayload);
 
     writeStream.writeUInt8("payloadMilestone.signaturesCount", object.signatures.length);
