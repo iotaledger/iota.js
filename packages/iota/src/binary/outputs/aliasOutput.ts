@@ -3,7 +3,7 @@
 import { HexHelper, ReadStream, WriteStream } from "@iota/util.js";
 import bigInt from "big-integer";
 import { ALIAS_OUTPUT_TYPE, IAliasOutput } from "../../models/outputs/IAliasOutput";
-import { SMALL_TYPE_LENGTH, UINT32_SIZE, UINT64_SIZE } from "../commonDataTypes";
+import { SMALL_TYPE_LENGTH, UINT16_SIZE, UINT32_SIZE, UINT64_SIZE } from "../commonDataTypes";
 import {
     deserializeFeatureBlocks, MIN_FEATURE_BLOCKS_LENGTH, serializeFeatureBlocks
 } from "../featureBlocks/featureBlocks";
@@ -24,7 +24,7 @@ export const MIN_ALIAS_OUTPUT_LENGTH: number =
     MIN_NATIVE_TOKENS_LENGTH + // Native Tokens
     ALIAS_ID_LENGTH + // Alias Id
     UINT32_SIZE + // State Index
-    UINT32_SIZE + // State Metatata Length
+    UINT16_SIZE + // State Metatata Length
     UINT32_SIZE + // Foundry counter
     MIN_UNLOCK_CONDITIONS_LENGTH + // Unlock conditions
     MIN_FEATURE_BLOCKS_LENGTH + // Feature Blocks

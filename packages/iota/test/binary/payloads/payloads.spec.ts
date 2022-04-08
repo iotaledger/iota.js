@@ -41,7 +41,7 @@ describe("Binary Payload", () => {
     test("Can fail with milestone payload too small", () => {
         const buffer = Buffer.alloc(8);
         buffer.writeUInt32LE(4, 0); // Payload length
-        buffer.writeUInt32LE(1, 4); // Payload type
+        buffer.writeUInt32LE(7, 4); // Payload type
         expect(() => deserializePayload(new ReadStream(buffer))).toThrow("minimimum size");
     });
 
@@ -66,34 +66,46 @@ describe("Binary Payload", () => {
     });
 
     test("Can succeed with valid milestone data", () => {
-        const buffer = Buffer.alloc(327);
+        const buffer = Buffer.alloc(337);
         buffer.writeUInt32LE(315, 0); // Payload length
-        buffer.writeUInt32LE(1, 4); // Payload type
+        buffer.writeUInt32LE(7, 4); // Payload type
         buffer.writeUInt32LE(1087, 8); // Milestone index
         buffer.writeBigUInt64LE(BigInt(1605190003), 12); // Milestone timestamp
         buffer.writeUInt8(2, 20); // Num parents
         buffer.write("c0ab1d1f6886ba6317634da6b2d957e7c987a9699dd3707d1e2751fcf4b8efe3", 21, "hex"); // Parent 1
         buffer.write("04ba147c9cc9bebd3b97310a23d385f33d8e67ac42868b69bc06f5468e3c0a02", 53, "hex"); // Parent 2
         buffer.write("786a02f742015903c6c6fd852552d272912f4740e15847618a86e217f71f5419", 85, "hex"); // Inclusion Merkle proof
+        
         buffer.writeUInt32LE(0, 117); // Next PoW Score
         buffer.writeUInt32LE(0, 121); // Next PoW Score Milestone index
-        buffer.writeUInt8(2, 125); // Public Key count
-        buffer.write("ed3c3f1a319ff4e909cf2771d79fece0ac9bd9fd2ee49ea6c0885c9cb3b1248c", 126, "hex"); // Public Key
-        buffer.write("f6752f5f46a53364e2ee9c4d662d762a81efd51010282a75cd6bd03f28ef349c", 158, "hex"); // Public Key
-        buffer.writeUInt32LE(0, 190); // receipt type
-        buffer.writeUInt8(2, 194); // Signature count
+        buffer.writeUInt16LE(8, 125); // metadata count
+        buffer.write("1111111122222222", 127, "hex"); // metadata
+        buffer.writeUInt32LE(0, 135); // receipt type
+        buffer.writeUInt8(2, 139); // Signature count
+        buffer.writeUInt8(0, 140); // Signature type
         buffer.write(
-            "f7a99cd2e2e80dd1c4d8ee63567d0ff5be00c3881568d155cf06607a6a78e2972b5d3b1e10dc60da214ae42abb95538f8faa872c90f60636427a36cf4739ac01",
-            195,
+            "d85e5b1590d898d1e0cdebb2e3b5337c8b76270142663d78811683ba47c17c98",
+            141,
+            "hex"
+        ); // Public key
+        buffer.write(
+            "15188080d5ef2f8a8fd08498243a30b2a8eb08e0910573101632bb244c9e27db26121c8af619d90de6cb5e5c407e4edd709e0e06702170e311a1668e0a12480d",
+            173,
             "hex"
         ); // Signature
+        buffer.writeUInt8(0, 237); // Signature type
         buffer.write(
-            "fc7c1c3174cc0d120c7d522adb3dda549a5f742e082fc2921c740b1b8723bde457498c047cdf6a7759bf7d94b22960d260a1de550e65abadb1a00404d619060c",
-            259,
+            "d9922819a39e94ddf3907f4b9c8df93f39f026244fcb609205b9a879022599f2",
+            238,
+            "hex"
+        ); // Public key
+        buffer.write(
+            "48afb8e21fbba0ba473b6798ecad3a33e10d1575fd5e3822e2922db4cc24b0808fd6792ee6eaaade15cdc14e43da16883962d15358dc064ba5bb2726cf07790a",
+            270,
             "hex"
         ); // Signature
         const payload = deserializePayload(new ReadStream(buffer)) as IMilestonePayload;
-        expect(payload.type).toEqual(1);
+        expect(payload.type).toEqual(7);
         expect(payload.index).toEqual(1087);
         expect(payload.timestamp).toEqual(1605190003);
         expect(payload.parentMessageIds[0]).toEqual("0xc0ab1d1f6886ba6317634da6b2d957e7c987a9699dd3707d1e2751fcf4b8efe3");
@@ -103,16 +115,24 @@ describe("Binary Payload", () => {
         );
         expect(payload.nextPoWScore).toEqual(0);
         expect(payload.nextPoWScoreMilestoneIndex).toEqual(0);
-        expect(payload.publicKeys.length).toEqual(2);
-        expect(payload.publicKeys[0]).toEqual("0xed3c3f1a319ff4e909cf2771d79fece0ac9bd9fd2ee49ea6c0885c9cb3b1248c");
-        expect(payload.publicKeys[1]).toEqual("0xf6752f5f46a53364e2ee9c4d662d762a81efd51010282a75cd6bd03f28ef349c");
+        expect(payload.metadata).toEqual(
+            "0x1111111122222222"
+        );    
         expect(payload.receipt).toBeUndefined();
         expect(payload.signatures.length).toEqual(2);
-        expect(payload.signatures[0]).toEqual(
-            "0xf7a99cd2e2e80dd1c4d8ee63567d0ff5be00c3881568d155cf06607a6a78e2972b5d3b1e10dc60da214ae42abb95538f8faa872c90f60636427a36cf4739ac01"
+        expect(payload.signatures[0].type).toEqual(0);
+        expect(payload.signatures[0].publicKey).toEqual(
+            "0xd85e5b1590d898d1e0cdebb2e3b5337c8b76270142663d78811683ba47c17c98"
         );
-        expect(payload.signatures[1]).toEqual(
-            "0xfc7c1c3174cc0d120c7d522adb3dda549a5f742e082fc2921c740b1b8723bde457498c047cdf6a7759bf7d94b22960d260a1de550e65abadb1a00404d619060c"
+        expect(payload.signatures[0].signature).toEqual(
+            "0x15188080d5ef2f8a8fd08498243a30b2a8eb08e0910573101632bb244c9e27db26121c8af619d90de6cb5e5c407e4edd709e0e06702170e311a1668e0a12480d"
+        );
+        expect(payload.signatures[1].type).toEqual(0);
+        expect(payload.signatures[1].publicKey).toEqual(
+            "0xd9922819a39e94ddf3907f4b9c8df93f39f026244fcb609205b9a879022599f2"
+        );
+        expect(payload.signatures[1].signature).toEqual(
+            "0x48afb8e21fbba0ba473b6798ecad3a33e10d1575fd5e3822e2922db4cc24b0808fd6792ee6eaaade15cdc14e43da16883962d15358dc064ba5bb2726cf07790a"
         );
     });
 

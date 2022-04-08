@@ -2,12 +2,12 @@
 // SPDX-License-Identifier: Apache-2.0
 import { HexHelper, ReadStream, WriteStream } from "@iota/util.js";
 import { IMetadataFeatureBlock, METADATA_FEATURE_BLOCK_TYPE } from "../../models/featureBlocks/IMetadataFeatureBlock";
-import { SMALL_TYPE_LENGTH, UINT32_SIZE } from "../commonDataTypes";
+import { SMALL_TYPE_LENGTH, UINT16_SIZE } from "../commonDataTypes";
 
 /**
  * The minimum length of a metadata feature block binary representation.
  */
-export const MIN_METADATA_FEATURE_BLOCK_LENGTH: number = SMALL_TYPE_LENGTH + UINT32_SIZE;
+export const MIN_METADATA_FEATURE_BLOCK_LENGTH: number = SMALL_TYPE_LENGTH + UINT16_SIZE;
 
 /**
  * Deserialize the metadata feature block from binary.

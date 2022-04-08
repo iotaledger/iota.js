@@ -1,17 +1,18 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 import type { ITypeBase } from "../ITypeBase";
+import type { IEd25519Signature } from "../signatures/IEd25519Signature";
 import type { IReceiptPayload } from "./IReceiptPayload";
 
 /**
  * The global type for the payload.
  */
-export const MILESTONE_PAYLOAD_TYPE = 1;
+export const MILESTONE_PAYLOAD_TYPE = 7;
 
 /**
  * Milestone payload.
  */
-export interface IMilestonePayload extends ITypeBase<1> {
+export interface IMilestonePayload extends ITypeBase<7> {
     /**
      * The index name.
      */
@@ -43,14 +44,14 @@ export interface IMilestonePayload extends ITypeBase<1> {
     nextPoWScoreMilestoneIndex: number;
 
     /**
-     * The public keys.
+     * Hex-encoded binary data with 0x prefix.
      */
-    publicKeys: string[];
+    metadata: string;
 
     /**
      * The signatures.
      */
-    signatures: string[];
+    signatures: IEd25519Signature[];
 
     /**
      * Receipt payload.

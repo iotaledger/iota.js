@@ -19,7 +19,7 @@ Milestone payload.
 - [inclusionMerkleProof](IMilestonePayload.md#inclusionmerkleproof)
 - [nextPoWScore](IMilestonePayload.md#nextpowscore)
 - [nextPoWScoreMilestoneIndex](IMilestonePayload.md#nextpowscoremilestoneindex)
-- [publicKeys](IMilestonePayload.md#publickeys)
+- [metadata](IMilestonePayload.md#metadata)
 - [signatures](IMilestonePayload.md#signatures)
 - [receipt](IMilestonePayload.md#receipt)
 
@@ -85,11 +85,11 @@ The milestone at which the next PoW score becomes active.
 
 ___
 
-### publicKeys
+### metadata
 
-• **publicKeys**: `string`[]
+• **metadata**: `string`[]
 
-The public keys.
+Hex-encoded binary data with 0x prefix.
 
 ___
 

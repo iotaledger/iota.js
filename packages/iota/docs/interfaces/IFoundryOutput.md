@@ -21,9 +21,6 @@ Foundry output.
 - [amount](IFoundryOutput.md#amount)
 - [serialNumber](IFoundryOutput.md#serialnumber)
 - [tokenTag](IFoundryOutput.md#tokentag)
-- [mintedTokens](IFoundryOutput.md#mintedtokens)
-- [meltedTokens](IFoundryOutput.md#meltedtokens)
-- [maximumSupply](IFoundryOutput.md#maximumsupply)
 - [tokenScheme](IFoundryOutput.md#tokenscheme)
 - [immutableFeatureBlocks](IFoundryOutput.md#immutablefeatureblocks)
 
@@ -98,30 +95,6 @@ ___
 • **tokenTag**: `string`
 
 Data that is always the last 12 bytes of ID of the tokens produced by this foundry.
-
-___
-
-### mintedTokens
-
-• **mintedTokens**: `string`
-
-Amount of tokens minted by this foundry.
-
-___
-
-### meltedTokens
-
-• **meltedTokens**: `string`
-
-Amount of tokens melted by this foundry.
-
-___
-
-### maximumSupply
-
-• **maximumSupply**: `string`
-
-Maximum supply of tokens controlled by this foundry.
 
 ___
 
