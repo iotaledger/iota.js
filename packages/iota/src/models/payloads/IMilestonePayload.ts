@@ -44,7 +44,7 @@ export interface IMilestonePayload extends ITypeBase<7> {
     nextPoWScoreMilestoneIndex: number;
 
     /**
-     * Hex-encoded binary data with 0x prefix.
+     * The metadata.
      */
     metadata: string;
 

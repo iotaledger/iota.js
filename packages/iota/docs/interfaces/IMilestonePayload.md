@@ -89,7 +89,7 @@ ___
 
 • **metadata**: `string`
 
-Hex-encoded binary data with 0x prefix.
+The metadata.
 
 ___
 

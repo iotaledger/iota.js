@@ -253,7 +253,7 @@ export class IndexerPluginClient {
      * @returns The output.
      */
     public async alias(aliasId: string): Promise<IOutputsResponse> {
-        if (!Converter.isHex(aliasId)) {
+        if (!Converter.isHex(aliasId, true)) {
             throw new Error("The alias id does not appear to be hex format");
         }
         return this._client.pluginFetch<never, IOutputsResponse>(
@@ -409,7 +409,7 @@ export class IndexerPluginClient {
      * @returns The output.
      */
     public async nft(nftId: string): Promise<IOutputsResponse> {
-        if (!Converter.isHex(nftId)) {
+        if (!Converter.isHex(nftId, true)) {
             throw new Error("The nft id does not appear to be hex format");
         }
         return this._client.pluginFetch<never, IOutputsResponse>(
@@ -483,9 +483,10 @@ export class IndexerPluginClient {
      * @returns The output.
      */
     public async foundry(foundryId: string): Promise<IOutputsResponse> {
-        if (!Converter.isHex(foundryId)) {
+        if (!Converter.isHex(foundryId, true)) {
             throw new Error("The foundry id does not appear to be hex format");
         }
+
         return this._client.pluginFetch<never, IOutputsResponse>(
             this._basePluginPath,
             "get",
