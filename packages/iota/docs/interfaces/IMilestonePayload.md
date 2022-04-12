@@ -4,7 +4,7 @@ Milestone payload.
 
 ## Hierarchy
 
-- [`ITypeBase`](ITypeBase.md)<``1``\>
+- [`ITypeBase`](ITypeBase.md)<``7``\>
 
   ↳ **`IMilestonePayload`**
 
@@ -19,7 +19,7 @@ Milestone payload.
 - [inclusionMerkleProof](IMilestonePayload.md#inclusionmerkleproof)
 - [nextPoWScore](IMilestonePayload.md#nextpowscore)
 - [nextPoWScoreMilestoneIndex](IMilestonePayload.md#nextpowscoremilestoneindex)
-- [publicKeys](IMilestonePayload.md#publickeys)
+- [metadata](IMilestonePayload.md#metadata)
 - [signatures](IMilestonePayload.md#signatures)
 - [receipt](IMilestonePayload.md#receipt)
 
@@ -27,7 +27,7 @@ Milestone payload.
 
 ### type
 
-• **type**: ``1``
+• **type**: ``7``
 
 The type of the object.
 
@@ -85,17 +85,17 @@ The milestone at which the next PoW score becomes active.
 
 ___
 
-### publicKeys
+### metadata
 
-• **publicKeys**: `string`[]
+• **metadata**: `string`
 
-The public keys.
+The metadata.
 
 ___
 
 ### signatures
 
-• **signatures**: `string`[]
+• **signatures**: [`IEd25519Signature`](IEd25519Signature.md)[]
 
 The signatures.
 

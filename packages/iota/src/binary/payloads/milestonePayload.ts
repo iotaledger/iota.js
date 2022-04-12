@@ -1,8 +1,8 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 /* eslint-disable no-mixed-operators */
-import { Ed25519 } from "@iota/crypto.js";
 import type { ReadStream, WriteStream } from "@iota/util.js";
+import { HexHelper } from "@iota/util.js";
 import bigInt from "big-integer";
 import { IMilestonePayload, MILESTONE_PAYLOAD_TYPE } from "../../models/payloads/IMilestonePayload";
 import { IReceiptPayload, RECEIPT_PAYLOAD_TYPE } from "../../models/payloads/IReceiptPayload";
@@ -10,11 +10,14 @@ import {
     MERKLE_PROOF_LENGTH,
     MESSAGE_ID_LENGTH,
     TYPE_LENGTH,
+    UINT8_SIZE,
+    UINT16_SIZE,
     UINT32_SIZE,
-    UINT64_SIZE,
-    UINT8_SIZE
+    UINT64_SIZE
 } from "../commonDataTypes";
 import { MAX_NUMBER_PARENTS, MIN_NUMBER_PARENTS } from "../message";
+import { MIN_ED25519_SIGNATURE_LENGTH } from "../signatures/ed25519Signature";
+import { deserializeSignature, serializeSignature } from "../signatures/signatures";
 import { deserializePayload, serializePayload } from "./payloads";
 
 /**
@@ -28,10 +31,9 @@ export const MIN_MILESTONE_PAYLOAD_LENGTH: number =
     MESSAGE_ID_LENGTH + // parent 2
     MERKLE_PROOF_LENGTH + // merkle proof
     2 * UINT32_SIZE + // Next pow score and pow score milestone index
-    UINT8_SIZE + // publicKeysCount
-    Ed25519.PUBLIC_KEY_SIZE + // 1 public key
+    UINT16_SIZE + // metadata
     UINT8_SIZE + // signatureCount
-    Ed25519.SIGNATURE_SIZE; // 1 signature
+    MIN_ED25519_SIGNATURE_LENGTH; // 1 signature
 
 /**
  * Deserialize the milestone payload from binary.
@@ -63,11 +65,8 @@ export function deserializeMilestonePayload(readStream: ReadStream): IMilestoneP
     const nextPoWScore = readStream.readUInt32("payloadMilestone.nextPoWScore");
     const nextPoWScoreMilestoneIndex = readStream.readUInt32("payloadMilestone.nextPoWScoreMilestoneIndex");
 
-    const publicKeysCount = readStream.readUInt8("payloadMilestone.publicKeysCount");
-    const publicKeys = [];
-    for (let i = 0; i < publicKeysCount; i++) {
-        publicKeys.push(readStream.readFixedHex("payloadMilestone.publicKey", Ed25519.PUBLIC_KEY_SIZE));
-    }
+    const metadataLength = readStream.readUInt16("payloadMilestone.metadataLength");
+    const metadata = readStream.readFixedHex("payloadMilestone.metadata", metadataLength);
 
     const receipt = deserializePayload(readStream);
     if (receipt && receipt.type !== RECEIPT_PAYLOAD_TYPE) {
@@ -77,7 +76,7 @@ export function deserializeMilestonePayload(readStream: ReadStream): IMilestoneP
     const signaturesCount = readStream.readUInt8("payloadMilestone.signaturesCount");
     const signatures = [];
     for (let i = 0; i < signaturesCount; i++) {
-        signatures.push(readStream.readFixedHex("payloadMilestone.signature", Ed25519.SIGNATURE_SIZE));
+        signatures.push(deserializeSignature(readStream));
     }
 
     return {
@@ -88,7 +87,7 @@ export function deserializeMilestonePayload(readStream: ReadStream): IMilestoneP
         inclusionMerkleProof,
         nextPoWScore,
         nextPoWScoreMilestoneIndex,
-        publicKeys,
+        metadata,
         receipt,
         signatures
     };
@@ -141,15 +140,16 @@ export function serializeMilestonePayload(writeStream: WriteStream, object: IMil
     writeStream.writeUInt32("payloadMilestone.nextPoWScore", object.nextPoWScore);
     writeStream.writeUInt32("payloadMilestone.nextPoWScoreMilestoneIndex", object.nextPoWScoreMilestoneIndex);
 
-    writeStream.writeUInt8("payloadMilestone.publicKeysCount", object.publicKeys.length);
-    for (let i = 0; i < object.publicKeys.length; i++) {
-        writeStream.writeFixedHex("payloadMilestone.publicKey", Ed25519.PUBLIC_KEY_SIZE, object.publicKeys[i]);
+    const metadata = HexHelper.stripPrefix(object.metadata);
+    writeStream.writeUInt16("payloadMilestone.metadataLength", metadata.length / 2);
+    if (metadata.length > 0) {
+        writeStream.writeFixedHex("payloadMilestone.metadata", metadata.length / 2, metadata);
     }
 
     serializePayload(writeStream, object.receipt as IReceiptPayload);
 
     writeStream.writeUInt8("payloadMilestone.signaturesCount", object.signatures.length);
     for (let i = 0; i < object.signatures.length; i++) {
-        writeStream.writeFixedHex("payloadMilestone.signature", Ed25519.SIGNATURE_SIZE, object.signatures[i]);
+        serializeSignature(writeStream, object.signatures[i]);
     }
 }

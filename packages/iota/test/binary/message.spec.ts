@@ -62,40 +62,55 @@ describe("Binary Message", () => {
 
     test("Can succeed with milestone data", () => {
         const hex =
-            "010204ba147c9cc9bebd3b97310a23d385f33d8e67ac42868b69bc06f5468e3c0a02c0ab1d1f6886ba6317634da6b2d957e7c987a9699dd3707d1e2751fcf4b8efe33f010000010000003f0400007341ad5f000000000204ba147c9cc9bebd3b97310a23d385f33d8e67ac42868b69bc06f5468e3c0a02c0ab1d1f6886ba6317634da6b2d957e7c987a9699dd3707d1e2751fcf4b8efe3786a02f742015903c6c6fd852552d272912f4740e15847618a86e217f71f5419000000000000000002ed3c3f1a319ff4e909cf2771d79fece0ac9bd9fd2ee49ea6c0885c9cb3b1248cf6752f5f46a53364e2ee9c4d662d762a81efd51010282a75cd6bd03f28ef349c0000000002f7a99cd2e2e80dd1c4d8ee63567d0ff5be00c3881568d155cf06607a6a78e2972b5d3b1e10dc60da214ae42abb95538f8faa872c90f60636427a36cf4739ac01fc7c1c3174cc0d120c7d522adb3dda549a5f742e082fc2921c740b1b8723bde457498c047cdf6a7759bf7d94b22960d260a1de550e65abadb1a00404d619060cdd2f000000000000";
+            "02021198a84730ce688bc7494714bed66bda74fe75320b23068a5caa77bf1f302ce1157af2243bdb7666b8ee3e0ebeeed0b0b998cf66735450bc8d63f4304317299eab01000007000000052801005f13506200000000021198a84730ce688bc7494714bed66bda74fe75320b23068a5caa77bf1f302ce1157af2243bdb7666b8ee3e0ebeeed0b0b998cf66735450bc8d63f4304317299e0e5751c026e543b2e8ab2eb06099daa1d1e5df47778f7787faab45cdf12fe3a8000000000000000008001111111122222222000000000300d85e5b1590d898d1e0cdebb2e3b5337c8b76270142663d78811683ba47c17c9868dbdfa482065390b84e73a64c27ef597963bcf7972a455589615408a82e02ec3ddbe14fe90ab96e2e0ff164659f59b24c1bcf16582c0f3f26d9888880c0a80c00d9922819a39e94ddf3907f4b9c8df93f39f026244fcb609205b9a879022599f28b99f9bbee0e9f6326d7ab0b1df219c696991681a843d5e851619e0e9073753b7fa04e591d1abc1c746a21ee74b9b200d4d98a3f34281a84cbceb2fa86ec990500f9d9656a60049083eef61487632187b351294c1fa23d118060d813db6d03e8b6b284cc29e9810a76345bf5c60cc4967d67f1867f4cf51c0b9da1f4ac0b2f7e890ff73063ce46f74068f618cca35a4732c68ef2ee324fa7af940108f8d0e34c0976b6595555555555";
         const message = deserializeMessage(new ReadStream(Converter.hexToBytes(hex)));
-        expect(message.protocolVersion).toEqual(1);
+        expect(message.protocolVersion).toEqual(2);
         expect(message.parentMessageIds).toBeDefined();
         if (message.parentMessageIds) {
             expect(message.parentMessageIds[0]).toEqual(
-                "0x04ba147c9cc9bebd3b97310a23d385f33d8e67ac42868b69bc06f5468e3c0a02"
+                "0x1198a84730ce688bc7494714bed66bda74fe75320b23068a5caa77bf1f302ce1"
             );
             expect(message.parentMessageIds[1]).toEqual(
-                "0xc0ab1d1f6886ba6317634da6b2d957e7c987a9699dd3707d1e2751fcf4b8efe3"
+                "0x157af2243bdb7666b8ee3e0ebeeed0b0b998cf66735450bc8d63f4304317299e"
             );
         }
         const payload = message.payload as IMilestonePayload;
-        expect(payload.type).toEqual(1);
-        expect(payload.index).toEqual(1087);
-        expect(payload.timestamp).toEqual(1605190003);
-        expect(payload.parentMessageIds[0]).toEqual("0x04ba147c9cc9bebd3b97310a23d385f33d8e67ac42868b69bc06f5468e3c0a02");
-        expect(payload.parentMessageIds[1]).toEqual("0xc0ab1d1f6886ba6317634da6b2d957e7c987a9699dd3707d1e2751fcf4b8efe3");
+        expect(payload.type).toEqual(7);
+        expect(payload.index).toEqual(75781);
+        expect(payload.timestamp).toEqual(1649415007);
+        expect(payload.parentMessageIds[0]).toEqual("0x1198a84730ce688bc7494714bed66bda74fe75320b23068a5caa77bf1f302ce1");
+        expect(payload.parentMessageIds[1]).toEqual("0x157af2243bdb7666b8ee3e0ebeeed0b0b998cf66735450bc8d63f4304317299e");
         expect(payload.inclusionMerkleProof).toEqual(
-            "0x786a02f742015903c6c6fd852552d272912f4740e15847618a86e217f71f5419"
+            "0x0e5751c026e543b2e8ab2eb06099daa1d1e5df47778f7787faab45cdf12fe3a8"
         );
         expect(payload.nextPoWScore).toEqual(0);
         expect(payload.nextPoWScoreMilestoneIndex).toEqual(0);
-        expect(payload.publicKeys.length).toEqual(2);
-        expect(payload.publicKeys[0]).toEqual("0xed3c3f1a319ff4e909cf2771d79fece0ac9bd9fd2ee49ea6c0885c9cb3b1248c");
-        expect(payload.publicKeys[1]).toEqual("0xf6752f5f46a53364e2ee9c4d662d762a81efd51010282a75cd6bd03f28ef349c");
-        expect(payload.signatures.length).toEqual(2);
-        expect(payload.signatures[0]).toEqual(
-            "0xf7a99cd2e2e80dd1c4d8ee63567d0ff5be00c3881568d155cf06607a6a78e2972b5d3b1e10dc60da214ae42abb95538f8faa872c90f60636427a36cf4739ac01"
+        expect(payload.metadata).toEqual(
+            "0x1111111122222222"
         );
-        expect(payload.signatures[1]).toEqual(
-            "0xfc7c1c3174cc0d120c7d522adb3dda549a5f742e082fc2921c740b1b8723bde457498c047cdf6a7759bf7d94b22960d260a1de550e65abadb1a00404d619060c"
+        expect(payload.signatures.length).toEqual(3);
+        expect(payload.signatures[0].type).toEqual(0);
+        expect(payload.signatures[0].publicKey).toEqual(
+            "0xd85e5b1590d898d1e0cdebb2e3b5337c8b76270142663d78811683ba47c17c98"
         );
-        expect(message.nonce).toEqual("12253");
+        expect(payload.signatures[0].signature).toEqual(
+            "0x68dbdfa482065390b84e73a64c27ef597963bcf7972a455589615408a82e02ec3ddbe14fe90ab96e2e0ff164659f59b24c1bcf16582c0f3f26d9888880c0a80c"
+        );
+        expect(payload.signatures[1].type).toEqual(0);
+        expect(payload.signatures[1].publicKey).toEqual(
+            "0xd9922819a39e94ddf3907f4b9c8df93f39f026244fcb609205b9a879022599f2"
+        );
+        expect(payload.signatures[1].signature).toEqual(
+            "0x8b99f9bbee0e9f6326d7ab0b1df219c696991681a843d5e851619e0e9073753b7fa04e591d1abc1c746a21ee74b9b200d4d98a3f34281a84cbceb2fa86ec9905"
+        );
+        expect(payload.signatures[2].type).toEqual(0);
+        expect(payload.signatures[2].publicKey).toEqual(
+            "0xf9d9656a60049083eef61487632187b351294c1fa23d118060d813db6d03e8b6"
+        );
+        expect(payload.signatures[2].signature).toEqual(
+            "0xb284cc29e9810a76345bf5c60cc4967d67f1867f4cf51c0b9da1f4ac0b2f7e890ff73063ce46f74068f618cca35a4732c68ef2ee324fa7af940108f8d0e34c09"
+        );
+        expect(message.nonce).toEqual("6148914691236804214");
     });
 
     test("Can succeed with tagged data", () => {
@@ -127,7 +142,7 @@ describe("Binary Message", () => {
 
     test("Can succeed with actual milestone data", () => {
         const hex =
-            "010204ba147c9cc9bebd3b97310a23d385f33d8e67ac42868b69bc06f5468e3c0a02c0ab1d1f6886ba6317634da6b2d957e7c987a9699dd3707d1e2751fcf4b8efe33f010000010000003f0400007341ad5f000000000204ba147c9cc9bebd3b97310a23d385f33d8e67ac42868b69bc06f5468e3c0a02c0ab1d1f6886ba6317634da6b2d957e7c987a9699dd3707d1e2751fcf4b8efe3786a02f742015903c6c6fd852552d272912f4740e15847618a86e217f71f5419000000000100000002ed3c3f1a319ff4e909cf2771d79fece0ac9bd9fd2ee49ea6c0885c9cb3b1248cf6752f5f46a53364e2ee9c4d662d762a81efd51010282a75cd6bd03f28ef349c0000000002f7a99cd2e2e80dd1c4d8ee63567d0ff5be00c3881568d155cf06607a6a78e2972b5d3b1e10dc60da214ae42abb95538f8faa872c90f60636427a36cf4739ac01fc7c1c3174cc0d120c7d522adb3dda549a5f742e082fc2921c740b1b8723bde457498c047cdf6a7759bf7d94b22960d260a1de550e65abadb1a00404d619060cdd2f000000000000";
+            "02021198a84730ce688bc7494714bed66bda74fe75320b23068a5caa77bf1f302ce1157af2243bdb7666b8ee3e0ebeeed0b0b998cf66735450bc8d63f4304317299eab01000007000000052801005f13506200000000021198a84730ce688bc7494714bed66bda74fe75320b23068a5caa77bf1f302ce1157af2243bdb7666b8ee3e0ebeeed0b0b998cf66735450bc8d63f4304317299e0e5751c026e543b2e8ab2eb06099daa1d1e5df47778f7787faab45cdf12fe3a8000000000000000008001111111122222222000000000300d85e5b1590d898d1e0cdebb2e3b5337c8b76270142663d78811683ba47c17c9868dbdfa482065390b84e73a64c27ef597963bcf7972a455589615408a82e02ec3ddbe14fe90ab96e2e0ff164659f59b24c1bcf16582c0f3f26d9888880c0a80c00d9922819a39e94ddf3907f4b9c8df93f39f026244fcb609205b9a879022599f28b99f9bbee0e9f6326d7ab0b1df219c696991681a843d5e851619e0e9073753b7fa04e591d1abc1c746a21ee74b9b200d4d98a3f34281a84cbceb2fa86ec990500f9d9656a60049083eef61487632187b351294c1fa23d118060d813db6d03e8b6b284cc29e9810a76345bf5c60cc4967d67f1867f4cf51c0b9da1f4ac0b2f7e890ff73063ce46f74068f618cca35a4732c68ef2ee324fa7af940108f8d0e34c0976b6595555555555";
         const message = deserializeMessage(new ReadStream(Converter.hexToBytes(hex)));
 
         const writeStream = new WriteStream();

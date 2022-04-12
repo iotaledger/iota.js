@@ -10,5 +10,19 @@ export const SIMPLE_TOKEN_SCHEME_TYPE = 0;
 /**
  * Simple token scheme.
  */
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface ISimpleTokenScheme extends ITypeBase<0> {}
+export interface ISimpleTokenScheme extends ITypeBase<0> {
+    /**
+     * Amount of tokens minted by this foundry.
+     */
+    mintedTokens: string;
+
+    /**
+     * Amount of tokens melted by this foundry.
+     */
+    meltedTokens: string;
+
+    /**
+     * Maximum supply of tokens controlled by this foundry.
+     */
+    maximumSupply: string;
+}

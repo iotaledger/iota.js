@@ -259,8 +259,11 @@ export function logMilestonePayload(prefix: string, payload?: IMilestonePayload)
         if (payload.nextPoWScoreMilestoneIndex) {
             logger(`${prefix}\tNext PoW Score Milestone Index:`, payload.nextPoWScoreMilestoneIndex);
         }
-        logger(`${prefix}\tPublic Keys:`, payload.publicKeys);
-        logger(`${prefix}\tSignatures:`, payload.signatures);
+        logger(`${prefix}\tMetadata:`, payload.metadata);
+        logger(`${prefix}\tSignatures:`, payload.signatures.length);
+        for (const signature of payload.signatures) {
+            logSignature(`${prefix}\t\t`, signature);
+        }
         logReceiptPayload(`${prefix}\t`, payload.receipt);
     }
 }
@@ -378,9 +381,6 @@ export function logOutput(prefix: string, output?: OutputTypes): void {
             logNativeTokens(`${prefix}\t\t`, output.nativeTokens);
             logger(`${prefix}\t\tSerial Number:`, output.serialNumber);
             logger(`${prefix}\t\tToken Tag:`, output.tokenTag);
-            logger(`${prefix}\t\tMinted Tokens:`, output.mintedTokens);
-            logger(`${prefix}\t\tMelted Tokens:`, output.meltedTokens);
-            logger(`${prefix}\t\tMaximum Supply:`, output.maximumSupply);
             logTokenScheme(`${prefix}\t\t`, output.tokenScheme);
             logUnlockConditions(`${prefix}\t\t`, output.unlockConditions);
             logFeatureBlocks(`${prefix}\t\t`, output.featureBlocks);
@@ -455,6 +455,9 @@ export function logNativeTokens(prefix: string, nativeTokens: INativeToken[]): v
 export function logTokenScheme(prefix: string, tokenScheme: TokenSchemeTypes): void {
     if (tokenScheme.type === SIMPLE_TOKEN_SCHEME_TYPE) {
         logger(`${prefix}\tSimple Token Scheme`);
+        logger(`${prefix}\t\tMinted Tokens:`, tokenScheme.mintedTokens);
+        logger(`${prefix}\t\tMelted Tokens:`, tokenScheme.meltedTokens);
+        logger(`${prefix}\t\tMaximum Supply:`, tokenScheme.maximumSupply);
     }
 }
 

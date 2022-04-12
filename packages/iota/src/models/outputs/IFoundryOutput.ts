@@ -30,21 +30,6 @@ export interface IFoundryOutput extends ITypeBase<5>, ICommonOutput {
     tokenTag: string;
 
     /**
-     * Amount of tokens minted by this foundry.
-     */
-    mintedTokens: string;
-
-    /**
-     * Amount of tokens melted by this foundry.
-     */
-    meltedTokens: string;
-
-    /**
-     * Maximum supply of tokens controlled by this foundry.
-     */
-    maximumSupply: string;
-
-    /**
      * The token scheme for the foundry.
      */
     tokenScheme: TokenSchemeTypes;

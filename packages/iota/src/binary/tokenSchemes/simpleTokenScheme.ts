@@ -1,13 +1,18 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 import type { ReadStream, WriteStream } from "@iota/util.js";
+import { HexHelper } from "@iota/util.js";
 import { ISimpleTokenScheme, SIMPLE_TOKEN_SCHEME_TYPE } from "../../models/tokenSchemes/ISimpleTokenScheme";
-import { SMALL_TYPE_LENGTH } from "../commonDataTypes";
+import { SMALL_TYPE_LENGTH, UINT256_SIZE } from "../commonDataTypes";
 
 /**
  * The minimum length of an simple token scheme binary representation.
  */
-export const MIN_SIMPLE_TOKEN_SCHEME_LENGTH: number = SMALL_TYPE_LENGTH;
+export const MIN_SIMPLE_TOKEN_SCHEME_LENGTH: number =
+    SMALL_TYPE_LENGTH + // type
+    UINT256_SIZE + // Minted
+    UINT256_SIZE + // Melted
+    UINT256_SIZE; // Maximum Supply;
 
 /**
  * Deserialize the simple token scheme from binary.
@@ -26,7 +31,14 @@ export function deserializeSimpleTokenScheme(readStream: ReadStream): ISimpleTok
         throw new Error(`Type mismatch in simpleTokenScheme ${type}`);
     }
 
+    const mintedTokens = readStream.readUInt256("foundryOutput.mintedTokens");
+    const meltedTokens = readStream.readUInt256("foundryOutput.meltedTokens");
+    const maximumSupply = readStream.readUInt256("foundryOutput.maximumSupply");
+
     return {
+        mintedTokens: HexHelper.fromBigInt256(mintedTokens),
+        meltedTokens: HexHelper.fromBigInt256(meltedTokens),
+        maximumSupply: HexHelper.fromBigInt256(maximumSupply),
         type: SIMPLE_TOKEN_SCHEME_TYPE
     };
 }
@@ -38,4 +50,8 @@ export function deserializeSimpleTokenScheme(readStream: ReadStream): ISimpleTok
  */
 export function serializeSimpleTokenScheme(writeStream: WriteStream, object: ISimpleTokenScheme): void {
     writeStream.writeUInt8("simpleTokenScheme.type", object.type);
+
+    writeStream.writeUInt256("foundryOutput.mintedTokens", HexHelper.toBigInt256(object.mintedTokens));
+    writeStream.writeUInt256("foundryOutput.meltedTokens", HexHelper.toBigInt256(object.meltedTokens));
+    writeStream.writeUInt256("foundryOutput.maximumSupply", HexHelper.toBigInt256(object.maximumSupply));
 }

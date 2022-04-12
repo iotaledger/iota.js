@@ -13,6 +13,9 @@ Simple token scheme.
 ### Properties
 
 - [type](ISimpleTokenScheme.md#type)
+- [mintedTokens](ISimpleTokenScheme.md#mintedtokens)
+- [meltedTokens](ISimpleTokenScheme.md#meltedtokens)
+- [maximumSupply](ISimpleTokenScheme.md#maximumsupply)
 
 ## Properties
 
@@ -25,3 +28,27 @@ The type of the object.
 #### Inherited from
 
 [ITypeBase](ITypeBase.md).[type](ITypeBase.md#type)
+
+___
+
+### mintedTokens
+
+• **mintedTokens**: `string`
+
+Amount of tokens minted by this foundry.
+
+___
+
+### meltedTokens
+
+• **meltedTokens**: `string`
+
+Amount of tokens melted by this foundry.
+
+___
+
+### maximumSupply
+
+• **maximumSupply**: `string`
+
+Maximum supply of tokens controlled by this foundry.
