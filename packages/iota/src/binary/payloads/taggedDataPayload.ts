@@ -71,14 +71,18 @@ export function serializeTaggedDataPayload(writeStream: WriteStream, object: ITa
     if (object.tag) {
         const tag = HexHelper.stripPrefix(object.tag);
         writeStream.writeUInt8("payloadTaggedData.tagLength", tag.length / 2);
-        writeStream.writeFixedHex("payloadTaggedData.tag", tag.length / 2, tag);
+        if (tag.length > 0) {
+            writeStream.writeFixedHex("payloadTaggedData.tag", tag.length / 2, tag);
+        }
     } else {
         writeStream.writeUInt32("payloadTaggedData.tagLength", 0);
     }
     if (object.data) {
         const data = HexHelper.stripPrefix(object.data);
         writeStream.writeUInt32("payloadTaggedData.dataLength", data.length / 2);
-        writeStream.writeFixedHex("payloadTaggedData.data", data.length / 2, data);
+        if (data.length > 0) {
+            writeStream.writeFixedHex("payloadTaggedData.data", data.length / 2, data);
+        }
     } else {
         writeStream.writeUInt32("payloadTaggedData.dataLength", 0);
     }
