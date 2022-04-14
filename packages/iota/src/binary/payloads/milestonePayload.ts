@@ -140,13 +140,13 @@ export function serializeMilestonePayload(writeStream: WriteStream, object: IMil
     writeStream.writeUInt32("payloadMilestone.nextPoWScore", object.nextPoWScore);
     writeStream.writeUInt32("payloadMilestone.nextPoWScoreMilestoneIndex", object.nextPoWScoreMilestoneIndex);
 
-    if(object.metadata) {
+    if (object.metadata) {
         const metadata = HexHelper.stripPrefix(object.metadata);
         writeStream.writeUInt16("payloadMilestone.metadataLength", metadata.length / 2);
         if (metadata.length > 0) {
             writeStream.writeFixedHex("payloadMilestone.metadata", metadata.length / 2, metadata);
         }
-    }else  {
+    } else {
         writeStream.writeUInt16("payloadMilestone.metadataLength", 0);
     }
     serializePayload(writeStream, object.receipt as IReceiptPayload);
