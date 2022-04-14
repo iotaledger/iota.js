@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.9.0-stardust.6
+
+* Stardust message serialization fix
+* Update Simple token scheme
+* Update Milestone payload
+
 ## v1.9.0-stardust.5
 
 * Stardust message serialization fix
