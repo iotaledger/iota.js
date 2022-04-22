@@ -147,6 +147,30 @@ export interface IMqttClient {
     output(outputId: string, callback: (topic: string, data: IOutputResponse) => void): string;
 
     /**
+     * Subscribe to updates for an nft output.
+     * @param nftId The Nft output to monitor.
+     * @param callback The callback which is called when new data arrives.
+     * @returns A subscription Id which can be used to unsubscribe.
+     */
+    nft(nftId: string, callback: (topic: string, data: IOutputResponse) => void): string;
+
+    /**
+     * Subscribe to updates for an alias output.
+     * @param aliasId The alias output to monitor.
+     * @param callback The callback which is called when new data arrives.
+     * @returns A subscription Id which can be used to unsubscribe.
+     */
+    alias(aliasId: string, callback: (topic: string, data: IOutputResponse) => void): string;
+
+    /**
+     * Subscribe to updates for a foundry output.
+     * @param foundryId The foundry output to monitor.
+     * @param callback The callback which is called when new data arrives.
+     * @returns A subscription Id which can be used to unsubscribe.
+     */
+    foundry(foundryId: string, callback: (topic: string, data: IOutputResponse) => void): string;
+
+    /**
      * Subscribe to the output with specific unlock condition and address.
      * @param condition The condition to monitor.
      * @param addressBech32 The address to monitor.
