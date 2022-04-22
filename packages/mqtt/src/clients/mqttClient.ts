@@ -141,7 +141,7 @@ export class MqttClient implements IMqttClient {
      * @returns A subscription Id which can be used to unsubscribe.
      */
     public messagesReferenced(callback: (topic: string, data: IMessageMetadata) => void): string {
-        return this.internalSubscribe<IMessageMetadata>("messages-metadata/referenced", true, callback);
+        return this.internalSubscribe<IMessageMetadata>("message-metadata/referenced", true, callback);
     }
 
     /**
