@@ -169,7 +169,7 @@ export class IndexerPluginClient {
         return this._client.pluginFetch<never, IOutputsResponse>(
             this._basePluginPath,
             "get",
-            "outputs",
+            "basic-outputs",
             queryParams
         );
     }
