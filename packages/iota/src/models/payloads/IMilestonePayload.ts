@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 import type { ITypeBase } from "../ITypeBase";
 import type { IEd25519Signature } from "../signatures/IEd25519Signature";
-import type { IReceiptPayload } from "./IReceiptPayload";
+import type { MilestoneOptionTypes } from "../milestoneOptions/milestoneOptionTypes";
 
 /**
  * The global type for the payload.
@@ -22,6 +22,11 @@ export interface IMilestonePayload extends ITypeBase<7> {
      * The timestamp of the milestone.
      */
     timestamp: number;
+    
+    /**
+     * The timestamp of the milestone.
+     */
+    lastMilestoneId: string;
 
     /**
      * The parents where this milestone attaches to.
@@ -29,19 +34,14 @@ export interface IMilestonePayload extends ITypeBase<7> {
     parentMessageIds: string[];
 
     /**
-     * The merkle proof inclusions.
+     * The merkle proof confirmation.
      */
-    inclusionMerkleProof: string;
-
+    confirmedMerkleRoot: string;
+    
     /**
-     * The next PoW score.
+     * The merkle proof applied.
      */
-    nextPoWScore: number;
-
-    /**
-     * The milestone at which the next PoW score becomes active.
-     */
-    nextPoWScoreMilestoneIndex: number;
+    appliedMerkleRoot: string;
 
     /**
      * The metadata.
@@ -49,12 +49,12 @@ export interface IMilestonePayload extends ITypeBase<7> {
     metadata: string;
 
     /**
+     * The milestone options.
+     */
+    options: MilestoneOptionTypes[];
+
+    /**
      * The signatures.
      */
     signatures: IEd25519Signature[];
-
-    /**
-     * Receipt payload.
-     */
-    receipt?: IReceiptPayload;
 }

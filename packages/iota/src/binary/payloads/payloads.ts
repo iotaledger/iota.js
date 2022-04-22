@@ -4,7 +4,6 @@
 import type { ReadStream, WriteStream } from "@iota/util.js";
 import type { ITypeBase } from "../../models/ITypeBase";
 import { MILESTONE_PAYLOAD_TYPE } from "../../models/payloads/IMilestonePayload";
-import { RECEIPT_PAYLOAD_TYPE } from "../../models/payloads/IReceiptPayload";
 import { TAGGED_DATA_PAYLOAD_TYPE } from "../../models/payloads/ITaggedDataPayload";
 import { TRANSACTION_PAYLOAD_TYPE } from "../../models/payloads/ITransactionPayload";
 import { TREASURY_TRANSACTION_PAYLOAD_TYPE } from "../../models/payloads/ITreasuryTransactionPayload";
@@ -15,7 +14,6 @@ import {
     MIN_MILESTONE_PAYLOAD_LENGTH,
     serializeMilestonePayload
 } from "./milestonePayload";
-import { deserializeReceiptPayload, MIN_RECEIPT_PAYLOAD_LENGTH, serializeReceiptPayload } from "./receiptPayload";
 import {
     deserializeTaggedDataPayload,
     MIN_TAGGED_DATA_PAYLOAD_LENGTH,
@@ -39,7 +37,6 @@ export const MIN_PAYLOAD_LENGTH: number = Math.min(
     MIN_TRANSACTION_PAYLOAD_LENGTH,
     MIN_MILESTONE_PAYLOAD_LENGTH,
     MIN_TAGGED_DATA_PAYLOAD_LENGTH,
-    MIN_RECEIPT_PAYLOAD_LENGTH,
     MIN_TREASURY_TRANSACTION_PAYLOAD_LENGTH
 );
 
@@ -64,8 +61,6 @@ export function deserializePayload(readStream: ReadStream): PayloadTypes | undef
             payload = deserializeTransactionPayload(readStream);
         } else if (payloadType === MILESTONE_PAYLOAD_TYPE) {
             payload = deserializeMilestonePayload(readStream);
-        } else if (payloadType === RECEIPT_PAYLOAD_TYPE) {
-            payload = deserializeReceiptPayload(readStream);
         } else if (payloadType === TREASURY_TRANSACTION_PAYLOAD_TYPE) {
             payload = deserializeTreasuryTransactionPayload(readStream);
         } else if (payloadType === TAGGED_DATA_PAYLOAD_TYPE) {
@@ -95,8 +90,6 @@ export function serializePayload(writeStream: WriteStream, object: PayloadTypes 
         serializeTransactionPayload(writeStream, object);
     } else if (object.type === MILESTONE_PAYLOAD_TYPE) {
         serializeMilestonePayload(writeStream, object);
-    } else if (object.type === RECEIPT_PAYLOAD_TYPE) {
-        serializeReceiptPayload(writeStream, object);
     } else if (object.type === TREASURY_TRANSACTION_PAYLOAD_TYPE) {
         serializeTreasuryTransactionPayload(writeStream, object);
     } else if (object.type === TAGGED_DATA_PAYLOAD_TYPE) {

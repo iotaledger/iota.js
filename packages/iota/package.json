@@ -72,18 +72,18 @@
         "typedoc-plugin-markdown": "^3.11.14",
         "typescript": "^4.6.2"
     },
-    "main": "dist/cjs/index-node.js",
-    "browser": "dist/cjs/index-browser.js",
-    "module": "dist/esm/index-browser.mjs",
+    "main": "es/index-node.js",
+    "browser": "es/index-browser.js",
+    "module": "es/index-browser.mjs",
     "exports": {
         ".": {
             "node": {
-                "import": "./dist/esm/index-node.mjs",
-                "require": "./dist/cjs/index-node.js"
+                "import": "./es/index-node.mjs",
+                "require": "./es/index-node.js"
             },
             "browser": {
-                "import": "./dist/esm/index-browser.mjs",
-                "require": "./dist/cjs/index-browser.js"
+                "import": "./es/index-browser.mjs",
+                "require": "./es/index-browser.js"
             }
         },
         "./package.json": "./package.json"
