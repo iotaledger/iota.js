@@ -1,6 +1,6 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import type { IMessage, IMessageMetadata, IOutputResponse, IReceiptsResponse } from "@iota/iota.js";
+import type { IMessage, IMessageMetadata, IMilestonePayload, IOutputResponse, IReceiptsResponse } from "@iota/iota.js";
 import type { IMqttMilestoneResponse } from "./api/IMqttMilestoneResponse";
 import type { IMqttStatus } from "./IMqttStatus";
 
@@ -78,18 +78,18 @@ export interface IMqttClient {
         callback: (topic: string, data: IMessage) => void): string;
 
     /**
-     * Subscribe to all milestone messages in their raw form.
+     * Subscribe to all milestone payloads in their raw form.
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    messagesMilestoneRaw(callback: (topic: string, data: Uint8Array) => void): string;
+    milestoneRaw(callback: (topic: string, data: Uint8Array) => void): string;
 
     /**
-     * Subscribe to all milestone messages.
+     * Subscribe to all milestone payloads.
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    messagesMilestone(callback: (topic: string, data: IMessage) => void): string;
+    milestone(callback: (topic: string, data: IMilestonePayload) => void): string;
 
     /**
      * Subscribe to get all messages for the specified tag in binary form.

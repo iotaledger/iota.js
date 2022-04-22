@@ -5,6 +5,11 @@
  */
 export interface IMqttMilestoneResponse {
     /**
+     * The milestone id.
+     */
+    milestoneId: string;
+
+    /**
      * The milestone index.
      */
     index: number;

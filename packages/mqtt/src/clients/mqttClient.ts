@@ -1,6 +1,6 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import { deserializeMessage, IMessage, IMessageMetadata, IOutputResponse, IReceiptsResponse } from "@iota/iota.js";
+import { deserializeMessage, deserializeMilestonePayload, IMessage, IMessageMetadata, IMilestonePayload, IOutputResponse, IReceiptsResponse } from "@iota/iota.js";
 import { Converter, RandomHelper, ReadStream } from "@iota/util.js";
 import * as mqtt from "mqtt";
 import type { IMqttMilestoneResponse } from "../models/api/IMqttMilestoneResponse";
@@ -207,22 +207,22 @@ export class MqttClient implements IMqttClient {
     }
 
     /**
-     * Subscribe to all milestone messages in their raw form.
+     * Subscribe to all milestone payloads in their raw form.
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    public messagesMilestoneRaw(callback: (topic: string, data: Uint8Array) => void): string {
+    public milestoneRaw(callback: (topic: string, data: Uint8Array) => void): string {
         return this.internalSubscribe<Uint8Array>("milestones", false, callback);
     }
 
     /**
-     * Subscribe to all milestone messages.
+     * Subscribe to all milestone payloads.
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    public messagesMilestone(callback: (topic: string, data: IMessage) => void): string {
+    public milestone(callback: (topic: string, data: IMilestonePayload) => void): string {
         return this.internalSubscribe<Uint8Array>("milestones", false, (topic, raw) => {
-            callback(topic, deserializeMessage(new ReadStream(raw)));
+            callback(topic, deserializeMilestonePayload(new ReadStream(raw)));
         });
     }
 
@@ -740,3 +740,4 @@ export class MqttClient implements IMqttClient {
         }
     }
 }
+
