@@ -2,19 +2,19 @@
 // SPDX-License-Identifier: Apache-2.0
 import type { ReadStream, WriteStream } from "@iota/util.js";
 import type { ITypeBase } from "../../models/ITypeBase";
-import { 
-    deserializeReceiptMilestoneOption,
-    MIN_RECEIPT_MILESTONE_OPTION_LENGTH,
-    serializeReceiptMilestoneOption 
-} from "../milestoneOptions/receiptMilestoneOption";
-import { 
+import { IPoWMilestoneOption, POW_MILESTONE_OPTION_TYPE } from "../../models/milestoneOptions/IPoWMilestoneOption";
+import { IReceiptMilestoneOption, RECEIPT_MILESTONE_OPTION_TYPE } from "../../models/milestoneOptions/IReceiptMilestoneOption";
+import type { MilestoneOptionTypes } from "../../models/milestoneOptions/milestoneOptionTypes";
+import {
     deserializePoWMilestoneOption,
     MIN_POW_MILESTONE_OPTION_LENGTH,
     serializePoWMilestoneOption
 } from "../milestoneOptions/powMilestoneOption";
-import type { MilestoneOptionTypes } from "../../models/milestoneOptions/milestoneOptionTypes";
-import { IReceiptMilestoneOption, RECEIPT_MILESTONE_OPTION_TYPE } from "../../models/milestoneOptions/IReceiptMilestoneOption";
-import { IPoWMilestoneOption, POW_MILESTONE_OPTION_TYPE } from "../../models/milestoneOptions/IPoWMilestoneOption";
+import {
+    deserializeReceiptMilestoneOption,
+    MIN_RECEIPT_MILESTONE_OPTION_LENGTH,
+    serializeReceiptMilestoneOption
+} from "../milestoneOptions/receiptMilestoneOption";
 
 /**
  * The minimum length of a milestone option binary representation.

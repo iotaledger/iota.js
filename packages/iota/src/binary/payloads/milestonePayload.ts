@@ -13,9 +13,9 @@ import {
     UINT32_SIZE
 } from "../commonDataTypes";
 import { MAX_NUMBER_PARENTS, MIN_NUMBER_PARENTS } from "../message";
+import { deserializeMilestoneOptions, serializeMilestoneOptions } from "../milestoneOptions/milestoneOptions";
 import { MIN_ED25519_SIGNATURE_LENGTH } from "../signatures/ed25519Signature";
 import { deserializeSignature, serializeSignature } from "../signatures/signatures";
-import { deserializeMilestoneOptions, serializeMilestoneOptions } from "../milestoneOptions/milestoneOptions";
 
 /**
  * The minimum length of a milestone payload binary representation.
@@ -137,7 +137,7 @@ export function serializeMilestonePayload(writeStream: WriteStream, object: IMil
         MERKLE_PROOF_LENGTH,
         object.confirmedMerkleRoot
     );
-    
+
     writeStream.writeFixedHex(
         "payloadMilestone.appliedMerkleRoot",
         MERKLE_PROOF_LENGTH,
@@ -154,8 +154,12 @@ export function serializeMilestonePayload(writeStream: WriteStream, object: IMil
         writeStream.writeUInt16("payloadMilestone.metadataLength", 0);
     }
 
-    serializeMilestoneOptions(writeStream, object.options);
-    
+    if (object.options) {
+        serializeMilestoneOptions(writeStream, object.options);
+    } else {
+        writeStream.writeUInt8("milestoneOptions.optionsCount", 0);
+    }
+
     writeStream.writeUInt8("payloadMilestone.signaturesCount", object.signatures.length);
     for (let i = 0; i < object.signatures.length; i++) {
         serializeSignature(writeStream, object.signatures[i]);

@@ -12,7 +12,7 @@ export const MIN_POW_MILESTONE_OPTION_LENGTH: number =
     SMALL_TYPE_LENGTH +
     UINT32_SIZE + // nextPoWScore
     UINT32_SIZE; // nextPowScoreMilestoneIndex
-    
+
 /**
  * Deserialize the pow milestone option from binary.
  * @param readStream The stream to read the data from.
@@ -36,7 +36,7 @@ export function deserializePoWMilestoneOption(readStream: ReadStream): IPoWMiles
     return {
         type: POW_MILESTONE_OPTION_TYPE,
         nextPoWScore,
-        nextPoWScoreMilestoneIndex,
+        nextPoWScoreMilestoneIndex
     };
 }
 

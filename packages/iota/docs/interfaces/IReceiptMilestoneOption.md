@@ -1,28 +1,28 @@
-# Interface: IReceiptPayload
+# Interface: IReceiptMilestoneOption
 
 Receipt payload.
 
 ## Hierarchy
 
-- [`ITypeBase`](ITypeBase.md)<``3``\>
+- [`ITypeBase`](ITypeBase.md)<``0``\>
 
-  ↳ **`IReceiptPayload`**
+  ↳ **`IReceiptMilestoneOption`**
 
 ## Table of contents
 
 ### Properties
 
-- [type](IReceiptPayload.md#type)
-- [migratedAt](IReceiptPayload.md#migratedat)
-- [final](IReceiptPayload.md#final)
-- [funds](IReceiptPayload.md#funds)
-- [transaction](IReceiptPayload.md#transaction)
+- [type](IReceiptMilestoneOption.md#type)
+- [migratedAt](IReceiptMilestoneOption.md#migratedat)
+- [final](IReceiptMilestoneOption.md#final)
+- [funds](IReceiptMilestoneOption.md#funds)
+- [transaction](IReceiptMilestoneOption.md#transaction)
 
 ## Properties
 
 ### type
 
-• **type**: ``3``
+• **type**: ``0``
 
 The type of the object.
 

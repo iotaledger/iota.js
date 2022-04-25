@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.9.0-stardust.7
+
+* Update Milestone payload
+
 ## v1.9.0-stardust.6
 
 * Stardust message serialization fix

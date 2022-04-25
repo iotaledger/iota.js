@@ -1,8 +1,8 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 import type { ITypeBase } from "../ITypeBase";
-import type { IEd25519Signature } from "../signatures/IEd25519Signature";
 import type { MilestoneOptionTypes } from "../milestoneOptions/milestoneOptionTypes";
+import type { IEd25519Signature } from "../signatures/IEd25519Signature";
 
 /**
  * The global type for the payload.
@@ -22,7 +22,7 @@ export interface IMilestonePayload extends ITypeBase<7> {
      * The timestamp of the milestone.
      */
     timestamp: number;
-    
+
     /**
      * The timestamp of the milestone.
      */
@@ -37,7 +37,7 @@ export interface IMilestonePayload extends ITypeBase<7> {
      * The merkle proof confirmation.
      */
     confirmedMerkleRoot: string;
-    
+
     /**
      * The merkle proof applied.
      */
@@ -51,7 +51,7 @@ export interface IMilestonePayload extends ITypeBase<7> {
     /**
      * The milestone options.
      */
-    options: MilestoneOptionTypes[];
+    options?: MilestoneOptionTypes[];
 
     /**
      * The signatures.

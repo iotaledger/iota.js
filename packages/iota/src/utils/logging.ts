@@ -20,6 +20,9 @@ import type { InputTypes } from "../models/inputs/inputTypes";
 import { TREASURY_INPUT_TYPE } from "../models/inputs/ITreasuryInput";
 import { UTXO_INPUT_TYPE } from "../models/inputs/IUTXOInput";
 import { TRANSACTION_ESSENCE_TYPE } from "../models/ITransactionEssence";
+import { IPoWMilestoneOption, POW_MILESTONE_OPTION_TYPE } from "../models/milestoneOptions/IPoWMilestoneOption";
+import { IReceiptMilestoneOption, RECEIPT_MILESTONE_OPTION_TYPE } from "../models/milestoneOptions/IReceiptMilestoneOption";
+import type { MilestoneOptionTypes } from "../models/milestoneOptions/milestoneOptionTypes";
 import { ALIAS_OUTPUT_TYPE } from "../models/outputs/IAliasOutput";
 import { BASIC_OUTPUT_TYPE } from "../models/outputs/IBasicOutput";
 import { FOUNDRY_OUTPUT_TYPE } from "../models/outputs/IFoundryOutput";
@@ -27,9 +30,6 @@ import { NFT_OUTPUT_TYPE } from "../models/outputs/INftOutput";
 import { TREASURY_OUTPUT_TYPE } from "../models/outputs/ITreasuryOutput";
 import type { OutputTypes } from "../models/outputs/outputTypes";
 import { IMilestonePayload, MILESTONE_PAYLOAD_TYPE } from "../models/payloads/IMilestonePayload";
-import type { MilestoneOptionTypes } from "../models/milestoneOptions/milestoneOptionTypes";
-import { IReceiptMilestoneOption, RECEIPT_MILESTONE_OPTION_TYPE } from "../models/milestoneOptions/IReceiptMilestoneOption";
-import { IPoWMilestoneOption, POW_MILESTONE_OPTION_TYPE } from "../models/milestoneOptions/IPoWMilestoneOption";
 import type { ITaggedDataPayload } from "../models/payloads/ITaggedDataPayload";
 import { TAGGED_DATA_PAYLOAD_TYPE } from "../models/payloads/ITaggedDataPayload";
 import { ITransactionPayload, TRANSACTION_PAYLOAD_TYPE } from "../models/payloads/ITransactionPayload";
@@ -256,7 +256,7 @@ export function logMilestonePayload(prefix: string, payload?: IMilestonePayload)
         logger(`${prefix}\tConfirmed Merkle Proof:`, payload.confirmedMerkleRoot);
         logger(`${prefix}\tApplied Merkle Proof:`, payload.appliedMerkleRoot);
         logger(`${prefix}\tMetadata:`, payload.metadata);
-        logMilestoneOptions(`${prefix}\t`, payload.options)
+        logMilestoneOptions(`${prefix}\t`, payload.options);
         logger(`${prefix}\tSignatures:`, payload.signatures.length);
         for (const signature of payload.signatures) {
             logSignature(`${prefix}\t\t`, signature);
@@ -269,17 +269,19 @@ export function logMilestonePayload(prefix: string, payload?: IMilestonePayload)
  * @param prefix The prefix for the output.
  * @param milestoneOptions The milestone options.
  */
- export function logMilestoneOptions(prefix: string, milestoneOptions: MilestoneOptionTypes[]): void {
-    logger(`${prefix}Milestone Options`);
-    for (const milestoneOption of milestoneOptions) {
-        logMilestoneOption(`${prefix}\t\t`, milestoneOption);
+ export function logMilestoneOptions(prefix: string, milestoneOptions?: MilestoneOptionTypes[]): void {
+    if (milestoneOptions) {
+        logger(`${prefix}Milestone Options`);
+        for (const milestoneOption of milestoneOptions) {
+            logMilestoneOption(`${prefix}\t\t`, milestoneOption);
+        }
     }
 }
 
 /**
- * Log feature block to the console.
+ * Log milestone option to the console.
  * @param prefix The prefix for the output.
- * @param featureBlock The feature block.
+ * @param milestoneOption The milestone option.
  */
  export function logMilestoneOption(prefix: string, milestoneOption: MilestoneOptionTypes): void {
     if (milestoneOption.type === RECEIPT_MILESTONE_OPTION_TYPE) {
@@ -288,7 +290,7 @@ export function logMilestonePayload(prefix: string, payload?: IMilestonePayload)
     } else if (milestoneOption.type === POW_MILESTONE_OPTION_TYPE) {
         logger(`${prefix}\tPoW Milestone Option`);
         logPoWMilestoneOption(`${prefix}\t\t`, milestoneOption);
-    } 
+    }
 }
 
 /**
