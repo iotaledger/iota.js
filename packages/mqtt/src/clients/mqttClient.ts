@@ -1,6 +1,6 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import { deserializeMessage, IMessage, IMessageMetadata, IOutputResponse, IReceiptsResponse } from "@iota/iota.js";
+import { deserializeMessage, deserializeMilestonePayload, IMessage, IMessageMetadata, IMilestonePayload, IOutputResponse, IReceiptsResponse } from "@iota/iota.js";
 import { Converter, RandomHelper, ReadStream } from "@iota/util.js";
 import * as mqtt from "mqtt";
 import type { IMqttMilestoneResponse } from "../models/api/IMqttMilestoneResponse";
@@ -103,7 +103,7 @@ export class MqttClient implements IMqttClient {
      * @returns A subscription Id which can be used to unsubscribe.
      */
     public milestonesLatest(callback: (topic: string, data: IMqttMilestoneResponse) => void): string {
-        return this.internalSubscribe("milestones/latest", true, callback);
+        return this.internalSubscribe("milestone-info/latest", true, callback);
     }
 
     /**
@@ -112,7 +112,7 @@ export class MqttClient implements IMqttClient {
      * @returns A subscription Id which can be used to unsubscribe.
      */
     public milestonesConfirmed(callback: (topic: string, data: IMqttMilestoneResponse) => void): string {
-        return this.internalSubscribe("milestones/confirmed", true, callback);
+        return this.internalSubscribe("milestone-info/confirmed", true, callback);
     }
 
     /**
@@ -141,7 +141,7 @@ export class MqttClient implements IMqttClient {
      * @returns A subscription Id which can be used to unsubscribe.
      */
     public messagesReferenced(callback: (topic: string, data: IMessageMetadata) => void): string {
-        return this.internalSubscribe<IMessageMetadata>("messages/referenced", true, callback);
+        return this.internalSubscribe<IMessageMetadata>("message-metadata/referenced", true, callback);
     }
 
     /**
@@ -181,7 +181,7 @@ export class MqttClient implements IMqttClient {
             subTag = `/${Converter.bytesToHex(tag)}`;
         }
 
-        return this.internalSubscribe<Uint8Array>(`messages/transaction/taggedData${subTag}`, false, callback);
+        return this.internalSubscribe<Uint8Array>(`messages/transaction/tagged-data${subTag}`, false, callback);
     }
 
     /**
@@ -201,28 +201,28 @@ export class MqttClient implements IMqttClient {
             subTag = `/${Converter.bytesToHex(tag)}`;
         }
 
-        return this.internalSubscribe<Uint8Array>(`messages/transaction/taggedData${subTag}`, false, (topic, raw) => {
+        return this.internalSubscribe<Uint8Array>(`messages/transaction/tagged-data${subTag}`, false, (topic, raw) => {
             callback(topic, deserializeMessage(new ReadStream(raw)));
         });
     }
 
     /**
-     * Subscribe to all milestone messages in their raw form.
+     * Subscribe to all milestone payloads in their raw form.
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    public messagesMilestoneRaw(callback: (topic: string, data: Uint8Array) => void): string {
-        return this.internalSubscribe<Uint8Array>("messages/milestone", false, callback);
+    public milestoneRaw(callback: (topic: string, data: Uint8Array) => void): string {
+        return this.internalSubscribe<Uint8Array>("milestones", false, callback);
     }
 
     /**
-     * Subscribe to all milestone messages.
+     * Subscribe to all milestone payloads.
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    public messagesMilestone(callback: (topic: string, data: IMessage) => void): string {
-        return this.internalSubscribe<Uint8Array>("messages/milestone", false, (topic, raw) => {
-            callback(topic, deserializeMessage(new ReadStream(raw)));
+    public milestone(callback: (topic: string, data: IMilestonePayload) => void): string {
+        return this.internalSubscribe<Uint8Array>("milestones", false, (topic, raw) => {
+            callback(topic, deserializeMilestonePayload(new ReadStream(raw)));
         });
     }
 
@@ -243,7 +243,7 @@ export class MqttClient implements IMqttClient {
             subTag = `/${Converter.bytesToHex(tag)}`;
         }
 
-        return this.internalSubscribe<Uint8Array>(`messages/taggedData${subTag}`, false, callback);
+        return this.internalSubscribe<Uint8Array>(`messages/tagged-data${subTag}`, false, callback);
     }
 
     /**
@@ -263,7 +263,7 @@ export class MqttClient implements IMqttClient {
             subTag = `/${Converter.bytesToHex(tag)}`;
         }
 
-        return this.internalSubscribe<Uint8Array>(`messages/taggedData${subTag}`, false, (topic, raw) => {
+        return this.internalSubscribe<Uint8Array>(`messages/tagged-data${subTag}`, false, (topic, raw) => {
             callback(topic, deserializeMessage(new ReadStream(raw)));
         });
     }
@@ -275,7 +275,7 @@ export class MqttClient implements IMqttClient {
      * @returns A subscription Id which can be used to unsubscribe.
      */
     public messagesMetadata(messageId: string, callback: (topic: string, data: IMessageMetadata) => void): string {
-        return this.internalSubscribe(`messages/${messageId}/metadata`, true, callback);
+        return this.internalSubscribe(`message-metadata/${messageId}`, true, callback);
     }
 
     /**
@@ -315,6 +315,36 @@ export class MqttClient implements IMqttClient {
      */
     public output(outputId: string, callback: (topic: string, data: IOutputResponse) => void): string {
         return this.internalSubscribe(`outputs/${outputId}`, true, callback);
+    }
+
+    /**
+     * Subscribe to updates for an nft output.
+     * @param nftId The Nft output to monitor.
+     * @param callback The callback which is called when new data arrives.
+     * @returns A subscription Id which can be used to unsubscribe.
+     */
+    public nft(nftId: string, callback: (topic: string, data: IOutputResponse) => void): string {
+        return this.internalSubscribe(`outputs/nfts/${nftId}`, true, callback);
+    }
+
+    /**
+     * Subscribe to updates for an alias output.
+     * @param aliasId The alias output to monitor.
+     * @param callback The callback which is called when new data arrives.
+     * @returns A subscription Id which can be used to unsubscribe.
+     */
+    public alias(aliasId: string, callback: (topic: string, data: IOutputResponse) => void): string {
+        return this.internalSubscribe(`outputs/aliases/${aliasId}`, true, callback);
+    }
+
+    /**
+     * Subscribe to updates for a foundry output.
+     * @param foundryId The foundry output to monitor.
+     * @param callback The callback which is called when new data arrives.
+     * @returns A subscription Id which can be used to unsubscribe.
+     */
+    public foundry(foundryId: string, callback: (topic: string, data: IOutputResponse) => void): string {
+        return this.internalSubscribe(`outputs/foundries/${foundryId}`, true, callback);
     }
 
     /**
@@ -710,3 +740,4 @@ export class MqttClient implements IMqttClient {
         }
     }
 }
+

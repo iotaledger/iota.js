@@ -1,6 +1,6 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import type { IMessage, IMessageMetadata, IOutputResponse, IReceiptsResponse } from "@iota/iota.js";
+import type { IMessage, IMessageMetadata, IMilestonePayload, IOutputResponse, IReceiptsResponse } from "@iota/iota.js";
 import type { IMqttMilestoneResponse } from "./api/IMqttMilestoneResponse";
 import type { IMqttStatus } from "./IMqttStatus";
 
@@ -78,18 +78,18 @@ export interface IMqttClient {
         callback: (topic: string, data: IMessage) => void): string;
 
     /**
-     * Subscribe to all milestone messages in their raw form.
+     * Subscribe to all milestone payloads in their raw form.
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    messagesMilestoneRaw(callback: (topic: string, data: Uint8Array) => void): string;
+    milestoneRaw(callback: (topic: string, data: Uint8Array) => void): string;
 
     /**
-     * Subscribe to all milestone messages.
+     * Subscribe to all milestone payloads.
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    messagesMilestone(callback: (topic: string, data: IMessage) => void): string;
+    milestone(callback: (topic: string, data: IMilestonePayload) => void): string;
 
     /**
      * Subscribe to get all messages for the specified tag in binary form.
@@ -145,6 +145,30 @@ export interface IMqttClient {
      * @returns A subscription Id which can be used to unsubscribe.
      */
     output(outputId: string, callback: (topic: string, data: IOutputResponse) => void): string;
+
+    /**
+     * Subscribe to updates for an nft output.
+     * @param nftId The Nft output to monitor.
+     * @param callback The callback which is called when new data arrives.
+     * @returns A subscription Id which can be used to unsubscribe.
+     */
+    nft(nftId: string, callback: (topic: string, data: IOutputResponse) => void): string;
+
+    /**
+     * Subscribe to updates for an alias output.
+     * @param aliasId The alias output to monitor.
+     * @param callback The callback which is called when new data arrives.
+     * @returns A subscription Id which can be used to unsubscribe.
+     */
+    alias(aliasId: string, callback: (topic: string, data: IOutputResponse) => void): string;
+
+    /**
+     * Subscribe to updates for a foundry output.
+     * @param foundryId The foundry output to monitor.
+     * @param callback The callback which is called when new data arrives.
+     * @returns A subscription Id which can be used to unsubscribe.
+     */
+    foundry(foundryId: string, callback: (topic: string, data: IOutputResponse) => void): string;
 
     /**
      * Subscribe to the output with specific unlock condition and address.

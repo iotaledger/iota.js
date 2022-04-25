@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.9.0-stardust.5
+
+* Update Mqtt topic endpoints
+* Bump version of iota.js
+
 ## v1.9.0-stardust.4
 
 * Stardust alpha release
