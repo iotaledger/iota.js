@@ -20,6 +20,9 @@ import type { InputTypes } from "../models/inputs/inputTypes";
 import { TREASURY_INPUT_TYPE } from "../models/inputs/ITreasuryInput";
 import { UTXO_INPUT_TYPE } from "../models/inputs/IUTXOInput";
 import { TRANSACTION_ESSENCE_TYPE } from "../models/ITransactionEssence";
+import { IPoWMilestoneOption, POW_MILESTONE_OPTION_TYPE } from "../models/milestoneOptions/IPoWMilestoneOption";
+import { IReceiptMilestoneOption, RECEIPT_MILESTONE_OPTION_TYPE } from "../models/milestoneOptions/IReceiptMilestoneOption";
+import type { MilestoneOptionTypes } from "../models/milestoneOptions/milestoneOptionTypes";
 import { ALIAS_OUTPUT_TYPE } from "../models/outputs/IAliasOutput";
 import { BASIC_OUTPUT_TYPE } from "../models/outputs/IBasicOutput";
 import { FOUNDRY_OUTPUT_TYPE } from "../models/outputs/IFoundryOutput";
@@ -27,7 +30,6 @@ import { NFT_OUTPUT_TYPE } from "../models/outputs/INftOutput";
 import { TREASURY_OUTPUT_TYPE } from "../models/outputs/ITreasuryOutput";
 import type { OutputTypes } from "../models/outputs/outputTypes";
 import { IMilestonePayload, MILESTONE_PAYLOAD_TYPE } from "../models/payloads/IMilestonePayload";
-import { IReceiptPayload, RECEIPT_PAYLOAD_TYPE } from "../models/payloads/IReceiptPayload";
 import type { ITaggedDataPayload } from "../models/payloads/ITaggedDataPayload";
 import { TAGGED_DATA_PAYLOAD_TYPE } from "../models/payloads/ITaggedDataPayload";
 import { ITransactionPayload, TRANSACTION_PAYLOAD_TYPE } from "../models/payloads/ITransactionPayload";
@@ -182,8 +184,6 @@ export function logPayload(prefix: string, payload?: PayloadTypes): void {
             logTransactionPayload(prefix, payload);
         } else if (payload.type === MILESTONE_PAYLOAD_TYPE) {
             logMilestonePayload(prefix, payload);
-        } else if (payload.type === RECEIPT_PAYLOAD_TYPE) {
-            logReceiptPayload(prefix, payload);
         } else if (payload.type === TREASURY_TRANSACTION_PAYLOAD_TYPE) {
             logTreasuryTransactionPayload(prefix, payload);
         } else if (payload.type === TAGGED_DATA_PAYLOAD_TYPE) {
@@ -249,40 +249,78 @@ export function logMilestonePayload(prefix: string, payload?: IMilestonePayload)
         logger(`${prefix}Milestone Payload`);
         logger(`${prefix}\tIndex:`, payload.index);
         logger(`${prefix}\tTimestamp:`, payload.timestamp);
+        logger(`${prefix}\tLastMilestoneId:`, payload.lastMilestoneId);
         for (let i = 0; i < payload.parentMessageIds.length; i++) {
             logger(`${prefix}\tParent ${i + 1}:`, payload.parentMessageIds[i]);
         }
-        logger(`${prefix}\tInclusion Merkle Proof:`, payload.inclusionMerkleProof);
-        if (payload.nextPoWScore) {
-            logger(`${prefix}\tNext PoW Score:`, payload.nextPoWScore);
-        }
-        if (payload.nextPoWScoreMilestoneIndex) {
-            logger(`${prefix}\tNext PoW Score Milestone Index:`, payload.nextPoWScoreMilestoneIndex);
-        }
+        logger(`${prefix}\tConfirmed Merkle Proof:`, payload.confirmedMerkleRoot);
+        logger(`${prefix}\tApplied Merkle Proof:`, payload.appliedMerkleRoot);
         logger(`${prefix}\tMetadata:`, payload.metadata);
+        logMilestoneOptions(`${prefix}\t`, payload.options);
         logger(`${prefix}\tSignatures:`, payload.signatures.length);
         for (const signature of payload.signatures) {
             logSignature(`${prefix}\t\t`, signature);
         }
-        logReceiptPayload(`${prefix}\t`, payload.receipt);
     }
 }
 
 /**
- * Log a receipt payload to the console.
+ * Log milestone options to the console.
  * @param prefix The prefix for the output.
- * @param payload The payload.
+ * @param milestoneOptions The milestone options.
  */
-export function logReceiptPayload(prefix: string, payload?: IReceiptPayload): void {
-    if (payload) {
-        logger(`${prefix}Receipt Payload`);
-        logger(`${prefix}\tMigrated At:`, payload.migratedAt);
-        logger(`${prefix}\tFinal:`, payload.final);
-        logger(`${prefix}\tFunds:`, payload.funds.length);
-        for (const funds of payload.funds) {
+ export function logMilestoneOptions(prefix: string, milestoneOptions?: MilestoneOptionTypes[]): void {
+    if (milestoneOptions) {
+        logger(`${prefix}Milestone Options`);
+        for (const milestoneOption of milestoneOptions) {
+            logMilestoneOption(`${prefix}\t\t`, milestoneOption);
+        }
+    }
+}
+
+/**
+ * Log milestone option to the console.
+ * @param prefix The prefix for the output.
+ * @param milestoneOption The milestone option.
+ */
+ export function logMilestoneOption(prefix: string, milestoneOption: MilestoneOptionTypes): void {
+    if (milestoneOption.type === RECEIPT_MILESTONE_OPTION_TYPE) {
+        logger(`${prefix}\tReceipt Milestone Option`);
+        logReceiptMilestoneOption(`${prefix}\t\t`, milestoneOption);
+    } else if (milestoneOption.type === POW_MILESTONE_OPTION_TYPE) {
+        logger(`${prefix}\tPoW Milestone Option`);
+        logPoWMilestoneOption(`${prefix}\t\t`, milestoneOption);
+    }
+}
+
+/**
+ * Log a receipt milestone option to the console.
+ * @param prefix The prefix for the output.
+ * @param option The option.
+ */
+export function logReceiptMilestoneOption(prefix: string, option?: IReceiptMilestoneOption): void {
+    if (option) {
+        logger(`${prefix}Receipt Milestone Option`);
+        logger(`${prefix}\tMigrated At:`, option.migratedAt);
+        logger(`${prefix}\tFinal:`, option.final);
+        logger(`${prefix}\tFunds:`, option.funds.length);
+        for (const funds of option.funds) {
             logFunds(`${prefix}\t\t`, funds);
         }
-        logTreasuryTransactionPayload(`${prefix}\t\t`, payload.transaction);
+        logTreasuryTransactionPayload(`${prefix}\t\t`, option.transaction);
+    }
+}
+
+/**
+ * Log a receipt milestone option to the console.
+ * @param prefix The prefix for the output.
+ * @param option The option.
+ */
+export function logPoWMilestoneOption(prefix: string, option?: IPoWMilestoneOption): void {
+    if (option) {
+        logger(`${prefix}PoW Milestone Option`);
+        logger(`${prefix}\tNext PoW Score:`, option.nextPoWScore);
+        logger(`${prefix}\tNext PoW Score Milestone Index:`, option.nextPoWScoreMilestoneIndex);
     }
 }
 
@@ -464,7 +502,7 @@ export function logTokenScheme(prefix: string, tokenScheme: TokenSchemeTypes): v
 /**
  * Log feature blocks to the console.
  * @param prefix The prefix for the output.
- * @param featureBlocks The deature blocks.
+ * @param featureBlocks The feature blocks.
  */
 export function logFeatureBlocks(prefix: string, featureBlocks: FeatureBlockTypes[]): void {
     logger(`${prefix}Feature Blocks`);

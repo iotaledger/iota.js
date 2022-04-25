@@ -1,6 +1,6 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import type { IReceiptPayload } from "../payloads/IReceiptPayload";
+import type { IReceiptMilestoneOption } from "../milestoneOptions/IReceiptMilestoneOption";
 
 /**
  * Receipts response details.
@@ -17,6 +17,6 @@ export interface IReceiptsResponse {
         /**
          * The receipt.
          */
-        receipt: IReceiptPayload;
+        receipt: IReceiptMilestoneOption;
     }[];
 }

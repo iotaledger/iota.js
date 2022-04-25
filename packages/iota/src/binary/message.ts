@@ -4,7 +4,6 @@ import type { ReadStream, WriteStream } from "@iota/util.js";
 import bigInt from "big-integer";
 import { DEFAULT_PROTOCOL_VERSION, IMessage } from "../models/IMessage";
 import { MILESTONE_PAYLOAD_TYPE } from "../models/payloads/IMilestonePayload";
-import { RECEIPT_PAYLOAD_TYPE } from "../models/payloads/IReceiptPayload";
 import { TAGGED_DATA_PAYLOAD_TYPE } from "../models/payloads/ITaggedDataPayload";
 import { TRANSACTION_PAYLOAD_TYPE } from "../models/payloads/ITransactionPayload";
 import { TREASURY_TRANSACTION_PAYLOAD_TYPE } from "../models/payloads/ITreasuryTransactionPayload";
@@ -59,7 +58,7 @@ export function deserializeMessage(readStream: ReadStream): IMessage {
 
     const payload = deserializePayload(readStream);
 
-    if (payload && (payload.type === RECEIPT_PAYLOAD_TYPE || payload.type === TREASURY_TRANSACTION_PAYLOAD_TYPE)) {
+    if (payload && payload.type === TREASURY_TRANSACTION_PAYLOAD_TYPE) {
         throw new Error("Messages can not contain receipt or treasury transaction payloads");
     }
 

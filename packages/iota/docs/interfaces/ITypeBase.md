@@ -44,7 +44,9 @@ Type of the object.
 
   ↳ [`IMilestonePayload`](IMilestonePayload.md)
 
-  ↳ [`IReceiptPayload`](IReceiptPayload.md)
+  ↳ [`IReceiptMilestoneOption`](IReceiptMilestoneOption.md)
+
+  ↳ [`IPoWMilestoneOption`](IPoWMilestoneOption.md)
 
   ↳ [`ITaggedDataPayload`](ITaggedDataPayload.md)
 
