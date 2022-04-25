@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.9.0-stardust.8
+
+* Publish with package
+
 ## v1.9.0-stardust.7
 
 * Update Milestone payload
