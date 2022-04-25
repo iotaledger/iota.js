@@ -5,12 +5,12 @@ import type { ITypeBase } from "../ITypeBase";
 import type { ITreasuryTransactionPayload } from "../payloads/ITreasuryTransactionPayload";
 
 /**
- * The global type for the payload.
+ * The global type for the option.
  */
 export const RECEIPT_MILESTONE_OPTION_TYPE = 0;
 
 /**
- * Receipt payload.
+ * Receipt milestone option.
  */
 export interface IReceiptMilestoneOption extends ITypeBase<0> {
     /**

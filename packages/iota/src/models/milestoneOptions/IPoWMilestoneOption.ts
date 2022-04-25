@@ -3,12 +3,12 @@
 import type { ITypeBase } from "../ITypeBase";
 
 /**
- * The global type for the payload.
+ * The global type for the option.
  */
 export const POW_MILESTONE_OPTION_TYPE = 1;
 
 /**
- * Receipt payload.
+ * PoW milestone option.
  */
 export interface IPoWMilestoneOption extends ITypeBase<1> {
     /**
