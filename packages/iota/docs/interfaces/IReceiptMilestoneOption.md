@@ -1,6 +1,6 @@
 # Interface: IReceiptMilestoneOption
 
-Receipt payload.
+Receipt milestone option.
 
 ## Hierarchy
 

@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.9.0-stardust.9
+
+* Bump version due to npm issue
+
 ## v1.9.0-stardust.8
 
 * Publish with package

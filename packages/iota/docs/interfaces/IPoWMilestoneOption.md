@@ -1,6 +1,6 @@
 # Interface: IPoWMilestoneOption
 
-Receipt payload.
+PoW milestone option.
 
 ## Hierarchy
 

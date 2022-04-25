@@ -65,7 +65,12 @@
 - [MIN\_OUTPUT\_COUNT](api.md#min_output_count)
 - [MAX\_OUTPUT\_COUNT](api.md#max_output_count)
 - [MIN\_TREASURY\_OUTPUT\_LENGTH](api.md#min_treasury_output_length)
+- [MIN\_MILESTONE\_PAYLOAD\_LENGTH](api.md#min_milestone_payload_length)
 - [MIN\_PAYLOAD\_LENGTH](api.md#min_payload_length)
+- [MIN\_TAGGED\_DATA\_PAYLOAD\_LENGTH](api.md#min_tagged_data_payload_length)
+- [MAX\_TAG\_LENGTH](api.md#max_tag_length)
+- [MIN\_TRANSACTION\_PAYLOAD\_LENGTH](api.md#min_transaction_payload_length)
+- [MIN\_TREASURY\_TRANSACTION\_PAYLOAD\_LENGTH](api.md#min_treasury_transaction_payload_length)
 - [MIN\_ED25519\_SIGNATURE\_LENGTH](api.md#min_ed25519_signature_length)
 - [MIN\_SIGNATURE\_LENGTH](api.md#min_signature_length)
 - [MIN\_SIMPLE\_TOKEN\_SCHEME\_LENGTH](api.md#min_simple_token_scheme_length)
@@ -182,8 +187,16 @@
 - [serializeOutput](api.md#serializeoutput)
 - [deserializeTreasuryOutput](api.md#deserializetreasuryoutput)
 - [serializeTreasuryOutput](api.md#serializetreasuryoutput)
+- [deserializeMilestonePayload](api.md#deserializemilestonepayload)
+- [serializeMilestonePayload](api.md#serializemilestonepayload)
 - [deserializePayload](api.md#deserializepayload)
 - [serializePayload](api.md#serializepayload)
+- [deserializeTaggedDataPayload](api.md#deserializetaggeddatapayload)
+- [serializeTaggedDataPayload](api.md#serializetaggeddatapayload)
+- [deserializeTransactionPayload](api.md#deserializetransactionpayload)
+- [serializeTransactionPayload](api.md#serializetransactionpayload)
+- [deserializeTreasuryTransactionPayload](api.md#deserializetreasurytransactionpayload)
+- [serializeTreasuryTransactionPayload](api.md#serializetreasurytransactionpayload)
 - [deserializeEd25519Signature](api.md#deserializeed25519signature)
 - [serializeEd25519Signature](api.md#serializeed25519signature)
 - [deserializeSignature](api.md#deserializesignature)
@@ -746,11 +759,51 @@ The minimum length of a treasury output binary representation.
 
 ___
 
+### MIN\_MILESTONE\_PAYLOAD\_LENGTH
+
+• `Const` **MIN\_MILESTONE\_PAYLOAD\_LENGTH**: `number`
+
+The minimum length of a milestone payload binary representation.
+
+___
+
 ### MIN\_PAYLOAD\_LENGTH
 
 • `Const` **MIN\_PAYLOAD\_LENGTH**: `number`
 
 The minimum length of a payload binary representation.
+
+___
+
+### MIN\_TAGGED\_DATA\_PAYLOAD\_LENGTH
+
+• `Const` **MIN\_TAGGED\_DATA\_PAYLOAD\_LENGTH**: `number`
+
+The minimum length of a tagged data payload binary representation.
+
+___
+
+### MAX\_TAG\_LENGTH
+
+• `Const` **MAX\_TAG\_LENGTH**: `number` = `64`
+
+The maximum length of a tag.
+
+___
+
+### MIN\_TRANSACTION\_PAYLOAD\_LENGTH
+
+• `Const` **MIN\_TRANSACTION\_PAYLOAD\_LENGTH**: `number`
+
+The minimum length of a transaction payload binary representation.
+
+___
+
+### MIN\_TREASURY\_TRANSACTION\_PAYLOAD\_LENGTH
+
+• `Const` **MIN\_TREASURY\_TRANSACTION\_PAYLOAD\_LENGTH**: `number`
+
+The minimum length of a treasury transaction payload binary representation.
 
 ___
 
@@ -1006,7 +1059,7 @@ ___
 
 • `Const` **POW\_MILESTONE\_OPTION\_TYPE**: ``1``
 
-The global type for the payload.
+The global type for the option.
 
 ___
 
@@ -1014,7 +1067,7 @@ ___
 
 • `Const` **RECEIPT\_MILESTONE\_OPTION\_TYPE**: ``0``
 
-The global type for the payload.
+The global type for the option.
 
 ___
 
@@ -2302,6 +2355,45 @@ Serialize the treasury output to binary.
 
 ___
 
+### deserializeMilestonePayload
+
+▸ **deserializeMilestonePayload**(`readStream`): [`IMilestonePayload`](interfaces/IMilestonePayload.md)
+
+Deserialize the milestone payload from binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `readStream` | `ReadStream` | The stream to read the data from. |
+
+#### Returns
+
+[`IMilestonePayload`](interfaces/IMilestonePayload.md)
+
+The deserialized object.
+
+___
+
+### serializeMilestonePayload
+
+▸ **serializeMilestonePayload**(`writeStream`, `object`): `void`
+
+Serialize the milestone payload to binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `writeStream` | `WriteStream` | The stream to write the data to. |
+| `object` | [`IMilestonePayload`](interfaces/IMilestonePayload.md) | The object to serialize. |
+
+#### Returns
+
+`void`
+
+___
+
 ### deserializePayload
 
 ▸ **deserializePayload**(`readStream`): [`PayloadTypes`](api.md#payloadtypes) \| `undefined`
@@ -2334,6 +2426,123 @@ Serialize the payload essence to binary.
 | :------ | :------ | :------ |
 | `writeStream` | `WriteStream` | The stream to write the data to. |
 | `object` | `undefined` \| [`PayloadTypes`](api.md#payloadtypes) | The object to serialize. |
+
+#### Returns
+
+`void`
+
+___
+
+### deserializeTaggedDataPayload
+
+▸ **deserializeTaggedDataPayload**(`readStream`): [`ITaggedDataPayload`](interfaces/ITaggedDataPayload.md)
+
+Deserialize the tagged data payload from binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `readStream` | `ReadStream` | The stream to read the data from. |
+
+#### Returns
+
+[`ITaggedDataPayload`](interfaces/ITaggedDataPayload.md)
+
+The deserialized object.
+
+___
+
+### serializeTaggedDataPayload
+
+▸ **serializeTaggedDataPayload**(`writeStream`, `object`): `void`
+
+Serialize the tagged data payload to binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `writeStream` | `WriteStream` | The stream to write the data to. |
+| `object` | [`ITaggedDataPayload`](interfaces/ITaggedDataPayload.md) | The object to serialize. |
+
+#### Returns
+
+`void`
+
+___
+
+### deserializeTransactionPayload
+
+▸ **deserializeTransactionPayload**(`readStream`): [`ITransactionPayload`](interfaces/ITransactionPayload.md)
+
+Deserialize the transaction payload from binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `readStream` | `ReadStream` | The stream to read the data from. |
+
+#### Returns
+
+[`ITransactionPayload`](interfaces/ITransactionPayload.md)
+
+The deserialized object.
+
+___
+
+### serializeTransactionPayload
+
+▸ **serializeTransactionPayload**(`writeStream`, `object`): `void`
+
+Serialize the transaction payload to binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `writeStream` | `WriteStream` | The stream to write the data to. |
+| `object` | [`ITransactionPayload`](interfaces/ITransactionPayload.md) | The object to serialize. |
+
+#### Returns
+
+`void`
+
+___
+
+### deserializeTreasuryTransactionPayload
+
+▸ **deserializeTreasuryTransactionPayload**(`readStream`): [`ITreasuryTransactionPayload`](interfaces/ITreasuryTransactionPayload.md)
+
+Deserialize the treasury transaction payload from binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `readStream` | `ReadStream` | The stream to read the data from. |
+
+#### Returns
+
+[`ITreasuryTransactionPayload`](interfaces/ITreasuryTransactionPayload.md)
+
+The deserialized object.
+
+___
+
+### serializeTreasuryTransactionPayload
+
+▸ **serializeTreasuryTransactionPayload**(`writeStream`, `object`): `void`
+
+Serialize the treasury transaction payload to binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `writeStream` | `WriteStream` | The stream to write the data to. |
+| `object` | [`ITreasuryTransactionPayload`](interfaces/ITreasuryTransactionPayload.md) | The object to serialize. |
 
 #### Returns
 
