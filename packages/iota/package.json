@@ -1,7 +1,7 @@
 {
     "name": "@iota/iota.js",
     "description": "IOTA JavaScript Library",
-    "version": "1.9.0-stardust.7",
+    "version": "1.9.0-stardust.8",
     "keywords": [
         "iota",
         "client"
