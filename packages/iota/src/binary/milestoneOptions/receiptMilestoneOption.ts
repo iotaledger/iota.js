@@ -38,7 +38,7 @@ export function deserializeReceiptMilestoneOption(readStream: ReadStream): IRece
 
     const funds = deserializeFunds(readStream);
     const treasuryTransactionPayload = deserializePayload(readStream);
-    if (!treasuryTransactionPayload || treasuryTransactionPayload.type !== TREASURY_TRANSACTION_PAYLOAD_TYPE) {
+    if (treasuryTransactionPayload?.type !== TREASURY_TRANSACTION_PAYLOAD_TYPE) {
         throw new Error(`receiptMilestoneOption can only contain treasury payloads ${type}`);
     }
 

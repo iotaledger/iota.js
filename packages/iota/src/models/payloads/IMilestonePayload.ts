@@ -34,12 +34,12 @@ export interface IMilestonePayload extends ITypeBase<7> {
     parentMessageIds: string[];
 
     /**
-     * The merkle proof confirmation.
+     * The Merkle tree hash of all messages confirmed by this milestone.
      */
     confirmedMerkleRoot: string;
 
     /**
-     * The merkle proof applied.
+     * The Merkle tree hash of all messages applied by this milestone.
      */
     appliedMerkleRoot: string;
 

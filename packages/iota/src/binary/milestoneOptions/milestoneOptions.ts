@@ -31,10 +31,10 @@ import {
  * @returns The deserialized object.
  */
  export function deserializeMilestoneOptions(readStream: ReadStream): MilestoneOptionTypes[] {
-    const numMilestoneOptions = readStream.readUInt8("milestoneOptions.numMilestoneOptions");
+    const optionsCount = readStream.readUInt8("milestoneOptions.optionsCount");
 
     const milestoneOptions: MilestoneOptionTypes[] = [];
-    for (let i = 0; i < numMilestoneOptions; i++) {
+    for (let i = 0; i < optionsCount; i++) {
         milestoneOptions.push(deserializeMilestoneOption(readStream));
     }
 
