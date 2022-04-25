@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.9.0-stardust.7
+
+* Bump version of iota.js
+
 ## v1.9.0-stardust.6
 
 * Bump version of iota.js

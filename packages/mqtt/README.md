@@ -5,7 +5,7 @@ This package provides mqtt support.
 ## Install
 
 ```shell
-npm install @iota/mqtt.js@1.9.0-stardust.6
+npm install @iota/mqtt.js@1.9.0-stardust.7
 ```
 
 ## MQTT Operations
