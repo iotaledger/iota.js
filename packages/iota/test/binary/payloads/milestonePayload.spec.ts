@@ -25,7 +25,6 @@ describe("Binary Milestone Payload", () => {
             confirmedMerkleRoot: "0x665de8d34bca02af275a6ccaf2d5f7b1d018f695473f19855d7ad1a54f106ed1",
             appliedMerkleRoot: "0x0e5751c026e543b2e8ab2eb06099daa1d1e5df47778f7787faab45cdf12fe3a8",
             metadata: "0x1111111122222222",
-            // options:[],
             signatures: [
                 {
                     type: 0,
