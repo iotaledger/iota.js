@@ -12,6 +12,6 @@ Receipts response details.
 
 ### receipts
 
-• **receipts**: { `milestoneIndex`: `number` ; `receipt`: [`IReceiptPayload`](IReceiptPayload.md)  }[]
+• **receipts**: { `milestoneIndex`: `number` ; `receipt`: [`IReceiptMilestoneOption`](IReceiptMilestoneOption.md)  }[]
 
 The receipts.

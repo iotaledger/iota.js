@@ -15,13 +15,13 @@ Milestone payload.
 - [type](IMilestonePayload.md#type)
 - [index](IMilestonePayload.md#index)
 - [timestamp](IMilestonePayload.md#timestamp)
+- [lastMilestoneId](IMilestonePayload.md#lastmilestoneid)
 - [parentMessageIds](IMilestonePayload.md#parentmessageids)
-- [inclusionMerkleProof](IMilestonePayload.md#inclusionmerkleproof)
-- [nextPoWScore](IMilestonePayload.md#nextpowscore)
-- [nextPoWScoreMilestoneIndex](IMilestonePayload.md#nextpowscoremilestoneindex)
+- [confirmedMerkleRoot](IMilestonePayload.md#confirmedmerkleroot)
+- [appliedMerkleRoot](IMilestonePayload.md#appliedmerkleroot)
 - [metadata](IMilestonePayload.md#metadata)
+- [options](IMilestonePayload.md#options)
 - [signatures](IMilestonePayload.md#signatures)
-- [receipt](IMilestonePayload.md#receipt)
 
 ## Properties
 
@@ -53,6 +53,14 @@ The timestamp of the milestone.
 
 ___
 
+### lastMilestoneId
+
+• **lastMilestoneId**: `string`
+
+The timestamp of the milestone.
+
+___
+
 ### parentMessageIds
 
 • **parentMessageIds**: `string`[]
@@ -61,27 +69,19 @@ The parents where this milestone attaches to.
 
 ___
 
-### inclusionMerkleProof
+### confirmedMerkleRoot
 
-• **inclusionMerkleProof**: `string`
+• **confirmedMerkleRoot**: `string`
 
-The merkle proof inclusions.
-
-___
-
-### nextPoWScore
-
-• **nextPoWScore**: `number`
-
-The next PoW score.
+The Merkle tree hash of all messages confirmed by this milestone.
 
 ___
 
-### nextPoWScoreMilestoneIndex
+### appliedMerkleRoot
 
-• **nextPoWScoreMilestoneIndex**: `number`
+• **appliedMerkleRoot**: `string`
 
-The milestone at which the next PoW score becomes active.
+The Merkle tree hash of all messages applied by this milestone.
 
 ___
 
@@ -93,16 +93,16 @@ The metadata.
 
 ___
 
+### options
+
+• `Optional` **options**: [`MilestoneOptionTypes`](../api.md#milestoneoptiontypes)[]
+
+The milestone options.
+
+___
+
 ### signatures
 
 • **signatures**: [`IEd25519Signature`](IEd25519Signature.md)[]
 
 The signatures.
-
-___
-
-### receipt
-
-• `Optional` **receipt**: [`IReceiptPayload`](IReceiptPayload.md)
-
-Receipt payload.

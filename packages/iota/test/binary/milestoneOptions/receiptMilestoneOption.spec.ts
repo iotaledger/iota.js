@@ -1,17 +1,17 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 import { Converter, ReadStream, WriteStream } from "@iota/util.js";
-import { deserializeReceiptPayload, serializeReceiptPayload } from "../../../src/binary/payloads/receiptPayload";
+import { deserializeReceiptMilestoneOption, serializeReceiptMilestoneOption } from "../../../src/binary/milestoneOptions/receiptMilestoneOption";
 import { ED25519_ADDRESS_TYPE, IEd25519Address } from "../../../src/models/addresses/IEd25519Address";
 import { TREASURY_INPUT_TYPE } from "../../../src/models/inputs/ITreasuryInput";
+import { IReceiptMilestoneOption, RECEIPT_MILESTONE_OPTION_TYPE } from "../../../src/models/milestoneOptions/IReceiptMilestoneOption";
 import { TREASURY_OUTPUT_TYPE } from "../../../src/models/outputs/ITreasuryOutput";
-import { IReceiptPayload, RECEIPT_PAYLOAD_TYPE } from "../../../src/models/payloads/IReceiptPayload";
 import { TREASURY_TRANSACTION_PAYLOAD_TYPE } from "../../../src/models/payloads/ITreasuryTransactionPayload";
 
-describe("Binary Receipt Payload", () => {
-    test("Can serialize and deserialize receipt payload", () => {
-        const payload: IReceiptPayload = {
-            type: RECEIPT_PAYLOAD_TYPE,
+describe("Binary Receipt Milestone Option", () => {
+    test("Can serialize and deserialize receipt milestone option", () => {
+        const payload: IReceiptMilestoneOption = {
+            type: RECEIPT_MILESTONE_OPTION_TYPE,
             migratedAt: 123456,
             final: true,
             funds: [
@@ -38,13 +38,13 @@ describe("Binary Receipt Payload", () => {
         };
 
         const serialized = new WriteStream();
-        serializeReceiptPayload(serialized, payload);
+        serializeReceiptMilestoneOption(serialized, payload);
         const hex = serialized.finalHex();
         expect(hex).toEqual(
-            "0300000040e20100010100aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa00bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb64000000000000002e0000000400000001aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa029426000000000000"
+            "0040e20100010100aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa00bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb64000000000000002e0000000400000001aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa029426000000000000"
         );
-        const deserialized = deserializeReceiptPayload(new ReadStream(Converter.hexToBytes(hex)));
-        expect(deserialized.type).toEqual(3);
+        const deserialized = deserializeReceiptMilestoneOption(new ReadStream(Converter.hexToBytes(hex)));
+        expect(deserialized.type).toEqual(0);
         expect(deserialized.migratedAt).toEqual(123456);
         expect(deserialized.final).toEqual(true);
         expect(deserialized.funds.length).toEqual(1);

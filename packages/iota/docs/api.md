@@ -52,6 +52,9 @@
 - [MAX\_MESSAGE\_LENGTH](api.md#max_message_length)
 - [MAX\_NUMBER\_PARENTS](api.md#max_number_parents)
 - [MIN\_NUMBER\_PARENTS](api.md#min_number_parents)
+- [MIN\_MILESTONE\_OPTION\_LENGTH](api.md#min_milestone_option_length)
+- [MIN\_POW\_MILESTONE\_OPTION\_LENGTH](api.md#min_pow_milestone_option_length)
+- [MIN\_RECEIPT\_MILESTONE\_OPTION\_LENGTH](api.md#min_receipt_milestone_option_length)
 - [ALIAS\_ID\_LENGTH](api.md#alias_id_length)
 - [MIN\_ALIAS\_OUTPUT\_LENGTH](api.md#min_alias_output_length)
 - [MIN\_BASIC\_OUTPUT\_LENGTH](api.md#min_basic_output_length)
@@ -94,13 +97,14 @@
 - [TAG\_FEATURE\_BLOCK\_TYPE](api.md#tag_feature_block_type)
 - [TREASURY\_INPUT\_TYPE](api.md#treasury_input_type)
 - [UTXO\_INPUT\_TYPE](api.md#utxo_input_type)
+- [POW\_MILESTONE\_OPTION\_TYPE](api.md#pow_milestone_option_type)
+- [RECEIPT\_MILESTONE\_OPTION\_TYPE](api.md#receipt_milestone_option_type)
 - [ALIAS\_OUTPUT\_TYPE](api.md#alias_output_type)
 - [BASIC\_OUTPUT\_TYPE](api.md#basic_output_type)
 - [FOUNDRY\_OUTPUT\_TYPE](api.md#foundry_output_type)
 - [NFT\_OUTPUT\_TYPE](api.md#nft_output_type)
 - [TREASURY\_OUTPUT\_TYPE](api.md#treasury_output_type)
 - [MILESTONE\_PAYLOAD\_TYPE](api.md#milestone_payload_type)
-- [RECEIPT\_PAYLOAD\_TYPE](api.md#receipt_payload_type)
 - [TAGGED\_DATA\_PAYLOAD\_TYPE](api.md#tagged_data_payload_type)
 - [TRANSACTION\_PAYLOAD\_TYPE](api.md#transaction_payload_type)
 - [TREASURY\_TRANSACTION\_PAYLOAD\_TYPE](api.md#treasury_transaction_payload_type)
@@ -156,6 +160,14 @@
 - [serializeUTXOInput](api.md#serializeutxoinput)
 - [deserializeMessage](api.md#deserializemessage)
 - [serializeMessage](api.md#serializemessage)
+- [deserializeMilestoneOptions](api.md#deserializemilestoneoptions)
+- [serializeMilestoneOptions](api.md#serializemilestoneoptions)
+- [deserializeMilestoneOption](api.md#deserializemilestoneoption)
+- [serializeMilestoneOption](api.md#serializemilestoneoption)
+- [deserializePoWMilestoneOption](api.md#deserializepowmilestoneoption)
+- [serializePoWMilestoneOption](api.md#serializepowmilestoneoption)
+- [deserializeReceiptMilestoneOption](api.md#deserializereceiptmilestoneoption)
+- [serializeReceiptMilestoneOption](api.md#serializereceiptmilestoneoption)
 - [deserializeAliasOutput](api.md#deserializealiasoutput)
 - [serializeAliasOutput](api.md#serializealiasoutput)
 - [deserializeBasicOutput](api.md#deserializebasicoutput)
@@ -241,7 +253,10 @@
 - [logTransactionPayload](api.md#logtransactionpayload)
 - [logTaggedDataPayload](api.md#logtaggeddatapayload)
 - [logMilestonePayload](api.md#logmilestonepayload)
-- [logReceiptPayload](api.md#logreceiptpayload)
+- [logMilestoneOptions](api.md#logmilestoneoptions)
+- [logMilestoneOption](api.md#logmilestoneoption)
+- [logReceiptMilestoneOption](api.md#logreceiptmilestoneoption)
+- [logPoWMilestoneOption](api.md#logpowmilestoneoption)
 - [logTreasuryTransactionPayload](api.md#logtreasurytransactionpayload)
 - [logAddress](api.md#logaddress)
 - [logSignature](api.md#logsignature)
@@ -300,6 +315,8 @@
 - [ITagFeatureBlock](interfaces/ITagFeatureBlock.md)
 - [ITreasuryInput](interfaces/ITreasuryInput.md)
 - [IUTXOInput](interfaces/IUTXOInput.md)
+- [IPoWMilestoneOption](interfaces/IPoWMilestoneOption.md)
+- [IReceiptMilestoneOption](interfaces/IReceiptMilestoneOption.md)
 - [IAliasOutput](interfaces/IAliasOutput.md)
 - [IBasicOutput](interfaces/IBasicOutput.md)
 - [ICommonOutput](interfaces/ICommonOutput.md)
@@ -307,7 +324,6 @@
 - [INftOutput](interfaces/INftOutput.md)
 - [ITreasuryOutput](interfaces/ITreasuryOutput.md)
 - [IMilestonePayload](interfaces/IMilestonePayload.md)
-- [IReceiptPayload](interfaces/IReceiptPayload.md)
 - [ITaggedDataPayload](interfaces/ITaggedDataPayload.md)
 - [ITransactionPayload](interfaces/ITransactionPayload.md)
 - [ITreasuryTransactionPayload](interfaces/ITreasuryTransactionPayload.md)
@@ -331,6 +347,7 @@
 - [FeatureBlockTypes](api.md#featureblocktypes)
 - [InputTypes](api.md#inputtypes)
 - [LedgerInclusionState](api.md#ledgerinclusionstate)
+- [MilestoneOptionTypes](api.md#milestoneoptiontypes)
 - [OutputTypes](api.md#outputtypes)
 - [PayloadTypes](api.md#payloadtypes)
 - [SignatureTypes](api.md#signaturetypes)
@@ -622,6 +639,30 @@ ___
 • `Const` **MIN\_NUMBER\_PARENTS**: `number` = `1`
 
 The minimum number of parents.
+
+___
+
+### MIN\_MILESTONE\_OPTION\_LENGTH
+
+• `Const` **MIN\_MILESTONE\_OPTION\_LENGTH**: `number`
+
+The minimum length of a milestone option binary representation.
+
+___
+
+### MIN\_POW\_MILESTONE\_OPTION\_LENGTH
+
+• `Const` **MIN\_POW\_MILESTONE\_OPTION\_LENGTH**: `number`
+
+The minimum length of a pow milestone option binary representation.
+
+___
+
+### MIN\_RECEIPT\_MILESTONE\_OPTION\_LENGTH
+
+• `Const` **MIN\_RECEIPT\_MILESTONE\_OPTION\_LENGTH**: `number`
+
+The minimum length of a receipt milestone option binary representation.
 
 ___
 
@@ -961,6 +1002,22 @@ The global type for the input.
 
 ___
 
+### POW\_MILESTONE\_OPTION\_TYPE
+
+• `Const` **POW\_MILESTONE\_OPTION\_TYPE**: ``1``
+
+The global type for the payload.
+
+___
+
+### RECEIPT\_MILESTONE\_OPTION\_TYPE
+
+• `Const` **RECEIPT\_MILESTONE\_OPTION\_TYPE**: ``0``
+
+The global type for the payload.
+
+___
+
 ### ALIAS\_OUTPUT\_TYPE
 
 • `Const` **ALIAS\_OUTPUT\_TYPE**: ``4``
@@ -1004,14 +1061,6 @@ ___
 ### MILESTONE\_PAYLOAD\_TYPE
 
 • `Const` **MILESTONE\_PAYLOAD\_TYPE**: ``7``
-
-The global type for the payload.
-
-___
-
-### RECEIPT\_PAYLOAD\_TYPE
-
-• `Const` **RECEIPT\_PAYLOAD\_TYPE**: ``3``
 
 The global type for the payload.
 
@@ -1817,6 +1866,162 @@ Serialize the message essence to binary.
 | :------ | :------ | :------ |
 | `writeStream` | `WriteStream` | The stream to write the data to. |
 | `object` | [`IMessage`](interfaces/IMessage.md) | The object to serialize. |
+
+#### Returns
+
+`void`
+
+___
+
+### deserializeMilestoneOptions
+
+▸ **deserializeMilestoneOptions**(`readStream`): [`MilestoneOptionTypes`](api.md#milestoneoptiontypes)[]
+
+Deserialize the milestone options from binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `readStream` | `ReadStream` | The stream to read the data from. |
+
+#### Returns
+
+[`MilestoneOptionTypes`](api.md#milestoneoptiontypes)[]
+
+The deserialized object.
+
+___
+
+### serializeMilestoneOptions
+
+▸ **serializeMilestoneOptions**(`writeStream`, `objects`): `void`
+
+Serialize the milestone options to binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `writeStream` | `WriteStream` | The stream to write the data to. |
+| `objects` | [`MilestoneOptionTypes`](api.md#milestoneoptiontypes)[] | The objects to serialize. |
+
+#### Returns
+
+`void`
+
+___
+
+### deserializeMilestoneOption
+
+▸ **deserializeMilestoneOption**(`readStream`): [`MilestoneOptionTypes`](api.md#milestoneoptiontypes)
+
+Deserialize the milestone options from binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `readStream` | `ReadStream` | The stream to read the data from. |
+
+#### Returns
+
+[`MilestoneOptionTypes`](api.md#milestoneoptiontypes)
+
+The deserialized object.
+
+___
+
+### serializeMilestoneOption
+
+▸ **serializeMilestoneOption**(`writeStream`, `object`): `void`
+
+Serialize the milestone option to binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `writeStream` | `WriteStream` | The stream to write the data to. |
+| `object` | [`ITypeBase`](interfaces/ITypeBase.md)<`number`\> | The object to serialize. |
+
+#### Returns
+
+`void`
+
+___
+
+### deserializePoWMilestoneOption
+
+▸ **deserializePoWMilestoneOption**(`readStream`): [`IPoWMilestoneOption`](interfaces/IPoWMilestoneOption.md)
+
+Deserialize the pow milestone option from binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `readStream` | `ReadStream` | The stream to read the data from. |
+
+#### Returns
+
+[`IPoWMilestoneOption`](interfaces/IPoWMilestoneOption.md)
+
+The deserialized object.
+
+___
+
+### serializePoWMilestoneOption
+
+▸ **serializePoWMilestoneOption**(`writeStream`, `object`): `void`
+
+Serialize the receipt payload to binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `writeStream` | `WriteStream` | The stream to write the data to. |
+| `object` | [`IPoWMilestoneOption`](interfaces/IPoWMilestoneOption.md) | The object to serialize. |
+
+#### Returns
+
+`void`
+
+___
+
+### deserializeReceiptMilestoneOption
+
+▸ **deserializeReceiptMilestoneOption**(`readStream`): [`IReceiptMilestoneOption`](interfaces/IReceiptMilestoneOption.md)
+
+Deserialize the receipt milestone option from binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `readStream` | `ReadStream` | The stream to read the data from. |
+
+#### Returns
+
+[`IReceiptMilestoneOption`](interfaces/IReceiptMilestoneOption.md)
+
+The deserialized object.
+
+___
+
+### serializeReceiptMilestoneOption
+
+▸ **serializeReceiptMilestoneOption**(`writeStream`, `object`): `void`
+
+Serialize the receipt milestone option to binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `writeStream` | `WriteStream` | The stream to write the data to. |
+| `object` | [`IReceiptMilestoneOption`](interfaces/IReceiptMilestoneOption.md) | The object to serialize. |
 
 #### Returns
 
@@ -3565,18 +3770,75 @@ Log a milestone payload to the console.
 
 ___
 
-### logReceiptPayload
+### logMilestoneOptions
 
-▸ **logReceiptPayload**(`prefix`, `payload?`): `void`
+▸ **logMilestoneOptions**(`prefix`, `milestoneOptions?`): `void`
 
-Log a receipt payload to the console.
+Log milestone options to the console.
 
 #### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `prefix` | `string` | The prefix for the output. |
-| `payload?` | [`IReceiptPayload`](interfaces/IReceiptPayload.md) | The payload. |
+| `milestoneOptions?` | [`MilestoneOptionTypes`](api.md#milestoneoptiontypes)[] | The milestone options. |
+
+#### Returns
+
+`void`
+
+___
+
+### logMilestoneOption
+
+▸ **logMilestoneOption**(`prefix`, `milestoneOption`): `void`
+
+Log milestone option to the console.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `prefix` | `string` | The prefix for the output. |
+| `milestoneOption` | [`MilestoneOptionTypes`](api.md#milestoneoptiontypes) | The milestone option. |
+
+#### Returns
+
+`void`
+
+___
+
+### logReceiptMilestoneOption
+
+▸ **logReceiptMilestoneOption**(`prefix`, `option?`): `void`
+
+Log a receipt milestone option to the console.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `prefix` | `string` | The prefix for the output. |
+| `option?` | [`IReceiptMilestoneOption`](interfaces/IReceiptMilestoneOption.md) | The option. |
+
+#### Returns
+
+`void`
+
+___
+
+### logPoWMilestoneOption
+
+▸ **logPoWMilestoneOption**(`prefix`, `option?`): `void`
+
+Log a receipt milestone option to the console.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `prefix` | `string` | The prefix for the output. |
+| `option?` | [`IPoWMilestoneOption`](interfaces/IPoWMilestoneOption.md) | The option. |
 
 #### Returns
 
@@ -3766,7 +4028,7 @@ Log feature blocks to the console.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `prefix` | `string` | The prefix for the output. |
-| `featureBlocks` | [`FeatureBlockTypes`](api.md#featureblocktypes)[] | The deature blocks. |
+| `featureBlocks` | [`FeatureBlockTypes`](api.md#featureblocktypes)[] | The feature blocks. |
 
 #### Returns
 
@@ -3882,6 +4144,14 @@ The different states of ledger inclusion.
 
 ___
 
+### MilestoneOptionTypes
+
+Ƭ **MilestoneOptionTypes**: [`IReceiptMilestoneOption`](interfaces/IReceiptMilestoneOption.md) \| [`IPoWMilestoneOption`](interfaces/IPoWMilestoneOption.md)
+
+All of the milestone option types.
+
+___
+
 ### OutputTypes
 
 Ƭ **OutputTypes**: [`ITreasuryOutput`](interfaces/ITreasuryOutput.md) \| [`IBasicOutput`](interfaces/IBasicOutput.md) \| [`IAliasOutput`](interfaces/IAliasOutput.md) \| [`IFoundryOutput`](interfaces/IFoundryOutput.md) \| [`INftOutput`](interfaces/INftOutput.md)
@@ -3892,7 +4162,7 @@ ___
 
 ### PayloadTypes
 
-Ƭ **PayloadTypes**: [`ITransactionPayload`](interfaces/ITransactionPayload.md) \| [`IMilestonePayload`](interfaces/IMilestonePayload.md) \| [`IReceiptPayload`](interfaces/IReceiptPayload.md) \| [`ITreasuryTransactionPayload`](interfaces/ITreasuryTransactionPayload.md) \| [`ITaggedDataPayload`](interfaces/ITaggedDataPayload.md)
+Ƭ **PayloadTypes**: [`ITransactionPayload`](interfaces/ITransactionPayload.md) \| [`IMilestonePayload`](interfaces/IMilestonePayload.md) \| [`ITreasuryTransactionPayload`](interfaces/ITreasuryTransactionPayload.md) \| [`ITaggedDataPayload`](interfaces/ITaggedDataPayload.md)
 
 All of the payload types.
 
