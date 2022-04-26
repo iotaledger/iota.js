@@ -81,7 +81,7 @@ describe("Binary Message", () => {
         expect(payload.type).toEqual(7);
         expect(payload.index).toEqual(23564);
         expect(payload.timestamp).toEqual(1650790571);
-        expect(payload.lastMilestoneId).toEqual("0x4b218eb12cc9d8577e092ec9b733da1a97768d7b13b6d005cd9c285305a9175f");
+        expect(payload.previousMilestoneId).toEqual("0x4b218eb12cc9d8577e092ec9b733da1a97768d7b13b6d005cd9c285305a9175f");
         expect(payload.parentMessageIds[0]).toEqual("0x0d34993b5485a59c9c54f04068ea2caf9f2f76c58228013f1ad03dd6dfc06829");
         expect(payload.parentMessageIds[1]).toEqual("0xce68b9feaa6f6df5eed44781a8c6881cd1d8910da905625dc20ca9986e85887b");
         expect(payload.parentMessageIds[2]).toEqual("0xd539f3c16201bd6935a8daaa2e6efc775a5722ca31287e7e7e92842db111454d");
