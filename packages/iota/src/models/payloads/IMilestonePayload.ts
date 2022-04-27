@@ -24,9 +24,9 @@ export interface IMilestonePayload extends ITypeBase<7> {
     timestamp: number;
 
     /**
-     * The timestamp of the milestone.
+     * The id of the previous milestone.
      */
-    lastMilestoneId: string;
+    previousMilestoneId: string;
 
     /**
      * The parents where this milestone attaches to.

@@ -249,7 +249,7 @@ export function logMilestonePayload(prefix: string, payload?: IMilestonePayload)
         logger(`${prefix}Milestone Payload`);
         logger(`${prefix}\tIndex:`, payload.index);
         logger(`${prefix}\tTimestamp:`, payload.timestamp);
-        logger(`${prefix}\tLastMilestoneId:`, payload.lastMilestoneId);
+        logger(`${prefix}\tPreviousMilestoneId:`, payload.previousMilestoneId);
         for (let i = 0; i < payload.parentMessageIds.length; i++) {
             logger(`${prefix}\tParent ${i + 1}:`, payload.parentMessageIds[i]);
         }
