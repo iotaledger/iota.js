@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "target": "es2019",
+        "strict": true,
+        "module": "es2020",
+        "moduleResolution": "node",
+        "esModuleInterop": true,
+        "stripInternal": true,
+        "resolveJsonModule": true,
+        "declaration": true,
+        "declarationDir": "",
+        "emitDeclarationOnly": true
+    },
+    "include": [
+        "node_modules/@iota/iota.js/src"
+    ]
+}
