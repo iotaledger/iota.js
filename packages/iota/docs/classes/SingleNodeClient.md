@@ -24,12 +24,15 @@ Client for API communication.
 - [messageSubmitRaw](SingleNodeClient.md#messagesubmitraw)
 - [messageChildren](SingleNodeClient.md#messagechildren)
 - [transactionIncludedMessage](SingleNodeClient.md#transactionincludedmessage)
+- [transactionIncludedMessageRaw](SingleNodeClient.md#transactionincludedmessageraw)
 - [output](SingleNodeClient.md#output)
 - [outputMetadata](SingleNodeClient.md#outputmetadata)
 - [outputRaw](SingleNodeClient.md#outputraw)
 - [milestoneByIndex](SingleNodeClient.md#milestonebyindex)
+- [milestoneByIndexRaw](SingleNodeClient.md#milestonebyindexraw)
 - [milestoneUtxoChangesByIndex](SingleNodeClient.md#milestoneutxochangesbyindex)
 - [milestoneById](SingleNodeClient.md#milestonebyid)
+- [milestoneByIdRaw](SingleNodeClient.md#milestonebyidraw)
 - [milestoneUtxoChangesById](SingleNodeClient.md#milestoneutxochangesbyid)
 - [treasury](SingleNodeClient.md#treasury)
 - [receipts](SingleNodeClient.md#receipts)
@@ -279,6 +282,30 @@ The message.
 
 ___
 
+### transactionIncludedMessageRaw
+
+▸ **transactionIncludedMessageRaw**(`transactionId`): `Promise`<`Uint8Array`\>
+
+Get raw message that was included in the ledger for a transaction.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `transactionId` | `string` | The id of the transaction to get the included message for. |
+
+#### Returns
+
+`Promise`<`Uint8Array`\>
+
+The message.
+
+#### Implementation of
+
+[IClient](../interfaces/IClient.md).[transactionIncludedMessageRaw](../interfaces/IClient.md#transactionincludedmessageraw)
+
+___
+
 ### output
 
 ▸ **output**(`outputId`): `Promise`<[`IOutputResponse`](../interfaces/IOutputResponse.md)\>
@@ -375,6 +402,30 @@ The milestone details.
 
 ___
 
+### milestoneByIndexRaw
+
+▸ **milestoneByIndexRaw**(`index`): `Promise`<`Uint8Array`\>
+
+Get the requested milestone raw.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `index` | `number` | The index of the milestone to get. |
+
+#### Returns
+
+`Promise`<`Uint8Array`\>
+
+The milestone details.
+
+#### Implementation of
+
+[IClient](../interfaces/IClient.md).[milestoneByIndexRaw](../interfaces/IClient.md#milestonebyindexraw)
+
+___
+
 ### milestoneUtxoChangesByIndex
 
 ▸ **milestoneUtxoChangesByIndex**(`index`): `Promise`<[`IMilestoneUtxoChangesResponse`](../interfaces/IMilestoneUtxoChangesResponse.md)\>
@@ -420,6 +471,30 @@ The milestone details.
 #### Implementation of
 
 [IClient](../interfaces/IClient.md).[milestoneById](../interfaces/IClient.md#milestonebyid)
+
+___
+
+### milestoneByIdRaw
+
+▸ **milestoneByIdRaw**(`milestoneId`): `Promise`<`Uint8Array`\>
+
+Get the requested milestone raw.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `milestoneId` | `number` | The id of the milestone to get. |
+
+#### Returns
+
+`Promise`<`Uint8Array`\>
+
+The milestone details.
+
+#### Implementation of
+
+[IClient](../interfaces/IClient.md).[milestoneByIdRaw](../interfaces/IClient.md#milestonebyidraw)
 
 ___
 

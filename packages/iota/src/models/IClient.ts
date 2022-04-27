@@ -85,6 +85,13 @@ export interface IClient {
     transactionIncludedMessage(transactionId: string): Promise<IMessage>;
 
     /**
+     * Get raw message that was included in the ledger for a transaction.
+     * @param transactionId The id of the transaction to get the included message for.
+     * @returns The message.
+     */
+    transactionIncludedMessageRaw(transactionId: string): Promise<Uint8Array>;
+
+    /**
      * Get an output by its identifier.
      * @param outputId The id of the output to get.
      * @returns The output details.
@@ -113,6 +120,13 @@ export interface IClient {
     milestoneByIndex(index: number): Promise<IMilestoneResponse>;
 
     /**
+     * Get the requested milestone raw.
+     * @param index The index of the milestone to get.
+     * @returns The milestone details.
+     */
+    milestoneByIndexRaw(index: number): Promise<Uint8Array>;
+
+    /**
      * Get the requested milestone utxo changes.
      * @param index The index of the milestone to request the changes for.
      * @returns The milestone utxo changes details.
@@ -125,6 +139,13 @@ export interface IClient {
      * @returns The milestone details.
      */
     milestoneById(milestoneId: number): Promise<IMilestoneResponse>;
+
+    /**
+     * Get the requested milestone raw.
+     * @param milestoneId The id of the milestone to get.
+     * @returns The milestone details.
+     */
+     milestoneByIdRaw(milestoneId: number): Promise<Uint8Array>;
 
     /**
      * Get the requested milestone utxo changes.

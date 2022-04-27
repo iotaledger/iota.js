@@ -197,7 +197,7 @@ export class SingleNodeClient implements IClient {
      * @returns The message raw data.
      */
     public async messageRaw(messageId: string): Promise<Uint8Array> {
-        return this.fetchBinary(this._basePath, "get", `messages/${messageId}/raw`);
+        return this.fetchBinary(this._basePath, "get", `messages/${messageId}`);
     }
 
     /**
@@ -290,6 +290,15 @@ export class SingleNodeClient implements IClient {
     }
 
     /**
+     * Get raw message that was included in the ledger for a transaction.
+     * @param transactionId The id of the transaction to get the included message for.
+     * @returns The message.
+     */
+    public async transactionIncludedMessageRaw(transactionId: string): Promise<Uint8Array> {
+        return this.fetchBinary(this._basePath, "get", `transactions/${transactionId}/included-message`);
+    }
+
+    /**
      * Get an output by its identifier.
      * @param outputId The id of the output to get.
      * @returns The output details.
@@ -313,7 +322,7 @@ export class SingleNodeClient implements IClient {
      * @returns The output raw bytes.
      */
      public async outputRaw(outputId: string): Promise<Uint8Array> {
-        return this.fetchBinary(this._basePath, "get", `outputs/${outputId}/raw`);
+        return this.fetchBinary(this._basePath, "get", `outputs/${outputId}`);
      }
 
     /**
@@ -323,6 +332,15 @@ export class SingleNodeClient implements IClient {
      */
     public async milestoneByIndex(index: number): Promise<IMilestoneResponse> {
         return this.fetchJson<never, IMilestoneResponse>(this._basePath, "get", `milestones/by-index/${index}`);
+    }
+
+    /**
+     * Get the requested milestone raw.
+     * @param index The index of the milestone to get.
+     * @returns The milestone details.
+     */
+    public async milestoneByIndexRaw(index: number): Promise<Uint8Array> {
+        return this.fetchBinary(this._basePath, "get", `milestones/by-index/${index}`);
     }
 
     /**
@@ -341,6 +359,15 @@ export class SingleNodeClient implements IClient {
      */
     public async milestoneById(milestoneId: number): Promise<IMilestoneResponse> {
         return this.fetchJson<never, IMilestoneResponse>(this._basePath, "get", `milestones/${milestoneId}`);
+    }
+
+    /**
+     * Get the requested milestone raw.
+     * @param milestoneId The id of the milestone to get.
+     * @returns The milestone details.
+     */
+    public async milestoneByIdRaw(milestoneId: number): Promise<Uint8Array> {
+        return this.fetchBinary(this._basePath, "get", `milestones/${milestoneId}`);
     }
 
     /**
@@ -569,7 +596,7 @@ export class SingleNodeClient implements IClient {
         const response = await this.fetchWithTimeout(
             method,
             `${basePath}${route}`,
-            { "Content-Type": "application/octet-stream" },
+            { "Content-Type": "application/vnd.iota.serializer-v1" },
             requestData
         );
 

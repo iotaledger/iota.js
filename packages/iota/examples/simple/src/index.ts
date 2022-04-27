@@ -73,7 +73,7 @@ async function run() {
     console.log("\tChildren Message Ids:", children.childrenMessageIds);
     console.log();
 
-    const milestone = await client.milestone(info.status.latestMilestoneIndex);
+    const milestone = await client.milestoneByIndex(info.status.latestMilestoneIndex);
     console.log("Milestone");
     console.log("\tMilestone Index:", milestone.index);
     console.log("\tMessage Id:", milestone.messageId);

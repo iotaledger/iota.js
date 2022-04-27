@@ -20,12 +20,15 @@ Client interface definition for API communication.
 - [messageSubmitRaw](IClient.md#messagesubmitraw)
 - [messageChildren](IClient.md#messagechildren)
 - [transactionIncludedMessage](IClient.md#transactionincludedmessage)
+- [transactionIncludedMessageRaw](IClient.md#transactionincludedmessageraw)
 - [output](IClient.md#output)
 - [outputMetadata](IClient.md#outputmetadata)
 - [outputRaw](IClient.md#outputraw)
 - [milestoneByIndex](IClient.md#milestonebyindex)
+- [milestoneByIndexRaw](IClient.md#milestonebyindexraw)
 - [milestoneUtxoChangesByIndex](IClient.md#milestoneutxochangesbyindex)
 - [milestoneById](IClient.md#milestonebyid)
+- [milestoneByIdRaw](IClient.md#milestonebyidraw)
 - [milestoneUtxoChangesById](IClient.md#milestoneutxochangesbyid)
 - [treasury](IClient.md#treasury)
 - [receipts](IClient.md#receipts)
@@ -220,6 +223,26 @@ The message.
 
 ___
 
+### transactionIncludedMessageRaw
+
+▸ **transactionIncludedMessageRaw**(`transactionId`): `Promise`<`Uint8Array`\>
+
+Get raw message that was included in the ledger for a transaction.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `transactionId` | `string` | The id of the transaction to get the included message for. |
+
+#### Returns
+
+`Promise`<`Uint8Array`\>
+
+The message.
+
+___
+
 ### output
 
 ▸ **output**(`outputId`): `Promise`<[`IOutputResponse`](IOutputResponse.md)\>
@@ -300,6 +323,26 @@ The milestone details.
 
 ___
 
+### milestoneByIndexRaw
+
+▸ **milestoneByIndexRaw**(`index`): `Promise`<`Uint8Array`\>
+
+Get the requested milestone raw.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `index` | `number` | The index of the milestone to get. |
+
+#### Returns
+
+`Promise`<`Uint8Array`\>
+
+The milestone details.
+
+___
+
 ### milestoneUtxoChangesByIndex
 
 ▸ **milestoneUtxoChangesByIndex**(`index`): `Promise`<[`IMilestoneUtxoChangesResponse`](IMilestoneUtxoChangesResponse.md)\>
@@ -335,6 +378,26 @@ Get the requested milestone.
 #### Returns
 
 `Promise`<[`IMilestoneResponse`](IMilestoneResponse.md)\>
+
+The milestone details.
+
+___
+
+### milestoneByIdRaw
+
+▸ **milestoneByIdRaw**(`milestoneId`): `Promise`<`Uint8Array`\>
+
+Get the requested milestone raw.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `milestoneId` | `number` | The id of the milestone to get. |
+
+#### Returns
+
+`Promise`<`Uint8Array`\>
 
 The milestone details.
 
