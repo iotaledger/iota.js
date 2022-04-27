@@ -15,7 +15,7 @@ Milestone payload.
 - [type](IMilestonePayload.md#type)
 - [index](IMilestonePayload.md#index)
 - [timestamp](IMilestonePayload.md#timestamp)
-- [previousMilestoneId](IMilestonePayload.md#previousMilestoneId)
+- [previousMilestoneId](IMilestonePayload.md#previousmilestoneid)
 - [parentMessageIds](IMilestonePayload.md#parentmessageids)
 - [confirmedMerkleRoot](IMilestonePayload.md#confirmedmerkleroot)
 - [appliedMerkleRoot](IMilestonePayload.md#appliedmerkleroot)

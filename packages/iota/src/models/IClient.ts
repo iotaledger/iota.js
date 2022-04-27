@@ -110,14 +110,28 @@ export interface IClient {
      * @param index The index of the milestone to get.
      * @returns The milestone details.
      */
-    milestone(index: number): Promise<IMilestoneResponse>;
+    milestoneByIndex(index: number): Promise<IMilestoneResponse>;
 
     /**
      * Get the requested milestone utxo changes.
      * @param index The index of the milestone to request the changes for.
      * @returns The milestone utxo changes details.
      */
-    milestoneUtxoChanges(index: number): Promise<IMilestoneUtxoChangesResponse>;
+    milestoneUtxoChangesByIndex(index: number): Promise<IMilestoneUtxoChangesResponse>;
+
+    /**
+     * Get the requested milestone.
+     * @param milestoneId The id of the milestone to get.
+     * @returns The milestone details.
+     */
+    milestoneById(milestoneId: number): Promise<IMilestoneResponse>;
+
+    /**
+     * Get the requested milestone utxo changes.
+     * @param milestoneId The id of the milestone to request the changes for.
+     * @returns The milestone utxo changes details.
+     */
+    milestoneUtxoChangesById(milestoneId: number): Promise<IMilestoneUtxoChangesResponse>;
 
     /**
      * Get the current treasury output.

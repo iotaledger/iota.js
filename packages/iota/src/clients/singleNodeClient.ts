@@ -321,8 +321,8 @@ export class SingleNodeClient implements IClient {
      * @param index The index of the milestone to get.
      * @returns The milestone details.
      */
-    public async milestone(index: number): Promise<IMilestoneResponse> {
-        return this.fetchJson<never, IMilestoneResponse>(this._basePath, "get", `milestones/${index}`);
+    public async milestoneByIndex(index: number): Promise<IMilestoneResponse> {
+        return this.fetchJson<never, IMilestoneResponse>(this._basePath, "get", `milestones/by-index/${index}`);
     }
 
     /**
@@ -330,8 +330,26 @@ export class SingleNodeClient implements IClient {
      * @param index The index of the milestone to request the changes for.
      * @returns The milestone utxo changes details.
      */
-    public async milestoneUtxoChanges(index: number): Promise<IMilestoneUtxoChangesResponse> {
-        return this.fetchJson<never, IMilestoneUtxoChangesResponse>(this._basePath, "get", `milestones/${index}/utxo-changes`);
+    public async milestoneUtxoChangesByIndex(index: number): Promise<IMilestoneUtxoChangesResponse> {
+        return this.fetchJson<never, IMilestoneUtxoChangesResponse>(this._basePath, "get", `milestones/by-index/${index}/utxo-changes`);
+    }
+
+    /**
+     * Get the requested milestone.
+     * @param milestoneId The id of the milestone to get.
+     * @returns The milestone details.
+     */
+    public async milestoneById(milestoneId: number): Promise<IMilestoneResponse> {
+        return this.fetchJson<never, IMilestoneResponse>(this._basePath, "get", `milestones/${milestoneId}`);
+    }
+
+    /**
+     * Get the requested milestone utxo changes.
+     * @param milestoneId The id of the milestone to request the changes for.
+     * @returns The milestone utxo changes details.
+     */
+    public async milestoneUtxoChangesById(milestoneId: number): Promise<IMilestoneUtxoChangesResponse> {
+        return this.fetchJson<never, IMilestoneUtxoChangesResponse>(this._basePath, "get", `milestones/${milestoneId}/utxo-changes`);
     }
 
     /**

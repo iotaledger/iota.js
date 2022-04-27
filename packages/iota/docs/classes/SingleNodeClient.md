@@ -27,8 +27,10 @@ Client for API communication.
 - [output](SingleNodeClient.md#output)
 - [outputMetadata](SingleNodeClient.md#outputmetadata)
 - [outputRaw](SingleNodeClient.md#outputraw)
-- [milestone](SingleNodeClient.md#milestone)
-- [milestoneUtxoChanges](SingleNodeClient.md#milestoneutxochanges)
+- [milestoneByIndex](SingleNodeClient.md#milestonebyindex)
+- [milestoneUtxoChangesByIndex](SingleNodeClient.md#milestoneutxochangesbyindex)
+- [milestoneById](SingleNodeClient.md#milestonebyid)
+- [milestoneUtxoChangesById](SingleNodeClient.md#milestoneutxochangesbyid)
 - [treasury](SingleNodeClient.md#treasury)
 - [receipts](SingleNodeClient.md#receipts)
 - [peers](SingleNodeClient.md#peers)
@@ -349,9 +351,9 @@ The output raw bytes.
 
 ___
 
-### milestone
+### milestoneByIndex
 
-▸ **milestone**(`index`): `Promise`<[`IMilestoneResponse`](../interfaces/IMilestoneResponse.md)\>
+▸ **milestoneByIndex**(`index`): `Promise`<[`IMilestoneResponse`](../interfaces/IMilestoneResponse.md)\>
 
 Get the requested milestone.
 
@@ -369,13 +371,13 @@ The milestone details.
 
 #### Implementation of
 
-[IClient](../interfaces/IClient.md).[milestone](../interfaces/IClient.md#milestone)
+[IClient](../interfaces/IClient.md).[milestoneByIndex](../interfaces/IClient.md#milestonebyindex)
 
 ___
 
-### milestoneUtxoChanges
+### milestoneUtxoChangesByIndex
 
-▸ **milestoneUtxoChanges**(`index`): `Promise`<[`IMilestoneUtxoChangesResponse`](../interfaces/IMilestoneUtxoChangesResponse.md)\>
+▸ **milestoneUtxoChangesByIndex**(`index`): `Promise`<[`IMilestoneUtxoChangesResponse`](../interfaces/IMilestoneUtxoChangesResponse.md)\>
 
 Get the requested milestone utxo changes.
 
@@ -393,7 +395,55 @@ The milestone utxo changes details.
 
 #### Implementation of
 
-[IClient](../interfaces/IClient.md).[milestoneUtxoChanges](../interfaces/IClient.md#milestoneutxochanges)
+[IClient](../interfaces/IClient.md).[milestoneUtxoChangesByIndex](../interfaces/IClient.md#milestoneutxochangesbyindex)
+
+___
+
+### milestoneById
+
+▸ **milestoneById**(`milestoneId`): `Promise`<[`IMilestoneResponse`](../interfaces/IMilestoneResponse.md)\>
+
+Get the requested milestone.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `milestoneId` | `number` | The id of the milestone to get. |
+
+#### Returns
+
+`Promise`<[`IMilestoneResponse`](../interfaces/IMilestoneResponse.md)\>
+
+The milestone details.
+
+#### Implementation of
+
+[IClient](../interfaces/IClient.md).[milestoneById](../interfaces/IClient.md#milestonebyid)
+
+___
+
+### milestoneUtxoChangesById
+
+▸ **milestoneUtxoChangesById**(`milestoneId`): `Promise`<[`IMilestoneUtxoChangesResponse`](../interfaces/IMilestoneUtxoChangesResponse.md)\>
+
+Get the requested milestone utxo changes.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `milestoneId` | `number` | The id of the milestone to request the changes for. |
+
+#### Returns
+
+`Promise`<[`IMilestoneUtxoChangesResponse`](../interfaces/IMilestoneUtxoChangesResponse.md)\>
+
+The milestone utxo changes details.
+
+#### Implementation of
+
+[IClient](../interfaces/IClient.md).[milestoneUtxoChangesById](../interfaces/IClient.md#milestoneutxochangesbyid)
 
 ___
 

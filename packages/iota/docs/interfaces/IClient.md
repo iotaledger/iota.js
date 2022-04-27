@@ -23,8 +23,10 @@ Client interface definition for API communication.
 - [output](IClient.md#output)
 - [outputMetadata](IClient.md#outputmetadata)
 - [outputRaw](IClient.md#outputraw)
-- [milestone](IClient.md#milestone)
-- [milestoneUtxoChanges](IClient.md#milestoneutxochanges)
+- [milestoneByIndex](IClient.md#milestonebyindex)
+- [milestoneUtxoChangesByIndex](IClient.md#milestoneutxochangesbyindex)
+- [milestoneById](IClient.md#milestonebyid)
+- [milestoneUtxoChangesById](IClient.md#milestoneutxochangesbyid)
 - [treasury](IClient.md#treasury)
 - [receipts](IClient.md#receipts)
 - [peers](IClient.md#peers)
@@ -278,9 +280,9 @@ The output metadata.
 
 ___
 
-### milestone
+### milestoneByIndex
 
-▸ **milestone**(`index`): `Promise`<[`IMilestoneResponse`](IMilestoneResponse.md)\>
+▸ **milestoneByIndex**(`index`): `Promise`<[`IMilestoneResponse`](IMilestoneResponse.md)\>
 
 Get the requested milestone.
 
@@ -298,9 +300,9 @@ The milestone details.
 
 ___
 
-### milestoneUtxoChanges
+### milestoneUtxoChangesByIndex
 
-▸ **milestoneUtxoChanges**(`index`): `Promise`<[`IMilestoneUtxoChangesResponse`](IMilestoneUtxoChangesResponse.md)\>
+▸ **milestoneUtxoChangesByIndex**(`index`): `Promise`<[`IMilestoneUtxoChangesResponse`](IMilestoneUtxoChangesResponse.md)\>
 
 Get the requested milestone utxo changes.
 
@@ -309,6 +311,46 @@ Get the requested milestone utxo changes.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `index` | `number` | The index of the milestone to request the changes for. |
+
+#### Returns
+
+`Promise`<[`IMilestoneUtxoChangesResponse`](IMilestoneUtxoChangesResponse.md)\>
+
+The milestone utxo changes details.
+
+___
+
+### milestoneById
+
+▸ **milestoneById**(`milestoneId`): `Promise`<[`IMilestoneResponse`](IMilestoneResponse.md)\>
+
+Get the requested milestone.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `milestoneId` | `number` | The id of the milestone to get. |
+
+#### Returns
+
+`Promise`<[`IMilestoneResponse`](IMilestoneResponse.md)\>
+
+The milestone details.
+
+___
+
+### milestoneUtxoChangesById
+
+▸ **milestoneUtxoChangesById**(`milestoneId`): `Promise`<[`IMilestoneUtxoChangesResponse`](IMilestoneUtxoChangesResponse.md)\>
+
+Get the requested milestone utxo changes.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `milestoneId` | `number` | The id of the milestone to request the changes for. |
 
 #### Returns
 
