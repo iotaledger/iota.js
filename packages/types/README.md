@@ -12,7 +12,7 @@ npm install @iota/types
 
 1. Update @iota/iota.js dependency in package.json to desired version
 2. Increment version of this package in package.json
-2. `npm install`
-3. `npm run build`
-4. `npm publish --tag latest`
+3. `npm install`
+4. `npm run build`
+5. `npm publish --tag latest`
 
