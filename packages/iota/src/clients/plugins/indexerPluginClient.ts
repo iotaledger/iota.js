@@ -169,7 +169,7 @@ export class IndexerPluginClient {
         return this._client.pluginFetch<never, IOutputsResponse>(
             this._basePluginPath,
             "get",
-            "basic-outputs",
+            "outputs/basic",
             queryParams
         );
     }
@@ -242,7 +242,7 @@ export class IndexerPluginClient {
         return this._client.pluginFetch<never, IOutputsResponse>(
             this._basePluginPath,
             "get",
-            "aliases",
+            "outputs/alias",
             queryParams
         );
     }
@@ -259,7 +259,7 @@ export class IndexerPluginClient {
         return this._client.pluginFetch<never, IOutputsResponse>(
             this._basePluginPath,
             "get",
-            `aliases/${aliasId}`
+            `outputs/alias/${aliasId}`
         );
     }
 
@@ -398,7 +398,7 @@ export class IndexerPluginClient {
         return this._client.pluginFetch<never, IOutputsResponse>(
             this._basePluginPath,
             "get",
-            "nfts",
+            "outputs/nft",
             queryParams
         );
     }
@@ -415,7 +415,7 @@ export class IndexerPluginClient {
         return this._client.pluginFetch<never, IOutputsResponse>(
             this._basePluginPath,
             "get",
-            `nfts/${nftId}`
+            `outputs/nft/${nftId}`
         );
     }
 
@@ -472,7 +472,7 @@ export class IndexerPluginClient {
         return this._client.pluginFetch<never, IOutputsResponse>(
             this._basePluginPath,
             "get",
-            "foundries",
+            "outputs/foundry",
             queryParams
         );
     }
@@ -490,7 +490,7 @@ export class IndexerPluginClient {
         return this._client.pluginFetch<never, IOutputsResponse>(
             this._basePluginPath,
             "get",
-            `foundries/${foundryId}`
+            `outputs/foundry/${foundryId}`
         );
     }
 }
