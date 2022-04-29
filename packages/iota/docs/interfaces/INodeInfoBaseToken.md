@@ -9,6 +9,7 @@ The base token info of the node.
 - [name](INodeInfoBaseToken.md#name)
 - [tickerSymbol](INodeInfoBaseToken.md#tickersymbol)
 - [unit](INodeInfoBaseToken.md#unit)
+- [subunit](INodeInfoBaseToken.md#subunit)
 - [decimals](INodeInfoBaseToken.md#decimals)
 - [useMetricPrefix](INodeInfoBaseToken.md#usemetricprefix)
 
@@ -35,6 +36,14 @@ ___
 • **unit**: `string`
 
 The base token unit.
+
+___
+
+### subunit
+
+• `Optional` **subunit**: `string`
+
+The base token sub-unit.
 
 ___
 
