@@ -1,5 +1,6 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
+import type { INodeInfoBaseToken } from "./INodeInfoBaseToken";
 import type { INodeInfoMetrics } from "./INodeInfoMetrics";
 import type { INodeInfoProtocol } from "./INodeInfoProtocol";
 import type { INodeInfoStatus } from "./INodeInfoStatus";
@@ -9,12 +10,12 @@ import type { INodeInfoStatus } from "./INodeInfoStatus";
  */
 export interface INodeInfo {
     /**
-     * The name of the node software.
+     * The name of the node.
      */
     name: string;
 
     /**
-     * The version of the software running on the node.
+     * The version of node.
      */
     version: string;
 
@@ -24,9 +25,14 @@ export interface INodeInfo {
     status: INodeInfoStatus;
 
     /**
-     * The protocol information of the node.
+     * The protocol info of the node.
      */
     protocol: INodeInfoProtocol;
+
+    /**
+     * The base token info of the node.
+     */
+    baseToken: INodeInfoBaseToken;
 
     /**
      * The metrics for the node.

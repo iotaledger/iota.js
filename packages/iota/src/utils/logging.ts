@@ -15,7 +15,7 @@ import type { IMessage } from "../models/IMessage";
 import type { IMessageMetadata } from "../models/IMessageMetadata";
 import type { IMigratedFunds } from "../models/IMigratedFunds";
 import type { INativeToken } from "../models/INativeToken";
-import type { INodeInfo } from "../models/INodeInfo";
+import type { INodeInfo } from "../models/info/INodeInfo";
 import type { InputTypes } from "../models/inputs/inputTypes";
 import { TREASURY_INPUT_TYPE } from "../models/inputs/ITreasuryInput";
 import { UTXO_INPUT_TYPE } from "../models/inputs/IUTXOInput";
@@ -84,26 +84,38 @@ export function logInfo(prefix: string, info: INodeInfo): void {
     logger(`${prefix}\tName:`, info.name);
     logger(`${prefix}\tVersion:`, info.version);
 
-    logger(`${prefix}\t\tStatus`);
-    logger(`${prefix}\t\t\tIs Healthy:`, info.status.isHealthy);
-    logger(`${prefix}\t\t\tLatest Milestone Index:`, info.status.latestMilestoneIndex);
-    logger(`${prefix}\t\t\tLatest Milestone Timestamp:`, info.status.latestMilestoneTimestamp);
-    logger(`${prefix}\t\t\tConfirmed Milestone Index:`, info.status.confirmedMilestoneIndex);
-    logger(`${prefix}\t\t\tPruning Index:`, info.status.pruningIndex);
+    logger(`${prefix}\tStatus`);
+    logger(`${prefix}\t\tIs Healthy:`, info.status.isHealthy);
+    logger(`${prefix}\t\tLatest Milestone Index:`, info.status.latestMilestone.index);
+    logger(`${prefix}\t\tLatest Milestone Timestamp:`, info.status.latestMilestone.timestamp);
+    logger(`${prefix}\t\tLatest Milestone Id:`, info.status.latestMilestone.milestoneId);
+    logger(`${prefix}\t\tConfirmed Milestone Index:`, info.status.confirmedMilestone.index);
+    logger(`${prefix}\t\tConfirmed Milestone Timestamp:`, info.status.confirmedMilestone.timestamp);
+    logger(`${prefix}\t\tConfirmed Milestone Id:`, info.status.confirmedMilestone.milestoneId);
+    logger(`${prefix}\t\tPruning Index:`, info.status.pruningIndex);
 
-    logger(`${prefix}\t\tProtocol`);
-    logger(`${prefix}\t\t\tNetwork Name:`, info.protocol.networkName);
-    logger(`${prefix}\t\t\tBech32 HRP:`, info.protocol.bech32HRP);
-    logger(`${prefix}\t\t\tMin PoW Score:`, info.protocol.minPoWScore);
-    logger(`${prefix}\t\t\tRent`);
-    logger(`${prefix}\t\t\t\tVByte Cost:`, info.protocol.rentStructure.vByteCost);
-    logger(`${prefix}\t\t\t\tVByte Factor Data:`, info.protocol.rentStructure.vByteFactorData);
-    logger(`${prefix}\t\t\t\tVByte Factor Key:`, info.protocol.rentStructure.vByteFactorKey);
+    logger(`${prefix}\tProtocol`);
+    logger(`${prefix}\t\tNetwork Name:`, info.protocol.networkName);
+    logger(`${prefix}\t\tBech32 HRP:`, info.protocol.bech32HRP);
+    logger(`${prefix}\t\tToken supply:`, info.protocol.tokenSupply);
+    logger(`${prefix}\t\tProtocol version:`, info.protocol.protocolVersion);
+    logger(`${prefix}\t\tMin PoW Score:`, info.protocol.minPoWScore);
+    logger(`${prefix}\t\tRent`);
+    logger(`${prefix}\t\t\tVByte Cost:`, info.protocol.rentStructure.vByteCost);
+    logger(`${prefix}\t\t\tVByte Factor Data:`, info.protocol.rentStructure.vByteFactorData);
+    logger(`${prefix}\t\t\tVByte Factor Key:`, info.protocol.rentStructure.vByteFactorKey);
 
-    logger(`${prefix}\t\tMetrics`);
-    logger(`${prefix}\t\t\tMessages Per Second:`, info.metrics.messagesPerSecond);
-    logger(`${prefix}\t\t\tReferenced Messages Per Second:`, info.metrics.referencedMessagesPerSecond);
-    logger(`${prefix}\t\t\tReferenced Rate:`, info.metrics.referencedRate);
+    logger(`${prefix}\tBase token`);
+    logger(`${prefix}\t\tName:`, info.baseToken.name);
+    logger(`${prefix}\t\tTicker Symbol:`, info.baseToken.tickerSymbol);
+    logger(`${prefix}\t\tUnit:`, info.baseToken.unit);
+    logger(`${prefix}\t\tDecimals:`, info.baseToken.decimals);
+    logger(`${prefix}\t\tUse metric prefix:`, info.baseToken.useMetricPrefix);
+
+    logger(`${prefix}\tMetrics`);
+    logger(`${prefix}\t\tMessages Per Second:`, info.metrics.messagesPerSecond);
+    logger(`${prefix}\t\tReferenced Messages Per Second:`, info.metrics.referencedMessagesPerSecond);
+    logger(`${prefix}\t\tReferenced Rate:`, info.metrics.referencedRate);
 
     logger(`${prefix}\tFeatures:`, info.features);
     logger(`${prefix}\tPlugins:`, info.plugins);

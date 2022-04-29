@@ -7,9 +7,8 @@ Response from the /info endpoint.
 ### Properties
 
 - [isHealthy](INodeInfoStatus.md#ishealthy)
-- [latestMilestoneTimestamp](INodeInfoStatus.md#latestmilestonetimestamp)
-- [latestMilestoneIndex](INodeInfoStatus.md#latestmilestoneindex)
-- [confirmedMilestoneIndex](INodeInfoStatus.md#confirmedmilestoneindex)
+- [latestMilestone](INodeInfoStatus.md#latestMilestone)
+- [confirmedMilestone](INodeInfoStatus.md#confirmedMilestone)
 - [pruningIndex](INodeInfoStatus.md#pruningindex)
 
 ## Properties
@@ -22,27 +21,19 @@ Is the node healthy.
 
 ___
 
-### latestMilestoneTimestamp
+### latestMilestone
 
-• **latestMilestoneTimestamp**: `number`
+• **latestMilestoneTimestamp**: [`INodeInfoMilestone`](INodeInfoMilestone.md)
 
-The latest milestone timestamp.
-
-___
-
-### latestMilestoneIndex
-
-• **latestMilestoneIndex**: `number`
-
-The latest milestone index.
+The latest milestone info.
 
 ___
 
-### confirmedMilestoneIndex
+### confirmedMilestone
 
-• **confirmedMilestoneIndex**: `number`
+• **confirmedMilestone**: [`INodeInfoMilestone`](INodeInfoMilestone.md)
 
-The confirmed milestone index.
+The confirmed milestone info.
 
 ___
 

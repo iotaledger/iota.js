@@ -1,0 +1,54 @@
+# Interface: INodeInfoBaseToken
+
+The base token info of the node.
+
+## Table of contents
+
+### Properties
+
+- [name](INodeInfoBaseToken.md#name)
+- [tickerSymbol](INodeInfoBaseToken.md#tickerSymbol)
+- [unit](INodeInfoBaseToken.md#unit)
+- [decimals](INodeInfoBaseToken.md#decimals)
+- [useMetricPrefix](INodeInfoBaseToken.md#useMetricPrefix)
+
+## Properties
+
+### name
+
+• **name**: `string`
+
+The base token name.
+
+___
+
+### tickerSymbol
+
+• **tickerSymbol**: `string`
+
+The base token ticker symbol.
+
+___
+
+### unit
+
+• **unit**: `string`
+
+The base token unit.
+
+___
+
+### decimals
+
+• **decimals**: `number`
+
+The base token decimals.
+
+___
+
+### useMetricPrefix
+
+• **useMetricPrefix**: `boolean`
+
+The use metric prefix flag.
+

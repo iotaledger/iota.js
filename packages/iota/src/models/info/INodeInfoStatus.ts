@@ -1,5 +1,7 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
+import type { INodeInfoMilestone } from "./INodeInfoMilesone";
+
 /**
  * Response from the /info endpoint.
  */
@@ -10,19 +12,14 @@ export interface INodeInfoStatus {
     isHealthy: boolean;
 
     /**
-     * The latest milestone timestamp.
+     * The latest milestone info.
      */
-    latestMilestoneTimestamp: number;
+    latestMilestone: INodeInfoMilestone;
 
     /**
-     * The latest milestone index.
+     * The confirmed milestone info.
      */
-    latestMilestoneIndex: number;
-
-    /**
-     * The confirmed milestone index.
-     */
-    confirmedMilestoneIndex: number;
+    confirmedMilestone: INodeInfoMilestone;
 
     /**
      * The pruning index.

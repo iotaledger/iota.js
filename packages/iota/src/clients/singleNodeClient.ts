@@ -16,7 +16,7 @@ import type { ITipsResponse } from "../models/api/ITipsResponse";
 import type { IClient } from "../models/IClient";
 import { DEFAULT_PROTOCOL_VERSION, IMessage } from "../models/IMessage";
 import type { IMessageMetadata } from "../models/IMessageMetadata";
-import type { INodeInfo } from "../models/INodeInfo";
+import type { INodeInfo } from "../models/info/INodeInfo";
 import type { IPeer } from "../models/IPeer";
 import type { IPowProvider } from "../models/IPowProvider";
 import type { ITreasury } from "../models/ITreasury";

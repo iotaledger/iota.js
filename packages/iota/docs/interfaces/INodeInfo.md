@@ -10,6 +10,7 @@ Response from the /info endpoint.
 - [version](INodeInfo.md#version)
 - [status](INodeInfo.md#status)
 - [protocol](INodeInfo.md#protocol)
+- [baseToken](INodeInfo.md#baseToken)
 - [metrics](INodeInfo.md#metrics)
 - [features](INodeInfo.md#features)
 - [plugins](INodeInfo.md#plugins)
@@ -20,7 +21,7 @@ Response from the /info endpoint.
 
 • **name**: `string`
 
-The name of the node software.
+The name of the node.
 
 ___
 
@@ -28,7 +29,7 @@ ___
 
 • **version**: `string`
 
-The version of the software running on the node.
+The version of node.
 
 ___
 
@@ -45,6 +46,14 @@ ___
 • **protocol**: [`INodeInfoProtocol`](INodeInfoProtocol.md)
 
 The protocol information of the node.
+
+___
+
+### baseToken
+
+• **baseToken**: [`INodeInfoBaseToken`](INodeInfoBaseToken.md)
+
+The base token info of the node.
 
 ___
 
