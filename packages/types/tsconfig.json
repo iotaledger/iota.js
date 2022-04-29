@@ -4,14 +4,14 @@
         "strict": true,
         "module": "es2020",
         "moduleResolution": "node",
-        "esModuleInterop": true,
-        "stripInternal": true,
-        "resolveJsonModule": true,
+        "allowSyntheticDefaultImports": true,
         "declaration": true,
         "declarationDir": "",
         "emitDeclarationOnly": true
     },
     "include": [
-        "node_modules/@iota/iota.js/src"
+        "node_modules/@iota/iota.js/src",
+        "node_modules/@iota/crypto.js/src",
+        "node_modules/@iota/util.js/src"
     ]
 }
