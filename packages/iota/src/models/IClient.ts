@@ -1,7 +1,7 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
+import type { IMilestonePayload } from "../index-browser";
 import type { IChildrenResponse } from "./api/IChildrenResponse";
-import type { IMilestoneResponse } from "./api/IMilestoneResponse";
 import type { IMilestoneUtxoChangesResponse } from "./api/IMilestoneUtxoChangesResponse";
 import type { IOutputMetadataResponse } from "./api/IOutputMetadataResponse";
 import type { IOutputResponse } from "./api/IOutputResponse";
@@ -114,15 +114,15 @@ export interface IClient {
 
     /**
      * Get the requested milestone.
-     * @param index The index of the milestone to get.
-     * @returns The milestone details.
+     * @param index The index of the milestone to look up.
+     * @returns The milestone payload.
      */
-    milestoneByIndex(index: number): Promise<IMilestoneResponse>;
+    milestoneByIndex(index: number): Promise<IMilestonePayload>;
 
     /**
      * Get the requested milestone raw.
-     * @param index The index of the milestone to get.
-     * @returns The milestone details.
+     * @param index The index of the milestone to look up.
+     * @returns The milestone payload raw.
      */
     milestoneByIndexRaw(index: number): Promise<Uint8Array>;
 
@@ -135,24 +135,24 @@ export interface IClient {
 
     /**
      * Get the requested milestone.
-     * @param milestoneId The id of the milestone to get.
-     * @returns The milestone details.
+     * @param milestoneId The id of the milestone to look up.
+     * @returns The milestone payload.
      */
-    milestoneById(milestoneId: number): Promise<IMilestoneResponse>;
+    milestoneById(milestoneId: string): Promise<IMilestonePayload>;
 
     /**
      * Get the requested milestone raw.
-     * @param milestoneId The id of the milestone to get.
-     * @returns The milestone details.
+     * @param milestoneId The id of the milestone to look up.
+     * @returns The milestone payload raw.
      */
-     milestoneByIdRaw(milestoneId: number): Promise<Uint8Array>;
+     milestoneByIdRaw(milestoneId: string): Promise<Uint8Array>;
 
     /**
      * Get the requested milestone utxo changes.
      * @param milestoneId The id of the milestone to request the changes for.
      * @returns The milestone utxo changes details.
      */
-    milestoneUtxoChangesById(milestoneId: number): Promise<IMilestoneUtxoChangesResponse>;
+    milestoneUtxoChangesById(milestoneId: string): Promise<IMilestoneUtxoChangesResponse>;
 
     /**
      * Get the current treasury output.

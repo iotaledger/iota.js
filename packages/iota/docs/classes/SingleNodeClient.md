@@ -380,7 +380,7 @@ ___
 
 ### milestoneByIndex
 
-▸ **milestoneByIndex**(`index`): `Promise`<[`IMilestoneResponse`](../interfaces/IMilestoneResponse.md)\>
+▸ **milestoneByIndex**(`index`): `Promise`<[`IMilestonePayload`](../interfaces/IMilestonePayload.md)\>
 
 Get the requested milestone.
 
@@ -388,13 +388,13 @@ Get the requested milestone.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `index` | `number` | The index of the milestone to get. |
+| `index` | `number` | The index of the milestone to look up. |
 
 #### Returns
 
-`Promise`<[`IMilestoneResponse`](../interfaces/IMilestoneResponse.md)\>
+`Promise`<[`IMilestonePayload`](../interfaces/IMilestonePayload.md)\>
 
-The milestone details.
+The milestone payload.
 
 #### Implementation of
 
@@ -412,13 +412,13 @@ Get the requested milestone raw.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `index` | `number` | The index of the milestone to get. |
+| `index` | `number` | The index of the milestone to look up. |
 
 #### Returns
 
 `Promise`<`Uint8Array`\>
 
-The milestone details.
+The milestone payload raw.
 
 #### Implementation of
 
@@ -452,7 +452,7 @@ ___
 
 ### milestoneById
 
-▸ **milestoneById**(`milestoneId`): `Promise`<[`IMilestoneResponse`](../interfaces/IMilestoneResponse.md)\>
+▸ **milestoneById**(`milestoneId`): `Promise`<[`IMilestonePayload`](../interfaces/IMilestonePayload.md)\>
 
 Get the requested milestone.
 
@@ -460,13 +460,13 @@ Get the requested milestone.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `milestoneId` | `number` | The id of the milestone to get. |
+| `milestoneId` | `string` | The id of the milestone to look up. |
 
 #### Returns
 
-`Promise`<[`IMilestoneResponse`](../interfaces/IMilestoneResponse.md)\>
+`Promise`<[`IMilestonePayload`](../interfaces/IMilestonePayload.md)\>
 
-The milestone details.
+The milestone payload.
 
 #### Implementation of
 
@@ -484,13 +484,13 @@ Get the requested milestone raw.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `milestoneId` | `number` | The id of the milestone to get. |
+| `milestoneId` | `string` | The id of the milestone to look up. |
 
 #### Returns
 
 `Promise`<`Uint8Array`\>
 
-The milestone details.
+The milestone payload raw.
 
 #### Implementation of
 
@@ -508,7 +508,7 @@ Get the requested milestone utxo changes.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `milestoneId` | `number` | The id of the milestone to request the changes for. |
+| `milestoneId` | `string` | The id of the milestone to request the changes for. |
 
 #### Returns
 

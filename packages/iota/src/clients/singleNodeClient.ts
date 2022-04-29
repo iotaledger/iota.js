@@ -4,9 +4,9 @@ import { ArrayHelper, Blake2b } from "@iota/crypto.js";
 import { BigIntHelper, Converter, WriteStream } from "@iota/util.js";
 import bigInt from "big-integer";
 import { MAX_MESSAGE_LENGTH, serializeMessage } from "../binary/message";
+import type { IMilestonePayload } from "../index-browser";
 import type { IChildrenResponse } from "../models/api/IChildrenResponse";
 import type { IMessageIdResponse } from "../models/api/IMessageIdResponse";
-import type { IMilestoneResponse } from "../models/api/IMilestoneResponse";
 import type { IMilestoneUtxoChangesResponse } from "../models/api/IMilestoneUtxoChangesResponse";
 import type { IOutputMetadataResponse } from "../models/api/IOutputMetadataResponse";
 import type { IOutputResponse } from "../models/api/IOutputResponse";
@@ -327,17 +327,17 @@ export class SingleNodeClient implements IClient {
 
     /**
      * Get the requested milestone.
-     * @param index The index of the milestone to get.
-     * @returns The milestone details.
+     * @param index The index of the milestone to look up.
+     * @returns The milestone payload.
      */
-    public async milestoneByIndex(index: number): Promise<IMilestoneResponse> {
-        return this.fetchJson<never, IMilestoneResponse>(this._basePath, "get", `milestones/by-index/${index}`);
+    public async milestoneByIndex(index: number): Promise<IMilestonePayload> {
+        return this.fetchJson<never, IMilestonePayload>(this._basePath, "get", `milestones/by-index/${index}`);
     }
 
     /**
      * Get the requested milestone raw.
-     * @param index The index of the milestone to get.
-     * @returns The milestone details.
+     * @param index The index of the milestone to look up.
+     * @returns The milestone payload raw.
      */
     public async milestoneByIndexRaw(index: number): Promise<Uint8Array> {
         return this.fetchBinary(this._basePath, "get", `milestones/by-index/${index}`);
@@ -354,19 +354,19 @@ export class SingleNodeClient implements IClient {
 
     /**
      * Get the requested milestone.
-     * @param milestoneId The id of the milestone to get.
-     * @returns The milestone details.
+     * @param milestoneId The id of the milestone to look up.
+     * @returns The milestone payload.
      */
-    public async milestoneById(milestoneId: number): Promise<IMilestoneResponse> {
-        return this.fetchJson<never, IMilestoneResponse>(this._basePath, "get", `milestones/${milestoneId}`);
+    public async milestoneById(milestoneId: string): Promise<IMilestonePayload> {
+        return this.fetchJson<never, IMilestonePayload>(this._basePath, "get", `milestones/${milestoneId}`);
     }
 
     /**
      * Get the requested milestone raw.
-     * @param milestoneId The id of the milestone to get.
-     * @returns The milestone details.
+     * @param milestoneId The id of the milestone to look up.
+     * @returns The milestone payload raw.
      */
-    public async milestoneByIdRaw(milestoneId: number): Promise<Uint8Array> {
+    public async milestoneByIdRaw(milestoneId: string): Promise<Uint8Array> {
         return this.fetchBinary(this._basePath, "get", `milestones/${milestoneId}`);
     }
 
@@ -375,7 +375,7 @@ export class SingleNodeClient implements IClient {
      * @param milestoneId The id of the milestone to request the changes for.
      * @returns The milestone utxo changes details.
      */
-    public async milestoneUtxoChangesById(milestoneId: number): Promise<IMilestoneUtxoChangesResponse> {
+    public async milestoneUtxoChangesById(milestoneId: string): Promise<IMilestoneUtxoChangesResponse> {
         return this.fetchJson<never, IMilestoneUtxoChangesResponse>(this._basePath, "get", `milestones/${milestoneId}/utxo-changes`);
     }
 
@@ -596,7 +596,7 @@ export class SingleNodeClient implements IClient {
         const response = await this.fetchWithTimeout(
             method,
             `${basePath}${route}`,
-            { "Content-Type": "application/vnd.iota.serializer-v1" },
+            { "Accept": "application/vnd.iota.serializer-v1" },
             requestData
         );
 
@@ -606,7 +606,6 @@ export class SingleNodeClient implements IClient {
                 return new Uint8Array(await response.arrayBuffer());
             }
             responseData = await response.json();
-
             if (!responseData?.error) {
                 return responseData?.data as T;
             }
