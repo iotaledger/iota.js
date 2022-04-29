@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0-beta.3",
+  "version": "1.0.0-beta.4",
   "name": "@iota/types",
   "description": "Shared Iota Typescript types",
   "keywords": [
@@ -16,7 +16,7 @@
       "directory": "packages/types"
   },
   "scripts": {
-      "clean": "del * !big-int !package.json !tsconfig.json !node_modules !setup.sh !link.js !README.md",
+      "clean": "del * !index.d.ts !big-int !package.json !tsconfig.json !node_modules !setup.sh !link.js !README.md",
       "generate": "tsc",
       "setup": "./setup.sh",
       "link": "node link.js",
