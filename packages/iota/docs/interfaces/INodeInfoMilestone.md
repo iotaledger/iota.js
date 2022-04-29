@@ -8,7 +8,7 @@ The milestone info.
 
 - [index](INodeInfoMilestone.md#index)
 - [timestamp](INodeInfoMilestone.md#timestamp)
-- [milestoneId](INodeInfoMilestone.md#milestoneId)
+- [milestoneId](INodeInfoMilestone.md#milestoneid)
 
 ## Properties
 
@@ -32,5 +32,4 @@ ___
 
 • **milestoneId**: `string`
 
-The milestoneId.
-
+The milestone id.

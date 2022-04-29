@@ -7,10 +7,10 @@ The base token info of the node.
 ### Properties
 
 - [name](INodeInfoBaseToken.md#name)
-- [tickerSymbol](INodeInfoBaseToken.md#tickerSymbol)
+- [tickerSymbol](INodeInfoBaseToken.md#tickersymbol)
 - [unit](INodeInfoBaseToken.md#unit)
 - [decimals](INodeInfoBaseToken.md#decimals)
-- [useMetricPrefix](INodeInfoBaseToken.md#useMetricPrefix)
+- [useMetricPrefix](INodeInfoBaseToken.md#usemetricprefix)
 
 ## Properties
 
@@ -51,4 +51,3 @@ ___
 • **useMetricPrefix**: `boolean`
 
 The use metric prefix flag.
-

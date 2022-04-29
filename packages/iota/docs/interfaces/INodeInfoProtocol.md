@@ -1,6 +1,6 @@
 # Interface: INodeInfoProtocol
 
-Response from the /info endpoint.
+The Protocol Info.
 
 ## Table of contents
 
@@ -8,8 +8,8 @@ Response from the /info endpoint.
 
 - [networkName](INodeInfoProtocol.md#networkname)
 - [bech32HRP](INodeInfoProtocol.md#bech32hrp)
-- [tokenSupply](INodeInfoProtocol.md#tokenSupply)
-- [protocolVersion](INodeInfoProtocol.md#protocolVersion)
+- [tokenSupply](INodeInfoProtocol.md#tokensupply)
+- [protocolVersion](INodeInfoProtocol.md#protocolversion)
 - [minPoWScore](INodeInfoProtocol.md#minpowscore)
 - [rentStructure](INodeInfoProtocol.md#rentstructure)
 
