@@ -17,6 +17,10 @@ export interface INodeInfoBaseToken {
      */
     unit: string;
     /**
+     * The base token sub-unit.
+     */
+    subunit?: string;
+    /**
      * The base token decimals.
      */
     decimals: number;

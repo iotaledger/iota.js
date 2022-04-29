@@ -109,6 +109,9 @@ export function logInfo(prefix: string, info: INodeInfo): void {
     logger(`${prefix}\t\tName:`, info.baseToken.name);
     logger(`${prefix}\t\tTicker Symbol:`, info.baseToken.tickerSymbol);
     logger(`${prefix}\t\tUnit:`, info.baseToken.unit);
+    if (info.baseToken.subunit) {
+        logger(`${prefix}\t\tSub unit:`, info.baseToken.subunit);
+    }
     logger(`${prefix}\t\tDecimals:`, info.baseToken.decimals);
     logger(`${prefix}\t\tUse metric prefix:`, info.baseToken.useMetricPrefix);
 
