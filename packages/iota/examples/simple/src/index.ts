@@ -74,9 +74,11 @@ async function run() {
     console.log();
 
     const milestone = await client.milestoneByIndex(info.status.latestMilestoneIndex);
-    console.log("Milestone");
+    console.log("Milestone Payload");
     console.log("\tMilestone Index:", milestone.index);
-    console.log("\tMessage Id:", milestone.messageId);
+    console.log("\tConfirmed Merkel Root", milestone.confirmedMerkleRoot);
+    console.log("\tApplied Merkel Root", milestone.appliedMerkleRoot);
+    console.log("\tPrevious Milestone Id:", milestone.previousMilestoneId);
     console.log("\tTimestamp:", milestone.timestamp);
     console.log();
 
