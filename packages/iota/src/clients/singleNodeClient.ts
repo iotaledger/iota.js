@@ -4,9 +4,9 @@ import { ArrayHelper, Blake2b } from "@iota/crypto.js";
 import { BigIntHelper, Converter, WriteStream } from "@iota/util.js";
 import bigInt from "big-integer";
 import { MAX_MESSAGE_LENGTH, serializeMessage } from "../binary/message";
+import type { IMilestonePayload } from "../index-browser";
 import type { IChildrenResponse } from "../models/api/IChildrenResponse";
 import type { IMessageIdResponse } from "../models/api/IMessageIdResponse";
-import type { IMilestoneResponse } from "../models/api/IMilestoneResponse";
 import type { IMilestoneUtxoChangesResponse } from "../models/api/IMilestoneUtxoChangesResponse";
 import type { IOutputMetadataResponse } from "../models/api/IOutputMetadataResponse";
 import type { IOutputResponse } from "../models/api/IOutputResponse";
@@ -197,7 +197,7 @@ export class SingleNodeClient implements IClient {
      * @returns The message raw data.
      */
     public async messageRaw(messageId: string): Promise<Uint8Array> {
-        return this.fetchBinary(this._basePath, "get", `messages/${messageId}/raw`);
+        return this.fetchBinary(this._basePath, "get", `messages/${messageId}`);
     }
 
     /**
@@ -290,6 +290,15 @@ export class SingleNodeClient implements IClient {
     }
 
     /**
+     * Get raw message that was included in the ledger for a transaction.
+     * @param transactionId The id of the transaction to get the included message for.
+     * @returns The message.
+     */
+    public async transactionIncludedMessageRaw(transactionId: string): Promise<Uint8Array> {
+        return this.fetchBinary(this._basePath, "get", `transactions/${transactionId}/included-message`);
+    }
+
+    /**
      * Get an output by its identifier.
      * @param outputId The id of the output to get.
      * @returns The output details.
@@ -313,16 +322,25 @@ export class SingleNodeClient implements IClient {
      * @returns The output raw bytes.
      */
      public async outputRaw(outputId: string): Promise<Uint8Array> {
-        return this.fetchBinary(this._basePath, "get", `outputs/${outputId}/raw`);
+        return this.fetchBinary(this._basePath, "get", `outputs/${outputId}`);
      }
 
     /**
      * Get the requested milestone.
-     * @param index The index of the milestone to get.
-     * @returns The milestone details.
+     * @param index The index of the milestone to look up.
+     * @returns The milestone payload.
      */
-    public async milestone(index: number): Promise<IMilestoneResponse> {
-        return this.fetchJson<never, IMilestoneResponse>(this._basePath, "get", `milestones/${index}`);
+    public async milestoneByIndex(index: number): Promise<IMilestonePayload> {
+        return this.fetchJson<never, IMilestonePayload>(this._basePath, "get", `milestones/by-index/${index}`);
+    }
+
+    /**
+     * Get the requested milestone raw.
+     * @param index The index of the milestone to look up.
+     * @returns The milestone payload raw.
+     */
+    public async milestoneByIndexRaw(index: number): Promise<Uint8Array> {
+        return this.fetchBinary(this._basePath, "get", `milestones/by-index/${index}`);
     }
 
     /**
@@ -330,8 +348,35 @@ export class SingleNodeClient implements IClient {
      * @param index The index of the milestone to request the changes for.
      * @returns The milestone utxo changes details.
      */
-    public async milestoneUtxoChanges(index: number): Promise<IMilestoneUtxoChangesResponse> {
-        return this.fetchJson<never, IMilestoneUtxoChangesResponse>(this._basePath, "get", `milestones/${index}/utxo-changes`);
+    public async milestoneUtxoChangesByIndex(index: number): Promise<IMilestoneUtxoChangesResponse> {
+        return this.fetchJson<never, IMilestoneUtxoChangesResponse>(this._basePath, "get", `milestones/by-index/${index}/utxo-changes`);
+    }
+
+    /**
+     * Get the requested milestone.
+     * @param milestoneId The id of the milestone to look up.
+     * @returns The milestone payload.
+     */
+    public async milestoneById(milestoneId: string): Promise<IMilestonePayload> {
+        return this.fetchJson<never, IMilestonePayload>(this._basePath, "get", `milestones/${milestoneId}`);
+    }
+
+    /**
+     * Get the requested milestone raw.
+     * @param milestoneId The id of the milestone to look up.
+     * @returns The milestone payload raw.
+     */
+    public async milestoneByIdRaw(milestoneId: string): Promise<Uint8Array> {
+        return this.fetchBinary(this._basePath, "get", `milestones/${milestoneId}`);
+    }
+
+    /**
+     * Get the requested milestone utxo changes.
+     * @param milestoneId The id of the milestone to request the changes for.
+     * @returns The milestone utxo changes details.
+     */
+    public async milestoneUtxoChangesById(milestoneId: string): Promise<IMilestoneUtxoChangesResponse> {
+        return this.fetchJson<never, IMilestoneUtxoChangesResponse>(this._basePath, "get", `milestones/${milestoneId}/utxo-changes`);
     }
 
     /**
@@ -551,7 +596,7 @@ export class SingleNodeClient implements IClient {
         const response = await this.fetchWithTimeout(
             method,
             `${basePath}${route}`,
-            { "Content-Type": "application/octet-stream" },
+            { "Accept": "application/vnd.iota.serializer-v1" },
             requestData
         );
 
@@ -561,7 +606,6 @@ export class SingleNodeClient implements IClient {
                 return new Uint8Array(await response.arrayBuffer());
             }
             responseData = await response.json();
-
             if (!responseData?.error) {
                 return responseData?.data as T;
             }
