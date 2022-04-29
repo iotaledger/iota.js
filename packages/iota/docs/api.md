@@ -310,7 +310,6 @@
 - [INftAddress](interfaces/INftAddress.md)
 - [IChildrenResponse](interfaces/IChildrenResponse.md)
 - [IMessageIdResponse](interfaces/IMessageIdResponse.md)
-- [IMilestoneResponse](interfaces/IMilestoneResponse.md)
 - [IMilestoneUtxoChangesResponse](interfaces/IMilestoneUtxoChangesResponse.md)
 - [IOutputMetadataResponse](interfaces/IOutputMetadataResponse.md)
 - [IOutputResponse](interfaces/IOutputResponse.md)

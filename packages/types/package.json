@@ -1,0 +1,31 @@
+{
+  "version": "1.0.0-beta.4",
+  "name": "@iota/types",
+  "description": "Shared Iota Typescript types",
+  "keywords": [
+      "iota",
+      "types"
+  ],
+  "authors": [
+      "Mario Sarcevic <mario.sarcevic@iota.org>"
+  ],
+  "license": "Apache-2.0",
+  "repository": {
+      "type": "git",
+      "url": "https://github.com/iotaledger/iota.js.git",
+      "directory": "packages/types"
+  },
+  "scripts": {
+      "clean": "del * !index.d.ts !big-int !package.json !tsconfig.json !node_modules !setup.sh !link.js !README.md",
+      "generate": "tsc",
+      "setup": "./setup.sh",
+      "link": "node link.js",
+      "build": "run-s clean generate setup link"
+  },
+  "devDependencies": {
+      "@iota/iota.js": "^1.9.0-stardust.9",
+      "typescript": "^4.6.2",
+      "npm-run-all": "^4.1.5",
+      "del-cli": "4.0.1"
+  }
+}

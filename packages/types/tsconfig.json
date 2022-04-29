@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "target": "es2019",
+        "strict": true,
+        "module": "es2020",
+        "moduleResolution": "node",
+        "allowSyntheticDefaultImports": true,
+        "declaration": true,
+        "declarationDir": "",
+        "emitDeclarationOnly": true
+    },
+    "include": [
+        "node_modules/@iota/iota.js/src",
+        "node_modules/@iota/crypto.js/src",
+        "node_modules/@iota/util.js/src"
+    ]
+}
