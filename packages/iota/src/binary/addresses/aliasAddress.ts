@@ -4,6 +4,10 @@ import type { ReadStream, WriteStream } from "@iota/util.js";
 import { ALIAS_ADDRESS_TYPE, IAliasAddress } from "../../models/addresses/IAliasAddress";
 import { SMALL_TYPE_LENGTH } from "../commonDataTypes";
 
+// A better place for this id would be in outputs/aliasOutput, but importing it from there
+// causes other constats computed from it to have value NaN during serialization
+/* eslint-disable no-warning-comments */
+// TODO: Find fix for the weird typescript issue
 /**
  * The length of an alias id.
  */
