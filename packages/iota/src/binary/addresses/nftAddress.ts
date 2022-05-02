@@ -4,15 +4,19 @@ import type { ReadStream, WriteStream } from "@iota/util.js";
 import { NFT_ADDRESS_TYPE, INftAddress } from "../../models/addresses/INftAddress";
 import { SMALL_TYPE_LENGTH } from "../commonDataTypes";
 
+// A better place for this id would be in outputs/nftOutput, but importing it from there
+// causes other constats computed from it to have value NaN during serialization
+/* eslint-disable no-warning-comments */
+// TODO: Find fix for the weird typescript issue
 /**
- * The length of an NFT address.
+ * The length of an NFT Id.
  */
-export const NFT_ADDRESS_LENGTH: number = 20;
+export const NFT_ID_LENGTH: number = 32;
 
 /**
  * The minimum length of an nft address binary representation.
  */
-export const MIN_NFT_ADDRESS_LENGTH: number = SMALL_TYPE_LENGTH + NFT_ADDRESS_LENGTH;
+export const MIN_NFT_ADDRESS_LENGTH: number = SMALL_TYPE_LENGTH + NFT_ID_LENGTH;
 
 /**
  * Deserialize the nft address from binary.
@@ -31,7 +35,7 @@ export function deserializeNftAddress(readStream: ReadStream): INftAddress {
         throw new Error(`Type mismatch in nftAddress ${type}`);
     }
 
-    const address = readStream.readFixedHex("nftAddress.nftId", NFT_ADDRESS_LENGTH);
+    const address = readStream.readFixedHex("nftAddress.nftId", NFT_ID_LENGTH);
 
     return {
         type: NFT_ADDRESS_TYPE,
@@ -46,5 +50,6 @@ export function deserializeNftAddress(readStream: ReadStream): INftAddress {
  */
 export function serializeNftAddress(writeStream: WriteStream, object: INftAddress): void {
     writeStream.writeUInt8("nftAddress.type", object.type);
-    writeStream.writeFixedHex("nftAddress.nftId", NFT_ADDRESS_LENGTH, object.nftId);
+    writeStream.writeFixedHex("nftAddress.nftId", NFT_ID_LENGTH, object.nftId);
 }
+

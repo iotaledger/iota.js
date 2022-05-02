@@ -18,10 +18,10 @@
 ### Variables
 
 - [MIN\_ADDRESS\_LENGTH](api.md#min_address_length)
-- [ALIAS\_ADDRESS\_LENGTH](api.md#alias_address_length)
+- [ALIAS\_ID\_LENGTH](api.md#alias_id_length)
 - [MIN\_ALIAS\_ADDRESS\_LENGTH](api.md#min_alias_address_length)
 - [MIN\_ED25519\_ADDRESS\_LENGTH](api.md#min_ed25519_address_length)
-- [NFT\_ADDRESS\_LENGTH](api.md#nft_address_length)
+- [NFT\_ID\_LENGTH](api.md#nft_id_length)
 - [MIN\_NFT\_ADDRESS\_LENGTH](api.md#min_nft_address_length)
 - [UINT8\_SIZE](api.md#uint8_size)
 - [UINT16\_SIZE](api.md#uint16_size)
@@ -55,11 +55,9 @@
 - [MIN\_MILESTONE\_OPTION\_LENGTH](api.md#min_milestone_option_length)
 - [MIN\_POW\_MILESTONE\_OPTION\_LENGTH](api.md#min_pow_milestone_option_length)
 - [MIN\_RECEIPT\_MILESTONE\_OPTION\_LENGTH](api.md#min_receipt_milestone_option_length)
-- [ALIAS\_ID\_LENGTH](api.md#alias_id_length)
 - [MIN\_ALIAS\_OUTPUT\_LENGTH](api.md#min_alias_output_length)
 - [MIN\_BASIC\_OUTPUT\_LENGTH](api.md#min_basic_output_length)
 - [MIN\_FOUNDRY\_OUTPUT\_LENGTH](api.md#min_foundry_output_length)
-- [NFT\_ID\_LENGTH](api.md#nft_id_length)
 - [MIN\_NFT\_OUTPUT\_LENGTH](api.md#min_nft_output_length)
 - [MIN\_OUTPUT\_LENGTH](api.md#min_output_length)
 - [MIN\_OUTPUT\_COUNT](api.md#min_output_count)
@@ -384,11 +382,11 @@ The minimum length of an address binary representation.
 
 ___
 
-### ALIAS\_ADDRESS\_LENGTH
+### ALIAS\_ID\_LENGTH
 
-• `Const` **ALIAS\_ADDRESS\_LENGTH**: `number` = `20`
+• `Const` **ALIAS\_ID\_LENGTH**: `number` = `32`
 
-The length of an alias address.
+The length of an alias id.
 
 ___
 
@@ -408,11 +406,11 @@ The minimum length of an ed25519 address binary representation.
 
 ___
 
-### NFT\_ADDRESS\_LENGTH
+### NFT\_ID\_LENGTH
 
-• `Const` **NFT\_ADDRESS\_LENGTH**: `number` = `20`
+• `Const` **NFT\_ID\_LENGTH**: `number` = `32`
 
-The length of an NFT address.
+The length of an NFT Id.
 
 ___
 
@@ -680,14 +678,6 @@ The minimum length of a receipt milestone option binary representation.
 
 ___
 
-### ALIAS\_ID\_LENGTH
-
-• `Const` **ALIAS\_ID\_LENGTH**: `number` = `20`
-
-The length of an alias id.
-
-___
-
 ### MIN\_ALIAS\_OUTPUT\_LENGTH
 
 • `Const` **MIN\_ALIAS\_OUTPUT\_LENGTH**: `number`
@@ -709,14 +699,6 @@ ___
 • `Const` **MIN\_FOUNDRY\_OUTPUT\_LENGTH**: `number`
 
 The minimum length of a foundry output binary representation.
-
-___
-
-### NFT\_ID\_LENGTH
-
-• `Const` **NFT\_ID\_LENGTH**: `number` = `20`
-
-The length of an NFT Id.
 
 ___
 

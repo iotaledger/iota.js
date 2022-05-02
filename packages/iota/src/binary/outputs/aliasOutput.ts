@@ -3,17 +3,13 @@
 import { HexHelper, ReadStream, WriteStream } from "@iota/util.js";
 import bigInt from "big-integer";
 import { ALIAS_OUTPUT_TYPE, IAliasOutput } from "../../models/outputs/IAliasOutput";
+import { ALIAS_ID_LENGTH } from "../addresses/aliasAddress";
 import { SMALL_TYPE_LENGTH, UINT16_SIZE, UINT32_SIZE, UINT64_SIZE } from "../commonDataTypes";
 import {
     deserializeFeatureBlocks, MIN_FEATURE_BLOCKS_LENGTH, serializeFeatureBlocks
 } from "../featureBlocks/featureBlocks";
 import { deserializeNativeTokens, MIN_NATIVE_TOKENS_LENGTH, serializeNativeTokens } from "../nativeTokens";
 import { deserializeUnlockConditions, MIN_UNLOCK_CONDITIONS_LENGTH, serializeUnlockConditions } from "../unlockConditions/unlockConditions";
-
-/**
- * The length of an alias id.
- */
-export const ALIAS_ID_LENGTH: number = 20;
 
 /**
  * The minimum length of a alias output binary representation.
