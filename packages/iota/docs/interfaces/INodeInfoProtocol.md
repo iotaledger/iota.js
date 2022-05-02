@@ -1,6 +1,6 @@
 # Interface: INodeInfoProtocol
 
-Response from the /info endpoint.
+The Protocol Info.
 
 ## Table of contents
 
@@ -8,6 +8,8 @@ Response from the /info endpoint.
 
 - [networkName](INodeInfoProtocol.md#networkname)
 - [bech32HRP](INodeInfoProtocol.md#bech32hrp)
+- [tokenSupply](INodeInfoProtocol.md#tokensupply)
+- [protocolVersion](INodeInfoProtocol.md#protocolversion)
 - [minPoWScore](INodeInfoProtocol.md#minpowscore)
 - [rentStructure](INodeInfoProtocol.md#rentstructure)
 
@@ -26,6 +28,22 @@ ___
 • **bech32HRP**: `string`
 
 The human readable part of bech32 addresses.
+
+___
+
+### tokenSupply
+
+• **tokenSupply**: `string`
+
+The token supply.
+
+___
+
+### protocolVersion
+
+• **protocolVersion**: `number`
+
+The protocol version.
 
 ___
 

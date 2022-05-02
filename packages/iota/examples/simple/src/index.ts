@@ -73,8 +73,8 @@ async function run() {
     console.log("\tChildren Message Ids:", children.childrenMessageIds);
     console.log();
 
-    const milestone = await client.milestoneByIndex(info.status.latestMilestoneIndex);
-    console.log("Milestone Payload");
+    const milestone = await client.milestoneByIndex(info.status.latestMilestone.index);
+    console.log("Latest Milestone Payload");
     console.log("\tMilestone Index:", milestone.index);
     console.log("\tConfirmed Merkel Root", milestone.confirmedMerkleRoot);
     console.log("\tApplied Merkel Root", milestone.appliedMerkleRoot);

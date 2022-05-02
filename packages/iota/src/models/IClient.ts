@@ -9,7 +9,7 @@ import type { IReceiptsResponse } from "./api/IReceiptsResponse";
 import type { ITipsResponse } from "./api/ITipsResponse";
 import type { IMessage } from "./IMessage";
 import type { IMessageMetadata } from "./IMessageMetadata";
-import type { INodeInfo } from "./INodeInfo";
+import type { INodeInfo } from "./info/INodeInfo";
 import type { IPeer } from "./IPeer";
 import type { ITreasury } from "./ITreasury";
 

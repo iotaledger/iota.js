@@ -1,9 +1,9 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import type { IRent } from "./IRent";
+import type { IRent } from "../IRent";
 
 /**
- * Response from the /info endpoint.
+ * The Protocol Info.
  */
 export interface INodeInfoProtocol {
     /**
@@ -15,6 +15,16 @@ export interface INodeInfoProtocol {
      * The human readable part of bech32 addresses.
      */
     bech32HRP: string;
+
+    /**
+     * The token supply.
+     */
+    tokenSupply: string;
+
+    /**
+     * The protocol version.
+     */
+    protocolVersion: number;
 
     /**
      * The minimum score required for PoW.
