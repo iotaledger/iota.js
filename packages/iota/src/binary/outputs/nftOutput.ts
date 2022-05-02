@@ -3,6 +3,7 @@
 import type { ReadStream, WriteStream } from "@iota/util.js";
 import bigInt from "big-integer";
 import { INftOutput, NFT_OUTPUT_TYPE } from "../../models/outputs/INftOutput";
+import { NFT_ID_LENGTH } from "../addresses/nftAddress";
 import { SMALL_TYPE_LENGTH, UINT64_SIZE } from "../commonDataTypes";
 import {
     deserializeFeatureBlocks,
@@ -11,11 +12,6 @@ import {
 } from "../featureBlocks/featureBlocks";
 import { deserializeNativeTokens, MIN_NATIVE_TOKENS_LENGTH, serializeNativeTokens } from "../nativeTokens";
 import { deserializeUnlockConditions, MIN_UNLOCK_CONDITIONS_LENGTH, serializeUnlockConditions } from "../unlockConditions/unlockConditions";
-
-/**
- * The length of an NFT Id.
- */
-export const NFT_ID_LENGTH: number = 20;
 
 /**
  * The minimum length of a nft output binary representation.
