@@ -90,7 +90,7 @@ export function serializeAliasOutput(writeStream: WriteStream, object: IAliasOut
     writeStream.writeFixedHex("aliasOutput.aliasId", ALIAS_ID_LENGTH, object.aliasId);
 
     writeStream.writeUInt32("aliasOutput.stateIndex", object.stateIndex);
-  
+
     if (object.stateMetadata) {
         const stateMetadata = HexHelper.stripPrefix(object.stateMetadata);
         writeStream.writeUInt16("aliasOutput.stateMetadataLength", stateMetadata.length / 2);
@@ -100,7 +100,6 @@ export function serializeAliasOutput(writeStream: WriteStream, object: IAliasOut
     } else {
         writeStream.writeUInt16("aliasOutput.stateMetadataLength", 0);
     }
-
 
     writeStream.writeUInt32("aliasOutput.foundryCounter", object.foundryCounter);
 
