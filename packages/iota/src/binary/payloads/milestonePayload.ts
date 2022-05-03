@@ -95,6 +95,21 @@ export function deserializeMilestonePayload(readStream: ReadStream): IMilestoneP
  */
 export function serializeMilestonePayload(writeStream: WriteStream, object: IMilestonePayload): void {
     writeStream.writeUInt32("payloadMilestone.type", object.type);
+
+    serializeMilestoneEssence(writeStream, object);
+
+    writeStream.writeUInt8("payloadMilestone.signaturesCount", object.signatures.length);
+    for (let i = 0; i < object.signatures.length; i++) {
+        serializeSignature(writeStream, object.signatures[i]);
+    }
+}
+
+/**
+ * Serialize the milestone payload to binary.
+ * @param writeStream The stream to write the data to.
+ * @param object The object to serialize.
+ */
+export function serializeMilestoneEssence(writeStream: WriteStream, object: IMilestonePayload): void {
     writeStream.writeUInt32("payloadMilestone.index", object.index);
     writeStream.writeUInt32("payloadMilestone.timestamp", object.timestamp);
 
@@ -159,9 +174,5 @@ export function serializeMilestonePayload(writeStream: WriteStream, object: IMil
     } else {
         writeStream.writeUInt8("milestoneOptions.optionsCount", 0);
     }
-
-    writeStream.writeUInt8("payloadMilestone.signaturesCount", object.signatures.length);
-    for (let i = 0; i < object.signatures.length; i++) {
-        serializeSignature(writeStream, object.signatures[i]);
-    }
 }
+
