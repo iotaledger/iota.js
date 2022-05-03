@@ -91,10 +91,14 @@ export function serializeAliasOutput(writeStream: WriteStream, object: IAliasOut
 
     writeStream.writeUInt32("aliasOutput.stateIndex", object.stateIndex);
 
-    const stateMetadata = HexHelper.stripPrefix(object.stateMetadata);
-    writeStream.writeUInt16("aliasOutput.stateMetadataLength", stateMetadata.length / 2);
-    if (stateMetadata.length > 0) {
-        writeStream.writeFixedHex("aliasOutput.stateMetadata", stateMetadata.length / 2, stateMetadata);
+    if (object.stateMetadata) {
+        const stateMetadata = HexHelper.stripPrefix(object.stateMetadata);
+        writeStream.writeUInt16("aliasOutput.stateMetadataLength", stateMetadata.length / 2);
+        if (stateMetadata.length > 0) {
+            writeStream.writeFixedHex("aliasOutput.stateMetadata", stateMetadata.length / 2, stateMetadata);
+        }
+    } else {
+        writeStream.writeUInt16("aliasOutput.stateMetadataLength", 0);
     }
 
     writeStream.writeUInt32("aliasOutput.foundryCounter", object.foundryCounter);
