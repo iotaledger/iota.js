@@ -87,7 +87,7 @@ ___
 
 ### metadata
 
-• **metadata**: `string`
+• `Optional` **metadata**: `string`
 
 The metadata.
 

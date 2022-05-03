@@ -187,6 +187,7 @@
 - [serializeTreasuryOutput](api.md#serializetreasuryoutput)
 - [deserializeMilestonePayload](api.md#deserializemilestonepayload)
 - [serializeMilestonePayload](api.md#serializemilestonepayload)
+- [serializeMilestoneEssence](api.md#serializemilestoneessence)
 - [deserializePayload](api.md#deserializepayload)
 - [serializePayload](api.md#serializepayload)
 - [deserializeTaggedDataPayload](api.md#deserializetaggeddatapayload)
@@ -282,6 +283,8 @@
 - [logFeatureBlock](api.md#logfeatureblock)
 - [logUnlockConditions](api.md#logunlockconditions)
 - [logUnlockCondition](api.md#logunlockcondition)
+- [milestoneIdFromMilestonePayload](api.md#milestoneidfrommilestonepayload)
+- [messageIdFromMilestonePayload](api.md#messageidfrommilestonepayload)
 
 ### Interfaces
 
@@ -2377,6 +2380,25 @@ Serialize the milestone payload to binary.
 
 ___
 
+### serializeMilestoneEssence
+
+▸ **serializeMilestoneEssence**(`writeStream`, `object`): `void`
+
+Serialize the milestone payload to binary.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `writeStream` | `WriteStream` | The stream to write the data to. |
+| `object` | [`IMilestonePayload`](interfaces/IMilestonePayload.md) | The object to serialize. |
+
+#### Returns
+
+`void`
+
+___
+
 ### deserializePayload
 
 ▸ **deserializePayload**(`readStream`): [`PayloadTypes`](api.md#payloadtypes) \| `undefined`
@@ -4301,6 +4323,47 @@ Log feature block to the console.
 #### Returns
 
 `void`
+
+___
+
+### milestoneIdFromMilestonePayload
+
+▸ **milestoneIdFromMilestonePayload**(`payload`): `string`
+
+Compute a milestoneId from a milestone payload.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `payload` | [`IMilestonePayload`](interfaces/IMilestonePayload.md) | The milestone payload. |
+
+#### Returns
+
+`string`
+
+The milestone id hex prefixed string.
+
+___
+
+### messageIdFromMilestonePayload
+
+▸ **messageIdFromMilestonePayload**(`protocolVersion`, `payload`): `string`
+
+Compute a messageId from a milestone payload.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `protocolVersion` | `number` | The protocol version to use. |
+| `payload` | [`IMilestonePayload`](interfaces/IMilestonePayload.md) | The milestone payload. |
+
+#### Returns
+
+`string`
+
+The messageId of the message with the milestone payload.
 
 ## Type aliases
 
