@@ -130,7 +130,7 @@ export * from "./models/signatures/IEd25519Signature";
 export * from "./models/signatures/signatureTypes";
 export * from "./models/tokenSchemes/ISimpleTokenScheme";
 export * from "./models/tokenSchemes/tokenSchemeTypes";
-export * from "./models/units";
+export * from "./models/magnitudes";
 export * from "./models/unlockBlocks/IAliasUnlockBlock";
 export * from "./models/unlockBlocks/INftUnlockBlock";
 export * from "./models/unlockBlocks/IReferenceUnlockBlock";

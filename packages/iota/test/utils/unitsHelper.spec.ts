@@ -1,6 +1,6 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import type { Units } from "../../src/models/units";
+import type { Magnitudes } from "../../src/models/magnitudes";
 import { UnitsHelper } from "../../src/utils/unitsHelper";
 
 describe("UnitsHelper", () => {
@@ -69,7 +69,7 @@ describe("UnitsHelper", () => {
     });
 
     test("formatUnits can throw if unrecognised units", () => {
-        expect(() => UnitsHelper.formatUnits(10, "ppp" as Units)).toThrow("Unrecognized");
+        expect(() => UnitsHelper.formatUnits(10, "ppp" as Magnitudes)).toThrow("Unrecognized");
     });
 
     test("formatUnits can return 0 with no value", () => {
@@ -81,11 +81,11 @@ describe("UnitsHelper", () => {
     });
 
     test("convertUnits can throw if unrecognised from units", () => {
-        expect(() => UnitsHelper.convertUnits(10, "ppp" as Units, "")).toThrow("Unrecognized");
+        expect(() => UnitsHelper.convertUnits(10, "ppp" as Magnitudes, "")).toThrow("Unrecognized");
     });
 
     test("convertUnits can throw if unrecognised to units", () => {
-        expect(() => UnitsHelper.convertUnits(10, "", "ppp" as Units)).toThrow("Unrecognized");
+        expect(() => UnitsHelper.convertUnits(10, "", "ppp" as Magnitudes)).toThrow("Unrecognized");
     });
 
     test("convertUnits can return 0 with no value", () => {
@@ -93,7 +93,7 @@ describe("UnitsHelper", () => {
     });
 
     test("convertUnits should calculate the value with new units", () => {
-        const results: { input: number; from: Units; to: Units; output: number }[] = [
+        const results: { input: number; from: Magnitudes; to: Magnitudes; output: number }[] = [
             { input: 1, from: "", to: "", output: 1 },
             { input: 1, from: "", to: "K", output: 0.001 },
             { input: 1, from: "", to: "M", output: 0.000001 },

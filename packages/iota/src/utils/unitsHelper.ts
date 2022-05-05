@@ -1,6 +1,6 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import type { Units } from "../models/units";
+import type { Magnitudes } from "../models/magnitudes";
 
 /**
  * Class to help with units formatting.
@@ -9,7 +9,7 @@ export class UnitsHelper {
     /**
      * Map units.
      */
-    public static readonly UNIT_MAP: { [unit in Units]: { val: number; dp: number } } = {
+    public static readonly MAGNITUDE_MAP: { [magnitude in Magnitudes]: { val: number; dp: number } } = {
         "": { val: 1, dp: 0 },
         K: { val: 1000, dp: 3 },
         M: { val: 1000000, dp: 6 },
@@ -31,22 +31,22 @@ export class UnitsHelper {
     /**
      * Format the value in the best units.
      * @param value The value to format.
-     * @param unit The unit to format with.
+     * @param magnitude The magnitude to format with.
      * @param decimalPlaces The number of decimal places to display.
      * @returns The formated value.
      */
-    public static formatUnits(value: number, unit: Units, decimalPlaces: number = 2): string {
-        if (!UnitsHelper.UNIT_MAP[unit]) {
-            throw new Error(`Unrecognized unit ${unit}`);
+    public static formatUnits(value: number, magnitude: Magnitudes, decimalPlaces: number = 2): string {
+        if (!UnitsHelper.MAGNITUDE_MAP[magnitude]) {
+            throw new Error(`Unrecognized unit ${magnitude}`);
         }
 
         if (!value) {
             return "0";
         }
 
-        return unit === ""
+        return magnitude === ""
             ? `${value}`
-            : `${UnitsHelper.convertUnits(value, "", unit).toFixed(decimalPlaces)} ${unit}`;
+            : `${UnitsHelper.convertUnits(value, "", magnitude).toFixed(decimalPlaces)} ${magnitude}`;
     }
 
     /**
@@ -54,8 +54,8 @@ export class UnitsHelper {
      * @param value The value to format.
      * @returns The best units for the value.
      */
-    public static calculateBest(value: number): Units {
-        let bestUnits: Units = "";
+    public static calculateBest(value: number): Magnitudes {
+        let bestUnits: Magnitudes = "";
 
         if (!value) {
             return bestUnits;
@@ -63,15 +63,15 @@ export class UnitsHelper {
 
         const checkLength = Math.abs(value).toString().length;
 
-        if (checkLength > UnitsHelper.UNIT_MAP.P.dp) {
+        if (checkLength > UnitsHelper.MAGNITUDE_MAP.P.dp) {
             bestUnits = "P";
-        } else if (checkLength > UnitsHelper.UNIT_MAP.T.dp) {
+        } else if (checkLength > UnitsHelper.MAGNITUDE_MAP.T.dp) {
             bestUnits = "T";
-        } else if (checkLength > UnitsHelper.UNIT_MAP.G.dp) {
+        } else if (checkLength > UnitsHelper.MAGNITUDE_MAP.G.dp) {
             bestUnits = "G";
-        } else if (checkLength > UnitsHelper.UNIT_MAP.M.dp) {
+        } else if (checkLength > UnitsHelper.MAGNITUDE_MAP.M.dp) {
             bestUnits = "M";
-        } else if (checkLength > UnitsHelper.UNIT_MAP.K.dp) {
+        } else if (checkLength > UnitsHelper.MAGNITUDE_MAP.K.dp) {
             bestUnits = "K";
         }
 
@@ -81,29 +81,29 @@ export class UnitsHelper {
     /**
      * Convert the value to different units.
      * @param value The value to convert.
-     * @param fromUnit The from unit.
-     * @param toUnit The to unit.
+     * @param from The from magnitude.
+     * @param to The to magnitude.
      * @returns The formatted unit.
      */
-    public static convertUnits(value: number, fromUnit: Units, toUnit: Units): number {
+    public static convertUnits(value: number, from: Magnitudes, to: Magnitudes): number {
         if (!value) {
             return 0;
         }
-        if (!UnitsHelper.UNIT_MAP[fromUnit]) {
-            throw new Error(`Unrecognized fromUnit ${fromUnit}`);
+        if (!UnitsHelper.MAGNITUDE_MAP[from]) {
+            throw new Error(`Unrecognized fromUnit ${from}`);
         }
-        if (!UnitsHelper.UNIT_MAP[toUnit]) {
-            throw new Error(`Unrecognized toUnit ${toUnit}`);
+        if (!UnitsHelper.MAGNITUDE_MAP[to]) {
+            throw new Error(`Unrecognized toUnit ${to}`);
         }
 
-        if (fromUnit === toUnit) {
+        if (from === to) {
             return Number(value);
         }
 
         const multiplier = value < 0 ? -1 : 1;
         const scaledValue =
-            (Math.abs(Number(value)) * UnitsHelper.UNIT_MAP[fromUnit].val) / UnitsHelper.UNIT_MAP[toUnit].val;
-        const numDecimals = UnitsHelper.UNIT_MAP[toUnit].dp;
+            (Math.abs(Number(value)) * UnitsHelper.MAGNITUDE_MAP[from].val) / UnitsHelper.MAGNITUDE_MAP[to].val;
+        const numDecimals = UnitsHelper.MAGNITUDE_MAP[to].dp;
 
         // We cant use toFixed to just convert the new value to a string with
         // fixed decimal places as it will round, which we don't want
