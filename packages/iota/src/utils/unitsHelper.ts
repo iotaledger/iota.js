@@ -37,7 +37,7 @@ export class UnitsHelper {
      */
     public static formatUnits(value: number, magnitude: Magnitudes, decimalPlaces: number = 2): string {
         if (!UnitsHelper.MAGNITUDE_MAP[magnitude]) {
-            throw new Error(`Unrecognized unit ${magnitude}`);
+            throw new Error(`Unrecognized magnitude ${magnitude}`);
         }
 
         if (!value) {
