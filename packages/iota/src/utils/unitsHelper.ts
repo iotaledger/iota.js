@@ -10,12 +10,12 @@ export class UnitsHelper {
      * Map units.
      */
     public static readonly UNIT_MAP: { [unit in Units]: { val: number; dp: number } } = {
-        i: { val: 1, dp: 0 },
-        Ki: { val: 1000, dp: 3 },
-        Mi: { val: 1000000, dp: 6 },
-        Gi: { val: 1000000000, dp: 9 },
-        Ti: { val: 1000000000000, dp: 12 },
-        Pi: { val: 1000000000000000, dp: 15 }
+        "": { val: 1, dp: 0 },
+        K: { val: 1000, dp: 3 },
+        M: { val: 1000000, dp: 6 },
+        G: { val: 1000000000, dp: 9 },
+        T: { val: 1000000000000, dp: 12 },
+        P: { val: 1000000000000000, dp: 15 }
     };
 
     /**
@@ -41,12 +41,12 @@ export class UnitsHelper {
         }
 
         if (!value) {
-            return `0 ${unit}`;
+            return "0";
         }
 
-        return unit === "i"
-            ? `${value} i`
-            : `${UnitsHelper.convertUnits(value, "i", unit).toFixed(decimalPlaces)} ${unit}`;
+        return unit === ""
+            ? `${value}`
+            : `${UnitsHelper.convertUnits(value, "", unit).toFixed(decimalPlaces)} ${unit}`;
     }
 
     /**
@@ -55,7 +55,7 @@ export class UnitsHelper {
      * @returns The best units for the value.
      */
     public static calculateBest(value: number): Units {
-        let bestUnits: Units = "i";
+        let bestUnits: Units = "";
 
         if (!value) {
             return bestUnits;
@@ -63,16 +63,16 @@ export class UnitsHelper {
 
         const checkLength = Math.abs(value).toString().length;
 
-        if (checkLength > UnitsHelper.UNIT_MAP.Pi.dp) {
-            bestUnits = "Pi";
-        } else if (checkLength > UnitsHelper.UNIT_MAP.Ti.dp) {
-            bestUnits = "Ti";
-        } else if (checkLength > UnitsHelper.UNIT_MAP.Gi.dp) {
-            bestUnits = "Gi";
-        } else if (checkLength > UnitsHelper.UNIT_MAP.Mi.dp) {
-            bestUnits = "Mi";
-        } else if (checkLength > UnitsHelper.UNIT_MAP.Ki.dp) {
-            bestUnits = "Ki";
+        if (checkLength > UnitsHelper.UNIT_MAP.P.dp) {
+            bestUnits = "P";
+        } else if (checkLength > UnitsHelper.UNIT_MAP.T.dp) {
+            bestUnits = "T";
+        } else if (checkLength > UnitsHelper.UNIT_MAP.G.dp) {
+            bestUnits = "G";
+        } else if (checkLength > UnitsHelper.UNIT_MAP.M.dp) {
+            bestUnits = "M";
+        } else if (checkLength > UnitsHelper.UNIT_MAP.K.dp) {
+            bestUnits = "K";
         }
 
         return bestUnits;
@@ -81,7 +81,7 @@ export class UnitsHelper {
     /**
      * Convert the value to different units.
      * @param value The value to convert.
-     * @param fromUnit The form unit.
+     * @param fromUnit The from unit.
      * @param toUnit The to unit.
      * @returns The formatted unit.
      */
@@ -94,9 +94,6 @@ export class UnitsHelper {
         }
         if (!UnitsHelper.UNIT_MAP[toUnit]) {
             throw new Error(`Unrecognized toUnit ${toUnit}`);
-        }
-        if (fromUnit === "i" && value % 1 !== 0) {
-            throw new Error("If fromUnit is 'i' the value must be an integer value");
         }
 
         if (fromUnit === toUnit) {

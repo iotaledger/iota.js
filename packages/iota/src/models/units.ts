@@ -4,4 +4,4 @@
 /**
  * Units for the token.
  */
-export type Units = "Pi" | "Ti" | "Gi" | "Mi" | "Ki" | "i";
+export type Units = "P" | "T" | "G" | "M" | "K" | "";

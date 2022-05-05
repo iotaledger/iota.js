@@ -103,7 +103,7 @@ Convert the value to different units.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `value` | `number` | The value to convert. |
-| `fromUnit` | [`Units`](../api.md#units) | The form unit. |
+| `fromUnit` | [`Units`](../api.md#units) | The from unit. |
 | `toUnit` | [`Units`](../api.md#units) | The to unit. |
 
 #### Returns
