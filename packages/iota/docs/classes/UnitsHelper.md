@@ -6,7 +6,7 @@ Class to help with units formatting.
 
 ### Properties
 
-- [UNIT\_MAP](UnitsHelper.md#unit_map)
+- [MAGNITUDE\_MAP](UnitsHelper.md#magnitude_map)
 
 ### Methods
 
@@ -21,9 +21,9 @@ Class to help with units formatting.
 
 ## Properties
 
-### UNIT\_MAP
+### MAGNITUDE\_MAP
 
-▪ `Static` `Readonly` **UNIT\_MAP**: `Object`
+▪ `Static` `Readonly` **MAGNITUDE\_MAP**: `Object`
 
 Map units.
 
@@ -52,7 +52,7 @@ ___
 
 ### formatUnits
 
-▸ `Static` **formatUnits**(`value`, `unit`, `decimalPlaces?`): `string`
+▸ `Static` **formatUnits**(`value`, `magnitude`, `decimalPlaces?`): `string`
 
 Format the value in the best units.
 
@@ -61,7 +61,7 @@ Format the value in the best units.
 | Name | Type | Default value | Description |
 | :------ | :------ | :------ | :------ |
 | `value` | `number` | `undefined` | The value to format. |
-| `unit` | [`Units`](../api.md#units) | `undefined` | The unit to format with. |
+| `magnitude` | [`Magnitudes`](../api.md#magnitudes) | `undefined` | The magnitude to format with. |
 | `decimalPlaces` | `number` | `2` | The number of decimal places to display. |
 
 #### Returns
@@ -74,7 +74,7 @@ ___
 
 ### calculateBest
 
-▸ `Static` **calculateBest**(`value`): [`Units`](../api.md#units)
+▸ `Static` **calculateBest**(`value`): [`Magnitudes`](../api.md#magnitudes)
 
 Format the value in the best units.
 
@@ -86,7 +86,7 @@ Format the value in the best units.
 
 #### Returns
 
-[`Units`](../api.md#units)
+[`Magnitudes`](../api.md#magnitudes)
 
 The best units for the value.
 
@@ -94,7 +94,7 @@ ___
 
 ### convertUnits
 
-▸ `Static` **convertUnits**(`value`, `fromUnit`, `toUnit`): `number`
+▸ `Static` **convertUnits**(`value`, `from`, `to`): `number`
 
 Convert the value to different units.
 
@@ -103,8 +103,8 @@ Convert the value to different units.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `value` | `number` | The value to convert. |
-| `fromUnit` | [`Units`](../api.md#units) | The form unit. |
-| `toUnit` | [`Units`](../api.md#units) | The to unit. |
+| `from` | [`Magnitudes`](../api.md#magnitudes) | The from magnitude. |
+| `to` | [`Magnitudes`](../api.md#magnitudes) | The to magnitude. |
 
 #### Returns
 

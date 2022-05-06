@@ -362,12 +362,12 @@
 - [FeatureBlockTypes](api.md#featureblocktypes)
 - [InputTypes](api.md#inputtypes)
 - [LedgerInclusionState](api.md#ledgerinclusionstate)
+- [Magnitudes](api.md#magnitudes)
 - [MilestoneOptionTypes](api.md#milestoneoptiontypes)
 - [OutputTypes](api.md#outputtypes)
 - [PayloadTypes](api.md#payloadtypes)
 - [SignatureTypes](api.md#signaturetypes)
 - [TokenSchemeTypes](api.md#tokenschemetypes)
-- [Units](api.md#units)
 - [UnlockBlockTypes](api.md#unlockblocktypes)
 - [UnlockConditionTypes](api.md#unlockconditiontypes)
 
@@ -4399,6 +4399,14 @@ The different states of ledger inclusion.
 
 ___
 
+### Magnitudes
+
+Ƭ **Magnitudes**: ``"P"`` \| ``"T"`` \| ``"G"`` \| ``"M"`` \| ``"K"`` \| ``""``
+
+Magnitudes for the numbers.
+
+___
+
 ### MilestoneOptionTypes
 
 Ƭ **MilestoneOptionTypes**: [`IReceiptMilestoneOption`](interfaces/IReceiptMilestoneOption.md) \| [`IPoWMilestoneOption`](interfaces/IPoWMilestoneOption.md)
@@ -4436,14 +4444,6 @@ ___
 Ƭ **TokenSchemeTypes**: [`ISimpleTokenScheme`](interfaces/ISimpleTokenScheme.md)
 
 All of the token scheme types.
-
-___
-
-### Units
-
-Ƭ **Units**: ``"Pi"`` \| ``"Ti"`` \| ``"Gi"`` \| ``"Mi"`` \| ``"Ki"`` \| ``"i"``
-
-Units for the token.
 
 ___
 
