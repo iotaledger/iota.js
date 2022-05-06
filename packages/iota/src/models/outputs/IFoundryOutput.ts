@@ -25,11 +25,6 @@ export interface IFoundryOutput extends ITypeBase<5>, ICommonOutput {
     serialNumber: number;
 
     /**
-     * Data that is always the last 12 bytes of ID of the tokens produced by this foundry.
-     */
-    tokenTag: string;
-
-    /**
      * The token scheme for the foundry.
      */
     tokenScheme: TokenSchemeTypes;
