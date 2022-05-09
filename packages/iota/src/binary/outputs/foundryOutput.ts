@@ -13,7 +13,6 @@ import {
 import {
     deserializeNativeTokens,
     MIN_NATIVE_TOKENS_LENGTH,
-    NATIVE_TOKEN_TAG_LENGTH,
     serializeNativeTokens
 } from "../nativeTokens";
 import { deserializeTokenScheme, MIN_TOKEN_SCHEME_LENGTH, serializeTokenScheme } from "../tokenSchemes/tokenSchemes";
@@ -27,7 +26,6 @@ export const MIN_FOUNDRY_OUTPUT_LENGTH: number =
     UINT64_SIZE + // Amount
     MIN_NATIVE_TOKENS_LENGTH + // Native tokens
     UINT32_SIZE + // Serial Number
-    NATIVE_TOKEN_TAG_LENGTH + // Token Tag
     MIN_TOKEN_SCHEME_LENGTH + // Token scheme length
     MIN_UNLOCK_CONDITIONS_LENGTH + // Unlock conditions
     MIN_FEATURE_BLOCKS_LENGTH + // Feature Blocks
@@ -53,7 +51,6 @@ export function deserializeFoundryOutput(readStream: ReadStream): IFoundryOutput
     const amount = readStream.readUInt64("foundryOutput.amount");
     const nativeTokens = deserializeNativeTokens(readStream);
     const serialNumber = readStream.readUInt32("foundryOutput.serialNumber");
-    const tokenTag = readStream.readFixedHex("foundryOutput.tokenTag", NATIVE_TOKEN_TAG_LENGTH);
     const tokenScheme = deserializeTokenScheme(readStream);
     const unlockConditions = deserializeUnlockConditions(readStream);
     const featureBlocks = deserializeFeatureBlocks(readStream);
@@ -64,7 +61,6 @@ export function deserializeFoundryOutput(readStream: ReadStream): IFoundryOutput
         amount: amount.toString(),
         nativeTokens,
         serialNumber,
-        tokenTag,
         tokenScheme,
         unlockConditions,
         featureBlocks: featureBlocks as IMetadataFeatureBlock[],
@@ -83,7 +79,6 @@ export function serializeFoundryOutput(writeStream: WriteStream, object: IFoundr
     writeStream.writeUInt64("foundryOutput.amount", bigInt(object.amount));
     serializeNativeTokens(writeStream, object.nativeTokens);
     writeStream.writeUInt32("foundryOutput.serialNumber", object.serialNumber);
-    writeStream.writeFixedHex("foundryOutput.tokenTag", NATIVE_TOKEN_TAG_LENGTH, object.tokenTag);
     serializeTokenScheme(writeStream, object.tokenScheme);
     serializeUnlockConditions(writeStream, object.unlockConditions);
     serializeFeatureBlocks(writeStream, object.featureBlocks);

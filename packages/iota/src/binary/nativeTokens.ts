@@ -11,11 +11,6 @@ import { UINT32_SIZE, UINT8_SIZE } from "./commonDataTypes";
 export const MIN_NATIVE_TOKENS_LENGTH: number = UINT8_SIZE;
 
 /**
- * The length of a native token tag.
- */
-export const NATIVE_TOKEN_TAG_LENGTH: number = 12;
-
-/**
  * The length of a foundry id.
  */
 export const FOUNDRY_ID_LENGTH: number = MIN_ALIAS_ADDRESS_LENGTH + UINT32_SIZE + UINT8_SIZE;
@@ -23,7 +18,7 @@ export const FOUNDRY_ID_LENGTH: number = MIN_ALIAS_ADDRESS_LENGTH + UINT32_SIZE 
 /**
  * The length of a native token id.
  */
-export const NATIVE_TOKEN_ID_LENGTH: number = FOUNDRY_ID_LENGTH + NATIVE_TOKEN_TAG_LENGTH;
+export const NATIVE_TOKEN_ID_LENGTH: number = FOUNDRY_ID_LENGTH;
 
 /**
  * The maximum number of native tokens.

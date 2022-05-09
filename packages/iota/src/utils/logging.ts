@@ -433,7 +433,6 @@ export function logOutput(prefix: string, output?: OutputTypes): void {
             logger(`${prefix}\t\tAmount:`, output.amount);
             logNativeTokens(`${prefix}\t\t`, output.nativeTokens);
             logger(`${prefix}\t\tSerial Number:`, output.serialNumber);
-            logger(`${prefix}\t\tToken Tag:`, output.tokenTag);
             logTokenScheme(`${prefix}\t\t`, output.tokenScheme);
             logUnlockConditions(`${prefix}\t\t`, output.unlockConditions);
             logFeatureBlocks(`${prefix}\t\t`, output.featureBlocks);

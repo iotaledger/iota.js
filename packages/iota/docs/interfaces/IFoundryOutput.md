@@ -20,7 +20,6 @@ Foundry output.
 - [featureBlocks](IFoundryOutput.md#featureblocks)
 - [amount](IFoundryOutput.md#amount)
 - [serialNumber](IFoundryOutput.md#serialnumber)
-- [tokenTag](IFoundryOutput.md#tokentag)
 - [tokenScheme](IFoundryOutput.md#tokenscheme)
 - [immutableFeatureBlocks](IFoundryOutput.md#immutablefeatureblocks)
 
@@ -87,14 +86,6 @@ ___
 • **serialNumber**: `number`
 
 The serial number of the foundry with respect to the controlling alias.
-
-___
-
-### tokenTag
-
-• **tokenTag**: `string`
-
-Data that is always the last 12 bytes of ID of the tokens produced by this foundry.
 
 ___
 
