@@ -87,8 +87,8 @@ async function run() {
             inputsWithKeyPairs.push({
                 input: {
                     type: UTXO_INPUT_TYPE,
-                    transactionId: output.transactionId,
-                    transactionOutputIndex: output.outputIndex
+                    transactionId: output.metadata.transactionId,
+                    transactionOutputIndex: output.metadata.outputIndex
                 },
                 addressKeyPair: genesisWalletKeyPair,
                 consumingOutput: output.output

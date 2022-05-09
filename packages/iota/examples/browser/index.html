@@ -91,10 +91,10 @@
 
             const output = await client.output("0x00000000000000000000000000000000000000000000000000000000000000000000");
             consoleLog("Output");
-            consoleLog("\tMessage Id:", output.messageId);
-            consoleLog("\tTransaction Id:", output.transactionId);
-            consoleLog("\tOutput Index:", output.outputIndex);
-            consoleLog("\tIs Spent:", output.isSpent);
+            consoleLog("\tMessage Id:", output.metadata.messageId);
+            consoleLog("\tTransaction Id:", output.metadata.transactionId);
+            consoleLog("\tOutput Index:", output.metadata.outputIndex);
+            consoleLog("\tIs Spent:", output.metadata.isSpent);
             Iota.logOutput("\t", output.output);
             consoleLog();
 
@@ -159,8 +159,8 @@
                     inputsWithKeyPairs.push({
                         input: {
                             type: 0,
-                            transactionId: output.transactionId,
-                            transactionOutputIndex: output.outputIndex
+                            transactionId: output.metadata.transactionId,
+                            transactionOutputIndex: output.metadata.outputIndex
                         },
                         addressKeyPair: genesisWalletKeyPair,
                         consumingOutput: output.output
