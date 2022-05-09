@@ -83,7 +83,7 @@ async function run() {
 
     for (let i = 0; i < genesisAddressOutputs.items.length; i++) {
         const output = await client.output(genesisAddressOutputs.items[i]);
-        if (!output.isSpent) {
+        if (!output.metadata.isSpent) {
             inputsWithKeyPairs.push({
                 input: {
                     type: UTXO_INPUT_TYPE,
