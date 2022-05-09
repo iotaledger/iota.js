@@ -37,7 +37,7 @@ export async function addressBalance(
         for (const outputId of response.items) {
             const output = await localClient.output(outputId);
 
-            if (!output.isSpent) {
+            if (!output.metadata.isSpent) {
                 total = total.plus(output.output.amount);
 
                 const nativeTokenOutput = output.output as ICommonOutput;
@@ -48,7 +48,7 @@ export async function addressBalance(
                     }
                 }
             }
-            ledgerIndex = output.ledgerIndex;
+            ledgerIndex = output.metadata.ledgerIndex;
         }
         cursor = response.cursor;
     } while (cursor && response.items.length > 0);

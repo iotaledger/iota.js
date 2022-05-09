@@ -2,12 +2,6 @@
 
 Details of an output.
 
-## Hierarchy
-
-- **`IOutputMetadataResponse`**
-
-  ↳ [`IOutputResponse`](IOutputResponse.md)
-
 ## Table of contents
 
 ### Properties

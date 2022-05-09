@@ -319,7 +319,7 @@ export async function calculateInputs<T>(
             for (const addressOutputId of addressOutputIds.items) {
                 const addressOutput = await localClient.output(addressOutputId);
 
-                if (!addressOutput.isSpent && consumedBalance.lesser(requiredBalance)) {
+                if (!addressOutput.metadata.isSpent && consumedBalance.lesser(requiredBalance)) {
                     if (bigInt(addressOutput.output.amount).equals(0)) {
                         zeroBalance++;
                         if (zeroBalance >= zeroCount) {
@@ -330,8 +330,8 @@ export async function calculateInputs<T>(
 
                         const input: IUTXOInput = {
                             type: UTXO_INPUT_TYPE,
-                            transactionId: addressOutput.transactionId,
-                            transactionOutputIndex: addressOutput.outputIndex
+                            transactionId: addressOutput.metadata.transactionId,
+                            transactionOutputIndex: addressOutput.metadata.outputIndex
                         };
 
                         inputsAndSignatureKeyPairs.push({
