@@ -6,7 +6,12 @@ import type { IOutputMetadataResponse } from "./IOutputMetadataResponse";
 /**
  * Details of an output.
  */
-export interface IOutputResponse extends IOutputMetadataResponse {
+export interface IOutputResponse {
+    /**
+     * The metadata about the output.
+     */
+    metadata: IOutputMetadataResponse;
+
     /**
      * The output.
      */

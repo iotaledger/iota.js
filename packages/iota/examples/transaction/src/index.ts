@@ -83,12 +83,12 @@ async function run() {
 
     for (let i = 0; i < genesisAddressOutputs.items.length; i++) {
         const output = await client.output(genesisAddressOutputs.items[i]);
-        if (!output.isSpent) {
+        if (!output.metadata.isSpent) {
             inputsWithKeyPairs.push({
                 input: {
                     type: UTXO_INPUT_TYPE,
-                    transactionId: output.transactionId,
-                    transactionOutputIndex: output.outputIndex
+                    transactionId: output.metadata.transactionId,
+                    transactionOutputIndex: output.metadata.outputIndex
                 },
                 addressKeyPair: genesisWalletKeyPair,
                 consumingOutput: output.output

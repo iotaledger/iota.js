@@ -10,7 +10,7 @@ import {
     MAX_NUMBER_PARENTS,
     SingleNodeClient
 } from "@iota/iota.js";
-import { Converter, HexHelper, ReadStream } from "@iota/util.js";
+import { Converter, ReadStream } from "@iota/util.js";
 
 const API_ENDPOINT = "http://localhost:14265/";
 
@@ -84,10 +84,10 @@ async function run() {
 
     const output = await client.output("0x00000000000000000000000000000000000000000000000000000000000000000000");
     console.log("Output");
-    console.log("\tMessage Id:", output.messageId);
-    console.log("\tTransaction Id:", output.transactionId);
-    console.log("\tOutput Index:", output.outputIndex);
-    console.log("\tIs Spent:", output.isSpent);
+    console.log("\tMessage Id:", output.metadata.messageId);
+    console.log("\tTransaction Id:", output.metadata.transactionId);
+    console.log("\tOutput Index:", output.metadata.outputIndex);
+    console.log("\tIs Spent:", output.metadata.isSpent);
     logOutput("\t", output.output);
     console.log();
 }

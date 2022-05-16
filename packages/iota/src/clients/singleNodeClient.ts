@@ -313,7 +313,7 @@ export class SingleNodeClient implements IClient {
      * @returns The output metadata.
      */
     public async outputMetadata(outputId: string): Promise<IOutputMetadataResponse> {
-        return this.fetchJson<never, IOutputResponse>(this._basePath, "get", `outputs/${outputId}/metadata`);
+        return this.fetchJson<never, IOutputMetadataResponse>(this._basePath, "get", `outputs/${outputId}/metadata`);
     }
 
     /**
