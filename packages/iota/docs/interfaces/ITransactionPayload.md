@@ -14,7 +14,7 @@ Transaction payload.
 
 - [type](ITransactionPayload.md#type)
 - [essence](ITransactionPayload.md#essence)
-- [unlockBlocks](ITransactionPayload.md#unlockblocks)
+- [unlocks](ITransactionPayload.md#unlocks)
 
 ## Properties
 
@@ -38,8 +38,8 @@ The index name.
 
 ___
 
-### unlockBlocks
+### unlocks
 
-• **unlockBlocks**: [`UnlockBlockTypes`](../api.md#unlockblocktypes)[]
+• **unlocks**: [`UnlockTypes`](../api.md#unlocktypes)[]
 
-The unlock blocks.
+The unlocks.

@@ -1,6 +1,6 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import type { FeatureBlockTypes } from "../featureBlocks/featureBlockTypes";
+import type { FeatureTypes } from "../features/featureTypes";
 import type { INativeToken } from "../INativeToken";
 import type { UnlockConditionTypes } from "../unlockConditions/unlockConditionTypes";
 
@@ -19,7 +19,7 @@ export interface ICommonOutput {
     unlockConditions: UnlockConditionTypes[];
 
     /**
-     * Feature blocks contained by the output.
+     * Features contained by the output.
      */
-    featureBlocks: FeatureBlockTypes[];
+    features: FeatureTypes[];
 }

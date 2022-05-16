@@ -6,12 +6,12 @@ Response from the tips endpoint.
 
 ### Properties
 
-- [tipMessageIds](ITipsResponse.md#tipmessageids)
+- [tipBlockIds](ITipsResponse.md#tipblockids)
 
 ## Properties
 
-### tipMessageIds
+### tipBlockIds
 
-• **tipMessageIds**: `string`[]
+• **tipBlockIds**: `string`[]
 
-The message ids of the tip.
+The block ids of the tip.

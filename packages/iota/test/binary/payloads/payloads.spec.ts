@@ -110,8 +110,8 @@ describe("Binary Payload", () => {
         expect(payload.index).toEqual(1087);
         expect(payload.timestamp).toEqual(1605190003);
         expect(payload.previousMilestoneId).toEqual("0x50cf83f8ee3e316a7f3a4df32082747e8392e59fa724bbd13a9f2efc34cec6e4");
-        expect(payload.parentMessageIds[0]).toEqual("0xc0ab1d1f6886ba6317634da6b2d957e7c987a9699dd3707d1e2751fcf4b8efe3");
-        expect(payload.parentMessageIds[1]).toEqual("0x04ba147c9cc9bebd3b97310a23d385f33d8e67ac42868b69bc06f5468e3c0a02");
+        expect(payload.parentBlockIds[0]).toEqual("0xc0ab1d1f6886ba6317634da6b2d957e7c987a9699dd3707d1e2751fcf4b8efe3");
+        expect(payload.parentBlockIds[1]).toEqual("0x04ba147c9cc9bebd3b97310a23d385f33d8e67ac42868b69bc06f5468e3c0a02");
         expect(payload.confirmedMerkleRoot).toEqual(
             "0x786a02f742015903c6c6fd852552d272912f4740e15847618a86e217f71f5419"
         );

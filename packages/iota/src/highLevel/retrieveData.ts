@@ -7,14 +7,14 @@ import { ITaggedDataPayload, TAGGED_DATA_PAYLOAD_TYPE } from "../models/payloads
 import { TRANSACTION_PAYLOAD_TYPE } from "../models/payloads/ITransactionPayload";
 
 /**
- * Retrieve a data message.
+ * Retrieve a data block.
  * @param client The client or node endpoint to retrieve the data with.
- * @param messageId The message id of the data to get.
- * @returns The message tag and data.
+ * @param blockId The block id of the data to get.
+ * @returns The block tag and data.
  */
 export async function retrieveData(
     client: IClient | string,
-    messageId: string
+    blockId: string
 ): Promise<
     | {
           tag?: Uint8Array;
@@ -24,15 +24,15 @@ export async function retrieveData(
 > {
     const localClient = typeof client === "string" ? new SingleNodeClient(client) : client;
 
-    const message = await localClient.message(messageId);
+    const block = await localClient.block(blockId);
 
-    if (message?.payload) {
+    if (block?.payload) {
         let taggedDataPayload: ITaggedDataPayload | undefined;
 
-        if (message.payload.type === TRANSACTION_PAYLOAD_TYPE) {
-            taggedDataPayload = message.payload.essence.payload;
-        } else if (message.payload.type === TAGGED_DATA_PAYLOAD_TYPE) {
-            taggedDataPayload = message.payload;
+        if (block.payload.type === TRANSACTION_PAYLOAD_TYPE) {
+            taggedDataPayload = block.payload.essence.payload;
+        } else if (block.payload.type === TAGGED_DATA_PAYLOAD_TYPE) {
+            taggedDataPayload = block.payload;
         }
 
         if (taggedDataPayload) {

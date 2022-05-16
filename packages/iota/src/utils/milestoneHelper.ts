@@ -2,9 +2,9 @@
 // SPDX-License-Identifier: Apache-2.0
 import { Blake2b } from "@iota/crypto.js";
 import { Converter, WriteStream } from "@iota/util.js";
-import { serializeMessage } from "../binary/message";
+import { serializeBlock } from "../binary/block";
 import { serializeMilestoneEssence } from "../binary/payloads/milestonePayload";
-import type { IMessage } from "../models/IMessage";
+import type { IBlock } from "../models/IBlock";
 import type { IMilestonePayload } from "../models/payloads/IMilestonePayload";
 
 /**
@@ -29,13 +29,13 @@ export function milestoneIdFromMilestonePayload(payload: IMilestonePayload): str
  */
 export function messageIdFromMilestonePayload(protocolVersion: number, payload: IMilestonePayload) {
     const writeStream = new WriteStream();
-    const message: IMessage = {
+    const message: IBlock = {
         protocolVersion,
-        parentMessageIds: payload.parentMessageIds,
+        parentBlockIds: payload.parentBlockIds,
         payload,
         nonce: "0"
     };
-    serializeMessage(writeStream, message);
+    serializeBlock(writeStream, message);
 
     const messageFinal = writeStream.finalBytes();
     const messageHash = Blake2b.sum256(messageFinal);

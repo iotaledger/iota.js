@@ -1,37 +1,37 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 import { SingleNodeClient } from "../clients/singleNodeClient";
+import type { IBlock } from "../models/IBlock";
 import type { IClient } from "../models/IClient";
-import type { IMessage } from "../models/IMessage";
 
 /**
- * Reattach an existing message.
+ * Reattach an existing block.
  * @param client The client or node endpoint to perform the reattach with.
- * @param messageId The message to reattach.
- * @returns The id and message that were reattached.
+ * @param blockId The block to reattach.
+ * @returns The id and block that were reattached.
  */
 export async function reattach(
     client: IClient | string,
-    messageId: string
+    blockId: string
 ): Promise<{
-    message: IMessage;
-    messageId: string;
+    block: IBlock;
+    blockId: string;
 }> {
     const localClient = typeof client === "string" ? new SingleNodeClient(client) : client;
 
-    const message = await localClient.message(messageId);
-    if (!message) {
-        throw new Error("The message does not exist.");
+    const block = await localClient.block(blockId);
+    if (!block) {
+        throw new Error("The block does not exist.");
     }
 
-    const reattachMessage: IMessage = {
-        payload: message.payload
+    const reattachBlock: IBlock = {
+        payload: block.payload
     };
 
-    const reattachedMessageId = await localClient.messageSubmit(reattachMessage);
+    const reattachedBlockId = await localClient.blockSubmit(reattachBlock);
 
     return {
-        message,
-        messageId: reattachedMessageId
+        block,
+        blockId: reattachedBlockId
     };
 }

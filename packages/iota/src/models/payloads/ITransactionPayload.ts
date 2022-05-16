@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 import type { ITransactionEssence } from "../ITransactionEssence";
 import type { ITypeBase } from "../ITypeBase";
-import type { UnlockBlockTypes } from "../unlockBlocks/unlockBlockTypes";
+import type { UnlockTypes } from "../unlocks/unlockTypes";
 
 /**
  * The global type for the payload.
@@ -19,7 +19,7 @@ export interface ITransactionPayload extends ITypeBase<6> {
     essence: ITransactionEssence;
 
     /**
-     * The unlock blocks.
+     * The unlocks.
      */
-    unlockBlocks: UnlockBlockTypes[];
+    unlocks: UnlockTypes[];
 }

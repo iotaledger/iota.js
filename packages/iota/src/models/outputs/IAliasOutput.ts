@@ -1,6 +1,6 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import type { FeatureBlockTypes } from "../featureBlocks/featureBlockTypes";
+import type { FeatureTypes } from "../features/featureTypes";
 import type { ITypeBase } from "../ITypeBase";
 import type { ICommonOutput } from "./ICommonOutput";
 
@@ -39,7 +39,7 @@ export interface IAliasOutput extends ITypeBase<4>, ICommonOutput {
     foundryCounter: number;
 
     /**
-     * Immutable blocks contained by the output.
+     * Immutable features contained by the output.
      */
-    immutableFeatureBlocks: FeatureBlockTypes[];
+    immutableFeatures: FeatureTypes[];
 }

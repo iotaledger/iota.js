@@ -6,7 +6,7 @@ import { TRANSACTION_ESSENCE_TYPE } from "../../models/ITransactionEssence";
 import { ITransactionPayload, TRANSACTION_PAYLOAD_TYPE } from "../../models/payloads/ITransactionPayload";
 import { TYPE_LENGTH, UINT32_SIZE } from "../commonDataTypes";
 import { deserializeTransactionEssence, serializeTransactionEssence } from "../transactionEssence";
-import { deserializeUnlockBlocks, serializeUnlockBlocks } from "../unlockBlocks/unlockBlocks";
+import { deserializeUnlocks, serializeUnlocks } from "../unlocks/unlocks";
 
 /**
  * The minimum length of a transaction payload binary representation.
@@ -34,11 +34,11 @@ export function deserializeTransactionPayload(readStream: ReadStream): ITransact
 
     const essenceType = readStream.readUInt8("payloadTransaction.essenceType", false);
     let essence;
-    let unlockBlocks;
+    let unlocks;
 
     if (essenceType === TRANSACTION_ESSENCE_TYPE) {
         essence = deserializeTransactionEssence(readStream);
-        unlockBlocks = deserializeUnlockBlocks(readStream);
+        unlocks = deserializeUnlocks(readStream);
     } else {
         throw new Error(`Unrecognized transaction essence type ${type}`);
     }
@@ -46,7 +46,7 @@ export function deserializeTransactionPayload(readStream: ReadStream): ITransact
     return {
         type: TRANSACTION_PAYLOAD_TYPE,
         essence,
-        unlockBlocks
+        unlocks
     };
 }
 
@@ -60,7 +60,7 @@ export function serializeTransactionPayload(writeStream: WriteStream, object: IT
 
     if (object.type === TRANSACTION_PAYLOAD_TYPE) {
         serializeTransactionEssence(writeStream, object.essence);
-        serializeUnlockBlocks(writeStream, object.unlockBlocks);
+        serializeUnlocks(writeStream, object.unlocks);
     } else {
         throw new Error(`Unrecognized transaction type ${object.type}`);
     }

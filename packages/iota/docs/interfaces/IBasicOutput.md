@@ -18,7 +18,7 @@ Basic output.
 - [amount](IBasicOutput.md#amount)
 - [nativeTokens](IBasicOutput.md#nativetokens)
 - [unlockConditions](IBasicOutput.md#unlockconditions)
-- [featureBlocks](IBasicOutput.md#featureblocks)
+- [features](IBasicOutput.md#features)
 
 ## Properties
 
@@ -66,12 +66,12 @@ The unlock conditions for the output.
 
 ___
 
-### featureBlocks
+### features
 
-• **featureBlocks**: [`FeatureBlockTypes`](../api.md#featureblocktypes)[]
+• **features**: [`FeatureTypes`](../api.md#featuretypes)[]
 
-Feature blocks contained by the output.
+Features contained by the output.
 
 #### Inherited from
 
-[ICommonOutput](ICommonOutput.md).[featureBlocks](ICommonOutput.md#featureblocks)
+[ICommonOutput](ICommonOutput.md).[features](ICommonOutput.md#features)

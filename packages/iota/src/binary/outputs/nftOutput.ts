@@ -6,10 +6,10 @@ import { INftOutput, NFT_OUTPUT_TYPE } from "../../models/outputs/INftOutput";
 import { NFT_ID_LENGTH } from "../addresses/nftAddress";
 import { SMALL_TYPE_LENGTH, UINT64_SIZE } from "../commonDataTypes";
 import {
-    deserializeFeatureBlocks,
-    MIN_FEATURE_BLOCKS_LENGTH,
-    serializeFeatureBlocks
-} from "../featureBlocks/featureBlocks";
+    deserializeFeatures,
+    MIN_FEATURE_LENGTH,
+    serializeFeatures
+} from "../features/features";
 import { deserializeNativeTokens, MIN_NATIVE_TOKENS_LENGTH, serializeNativeTokens } from "../nativeTokens";
 import { deserializeUnlockConditions, MIN_UNLOCK_CONDITIONS_LENGTH, serializeUnlockConditions } from "../unlockConditions/unlockConditions";
 
@@ -22,8 +22,8 @@ export const MIN_NFT_OUTPUT_LENGTH: number =
     MIN_NATIVE_TOKENS_LENGTH + // Native tokens
     NFT_ID_LENGTH + // Nft Id
     MIN_UNLOCK_CONDITIONS_LENGTH + // Unlock conditions
-    MIN_FEATURE_BLOCKS_LENGTH + // Feature Blocks
-    MIN_FEATURE_BLOCKS_LENGTH; // Immutable blocks
+    MIN_FEATURE_LENGTH + // Features
+    MIN_FEATURE_LENGTH; // Immutable features
 
 /**
  * Deserialize the nft output from binary.
@@ -47,8 +47,8 @@ export function deserializeNftOutput(readStream: ReadStream): INftOutput {
     const nftId = readStream.readFixedHex("nftOutput.nftId", NFT_ID_LENGTH);
 
     const unlockConditions = deserializeUnlockConditions(readStream);
-    const featureBlocks = deserializeFeatureBlocks(readStream);
-    const immutableFeatureBlocks = deserializeFeatureBlocks(readStream);
+    const features = deserializeFeatures(readStream);
+    const immutableFeatures = deserializeFeatures(readStream);
 
     return {
         type: NFT_OUTPUT_TYPE,
@@ -56,8 +56,8 @@ export function deserializeNftOutput(readStream: ReadStream): INftOutput {
         nativeTokens,
         nftId,
         unlockConditions,
-        featureBlocks,
-        immutableFeatureBlocks
+        features,
+        immutableFeatures
     };
 }
 
@@ -74,6 +74,6 @@ export function serializeNftOutput(writeStream: WriteStream, object: INftOutput)
     writeStream.writeFixedHex("nftOutput.nftId", NFT_ID_LENGTH, object.nftId);
 
     serializeUnlockConditions(writeStream, object.unlockConditions);
-    serializeFeatureBlocks(writeStream, object.featureBlocks);
-    serializeFeatureBlocks(writeStream, object.immutableFeatureBlocks);
+    serializeFeatures(writeStream, object.features);
+    serializeFeatures(writeStream, object.immutableFeatures);
 }

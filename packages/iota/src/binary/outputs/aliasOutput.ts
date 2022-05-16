@@ -6,8 +6,8 @@ import { ALIAS_OUTPUT_TYPE, IAliasOutput } from "../../models/outputs/IAliasOutp
 import { ALIAS_ID_LENGTH } from "../addresses/aliasAddress";
 import { SMALL_TYPE_LENGTH, UINT16_SIZE, UINT32_SIZE, UINT64_SIZE } from "../commonDataTypes";
 import {
-    deserializeFeatureBlocks, MIN_FEATURE_BLOCKS_LENGTH, serializeFeatureBlocks
-} from "../featureBlocks/featureBlocks";
+    deserializeFeatures, MIN_FEATURES_LENGTH, serializeFeatures
+} from "../features/features";
 import { deserializeNativeTokens, MIN_NATIVE_TOKENS_LENGTH, serializeNativeTokens } from "../nativeTokens";
 import { deserializeUnlockConditions, MIN_UNLOCK_CONDITIONS_LENGTH, serializeUnlockConditions } from "../unlockConditions/unlockConditions";
 
@@ -23,8 +23,8 @@ export const MIN_ALIAS_OUTPUT_LENGTH: number =
     UINT16_SIZE + // State Metatata Length
     UINT32_SIZE + // Foundry counter
     MIN_UNLOCK_CONDITIONS_LENGTH + // Unlock conditions
-    MIN_FEATURE_BLOCKS_LENGTH + // Feature Blocks
-    MIN_FEATURE_BLOCKS_LENGTH; // Immutable blocks
+    MIN_FEATURES_LENGTH + // Features
+    MIN_FEATURES_LENGTH; // Immutable feature
 
 /**
  * Deserialize the alias output from binary.
@@ -58,9 +58,9 @@ export function deserializeAliasOutput(readStream: ReadStream): IAliasOutput {
 
     const unlockConditions = deserializeUnlockConditions(readStream);
 
-    const featureBlocks = deserializeFeatureBlocks(readStream);
+    const features = deserializeFeatures(readStream);
 
-    const immutableFeatureBlocks = deserializeFeatureBlocks(readStream);
+    const immutableFeatures = deserializeFeatures(readStream);
 
     return {
         type: ALIAS_OUTPUT_TYPE,
@@ -71,8 +71,8 @@ export function deserializeAliasOutput(readStream: ReadStream): IAliasOutput {
         stateMetadata,
         foundryCounter,
         unlockConditions,
-        featureBlocks,
-        immutableFeatureBlocks
+        features,
+        immutableFeatures
     };
 }
 
@@ -105,6 +105,6 @@ export function serializeAliasOutput(writeStream: WriteStream, object: IAliasOut
 
     serializeUnlockConditions(writeStream, object.unlockConditions);
 
-    serializeFeatureBlocks(writeStream, object.featureBlocks);
-    serializeFeatureBlocks(writeStream, object.immutableFeatureBlocks);
+    serializeFeatures(writeStream, object.features);
+    serializeFeatures(writeStream, object.immutableFeatures);
 }

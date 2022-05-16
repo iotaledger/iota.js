@@ -6,13 +6,13 @@ import { ALIAS_ADDRESS_TYPE } from "../models/addresses/IAliasAddress";
 import { ED25519_ADDRESS_TYPE } from "../models/addresses/IEd25519Address";
 import { NFT_ADDRESS_TYPE } from "../models/addresses/INftAddress";
 import type { ITipsResponse } from "../models/api/ITipsResponse";
-import type { FeatureBlockTypes } from "../models/featureBlocks/featureBlockTypes";
-import { ISSUER_FEATURE_BLOCK_TYPE } from "../models/featureBlocks/IIssuerFeatureBlock";
-import { METADATA_FEATURE_BLOCK_TYPE } from "../models/featureBlocks/IMetadataFeatureBlock";
-import { SENDER_FEATURE_BLOCK_TYPE } from "../models/featureBlocks/ISenderFeatureBlock";
-import { TAG_FEATURE_BLOCK_TYPE } from "../models/featureBlocks/ITagFeatureBlock";
-import type { IMessage } from "../models/IMessage";
-import type { IMessageMetadata } from "../models/IMessageMetadata";
+import type { FeatureTypes } from "../models/features/featureTypes";
+import { ISSUER_FEATURE_TYPE } from "../models/features/IIssuerFeature";
+import { METADATA_FEATURE_TYPE } from "../models/features/IMetadataFeature";
+import { SENDER_FEATURE_TYPE } from "../models/features/ISenderFeature";
+import { TAG_FEATURE_TYPE } from "../models/features/ITagFeature";
+import type { IBlock } from "../models/IBlock";
+import type { IBlockMetadata } from "../models/IBlockMetadata";
 import type { IMigratedFunds } from "../models/IMigratedFunds";
 import type { INativeToken } from "../models/INativeToken";
 import type { INodeInfo } from "../models/info/INodeInfo";
@@ -42,11 +42,6 @@ import { ED25519_SIGNATURE_TYPE } from "../models/signatures/IEd25519Signature";
 import type { SignatureTypes } from "../models/signatures/signatureTypes";
 import { SIMPLE_TOKEN_SCHEME_TYPE } from "../models/tokenSchemes/ISimpleTokenScheme";
 import type { TokenSchemeTypes } from "../models/tokenSchemes/tokenSchemeTypes";
-import { ALIAS_UNLOCK_BLOCK_TYPE } from "../models/unlockBlocks/IAliasUnlockBlock";
-import { NFT_UNLOCK_BLOCK_TYPE } from "../models/unlockBlocks/INftUnlockBlock";
-import { REFERENCE_UNLOCK_BLOCK_TYPE } from "../models/unlockBlocks/IReferenceUnlockBlock";
-import { SIGNATURE_UNLOCK_BLOCK_TYPE } from "../models/unlockBlocks/ISignatureUnlockBlock";
-import type { UnlockBlockTypes } from "../models/unlockBlocks/unlockBlockTypes";
 import { ADDRESS_UNLOCK_CONDITION_TYPE } from "../models/unlockConditions/IAddressUnlockCondition";
 import { EXPIRATION_UNLOCK_CONDITION_TYPE } from "../models/unlockConditions/IExpirationUnlockCondition";
 import { GOVERNOR_ADDRESS_UNLOCK_CONDITION_TYPE } from "../models/unlockConditions/IGovernorAddressUnlockCondition";
@@ -55,6 +50,11 @@ import { STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE } from "../models/unlock
 import { STORAGE_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE } from "../models/unlockConditions/IStorageDepositReturnUnlockCondition";
 import { TIMELOCK_UNLOCK_CONDITION_TYPE } from "../models/unlockConditions/ITimelockUnlockCondition";
 import type { UnlockConditionTypes } from "../models/unlockConditions/unlockConditionTypes";
+import { ALIAS_UNLOCK_TYPE } from "../models/unlocks/IAliasUnlock";
+import { NFT_UNLOCK_TYPE } from "../models/unlocks/INftUnlock";
+import { REFERENCE_UNLOCK_TYPE } from "../models/unlocks/IReferenceUnlock";
+import { SIGNATURE_UNLOCK_TYPE } from "../models/unlocks/ISignatureUnlock";
+import type { UnlockTypes } from "../models/unlocks/unlockTypes";
 
 
 /**
@@ -130,66 +130,66 @@ export function logInfo(prefix: string, info: INodeInfo): void {
  * @param tipsResponse The tips to log.
  */
 export function logTips(prefix: string, tipsResponse: ITipsResponse): void {
-    if (tipsResponse.tipMessageIds) {
-        for (let i = 0; i < tipsResponse.tipMessageIds.length; i++) {
-            logger(`${prefix}\tTip ${i + 1} Message Id:`, tipsResponse.tipMessageIds[i]);
+    if (tipsResponse.tipBlockIds) {
+        for (let i = 0; i < tipsResponse.tipBlockIds.length; i++) {
+            logger(`${prefix}\tTip ${i + 1} Block Id:`, tipsResponse.tipBlockIds[i]);
         }
     }
 }
 
 /**
- * Log a message to the console.
+ * Log a block to the console.
  * @param prefix The prefix for the output.
- * @param message The message to log.
+ * @param block The block to log.
  */
-export function logMessage(prefix: string, message: IMessage): void {
-    logger(`${prefix}\tProtocol Version:`, message.protocolVersion);
-    if (message.parentMessageIds) {
-        for (let i = 0; i < message.parentMessageIds.length; i++) {
-            logger(`${prefix}\tParent ${i + 1} Message Id:`, message.parentMessageIds[i]);
+export function logBlock(prefix: string, block: IBlock): void {
+    logger(`${prefix}\tProtocol Version:`, block.protocolVersion);
+    if (block.parentBlockIds) {
+        for (let i = 0; i < block.parentBlockIds.length; i++) {
+            logger(`${prefix}\tParent ${i + 1} Block Id:`, block.parentBlockIds[i]);
         }
     }
-    logPayload(`${prefix}\t`, message.payload);
-    if (message.nonce !== undefined) {
-        logger(`${prefix}\tNonce:`, message.nonce);
+    logPayload(`${prefix}\t`, block.payload);
+    if (block.nonce !== undefined) {
+        logger(`${prefix}\tNonce:`, block.nonce);
     }
 }
 
 /**
- * Log the message metadata to the console.
+ * Log the block metadata to the console.
  * @param prefix The prefix for the output.
- * @param messageMetadata The messageMetadata to log.
+ * @param blockMetadata The blockMetadata to log.
  */
-export function logMessageMetadata(prefix: string, messageMetadata: IMessageMetadata): void {
-    logger(`${prefix}\tMessage Id:`, messageMetadata.messageId);
-    if (messageMetadata.parentMessageIds) {
-        for (let i = 0; i < messageMetadata.parentMessageIds.length; i++) {
-            logger(`${prefix}\tParent ${i + 1} Message Id:`, messageMetadata.parentMessageIds[i]);
+export function logBlockMetadata(prefix: string, blockMetadata: IBlockMetadata): void {
+    logger(`${prefix}\tBlock Id:`, blockMetadata.blockId);
+    if (blockMetadata.parentBlockIds) {
+        for (let i = 0; i < blockMetadata.parentBlockIds.length; i++) {
+            logger(`${prefix}\tParent ${i + 1} Block Id:`, blockMetadata.parentBlockIds[i]);
         }
     }
-    if (messageMetadata.isSolid !== undefined) {
-        logger(`${prefix}\tIs Solid:`, messageMetadata.isSolid);
+    if (blockMetadata.isSolid !== undefined) {
+        logger(`${prefix}\tIs Solid:`, blockMetadata.isSolid);
     }
-    if (messageMetadata.milestoneIndex !== undefined) {
-        logger(`${prefix}\tMilestone Index:`, messageMetadata.milestoneIndex);
+    if (blockMetadata.milestoneIndex !== undefined) {
+        logger(`${prefix}\tMilestone Index:`, blockMetadata.milestoneIndex);
     }
-    if (messageMetadata.referencedByMilestoneIndex !== undefined) {
-        logger(`${prefix}\tReferenced By Milestone Index:`, messageMetadata.referencedByMilestoneIndex);
+    if (blockMetadata.referencedByMilestoneIndex !== undefined) {
+        logger(`${prefix}\tReferenced By Milestone Index:`, blockMetadata.referencedByMilestoneIndex);
     }
-    logger(`${prefix}\tLedger Inclusion State:`, messageMetadata.ledgerInclusionState);
-    if (messageMetadata.conflictReason !== undefined) {
-        logger(`${prefix}\tConflict Reason:`, messageMetadata.conflictReason);
+    logger(`${prefix}\tLedger Inclusion State:`, blockMetadata.ledgerInclusionState);
+    if (blockMetadata.conflictReason !== undefined) {
+        logger(`${prefix}\tConflict Reason:`, blockMetadata.conflictReason);
     }
-    if (messageMetadata.shouldPromote !== undefined) {
-        logger(`${prefix}\tShould Promote:`, messageMetadata.shouldPromote);
+    if (blockMetadata.shouldPromote !== undefined) {
+        logger(`${prefix}\tShould Promote:`, blockMetadata.shouldPromote);
     }
-    if (messageMetadata.shouldReattach !== undefined) {
-        logger(`${prefix}\tShould Reattach:`, messageMetadata.shouldReattach);
+    if (blockMetadata.shouldReattach !== undefined) {
+        logger(`${prefix}\tShould Reattach:`, blockMetadata.shouldReattach);
     }
 }
 
 /**
- * Log a message to the console.
+ * Log a block to the console.
  * @param prefix The prefix for the output.
  * @param payload The payload.
  */
@@ -232,10 +232,10 @@ export function logTransactionPayload(prefix: string, payload?: ITransactionPayl
                 }
             }
         }
-        if (payload.unlockBlocks) {
-            logger(`${prefix}\tUnlock Blocks:`, payload.unlockBlocks.length);
-            for (const unlockBlock of payload.unlockBlocks) {
-                logUnlockBlock(`${prefix}\t\t`, unlockBlock);
+        if (payload.unlocks) {
+            logger(`${prefix}\tUnlocks:`, payload.unlocks.length);
+            for (const unlock of payload.unlocks) {
+                logUnlock(`${prefix}\t\t`, unlock);
             }
         }
     }
@@ -265,8 +265,8 @@ export function logMilestonePayload(prefix: string, payload?: IMilestonePayload)
         logger(`${prefix}\tIndex:`, payload.index);
         logger(`${prefix}\tTimestamp:`, payload.timestamp);
         logger(`${prefix}\tPreviousMilestoneId:`, payload.previousMilestoneId);
-        for (let i = 0; i < payload.parentMessageIds.length; i++) {
-            logger(`${prefix}\tParent ${i + 1}:`, payload.parentMessageIds[i]);
+        for (let i = 0; i < payload.parentBlockIds.length; i++) {
+            logger(`${prefix}\tParent ${i + 1}:`, payload.parentBlockIds[i]);
         }
         logger(`${prefix}\tConfirmed Merkle Proof:`, payload.confirmedMerkleRoot);
         logger(`${prefix}\tApplied Merkle Proof:`, payload.appliedMerkleRoot);
@@ -416,7 +416,7 @@ export function logOutput(prefix: string, output?: OutputTypes): void {
             logger(`${prefix}\t\tAmount:`, output.amount);
             logNativeTokens(`${prefix}\t\t`, output.nativeTokens);
             logUnlockConditions(`${prefix}\t\t`, output.unlockConditions);
-            logFeatureBlocks(`${prefix}\t\t`, output.featureBlocks);
+            logFeatures(`${prefix}\t\t`, output.features);
         } else if (output.type === ALIAS_OUTPUT_TYPE) {
             logger(`${prefix}Alias Output`);
             logger(`${prefix}\t\tAmount:`, output.amount);
@@ -426,8 +426,8 @@ export function logOutput(prefix: string, output?: OutputTypes): void {
             logger(`${prefix}\t\tState Metadata:`, output.stateMetadata);
             logger(`${prefix}\t\tFoundry Counter:`, output.foundryCounter);
             logUnlockConditions(`${prefix}\t\t`, output.unlockConditions);
-            logFeatureBlocks(`${prefix}\t\t`, output.featureBlocks);
-            logImmutableFeatureBlocks(`${prefix}\t\t`, output.immutableFeatureBlocks);
+            logFeatures(`${prefix}\t\t`, output.features);
+            logImmutableFeatures(`${prefix}\t\t`, output.immutableFeatures);
         } else if (output.type === FOUNDRY_OUTPUT_TYPE) {
             logger(`${prefix}Foundry Output`);
             logger(`${prefix}\t\tAmount:`, output.amount);
@@ -435,39 +435,39 @@ export function logOutput(prefix: string, output?: OutputTypes): void {
             logger(`${prefix}\t\tSerial Number:`, output.serialNumber);
             logTokenScheme(`${prefix}\t\t`, output.tokenScheme);
             logUnlockConditions(`${prefix}\t\t`, output.unlockConditions);
-            logFeatureBlocks(`${prefix}\t\t`, output.featureBlocks);
-            logImmutableFeatureBlocks(`${prefix}\t\t`, output.immutableFeatureBlocks);
+            logFeatures(`${prefix}\t\t`, output.features);
+            logImmutableFeatures(`${prefix}\t\t`, output.immutableFeatures);
         } else if (output.type === NFT_OUTPUT_TYPE) {
             logger(`${prefix}NFT Output`);
             logger(`${prefix}\t\tAmount:`, output.amount);
             logNativeTokens(`${prefix}\t\t`, output.nativeTokens);
             logger(`${prefix}\t\tNFT Id:`, output.nftId);
             logUnlockConditions(`${prefix}\t\t`, output.unlockConditions);
-            logFeatureBlocks(`${prefix}\t\t`, output.featureBlocks);
-            logImmutableFeatureBlocks(`${prefix}\t\t`, output.immutableFeatureBlocks);
+            logFeatures(`${prefix}\t\t`, output.features);
+            logImmutableFeatures(`${prefix}\t\t`, output.immutableFeatures);
         }
     }
 }
 
 /**
- * Log unlock block to the console.
+ * Log unlock to the console.
  * @param prefix The prefix for the output.
- * @param unlockBlock The unlock block to log.
+ * @param unlock The unlock to log.
  */
-export function logUnlockBlock(prefix: string, unlockBlock?: UnlockBlockTypes): void {
-    if (unlockBlock) {
-        if (unlockBlock.type === SIGNATURE_UNLOCK_BLOCK_TYPE) {
-            logger(`${prefix}\tSignature Unlock Block`);
-            logSignature(`${prefix}\t\t`, unlockBlock.signature);
-        } else if (unlockBlock.type === REFERENCE_UNLOCK_BLOCK_TYPE) {
-            logger(`${prefix}\tReference Unlock Block`);
-            logger(`${prefix}\t\tReference:`, unlockBlock.reference);
-        } else if (unlockBlock.type === ALIAS_UNLOCK_BLOCK_TYPE) {
-            logger(`${prefix}\tAlias Unlock Block`);
-            logger(`${prefix}\t\tReference:`, unlockBlock.reference);
-        } else if (unlockBlock.type === NFT_UNLOCK_BLOCK_TYPE) {
-            logger(`${prefix}\tNFT Unlock Block`);
-            logger(`${prefix}\t\tReference:`, unlockBlock.reference);
+export function logUnlock(prefix: string, unlock?: UnlockTypes): void {
+    if (unlock) {
+        if (unlock.type === SIGNATURE_UNLOCK_TYPE) {
+            logger(`${prefix}\tSignature Unlock`);
+            logSignature(`${prefix}\t\t`, unlock.signature);
+        } else if (unlock.type === REFERENCE_UNLOCK_TYPE) {
+            logger(`${prefix}\tReference Unlock`);
+            logger(`${prefix}\t\tReference:`, unlock.reference);
+        } else if (unlock.type === ALIAS_UNLOCK_TYPE) {
+            logger(`${prefix}\tAlias Unlock`);
+            logger(`${prefix}\t\tReference:`, unlock.reference);
+        } else if (unlock.type === NFT_UNLOCK_TYPE) {
+            logger(`${prefix}\tNFT Unlock`);
+            logger(`${prefix}\t\tReference:`, unlock.reference);
         }
     }
 }
@@ -514,47 +514,47 @@ export function logTokenScheme(prefix: string, tokenScheme: TokenSchemeTypes): v
 }
 
 /**
- * Log feature blocks to the console.
+ * Log featurew to the console.
  * @param prefix The prefix for the output.
- * @param featureBlocks The feature blocks.
+ * @param features The features.
  */
-export function logFeatureBlocks(prefix: string, featureBlocks: FeatureBlockTypes[]): void {
-    logger(`${prefix}Feature Blocks`);
-    for (const featureBlock of featureBlocks) {
-        logFeatureBlock(`${prefix}\t\t`, featureBlock);
+export function logFeatures(prefix: string, features: FeatureTypes[]): void {
+    logger(`${prefix}Features`);
+    for (const feature of features) {
+        logFeature(`${prefix}\t\t`, feature);
     }
 }
 
 /**
- * Log immutable blocks to the console.
+ * Log immutable featuress to the console.
  * @param prefix The prefix for the output.
- * @param immutableFeatureBlocks The deature blocks.
+ * @param immutableFeatures The features.
  */
- export function logImmutableFeatureBlocks(prefix: string, immutableFeatureBlocks: FeatureBlockTypes[]): void {
-    logger(`${prefix}Immutable Feature Blocks`);
-    for (const featureBlock of immutableFeatureBlocks) {
-        logFeatureBlock(`${prefix}\t\t`, featureBlock);
+ export function logImmutableFeatures(prefix: string, immutableFeatures: FeatureTypes[]): void {
+    logger(`${prefix}Immutable Features`);
+    for (const feature of immutableFeatures) {
+        logFeature(`${prefix}\t\t`, feature);
     }
 }
 
 /**
- * Log feature block to the console.
+ * Log feature to the console.
  * @param prefix The prefix for the output.
- * @param featureBlock The feature block.
+ * @param feature The feature.
  */
-export function logFeatureBlock(prefix: string, featureBlock: FeatureBlockTypes): void {
-    if (featureBlock.type === SENDER_FEATURE_BLOCK_TYPE) {
-        logger(`${prefix}\tSender Feature Block`);
-        logAddress(`${prefix}\t\t`, featureBlock.address);
-    } else if (featureBlock.type === ISSUER_FEATURE_BLOCK_TYPE) {
-        logger(`${prefix}\tIssuer Feature Block`);
-        logAddress(`${prefix}\t\t`, featureBlock.address);
-    } else if (featureBlock.type === METADATA_FEATURE_BLOCK_TYPE) {
-        logger(`${prefix}\tMetadata Feature Block`);
-        logger(`${prefix}\t\tData:`, featureBlock.data);
-    } else if (featureBlock.type === TAG_FEATURE_BLOCK_TYPE) {
-        logger(`${prefix}\tTag Feature Block`);
-        logger(`${prefix}\t\tTag:`, featureBlock.tag);
+export function logFeature(prefix: string, feature: FeatureTypes): void {
+    if (feature.type === SENDER_FEATURE_TYPE) {
+        logger(`${prefix}\tSender Feature`);
+        logAddress(`${prefix}\t\t`, feature.address);
+    } else if (feature.type === ISSUER_FEATURE_TYPE) {
+        logger(`${prefix}\tIssuer Feature`);
+        logAddress(`${prefix}\t\t`, feature.address);
+    } else if (feature.type === METADATA_FEATURE_TYPE) {
+        logger(`${prefix}\tMetadata Feature`);
+        logger(`${prefix}\t\tData:`, feature.data);
+    } else if (feature.type === TAG_FEATURE_TYPE) {
+        logger(`${prefix}\tTag Feature`);
+        logger(`${prefix}\t\tTag:`, feature.tag);
     }
 }
 

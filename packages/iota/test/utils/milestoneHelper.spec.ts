@@ -8,7 +8,7 @@ const milestonePayload: IMilestonePayload = {
     "index": 30946,
     "timestamp": 1651565954,
     "previousMilestoneId": "0xa64113d2aab54a3aa2387c743685acf503b09877343576a6d7c14adae2299ca0",
-    "parentMessageIds": [
+    "parentBlockIds": [
         "0x2ae4b5a514d9c412a0b5c8bb1fbbe7d7a1c542ba7ff67e2ff66137a308b5633e",
         "0xfa956ae69781430af3d31b70279eabeb801f44d91087525e609e95d577e40fd2"
     ],

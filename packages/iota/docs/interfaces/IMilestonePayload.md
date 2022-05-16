@@ -16,7 +16,7 @@ Milestone payload.
 - [index](IMilestonePayload.md#index)
 - [timestamp](IMilestonePayload.md#timestamp)
 - [previousMilestoneId](IMilestonePayload.md#previousmilestoneid)
-- [parentMessageIds](IMilestonePayload.md#parentmessageids)
+- [parentBlockIds](IMilestonePayload.md#parentblockids)
 - [confirmedMerkleRoot](IMilestonePayload.md#confirmedmerkleroot)
 - [appliedMerkleRoot](IMilestonePayload.md#appliedmerkleroot)
 - [metadata](IMilestonePayload.md#metadata)
@@ -61,9 +61,9 @@ The id of the previous milestone.
 
 ___
 
-### parentMessageIds
+### parentBlockIds
 
-• **parentMessageIds**: `string`[]
+• **parentBlockIds**: `string`[]
 
 The parents where this milestone attaches to.
 

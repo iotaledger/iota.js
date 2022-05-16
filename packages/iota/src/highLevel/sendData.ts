@@ -4,24 +4,24 @@
 import { Converter, HexHelper } from "@iota/util.js";
 import { MAX_TAG_LENGTH } from "../binary/payloads/taggedDataPayload";
 import { SingleNodeClient } from "../clients/singleNodeClient";
+import type { IBlock } from "../models/IBlock";
 import type { IClient } from "../models/IClient";
-import type { IMessage } from "../models/IMessage";
 import { ITaggedDataPayload, TAGGED_DATA_PAYLOAD_TYPE } from "../models/payloads/ITaggedDataPayload";
 
 /**
- * Send a data message.
+ * Send a data block.
  * @param client The client or node endpoint to send the data with.
  * @param tag The tag for the data.
  * @param data The data as either UTF8 text or Uint8Array bytes.
- * @returns The id of the message created and the message.
+ * @returns The id of the block created and the block.
  */
 export async function sendData(
     client: IClient | string,
     tag?: Uint8Array | string,
     data?: Uint8Array | string
 ): Promise<{
-    message: IMessage;
-    messageId: string;
+    block: IBlock;
+    blockId: string;
 }> {
     const localClient = typeof client === "string" ? new SingleNodeClient(client) : client;
 
@@ -54,13 +54,13 @@ export async function sendData(
         data: localDataHex
     };
 
-    const message: IMessage = {
+    const block: IBlock = {
         payload: taggedDataPayload
     };
 
-    const messageId = await localClient.messageSubmit(message);
+    const blockId = await localClient.blockSubmit(block);
     return {
-        message,
-        messageId
+        block,
+        blockId
     };
 }

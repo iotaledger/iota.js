@@ -17,14 +17,14 @@ Client for API communication.
 - [health](SingleNodeClient.md#health)
 - [info](SingleNodeClient.md#info)
 - [tips](SingleNodeClient.md#tips)
-- [message](SingleNodeClient.md#message)
-- [messageMetadata](SingleNodeClient.md#messagemetadata)
-- [messageRaw](SingleNodeClient.md#messageraw)
-- [messageSubmit](SingleNodeClient.md#messagesubmit)
-- [messageSubmitRaw](SingleNodeClient.md#messagesubmitraw)
-- [messageChildren](SingleNodeClient.md#messagechildren)
-- [transactionIncludedMessage](SingleNodeClient.md#transactionincludedmessage)
-- [transactionIncludedMessageRaw](SingleNodeClient.md#transactionincludedmessageraw)
+- [block](SingleNodeClient.md#block)
+- [blockMetadata](SingleNodeClient.md#blockmetadata)
+- [blockRaw](SingleNodeClient.md#blockraw)
+- [blockSubmit](SingleNodeClient.md#blocksubmit)
+- [blockSubmitRaw](SingleNodeClient.md#blocksubmitraw)
+- [blockChildren](SingleNodeClient.md#blockchildren)
+- [transactionIncludedBlock](SingleNodeClient.md#transactionincludedblock)
+- [transactionIncludedBlockRaw](SingleNodeClient.md#transactionincludedblockraw)
 - [output](SingleNodeClient.md#output)
 - [outputMetadata](SingleNodeClient.md#outputmetadata)
 - [outputRaw](SingleNodeClient.md#outputraw)
@@ -114,195 +114,195 @@ The tips.
 
 ___
 
-### message
+### block
 
-▸ **message**(`messageId`): `Promise`<[`IMessage`](../interfaces/IMessage.md)\>
+▸ **block**(`blockId`): `Promise`<[`IBlock`](../interfaces/IBlock.md)\>
 
-Get the message data by id.
+Get the block data by id.
 
 #### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `messageId` | `string` | The message to get the data for. |
+| `blockId` | `string` | The block to get the data for. |
 
 #### Returns
 
-`Promise`<[`IMessage`](../interfaces/IMessage.md)\>
+`Promise`<[`IBlock`](../interfaces/IBlock.md)\>
 
-The message data.
+The block data.
 
 #### Implementation of
 
-[IClient](../interfaces/IClient.md).[message](../interfaces/IClient.md#message)
+[IClient](../interfaces/IClient.md).[block](../interfaces/IClient.md#block)
 
 ___
 
-### messageMetadata
+### blockMetadata
 
-▸ **messageMetadata**(`messageId`): `Promise`<[`IMessageMetadata`](../interfaces/IMessageMetadata.md)\>
+▸ **blockMetadata**(`blockId`): `Promise`<[`IBlockMetadata`](../interfaces/IBlockMetadata.md)\>
 
-Get the message metadata by id.
+Get the block metadata by id.
 
 #### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `messageId` | `string` | The message to get the metadata for. |
+| `blockId` | `string` | The block to get the metadata for. |
 
 #### Returns
 
-`Promise`<[`IMessageMetadata`](../interfaces/IMessageMetadata.md)\>
+`Promise`<[`IBlockMetadata`](../interfaces/IBlockMetadata.md)\>
 
-The message metadata.
+The block metadata.
 
 #### Implementation of
 
-[IClient](../interfaces/IClient.md).[messageMetadata](../interfaces/IClient.md#messagemetadata)
+[IClient](../interfaces/IClient.md).[blockMetadata](../interfaces/IClient.md#blockmetadata)
 
 ___
 
-### messageRaw
+### blockRaw
 
-▸ **messageRaw**(`messageId`): `Promise`<`Uint8Array`\>
+▸ **blockRaw**(`blockId`): `Promise`<`Uint8Array`\>
 
-Get the message raw data by id.
+Get the block raw data by id.
 
 #### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `messageId` | `string` | The message to get the data for. |
+| `blockId` | `string` | The block to get the data for. |
 
 #### Returns
 
 `Promise`<`Uint8Array`\>
 
-The message raw data.
+The block raw data.
 
 #### Implementation of
 
-[IClient](../interfaces/IClient.md).[messageRaw](../interfaces/IClient.md#messageraw)
+[IClient](../interfaces/IClient.md).[blockRaw](../interfaces/IClient.md#blockraw)
 
 ___
 
-### messageSubmit
+### blockSubmit
 
-▸ **messageSubmit**(`message`): `Promise`<`string`\>
+▸ **blockSubmit**(`block`): `Promise`<`string`\>
 
-Submit message.
+Submit block.
 
 #### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `message` | [`IMessage`](../interfaces/IMessage.md) | The message to submit. |
+| `block` | [`IBlock`](../interfaces/IBlock.md) | The block to submit. |
 
 #### Returns
 
 `Promise`<`string`\>
 
-The messageId.
+The blockId.
 
 #### Implementation of
 
-[IClient](../interfaces/IClient.md).[messageSubmit](../interfaces/IClient.md#messagesubmit)
+[IClient](../interfaces/IClient.md).[blockSubmit](../interfaces/IClient.md#blocksubmit)
 
 ___
 
-### messageSubmitRaw
+### blockSubmitRaw
 
-▸ **messageSubmitRaw**(`message`): `Promise`<`string`\>
+▸ **blockSubmitRaw**(`block`): `Promise`<`string`\>
 
-Submit message in raw format.
+Submit block in raw format.
 
 #### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `message` | `Uint8Array` | The message to submit. |
+| `block` | `Uint8Array` | The block to submit. |
 
 #### Returns
 
 `Promise`<`string`\>
 
-The messageId.
+The blockId.
 
 #### Implementation of
 
-[IClient](../interfaces/IClient.md).[messageSubmitRaw](../interfaces/IClient.md#messagesubmitraw)
+[IClient](../interfaces/IClient.md).[blockSubmitRaw](../interfaces/IClient.md#blocksubmitraw)
 
 ___
 
-### messageChildren
+### blockChildren
 
-▸ **messageChildren**(`messageId`): `Promise`<[`IChildrenResponse`](../interfaces/IChildrenResponse.md)\>
+▸ **blockChildren**(`blockId`): `Promise`<[`IChildrenResponse`](../interfaces/IChildrenResponse.md)\>
 
-Get the children of a message.
+Get the children of a block.
 
 #### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `messageId` | `string` | The id of the message to get the children for. |
+| `blockId` | `string` | The id of the block to get the children for. |
 
 #### Returns
 
 `Promise`<[`IChildrenResponse`](../interfaces/IChildrenResponse.md)\>
 
-The messages children.
+The blocks children.
 
 #### Implementation of
 
-[IClient](../interfaces/IClient.md).[messageChildren](../interfaces/IClient.md#messagechildren)
+[IClient](../interfaces/IClient.md).[blockChildren](../interfaces/IClient.md#blockchildren)
 
 ___
 
-### transactionIncludedMessage
+### transactionIncludedBlock
 
-▸ **transactionIncludedMessage**(`transactionId`): `Promise`<[`IMessage`](../interfaces/IMessage.md)\>
+▸ **transactionIncludedBlock**(`transactionId`): `Promise`<[`IBlock`](../interfaces/IBlock.md)\>
 
-Get the message that was included in the ledger for a transaction.
+Get the block that was included in the ledger for a transaction.
 
 #### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `transactionId` | `string` | The id of the transaction to get the included message for. |
+| `transactionId` | `string` | The id of the transaction to get the included block for. |
 
 #### Returns
 
-`Promise`<[`IMessage`](../interfaces/IMessage.md)\>
+`Promise`<[`IBlock`](../interfaces/IBlock.md)\>
 
-The message.
+The block.
 
 #### Implementation of
 
-[IClient](../interfaces/IClient.md).[transactionIncludedMessage](../interfaces/IClient.md#transactionincludedmessage)
+[IClient](../interfaces/IClient.md).[transactionIncludedBlock](../interfaces/IClient.md#transactionincludedblock)
 
 ___
 
-### transactionIncludedMessageRaw
+### transactionIncludedBlockRaw
 
-▸ **transactionIncludedMessageRaw**(`transactionId`): `Promise`<`Uint8Array`\>
+▸ **transactionIncludedBlockRaw**(`transactionId`): `Promise`<`Uint8Array`\>
 
-Get raw message that was included in the ledger for a transaction.
+Get raw block that was included in the ledger for a transaction.
 
 #### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `transactionId` | `string` | The id of the transaction to get the included message for. |
+| `transactionId` | `string` | The id of the transaction to get the included block for. |
 
 #### Returns
 
 `Promise`<`Uint8Array`\>
 
-The message.
+The block.
 
 #### Implementation of
 
-[IClient](../interfaces/IClient.md).[transactionIncludedMessageRaw](../interfaces/IClient.md#transactionincludedmessageraw)
+[IClient](../interfaces/IClient.md).[transactionIncludedBlockRaw](../interfaces/IClient.md#transactionincludedblockraw)
 
 ___
 

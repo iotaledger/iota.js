@@ -17,11 +17,11 @@ Foundry output.
 - [type](IFoundryOutput.md#type)
 - [nativeTokens](IFoundryOutput.md#nativetokens)
 - [unlockConditions](IFoundryOutput.md#unlockconditions)
-- [featureBlocks](IFoundryOutput.md#featureblocks)
+- [features](IFoundryOutput.md#features)
 - [amount](IFoundryOutput.md#amount)
 - [serialNumber](IFoundryOutput.md#serialnumber)
 - [tokenScheme](IFoundryOutput.md#tokenscheme)
-- [immutableFeatureBlocks](IFoundryOutput.md#immutablefeatureblocks)
+- [immutableFeatures](IFoundryOutput.md#immutablefeatures)
 
 ## Properties
 
@@ -61,15 +61,15 @@ The unlock conditions for the output.
 
 ___
 
-### featureBlocks
+### features
 
-• **featureBlocks**: [`FeatureBlockTypes`](../api.md#featureblocktypes)[]
+• **features**: [`FeatureTypes`](../api.md#featuretypes)[]
 
-Feature blocks contained by the output.
+Features contained by the output.
 
 #### Inherited from
 
-[ICommonOutput](ICommonOutput.md).[featureBlocks](ICommonOutput.md#featureblocks)
+[ICommonOutput](ICommonOutput.md).[features](ICommonOutput.md#features)
 
 ___
 
@@ -97,8 +97,8 @@ The token scheme for the foundry.
 
 ___
 
-### immutableFeatureBlocks
+### immutableFeatures
 
-• **immutableFeatureBlocks**: [`FeatureBlockTypes`](../api.md#featureblocktypes)[]
+• **immutableFeatures**: [`FeatureTypes`](../api.md#featuretypes)[]
 
-Immutable blocks contained by the output.
+Immutable features contained by the output.
