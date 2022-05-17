@@ -11,6 +11,10 @@ TypeScript conversion from https://github.com/dcposch/blakejs.
 - [SIZE\_256](Blake2b.md#size_256)
 - [SIZE\_512](Blake2b.md#size_512)
 
+### Constructors
+
+- [constructor](Blake2b.md#constructor)
+
 ### Methods
 
 - [sum160](Blake2b.md#sum160)
@@ -18,10 +22,6 @@ TypeScript conversion from https://github.com/dcposch/blakejs.
 - [sum512](Blake2b.md#sum512)
 - [update](Blake2b.md#update)
 - [final](Blake2b.md#final)
-
-### Constructors
-
-- [constructor](Blake2b.md#constructor)
 
 ## Properties
 
@@ -46,6 +46,21 @@ ___
 ▪ `Static` **SIZE\_512**: `number` = `64`
 
 Blake2b 512.
+
+## Constructors
+
+### constructor
+
+• **new Blake2b**(`outlen`, `key?`)
+
+Create a new instance of Blake2b.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `outlen` | `number` | Output length between 1 and 64 bytes. |
+| `key?` | `Uint8Array` | Optional key. |
 
 ## Methods
 
@@ -141,18 +156,3 @@ Completes a BLAKE2b streaming hash.
 `Uint8Array`
 
 The final data.
-
-## Constructors
-
-### constructor
-
-• **new Blake2b**(`outlen`, `key?`)
-
-Create a new instance of Blake2b.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `outlen` | `number` | Output length between 1 and 64 bytes. |
-| `key?` | `Uint8Array` | Optional key. |

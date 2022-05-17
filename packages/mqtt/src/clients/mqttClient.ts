@@ -1,6 +1,6 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import { deserializeMessage, deserializeMilestonePayload, IMessage, IMessageMetadata, IMilestonePayload, IOutputResponse, IReceiptsResponse } from "@iota/iota.js";
+import { deserializeBlock, deserializeMilestonePayload, IBlock, IBlockMetadata, IMilestonePayload, IOutputResponse, IReceiptsResponse } from "@iota/iota.js";
 import { Converter, RandomHelper, ReadStream } from "@iota/util.js";
 import * as mqtt from "mqtt";
 import type { IMqttMilestoneResponse } from "../models/api/IMqttMilestoneResponse";
@@ -116,61 +116,61 @@ export class MqttClient implements IMqttClient {
     }
 
     /**
-     * Subscribe to get all messages in binary form.
+     * Subscribe to get all blocks in binary form.
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    public messagesRaw(callback: (topic: string, data: Uint8Array) => void): string {
-        return this.internalSubscribe<Uint8Array>("messages", false, callback);
+    public blocksRaw(callback: (topic: string, data: Uint8Array) => void): string {
+        return this.internalSubscribe<Uint8Array>("blocks", false, callback);
     }
 
     /**
-     * Subscribe to get all messages in object form.
+     * Subscribe to get all blocks in object form.
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    public messages(callback: (topic: string, data: IMessage) => void): string {
-        return this.internalSubscribe<Uint8Array>("messages", false, (topic, raw) => {
-            callback(topic, deserializeMessage(new ReadStream(raw)));
+    public blocks(callback: (topic: string, data: IBlock) => void): string {
+        return this.internalSubscribe<Uint8Array>("blocks", false, (topic, raw) => {
+            callback(topic, deserializeBlock(new ReadStream(raw)));
         });
     }
 
     /**
-     * Subscribe to get the metadata for all the messages.
+     * Subscribe to get the metadata for all the blocks.
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    public messagesReferenced(callback: (topic: string, data: IMessageMetadata) => void): string {
-        return this.internalSubscribe<IMessageMetadata>("message-metadata/referenced", true, callback);
+    public blocksReferenced(callback: (topic: string, data: IBlockMetadata) => void): string {
+        return this.internalSubscribe<IBlockMetadata>("block-metadata/referenced", true, callback);
     }
 
     /**
-     * Subscribe to all transaction messages in their raw form.
+     * Subscribe to all transaction blocks in their raw form.
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    public messagesTransactionRaw(callback: (topic: string, data: Uint8Array) => void): string {
-        return this.internalSubscribe<Uint8Array>("messages/transaction", false, callback);
+    public blocksTransactionRaw(callback: (topic: string, data: Uint8Array) => void): string {
+        return this.internalSubscribe<Uint8Array>("blocks/transaction", false, callback);
     }
 
     /**
-     * Subscribe to all transaction messages.
+     * Subscribe to all transaction blocks.
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    public messagesTransaction(callback: (topic: string, data: IMessage) => void): string {
-        return this.internalSubscribe<Uint8Array>("messages/transaction", false, (topic, raw) => {
-            callback(topic, deserializeMessage(new ReadStream(raw)));
+    public blocksTransaction(callback: (topic: string, data: IBlock) => void): string {
+        return this.internalSubscribe<Uint8Array>("blocks/transaction", false, (topic, raw) => {
+            callback(topic, deserializeBlock(new ReadStream(raw)));
         });
     }
 
     /**
-     * Subscribe to transaction messages with tagged data in their raw form.
-     * @param tag The tag to monitor as bytes or in hex, undefined for all messages.
+     * Subscribe to transaction blocks with tagged data in their raw form.
+     * @param tag The tag to monitor as bytes or in hex, undefined for all blocks.
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    public messagesTransactionTaggedDataRaw(
+    public blocksTransactionTaggedDataRaw(
         tag: Uint8Array | string | undefined,
         callback: (topic: string, data: Uint8Array) => void): string {
         let subTag = "";
@@ -181,18 +181,18 @@ export class MqttClient implements IMqttClient {
             subTag = `/${Converter.bytesToHex(tag)}`;
         }
 
-        return this.internalSubscribe<Uint8Array>(`messages/transaction/tagged-data${subTag}`, false, callback);
+        return this.internalSubscribe<Uint8Array>(`blocks/transaction/tagged-data${subTag}`, false, callback);
     }
 
     /**
-     * Subscribe to all transaction messages with tagged data.
-     * @param tag The tag to monitor as bytes or in hex, undefined for all messages.
+     * Subscribe to all transaction blocks with tagged data.
+     * @param tag The tag to monitor as bytes or in hex, undefined for all blocks.
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    public messagesTransactionTaggedData(
+    public blocksTransactionTaggedData(
         tag: Uint8Array | string | undefined,
-        callback: (topic: string, data: IMessage) => void): string {
+        callback: (topic: string, data: IBlock) => void): string {
         let subTag = "";
 
         if (typeof tag === "string") {
@@ -201,8 +201,8 @@ export class MqttClient implements IMqttClient {
             subTag = `/${Converter.bytesToHex(tag)}`;
         }
 
-        return this.internalSubscribe<Uint8Array>(`messages/transaction/tagged-data${subTag}`, false, (topic, raw) => {
-            callback(topic, deserializeMessage(new ReadStream(raw)));
+        return this.internalSubscribe<Uint8Array>(`blocks/transaction/tagged-data${subTag}`, false, (topic, raw) => {
+            callback(topic, deserializeBlock(new ReadStream(raw)));
         });
     }
 
@@ -227,12 +227,12 @@ export class MqttClient implements IMqttClient {
     }
 
     /**
-     * Subscribe to get all messages for the specified tag in binary form.
-     * @param tag The tag to monitor as bytes or in hex, undefined for all messages.
+     * Subscribe to get all blocks for the specified tag in binary form.
+     * @param tag The tag to monitor as bytes or in hex, undefined for all blocks.
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    public messagesTaggedRaw(
+    public blocksTaggedRaw(
         tag: Uint8Array | string | undefined,
         callback: (topic: string, data: Uint8Array) => void): string {
         let subTag = "";
@@ -243,18 +243,18 @@ export class MqttClient implements IMqttClient {
             subTag = `/${Converter.bytesToHex(tag)}`;
         }
 
-        return this.internalSubscribe<Uint8Array>(`messages/tagged-data${subTag}`, false, callback);
+        return this.internalSubscribe<Uint8Array>(`blocks/tagged-data${subTag}`, false, callback);
     }
 
     /**
-     * Subscribe to get all messages for the specified tag in object form.
-     * @param tag The tag to monitor as bytes or in hex, undefined for all messages.
+     * Subscribe to get all blocks for the specified tag in object form.
+     * @param tag The tag to monitor as bytes or in hex, undefined for all blocks.
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    public messagesTagged(
+    public blocksTagged(
         tag: Uint8Array | string | undefined,
-        callback: (topic: string, data: IMessage) => void): string {
+        callback: (topic: string, data: IBlock) => void): string {
         let subTag = "";
 
         if (typeof tag === "string") {
@@ -263,47 +263,47 @@ export class MqttClient implements IMqttClient {
             subTag = `/${Converter.bytesToHex(tag)}`;
         }
 
-        return this.internalSubscribe<Uint8Array>(`messages/tagged-data${subTag}`, false, (topic, raw) => {
-            callback(topic, deserializeMessage(new ReadStream(raw)));
+        return this.internalSubscribe<Uint8Array>(`blocks/tagged-data${subTag}`, false, (topic, raw) => {
+            callback(topic, deserializeBlock(new ReadStream(raw)));
         });
     }
 
     /**
-     * Subscribe to metadata updates for a specific message.
-     * @param messageId The message to monitor.
+     * Subscribe to metadata updates for a specific block.
+     * @param blockId The block to monitor.
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    public messagesMetadata(messageId: string, callback: (topic: string, data: IMessageMetadata) => void): string {
-        return this.internalSubscribe(`message-metadata/${messageId}`, true, callback);
+    public blocksMetadata(blockId: string, callback: (topic: string, data: IBlockMetadata) => void): string {
+        return this.internalSubscribe(`block-metadata/${blockId}`, true, callback);
     }
 
     /**
-     * Subscribe to message updates for a specific transactionId.
-     * @param transactionId The message to monitor.
+     * Subscribe to block updates for a specific transactionId.
+     * @param transactionId The block to monitor.
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    public transactionIncludedMessageRaw(
+    public transactionIncludedBlockRaw(
         transactionId: string,
         callback: (topic: string, data: Uint8Array) => void
     ): string {
-        return this.internalSubscribe(`transactions/${transactionId}/included-message`, false, callback);
+        return this.internalSubscribe(`transactions/${transactionId}/included-block`, false, callback);
     }
 
     /**
-     * Subscribe to message updates for a specific transactionId.
-     * @param transactionId The message to monitor.
+     * Subscribe to block updates for a specific transactionId.
+     * @param transactionId The block to monitor.
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    public transactionIncludedMessage(
+    public transactionIncludedBlock(
         transactionId: string,
-        callback: (topic: string, data: IMessage) => void
+        callback: (topic: string, data: IBlock) => void
     ): string {
-        return this.internalSubscribe<Uint8Array>(`transactions/${transactionId}/included-message`, false,
+        return this.internalSubscribe<Uint8Array>(`transactions/${transactionId}/included-block`, false,
             (topic, raw) => {
-                callback(topic, deserializeMessage(new ReadStream(raw)));
+                callback(topic, deserializeBlock(new ReadStream(raw)));
             });
     }
 

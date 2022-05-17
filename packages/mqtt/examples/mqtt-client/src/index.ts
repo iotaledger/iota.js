@@ -11,21 +11,21 @@ async function run() {
 
     mqttClient.milestonesConfirmed((topic, data) => console.log(topic, data));
 
-    mqttClient.messagesMetadata("ec7c73e61295aba1c6ae82b06fb34964e22a8b719c008d42f8c9807fd4c8df2d", (topic, data) =>
+    mqttClient.blocksMetadata("ec7c73e61295aba1c6ae82b06fb34964e22a8b719c008d42f8c9807fd4c8df2d", (topic, data) =>
         console.log(topic, data)
     );
 
     mqttClient.output("0".repeat(68), (topic, data) => console.log(topic, data));
 
-    mqttClient.messagesRaw((topic, data) => console.log(topic, data));
+    mqttClient.blocksRaw((topic, data) => console.log(topic, data));
 
-    mqttClient.messages((topic, data) => console.log(topic, data));
+    mqttClient.blocks((topic, data) => console.log(topic, data));
 
-    mqttClient.messagesTagged("aa", (topic, data) => console.log(topic, data));
+    mqttClient.blocksTagged("aa", (topic, data) => console.log(topic, data));
 
-    mqttClient.messagesTaggedRaw("aa", (topic, data) => console.log(topic, data));
+    mqttClient.blocksTaggedRaw("aa", (topic, data) => console.log(topic, data));
 
-    mqttClient.messagesReferenced((topic, data) => console.log(topic, data));
+    mqttClient.blocksReferenced((topic, data) => console.log(topic, data));
 }
 
 run()

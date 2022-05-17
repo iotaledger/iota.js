@@ -17,15 +17,15 @@ import { scalarMinimal, scalarReduce } from "./edwards25519/scalar";
  */
 export class Zip215 {
     /**
-     * Verify reports whether sig is a valid signature of message by
+     * Verify reports whether sig is a valid signature of block by
      * publicKey, using precisely-specified validation criteria (ZIP 215) suitable
      * for use in consensus-critical contexts.
-     * @param publicKey The public key for the message.
-     * @param message The message content to validate.
+     * @param publicKey The public key for the block.
+     * @param block The block content to validate.
      * @param sig The signature to verify.
      * @returns True if the signature is valid.
      */
-    public static verify(publicKey: Uint8Array, message: Uint8Array, sig: Uint8Array): boolean {
+    public static verify(publicKey: Uint8Array, block: Uint8Array, sig: Uint8Array): boolean {
         if (!publicKey || publicKey.length !== Ed25519.PUBLIC_KEY_SIZE) {
             return false;
         }
@@ -46,7 +46,7 @@ export class Zip215 {
         const h = new Sha512();
         h.update(sig.subarray(0, 32));
         h.update(publicKey);
-        h.update(message);
+        h.update(block);
 
         const digest = h.digest();
 

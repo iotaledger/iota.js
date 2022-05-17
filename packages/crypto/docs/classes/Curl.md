@@ -9,6 +9,10 @@ Class to implement Curl sponge.
 - [HASH\_LENGTH](Curl.md#hash_length)
 - [STATE\_LENGTH](Curl.md#state_length)
 
+### Constructors
+
+- [constructor](Curl.md#constructor)
+
 ### Methods
 
 - [transform](Curl.md#transform)
@@ -16,10 +20,6 @@ Class to implement Curl sponge.
 - [rate](Curl.md#rate)
 - [absorb](Curl.md#absorb)
 - [squeeze](Curl.md#squeeze)
-
-### Constructors
-
-- [constructor](Curl.md#constructor)
 
 ## Properties
 
@@ -36,6 +36,20 @@ ___
 ▪ `Static` `Readonly` **STATE\_LENGTH**: `number`
 
 The State Length.
+
+## Constructors
+
+### constructor
+
+• **new Curl**(`rounds?`)
+
+Create a new instance of Curl.
+
+#### Parameters
+
+| Name | Type | Default value | Description |
+| :------ | :------ | :------ | :------ |
+| `rounds` | `number` | `Curl.NUMBER_OF_ROUNDS` | The number of rounds to perform. |
 
 ## Methods
 
@@ -127,17 +141,3 @@ Squeezes trits given an offset and length.
 #### Returns
 
 `void`
-
-## Constructors
-
-### constructor
-
-• **new Curl**(`rounds?`)
-
-Create a new instance of Curl.
-
-#### Parameters
-
-| Name | Type | Default value | Description |
-| :------ | :------ | :------ | :------ |
-| `rounds` | `number` | `Curl.NUMBER_OF_ROUNDS` | The number of rounds to perform. |
