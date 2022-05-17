@@ -6,18 +6,18 @@ List of children found.
 
 ### Properties
 
-- [messageId](IChildrenResponse.md#messageid)
+- [blockId](IChildrenResponse.md#blockid)
 - [maxResults](IChildrenResponse.md#maxresults)
 - [count](IChildrenResponse.md#count)
-- [childrenMessageIds](IChildrenResponse.md#childrenmessageids)
+- [childrenBlockIds](IChildrenResponse.md#childrenblockids)
 
 ## Properties
 
-### messageId
+### blockId
 
-• **messageId**: `string`
+• **blockId**: `string`
 
-The message id that the children are for.
+The block id that the children are for.
 
 ___
 
@@ -37,8 +37,8 @@ The number of items returned.
 
 ___
 
-### childrenMessageIds
+### childrenBlockIds
 
-• **childrenMessageIds**: `string`[]
+• **childrenBlockIds**: `string`[]
 
-The ids of the messages children.
+The ids of the blocks children.

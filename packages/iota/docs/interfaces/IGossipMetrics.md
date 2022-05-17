@@ -6,49 +6,49 @@ Gossip metrics.
 
 ### Properties
 
-- [newMessages](IGossipMetrics.md#newmessages)
-- [knownMessages](IGossipMetrics.md#knownmessages)
-- [receivedMessages](IGossipMetrics.md#receivedmessages)
-- [receivedMessageRequests](IGossipMetrics.md#receivedmessagerequests)
+- [newBlocks](IGossipMetrics.md#newblocks)
+- [knownBlocks](IGossipMetrics.md#knownblocks)
+- [receivedBlocks](IGossipMetrics.md#receivedblocks)
+- [receivedBlockRequests](IGossipMetrics.md#receivedblockrequests)
 - [receivedMilestoneRequests](IGossipMetrics.md#receivedmilestonerequests)
 - [receivedHeartbeats](IGossipMetrics.md#receivedheartbeats)
-- [sentMessages](IGossipMetrics.md#sentmessages)
-- [sentMessageRequests](IGossipMetrics.md#sentmessagerequests)
+- [sentBlocks](IGossipMetrics.md#sentblocks)
+- [sentBlockRequests](IGossipMetrics.md#sentblockrequests)
 - [sentMilestoneRequests](IGossipMetrics.md#sentmilestonerequests)
 - [sentHeartbeats](IGossipMetrics.md#sentheartbeats)
 - [droppedPackets](IGossipMetrics.md#droppedpackets)
 
 ## Properties
 
-### newMessages
+### newBlocks
 
-• **newMessages**: `number`
+• **newBlocks**: `number`
 
-The number of new messages.
-
-___
-
-### knownMessages
-
-• **knownMessages**: `number`
-
-The number of known messages.
+The number of new blocks.
 
 ___
 
-### receivedMessages
+### knownBlocks
 
-• **receivedMessages**: `number`
+• **knownBlocks**: `number`
 
-The number of received messages.
+The number of known blocks.
 
 ___
 
-### receivedMessageRequests
+### receivedBlocks
 
-• **receivedMessageRequests**: `number`
+• **receivedBlocks**: `number`
 
-The number of received message requests.
+The number of received blocks.
+
+___
+
+### receivedBlockRequests
+
+• **receivedBlockRequests**: `number`
+
+The number of received block requests.
 
 ___
 
@@ -68,19 +68,19 @@ The number of received heartbeats.
 
 ___
 
-### sentMessages
+### sentBlocks
 
-• **sentMessages**: `number`
+• **sentBlocks**: `number`
 
-The number of sent messages.
+The number of sent blocks.
 
 ___
 
-### sentMessageRequests
+### sentBlockRequests
 
-• **sentMessageRequests**: `number`
+• **sentBlockRequests**: `number`
 
-The number of sent message requests.
+The number of sent block requests.
 
 ___
 
