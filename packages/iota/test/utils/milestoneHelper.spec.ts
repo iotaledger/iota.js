@@ -1,7 +1,7 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 import type { IMilestonePayload } from "../../src";
-import { messageIdFromMilestonePayload, milestoneIdFromMilestonePayload } from "../../src/utils/milestoneHelper";
+import { blockIdFromMilestonePayload, milestoneIdFromMilestonePayload } from "../../src/utils/milestoneHelper";
 
 const milestonePayload: IMilestonePayload = {
     "type": 7,
@@ -40,10 +40,10 @@ describe("MilestoneHelper", () => {
         expect(milestoneId).toEqual(expectedMilestoneId);
     });
 
-    test("Can compute messageId from milestone payload", () => {
-        const expectedMessageId = "0x4a3cf7cf91c08ab790b5232d5523f811b6ace33adedb21180deb653adaea581e";
-        const messageId = messageIdFromMilestonePayload(2, milestonePayload);
-        expect(messageId).toEqual(expectedMessageId);
+    test("Can compute blockId from milestone payload", () => {
+        const expectedBlockId = "0x4a3cf7cf91c08ab790b5232d5523f811b6ace33adedb21180deb653adaea581e";
+        const blockId = blockIdFromMilestonePayload(2, milestonePayload);
+        expect(blockId).toEqual(expectedBlockId);
     });
 });
 

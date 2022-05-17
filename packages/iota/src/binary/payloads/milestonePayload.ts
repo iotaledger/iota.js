@@ -56,8 +56,8 @@ export function deserializeMilestonePayload(readStream: ReadStream): IMilestoneP
     const parentBlockIds: string[] = [];
 
     for (let i = 0; i < numParents; i++) {
-        const parentMessageId = readStream.readFixedHex(`payloadMilestone.parentMessageId${i + 1}`, BLOCK_ID_LENGTH);
-        parentBlockIds.push(parentMessageId);
+        const parentBlockId = readStream.readFixedHex(`payloadMilestone.parentBlockId${i + 1}`, BLOCK_ID_LENGTH);
+        parentBlockIds.push(parentBlockId);
     }
 
     const confirmedMerkleRoot = readStream.readFixedHex("payloadMilestone.confirmedMerkleRoot", MERKLE_PROOF_LENGTH);
@@ -141,7 +141,7 @@ export function serializeMilestoneEssence(writeStream: WriteStream, object: IMil
         }
 
         writeStream.writeFixedHex(
-            `payloadMilestone.parentMessageId${i + 1}`,
+            `payloadMilestone.parentBlockId${i + 1}`,
             BLOCK_ID_LENGTH,
             object.parentBlockIds[i]
         );

@@ -73,7 +73,7 @@ ___
 
 • **confirmedMerkleRoot**: `string`
 
-The Merkle tree hash of all messages confirmed by this milestone.
+The Merkle tree hash of all blocks confirmed by this milestone.
 
 ___
 
@@ -81,7 +81,7 @@ ___
 
 • **appliedMerkleRoot**: `string`
 
-The Merkle tree hash of all messages applied by this milestone.
+The Merkle tree hash of all blocks applied by this milestone.
 
 ___
 

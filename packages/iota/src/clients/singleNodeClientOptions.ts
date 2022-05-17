@@ -22,7 +22,7 @@ export interface SingleNodeClientOptions {
     powProvider?: IPowProvider;
 
     /**
-     * The protocol version for messages.
+     * The protocol version for blocks.
      */
     protocolVersion?: number;
 

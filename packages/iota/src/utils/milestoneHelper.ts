@@ -22,24 +22,24 @@ export function milestoneIdFromMilestonePayload(payload: IMilestonePayload): str
 }
 
 /**
- * Compute a messageId from a milestone payload.
+ * Compute a blockId from a milestone payload.
  * @param protocolVersion The protocol version to use.
  * @param payload The milestone payload.
- * @returns The messageId of the message with the milestone payload.
+ * @returns The blockId of the block with the milestone payload.
  */
-export function messageIdFromMilestonePayload(protocolVersion: number, payload: IMilestonePayload) {
+export function blockIdFromMilestonePayload(protocolVersion: number, payload: IMilestonePayload) {
     const writeStream = new WriteStream();
-    const message: IBlock = {
+    const block: IBlock = {
         protocolVersion,
         parentBlockIds: payload.parentBlockIds,
         payload,
         nonce: "0"
     };
-    serializeBlock(writeStream, message);
+    serializeBlock(writeStream, block);
 
-    const messageFinal = writeStream.finalBytes();
-    const messageHash = Blake2b.sum256(messageFinal);
+    const blockFinal = writeStream.finalBytes();
+    const blockHash = Blake2b.sum256(blockFinal);
 
-    return Converter.bytesToHex(messageHash, true);
+    return Converter.bytesToHex(blockHash, true);
 }
 

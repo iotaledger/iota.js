@@ -284,7 +284,7 @@
 - [logUnlockConditions](api.md#logunlockconditions)
 - [logUnlockCondition](api.md#logunlockcondition)
 - [milestoneIdFromMilestonePayload](api.md#milestoneidfrommilestonepayload)
-- [messageIdFromMilestonePayload](api.md#messageidfrommilestonepayload)
+- [blockIdFromMilestonePayload](api.md#blockidfrommilestonepayload)
 
 ### Interfaces
 
@@ -4346,11 +4346,11 @@ The milestone id hex prefixed string.
 
 ___
 
-### messageIdFromMilestonePayload
+### blockIdFromMilestonePayload
 
-▸ **messageIdFromMilestonePayload**(`protocolVersion`, `payload`): `string`
+▸ **blockIdFromMilestonePayload**(`protocolVersion`, `payload`): `string`
 
-Compute a messageId from a milestone payload.
+Compute a blockId from a milestone payload.
 
 #### Parameters
 
@@ -4363,7 +4363,7 @@ Compute a messageId from a milestone payload.
 
 `string`
 
-The messageId of the message with the milestone payload.
+The blockId of the block with the milestone payload.
 
 ## Type aliases
 

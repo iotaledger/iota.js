@@ -2,12 +2,12 @@
 // SPDX-License-Identifier: Apache-2.0
 
 /**
- * Reason for message conflicts.
+ * Reason for block conflicts.
  */
 // eslint-disable-next-line no-shadow
 export enum ConflictReason {
     /**
-     * The message has no conflict.
+     * The block has no conflict.
      */
     none = 0,
 

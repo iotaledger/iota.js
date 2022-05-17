@@ -1,6 +1,6 @@
 # Interface: IPowProvider
 
-Perform the POW on a message.
+Perform the POW on a block.
 
 ## Implemented by
 
@@ -16,15 +16,15 @@ Perform the POW on a message.
 
 ### pow
 
-▸ **pow**(`message`, `targetScore`): `Promise`<`string`\>
+▸ **pow**(`block`, `targetScore`): `Promise`<`string`\>
 
-Perform pow on the message and return the nonce of at least targetScore.
+Perform pow on the block and return the nonce of at least targetScore.
 
 #### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `message` | `Uint8Array` | The message to process. |
+| `block` | `Uint8Array` | The block to process. |
 | `targetScore` | `number` | The target score. |
 
 #### Returns

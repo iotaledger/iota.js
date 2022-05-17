@@ -55,16 +55,16 @@ There are also high level operations which make use of the API level methods:
 * getBalance - Given a seed and account index calculate the total balance available on it's addresses.
 * getUnspentAddress - Given a seed, account index, and start index find the next unspent address.
 * getUnspentAddresses - Given a seed, account index, and start index find all the unspent addresses.
-* promote - Promote a message by attaching an empty message to it.
-* reattach - Reattach a message using the message id.
-* retry - Looks at the metadata for a message and promotes or retries depending on it's state.
-* retrieveData - Given a message id return the index and data from it.
+* promote - Promote a block by attaching an empty block to it.
+* reattach - Reattach a block using the block id.
+* retry - Looks at the metadata for a block and promotes or retries depending on it's state.
+* retrieveData - Given a block id return the index and data from it.
 * send - Given a seed, path, destination address in bech32 format and amount, make a single transfer.
 * sendEd25519 - Given a seed, path, destination address in ed25519 format and amount, make a single transfer.
 * sendMultiple - Given a seed, path, destination addresses in bech32 format and amounts, make multiple transfers.
 * sendMultipleEd25519 - Given a seed, path, destination addresses in ed25519 format and amounts, make multiple transfers.
 * sendAdvanced - Given a set of inputs with keypairs seed, path, list of destinations make multiple transfers, can also include index data.
-* sendData - Given index and data create a new data message.
+* sendData - Given index and data create a new data block.
 
 ## Models
 

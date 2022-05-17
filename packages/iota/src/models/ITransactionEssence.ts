@@ -21,7 +21,7 @@ export const INPUTS_COMMITMENT_SIZE: number = Blake2b.SIZE_256;
  */
 export interface ITransactionEssence extends ITypeBase<1> {
     /**
-     * The network id of the message.
+     * The network id of the block.
      */
     networkId: string;
 
