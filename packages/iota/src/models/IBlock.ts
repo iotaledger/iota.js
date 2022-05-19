@@ -21,7 +21,7 @@ export interface IBlock {
     /**
      * The parent block ids.
      */
-    parentBlockIds?: string[];
+    parents?: string[];
 
     /**
      * The payload contents.

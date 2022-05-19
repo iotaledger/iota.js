@@ -16,8 +16,8 @@ Milestone payload.
 - [index](IMilestonePayload.md#index)
 - [timestamp](IMilestonePayload.md#timestamp)
 - [previousMilestoneId](IMilestonePayload.md#previousmilestoneid)
-- [parentBlockIds](IMilestonePayload.md#parentblockids)
-- [confirmedMerkleRoot](IMilestonePayload.md#confirmedmerkleroot)
+- [parents](IMilestonePayload.md#parents)
+- [inclusionMerkleRoot](IMilestonePayload.md#inclusionmerkleroot)
 - [appliedMerkleRoot](IMilestonePayload.md#appliedmerkleroot)
 - [metadata](IMilestonePayload.md#metadata)
 - [options](IMilestonePayload.md#options)
@@ -61,17 +61,17 @@ The id of the previous milestone.
 
 ___
 
-### parentBlockIds
+### parents
 
-• **parentBlockIds**: `string`[]
+• **parents**: `string`[]
 
 The parents where this milestone attaches to.
 
 ___
 
-### confirmedMerkleRoot
+### inclusionMerkleRoot
 
-• **confirmedMerkleRoot**: `string`
+• **inclusionMerkleRoot**: `string`
 
 The Merkle tree hash of all blocks confirmed by this milestone.
 

@@ -22,5 +22,5 @@ export interface IChildrenResponse {
     /**
      * The ids of the blocks children.
      */
-    childrenBlockIds: string[];
+    children: string[];
 }

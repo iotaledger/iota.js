@@ -71,7 +71,7 @@ export function deserializeBlock(readStream: ReadStream): IBlock {
 
     return {
         protocolVersion,
-        parentBlockIds: parents,
+        parents,
         payload,
         nonce: nonce.toString()
     };
@@ -85,22 +85,22 @@ export function deserializeBlock(readStream: ReadStream): IBlock {
 export function serializeBlock(writeStream: WriteStream, object: IBlock): void {
     writeStream.writeUInt8("block.protocolVersion", object.protocolVersion ?? DEFAULT_PROTOCOL_VERSION);
 
-    const numParents = object.parentBlockIds?.length ?? 0;
+    const numParents = object.parents?.length ?? 0;
     writeStream.writeUInt8("block.numParents", numParents);
 
-    if (object.parentBlockIds) {
+    if (object.parents) {
         if (numParents > MAX_NUMBER_PARENTS) {
             throw new Error(`A maximum of ${MAX_NUMBER_PARENTS} parents is allowed, you provided ${numParents}`);
         }
-        if (new Set(object.parentBlockIds).size !== numParents) {
+        if (new Set(object.parents).size !== numParents) {
             throw new Error("The block parents must be unique");
         }
-        const sorted = object.parentBlockIds.slice().sort();
+        const sorted = object.parents.slice().sort();
         for (let i = 0; i < numParents; i++) {
-            if (sorted[i] !== object.parentBlockIds[i]) {
+            if (sorted[i] !== object.parents[i]) {
                 throw new Error("The block parents must be lexographically sorted");
             }
-            writeStream.writeFixedHex(`block.parentBlockId${i + 1}`, BLOCK_ID_LENGTH, object.parentBlockIds[i]);
+            writeStream.writeFixedHex(`block.parentBlockId${i + 1}`, BLOCK_ID_LENGTH, object.parents[i]);
         }
     }
 

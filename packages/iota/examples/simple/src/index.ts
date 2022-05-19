@@ -33,7 +33,7 @@ async function run() {
 
     const submitBlock: IBlock = {
         // Parents can be left undefined if you want the node to populate the field
-        parentBlockIds: tipsResponse.tipBlockIds.slice(0, MAX_NUMBER_PARENTS),
+        parents: tipsResponse.tips.slice(0, MAX_NUMBER_PARENTS),
         payload: {
             type: TAGGED_DATA_PAYLOAD_TYPE,
             tag: Converter.utf8ToHex("Foo", true),
@@ -65,18 +65,18 @@ async function run() {
     logBlock("", decoded);
     console.log();
 
-    const children = await client.blockChildren(tipsResponse.tipBlockIds[0]);
+    const children = await client.blockChildren(tipsResponse.tips[0]);
     console.log("Children");
     console.log("\tBlock Id:", children.blockId);
     console.log("\tMax Results:", children.maxResults);
     console.log("\tCount:", children.count);
-    console.log("\tChildren Block Ids:", children.childrenBlockIds);
+    console.log("\tChildren Block Ids:", children.children);
     console.log();
 
     const milestone = await client.milestoneByIndex(info.status.latestMilestone.index);
     console.log("Latest Milestone Payload");
     console.log("\tMilestone Index:", milestone.index);
-    console.log("\tConfirmed Merkel Root", milestone.confirmedMerkleRoot);
+    console.log("\tIncluded Merkel Root", milestone.inclusionMerkleRoot);
     console.log("\tApplied Merkel Root", milestone.appliedMerkleRoot);
     console.log("\tPrevious Milestone Id:", milestone.previousMilestoneId);
     console.log("\tTimestamp:", milestone.timestamp);

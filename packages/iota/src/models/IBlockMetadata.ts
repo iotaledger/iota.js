@@ -15,7 +15,7 @@ export interface IBlockMetadata {
     /**
      * The parent block ids.
      */
-    parentBlockIds?: string[];
+    parents?: string[];
 
     /**
      * Is the block solid.

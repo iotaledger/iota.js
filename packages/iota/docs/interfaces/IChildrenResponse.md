@@ -9,7 +9,7 @@ List of children found.
 - [blockId](IChildrenResponse.md#blockid)
 - [maxResults](IChildrenResponse.md#maxresults)
 - [count](IChildrenResponse.md#count)
-- [childrenBlockIds](IChildrenResponse.md#childrenblockids)
+- [children](IChildrenResponse.md#children)
 
 ## Properties
 
@@ -37,8 +37,8 @@ The number of items returned.
 
 ___
 
-### childrenBlockIds
+### children
 
-• **childrenBlockIds**: `string`[]
+• **children**: `string`[]
 
 The ids of the blocks children.

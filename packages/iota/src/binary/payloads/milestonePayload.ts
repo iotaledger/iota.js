@@ -53,14 +53,14 @@ export function deserializeMilestonePayload(readStream: ReadStream): IMilestoneP
     const timestamp = readStream.readUInt32("payloadMilestone.timestamp");
     const previousMilestoneId = readStream.readFixedHex("payloadMilestone.previousMilestoneId", BLOCK_ID_LENGTH);
     const numParents = readStream.readUInt8("payloadMilestone.numParents");
-    const parentBlockIds: string[] = [];
+    const parents: string[] = [];
 
     for (let i = 0; i < numParents; i++) {
         const parentBlockId = readStream.readFixedHex(`payloadMilestone.parentBlockId${i + 1}`, BLOCK_ID_LENGTH);
-        parentBlockIds.push(parentBlockId);
+        parents.push(parentBlockId);
     }
 
-    const confirmedMerkleRoot = readStream.readFixedHex("payloadMilestone.confirmedMerkleRoot", MERKLE_PROOF_LENGTH);
+    const inclusionMerkleRoot = readStream.readFixedHex("payloadMilestone.inclusionMerkleRoot", MERKLE_PROOF_LENGTH);
     const appliedMerkleRoot = readStream.readFixedHex("payloadMilestone.appliedMerkleRoot", MERKLE_PROOF_LENGTH);
 
     const metadataLength = readStream.readUInt16("payloadMilestone.metadataLength");
@@ -79,8 +79,8 @@ export function deserializeMilestonePayload(readStream: ReadStream): IMilestoneP
         index,
         timestamp: Number(timestamp),
         previousMilestoneId,
-        parentBlockIds,
-        confirmedMerkleRoot,
+        parents,
+        inclusionMerkleRoot,
         appliedMerkleRoot,
         metadata,
         options,
@@ -119,38 +119,38 @@ export function serializeMilestoneEssence(writeStream: WriteStream, object: IMil
         object.previousMilestoneId
     );
 
-    if (object.parentBlockIds.length < MIN_NUMBER_PARENTS) {
+    if (object.parents.length < MIN_NUMBER_PARENTS) {
         throw new Error(
-            `A minimum of ${MIN_NUMBER_PARENTS} parents is allowed, you provided ${object.parentBlockIds.length}`
+            `A minimum of ${MIN_NUMBER_PARENTS} parents is allowed, you provided ${object.parents.length}`
         );
     }
-    if (object.parentBlockIds.length > MAX_NUMBER_PARENTS) {
+    if (object.parents.length > MAX_NUMBER_PARENTS) {
         throw new Error(
-            `A maximum of ${MAX_NUMBER_PARENTS} parents is allowed, you provided ${object.parentBlockIds.length}`
+            `A maximum of ${MAX_NUMBER_PARENTS} parents is allowed, you provided ${object.parents.length}`
         );
     }
-    if (new Set(object.parentBlockIds).size !== object.parentBlockIds.length) {
+    if (new Set(object.parents).size !== object.parents.length) {
         throw new Error("The milestone parents must be unique");
     }
-    const sorted = object.parentBlockIds.slice().sort();
+    const sorted = object.parents.slice().sort();
 
-    writeStream.writeUInt8("payloadMilestone.numParents", object.parentBlockIds.length);
-    for (let i = 0; i < object.parentBlockIds.length; i++) {
-        if (sorted[i] !== object.parentBlockIds[i]) {
+    writeStream.writeUInt8("payloadMilestone.numParents", object.parents.length);
+    for (let i = 0; i < object.parents.length; i++) {
+        if (sorted[i] !== object.parents[i]) {
             throw new Error("The milestone parents must be lexographically sorted");
         }
 
         writeStream.writeFixedHex(
             `payloadMilestone.parentBlockId${i + 1}`,
             BLOCK_ID_LENGTH,
-            object.parentBlockIds[i]
+            object.parents[i]
         );
     }
 
     writeStream.writeFixedHex(
-        "payloadMilestone.confirmedMerkleRoot",
+        "payloadMilestone.inclusionMerkleRoot",
         MERKLE_PROOF_LENGTH,
-        object.confirmedMerkleRoot
+        object.inclusionMerkleRoot
     );
 
     writeStream.writeFixedHex(

@@ -7,7 +7,7 @@ Block layout.
 ### Properties
 
 - [protocolVersion](IBlock.md#protocolversion)
-- [parentBlockIds](IBlock.md#parentblockids)
+- [parents](IBlock.md#parents)
 - [payload](IBlock.md#payload)
 - [nonce](IBlock.md#nonce)
 
@@ -21,9 +21,9 @@ The protocol version under which this block operates.
 
 ___
 
-### parentBlockIds
+### parents
 
-• `Optional` **parentBlockIds**: `string`[]
+• `Optional` **parents**: `string`[]
 
 The parent block ids.
 

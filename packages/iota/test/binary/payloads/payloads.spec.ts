@@ -77,7 +77,7 @@ describe("Binary Payload", () => {
         buffer.writeUInt8(2, 48); // Num parents
         buffer.write("c0ab1d1f6886ba6317634da6b2d957e7c987a9699dd3707d1e2751fcf4b8efe3", 49, "hex"); // Parent 1
         buffer.write("04ba147c9cc9bebd3b97310a23d385f33d8e67ac42868b69bc06f5468e3c0a02", 81, "hex"); // Parent 2
-        buffer.write("786a02f742015903c6c6fd852552d272912f4740e15847618a86e217f71f5419", 113, "hex"); // Confirmed Merkle proof
+        buffer.write("786a02f742015903c6c6fd852552d272912f4740e15847618a86e217f71f5419", 113, "hex"); // Included Merkle proof
         buffer.write("0e5751c026e543b2e8ab2eb06099daa1d1e5df47778f7787faab45cdf12fe3a8", 145, "hex"); // Applied Merkle proof
         buffer.writeUInt16LE(8, 177); // metadata count
         buffer.write("1111111122222222", 179, "hex"); // metadata
@@ -110,9 +110,9 @@ describe("Binary Payload", () => {
         expect(payload.index).toEqual(1087);
         expect(payload.timestamp).toEqual(1605190003);
         expect(payload.previousMilestoneId).toEqual("0x50cf83f8ee3e316a7f3a4df32082747e8392e59fa724bbd13a9f2efc34cec6e4");
-        expect(payload.parentBlockIds[0]).toEqual("0xc0ab1d1f6886ba6317634da6b2d957e7c987a9699dd3707d1e2751fcf4b8efe3");
-        expect(payload.parentBlockIds[1]).toEqual("0x04ba147c9cc9bebd3b97310a23d385f33d8e67ac42868b69bc06f5468e3c0a02");
-        expect(payload.confirmedMerkleRoot).toEqual(
+        expect(payload.parents[0]).toEqual("0xc0ab1d1f6886ba6317634da6b2d957e7c987a9699dd3707d1e2751fcf4b8efe3");
+        expect(payload.parents[1]).toEqual("0x04ba147c9cc9bebd3b97310a23d385f33d8e67ac42868b69bc06f5468e3c0a02");
+        expect(payload.inclusionMerkleRoot).toEqual(
             "0x786a02f742015903c6c6fd852552d272912f4740e15847618a86e217f71f5419"
         );
         expect(payload.appliedMerkleRoot).toEqual(

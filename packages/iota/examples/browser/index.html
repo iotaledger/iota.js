@@ -41,7 +41,7 @@
 
             const submitBlock = {
                 // Parents can be left undefined if you want the node to populate the field
-                parentBlockIds: tipsResponse.tipBlockIds.slice(0, Iota.MAX_NUMBER_PARENTS),
+                parents: tipsResponse.tips.slice(0, Iota.MAX_NUMBER_PARENTS),
                 payload: {
                     type: Iota.TAGGED_DATA_PAYLOAD_TYPE,
                     tag: IotaUtil.Converter.utf8ToHex("Foo", true),
@@ -74,12 +74,12 @@
             Iota.logBlock("", decoded);
             consoleLog();
 
-            const children = await client.blockChildren(tipsResponse.tipBlockIds[0]);
+            const children = await client.blockChildren(tipsResponse.tips[0]);
             consoleLog("Children");
             consoleLog("\tBlock Id:", children.blockId);
             consoleLog("\tMax Results:", children.maxResults);
             consoleLog("\tCount:", children.count);
-            consoleLog("\tChildren Block Ids:", children.childrenBlockIds);
+            consoleLog("\tChildren Block Ids:", children.children);
             consoleLog();
 
             const milestone = await client.milestone(info.status.latestMilestoneIndex);

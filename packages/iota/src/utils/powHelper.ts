@@ -22,7 +22,7 @@ export class PowHelper {
      * @returns The score for the data.
      */
     public static score(block: Uint8Array): number {
-        // the PoW digest is the hash of msg without the nonce
+        // the PoW digest is the hash of block without the nonce
         const powRelevantData = block.slice(0, -8);
 
         const powDigest = Blake2b.sum256(powRelevantData);

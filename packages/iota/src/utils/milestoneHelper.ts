@@ -31,7 +31,7 @@ export function blockIdFromMilestonePayload(protocolVersion: number, payload: IM
     const writeStream = new WriteStream();
     const block: IBlock = {
         protocolVersion,
-        parentBlockIds: payload.parentBlockIds,
+        parents: payload.parents,
         payload,
         nonce: "0"
     };

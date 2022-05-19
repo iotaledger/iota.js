@@ -18,11 +18,11 @@ describe("Binary Milestone Payload", () => {
             index: 1087,
             timestamp: 1605190003,
             previousMilestoneId: "0x50cf83f8ee3e316a7f3a4df32082747e8392e59fa724bbd13a9f2efc34cec6e4",
-            parentBlockIds: [
+            parents: [
                 "0x04ba147c9cc9bebd3b97310a23d385f33d8e67ac42868b69bc06f5468e3c0a02",
                 "0xc0ab1d1f6886ba6317634da6b2d957e7c987a9699dd3707d1e2751fcf4b8efe3"
             ],
-            confirmedMerkleRoot: "0x665de8d34bca02af275a6ccaf2d5f7b1d018f695473f19855d7ad1a54f106ed1",
+            inclusionMerkleRoot: "0x665de8d34bca02af275a6ccaf2d5f7b1d018f695473f19855d7ad1a54f106ed1",
             appliedMerkleRoot: "0x0e5751c026e543b2e8ab2eb06099daa1d1e5df47778f7787faab45cdf12fe3a8",
             metadata: "0x1111111122222222",
             signatures: [
@@ -50,13 +50,13 @@ describe("Binary Milestone Payload", () => {
         expect(deserialized.index).toEqual(1087);
         expect(deserialized.timestamp).toEqual(1605190003);
         expect(deserialized.previousMilestoneId).toEqual("0x50cf83f8ee3e316a7f3a4df32082747e8392e59fa724bbd13a9f2efc34cec6e4");
-        expect(deserialized.parentBlockIds[0]).toEqual(
+        expect(deserialized.parents[0]).toEqual(
             "0x04ba147c9cc9bebd3b97310a23d385f33d8e67ac42868b69bc06f5468e3c0a02"
         );
-        expect(deserialized.parentBlockIds[1]).toEqual(
+        expect(deserialized.parents[1]).toEqual(
             "0xc0ab1d1f6886ba6317634da6b2d957e7c987a9699dd3707d1e2751fcf4b8efe3"
         );
-        expect(deserialized.confirmedMerkleRoot).toEqual(
+        expect(deserialized.inclusionMerkleRoot).toEqual(
             "0x665de8d34bca02af275a6ccaf2d5f7b1d018f695473f19855d7ad1a54f106ed1"
         );
         expect(deserialized.appliedMerkleRoot).toEqual(
@@ -88,11 +88,11 @@ describe("Binary Milestone Payload", () => {
             index: 1087,
             timestamp: 1605190003,
             previousMilestoneId: "0x50cf83f8ee3e316a7f3a4df32082747e8392e59fa724bbd13a9f2efc34cec6e4",
-            parentBlockIds: [
+            parents: [
                 "0x04ba147c9cc9bebd3b97310a23d385f33d8e67ac42868b69bc06f5468e3c0a02",
                 "0xc0ab1d1f6886ba6317634da6b2d957e7c987a9699dd3707d1e2751fcf4b8efe3"
             ],
-            confirmedMerkleRoot: "0x665de8d34bca02af275a6ccaf2d5f7b1d018f695473f19855d7ad1a54f106ed1",
+            inclusionMerkleRoot: "0x665de8d34bca02af275a6ccaf2d5f7b1d018f695473f19855d7ad1a54f106ed1",
             appliedMerkleRoot: "0x0e5751c026e543b2e8ab2eb06099daa1d1e5df47778f7787faab45cdf12fe3a8",
             metadata: "0x1111111122222222",
             options: [
@@ -148,13 +148,13 @@ describe("Binary Milestone Payload", () => {
         expect(deserialized.index).toEqual(1087);
         expect(deserialized.timestamp).toEqual(1605190003);
         expect(deserialized.previousMilestoneId).toEqual("0x50cf83f8ee3e316a7f3a4df32082747e8392e59fa724bbd13a9f2efc34cec6e4");
-        expect(deserialized.parentBlockIds[0]).toEqual(
+        expect(deserialized.parents[0]).toEqual(
             "0x04ba147c9cc9bebd3b97310a23d385f33d8e67ac42868b69bc06f5468e3c0a02"
         );
-        expect(deserialized.parentBlockIds[1]).toEqual(
+        expect(deserialized.parents[1]).toEqual(
             "0xc0ab1d1f6886ba6317634da6b2d957e7c987a9699dd3707d1e2751fcf4b8efe3"
         );
-        expect(deserialized.confirmedMerkleRoot).toEqual(
+        expect(deserialized.inclusionMerkleRoot).toEqual(
             "0x665de8d34bca02af275a6ccaf2d5f7b1d018f695473f19855d7ad1a54f106ed1"
         );
         expect(deserialized.appliedMerkleRoot).toEqual(
@@ -201,11 +201,11 @@ describe("Binary Milestone Payload", () => {
             index: 1087,
             timestamp: 1605190003,
             previousMilestoneId: "0x50cf83f8ee3e316a7f3a4df32082747e8392e59fa724bbd13a9f2efc34cec6e4",
-            parentBlockIds: [
+            parents: [
                 "0x04ba147c9cc9bebd3b97310a23d385f33d8e67ac42868b69bc06f5468e3c0a02",
                 "0xc0ab1d1f6886ba6317634da6b2d957e7c987a9699dd3707d1e2751fcf4b8efe3"
             ],
-            confirmedMerkleRoot: "0x665de8d34bca02af275a6ccaf2d5f7b1d018f695473f19855d7ad1a54f106ed1",
+            inclusionMerkleRoot: "0x665de8d34bca02af275a6ccaf2d5f7b1d018f695473f19855d7ad1a54f106ed1",
             appliedMerkleRoot: "0x0e5751c026e543b2e8ab2eb06099daa1d1e5df47778f7787faab45cdf12fe3a8",
             metadata: "0x1111111122222222",
             options: [
@@ -240,13 +240,13 @@ describe("Binary Milestone Payload", () => {
         expect(deserialized.index).toEqual(1087);
         expect(deserialized.timestamp).toEqual(1605190003);
         expect(deserialized.previousMilestoneId).toEqual("0x50cf83f8ee3e316a7f3a4df32082747e8392e59fa724bbd13a9f2efc34cec6e4");
-        expect(deserialized.parentBlockIds[0]).toEqual(
+        expect(deserialized.parents[0]).toEqual(
             "0x04ba147c9cc9bebd3b97310a23d385f33d8e67ac42868b69bc06f5468e3c0a02"
         );
-        expect(deserialized.parentBlockIds[1]).toEqual(
+        expect(deserialized.parents[1]).toEqual(
             "0xc0ab1d1f6886ba6317634da6b2d957e7c987a9699dd3707d1e2751fcf4b8efe3"
         );
-        expect(deserialized.confirmedMerkleRoot).toEqual(
+        expect(deserialized.inclusionMerkleRoot).toEqual(
             "0x665de8d34bca02af275a6ccaf2d5f7b1d018f695473f19855d7ad1a54f106ed1"
         );
         expect(deserialized.appliedMerkleRoot).toEqual(
@@ -285,11 +285,11 @@ describe("Binary Milestone Payload", () => {
             index: 1087,
             timestamp: 1605190003,
             previousMilestoneId: "0x50cf83f8ee3e316a7f3a4df32082747e8392e59fa724bbd13a9f2efc34cec6e4",
-            parentBlockIds: [
+            parents: [
                 "0x04ba147c9cc9bebd3b97310a23d385f33d8e67ac42868b69bc06f5468e3c0a02",
                 "0xc0ab1d1f6886ba6317634da6b2d957e7c987a9699dd3707d1e2751fcf4b8efe3"
             ],
-            confirmedMerkleRoot: "0x665de8d34bca02af275a6ccaf2d5f7b1d018f695473f19855d7ad1a54f106ed1",
+            inclusionMerkleRoot: "0x665de8d34bca02af275a6ccaf2d5f7b1d018f695473f19855d7ad1a54f106ed1",
             appliedMerkleRoot: "0x0e5751c026e543b2e8ab2eb06099daa1d1e5df47778f7787faab45cdf12fe3a8",
             metadata: "0x1111111122222222",
             options: [
@@ -350,13 +350,13 @@ describe("Binary Milestone Payload", () => {
         expect(deserialized.index).toEqual(1087);
         expect(deserialized.timestamp).toEqual(1605190003);
         expect(deserialized.previousMilestoneId).toEqual("0x50cf83f8ee3e316a7f3a4df32082747e8392e59fa724bbd13a9f2efc34cec6e4");
-        expect(deserialized.parentBlockIds[0]).toEqual(
+        expect(deserialized.parents[0]).toEqual(
             "0x04ba147c9cc9bebd3b97310a23d385f33d8e67ac42868b69bc06f5468e3c0a02"
         );
-        expect(deserialized.parentBlockIds[1]).toEqual(
+        expect(deserialized.parents[1]).toEqual(
             "0xc0ab1d1f6886ba6317634da6b2d957e7c987a9699dd3707d1e2751fcf4b8efe3"
         );
-        expect(deserialized.confirmedMerkleRoot).toEqual(
+        expect(deserialized.inclusionMerkleRoot).toEqual(
             "0x665de8d34bca02af275a6ccaf2d5f7b1d018f695473f19855d7ad1a54f106ed1"
         );
         expect(deserialized.appliedMerkleRoot).toEqual(

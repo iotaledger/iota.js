@@ -218,9 +218,9 @@ export class SingleNodeClient implements IClient {
             }
             minPoWScore = this._protocol?.minPoWScore ?? 0;
 
-            if (!block.parentBlockIds || block.parentBlockIds.length === 0) {
+            if (!block.parents || block.parents.length === 0) {
                 const tips = await this.tips();
-                block.parentBlockIds = tips.tipBlockIds;
+                block.parents = tips.tips;
             }
         }
 

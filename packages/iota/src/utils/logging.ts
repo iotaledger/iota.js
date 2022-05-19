@@ -130,9 +130,9 @@ export function logInfo(prefix: string, info: INodeInfo): void {
  * @param tipsResponse The tips to log.
  */
 export function logTips(prefix: string, tipsResponse: ITipsResponse): void {
-    if (tipsResponse.tipBlockIds) {
-        for (let i = 0; i < tipsResponse.tipBlockIds.length; i++) {
-            logger(`${prefix}\tTip ${i + 1} Block Id:`, tipsResponse.tipBlockIds[i]);
+    if (tipsResponse.tips) {
+        for (let i = 0; i < tipsResponse.tips.length; i++) {
+            logger(`${prefix}\tTip ${i + 1} Block Id:`, tipsResponse.tips[i]);
         }
     }
 }
@@ -144,9 +144,9 @@ export function logTips(prefix: string, tipsResponse: ITipsResponse): void {
  */
 export function logBlock(prefix: string, block: IBlock): void {
     logger(`${prefix}\tProtocol Version:`, block.protocolVersion);
-    if (block.parentBlockIds) {
-        for (let i = 0; i < block.parentBlockIds.length; i++) {
-            logger(`${prefix}\tParent ${i + 1} Block Id:`, block.parentBlockIds[i]);
+    if (block.parents) {
+        for (let i = 0; i < block.parents.length; i++) {
+            logger(`${prefix}\tParent ${i + 1} Block Id:`, block.parents[i]);
         }
     }
     logPayload(`${prefix}\t`, block.payload);
@@ -162,9 +162,9 @@ export function logBlock(prefix: string, block: IBlock): void {
  */
 export function logBlockMetadata(prefix: string, blockMetadata: IBlockMetadata): void {
     logger(`${prefix}\tBlock Id:`, blockMetadata.blockId);
-    if (blockMetadata.parentBlockIds) {
-        for (let i = 0; i < blockMetadata.parentBlockIds.length; i++) {
-            logger(`${prefix}\tParent ${i + 1} Block Id:`, blockMetadata.parentBlockIds[i]);
+    if (blockMetadata.parents) {
+        for (let i = 0; i < blockMetadata.parents.length; i++) {
+            logger(`${prefix}\tParent ${i + 1} Block Id:`, blockMetadata.parents[i]);
         }
     }
     if (blockMetadata.isSolid !== undefined) {
@@ -265,10 +265,10 @@ export function logMilestonePayload(prefix: string, payload?: IMilestonePayload)
         logger(`${prefix}\tIndex:`, payload.index);
         logger(`${prefix}\tTimestamp:`, payload.timestamp);
         logger(`${prefix}\tPreviousMilestoneId:`, payload.previousMilestoneId);
-        for (let i = 0; i < payload.parentBlockIds.length; i++) {
-            logger(`${prefix}\tParent ${i + 1}:`, payload.parentBlockIds[i]);
+        for (let i = 0; i < payload.parents.length; i++) {
+            logger(`${prefix}\tParent ${i + 1}:`, payload.parents[i]);
         }
-        logger(`${prefix}\tConfirmed Merkle Proof:`, payload.confirmedMerkleRoot);
+        logger(`${prefix}\tConfirmed Merkle Proof:`, payload.inclusionMerkleRoot);
         logger(`${prefix}\tApplied Merkle Proof:`, payload.appliedMerkleRoot);
         logger(`${prefix}\tMetadata:`, payload.metadata);
         logMilestoneOptions(`${prefix}\t`, payload.options);

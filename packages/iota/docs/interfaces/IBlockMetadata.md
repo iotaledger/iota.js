@@ -7,7 +7,7 @@ Response from the metadata endpoint.
 ### Properties
 
 - [blockId](IBlockMetadata.md#blockid)
-- [parentBlockIds](IBlockMetadata.md#parentblockids)
+- [parents](IBlockMetadata.md#parents)
 - [isSolid](IBlockMetadata.md#issolid)
 - [referencedByMilestoneIndex](IBlockMetadata.md#referencedbymilestoneindex)
 - [milestoneIndex](IBlockMetadata.md#milestoneindex)
@@ -26,9 +26,9 @@ The block id.
 
 ___
 
-### parentBlockIds
+### parents
 
-• `Optional` **parentBlockIds**: `string`[]
+• `Optional` **parents**: `string`[]
 
 The parent block ids.
 

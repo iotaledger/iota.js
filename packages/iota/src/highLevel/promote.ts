@@ -29,20 +29,20 @@ export async function promote(
 
     // Parents must be unique and lexicographically sorted
     // so don't add the blockId if it is already one of the tips
-    if (!tipsResponse.tipBlockIds.includes(blockId)) {
-        tipsResponse.tipBlockIds.unshift(blockId);
+    if (!tipsResponse.tips.includes(blockId)) {
+        tipsResponse.tips.unshift(blockId);
     }
 
     // If we now exceed the max parents remove as many as we need
-    if (tipsResponse.tipBlockIds.length > MAX_NUMBER_PARENTS) {
-        tipsResponse.tipBlockIds = tipsResponse.tipBlockIds.slice(0, MAX_NUMBER_PARENTS);
+    if (tipsResponse.tips.length > MAX_NUMBER_PARENTS) {
+        tipsResponse.tips = tipsResponse.tips.slice(0, MAX_NUMBER_PARENTS);
     }
 
     // Finally sort the list
-    tipsResponse.tipBlockIds.sort();
+    tipsResponse.tips.sort();
 
     const promoteBlock: IBlock = {
-        parentBlockIds: tipsResponse.tipBlockIds
+        parents: tipsResponse.tips
     };
 
     const promoteBlockId = await localClient.blockSubmit(promoteBlock);
