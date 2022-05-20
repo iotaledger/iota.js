@@ -5,14 +5,14 @@
  */
 export interface INodeInfoMetrics {
     /**
-     * Messages per second.
+     * Blocks per second.
      */
-    messagesPerSecond: number;
+    blocksPerSecond: number;
 
     /**
-     * Referenced messages per second.
+     * Referenced blocks per second.
      */
-    referencedMessagesPerSecond: number;
+    referencedBlocksPerSecond: number;
 
     /**
      * The rate at which rates are being referenced.
