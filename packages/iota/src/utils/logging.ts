@@ -264,6 +264,7 @@ export function logMilestonePayload(prefix: string, payload?: IMilestonePayload)
         logger(`${prefix}Milestone Payload`);
         logger(`${prefix}\tIndex:`, payload.index);
         logger(`${prefix}\tTimestamp:`, payload.timestamp);
+        logger(`${prefix}\tProtocol version:`, payload.protocolVersion);
         logger(`${prefix}\tPreviousMilestoneId:`, payload.previousMilestoneId);
         for (let i = 0; i < payload.parents.length; i++) {
             logger(`${prefix}\tParent ${i + 1}:`, payload.parents[i]);

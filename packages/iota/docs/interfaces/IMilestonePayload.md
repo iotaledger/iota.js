@@ -15,6 +15,7 @@ Milestone payload.
 - [type](IMilestonePayload.md#type)
 - [index](IMilestonePayload.md#index)
 - [timestamp](IMilestonePayload.md#timestamp)
+- [protocolVersion](IMilestonePayload.md#protocolversion)
 - [previousMilestoneId](IMilestonePayload.md#previousmilestoneid)
 - [parents](IMilestonePayload.md#parents)
 - [inclusionMerkleRoot](IMilestonePayload.md#inclusionmerkleroot)
@@ -50,6 +51,14 @@ ___
 • **timestamp**: `number`
 
 The timestamp of the milestone.
+
+___
+
+### protocolVersion
+
+• **protocolVersion**: `number`
+
+The protocol version.
 
 ___
 

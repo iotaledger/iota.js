@@ -73,36 +73,37 @@ describe("Binary Payload", () => {
         buffer.writeUInt32LE(7, 4); // Payload type
         buffer.writeUInt32LE(1087, 8); // Milestone index
         buffer.writeUInt32LE(1605190003, 12); // Milestone timestamp
-        buffer.write("50cf83f8ee3e316a7f3a4df32082747e8392e59fa724bbd13a9f2efc34cec6e4", 16, "hex"); // Last Milestone id
-        buffer.writeUInt8(2, 48); // Num parents
-        buffer.write("c0ab1d1f6886ba6317634da6b2d957e7c987a9699dd3707d1e2751fcf4b8efe3", 49, "hex"); // Parent 1
-        buffer.write("04ba147c9cc9bebd3b97310a23d385f33d8e67ac42868b69bc06f5468e3c0a02", 81, "hex"); // Parent 2
-        buffer.write("786a02f742015903c6c6fd852552d272912f4740e15847618a86e217f71f5419", 113, "hex"); // Included Merkle proof
-        buffer.write("0e5751c026e543b2e8ab2eb06099daa1d1e5df47778f7787faab45cdf12fe3a8", 145, "hex"); // Applied Merkle proof
-        buffer.writeUInt16LE(8, 177); // metadata count
-        buffer.write("1111111122222222", 179, "hex"); // metadata
-        buffer.writeUInt8(0, 187); // Options count
-        buffer.writeUInt8(2, 188); // Signature count
-        buffer.writeUInt8(0, 189); // Signature type
+        buffer.writeUInt8(3, 16); // Milestone protocol version
+        buffer.write("50cf83f8ee3e316a7f3a4df32082747e8392e59fa724bbd13a9f2efc34cec6e4", 17, "hex"); // Last Milestone id
+        buffer.writeUInt8(2, 49); // Num parents
+        buffer.write("c0ab1d1f6886ba6317634da6b2d957e7c987a9699dd3707d1e2751fcf4b8efe3", 50, "hex"); // Parent 1
+        buffer.write("04ba147c9cc9bebd3b97310a23d385f33d8e67ac42868b69bc06f5468e3c0a02", 82, "hex"); // Parent 2
+        buffer.write("786a02f742015903c6c6fd852552d272912f4740e15847618a86e217f71f5419", 114, "hex"); // Included Merkle proof
+        buffer.write("0e5751c026e543b2e8ab2eb06099daa1d1e5df47778f7787faab45cdf12fe3a8", 146, "hex"); // Applied Merkle proof
+        buffer.writeUInt16LE(8, 178); // metadata count
+        buffer.write("1111111122222222", 180, "hex"); // metadata
+        buffer.writeUInt8(0, 188); // Options count
+        buffer.writeUInt8(2, 189); // Signature count
+        buffer.writeUInt8(0, 190); // Signature type
         buffer.write(
             "d85e5b1590d898d1e0cdebb2e3b5337c8b76270142663d78811683ba47c17c98",
-            190,
+            191,
             "hex"
         ); // Public key
         buffer.write(
             "15188080d5ef2f8a8fd08498243a30b2a8eb08e0910573101632bb244c9e27db26121c8af619d90de6cb5e5c407e4edd709e0e06702170e311a1668e0a12480d",
-            222,
+            223,
             "hex"
         ); // Signature
-        buffer.writeUInt8(0, 286); // Signature type
+        buffer.writeUInt8(0, 287); // Signature type
         buffer.write(
             "d9922819a39e94ddf3907f4b9c8df93f39f026244fcb609205b9a879022599f2",
-            287,
+            288,
             "hex"
         ); // Public key
         buffer.write(
             "48afb8e21fbba0ba473b6798ecad3a33e10d1575fd5e3822e2922db4cc24b0808fd6792ee6eaaade15cdc14e43da16883962d15358dc064ba5bb2726cf07790a",
-            319,
+            320,
             "hex"
         ); // Signature
         const payload = deserializePayload(new ReadStream(buffer)) as IMilestonePayload;
