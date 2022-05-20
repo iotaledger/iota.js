@@ -7,6 +7,7 @@ const milestonePayload: IMilestonePayload = {
     "type": 7,
     "index": 30946,
     "timestamp": 1651565954,
+    "protocolVersion": 2,
     "previousMilestoneId": "0xa64113d2aab54a3aa2387c743685acf503b09877343576a6d7c14adae2299ca0",
     "parents": [
         "0x2ae4b5a514d9c412a0b5c8bb1fbbe7d7a1c542ba7ff67e2ff66137a308b5633e",
@@ -35,13 +36,13 @@ const milestonePayload: IMilestonePayload = {
 
 describe("MilestoneHelper", () => {
     test("Can compute milestonId from milestone payload", () => {
-        const expectedMilestoneId = "0xadcba83eeb91c9e929e42c99fd5954e2b57fca7b2246b8c6cfa8043b9765e379";
+        const expectedMilestoneId = "0xebc6e208c9267649a56bc108094da1393c1e1da98dd36e76e54347d833fa32cf";
         const milestoneId = milestoneIdFromMilestonePayload(milestonePayload);
         expect(milestoneId).toEqual(expectedMilestoneId);
     });
 
     test("Can compute blockId from milestone payload", () => {
-        const expectedBlockId = "0x4a3cf7cf91c08ab790b5232d5523f811b6ace33adedb21180deb653adaea581e";
+        const expectedBlockId = "0x43ce64ee623d990962a3868c4cb670bac554bb955e6da441c0144c238c53bdec";
         const blockId = blockIdFromMilestonePayload(2, milestonePayload);
         expect(blockId).toEqual(expectedBlockId);
     });

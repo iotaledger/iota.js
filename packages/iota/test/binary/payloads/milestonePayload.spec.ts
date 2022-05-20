@@ -17,6 +17,7 @@ describe("Binary Milestone Payload", () => {
             type: MILESTONE_PAYLOAD_TYPE,
             index: 1087,
             timestamp: 1605190003,
+            protocolVersion: 2,
             previousMilestoneId: "0x50cf83f8ee3e316a7f3a4df32082747e8392e59fa724bbd13a9f2efc34cec6e4",
             parents: [
                 "0x04ba147c9cc9bebd3b97310a23d385f33d8e67ac42868b69bc06f5468e3c0a02",
@@ -43,12 +44,13 @@ describe("Binary Milestone Payload", () => {
         serializeMilestonePayload(serialized, payload);
         const hex = serialized.finalHex();
         expect(hex).toEqual(
-            "070000003f0400007341ad5f50cf83f8ee3e316a7f3a4df32082747e8392e59fa724bbd13a9f2efc34cec6e40204ba147c9cc9bebd3b97310a23d385f33d8e67ac42868b69bc06f5468e3c0a02c0ab1d1f6886ba6317634da6b2d957e7c987a9699dd3707d1e2751fcf4b8efe3665de8d34bca02af275a6ccaf2d5f7b1d018f695473f19855d7ad1a54f106ed10e5751c026e543b2e8ab2eb06099daa1d1e5df47778f7787faab45cdf12fe3a808001111111122222222000200d85e5b1590d898d1e0cdebb2e3b5337c8b76270142663d78811683ba47c17c9815188080d5ef2f8a8fd08498243a30b2a8eb08e0910573101632bb244c9e27db26121c8af619d90de6cb5e5c407e4edd709e0e06702170e311a1668e0a12480d00d9922819a39e94ddf3907f4b9c8df93f39f026244fcb609205b9a879022599f248afb8e21fbba0ba473b6798ecad3a33e10d1575fd5e3822e2922db4cc24b0808fd6792ee6eaaade15cdc14e43da16883962d15358dc064ba5bb2726cf07790a"
+            "070000003f0400007341ad5f0250cf83f8ee3e316a7f3a4df32082747e8392e59fa724bbd13a9f2efc34cec6e40204ba147c9cc9bebd3b97310a23d385f33d8e67ac42868b69bc06f5468e3c0a02c0ab1d1f6886ba6317634da6b2d957e7c987a9699dd3707d1e2751fcf4b8efe3665de8d34bca02af275a6ccaf2d5f7b1d018f695473f19855d7ad1a54f106ed10e5751c026e543b2e8ab2eb06099daa1d1e5df47778f7787faab45cdf12fe3a808001111111122222222000200d85e5b1590d898d1e0cdebb2e3b5337c8b76270142663d78811683ba47c17c9815188080d5ef2f8a8fd08498243a30b2a8eb08e0910573101632bb244c9e27db26121c8af619d90de6cb5e5c407e4edd709e0e06702170e311a1668e0a12480d00d9922819a39e94ddf3907f4b9c8df93f39f026244fcb609205b9a879022599f248afb8e21fbba0ba473b6798ecad3a33e10d1575fd5e3822e2922db4cc24b0808fd6792ee6eaaade15cdc14e43da16883962d15358dc064ba5bb2726cf07790a"
         );
         const deserialized = deserializeMilestonePayload(new ReadStream(Converter.hexToBytes(hex)));
         expect(deserialized.type).toEqual(7);
         expect(deserialized.index).toEqual(1087);
         expect(deserialized.timestamp).toEqual(1605190003);
+        expect(deserialized.protocolVersion).toEqual(2);
         expect(deserialized.previousMilestoneId).toEqual("0x50cf83f8ee3e316a7f3a4df32082747e8392e59fa724bbd13a9f2efc34cec6e4");
         expect(deserialized.parents[0]).toEqual(
             "0x04ba147c9cc9bebd3b97310a23d385f33d8e67ac42868b69bc06f5468e3c0a02"
@@ -87,6 +89,7 @@ describe("Binary Milestone Payload", () => {
             type: MILESTONE_PAYLOAD_TYPE,
             index: 1087,
             timestamp: 1605190003,
+            protocolVersion: 2,
             previousMilestoneId: "0x50cf83f8ee3e316a7f3a4df32082747e8392e59fa724bbd13a9f2efc34cec6e4",
             parents: [
                 "0x04ba147c9cc9bebd3b97310a23d385f33d8e67ac42868b69bc06f5468e3c0a02",
@@ -141,12 +144,13 @@ describe("Binary Milestone Payload", () => {
         serializeMilestonePayload(serialized, payload);
         const hex = serialized.finalHex();
         expect(hex).toEqual(
-            "070000003f0400007341ad5f50cf83f8ee3e316a7f3a4df32082747e8392e59fa724bbd13a9f2efc34cec6e40204ba147c9cc9bebd3b97310a23d385f33d8e67ac42868b69bc06f5468e3c0a02c0ab1d1f6886ba6317634da6b2d957e7c987a9699dd3707d1e2751fcf4b8efe3665de8d34bca02af275a6ccaf2d5f7b1d018f695473f19855d7ad1a54f106ed10e5751c026e543b2e8ab2eb06099daa1d1e5df47778f7787faab45cdf12fe3a808001111111122222222010040e20100010100aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa00bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb40000000000000002e0000000400000001aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa02860a0000000000000200d85e5b1590d898d1e0cdebb2e3b5337c8b76270142663d78811683ba47c17c9815188080d5ef2f8a8fd08498243a30b2a8eb08e0910573101632bb244c9e27db26121c8af619d90de6cb5e5c407e4edd709e0e06702170e311a1668e0a12480d00d9922819a39e94ddf3907f4b9c8df93f39f026244fcb609205b9a879022599f248afb8e21fbba0ba473b6798ecad3a33e10d1575fd5e3822e2922db4cc24b0808fd6792ee6eaaade15cdc14e43da16883962d15358dc064ba5bb2726cf07790a"
+            "070000003f0400007341ad5f0250cf83f8ee3e316a7f3a4df32082747e8392e59fa724bbd13a9f2efc34cec6e40204ba147c9cc9bebd3b97310a23d385f33d8e67ac42868b69bc06f5468e3c0a02c0ab1d1f6886ba6317634da6b2d957e7c987a9699dd3707d1e2751fcf4b8efe3665de8d34bca02af275a6ccaf2d5f7b1d018f695473f19855d7ad1a54f106ed10e5751c026e543b2e8ab2eb06099daa1d1e5df47778f7787faab45cdf12fe3a808001111111122222222010040e20100010100aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa00bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb40000000000000002e0000000400000001aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa02860a0000000000000200d85e5b1590d898d1e0cdebb2e3b5337c8b76270142663d78811683ba47c17c9815188080d5ef2f8a8fd08498243a30b2a8eb08e0910573101632bb244c9e27db26121c8af619d90de6cb5e5c407e4edd709e0e06702170e311a1668e0a12480d00d9922819a39e94ddf3907f4b9c8df93f39f026244fcb609205b9a879022599f248afb8e21fbba0ba473b6798ecad3a33e10d1575fd5e3822e2922db4cc24b0808fd6792ee6eaaade15cdc14e43da16883962d15358dc064ba5bb2726cf07790a"
         );
         const deserialized = deserializeMilestonePayload(new ReadStream(Converter.hexToBytes(hex)));
         expect(deserialized.type).toEqual(7);
         expect(deserialized.index).toEqual(1087);
         expect(deserialized.timestamp).toEqual(1605190003);
+        expect(deserialized.protocolVersion).toEqual(2);
         expect(deserialized.previousMilestoneId).toEqual("0x50cf83f8ee3e316a7f3a4df32082747e8392e59fa724bbd13a9f2efc34cec6e4");
         expect(deserialized.parents[0]).toEqual(
             "0x04ba147c9cc9bebd3b97310a23d385f33d8e67ac42868b69bc06f5468e3c0a02"
@@ -200,6 +204,7 @@ describe("Binary Milestone Payload", () => {
             type: MILESTONE_PAYLOAD_TYPE,
             index: 1087,
             timestamp: 1605190003,
+            protocolVersion: 2,
             previousMilestoneId: "0x50cf83f8ee3e316a7f3a4df32082747e8392e59fa724bbd13a9f2efc34cec6e4",
             parents: [
                 "0x04ba147c9cc9bebd3b97310a23d385f33d8e67ac42868b69bc06f5468e3c0a02",
@@ -233,12 +238,13 @@ describe("Binary Milestone Payload", () => {
         serializeMilestonePayload(serialized, payload);
         const hex = serialized.finalHex();
         expect(hex).toEqual(
-            "070000003f0400007341ad5f50cf83f8ee3e316a7f3a4df32082747e8392e59fa724bbd13a9f2efc34cec6e40204ba147c9cc9bebd3b97310a23d385f33d8e67ac42868b69bc06f5468e3c0a02c0ab1d1f6886ba6317634da6b2d957e7c987a9699dd3707d1e2751fcf4b8efe3665de8d34bca02af275a6ccaf2d5f7b1d018f695473f19855d7ad1a54f106ed10e5751c026e543b2e8ab2eb06099daa1d1e5df47778f7787faab45cdf12fe3a808001111111122222222010100000000010000000200d85e5b1590d898d1e0cdebb2e3b5337c8b76270142663d78811683ba47c17c9815188080d5ef2f8a8fd08498243a30b2a8eb08e0910573101632bb244c9e27db26121c8af619d90de6cb5e5c407e4edd709e0e06702170e311a1668e0a12480d00d9922819a39e94ddf3907f4b9c8df93f39f026244fcb609205b9a879022599f248afb8e21fbba0ba473b6798ecad3a33e10d1575fd5e3822e2922db4cc24b0808fd6792ee6eaaade15cdc14e43da16883962d15358dc064ba5bb2726cf07790a"
+            "070000003f0400007341ad5f0250cf83f8ee3e316a7f3a4df32082747e8392e59fa724bbd13a9f2efc34cec6e40204ba147c9cc9bebd3b97310a23d385f33d8e67ac42868b69bc06f5468e3c0a02c0ab1d1f6886ba6317634da6b2d957e7c987a9699dd3707d1e2751fcf4b8efe3665de8d34bca02af275a6ccaf2d5f7b1d018f695473f19855d7ad1a54f106ed10e5751c026e543b2e8ab2eb06099daa1d1e5df47778f7787faab45cdf12fe3a808001111111122222222010100000000010000000200d85e5b1590d898d1e0cdebb2e3b5337c8b76270142663d78811683ba47c17c9815188080d5ef2f8a8fd08498243a30b2a8eb08e0910573101632bb244c9e27db26121c8af619d90de6cb5e5c407e4edd709e0e06702170e311a1668e0a12480d00d9922819a39e94ddf3907f4b9c8df93f39f026244fcb609205b9a879022599f248afb8e21fbba0ba473b6798ecad3a33e10d1575fd5e3822e2922db4cc24b0808fd6792ee6eaaade15cdc14e43da16883962d15358dc064ba5bb2726cf07790a"
         );
         const deserialized = deserializeMilestonePayload(new ReadStream(Converter.hexToBytes(hex)));
         expect(deserialized.type).toEqual(7);
         expect(deserialized.index).toEqual(1087);
         expect(deserialized.timestamp).toEqual(1605190003);
+        expect(deserialized.protocolVersion).toEqual(2);
         expect(deserialized.previousMilestoneId).toEqual("0x50cf83f8ee3e316a7f3a4df32082747e8392e59fa724bbd13a9f2efc34cec6e4");
         expect(deserialized.parents[0]).toEqual(
             "0x04ba147c9cc9bebd3b97310a23d385f33d8e67ac42868b69bc06f5468e3c0a02"
@@ -284,6 +290,7 @@ describe("Binary Milestone Payload", () => {
             type: MILESTONE_PAYLOAD_TYPE,
             index: 1087,
             timestamp: 1605190003,
+            protocolVersion: 2,
             previousMilestoneId: "0x50cf83f8ee3e316a7f3a4df32082747e8392e59fa724bbd13a9f2efc34cec6e4",
             parents: [
                 "0x04ba147c9cc9bebd3b97310a23d385f33d8e67ac42868b69bc06f5468e3c0a02",
@@ -343,12 +350,13 @@ describe("Binary Milestone Payload", () => {
         serializeMilestonePayload(serialized, payload);
         const hex = serialized.finalHex();
         expect(hex).toEqual(
-            "070000003f0400007341ad5f50cf83f8ee3e316a7f3a4df32082747e8392e59fa724bbd13a9f2efc34cec6e40204ba147c9cc9bebd3b97310a23d385f33d8e67ac42868b69bc06f5468e3c0a02c0ab1d1f6886ba6317634da6b2d957e7c987a9699dd3707d1e2751fcf4b8efe3665de8d34bca02af275a6ccaf2d5f7b1d018f695473f19855d7ad1a54f106ed10e5751c026e543b2e8ab2eb06099daa1d1e5df47778f7787faab45cdf12fe3a808001111111122222222020040e20100010100aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa00bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb40000000000000002e0000000400000001aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa02860a0000000000000100000000010000000200d85e5b1590d898d1e0cdebb2e3b5337c8b76270142663d78811683ba47c17c9815188080d5ef2f8a8fd08498243a30b2a8eb08e0910573101632bb244c9e27db26121c8af619d90de6cb5e5c407e4edd709e0e06702170e311a1668e0a12480d00d9922819a39e94ddf3907f4b9c8df93f39f026244fcb609205b9a879022599f248afb8e21fbba0ba473b6798ecad3a33e10d1575fd5e3822e2922db4cc24b0808fd6792ee6eaaade15cdc14e43da16883962d15358dc064ba5bb2726cf07790a"
+            "070000003f0400007341ad5f0250cf83f8ee3e316a7f3a4df32082747e8392e59fa724bbd13a9f2efc34cec6e40204ba147c9cc9bebd3b97310a23d385f33d8e67ac42868b69bc06f5468e3c0a02c0ab1d1f6886ba6317634da6b2d957e7c987a9699dd3707d1e2751fcf4b8efe3665de8d34bca02af275a6ccaf2d5f7b1d018f695473f19855d7ad1a54f106ed10e5751c026e543b2e8ab2eb06099daa1d1e5df47778f7787faab45cdf12fe3a808001111111122222222020040e20100010100aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa00bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb40000000000000002e0000000400000001aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa02860a0000000000000100000000010000000200d85e5b1590d898d1e0cdebb2e3b5337c8b76270142663d78811683ba47c17c9815188080d5ef2f8a8fd08498243a30b2a8eb08e0910573101632bb244c9e27db26121c8af619d90de6cb5e5c407e4edd709e0e06702170e311a1668e0a12480d00d9922819a39e94ddf3907f4b9c8df93f39f026244fcb609205b9a879022599f248afb8e21fbba0ba473b6798ecad3a33e10d1575fd5e3822e2922db4cc24b0808fd6792ee6eaaade15cdc14e43da16883962d15358dc064ba5bb2726cf07790a"
         );
         const deserialized = deserializeMilestonePayload(new ReadStream(Converter.hexToBytes(hex)));
         expect(deserialized.type).toEqual(7);
         expect(deserialized.index).toEqual(1087);
         expect(deserialized.timestamp).toEqual(1605190003);
+        expect(deserialized.protocolVersion).toEqual(2);
         expect(deserialized.previousMilestoneId).toEqual("0x50cf83f8ee3e316a7f3a4df32082747e8392e59fa724bbd13a9f2efc34cec6e4");
         expect(deserialized.parents[0]).toEqual(
             "0x04ba147c9cc9bebd3b97310a23d385f33d8e67ac42868b69bc06f5468e3c0a02"

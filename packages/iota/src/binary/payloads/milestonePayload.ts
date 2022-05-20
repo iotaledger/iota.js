@@ -51,6 +51,7 @@ export function deserializeMilestonePayload(readStream: ReadStream): IMilestoneP
     }
     const index = readStream.readUInt32("payloadMilestone.index");
     const timestamp = readStream.readUInt32("payloadMilestone.timestamp");
+    const protocolVersion = readStream.readUInt8("payloadMileston.protocolVersion");
     const previousMilestoneId = readStream.readFixedHex("payloadMilestone.previousMilestoneId", BLOCK_ID_LENGTH);
     const numParents = readStream.readUInt8("payloadMilestone.numParents");
     const parents: string[] = [];
@@ -78,6 +79,7 @@ export function deserializeMilestonePayload(readStream: ReadStream): IMilestoneP
         type: MILESTONE_PAYLOAD_TYPE,
         index,
         timestamp: Number(timestamp),
+        protocolVersion,
         previousMilestoneId,
         parents,
         inclusionMerkleRoot,
@@ -112,6 +114,7 @@ export function serializeMilestonePayload(writeStream: WriteStream, object: IMil
 export function serializeMilestoneEssence(writeStream: WriteStream, object: IMilestonePayload): void {
     writeStream.writeUInt32("payloadMilestone.index", object.index);
     writeStream.writeUInt32("payloadMilestone.timestamp", object.timestamp);
+    writeStream.writeUInt8("payloadMilesone.protocolVersion", object.protocolVersion);
 
     writeStream.writeFixedHex(
         "payloadMilestone.previousMilestoneId",

@@ -24,6 +24,11 @@ export interface IMilestonePayload extends ITypeBase<7> {
     timestamp: number;
 
     /**
+     * The protocol version.
+     */
+    protocolVersion: number;
+
+    /**
      * The id of the previous milestone.
      */
     previousMilestoneId: string;
