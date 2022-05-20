@@ -2,7 +2,7 @@
 
 
 
-### Message data
-GET http://localhost:14265/api/v2/messages/0x962ba930abcfd58647722e6d7d780dfada4f3dd7a1423a8ecf26da7d814231cd
+### Blocks data
+GET http://localhost:14265/api/v2/blocks/0x962ba930abcfd58647722e6d7d780dfada4f3dd7a1423a8ecf26da7d814231cd
 Content-Type: application/json
 

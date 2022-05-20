@@ -6,25 +6,25 @@ Response from the /info endpoint.
 
 ### Properties
 
-- [messagesPerSecond](INodeInfoMetrics.md#messagespersecond)
-- [referencedMessagesPerSecond](INodeInfoMetrics.md#referencedmessagespersecond)
+- [blocksPerSecond](INodeInfoMetrics.md#blockspersecond)
+- [referencedBlocksPerSecond](INodeInfoMetrics.md#referencedblockspersecond)
 - [referencedRate](INodeInfoMetrics.md#referencedrate)
 
 ## Properties
 
-### messagesPerSecond
+### blocksPerSecond
 
-• **messagesPerSecond**: `number`
+• **blocksPerSecond**: `number`
 
-Messages per second.
+Blocks per second.
 
 ___
 
-### referencedMessagesPerSecond
+### referencedBlocksPerSecond
 
-• **referencedMessagesPerSecond**: `number`
+• **referencedBlocksPerSecond**: `number`
 
-Referenced messages per second.
+Referenced blocks per second.
 
 ___
 

@@ -116,8 +116,8 @@ export function logInfo(prefix: string, info: INodeInfo): void {
     logger(`${prefix}\t\tUse metric prefix:`, info.baseToken.useMetricPrefix);
 
     logger(`${prefix}\tMetrics`);
-    logger(`${prefix}\t\tMessages Per Second:`, info.metrics.messagesPerSecond);
-    logger(`${prefix}\t\tReferenced Messages Per Second:`, info.metrics.referencedMessagesPerSecond);
+    logger(`${prefix}\t\tBlocks Per Second:`, info.metrics.blocksPerSecond);
+    logger(`${prefix}\t\tReferenced Blocks Per Second:`, info.metrics.referencedBlocksPerSecond);
     logger(`${prefix}\t\tReferenced Rate:`, info.metrics.referencedRate);
 
     logger(`${prefix}\tFeatures:`, info.features);
