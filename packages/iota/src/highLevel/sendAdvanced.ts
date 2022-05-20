@@ -10,9 +10,9 @@ import { MAX_TAG_LENGTH } from "../binary/payloads/taggedDataPayload";
 import { serializeTransactionEssence } from "../binary/transactionEssence";
 import { SingleNodeClient } from "../clients/singleNodeClient";
 import { ED25519_ADDRESS_TYPE } from "../models/addresses/IEd25519Address";
+import type { IBlock } from "../models/IBlock";
 import type { IClient } from "../models/IClient";
 import type { IKeyPair } from "../models/IKeyPair";
-import type { IMessage } from "../models/IMessage";
 import type { IUTXOInput } from "../models/inputs/IUTXOInput";
 import { ITransactionEssence, TRANSACTION_ESSENCE_TYPE } from "../models/ITransactionEssence";
 import { BASIC_OUTPUT_TYPE, IBasicOutput } from "../models/outputs/IBasicOutput";
@@ -20,10 +20,10 @@ import type { OutputTypes } from "../models/outputs/outputTypes";
 import { TAGGED_DATA_PAYLOAD_TYPE } from "../models/payloads/ITaggedDataPayload";
 import { ITransactionPayload, TRANSACTION_PAYLOAD_TYPE } from "../models/payloads/ITransactionPayload";
 import { ED25519_SIGNATURE_TYPE } from "../models/signatures/IEd25519Signature";
-import { REFERENCE_UNLOCK_BLOCK_TYPE } from "../models/unlockBlocks/IReferenceUnlockBlock";
-import { SIGNATURE_UNLOCK_BLOCK_TYPE } from "../models/unlockBlocks/ISignatureUnlockBlock";
-import type { UnlockBlockTypes } from "../models/unlockBlocks/unlockBlockTypes";
 import { ADDRESS_UNLOCK_CONDITION_TYPE } from "../models/unlockConditions/IAddressUnlockCondition";
+import { REFERENCE_UNLOCK_TYPE } from "../models/unlocks/IReferenceUnlock";
+import { SIGNATURE_UNLOCK_TYPE } from "../models/unlocks/ISignatureUnlock";
+import type { UnlockTypes } from "../models/unlocks/unlockTypes";
 
 /**
  * Send a transfer from the balance on the seed.
@@ -33,7 +33,7 @@ import { ADDRESS_UNLOCK_CONDITION_TYPE } from "../models/unlockConditions/IAddre
  * @param taggedData Optional tagged data to associate with the transaction.
  * @param taggedData.tag Optional tag.
  * @param taggedData.data Optional data.
- * @returns The id of the message created and the remainder address if one was needed.
+ * @returns The id of the block created and the remainder address if one was needed.
  */
 export async function sendAdvanced(
     client: IClient | string,
@@ -52,8 +52,8 @@ export async function sendAdvanced(
         data?: Uint8Array | string;
     }
 ): Promise<{
-    messageId: string;
-    message: IMessage;
+    blockId: string;
+    block: IBlock;
 }> {
     const localClient = typeof client === "string" ? new SingleNodeClient(client) : client;
 
@@ -62,15 +62,15 @@ export async function sendAdvanced(
     const transactionPayload = buildTransactionPayload(
         protocolInfo.networkId, inputsAndSignatureKeyPairs, outputs, taggedData);
 
-    const message: IMessage = {
+    const block: IBlock = {
         payload: transactionPayload
     };
 
-    const messageId = await localClient.messageSubmit(message);
+    const blockId = await localClient.blockSubmit(block);
 
     return {
-        messageId,
-        message
+        blockId,
+        block
     };
 }
 
@@ -152,7 +152,7 @@ export function buildTransactionPayload(
                         }
                     }
                 ],
-                featureBlocks: []
+                features: []
             };
             const writeStream = new WriteStream();
             serializeOutput(writeStream, o);
@@ -218,9 +218,9 @@ export function buildTransactionPayload(
 
     const essenceHash = Blake2b.sum256(essenceFinal);
 
-    // Create the unlock blocks
-    const unlockBlocks: UnlockBlockTypes[] = [];
-    const addressToUnlockBlock: {
+    // Create the unlocks
+    const unlocks: UnlockTypes[] = [];
+    const addressToUnlock: {
         [address: string]: {
             keyPair: IKeyPair;
             unlockIndex: number;
@@ -229,23 +229,23 @@ export function buildTransactionPayload(
 
     for (const input of sortedInputs) {
         const hexInputAddressPublic = Converter.bytesToHex(input.addressKeyPair.publicKey, true);
-        if (addressToUnlockBlock[hexInputAddressPublic]) {
-            unlockBlocks.push({
-                type: REFERENCE_UNLOCK_BLOCK_TYPE,
-                reference: addressToUnlockBlock[hexInputAddressPublic].unlockIndex
+        if (addressToUnlock[hexInputAddressPublic]) {
+            unlocks.push({
+                type: REFERENCE_UNLOCK_TYPE,
+                reference: addressToUnlock[hexInputAddressPublic].unlockIndex
             });
         } else {
-            unlockBlocks.push({
-                type: SIGNATURE_UNLOCK_BLOCK_TYPE,
+            unlocks.push({
+                type: SIGNATURE_UNLOCK_TYPE,
                 signature: {
                     type: ED25519_SIGNATURE_TYPE,
                     publicKey: hexInputAddressPublic,
                     signature: Converter.bytesToHex(Ed25519.sign(input.addressKeyPair.privateKey, essenceHash), true)
                 }
             });
-            addressToUnlockBlock[hexInputAddressPublic] = {
+            addressToUnlock[hexInputAddressPublic] = {
                 keyPair: input.addressKeyPair,
-                unlockIndex: unlockBlocks.length - 1
+                unlockIndex: unlocks.length - 1
             };
         }
     }
@@ -253,7 +253,7 @@ export function buildTransactionPayload(
     const transactionPayload: ITransactionPayload = {
         type: TRANSACTION_PAYLOAD_TYPE,
         essence: transactionEssence,
-        unlockBlocks
+        unlocks
     };
 
     return transactionPayload;

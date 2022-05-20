@@ -14,9 +14,9 @@
     <script src="../../../../packages/iota/dist/cjs/index-browser.js"></script>
     <script src="../../dist/cjs/index-browser.js"></script>
     <script>
-        function consoleLog(message, obj) {
+        function consoleLog(block, obj) {
             const con = document.getElementById("console");
-            con.innerHTML = (message || "").replace("\t", "&nbsp;&nbsp;&nbsp;") + " " + (obj ? JSON.stringify(obj) : "") + "<br/>" + con.innerHTML;
+            con.innerHTML = (block || "").replace("\t", "&nbsp;&nbsp;&nbsp;") + " " + (obj ? JSON.stringify(obj) : "") + "<br/>" + con.innerHTML;
 
             if (con.innerHTML.length > 100000) {
                 con.innerHTML = con.innerHTML.slice(0, 100000);
@@ -34,11 +34,11 @@
                 consoleLog(topic, data);
             });
 
-            client.messages((topic, data, raw) => {
+            client.blocks((topic, data, raw) => {
                 consoleLog(topic, data);
             });
 
-            client.messagesReferenced((topic, data) => {
+            client.blocksReferenced((topic, data) => {
                 consoleLog(topic, data);
             });
 

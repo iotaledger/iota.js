@@ -5,15 +5,29 @@ TypeScript conversion from https://github.com/emn178/js-sha1.
 
 ## Table of contents
 
+### Constructors
+
+- [constructor](HmacSha1.md#constructor)
+
 ### Methods
 
 - [sum](HmacSha1.md#sum)
 - [update](HmacSha1.md#update)
 - [digest](HmacSha1.md#digest)
 
-### Constructors
+## Constructors
 
-- [constructor](HmacSha1.md#constructor)
+### constructor
+
+• **new HmacSha1**(`key`)
+
+Create a new instance of HmacSha1.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `key` | `Uint8Array` | The key for the hmac. |
 
 ## Methods
 
@@ -69,17 +83,3 @@ Get the digest.
 `Uint8Array`
 
 The digest.
-
-## Constructors
-
-### constructor
-
-• **new HmacSha1**(`key`)
-
-Create a new instance of HmacSha1.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `key` | `Uint8Array` | The key for the hmac. |

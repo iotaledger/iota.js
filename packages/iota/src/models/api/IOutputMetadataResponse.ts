@@ -6,9 +6,9 @@
  */
 export interface IOutputMetadataResponse {
     /**
-     * The message id the output was contained in.
+     * The block id the output was contained in.
      */
-    messageId: string;
+    blockId: string;
 
     /**
      * The transaction id for the output.

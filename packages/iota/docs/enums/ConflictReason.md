@@ -1,6 +1,6 @@
 # Enumeration: ConflictReason
 
-Reason for message conflicts.
+Reason for block conflicts.
 
 ## Table of contents
 
@@ -21,7 +21,7 @@ Reason for message conflicts.
 
 • **none** = `0`
 
-The message has no conflict.
+The block has no conflict.
 
 ___
 

@@ -25,7 +25,7 @@ Transaction payload.
 
 • **networkId**: `string`
 
-The network id of the message.
+The network id of the block.
 
 ___
 

@@ -5,8 +5,8 @@ import bigInt from "big-integer";
 import { BASIC_OUTPUT_TYPE, IBasicOutput } from "../../models/outputs/IBasicOutput";
 import { SMALL_TYPE_LENGTH, UINT64_SIZE } from "../commonDataTypes";
 import {
-    deserializeFeatureBlocks, MIN_FEATURE_BLOCKS_LENGTH, serializeFeatureBlocks
-} from "../featureBlocks/featureBlocks";
+    deserializeFeatures, MIN_FEATURE_LENGTH, serializeFeatures
+} from "../features/features";
 import { deserializeNativeTokens, MIN_NATIVE_TOKENS_LENGTH, serializeNativeTokens } from "../nativeTokens";
 import { deserializeUnlockConditions, MIN_UNLOCK_CONDITIONS_LENGTH, serializeUnlockConditions } from "../unlockConditions/unlockConditions";
 
@@ -18,7 +18,7 @@ export const MIN_BASIC_OUTPUT_LENGTH: number =
     UINT64_SIZE + // Amount
     MIN_NATIVE_TOKENS_LENGTH + // Native Tokens
     MIN_UNLOCK_CONDITIONS_LENGTH + // Unlock conditions
-    MIN_FEATURE_BLOCKS_LENGTH; // Feature Blocks
+    MIN_FEATURE_LENGTH; // Features
 
 /**
  * Deserialize the basic output from binary.
@@ -40,14 +40,14 @@ export function deserializeBasicOutput(readStream: ReadStream): IBasicOutput {
     const amount = readStream.readUInt64("basicOutput.amount");
     const nativeTokens = deserializeNativeTokens(readStream);
     const unlockConditions = deserializeUnlockConditions(readStream);
-    const featureBlocks = deserializeFeatureBlocks(readStream);
+    const features = deserializeFeatures(readStream);
 
     return {
         type: BASIC_OUTPUT_TYPE,
         amount: amount.toString(),
         nativeTokens,
         unlockConditions,
-        featureBlocks
+        features
     };
 }
 
@@ -62,5 +62,5 @@ export function serializeBasicOutput(writeStream: WriteStream, object: IBasicOut
     writeStream.writeUInt64("basicOutput.amount", bigInt(object.amount));
     serializeNativeTokens(writeStream, object.nativeTokens);
     serializeUnlockConditions(writeStream, object.unlockConditions);
-    serializeFeatureBlocks(writeStream, object.featureBlocks);
+    serializeFeatures(writeStream, object.features);
 }

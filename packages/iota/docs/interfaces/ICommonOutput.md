@@ -20,7 +20,7 @@ Common output properties.
 
 - [nativeTokens](ICommonOutput.md#nativetokens)
 - [unlockConditions](ICommonOutput.md#unlockconditions)
-- [featureBlocks](ICommonOutput.md#featureblocks)
+- [features](ICommonOutput.md#features)
 
 ## Properties
 
@@ -40,8 +40,8 @@ The unlock conditions for the output.
 
 ___
 
-### featureBlocks
+### features
 
-• **featureBlocks**: [`FeatureBlockTypes`](../api.md#featureblocktypes)[]
+• **features**: [`FeatureTypes`](../api.md#featuretypes)[]
 
-Feature blocks contained by the output.
+Features contained by the output.

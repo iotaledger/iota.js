@@ -5,9 +5,9 @@
  */
 export interface IChildrenResponse {
     /**
-     * The message id that the children are for.
+     * The block id that the children are for.
      */
-    messageId: string;
+    blockId: string;
 
     /**
      * The max number of results returned.
@@ -20,7 +20,7 @@ export interface IChildrenResponse {
     count: number;
 
     /**
-     * The ids of the messages children.
+     * The ids of the blocks children.
      */
-    childrenMessageIds: string[];
+    children: string[];
 }

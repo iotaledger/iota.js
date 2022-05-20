@@ -33,7 +33,7 @@ LN3 Const see https://oeis.org/A002391.
 
 ### score
 
-▸ `Static` **score**(`message`): `number`
+▸ `Static` **score**(`block`): `number`
 
 Perform the score calculation.
 
@@ -41,7 +41,7 @@ Perform the score calculation.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `message` | `Uint8Array` | The data to perform the score on. |
+| `block` | `Uint8Array` | The data to perform the score on. |
 
 #### Returns
 
@@ -53,7 +53,7 @@ ___
 
 ### calculateTargetZeros
 
-▸ `Static` **calculateTargetZeros**(`message`, `targetScore`): `number`
+▸ `Static` **calculateTargetZeros**(`block`, `targetScore`): `number`
 
 Calculate the number of zeros required to get target score.
 
@@ -61,7 +61,7 @@ Calculate the number of zeros required to get target score.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `message` | `Uint8Array` | The message to process. |
+| `block` | `Uint8Array` | The block to process. |
 | `targetScore` | `number` | The target score. |
 
 #### Returns

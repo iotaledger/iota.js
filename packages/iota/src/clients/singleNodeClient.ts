@@ -3,19 +3,19 @@
 import { ArrayHelper, Blake2b } from "@iota/crypto.js";
 import { BigIntHelper, Converter, WriteStream } from "@iota/util.js";
 import bigInt from "big-integer";
-import { MAX_MESSAGE_LENGTH, serializeMessage } from "../binary/message";
+import { MAX_BLOCK_LENGTH, serializeBlock } from "../binary/block";
 import type { IMilestonePayload } from "../index-browser";
+import type { IBlockIdResponse } from "../models/api/IBlockIdResponse";
 import type { IChildrenResponse } from "../models/api/IChildrenResponse";
-import type { IMessageIdResponse } from "../models/api/IMessageIdResponse";
 import type { IMilestoneUtxoChangesResponse } from "../models/api/IMilestoneUtxoChangesResponse";
 import type { IOutputMetadataResponse } from "../models/api/IOutputMetadataResponse";
 import type { IOutputResponse } from "../models/api/IOutputResponse";
 import type { IReceiptsResponse } from "../models/api/IReceiptsResponse";
 import type { IResponse } from "../models/api/IResponse";
 import type { ITipsResponse } from "../models/api/ITipsResponse";
+import { DEFAULT_PROTOCOL_VERSION, IBlock } from "../models/IBlock";
+import type { IBlockMetadata } from "../models/IBlockMetadata";
 import type { IClient } from "../models/IClient";
-import { DEFAULT_PROTOCOL_VERSION, IMessage } from "../models/IMessage";
-import type { IMessageMetadata } from "../models/IMessageMetadata";
 import type { INodeInfo } from "../models/info/INodeInfo";
 import type { IPeer } from "../models/IPeer";
 import type { IPowProvider } from "../models/IPowProvider";
@@ -52,7 +52,7 @@ export class SingleNodeClient implements IClient {
     private readonly _basePluginPath: string;
 
     /**
-     * Optional PoW provider to be used for messages with nonce=0/undefined.
+     * Optional PoW provider to be used for blocks with nonce=0/undefined.
      * @internal
      */
     private readonly _powProvider?: IPowProvider;
@@ -108,7 +108,7 @@ export class SingleNodeClient implements IClient {
     };
 
     /**
-     * The protocol version for messages.
+     * The protocol version for blocks.
      * @internal
      */
     private readonly _protocolVersion: number;
@@ -174,43 +174,43 @@ export class SingleNodeClient implements IClient {
     }
 
     /**
-     * Get the message data by id.
-     * @param messageId The message to get the data for.
-     * @returns The message data.
+     * Get the block data by id.
+     * @param blockId The block to get the data for.
+     * @returns The block data.
      */
-    public async message(messageId: string): Promise<IMessage> {
-        return this.fetchJson<never, IMessage>(this._basePath, "get", `messages/${messageId}`);
+    public async block(blockId: string): Promise<IBlock> {
+        return this.fetchJson<never, IBlock>(this._basePath, "get", `blocks/${blockId}`);
     }
 
     /**
-     * Get the message metadata by id.
-     * @param messageId The message to get the metadata for.
-     * @returns The message metadata.
+     * Get the block metadata by id.
+     * @param blockId The block to get the metadata for.
+     * @returns The block metadata.
      */
-    public async messageMetadata(messageId: string): Promise<IMessageMetadata> {
-        return this.fetchJson<never, IMessageMetadata>(this._basePath, "get", `messages/${messageId}/metadata`);
+    public async blockMetadata(blockId: string): Promise<IBlockMetadata> {
+        return this.fetchJson<never, IBlockMetadata>(this._basePath, "get", `blocks/${blockId}/metadata`);
     }
 
     /**
-     * Get the message raw data by id.
-     * @param messageId The message to get the data for.
-     * @returns The message raw data.
+     * Get the block raw data by id.
+     * @param blockId The block to get the data for.
+     * @returns The block raw data.
      */
-    public async messageRaw(messageId: string): Promise<Uint8Array> {
-        return this.fetchBinary(this._basePath, "get", `messages/${messageId}`);
+    public async blockRaw(blockId: string): Promise<Uint8Array> {
+        return this.fetchBinary(this._basePath, "get", `blocks/${blockId}`);
     }
 
     /**
-     * Submit message.
-     * @param message The message to submit.
-     * @returns The messageId.
+     * Submit block.
+     * @param block The block to submit.
+     * @returns The blockId.
      */
-    public async messageSubmit(message: IMessage): Promise<string> {
-        message.protocolVersion = this._protocolVersion;
+    public async blockSubmit(block: IBlock): Promise<string> {
+        block.protocolVersion = this._protocolVersion;
 
         let minPoWScore = 0;
         if (this._powProvider) {
-            // If there is a local pow provider and no networkId or parent message ids
+            // If there is a local pow provider and no networkId or parent block ids
             // we must populate them, so that the they are not filled in by the
             // node causing invalid pow calculation
             if (this._protocol === undefined) {
@@ -218,84 +218,84 @@ export class SingleNodeClient implements IClient {
             }
             minPoWScore = this._protocol?.minPoWScore ?? 0;
 
-            if (!message.parentMessageIds || message.parentMessageIds.length === 0) {
+            if (!block.parents || block.parents.length === 0) {
                 const tips = await this.tips();
-                message.parentMessageIds = tips.tipMessageIds;
+                block.parents = tips.tips;
             }
         }
 
         const writeStream = new WriteStream();
-        serializeMessage(writeStream, message);
-        const messageBytes = writeStream.finalBytes();
+        serializeBlock(writeStream, block);
+        const blockBytes = writeStream.finalBytes();
 
-        if (messageBytes.length > MAX_MESSAGE_LENGTH) {
+        if (blockBytes.length > MAX_BLOCK_LENGTH) {
             throw new Error(
-                `The message length is ${messageBytes.length}, which exceeds the maximum size of ${MAX_MESSAGE_LENGTH}`
+                `The block length is ${blockBytes.length}, which exceeds the maximum size of ${MAX_BLOCK_LENGTH}`
             );
         }
 
         if (this._powProvider) {
-            const nonce = await this._powProvider.pow(messageBytes, minPoWScore);
-            message.nonce = nonce.toString();
+            const nonce = await this._powProvider.pow(blockBytes, minPoWScore);
+            block.nonce = nonce.toString();
         }
 
-        const response = await this.fetchJson<IMessage, IMessageIdResponse>(this._basePath, "post", "messages", message);
+        const response = await this.fetchJson<IBlock, IBlockIdResponse>(this._basePath, "post", "blocks", block);
 
-        return response.messageId;
+        return response.blockId;
     }
 
     /**
-     * Submit message in raw format.
-     * @param message The message to submit.
-     * @returns The messageId.
+     * Submit block in raw format.
+     * @param block The block to submit.
+     * @returns The blockId.
      */
-    public async messageSubmitRaw(message: Uint8Array): Promise<string> {
-        if (message.length > MAX_MESSAGE_LENGTH) {
+    public async blockSubmitRaw(block: Uint8Array): Promise<string> {
+        if (block.length > MAX_BLOCK_LENGTH) {
             throw new Error(
-                `The message length is ${message.length}, which exceeds the maximum size of ${MAX_MESSAGE_LENGTH}`
+                `The block length is ${block.length}, which exceeds the maximum size of ${MAX_BLOCK_LENGTH}`
             );
         }
 
-        message[0] = this._protocolVersion;
+        block[0] = this._protocolVersion;
 
-        if (this._powProvider && ArrayHelper.equal(message.slice(-8), SingleNodeClient.NONCE_ZERO)) {
+        if (this._powProvider && ArrayHelper.equal(block.slice(-8), SingleNodeClient.NONCE_ZERO)) {
             if (this._protocol === undefined) {
                 await this.populateProtocolInfoCache();
             }
-            const nonce = await this._powProvider.pow(message, this._protocol?.minPoWScore ?? 0);
-            BigIntHelper.write8(bigInt(nonce), message, message.length - 8);
+            const nonce = await this._powProvider.pow(block, this._protocol?.minPoWScore ?? 0);
+            BigIntHelper.write8(bigInt(nonce), block, block.length - 8);
         }
 
-        const response = await this.fetchBinary<IMessageIdResponse>(this._basePath, "post", "messages", message);
+        const response = await this.fetchBinary<IBlockIdResponse>(this._basePath, "post", "blocks", block);
 
-        return (response as IMessageIdResponse).messageId;
+        return (response as IBlockIdResponse).blockId;
     }
 
     /**
-     * Get the children of a message.
-     * @param messageId The id of the message to get the children for.
-     * @returns The messages children.
+     * Get the children of a block.
+     * @param blockId The id of the block to get the children for.
+     * @returns The blocks children.
      */
-    public async messageChildren(messageId: string): Promise<IChildrenResponse> {
-        return this.fetchJson<never, IChildrenResponse>(this._basePath, "get", `messages/${messageId}/children`);
+    public async blockChildren(blockId: string): Promise<IChildrenResponse> {
+        return this.fetchJson<never, IChildrenResponse>(this._basePath, "get", `blocks/${blockId}/children`);
     }
 
     /**
-     * Get the message that was included in the ledger for a transaction.
-     * @param transactionId The id of the transaction to get the included message for.
-     * @returns The message.
+     * Get the block that was included in the ledger for a transaction.
+     * @param transactionId The id of the transaction to get the included block for.
+     * @returns The block.
      */
-    public async transactionIncludedMessage(transactionId: string): Promise<IMessage> {
-        return this.fetchJson<never, IMessage>(this._basePath, "get", `transactions/${transactionId}/included-message`);
+    public async transactionIncludedBlock(transactionId: string): Promise<IBlock> {
+        return this.fetchJson<never, IBlock>(this._basePath, "get", `transactions/${transactionId}/included-block`);
     }
 
     /**
-     * Get raw message that was included in the ledger for a transaction.
-     * @param transactionId The id of the transaction to get the included message for.
-     * @returns The message.
+     * Get raw block that was included in the ledger for a transaction.
+     * @param transactionId The id of the transaction to get the included block for.
+     * @returns The block.
      */
-    public async transactionIncludedMessageRaw(transactionId: string): Promise<Uint8Array> {
-        return this.fetchBinary(this._basePath, "get", `transactions/${transactionId}/included-message`);
+    public async transactionIncludedBlockRaw(transactionId: string): Promise<Uint8Array> {
+        return this.fetchBinary(this._basePath, "get", `transactions/${transactionId}/included-block`);
     }
 
     /**

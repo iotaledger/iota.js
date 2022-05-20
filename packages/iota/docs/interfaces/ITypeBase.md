@@ -18,13 +18,13 @@ Type of the object.
 
   ↳ [`INftAddress`](INftAddress.md)
 
-  ↳ [`IIssuerFeatureBlock`](IIssuerFeatureBlock.md)
+  ↳ [`IIssuerFeature`](IIssuerFeature.md)
 
-  ↳ [`IMetadataFeatureBlock`](IMetadataFeatureBlock.md)
+  ↳ [`IMetadataFeature`](IMetadataFeature.md)
 
-  ↳ [`ISenderFeatureBlock`](ISenderFeatureBlock.md)
+  ↳ [`ISenderFeature`](ISenderFeature.md)
 
-  ↳ [`ITagFeatureBlock`](ITagFeatureBlock.md)
+  ↳ [`ITagFeature`](ITagFeature.md)
 
   ↳ [`ITreasuryInput`](ITreasuryInput.md)
 
@@ -58,13 +58,13 @@ Type of the object.
 
   ↳ [`ISimpleTokenScheme`](ISimpleTokenScheme.md)
 
-  ↳ [`IAliasUnlockBlock`](IAliasUnlockBlock.md)
+  ↳ [`IAliasUnlock`](IAliasUnlock.md)
 
-  ↳ [`INftUnlockBlock`](INftUnlockBlock.md)
+  ↳ [`INftUnlock`](INftUnlock.md)
 
-  ↳ [`IReferenceUnlockBlock`](IReferenceUnlockBlock.md)
+  ↳ [`IReferenceUnlock`](IReferenceUnlock.md)
 
-  ↳ [`ISignatureUnlockBlock`](ISignatureUnlockBlock.md)
+  ↳ [`ISignatureUnlock`](ISignatureUnlock.md)
 
   ↳ [`IAddressUnlockCondition`](IAddressUnlockCondition.md)
 

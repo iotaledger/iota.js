@@ -10,15 +10,15 @@ import { PowHelper } from "../utils/powHelper";
  */
 export class LocalPowProvider implements IPowProvider {
     /**
-     * Perform pow on the message and return the nonce of at least targetScore.
-     * @param message The message to process.
+     * Perform pow on the block and return the nonce of at least targetScore.
+     * @param block The block to process.
      * @param targetScore The target score.
      * @returns The nonce.
      */
-    public async pow(message: Uint8Array, targetScore: number): Promise<string> {
-        const powRelevantData = message.slice(0, -8);
+    public async pow(block: Uint8Array, targetScore: number): Promise<string> {
+        const powRelevantData = block.slice(0, -8);
         const powDigest = Blake2b.sum256(powRelevantData);
-        const targetZeros = PowHelper.calculateTargetZeros(message, targetScore);
+        const targetZeros = PowHelper.calculateTargetZeros(block, targetScore);
         return PowHelper.performPow(powDigest, targetZeros, "0").toString();
     }
 }

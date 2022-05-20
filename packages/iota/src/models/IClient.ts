@@ -7,8 +7,8 @@ import type { IOutputMetadataResponse } from "./api/IOutputMetadataResponse";
 import type { IOutputResponse } from "./api/IOutputResponse";
 import type { IReceiptsResponse } from "./api/IReceiptsResponse";
 import type { ITipsResponse } from "./api/ITipsResponse";
-import type { IMessage } from "./IMessage";
-import type { IMessageMetadata } from "./IMessageMetadata";
+import type { IBlock } from "./IBlock";
+import type { IBlockMetadata } from "./IBlockMetadata";
 import type { INodeInfo } from "./info/INodeInfo";
 import type { IPeer } from "./IPeer";
 import type { ITreasury } from "./ITreasury";
@@ -36,60 +36,60 @@ export interface IClient {
     tips(): Promise<ITipsResponse>;
 
     /**
-     * Get the message data by id.
-     * @param messageId The message to get the data for.
-     * @returns The message data.
+     * Get the block data by id.
+     * @param blockId The block to get the data for.
+     * @returns The block data.
      */
-    message(messageId: string): Promise<IMessage>;
+    block(blockId: string): Promise<IBlock>;
 
     /**
-     * Get the message metadata by id.
-     * @param messageId The message to get the metadata for.
-     * @returns The message metadata.
+     * Get the block metadata by id.
+     * @param blockId The block to get the metadata for.
+     * @returns The block metadata.
      */
-    messageMetadata(messageId: string): Promise<IMessageMetadata>;
+    blockMetadata(blockId: string): Promise<IBlockMetadata>;
 
     /**
-     * Get the message raw data by id.
-     * @param messageId The message to get the data for.
-     * @returns The message raw data.
+     * Get the block raw data by id.
+     * @param blockId The block to get the data for.
+     * @returns The block raw data.
      */
-    messageRaw(messageId: string): Promise<Uint8Array>;
+    blockRaw(blockId: string): Promise<Uint8Array>;
 
     /**
-     * Submit message.
-     * @param message The message to submit.
-     * @returns The messageId.
+     * Submit block.
+     * @param block The block to submit.
+     * @returns The blockId.
      */
-    messageSubmit(message: IMessage): Promise<string>;
+    blockSubmit(block: IBlock): Promise<string>;
 
     /**
-     * Submit message in raw format.
-     * @param message The message to submit.
-     * @returns The messageId.
+     * Submit block in raw format.
+     * @param block The block to submit.
+     * @returns The blockId.
      */
-    messageSubmitRaw(message: Uint8Array): Promise<string>;
+    blockSubmitRaw(block: Uint8Array): Promise<string>;
 
     /**
-     * Get the children of a message.
-     * @param messageId The id of the message to get the children for.
-     * @returns The messages children.
+     * Get the children of a block.
+     * @param blockId The id of the block to get the children for.
+     * @returns The blocks children.
      */
-    messageChildren(messageId: string): Promise<IChildrenResponse>;
+    blockChildren(blockId: string): Promise<IChildrenResponse>;
 
     /**
-     * Get the message that was included in the ledger for a transaction.
-     * @param transactionId The id of the transaction to get the included message for.
-     * @returns The message.
+     * Get the block that was included in the ledger for a transaction.
+     * @param transactionId The id of the transaction to get the included block for.
+     * @returns The block.
      */
-    transactionIncludedMessage(transactionId: string): Promise<IMessage>;
+    transactionIncludedBlock(transactionId: string): Promise<IBlock>;
 
     /**
-     * Get raw message that was included in the ledger for a transaction.
-     * @param transactionId The id of the transaction to get the included message for.
-     * @returns The message.
+     * Get raw block that was included in the ledger for a transaction.
+     * @param transactionId The id of the transaction to get the included block for.
+     * @returns The block.
      */
-    transactionIncludedMessageRaw(transactionId: string): Promise<Uint8Array>;
+    transactionIncludedBlockRaw(transactionId: string): Promise<Uint8Array>;
 
     /**
      * Get an output by its identifier.
@@ -145,7 +145,7 @@ export interface IClient {
      * @param milestoneId The id of the milestone to look up.
      * @returns The milestone payload raw.
      */
-     milestoneByIdRaw(milestoneId: string): Promise<Uint8Array>;
+    milestoneByIdRaw(milestoneId: string): Promise<Uint8Array>;
 
     /**
      * Get the requested milestone utxo changes.

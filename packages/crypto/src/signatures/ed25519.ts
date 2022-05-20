@@ -103,12 +103,12 @@ export class Ed25519 {
     }
 
     /**
-     * Sign the message with privateKey and returns a signature.
+     * Sign the block with privateKey and returns a signature.
      * @param privateKey The private key.
-     * @param message The message to sign.
+     * @param block The block to sign.
      * @returns The signature.
      */
-    public static sign(privateKey: Uint8Array, message: Uint8Array): Uint8Array {
+    public static sign(privateKey: Uint8Array, block: Uint8Array): Uint8Array {
         if (!privateKey || privateKey.length !== Ed25519.PRIVATE_KEY_SIZE) {
             throw new Error("Bad private key length");
         }
@@ -125,14 +125,14 @@ export class Ed25519 {
 
         sha512 = new Sha512();
         sha512.update(digest1.subarray(32));
-        sha512.update(message);
-        const messageDigest = sha512.digest();
+        sha512.update(block);
+        const blockDigest = sha512.digest();
 
-        const messageDigestReduced = new Uint8Array(32);
-        scalarReduce(messageDigestReduced, messageDigest);
+        const blockDigestReduced = new Uint8Array(32);
+        scalarReduce(blockDigestReduced, blockDigest);
 
         const R = new ExtendedGroupElement();
-        R.scalarMultBase(messageDigestReduced);
+        R.scalarMultBase(blockDigestReduced);
 
         const encodedR = new Uint8Array(32);
         R.toBytes(encodedR);
@@ -140,14 +140,14 @@ export class Ed25519 {
         sha512 = new Sha512();
         sha512.update(encodedR);
         sha512.update(privateKey.subarray(32));
-        sha512.update(message);
+        sha512.update(block);
         const hramDigest = sha512.digest();
 
         const hramDigestReduced = new Uint8Array(32);
         scalarReduce(hramDigestReduced, hramDigest);
 
         const s = new Uint8Array(32);
-        scalarMulAdd(s, hramDigestReduced, expandedSecretKey, messageDigestReduced);
+        scalarMulAdd(s, hramDigestReduced, expandedSecretKey, blockDigestReduced);
 
         const signature = new Uint8Array(Ed25519.SIGNATURE_SIZE);
         signature.set(encodedR);
@@ -157,13 +157,13 @@ export class Ed25519 {
     }
 
     /**
-     * Verify reports whether sig is a valid signature of message by publicKey.
+     * Verify reports whether sig is a valid signature of block by publicKey.
      * @param publicKey The public key to verify the signature.
-     * @param message The message for the signature.
+     * @param block The block for the signature.
      * @param sig The signature.
      * @returns True if the signature matches.
      */
-    public static verify(publicKey: Uint8Array, message: Uint8Array, sig: Uint8Array): boolean {
+    public static verify(publicKey: Uint8Array, block: Uint8Array, sig: Uint8Array): boolean {
         if (!publicKey || publicKey.length !== Ed25519.PUBLIC_KEY_SIZE) {
             return false;
         }
@@ -183,7 +183,7 @@ export class Ed25519 {
         const h = new Sha512();
         h.update(sig.subarray(0, 32));
         h.update(publicKey);
-        h.update(message);
+        h.update(block);
 
         const digest = h.digest();
 

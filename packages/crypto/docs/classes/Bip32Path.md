@@ -4,6 +4,10 @@ Class to help with bip32 paths.
 
 ## Table of contents
 
+### Constructors
+
+- [constructor](Bip32Path.md#constructor)
+
 ### Methods
 
 - [fromPath](Bip32Path.md#frompath)
@@ -13,9 +17,19 @@ Class to help with bip32 paths.
 - [pop](Bip32Path.md#pop)
 - [numberSegments](Bip32Path.md#numbersegments)
 
-### Constructors
+## Constructors
 
-- [constructor](Bip32Path.md#constructor)
+### constructor
+
+• **new Bip32Path**(`initialPath?`)
+
+Create a new instance of Bip32Path.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `initialPath?` | `string` | Initial path to create. |
 
 ## Methods
 
@@ -112,17 +126,3 @@ Get the segments.
 `number`[]
 
 The segments as numbers.
-
-## Constructors
-
-### constructor
-
-• **new Bip32Path**(`initialPath?`)
-
-Create a new instance of Bip32Path.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `initialPath?` | `string` | Initial path to create. |

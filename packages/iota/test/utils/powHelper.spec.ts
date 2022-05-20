@@ -3,7 +3,7 @@
 import { PowHelper } from "../../src/utils/powHelper";
 
 describe("PowHelper", () => {
-    // test("Calculate from an empty message", () => {
+    // test("Calculate from an empty block", () => {
     //     const score = PowHelper.score(Uint8Array.from([0, 0, 0, 0, 0, 0, 0, 0]));
     //     expect(score).toEqual(Math.pow(3, 1) / 8);
     // });

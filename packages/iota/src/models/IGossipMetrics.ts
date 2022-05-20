@@ -5,24 +5,24 @@
  */
 export interface IGossipMetrics {
     /**
-     * The number of new messages.
+     * The number of new blocks.
      */
-    newMessages: number;
+    newBlocks: number;
 
     /**
-     * The number of known messages.
+     * The number of known blocks.
      */
-    knownMessages: number;
+    knownBlocks: number;
 
     /**
-     * The number of received messages.
+     * The number of received blocks.
      */
-    receivedMessages: number;
+    receivedBlocks: number;
 
     /**
-     * The number of received message requests.
+     * The number of received block requests.
      */
-    receivedMessageRequests: number;
+    receivedBlockRequests: number;
 
     /**
      * The number of received milestone requests.
@@ -35,14 +35,14 @@ export interface IGossipMetrics {
     receivedHeartbeats: number;
 
     /**
-     * The number of sent messages.
+     * The number of sent blocks.
      */
-    sentMessages: number;
+    sentBlocks: number;
 
     /**
-     * The number of sent message requests.
+     * The number of sent block requests.
      */
-    sentMessageRequests: number;
+    sentBlockRequests: number;
 
     /**
      * The number of sent miletsone requests.

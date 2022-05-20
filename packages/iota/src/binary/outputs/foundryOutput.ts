@@ -2,14 +2,14 @@
 // SPDX-License-Identifier: Apache-2.0
 import type { ReadStream, WriteStream } from "@iota/util.js";
 import bigInt from "big-integer";
-import type { IMetadataFeatureBlock } from "../../models/featureBlocks/IMetadataFeatureBlock";
+import type { IMetadataFeature } from "../../models/features/IMetadataFeature";
 import { FOUNDRY_OUTPUT_TYPE, IFoundryOutput } from "../../models/outputs/IFoundryOutput";
 import { SMALL_TYPE_LENGTH, UINT32_SIZE, UINT64_SIZE } from "../commonDataTypes";
 import {
-    deserializeFeatureBlocks,
-    MIN_FEATURE_BLOCKS_LENGTH,
-    serializeFeatureBlocks
-} from "../featureBlocks/featureBlocks";
+    deserializeFeatures,
+    MIN_FEATURES_LENGTH,
+    serializeFeatures
+} from "../features/features";
 import {
     deserializeNativeTokens,
     MIN_NATIVE_TOKENS_LENGTH,
@@ -28,8 +28,8 @@ export const MIN_FOUNDRY_OUTPUT_LENGTH: number =
     UINT32_SIZE + // Serial Number
     MIN_TOKEN_SCHEME_LENGTH + // Token scheme length
     MIN_UNLOCK_CONDITIONS_LENGTH + // Unlock conditions
-    MIN_FEATURE_BLOCKS_LENGTH + // Feature Blocks
-    MIN_FEATURE_BLOCKS_LENGTH; // Immutable blocks
+    MIN_FEATURES_LENGTH + // Features
+    MIN_FEATURES_LENGTH; // Immutable features
 
 /**
  * Deserialize the foundry output from binary.
@@ -53,8 +53,8 @@ export function deserializeFoundryOutput(readStream: ReadStream): IFoundryOutput
     const serialNumber = readStream.readUInt32("foundryOutput.serialNumber");
     const tokenScheme = deserializeTokenScheme(readStream);
     const unlockConditions = deserializeUnlockConditions(readStream);
-    const featureBlocks = deserializeFeatureBlocks(readStream);
-    const immutableFeatureBlocks = deserializeFeatureBlocks(readStream);
+    const features = deserializeFeatures(readStream);
+    const immutableFeatures = deserializeFeatures(readStream);
 
     return {
         type: FOUNDRY_OUTPUT_TYPE,
@@ -63,8 +63,8 @@ export function deserializeFoundryOutput(readStream: ReadStream): IFoundryOutput
         serialNumber,
         tokenScheme,
         unlockConditions,
-        featureBlocks: featureBlocks as IMetadataFeatureBlock[],
-        immutableFeatureBlocks
+        features: features as IMetadataFeature[],
+        immutableFeatures
     };
 }
 
@@ -81,6 +81,6 @@ export function serializeFoundryOutput(writeStream: WriteStream, object: IFoundr
     writeStream.writeUInt32("foundryOutput.serialNumber", object.serialNumber);
     serializeTokenScheme(writeStream, object.tokenScheme);
     serializeUnlockConditions(writeStream, object.unlockConditions);
-    serializeFeatureBlocks(writeStream, object.featureBlocks);
-    serializeFeatureBlocks(writeStream, object.immutableFeatureBlocks);
+    serializeFeatures(writeStream, object.features);
+    serializeFeatures(writeStream, object.immutableFeatures);
 }

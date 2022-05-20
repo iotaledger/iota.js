@@ -1,10 +1,10 @@
 import {
-    deserializeMessage,
-    IMessage,
+    deserializeBlock,
+    IBlock,
     TAGGED_DATA_PAYLOAD_TYPE,
     logInfo,
-    logMessage,
-    logMessageMetadata,
+    logBlock,
+    logBlockMetadata,
     logOutput,
     logTips,
     MAX_NUMBER_PARENTS,
@@ -31,9 +31,9 @@ async function run() {
     logTips("", tipsResponse);
     console.log();
 
-    const submitMessage: IMessage = {
+    const submitBlock: IBlock = {
         // Parents can be left undefined if you want the node to populate the field
-        parentMessageIds: tipsResponse.tipMessageIds.slice(0, MAX_NUMBER_PARENTS),
+        parents: tipsResponse.tips.slice(0, MAX_NUMBER_PARENTS),
         payload: {
             type: TAGGED_DATA_PAYLOAD_TYPE,
             tag: Converter.utf8ToHex("Foo", true),
@@ -41,42 +41,42 @@ async function run() {
         }
     };
 
-    const messageId = await client.messageSubmit(submitMessage);
-    console.log("Submit Message:");
-    console.log("\tMessage Id", messageId);
+    const blockId = await client.blockSubmit(submitBlock);
+    console.log("Submit Block:");
+    console.log("\tBlock Id", blockId);
     console.log();
 
-    const message = await client.message(messageId);
-    console.log("Get Message");
-    logMessage("", message);
+    const block = await client.block(blockId);
+    console.log("Get Block");
+    logBlock("", block);
     console.log();
 
-    const messageMetadata = await client.messageMetadata(messageId);
-    console.log("Message Metadata");
-    logMessageMetadata("", messageMetadata);
+    const blockMetadata = await client.blockMetadata(blockId);
+    console.log("Block Metadata");
+    logBlockMetadata("", blockMetadata);
     console.log();
 
-    const messageRaw = await client.messageRaw(messageId);
-    console.log("Message Raw");
-    console.log("\tRaw:", Converter.bytesToHex(messageRaw, true));
+    const blockRaw = await client.blockRaw(blockId);
+    console.log("Block Raw");
+    console.log("\tRaw:", Converter.bytesToHex(blockRaw, true));
     console.log();
-    const decoded = deserializeMessage(new ReadStream(messageRaw));
-    console.log("Message Decoded");
-    logMessage("", decoded);
+    const decoded = deserializeBlock(new ReadStream(blockRaw));
+    console.log("Block Decoded");
+    logBlock("", decoded);
     console.log();
 
-    const children = await client.messageChildren(tipsResponse.tipMessageIds[0]);
+    const children = await client.blockChildren(tipsResponse.tips[0]);
     console.log("Children");
-    console.log("\tMessage Id:", children.messageId);
+    console.log("\tBlock Id:", children.blockId);
     console.log("\tMax Results:", children.maxResults);
     console.log("\tCount:", children.count);
-    console.log("\tChildren Message Ids:", children.childrenMessageIds);
+    console.log("\tChildren Block Ids:", children.children);
     console.log();
 
     const milestone = await client.milestoneByIndex(info.status.latestMilestone.index);
     console.log("Latest Milestone Payload");
     console.log("\tMilestone Index:", milestone.index);
-    console.log("\tConfirmed Merkel Root", milestone.confirmedMerkleRoot);
+    console.log("\tIncluded Merkel Root", milestone.inclusionMerkleRoot);
     console.log("\tApplied Merkel Root", milestone.appliedMerkleRoot);
     console.log("\tPrevious Milestone Id:", milestone.previousMilestoneId);
     console.log("\tTimestamp:", milestone.timestamp);
@@ -84,7 +84,7 @@ async function run() {
 
     const output = await client.output("0x00000000000000000000000000000000000000000000000000000000000000000000");
     console.log("Output");
-    console.log("\tMessage Id:", output.metadata.messageId);
+    console.log("\tBlock Id:", output.metadata.blockId);
     console.log("\tTransaction Id:", output.metadata.transactionId);
     console.log("\tOutput Index:", output.metadata.outputIndex);
     console.log("\tIs Spent:", output.metadata.isSpent);

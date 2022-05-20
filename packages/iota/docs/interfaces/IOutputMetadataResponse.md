@@ -6,7 +6,7 @@ Details of an output.
 
 ### Properties
 
-- [messageId](IOutputMetadataResponse.md#messageid)
+- [blockId](IOutputMetadataResponse.md#blockid)
 - [transactionId](IOutputMetadataResponse.md#transactionid)
 - [outputIndex](IOutputMetadataResponse.md#outputindex)
 - [isSpent](IOutputMetadataResponse.md#isspent)
@@ -19,11 +19,11 @@ Details of an output.
 
 ## Properties
 
-### messageId
+### blockId
 
-• **messageId**: `string`
+• **blockId**: `string`
 
-The message id the output was contained in.
+The block id the output was contained in.
 
 ___
 

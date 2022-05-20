@@ -1,6 +1,6 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import type { IMessage, IMessageMetadata, IMilestonePayload, IOutputResponse, IReceiptsResponse } from "@iota/iota.js";
+import type { IBlock, IBlockMetadata, IMilestonePayload, IOutputResponse, IReceiptsResponse } from "@iota/iota.js";
 import type { IMqttMilestoneResponse } from "./api/IMqttMilestoneResponse";
 import type { IMqttStatus } from "./IMqttStatus";
 
@@ -23,59 +23,59 @@ export interface IMqttClient {
     milestonesConfirmed(callback: (topic: string, data: IMqttMilestoneResponse) => void): string;
 
     /**
-     * Subscribe to get all messages in binary form.
+     * Subscribe to get all blocks in binary form.
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    messagesRaw(callback: (topic: string, data: Uint8Array) => void): string;
+    blocksRaw(callback: (topic: string, data: Uint8Array) => void): string;
 
     /**
-     * Subscribe to get all messages in object form.
+     * Subscribe to get all blocks in object form.
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    messages(callback: (topic: string, data: IMessage) => void): string;
+    blocks(callback: (topic: string, data: IBlock) => void): string;
 
     /**
-     * Subscribe to get the metadata for all the messages.
+     * Subscribe to get the metadata for all the blocks.
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    messagesReferenced(callback: (topic: string, data: IMessageMetadata) => void): string;
+    blocksReferenced(callback: (topic: string, data: IBlockMetadata) => void): string;
 
     /**
-     * Subscribe to all transaction messages in their raw form.
+     * Subscribe to all transaction blocks in their raw form.
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    messagesTransactionRaw(callback: (topic: string, data: Uint8Array) => void): string;
+    blocksTransactionRaw(callback: (topic: string, data: Uint8Array) => void): string;
 
     /**
-     * Subscribe to all transaction messages.
+     * Subscribe to all transaction blocks.
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    messagesTransaction(callback: (topic: string, data: IMessage) => void): string;
+    blocksTransaction(callback: (topic: string, data: IBlock) => void): string;
 
     /**
-     * Subscribe to transaction messages with tagged data in their raw form.
+     * Subscribe to transaction blocks with tagged data in their raw form.
      * @param tag The tag to look for, or all tagged transactions if undefined.
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    messagesTransactionTaggedDataRaw(
+    blocksTransactionTaggedDataRaw(
         tag: Uint8Array | string | undefined,
         callback: (topic: string, data: Uint8Array) => void): string;
 
     /**
-     * Subscribe to all transaction messages with tagged data.
+     * Subscribe to all transaction blocks with tagged data.
      * @param tag The tag to look for, or all tagged transactions if undefined.
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    messagesTransactionTaggedData(
+    blocksTransactionTaggedData(
         tag: Uint8Array | string | undefined,
-        callback: (topic: string, data: IMessage) => void): string;
+        callback: (topic: string, data: IBlock) => void): string;
 
     /**
      * Subscribe to all milestone payloads in their raw form.
@@ -92,50 +92,50 @@ export interface IMqttClient {
     milestone(callback: (topic: string, data: IMilestonePayload) => void): string;
 
     /**
-     * Subscribe to get all messages for the specified tag in binary form.
-     * @param tag The tag to monitor as bytes or in hex, undefined for all messages.
+     * Subscribe to get all blocks for the specified tag in binary form.
+     * @param tag The tag to monitor as bytes or in hex, undefined for all blocks.
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    messagesTaggedRaw(
+    blocksTaggedRaw(
         tag: Uint8Array | string | undefined,
         callback: (topic: string, data: Uint8Array) => void): string;
 
     /**
-     * Subscribe to get all messages for the specified tag in object form.
-     * @param tag The tag to monitor as bytes or in hex, undefined for all messages.
+     * Subscribe to get all blocks for the specified tag in object form.
+     * @param tag The tag to monitor as bytes or in hex, undefined for all blocks.
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    messagesTagged(
+    blocksTagged(
         tag: Uint8Array | string | undefined,
-        callback: (topic: string, data: IMessage) => void): string;
+        callback: (topic: string, data: IBlock) => void): string;
 
     /**
-     * Subscribe to metadata updates for a specific message.
-     * @param messageId The message to monitor.
+     * Subscribe to metadata updates for a specific block.
+     * @param blockId The block to monitor.
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    messagesMetadata(messageId: string, callback: (topic: string, data: IMessageMetadata) => void): string;
+    blocksMetadata(blockId: string, callback: (topic: string, data: IBlockMetadata) => void): string;
 
     /**
-     * Subscribe to message updates for a specific transactionId.
-     * @param transactionId The message to monitor.
+     * Subscribe to block updates for a specific transactionId.
+     * @param transactionId The block to monitor.
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    transactionIncludedMessageRaw(transactionId: string, callback: (topic: string, data: Uint8Array) => void): string;
+    transactionIncludedBlockRaw(transactionId: string, callback: (topic: string, data: Uint8Array) => void): string;
 
     /**
-     * Subscribe to message updates for a specific transactionId.
-     * @param transactionId The message to monitor.
+     * Subscribe to block updates for a specific transactionId.
+     * @param transactionId The block to monitor.
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
      */
-    transactionIncludedMessage(
+    transactionIncludedBlock(
         transactionId: string,
-        callback: (topic: string, data: IMessage) => void
+        callback: (topic: string, data: IBlock) => void
     ): string;
 
     /**
@@ -204,7 +204,7 @@ export interface IMqttClient {
     receipts(callback: (topic: string, data: IReceiptsResponse) => void): string;
 
     /**
-     * Subscribe to another type of message as raw data.
+     * Subscribe to another type of block as raw data.
      * @param customTopic The topic to subscribe to.
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.
@@ -212,7 +212,7 @@ export interface IMqttClient {
     subscribeRaw(customTopic: string, callback: (topic: string, data: Uint8Array) => void): string;
 
     /**
-     * Subscribe to another type of message as json.
+     * Subscribe to another type of block as json.
      * @param customTopic The topic to subscribe to.
      * @param callback The callback which is called when new data arrives.
      * @returns A subscription Id which can be used to unsubscribe.

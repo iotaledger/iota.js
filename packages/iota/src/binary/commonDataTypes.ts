@@ -28,9 +28,9 @@ export const UINT64_SIZE: number = 8;
 export const UINT256_SIZE: number = 32;
 
 /**
- * Byte length for a message id.
+ * Byte length for a block id.
  */
-export const MESSAGE_ID_LENGTH: number = Blake2b.SIZE_256;
+export const BLOCK_ID_LENGTH: number = Blake2b.SIZE_256;
 
 /**
  * Byte length for a transaction id.

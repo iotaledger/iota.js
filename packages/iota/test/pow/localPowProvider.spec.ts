@@ -1,14 +1,14 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 import { Converter, WriteStream } from "@iota/util.js";
-import { serializeMessage } from "../../src/binary/message";
-import type { IMessage } from "../../src/models/IMessage";
+import { serializeBlock } from "../../src/binary/block";
+import type { IBlock } from "../../src/models/IBlock";
 import { ITaggedDataPayload, TAGGED_DATA_PAYLOAD_TYPE } from "../../src/models/payloads/ITaggedDataPayload";
 import { LocalPowProvider } from "../../src/pow/localPowProvider";
 import { PowHelper } from "../../src/utils/powHelper";
 
 describe("LocalPowProvider", () => {
-    test("Calculate from an empty message", async () => {
+    test("Calculate from an empty block", async () => {
         const pow = new LocalPowProvider();
 
         const taggedDataPayload: ITaggedDataPayload = {
@@ -17,19 +17,19 @@ describe("LocalPowProvider", () => {
             data: Converter.bytesToHex(Uint8Array.from([1, 2, 3, 4]))
         };
 
-        const message: IMessage = {
+        const block: IBlock = {
             protocolVersion: 1,
             payload: taggedDataPayload
         };
 
         const writeStream = new WriteStream();
-        serializeMessage(writeStream, message);
-        const messageBytes = writeStream.finalBytes();
+        serializeBlock(writeStream, block);
+        const blockBytes = writeStream.finalBytes();
 
-        const nonce = await pow.pow(messageBytes, 100);
+        const nonce = await pow.pow(blockBytes, 100);
         expect(nonce).toEqual("6071");
 
-        const score = PowHelper.score(messageBytes);
+        const score = PowHelper.score(blockBytes);
 
         expect(Number.parseInt(nonce, 10)).toBeGreaterThanOrEqual(score);
     });

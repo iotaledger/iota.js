@@ -18,30 +18,30 @@ export class PowHelper {
 
     /**
      * Perform the score calculation.
-     * @param message The data to perform the score on.
+     * @param block The data to perform the score on.
      * @returns The score for the data.
      */
-    public static score(message: Uint8Array): number {
-        // the PoW digest is the hash of msg without the nonce
-        const powRelevantData = message.slice(0, -8);
+    public static score(block: Uint8Array): number {
+        // the PoW digest is the hash of block without the nonce
+        const powRelevantData = block.slice(0, -8);
 
         const powDigest = Blake2b.sum256(powRelevantData);
 
-        const nonce = BigIntHelper.read8(message, message.length - 8);
+        const nonce = BigIntHelper.read8(block, block.length - 8);
 
         const zeros = PowHelper.trailingZeros(powDigest, nonce);
 
-        return Math.pow(3, zeros) / message.length;
+        return Math.pow(3, zeros) / block.length;
     }
 
     /**
      * Calculate the number of zeros required to get target score.
-     * @param message The message to process.
+     * @param block The block to process.
      * @param targetScore The target score.
      * @returns The number of zeros to find.
      */
-    public static calculateTargetZeros(message: Uint8Array, targetScore: number): number {
-        return Math.ceil(Math.log(message.length * targetScore) / this.LN3);
+    public static calculateTargetZeros(block: Uint8Array, targetScore: number): number {
+        return Math.ceil(Math.log(block.length * targetScore) / this.LN3);
     }
 
     /**

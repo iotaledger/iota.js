@@ -17,10 +17,10 @@ NFT output.
 - [type](INftOutput.md#type)
 - [nativeTokens](INftOutput.md#nativetokens)
 - [unlockConditions](INftOutput.md#unlockconditions)
-- [featureBlocks](INftOutput.md#featureblocks)
+- [features](INftOutput.md#features)
 - [amount](INftOutput.md#amount)
 - [nftId](INftOutput.md#nftid)
-- [immutableFeatureBlocks](INftOutput.md#immutablefeatureblocks)
+- [immutableFeatures](INftOutput.md#immutablefeatures)
 
 ## Properties
 
@@ -60,15 +60,15 @@ The unlock conditions for the output.
 
 ___
 
-### featureBlocks
+### features
 
-• **featureBlocks**: [`FeatureBlockTypes`](../api.md#featureblocktypes)[]
+• **features**: [`FeatureTypes`](../api.md#featuretypes)[]
 
-Feature blocks contained by the output.
+Features contained by the output.
 
 #### Inherited from
 
-[ICommonOutput](ICommonOutput.md).[featureBlocks](ICommonOutput.md#featureblocks)
+[ICommonOutput](ICommonOutput.md).[features](ICommonOutput.md#features)
 
 ___
 
@@ -88,8 +88,8 @@ Unique identifier of the NFT, which is the BLAKE2b-160 hash of the Output ID tha
 
 ___
 
-### immutableFeatureBlocks
+### immutableFeatures
 
-• **immutableFeatureBlocks**: [`FeatureBlockTypes`](../api.md#featureblocktypes)[]
+• **immutableFeatures**: [`FeatureTypes`](../api.md#featuretypes)[]
 
-Immutable blocks contained by the output.
+Immutable features contained by the output.

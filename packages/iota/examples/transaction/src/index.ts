@@ -120,12 +120,12 @@ async function run() {
             }
         ];
 
-    const { messageId } = await sendAdvanced(client, inputsWithKeyPairs, outputs, {
+    const { blockId } = await sendAdvanced(client, inputsWithKeyPairs, outputs, {
         tag: Converter.utf8ToBytes("WALLET"),
         data: Converter.utf8ToBytes("Fireflea")
     });
 
-    console.log("Created Message Id", messageId);
+    console.log("Created Block Id", blockId);
 
     const newAddressBalance = await getBalance(client, walletSeed, 0);
     console.log("Wallet 1 Address Balance", newAddressBalance);

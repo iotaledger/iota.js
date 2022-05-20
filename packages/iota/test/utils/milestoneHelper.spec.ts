@@ -1,18 +1,18 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 import type { IMilestonePayload } from "../../src";
-import { messageIdFromMilestonePayload, milestoneIdFromMilestonePayload } from "../../src/utils/milestoneHelper";
+import { blockIdFromMilestonePayload, milestoneIdFromMilestonePayload } from "../../src/utils/milestoneHelper";
 
 const milestonePayload: IMilestonePayload = {
     "type": 7,
     "index": 30946,
     "timestamp": 1651565954,
     "previousMilestoneId": "0xa64113d2aab54a3aa2387c743685acf503b09877343576a6d7c14adae2299ca0",
-    "parentMessageIds": [
+    "parents": [
         "0x2ae4b5a514d9c412a0b5c8bb1fbbe7d7a1c542ba7ff67e2ff66137a308b5633e",
         "0xfa956ae69781430af3d31b70279eabeb801f44d91087525e609e95d577e40fd2"
     ],
-    "confirmedMerkleRoot": "0xc9de50a367606c4984100ab71aa84a17c25cd14ba06793451500ef4df5faa793",
+    "inclusionMerkleRoot": "0xc9de50a367606c4984100ab71aa84a17c25cd14ba06793451500ef4df5faa793",
     "appliedMerkleRoot": "0x0e5751c026e543b2e8ab2eb06099daa1d1e5df47778f7787faab45cdf12fe3a8",
     "signatures": [
         {
@@ -40,10 +40,10 @@ describe("MilestoneHelper", () => {
         expect(milestoneId).toEqual(expectedMilestoneId);
     });
 
-    test("Can compute messageId from milestone payload", () => {
-        const expectedMessageId = "0x4a3cf7cf91c08ab790b5232d5523f811b6ace33adedb21180deb653adaea581e";
-        const messageId = messageIdFromMilestonePayload(2, milestonePayload);
-        expect(messageId).toEqual(expectedMessageId);
+    test("Can compute blockId from milestone payload", () => {
+        const expectedBlockId = "0x4a3cf7cf91c08ab790b5232d5523f811b6ace33adedb21180deb653adaea581e";
+        const blockId = blockIdFromMilestonePayload(2, milestonePayload);
+        expect(blockId).toEqual(expectedBlockId);
     });
 });
 

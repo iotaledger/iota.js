@@ -20,10 +20,10 @@ Alias output.
 - [stateIndex](IAliasOutput.md#stateindex)
 - [stateMetadata](IAliasOutput.md#statemetadata)
 - [foundryCounter](IAliasOutput.md#foundrycounter)
-- [immutableFeatureBlocks](IAliasOutput.md#immutablefeatureblocks)
+- [immutableFeatures](IAliasOutput.md#immutablefeatures)
 - [nativeTokens](IAliasOutput.md#nativetokens)
 - [unlockConditions](IAliasOutput.md#unlockconditions)
-- [featureBlocks](IAliasOutput.md#featureblocks)
+- [features](IAliasOutput.md#features)
 
 ## Properties
 
@@ -79,11 +79,11 @@ A counter that denotes the number of foundries created by this alias account.
 
 ___
 
-### immutableFeatureBlocks
+### immutableFeatures
 
-• **immutableFeatureBlocks**: [`FeatureBlockTypes`](../api.md#featureblocktypes)[]
+• **immutableFeatures**: [`FeatureTypes`](../api.md#featuretypes)[]
 
-Immutable blocks contained by the output.
+Immutable features contained by the output.
 
 ___
 
@@ -111,12 +111,12 @@ The unlock conditions for the output.
 
 ___
 
-### featureBlocks
+### features
 
-• **featureBlocks**: [`FeatureBlockTypes`](../api.md#featureblocktypes)[]
+• **features**: [`FeatureTypes`](../api.md#featuretypes)[]
 
-Feature blocks contained by the output.
+Features contained by the output.
 
 #### Inherited from
 
-[ICommonOutput](ICommonOutput.md).[featureBlocks](ICommonOutput.md#featureblocks)
+[ICommonOutput](ICommonOutput.md).[features](ICommonOutput.md#features)

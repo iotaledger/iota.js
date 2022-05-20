@@ -31,15 +31,15 @@ export interface IMilestonePayload extends ITypeBase<7> {
     /**
      * The parents where this milestone attaches to.
      */
-    parentMessageIds: string[];
+    parents: string[];
 
     /**
-     * The Merkle tree hash of all messages confirmed by this milestone.
+     * The Merkle tree hash of all blocks confirmed by this milestone.
      */
-    confirmedMerkleRoot: string;
+    inclusionMerkleRoot: string;
 
     /**
-     * The Merkle tree hash of all messages applied by this milestone.
+     * The Merkle tree hash of all blocks applied by this milestone.
      */
     appliedMerkleRoot: string;
 

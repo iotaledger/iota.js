@@ -12,9 +12,9 @@
     <script src="../../../crypto/dist/cjs/index-browser.js"></script>
     <script src="../../dist/cjs/index-browser.js"></script>
     <script>
-        function consoleLog(message, obj) {
+        function consoleLog(block, obj) {
             const con = document.getElementById("console");
-            con.innerHTML += (message || "").replace("\t", "&nbsp;&nbsp;&nbsp;") + " " + (obj !== undefined ? JSON.stringify(obj) : "") + "<br/>";
+            con.innerHTML += (block || "").replace("\t", "&nbsp;&nbsp;&nbsp;") + " " + (obj !== undefined ? JSON.stringify(obj) : "") + "<br/>";
         }
         function consoleLink(lnk) {
             const con = document.getElementById("console");
@@ -39,9 +39,9 @@
             Iota.logTips("", tipsResponse);
             consoleLog();
 
-            const submitMessage = {
+            const submitBlock = {
                 // Parents can be left undefined if you want the node to populate the field
-                parentMessageIds: tipsResponse.tipMessageIds.slice(0, Iota.MAX_NUMBER_PARENTS),
+                parents: tipsResponse.tips.slice(0, Iota.MAX_NUMBER_PARENTS),
                 payload: {
                     type: Iota.TAGGED_DATA_PAYLOAD_TYPE,
                     tag: IotaUtil.Converter.utf8ToHex("Foo", true),
@@ -49,49 +49,49 @@
                 }
             };
 
-            const messageIdCreated = await client.messageSubmit(submitMessage);
-            consoleLog("Submit Message:");
-            consoleLog("\tMessage Id", messageIdCreated);
+            const blockIdCreated = await client.blockSubmit(submitBlock);
+            consoleLog("Submit Block:");
+            consoleLog("\tBlock Id", blockIdCreated);
             consoleLog();
 
-            const message = await client.message(messageIdCreated);
-            consoleLog("Get Message");
-            Iota.logMessage("", message);
+            const block = await client.block(blockIdCreated);
+            consoleLog("Get Block");
+            Iota.logBlock("", block);
             consoleLog();
 
-            const messageMetadata = await client.messageMetadata(messageIdCreated);
-            consoleLog("Message Metadata");
-            Iota.logMessageMetadata("", messageMetadata);
+            const blockMetadata = await client.blockMetadata(blockIdCreated);
+            consoleLog("Block Metadata");
+            Iota.logBlockMetadata("", blockMetadata);
             consoleLog();
 
-            const messageRaw = await client.messageRaw(messageIdCreated);
-            consoleLog("Message Raw");
-            consoleLog("\tRaw:", IotaUtil.Converter.bytesToHex(messageRaw));
+            const blockRaw = await client.blockRaw(blockIdCreated);
+            consoleLog("Block Raw");
+            consoleLog("\tRaw:", IotaUtil.Converter.bytesToHex(blockRaw));
             consoleLog();
 
-            const decoded = Iota.deserializeMessage(new IotaUtil.ReadStream(messageRaw));
-            consoleLog("Message Decoded");
-            Iota.logMessage("", decoded);
+            const decoded = Iota.deserializeBlock(new IotaUtil.ReadStream(blockRaw));
+            consoleLog("Block Decoded");
+            Iota.logBlock("", decoded);
             consoleLog();
 
-            const children = await client.messageChildren(tipsResponse.tipMessageIds[0]);
+            const children = await client.blockChildren(tipsResponse.tips[0]);
             consoleLog("Children");
-            consoleLog("\tMessage Id:", children.messageId);
+            consoleLog("\tBlock Id:", children.blockId);
             consoleLog("\tMax Results:", children.maxResults);
             consoleLog("\tCount:", children.count);
-            consoleLog("\tChildren Message Ids:", children.childrenMessageIds);
+            consoleLog("\tChildren Block Ids:", children.children);
             consoleLog();
 
             const milestone = await client.milestone(info.status.latestMilestoneIndex);
             consoleLog("Milestone");
             consoleLog("\tMilestone Index:", milestone.index);
-            consoleLog("\tMessage Id:", milestone.messageId);
+            consoleLog("\tBlock Id:", milestone.blockId);
             consoleLog("\tTimestamp:", milestone.timestamp);
             consoleLog();
 
             const output = await client.output("0x00000000000000000000000000000000000000000000000000000000000000000000");
             consoleLog("Output");
-            consoleLog("\tMessage Id:", output.metadata.messageId);
+            consoleLog("\tBlock Id:", output.metadata.blockId);
             consoleLog("\tTransaction Id:", output.metadata.transactionId);
             consoleLog("\tOutput Index:", output.metadata.outputIndex);
             consoleLog("\tIs Spent:", output.metadata.isSpent);
@@ -186,7 +186,7 @@
                 }
             ];
 
-            const { messageId } = await Iota.sendAdvanced(
+            const { blockId } = await Iota.sendAdvanced(
                 client,
                 inputsWithKeyPairs,
                 outputs,
@@ -196,7 +196,7 @@
                 }
             );
 
-            consoleLog("Created Message Id", messageId);
+            consoleLog("Created Block Id", blockId);
 
             const newAddressBalance = await Iota.getBalance(client, walletSeed, 0);
             consoleLog("Wallet 1 Address Balance", newAddressBalance);

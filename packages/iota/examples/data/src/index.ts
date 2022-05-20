@@ -8,24 +8,24 @@ async function run() {
 
     const myTag = Converter.utf8ToBytes("MY-DATA-TAG");
 
-    const messageIds = [];
+    const blockIds = [];
 
     for (let i = 0; i < 10; i++) {
         console.log("Sending Data");
         const sendResult = await sendData(client, myTag, Converter.utf8ToBytes(`This is data ${i} 🚀`));
-        console.log("Received Message Id", sendResult.messageId);
-        // console.log(`https://explorer.iota.org/mainnet/message/${sendResult.messageId}`);
-        messageIds.push(sendResult.messageId);
+        console.log("Received Block Id", sendResult.blockId);
+        // console.log(`https://explorer.iota.org/mainnet/block/${sendResult.blockId}`);
+        blockIds.push(sendResult.blockId);
     }
 
     console.log();
 
-    for (let i = 0; i < messageIds.length; i++) {
+    for (let i = 0; i < blockIds.length; i++) {
         console.log("Retrieveing Data");
 
-        const firstResult = await retrieveData(client, messageIds[i]);
+        const firstResult = await retrieveData(client, blockIds[i]);
         if (firstResult) {
-            console.log("Message");
+            console.log("Block");
             console.log("\tTag: ", firstResult.tag ? Converter.bytesToUtf8(firstResult.tag) : "None");
             console.log("\tData: ", firstResult.data ? Converter.bytesToUtf8(firstResult.data) : "None");
         }

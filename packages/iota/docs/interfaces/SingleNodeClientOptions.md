@@ -45,7 +45,7 @@ ___
 
 • `Optional` **protocolVersion**: `number`
 
-The protocol version for messages.
+The protocol version for blocks.
 
 ___
 

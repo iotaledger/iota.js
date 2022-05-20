@@ -8,9 +8,9 @@ import { IndexerPluginClient } from "../clients/plugins/indexerPluginClient";
 import { SingleNodeClient } from "../clients/singleNodeClient";
 import { ED25519_ADDRESS_TYPE } from "../models/addresses/IEd25519Address";
 import type { IBip44GeneratorState } from "../models/IBip44GeneratorState";
+import type { IBlock } from "../models/IBlock";
 import type { IClient } from "../models/IClient";
 import type { IKeyPair } from "../models/IKeyPair";
-import type { IMessage } from "../models/IMessage";
 import { IUTXOInput, UTXO_INPUT_TYPE } from "../models/inputs/IUTXOInput";
 import type { ISeed } from "../models/ISeed";
 import { BASIC_OUTPUT_TYPE } from "../models/outputs/IBasicOutput";
@@ -33,7 +33,7 @@ import { sendAdvanced } from "./sendAdvanced";
  * @param addressOptions Optional address configuration for balance address lookups.
  * @param addressOptions.startIndex The start index for the wallet count address, defaults to 0.
  * @param addressOptions.zeroCount The number of addresses with 0 balance during lookup before aborting.
- * @returns The id of the message created and the contructed message.
+ * @returns The id of the block created and the contructed block.
  */
 export async function send(
     client: IClient | string,
@@ -50,8 +50,8 @@ export async function send(
         zeroCount?: number;
     }
 ): Promise<{
-    messageId: string;
-    message: IMessage;
+    blockId: string;
+    block: IBlock;
 }> {
     return sendMultiple(client, seed, accountIndex, [{ addressBech32, amount }], taggedData, addressOptions);
 }
@@ -69,7 +69,7 @@ export async function send(
  * @param addressOptions Optional address configuration for balance address lookups.
  * @param addressOptions.startIndex The start index for the wallet count address, defaults to 0.
  * @param addressOptions.zeroCount The number of addresses with 0 balance during lookup before aborting.
- * @returns The id of the message created and the contructed message.
+ * @returns The id of the block created and the contructed block.
  */
 export async function sendEd25519(
     client: IClient | string,
@@ -86,8 +86,8 @@ export async function sendEd25519(
         zeroCount?: number;
     }
 ): Promise<{
-    messageId: string;
-    message: IMessage;
+    blockId: string;
+    block: IBlock;
 }> {
     return sendMultipleEd25519(client, seed, accountIndex, [{ addressEd25519, amount }], taggedData, addressOptions);
 }
@@ -104,7 +104,7 @@ export async function sendEd25519(
  * @param addressOptions Optional address configuration for balance address lookups.
  * @param addressOptions.startIndex The start index for the wallet count address, defaults to 0.
  * @param addressOptions.zeroCount The number of addresses with 0 balance during lookup before aborting.
- * @returns The id of the message created and the contructed message.
+ * @returns The id of the block created and the contructed block.
  */
 export async function sendMultiple(
     client: IClient | string,
@@ -123,8 +123,8 @@ export async function sendMultiple(
         zeroCount?: number;
     }
 ): Promise<{
-    messageId: string;
-    message: IMessage;
+    blockId: string;
+    block: IBlock;
 }> {
     const localClient = typeof client === "string" ? new SingleNodeClient(client) : client;
 
@@ -170,7 +170,7 @@ export async function sendMultiple(
  * @param addressOptions Optional address configuration for balance address lookups.
  * @param addressOptions.startIndex The start index for the wallet count address, defaults to 0.
  * @param addressOptions.zeroCount The number of addresses with 0 balance during lookup before aborting.
- * @returns The id of the message created and the contructed message.
+ * @returns The id of the block created and the contructed block.
  */
 export async function sendMultipleEd25519(
     client: IClient | string,
@@ -189,8 +189,8 @@ export async function sendMultipleEd25519(
         zeroCount?: number;
     }
 ): Promise<{
-    messageId: string;
-    message: IMessage;
+    blockId: string;
+    block: IBlock;
 }> {
     const hexOutputs = outputs.map(output => ({
         address: output.addressEd25519,
@@ -224,7 +224,7 @@ export async function sendMultipleEd25519(
  * @param taggedData.tag Optional tag.
  * @param taggedData.data Optional data.
  * @param zeroCount The number of addresses with 0 balance during lookup before aborting.
- * @returns The id of the message created and the contructed message.
+ * @returns The id of the block created and the contructed block.
  */
 export async function sendWithAddressGenerator<T>(
     client: IClient | string,
@@ -242,16 +242,16 @@ export async function sendWithAddressGenerator<T>(
     },
     zeroCount?: number
 ): Promise<{
-    messageId: string;
-    message: IMessage;
+    blockId: string;
+    block: IBlock;
 }> {
     const inputsAndKeys = await calculateInputs(client, seed, initialAddressState, nextAddressPath, outputs, zeroCount);
 
     const response = await sendAdvanced(client, inputsAndKeys, outputs, taggedData);
 
     return {
-        messageId: response.messageId,
-        message: response.message
+        blockId: response.blockId,
+        block: response.block
     };
 }
 
@@ -263,7 +263,7 @@ export async function sendWithAddressGenerator<T>(
  * @param nextAddressPath Calculate the next address for inputs.
  * @param outputs The outputs to send.
  * @param zeroCount Abort when the number of zero balances is exceeded.
- * @returns The id of the message created and the contructed message.
+ * @returns The id of the block created and the contructed block.
  */
 export async function calculateInputs<T>(
     client: IClient | string,

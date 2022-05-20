@@ -25,14 +25,14 @@ async function run() {
                     console.log("\t\tSynced Neighbors:", peer.gossip.heartbeat.syncedNeighbors);
                 }
                 console.log("\tGossip Metrics");
-                console.log("\t\tNew Messages:", peer.gossip.metrics.newMessages);
-                console.log("\t\tKnown Messages:", peer.gossip.metrics.knownMessages);
-                console.log("\t\tReceived Messages:", peer.gossip.metrics.receivedMessages);
-                console.log("\t\tReceived Message Requests:", peer.gossip.metrics.receivedMessageRequests);
+                console.log("\t\tNew Blocks:", peer.gossip.metrics.newBlocks);
+                console.log("\t\tKnown Blocks:", peer.gossip.metrics.knownBlocks);
+                console.log("\t\tReceived Blocks:", peer.gossip.metrics.receivedBlocks);
+                console.log("\t\tReceived Block Requests:", peer.gossip.metrics.receivedBlockRequests);
                 console.log("\t\tReceived Milestone Requests:", peer.gossip.metrics.receivedMilestoneRequests);
                 console.log("\t\tReceived Hearbeats:", peer.gossip.metrics.receivedHeartbeats);
-                console.log("\t\tSent Messages:", peer.gossip.metrics.sentMessages);
-                console.log("\t\tSent Message Requests:", peer.gossip.metrics.sentMessageRequests);
+                console.log("\t\tSent Blocks:", peer.gossip.metrics.sentBlocks);
+                console.log("\t\tSent Block Requests:", peer.gossip.metrics.sentBlockRequests);
                 console.log("\t\tSent Milestone Requests:", peer.gossip.metrics.sentMilestoneRequests);
                 console.log("\t\tSent Heartbeats:", peer.gossip.metrics.sentHeartbeats);
                 console.log("\t\tDropped Packets:", peer.gossip.metrics.droppedPackets);

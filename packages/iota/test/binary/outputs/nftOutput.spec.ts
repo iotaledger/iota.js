@@ -21,8 +21,8 @@ describe("Binary Nft Output", () => {
             ],
             nftId: "0x1111111111111111111111111111111111111111223344556677889900112233",
             unlockConditions: [],
-            featureBlocks: [],
-            immutableFeatureBlocks: []
+            features: [],
+            immutableFeatures: []
         };
 
         const serialized = new WriteStream();
