@@ -36,12 +36,20 @@ export function deserializeExpirationUnlockCondition(readStream: ReadStream): IE
     const milestoneIndex = readStream.readUInt32("expirationUnlockCondition.milestoneIndex");
     const unixTime = readStream.readUInt32("expirationUnlockCondition.unixTime");
 
-    return {
+    const expirationUnlockCondition: IExpirationUnlockCondition = {
         type: EXPIRATION_UNLOCK_CONDITION_TYPE,
-        returnAddress,
-        milestoneIndex: milestoneIndex > 0 ? milestoneIndex : undefined,
-        unixTime: unixTime > 0 ? unixTime : undefined
+        returnAddress
     };
+
+    if (milestoneIndex > 0) {
+        expirationUnlockCondition.milestoneIndex = milestoneIndex;
+    }
+
+    if (unixTime > 0) {
+        expirationUnlockCondition.unixTime = unixTime;
+    }
+
+    return expirationUnlockCondition;
 }
 
 /**
