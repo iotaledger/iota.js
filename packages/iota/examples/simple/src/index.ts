@@ -1,6 +1,5 @@
 import {
     deserializeBlock,
-    IBlock,
     TAGGED_DATA_PAYLOAD_TYPE,
     logInfo,
     logBlock,
@@ -8,7 +7,8 @@ import {
     logOutput,
     logTips,
     MAX_NUMBER_PARENTS,
-    SingleNodeClient
+    SingleNodeClient,
+    IBlockPartial
 } from "@iota/iota.js";
 import { Converter, ReadStream } from "@iota/util.js";
 
@@ -31,7 +31,7 @@ async function run() {
     logTips("", tipsResponse);
     console.log();
 
-    const submitBlock: IBlock = {
+    const submitBlock: IBlockPartial = {
         // Parents can be left undefined if you want the node to populate the field
         parents: tipsResponse.tips.slice(0, MAX_NUMBER_PARENTS),
         payload: {
