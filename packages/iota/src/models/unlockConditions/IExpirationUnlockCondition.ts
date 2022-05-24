@@ -21,11 +21,11 @@ export interface IExpirationUnlockCondition extends ITypeBase<3> {
      * Before this milestone index the condition is allowed to unlock the output,
      * after that only the address defined in return address.
      */
-    milestoneIndex: number;
+    milestoneIndex?: number;
 
     /**
      * Before this unix time, the condition is allowed to unlock the output,
      * after that only the address defined in return address.
      */
-    unixTime: number;
+    unixTime?: number;
 }

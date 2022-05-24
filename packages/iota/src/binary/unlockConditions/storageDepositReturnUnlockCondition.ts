@@ -38,7 +38,7 @@ export function deserializeStorageDepositReturnUnlockCondition(readStream: ReadS
     return {
         type: STORAGE_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE,
         returnAddress,
-        amount: amount.toString()
+        returnAmount: amount.toString()
     };
 }
 
@@ -51,5 +51,5 @@ export function serializeStorageDepositReturnUnlockCondition(
     writeStream: WriteStream, object: IStorageDepositReturnUnlockCondition): void {
     writeStream.writeUInt8("storageDepositReturnUnlockCondition.type", object.type);
     serializeAddress(writeStream, object.returnAddress);
-    writeStream.writeUInt64("storageDepositReturnUnlockCondition.amount", bigInt(object.amount));
+    writeStream.writeUInt64("storageDepositReturnUnlockCondition.amount", bigInt(object.returnAmount));
 }

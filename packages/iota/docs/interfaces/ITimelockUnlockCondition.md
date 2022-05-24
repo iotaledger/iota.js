@@ -32,7 +32,7 @@ ___
 
 ### milestoneIndex
 
-• **milestoneIndex**: `number`
+• `Optional` **milestoneIndex**: `number`
 
 The milestone index starting from which the output can be consumed.
 
@@ -40,6 +40,6 @@ ___
 
 ### unixTime
 
-• **unixTime**: `number`
+• `Optional` **unixTime**: `number`
 
 Unix time (seconds since Unix epoch) starting from which the output can be consumed.

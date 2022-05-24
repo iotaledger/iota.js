@@ -9,6 +9,7 @@ import type { IReceiptsResponse } from "./api/IReceiptsResponse";
 import type { ITipsResponse } from "./api/ITipsResponse";
 import type { IBlock } from "./IBlock";
 import type { IBlockMetadata } from "./IBlockMetadata";
+import type { IBlockPartial } from "./IBlockPartial";
 import type { INodeInfo } from "./info/INodeInfo";
 import type { IPeer } from "./IPeer";
 import type { ITreasury } from "./ITreasury";
@@ -58,10 +59,10 @@ export interface IClient {
 
     /**
      * Submit block.
-     * @param block The block to submit.
+     * @param partialBlock The block to submit.
      * @returns The blockId.
      */
-    blockSubmit(block: IBlock): Promise<string>;
+    blockSubmit(partialBlock: IBlockPartial): Promise<string>;
 
     /**
      * Submit block in raw format.

@@ -92,6 +92,7 @@ export * from "./models/IGossipMetrics";
 export * from "./models/IKeyPair";
 export * from "./models/IBlock";
 export * from "./models/IBlockMetadata";
+export * from "./models/IBlockPartial";
 export * from "./models/IMigratedFunds";
 export * from "./models/INativeToken";
 export * from "./models/info/INodeInfo";

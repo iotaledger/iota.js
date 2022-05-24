@@ -64,7 +64,7 @@ describe("Binary Payload", () => {
         const payload = deserializePayload(new ReadStream(buffer)) as ITaggedDataPayload;
         expect(payload.type).toEqual(5);
         expect(payload.tag).toEqual("0x41");
-        expect(payload.data).toEqual(undefined);
+        expect(payload.data).toEqual("");
     });
 
     test("Can succeed with valid milestone data", () => {

@@ -10,7 +10,7 @@ import { MAX_TAG_LENGTH } from "../binary/payloads/taggedDataPayload";
 import { serializeTransactionEssence } from "../binary/transactionEssence";
 import { SingleNodeClient } from "../clients/singleNodeClient";
 import { ED25519_ADDRESS_TYPE } from "../models/addresses/IEd25519Address";
-import type { IBlock } from "../models/IBlock";
+import { DEFAULT_PROTOCOL_VERSION, IBlock } from "../models/IBlock";
 import type { IClient } from "../models/IClient";
 import type { IKeyPair } from "../models/IKeyPair";
 import type { IUTXOInput } from "../models/inputs/IUTXOInput";
@@ -63,7 +63,10 @@ export async function sendAdvanced(
         protocolInfo.networkId, inputsAndSignatureKeyPairs, outputs, taggedData);
 
     const block: IBlock = {
-        payload: transactionPayload
+        protocolVersion: DEFAULT_PROTOCOL_VERSION,
+        parents: [],
+        payload: transactionPayload,
+        nonce: "0"
     };
 
     const blockId = await localClient.blockSubmit(block);
@@ -203,7 +206,7 @@ export function buildTransactionPayload(
         inputs: sortedInputs.map(i => i.input),
         inputsCommitment,
         outputs: sortedOutputs.map(o => o.output),
-        payload: localTagHex || localTagHex
+        payload: localTagHex && localDataHex
             ? {
                 type: TAGGED_DATA_PAYLOAD_TYPE,
                 tag: localTagHex,

@@ -11,7 +11,7 @@ export interface ICommonOutput {
     /**
      * The native tokens held by the output.
      */
-    nativeTokens: INativeToken[];
+    nativeTokens?: INativeToken[];
 
     /**
      * The unlock conditions for the output.
@@ -21,5 +21,5 @@ export interface ICommonOutput {
     /**
      * Features contained by the output.
      */
-    features: FeatureTypes[];
+    features?: FeatureTypes[];
 }

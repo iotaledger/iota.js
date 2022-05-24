@@ -53,6 +53,10 @@ export function serializeExpirationUnlockCondition(
     writeStream: WriteStream, object: IExpirationUnlockCondition): void {
     writeStream.writeUInt8("expirationUnlockCondition.type", object.type);
     serializeAddress(writeStream, object.returnAddress);
-    writeStream.writeUInt32("expirationUnlockCondition.milestoneIndex", object.milestoneIndex);
-    writeStream.writeUInt32("expirationUnlockCondition.unixTime", object.unixTime);
+    if (object.milestoneIndex) {
+        writeStream.writeUInt32("expirationUnlockCondition.milestoneIndex", object.milestoneIndex);
+    }
+    if (object.unixTime) {
+        writeStream.writeUInt32("expirationUnlockCondition.unixTime", object.unixTime);
+    }
 }

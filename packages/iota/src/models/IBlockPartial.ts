@@ -5,23 +5,18 @@ import type { ITaggedDataPayload } from "./payloads/ITaggedDataPayload";
 import type { ITransactionPayload } from "./payloads/ITransactionPayload";
 
 /**
- * The default protocol version.
+ * An interface with partial data for a Block.
  */
-export const DEFAULT_PROTOCOL_VERSION: number = 2;
-
-/**
- * Block layout.
- */
-export interface IBlock {
+export interface IBlockPartial {
     /**
      * The protocol version under which this block operates.
      */
-    protocolVersion: number;
+    protocolVersion?: number;
 
     /**
      * The parent block ids.
      */
-    parents: string[];
+    parents?: string[];
 
     /**
      * The payload contents.
@@ -31,5 +26,5 @@ export interface IBlock {
     /**
      * The nonce for the block.
      */
-    nonce: string;
+    nonce?: string;
 }

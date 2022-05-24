@@ -188,7 +188,7 @@ ___
 
 ### blockSubmit
 
-▸ **blockSubmit**(`block`): `Promise`<`string`\>
+▸ **blockSubmit**(`blockPartial`): `Promise`<`string`\>
 
 Submit block.
 
@@ -196,7 +196,7 @@ Submit block.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `block` | [`IBlock`](../interfaces/IBlock.md) | The block to submit. |
+| `blockPartial` | [`IBlockPartial`](../interfaces/IBlockPartial.md) | The block (with possible partial data) to submit. |
 
 #### Returns
 

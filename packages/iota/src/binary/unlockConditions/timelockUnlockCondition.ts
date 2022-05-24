@@ -47,6 +47,10 @@ export function deserializeTimelockUnlockCondition(readStream: ReadStream): ITim
 export function serializeTimelockUnlockCondition(
     writeStream: WriteStream, object: ITimelockUnlockCondition): void {
     writeStream.writeUInt8("timelockUnlockCondition.type", object.type);
-    writeStream.writeUInt32("timelockUnlockCondition.milestoneIndex", object.milestoneIndex);
-    writeStream.writeUInt32("timelockUnlockCondition.unixTime", object.unixTime);
+    if (object.milestoneIndex) {
+        writeStream.writeUInt32("timelockUnlockCondition.milestoneIndex", object.milestoneIndex);
+    }
+    if (object.unixTime) {
+        writeStream.writeUInt32("timelockUnlockCondition.unixTime", object.unixTime);
+    }
 }

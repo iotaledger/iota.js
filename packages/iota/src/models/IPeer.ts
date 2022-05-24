@@ -39,7 +39,7 @@ export interface IPeer {
         /**
          * The peer heartbeat.
          */
-        heartbeat?: IGossipHeartbeat;
+        heartbeat: IGossipHeartbeat;
 
         /**
          * The peer metrics.

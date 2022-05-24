@@ -1,21 +1,21 @@
-# Interface: IBlock
+# Interface: IBlockPartial
 
-Block layout.
+An interface with partial data for a Block.
 
 ## Table of contents
 
 ### Properties
 
-- [protocolVersion](IBlock.md#protocolversion)
-- [parents](IBlock.md#parents)
-- [payload](IBlock.md#payload)
-- [nonce](IBlock.md#nonce)
+- [protocolVersion](IBlockPartial.md#protocolversion)
+- [parents](IBlockPartial.md#parents)
+- [payload](IBlockPartial.md#payload)
+- [nonce](IBlockPartial.md#nonce)
 
 ## Properties
 
 ### protocolVersion
 
-• **protocolVersion**: `number`
+• `Optional` **protocolVersion**: `number`
 
 The protocol version under which this block operates.
 
@@ -23,7 +23,7 @@ ___
 
 ### parents
 
-• **parents**: `string`[]
+• `Optional` **parents**: `string`[]
 
 The parent block ids.
 
@@ -39,6 +39,6 @@ ___
 
 ### nonce
 
-• **nonce**: `string`
+• `Optional` **nonce**: `string`
 
 The nonce for the block.

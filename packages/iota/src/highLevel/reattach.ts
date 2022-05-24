@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 import { SingleNodeClient } from "../clients/singleNodeClient";
 import type { IBlock } from "../models/IBlock";
+import type { IBlockPartial } from "../models/IBlockPartial";
 import type { IClient } from "../models/IClient";
 
 /**
@@ -24,7 +25,7 @@ export async function reattach(
         throw new Error("The block does not exist.");
     }
 
-    const reattachBlock: IBlock = {
+    const reattachBlock: IBlockPartial = {
         payload: block.payload
     };
 

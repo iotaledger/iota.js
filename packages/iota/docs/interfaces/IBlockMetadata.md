@@ -28,7 +28,7 @@ ___
 
 ### parents
 
-• `Optional` **parents**: `string`[]
+• **parents**: `string`[]
 
 The parent block ids.
 

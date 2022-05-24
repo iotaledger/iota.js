@@ -35,20 +35,20 @@ export function deserializeTaggedDataPayload(readStream: ReadStream): ITaggedDat
         throw new Error(`Type mismatch in payloadTaggedData ${type}`);
     }
     const tagLength = readStream.readUInt8("payloadTaggedData.tagLength");
-    let tag;
+    let tag = "";
     if (tagLength > 0) {
         tag = readStream.readFixedHex("payloadTaggedData.tag", tagLength);
     }
     const dataLength = readStream.readUInt32("payloadTaggedData.dataLength");
-    let data;
+    let data = "";
     if (dataLength > 0) {
         data = readStream.readFixedHex("payloadTaggedData.data", dataLength);
     }
 
     return {
         type: TAGGED_DATA_PAYLOAD_TYPE,
-        tag: tag ? HexHelper.addPrefix(tag) : undefined,
-        data: data ? HexHelper.addPrefix(data) : undefined
+        tag: tag ? HexHelper.addPrefix(tag) : tag,
+        data: data ? HexHelper.addPrefix(data) : data
     };
 }
 
