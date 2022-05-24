@@ -20,7 +20,12 @@ export async function sendData(
     tag?: Uint8Array | string,
     data?: Uint8Array | string
 ): Promise<{
-    block: IBlock;
+    block: {
+        protocolVersion?: number;
+        parents?: string[];
+        payload?: IBlock["payload"];
+        nonce?: string;
+    };
     blockId: string;
 }> {
     const localClient = typeof client === "string" ? new SingleNodeClient(client) : client;
@@ -48,13 +53,14 @@ export async function sendData(
             : Converter.bytesToHex(data, true));
     }
 
-    const taggedDataPayload: ITaggedDataPayload = {
-        type: TAGGED_DATA_PAYLOAD_TYPE,
-        tag: localTagHex,
-        data: localDataHex
-    };
+    const taggedDataPayload: ITaggedDataPayload | undefined = localTagHex && localDataHex
+        ? {
+            type: TAGGED_DATA_PAYLOAD_TYPE,
+            tag: localTagHex,
+            data: localDataHex
+        } : undefined;
 
-    const block: IBlock = {
+    const block = {
         payload: taggedDataPayload
     };
 

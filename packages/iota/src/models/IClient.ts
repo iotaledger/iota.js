@@ -58,10 +58,17 @@ export interface IClient {
 
     /**
      * Submit block.
-     * @param block The block to submit.
+     * @param blockPartial The block to submit (possibly contains only partial block data).
      * @returns The blockId.
      */
-    blockSubmit(block: IBlock): Promise<string>;
+    blockSubmit(
+        blockPartial: {
+            protocolVersion?: number;
+            parents?: string[];
+            payload?: IBlock["payload"];
+            nonce?: string;
+        }
+    ): Promise<string>;
 
     /**
      * Submit block in raw format.

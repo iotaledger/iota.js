@@ -31,7 +31,12 @@ async function run() {
     logTips("", tipsResponse);
     console.log();
 
-    const submitBlock: IBlock = {
+    const submitBlock: {
+        protocolVersion?: number;
+        parents?: string[];
+        payload?: IBlock["payload"];
+        nonce?: string;
+    } = {
         // Parents can be left undefined if you want the node to populate the field
         parents: tipsResponse.tips.slice(0, MAX_NUMBER_PARENTS),
         payload: {

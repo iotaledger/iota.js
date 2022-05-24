@@ -52,7 +52,9 @@ export function deserializeAliasOutput(readStream: ReadStream): IAliasOutput {
     const stateIndex = readStream.readUInt32("aliasOutput.stateIndex");
 
     const stateMetadataLength = readStream.readUInt16("aliasOutput.stateMetadataLength");
-    const stateMetadata = readStream.readFixedHex("aliasOutput.stateMetadata", stateMetadataLength);
+    const stateMetadata = stateMetadataLength > 0
+        ? readStream.readFixedHex("aliasOutput.stateMetadata", stateMetadataLength)
+        : undefined;
 
     const foundryCounter = readStream.readUInt32("aliasOutput.foundryCounter");
 
@@ -85,7 +87,7 @@ export function serializeAliasOutput(writeStream: WriteStream, object: IAliasOut
     writeStream.writeUInt8("aliasOutput.type", object.type);
     writeStream.writeUInt64("aliasOutput.amount", bigInt(object.amount));
 
-    serializeNativeTokens(writeStream, object.nativeTokens);
+    serializeNativeTokens(writeStream, object.nativeTokens ?? []);
 
     writeStream.writeFixedHex("aliasOutput.aliasId", ALIAS_ID_LENGTH, object.aliasId);
 
@@ -105,6 +107,6 @@ export function serializeAliasOutput(writeStream: WriteStream, object: IAliasOut
 
     serializeUnlockConditions(writeStream, object.unlockConditions);
 
-    serializeFeatures(writeStream, object.features);
-    serializeFeatures(writeStream, object.immutableFeatures);
+    serializeFeatures(writeStream, object.features ?? []);
+    serializeFeatures(writeStream, object.immutableFeatures ?? []);
 }

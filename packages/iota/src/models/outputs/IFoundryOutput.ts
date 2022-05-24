@@ -32,5 +32,5 @@ export interface IFoundryOutput extends ITypeBase<5>, ICommonOutput {
     /**
      * Immutable features contained by the output.
      */
-    immutableFeatures: FeatureTypes[];
+    immutableFeatures?: FeatureTypes[];
 }

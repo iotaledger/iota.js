@@ -19,7 +19,9 @@ describe("LocalPowProvider", () => {
 
         const block: IBlock = {
             protocolVersion: 1,
-            payload: taggedDataPayload
+            parents: [],
+            payload: taggedDataPayload,
+            nonce: ""
         };
 
         const writeStream = new WriteStream();

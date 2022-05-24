@@ -65,7 +65,7 @@ ___
 
 ### stateMetadata
 
-• **stateMetadata**: `string`
+• `Optional` **stateMetadata**: `string`
 
 Metadata that can only be changed by the state controller.
 
@@ -81,7 +81,7 @@ ___
 
 ### immutableFeatures
 
-• **immutableFeatures**: [`FeatureTypes`](../api.md#featuretypes)[]
+• `Optional` **immutableFeatures**: [`FeatureTypes`](../api.md#featuretypes)[]
 
 Immutable features contained by the output.
 
@@ -89,7 +89,7 @@ ___
 
 ### nativeTokens
 
-• **nativeTokens**: [`INativeToken`](INativeToken.md)[]
+• `Optional` **nativeTokens**: [`INativeToken`](INativeToken.md)[]
 
 The native tokens held by the output.
 
@@ -113,7 +113,7 @@ ___
 
 ### features
 
-• **features**: [`FeatureTypes`](../api.md#featuretypes)[]
+• `Optional` **features**: [`FeatureTypes`](../api.md#featuretypes)[]
 
 Features contained by the output.
 

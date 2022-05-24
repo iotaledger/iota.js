@@ -41,11 +41,11 @@ export async function promote(
     // Finally sort the list
     tipsResponse.tips.sort();
 
-    const promoteBlock: IBlock = {
+    const promoteBlockPartial = {
         parents: tipsResponse.tips
     };
 
-    const promoteBlockId = await localClient.blockSubmit(promoteBlock);
+    const promoteBlockId = await localClient.blockSubmit(promoteBlockPartial);
 
     return {
         block,

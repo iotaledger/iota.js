@@ -24,11 +24,11 @@ export async function reattach(
         throw new Error("The block does not exist.");
     }
 
-    const reattachBlock: IBlock = {
+    const reattachBlockPartial = {
         payload: block.payload
     };
 
-    const reattachedBlockId = await localClient.blockSubmit(reattachBlock);
+    const reattachedBlockId = await localClient.blockSubmit(reattachBlockPartial);
 
     return {
         block,

@@ -16,12 +16,12 @@ export interface IBlock {
     /**
      * The protocol version under which this block operates.
      */
-    protocolVersion?: number;
+    protocolVersion: number;
 
     /**
      * The parent block ids.
      */
-    parents?: string[];
+    parents: string[];
 
     /**
      * The payload contents.
@@ -31,5 +31,5 @@ export interface IBlock {
     /**
      * The nonce for the block.
      */
-    nonce?: string;
+    nonce: string;
 }

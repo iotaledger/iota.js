@@ -30,7 +30,7 @@ export const MAX_NATIVE_TOKEN_COUNT: number = 64;
  * @param readStream The stream to read the data from.
  * @returns The deserialized object.
  */
-export function deserializeNativeTokens(readStream: ReadStream): INativeToken[] {
+export function deserializeNativeTokens(readStream: ReadStream): INativeToken[] | undefined {
     const numNativeTokens = readStream.readUInt8("nativeTokens.numNativeTokens");
     const nativeTokens: INativeToken[] = [];
 
@@ -38,7 +38,7 @@ export function deserializeNativeTokens(readStream: ReadStream): INativeToken[] 
         nativeTokens.push(deserializeNativeToken(readStream));
     }
 
-    return nativeTokens;
+    return numNativeTokens > 0 ? nativeTokens : undefined;
 }
 
 /**
@@ -46,8 +46,13 @@ export function deserializeNativeTokens(readStream: ReadStream): INativeToken[] 
  * @param writeStream The stream to write the data to.
  * @param object The object to serialize.
  */
-export function serializeNativeTokens(writeStream: WriteStream, object: INativeToken[]): void {
-    writeStream.writeUInt8("nativeTokens.numNativeTokens", object.length);
+export function serializeNativeTokens(writeStream: WriteStream, object: INativeToken[] | undefined): void {
+    writeStream.writeUInt8("nativeTokens.numNativeTokens", object?.length ?? 0);
+
+    if (!object) {
+        return;
+    }
+
     for (let i = 0; i < object.length; i++) {
         serializeNativeToken(writeStream, object[i]);
     }

@@ -1446,7 +1446,7 @@ ___
 
 ### deserializeFeatures
 
-▸ **deserializeFeatures**(`readStream`): [`FeatureTypes`](api.md#featuretypes)[]
+▸ **deserializeFeatures**(`readStream`): [`FeatureTypes`](api.md#featuretypes)[] \| `undefined`
 
 Deserialize the feature from binary.
 
@@ -1458,7 +1458,7 @@ Deserialize the feature from binary.
 
 #### Returns
 
-[`FeatureTypes`](api.md#featuretypes)[]
+[`FeatureTypes`](api.md#featuretypes)[] \| `undefined`
 
 The deserialized object.
 
@@ -1475,7 +1475,7 @@ Serialize the feature to binary.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `writeStream` | `WriteStream` | The stream to write the data to. |
-| `objects` | [`FeatureTypes`](api.md#featuretypes)[] | The objects to serialize. |
+| `objects` | `undefined` \| [`FeatureTypes`](api.md#featuretypes)[] | The objects to serialize. |
 
 #### Returns
 
@@ -4204,7 +4204,7 @@ Log native tokens to the console.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `prefix` | `string` | The prefix for the output. |
-| `nativeTokens` | [`INativeToken`](interfaces/INativeToken.md)[] | The native tokens. |
+| `nativeTokens` | `undefined` \| [`INativeToken`](interfaces/INativeToken.md)[] | The native tokens. |
 
 #### Returns
 
@@ -4242,7 +4242,7 @@ Log featurew to the console.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `prefix` | `string` | The prefix for the output. |
-| `features` | [`FeatureTypes`](api.md#featuretypes)[] | The features. |
+| `features` | `undefined` \| [`FeatureTypes`](api.md#featuretypes)[] | The features. |
 
 #### Returns
 
@@ -4261,7 +4261,7 @@ Log immutable featuress to the console.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `prefix` | `string` | The prefix for the output. |
-| `immutableFeatures` | [`FeatureTypes`](api.md#featuretypes)[] | The features. |
+| `immutableFeatures` | `undefined` \| [`FeatureTypes`](api.md#featuretypes)[] | The features. |
 
 #### Returns
 

@@ -32,11 +32,19 @@ export function deserializeTimelockUnlockCondition(readStream: ReadStream): ITim
     const milestoneIndex = readStream.readUInt32("timelockUnlockCondition.milestoneIndex");
     const unixTime = readStream.readUInt32("timelockUnlockCondition.unixTime");
 
-    return {
-        type: TIMELOCK_UNLOCK_CONDITION_TYPE,
-        milestoneIndex,
-        unixTime
+    const timelockUnlockCondition: ITimelockUnlockCondition = {
+        type: TIMELOCK_UNLOCK_CONDITION_TYPE
     };
+
+    if (milestoneIndex > 0) {
+        timelockUnlockCondition.milestoneIndex = milestoneIndex;
+    }
+
+    if (unixTime > 0) {
+        timelockUnlockCondition.unixTime = unixTime;
+    }
+
+    return timelockUnlockCondition;
 }
 
 /**
@@ -47,6 +55,6 @@ export function deserializeTimelockUnlockCondition(readStream: ReadStream): ITim
 export function serializeTimelockUnlockCondition(
     writeStream: WriteStream, object: ITimelockUnlockCondition): void {
     writeStream.writeUInt8("timelockUnlockCondition.type", object.type);
-    writeStream.writeUInt32("timelockUnlockCondition.milestoneIndex", object.milestoneIndex);
-    writeStream.writeUInt32("timelockUnlockCondition.unixTime", object.unixTime);
+    writeStream.writeUInt32("timelockUnlockCondition.milestoneIndex", object.milestoneIndex ?? 0);
+    writeStream.writeUInt32("timelockUnlockCondition.unixTime", object.unixTime ?? 0);
 }

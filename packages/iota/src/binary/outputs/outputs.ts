@@ -78,7 +78,7 @@ export function serializeOutputs(writeStream: WriteStream, objects: OutputTypes[
             objects[i].type === FOUNDRY_OUTPUT_TYPE ||
             objects[i].type === NFT_OUTPUT_TYPE) {
             const common = objects[i] as ICommonOutput;
-            nativeTokenCount += common.nativeTokens.length;
+            nativeTokenCount += (common.nativeTokens?.length ?? 0);
         }
     }
     if (nativeTokenCount > MAX_NATIVE_TOKEN_COUNT) {

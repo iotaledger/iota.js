@@ -36,12 +36,20 @@ export function deserializeExpirationUnlockCondition(readStream: ReadStream): IE
     const milestoneIndex = readStream.readUInt32("expirationUnlockCondition.milestoneIndex");
     const unixTime = readStream.readUInt32("expirationUnlockCondition.unixTime");
 
-    return {
+    const expirationUnlockCondition: IExpirationUnlockCondition = {
         type: EXPIRATION_UNLOCK_CONDITION_TYPE,
-        returnAddress,
-        milestoneIndex,
-        unixTime
+        returnAddress
     };
+
+    if (milestoneIndex > 0) {
+        expirationUnlockCondition.milestoneIndex = milestoneIndex;
+    }
+
+    if (unixTime > 0) {
+        expirationUnlockCondition.unixTime = unixTime;
+    }
+
+    return expirationUnlockCondition;
 }
 
 /**
@@ -53,6 +61,6 @@ export function serializeExpirationUnlockCondition(
     writeStream: WriteStream, object: IExpirationUnlockCondition): void {
     writeStream.writeUInt8("expirationUnlockCondition.type", object.type);
     serializeAddress(writeStream, object.returnAddress);
-    writeStream.writeUInt32("expirationUnlockCondition.milestoneIndex", object.milestoneIndex);
-    writeStream.writeUInt32("expirationUnlockCondition.unixTime", object.unixTime);
+    writeStream.writeUInt32("expirationUnlockCondition.milestoneIndex", object.milestoneIndex ?? 0);
+    writeStream.writeUInt32("expirationUnlockCondition.unixTime", object.unixTime ?? 0);
 }

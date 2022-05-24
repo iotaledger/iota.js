@@ -31,7 +31,7 @@ export interface IAliasOutput extends ITypeBase<4>, ICommonOutput {
     /**
      * Metadata that can only be changed by the state controller.
      */
-    stateMetadata: string;
+    stateMetadata?: string;
 
     /**
      * A counter that denotes the number of foundries created by this alias account.
@@ -41,5 +41,5 @@ export interface IAliasOutput extends ITypeBase<4>, ICommonOutput {
     /**
      * Immutable features contained by the output.
      */
-    immutableFeatures: FeatureTypes[];
+    immutableFeatures?: FeatureTypes[];
 }

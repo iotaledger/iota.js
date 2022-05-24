@@ -15,7 +15,7 @@ Block layout.
 
 ### protocolVersion
 
-• `Optional` **protocolVersion**: `number`
+• **protocolVersion**: `number`
 
 The protocol version under which this block operates.
 
@@ -23,7 +23,7 @@ ___
 
 ### parents
 
-• `Optional` **parents**: `string`[]
+• **parents**: `string`[]
 
 The parent block ids.
 
@@ -39,6 +39,6 @@ ___
 
 ### nonce
 
-• `Optional` **nonce**: `string`
+• **nonce**: `string`
 
 The nonce for the block.

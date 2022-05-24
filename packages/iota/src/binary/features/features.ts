@@ -52,7 +52,7 @@ export const MIN_FEATURE_LENGTH: number = Math.min(
  * @param readStream The stream to read the data from.
  * @returns The deserialized object.
  */
-export function deserializeFeatures(readStream: ReadStream): FeatureTypes[] {
+export function deserializeFeatures(readStream: ReadStream): FeatureTypes[] | undefined {
     const numFeatures = readStream.readUInt8("features.numFeatures");
 
     const features: FeatureTypes[] = [];
@@ -60,7 +60,7 @@ export function deserializeFeatures(readStream: ReadStream): FeatureTypes[] {
         features.push(deserializeFeature(readStream));
     }
 
-    return features;
+    return numFeatures > 0 ? features : undefined;
 }
 
 /**
@@ -68,8 +68,12 @@ export function deserializeFeatures(readStream: ReadStream): FeatureTypes[] {
  * @param writeStream The stream to write the data to.
  * @param objects The objects to serialize.
  */
-export function serializeFeatures(writeStream: WriteStream, objects: FeatureTypes[]): void {
-    writeStream.writeUInt8("features.numFeatures", objects.length);
+export function serializeFeatures(writeStream: WriteStream, objects: FeatureTypes[] | undefined): void {
+    writeStream.writeUInt8("features.numFeatures", objects?.length ?? 0);
+
+    if (!objects) {
+        return;
+    }
 
     for (let i = 0; i < objects.length; i++) {
         serializeFeature(writeStream, objects[i]);

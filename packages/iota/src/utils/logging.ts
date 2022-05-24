@@ -492,9 +492,9 @@ export function logFunds(prefix: string, fund?: IMigratedFunds): void {
  * @param prefix The prefix for the output.
  * @param nativeTokens The native tokens.
  */
-export function logNativeTokens(prefix: string, nativeTokens: INativeToken[]): void {
+export function logNativeTokens(prefix: string, nativeTokens: INativeToken[] | undefined): void {
     logger(`${prefix}Native Tokens`);
-    for (const nativeToken of nativeTokens) {
+    for (const nativeToken of nativeTokens ?? []) {
         logger(`${prefix}\t\tId:`, nativeToken.id);
         logger(`${prefix}\t\tAmount:`, nativeToken.amount);
     }
@@ -519,9 +519,9 @@ export function logTokenScheme(prefix: string, tokenScheme: TokenSchemeTypes): v
  * @param prefix The prefix for the output.
  * @param features The features.
  */
-export function logFeatures(prefix: string, features: FeatureTypes[]): void {
+export function logFeatures(prefix: string, features: FeatureTypes[] | undefined): void {
     logger(`${prefix}Features`);
-    for (const feature of features) {
+    for (const feature of features ?? []) {
         logFeature(`${prefix}\t\t`, feature);
     }
 }
@@ -531,9 +531,9 @@ export function logFeatures(prefix: string, features: FeatureTypes[]): void {
  * @param prefix The prefix for the output.
  * @param immutableFeatures The features.
  */
- export function logImmutableFeatures(prefix: string, immutableFeatures: FeatureTypes[]): void {
+ export function logImmutableFeatures(prefix: string, immutableFeatures: FeatureTypes[] | undefined): void {
     logger(`${prefix}Immutable Features`);
-    for (const feature of immutableFeatures) {
+    for (const feature of immutableFeatures ?? []) {
         logFeature(`${prefix}\t\t`, feature);
     }
 }

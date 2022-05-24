@@ -202,11 +202,22 @@ export class SingleNodeClient implements IClient {
 
     /**
      * Submit block.
-     * @param block The block to submit.
+     * @param blockPartial The block to submit (possibly contains only partial block data).
+     * @param blockPartial.protocolVersion The protocol version under which this block operates.
+     * @param blockPartial.parents The parent block ids.
+     * @param blockPartial.payload The payload contents.
+     * @param blockPartial.nonce The nonce for the block.
      * @returns The blockId.
      */
-    public async blockSubmit(block: IBlock): Promise<string> {
-        block.protocolVersion = this._protocolVersion;
+    public async blockSubmit(
+        blockPartial: {
+            protocolVersion?: number;
+            parents?: string[];
+            payload?: IBlock["payload"];
+            nonce?: string;
+        }
+    ): Promise<string> {
+        blockPartial.protocolVersion = this._protocolVersion;
 
         let minPoWScore = 0;
         if (this._powProvider) {
@@ -218,11 +229,18 @@ export class SingleNodeClient implements IClient {
             }
             minPoWScore = this._protocol?.minPoWScore ?? 0;
 
-            if (!block.parents || block.parents.length === 0) {
+            if (!blockPartial.parents || blockPartial.parents.length === 0) {
                 const tips = await this.tips();
-                block.parents = tips.tips;
+                blockPartial.parents = tips.tips;
             }
         }
+
+        const block: IBlock = {
+            protocolVersion: blockPartial.protocolVersion ?? DEFAULT_PROTOCOL_VERSION,
+            parents: blockPartial.parents ?? [],
+            payload: blockPartial.payload,
+            nonce: blockPartial.nonce ?? "0"
+        };
 
         const writeStream = new WriteStream();
         serializeBlock(writeStream, block);

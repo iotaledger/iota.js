@@ -65,5 +65,5 @@ Gossip metrics for the peer.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `heartbeat?` | [`IGossipHeartbeat`](IGossipHeartbeat.md) | The peer heartbeat. |
+| `heartbeat` | [`IGossipHeartbeat`](IGossipHeartbeat.md) | The peer heartbeat. |
 | `metrics` | [`IGossipMetrics`](IGossipMetrics.md) | The peer metrics. |

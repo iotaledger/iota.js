@@ -56,11 +56,14 @@ describe("Binary Alias Output", () => {
         expect(deserialized.aliasId).toEqual("0x2222222222222222222222222222222222222222334455667788990011223344");
         expect(deserialized.type).toEqual(4);
         expect(deserialized.amount).toEqual("123456");
-        expect(deserialized.nativeTokens.length).toEqual(2);
-        expect(deserialized.nativeTokens[0].id).toEqual("0x0000000000000000000000000000000000000000000000000000000000000000000000000000");
-        expect(deserialized.nativeTokens[0].amount).toEqual("0x64");
-        expect(deserialized.nativeTokens[1].id).toEqual("0x1111111111111111111111111111111111111111111111111111111111111111111111111111");
-        expect(deserialized.nativeTokens[1].amount).toEqual("0xc8");
+        expect(deserialized.nativeTokens).toBeTruthy();
+        if (deserialized.nativeTokens) {
+            expect(deserialized.nativeTokens.length).toEqual(2);
+            expect(deserialized.nativeTokens[0].id).toEqual("0x0000000000000000000000000000000000000000000000000000000000000000000000000000");
+            expect(deserialized.nativeTokens[0].amount).toEqual("0x64");
+            expect(deserialized.nativeTokens[1].id).toEqual("0x1111111111111111111111111111111111111111111111111111111111111111111111111111");
+            expect(deserialized.nativeTokens[1].amount).toEqual("0xc8");
+        }
         expect(deserialized.stateIndex).toEqual(843534);
         expect(deserialized.stateMetadata).toEqual("0x1111111122222222");
         expect(deserialized.foundryCounter).toEqual(92123);

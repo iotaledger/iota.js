@@ -41,7 +41,7 @@ ___
 
 ### milestoneIndex
 
-• **milestoneIndex**: `number`
+• `Optional` **milestoneIndex**: `number`
 
 Before this milestone index the condition is allowed to unlock the output,
 after that only the address defined in return address.
@@ -50,7 +50,7 @@ ___
 
 ### unixTime
 
-• **unixTime**: `number`
+• `Optional` **unixTime**: `number`
 
 Before this unix time, the condition is allowed to unlock the output,
 after that only the address defined in return address.
