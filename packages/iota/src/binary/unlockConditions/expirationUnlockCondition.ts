@@ -39,8 +39,8 @@ export function deserializeExpirationUnlockCondition(readStream: ReadStream): IE
     return {
         type: EXPIRATION_UNLOCK_CONDITION_TYPE,
         returnAddress,
-        milestoneIndex,
-        unixTime
+        milestoneIndex: milestoneIndex > 0 ? milestoneIndex : undefined,
+        unixTime: unixTime > 0 ? unixTime : undefined
     };
 }
 
@@ -53,10 +53,6 @@ export function serializeExpirationUnlockCondition(
     writeStream: WriteStream, object: IExpirationUnlockCondition): void {
     writeStream.writeUInt8("expirationUnlockCondition.type", object.type);
     serializeAddress(writeStream, object.returnAddress);
-    if (object.milestoneIndex) {
-        writeStream.writeUInt32("expirationUnlockCondition.milestoneIndex", object.milestoneIndex);
-    }
-    if (object.unixTime) {
-        writeStream.writeUInt32("expirationUnlockCondition.unixTime", object.unixTime);
-    }
+    writeStream.writeUInt32("expirationUnlockCondition.milestoneIndex", object.milestoneIndex ?? 0);
+    writeStream.writeUInt32("expirationUnlockCondition.unixTime", object.unixTime ?? 0);
 }
