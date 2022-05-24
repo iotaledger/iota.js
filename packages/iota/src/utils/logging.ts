@@ -583,7 +583,7 @@ export function logUnlockCondition(prefix: string, unlockCondition: UnlockCondit
     } else if (unlockCondition.type === STORAGE_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE) {
         logger(`${prefix}\tStorage Deposit Return Unlock Condition`);
         logAddress(`${prefix}\t\t`, unlockCondition.returnAddress);
-        logger(`${prefix}\t\tAmount:`, unlockCondition.returnAmount);
+        logger(`${prefix}\t\tAmount:`, unlockCondition.amount);
     } else if (unlockCondition.type === TIMELOCK_UNLOCK_CONDITION_TYPE) {
         logger(`${prefix}\tTimelock Unlock Condition`);
         logger(`${prefix}\t\tMilestone Index:`, unlockCondition.milestoneIndex);

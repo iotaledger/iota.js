@@ -14,7 +14,7 @@ Storage Desposit Return Unlock Condition.
 
 - [type](IStorageDepositReturnUnlockCondition.md#type)
 - [returnAddress](IStorageDepositReturnUnlockCondition.md#returnaddress)
-- [returnAmount](IStorageDepositReturnUnlockCondition.md#returnamount)
+- [amount](IStorageDepositReturnUnlockCondition.md#amount)
 
 ## Properties
 
@@ -38,8 +38,8 @@ The return address.
 
 ___
 
-### returnAmount
+### amount
 
-• **returnAmount**: `string`
+• **amount**: `string`
 
 Amount of IOTA tokens the consuming transaction should deposit to the address defined in return address.
