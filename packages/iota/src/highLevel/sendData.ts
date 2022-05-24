@@ -4,7 +4,7 @@
 import { Converter, HexHelper } from "@iota/util.js";
 import { MAX_TAG_LENGTH } from "../binary/payloads/taggedDataPayload";
 import { SingleNodeClient } from "../clients/singleNodeClient";
-import type { IBlockPartial } from "../models/IBlockPartial";
+import type { IBlock } from "../models/IBlock";
 import type { IClient } from "../models/IClient";
 import { ITaggedDataPayload, TAGGED_DATA_PAYLOAD_TYPE } from "../models/payloads/ITaggedDataPayload";
 
@@ -20,7 +20,12 @@ export async function sendData(
     tag?: Uint8Array | string,
     data?: Uint8Array | string
 ): Promise<{
-    block: IBlockPartial;
+    block: {
+        protocolVersion?: number;
+        parents?: string[];
+        payload?: IBlock["payload"];
+        nonce?: string;
+    };
     blockId: string;
 }> {
     const localClient = typeof client === "string" ? new SingleNodeClient(client) : client;
@@ -55,7 +60,7 @@ export async function sendData(
             data: localDataHex
         } : undefined;
 
-    const block: IBlockPartial = {
+    const block = {
         payload: taggedDataPayload
     };
 

@@ -196,7 +196,7 @@ Submit block.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `blockPartial` | [`IBlockPartial`](../interfaces/IBlockPartial.md) | The block (with possible partial data) to submit. |
+| `blockPartial` | `Object` | The block to submit (possibly contains only partial block data). |
 
 #### Returns
 

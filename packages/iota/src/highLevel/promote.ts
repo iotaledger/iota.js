@@ -3,7 +3,6 @@
 import { MAX_NUMBER_PARENTS } from "../binary/block";
 import { SingleNodeClient } from "../clients/singleNodeClient";
 import type { IBlock } from "../models/IBlock";
-import type { IBlockPartial } from "../models/IBlockPartial";
 import type { IClient } from "../models/IClient";
 
 /**
@@ -42,11 +41,11 @@ export async function promote(
     // Finally sort the list
     tipsResponse.tips.sort();
 
-    const promoteBlock: IBlockPartial = {
+    const promoteBlockPartial = {
         parents: tipsResponse.tips
     };
 
-    const promoteBlockId = await localClient.blockSubmit(promoteBlock);
+    const promoteBlockId = await localClient.blockSubmit(promoteBlockPartial);
 
     return {
         block,

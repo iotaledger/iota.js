@@ -293,7 +293,6 @@
 - [IBip44GeneratorState](interfaces/IBip44GeneratorState.md)
 - [IBlock](interfaces/IBlock.md)
 - [IBlockMetadata](interfaces/IBlockMetadata.md)
-- [IBlockPartial](interfaces/IBlockPartial.md)
 - [IClient](interfaces/IClient.md)
 - [IGossipHeartbeat](interfaces/IGossipHeartbeat.md)
 - [IGossipMetrics](interfaces/IGossipMetrics.md)

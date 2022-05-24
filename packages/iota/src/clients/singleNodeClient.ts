@@ -15,7 +15,6 @@ import type { IResponse } from "../models/api/IResponse";
 import type { ITipsResponse } from "../models/api/ITipsResponse";
 import { DEFAULT_PROTOCOL_VERSION, IBlock } from "../models/IBlock";
 import type { IBlockMetadata } from "../models/IBlockMetadata";
-import type { IBlockPartial } from "../models/IBlockPartial";
 import type { IClient } from "../models/IClient";
 import type { INodeInfo } from "../models/info/INodeInfo";
 import type { IPeer } from "../models/IPeer";
@@ -203,10 +202,21 @@ export class SingleNodeClient implements IClient {
 
     /**
      * Submit block.
-     * @param blockPartial The block (with possible partial data) to submit.
+     * @param blockPartial The block to submit (possibly contains only partial block data).
+     * @param blockPartial.protocolVersion The protocol version under which this block operates.
+     * @param blockPartial.parents The parent block ids.
+     * @param blockPartial.payload The payload contents.
+     * @param blockPartial.nonce The nonce for the block.
      * @returns The blockId.
      */
-    public async blockSubmit(blockPartial: IBlockPartial): Promise<string> {
+    public async blockSubmit(
+        blockPartial: {
+            protocolVersion?: number;
+            parents?: string[];
+            payload?: IBlock["payload"];
+            nonce?: string;
+        }
+    ): Promise<string> {
         blockPartial.protocolVersion = this._protocolVersion;
 
         let minPoWScore = 0;
@@ -225,7 +235,7 @@ export class SingleNodeClient implements IClient {
             }
         }
 
-        const block = {
+        const block: IBlock = {
             protocolVersion: blockPartial.protocolVersion ?? DEFAULT_PROTOCOL_VERSION,
             parents: blockPartial.parents ?? [],
             payload: blockPartial.payload,
@@ -247,7 +257,7 @@ export class SingleNodeClient implements IClient {
             block.nonce = nonce.toString();
         }
 
-        const response = await this.fetchJson<IBlockPartial, IBlockIdResponse>(this._basePath, "post", "blocks", block);
+        const response = await this.fetchJson<IBlock, IBlockIdResponse>(this._basePath, "post", "blocks", block);
 
         return response.blockId;
     }
