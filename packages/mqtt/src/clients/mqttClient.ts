@@ -324,7 +324,7 @@ export class MqttClient implements IMqttClient {
      * @returns A subscription Id which can be used to unsubscribe.
      */
     public nft(nftId: string, callback: (topic: string, data: IOutputResponse) => void): string {
-        return this.internalSubscribe(`outputs/nfts/${nftId}`, true, callback);
+        return this.internalSubscribe(`outputs/nft/${nftId}`, true, callback);
     }
 
     /**
@@ -334,7 +334,7 @@ export class MqttClient implements IMqttClient {
      * @returns A subscription Id which can be used to unsubscribe.
      */
     public alias(aliasId: string, callback: (topic: string, data: IOutputResponse) => void): string {
-        return this.internalSubscribe(`outputs/aliases/${aliasId}`, true, callback);
+        return this.internalSubscribe(`outputs/alias/${aliasId}`, true, callback);
     }
 
     /**
@@ -344,7 +344,7 @@ export class MqttClient implements IMqttClient {
      * @returns A subscription Id which can be used to unsubscribe.
      */
     public foundry(foundryId: string, callback: (topic: string, data: IOutputResponse) => void): string {
-        return this.internalSubscribe(`outputs/foundries/${foundryId}`, true, callback);
+        return this.internalSubscribe(`outputs/foundry/${foundryId}`, true, callback);
     }
 
     /**

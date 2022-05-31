@@ -1,6 +1,6 @@
 import { MqttClient } from "@iota/mqtt.js";
 
-const MQTT_ENDPOINT = "mqtt://localhost:1883";
+const MQTT_ENDPOINT = "ws://localhost:14265/api/plugins/mqtt/v1";
 
 async function run() {
     const mqttClient = new MqttClient(MQTT_ENDPOINT);
