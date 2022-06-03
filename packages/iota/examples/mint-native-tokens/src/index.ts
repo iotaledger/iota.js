@@ -219,10 +219,8 @@ async function run() {
     console.log("Required Storage Deposit of the Alias output: ", requiredStorageDeposit);
 
     // Prepare Tx essence
-    // We are going to mint the NFT to an address the user defined in the beginning
-    // We could put only requiredStorageDeposit into the nft output, but hey, we have free tokens so top it up with all we have.
-    // nftOutput.amount = requiredStorageDeposit.toString()
 
+    // Get inputs commitment
     const inputsCommitment = getInputsCommitment([consumedOutput]);
 
     // Figure out networkId from networkName
