@@ -41,7 +41,7 @@
         "@typescript-eslint/eslint-plugin": "5.14.0",
         "@typescript-eslint/parser": "^5.14.0",
         "cross-env": "^7.0.3",
-        "eslint": "^8.10.0",
+        "eslint": "^8.17.0",
         "eslint-plugin-header": "^3.1.1",
         "eslint-plugin-import": "^2.25.4",
         "eslint-plugin-jsdoc": "^37.9.7",
