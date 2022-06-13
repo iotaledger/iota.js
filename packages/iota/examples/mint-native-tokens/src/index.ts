@@ -124,12 +124,12 @@ async function run() {
     // Ready with the alias minting tx, now we have to prepare the second tx that:
     //   - creates the foundry
     //   - mints tokens to target address
-    let txPayload2 = createFoundryMintTokenTx(getOutput("tx1Alias"), getOutputId("tx1Alias"), ctx.walletAddressHex, ctx.walletKeyPair, ctx.info, ctx.targetAddress);
+    let txPayload2 = createFoundryMintTokenTx(getOutput("tx1Alias"), getOutputId("tx1Alias"), ctx.walletKeyPair, ctx.info, ctx.targetAddress);
     ctx.txList.push(txPayload2);
 
     // Tx3 transfers the control of alias to the user address
     // Tx 3 is going to give the governor role of tha alias to targetaddress
-    let txPayload3 = transferAliasTx(getOutput("tx2Alias"), getOutputId("tx2Alias"), ctx.walletAddressHex, ctx.walletKeyPair, ctx.info, ctx.targetAddress);
+    let txPayload3 = transferAliasTx(getOutput("tx2Alias"), getOutputId("tx2Alias"), ctx.walletKeyPair, ctx.targetAddress);
     ctx.txList.push(txPayload3);
 
     // Finally, time to prepare the three blocks, and chain them together via `parents`
@@ -253,12 +253,11 @@ function mintAliasTx(consumedOutput: OutputTypes, consumedOutputId: string, wall
 // Create a foundry with the help of an alias, mint native tokens and send them to user via a basic output.
 // inputs: alias from prev tx
 // output: alias, foundry, basic output
-function createFoundryMintTokenTx(consumedOutput: OutputTypes, consumedOutputId: string, walletAddressHex: string, walletKeyPair: IKeyPair, info: INodeInfo, targetAddress: AddressTypes): ITransactionPayload {
+function createFoundryMintTokenTx(consumedOutput: OutputTypes, consumedOutputId: string, walletKeyPair: IKeyPair, info: INodeInfo, targetAddress: AddressTypes): ITransactionPayload {
     const aliasInput = inputFromOutputId(consumedOutputId);
 
     // defining the next alias output
-    let prevAlias = getOutput("tx1Alias");
-    let nextAliasOutput = deepCopy(prevAlias) as IAliasOutput;
+    let nextAliasOutput = deepCopy(consumedOutput) as IAliasOutput;
 
     // aliasId is the hash of the creating outputId
     nextAliasOutput.aliasId = aliasIdFromOutputId(consumedOutputId);
@@ -324,17 +323,17 @@ function createFoundryMintTokenTx(consumedOutput: OutputTypes, consumedOutputId:
     const foundryStorageDeposit = getStorageDeposit(foundryOutput, info.protocol.rentStructure);
     const basicStorageDeposit = getStorageDeposit(remainderOutput, info.protocol.rentStructure);
 
-    if (parseInt(prevAlias.amount) < aliasStorageDeposit + foundryStorageDeposit + basicStorageDeposit) {
+    if (parseInt(consumedOutput.amount) < aliasStorageDeposit + foundryStorageDeposit + basicStorageDeposit) {
         throw new Error("Initial funds not enough to cover for storage deposits");
     }
 
     // Update amounts in outputs. Only leave the bare minimum in the alias and the foundry, put the rest into the basic output
     nextAliasOutput.amount = aliasStorageDeposit.toString();
     foundryOutput.amount = foundryStorageDeposit.toString();
-    remainderOutput.amount = (parseInt(prevAlias.amount) - (aliasStorageDeposit + foundryStorageDeposit)).toString();
+    remainderOutput.amount = (parseInt(consumedOutput.amount) - (aliasStorageDeposit + foundryStorageDeposit)).toString();
 
     // Prepare inputs commitment
-    const inputsCommitmentTx2 = getInputsCommitment([prevAlias]);
+    const inputsCommitmentTx2 = getInputsCommitment([consumedOutput]);
 
     // Construct tx essence
     const tx2Essence: ITransactionEssence = {
@@ -378,11 +377,10 @@ function createFoundryMintTokenTx(consumedOutput: OutputTypes, consumedOutputId:
 // Transfer ownership rights of the alias to user
 // inputs: alias from prev tx
 // outputs: alias owned by user (noth state and governance controller)
-function transferAliasTx(consumedOutput: OutputTypes, consumedOutputId: string, walletAddressHex: string, walletKeyPair: IKeyPair, info: INodeInfo, targetAddress: AddressTypes): ITransactionPayload {
+function transferAliasTx(consumedOutput: OutputTypes, consumedOutputId: string, walletKeyPair: IKeyPair, targetAddress: AddressTypes): ITransactionPayload {
     const prevAliasInput = inputFromOutputId(consumedOutputId);
 
-    let prevAlias = getOutput("tx2Alias");
-    let nextAlias = deepCopy(prevAlias) as IAliasOutput;
+    let nextAlias = deepCopy(consumedOutput) as IAliasOutput;
     // We are performing a governance transition, so no need to increment stateIndex
     nextAlias.unlockConditions = [
         {
@@ -396,7 +394,7 @@ function transferAliasTx(consumedOutput: OutputTypes, consumedOutputId: string, 
     ]
 
     // Prepare inputs commitment
-    const inputsCommitmentTx3 = getInputsCommitment([prevAlias]);
+    const inputsCommitmentTx3 = getInputsCommitment([consumedOutput]);
 
     // Construct tx essence
     const tx3Essence: ITransactionEssence = {
@@ -488,16 +486,16 @@ async function setUpHotWallet(hrp: string) {
 }
 
 // Use the indexer API to fetch the output sent to the wallet address by the faucet
-async function fetchAndWaitForBasicOutput(addy: string, client: IndexerPluginClient): Promise<string> {
+async function fetchAndWaitForBasicOutput(addressBech32: string, client: IndexerPluginClient): Promise<string> {
     let outputsResponse: IOutputsResponse = { ledgerIndex: 0, cursor: "", pageSize: "", items: [] };
     let maxTries = 10;
     let tries = 0;
     while (outputsResponse.items.length == 0) {
         if (tries > maxTries) { break }
         tries++;
-        console.log("\tTry #", tries, ": fetching basic output for address ", addy)
+        console.log("\tTry #", tries, ": fetching basic output for address ", addressBech32)
         outputsResponse = await client.outputs({
-            addressBech32: addy,
+            addressBech32,
             hasStorageReturnCondition: false,
             hasExpirationCondition: false,
             hasTimelockCondition: false,
