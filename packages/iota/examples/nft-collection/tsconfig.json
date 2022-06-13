@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "target": "es6",
+        "strict": true,
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "outDir": "./dist",
+        "inlineSourceMap": true,
+        "forceConsistentCasingInFileNames": true,
+        "importHelpers": true,
+        "esModuleInterop": true,
+        "lib": [ "es2015" ]
+    },
+    "include": ["src"]
+}
