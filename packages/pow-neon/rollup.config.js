@@ -12,7 +12,7 @@ const plugins = [
         copyTo: "dist/native",
         destDir: "./native",
         dlopen: false,
-        map: modulePath => "index.node",
+        map: modulePath => "_index_.node",
         sourcemap: true
     })
 ];
