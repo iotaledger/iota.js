@@ -18,7 +18,7 @@ import {
 } from "@iota/iota.js";
 import { Converter, WriteStream } from "@iota/util.js";
 import { NeonPowProvider } from "@iota/pow-neon.js";
-import bigInt, { BigInteger } from "big-integer";
+import bigInt from "big-integer";
 import fetch from "node-fetch";
 import { randomBytes } from "node:crypto";
 
