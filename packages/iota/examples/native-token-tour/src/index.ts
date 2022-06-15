@@ -123,7 +123,7 @@ async function run() {
      * - mints tokens
      ************************************/
     console.log("Creating a foundry, minting native tokens...");
-    let txPayload2 = createFoundryMintTokenTx(getOutput("tx1Alias"), getOutputId("tx1Alias"), ctx.walletAddressHex, ctx.walletKeyPair, ctx.info, lib.Bech32Helper.addressFromBech32(ctx.walletAddressBech32, ctx.info.protocol.bech32HRP));
+    let txPayload2 = createFoundryMintTokenTx(getOutput("tx1Alias"), getOutputId("tx1Alias"), ctx.walletKeyPair, ctx.info, lib.Bech32Helper.addressFromBech32(ctx.walletAddressBech32, ctx.info.protocol.bech32HRP));
     ctx.txList.push(txPayload2);
 
     /****************************************************************************************
@@ -479,12 +479,11 @@ function mintAliasTx(consumedOutput: lib.OutputTypes, consumedOutputId: string, 
 // Create a foundry with the help of an alias, mint native tokens and send them to user via a basic output.
 // inputs: alias from prev tx
 // output: alias, foundry, basic output
-function createFoundryMintTokenTx(consumedOutput: lib.OutputTypes, consumedOutputId: string, walletAddressHex: string, walletKeyPair: lib.IKeyPair, info: lib.INodeInfo, targetAddress: lib.AddressTypes): lib.ITransactionPayload {
+function createFoundryMintTokenTx(consumedOutput: lib.OutputTypes, consumedOutputId: string, walletKeyPair: lib.IKeyPair, info: lib.INodeInfo, targetAddress: lib.AddressTypes): lib.ITransactionPayload {
     const aliasInput = lib.TransactionHelper.inputFromOutputId(consumedOutputId);
 
     // defining the next alias output
-    let prevAlias = getOutput("tx1Alias");
-    let nextAliasOutput = deepCopy(prevAlias) as lib.IAliasOutput;
+    let nextAliasOutput = deepCopy(consumedOutput) as lib.IAliasOutput;
 
     // aliasId is the hash of the creating outputId
     nextAliasOutput.aliasId = lib.TransactionHelper.resolveIdFromOutputId(consumedOutputId);
@@ -550,7 +549,7 @@ function createFoundryMintTokenTx(consumedOutput: lib.OutputTypes, consumedOutpu
     const foundryStorageDeposit = lib.TransactionHelper.getStorageDeposit(foundryOutput, info.protocol.rentStructure);
     const basicStorageDeposit = lib.TransactionHelper.getStorageDeposit(remainderOutput, info.protocol.rentStructure);
 
-    if (parseInt(prevAlias.amount) < aliasStorageDeposit + foundryStorageDeposit + basicStorageDeposit) {
+    if (parseInt(consumedOutput.amount) < aliasStorageDeposit + foundryStorageDeposit + basicStorageDeposit) {
         throw new Error("Initial funds not enough to cover for storage deposits");
     }
 
@@ -559,10 +558,10 @@ function createFoundryMintTokenTx(consumedOutput: lib.OutputTypes, consumedOutpu
     // Update amounts in outputs. Only leave the bare minimum in the alias and the foundry, put the rest into the basic output
     nextAliasOutput.amount = aliasStorageDeposit.toString();
     foundryOutput.amount = foundryStorageDeposit.toString();
-    remainderOutput.amount = (parseInt(prevAlias.amount) - (aliasStorageDeposit + foundryStorageDeposit)).toString();
+    remainderOutput.amount = (parseInt(consumedOutput.amount) - (aliasStorageDeposit + foundryStorageDeposit)).toString();
 
     // Prepare inputs commitment
-    const inputsCommitmentTx2 = lib.TransactionHelper.getInputsCommitment([prevAlias]);
+    const inputsCommitmentTx2 = lib.TransactionHelper.getInputsCommitment([consumedOutput]);
 
     // Construct tx essence
     const tx2Essence: lib.ITransactionEssence = {
@@ -606,7 +605,6 @@ function createFoundryMintTokenTx(consumedOutput: lib.OutputTypes, consumedOutpu
     ctx.outputByName?.set("tx2Basic", remainderOutput);
 
     return txPayload2;
-
 }
 
 // Transfer half of the native tokens to target address, keep the rest in wallet
