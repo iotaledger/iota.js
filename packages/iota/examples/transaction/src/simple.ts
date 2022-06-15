@@ -8,8 +8,8 @@ import {
     ED25519_ADDRESS_TYPE,
     ED25519_SIGNATURE_TYPE,
     IBasicOutput, IBlock, IndexerPluginClient, IOutputsResponse, ITransactionEssence, ITransactionPayload, IUTXOInput,
-    OutputTypes,
-    serializeOutput, serializeTransactionEssence, SIGNATURE_UNLOCK_TYPE, SingleNodeClient,
+    serializeTransactionEssence, SIGNATURE_UNLOCK_TYPE, SingleNodeClient,
+    TransactionHelper,
     TRANSACTION_ESSENCE_TYPE,
     TRANSACTION_PAYLOAD_TYPE,
     UnlockTypes,
@@ -124,11 +124,6 @@ async function run() {
     console.log("Input: ", input, '\n');
 
     // 3. Create outputs, in this simple example only one basic output and a remainder that goes back to genesis address
-    const outputsWithSerialization: {
-        output: IBasicOutput;
-        serializedHex: string;
-    }[] = [];
-
     const basicOutput: IBasicOutput = {
         type: BASIC_OUTPUT_TYPE,
         amount: amountToSend.toString(),
@@ -144,15 +139,8 @@ async function run() {
         ],
         features: []
     };
-    const wsBasicOutput = new WriteStream();
-    serializeOutput(wsBasicOutput, basicOutput);
-    const fbBasicOutput = wsBasicOutput.finalBytes();
-    const serializedBasicOutput = Converter.bytesToHex(fbBasicOutput);
 
-    outputsWithSerialization.push({
-        output: basicOutput,
-        serializedHex: serializedBasicOutput
-    })
+    const nftStorageDeposit = TransactionHelper.getStorageDeposit(basicOutput, nodeInfo.protocol.rentStructure);
 
     const remainderBasicOutput: IBasicOutput = {
         type: BASIC_OUTPUT_TYPE,
@@ -169,31 +157,18 @@ async function run() {
         ],
         features: []
     };
-    const wsRemainder = new WriteStream();
-    serializeOutput(wsRemainder, remainderBasicOutput);
-    const fbRemainder = wsRemainder.finalBytes();
-    const serializedRemainderOutput = Converter.bytesToHex(fbRemainder);
-
-    outputsWithSerialization.push({
-        output: remainderBasicOutput,
-        serializedHex: serializedRemainderOutput
-    })
-
-    // Lexicographically sort outputs
-    const sortedOutputs = outputsWithSerialization.sort((a, b) => a.serializedHex.localeCompare(b.serializedHex))
-    console.log("Sorted Outputs: ", sortedOutputs, '\n')
 
     // 4. Get inputs commitment
-    const inputsCommitment = getInputsCommitment([consumedOutput]);
+    const inputsCommitment = TransactionHelper.getInputsCommitment([consumedOutput]);
     console.log("Inputs Commitment: ", inputsCommitment, '\n');
 
     // 5.Create transaction essence
     const transactionEssence: ITransactionEssence = {
         type: TRANSACTION_ESSENCE_TYPE,
         networkId: protocolInfo.networkId,
-        inputs: [input], // No need to Lexicographically sort inputs because we only have one input
+        inputs: [input], 
         inputsCommitment,
-        outputs: sortedOutputs.map(o => o.output),
+        outputs: [basicOutput, remainderBasicOutput],
         payload: undefined
     };
 
@@ -208,7 +183,6 @@ async function run() {
         type: SIGNATURE_UNLOCK_TYPE,
         signature: {
             type: ED25519_SIGNATURE_TYPE,
-            // publicKey: genesisWalletAddressHex,
             publicKey: Converter.bytesToHex(genesisWalletKeyPair.publicKey, true),
             signature: Converter.bytesToHex(Ed25519.sign(genesisWalletKeyPair.privateKey, essenceHash), true)
         }
@@ -278,23 +252,5 @@ async function fetchAndWaitForBasicOutput(addy: string, client: IndexerPluginCli
         throw new Error("Didn't find any outputs for address");
     }
     
-    return outputsResponse.items[0]
-};
-
-function getInputsCommitment(inputs: [OutputTypes]): string {
-    // Step 1: InputsCommitment calculation
-    const inputsCommitmentHasher = new Blake2b(Blake2b.SIZE_256); // blake2b hasher
-    // Step 2: Loop over list of inputs (the actual output objects they reference).
-    inputs.forEach( value => {
-        // Sub-step 2a: Calculate hash of serialized output
-        const outputHasher = new Blake2b(Blake2b.SIZE_256);
-        const w = new WriteStream();
-        serializeOutput(w, value);
-        const consumedOutputBytes = w.finalBytes();
-        outputHasher.update(consumedOutputBytes);
-        const outputHash = outputHasher.final();
-        // Sub-step 2b: add each output hash to buffer
-        inputsCommitmentHasher.update(outputHash);
-    })
-    return Converter.bytesToHex(inputsCommitmentHasher.final(), true);
+    return outputsResponse.items[0];
 };

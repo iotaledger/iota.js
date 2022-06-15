@@ -196,7 +196,7 @@ export function buildTransactionPayload(
 
     const inputsCommitmentHasher = new Blake2b(Blake2b.SIZE_256);
     for (const input of sortedInputs) {
-        inputsCommitmentHasher.update(input.consumingOutputBytes);
+        inputsCommitmentHasher.update(Blake2b.sum256(input.consumingOutputBytes));
     }
     const inputsCommitment = Converter.bytesToHex(inputsCommitmentHasher.final(), true);
 

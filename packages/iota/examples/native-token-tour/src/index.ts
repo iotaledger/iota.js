@@ -1,6 +1,6 @@
 import * as lib from "@iota/iota.js"
-import { Converter, WriteStream, ReadStream, BigIntHelper, HexHelper } from "@iota/util.js";
-import { Bip32Path, Blake2b, Ed25519 } from "@iota/crypto.js";
+import { Converter, WriteStream, HexHelper } from "@iota/util.js";
+import { Bip32Path, Ed25519 } from "@iota/crypto.js";
 import { NeonPowProvider } from "@iota/pow-neon.js";
 import * as readline from 'readline';
 import { randomBytes } from "crypto";
@@ -11,7 +11,8 @@ import fetch from "node-fetch";
 
 const API_ENDPOINT = "http://localhost:14265/";
 const EXPLORER = "https://explorer.alphanet.iotaledger.net/alphanet";
-const FAUCET_ENQUEUE = "https://faucet.alphanet.iotaledger.net/api/enqueue";
+// const FAUCET_ENQUEUE = "https://faucet.alphanet.iotaledger.net/api/enqueue";
+const FAUCET_ENQUEUE = "http://localhost:8091/api/enqueue"; // if running private tangle
 
 /*******************************
  In this example we will explore native tokens:
@@ -71,13 +72,13 @@ async function run() {
     // fetch basic info from node
     ctx.info = await ctx.client.info();
     // calculate networkId
-    ctx.networkId = networkIdFromNetworkName(ctx.info.protocol.networkName);
+    ctx.networkId = lib.TransactionHelper.networkIdFromNetworkName(ctx.info.protocol.networkName);
 
     // ask for the target address
     const targetAddressBech32 = await askQuestion("Target address? (Bech32 encoded): ");
 
     // parse bech32 encoded address into iota address
-    ctx.targetAddress = addressFromBech32(targetAddressBech32, ctx.info.protocol.bech32HRP);
+    ctx.targetAddress = lib.Bech32Helper.addressFromBech32(targetAddressBech32, ctx.info.protocol.bech32HRP);
 
     // Now it's time to set up an account for this demo. We generate a random seed and set up a hot wallet called "Main"
     console.log("Setting up Main wallet...");
@@ -122,7 +123,7 @@ async function run() {
      * - mints tokens
      ************************************/
     console.log("Creating a foundry, minting native tokens...");
-    let txPayload2 = createFoundryMintTokenTx(getOutput("tx1Alias"), getOutputId("tx1Alias"), ctx.walletAddressHex, ctx.walletKeyPair, ctx.info, addressFromBech32(ctx.walletAddressBech32, ctx.info.protocol.bech32HRP));
+    let txPayload2 = createFoundryMintTokenTx(getOutput("tx1Alias"), getOutputId("tx1Alias"), ctx.walletAddressHex, ctx.walletKeyPair, ctx.info, lib.Bech32Helper.addressFromBech32(ctx.walletAddressBech32, ctx.info.protocol.bech32HRP));
     ctx.txList.push(txPayload2);
 
     /****************************************************************************************
@@ -169,7 +170,7 @@ async function run() {
      * - create basic output to wallet address with half of the tokens
      ************************************/
     console.log("Transferring tokens without unlock conditions...");
-    let txPayload3 = transferNativeTokensWithoutUnlockCondition(getOutput("tx2Basic"), getOutputId("tx2Basic"), ctx.walletAddressHex, ctx.walletKeyPair, ctx.info, addressFromBech32(receiverWallet.bech32, ctx.info.protocol.bech32HRP));
+    let txPayload3 = transferNativeTokensWithoutUnlockCondition(getOutput("tx2Basic"), getOutputId("tx2Basic"), ctx.walletAddressHex, ctx.walletKeyPair, ctx.info, lib.Bech32Helper.addressFromBech32(receiverWallet.bech32, ctx.info.protocol.bech32HRP));
     ctx.txList.push(txPayload3);
 
     /****************************************************************************************
@@ -187,7 +188,7 @@ async function run() {
      * - create basic output with remaining base currency to wallet address
      ************************************/
     console.log("Transferring tokens with expiration and storage deposit return unlock conditions...");
-    let txPayload4 = transferNativeTokensWithUnlockCondition(getOutput("tx3Remainder"), getOutputId("tx3Remainder"), ctx.walletAddressHex, ctx.walletKeyPair, ctx.info, addressFromBech32(receiverWallet.bech32, ctx.info.protocol.bech32HRP))
+    let txPayload4 = transferNativeTokensWithUnlockCondition(getOutput("tx3Remainder"), getOutputId("tx3Remainder"), ctx.walletAddressHex, ctx.walletKeyPair, ctx.info, lib.Bech32Helper.addressFromBech32(receiverWallet.bech32, ctx.info.protocol.bech32HRP))
     ctx.txList.push(txPayload4);
 
     /****************************************************************************************
@@ -387,7 +388,7 @@ run()
  */
 function mintAliasTx(consumedOutput: lib.OutputTypes, consumedOutputId: string, walletAddressHex: string, walletKeyPair: lib.IKeyPair, info: lib.INodeInfo): lib.ITransactionPayload {
     // Prepare inputs to the tx
-    const input = inputFromOutputId(consumedOutputId);
+    const input = lib.TransactionHelper.inputFromOutputId(consumedOutputId);
     // First we need to mint an alias, then we can mint the tokens, lastly we are going to transfer the alias
 
     // Create the outputs, that is an Alias output
@@ -431,11 +432,11 @@ function mintAliasTx(consumedOutput: lib.OutputTypes, consumedOutputId: string, 
     };
 
     // To know the byte cost, we need to serialize the output
-    const requiredStorageDeposit = getStorageDeposit(aliasOutput, info.protocol.rentStructure);
+    const requiredStorageDeposit = lib.TransactionHelper.getStorageDeposit(aliasOutput, info.protocol.rentStructure);
     console.log("Required Storage Deposit of the Alias output: ", requiredStorageDeposit);
 
     // Prepare Tx essence
-    const inputsCommitment = getInputsCommitment([consumedOutput]);
+    const inputsCommitment = lib.TransactionHelper.getInputsCommitment([consumedOutput]);
 
     // Creating Transaction Essence
     const txEssence: lib.ITransactionEssence = {
@@ -447,7 +448,7 @@ function mintAliasTx(consumedOutput: lib.OutputTypes, consumedOutputId: string, 
     };
 
     // Calculating Transaction Essence Hash (to be signed in signature unlocks)
-    const essenceHash = getTxEssenceHash(txEssence)
+    const essenceHash = lib.TransactionHelper.getTransactionEssenceHash(txEssence)
 
     // We unlock only one output, so there will be one unlock with signature
     let unlock: lib.ISignatureUnlock = {
@@ -467,7 +468,7 @@ function mintAliasTx(consumedOutput: lib.OutputTypes, consumedOutputId: string, 
     };
 
     // Record some info for ourselves
-    let aliasOutputId = Converter.bytesToHex(getTransactionHash(txPayload), true) + "0000";
+    let aliasOutputId = Converter.bytesToHex(lib.TransactionHelper.getTransactionPayloadHash(txPayload), true) + "0000";
     ctx.outputById?.set(aliasOutputId, aliasOutput);
     ctx.outputIdByName?.set("tx1Alias", aliasOutputId);
     ctx.outputByName?.set("tx1Alias", aliasOutput);
@@ -479,14 +480,14 @@ function mintAliasTx(consumedOutput: lib.OutputTypes, consumedOutputId: string, 
 // inputs: alias from prev tx
 // output: alias, foundry, basic output
 function createFoundryMintTokenTx(consumedOutput: lib.OutputTypes, consumedOutputId: string, walletAddressHex: string, walletKeyPair: lib.IKeyPair, info: lib.INodeInfo, targetAddress: lib.AddressTypes): lib.ITransactionPayload {
-    const aliasInput = inputFromOutputId(consumedOutputId);
+    const aliasInput = lib.TransactionHelper.inputFromOutputId(consumedOutputId);
 
     // defining the next alias output
     let prevAlias = getOutput("tx1Alias");
     let nextAliasOutput = deepCopy(prevAlias) as lib.IAliasOutput;
 
     // aliasId is the hash of the creating outputId
-    nextAliasOutput.aliasId = aliasIdFromOutputId(consumedOutputId);
+    nextAliasOutput.aliasId = lib.TransactionHelper.resolveIdFromOutputId(consumedOutputId);
 
     nextAliasOutput.stateIndex++; // has to be incremented for every state update tx
     nextAliasOutput.foundryCounter++; // has to be incremented every time we create a foundry
@@ -522,7 +523,7 @@ function createFoundryMintTokenTx(consumedOutput: lib.OutputTypes, consumedOutpu
     }
 
     // Calculate tokendId
-    const tokenId = constructTokenId(nextAliasOutput.aliasId, foundryOutput.serialNumber, foundryOutput.tokenScheme.type);
+    const tokenId = lib.TransactionHelper.constructTokenId(nextAliasOutput.aliasId, foundryOutput.serialNumber, foundryOutput.tokenScheme.type);
 
     const remainderOutput: lib.IBasicOutput = {
         type: lib.BASIC_OUTPUT_TYPE,
@@ -545,9 +546,9 @@ function createFoundryMintTokenTx(consumedOutput: lib.OutputTypes, consumedOutpu
     }
 
     // Now we can calculate the storage deposits
-    const aliasStorageDeposit = getStorageDeposit(nextAliasOutput, info.protocol.rentStructure);
-    const foundryStorageDeposit = getStorageDeposit(foundryOutput, info.protocol.rentStructure);
-    const basicStorageDeposit = getStorageDeposit(remainderOutput, info.protocol.rentStructure);
+    const aliasStorageDeposit = lib.TransactionHelper.getStorageDeposit(nextAliasOutput, info.protocol.rentStructure);
+    const foundryStorageDeposit = lib.TransactionHelper.getStorageDeposit(foundryOutput, info.protocol.rentStructure);
+    const basicStorageDeposit = lib.TransactionHelper.getStorageDeposit(remainderOutput, info.protocol.rentStructure);
 
     if (parseInt(prevAlias.amount) < aliasStorageDeposit + foundryStorageDeposit + basicStorageDeposit) {
         throw new Error("Initial funds not enough to cover for storage deposits");
@@ -561,7 +562,7 @@ function createFoundryMintTokenTx(consumedOutput: lib.OutputTypes, consumedOutpu
     remainderOutput.amount = (parseInt(prevAlias.amount) - (aliasStorageDeposit + foundryStorageDeposit)).toString();
 
     // Prepare inputs commitment
-    const inputsCommitmentTx2 = getInputsCommitment([prevAlias]);
+    const inputsCommitmentTx2 = lib.TransactionHelper.getInputsCommitment([prevAlias]);
 
     // Construct tx essence
     const tx2Essence: lib.ITransactionEssence = {
@@ -573,7 +574,7 @@ function createFoundryMintTokenTx(consumedOutput: lib.OutputTypes, consumedOutpu
     };
 
     // Calculating Transaction Essence Hash (to be signed in signature unlocks)
-    const essenceHashTx2 = getTxEssenceHash(tx2Essence)
+    const essenceHashTx2 = lib.TransactionHelper.getTransactionEssenceHash(tx2Essence)
 
     // We unlock only one output (the alias), so there will be one unlock with signature
     let unlockTx2: lib.ISignatureUnlock = {
@@ -593,9 +594,9 @@ function createFoundryMintTokenTx(consumedOutput: lib.OutputTypes, consumedOutpu
     };
 
     // Record some info for ourselves
-    let aliasOutputId = Converter.bytesToHex(getTransactionHash(txPayload2), true) + "0000";
-    let foundryOutputId = Converter.bytesToHex(getTransactionHash(txPayload2), true) + "0100";
-    let basicOutputId = Converter.bytesToHex(getTransactionHash(txPayload2), true) + "0200";
+    let aliasOutputId = Converter.bytesToHex(lib.TransactionHelper.getTransactionPayloadHash(txPayload2), true) + "0000";
+    let foundryOutputId = Converter.bytesToHex(lib.TransactionHelper.getTransactionPayloadHash(txPayload2), true) + "0100";
+    let basicOutputId = Converter.bytesToHex(lib.TransactionHelper.getTransactionPayloadHash(txPayload2), true) + "0200";
     ctx.outputById?.set(aliasOutputId, nextAliasOutput);
     ctx.outputIdByName?.set("tx2Alias", aliasOutputId);
     ctx.outputByName?.set("tx2Alias", nextAliasOutput);
@@ -611,7 +612,7 @@ function createFoundryMintTokenTx(consumedOutput: lib.OutputTypes, consumedOutpu
 // Transfer half of the native tokens to target address, keep the rest in wallet
 function transferNativeTokensWithoutUnlockCondition(consumedOutput: lib.OutputTypes, consumedOutputId: string, walletAddressHex: string, walletKeyPair: lib.IKeyPair, info: lib.INodeInfo, targetAddress: lib.AddressTypes) {
     // Prepare the input object
-    const input = inputFromOutputId(consumedOutputId);
+    const input = lib.TransactionHelper.inputFromOutputId(consumedOutputId);
 
     const consumedBasic = consumedOutput as lib.IBasicOutput;
     if (consumedBasic.nativeTokens === undefined) {
@@ -660,8 +661,8 @@ function transferNativeTokensWithoutUnlockCondition(consumedOutput: lib.OutputTy
         ]
     }
 
-    const receiverStorageDeposit = getStorageDeposit(receiverOutput, info.protocol.rentStructure);
-    const remainderStorageDeposit = getStorageDeposit(remainderOutput, info.protocol.rentStructure);
+    const receiverStorageDeposit = lib.TransactionHelper.getStorageDeposit(receiverOutput, info.protocol.rentStructure);
+    const remainderStorageDeposit = lib.TransactionHelper.getStorageDeposit(remainderOutput, info.protocol.rentStructure);
 
     if ((receiverStorageDeposit + remainderStorageDeposit) > parseInt(consumedBasic.amount)) {
         throw new Error(`Insufficient funds to carry out the transaction, have ${parseInt(consumedBasic.amount)} but need ${receiverStorageDeposit + remainderStorageDeposit}`);
@@ -672,7 +673,7 @@ function transferNativeTokensWithoutUnlockCondition(consumedOutput: lib.OutputTy
     remainderOutput.amount = (parseInt(consumedBasic.amount) - receiverStorageDeposit).toString();
 
     // Prepare inputs commitment
-    const inputsCommitment = getInputsCommitment([consumedOutput]);
+    const inputsCommitment = lib.TransactionHelper.getInputsCommitment([consumedOutput]);
 
     // Construct tx essence
     const essence: lib.ITransactionEssence = {
@@ -684,7 +685,7 @@ function transferNativeTokensWithoutUnlockCondition(consumedOutput: lib.OutputTy
     };
 
     // Calculating Transaction Essence Hash (to be signed in signature unlocks)
-    const essenceHash = getTxEssenceHash(essence)
+    const essenceHash = lib.TransactionHelper.getTransactionEssenceHash(essence)
 
     // We unlock only one output, so there will be one unlock with signature
     let unlock: lib.ISignatureUnlock = {
@@ -704,8 +705,8 @@ function transferNativeTokensWithoutUnlockCondition(consumedOutput: lib.OutputTy
     };
 
     // Record some info for ourselves
-    let receiverOutputId = Converter.bytesToHex(getTransactionHash(txPayload), true) + "0000";
-    let remainderOutputId = Converter.bytesToHex(getTransactionHash(txPayload), true) + "0100";
+    let receiverOutputId = Converter.bytesToHex(lib.TransactionHelper.getTransactionPayloadHash(txPayload), true) + "0000";
+    let remainderOutputId = Converter.bytesToHex(lib.TransactionHelper.getTransactionPayloadHash(txPayload), true) + "0100";
 
     ctx.outputByName?.set("tx3Receiver", receiverOutput);
     ctx.outputIdByName?.set("tx3Receiver", receiverOutputId);
@@ -718,7 +719,7 @@ function transferNativeTokensWithoutUnlockCondition(consumedOutput: lib.OutputTy
 // Transfer native tokens with storage return + expiration unlock condition
 function transferNativeTokensWithUnlockCondition(consumedOutput: lib.OutputTypes, consumedOutputId: string, walletAddressHex: string, walletKeyPair: lib.IKeyPair, info: lib.INodeInfo, targetAddress: lib.AddressTypes) {
     // Prepare the input object
-    const input = inputFromOutputId(consumedOutputId);
+    const input = lib.TransactionHelper.inputFromOutputId(consumedOutputId);
 
     const consumedBasic = consumedOutput as lib.IBasicOutput;
     if (consumedBasic.nativeTokens === undefined) {
@@ -779,8 +780,8 @@ function transferNativeTokensWithUnlockCondition(consumedOutput: lib.OutputTypes
         ]
     }
 
-    const receiverStorageDeposit = getStorageDeposit(receiverOutput, info.protocol.rentStructure);
-    const remainderStorageDeposit = getStorageDeposit(remainderOutput, info.protocol.rentStructure);
+    const receiverStorageDeposit = lib.TransactionHelper.getStorageDeposit(receiverOutput, info.protocol.rentStructure);
+    const remainderStorageDeposit = lib.TransactionHelper.getStorageDeposit(remainderOutput, info.protocol.rentStructure);
 
     if ((receiverStorageDeposit + remainderStorageDeposit) > parseInt(consumedBasic.amount)) {
         throw new Error(`Insufficient funds to carry out the transaction, have ${parseInt(consumedBasic.amount)} but need ${receiverStorageDeposit + remainderStorageDeposit}`);
@@ -803,7 +804,7 @@ function transferNativeTokensWithUnlockCondition(consumedOutput: lib.OutputTypes
     remainderOutput.amount = (parseInt(consumedOutput.amount) - receiverStorageDeposit).toString();
 
     // Prepare inputs commitment
-    const inputsCommitment = getInputsCommitment([consumedOutput]);
+    const inputsCommitment = lib.TransactionHelper.getInputsCommitment([consumedOutput]);
 
     // Construct tx essence
     const essence: lib.ITransactionEssence = {
@@ -815,7 +816,7 @@ function transferNativeTokensWithUnlockCondition(consumedOutput: lib.OutputTypes
     };
 
     // Calculating Transaction Essence Hash (to be signed in signature unlocks)
-    const essenceHash = getTxEssenceHash(essence)
+    const essenceHash = lib.TransactionHelper.getTransactionEssenceHash(essence)
 
     // We unlock only one output, so there will be one unlock with signature
     let unlock: lib.ISignatureUnlock = {
@@ -835,8 +836,8 @@ function transferNativeTokensWithUnlockCondition(consumedOutput: lib.OutputTypes
     };
 
     // Record some info for ourselves
-    let receiverOutputId = Converter.bytesToHex(getTransactionHash(txPayload), true) + "0000";
-    let remainderOutputId = Converter.bytesToHex(getTransactionHash(txPayload), true) + "0100";
+    let receiverOutputId = Converter.bytesToHex(lib.TransactionHelper.getTransactionPayloadHash(txPayload), true) + "0000";
+    let remainderOutputId = Converter.bytesToHex(lib.TransactionHelper.getTransactionPayloadHash(txPayload), true) + "0100";
     ctx.outputByName?.set("tx4Receiver", receiverOutput);
     ctx.outputIdByName?.set("tx4Receiver", receiverOutputId);
     ctx.outputIdByName?.set("tx4Remainder", remainderOutputId);
@@ -858,8 +859,8 @@ function acceptNativeTokenTransfer(
     info: lib.INodeInfo,
 ): lib.ITransactionPayload {
     // Prepare the input objects
-    const incomingInput = inputFromOutputId(incomingOutputId);
-    const walletInput = inputFromOutputId(walletOutputId);
+    const incomingInput = lib.TransactionHelper.inputFromOutputId(incomingOutputId);
+    const walletInput = lib.TransactionHelper.inputFromOutputId(walletOutputId);
 
     // Fetch the tokenId and amount for the incoming native tokens.
     const incomingBasic = incomingOutput as lib.IBasicOutput;
@@ -912,12 +913,12 @@ function acceptNativeTokenTransfer(
         ]
     }
 
-    if (parseInt(storageDepositRefundOutput.amount) < getStorageDeposit(storageDepositRefundOutput, info.protocol.rentStructure)) {
+    if (parseInt(storageDepositRefundOutput.amount) < lib.TransactionHelper.getStorageDeposit(storageDepositRefundOutput, info.protocol.rentStructure)) {
         // Should never happen, as the protocol would reject tx4 for creating an output with less than minimum storage deposit return amount
     }
 
     // Prepare inputs commitment
-    const inputsCommitment = getInputsCommitment([incomingOutput, walletOutput]);
+    const inputsCommitment = lib.TransactionHelper.getInputsCommitment([incomingOutput, walletOutput]);
 
     // Construct tx essence
     const essence: lib.ITransactionEssence = {
@@ -929,7 +930,7 @@ function acceptNativeTokenTransfer(
     };
 
     // Calculating Transaction Essence Hash (to be signed in signature unlocks)
-    const essenceHash = getTxEssenceHash(essence);
+    const essenceHash = lib.TransactionHelper.getTransactionEssenceHash(essence);
 
     // We unlock 2 outputs now, but they are both owned by the same address. So we only have to sign once, second unlock is going to reference the first
     let unlocks: lib.UnlockTypes[] = [
@@ -956,8 +957,8 @@ function acceptNativeTokenTransfer(
     };
 
     // Record some info for ourselves
-    let receiverOwnedOutputId = Converter.bytesToHex(getTransactionHash(txPayload), true) + "0000";
-    let refundOutputId = Converter.bytesToHex(getTransactionHash(txPayload), true) + "0100";
+    let receiverOwnedOutputId = Converter.bytesToHex(lib.TransactionHelper.getTransactionPayloadHash(txPayload), true) + "0000";
+    let refundOutputId = Converter.bytesToHex(lib.TransactionHelper.getTransactionPayloadHash(txPayload), true) + "0100";
 
     ctx.outputByName?.set("tx5Receiver", receiverOwnedOutput);
     ctx.outputIdByName?.set("tx5Receiver", receiverOwnedOutputId);
@@ -978,9 +979,9 @@ function mintMoreNativeTokens(
     walletKeyPair: lib.IKeyPair,
     info: lib.INodeInfo
 ): lib.ITransactionPayload {
-    const aliasInput = inputFromOutputId(controllingAliasOutputId);
-    const foundryInput = inputFromOutputId(foundryOutputId);
-    const walletOwnedInput = inputFromOutputId(walletOwnedBasicOutputId);
+    const aliasInput = lib.TransactionHelper.inputFromOutputId(controllingAliasOutputId);
+    const foundryInput = lib.TransactionHelper.inputFromOutputId(foundryOutputId);
+    const walletOwnedInput = lib.TransactionHelper.inputFromOutputId(walletOwnedBasicOutputId);
 
     const nextAlias = deepCopy(controllingAliasOutput);
     nextAlias.stateIndex++;
@@ -990,7 +991,7 @@ function mintMoreNativeTokens(
     // note that minted-melted > max always has to be true! In out case, melted is 0, so we are fine.
 
 
-    let tokenId = constructTokenId(controllingAliasOutput.aliasId, foundryOutput.serialNumber, foundryOutput.tokenScheme.type);
+    let tokenId = lib.TransactionHelper.constructTokenId(controllingAliasOutput.aliasId, foundryOutput.serialNumber, foundryOutput.tokenScheme.type);
     let currentMinted = HexHelper.toBigInt256(foundryOutput.tokenScheme.mintedTokens);
     let currentMelted = HexHelper.toBigInt256(foundryOutput.tokenScheme.meltedTokens);
     let maxSupply = HexHelper.toBigInt256(foundryOutput.tokenScheme.maximumSupply)
@@ -1014,7 +1015,7 @@ function mintMoreNativeTokens(
     }
 
     // Prepare inputs commitment
-    const inputsCommitment = getInputsCommitment([controllingAliasOutput, foundryOutput, walletOwnedBasicOutput]);
+    const inputsCommitment = lib.TransactionHelper.getInputsCommitment([controllingAliasOutput, foundryOutput, walletOwnedBasicOutput]);
 
     // Construct tx essence
     const essence: lib.ITransactionEssence = {
@@ -1026,7 +1027,7 @@ function mintMoreNativeTokens(
     };
 
     // Calculating Transaction Essence Hash (to be signed in signature unlocks)
-    const essenceHash = getTxEssenceHash(essence)
+    const essenceHash = lib.TransactionHelper.getTransactionEssenceHash(essence)
 
     // We unlock 3 outputs. The alias we unlock with the sig, the foundry with an alias ref unlock, and the basic with a normal ref unlock
     let unlocks: lib.UnlockTypes[] = [
@@ -1056,9 +1057,9 @@ function mintMoreNativeTokens(
     };
 
     // Record some info for ourselves
-    let nextAliasOutputId = Converter.bytesToHex(getTransactionHash(txPayload), true) + "0000";
-    let nextFoundryOutputId = Converter.bytesToHex(getTransactionHash(txPayload), true) + "0100";
-    let remainderOutputId = Converter.bytesToHex(getTransactionHash(txPayload), true) + "0200";
+    let nextAliasOutputId = Converter.bytesToHex(lib.TransactionHelper.getTransactionPayloadHash(txPayload), true) + "0000";
+    let nextFoundryOutputId = Converter.bytesToHex(lib.TransactionHelper.getTransactionPayloadHash(txPayload), true) + "0100";
+    let remainderOutputId = Converter.bytesToHex(lib.TransactionHelper.getTransactionPayloadHash(txPayload), true) + "0200";
 
     ctx.outputByName?.set("tx6Alias", nextAlias);
     ctx.outputIdByName?.set("tx6Alias", nextAliasOutputId);
@@ -1081,9 +1082,9 @@ function meltNativeTokens(
     walletKeyPair: lib.IKeyPair,
     info: lib.INodeInfo
 ): lib.ITransactionPayload {
-    const aliasInput = inputFromOutputId(controllingAliasOutputId);
-    const foundryInput = inputFromOutputId(foundryOutputId);
-    const walletOwnedInputWithNT = inputFromOutputId(walletOwnedBasicOutputIdWithNT);
+    const aliasInput = lib.TransactionHelper.inputFromOutputId(controllingAliasOutputId);
+    const foundryInput = lib.TransactionHelper.inputFromOutputId(foundryOutputId);
+    const walletOwnedInputWithNT = lib.TransactionHelper.inputFromOutputId(walletOwnedBasicOutputIdWithNT);
 
     const nextAlias = deepCopy(controllingAliasOutput);
     // state transition. so need to increase state index
@@ -1113,7 +1114,7 @@ function meltNativeTokens(
     };
 
     // Prepare inputs commitment
-    const inputsCommitment = getInputsCommitment([controllingAliasOutput, foundryOutput, walletOwnedBasicOutputWithNT]);
+    const inputsCommitment = lib.TransactionHelper.getInputsCommitment([controllingAliasOutput, foundryOutput, walletOwnedBasicOutputWithNT]);
 
     // Construct tx essence
     const essence: lib.ITransactionEssence = {
@@ -1125,7 +1126,7 @@ function meltNativeTokens(
     };
 
     // Calculating Transaction Essence Hash (to be signed in signature unlocks)
-    const essenceHash = getTxEssenceHash(essence)
+    const essenceHash = lib.TransactionHelper.getTransactionEssenceHash(essence)
 
     // We unlock 3 outputs. The alias we unlock with the sig, the foundry with an alias ref unlock, and the basic with a normal ref unlock
     let unlocks: lib.UnlockTypes[] = [
@@ -1155,10 +1156,10 @@ function meltNativeTokens(
     };
 
     // Record some info for ourselves
-    const txHash = Converter.bytesToHex(getTransactionHash(txPayload), true);
-    let nextAliasOutputId = outputIdFromTxData(txHash, 0);
-    let nextFoundryOutputId = outputIdFromTxData(txHash, 1);
-    let remainderOutputId = outputIdFromTxData(txHash, 2);
+    const txHash = Converter.bytesToHex(lib.TransactionHelper.getTransactionPayloadHash(txPayload), true);
+    let nextAliasOutputId = lib.TransactionHelper.outputIdFromTransactionData(txHash, 0);
+    let nextFoundryOutputId = lib.TransactionHelper.outputIdFromTransactionData(txHash, 1);
+    let remainderOutputId = lib.TransactionHelper.outputIdFromTransactionData(txHash, 2);
 
     ctx.outputByName?.set("tx7Alias", nextAlias);
     ctx.outputIdByName?.set("tx7Alias", nextAliasOutputId);
@@ -1180,7 +1181,7 @@ function burnNativeTokens(
     info: lib.INodeInfo
 ): lib.ITransactionPayload {
     // Create input object
-    const input = inputFromOutputId(consumeBasicOutputIdWithNT);
+    const input = lib.TransactionHelper.inputFromOutputId(consumeBasicOutputIdWithNT);
 
     // Look into inut, see how much of what native token we have
     if (consumeBasicOutputWithNT.nativeTokens === undefined) {
@@ -1203,7 +1204,7 @@ function burnNativeTokens(
     };
 
     // Prepare inputs commitment
-    const inputsCommitment = getInputsCommitment([consumeBasicOutputWithNT]);
+    const inputsCommitment = lib.TransactionHelper.getInputsCommitment([consumeBasicOutputWithNT]);
 
     // Construct tx essence
     const essence: lib.ITransactionEssence = {
@@ -1215,7 +1216,7 @@ function burnNativeTokens(
     };
 
     // Calculating Transaction Essence Hash (to be signed in signature unlocks)
-    const essenceHash = getTxEssenceHash(essence)
+    const essenceHash = lib.TransactionHelper.getTransactionEssenceHash(essence)
 
     // We unlock only 1 output
     let unlocks: lib.UnlockTypes[] = [
@@ -1237,8 +1238,8 @@ function burnNativeTokens(
     };
 
     // Record some info for ourselves
-    const txHash = Converter.bytesToHex(getTransactionHash(txPayload), true);
-    let remainderOutputId = outputIdFromTxData(txHash, 0);
+    const txHash = Converter.bytesToHex(lib.TransactionHelper.getTransactionPayloadHash(txPayload), true);
+    let remainderOutputId = lib.TransactionHelper.outputIdFromTransactionData(txHash, 0);
 
     ctx.outputIdByName?.set("tx8Receiver", remainderOutputId);
     ctx.outputByName?.set("tx8Receiver", remainder);
@@ -1259,9 +1260,9 @@ function mintAndLockAway(
     info: lib.INodeInfo
 ): lib.ITransactionPayload {
     // Prepare input objects
-    const aliasInput = inputFromOutputId(controllingAliasOutputId);
-    const foundryInput = inputFromOutputId(foundryOutputId);
-    const depostiSupplierInput = inputFromOutputId(depositSupplierOutputId);
+    const aliasInput = lib.TransactionHelper.inputFromOutputId(controllingAliasOutputId);
+    const foundryInput = lib.TransactionHelper.inputFromOutputId(foundryOutputId);
+    const depostiSupplierInput = lib.TransactionHelper.inputFromOutputId(depositSupplierOutputId);
 
     const nextAlias = deepCopy(controllingAliasOutput);
     // state transition. so need to increase state index
@@ -1284,7 +1285,7 @@ function mintAndLockAway(
     // increase minted counter in foundry
     nextFoundry.tokenScheme.mintedTokens = HexHelper.fromBigInt256(currentMinted.add(bigInt(mintAmount)));
 
-    const tokenId = constructTokenId(controllingAliasOutput.aliasId, foundryOutput.serialNumber, foundryOutput.tokenScheme.type);
+    const tokenId = lib.TransactionHelper.constructTokenId(controllingAliasOutput.aliasId, foundryOutput.serialNumber, foundryOutput.tokenScheme.type);
 
     const now = new Date();
     // setFullYear adds X years to the date object and returns the miliseconds elapsed between 1970 and the updated date
@@ -1319,7 +1320,7 @@ function mintAndLockAway(
     }
 
     // Prepare inputs commitment
-    const inputsCommitment = getInputsCommitment([controllingAliasOutput, foundryOutput, depositSupplierOutput]);
+    const inputsCommitment = lib.TransactionHelper.getInputsCommitment([controllingAliasOutput, foundryOutput, depositSupplierOutput]);
 
     // Construct tx essence
     const essence: lib.ITransactionEssence = {
@@ -1331,7 +1332,7 @@ function mintAndLockAway(
     };
 
     // Calculating Transaction Essence Hash (to be signed in signature unlocks)
-    const essenceHash = getTxEssenceHash(essence)
+    const essenceHash = lib.TransactionHelper.getTransactionEssenceHash(essence)
 
     // We unlock 3 outputs. The alias we unlock with the sig, the foundry with an alias ref unlock, and the basic with a normal ref unlock
     let unlocks: lib.UnlockTypes[] = [
@@ -1361,10 +1362,10 @@ function mintAndLockAway(
     };
 
     // Record some info for ourselves
-    const txHash = Converter.bytesToHex(getTransactionHash(txPayload), true);
-    let nextAliasOutputId = outputIdFromTxData(txHash, 0);
-    let nextFoundryOutputId = outputIdFromTxData(txHash, 1);
-    let timeLockedOutputId = outputIdFromTxData(txHash, 2);
+    const txHash = Converter.bytesToHex(lib.TransactionHelper.getTransactionPayloadHash(txPayload), true);
+    let nextAliasOutputId = lib.TransactionHelper.outputIdFromTransactionData(txHash, 0);
+    let nextFoundryOutputId = lib.TransactionHelper.outputIdFromTransactionData(txHash, 1);
+    let timeLockedOutputId = lib.TransactionHelper.outputIdFromTransactionData(txHash, 2);
 
     ctx.outputByName?.set("tx9Alias", nextAlias);
     ctx.outputIdByName?.set("tx9Alias", nextAliasOutputId);
@@ -1389,10 +1390,10 @@ function sendAll(
     walletKeyPair: lib.IKeyPair,
     receiverKeyPair: lib.IKeyPair,
 ): lib.ITransactionPayload {
-    const aliasInput = inputFromOutputId(aliasOutputIdId);
-    const walletBasicInput = inputFromOutputId(walletBasicOutputId);
-    const receiverBasitWithNTInput = inputFromOutputId(receiverBasicOutputWithNTId);
-    const receiverBasicInput = inputFromOutputId(receiverBasicOutputId);
+    const aliasInput = lib.TransactionHelper.inputFromOutputId(aliasOutputIdId);
+    const walletBasicInput = lib.TransactionHelper.inputFromOutputId(walletBasicOutputId);
+    const receiverBasitWithNTInput = lib.TransactionHelper.inputFromOutputId(receiverBasicOutputWithNTId);
+    const receiverBasicInput = lib.TransactionHelper.inputFromOutputId(receiverBasicOutputId);
 
     const nextAlias = deepCopy(aliasOutput);
     // governance transition, so no need to increment state index!
@@ -1424,7 +1425,7 @@ function sendAll(
     }
 
     // Prepare inputs commitment
-    const inputsCommitment = getInputsCommitment([aliasOutput, walletBasicOutput, receiverBasicOutputWithNT, receiverBasicOutput ]);
+    const inputsCommitment = lib.TransactionHelper.getInputsCommitment([aliasOutput, walletBasicOutput, receiverBasicOutputWithNT, receiverBasicOutput ]);
 
     // Construct tx essence
     const essence: lib.ITransactionEssence = {
@@ -1436,7 +1437,7 @@ function sendAll(
     };
 
     // Calculating Transaction Essence Hash (to be signed in signature unlocks)
-    const essenceHash = getTxEssenceHash(essence)
+    const essenceHash = lib.TransactionHelper.getTransactionEssenceHash(essence)
 
     //
     /*******************************
@@ -1612,7 +1613,7 @@ async function chainTrasactionsViaBlocks(client: lib.SingleNodeClient, txs: Arra
         block.nonce = blockNonce;
 
         // Calculate blockId
-        const blockId = calculateBlockId(block);
+        const blockId = lib.TransactionHelper.calculateBlockId(block);
 
         // Add it to list of blockIds
         blockIds.push(blockId);
@@ -1666,177 +1667,7 @@ function getNetworkId(): string {
 }
 
 /***********************************************************************************************************************
- * HELPER METHODS TO WORK WITH LIB TYPES - TODO: MIGRATE INTO THE LIB
- ***********************************************************************************************************************/
-
-// Calculate blockId from a block.
-// Hint: blockId is the Blake1b-256 hash of the serialized block bytes
-function calculateBlockId(block: lib.IBlock): string {
-    const writeStream = new WriteStream();
-    lib.serializeBlock(writeStream, block);
-    const blockBytes = writeStream.finalBytes();
-
-    return Converter.bytesToHex(Blake2b.sum256(blockBytes), true);
-}
-
-// Performs PoW on a block to calculate nonce. Uses NeonPowProvider.
-async function caluclateNonce(block: lib.IBlock, minPoWScore: number): Promise<string> {
-    const writeStream = new WriteStream();
-    lib.serializeBlock(writeStream, block);
-    const blockBytes = writeStream.finalBytes();
-
-    if (blockBytes.length > lib.MAX_BLOCK_LENGTH) {
-        throw new Error(
-            `The block length is ${blockBytes.length}, which exceeds the maximum size of ${lib.MAX_BLOCK_LENGTH}`
-        );
-    }
-
-    const powProvider = new NeonPowProvider();
-    const nonce = await powProvider.pow(blockBytes, minPoWScore);
-    return nonce.toString();
-}
-
-// Returns an input object from an outputId.
-function inputFromOutputId(outputId: string): lib.IUTXOInput {
-    const r = new ReadStream(Converter.hexToBytes(outputId));
-    let input: lib.IUTXOInput = {
-        type: lib.UTXO_INPUT_TYPE,
-        // outputId = txPayloadHash (32 bytes) + outputIndex (2 bytes)
-        transactionId: r.readFixedHex("", lib.TRANSACTION_ID_LENGTH),
-        transactionOutputIndex: r.readUInt16("") // we only had one output
-    }
-    return input
-}
-
-// Returns the outputId from transation id and output index
-function outputIdFromTxData(transactionId: string, outputIndex: number): string {
-    const w = new WriteStream();
-    w.writeFixedHex("", lib.TRANSACTION_ID_LENGTH, transactionId);
-    w.writeUInt16("", outputIndex);
-    const outputIdBytes = w.finalBytes();
-
-    return Converter.bytesToHex(outputIdBytes, true);
-}
-
-// Returns aliasId from an outputId.
-// Hint: aliasId is the Blake2b-256 hash of the outputId that created the alias.
-function aliasIdFromOutputId(outputId: string): string {
-    // Convert string to bytes, hash it once, convert back to string (with prefix)
-    return Converter.bytesToHex(Blake2b.sum256(Converter.hexToBytes(outputId)), true)
-}
-
-// Returns the inputCommitment from the output objects that refer to inputs.
-function getInputsCommitment(inputs: lib.OutputTypes[]): string {
-    // InputsCommitment calculation
-    const inputsCommitmentHasher = new Blake2b(Blake2b.SIZE_256); // blake2b hasher
-    for (let i = 0; i < inputs.length; i++) {
-        // Sub-step 2a: Calculate hash of serialized output
-        let w = new WriteStream();
-        lib.serializeOutput(w, inputs[i]);
-        // Sub-step 2b: add each output hash to buffer
-        inputsCommitmentHasher.update(Blake2b.sum256(w.finalBytes()));
-    }
-
-    return Converter.bytesToHex(inputsCommitmentHasher.final(), true);
-};
-
-// Calculates the networkId value from the network name.
-function networkIdFromNetworkName(networkName: string): string {
-    const networkIdBytes = Blake2b.sum256(Converter.utf8ToBytes(networkName));
-    return BigIntHelper.read8(networkIdBytes, 0).toString();
-}
-
-// Calculates the Transaction Essence Hash.
-function getTxEssenceHash(essence: lib.ITransactionEssence): Uint8Array {
-    const binaryEssence = new WriteStream();
-    lib.serializeTransactionEssence(binaryEssence, essence);
-    const essenceFinal = binaryEssence.finalBytes();
-    return Blake2b.sum256(essenceFinal);
-}
-
-// Calculates the transaction hash.
-function getTransactionHash(tx: lib.ITransactionPayload): Uint8Array {
-    const binaryTx = new WriteStream();
-    lib.serializeTransactionPayload(binaryTx, tx);
-    const txBytes = binaryTx.finalBytes();
-    return Blake2b.sum256(txBytes);
-}
-
-// Constructs a tokenId from the:
-// - aliasId of the alias that controls the foundry
-// - serial number of the foundry
-// - tokenSchemeType of the foundry
-function constructTokenId(aliasId: string, serialNumber: number, tokenSchemeType: number): string {
-    // Get serialized alias address bytes
-    const wA = new WriteStream();
-    lib.serializeAliasAddress(wA, {
-        type: lib.ALIAS_ADDRESS_TYPE,
-        aliasId: aliasId
-    });
-    const aliasAddressBytes = wA.finalBytes();
-
-    const wS = new WriteStream();
-    wS.writeUInt32("", serialNumber);
-    const serialNumberBytes = wS.finalBytes();
-
-    const wT = new WriteStream();
-    wT.writeUInt8("", tokenSchemeType);
-    const tokenSchemeTypeBytes = wT.finalBytes();
-
-    // Append them and convert to hex string representation
-    return Converter.bytesToHex(new Uint8Array([...aliasAddressBytes, ...serialNumberBytes, ...tokenSchemeTypeBytes]), true);
-}
-
-// Calculates the required storage deposit of an output.
-function getStorageDeposit(output: lib.OutputTypes, rentStructure: lib.IRent): number {
-    const w = new WriteStream();
-    lib.serializeOutput(w, output);
-    const outputBytes = w.finalBytes();
-
-    // vByteFactorKey * outputIdLength + vByteFactorData * (blockIdLength + confMSIndexLength + confUnixTSLength) src: https://github.com/muXxer/tips/blob/master/tips/TIP-0019/tip-0019.md
-    const offset = rentStructure.vByteFactorKey * 34 + rentStructure.vByteFactorData * (32 + 4 + 4);
-
-    // Calculate Virtual Byte Size (output only has data fields)
-    const vByteSize = rentStructure.vByteFactorData * outputBytes.length + offset;
-
-    // Calculate required storage deposit
-    return rentStructure.vByteCost * vByteSize
-}
-
-// Returns an iota.js address type from a bech32 encoded address string.
-function addressFromBech32(bech32Address: string, hrp: string): lib.AddressTypes {
-    const parsed = lib.Bech32Helper.fromBech32(bech32Address, hrp);
-    if (!parsed) {
-        throw new Error("Can't decode address")
-    }
-
-    switch (parsed.addressType) {
-        case lib.ED25519_ADDRESS_TYPE: {
-            return {
-                type: lib.ED25519_ADDRESS_TYPE,
-                pubKeyHash: Converter.bytesToHex(parsed.addressBytes, true)
-            };
-        }
-        case lib.ALIAS_ADDRESS_TYPE: {
-            return {
-                type: lib.ALIAS_ADDRESS_TYPE,
-                aliasId: Converter.bytesToHex(parsed.addressBytes, true)
-            };
-        }
-        case lib.NFT_ADDRESS_TYPE: {
-            return {
-                type: lib.NFT_ADDRESS_TYPE,
-                nftId: Converter.bytesToHex(parsed.addressBytes, true)
-            };
-        }
-        default: {
-            throw new Error("Unexpected address type");
-        }
-    }
-}
-
-/***********************************************************************************************************************
- * OTHER UTILS
+ * UTILS
  ***********************************************************************************************************************/
 
 // Deeply copies an object.
@@ -1891,4 +1722,21 @@ async function askQuestion(question: string): Promise<string> {
     const result: string = await questionAsync(question);
 
     return result;
+}
+
+// Performs PoW on a block to calculate nonce. Uses NeonPowProvider.
+async function caluclateNonce(block: lib.IBlock, minPoWScore: number): Promise<string> {
+    const writeStream = new WriteStream();
+    lib.serializeBlock(writeStream, block);
+    const blockBytes = writeStream.finalBytes();
+
+    if (blockBytes.length > lib.MAX_BLOCK_LENGTH) {
+        throw new Error(
+            `The block length is ${blockBytes.length}, which exceeds the maximum size of ${lib.MAX_BLOCK_LENGTH}`
+        );
+    }
+
+    const powProvider = new NeonPowProvider();
+    const nonce = await powProvider.pow(blockBytes, minPoWScore);
+    return nonce.toString();
 }

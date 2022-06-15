@@ -13,6 +13,7 @@
 - [Ed25519Seed](classes/Ed25519Seed.md)
 - [Bech32Helper](classes/Bech32Helper.md)
 - [PowHelper](classes/PowHelper.md)
+- [TransactionHelper](classes/TransactionHelper.md)
 - [UnitsHelper](classes/UnitsHelper.md)
 
 ### Variables

@@ -1,6 +1,6 @@
 import * as lib from "@iota/iota.js"
-import { Converter, WriteStream, BigIntHelper, ReadStream } from "@iota/util.js";
-import { Bip32Path, Blake2b, Ed25519 } from "@iota/crypto.js";
+import { Converter, WriteStream } from "@iota/util.js";
+import { Bip32Path, Ed25519 } from "@iota/crypto.js";
 import { randomBytes } from "crypto";
 import { NeonPowProvider } from "@iota/pow-neon.js";
 import bigInt from "big-integer";
@@ -38,8 +38,8 @@ interface IContext {
     walletKeyPair?: lib.IKeyPair,
     // Address of the hot wallet encoded in bech32
     walletAddressBech32?: string,
-    // Target pubkeyHash where to consolidate in the last step
-    targetAddressHex?: string,
+    // Address of the hot wallet
+    walletAddress?: lib.AddressTypes,
     // info about the node/protocol
     info?: lib.INodeInfo
     // maps to help us locate outputs
@@ -65,12 +65,12 @@ async function run(){
     // fetch basic info from node
     ctx.info = await ctx.client.info();
     // calculate networkId
-    ctx.networkId = networkIdFromNetworkName(ctx.info.protocol.networkName);
+    ctx.networkId = lib.TransactionHelper.networkIdFromNetworkName(ctx.info.protocol.networkName);
 
     // Now it's time to set up an account for this demo. We generate a random seed and set up a hot wallet called "Main"
     console.log("Setting up Main wallet...");
     [ctx.walletAddressHex, ctx.walletAddressBech32, ctx.walletKeyPair] = await setUpHotWallet(ctx.info.protocol.bech32HRP, "Main");
-
+    ctx.walletAddress = lib.Bech32Helper.addressFromBech32(ctx.walletAddressBech32, ctx.info.protocol.bech32HRP);
     // We also top up the address by asking funds from the faucet.
     await requestFundsFromFaucet(ctx.walletAddressBech32);
 
@@ -91,7 +91,7 @@ async function run(){
     //target addres
     console.log("Setting up Receiver wallet...");
     const [receiverAddressHex, receiverAddressBech32, receiverKeyPair] = await setUpHotWallet(ctx.info.protocol.bech32HRP, "Receiver");
-    const receiverAddress = addressFromBech32(receiverAddressBech32, ctx.info.protocol.bech32HRP);
+    const receiverAddress = lib.Bech32Helper.addressFromBech32(receiverAddressBech32, ctx.info.protocol.bech32HRP);
 
     /****************************************************************************************
      * Current output ownership:
@@ -105,7 +105,7 @@ async function run(){
      *  - output: minted nft
      ************************************/
     console.log("Minting collection nft...");
-    let txPayload1 = mintCollectionNft(genesisOutput, outputId, ctx.walletAddressHex, ctx.walletKeyPair, addressFromBech32(ctx.walletAddressBech32, ctx.info.protocol.bech32HRP));
+    let txPayload1 = mintCollectionNft(genesisOutput, outputId, ctx.walletAddressHex, ctx.walletKeyPair, ctx.walletAddress);
     ctx.txList.push(txPayload1);
 
     /****************************************************************************************
@@ -119,9 +119,9 @@ async function run(){
      ************************************/
     const collectionNftAddress: lib.AddressTypes = {
         type: lib.NFT_ADDRESS_TYPE,
-        nftId: resolveIdFromOutputId(getOutputId("tx1CollectionNft"))
+        nftId: lib.TransactionHelper.resolveIdFromOutputId(getOutputId("tx1CollectionNft"))
     };
-    const nftCollectionOutputs = createNftCollectionOutputs(collectionNftAddress, addressFromBech32(ctx.walletAddressBech32, ctx.info?.protocol.bech32HRP), ctx.walletAddressBech32, 5, ctx.info);
+    const nftCollectionOutputs = createNftCollectionOutputs(collectionNftAddress, ctx.walletAddress, ctx.walletAddressBech32, 5, ctx.info);
 
     if (nftCollectionOutputs.totalDeposit > parseInt(getOutput("tx1CollectionNft").amount)) {
         throw new Error("Not enough funds to mint collection. Request funds from faucet:" + FAUCET);
@@ -230,7 +230,7 @@ run()
 
 function mintCollectionNft(consumedOutput: lib.OutputTypes, consumedOutputId: string, walletAddressHex: string, walletKeyPair: lib.IKeyPair, targetAddress: lib.AddressTypes): lib.ITransactionPayload{
     // Prepare inputs to the tx
-    const input = inputFromOutputId(consumedOutputId);
+    const input = lib.TransactionHelper.inputFromOutputId(consumedOutputId);
 
     // Create the outputs, that is an NFT output
     let nftOutput: lib.INftOutput = {
@@ -277,7 +277,7 @@ function mintCollectionNft(consumedOutput: lib.OutputTypes, consumedOutputId: st
 
     // Prepare Tx essence
     // InputsCommitment calculation
-    const inputsCommitment = getInputsCommitment([consumedOutput]);
+    const inputsCommitment = lib.TransactionHelper.getInputsCommitment([consumedOutput]);
 
     // Creating Transaction Essence
     const txEssence: lib.ITransactionEssence = {
@@ -289,7 +289,7 @@ function mintCollectionNft(consumedOutput: lib.OutputTypes, consumedOutputId: st
     };
 
     // Calculating Transaction Essence Hash (to be signed in signature unlocks)
-    const essenceHash = getTxEssenceHash(txEssence)
+    const essenceHash = lib.TransactionHelper.getTransactionEssenceHash(txEssence)
 
     // We unlock only one output, so there will be one unlock with signature
     let unlock: lib.ISignatureUnlock = {
@@ -309,8 +309,8 @@ function mintCollectionNft(consumedOutput: lib.OutputTypes, consumedOutputId: st
     };
 
     // Record some info for ourselves
-    let nftOutputId = Converter.bytesToHex(getTransactionHash(txPayload), true) + "0000";
-    let basicOutputId = Converter.bytesToHex(getTransactionHash(txPayload), true) + "0100";
+    let nftOutputId = Converter.bytesToHex(lib.TransactionHelper.getTransactionPayloadHash(txPayload), true) + "0000";
+    let basicOutputId = Converter.bytesToHex(lib.TransactionHelper.getTransactionPayloadHash(txPayload), true) + "0100";
 
     ctx.outputIdByName?.set("tx1CollectionNft", nftOutputId);
     ctx.outputByName?.set("tx1CollectionNft", nftOutput);
@@ -322,16 +322,16 @@ function mintCollectionNft(consumedOutput: lib.OutputTypes, consumedOutputId: st
 
 function mintCollectionNfts(txName: string, resolveCollectionNftId: boolean, consumedOutput: lib.OutputTypes, consumedOutputId: string, collectionOutputs: lib.OutputTypes[], totalDeposit: number, signerKeyPair: lib.IKeyPair, nodeInfo: lib.INodeInfo): lib.ITransactionPayload{
     // Prepare inputs to the tx
-    const input = inputFromOutputId(consumedOutputId);
+    const input = lib.TransactionHelper.inputFromOutputId(consumedOutputId);
 
     // InputsCommitment calculation
-    const inputsCommitment = getInputsCommitment([consumedOutput]);
+    const inputsCommitment = lib.TransactionHelper.getInputsCommitment([consumedOutput]);
 
     // Transition the CollectionNft
     let collectionNft = deepCopy(consumedOutput) as lib.INftOutput;
     // resolve nft Id if its all zeros
     if(resolveCollectionNftId){
-        collectionNft.nftId = resolveIdFromOutputId(consumedOutputId);
+        collectionNft.nftId = lib.TransactionHelper.resolveIdFromOutputId(consumedOutputId);
     }
      
     collectionNft.amount = bigInt(consumedOutput.amount).minus(totalDeposit).toString(); 
@@ -346,7 +346,7 @@ function mintCollectionNfts(txName: string, resolveCollectionNftId: boolean, con
     };
 
     // Calculating Transaction Essence Hash (to be signed in signature unlocks)
-    const essenceHash = getTxEssenceHash(collectionTransactionEssence);
+    const essenceHash = lib.TransactionHelper.getTransactionEssenceHash(collectionTransactionEssence);
 
     // Create the unlocks
     const unlockConditions: lib.UnlockTypes[] = [
@@ -368,12 +368,12 @@ function mintCollectionNfts(txName: string, resolveCollectionNftId: boolean, con
     };
 
     // Record some info for ourselves
-    let collectionNftOutputId = Converter.bytesToHex(getTransactionHash(txPayload), true) + "0000";
-    let nftOutputId1 = Converter.bytesToHex(getTransactionHash(txPayload), true) + "0100";
-    let nftOutputId2 = Converter.bytesToHex(getTransactionHash(txPayload), true) + "0200";
-    let nftOutputId3 = Converter.bytesToHex(getTransactionHash(txPayload), true) + "0300";
-    let nftOutputId4 = Converter.bytesToHex(getTransactionHash(txPayload), true) + "0400";
-    let nftOutputId5 = Converter.bytesToHex(getTransactionHash(txPayload), true) + "0500";
+    let collectionNftOutputId = Converter.bytesToHex(lib.TransactionHelper.getTransactionPayloadHash(txPayload), true) + "0000";
+    let nftOutputId1 = Converter.bytesToHex(lib.TransactionHelper.getTransactionPayloadHash(txPayload), true) + "0100";
+    let nftOutputId2 = Converter.bytesToHex(lib.TransactionHelper.getTransactionPayloadHash(txPayload), true) + "0200";
+    let nftOutputId3 = Converter.bytesToHex(lib.TransactionHelper.getTransactionPayloadHash(txPayload), true) + "0300";
+    let nftOutputId4 = Converter.bytesToHex(lib.TransactionHelper.getTransactionPayloadHash(txPayload), true) + "0400";
+    let nftOutputId5 = Converter.bytesToHex(lib.TransactionHelper.getTransactionPayloadHash(txPayload), true) + "0500";
 
     // write collectionNFT
     ctx.outputIdByName?.set(txName + "CollectionNft", collectionNftOutputId);
@@ -395,13 +395,13 @@ function mintCollectionNfts(txName: string, resolveCollectionNftId: boolean, con
 
 function transferNftTxWithoutUnlockConditions(txName: string, resolveNftId: boolean, consumedOutput: lib.OutputTypes, consumedOutputId: string, signerKeyPair: lib.IKeyPair, targetAddress: lib.AddressTypes) {
     // Prepare inputs to the tx
-    let input: lib.IUTXOInput = inputFromOutputId(consumedOutputId);
+    let input: lib.IUTXOInput = lib.TransactionHelper.inputFromOutputId(consumedOutputId);
     
     //transfer nft
     let nextNft = deepCopy(consumedOutput) as lib.INftOutput;
     // resolve nft id if its all zeros
     if (resolveNftId) {
-        nextNft.nftId = resolveIdFromOutputId(consumedOutputId);
+        nextNft.nftId = lib.TransactionHelper.resolveIdFromOutputId(consumedOutputId);
     }
     
     //Change unlock conditions
@@ -413,7 +413,7 @@ function transferNftTxWithoutUnlockConditions(txName: string, resolveNftId: bool
     ];
 
     // Calculate inputs commitment
-    let inputsCommitment = getInputsCommitment([consumedOutput]);
+    let inputsCommitment = lib.TransactionHelper.getInputsCommitment([consumedOutput]);
 
     // Construct tx essence
     const txEssence: lib.ITransactionEssence = {
@@ -425,7 +425,7 @@ function transferNftTxWithoutUnlockConditions(txName: string, resolveNftId: bool
     };
 
     // Calculating Transaction Essence Hash (to be signed in signature unlocks)
-    const essenceHash = getTxEssenceHash(txEssence);
+    const essenceHash = lib.TransactionHelper.getTransactionEssenceHash(txEssence);
 
     // We unlock the nft output
     let unlocks: lib.UnlockTypes[] = [
@@ -447,7 +447,7 @@ function transferNftTxWithoutUnlockConditions(txName: string, resolveNftId: bool
     };
 
     // Record some info for ourselves
-    let nftOutputId = Converter.bytesToHex(getTransactionHash(txPayload), true) + "0000";
+    let nftOutputId = Converter.bytesToHex(lib.TransactionHelper.getTransactionPayloadHash(txPayload), true) + "0000";
     
     ctx.outputIdByName?.set(txName, nftOutputId);
     ctx.outputByName?.set(txName, nextNft);
@@ -457,11 +457,11 @@ function transferNftTxWithoutUnlockConditions(txName: string, resolveNftId: bool
 
 function transferNftTxWithUnlockConditions(consumedOutput: lib.OutputTypes, consumedOutputId: string, basicOutput: lib.OutputTypes, basicOutputId: string, walletAddressHex: string, signerKeyPair: lib.IKeyPair, targetAddress: lib.AddressTypes, nodeInfo: lib.INodeInfo): lib.ITransactionPayload{
     // Prepare inputs to the tx
-    let inputs: lib.IUTXOInput[] = [inputFromOutputId(consumedOutputId), inputFromOutputId(basicOutputId)];
+    let inputs: lib.IUTXOInput[] = [lib.TransactionHelper.inputFromOutputId(consumedOutputId), lib.TransactionHelper.inputFromOutputId(basicOutputId)];
 
     //transfer nft
     let nextNft = deepCopy(consumedOutput) as lib.INftOutput;
-    nextNft.nftId = resolveIdFromOutputId(consumedOutputId);
+    nextNft.nftId = lib.TransactionHelper.resolveIdFromOutputId(consumedOutputId);
     
     //Change unlock conditions
     nextNft.unlockConditions = [
@@ -504,8 +504,8 @@ function transferNftTxWithUnlockConditions(consumedOutput: lib.OutputTypes, cons
         ]
     }
 
-    const nftStorageDeposit = getStorageDeposit(nextNft, nodeInfo.protocol.rentStructure);
-    const remainderStorageDeposit = getStorageDeposit(remainderOutput, nodeInfo.protocol.rentStructure);
+    const nftStorageDeposit = lib.TransactionHelper.getStorageDeposit(nextNft, nodeInfo.protocol.rentStructure);
+    const remainderStorageDeposit = lib.TransactionHelper.getStorageDeposit(remainderOutput, nodeInfo.protocol.rentStructure);
 
     if ((nftStorageDeposit + remainderStorageDeposit) > parseInt(basicOutput.amount)) {
         throw new Error(`Insufficient funds to carry out the transaction, have ${parseInt(basicOutput.amount)} but need ${nftStorageDeposit + remainderStorageDeposit}`);
@@ -528,7 +528,7 @@ function transferNftTxWithUnlockConditions(consumedOutput: lib.OutputTypes, cons
     remainderOutput.amount = (parseInt(basicOutput.amount) - (nftStorageDeposit - parseInt(consumedOutput.amount))).toString();
 
     // Calculate inputs commitment
-    let inputsCommitment = getInputsCommitment([consumedOutput, basicOutput]);
+    let inputsCommitment = lib.TransactionHelper.getInputsCommitment([consumedOutput, basicOutput]);
 
     // Construct tx essence
     const txEssence: lib.ITransactionEssence = {
@@ -540,7 +540,7 @@ function transferNftTxWithUnlockConditions(consumedOutput: lib.OutputTypes, cons
     };
 
     // Calculating Transaction Essence Hash (to be signed in signature unlocks)
-    const essenceHash = getTxEssenceHash(txEssence);
+    const essenceHash = lib.TransactionHelper.getTransactionEssenceHash(txEssence);
 
     // We unlock the nft output
     let unlocks: lib.UnlockTypes[] = [
@@ -566,8 +566,8 @@ function transferNftTxWithUnlockConditions(consumedOutput: lib.OutputTypes, cons
     };
 
     // Record some info for ourselves
-    let nftOutputId = Converter.bytesToHex(getTransactionHash(txPayload), true) + "0000";
-    let reminderOutputId = Converter.bytesToHex(getTransactionHash(txPayload), true) + "0100";
+    let nftOutputId = Converter.bytesToHex(lib.TransactionHelper.getTransactionPayloadHash(txPayload), true) + "0000";
+    let reminderOutputId = Converter.bytesToHex(lib.TransactionHelper.getTransactionPayloadHash(txPayload), true) + "0100";
 
     ctx.outputIdByName?.set("tx4Nft2", nftOutputId);
     ctx.outputByName?.set("tx4Nft2", nextNft);
@@ -579,7 +579,7 @@ function transferNftTxWithUnlockConditions(consumedOutput: lib.OutputTypes, cons
 
 function burnCollectionNft(txName: string, consumedOutput: lib.OutputTypes, consumedOutputId: string, signerKeyPair: lib.IKeyPair, targetAddress: lib.AddressTypes): lib.ITransactionPayload{
         // Prepare inputs to the tx
-        let input: lib.IUTXOInput = inputFromOutputId(consumedOutputId);
+        let input: lib.IUTXOInput = lib.TransactionHelper.inputFromOutputId(consumedOutputId);
     
         // create basic output for the nft amount
         const remainderOutput: lib.IBasicOutput = {
@@ -597,7 +597,7 @@ function burnCollectionNft(txName: string, consumedOutput: lib.OutputTypes, cons
         }
         
         // Calculate inputs commitment
-        let inputsCommitment = getInputsCommitment([consumedOutput]);
+        let inputsCommitment = lib.TransactionHelper.getInputsCommitment([consumedOutput]);
 
         // Construct tx essence
         const txEssence: lib.ITransactionEssence = {
@@ -609,7 +609,7 @@ function burnCollectionNft(txName: string, consumedOutput: lib.OutputTypes, cons
         };
     
         // Calculating Transaction Essence Hash (to be signed in signature unlocks)
-        const essenceHash = getTxEssenceHash(txEssence);
+        const essenceHash = lib.TransactionHelper.getTransactionEssenceHash(txEssence);
     
         // We unlock the nft output
         let unlocks: lib.UnlockTypes[] = [
@@ -631,7 +631,7 @@ function burnCollectionNft(txName: string, consumedOutput: lib.OutputTypes, cons
         };
     
         // Record some info for ourselves
-        let reminderOutputId = Converter.bytesToHex(getTransactionHash(txPayload), true) + "0000";
+        let reminderOutputId = Converter.bytesToHex(lib.TransactionHelper.getTransactionPayloadHash(txPayload), true) + "0000";
         
         ctx.outputIdByName?.set(txName, reminderOutputId);
         ctx.outputByName?.set(txName, remainderOutput);
@@ -773,7 +773,7 @@ function createNftCollectionOutputs(issuerAddress: lib.INftAddress, targetAddres
             ]
         }
         //calculate required storage
-        const requiredStorageDeposit = getStorageDeposit(nftOutput, nodeInfo.protocol.rentStructure);
+        const requiredStorageDeposit = lib.TransactionHelper.getStorageDeposit(nftOutput, nodeInfo.protocol.rentStructure);
 
         //Change NFT output amount to requred deposit storage
         nftOutput.amount = requiredStorageDeposit.toString();
@@ -826,7 +826,7 @@ async function chainTrasactionsViaBlocks(client: lib.SingleNodeClient, txs: Arra
         block.nonce = blockNonce;
 
         // Calculate blockId
-        const blockId = calculateBlockId(block);
+        const blockId = lib.TransactionHelper.calculateBlockId(block);
 
         // Add it to list of blockIds
         blockIds.push(blockId);
@@ -880,19 +880,8 @@ function getNetworkId(): string {
 }
 
 /***********************************************************************************************************************
- * HELPER METHODS TO WORK WITH LIB TYPES - TODO: MIGRATE INTO THE LIB
+ * UTILS
  ***********************************************************************************************************************/
-
-// Calculate blockId from a block.
-// Hint: blockId is the Blake1b-256 hash of the serialized block bytes
-function calculateBlockId(block: lib.IBlock): string {
-    const writeStream = new WriteStream();
-    lib.serializeBlock(writeStream, block);
-    const blockBytes = writeStream.finalBytes();
-
-    return Converter.bytesToHex(Blake2b.sum256(blockBytes), true);
-}
-
 // Performs PoW on a block to calculate nonce. Uses NeonPowProvider.
 async function caluclateNonce(block: lib.IBlock, minPoWScore: number): Promise<string> {
     const writeStream = new WriteStream();
@@ -909,123 +898,6 @@ async function caluclateNonce(block: lib.IBlock, minPoWScore: number): Promise<s
     const nonce = await powProvider.pow(blockBytes, minPoWScore);
     return nonce.toString();
 }
-
-// Returns an input object from an outputId.
-function inputFromOutputId(outputId: string): lib.IUTXOInput {
-    const r = new ReadStream(Converter.hexToBytes(outputId));
-    let input: lib.IUTXOInput = {
-        type: lib.UTXO_INPUT_TYPE,
-        // outputId = txPayloadHash (32 bytes) + outputIndex (2 bytes)
-        transactionId: r.readFixedHex("", lib.TRANSACTION_ID_LENGTH),
-        transactionOutputIndex: r.readUInt16("") // we only had one output
-    }
-    return input
-}
-
-// Returns the outputId from transation id and output index
-function outputIdFromTxData(transactionId: string, outputIndex: number): string {
-    const w = new WriteStream();
-    w.writeFixedHex("", lib.TRANSACTION_ID_LENGTH, transactionId);
-    w.writeUInt16("", outputIndex);
-    const outputIdBytes = w.finalBytes();
-
-    return Converter.bytesToHex(outputIdBytes, true);
-}
-
-// Returns nftId/aliasId from an outputId.
-// Hint: nftId/aliasId is the Blake2b-256 hash of the outputId that created the nft/alias.
-function resolveIdFromOutputId(outputId: string): string {
-    // Convert string to bytes, hash it once, convert back to string (with prefix)
-    return Converter.bytesToHex(Blake2b.sum256(Converter.hexToBytes(outputId)), true)
-}
-
-// Returns the inputCommitment from the output objects that refer to inputs.
-function getInputsCommitment(inputs: lib.OutputTypes[]): string {
-    // InputsCommitment calculation
-    const inputsCommitmentHasher = new Blake2b(Blake2b.SIZE_256); // blake2b hasher
-    for (let i = 0; i < inputs.length; i++) {
-        // Sub-step 2a: Calculate hash of serialized output
-        let w = new WriteStream();
-        lib.serializeOutput(w, inputs[i]);
-        // Sub-step 2b: add each output hash to buffer
-        inputsCommitmentHasher.update(Blake2b.sum256(w.finalBytes()));
-    }
-
-    return Converter.bytesToHex(inputsCommitmentHasher.final(), true);
-};
-
-// Calculates the networkId value from the network name.
-function networkIdFromNetworkName(networkName: string): string {
-    const networkIdBytes = Blake2b.sum256(Converter.utf8ToBytes(networkName));
-    return BigIntHelper.read8(networkIdBytes, 0).toString();
-}
-
-// Calculates the Transaction Essence Hash.
-function getTxEssenceHash(essence: lib.ITransactionEssence): Uint8Array {
-    const binaryEssence = new WriteStream();
-    lib.serializeTransactionEssence(binaryEssence, essence);
-    const essenceFinal = binaryEssence.finalBytes();
-    return Blake2b.sum256(essenceFinal);
-}
-
-// Calculates the transaction hash.
-function getTransactionHash(tx: lib.ITransactionPayload): Uint8Array {
-    const binaryTx = new WriteStream();
-    lib.serializeTransactionPayload(binaryTx, tx);
-    const txBytes = binaryTx.finalBytes();
-    return Blake2b.sum256(txBytes);
-}
-
-// Calculates the required storage deposit of an output.
-function getStorageDeposit(output: lib.OutputTypes, rentStructure: lib.IRent): number {
-    const w = new WriteStream();
-    lib.serializeOutput(w, output);
-    const outputBytes = w.finalBytes();
-
-    // vByteFactorKey * outputIdLength + vByteFactorData * (blockIdLength + confMSIndexLength + confUnixTSLength) src: https://github.com/muXxer/tips/blob/master/tips/TIP-0019/tip-0019.md
-    const offset = rentStructure.vByteFactorKey * 34 + rentStructure.vByteFactorData * (32 + 4 + 4);
-
-    // Calculate Virtual Byte Size (output only has data fields)
-    const vByteSize = rentStructure.vByteFactorData * outputBytes.length + offset;
-
-    // Calculate required storage deposit
-    return rentStructure.vByteCost * vByteSize
-}
-
-// Returns an iota.js address type from a bech32 encoded address string.
-function addressFromBech32(bech32Address: string, hrp: string): lib.AddressTypes {
-    const parsed = lib.Bech32Helper.fromBech32(bech32Address, hrp);
-    if (!parsed) {
-        throw new Error("Can't decode address")
-    }
-
-    switch (parsed.addressType) {
-        case lib.ED25519_ADDRESS_TYPE: {
-            return {
-                type: lib.ED25519_ADDRESS_TYPE,
-                pubKeyHash: Converter.bytesToHex(parsed.addressBytes, true)
-            };
-        }
-        case lib.ALIAS_ADDRESS_TYPE: {
-            return {
-                type: lib.ALIAS_ADDRESS_TYPE,
-                aliasId: Converter.bytesToHex(parsed.addressBytes, true)
-            };
-        }
-        case lib.NFT_ADDRESS_TYPE: {
-            return {
-                type: lib.NFT_ADDRESS_TYPE,
-                nftId: Converter.bytesToHex(parsed.addressBytes, true)
-            };
-        }
-        default: {
-            throw new Error("Unexpected address type");
-        }
-    }
-}
-/***********************************************************************************************************************
- * OTHER UTILS
- ***********************************************************************************************************************/
 
 // Deeply copies an object.
 function deepCopy<T>(instance: T): T {
@@ -1060,4 +932,3 @@ function deepCopy<T>(instance: T): T {
     // handling primitive data types
     return instance;
 }
-

@@ -6,28 +6,32 @@ import {
     ED25519_ADDRESS_TYPE,
     getBalance,
     getUnspentAddress,
-    getUnspentAddresses, IBasicOutput, IKeyPair, IndexerPluginClient, IUTXOInput,
+    getUnspentAddresses, IBasicOutput, IKeyPair, IndexerPluginClient, IOutputsResponse, IUTXOInput,
     OutputTypes,
     sendAdvanced, SingleNodeClient,
     UTXO_INPUT_TYPE
 } from "@iota/iota.js";
 import { Converter } from "@iota/util.js";
 import bigInt, { BigInteger } from "big-integer";
+import fetch from "node-fetch";
+import { randomBytes } from "node:crypto";
 
 const API_ENDPOINT = "http://localhost:14265/";
+// const FAUCET = "https://faucet.alphanet.iotaledger.net/api/enqueue" 
+const FAUCET = "http://localhost:8091/api/enqueue"; // if runnig private tangle
 
 async function run() {
     const client = new SingleNodeClient(API_ENDPOINT);
 
     const nodeInfo = await client.info();
 
-    // These are the default values from the Hornet alphanet configuration
-    const mnemonic =
-        "giant dynamic museum toddler six deny defense ostrich bomb access mercy blood explain muscle shoot shallow glad autumn author calm heavy hawk abuse rally";
-
-    // Generate the seed from the Mnemonic
-    const genesisSeed = Ed25519Seed.fromMnemonic(mnemonic);
-
+    // PUT here your mnemonic
+    // const mnemonic =
+    //     "assist file add kidney sense anxiety march quality sphere stamp crime swift mystery bind thrive impact walk solar asset pottery nation dutch column beef";
+    // // Generate the seed from the Mnemonic
+    // const genesisSeed = Ed25519Seed.fromMnemonic(mnemonic);
+    const genesisSeed =  new Ed25519Seed(randomBytes(32));
+    
     console.log("Genesis");
 
     const genesisPath = new Bip32Path("m/44'/4218'/0'/0'/0'");
@@ -67,11 +71,16 @@ async function run() {
     );
     console.log();
 
+    //Request funds from faucet
+    const genesisFunds = await requestFunds(FAUCET, genesisWalletAddressBech32);
+    console.log("genesisFunds: ", genesisFunds)
+
     // Because we are using the genesis address we must use send advanced as the input address is
     // not calculated from a Bip32 path, if you were doing a wallet to wallet transfer you can just use send
     // which calculates all the inputs/outputs for you
     const indexerPlugin = new IndexerPluginClient(client);
-    const genesisAddressOutputs = await indexerPlugin.outputs({ addressBech32: genesisWalletAddressBech32 });
+    // const genesisAddressOutputs = await indexerPlugin.outputs({ addressBech32: genesisWalletAddressBech32 });
+    const genesisAddressOutputs = await fetchAndWaitForBasicOutputs(genesisWalletAddressBech32, indexerPlugin);
 
     const inputsWithKeyPairs: {
         input: IUTXOInput;
@@ -98,7 +107,7 @@ async function run() {
             }
         }
     }
-
+    console.log("inputsWithKeyPairs:", JSON.stringify(inputsWithKeyPairs));
     const amountToSend = bigInt(10000000);
 
     const outputs: {
@@ -140,3 +149,42 @@ async function run() {
 run()
     .then(() => console.log("Done"))
     .catch(err => console.error(err));
+    
+async function requestFunds(url: string, addressBech32: string): Promise<object> {
+    const requestFounds = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ address: addressBech32 })
+        });
+
+    return await requestFounds.json();
+}
+
+async function fetchAndWaitForBasicOutputs(addressBech32: string, client: IndexerPluginClient): Promise<IOutputsResponse> {
+    let outputsResponse: IOutputsResponse = { ledgerIndex: 0, cursor: "", pageSize: "", items: [] };
+    let maxTries = 10;
+    let tries = 0;
+    while(outputsResponse.items.length == 0 ){
+        if (tries > maxTries){break}
+        tries++;
+        console.log("\tTry #",tries,": fetching basic output for address ", addressBech32)
+        outputsResponse = await client.outputs({
+            addressBech32: addressBech32,
+            hasStorageReturnCondition: false,
+            hasExpirationCondition: false,
+            hasTimelockCondition: false,
+            hasNativeTokens: false,
+        });
+        if(outputsResponse.items.length == 0){
+            console.log("\tDidn't find any, retrying soon...")
+            await new Promise(f => setTimeout(f, 1000));}
+    }
+    if(tries > maxTries){
+        throw new Error("Didn't find any outputs for address");
+    }
+    
+    return outputsResponse;
+};
