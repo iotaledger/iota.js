@@ -192,7 +192,7 @@ export class IndexerPluginClient {
      */
     public async aliases(filterOptions?: {
         stateControllerBech32?: string;
-        governorBech32?: boolean;
+        governorBech32?: string;
         issuerBech32?: string;
         senderBech32?: string;
         hasNativeTokens?: boolean;
