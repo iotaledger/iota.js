@@ -6,7 +6,6 @@ import bigInt from "big-integer";
 import { MAX_BLOCK_LENGTH, serializeBlock } from "../binary/block";
 import type { IMilestonePayload } from "../index-browser";
 import type { IBlockIdResponse } from "../models/api/IBlockIdResponse";
-import type { IChildrenResponse } from "../models/api/IChildrenResponse";
 import type { IMilestoneUtxoChangesResponse } from "../models/api/IMilestoneUtxoChangesResponse";
 import type { IOutputMetadataResponse } from "../models/api/IOutputMetadataResponse";
 import type { IOutputResponse } from "../models/api/IOutputResponse";
@@ -287,15 +286,6 @@ export class SingleNodeClient implements IClient {
         const response = await this.fetchBinary<IBlockIdResponse>(this._basePath, "post", "blocks", block);
 
         return (response as IBlockIdResponse).blockId;
-    }
-
-    /**
-     * Get the children of a block.
-     * @param blockId The id of the block to get the children for.
-     * @returns The blocks children.
-     */
-    public async blockChildren(blockId: string): Promise<IChildrenResponse> {
-        return this.fetchJson<never, IChildrenResponse>(this._basePath, "get", `blocks/${blockId}/children`);
     }
 
     /**

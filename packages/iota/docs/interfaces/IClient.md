@@ -18,7 +18,6 @@ Client interface definition for API communication.
 - [blockRaw](IClient.md#blockraw)
 - [blockSubmit](IClient.md#blocksubmit)
 - [blockSubmitRaw](IClient.md#blocksubmitraw)
-- [blockChildren](IClient.md#blockchildren)
 - [transactionIncludedBlock](IClient.md#transactionincludedblock)
 - [transactionIncludedBlockRaw](IClient.md#transactionincludedblockraw)
 - [output](IClient.md#output)
@@ -180,26 +179,6 @@ Submit block in raw format.
 `Promise`<`string`\>
 
 The blockId.
-
-___
-
-### blockChildren
-
-▸ **blockChildren**(`blockId`): `Promise`<[`IChildrenResponse`](IChildrenResponse.md)\>
-
-Get the children of a block.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `blockId` | `string` | The id of the block to get the children for. |
-
-#### Returns
-
-`Promise`<[`IChildrenResponse`](IChildrenResponse.md)\>
-
-The blocks children.
 
 ___
 

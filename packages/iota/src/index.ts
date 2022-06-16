@@ -69,7 +69,6 @@ export * from "./models/addresses/addressTypes";
 export * from "./models/addresses/IAliasAddress";
 export * from "./models/addresses/IEd25519Address";
 export * from "./models/addresses/INftAddress";
-export * from "./models/api/IChildrenResponse";
 export * from "./models/api/IBlockIdResponse";
 export * from "./models/api/IMilestoneUtxoChangesResponse";
 export * from "./models/api/IOutputMetadataResponse";
