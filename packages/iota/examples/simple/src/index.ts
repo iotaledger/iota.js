@@ -70,14 +70,6 @@ async function run() {
     logBlock("", decoded);
     console.log();
 
-    const children = await client.blockChildren(tipsResponse.tips[0]);
-    console.log("Children");
-    console.log("\tBlock Id:", children.blockId);
-    console.log("\tMax Results:", children.maxResults);
-    console.log("\tCount:", children.count);
-    console.log("\tChildren Block Ids:", children.children);
-    console.log();
-
     const milestone = await client.milestoneByIndex(info.status.latestMilestone.index);
     console.log("Latest Milestone Payload");
     console.log("\tMilestone Index:", milestone.index);

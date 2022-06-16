@@ -310,7 +310,6 @@
 - [IEd25519Address](interfaces/IEd25519Address.md)
 - [INftAddress](interfaces/INftAddress.md)
 - [IBlockIdResponse](interfaces/IBlockIdResponse.md)
-- [IChildrenResponse](interfaces/IChildrenResponse.md)
 - [IMilestoneUtxoChangesResponse](interfaces/IMilestoneUtxoChangesResponse.md)
 - [IOutputMetadataResponse](interfaces/IOutputMetadataResponse.md)
 - [IOutputResponse](interfaces/IOutputResponse.md)

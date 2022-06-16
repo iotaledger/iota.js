@@ -22,7 +22,6 @@ Client for API communication.
 - [blockRaw](SingleNodeClient.md#blockraw)
 - [blockSubmit](SingleNodeClient.md#blocksubmit)
 - [blockSubmitRaw](SingleNodeClient.md#blocksubmitraw)
-- [blockChildren](SingleNodeClient.md#blockchildren)
 - [transactionIncludedBlock](SingleNodeClient.md#transactionincludedblock)
 - [transactionIncludedBlockRaw](SingleNodeClient.md#transactionincludedblockraw)
 - [output](SingleNodeClient.md#output)
@@ -231,30 +230,6 @@ The blockId.
 #### Implementation of
 
 [IClient](../interfaces/IClient.md).[blockSubmitRaw](../interfaces/IClient.md#blocksubmitraw)
-
-___
-
-### blockChildren
-
-▸ **blockChildren**(`blockId`): `Promise`<[`IChildrenResponse`](../interfaces/IChildrenResponse.md)\>
-
-Get the children of a block.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `blockId` | `string` | The id of the block to get the children for. |
-
-#### Returns
-
-`Promise`<[`IChildrenResponse`](../interfaces/IChildrenResponse.md)\>
-
-The blocks children.
-
-#### Implementation of
-
-[IClient](../interfaces/IClient.md).[blockChildren](../interfaces/IClient.md#blockchildren)
 
 ___
 

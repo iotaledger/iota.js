@@ -1,7 +1,6 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 import type { IMilestonePayload } from "../index-browser";
-import type { IChildrenResponse } from "./api/IChildrenResponse";
 import type { IMilestoneUtxoChangesResponse } from "./api/IMilestoneUtxoChangesResponse";
 import type { IOutputMetadataResponse } from "./api/IOutputMetadataResponse";
 import type { IOutputResponse } from "./api/IOutputResponse";
@@ -76,13 +75,6 @@ export interface IClient {
      * @returns The blockId.
      */
     blockSubmitRaw(block: Uint8Array): Promise<string>;
-
-    /**
-     * Get the children of a block.
-     * @param blockId The id of the block to get the children for.
-     * @returns The blocks children.
-     */
-    blockChildren(blockId: string): Promise<IChildrenResponse>;
 
     /**
      * Get the block that was included in the ledger for a transaction.
