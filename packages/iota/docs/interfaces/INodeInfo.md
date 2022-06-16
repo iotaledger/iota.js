@@ -9,9 +9,11 @@ Response from the /info endpoint.
 - [name](INodeInfo.md#name)
 - [version](INodeInfo.md#version)
 - [status](INodeInfo.md#status)
-- [protocol](INodeInfo.md#protocol)
-- [baseToken](INodeInfo.md#basetoken)
 - [metrics](INodeInfo.md#metrics)
+- [supportedProtocolVersions](INodeInfo.md#supportedprotocolversions)
+- [protocol](INodeInfo.md#protocol)
+- [pendingProtocolParameters](INodeInfo.md#pendingprotocolparameters)
+- [baseToken](INodeInfo.md#basetoken)
 - [features](INodeInfo.md#features)
 - [plugins](INodeInfo.md#plugins)
 
@@ -41,6 +43,22 @@ The status of the node.
 
 ___
 
+### metrics
+
+• **metrics**: [`INodeInfoMetrics`](INodeInfoMetrics.md)
+
+The metrics for the node.
+
+___
+
+### supportedProtocolVersions
+
+• **supportedProtocolVersions**: `number`[]
+
+The supported protocol versions.
+
+___
+
 ### protocol
 
 • **protocol**: [`INodeInfoProtocol`](INodeInfoProtocol.md)
@@ -49,19 +67,19 @@ The protocol info of the node.
 
 ___
 
+### pendingProtocolParameters
+
+• **pendingProtocolParameters**: `INodeInfoProtocolParamsMilestoneOpt`[]
+
+Pending protocol parameters.
+
+___
+
 ### baseToken
 
 • **baseToken**: [`INodeInfoBaseToken`](INodeInfoBaseToken.md)
 
 The base token info of the node.
-
-___
-
-### metrics
-
-• **metrics**: [`INodeInfoMetrics`](INodeInfoMetrics.md)
-
-The metrics for the node.
 
 ___
 
