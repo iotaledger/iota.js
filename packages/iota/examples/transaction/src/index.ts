@@ -25,20 +25,17 @@ async function run() {
 
     const nodeInfo = await client.info();
 
-    // PUT here your mnemonic
+    // Generate the seed from the Mnemonic
     // const mnemonic =
     //     "assist file add kidney sense anxiety march quality sphere stamp crime swift mystery bind thrive impact walk solar asset pottery nation dutch column beef";
-    // // Generate the seed from the Mnemonic
     // const genesisSeed = Ed25519Seed.fromMnemonic(mnemonic);
-    const genesisSeed =  new Ed25519Seed(randomBytes(32));
     
-    console.log("Genesis");
+    // Generate the seed from random bytes
+    const genesisSeed =  new Ed25519Seed(randomBytes(32));
 
     const genesisPath = new Bip32Path("m/44'/4218'/0'/0'/0'");
-
     const genesisWalletSeed = genesisSeed.generateSeedFromPath(genesisPath);
     const genesisWalletKeyPair = genesisWalletSeed.keyPair();
-    console.log("\tSeed", Converter.bytesToHex(genesisWalletSeed.toBytes()));
 
     // Get the address for the path seed which is actually the Blake2b.sum256 of the public key
     // display it in both Ed25519 and Bech 32 format
@@ -46,6 +43,9 @@ async function run() {
     const genesisWalletAddress = genesisEd25519Address.toAddress();
     const genesisWalletAddressHex = Converter.bytesToHex(genesisWalletAddress, true);
     const genesisWalletAddressBech32 = Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, genesisWalletAddress, nodeInfo.protocol.bech32HRP);
+
+    console.log("Genesis");
+    console.log("\tSeed", Converter.bytesToHex(genesisWalletSeed.toBytes()));
     console.log("\tAddress Ed25519", genesisWalletAddressHex);
     console.log("\tAddress Bech32", genesisWalletAddressBech32);
 
@@ -69,7 +69,6 @@ async function run() {
         `\tAddress Bech32 ${walletPath.toString()}:`,
         Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, newAddress, nodeInfo.protocol.bech32HRP)
     );
-    console.log();
 
     //Request funds from faucet
     const genesisFunds = await requestFunds(FAUCET, genesisWalletAddressBech32);

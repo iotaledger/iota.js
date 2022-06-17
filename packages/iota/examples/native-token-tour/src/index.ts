@@ -11,8 +11,8 @@ import fetch from "node-fetch";
 
 const API_ENDPOINT = "http://localhost:14265/";
 const EXPLORER = "https://explorer.alphanet.iotaledger.net/alphanet";
-// const FAUCET_ENQUEUE = "https://faucet.alphanet.iotaledger.net/api/enqueue";
-const FAUCET_ENQUEUE = "http://localhost:8091/api/enqueue"; // if running private tangle
+const FAUCET_ENQUEUE = "https://faucet.alphanet.iotaledger.net/api/enqueue";
+// const FAUCET_ENQUEUE = "http://localhost:8091/api/enqueue"; // if running private tangle
 
 /*******************************
  In this example we will explore native tokens:
@@ -58,7 +58,7 @@ interface IContext {
 }
 
 // local context
-let ctx: IContext = {}
+let ctx: IContext = {};
 
 // In this example we set up a hot wallet, fund it with tokens from the faucet and let it prepare s
 async function run() {
@@ -235,8 +235,7 @@ async function run() {
         getOutputId("tx2Foundry"),
         getOutput("tx4Remainder") as lib.IBasicOutput,
         getOutputId("tx4Remainder"),
-        ctx.walletKeyPair,
-        ctx.info
+        ctx.walletKeyPair
     );
     ctx.txList.push(txPayload6);
 
@@ -267,8 +266,7 @@ async function run() {
         getOutputId("tx6Foundry"),
         getOutput("tx6Remainder") as lib.IBasicOutput,
         getOutputId("tx6Remainder"),
-        ctx.walletKeyPair,
-        ctx.info
+        ctx.walletKeyPair
     );
     ctx.txList.push(txPayload7);
 
@@ -290,8 +288,7 @@ async function run() {
     let txPayload8 = burnNativeTokens(
         getOutput("tx3Receiver") as lib.IBasicOutput,
         getOutputId("tx3Receiver"),
-        receiverWallet.keyPair,
-        ctx.info
+        receiverWallet.keyPair
     );
     ctx.txList.push(txPayload8);
 
@@ -317,8 +314,7 @@ async function run() {
         getOutput("tx5Refund") as lib.IBasicOutput,
         getOutputId("tx5Refund"),
         ctx.targetAddress,
-        ctx.walletKeyPair,
-        ctx.info
+        ctx.walletKeyPair
     );
     ctx.txList.push(txPayload9);
 
@@ -974,8 +970,7 @@ function mintMoreNativeTokens(
     foundryOutputId: string,
     walletOwnedBasicOutput: lib.IBasicOutput,
     walletOwnedBasicOutputId: string,
-    walletKeyPair: lib.IKeyPair,
-    info: lib.INodeInfo
+    walletKeyPair: lib.IKeyPair
 ): lib.ITransactionPayload {
     const aliasInput = lib.TransactionHelper.inputFromOutputId(controllingAliasOutputId);
     const foundryInput = lib.TransactionHelper.inputFromOutputId(foundryOutputId);
@@ -1077,8 +1072,7 @@ function meltNativeTokens(
     foundryOutputId: string,
     walletOwnedBasicOutputWithNT: lib.IBasicOutput,
     walletOwnedBasicOutputIdWithNT: string,
-    walletKeyPair: lib.IKeyPair,
-    info: lib.INodeInfo
+    walletKeyPair: lib.IKeyPair
 ): lib.ITransactionPayload {
     const aliasInput = lib.TransactionHelper.inputFromOutputId(controllingAliasOutputId);
     const foundryInput = lib.TransactionHelper.inputFromOutputId(foundryOutputId);
@@ -1092,14 +1086,13 @@ function meltNativeTokens(
 
     // Look into inut, see how much of what native token we have
     if (walletOwnedBasicOutputWithNT.nativeTokens === undefined) {
-        throw new Error("Consumed output doesn't have native tokens")
+        throw new Error("Consumed output doesn't have native tokens");
     }
 
-    let tokenId = walletOwnedBasicOutputWithNT.nativeTokens[0].id;
     // let's melt all tokens from this output
     let tokensToMelt = HexHelper.toBigInt256(walletOwnedBasicOutputWithNT.nativeTokens[0].amount);
 
-    const updatedMeltedTokens = HexHelper.toBigInt256(nextFoundry.tokenScheme.meltedTokens).add(tokensToMelt)
+    const updatedMeltedTokens = HexHelper.toBigInt256(nextFoundry.tokenScheme.meltedTokens).add(tokensToMelt);
 
     // By increasing the melted tokens counter in the foundry we declare that these tokens should be melted, not burned
     // If the tokens are missing on the output side of the tx, but meltedTokens in foundry do not increase, we actually burn.
@@ -1120,11 +1113,11 @@ function meltNativeTokens(
         networkId: getNetworkId(),
         inputs: [aliasInput, foundryInput, walletOwnedInputWithNT],
         outputs: [nextAlias, nextFoundry, remainder],
-        inputsCommitment: inputsCommitment,
+        inputsCommitment: inputsCommitment
     };
 
     // Calculating Transaction Essence Hash (to be signed in signature unlocks)
-    const essenceHash = lib.TransactionHelper.getTransactionEssenceHash(essence)
+    const essenceHash = lib.TransactionHelper.getTransactionEssenceHash(essence);
 
     // We unlock 3 outputs. The alias we unlock with the sig, the foundry with an alias ref unlock, and the basic with a normal ref unlock
     let unlocks: lib.UnlockTypes[] = [
@@ -1138,11 +1131,11 @@ function meltNativeTokens(
         },
         {
             type: lib.ALIAS_UNLOCK_TYPE,
-            reference: 0, // point to the unlock of the alias that controls the foundry
+            reference: 0 // point to the unlock of the alias that controls the foundry
         },
         {
             type: lib.REFERENCE_UNLOCK_TYPE,
-            reference: 0, // same address, so just reference
+            reference: 0 // same address, so just reference
         }
     ];
 
@@ -1175,15 +1168,14 @@ function meltNativeTokens(
 function burnNativeTokens(
     consumeBasicOutputWithNT: lib.IBasicOutput,
     consumeBasicOutputIdWithNT: string,
-    walletKeyPair: lib.IKeyPair,
-    info: lib.INodeInfo
+    walletKeyPair: lib.IKeyPair
 ): lib.ITransactionPayload {
     // Create input object
     const input = lib.TransactionHelper.inputFromOutputId(consumeBasicOutputIdWithNT);
 
     // Look into inut, see how much of what native token we have
     if (consumeBasicOutputWithNT.nativeTokens === undefined) {
-        throw new Error("Consumed output doesn't have native tokens")
+        throw new Error("Consumed output doesn't have native tokens");
     }
 
     let tokenId = consumeBasicOutputWithNT.nativeTokens[0].id;
@@ -1197,7 +1189,7 @@ function burnNativeTokens(
         // we carry the SMR/IOTA balance over, only burn the native token balance
         amount: consumeBasicOutputWithNT.amount,
         // keep it in receiverWallet
-        unlockConditions: consumeBasicOutputWithNT.unlockConditions,
+        unlockConditions: consumeBasicOutputWithNT.unlockConditions
         // By not declaring any native tokens on the output side of the transaction, we burn them
     };
 
@@ -1210,11 +1202,11 @@ function burnNativeTokens(
         networkId: getNetworkId(),
         inputs: [input],
         outputs: [remainder],
-        inputsCommitment: inputsCommitment,
+        inputsCommitment: inputsCommitment
     };
 
     // Calculating Transaction Essence Hash (to be signed in signature unlocks)
-    const essenceHash = lib.TransactionHelper.getTransactionEssenceHash(essence)
+    const essenceHash = lib.TransactionHelper.getTransactionEssenceHash(essence);
 
     // We unlock only 1 output
     let unlocks: lib.UnlockTypes[] = [
@@ -1254,8 +1246,7 @@ function mintAndLockAway(
     depositSupplierOutput: lib.IBasicOutput,
     depositSupplierOutputId: string,
     targetAddress: lib.AddressTypes,
-    walletKeyPair: lib.IKeyPair,
-    info: lib.INodeInfo
+    walletKeyPair: lib.IKeyPair
 ): lib.ITransactionPayload {
     // Prepare input objects
     const aliasInput = lib.TransactionHelper.inputFromOutputId(controllingAliasOutputId);
@@ -1288,7 +1279,6 @@ function mintAndLockAway(
     const now = new Date();
     // setFullYear adds X years to the date object and returns the miliseconds elapsed between 1970 and the updated date
     const aYearFromNow = Math.floor(now.setFullYear(now.getFullYear() + 1) / 1000);
-
 
     // Prepare basic output that holds the minted tokens + locks them away for 1 year
     const timeLockedWithNTs: lib.IBasicOutput = {
@@ -1326,11 +1316,11 @@ function mintAndLockAway(
         networkId: getNetworkId(),
         inputs: [aliasInput, foundryInput, depostiSupplierInput],
         outputs: [nextAlias, nextFoundry, timeLockedWithNTs],
-        inputsCommitment: inputsCommitment,
+        inputsCommitment: inputsCommitment
     };
 
     // Calculating Transaction Essence Hash (to be signed in signature unlocks)
-    const essenceHash = lib.TransactionHelper.getTransactionEssenceHash(essence)
+    const essenceHash = lib.TransactionHelper.getTransactionEssenceHash(essence);
 
     // We unlock 3 outputs. The alias we unlock with the sig, the foundry with an alias ref unlock, and the basic with a normal ref unlock
     let unlocks: lib.UnlockTypes[] = [
@@ -1344,11 +1334,11 @@ function mintAndLockAway(
         },
         {
             type: lib.ALIAS_UNLOCK_TYPE,
-            reference: 0, // point to the unlock of the alias that controls the foundry
+            reference: 0 // point to the unlock of the alias that controls the foundry
         },
         {
             type: lib.REFERENCE_UNLOCK_TYPE,
-            reference: 0, // same address, so just reference
+            reference: 0 // same address, so just reference
         }
     ];
 
@@ -1423,7 +1413,7 @@ function sendAll(
     }
 
     // Prepare inputs commitment
-    const inputsCommitment = lib.TransactionHelper.getInputsCommitment([aliasOutput, walletBasicOutput, receiverBasicOutputWithNT, receiverBasicOutput ]);
+    const inputsCommitment = lib.TransactionHelper.getInputsCommitment([aliasOutput, walletBasicOutput, receiverBasicOutputWithNT, receiverBasicOutput]);
 
     // Construct tx essence
     const essence: lib.ITransactionEssence = {
@@ -1431,11 +1421,11 @@ function sendAll(
         networkId: getNetworkId(),
         inputs: [aliasInput, walletBasicInput, receiverBasitWithNTInput, receiverBasicInput],
         outputs: [nextAlias, remainder],
-        inputsCommitment: inputsCommitment,
+        inputsCommitment: inputsCommitment
     };
 
     // Calculating Transaction Essence Hash (to be signed in signature unlocks)
-    const essenceHash = lib.TransactionHelper.getTransactionEssenceHash(essence)
+    const essenceHash = lib.TransactionHelper.getTransactionEssenceHash(essence);
 
     //
     /*******************************
@@ -1456,7 +1446,7 @@ function sendAll(
         },
         {
             type: lib.REFERENCE_UNLOCK_TYPE,
-            reference: 0,
+            reference: 0
         },
         {
             type: lib.SIGNATURE_UNLOCK_TYPE,
@@ -1468,7 +1458,7 @@ function sendAll(
         },
         {
             type: lib.REFERENCE_UNLOCK_TYPE,
-            reference: 2,
+            reference: 2
         },
     ];
 
@@ -1544,30 +1534,30 @@ async function setUpHotWallet(hrp: string, name: string) {
 }
 
 // Use the indexer API to fetch the output sent to the wallet address by the faucet
-async function fetchAndWaitForBasicOutput(addy: string, client: lib.IndexerPluginClient): Promise<string> {
+async function fetchAndWaitForBasicOutput(addressBech32: string, client: lib.IndexerPluginClient): Promise<string> {
     let outputsResponse: lib.IOutputsResponse = { ledgerIndex: 0, cursor: "", pageSize: "", items: [] };
     let maxTries = 15;
     let tries = 0;
     while (outputsResponse.items.length == 0) {
-        if (tries > maxTries) { break }
+        if (tries > maxTries) { break; }
         tries++;
-        console.log(`\tTry #${tries}: fetching basic output for address ${addy}`)
+        console.log(`\tTry #${tries}: fetching basic output for address ${addressBech32}`)
         outputsResponse = await client.outputs({
-            addressBech32: addy,
+            addressBech32: addressBech32,
             hasStorageReturnCondition: false,
             hasExpirationCondition: false,
             hasTimelockCondition: false,
-            hasNativeTokens: false,
+            hasNativeTokens: false
         });
         if (outputsResponse.items.length == 0) {
-            console.log("\tDidn't find any, retrying soon...")
+            console.log("\tDidn't find any, retrying soon...");
             await new Promise(f => setTimeout(f, 1500));
         }
     }
     if (tries > maxTries) {
-        throw new Error(`Didn't find any outputs for address ${addy}`);
+        throw new Error(`Didn't find any outputs for address ${addressBech32}`);
     }
-    return outputsResponse.items[0]
+    return outputsResponse.items[0];
 };
 
 // Chain together transaction payloads via blocks.
