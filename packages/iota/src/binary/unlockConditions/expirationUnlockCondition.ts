@@ -11,7 +11,6 @@ import { SMALL_TYPE_LENGTH, UINT32_SIZE } from "../commonDataTypes";
 export const MIN_EXPIRATION_UNLOCK_CONDITION_LENGTH: number =
     SMALL_TYPE_LENGTH +
     MIN_ADDRESS_LENGTH +
-    UINT32_SIZE +
     UINT32_SIZE;
 
 /**
@@ -33,21 +32,13 @@ export function deserializeExpirationUnlockCondition(readStream: ReadStream): IE
 
     const returnAddress = deserializeAddress(readStream);
 
-    const milestoneIndex = readStream.readUInt32("expirationUnlockCondition.milestoneIndex");
     const unixTime = readStream.readUInt32("expirationUnlockCondition.unixTime");
 
     const expirationUnlockCondition: IExpirationUnlockCondition = {
         type: EXPIRATION_UNLOCK_CONDITION_TYPE,
-        returnAddress
+        returnAddress,
+        unixTime
     };
-
-    if (milestoneIndex > 0) {
-        expirationUnlockCondition.milestoneIndex = milestoneIndex;
-    }
-
-    if (unixTime > 0) {
-        expirationUnlockCondition.unixTime = unixTime;
-    }
 
     return expirationUnlockCondition;
 }
@@ -61,6 +52,5 @@ export function serializeExpirationUnlockCondition(
     writeStream: WriteStream, object: IExpirationUnlockCondition): void {
     writeStream.writeUInt8("expirationUnlockCondition.type", object.type);
     serializeAddress(writeStream, object.returnAddress);
-    writeStream.writeUInt32("expirationUnlockCondition.milestoneIndex", object.milestoneIndex ?? 0);
-    writeStream.writeUInt32("expirationUnlockCondition.unixTime", object.unixTime ?? 0);
+    writeStream.writeUInt32("expirationUnlockCondition.unixTime", object.unixTime);
 }

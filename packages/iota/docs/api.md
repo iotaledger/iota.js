@@ -326,6 +326,7 @@
 - [INodeInfoMetrics](interfaces/INodeInfoMetrics.md)
 - [INodeInfoMilestone](interfaces/INodeInfoMilestone.md)
 - [INodeInfoProtocol](interfaces/INodeInfoProtocol.md)
+- [INodeInfoProtocolParamsMilestoneOpt](interfaces/INodeInfoProtocolParamsMilestoneOpt.md)
 - [INodeInfoStatus](interfaces/INodeInfoStatus.md)
 - [ITreasuryInput](interfaces/ITreasuryInput.md)
 - [IUTXOInput](interfaces/IUTXOInput.md)
