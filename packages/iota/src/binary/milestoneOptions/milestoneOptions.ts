@@ -2,14 +2,14 @@
 // SPDX-License-Identifier: Apache-2.0
 import type { ReadStream, WriteStream } from "@iota/util.js";
 import type { ITypeBase } from "../../models/ITypeBase";
-import { IPoWMilestoneOption, POW_MILESTONE_OPTION_TYPE } from "../../models/milestoneOptions/IPoWMilestoneOption";
+import { IProtocolParamsMilestoneOption, PROTOCOL_PARAMETERS_MILESTONE_OPTION_TYPE } from "../../models/milestoneOptions/IProtocolParamsMilestoneOption";
 import { IReceiptMilestoneOption, RECEIPT_MILESTONE_OPTION_TYPE } from "../../models/milestoneOptions/IReceiptMilestoneOption";
 import type { MilestoneOptionTypes } from "../../models/milestoneOptions/milestoneOptionTypes";
 import {
-    deserializePoWMilestoneOption,
-    MIN_POW_MILESTONE_OPTION_LENGTH,
-    serializePoWMilestoneOption
-} from "../milestoneOptions/powMilestoneOption";
+    deserializeProtocolParamsMilestoneOption,
+    MIN_PROTOCOL_PARAMS_MILESTONE_OPTION_LENGTH,
+    serializeProtocolParamsMilestoneOption
+} from "../milestoneOptions/protocolParamsMilestoneOption";
 import {
     deserializeReceiptMilestoneOption,
     MIN_RECEIPT_MILESTONE_OPTION_LENGTH,
@@ -21,7 +21,7 @@ import {
  */
  export const MIN_MILESTONE_OPTION_LENGTH: number = Math.min(
     MIN_RECEIPT_MILESTONE_OPTION_LENGTH,
-    MIN_POW_MILESTONE_OPTION_LENGTH
+    MIN_PROTOCOL_PARAMS_MILESTONE_OPTION_LENGTH
 );
 
 
@@ -71,8 +71,8 @@ export function deserializeMilestoneOption(readStream: ReadStream): MilestoneOpt
 
     if (type === RECEIPT_MILESTONE_OPTION_TYPE) {
         option = deserializeReceiptMilestoneOption(readStream);
-    } else if (type === POW_MILESTONE_OPTION_TYPE) {
-        option = deserializePoWMilestoneOption(readStream);
+    } else if (type === PROTOCOL_PARAMETERS_MILESTONE_OPTION_TYPE) {
+        option = deserializeProtocolParamsMilestoneOption(readStream);
     } else {
         throw new Error(`Unrecognized milestone option type ${type}`);
     }
@@ -88,8 +88,8 @@ export function deserializeMilestoneOption(readStream: ReadStream): MilestoneOpt
  export function serializeMilestoneOption(writeStream: WriteStream, object: ITypeBase<number>): void {
     if (object.type === RECEIPT_MILESTONE_OPTION_TYPE) {
         serializeReceiptMilestoneOption(writeStream, object as IReceiptMilestoneOption);
-    } else if (object.type === POW_MILESTONE_OPTION_TYPE) {
-        serializePoWMilestoneOption(writeStream, object as IPoWMilestoneOption);
+    } else if (object.type === PROTOCOL_PARAMETERS_MILESTONE_OPTION_TYPE) {
+        serializeProtocolParamsMilestoneOption(writeStream, object as IProtocolParamsMilestoneOption);
     } else {
         throw new Error(`Unrecognized milestone option type ${object.type}`);
     }

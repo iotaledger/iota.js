@@ -69,7 +69,7 @@ ___
 
 ### pendingProtocolParameters
 
-• **pendingProtocolParameters**: `INodeInfoProtocolParamsMilestoneOpt`[]
+• **pendingProtocolParameters**: [`INodeInfoProtocolParamsMilestoneOpt`](INodeInfoProtocolParamsMilestoneOpt.md)[]
 
 Pending protocol parameters.
 

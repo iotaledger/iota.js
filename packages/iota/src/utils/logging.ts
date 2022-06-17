@@ -20,7 +20,7 @@ import type { InputTypes } from "../models/inputs/inputTypes";
 import { TREASURY_INPUT_TYPE } from "../models/inputs/ITreasuryInput";
 import { UTXO_INPUT_TYPE } from "../models/inputs/IUTXOInput";
 import { TRANSACTION_ESSENCE_TYPE } from "../models/ITransactionEssence";
-import { IPoWMilestoneOption, POW_MILESTONE_OPTION_TYPE } from "../models/milestoneOptions/IPoWMilestoneOption";
+import { IProtocolParamsMilestoneOption, PROTOCOL_PARAMETERS_MILESTONE_OPTION_TYPE } from "../models/milestoneOptions/IProtocolParamsMilestoneOption";
 import { IReceiptMilestoneOption, RECEIPT_MILESTONE_OPTION_TYPE } from "../models/milestoneOptions/IReceiptMilestoneOption";
 import type { MilestoneOptionTypes } from "../models/milestoneOptions/milestoneOptionTypes";
 import { ALIAS_OUTPUT_TYPE } from "../models/outputs/IAliasOutput";
@@ -303,9 +303,9 @@ export function logMilestonePayload(prefix: string, payload?: IMilestonePayload)
     if (milestoneOption.type === RECEIPT_MILESTONE_OPTION_TYPE) {
         logger(`${prefix}\tReceipt Milestone Option`);
         logReceiptMilestoneOption(`${prefix}\t\t`, milestoneOption);
-    } else if (milestoneOption.type === POW_MILESTONE_OPTION_TYPE) {
-        logger(`${prefix}\tPoW Milestone Option`);
-        logPoWMilestoneOption(`${prefix}\t\t`, milestoneOption);
+    } else if (milestoneOption.type === PROTOCOL_PARAMETERS_MILESTONE_OPTION_TYPE) {
+        logger(`${prefix}\tProtocol Params Milestone Option`);
+        logProtocolParamsMilestoneOption(`${prefix}\t\t`, milestoneOption);
     }
 }
 
@@ -328,15 +328,16 @@ export function logReceiptMilestoneOption(prefix: string, option?: IReceiptMiles
 }
 
 /**
- * Log a receipt milestone option to the console.
+ * Log a protocol params milestone option to the console.
  * @param prefix The prefix for the output.
  * @param option The option.
  */
-export function logPoWMilestoneOption(prefix: string, option?: IPoWMilestoneOption): void {
+export function logProtocolParamsMilestoneOption(prefix: string, option?: IProtocolParamsMilestoneOption): void {
     if (option) {
-        logger(`${prefix}PoW Milestone Option`);
-        logger(`${prefix}\tNext PoW Score:`, option.nextPoWScore);
-        logger(`${prefix}\tNext PoW Score Milestone Index:`, option.nextPoWScoreMilestoneIndex);
+        logger(`${prefix}Protocol Params Milestone Option`);
+        logger(`${prefix}\tTarget Milestone Index:`, option.targetMilestoneIndex);
+        logger(`${prefix}\tProtocol Version:`, option.protocolVersion);
+        logger(`${prefix}\tParameters:`, option.params);
     }
 }
 

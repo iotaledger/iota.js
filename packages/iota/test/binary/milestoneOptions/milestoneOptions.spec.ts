@@ -4,7 +4,7 @@ import { Converter, ReadStream, WriteStream } from "@iota/util.js";
 import { deserializeMilestoneOptions, serializeMilestoneOptions } from "../../../src/binary/milestoneOptions/milestoneOptions";
 import { ED25519_ADDRESS_TYPE, IEd25519Address } from "../../../src/models/addresses/IEd25519Address";
 import { TREASURY_INPUT_TYPE } from "../../../src/models/inputs/ITreasuryInput";
-import { IPoWMilestoneOption, POW_MILESTONE_OPTION_TYPE } from "../../../src/models/milestoneOptions/IPoWMilestoneOption";
+import { IProtocolParamsMilestoneOption, PROTOCOL_PARAMETERS_MILESTONE_OPTION_TYPE } from "../../../src/models/milestoneOptions/IProtocolParamsMilestoneOption";
 import { IReceiptMilestoneOption, RECEIPT_MILESTONE_OPTION_TYPE } from "../../../src/models/milestoneOptions/IReceiptMilestoneOption";
 import type { MilestoneOptionTypes } from "../../../src/models/milestoneOptions/milestoneOptionTypes";
 import { TREASURY_OUTPUT_TYPE } from "../../../src/models/outputs/ITreasuryOutput";
@@ -40,9 +40,10 @@ describe("Binary Milestone Options", () => {
                 }
             },
             {
-                type: POW_MILESTONE_OPTION_TYPE,
-                nextPoWScore: 0,
-                nextPoWScoreMilestoneIndex: 1
+                type: PROTOCOL_PARAMETERS_MILESTONE_OPTION_TYPE,
+                targetMilestoneIndex: 13455,
+                protocolVersion: 3,
+                params: "0x27d0ca22753f76ef32d1e9e8fcc417aa9fc1c15eae854661e0253287be6ea68f649493fc8fd6ac43e9ca750c6f6d884cc72386ddcb7d"
             }
         ];
 
@@ -50,7 +51,7 @@ describe("Binary Milestone Options", () => {
         serializeMilestoneOptions(serialized, payload);
         const hex = serialized.finalHex();
         expect(hex).toEqual(
-            "020040e20100010100aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa00bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb64000000000000002e0000000400000001aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa029426000000000000010000000001000000"
+            "020040e20100010100aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa00bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb64000000000000002e0000000400000001aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa029426000000000000018f34000003360027d0ca22753f76ef32d1e9e8fcc417aa9fc1c15eae854661e0253287be6ea68f649493fc8fd6ac43e9ca750c6f6d884cc72386ddcb7d"
         );
         const deserialized = deserializeMilestoneOptions(new ReadStream(Converter.hexToBytes(hex)));
         expect(deserialized.length).toEqual(2);
@@ -69,8 +70,9 @@ describe("Binary Milestone Options", () => {
         expect(mo0.transaction.output.type).toEqual(2);
         expect(mo0.transaction.output.amount).toEqual("9876");
         expect(deserialized[1].type).toEqual(1);
-        const mo1 = deserialized[1] as IPoWMilestoneOption;
-        expect(mo1.nextPoWScore).toEqual(0);
-        expect(mo1.nextPoWScoreMilestoneIndex).toEqual(1);
+        const mo1 = deserialized[1] as IProtocolParamsMilestoneOption;
+        expect(mo1.targetMilestoneIndex).toEqual(13455);
+        expect(mo1.protocolVersion).toEqual(3);
+        expect(mo1.params).toEqual("0x27d0ca22753f76ef32d1e9e8fcc417aa9fc1c15eae854661e0253287be6ea68f649493fc8fd6ac43e9ca750c6f6d884cc72386ddcb7d");
     });
 });
