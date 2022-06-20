@@ -13,7 +13,6 @@ Timelock Unlock Condition.
 ### Properties
 
 - [type](ITimelockUnlockCondition.md#type)
-- [milestoneIndex](ITimelockUnlockCondition.md#milestoneindex)
 - [unixTime](ITimelockUnlockCondition.md#unixtime)
 
 ## Properties
@@ -30,16 +29,8 @@ The type of the object.
 
 ___
 
-### milestoneIndex
-
-• `Optional` **milestoneIndex**: `number`
-
-The milestone index starting from which the output can be consumed.
-
-___
-
 ### unixTime
 
-• `Optional` **unixTime**: `number`
+• **unixTime**: `number`
 
 Unix time (seconds since Unix epoch) starting from which the output can be consumed.

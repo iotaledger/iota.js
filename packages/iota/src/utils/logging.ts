@@ -587,12 +587,10 @@ export function logUnlockCondition(prefix: string, unlockCondition: UnlockCondit
         logger(`${prefix}\t\tAmount:`, unlockCondition.amount);
     } else if (unlockCondition.type === TIMELOCK_UNLOCK_CONDITION_TYPE) {
         logger(`${prefix}\tTimelock Unlock Condition`);
-        logger(`${prefix}\t\tMilestone Index:`, unlockCondition.milestoneIndex);
         logger(`${prefix}\t\tUnixTime:`, unlockCondition.unixTime);
     } else if (unlockCondition.type === EXPIRATION_UNLOCK_CONDITION_TYPE) {
         logger(`${prefix}\tExpiration Unlock Condition`);
         logAddress(`${prefix}\t\t`, unlockCondition.returnAddress);
-        logger(`${prefix}\t\tMilestone Index:`, unlockCondition.milestoneIndex);
         logger(`${prefix}\t\tUnixTime:`, unlockCondition.unixTime);
     } else if (unlockCondition.type === STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE) {
         logger(`${prefix}\tState Controller Address Unlock Condition`);
