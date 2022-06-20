@@ -481,7 +481,6 @@ function transferNftTxWithUnlockConditions(consumedOutput: lib.OutputTypes, cons
         {
             type: lib.EXPIRATION_UNLOCK_CONDITION_TYPE,
             unixTime: Math.floor(Date.now() / 1000) + (10 * 60), // Expires in now + 10 minutes
-            // milestoneIndex: nodeInfo.status.latestMilestone.index + 50 // We combine milestoneIndex and unixTime
             // expires to the wallet address
             returnAddress: {
                 type: lib.ED25519_ADDRESS_TYPE,

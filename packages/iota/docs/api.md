@@ -54,7 +54,7 @@
 - [MIN\_TREASURY\_INPUT\_LENGTH](api.md#min_treasury_input_length)
 - [MIN\_UTXO\_INPUT\_LENGTH](api.md#min_utxo_input_length)
 - [MIN\_MILESTONE\_OPTION\_LENGTH](api.md#min_milestone_option_length)
-- [MIN\_POW\_MILESTONE\_OPTION\_LENGTH](api.md#min_pow_milestone_option_length)
+- [MIN\_PROTOCOL\_PARAMS\_MILESTONE\_OPTION\_LENGTH](api.md#min_protocol_params_milestone_option_length)
 - [MIN\_RECEIPT\_MILESTONE\_OPTION\_LENGTH](api.md#min_receipt_milestone_option_length)
 - [MIN\_ALIAS\_OUTPUT\_LENGTH](api.md#min_alias_output_length)
 - [MIN\_BASIC\_OUTPUT\_LENGTH](api.md#min_basic_output_length)
@@ -101,7 +101,7 @@
 - [TAG\_FEATURE\_TYPE](api.md#tag_feature_type)
 - [TREASURY\_INPUT\_TYPE](api.md#treasury_input_type)
 - [UTXO\_INPUT\_TYPE](api.md#utxo_input_type)
-- [POW\_MILESTONE\_OPTION\_TYPE](api.md#pow_milestone_option_type)
+- [PROTOCOL\_PARAMETERS\_MILESTONE\_OPTION\_TYPE](api.md#protocol_parameters_milestone_option_type)
 - [RECEIPT\_MILESTONE\_OPTION\_TYPE](api.md#receipt_milestone_option_type)
 - [ALIAS\_OUTPUT\_TYPE](api.md#alias_output_type)
 - [BASIC\_OUTPUT\_TYPE](api.md#basic_output_type)
@@ -168,8 +168,8 @@
 - [serializeMilestoneOptions](api.md#serializemilestoneoptions)
 - [deserializeMilestoneOption](api.md#deserializemilestoneoption)
 - [serializeMilestoneOption](api.md#serializemilestoneoption)
-- [deserializePoWMilestoneOption](api.md#deserializepowmilestoneoption)
-- [serializePoWMilestoneOption](api.md#serializepowmilestoneoption)
+- [deserializeProtocolParamsMilestoneOption](api.md#deserializeprotocolparamsmilestoneoption)
+- [serializeProtocolParamsMilestoneOption](api.md#serializeprotocolparamsmilestoneoption)
 - [deserializeReceiptMilestoneOption](api.md#deserializereceiptmilestoneoption)
 - [serializeReceiptMilestoneOption](api.md#serializereceiptmilestoneoption)
 - [deserializeAliasOutput](api.md#deserializealiasoutput)
@@ -269,7 +269,7 @@
 - [logMilestoneOptions](api.md#logmilestoneoptions)
 - [logMilestoneOption](api.md#logmilestoneoption)
 - [logReceiptMilestoneOption](api.md#logreceiptmilestoneoption)
-- [logPoWMilestoneOption](api.md#logpowmilestoneoption)
+- [logProtocolParamsMilestoneOption](api.md#logprotocolparamsmilestoneoption)
 - [logTreasuryTransactionPayload](api.md#logtreasurytransactionpayload)
 - [logAddress](api.md#logaddress)
 - [logSignature](api.md#logsignature)
@@ -311,7 +311,6 @@
 - [IEd25519Address](interfaces/IEd25519Address.md)
 - [INftAddress](interfaces/INftAddress.md)
 - [IBlockIdResponse](interfaces/IBlockIdResponse.md)
-- [IChildrenResponse](interfaces/IChildrenResponse.md)
 - [IMilestoneUtxoChangesResponse](interfaces/IMilestoneUtxoChangesResponse.md)
 - [IOutputMetadataResponse](interfaces/IOutputMetadataResponse.md)
 - [IOutputResponse](interfaces/IOutputResponse.md)
@@ -328,10 +327,11 @@
 - [INodeInfoMetrics](interfaces/INodeInfoMetrics.md)
 - [INodeInfoMilestone](interfaces/INodeInfoMilestone.md)
 - [INodeInfoProtocol](interfaces/INodeInfoProtocol.md)
+- [INodeInfoProtocolParamsMilestoneOpt](interfaces/INodeInfoProtocolParamsMilestoneOpt.md)
 - [INodeInfoStatus](interfaces/INodeInfoStatus.md)
 - [ITreasuryInput](interfaces/ITreasuryInput.md)
 - [IUTXOInput](interfaces/IUTXOInput.md)
-- [IPoWMilestoneOption](interfaces/IPoWMilestoneOption.md)
+- [IProtocolParamsMilestoneOption](interfaces/IProtocolParamsMilestoneOption.md)
 - [IReceiptMilestoneOption](interfaces/IReceiptMilestoneOption.md)
 - [IAliasOutput](interfaces/IAliasOutput.md)
 - [IBasicOutput](interfaces/IBasicOutput.md)
@@ -666,11 +666,11 @@ The minimum length of a milestone option binary representation.
 
 ___
 
-### MIN\_POW\_MILESTONE\_OPTION\_LENGTH
+### MIN\_PROTOCOL\_PARAMS\_MILESTONE\_OPTION\_LENGTH
 
-• `Const` **MIN\_POW\_MILESTONE\_OPTION\_LENGTH**: `number`
+• `Const` **MIN\_PROTOCOL\_PARAMS\_MILESTONE\_OPTION\_LENGTH**: `number`
 
-The minimum length of a pow milestone option binary representation.
+The minimum length of a protocol params milestone option binary representation.
 
 ___
 
@@ -1042,9 +1042,9 @@ The global type for the input.
 
 ___
 
-### POW\_MILESTONE\_OPTION\_TYPE
+### PROTOCOL\_PARAMETERS\_MILESTONE\_OPTION\_TYPE
 
-• `Const` **POW\_MILESTONE\_OPTION\_TYPE**: ``1``
+• `Const` **PROTOCOL\_PARAMETERS\_MILESTONE\_OPTION\_TYPE**: ``1``
 
 The global type for the option.
 
@@ -1991,11 +1991,11 @@ Serialize the milestone option to binary.
 
 ___
 
-### deserializePoWMilestoneOption
+### deserializeProtocolParamsMilestoneOption
 
-▸ **deserializePoWMilestoneOption**(`readStream`): [`IPoWMilestoneOption`](interfaces/IPoWMilestoneOption.md)
+▸ **deserializeProtocolParamsMilestoneOption**(`readStream`): [`IProtocolParamsMilestoneOption`](interfaces/IProtocolParamsMilestoneOption.md)
 
-Deserialize the pow milestone option from binary.
+Deserialize the protocol params milestone option from binary.
 
 #### Parameters
 
@@ -2005,24 +2005,24 @@ Deserialize the pow milestone option from binary.
 
 #### Returns
 
-[`IPoWMilestoneOption`](interfaces/IPoWMilestoneOption.md)
+[`IProtocolParamsMilestoneOption`](interfaces/IProtocolParamsMilestoneOption.md)
 
 The deserialized object.
 
 ___
 
-### serializePoWMilestoneOption
+### serializeProtocolParamsMilestoneOption
 
-▸ **serializePoWMilestoneOption**(`writeStream`, `object`): `void`
+▸ **serializeProtocolParamsMilestoneOption**(`writeStream`, `object`): `void`
 
-Serialize the receipt payload to binary.
+Serialize the protocol params milestone option to binary.
 
 #### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `writeStream` | `WriteStream` | The stream to write the data to. |
-| `object` | [`IPoWMilestoneOption`](interfaces/IPoWMilestoneOption.md) | The object to serialize. |
+| `object` | [`IProtocolParamsMilestoneOption`](interfaces/IProtocolParamsMilestoneOption.md) | The object to serialize. |
 
 #### Returns
 
@@ -4042,18 +4042,18 @@ Log a receipt milestone option to the console.
 
 ___
 
-### logPoWMilestoneOption
+### logProtocolParamsMilestoneOption
 
-▸ **logPoWMilestoneOption**(`prefix`, `option?`): `void`
+▸ **logProtocolParamsMilestoneOption**(`prefix`, `option?`): `void`
 
-Log a receipt milestone option to the console.
+Log a protocol params milestone option to the console.
 
 #### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `prefix` | `string` | The prefix for the output. |
-| `option?` | [`IPoWMilestoneOption`](interfaces/IPoWMilestoneOption.md) | The option. |
+| `option?` | [`IProtocolParamsMilestoneOption`](interfaces/IProtocolParamsMilestoneOption.md) | The option. |
 
 #### Returns
 
@@ -4410,7 +4410,7 @@ ___
 
 ### MilestoneOptionTypes
 
-Ƭ **MilestoneOptionTypes**: [`IReceiptMilestoneOption`](interfaces/IReceiptMilestoneOption.md) \| [`IPoWMilestoneOption`](interfaces/IPoWMilestoneOption.md)
+Ƭ **MilestoneOptionTypes**: [`IReceiptMilestoneOption`](interfaces/IReceiptMilestoneOption.md) \| [`IProtocolParamsMilestoneOption`](interfaces/IProtocolParamsMilestoneOption.md)
 
 All of the milestone option types.
 

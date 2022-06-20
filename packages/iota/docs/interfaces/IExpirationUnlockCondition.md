@@ -14,7 +14,6 @@ Expiration Unlock Condition.
 
 - [type](IExpirationUnlockCondition.md#type)
 - [returnAddress](IExpirationUnlockCondition.md#returnaddress)
-- [milestoneIndex](IExpirationUnlockCondition.md#milestoneindex)
 - [unixTime](IExpirationUnlockCondition.md#unixtime)
 
 ## Properties
@@ -39,18 +38,9 @@ The return address.
 
 ___
 
-### milestoneIndex
-
-• `Optional` **milestoneIndex**: `number`
-
-Before this milestone index the condition is allowed to unlock the output,
-after that only the address defined in return address.
-
-___
-
 ### unixTime
 
-• `Optional` **unixTime**: `number`
+• **unixTime**: `number`
 
 Before this unix time, the condition is allowed to unlock the output,
 after that only the address defined in return address.

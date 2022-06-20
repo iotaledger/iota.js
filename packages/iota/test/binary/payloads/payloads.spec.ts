@@ -1,7 +1,7 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 import { ReadStream } from "@iota/util.js";
-import { deserializePoWMilestoneOption } from "../../../src/binary/milestoneOptions/powMilestoneOption";
+import { deserializeProtocolParamsMilestoneOption } from "../../../src/binary/milestoneOptions/protocolParamsMilestoneOption";
 import { deserializeReceiptMilestoneOption } from "../../../src/binary/milestoneOptions/receiptMilestoneOption";
 import { deserializePayload } from "../../../src/binary/payloads/payloads";
 import type { IEd25519Address } from "../../../src/models/addresses/IEd25519Address";
@@ -172,15 +172,18 @@ describe("Binary Payload", () => {
         expect(payload.transaction.output.amount).toEqual("123");
     });
 
-    test("Can succeed with valid PoW milestone option", () => {
-        const buffer = Buffer.alloc(9);
-        buffer.writeUInt8(1, 0); // Payload type
-        buffer.writeUInt32LE(0, 1); // Next PoW Score
-        buffer.writeUInt32LE(0, 5); // Next PoW Score Milestone index
+    test("Can succeed with valid Protocol params milestone option", () => {
+        const buffer = Buffer.alloc(62);
+        buffer.writeUInt8(1, 0); // type
+        buffer.writeUInt32LE(13455, 1); // target milestone index
+        buffer.writeUInt8(3, 5); // protocol version
+        buffer.writeUInt16LE(54, 6); // metadata count
+        buffer.write("27d0ca22753f76ef32d1e9e8fcc417aa9fc1c15eae854661e0253287be6ea68f649493fc8fd6ac43e9ca750c6f6d884cc72386ddcb7d", 8, "hex"); // metadata
 
-        const payload = deserializePoWMilestoneOption(new ReadStream(buffer));
+        const payload = deserializeProtocolParamsMilestoneOption(new ReadStream(buffer));
         expect(payload.type).toEqual(1);
-        expect(payload.nextPoWScore).toEqual(0);
-        expect(payload.nextPoWScoreMilestoneIndex).toEqual(0);
+        expect(payload.targetMilestoneIndex).toEqual(13455);
+        expect(payload.protocolVersion).toEqual(3);
+        expect(payload.params).toEqual("0x27d0ca22753f76ef32d1e9e8fcc417aa9fc1c15eae854661e0253287be6ea68f649493fc8fd6ac43e9ca750c6f6d884cc72386ddcb7d");
       });
 });

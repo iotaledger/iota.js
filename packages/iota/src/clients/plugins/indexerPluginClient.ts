@@ -43,15 +43,9 @@ export class IndexerPluginClient {
      * @param filterOptions.expirationReturnAddressBech32 Filter for outputs with a certain expiration return address.
      * @param filterOptions.expiresBefore Filter for outputs that expire before a certain unix time.
      * @param filterOptions.expiresAfter Filter for outputs that expire after a certain unix time.
-     * @param filterOptions.expiresBeforeMilestone Filter for outputs that expire before a certain milestone index.
-     * @param filterOptions.expiresAfterMilestone Filter for outputs that expire after a certain milestone index.
      * @param filterOptions.hasTimelockCondition Filter for outputs having a timelock unlock condition.
      * @param filterOptions.timelockedBefore Filter for outputs that are timelocked before a certain unix time.
      * @param filterOptions.timelockedAfter Filter for outputs that are timelocked after a certain unix time.
-     * @param filterOptions.timelockedBeforeMilestone Filter for outputs that are timelocked before a certain
-     * milestone index.
-     * @param filterOptions.timelockedAfterMilestone Filter for outputs that are timelocked after a certain
-     * milestone index.
      * @param filterOptions.hasNativeTokens Filter for outputs having native tokens.
      * @param filterOptions.minNativeTokenCount Filter for outputs that have at least an amount of native tokens.
      * @param filterOptions.maxNativeTokenCount Filter for outputs that have at the most an amount of native tokens.
@@ -71,13 +65,9 @@ export class IndexerPluginClient {
         expirationReturnAddressBech32?: string;
         expiresBefore?: number;
         expiresAfter?: number;
-        expiresBeforeMilestone?: number;
-        expiresAfterMilestone?: number;
         hasTimelockCondition?: boolean;
         timelockedBefore?: number;
         timelockedAfter?: number;
-        timelockedBeforeMilestone?: number;
-        timelockedAfterMilestone?: number;
         hasNativeTokens?: boolean;
         minNativeTokenCount?: number;
         maxNativeTokenCount?: number;
@@ -111,12 +101,6 @@ export class IndexerPluginClient {
             if (filterOptions.expiresAfter !== undefined) {
                 queryParams.push(`expiresAfter=${filterOptions.expiresAfter}`);
             }
-            if (filterOptions.expiresBeforeMilestone !== undefined) {
-                queryParams.push(`expiresBeforeMilestone=${filterOptions.expiresBeforeMilestone}`);
-            }
-            if (filterOptions.expiresAfterMilestone !== undefined) {
-                queryParams.push(`expiresAfterMilestone=${filterOptions.expiresAfterMilestone}`);
-            }
             if (filterOptions.hasTimelockCondition !== undefined) {
                 queryParams.push(`hasTimelockCondition=${filterOptions.hasTimelockCondition}`);
             }
@@ -125,18 +109,6 @@ export class IndexerPluginClient {
             }
             if (filterOptions.timelockedAfter !== undefined) {
                 queryParams.push(`timelockedAfter=${filterOptions.timelockedAfter}`);
-            }
-            if (filterOptions.timelockedBefore !== undefined) {
-                queryParams.push(`timelockedBefore=${filterOptions.timelockedBefore}`);
-            }
-            if (filterOptions.timelockedAfter !== undefined) {
-                queryParams.push(`timelockedAfter=${filterOptions.timelockedAfter}`);
-            }
-            if (filterOptions.timelockedBeforeMilestone !== undefined) {
-                queryParams.push(`timelockedBeforeMilestone=${filterOptions.timelockedBeforeMilestone}`);
-            }
-            if (filterOptions.timelockedAfterMilestone !== undefined) {
-                queryParams.push(`timelockedAfterMilestone=${filterOptions.timelockedAfterMilestone}`);
             }
             if (filterOptions.hasNativeTokens !== undefined) {
                 queryParams.push(`hasNativeTokens=${filterOptions.hasNativeTokens}`);
@@ -192,7 +164,7 @@ export class IndexerPluginClient {
      */
     public async aliases(filterOptions?: {
         stateControllerBech32?: string;
-        governorBech32?: boolean;
+        governorBech32?: string;
         issuerBech32?: string;
         senderBech32?: string;
         hasNativeTokens?: boolean;
@@ -273,15 +245,9 @@ export class IndexerPluginClient {
      * @param filterOptions.expirationReturnAddressBech32 Filter for outputs with a certain expiration return address.
      * @param filterOptions.expiresBefore Filter for outputs that expire before a certain unix time.
      * @param filterOptions.expiresAfter Filter for outputs that expire after a certain unix time.
-     * @param filterOptions.expiresBeforeMilestone Filter for outputs that expire before a certain milestone index.
-     * @param filterOptions.expiresAfterMilestone Filter for outputs that expire after a certain milestone index.
      * @param filterOptions.hasTimelockCondition Filter for outputs having a timelock unlock condition.
      * @param filterOptions.timelockedBefore Filter for outputs that are timelocked before a certain unix time.
      * @param filterOptions.timelockedAfter Filter for outputs that are timelocked after a certain unix time.
-     * @param filterOptions.timelockedBeforeMilestone Filter for outputs that are timelocked before a certain
-     * milestone index.
-     * @param filterOptions.timelockedAfterMilestone Filter for outputs that are timelocked after a certain
-     * milestone index.
      * @param filterOptions.hasNativeTokens Filter for outputs having native tokens.
      * @param filterOptions.minNativeTokenCount Filter for outputs that have at least an amount of native tokens.
      * @param filterOptions.maxNativeTokenCount Filter for outputs that have at the most an amount of native tokens.
@@ -302,13 +268,9 @@ export class IndexerPluginClient {
         expirationReturnAddressBech32?: string;
         expiresBefore?: number;
         expiresAfter?: number;
-        expiresBeforeMilestone?: number;
-        expiresAfterMilestone?: number;
         hasTimelockCondition?: boolean;
         timelockedBefore?: number;
         timelockedAfter?: number;
-        timelockedBeforeMilestone?: number;
-        timelockedAfterMilestone?: number;
         hasNativeTokens?: boolean;
         minNativeTokenCount?: number;
         maxNativeTokenCount?: number;
@@ -343,12 +305,6 @@ export class IndexerPluginClient {
             if (filterOptions.expiresAfter !== undefined) {
                 queryParams.push(`expiresAfter=${filterOptions.expiresAfter}`);
             }
-            if (filterOptions.expiresBeforeMilestone !== undefined) {
-                queryParams.push(`expiresBeforeMilestone=${filterOptions.expiresBeforeMilestone}`);
-            }
-            if (filterOptions.expiresAfterMilestone !== undefined) {
-                queryParams.push(`expiresAfterMilestone=${filterOptions.expiresAfterMilestone}`);
-            }
             if (filterOptions.hasTimelockCondition !== undefined) {
                 queryParams.push(`hasTimelockCondition=${filterOptions.hasTimelockCondition}`);
             }
@@ -357,12 +313,6 @@ export class IndexerPluginClient {
             }
             if (filterOptions.timelockedAfter !== undefined) {
                 queryParams.push(`timelockedAfter=${filterOptions.timelockedAfter}`);
-            }
-            if (filterOptions.timelockedBeforeMilestone !== undefined) {
-                queryParams.push(`timelockedBeforeMilestone=${filterOptions.timelockedBeforeMilestone}`);
-            }
-            if (filterOptions.timelockedAfterMilestone !== undefined) {
-                queryParams.push(`timelockedAfterMilestone=${filterOptions.timelockedAfterMilestone}`);
             }
             if (filterOptions.hasNativeTokens !== undefined) {
                 queryParams.push(`hasNativeTokens=${filterOptions.hasNativeTokens}`);

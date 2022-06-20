@@ -3,6 +3,7 @@
 import type { INodeInfoBaseToken } from "./INodeInfoBaseToken";
 import type { INodeInfoMetrics } from "./INodeInfoMetrics";
 import type { INodeInfoProtocol } from "./INodeInfoProtocol";
+import type { INodeInfoProtocolParamsMilestoneOpt } from "./INodeInfoProtocolParamsMilestoneOpt";
 import type { INodeInfoStatus } from "./INodeInfoStatus";
 
 /**
@@ -25,19 +26,29 @@ export interface INodeInfo {
     status: INodeInfoStatus;
 
     /**
+     * The metrics for the node.
+     */
+    metrics: INodeInfoMetrics;
+
+    /**
+     * The supported protocol versions.
+     */
+    supportedProtocolVersions: number[];
+
+    /**
      * The protocol info of the node.
      */
     protocol: INodeInfoProtocol;
 
     /**
+     * Pending protocol parameters.
+     */
+    pendingProtocolParameters: INodeInfoProtocolParamsMilestoneOpt[];
+
+    /**
      * The base token info of the node.
      */
     baseToken: INodeInfoBaseToken;
-
-    /**
-     * The metrics for the node.
-     */
-    metrics: INodeInfoMetrics;
 
     /**
      * Features supported by the node.
