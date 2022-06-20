@@ -2,6 +2,12 @@
 
 Defines changing protocol parameters in a milestone.
 
+## Hierarchy
+
+- [`IProtocolParamsMilestoneOption`](IProtocolParamsMilestoneOption.md)
+
+  ↳ **`INodeInfoProtocolParamsMilestoneOpt`**
+
 ## Table of contents
 
 ### Properties
@@ -15,9 +21,13 @@ Defines changing protocol parameters in a milestone.
 
 ### type
 
-• **type**: `number`
+• **type**: ``1``
 
-Defines the type of MilestoneOpt.
+The type of the object.
+
+#### Inherited from
+
+[IProtocolParamsMilestoneOption](IProtocolParamsMilestoneOption.md).[type](IProtocolParamsMilestoneOption.md#type)
 
 ___
 
@@ -27,6 +37,10 @@ ___
 
 The milestone index at which these protocol parameters become active.
 
+#### Inherited from
+
+[IProtocolParamsMilestoneOption](IProtocolParamsMilestoneOption.md).[targetMilestoneIndex](IProtocolParamsMilestoneOption.md#targetmilestoneindex)
+
 ___
 
 ### protocolVersion
@@ -35,6 +49,10 @@ ___
 
 The to be applied protocol version.
 
+#### Inherited from
+
+[IProtocolParamsMilestoneOption](IProtocolParamsMilestoneOption.md).[protocolVersion](IProtocolParamsMilestoneOption.md#protocolversion)
+
 ___
 
 ### params
@@ -42,3 +60,7 @@ ___
 • **params**: `string`
 
 The protocol parameters in binary form. Hex-encoded with 0x prefix.
+
+#### Inherited from
+
+[IProtocolParamsMilestoneOption](IProtocolParamsMilestoneOption.md).[params](IProtocolParamsMilestoneOption.md#params)

@@ -46,7 +46,7 @@ Type of the object.
 
   ↳ [`IReceiptMilestoneOption`](IReceiptMilestoneOption.md)
 
-  ↳ [`IPoWMilestoneOption`](IPoWMilestoneOption.md)
+  ↳ [`IProtocolParamsMilestoneOption`](IProtocolParamsMilestoneOption.md)
 
   ↳ [`ITaggedDataPayload`](ITaggedDataPayload.md)
 

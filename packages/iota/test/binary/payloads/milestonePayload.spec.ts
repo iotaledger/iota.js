@@ -4,7 +4,7 @@ import { Converter, ReadStream, WriteStream } from "@iota/util.js";
 import { deserializeMilestonePayload, serializeMilestonePayload } from "../../../src/binary/payloads/milestonePayload";
 import { ED25519_ADDRESS_TYPE, IEd25519Address } from "../../../src/models/addresses/IEd25519Address";
 import { TREASURY_INPUT_TYPE } from "../../../src/models/inputs/ITreasuryInput";
-import { IPoWMilestoneOption, POW_MILESTONE_OPTION_TYPE } from "../../../src/models/milestoneOptions/IPoWMilestoneOption";
+import { IProtocolParamsMilestoneOption, PROTOCOL_PARAMETERS_MILESTONE_OPTION_TYPE } from "../../../src/models/milestoneOptions/IProtocolParamsMilestoneOption";
 import { IReceiptMilestoneOption, RECEIPT_MILESTONE_OPTION_TYPE } from "../../../src/models/milestoneOptions/IReceiptMilestoneOption";
 import type { MilestoneOptionTypes } from "../../../src/models/milestoneOptions/milestoneOptionTypes";
 import { TREASURY_OUTPUT_TYPE } from "../../../src/models/outputs/ITreasuryOutput";
@@ -199,7 +199,7 @@ describe("Binary Milestone Payload", () => {
         );
     });
 
-    test("Can serialize and deserialize milestone payload with PoW option", () => {
+    test("Can serialize and deserialize milestone payload with Protocol params option", () => {
         const payload: IMilestonePayload = {
             type: MILESTONE_PAYLOAD_TYPE,
             index: 1087,
@@ -215,9 +215,10 @@ describe("Binary Milestone Payload", () => {
             metadata: "0x1111111122222222",
             options: [
                 {
-                    type: POW_MILESTONE_OPTION_TYPE,
-                    nextPoWScore: 0,
-                    nextPoWScoreMilestoneIndex: 1
+                    type: PROTOCOL_PARAMETERS_MILESTONE_OPTION_TYPE,
+                    targetMilestoneIndex: 13455,
+                    protocolVersion: 3,
+                    params: "0x27d0ca22753f76ef32d1e9e8fcc417aa9fc1c15eae854661e0253287be6ea68f649493fc8fd6ac43e9ca750c6f6d884cc72386ddcb"
                 }
             ],
             signatures: [
@@ -238,7 +239,7 @@ describe("Binary Milestone Payload", () => {
         serializeMilestonePayload(serialized, payload);
         const hex = serialized.finalHex();
         expect(hex).toEqual(
-            "070000003f0400007341ad5f0250cf83f8ee3e316a7f3a4df32082747e8392e59fa724bbd13a9f2efc34cec6e40204ba147c9cc9bebd3b97310a23d385f33d8e67ac42868b69bc06f5468e3c0a02c0ab1d1f6886ba6317634da6b2d957e7c987a9699dd3707d1e2751fcf4b8efe3665de8d34bca02af275a6ccaf2d5f7b1d018f695473f19855d7ad1a54f106ed10e5751c026e543b2e8ab2eb06099daa1d1e5df47778f7787faab45cdf12fe3a808001111111122222222010100000000010000000200d85e5b1590d898d1e0cdebb2e3b5337c8b76270142663d78811683ba47c17c9815188080d5ef2f8a8fd08498243a30b2a8eb08e0910573101632bb244c9e27db26121c8af619d90de6cb5e5c407e4edd709e0e06702170e311a1668e0a12480d00d9922819a39e94ddf3907f4b9c8df93f39f026244fcb609205b9a879022599f248afb8e21fbba0ba473b6798ecad3a33e10d1575fd5e3822e2922db4cc24b0808fd6792ee6eaaade15cdc14e43da16883962d15358dc064ba5bb2726cf07790a"
+            "070000003f0400007341ad5f0250cf83f8ee3e316a7f3a4df32082747e8392e59fa724bbd13a9f2efc34cec6e40204ba147c9cc9bebd3b97310a23d385f33d8e67ac42868b69bc06f5468e3c0a02c0ab1d1f6886ba6317634da6b2d957e7c987a9699dd3707d1e2751fcf4b8efe3665de8d34bca02af275a6ccaf2d5f7b1d018f695473f19855d7ad1a54f106ed10e5751c026e543b2e8ab2eb06099daa1d1e5df47778f7787faab45cdf12fe3a80800111111112222222201018f34000003350027d0ca22753f76ef32d1e9e8fcc417aa9fc1c15eae854661e0253287be6ea68f649493fc8fd6ac43e9ca750c6f6d884cc72386ddcb0200d85e5b1590d898d1e0cdebb2e3b5337c8b76270142663d78811683ba47c17c9815188080d5ef2f8a8fd08498243a30b2a8eb08e0910573101632bb244c9e27db26121c8af619d90de6cb5e5c407e4edd709e0e06702170e311a1668e0a12480d00d9922819a39e94ddf3907f4b9c8df93f39f026244fcb609205b9a879022599f248afb8e21fbba0ba473b6798ecad3a33e10d1575fd5e3822e2922db4cc24b0808fd6792ee6eaaade15cdc14e43da16883962d15358dc064ba5bb2726cf07790a"
         );
         const deserialized = deserializeMilestonePayload(new ReadStream(Converter.hexToBytes(hex)));
         expect(deserialized.type).toEqual(7);
@@ -264,9 +265,10 @@ describe("Binary Milestone Payload", () => {
         expect(deserialized.options).toBeDefined();
         const options = deserialized.options as MilestoneOptionTypes[];
         expect(options[0].type).toEqual(1);
-        const mo0 = options[0] as IPoWMilestoneOption;
-        expect(mo0.nextPoWScore).toEqual(0);
-        expect(mo0.nextPoWScoreMilestoneIndex).toEqual(1);
+        const mo0 = options[0] as IProtocolParamsMilestoneOption;
+        expect(mo0.targetMilestoneIndex).toEqual(13455);
+        expect(mo0.protocolVersion).toEqual(3);
+        expect(mo0.params).toEqual("0x27d0ca22753f76ef32d1e9e8fcc417aa9fc1c15eae854661e0253287be6ea68f649493fc8fd6ac43e9ca750c6f6d884cc72386ddcb");
         expect(deserialized.signatures.length).toEqual(2);
         expect(deserialized.signatures[0].type).toEqual(0);
         expect(deserialized.signatures[0].publicKey).toEqual(
@@ -285,7 +287,7 @@ describe("Binary Milestone Payload", () => {
     });
 
 
-    test("Can serialize and deserialize milestone payload with receipt and PoW option", () => {
+    test("Can serialize and deserialize milestone payload with receipt and protocol params option", () => {
         const payload: IMilestonePayload = {
             type: MILESTONE_PAYLOAD_TYPE,
             index: 1087,
@@ -327,9 +329,10 @@ describe("Binary Milestone Payload", () => {
                     }
                 },
                 {
-                    type: POW_MILESTONE_OPTION_TYPE,
-                    nextPoWScore: 0,
-                    nextPoWScoreMilestoneIndex: 1
+                    type: PROTOCOL_PARAMETERS_MILESTONE_OPTION_TYPE,
+                    targetMilestoneIndex: 13455,
+                    protocolVersion: 3,
+                    params: "0x27d0ca22753f76ef32d1e9e8fcc417aa9fc1c15eae854661e0253287be6ea68f649493fc8fd6ac43e9ca750c6f6d884cc72386ddcb7d"
                 }
             ],
             signatures: [
@@ -350,7 +353,7 @@ describe("Binary Milestone Payload", () => {
         serializeMilestonePayload(serialized, payload);
         const hex = serialized.finalHex();
         expect(hex).toEqual(
-            "070000003f0400007341ad5f0250cf83f8ee3e316a7f3a4df32082747e8392e59fa724bbd13a9f2efc34cec6e40204ba147c9cc9bebd3b97310a23d385f33d8e67ac42868b69bc06f5468e3c0a02c0ab1d1f6886ba6317634da6b2d957e7c987a9699dd3707d1e2751fcf4b8efe3665de8d34bca02af275a6ccaf2d5f7b1d018f695473f19855d7ad1a54f106ed10e5751c026e543b2e8ab2eb06099daa1d1e5df47778f7787faab45cdf12fe3a808001111111122222222020040e20100010100aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa00bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb40000000000000002e0000000400000001aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa02860a0000000000000100000000010000000200d85e5b1590d898d1e0cdebb2e3b5337c8b76270142663d78811683ba47c17c9815188080d5ef2f8a8fd08498243a30b2a8eb08e0910573101632bb244c9e27db26121c8af619d90de6cb5e5c407e4edd709e0e06702170e311a1668e0a12480d00d9922819a39e94ddf3907f4b9c8df93f39f026244fcb609205b9a879022599f248afb8e21fbba0ba473b6798ecad3a33e10d1575fd5e3822e2922db4cc24b0808fd6792ee6eaaade15cdc14e43da16883962d15358dc064ba5bb2726cf07790a"
+            "070000003f0400007341ad5f0250cf83f8ee3e316a7f3a4df32082747e8392e59fa724bbd13a9f2efc34cec6e40204ba147c9cc9bebd3b97310a23d385f33d8e67ac42868b69bc06f5468e3c0a02c0ab1d1f6886ba6317634da6b2d957e7c987a9699dd3707d1e2751fcf4b8efe3665de8d34bca02af275a6ccaf2d5f7b1d018f695473f19855d7ad1a54f106ed10e5751c026e543b2e8ab2eb06099daa1d1e5df47778f7787faab45cdf12fe3a808001111111122222222020040e20100010100aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa00bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb40000000000000002e0000000400000001aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa02860a000000000000018f34000003360027d0ca22753f76ef32d1e9e8fcc417aa9fc1c15eae854661e0253287be6ea68f649493fc8fd6ac43e9ca750c6f6d884cc72386ddcb7d0200d85e5b1590d898d1e0cdebb2e3b5337c8b76270142663d78811683ba47c17c9815188080d5ef2f8a8fd08498243a30b2a8eb08e0910573101632bb244c9e27db26121c8af619d90de6cb5e5c407e4edd709e0e06702170e311a1668e0a12480d00d9922819a39e94ddf3907f4b9c8df93f39f026244fcb609205b9a879022599f248afb8e21fbba0ba473b6798ecad3a33e10d1575fd5e3822e2922db4cc24b0808fd6792ee6eaaade15cdc14e43da16883962d15358dc064ba5bb2726cf07790a"
         );
         const deserialized = deserializeMilestonePayload(new ReadStream(Converter.hexToBytes(hex)));
         expect(deserialized.type).toEqual(7);
@@ -390,9 +393,10 @@ describe("Binary Milestone Payload", () => {
         expect(mo0.transaction.output.type).toEqual(2);
         expect(mo0.transaction.output.amount).toEqual("2694");
         expect(options[1].type).toEqual(1);
-        const mo1 = options[1] as IPoWMilestoneOption;
-        expect(mo1.nextPoWScore).toEqual(0);
-        expect(mo1.nextPoWScoreMilestoneIndex).toEqual(1);
+        const mo1 = options[1] as IProtocolParamsMilestoneOption;
+        expect(mo1.targetMilestoneIndex).toEqual(13455);
+        expect(mo1.protocolVersion).toEqual(3);
+        expect(mo1.params).toEqual("0x27d0ca22753f76ef32d1e9e8fcc417aa9fc1c15eae854661e0253287be6ea68f649493fc8fd6ac43e9ca750c6f6d884cc72386ddcb7d");
         expect(deserialized.signatures.length).toEqual(2);
         expect(deserialized.signatures[0].type).toEqual(0);
         expect(deserialized.signatures[0].publicKey).toEqual(
