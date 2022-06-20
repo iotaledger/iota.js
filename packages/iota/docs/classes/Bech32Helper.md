@@ -13,6 +13,7 @@ Convert address to bech32.
 
 - [toBech32](Bech32Helper.md#tobech32)
 - [fromBech32](Bech32Helper.md#frombech32)
+- [addressFromBech32](Bech32Helper.md#addressfrombech32)
 - [matches](Bech32Helper.md#matches)
 
 ### Constructors
@@ -77,6 +78,27 @@ Decode an address from bech32.
 `undefined` \| {}
 
 The address type and address bytes or undefined if it cannot be decoded.
+
+___
+
+### addressFromBech32
+
+▸ `Static` **addressFromBech32**(`bech32Address`, `humanReadablePart`): [`AddressTypes`](../api.md#addresstypes)
+
+Decode an address from bech32.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `bech32Address` | `string` | The bech32 address to decode. |
+| `humanReadablePart` | `string` | The human readable part to use. |
+
+#### Returns
+
+[`AddressTypes`](../api.md#addresstypes)
+
+The address type.
 
 ___
 

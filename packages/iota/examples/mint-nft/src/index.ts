@@ -25,7 +25,8 @@ import {
     LocalPowProvider,
     AddressTypes,
     ALIAS_ADDRESS_TYPE,
-    NFT_ADDRESS_TYPE
+    NFT_ADDRESS_TYPE,
+    TransactionHelper
 } from "@iota/iota.js";
 import { Converter, WriteStream, BigIntHelper } from "@iota/util.js";
 import { Bip32Path, Blake2b, Ed25519 } from "@iota/crypto.js";
@@ -67,40 +68,14 @@ async function run() {
     const targetAddressBech32 = await askQuestion("Target address where to mint the NFT? (Bech32 encoded): ");
 
     // parse bech32 encoded address into iota address
-    const tmp = Bech32Helper.fromBech32(targetAddressBech32, nodeInfo.protocol.bech32HRP)
+    const tmp = Bech32Helper.fromBech32(targetAddressBech32, nodeInfo.protocol.bech32HRP);
     if (!tmp){
-        throw new Error("Can't decode target address")
+        throw new Error("Can't decode target address");
     }
 
-    let targetAddress: AddressTypes;
-    switch(tmp.addressType){
-        case ED25519_ADDRESS_TYPE: {
-            targetAddress = {
-                type: ED25519_ADDRESS_TYPE,
-                pubKeyHash: Converter.bytesToHex(tmp.addressBytes, true)
-            };
-            break;
-        }
-        case ALIAS_ADDRESS_TYPE: {
-            targetAddress = {
-                type: ALIAS_ADDRESS_TYPE,
-                aliasId: Converter.bytesToHex(tmp.addressBytes, true)
-            };
-            break;
-        }
-        case NFT_ADDRESS_TYPE: {
-            targetAddress = {
-                type: NFT_ADDRESS_TYPE,
-                nftId: Converter.bytesToHex(tmp.addressBytes, true)
-            };
-            break;
-        }
-        default: {
-            throw new Error("Unexpected address type");
-        }
-    }
+    let targetAddress = Bech32Helper.addressFromBech32(targetAddressBech32, nodeInfo.protocol.bech32HRP);
 
-    // Put here you mnemonic
+    // Generate seed from mnemonic
     // const mnemonic =
     //     "assist file add kidney sense anxiety march quality sphere stamp crime swift mystery bind thrive impact walk solar asset pottery nation dutch column beef";
     // Generate the seed from the Mnemonic
@@ -108,7 +83,6 @@ async function run() {
 
     // Now it's time to set up an account for this demo. We generate a random seed.
     const walletEd25519Seed = new Ed25519Seed(randomBytes(32))
-
     console.log("Your seed");
 
     // For Shimmer we use Coin Type 4219
@@ -137,22 +111,15 @@ async function run() {
 
     // Indexer returns outputIds of matching outputs. We are only interested in the first one coming from the faucet.
     const outputId = await fetchAndWaitForBasicOutput(walletAddressBech32, indexerPluginClient);
-
     console.log("OutputId: ", outputId);
 
     // Fetch the output itself
     const resp = await client.output(outputId);
     const consumedOutput = resp.output;
-
     console.log("To be consumed output: ", consumedOutput);
 
     // Prepare inputs to the tx
-    const input:IUTXOInput = {
-        type: UTXO_INPUT_TYPE,
-        transactionId: outputId.slice(0, 2 + 2*TRANSACTION_ID_LENGTH), // +2 because it has 0x prefix
-        transactionOutputIndex: parseInt(outputId.slice(2+2*TRANSACTION_ID_LENGTH))
-    }
-
+    const input:IUTXOInput = TransactionHelper.inputFromOutputId(outputId);
     console.log("Input: ", input)
 
     // Create the outputs, that is an NFT output
@@ -167,7 +134,7 @@ async function run() {
                 type: 1, // Issuer feature
                 address: {
                     type: 0,
-                    pubKeyHash: walletAddressHex,
+                    pubKeyHash: walletAddressHex
                 },
             },
             {
@@ -178,19 +145,13 @@ async function run() {
         unlockConditions: [
             {
                 type: 0,
-                address: targetAddress, // minting it directly onto target addy
+                address: targetAddress // minting it directly onto target addy
             }
         ]
     }
 
-    // To know the byte cost, we need to serialize the output
-    const writeStream = new WriteStream();
-    serializeNftOutput(writeStream, nftOutput);
-    const nftOutputBytes = writeStream.finalBytes();
-    const offset = nodeInfo.protocol.rentStructure.vByteFactorKey*34 + nodeInfo.protocol.rentStructure.vByteFactorData*(32 + 4 + 4); // 10* outputIdLength + blockIdLength + confMSIndexLength + confUnixTSLength src: https://github.com/muXxer/tips/blob/master/tips/TIP-0019/tip-0019.md
-    let vByteSize =  nodeInfo.protocol.rentStructure.vByteFactorData*nftOutputBytes.length + offset;
-    let requiredStorageDeposit = nodeInfo.protocol.rentStructure.vByteCost * vByteSize;
-    console.log("Virtual Byte Size of the NFT output: ", vByteSize);
+    // Calculate required storage
+    let requiredStorageDeposit = TransactionHelper.getStorageDeposit(nftOutput, nodeInfo.protocol.rentStructure);
     console.log("Required Storage Deposit of the NFT output: ", requiredStorageDeposit);
 
     // Prepare Tx essence
@@ -198,7 +159,6 @@ async function run() {
     // We could put only requiredStorageDepoist into the nft output, but hey, we have free tokens so top it up with all we have.
     // nftOutput.amount = requiredStorageDeposit.toString()
     nftOutput.amount = consumedOutput.amount;
-
 
     // InputsCommitment calculation
     const inputsCommitmentHasher = new Blake2b(Blake2b.SIZE_256); // blake2b hasher
@@ -220,8 +180,7 @@ async function run() {
     const inputsCommitment = Converter.bytesToHex(inputsCommitmentHasher.final(), true);
 
     // Figure out networkId from networkName
-    const networkIdBytes = Blake2b.sum256(Converter.utf8ToBytes(nodeInfo.protocol.networkName));
-    const currentNetworkId = BigIntHelper.read8(networkIdBytes, 0).toString();
+    const currentNetworkId = TransactionHelper.networkIdFromNetworkName(nodeInfo.protocol.networkName);
 
     // Creating Transaction Essence
     const txEssence: ITransactionEssence = {
@@ -233,10 +192,7 @@ async function run() {
     };
 
     // Calculating Transaction Essence Hash (to be signed in signature unlocks)
-    const binaryEssence = new WriteStream();
-    serializeTransactionEssence(binaryEssence, txEssence);
-    const essenceFinal = binaryEssence.finalBytes();
-    const essenceHash = Blake2b.sum256(essenceFinal);
+    const essenceHash = TransactionHelper.getTransactionEssenceHash(txEssence);
 
     // We unlock only one output, so there will be one unlock with signature
     let unlock: ISignatureUnlock = {
@@ -273,36 +229,35 @@ async function run() {
     const blockId = await client.blockSubmit(block);
 
     console.log("Submitted blockId is: ", blockId);
-
     console.log("Check out the transaction at ", EXPLORER+"/block/"+blockId);
-
 }
 
 run()
     .then(() => console.log("Done"))
     .catch(err => console.error(err));
 
-async function fetchAndWaitForBasicOutput(addy: string, client: IndexerPluginClient): Promise<string> {
+async function fetchAndWaitForBasicOutput(addressBech32: string, client: IndexerPluginClient): Promise<string> {
     let outputsResponse: IOutputsResponse = { ledgerIndex: 0, cursor: "", pageSize: "", items: [] };
     let maxTries = 10;
     let tries = 0;
-    while(outputsResponse.items.length == 0 ){
-        if (tries > maxTries){break}
+    while (outputsResponse.items.length == 0) {
+        if (tries > maxTries){ break; }
         tries++;
-        console.log("\tTry #",tries,": fetching basic output for address ", addy)
+        console.log("\tTry #",tries,": fetching basic output for address ", addressBech32);
         outputsResponse = await client.outputs({
-            addressBech32: addy,
+            addressBech32: addressBech32,
             hasStorageReturnCondition: false,
             hasExpirationCondition: false,
             hasTimelockCondition: false,
             hasNativeTokens: false,
         });
-        if(outputsResponse.items.length == 0){
-            console.log("\tDidn't find any, retrying soon...")
-            await new Promise(f => setTimeout(f, 1000));}
+        if (outputsResponse.items.length == 0) {
+            console.log("\tDidn't find any, retrying soon...");
+            await new Promise(f => setTimeout(f, 1000));
+        }
     }
-    if(tries > maxTries){
+    if (tries > maxTries) {
         throw new Error("Didn't find any outputs for address");
     }
-    return outputsResponse.items[0]
+    return outputsResponse.items[0];
 }

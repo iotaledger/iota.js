@@ -2,6 +2,11 @@
 // SPDX-License-Identifier: Apache-2.0
 /* eslint-disable no-bitwise */
 import { Bech32 } from "@iota/crypto.js";
+import { Converter } from "@iota/util.js";
+import type { AddressTypes } from "../models/addresses/addressTypes";
+import { ALIAS_ADDRESS_TYPE } from "../models/addresses/IAliasAddress";
+import { ED25519_ADDRESS_TYPE } from "../models/addresses/IEd25519Address";
+import { NFT_ADDRESS_TYPE } from "../models/addresses/INftAddress";
 
 /**
  * Convert address to bech32.
@@ -65,6 +70,43 @@ export class Bech32Helper {
                 addressType,
                 addressBytes
             };
+        }
+    }
+
+    /**
+     * Decode an address from bech32.
+     * @param bech32Address The bech32 address to decode.
+     * @param humanReadablePart The human readable part to use.
+     * @returns The address type.
+     */
+    public static addressFromBech32(bech32Address: string, humanReadablePart: string): AddressTypes {
+        const parsed = Bech32Helper.fromBech32(bech32Address, humanReadablePart);
+        if (!parsed) {
+            throw new Error("Can't decode address");
+        }
+
+        switch (parsed.addressType) {
+            case ED25519_ADDRESS_TYPE: {
+                return {
+                    type: ED25519_ADDRESS_TYPE,
+                    pubKeyHash: Converter.bytesToHex(parsed.addressBytes, true)
+                };
+            }
+            case ALIAS_ADDRESS_TYPE: {
+                return {
+                    type: ALIAS_ADDRESS_TYPE,
+                    aliasId: Converter.bytesToHex(parsed.addressBytes, true)
+                };
+            }
+            case NFT_ADDRESS_TYPE: {
+                return {
+                    type: NFT_ADDRESS_TYPE,
+                    nftId: Converter.bytesToHex(parsed.addressBytes, true)
+                };
+            }
+            default: {
+                throw new Error("Unexpected address type");
+            }
         }
     }
 

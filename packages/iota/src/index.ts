@@ -151,5 +151,6 @@ export * from "./utils/bech32Helper";
 export * from "./utils/milestoneHelper";
 export * from "./utils/logging";
 export * from "./utils/powHelper";
+export * from "./utils/transactionHelper";
 export * from "./utils/unitsHelper";
 
