@@ -54,9 +54,4 @@ export interface INodeInfo {
      * Features supported by the node.
      */
     features: string[];
-
-    /**
-     * The plugins the node exposes.
-     */
-    plugins: string[];
 }

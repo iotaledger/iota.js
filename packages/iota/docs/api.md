@@ -258,6 +258,7 @@
 - [buildTransactionPayload](api.md#buildtransactionpayload)
 - [sendData](api.md#senddata)
 - [setLogger](api.md#setlogger)
+- [logRoutes](api.md#logroutes)
 - [logInfo](api.md#loginfo)
 - [logTips](api.md#logtips)
 - [logBlock](api.md#logblock)
@@ -357,7 +358,7 @@
 - [IReferenceUnlock](interfaces/IReferenceUnlock.md)
 - [ISignatureUnlock](interfaces/ISignatureUnlock.md)
 
-### Type Aliases
+### Type aliases
 
 - [AddressTypes](api.md#addresstypes)
 - [FeatureTypes](api.md#featuretypes)
@@ -3833,6 +3834,25 @@ Set the logger for output.
 
 ___
 
+### logRoutes
+
+▸ **logRoutes**(`prefix`, `routes`): `void`
+
+Log the routes of the node.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `prefix` | `string` | The prefix for the output. |
+| `routes` | `IRoutesResponse` | The available routes. |
+
+#### Returns
+
+`void`
+
+___
+
 ### logInfo
 
 ▸ **logInfo**(`prefix`, `info`): `void`
@@ -4366,7 +4386,7 @@ Compute a blockId from a milestone payload.
 
 The blockId of the block with the milestone payload.
 
-## Type Aliases
+## Type aliases
 
 ### AddressTypes
 

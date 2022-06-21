@@ -9,6 +9,7 @@ import type { ITipsResponse } from "./api/ITipsResponse";
 import type { IBlock } from "./IBlock";
 import type { IBlockMetadata } from "./IBlockMetadata";
 import type { INodeInfo } from "./info/INodeInfo";
+import type { IRoutesResponse } from "./info/IRoutesResponse";
 import type { IPeer } from "./IPeer";
 import type { ITreasury } from "./ITreasury";
 
@@ -21,6 +22,12 @@ export interface IClient {
      * @returns True if the node is healthy.
      */
     health(): Promise<boolean>;
+
+    /**
+     * Get the routes the node exposes.
+     * @returns The routes.
+     */
+    routes(): Promise<IRoutesResponse>;
 
     /**
      * Get the info about the node.

@@ -1,6 +1,6 @@
 # Use https://marketplace.visualstudio.com/items?itemName=humao.rest-client to execute these in VSCode
 
 ### Milestones data
-GET http://localhost:14265/api/v2/milestones/1
+GET http://localhost:14265/api/core/v2/milestones/1
 Content-Type: application/json
 

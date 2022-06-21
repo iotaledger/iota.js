@@ -7,7 +7,6 @@ Options used when constructing SingleNodeClient.
 ### Properties
 
 - [basePath](SingleNodeClientOptions.md#basepath)
-- [basePluginPath](SingleNodeClientOptions.md#basepluginpath)
 - [powProvider](SingleNodeClientOptions.md#powprovider)
 - [protocolVersion](SingleNodeClientOptions.md#protocolversion)
 - [timeout](SingleNodeClientOptions.md#timeout)
@@ -21,15 +20,7 @@ Options used when constructing SingleNodeClient.
 
 • `Optional` **basePath**: `string`
 
-Base path for API location, defaults to /api/v2/.
-
-___
-
-### basePluginPath
-
-• `Optional` **basePluginPath**: `string`
-
-Base path for API plugin location, defaults to /api/plugins/.
+Base path for API location, defaults to /api/.
 
 ___
 

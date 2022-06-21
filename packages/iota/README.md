@@ -20,6 +20,9 @@ const { SingleNodeClient } = require("@iota/iota.js");
 async function run() {
     const client = new SingleNodeClient("http://localhost:14265/");
 
+    const routes = await client.routes();
+    console.log("\tRoutes:", routes.routes);
+
     const info = await client.info();
     console.log("Node Info");
     console.log("\tName:", info.name);
@@ -31,11 +34,10 @@ async function run() {
     console.log("\tNetwork Name:", info.protocol.networkName);
     console.log("\tBech32 HRP:", info.protocol.bech32HRP);
     console.log("\tMin PoW Score:", info.protocol.minPoWScore);
-    console.log("\tMessages Per Second:", info.metrics.messagesPerSecond);
-    console.log("\tReferenced Messages Per Second:", info.metrics.referencedMessagesPerSecond);
+    console.log("\tBlocks Per Second:", info.metrics.blocksPerSecond);
+    console.log("\tReferenced Blocks Per Second:", info.metrics.referencedBlocksPerSecond);
     console.log("\tReferenced Rate:", info.metrics.referencedRate);
     console.log("\tFeatures:", info.features);
-    console.log("\tPlugins:", info.plugins);
 }
 
 run()

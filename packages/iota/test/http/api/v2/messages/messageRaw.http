@@ -1,5 +1,5 @@
 # Use https://marketplace.visualstudio.com/items?itemName=humao.rest-client to execute these in VSCode
 
 ### Blocks raw
-GET http://localhost:14265/api/v2/blocks/62832812d5ef48dcec4185bc09f4a68d9e481cf92d83c9a9151c098a34226fd6/raw
+GET http://localhost:14265/api/core/v2/blocks/62832812d5ef48dcec4185bc09f4a68d9e481cf92d83c9a9151c098a34226fd6/raw
 Content-Type: application/json

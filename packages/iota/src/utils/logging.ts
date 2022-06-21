@@ -16,6 +16,7 @@ import type { IBlockMetadata } from "../models/IBlockMetadata";
 import type { IMigratedFunds } from "../models/IMigratedFunds";
 import type { INativeToken } from "../models/INativeToken";
 import type { INodeInfo } from "../models/info/INodeInfo";
+import type { IRoutesResponse } from "../models/info/IRoutesResponse";
 import type { InputTypes } from "../models/inputs/inputTypes";
 import { TREASURY_INPUT_TYPE } from "../models/inputs/ITreasuryInput";
 import { UTXO_INPUT_TYPE } from "../models/inputs/IUTXOInput";
@@ -76,6 +77,15 @@ export function setLogger(log: (message: string, data?: unknown) => void): void 
 }
 
 /**
+ * Log the routes of the node.
+ * @param prefix The prefix for the output.
+ * @param routes The available routes.
+ */
+ export function logRoutes(prefix: string, routes: IRoutesResponse): void {
+    logger(`${prefix}\tRoutes:`, routes.routes);
+}
+
+/**
  * Log the node information.
  * @param prefix The prefix for the output.
  * @param info The info to log.
@@ -121,7 +131,6 @@ export function logInfo(prefix: string, info: INodeInfo): void {
     logger(`${prefix}\t\tReferenced Rate:`, info.metrics.referencedRate);
 
     logger(`${prefix}\tFeatures:`, info.features);
-    logger(`${prefix}\tPlugins:`, info.plugins);
 }
 
 /**
