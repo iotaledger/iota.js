@@ -15,6 +15,7 @@ Client for API communication.
 ### Methods
 
 - [health](SingleNodeClient.md#health)
+- [routes](SingleNodeClient.md#routes)
 - [info](SingleNodeClient.md#info)
 - [tips](SingleNodeClient.md#tips)
 - [block](SingleNodeClient.md#block)
@@ -74,6 +75,24 @@ True if the node is healthy.
 #### Implementation of
 
 [IClient](../interfaces/IClient.md).[health](../interfaces/IClient.md#health)
+
+___
+
+### routes
+
+▸ **routes**(): `Promise`<`IRoutesResponse`\>
+
+Get the routes the node exposes.
+
+#### Returns
+
+`Promise`<`IRoutesResponse`\>
+
+The routes.
+
+#### Implementation of
+
+[IClient](../interfaces/IClient.md).[routes](../interfaces/IClient.md#routes)
 
 ___
 

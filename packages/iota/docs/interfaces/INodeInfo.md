@@ -15,7 +15,6 @@ Response from the /info endpoint.
 - [pendingProtocolParameters](INodeInfo.md#pendingprotocolparameters)
 - [baseToken](INodeInfo.md#basetoken)
 - [features](INodeInfo.md#features)
-- [plugins](INodeInfo.md#plugins)
 
 ## Properties
 
@@ -88,11 +87,3 @@ ___
 • **features**: `string`[]
 
 Features supported by the node.
-
-___
-
-### plugins
-
-• **plugins**: `string`[]
-
-The plugins the node exposes.

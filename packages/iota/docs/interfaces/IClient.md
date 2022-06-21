@@ -11,6 +11,7 @@ Client interface definition for API communication.
 ### Methods
 
 - [health](IClient.md#health)
+- [routes](IClient.md#routes)
 - [info](IClient.md#info)
 - [tips](IClient.md#tips)
 - [block](IClient.md#block)
@@ -51,6 +52,20 @@ Get the health of the node.
 `Promise`<`boolean`\>
 
 True if the node is healthy.
+
+___
+
+### routes
+
+▸ **routes**(): `Promise`<`IRoutesResponse`\>
+
+Get the routes the node exposes.
+
+#### Returns
+
+`Promise`<`IRoutesResponse`\>
+
+The routes.
 
 ___
 
