@@ -21,8 +21,8 @@ async function run() {
                     console.log("\t\tLatest Milestone Index:", peer.gossip.heartbeat.latestMilestoneIndex);
                     console.log("\t\tPruned Milestone Index:", peer.gossip.heartbeat.prunedMilestoneIndex);
                     console.log("\t\tSolid Milestone Index:", peer.gossip.heartbeat.solidMilestoneIndex);
-                    console.log("\t\tConnected Neighbors:", peer.gossip.heartbeat.connectedNeighbors);
-                    console.log("\t\tSynced Neighbors:", peer.gossip.heartbeat.syncedNeighbors);
+                    console.log("\t\tConnected Peers:", peer.gossip.heartbeat.connectedPeers);
+                    console.log("\t\tSynced Peers:", peer.gossip.heartbeat.syncedPeers);
                 }
                 console.log("\tGossip Metrics");
                 console.log("\t\tNew Blocks:", peer.gossip.metrics.newBlocks);

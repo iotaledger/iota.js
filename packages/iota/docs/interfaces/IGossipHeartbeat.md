@@ -9,8 +9,8 @@ Gossip heartbeat.
 - [solidMilestoneIndex](IGossipHeartbeat.md#solidmilestoneindex)
 - [prunedMilestoneIndex](IGossipHeartbeat.md#prunedmilestoneindex)
 - [latestMilestoneIndex](IGossipHeartbeat.md#latestmilestoneindex)
-- [connectedNeighbors](IGossipHeartbeat.md#connectedneighbors)
-- [syncedNeighbors](IGossipHeartbeat.md#syncedneighbors)
+- [connectedPeers](IGossipHeartbeat.md#connectedpeers)
+- [syncedPeers](IGossipHeartbeat.md#syncedpeers)
 
 ## Properties
 
@@ -38,16 +38,16 @@ Latest milestone index.
 
 ___
 
-### connectedNeighbors
+### connectedPeers
 
-• **connectedNeighbors**: `number`
+• **connectedPeers**: `number`
 
-Connected Neighbours.
+Connected peers.
 
 ___
 
-### syncedNeighbors
+### syncedPeers
 
-• **syncedNeighbors**: `number`
+• **syncedPeers**: `number`
 
-Synced neighbours.
+Synced peers.
