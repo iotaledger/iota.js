@@ -20,12 +20,12 @@ export interface IGossipHeartbeat {
     latestMilestoneIndex: number;
 
     /**
-     * Connected Neighbours.
+     * Connected peers.
      */
-    connectedNeighbors: number;
+    connectedPeers: number;
 
     /**
-     * Synced neighbours.
+     * Synced peers.
      */
-    syncedNeighbors: number;
+    syncedPeers: number;
 }
