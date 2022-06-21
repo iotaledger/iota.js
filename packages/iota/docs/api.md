@@ -358,7 +358,7 @@
 - [IReferenceUnlock](interfaces/IReferenceUnlock.md)
 - [ISignatureUnlock](interfaces/ISignatureUnlock.md)
 
-### Type aliases
+### Type Aliases
 
 - [AddressTypes](api.md#addresstypes)
 - [FeatureTypes](api.md#featuretypes)
@@ -4386,7 +4386,7 @@ Compute a blockId from a milestone payload.
 
 The blockId of the block with the milestone payload.
 
-## Type aliases
+## Type Aliases
 
 ### AddressTypes
 
