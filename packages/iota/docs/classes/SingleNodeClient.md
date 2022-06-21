@@ -80,13 +80,13 @@ ___
 
 ### routes
 
-▸ **routes**(): `Promise`<`IRoutesResponse`\>
+▸ **routes**(): `Promise`<[`IRoutesResponse`](../interfaces/IRoutesResponse.md)\>
 
 Get the routes the node exposes.
 
 #### Returns
 
-`Promise`<`IRoutesResponse`\>
+`Promise`<[`IRoutesResponse`](../interfaces/IRoutesResponse.md)\>
 
 The routes.
 

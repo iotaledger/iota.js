@@ -330,6 +330,7 @@
 - [INodeInfoProtocol](interfaces/INodeInfoProtocol.md)
 - [INodeInfoProtocolParamsMilestoneOpt](interfaces/INodeInfoProtocolParamsMilestoneOpt.md)
 - [INodeInfoStatus](interfaces/INodeInfoStatus.md)
+- [IRoutesResponse](interfaces/IRoutesResponse.md)
 - [ITreasuryInput](interfaces/ITreasuryInput.md)
 - [IUTXOInput](interfaces/IUTXOInput.md)
 - [IProtocolParamsMilestoneOption](interfaces/IProtocolParamsMilestoneOption.md)
@@ -358,7 +359,7 @@
 - [IReferenceUnlock](interfaces/IReferenceUnlock.md)
 - [ISignatureUnlock](interfaces/ISignatureUnlock.md)
 
-### Type Aliases
+### Type aliases
 
 - [AddressTypes](api.md#addresstypes)
 - [FeatureTypes](api.md#featuretypes)
@@ -3845,7 +3846,7 @@ Log the routes of the node.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `prefix` | `string` | The prefix for the output. |
-| `routes` | `IRoutesResponse` | The available routes. |
+| `routes` | [`IRoutesResponse`](interfaces/IRoutesResponse.md) | The available routes. |
 
 #### Returns
 
@@ -4386,7 +4387,7 @@ Compute a blockId from a milestone payload.
 
 The blockId of the block with the milestone payload.
 
-## Type Aliases
+## Type aliases
 
 ### AddressTypes
 

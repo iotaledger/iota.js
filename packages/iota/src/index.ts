@@ -100,6 +100,7 @@ export * from "./models/info/INodeInfoProtocolParamsMilestoneOpt";
 export * from "./models/info/INodeInfoStatus";
 export * from "./models/info/INodeInfoMilesone";
 export * from "./models/info/INodeInfoBaseToken";
+export * from "./models/info/IRoutesResponse";
 export * from "./models/inputs/inputTypes";
 export * from "./models/inputs/ITreasuryInput";
 export * from "./models/inputs/IUTXOInput";
