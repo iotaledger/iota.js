@@ -46,6 +46,12 @@ export class SingleNodeClient implements IClient {
     private readonly _basePath: string;
 
     /**
+     * The base path for the core API.
+     * @internal
+     */
+    private readonly _coreApiPath: string;
+
+    /**
      * Optional PoW provider to be used for blocks with nonce=0/undefined.
      * @internal
      */
@@ -118,6 +124,7 @@ export class SingleNodeClient implements IClient {
         }
         this._endpoint = endpoint.replace(/\/+$/, "");
         this._basePath = options?.basePath ?? "/api/";
+        this._coreApiPath = `${this._basePath}core/v2/`;
         this._powProvider = options?.powProvider;
         this._timeout = options?.timeout;
         this._userName = options?.userName;
@@ -163,7 +170,7 @@ export class SingleNodeClient implements IClient {
      * @returns The node information.
      */
     public async info(): Promise<INodeInfo> {
-        return this.fetchJson<never, INodeInfo>(this.coreApiPath(), "get", "info");
+        return this.fetchJson<never, INodeInfo>(this._coreApiPath, "get", "info");
     }
 
     /**
@@ -171,7 +178,7 @@ export class SingleNodeClient implements IClient {
      * @returns The tips.
      */
     public async tips(): Promise<ITipsResponse> {
-        return this.fetchJson<never, ITipsResponse>(this.coreApiPath(), "get", "tips");
+        return this.fetchJson<never, ITipsResponse>(this._coreApiPath, "get", "tips");
     }
 
     /**
@@ -180,7 +187,7 @@ export class SingleNodeClient implements IClient {
      * @returns The block data.
      */
     public async block(blockId: string): Promise<IBlock> {
-        return this.fetchJson<never, IBlock>(this.coreApiPath(), "get", `blocks/${blockId}`);
+        return this.fetchJson<never, IBlock>(this._coreApiPath, "get", `blocks/${blockId}`);
     }
 
     /**
@@ -189,7 +196,7 @@ export class SingleNodeClient implements IClient {
      * @returns The block metadata.
      */
     public async blockMetadata(blockId: string): Promise<IBlockMetadata> {
-        return this.fetchJson<never, IBlockMetadata>(this.coreApiPath(), "get", `blocks/${blockId}/metadata`);
+        return this.fetchJson<never, IBlockMetadata>(this._coreApiPath, "get", `blocks/${blockId}/metadata`);
     }
 
     /**
@@ -198,7 +205,7 @@ export class SingleNodeClient implements IClient {
      * @returns The block raw data.
      */
     public async blockRaw(blockId: string): Promise<Uint8Array> {
-        return this.fetchBinary(this.coreApiPath(), "get", `blocks/${blockId}`);
+        return this.fetchBinary(this._coreApiPath, "get", `blocks/${blockId}`);
     }
 
     /**
@@ -258,7 +265,7 @@ export class SingleNodeClient implements IClient {
             block.nonce = nonce.toString();
         }
 
-        const response = await this.fetchJson<IBlock, IBlockIdResponse>(this.coreApiPath(), "post", "blocks", block);
+        const response = await this.fetchJson<IBlock, IBlockIdResponse>(this._coreApiPath, "post", "blocks", block);
 
         return response.blockId;
     }
@@ -285,7 +292,7 @@ export class SingleNodeClient implements IClient {
             BigIntHelper.write8(bigInt(nonce), block, block.length - 8);
         }
 
-        const response = await this.fetchBinary<IBlockIdResponse>(this.coreApiPath(), "post", "blocks", block);
+        const response = await this.fetchBinary<IBlockIdResponse>(this._coreApiPath, "post", "blocks", block);
 
         return (response as IBlockIdResponse).blockId;
     }
@@ -296,7 +303,7 @@ export class SingleNodeClient implements IClient {
      * @returns The block.
      */
     public async transactionIncludedBlock(transactionId: string): Promise<IBlock> {
-        return this.fetchJson<never, IBlock>(this.coreApiPath(), "get", `transactions/${transactionId}/included-block`);
+        return this.fetchJson<never, IBlock>(this._coreApiPath, "get", `transactions/${transactionId}/included-block`);
     }
 
     /**
@@ -305,7 +312,7 @@ export class SingleNodeClient implements IClient {
      * @returns The block.
      */
     public async transactionIncludedBlockRaw(transactionId: string): Promise<Uint8Array> {
-        return this.fetchBinary(this.coreApiPath(), "get", `transactions/${transactionId}/included-block`);
+        return this.fetchBinary(this._coreApiPath, "get", `transactions/${transactionId}/included-block`);
     }
 
     /**
@@ -314,7 +321,7 @@ export class SingleNodeClient implements IClient {
      * @returns The output details.
      */
     public async output(outputId: string): Promise<IOutputResponse> {
-        return this.fetchJson<never, IOutputResponse>(this.coreApiPath(), "get", `outputs/${outputId}`);
+        return this.fetchJson<never, IOutputResponse>(this._coreApiPath, "get", `outputs/${outputId}`);
     }
 
     /**
@@ -323,7 +330,7 @@ export class SingleNodeClient implements IClient {
      * @returns The output metadata.
      */
     public async outputMetadata(outputId: string): Promise<IOutputMetadataResponse> {
-        return this.fetchJson<never, IOutputMetadataResponse>(this.coreApiPath(), "get", `outputs/${outputId}/metadata`);
+        return this.fetchJson<never, IOutputMetadataResponse>(this._coreApiPath, "get", `outputs/${outputId}/metadata`);
     }
 
     /**
@@ -332,7 +339,7 @@ export class SingleNodeClient implements IClient {
      * @returns The output raw bytes.
      */
     public async outputRaw(outputId: string): Promise<Uint8Array> {
-        return this.fetchBinary(this.coreApiPath(), "get", `outputs/${outputId}`);
+        return this.fetchBinary(this._coreApiPath, "get", `outputs/${outputId}`);
     }
 
     /**
@@ -341,7 +348,7 @@ export class SingleNodeClient implements IClient {
      * @returns The milestone payload.
      */
     public async milestoneByIndex(index: number): Promise<IMilestonePayload> {
-        return this.fetchJson<never, IMilestonePayload>(this.coreApiPath(), "get", `milestones/by-index/${index}`);
+        return this.fetchJson<never, IMilestonePayload>(this._coreApiPath, "get", `milestones/by-index/${index}`);
     }
 
     /**
@@ -350,7 +357,7 @@ export class SingleNodeClient implements IClient {
      * @returns The milestone payload raw.
      */
     public async milestoneByIndexRaw(index: number): Promise<Uint8Array> {
-        return this.fetchBinary(this.coreApiPath(), "get", `milestones/by-index/${index}`);
+        return this.fetchBinary(this._coreApiPath, "get", `milestones/by-index/${index}`);
     }
 
     /**
@@ -359,7 +366,7 @@ export class SingleNodeClient implements IClient {
      * @returns The milestone utxo changes details.
      */
     public async milestoneUtxoChangesByIndex(index: number): Promise<IMilestoneUtxoChangesResponse> {
-        return this.fetchJson<never, IMilestoneUtxoChangesResponse>(this.coreApiPath(), "get", `milestones/by-index/${index}/utxo-changes`);
+        return this.fetchJson<never, IMilestoneUtxoChangesResponse>(this._coreApiPath, "get", `milestones/by-index/${index}/utxo-changes`);
     }
 
     /**
@@ -368,7 +375,7 @@ export class SingleNodeClient implements IClient {
      * @returns The milestone payload.
      */
     public async milestoneById(milestoneId: string): Promise<IMilestonePayload> {
-        return this.fetchJson<never, IMilestonePayload>(this.coreApiPath(), "get", `milestones/${milestoneId}`);
+        return this.fetchJson<never, IMilestonePayload>(this._coreApiPath, "get", `milestones/${milestoneId}`);
     }
 
     /**
@@ -377,7 +384,7 @@ export class SingleNodeClient implements IClient {
      * @returns The milestone payload raw.
      */
     public async milestoneByIdRaw(milestoneId: string): Promise<Uint8Array> {
-        return this.fetchBinary(this.coreApiPath(), "get", `milestones/${milestoneId}`);
+        return this.fetchBinary(this._coreApiPath, "get", `milestones/${milestoneId}`);
     }
 
     /**
@@ -386,7 +393,7 @@ export class SingleNodeClient implements IClient {
      * @returns The milestone utxo changes details.
      */
     public async milestoneUtxoChangesById(milestoneId: string): Promise<IMilestoneUtxoChangesResponse> {
-        return this.fetchJson<never, IMilestoneUtxoChangesResponse>(this.coreApiPath(), "get", `milestones/${milestoneId}/utxo-changes`);
+        return this.fetchJson<never, IMilestoneUtxoChangesResponse>(this._coreApiPath, "get", `milestones/${milestoneId}/utxo-changes`);
     }
 
     /**
@@ -394,7 +401,7 @@ export class SingleNodeClient implements IClient {
      * @returns The details for the treasury.
      */
     public async treasury(): Promise<ITreasury> {
-        return this.fetchJson<never, ITreasury>(this.coreApiPath(), "get", "treasury");
+        return this.fetchJson<never, ITreasury>(this._coreApiPath, "get", "treasury");
     }
 
     /**
@@ -404,7 +411,7 @@ export class SingleNodeClient implements IClient {
      */
     public async receipts(migratedAt?: number): Promise<IReceiptsResponse> {
         return this.fetchJson<never, IReceiptsResponse>(
-            this.coreApiPath(),
+            this._coreApiPath,
             "get",
             `receipts${migratedAt !== undefined ? `/${migratedAt}` : ""}`
         );
@@ -415,7 +422,7 @@ export class SingleNodeClient implements IClient {
      * @returns The list of peers.
      */
     public async peers(): Promise<IPeer[]> {
-        return this.fetchJson<never, IPeer[]>(this.coreApiPath(), "get", "peers");
+        return this.fetchJson<never, IPeer[]>(this._coreApiPath, "get", "peers");
     }
 
     /**
@@ -431,7 +438,7 @@ export class SingleNodeClient implements IClient {
                 alias?: string;
             },
             IPeer
-        >(this.coreApiPath(), "post", "peers", {
+        >(this._coreApiPath, "post", "peers", {
             multiAddress,
             alias
         });
@@ -444,7 +451,7 @@ export class SingleNodeClient implements IClient {
      */
     public async peerDelete(peerId: string): Promise<void> {
         // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
-        return this.fetchJson<never, void>(this.coreApiPath(), "delete", `peers/${peerId}`);
+        return this.fetchJson<never, void>(this._coreApiPath, "delete", `peers/${peerId}`);
     }
 
     /**
@@ -453,7 +460,7 @@ export class SingleNodeClient implements IClient {
      * @returns The details for the created peer.
      */
     public async peer(peerId: string): Promise<IPeer> {
-        return this.fetchJson<never, IPeer>(this.coreApiPath(), "get", `peers/${peerId}`);
+        return this.fetchJson<never, IPeer>(this._coreApiPath, "get", `peers/${peerId}`);
     }
 
     /**
@@ -484,15 +491,7 @@ export class SingleNodeClient implements IClient {
      * @returns The response object.
      */
     public async pluginFetch<T, S>(basePluginPath: string, method: "get" | "post" | "delete", methodPath: string, queryParams?: string[], request?: T): Promise<S> {
-        return this.fetchJson<T, S>(this.coreApiPath(), method, `${basePluginPath}${methodPath}${this.combineQueryParams(queryParams)}`, request);
-    }
-
-    /**
-     * Get the core API route.
-     * @returns The core api route.
-     */
-    private coreApiPath(): string {
-        return `${this._basePath}core/v2/`;
+        return this.fetchJson<T, S>(this._basePath, method, `${basePluginPath}${methodPath}${this.combineQueryParams(queryParams)}`, request);
     }
 
     /**
