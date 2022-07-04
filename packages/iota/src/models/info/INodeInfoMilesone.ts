@@ -12,9 +12,9 @@ export interface INodeInfoMilestone {
     /**
      * The milestone timestamp.
      */
-    timestamp: number;
+    timestamp?: number;
     /**
      * The milestone id.
      */
-    milestoneId: string;
+    milestoneId?: string;
 }
