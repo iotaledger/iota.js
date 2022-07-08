@@ -1,0 +1,65 @@
+import IotaRS from '../admonitions/_iotars.md'
+
+# Getting Started With iota.js
+
+<IotaRS/>
+
+## Required Prior Knowledge
+
+This wiki assumes that you already know the basics of [TypeScript](https://www.typescriptlang.org/). If you are
+unfamiliar with the language, you can find documentation to get started in the official
+[TypeScript documentation](https://www.typescriptlang.org/docs/).
+
+If you have never programmed in your life, MIT has published an open
+[introductory course to programming](https://ocw.mit.edu/courses/6-00sc-introduction-to-computer-science-and-programming-spring-2011/)
+which could help you get started.
+
+## Prerequisites
+
+Before you can start using the library, you will need to install the following software:
+
+* [node](https://nodejs.org/en/)
+* [npm](https://npmjs.com)
+
+## Install the Library
+
+You can install the iota.js library using npm with a single command:
+
+```bash
+npm install @iota/iota.js
+```
+
+## Use the Library
+
+Once you have [installed the library](#install-the-library), you can start using it by requiring the
+[iota.js package](https://www.npmjs.com/package/@iota/iota.js) as shown in the following example which connects to a
+Chrysalis node and logs some of its properties to the console.
+
+```js
+const {SingleNodeClient} = require("@iota/iota.js");
+
+async function run() {
+    const client = new SingleNodeClient("https://chrysalis-nodes.iota.org");
+
+    const info = await client.info();
+    console.log("Node Info");
+    console.log("\tName:", info.name);
+    console.log("\tVersion:", info.version);
+    console.log("\tIs Healthy:", info.isHealthy);
+    console.log("\tNetwork Id:", info.networkId);
+    console.log("\tLatest Milestone Index:", info.latestMilestoneIndex);
+    console.log("\tConfirmed Milestone Index:", info.confirmedMilestoneIndex);
+    console.log("\tPruning Index:", info.pruningIndex);
+    console.log("\tFeatures:", info.features);
+    console.log("\tMin PoW Score:", info.minPoWScore);
+}
+
+run()
+    .then(() => console.log("Done"))
+    .catch((err) => console.error(err));
+```
+
+## How-To Guides
+
+You can find additional usage [examples](https://github.com/iotaledger/iota.js/tree/dev/packages/iota/examples) in the
+[How To section](how_tos/run_how_tos.mdx).

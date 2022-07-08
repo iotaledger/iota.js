@@ -1,0 +1,107 @@
+import CodeBlock from '@theme/CodeBlock';
+import ExampleCode from '!!raw-loader!./../../../packages/iota/examples/browser/index.html';
+
+
+# Display Client Data in a Browser
+
+The following example covers is based on the [How to Create a Simple Connection article](simple.mdx), but it will log
+the data in the browser instead of the command line interface. To run it, you simply need to open the `.html` file in
+your browser of choice.
+
+## Example Code
+
+<CodeBlock className="language-javascript">
+    {ExampleCode}
+</CodeBlock>
+
+### Expected Output
+
+```plaintext
+
+iota.js Simple Browser Example
+Is the node healthy "Yes"
+
+Node Info
+   Name: "HORNET"
+   Version: "2.0.0-alpha.23"
+   Status
+   	Is Healthy: true
+   	Latest Milestone Index: 5447
+   	Latest Milestone Timestamp: 1657296281
+   	Latest Milestone Id: "0xf40dda8d568395dd87020c5afbc438acfd37c9f67f358970a300489751a58a03"
+   	Confirmed Milestone Index: 5447
+   	Confirmed Milestone Timestamp: 1657296281
+   	Confirmed Milestone Id: "0xf40dda8d568395dd87020c5afbc438acfd37c9f67f358970a300489751a58a03"
+   	Pruning Index: 0
+   Protocol
+   	Network Name: "alphanet-8"
+   	Bech32 HRP: "rms"
+   	Token supply: "2779530283277761"
+   	Protocol version:
+   	Min PoW Score: 1000
+   	Rent
+   		VByte Cost: 500
+   		VByte Factor Data: 1
+   		VByte Factor Key: 10
+   Base token
+   	Name: "Shimmer"
+   	Ticker Symbol: "SMR"
+   	Unit: "SMR"
+   	Sub unit: "glow"
+   	Decimals: 6
+   	Use metric prefix: false
+   Metrics
+   	Blocks Per Second: 2.2
+   	Referenced Blocks Per Second: 2.2
+   	Referenced Rate: 100
+   Features: ["PoW"]
+
+Tips
+   Tip 1 Block Id: "0x0e425583dad04dcf35d28e6faf3ebc4649b4e66e9ab639e107c2ecf2df6957b4"
+   Tip 2 Block Id: "0x0f9544867b1d31f3c53a3a20e23f8501639a5b6207369076769511887e6bf961"
+   Tip 3 Block Id: "0x2080482fd08be2b2622267e5cdbbb5a188ff82933a25c7e1ab39a0d99a7fed69"
+   Tip 4 Block Id: "0xaac9220ec54d24e13146de78d152d7bf6c199f5a342e110c0d2e795401163583"
+
+Submit Block:
+   Block Id "0x5dc08894be71d1c3bc16338ef56979d988a18dbaf7ac34986f8d27ac8a1c4e65"
+
+Get Block
+   Protocol Version: 2
+   Parent 1 Block Id: "0x0e425583dad04dcf35d28e6faf3ebc4649b4e66e9ab639e107c2ecf2df6957b4"
+   Parent 2 Block Id: "0x0f9544867b1d31f3c53a3a20e23f8501639a5b6207369076769511887e6bf961"
+   Parent 3 Block Id: "0x2080482fd08be2b2622267e5cdbbb5a188ff82933a25c7e1ab39a0d99a7fed69"
+   Parent 4 Block Id: "0xaac9220ec54d24e13146de78d152d7bf6c199f5a342e110c0d2e795401163583"
+   Tagged Data Payload
+   	Tag: "Foo"
+   	Data: "Bar"
+   Nonce: "40858"
+
+Block Metadata
+   Block Id: "0x5dc08894be71d1c3bc16338ef56979d988a18dbaf7ac34986f8d27ac8a1c4e65"
+   Parent 1 Block Id: "0x0e425583dad04dcf35d28e6faf3ebc4649b4e66e9ab639e107c2ecf2df6957b4"
+   Parent 2 Block Id: "0x0f9544867b1d31f3c53a3a20e23f8501639a5b6207369076769511887e6bf961"
+   Parent 3 Block Id: "0x2080482fd08be2b2622267e5cdbbb5a188ff82933a25c7e1ab39a0d99a7fed69"
+   Parent 4 Block Id: "0xaac9220ec54d24e13146de78d152d7bf6c199f5a342e110c0d2e795401163583"
+   Is Solid: true
+   Ledger Inclusion State:
+   Should Promote: false
+   Should Reattach: false
+
+Block Raw
+   Raw: "02040e425583dad04dcf35d28e6faf3ebc4649b4e66e9ab639e107c2ecf2df6957b40f9544867b1d31f3c53a3a20e23f8501639a5b6207369076769511887e6bf9612080482fd08be2b2622267e5cdbbb5a188ff82933a25c7e1ab39a0d99a7fed69aac9220ec54d24e13146de78d152d7bf6c199f5a342e110c0d2e7954011635830f0000000500000003466f6f030000004261729a9f000000000000"
+
+Block Decoded
+   Protocol Version: 2
+   Parent 1 Block Id: "0x0e425583dad04dcf35d28e6faf3ebc4649b4e66e9ab639e107c2ecf2df6957b4"
+   Parent 2 Block Id: "0x0f9544867b1d31f3c53a3a20e23f8501639a5b6207369076769511887e6bf961"
+   Parent 3 Block Id: "0x2080482fd08be2b2622267e5cdbbb5a188ff82933a25c7e1ab39a0d99a7fed69"
+   Parent 4 Block Id: "0xaac9220ec54d24e13146de78d152d7bf6c199f5a342e110c0d2e795401163583"
+   Tagged Data Payload
+   	Tag: "Foo"
+   	Data: "Bar"
+   Nonce: "40858"
+
+TypeError: client.milestone is not a function
+
+```
+

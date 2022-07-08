@@ -33,7 +33,8 @@
         "package-umd-browser": "rollup --config rollup.config.js --environment BROWSER:true",
         "package-umd-browser-min": "rollup --config rollup.config.js --environment BROWSER:true --environment MINIFY:true",
         "package": "run-s package-clean package-esm package-esm-rename package-umd package-umd-min package-umd-browser package-umd-browser-min",
-        "dist": "run-s build test package"
+        "dist": "run-s build test package",
+        "docs-wiki-build": "typedoc --disableSources --excludePrivate --excludeInternal --excludeNotDocumented --plugin typedoc-plugin-markdown --theme markdown --hideBreadcrumbs --entryDocument api_ref.md --readme none --hideGenerator --sort source-order --exclude ./**/src/index.ts --out ../../documentation/docs/references/mqtt ./src/index.ts"
     },
     "engines": {
         "node": ">=12.0.0"

@@ -1,0 +1,44 @@
+import CodeBlock from '@theme/CodeBlock';
+import ExampleCode from '!!raw-loader!./../../../packages/iota/examples/peers/src/index';
+
+# Manage Peers
+
+## Pre-requirements
+
+Before you can create add and retrieve peers, you will need to:
+
+* [Connect to a Node](simple.mdx).
+
+## Add Peers
+
+You can add peers using the
+[SingleNodeClient.peerAdd(multiAddress, alias?)](../references/client/classes/SingleNodeClient.md#peeradd) function.
+You will need to provide a `multiAddress` and, optionally, and alias.
+
+## Retrieve Peers
+
+You can retrieve a [SingleNodeClient's](../references/client/classes/SingleNodeClient.md#peeradd) peers using the
+[SingleNodeClient.peers()](../references/client/classes/SingleNodeClient.md#peers) function.  The `peers()` function
+will return a list of [peers](../references/client/interfaces/IPeer.md).
+
+### Retrieve Peer Data
+
+Once you have [retrieved your node's peers](#retrieve-peers), you can use any of its
+[properties](../references/client/interfaces/IPeer.md#properties) to retrieve the peer's data.
+
+## Delete Peers
+
+You can delete a [SingleNodeClient's](../references/client/classes/SingleNodeClient.md#peeradd) peer using the
+[SingleNodeClient.peerDelete(peerId)](../references/client/classes/SingleNodeClient.md#peerdelete) function. You will
+need to provide a valid `peerId`.
+
+
+## Example Code
+
+<CodeBlock className="language-javascript">
+    {ExampleCode}
+</CodeBlock>
+
+
+### Expected Output
+

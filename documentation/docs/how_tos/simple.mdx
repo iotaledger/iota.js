@@ -1,0 +1,175 @@
+import CodeBlock from '@theme/CodeBlock';
+import EnablePOW from '../../admonitions/_enable_pow.md';
+import ExampleCode from '!!raw-loader!./../../../packages/iota/examples/simple/src/index';
+
+
+# Connect to a Node
+
+<EnablePOW />
+
+## Instantiate a SimpleNodeClient
+
+You can instantiate a [SimpleNodeClient](../references/client/classes/SingleNodeClient.md) using its
+[constructor](../references/client/classes/SingleNodeClient.md#constructor).  You will need to provide a valid
+`API_ENDPOINT`, and can also use the
+[SingleNodeClientOptions](../references/client/interfaces/SingleNodeClientOptions.md).
+
+
+### Get the SimpleNodeClient's Properties
+
+Once you have [instantiated the SingleNodeClient](#instantiate-a-simplenodeclient), you can retrieve its properties by
+using the class's [functions](../references/client/classes/SingleNodeClient#methods-1).  The example uses the following:
+
+* [SingleNodeClient.health()](../references/client/classes/SingleNodeClient.md#health)
+* [SingleNodeClient.info()](../references/client/classes/SingleNodeClient.md#info)
+* [SingleNodeClient.tips()](../references/client/classes/SingleNodeClient.md#tips)
+
+## Submit a Block
+
+Once you have [instantiated the SingleNodeClient](#instantiate-a-simplenodeclient), you can create and submit a new
+block using the [SingleNodeClient.nodeSubmit()](../references/client/classes/SingleNodeClient#blocksubmit) function. To
+do so, you will first need to create a [submitBlock](../references/client/classes/SingleNodeClient#blocksubmit) as shown
+in the example.
+
+## Retrieve a Block
+
+You can use the [SingleNodeClient.block(blockId)](../references/client/classes/SingleNodeClient#block) function to retrieve
+a block using its `blockId`.  If successful, the function will return a
+[block](../references/client/interfaces/IClient.md).
+
+## Retrieve a Block's Metadata
+
+You can use the [SingleNodeClient.blockMetadata(blockId)](../references/client/classes/SingleNodeClient#blockmetadata) function to retrieve
+a block's metadata using its `blockId`.  If successful, the function will return a
+[IBlockMetadata](../references/client/interfaces/IBlockMetadata).
+
+## Retrieve a Raw Block
+
+You can use the [SingleNodeClient.blockRaw(blockId)](../references/client/classes/SingleNodeClient#blockraw) function to retrieve
+a raw block using its `blockId`.  If successful, the function will return the block's raw data which you can convert to
+Hex using the [Converter.bytesToHex()](../references/util/classes/Converter#bytestohex) function, or decode using the
+[ReadStream(blockRaw)](../references/util/classes/ReadStream) class.
+
+## Retrieve a Milestone
+
+You can retrieve a milestone using the
+[SingleNodeClient.milestoneByIndex(index)](../references/client/classes/SingleNodeClient#milestonebyindex) function. The
+function will return a [IMilestonePayload](../references/client/interfaces/IMilestonePayload) if successful.
+
+### Retrieve a Milestone's Properties
+
+Once you have [retrieved a milestone](#retrieve-a-milestone), you can retrieve any of its
+[properties](../references/client/interfaces/IMilestonePayload.md#properties-1), as shown in the example.
+
+## Retrieve an Output
+
+You can retrieve an output using the
+[SingleNodeClient.output(outputId)](../references/client/classes/SingleNodeClient#output) function. The
+function will return a [IMilestonePayload](../references/client/interfaces/IOutputResponse) if successful.
+
+
+### Retrieve an Output's Properties
+
+Once you have [retrieved a output](#retrieve-an-output), you can retrieve any of its
+[properties](../references/client/interfaces/IOutputResponse.md#properties-1), as shown in the example.
+
+## Example Code
+
+<CodeBlock className="language-javascript">
+    {ExampleCode}
+</CodeBlock>
+
+### Expected Output
+
+```plaintext
+
+Is the node healthy Yes
+
+Node Info
+        Name: HORNET
+        Version: 2.0.0-alpha.23
+        Status
+                Is Healthy: true
+                Latest Milestone Index: 4043
+                Latest Milestone Timestamp: 1657289261
+                Latest Milestone Id: 0xf9ee201b807de48628e0406cb9882895dd95fd654c5bf36532489aaec3020dae
+                Confirmed Milestone Index: 4043
+                Confirmed Milestone Timestamp: 1657289261
+                Confirmed Milestone Id: 0xf9ee201b807de48628e0406cb9882895dd95fd654c5bf36532489aaec3020dae
+                Pruning Index: 0
+        Protocol
+                Network Name: alphanet-8
+                Bech32 HRP: rms
+                Token supply: 2779530283277761
+                Protocol version:
+                Min PoW Score: 1000
+                Rent
+                        VByte Cost: 500
+                        VByte Factor Data: 1
+                        VByte Factor Key: 10
+        Base token
+                Name: Shimmer
+                Ticker Symbol: SMR
+                Unit: SMR
+                Sub unit: glow
+                Decimals: 6
+                Use metric prefix: false
+        Metrics
+                Blocks Per Second: 1.4
+                Referenced Blocks Per Second: 1.2
+                Referenced Rate: 85.71428571428571
+        Features: [ 'PoW' ]
+
+Tips
+        Tip 1 Block Id: 0x5e05daf894bd30d1848c3cea897da56049d459f465a2217ee1bd5d7496fd40c3
+        Tip 2 Block Id: 0x79b5832c291f56c88b505b1621d022ca9f7c616a94dc39fa0b85c635818fd77c
+        Tip 3 Block Id: 0xa835670c92e4c6290c295e206333347df79f9aec06ef110e7cdced800c46b5fa
+        Tip 4 Block Id: 0xc2e806614c5990f763f13d871893b07b903920d73f2883112161b710eab1a0cc
+
+Submit Block:
+        Block Id 0xd4b2271d2f54979a2584714e3dedac7fccc07079cd52b80b9c9b92f39ec1ab70
+
+Get Block
+        Protocol Version: 2
+        Parent 1 Block Id: 0x5e05daf894bd30d1848c3cea897da56049d459f465a2217ee1bd5d7496fd40c3
+        Parent 2 Block Id: 0x79b5832c291f56c88b505b1621d022ca9f7c616a94dc39fa0b85c635818fd77c
+        Parent 3 Block Id: 0xa835670c92e4c6290c295e206333347df79f9aec06ef110e7cdced800c46b5fa
+        Parent 4 Block Id: 0xc2e806614c5990f763f13d871893b07b903920d73f2883112161b710eab1a0cc
+        Tagged Data Payload
+                Tag: Foo
+                Data: Bar
+        Nonce: 457335
+
+Block Metadata
+        Block Id: 0xd4b2271d2f54979a2584714e3dedac7fccc07079cd52b80b9c9b92f39ec1ab70
+        Parent 1 Block Id: 0x5e05daf894bd30d1848c3cea897da56049d459f465a2217ee1bd5d7496fd40c3
+        Parent 2 Block Id: 0x79b5832c291f56c88b505b1621d022ca9f7c616a94dc39fa0b85c635818fd77c
+        Parent 3 Block Id: 0xa835670c92e4c6290c295e206333347df79f9aec06ef110e7cdced800c46b5fa
+        Parent 4 Block Id: 0xc2e806614c5990f763f13d871893b07b903920d73f2883112161b710eab1a0cc
+        Is Solid: true
+        Referenced By Milestone Index: 4044
+        Ledger Inclusion State: noTransaction
+
+Block Raw
+        Raw: 0x02045e05daf894bd30d1848c3cea897da56049d459f465a2217ee1bd5d7496fd40c379b5832c291f56c88b505b1621d022ca9f7c616a94dc39fa0b85c635818fd77ca835670c92e4c6290c295e206333347df79f9aec06ef110e7cdced800c46b5fac2e806614c5990f763f13d871893b07b903920d73f2883112161b710eab1a0cc0f0000000500000003466f6f0300000042617277fa060000000000
+
+Block Decoded
+        Protocol Version: 2
+        Parent 1 Block Id: 0x5e05daf894bd30d1848c3cea897da56049d459f465a2217ee1bd5d7496fd40c3
+        Parent 2 Block Id: 0x79b5832c291f56c88b505b1621d022ca9f7c616a94dc39fa0b85c635818fd77c
+        Parent 3 Block Id: 0xa835670c92e4c6290c295e206333347df79f9aec06ef110e7cdced800c46b5fa
+        Parent 4 Block Id: 0xc2e806614c5990f763f13d871893b07b903920d73f2883112161b710eab1a0cc
+        Tagged Data Payload
+                Tag: Foo
+                Data: Bar
+        Nonce: 457335
+
+Latest Milestone Payload
+        Milestone Index: 4043
+        Included Merkel Root 0x0d69b824782efdb90554c9671c3acb6b05e48f2d73684be4e8af4d1bab4de311
+        Applied Merkel Root 0x0e5751c026e543b2e8ab2eb06099daa1d1e5df47778f7787faab45cdf12fe3a8
+        Previous Milestone Id: 0x36c5038e1cf8c95e29ff9eef5b3f454395df61d1d135988b8ba3c06427113348
+        Timestamp: 1657289261
+
+[TODO GET VALID OUTPUT TO LOG]
+```

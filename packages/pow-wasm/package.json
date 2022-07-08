@@ -30,7 +30,8 @@
         "package-umd": "rollup --config rollup.config.js",
         "package-umd-min": "rollup --config rollup.config.js --environment MINIFY:true",
         "package": "run-s package-clean package-umd package-umd-min",
-        "dist": "run-s build test package"
+        "dist": "run-s build test package",
+        "docs-wiki-build": "typedoc --disableSources --excludePrivate --excludeInternal --excludeNotDocumented --plugin typedoc-plugin-markdown --theme markdown --hideBreadcrumbs --entryDocument api_ref.md --readme none --hideGenerator --sort source-order --exclude ./**/src/index.ts --out ../../documentation/docs/references/pow-wasm ./src/index.ts"
     },
     "engines": {
         "node": ">=12.0.0"
