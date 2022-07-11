@@ -6,14 +6,6 @@ keywords:
 - typescript
 image: /img/client_banner.png
 ---
----
-description: iota.js API reference
-keywords:
-- references
-- api references
-- typescript
-image: /img/client_banner.png
----
 # Class: IndexerPluginClient
 
 Indexer plugin which provides access to the indexer plugin API.
