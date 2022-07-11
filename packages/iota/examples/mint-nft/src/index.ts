@@ -5,38 +5,37 @@ import {
     ED25519_ADDRESS_TYPE,
     IndexerPluginClient, IUTXOInput,
     SingleNodeClient,
-    UTXO_INPUT_TYPE,
     IOutputsResponse,
-    TRANSACTION_ID_LENGTH,
     INftOutput,
     NFT_OUTPUT_TYPE,
-    serializeNftOutput,
     ITransactionEssence,
     serializeOutput,
     ISignatureUnlock,
     SIGNATURE_UNLOCK_TYPE,
     ED25519_SIGNATURE_TYPE,
-    serializeTransactionEssence,
     TRANSACTION_ESSENCE_TYPE,
     ITransactionPayload,
     TRANSACTION_PAYLOAD_TYPE,
     IBlock,
     DEFAULT_PROTOCOL_VERSION,
     LocalPowProvider,
-    AddressTypes,
-    ALIAS_ADDRESS_TYPE,
-    NFT_ADDRESS_TYPE,
     TransactionHelper
 } from "@iota/iota.js";
-import { Converter, WriteStream, BigIntHelper } from "@iota/util.js";
+import { Converter, WriteStream } from "@iota/util.js";
+import { NeonPowProvider } from "@iota/pow-neon.js";
 import { Bip32Path, Blake2b, Ed25519 } from "@iota/crypto.js";
 import * as readline from 'node:readline';
 import { randomBytes } from "node:crypto";
 import Prom from "bluebird";
+import fetch from "node-fetch";
 
-const API_ENDPOINT = "http://localhost:14265/";
-const EXPLORER = "https://explorer.alphanet.iotaledger.net/alphanet"
-const FAUCET = "https://faucet.alphanet.iotaledger.net"
+const EXPLORER = "https://explorer.alphanet.iotaledger.net/alphanet";
+const API_ENDPOINT = "https://api.alphanet.iotaledger.net/";
+const FAUCET = "https://faucet.alphanet.iotaledger.net/api/enqueue" 
+
+// If running the node locally
+// const API_ENDPOINT = "http://localhost:14265/";
+// const FAUCET = "http://localhost:8091/api/enqueue"; 
 
 // Just some helpers to ask for user input in terminal
 let rl = readline.createInterface({
@@ -59,7 +58,9 @@ async function askQuestion(question: string ): Promise<string> {
 // In this example we set up a hot wallet, fund it with tokens from the faucet and let it mint an NFT to our address.
 async function run() {
     // LocalPoW is extremely slow and only runs in 1 thread...
-    const client = new SingleNodeClient(API_ENDPOINT, {powProvider: new LocalPowProvider()});
+    // const client = new SingleNodeClient(API_ENDPOINT, {powProvider: new LocalPowProvider()});
+    // Neon localPoW is blazingly fast, but you need rust toolchain to build
+    const client = new SingleNodeClient(API_ENDPOINT, {powProvider: new NeonPowProvider()});
 
     // fetch basic info from node
     const nodeInfo = await client.info();
@@ -102,9 +103,8 @@ async function run() {
     console.log("Address Ed25519", walletAddressHex);
     console.log("Address Bech32", walletAddressBech32);
 
-    console.log("Go to "+ FAUCET + " and send funds to " + walletAddressBech32);
-
-    await askQuestion("Confirm you sent funds to the address by pressing any key ");
+     // We also top up the address by asking funds from the faucet.
+     await requestFundsFromFaucet(walletAddressBech32);
 
     // Fetch outputId with funds to be used as input
     const indexerPluginClient = new IndexerPluginClient(client);
@@ -235,6 +235,37 @@ async function run() {
 run()
     .then(() => console.log("Done"))
     .catch(err => console.error(err));
+
+    // Requests frunds from the faucet via API
+async function requestFundsFromFaucet(addressBech32: string) {
+    // Ask the faucet for funds
+    const requestObj = JSON.stringify({ address: addressBech32 });
+    let errorMessage, data;
+    try {
+        const response = await fetch(FAUCET, {
+            method: "POST",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+            },
+            body: requestObj,
+        });
+        if (response.status === 202) {
+            errorMessage = "OK";
+        } else if (response.status === 429) {
+            errorMessage = "Too many requests. Please, try again later.";
+        } else {
+            data = await response.json();
+            errorMessage = data.error.message;
+        }
+    } catch (error) {
+        errorMessage = error;
+    }
+
+    if (errorMessage != "OK") {
+        throw new Error(`Didn't manage to get funds from faucet: ${errorMessage}`);
+    }
+}
 
 async function fetchAndWaitForBasicOutput(addressBech32: string, client: IndexerPluginClient): Promise<string> {
     let outputsResponse: IOutputsResponse = { ledgerIndex: 0, cursor: "", pageSize: "", items: [] };

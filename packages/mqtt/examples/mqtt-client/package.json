@@ -8,8 +8,8 @@
         "start": "node dist/index"
     },
     "dependencies": {
-        "@iota/iota.js": "file:../../../../packages/iota",
-        "@iota/mqtt.js": "file:../..",
+        "@iota/iota.js": "file:packages/iota",
+        "@iota/mqtt.js": "file:packages/mqtt",
         "typescript": "^4.4.3"
     }
 }

@@ -9,11 +9,13 @@ import bigInt from "big-integer";
 import * as console from "console";
 import fetch from "node-fetch";
 
-const API_ENDPOINT = "https://node.levi01.iota.cafe";
 const EXPLORER = "https://explorer.alphanet.iotaledger.net/alphanet";
-const FAUCET = "https://faucet.alphanet.iotaledger.net";
-const FAUCET_ENQUEUE = "https://faucet.alphanet.iotaledger.net/api/enqueue";
-// const FAUCET_ENQUEUE = "http://localhost:8091/api/enqueue"; // if running private tangle
+const API_ENDPOINT = "https://api.alphanet.iotaledger.net/";
+const FAUCET = "https://faucet.alphanet.iotaledger.net/api/enqueue" 
+
+// If running the node locally
+// const API_ENDPOINT = "http://localhost:14265/";
+// const FAUCET = "http://localhost:8091/api/enqueue"; 
 
 // Amount of tokens to mint for now
 const mintAmount = 1000;
@@ -423,7 +425,7 @@ async function setUpHotWallet(hrp: string) {
     const requestObj = JSON.stringify({address: walletAddressBech32});
     let errorMessage, data;
     try {
-        const response = await fetch(FAUCET_ENQUEUE, {
+        const response = await fetch(FAUCET, {
           method: "POST",
           headers: {
             Accept: "application/json",

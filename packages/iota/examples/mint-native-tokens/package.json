@@ -8,10 +8,10 @@
         "start": "node dist/index"
     },
     "dependencies": {
-        "@iota/crypto.js": "file:../../../../packages/crypto",
-        "@iota/iota.js": "file:../../../../packages/iota",
-        "@iota/pow-neon.js": "file:../../../../packages/pow-neon",
-        "@iota/util.js": "file:../../../../packages/util",
+        "@iota/crypto.js": "file:packages/crypto",
+        "@iota/iota.js": "file:packages/iota",
+        "@iota/pow-neon.js": "file:packages/pow-neon",
+        "@iota/util.js": "file:packages/util",
         "bluebird": "^3.7.2",
         "node-fetch": "^2.6.1",
         "readline": "^1.3.0",

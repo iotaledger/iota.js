@@ -23,7 +23,7 @@
 
         async function run() {
             Iota.setLogger(consoleLog);
-            const client = new Iota.SingleNodeClient("http://localhost:14265/");
+            const client = new Iota.SingleNodeClient("https://api.alphanet.iotaledger.net/", {powProvider: new Iota.LocalPowProvider()});
 
             const health = await client.health();
             consoleLog("Is the node healthy", health ? "Yes" : "No");
@@ -74,10 +74,9 @@
             Iota.logBlock("", decoded);
             consoleLog();
 
-            const milestone = await client.milestone(info.status.latestMilestoneIndex);
+            const milestone = await client.milestoneByIndex(info.status.latestMilestone.index);
             consoleLog("Milestone");
             consoleLog("\tMilestone Index:", milestone.index);
-            consoleLog("\tBlock Id:", milestone.blockId);
             consoleLog("\tTimestamp:", milestone.timestamp);
             consoleLog();
 
@@ -161,7 +160,7 @@
                 }
             }
 
-            const amountToSend = bigInt(10000000);
+            const amountToSend = bigInt(213000);
 
             const outputs = [
                 // This is the transfer to the new address

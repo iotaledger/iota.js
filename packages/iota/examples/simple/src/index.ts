@@ -11,11 +11,17 @@ import {
     SingleNodeClient
 } from "@iota/iota.js";
 import { Converter, ReadStream } from "@iota/util.js";
+import { NeonPowProvider } from "@iota/pow-neon.js";
 
-const API_ENDPOINT = "http://localhost:14265/";
+const API_ENDPOINT = "https://api.alphanet.iotaledger.net/";
+
+// If running the node locally
+// const API_ENDPOINT = "http://localhost:14265/";
+
 
 async function run() {
-    const client = new SingleNodeClient(API_ENDPOINT);
+    // Neon localPoW is blazingly fast, but you need rust toolchain to build
+    const client = new SingleNodeClient(API_ENDPOINT, {powProvider: new NeonPowProvider()});
 
     const health = await client.health();
     console.log("Is the node healthy", health ? "Yes" : "No");
