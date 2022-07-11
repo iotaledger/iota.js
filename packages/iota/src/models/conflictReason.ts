@@ -32,7 +32,7 @@ export enum ConflictReason {
     inputOutputSumMismatch = 4,
 
     /**
-     * The unlock block signature is invalid.
+     * The unlock signature is invalid.
      */
     invalidSignature = 5,
 

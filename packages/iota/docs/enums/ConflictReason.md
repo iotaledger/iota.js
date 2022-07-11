@@ -67,7 +67,7 @@ ___
 
 • **invalidSignature**
 
-The unlock block signature is invalid.
+The unlock signature is invalid.
 
 ___
 
