@@ -28,6 +28,10 @@
         "packages/iota/examples/pow",
         "packages/iota/examples/simple",
         "packages/iota/examples/transaction",
+        "packages/iota/examples/mint-native-tokens",
+        "packages/iota/examples/mint-nft",
+        "packages/iota/examples/native-token-tour",
+        "packages/iota/examples/nft-collection",
         "packages/mqtt/examples/mqtt-client"
     ],
     "dependencies": {

@@ -1,10 +1,14 @@
 import { retrieveData, sendData, SingleNodeClient } from "@iota/iota.js";
 import { Converter } from "@iota/util.js";
+import { NeonPowProvider } from "@iota/pow-neon.js";
 
-const API_ENDPOINT = "http://localhost:14265/";
+const API_ENDPOINT = "https://api.alphanet.iotaledger.net/";
+// If running the node locally
+// const API_ENDPOINT = "http://localhost:14265/";
 
 async function run() {
-    const client = new SingleNodeClient(API_ENDPOINT);
+    // Neon localPoW is blazingly fast, but you need rust toolchain to build
+    const client = new SingleNodeClient(API_ENDPOINT, {powProvider: new NeonPowProvider()});
 
     const myTag = Converter.utf8ToBytes("MY-DATA-TAG");
 
@@ -14,7 +18,6 @@ async function run() {
         console.log("Sending Data");
         const sendResult = await sendData(client, myTag, Converter.utf8ToBytes(`This is data ${i} 🚀`));
         console.log("Received Block Id", sendResult.blockId);
-        // console.log(`https://explorer.iota.org/mainnet/block/${sendResult.blockId}`);
         blockIds.push(sendResult.blockId);
     }
 

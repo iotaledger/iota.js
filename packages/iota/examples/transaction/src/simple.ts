@@ -12,9 +12,7 @@ import {
     TransactionHelper,
     TRANSACTION_ESSENCE_TYPE,
     TRANSACTION_PAYLOAD_TYPE,
-    UnlockTypes,
-    UTXO_INPUT_TYPE,
-    
+    UnlockTypes
 } from "@iota/iota.js";
 import { Converter, WriteStream } from "@iota/util.js";
 import { NeonPowProvider } from "@iota/pow-neon.js";
@@ -23,9 +21,12 @@ import fetch from "node-fetch";
 import { randomBytes } from "node:crypto";
 
 
-const API_ENDPOINT = "http://localhost:14265/";
-// const FAUCET = "https://faucet.alphanet.iotaledger.net/api/enqueue" 
-const FAUCET = "http://localhost:8091/api/enqueue"; // if runnig private tangle
+const API_ENDPOINT = "https://api.alphanet.iotaledger.net/";
+const FAUCET = "https://faucet.alphanet.iotaledger.net/api/enqueue" 
+
+// If running the node locally
+// const API_ENDPOINT = "http://localhost:14265/";
+// const FAUCET = "http://localhost:8091/api/enqueue"; 
 
 async function run() {
     // Neon localPoW is blazingly fast, but you need rust toolchain to build

@@ -8,9 +8,9 @@
         "start": "node dist/index"
     },
     "dependencies": {
-        "@iota/crypto.js": "file:../../packages/crypto",
-        "@iota/iota.js": "file:../../packages/iota",
-        "@iota/util.js": "file:../../packages/util",
+        "@iota/crypto.js": "file:packages/crypto",
+        "@iota/iota.js": "file:packages/iota",
+        "@iota/util.js": "file:packages/util",
         "typescript": "^4.4.3"
     }
 }
