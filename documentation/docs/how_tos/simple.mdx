@@ -1,11 +1,7 @@
 import CodeBlock from '@theme/CodeBlock';
-import EnablePOW from '../../admonitions/_enable_pow.md';
 import ExampleCode from '!!raw-loader!./../../../packages/iota/examples/simple/src/index';
 
-
 # Connect to a Node
-
-<EnablePOW />
 
 ## Instantiate a SimpleNodeClient
 
@@ -90,12 +86,12 @@ Node Info
         Version: 2.0.0-alpha.23
         Status
                 Is Healthy: true
-                Latest Milestone Index: 4043
-                Latest Milestone Timestamp: 1657289261
-                Latest Milestone Id: 0xf9ee201b807de48628e0406cb9882895dd95fd654c5bf36532489aaec3020dae
-                Confirmed Milestone Index: 4043
-                Confirmed Milestone Timestamp: 1657289261
-                Confirmed Milestone Id: 0xf9ee201b807de48628e0406cb9882895dd95fd654c5bf36532489aaec3020dae
+                Latest Milestone Index: 54851
+                Latest Milestone Timestamp: 1657543301
+                Latest Milestone Id: 0x49fe39afe197426e085fc5ce61ba2168307075d13b0b311407654d09532f7efa
+                Confirmed Milestone Index: 54851
+                Confirmed Milestone Timestamp: 1657543301
+                Confirmed Milestone Id: 0x49fe39afe197426e085fc5ce61ba2168307075d13b0b311407654d09532f7efa
                 Pruning Index: 0
         Protocol
                 Network Name: alphanet-8
@@ -115,61 +111,76 @@ Node Info
                 Decimals: 6
                 Use metric prefix: false
         Metrics
-                Blocks Per Second: 1.4
-                Referenced Blocks Per Second: 1.2
+                Blocks Per Second: 5.6
+                Referenced Blocks Per Second: 4.8
                 Referenced Rate: 85.71428571428571
-        Features: [ 'PoW' ]
+        Features: []
 
 Tips
-        Tip 1 Block Id: 0x5e05daf894bd30d1848c3cea897da56049d459f465a2217ee1bd5d7496fd40c3
-        Tip 2 Block Id: 0x79b5832c291f56c88b505b1621d022ca9f7c616a94dc39fa0b85c635818fd77c
-        Tip 3 Block Id: 0xa835670c92e4c6290c295e206333347df79f9aec06ef110e7cdced800c46b5fa
-        Tip 4 Block Id: 0xc2e806614c5990f763f13d871893b07b903920d73f2883112161b710eab1a0cc
+        Tip 1 Block Id: 0x05789c77904b4922004c04624aff85543442634044404ecec95c8498fcb95e49
+        Tip 2 Block Id: 0x5d9a4d67d86c5e5fefcbb884850e3a4ed0cb8b546fe2beb36059a150726dcfb7
+        Tip 3 Block Id: 0x7c6159ac6c6473ef1e36c4de298a6b77bbb84d0ad200cfdccca5ae9a396032e7
+        Tip 4 Block Id: 0xd270eba03af6b1af34845c2eebcfa6be4be225d4e3875a32d6fa7b763b88bfb2
 
 Submit Block:
-        Block Id 0xd4b2271d2f54979a2584714e3dedac7fccc07079cd52b80b9c9b92f39ec1ab70
+        Block Id 0x844c9f8c363123774739acfc6ff60bc20bb61a6ddc829c9af6d3c8ccf3525111
 
 Get Block
         Protocol Version: 2
-        Parent 1 Block Id: 0x5e05daf894bd30d1848c3cea897da56049d459f465a2217ee1bd5d7496fd40c3
-        Parent 2 Block Id: 0x79b5832c291f56c88b505b1621d022ca9f7c616a94dc39fa0b85c635818fd77c
-        Parent 3 Block Id: 0xa835670c92e4c6290c295e206333347df79f9aec06ef110e7cdced800c46b5fa
-        Parent 4 Block Id: 0xc2e806614c5990f763f13d871893b07b903920d73f2883112161b710eab1a0cc
+        Parent 1 Block Id: 0x05789c77904b4922004c04624aff85543442634044404ecec95c8498fcb95e49
+        Parent 2 Block Id: 0x5d9a4d67d86c5e5fefcbb884850e3a4ed0cb8b546fe2beb36059a150726dcfb7
+        Parent 3 Block Id: 0x7c6159ac6c6473ef1e36c4de298a6b77bbb84d0ad200cfdccca5ae9a396032e7
+        Parent 4 Block Id: 0xd270eba03af6b1af34845c2eebcfa6be4be225d4e3875a32d6fa7b763b88bfb2
         Tagged Data Payload
                 Tag: Foo
                 Data: Bar
-        Nonce: 457335
+        Nonce: 15372286728091295777
 
 Block Metadata
-        Block Id: 0xd4b2271d2f54979a2584714e3dedac7fccc07079cd52b80b9c9b92f39ec1ab70
-        Parent 1 Block Id: 0x5e05daf894bd30d1848c3cea897da56049d459f465a2217ee1bd5d7496fd40c3
-        Parent 2 Block Id: 0x79b5832c291f56c88b505b1621d022ca9f7c616a94dc39fa0b85c635818fd77c
-        Parent 3 Block Id: 0xa835670c92e4c6290c295e206333347df79f9aec06ef110e7cdced800c46b5fa
-        Parent 4 Block Id: 0xc2e806614c5990f763f13d871893b07b903920d73f2883112161b710eab1a0cc
+        Block Id: 0x844c9f8c363123774739acfc6ff60bc20bb61a6ddc829c9af6d3c8ccf3525111
+        Parent 1 Block Id: 0x05789c77904b4922004c04624aff85543442634044404ecec95c8498fcb95e49
+        Parent 2 Block Id: 0x5d9a4d67d86c5e5fefcbb884850e3a4ed0cb8b546fe2beb36059a150726dcfb7
+        Parent 3 Block Id: 0x7c6159ac6c6473ef1e36c4de298a6b77bbb84d0ad200cfdccca5ae9a396032e7
+        Parent 4 Block Id: 0xd270eba03af6b1af34845c2eebcfa6be4be225d4e3875a32d6fa7b763b88bfb2
         Is Solid: true
-        Referenced By Milestone Index: 4044
-        Ledger Inclusion State: noTransaction
+        Ledger Inclusion State:
+        Should Promote: false
+        Should Reattach: false
 
 Block Raw
-        Raw: 0x02045e05daf894bd30d1848c3cea897da56049d459f465a2217ee1bd5d7496fd40c379b5832c291f56c88b505b1621d022ca9f7c616a94dc39fa0b85c635818fd77ca835670c92e4c6290c295e206333347df79f9aec06ef110e7cdced800c46b5fac2e806614c5990f763f13d871893b07b903920d73f2883112161b710eab1a0cc0f0000000500000003466f6f0300000042617277fa060000000000
+        Raw: 0x020405789c77904b4922004c04624aff85543442634044404ecec95c8498fcb95e495d9a4d67d86c5e5fefcbb884850e3a4ed0cb8b546fe2beb36059a150726dcfb77c6159ac6c6473ef1e36c4de298a6b77bbb84d0ad200cfdccca5ae9a396032e7d270eba03af6b1af34845c2eebcfa6be4be225d4e3875a32d6fa7b763b88bfb20f0000000500000003466f6f0300000042617221605555555555d5
 
 Block Decoded
         Protocol Version: 2
-        Parent 1 Block Id: 0x5e05daf894bd30d1848c3cea897da56049d459f465a2217ee1bd5d7496fd40c3
-        Parent 2 Block Id: 0x79b5832c291f56c88b505b1621d022ca9f7c616a94dc39fa0b85c635818fd77c
-        Parent 3 Block Id: 0xa835670c92e4c6290c295e206333347df79f9aec06ef110e7cdced800c46b5fa
-        Parent 4 Block Id: 0xc2e806614c5990f763f13d871893b07b903920d73f2883112161b710eab1a0cc
+        Parent 1 Block Id: 0x05789c77904b4922004c04624aff85543442634044404ecec95c8498fcb95e49
+        Parent 2 Block Id: 0x5d9a4d67d86c5e5fefcbb884850e3a4ed0cb8b546fe2beb36059a150726dcfb7
+        Parent 3 Block Id: 0x7c6159ac6c6473ef1e36c4de298a6b77bbb84d0ad200cfdccca5ae9a396032e7
+        Parent 4 Block Id: 0xd270eba03af6b1af34845c2eebcfa6be4be225d4e3875a32d6fa7b763b88bfb2
         Tagged Data Payload
                 Tag: Foo
                 Data: Bar
-        Nonce: 457335
+        Nonce: 15372286728091295777
 
 Latest Milestone Payload
-        Milestone Index: 4043
-        Included Merkel Root 0x0d69b824782efdb90554c9671c3acb6b05e48f2d73684be4e8af4d1bab4de311
+        Milestone Index: 54851
+        Included Merkel Root 0xb46f508b2dcd240cbc927453eeae3e7f800a9a0f8e0415ce577acea50da039cf
         Applied Merkel Root 0x0e5751c026e543b2e8ab2eb06099daa1d1e5df47778f7787faab45cdf12fe3a8
-        Previous Milestone Id: 0x36c5038e1cf8c95e29ff9eef5b3f454395df61d1d135988b8ba3c06427113348
-        Timestamp: 1657289261
+        Previous Milestone Id: 0x5432f5761fdb156e14add8227ae7c48085011ca2097679e08e4d33fa2e34379d
+        Timestamp: 1657543301
 
-[TODO GET VALID OUTPUT TO LOG]
+Output
+        Block Id: 0x0000000000000000000000000000000000000000000000000000000000000000
+        Transaction Id: 0x0000000000000000000000000000000000000000000000000000000000000000
+        Output Index: 0
+        Is Spent: true
+        Basic Output
+                        Amount: 2779530283277761
+                        Native Tokens
+                        Unlock Conditions
+                                                Address Unlock Condition
+                                                        Ed25519 Address
+                                                                Public Key Hash: 0x3845105b59429361a75b3203a6e24e16d19540aad6bd1936449b62f1c4bbe5da
+                        Features
+
+Done
 ```

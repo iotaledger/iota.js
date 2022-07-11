@@ -24,7 +24,7 @@ async function run() {
     console.log();
 
     for (let i = 0; i < blockIds.length; i++) {
-        console.log("Retrieveing Data");
+        console.log("Retrieving Data");
 
         const firstResult = await retrieveData(client, blockIds[i]);
         if (firstResult) {
