@@ -22,7 +22,7 @@ ___
 
 ### timestamp
 
-• **timestamp**: `number`
+• `Optional` **timestamp**: `number`
 
 The milestone timestamp.
 
@@ -30,6 +30,6 @@ ___
 
 ### milestoneId
 
-• **milestoneId**: `string`
+• `Optional` **milestoneId**: `string`
 
 The milestone id.
