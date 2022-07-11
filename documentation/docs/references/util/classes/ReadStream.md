@@ -1,3 +1,11 @@
+---
+description: iota.js API reference
+keywords:
+- references
+- api references
+- typescript
+image: /img/client_banner.png
+---
 # Class: ReadStream
 
 Keep track of the read index within a stream.

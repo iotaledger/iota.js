@@ -1,3 +1,11 @@
+---
+description: iota.js API reference
+keywords:
+- references
+- api references
+- typescript
+image: /img/client_banner.png
+---
 # Class: Base32
 
 Class to help with base32 Encoding/Decoding using RFC4648.

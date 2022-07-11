@@ -41,7 +41,7 @@
         "package": "run-s package-clean package-esm package-esm-rename package-umd package-umd-min package-umd-browser package-umd-browser-min",
         "docs-clean": "rimraf ./docs/*",
         "docs-build": "typedoc --disableSources --excludePrivate --excludeInternal --excludeNotDocumented --plugin typedoc-plugin-markdown --theme markdown --hideBreadcrumbs --entryDocument api.md --readme none --hideGenerator --sort source-order --exclude ./**/src/index.ts --out ./docs ./src/index.ts",
-        "docs-wiki-build": "typedoc --disableSources --excludePrivate --excludeInternal --excludeNotDocumented --plugin typedoc-plugin-markdown --theme markdown --hideBreadcrumbs --entryDocument api_ref.md --readme none --hideGenerator --sort source-order --exclude ./**/src/index.ts --out ../../documentation/docs/references/client ./src/index.ts",
+        "docs-wiki-build": "typedoc --githubPages false  --disableSources --excludePrivate --excludeInternal --excludeNotDocumented --plugin typedoc-plugin-markdown --theme markdown --hideBreadcrumbs --entryDocument api_ref.md --readme none --hideGenerator --sort source-order --exclude ./**/src/index.ts --out ../../documentation/docs/references/client ./src/index.ts",
         "docs": "npm-run-all docs-clean docs-build",
         "dist": "run-s build test package docs"
     },

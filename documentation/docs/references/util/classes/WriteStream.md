@@ -1,3 +1,11 @@
+---
+description: iota.js API reference
+keywords:
+- references
+- api references
+- typescript
+image: /img/client_banner.png
+---
 # Class: WriteStream
 
 Keep track of the write index within a stream.

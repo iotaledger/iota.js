@@ -1,3 +1,19 @@
+---
+description: iota.js API reference
+keywords:
+- references
+- api references
+- typescript
+image: /img/client_banner.png
+---
+---
+description: iota.js API reference
+keywords:
+- references
+- api references
+- typescript
+image: /img/client_banner.png
+---
 # Interface: INodeInfoProtocolParamsMilestoneOpt
 
 Defines changing protocol parameters in a milestone.

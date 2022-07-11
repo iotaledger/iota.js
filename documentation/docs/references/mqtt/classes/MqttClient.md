@@ -1,3 +1,11 @@
+---
+description: iota.js API reference
+keywords:
+- references
+- api references
+- typescript
+image: /img/client_banner.png
+---
 # Class: MqttClient
 
 MQTT Client implementation for pub/sub communication.

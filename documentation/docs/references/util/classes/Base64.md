@@ -1,3 +1,11 @@
+---
+description: iota.js API reference
+keywords:
+- references
+- api references
+- typescript
+image: /img/client_banner.png
+---
 # Class: Base64
 
 Class to help with base64 Encoding/Decoding.
