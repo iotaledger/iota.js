@@ -189,13 +189,8 @@ export function buildTransactionPayload(
         };
     });
 
-    // Lexicographically sort the inputs and outputs
-    const sortedInputs = inputsAndSignatureKeyPairsSerialized.sort(
-        (a, b) => a.inputIdHex.localeCompare(b.inputIdHex));
-    const sortedOutputs = outputsWithSerialization.sort((a, b) => a.serializedHex.localeCompare(b.serializedHex));
-
     const inputsCommitmentHasher = new Blake2b(Blake2b.SIZE_256);
-    for (const input of sortedInputs) {
+    for (const input of inputsAndSignatureKeyPairsSerialized) {
         inputsCommitmentHasher.update(Blake2b.sum256(input.consumingOutputBytes));
     }
     const inputsCommitment = Converter.bytesToHex(inputsCommitmentHasher.final(), true);
@@ -203,9 +198,9 @@ export function buildTransactionPayload(
     const transactionEssence: ITransactionEssence = {
         type: TRANSACTION_ESSENCE_TYPE,
         networkId,
-        inputs: sortedInputs.map(i => i.input),
+        inputs: inputsAndSignatureKeyPairsSerialized.map(i => i.input),
         inputsCommitment,
-        outputs: sortedOutputs.map(o => o.output),
+        outputs: outputsWithSerialization.map(o => o.output),
         payload: localTagHex && localDataHex
             ? {
                 type: TAGGED_DATA_PAYLOAD_TYPE,
@@ -230,7 +225,7 @@ export function buildTransactionPayload(
         };
     } = {};
 
-    for (const input of sortedInputs) {
+    for (const input of inputsAndSignatureKeyPairsSerialized) {
         const hexInputAddressPublic = Converter.bytesToHex(input.addressKeyPair.publicKey, true);
         if (addressToUnlock[hexInputAddressPublic]) {
             unlocks.push({
