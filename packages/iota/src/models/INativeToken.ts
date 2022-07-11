@@ -13,5 +13,10 @@ export interface INativeToken {
     /**
      * Amount of native tokens of the given Token ID.
      */
-    amount: string;
+    amount: HexEncodedAmount;
 }
+
+/**
+ * Hex encoded U256.
+ */
+export type HexEncodedAmount = string;
