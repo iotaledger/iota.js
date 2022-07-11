@@ -1,6 +1,7 @@
 ---
-description: Contribute to the IOTA wiki docs templates by contributing to the official GitHub repository or sharing your knowledge on Discord.
-image: /img/logo/iota_logo.svg
+description: "Contribute to the Iota.js library by contributing to the official GitHub repository or sharing your
+knowledge on Discord."
+image: /img/client_banner.png
 keywords:
 - join
 - documentation
@@ -9,6 +10,7 @@ keywords:
 - discord
 - GitHub
 - reference
+
 ---
 
 # Contribute to the Project

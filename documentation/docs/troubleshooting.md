@@ -1,8 +1,8 @@
 ---
-description: Troubleshooting the iota.js.
-image: /img/logo/iota_logo.svg
+description: "If you are having any trouble with the iota.js client library you can check
+out https://iota.stackexchange.com/ or https://discord.iota.org."
+image: /img/client_banner.png
 keywords:
-
 - discussion
 - channel
 - problem
@@ -10,7 +10,6 @@ keywords:
 - discord
 - stack exchange
 - reference
-
 ---
 
 # Troubleshooting

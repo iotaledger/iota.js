@@ -1,11 +1,14 @@
 ---
-description: Welcome to your project.
-image: /img/logo/iota_logo.svg
+description: "The iota.js client library is implemented in TypeScript to strongly type the objects sent and received from the API. You
+can use it in both NodeJs and Browser environments. You can use the client library to handle communications between your
+software and the IOTA network."
+image: /img/client_banner.png
 keywords:
-
+- js
+- client library
 - welcome
 - explanation
-
+- IOTA
 ---
 
 # Welcome
