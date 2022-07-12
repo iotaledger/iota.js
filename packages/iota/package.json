@@ -1,7 +1,7 @@
 {
     "name": "@iota/iota.js",
     "description": "IOTA JavaScript Library",
-    "version": "1.9.0-stardust.19",
+    "version": "1.9.0-stardust.20",
     "keywords": [
         "iota",
         "client"
@@ -68,7 +68,7 @@
         "rollup-plugin-terser": "^7.0.2",
         "ts-jest": "^27.1.3",
         "ts-node": "^10.7.0",
-        "typedoc": "^0.22.15",
+        "typedoc": "^0.23.0",
         "typedoc-plugin-markdown": "^3.12.1",
         "typescript": "^4.6.2"
     },

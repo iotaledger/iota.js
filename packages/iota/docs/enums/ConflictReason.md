@@ -25,7 +25,7 @@ Reason for block conflicts.
 
 ### none
 
-• **none**
+• **none** = ``0``
 
 The block has no conflict.
 
@@ -33,7 +33,7 @@ ___
 
 ### inputUTXOAlreadySpent
 
-• **inputUTXOAlreadySpent**
+• **inputUTXOAlreadySpent** = ``1``
 
 The referenced UTXO was already spent.
 
@@ -41,7 +41,7 @@ ___
 
 ### inputUTXOAlreadySpentInThisMilestone
 
-• **inputUTXOAlreadySpentInThisMilestone**
+• **inputUTXOAlreadySpentInThisMilestone** = ``2``
 
 The referenced UTXO was already spent while confirming this milestone.
 
@@ -49,7 +49,7 @@ ___
 
 ### inputUTXONotFound
 
-• **inputUTXONotFound**
+• **inputUTXONotFound** = ``3``
 
 The referenced UTXO cannot be found.
 
@@ -57,7 +57,7 @@ ___
 
 ### inputOutputSumMismatch
 
-• **inputOutputSumMismatch**
+• **inputOutputSumMismatch** = ``4``
 
 The sum of the inputs and output values does not match.
 
@@ -65,7 +65,7 @@ ___
 
 ### invalidSignature
 
-• **invalidSignature**
+• **invalidSignature** = ``5``
 
 The unlock signature is invalid.
 
@@ -73,7 +73,7 @@ ___
 
 ### invalidTimelock
 
-• **invalidTimelock**
+• **invalidTimelock** = ``6``
 
 The configured timelock is not yet expired.
 
@@ -81,7 +81,7 @@ ___
 
 ### invalidNativeTokens
 
-• **invalidNativeTokens**
+• **invalidNativeTokens** = ``7``
 
 The native tokens are invalid.
 
@@ -89,7 +89,7 @@ ___
 
 ### returnAmountMismatch
 
-• **returnAmountMismatch**
+• **returnAmountMismatch** = ``8``
 
 The return amount in a transaction is not fulfilled by the output side.
 
@@ -97,7 +97,7 @@ ___
 
 ### invalidInputUnlock
 
-• **invalidInputUnlock**
+• **invalidInputUnlock** = ``9``
 
 The input unlock is invalid.
 
@@ -105,7 +105,7 @@ ___
 
 ### invalidInputsCommitment
 
-• **invalidInputsCommitment**
+• **invalidInputsCommitment** = ``10``
 
 The inputs commitment is invalid.
 
@@ -113,7 +113,7 @@ ___
 
 ### invalidSender
 
-• **invalidSender**
+• **invalidSender** = ``11``
 
 The output contains a Sender with an ident (address) which is not unlocked.
 
@@ -121,7 +121,7 @@ ___
 
 ### invalidChainState
 
-• **invalidChainState**
+• **invalidChainState** = ``12``
 
 The chain state transition is invalid.
 
@@ -129,6 +129,6 @@ ___
 
 ### semanticValidationFailed
 
-• **semanticValidationFailed**
+• **semanticValidationFailed** = ``255``
 
 The semantic validation failed.

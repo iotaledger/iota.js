@@ -361,6 +361,7 @@
 
 ### Type Aliases
 
+- [HexEncodedAmount](api.md#hexencodedamount)
 - [AddressTypes](api.md#addresstypes)
 - [FeatureTypes](api.md#featuretypes)
 - [InputTypes](api.md#inputtypes)
@@ -3340,7 +3341,7 @@ ___
 
 ### addressBalance
 
-▸ **addressBalance**(`client`, `addressBech32`): `Promise`<{}\>
+▸ **addressBalance**(`client`, `addressBech32`): `Promise`<{ `balance`: `BigInteger` ; `nativeTokens`: { `[id: string]`: `BigInteger`;  } ; `ledgerIndex`: `number`  }\>
 
 Get the balance for an address.
 
@@ -3353,7 +3354,7 @@ Get the balance for an address.
 
 #### Returns
 
-`Promise`<{}\>
+`Promise`<{ `balance`: `BigInteger` ; `nativeTokens`: { `[id: string]`: `BigInteger`;  } ; `ledgerIndex`: `number`  }\>
 
 The balance.
 
@@ -3415,6 +3416,8 @@ Get the balance for a list of addresses.
 | `seed` | [`ISeed`](interfaces/ISeed.md) | The seed. |
 | `accountIndex` | `number` | The account index in the wallet. |
 | `addressOptions?` | `Object` | Optional address configuration for balance address lookups. |
+| `addressOptions.startIndex?` | `number` | The start index for the wallet count address, defaults to 0. |
+| `addressOptions.zeroCount?` | `number` | The number of addresses with 0 balance during lookup before aborting. |
 
 #### Returns
 
@@ -3426,7 +3429,7 @@ ___
 
 ### getUnspentAddress
 
-▸ **getUnspentAddress**(`client`, `seed`, `accountIndex`, `addressOptions?`): `Promise`<{} \| `undefined`\>
+▸ **getUnspentAddress**(`client`, `seed`, `accountIndex`, `addressOptions?`): `Promise`<{ `address`: `string` ; `path`: `string` ; `balance`: `BigInteger`  } \| `undefined`\>
 
 Get the first unspent address.
 
@@ -3438,10 +3441,12 @@ Get the first unspent address.
 | `seed` | [`ISeed`](interfaces/ISeed.md) | The seed to use for address generation. |
 | `accountIndex` | `number` | The account index in the wallet. |
 | `addressOptions?` | `Object` | Optional address configuration for balance address lookups. |
+| `addressOptions.startIndex?` | `number` | The start index for the wallet count address, defaults to 0. |
+| `addressOptions.zeroCount?` | `number` | The number of addresses with 0 balance during lookup before aborting. |
 
 #### Returns
 
-`Promise`<{} \| `undefined`\>
+`Promise`<{ `address`: `string` ; `path`: `string` ; `balance`: `BigInteger`  } \| `undefined`\>
 
 The first unspent address.
 
@@ -3449,7 +3454,7 @@ ___
 
 ### getUnspentAddresses
 
-▸ **getUnspentAddresses**(`client`, `seed`, `accountIndex`, `addressOptions?`): `Promise`<{}[]\>
+▸ **getUnspentAddresses**(`client`, `seed`, `accountIndex`, `addressOptions?`): `Promise`<{ `address`: `string` ; `path`: `string` ; `balance`: `BigInteger`  }[]\>
 
 Get all the unspent addresses.
 
@@ -3461,10 +3466,13 @@ Get all the unspent addresses.
 | `seed` | [`ISeed`](interfaces/ISeed.md) | The seed to use for address generation. |
 | `accountIndex` | `number` | The account index in the wallet. |
 | `addressOptions?` | `Object` | Optional address configuration for balance address lookups. |
+| `addressOptions.startIndex?` | `number` | The start index for the wallet count address, defaults to 0. |
+| `addressOptions.zeroCount?` | `number` | The number of addresses with 0 balance during lookup before aborting. |
+| `addressOptions.requiredCount?` | `number` | The max number of addresses to find. |
 
 #### Returns
 
-`Promise`<{}[]\>
+`Promise`<{ `address`: `string` ; `path`: `string` ; `balance`: `BigInteger`  }[]\>
 
 All the unspent addresses.
 
@@ -3472,7 +3480,7 @@ ___
 
 ### getUnspentAddressesWithAddressGenerator
 
-▸ **getUnspentAddressesWithAddressGenerator**<`T`\>(`client`, `seed`, `initialAddressState`, `nextAddressPath`, `addressOptions?`): `Promise`<{}[]\>
+▸ **getUnspentAddressesWithAddressGenerator**<`T`\>(`client`, `seed`, `initialAddressState`, `nextAddressPath`, `addressOptions?`): `Promise`<{ `address`: `string` ; `path`: `string` ; `balance`: `BigInteger`  }[]\>
 
 Get all the unspent addresses using an address generator.
 
@@ -3491,10 +3499,13 @@ Get all the unspent addresses using an address generator.
 | `initialAddressState` | `T` | The initial address state for calculating the addresses. |
 | `nextAddressPath` | (`addressState`: `T`) => `string` | Calculate the next address for inputs. |
 | `addressOptions?` | `Object` | Optional address configuration for balance address lookups. |
+| `addressOptions.startIndex?` | `number` | The start index for the wallet count address, defaults to 0. |
+| `addressOptions.zeroCount?` | `number` | The number of addresses with 0 balance during lookup before aborting. |
+| `addressOptions.requiredCount?` | `number` | The max number of addresses to find. |
 
 #### Returns
 
-`Promise`<{}[]\>
+`Promise`<{ `address`: `string` ; `path`: `string` ; `balance`: `BigInteger`  }[]\>
 
 All the unspent addresses.
 
@@ -3502,7 +3513,7 @@ ___
 
 ### promote
 
-▸ **promote**(`client`, `blockId`): `Promise`<{}\>
+▸ **promote**(`client`, `blockId`): `Promise`<{ `block`: [`IBlock`](interfaces/IBlock.md) ; `blockId`: `string`  }\>
 
 Promote an existing block.
 
@@ -3515,7 +3526,7 @@ Promote an existing block.
 
 #### Returns
 
-`Promise`<{}\>
+`Promise`<{ `block`: [`IBlock`](interfaces/IBlock.md) ; `blockId`: `string`  }\>
 
 The id and block that were promoted.
 
@@ -3523,7 +3534,7 @@ ___
 
 ### reattach
 
-▸ **reattach**(`client`, `blockId`): `Promise`<{}\>
+▸ **reattach**(`client`, `blockId`): `Promise`<{ `block`: [`IBlock`](interfaces/IBlock.md) ; `blockId`: `string`  }\>
 
 Reattach an existing block.
 
@@ -3536,7 +3547,7 @@ Reattach an existing block.
 
 #### Returns
 
-`Promise`<{}\>
+`Promise`<{ `block`: [`IBlock`](interfaces/IBlock.md) ; `blockId`: `string`  }\>
 
 The id and block that were reattached.
 
@@ -3544,7 +3555,7 @@ ___
 
 ### retrieveData
 
-▸ **retrieveData**(`client`, `blockId`): `Promise`<{} \| `undefined`\>
+▸ **retrieveData**(`client`, `blockId`): `Promise`<{ `tag?`: `Uint8Array` ; `data?`: `Uint8Array`  } \| `undefined`\>
 
 Retrieve a data block.
 
@@ -3557,7 +3568,7 @@ Retrieve a data block.
 
 #### Returns
 
-`Promise`<{} \| `undefined`\>
+`Promise`<{ `tag?`: `Uint8Array` ; `data?`: `Uint8Array`  } \| `undefined`\>
 
 The block tag and data.
 
@@ -3565,7 +3576,7 @@ ___
 
 ### retry
 
-▸ **retry**(`client`, `blockId`): `Promise`<{}\>
+▸ **retry**(`client`, `blockId`): `Promise`<{ `block`: [`IBlock`](interfaces/IBlock.md) ; `blockId`: `string`  }\>
 
 Retry an existing block either by promoting or reattaching.
 
@@ -3578,7 +3589,7 @@ Retry an existing block either by promoting or reattaching.
 
 #### Returns
 
-`Promise`<{}\>
+`Promise`<{ `block`: [`IBlock`](interfaces/IBlock.md) ; `blockId`: `string`  }\>
 
 The id and block that were retried.
 
@@ -3586,7 +3597,7 @@ ___
 
 ### send
 
-▸ **send**(`client`, `seed`, `accountIndex`, `addressBech32`, `amount`, `taggedData?`, `addressOptions?`): `Promise`<{}\>
+▸ **send**(`client`, `seed`, `accountIndex`, `addressBech32`, `amount`, `taggedData?`, `addressOptions?`): `Promise`<{ `blockId`: `string` ; `block`: [`IBlock`](interfaces/IBlock.md)  }\>
 
 Send a transfer from the balance on the seed to a single output.
 
@@ -3600,11 +3611,15 @@ Send a transfer from the balance on the seed to a single output.
 | `addressBech32` | `string` | The address to send the funds to in bech32 format. |
 | `amount` | `BigInteger` | The amount to send. |
 | `taggedData?` | `Object` | Optional tagged data to associate with the transaction. |
+| `taggedData.tag?` | `string` \| `Uint8Array` | Optional tag. |
+| `taggedData.data?` | `string` \| `Uint8Array` | Optional data. |
 | `addressOptions?` | `Object` | Optional address configuration for balance address lookups. |
+| `addressOptions.startIndex?` | `number` | The start index for the wallet count address, defaults to 0. |
+| `addressOptions.zeroCount?` | `number` | The number of addresses with 0 balance during lookup before aborting. |
 
 #### Returns
 
-`Promise`<{}\>
+`Promise`<{ `blockId`: `string` ; `block`: [`IBlock`](interfaces/IBlock.md)  }\>
 
 The id of the block created and the contructed block.
 
@@ -3612,7 +3627,7 @@ ___
 
 ### sendEd25519
 
-▸ **sendEd25519**(`client`, `seed`, `accountIndex`, `addressEd25519`, `amount`, `taggedData?`, `addressOptions?`): `Promise`<{}\>
+▸ **sendEd25519**(`client`, `seed`, `accountIndex`, `addressEd25519`, `amount`, `taggedData?`, `addressOptions?`): `Promise`<{ `blockId`: `string` ; `block`: [`IBlock`](interfaces/IBlock.md)  }\>
 
 Send a transfer from the balance on the seed to a single output.
 
@@ -3626,11 +3641,15 @@ Send a transfer from the balance on the seed to a single output.
 | `addressEd25519` | `string` | The address to send the funds to in ed25519 format. |
 | `amount` | `BigInteger` | The amount to send. |
 | `taggedData?` | `Object` | Optional tagged data to associate with the transaction. |
+| `taggedData.tag?` | `Uint8Array` | Optional tag. |
+| `taggedData.data?` | `Uint8Array` | Optional data. |
 | `addressOptions?` | `Object` | Optional address configuration for balance address lookups. |
+| `addressOptions.startIndex?` | `number` | The start index for the wallet count address, defaults to 0. |
+| `addressOptions.zeroCount?` | `number` | The number of addresses with 0 balance during lookup before aborting. |
 
 #### Returns
 
-`Promise`<{}\>
+`Promise`<{ `blockId`: `string` ; `block`: [`IBlock`](interfaces/IBlock.md)  }\>
 
 The id of the block created and the contructed block.
 
@@ -3638,7 +3657,7 @@ ___
 
 ### sendMultiple
 
-▸ **sendMultiple**(`client`, `seed`, `accountIndex`, `outputs`, `taggedData?`, `addressOptions?`): `Promise`<{}\>
+▸ **sendMultiple**(`client`, `seed`, `accountIndex`, `outputs`, `taggedData?`, `addressOptions?`): `Promise`<{ `blockId`: `string` ; `block`: [`IBlock`](interfaces/IBlock.md)  }\>
 
 Send a transfer from the balance on the seed to multiple outputs.
 
@@ -3649,13 +3668,17 @@ Send a transfer from the balance on the seed to multiple outputs.
 | `client` | `string` \| [`IClient`](interfaces/IClient.md) | The client or node endpoint to send the transfer with. |
 | `seed` | [`ISeed`](interfaces/ISeed.md) | The seed to use for address generation. |
 | `accountIndex` | `number` | The account index in the wallet. |
-| `outputs` | {}[] | The address to send the funds to in bech32 format and amounts. |
+| `outputs` | { `addressBech32`: `string` ; `amount`: `BigInteger`  }[] | The address to send the funds to in bech32 format and amounts. |
 | `taggedData?` | `Object` | Optional tagged data to associate with the transaction. |
+| `taggedData.tag?` | `string` \| `Uint8Array` | Optional tag. |
+| `taggedData.data?` | `string` \| `Uint8Array` | Optional data. |
 | `addressOptions?` | `Object` | Optional address configuration for balance address lookups. |
+| `addressOptions.startIndex?` | `number` | The start index for the wallet count address, defaults to 0. |
+| `addressOptions.zeroCount?` | `number` | The number of addresses with 0 balance during lookup before aborting. |
 
 #### Returns
 
-`Promise`<{}\>
+`Promise`<{ `blockId`: `string` ; `block`: [`IBlock`](interfaces/IBlock.md)  }\>
 
 The id of the block created and the contructed block.
 
@@ -3663,7 +3686,7 @@ ___
 
 ### sendMultipleEd25519
 
-▸ **sendMultipleEd25519**(`client`, `seed`, `accountIndex`, `outputs`, `taggedData?`, `addressOptions?`): `Promise`<{}\>
+▸ **sendMultipleEd25519**(`client`, `seed`, `accountIndex`, `outputs`, `taggedData?`, `addressOptions?`): `Promise`<{ `blockId`: `string` ; `block`: [`IBlock`](interfaces/IBlock.md)  }\>
 
 Send a transfer from the balance on the seed.
 
@@ -3674,13 +3697,17 @@ Send a transfer from the balance on the seed.
 | `client` | `string` \| [`IClient`](interfaces/IClient.md) | The client or node endpoint to send the transfer with. |
 | `seed` | [`ISeed`](interfaces/ISeed.md) | The seed to use for address generation. |
 | `accountIndex` | `number` | The account index in the wallet. |
-| `outputs` | {}[] | The outputs including address to send the funds to in ed25519 format and amount. |
+| `outputs` | { `addressEd25519`: `string` ; `amount`: `BigInteger`  }[] | The outputs including address to send the funds to in ed25519 format and amount. |
 | `taggedData?` | `Object` | Optional tagged data to associate with the transaction. |
+| `taggedData.tag?` | `Uint8Array` | Optional tag. |
+| `taggedData.data?` | `Uint8Array` | Optional data. |
 | `addressOptions?` | `Object` | Optional address configuration for balance address lookups. |
+| `addressOptions.startIndex?` | `number` | The start index for the wallet count address, defaults to 0. |
+| `addressOptions.zeroCount?` | `number` | The number of addresses with 0 balance during lookup before aborting. |
 
 #### Returns
 
-`Promise`<{}\>
+`Promise`<{ `blockId`: `string` ; `block`: [`IBlock`](interfaces/IBlock.md)  }\>
 
 The id of the block created and the contructed block.
 
@@ -3688,7 +3715,7 @@ ___
 
 ### sendWithAddressGenerator
 
-▸ **sendWithAddressGenerator**<`T`\>(`client`, `seed`, `initialAddressState`, `nextAddressPath`, `outputs`, `taggedData?`, `zeroCount?`): `Promise`<{}\>
+▸ **sendWithAddressGenerator**<`T`\>(`client`, `seed`, `initialAddressState`, `nextAddressPath`, `outputs`, `taggedData?`, `zeroCount?`): `Promise`<{ `blockId`: `string` ; `block`: [`IBlock`](interfaces/IBlock.md)  }\>
 
 Send a transfer using account based indexing for the inputs.
 
@@ -3706,13 +3733,15 @@ Send a transfer using account based indexing for the inputs.
 | `seed` | [`ISeed`](interfaces/ISeed.md) | The seed to use for address generation. |
 | `initialAddressState` | `T` | The initial address state for calculating the addresses. |
 | `nextAddressPath` | (`addressState`: `T`) => `string` | Calculate the next address for inputs. |
-| `outputs` | {}[] | The address to send the funds to in bech32 format and amounts. |
+| `outputs` | { `address`: `string` ; `addressType`: `number` ; `amount`: `BigInteger`  }[] | The address to send the funds to in bech32 format and amounts. |
 | `taggedData?` | `Object` | Optional tagged data to associate with the transaction. |
+| `taggedData.tag?` | `string` \| `Uint8Array` | Optional tag. |
+| `taggedData.data?` | `string` \| `Uint8Array` | Optional data. |
 | `zeroCount?` | `number` | The number of addresses with 0 balance during lookup before aborting. |
 
 #### Returns
 
-`Promise`<{}\>
+`Promise`<{ `blockId`: `string` ; `block`: [`IBlock`](interfaces/IBlock.md)  }\>
 
 The id of the block created and the contructed block.
 
@@ -3720,7 +3749,7 @@ ___
 
 ### calculateInputs
 
-▸ **calculateInputs**<`T`\>(`client`, `seed`, `initialAddressState`, `nextAddressPath`, `outputs`, `zeroCount?`): `Promise`<{}[]\>
+▸ **calculateInputs**<`T`\>(`client`, `seed`, `initialAddressState`, `nextAddressPath`, `outputs`, `zeroCount?`): `Promise`<{ `input`: [`IUTXOInput`](interfaces/IUTXOInput.md) ; `addressKeyPair`: [`IKeyPair`](interfaces/IKeyPair.md) ; `consumingOutput`: [`OutputTypes`](api.md#outputtypes)  }[]\>
 
 Calculate the inputs from the seed and basePath.
 
@@ -3738,12 +3767,12 @@ Calculate the inputs from the seed and basePath.
 | `seed` | [`ISeed`](interfaces/ISeed.md) | `undefined` | The seed to use for address generation. |
 | `initialAddressState` | `T` | `undefined` | The initial address state for calculating the addresses. |
 | `nextAddressPath` | (`addressState`: `T`) => `string` | `undefined` | Calculate the next address for inputs. |
-| `outputs` | {}[] | `undefined` | The outputs to send. |
+| `outputs` | { `address`: `string` ; `addressType`: `number` ; `amount`: `BigInteger`  }[] | `undefined` | The outputs to send. |
 | `zeroCount` | `number` | `5` | Abort when the number of zero balances is exceeded. |
 
 #### Returns
 
-`Promise`<{}[]\>
+`Promise`<{ `input`: [`IUTXOInput`](interfaces/IUTXOInput.md) ; `addressKeyPair`: [`IKeyPair`](interfaces/IKeyPair.md) ; `consumingOutput`: [`OutputTypes`](api.md#outputtypes)  }[]\>
 
 The id of the block created and the contructed block.
 
@@ -3751,7 +3780,7 @@ ___
 
 ### sendAdvanced
 
-▸ **sendAdvanced**(`client`, `inputsAndSignatureKeyPairs`, `outputs`, `taggedData?`): `Promise`<{}\>
+▸ **sendAdvanced**(`client`, `inputsAndSignatureKeyPairs`, `outputs`, `taggedData?`): `Promise`<{ `blockId`: `string` ; `block`: [`IBlock`](interfaces/IBlock.md)  }\>
 
 Send a transfer from the balance on the seed.
 
@@ -3760,13 +3789,15 @@ Send a transfer from the balance on the seed.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `client` | `string` \| [`IClient`](interfaces/IClient.md) | The client or node endpoint to send the transfer with. |
-| `inputsAndSignatureKeyPairs` | {}[] | The inputs with the signature key pairs needed to sign transfers. |
-| `outputs` | {}[] | The outputs to send. |
+| `inputsAndSignatureKeyPairs` | { `input`: [`IUTXOInput`](interfaces/IUTXOInput.md) ; `addressKeyPair`: [`IKeyPair`](interfaces/IKeyPair.md) ; `consumingOutput`: [`OutputTypes`](api.md#outputtypes)  }[] | The inputs with the signature key pairs needed to sign transfers. |
+| `outputs` | { `address`: `string` ; `addressType`: `number` ; `amount`: `BigInteger`  }[] | The outputs to send. |
 | `taggedData?` | `Object` | Optional tagged data to associate with the transaction. |
+| `taggedData.tag?` | `string` \| `Uint8Array` | Optional tag. |
+| `taggedData.data?` | `string` \| `Uint8Array` | Optional data. |
 
 #### Returns
 
-`Promise`<{}\>
+`Promise`<{ `blockId`: `string` ; `block`: [`IBlock`](interfaces/IBlock.md)  }\>
 
 The id of the block created and the remainder address if one was needed.
 
@@ -3783,9 +3814,11 @@ Build a transaction payload.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `networkId` | `string` | The network id we are sending the payload on. |
-| `inputsAndSignatureKeyPairs` | {}[] | The inputs with the signature key pairs needed to sign transfers. |
-| `outputs` | {}[] | The outputs to send. |
+| `inputsAndSignatureKeyPairs` | { `input`: [`IUTXOInput`](interfaces/IUTXOInput.md) ; `addressKeyPair`: [`IKeyPair`](interfaces/IKeyPair.md) ; `consumingOutput`: [`OutputTypes`](api.md#outputtypes)  }[] | The inputs with the signature key pairs needed to sign transfers. |
+| `outputs` | { `address`: `string` ; `addressType`: `number` ; `amount`: `BigInteger`  }[] | The outputs to send. |
 | `taggedData?` | `Object` | Optional tagged data to associate with the transaction. |
+| `taggedData.tag?` | `string` \| `Uint8Array` | Optional tag. |
+| `taggedData.data?` | `string` \| `Uint8Array` | Optional index data. |
 
 #### Returns
 
@@ -3797,7 +3830,7 @@ ___
 
 ### sendData
 
-▸ **sendData**(`client`, `tag?`, `data?`): `Promise`<{}\>
+▸ **sendData**(`client`, `tag?`, `data?`): `Promise`<{ `block`: { `protocolVersion?`: `number` ; `parents?`: `string`[] ; `payload?`: [`IBlock`](interfaces/IBlock.md)[``"payload"``] ; `nonce?`: `string`  } ; `blockId`: `string`  }\>
 
 Send a data block.
 
@@ -3811,7 +3844,7 @@ Send a data block.
 
 #### Returns
 
-`Promise`<{}\>
+`Promise`<{ `block`: { `protocolVersion?`: `number` ; `parents?`: `string`[] ; `payload?`: [`IBlock`](interfaces/IBlock.md)[``"payload"``] ; `nonce?`: `string`  } ; `blockId`: `string`  }\>
 
 The id of the block created and the block.
 
@@ -4388,6 +4421,14 @@ Compute a blockId from a milestone payload.
 The blockId of the block with the milestone payload.
 
 ## Type Aliases
+
+### HexEncodedAmount
+
+Ƭ **HexEncodedAmount**: `string`
+
+Hex encoded U256.
+
+___
 
 ### AddressTypes
 

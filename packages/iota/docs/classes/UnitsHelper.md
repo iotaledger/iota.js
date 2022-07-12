@@ -15,10 +15,6 @@ Class to help with units formatting.
 - [calculateBest](UnitsHelper.md#calculatebest)
 - [convertUnits](UnitsHelper.md#convertunits)
 
-### Constructors
-
-- [constructor](UnitsHelper.md#constructor)
-
 ## Properties
 
 ### MAGNITUDE\_MAP
@@ -26,6 +22,29 @@ Class to help with units formatting.
 ▪ `Static` `Readonly` **MAGNITUDE\_MAP**: `Object`
 
 Map units.
+
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `` | { `val`: `number` ; `dp`: `number`  } |
+| `.val` | `number` |
+| `.dp` | `number` |
+| `P` | { `val`: `number` ; `dp`: `number`  } |
+| `P.val` | `number` |
+| `P.dp` | `number` |
+| `T` | { `val`: `number` ; `dp`: `number`  } |
+| `T.val` | `number` |
+| `T.dp` | `number` |
+| `G` | { `val`: `number` ; `dp`: `number`  } |
+| `G.val` | `number` |
+| `G.dp` | `number` |
+| `M` | { `val`: `number` ; `dp`: `number`  } |
+| `M.val` | `number` |
+| `M.dp` | `number` |
+| `K` | { `val`: `number` ; `dp`: `number`  } |
+| `K.val` | `number` |
+| `K.dp` | `number` |
 
 ## Methods
 
@@ -111,9 +130,3 @@ Convert the value to different units.
 `number`
 
 The formatted unit.
-
-## Constructors
-
-### constructor
-
-• **new UnitsHelper**()

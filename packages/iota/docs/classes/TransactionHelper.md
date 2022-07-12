@@ -23,10 +23,6 @@ Helper methods for Transactions.
 - [constructTokenId](TransactionHelper.md#constructtokenid)
 - [networkIdFromNetworkName](TransactionHelper.md#networkidfromnetworkname)
 
-### Constructors
-
-- [constructor](TransactionHelper.md#constructor)
-
 ## Properties
 
 ### CONFIRMED\_MILESTONE\_INDEX\_LENGTH
@@ -255,9 +251,3 @@ Calculates the networkId value from the network name.
 `string`
 
 The networkId.
-
-## Constructors
-
-### constructor
-
-• **new TransactionHelper**()

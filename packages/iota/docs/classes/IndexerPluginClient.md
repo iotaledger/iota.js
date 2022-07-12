@@ -32,6 +32,7 @@ Create a new instance of IndexerPluginClient.
 | :------ | :------ | :------ |
 | `client` | `string` \| [`IClient`](../interfaces/IClient.md) | The client for communications. |
 | `options?` | `Object` | Options for the plugin. |
+| `options.basePluginPath?` | `string` | Base path for the plugin routes, relative to client basePluginPath, defaults to indexer/v1/ . |
 
 ## Methods
 
@@ -46,6 +47,25 @@ Find outputs using filter options.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `filterOptions?` | `Object` | The options for filtering. |
+| `filterOptions.addressBech32?` | `string` | Filter outputs that are unlockable by the address. |
+| `filterOptions.hasStorageReturnCondition?` | `boolean` | Filter for outputs having a storage return unlock condition. |
+| `filterOptions.storageReturnAddressBech32?` | `string` | Filter for outputs with a certain storage return address. |
+| `filterOptions.hasExpirationCondition?` | `boolean` | Filter for outputs having an expiration unlock condition. |
+| `filterOptions.expirationReturnAddressBech32?` | `string` | Filter for outputs with a certain expiration return address. |
+| `filterOptions.expiresBefore?` | `number` | Filter for outputs that expire before a certain unix time. |
+| `filterOptions.expiresAfter?` | `number` | Filter for outputs that expire after a certain unix time. |
+| `filterOptions.hasTimelockCondition?` | `boolean` | Filter for outputs having a timelock unlock condition. |
+| `filterOptions.timelockedBefore?` | `number` | Filter for outputs that are timelocked before a certain unix time. |
+| `filterOptions.timelockedAfter?` | `number` | Filter for outputs that are timelocked after a certain unix time. |
+| `filterOptions.hasNativeTokens?` | `boolean` | Filter for outputs having native tokens. |
+| `filterOptions.minNativeTokenCount?` | `number` | Filter for outputs that have at least an amount of native tokens. |
+| `filterOptions.maxNativeTokenCount?` | `number` | Filter for outputs that have at the most an amount of native tokens. |
+| `filterOptions.senderBech32?` | `string` | Filter outputs by the sender. |
+| `filterOptions.tagHex?` | `string` | Filter outputs by the tag in hex format. |
+| `filterOptions.createdBefore?` | `number` | Filter for outputs that were created before the given time. |
+| `filterOptions.createdAfter?` | `number` | Filter for outputs that were created after the given time. |
+| `filterOptions.pageSize?` | `number` | Set the page size for the response. |
+| `filterOptions.cursor?` | `string` | Request the items from the given cursor, returned from a previous request. |
 
 #### Returns
 
@@ -66,6 +86,17 @@ Find alises using filter options.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `filterOptions?` | `Object` | The options for filtering. |
+| `filterOptions.stateControllerBech32?` | `string` | Filter for a certain state controller address. |
+| `filterOptions.governorBech32?` | `string` | Filter for a certain governance controller address. |
+| `filterOptions.issuerBech32?` | `string` | Filter for a certain issuer. |
+| `filterOptions.senderBech32?` | `string` | Filter outputs by the sender. |
+| `filterOptions.hasNativeTokens?` | `boolean` | Filter for outputs having native tokens. |
+| `filterOptions.minNativeTokenCount?` | `number` | Filter for outputs that have at least an amount of native tokens. |
+| `filterOptions.maxNativeTokenCount?` | `number` | Filter for outputs that have at the most an amount of native tokens. |
+| `filterOptions.createdBefore?` | `number` | Filter for outputs that were created before the given time. |
+| `filterOptions.createdAfter?` | `number` | Filter for outputs that were created after the given time. |
+| `filterOptions.pageSize?` | `number` | Set the page size for the response. |
+| `filterOptions.cursor?` | `string` | Request the items from the given cursor, returned from a previous request. |
 
 #### Returns
 
@@ -106,6 +137,26 @@ Find nfts using filter options.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `filterOptions?` | `Object` | The options for filtering. |
+| `filterOptions.addressBech32?` | `string` | Filter outputs that are unlockable by the address. |
+| `filterOptions.hasStorageReturnCondition?` | `boolean` | Filter for outputs having a storage return unlock condition. |
+| `filterOptions.storageReturnAddressBech32?` | `string` | Filter for outputs with a certain storage return address. |
+| `filterOptions.hasExpirationCondition?` | `boolean` | Filter for outputs having an expiration unlock condition. |
+| `filterOptions.expirationReturnAddressBech32?` | `string` | Filter for outputs with a certain expiration return address. |
+| `filterOptions.expiresBefore?` | `number` | Filter for outputs that expire before a certain unix time. |
+| `filterOptions.expiresAfter?` | `number` | Filter for outputs that expire after a certain unix time. |
+| `filterOptions.hasTimelockCondition?` | `boolean` | Filter for outputs having a timelock unlock condition. |
+| `filterOptions.timelockedBefore?` | `number` | Filter for outputs that are timelocked before a certain unix time. |
+| `filterOptions.timelockedAfter?` | `number` | Filter for outputs that are timelocked after a certain unix time. |
+| `filterOptions.hasNativeTokens?` | `boolean` | Filter for outputs having native tokens. |
+| `filterOptions.minNativeTokenCount?` | `number` | Filter for outputs that have at least an amount of native tokens. |
+| `filterOptions.maxNativeTokenCount?` | `number` | Filter for outputs that have at the most an amount of native tokens. |
+| `filterOptions.issuerBech32?` | `string` | Filter outputs by the issuer. |
+| `filterOptions.senderBech32?` | `string` | Filter outputs by the sender. |
+| `filterOptions.tagHex?` | `string` | Filter outputs by the tag in hex format. |
+| `filterOptions.createdBefore?` | `number` | Filter for outputs that were created before the given time. |
+| `filterOptions.createdAfter?` | `number` | Filter for outputs that were created after the given time. |
+| `filterOptions.pageSize?` | `number` | Set the page size for the response. |
+| `filterOptions.cursor?` | `string` | Request the items from the given cursor, returned from a previous request. |
 
 #### Returns
 
@@ -146,6 +197,14 @@ Find foundries using filter options.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `filterOptions?` | `Object` | The options for filtering. |
+| `filterOptions.aliasAddressBech32?` | `string` | Filter outputs that are unlockable by the address. |
+| `filterOptions.hasNativeTokens?` | `boolean` | Filter for outputs having native tokens. |
+| `filterOptions.minNativeTokenCount?` | `number` | Filter for outputs that have at least an amount of native tokens. |
+| `filterOptions.maxNativeTokenCount?` | `number` | Filter for outputs that have at the most an amount of native tokens. |
+| `filterOptions.createdBefore?` | `number` | Filter for outputs that were created before the given time. |
+| `filterOptions.createdAfter?` | `number` | Filter for outputs that were created after the given time. |
+| `filterOptions.pageSize?` | `number` | Set the page size for the response. |
+| `filterOptions.cursor?` | `string` | Request the items from the given cursor, returned from a previous request. |
 
 #### Returns
 

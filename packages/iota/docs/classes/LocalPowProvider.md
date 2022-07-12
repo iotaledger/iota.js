@@ -9,19 +9,9 @@ WARNING - This is really slow.
 
 ## Table of contents
 
-### Constructors
-
-- [constructor](LocalPowProvider.md#constructor)
-
 ### Methods
 
 - [pow](LocalPowProvider.md#pow)
-
-## Constructors
-
-### constructor
-
-• **new LocalPowProvider**()
 
 ## Methods
 
@@ -46,4 +36,4 @@ The nonce.
 
 #### Implementation of
 
-[IPowProvider](../interfaces/IPowProvider.md).[pow](../interfaces/IPowProvider.md#pow)
+IPowProvider.pow

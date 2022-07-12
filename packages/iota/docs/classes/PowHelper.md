@@ -16,10 +16,6 @@ Helper methods for POW.
 - [trinaryTrailingZeros](PowHelper.md#trinarytrailingzeros)
 - [performPow](PowHelper.md#performpow)
 
-### Constructors
-
-- [constructor](PowHelper.md#constructor)
-
 ## Properties
 
 ### LN3
@@ -133,9 +129,3 @@ Perform the hash on the data until we reach target number of zeros.
 `string`
 
 The nonce.
-
-## Constructors
-
-### constructor
-
-• **new PowHelper**()

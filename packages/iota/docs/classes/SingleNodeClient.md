@@ -74,7 +74,7 @@ True if the node is healthy.
 
 #### Implementation of
 
-[IClient](../interfaces/IClient.md).[health](../interfaces/IClient.md#health)
+IClient.health
 
 ___
 
@@ -92,7 +92,7 @@ The routes.
 
 #### Implementation of
 
-[IClient](../interfaces/IClient.md).[routes](../interfaces/IClient.md#routes)
+IClient.routes
 
 ___
 
@@ -110,7 +110,7 @@ The node information.
 
 #### Implementation of
 
-[IClient](../interfaces/IClient.md).[info](../interfaces/IClient.md#info)
+IClient.info
 
 ___
 
@@ -128,7 +128,7 @@ The tips.
 
 #### Implementation of
 
-[IClient](../interfaces/IClient.md).[tips](../interfaces/IClient.md#tips)
+IClient.tips
 
 ___
 
@@ -152,7 +152,7 @@ The block data.
 
 #### Implementation of
 
-[IClient](../interfaces/IClient.md).[block](../interfaces/IClient.md#block)
+IClient.block
 
 ___
 
@@ -176,7 +176,7 @@ The block metadata.
 
 #### Implementation of
 
-[IClient](../interfaces/IClient.md).[blockMetadata](../interfaces/IClient.md#blockmetadata)
+IClient.blockMetadata
 
 ___
 
@@ -200,7 +200,7 @@ The block raw data.
 
 #### Implementation of
 
-[IClient](../interfaces/IClient.md).[blockRaw](../interfaces/IClient.md#blockraw)
+IClient.blockRaw
 
 ___
 
@@ -215,6 +215,10 @@ Submit block.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `blockPartial` | `Object` | The block to submit (possibly contains only partial block data). |
+| `blockPartial.protocolVersion?` | `number` | The protocol version under which this block operates. |
+| `blockPartial.parents?` | `string`[] | The parent block ids. |
+| `blockPartial.payload?` | [`IMilestonePayload`](../interfaces/IMilestonePayload.md) \| [`ITaggedDataPayload`](../interfaces/ITaggedDataPayload.md) \| [`ITransactionPayload`](../interfaces/ITransactionPayload.md) | The payload contents. |
+| `blockPartial.nonce?` | `string` | The nonce for the block. |
 
 #### Returns
 
@@ -224,7 +228,7 @@ The blockId.
 
 #### Implementation of
 
-[IClient](../interfaces/IClient.md).[blockSubmit](../interfaces/IClient.md#blocksubmit)
+IClient.blockSubmit
 
 ___
 
@@ -248,7 +252,7 @@ The blockId.
 
 #### Implementation of
 
-[IClient](../interfaces/IClient.md).[blockSubmitRaw](../interfaces/IClient.md#blocksubmitraw)
+IClient.blockSubmitRaw
 
 ___
 
@@ -272,7 +276,7 @@ The block.
 
 #### Implementation of
 
-[IClient](../interfaces/IClient.md).[transactionIncludedBlock](../interfaces/IClient.md#transactionincludedblock)
+IClient.transactionIncludedBlock
 
 ___
 
@@ -296,7 +300,7 @@ The block.
 
 #### Implementation of
 
-[IClient](../interfaces/IClient.md).[transactionIncludedBlockRaw](../interfaces/IClient.md#transactionincludedblockraw)
+IClient.transactionIncludedBlockRaw
 
 ___
 
@@ -320,7 +324,7 @@ The output details.
 
 #### Implementation of
 
-[IClient](../interfaces/IClient.md).[output](../interfaces/IClient.md#output)
+IClient.output
 
 ___
 
@@ -344,7 +348,7 @@ The output metadata.
 
 #### Implementation of
 
-[IClient](../interfaces/IClient.md).[outputMetadata](../interfaces/IClient.md#outputmetadata)
+IClient.outputMetadata
 
 ___
 
@@ -368,7 +372,7 @@ The output raw bytes.
 
 #### Implementation of
 
-[IClient](../interfaces/IClient.md).[outputRaw](../interfaces/IClient.md#outputraw)
+IClient.outputRaw
 
 ___
 
@@ -392,7 +396,7 @@ The milestone payload.
 
 #### Implementation of
 
-[IClient](../interfaces/IClient.md).[milestoneByIndex](../interfaces/IClient.md#milestonebyindex)
+IClient.milestoneByIndex
 
 ___
 
@@ -416,7 +420,7 @@ The milestone payload raw.
 
 #### Implementation of
 
-[IClient](../interfaces/IClient.md).[milestoneByIndexRaw](../interfaces/IClient.md#milestonebyindexraw)
+IClient.milestoneByIndexRaw
 
 ___
 
@@ -440,7 +444,7 @@ The milestone utxo changes details.
 
 #### Implementation of
 
-[IClient](../interfaces/IClient.md).[milestoneUtxoChangesByIndex](../interfaces/IClient.md#milestoneutxochangesbyindex)
+IClient.milestoneUtxoChangesByIndex
 
 ___
 
@@ -464,7 +468,7 @@ The milestone payload.
 
 #### Implementation of
 
-[IClient](../interfaces/IClient.md).[milestoneById](../interfaces/IClient.md#milestonebyid)
+IClient.milestoneById
 
 ___
 
@@ -488,7 +492,7 @@ The milestone payload raw.
 
 #### Implementation of
 
-[IClient](../interfaces/IClient.md).[milestoneByIdRaw](../interfaces/IClient.md#milestonebyidraw)
+IClient.milestoneByIdRaw
 
 ___
 
@@ -512,7 +516,7 @@ The milestone utxo changes details.
 
 #### Implementation of
 
-[IClient](../interfaces/IClient.md).[milestoneUtxoChangesById](../interfaces/IClient.md#milestoneutxochangesbyid)
+IClient.milestoneUtxoChangesById
 
 ___
 
@@ -530,7 +534,7 @@ The details for the treasury.
 
 #### Implementation of
 
-[IClient](../interfaces/IClient.md).[treasury](../interfaces/IClient.md#treasury)
+IClient.treasury
 
 ___
 
@@ -554,7 +558,7 @@ The stored receipts.
 
 #### Implementation of
 
-[IClient](../interfaces/IClient.md).[receipts](../interfaces/IClient.md#receipts)
+IClient.receipts
 
 ___
 
@@ -572,7 +576,7 @@ The list of peers.
 
 #### Implementation of
 
-[IClient](../interfaces/IClient.md).[peers](../interfaces/IClient.md#peers)
+IClient.peers
 
 ___
 
@@ -597,7 +601,7 @@ The details for the created peer.
 
 #### Implementation of
 
-[IClient](../interfaces/IClient.md).[peerAdd](../interfaces/IClient.md#peeradd)
+IClient.peerAdd
 
 ___
 
@@ -621,7 +625,7 @@ Nothing.
 
 #### Implementation of
 
-[IClient](../interfaces/IClient.md).[peerDelete](../interfaces/IClient.md#peerdelete)
+IClient.peerDelete
 
 ___
 
@@ -645,25 +649,25 @@ The details for the created peer.
 
 #### Implementation of
 
-[IClient](../interfaces/IClient.md).[peer](../interfaces/IClient.md#peer)
+IClient.peer
 
 ___
 
 ### protocolInfo
 
-▸ **protocolInfo**(): `Promise`<{}\>
+▸ **protocolInfo**(): `Promise`<{ `networkName`: `string` ; `networkId`: `string` ; `bech32HRP`: `string` ; `minPoWScore`: `number`  }\>
 
 Get the protocol info from the node.
 
 #### Returns
 
-`Promise`<{}\>
+`Promise`<{ `networkName`: `string` ; `networkId`: `string` ; `bech32HRP`: `string` ; `minPoWScore`: `number`  }\>
 
 The protocol info.
 
 #### Implementation of
 
-[IClient](../interfaces/IClient.md).[protocolInfo](../interfaces/IClient.md#protocolinfo)
+IClient.protocolInfo
 
 ___
 
@@ -698,4 +702,4 @@ The response object.
 
 #### Implementation of
 
-[IClient](../interfaces/IClient.md).[pluginFetch](../interfaces/IClient.md#pluginfetch)
+IClient.pluginFetch

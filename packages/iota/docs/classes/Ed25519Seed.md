@@ -69,7 +69,7 @@ The key pair.
 
 #### Implementation of
 
-[ISeed](../interfaces/ISeed.md).[keyPair](../interfaces/ISeed.md#keypair)
+ISeed.keyPair
 
 ___
 
@@ -93,7 +93,7 @@ The generated seed.
 
 #### Implementation of
 
-[ISeed](../interfaces/ISeed.md).[generateSeedFromPath](../interfaces/ISeed.md#generateseedfrompath)
+ISeed.generateSeedFromPath
 
 ___
 
@@ -111,4 +111,4 @@ The key as bytes.
 
 #### Implementation of
 
-[ISeed](../interfaces/ISeed.md).[toBytes](../interfaces/ISeed.md#tobytes)
+ISeed.toBytes
