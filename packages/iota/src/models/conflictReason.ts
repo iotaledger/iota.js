@@ -32,14 +32,44 @@ export enum ConflictReason {
     inputOutputSumMismatch = 4,
 
     /**
-     * The unlock block signature is invalid.
+     * The unlock signature is invalid.
      */
     invalidSignature = 5,
 
     /**
-     * The networkId in the essence does not match the nodes configuration.
+     * The configured timelock is not yet expired.
      */
-    invalidNetworkId = 6,
+    invalidTimelock = 6,
+
+    /**
+     * The native tokens are invalid.
+     */
+    invalidNativeTokens = 7,
+
+    /**
+     * The return amount in a transaction is not fulfilled by the output side.
+     */
+    returnAmountMismatch = 8,
+
+    /**
+     * The input unlock is invalid.
+     */
+    invalidInputUnlock = 9,
+
+    /**
+     * The inputs commitment is invalid.
+     */
+    invalidInputsCommitment = 10,
+
+    /**
+     * The output contains a Sender with an ident (address) which is not unlocked.
+     */
+    invalidSender = 11,
+
+    /**
+     * The chain state transition is invalid.
+     */
+    invalidChainState = 12,
 
     /**
      * The semantic validation failed.

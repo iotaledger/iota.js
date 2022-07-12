@@ -4,7 +4,7 @@ Reason for block conflicts.
 
 ## Table of contents
 
-### Enumeration members
+### Enumeration Members
 
 - [none](ConflictReason.md#none)
 - [inputUTXOAlreadySpent](ConflictReason.md#inpututxoalreadyspent)
@@ -12,14 +12,20 @@ Reason for block conflicts.
 - [inputUTXONotFound](ConflictReason.md#inpututxonotfound)
 - [inputOutputSumMismatch](ConflictReason.md#inputoutputsummismatch)
 - [invalidSignature](ConflictReason.md#invalidsignature)
-- [invalidNetworkId](ConflictReason.md#invalidnetworkid)
+- [invalidTimelock](ConflictReason.md#invalidtimelock)
+- [invalidNativeTokens](ConflictReason.md#invalidnativetokens)
+- [returnAmountMismatch](ConflictReason.md#returnamountmismatch)
+- [invalidInputUnlock](ConflictReason.md#invalidinputunlock)
+- [invalidInputsCommitment](ConflictReason.md#invalidinputscommitment)
+- [invalidSender](ConflictReason.md#invalidsender)
+- [invalidChainState](ConflictReason.md#invalidchainstate)
 - [semanticValidationFailed](ConflictReason.md#semanticvalidationfailed)
 
-## Enumeration members
+## Enumeration Members
 
 ### none
 
-• **none** = `0`
+• **none**
 
 The block has no conflict.
 
@@ -27,7 +33,7 @@ ___
 
 ### inputUTXOAlreadySpent
 
-• **inputUTXOAlreadySpent** = `1`
+• **inputUTXOAlreadySpent**
 
 The referenced UTXO was already spent.
 
@@ -35,7 +41,7 @@ ___
 
 ### inputUTXOAlreadySpentInThisMilestone
 
-• **inputUTXOAlreadySpentInThisMilestone** = `2`
+• **inputUTXOAlreadySpentInThisMilestone**
 
 The referenced UTXO was already spent while confirming this milestone.
 
@@ -43,7 +49,7 @@ ___
 
 ### inputUTXONotFound
 
-• **inputUTXONotFound** = `3`
+• **inputUTXONotFound**
 
 The referenced UTXO cannot be found.
 
@@ -51,7 +57,7 @@ ___
 
 ### inputOutputSumMismatch
 
-• **inputOutputSumMismatch** = `4`
+• **inputOutputSumMismatch**
 
 The sum of the inputs and output values does not match.
 
@@ -59,22 +65,70 @@ ___
 
 ### invalidSignature
 
-• **invalidSignature** = `5`
+• **invalidSignature**
 
-The unlock block signature is invalid.
+The unlock signature is invalid.
 
 ___
 
-### invalidNetworkId
+### invalidTimelock
 
-• **invalidNetworkId** = `6`
+• **invalidTimelock**
 
-The networkId in the essence does not match the nodes configuration.
+The configured timelock is not yet expired.
+
+___
+
+### invalidNativeTokens
+
+• **invalidNativeTokens**
+
+The native tokens are invalid.
+
+___
+
+### returnAmountMismatch
+
+• **returnAmountMismatch**
+
+The return amount in a transaction is not fulfilled by the output side.
+
+___
+
+### invalidInputUnlock
+
+• **invalidInputUnlock**
+
+The input unlock is invalid.
+
+___
+
+### invalidInputsCommitment
+
+• **invalidInputsCommitment**
+
+The inputs commitment is invalid.
+
+___
+
+### invalidSender
+
+• **invalidSender**
+
+The output contains a Sender with an ident (address) which is not unlocked.
+
+___
+
+### invalidChainState
+
+• **invalidChainState**
+
+The chain state transition is invalid.
 
 ___
 
 ### semanticValidationFailed
 
-• **semanticValidationFailed** = `255`
+• **semanticValidationFailed**
 
 The semantic validation failed.
