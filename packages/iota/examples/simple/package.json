@@ -11,6 +11,7 @@
         "@iota/crypto.js": "file:packages/crypto",
         "@iota/iota.js": "file:packages/iota",
         "@iota/util.js": "file:packages/util",
+        "@iota/pow-neon.js": "file:packages/pow-neon",
         "typescript": "^4.4.3"
     }
 }
