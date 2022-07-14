@@ -1,18 +1,14 @@
 {
   "name": "iotajs",
   "version": "0.0.0",
+  "private": true,
   "scripts": {
     "start": "iota-wiki start",
     "build": "iota-wiki build"
   },
   "license": "UNLICENSED",
   "engines": {
-    "node": ">=14.14.0"
-  },
-  "dependencies": {
-    "raw-loader": "^4.0.2",
-    "remark-code-import": "^0.3.0",
-    "remark-import-partial": "^0.0.2"
+    "node": ">=16.14.0"
   },
   "devDependencies": {
     "@iota-community/iota-wiki-cli": "iota-community/iota-wiki-cli#v2"
