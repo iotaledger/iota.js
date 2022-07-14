@@ -22,5 +22,3 @@ ask questions and find answers at our community on [Stack Exchange](https://iota
 contribute to the project, make sure that you read our [contribution guide](contribute.md)
 
 We are glad that you are here!
-
-
