@@ -6,6 +6,11 @@ on:
       - master
       - feat/stardust
   workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'
+        required: true
+        default: 'warning'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
