@@ -21,8 +21,7 @@ Thank you for considering a contribution to this project. You can help it in the
 
 All the code is open source and hosted on [GitHub](https://github.com/iotaledger/iota.js) where you can:
 
-- [Report a bug](https://github.com/iotaledger/iota.js/issues/new?assignees=&labels=c-bug&template=bug_report.md&title=)
-  .
+- [Report a bug](https://github.com/iotaledger/iota.js/issues/new?assignees=&labels=c-bug&template=bug_report.md&title=).
 - [Suggest a new feature](https://github.com/iotaledger/iota.js/issues/new?assignees=&labels=&template=feature_request.md)
   .
 - [Contribute to the documentation](#contribute-to-the-documentation).
