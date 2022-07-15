@@ -1,0 +1,160 @@
+---
+description: "Learn how to manage addresses with the iota.js client library."
+image: /img/client_banner.png
+keywords:
+- how to
+- example
+- address
+- manage
+- bip44
+- create
+- generate seed
+- ed25519
+---
+
+import CodeBlock from '@theme/CodeBlock';
+import ExampleCode from '!!raw-loader!./../../../packages/iota/examples/address/src/index';
+
+# Create an Address
+
+## Pre-requirements
+
+Before you can create a transaction, you will need to:
+
+* [Connect to a Node](simple.mdx).
+
+### Generate A Seed
+
+#### Constructor
+
+You can generate a seed from random bytes by instantiating the [Ed255119Seed class](../references/client/classes/Ed25519Seed.md) using
+its [constructor](../references/client/classes/Ed25519Seed.md#constructor).
+
+#### From Mnemonic
+
+You can also generate a seed from a mnemonic by using the [Ed25519Seed.fromMnemonic(mnemonic)](../references/client/classes/Ed25519Seed#frommnemonic)
+function.
+
+##### Generate a Random Mnemonic
+
+You can generate a random mnemonic using the [Bip39.randomMnemonic(length?)](../references/crypto/classes/Bip39#randommnemonic) function.
+
+## Create an Address
+
+### Bip44 Address
+
+#### generateBip44Address()
+
+You can generate a new Bip44 address using the [generateBip44Address(generatorState	)](../references/client/api_ref#generatebip44address) function. You will need to provide an [IBip44GeneratorState](../references/client/interfaces/IBip44GeneratorState) as `generatorState`.
+
+### Ed25519 Address
+
+You can create a new [Ed25519Address](../references/client/classes/Ed25519Address.md) by providing a public key to its
+[constructor](../references/client/classes/Ed25519Address.md#constructor).
+
+### Retrieve an Address
+
+You can retrieve an address by using the [Ed25519Address.toAddress()](../references/client/classes/Ed25519Address#toaddress)
+function.
+
+You can then use the [Converter.bytesToHex(array, includePrefix?, startIndex?, length?, reverse?)](../references/util/classes/Converter.md#bytestohex) and  [Bech32Helper.toBech32()](../references/client/classes/Bech32Helper.md#tobech32) functions to convert the address
+to Ed25519 or Bech32 formats.
+
+## Example Code
+
+<CodeBlock className="language-javascript">
+    {ExampleCode}
+</CodeBlock>
+
+### Expected Output
+
+```plaintext
+
+Base
+        Mnemonic: chronic crucial obtain kit birth river fiber medal napkin month spare reduce increase transfer fan uncover rifle hidden quiz agent bright young bring asthma
+        Seed acb5eb1312a07f47d147d8ec097d82e2b807478bad17776b965b58d670c14eb35569ee525697f267e85a6c05f3f8aeb333cbbedf9a647316198a3fc423c54c95
+
+Generated Addresses using Bip44 Format
+Wallet Index m/44'/4218'/0'/0'/0'
+        Private Key 0xdad2a6b0760bf0dad66fb1fd0c7dafe6bc713ea64f44b32917c91407736fdcc0488e77cbb0075d58fecefaa1e4397148674ea54ae8fe189c8a62e99cd4a3ee24
+        Public Key 0x488e77cbb0075d58fecefaa1e4397148674ea54ae8fe189c8a62e99cd4a3ee24
+        Address Ed25519 0xe4c72f2db3de883e3366cb8dc7055ab5ea30d30e602ea4774dfc849bc6336cdd
+        Address Bech32 rms1qrjvwtedk00gs03nvm9cm3c9t2675vxnpeszafrhfh7gfx7xxdkd6j5t63e
+
+Wallet Index m/44'/4218'/0'/1'/0'
+        Private Key 0xdb3076273184f2a1c5385166cd22699dbc88f8c97e1b201b2ee505ae77e6b588ae0a85f5986547ec5137bc213c04777b6d708ae11d6fe338e9ec3970d70e2d3c
+        Public Key 0xae0a85f5986547ec5137bc213c04777b6d708ae11d6fe338e9ec3970d70e2d3c
+        Address Ed25519 0x10f48fb4680954d073bd6ec25534e64ea8b38d47e3d3c41bfe3436f845a361a4
+        Address Bech32 rms1qqg0fra5dqy4f5rnh4hvy4f5ue823vudgl3a83qmlc6rd7z95ds6gg84dug
+
+Wallet Index m/44'/4218'/0'/0'/1'
+        Private Key 0xca6befa2029677174e2de4afb3a54b5a44e186b9c3466d208d083bb5215587fd6f19e84ba4e0733b9e5f984aa5b6a63832d06215bb15749dd415e3bab2a0f3bf
+        Public Key 0x6f19e84ba4e0733b9e5f984aa5b6a63832d06215bb15749dd415e3bab2a0f3bf
+        Address Ed25519 0x5786019fde4a7b5568c2ee277c29df1aebaa6013c990e18f3eaea726a57a51d6
+        Address Bech32 rms1qptcvqvlme98k4tgcthzwlpfmudwh2nqz0yepcv086h2wf490fgavsmad30
+
+Wallet Index m/44'/4218'/0'/1'/1'
+        Private Key 0x538cf517996ffe0eb7fab5d3c1bf712eec8806f8c342a893cadfe951669ab30d9db8b31f652b149fc8214cfcea775731be67908f41f95058ffb32263dccedaa2
+        Public Key 0x9db8b31f652b149fc8214cfcea775731be67908f41f95058ffb32263dccedaa2
+        Address Ed25519 0x0e25c5ed55c498e5a643e2262ae3838a1405c85f5912e902a095158da8d884b1
+        Address Bech32 rms1qq8zt30d2hzf3edxg03zv2hrsw9pgpwgtav396gz5z23trdgmzztzvwhn0t
+
+Wallet Index m/44'/4218'/0'/0'/2'
+        Private Key 0x622468ba55412093993ee9625b9ffd031311f8c998fbcb63d4ff4b0409b00142db1dfaad2a9782b965f81d8a8b919e9cf73a68478077de5760ada7e0a2f0f42b
+        Public Key 0xdb1dfaad2a9782b965f81d8a8b919e9cf73a68478077de5760ada7e0a2f0f42b
+        Address Ed25519 0x539ad9bd4ab1ce54f4433b0f51d63d3fc0d1c8e5f39063c61ea56fc6d54dfd4c
+        Address Bech32 rms1qpfe4kdaf2cuu485gvas75wk85lup5wguheeqc7xr6jkl3k4fh75cylay9t
+
+Wallet Index m/44'/4218'/0'/1'/2'
+        Private Key 0x580820e4a1c853831421dbf3f78084f2cade850179c0b97aa973c19981b519c21b95f800d65709cbda1dc20180d72c897439ae0e01a4ecccbb8f092cae4839b0
+        Public Key 0x1b95f800d65709cbda1dc20180d72c897439ae0e01a4ecccbb8f092cae4839b0
+        Address Ed25519 0xf97157ced9d74a3d5af98e4fcf9239ad520f019d9220acccfc76156da537a252
+        Address Bech32 rms1qruhz47wm8t55026lx8ylnuj8xk4yrcpnkfzptxvl3mp2md9x739y9sy9cq
+
+
+Generated Addresses manually using Bip44 Format
+
+Wallet Index m/44'/4218'/0'/0'/0'
+        Seed dad2a6b0760bf0dad66fb1fd0c7dafe6bc713ea64f44b32917c91407736fdcc0
+        Private Key 0xdad2a6b0760bf0dad66fb1fd0c7dafe6bc713ea64f44b32917c91407736fdcc0488e77cbb0075d58fecefaa1e4397148674ea54ae8fe189c8a62e99cd4a3ee24
+        Public Key 0x488e77cbb0075d58fecefaa1e4397148674ea54ae8fe189c8a62e99cd4a3ee24
+        Address Ed25519 0xe4c72f2db3de883e3366cb8dc7055ab5ea30d30e602ea4774dfc849bc6336cdd
+        Address Bech32 rms1qrjvwtedk00gs03nvm9cm3c9t2675vxnpeszafrhfh7gfx7xxdkd6j5t63e
+
+Wallet Index m/44'/4218'/0'/1'/0'
+        Seed db3076273184f2a1c5385166cd22699dbc88f8c97e1b201b2ee505ae77e6b588
+        Private Key 0xdb3076273184f2a1c5385166cd22699dbc88f8c97e1b201b2ee505ae77e6b588ae0a85f5986547ec5137bc213c04777b6d708ae11d6fe338e9ec3970d70e2d3c
+        Public Key 0xae0a85f5986547ec5137bc213c04777b6d708ae11d6fe338e9ec3970d70e2d3c
+        Address Ed25519 0x10f48fb4680954d073bd6ec25534e64ea8b38d47e3d3c41bfe3436f845a361a4
+        Address Bech32 rms1qqg0fra5dqy4f5rnh4hvy4f5ue823vudgl3a83qmlc6rd7z95ds6gg84dug
+
+Wallet Index m/44'/4218'/0'/0'/1'
+        Seed ca6befa2029677174e2de4afb3a54b5a44e186b9c3466d208d083bb5215587fd
+        Private Key 0xca6befa2029677174e2de4afb3a54b5a44e186b9c3466d208d083bb5215587fd6f19e84ba4e0733b9e5f984aa5b6a63832d06215bb15749dd415e3bab2a0f3bf
+        Public Key 0x6f19e84ba4e0733b9e5f984aa5b6a63832d06215bb15749dd415e3bab2a0f3bf
+        Address Ed25519 0x5786019fde4a7b5568c2ee277c29df1aebaa6013c990e18f3eaea726a57a51d6
+        Address Bech32 rms1qptcvqvlme98k4tgcthzwlpfmudwh2nqz0yepcv086h2wf490fgavsmad30
+
+Wallet Index m/44'/4218'/0'/1'/1'
+        Seed 538cf517996ffe0eb7fab5d3c1bf712eec8806f8c342a893cadfe951669ab30d
+        Private Key 0x538cf517996ffe0eb7fab5d3c1bf712eec8806f8c342a893cadfe951669ab30d9db8b31f652b149fc8214cfcea775731be67908f41f95058ffb32263dccedaa2
+        Public Key 0x9db8b31f652b149fc8214cfcea775731be67908f41f95058ffb32263dccedaa2
+        Address Ed25519 0x0e25c5ed55c498e5a643e2262ae3838a1405c85f5912e902a095158da8d884b1
+        Address Bech32 rms1qq8zt30d2hzf3edxg03zv2hrsw9pgpwgtav396gz5z23trdgmzztzvwhn0t
+
+Wallet Index m/44'/4218'/0'/0'/2'
+        Seed 622468ba55412093993ee9625b9ffd031311f8c998fbcb63d4ff4b0409b00142
+        Private Key 0x622468ba55412093993ee9625b9ffd031311f8c998fbcb63d4ff4b0409b00142db1dfaad2a9782b965f81d8a8b919e9cf73a68478077de5760ada7e0a2f0f42b
+        Public Key 0xdb1dfaad2a9782b965f81d8a8b919e9cf73a68478077de5760ada7e0a2f0f42b
+        Address Ed25519 0x539ad9bd4ab1ce54f4433b0f51d63d3fc0d1c8e5f39063c61ea56fc6d54dfd4c
+        Address Bech32 rms1qpfe4kdaf2cuu485gvas75wk85lup5wguheeqc7xr6jkl3k4fh75cylay9t
+
+Wallet Index m/44'/4218'/0'/1'/2'
+        Seed 580820e4a1c853831421dbf3f78084f2cade850179c0b97aa973c19981b519c2
+        Private Key 0x580820e4a1c853831421dbf3f78084f2cade850179c0b97aa973c19981b519c21b95f800d65709cbda1dc20180d72c897439ae0e01a4ecccbb8f092cae4839b0
+        Public Key 0x1b95f800d65709cbda1dc20180d72c897439ae0e01a4ecccbb8f092cae4839b0
+        Address Ed25519 0xf97157ced9d74a3d5af98e4fcf9239ad520f019d9220acccfc76156da537a252
+        Address Bech32 rms1qruhz47wm8t55026lx8ylnuj8xk4yrcpnkfzptxvl3mp2md9x739y9sy9cq
+
+Done
+```

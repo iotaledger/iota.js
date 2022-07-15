@@ -1,0 +1,77 @@
+---
+description: "Learn how to perform proof of work operations with the iota.js client library."
+image: /img/client_banner.png
+keywords:
+- how to
+- example
+- pow
+- proof of work
+- node pow
+- neon pow
+- wasm pow
+- local pow
+---
+
+
+import CodeBlock from '@theme/CodeBlock';
+import ExampleCode from '!!raw-loader!./../../../packages/iota/examples/pow/src/index';
+
+# Perform Proof of Work
+
+You can perform Proof of Work(POW) operations using the following functions :
+
+* [NeonPowProvider.pow(message, targetScore)](../references/pow-neon/classes/NeonPowProvider.md#pow).
+* [NodePowProvider.pow(message, targetScore)](../references/pow-node/classes/NodePowProvider.md#pow).
+* [WasmPowProvider.pow(message, targetScore)](../references/pow-wasm/classes/WasmPowProvider#pow).
+* [LocalPow.pow(message, targetScore)](../references/client/classes/LocalPowProvider#pow).
+
+You will need to provide a `block` and a `targetScore` to any of these functions.  If successful, they will return nonce.
+
+## Example Code
+
+<CodeBlock className="language-javascript">
+    {ExampleCode}
+</CodeBlock>
+
+### Expected Output
+
+```plaintext
+
+Neon Pow
+Target Score 100
+Data Length 500
+Iterations 1
+        Iteration 1
+        Nonce 173109
+        Score 118.098
+Average Time (s) 0.62
+
+Node Pow
+Target Score 100
+Data Length 500
+Iterations 1
+        Iteration 1
+        Nonce 173109
+        Score 118.098
+Average Time (s) 27.11
+
+Wasm Pow
+Target Score 100
+Data Length 500
+Iterations 1
+        Iteration 1
+        Nonce 173109
+        Score 118.098
+Average Time (s) 25.42
+
+Local Pow
+Target Score 100
+Data Length 500
+Iterations 1
+        Iteration 1
+        Nonce 173109
+        Score 118.098
+Average Time (s) 24.54
+
+Done
+```

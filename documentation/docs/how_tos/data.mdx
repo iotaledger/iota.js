@@ -1,0 +1,123 @@
+---
+description: "Learn how to send and retrieve data using the iota.js client library."
+image: /img/client_banner.png
+keywords:
+- how to
+- example
+- send data
+- retrieve data
+- bytes
+- utf8
+- base64
+- binary
+---
+
+
+import CodeBlock from '@theme/CodeBlock';
+import ExampleCode from '!!raw-loader!./../../../packages/iota/examples/data/src/index';
+
+# Send and Retrieve Data
+
+## Example Code
+
+## Pre-requirements
+
+Before you can send data, you will need to:
+
+* [Connect to a Node](simple.mdx).
+* [Convert data to bytes](#convert-data-to-bytes).
+
+### Convert Data to Bytes
+
+You can convert data to bytes by using the following functions from the [Converter](../references/util/classes/Converter.md)
+class:
+
+* [Converter.utf8ToBytes(utf8)](../references/util/classes/Converter#utf8tobytes).
+* [Converter.utf8ToBytes(binary)](../references/util/classes/Converter#binarytobytes).
+* [Converter.base64ToBytes(base64)](../references/util/classes/Converter#base64tobytes).
+
+## Send Data
+
+You can use the [sendData(client, tag?, data?)](../references/client/api_ref#senddata) function to send data to a
+[SingleNodeClient](../references/client/classes/SingleNodeClient.md). You will need to provide a `SingleNodeClient`,
+and optionally a `tag` and `data` as bytes.
+
+## Retrieve Data
+
+You can use the [retrieveData(client, blockId)](../references/client/api_ref#retrievedata) function to retrieve data
+from a [SingleNodeClient](../references/client/classes/SingleNodeClient.md).  You will need to provide a
+`SingleNodeClient` and a `blockId`. If successful, the function will return an object with the block's data.
+
+## Example Code
+
+<CodeBlock className="language-javascript">
+    {ExampleCode}
+</CodeBlock>
+
+### Expected Output
+
+```plaintext
+Sending Data
+Received Block Id 0x655e3b59943252851f0d7c67cbc93a733e0950a08aa3291aac8e34e6f79334be
+Sending Data
+Received Block Id 0xea3d6be441d78d89782d45edc0466b26e8a5e8423851d60ce38fe97754b9406f
+Sending Data
+Received Block Id 0xa1691c3113cdf0e143034cf34c2a172c02c1b172a8f187203e4d177ee94fa1a5
+Sending Data
+Received Block Id 0x708c4f1169269a78650ed592ef7268b7a16134240d4360ad177dbd82a2137a4f
+Sending Data
+Received Block Id 0x50f8804354485dc2b340d5da72cd3cf8df67e99ec0bac2d3b978b3f6d9c74be3
+Sending Data
+Received Block Id 0x016ac0a64278b57e7bcb937b7c4ecd0f2869ab4ab25e46a4f9be34f65c215461
+Sending Data
+Received Block Id 0x1c119d34aef307c3c90a5d8250bfebb7ab65ec5ca90533c0e38056d22f724e99
+Sending Data
+Received Block Id 0xdecec0535c4b71554ad34e369bba6e2bf9a1591c779b008f0be7c8b47ea8f072
+Sending Data
+Received Block Id 0x6072def2453c5ac99c54a450854eb3962e6c3a6eb8eb80863cff17f10b426034
+Sending Data
+Received Block Id 0xdbc9ee326b86ce2dabd262a1054afde98ac0928b8665ae431efde3802783f487
+
+Retrieving Data
+Block
+        Tag:  MY-DATA-TAG
+        Data:  This is data 0 🚀
+Retrieving Data
+Block
+        Tag:  MY-DATA-TAG
+        Data:  This is data 1 🚀
+Retrieving Data
+Block
+        Tag:  MY-DATA-TAG
+        Data:  This is data 2 🚀
+Retrieving Data
+Block
+        Tag:  MY-DATA-TAG
+        Data:  This is data 3 🚀
+Retrieving Data
+Block
+        Tag:  MY-DATA-TAG
+        Data:  This is data 4 🚀
+Retrieving Data
+Block
+        Tag:  MY-DATA-TAG
+        Data:  This is data 5 🚀
+Retrieving Data
+Block
+        Tag:  MY-DATA-TAG
+        Data:  This is data 6 🚀
+Retrieving Data
+Block
+        Tag:  MY-DATA-TAG
+        Data:  This is data 7 🚀
+Retrieving Data
+Block
+        Tag:  MY-DATA-TAG
+        Data:  This is data 8 🚀
+Retrieving Data
+Block
+        Tag:  MY-DATA-TAG
+        Data:  This is data 9 🚀
+Done
+
+```
