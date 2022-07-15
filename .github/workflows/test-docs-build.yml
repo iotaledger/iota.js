@@ -21,8 +21,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
       - name: Test Build
         run: |
+          corepack enable
           cd documentation
           yarn install --immutable
           yarn build
