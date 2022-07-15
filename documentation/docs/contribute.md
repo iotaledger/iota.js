@@ -10,7 +10,6 @@ keywords:
 - discord
 - GitHub
 - reference
-
 ---
 
 # Contribute to the Project
