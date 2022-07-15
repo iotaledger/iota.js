@@ -18,8 +18,8 @@ import {
     TRANSACTION_PAYLOAD_TYPE,
     IBlock,
     DEFAULT_PROTOCOL_VERSION,
-    LocalPowProvider,
-    TransactionHelper
+    TransactionHelper,
+    AddressTypes
 } from "@iota/iota.js";
 import { Converter, WriteStream } from "@iota/util.js";
 import { NeonPowProvider } from "@iota/pow-neon.js";
@@ -37,24 +37,6 @@ const FAUCET = "https://faucet.alphanet.iotaledger.net/api/enqueue"
 // const API_ENDPOINT = "http://localhost:14265/";
 // const FAUCET = "http://localhost:8091/api/enqueue"; 
 
-// Just some helpers to ask for user input in terminal
-let rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-});
-
-const questionAsync = Prom.promisify<string, string>((question: string, callback: Function) => {
-    rl.question(question,
-        callback.bind(null, null) // Ugh, signature mismatch.
-    );
-});
-
-async function askQuestion(question: string ): Promise<string> {
-    const result: string = await questionAsync(question);
-
-    return result;
-}
-
 // In this example we set up a hot wallet, fund it with tokens from the faucet and let it mint an NFT to our address.
 async function run() {
     // LocalPoW is extremely slow and only runs in 1 thread...
@@ -66,46 +48,28 @@ async function run() {
     const nodeInfo = await client.info();
 
     // ask for the target address
-    const targetAddressBech32 = await askQuestion("Target address where to mint the NFT? (Bech32 encoded): ");
+    const targetAddressBech32 = await askQuestion("Target address (Bech32 encoded) where to mint the tokens or leave empty and we will generate an address for you?: ");
 
     // parse bech32 encoded address into iota address
-    const tmp = Bech32Helper.fromBech32(targetAddressBech32, nodeInfo.protocol.bech32HRP);
-    if (!tmp){
-        throw new Error("Can't decode target address");
+    let targetAddress: AddressTypes = {} as AddressTypes;
+    try {
+        const tmp = Bech32Helper.fromBech32(targetAddressBech32, nodeInfo.protocol.bech32HRP);
+        if (!tmp){
+            throw new Error("Can't decode target address");
+        }
+        targetAddress = Bech32Helper.addressFromBech32(targetAddressBech32, nodeInfo.protocol.bech32HRP);
+    } catch (error) {
+        
+        // If target address is not provided we are goping to set up an account for this demo.
+       console.log("Target Address:");
+       const [addressHex, addressBech32, addressKeyPair] = await setUpHotWallet(nodeInfo.protocol.bech32HRP);
+       targetAddress = Bech32Helper.addressFromBech32(addressBech32, nodeInfo.protocol.bech32HRP);
     }
 
-    let targetAddress = Bech32Helper.addressFromBech32(targetAddressBech32, nodeInfo.protocol.bech32HRP);
-
-    // Generate seed from mnemonic
-    // const mnemonic =
-    //     "assist file add kidney sense anxiety march quality sphere stamp crime swift mystery bind thrive impact walk solar asset pottery nation dutch column beef";
-    // Generate the seed from the Mnemonic
-    //const walletEd25519Seed = Ed25519Seed.fromMnemonic(mnemonic);
-
-    // Now it's time to set up an account for this demo. We generate a random seed.
-    const walletEd25519Seed = new Ed25519Seed(randomBytes(32))
-    console.log("Your seed");
-
-    // For Shimmer we use Coin Type 4219
-    const path = new Bip32Path("m/44'/4219'/0'/0'/0'");
-
-    // Construct wallet from seed
-    const walletSeed = walletEd25519Seed.generateSeedFromPath(path);
-    const walletKeyPair = walletSeed.keyPair();
-    console.log("Seed", Converter.bytesToHex(walletSeed.toBytes()));
-
-    // Get the address for the path seed which is actually the Blake2b.sum256 of the public key
-    // display it in both Ed25519 and Bech 32 format
-    const walletEd25519Address = new Ed25519Address(walletKeyPair.publicKey);
-    const walletAddress = walletEd25519Address.toAddress();
-    const walletAddressHex = Converter.bytesToHex(walletAddress, true);
-    const walletAddressBech32 = Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, walletAddress, nodeInfo.protocol.bech32HRP);
-    console.log("Address Ed25519", walletAddressHex);
-    console.log("Address Bech32", walletAddressBech32);
-
-     // We also top up the address by asking funds from the faucet.
-     await requestFundsFromFaucet(walletAddressBech32);
-
+    // Now it's time to set up an account for this demo which we are going to use to mint nft and send it to the target address.
+    console.log("Sender Address:")
+    const [walletAddressHex, walletAddressBech32, walletKeyPair] = await setUpHotWallet(nodeInfo.protocol.bech32HRP, true);
+   
     // Fetch outputId with funds to be used as input
     const indexerPluginClient = new IndexerPluginClient(client);
 
@@ -120,7 +84,7 @@ async function run() {
 
     // Prepare inputs to the tx
     const input:IUTXOInput = TransactionHelper.inputFromOutputId(outputId);
-    console.log("Input: ", input)
+    console.log("Input: ", input);
 
     // Create the outputs, that is an NFT output
     let nftOutput: INftOutput = {
@@ -148,7 +112,7 @@ async function run() {
                 address: targetAddress // minting it directly onto target addy
             }
         ]
-    }
+    };
 
     // Calculate required storage
     let requiredStorageDeposit = TransactionHelper.getStorageDeposit(nftOutput, nodeInfo.protocol.rentStructure);
@@ -236,9 +200,39 @@ run()
     .then(() => console.log("Done"))
     .catch(err => console.error(err));
 
-    // Requests frunds from the faucet via API
+async function setUpHotWallet(hrp: string, fund: boolean = false) {
+    // Generate a random seed
+    const walletEd25519Seed = new Ed25519Seed(randomBytes(32));
+
+    // For Shimmer we use Coin Type 4219
+    const path = new Bip32Path("m/44'/4219'/0'/0'/0'");
+
+    // Construct wallet from seed
+    const walletSeed = walletEd25519Seed.generateSeedFromPath(path);
+    let walletKeyPair = walletSeed.keyPair();
+
+    console.log("\tSeed", Converter.bytesToHex(walletSeed.toBytes()));
+
+    // Get the address for the path seed which is actually the Blake2b.sum256 of the public key
+    // display it in both Ed25519 and Bech 32 format
+    const walletEd25519Address = new Ed25519Address(walletKeyPair.publicKey);
+    const walletAddress = walletEd25519Address.toAddress();
+    const walletAddressHex = Converter.bytesToHex(walletAddress, true);
+
+    let walletAddressBech32 = Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, walletAddress, hrp);
+    console.log("\tAddress Ed25519", walletAddressHex);
+    console.log("\tAddress Bech32", walletAddressBech32);
+
+    // We also top up the address by asking funds from the faucet.
+    if (fund) {
+        await requestFundsFromFaucet(walletAddressBech32);
+    }
+
+    return [walletAddressHex, walletAddressBech32, walletKeyPair] as const;
+}
+
+// Requests frunds from the faucet via API
 async function requestFundsFromFaucet(addressBech32: string) {
-    // Ask the faucet for funds
     const requestObj = JSON.stringify({ address: addressBech32 });
     let errorMessage, data;
     try {
@@ -291,4 +285,22 @@ async function fetchAndWaitForBasicOutput(addressBech32: string, client: Indexer
         throw new Error("Didn't find any outputs for address");
     }
     return outputsResponse.items[0];
+}
+
+// Just some helpers to ask for user input in terminal
+let rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
+
+const questionAsync = Prom.promisify<string, string>((question: string, callback: Function) => {
+    rl.question(question,
+        callback.bind(null, null) // Ugh, signature mismatch.
+    );
+});
+
+async function askQuestion(question: string ): Promise<string> {
+    const result: string = await questionAsync(question);
+
+    return result;
 }

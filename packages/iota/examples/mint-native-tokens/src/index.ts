@@ -56,14 +56,28 @@ async function run() {
     ctx.networkId = lib.TransactionHelper.networkIdFromNetworkName(ctx.info.protocol.networkName);
     
     // ask for the target address
-    const targetAddressBech32 = await askQuestion("Target address where to mint the tokens? (Bech32 encoded): ");
+    const targetAddressBech32 = await askQuestion("Target address (Bech32 encoded) where to mint the tokens or leave empty and we will generate an address for you?: ");
 
     // parse bech32 encoded address into iota address
-    ctx.targetAddress = lib.Bech32Helper.addressFromBech32(targetAddressBech32, ctx.info.protocol.bech32HRP);
+    try {
+        const tmp = lib.Bech32Helper.fromBech32(targetAddressBech32, ctx.info.protocol.bech32HRP);
+        if (!tmp){
+            throw new Error("Can't decode target address");
+        }
+         // parse bech32 encoded address into iota address
+        ctx.targetAddress = lib.Bech32Helper.addressFromBech32(targetAddressBech32, ctx.info.protocol.bech32HRP);
+    } catch (error) {
+        
+        // If target address is not provided we are goping to set up an account for this demo.
+       console.log("Target Address:");
+       const [addressHex, addressBech32, addressKeyPair] = await setUpHotWallet(ctx.info.protocol.bech32HRP);
+       ctx.targetAddress = lib.Bech32Helper.addressFromBech32(addressBech32, ctx.info.protocol.bech32HRP);
+    }
 
     // Now it's time to set up an account for this demo. We generate a random seed and set up a hot wallet.
     // We also top up the address by asking funds from the faucet.
-    [ctx.walletAddressHex, ctx.walletAddressBech32, ctx.walletKeyPair] = await setUpHotWallet(ctx.info.protocol.bech32HRP);
+    console.log("Sender Address:");
+    [ctx.walletAddressHex, ctx.walletAddressBech32, ctx.walletKeyPair] = await setUpHotWallet(ctx.info.protocol.bech32HRP, true);
 
     // Fetch outputId with funds to be used as input from the Indexer API
     const indexerPluginClient = new lib.IndexerPluginClient(ctx.client);
@@ -397,7 +411,7 @@ function transferAliasTx(consumedOutput: lib.OutputTypes, consumedOutputId: stri
 // Helper methods for the sake of this example
 
 // Generate a hot wallet from a random key, ask the faucet to top it up
-async function setUpHotWallet(hrp: string) {
+async function setUpHotWallet(hrp: string, fund: boolean = false) {
     // Generate a random seed
     const walletEd25519Seed = new lib.Ed25519Seed(randomBytes(32));
 
@@ -408,8 +422,7 @@ async function setUpHotWallet(hrp: string) {
     const walletSeed = walletEd25519Seed.generateSeedFromPath(path);
     let walletKeyPair = walletSeed.keyPair();
 
-    console.log("Your seed");
-    console.log("Seed", Converter.bytesToHex(walletSeed.toBytes()));
+    console.log("\tSeed", Converter.bytesToHex(walletSeed.toBytes()));
 
     // Get the address for the path seed which is actually the Blake2b.sum256 of the public key
     // display it in both Ed25519 and Bech 32 format
@@ -418,39 +431,47 @@ async function setUpHotWallet(hrp: string) {
     const walletAddressHex = Converter.bytesToHex(walletAddress, true);
 
     let walletAddressBech32 = lib.Bech32Helper.toBech32(lib.ED25519_ADDRESS_TYPE, walletAddress, hrp);
-    console.log("Address Ed25519", walletAddressHex);
-    console.log("Address Bech32", walletAddressBech32);
+    console.log("\tAddress Ed25519", walletAddressHex);
+    console.log("\tAddress Bech32", walletAddressBech32);
 
     // Ask the faucet for funds
-    const requestObj = JSON.stringify({address: walletAddressBech32});
-    let errorMessage, data;
-    try {
-        const response = await fetch(FAUCET, {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          body: requestObj,
-        });
-        if (response.status === 202) {
-          errorMessage = "OK";
-        } else if (response.status === 429) {
-          errorMessage = "Too many requests. Please, try again later.";
-        } else {
-          data = await response.json();
-          errorMessage = data.error.message;
-        }
-      } catch (error) {
-        errorMessage = error;
-      }
-
-    if (errorMessage != "OK"){
-        throw new Error(`Didn't manage to get funds from faucet: ${errorMessage}`);
+     // We also top up the address by asking funds from the faucet.
+     if (fund) {
+        await requestFundsFromFaucet(walletAddressBech32);
     }
+
     return [walletAddressHex, walletAddressBech32, walletKeyPair] as const;
 }
 
+// Requests frunds from the faucet via API
+async function requestFundsFromFaucet(addressBech32: string) {
+    const requestObj = JSON.stringify({ address: addressBech32 });
+    let errorMessage, data;
+    try {
+        const response = await fetch(FAUCET, {
+            method: "POST",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+            },
+            body: requestObj,
+        });
+        if (response.status === 202) {
+            errorMessage = "OK";
+        } else if (response.status === 429) {
+            errorMessage = "Too many requests. Please, try again later.";
+        } else {
+            data = await response.json();
+            errorMessage = data.error.message;
+        }
+    } catch (error) {
+        errorMessage = error;
+    }
+
+    if (errorMessage != "OK") {
+        throw new Error(`Didn't manage to get funds from faucet: ${errorMessage}`);
+    }
+}
 // Use the indexer API to fetch the output sent to the wallet address by the faucet
 async function fetchAndWaitForBasicOutput(addressBech32: string, client: lib.IndexerPluginClient): Promise<string> {
     let outputsResponse: lib.IOutputsResponse = { ledgerIndex: 0, cursor: "", pageSize: "", items: [] };

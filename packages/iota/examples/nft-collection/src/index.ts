@@ -128,7 +128,7 @@ async function run(){
         throw new Error("Not enough funds to mint collection. Request funds from faucet:" + FAUCET);
     }
     console.log("Minting nft collection...");
-    let txPayload2 = mintCollectionNfts("tx2", true, getOutput("tx1CollectionNft"), getOutputId("tx1CollectionNft"), nftCollectionOutputs.outputs, nftCollectionOutputs.totalDeposit, ctx.walletKeyPair, ctx.info);
+    let txPayload2 = mintCollectionNfts("tx2", true, getOutput("tx1CollectionNft"), getOutputId("tx1CollectionNft"), nftCollectionOutputs.outputs, nftCollectionOutputs.totalDeposit, ctx.walletKeyPair);
     ctx.txList.push(txPayload2);
 
     /****************************************************************************************
@@ -180,7 +180,7 @@ async function run(){
         throw new Error("Not enough funds to mint collection. Request funds from faucet:" + FAUCET);
     }
     console.log("New Owner minting nft collection...");
-    let txPayload6 = mintCollectionNfts("tx6", false, getOutput("tx5CollectionNft"), getOutputId("tx5CollectionNft"), tx6NftCollectionOutputs.outputs, tx6NftCollectionOutputs.totalDeposit, receiverKeyPair, ctx.info);
+    let txPayload6 = mintCollectionNfts("tx6", false, getOutput("tx5CollectionNft"), getOutputId("tx5CollectionNft"), tx6NftCollectionOutputs.outputs, tx6NftCollectionOutputs.totalDeposit, receiverKeyPair);
     ctx.txList.push(txPayload6)
     /****************************************************************************************
      * Current output ownership:
@@ -321,7 +321,7 @@ function mintCollectionNft(consumedOutput: lib.OutputTypes, consumedOutputId: st
     return txPayload;
 }
 
-function mintCollectionNfts(txName: string, resolveCollectionNftId: boolean, consumedOutput: lib.OutputTypes, consumedOutputId: string, collectionOutputs: lib.OutputTypes[], totalDeposit: number, signerKeyPair: lib.IKeyPair, nodeInfo: lib.INodeInfo): lib.ITransactionPayload{
+function mintCollectionNfts(txName: string, resolveCollectionNftId: boolean, consumedOutput: lib.OutputTypes, consumedOutputId: string, collectionOutputs: lib.OutputTypes[], totalDeposit: number, signerKeyPair: lib.IKeyPair): lib.ITransactionPayload{
     // Prepare inputs to the tx
     const input = lib.TransactionHelper.inputFromOutputId(consumedOutputId);
 
