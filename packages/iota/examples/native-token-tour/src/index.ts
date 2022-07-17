@@ -75,18 +75,30 @@ async function run() {
     ctx.client = new lib.SingleNodeClient(API_ENDPOINT);
     // fetch basic info from node
     ctx.info = await ctx.client.info();
-    // calculate networkId
+    // Calculate networkId
     ctx.networkId = lib.TransactionHelper.networkIdFromNetworkName(ctx.info.protocol.networkName);
 
-    // ask for the target address
-    const targetAddressBech32 = await askQuestion("Target address? (Bech32 encoded): ");
+    // Ask for the target address
+    const targetAddressBech32 = await askQuestion("Target address (Bech32 encoded) where to mint the tokens or leave empty and we will generate an address for you: ");
 
-    // parse bech32 encoded address into iota address
-    ctx.targetAddress = lib.Bech32Helper.addressFromBech32(targetAddressBech32, ctx.info.protocol.bech32HRP);
+    // Parse bech32 encoded address into iota address
+    try {
+         const tmp = lib.Bech32Helper.fromBech32(targetAddressBech32, ctx.info.protocol.bech32HRP);
+         if (!tmp){
+             throw new Error("Can't decode target address.");
+         }
+        // Parse bech32 encoded address into iota address
+        ctx.targetAddress = lib.Bech32Helper.addressFromBech32(targetAddressBech32, ctx.info.protocol.bech32HRP);
+    } catch (error) {
+        // If target address is not provided we are going to set up an account for this demo.
+        console.log("Target Address:");
+        const [addressHex, addressBech32, addressKeyPair] = await setUpHotWallet(ctx.info.protocol.bech32HRP);
+        ctx.targetAddress = lib.Bech32Helper.addressFromBech32(addressBech32, ctx.info.protocol.bech32HRP);
+    }
 
     // Now it's time to set up an account for this demo. We generate a random seed and set up a hot wallet called "Main"
     console.log("Setting up Main wallet...");
-    [ctx.walletAddressHex, ctx.walletAddressBech32, ctx.walletKeyPair] = await setUpHotWallet(ctx.info.protocol.bech32HRP, "Main");
+    [ctx.walletAddressHex, ctx.walletAddressBech32, ctx.walletKeyPair] = await setUpHotWallet(ctx.info.protocol.bech32HRP);
 
     // We also top up the address by asking funds from the faucet.
     await requestFundsFromFaucet(ctx.walletAddressBech32);
@@ -148,7 +160,7 @@ async function run() {
         }
     };
 
-    [receiverWallet.hex, receiverWallet.bech32, receiverWallet.keyPair] = await setUpHotWallet(ctx.info.protocol.bech32HRP, "Receiver");
+    [receiverWallet.hex, receiverWallet.bech32, receiverWallet.keyPair] = await setUpHotWallet(ctx.info.protocol.bech32HRP);
 
     // We also top up the receiver address by asking funds from the faucet.
     await requestFundsFromFaucet(receiverWallet.bech32);
@@ -1513,7 +1525,7 @@ async function requestFundsFromFaucet(addressBech32: string) {
 }
 
 // Generate a hot wallet from a random key
-async function setUpHotWallet(hrp: string, name: string) {
+async function setUpHotWallet(hrp: string) {
     // Generate a random seed
     const walletEd25519Seed = new lib.Ed25519Seed(randomBytes(32));
 
@@ -1524,7 +1536,7 @@ async function setUpHotWallet(hrp: string, name: string) {
     const walletSeed = walletEd25519Seed.generateSeedFromPath(path);
     let walletKeyPair = walletSeed.keyPair();
 
-    console.log(`Seed for hot wallet ${name}: ${Converter.bytesToHex(walletSeed.toBytes())}`);
+    console.log(`\tSeed for hot wallet: ${Converter.bytesToHex(walletSeed.toBytes())}`);
 
     // Get the address for the path seed which is actually the Blake2b.sum256 of the public key
     // display it in both Ed25519 and Bech 32 format
