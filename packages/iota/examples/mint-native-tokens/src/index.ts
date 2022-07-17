@@ -51,27 +51,26 @@ async function run() {
     ctx.txList = [];
     // Neon localPoW is blazingly fast, but you need rust toolchain to build
     ctx.client = new lib.SingleNodeClient(API_ENDPOINT);
-    // fetch basic info from node
+    // Fetch basic info from node
     ctx.info = await ctx.client.info();
     ctx.networkId = lib.TransactionHelper.networkIdFromNetworkName(ctx.info.protocol.networkName);
     
-    // ask for the target address
-    const targetAddressBech32 = await askQuestion("Target address (Bech32 encoded) where to mint the tokens or leave empty and we will generate an address for you?: ");
+    // Ask for the target address
+    const targetAddressBech32 = await askQuestion("Target address (Bech32 encoded) where to mint the tokens or leave empty and we will generate an address for you: ");
 
-    // parse bech32 encoded address into iota address
+    // Parse bech32 encoded address into iota address
     try {
         const tmp = lib.Bech32Helper.fromBech32(targetAddressBech32, ctx.info.protocol.bech32HRP);
         if (!tmp){
-            throw new Error("Can't decode target address");
+            throw new Error("Can't decode target address.");
         }
-         // parse bech32 encoded address into iota address
+        // Parse bech32 encoded address into iota address
         ctx.targetAddress = lib.Bech32Helper.addressFromBech32(targetAddressBech32, ctx.info.protocol.bech32HRP);
     } catch (error) {
-        
         // If target address is not provided we are goping to set up an account for this demo.
-       console.log("Target Address:");
-       const [addressHex, addressBech32, addressKeyPair] = await setUpHotWallet(ctx.info.protocol.bech32HRP);
-       ctx.targetAddress = lib.Bech32Helper.addressFromBech32(addressBech32, ctx.info.protocol.bech32HRP);
+        console.log("Target Address:");
+        const [addressHex, addressBech32, addressKeyPair] = await setUpHotWallet(ctx.info.protocol.bech32HRP);
+        ctx.targetAddress = lib.Bech32Helper.addressFromBech32(addressBech32, ctx.info.protocol.bech32HRP);
     }
 
     // Now it's time to set up an account for this demo. We generate a random seed and set up a hot wallet.
