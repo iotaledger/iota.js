@@ -1,7 +1,7 @@
 {
     "name": "@iota/iota.js",
     "description": "IOTA JavaScript Library",
-    "version": "1.9.0-stardust.20",
+    "version": "1.9.0-stardust.21",
     "keywords": [
         "iota",
         "client"
@@ -16,8 +16,8 @@
     },
     "license": "Apache-2.0",
     "dependencies": {
-        "@iota/crypto.js": "^1.9.0-stardust.5",
-        "@iota/util.js": "^1.9.0-stardust.4",
+        "@iota/crypto.js": "^1.9.0-stardust.6",
+        "@iota/util.js": "^1.9.0-stardust.5",
         "big-integer": "^1.6.51",
         "node-fetch": "2.6.7"
     },
@@ -32,7 +32,7 @@
         "test-run": "jest",
         "test": "run-s test-clean test-lint test-run",
         "package-clean": "rimraf ./dist/*",
-        "package-esm": "copyfiles -u 1 es/**/* dist/esm",
+        "package-esm": "copyfiles -u 1 \"es/**/*\" dist/esm",
         "package-esm-rename": "node esm-modules.js ./dist/esm",
         "package-umd": "rollup --config rollup.config.js",
         "package-umd-min": "rollup --config rollup.config.js --environment MINIFY:true",

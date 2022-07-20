@@ -9,10 +9,6 @@ Class to help with base58 Encoding/Decoding.
 - [decode](Base58.md#decode)
 - [encode](Base58.md#encode)
 
-### Constructors
-
-- [constructor](Base58.md#constructor)
-
 ## Methods
 
 ### decode
@@ -21,7 +17,9 @@ Class to help with base58 Encoding/Decoding.
 
 Convert the base 58 string to a byte array.
 
-**`throws`** If the input string contains a character not in the Base58 alphabet.
+**`Throws`**
+
+If the input string contains a character not in the Base58 alphabet.
 
 #### Parameters
 
@@ -54,9 +52,3 @@ Convert a byte array to base 58.
 `string`
 
 The data as base58 string.
-
-## Constructors
-
-### constructor
-
-• **new Base58**()

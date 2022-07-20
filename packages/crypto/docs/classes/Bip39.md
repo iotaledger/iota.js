@@ -13,10 +13,6 @@ Implementation of Bip39 for mnemonic generation.
 - [mnemonicToEntropy](Bip39.md#mnemonictoentropy)
 - [entropyChecksumBits](Bip39.md#entropychecksumbits)
 
-### Constructors
-
-- [constructor](Bip39.md#constructor)
-
 ## Methods
 
 ### setWordList
@@ -138,9 +134,3 @@ Calculate the entropy checksum.
 `string`
 
 The checksum.
-
-## Constructors
-
-### constructor
-
-• **new Bip39**()

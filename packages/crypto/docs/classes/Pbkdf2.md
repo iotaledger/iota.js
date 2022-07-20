@@ -9,10 +9,6 @@ Implementation of the password based key derivation function 2.
 - [sha256](Pbkdf2.md#sha256)
 - [sha512](Pbkdf2.md#sha512)
 
-### Constructors
-
-- [constructor](Pbkdf2.md#constructor)
-
 ## Methods
 
 ### sha256
@@ -58,9 +54,3 @@ Derive a key from the parameters using Sha512.
 `Uint8Array`
 
 The derived key.
-
-## Constructors
-
-### constructor
-
-• **new Pbkdf2**()

@@ -14,10 +14,6 @@ Helper methods for bigints.
 - [write32](BigIntHelper.md#write32)
 - [random](BigIntHelper.md#random)
 
-### Constructors
-
-- [constructor](BigIntHelper.md#constructor)
-
 ## Methods
 
 ### read3
@@ -161,9 +157,3 @@ Generate a random bigint.
 `BigInteger`
 
 The bigint.
-
-## Constructors
-
-### constructor
-
-• **new BigIntHelper**()

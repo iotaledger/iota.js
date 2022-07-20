@@ -8,10 +8,6 @@ Class to help with random generation.
 
 - [generate](RandomHelper.md#generate)
 
-### Constructors
-
-- [constructor](RandomHelper.md#constructor)
-
 ## Methods
 
 ### generate
@@ -31,9 +27,3 @@ Generate a new random array.
 `Uint8Array`
 
 The random array.
-
-## Constructors
-
-### constructor
-
-• **new RandomHelper**()
