@@ -15,10 +15,6 @@ Based on reference implementation https://github.com/sipa/bech32/blob/master/ref
 - [from5Bit](Bech32.md#from5bit)
 - [matches](Bech32.md#matches)
 
-### Constructors
-
-- [constructor](Bech32.md#constructor)
-
 ## Methods
 
 ### encode
@@ -65,7 +61,7 @@ ___
 
 ### decode
 
-▸ `Static` **decode**(`bech`): `undefined` \| {}
+▸ `Static` **decode**(`bech`): `undefined` \| { `humanReadablePart`: `string` ; `data`: `Uint8Array`  }
 
 Decode a bech32 string.
 
@@ -77,7 +73,7 @@ Decode a bech32 string.
 
 #### Returns
 
-`undefined` \| {}
+`undefined` \| { `humanReadablePart`: `string` ; `data`: `Uint8Array`  }
 
 The decoded data or undefined if it could not be decoded.
 
@@ -85,7 +81,7 @@ ___
 
 ### decodeTo5BitArray
 
-▸ `Static` **decodeTo5BitArray**(`bech`): `undefined` \| {}
+▸ `Static` **decodeTo5BitArray**(`bech`): `undefined` \| { `humanReadablePart`: `string` ; `data`: `Uint8Array`  }
 
 Decode a bech32 string to 5 bit array.
 
@@ -97,7 +93,7 @@ Decode a bech32 string to 5 bit array.
 
 #### Returns
 
-`undefined` \| {}
+`undefined` \| { `humanReadablePart`: `string` ; `data`: `Uint8Array`  }
 
 The decoded data or undefined if it could not be decoded.
 
@@ -161,9 +157,3 @@ Does the given string match the bech32 pattern.
 `boolean`
 
 True if this is potentially a match.
-
-## Constructors
-
-### constructor
-
-• **new Bech32**()

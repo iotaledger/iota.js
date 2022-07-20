@@ -53,7 +53,9 @@ ___
 
 Update the hash with the data.
 
-**`throws`** Error if the hash has already been finalized.
+**`Throws`**
+
+Error if the hash has already been finalized.
 
 #### Parameters
 

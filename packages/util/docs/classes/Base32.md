@@ -9,10 +9,6 @@ Class to help with base32 Encoding/Decoding using RFC4648.
 - [decode](Base32.md#decode)
 - [encode](Base32.md#encode)
 
-### Constructors
-
-- [constructor](Base32.md#constructor)
-
 ## Methods
 
 ### decode
@@ -21,7 +17,9 @@ Class to help with base32 Encoding/Decoding using RFC4648.
 
 Convert the base 32 string to a byte array.
 
-**`throws`** If the input string contains a character not in the Base32 alphabet.
+**`Throws`**
+
+If the input string contains a character not in the Base32 alphabet.
 
 #### Parameters
 
@@ -54,9 +52,3 @@ Convert a byte array to base 32.
 `string`
 
 The data as base32 string.
-
-## Constructors
-
-### constructor
-
-• **new Base32**()

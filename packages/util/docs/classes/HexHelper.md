@@ -16,10 +16,6 @@ Helper methods for hex conversions.
 - [addPrefix](HexHelper.md#addprefix)
 - [hasPrefix](HexHelper.md#hasprefix)
 
-### Constructors
-
-- [constructor](HexHelper.md#constructor)
-
 ## Properties
 
 ### BIG\_INT\_MAX\_256\_BIT
@@ -127,9 +123,3 @@ Does the hex string have the prefix.
 `boolean`
 
 True if the hex string has the prefix.
-
-## Constructors
-
-### constructor
-
-• **new HexHelper**()

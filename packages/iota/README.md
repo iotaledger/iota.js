@@ -9,7 +9,7 @@ Runs in both NodeJS and Browser environments.
 ## Prerequisites
 
 ```shell
-npm install @iota/iota.js@1.9.0-stardust.20
+npm install @iota/iota.js@next
 ```
 
 ## Example
