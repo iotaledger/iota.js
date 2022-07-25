@@ -45,7 +45,7 @@ async function run() {
     const genesisEd25519Address = new Ed25519Address(genesisWalletKeyPair.publicKey);
     const genesisWalletAddress = genesisEd25519Address.toAddress();
     const genesisWalletAddressHex = Converter.bytesToHex(genesisWalletAddress, true);
-    const genesisWalletAddressBech32 = Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, genesisWalletAddress, nodeInfo.protocol.bech32HRP);
+    const genesisWalletAddressBech32 = Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, genesisWalletAddress, nodeInfo.protocol.bech32Hrp);
 
     console.log("Genesis");
     console.log("\tSeed", Converter.bytesToHex(genesisWalletSeed.toBytes()));
@@ -70,7 +70,7 @@ async function run() {
     console.log(`\tAddress Ed25519 ${walletPath.toString()}:`, newAddressHex);
     console.log(
         `\tAddress Bech32 ${walletPath.toString()}:`,
-        Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, newAddress, nodeInfo.protocol.bech32HRP)
+        Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, newAddress, nodeInfo.protocol.bech32Hrp)
     );
 
     //Request funds from faucet

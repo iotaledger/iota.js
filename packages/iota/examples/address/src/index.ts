@@ -51,7 +51,7 @@ async function run() {
         console.log("\tAddress Ed25519", Converter.bytesToHex(indexPublicKeyAddress, true));
         console.log(
             "\tAddress Bech32",
-            Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, indexPublicKeyAddress, info.protocol.bech32HRP)
+            Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, indexPublicKeyAddress, info.protocol.bech32Hrp)
         );
         console.log();
     }
@@ -88,7 +88,7 @@ async function run() {
         console.log("\tAddress Ed25519", Converter.bytesToHex(indexPublicKeyAddress, true));
         console.log(
             "\tAddress Bech32",
-            Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, indexPublicKeyAddress, info.protocol.bech32HRP)
+            Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, indexPublicKeyAddress, info.protocol.bech32Hrp)
         );
         console.log();
 

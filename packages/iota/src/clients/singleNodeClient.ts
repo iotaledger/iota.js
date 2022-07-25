@@ -99,12 +99,12 @@ export class SingleNodeClient implements IClient {
         /**
          * The human readable part of bech32 addresses.
          */
-        bech32HRP: string;
+        bech32Hrp: string;
 
         /**
          * The minimum score required for PoW.
          */
-        minPoWScore: number;
+        minPowScore: number;
     };
 
     /**
@@ -227,7 +227,7 @@ export class SingleNodeClient implements IClient {
     ): Promise<string> {
         blockPartial.protocolVersion = this._protocolVersion;
 
-        let minPoWScore = 0;
+        let minPowScore = 0;
         if (this._powProvider) {
             // If there is a local pow provider and no networkId or parent block ids
             // we must populate them, so that the they are not filled in by the
@@ -235,7 +235,7 @@ export class SingleNodeClient implements IClient {
             if (this._protocol === undefined) {
                 await this.populateProtocolInfoCache();
             }
-            minPoWScore = this._protocol?.minPoWScore ?? 0;
+            minPowScore = this._protocol?.minPowScore ?? 0;
 
             if (!blockPartial.parents || blockPartial.parents.length === 0) {
                 const tips = await this.tips();
@@ -261,7 +261,7 @@ export class SingleNodeClient implements IClient {
         }
 
         if (this._powProvider) {
-            const nonce = await this._powProvider.pow(blockBytes, minPoWScore);
+            const nonce = await this._powProvider.pow(blockBytes, minPowScore);
             block.nonce = nonce.toString();
         }
 
@@ -288,7 +288,7 @@ export class SingleNodeClient implements IClient {
             if (this._protocol === undefined) {
                 await this.populateProtocolInfoCache();
             }
-            const nonce = await this._powProvider.pow(block, this._protocol?.minPoWScore ?? 0);
+            const nonce = await this._powProvider.pow(block, this._protocol?.minPowScore ?? 0);
             BigIntHelper.write8(bigInt(nonce), block, block.length - 8);
         }
 
@@ -470,8 +470,8 @@ export class SingleNodeClient implements IClient {
     public async protocolInfo(): Promise<{
         networkName: string;
         networkId: string;
-        bech32HRP: string;
-        minPoWScore: number;
+        bech32Hrp: string;
+        minPowScore: number;
     }> {
         if (this._protocol === undefined) {
             await this.populateProtocolInfoCache();
@@ -519,8 +519,8 @@ export class SingleNodeClient implements IClient {
             this._protocol = {
                 networkName: info.protocol.networkName,
                 networkId: BigIntHelper.read8(networkIdBytes, 0).toString(),
-                bech32HRP: info.protocol.bech32HRP,
-                minPoWScore: info.protocol.minPoWScore
+                bech32Hrp: info.protocol.bech32Hrp,
+                minPowScore: info.protocol.minPowScore
             };
         }
     }

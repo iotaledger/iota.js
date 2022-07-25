@@ -14,7 +14,7 @@ export interface INodeInfoProtocol {
     /**
      * The human readable part of bech32 addresses.
      */
-    bech32HRP: string;
+    bech32Hrp: string;
 
     /**
      * The token supply.
@@ -29,7 +29,7 @@ export interface INodeInfoProtocol {
     /**
      * The minimum score required for PoW.
      */
-    minPoWScore: number;
+    minPowScore: number;
 
     /**
      * The rent structure used by given node/network.

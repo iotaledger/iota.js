@@ -655,13 +655,13 @@ ___
 
 ### protocolInfo
 
-▸ **protocolInfo**(): `Promise`<{ `networkName`: `string` ; `networkId`: `string` ; `bech32HRP`: `string` ; `minPoWScore`: `number`  }\>
+▸ **protocolInfo**(): `Promise`<{ `networkName`: `string` ; `networkId`: `string` ; `bech32Hrp`: `string` ; `minPowScore`: `number`  }\>
 
 Get the protocol info from the node.
 
 #### Returns
 
-`Promise`<{ `networkName`: `string` ; `networkId`: `string` ; `bech32HRP`: `string` ; `minPoWScore`: `number`  }\>
+`Promise`<{ `networkName`: `string` ; `networkId`: `string` ; `bech32Hrp`: `string` ; `minPowScore`: `number`  }\>
 
 The protocol info.
 

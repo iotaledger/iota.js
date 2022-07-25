@@ -103,7 +103,7 @@ export async function getUnspentAddressesWithAddressGenerator<T>(
 
         const ed25519Address = new Ed25519Address(addressSeed.keyPair().publicKey);
         const addressBytes = ed25519Address.toAddress();
-        const addressBech32 = Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, addressBytes, protocolInfo.bech32HRP);
+        const addressBech32 = Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, addressBytes, protocolInfo.bech32Hrp);
 
         const balance = await addressBalance(localClient, addressBech32);
 

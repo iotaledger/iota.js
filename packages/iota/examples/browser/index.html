@@ -112,7 +112,7 @@
             const genesisEd25519Address = new Iota.Ed25519Address(genesisWalletKeyPair.publicKey);
             const genesisWalletAddress = genesisEd25519Address.toAddress();
             const genesisWalletAddressHex = IotaUtil.Converter.bytesToHex(genesisWalletAddress, true);
-            const genesisWalletAddressBech32 = Iota.Bech32Helper.toBech32(Iota.ED25519_ADDRESS_TYPE, genesisWalletAddress, nodeInfo.protocol.bech32HRP);
+            const genesisWalletAddressBech32 = Iota.Bech32Helper.toBech32(Iota.ED25519_ADDRESS_TYPE, genesisWalletAddress, nodeInfo.protocol.bech32Hrp);
             consoleLog("\tAddress Ed25519", genesisWalletAddressHex);
             consoleLog("\tAddress Bech32", genesisWalletAddressBech32);
 
@@ -125,7 +125,7 @@
             const walletEd25519Address = new Iota.Ed25519Address(walletAddressSeed.keyPair().publicKey);
             const newAddress = walletEd25519Address.toAddress();
             const newAddressHex = IotaUtil.Converter.bytesToHex(newAddress, true);
-            const newAddressBech32 = Iota.Bech32Helper.toBech32(Iota.ED25519_ADDRESS_TYPE, newAddress, nodeInfo.protocol.bech32HRP);
+            const newAddressBech32 = Iota.Bech32Helper.toBech32(Iota.ED25519_ADDRESS_TYPE, newAddress, nodeInfo.protocol.bech32Hrp);
 
             consoleLog("Wallet 1");
             consoleLog("\tSeed:", IotaUtil.Converter.bytesToHex(walletSeed.toBytes()));

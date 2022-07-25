@@ -131,7 +131,7 @@ export async function sendMultiple(
     const protocolInfo = await localClient.protocolInfo();
 
     const hexOutputs = outputs.map(output => {
-        const bech32Details = Bech32Helper.fromBech32(output.addressBech32, protocolInfo.bech32HRP);
+        const bech32Details = Bech32Helper.fromBech32(output.addressBech32, protocolInfo.bech32Hrp);
         if (!bech32Details) {
             throw new Error("Unable to decode bech32 address");
         }
@@ -308,7 +308,7 @@ export async function calculateInputs<T>(
 
         const indexerPlugin = new IndexerPluginClient(client);
         const addressOutputIds = await indexerPlugin.outputs(
-            { addressBech32: Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, addressBytes, protocolInfo.bech32HRP) });
+            { addressBech32: Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, addressBytes, protocolInfo.bech32Hrp) });
 
         if (addressOutputIds.items.length === 0) {
             zeroBalance++;

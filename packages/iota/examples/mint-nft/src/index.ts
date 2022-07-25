@@ -53,22 +53,22 @@ async function run() {
     // Parse bech32 encoded address into iota address
     let targetAddress: AddressTypes = {} as AddressTypes;
     try {
-        const tmp = Bech32Helper.fromBech32(targetAddressBech32, nodeInfo.protocol.bech32HRP);
+        const tmp = Bech32Helper.fromBech32(targetAddressBech32, nodeInfo.protocol.bech32Hrp);
         if (!tmp){
             throw new Error("Can't decode target address.");
         }
-        targetAddress = Bech32Helper.addressFromBech32(targetAddressBech32, nodeInfo.protocol.bech32HRP);
+        targetAddress = Bech32Helper.addressFromBech32(targetAddressBech32, nodeInfo.protocol.bech32Hrp);
     } catch (error) {
         
         // If target address is not provided we are goping to set up an account for this demo.
         console.log("Target Address:");
-        const [addressHex, addressBech32, addressKeyPair] = await setUpHotWallet(nodeInfo.protocol.bech32HRP);
-        targetAddress = Bech32Helper.addressFromBech32(addressBech32, nodeInfo.protocol.bech32HRP);
+        const [addressHex, addressBech32, addressKeyPair] = await setUpHotWallet(nodeInfo.protocol.bech32Hrp);
+        targetAddress = Bech32Helper.addressFromBech32(addressBech32, nodeInfo.protocol.bech32Hrp);
     }
 
     // Now it's time to set up an account for this demo which we are going to use to mint nft and send it to the target address.
     console.log("Sender Address:")
-    const [walletAddressHex, walletAddressBech32, walletKeyPair] = await setUpHotWallet(nodeInfo.protocol.bech32HRP, true);
+    const [walletAddressHex, walletAddressBech32, walletKeyPair] = await setUpHotWallet(nodeInfo.protocol.bech32Hrp, true);
    
     // Fetch outputId with funds to be used as input
     const indexerPluginClient = new IndexerPluginClient(client);
