@@ -22,6 +22,9 @@ module.exports = {
                 "how_tos/transaction",
                 "how_tos/pow",
                 "how_tos/browser",
+                "how_tos/mint_nft",
+                "how_tos/mint_native_tokens",
+                "how_tos/native_token_tour",
             ],
         },
         {
