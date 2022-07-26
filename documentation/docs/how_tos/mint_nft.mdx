@@ -7,10 +7,11 @@ keywords:
 - nft
 - min
 ---
+
 import CodeBlock from '@theme/CodeBlock';
 import ExampleCode from '!!raw-loader!./../../../packages/iota/examples/mint-nft/src/index';
 
-# Mint NFT
+# Mint an NFT
 
 ## Pre-requirements
 
@@ -18,11 +19,44 @@ Before you can mint an NFT, you will need to:
 
 * [Connect to a Node](simple.mdx).
 
-## Mint NFT
+## Mint an NFT
 
-You can add peers using the
-[SingleNodeClient.peerAdd(multiAddress, alias?)](../references/client/classes/SingleNodeClient.md#peeradd) function.
-You will need to provide a `multiAddress` and, optionally, and alias.
+This [example](https://github.com/iotaledger/iota.js/tree/feat/stardust/packages/iota/examples/mint-nft) will connect to
+a node you defined as the `API_ENDPOINT` constant. Afterwards, the example will request a Bech32 address, if you don't
+have one the example will take care of generating it.
+
+### Create a Hot Wallet
+
+The example will later create a hot wallet and request funds from the
+[faucet](https://faucet.alphanet.iotaledger.net/api/enqueue) defined as the `FAUCET` constant.
+
+### Create the Output
+
+Once the generated wallet has outputs to mint the NFT, it will define and
+[INftOutput](../references/client/interfaces/INftOutput) object. This object.  The `amount` property is set to `0`, as
+you need to calculate the required storage deposit using the
+[TransactionHelper.getStorageDeposit(output, rentStructure)](../references/client/classes/TransactionHelper#getstoragedeposit)
+function, which takes any of the allowed [OutputTypes](../references/client/api_ref#outputtypes).
+
+### Create the Transaction Essence
+
+Once you have created the [output](#create-the-output), you should create the
+[ITransactionEssence](../interfaces/ITransactionEssence), which will include the `output`. The example will then use the
+`ITransactionEssence` to generate the `essenceHash` using the
+[TransactionHelper.getTransactionEssenceHash(essence)](../references/client/classes/TransactionHelper#gettransactionessencehash)
+function.
+
+### Create the Transaction Payload
+
+With the [created the transaction essence](#create-the-transaction-essence), you are now able to create the
+[ISignatureUnlock](../references/client/interfaces/ISignatureUnlock) which will be used to create the
+[ITransactionPayload](../references/client/interfaces/ITransactionPayload).
+
+### Submit the Block
+
+Once you have [created the transaction payload](#create-the-transaction-payload), you can create the
+[IBlock](../references/client/interfaces/IBlock) and submit it using the
+[SingleNodeClient.blockSubmit(blockPartial)](references/client/classes/SingleNodeClient#blocksubmit) function.
 
 ## Example Code
 
