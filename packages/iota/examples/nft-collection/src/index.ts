@@ -70,8 +70,8 @@ async function run(){
 
     // Now it's time to set up an account for this demo. We generate a random seed and set up a hot wallet called "Main"
     console.log("Setting up Main wallet...");
-    [ctx.walletAddressHex, ctx.walletAddressBech32, ctx.walletKeyPair] = await setUpHotWallet(ctx.info.protocol.bech32HRP, "Main");
-    ctx.walletAddress = lib.Bech32Helper.addressFromBech32(ctx.walletAddressBech32, ctx.info.protocol.bech32HRP);
+    [ctx.walletAddressHex, ctx.walletAddressBech32, ctx.walletKeyPair] = await setUpHotWallet(ctx.info.protocol.bech32Hrp, "Main");
+    ctx.walletAddress = lib.Bech32Helper.addressFromBech32(ctx.walletAddressBech32, ctx.info.protocol.bech32Hrp);
     // We also top up the address by asking funds from the faucet.
     await requestFundsFromFaucet(ctx.walletAddressBech32);
 
@@ -91,8 +91,8 @@ async function run(){
  
     //target addres
     console.log("Setting up Receiver wallet...");
-    const [receiverAddressHex, receiverAddressBech32, receiverKeyPair] = await setUpHotWallet(ctx.info.protocol.bech32HRP, "Receiver");
-    const receiverAddress = lib.Bech32Helper.addressFromBech32(receiverAddressBech32, ctx.info.protocol.bech32HRP);
+    const [receiverAddressHex, receiverAddressBech32, receiverKeyPair] = await setUpHotWallet(ctx.info.protocol.bech32Hrp, "Receiver");
+    const receiverAddress = lib.Bech32Helper.addressFromBech32(receiverAddressBech32, ctx.info.protocol.bech32Hrp);
 
     /****************************************************************************************
      * Current output ownership:
@@ -215,7 +215,7 @@ async function run(){
 
     console.log("Chaining together transactions via blocks...");
     // Finally, time to prepare the three blocks, and chain them together via `parents`
-    let blocks: lib.IBlock[] = await chainTrasactionsViaBlocks(ctx.client, ctx.txList, ctx.info.protocol.minPoWScore);
+    let blocks: lib.IBlock[] = await chainTrasactionsViaBlocks(ctx.client, ctx.txList, ctx.info.protocol.minPowScore);
 
     // send the blocks to the network
     // We calculated pow by hand, so we don't define a localPow provider for the client so it doesn't redo the pow again.
@@ -790,7 +790,7 @@ function createNftCollectionOutputs(issuerAddress: lib.INftAddress, targetAddres
 // To calculate blockId, we need to set the parents and perform pow to get the nonce.
 //
 // The first block will have parents fetched from the tangle. The subsequent blocks refernce always the previous block as parent.
-async function chainTrasactionsViaBlocks(client: lib.SingleNodeClient, txs: Array<lib.ITransactionPayload>, minPoWScore: number): Promise<Array<lib.IBlock>> {
+async function chainTrasactionsViaBlocks(client: lib.SingleNodeClient, txs: Array<lib.ITransactionPayload>, minPowScore: number): Promise<Array<lib.IBlock>> {
     if (txs.length === 0) {
         throw new Error("can't create blocks from empty transaction payload list");
     }
@@ -820,7 +820,7 @@ async function chainTrasactionsViaBlocks(client: lib.SingleNodeClient, txs: Arra
 
         // Calculate Pow
         console.log(`Calculating PoW for block ${i+1}...`)
-        const blockNonce = await caluclateNonce(block, minPoWScore);
+        const blockNonce = await caluclateNonce(block, minPowScore);
 
         // Update nonce field of the block
         block.nonce = blockNonce;
@@ -883,7 +883,7 @@ function getNetworkId(): string {
  * UTILS
  ***********************************************************************************************************************/
 // Performs PoW on a block to calculate nonce. Uses NeonPowProvider.
-async function caluclateNonce(block: lib.IBlock, minPoWScore: number): Promise<string> {
+async function caluclateNonce(block: lib.IBlock, minPowScore: number): Promise<string> {
     const writeStream = new WriteStream();
     lib.serializeBlock(writeStream, block);
     const blockBytes = writeStream.finalBytes();
@@ -895,7 +895,7 @@ async function caluclateNonce(block: lib.IBlock, minPoWScore: number): Promise<s
     }
 
     const powProvider = new NeonPowProvider();
-    const nonce = await powProvider.pow(blockBytes, minPoWScore);
+    const nonce = await powProvider.pow(blockBytes, minPowScore);
     return nonce.toString();
 }
 

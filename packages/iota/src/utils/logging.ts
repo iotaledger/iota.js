@@ -106,10 +106,10 @@ export function logInfo(prefix: string, info: INodeInfo): void {
 
     logger(`${prefix}\tProtocol`);
     logger(`${prefix}\t\tNetwork Name:`, info.protocol.networkName);
-    logger(`${prefix}\t\tBech32 HRP:`, info.protocol.bech32HRP);
+    logger(`${prefix}\t\tBech32 HRP:`, info.protocol.bech32Hrp);
     logger(`${prefix}\t\tToken supply:`, info.protocol.tokenSupply);
     logger(`${prefix}\t\tProtocol version:`, info.protocol.protocolVersion);
-    logger(`${prefix}\t\tMin PoW Score:`, info.protocol.minPoWScore);
+    logger(`${prefix}\t\tMin PoW Score:`, info.protocol.minPowScore);
     logger(`${prefix}\t\tRent`);
     logger(`${prefix}\t\t\tVByte Cost:`, info.protocol.rentStructure.vByteCost);
     logger(`${prefix}\t\t\tVByte Factor Data:`, info.protocol.rentStructure.vByteFactorData);

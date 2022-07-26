@@ -58,7 +58,7 @@ async function run() {
     const genesisEd25519Address = new Ed25519Address(genesisWalletKeyPair.publicKey);
     const genesisWalletAddress = genesisEd25519Address.toAddress();
     const genesisWalletAddressHex = Converter.bytesToHex(genesisWalletAddress, true);
-    const genesisWalletAddressBech32 = Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, genesisWalletAddress, nodeInfo.protocol.bech32HRP);
+    const genesisWalletAddressBech32 = Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, genesisWalletAddress, nodeInfo.protocol.bech32Hrp);
 
     console.log("Genesis");
     console.log("\tSeed", Converter.bytesToHex(genesisWalletSeed.toBytes()));
@@ -82,7 +82,7 @@ async function run() {
 
     const newAddress = walletEd25519Address.toAddress();
     const newAddressHex = Converter.bytesToHex(newAddress, true);
-    const newAddressBech32 = Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, newAddress, nodeInfo.protocol.bech32HRP);
+    const newAddressBech32 = Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, newAddress, nodeInfo.protocol.bech32Hrp);
     
     console.log("Wallet 1");
     console.log("\tSeed:", Converter.bytesToHex(walletSeed.toBytes()));

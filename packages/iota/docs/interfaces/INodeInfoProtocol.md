@@ -7,10 +7,10 @@ The Protocol Info.
 ### Properties
 
 - [networkName](INodeInfoProtocol.md#networkname)
-- [bech32HRP](INodeInfoProtocol.md#bech32hrp)
+- [bech32Hrp](INodeInfoProtocol.md#bech32hrp)
 - [tokenSupply](INodeInfoProtocol.md#tokensupply)
 - [protocolVersion](INodeInfoProtocol.md#protocolversion)
-- [minPoWScore](INodeInfoProtocol.md#minpowscore)
+- [minPowScore](INodeInfoProtocol.md#minpowscore)
 - [rentStructure](INodeInfoProtocol.md#rentstructure)
 
 ## Properties
@@ -23,9 +23,9 @@ The human friendly name of the network on which the node operates on.
 
 ___
 
-### bech32HRP
+### bech32Hrp
 
-• **bech32HRP**: `string`
+• **bech32Hrp**: `string`
 
 The human readable part of bech32 addresses.
 
@@ -47,9 +47,9 @@ The protocol version.
 
 ___
 
-### minPoWScore
+### minPowScore
 
-• **minPoWScore**: `number`
+• **minPowScore**: `number`
 
 The minimum score required for PoW.
 
