@@ -41,7 +41,7 @@ function, which takes any of the allowed [OutputTypes](../references/client/api_
 ### Create the Transaction Essence
 
 Once you have created the [output](#create-the-output), you should create the
-[ITransactionEssence](../interfaces/ITransactionEssence), which will include the `output`. The example will then use the
+[ITransactionEssence](../references/client/interfaces/ITransactionEssence), which will include the `output`. The example will then use the
 `ITransactionEssence` to generate the `essenceHash` using the
 [TransactionHelper.getTransactionEssenceHash(essence)](../references/client/classes/TransactionHelper#gettransactionessencehash)
 function.
@@ -56,7 +56,7 @@ With the [created the transaction essence](#create-the-transaction-essence), you
 
 Once you have [created the transaction payload](#create-the-transaction-payload), you can create the
 [IBlock](../references/client/interfaces/IBlock) and submit it using the
-[SingleNodeClient.blockSubmit(blockPartial)](references/client/classes/SingleNodeClient#blocksubmit) function.
+[SingleNodeClient.blockSubmit(blockPartial)](../references/client/classes/SingleNodeClient#blocksubmit) function.
 
 ## Example Code
 
