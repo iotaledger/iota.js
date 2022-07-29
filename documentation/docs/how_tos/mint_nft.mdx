@@ -32,9 +32,9 @@ The example will later create a hot wallet and request funds from the
 
 ### Create the Output
 
-Once the generated wallet has outputs to mint the NFT, it will define and
-[INftOutput](../references/client/interfaces/INftOutput) object. This object.  The `amount` property is set to `0`, as
-you need to calculate the required storage deposit using the
+Once the generated wallet has outputs to mint the NFT, it will define an
+[INftOutput](../references/client/interfaces/INftOutput) object.  The `amount` property is set to `0`, as you need to
+calculate the required storage deposit using the
 [TransactionHelper.getStorageDeposit(output, rentStructure)](../references/client/classes/TransactionHelper#getstoragedeposit)
 function, which takes any of the allowed [OutputTypes](../references/client/api_ref#outputtypes).
 
