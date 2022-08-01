@@ -24,7 +24,7 @@ export interface INodeInfoProtocol {
     /**
      * The protocol version.
      */
-    protocolVersion: number;
+    version: number;
 
     /**
      * The minimum score required for PoW.
