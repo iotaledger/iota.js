@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0-beta.10",
+  "version": "1.0.0-beta.11",
   "name": "@iota/types",
   "description": "Shared Iota Typescript types",
   "keywords": [
@@ -24,7 +24,7 @@
       "docs-wiki-build": "typedoc --githubPages false  --disableSources --excludePrivate --excludeInternal --excludeNotDocumented --plugin typedoc-plugin-markdown --theme markdown --hideBreadcrumbs --entryDocument api_ref.md --readme none --hideGenerator --sort source-order --exclude ./**/src/index.ts --out ../../documentation/docs/references/types ./src/index.ts"
   },
   "devDependencies": {
-      "@iota/iota.js": "^1.9.0-stardust.22",
+      "@iota/iota.js": "^1.9.0-stardust.23",
       "typescript": "^4.6.2",
       "npm-run-all": "^4.1.5",
       "del-cli": "4.0.1"
