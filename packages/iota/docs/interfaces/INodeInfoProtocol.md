@@ -9,7 +9,7 @@ The Protocol Info.
 - [networkName](INodeInfoProtocol.md#networkname)
 - [bech32Hrp](INodeInfoProtocol.md#bech32hrp)
 - [tokenSupply](INodeInfoProtocol.md#tokensupply)
-- [protocolVersion](INodeInfoProtocol.md#protocolversion)
+- [version](INodeInfoProtocol.md#version)
 - [minPowScore](INodeInfoProtocol.md#minpowscore)
 - [rentStructure](INodeInfoProtocol.md#rentstructure)
 
@@ -39,9 +39,9 @@ The token supply.
 
 ___
 
-### protocolVersion
+### version
 
-• **protocolVersion**: `number`
+• **version**: `number`
 
 The protocol version.
 
