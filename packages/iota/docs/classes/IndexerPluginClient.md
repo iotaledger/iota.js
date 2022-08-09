@@ -48,13 +48,13 @@ Find outputs using filter options.
 | :------ | :------ | :------ |
 | `filterOptions?` | `Object` | The options for filtering. |
 | `filterOptions.addressBech32?` | `string` | Filter outputs that are unlockable by the address. |
-| `filterOptions.hasStorageReturnCondition?` | `boolean` | Filter for outputs having a storage return unlock condition. |
-| `filterOptions.storageReturnAddressBech32?` | `string` | Filter for outputs with a certain storage return address. |
-| `filterOptions.hasExpirationCondition?` | `boolean` | Filter for outputs having an expiration unlock condition. |
+| `filterOptions.hasStorageDepositReturn?` | `boolean` | Filter for outputs having a storage deposit return unlock condition. |
+| `filterOptions.storageDepositReturnAddressBech32?` | `string` | Filter for outputs with a certain storage deposit return address. |
+| `filterOptions.hasExpiration?` | `boolean` | Filter for outputs having an expiration unlock condition. |
 | `filterOptions.expirationReturnAddressBech32?` | `string` | Filter for outputs with a certain expiration return address. |
 | `filterOptions.expiresBefore?` | `number` | Filter for outputs that expire before a certain unix time. |
 | `filterOptions.expiresAfter?` | `number` | Filter for outputs that expire after a certain unix time. |
-| `filterOptions.hasTimelockCondition?` | `boolean` | Filter for outputs having a timelock unlock condition. |
+| `filterOptions.hasTimelock?` | `boolean` | Filter for outputs having a timelock unlock condition. |
 | `filterOptions.timelockedBefore?` | `number` | Filter for outputs that are timelocked before a certain unix time. |
 | `filterOptions.timelockedAfter?` | `number` | Filter for outputs that are timelocked after a certain unix time. |
 | `filterOptions.hasNativeTokens?` | `boolean` | Filter for outputs having native tokens. |
@@ -138,13 +138,13 @@ Find nfts using filter options.
 | :------ | :------ | :------ |
 | `filterOptions?` | `Object` | The options for filtering. |
 | `filterOptions.addressBech32?` | `string` | Filter outputs that are unlockable by the address. |
-| `filterOptions.hasStorageReturnCondition?` | `boolean` | Filter for outputs having a storage return unlock condition. |
-| `filterOptions.storageReturnAddressBech32?` | `string` | Filter for outputs with a certain storage return address. |
-| `filterOptions.hasExpirationCondition?` | `boolean` | Filter for outputs having an expiration unlock condition. |
+| `filterOptions.hasStorageDepositReturn?` | `boolean` | Filter for outputs having a storage deposit return unlock condition. |
+| `filterOptions.storageDepositReturnAddressBech32?` | `string` | Filter for outputs with a certain storage deposit return address. |
+| `filterOptions.hasExpiration?` | `boolean` | Filter for outputs having an expiration unlock condition. |
 | `filterOptions.expirationReturnAddressBech32?` | `string` | Filter for outputs with a certain expiration return address. |
 | `filterOptions.expiresBefore?` | `number` | Filter for outputs that expire before a certain unix time. |
 | `filterOptions.expiresAfter?` | `number` | Filter for outputs that expire after a certain unix time. |
-| `filterOptions.hasTimelockCondition?` | `boolean` | Filter for outputs having a timelock unlock condition. |
+| `filterOptions.hasTimelock?` | `boolean` | Filter for outputs having a timelock unlock condition. |
 | `filterOptions.timelockedBefore?` | `number` | Filter for outputs that are timelocked before a certain unix time. |
 | `filterOptions.timelockedAfter?` | `number` | Filter for outputs that are timelocked after a certain unix time. |
 | `filterOptions.hasNativeTokens?` | `boolean` | Filter for outputs having native tokens. |

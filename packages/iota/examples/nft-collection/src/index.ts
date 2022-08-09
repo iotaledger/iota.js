@@ -22,7 +22,7 @@ In this example we will explore native tokens:
 3. Transfer an NFT from the collection w/o unlock conditions
 4. Transfer an NFT from the collection via:
     - expiration
-    - storage return
+    - storage deposit return
 5. Transfer the collection NFT
 6. new owner mints new NFTs in the collection
 7. Burn the collection NFT (lock collection)
@@ -710,9 +710,9 @@ async function fetchAndWaitForBasicOutput(addressBech32: string, client: lib.Ind
         console.log(`\tTry #${tries}: fetching basic output for address ${addressBech32}`)
         outputsResponse = await client.outputs({
             addressBech32: addressBech32,
-            hasStorageReturnCondition: false,
-            hasExpirationCondition: false,
-            hasTimelockCondition: false,
+            hasStorageDepositReturn: false,
+            hasExpiration: false,
+            hasTimelock: false,
             hasNativeTokens: false,
         });
         if (outputsResponse.items.length == 0) {

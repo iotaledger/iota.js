@@ -484,9 +484,9 @@ async function fetchAndWaitForBasicOutput(addressBech32: string, client: lib.Ind
         console.log("\tTry #", tries, ": fetching basic output for address ", addressBech32)
         outputsResponse = await client.outputs({
             addressBech32,
-            hasStorageReturnCondition: false,
-            hasExpirationCondition: false,
-            hasTimelockCondition: false,
+            hasStorageDepositReturn: false,
+            hasExpiration: false,
+            hasTimelock: false,
             hasNativeTokens: false
         });
         if (outputsResponse.items.length == 0) {

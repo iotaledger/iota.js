@@ -37,13 +37,13 @@ export class IndexerPluginClient {
      * Find outputs using filter options.
      * @param filterOptions The options for filtering.
      * @param filterOptions.addressBech32 Filter outputs that are unlockable by the address.
-     * @param filterOptions.hasStorageReturnCondition Filter for outputs having a storage return unlock condition.
-     * @param filterOptions.storageReturnAddressBech32 Filter for outputs with a certain storage return address.
-     * @param filterOptions.hasExpirationCondition Filter for outputs having an expiration unlock condition.
+     * @param filterOptions.hasStorageDepositReturn Filter for outputs having a storage deposit return unlock condition.
+     * @param filterOptions.storageDepositReturnAddressBech32 Filter for outputs with a certain storage deposit return address.
+     * @param filterOptions.hasExpiration Filter for outputs having an expiration unlock condition.
      * @param filterOptions.expirationReturnAddressBech32 Filter for outputs with a certain expiration return address.
      * @param filterOptions.expiresBefore Filter for outputs that expire before a certain unix time.
      * @param filterOptions.expiresAfter Filter for outputs that expire after a certain unix time.
-     * @param filterOptions.hasTimelockCondition Filter for outputs having a timelock unlock condition.
+     * @param filterOptions.hasTimelock Filter for outputs having a timelock unlock condition.
      * @param filterOptions.timelockedBefore Filter for outputs that are timelocked before a certain unix time.
      * @param filterOptions.timelockedAfter Filter for outputs that are timelocked after a certain unix time.
      * @param filterOptions.hasNativeTokens Filter for outputs having native tokens.
@@ -59,13 +59,13 @@ export class IndexerPluginClient {
      */
     public async outputs(filterOptions?: {
         addressBech32?: string;
-        hasStorageReturnCondition?: boolean;
-        storageReturnAddressBech32?: string;
-        hasExpirationCondition?: boolean;
+        hasStorageDepositReturn?: boolean;
+        storageDepositReturnAddressBech32?: string;
+        hasExpiration?: boolean;
         expirationReturnAddressBech32?: string;
         expiresBefore?: number;
         expiresAfter?: number;
-        hasTimelockCondition?: boolean;
+        hasTimelock?: boolean;
         timelockedBefore?: number;
         timelockedAfter?: number;
         hasNativeTokens?: boolean;
@@ -83,14 +83,14 @@ export class IndexerPluginClient {
             if (filterOptions.addressBech32 !== undefined) {
                 queryParams.push(`address=${filterOptions.addressBech32}`);
             }
-            if (filterOptions.hasStorageReturnCondition !== undefined) {
-                queryParams.push(`hasStorageReturnCondition=${filterOptions.hasStorageReturnCondition}`);
+            if (filterOptions.hasStorageDepositReturn !== undefined) {
+                queryParams.push(`hasStorageDepositReturn=${filterOptions.hasStorageDepositReturn}`);
             }
-            if (filterOptions.storageReturnAddressBech32 !== undefined) {
-                queryParams.push(`storageReturnAddress=${filterOptions.storageReturnAddressBech32}`);
+            if (filterOptions.storageDepositReturnAddressBech32 !== undefined) {
+                queryParams.push(`storageDepositReturnAddress=${filterOptions.storageDepositReturnAddressBech32}`);
             }
-            if (filterOptions.hasExpirationCondition !== undefined) {
-                queryParams.push(`hasExpirationCondition=${filterOptions.hasExpirationCondition}`);
+            if (filterOptions.hasExpiration !== undefined) {
+                queryParams.push(`hasExpiration=${filterOptions.hasExpiration}`);
             }
             if (filterOptions.expirationReturnAddressBech32 !== undefined) {
                 queryParams.push(`expirationReturnAddress=${filterOptions.expirationReturnAddressBech32}`);
@@ -101,8 +101,8 @@ export class IndexerPluginClient {
             if (filterOptions.expiresAfter !== undefined) {
                 queryParams.push(`expiresAfter=${filterOptions.expiresAfter}`);
             }
-            if (filterOptions.hasTimelockCondition !== undefined) {
-                queryParams.push(`hasTimelockCondition=${filterOptions.hasTimelockCondition}`);
+            if (filterOptions.hasTimelock !== undefined) {
+                queryParams.push(`hasTimelock=${filterOptions.hasTimelock}`);
             }
             if (filterOptions.timelockedBefore !== undefined) {
                 queryParams.push(`timelockedBefore=${filterOptions.timelockedBefore}`);
@@ -239,13 +239,13 @@ export class IndexerPluginClient {
      * Find nfts using filter options.
      * @param filterOptions The options for filtering.
      * @param filterOptions.addressBech32 Filter outputs that are unlockable by the address.
-     * @param filterOptions.hasStorageReturnCondition Filter for outputs having a storage return unlock condition.
-     * @param filterOptions.storageReturnAddressBech32 Filter for outputs with a certain storage return address.
-     * @param filterOptions.hasExpirationCondition Filter for outputs having an expiration unlock condition.
+     * @param filterOptions.hasStorageDepositReturn Filter for outputs having a storage deposit return unlock condition.
+     * @param filterOptions.storageDepositReturnAddressBech32 Filter for outputs with a certain storage deposit return address.
+     * @param filterOptions.hasExpiration Filter for outputs having an expiration unlock condition.
      * @param filterOptions.expirationReturnAddressBech32 Filter for outputs with a certain expiration return address.
      * @param filterOptions.expiresBefore Filter for outputs that expire before a certain unix time.
      * @param filterOptions.expiresAfter Filter for outputs that expire after a certain unix time.
-     * @param filterOptions.hasTimelockCondition Filter for outputs having a timelock unlock condition.
+     * @param filterOptions.hasTimelock Filter for outputs having a timelock unlock condition.
      * @param filterOptions.timelockedBefore Filter for outputs that are timelocked before a certain unix time.
      * @param filterOptions.timelockedAfter Filter for outputs that are timelocked after a certain unix time.
      * @param filterOptions.hasNativeTokens Filter for outputs having native tokens.
@@ -262,13 +262,13 @@ export class IndexerPluginClient {
      */
     public async nfts(filterOptions?: {
         addressBech32?: string;
-        hasStorageReturnCondition?: boolean;
-        storageReturnAddressBech32?: string;
-        hasExpirationCondition?: boolean;
+        hasStorageDepositReturn?: boolean;
+        storageDepositReturnAddressBech32?: string;
+        hasExpiration?: boolean;
         expirationReturnAddressBech32?: string;
         expiresBefore?: number;
         expiresAfter?: number;
-        hasTimelockCondition?: boolean;
+        hasTimelock?: boolean;
         timelockedBefore?: number;
         timelockedAfter?: number;
         hasNativeTokens?: boolean;
@@ -287,14 +287,14 @@ export class IndexerPluginClient {
             if (filterOptions.addressBech32 !== undefined) {
                 queryParams.push(`address=${filterOptions.addressBech32}`);
             }
-            if (filterOptions.hasStorageReturnCondition !== undefined) {
-                queryParams.push(`hasStorageReturnCondition=${filterOptions.hasStorageReturnCondition}`);
+            if (filterOptions.hasStorageDepositReturn !== undefined) {
+                queryParams.push(`hasStorageDepositReturn=${filterOptions.hasStorageDepositReturn}`);
             }
-            if (filterOptions.storageReturnAddressBech32 !== undefined) {
-                queryParams.push(`storageReturnAddress=${filterOptions.storageReturnAddressBech32}`);
+            if (filterOptions.storageDepositReturnAddressBech32 !== undefined) {
+                queryParams.push(`storageDepositReturnAddress=${filterOptions.storageDepositReturnAddressBech32}`);
             }
-            if (filterOptions.hasExpirationCondition !== undefined) {
-                queryParams.push(`hasExpirationCondition=${filterOptions.hasExpirationCondition}`);
+            if (filterOptions.hasExpiration !== undefined) {
+                queryParams.push(`hasExpiration=${filterOptions.hasExpiration}`);
             }
             if (filterOptions.expirationReturnAddressBech32 !== undefined) {
                 queryParams.push(`expirationReturnAddress=${filterOptions.expirationReturnAddressBech32}`);
@@ -305,8 +305,8 @@ export class IndexerPluginClient {
             if (filterOptions.expiresAfter !== undefined) {
                 queryParams.push(`expiresAfter=${filterOptions.expiresAfter}`);
             }
-            if (filterOptions.hasTimelockCondition !== undefined) {
-                queryParams.push(`hasTimelockCondition=${filterOptions.hasTimelockCondition}`);
+            if (filterOptions.hasTimelock !== undefined) {
+                queryParams.push(`hasTimelock=${filterOptions.hasTimelock}`);
             }
             if (filterOptions.timelockedBefore !== undefined) {
                 queryParams.push(`timelockedBefore=${filterOptions.timelockedBefore}`);
