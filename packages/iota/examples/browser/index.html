@@ -138,7 +138,7 @@
             // not calculated from a Bip32 path, if you were doing a wallet to wallet transfer you can just use send
             // which calculates all the inputs/outputs for you
             const indexerPlugin = new Iota.IndexerPluginClient(client);
-            const genesisAddressOutputs = await indexerPlugin.outputs({ addressBech32: genesisWalletAddressBech32 });
+            const genesisAddressOutputs = await indexerPlugin.basicOutputs({ addressBech32: genesisWalletAddressBech32 });
 
             const inputsWithKeyPairs = [];
 

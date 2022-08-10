@@ -81,7 +81,7 @@ async function run() {
     // not calculated from a Bip32 path, if you were doing a wallet to wallet transfer you can just use send
     // which calculates all the inputs/outputs for you
     const indexerPlugin = new IndexerPluginClient(client);
-    // const genesisAddressOutputs = await indexerPlugin.outputs({ addressBech32: genesisWalletAddressBech32 });
+    // const genesisAddressOutputs = await indexerPlugin.basicOutputs({ addressBech32: genesisWalletAddressBech32 });
     const genesisAddressOutputs = await fetchAndWaitForBasicOutputs(genesisWalletAddressBech32, indexerPlugin);
 
     const inputsWithKeyPairs: {
@@ -173,7 +173,7 @@ async function fetchAndWaitForBasicOutputs(addressBech32: string, client: Indexe
         if (tries > maxTries){break}
         tries++;
         console.log("\tTry #",tries,": fetching basic output for address ", addressBech32)
-        outputsResponse = await client.outputs({
+        outputsResponse = await client.basicOutputs({
             addressBech32: addressBech32,
             hasStorageDepositReturn: false,
             hasExpiration: false,

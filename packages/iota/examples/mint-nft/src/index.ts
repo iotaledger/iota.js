@@ -269,7 +269,7 @@ async function fetchAndWaitForBasicOutput(addressBech32: string, client: Indexer
         if (tries > maxTries){ break; }
         tries++;
         console.log("\tTry #",tries,": fetching basic output for address ", addressBech32);
-        outputsResponse = await client.outputs({
+        outputsResponse = await client.basicOutputs({
             addressBech32: addressBech32,
             hasStorageDepositReturn: false,
             hasExpiration: false,
