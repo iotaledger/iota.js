@@ -38,7 +38,7 @@ export class IndexerPluginClient {
      * @param filterOptions The options for filtering.
      * @param filterOptions.addressBech32 Filter outputs that are unlockable by the address.
      * @param filterOptions.hasStorageDepositReturn Filter for outputs having a storage deposit return unlock condition.
-     * @param filterOptions.storageDepositReturnAddressBech32 Filter for outputs with a certain storage deposit return address.
+     * @param filterOptions.storageDepositReturnAddressBech32 Filter for outputs with storage deposit return address.
      * @param filterOptions.hasExpiration Filter for outputs having an expiration unlock condition.
      * @param filterOptions.expirationReturnAddressBech32 Filter for outputs with a certain expiration return address.
      * @param filterOptions.expiresBefore Filter for outputs that expire before a certain unix time.
@@ -240,7 +240,7 @@ export class IndexerPluginClient {
      * @param filterOptions The options for filtering.
      * @param filterOptions.addressBech32 Filter outputs that are unlockable by the address.
      * @param filterOptions.hasStorageDepositReturn Filter for outputs having a storage deposit return unlock condition.
-     * @param filterOptions.storageDepositReturnAddressBech32 Filter for outputs with a certain storage deposit return address.
+     * @param filterOptions.storageDepositReturnAddressBech32 Filter for outputs with storage deposit return address.
      * @param filterOptions.hasExpiration Filter for outputs having an expiration unlock condition.
      * @param filterOptions.expirationReturnAddressBech32 Filter for outputs with a certain expiration return address.
      * @param filterOptions.expiresBefore Filter for outputs that expire before a certain unix time.
