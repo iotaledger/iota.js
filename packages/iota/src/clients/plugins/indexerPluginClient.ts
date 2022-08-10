@@ -34,7 +34,7 @@ export class IndexerPluginClient {
     }
 
     /**
-     * Find outputs using filter options.
+     * Find basic outputs using filter options.
      * @param filterOptions The options for filtering.
      * @param filterOptions.addressBech32 Filter outputs that are unlockable by the address.
      * @param filterOptions.hasStorageDepositReturn Filter for outputs having a storage deposit return unlock condition.
@@ -57,7 +57,7 @@ export class IndexerPluginClient {
      * @param filterOptions.cursor Request the items from the given cursor, returned from a previous request.
      * @returns The outputs with the requested filters.
      */
-    public async outputs(filterOptions?: {
+    public async basicOutputs(filterOptions?: {
         addressBech32?: string;
         hasStorageDepositReturn?: boolean;
         storageDepositReturnAddressBech32?: string;
@@ -147,7 +147,7 @@ export class IndexerPluginClient {
     }
 
     /**
-     * Find alises using filter options.
+     * Find alias outputs using filter options.
      * @param filterOptions The options for filtering.
      * @param filterOptions.stateControllerBech32 Filter for a certain state controller address.
      * @param filterOptions.governorBech32 Filter for a certain governance controller address.
@@ -236,7 +236,7 @@ export class IndexerPluginClient {
     }
 
     /**
-     * Find nfts using filter options.
+     * Find nft outputs using filter options.
      * @param filterOptions The options for filtering.
      * @param filterOptions.addressBech32 Filter outputs that are unlockable by the address.
      * @param filterOptions.hasStorageDepositReturn Filter for outputs having a storage deposit return unlock condition.
@@ -370,7 +370,7 @@ export class IndexerPluginClient {
     }
 
     /**
-     * Find foundries using filter options.
+     * Find foundry outputs using filter options.
      * @param filterOptions The options for filtering.
      * @param filterOptions.aliasAddressBech32 Filter outputs that are unlockable by the address.
      * @param filterOptions.hasNativeTokens Filter for outputs having native tokens.

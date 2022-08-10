@@ -10,7 +10,7 @@ Indexer plugin which provides access to the indexer plugin API.
 
 ### Methods
 
-- [outputs](IndexerPluginClient.md#outputs)
+- [basicOutputs](IndexerPluginClient.md#basicoutputs)
 - [aliases](IndexerPluginClient.md#aliases)
 - [alias](IndexerPluginClient.md#alias)
 - [nfts](IndexerPluginClient.md#nfts)
@@ -36,11 +36,11 @@ Create a new instance of IndexerPluginClient.
 
 ## Methods
 
-### outputs
+### basicOutputs
 
-▸ **outputs**(`filterOptions?`): `Promise`<[`IOutputsResponse`](../interfaces/IOutputsResponse.md)\>
+▸ **basicOutputs**(`filterOptions?`): `Promise`<[`IOutputsResponse`](../interfaces/IOutputsResponse.md)\>
 
-Find outputs using filter options.
+Find basic outputs using filter options.
 
 #### Parameters
 
@@ -49,7 +49,7 @@ Find outputs using filter options.
 | `filterOptions?` | `Object` | The options for filtering. |
 | `filterOptions.addressBech32?` | `string` | Filter outputs that are unlockable by the address. |
 | `filterOptions.hasStorageDepositReturn?` | `boolean` | Filter for outputs having a storage deposit return unlock condition. |
-| `filterOptions.storageDepositReturnAddressBech32?` | `string` | Filter for outputs with a certain storage deposit return address. |
+| `filterOptions.storageDepositReturnAddressBech32?` | `string` | Filter for outputs with storage deposit return address. |
 | `filterOptions.hasExpiration?` | `boolean` | Filter for outputs having an expiration unlock condition. |
 | `filterOptions.expirationReturnAddressBech32?` | `string` | Filter for outputs with a certain expiration return address. |
 | `filterOptions.expiresBefore?` | `number` | Filter for outputs that expire before a certain unix time. |
@@ -79,7 +79,7 @@ ___
 
 ▸ **aliases**(`filterOptions?`): `Promise`<[`IOutputsResponse`](../interfaces/IOutputsResponse.md)\>
 
-Find alises using filter options.
+Find alias outputs using filter options.
 
 #### Parameters
 
@@ -130,7 +130,7 @@ ___
 
 ▸ **nfts**(`filterOptions?`): `Promise`<[`IOutputsResponse`](../interfaces/IOutputsResponse.md)\>
 
-Find nfts using filter options.
+Find nft outputs using filter options.
 
 #### Parameters
 
@@ -139,7 +139,7 @@ Find nfts using filter options.
 | `filterOptions?` | `Object` | The options for filtering. |
 | `filterOptions.addressBech32?` | `string` | Filter outputs that are unlockable by the address. |
 | `filterOptions.hasStorageDepositReturn?` | `boolean` | Filter for outputs having a storage deposit return unlock condition. |
-| `filterOptions.storageDepositReturnAddressBech32?` | `string` | Filter for outputs with a certain storage deposit return address. |
+| `filterOptions.storageDepositReturnAddressBech32?` | `string` | Filter for outputs with storage deposit return address. |
 | `filterOptions.hasExpiration?` | `boolean` | Filter for outputs having an expiration unlock condition. |
 | `filterOptions.expirationReturnAddressBech32?` | `string` | Filter for outputs with a certain expiration return address. |
 | `filterOptions.expiresBefore?` | `number` | Filter for outputs that expire before a certain unix time. |
@@ -190,7 +190,7 @@ ___
 
 ▸ **foundries**(`filterOptions?`): `Promise`<[`IOutputsResponse`](../interfaces/IOutputsResponse.md)\>
 
-Find foundries using filter options.
+Find foundry outputs using filter options.
 
 #### Parameters
 
