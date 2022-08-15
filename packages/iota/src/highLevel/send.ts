@@ -307,7 +307,7 @@ export async function calculateInputs<T>(
         const addressBytes = ed25519Address.toAddress();
 
         const indexerPlugin = new IndexerPluginClient(client);
-        const addressOutputIds = await indexerPlugin.outputs(
+        const addressOutputIds = await indexerPlugin.basicOutputs(
             { addressBech32: Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, addressBytes, protocolInfo.bech32Hrp) });
 
         if (addressOutputIds.items.length === 0) {
