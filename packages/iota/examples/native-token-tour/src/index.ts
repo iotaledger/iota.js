@@ -726,7 +726,7 @@ function transferNativeTokensWithoutUnlockCondition(consumedOutput: lib.OutputTy
     return txPayload;
 }
 
-// Transfer native tokens with storage return + expiration unlock condition
+// Transfer native tokens with storage deposit return + expiration unlock condition
 function transferNativeTokensWithUnlockCondition(consumedOutput: lib.OutputTypes, consumedOutputId: string, walletAddressHex: string, walletKeyPair: lib.IKeyPair, info: lib.INodeInfo, targetAddress: lib.AddressTypes) {
     // Prepare the input object
     const input = lib.TransactionHelper.inputFromOutputId(consumedOutputId);
@@ -1558,11 +1558,11 @@ async function fetchAndWaitForBasicOutput(addressBech32: string, client: lib.Ind
         if (tries > maxTries) { break; }
         tries++;
         console.log(`\tTry #${tries}: fetching basic output for address ${addressBech32}`)
-        outputsResponse = await client.outputs({
+        outputsResponse = await client.basicOutputs({
             addressBech32: addressBech32,
-            hasStorageReturnCondition: false,
-            hasExpirationCondition: false,
-            hasTimelockCondition: false,
+            hasStorageDepositReturn: false,
+            hasExpiration: false,
+            hasTimelock: false,
             hasNativeTokens: false
         });
         if (outputsResponse.items.length == 0) {
