@@ -13,7 +13,7 @@ import {
 import { Converter, ReadStream } from "@iota/util.js";
 import { NeonPowProvider } from "@iota/pow-neon.js";
 
-const API_ENDPOINT = "https://api.alphanet.iotaledger.net/";
+const API_ENDPOINT = "https://api.testnet.shimmer.network/";
 
 // If running the node locally
 // const API_ENDPOINT = "http://localhost:14265/";
