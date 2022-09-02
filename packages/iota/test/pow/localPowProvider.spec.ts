@@ -18,7 +18,7 @@ describe("LocalPowProvider", () => {
         };
 
         const block: IBlock = {
-            protocolVersion: 1,
+            protocolVersion: 2,
             parents: [],
             payload: taggedDataPayload,
             nonce: ""
@@ -29,7 +29,7 @@ describe("LocalPowProvider", () => {
         const blockBytes = writeStream.finalBytes();
 
         const nonce = await pow.pow(blockBytes, 100);
-        expect(nonce).toEqual("6071");
+        expect(nonce).toEqual("6917529027641082403");
 
         const score = PowHelper.score(blockBytes);
 

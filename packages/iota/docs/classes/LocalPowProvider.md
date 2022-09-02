@@ -1,7 +1,6 @@
 # Class: LocalPowProvider
 
-Local POW Provider.
-WARNING - This is really slow.
+Local PoW Provider.
 
 ## Implements
 
@@ -9,9 +8,27 @@ WARNING - This is really slow.
 
 ## Table of contents
 
+### Constructors
+
+- [constructor](LocalPowProvider.md#constructor)
+
 ### Methods
 
 - [pow](LocalPowProvider.md#pow)
+
+## Constructors
+
+### constructor
+
+• **new LocalPowProvider**(`numCpus?`)
+
+Create a new instance of LocalPowProvider.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `numCpus?` | `number` | The number of cpus, defaults to max CPUs. |
 
 ## Methods
 
