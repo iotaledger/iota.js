@@ -50,7 +50,7 @@
     "scripts": {
         "dist-neon": "npm run postinstall --prefix packages/pow-neon",
         "dist-all": "npm run dist-neon && npm run dist --workspaces",
-            "build-wiki-api-ref": "npm run docs-wiki-build --workspace packages/util  --workspace packages/crypto  --workspace packages/iota   --workspace packages/mqtt  --workspace packages/pow-neon --workspace packages/pow-node--workspace packages/pow-wasm",
+        "build-wiki-api-ref": "npm run docs-wiki-build --workspace packages/util  --workspace packages/crypto  --workspace packages/iota   --workspace packages/mqtt  --workspace packages/pow-neon --workspace packages/pow-node--workspace packages/pow-wasm",
         "workspace-format": "prettier --config .prettierrc --write ."
     }
 }

@@ -15,10 +15,11 @@ jobs:
             - name: Use Node.js 16.x
               uses: actions/setup-node@v1
               with:
-                  node-version: "16"
+                  node-version: "16.10"
             - name: npm 7
-              run: npm install -g npm@7
+              run: npm install -g npm@7.24
             - name: Build
               run: |
+                  npm -v
                   npm install
-                  npm run dist --workspaces
+                  npm run dist-all
