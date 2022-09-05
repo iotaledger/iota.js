@@ -9,7 +9,7 @@ import { PowHelper } from "../../src/utils/powHelper";
 
 describe("LocalPowProvider", () => {
     test("Calculate from an empty block", async () => {
-        const pow = new LocalPowProvider();
+        const pow = new LocalPowProvider(3);
 
         const taggedDataPayload: ITaggedDataPayload = {
             type: TAGGED_DATA_PAYLOAD_TYPE,
@@ -29,7 +29,7 @@ describe("LocalPowProvider", () => {
         const blockBytes = writeStream.finalBytes();
 
         const nonce = await pow.pow(blockBytes, 100);
-        expect(nonce).toEqual("6917529027641082403");
+        expect(nonce).toEqual("12297829382473039080");
 
         const score = PowHelper.score(blockBytes);
 
