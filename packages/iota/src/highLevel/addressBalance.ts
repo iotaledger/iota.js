@@ -63,7 +63,7 @@ export async function addressBalance(
         });
 
         for (const outputId of expirationResponse.items) {
-            const output = await localClient.output(String(outputId);
+            const output = await localClient.output(outputId);
 
             if (!output.metadata.isSpent) {
                 total = total.plus(output.output.amount);
