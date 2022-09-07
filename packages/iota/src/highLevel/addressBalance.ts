@@ -56,14 +56,14 @@ export async function addressBalance(
     } while (cursor && response.items.length > 0);
 
     do {
-        expirationResponse = await indexerPluginClient.outputs({
+        expirationResponse = await indexerPluginClient.basicOutputs({
             expirationReturnAddressBech32: addressBech32,
             expiresBefore: Math.floor(Date.now() / 1000),
             cursor: expirationCursor
         });
 
         for (const outputId of expirationResponse.items) {
-            const output = await localClient.output(outputId);
+            const output = await localClient.output(String(outputId);
 
             if (!output.metadata.isSpent) {
                 total = total.plus(output.output.amount);
