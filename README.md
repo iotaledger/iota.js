@@ -32,8 +32,8 @@ async function run() {
     console.log("\tConfirmed Milestone Index:", info.status.confirmedMilestoneIndex);
     console.log("\tPruning Index:", info.status.pruningIndex);
     console.log("\tNetwork Name:", info.protocol.networkName);
-    console.log("\tBech32 HRP:", info.protocol.bech32HRP);
-    console.log("\tMin PoW Score:", info.protocol.minPoWScore);
+    console.log("\tBech32 HRP:", info.protocol.bech32Hrp);
+    console.log("\tMin PoW Score:", info.protocol.minPowScore);
     console.log("\tBlocks Per Second:", info.metrics.blocksPerSecond);
     console.log("\tReferenced Blocks Per Second:", info.metrics.referencedBlocksPerSecond);
     console.log("\tReferenced Rate:", info.metrics.referencedRate);

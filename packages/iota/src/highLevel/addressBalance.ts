@@ -34,7 +34,7 @@ export async function addressBalance(
     let cursor;
     let expirationCursor;
     do {
-        response = await indexerPluginClient.outputs({ addressBech32, cursor });
+        response = await indexerPluginClient.basicOutputs({ addressBech32, cursor });
 
         for (const outputId of response.items) {
             const output = await localClient.output(outputId);

@@ -18,7 +18,7 @@ Indexer plugin which provides access to the indexer plugin API.
 
 ### Methods
 
-- [outputs](IndexerPluginClient.md#outputs)
+- [basicOutputs](IndexerPluginClient.md#basicOutputs)
 - [aliases](IndexerPluginClient.md#aliases)
 - [alias](IndexerPluginClient.md#alias)
 - [nfts](IndexerPluginClient.md#nfts)
@@ -43,7 +43,7 @@ Create a new instance of IndexerPluginClient.
 
 ## Methods
 
-### outputs
+### basicOutputs
 
 ▸ **outputs**(`filterOptions?`): `Promise`<[`IOutputsResponse`](../interfaces/IOutputsResponse.md)\>
 
