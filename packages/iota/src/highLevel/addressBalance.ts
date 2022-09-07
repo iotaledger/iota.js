@@ -32,6 +32,7 @@ export async function addressBalance(
     let response;
     let expirationResponse;
     let cursor;
+    let expirationCursor;
     do {
         response = await indexerPluginClient.outputs({ addressBech32, cursor });
 
@@ -56,7 +57,9 @@ export async function addressBalance(
 
     do {
         expirationResponse = await indexerPluginClient.outputs({
-            expirationReturnAddressBech32: addressBech32, expiresBefore: Math.floor(Date.now() / 1000), cursor
+            expirationReturnAddressBech32: addressBech32,
+            expiresBefore: Math.floor(Date.now() / 1000),
+            cursor: expirationCursor
         });
 
         for (const outputId of expirationResponse.items) {
@@ -66,8 +69,8 @@ export async function addressBalance(
                 total = total.plus(output.output.amount);
             }
         }
-        cursor = response.cursor;
-    } while (cursor && expirationResponse.items.length > 0);
+        expirationCursor = expirationResponse.cursor;
+    } while (expirationCursor && expirationResponse.items.length > 0);
 
     return {
         balance: total,
