@@ -24,9 +24,10 @@ export class NodePowWorker {
      * Perform pow on the block and return the nonce of at least targetScore.
      * @param powDigest The block pow digest.
      * @param targetZeros The target zeros.
+     * @param powInterval The time in seconds that pow should work before aborting.
      * @returns The nonce.
      */
-    public async doNodePow(powDigest: Uint8Array, targetZeros: number): Promise<string> {
+    public async doNodePow(powDigest: Uint8Array, targetZeros: number, powInterval?: number): Promise<string> {
         return new Promise<string>((resolve, reject) => {
             const chunkSize = BigInt("18446744073709551615") / BigInt(this._numCpus);
             const workers: Worker[] = [];
@@ -34,7 +35,12 @@ export class NodePowWorker {
 
             for (let i = 0; i < this._numCpus; i++) {
                 const worker = this.createWorker({
-                    workerData: { powDigest, targetZeros, startIndex: (chunkSize * BigInt(i)).toString() },
+                    workerData: {
+                        powDigest,
+                        targetZeros,
+                        startIndex: (chunkSize * BigInt(i)).toString(),
+                        powInterval
+                    },
                     eval: true
                 });
 
@@ -75,7 +81,8 @@ export class NodePowWorker {
                 .performPow(
                     workerData.powDigest,
                     workerData.targetZeros,
-                    workerData.startIndex)
+                    workerData.startIndex,
+                    workerData.powInterval)
                 .toString();
                 parentPort.postMessage(nonce);
             }`,

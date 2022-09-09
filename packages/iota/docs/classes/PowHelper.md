@@ -112,7 +112,7 @@ ___
 
 ### performPow
 
-▸ `Static` **performPow**(`powDigest`, `targetZeros`, `startIndex`): `string`
+▸ `Static` **performPow**(`powDigest`, `targetZeros`, `startIndex`, `powInterval?`): `string`
 
 Perform the hash on the data until we reach target number of zeros.
 
@@ -123,6 +123,7 @@ Perform the hash on the data until we reach target number of zeros.
 | `powDigest` | `Uint8Array` | The pow digest. |
 | `targetZeros` | `number` | The target number of zeros. |
 | `startIndex` | `string` | The index to start looking from. |
+| `powInterval?` | `number` | The time in seconds that pow should work before aborting. |
 
 #### Returns
 

@@ -3715,7 +3715,7 @@ ___
 
 ### sendWithAddressGenerator
 
-▸ **sendWithAddressGenerator**<`T`\>(`client`, `seed`, `initialAddressState`, `nextAddressPath`, `outputs`, `taggedData?`, `zeroCount?`): `Promise`<{ `blockId`: `string` ; `block`: [`IBlock`](interfaces/IBlock.md)  }\>
+▸ **sendWithAddressGenerator**<`T`\>(`client`, `seed`, `initialAddressState`, `nextAddressPath`, `outputs`, `taggedData?`, `powInterval?`, `maxPowAttempts?`, `zeroCount?`): `Promise`<{ `blockId`: `string` ; `block`: [`IBlock`](interfaces/IBlock.md)  }\>
 
 Send a transfer using account based indexing for the inputs.
 
@@ -3737,6 +3737,8 @@ Send a transfer using account based indexing for the inputs.
 | `taggedData?` | `Object` | Optional tagged data to associate with the transaction. |
 | `taggedData.tag?` | `string` \| `Uint8Array` | Optional tag. |
 | `taggedData.data?` | `string` \| `Uint8Array` | Optional data. |
+| `powInterval?` | `number` | The time in seconds that pow should work before aborting. |
+| `maxPowAttempts?` | `number` | The number of times the pow should be attempted. |
 | `zeroCount?` | `number` | The number of addresses with 0 balance during lookup before aborting. |
 
 #### Returns
@@ -3780,7 +3782,7 @@ ___
 
 ### sendAdvanced
 
-▸ **sendAdvanced**(`client`, `inputsAndSignatureKeyPairs`, `outputs`, `taggedData?`): `Promise`<{ `blockId`: `string` ; `block`: [`IBlock`](interfaces/IBlock.md)  }\>
+▸ **sendAdvanced**(`client`, `inputsAndSignatureKeyPairs`, `outputs`, `taggedData?`, `powInterval?`, `maxPowAttempts?`): `Promise`<{ `blockId`: `string` ; `block`: [`IBlock`](interfaces/IBlock.md)  }\>
 
 Send a transfer from the balance on the seed.
 
@@ -3794,6 +3796,8 @@ Send a transfer from the balance on the seed.
 | `taggedData?` | `Object` | Optional tagged data to associate with the transaction. |
 | `taggedData.tag?` | `string` \| `Uint8Array` | Optional tag. |
 | `taggedData.data?` | `string` \| `Uint8Array` | Optional data. |
+| `powInterval?` | `number` | The time in seconds that pow should work before aborting. |
+| `maxPowAttempts?` | `number` | The number of times the pow should be attempted. |
 
 #### Returns
 

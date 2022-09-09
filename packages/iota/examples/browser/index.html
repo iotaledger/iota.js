@@ -23,6 +23,8 @@
 
         async function run() {
             Iota.setLogger(consoleLog);
+            // testnet api endpoint: https://api.testnet.shimmer.network/
+            // localhost api endpoint: http://localhost:14265/
             const client = new Iota.SingleNodeClient("https://api.alphanet.iotaledger.net/", {powProvider: new Iota.LocalPowProvider()});
 
             const health = await client.health();
@@ -49,7 +51,7 @@
                 }
             };
 
-            const blockIdCreated = await client.blockSubmit(submitBlock);
+            const blockIdCreated = await client.blockSubmit(submitBlock, 8);
             consoleLog("Submit Block:");
             consoleLog("\tBlock Id", blockIdCreated);
             consoleLog();

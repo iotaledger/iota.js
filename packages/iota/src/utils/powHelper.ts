@@ -86,16 +86,25 @@ export class PowHelper {
      * @param powDigest The pow digest.
      * @param targetZeros The target number of zeros.
      * @param startIndex The index to start looking from.
-     * @returns The nonce.
+     * @param powInterval The time in seconds that pow should work before aborting.
+     *@returns The nonce.
      */
-    public static performPow(powDigest: Uint8Array, targetZeros: number, startIndex: string): string {
+    public static performPow(
+        powDigest: Uint8Array,
+        targetZeros: number,
+        startIndex: string,
+        powInterval?: number
+        ): string {
         let nonce = bigInt(startIndex);
         let returnNonce;
 
         const buf: Int8Array = new Int8Array(Curl.HASH_LENGTH);
         const digestTritsLen = B1T6.encode(buf, 0, powDigest);
         const biArr = new Uint8Array(8);
-
+        let end = Number.POSITIVE_INFINITY;
+        if (powInterval) {
+            end = Date.now() + (powInterval * 1000);
+        }
         do {
             BigIntHelper.write8(nonce, biArr, 0);
             B1T6.encode(buf, digestTritsLen, biArr);
@@ -109,7 +118,7 @@ export class PowHelper {
             } else {
                 nonce = nonce.plus(1);
             }
-        } while (returnNonce === undefined);
+        } while (returnNonce === undefined && Date.now() <= end);
 
         return returnNonce ? returnNonce.toString() : "0";
     }

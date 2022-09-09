@@ -1,9 +1,9 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 import { ArrayHelper, Blake2b } from "@iota/crypto.js";
-import { BigIntHelper, Converter, WriteStream } from "@iota/util.js";
+import { BigIntHelper, Converter, ReadStream, WriteStream } from "@iota/util.js";
 import bigInt from "big-integer";
-import { MAX_BLOCK_LENGTH, serializeBlock } from "../binary/block";
+import { deserializeBlock, MAX_BLOCK_LENGTH, MAX_NUMBER_PARENTS, serializeBlock } from "../binary/block";
 import type { IMilestonePayload } from "../index-browser";
 import type { IBlockIdResponse } from "../models/api/IBlockIdResponse";
 import type { IMilestoneUtxoChangesResponse } from "../models/api/IMilestoneUtxoChangesResponse";
@@ -215,6 +215,8 @@ export class SingleNodeClient implements IClient {
      * @param blockPartial.parents The parent block ids.
      * @param blockPartial.payload The payload contents.
      * @param blockPartial.nonce The nonce for the block.
+     * @param powInterval The time in seconds that pow should work before aborting.
+     * @param maxPowAttempts The number of times the pow should be attempted.
      * @returns The blockId.
      */
     public async blockSubmit(
@@ -223,7 +225,9 @@ export class SingleNodeClient implements IClient {
             parents?: string[];
             payload?: IBlock["payload"];
             nonce?: string;
-        }
+        },
+        powInterval?: number,
+        maxPowAttempts: number = 40
     ): Promise<string> {
         blockPartial.protocolVersion = this._protocolVersion;
 
@@ -239,7 +243,7 @@ export class SingleNodeClient implements IClient {
 
             if (!blockPartial.parents || blockPartial.parents.length === 0) {
                 const tips = await this.tips();
-                blockPartial.parents = tips.tips;
+                blockPartial.parents = tips.tips.slice(0, MAX_NUMBER_PARENTS);
             }
         }
 
@@ -252,7 +256,7 @@ export class SingleNodeClient implements IClient {
 
         const writeStream = new WriteStream();
         serializeBlock(writeStream, block);
-        const blockBytes = writeStream.finalBytes();
+        let blockBytes = writeStream.finalBytes();
 
         if (blockBytes.length > MAX_BLOCK_LENGTH) {
             throw new Error(
@@ -261,7 +265,24 @@ export class SingleNodeClient implements IClient {
         }
 
         if (this._powProvider) {
-            const nonce = await this._powProvider.pow(blockBytes, minPowScore);
+            let nonce: string = "0";
+            for (let i = 0; i <= maxPowAttempts; i++) {
+                // for last attempt let the pow run without interval
+                nonce = (i === maxPowAttempts)
+                    ? await this._powProvider.pow(blockBytes, minPowScore)
+                    : await this._powProvider.pow(blockBytes, minPowScore, powInterval);
+
+                if (nonce === "0") {
+                    const tips = await this.tips();
+                    block.parents = tips.tips.slice(0, MAX_NUMBER_PARENTS);
+
+                    const ws = new WriteStream();
+                    serializeBlock(ws, block);
+                    blockBytes = ws.finalBytes();
+                } else {
+                    break;
+                }
+            }
             block.nonce = nonce.toString();
         }
 
@@ -273,9 +294,15 @@ export class SingleNodeClient implements IClient {
     /**
      * Submit block in raw format.
      * @param block The block to submit.
+     * @param powInterval The time in seconds that pow should work before aborting.
+     * @param maxPowAttempts The number of times the pow should be attempted.
      * @returns The blockId.
      */
-    public async blockSubmitRaw(block: Uint8Array): Promise<string> {
+    public async blockSubmitRaw(
+            block: Uint8Array,
+            powInterval?: number,
+            maxPowAttempts: number = 40
+        ): Promise<string> {
         if (block.length > MAX_BLOCK_LENGTH) {
             throw new Error(
                 `The block length is ${block.length}, which exceeds the maximum size of ${MAX_BLOCK_LENGTH}`
@@ -288,7 +315,27 @@ export class SingleNodeClient implements IClient {
             if (this._protocol === undefined) {
                 await this.populateProtocolInfoCache();
             }
-            const nonce = await this._powProvider.pow(block, this._protocol?.minPowScore ?? 0);
+            let nonce: string = "0";
+            for (let i = 0; i <= maxPowAttempts; i++) {
+                // for last attempt let the pow run without interval
+                nonce = (i === maxPowAttempts)
+                    ? await this._powProvider.pow(block, this._protocol?.minPowScore ?? 0)
+                    : await this._powProvider.pow(block, this._protocol?.minPowScore ?? 0, powInterval);
+                if (nonce === "0") {
+                    const rs = new ReadStream(block);
+                    const blockObject = deserializeBlock(rs);
+
+                    const tips = await this.tips();
+                    blockObject.parents = tips.tips.slice(0, MAX_NUMBER_PARENTS);
+
+                    const ws = new WriteStream();
+                    serializeBlock(ws, blockObject);
+                    block = ws.finalBytes();
+                } else {
+                    break;
+                }
+            }
+
             BigIntHelper.write8(bigInt(nonce), block, block.length - 8);
         }
 
@@ -551,7 +598,7 @@ export class SingleNodeClient implements IClient {
                 return {} as U;
             }
             try {
-                const responseData: U & { error?: { code: string; message: string } } = await response.json();
+                const responseData: U & IResponse = await response.json();
 
                 if (responseData.error) {
                     errorMessage = responseData.error.message;
@@ -613,18 +660,24 @@ export class SingleNodeClient implements IClient {
         const response = await this.fetchWithTimeout(
             method,
             `${basePath}${route}`,
-            { "Accept": "application/vnd.iota.serializer-v1" },
+            {
+                "Content-Type": "application/vnd.iota.serializer-v1",
+                "Accept": "application/vnd.iota.serializer-v1"
+            },
             requestData
         );
 
-        let responseData: IResponse<T> | undefined;
+        let responseData: T & IResponse | undefined;
+
         if (response.ok) {
             if (method === "get") {
                 return new Uint8Array(await response.arrayBuffer());
             }
+
             responseData = await response.json();
+
             if (!responseData?.error) {
-                return responseData?.data as T;
+                return responseData as T;
             }
         }
 

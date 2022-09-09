@@ -33,6 +33,8 @@ import type { UnlockTypes } from "../models/unlocks/unlockTypes";
  * @param taggedData Optional tagged data to associate with the transaction.
  * @param taggedData.tag Optional tag.
  * @param taggedData.data Optional data.
+ * @param powInterval The time in seconds that pow should work before aborting.
+ * @param maxPowAttempts The number of times the pow should be attempted.
  * @returns The id of the block created and the remainder address if one was needed.
  */
 export async function sendAdvanced(
@@ -50,7 +52,9 @@ export async function sendAdvanced(
     taggedData?: {
         tag?: Uint8Array | string;
         data?: Uint8Array | string;
-    }
+    },
+    powInterval?: number,
+    maxPowAttempts?: number
 ): Promise<{
     blockId: string;
     block: IBlock;
@@ -69,7 +73,7 @@ export async function sendAdvanced(
         nonce: "0"
     };
 
-    const blockId = await localClient.blockSubmit(block);
+    const blockId = await localClient.blockSubmit(block, powInterval, maxPowAttempts);
 
     return {
         blockId,

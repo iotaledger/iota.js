@@ -36,19 +36,20 @@ export class LocalPowProvider implements IPowProvider {
      * Perform pow on the block and return the nonce of at least targetScore.
      * @param block The block to process.
      * @param targetScore The target score.
+     * @param powInterval The time in seconds that pow should work before aborting.
      * @returns The nonce.
      */
-    public async pow(block: Uint8Array, targetScore: number): Promise<string> {
+    public async pow(block: Uint8Array, targetScore: number, powInterval?: number): Promise<string> {
         const powRelevantData = block.slice(0, -8);
         const powDigest = Blake2b.sum256(powRelevantData);
         const targetZeros = PowHelper.calculateTargetZeros(block, targetScore);
 
         if (this._isBrowser) {
             const browserWorker = new BrowserPowWorker(this._numCpus);
-            return browserWorker.doBrowserPow(powDigest, targetZeros);
+            return browserWorker.doBrowserPow(powDigest, targetZeros, powInterval);
         }
 
         const nodeWorker = new NodePowWorker(this._numCpus);
-        return nodeWorker.doNodePow(powDigest, targetZeros);
+        return nodeWorker.doNodePow(powDigest, targetZeros, powInterval);
     }
 }

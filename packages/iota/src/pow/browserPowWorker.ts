@@ -29,9 +29,10 @@ export class BrowserPowWorker {
      * Perform pow on the block and return the nonce of at least targetScore.
      * @param powDigest The block pow digest.
      * @param targetZeros The target zeros.
+     * @param powInterval The time in seconds that pow should work before aborting.
      * @returns The nonce.
      */
-    public async doBrowserPow(powDigest: Uint8Array, targetZeros: number): Promise<string> {
+    public async doBrowserPow(powDigest: Uint8Array, targetZeros: number, powInterval?: number): Promise<string> {
         return new Promise<string>((resolve, reject) => {
             const chunkSize = BigInt("18446744073709551615") / BigInt(this._numCpus);
             const workers: Worker[] = [];
@@ -44,7 +45,8 @@ export class BrowserPowWorker {
                     powDigest,
                     targetZeros,
                     (chunkSize * BigInt(i)).toString(),
-                    scriptURLs
+                    scriptURLs,
+                    powInterval
                 ]);
                 workers.push(worker);
 
@@ -70,7 +72,7 @@ export class BrowserPowWorker {
             "(",
             (() => {
                 addEventListener("message", e => {
-                    const [powDigest, targetZeros, startIndex, scripts] = [...e.data];
+                    const [powDigest, targetZeros, startIndex, scripts, powInterval] = [...e.data];
                     /* eslint-disable @typescript-eslint/no-unsafe-argument */
                     for (const script of scripts) {
                         if (script) {
@@ -81,7 +83,8 @@ export class BrowserPowWorker {
                         .performPow(
                             powDigest,
                             targetZeros,
-                            startIndex)
+                            startIndex,
+                            powInterval)
                         .toString();
 
                     postMessage(nonce);

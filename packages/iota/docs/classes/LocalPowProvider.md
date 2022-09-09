@@ -34,7 +34,7 @@ Create a new instance of LocalPowProvider.
 
 ### pow
 
-▸ **pow**(`block`, `targetScore`): `Promise`<`string`\>
+▸ **pow**(`block`, `targetScore`, `powInterval?`): `Promise`<`string`\>
 
 Perform pow on the block and return the nonce of at least targetScore.
 
@@ -44,6 +44,7 @@ Perform pow on the block and return the nonce of at least targetScore.
 | :------ | :------ | :------ |
 | `block` | `Uint8Array` | The block to process. |
 | `targetScore` | `number` | The target score. |
+| `powInterval?` | `number` | The time in seconds that pow should work before aborting. |
 
 #### Returns
 
