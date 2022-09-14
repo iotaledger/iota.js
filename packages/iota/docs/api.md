@@ -9,6 +9,7 @@
 - [IndexerPluginClient](classes/IndexerPluginClient.md)
 - [SingleNodeClient](classes/SingleNodeClient.md)
 - [B1T6](classes/B1T6.md)
+- [LocalBrowserPowProvider](classes/LocalBrowserPowProvider.md)
 - [LocalPowProvider](classes/LocalPowProvider.md)
 - [Ed25519Seed](classes/Ed25519Seed.md)
 - [Bech32Helper](classes/Bech32Helper.md)

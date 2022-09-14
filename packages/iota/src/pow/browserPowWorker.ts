@@ -7,6 +7,7 @@ declare global {
         Iota: any;
     }
   }
+
 /**
  * The Browser PoW Worker.
  */
@@ -36,29 +37,41 @@ export class BrowserPowWorker {
         return new Promise<string>((resolve, reject) => {
             const chunkSize = BigInt("18446744073709551615") / BigInt(this._numCpus);
             const workers: Worker[] = [];
+            if (window?.document) {
+                // works but blocks the main thread
+                // const nonce = PowHelper
+                // .performPow(
+                //     powDigest,
+                //     targetZeros,
+                //     "0",
+                //     powInterval)
+                // .toString();
+                // console.log("nonce :", nonce);
 
-            for (let i = 0; i < this._numCpus; i++) {
-                const worker = this.createWorker();
-                const scriptURLs = [...window.document.querySelectorAll("script")].map(element => element.src);
+                for (let i = 0; i < this._numCpus; i++) {
+                    const worker = this.createWorker();
+                    const scriptURLs = [...window.document.querySelectorAll("script")].map(element => element.src);
+                    // console.log("IotaPow", PowHelper);
 
-                worker.postMessage([
-                    powDigest,
-                    targetZeros,
-                    (chunkSize * BigInt(i)).toString(),
-                    scriptURLs,
-                    powInterval
-                ]);
-                workers.push(worker);
+                    worker.postMessage([
+                        powDigest,
+                        targetZeros,
+                        (chunkSize * BigInt(i)).toString(),
+                        scriptURLs,
+                        powInterval
+                    ]);
+                    workers.push(worker);
 
-                worker.addEventListener("message", async (e: MessageEvent) => {
-                    for (let j = 0; j < workers.length; j++) {
-                        workers[j].terminate();
-                    }
-                    resolve(e.data as string);
-                });
-                worker.addEventListener("error", async (err: ErrorEvent) => {
-                    reject(err.message);
-                });
+                    worker.addEventListener("message", async (e: MessageEvent) => {
+                        for (let j = 0; j < workers.length; j++) {
+                            workers[j].terminate();
+                        }
+                        resolve(e.data as string);
+                    });
+                    worker.addEventListener("error", async (err: ErrorEvent) => {
+                        reject(err.message);
+                    });
+                }
             }
         });
     }
@@ -69,28 +82,32 @@ export class BrowserPowWorker {
      */
     public createWorker(): Worker {
         const blob = new Blob([
-            "(",
-            (() => {
-                addEventListener("message", e => {
-                    const [powDigest, targetZeros, startIndex, scripts, powInterval] = [...e.data];
-                    /* eslint-disable @typescript-eslint/no-unsafe-argument */
-                    for (const script of scripts) {
-                        if (script) {
-                            importScripts(script);
-                        }
-                    }
-                    const nonce = self.Iota.PowHelper
-                        .performPow(
-                            powDigest,
-                            targetZeros,
-                            startIndex,
-                            powInterval)
-                        .toString();
+                "(",
+                (() => {
+                    console.log("init worker");
+                    addEventListener("message", e => {
+                        const [powDigest, targetZeros, startIndex, scripts, powInterval] = [...e.data];
 
-                    postMessage(nonce);
-                });
-            }).toString(),
-            ")()"
+                        /* eslint-disable @typescript-eslint/no-unsafe-argument */
+                        for (const script of scripts) {
+                            console.log("script", script);
+                            if (script) {
+                                importScripts(script);
+                            }
+                        }
+
+                        const nonce = self.Iota.PowHelper
+                            .performPow(
+                                powDigest as Uint8Array,
+                                targetZeros as number,
+                                startIndex as string,
+                                powInterval as number)
+                            .toString();
+
+                        postMessage(nonce);
+                    });
+                }).toString(),
+                ")()"
             ],
             { type: "application/javascript" }
         );

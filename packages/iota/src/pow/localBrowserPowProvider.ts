@@ -4,12 +4,11 @@ import { Blake2b } from "@iota/crypto.js";
 import type { IPowProvider } from "../models/IPowProvider";
 import { PowHelper } from "../utils/powHelper";
 import { BrowserPowWorker } from "./browserPowWorker";
-import { NodePowWorker } from "./nodePowWorker";
 
 /**
- * Local PoW Provider.
+ * Local Browser PoW Provider.
  */
-export class LocalPowProvider implements IPowProvider {
+export class LocalBrowserPowProvider implements IPowProvider {
     /**
      * The number of CPUs to utilise.
      * @internal
@@ -23,7 +22,7 @@ export class LocalPowProvider implements IPowProvider {
     private readonly _isBrowser: boolean;
 
     /**
-     * Create a new instance of LocalPowProvider.
+     * Create a new instance of LocalBrowserPowProvider.
      * @param numCpus The number of cpus, defaults to max CPUs.
      */
     constructor(numCpus?: number) {
@@ -47,8 +46,6 @@ export class LocalPowProvider implements IPowProvider {
             const browserWorker = new BrowserPowWorker(this._numCpus);
             return browserWorker.doBrowserPow(powDigest, targetZeros, powInterval);
         }
-
-        const nodeWorker = new NodePowWorker(this._numCpus);
-        return nodeWorker.doNodePow(powDigest, targetZeros, powInterval);
+        return "0";
     }
 }
