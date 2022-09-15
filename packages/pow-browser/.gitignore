@@ -1,0 +1,11 @@
+.vscode
+node_modules
+/coverage
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.env
+build
+dist
+es
+typings
