@@ -145,8 +145,6 @@ export * from "./models/unlockConditions/IStateControllerAddressUnlockCondition"
 export * from "./models/unlockConditions/IStorageDepositReturnUnlockCondition";
 export * from "./models/unlockConditions/ITimelockUnlockCondition";
 export * from "./models/unlockConditions/unlockConditionTypes";
-export * from "./pow/localPowProvider";
-export * from "./pow/localBrowserPowProvider";
 export * from "./resources/conflictReasonStrings";
 export * from "./seedTypes/ed25519Seed";
 export * from "./utils/bech32Helper";
