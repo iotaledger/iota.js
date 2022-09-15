@@ -52,7 +52,6 @@ export * from "./clients/clientError";
 export * from "./clients/plugins/indexerPluginClient";
 export * from "./clients/singleNodeClient";
 export * from "./clients/singleNodeClientOptions";
-export * from "./encoding/b1t6";
 export * from "./highLevel/addressBalance";
 export * from "./highLevel/addresses";
 export * from "./highLevel/getBalance";
@@ -150,8 +149,7 @@ export * from "./resources/conflictReasonStrings";
 export * from "./seedTypes/ed25519Seed";
 export * from "./utils/bech32Helper";
 export * from "./utils/milestoneHelper";
-export * from "./utils/logging";
-export * from "./utils/powHelper";
 export * from "./utils/transactionHelper";
+export * from "./utils/logging";
 export * from "./utils/unitsHelper";
 

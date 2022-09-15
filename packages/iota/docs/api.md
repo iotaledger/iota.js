@@ -8,11 +8,9 @@
 - [ClientError](classes/ClientError.md)
 - [IndexerPluginClient](classes/IndexerPluginClient.md)
 - [SingleNodeClient](classes/SingleNodeClient.md)
-- [B1T6](classes/B1T6.md)
 - [LocalPowProvider](classes/LocalPowProvider.md)
 - [Ed25519Seed](classes/Ed25519Seed.md)
 - [Bech32Helper](classes/Bech32Helper.md)
-- [PowHelper](classes/PowHelper.md)
 - [TransactionHelper](classes/TransactionHelper.md)
 - [UnitsHelper](classes/UnitsHelper.md)
 
