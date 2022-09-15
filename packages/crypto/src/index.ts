@@ -3,6 +3,7 @@
 export * from "./address/bech32";
 export * from "./ciphers/chaCha20";
 export * from "./ciphers/chaCha20Poly1305";
+export * from "./encoding/b1t6";
 export * from "./hashes/blake2b";
 export * from "./hashes/curl";
 export * from "./hashes/sha1";
@@ -21,3 +22,4 @@ export * from "./signatures/x25519";
 export * from "./signatures/zip215";
 export * from "./utils/arrayHelper";
 export * from "./utils/bitHelper";
+export * from "./utils/powHelper";

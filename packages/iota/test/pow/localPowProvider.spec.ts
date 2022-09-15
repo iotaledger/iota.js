@@ -1,11 +1,11 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
+import { PowHelper } from "@iota/crypto.js";
 import { Converter, WriteStream } from "@iota/util.js";
 import { serializeBlock } from "../../src/binary/block";
 import type { IBlock } from "../../src/models/IBlock";
 import { ITaggedDataPayload, TAGGED_DATA_PAYLOAD_TYPE } from "../../src/models/payloads/ITaggedDataPayload";
 import { LocalPowProvider } from "../../src/pow/localPowProvider";
-import { PowHelper } from "../../src/utils/powHelper";
 
 describe("LocalPowProvider", () => {
     test("Calculate from an empty block", async () => {

@@ -1,10 +1,11 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 /* eslint-disable no-bitwise */
-import { Blake2b, Curl } from "@iota/crypto.js";
 import { BigIntHelper } from "@iota/util.js";
 import bigInt, { BigInteger } from "big-integer";
 import { B1T6 } from "../encoding/b1t6";
+import { Blake2b } from "../hashes/blake2b";
+import { Curl } from "../hashes/curl";
 
 /**
  * Helper methods for POW.

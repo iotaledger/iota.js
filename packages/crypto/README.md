@@ -5,7 +5,7 @@ The code in the package is provides crypto implementations used by other package
 ## Install
 
 ```shell
-npm install @iota/crypto.js@1.9.0-stardust.5
+npm install @iota/crypto.js@next
 ```
 
 ## Usage

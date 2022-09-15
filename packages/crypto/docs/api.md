@@ -7,6 +7,7 @@
 - [Bech32](classes/Bech32.md)
 - [ChaCha20](classes/ChaCha20.md)
 - [ChaCha20Poly1305](classes/ChaCha20Poly1305.md)
+- [B1T6](classes/B1T6.md)
 - [Blake2b](classes/Blake2b.md)
 - [Curl](classes/Curl.md)
 - [Sha1](classes/Sha1.md)
@@ -24,3 +25,4 @@
 - [X25519](classes/X25519.md)
 - [Zip215](classes/Zip215.md)
 - [ArrayHelper](classes/ArrayHelper.md)
+- [PowHelper](classes/PowHelper.md)
