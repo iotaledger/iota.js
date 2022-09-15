@@ -148,7 +148,7 @@ export * from "./resources/conflictReasonStrings";
 export * from "./seedTypes/ed25519Seed";
 export * from "./utils/bech32Helper";
 export * from "./utils/milestoneHelper";
-export * from "./utils/logging";
 export * from "./utils/transactionHelper";
+export * from "./utils/logging";
 export * from "./utils/unitsHelper";
 

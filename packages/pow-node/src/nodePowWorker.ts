@@ -1,7 +1,7 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 /* eslint-disable no-bitwise */
-import { PowHelper } from "@iota/iota.js";
+import { PowHelper } from "@iota/crypto.js";
 import { parentPort, workerData } from "worker_threads";
 
 /**

@@ -1,6 +1,7 @@
 import * as bigInt from "big-integer";
+import { PowHelper } from "@iota/crypto.js";
 import { BigIntHelper } from "@iota/util.js";
-import { IPowProvider, PowHelper } from "@iota/iota.js";
+import { IPowProvider } from "@iota/iota.js";
 import { NodePowProvider } from "@iota/pow-node.js";
 import { WasmPowProvider } from "@iota/pow-wasm.js";
 import { NeonPowProvider } from "@iota/pow-neon.js";
