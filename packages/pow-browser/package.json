@@ -67,6 +67,6 @@
     ],
     "dependencies": {
         "@iota/crypto.js": "next",
-        "@iota/iota.js": "next"
+        "@iota/types": "latest"
     }
 }
