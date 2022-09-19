@@ -22,6 +22,7 @@
         "packages/pow-node",
         "packages/pow-wasm/wasm",
         "packages/pow-wasm",
+        "packages/pow-browser",
         "packages/iota/examples/address",
         "packages/iota/examples/data",
         "packages/iota/examples/peers",
@@ -42,7 +43,8 @@
         "packages/pow-neon",
         "packages/pow-node",
         "packages/pow-wasm/wasm",
-        "packages/pow-wasm"
+        "packages/pow-wasm",
+        "packages/pow-browser"
     ],
     "dependencies": {
         "prettier": "^2.4.1"

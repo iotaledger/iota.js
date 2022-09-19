@@ -87,7 +87,8 @@ export class BrowserPowProvider implements IPowProvider {
                             powDigest,
                             targetZeros,
                             startIndex,
-                            powInterval).toString();
+                            powInterval
+                        ).toString();
 
                         postMessage(nonce);
                     });
