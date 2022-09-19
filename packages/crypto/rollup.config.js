@@ -14,9 +14,9 @@ if (process.env.MINIFY) {
 }
 
 export default {
-    input: `./es/index${process.env.BROWSER ? "-browser" : "-node"}.js`,
+    input: `./es/index${process.env.BROWSER ? process.env.BUNDLE ?  "-bundle" : "-browser" : "-node"}.js`,
     output: {
-        file: `dist/cjs/index${process.env.BROWSER ? "-browser" : "-node"}${process.env.MINIFY ? ".min" : ""}.js`,
+        file: `dist/cjs/index${process.env.BROWSER ? process.env.BUNDLE ?  "-bundle" : "-browser" : "-node"}${process.env.MINIFY ? ".min" : ""}.js`,
         format: "umd",
         name: "IotaCrypto",
         compact: process.env.MINIFY,
@@ -27,8 +27,10 @@ export default {
             "@iota/util.js": "IotaUtil"
         }
     },
-    external: process.env.BROWSER
-        ? ["big-integer", "@iota/util.js"]
+    external: process.env.BROWSER 
+        ? process.env.BUNDLE 
+            ?  []
+            : "-bundle"["big-integer", "@iota/util.js"]
         : ["big-integer", "crypto", "node-fetch", "@iota/util.js"],
     plugins
 };

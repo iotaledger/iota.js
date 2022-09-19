@@ -94,7 +94,7 @@ export class PowHelper {
         powDigest: Uint8Array,
         targetZeros: number,
         startIndex: string,
-        powInterval: number
+        powInterval?: number
         ): string {
         let nonce = bigInt(startIndex);
         let returnNonce;

@@ -1,7 +1,7 @@
 {
     "name": "@iota/pow-browser.js",
     "description": "IOTA JavaScript Library for Performing Multi-Threaded PoW in the browser",
-    "version": "1.0.0-stardust.0",
+    "version": "1.0.0-stardust.1",
     "keywords": [
         "iota",
         "pow",

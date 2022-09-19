@@ -78,9 +78,7 @@ export class BrowserPowProvider implements IPowProvider {
                 (() => {
                     self.addEventListener("message", e => {
                         importScripts(
-                            "https://cdn.jsdelivr.net/npm/big-integer@1.6.50/BigInteger.js",
-                            "https://cdn.jsdelivr.net/npm/@iota/util.js@next/dist/cjs/index-browser.min.js",
-                            "https://cdn.jsdelivr.net/npm/@iota/crypto.js@next/dist/cjs/index-browser.min.js"
+                            "https://cdn.jsdelivr.net/npm/@iota/crypto.js@next/dist/cjs/index-bundle.min.js"
                         );
 
                         const [powDigest, targetZeros, startIndex, powInterval] = [...e.data];

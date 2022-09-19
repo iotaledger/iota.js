@@ -1,7 +1,7 @@
 {
     "name": "@iota/iota.js",
     "description": "IOTA JavaScript Library",
-    "version": "1.9.0-stardust.26",
+    "version": "1.9.0-stardust.27",
     "keywords": [
         "iota",
         "client"
@@ -16,8 +16,8 @@
     },
     "license": "Apache-2.0",
     "dependencies": {
-        "@iota/crypto.js": "^1.9.0-stardust.7",
-        "@iota/util.js": "^1.9.0-stardust.5",
+        "@iota/crypto.js": "next",
+        "@iota/util.js": "next",
         "big-integer": "^1.6.51",
         "node-fetch": "2.6.7"
     },
