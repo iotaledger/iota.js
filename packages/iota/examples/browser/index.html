@@ -25,11 +25,10 @@
 
         async function run() {
             Iota.setLogger(consoleLog);
-            // testnet api endpoint: https://api.testnet.shimmer.network/
+            // alphanet api endpoint: https://api.alphanet.iotaledger.net/
             // localhost api endpoint: http://localhost:14265/
-            console.log(window);
-            console.log(IotaPowBrowser);
-            const client = new Iota.SingleNodeClient("https://api.alphanet.iotaledger.net/", {powProvider: new IotaPowBrowser.BrowserPowProvider(3)});
+            const API_ENDPOINT = "https://api.testnet.shimmer.network/"
+            const client = new Iota.SingleNodeClient(API_ENDPOINT, {powProvider: new IotaPowBrowser.BrowserPowProvider(5)});
 
             const health = await client.health();
             consoleLog("Is the node healthy", health ? "Yes" : "No");
@@ -55,7 +54,7 @@
                 }
             };
 
-            const blockIdCreated = await client.blockSubmit(submitBlock);
+            const blockIdCreated = await client.blockSubmit(submitBlock, 5);
             consoleLog("Submit Block:");
             consoleLog("\tBlock Id", blockIdCreated);
             consoleLog();
