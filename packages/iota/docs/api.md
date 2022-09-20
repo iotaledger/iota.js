@@ -220,7 +220,7 @@
 
 - [ConflictReason](enums/ConflictReason.md)
 
-### Type aliases
+### Type Aliases
 
 - [LedgerInclusionState](api.md#ledgerinclusionstate)
 - [Units](api.md#units)
@@ -902,7 +902,7 @@ Serialize the inputs to binary.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `writeStream` | `WriteStream` | The stream to write the data to. |
-| `objects` | ([`IUTXOInput`](interfaces/IUTXOInput.md) \| [`ITreasuryInput`](interfaces/ITreasuryInput.md))[] | The objects to serialize. |
+| `objects` | ([`ITreasuryInput`](interfaces/ITreasuryInput.md) \| [`IUTXOInput`](interfaces/IUTXOInput.md))[] | The objects to serialize. |
 
 #### Returns
 
@@ -941,7 +941,7 @@ Serialize the input to binary.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `writeStream` | `WriteStream` | The stream to write the data to. |
-| `object` | [`IUTXOInput`](interfaces/IUTXOInput.md) \| [`ITreasuryInput`](interfaces/ITreasuryInput.md) | The object to serialize. |
+| `object` | [`ITreasuryInput`](interfaces/ITreasuryInput.md) \| [`IUTXOInput`](interfaces/IUTXOInput.md) | The object to serialize. |
 
 #### Returns
 
@@ -1097,7 +1097,7 @@ Serialize the outputs to binary.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `writeStream` | `WriteStream` | The stream to write the data to. |
-| `objects` | ([`ISigLockedSingleOutput`](interfaces/ISigLockedSingleOutput.md) \| [`ISigLockedDustAllowanceOutput`](interfaces/ISigLockedDustAllowanceOutput.md) \| [`ITreasuryOutput`](interfaces/ITreasuryOutput.md))[] | The objects to serialize. |
+| `objects` | ([`ITreasuryOutput`](interfaces/ITreasuryOutput.md) \| [`ISigLockedDustAllowanceOutput`](interfaces/ISigLockedDustAllowanceOutput.md) \| [`ISigLockedSingleOutput`](interfaces/ISigLockedSingleOutput.md))[] | The objects to serialize. |
 
 #### Returns
 
@@ -1292,7 +1292,7 @@ Serialize the payload essence to binary.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `writeStream` | `WriteStream` | The stream to write the data to. |
-| `object` | `undefined` \| [`ITransactionPayload`](interfaces/ITransactionPayload.md) \| [`IMilestonePayload`](interfaces/IMilestonePayload.md) \| [`IIndexationPayload`](interfaces/IIndexationPayload.md) \| [`ITreasuryTransactionPayload`](interfaces/ITreasuryTransactionPayload.md) \| [`IReceiptPayload`](interfaces/IReceiptPayload.md) | The object to serialize. |
+| `object` | `undefined` \| [`IIndexationPayload`](interfaces/IIndexationPayload.md) \| [`ITreasuryTransactionPayload`](interfaces/ITreasuryTransactionPayload.md) \| [`IReceiptPayload`](interfaces/IReceiptPayload.md) \| [`IMilestonePayload`](interfaces/IMilestonePayload.md) \| [`ITransactionPayload`](interfaces/ITransactionPayload.md) | The object to serialize. |
 
 #### Returns
 
@@ -1643,7 +1643,7 @@ Serialize the unlock blocks to binary.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `writeStream` | `WriteStream` | The stream to write the data to. |
-| `objects` | ([`ISignatureUnlockBlock`](interfaces/ISignatureUnlockBlock.md) \| [`IReferenceUnlockBlock`](interfaces/IReferenceUnlockBlock.md))[] | The objects to serialize. |
+| `objects` | ([`IReferenceUnlockBlock`](interfaces/IReferenceUnlockBlock.md) \| [`ISignatureUnlockBlock`](interfaces/ISignatureUnlockBlock.md))[] | The objects to serialize. |
 
 #### Returns
 
@@ -1682,7 +1682,7 @@ Serialize the unlock block to binary.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `writeStream` | `WriteStream` | The stream to write the data to. |
-| `object` | [`ISignatureUnlockBlock`](interfaces/ISignatureUnlockBlock.md) \| [`IReferenceUnlockBlock`](interfaces/IReferenceUnlockBlock.md) | The object to serialize. |
+| `object` | [`IReferenceUnlockBlock`](interfaces/IReferenceUnlockBlock.md) \| [`ISignatureUnlockBlock`](interfaces/ISignatureUnlockBlock.md) | The object to serialize. |
 
 #### Returns
 
@@ -1824,6 +1824,8 @@ Get the balance for a list of addresses.
 | `seed` | [`ISeed`](interfaces/ISeed.md) | The seed. |
 | `accountIndex` | `number` | The account index in the wallet. |
 | `addressOptions?` | `Object` | Optional address configuration for balance address lookups. |
+| `addressOptions.startIndex?` | `number` | The start index for the wallet count address, defaults to 0. |
+| `addressOptions.zeroCount?` | `number` | The number of addresses with 0 balance during lookup before aborting. |
 
 #### Returns
 
@@ -1835,7 +1837,7 @@ ___
 
 ### getUnspentAddress
 
-▸ **getUnspentAddress**(`client`, `seed`, `accountIndex`, `addressOptions?`): `Promise`<{} \| `undefined`\>
+▸ **getUnspentAddress**(`client`, `seed`, `accountIndex`, `addressOptions?`): `Promise`<{ `address`: `string` ; `path`: `string` ; `balance`: `number`  } \| `undefined`\>
 
 Get the first unspent address.
 
@@ -1847,10 +1849,12 @@ Get the first unspent address.
 | `seed` | [`ISeed`](interfaces/ISeed.md) | The seed to use for address generation. |
 | `accountIndex` | `number` | The account index in the wallet. |
 | `addressOptions?` | `Object` | Optional address configuration for balance address lookups. |
+| `addressOptions.startIndex?` | `number` | The start index for the wallet count address, defaults to 0. |
+| `addressOptions.zeroCount?` | `number` | The number of addresses with 0 balance during lookup before aborting. |
 
 #### Returns
 
-`Promise`<{} \| `undefined`\>
+`Promise`<{ `address`: `string` ; `path`: `string` ; `balance`: `number`  } \| `undefined`\>
 
 The first unspent address.
 
@@ -1858,7 +1862,7 @@ ___
 
 ### getUnspentAddresses
 
-▸ **getUnspentAddresses**(`client`, `seed`, `accountIndex`, `addressOptions?`): `Promise`<{}[]\>
+▸ **getUnspentAddresses**(`client`, `seed`, `accountIndex`, `addressOptions?`): `Promise`<{ `address`: `string` ; `path`: `string` ; `balance`: `number`  }[]\>
 
 Get all the unspent addresses.
 
@@ -1870,10 +1874,13 @@ Get all the unspent addresses.
 | `seed` | [`ISeed`](interfaces/ISeed.md) | The seed to use for address generation. |
 | `accountIndex` | `number` | The account index in the wallet. |
 | `addressOptions?` | `Object` | Optional address configuration for balance address lookups. |
+| `addressOptions.startIndex?` | `number` | The start index for the wallet count address, defaults to 0. |
+| `addressOptions.zeroCount?` | `number` | The number of addresses with 0 balance during lookup before aborting. |
+| `addressOptions.requiredCount?` | `number` | The max number of addresses to find. |
 
 #### Returns
 
-`Promise`<{}[]\>
+`Promise`<{ `address`: `string` ; `path`: `string` ; `balance`: `number`  }[]\>
 
 All the unspent addresses.
 
@@ -1881,7 +1888,7 @@ ___
 
 ### getUnspentAddressesWithAddressGenerator
 
-▸ **getUnspentAddressesWithAddressGenerator**<`T`\>(`client`, `seed`, `initialAddressState`, `nextAddressPath`, `addressOptions?`): `Promise`<{}[]\>
+▸ **getUnspentAddressesWithAddressGenerator**<`T`\>(`client`, `seed`, `initialAddressState`, `nextAddressPath`, `addressOptions?`): `Promise`<{ `address`: `string` ; `path`: `string` ; `balance`: `number`  }[]\>
 
 Get all the unspent addresses using an address generator.
 
@@ -1900,10 +1907,13 @@ Get all the unspent addresses using an address generator.
 | `initialAddressState` | `T` | The initial address state for calculating the addresses. |
 | `nextAddressPath` | (`addressState`: `T`) => `string` | Calculate the next address for inputs. |
 | `addressOptions?` | `Object` | Optional address configuration for balance address lookups. |
+| `addressOptions.startIndex?` | `number` | The start index for the wallet count address, defaults to 0. |
+| `addressOptions.zeroCount?` | `number` | The number of addresses with 0 balance during lookup before aborting. |
+| `addressOptions.requiredCount?` | `number` | The max number of addresses to find. |
 
 #### Returns
 
-`Promise`<{}[]\>
+`Promise`<{ `address`: `string` ; `path`: `string` ; `balance`: `number`  }[]\>
 
 All the unspent addresses.
 
@@ -1911,7 +1921,7 @@ ___
 
 ### promote
 
-▸ **promote**(`client`, `messageId`): `Promise`<{}\>
+▸ **promote**(`client`, `messageId`): `Promise`<{ `message`: [`IMessage`](interfaces/IMessage.md) ; `messageId`: `string`  }\>
 
 Promote an existing message.
 
@@ -1924,7 +1934,7 @@ Promote an existing message.
 
 #### Returns
 
-`Promise`<{}\>
+`Promise`<{ `message`: [`IMessage`](interfaces/IMessage.md) ; `messageId`: `string`  }\>
 
 The id and message that were promoted.
 
@@ -1932,7 +1942,7 @@ ___
 
 ### reattach
 
-▸ **reattach**(`client`, `messageId`): `Promise`<{}\>
+▸ **reattach**(`client`, `messageId`): `Promise`<{ `message`: [`IMessage`](interfaces/IMessage.md) ; `messageId`: `string`  }\>
 
 Reattach an existing message.
 
@@ -1945,7 +1955,7 @@ Reattach an existing message.
 
 #### Returns
 
-`Promise`<{}\>
+`Promise`<{ `message`: [`IMessage`](interfaces/IMessage.md) ; `messageId`: `string`  }\>
 
 The id and message that were reattached.
 
@@ -1953,7 +1963,7 @@ ___
 
 ### retrieveData
 
-▸ **retrieveData**(`client`, `messageId`): `Promise`<{} \| `undefined`\>
+▸ **retrieveData**(`client`, `messageId`): `Promise`<{ `index`: `Uint8Array` ; `data?`: `Uint8Array`  } \| `undefined`\>
 
 Retrieve a data message.
 
@@ -1966,7 +1976,7 @@ Retrieve a data message.
 
 #### Returns
 
-`Promise`<{} \| `undefined`\>
+`Promise`<{ `index`: `Uint8Array` ; `data?`: `Uint8Array`  } \| `undefined`\>
 
 The message index and data.
 
@@ -1974,7 +1984,7 @@ ___
 
 ### retry
 
-▸ **retry**(`client`, `messageId`): `Promise`<{}\>
+▸ **retry**(`client`, `messageId`): `Promise`<{ `message`: [`IMessage`](interfaces/IMessage.md) ; `messageId`: `string`  }\>
 
 Retry an existing message either by promoting or reattaching.
 
@@ -1987,7 +1997,7 @@ Retry an existing message either by promoting or reattaching.
 
 #### Returns
 
-`Promise`<{}\>
+`Promise`<{ `message`: [`IMessage`](interfaces/IMessage.md) ; `messageId`: `string`  }\>
 
 The id and message that were retried.
 
@@ -1995,7 +2005,7 @@ ___
 
 ### send
 
-▸ **send**(`client`, `seed`, `accountIndex`, `addressBech32`, `amount`, `indexation?`, `addressOptions?`): `Promise`<{}\>
+▸ **send**(`client`, `seed`, `accountIndex`, `addressBech32`, `amount`, `indexation?`, `addressOptions?`): `Promise`<{ `messageId`: `string` ; `message`: [`IMessage`](interfaces/IMessage.md)  }\>
 
 Send a transfer from the balance on the seed to a single output.
 
@@ -2009,11 +2019,15 @@ Send a transfer from the balance on the seed to a single output.
 | `addressBech32` | `string` | The address to send the funds to in bech32 format. |
 | `amount` | `number` | The amount to send. |
 | `indexation?` | `Object` | Optional indexation data to associate with the transaction. |
+| `indexation.key` | `string` \| `Uint8Array` | Indexation key. |
+| `indexation.data?` | `string` \| `Uint8Array` | Optional index data. |
 | `addressOptions?` | `Object` | Optional address configuration for balance address lookups. |
+| `addressOptions.startIndex?` | `number` | The start index for the wallet count address, defaults to 0. |
+| `addressOptions.zeroCount?` | `number` | The number of addresses with 0 balance during lookup before aborting. |
 
 #### Returns
 
-`Promise`<{}\>
+`Promise`<{ `messageId`: `string` ; `message`: [`IMessage`](interfaces/IMessage.md)  }\>
 
 The id of the message created and the contructed message.
 
@@ -2021,7 +2035,7 @@ ___
 
 ### sendEd25519
 
-▸ **sendEd25519**(`client`, `seed`, `accountIndex`, `addressEd25519`, `amount`, `indexation?`, `addressOptions?`): `Promise`<{}\>
+▸ **sendEd25519**(`client`, `seed`, `accountIndex`, `addressEd25519`, `amount`, `indexation?`, `addressOptions?`): `Promise`<{ `messageId`: `string` ; `message`: [`IMessage`](interfaces/IMessage.md)  }\>
 
 Send a transfer from the balance on the seed to a single output.
 
@@ -2035,11 +2049,15 @@ Send a transfer from the balance on the seed to a single output.
 | `addressEd25519` | `string` | The address to send the funds to in ed25519 format. |
 | `amount` | `number` | The amount to send. |
 | `indexation?` | `Object` | Optional indexation data to associate with the transaction. |
+| `indexation.key` | `Uint8Array` | Indexation key. |
+| `indexation.data?` | `Uint8Array` | Optional index data. |
 | `addressOptions?` | `Object` | Optional address configuration for balance address lookups. |
+| `addressOptions.startIndex?` | `number` | The start index for the wallet count address, defaults to 0. |
+| `addressOptions.zeroCount?` | `number` | The number of addresses with 0 balance during lookup before aborting. |
 
 #### Returns
 
-`Promise`<{}\>
+`Promise`<{ `messageId`: `string` ; `message`: [`IMessage`](interfaces/IMessage.md)  }\>
 
 The id of the message created and the contructed message.
 
@@ -2047,7 +2065,7 @@ ___
 
 ### sendMultiple
 
-▸ **sendMultiple**(`client`, `seed`, `accountIndex`, `outputs`, `indexation?`, `addressOptions?`): `Promise`<{}\>
+▸ **sendMultiple**(`client`, `seed`, `accountIndex`, `outputs`, `indexation?`, `addressOptions?`): `Promise`<{ `messageId`: `string` ; `message`: [`IMessage`](interfaces/IMessage.md)  }\>
 
 Send a transfer from the balance on the seed to multiple outputs.
 
@@ -2058,13 +2076,17 @@ Send a transfer from the balance on the seed to multiple outputs.
 | `client` | `string` \| [`IClient`](interfaces/IClient.md) | The client or node endpoint to send the transfer with. |
 | `seed` | [`ISeed`](interfaces/ISeed.md) | The seed to use for address generation. |
 | `accountIndex` | `number` | The account index in the wallet. |
-| `outputs` | {}[] | The address to send the funds to in bech32 format and amounts. |
+| `outputs` | { `addressBech32`: `string` ; `amount`: `number` ; `isDustAllowance?`: `boolean`  }[] | The address to send the funds to in bech32 format and amounts. |
 | `indexation?` | `Object` | Optional indexation data to associate with the transaction. |
+| `indexation.key` | `string` \| `Uint8Array` | Indexation key. |
+| `indexation.data?` | `string` \| `Uint8Array` | Optional index data. |
 | `addressOptions?` | `Object` | Optional address configuration for balance address lookups. |
+| `addressOptions.startIndex?` | `number` | The start index for the wallet count address, defaults to 0. |
+| `addressOptions.zeroCount?` | `number` | The number of addresses with 0 balance during lookup before aborting. |
 
 #### Returns
 
-`Promise`<{}\>
+`Promise`<{ `messageId`: `string` ; `message`: [`IMessage`](interfaces/IMessage.md)  }\>
 
 The id of the message created and the contructed message.
 
@@ -2072,7 +2094,7 @@ ___
 
 ### sendMultipleEd25519
 
-▸ **sendMultipleEd25519**(`client`, `seed`, `accountIndex`, `outputs`, `indexation?`, `addressOptions?`): `Promise`<{}\>
+▸ **sendMultipleEd25519**(`client`, `seed`, `accountIndex`, `outputs`, `indexation?`, `addressOptions?`): `Promise`<{ `messageId`: `string` ; `message`: [`IMessage`](interfaces/IMessage.md)  }\>
 
 Send a transfer from the balance on the seed.
 
@@ -2083,13 +2105,17 @@ Send a transfer from the balance on the seed.
 | `client` | `string` \| [`IClient`](interfaces/IClient.md) | The client or node endpoint to send the transfer with. |
 | `seed` | [`ISeed`](interfaces/ISeed.md) | The seed to use for address generation. |
 | `accountIndex` | `number` | The account index in the wallet. |
-| `outputs` | {}[] | The outputs including address to send the funds to in ed25519 format and amount. |
+| `outputs` | { `addressEd25519`: `string` ; `amount`: `number` ; `isDustAllowance?`: `boolean`  }[] | The outputs including address to send the funds to in ed25519 format and amount. |
 | `indexation?` | `Object` | Optional indexation data to associate with the transaction. |
+| `indexation.key` | `Uint8Array` | Indexation key. |
+| `indexation.data?` | `Uint8Array` | Optional index data. |
 | `addressOptions?` | `Object` | Optional address configuration for balance address lookups. |
+| `addressOptions.startIndex?` | `number` | The start index for the wallet count address, defaults to 0. |
+| `addressOptions.zeroCount?` | `number` | The number of addresses with 0 balance during lookup before aborting. |
 
 #### Returns
 
-`Promise`<{}\>
+`Promise`<{ `messageId`: `string` ; `message`: [`IMessage`](interfaces/IMessage.md)  }\>
 
 The id of the message created and the contructed message.
 
@@ -2097,7 +2123,7 @@ ___
 
 ### sendWithAddressGenerator
 
-▸ **sendWithAddressGenerator**<`T`\>(`client`, `seed`, `initialAddressState`, `nextAddressPath`, `outputs`, `indexation?`, `zeroCount?`): `Promise`<{}\>
+▸ **sendWithAddressGenerator**<`T`\>(`client`, `seed`, `initialAddressState`, `nextAddressPath`, `outputs`, `indexation?`, `zeroCount?`): `Promise`<{ `messageId`: `string` ; `message`: [`IMessage`](interfaces/IMessage.md)  }\>
 
 Send a transfer using account based indexing for the inputs.
 
@@ -2115,13 +2141,15 @@ Send a transfer using account based indexing for the inputs.
 | `seed` | [`ISeed`](interfaces/ISeed.md) | The seed to use for address generation. |
 | `initialAddressState` | `T` | The initial address state for calculating the addresses. |
 | `nextAddressPath` | (`addressState`: `T`) => `string` | Calculate the next address for inputs. |
-| `outputs` | {}[] | The address to send the funds to in bech32 format and amounts. |
+| `outputs` | { `address`: `string` ; `addressType`: `number` ; `amount`: `number` ; `isDustAllowance?`: `boolean`  }[] | The address to send the funds to in bech32 format and amounts. |
 | `indexation?` | `Object` | Optional indexation data to associate with the transaction. |
+| `indexation.key` | `string` \| `Uint8Array` | Indexation key. |
+| `indexation.data?` | `string` \| `Uint8Array` | Optional index data. |
 | `zeroCount?` | `number` | The number of addresses with 0 balance during lookup before aborting. |
 
 #### Returns
 
-`Promise`<{}\>
+`Promise`<{ `messageId`: `string` ; `message`: [`IMessage`](interfaces/IMessage.md)  }\>
 
 The id of the message created and the contructed message.
 
@@ -2129,7 +2157,7 @@ ___
 
 ### calculateInputs
 
-▸ **calculateInputs**<`T`\>(`client`, `seed`, `initialAddressState`, `nextAddressPath`, `outputs`, `zeroCount?`): `Promise`<{}[]\>
+▸ **calculateInputs**<`T`\>(`client`, `seed`, `initialAddressState`, `nextAddressPath`, `outputs`, `zeroCount?`): `Promise`<{ `input`: [`IUTXOInput`](interfaces/IUTXOInput.md) ; `addressKeyPair`: [`IKeyPair`](interfaces/IKeyPair.md)  }[]\>
 
 Calculate the inputs from the seed and basePath.
 
@@ -2147,12 +2175,12 @@ Calculate the inputs from the seed and basePath.
 | `seed` | [`ISeed`](interfaces/ISeed.md) | `undefined` | The seed to use for address generation. |
 | `initialAddressState` | `T` | `undefined` | The initial address state for calculating the addresses. |
 | `nextAddressPath` | (`addressState`: `T`) => `string` | `undefined` | Calculate the next address for inputs. |
-| `outputs` | {}[] | `undefined` | The outputs to send. |
+| `outputs` | { `address`: `string` ; `addressType`: `number` ; `amount`: `number`  }[] | `undefined` | The outputs to send. |
 | `zeroCount` | `number` | `5` | Abort when the number of zero balances is exceeded. |
 
 #### Returns
 
-`Promise`<{}[]\>
+`Promise`<{ `input`: [`IUTXOInput`](interfaces/IUTXOInput.md) ; `addressKeyPair`: [`IKeyPair`](interfaces/IKeyPair.md)  }[]\>
 
 The id of the message created and the contructed message.
 
@@ -2160,7 +2188,7 @@ ___
 
 ### sendAdvanced
 
-▸ **sendAdvanced**(`client`, `inputsAndSignatureKeyPairs`, `outputs`, `indexation?`): `Promise`<{}\>
+▸ **sendAdvanced**(`client`, `inputsAndSignatureKeyPairs`, `outputs`, `indexation?`): `Promise`<{ `messageId`: `string` ; `message`: [`IMessage`](interfaces/IMessage.md)  }\>
 
 Send a transfer from the balance on the seed.
 
@@ -2169,13 +2197,15 @@ Send a transfer from the balance on the seed.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `client` | `string` \| [`IClient`](interfaces/IClient.md) | The client or node endpoint to send the transfer with. |
-| `inputsAndSignatureKeyPairs` | {}[] | The inputs with the signature key pairs needed to sign transfers. |
-| `outputs` | {}[] | The outputs to send. |
+| `inputsAndSignatureKeyPairs` | { `input`: [`IUTXOInput`](interfaces/IUTXOInput.md) ; `addressKeyPair`: [`IKeyPair`](interfaces/IKeyPair.md)  }[] | The inputs with the signature key pairs needed to sign transfers. |
+| `outputs` | { `address`: `string` ; `addressType`: `number` ; `amount`: `number` ; `isDustAllowance?`: `boolean`  }[] | The outputs to send. |
 | `indexation?` | `Object` | Optional indexation data to associate with the transaction. |
+| `indexation.key` | `string` \| `Uint8Array` | Indexation key. |
+| `indexation.data?` | `string` \| `Uint8Array` | Optional index data. |
 
 #### Returns
 
-`Promise`<{}\>
+`Promise`<{ `messageId`: `string` ; `message`: [`IMessage`](interfaces/IMessage.md)  }\>
 
 The id of the message created and the remainder address if one was needed.
 
@@ -2191,9 +2221,11 @@ Build a transaction payload.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `inputsAndSignatureKeyPairs` | {}[] | The inputs with the signature key pairs needed to sign transfers. |
-| `outputs` | {}[] | The outputs to send. |
+| `inputsAndSignatureKeyPairs` | { `input`: [`IUTXOInput`](interfaces/IUTXOInput.md) ; `addressKeyPair`: [`IKeyPair`](interfaces/IKeyPair.md)  }[] | The inputs with the signature key pairs needed to sign transfers. |
+| `outputs` | { `address`: `string` ; `addressType`: `number` ; `amount`: `number` ; `isDustAllowance?`: `boolean`  }[] | The outputs to send. |
 | `indexation?` | `Object` | Optional indexation data to associate with the transaction. |
+| `indexation.key` | `string` \| `Uint8Array` | Indexation key. |
+| `indexation.data?` | `string` \| `Uint8Array` | Optional index data. |
 
 #### Returns
 
@@ -2205,7 +2237,7 @@ ___
 
 ### sendData
 
-▸ **sendData**(`client`, `indexationKey`, `indexationData?`): `Promise`<{}\>
+▸ **sendData**(`client`, `indexationKey`, `indexationData?`): `Promise`<{ `message`: [`IMessage`](interfaces/IMessage.md) ; `messageId`: `string`  }\>
 
 Send a data message.
 
@@ -2219,7 +2251,7 @@ Send a data message.
 
 #### Returns
 
-`Promise`<{}\>
+`Promise`<{ `message`: [`IMessage`](interfaces/IMessage.md) ; `messageId`: `string`  }\>
 
 The id of the message created and the message.
 
@@ -2330,7 +2362,7 @@ Log a message to the console.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `prefix` | `string` | The prefix for the output. |
-| `unknownPayload?` | [`ITransactionPayload`](interfaces/ITransactionPayload.md) \| [`IMilestonePayload`](interfaces/IMilestonePayload.md) \| [`IIndexationPayload`](interfaces/IIndexationPayload.md) \| [`ITreasuryTransactionPayload`](interfaces/ITreasuryTransactionPayload.md) \| [`IReceiptPayload`](interfaces/IReceiptPayload.md) | The payload. |
+| `unknownPayload?` | [`IIndexationPayload`](interfaces/IIndexationPayload.md) \| [`ITreasuryTransactionPayload`](interfaces/ITreasuryTransactionPayload.md) \| [`IReceiptPayload`](interfaces/IReceiptPayload.md) \| [`IMilestonePayload`](interfaces/IMilestonePayload.md) \| [`ITransactionPayload`](interfaces/ITransactionPayload.md) | The payload. |
 
 #### Returns
 
@@ -2482,7 +2514,7 @@ Log input to the console.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `prefix` | `string` | The prefix for the output. |
-| `unknownInput?` | [`IUTXOInput`](interfaces/IUTXOInput.md) \| [`ITreasuryInput`](interfaces/ITreasuryInput.md) | The input to log. |
+| `unknownInput?` | [`ITreasuryInput`](interfaces/ITreasuryInput.md) \| [`IUTXOInput`](interfaces/IUTXOInput.md) | The input to log. |
 
 #### Returns
 
@@ -2501,7 +2533,7 @@ Log output to the console.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `prefix` | `string` | The prefix for the output. |
-| `unknownOutput?` | [`ISigLockedSingleOutput`](interfaces/ISigLockedSingleOutput.md) \| [`ISigLockedDustAllowanceOutput`](interfaces/ISigLockedDustAllowanceOutput.md) \| [`ITreasuryOutput`](interfaces/ITreasuryOutput.md) | The output to log. |
+| `unknownOutput?` | [`ITreasuryOutput`](interfaces/ITreasuryOutput.md) \| [`ISigLockedDustAllowanceOutput`](interfaces/ISigLockedDustAllowanceOutput.md) \| [`ISigLockedSingleOutput`](interfaces/ISigLockedSingleOutput.md) | The output to log. |
 
 #### Returns
 
@@ -2520,7 +2552,7 @@ Log unlock block to the console.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `prefix` | `string` | The prefix for the output. |
-| `unknownUnlockBlock?` | [`ISignatureUnlockBlock`](interfaces/ISignatureUnlockBlock.md) \| [`IReferenceUnlockBlock`](interfaces/IReferenceUnlockBlock.md) | The unlock block to log. |
+| `unknownUnlockBlock?` | [`IReferenceUnlockBlock`](interfaces/IReferenceUnlockBlock.md) \| [`ISignatureUnlockBlock`](interfaces/ISignatureUnlockBlock.md) | The unlock block to log. |
 
 #### Returns
 
@@ -2545,7 +2577,7 @@ Log fund to the console.
 
 `void`
 
-## Type aliases
+## Type Aliases
 
 ### LedgerInclusionState
 

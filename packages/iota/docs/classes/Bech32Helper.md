@@ -15,10 +15,6 @@ Convert address to bech32.
 - [fromBech32](Bech32Helper.md#frombech32)
 - [matches](Bech32Helper.md#matches)
 
-### Constructors
-
-- [constructor](Bech32Helper.md#constructor)
-
 ## Properties
 
 ### BECH32\_DEFAULT\_HRP\_MAIN
@@ -61,7 +57,7 @@ ___
 
 ### fromBech32
 
-▸ `Static` **fromBech32**(`bech32Text`, `humanReadablePart`): `undefined` \| {}
+▸ `Static` **fromBech32**(`bech32Text`, `humanReadablePart`): `undefined` \| { `addressType`: `number` ; `addressBytes`: `Uint8Array`  }
 
 Decode an address from bech32.
 
@@ -74,7 +70,7 @@ Decode an address from bech32.
 
 #### Returns
 
-`undefined` \| {}
+`undefined` \| { `addressType`: `number` ; `addressBytes`: `Uint8Array`  }
 
 The address type and address bytes or undefined if it cannot be decoded.
 
@@ -98,9 +94,3 @@ Does the provided string look like it might be an bech32 address with matching h
 `boolean`
 
 True if the passed address matches the pattern for a bech32 address.
-
-## Constructors
-
-### constructor
-
-• **new Bech32Helper**()

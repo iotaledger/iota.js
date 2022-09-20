@@ -5,15 +5,30 @@ TypeScript conversion from https://github.com/emn178/js-sha256.
 
 ## Table of contents
 
+### Constructors
+
+- [constructor](HmacSha256.md#constructor)
+
 ### Methods
 
 - [sum256](HmacSha256.md#sum256)
 - [update](HmacSha256.md#update)
 - [digest](HmacSha256.md#digest)
 
-### Constructors
+## Constructors
 
-- [constructor](HmacSha256.md#constructor)
+### constructor
+
+• **new HmacSha256**(`key`, `bits?`)
+
+Create a new instance of HmacSha256.
+
+#### Parameters
+
+| Name | Type | Default value | Description |
+| :------ | :------ | :------ | :------ |
+| `key` | `Uint8Array` | `undefined` | The key for the hmac. |
+| `bits` | `number` | `256` | The number of bits. |
 
 ## Methods
 
@@ -69,18 +84,3 @@ Get the digest.
 `Uint8Array`
 
 The digest.
-
-## Constructors
-
-### constructor
-
-• **new HmacSha256**(`key`, `bits?`)
-
-Create a new instance of HmacSha256.
-
-#### Parameters
-
-| Name | Type | Default value | Description |
-| :------ | :------ | :------ | :------ |
-| `key` | `Uint8Array` | `undefined` | The key for the hmac. |
-| `bits` | `number` | `256` | The number of bits. |

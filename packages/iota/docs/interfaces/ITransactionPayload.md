@@ -28,7 +28,7 @@ ___
 
 ### unlockBlocks
 
-• **unlockBlocks**: ([`ISignatureUnlockBlock`](ISignatureUnlockBlock.md) \| [`IReferenceUnlockBlock`](IReferenceUnlockBlock.md))[]
+• **unlockBlocks**: ([`IReferenceUnlockBlock`](IReferenceUnlockBlock.md) \| [`ISignatureUnlockBlock`](ISignatureUnlockBlock.md))[]
 
 The unlock blocks.
 

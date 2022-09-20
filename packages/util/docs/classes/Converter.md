@@ -18,10 +18,6 @@ Convert arrays to and from different formats.
 - [bytesToBase64](Converter.md#bytestobase64)
 - [base64ToBytes](Converter.md#base64tobytes)
 
-### Constructors
-
-- [constructor](Converter.md#constructor)
-
 ## Methods
 
 ### bytesToUtf8
@@ -247,9 +243,3 @@ Convert a base64 string to bytes.
 `Uint8Array`
 
 The bytes.
-
-## Constructors
-
-### constructor
-
-• **new Converter**()

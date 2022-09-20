@@ -8,10 +8,6 @@ Array helper methods.
 
 - [equal](ArrayHelper.md#equal)
 
-### Constructors
-
-- [constructor](ArrayHelper.md#constructor)
-
 ## Methods
 
 ### equal
@@ -32,9 +28,3 @@ Are the two array equals.
 `boolean`
 
 True if the arrays are equal.
-
-## Constructors
-
-### constructor
-
-• **new ArrayHelper**()

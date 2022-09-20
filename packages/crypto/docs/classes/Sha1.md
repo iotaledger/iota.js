@@ -7,15 +7,23 @@ default and most widely support for generating TOTP/HOTP codes.
 
 ## Table of contents
 
+### Constructors
+
+- [constructor](Sha1.md#constructor)
+
 ### Methods
 
 - [sum](Sha1.md#sum)
 - [update](Sha1.md#update)
 - [digest](Sha1.md#digest)
 
-### Constructors
+## Constructors
 
-- [constructor](Sha1.md#constructor)
+### constructor
+
+• **new Sha1**()
+
+Create a new instance of Sha1.
 
 ## Methods
 
@@ -45,7 +53,9 @@ ___
 
 Update the hash with the data.
 
-**`throws`** Error if the hash has already been finalized.
+**`Throws`**
+
+Error if the hash has already been finalized.
 
 #### Parameters
 
@@ -72,11 +82,3 @@ Get the digest.
 `Uint8Array`
 
 The digest.
-
-## Constructors
-
-### constructor
-
-• **new Sha1**()
-
-Create a new instance of Sha1.

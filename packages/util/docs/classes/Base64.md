@@ -11,10 +11,6 @@ Sourced from https://github.com/beatgammit/base64-js.
 - [decode](Base64.md#decode)
 - [encode](Base64.md#encode)
 
-### Constructors
-
-- [constructor](Base64.md#constructor)
-
 ## Methods
 
 ### byteLength
@@ -74,9 +70,3 @@ Convert a byte array to base 64.
 `string`
 
 The data as bas64 string.
-
-## Constructors
-
-### constructor
-
-• **new Base64**()

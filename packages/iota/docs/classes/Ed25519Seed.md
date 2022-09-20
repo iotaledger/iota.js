@@ -8,6 +8,10 @@ Class to help with seeds.
 
 ## Table of contents
 
+### Constructors
+
+- [constructor](Ed25519Seed.md#constructor)
+
 ### Methods
 
 - [fromMnemonic](Ed25519Seed.md#frommnemonic)
@@ -15,9 +19,19 @@ Class to help with seeds.
 - [generateSeedFromPath](Ed25519Seed.md#generateseedfrompath)
 - [toBytes](Ed25519Seed.md#tobytes)
 
-### Constructors
+## Constructors
 
-- [constructor](Ed25519Seed.md#constructor)
+### constructor
+
+• **new Ed25519Seed**(`secretKeyBytes?`)
+
+Create a new instance of Ed25519Seed.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `secretKeyBytes?` | `Uint8Array` | The bytes. |
 
 ## Methods
 
@@ -98,17 +112,3 @@ The key as bytes.
 #### Implementation of
 
 [ISeed](../interfaces/ISeed.md).[toBytes](../interfaces/ISeed.md#tobytes)
-
-## Constructors
-
-### constructor
-
-• **new Ed25519Seed**(`secretKeyBytes?`)
-
-Create a new instance of Ed25519Seed.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `secretKeyBytes?` | `Uint8Array` | The bytes. |

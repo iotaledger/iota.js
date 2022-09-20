@@ -5,15 +5,30 @@ TypeScript conversion from https://github.com/emn178/js-sha512.
 
 ## Table of contents
 
+### Constructors
+
+- [constructor](HmacSha512.md#constructor)
+
 ### Methods
 
 - [sum512](HmacSha512.md#sum512)
 - [update](HmacSha512.md#update)
 - [digest](HmacSha512.md#digest)
 
-### Constructors
+## Constructors
 
-- [constructor](HmacSha512.md#constructor)
+### constructor
+
+• **new HmacSha512**(`key`, `bits?`)
+
+Create a new instance of HmacSha512.
+
+#### Parameters
+
+| Name | Type | Default value | Description |
+| :------ | :------ | :------ | :------ |
+| `key` | `Uint8Array` | `undefined` | The key for the hmac. |
+| `bits` | `number` | `512` | The number of bits. |
 
 ## Methods
 
@@ -69,18 +84,3 @@ Get the digest.
 `Uint8Array`
 
 The digest.
-
-## Constructors
-
-### constructor
-
-• **new HmacSha512**(`key`, `bits?`)
-
-Create a new instance of HmacSha512.
-
-#### Parameters
-
-| Name | Type | Default value | Description |
-| :------ | :------ | :------ | :------ |
-| `key` | `Uint8Array` | `undefined` | The key for the hmac. |
-| `bits` | `number` | `512` | The number of bits. |

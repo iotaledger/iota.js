@@ -60,7 +60,9 @@ Error.captureStackTrace
 
 Optional override for formatting stack traces
 
-**`see`** https://v8.dev/docs/stack-trace-api#customizing-stack-traces
+**`See`**
+
+https://v8.dev/docs/stack-trace-api#customizing-stack-traces
 
 ##### Parameters
 
