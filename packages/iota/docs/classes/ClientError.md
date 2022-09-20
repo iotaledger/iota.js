@@ -10,6 +10,10 @@ Class to represent errors from Client.
 
 ## Table of contents
 
+### Methods
+
+- [captureStackTrace](ClientError.md#capturestacktrace)
+
 ### Properties
 
 - [prepareStackTrace](ClientError.md#preparestacktrace)
@@ -20,6 +24,29 @@ Class to represent errors from Client.
 ### Constructors
 
 - [constructor](ClientError.md#constructor)
+
+## Methods
+
+### captureStackTrace
+
+▸ `Static` **captureStackTrace**(`targetObject`, `constructorOpt?`): `void`
+
+Create .stack property on a target object
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `targetObject` | `object` |
+| `constructorOpt?` | `Function` |
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+Error.captureStackTrace
 
 ## Properties
 

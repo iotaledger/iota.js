@@ -47,7 +47,7 @@
         "packages/pow-browser"
     ],
     "dependencies": {
-        "prettier": "^2.4.1"
+        "prettier": "^2.7.1"
     },
     "scripts": {
         "dist-neon": "npm run postinstall --prefix packages/pow-neon",
