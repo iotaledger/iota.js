@@ -1,6 +1,7 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 /* eslint-disable no-bitwise */
+/* eslint-disable unicorn/prefer-top-level-await */
 import { promises } from "fs";
 import path from "path";
 import { parentPort, workerData } from "worker_threads";
