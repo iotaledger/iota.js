@@ -84,6 +84,6 @@
     "dependencies": {
         "@iota/util.js": "^1.8.6",
         "@iota/iota.js": "^1.8.6",
-        "mqtt": "^4.3.6"
+        "mqtt": "^4.3.7"
     }
 }
