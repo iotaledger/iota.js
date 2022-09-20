@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 /* eslint-disable no-bitwise */
 import { Blake2b, PowHelper } from "@iota/crypto.js";
-import type { IPowProvider } from "@iota/iota.js";
+import type { IPowProvider } from "@iota/types";
 import os from "os";
 import path from "path";
 import { Worker } from "worker_threads";

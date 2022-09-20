@@ -1,18 +1,19 @@
 {
-    "name": "@iota/pow-node.js",
-    "description": "IOTA JavaScript Library for Performing Multi-Threaded PoW on NodeJS",
-    "version": "1.9.0-stardust.6",
+    "name": "@iota/pow-browser.js",
+    "description": "IOTA JavaScript Library for Performing Multi-Threaded PoW in the browser",
+    "version": "1.0.0-stardust.1",
     "keywords": [
         "iota",
-        "pow"
+        "pow",
+        "browser"
     ],
     "authors": [
-        "Martyn Janes <martyn.janes@iota.org>"
+        "Branko Bosnic <branko.bosnic@iota.org>"
     ],
     "repository": {
         "type": "git",
         "url": "https://github.com/iotaledger/iota.js.git",
-        "directory": "packages/pow-node"
+        "directory": "packages/pow-browser"
     },
     "license": "Apache-2.0",
     "scripts": {
@@ -29,11 +30,11 @@
         "package-umd": "rollup --config rollup.config.js",
         "package-umd-min": "rollup --config rollup.config.js --environment MINIFY:true",
         "package": "run-s package-clean package-umd package-umd-min",
-        "dist": "run-s build test package",
-        "docs-wiki-build": "typedoc --githubPages false  --disableSources --excludePrivate --excludeInternal --excludeNotDocumented --plugin typedoc-plugin-markdown --theme markdown --hideBreadcrumbs --entryDocument api_ref.md --readme none --hideGenerator --sort source-order --exclude ./**/src/index.ts --out ../../documentation/docs/references/pow-node ./src/index.ts"
+        "dist": "run-s build package",
+        "docs-wiki-build": "typedoc --githubPages false  --disableSources --excludePrivate --excludeInternal --excludeNotDocumented --plugin typedoc-plugin-markdown --theme markdown --hideBreadcrumbs --entryDocument api_ref.md --readme none --hideGenerator --sort source-order --exclude ./**/src/index.ts --out ../../documentation/docs/references/pow-browser ./src/index.ts"
     },
     "engines": {
-        "node": ">=12.0.0"
+        "node": ">=16.16.0"
     },
     "devDependencies": {
         "@rollup/plugin-commonjs": "^21.0.2",
@@ -56,8 +57,8 @@
         "ts-node": "^10.7.0",
         "typescript": "^4.6.2"
     },
-    "main": "dist/pow-node.js",
-    "module": "es/pow-node.js",
+    "main": "dist/pow-browser.js",
+    "module": "es/pow-browser.js",
     "typings": "typings/index.d.ts",
     "files": [
         "dist",

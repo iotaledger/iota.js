@@ -1,7 +1,7 @@
 {
     "name": "@iota/pow-wasm.js",
     "description": "IOTA JavaScript Library for Performing Multi-Threaded PoW on NodeJS using WASM implementation",
-    "version": "1.9.0-stardust.5",
+    "version": "1.9.0-stardust.6",
     "keywords": [
         "iota",
         "pow",
@@ -67,7 +67,7 @@
         "wasm/build/release.wasm"
     ],
     "dependencies": {
-        "@iota/crypto.js": "^1.9.0-stardust.7",
-        "@iota/iota.js": "^1.9.0-stardust.4"
+        "@iota/crypto.js": "next",
+        "@iota/types": "latest"
     }
 }

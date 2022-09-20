@@ -206,19 +206,21 @@ ___
 
 ### blockSubmit
 
-▸ **blockSubmit**(`blockPartial`): `Promise`<`string`\>
+▸ **blockSubmit**(`blockPartial`, `powInterval?`, `maxPowAttempts?`): `Promise`<`string`\>
 
 Submit block.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `blockPartial` | `Object` | The block to submit (possibly contains only partial block data). |
-| `blockPartial.protocolVersion?` | `number` | The protocol version under which this block operates. |
-| `blockPartial.parents?` | `string`[] | The parent block ids. |
-| `blockPartial.payload?` | [`IMilestonePayload`](../interfaces/IMilestonePayload.md) \| [`ITaggedDataPayload`](../interfaces/ITaggedDataPayload.md) \| [`ITransactionPayload`](../interfaces/ITransactionPayload.md) | The payload contents. |
-| `blockPartial.nonce?` | `string` | The nonce for the block. |
+| Name | Type | Default value | Description |
+| :------ | :------ | :------ | :------ |
+| `blockPartial` | `Object` | `undefined` | The block to submit (possibly contains only partial block data). |
+| `blockPartial.protocolVersion?` | `number` | `undefined` | The protocol version under which this block operates. |
+| `blockPartial.parents?` | `string`[] | `undefined` | The parent block ids. |
+| `blockPartial.payload?` | [`IMilestonePayload`](../interfaces/IMilestonePayload.md) \| [`ITaggedDataPayload`](../interfaces/ITaggedDataPayload.md) \| [`ITransactionPayload`](../interfaces/ITransactionPayload.md) | `undefined` | The payload contents. |
+| `blockPartial.nonce?` | `string` | `undefined` | The nonce for the block. |
+| `powInterval?` | `number` | `undefined` | The time in seconds that pow should work before aborting. |
+| `maxPowAttempts` | `number` | `40` | The number of times the pow should be attempted. |
 
 #### Returns
 
@@ -234,15 +236,17 @@ ___
 
 ### blockSubmitRaw
 
-▸ **blockSubmitRaw**(`block`): `Promise`<`string`\>
+▸ **blockSubmitRaw**(`block`, `powInterval?`, `maxPowAttempts?`): `Promise`<`string`\>
 
 Submit block in raw format.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `block` | `Uint8Array` | The block to submit. |
+| Name | Type | Default value | Description |
+| :------ | :------ | :------ | :------ |
+| `block` | `Uint8Array` | `undefined` | The block to submit. |
+| `powInterval?` | `number` | `undefined` | The time in seconds that pow should work before aborting. |
+| `maxPowAttempts` | `number` | `40` | The number of times the pow should be attempted. |
 
 #### Returns
 

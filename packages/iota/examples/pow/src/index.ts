@@ -1,7 +1,7 @@
 import * as bigInt from "big-integer";
 import { PowHelper } from "@iota/crypto.js";
 import { BigIntHelper } from "@iota/util.js";
-import { IPowProvider, LocalPowProvider } from "@iota/iota.js";
+import { IPowProvider } from "@iota/iota.js";
 import { NodePowProvider } from "@iota/pow-node.js";
 import { WasmPowProvider } from "@iota/pow-wasm.js";
 import { NeonPowProvider } from "@iota/pow-neon.js";
@@ -11,10 +11,9 @@ async function run() {
     const targetScore = 100;
     const iterations = 1;
 
-    await doPow("Neon Pow", dataLength, targetScore, iterations, new NeonPowProvider(1));
-    await doPow("Node Pow", dataLength, targetScore, iterations, new NodePowProvider(1));
-    await doPow("Wasm Pow", dataLength, targetScore, iterations, new WasmPowProvider(1));
-    await doPow("Local Pow", dataLength, targetScore, iterations, new LocalPowProvider());
+    await doPow("Neon Pow", dataLength, targetScore, iterations, new NeonPowProvider(3));
+    await doPow("Node Pow", dataLength, targetScore, iterations, new NodePowProvider(3));
+    await doPow("Wasm Pow", dataLength, targetScore, iterations, new WasmPowProvider(3));
 }
 
 async function doPow(

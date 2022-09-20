@@ -1,7 +1,7 @@
 {
     "name": "@iota/workspaces",
     "description": "IOTA JavaScript Library",
-    "version": "1.9.0-stardust.4",
+    "version": "1.9.0-stardust.5",
     "keywords": [
         "iota"
     ],
@@ -22,6 +22,7 @@
         "packages/pow-node",
         "packages/pow-wasm/wasm",
         "packages/pow-wasm",
+        "packages/pow-browser",
         "packages/iota/examples/address",
         "packages/iota/examples/data",
         "packages/iota/examples/peers",
@@ -42,7 +43,8 @@
         "packages/pow-neon",
         "packages/pow-node",
         "packages/pow-wasm/wasm",
-        "packages/pow-wasm"
+        "packages/pow-wasm",
+        "packages/pow-browser"
     ],
     "dependencies": {
         "prettier": "^2.4.1"
@@ -50,7 +52,7 @@
     "scripts": {
         "dist-neon": "npm run postinstall --prefix packages/pow-neon",
         "dist-all": "npm run dist-neon && npm run dist --workspaces",
-            "build-wiki-api-ref": "npm run docs-wiki-build --workspace packages/util  --workspace packages/crypto  --workspace packages/iota   --workspace packages/mqtt  --workspace packages/pow-neon --workspace packages/pow-node--workspace packages/pow-wasm",
+        "build-wiki-api-ref": "npm run docs-wiki-build --workspace packages/util  --workspace packages/crypto  --workspace packages/iota   --workspace packages/mqtt  --workspace packages/pow-neon --workspace packages/pow-node --workspace packages/pow-wasm --workspace packages/pow-browser",
         "workspace-format": "prettier --config .prettierrc --write ."
     }
 }
