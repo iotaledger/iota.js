@@ -20,5 +20,5 @@ export interface ITaggedDataPayload extends ITypeBase<5> {
     /**
      * The index data.
      */
-    data: string;
+    data: HexEncodedString;
 }

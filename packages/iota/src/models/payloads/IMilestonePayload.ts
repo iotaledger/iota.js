@@ -52,7 +52,7 @@ export interface IMilestonePayload extends ITypeBase<7> {
     /**
      * The metadata.
      */
-    metadata?: string;
+    metadata?: HexEncodedString;
 
     /**
      * The milestone options.
