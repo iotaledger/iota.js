@@ -1,6 +1,8 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 
+import type { HexEncodedString } from "../hexEncodedString";
+
 /**
  * The milestone info.
  */
@@ -16,5 +18,5 @@ export interface INodeInfoMilestone {
     /**
      * The milestone id.
      */
-    milestoneId?: string;
+    milestoneId?: HexEncodedString;
 }

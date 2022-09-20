@@ -1,5 +1,6 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
+import type { HexEncodedString } from "../hexEncodedString";
 import type { ITypeBase } from "../ITypeBase";
 import type { MilestoneOptionTypes } from "../milestoneOptions/milestoneOptionTypes";
 import type { IEd25519Signature } from "../signatures/IEd25519Signature";
@@ -31,22 +32,22 @@ export interface IMilestonePayload extends ITypeBase<7> {
     /**
      * The id of the previous milestone.
      */
-    previousMilestoneId: string;
+    previousMilestoneId: HexEncodedString;
 
     /**
      * The parents where this milestone attaches to.
      */
-    parents: string[];
+    parents: HexEncodedString[];
 
     /**
      * The Merkle tree hash of all blocks confirmed by this milestone.
      */
-    inclusionMerkleRoot: string;
+    inclusionMerkleRoot: HexEncodedString;
 
     /**
      * The Merkle tree hash of all blocks applied by this milestone.
      */
-    appliedMerkleRoot: string;
+    appliedMerkleRoot: HexEncodedString;
 
     /**
      * The metadata.

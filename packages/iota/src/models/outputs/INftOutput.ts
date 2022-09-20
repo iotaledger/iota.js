@@ -1,6 +1,7 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 import type { FeatureTypes } from "../features/featureTypes";
+import type { HexEncodedString } from "../hexEncodedString";
 import type { ITypeBase } from "../ITypeBase";
 import type { ICommonOutput } from "./ICommonOutput";
 
@@ -21,7 +22,7 @@ export interface INftOutput extends ITypeBase<6>, ICommonOutput {
     /**
      * Unique identifier of the NFT, which is the BLAKE2b-160 hash of the Output ID that created it.
      */
-    nftId: string;
+    nftId: HexEncodedString;
 
     /**
      * Immutable features contained by the output.

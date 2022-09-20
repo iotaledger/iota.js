@@ -1,6 +1,7 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 import type { FeatureTypes } from "../features/featureTypes";
+import type { HexEncodedString } from "../hexEncodedString";
 import type { ITypeBase } from "../ITypeBase";
 import type { ICommonOutput } from "./ICommonOutput";
 
@@ -21,7 +22,7 @@ export interface IAliasOutput extends ITypeBase<4>, ICommonOutput {
     /**
      * Unique identifier of the alias, which is the BLAKE2b-160 hash of the Output ID that created it.
      */
-    aliasId: string;
+    aliasId: HexEncodedString;
 
     /**
      * A counter that must increase by 1 every time the alias is state transitioned.

@@ -1,5 +1,6 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
+import type { HexEncodedString } from "../hexEncodedString";
 import type { ITypeBase } from "../ITypeBase";
 
 /**
@@ -14,5 +15,5 @@ export interface ITreasuryInput extends ITypeBase<1> {
     /**
      * The milestone id of the input.
      */
-    milestoneId: string;
+    milestoneId: HexEncodedString;
 }

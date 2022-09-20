@@ -1,6 +1,7 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 import type { ConflictReason } from "./conflictReason";
+import type { HexEncodedString } from "./hexEncodedString";
 import type { LedgerInclusionState } from "./ledgerInclusionState";
 
 /**
@@ -10,12 +11,12 @@ export interface IBlockMetadata {
     /**
      * The block id.
      */
-    blockId: string;
+    blockId: HexEncodedString;
 
     /**
      * The parent block ids.
      */
-    parents: string[];
+    parents: HexEncodedString[];
 
     /**
      * Is the block solid.

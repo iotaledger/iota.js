@@ -1,5 +1,6 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
+import type { HexEncodedString } from "../hexEncodedString";
 import type { ITypeBase } from "../ITypeBase";
 
 /**
@@ -14,5 +15,5 @@ export interface INftAddress extends ITypeBase<16> {
     /**
      * The NFT Id.
      */
-    nftId: string;
+    nftId: HexEncodedString;
 }
