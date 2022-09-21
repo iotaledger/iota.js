@@ -358,7 +358,6 @@
 
 ### Type Aliases
 
-- [HexEncodedAmount](api.md#hexencodedamount)
 - [AddressTypes](api.md#addresstypes)
 - [FeatureTypes](api.md#featuretypes)
 - [InputTypes](api.md#inputtypes)
@@ -4422,14 +4421,6 @@ Compute a blockId from a milestone payload.
 The blockId of the block with the milestone payload.
 
 ## Type Aliases
-
-### HexEncodedAmount
-
-Ƭ **HexEncodedAmount**: `string`
-
-Hex encoded U256.
-
-___
 
 ### AddressTypes
 
