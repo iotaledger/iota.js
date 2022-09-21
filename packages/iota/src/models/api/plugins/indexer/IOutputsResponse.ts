@@ -1,7 +1,7 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 
-import type { HexEncodedString } from "../../../hexEncodedString";
+import type { HexEncodedString } from "../../../hexEncodedTypes";
 
 /**
  * Details of an outputs response from the indexer plugin.

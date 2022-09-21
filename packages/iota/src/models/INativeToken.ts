@@ -1,6 +1,8 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 
+import type { HexEncodedAmount } from "./hexEncodedTypes";
+
 /**
  * Native token.
  */
@@ -16,7 +18,3 @@ export interface INativeToken {
     amount: HexEncodedAmount;
 }
 
-/**
- * Hex encoded U256.
- */
-export type HexEncodedAmount = string;

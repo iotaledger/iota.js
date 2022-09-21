@@ -1,6 +1,6 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import type { HexEncodedString } from "../hexEncodedString";
+import type { HexEncodedString } from "../hexEncodedTypes";
 import type { ITypeBase } from "../ITypeBase";
 import type { MilestoneOptionTypes } from "../milestoneOptions/milestoneOptionTypes";
 import type { IEd25519Signature } from "../signatures/IEd25519Signature";

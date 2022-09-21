@@ -6,7 +6,7 @@ import type { IOutputMetadataResponse } from "./api/IOutputMetadataResponse";
 import type { IOutputResponse } from "./api/IOutputResponse";
 import type { IReceiptsResponse } from "./api/IReceiptsResponse";
 import type { ITipsResponse } from "./api/ITipsResponse";
-import type { HexEncodedString } from "./hexEncodedString";
+import type { HexEncodedString } from "./hexEncodedTypes";
 import type { IBlock } from "./IBlock";
 import type { IBlockMetadata } from "./IBlockMetadata";
 import type { INodeInfo } from "./info/INodeInfo";
