@@ -12,6 +12,7 @@ import type { IOutputResponse } from "../models/api/IOutputResponse";
 import type { IReceiptsResponse } from "../models/api/IReceiptsResponse";
 import type { IResponse } from "../models/api/IResponse";
 import type { ITipsResponse } from "../models/api/ITipsResponse";
+import type { HexEncodedString } from "../models/hexEncodedTypes";
 import { DEFAULT_PROTOCOL_VERSION, IBlock } from "../models/IBlock";
 import type { IBlockMetadata } from "../models/IBlockMetadata";
 import type { IClient } from "../models/IClient";
@@ -186,7 +187,7 @@ export class SingleNodeClient implements IClient {
      * @param blockId The block to get the data for.
      * @returns The block data.
      */
-    public async block(blockId: string): Promise<IBlock> {
+    public async block(blockId: HexEncodedString): Promise<IBlock> {
         return this.fetchJson<never, IBlock>(this._coreApiPath, "get", `blocks/${blockId}`);
     }
 
@@ -195,7 +196,7 @@ export class SingleNodeClient implements IClient {
      * @param blockId The block to get the metadata for.
      * @returns The block metadata.
      */
-    public async blockMetadata(blockId: string): Promise<IBlockMetadata> {
+    public async blockMetadata(blockId: HexEncodedString): Promise<IBlockMetadata> {
         return this.fetchJson<never, IBlockMetadata>(this._coreApiPath, "get", `blocks/${blockId}/metadata`);
     }
 
@@ -204,7 +205,7 @@ export class SingleNodeClient implements IClient {
      * @param blockId The block to get the data for.
      * @returns The block raw data.
      */
-    public async blockRaw(blockId: string): Promise<Uint8Array> {
+    public async blockRaw(blockId: HexEncodedString): Promise<Uint8Array> {
         return this.fetchBinary(this._coreApiPath, "get", `blocks/${blockId}`);
     }
 
@@ -222,13 +223,13 @@ export class SingleNodeClient implements IClient {
     public async blockSubmit(
         blockPartial: {
             protocolVersion?: number;
-            parents?: string[];
+            parents?: HexEncodedString[];
             payload?: IBlock["payload"];
             nonce?: string;
         },
         powInterval?: number,
         maxPowAttempts: number = 40
-    ): Promise<string> {
+    ): Promise<HexEncodedString> {
         blockPartial.protocolVersion = this._protocolVersion;
 
         let minPowScore = 0;
@@ -349,7 +350,7 @@ export class SingleNodeClient implements IClient {
      * @param transactionId The id of the transaction to get the included block for.
      * @returns The block.
      */
-    public async transactionIncludedBlock(transactionId: string): Promise<IBlock> {
+    public async transactionIncludedBlock(transactionId: HexEncodedString): Promise<IBlock> {
         return this.fetchJson<never, IBlock>(this._coreApiPath, "get", `transactions/${transactionId}/included-block`);
     }
 
@@ -358,7 +359,7 @@ export class SingleNodeClient implements IClient {
      * @param transactionId The id of the transaction to get the included block for.
      * @returns The block.
      */
-    public async transactionIncludedBlockRaw(transactionId: string): Promise<Uint8Array> {
+    public async transactionIncludedBlockRaw(transactionId: HexEncodedString): Promise<Uint8Array> {
         return this.fetchBinary(this._coreApiPath, "get", `transactions/${transactionId}/included-block`);
     }
 
@@ -367,7 +368,7 @@ export class SingleNodeClient implements IClient {
      * @param outputId The id of the output to get.
      * @returns The output details.
      */
-    public async output(outputId: string): Promise<IOutputResponse> {
+    public async output(outputId: HexEncodedString): Promise<IOutputResponse> {
         return this.fetchJson<never, IOutputResponse>(this._coreApiPath, "get", `outputs/${outputId}`);
     }
 
@@ -376,7 +377,7 @@ export class SingleNodeClient implements IClient {
      * @param outputId The id of the output to get the metadata for.
      * @returns The output metadata.
      */
-    public async outputMetadata(outputId: string): Promise<IOutputMetadataResponse> {
+    public async outputMetadata(outputId: HexEncodedString): Promise<IOutputMetadataResponse> {
         return this.fetchJson<never, IOutputMetadataResponse>(this._coreApiPath, "get", `outputs/${outputId}/metadata`);
     }
 
@@ -421,7 +422,7 @@ export class SingleNodeClient implements IClient {
      * @param milestoneId The id of the milestone to look up.
      * @returns The milestone payload.
      */
-    public async milestoneById(milestoneId: string): Promise<IMilestonePayload> {
+    public async milestoneById(milestoneId: HexEncodedString): Promise<IMilestonePayload> {
         return this.fetchJson<never, IMilestonePayload>(this._coreApiPath, "get", `milestones/${milestoneId}`);
     }
 
@@ -698,7 +699,7 @@ export class SingleNodeClient implements IClient {
      * @param method The http method.
      * @param route The route of the request.
      * @param headers The headers for the request.
-     * @param requestData Request to send to the endpoint.
+     * @param body The request body.
      * @returns The response.
      * @internal
      */
