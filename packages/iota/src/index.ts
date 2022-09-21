@@ -77,6 +77,7 @@ export * from "./models/api/IResponse";
 export * from "./models/api/ITipsResponse";
 export * from "./models/api/plugins/indexer/IOutputsResponse";
 export * from "./models/conflictReason";
+export * from "./models/hexEncodedTypes";
 export * from "./models/features/featureTypes";
 export * from "./models/features/IIssuerFeature";
 export * from "./models/features/IMetadataFeature";

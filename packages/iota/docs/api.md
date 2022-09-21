@@ -360,6 +360,8 @@
 
 - [AddressTypes](api.md#addresstypes)
 - [FeatureTypes](api.md#featuretypes)
+- [HexEncodedString](api.md#hexencodedstring)
+- [HexEncodedAmount](api.md#hexencodedamount)
 - [InputTypes](api.md#inputtypes)
 - [LedgerInclusionState](api.md#ledgerinclusionstate)
 - [Magnitudes](api.md#magnitudes)
@@ -4435,6 +4437,22 @@ ___
 Ƭ **FeatureTypes**: [`ISenderFeature`](interfaces/ISenderFeature.md) \| [`IIssuerFeature`](interfaces/IIssuerFeature.md) \| [`IMetadataFeature`](interfaces/IMetadataFeature.md) \| [`ITagFeature`](interfaces/ITagFeature.md)
 
 All of the feature block types.
+
+___
+
+### HexEncodedString
+
+Ƭ **HexEncodedString**: `string`
+
+Hex encoded bytes.
+
+___
+
+### HexEncodedAmount
+
+Ƭ **HexEncodedAmount**: `string`
+
+Hex encoded U256.
 
 ___
 
