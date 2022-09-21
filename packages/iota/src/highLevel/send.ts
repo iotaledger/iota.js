@@ -223,6 +223,8 @@ export async function sendMultipleEd25519(
  * @param taggedData Optional tagged data to associate with the transaction.
  * @param taggedData.tag Optional tag.
  * @param taggedData.data Optional data.
+ * @param powInterval The time in seconds that pow should work before aborting.
+ * @param maxPowAttempts The number of times the pow should be attempted.
  * @param zeroCount The number of addresses with 0 balance during lookup before aborting.
  * @returns The id of the block created and the contructed block.
  */
@@ -240,6 +242,8 @@ export async function sendWithAddressGenerator<T>(
         tag?: Uint8Array | string;
         data?: Uint8Array | string;
     },
+    powInterval?: number,
+    maxPowAttempts?: number,
     zeroCount?: number
 ): Promise<{
     blockId: string;
@@ -247,7 +251,7 @@ export async function sendWithAddressGenerator<T>(
 }> {
     const inputsAndKeys = await calculateInputs(client, seed, initialAddressState, nextAddressPath, outputs, zeroCount);
 
-    const response = await sendAdvanced(client, inputsAndKeys, outputs, taggedData);
+    const response = await sendAdvanced(client, inputsAndKeys, outputs, taggedData, powInterval, maxPowAttempts);
 
     return {
         blockId: response.blockId,

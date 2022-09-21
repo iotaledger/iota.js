@@ -1,7 +1,7 @@
 {
     "name": "@iota/crypto.js",
     "description": "IOTA JavaScript Cryptography Library",
-    "version": "1.9.0-stardust.7",
+    "version": "1.9.0-stardust.8",
     "keywords": [
         "iota",
         "client"
@@ -17,7 +17,7 @@
     "license": "Apache-2.0",
     "dependencies": {
         "big-integer": "^1.6.51",
-        "@iota/util.js": "^1.9.0-stardust.5"
+        "@iota/util.js": "next"
     },
     "scripts": {
         "build-clean": "rimraf ./es/* ./typings/*",
@@ -36,7 +36,8 @@
         "package-umd-min": "rollup --config rollup.config.js --environment MINIFY:true",
         "package-umd-browser": "rollup --config rollup.config.js --environment BROWSER:true",
         "package-umd-browser-min": "rollup --config rollup.config.js --environment BROWSER:true --environment MINIFY:true",
-        "package": "run-s package-clean package-esm package-esm-rename package-umd package-umd-min package-umd-browser package-umd-browser-min",
+        "package-umd-browser-bundle": "rollup --config rollup.config.js --environment BROWSER:true --environment BUNDLE:true --environment MINIFY:true",
+        "package": "run-s package-clean package-esm package-esm-rename package-umd package-umd-min package-umd-browser package-umd-browser-min package-umd-browser-bundle",
         "docs-clean": "rimraf ./docs/*",
         "docs-build": "typedoc --disableSources --excludePrivate --excludeInternal --excludeNotDocumented --plugin typedoc-plugin-markdown --theme markdown --hideBreadcrumbs --entryDocument api.md --readme none --hideGenerator --sort source-order --exclude ./**/src/index.ts --out ./docs ./src/index.ts",
         "docs-wiki-build": "typedoc --githubPages false  --disableSources --excludePrivate --excludeInternal --excludeNotDocumented --plugin typedoc-plugin-markdown --theme markdown --hideBreadcrumbs --entryDocument api_ref.md --readme none --hideGenerator --sort source-order --exclude ./**/src/index.ts --out ../../documentation/docs/references/crypto ./src/index.ts",
@@ -48,27 +49,27 @@
     },
     "devDependencies": {
         "@rollup/plugin-commonjs": "^21.0.2",
-        "@rollup/plugin-node-resolve": "^13.1.3",
+        "@rollup/plugin-node-resolve": "^14.1.0",
         "@types/jest": "^27.4.1",
-        "@typescript-eslint/eslint-plugin": "5.14.0",
-        "@typescript-eslint/parser": "^5.14.0",
+        "@typescript-eslint/eslint-plugin": "5.38.0",
+        "@typescript-eslint/parser": "^5.38.0",
         "copyfiles": "^2.4.1",
         "cross-env": "^7.0.3",
-        "eslint": "^8.10.0",
+        "eslint": "^8.23.1",
         "eslint-plugin-header": "^3.1.1",
-        "eslint-plugin-import": "^2.25.4",
-        "eslint-plugin-jsdoc": "^37.9.7",
-        "eslint-plugin-unicorn": "^41.0.0",
+        "eslint-plugin-import": "^2.26.0",
+        "eslint-plugin-jsdoc": "^39.3.6",
+        "eslint-plugin-unicorn": "^43.0.2",
         "jest": "^27.5.1",
         "npm-run-all": "^4.1.5",
         "rimraf": "^3.0.2",
         "rollup": "^2.70.0",
         "rollup-plugin-terser": "^7.0.2",
         "ts-jest": "^27.1.3",
-        "ts-node": "^10.7.0",
-        "typedoc": "^0.23.0",
-        "typedoc-plugin-markdown": "^3.13.3",
-        "typescript": "^4.6.2"
+        "ts-node": "^10.9.1",
+        "typedoc": "^0.23.15",
+        "typedoc-plugin-markdown": "^3.13.6",
+        "typescript": "^4.8.3"
     },
     "main": "dist/cjs/index-node.js",
     "browser": "dist/cjs/index-browser.js",

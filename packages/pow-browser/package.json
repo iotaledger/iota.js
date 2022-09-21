@@ -1,19 +1,19 @@
 {
-    "name": "@iota/pow-wasm.js",
-    "description": "IOTA JavaScript Library for Performing Multi-Threaded PoW on NodeJS using WASM implementation",
-    "version": "1.9.0-stardust.6",
+    "name": "@iota/pow-browser.js",
+    "description": "IOTA JavaScript Library for Performing Multi-Threaded PoW in the browser",
+    "version": "1.0.0-stardust.1",
     "keywords": [
         "iota",
         "pow",
-        "wasm"
+        "browser"
     ],
     "authors": [
-        "Martyn Janes <martyn.janes@iota.org>"
+        "Branko Bosnic <branko.bosnic@iota.org>"
     ],
     "repository": {
         "type": "git",
         "url": "https://github.com/iotaledger/iota.js.git",
-        "directory": "packages/pow-wasm"
+        "directory": "packages/pow-browser"
     },
     "license": "Apache-2.0",
     "scripts": {
@@ -30,41 +30,40 @@
         "package-umd": "rollup --config rollup.config.js",
         "package-umd-min": "rollup --config rollup.config.js --environment MINIFY:true",
         "package": "run-s package-clean package-umd package-umd-min",
-        "dist": "run-s build test package",
-        "docs-wiki-build": "typedoc --githubPages false  --disableSources --excludePrivate --excludeInternal --excludeNotDocumented --plugin typedoc-plugin-markdown --theme markdown --hideBreadcrumbs --entryDocument api_ref.md --readme none --hideGenerator --sort source-order --exclude ./**/src/index.ts --out ../../documentation/docs/references/pow-wasm ./src/index.ts"
+        "dist": "run-s build package",
+        "docs-wiki-build": "typedoc --githubPages false  --disableSources --excludePrivate --excludeInternal --excludeNotDocumented --plugin typedoc-plugin-markdown --theme markdown --hideBreadcrumbs --entryDocument api_ref.md --readme none --hideGenerator --sort source-order --exclude ./**/src/index.ts --out ../../documentation/docs/references/pow-browser ./src/index.ts"
     },
     "engines": {
-        "node": ">=12.0.0"
+        "node": ">=16.16.0"
     },
     "devDependencies": {
         "@rollup/plugin-commonjs": "^21.0.2",
-        "@rollup/plugin-node-resolve": "^14.1.0",
+        "@rollup/plugin-node-resolve": "^13.1.3",
         "@types/jest": "^27.4.1",
-        "@typescript-eslint/eslint-plugin": "5.38.0",
-        "@typescript-eslint/parser": "^5.38.0",
+        "@typescript-eslint/eslint-plugin": "5.14.0",
+        "@typescript-eslint/parser": "^5.14.0",
         "cross-env": "^7.0.3",
-        "eslint": "^8.23.1",
+        "eslint": "^8.10.0",
         "eslint-plugin-header": "^3.1.1",
-        "eslint-plugin-import": "^2.26.0",
-        "eslint-plugin-jsdoc": "^39.3.6",
-        "eslint-plugin-unicorn": "^43.0.2",
+        "eslint-plugin-import": "^2.25.4",
+        "eslint-plugin-jsdoc": "^37.9.7",
+        "eslint-plugin-unicorn": "^41.0.0",
         "jest": "^27.5.1",
         "npm-run-all": "^4.1.5",
         "rimraf": "^3.0.2",
         "rollup": "^2.70.0",
         "rollup-plugin-terser": "^7.0.2",
         "ts-jest": "^27.1.3",
-        "ts-node": "^10.9.1",
-        "typescript": "^4.8.3"
+        "ts-node": "^10.7.0",
+        "typescript": "^4.6.2"
     },
-    "main": "dist/pow-wasm.js",
-    "module": "es/pow-wasm.js",
+    "main": "dist/pow-browser.js",
+    "module": "es/pow-browser.js",
     "typings": "typings/index.d.ts",
     "files": [
         "dist",
         "src",
-        "typings",
-        "wasm/build/release.wasm"
+        "typings"
     ],
     "dependencies": {
         "@iota/crypto.js": "next",

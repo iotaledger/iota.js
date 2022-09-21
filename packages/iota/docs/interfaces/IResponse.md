@@ -1,29 +1,14 @@
-# Interface: IResponse<T\>
+# Interface: IResponse
 
 Base response data.
-
-## Type parameters
-
-| Name |
-| :------ |
-| `T` |
 
 ## Table of contents
 
 ### Properties
 
-- [data](IResponse.md#data)
 - [error](IResponse.md#error)
 
 ## Properties
-
-### data
-
-• **data**: `T`
-
-The data in the response.
-
-___
 
 ### error
 

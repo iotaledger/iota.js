@@ -74,7 +74,7 @@ True if the node is healthy.
 
 #### Implementation of
 
-IClient.health
+[IClient](../interfaces/IClient.md).[health](../interfaces/IClient.md#health)
 
 ___
 
@@ -92,7 +92,7 @@ The routes.
 
 #### Implementation of
 
-IClient.routes
+[IClient](../interfaces/IClient.md).[routes](../interfaces/IClient.md#routes)
 
 ___
 
@@ -110,7 +110,7 @@ The node information.
 
 #### Implementation of
 
-IClient.info
+[IClient](../interfaces/IClient.md).[info](../interfaces/IClient.md#info)
 
 ___
 
@@ -128,7 +128,7 @@ The tips.
 
 #### Implementation of
 
-IClient.tips
+[IClient](../interfaces/IClient.md).[tips](../interfaces/IClient.md#tips)
 
 ___
 
@@ -152,7 +152,7 @@ The block data.
 
 #### Implementation of
 
-IClient.block
+[IClient](../interfaces/IClient.md).[block](../interfaces/IClient.md#block)
 
 ___
 
@@ -176,7 +176,7 @@ The block metadata.
 
 #### Implementation of
 
-IClient.blockMetadata
+[IClient](../interfaces/IClient.md).[blockMetadata](../interfaces/IClient.md#blockmetadata)
 
 ___
 
@@ -200,25 +200,27 @@ The block raw data.
 
 #### Implementation of
 
-IClient.blockRaw
+[IClient](../interfaces/IClient.md).[blockRaw](../interfaces/IClient.md#blockraw)
 
 ___
 
 ### blockSubmit
 
-▸ **blockSubmit**(`blockPartial`): `Promise`<`string`\>
+▸ **blockSubmit**(`blockPartial`, `powInterval?`, `maxPowAttempts?`): `Promise`<`string`\>
 
 Submit block.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `blockPartial` | `Object` | The block to submit (possibly contains only partial block data). |
-| `blockPartial.protocolVersion?` | `number` | The protocol version under which this block operates. |
-| `blockPartial.parents?` | `string`[] | The parent block ids. |
-| `blockPartial.payload?` | [`IMilestonePayload`](../interfaces/IMilestonePayload.md) \| [`ITaggedDataPayload`](../interfaces/ITaggedDataPayload.md) \| [`ITransactionPayload`](../interfaces/ITransactionPayload.md) | The payload contents. |
-| `blockPartial.nonce?` | `string` | The nonce for the block. |
+| Name | Type | Default value | Description |
+| :------ | :------ | :------ | :------ |
+| `blockPartial` | `Object` | `undefined` | The block to submit (possibly contains only partial block data). |
+| `blockPartial.protocolVersion?` | `number` | `undefined` | The protocol version under which this block operates. |
+| `blockPartial.parents?` | `string`[] | `undefined` | The parent block ids. |
+| `blockPartial.payload?` | [`IMilestonePayload`](../interfaces/IMilestonePayload.md) \| [`ITaggedDataPayload`](../interfaces/ITaggedDataPayload.md) \| [`ITransactionPayload`](../interfaces/ITransactionPayload.md) | `undefined` | The payload contents. |
+| `blockPartial.nonce?` | `string` | `undefined` | The nonce for the block. |
+| `powInterval?` | `number` | `undefined` | The time in seconds that pow should work before aborting. |
+| `maxPowAttempts` | `number` | `40` | The number of times the pow should be attempted. |
 
 #### Returns
 
@@ -228,21 +230,23 @@ The blockId.
 
 #### Implementation of
 
-IClient.blockSubmit
+[IClient](../interfaces/IClient.md).[blockSubmit](../interfaces/IClient.md#blocksubmit)
 
 ___
 
 ### blockSubmitRaw
 
-▸ **blockSubmitRaw**(`block`): `Promise`<`string`\>
+▸ **blockSubmitRaw**(`block`, `powInterval?`, `maxPowAttempts?`): `Promise`<`string`\>
 
 Submit block in raw format.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `block` | `Uint8Array` | The block to submit. |
+| Name | Type | Default value | Description |
+| :------ | :------ | :------ | :------ |
+| `block` | `Uint8Array` | `undefined` | The block to submit. |
+| `powInterval?` | `number` | `undefined` | The time in seconds that pow should work before aborting. |
+| `maxPowAttempts` | `number` | `40` | The number of times the pow should be attempted. |
 
 #### Returns
 
@@ -252,7 +256,7 @@ The blockId.
 
 #### Implementation of
 
-IClient.blockSubmitRaw
+[IClient](../interfaces/IClient.md).[blockSubmitRaw](../interfaces/IClient.md#blocksubmitraw)
 
 ___
 
@@ -276,7 +280,7 @@ The block.
 
 #### Implementation of
 
-IClient.transactionIncludedBlock
+[IClient](../interfaces/IClient.md).[transactionIncludedBlock](../interfaces/IClient.md#transactionincludedblock)
 
 ___
 
@@ -300,7 +304,7 @@ The block.
 
 #### Implementation of
 
-IClient.transactionIncludedBlockRaw
+[IClient](../interfaces/IClient.md).[transactionIncludedBlockRaw](../interfaces/IClient.md#transactionincludedblockraw)
 
 ___
 
@@ -324,7 +328,7 @@ The output details.
 
 #### Implementation of
 
-IClient.output
+[IClient](../interfaces/IClient.md).[output](../interfaces/IClient.md#output)
 
 ___
 
@@ -348,7 +352,7 @@ The output metadata.
 
 #### Implementation of
 
-IClient.outputMetadata
+[IClient](../interfaces/IClient.md).[outputMetadata](../interfaces/IClient.md#outputmetadata)
 
 ___
 
@@ -372,7 +376,7 @@ The output raw bytes.
 
 #### Implementation of
 
-IClient.outputRaw
+[IClient](../interfaces/IClient.md).[outputRaw](../interfaces/IClient.md#outputraw)
 
 ___
 
@@ -396,7 +400,7 @@ The milestone payload.
 
 #### Implementation of
 
-IClient.milestoneByIndex
+[IClient](../interfaces/IClient.md).[milestoneByIndex](../interfaces/IClient.md#milestonebyindex)
 
 ___
 
@@ -420,7 +424,7 @@ The milestone payload raw.
 
 #### Implementation of
 
-IClient.milestoneByIndexRaw
+[IClient](../interfaces/IClient.md).[milestoneByIndexRaw](../interfaces/IClient.md#milestonebyindexraw)
 
 ___
 
@@ -444,7 +448,7 @@ The milestone utxo changes details.
 
 #### Implementation of
 
-IClient.milestoneUtxoChangesByIndex
+[IClient](../interfaces/IClient.md).[milestoneUtxoChangesByIndex](../interfaces/IClient.md#milestoneutxochangesbyindex)
 
 ___
 
@@ -468,7 +472,7 @@ The milestone payload.
 
 #### Implementation of
 
-IClient.milestoneById
+[IClient](../interfaces/IClient.md).[milestoneById](../interfaces/IClient.md#milestonebyid)
 
 ___
 
@@ -492,7 +496,7 @@ The milestone payload raw.
 
 #### Implementation of
 
-IClient.milestoneByIdRaw
+[IClient](../interfaces/IClient.md).[milestoneByIdRaw](../interfaces/IClient.md#milestonebyidraw)
 
 ___
 
@@ -516,7 +520,7 @@ The milestone utxo changes details.
 
 #### Implementation of
 
-IClient.milestoneUtxoChangesById
+[IClient](../interfaces/IClient.md).[milestoneUtxoChangesById](../interfaces/IClient.md#milestoneutxochangesbyid)
 
 ___
 
@@ -534,7 +538,7 @@ The details for the treasury.
 
 #### Implementation of
 
-IClient.treasury
+[IClient](../interfaces/IClient.md).[treasury](../interfaces/IClient.md#treasury)
 
 ___
 
@@ -558,7 +562,7 @@ The stored receipts.
 
 #### Implementation of
 
-IClient.receipts
+[IClient](../interfaces/IClient.md).[receipts](../interfaces/IClient.md#receipts)
 
 ___
 
@@ -576,7 +580,7 @@ The list of peers.
 
 #### Implementation of
 
-IClient.peers
+[IClient](../interfaces/IClient.md).[peers](../interfaces/IClient.md#peers)
 
 ___
 
@@ -601,7 +605,7 @@ The details for the created peer.
 
 #### Implementation of
 
-IClient.peerAdd
+[IClient](../interfaces/IClient.md).[peerAdd](../interfaces/IClient.md#peeradd)
 
 ___
 
@@ -625,7 +629,7 @@ Nothing.
 
 #### Implementation of
 
-IClient.peerDelete
+[IClient](../interfaces/IClient.md).[peerDelete](../interfaces/IClient.md#peerdelete)
 
 ___
 
@@ -649,7 +653,7 @@ The details for the created peer.
 
 #### Implementation of
 
-IClient.peer
+[IClient](../interfaces/IClient.md).[peer](../interfaces/IClient.md#peer)
 
 ___
 
@@ -667,7 +671,7 @@ The protocol info.
 
 #### Implementation of
 
-IClient.protocolInfo
+[IClient](../interfaces/IClient.md).[protocolInfo](../interfaces/IClient.md#protocolinfo)
 
 ___
 
@@ -702,4 +706,4 @@ The response object.
 
 #### Implementation of
 
-IClient.pluginFetch
+[IClient](../interfaces/IClient.md).[pluginFetch](../interfaces/IClient.md#pluginfetch)

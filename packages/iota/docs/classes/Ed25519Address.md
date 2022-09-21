@@ -47,7 +47,7 @@ The address.
 
 #### Implementation of
 
-IAddress.toAddress
+[IAddress](../interfaces/IAddress.md).[toAddress](../interfaces/IAddress.md#toaddress)
 
 ___
 
@@ -71,4 +71,4 @@ True if the data and address is verified.
 
 #### Implementation of
 
-IAddress.verify
+[IAddress](../interfaces/IAddress.md).[verify](../interfaces/IAddress.md#verify)

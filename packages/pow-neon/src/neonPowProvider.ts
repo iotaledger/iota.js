@@ -1,7 +1,7 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 /* eslint-disable no-bitwise */
-import type { IPowProvider } from "@iota/iota.js";
+import type { IPowProvider } from "@iota/types";
 import os from "os";
 // eslint-disable-next-line unicorn/import-index
 import module from "../native/";

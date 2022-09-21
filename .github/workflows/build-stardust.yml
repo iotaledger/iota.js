@@ -12,13 +12,13 @@ jobs:
 
         steps:
             - uses: actions/checkout@v2
-            - name: Use Node.js 14.x
+            - name: Use Node.js 16.x
               uses: actions/setup-node@v1
               with:
-                  node-version: "14"
+                  node-version: "16.10.0"
             - name: npm 7
-              run: npm install -g npm@7
+              run: npm install -g npm@7.24.0
             - name: Build
               run: |
                   npm install
-                  npm run dist --workspaces
+                  npm run dist-all

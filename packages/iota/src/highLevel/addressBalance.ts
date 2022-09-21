@@ -30,7 +30,9 @@ export async function addressBalance(
     const nativeTokens: { [id: string]: BigInteger } = {};
 
     let response;
+    let expirationResponse;
     let cursor;
+    let expirationCursor;
     do {
         response = await indexerPluginClient.basicOutputs({ addressBech32, cursor });
 
@@ -52,6 +54,23 @@ export async function addressBalance(
         }
         cursor = response.cursor;
     } while (cursor && response.items.length > 0);
+
+    do {
+        expirationResponse = await indexerPluginClient.basicOutputs({
+            expirationReturnAddressBech32: addressBech32,
+            expiresBefore: Math.floor(Date.now() / 1000),
+            cursor: expirationCursor
+        });
+
+        for (const outputId of expirationResponse.items) {
+            const output = await localClient.output(outputId);
+
+            if (!output.metadata.isSpent) {
+                total = total.plus(output.output.amount);
+            }
+        }
+        expirationCursor = expirationResponse.cursor;
+    } while (expirationCursor && expirationResponse.items.length > 0);
 
     return {
         balance: total,

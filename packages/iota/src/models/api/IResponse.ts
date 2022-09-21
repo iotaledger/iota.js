@@ -3,12 +3,7 @@
 /**
  * Base response data.
  */
-export interface IResponse<T> {
-    /**
-     * The data in the response.
-     */
-    data: T;
-
+export interface IResponse {
     /**
      * Optional error in the response.
      */
