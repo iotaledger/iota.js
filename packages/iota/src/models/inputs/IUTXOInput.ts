@@ -1,5 +1,6 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
+import type { HexEncodedString } from "../hexEncodedTypes";
 import type { ITypeBase } from "../ITypeBase";
 
 /**
@@ -14,7 +15,7 @@ export interface IUTXOInput extends ITypeBase<0> {
     /**
      * The transaction Id.
      */
-    transactionId: string;
+    transactionId: HexEncodedString;
 
     /**
      * The output index.

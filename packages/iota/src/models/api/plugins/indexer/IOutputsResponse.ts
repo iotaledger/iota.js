@@ -1,6 +1,8 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 
+import type { HexEncodedString } from "../../../hexEncodedTypes";
+
 /**
  * Details of an outputs response from the indexer plugin.
  */
@@ -23,5 +25,5 @@ export interface IOutputsResponse {
     /**
      * The output IDs (transaction hash + output index) of the outputs on this address.
      */
-    items: string[];
+    items: HexEncodedString[];
 }

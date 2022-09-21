@@ -1,5 +1,6 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
+import type { HexEncodedAmount } from "../hexEncodedTypes";
 import type { ITypeBase } from "../ITypeBase";
 
 /**
@@ -14,15 +15,15 @@ export interface ISimpleTokenScheme extends ITypeBase<0> {
     /**
      * Amount of tokens minted by this foundry.
      */
-    mintedTokens: string;
+    mintedTokens: HexEncodedAmount;
 
     /**
      * Amount of tokens melted by this foundry.
      */
-    meltedTokens: string;
+    meltedTokens: HexEncodedAmount;
 
     /**
      * Maximum supply of tokens controlled by this foundry.
      */
-    maximumSupply: string;
+    maximumSupply: HexEncodedAmount;
 }

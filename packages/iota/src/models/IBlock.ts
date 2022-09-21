@@ -1,5 +1,6 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
+import type { HexEncodedString } from "./hexEncodedTypes";
 import type { IMilestonePayload } from "./payloads/IMilestonePayload";
 import type { ITaggedDataPayload } from "./payloads/ITaggedDataPayload";
 import type { ITransactionPayload } from "./payloads/ITransactionPayload";
@@ -21,7 +22,7 @@ export interface IBlock {
     /**
      * The parent block ids.
      */
-    parents: string[];
+    parents: HexEncodedString[];
 
     /**
      * The payload contents.

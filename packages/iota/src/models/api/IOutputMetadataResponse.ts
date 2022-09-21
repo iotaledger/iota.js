@@ -1,6 +1,8 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 
+import type { HexEncodedString } from "../hexEncodedTypes";
+
 /**
  * Details of an output.
  */
@@ -8,12 +10,12 @@ export interface IOutputMetadataResponse {
     /**
      * The block id the output was contained in.
      */
-    blockId: string;
+    blockId: HexEncodedString;
 
     /**
      * The transaction id for the output.
      */
-    transactionId: string;
+    transactionId: HexEncodedString;
 
     /**
      * The index for the output.
@@ -38,7 +40,7 @@ export interface IOutputMetadataResponse {
     /**
      * The transaction this output was spent with.
      */
-    transactionIdSpent?: string;
+    transactionIdSpent?: HexEncodedString;
 
     /**
      * The milestone index at which this output was booked into the ledger.

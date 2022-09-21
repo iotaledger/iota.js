@@ -1,5 +1,8 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
+
+import type { HexEncodedString } from "../hexEncodedTypes";
+
 /**
  * Milestone.
  */
@@ -12,10 +15,10 @@ export interface IMilestoneUtxoChangesResponse {
     /**
      * The output IDs (transaction hash + output index) of the newly created outputs.
      */
-    createdOutputs: string[];
+    createdOutputs: HexEncodedString[];
 
     /**
      * The output IDs (transaction hash + output index) of the consumed (spent) outputs.
      */
-    consumedOutputs: string[];
+    consumedOutputs: HexEncodedString[];
 }

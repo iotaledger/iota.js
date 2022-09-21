@@ -6,6 +6,7 @@ import type { IOutputMetadataResponse } from "./api/IOutputMetadataResponse";
 import type { IOutputResponse } from "./api/IOutputResponse";
 import type { IReceiptsResponse } from "./api/IReceiptsResponse";
 import type { ITipsResponse } from "./api/ITipsResponse";
+import type { HexEncodedString } from "./hexEncodedTypes";
 import type { IBlock } from "./IBlock";
 import type { IBlockMetadata } from "./IBlockMetadata";
 import type { INodeInfo } from "./info/INodeInfo";
@@ -46,21 +47,21 @@ export interface IClient {
      * @param blockId The block to get the data for.
      * @returns The block data.
      */
-    block(blockId: string): Promise<IBlock>;
+    block(blockId: HexEncodedString): Promise<IBlock>;
 
     /**
      * Get the block metadata by id.
      * @param blockId The block to get the metadata for.
      * @returns The block metadata.
      */
-    blockMetadata(blockId: string): Promise<IBlockMetadata>;
+    blockMetadata(blockId: HexEncodedString): Promise<IBlockMetadata>;
 
     /**
      * Get the block raw data by id.
      * @param blockId The block to get the data for.
      * @returns The block raw data.
      */
-    blockRaw(blockId: string): Promise<Uint8Array>;
+    blockRaw(blockId: HexEncodedString): Promise<Uint8Array>;
 
     /**
      * Submit block.
@@ -70,53 +71,53 @@ export interface IClient {
     blockSubmit(
         blockPartial: {
             protocolVersion?: number;
-            parents?: string[];
+            parents?: HexEncodedString[];
             payload?: IBlock["payload"];
             nonce?: string;
         }
-    ): Promise<string>;
+    ): Promise<HexEncodedString>;
 
     /**
      * Submit block in raw format.
      * @param block The block to submit.
      * @returns The blockId.
      */
-    blockSubmitRaw(block: Uint8Array): Promise<string>;
+    blockSubmitRaw(block: Uint8Array): Promise<HexEncodedString>;
 
     /**
      * Get the block that was included in the ledger for a transaction.
      * @param transactionId The id of the transaction to get the included block for.
      * @returns The block.
      */
-    transactionIncludedBlock(transactionId: string): Promise<IBlock>;
+    transactionIncludedBlock(transactionId: HexEncodedString): Promise<IBlock>;
 
     /**
      * Get raw block that was included in the ledger for a transaction.
      * @param transactionId The id of the transaction to get the included block for.
      * @returns The block.
      */
-    transactionIncludedBlockRaw(transactionId: string): Promise<Uint8Array>;
+    transactionIncludedBlockRaw(transactionId: HexEncodedString): Promise<Uint8Array>;
 
     /**
      * Get an output by its identifier.
      * @param outputId The id of the output to get.
      * @returns The output details.
      */
-    output(outputId: string): Promise<IOutputResponse>;
+    output(outputId: HexEncodedString): Promise<IOutputResponse>;
 
     /**
      * Get an outputs metadata by its identifier.
      * @param outputId The id of the output to get the metadata for.
      * @returns The output metadata.
      */
-    outputMetadata(outputId: string): Promise<IOutputMetadataResponse>;
+    outputMetadata(outputId: HexEncodedString): Promise<IOutputMetadataResponse>;
 
     /**
      * Get an outputs raw data.
      * @param outputId The id of the output to get the raw data for.
      * @returns The output metadata.
      */
-    outputRaw(outputId: string): Promise<Uint8Array>;
+    outputRaw(outputId: HexEncodedString): Promise<Uint8Array>;
 
     /**
      * Get the requested milestone.
@@ -144,21 +145,21 @@ export interface IClient {
      * @param milestoneId The id of the milestone to look up.
      * @returns The milestone payload.
      */
-    milestoneById(milestoneId: string): Promise<IMilestonePayload>;
+    milestoneById(milestoneId: HexEncodedString): Promise<IMilestonePayload>;
 
     /**
      * Get the requested milestone raw.
      * @param milestoneId The id of the milestone to look up.
      * @returns The milestone payload raw.
      */
-    milestoneByIdRaw(milestoneId: string): Promise<Uint8Array>;
+    milestoneByIdRaw(milestoneId: HexEncodedString): Promise<Uint8Array>;
 
     /**
      * Get the requested milestone utxo changes.
      * @param milestoneId The id of the milestone to request the changes for.
      * @returns The milestone utxo changes details.
      */
-    milestoneUtxoChangesById(milestoneId: string): Promise<IMilestoneUtxoChangesResponse>;
+    milestoneUtxoChangesById(milestoneId: HexEncodedString): Promise<IMilestoneUtxoChangesResponse>;
 
     /**
      * Get the current treasury output.

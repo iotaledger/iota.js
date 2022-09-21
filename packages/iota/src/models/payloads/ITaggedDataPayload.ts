@@ -1,5 +1,6 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
+import type { HexEncodedString } from "../hexEncodedTypes";
 import type { ITypeBase } from "../ITypeBase";
 
 /**
@@ -14,10 +15,10 @@ export interface ITaggedDataPayload extends ITypeBase<5> {
     /**
      * The tag to use to categorize the data.
      */
-    tag: string;
+    tag: HexEncodedString;
 
     /**
      * The index data.
      */
-    data: string;
+    data: HexEncodedString;
 }

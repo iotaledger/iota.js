@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 import { Converter } from "@iota/util.js";
 import type { IOutputsResponse } from "../../models/api/plugins/indexer/IOutputsResponse";
+import type { HexEncodedString } from "../../models/hexEncodedTypes";
 import type { IClient } from "../../models/IClient";
 import { SingleNodeClient } from "../singleNodeClient";
 
@@ -224,7 +225,7 @@ export class IndexerPluginClient {
      * @param aliasId The alias to get the output for.
      * @returns The output.
      */
-    public async alias(aliasId: string): Promise<IOutputsResponse> {
+    public async alias(aliasId: HexEncodedString): Promise<IOutputsResponse> {
         if (!Converter.isHex(aliasId, true)) {
             throw new Error("The alias id does not appear to be hex format");
         }
@@ -358,7 +359,7 @@ export class IndexerPluginClient {
      * @param nftId The nft to get the output for.
      * @returns The output.
      */
-    public async nft(nftId: string): Promise<IOutputsResponse> {
+    public async nft(nftId: HexEncodedString): Promise<IOutputsResponse> {
         if (!Converter.isHex(nftId, true)) {
             throw new Error("The nft id does not appear to be hex format");
         }
@@ -432,7 +433,7 @@ export class IndexerPluginClient {
      * @param foundryId The foundry to get the output for.
      * @returns The output.
      */
-    public async foundry(foundryId: string): Promise<IOutputsResponse> {
+    public async foundry(foundryId: HexEncodedString): Promise<IOutputsResponse> {
         if (!Converter.isHex(foundryId, true)) {
             throw new Error("The foundry id does not appear to be hex format");
         }
