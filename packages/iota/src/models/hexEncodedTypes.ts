@@ -7,7 +7,7 @@
 export type HexEncodedString = string;
 
 /**
- * Hex encoded bytes.
+ * Hex encoded U256.
  */
 export type HexEncodedAmount = string;
 
