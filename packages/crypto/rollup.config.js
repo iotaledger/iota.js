@@ -14,7 +14,7 @@ if (process.env.MINIFY) {
 }
 
 export default {
-    input: `./es/index.js`,
+    input: `./es/index${process.env.BROWSER ? "-browser" : "-node"}.js`,
     output: {
         file: `dist/cjs/index${process.env.BROWSER ?
             process.env.BUNDLE ?
