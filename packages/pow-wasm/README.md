@@ -5,7 +5,7 @@ This package provides local proof of work multi-threaded for NodeJS implemented 
 ## Install
 
 ```shell
-npm install @iota/pow-wasm.js@next
+npm install @iota/pow-wasm.js@2.0.0-rc.1
 ```
 
 ## Usage

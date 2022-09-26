@@ -1,7 +1,7 @@
 {
     "name": "@iota/workspaces",
     "description": "IOTA JavaScript Library",
-    "version": "1.9.0-stardust.5",
+    "version": "2.0.0-rc.1",
     "keywords": [
         "iota"
     ],
