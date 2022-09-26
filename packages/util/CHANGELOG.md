@@ -1,8 +1,8 @@
 # Changelog
 
-## v1.9.0-stardust.4
+## 2.0.0-rc.1
 
-* Stardust alpha release
+* Stardust release candidate
 
 ## v1.8.6
 
