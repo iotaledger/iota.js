@@ -1,30 +1,8 @@
 # Changelog
 
-## v1.9.0-stardust.9
+## 2.0.0-rc.1
 
-* Bump version due to npm issue
-
-## v1.9.0-stardust.8
-
-* Publish with package
-
-## v1.9.0-stardust.7
-
-* Update Milestone payload
-
-## v1.9.0-stardust.6
-
-* Stardust message serialization fix
-* Update Simple token scheme
-* Update Milestone payload
-
-## v1.9.0-stardust.5
-
-* Stardust message serialization fix
-
-## v1.9.0-stardust.4
-
-* Stardust alpha release
+* Stardust release candidate
 
 ## v1.8.6
 

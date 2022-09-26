@@ -5,7 +5,7 @@ The code in the package is mostly utility classes for the rest of the packages t
 ## Install
 
 ```shell
-npm install @iota/util.js@next
+npm install @iota/util.js@2.0.0-rc.1
 ```
 
 ## Usage
