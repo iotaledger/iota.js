@@ -1,7 +1,7 @@
 {
     "name": "pow-wasm-wrapper.js",
     "description": "IOTA JavaScript Library for Performing Multi-Threaded PoW implemented in WASM",
-    "version": "1.9.0-stardust.4",
+    "version": "2.0.0-rc.1",
     "private": true,
     "keywords": [
         "iota",
