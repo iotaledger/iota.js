@@ -11,4 +11,3 @@ import type { IValidationResult } from "../result";
 export function validateUnlocks(object: UnlockTypes[]): IValidationResult {
     return { isValid: true };
 }
-

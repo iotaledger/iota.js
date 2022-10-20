@@ -16,4 +16,3 @@ export function validateTransactionEssence(object: ITransactionEssence): IValida
 
     return mergeValidationResults(validateInputsResult, validateOutputsResult);
 }
-

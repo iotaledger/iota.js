@@ -1,5 +1,7 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
+import bigInt from "big-integer";
+import { MAX_NATIVE_TOKEN_COUNT } from "../binary/nativeTokens";
 import type { INativeToken } from "../models/INativeToken";
 import type { IValidationResult } from "./result";
 
@@ -9,6 +11,31 @@ import type { IValidationResult } from "./result";
  * @returns The validation result.
  */
 export function validateNativeTokens(object: INativeToken[] | undefined): IValidationResult {
-    return { isValid: true };
-}
+    const result: IValidationResult = { isValid: true };
+    const errors: string[] = [];
 
+    if (object) {
+        const tokenIds = object.map(token => {
+            if (bigInt(token.amount).compare(bigInt.zero) !== 1) {
+                errors.push(`Native token ${token.id} must have a value bigger than zero.`);
+            }
+            return token.id;
+        });
+
+        const distinctNativeTokens = new Set(tokenIds);
+        if (distinctNativeTokens.size !== tokenIds.length) {
+            errors.push("No duplicate tokens are allowed.");
+        }
+
+        if (distinctNativeTokens.size > MAX_NATIVE_TOKEN_COUNT) {
+            errors.push("Max native tokens count exceeded.");
+        }
+    }
+
+    if (errors.length > 0) {
+        result.isValid = false;
+        result.errors = errors;
+    }
+
+    return result;
+}

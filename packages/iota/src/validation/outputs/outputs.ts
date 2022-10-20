@@ -73,7 +73,9 @@ export function validateBasicOutput(object: IBasicOutput): IValidationResult {
 
     results.push(validateNativeTokens(object.nativeTokens));
     results.push(validateUnlockConditions(object.unlockConditions));
-    results.push(validateFeatures(object.features));
+    if (object.features) {
+        results.push(validateFeatures(object.features));
+    }
 
     return mergeValidationResults(...results);
 }

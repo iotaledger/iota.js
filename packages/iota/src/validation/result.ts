@@ -31,4 +31,3 @@ export function mergeValidationResults(...results: IValidationResult[]): IValida
             undefined
     };
 }
-
