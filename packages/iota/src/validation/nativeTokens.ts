@@ -30,6 +30,13 @@ export function validateNativeTokens(object: INativeToken[] | undefined): IValid
         if (distinctNativeTokens.size > MAX_NATIVE_TOKEN_COUNT) {
             errors.push("Max native tokens count exceeded.");
         }
+
+        const sortedNativeTokens = tokenIds.slice().sort(
+            (a, b) => a.localeCompare(b));
+
+        if (tokenIds.toString() !== sortedNativeTokens.toString()) {
+            errors.push("Native Tokens must be lexicographically sorted based on Token id.");
+        }
     }
 
     if (errors.length > 0) {

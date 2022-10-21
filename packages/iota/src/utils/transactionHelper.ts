@@ -8,13 +8,16 @@ import { BLOCK_ID_LENGTH, TRANSACTION_ID_LENGTH } from "../binary/commonDataType
 import { serializeOutput } from "../binary/outputs/outputs";
 import { serializeTransactionPayload } from "../binary/payloads/transactionPayload";
 import { serializeTransactionEssence } from "../binary/transactionEssence";
+import type { AddressTypes } from "../index-browser";
 import { ALIAS_ADDRESS_TYPE } from "../models/addresses/IAliasAddress";
 import type { IBlock } from "../models/IBlock";
 import { IUTXOInput, UTXO_INPUT_TYPE } from "../models/inputs/IUTXOInput";
 import type { IRent } from "../models/IRent";
 import type { ITransactionEssence } from "../models/ITransactionEssence";
+import { BASIC_OUTPUT_TYPE, IBasicOutput } from "../models/outputs/IBasicOutput";
 import type { OutputTypes } from "../models/outputs/outputTypes";
 import type { ITransactionPayload } from "../models/payloads/ITransactionPayload";
+import { ADDRESS_UNLOCK_CONDITION_TYPE } from "../models/unlockConditions/IAddressUnlockCondition";
 
 
 /**
@@ -139,6 +142,27 @@ import type { ITransactionPayload } from "../models/payloads/ITransactionPayload
         const vByteSize = (rentStructure.vByteFactorData * outputBytes.length) + offset;
 
         return rentStructure.vByteCost * vByteSize;
+    }
+
+    /**
+     * Calculates the required storage deposit of an output.
+     * @param address The address to calculate min storage deposit.
+     * @param rentStructure Rent cost of objects which take node resources.
+     * @returns The required storage deposit.
+     */
+    public static getMinStorageDeposit(address: AddressTypes, rentStructure: IRent): number {
+        const basicOutput: IBasicOutput = {
+            type: BASIC_OUTPUT_TYPE,
+            amount: "0",
+            unlockConditions: [
+                {
+                    type: ADDRESS_UNLOCK_CONDITION_TYPE,
+                    address
+                }
+            ]
+        };
+
+        return this.getStorageDeposit(basicOutput, rentStructure);
     }
 
     /**

@@ -29,7 +29,7 @@ export function validateFeatures(object: FeatureTypes[]): IValidationResult {
     if (object.length > 4) {
         results.push({
             isValid: false,
-            errors: ["Max number features exceeded."]
+            errors: ["Max number of features exceeded."]
         });
     }
 
@@ -99,7 +99,6 @@ export function validateSenderFeatures(object: ISenderFeature): IValidationResul
     const validateAddresssResult = validateAddress(object.address);
 
     return mergeValidationResults(result, validateAddresssResult);
-
 }
 
 /**

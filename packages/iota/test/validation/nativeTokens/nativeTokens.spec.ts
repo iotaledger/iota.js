@@ -68,6 +68,23 @@ describe("Native tokens", () => {
         expect(result.errors).toEqual(expect.arrayContaining(["Max native tokens count exceeded."]));
     });
     
+    test("Fails with lexicographic sort", () => {
+        const tokens: INativeToken[] = [
+            {
+                id: "0x08d8e532f6138fd753cc5f5fc2f3fb13e8d6df3c4041429232ad3b7f8b7e7d95740200000000",
+                amount: "1687"
+            },
+            {
+                id: "0x08d8e532f6138fd753cc5f5fc2f3fb13e8d6df3c4041429232ad3b7f8b7e7d95740100000000",
+                amount: "15"
+            }
+        ];
+        
+        const result = validateNativeTokens(tokens);
+        expect(result.isValid).toEqual(false);
+        expect(result.errors).toEqual(expect.arrayContaining(["Native Tokens must be lexicographically sorted based on Token id."]));
+    });
+    
     test("Fails with all errors", () => {
         const tokens: INativeToken[] = [
             {
@@ -91,5 +108,6 @@ describe("Native tokens", () => {
         expect(result.errors).toEqual(expect.arrayContaining(["Native token 0x08d8e532f6138fd753cc5f5fc2f3fb13e8d6df3c4041429232ad3b7f8b7e7d95740100000000 must have a value bigger than zero."]));
         expect(result.errors).toEqual(expect.arrayContaining(["No duplicate tokens are allowed."]));
         expect(result.errors).toEqual(expect.arrayContaining(["Max native tokens count exceeded."]));
+        expect(result.errors).toEqual(expect.arrayContaining(["Native Tokens must be lexicographically sorted based on Token id."]));
     });
 });
