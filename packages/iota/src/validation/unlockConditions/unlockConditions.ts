@@ -14,21 +14,19 @@ import { ITimelockUnlockCondition, TIMELOCK_UNLOCK_CONDITION_TYPE } from "../../
 import type { UnlockConditionTypes } from "../../models/unlockConditions/unlockConditionTypes";
 import { TransactionHelper } from "../../utils/transactionHelper";
 import { validateAddress } from "../addresses/addresses";
-import { IValidationResult, mergeValidationResults } from "../result";
+import { IValidationResult, mergeValidationResults, failValidation } from "../result";
 
 /**
  * Validate output unlock conditions.
  * @param object The object to validate.
  * @param output The output that owns unlock conditions.
- * @param protocol The Protocol Info.
+ * @param protocolInfo The Protocol Info.
  * @returns The validation result.
  */
-//  Each output must not contain more than one unlock condition of each type
-//  and not all unlock condition types are supported for each output type.
 export function validateUnlockConditions(
     object: UnlockConditionTypes[],
     output?: OutputTypes,
-    protocol?: INodeInfoProtocol
+    protocolInfo?: INodeInfoProtocol
     ): IValidationResult {
     const results: IValidationResult[] = [];
 
@@ -49,7 +47,7 @@ export function validateUnlockConditions(
 
     for (const unlockCondition of object) {
         results.push(
-            validateUnlockCondition(unlockCondition, output, protocol)
+            validateUnlockCondition(unlockCondition, output, protocolInfo)
         );
     }
 
@@ -60,13 +58,13 @@ export function validateUnlockConditions(
  * Validate output unlock condition.
  * @param object The object to validate.
  * @param output The output that owns unlock conditions.
- * @param protocol The Protocol Info.
+ * @param protocolInfo The Protocol Info.
  * @returns The validation result.
  */
 export function validateUnlockCondition(
     object: UnlockConditionTypes,
     output?: OutputTypes,
-    protocol?: INodeInfoProtocol
+    protocolInfo?: INodeInfoProtocol
     ): IValidationResult {
     let result: IValidationResult = { isValid: true };
 
@@ -75,8 +73,8 @@ export function validateUnlockCondition(
             result = validateAddressUnlockCondition(object);
             break;
         case STORAGE_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE:
-            if (output && protocol) {
-                result = validateStorageDepositReturnUnlockCondition(object, output, protocol);
+            if (output && protocolInfo) {
+                result = validateStorageDepositReturnUnlockCondition(object, output, protocolInfo);
             } else {
                 throw new Error("Must provide Output and Protocol info to validate storage deposit return unlock condition.");
             }
@@ -110,15 +108,9 @@ export function validateUnlockCondition(
  */
 export function validateAddressUnlockCondition(object: IAddressUnlockCondition): IValidationResult {
     const result: IValidationResult = { isValid: true };
-    const errors: string[] = [];
 
     if (object.type !== ADDRESS_UNLOCK_CONDITION_TYPE) {
-        errors.push(`Type mismatch in address unlock condition ${object.type}`);
-    }
-
-    if (errors.length > 0) {
-        result.isValid = false;
-        result.errors = errors;
+        failValidation(result, `Type mismatch in address unlock condition ${object.type}`);
     }
 
     const validateAddresssResult = validateAddress(object.address);
@@ -139,28 +131,22 @@ export function validateStorageDepositReturnUnlockCondition(
     protocol: INodeInfoProtocol
     ): IValidationResult {
     const result: IValidationResult = { isValid: true };
-    const errors: string[] = [];
 
     if (object.type !== STORAGE_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE) {
-        errors.push(`Type mismatch in storage deposit return unlock condition ${object.type}`);
+        failValidation(result, `Type mismatch in storage deposit return unlock condition ${object.type}`);
     }
 
     if (bigInt(object.amount).compare(bigInt.zero) !== 1) {
-        errors.push("Storage deposit amount must be larger than zero.");
+        failValidation(result, "Storage deposit amount must be larger than zero.");
     }
 
     const minStorageDeposit = TransactionHelper.getMinStorageDeposit(object.returnAddress, protocol.rentStructure);
     if (bigInt(object.amount).compare(minStorageDeposit) !== 1) {
-        errors.push("Storage deposit return amount is less than the min storage deposit.");
+        failValidation(result, "Storage deposit return amount is less than the min storage deposit.");
     }
 
     if (bigInt(object.amount).compare(output.amount) === 1) {
-        errors.push("Storage deposit return amount exceeds target output's deposit.");
-    }
-
-    if (errors.length > 0) {
-        result.isValid = false;
-        result.errors = errors;
+        failValidation(result, "Storage deposit return amount exceeds target output's deposit.");
     }
 
     const validateAddresssResult = validateAddress(object.returnAddress);
@@ -175,19 +161,13 @@ export function validateStorageDepositReturnUnlockCondition(
  */
 export function validateTimeUnlockCondition(object: ITimelockUnlockCondition): IValidationResult {
     const result: IValidationResult = { isValid: true };
-    const errors: string[] = [];
 
     if (object.type !== TIMELOCK_UNLOCK_CONDITION_TYPE) {
-        errors.push(`Type mismatch in time unlock condition ${object.type}`);
+        failValidation(result, `Type mismatch in time unlock condition ${object.type}`);
     }
 
     if (object.unixTime === 0) {
-        errors.push("Time unlock condition must be greater than zero.");
-    }
-
-    if (errors.length > 0) {
-        result.isValid = false;
-        result.errors = errors;
+        failValidation(result, "Time unlock condition must be greater than zero.");
     }
 
     return result;
@@ -200,19 +180,13 @@ export function validateTimeUnlockCondition(object: ITimelockUnlockCondition): I
  */
 export function validateExpirationUnlockCondition(object: IExpirationUnlockCondition): IValidationResult {
     const result: IValidationResult = { isValid: true };
-    const errors: string[] = [];
 
     if (object.type !== EXPIRATION_UNLOCK_CONDITION_TYPE) {
-        errors.push(`Type mismatch in expiration unlock condition ${object.type}`);
+        failValidation(result, `Type mismatch in expiration unlock condition ${object.type}`);
     }
 
     if (object.unixTime === 0) {
-        errors.push("Expiration unlock condition must be greater than zero.");
-    }
-
-    if (errors.length > 0) {
-        result.isValid = false;
-        result.errors = errors;
+        failValidation(result, "Expiration unlock condition must be greater than zero.");
     }
 
     const validateAddresssResult = validateAddress(object.returnAddress);
@@ -229,15 +203,9 @@ export function validateStateControllerAddressUnlockCondition(
     object: IStateControllerAddressUnlockCondition
     ): IValidationResult {
     const result: IValidationResult = { isValid: true };
-    const errors: string[] = [];
 
     if (object.type !== STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE) {
-        errors.push(`Type mismatch in state controller address unlock condition ${object.type}`);
-    }
-
-    if (errors.length > 0) {
-        result.isValid = false;
-        result.errors = errors;
+        failValidation(result, `Type mismatch in state controller address unlock condition ${object.type}`);
     }
 
     const validateAddresssResult = validateAddress(object.address);
@@ -252,15 +220,9 @@ export function validateStateControllerAddressUnlockCondition(
  */
 export function validateGovernorAddressUnlockCondition(object: IGovernorAddressUnlockCondition): IValidationResult {
     const result: IValidationResult = { isValid: true };
-    const errors: string[] = [];
 
     if (object.type !== GOVERNOR_ADDRESS_UNLOCK_CONDITION_TYPE) {
-        errors.push(`Type mismatch in governor address unlock condition ${object.type}`);
-    }
-
-    if (errors.length > 0) {
-        result.isValid = false;
-        result.errors = errors;
+        failValidation(result, `Type mismatch in governor address unlock condition ${object.type}`);
     }
 
     const validateAddresssResult = validateAddress(object.address);
@@ -275,15 +237,9 @@ export function validateGovernorAddressUnlockCondition(object: IGovernorAddressU
  */
 export function validateImmutableAliasUnlockCondition(object: IImmutableAliasUnlockCondition): IValidationResult {
     const result: IValidationResult = { isValid: true };
-    const errors: string[] = [];
 
     if (object.type !== IMMUTABLE_ALIAS_UNLOCK_CONDITION_TYPE) {
-        errors.push(`Type mismatch in immutable alias unlock condition ${object.type}`);
-    }
-
-    if (errors.length > 0) {
-        result.isValid = false;
-        result.errors = errors;
+        failValidation(result, `Type mismatch in immutable alias unlock condition ${object.type}`);
     }
 
     const validateAddresssResult = validateAddress(object.address);

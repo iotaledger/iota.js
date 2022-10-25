@@ -8,7 +8,7 @@ import { ALIAS_ADDRESS_TYPE, IAliasAddress } from "../../models/addresses/IAlias
 import { ED25519_ADDRESS_TYPE, IEd25519Address } from "../../models/addresses/IEd25519Address";
 import { INftAddress, NFT_ADDRESS_TYPE } from "../../models/addresses/INftAddress";
 import type { ITypeBase } from "../../models/ITypeBase";
-import type { IValidationResult } from "../result";
+import { IValidationResult, failValidation } from "../result";
 
 /**
  * The length of an hex encode ed25519 address string with prefix 0x.
@@ -57,19 +57,13 @@ export function validateAddress(object: AddressTypes): IValidationResult {
  */
 export function validateEd25519Address(object: IEd25519Address): IValidationResult {
     const result: IValidationResult = { isValid: true };
-    const errors: string[] = [];
 
     if (object.type !== ED25519_ADDRESS_TYPE) {
-        errors.push(`Type mismatch in ed25519 address ${object.type}`);
+        failValidation(result, `Type mismatch in ed25519 address ${object.type}`);
     }
 
     if (object.pubKeyHash.length !== ED25519_ADDRESS_HEX_LENGTH) {
-        errors.push(`Ed25519 Address must have ${ED25519_ADDRESS_HEX_LENGTH} charachters.`);
-    }
-
-    if (errors.length > 0) {
-        result.isValid = false;
-        result.errors = errors;
+        failValidation(result, `Ed25519 Address must have ${ED25519_ADDRESS_HEX_LENGTH} charachters.`);
     }
 
     return result;
@@ -82,19 +76,13 @@ export function validateEd25519Address(object: IEd25519Address): IValidationResu
  */
 export function validateAliasAddress(object: IAliasAddress): IValidationResult {
     const result: IValidationResult = { isValid: true };
-    const errors: string[] = [];
 
     if (object.type !== ALIAS_ADDRESS_TYPE) {
-        errors.push(`Type mismatch in alias address ${object.type}`);
+        failValidation(result, `Type mismatch in alias address ${object.type}`);
     }
 
     if (object.aliasId.length !== ALIAS_ID_HEX_LENGTH) {
-        errors.push(`Alias id must have ${ALIAS_ID_HEX_LENGTH} charachters.`);
-    }
-
-    if (errors.length > 0) {
-        result.isValid = false;
-        result.errors = errors;
+        failValidation(result, `Alias id must have ${ALIAS_ID_HEX_LENGTH} charachters.`);
     }
 
     return result;
@@ -107,19 +95,13 @@ export function validateAliasAddress(object: IAliasAddress): IValidationResult {
  */
 export function validateNftAddress(object: INftAddress): IValidationResult {
     const result: IValidationResult = { isValid: true };
-    const errors: string[] = [];
 
     if (object.type !== NFT_ADDRESS_TYPE) {
-        errors.push(`Type mismatch in nft address ${object.type}`);
+        failValidation(result, `Type mismatch in nft address ${object.type}`);
     }
 
     if (object.nftId.length !== NFT_ID_HEX_LENGTH) {
-        errors.push(`Nft id must have ${NFT_ID_HEX_LENGTH} charachters.`);
-    }
-
-    if (errors.length > 0) {
-        result.isValid = false;
-        result.errors = errors;
+        failValidation(result, `Nft id must have ${NFT_ID_HEX_LENGTH} charachters.`);
     }
 
     return result;

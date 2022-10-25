@@ -9,9 +9,14 @@ import bigInt from "big-integer";
 import * as console from "console";
 import fetch from "node-fetch";
 
-const EXPLORER = "https://explorer.alphanet.iotaledger.net/alphanet";
-const API_ENDPOINT = "https://api.alphanet.iotaledger.net/";
-const FAUCET = "https://faucet.alphanet.iotaledger.net/api/enqueue" 
+// const EXPLORER = "https://explorer.alphanet.iotaledger.net/alphanet";
+// const API_ENDPOINT = "https://api.alphanet.iotaledger.net/";
+// const FAUCET = "https://faucet.alphanet.iotaledger.net/api/enqueue" 
+
+const EXPLORER = "https://explorer.shimmer.network/testnet";
+const API_ENDPOINT = "https://api.testnet.shimmer.network/";
+const FAUCET = "https://faucet.testnet.shimmer.network/api/enqueue" 
+
 
 // If running the node locally
 // const API_ENDPOINT = "http://localhost:14265/";
@@ -775,6 +780,8 @@ function transferNativeTokensWithUnlockCondition(consumedOutput: lib.OutputTypes
             }
         ]
     }
+
+    console.log("BasicInput", receiverOutput);
 
     const remainderOutput: lib.IBasicOutput = {
         type: lib.BASIC_OUTPUT_TYPE,

@@ -1,5 +1,6 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
+import type { INodeInfoProtocol } from "../../models/info/INodeInfoProtocol";
 import type { ITypeBase } from "../../models/ITypeBase";
 import { MILESTONE_PAYLOAD_TYPE } from "../../models/payloads/IMilestonePayload";
 import { TAGGED_DATA_PAYLOAD_TYPE } from "../../models/payloads/ITaggedDataPayload";
@@ -13,9 +14,11 @@ import { validateUnlocks } from "../unlocks/unlocks";
 /**
  * Validate any payload entrypoint.
  * @param object The object to validate.
+ * @param protocolInfo The Protocol Info.
  * @returns The validation result.
  */
-export function validatePayload(object: PayloadTypes | undefined): IValidationResult {
+export function validatePayload(object: PayloadTypes | undefined, protocolInfo: INodeInfoProtocol
+    ): IValidationResult {
     let result: IValidationResult = { isValid: true };
 
     if (!object) {
@@ -23,7 +26,7 @@ export function validatePayload(object: PayloadTypes | undefined): IValidationRe
     } else {
         switch (object.type) {
             case TRANSACTION_PAYLOAD_TYPE:
-                result = validateTransactionPayload(object);
+                result = validateTransactionPayload(object, protocolInfo);
                 break;
             case MILESTONE_PAYLOAD_TYPE:
                 // Unimplemented
@@ -45,14 +48,16 @@ export function validatePayload(object: PayloadTypes | undefined): IValidationRe
 /**
  * Validate a transaction payload.
  * @param object The object to validate.
+ * @param protocolInfo The Protocol Info.
  * @returns The validation result.
  */
-export function validateTransactionPayload(object: ITransactionPayload): IValidationResult {
+export function validateTransactionPayload(object: ITransactionPayload, protocolInfo: INodeInfoProtocol
+    ): IValidationResult {
     let txEssenceResult: IValidationResult = { isValid: true };
     let unlocksResult: IValidationResult = { isValid: true };
 
     if (object.type === TRANSACTION_PAYLOAD_TYPE) {
-        txEssenceResult = validateTransactionEssence(object.essence);
+        txEssenceResult = validateTransactionEssence(object.essence, protocolInfo);
         unlocksResult = validateUnlocks(object.unlocks);
     } else {
         throw new Error(`Unrecognized transaction type ${object.type}`);

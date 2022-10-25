@@ -31,3 +31,20 @@ export function mergeValidationResults(...results: IValidationResult[]): IValida
             undefined
     };
 }
+
+/**
+ * Fail validation with error message.
+ * @param result The validation result.
+ * @param withError The error message.
+ * @returns The validation result.
+ */
+export function failValidation(result: IValidationResult, withError: string): IValidationResult {
+    result.isValid = false;
+    if (result.errors) {
+        result.errors.push(withError);
+    } else {
+        result.errors = [withError];
+    }
+
+    return result;
+}

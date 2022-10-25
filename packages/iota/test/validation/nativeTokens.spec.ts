@@ -1,7 +1,7 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import { validateNativeTokens } from "../../../src/validation/nativeTokens";
-import type { INativeToken } from "../../../src/models/INativeToken";
+import { validateNativeTokens } from "../../src/validation/nativeTokens";
+import type { INativeToken } from "../../src/models/INativeToken";
 
 describe("Native tokens", () => {
     test("Can validate native tokens", () => {

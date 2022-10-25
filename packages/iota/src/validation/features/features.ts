@@ -9,7 +9,7 @@ import { ISenderFeature, SENDER_FEATURE_TYPE } from "../../models/features/ISend
 import { ITagFeature, TAG_FEATURE_TYPE } from "../../models/features/ITagFeature";
 import type { ITypeBase } from "../../models/ITypeBase";
 import { validateAddress } from "../addresses/addresses";
-import { IValidationResult, mergeValidationResults } from "../result";
+import { IValidationResult, mergeValidationResults, failValidation } from "../result";
 
 /**
  * The maximum length of a metadata binary representation.
@@ -85,15 +85,9 @@ export function validateFeature(object: FeatureTypes): IValidationResult {
  */
 export function validateSenderFeatures(object: ISenderFeature): IValidationResult {
     const result: IValidationResult = { isValid: true };
-    const errors: string[] = [];
 
     if (object.type !== SENDER_FEATURE_TYPE) {
-        errors.push(`Type mismatch in sender feature ${object.type}`);
-    }
-
-    if (errors.length > 0) {
-        result.isValid = false;
-        result.errors = errors;
+        failValidation(result, `Type mismatch in sender feature ${object.type}`);
     }
 
     const validateAddresssResult = validateAddress(object.address);
@@ -108,15 +102,9 @@ export function validateSenderFeatures(object: ISenderFeature): IValidationResul
  */
 export function validateIssuerFeatures(object: IIssuerFeature): IValidationResult {
     const result: IValidationResult = { isValid: true };
-    const errors: string[] = [];
 
     if (object.type !== ISSUER_FEATURE_TYPE) {
-        errors.push(`Type mismatch in issuer feature ${object.type}`);
-    }
-
-    if (errors.length > 0) {
-        result.isValid = false;
-        result.errors = errors;
+        failValidation(result, `Type mismatch in issuer feature ${object.type}`);
     }
 
     const validateAddresssResult = validateAddress(object.address);
@@ -131,24 +119,18 @@ export function validateIssuerFeatures(object: IIssuerFeature): IValidationResul
  */
 export function validateMetadataFeatures(object: IMetadataFeature): IValidationResult {
     const result: IValidationResult = { isValid: true };
-    const errors: string[] = [];
 
     if (object.type !== METADATA_FEATURE_TYPE) {
-        errors.push(`Type mismatch in metadata feature ${object.type}`);
+        failValidation(result, `Type mismatch in metadata feature ${object.type}`);
     }
 
     if (object.data.length === 0) {
-        errors.push("Metadata must have a value bigger than zero.");
+        failValidation(result, "Metadata must have a value bigger than zero.");
     }
 
     const data = HexHelper.stripPrefix(object.data);
     if ((data.length / 2) > MAX_METADATA_LENGTH) {
-        errors.push("Max metadata length exceeded.");
-    }
-
-    if (errors.length > 0) {
-        result.isValid = false;
-        result.errors = errors;
+        failValidation(result, "Max metadata length exceeded.");
     }
 
     return result;
@@ -161,23 +143,17 @@ export function validateMetadataFeatures(object: IMetadataFeature): IValidationR
  */
 export function validateTagFeatures(object: ITagFeature): IValidationResult {
     const result: IValidationResult = { isValid: true };
-    const errors: string[] = [];
 
     if (object.type !== TAG_FEATURE_TYPE) {
-        errors.push(`Type mismatch in tag feature ${object.type}`);
+        failValidation(result, `Type mismatch in tag feature ${object.type}`);
     }
 
     if (object.tag.length === 0) {
-        errors.push("Tag must have a value bigger than zero.");
+        failValidation(result, "Tag must have a value bigger than zero.");
     }
 
     if ((object.tag.length / 2) > MAX_TAG_LENGTH) {
-        errors.push("Max tag length exceeded.");
-    }
-
-    if (errors.length > 0) {
-        result.isValid = false;
-        result.errors = errors;
+        failValidation(result, "Max tag length exceeded.");
     }
 
     return result;
