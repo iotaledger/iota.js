@@ -129,9 +129,9 @@ function validateStorageDepositReturnUnlockCondition(
         result = failValidation(result, "Storage deposit return amount exceeds target output's deposit.");
     }
 
-    const validateAddresssResult = validateAddress(object.returnAddress);
+    const validateAddressResult = validateAddress(object.returnAddress);
 
-    return mergeValidationResults(result, validateAddresssResult);
+    return mergeValidationResults(result, validateAddressResult);
 }
 
 /**
@@ -146,7 +146,7 @@ function validateExpirationUnlockCondition(object: IExpirationUnlockCondition): 
         result = failValidation(result, "Expiration unlock condition must be greater than zero.");
     }
 
-    const validateAddresssResult = validateAddress(object.returnAddress);
+    const validateAddressResult = validateAddress(object.returnAddress);
 
-    return mergeValidationResults(result, validateAddresssResult);
+    return mergeValidationResults(result, validateAddressResult);
 }
