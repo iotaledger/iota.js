@@ -102,7 +102,7 @@ export function validateBasicOutput(object: IBasicOutput, protocolInfo: INodeInf
                 errors: ["Address Unlock Condition must be present."]
             });
         }
-        results.push(validateUnlockConditions(object.unlockConditions, object, protocolInfo));
+        results.push(validateUnlockConditions(object.unlockConditions, object.amount, protocolInfo.rentStructure));
     }
 
     if (object.nativeTokens) {

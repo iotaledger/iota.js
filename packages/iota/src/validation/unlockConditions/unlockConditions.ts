@@ -1,9 +1,8 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 import bigInt from "big-integer";
-import type { INodeInfoProtocol } from "../../models/info/INodeInfoProtocol";
+import type { IRent } from "../../models/IRent";
 import type { ITypeBase } from "../../models/ITypeBase";
-import type { OutputTypes } from "../../models/outputs/outputTypes";
 import { ADDRESS_UNLOCK_CONDITION_TYPE } from "../../models/unlockConditions/IAddressUnlockCondition";
 import { EXPIRATION_UNLOCK_CONDITION_TYPE, IExpirationUnlockCondition } from "../../models/unlockConditions/IExpirationUnlockCondition";
 import { GOVERNOR_ADDRESS_UNLOCK_CONDITION_TYPE } from "../../models/unlockConditions/IGovernorAddressUnlockCondition";
@@ -24,14 +23,14 @@ const MAX_UNLOCK_CONDITIONS: number = 7;
 /**
  * Validate output unlock conditions.
  * @param object The object to validate.
- * @param output The output that owns unlock conditions.
- * @param protocolInfo The Protocol Info.
+ * @param amount The output amount that owns unlock conditions.
+ * @param rentStructure The rent cost parameters.
  * @returns The validation result.
  */
 export function validateUnlockConditions(
     object: UnlockConditionTypes[],
-    output?: OutputTypes,
-    protocolInfo?: INodeInfoProtocol
+    amount?: string,
+    rentStructure?: IRent
     ): IValidationResult {
     const results: IValidationResult[] = [];
 
@@ -47,7 +46,7 @@ export function validateUnlockConditions(
 
     for (const unlockCondition of object) {
         results.push(
-            validateUnlockCondition(unlockCondition, output, protocolInfo)
+            validateUnlockCondition(unlockCondition, amount, rentStructure)
         );
     }
 
@@ -57,14 +56,14 @@ export function validateUnlockConditions(
 /**
  * Validate output unlock condition.
  * @param object The object to validate.
- * @param output The output that owns unlock conditions.
- * @param protocolInfo The Protocol Info.
+ * @param amount The output amount that owns unlock conditions.
+ * @param rentStructure The rent cost parameters.
  * @returns The validation result.
  */
 export function validateUnlockCondition(
     object: UnlockConditionTypes,
-    output?: OutputTypes,
-    protocolInfo?: INodeInfoProtocol
+    amount?: string,
+    rentStructure?: IRent
     ): IValidationResult {
     let result: IValidationResult = { isValid: true };
 
@@ -73,10 +72,10 @@ export function validateUnlockCondition(
             result = validateAddress(object.address);
             break;
         case STORAGE_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE:
-            if (output && protocolInfo) {
-                result = validateStorageDepositReturnUnlockCondition(object, output, protocolInfo);
+            if (amount && rentStructure) {
+                result = validateStorageDepositReturnUnlockCondition(object, amount, rentStructure);
             } else {
-                throw new Error("Must provide Output and Protocol info to validate storage deposit return unlock condition.");
+                throw new Error("Must provide Output amount and Rent structure to validate storage deposit return unlock condition.");
             }
             break;
         case TIMELOCK_UNLOCK_CONDITION_TYPE:
@@ -106,14 +105,14 @@ export function validateUnlockCondition(
 /**
  * Validate storage deposit return unlock condition.
  * @param object The object to validate.
- * @param output The output that owns unlock conditions.
- * @param protocol The Protocol Info.
+ * @param amount The output amount that owns unlock conditions.
+ * @param rentStructure The rent cost parameters.
  * @returns The validation result.
  */
 function validateStorageDepositReturnUnlockCondition(
     object: IStorageDepositReturnUnlockCondition,
-    output: OutputTypes,
-    protocol: INodeInfoProtocol
+    amount: string,
+    rentStructure: IRent
     ): IValidationResult {
     let result: IValidationResult = { isValid: true };
 
@@ -121,12 +120,12 @@ function validateStorageDepositReturnUnlockCondition(
         result = failValidation(result, "Storage deposit amount must be larger than zero.");
     }
 
-    const minStorageDeposit = ValidationHelper.getMinStorageDeposit(object.returnAddress, protocol.rentStructure);
+    const minStorageDeposit = ValidationHelper.getMinStorageDeposit(object.returnAddress, rentStructure);
     if (bigInt(object.amount).compare(minStorageDeposit) !== 1) {
         result = failValidation(result, "Storage deposit return amount is less than the min storage deposit.");
     }
 
-    if (bigInt(object.amount).compare(output.amount) === 1) {
+    if (bigInt(object.amount).compare(amount) === 1) {
         result = failValidation(result, "Storage deposit return amount exceeds target output's deposit.");
     }
 
