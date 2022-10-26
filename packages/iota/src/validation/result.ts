@@ -40,6 +40,7 @@ export function mergeValidationResults(...results: IValidationResult[]): IValida
  */
 export function failValidation(result: IValidationResult, withError: string): IValidationResult {
     result.isValid = false;
+
     if (result.errors) {
         result.errors.push(withError);
     } else {

@@ -5,8 +5,8 @@ import { ED25519_ADDRESS_TYPE, IEd25519Address } from "../../src/models/addresse
 import { ALIAS_ADDRESS_TYPE, IAliasAddress } from "../../src/models/addresses/IAliasAddress";
 import { INftAddress, NFT_ADDRESS_TYPE } from "../../src/models/addresses/INftAddress";
 
-describe("Addresses", () => {
-    test("Can validate ed address", () => {
+describe("Address validation", () => {
+    test("should pass on a valid ed25519 address", () => {
         const ed25519Address: IEd25519Address = {
             type: ED25519_ADDRESS_TYPE,
             pubKeyHash: "0x6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
@@ -16,17 +16,17 @@ describe("Addresses", () => {
         expect(result.isValid).toEqual(true);
     });
     
-    test("Can validate alias address", () => {
-            const aliasAddress: IAliasAddress = {
-                type: ALIAS_ADDRESS_TYPE,
-                aliasId: "0x6920b176f613ec7be59e68fc68f597eb3393af80b176f613ec7be59e68fc68f5"
-            };  
-    
-            const result = validateAddress(aliasAddress);
-            expect(result.isValid).toEqual(true);
+    test("should pass on a valid alias address", () => {
+        const aliasAddress: IAliasAddress = {
+            type: ALIAS_ADDRESS_TYPE,
+            aliasId: "0x6920b176f613ec7be59e68fc68f597eb3393af80b176f613ec7be59e68fc68f5"
+        };  
+
+        const result = validateAddress(aliasAddress);
+        expect(result.isValid).toEqual(true);
     });
     
-    test("Can validate ed address", () => {
+    test("should pass on a valid nft address", () => {
         const nftAddress: INftAddress = {
             type: NFT_ADDRESS_TYPE,
             nftId: "0x6920b176f613ec7be59e68fc68f597eb3393af80e68fc68f597eb3393af80120"
@@ -35,7 +35,8 @@ describe("Addresses", () => {
         const result = validateAddress(nftAddress);
         expect(result.isValid).toEqual(true);
     });
-    test("Fails to validate ed address", () => {
+
+    test("should fail on invalid ed25519 address", () => {
         const ed25519Address: IEd25519Address = {
             type: ED25519_ADDRESS_TYPE,
             pubKeyHash: "0x6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d"
@@ -44,10 +45,9 @@ describe("Addresses", () => {
         const result = validateAddress(ed25519Address);
         expect(result.isValid).toEqual(false);
         expect(result.errors).toEqual(expect.arrayContaining(["Ed25519 Address must have 66 charachters."]));
-
     });
-    
-    test("Fails to validate alias address", () => {
+
+    test("should fail on invalid alias address", () => {
         const aliasAddress: IAliasAddress = {
             type: ALIAS_ADDRESS_TYPE,
             aliasId: "0x6920b176f613ec7be59e68fc68f597eb3393af9e68fc68f5"
@@ -57,8 +57,8 @@ describe("Addresses", () => {
         expect(result.isValid).toEqual(false);
         expect(result.errors).toEqual(expect.arrayContaining(["Alias id must have 66 charachters."]));
     });
-    
-    test("Fails to validate ed address", () => {
+
+    test("should fail on invalid nft address", () => {
         const nftAddress: INftAddress = {
             type: NFT_ADDRESS_TYPE,
             nftId: "0x6920b176f613ec7be59e68fc68f59780e68fc68f597eb3393af80120"

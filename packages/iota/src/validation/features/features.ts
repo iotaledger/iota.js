@@ -3,11 +3,12 @@
 import { HexHelper } from "@iota/util.js";
 import { MAX_TAG_LENGTH } from "../../binary/payloads/taggedDataPayload";
 import type { FeatureTypes } from "../../models/features/featureTypes";
-import { IIssuerFeature, ISSUER_FEATURE_TYPE } from "../../models/features/IIssuerFeature";
+import { ISSUER_FEATURE_TYPE } from "../../models/features/IIssuerFeature";
 import { IMetadataFeature, METADATA_FEATURE_TYPE } from "../../models/features/IMetadataFeature";
-import { ISenderFeature, SENDER_FEATURE_TYPE } from "../../models/features/ISenderFeature";
+import { SENDER_FEATURE_TYPE } from "../../models/features/ISenderFeature";
 import { ITagFeature, TAG_FEATURE_TYPE } from "../../models/features/ITagFeature";
 import type { ITypeBase } from "../../models/ITypeBase";
+import { ValidationHelper } from "../../utils/validationHelper";
 import { validateAddress } from "../addresses/addresses";
 import { IValidationResult, mergeValidationResults, failValidation } from "../result";
 
@@ -34,12 +35,7 @@ export function validateFeatures(object: FeatureTypes[]): IValidationResult {
     }
 
     const distinctFeatureTypes = new Set(object.map(feature => feature.type));
-    if (distinctFeatureTypes.size !== object.length) {
-        results.push({
-            isValid: false,
-            errors: ["Output must not contain more than one feature of each type."]
-        });
-    }
+    results.push(ValidationHelper.validateDistinct(distinctFeatureTypes, object.length, "Output", "feature"));
 
     for (const feature of object) {
         results.push(
@@ -60,16 +56,16 @@ export function validateFeature(object: FeatureTypes): IValidationResult {
 
     switch (object.type) {
         case SENDER_FEATURE_TYPE:
-            result = validateSenderFeatures(object);
+            result = validateAddress(object.address);
             break;
         case ISSUER_FEATURE_TYPE:
-            result = validateIssuerFeatures(object);
+            result = validateAddress(object.address);
             break;
         case METADATA_FEATURE_TYPE:
-            result = validateMetadataFeatures(object);
+            result = validateMetadataFeature(object);
             break;
         case TAG_FEATURE_TYPE:
-            result = validateTagFeatures(object);
+            result = validateTagFeature(object);
             break;
         default:
             throw new Error(`Unrecognized Feature type ${(object as ITypeBase<number>).type}`);
@@ -79,58 +75,20 @@ export function validateFeature(object: FeatureTypes): IValidationResult {
 }
 
 /**
- * Validate sender feature.
- * @param object The object to validate.
- * @returns The validation result.
- */
-export function validateSenderFeatures(object: ISenderFeature): IValidationResult {
-    const result: IValidationResult = { isValid: true };
-
-    if (object.type !== SENDER_FEATURE_TYPE) {
-        failValidation(result, `Type mismatch in sender feature ${object.type}`);
-    }
-
-    const validateAddresssResult = validateAddress(object.address);
-
-    return mergeValidationResults(result, validateAddresssResult);
-}
-
-/**
- * Validate issuer feature.
- * @param object The object to validate.
- * @returns The validation result.
- */
-export function validateIssuerFeatures(object: IIssuerFeature): IValidationResult {
-    const result: IValidationResult = { isValid: true };
-
-    if (object.type !== ISSUER_FEATURE_TYPE) {
-        failValidation(result, `Type mismatch in issuer feature ${object.type}`);
-    }
-
-    const validateAddresssResult = validateAddress(object.address);
-
-    return mergeValidationResults(result, validateAddresssResult);
-}
-
-/**
  * Validate metadata feature.
  * @param object The object to validate.
  * @returns The validation result.
  */
-export function validateMetadataFeatures(object: IMetadataFeature): IValidationResult {
-    const result: IValidationResult = { isValid: true };
-
-    if (object.type !== METADATA_FEATURE_TYPE) {
-        failValidation(result, `Type mismatch in metadata feature ${object.type}`);
-    }
+function validateMetadataFeature(object: IMetadataFeature): IValidationResult {
+    let result: IValidationResult = { isValid: true };
 
     if (object.data.length === 0) {
-        failValidation(result, "Metadata must have a value bigger than zero.");
+        result = failValidation(result, "Metadata must have a value bigger than zero.");
     }
 
     const data = HexHelper.stripPrefix(object.data);
     if ((data.length / 2) > MAX_METADATA_LENGTH) {
-        failValidation(result, "Max metadata length exceeded.");
+        result = failValidation(result, "Max metadata length exceeded.");
     }
 
     return result;
@@ -141,19 +99,15 @@ export function validateMetadataFeatures(object: IMetadataFeature): IValidationR
  * @param object The object to validate.
  * @returns The validation result.
  */
-export function validateTagFeatures(object: ITagFeature): IValidationResult {
-    const result: IValidationResult = { isValid: true };
-
-    if (object.type !== TAG_FEATURE_TYPE) {
-        failValidation(result, `Type mismatch in tag feature ${object.type}`);
-    }
+function validateTagFeature(object: ITagFeature): IValidationResult {
+    let result: IValidationResult = { isValid: true };
 
     if (object.tag.length === 0) {
-        failValidation(result, "Tag must have a value bigger than zero.");
+        result = failValidation(result, "Tag must have a value bigger than zero.");
     }
 
     if ((object.tag.length / 2) > MAX_TAG_LENGTH) {
-        failValidation(result, "Max tag length exceeded.");
+        result = failValidation(result, "Max tag length exceeded.");
     }
 
     return result;

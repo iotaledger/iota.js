@@ -3,6 +3,7 @@
 import bigInt from "big-integer";
 import { MAX_NATIVE_TOKEN_COUNT } from "../binary/nativeTokens";
 import type { INativeToken } from "../models/INativeToken";
+import { ValidationHelper } from "../utils/validationHelper";
 import { IValidationResult, failValidation, mergeValidationResults } from "./result";
 
 /**
@@ -20,19 +21,19 @@ export function validateNativeTokens(object: INativeToken[] | undefined): IValid
         });
 
         const distinctNativeTokens = new Set(tokenIds);
+        result = mergeValidationResults(result, ValidationHelper.validateDistinct(distinctNativeTokens, object.length, "Output", "unlock condition"));
+
         if (distinctNativeTokens.size !== tokenIds.length) {
-            failValidation(result, "No duplicate tokens are allowed.");
+            result = failValidation(result, "No duplicate tokens are allowed.");
         }
 
         if (distinctNativeTokens.size > MAX_NATIVE_TOKEN_COUNT) {
-            failValidation(result, "Max native tokens count exceeded.");
+            result = failValidation(result, "Max native tokens count exceeded.");
         }
 
-        const sortedNativeTokens = tokenIds.slice().sort(
-            (a, b) => a.localeCompare(b));
-
+        const sortedNativeTokens = tokenIds.slice().sort((a, b) => a.localeCompare(b));
         if (tokenIds.toString() !== sortedNativeTokens.toString()) {
-            failValidation(result, "Native Tokens must be lexicographically sorted based on Token id.");
+            result = failValidation(result, "Native Tokens must be lexicographically sorted based on Token id.");
         }
     }
 
@@ -45,10 +46,10 @@ export function validateNativeTokens(object: INativeToken[] | undefined): IValid
  * @returns The validation result.
  */
  export function validateNativeToken(object: INativeToken): IValidationResult {
-    const result: IValidationResult = { isValid: true };
+    let result: IValidationResult = { isValid: true };
 
     if (bigInt(object.amount).compare(bigInt.zero) !== 1) {
-        failValidation(result, `Native token ${object.id} must have a value bigger than zero.`);
+        result = failValidation(result, `Native token ${object.id} must have a value bigger than zero.`);
     }
 
     return result;

@@ -77,7 +77,7 @@ export function validateBasicOutput(object: IBasicOutput, protocolInfo: INodeInf
     if (object.type !== BASIC_OUTPUT_TYPE) {
         results.push({
             isValid: false,
-            errors: [`Type mismatch in storage deposit return unlock condition ${object.type}`]
+            errors: [`Type mismatch in basic output ${object.type}`]
         });
     }
 
@@ -91,7 +91,7 @@ export function validateBasicOutput(object: IBasicOutput, protocolInfo: INodeInf
     if (bigInt(object.amount).compare(protocolInfo.tokenSupply) === 1) {
         results.push({
             isValid: false,
-            errors: ["Basic output amount field larger than max token supply."]
+            errors: ["Basic output amount field must not be larger than max token supply."]
         });
     }
 
