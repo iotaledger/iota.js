@@ -36,17 +36,17 @@ export function validateAddress(object: AddressTypes): IValidationResult {
     switch (object.type) {
         case ED25519_ADDRESS_TYPE:
             if (object.pubKeyHash.length !== ED25519_ADDRESS_HEX_LENGTH) {
-                result = failValidation(result, `Ed25519 Address must have ${ED25519_ADDRESS_HEX_LENGTH} charachters.`);
+                result = failValidation(result, `Ed25519 Address must have ${ED25519_ADDRESS_HEX_LENGTH} characters.`);
             }
             break;
         case ALIAS_ADDRESS_TYPE:
             if (object.aliasId.length !== ALIAS_ID_HEX_LENGTH) {
-                result = failValidation(result, `Alias id must have ${ALIAS_ID_HEX_LENGTH} charachters.`);
+                result = failValidation(result, `Alias id must have ${ALIAS_ID_HEX_LENGTH} characters.`);
             }
             break;
         case NFT_ADDRESS_TYPE:
             if (object.nftId.length !== NFT_ID_HEX_LENGTH) {
-                result = failValidation(result, `Nft id must have ${NFT_ID_HEX_LENGTH} charachters.`);
+                result = failValidation(result, `Nft id must have ${NFT_ID_HEX_LENGTH} characters.`);
             }
             break;
         default:

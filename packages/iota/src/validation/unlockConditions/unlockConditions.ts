@@ -31,7 +31,7 @@ export function validateUnlockConditions(
     object: UnlockConditionTypes[],
     amount?: string,
     rentStructure?: IRent
-    ): IValidationResult {
+): IValidationResult {
     const results: IValidationResult[] = [];
 
     if (object.length > MAX_UNLOCK_CONDITIONS) {
@@ -41,8 +41,7 @@ export function validateUnlockConditions(
         });
     }
 
-    const distinctUnlockConditions = new Set(object.map(condition => condition.type));
-    results.push(ValidationHelper.validateDistinct(distinctUnlockConditions, object.length, "Output", "unlock condition"));
+    results.push(ValidationHelper.validateDistinct(object.map(condition => condition.type), "Output", "unlock condition"));
 
     for (const unlockCondition of object) {
         results.push(
@@ -64,7 +63,7 @@ export function validateUnlockCondition(
     object: UnlockConditionTypes,
     amount?: string,
     rentStructure?: IRent
-    ): IValidationResult {
+): IValidationResult {
     let result: IValidationResult = { isValid: true };
 
     switch (object.type) {
@@ -113,7 +112,7 @@ function validateStorageDepositReturnUnlockCondition(
     object: IStorageDepositReturnUnlockCondition,
     amount: string,
     rentStructure: IRent
-    ): IValidationResult {
+): IValidationResult {
     let result: IValidationResult = { isValid: true };
 
     if (bigInt(object.amount).compare(bigInt.zero) !== 1) {

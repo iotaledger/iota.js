@@ -34,8 +34,7 @@ export function validateFeatures(object: FeatureTypes[]): IValidationResult {
         });
     }
 
-    const distinctFeatureTypes = new Set(object.map(feature => feature.type));
-    results.push(ValidationHelper.validateDistinct(distinctFeatureTypes, object.length, "Output", "feature"));
+    results.push(ValidationHelper.validateDistinct(object.map(feature => feature.type), "Output", "feature"));
 
     for (const feature of object) {
         results.push(

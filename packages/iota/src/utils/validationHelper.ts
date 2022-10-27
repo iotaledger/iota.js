@@ -13,22 +13,22 @@ import { TransactionHelper } from "./transactionHelper";
 export class ValidationHelper {
 
     /**
-     * Validate that the values in Set are unique.
+     * Validates the array is composed of distinct elements.
      * @param elements The elements.
-     * @param targetSize The number of decimal places to display.
      * @param containerName The name of the object containing the elements.
      * @param elementName The element in the contaier.
      * @returns The validation result.
      */
     public static validateDistinct(
-        elements: Set<string> | Set<number>,
-        targetSize: number,
+        elements: string[] | number[],
         containerName: string,
         elementName: string
-        ): IValidationResult {
+    ): IValidationResult {
         let result: IValidationResult = { isValid: true };
+        // eslint-disable-next-line unicorn/no-useless-spread
+        const distinctElements = new Set([...elements]);
 
-        if (elements.size !== targetSize) {
+        if (distinctElements.size !== elements.length) {
             result = {
                 isValid: false,
                 errors: [`${containerName} must not contain more than one ${elementName} of each type.`]
