@@ -25,14 +25,18 @@ export class ValidationHelper {
         elementName: string
     ): IValidationResult {
         let result: IValidationResult = { isValid: true };
-        // eslint-disable-next-line unicorn/no-useless-spread
-        const distinctElements = new Set([...elements]);
 
-        if (distinctElements.size !== elements.length) {
-            result = {
-                isValid: false,
-                errors: [`${containerName} must not contain more than one ${elementName} of each type.`]
-            };
+        if (elements.length > 0) {
+            const distinctElements = typeof elements[0] === "string" ?
+                new Set<string>(elements as string[]) :
+                new Set<number>(elements as number[]);
+
+            if (distinctElements.size !== elements.length) {
+                result = {
+                    isValid: false,
+                    errors: [`${containerName} must not contain more than one ${elementName} of each type.`]
+                };
+            }
         }
 
         return result;
