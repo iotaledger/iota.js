@@ -12,6 +12,7 @@
 - [Bech32Helper](classes/Bech32Helper.md)
 - [TransactionHelper](classes/TransactionHelper.md)
 - [UnitsHelper](classes/UnitsHelper.md)
+- [ValidationHelper](classes/ValidationHelper.md)
 
 ### Variables
 
