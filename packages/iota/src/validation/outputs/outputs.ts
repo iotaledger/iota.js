@@ -1,7 +1,8 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 import bigInt from "big-integer";
-import { ALIAS_ADDRESS_TYPE, INodeInfoProtocol } from "../../index-browser";
+import type { INodeInfoProtocol } from "../../index-browser";
+import { ALIAS_ADDRESS_TYPE } from "../../models/addresses/IAliasAddress";
 import type { ITypeBase } from "../../models/ITypeBase";
 import { ALIAS_OUTPUT_TYPE, IAliasOutput } from "../../models/outputs/IAliasOutput";
 import { BASIC_OUTPUT_TYPE, IBasicOutput } from "../../models/outputs/IBasicOutput";
