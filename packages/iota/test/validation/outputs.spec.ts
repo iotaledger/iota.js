@@ -1,11 +1,11 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 import type { INodeInfoProtocol } from "../../src/models/info/INodeInfoProtocol";
-import { BASIC_OUTPUT_TYPE, IBasicOutput } from "../../src/models/outputs/IBasicOutput";
 import { ALIAS_OUTPUT_TYPE, IAliasOutput } from "../../src/models/outputs/IAliasOutput";
+import { BASIC_OUTPUT_TYPE, IBasicOutput } from "../../src/models/outputs/IBasicOutput";
 import { ADDRESS_UNLOCK_CONDITION_TYPE } from "../../src/models/unlockConditions/IAddressUnlockCondition";
-import { STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE } from "../../src/models/unlockConditions/IStateControllerAddressUnlockCondition";
 import { GOVERNOR_ADDRESS_UNLOCK_CONDITION_TYPE } from "../../src/models/unlockConditions/IGovernorAddressUnlockCondition";
+import { STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE } from "../../src/models/unlockConditions/IStateControllerAddressUnlockCondition";
 import { validateOutputs } from "../../src/validation/outputs/outputs";
 
 /**
@@ -134,9 +134,7 @@ describe("Features", () => {
 
         const result = validateOutputs([output], protocolInfo);
         expect(result.isValid).toEqual(false);
-        expect(result.errors).toEqual(expect.arrayContaining([
-            "Address of State controller address unlock condition and address of Governor address unlock condition must be different from the Alias address derived from alias id."
-        ]));
+        expect(result.errors).toEqual(expect.arrayContaining(["Address of State controller address unlock condition and address of Governor address unlock condition must be different from the Alias address derived from alias id."]));
     });
 
     test("Fail zero state index and founder counter", () => {
@@ -166,8 +164,6 @@ describe("Features", () => {
 
         const result = validateOutputs([output], protocolInfo);
         expect(result.isValid).toEqual(false);
-        expect(result.errors).toEqual(expect.arrayContaining([
-            "State index and foundry counter must be zero."
-        ]));
+        expect(result.errors).toEqual(expect.arrayContaining(["State index and foundry counter must be zero."]));
     });
 });
