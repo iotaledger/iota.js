@@ -20,14 +20,15 @@ export const MAX_METADATA_LENGTH: number = 8192;
 /**
  * Validate output features.
  * @param object The object to validate.
+ * @param maxFeaturesCount Maximum number of features.
  * @returns The validation result.
  */
 // Each output must not contain more than one feature of
 // each type and not all feature types are supported for each output type.
-export function validateFeatures(object: FeatureTypes[]): IValidationResult {
+export function validateFeatures(object: FeatureTypes[], maxFeaturesCount: number): IValidationResult {
     const results: IValidationResult[] = [];
 
-    if (object.length > 4) {
+    if (object.length > maxFeaturesCount) {
         results.push({
             isValid: false,
             errors: ["Max number of features exceeded."]
