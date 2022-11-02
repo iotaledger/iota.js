@@ -1,5 +1,6 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
+import { ALIAS_ADDRESS_TYPE } from "../../src/models/addresses/IAliasAddress";
 import type { INodeInfoProtocol } from "../../src/models/info/INodeInfoProtocol";
 import { ALIAS_OUTPUT_TYPE, IAliasOutput } from "../../src/models/outputs/IAliasOutput";
 import { BASIC_OUTPUT_TYPE, IBasicOutput } from "../../src/models/outputs/IBasicOutput";
@@ -59,7 +60,7 @@ describe("Features", () => {
         ]));
     });
 
-    test("Can validate alias output", () => {
+    test("should pass with valid alias output", () => {
         const output: IAliasOutput = {
             type: ALIAS_OUTPUT_TYPE,
             amount: "455655655",
@@ -88,7 +89,7 @@ describe("Features", () => {
         expect(result.isValid).toEqual(true);
     });
 
-    test("Fail validate alias output", () => {
+    test("should fail with invalid alias output", () => {
         const output: IAliasOutput = {
             type: ALIAS_OUTPUT_TYPE,
             amount: "0",
@@ -107,7 +108,7 @@ describe("Features", () => {
         ]));
     });
 
-    test("Fail same unlock condition address as alias id", () => {
+    test("should fail on unlock condition address same as alias id", () => {
         const output: IAliasOutput = {
             type: ALIAS_OUTPUT_TYPE,
             amount: "455655655",
@@ -118,14 +119,14 @@ describe("Features", () => {
                 {
                     type: STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE,
                     address: {
-                        type: 8,
+                        type: ALIAS_ADDRESS_TYPE,
                         aliasId: "0xb6b82443901a2ab6beefdcb88acff1ca359f211a474cb50cf63aa6a24721f9aa"
                     }
                 },
                 {
                     type: GOVERNOR_ADDRESS_UNLOCK_CONDITION_TYPE,
                     address: {
-                        type: 8,
+                        type: ALIAS_ADDRESS_TYPE,
                         aliasId: "0xb6b82443901a2ab6beefdcb88acff1ca359f211a474cb50cf63aa6a24721f9aa"
                     }
                 }
@@ -137,7 +138,7 @@ describe("Features", () => {
         expect(result.errors).toEqual(expect.arrayContaining(["Address of State controller address unlock condition and address of Governor address unlock condition must be different from the Alias address derived from alias id."]));
     });
 
-    test("Fail zero state index and founder counter", () => {
+    test("should fail on state index and foundry counter not equal to zero", () => {
         const output: IAliasOutput = {
             type: ALIAS_OUTPUT_TYPE,
             amount: "455655655",
@@ -148,14 +149,14 @@ describe("Features", () => {
                 {
                     type: STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE,
                     address: {
-                        type: 8,
+                        type: ALIAS_ADDRESS_TYPE,
                         aliasId: "0x7ffec9e1233204d9c6dce6812b1539ee96af691ca2e4d9065daa85907d33e5d3"
                     }
                 },
                 {
                     type: GOVERNOR_ADDRESS_UNLOCK_CONDITION_TYPE,
                     address: {
-                        type: 8,
+                        type: ALIAS_ADDRESS_TYPE,
                         aliasId: "0x7ffec9e1233204d9c6dce6812b1539ee96af691ca2e4d9065daa85907d33e5d3"
                     }
                 }

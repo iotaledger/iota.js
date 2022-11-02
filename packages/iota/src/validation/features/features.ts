@@ -31,7 +31,7 @@ export function validateFeatures(object: FeatureTypes[], maxFeaturesCount: numbe
     if (object.length > maxFeaturesCount) {
         results.push({
             isValid: false,
-            errors: ["Max number of features exceeded."]
+            errors: [`Max number of ${maxFeaturesCount} features exceeded.`]
         });
     }
 

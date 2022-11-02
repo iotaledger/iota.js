@@ -20,6 +20,9 @@ import { validateUnlockConditions } from "../unlockConditions/unlockConditions";
 
 // zero alias id.
 const ZERO_ALIAS_ID = "0x0000000000000000000000000000000000000000000000000000000000000000";
+const MAX_BASIC_FEATURES_COUNT = 3;
+const MAX_ALIAS_FEATURES_COUNT = 2;
+const MAX_ALIAS_UNLOCK_CONDITIONS_COUNT = 2;
 
 /**
  * Validate outputs.
@@ -79,7 +82,6 @@ export function validateOutput(object: OutputTypes, protocolInfo: INodeInfoProto
  */
 export function validateBasicOutput(object: IBasicOutput, protocolInfo: INodeInfoProtocol): IValidationResult {
     const results: IValidationResult[] = [];
-    const maxFeaturesCount = 3;
 
     if (object.type !== BASIC_OUTPUT_TYPE) {
         results.push({
@@ -117,7 +119,7 @@ export function validateBasicOutput(object: IBasicOutput, protocolInfo: INodeInf
     }
 
     if (object.features) {
-        results.push(validateFeatures(object.features, maxFeaturesCount));
+        results.push(validateFeatures(object.features, MAX_BASIC_FEATURES_COUNT));
     }
 
     return mergeValidationResults(...results);
@@ -131,7 +133,6 @@ export function validateBasicOutput(object: IBasicOutput, protocolInfo: INodeInf
  */
 export function validateAliasOutput(object: IAliasOutput, protocolInfo: INodeInfoProtocol): IValidationResult {
     const results: IValidationResult[] = [];
-    const maxFeaturesCount = 2;
 
     if (object.type !== ALIAS_OUTPUT_TYPE) {
         results.push({
@@ -154,10 +155,10 @@ export function validateAliasOutput(object: IAliasOutput, protocolInfo: INodeInf
         });
     }
 
-    if (object.unlockConditions.length !== 2) {
+    if (object.unlockConditions.length !== MAX_ALIAS_UNLOCK_CONDITIONS_COUNT) {
         results.push({
             isValid: false,
-            errors: ["Unlock conditions count must be equal to 2."]
+            errors: [`Unlock conditions count must be equal to ${MAX_ALIAS_UNLOCK_CONDITIONS_COUNT}.`]
         });
     }
 
@@ -172,11 +173,11 @@ export function validateAliasOutput(object: IAliasOutput, protocolInfo: INodeInf
             });
         }
 
-        object.unlockConditions.map(unlockCondiiton => {
-            if ((unlockCondiiton.type === STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE ||
-                unlockCondiiton.type === GOVERNOR_ADDRESS_UNLOCK_CONDITION_TYPE) &&
-                (unlockCondiiton.address.type === ALIAS_ADDRESS_TYPE &&
-                    unlockCondiiton.address.aliasId === object.aliasId)) {
+        object.unlockConditions.map(unlockCondition => {
+            if ((unlockCondition.type === STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE ||
+                unlockCondition.type === GOVERNOR_ADDRESS_UNLOCK_CONDITION_TYPE) &&
+                (unlockCondition.address.type === ALIAS_ADDRESS_TYPE &&
+                    unlockCondition.address.aliasId === object.aliasId)) {
                 results.push({
                     isValid: false,
                     errors: ["Address of State controller address unlock condition and address of Governor address unlock condition must be different from the Alias address derived from alias id."]
@@ -192,11 +193,11 @@ export function validateAliasOutput(object: IAliasOutput, protocolInfo: INodeInf
     }
 
     if (object.features) {
-        results.push(validateFeatures(object.features, maxFeaturesCount));
+        results.push(validateFeatures(object.features, MAX_ALIAS_FEATURES_COUNT));
     }
 
     if (object.immutableFeatures) {
-        results.push(validateFeatures(object.immutableFeatures, maxFeaturesCount));
+        results.push(validateFeatures(object.immutableFeatures, MAX_ALIAS_FEATURES_COUNT));
     }
 
     if (object.aliasId === ZERO_ALIAS_ID && (object.stateIndex !== 0 || object.foundryCounter !== 0)) {
