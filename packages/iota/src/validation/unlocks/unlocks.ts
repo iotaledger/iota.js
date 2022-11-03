@@ -12,7 +12,7 @@ import { failValidation, IValidationResult, mergeValidationResults } from "../re
 
 /**
  * Validate unlocks.
- * @param unlocks The refUnlock to validate.
+ * @param unlocks The unlocks to validate.
  * @returns The validation result.
  */
 export function validateUnlocks(unlocks: UnlockTypes[]): IValidationResult {
@@ -54,7 +54,7 @@ export function validateUnlocks(unlocks: UnlockTypes[]): IValidationResult {
 
 /**
  * Validate signature unlock.
- * @param sigUnlock The refUnlock to validate.
+ * @param sigUnlock The unlock to validate.
  * @returns The validation result.
  */
 function validateSignatureUnlock(sigUnlock: ISignatureUnlock): IValidationResult {
@@ -69,7 +69,7 @@ function validateSignatureUnlock(sigUnlock: ISignatureUnlock): IValidationResult
 
 /**
  * Validate reference, alias or nft unlock.
- * @param unlock The refUnlock to validate.
+ * @param unlock The unlock to validate.
  * @param index The index of the refUnlock in unlocks array.
  * @param referencedUnlock The referenced unlock.
  * @returns The validation result.
