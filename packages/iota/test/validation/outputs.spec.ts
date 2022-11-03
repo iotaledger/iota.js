@@ -6,7 +6,7 @@ import { ADDRESS_UNLOCK_CONDITION_TYPE } from "../../src/models/unlockConditions
 import { validateOutputs } from "../../src/validation/outputs/outputs";
 
 /**
- * The minimum length of a simple token scheme binary representation.
+ * The protocol info.
  */
 const protocolInfo: INodeInfoProtocol = {
     "version": 2,
@@ -21,8 +21,8 @@ const protocolInfo: INodeInfoProtocol = {
     "tokenSupply": "1450896407249092"
 };
 
-describe("Features", () => {
-    test("Can validate basic output", () => {
+describe("Basic output validation", () => {
+    test("should pass with valid basic output", () => {
         const output: IBasicOutput = {
             type: BASIC_OUTPUT_TYPE,
             amount: "455655655",
@@ -41,7 +41,7 @@ describe("Features", () => {
         expect(result.isValid).toEqual(true);
     });
 
-    test("Fail validate basic output", () => {
+    test("should fail wth invalid basic output", () => {
         const output: IBasicOutput = {
             type: BASIC_OUTPUT_TYPE,
             amount: "0",
