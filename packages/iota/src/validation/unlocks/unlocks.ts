@@ -12,15 +12,15 @@ import { failValidation, IValidationResult, mergeValidationResults } from "../re
 
 /**
  * Validate unlocks.
- * @param object The object to validate.
+ * @param unlocks The refUnlock to validate.
  * @returns The validation result.
  */
-export function validateUnlocks(object: UnlockTypes[]): IValidationResult {
+export function validateUnlocks(unlocks: UnlockTypes[]): IValidationResult {
     const results: IValidationResult[] = [];
     const seenSignatures: IEd25519Signature[] = [];
 
-    for (let index = 0; index < object.length; index++) {
-        const unlock = object[index];
+    for (let index = 0; index < unlocks.length; index++) {
+        const unlock = unlocks[index];
 
         switch (unlock.type) {
             case SIGNATURE_UNLOCK_TYPE:
@@ -42,10 +42,10 @@ export function validateUnlocks(object: UnlockTypes[]): IValidationResult {
             case REFERENCE_UNLOCK_TYPE:
             case ALIAS_UNLOCK_TYPE:
             case NFT_UNLOCK_TYPE:
-                results.push(validateReferenceUnlock(unlock, index, object[unlock.reference]));
+                results.push(validateReferenceUnlock(unlock, index, unlocks[unlock.reference]));
                 break;
             default:
-                throw new Error(`Unrecognized Unlock type ${(object[index] as ITypeBase<number>).type}`);
+                throw new Error(`Unrecognized Unlock type ${(unlocks[index] as ITypeBase<number>).type}`);
         }
     }
 
@@ -54,13 +54,13 @@ export function validateUnlocks(object: UnlockTypes[]): IValidationResult {
 
 /**
  * Validate signature unlock.
- * @param object The object to validate.
+ * @param sigUnlock The refUnlock to validate.
  * @returns The validation result.
  */
-function validateSignatureUnlock(object: ISignatureUnlock): IValidationResult {
+function validateSignatureUnlock(sigUnlock: ISignatureUnlock): IValidationResult {
     let result: IValidationResult = { isValid: true };
 
-    if (object.signature.type !== ED25519_SIGNATURE_TYPE) {
+    if (sigUnlock.signature.type !== ED25519_SIGNATURE_TYPE) {
         result = failValidation(result, "Signature must contain an Ed25519 Signature.");
     }
 
@@ -69,19 +69,19 @@ function validateSignatureUnlock(object: ISignatureUnlock): IValidationResult {
 
 /**
  * Validate reference, alias or nft unlock.
- * @param object The object to validate.
- * @param index The index of the object in unlocks array.
+ * @param unlock The refUnlock to validate.
+ * @param index The index of the refUnlock in unlocks array.
  * @param referencedUnlock The referenced unlock.
  * @returns The validation result.
  */
 function validateReferenceUnlock(
-        object: IReferenceUnlock | IAliasUnlock | INftUnlock,
+        unlock: IReferenceUnlock | IAliasUnlock | INftUnlock,
         index: number,
         referencedUnlock?: UnlockTypes
     ): IValidationResult {
     let result: IValidationResult = { isValid: true };
 
-    if (object.reference >= index) {
+    if (unlock.reference >= index) {
         result = failValidation(result, `The Reference Unlock at index ${index} must have Reference < ${index}`);
     }
 
@@ -89,9 +89,10 @@ function validateReferenceUnlock(
         result = failValidation(result, `The Unlock at index ${index} must Reference a Signature Unlock.`);
     }
 
-    if (object.reference < 0 || object.reference >= MAX_INPUT_COUNT) {
+    if (unlock.reference < 0 || unlock.reference >= MAX_INPUT_COUNT) {
         result = failValidation(result, `Reference Unlock Index must be between 0 and ${MAX_INPUT_COUNT}.`);
     }
 
     return result;
 }
+
