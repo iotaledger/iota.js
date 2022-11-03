@@ -104,8 +104,31 @@ describe("Features", () => {
         expect(result.errors).toEqual(expect.arrayContaining([
             "Alias output amount field must be larger than zero.",
             "Unlock conditions count must be equal to 2.",
-            "State controller address unlock condition or Governor address unlock condition must be present."
+            "Both state controller address unlock condition and Governor address unlock condition must be present."
         ]));
+    });
+
+    test("should fail on both state controller address unlock condition and Governor address unlock condition must be present", () => {
+        const output: IAliasOutput = {
+            type: ALIAS_OUTPUT_TYPE,
+            amount: "455655655",
+            aliasId: "0xb6b82443901a2ab6beefdcb88acff1ca359f211a474cb50cf63aa6a24721f9aa",
+            stateIndex: 1,
+            foundryCounter: 0,
+            unlockConditions: [
+                {
+                    type: STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE,
+                    address: {
+                        type: ALIAS_ADDRESS_TYPE,
+                        aliasId: "0x7ffec9e1233204d9c6dce6812b1539ee96af691ca2e4d9065daa85907d33e5d3"
+                    }
+                }
+            ]
+        };
+
+        const result = validateOutputs([output], protocolInfo);
+        expect(result.isValid).toEqual(false);
+        expect(result.errors).toEqual(expect.arrayContaining(["Both state controller address unlock condition and Governor address unlock condition must be present."]));
     });
 
     test("should fail on unlock condition address same as alias id", () => {
@@ -138,6 +161,68 @@ describe("Features", () => {
         expect(result.errors).toEqual(expect.arrayContaining(["Address of State controller address unlock condition and address of Governor address unlock condition must be different from the Alias address derived from alias id."]));
     });
 
+    test("should fail on sender feature or metadata feature must be present in features", () => {
+        const output: IAliasOutput = {
+            type: ALIAS_OUTPUT_TYPE,
+            amount: "455655655",
+            aliasId: "0xb6b82443901a2ab6beefdcb88acff1ca359f211a474cb50cf63aa6a24721f9aa",
+            stateIndex: 1,
+            foundryCounter: 0,
+            unlockConditions: [
+                {
+                    type: STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE,
+                    address: {
+                        type: ALIAS_ADDRESS_TYPE,
+                        aliasId: "0x7ffec9e1233204d9c6dce6812b1539ee96af691ca2e4d9065daa85907d33e5d3"
+                    }
+                },
+                {
+                    type: GOVERNOR_ADDRESS_UNLOCK_CONDITION_TYPE,
+                    address: {
+                        type: ALIAS_ADDRESS_TYPE,
+                        aliasId: "0x7ffec9e1233204d9c6dce6812b1539ee96af691ca2e4d9065daa85907d33e5d3"
+                    }
+                }
+            ],
+            features: []
+        };
+
+        const result = validateOutputs([output], protocolInfo);
+        expect(result.isValid).toEqual(false);
+        expect(result.errors).toEqual(expect.arrayContaining(["Sender feature or metadata feature must be present in features."]));
+    });
+
+    test("should fail on issuer feature or metadata feature must be present in immutable features", () => {
+        const output: IAliasOutput = {
+            type: ALIAS_OUTPUT_TYPE,
+            amount: "455655655",
+            aliasId: "0xb6b82443901a2ab6beefdcb88acff1ca359f211a474cb50cf63aa6a24721f9aa",
+            stateIndex: 1,
+            foundryCounter: 0,
+            unlockConditions: [
+                {
+                    type: STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE,
+                    address: {
+                        type: ALIAS_ADDRESS_TYPE,
+                        aliasId: "0x7ffec9e1233204d9c6dce6812b1539ee96af691ca2e4d9065daa85907d33e5d3"
+                    }
+                },
+                {
+                    type: GOVERNOR_ADDRESS_UNLOCK_CONDITION_TYPE,
+                    address: {
+                        type: ALIAS_ADDRESS_TYPE,
+                        aliasId: "0x7ffec9e1233204d9c6dce6812b1539ee96af691ca2e4d9065daa85907d33e5d3"
+                    }
+                }
+            ],
+            immutableFeatures: []
+        };
+
+        const result = validateOutputs([output], protocolInfo);
+        expect(result.isValid).toEqual(false);
+        expect(result.errors).toEqual(expect.arrayContaining(["Issuer feature or metadata feature must be present in immutable features."]));
+    });
+
     test("should fail on state index and foundry counter not equal to zero", () => {
         const output: IAliasOutput = {
             type: ALIAS_OUTPUT_TYPE,
@@ -165,6 +250,6 @@ describe("Features", () => {
 
         const result = validateOutputs([output], protocolInfo);
         expect(result.isValid).toEqual(false);
-        expect(result.errors).toEqual(expect.arrayContaining(["State index and foundry counter must be zero."]));
+        expect(result.errors).toEqual(expect.arrayContaining(["When Alias ID is zeroed out, State Index and Foundry Counter must be 0."]));
     });
 });

@@ -1,8 +1,11 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 import bigInt from "big-integer";
-import type { INodeInfoProtocol } from "../../index-browser";
 import { ALIAS_ADDRESS_TYPE } from "../../models/addresses/IAliasAddress";
+import { ISSUER_FEATURE_TYPE } from "../../models/features/IIssuerFeature";
+import { METADATA_FEATURE_TYPE } from "../../models/features/IMetadataFeature";
+import { SENDER_FEATURE_TYPE } from "../../models/features/ISenderFeature";
+import type { INodeInfoProtocol } from "../../models/info/INodeInfoProtocol";
 import type { ITypeBase } from "../../models/ITypeBase";
 import { ALIAS_OUTPUT_TYPE, IAliasOutput } from "../../models/outputs/IAliasOutput";
 import { BASIC_OUTPUT_TYPE, IBasicOutput } from "../../models/outputs/IBasicOutput";
@@ -20,11 +23,11 @@ import { validateUnlockConditions } from "../unlockConditions/unlockConditions";
 
 // zero alias id.
 const ZERO_ALIAS_ID = "0x0000000000000000000000000000000000000000000000000000000000000000";
-// Maximum number of features that basic output could have.
+// Maximum number of features that basic output can have.
 const MAX_BASIC_FEATURES_COUNT = 3;
-// Maximum number of features that alias output could have.
+// Maximum number of features that alias output can have.
 const MAX_ALIAS_FEATURES_COUNT = 2;
-// Maximum number of unlock conditions that alias output could have.
+// Maximum number of unlock conditions that alias output can have.
 const MAX_ALIAS_UNLOCK_CONDITIONS_COUNT = 2;
 
 /**
@@ -166,13 +169,11 @@ export function validateAliasOutput(aliasOutput: IAliasOutput, protocolInfo: INo
     }
 
     if (aliasOutput.unlockConditions) {
-        if (!aliasOutput.unlockConditions.some(uC =>
-            uC.type === STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE ||
-            uC.type === GOVERNOR_ADDRESS_UNLOCK_CONDITION_TYPE
-        )) {
+        if (!aliasOutput.unlockConditions.some(uC => uC.type === STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE) ||
+            !aliasOutput.unlockConditions.some(uC => uC.type === GOVERNOR_ADDRESS_UNLOCK_CONDITION_TYPE)) {
             results.push({
                 isValid: false,
-                errors: ["State controller address unlock condition or Governor address unlock condition must be present."]
+                errors: ["Both state controller address unlock condition and Governor address unlock condition must be present."]
             });
         }
 
@@ -188,7 +189,9 @@ export function validateAliasOutput(aliasOutput: IAliasOutput, protocolInfo: INo
             }
         });
 
-        results.push(validateUnlockConditions(aliasOutput.unlockConditions, aliasOutput.amount, protocolInfo.rentStructure));
+        results.push(
+            validateUnlockConditions(aliasOutput.unlockConditions, aliasOutput.amount, protocolInfo.rentStructure)
+        );
     }
 
     if (aliasOutput.nativeTokens) {
@@ -196,17 +199,33 @@ export function validateAliasOutput(aliasOutput: IAliasOutput, protocolInfo: INo
     }
 
     if (aliasOutput.features) {
+        if (!aliasOutput.features.some(feature =>
+            feature.type === SENDER_FEATURE_TYPE || feature.type === METADATA_FEATURE_TYPE
+        )) {
+            results.push({
+                isValid: false,
+                errors: ["Sender feature or metadata feature must be present in features."]
+            });
+        }
         results.push(validateFeatures(aliasOutput.features, MAX_ALIAS_FEATURES_COUNT));
     }
 
     if (aliasOutput.immutableFeatures) {
+        if (!aliasOutput.immutableFeatures.some(immutableFeature =>
+            immutableFeature.type === ISSUER_FEATURE_TYPE || immutableFeature.type === METADATA_FEATURE_TYPE
+        )) {
+            results.push({
+                isValid: false,
+                errors: ["Issuer feature or metadata feature must be present in immutable features."]
+            });
+        }
         results.push(validateFeatures(aliasOutput.immutableFeatures, MAX_ALIAS_FEATURES_COUNT));
     }
 
     if (aliasOutput.aliasId === ZERO_ALIAS_ID && (aliasOutput.stateIndex !== 0 || aliasOutput.foundryCounter !== 0)) {
         results.push({
             isValid: false,
-            errors: ["State index and foundry counter must be zero."]
+            errors: ["When Alias ID is zeroed out, State Index and Foundry Counter must be 0."]
         });
     }
 
