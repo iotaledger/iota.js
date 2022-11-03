@@ -20,8 +20,11 @@ import { validateUnlockConditions } from "../unlockConditions/unlockConditions";
 
 // zero alias id.
 const ZERO_ALIAS_ID = "0x0000000000000000000000000000000000000000000000000000000000000000";
+// Maximum number of features that basic output could have.
 const MAX_BASIC_FEATURES_COUNT = 3;
+// Maximum number of features that alias output could have.
 const MAX_ALIAS_FEATURES_COUNT = 2;
+// Maximum number of unlock conditions that alias output could have.
 const MAX_ALIAS_UNLOCK_CONDITIONS_COUNT = 2;
 
 /**
@@ -127,43 +130,43 @@ export function validateBasicOutput(object: IBasicOutput, protocolInfo: INodeInf
 
 /**
  * Validate an alias output.
- * @param object The object to validate.
+ * @param aliasOutput The object to validate.
  * @param protocolInfo The Protocol Info.
  * @returns The validation result.
  */
-export function validateAliasOutput(object: IAliasOutput, protocolInfo: INodeInfoProtocol): IValidationResult {
+export function validateAliasOutput(aliasOutput: IAliasOutput, protocolInfo: INodeInfoProtocol): IValidationResult {
     const results: IValidationResult[] = [];
 
-    if (object.type !== ALIAS_OUTPUT_TYPE) {
+    if (aliasOutput.type !== ALIAS_OUTPUT_TYPE) {
         results.push({
             isValid: false,
-            errors: [`Type mismatch in alias output ${object.type}`]
+            errors: [`Type mismatch in alias output ${aliasOutput.type}`]
         });
     }
 
-    if (bigInt(object.amount).compare(bigInt.zero) !== 1) {
+    if (bigInt(aliasOutput.amount).compare(bigInt.zero) !== 1) {
         results.push({
             isValid: false,
             errors: ["Alias output amount field must be larger than zero."]
         });
     }
 
-    if (bigInt(object.amount).compare(protocolInfo.tokenSupply) === 1) {
+    if (bigInt(aliasOutput.amount).compare(protocolInfo.tokenSupply) === 1) {
         results.push({
             isValid: false,
             errors: ["Alias output amount field must not be larger than max token supply."]
         });
     }
 
-    if (object.unlockConditions.length !== MAX_ALIAS_UNLOCK_CONDITIONS_COUNT) {
+    if (aliasOutput.unlockConditions.length !== MAX_ALIAS_UNLOCK_CONDITIONS_COUNT) {
         results.push({
             isValid: false,
             errors: [`Unlock conditions count must be equal to ${MAX_ALIAS_UNLOCK_CONDITIONS_COUNT}.`]
         });
     }
 
-    if (object.unlockConditions) {
-        if (!object.unlockConditions.some(uC =>
+    if (aliasOutput.unlockConditions) {
+        if (!aliasOutput.unlockConditions.some(uC =>
             uC.type === STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE ||
             uC.type === GOVERNOR_ADDRESS_UNLOCK_CONDITION_TYPE
         )) {
@@ -173,11 +176,11 @@ export function validateAliasOutput(object: IAliasOutput, protocolInfo: INodeInf
             });
         }
 
-        object.unlockConditions.map(unlockCondition => {
+        aliasOutput.unlockConditions.map(unlockCondition => {
             if ((unlockCondition.type === STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE ||
                 unlockCondition.type === GOVERNOR_ADDRESS_UNLOCK_CONDITION_TYPE) &&
                 (unlockCondition.address.type === ALIAS_ADDRESS_TYPE &&
-                    unlockCondition.address.aliasId === object.aliasId)) {
+                    unlockCondition.address.aliasId === aliasOutput.aliasId)) {
                 results.push({
                     isValid: false,
                     errors: ["Address of State controller address unlock condition and address of Governor address unlock condition must be different from the Alias address derived from alias id."]
@@ -185,29 +188,29 @@ export function validateAliasOutput(object: IAliasOutput, protocolInfo: INodeInf
             }
         });
 
-        results.push(validateUnlockConditions(object.unlockConditions, object.amount, protocolInfo.rentStructure));
+        results.push(validateUnlockConditions(aliasOutput.unlockConditions, aliasOutput.amount, protocolInfo.rentStructure));
     }
 
-    if (object.nativeTokens) {
-        results.push(validateNativeTokens(object.nativeTokens));
+    if (aliasOutput.nativeTokens) {
+        results.push(validateNativeTokens(aliasOutput.nativeTokens));
     }
 
-    if (object.features) {
-        results.push(validateFeatures(object.features, MAX_ALIAS_FEATURES_COUNT));
+    if (aliasOutput.features) {
+        results.push(validateFeatures(aliasOutput.features, MAX_ALIAS_FEATURES_COUNT));
     }
 
-    if (object.immutableFeatures) {
-        results.push(validateFeatures(object.immutableFeatures, MAX_ALIAS_FEATURES_COUNT));
+    if (aliasOutput.immutableFeatures) {
+        results.push(validateFeatures(aliasOutput.immutableFeatures, MAX_ALIAS_FEATURES_COUNT));
     }
 
-    if (object.aliasId === ZERO_ALIAS_ID && (object.stateIndex !== 0 || object.foundryCounter !== 0)) {
+    if (aliasOutput.aliasId === ZERO_ALIAS_ID && (aliasOutput.stateIndex !== 0 || aliasOutput.foundryCounter !== 0)) {
         results.push({
             isValid: false,
             errors: ["State index and foundry counter must be zero."]
         });
     }
 
-    if (object.stateMetadata && (object.stateMetadata.length / 2) > MAX_METADATA_LENGTH) {
+    if (aliasOutput.stateMetadata && (aliasOutput.stateMetadata.length / 2) > MAX_METADATA_LENGTH) {
         results.push({
             isValid: false,
             errors: ["Length of state metadata must not be greater than max metadata length."]

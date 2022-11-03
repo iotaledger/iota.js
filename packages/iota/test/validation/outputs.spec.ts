@@ -71,14 +71,14 @@ describe("Features", () => {
                 {
                     type: STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE,
                     address: {
-                        type: 8,
+                        type: ALIAS_ADDRESS_TYPE,
                         aliasId: "0x7ffec9e1233204d9c6dce6812b1539ee96af691ca2e4d9065daa85907d33e5d3"
                     }
                 },
                 {
                     type: GOVERNOR_ADDRESS_UNLOCK_CONDITION_TYPE,
                     address: {
-                        type: 8,
+                        type: ALIAS_ADDRESS_TYPE,
                         aliasId: "0x7ffec9e1233204d9c6dce6812b1539ee96af691ca2e4d9065daa85907d33e5d3"
                     }
                 }
