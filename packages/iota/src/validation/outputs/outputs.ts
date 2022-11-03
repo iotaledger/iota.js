@@ -5,6 +5,7 @@ import { ALIAS_ADDRESS_TYPE } from "../../models/addresses/IAliasAddress";
 import { ISSUER_FEATURE_TYPE } from "../../models/features/IIssuerFeature";
 import { METADATA_FEATURE_TYPE } from "../../models/features/IMetadataFeature";
 import { SENDER_FEATURE_TYPE } from "../../models/features/ISenderFeature";
+import { TAG_FEATURE_TYPE } from "../../models/features/ITagFeature";
 import type { INodeInfoProtocol } from "../../models/info/INodeInfoProtocol";
 import type { ITypeBase } from "../../models/ITypeBase";
 import { ALIAS_OUTPUT_TYPE, IAliasOutput } from "../../models/outputs/IAliasOutput";
@@ -189,9 +190,7 @@ export function validateAliasOutput(aliasOutput: IAliasOutput, protocolInfo: INo
             }
         });
 
-        results.push(
-            validateUnlockConditions(aliasOutput.unlockConditions, aliasOutput.amount, protocolInfo.rentStructure)
-        );
+        results.push(validateUnlockConditions(aliasOutput.unlockConditions));
     }
 
     if (aliasOutput.nativeTokens) {
@@ -201,10 +200,12 @@ export function validateAliasOutput(aliasOutput: IAliasOutput, protocolInfo: INo
     if (aliasOutput.features) {
         if (!aliasOutput.features.some(feature =>
             feature.type === SENDER_FEATURE_TYPE || feature.type === METADATA_FEATURE_TYPE
+        ) || aliasOutput.features.some(feature =>
+            feature.type === TAG_FEATURE_TYPE || feature.type === ISSUER_FEATURE_TYPE
         )) {
             results.push({
                 isValid: false,
-                errors: ["Sender feature or metadata feature must be present in features."]
+                errors: ["Only sender feature or metadata feature must be present in features."]
             });
         }
         results.push(validateFeatures(aliasOutput.features, MAX_ALIAS_FEATURES_COUNT));
@@ -213,10 +214,12 @@ export function validateAliasOutput(aliasOutput: IAliasOutput, protocolInfo: INo
     if (aliasOutput.immutableFeatures) {
         if (!aliasOutput.immutableFeatures.some(immutableFeature =>
             immutableFeature.type === ISSUER_FEATURE_TYPE || immutableFeature.type === METADATA_FEATURE_TYPE
+        ) || aliasOutput.immutableFeatures.some(immutableFeature =>
+            immutableFeature.type === TAG_FEATURE_TYPE || immutableFeature.type === SENDER_FEATURE_TYPE
         )) {
             results.push({
                 isValid: false,
-                errors: ["Issuer feature or metadata feature must be present in immutable features."]
+                errors: ["Only issuer feature or metadata feature must be present in immutable features."]
             });
         }
         results.push(validateFeatures(aliasOutput.immutableFeatures, MAX_ALIAS_FEATURES_COUNT));
