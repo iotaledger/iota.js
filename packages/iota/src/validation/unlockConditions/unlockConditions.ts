@@ -115,7 +115,7 @@ function validateStorageDepositReturnUnlockCondition(
 ): IValidationResult {
     let result: IValidationResult = { isValid: true };
 
-    if (bigInt(object.amount).eq(bigInt.zero)) {
+    if (bigInt(object.amount).leq(bigInt.zero)) {
         result = failValidation(result, "Storage deposit amount must be larger than zero.");
     }
 

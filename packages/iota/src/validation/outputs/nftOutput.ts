@@ -42,7 +42,7 @@ export function validateNftOutput(nftOutput: INftOutput, protocolInfo: INodeInfo
         });
     }
 
-    if (bigInt(nftOutput.amount).equals(bigInt.zero)) {
+    if (bigInt(nftOutput.amount).leq(bigInt.zero)) {
         results.push({
             isValid: false,
             errors: ["NFT output amount field must be larger than zero."]
