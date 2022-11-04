@@ -7,10 +7,11 @@ import type { IValidationResult } from "./result";
 
 /**
  * Validates a block.
- * @param object The object to validate.
+ * @param block The block to validate.
  * @param protocolInfo The Protocol Info.
  * @returns The validation result.
  */
-export function validateBlock(object: IBlock, protocolInfo: INodeInfoProtocol): IValidationResult {
-    return validatePayload(object.payload, protocolInfo);
+export function validateBlock(block: IBlock, protocolInfo: INodeInfoProtocol): IValidationResult {
+    return validatePayload(block.payload, protocolInfo);
 }
+

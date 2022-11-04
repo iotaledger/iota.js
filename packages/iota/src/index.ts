@@ -152,5 +152,4 @@ export * from "./utils/milestoneHelper";
 export * from "./utils/transactionHelper";
 export * from "./utils/logging";
 export * from "./utils/unitsHelper";
-export * from "./utils/validationHelper";
 

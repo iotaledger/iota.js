@@ -3,23 +3,26 @@
 import bigInt from "big-integer";
 import { MAX_NATIVE_TOKEN_COUNT } from "../binary/nativeTokens";
 import type { INativeToken } from "../models/INativeToken";
-import { ValidationHelper } from "../utils/validationHelper";
 import { IValidationResult, failValidation, mergeValidationResults } from "./result";
+import { validateDistinct } from "./validationUtils";
 
 /**
  * Validate native tokens.
- * @param object The object to validate.
+ * @param nativeTokens The Native Tokens to validate.
  * @returns The validation result.
  */
-export function validateNativeTokens(object: INativeToken[] | undefined): IValidationResult {
+export function validateNativeTokens(nativeTokens: INativeToken[] | undefined): IValidationResult {
     let result: IValidationResult = { isValid: true };
 
-    if (object) {
-        const tokenIds = object.map(token => token.id);
+    if (nativeTokens) {
+        const tokenIds = nativeTokens.map(token => token.id);
 
-        result = mergeValidationResults(result, ValidationHelper.validateDistinct(tokenIds, "Array", "native token"));
+        result = mergeValidationResults(
+            result,
+            validateDistinct(tokenIds, "Array", "native token")
+        );
 
-        if (object.length > MAX_NATIVE_TOKEN_COUNT) {
+        if (nativeTokens.length > MAX_NATIVE_TOKEN_COUNT) {
             result = failValidation(result, "Max native tokens count exceeded.");
         }
 
@@ -28,7 +31,7 @@ export function validateNativeTokens(object: INativeToken[] | undefined): IValid
             result = failValidation(result, "Native Tokens must be lexicographically sorted based on Token id.");
         }
 
-        for (const token of object) {
+        for (const token of nativeTokens) {
             result = mergeValidationResults(result, validateNativeToken(token));
         }
     }
@@ -38,15 +41,16 @@ export function validateNativeTokens(object: INativeToken[] | undefined): IValid
 
 /**
  * Validate a native token.
- * @param object The object to validate.
+ * @param nativeToken The Native Token to validate.
  * @returns The validation result.
  */
- export function validateNativeToken(object: INativeToken): IValidationResult {
+ export function validateNativeToken(nativeToken: INativeToken): IValidationResult {
     let result: IValidationResult = { isValid: true };
 
-    if (bigInt(object.amount).compare(bigInt.zero) !== 1) {
-        result = failValidation(result, `Native token ${object.id} must have a value bigger than zero.`);
+    if (bigInt(nativeToken.amount).compare(bigInt.zero) !== 1) {
+        result = failValidation(result, `Native token ${nativeToken.id} must have a value bigger than zero.`);
     }
 
     return result;
 }
+

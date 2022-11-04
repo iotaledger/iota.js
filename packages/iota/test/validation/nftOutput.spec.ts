@@ -151,21 +151,21 @@ describe("NFT output validation", () => {
         expect(result.errors).toBeDefined();
         expect(result.errors?.length).toEqual(1);
         expect(result.errors).toEqual(expect.arrayContaining(
-            ["NFT output Unlock Conditions must be sorted in ascending order based on their Unlock Condition Type"]
+            ["NFT output Unlock Conditions must be sorted in ascending order based on their Unlock Condition Type."]
         ));
     });
 
     it("should fail when one of the features is of unsupported type", () => {
         const nftOutput = cloneNftOutput(mockNftOutput);
-        if (nftOutput.features) {
-            nftOutput.features[2] = {
+        nftOutput.features = [
+            {
                 type: ISSUER_FEATURE_TYPE,
                 address: {
                     type: NFT_ADDRESS_TYPE,
                     nftId: nftOutput.nftId
                 }
-            };
-        }
+            }
+        ];
 
         const result = validateNftOutput(nftOutput, protocolInfoMock);
 
@@ -222,7 +222,7 @@ describe("NFT output validation", () => {
         expect(result.errors).toBeDefined();
         expect(result.errors?.length).toEqual(1);
         expect(result.errors).toEqual(expect.arrayContaining(
-            ["NFT output feature type of an immutable feature must define one of the following types: Issuer Feature or Metadata Feature."]
+            ["NFT output feature type of an Immutable Feature must define one of the following types: Issuer Feature or Metadata Feature."]
         ));
     });
 
@@ -248,7 +248,7 @@ describe("NFT output validation", () => {
         expect(result.errors).toBeDefined();
         expect(result.errors?.length).toEqual(1);
         expect(result.errors).toEqual(expect.arrayContaining(
-            ["NFT output Immutable Features must be sorted in ascending order based on their Feature Type."]
+            ["NFT output Immutable Features must be sorted in ascending order based on their Immutable Feature Type."]
         ));
     });
 });

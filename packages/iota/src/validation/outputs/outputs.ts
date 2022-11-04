@@ -15,6 +15,7 @@ import { validateNativeTokens } from "../nativeTokens";
 import { IValidationResult, mergeValidationResults } from "../result";
 import { validateUnlockConditions } from "../unlockConditions/unlockConditions";
 import { validateAliasOutput } from "./aliasOutput";
+import { validateFoundryOutput } from "./foundryOutput";
 import { validateNftOutput } from "./nftOutput";
 
 /**
@@ -57,7 +58,7 @@ export function validateOutput(output: OutputTypes, protocolInfo: INodeInfoProto
             result = validateBasicOutput(output, protocolInfo);
             break;
         case FOUNDRY_OUTPUT_TYPE:
-            // Unimplemented
+            result = validateFoundryOutput(output, protocolInfo);
             break;
         case NFT_OUTPUT_TYPE:
             result = validateNftOutput(output, protocolInfo);
@@ -74,7 +75,7 @@ export function validateOutput(output: OutputTypes, protocolInfo: INodeInfoProto
 
 /**
  * Validate a basic output.
- * @param basicOutput The output to validate.
+ * @param basicOutput The basic output to validate.
  * @param protocolInfo The Protocol Info.
  * @returns The validation result.
  */
