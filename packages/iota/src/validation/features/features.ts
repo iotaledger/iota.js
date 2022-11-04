@@ -8,9 +8,9 @@ import { IMetadataFeature, METADATA_FEATURE_TYPE } from "../../models/features/I
 import { SENDER_FEATURE_TYPE } from "../../models/features/ISenderFeature";
 import { ITagFeature, TAG_FEATURE_TYPE } from "../../models/features/ITagFeature";
 import type { ITypeBase } from "../../models/ITypeBase";
-import { ValidationHelper } from "../../utils/validationHelper";
 import { validateAddress } from "../addresses/addresses";
 import { IValidationResult, mergeValidationResults, failValidation } from "../result";
+import { validateDistinct } from "../validationUtils";
 
 /**
  * The maximum length of a metadata binary representation.
@@ -33,7 +33,9 @@ export function validateFeatures(features: FeatureTypes[], maxFeaturesCount: num
         });
     }
 
-    results.push(ValidationHelper.validateDistinct(features.map(feature => feature.type), "Output", "feature"));
+    results.push(
+        validateDistinct(features.map(feature => feature.type), "Output", "feature")
+    );
 
     for (const feature of features) {
         results.push(

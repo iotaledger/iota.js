@@ -3,8 +3,8 @@
 import bigInt from "big-integer";
 import { MAX_NATIVE_TOKEN_COUNT } from "../binary/nativeTokens";
 import type { INativeToken } from "../models/INativeToken";
-import { ValidationHelper } from "../utils/validationHelper";
 import { IValidationResult, failValidation, mergeValidationResults } from "./result";
+import { validateDistinct } from "./validationUtils";
 
 /**
  * Validate native tokens.
@@ -17,7 +17,10 @@ export function validateNativeTokens(nativeTokens: INativeToken[] | undefined): 
     if (nativeTokens) {
         const tokenIds = nativeTokens.map(token => token.id);
 
-        result = mergeValidationResults(result, ValidationHelper.validateDistinct(tokenIds, "Array", "native token"));
+        result = mergeValidationResults(
+            result,
+            validateDistinct(tokenIds, "Array", "native token")
+        );
 
         if (nativeTokens.length > MAX_NATIVE_TOKEN_COUNT) {
             result = failValidation(result, "Max native tokens count exceeded.");

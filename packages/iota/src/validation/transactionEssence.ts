@@ -19,3 +19,4 @@ export function validateTransactionEssence(transactionEssence: ITransactionEssen
 
     return mergeValidationResults(validateInputsResult, validateOutputsResult);
 }
+
