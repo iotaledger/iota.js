@@ -2,6 +2,11 @@
 // SPDX-License-Identifier: Apache-2.0
 import { ED25519_ADDRESS_TYPE } from "../../src/models/addresses/IEd25519Address";
 import { NFT_ADDRESS_TYPE } from "../../src/models/addresses/INftAddress";
+import { ISSUER_FEATURE_TYPE } from "../../src/models/features/IIssuerFeature";
+import { TAG_FEATURE_TYPE } from "../../src/models/features/ITagFeature";
+import { ADDRESS_UNLOCK_CONDITION_TYPE } from "../../src/models/unlockConditions/IAddressUnlockCondition";
+import { STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE } from "../../src/models/unlockConditions/IStateControllerAddressUnlockCondition";
+import { STORAGE_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE } from "../../src/models/unlockConditions/IStorageDepositReturnUnlockCondition";
 import { validateNftOutput } from "../../src/validation/outputs/nftOutput";
 import { cloneNftOutput } from "./testUtils";
 import { mockNftOutput, protocolInfoMock } from "./testValidationMocks";
@@ -51,7 +56,7 @@ describe("NFT output validation", () => {
     it("should fail when one of the unlocks is of unsupported type", () => {
         const nftOutput = cloneNftOutput(mockNftOutput);
         nftOutput.unlockConditions.push({
-            type: 4,
+            type: STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE,
             address: {
                 type: 0,
                 pubKeyHash: "0x6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
@@ -72,7 +77,7 @@ describe("NFT output validation", () => {
         const nftOutput = cloneNftOutput(mockNftOutput);
         nftOutput.unlockConditions = [
             {
-                type: 1,
+                type: STORAGE_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE,
                 amount: "43600",
                 returnAddress: {
                     type: 0,
@@ -97,7 +102,7 @@ describe("NFT output validation", () => {
             const nftOutput = cloneNftOutput(mockNftOutput);
             nftOutput.unlockConditions = [
                 {
-                    type: 0,
+                    type: ADDRESS_UNLOCK_CONDITION_TYPE,
                     address: {
                         type: NFT_ADDRESS_TYPE,
                         nftId: nftOutput.nftId
@@ -154,8 +159,7 @@ describe("NFT output validation", () => {
         const nftOutput = cloneNftOutput(mockNftOutput);
         if (nftOutput.features) {
             nftOutput.features[2] = {
-                // Issuer Feature type
-                type: 1,
+                type: ISSUER_FEATURE_TYPE,
                 address: {
                     type: NFT_ADDRESS_TYPE,
                     nftId: nftOutput.nftId
@@ -207,8 +211,7 @@ describe("NFT output validation", () => {
         const nftOutput = cloneNftOutput(mockNftOutput);
         if (nftOutput.immutableFeatures) {
             nftOutput.immutableFeatures[1] = {
-                 // Tag Feature
-                type: 3,
+                type: TAG_FEATURE_TYPE,
                 tag: "0xblablasometag"
             };
         }
