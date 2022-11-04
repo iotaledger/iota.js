@@ -58,7 +58,7 @@ describe("NFT output validation", () => {
         nftOutput.unlockConditions.push({
             type: STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE,
             address: {
-                type: 0,
+                type: ED25519_ADDRESS_TYPE,
                 pubKeyHash: "0x6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
             }
         });
@@ -80,7 +80,7 @@ describe("NFT output validation", () => {
                 type: STORAGE_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE,
                 amount: "43600",
                 returnAddress: {
-                    type: 0,
+                    type: ED25519_ADDRESS_TYPE,
                     pubKeyHash: "0x6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
                 }
             }
@@ -135,7 +135,7 @@ describe("NFT output validation", () => {
                 type: 3,
                 unixTime: 123123123123,
                 returnAddress: {
-                    type: 0,
+                    type: ED25519_ADDRESS_TYPE,
                     pubKeyHash: "0x6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
                 }
             },
@@ -191,7 +191,7 @@ describe("NFT output validation", () => {
             {
                 type: 0,
                 address: {
-                    type: 0,
+                    type: ED25519_ADDRESS_TYPE,
                     pubKeyHash: "0x6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
                 }
             }
@@ -236,7 +236,7 @@ describe("NFT output validation", () => {
             {
                 type: 1,
                 address: {
-                    type: 0,
+                    type: ED25519_ADDRESS_TYPE,
                     pubKeyHash: "0x6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
                 }
             }
