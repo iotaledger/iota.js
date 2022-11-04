@@ -16,6 +16,7 @@ import { validateFeatures } from "../features/features";
 import { validateNativeTokens } from "../nativeTokens";
 import { IValidationResult, mergeValidationResults } from "../result";
 import { validateUnlockConditions } from "../unlockConditions/unlockConditions";
+import { validateAscendingOrder } from "../validationUtils";
 
 /**
  * Maximum number of features that an nft output could have.
@@ -75,6 +76,7 @@ export function validateNftOutput(nftOutput: INftOutput, protocolInfo: INodeInfo
         });
     }
 
+    results.push(validateAscendingOrder(nftOutput.unlockConditions, "NFT output", "Unlock Condition"));
     results.push(validateUnlockConditions(nftOutput.unlockConditions, nftOutput.amount, protocolInfo.rentStructure));
 
     if (!nftOutput.unlockConditions.some(uC => uC.type === ADDRESS_UNLOCK_CONDITION_TYPE)) {
@@ -114,6 +116,7 @@ export function validateNftOutput(nftOutput: INftOutput, protocolInfo: INodeInfo
             });
         }
 
+        results.push(validateAscendingOrder(nftOutput.features, "NFT output", "Feature"));
         results.push(validateFeatures(nftOutput.features, MAX_NFT_FEATURES_COUNT));
     }
 
@@ -127,10 +130,11 @@ export function validateNftOutput(nftOutput: INftOutput, protocolInfo: INodeInfo
         ) {
             results.push({
                 isValid: false,
-                errors: ["NFT output feature type of an immutable feature must define one of the following types: Issuer Feature or Metadata Feature."]
+                errors: ["NFT output feature type of an Immutable Feature must define one of the following types: Issuer Feature or Metadata Feature."]
             });
         }
 
+        results.push(validateAscendingOrder(nftOutput.immutableFeatures, "NFT output", "Immutable Feature"));
         results.push(validateFeatures(nftOutput.immutableFeatures, MAX_NFT_IMMUTABLE_FEATURES_COUNT));
     }
 
