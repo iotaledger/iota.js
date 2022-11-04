@@ -35,14 +35,14 @@ const MAX_NFT_IMMUTABLE_FEATURES_COUNT = 2;
 export function validateNftOutput(nftOutput: INftOutput, protocolInfo: INodeInfoProtocol): IValidationResult {
     const results: IValidationResult[] = [];
 
-    if (bigInt(nftOutput.amount).compare(bigInt.zero) !== 1) {
+    if (bigInt(nftOutput.amount).equals(bigInt.zero)) {
         results.push({
             isValid: false,
             errors: ["NFT output amount field must be larger than zero."]
         });
     }
 
-    if (bigInt(nftOutput.amount).compare(protocolInfo.tokenSupply) === 1) {
+    if (bigInt(nftOutput.amount).gt(protocolInfo.tokenSupply)) {
         results.push({
             isValid: false,
             errors: ["NFT output amount field must not be larger than max token supply."]
