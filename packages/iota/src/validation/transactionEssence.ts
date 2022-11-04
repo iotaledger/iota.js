@@ -8,14 +8,14 @@ import { IValidationResult, mergeValidationResults } from "./result";
 
 /**
  * Validate a transaction essence.
- * @param object The object to validate.
+ * @param transactionEssence The Transaction Essence to validate.
  * @param protocolInfo The Protocol Info.
  * @returns The validation result.
  */
-export function validateTransactionEssence(object: ITransactionEssence, protocolInfo: INodeInfoProtocol
+export function validateTransactionEssence(transactionEssence: ITransactionEssence, protocolInfo: INodeInfoProtocol
     ): IValidationResult {
-    const validateInputsResult = validateInputs(object.inputs);
-    const validateOutputsResult = validateOutputs(object.outputs, protocolInfo);
+    const validateInputsResult = validateInputs(transactionEssence.inputs);
+    const validateOutputsResult = validateOutputs(transactionEssence.outputs, protocolInfo);
 
     return mergeValidationResults(validateInputsResult, validateOutputsResult);
 }

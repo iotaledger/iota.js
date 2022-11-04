@@ -88,7 +88,7 @@ export function validateOutput(output: OutputTypes, protocolInfo: INodeInfoProto
 
 /**
  * Validate a basic output.
- * @param basicOutput The output to validate.
+ * @param basicOutput The basic output to validate.
  * @param protocolInfo The Protocol Info.
  * @returns The validation result.
  */
@@ -144,7 +144,7 @@ export function validateBasicOutput(basicOutput: IBasicOutput, protocolInfo: INo
 
 /**
  * Validate an alias output.
- * @param aliasOutput The object to validate.
+ * @param aliasOutput The alias output to validate.
  * @param protocolInfo The Protocol Info.
  * @returns The validation result.
  */

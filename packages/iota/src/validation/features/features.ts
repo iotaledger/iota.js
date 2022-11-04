@@ -19,25 +19,23 @@ export const MAX_METADATA_LENGTH: number = 8192;
 
 /**
  * Validate output features.
- * @param object The object to validate.
+ * @param features The Features to validate.
  * @param maxFeaturesCount Maximum number of features.
  * @returns The validation result.
  */
-// Each output must not contain more than one feature of
-// each type and not all feature types are supported for each output type.
-export function validateFeatures(object: FeatureTypes[], maxFeaturesCount: number): IValidationResult {
+export function validateFeatures(features: FeatureTypes[], maxFeaturesCount: number): IValidationResult {
     const results: IValidationResult[] = [];
 
-    if (object.length > maxFeaturesCount) {
+    if (features.length > maxFeaturesCount) {
         results.push({
             isValid: false,
             errors: [`Max number of features exceeded (${maxFeaturesCount}).`]
         });
     }
 
-    results.push(ValidationHelper.validateDistinct(object.map(feature => feature.type), "Output", "feature"));
+    results.push(ValidationHelper.validateDistinct(features.map(feature => feature.type), "Output", "feature"));
 
-    for (const feature of object) {
+    for (const feature of features) {
         results.push(
             validateFeature(feature)
         );
@@ -48,27 +46,27 @@ export function validateFeatures(object: FeatureTypes[], maxFeaturesCount: numbe
 
 /**
  * Validate output feature.
- * @param object The object to validate.
+ * @param feature The Feature to validate.
  * @returns The validation result.
  */
-export function validateFeature(object: FeatureTypes): IValidationResult {
+export function validateFeature(feature: FeatureTypes): IValidationResult {
     let result: IValidationResult = { isValid: true };
 
-    switch (object.type) {
+    switch (feature.type) {
         case SENDER_FEATURE_TYPE:
-            result = validateAddress(object.address);
+            result = validateAddress(feature.address);
             break;
         case ISSUER_FEATURE_TYPE:
-            result = validateAddress(object.address);
+            result = validateAddress(feature.address);
             break;
         case METADATA_FEATURE_TYPE:
-            result = validateMetadataFeature(object);
+            result = validateMetadataFeature(feature);
             break;
         case TAG_FEATURE_TYPE:
-            result = validateTagFeature(object);
+            result = validateTagFeature(feature);
             break;
         default:
-            throw new Error(`Unrecognized Feature type ${(object as ITypeBase<number>).type}`);
+            throw new Error(`Unrecognized Feature type ${(feature as ITypeBase<number>).type}`);
     }
 
     return result;
@@ -76,17 +74,17 @@ export function validateFeature(object: FeatureTypes): IValidationResult {
 
 /**
  * Validate metadata feature.
- * @param object The object to validate.
+ * @param metadataFeature The Metadata Feature to validate.
  * @returns The validation result.
  */
-function validateMetadataFeature(object: IMetadataFeature): IValidationResult {
+function validateMetadataFeature(metadataFeature: IMetadataFeature): IValidationResult {
     let result: IValidationResult = { isValid: true };
 
-    if (object.data.length === 0) {
+    if (metadataFeature.data.length === 0) {
         result = failValidation(result, "Metadata must have a value bigger than zero.");
     }
 
-    const data = HexHelper.stripPrefix(object.data);
+    const data = HexHelper.stripPrefix(metadataFeature.data);
     if ((data.length / 2) > MAX_METADATA_LENGTH) {
         result = failValidation(result, "Max metadata length exceeded.");
     }
@@ -96,19 +94,20 @@ function validateMetadataFeature(object: IMetadataFeature): IValidationResult {
 
 /**
  * Validate tag feature.
- * @param object The object to validate.
+ * @param tagFeature The Tag Feature to validate.
  * @returns The validation result.
  */
-function validateTagFeature(object: ITagFeature): IValidationResult {
+function validateTagFeature(tagFeature: ITagFeature): IValidationResult {
     let result: IValidationResult = { isValid: true };
 
-    if (object.tag.length === 0) {
+    if (tagFeature.tag.length === 0) {
         result = failValidation(result, "Tag must have a value bigger than zero.");
     }
 
-    if ((object.tag.length / 2) > MAX_TAG_LENGTH) {
+    if ((tagFeature.tag.length / 2) > MAX_TAG_LENGTH) {
         result = failValidation(result, "Max tag length exceeded.");
     }
 
     return result;
 }
+

@@ -28,7 +28,7 @@ const MAX_NFT_IMMUTABLE_FEATURES_COUNT = 2;
 
 /**
  * Validate an nft output.
- * @param nftOutput The output to validate.
+ * @param nftOutput The NFT output to validate.
  * @param protocolInfo The Protocol Info.
  * @returns The validation result.
  */

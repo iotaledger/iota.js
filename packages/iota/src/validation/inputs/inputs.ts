@@ -7,18 +7,18 @@ import { failValidation, IValidationResult, mergeValidationResults } from "../re
 
 /**
  * Validate inputs.
- * @param object The object to validate.
+ * @param inputs The inputs to validate.
  * @returns The validation result.
  */
-export function validateInputs(object: IUTXOInput[]): IValidationResult {
+export function validateInputs(inputs: IUTXOInput[]): IValidationResult {
     let result: IValidationResult = { isValid: true };
 
-    if (object.length < MIN_INPUT_COUNT || object.length > MAX_INPUT_COUNT) {
+    if (inputs.length < MIN_INPUT_COUNT || inputs.length > MAX_INPUT_COUNT) {
         result = failValidation(result, `Inputs count must be between ${MIN_INPUT_COUNT} and ${MAX_INPUT_COUNT}.`);
     }
 
-    for (const input of object) {
-        const filteredInputs = object.filter(i => i.transactionId === input.transactionId &&
+    for (const input of inputs) {
+        const filteredInputs = inputs.filter(i => i.transactionId === input.transactionId &&
             i.transactionOutputIndex === input.transactionOutputIndex
         );
 
@@ -27,7 +27,7 @@ export function validateInputs(object: IUTXOInput[]): IValidationResult {
         }
     }
 
-    for (const input of object) {
+    for (const input of inputs) {
         result = mergeValidationResults(result, validateInput(input));
     }
 
@@ -35,20 +35,21 @@ export function validateInputs(object: IUTXOInput[]): IValidationResult {
 }
 
 /**
- * Validate input.
- * @param object The object to validate.
+ * Validate an input.
+ * @param input The input to validate.
  * @returns The validation result.
  */
- export function validateInput(object: IUTXOInput): IValidationResult {
+ export function validateInput(input: IUTXOInput): IValidationResult {
     let result: IValidationResult = { isValid: true };
 
-    if (object.type !== UTXO_INPUT_TYPE) {
+    if (input.type !== UTXO_INPUT_TYPE) {
         result = failValidation(result, "Input type must denote a UTXO Input.");
     }
 
-    if (object.transactionOutputIndex < 0 || object.transactionOutputIndex >= MAX_OUTPUT_COUNT) {
+    if (input.transactionOutputIndex < 0 || input.transactionOutputIndex >= MAX_OUTPUT_COUNT) {
         result = failValidation(result, `Transaction Output Index must be between 0 and ${MAX_INPUT_COUNT}.`);
     }
 
     return result;
 }
+
