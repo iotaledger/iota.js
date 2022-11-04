@@ -1,29 +1,13 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 import { ALIAS_ADDRESS_TYPE } from "../../src/models/addresses/IAliasAddress";
-import type { INodeInfoProtocol } from "../../src/models/info/INodeInfoProtocol";
 import { ALIAS_OUTPUT_TYPE, IAliasOutput } from "../../src/models/outputs/IAliasOutput";
 import { BASIC_OUTPUT_TYPE, IBasicOutput } from "../../src/models/outputs/IBasicOutput";
 import { ADDRESS_UNLOCK_CONDITION_TYPE } from "../../src/models/unlockConditions/IAddressUnlockCondition";
 import { GOVERNOR_ADDRESS_UNLOCK_CONDITION_TYPE } from "../../src/models/unlockConditions/IGovernorAddressUnlockCondition";
 import { STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE } from "../../src/models/unlockConditions/IStateControllerAddressUnlockCondition";
 import { validateOutputs } from "../../src/validation/outputs/outputs";
-
-/**
- * The protocol info.
- */
-const protocolInfo: INodeInfoProtocol = {
-    "version": 2,
-    "networkName": "testnet",
-    "bech32Hrp": "rms",
-    "minPowScore": 1500,
-    "rentStructure": {
-        "vByteCost": 100,
-        "vByteFactorData": 1,
-        "vByteFactorKey": 10
-    },
-    "tokenSupply": "1450896407249092"
-};
+import { protocolInfoMock } from "./testValidationMocks";
 
 describe("Basic output validation", () => {
     test("should pass with valid basic output", () => {
@@ -41,7 +25,7 @@ describe("Basic output validation", () => {
             ]
         };
 
-        const result = validateOutputs([output], protocolInfo);
+        const result = validateOutputs([output], protocolInfoMock);
         expect(result.isValid).toEqual(true);
     });
 
@@ -52,7 +36,7 @@ describe("Basic output validation", () => {
             unlockConditions: []
         };
 
-        const result = validateOutputs([output], protocolInfo);
+        const result = validateOutputs([output], protocolInfoMock);
         expect(result.isValid).toEqual(false);
         expect(result.errors).toEqual(expect.arrayContaining([
             "Address Unlock Condition must be present.",
@@ -85,7 +69,7 @@ describe("Basic output validation", () => {
             ]
         };
 
-        const result = validateOutputs([output], protocolInfo);
+        const result = validateOutputs([output], protocolInfoMock);
         expect(result.isValid).toEqual(true);
     });
 
@@ -99,7 +83,7 @@ describe("Basic output validation", () => {
             unlockConditions: []
         };
 
-        const result = validateOutputs([output], protocolInfo);
+        const result = validateOutputs([output], protocolInfoMock);
         expect(result.isValid).toEqual(false);
         expect(result.errors).toEqual(expect.arrayContaining([
             "Alias output amount field must be larger than zero.",
@@ -126,7 +110,7 @@ describe("Basic output validation", () => {
             ]
         };
 
-        const result = validateOutputs([output], protocolInfo);
+        const result = validateOutputs([output], protocolInfoMock);
         expect(result.isValid).toEqual(false);
         expect(result.errors).toEqual(expect.arrayContaining(["Both state controller address unlock condition and Governor address unlock condition must be present."]));
     });
@@ -156,7 +140,7 @@ describe("Basic output validation", () => {
             ]
         };
 
-        const result = validateOutputs([output], protocolInfo);
+        const result = validateOutputs([output], protocolInfoMock);
         expect(result.isValid).toEqual(false);
         expect(result.errors).toEqual(expect.arrayContaining(["Address of State controller address unlock condition and address of Governor address unlock condition must be different from the Alias address derived from alias id."]));
     });
@@ -186,7 +170,7 @@ describe("Basic output validation", () => {
             ]
         };
 
-        const result = validateOutputs([output], protocolInfo);
+        const result = validateOutputs([output], protocolInfoMock);
         expect(result.isValid).toEqual(false);
         expect(result.errors).toEqual(expect.arrayContaining(["When Alias ID is zeroed out, State Index and Foundry Counter must be 0."]));
     });
