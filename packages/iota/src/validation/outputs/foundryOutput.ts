@@ -11,11 +11,15 @@ import { IValidationResult, mergeValidationResults } from "../result";
 import { validateSimpleTokenScheme } from "../tokenSchemes/simpleTokenScheme";
 import { validateUnlockConditions } from "../unlockConditions/unlockConditions";
 
-/* Maximum number of unlock conditions that foundry output can have. */
-const MAX_FOUNDRY_UNLOCK_CONDITIONS_COUNT = 1;
+/**
+ * Maximum number of unlock conditions that foundry output can have.
+ */
+const FOUNDRY_UNLOCK_CONDITIONS_COUNT = 1;
 
-/* Maximum number of features that foundry output can have. */
-const MAX_FOUNDRY_FEATURES_COUNT = 2;
+/**
+ * Maximum number of features that foundry output can have.
+ */
+const MAX_FOUNDRY_FEATURES_COUNT = 1;
 
 /**
  * Validate a foundry output.
@@ -54,11 +58,10 @@ const MAX_FOUNDRY_FEATURES_COUNT = 2;
         results.push(validateNativeTokens(foundryOutput.nativeTokens));
     }
 
-    if (!foundryOutput.unlockConditions ||
-        foundryOutput.unlockConditions.length !== MAX_FOUNDRY_UNLOCK_CONDITIONS_COUNT) {
+    if (foundryOutput.unlockConditions?.length !== FOUNDRY_UNLOCK_CONDITIONS_COUNT) {
         results.push({
             isValid: false,
-            errors: [`Foundry output unlock conditions count must be equal to ${MAX_FOUNDRY_UNLOCK_CONDITIONS_COUNT}.`]
+            errors: [`Foundry output unlock conditions count must be equal to ${FOUNDRY_UNLOCK_CONDITIONS_COUNT}.`]
         });
     } else if (foundryOutput.unlockConditions[0].type !== IMMUTABLE_ALIAS_UNLOCK_CONDITION_TYPE) {
         results.push({

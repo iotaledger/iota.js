@@ -17,8 +17,9 @@ export function validateSimpleTokenScheme(tokenScheme: ISimpleTokenScheme): IVal
         result = failValidation(result, "Token scheme type must denote a Simple token scheme");
     }
 
-    const tokenSupply = HexHelper.toBigInt256(tokenScheme.mintedTokens)
-                        .minus(HexHelper.toBigInt256(tokenScheme.meltedTokens));
+    const minted = HexHelper.toBigInt256(tokenScheme.mintedTokens);
+    const melted = HexHelper.toBigInt256(tokenScheme.meltedTokens);
+    const tokenSupply = minted.minus(melted);
     if (tokenSupply.gt(HexHelper.toBigInt256(tokenScheme.maximumSupply))) {
         result = failValidation(result, "Minted Tokens - Melted Tokens must not be greater than Maximum Supply");
     }
