@@ -17,14 +17,23 @@ import { validateFeatures, MAX_METADATA_LENGTH } from "../features/features";
 import { validateNativeTokens } from "../nativeTokens";
 import { IValidationResult, mergeValidationResults } from "../result";
 import { validateUnlockConditions } from "../unlockConditions/unlockConditions";
+import { validateNftOutput } from "./nftOutput";
 
-// zero alias id.
+/**
+ * Zero alias id.
+ */
 const ZERO_ALIAS_ID = "0x0000000000000000000000000000000000000000000000000000000000000000";
-// Maximum number of features that basic output can have.
+/**
+ * Maximum number of features that a basic output could have.
+ */
 const MAX_BASIC_FEATURES_COUNT = 3;
-// Maximum number of features that alias output can have.
+/**
+ * Maximum number of features that alias output can have.
+ */
 const MAX_ALIAS_FEATURES_COUNT = 2;
-// Maximum number of unlock conditions that alias output can have.
+/**
+ * Maximum number of unlock conditions that alias output can have.
+ */
 const MAX_ALIAS_UNLOCK_CONDITIONS_COUNT = 2;
 
 /**
@@ -65,7 +74,7 @@ export function validateOutput(output: OutputTypes, protocolInfo: INodeInfoProto
             // Unimplemented
             break;
         case NFT_OUTPUT_TYPE:
-            // Unimplemented
+            result = validateNftOutput(output, protocolInfo);
             break;
         case ALIAS_OUTPUT_TYPE:
             result = validateAliasOutput(output, protocolInfo);
@@ -114,7 +123,12 @@ export function validateBasicOutput(basicOutput: IBasicOutput, protocolInfo: INo
                 errors: ["Address Unlock Condition must be present."]
             });
         }
-        results.push(validateUnlockConditions(basicOutput.unlockConditions, basicOutput.amount, protocolInfo.rentStructure));
+
+        results.push(validateUnlockConditions(
+            basicOutput.unlockConditions,
+            basicOutput.amount,
+            protocolInfo.rentStructure
+        ));
     }
 
     if (basicOutput.nativeTokens) {
@@ -217,3 +231,4 @@ export function validateAliasOutput(aliasOutput: IAliasOutput, protocolInfo: INo
 
     return mergeValidationResults(...results);
 }
+
