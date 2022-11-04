@@ -7,7 +7,7 @@ import { METADATA_FEATURE_TYPE } from "../../models/features/IMetadataFeature";
 import { SENDER_FEATURE_TYPE } from "../../models/features/ISenderFeature";
 import { TAG_FEATURE_TYPE } from "../../models/features/ITagFeature";
 import type { INodeInfoProtocol } from "../../models/info/INodeInfoProtocol";
-import type { INftOutput } from "../../models/outputs/INftOutput";
+import { INftOutput, NFT_OUTPUT_TYPE } from "../../models/outputs/INftOutput";
 import { ADDRESS_UNLOCK_CONDITION_TYPE } from "../../models/unlockConditions/IAddressUnlockCondition";
 import { EXPIRATION_UNLOCK_CONDITION_TYPE } from "../../models/unlockConditions/IExpirationUnlockCondition";
 import { STORAGE_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE } from "../../models/unlockConditions/IStorageDepositReturnUnlockCondition";
@@ -34,6 +34,13 @@ const MAX_NFT_IMMUTABLE_FEATURES_COUNT = 2;
  */
 export function validateNftOutput(nftOutput: INftOutput, protocolInfo: INodeInfoProtocol): IValidationResult {
     const results: IValidationResult[] = [];
+
+    if (nftOutput.type !== NFT_OUTPUT_TYPE) {
+        results.push({
+            isValid: false,
+            errors: [`Type mismatch in NFT output ${nftOutput.type}`]
+        });
+    }
 
     if (bigInt(nftOutput.amount).equals(bigInt.zero)) {
         results.push({
