@@ -17,26 +17,35 @@ import { validateFeatures, MAX_METADATA_LENGTH } from "../features/features";
 import { validateNativeTokens } from "../nativeTokens";
 import { IValidationResult, mergeValidationResults } from "../result";
 import { validateUnlockConditions } from "../unlockConditions/unlockConditions";
+import { validateNftOutput } from "./nftOutput";
 
-// zero alias id.
+/**
+ * Zero alias id.
+ */
 const ZERO_ALIAS_ID = "0x0000000000000000000000000000000000000000000000000000000000000000";
-// Maximum number of features that basic output can have.
+/**
+ * Maximum number of features that a basic output could have.
+ */
 const MAX_BASIC_FEATURES_COUNT = 3;
-// Maximum number of features that alias output can have.
+/**
+ * Maximum number of features that alias output can have.
+ */
 const MAX_ALIAS_FEATURES_COUNT = 2;
-// Maximum number of unlock conditions that alias output can have.
+/**
+ * Maximum number of unlock conditions that alias output can have.
+ */
 const MAX_ALIAS_UNLOCK_CONDITIONS_COUNT = 2;
 
 /**
  * Validate outputs.
- * @param object The object to validate.
+ * @param outputs The outputs to validate.
  * @param protocolInfo The Protocol Info.
  * @returns The validation result.
  */
-export function validateOutputs(object: OutputTypes[], protocolInfo: INodeInfoProtocol): IValidationResult {
+export function validateOutputs(outputs: OutputTypes[], protocolInfo: INodeInfoProtocol): IValidationResult {
     const results: IValidationResult[] = [];
 
-    for (const output of object) {
+    for (const output of outputs) {
         results.push(
             validateOutput(output, protocolInfo)
         );
@@ -47,31 +56,31 @@ export function validateOutputs(object: OutputTypes[], protocolInfo: INodeInfoPr
 
 /**
  * Validate an output entry point.
- * @param object The object to validate.
+ * @param output The output to validate.
  * @param protocolInfo The Protocol Info.
  * @returns The validation result.
  */
-export function validateOutput(object: OutputTypes, protocolInfo: INodeInfoProtocol): IValidationResult {
+export function validateOutput(output: OutputTypes, protocolInfo: INodeInfoProtocol): IValidationResult {
     let result: IValidationResult = { isValid: true };
 
-    switch (object.type) {
+    switch (output.type) {
         case TREASURY_OUTPUT_TYPE:
             // Unimplemented
             break;
         case BASIC_OUTPUT_TYPE:
-            result = validateBasicOutput(object, protocolInfo);
+            result = validateBasicOutput(output, protocolInfo);
             break;
         case FOUNDRY_OUTPUT_TYPE:
             // Unimplemented
             break;
         case NFT_OUTPUT_TYPE:
-            // Unimplemented
+            result = validateNftOutput(output, protocolInfo);
             break;
         case ALIAS_OUTPUT_TYPE:
-            result = validateAliasOutput(object, protocolInfo);
+            result = validateAliasOutput(output, protocolInfo);
             break;
         default:
-            throw new Error(`Unrecognized output type ${(object as ITypeBase<number>).type}`);
+            throw new Error(`Unrecognized output type ${(output as ITypeBase<number>).type}`);
     }
 
     return result;
@@ -79,50 +88,55 @@ export function validateOutput(object: OutputTypes, protocolInfo: INodeInfoProto
 
 /**
  * Validate a basic output.
- * @param object The object to validate.
+ * @param basicOutput The output to validate.
  * @param protocolInfo The Protocol Info.
  * @returns The validation result.
  */
-export function validateBasicOutput(object: IBasicOutput, protocolInfo: INodeInfoProtocol): IValidationResult {
+export function validateBasicOutput(basicOutput: IBasicOutput, protocolInfo: INodeInfoProtocol): IValidationResult {
     const results: IValidationResult[] = [];
 
-    if (object.type !== BASIC_OUTPUT_TYPE) {
+    if (basicOutput.type !== BASIC_OUTPUT_TYPE) {
         results.push({
             isValid: false,
-            errors: [`Type mismatch in basic output ${object.type}`]
+            errors: [`Type mismatch in basic output ${basicOutput.type}`]
         });
     }
 
-    if (bigInt(object.amount).compare(bigInt.zero) !== 1) {
+    if (bigInt(basicOutput.amount).compare(bigInt.zero) !== 1) {
         results.push({
             isValid: false,
             errors: ["Basic output amount field must be larger than zero."]
         });
     }
 
-    if (bigInt(object.amount).compare(protocolInfo.tokenSupply) === 1) {
+    if (bigInt(basicOutput.amount).compare(protocolInfo.tokenSupply) === 1) {
         results.push({
             isValid: false,
             errors: ["Basic output amount field must not be larger than max token supply."]
         });
     }
 
-    if (object.unlockConditions) {
-        if (!object.unlockConditions.some(uC => uC.type === ADDRESS_UNLOCK_CONDITION_TYPE)) {
+    if (basicOutput.unlockConditions) {
+        if (!basicOutput.unlockConditions.some(uC => uC.type === ADDRESS_UNLOCK_CONDITION_TYPE)) {
             results.push({
                 isValid: false,
                 errors: ["Address Unlock Condition must be present."]
             });
         }
-        results.push(validateUnlockConditions(object.unlockConditions, object.amount, protocolInfo.rentStructure));
+
+        results.push(validateUnlockConditions(
+            basicOutput.unlockConditions,
+            basicOutput.amount,
+            protocolInfo.rentStructure
+        ));
     }
 
-    if (object.nativeTokens) {
-        results.push(validateNativeTokens(object.nativeTokens));
+    if (basicOutput.nativeTokens) {
+        results.push(validateNativeTokens(basicOutput.nativeTokens));
     }
 
-    if (object.features) {
-        results.push(validateFeatures(object.features, MAX_BASIC_FEATURES_COUNT));
+    if (basicOutput.features) {
+        results.push(validateFeatures(basicOutput.features, MAX_BASIC_FEATURES_COUNT));
     }
 
     return mergeValidationResults(...results);
@@ -217,3 +231,4 @@ export function validateAliasOutput(aliasOutput: IAliasOutput, protocolInfo: INo
 
     return mergeValidationResults(...results);
 }
+

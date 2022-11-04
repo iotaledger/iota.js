@@ -115,16 +115,17 @@ function validateStorageDepositReturnUnlockCondition(
 ): IValidationResult {
     let result: IValidationResult = { isValid: true };
 
-    if (bigInt(object.amount).compare(bigInt.zero) !== 1) {
+    if (bigInt(object.amount).eq(bigInt.zero)) {
         result = failValidation(result, "Storage deposit amount must be larger than zero.");
     }
 
     const minStorageDeposit = ValidationHelper.getMinStorageDeposit(object.returnAddress, rentStructure);
-    if (bigInt(object.amount).compare(minStorageDeposit) !== 1) {
+
+    if (bigInt(object.amount).lt(minStorageDeposit)) {
         result = failValidation(result, "Storage deposit return amount is less than the min storage deposit.");
     }
 
-    if (bigInt(object.amount).compare(amount) === 1) {
+    if (bigInt(object.amount).gt(amount)) {
         result = failValidation(result, "Storage deposit return amount exceeds target output's deposit.");
     }
 
