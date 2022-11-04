@@ -17,6 +17,7 @@ import { validateFeatures, MAX_METADATA_LENGTH } from "../features/features";
 import { validateNativeTokens } from "../nativeTokens";
 import { IValidationResult, mergeValidationResults } from "../result";
 import { validateUnlockConditions } from "../unlockConditions/unlockConditions";
+import { validateFoundryOutput } from "./foundryOutput";
 
 // zero alias id.
 const ZERO_ALIAS_ID = "0x0000000000000000000000000000000000000000000000000000000000000000";
@@ -62,7 +63,7 @@ export function validateOutput(object: OutputTypes, protocolInfo: INodeInfoProto
             result = validateBasicOutput(object, protocolInfo);
             break;
         case FOUNDRY_OUTPUT_TYPE:
-            // Unimplemented
+            result = validateFoundryOutput(object, protocolInfo);
             break;
         case NFT_OUTPUT_TYPE:
             // Unimplemented
