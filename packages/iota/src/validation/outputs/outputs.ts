@@ -18,6 +18,7 @@ import { validateNativeTokens } from "../nativeTokens";
 import { IValidationResult, mergeValidationResults } from "../result";
 import { validateUnlockConditions } from "../unlockConditions/unlockConditions";
 import { validateNftOutput } from "./nftOutput";
+import { validateFoundryOutput } from "./foundryOutput";
 
 /**
  * Zero alias id.
@@ -71,7 +72,7 @@ export function validateOutput(output: OutputTypes, protocolInfo: INodeInfoProto
             result = validateBasicOutput(output, protocolInfo);
             break;
         case FOUNDRY_OUTPUT_TYPE:
-            // Unimplemented
+            result = validateFoundryOutput(output, protocolInfo);
             break;
         case NFT_OUTPUT_TYPE:
             result = validateNftOutput(output, protocolInfo);
