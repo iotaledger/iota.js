@@ -17,8 +17,8 @@ import { validateFeatures, MAX_METADATA_LENGTH } from "../features/features";
 import { validateNativeTokens } from "../nativeTokens";
 import { IValidationResult, mergeValidationResults } from "../result";
 import { validateUnlockConditions } from "../unlockConditions/unlockConditions";
-import { validateNftOutput } from "./nftOutput";
 import { validateFoundryOutput } from "./foundryOutput";
+import { validateNftOutput } from "./nftOutput";
 
 /**
  * Zero alias id.

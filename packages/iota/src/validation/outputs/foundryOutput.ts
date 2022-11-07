@@ -1,6 +1,7 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 import bigInt from "big-integer";
+import { METADATA_FEATURE_TYPE } from "../../index-browser";
 import type { INodeInfoProtocol } from "../../models/info/INodeInfoProtocol";
 import { FOUNDRY_OUTPUT_TYPE, IFoundryOutput } from "../../models/outputs/IFoundryOutput";
 import { SIMPLE_TOKEN_SCHEME_TYPE } from "../../models/tokenSchemes/ISimpleTokenScheme";
@@ -72,11 +73,35 @@ const MAX_FOUNDRY_FEATURES_COUNT = 1;
         results.push(validateUnlockConditions(foundryOutput.unlockConditions));
     }
 
-    if (foundryOutput.features) {
+    if (foundryOutput.features && foundryOutput.features.length > 0) {
+        if (
+            !foundryOutput.features.every(
+                feature =>
+                    feature.type === METADATA_FEATURE_TYPE
+            )
+        ) {
+            results.push({
+                isValid: false,
+                errors: ["Foundry output feature type of a feature must define one of the following types: Metadata Feature."]
+            });
+        }
+
         results.push(validateFeatures(foundryOutput.features, MAX_FOUNDRY_FEATURES_COUNT));
     }
 
-    if (foundryOutput.immutableFeatures) {
+    if (foundryOutput.immutableFeatures && foundryOutput.immutableFeatures.length > 0) {
+        if (
+            !foundryOutput.immutableFeatures.every(
+                feature =>
+                    feature.type === METADATA_FEATURE_TYPE
+            )
+        ) {
+            results.push({
+                isValid: false,
+                errors: ["Foundry output immutable feature type of a feature must define one of the following types: Metadata Feature."]
+            });
+        }
+
         results.push(validateFeatures(foundryOutput.immutableFeatures, MAX_FOUNDRY_FEATURES_COUNT));
     }
 
