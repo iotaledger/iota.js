@@ -8,6 +8,7 @@ import { SENDER_FEATURE_TYPE } from "../../src/models/features/ISenderFeature";
 import { TAG_FEATURE_TYPE } from "../../src/models/features/ITagFeature";
 import type { INodeInfoProtocol } from "../../src/models/info/INodeInfoProtocol";
 import { IAliasOutput, ALIAS_OUTPUT_TYPE } from "../../src/models/outputs/IAliasOutput";
+import { BASIC_OUTPUT_TYPE, IBasicOutput } from "../../src/models/outputs/IBasicOutput";
 import { INftOutput, NFT_OUTPUT_TYPE } from "../../src/models/outputs/INftOutput";
 import { ADDRESS_UNLOCK_CONDITION_TYPE } from "../../src/models/unlockConditions/IAddressUnlockCondition";
 import { EXPIRATION_UNLOCK_CONDITION_TYPE } from "../../src/models/unlockConditions/IExpirationUnlockCondition";
@@ -30,6 +31,44 @@ export const protocolInfoMock: INodeInfoProtocol = {
         "vByteFactorKey": 10
     },
     "tokenSupply": "1450896407249092"
+};
+
+/**
+ * The Basic output mock.
+ */
+export const mockBasicOutput: IBasicOutput = {
+    type: BASIC_OUTPUT_TYPE,
+    amount: "455655655",
+    nativeTokens: [
+        { id: "0x1234567890", amount: "123" },
+        { id: "0x1234567891", amount: "1234" }
+    ],
+    unlockConditions: [
+        {
+            type: ADDRESS_UNLOCK_CONDITION_TYPE,
+            address: {
+                type: ED25519_ADDRESS_TYPE,
+                pubKeyHash: "0x6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
+            }
+        }
+    ],
+    features: [
+        {
+            type: SENDER_FEATURE_TYPE,
+            address: {
+                type: ED25519_ADDRESS_TYPE,
+                pubKeyHash: "0x6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
+            }
+        },
+        {
+            type: METADATA_FEATURE_TYPE,
+            data: "0xthisissomefakedataandnotahex"
+        },
+        {
+            type: TAG_FEATURE_TYPE,
+            tag: "0xthisissomefakedataandnotahex"
+        }
+    ]
 };
 
 /**
@@ -65,7 +104,7 @@ export const mockAliasOutput: IAliasOutput = {
         {
             type: SENDER_FEATURE_TYPE,
             address: {
-                type: 0,
+                type: ED25519_ADDRESS_TYPE,
                 pubKeyHash: "0x6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
             }
         },
@@ -78,7 +117,7 @@ export const mockAliasOutput: IAliasOutput = {
         {
             type: ISSUER_FEATURE_TYPE,
             address: {
-                type: 0,
+                type: ED25519_ADDRESS_TYPE,
                 pubKeyHash: "0x6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
             }
         },
@@ -112,7 +151,7 @@ export const mockNftOutput: INftOutput = {
             type: STORAGE_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE,
             amount: "43600",
             returnAddress: {
-                type: 0,
+                type: ED25519_ADDRESS_TYPE,
                 pubKeyHash: "0x6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
             }
         },
@@ -124,7 +163,7 @@ export const mockNftOutput: INftOutput = {
             type: EXPIRATION_UNLOCK_CONDITION_TYPE,
             unixTime: 123123123123,
             returnAddress: {
-                type: 0,
+                type: ED25519_ADDRESS_TYPE,
                 pubKeyHash: "0x6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
             }
         }
@@ -133,7 +172,7 @@ export const mockNftOutput: INftOutput = {
         {
             type: SENDER_FEATURE_TYPE,
             address: {
-                type: 0,
+                type: ED25519_ADDRESS_TYPE,
                 pubKeyHash: "0x6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
             }
         },
@@ -150,7 +189,7 @@ export const mockNftOutput: INftOutput = {
         {
             type: ISSUER_FEATURE_TYPE,
             address: {
-                type: 0,
+                type: ED25519_ADDRESS_TYPE,
                 pubKeyHash: "0x6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
             }
         },
