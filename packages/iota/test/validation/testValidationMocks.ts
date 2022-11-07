@@ -7,12 +7,15 @@ import { METADATA_FEATURE_TYPE } from "../../src/models/features/IMetadataFeatur
 import { SENDER_FEATURE_TYPE } from "../../src/models/features/ISenderFeature";
 import { TAG_FEATURE_TYPE } from "../../src/models/features/ITagFeature";
 import type { INodeInfoProtocol } from "../../src/models/info/INodeInfoProtocol";
+import { IAliasOutput, ALIAS_OUTPUT_TYPE } from "../../src/models/outputs/IAliasOutput";
 import { FOUNDRY_OUTPUT_TYPE, IFoundryOutput } from "../../src/models/outputs/IFoundryOutput";
 import { INftOutput, NFT_OUTPUT_TYPE } from "../../src/models/outputs/INftOutput";
 import { SIMPLE_TOKEN_SCHEME_TYPE } from "../../src/models/tokenSchemes/ISimpleTokenScheme";
 import { ADDRESS_UNLOCK_CONDITION_TYPE } from "../../src/models/unlockConditions/IAddressUnlockCondition";
 import { EXPIRATION_UNLOCK_CONDITION_TYPE } from "../../src/models/unlockConditions/IExpirationUnlockCondition";
+import { GOVERNOR_ADDRESS_UNLOCK_CONDITION_TYPE } from "../../src/models/unlockConditions/IGovernorAddressUnlockCondition";
 import { IMMUTABLE_ALIAS_UNLOCK_CONDITION_TYPE } from "../../src/models/unlockConditions/IImmutableAliasUnlockCondition";
+import { STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE } from "../../src/models/unlockConditions/IStateControllerAddressUnlockCondition";
 import { STORAGE_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE } from "../../src/models/unlockConditions/IStorageDepositReturnUnlockCondition";
 import { TIMELOCK_UNLOCK_CONDITION_TYPE } from "../../src/models/unlockConditions/ITimelockUnlockCondition";
 
@@ -30,6 +33,63 @@ export const protocolInfoMock: INodeInfoProtocol = {
         "vByteFactorKey": 10
     },
     "tokenSupply": "1450896407249092"
+};
+
+/**
+ * The Alias output mock.
+ */
+export const mockAliasOutput: IAliasOutput = {
+    type: ALIAS_OUTPUT_TYPE,
+    amount: "455655655",
+    aliasId: "0xb6b82443901a2ab6beefdcb88acff1ca359f211a474cb50cf63aa6a24721f9aa",
+    stateIndex: 1,
+    foundryCounter: 0,
+    nativeTokens: [
+        { id: "0x1234567890", amount: "123" },
+        { id: "0x1234567891", amount: "1234" }
+    ],
+    unlockConditions: [
+        {
+            type: STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE,
+            address: {
+                type: ALIAS_ADDRESS_TYPE,
+                aliasId: "0x7ffec9e1233204d9c6dce6812b1539ee96af691ca2e4d9065daa85907d33e5d3"
+            }
+        },
+        {
+            type: GOVERNOR_ADDRESS_UNLOCK_CONDITION_TYPE,
+            address: {
+                type: ALIAS_ADDRESS_TYPE,
+                aliasId: "0x7ffec9e1233204d9c6dce6812b1539ee96af691ca2e4d9065daa85907d33e5d3"
+            }
+        }
+    ],
+    features: [
+        {
+            type: SENDER_FEATURE_TYPE,
+            address: {
+                type: 0,
+                pubKeyHash: "0x6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
+            }
+        },
+        {
+            type: METADATA_FEATURE_TYPE,
+            data: "0xthisissomefakedataandnotahex"
+        }
+    ],
+    immutableFeatures: [
+        {
+            type: ISSUER_FEATURE_TYPE,
+            address: {
+                type: 0,
+                pubKeyHash: "0x6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
+            }
+        },
+        {
+            type: METADATA_FEATURE_TYPE,
+            data: "0xthisissomefakedataandnotahex"
+        }
+    ]
 };
 
 /**

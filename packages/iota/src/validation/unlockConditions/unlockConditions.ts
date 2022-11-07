@@ -11,9 +11,9 @@ import { STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE } from "../../models/unl
 import { IStorageDepositReturnUnlockCondition, STORAGE_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE } from "../../models/unlockConditions/IStorageDepositReturnUnlockCondition";
 import { TIMELOCK_UNLOCK_CONDITION_TYPE } from "../../models/unlockConditions/ITimelockUnlockCondition";
 import type { UnlockConditionTypes } from "../../models/unlockConditions/unlockConditionTypes";
-import { ValidationHelper } from "../../utils/validationHelper";
 import { validateAddress } from "../addresses/addresses";
 import { IValidationResult, mergeValidationResults, failValidation } from "../result";
+import { getMinStorageDeposit, validateDistinct } from "../validationUtils";
 
 /**
  * The max number of unlock conditions.
@@ -41,7 +41,9 @@ export function validateUnlockConditions(
         });
     }
 
-    results.push(ValidationHelper.validateDistinct(unlockConditions.map(condition => condition.type), "Output", "unlock condition"));
+    results.push(
+        validateDistinct(unlockConditions.map(condition => condition.type), "Output", "unlock condition")
+    );
 
     for (const unlockCondition of unlockConditions) {
         results.push(
@@ -119,7 +121,7 @@ function validateStorageDepositReturnUnlockCondition(
         result = failValidation(result, "Storage deposit amount must be larger than zero.");
     }
 
-    const minStorageDeposit = ValidationHelper.getMinStorageDeposit(sdruc.returnAddress, rentStructure);
+    const minStorageDeposit = getMinStorageDeposit(sdruc.returnAddress, rentStructure);
 
     if (bigInt(sdruc.amount).lt(minStorageDeposit)) {
         result = failValidation(result, "Storage deposit return amount is less than the min storage deposit.");

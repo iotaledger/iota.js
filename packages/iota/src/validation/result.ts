@@ -1,5 +1,6 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
+
 /**
  * The validation result object.
  */
@@ -49,3 +50,4 @@ export function failValidation(result: IValidationResult, withError: string): IV
 
     return result;
 }
+

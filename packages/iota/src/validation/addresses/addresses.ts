@@ -27,31 +27,32 @@ const NFT_ID_HEX_LENGTH: number = (NFT_ID_LENGTH * 2) + 2;
 
 /**
  * Validate address.
- * @param object The object to validate.
+ * @param address The Address to validate.
  * @returns The validation result.
  */
-export function validateAddress(object: AddressTypes): IValidationResult {
+export function validateAddress(address: AddressTypes): IValidationResult {
     let result: IValidationResult = { isValid: true };
 
-    switch (object.type) {
+    switch (address.type) {
         case ED25519_ADDRESS_TYPE:
-            if (object.pubKeyHash.length !== ED25519_ADDRESS_HEX_LENGTH) {
+            if (address.pubKeyHash.length !== ED25519_ADDRESS_HEX_LENGTH) {
                 result = failValidation(result, `Ed25519 Address must have ${ED25519_ADDRESS_HEX_LENGTH} characters.`);
             }
             break;
         case ALIAS_ADDRESS_TYPE:
-            if (object.aliasId.length !== ALIAS_ID_HEX_LENGTH) {
+            if (address.aliasId.length !== ALIAS_ID_HEX_LENGTH) {
                 result = failValidation(result, `Alias id must have ${ALIAS_ID_HEX_LENGTH} characters.`);
             }
             break;
         case NFT_ADDRESS_TYPE:
-            if (object.nftId.length !== NFT_ID_HEX_LENGTH) {
+            if (address.nftId.length !== NFT_ID_HEX_LENGTH) {
                 result = failValidation(result, `Nft id must have ${NFT_ID_HEX_LENGTH} characters.`);
             }
             break;
         default:
-            throw new Error(`Unrecognized Address type ${(object as ITypeBase<number>).type}`);
+            throw new Error(`Unrecognized Address type ${(address as ITypeBase<number>).type}`);
     }
 
     return result;
 }
+
