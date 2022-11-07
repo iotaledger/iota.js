@@ -2,23 +2,22 @@
 // SPDX-License-Identifier: Apache-2.0
 import { ED25519_ADDRESS_TYPE } from "../../src/models/addresses/IEd25519Address";
 import { TAG_FEATURE_TYPE } from "../../src/models/features/ITagFeature";
-import type { IFoundryOutput } from "../../src/models/outputs/IFoundryOutput";
 import { SIMPLE_TOKEN_SCHEME_TYPE } from "../../src/models/tokenSchemes/ISimpleTokenScheme";
 import { STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE } from "../../src/models/unlockConditions/IStateControllerAddressUnlockCondition";
 import { validateFoundryOutput } from "../../src/validation/outputs/foundryOutput";
-import { cloneOutput } from "./testUtils";
+import { cloneFoundryOutput } from "./testUtils";
 import { mockFoundryOutput, protocolInfoMock } from "./testValidationMocks";
 
 describe("Foundry output validation", () => {
     it("should pass with valid foundry output", () => {
-        const foundryOutput = cloneOutput<IFoundryOutput>(mockFoundryOutput);
+        const foundryOutput = cloneFoundryOutput(mockFoundryOutput);
 
         const result = validateFoundryOutput(foundryOutput, protocolInfoMock);
         expect(result.isValid).toEqual(true);
     });
 
     it("should fail when foundry output amount is zero", () => {
-        const foundryOutput = cloneOutput<IFoundryOutput>(mockFoundryOutput);
+        const foundryOutput = cloneFoundryOutput(mockFoundryOutput);
         foundryOutput.amount = "0";
 
         const result = validateFoundryOutput(foundryOutput, protocolInfoMock);
@@ -31,7 +30,7 @@ describe("Foundry output validation", () => {
     });
 
     it("should fail when the amount is larger than max token supply", () => {
-        const foundryOutput = cloneOutput<IFoundryOutput>(mockFoundryOutput);
+        const foundryOutput = cloneFoundryOutput(mockFoundryOutput);
         // max is 1450896407249092
         foundryOutput.amount = "1450896407249095";
 
@@ -46,7 +45,7 @@ describe("Foundry output validation", () => {
     });
 
     it("should fail when unlock conditions count is exceeded", () => {
-        const foundryOutput = cloneOutput<IFoundryOutput>(mockFoundryOutput);
+        const foundryOutput = cloneFoundryOutput(mockFoundryOutput);
         foundryOutput.unlockConditions.push({
             type: STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE,
             address: {
@@ -66,7 +65,7 @@ describe("Foundry output validation", () => {
     });
 
     it("should fail when the unlock condition is of unsupported type", () => {
-        const foundryOutput = cloneOutput<IFoundryOutput>(mockFoundryOutput);
+        const foundryOutput = cloneFoundryOutput(mockFoundryOutput);
         foundryOutput.unlockConditions = [
             {
                 type: STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE,
@@ -88,7 +87,7 @@ describe("Foundry output validation", () => {
     });
 
     it("should fail when the feature is of unsupported type", () => {
-        const foundryOutput = cloneOutput<IFoundryOutput>(mockFoundryOutput);
+        const foundryOutput = cloneFoundryOutput(mockFoundryOutput);
         foundryOutput.features = [
             {
                 type: TAG_FEATURE_TYPE,
@@ -107,7 +106,7 @@ describe("Foundry output validation", () => {
     });
 
     it("should fail when the features count is exceeded", () => {
-        const foundryOutput = cloneOutput<IFoundryOutput>(mockFoundryOutput);
+        const foundryOutput = cloneFoundryOutput(mockFoundryOutput);
         foundryOutput.features?.push({
             type: TAG_FEATURE_TYPE,
             tag: "0x6920b176f613ec7be59e68fc68f597eb"
@@ -127,7 +126,7 @@ describe("Foundry output validation", () => {
     });
 
     it("should fail when the immputable feature is of unsupported type", () => {
-        const foundryOutput = cloneOutput<IFoundryOutput>(mockFoundryOutput);
+        const foundryOutput = cloneFoundryOutput(mockFoundryOutput);
         foundryOutput.immutableFeatures = [
             {
                 type: TAG_FEATURE_TYPE,
@@ -146,7 +145,7 @@ describe("Foundry output validation", () => {
     });
 
     it("should fail when the immutable features count is exceeded", () => {
-        const foundryOutput = cloneOutput<IFoundryOutput>(mockFoundryOutput);
+        const foundryOutput = cloneFoundryOutput(mockFoundryOutput);
         foundryOutput.immutableFeatures?.push({
             type: TAG_FEATURE_TYPE,
             tag: "0x6920b176f613ec7be59e68fc68f597eb"
@@ -166,7 +165,7 @@ describe("Foundry output validation", () => {
     });
 
     it("should fail when difference of Minted Tokens and Melted Tokens is greater than Maximum Supply.", () => {
-        const foundryOutput = cloneOutput<IFoundryOutput>(mockFoundryOutput);
+        const foundryOutput = cloneFoundryOutput(mockFoundryOutput);
         foundryOutput.tokenScheme = {
             type: SIMPLE_TOKEN_SCHEME_TYPE,
             mintedTokens: "0x3e8",
@@ -185,7 +184,7 @@ describe("Foundry output validation", () => {
     });
 
     it("should fail when Melted Tokens are greater than Minted Tokens.", () => {
-        const foundryOutput = cloneOutput<IFoundryOutput>(mockFoundryOutput);
+        const foundryOutput = cloneFoundryOutput(mockFoundryOutput);
         foundryOutput.tokenScheme = {
             type: SIMPLE_TOKEN_SCHEME_TYPE,
             mintedTokens: "0x3e8",
@@ -204,7 +203,7 @@ describe("Foundry output validation", () => {
     });
 
     it("should fail when Token Maximum Supply is equal to zero.", () => {
-        const foundryOutput = cloneOutput<IFoundryOutput>(mockFoundryOutput);
+        const foundryOutput = cloneFoundryOutput(mockFoundryOutput);
         foundryOutput.tokenScheme = {
             type: SIMPLE_TOKEN_SCHEME_TYPE,
             mintedTokens: "0x0",
