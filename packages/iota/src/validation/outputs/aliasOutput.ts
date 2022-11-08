@@ -1,5 +1,6 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
+import { HexHelper } from "@iota/util.js";
 import bigInt from "big-integer";
 import { ALIAS_ADDRESS_TYPE } from "../../models/addresses/IAliasAddress";
 import { ISSUER_FEATURE_TYPE } from "../../models/features/IIssuerFeature";
@@ -144,7 +145,10 @@ export function validateAliasOutput(aliasOutput: IAliasOutput, protocolInfo: INo
         });
     }
 
-    if (aliasOutput.stateMetadata && (aliasOutput.stateMetadata.length / 2) > MAX_METADATA_LENGTH) {
+    if (
+        aliasOutput.stateMetadata &&
+        (HexHelper.stripPrefix(aliasOutput.stateMetadata).length / 2) > MAX_METADATA_LENGTH
+    ) {
         results.push({
             isValid: false,
             errors: ["Alias output state metadata length must not be greater than max metadata length."]

@@ -236,4 +236,13 @@ describe("Alias output validation", () => {
         expect(result.isValid).toEqual(false);
         expect(result.errors).toEqual(expect.arrayContaining(["Alias output Alias ID is zeroed out, State Index and Foundry Counter must be 0."]));
     });
+
+    it("should fail when state metadata length is greater than max metadata length", () => {
+        const aliasOutput = cloneAliasOutput(mockAliasOutput);
+        aliasOutput.stateMetadata = "1".repeat(2 * 8193);
+
+        const result = validateAliasOutput(aliasOutput, protocolInfoMock);
+        expect(result.isValid).toEqual(false);
+        expect(result.errors).toEqual(expect.arrayContaining(["Alias output state metadata length must not be greater than max metadata length."]));
+    });
 });
