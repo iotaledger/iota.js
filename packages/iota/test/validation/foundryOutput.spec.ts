@@ -125,7 +125,7 @@ describe("Foundry output validation", () => {
         ));
     });
 
-    it("should fail when the immputable feature is of unsupported type", () => {
+    it("should fail when the immutable feature is of unsupported type", () => {
         const foundryOutput = cloneFoundryOutput(mockFoundryOutput);
         foundryOutput.immutableFeatures = [
             {
