@@ -3790,7 +3790,7 @@ Send a transfer from the balance on the seed.
 | :------ | :------ | :------ |
 | `client` | `string` \| [`IClient`](interfaces/IClient.md) | The client or node endpoint to send the transfer with. |
 | `inputsAndSignatureKeyPairs` | { `input`: [`IUTXOInput`](interfaces/IUTXOInput.md) ; `addressKeyPair`: [`IKeyPair`](interfaces/IKeyPair.md) ; `consumingOutput`: [`OutputTypes`](api.md#outputtypes)  }[] | The inputs with the signature key pairs needed to sign transfers. |
-| `outputs` | { `address`: `string` ; `addressType`: `number` ; `amount`: `BigInteger`  }[] | The outputs to send. |
+| `outputs` | { `address`: `string` ; `addressType`: `number` ; `amount`: `BigInteger` ; `nativeTokens?`: [`INativeToken`](interfaces/INativeToken.md)[] ; `fatures?`: [`FeatureTypes`](api.md#featuretypes)[]  }[] | The outputs to send. |
 | `taggedData?` | `Object` | Optional tagged data to associate with the transaction. |
 | `taggedData.tag?` | `string` \| `Uint8Array` | Optional tag. |
 | `taggedData.data?` | `string` \| `Uint8Array` | Optional data. |
@@ -3817,7 +3817,7 @@ Build a transaction payload.
 | :------ | :------ | :------ |
 | `networkId` | `string` | The network id we are sending the payload on. |
 | `inputsAndSignatureKeyPairs` | { `input`: [`IUTXOInput`](interfaces/IUTXOInput.md) ; `addressKeyPair`: [`IKeyPair`](interfaces/IKeyPair.md) ; `consumingOutput`: [`OutputTypes`](api.md#outputtypes)  }[] | The inputs with the signature key pairs needed to sign transfers. |
-| `outputs` | { `address`: `string` ; `addressType`: `number` ; `amount`: `BigInteger`  }[] | The outputs to send. |
+| `outputs` | { `address`: `string` ; `addressType`: `number` ; `amount`: `BigInteger` ; `nativeTokens?`: [`INativeToken`](interfaces/INativeToken.md)[] ; `fatures?`: [`FeatureTypes`](api.md#featuretypes)[]  }[] | The outputs to send. |
 | `taggedData?` | `Object` | Optional tagged data to associate with the transaction. |
 | `taggedData.tag?` | `string` \| `Uint8Array` | Optional tag. |
 | `taggedData.data?` | `string` \| `Uint8Array` | Optional index data. |
