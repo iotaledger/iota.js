@@ -14,18 +14,18 @@ export function validateSimpleTokenScheme(tokenScheme: ISimpleTokenScheme): IVal
     let result: IValidationResult = { isValid: true };
 
     if (tokenScheme.type !== SIMPLE_TOKEN_SCHEME_TYPE) {
-        result = failValidation(result, "Token scheme type must denote a Simple token scheme");
+        result = failValidation(result, "Token scheme type must denote a Simple token scheme.");
     }
 
     const minted = HexHelper.toBigInt256(tokenScheme.mintedTokens);
     const melted = HexHelper.toBigInt256(tokenScheme.meltedTokens);
     const tokenSupply = minted.minus(melted);
     if (tokenSupply.gt(HexHelper.toBigInt256(tokenScheme.maximumSupply))) {
-        result = failValidation(result, "Minted Tokens - Melted Tokens must not be greater than Maximum Supply");
+        result = failValidation(result, "The difference of Minted Tokens and Melted Tokens must not be greater than Maximum Supply.");
     }
 
     if (HexHelper.toBigInt256(tokenScheme.meltedTokens).gt(HexHelper.toBigInt256(tokenScheme.mintedTokens))) {
-        result = failValidation(result, "Melted Tokens must not be greater than Minted Tokens");
+        result = failValidation(result, "Melted Tokens must not be greater than Minted Tokens.");
     }
 
     if (HexHelper.toBigInt256(tokenScheme.maximumSupply).leq(bigInt.zero)) {

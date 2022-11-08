@@ -1,111 +1,222 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import { ALIAS_ADDRESS_TYPE } from "../../src/models/addresses/IAliasAddress";
-import { METADATA_FEATURE_TYPE } from "../../src/models/features/IMetadataFeature";
-import type { INodeInfoProtocol } from "../../src/models/info/INodeInfoProtocol";
-import { FOUNDRY_OUTPUT_TYPE, IFoundryOutput } from "../../src/models/outputs/IFoundryOutput";
+import { ED25519_ADDRESS_TYPE } from "../../src/models/addresses/IEd25519Address";
+import { TAG_FEATURE_TYPE } from "../../src/models/features/ITagFeature";
 import { SIMPLE_TOKEN_SCHEME_TYPE } from "../../src/models/tokenSchemes/ISimpleTokenScheme";
-import { IMMUTABLE_ALIAS_UNLOCK_CONDITION_TYPE } from "../../src/models/unlockConditions/IImmutableAliasUnlockCondition";
+import { STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE } from "../../src/models/unlockConditions/IStateControllerAddressUnlockCondition";
 import { validateFoundryOutput } from "../../src/validation/outputs/foundryOutput";
-
-const MAX_FOUNDRY_UNLOCK_CONDITIONS_COUNT = 1;
-/**
- * The protocol info.
- */
-const protocolInfo: INodeInfoProtocol = {
-    "version": 2,
-    "networkName": "testnet",
-    "bech32Hrp": "rms",
-    "minPowScore": 1500,
-    "rentStructure": {
-        "vByteCost": 100,
-        "vByteFactorData": 1,
-        "vByteFactorKey": 10
-    },
-    "tokenSupply": "1450896407249092"
-};
+import { cloneFoundryOutput } from "./testUtils";
+import { mockFoundryOutput, protocolInfoMock } from "./testValidationMocks";
 
 describe("Foundry output validation", () => {
-    test("should pass with valid foundry output", () => {
-        const output: IFoundryOutput = {
-            type: FOUNDRY_OUTPUT_TYPE,
-            amount: "455655655",
-            serialNumber: 1,
-            nativeTokens: [
-                {
-                    id: "0x08d8e532f6138fd753cc5f5fc2f3fb13e8d6df3c4041429232ad3b7f8b7e7d95740100000000",
-                    amount: "15"
-                },
-                {
-                    id: "0x08d8e532f6138fd753cc5f5fc2f3fb13e8d6df3c4041429232ad3b7f8b7e7d95740200000000",
-                    amount: "23"
-                }
-            ],
-            unlockConditions: [
-                {
-                    type: IMMUTABLE_ALIAS_UNLOCK_CONDITION_TYPE,
-                    address: {
-                        type: ALIAS_ADDRESS_TYPE,
-                        aliasId: "0x6920b176f613ec7be59e68fc68f597eb3393af80b176f613ec7be59e68fc68f5"
-                    }
-                }
-            ],
-            immutableFeatures: [
-                {
-                    type: METADATA_FEATURE_TYPE,
-                    data: "0x546869732069732077686572652074686520696d6d757461626c65206d6574616461746120676f6573"
-                }
-            ],
-            features: [
-                {
-                    type: METADATA_FEATURE_TYPE,
-                    data: "0x546869732069732077686572652074686520696d6d757461626c65206d6574616461746120676f6573"
-                }
-            ],
-            tokenScheme: {
-                type: SIMPLE_TOKEN_SCHEME_TYPE,
-                mintedTokens: "0x3e8",
-                meltedTokens: "0x0",
-                maximumSupply: "0x2710"
-            }
-        };
+    it("should pass with valid foundry output", () => {
+        const foundryOutput = cloneFoundryOutput(mockFoundryOutput);
 
-        const result = validateFoundryOutput(output, protocolInfo);
+        const result = validateFoundryOutput(foundryOutput, protocolInfoMock);
         expect(result.isValid).toEqual(true);
     });
 
-    test("should fail with invalid foundry output", () => {
-        const output: IFoundryOutput = {
-            type: FOUNDRY_OUTPUT_TYPE,
-            amount: "0",
-            serialNumber: 1,
-            unlockConditions: [],
-            immutableFeatures: [
-                {
-                    type: METADATA_FEATURE_TYPE,
-                    data: "0x546869732069732077686572652074686520696d6d757461626c65206d6574616461746120676f6573"
-                }
-            ],
-            features: [
-                {
-                    type: METADATA_FEATURE_TYPE,
-                    data: "0x546869732069732077686572652074686520696d6d757461626c65206d6574616461746120676f6573"
-                }
-            ],
-            tokenScheme: {
-                type: SIMPLE_TOKEN_SCHEME_TYPE,
-                mintedTokens: "0x3e8",
-                meltedTokens: "0x3e9",
-                maximumSupply: "0x2710"
+    it("should fail when foundry output amount is zero", () => {
+        const foundryOutput = cloneFoundryOutput(mockFoundryOutput);
+        foundryOutput.amount = "0";
+
+        const result = validateFoundryOutput(foundryOutput, protocolInfoMock);
+        expect(result.isValid).toEqual(false);
+        expect(result.errors).toBeDefined();
+        expect(result.errors?.length).toEqual(1);
+        expect(result.errors).toEqual(expect.arrayContaining(
+            ["Foundry output amount field must be larger than zero."]
+        ));
+    });
+
+    it("should fail when the amount is larger than max token supply", () => {
+        const foundryOutput = cloneFoundryOutput(mockFoundryOutput);
+        // max is 1450896407249092
+        foundryOutput.amount = "1450896407249095";
+
+        const result = validateFoundryOutput(foundryOutput, protocolInfoMock);
+
+        expect(result.isValid).toEqual(false);
+        expect(result.errors).toBeDefined();
+        expect(result.errors?.length).toEqual(1);
+        expect(result.errors).toEqual(expect.arrayContaining(
+            ["Foundry output amount field must not be larger than max token supply."]
+        ));
+    });
+
+    it("should fail when unlock conditions count is exceeded", () => {
+        const foundryOutput = cloneFoundryOutput(mockFoundryOutput);
+        foundryOutput.unlockConditions.push({
+            type: STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE,
+            address: {
+                type: ED25519_ADDRESS_TYPE,
+                pubKeyHash: "0x6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
             }
+        });
+
+        const result = validateFoundryOutput(foundryOutput, protocolInfoMock);
+
+        expect(result.isValid).toEqual(false);
+        expect(result.errors).toBeDefined();
+        expect(result.errors?.length).toEqual(1);
+        expect(result.errors).toEqual(expect.arrayContaining(
+            ["Foundry output unlock conditions count must be equal to 1."]
+        ));
+    });
+
+    it("should fail when the unlock condition is of unsupported type", () => {
+        const foundryOutput = cloneFoundryOutput(mockFoundryOutput);
+        foundryOutput.unlockConditions = [
+            {
+                type: STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE,
+                address: {
+                    type: ED25519_ADDRESS_TYPE,
+                    pubKeyHash: "0x6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
+                }
+            }
+        ];
+
+        const result = validateFoundryOutput(foundryOutput, protocolInfoMock);
+
+        expect(result.isValid).toEqual(false);
+        expect(result.errors).toBeDefined();
+        expect(result.errors?.length).toEqual(1);
+        expect(result.errors).toEqual(expect.arrayContaining(
+            ["Foundry output Immutable Alias Address Unlock Condition must be present."]
+        ));
+    });
+
+    it("should fail when the feature is of unsupported type", () => {
+        const foundryOutput = cloneFoundryOutput(mockFoundryOutput);
+        foundryOutput.features = [
+            {
+                type: TAG_FEATURE_TYPE,
+                tag: "0x6920b176f613ec7be59e68fc68f597eb"
+            }
+        ];
+
+        const result = validateFoundryOutput(foundryOutput, protocolInfoMock);
+
+        expect(result.isValid).toEqual(false);
+        expect(result.errors).toBeDefined();
+        expect(result.errors?.length).toEqual(1);
+        expect(result.errors).toEqual(expect.arrayContaining(
+            ["Foundry output feature type of a feature must define one of the following types: Metadata Feature."]
+        ));
+    });
+
+    it("should fail when the features count is exceeded", () => {
+        const foundryOutput = cloneFoundryOutput(mockFoundryOutput);
+        foundryOutput.features?.push({
+            type: TAG_FEATURE_TYPE,
+            tag: "0x6920b176f613ec7be59e68fc68f597eb"
+        });
+
+        const result = validateFoundryOutput(foundryOutput, protocolInfoMock);
+
+        expect(result.isValid).toEqual(false);
+        expect(result.errors).toBeDefined();
+        expect(result.errors?.length).toEqual(2);
+        expect(result.errors).toEqual(expect.arrayContaining(
+            [
+                "Max number of features exceeded (1).",
+                "Foundry output feature type of a feature must define one of the following types: Metadata Feature."
+            ]
+        ));
+    });
+
+    it("should fail when the immutable feature is of unsupported type", () => {
+        const foundryOutput = cloneFoundryOutput(mockFoundryOutput);
+        foundryOutput.immutableFeatures = [
+            {
+                type: TAG_FEATURE_TYPE,
+                tag: "0x6920b176f613ec7be59e68fc68f597eb"
+            }
+        ];
+
+        const result = validateFoundryOutput(foundryOutput, protocolInfoMock);
+
+        expect(result.isValid).toEqual(false);
+        expect(result.errors).toBeDefined();
+        expect(result.errors?.length).toEqual(1);
+        expect(result.errors).toEqual(expect.arrayContaining(
+            ["Foundry output immutable feature type of a feature must define one of the following types: Metadata Feature."]
+        ));
+    });
+
+    it("should fail when the immutable features count is exceeded", () => {
+        const foundryOutput = cloneFoundryOutput(mockFoundryOutput);
+        foundryOutput.immutableFeatures?.push({
+            type: TAG_FEATURE_TYPE,
+            tag: "0x6920b176f613ec7be59e68fc68f597eb"
+        });
+
+        const result = validateFoundryOutput(foundryOutput, protocolInfoMock);
+
+        expect(result.isValid).toEqual(false);
+        expect(result.errors).toBeDefined();
+        expect(result.errors?.length).toEqual(2);
+        expect(result.errors).toEqual(expect.arrayContaining(
+            [
+                "Max number of features exceeded (1).",
+                "Foundry output immutable feature type of a feature must define one of the following types: Metadata Feature."
+            ]
+        ));
+    });
+
+    it("should fail when difference of Minted Tokens and Melted Tokens is greater than Maximum Supply.", () => {
+        const foundryOutput = cloneFoundryOutput(mockFoundryOutput);
+        foundryOutput.tokenScheme = {
+            type: SIMPLE_TOKEN_SCHEME_TYPE,
+            mintedTokens: "0x3e8",
+            meltedTokens: "0x0",
+            maximumSupply: "0x2"
         };
 
-        const result = validateFoundryOutput(output, protocolInfo);
+        const result = validateFoundryOutput(foundryOutput, protocolInfoMock);
+
         expect(result.isValid).toEqual(false);
-        expect(result.errors).toEqual(expect.arrayContaining([
-            "Foundry output amount field must be larger than zero.",
-            `Foundry output unlock conditions count must be equal to ${MAX_FOUNDRY_UNLOCK_CONDITIONS_COUNT}.`
-        ]));
+        expect(result.errors).toBeDefined();
+        expect(result.errors?.length).toEqual(1);
+        expect(result.errors).toEqual(expect.arrayContaining(
+            ["The difference of Minted Tokens and Melted Tokens must not be greater than Maximum Supply."]
+        ));
+    });
+
+    it("should fail when Melted Tokens are greater than Minted Tokens.", () => {
+        const foundryOutput = cloneFoundryOutput(mockFoundryOutput);
+        foundryOutput.tokenScheme = {
+            type: SIMPLE_TOKEN_SCHEME_TYPE,
+            mintedTokens: "0x3e8",
+            meltedTokens: "0x3e9",
+            maximumSupply: "0x2710"
+        };
+
+        const result = validateFoundryOutput(foundryOutput, protocolInfoMock);
+
+        expect(result.isValid).toEqual(false);
+        expect(result.errors).toBeDefined();
+        expect(result.errors?.length).toEqual(1);
+        expect(result.errors).toEqual(expect.arrayContaining(
+            ["Melted Tokens must not be greater than Minted Tokens."]
+        ));
+    });
+
+    it("should fail when Token Maximum Supply is equal to zero.", () => {
+        const foundryOutput = cloneFoundryOutput(mockFoundryOutput);
+        foundryOutput.tokenScheme = {
+            type: SIMPLE_TOKEN_SCHEME_TYPE,
+            mintedTokens: "0x0",
+            meltedTokens: "0x0",
+            maximumSupply: "0x0"
+        };
+        const result = validateFoundryOutput(foundryOutput, protocolInfoMock);
+
+        expect(result.isValid).toEqual(false);
+        expect(result.errors).toBeDefined();
+        expect(result.errors?.length).toEqual(1);
+        expect(result.errors).toEqual(expect.arrayContaining(
+            ["Token Maximum Supply must be larger than zero."]
+        ));
     });
 });
-
