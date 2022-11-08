@@ -21,7 +21,7 @@ describe("Alias output validation", () => {
         expect(result.isValid).toEqual(true);
     });
 
-    it("should fail with invalid alias output", () => {
+    it("should fail when the output amount is zero", () => {
         const aliasOutput = cloneAliasOutput(mockAliasOutput);
         aliasOutput.amount = "0";
 
@@ -47,26 +47,17 @@ describe("Alias output validation", () => {
         ));
     });
 
-    it("should fail when unlocks count is not equal to 2", () => {
+    it("should fail when unlock conditions count is not equal to 2", () => {
         const aliasOutput = cloneAliasOutput(mockAliasOutput);
-        aliasOutput.unlockConditions.push({
-            type: IMMUTABLE_ALIAS_UNLOCK_CONDITION_TYPE,
-            address: {
-                type: ALIAS_ADDRESS_TYPE,
-                aliasId: "0x7ffec9e1233204d9c6dce6812b1539ee96af691ca2e4d9065daa85907d33e5d3"
-            }
-        });
+        aliasOutput.unlockConditions = [];
 
         const result = validateAliasOutput(aliasOutput, protocolInfoMock);
 
         expect(result.isValid).toEqual(false);
         expect(result.errors).toBeDefined();
-        expect(result.errors?.length).toEqual(2);
+        expect(result.errors?.length).toEqual(1);
         expect(result.errors).toEqual(expect.arrayContaining(
-            [
-                "Unlock conditions count must be equal to 2.",
-                "Alias output unlock condition type of an unlock condition must define one of the following types: State Controller Address Unlock Condition and Governor Address Unlock Condition."
-            ]
+            ["Alias output unlock conditions count must be equal to 2."]
         ));
     });
 
@@ -235,30 +226,14 @@ describe("Alias output validation", () => {
         }
     );
 
-    it("should fail on when alias id is zeroed out and state index and foundry counter are not equal to zero", () => {
+    it("should fail when alias id is zeroed out but state index and foundry counter are not equal to zero", () => {
         const aliasOutput = cloneAliasOutput(mockAliasOutput);
         aliasOutput.aliasId = "0x0000000000000000000000000000000000000000000000000000000000000000";
         aliasOutput.stateIndex = 1;
         aliasOutput.foundryCounter = 1;
-        aliasOutput.unlockConditions = [
-            {
-                type: STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE,
-                address: {
-                    type: ALIAS_ADDRESS_TYPE,
-                    aliasId: "0x7ffec9e1233204d9c6dce6812b1539ee96af691ca2e4d9065daa85907d33e5d3"
-                }
-            },
-            {
-                type: GOVERNOR_ADDRESS_UNLOCK_CONDITION_TYPE,
-                address: {
-                    type: ALIAS_ADDRESS_TYPE,
-                    aliasId: "0x7ffec9e1233204d9c6dce6812b1539ee96af691ca2e4d9065daa85907d33e5d3"
-                }
-            }
-        ];
 
         const result = validateAliasOutput(aliasOutput, protocolInfoMock);
         expect(result.isValid).toEqual(false);
-        expect(result.errors).toEqual(expect.arrayContaining(["When Alias ID is zeroed out, State Index and Foundry Counter must be 0."]));
+        expect(result.errors).toEqual(expect.arrayContaining(["Alias output Alias ID is zeroed out, State Index and Foundry Counter must be 0."]));
     });
 });
