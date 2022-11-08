@@ -1,8 +1,8 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 import type { IAliasOutput } from "../../src/models/outputs/IAliasOutput";
-import type { IFoundryOutput } from "../../src/models/outputs/IFoundryOutput";
 import type { IBasicOutput } from "../../src/models/outputs/IBasicOutput";
+import type { IFoundryOutput } from "../../src/models/outputs/IFoundryOutput";
 import type { INftOutput } from "../../src/models/outputs/INftOutput";
 
 /**
