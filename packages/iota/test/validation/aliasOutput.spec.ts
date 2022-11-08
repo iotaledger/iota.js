@@ -1,9 +1,14 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 import { ALIAS_ADDRESS_TYPE } from "../../src/models/addresses/IAliasAddress";
+import { ED25519_ADDRESS_TYPE } from "../../src/models/addresses/IEd25519Address";
+import { ISSUER_FEATURE_TYPE } from "../../src/models/features/IIssuerFeature";
+import { METADATA_FEATURE_TYPE } from "../../src/models/features/IMetadataFeature";
+import { SENDER_FEATURE_TYPE } from "../../src/models/features/ISenderFeature";
+import { TAG_FEATURE_TYPE } from "../../src/models/features/ITagFeature";
 import { GOVERNOR_ADDRESS_UNLOCK_CONDITION_TYPE } from "../../src/models/unlockConditions/IGovernorAddressUnlockCondition";
+import { IMMUTABLE_ALIAS_UNLOCK_CONDITION_TYPE } from "../../src/models/unlockConditions/IImmutableAliasUnlockCondition";
 import { STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE } from "../../src/models/unlockConditions/IStateControllerAddressUnlockCondition";
-import { TIMELOCK_UNLOCK_CONDITION_TYPE } from "../../src/models/unlockConditions/ITimelockUnlockCondition";
 import { validateAliasOutput } from "../../src/validation/outputs/aliasOutput";
 import { cloneAliasOutput } from "./testUtils";
 import { mockAliasOutput, protocolInfoMock } from "./testValidationMocks";
@@ -45,25 +50,34 @@ describe("Alias output validation", () => {
     it("should fail when unlocks count is not equal to 2", () => {
         const aliasOutput = cloneAliasOutput(mockAliasOutput);
         aliasOutput.unlockConditions.push({
-            type: TIMELOCK_UNLOCK_CONDITION_TYPE,
-            unixTime: 123123123123
+            type: IMMUTABLE_ALIAS_UNLOCK_CONDITION_TYPE,
+            address: {
+                type: ALIAS_ADDRESS_TYPE,
+                aliasId: "0x7ffec9e1233204d9c6dce6812b1539ee96af691ca2e4d9065daa85907d33e5d3"
+            }
         });
 
         const result = validateAliasOutput(aliasOutput, protocolInfoMock);
 
         expect(result.isValid).toEqual(false);
         expect(result.errors).toBeDefined();
-        expect(result.errors?.length).toEqual(1);
+        expect(result.errors?.length).toEqual(2);
         expect(result.errors).toEqual(expect.arrayContaining(
-            ["Unlock conditions count must be equal to 2."]
+            [
+                "Unlock conditions count must be equal to 2.",
+                "Alias output unlock condition type of an unlock condition must define one of the following types: State Controller Address Unlock Condition and Governor Address Unlock Condition."
+            ]
         ));
     });
 
     it("should fail when one of the unlocks is of unsupported type", () => {
         const aliasOutput = cloneAliasOutput(mockAliasOutput);
         aliasOutput.unlockConditions[1] = {
-            type: TIMELOCK_UNLOCK_CONDITION_TYPE,
-            unixTime: 123123123123
+            type: IMMUTABLE_ALIAS_UNLOCK_CONDITION_TYPE,
+            address: {
+                type: ALIAS_ADDRESS_TYPE,
+                aliasId: "0x7ffec9e1233204d9c6dce6812b1539ee96af691ca2e4d9065daa85907d33e5d3"
+            }
         };
 
         const result = validateAliasOutput(aliasOutput, protocolInfoMock);
@@ -73,6 +87,128 @@ describe("Alias output validation", () => {
         expect(result.errors?.length).toEqual(1);
         expect(result.errors).toEqual(expect.arrayContaining(
             ["Alias output unlock condition type of an unlock condition must define one of the following types: State Controller Address Unlock Condition and Governor Address Unlock Condition."]
+        ));
+    });
+
+    it("should fail when the unlocks are not ordered in ascending order by type", () => {
+        const aliasOutput = cloneAliasOutput(mockAliasOutput);
+        aliasOutput.unlockConditions = [
+            {
+                type: GOVERNOR_ADDRESS_UNLOCK_CONDITION_TYPE,
+                address: {
+                    type: ALIAS_ADDRESS_TYPE,
+                    aliasId: "0x7ffec9e1233204d9c6dce6812b1539ee96af691ca2e4d9065daa85907d33e5d3"
+                }
+            },
+            {
+                type: STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE,
+                address: {
+                    type: ALIAS_ADDRESS_TYPE,
+                    aliasId: "0x7ffec9e1233204d9c6dce6812b1539ee96af691ca2e4d9065daa85907d33e5d3"
+                }
+            }
+        ];
+
+        const result = validateAliasOutput(aliasOutput, protocolInfoMock);
+
+        expect(result.isValid).toEqual(false);
+        expect(result.errors).toBeDefined();
+        expect(result.errors?.length).toEqual(1);
+        expect(result.errors).toEqual(expect.arrayContaining(
+            ["Alias output Unlock Conditions must be sorted in ascending order based on their Unlock Condition Type."]
+        ));
+    });
+
+    it("should fail when one of the features is of unsupported type", () => {
+        const aliasOutput = cloneAliasOutput(mockAliasOutput);
+        aliasOutput.features = [
+            {
+                type: ISSUER_FEATURE_TYPE,
+                address: {
+                    type: ALIAS_ADDRESS_TYPE,
+                    aliasId: aliasOutput.aliasId
+                }
+            }
+        ];
+
+        const result = validateAliasOutput(aliasOutput, protocolInfoMock);
+
+        expect(result.isValid).toEqual(false);
+        expect(result.errors).toBeDefined();
+        expect(result.errors?.length).toEqual(1);
+        expect(result.errors).toEqual(expect.arrayContaining(
+            ["Alias output feature type of a feature must define one of the following types: Sender Feature or Metadata Feature."]
+        ));
+    });
+
+    it("should fail when the features are not ordered in ascending order by type", () => {
+        const aliasOutput = cloneAliasOutput(mockAliasOutput);
+        aliasOutput.features = [
+            {
+                type: METADATA_FEATURE_TYPE,
+                data: "0xthisissomefakedataandnotahex"
+            },
+            {
+                type: SENDER_FEATURE_TYPE,
+                address: {
+                    type: 0,
+                    pubKeyHash: "0x6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
+                }
+            }
+        ];
+
+        const result = validateAliasOutput(aliasOutput, protocolInfoMock);
+
+        expect(result.isValid).toEqual(false);
+        expect(result.errors).toBeDefined();
+        expect(result.errors?.length).toEqual(1);
+        expect(result.errors).toEqual(expect.arrayContaining(
+            ["Alias output Features must be sorted in ascending order based on their Feature Type."]
+        ));
+    });
+
+    it("should fail when one of the immutable features is of unsupported type", () => {
+        const aliasOutput = cloneAliasOutput(mockAliasOutput);
+        if (aliasOutput.immutableFeatures) {
+            aliasOutput.immutableFeatures[1] = {
+                type: TAG_FEATURE_TYPE,
+                tag: "0xblablasometag"
+            };
+        }
+
+        const result = validateAliasOutput(aliasOutput, protocolInfoMock);
+
+        expect(result.isValid).toEqual(false);
+        expect(result.errors).toBeDefined();
+        expect(result.errors?.length).toEqual(1);
+        expect(result.errors).toEqual(expect.arrayContaining(
+            ["Alias output feature type of an Immutable Feature must define one of the following types: Issuer Feature or Metadata Feature."]
+        ));
+    });
+
+    it("should fail when the immutable features are not ordered in ascending order by type", () => {
+        const aliasOutput = cloneAliasOutput(mockAliasOutput);
+        aliasOutput.immutableFeatures = [
+            {
+                type: METADATA_FEATURE_TYPE,
+                data: "0xblablasomedata"
+            },
+            {
+                type: ISSUER_FEATURE_TYPE,
+                address: {
+                    type: ED25519_ADDRESS_TYPE,
+                    pubKeyHash: "0x6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
+                }
+            }
+        ];
+
+        const result = validateAliasOutput(aliasOutput, protocolInfoMock);
+
+        expect(result.isValid).toEqual(false);
+        expect(result.errors).toBeDefined();
+        expect(result.errors?.length).toEqual(1);
+        expect(result.errors).toEqual(expect.arrayContaining(
+            ["Alias output Immutable Features must be sorted in ascending order based on their Immutable Feature Type."]
         ));
     });
 

@@ -2,6 +2,9 @@
 // SPDX-License-Identifier: Apache-2.0
 import bigInt from "big-integer";
 import { ALIAS_ADDRESS_TYPE } from "../../models/addresses/IAliasAddress";
+import { ISSUER_FEATURE_TYPE } from "../../models/features/IIssuerFeature";
+import { METADATA_FEATURE_TYPE } from "../../models/features/IMetadataFeature";
+import { SENDER_FEATURE_TYPE } from "../../models/features/ISenderFeature";
 import type { INodeInfoProtocol } from "../../models/info/INodeInfoProtocol";
 import { ALIAS_OUTPUT_TYPE, IAliasOutput } from "../../models/outputs/IAliasOutput";
 import { GOVERNOR_ADDRESS_UNLOCK_CONDITION_TYPE } from "../../models/unlockConditions/IGovernorAddressUnlockCondition";
@@ -10,6 +13,7 @@ import { validateFeatures, MAX_METADATA_LENGTH } from "../features/features";
 import { validateNativeTokens } from "../nativeTokens";
 import { IValidationResult, mergeValidationResults } from "../result";
 import { validateUnlockConditions } from "../unlockConditions/unlockConditions";
+import { validateAscendingOrder } from "../validationUtils";
 
 /**
  * Zero alias id.
@@ -19,6 +23,10 @@ const ZERO_ALIAS_ID = "0x0000000000000000000000000000000000000000000000000000000
  * Maximum number of features that alias output can have.
  */
 const MAX_ALIAS_FEATURES_COUNT = 2;
+/**
+ * Maximum number of immutable features that an nft output could have.
+ */
+const MAX_ALIAS_IMMUTABLE_FEATURES_COUNT = 2;
 /**
  * Maximum number of unlock conditions that alias output can have.
  */
@@ -62,8 +70,13 @@ export function validateAliasOutput(aliasOutput: IAliasOutput, protocolInfo: INo
     }
 
     if (aliasOutput.unlockConditions) {
-        if (!aliasOutput.unlockConditions.some(uC => uC.type === STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE) ||
-            !aliasOutput.unlockConditions.some(uC => uC.type === GOVERNOR_ADDRESS_UNLOCK_CONDITION_TYPE)) {
+        if (
+            !aliasOutput.unlockConditions.every(
+                uC =>
+                    uC.type === STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE ||
+                    uC.type === GOVERNOR_ADDRESS_UNLOCK_CONDITION_TYPE
+            )
+        ) {
             results.push({
                 isValid: false,
                 errors: ["Alias output unlock condition type of an unlock condition must define one of the following types: State Controller Address Unlock Condition and Governor Address Unlock Condition."]
@@ -81,7 +94,7 @@ export function validateAliasOutput(aliasOutput: IAliasOutput, protocolInfo: INo
                 });
             }
         });
-
+        results.push(validateAscendingOrder(aliasOutput.unlockConditions, "Alias output", "Unlock Condition"));
         results.push(validateUnlockConditions(aliasOutput.unlockConditions));
     }
 
@@ -89,12 +102,40 @@ export function validateAliasOutput(aliasOutput: IAliasOutput, protocolInfo: INo
         results.push(validateNativeTokens(aliasOutput.nativeTokens));
     }
 
-    if (aliasOutput.features) {
+    if (aliasOutput.features && aliasOutput.features.length > 0) {
+        if (
+            !aliasOutput.features.every(
+                feature =>
+                    feature.type === SENDER_FEATURE_TYPE ||
+                    feature.type === METADATA_FEATURE_TYPE
+            )
+        ) {
+            results.push({
+                isValid: false,
+                errors: ["Alias output feature type of a feature must define one of the following types: Sender Feature or Metadata Feature."]
+            });
+        }
+
+        results.push(validateAscendingOrder(aliasOutput.features, "Alias output", "Feature"));
         results.push(validateFeatures(aliasOutput.features, MAX_ALIAS_FEATURES_COUNT));
     }
 
-    if (aliasOutput.immutableFeatures) {
-        results.push(validateFeatures(aliasOutput.immutableFeatures, MAX_ALIAS_FEATURES_COUNT));
+    if (aliasOutput.immutableFeatures && aliasOutput.immutableFeatures.length > 0) {
+        if (
+            !aliasOutput.immutableFeatures.every(
+                immutableFeature =>
+                    immutableFeature.type === ISSUER_FEATURE_TYPE ||
+                    immutableFeature.type === METADATA_FEATURE_TYPE
+            )
+        ) {
+            results.push({
+                isValid: false,
+                errors: ["Alias output feature type of an Immutable Feature must define one of the following types: Issuer Feature or Metadata Feature."]
+            });
+        }
+
+        results.push(validateAscendingOrder(aliasOutput.immutableFeatures, "Alias output", "Immutable Feature"));
+        results.push(validateFeatures(aliasOutput.immutableFeatures, MAX_ALIAS_IMMUTABLE_FEATURES_COUNT));
     }
 
     if (aliasOutput.aliasId === ZERO_ALIAS_ID && (aliasOutput.stateIndex !== 0 || aliasOutput.foundryCounter !== 0)) {
