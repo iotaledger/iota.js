@@ -24,7 +24,7 @@ const MAX_FOUNDRY_FEATURES_COUNT = 1;
 
 /**
  * Validate a foundry output.
- * @param foundryOutput The object to validate.
+ * @param foundryOutput The output to validate.
  * @param protocolInfo The Protocol Info.
  * @returns The validation result.
  */

@@ -89,13 +89,11 @@ export function validateAliasOutput(aliasOutput: IAliasOutput, protocolInfo: INo
         results.push(validateNativeTokens(aliasOutput.nativeTokens));
     }
 
-    if (aliasOutput.features) {
-        results.push(validateFeatures(aliasOutput.features, MAX_ALIAS_FEATURES_COUNT));
-    }
+    results.push(validateFeatures(aliasOutput.features));
 
-    if (aliasOutput.immutableFeatures) {
-        results.push(validateFeatures(aliasOutput.immutableFeatures, MAX_ALIAS_FEATURES_COUNT));
-    }
+    
+    results.push(validateFeatures(aliasOutput.immutableFeatures));
+    
 
     if (aliasOutput.aliasId === ZERO_ALIAS_ID && (aliasOutput.stateIndex !== 0 || aliasOutput.foundryCounter !== 0)) {
         results.push({

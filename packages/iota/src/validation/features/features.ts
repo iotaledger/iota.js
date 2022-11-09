@@ -10,7 +10,7 @@ import { ITagFeature, TAG_FEATURE_TYPE } from "../../models/features/ITagFeature
 import type { ITypeBase } from "../../models/ITypeBase";
 import { validateAddress } from "../addresses/addresses";
 import { IValidationResult, mergeValidationResults, failValidation } from "../result";
-import { validateDistinct } from "../validationUtils";
+import { validateAscendingOrder, validateDistinct } from "../validationUtils";
 
 /**
  * The maximum length of a metadata binary representation.
@@ -23,24 +23,21 @@ export const MAX_METADATA_LENGTH: number = 8192;
  * @param maxFeaturesCount Maximum number of features.
  * @returns The validation result.
  */
-export function validateFeatures(features: FeatureTypes[], maxFeaturesCount: number): IValidationResult {
+export function validateFeatures(features?: FeatureTypes[]): IValidationResult {
     const results: IValidationResult[] = [];
 
-    if (features.length > maxFeaturesCount) {
-        results.push({
-            isValid: false,
-            errors: [`Max number of features exceeded (${maxFeaturesCount}).`]
-        });
-    }
-
-    results.push(
-        validateDistinct(features.map(feature => feature.type), "Output", "feature")
-    );
-
-    for (const feature of features) {
+    if (features) {
         results.push(
-            validateFeature(feature)
+            validateDistinct(features.map(feature => feature.type), "Output", "feature")
         );
+    
+        results.push(validateAscendingOrder(features, "Output", "Feature"));
+    
+        for (const feature of features) {
+            results.push(
+                validateFeature(feature)
+            );
+        }
     }
 
     return mergeValidationResults(...results);

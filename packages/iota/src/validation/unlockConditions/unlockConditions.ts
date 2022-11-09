@@ -13,12 +13,7 @@ import { TIMELOCK_UNLOCK_CONDITION_TYPE } from "../../models/unlockConditions/IT
 import type { UnlockConditionTypes } from "../../models/unlockConditions/unlockConditionTypes";
 import { validateAddress } from "../addresses/addresses";
 import { IValidationResult, mergeValidationResults, failValidation } from "../result";
-import { getMinStorageDeposit, validateDistinct } from "../validationUtils";
-
-/**
- * The max number of unlock conditions.
- */
-const MAX_UNLOCK_CONDITIONS: number = 7;
+import { getMinStorageDeposit, validateAscendingOrder, validateDistinct } from "../validationUtils";
 
 /**
  * Validate output unlock conditions.
@@ -34,16 +29,11 @@ export function validateUnlockConditions(
 ): IValidationResult {
     const results: IValidationResult[] = [];
 
-    if (unlockConditions.length > MAX_UNLOCK_CONDITIONS) {
-        results.push({
-            isValid: false,
-            errors: ["Max number of unlock conditions exceeded."]
-        });
-    }
-
     results.push(
         validateDistinct(unlockConditions.map(condition => condition.type), "Output", "unlock condition")
     );
+
+    results.push(validateAscendingOrder(unlockConditions, "Output", "Unlock Condition"));
 
     for (const unlockCondition of unlockConditions) {
         results.push(
