@@ -25,9 +25,9 @@ export function validateUnlocks(unlocks: UnlockTypes[]): IValidationResult {
         switch (unlock.type) {
             case SIGNATURE_UNLOCK_TYPE:
                 if (seenSignatures.some(sig =>
-                        sig.type === unlock.signature.type &&
-                        sig.publicKey === unlock.signature.publicKey &&
-                        sig.signature === unlock.signature.signature)
+                    sig.type === unlock.signature.type &&
+                    sig.publicKey === unlock.signature.publicKey &&
+                    sig.signature === unlock.signature.signature)
                 ) {
                     results.push({
                         isValid: false,
@@ -45,6 +45,10 @@ export function validateUnlocks(unlocks: UnlockTypes[]): IValidationResult {
                 results.push(validateReferenceUnlock(unlock, index, unlocks[unlock.reference]));
                 break;
             default:
+                results.push({
+                    isValid: false,
+                    errors: ["Unlock type must match one of these types: Signature, Reference, Alias and NFT."]
+                });
                 throw new Error(`Unrecognized Unlock type ${(unlocks[index] as ITypeBase<number>).type}`);
         }
     }
@@ -75,10 +79,10 @@ function validateSignatureUnlock(sigUnlock: ISignatureUnlock): IValidationResult
  * @returns The validation result.
  */
 function validateReferenceUnlock(
-        unlock: IReferenceUnlock | IAliasUnlock | INftUnlock,
-        index: number,
-        referencedUnlock?: UnlockTypes
-    ): IValidationResult {
+    unlock: IReferenceUnlock | IAliasUnlock | INftUnlock,
+    index: number,
+    referencedUnlock?: UnlockTypes
+): IValidationResult {
     let result: IValidationResult = { isValid: true };
 
     if (unlock.reference >= index) {

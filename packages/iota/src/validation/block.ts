@@ -3,7 +3,8 @@
 import type { IBlock } from "../models/IBlock";
 import type { INodeInfoProtocol } from "../models/info/INodeInfoProtocol";
 import { validatePayload } from "./payloads/payloads";
-import type { IValidationResult } from "./result";
+import { validateParents } from "./parents/parents";
+import { IValidationResult, mergeValidationResults } from "./result";
 
 /**
  * Validates a block.
@@ -12,6 +13,12 @@ import type { IValidationResult } from "./result";
  * @returns The validation result.
  */
 export function validateBlock(block: IBlock, protocolInfo: INodeInfoProtocol): IValidationResult {
-    return validatePayload(block.payload, protocolInfo);
+    let payloadResult: IValidationResult = { isValid: true };
+    let parentsResult: IValidationResult = { isValid: true };
+
+    payloadResult = validatePayload(block.payload, protocolInfo);
+    parentsResult = validateParents(block.parents);
+
+    return mergeValidationResults(payloadResult, parentsResult);
 }
 

@@ -4,6 +4,7 @@ import type { INodeInfoProtocol } from "../models/info/INodeInfoProtocol";
 import type { ITransactionEssence } from "../models/ITransactionEssence";
 import { validateInputs } from "./inputs/inputs";
 import { validateOutputs } from "./outputs/outputs";
+import { validateEssencePayload } from "./essencePayload/essencePayload";
 import { IValidationResult, mergeValidationResults } from "./result";
 
 /**
@@ -13,10 +14,15 @@ import { IValidationResult, mergeValidationResults } from "./result";
  * @returns The validation result.
  */
 export function validateTransactionEssence(transactionEssence: ITransactionEssence, protocolInfo: INodeInfoProtocol
-    ): IValidationResult {
+): IValidationResult {
     const validateInputsResult = validateInputs(transactionEssence.inputs);
     const validateOutputsResult = validateOutputs(transactionEssence.outputs, protocolInfo);
+    let validateEssencePayloadResult: IValidationResult = { isValid: true };
 
-    return mergeValidationResults(validateInputsResult, validateOutputsResult);
+    if (transactionEssence.payload) {
+        validateEssencePayloadResult = validateEssencePayload(transactionEssence.payload);
+    }
+
+    return mergeValidationResults(validateInputsResult, validateOutputsResult, validateEssencePayloadResult);
 }
 
