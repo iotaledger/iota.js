@@ -29,7 +29,7 @@ import { validateCommonRules } from "./common";
     if (!basicOutput.unlockConditions.some(uC => uC.type === ADDRESS_UNLOCK_CONDITION_TYPE)) {
         results.push({
             isValid: false,
-            errors: ["Basic output unlock conditions must define an Address Unlock Condition."]
+            errors: ["Basic output Unlock Conditions must define an Address Unlock Condition."]
         });
     } else {
         results.push(validateUnlockConditions(

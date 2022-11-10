@@ -11,16 +11,7 @@ import { validateNativeTokens } from "../nativeTokens";
 import { IValidationResult, mergeValidationResults } from "../result";
 import { validateSimpleTokenScheme } from "../tokenSchemes/simpleTokenScheme";
 import { validateUnlockConditions } from "../unlockConditions/unlockConditions";
-
-/**
- * Maximum number of unlock conditions that foundry output can have.
- */
-const FOUNDRY_UNLOCK_CONDITIONS_COUNT = 1;
-
-/**
- * Maximum number of features that foundry output can have.
- */
-const MAX_FOUNDRY_FEATURES_COUNT = 1;
+import { validateCommonRules } from "./common";
 
 /**
  * Validate a foundry output.
@@ -41,69 +32,7 @@ const MAX_FOUNDRY_FEATURES_COUNT = 1;
         });
     }
 
-    if (bigInt(foundryOutput.amount).leq(bigInt.zero)) {
-        results.push({
-            isValid: false,
-            errors: ["Foundry output amount field must be larger than zero."]
-        });
-    }
-
-    if (bigInt(foundryOutput.amount).gt(protocolInfo.tokenSupply)) {
-        results.push({
-            isValid: false,
-            errors: ["Foundry output amount field must not be larger than max token supply."]
-        });
-    }
-
-    if (foundryOutput.nativeTokens) {
-        results.push(validateNativeTokens(foundryOutput.nativeTokens));
-    }
-
-    if (foundryOutput.unlockConditions?.length !== FOUNDRY_UNLOCK_CONDITIONS_COUNT) {
-        results.push({
-            isValid: false,
-            errors: [`Foundry output unlock conditions count must be equal to ${FOUNDRY_UNLOCK_CONDITIONS_COUNT}.`]
-        });
-    } else if (foundryOutput.unlockConditions[0].type !== IMMUTABLE_ALIAS_UNLOCK_CONDITION_TYPE) {
-        results.push({
-            isValid: false,
-            errors: ["Foundry output Immutable Alias Address Unlock Condition must be present."]
-        });
-    } else {
-        results.push(validateUnlockConditions(foundryOutput.unlockConditions));
-    }
-
-    if (foundryOutput.features && foundryOutput.features.length > 0) {
-        if (
-            !foundryOutput.features.every(
-                feature =>
-                    feature.type === METADATA_FEATURE_TYPE
-            )
-        ) {
-            results.push({
-                isValid: false,
-                errors: ["Foundry output feature type of a feature must define one of the following types: Metadata Feature."]
-            });
-        }
-
-        results.push(validateFeatures(foundryOutput.features, MAX_FOUNDRY_FEATURES_COUNT));
-    }
-
-    if (foundryOutput.immutableFeatures && foundryOutput.immutableFeatures.length > 0) {
-        if (
-            !foundryOutput.immutableFeatures.every(
-                feature =>
-                    feature.type === METADATA_FEATURE_TYPE
-            )
-        ) {
-            results.push({
-                isValid: false,
-                errors: ["Foundry output immutable feature type of a feature must define one of the following types: Metadata Feature."]
-            });
-        }
-
-        results.push(validateFeatures(foundryOutput.immutableFeatures, MAX_FOUNDRY_FEATURES_COUNT));
-    }
+    results.push(validateCommonRules(foundryOutput, protocolInfo));
 
     if (!foundryOutput.tokenScheme || foundryOutput.tokenScheme.type !== SIMPLE_TOKEN_SCHEME_TYPE) {
         results.push({
@@ -113,6 +42,12 @@ const MAX_FOUNDRY_FEATURES_COUNT = 1;
     } else {
         results.push(validateSimpleTokenScheme(foundryOutput.tokenScheme));
     }
+  
+    results.push(validateUnlockConditions(foundryOutput.unlockConditions));
+
+    results.push(validateFeatures(foundryOutput.features));
+
+    results.push(validateFeatures(foundryOutput.immutableFeatures));
 
     return mergeValidationResults(...results);
 }

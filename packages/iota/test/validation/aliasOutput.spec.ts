@@ -57,11 +57,11 @@ describe("Alias output validation", () => {
         expect(result.errors).toBeDefined();
         expect(result.errors?.length).toEqual(1);
         expect(result.errors).toEqual(expect.arrayContaining(
-            ["Alias output unlock conditions count must be equal to 2."]
+            ["Alias output Unlock Conditions count must be equal to 2."]
         ));
     });
 
-    it("should fail when one of the unlocks is of unsupported type", () => {
+    it("should fail when one of the unlock conditions is of unsupported type", () => {
         const aliasOutput = cloneAliasOutput(mockAliasOutput);
         aliasOutput.unlockConditions[1] = {
             type: IMMUTABLE_ALIAS_UNLOCK_CONDITION_TYPE,
@@ -72,12 +72,12 @@ describe("Alias output validation", () => {
         };
 
         const result = validateAliasOutput(aliasOutput, protocolInfoMock);
-
+        console.log(result.errors);
         expect(result.isValid).toEqual(false);
         expect(result.errors).toBeDefined();
         expect(result.errors?.length).toEqual(1);
         expect(result.errors).toEqual(expect.arrayContaining(
-            ["Alias output unlock condition type of an unlock condition must define one of the following types: State Controller Address Unlock Condition and Governor Address Unlock Condition."]
+            ["Alias output unlock condition type of an unlock condition must define one of the following types: State Controller Address Unlock Condition, Governor Address Unlock Condition."]
         ));
     });
 
@@ -106,7 +106,7 @@ describe("Alias output validation", () => {
         expect(result.errors).toBeDefined();
         expect(result.errors?.length).toEqual(1);
         expect(result.errors).toEqual(expect.arrayContaining(
-            ["Alias output Unlock Conditions must be sorted in ascending order based on their Unlock Condition Type."]
+            ["Output Unlock Conditions must be sorted in ascending order based on their Unlock Condition Type."]
         ));
     });
 
@@ -128,7 +128,7 @@ describe("Alias output validation", () => {
         expect(result.errors).toBeDefined();
         expect(result.errors?.length).toEqual(1);
         expect(result.errors).toEqual(expect.arrayContaining(
-            ["Alias output feature type of a feature must define one of the following types: Sender Feature or Metadata Feature."]
+            ["Alias output feature type of a feature must define one of the following types: Sender Feature, Metadata Feature."]
         ));
     });
 
@@ -154,7 +154,7 @@ describe("Alias output validation", () => {
         expect(result.errors).toBeDefined();
         expect(result.errors?.length).toEqual(1);
         expect(result.errors).toEqual(expect.arrayContaining(
-            ["Alias output Features must be sorted in ascending order based on their Feature Type."]
+            ["Output Features must be sorted in ascending order based on their Feature Type."]
         ));
     });
 
@@ -173,7 +173,7 @@ describe("Alias output validation", () => {
         expect(result.errors).toBeDefined();
         expect(result.errors?.length).toEqual(1);
         expect(result.errors).toEqual(expect.arrayContaining(
-            ["Alias output feature type of an Immutable Feature must define one of the following types: Issuer Feature or Metadata Feature."]
+            ["Alias output feature type of an Immutable Feature must define one of the following types: Issuer Feature, Metadata Feature."]
         ));
     });
 
@@ -199,7 +199,7 @@ describe("Alias output validation", () => {
         expect(result.errors).toBeDefined();
         expect(result.errors?.length).toEqual(1);
         expect(result.errors).toEqual(expect.arrayContaining(
-            ["Alias output Immutable Features must be sorted in ascending order based on their Immutable Feature Type."]
+            ["Output Features must be sorted in ascending order based on their Feature Type."]
         ));
     });
 

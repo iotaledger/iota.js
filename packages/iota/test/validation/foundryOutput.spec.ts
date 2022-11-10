@@ -55,12 +55,17 @@ describe("Foundry output validation", () => {
         });
 
         const result = validateFoundryOutput(foundryOutput, protocolInfoMock);
+        console.log(result.errors)
 
         expect(result.isValid).toEqual(false);
         expect(result.errors).toBeDefined();
-        expect(result.errors?.length).toEqual(1);
+        expect(result.errors?.length).toEqual(3);
         expect(result.errors).toEqual(expect.arrayContaining(
-            ["Foundry output unlock conditions count must be equal to 1."]
+            [
+                "Foundry output Unlock Conditions count must be equal to 1.",
+                "Foundry output unlock condition type of an unlock condition must define one of the following types: Immutable Alias Address Unlock Condition.",
+                "Output Unlock Conditions must be sorted in ascending order based on their Unlock Condition Type."
+            ]
         ));
     });
 
@@ -82,7 +87,7 @@ describe("Foundry output validation", () => {
         expect(result.errors).toBeDefined();
         expect(result.errors?.length).toEqual(1);
         expect(result.errors).toEqual(expect.arrayContaining(
-            ["Foundry output Immutable Alias Address Unlock Condition must be present."]
+            ["Foundry output unlock condition type of an unlock condition must define one of the following types: Immutable Alias Address Unlock Condition."]
         ));
     });
 
@@ -119,7 +124,7 @@ describe("Foundry output validation", () => {
         expect(result.errors?.length).toEqual(2);
         expect(result.errors).toEqual(expect.arrayContaining(
             [
-                "Max number of features exceeded (1).",
+                "Foundry output Features count must be between 0 and 1.",
                 "Foundry output feature type of a feature must define one of the following types: Metadata Feature."
             ]
         ));
@@ -140,7 +145,7 @@ describe("Foundry output validation", () => {
         expect(result.errors).toBeDefined();
         expect(result.errors?.length).toEqual(1);
         expect(result.errors).toEqual(expect.arrayContaining(
-            ["Foundry output immutable feature type of a feature must define one of the following types: Metadata Feature."]
+            ["Foundry output feature type of an Immutable Feature must define one of the following types: Metadata Feature."]
         ));
     });
 
@@ -158,8 +163,8 @@ describe("Foundry output validation", () => {
         expect(result.errors?.length).toEqual(2);
         expect(result.errors).toEqual(expect.arrayContaining(
             [
-                "Max number of features exceeded (1).",
-                "Foundry output immutable feature type of a feature must define one of the following types: Metadata Feature."
+                "Foundry output Immutable Features count must be between 0 and 1.",
+                "Foundry output feature type of an Immutable Feature must define one of the following types: Metadata Feature."
             ]
         ));
     });

@@ -117,7 +117,7 @@ export function validateNftOutput(nftOutput: INftOutput, protocolInfo: INodeInfo
         }
 
         results.push(validateAscendingOrder(nftOutput.features, "NFT output", "Feature"));
-        results.push(validateFeatures(nftOutput.features, MAX_NFT_FEATURES_COUNT));
+        results.push(validateFeatures(nftOutput.features));
     }
 
     if (nftOutput.immutableFeatures && nftOutput.immutableFeatures.length > 0) {
@@ -135,7 +135,7 @@ export function validateNftOutput(nftOutput: INftOutput, protocolInfo: INodeInfo
         }
 
         results.push(validateAscendingOrder(nftOutput.immutableFeatures, "NFT output", "Immutable Feature"));
-        results.push(validateFeatures(nftOutput.immutableFeatures, MAX_NFT_IMMUTABLE_FEATURES_COUNT));
+        results.push(validateFeatures(nftOutput.immutableFeatures));
     }
 
     return mergeValidationResults(...results);

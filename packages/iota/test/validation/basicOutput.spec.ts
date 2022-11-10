@@ -106,7 +106,7 @@ describe("Basic output validation", () => {
         expect(result.errors).toEqual(expect.arrayContaining(
             [
                 "Basic output Unlock Conditions count must be between 1 and 4.",
-                "Basic output unlock conditions must define an Address Unlock Condition."
+                "Basic output Unlock Conditions must define an Address Unlock Condition."
             ]
         ));
     });
@@ -130,7 +130,7 @@ describe("Basic output validation", () => {
         expect(result.errors).toBeDefined();
         expect(result.errors?.length).toEqual(1);
         expect(result.errors).toEqual(expect.arrayContaining(
-            ["Basic output unlock conditions must define an Address Unlock Condition."]
+            ["Basic output Unlock Conditions must define an Address Unlock Condition."]
         ));
     });
 
