@@ -1,11 +1,11 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 import type { INodeInfoProtocol } from "../models/info/INodeInfoProtocol";
-import type { ITransactionEssence } from "../models/ITransactionEssence";
+import { ITransactionEssence, TRANSACTION_ESSENCE_TYPE } from "../models/ITransactionEssence";
+import { validateEssencePayload } from "./essencePayload/essencePayload";
 import { validateInputs } from "./inputs/inputs";
 import { validateOutputs } from "./outputs/outputs";
-import { validateEssencePayload } from "./essencePayload/essencePayload";
-import { IValidationResult, mergeValidationResults } from "./result";
+import { failValidation, IValidationResult, mergeValidationResults } from "./result";
 
 /**
  * Validate a transaction essence.
@@ -17,12 +17,19 @@ export function validateTransactionEssence(transactionEssence: ITransactionEssen
 ): IValidationResult {
     const validateInputsResult = validateInputs(transactionEssence.inputs);
     const validateOutputsResult = validateOutputs(transactionEssence.outputs, protocolInfo);
-    let validateEssencePayloadResult: IValidationResult = { isValid: true };
+    let validatePayloadResult: IValidationResult = { isValid: true };
+    let validateTypeResult: IValidationResult = { isValid: true };
 
     if (transactionEssence.payload) {
-        validateEssencePayloadResult = validateEssencePayload(transactionEssence.payload);
+        validatePayloadResult = validateEssencePayload(transactionEssence.payload);
     }
 
-    return mergeValidationResults(validateInputsResult, validateOutputsResult, validateEssencePayloadResult);
+    if (transactionEssence.type !== TRANSACTION_ESSENCE_TYPE) {
+        validateTypeResult = failValidation(validateTypeResult, `Transaction Essence Type value must be ${TRANSACTION_ESSENCE_TYPE}.`);
+    }
+
+    return mergeValidationResults(
+        validateInputsResult, validateOutputsResult, validatePayloadResult, validateTypeResult
+    );
 }
 

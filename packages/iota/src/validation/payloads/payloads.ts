@@ -69,7 +69,7 @@ export function validateTransactionPayload(
         const inputsCount = transactionPayload.essence.inputs.length;
 
         if (unlocksCount !== inputsCount) {
-            countsResult = failValidation(countsResult, "Transaction payload unlocks count must match inputs count of the Transaction Essence");
+            countsResult = failValidation(countsResult, "Transaction payload unlocks count must match inputs count of the Transaction Essence.");
         }
         txEssenceResult = validateTransactionEssence(transactionPayload.essence, protocolInfo);
         unlocksResult = validateUnlocks(transactionPayload.unlocks);

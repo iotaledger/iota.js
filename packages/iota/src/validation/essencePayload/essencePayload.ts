@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 import { ITaggedDataPayload, TAGGED_DATA_PAYLOAD_TYPE } from "../../models/payloads/ITaggedDataPayload";
 import { validateTaggedDataPayload } from "../payloads/payloads";
-import { IValidationResult, mergeValidationResults, failValidation } from "../result";
+import { IValidationResult, failValidation } from "../result";
 
 /**
  * Validate transaction essence payload.
@@ -12,10 +12,9 @@ import { IValidationResult, mergeValidationResults, failValidation } from "../re
 export function validateEssencePayload(payload: ITaggedDataPayload): IValidationResult {
     let result: IValidationResult = { isValid: true };
 
-    if (payload.type !== TAGGED_DATA_PAYLOAD_TYPE) {
-        result = failValidation(result, "Transaction Essence payload type must be Tagged data payload type.")
-    } else {
-        result = validateTaggedDataPayload(payload);
-    }
+    result = payload.type !== TAGGED_DATA_PAYLOAD_TYPE ?
+        failValidation(result, "Transaction Essence payload type must be Tagged data payload type.") :
+        validateTaggedDataPayload(payload);
+
     return result;
 }

@@ -1,7 +1,8 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import type { INodeInfoProtocol } from "../../models/info/INodeInfoProtocol";
+import { MAX_NATIVE_TOKEN_COUNT } from "../../binary/nativeTokens";
 import { MAX_OUTPUT_COUNT, MIN_OUTPUT_COUNT } from "../../binary/outputs/outputs";
+import type { INodeInfoProtocol } from "../../models/info/INodeInfoProtocol";
 import type { ITypeBase } from "../../models/ITypeBase";
 import { ALIAS_OUTPUT_TYPE } from "../../models/outputs/IAliasOutput";
 import { BASIC_OUTPUT_TYPE } from "../../models/outputs/IBasicOutput";
@@ -14,7 +15,6 @@ import { validateAliasOutput } from "./aliasOutput";
 import { validateBasicOutput } from "./basicOutput";
 import { validateFoundryOutput } from "./foundryOutput";
 import { validateNftOutput } from "./nftOutput";
-import { MAX_NATIVE_TOKEN_COUNT } from "../../binary/nativeTokens";
 
 /**
  * Maximum number of iota supply.
@@ -40,11 +40,11 @@ export function validateOutputs(outputs: OutputTypes[], protocolInfo: INodeInfoP
     }
 
     for (const output of outputs) {
-        totalAmount = totalAmount + Number(output.amount);
+        totalAmount += Number(output.amount);
         if (output.type !== TREASURY_OUTPUT_TYPE && output.nativeTokens) {
             const tokenIds = output.nativeTokens.map(token => token.id);
-            const distinctIds = new Set<string>(tokenIds as string[]);
-            nativeTokenCount = nativeTokenCount + distinctIds.size;
+            const distinctIds = new Set<string>(tokenIds);
+            nativeTokenCount += distinctIds.size;
         }
 
         results.push(

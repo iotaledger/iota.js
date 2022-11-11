@@ -24,6 +24,7 @@ export function validateInputs(inputs: IUTXOInput[]): IValidationResult {
 
         if (filteredInputs.length !== 1) {
             result = failValidation(result, "Each pair of Transaction Id and Transaction Output Index must be unique in the list of inputs.");
+            break;
         }
     }
 
@@ -39,7 +40,7 @@ export function validateInputs(inputs: IUTXOInput[]): IValidationResult {
  * @param input The input to validate.
  * @returns The validation result.
  */
- export function validateInput(input: IUTXOInput): IValidationResult {
+export function validateInput(input: IUTXOInput): IValidationResult {
     let result: IValidationResult = { isValid: true };
 
     if (input.type !== UTXO_INPUT_TYPE) {

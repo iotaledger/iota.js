@@ -1,7 +1,7 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import { IValidationResult, failValidation, mergeValidationResults } from "../result";
 import type { HexEncodedString } from "../../models/hexEncodedTypes";
+import { IValidationResult, failValidation, mergeValidationResults } from "../result";
 
 /**
  * The minimum count of parents in block.
@@ -24,7 +24,7 @@ export function validateParents(
     let sortedResult: IValidationResult = { isValid: true };
 
     if (parents.length < MIN_PARENTS_COUNT || parents.length > MAX_PARENTS_COUNT) {
-        countResult = failValidation(countResult, `Parents count must be between ${MIN_PARENTS_COUNT} and ${MAX_PARENTS_COUNT}.`)
+        countResult = failValidation(countResult, `Parents count must be between ${MIN_PARENTS_COUNT} and ${MAX_PARENTS_COUNT}.`);
     }
 
     const sortedParentIds = parents.slice().sort((a, b) => a.localeCompare(b));

@@ -2,8 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0
 import type { IBlock } from "../models/IBlock";
 import type { INodeInfoProtocol } from "../models/info/INodeInfoProtocol";
-import { validatePayload } from "./payloads/payloads";
 import { validateParents } from "./parents/parents";
+import { validatePayload } from "./payloads/payloads";
 import { IValidationResult, mergeValidationResults } from "./result";
 
 /**
