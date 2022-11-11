@@ -1,91 +1,114 @@
-// Copyright 2022 IOTA Stiftung
+// Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import bigInt from "big-integer";
-import type { UnlockConditionTypes } from "../../index-browser";
-import type { ITypeBase } from "../../models/ITypeBase";
+import type { FeatureTypes } from "../../models/features/featureTypes";
+import { ISSUER_FEATURE_TYPE } from "../../models/features/IIssuerFeature";
+import { METADATA_FEATURE_TYPE } from "../../models/features/IMetadataFeature";
+import { SENDER_FEATURE_TYPE } from "../../models/features/ISenderFeature";
+import { TAG_FEATURE_TYPE } from "../../models/features/ITagFeature";
+import type { INodeInfoProtocol } from "../../models/info/INodeInfoProtocol";
+import { ALIAS_OUTPUT_TYPE, IAliasOutput } from "../../models/outputs/IAliasOutput";
+import { BASIC_OUTPUT_TYPE, IBasicOutput } from "../../models/outputs/IBasicOutput";
+import { FOUNDRY_OUTPUT_TYPE, IFoundryOutput } from "../../models/outputs/IFoundryOutput";
+import { NFT_OUTPUT_TYPE, INftOutput } from "../../models/outputs/INftOutput";
 import { ADDRESS_UNLOCK_CONDITION_TYPE } from "../../models/unlockConditions/IAddressUnlockCondition";
 import { EXPIRATION_UNLOCK_CONDITION_TYPE } from "../../models/unlockConditions/IExpirationUnlockCondition";
+import { GOVERNOR_ADDRESS_UNLOCK_CONDITION_TYPE } from "../../models/unlockConditions/IGovernorAddressUnlockCondition";
+import { IMMUTABLE_ALIAS_UNLOCK_CONDITION_TYPE } from "../../models/unlockConditions/IImmutableAliasUnlockCondition";
+import { STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE } from "../../models/unlockConditions/IStateControllerAddressUnlockCondition";
 import { STORAGE_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE } from "../../models/unlockConditions/IStorageDepositReturnUnlockCondition";
 import { TIMELOCK_UNLOCK_CONDITION_TYPE } from "../../models/unlockConditions/ITimelockUnlockCondition";
-import { GOVERNOR_ADDRESS_UNLOCK_CONDITION_TYPE } from "../../models/unlockConditions/IGovernorAddressUnlockCondition";
-import { STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE } from "../../models/unlockConditions/IStateControllerAddressUnlockCondition";
-import { IMMUTABLE_ALIAS_UNLOCK_CONDITION_TYPE } from "../../models/unlockConditions/IImmutableAliasUnlockCondition";
-import { SENDER_FEATURE_TYPE } from "../../models/features/ISenderFeature";
-import { METADATA_FEATURE_TYPE } from "../../models/features/IMetadataFeature";
-import { TAG_FEATURE_TYPE } from "../../models/features/ITagFeature";
-import { ISSUER_FEATURE_TYPE } from "../../models/features/IIssuerFeature";
-import { failValidation, IValidationResult, mergeValidationResults } from "../result";
-import type { INodeInfoProtocol } from "../../models/info/INodeInfoProtocol";
-import type { OutputTypes } from "../../models/outputs/outputTypes";
-import type { FeatureTypes } from "../../models/features/featureTypes";
-import { TREASURY_OUTPUT_TYPE } from "../../models/outputs/ITreasuryOutput";
-import { BASIC_OUTPUT_TYPE } from "../../models/outputs/IBasicOutput";
-import { ALIAS_OUTPUT_TYPE } from "../../models/outputs/IAliasOutput";
-import { NFT_OUTPUT_TYPE } from "../../models/outputs/INftOutput";
-import { FOUNDRY_OUTPUT_TYPE } from "../../models/outputs/IFoundryOutput";
+import type { UnlockConditionTypes } from "../../models/unlockConditions/unlockConditionTypes";
 import { validateNativeTokens } from "../nativeTokens";
+import { failValidation, IValidationResult, mergeValidationResults } from "../result";
 
-
-/**
- * Allowed Basic output unlock conditions.
- */
-const BASIC_OUTPUT_UNLOCK_CONDITIONS = [
-    ADDRESS_UNLOCK_CONDITION_TYPE,
-    STORAGE_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE,
-    TIMELOCK_UNLOCK_CONDITION_TYPE,
-    EXPIRATION_UNLOCK_CONDITION_TYPE
-];
-
-const BASIC_OUTPUT_MIN_UNLOCK_CONDITIONS = 1;
+type SupportedOutputTypes = IBasicOutput | IAliasOutput | IFoundryOutput | INftOutput;
 
 /**
- * Allowed Alias output unlock conditions.
+ * Map Output type to supported values.
  */
-const ALIAS_OUTPUT_UNLOCK_CONDITIONS = [
-    STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE,
-    GOVERNOR_ADDRESS_UNLOCK_CONDITION_TYPE
-];
-
-const ALIAS_OUTPUT_MIN_UNLOCK_CONDITIONS = 2;
-
-/**
- * Allowed Foundry output unlock conditions.
- */
-const FOUNDRY_OUTPUT_UNLOCK_CONDITIONS = [IMMUTABLE_ALIAS_UNLOCK_CONDITION_TYPE];
-
-const FOUNDRY_OUTPUT_MIN_UNLOCK_CONDITIONS = 1;
-
-/**
- * Allowed Nft output unlock conditions.
- */
-const NFT_OUTPUT_UNLOCK_CONDITIONS = BASIC_OUTPUT_UNLOCK_CONDITIONS;
-
-const NFT_OUTPUT_MIN_UNLOCK_CONDITIONS = 1;
-
-/**
- * Map Output type to allowed unlock conditions.
- */
-const OUTPUT_TYPE_TO_UNLOCK_CONDITIONS = new Map()
-    .set(3, BASIC_OUTPUT_UNLOCK_CONDITIONS)
-    .set(4, ALIAS_OUTPUT_UNLOCK_CONDITIONS)
-    .set(5, FOUNDRY_OUTPUT_UNLOCK_CONDITIONS)
-    .set(6, NFT_OUTPUT_UNLOCK_CONDITIONS);
-
-/**
- * Map Output type to min unlock conditions.
- */
-const OUTPUT_TYPE_TO_MIN_UNLOCK_CONDITIONS = new Map()
-    .set(3, BASIC_OUTPUT_MIN_UNLOCK_CONDITIONS)
-    .set(4, ALIAS_OUTPUT_MIN_UNLOCK_CONDITIONS)
-    .set(5, FOUNDRY_OUTPUT_MIN_UNLOCK_CONDITIONS)
-    .set(6, NFT_OUTPUT_MIN_UNLOCK_CONDITIONS);
+const OUTPUT_TYPE_TO_SUPPORTED_PROP_VALUES = new Map([
+    [
+        BASIC_OUTPUT_TYPE,
+        {
+            minUnlockConditions: 1,
+            unlockConditions:
+                [
+                    ADDRESS_UNLOCK_CONDITION_TYPE,
+                    STORAGE_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE,
+                    TIMELOCK_UNLOCK_CONDITION_TYPE,
+                    EXPIRATION_UNLOCK_CONDITION_TYPE
+                ],
+            features:
+                [
+                    SENDER_FEATURE_TYPE,
+                    METADATA_FEATURE_TYPE,
+                    TAG_FEATURE_TYPE
+                ]
+        }
+    ],
+    [
+        ALIAS_OUTPUT_TYPE,
+        {
+            minUnlockConditions: 2,
+            unlockConditions:
+                [
+                    STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE,
+                    GOVERNOR_ADDRESS_UNLOCK_CONDITION_TYPE
+                ],
+            features:
+                [
+                    SENDER_FEATURE_TYPE,
+                    METADATA_FEATURE_TYPE
+                ],
+            immutableFeatures:
+                [
+                    ISSUER_FEATURE_TYPE,
+                    METADATA_FEATURE_TYPE
+                ]
+        }
+    ],
+    [
+        FOUNDRY_OUTPUT_TYPE,
+        {
+            minUnlockConditions: 1,
+            unlockConditions: [IMMUTABLE_ALIAS_UNLOCK_CONDITION_TYPE],
+            features: [METADATA_FEATURE_TYPE],
+            immutableFeatures: [METADATA_FEATURE_TYPE]
+        }
+    ],
+    [
+        NFT_OUTPUT_TYPE,
+        {
+            minUnlockConditions: 1,
+            unlockConditions:
+                [
+                    ADDRESS_UNLOCK_CONDITION_TYPE,
+                    STORAGE_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE,
+                    TIMELOCK_UNLOCK_CONDITION_TYPE,
+                    EXPIRATION_UNLOCK_CONDITION_TYPE
+                ],
+            features:
+                [
+                    SENDER_FEATURE_TYPE,
+                    METADATA_FEATURE_TYPE,
+                    TAG_FEATURE_TYPE
+                ],
+            immutableFeatures:
+                [
+                    ISSUER_FEATURE_TYPE,
+                    METADATA_FEATURE_TYPE
+                ]
+        }
+    ]
+]);
 
 /**
  * Unlock Condition type names.
  */
-const ULOCK_CONDITION_TYPE_NAMES = [
-    "Address Unlock Condition", 
+const UNLOCK_CONDITION_TYPE_NAMES = [
+    "Address Unlock Condition",
     "Storage Deposit Return Unlock Condition",
     "Timelock Unlock Condition",
     "Expiration Unlock Condition",
@@ -95,71 +118,10 @@ const ULOCK_CONDITION_TYPE_NAMES = [
 ];
 
 /**
- * Allowed Basic output features.
- */
-const BASIC_OUTPUT_FEATURES = [
-    SENDER_FEATURE_TYPE,
-    METADATA_FEATURE_TYPE,
-    TAG_FEATURE_TYPE
-];
-
-/**
- * Allowed Alias output features.
- */
-const ALIAS_OUTPUT_FEATURES = [
-    SENDER_FEATURE_TYPE,
-    METADATA_FEATURE_TYPE
-];
-
-/**
- * Allowed Alias output immutable features.
- */
-const ALIAS_OUTPUT_IMMUTABLE_FEATURES = [
-    ISSUER_FEATURE_TYPE,
-    METADATA_FEATURE_TYPE
-];
-
-/**
- * Allowed Foundry output features.
- */
-const FOUNDRY_OUTPUT_FEATURES = [METADATA_FEATURE_TYPE];
-
-/**
- * Allowed Foundry output immutable features.
- */
-const FOUNDRY_OUTPUT_IMMUTABLE_FEATURES = FOUNDRY_OUTPUT_FEATURES;
-
-/**
- * Allowed Nft output features.
- */
- const NFT_OUTPUT_FEATURES = BASIC_OUTPUT_FEATURES;
-
- /**
- * Allowed Nft output immutable features.
- */
- const NFT_OUTPUT_IMMUTABLE_FEATURES = ALIAS_OUTPUT_IMMUTABLE_FEATURES;
-
-/**
- * Map Output type to allowed features.
- */
-const OUTPUT_TYPE_TO_FEATURES = new Map()
-    .set(3, BASIC_OUTPUT_FEATURES)
-    .set(4, ALIAS_OUTPUT_FEATURES)
-    .set(5, FOUNDRY_OUTPUT_FEATURES)
-    .set(6, NFT_OUTPUT_FEATURES);
-/**
- * Map Output type to allowed immutable features.
- */
-const OUTPUT_TYPE_TO_IMMUTABLE_FEATURES = new Map()
-    .set(4, ALIAS_OUTPUT_IMMUTABLE_FEATURES)
-    .set(5, FOUNDRY_OUTPUT_IMMUTABLE_FEATURES)
-    .set(6, NFT_OUTPUT_IMMUTABLE_FEATURES);
-
-/**
  * Unlock Condition type names.
  */
 const FEATURE_TYPE_NAMES = [
-    "Sender Feature", 
+    "Sender Feature",
     "Issuer Feature",
     "Metadata Feature",
     "Tag Feature"
@@ -168,11 +130,12 @@ const FEATURE_TYPE_NAMES = [
 /**
  * Map Output type to name.
  */
-const OUTPUT_TYPE_NAMES = new Map()
-    .set(3, "Basic")
-    .set(4, "Alias")
-    .set(5, "Foundry")
-    .set(6, "Nft");
+const OUTPUT_TYPE_NAMES = new Map([
+    [BASIC_OUTPUT_TYPE, "Basic"],
+    [ALIAS_OUTPUT_TYPE, "Alias"],
+    [FOUNDRY_OUTPUT_TYPE, "Foundry"],
+    [NFT_OUTPUT_TYPE, "NFT"]
+]);
 
 /**
  * Validate the output common rules.
@@ -180,39 +143,40 @@ const OUTPUT_TYPE_NAMES = new Map()
  * @param protocolInfo The Protocol Info.
  * @returns The validation result.
  */
-export function validateCommonRules(output: OutputTypes, protocolInfo: INodeInfoProtocol): IValidationResult {
+export function validateCommonRules(
+    output: SupportedOutputTypes,
+    protocolInfo: INodeInfoProtocol
+): IValidationResult {
     const results: IValidationResult[] = [];
     const outputType = output.type;
-    const outputName = OUTPUT_TYPE_NAMES.get(output.type);
+    const outputName = OUTPUT_TYPE_NAMES.get(output.type)!;
 
     results.push(validateAmountIsGreaterThanZero(output.amount, outputName));
 
     results.push(validateAmountIsLesserThanMaxSupply(output.amount, protocolInfo.tokenSupply, outputName));
-    
-    if (outputType !== TREASURY_OUTPUT_TYPE) {
-        results.push(validateNativeTokens(output.nativeTokens));
 
-        if (output.unlockConditions) {
-            const max = OUTPUT_TYPE_TO_UNLOCK_CONDITIONS.get(outputType).length;
-            const min = OUTPUT_TYPE_TO_MIN_UNLOCK_CONDITIONS.get(outputType);
-            results.push(validateCount(outputName, "Unlock Conditions", output.unlockConditions.length, max, min));
+    results.push(validateNativeTokens(output.nativeTokens));
 
-            results.push(validateUnlockConditionsDefineAllowedTypes(output.unlockConditions, outputType, outputName));
-        }
+    if (output.unlockConditions) {
+        const min = OUTPUT_TYPE_TO_SUPPORTED_PROP_VALUES.get(outputType)!.minUnlockConditions;
+        const max = OUTPUT_TYPE_TO_SUPPORTED_PROP_VALUES.get(outputType)!.unlockConditions.length;
+        results.push(validateCount(output.unlockConditions.length, min, max, outputName, "Unlock Conditions"));
 
-        if (output.features) {
-            const max = OUTPUT_TYPE_TO_FEATURES.get(outputType).length;
-            results.push(validateCount(outputName, "Features", output.features.length, max));
+        results.push(validateUnlockConditionAllowedTypes(outputType, output.unlockConditions, outputName));
+    }
 
-            results.push(validateFeaturesDefineAllowedTypes(output.features, outputType, outputName));
-        }
+    if (output.features) {
+        const max = OUTPUT_TYPE_TO_SUPPORTED_PROP_VALUES.get(outputType)!.features.length;
+        results.push(validateCount(output.features.length, 0, max, outputName, "Features"));
 
-        if (outputType !== BASIC_OUTPUT_TYPE && output.immutableFeatures) {
-            const max = OUTPUT_TYPE_TO_IMMUTABLE_FEATURES.get(outputType).length;
-            results.push(validateCount(outputName, "Immutable Features", output.immutableFeatures.length, max));
+        results.push(validateFeatureAllowedTypes(outputType, output.features, outputName));
+    }
 
-            results.push(validateImmutableFeaturesDefineAllowedTypes(output.immutableFeatures, outputType, outputName));
-        }
+    if (outputType !== BASIC_OUTPUT_TYPE && output.immutableFeatures) {
+        const max = OUTPUT_TYPE_TO_SUPPORTED_PROP_VALUES.get(outputType)!.immutableFeatures!.length;
+        results.push(validateCount(output.immutableFeatures.length, 0, max, outputName, "Immutable Features"));
+
+        results.push(validateImmutableFeatureAllowedTypes(outputType, output.immutableFeatures, outputName));
     }
 
     return mergeValidationResults(...results);
@@ -221,6 +185,7 @@ export function validateCommonRules(output: OutputTypes, protocolInfo: INodeInfo
 /**
  * Validate the amount is greater than zero.
  * @param amount The amount to validate.
+ * @param outputName The name of the output to use in the error message.
  * @returns The validation result.
  */
 function validateAmountIsGreaterThanZero(amount: string, outputName: string): IValidationResult {
@@ -236,9 +201,15 @@ function validateAmountIsGreaterThanZero(amount: string, outputName: string): IV
 /**
  * Validate the amount is lesser than maximum token supply.
  * @param amount The amount to validate.
+ * @param tokenSupply The tokken supply amount.
+ * @param outputName The name of the output to use in the error message.
  * @returns The validation result.
  */
-function validateAmountIsLesserThanMaxSupply(amount: string, tokenSupply: string, outputName: string): IValidationResult {
+function validateAmountIsLesserThanMaxSupply(
+    amount: string,
+    tokenSupply: string,
+    outputName: string
+): IValidationResult {
     let result: IValidationResult = { isValid: true };
 
     if (bigInt(amount).gt(tokenSupply)) {
@@ -250,32 +221,23 @@ function validateAmountIsLesserThanMaxSupply(amount: string, tokenSupply: string
 
 /**
  * Validate the count is within allowed boundries.
+ * @param count The number to validate.
+ * @param min The maximum allowed value.
+ * @param max The maximum allowed value.
  * @param outputName The name of the output to use in the error message.
  * @param elementName The name of the validation subject to use in the error message.
- * @param count The number to validate.
- * @param max The maximum allowed value.
- * @param min The maximum allowed value.
  * @returns The validation result.
  */
-//Basic
-// It must hold true that 1 ≤ Unlock Conditions Count ≤ 4.
-// It must hold true that 0 ≤ Features Count ≤ 3.
-//Alias
-// It must hold true that Unlock Conditions Count = 2.
-// It must hold true that 0 ≤ Features Count ≤ 2.
-// It must hold true that 0 ≤ Immutable Features Count ≤ 2.
-// Foundry
-// It must hold true that Unlock Conditions Count = 1.
-// It must hold true that 0 ≤ Features Count ≤ 1.
-// It must hold true that 0 ≤ Immutable Features Count ≤ 1.
-// Nft
-// It must hold true that 1 ≤ Unlock Conditions Count ≤ 4.
-// It must hold true that 0 ≤ Features Count ≤ 3.
-// It must hold true that 0 ≤ Immutable Features Count ≤ 2.
-function validateCount(outputName: string, elementName: string, count: number, max: number, min: number = 0): IValidationResult {
+function validateCount(
+    count: number,
+    min: number,
+    max: number,
+    outputName: string,
+    elementName: string
+): IValidationResult {
     let result: IValidationResult = { isValid: true };
 
-    if (count < min || count > max ) {
+    if (count < min || count > max) {
         const message = min === max ?
             `${outputName} output ${elementName} count must be equal to ${max}.` :
             `${outputName} output ${elementName} count must be between ${min} and ${max}.`;
@@ -288,18 +250,24 @@ function validateCount(outputName: string, elementName: string, count: number, m
 
 /**
  * Validate that the unlock conditions define only allowed types.
- * @param unlockConditions The amount to validate.
  * @param outputType The type of the output.
+ * @param unlockConditions The amount to validate.
+ * @param outputName The name of the output to use in the error message.
  * @returns The validation result.
  */
-function validateUnlockConditionsDefineAllowedTypes(unlockConditions: UnlockConditionTypes[], outputType: number, outputName: string): IValidationResult {
+function validateUnlockConditionAllowedTypes(
+    outputType: number,
+    unlockConditions: UnlockConditionTypes[],
+    outputName: string
+): IValidationResult {
     let result: IValidationResult = { isValid: true };
 
-    const allowedUnlockConditionTypes = OUTPUT_TYPE_TO_UNLOCK_CONDITIONS.get(outputType);
+    const allowedUnlockConditionTypes = OUTPUT_TYPE_TO_SUPPORTED_PROP_VALUES.get(outputType)!.unlockConditions;
 
     if (!unlockConditions.every(uC => allowedUnlockConditionTypes.includes(uC.type))) {
-        const unlockConditionNames = ULOCK_CONDITION_TYPE_NAMES.filter((uC, index) => allowedUnlockConditionTypes.includes(index));
-        
+        const unlockConditionNames = UNLOCK_CONDITION_TYPE_NAMES
+                                        .filter((uC, index) => allowedUnlockConditionTypes.includes(index));
+
         result = failValidation(result, `${outputName} output unlock condition type of an unlock condition must define one of the following types: ${unlockConditionNames.join(", ")}.`);
     }
 
@@ -308,18 +276,23 @@ function validateUnlockConditionsDefineAllowedTypes(unlockConditions: UnlockCond
 
 /**
  * Validate that the features define only allowed types.
- * @param features The features to validate.
  * @param outputType The type of the output.
+ * @param features The features to validate.
+ * @param outputName The name of the output to use in the error message.
  * @returns The validation result.
  */
-function validateFeaturesDefineAllowedTypes(features: FeatureTypes[], outputType: number, outputName: string): IValidationResult {
+function validateFeatureAllowedTypes(
+    outputType: number,
+    features: FeatureTypes[],
+    outputName: string
+): IValidationResult {
     let result: IValidationResult = { isValid: true };
 
-    const allowedFeatureTypes = OUTPUT_TYPE_TO_FEATURES.get(outputType);
+    const allowedFeatureTypes = OUTPUT_TYPE_TO_SUPPORTED_PROP_VALUES.get(outputType)!.features;
 
     if (!features.every(feature => allowedFeatureTypes.includes(feature.type))) {
         const unlockConditionNames = FEATURE_TYPE_NAMES.filter((feature, index) => allowedFeatureTypes.includes(index));
-        
+
         result = failValidation(result, `${outputName} output feature type of a feature must define one of the following types: ${unlockConditionNames.join(", ")}.`);
     }
 
@@ -328,18 +301,23 @@ function validateFeaturesDefineAllowedTypes(features: FeatureTypes[], outputType
 
 /**
  * Validate that the immutable features define only allowed types.
- * @param immutableFeatures The features to validate.
  * @param outputType The type of the output.
+ * @param immutableFeatures The features to validate.
+ * @param outputName The name of the output to use in the error message.
  * @returns The validation result.
  */
-function validateImmutableFeaturesDefineAllowedTypes(immutableFeatures: FeatureTypes[], outputType: number, outputName: string): IValidationResult {
+function validateImmutableFeatureAllowedTypes(
+    outputType: number,
+    immutableFeatures: FeatureTypes[],
+    outputName: string
+): IValidationResult {
     let result: IValidationResult = { isValid: true };
 
-    const allowedFeatureTypes = OUTPUT_TYPE_TO_IMMUTABLE_FEATURES.get(outputType);
+    const allowedFeatureTypes = OUTPUT_TYPE_TO_SUPPORTED_PROP_VALUES.get(outputType)!.immutableFeatures!;
 
     if (!immutableFeatures.every(feature => allowedFeatureTypes.includes(feature.type))) {
         const unlockConditionNames = FEATURE_TYPE_NAMES.filter((feature, index) => allowedFeatureTypes.includes(index));
-        
+
         result = failValidation(result, `${outputName} output feature type of an Immutable Feature must define one of the following types: ${unlockConditionNames.join(", ")}.`);
     }
 

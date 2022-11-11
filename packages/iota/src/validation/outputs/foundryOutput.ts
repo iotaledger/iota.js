@@ -1,13 +1,9 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import bigInt from "big-integer";
-import { METADATA_FEATURE_TYPE } from "../../models/features/IMetadataFeature";
 import type { INodeInfoProtocol } from "../../models/info/INodeInfoProtocol";
 import { FOUNDRY_OUTPUT_TYPE, IFoundryOutput } from "../../models/outputs/IFoundryOutput";
 import { SIMPLE_TOKEN_SCHEME_TYPE } from "../../models/tokenSchemes/ISimpleTokenScheme";
-import { IMMUTABLE_ALIAS_UNLOCK_CONDITION_TYPE } from "../../models/unlockConditions/IImmutableAliasUnlockCondition";
 import { validateFeatures } from "../features/features";
-import { validateNativeTokens } from "../nativeTokens";
 import { IValidationResult, mergeValidationResults } from "../result";
 import { validateSimpleTokenScheme } from "../tokenSchemes/simpleTokenScheme";
 import { validateUnlockConditions } from "../unlockConditions/unlockConditions";
@@ -42,7 +38,7 @@ import { validateCommonRules } from "./common";
     } else {
         results.push(validateSimpleTokenScheme(foundryOutput.tokenScheme));
     }
-  
+
     results.push(validateUnlockConditions(foundryOutput.unlockConditions));
 
     results.push(validateFeatures(foundryOutput.features));

@@ -1,8 +1,8 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import { TAG_FEATURE_TYPE } from "../../src/models/features/ITagFeature";
 import { ED25519_ADDRESS_TYPE } from "../../src/models/addresses/IEd25519Address";
 import { ISSUER_FEATURE_TYPE } from "../../src/models/features/IIssuerFeature";
+import { TAG_FEATURE_TYPE } from "../../src/models/features/ITagFeature";
 import { STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE } from "../../src/models/unlockConditions/IStateControllerAddressUnlockCondition";
 import { STORAGE_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE } from "../../src/models/unlockConditions/IStorageDepositReturnUnlockCondition";
 import { validateBasicOutput } from "../../src/validation/outputs/basicOutput";
@@ -93,7 +93,7 @@ describe("Basic output validation", () => {
             ]
         ));
     });
-    
+
     it("should fail when the unlock conditions count is lesser than allowed", () => {
         const basicOutput = cloneBasicOutput(mockBasicOutput);
         basicOutput.unlockConditions = [];
@@ -189,7 +189,7 @@ describe("Basic output validation", () => {
             ["Basic output feature type of a feature must define one of the following types: Sender Feature, Metadata Feature, Tag Feature."]
         ));
     });
-    
+
     it("should fail when the featuress count is larger than allowed", () => {
         const basicOutput = cloneBasicOutput(mockBasicOutput);
         basicOutput.features?.push(
@@ -200,7 +200,6 @@ describe("Basic output validation", () => {
         );
 
         const result = validateBasicOutput(basicOutput, protocolInfoMock);
-        console.log(result.errors)
 
         expect(result.isValid).toEqual(false);
         expect(result.errors).toBeDefined();

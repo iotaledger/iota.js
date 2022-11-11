@@ -55,7 +55,6 @@ describe("Foundry output validation", () => {
         });
 
         const result = validateFoundryOutput(foundryOutput, protocolInfoMock);
-        console.log(result.errors)
 
         expect(result.isValid).toEqual(false);
         expect(result.errors).toBeDefined();

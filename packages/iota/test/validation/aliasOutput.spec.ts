@@ -72,7 +72,7 @@ describe("Alias output validation", () => {
         };
 
         const result = validateAliasOutput(aliasOutput, protocolInfoMock);
-        console.log(result.errors);
+
         expect(result.isValid).toEqual(false);
         expect(result.errors).toBeDefined();
         expect(result.errors?.length).toEqual(1);

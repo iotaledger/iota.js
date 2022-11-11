@@ -20,7 +20,6 @@ export const MAX_METADATA_LENGTH: number = 8192;
 /**
  * Validate output features.
  * @param features The Features to validate.
- * @param maxFeaturesCount Maximum number of features.
  * @returns The validation result.
  */
 export function validateFeatures(features?: FeatureTypes[]): IValidationResult {
@@ -30,9 +29,9 @@ export function validateFeatures(features?: FeatureTypes[]): IValidationResult {
         results.push(
             validateDistinct(features.map(feature => feature.type), "Output", "feature")
         );
-    
+
         results.push(validateAscendingOrder(features, "Output", "Feature"));
-    
+
         for (const feature of features) {
             results.push(
                 validateFeature(feature)

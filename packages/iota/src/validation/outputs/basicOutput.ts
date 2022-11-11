@@ -1,4 +1,4 @@
-// Copyright 2022 IOTA Stiftung
+// Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 import type { INodeInfoProtocol } from "../../models/info/INodeInfoProtocol";
 import { BASIC_OUTPUT_TYPE, IBasicOutput } from "../../models/outputs/IBasicOutput";
@@ -25,7 +25,7 @@ import { validateCommonRules } from "./common";
     }
 
     results.push(validateCommonRules(basicOutput, protocolInfo));
- 
+
     if (!basicOutput.unlockConditions.some(uC => uC.type === ADDRESS_UNLOCK_CONDITION_TYPE)) {
         results.push({
             isValid: false,
@@ -41,6 +41,5 @@ import { validateCommonRules } from "./common";
 
     results.push(validateFeatures(basicOutput.features));
 
-   
     return mergeValidationResults(...results);
 }
