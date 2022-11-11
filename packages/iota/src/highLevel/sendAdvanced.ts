@@ -51,7 +51,7 @@ export async function sendAdvanced(
         addressType: number;
         amount: BigInteger;
         nativeTokens?: INativeToken[];
-        fatures?: FeatureTypes[];
+        features?: FeatureTypes[];
     }[],
     taggedData?: {
         tag?: Uint8Array | string;
