@@ -1,6 +1,5 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import bigInt from "big-integer";
 import type { FeatureTypes } from "../../models/features/featureTypes";
 import { ISSUER_FEATURE_TYPE } from "../../models/features/IIssuerFeature";
@@ -149,34 +148,57 @@ export function validateCommonRules(
 ): IValidationResult {
     const results: IValidationResult[] = [];
     const outputType = output.type;
-    const outputName = OUTPUT_TYPE_NAMES.get(output.type)!;
+    const outputTypeValidations = OUTPUT_TYPE_TO_SUPPORTED_PROP_VALUES.get(output.type);
+    const outputName = OUTPUT_TYPE_NAMES.get(output.type);
 
-    results.push(validateAmountIsGreaterThanZero(output.amount, outputName));
+    if (!(outputName && outputTypeValidations)) {
+        return { isValid: false, errors: [`Unsupported output for common rules validation (type: ${output.type})`] };
+    }
 
-    results.push(validateAmountIsLesserThanMaxSupply(output.amount, protocolInfo.tokenSupply, outputName));
+    results.push(
+        validateAmountIsGreaterThanZero(output.amount, outputName)
+    );
 
-    results.push(validateNativeTokens(output.nativeTokens));
+    results.push(
+        validateAmountIsLesserThanMaxSupply(output.amount, protocolInfo.tokenSupply, outputName)
+    );
+
+    results.push(
+        validateNativeTokens(output.nativeTokens)
+    );
 
     if (output.unlockConditions) {
-        const min = OUTPUT_TYPE_TO_SUPPORTED_PROP_VALUES.get(outputType)!.minUnlockConditions;
-        const max = OUTPUT_TYPE_TO_SUPPORTED_PROP_VALUES.get(outputType)!.unlockConditions.length;
-        results.push(validateCount(output.unlockConditions.length, min, max, outputName, "Unlock Conditions"));
+        const min = outputTypeValidations.minUnlockConditions;
+        const max = outputTypeValidations.unlockConditions.length;
+        results.push(
+            validateCount(output.unlockConditions.length, min, max, outputName, "Unlock Conditions")
+        );
 
-        results.push(validateUnlockConditionAllowedTypes(outputType, output.unlockConditions, outputName));
+        results.push(
+            validateUnlockConditionAllowedTypes(outputType, output.unlockConditions, outputName)
+        );
     }
 
     if (output.features) {
-        const max = OUTPUT_TYPE_TO_SUPPORTED_PROP_VALUES.get(outputType)!.features.length;
-        results.push(validateCount(output.features.length, 0, max, outputName, "Features"));
+        const max = outputTypeValidations.features.length;
+        results.push(
+            validateCount(output.features.length, 0, max, outputName, "Features")
+        );
 
-        results.push(validateFeatureAllowedTypes(outputType, output.features, outputName));
+        results.push(
+            validateFeatureAllowedTypes(outputType, output.features, outputName)
+        );
     }
 
-    if (outputType !== BASIC_OUTPUT_TYPE && output.immutableFeatures) {
-        const max = OUTPUT_TYPE_TO_SUPPORTED_PROP_VALUES.get(outputType)!.immutableFeatures!.length;
-        results.push(validateCount(output.immutableFeatures.length, 0, max, outputName, "Immutable Features"));
+    if (outputType !== BASIC_OUTPUT_TYPE && output.immutableFeatures && outputTypeValidations.immutableFeatures) {
+        const max = outputTypeValidations.immutableFeatures.length;
+        results.push(
+            validateCount(output.immutableFeatures.length, 0, max, outputName, "Immutable Features")
+        );
 
-        results.push(validateImmutableFeatureAllowedTypes(outputType, output.immutableFeatures, outputName));
+        results.push(
+            validateImmutableFeatureAllowedTypes(outputType, output.immutableFeatures, outputName)
+        );
     }
 
     return mergeValidationResults(...results);
@@ -262,11 +284,12 @@ function validateUnlockConditionAllowedTypes(
 ): IValidationResult {
     let result: IValidationResult = { isValid: true };
 
-    const allowedUnlockConditionTypes = OUTPUT_TYPE_TO_SUPPORTED_PROP_VALUES.get(outputType)!.unlockConditions;
+    const allowedUnlockConditionTypes = OUTPUT_TYPE_TO_SUPPORTED_PROP_VALUES.get(outputType)?.unlockConditions ?? [];
 
     if (!unlockConditions.every(uC => allowedUnlockConditionTypes.includes(uC.type))) {
-        const unlockConditionNames = UNLOCK_CONDITION_TYPE_NAMES
-                                        .filter((uC, index) => allowedUnlockConditionTypes.includes(index));
+        const unlockConditionNames = UNLOCK_CONDITION_TYPE_NAMES.filter(
+            (uC, index) => allowedUnlockConditionTypes.includes(index)
+        );
 
         result = failValidation(result, `${outputName} output unlock condition type of an unlock condition must define one of the following types: ${unlockConditionNames.join(", ")}.`);
     }
@@ -288,7 +311,7 @@ function validateFeatureAllowedTypes(
 ): IValidationResult {
     let result: IValidationResult = { isValid: true };
 
-    const allowedFeatureTypes = OUTPUT_TYPE_TO_SUPPORTED_PROP_VALUES.get(outputType)!.features;
+    const allowedFeatureTypes = OUTPUT_TYPE_TO_SUPPORTED_PROP_VALUES.get(outputType)?.features ?? [];
 
     if (!features.every(feature => allowedFeatureTypes.includes(feature.type))) {
         const unlockConditionNames = FEATURE_TYPE_NAMES.filter((feature, index) => allowedFeatureTypes.includes(index));
@@ -313,7 +336,7 @@ function validateImmutableFeatureAllowedTypes(
 ): IValidationResult {
     let result: IValidationResult = { isValid: true };
 
-    const allowedFeatureTypes = OUTPUT_TYPE_TO_SUPPORTED_PROP_VALUES.get(outputType)!.immutableFeatures!;
+    const allowedFeatureTypes = OUTPUT_TYPE_TO_SUPPORTED_PROP_VALUES.get(outputType)?.immutableFeatures ?? [];
 
     if (!immutableFeatures.every(feature => allowedFeatureTypes.includes(feature.type))) {
         const unlockConditionNames = FEATURE_TYPE_NAMES.filter((feature, index) => allowedFeatureTypes.includes(index));
