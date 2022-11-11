@@ -8,8 +8,6 @@ import { SENDER_FEATURE_TYPE } from "../../src/models/features/ISenderFeature";
 import { TAG_FEATURE_TYPE } from "../../src/models/features/ITagFeature";
 import { validateFeatures } from "../../src/validation/features/features";
 
-const MAX_FEATURES_COUNT = 4;
-
 describe("Feature validation", () => {
     test("should pass with valid features", () => {
         const features: FeatureTypes[] = [
@@ -37,7 +35,7 @@ describe("Feature validation", () => {
             }
         ];
 
-        const result = validateFeatures(features, MAX_FEATURES_COUNT);
+        const result = validateFeatures(features);
         expect(result.isValid).toEqual(true);
     });
 
@@ -71,7 +69,7 @@ describe("Feature validation", () => {
             }
         ];
 
-        const result = validateFeatures(features, MAX_FEATURES_COUNT);
+        const result = validateFeatures(features);
         expect(result.isValid).toEqual(false);
         expect(result.errors).toEqual(expect.arrayContaining([
             "Ed25519 Address must have 66 characters.",

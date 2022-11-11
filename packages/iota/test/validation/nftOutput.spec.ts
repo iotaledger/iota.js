@@ -53,7 +53,7 @@ describe("NFT output validation", () => {
         ));
     });
 
-    it("should fail when one of the unlocks is of unsupported type", () => {
+    it("should fail when one of the unlock conditions is of unsupported type", () => {
         const nftOutput = cloneNftOutput(mockNftOutput);
         nftOutput.unlockConditions.push({
             type: STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE,
@@ -67,9 +67,12 @@ describe("NFT output validation", () => {
 
         expect(result.isValid).toEqual(false);
         expect(result.errors).toBeDefined();
-        expect(result.errors?.length).toEqual(1);
+        expect(result.errors?.length).toEqual(2);
         expect(result.errors).toEqual(expect.arrayContaining(
-            ["NFT output unlock condition type of an unlock condition must define one of the following types: Address Unlock Condition, Storage Deposit Return Unlock Condition, Timelock Unlock Condition or Expiration Unlock Condition."]
+            [
+                "NFT output Unlock Conditions count must be between 1 and 4.",
+                "NFT output unlock condition type of an unlock condition must define one of the following types: Address Unlock Condition, Storage Deposit Return Unlock Condition, Timelock Unlock Condition, Expiration Unlock Condition."
+            ]
         ));
     });
 
@@ -92,7 +95,7 @@ describe("NFT output validation", () => {
         expect(result.errors).toBeDefined();
         expect(result.errors?.length).toEqual(1);
         expect(result.errors).toEqual(expect.arrayContaining(
-            ["NFT output unlock conditions must define an Address Unlock Condition."]
+            ["NFT output Unlock Conditions must define an Address Unlock Condition."]
         ));
     });
 
@@ -151,7 +154,7 @@ describe("NFT output validation", () => {
         expect(result.errors).toBeDefined();
         expect(result.errors?.length).toEqual(1);
         expect(result.errors).toEqual(expect.arrayContaining(
-            ["NFT output Unlock Conditions must be sorted in ascending order based on their Unlock Condition Type."]
+            ["Output Unlock Conditions must be sorted in ascending order based on their Unlock Condition Type."]
         ));
     });
 
@@ -173,7 +176,7 @@ describe("NFT output validation", () => {
         expect(result.errors).toBeDefined();
         expect(result.errors?.length).toEqual(1);
         expect(result.errors).toEqual(expect.arrayContaining(
-            ["NFT output feature type of a feature must define one of the following types: Sender Feature, Metadata Feature or Tag Feature."]
+            ["NFT output feature type of a feature must define one of the following types: Sender Feature, Metadata Feature, Tag Feature."]
         ));
     });
 
@@ -203,7 +206,7 @@ describe("NFT output validation", () => {
         expect(result.errors).toBeDefined();
         expect(result.errors?.length).toEqual(1);
         expect(result.errors).toEqual(expect.arrayContaining(
-            ["NFT output Features must be sorted in ascending order based on their Feature Type."]
+            ["Output Features must be sorted in ascending order based on their Feature Type."]
         ));
     });
 
@@ -222,7 +225,7 @@ describe("NFT output validation", () => {
         expect(result.errors).toBeDefined();
         expect(result.errors?.length).toEqual(1);
         expect(result.errors).toEqual(expect.arrayContaining(
-            ["NFT output feature type of an Immutable Feature must define one of the following types: Issuer Feature or Metadata Feature."]
+            ["NFT output feature type of an Immutable Feature must define one of the following types: Issuer Feature, Metadata Feature."]
         ));
     });
 
@@ -248,7 +251,7 @@ describe("NFT output validation", () => {
         expect(result.errors).toBeDefined();
         expect(result.errors?.length).toEqual(1);
         expect(result.errors).toEqual(expect.arrayContaining(
-            ["NFT output Immutable Features must be sorted in ascending order based on their Immutable Feature Type."]
+            ["Output Features must be sorted in ascending order based on their Feature Type."]
         ));
     });
 });

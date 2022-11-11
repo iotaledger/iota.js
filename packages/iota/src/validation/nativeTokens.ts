@@ -11,7 +11,7 @@ import { validateDistinct } from "./validationUtils";
  * @param nativeTokens The Native Tokens to validate.
  * @returns The validation result.
  */
-export function validateNativeTokens(nativeTokens: INativeToken[] | undefined): IValidationResult {
+export function validateNativeTokens(nativeTokens?: INativeToken[]): IValidationResult {
     let result: IValidationResult = { isValid: true };
 
     if (nativeTokens) {
