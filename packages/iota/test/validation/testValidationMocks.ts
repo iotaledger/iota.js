@@ -404,6 +404,26 @@ export const mockBasicOutput: IBasicOutput = {
                 type: ED25519_ADDRESS_TYPE,
                 pubKeyHash: "0x6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
             }
+        },
+        {
+            type: STORAGE_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE,
+            amount: "43600",
+            returnAddress: {
+                type: ED25519_ADDRESS_TYPE,
+                pubKeyHash: "0x6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
+            }
+        },
+        {
+            type: TIMELOCK_UNLOCK_CONDITION_TYPE,
+            unixTime: 123123123123
+        },
+        {
+            type: EXPIRATION_UNLOCK_CONDITION_TYPE,
+            unixTime: 123123123123,
+            returnAddress: {
+                type: ED25519_ADDRESS_TYPE,
+                pubKeyHash: "0x6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
+            }
         }
     ],
     features: [
