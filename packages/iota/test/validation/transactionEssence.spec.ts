@@ -7,10 +7,22 @@ import { TREASURY_OUTPUT_TYPE } from "../../src/models/outputs/ITreasuryOutput";
 import { ADDRESS_UNLOCK_CONDITION_TYPE } from "../../src/models/unlockConditions/IAddressUnlockCondition";
 import { validateInputs } from "../../src/validation/inputs/inputs";
 import { validateOutputs } from "../../src/validation/outputs/outputs";
+import { validateTransactionEssence } from "../../src/validation/transactionEssence";
 import { cloneTransactionEssence } from "./testUtils";
 import { mockTransactionEssence, protocolInfoMock, mockMaxDistintNativeTokens } from "./testValidationMocks";
 
 describe("Transaction Essence validation", () => {
+    it("should fail with network id doesnot match with the current network's id", () => {
+        const result = validateTransactionEssence(mockTransactionEssence, protocolInfoMock);
+
+        expect(result.isValid).toEqual(false);
+        expect(result.errors).toBeDefined();
+        expect(result.errors?.length).toEqual(1);
+        expect(result.errors).toEqual(expect.arrayContaining(
+            ["Network ID must match the value of the current network."]
+        ));
+    });
+
     it("should fail when input count is out of bounds", () => {
         const txEssence = cloneTransactionEssence(mockTransactionEssence);
         txEssence.inputs = [];
@@ -116,7 +128,6 @@ describe("Transaction Essence validation", () => {
             features: []
         });
         const result = validateOutputs(txEssence.outputs, protocolInfoMock);
-        console.log("result.errors", result.errors);
 
         expect(result.isValid).toEqual(false);
         expect(result.errors).toBeDefined();

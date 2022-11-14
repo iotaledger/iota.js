@@ -1,5 +1,6 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
+import { TransactionHelper } from "@iota/iota.js";
 import type { INodeInfoProtocol } from "../models/info/INodeInfoProtocol";
 import { ITransactionEssence, TRANSACTION_ESSENCE_TYPE } from "../models/ITransactionEssence";
 import { ITaggedDataPayload, TAGGED_DATA_PAYLOAD_TYPE } from "../models/payloads/ITaggedDataPayload";
@@ -24,6 +25,14 @@ export function validateTransactionEssence(transactionEssence: ITransactionEssen
             errors: [`Transaction Essence Type value must be ${TRANSACTION_ESSENCE_TYPE}.`]
         });
     }
+
+    if (transactionEssence.networkId !== TransactionHelper.networkIdFromNetworkName(protocolInfo.networkName)) {
+        results.push({
+            isValid: false,
+            errors: ["Network ID must match the value of the current network."]
+        });
+    }
+
     results.push(validateInputs(transactionEssence.inputs));
     results.push(validateOutputs(transactionEssence.outputs, protocolInfo));
 
