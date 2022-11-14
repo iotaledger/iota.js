@@ -3360,17 +3360,18 @@ ___
 
 ### generateBip44Path
 
-▸ **generateBip44Path**(`accountIndex`, `addressIndex`, `isInternal`): `Bip32Path`
+▸ **generateBip44Path**(`accountIndex`, `addressIndex`, `isInternal`, `coinType?`): `Bip32Path`
 
 Generate a bip44 path based on all its parts.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `accountIndex` | `number` | The account index. |
-| `addressIndex` | `number` | The address index. |
-| `isInternal` | `boolean` | Is this an internal address. |
+| Name | Type | Default value | Description |
+| :------ | :------ | :------ | :------ |
+| `accountIndex` | `number` | `undefined` | The account index. |
+| `addressIndex` | `number` | `undefined` | The address index. |
+| `isInternal` | `boolean` | `undefined` | Is this an internal address. |
+| `coinType` | `number` | `COIN_TYPE_IOTA` | The coin type, default is the IOTA coin type. |
 
 #### Returns
 
@@ -3382,15 +3383,16 @@ ___
 
 ### generateBip44Address
 
-▸ **generateBip44Address**(`generatorState`): `string`
+▸ **generateBip44Address**(`generatorState`, `coinType?`): `string`
 
 Generate addresses based on the account indexing style.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `generatorState` | [`IBip44GeneratorState`](interfaces/IBip44GeneratorState.md) | The address state. |
+| Name | Type | Default value | Description |
+| :------ | :------ | :------ | :------ |
+| `generatorState` | [`IBip44GeneratorState`](interfaces/IBip44GeneratorState.md) | `undefined` | The address state. |
+| `coinType` | `number` | `COIN_TYPE_IOTA` | The coin type, default is the IOTA coin type. |
 
 #### Returns
 

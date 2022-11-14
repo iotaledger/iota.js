@@ -1,6 +1,6 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import { generateBip44Path, generateBip44Address } from "../../src/highLevel/addresses";
+import { generateBip44Path, generateBip44Address, COIN_TYPE_SHIMMER } from "../../src/highLevel/addresses";
 
 describe("Addresses", () => {
     test("can generate an address with generateBip44Path with external index", () => {
@@ -24,6 +24,19 @@ describe("Addresses", () => {
         expect(parts[0]).toEqual("m");
         expect(parts[1]).toEqual("44'");
         expect(parts[2]).toEqual("4218'");
+        expect(parts[3]).toEqual("0'");
+        expect(parts[4]).toEqual("1'");
+        expect(parts[5]).toEqual("0'");
+    });
+
+    test("can generate an address with generateBip44Path with custom coin type", () => {
+        const path = generateBip44Path(0, 0, true, COIN_TYPE_SHIMMER);
+
+        const parts = path.toString().split("/");
+
+        expect(parts[0]).toEqual("m");
+        expect(parts[1]).toEqual("44'");
+        expect(parts[2]).toEqual(`${COIN_TYPE_SHIMMER}'`);
         expect(parts[3]).toEqual("0'");
         expect(parts[4]).toEqual("1'");
         expect(parts[5]).toEqual("0'");
@@ -69,5 +82,26 @@ describe("Addresses", () => {
         expect(addresses[3]).toEqual("m/44'/4218'/0'/0'/2'");
         expect(addresses[4]).toEqual("m/44'/4218'/0'/1'/2'");
         expect(addresses[5]).toEqual("m/44'/4218'/0'/0'/3'");
+    });
+
+    test("can generate multiple addresses with generator and custom coin type", () => {
+        const generatorState = {
+            accountIndex: 0,
+            isInternal: false,
+            addressIndex: 0
+        };
+
+        const addresses = [];
+
+        for (let i = 0; i < 6; i++) {
+            addresses.push(generateBip44Address(generatorState, COIN_TYPE_SHIMMER));
+        }
+
+        expect(addresses[0]).toEqual(`m/44'/${COIN_TYPE_SHIMMER}'/0'/0'/0'`);
+        expect(addresses[1]).toEqual(`m/44'/${COIN_TYPE_SHIMMER}'/0'/1'/0'`);
+        expect(addresses[2]).toEqual(`m/44'/${COIN_TYPE_SHIMMER}'/0'/0'/1'`);
+        expect(addresses[3]).toEqual(`m/44'/${COIN_TYPE_SHIMMER}'/0'/1'/1'`);
+        expect(addresses[4]).toEqual(`m/44'/${COIN_TYPE_SHIMMER}'/0'/0'/2'`);
+        expect(addresses[5]).toEqual(`m/44'/${COIN_TYPE_SHIMMER}'/0'/1'/2'`);
     });
 });
