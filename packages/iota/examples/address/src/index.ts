@@ -6,7 +6,7 @@ import {
     Ed25519Seed,
     ED25519_ADDRESS_TYPE,
     generateBip44Address,
-    IOTA_BIP44_BASE_PATH,
+    COIN_TYPE_IOTA,
     SingleNodeClient
 } from "@iota/iota.js";
 
@@ -61,7 +61,8 @@ async function run() {
     console.log();
 
     // You can perform the same process as the generator manually as follows.
-    const basePath = new Bip32Path(IOTA_BIP44_BASE_PATH);
+    const basePath = new Bip32Path(`m/44'/${COIN_TYPE_IOTA}'`);
+
     const accountIndex = 0;
     let isInternal = false;
     let addressIndex = 0;
