@@ -7,7 +7,6 @@ import type { IBasicOutput } from "../../src/models/outputs/IBasicOutput";
 import type { IFoundryOutput } from "../../src/models/outputs/IFoundryOutput";
 import type { INftOutput } from "../../src/models/outputs/INftOutput";
 import type { ITaggedDataPayload } from "../../src/models/payloads/ITaggedDataPayload";
-import type { ITransactionPayload } from "../../src/models/payloads/ITransactionPayload";
 
 /**
  * Helper function to clone an Basic output.
@@ -70,13 +69,4 @@ export function cloneTaggedDataPayload(payload: ITaggedDataPayload): ITaggedData
  */
 export function cloneTransactionEssence(txEssence: ITransactionEssence): ITransactionEssence {
     return JSON.parse(JSON.stringify(txEssence)) as ITransactionEssence;
-}
-
-/**
- * Helper function to clone a transaction payload.
- * @param payload The transaction payload to clone.
- * @returns The cloned transaction essence.
- */
-export function cloneTransactionPayload(payload: ITransactionPayload): ITransactionPayload {
-    return JSON.parse(JSON.stringify(payload)) as ITransactionPayload;
 }

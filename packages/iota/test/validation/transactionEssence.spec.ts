@@ -10,8 +10,8 @@ import { validateOutputs } from "../../src/validation/outputs/outputs";
 import { cloneTransactionEssence } from "./testUtils";
 import { mockTransactionEssence, protocolInfoMock, mockMaxDistintNativeTokens } from "./testValidationMocks";
 
-describe("Parents validation", () => {
-    it("should fail with inputs count must be greater then equal to 1 and less then equal to 128", () => {
+describe("Transaction Essence validation", () => {
+    it("should fail when input count is out of bounds", () => {
         const txEssence = cloneTransactionEssence(mockTransactionEssence);
         txEssence.inputs = [];
         const result = validateInputs(txEssence.inputs);
@@ -24,7 +24,7 @@ describe("Parents validation", () => {
         ));
     });
 
-    it("should fail with same transaction id and transaction output index in list of inputs", () => {
+    it("should fail when transaction id and transaction output index pairs are not distinct", () => {
         const txEssence = cloneTransactionEssence(mockTransactionEssence);
         txEssence.inputs.push({
             type: UTXO_INPUT_TYPE,
@@ -58,7 +58,7 @@ describe("Parents validation", () => {
         ));
     });
 
-    it("should fail with outputs count must be greater then equal to 1 and less then equal to 128", () => {
+    it("should fail with outputs count must be greater then zero and less then 129", () => {
         const txEssence = cloneTransactionEssence(mockTransactionEssence);
         txEssence.outputs = [];
         const result = validateOutputs(txEssence.outputs, protocolInfoMock);

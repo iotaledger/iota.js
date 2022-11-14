@@ -24,10 +24,12 @@ export function validateUnlocks(unlocks: UnlockTypes[]): IValidationResult {
 
         switch (unlock.type) {
             case SIGNATURE_UNLOCK_TYPE:
-                if (seenSignatures.some(sig =>
-                    sig.type === unlock.signature.type &&
-                    sig.publicKey === unlock.signature.publicKey &&
-                    sig.signature === unlock.signature.signature)
+                if (
+                    seenSignatures.some(sig =>
+                        sig.type === unlock.signature.type &&
+                        sig.publicKey === unlock.signature.publicKey &&
+                        sig.signature === unlock.signature.signature
+                    )
                 ) {
                     results.push({
                         isValid: false,

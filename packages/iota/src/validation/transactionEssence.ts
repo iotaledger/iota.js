@@ -2,9 +2,10 @@
 // SPDX-License-Identifier: Apache-2.0
 import type { INodeInfoProtocol } from "../models/info/INodeInfoProtocol";
 import { ITransactionEssence, TRANSACTION_ESSENCE_TYPE } from "../models/ITransactionEssence";
-import { validateEssencePayload } from "./essencePayload/essencePayload";
+import { ITaggedDataPayload, TAGGED_DATA_PAYLOAD_TYPE } from "../models/payloads/ITaggedDataPayload";
 import { validateInputs } from "./inputs/inputs";
 import { validateOutputs } from "./outputs/outputs";
+import { validateTaggedDataPayload } from "./payloads/payloads";
 import { failValidation, IValidationResult, mergeValidationResults } from "./result";
 
 /**
@@ -15,21 +16,35 @@ import { failValidation, IValidationResult, mergeValidationResults } from "./res
  */
 export function validateTransactionEssence(transactionEssence: ITransactionEssence, protocolInfo: INodeInfoProtocol
 ): IValidationResult {
-    const validateInputsResult = validateInputs(transactionEssence.inputs);
-    const validateOutputsResult = validateOutputs(transactionEssence.outputs, protocolInfo);
-    let validatePayloadResult: IValidationResult = { isValid: true };
-    let validateTypeResult: IValidationResult = { isValid: true };
-
-    if (transactionEssence.payload) {
-        validatePayloadResult = validateEssencePayload(transactionEssence.payload);
-    }
+    const results: IValidationResult[] = [];
 
     if (transactionEssence.type !== TRANSACTION_ESSENCE_TYPE) {
-        validateTypeResult = failValidation(validateTypeResult, `Transaction Essence Type value must be ${TRANSACTION_ESSENCE_TYPE}.`);
+        results.push({
+            isValid: false,
+            errors: [`Transaction Essence Type value must be ${TRANSACTION_ESSENCE_TYPE}.`]
+        });
+    }
+    results.push(validateInputs(transactionEssence.inputs));
+    results.push(validateOutputs(transactionEssence.outputs, protocolInfo));
+
+    if (transactionEssence.payload) {
+        results.push(validateTxEsencePayload(transactionEssence.payload));
     }
 
-    return mergeValidationResults(
-        validateInputsResult, validateOutputsResult, validatePayloadResult, validateTypeResult
-    );
+    return mergeValidationResults(...results);
 }
 
+/**
+ * Validate transaction essence payload.
+ * @param payload The tagged data payload.
+ * @returns The validation result.
+ */
+export function validateTxEsencePayload(payload: ITaggedDataPayload): IValidationResult {
+    let result: IValidationResult = { isValid: true };
+
+    result = payload.type !== TAGGED_DATA_PAYLOAD_TYPE ?
+        failValidation(result, "Transaction Essence payload type must be Tagged data payload type.") :
+        validateTaggedDataPayload(payload);
+
+    return result;
+}

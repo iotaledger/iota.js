@@ -60,24 +60,25 @@ export function validatePayload(
 export function validateTransactionPayload(
     transactionPayload: ITransactionPayload, protocolInfo: INodeInfoProtocol
 ): IValidationResult {
-    let txEssenceResult: IValidationResult = { isValid: true };
-    let unlocksResult: IValidationResult = { isValid: true };
-    let countsResult: IValidationResult = { isValid: true };
+    const results: IValidationResult[] = [];
 
     if (transactionPayload.type === TRANSACTION_PAYLOAD_TYPE) {
         const unlocksCount = transactionPayload.unlocks.length;
         const inputsCount = transactionPayload.essence.inputs.length;
 
         if (unlocksCount !== inputsCount) {
-            countsResult = failValidation(countsResult, "Transaction payload unlocks count must match inputs count of the Transaction Essence.");
+            results.push({
+                isValid: false,
+                errors: ["Transaction payload unlocks count must match inputs count of the Transaction Essence."]
+            });
         }
-        txEssenceResult = validateTransactionEssence(transactionPayload.essence, protocolInfo);
-        unlocksResult = validateUnlocks(transactionPayload.unlocks);
+        results.push(validateTransactionEssence(transactionPayload.essence, protocolInfo));
+        results.push(validateUnlocks(transactionPayload.unlocks));
     } else {
         throw new Error(`Unrecognized transaction type ${transactionPayload.type}`);
     }
 
-    return mergeValidationResults(txEssenceResult, unlocksResult, countsResult);
+    return mergeValidationResults(...results);
 }
 
 /**
@@ -88,12 +89,7 @@ export function validateTransactionPayload(
 export function validateTaggedDataPayload(
     taggedDataPayload: ITaggedDataPayload
 ): IValidationResult {
-    let result: IValidationResult = { isValid: true };
-
-    if (taggedDataPayload.tag && taggedDataPayload.tag.length / 2 > MAX_TAG_LENGTH) {
-        result = failValidation(result, `Tagged Data Payload tag length exceeds the maximum size of ${MAX_TAG_LENGTH}.`);
-    }
-
-    return result;
+    return (taggedDataPayload.tag && taggedDataPayload.tag.length / 2 > MAX_TAG_LENGTH) ?
+        failValidation({ isValid: true }, `Tagged Data Payload tag length exceeds the maximum size of ${MAX_TAG_LENGTH}.`) :
+        { isValid: true };
 }
-

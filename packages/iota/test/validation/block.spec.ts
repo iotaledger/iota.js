@@ -1,10 +1,10 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import { validateParents } from "../../src/validation/parents/parents";
+import { validateParents } from "../../src/validation/block";
 import { cloneBlock } from "./testUtils";
 import { mockBlock } from "./testValidationMocks";
 
-describe("Parents validation", () => {
+describe("Block validation", () => {
     it("should pass with valid parents in block", () => {
         const block = cloneBlock(mockBlock);
         const result = validateParents(block.parents);
@@ -13,7 +13,7 @@ describe("Parents validation", () => {
         expect(result.errors).toEqual(undefined);
     });
 
-    it("should fail with parents count must be greater then equal to 1 and less then equal to 8", () => {
+    it("should fail with parents count must be greater then zero and less then 9", () => {
         const block = cloneBlock(mockBlock);
         block.parents = [];
         const result = validateParents(block.parents);

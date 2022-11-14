@@ -17,11 +17,6 @@ import { validateFoundryOutput } from "./foundryOutput";
 import { validateNftOutput } from "./nftOutput";
 
 /**
- * Maximum number of iota supply.
- */
-const MAX_IOTA_SUPPLY = 1450896407249092;
-
-/**
  * Validate outputs.
  * @param outputs The outputs to validate.
  * @param protocolInfo The Protocol Info.
@@ -29,41 +24,15 @@ const MAX_IOTA_SUPPLY = 1450896407249092;
  */
 export function validateOutputs(outputs: OutputTypes[], protocolInfo: INodeInfoProtocol): IValidationResult {
     const results: IValidationResult[] = [];
-    let totalAmount: number = 0;
-    let nativeTokenCount: number = 0;
 
-    if (outputs.length < MIN_OUTPUT_COUNT || outputs.length > MAX_OUTPUT_COUNT) {
-        results.push({
-            isValid: false,
-            errors: [`Outputs count must be between ${MIN_OUTPUT_COUNT} and ${MAX_OUTPUT_COUNT}.`]
-        });
-    }
+    results.push(validateOutputsCount(outputs));
+    results.push(validateOutputsAmount(outputs, Number(protocolInfo.tokenSupply)));
+    results.push(validateNativeTokensCount(outputs));
 
     for (const output of outputs) {
-        totalAmount += Number(output.amount);
-        if (output.type !== TREASURY_OUTPUT_TYPE && output.nativeTokens) {
-            const tokenIds = output.nativeTokens.map(token => token.id);
-            const distinctIds = new Set<string>(tokenIds);
-            nativeTokenCount += distinctIds.size;
-        }
-
         results.push(
             validateOutput(output, protocolInfo)
         );
-    }
-
-    if (totalAmount > MAX_IOTA_SUPPLY) {
-        results.push({
-            isValid: false,
-            errors: [`The sum of all outputs amount field must be less then ${MAX_IOTA_SUPPLY}.`]
-        });
-    }
-
-    if (nativeTokenCount > MAX_NATIVE_TOKEN_COUNT) {
-        results.push({
-            isValid: false,
-            errors: [`The count of all distinct native tokens present in outputs must be less then ${MAX_NATIVE_TOKEN_COUNT}.`]
-        });
     }
 
     return mergeValidationResults(...results);
@@ -97,6 +66,51 @@ export function validateOutput(output: OutputTypes, protocolInfo: INodeInfoProto
         default:
             result = failValidation(result, "Output Type must be one of the following: Basic, Alias, Foundry and NFT.");
             throw new Error(`Unrecognized output type ${(output as ITypeBase<number>).type}`);
+    }
+
+    return result;
+}
+
+function validateOutputsCount(outputs: OutputTypes[]) {
+    let result: IValidationResult = { isValid: true };
+
+    if (outputs.length < MIN_OUTPUT_COUNT || outputs.length > MAX_OUTPUT_COUNT) {
+        result = failValidation(result, `Outputs count must be between ${MIN_OUTPUT_COUNT} and ${MAX_OUTPUT_COUNT}.`);
+
+    }
+
+    return result;
+}
+
+function validateOutputsAmount(outputs: OutputTypes[], tokenSupply: number) {
+    let result: IValidationResult = { isValid: true };
+    let totalAmount: number = 0;
+
+    for (const output of outputs) {
+        totalAmount += Number(output.amount);
+    }
+
+    if (totalAmount > tokenSupply) {
+        result = failValidation(result, `The sum of all outputs amount field must be less then ${tokenSupply}.`);
+    }
+
+    return result;
+}
+
+function validateNativeTokensCount(outputs: OutputTypes[]) {
+    let result: IValidationResult = { isValid: true };
+    let nativeTokenCount: number = 0;
+
+    for (const output of outputs) {
+        if (output.type !== TREASURY_OUTPUT_TYPE && output.nativeTokens) {
+            const tokenIds = output.nativeTokens.map(token => token.id);
+            const distinctIds = new Set<string>(tokenIds);
+            nativeTokenCount += distinctIds.size;
+        }
+    }
+
+    if (nativeTokenCount > MAX_NATIVE_TOKEN_COUNT) {
+        result = failValidation(result, `The count of all distinct native tokens present in outputs must be less then ${MAX_NATIVE_TOKEN_COUNT}.`);
     }
 
     return result;

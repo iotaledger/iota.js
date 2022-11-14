@@ -3,13 +3,11 @@
 import { ED25519_SIGNATURE_TYPE } from "../../src/models/signatures/IEd25519Signature";
 import { SIGNATURE_UNLOCK_TYPE } from "../../src/models/unlocks/ISignatureUnlock";
 import { validateTransactionPayload } from "../../src/validation/payloads/payloads";
-import { cloneTransactionPayload } from "./testUtils";
 import { mockTransactionPayload, protocolInfoMock } from "./testValidationMocks";
 
 describe("Transaction payload validation", () => {
     it("should fail with unlock counts and input counts in transaction essence must be same", () => {
-        const payload = cloneTransactionPayload(mockTransactionPayload);
-        payload.unlocks.push(
+        mockTransactionPayload.unlocks.push(
             {
                 type: SIGNATURE_UNLOCK_TYPE,
                 signature: {
@@ -19,7 +17,7 @@ describe("Transaction payload validation", () => {
                 }
             }
         );
-        const result = validateTransactionPayload(payload, protocolInfoMock);
+        const result = validateTransactionPayload(mockTransactionPayload, protocolInfoMock);
 
         expect(result.isValid).toEqual(false);
         expect(result.errors).toBeDefined();
