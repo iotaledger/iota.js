@@ -10,9 +10,11 @@ import { MAX_TAG_LENGTH } from "../binary/payloads/taggedDataPayload";
 import { serializeTransactionEssence } from "../binary/transactionEssence";
 import { SingleNodeClient } from "../clients/singleNodeClient";
 import { ED25519_ADDRESS_TYPE } from "../models/addresses/IEd25519Address";
+import type { FeatureTypes } from "../models/features/featureTypes";
 import { DEFAULT_PROTOCOL_VERSION, IBlock } from "../models/IBlock";
 import type { IClient } from "../models/IClient";
 import type { IKeyPair } from "../models/IKeyPair";
+import type { INativeToken } from "../models/INativeToken";
 import type { IUTXOInput } from "../models/inputs/IUTXOInput";
 import { ITransactionEssence, TRANSACTION_ESSENCE_TYPE } from "../models/ITransactionEssence";
 import { BASIC_OUTPUT_TYPE, IBasicOutput } from "../models/outputs/IBasicOutput";
@@ -48,6 +50,8 @@ export async function sendAdvanced(
         address: string;
         addressType: number;
         amount: BigInteger;
+        nativeTokens?: INativeToken[];
+        features?: FeatureTypes[];
     }[],
     taggedData?: {
         tag?: Uint8Array | string;
@@ -64,7 +68,11 @@ export async function sendAdvanced(
     const protocolInfo = await localClient.protocolInfo();
 
     const transactionPayload = buildTransactionPayload(
-        protocolInfo.networkId, inputsAndSignatureKeyPairs, outputs, taggedData);
+        protocolInfo.networkId,
+        inputsAndSignatureKeyPairs,
+        outputs,
+        taggedData
+    );
 
     const block: IBlock = {
         protocolVersion: DEFAULT_PROTOCOL_VERSION,
@@ -102,6 +110,8 @@ export function buildTransactionPayload(
         address: string;
         addressType: number;
         amount: BigInteger;
+        nativeTokens?: INativeToken[];
+        fatures?: FeatureTypes[];
     }[],
     taggedData?: {
         tag?: Uint8Array | string;
@@ -149,7 +159,7 @@ export function buildTransactionPayload(
             const o: IBasicOutput = {
                 type: BASIC_OUTPUT_TYPE,
                 amount: output.amount.toString(),
-                nativeTokens: [],
+                nativeTokens: output.nativeTokens,
                 unlockConditions: [
                     {
                         type: ADDRESS_UNLOCK_CONDITION_TYPE,
@@ -159,7 +169,7 @@ export function buildTransactionPayload(
                         }
                     }
                 ],
-                features: []
+                features: output.fatures
             };
             const writeStream = new WriteStream();
             serializeOutput(writeStream, o);
