@@ -90,6 +90,6 @@ export function validateTaggedDataPayload(
     taggedDataPayload: ITaggedDataPayload
 ): IValidationResult {
     return (taggedDataPayload.tag && taggedDataPayload.tag.length / 2 > MAX_TAG_LENGTH) ?
-        failValidation({ isValid: true }, `Tagged Data Payload tag length exceeds the maximum size of ${MAX_TAG_LENGTH}.`) :
+        failValidation({ isValid: false }, `Tagged Data Payload tag length exceeds the maximum size of ${MAX_TAG_LENGTH}.`) :
         { isValid: true };
 }

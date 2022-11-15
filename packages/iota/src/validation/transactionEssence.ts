@@ -37,7 +37,7 @@ export function validateTransactionEssence(transactionEssence: ITransactionEssen
     results.push(validateOutputs(transactionEssence.outputs, protocolInfo));
 
     if (transactionEssence.payload) {
-        results.push(validateTxEsencePayload(transactionEssence.payload));
+        results.push(validateTxEssencePayload(transactionEssence.payload));
     }
 
     return mergeValidationResults(...results);
@@ -48,7 +48,7 @@ export function validateTransactionEssence(transactionEssence: ITransactionEssen
  * @param payload The tagged data payload.
  * @returns The validation result.
  */
-export function validateTxEsencePayload(payload: ITaggedDataPayload): IValidationResult {
+export function validateTxEssencePayload(payload: ITaggedDataPayload): IValidationResult {
     let result: IValidationResult = { isValid: true };
 
     result = payload.type !== TAGGED_DATA_PAYLOAD_TYPE ?
@@ -57,3 +57,4 @@ export function validateTxEsencePayload(payload: ITaggedDataPayload): IValidatio
 
     return result;
 }
+
