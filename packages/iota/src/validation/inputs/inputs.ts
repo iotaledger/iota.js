@@ -24,6 +24,7 @@ export function validateInputs(inputs: IUTXOInput[]): IValidationResult {
 
         if (filteredInputs.length !== 1) {
             result = failValidation(result, "Each pair of Transaction Id and Transaction Output Index must be unique in the list of inputs.");
+            break;
         }
     }
 
