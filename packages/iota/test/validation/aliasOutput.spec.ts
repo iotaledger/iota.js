@@ -17,19 +17,14 @@ describe("Alias output validation", () => {
     it("should pass with valid alias output", () => {
         const aliasOutput = cloneAliasOutput(mockAliasOutput);
 
-        const result = validateAliasOutput(aliasOutput, protocolInfoMock);
-        expect(result.isValid).toEqual(true);
+        expect(() => validateAliasOutput(aliasOutput, protocolInfoMock)).not.toThrowError();
     });
 
     it("should fail when the output amount is zero", () => {
         const aliasOutput = cloneAliasOutput(mockAliasOutput);
         aliasOutput.amount = "0";
 
-        const result = validateAliasOutput(aliasOutput, protocolInfoMock);
-        expect(result.isValid).toEqual(false);
-        expect(result.errors).toEqual(expect.arrayContaining(
-            ["Alias output amount field must be larger than zero."]
-        ));
+        expect(() => validateAliasOutput(aliasOutput, protocolInfoMock)).toThrow("Alias output amount field must be greater than zero.");
     });
 
     it("should fail when the amount is larger than max token supply", () => {
@@ -37,28 +32,14 @@ describe("Alias output validation", () => {
         // max is 1450896407249092
         aliasOutput.amount = "1450896407249095";
 
-        const result = validateAliasOutput(aliasOutput, protocolInfoMock);
-
-        expect(result.isValid).toEqual(false);
-        expect(result.errors).toBeDefined();
-        expect(result.errors?.length).toEqual(1);
-        expect(result.errors).toEqual(expect.arrayContaining(
-            ["Alias output amount field must not be larger than max token supply."]
-        ));
+        expect(() => validateAliasOutput(aliasOutput, protocolInfoMock)).toThrow("Alias output amount field must not be greater than max token supply.");
     });
 
     it("should fail when unlock conditions count is not equal to 2", () => {
         const aliasOutput = cloneAliasOutput(mockAliasOutput);
         aliasOutput.unlockConditions = [];
 
-        const result = validateAliasOutput(aliasOutput, protocolInfoMock);
-
-        expect(result.isValid).toEqual(false);
-        expect(result.errors).toBeDefined();
-        expect(result.errors?.length).toEqual(1);
-        expect(result.errors).toEqual(expect.arrayContaining(
-            ["Alias output Unlock Conditions count must be equal to 2."]
-        ));
+        expect(() => validateAliasOutput(aliasOutput, protocolInfoMock)).toThrow("Alias output Unlock Conditions count must be equal to 2.");
     });
 
     it("should fail when one of the unlock conditions is of unsupported type", () => {
@@ -71,14 +52,7 @@ describe("Alias output validation", () => {
             }
         };
 
-        const result = validateAliasOutput(aliasOutput, protocolInfoMock);
-
-        expect(result.isValid).toEqual(false);
-        expect(result.errors).toBeDefined();
-        expect(result.errors?.length).toEqual(1);
-        expect(result.errors).toEqual(expect.arrayContaining(
-            ["Alias output unlock condition type of an unlock condition must define one of the following types: State Controller Address Unlock Condition, Governor Address Unlock Condition."]
-        ));
+        expect(() => validateAliasOutput(aliasOutput, protocolInfoMock)).toThrow("Alias output unlock condition type of an unlock condition must define one of the following types: State Controller Address Unlock Condition, Governor Address Unlock Condition.");
     });
 
     it("should fail when the unlocks are not ordered in ascending order by type", () => {
@@ -100,14 +74,7 @@ describe("Alias output validation", () => {
             }
         ];
 
-        const result = validateAliasOutput(aliasOutput, protocolInfoMock);
-
-        expect(result.isValid).toEqual(false);
-        expect(result.errors).toBeDefined();
-        expect(result.errors?.length).toEqual(1);
-        expect(result.errors).toEqual(expect.arrayContaining(
-            ["Output Unlock Conditions must be sorted in ascending order based on their Unlock Condition Type."]
-        ));
+        expect(() => validateAliasOutput(aliasOutput, protocolInfoMock)).toThrow("Output Unlock Conditions must be sorted in ascending order based on their Unlock Condition Type.");
     });
 
     it("should fail when one of the features is of unsupported type", () => {
@@ -122,14 +89,7 @@ describe("Alias output validation", () => {
             }
         ];
 
-        const result = validateAliasOutput(aliasOutput, protocolInfoMock);
-
-        expect(result.isValid).toEqual(false);
-        expect(result.errors).toBeDefined();
-        expect(result.errors?.length).toEqual(1);
-        expect(result.errors).toEqual(expect.arrayContaining(
-            ["Alias output feature type of a feature must define one of the following types: Sender Feature, Metadata Feature."]
-        ));
+        expect(() => validateAliasOutput(aliasOutput, protocolInfoMock)).toThrow("Alias output feature type of a feature must define one of the following types: Sender Feature, Metadata Feature.");
     });
 
     it("should fail when the features are not ordered in ascending order by type", () => {
@@ -148,14 +108,7 @@ describe("Alias output validation", () => {
             }
         ];
 
-        const result = validateAliasOutput(aliasOutput, protocolInfoMock);
-
-        expect(result.isValid).toEqual(false);
-        expect(result.errors).toBeDefined();
-        expect(result.errors?.length).toEqual(1);
-        expect(result.errors).toEqual(expect.arrayContaining(
-            ["Output Features must be sorted in ascending order based on their Feature Type."]
-        ));
+        expect(() => validateAliasOutput(aliasOutput, protocolInfoMock)).toThrow("Output Features must be sorted in ascending order based on their Feature Type.");
     });
 
     it("should fail when one of the immutable features is of unsupported type", () => {
@@ -167,14 +120,7 @@ describe("Alias output validation", () => {
             };
         }
 
-        const result = validateAliasOutput(aliasOutput, protocolInfoMock);
-
-        expect(result.isValid).toEqual(false);
-        expect(result.errors).toBeDefined();
-        expect(result.errors?.length).toEqual(1);
-        expect(result.errors).toEqual(expect.arrayContaining(
-            ["Alias output feature type of an Immutable Feature must define one of the following types: Issuer Feature, Metadata Feature."]
-        ));
+        expect(() => validateAliasOutput(aliasOutput, protocolInfoMock)).toThrow("Alias output feature type of an Immutable Feature must define one of the following types: Issuer Feature, Metadata Feature.");
     });
 
     it("should fail when the immutable features are not ordered in ascending order by type", () => {
@@ -193,19 +139,10 @@ describe("Alias output validation", () => {
             }
         ];
 
-        const result = validateAliasOutput(aliasOutput, protocolInfoMock);
-
-        expect(result.isValid).toEqual(false);
-        expect(result.errors).toBeDefined();
-        expect(result.errors?.length).toEqual(1);
-        expect(result.errors).toEqual(expect.arrayContaining(
-            ["Output Features must be sorted in ascending order based on their Feature Type."]
-        ));
+        expect(() => validateAliasOutput(aliasOutput, protocolInfoMock)).toThrow("Output Features must be sorted in ascending order based on their Feature Type.");
     });
 
-    it(
-        "should fail when the address in the state controller address unlock condition or Governor address unlock condition is the alias address itself (self-unlocking)",
-        () => {
+    it("should fail when the address in the state controller address unlock condition or Governor address unlock condition is the alias address itself (self-unlocking)", () => {
             const aliasOutput = cloneAliasOutput(mockAliasOutput);
             aliasOutput.unlockConditions[0] = {
                 type: STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE,
@@ -215,14 +152,7 @@ describe("Alias output validation", () => {
                 }
             };
 
-            const result = validateAliasOutput(aliasOutput, protocolInfoMock);
-
-            expect(result.isValid).toEqual(false);
-            expect(result.errors).toBeDefined();
-            expect(result.errors?.length).toEqual(1);
-            expect(result.errors).toEqual(expect.arrayContaining(
-                ["Alias output Address field of the State Controller Address Unlock Condition and Governor Address Unlock Condition must not be the same as the Alias address derived from Alias ID."]
-            ));
+            expect(() => validateAliasOutput(aliasOutput, protocolInfoMock)).toThrow("Alias output Address field of the State Controller Address Unlock Condition and Governor Address Unlock Condition must not be the same as the Alias address derived from Alias ID.");
         }
     );
 
@@ -232,17 +162,14 @@ describe("Alias output validation", () => {
         aliasOutput.stateIndex = 1;
         aliasOutput.foundryCounter = 1;
 
-        const result = validateAliasOutput(aliasOutput, protocolInfoMock);
-        expect(result.isValid).toEqual(false);
-        expect(result.errors).toEqual(expect.arrayContaining(["Alias output Alias ID is zeroed out, State Index and Foundry Counter must be 0."]));
+        expect(() => validateAliasOutput(aliasOutput, protocolInfoMock)).toThrow("Alias output Alias ID is zeroed out, State Index and Foundry Counter must be 0.");
     });
 
     it("should fail when state metadata length is greater than max metadata length", () => {
         const aliasOutput = cloneAliasOutput(mockAliasOutput);
         aliasOutput.stateMetadata = "1".repeat(2 * 8193);
 
-        const result = validateAliasOutput(aliasOutput, protocolInfoMock);
-        expect(result.isValid).toEqual(false);
-        expect(result.errors).toEqual(expect.arrayContaining(["Alias output state metadata length must not be greater than max metadata length."]));
+        expect(() => validateAliasOutput(aliasOutput, protocolInfoMock)).toThrow("Alias output state metadata length must not be greater than max metadata length.");
     });
 });
+

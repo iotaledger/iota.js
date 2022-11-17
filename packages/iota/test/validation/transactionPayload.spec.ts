@@ -6,7 +6,7 @@ import { validateTransactionPayload } from "../../src/validation/payloads/payloa
 import { mockTransactionPayload, protocolInfoMock } from "./testValidationMocks";
 
 describe("Transaction payload validation", () => {
-    it("should fail with unlock counts and input counts in transaction essence must be same", () => {
+    it("should fail when unlock counts and input counts in transaction are not the same", () => {
         mockTransactionPayload.unlocks.push(
             {
                 type: SIGNATURE_UNLOCK_TYPE,
@@ -17,13 +17,8 @@ describe("Transaction payload validation", () => {
                 }
             }
         );
-        const result = validateTransactionPayload(mockTransactionPayload, protocolInfoMock);
 
-        expect(result.isValid).toEqual(false);
-        expect(result.errors).toBeDefined();
-        expect(result.errors?.length).toEqual(1);
-        expect(result.errors).toEqual(expect.arrayContaining(
-            ["Transaction payload unlocks count must match inputs count of the Transaction Essence."]
-        ));
+        expect(() => validateTransactionPayload(mockTransactionPayload, protocolInfoMock)).toThrow("Transaction payload unlocks count must match inputs count of the Transaction Essence.");
     });
 });
+

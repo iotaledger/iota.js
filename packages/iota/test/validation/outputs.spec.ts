@@ -11,9 +11,14 @@ describe("Outputs validation", () => {
         const nftOutput = cloneNftOutput(mockNftOutput);
         const foundryOutput = cloneFoundryOutput(mockFoundryOutput);
 
-        const result = validateOutputs([basicOutput, aliasOutput, nftOutput, foundryOutput], protocolInfoMock);
-
-        expect(result.isValid).toEqual(true);
-        expect(result.errors).toEqual(undefined);
+        expect(() => validateOutputs(
+            [
+                basicOutput,
+                aliasOutput,
+                nftOutput,
+                foundryOutput
+            ],
+            protocolInfoMock)).not.toThrowError();
     });
 });
+

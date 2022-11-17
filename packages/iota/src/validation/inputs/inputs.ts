@@ -3,18 +3,16 @@
 import { MAX_INPUT_COUNT, MIN_INPUT_COUNT } from "../../binary/inputs/inputs";
 import { MAX_OUTPUT_COUNT } from "../../binary/outputs/outputs";
 import { IUTXOInput, UTXO_INPUT_TYPE } from "../../models/inputs/IUTXOInput";
-import { failValidation, IValidationResult, mergeValidationResults } from "../result";
+import { failValidation } from "../result";
 
 /**
  * Validate inputs.
  * @param inputs The inputs to validate.
- * @returns The validation result.
+ * @throws Error if the validation fails.
  */
-export function validateInputs(inputs: IUTXOInput[]): IValidationResult {
-    let result: IValidationResult = { isValid: true };
-
+export function validateInputs(inputs: IUTXOInput[]) {
     if (inputs.length < MIN_INPUT_COUNT || inputs.length > MAX_INPUT_COUNT) {
-        result = failValidation(result, `Inputs count must be between ${MIN_INPUT_COUNT} and ${MAX_INPUT_COUNT}.`);
+        failValidation(`Inputs count must be between ${MIN_INPUT_COUNT} and ${MAX_INPUT_COUNT}.`);
     }
 
     for (const input of inputs) {
@@ -23,34 +21,27 @@ export function validateInputs(inputs: IUTXOInput[]): IValidationResult {
         );
 
         if (filteredInputs.length !== 1) {
-            result = failValidation(result, "Each pair of Transaction Id and Transaction Output Index must be unique in the list of inputs.");
-            break;
+            failValidation("Each pair of Transaction Id and Transaction Output Index must be unique in the list of inputs.");
         }
     }
 
     for (const input of inputs) {
-        result = mergeValidationResults(result, validateInput(input));
+        validateInput(input);
     }
-
-    return result;
 }
 
 /**
  * Validate an input.
  * @param input The input to validate.
- * @returns The validation result.
+ * @throws Error if the validation fails.
  */
-export function validateInput(input: IUTXOInput): IValidationResult {
-    let result: IValidationResult = { isValid: true };
-
+export function validateInput(input: IUTXOInput) {
     if (input.type !== UTXO_INPUT_TYPE) {
-        result = failValidation(result, "Input type must denote a UTXO Input.");
+        failValidation("Input type must denote a UTXO Input.");
     }
 
     if (input.transactionOutputIndex < 0 || input.transactionOutputIndex >= MAX_OUTPUT_COUNT) {
-        result = failValidation(result, `Transaction Output Index must be between 0 and ${MAX_INPUT_COUNT}.`);
+        failValidation(`Transaction Output Index must be between 0 and ${MAX_INPUT_COUNT}.`);
     }
-
-    return result;
 }
 

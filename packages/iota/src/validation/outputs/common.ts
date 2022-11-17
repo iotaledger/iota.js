@@ -20,7 +20,8 @@ import { STORAGE_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE } from "../../models/unloc
 import { TIMELOCK_UNLOCK_CONDITION_TYPE } from "../../models/unlockConditions/ITimelockUnlockCondition";
 import type { UnlockConditionTypes } from "../../models/unlockConditions/unlockConditionTypes";
 import { validateNativeTokens } from "../nativeTokens";
-import { failValidation, IValidationResult, mergeValidationResults } from "../result";
+import { failValidation } from "../result";
+import { validateCount } from "../validationUtils";
 
 type SupportedOutputTypes = IBasicOutput | IAliasOutput | IFoundryOutput | INftOutput;
 
@@ -130,94 +131,66 @@ const FEATURE_TYPE_NAMES = [
  * Map Output type to name.
  */
 const OUTPUT_TYPE_NAMES = new Map([
-    [BASIC_OUTPUT_TYPE, "Basic"],
-    [ALIAS_OUTPUT_TYPE, "Alias"],
-    [FOUNDRY_OUTPUT_TYPE, "Foundry"],
-    [NFT_OUTPUT_TYPE, "NFT"]
+    [BASIC_OUTPUT_TYPE, "Basic output"],
+    [ALIAS_OUTPUT_TYPE, "Alias output"],
+    [FOUNDRY_OUTPUT_TYPE, "Foundry output"],
+    [NFT_OUTPUT_TYPE, "NFT output"]
 ]);
 
 /**
  * Validate the output common rules.
  * @param output The output to validate.
  * @param protocolInfo The Protocol Info.
- * @returns The validation result.
+ * @throws Error if the validation fails.
  */
 export function validateCommonRules(
     output: SupportedOutputTypes,
     protocolInfo: INodeInfoProtocol
-): IValidationResult {
-    const results: IValidationResult[] = [];
+) {
     const outputType = output.type;
     const outputTypeValidations = OUTPUT_TYPE_TO_SUPPORTED_PROP_VALUES.get(output.type);
     const outputName = OUTPUT_TYPE_NAMES.get(output.type);
 
     if (!(outputName && outputTypeValidations)) {
-        return { isValid: false, errors: [`Unsupported output for common rules validation (type: ${output.type})`] };
+        throw new Error(`Unsupported output for common rules validation (type: ${output.type})`);
     }
 
-    results.push(
-        validateAmountIsGreaterThanZero(output.amount, outputName)
-    );
-
-    results.push(
-        validateAmountIsLesserThanMaxSupply(output.amount, protocolInfo.tokenSupply, outputName)
-    );
-
-    results.push(
-        validateNativeTokens(output.nativeTokens)
-    );
+    validateAmountIsGreaterThanZero(output.amount, outputName);
+    validateAmountIsLesserThanMaxSupply(output.amount, protocolInfo.tokenSupply, outputName);
+    validateNativeTokens(output.nativeTokens);
 
     if (output.unlockConditions) {
         const min = outputTypeValidations.minUnlockConditions;
         const max = outputTypeValidations.unlockConditions.length;
-        results.push(
-            validateCount(output.unlockConditions.length, min, max, outputName, "Unlock Conditions")
-        );
 
-        results.push(
-            validateUnlockConditionAllowedTypes(outputType, output.unlockConditions, outputName)
-        );
+        validateCount(output.unlockConditions.length, min, max, `${outputName} Unlock Conditions`);
+        validateUnlockConditionAllowedTypes(outputType, output.unlockConditions, outputName);
     }
 
     if (output.features) {
         const max = outputTypeValidations.features.length;
-        results.push(
-            validateCount(output.features.length, 0, max, outputName, "Features")
-        );
-
-        results.push(
-            validateFeatureAllowedTypes(outputType, output.features, outputName)
-        );
+        validateCount(output.features.length, 0, max, `${outputName} Features`);
+        validateFeatureAllowedTypes(outputType, output.features, outputName);
     }
 
     if (outputType !== BASIC_OUTPUT_TYPE && output.immutableFeatures && outputTypeValidations.immutableFeatures) {
         const max = outputTypeValidations.immutableFeatures.length;
-        results.push(
-            validateCount(output.immutableFeatures.length, 0, max, outputName, "Immutable Features")
-        );
 
-        results.push(
-            validateImmutableFeatureAllowedTypes(outputType, output.immutableFeatures, outputName)
-        );
+        validateCount(output.immutableFeatures.length, 0, max, `${outputName} Immutable Features`);
+        validateImmutableFeatureAllowedTypes(outputType, output.immutableFeatures, outputName);
     }
-
-    return mergeValidationResults(...results);
 }
 
 /**
  * Validate the amount is greater than zero.
  * @param amount The amount to validate.
  * @param outputName The name of the output to use in the error message.
- * @returns The validation result.
+ * @throws Error if the validation fails.
  */
-function validateAmountIsGreaterThanZero(amount: string, outputName: string): IValidationResult {
-    let result: IValidationResult = { isValid: true };
-
+function validateAmountIsGreaterThanZero(amount: string, outputName: string) {
     if (bigInt(amount).leq(bigInt.zero)) {
-        result = failValidation(result, `${outputName} output amount field must be larger than zero.`);
+        failValidation(`${outputName} amount field must be greater than zero.`);
     }
-
-    return result;
 }
 
 /**
@@ -225,49 +198,16 @@ function validateAmountIsGreaterThanZero(amount: string, outputName: string): IV
  * @param amount The amount to validate.
  * @param tokenSupply The tokken supply amount.
  * @param outputName The name of the output to use in the error message.
- * @returns The validation result.
+ * @throws Error if the validation fails.
  */
 function validateAmountIsLesserThanMaxSupply(
     amount: string,
     tokenSupply: string,
     outputName: string
-): IValidationResult {
-    let result: IValidationResult = { isValid: true };
-
+) {
     if (bigInt(amount).gt(tokenSupply)) {
-        result = failValidation(result, `${outputName} output amount field must not be larger than max token supply.`);
+        failValidation(`${outputName} amount field must not be greater than max token supply.`);
     }
-
-    return result;
-}
-
-/**
- * Validate the count is within allowed boundries.
- * @param count The number to validate.
- * @param min The maximum allowed value.
- * @param max The maximum allowed value.
- * @param outputName The name of the output to use in the error message.
- * @param elementName The name of the validation subject to use in the error message.
- * @returns The validation result.
- */
-function validateCount(
-    count: number,
-    min: number,
-    max: number,
-    outputName: string,
-    elementName: string
-): IValidationResult {
-    let result: IValidationResult = { isValid: true };
-
-    if (count < min || count > max) {
-        const message = min === max ?
-            `${outputName} output ${elementName} count must be equal to ${max}.` :
-            `${outputName} output ${elementName} count must be between ${min} and ${max}.`;
-
-        result = failValidation(result, message);
-    }
-
-    return result;
 }
 
 /**
@@ -275,15 +215,13 @@ function validateCount(
  * @param outputType The type of the output.
  * @param unlockConditions The amount to validate.
  * @param outputName The name of the output to use in the error message.
- * @returns The validation result.
+ * @throws Error if the validation fails.
  */
 function validateUnlockConditionAllowedTypes(
     outputType: number,
     unlockConditions: UnlockConditionTypes[],
     outputName: string
-): IValidationResult {
-    let result: IValidationResult = { isValid: true };
-
+) {
     const allowedUnlockConditionTypes = OUTPUT_TYPE_TO_SUPPORTED_PROP_VALUES.get(outputType)?.unlockConditions ?? [];
 
     if (!unlockConditions.every(uC => allowedUnlockConditionTypes.includes(uC.type))) {
@@ -291,10 +229,8 @@ function validateUnlockConditionAllowedTypes(
             (uC, index) => allowedUnlockConditionTypes.includes(index)
         );
 
-        result = failValidation(result, `${outputName} output unlock condition type of an unlock condition must define one of the following types: ${unlockConditionNames.join(", ")}.`);
+        failValidation(`${outputName} unlock condition type of an unlock condition must define one of the following types: ${unlockConditionNames.join(", ")}.`);
     }
-
-    return result;
 }
 
 /**
@@ -302,24 +238,20 @@ function validateUnlockConditionAllowedTypes(
  * @param outputType The type of the output.
  * @param features The features to validate.
  * @param outputName The name of the output to use in the error message.
- * @returns The validation result.
+ * @throws Error if the validation fails.
  */
 function validateFeatureAllowedTypes(
     outputType: number,
     features: FeatureTypes[],
     outputName: string
-): IValidationResult {
-    let result: IValidationResult = { isValid: true };
-
+) {
     const allowedFeatureTypes = OUTPUT_TYPE_TO_SUPPORTED_PROP_VALUES.get(outputType)?.features ?? [];
 
     if (!features.every(feature => allowedFeatureTypes.includes(feature.type))) {
         const unlockConditionNames = FEATURE_TYPE_NAMES.filter((feature, index) => allowedFeatureTypes.includes(index));
 
-        result = failValidation(result, `${outputName} output feature type of a feature must define one of the following types: ${unlockConditionNames.join(", ")}.`);
+        failValidation(`${outputName} feature type of a feature must define one of the following types: ${unlockConditionNames.join(", ")}.`);
     }
-
-    return result;
 }
 
 /**
@@ -327,22 +259,19 @@ function validateFeatureAllowedTypes(
  * @param outputType The type of the output.
  * @param immutableFeatures The features to validate.
  * @param outputName The name of the output to use in the error message.
- * @returns The validation result.
+ * @throws Error if the validation fails.
  */
 function validateImmutableFeatureAllowedTypes(
     outputType: number,
     immutableFeatures: FeatureTypes[],
     outputName: string
-): IValidationResult {
-    let result: IValidationResult = { isValid: true };
-
+) {
     const allowedFeatureTypes = OUTPUT_TYPE_TO_SUPPORTED_PROP_VALUES.get(outputType)?.immutableFeatures ?? [];
 
     if (!immutableFeatures.every(feature => allowedFeatureTypes.includes(feature.type))) {
         const unlockConditionNames = FEATURE_TYPE_NAMES.filter((feature, index) => allowedFeatureTypes.includes(index));
 
-        result = failValidation(result, `${outputName} output feature type of an Immutable Feature must define one of the following types: ${unlockConditionNames.join(", ")}.`);
+        failValidation(`${outputName} feature type of an Immutable Feature must define one of the following types: ${unlockConditionNames.join(", ")}.`);
     }
-
-    return result;
 }
+

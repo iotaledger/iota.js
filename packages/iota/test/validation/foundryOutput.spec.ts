@@ -12,21 +12,14 @@ describe("Foundry output validation", () => {
     it("should pass with valid foundry output", () => {
         const foundryOutput = cloneFoundryOutput(mockFoundryOutput);
 
-        const result = validateFoundryOutput(foundryOutput, protocolInfoMock);
-        expect(result.isValid).toEqual(true);
+        expect(() => validateFoundryOutput(foundryOutput, protocolInfoMock)).not.toThrowError();
     });
 
     it("should fail when foundry output amount is zero", () => {
         const foundryOutput = cloneFoundryOutput(mockFoundryOutput);
         foundryOutput.amount = "0";
 
-        const result = validateFoundryOutput(foundryOutput, protocolInfoMock);
-        expect(result.isValid).toEqual(false);
-        expect(result.errors).toBeDefined();
-        expect(result.errors?.length).toEqual(1);
-        expect(result.errors).toEqual(expect.arrayContaining(
-            ["Foundry output amount field must be larger than zero."]
-        ));
+        expect(() => validateFoundryOutput(foundryOutput, protocolInfoMock)).toThrow("Foundry output amount field must be greater than zero.");
     });
 
     it("should fail when the amount is larger than max token supply", () => {
@@ -34,14 +27,7 @@ describe("Foundry output validation", () => {
         // max is 1450896407249092
         foundryOutput.amount = "1450896407249095";
 
-        const result = validateFoundryOutput(foundryOutput, protocolInfoMock);
-
-        expect(result.isValid).toEqual(false);
-        expect(result.errors).toBeDefined();
-        expect(result.errors?.length).toEqual(1);
-        expect(result.errors).toEqual(expect.arrayContaining(
-            ["Foundry output amount field must not be larger than max token supply."]
-        ));
+        expect(() => validateFoundryOutput(foundryOutput, protocolInfoMock)).toThrow("Foundry output amount field must not be greater than max token supply.");
     });
 
     it("should fail when unlock conditions count is exceeded", () => {
@@ -54,18 +40,7 @@ describe("Foundry output validation", () => {
             }
         });
 
-        const result = validateFoundryOutput(foundryOutput, protocolInfoMock);
-
-        expect(result.isValid).toEqual(false);
-        expect(result.errors).toBeDefined();
-        expect(result.errors?.length).toEqual(3);
-        expect(result.errors).toEqual(expect.arrayContaining(
-            [
-                "Foundry output Unlock Conditions count must be equal to 1.",
-                "Foundry output unlock condition type of an unlock condition must define one of the following types: Immutable Alias Address Unlock Condition.",
-                "Output Unlock Conditions must be sorted in ascending order based on their Unlock Condition Type."
-            ]
-        ));
+        expect(() => validateFoundryOutput(foundryOutput, protocolInfoMock)).toThrow("Foundry output Unlock Conditions count must be equal to 1.");
     });
 
     it("should fail when the unlock condition is of unsupported type", () => {
@@ -80,14 +55,7 @@ describe("Foundry output validation", () => {
             }
         ];
 
-        const result = validateFoundryOutput(foundryOutput, protocolInfoMock);
-
-        expect(result.isValid).toEqual(false);
-        expect(result.errors).toBeDefined();
-        expect(result.errors?.length).toEqual(1);
-        expect(result.errors).toEqual(expect.arrayContaining(
-            ["Foundry output unlock condition type of an unlock condition must define one of the following types: Immutable Alias Address Unlock Condition."]
-        ));
+        expect(() => validateFoundryOutput(foundryOutput, protocolInfoMock)).toThrow("Foundry output unlock condition type of an unlock condition must define one of the following types: Immutable Alias Address Unlock Condition.");
     });
 
     it("should fail when the feature is of unsupported type", () => {
@@ -99,14 +67,7 @@ describe("Foundry output validation", () => {
             }
         ];
 
-        const result = validateFoundryOutput(foundryOutput, protocolInfoMock);
-
-        expect(result.isValid).toEqual(false);
-        expect(result.errors).toBeDefined();
-        expect(result.errors?.length).toEqual(1);
-        expect(result.errors).toEqual(expect.arrayContaining(
-            ["Foundry output feature type of a feature must define one of the following types: Metadata Feature."]
-        ));
+        expect(() => validateFoundryOutput(foundryOutput, protocolInfoMock)).toThrow("Foundry output feature type of a feature must define one of the following types: Metadata Feature.");
     });
 
     it("should fail when the features count is exceeded", () => {
@@ -116,17 +77,7 @@ describe("Foundry output validation", () => {
             tag: "0x6920b176f613ec7be59e68fc68f597eb"
         });
 
-        const result = validateFoundryOutput(foundryOutput, protocolInfoMock);
-
-        expect(result.isValid).toEqual(false);
-        expect(result.errors).toBeDefined();
-        expect(result.errors?.length).toEqual(2);
-        expect(result.errors).toEqual(expect.arrayContaining(
-            [
-                "Foundry output Features count must be between 0 and 1.",
-                "Foundry output feature type of a feature must define one of the following types: Metadata Feature."
-            ]
-        ));
+        expect(() => validateFoundryOutput(foundryOutput, protocolInfoMock)).toThrow("Foundry output Features count must be between 0 and 1.");
     });
 
     it("should fail when the immutable feature is of unsupported type", () => {
@@ -138,14 +89,7 @@ describe("Foundry output validation", () => {
             }
         ];
 
-        const result = validateFoundryOutput(foundryOutput, protocolInfoMock);
-
-        expect(result.isValid).toEqual(false);
-        expect(result.errors).toBeDefined();
-        expect(result.errors?.length).toEqual(1);
-        expect(result.errors).toEqual(expect.arrayContaining(
-            ["Foundry output feature type of an Immutable Feature must define one of the following types: Metadata Feature."]
-        ));
+        expect(() => validateFoundryOutput(foundryOutput, protocolInfoMock)).toThrow("Foundry output feature type of an Immutable Feature must define one of the following types: Metadata Feature.");
     });
 
     it("should fail when the immutable features count is exceeded", () => {
@@ -155,17 +99,7 @@ describe("Foundry output validation", () => {
             tag: "0x6920b176f613ec7be59e68fc68f597eb"
         });
 
-        const result = validateFoundryOutput(foundryOutput, protocolInfoMock);
-
-        expect(result.isValid).toEqual(false);
-        expect(result.errors).toBeDefined();
-        expect(result.errors?.length).toEqual(2);
-        expect(result.errors).toEqual(expect.arrayContaining(
-            [
-                "Foundry output Immutable Features count must be between 0 and 1.",
-                "Foundry output feature type of an Immutable Feature must define one of the following types: Metadata Feature."
-            ]
-        ));
+        expect(() => validateFoundryOutput(foundryOutput, protocolInfoMock)).toThrow("Foundry output Immutable Features count must be between 0 and 1.");
     });
 
     it("should fail when difference of Minted Tokens and Melted Tokens is greater than Maximum Supply.", () => {
@@ -177,14 +111,7 @@ describe("Foundry output validation", () => {
             maximumSupply: "0x2"
         };
 
-        const result = validateFoundryOutput(foundryOutput, protocolInfoMock);
-
-        expect(result.isValid).toEqual(false);
-        expect(result.errors).toBeDefined();
-        expect(result.errors?.length).toEqual(1);
-        expect(result.errors).toEqual(expect.arrayContaining(
-            ["The difference of Minted Tokens and Melted Tokens must not be greater than Maximum Supply."]
-        ));
+        expect(() => validateFoundryOutput(foundryOutput, protocolInfoMock)).toThrow("The difference of Minted Tokens and Melted Tokens must not be greater than Maximum Supply.");
     });
 
     it("should fail when Melted Tokens are greater than Minted Tokens.", () => {
@@ -196,14 +123,7 @@ describe("Foundry output validation", () => {
             maximumSupply: "0x2710"
         };
 
-        const result = validateFoundryOutput(foundryOutput, protocolInfoMock);
-
-        expect(result.isValid).toEqual(false);
-        expect(result.errors).toBeDefined();
-        expect(result.errors?.length).toEqual(1);
-        expect(result.errors).toEqual(expect.arrayContaining(
-            ["Melted Tokens must not be greater than Minted Tokens."]
-        ));
+        expect(() => validateFoundryOutput(foundryOutput, protocolInfoMock)).toThrow("Melted Tokens must not be greater than Minted Tokens.");
     });
 
     it("should fail when Token Maximum Supply is equal to zero.", () => {
@@ -214,13 +134,8 @@ describe("Foundry output validation", () => {
             meltedTokens: "0x0",
             maximumSupply: "0x0"
         };
-        const result = validateFoundryOutput(foundryOutput, protocolInfoMock);
 
-        expect(result.isValid).toEqual(false);
-        expect(result.errors).toBeDefined();
-        expect(result.errors?.length).toEqual(1);
-        expect(result.errors).toEqual(expect.arrayContaining(
-            ["Token Maximum Supply must be larger than zero."]
-        ));
+        expect(() => validateFoundryOutput(foundryOutput, protocolInfoMock)).toThrow("Token Maximum Supply must be larger than zero.");
     });
 });
+

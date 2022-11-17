@@ -29,8 +29,7 @@ describe("Inputs validation", () => {
             }
         ];
 
-        const result = validateInputs(inputs);
-        expect(result.isValid).toEqual(true);
+        expect(() => validateInputs(inputs)).not.toThrowError();
     });
 
     test("should fail with maximum inputs exceeded", () => {
@@ -44,9 +43,7 @@ describe("Inputs validation", () => {
             });
         }
 
-        const result = validateInputs(inputs);
-        expect(result.isValid).toEqual(false);
-        expect(result.errors).toEqual(expect.arrayContaining([`Inputs count must be between ${MIN_INPUT_COUNT} and ${MAX_INPUT_COUNT}.`]));
+        expect(() => validateInputs(inputs)).toThrow(`Inputs count must be between ${MIN_INPUT_COUNT} and ${MAX_INPUT_COUNT}.`);
     });
 
     test("should fail on duplicate Transaction Id and Transaction Output Index pair", () => {
@@ -73,9 +70,7 @@ describe("Inputs validation", () => {
             }
         ];
 
-        const result = validateInputs(inputs);
-        expect(result.isValid).toEqual(false);
-        expect(result.errors).toEqual(expect.arrayContaining(["Each pair of Transaction Id and Transaction Output Index must be unique in the list of inputs."]));
+        expect(() => validateInputs(inputs)).toThrow("Each pair of Transaction Id and Transaction Output Index must be unique in the list of inputs.");
     });
 
     test("should fail on maximum Transaction Output Index exceeded", () => {
@@ -85,8 +80,7 @@ describe("Inputs validation", () => {
             transactionOutputIndex: 128
         };
 
-        const result = validateInput(input);
-        expect(result.isValid).toEqual(false);
-        expect(result.errors).toEqual(expect.arrayContaining([`Transaction Output Index must be between 0 and ${MAX_INPUT_COUNT}.`]));
+        expect(() => validateInput(input)).toThrow(`Transaction Output Index must be between 0 and ${MAX_INPUT_COUNT}.`);
     });
 });
+

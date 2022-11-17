@@ -619,3 +619,4 @@ export const mockFoundryOutput: IFoundryOutput = {
         maximumSupply: "0x2710"
     }
 };
+

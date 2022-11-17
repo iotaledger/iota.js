@@ -70,3 +70,4 @@ export function cloneTaggedDataPayload(payload: ITaggedDataPayload): ITaggedData
 export function cloneTransactionEssence(txEssence: ITransactionEssence): ITransactionEssence {
     return JSON.parse(JSON.stringify(txEssence)) as ITransactionEssence;
 }
+

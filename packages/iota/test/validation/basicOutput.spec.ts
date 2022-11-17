@@ -13,27 +13,14 @@ describe("Basic output validation", () => {
     it("should pass with valid Basic output", () => {
         const basicOutput = cloneBasicOutput(mockBasicOutput);
 
-        const result = validateBasicOutput(basicOutput, protocolInfoMock);
-
-        expect(result.isValid).toEqual(true);
-        expect(result.errors).toEqual(undefined);
+        expect(() => validateBasicOutput(basicOutput, protocolInfoMock)).not.toThrowError();
     });
 
     it("should fail when the output amount is zero", () => {
         const basicOutput = cloneBasicOutput(mockBasicOutput);
         basicOutput.amount = "0";
 
-        const result = validateBasicOutput(basicOutput, protocolInfoMock);
-
-        expect(result.isValid).toEqual(false);
-        expect(result.errors).toBeDefined();
-        expect(result.errors?.length).toEqual(2);
-        expect(result.errors).toEqual(expect.arrayContaining(
-            [
-                "Basic output amount field must be larger than zero.",
-                "Storage deposit return amount exceeds target output's deposit."
-            ]
-        ));
+        expect(() => validateBasicOutput(basicOutput, protocolInfoMock)).toThrow("Basic output amount field must be greater than zero.");
     });
 
     it("should fail when the amount is larger than max token supply", () => {
@@ -41,14 +28,7 @@ describe("Basic output validation", () => {
         // max is 1450896407249092
         basicOutput.amount = "1450896407249095";
 
-        const result = validateBasicOutput(basicOutput, protocolInfoMock);
-
-        expect(result.isValid).toEqual(false);
-        expect(result.errors).toBeDefined();
-        expect(result.errors?.length).toEqual(1);
-        expect(result.errors).toEqual(expect.arrayContaining(
-            ["Basic output amount field must not be larger than max token supply."]
-        ));
+        expect(() => validateBasicOutput(basicOutput, protocolInfoMock)).toThrow("Basic output amount field must not be greater than max token supply.");
     });
 
     it("should fail when one of the unlock condition is of unsupported type", () => {
@@ -61,14 +41,7 @@ describe("Basic output validation", () => {
             }
         };
 
-        const result = validateBasicOutput(basicOutput, protocolInfoMock);
-
-        expect(result.isValid).toEqual(false);
-        expect(result.errors).toBeDefined();
-        expect(result.errors?.length).toEqual(1);
-        expect(result.errors).toEqual(expect.arrayContaining(
-            ["Basic output unlock condition type of an unlock condition must define one of the following types: Address Unlock Condition, Storage Deposit Return Unlock Condition, Timelock Unlock Condition, Expiration Unlock Condition."]
-        ));
+        expect(() => validateBasicOutput(basicOutput, protocolInfoMock)).toThrow("Basic output unlock condition type of an unlock condition must define one of the following types: Address Unlock Condition, Storage Deposit Return Unlock Condition, Timelock Unlock Condition, Expiration Unlock Condition.");
     });
 
     it("should fail when the unlock conditions count is larger than allowed", () => {
@@ -81,34 +54,14 @@ describe("Basic output validation", () => {
             }
         });
 
-        const result = validateBasicOutput(basicOutput, protocolInfoMock);
-
-        expect(result.isValid).toEqual(false);
-        expect(result.errors).toBeDefined();
-        expect(result.errors?.length).toEqual(2);
-        expect(result.errors).toEqual(expect.arrayContaining(
-            [
-                "Basic output Unlock Conditions count must be between 1 and 4.",
-                "Basic output unlock condition type of an unlock condition must define one of the following types: Address Unlock Condition, Storage Deposit Return Unlock Condition, Timelock Unlock Condition, Expiration Unlock Condition."
-            ]
-        ));
+        expect(() => validateBasicOutput(basicOutput, protocolInfoMock)).toThrow("Basic output Unlock Conditions count must be between 1 and 4.");
     });
 
     it("should fail when the unlock conditions count is lesser than allowed", () => {
         const basicOutput = cloneBasicOutput(mockBasicOutput);
         basicOutput.unlockConditions = [];
 
-        const result = validateBasicOutput(basicOutput, protocolInfoMock);
-
-        expect(result.isValid).toEqual(false);
-        expect(result.errors).toBeDefined();
-        expect(result.errors?.length).toEqual(2);
-        expect(result.errors).toEqual(expect.arrayContaining(
-            [
-                "Basic output Unlock Conditions count must be between 1 and 4.",
-                "Basic output Unlock Conditions must define an Address Unlock Condition."
-            ]
-        ));
+        expect(() => validateBasicOutput(basicOutput, protocolInfoMock)).toThrow("Basic output Unlock Conditions count must be between 1 and 4.");
     });
 
     it("should fail when the address unlock condition type is missing", () => {
@@ -124,14 +77,7 @@ describe("Basic output validation", () => {
             }
         ];
 
-        const result = validateBasicOutput(basicOutput, protocolInfoMock);
-
-        expect(result.isValid).toEqual(false);
-        expect(result.errors).toBeDefined();
-        expect(result.errors?.length).toEqual(1);
-        expect(result.errors).toEqual(expect.arrayContaining(
-            ["Basic output Unlock Conditions must define an Address Unlock Condition."]
-        ));
+        expect(() => validateBasicOutput(basicOutput, protocolInfoMock)).toThrow("Basic output Unlock Conditions must define an Address Unlock Condition.");
     });
 
     it("should fail when the unlocks are not ordered in ascending order by type", () => {
@@ -158,14 +104,7 @@ describe("Basic output validation", () => {
             }
         ];
 
-        const result = validateBasicOutput(basicOutput, protocolInfoMock);
-
-        expect(result.isValid).toEqual(false);
-        expect(result.errors).toBeDefined();
-        expect(result.errors?.length).toEqual(1);
-        expect(result.errors).toEqual(expect.arrayContaining(
-            ["Output Unlock Conditions must be sorted in ascending order based on their Unlock Condition Type."]
-        ));
+        expect(() => validateBasicOutput(basicOutput, protocolInfoMock)).toThrow("Output Unlock Conditions must be sorted in ascending order based on their Unlock Condition Type.");
     });
 
     it("should fail when one of the features is of unsupported type", () => {
@@ -180,14 +119,7 @@ describe("Basic output validation", () => {
             }
         ];
 
-        const result = validateBasicOutput(basicOutput, protocolInfoMock);
-
-        expect(result.isValid).toEqual(false);
-        expect(result.errors).toBeDefined();
-        expect(result.errors?.length).toEqual(1);
-        expect(result.errors).toEqual(expect.arrayContaining(
-            ["Basic output feature type of a feature must define one of the following types: Sender Feature, Metadata Feature, Tag Feature."]
-        ));
+        expect(() => validateBasicOutput(basicOutput, protocolInfoMock)).toThrow("Basic output feature type of a feature must define one of the following types: Sender Feature, Metadata Feature, Tag Feature.");
     });
 
     it("should fail when the featuress count is larger than allowed", () => {
@@ -199,18 +131,7 @@ describe("Basic output validation", () => {
             }
         );
 
-        const result = validateBasicOutput(basicOutput, protocolInfoMock);
-
-        expect(result.isValid).toEqual(false);
-        expect(result.errors).toBeDefined();
-        expect(result.errors?.length).toEqual(3);
-        expect(result.errors).toEqual(expect.arrayContaining(
-            [
-                "Basic output Features count must be between 0 and 3.",
-                "Output must not contain more than one feature of each type.",
-                "Output Features must be sorted in ascending order based on their Feature Type."
-            ]
-        ));
+        expect(() => validateBasicOutput(basicOutput, protocolInfoMock)).toThrow("Basic output Features count must be between 0 and 3.");
     });
 
     it("should fail when the features are not ordered in ascending order by type", () => {
@@ -233,13 +154,7 @@ describe("Basic output validation", () => {
             }
         ];
 
-        const result = validateBasicOutput(basicOutput, protocolInfoMock);
-
-        expect(result.isValid).toEqual(false);
-        expect(result.errors).toBeDefined();
-        expect(result.errors?.length).toEqual(1);
-        expect(result.errors).toEqual(expect.arrayContaining(
-            ["Output Features must be sorted in ascending order based on their Feature Type."]
-        ));
+        expect(() => validateBasicOutput(basicOutput, protocolInfoMock)).toThrow("Output Features must be sorted in ascending order based on their Feature Type.");
     });
 });
+

@@ -6,36 +6,29 @@ import type { ITypeBase } from "../models/ITypeBase";
 import { BASIC_OUTPUT_TYPE, IBasicOutput } from "../models/outputs/IBasicOutput";
 import { ADDRESS_UNLOCK_CONDITION_TYPE } from "../models/unlockConditions/IAddressUnlockCondition";
 import { TransactionHelper } from "../utils/transactionHelper";
-import type { IValidationResult } from "../validation/result";
+import { failValidation } from "../validation/result";
 
 /**
  * Validates the array is composed of distinct elements.
  * @param elements The elements.
  * @param containerName The name of the parent object to use in the error message.
  * @param elementName The name of the validation subject to use in the error message.
- * @returns The validation result.
+ * @throws Error if the validation fails.
  */
 export function validateDistinct(
     elements: string[] | number[],
     containerName: string,
     elementName: string
-): IValidationResult {
-    let result: IValidationResult = { isValid: true };
-
+) {
     if (elements.length > 0) {
         const distinctElements = typeof elements[0] === "string" ?
             new Set<string>(elements as string[]) :
             new Set<number>(elements as number[]);
 
         if (distinctElements.size !== elements.length) {
-            result = {
-                isValid: false,
-                errors: [`${containerName} must not contain more than one ${elementName} of each type.`]
-            };
+            failValidation(`${containerName} must not contain more than one ${elementName} of each type.`);
         }
     }
-
-    return result;
 }
 
 /**
@@ -43,27 +36,20 @@ export function validateDistinct(
  * @param arrayToValidate The subject to validate the ascending order for.
  * @param containerName The name of the parent object to use in the error message.
  * @param elementName The name of the validation subject to use in the error message.
- * @returns The validation result.
+ * @throws Error if the validation fails.
  */
 export function validateAscendingOrder(
     arrayToValidate: ITypeBase<number>[],
     containerName: string,
     elementName: string
-): IValidationResult {
-    let result: IValidationResult = { isValid: true };
-
+) {
     if (arrayToValidate.length >= 2) {
         const isAscending = arrayToValidate.slice(1).every((e, i) => e.type > arrayToValidate[i].type);
 
         if (!isAscending) {
-            result = {
-                isValid: false,
-                errors: [`${containerName} ${elementName}s must be sorted in ascending order based on their ${elementName} Type.`]
-            };
+            failValidation(`${containerName} ${elementName}s must be sorted in ascending order based on their ${elementName} Type.`);
         }
     }
-
-    return result;
 }
 
 /**
@@ -85,5 +71,27 @@ export function getMinStorageDeposit(address: AddressTypes, rentStructure: IRent
     };
 
     return TransactionHelper.getStorageDeposit(basicOutput, rentStructure);
+}
+
+/**
+ * Validate the count is within allowed boundries.
+ * @param count The number to validate.
+ * @param min The maximum allowed value.
+ * @param max The maximum allowed value.
+ * @param elementName The name of the validation subject to use in the error message.
+ * @throws Error if the validation fails.
+ */
+ export function validateCount(
+    count: number,
+    min: number,
+    max: number,
+    elementName: string
+) {
+    if (count < min || count > max) {
+        const message = min === max ?
+            `${elementName} count must be equal to ${max}.` :
+            `${elementName} count must be between ${min} and ${max}.`;
+        failValidation(message);
+    }
 }
 
