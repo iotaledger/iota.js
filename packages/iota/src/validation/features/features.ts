@@ -25,7 +25,6 @@ export const MAX_METADATA_LENGTH: number = 8192;
 export function validateFeatures(features?: FeatureTypes[]) {
     if (features) {
         validateDistinct(features.map(feature => feature.type), "Output", "feature");
-
         validateAscendingOrder(features, "Output", "Feature");
 
         for (const feature of features) {
@@ -88,3 +87,4 @@ function validateTagFeature(tagFeature: ITagFeature) {
         failValidation("Tag length must not be larger than max tag length.");
     }
 }
+

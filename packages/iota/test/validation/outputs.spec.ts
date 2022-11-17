@@ -21,3 +21,4 @@ describe("Outputs validation", () => {
             protocolInfoMock)).not.toThrowError();
     });
 });
+

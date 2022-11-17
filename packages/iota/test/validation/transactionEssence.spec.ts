@@ -12,7 +12,7 @@ import { cloneTransactionEssence } from "./testUtils";
 import { mockTransactionEssence, protocolInfoMock, mockMaxDistintNativeTokens } from "./testValidationMocks";
 
 describe("Transaction Essence validation", () => {
-    it("should fail with network id doesnot match with the current network's id", () => {
+    it("should fail when network id does not match the current network id", () => {
         expect(() => validateTransactionEssence(mockTransactionEssence, protocolInfoMock)).toThrow("Network ID must match the value of the current network.");
     });
 
@@ -34,7 +34,7 @@ describe("Transaction Essence validation", () => {
         expect(() => validateInputs(txEssence.inputs)).toThrow("Each pair of Transaction Id and Transaction Output Index must be unique in the list of inputs.");
     });
 
-    it("should fail with transaction output index greater then maximum input count", () => {
+    it("should fail when transaction output index is out of bounds", () => {
         const txEssence = cloneTransactionEssence(mockTransactionEssence);
         txEssence.inputs.push({
             type: UTXO_INPUT_TYPE,
@@ -104,3 +104,4 @@ describe("Transaction Essence validation", () => {
         expect(() => validateOutputs(txEssence.outputs, protocolInfoMock)).toThrow("Output Type must be one of the following: Basic, Alias, Foundry and NFT.");
     });
 });
+

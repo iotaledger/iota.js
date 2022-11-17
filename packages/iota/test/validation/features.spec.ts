@@ -84,3 +84,4 @@ describe("Feature validation", () => {
         expect(() => validateFeature(feature)).toThrow("Tag feature tag field must be larger than zero.");
     });
 });
+

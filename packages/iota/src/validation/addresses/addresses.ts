@@ -51,3 +51,4 @@ export function validateAddress(address: AddressTypes) {
             failValidation(`Unrecognized Address type ${(address as ITypeBase<number>).type}`);
     }
 }
+

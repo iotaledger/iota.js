@@ -44,3 +44,4 @@ export function validateInput(input: IUTXOInput) {
         failValidation(`Transaction Output Index must be between 0 and ${MAX_INPUT_COUNT}.`);
     }
 }
+

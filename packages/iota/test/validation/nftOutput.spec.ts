@@ -62,9 +62,7 @@ describe("NFT output validation", () => {
         expect(() => validateNftOutput(nftOutput, protocolInfoMock)).toThrow("NFT output Unlock Conditions must define an Address Unlock Condition.");
     });
 
-    it(
-        "should fail when the address in the address unlock condition is the nft address itself (self-unlocking)",
-        () => {
+    it("should fail when the address in the address unlock condition is the nft address itself (self-unlocking)", () => {
             const nftOutput = cloneNftOutput(mockNftOutput);
             nftOutput.unlockConditions = [
                 {
@@ -176,3 +174,4 @@ describe("NFT output validation", () => {
         expect(() => validateNftOutput(nftOutput, protocolInfoMock)).toThrow("Output Features must be sorted in ascending order based on their Feature Type.");
     });
 });
+

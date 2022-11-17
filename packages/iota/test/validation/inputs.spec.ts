@@ -83,3 +83,4 @@ describe("Inputs validation", () => {
         expect(() => validateInput(input)).toThrow(`Transaction Output Index must be between 0 and ${MAX_INPUT_COUNT}.`);
     });
 });
+

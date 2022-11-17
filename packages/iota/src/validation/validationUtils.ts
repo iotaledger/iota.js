@@ -94,3 +94,4 @@ export function getMinStorageDeposit(address: AddressTypes, rentStructure: IRent
         failValidation(message);
     }
 }
+

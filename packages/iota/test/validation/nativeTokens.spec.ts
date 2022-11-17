@@ -76,3 +76,4 @@ describe("Native tokens validation", () => {
         expect(() => validateNativeTokens(tokens)).toThrow("Native Tokens must be lexicographically sorted based on Token id.");
     });
 });
+

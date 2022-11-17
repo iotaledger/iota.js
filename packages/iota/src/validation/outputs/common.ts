@@ -156,9 +156,7 @@ export function validateCommonRules(
     }
 
     validateAmountIsGreaterThanZero(output.amount, outputName);
-
     validateAmountIsLesserThanMaxSupply(output.amount, protocolInfo.tokenSupply, outputName);
-
     validateNativeTokens(output.nativeTokens);
 
     if (output.unlockConditions) {
@@ -166,14 +164,12 @@ export function validateCommonRules(
         const max = outputTypeValidations.unlockConditions.length;
 
         validateCount(output.unlockConditions.length, min, max, `${outputName} Unlock Conditions`);
-
         validateUnlockConditionAllowedTypes(outputType, output.unlockConditions, outputName);
     }
 
     if (output.features) {
         const max = outputTypeValidations.features.length;
         validateCount(output.features.length, 0, max, `${outputName} Features`);
-
         validateFeatureAllowedTypes(outputType, output.features, outputName);
     }
 
@@ -181,7 +177,6 @@ export function validateCommonRules(
         const max = outputTypeValidations.immutableFeatures.length;
 
         validateCount(output.immutableFeatures.length, 0, max, `${outputName} Immutable Features`);
-
         validateImmutableFeatureAllowedTypes(outputType, output.immutableFeatures, outputName);
     }
 }
@@ -279,3 +274,4 @@ function validateImmutableFeatureAllowedTypes(
         failValidation(`${outputName} feature type of an Immutable Feature must define one of the following types: ${unlockConditionNames.join(", ")}.`);
     }
 }
+

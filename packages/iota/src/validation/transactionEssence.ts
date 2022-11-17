@@ -48,3 +48,4 @@ export function validateTxEssencePayload(payload: ITaggedDataPayload) {
 
     validateTaggedDataPayload(payload);
 }
+

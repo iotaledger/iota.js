@@ -45,6 +45,5 @@ export function validateNftOutput(nftOutput: INftOutput, protocolInfo: INodeInfo
     }
 
     validateFeatures(nftOutput.features);
-
     validateFeatures(nftOutput.immutableFeatures);
 }

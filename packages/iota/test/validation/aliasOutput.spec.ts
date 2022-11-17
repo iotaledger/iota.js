@@ -142,9 +142,7 @@ describe("Alias output validation", () => {
         expect(() => validateAliasOutput(aliasOutput, protocolInfoMock)).toThrow("Output Features must be sorted in ascending order based on their Feature Type.");
     });
 
-    it(
-        "should fail when the address in the state controller address unlock condition or Governor address unlock condition is the alias address itself (self-unlocking)",
-        () => {
+    it("should fail when the address in the state controller address unlock condition or Governor address unlock condition is the alias address itself (self-unlocking)", () => {
             const aliasOutput = cloneAliasOutput(mockAliasOutput);
             aliasOutput.unlockConditions[0] = {
                 type: STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE,
@@ -174,3 +172,4 @@ describe("Alias output validation", () => {
         expect(() => validateAliasOutput(aliasOutput, protocolInfoMock)).toThrow("Alias output state metadata length must not be greater than max metadata length.");
     });
 });
+

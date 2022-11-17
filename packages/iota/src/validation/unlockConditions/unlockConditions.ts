@@ -122,3 +122,4 @@ function validateExpirationUnlockCondition(euc: IExpirationUnlockCondition) {
 
     validateAddress(euc.returnAddress);
 }
+

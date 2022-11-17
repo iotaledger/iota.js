@@ -138,3 +138,4 @@ describe("Foundry output validation", () => {
         expect(() => validateFoundryOutput(foundryOutput, protocolInfoMock)).toThrow("Token Maximum Supply must be larger than zero.");
     });
 });
+

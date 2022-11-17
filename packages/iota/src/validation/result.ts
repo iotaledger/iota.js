@@ -23,3 +23,4 @@ export interface IValidationResult {
 export function failValidation(withError: string) {
     throw new Error(withError);
 }
+

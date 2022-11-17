@@ -82,3 +82,4 @@ function validateReferenceUnlock(
         failValidation(`Reference Unlock Index must be between 0 and ${MAX_INPUT_COUNT}.`);
     }
 }
+

@@ -60,3 +60,4 @@ describe("Address validation", () => {
         expect(() => validateAddress(nftAddress)).toThrow("Nft id must have 66 characters.");
     });
 });
+

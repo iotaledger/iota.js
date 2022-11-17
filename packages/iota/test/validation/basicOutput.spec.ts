@@ -157,3 +157,4 @@ describe("Basic output validation", () => {
         expect(() => validateBasicOutput(basicOutput, protocolInfoMock)).toThrow("Output Features must be sorted in ascending order based on their Feature Type.");
     });
 });
+

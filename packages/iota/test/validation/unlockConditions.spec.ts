@@ -145,7 +145,7 @@ describe("Unlock Conditions validation", () => {
         expect(() => validateUnlockCondition(uc)).toThrow("Ed25519 Address must have 66 characters.");
     });
 
-    test("should fail to validate sdruc if output amount and rent structure is not provided", () => {
+    test("should fail validation when output amount or rent structure are not provided with a SDRUC", () => {
          const sdruc: IStorageDepositReturnUnlockCondition = {
             type: STORAGE_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE,
             amount: "4600",
@@ -158,7 +158,7 @@ describe("Unlock Conditions validation", () => {
         expect(() => validateUnlockCondition(sdruc)).toThrow("Must provide Output amount and Rent structure to validate storage deposit return unlock condition.");
     });
 
-    test("should fail to validate sdruc if storage deposit amount is zero", () => {
+    test("should fail validation of SDRUC if storage deposit amount is zero", () => {
         const basicOutput = cloneBasicOutput(mockBasicOutput);
 
         (basicOutput.unlockConditions[1] as IStorageDepositReturnUnlockCondition).amount = "0";
@@ -166,7 +166,7 @@ describe("Unlock Conditions validation", () => {
         expect(() => validateUnlockConditions(basicOutput.unlockConditions, basicOutput.amount, protocolInfoMock.rentStructure)).toThrow("Storage deposit amount must be larger than zero.");
     });
 
-    test("should fail to validate sdruc if storage deposit return amount is less than the min storage deposit", () => {
+    test("should fail validation of SDRUC if storage deposit return amount is less than the min storage deposit", () => {
         const basicOutput = cloneBasicOutput(mockBasicOutput);
 
         (basicOutput.unlockConditions[1] as IStorageDepositReturnUnlockCondition).amount = "100";
@@ -174,7 +174,7 @@ describe("Unlock Conditions validation", () => {
         expect(() => validateUnlockConditions(basicOutput.unlockConditions, basicOutput.amount, protocolInfoMock.rentStructure)).toThrow("Storage deposit return amount is less than the min storage deposit.");
     });
 
-    test("should fail to validate sdruc if storage deposit return amount exceeds target output's deposit", () => {
+    test("should fail validation of SDRUC if storage deposit return amount exceeds target output's deposit", () => {
         const basicOutput = cloneBasicOutput(mockBasicOutput);
 
         (basicOutput.unlockConditions[1] as IStorageDepositReturnUnlockCondition).amount = "455655657";
@@ -182,7 +182,7 @@ describe("Unlock Conditions validation", () => {
         expect(() => validateUnlockConditions(basicOutput.unlockConditions, basicOutput.amount, protocolInfoMock.rentStructure)).toThrow("Storage deposit return amount exceeds target output's deposit.");
     });
 
-    test("should fail to validate sdruc with invalid return address", () => {
+    test("should fail validation of SDRUC if the return address is invalid", () => {
         const basicOutput = cloneBasicOutput(mockBasicOutput);
 
         (basicOutput.unlockConditions[1] as IStorageDepositReturnUnlockCondition).returnAddress = {
@@ -193,3 +193,4 @@ describe("Unlock Conditions validation", () => {
         expect(() => validateUnlockConditions(basicOutput.unlockConditions, basicOutput.amount, protocolInfoMock.rentStructure)).toThrow("Ed25519 Address must have 66 characters.");
     });
 });
+

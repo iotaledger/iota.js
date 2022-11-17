@@ -99,3 +99,4 @@ function validateNativeTokensCount(outputs: OutputTypes[]) {
         failValidation(`The count of all distinct native tokens present in outputs must be less then ${MAX_NATIVE_TOKEN_COUNT}.`);
     }
 }
+

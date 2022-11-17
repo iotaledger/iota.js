@@ -33,3 +33,4 @@ import { validateCommonRules } from "./common";
 
     validateFeatures(basicOutput.features);
 }
+

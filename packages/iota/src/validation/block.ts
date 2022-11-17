@@ -42,9 +42,7 @@ export function validateBlock(block: IBlock, protocolInfo: INodeInfoProtocol): I
  * @param parents The parentIds to validate.
  * @throws Error if the validation fails.
  */
-export function validateParents(
-    parents: HexEncodedString[]
-) {
+export function validateParents(parents: HexEncodedString[]) {
     if (parents.length < MIN_PARENTS_COUNT || parents.length > MAX_PARENTS_COUNT) {
         failValidation(`Parents count must be between ${MIN_PARENTS_COUNT} and ${MAX_PARENTS_COUNT}.`);
     }
@@ -54,3 +52,4 @@ export function validateParents(
         failValidation("Parents must be lexicographically sorted based on Parent id.");
     }
 }
+

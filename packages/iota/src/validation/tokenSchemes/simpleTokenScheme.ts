@@ -30,3 +30,4 @@ export function validateSimpleTokenScheme(tokenScheme: ISimpleTokenScheme) {
         failValidation("Token Maximum Supply must be larger than zero.");
     }
 }
+

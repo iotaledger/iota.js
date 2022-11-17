@@ -83,3 +83,4 @@ export function validateTaggedDataPayload(
         failValidation(`Tagged Data Payload tag length exceeds the maximum size of ${MAX_TAG_LENGTH}.`);
     }
 }
+
