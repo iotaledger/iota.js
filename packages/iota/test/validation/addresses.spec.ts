@@ -12,8 +12,7 @@ describe("Address validation", () => {
             pubKeyHash: "0x6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
         };
 
-        const result = validateAddress(ed25519Address);
-        expect(result.isValid).toEqual(true);
+        expect(() => validateAddress(ed25519Address)).not.toThrowError();
     });
 
     test("should pass on a valid alias address", () => {
@@ -22,8 +21,7 @@ describe("Address validation", () => {
             aliasId: "0x6920b176f613ec7be59e68fc68f597eb3393af80b176f613ec7be59e68fc68f5"
         };
 
-        const result = validateAddress(aliasAddress);
-        expect(result.isValid).toEqual(true);
+        expect(() => validateAddress(aliasAddress)).not.toThrowError();
     });
 
     test("should pass on a valid nft address", () => {
@@ -32,8 +30,7 @@ describe("Address validation", () => {
             nftId: "0x6920b176f613ec7be59e68fc68f597eb3393af80e68fc68f597eb3393af80120"
         };
 
-        const result = validateAddress(nftAddress);
-        expect(result.isValid).toEqual(true);
+        expect(() => validateAddress(nftAddress)).not.toThrowError();
     });
 
     test("should fail on invalid ed25519 address", () => {
@@ -42,9 +39,7 @@ describe("Address validation", () => {
             pubKeyHash: "0x6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d"
         };
 
-        const result = validateAddress(ed25519Address);
-        expect(result.isValid).toEqual(false);
-        expect(result.errors).toEqual(expect.arrayContaining(["Ed25519 Address must have 66 characters."]));
+        expect(() => validateAddress(ed25519Address)).toThrow("Ed25519 Address must have 66 characters.");
     });
 
     test("should fail on invalid alias address", () => {
@@ -53,9 +48,7 @@ describe("Address validation", () => {
             aliasId: "0x6920b176f613ec7be59e68fc68f597eb3393af9e68fc68f5"
         };
 
-        const result = validateAddress(aliasAddress);
-        expect(result.isValid).toEqual(false);
-        expect(result.errors).toEqual(expect.arrayContaining(["Alias id must have 66 characters."]));
+        expect(() => validateAddress(aliasAddress)).toThrow("Alias id must have 66 characters.");
     });
 
     test("should fail on invalid nft address", () => {
@@ -64,8 +57,6 @@ describe("Address validation", () => {
             nftId: "0x6920b176f613ec7be59e68fc68f59780e68fc68f597eb3393af80120"
         };
 
-        const result = validateAddress(nftAddress);
-        expect(result.isValid).toEqual(false);
-        expect(result.errors).toEqual(expect.arrayContaining(["Nft id must have 66 characters."]));
+        expect(() => validateAddress(nftAddress)).toThrow("Nft id must have 66 characters.");
     });
 });

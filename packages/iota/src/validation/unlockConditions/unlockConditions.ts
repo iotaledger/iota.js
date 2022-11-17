@@ -12,7 +12,7 @@ import { IStorageDepositReturnUnlockCondition, STORAGE_DEPOSIT_RETURN_UNLOCK_CON
 import { TIMELOCK_UNLOCK_CONDITION_TYPE } from "../../models/unlockConditions/ITimelockUnlockCondition";
 import type { UnlockConditionTypes } from "../../models/unlockConditions/unlockConditionTypes";
 import { validateAddress } from "../addresses/addresses";
-import { IValidationResult, mergeValidationResults, failValidation } from "../result";
+import { failValidation } from "../result";
 import { getMinStorageDeposit, validateAscendingOrder, validateDistinct } from "../validationUtils";
 
 /**
@@ -20,28 +20,20 @@ import { getMinStorageDeposit, validateAscendingOrder, validateDistinct } from "
  * @param unlockConditions The Unlock Conditions to validate.
  * @param amount The output amount that owns unlock conditions.
  * @param rentStructure The rent cost parameters.
- * @returns The validation result.
+ * @throws Error if the validation fails.
  */
 export function validateUnlockConditions(
     unlockConditions: UnlockConditionTypes[],
     amount?: string,
     rentStructure?: IRent
-): IValidationResult {
-    const results: IValidationResult[] = [];
+) {
+    validateDistinct(unlockConditions.map(condition => condition.type), "Output", "unlock condition");
 
-    results.push(
-        validateDistinct(unlockConditions.map(condition => condition.type), "Output", "unlock condition")
-    );
-
-    results.push(validateAscendingOrder(unlockConditions, "Output", "Unlock Condition"));
+    validateAscendingOrder(unlockConditions, "Output", "Unlock Condition");
 
     for (const unlockCondition of unlockConditions) {
-        results.push(
-            validateUnlockCondition(unlockCondition, amount, rentStructure)
-        );
+        validateUnlockCondition(unlockCondition, amount, rentStructure);
     }
-
-    return mergeValidationResults(...results);
 }
 
 /**
@@ -49,48 +41,44 @@ export function validateUnlockConditions(
  * @param unlockCondition The Unlock Condition to validate.
  * @param amount The output amount that owns unlock conditions.
  * @param rentStructure The rent cost parameters.
- * @returns The validation result.
+ * @throws Error if the validation fails.
  */
 export function validateUnlockCondition(
     unlockCondition: UnlockConditionTypes,
     amount?: string,
     rentStructure?: IRent
-): IValidationResult {
-    let result: IValidationResult = { isValid: true };
-
+) {
     switch (unlockCondition.type) {
         case ADDRESS_UNLOCK_CONDITION_TYPE:
-            result = validateAddress(unlockCondition.address);
+            validateAddress(unlockCondition.address);
             break;
         case STORAGE_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE:
             if (amount && rentStructure) {
-                result = validateStorageDepositReturnUnlockCondition(unlockCondition, amount, rentStructure);
+                validateStorageDepositReturnUnlockCondition(unlockCondition, amount, rentStructure);
             } else {
-                throw new Error("Must provide Output amount and Rent structure to validate storage deposit return unlock condition.");
+                failValidation("Must provide Output amount and Rent structure to validate storage deposit return unlock condition.");
             }
             break;
         case TIMELOCK_UNLOCK_CONDITION_TYPE:
             if (unlockCondition.unixTime === 0) {
-                result = failValidation(result, "Time unlock condition must be greater than zero.");
+                failValidation("Time unlock condition must be greater than zero.");
             }
             break;
         case EXPIRATION_UNLOCK_CONDITION_TYPE:
-            result = validateExpirationUnlockCondition(unlockCondition);
+            validateExpirationUnlockCondition(unlockCondition);
             break;
         case STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE:
-            result = validateAddress(unlockCondition.address);
+            validateAddress(unlockCondition.address);
             break;
         case GOVERNOR_ADDRESS_UNLOCK_CONDITION_TYPE:
-            result = validateAddress(unlockCondition.address);
+            validateAddress(unlockCondition.address);
             break;
         case IMMUTABLE_ALIAS_UNLOCK_CONDITION_TYPE:
-            result = validateAddress(unlockCondition.address);
+            validateAddress(unlockCondition.address);
             break;
         default:
-            throw new Error(`Unrecognized Unlock condition type ${(unlockCondition as ITypeBase<number>).type}`);
+            failValidation(`Unrecognized Unlock condition type ${(unlockCondition as ITypeBase<number>).type}`);
     }
-
-    return result;
 }
 
 /**
@@ -98,48 +86,39 @@ export function validateUnlockCondition(
  * @param sdruc The Storage Deposit Return Unlock Condition to validate.
  * @param amount The output amount that owns unlock conditions.
  * @param rentStructure The rent cost parameters.
- * @returns The validation result.
+ * @throws Error if the validation fails.
  */
 function validateStorageDepositReturnUnlockCondition(
     sdruc: IStorageDepositReturnUnlockCondition,
     amount: string,
     rentStructure: IRent
-): IValidationResult {
-    let result: IValidationResult = { isValid: true };
-
+) {
     if (bigInt(sdruc.amount).leq(bigInt.zero)) {
-        result = failValidation(result, "Storage deposit amount must be larger than zero.");
+        failValidation("Storage deposit amount must be larger than zero.");
     }
+
+    validateAddress(sdruc.returnAddress);
 
     const minStorageDeposit = getMinStorageDeposit(sdruc.returnAddress, rentStructure);
 
     if (bigInt(sdruc.amount).lt(minStorageDeposit)) {
-        result = failValidation(result, "Storage deposit return amount is less than the min storage deposit.");
+        failValidation("Storage deposit return amount is less than the min storage deposit.");
     }
 
     if (bigInt(sdruc.amount).gt(amount)) {
-        result = failValidation(result, "Storage deposit return amount exceeds target output's deposit.");
+        failValidation("Storage deposit return amount exceeds target output's deposit.");
     }
-
-    const validateAddressResult = validateAddress(sdruc.returnAddress);
-
-    return mergeValidationResults(result, validateAddressResult);
 }
 
 /**
  * Validate expiration unlock condition.
  * @param euc The Expiration Unlock Condition to validate.
- * @returns The validation result.
+ * @throws Error if the validation fails.
  */
-function validateExpirationUnlockCondition(euc: IExpirationUnlockCondition): IValidationResult {
-    let result: IValidationResult = { isValid: true };
-
+function validateExpirationUnlockCondition(euc: IExpirationUnlockCondition) {
     if (euc.unixTime === 0) {
-        result = failValidation(result, "Expiration unlock condition must be greater than zero.");
+        throw new Error("Expiration unlock condition must be greater than zero.");
     }
 
-    const validateAddressResult = validateAddress(euc.returnAddress);
-
-    return mergeValidationResults(result, validateAddressResult);
+    validateAddress(euc.returnAddress);
 }
-

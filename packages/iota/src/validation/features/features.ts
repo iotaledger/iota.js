@@ -9,7 +9,7 @@ import { SENDER_FEATURE_TYPE } from "../../models/features/ISenderFeature";
 import { ITagFeature, TAG_FEATURE_TYPE } from "../../models/features/ITagFeature";
 import type { ITypeBase } from "../../models/ITypeBase";
 import { validateAddress } from "../addresses/addresses";
-import { IValidationResult, mergeValidationResults, failValidation } from "../result";
+import { failValidation } from "../result";
 import { validateAscendingOrder, validateDistinct } from "../validationUtils";
 
 /**
@@ -20,92 +20,71 @@ export const MAX_METADATA_LENGTH: number = 8192;
 /**
  * Validate output features.
  * @param features The Features to validate.
- * @returns The validation result.
+ * @throws Error if the validation fails.
  */
-export function validateFeatures(features?: FeatureTypes[]): IValidationResult {
-    const results: IValidationResult[] = [];
-
+export function validateFeatures(features?: FeatureTypes[]) {
     if (features) {
-        results.push(
-            validateDistinct(features.map(feature => feature.type), "Output", "feature")
-        );
+        validateDistinct(features.map(feature => feature.type), "Output", "feature");
 
-        results.push(validateAscendingOrder(features, "Output", "Feature"));
+        validateAscendingOrder(features, "Output", "Feature");
 
         for (const feature of features) {
-            results.push(
-                validateFeature(feature)
-            );
+            validateFeature(feature);
         }
     }
-
-    return mergeValidationResults(...results);
 }
 
 /**
  * Validate output feature.
  * @param feature The Feature to validate.
- * @returns The validation result.
+ * @throws Error if the validation fails.
  */
-export function validateFeature(feature: FeatureTypes): IValidationResult {
-    let result: IValidationResult = { isValid: true };
-
+export function validateFeature(feature: FeatureTypes) {
     switch (feature.type) {
         case SENDER_FEATURE_TYPE:
-            result = validateAddress(feature.address);
+            validateAddress(feature.address);
             break;
         case ISSUER_FEATURE_TYPE:
-            result = validateAddress(feature.address);
+            validateAddress(feature.address);
             break;
         case METADATA_FEATURE_TYPE:
-            result = validateMetadataFeature(feature);
+            validateMetadataFeature(feature);
             break;
         case TAG_FEATURE_TYPE:
-            result = validateTagFeature(feature);
+            validateTagFeature(feature);
             break;
         default:
-            throw new Error(`Unrecognized Feature type ${(feature as ITypeBase<number>).type}`);
+            failValidation(`Unrecognized Feature type ${(feature as ITypeBase<number>).type}`);
     }
-
-    return result;
 }
 
 /**
  * Validate metadata feature.
  * @param metadataFeature The Metadata Feature to validate.
- * @returns The validation result.
+ * @throws Error if the validation fails.
  */
-function validateMetadataFeature(metadataFeature: IMetadataFeature): IValidationResult {
-    let result: IValidationResult = { isValid: true };
-
+function validateMetadataFeature(metadataFeature: IMetadataFeature) {
     if (metadataFeature.data.length === 0) {
-        result = failValidation(result, "Metadata must have a value bigger than zero.");
+        failValidation("Metadata feature data field must be larger than zero.");
     }
 
     const data = HexHelper.stripPrefix(metadataFeature.data);
     if ((data.length / 2) > MAX_METADATA_LENGTH) {
-        result = failValidation(result, "Max metadata length exceeded.");
+        failValidation("Metadata length must not be larger than max metadata length.");
     }
-
-    return result;
 }
 
 /**
  * Validate tag feature.
  * @param tagFeature The Tag Feature to validate.
- * @returns The validation result.
+ * @throws Error if the validation fails.
  */
-function validateTagFeature(tagFeature: ITagFeature): IValidationResult {
-    let result: IValidationResult = { isValid: true };
-
+function validateTagFeature(tagFeature: ITagFeature) {
     if (tagFeature.tag.length === 0) {
-        result = failValidation(result, "Tag must have a value bigger than zero.");
+        failValidation("Tag feature tag field must be larger than zero.");
     }
 
     if ((tagFeature.tag.length / 2) > MAX_TAG_LENGTH) {
-        result = failValidation(result, "Max tag length exceeded.");
+        failValidation("Tag length must not be larger than max tag length.");
     }
-
-    return result;
 }
-

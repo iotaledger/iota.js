@@ -17,13 +17,7 @@ describe("Transaction payload validation", () => {
                 }
             }
         );
-        const result = validateTransactionPayload(mockTransactionPayload, protocolInfoMock);
 
-        expect(result.isValid).toEqual(false);
-        expect(result.errors).toBeDefined();
-        expect(result.errors?.length).toEqual(1);
-        expect(result.errors).toEqual(expect.arrayContaining(
-            ["Transaction payload unlocks count must match inputs count of the Transaction Essence."]
-        ));
+        expect(() => validateTransactionPayload(mockTransactionPayload, protocolInfoMock)).toThrow("Transaction payload unlocks count must match inputs count of the Transaction Essence.");
     });
 });

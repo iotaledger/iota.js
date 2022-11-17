@@ -15,27 +15,14 @@ describe("NFT output validation", () => {
     it("should pass with valid NFT output", () => {
         const nftOutput = cloneNftOutput(mockNftOutput);
 
-        const result = validateNftOutput(nftOutput, protocolInfoMock);
-
-        expect(result.isValid).toEqual(true);
-        expect(result.errors).toEqual(undefined);
+        expect(() => validateNftOutput(nftOutput, protocolInfoMock)).not.toThrowError();
     });
 
     it("should fail when the output amount is zero", () => {
         const nftOutput = cloneNftOutput(mockNftOutput);
         nftOutput.amount = "0";
 
-        const result = validateNftOutput(nftOutput, protocolInfoMock);
-
-        expect(result.isValid).toEqual(false);
-        expect(result.errors).toBeDefined();
-        expect(result.errors?.length).toEqual(2);
-        expect(result.errors).toEqual(expect.arrayContaining(
-            [
-                "NFT output amount field must be larger than zero.",
-                "Storage deposit return amount exceeds target output's deposit."
-            ]
-        ));
+        expect(() => validateNftOutput(nftOutput, protocolInfoMock)).toThrow("NFT output amount field must be greater than zero.");
     });
 
     it("should fail when the amount is larger than max token supply", () => {
@@ -43,14 +30,7 @@ describe("NFT output validation", () => {
         // max is 1450896407249092
         nftOutput.amount = "1450896407249095";
 
-        const result = validateNftOutput(nftOutput, protocolInfoMock);
-
-        expect(result.isValid).toEqual(false);
-        expect(result.errors).toBeDefined();
-        expect(result.errors?.length).toEqual(1);
-        expect(result.errors).toEqual(expect.arrayContaining(
-            ["NFT output amount field must not be larger than max token supply."]
-        ));
+        expect(() => validateNftOutput(nftOutput, protocolInfoMock)).toThrow("NFT output amount field must not be greater than max token supply.");
     });
 
     it("should fail when one of the unlock conditions is of unsupported type", () => {
@@ -63,17 +43,7 @@ describe("NFT output validation", () => {
             }
         });
 
-        const result = validateNftOutput(nftOutput, protocolInfoMock);
-
-        expect(result.isValid).toEqual(false);
-        expect(result.errors).toBeDefined();
-        expect(result.errors?.length).toEqual(2);
-        expect(result.errors).toEqual(expect.arrayContaining(
-            [
-                "NFT output Unlock Conditions count must be between 1 and 4.",
-                "NFT output unlock condition type of an unlock condition must define one of the following types: Address Unlock Condition, Storage Deposit Return Unlock Condition, Timelock Unlock Condition, Expiration Unlock Condition."
-            ]
-        ));
+        expect(() => validateNftOutput(nftOutput, protocolInfoMock)).toThrow("NFT output Unlock Conditions count must be between 1 and 4.");
     });
 
     it("should fail when the address unlock condition type is missing", () => {
@@ -89,14 +59,7 @@ describe("NFT output validation", () => {
             }
         ];
 
-        const result = validateNftOutput(nftOutput, protocolInfoMock);
-
-        expect(result.isValid).toEqual(false);
-        expect(result.errors).toBeDefined();
-        expect(result.errors?.length).toEqual(1);
-        expect(result.errors).toEqual(expect.arrayContaining(
-            ["NFT output Unlock Conditions must define an Address Unlock Condition."]
-        ));
+        expect(() => validateNftOutput(nftOutput, protocolInfoMock)).toThrow("NFT output Unlock Conditions must define an Address Unlock Condition.");
     });
 
     it(
@@ -113,14 +76,7 @@ describe("NFT output validation", () => {
                 }
             ];
 
-            const result = validateNftOutput(nftOutput, protocolInfoMock);
-
-            expect(result.isValid).toEqual(false);
-            expect(result.errors).toBeDefined();
-            expect(result.errors?.length).toEqual(1);
-            expect(result.errors).toEqual(expect.arrayContaining(
-                ["NFT output Address field of the Address Unlock Condition must not be the same as the NFT address derived from NFT ID."]
-            ));
+            expect(() => validateNftOutput(nftOutput, protocolInfoMock)).toThrow("NFT output Address field of the Address Unlock Condition must not be the same as the NFT address derived from NFT ID.");
         }
     );
 
@@ -148,14 +104,7 @@ describe("NFT output validation", () => {
             }
         ];
 
-        const result = validateNftOutput(nftOutput, protocolInfoMock);
-
-        expect(result.isValid).toEqual(false);
-        expect(result.errors).toBeDefined();
-        expect(result.errors?.length).toEqual(1);
-        expect(result.errors).toEqual(expect.arrayContaining(
-            ["Output Unlock Conditions must be sorted in ascending order based on their Unlock Condition Type."]
-        ));
+        expect(() => validateNftOutput(nftOutput, protocolInfoMock)).toThrow("Output Unlock Conditions must be sorted in ascending order based on their Unlock Condition Type.");
     });
 
     it("should fail when one of the features is of unsupported type", () => {
@@ -170,14 +119,7 @@ describe("NFT output validation", () => {
             }
         ];
 
-        const result = validateNftOutput(nftOutput, protocolInfoMock);
-
-        expect(result.isValid).toEqual(false);
-        expect(result.errors).toBeDefined();
-        expect(result.errors?.length).toEqual(1);
-        expect(result.errors).toEqual(expect.arrayContaining(
-            ["NFT output feature type of a feature must define one of the following types: Sender Feature, Metadata Feature, Tag Feature."]
-        ));
+        expect(() => validateNftOutput(nftOutput, protocolInfoMock)).toThrow("NFT output feature type of a feature must define one of the following types: Sender Feature, Metadata Feature, Tag Feature.");
     });
 
     it("should fail when the features are not ordered in ascending order by type", () => {
@@ -200,14 +142,7 @@ describe("NFT output validation", () => {
             }
         ];
 
-        const result = validateNftOutput(nftOutput, protocolInfoMock);
-
-        expect(result.isValid).toEqual(false);
-        expect(result.errors).toBeDefined();
-        expect(result.errors?.length).toEqual(1);
-        expect(result.errors).toEqual(expect.arrayContaining(
-            ["Output Features must be sorted in ascending order based on their Feature Type."]
-        ));
+        expect(() => validateNftOutput(nftOutput, protocolInfoMock)).toThrow("Output Features must be sorted in ascending order based on their Feature Type.");
     });
 
     it("should fail when one of the immutable features is of unsupported type", () => {
@@ -219,14 +154,7 @@ describe("NFT output validation", () => {
             };
         }
 
-        const result = validateNftOutput(nftOutput, protocolInfoMock);
-
-        expect(result.isValid).toEqual(false);
-        expect(result.errors).toBeDefined();
-        expect(result.errors?.length).toEqual(1);
-        expect(result.errors).toEqual(expect.arrayContaining(
-            ["NFT output feature type of an Immutable Feature must define one of the following types: Issuer Feature, Metadata Feature."]
-        ));
+        expect(() => validateNftOutput(nftOutput, protocolInfoMock)).toThrow("NFT output feature type of an Immutable Feature must define one of the following types: Issuer Feature, Metadata Feature.");
     });
 
     it("should fail when the immutable features are not ordered in ascending order by type", () => {
@@ -245,13 +173,6 @@ describe("NFT output validation", () => {
             }
         ];
 
-        const result = validateNftOutput(nftOutput, protocolInfoMock);
-
-        expect(result.isValid).toEqual(false);
-        expect(result.errors).toBeDefined();
-        expect(result.errors?.length).toEqual(1);
-        expect(result.errors).toEqual(expect.arrayContaining(
-            ["Output Features must be sorted in ascending order based on their Feature Type."]
-        ));
+        expect(() => validateNftOutput(nftOutput, protocolInfoMock)).toThrow("Output Features must be sorted in ascending order based on their Feature Type.");
     });
 });

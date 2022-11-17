@@ -5,7 +5,7 @@ import type { INodeInfoProtocol } from "../../models/info/INodeInfoProtocol";
 import { INftOutput, NFT_OUTPUT_TYPE } from "../../models/outputs/INftOutput";
 import { ADDRESS_UNLOCK_CONDITION_TYPE } from "../../models/unlockConditions/IAddressUnlockCondition";
 import { validateFeatures } from "../features/features";
-import { IValidationResult, mergeValidationResults } from "../result";
+import { failValidation } from "../result";
 import { validateUnlockConditions } from "../unlockConditions/unlockConditions";
 import { validateCommonRules } from "./common";
 
@@ -13,25 +13,17 @@ import { validateCommonRules } from "./common";
  * Validate an nft output.
  * @param nftOutput The NFT output to validate.
  * @param protocolInfo The Protocol Info.
- * @returns The validation result.
+ * @throws Error if the validation fails.
  */
-export function validateNftOutput(nftOutput: INftOutput, protocolInfo: INodeInfoProtocol): IValidationResult {
-    const results: IValidationResult[] = [];
-
+export function validateNftOutput(nftOutput: INftOutput, protocolInfo: INodeInfoProtocol) {
     if (nftOutput.type !== NFT_OUTPUT_TYPE) {
-        results.push({
-            isValid: false,
-            errors: [`Type mismatch in NFT output ${nftOutput.type}`]
-        });
+        failValidation(`Type mismatch in NFT output ${nftOutput.type}`);
     }
 
-    results.push(validateCommonRules(nftOutput, protocolInfo));
+    validateCommonRules(nftOutput, protocolInfo);
 
     if (!nftOutput.unlockConditions.some(uC => uC.type === ADDRESS_UNLOCK_CONDITION_TYPE)) {
-        results.push({
-            isValid: false,
-            errors: ["NFT output Unlock Conditions must define an Address Unlock Condition."]
-        });
+        failValidation("NFT output Unlock Conditions must define an Address Unlock Condition.");
     } else {
         nftOutput.unlockConditions.map(
             uC => {
@@ -40,24 +32,19 @@ export function validateNftOutput(nftOutput: INftOutput, protocolInfo: INodeInfo
                     uC.address.type === NFT_ADDRESS_TYPE &&
                     uC.address.nftId === nftOutput.nftId
                 ) {
-                    results.push({
-                        isValid: false,
-                        errors: ["NFT output Address field of the Address Unlock Condition must not be the same as the NFT address derived from NFT ID."]
-                    });
+                    throw new Error("NFT output Address field of the Address Unlock Condition must not be the same as the NFT address derived from NFT ID.");
                 }
             }
         );
 
-        results.push(validateUnlockConditions(
+        validateUnlockConditions(
             nftOutput.unlockConditions,
             nftOutput.amount,
             protocolInfo.rentStructure
-        ));
+        );
     }
 
-    results.push(validateFeatures(nftOutput.features));
+    validateFeatures(nftOutput.features);
 
-    results.push(validateFeatures(nftOutput.immutableFeatures));
-
-    return mergeValidationResults(...results);
+    validateFeatures(nftOutput.immutableFeatures);
 }

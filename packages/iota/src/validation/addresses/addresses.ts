@@ -8,7 +8,7 @@ import { ALIAS_ADDRESS_TYPE } from "../../models/addresses/IAliasAddress";
 import { ED25519_ADDRESS_TYPE } from "../../models/addresses/IEd25519Address";
 import { NFT_ADDRESS_TYPE } from "../../models/addresses/INftAddress";
 import type { ITypeBase } from "../../models/ITypeBase";
-import { IValidationResult, failValidation } from "../result";
+import { failValidation } from "../result";
 
 /**
  * The length of an hex encode ed25519 address string with prefix 0x.
@@ -28,31 +28,26 @@ const NFT_ID_HEX_LENGTH: number = (NFT_ID_LENGTH * 2) + 2;
 /**
  * Validate address.
  * @param address The Address to validate.
- * @returns The validation result.
+ * @throws Error if the validation fails.
  */
-export function validateAddress(address: AddressTypes): IValidationResult {
-    let result: IValidationResult = { isValid: true };
-
+export function validateAddress(address: AddressTypes) {
     switch (address.type) {
         case ED25519_ADDRESS_TYPE:
             if (address.pubKeyHash.length !== ED25519_ADDRESS_HEX_LENGTH) {
-                result = failValidation(result, `Ed25519 Address must have ${ED25519_ADDRESS_HEX_LENGTH} characters.`);
+                failValidation(`Ed25519 Address must have ${ED25519_ADDRESS_HEX_LENGTH} characters.`);
             }
             break;
         case ALIAS_ADDRESS_TYPE:
             if (address.aliasId.length !== ALIAS_ID_HEX_LENGTH) {
-                result = failValidation(result, `Alias id must have ${ALIAS_ID_HEX_LENGTH} characters.`);
+                failValidation(`Alias id must have ${ALIAS_ID_HEX_LENGTH} characters.`);
             }
             break;
         case NFT_ADDRESS_TYPE:
             if (address.nftId.length !== NFT_ID_HEX_LENGTH) {
-                result = failValidation(result, `Nft id must have ${NFT_ID_HEX_LENGTH} characters.`);
+                failValidation(`Nft id must have ${NFT_ID_HEX_LENGTH} characters.`);
             }
             break;
         default:
-            throw new Error(`Unrecognized Address type ${(address as ITypeBase<number>).type}`);
+            failValidation(`Unrecognized Address type ${(address as ITypeBase<number>).type}`);
     }
-
-    return result;
 }
-

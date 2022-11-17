@@ -1,25 +1,32 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import { BASIC_OUTPUT_TYPE, IBasicOutput } from "../../src";
-import type { INodeInfoProtocol } from "../../src/models/info/INodeInfoProtocol";
-import { ADDRESS_UNLOCK_CONDITION_TYPE } from "../../src/models/unlockConditions/IAddressUnlockCondition";
-import { EXPIRATION_UNLOCK_CONDITION_TYPE } from "../../src/models/unlockConditions/IExpirationUnlockCondition";
-import { GOVERNOR_ADDRESS_UNLOCK_CONDITION_TYPE } from "../../src/models/unlockConditions/IGovernorAddressUnlockCondition";
-import { IMMUTABLE_ALIAS_UNLOCK_CONDITION_TYPE } from "../../src/models/unlockConditions/IImmutableAliasUnlockCondition";
-import { STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE } from "../../src/models/unlockConditions/IStateControllerAddressUnlockCondition";
+import { ADDRESS_UNLOCK_CONDITION_TYPE, IAddressUnlockCondition } from "../../src/models/unlockConditions/IAddressUnlockCondition";
+import { EXPIRATION_UNLOCK_CONDITION_TYPE, IExpirationUnlockCondition } from "../../src/models/unlockConditions/IExpirationUnlockCondition";
+import { GOVERNOR_ADDRESS_UNLOCK_CONDITION_TYPE, IGovernorAddressUnlockCondition } from "../../src/models/unlockConditions/IGovernorAddressUnlockCondition";
+import { IImmutableAliasUnlockCondition, IMMUTABLE_ALIAS_UNLOCK_CONDITION_TYPE } from "../../src/models/unlockConditions/IImmutableAliasUnlockCondition";
+import { IStateControllerAddressUnlockCondition, STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE } from "../../src/models/unlockConditions/IStateControllerAddressUnlockCondition";
 import { STORAGE_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE } from "../../src/models/unlockConditions/IStorageDepositReturnUnlockCondition";
 import type { IStorageDepositReturnUnlockCondition } from "../../src/models/unlockConditions/IStorageDepositReturnUnlockCondition";
-import { TIMELOCK_UNLOCK_CONDITION_TYPE } from "../../src/models/unlockConditions/ITimelockUnlockCondition";
+import { ITimelockUnlockCondition, TIMELOCK_UNLOCK_CONDITION_TYPE } from "../../src/models/unlockConditions/ITimelockUnlockCondition";
 import type { UnlockConditionTypes } from "../../src/models/unlockConditions/unlockConditionTypes";
 import { validateUnlockCondition, validateUnlockConditions } from "../../src/validation/unlockConditions/unlockConditions";
+import { cloneBasicOutput } from "./testUtils";
+import { mockBasicOutput, protocolInfoMock } from "./testValidationMocks";
 
-
-describe("Unlock Conditions", () => {
-    test("Can validate unlock conditions", () => {
+describe("Unlock Conditions validation", () => {
+    test("should pass with valid unlock conditions", () => {
         const unlockConditions: UnlockConditionTypes[] = [
             {
                 type: ADDRESS_UNLOCK_CONDITION_TYPE,
                 address: {
+                    type: ADDRESS_UNLOCK_CONDITION_TYPE,
+                    pubKeyHash: "0x6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
+                }
+            },
+            {
+                type: STORAGE_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE,
+                amount: "46000",
+                returnAddress: {
                     type: ADDRESS_UNLOCK_CONDITION_TYPE,
                     pubKeyHash: "0x6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
                 }
@@ -59,169 +66,130 @@ describe("Unlock Conditions", () => {
             }
         ];
 
-        const result = validateUnlockConditions(unlockConditions);
-        expect(result.isValid).toEqual(true);
+        expect(() => validateUnlockConditions(unlockConditions, "455655655", protocolInfoMock.rentStructure)).not.toThrowError();
     });
 
-    test("Can validate storage deposit return unlock condition", () => {
-        const protocolInfo: INodeInfoProtocol = {
-            "version": 2,
-            "networkName": "testnet",
-            "bech32Hrp": "rms",
-            "minPowScore": 1500,
-            "rentStructure": {
-              "vByteCost": 100,
-              "vByteFactorData": 1,
-              "vByteFactorKey": 10
-            },
-            "tokenSupply": "1450896407249092"
-          };
-
-        const output: IBasicOutput = {
-            type: BASIC_OUTPUT_TYPE,
-            amount: "455655655",
-            unlockConditions: [
-                {
-                    type: 0,
-                    address: {
-                        type: ADDRESS_UNLOCK_CONDITION_TYPE,
-                        pubKeyHash: "0x6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
-                    }
-                },
-                {
-                    type: STORAGE_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE,
-                    amount: "46000",
-                    returnAddress: {
-                        type: ADDRESS_UNLOCK_CONDITION_TYPE,
-                        pubKeyHash: "0x6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
-                    }
-                }
-            ]
+    test("should fail with invalid address unlock condition", () => {
+        const uc: IAddressUnlockCondition =
+        {
+            type: ADDRESS_UNLOCK_CONDITION_TYPE,
+            address: {
+                type: ADDRESS_UNLOCK_CONDITION_TYPE,
+                pubKeyHash: "0x6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f92"
+            }
         };
 
-        const unlockCondition: IStorageDepositReturnUnlockCondition = {
+        expect(() => validateUnlockCondition(uc)).toThrow("Ed25519 Address must have 66 characters.");
+    });
+
+    test("should fail with invalid timelock unlock condition", () => {
+        const uc: ITimelockUnlockCondition =
+        {
+            type: TIMELOCK_UNLOCK_CONDITION_TYPE,
+            unixTime: 0
+        };
+
+        expect(() => validateUnlockCondition(uc)).toThrow("Time unlock condition must be greater than zero.");
+    });
+
+    test("should fail with invalid expiration unlock condition", () => {
+        const uc: IExpirationUnlockCondition =
+        {
+            type: EXPIRATION_UNLOCK_CONDITION_TYPE,
+            returnAddress: {
+                type: ADDRESS_UNLOCK_CONDITION_TYPE,
+                pubKeyHash: "0x6920b176f613ec7be59e68fc68f597eb33f80f74css7c3db78198147d5f1f92"
+            },
+            unixTime: 0
+        };
+
+        expect(() => validateUnlockCondition(uc)).toThrow("Expiration unlock condition must be greater than zero.");
+    });
+
+    test("should fail with invalid state controller address unlock condition", () => {
+        const uc: IStateControllerAddressUnlockCondition =
+        {
+            type: STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE,
+            address: {
+                type: ADDRESS_UNLOCK_CONDITION_TYPE,
+                pubKeyHash: "0x6920b176f613ec7be59e68fc68f597eb3393af87c3db78198147d5f1f92"
+            }
+        };
+
+        expect(() => validateUnlockCondition(uc)).toThrow("Ed25519 Address must have 66 characters.");
+    });
+
+    test("should fail with invalid state governor address unlock condition", () => {
+        const uc: IGovernorAddressUnlockCondition =
+        {
+            type: GOVERNOR_ADDRESS_UNLOCK_CONDITION_TYPE,
+            address: {
+                type: ADDRESS_UNLOCK_CONDITION_TYPE,
+                pubKeyHash: "0x6920b176f613ec7be59e68fc68f597eb3393afssssaawedwwdwd4c7c3db78198147d5f1f92"
+            }
+        };
+
+        expect(() => validateUnlockCondition(uc)).toThrow("Ed25519 Address must have 66 characters.");
+    });
+
+    test("should fail with invalid state immutable alias address unlock condition", () => {
+        const uc: IImmutableAliasUnlockCondition =
+        {
+            type: IMMUTABLE_ALIAS_UNLOCK_CONDITION_TYPE,
+            address: {
+                type: ADDRESS_UNLOCK_CONDITION_TYPE,
+                pubKeyHash: "0x6920b176f613ec7be59e68fc68f597eb3393adwdwdwdf80f74c7c3db78198147d5f1f92"
+            }
+        };
+
+        expect(() => validateUnlockCondition(uc)).toThrow("Ed25519 Address must have 66 characters.");
+    });
+
+    test("should fail to validate sdruc if output amount and rent structure is not provided", () => {
+         const sdruc: IStorageDepositReturnUnlockCondition = {
             type: STORAGE_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE,
-            amount: "46000",
+            amount: "4600",
             returnAddress: {
                 type: ADDRESS_UNLOCK_CONDITION_TYPE,
                 pubKeyHash: "0x6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
             }
         };
 
-        const result = validateUnlockCondition(unlockCondition, output.amount, protocolInfo.rentStructure);
-        expect(result.isValid).toEqual(true);
+        expect(() => validateUnlockCondition(sdruc)).toThrow("Must provide Output amount and Rent structure to validate storage deposit return unlock condition.");
     });
 
-    test("Fail validate unlock conditions", () => {
-        const unlockConditions: UnlockConditionTypes[] = [
-            {
-                type: ADDRESS_UNLOCK_CONDITION_TYPE,
-                address: {
-                    type: ADDRESS_UNLOCK_CONDITION_TYPE,
-                    pubKeyHash: "0x6920b176f613ec7be59e68fc68f5b3393af80f74c7c3db78198147d5f1f92"
-                }
-            },
-            {
-                type: TIMELOCK_UNLOCK_CONDITION_TYPE,
-                unixTime: 0
-            },
-            {
-                type: EXPIRATION_UNLOCK_CONDITION_TYPE,
-                returnAddress: {
-                    type: ADDRESS_UNLOCK_CONDITION_TYPE,
-                    pubKeyHash: "0x6920b176f613ec7be59e68fc68f597eb33f80f74c7c3db78198147d5f1f92"
-                },
-                unixTime: 0
-            },
-            {
-                type: STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE,
-                address: {
-                    type: ADDRESS_UNLOCK_CONDITION_TYPE,
-                    pubKeyHash: "0x6920b176f613ec7be5968fc68f597eb3393af80f74c7c3db78198147d5f1f92"
-                }
-            },
-            {
-                type: GOVERNOR_ADDRESS_UNLOCK_CONDITION_TYPE,
-                address: {
-                    type: ADDRESS_UNLOCK_CONDITION_TYPE,
-                    pubKeyHash: "0x6920b176f613ec7be59e68fc68f597eb339f80f74c7c3db78198147d5f1f92"
-                }
-            },
-            {
-                type: IMMUTABLE_ALIAS_UNLOCK_CONDITION_TYPE,
-                address: {
-                    type: ADDRESS_UNLOCK_CONDITION_TYPE,
-                    pubKeyHash: "0x6920b176f613ec7be59e68fc68f597eb33af80f74c7c3db78198147d5f1f92"
-                }
-            },
-            {
-                type: IMMUTABLE_ALIAS_UNLOCK_CONDITION_TYPE,
-                address: {
-                    type: ADDRESS_UNLOCK_CONDITION_TYPE,
-                    pubKeyHash: "0x6920b176f613ec7be59e68fc68f597eb33af80f74c7c3db78198147d5f1f92"
-                }
-            }
-        ];
+    test("should fail to validate sdruc if storage deposit amount is zero", () => {
+        const basicOutput = cloneBasicOutput(mockBasicOutput);
 
-        const result = validateUnlockConditions(unlockConditions);
-        expect(result.isValid).toEqual(false);
-        expect(result.errors).toEqual(expect.arrayContaining([
-            "Ed25519 Address must have 66 characters.",
-            "Expiration unlock condition must be greater than zero.",
-            "Time unlock condition must be greater than zero."
-        ]));
+        (basicOutput.unlockConditions[1] as IStorageDepositReturnUnlockCondition).amount = "0";
+
+        expect(() => validateUnlockConditions(basicOutput.unlockConditions, basicOutput.amount, protocolInfoMock.rentStructure)).toThrow("Storage deposit amount must be larger than zero.");
     });
 
-    test("Fail validate storage deposit return unlock condition", () => {
-        const protocolInfo: INodeInfoProtocol = {
-            "version": 2,
-            "networkName": "testnet",
-            "bech32Hrp": "rms",
-            "minPowScore": 1500,
-            "rentStructure": {
-              "vByteCost": 100,
-              "vByteFactorData": 1,
-              "vByteFactorKey": 10
-            },
-            "tokenSupply": "1450896407249092"
-          };
+    test("should fail to validate sdruc if storage deposit return amount is less than the min storage deposit", () => {
+        const basicOutput = cloneBasicOutput(mockBasicOutput);
 
-        const output: IBasicOutput = {
-            type: BASIC_OUTPUT_TYPE,
-            amount: "455655655",
-            unlockConditions: [
-                {
-                    type: 0,
-                    address: {
-                        type: ADDRESS_UNLOCK_CONDITION_TYPE,
-                        pubKeyHash: "0x6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
-                    }
-                },
-                {
-                    type: STORAGE_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE,
-                    amount: "0",
-                    returnAddress: {
-                        type: ADDRESS_UNLOCK_CONDITION_TYPE,
-                        pubKeyHash: "0x6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
-                    }
-                }
-            ]
+        (basicOutput.unlockConditions[1] as IStorageDepositReturnUnlockCondition).amount = "100";
+
+        expect(() => validateUnlockConditions(basicOutput.unlockConditions, basicOutput.amount, protocolInfoMock.rentStructure)).toThrow("Storage deposit return amount is less than the min storage deposit.");
+    });
+
+    test("should fail to validate sdruc if storage deposit return amount exceeds target output's deposit", () => {
+        const basicOutput = cloneBasicOutput(mockBasicOutput);
+
+        (basicOutput.unlockConditions[1] as IStorageDepositReturnUnlockCondition).amount = "455655657";
+
+        expect(() => validateUnlockConditions(basicOutput.unlockConditions, basicOutput.amount, protocolInfoMock.rentStructure)).toThrow("Storage deposit return amount exceeds target output's deposit.");
+    });
+
+    test("should fail to validate sdruc with invalid return address", () => {
+        const basicOutput = cloneBasicOutput(mockBasicOutput);
+
+        (basicOutput.unlockConditions[1] as IStorageDepositReturnUnlockCondition).returnAddress = {
+            type: ADDRESS_UNLOCK_CONDITION_TYPE,
+            pubKeyHash: "0x6920b176f613ec7be59e68fc68f597e393af80f74c7c3db78198147d5f1f92"
         };
 
-        const unlockCondition: IStorageDepositReturnUnlockCondition = {
-            type: STORAGE_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE,
-            amount: "0",
-            returnAddress: {
-                type: ADDRESS_UNLOCK_CONDITION_TYPE,
-                pubKeyHash: "0x6920b176f613ec7be59e68fc68f597eb3393af80f74c7c3db78198147d5f1f92"
-            }
-        };
-
-        const result = validateUnlockCondition(unlockCondition, output.amount, protocolInfo.rentStructure);
-        expect(result.isValid).toEqual(false);
-        expect(result.errors).toEqual(expect.arrayContaining([
-            "Storage deposit amount must be larger than zero.",
-            "Storage deposit return amount is less than the min storage deposit."
-        ]));
+        expect(() => validateUnlockConditions(basicOutput.unlockConditions, basicOutput.amount, protocolInfoMock.rentStructure)).toThrow("Ed25519 Address must have 66 characters.");
     });
 });
