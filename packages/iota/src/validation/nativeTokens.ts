@@ -4,8 +4,7 @@ import { HexHelper } from "@iota/util.js";
 import bigInt from "big-integer";
 import { MAX_NATIVE_TOKEN_COUNT } from "../binary/nativeTokens";
 import type { INativeToken } from "../models/INativeToken";
-import { failValidation } from "./result";
-import { validateDistinct } from "./validationUtils";
+import { failValidation, validateDistinct } from "./validationUtils";
 
 /**
  * Validate native tokens.

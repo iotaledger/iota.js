@@ -7,7 +7,7 @@ import { INftUnlock, NFT_UNLOCK_TYPE } from "../../models/unlocks/INftUnlock";
 import { IReferenceUnlock, REFERENCE_UNLOCK_TYPE } from "../../models/unlocks/IReferenceUnlock";
 import { ISignatureUnlock, SIGNATURE_UNLOCK_TYPE } from "../../models/unlocks/ISignatureUnlock";
 import type { UnlockTypes } from "../../models/unlocks/unlockTypes";
-import { failValidation } from "../result";
+import { failValidation } from "../validationUtils";
 
 /**
  * Validate unlocks.

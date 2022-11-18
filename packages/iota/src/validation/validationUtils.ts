@@ -6,7 +6,29 @@ import type { ITypeBase } from "../models/ITypeBase";
 import { BASIC_OUTPUT_TYPE, IBasicOutput } from "../models/outputs/IBasicOutput";
 import { ADDRESS_UNLOCK_CONDITION_TYPE } from "../models/unlockConditions/IAddressUnlockCondition";
 import { TransactionHelper } from "../utils/transactionHelper";
-import { failValidation } from "../validation/result";
+
+/**
+ * The validation result object.
+ */
+ export interface IValidationResult {
+    /**
+     * Is the subject valid.
+     */
+    isValid: boolean;
+    /**
+     * The validation failure messages, in case on invalid subject.
+     */
+    error?: string;
+}
+
+/**
+ * Fail validation with error message.
+ * @param withError The error message.
+ * @throws Error with message.
+ */
+export function failValidation(withError: string) {
+    throw new Error(withError);
+}
 
 /**
  * Validates the array is composed of distinct elements.

@@ -4,8 +4,8 @@ import type { INodeInfoProtocol } from "../../models/info/INodeInfoProtocol";
 import { BASIC_OUTPUT_TYPE, IBasicOutput } from "../../models/outputs/IBasicOutput";
 import { ADDRESS_UNLOCK_CONDITION_TYPE } from "../../models/unlockConditions/IAddressUnlockCondition";
 import { validateFeatures } from "../features/features";
-import { failValidation } from "../result";
 import { validateUnlockConditions } from "../unlockConditions/unlockConditions";
+import { failValidation } from "../validationUtils";
 import { validateCommonRules } from "./common";
 
 /**

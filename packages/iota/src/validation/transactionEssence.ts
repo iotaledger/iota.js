@@ -7,7 +7,7 @@ import { TransactionHelper } from "../utils/transactionHelper";
 import { validateInputs } from "./inputs/inputs";
 import { validateOutputs } from "./outputs/outputs";
 import { validateTaggedDataPayload } from "./payloads/payloads";
-import { failValidation } from "./result";
+import { failValidation } from "./validationUtils";
 
 /**
  * Validate a transaction essence.

@@ -12,8 +12,7 @@ import { IStorageDepositReturnUnlockCondition, STORAGE_DEPOSIT_RETURN_UNLOCK_CON
 import { TIMELOCK_UNLOCK_CONDITION_TYPE } from "../../models/unlockConditions/ITimelockUnlockCondition";
 import type { UnlockConditionTypes } from "../../models/unlockConditions/unlockConditionTypes";
 import { validateAddress } from "../addresses/addresses";
-import { failValidation } from "../result";
-import { getMinStorageDeposit, validateAscendingOrder, validateDistinct } from "../validationUtils";
+import { failValidation, getMinStorageDeposit, validateAscendingOrder, validateDistinct } from "../validationUtils";
 
 /**
  * Validate output unlock conditions.

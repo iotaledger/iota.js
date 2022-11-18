@@ -7,9 +7,9 @@ import { ITaggedDataPayload, TAGGED_DATA_PAYLOAD_TYPE } from "../../models/paylo
 import { ITransactionPayload, TRANSACTION_PAYLOAD_TYPE } from "../../models/payloads/ITransactionPayload";
 import { TREASURY_TRANSACTION_PAYLOAD_TYPE } from "../../models/payloads/ITreasuryTransactionPayload";
 import type { PayloadTypes } from "../../models/payloads/payloadTypes";
-import { failValidation } from "../result";
 import { validateTransactionEssence } from "../transactionEssence";
 import { validateUnlocks } from "../unlocks/unlocks";
+import { failValidation } from "../validationUtils";
 
 /**
  * The maximum length of a tag.

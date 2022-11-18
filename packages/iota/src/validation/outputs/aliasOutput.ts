@@ -7,8 +7,8 @@ import { ALIAS_OUTPUT_TYPE, IAliasOutput } from "../../models/outputs/IAliasOutp
 import { GOVERNOR_ADDRESS_UNLOCK_CONDITION_TYPE } from "../../models/unlockConditions/IGovernorAddressUnlockCondition";
 import { STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE } from "../../models/unlockConditions/IStateControllerAddressUnlockCondition";
 import { validateFeatures, MAX_METADATA_LENGTH } from "../features/features";
-import { failValidation } from "../result";
 import { validateUnlockConditions } from "../unlockConditions/unlockConditions";
+import { failValidation } from "../validationUtils";
 import { validateCommonRules } from "./common";
 
 /**

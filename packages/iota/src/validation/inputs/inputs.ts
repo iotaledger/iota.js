@@ -3,7 +3,7 @@
 import { MAX_INPUT_COUNT, MIN_INPUT_COUNT } from "../../binary/inputs/inputs";
 import { MAX_OUTPUT_COUNT } from "../../binary/outputs/outputs";
 import { IUTXOInput, UTXO_INPUT_TYPE } from "../../models/inputs/IUTXOInput";
-import { failValidation } from "../result";
+import { failValidation } from "../validationUtils";
 
 /**
  * Validate inputs.

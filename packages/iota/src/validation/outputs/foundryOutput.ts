@@ -4,9 +4,9 @@ import type { INodeInfoProtocol } from "../../models/info/INodeInfoProtocol";
 import { FOUNDRY_OUTPUT_TYPE, IFoundryOutput } from "../../models/outputs/IFoundryOutput";
 import { SIMPLE_TOKEN_SCHEME_TYPE } from "../../models/tokenSchemes/ISimpleTokenScheme";
 import { validateFeatures } from "../features/features";
-import { failValidation } from "../result";
 import { validateSimpleTokenScheme } from "../tokenSchemes/simpleTokenScheme";
 import { validateUnlockConditions } from "../unlockConditions/unlockConditions";
+import { failValidation } from "../validationUtils";
 import { validateCommonRules } from "./common";
 
 /**
