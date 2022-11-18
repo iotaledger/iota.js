@@ -8,7 +8,7 @@ import { ALIAS_ADDRESS_TYPE } from "../../models/addresses/IAliasAddress";
 import { ED25519_ADDRESS_TYPE } from "../../models/addresses/IEd25519Address";
 import { NFT_ADDRESS_TYPE } from "../../models/addresses/INftAddress";
 import type { ITypeBase } from "../../models/ITypeBase";
-import { failValidation } from "../result";
+import { failValidation } from "../validationUtils";
 
 /**
  * The length of an hex encode ed25519 address string with prefix 0x.

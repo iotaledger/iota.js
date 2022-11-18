@@ -3,7 +3,7 @@
 import { HexHelper } from "@iota/util.js";
 import bigInt from "big-integer";
 import { ISimpleTokenScheme, SIMPLE_TOKEN_SCHEME_TYPE } from "../../models/tokenSchemes/ISimpleTokenScheme";
-import { failValidation } from "../result";
+import { failValidation } from "../validationUtils";
 
 /**
  * Validate simple token scheme.

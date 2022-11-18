@@ -20,8 +20,7 @@ import { STORAGE_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE } from "../../models/unloc
 import { TIMELOCK_UNLOCK_CONDITION_TYPE } from "../../models/unlockConditions/ITimelockUnlockCondition";
 import type { UnlockConditionTypes } from "../../models/unlockConditions/unlockConditionTypes";
 import { validateNativeTokens } from "../nativeTokens";
-import { failValidation } from "../result";
-import { validateCount } from "../validationUtils";
+import { failValidation, validateCount } from "../validationUtils";
 
 type SupportedOutputTypes = IBasicOutput | IAliasOutput | IFoundryOutput | INftOutput;
 
@@ -107,25 +106,25 @@ const OUTPUT_TYPE_TO_SUPPORTED_PROP_VALUES = new Map([
 /**
  * Unlock Condition type names.
  */
-const UNLOCK_CONDITION_TYPE_NAMES = [
-    "Address Unlock Condition",
-    "Storage Deposit Return Unlock Condition",
-    "Timelock Unlock Condition",
-    "Expiration Unlock Condition",
-    "State Controller Address Unlock Condition",
-    "Governor Address Unlock Condition",
-    "Immutable Alias Address Unlock Condition"
-];
+const UNLOCK_CONDITION_TYPE_NAMES = new Map([
+    [ADDRESS_UNLOCK_CONDITION_TYPE, "Address Unlock Condition"],
+    [STORAGE_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE, "Storage Deposit Return Unlock Condition"],
+    [TIMELOCK_UNLOCK_CONDITION_TYPE, "Timelock Unlock Condition"],
+    [EXPIRATION_UNLOCK_CONDITION_TYPE, "Expiration Unlock Condition"],
+    [STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE, "State Controller Address Unlock Condition"],
+    [GOVERNOR_ADDRESS_UNLOCK_CONDITION_TYPE, "Governor Address Unlock Condition"],
+    [IMMUTABLE_ALIAS_UNLOCK_CONDITION_TYPE, "Immutable Alias Address Unlock Condition"]
+]);
 
 /**
  * Unlock Condition type names.
  */
-const FEATURE_TYPE_NAMES = [
-    "Sender Feature",
-    "Issuer Feature",
-    "Metadata Feature",
-    "Tag Feature"
-];
+const FEATURE_TYPE_NAMES = new Map([
+    [SENDER_FEATURE_TYPE, "Sender Feature"],
+    [ISSUER_FEATURE_TYPE, "Issuer Feature"],
+    [METADATA_FEATURE_TYPE, "Metadata Feature"],
+    [TAG_FEATURE_TYPE, "Tag Feature"]
+]);
 
 /**
  * Map Output type to name.
@@ -225,9 +224,7 @@ function validateUnlockConditionAllowedTypes(
     const allowedUnlockConditionTypes = OUTPUT_TYPE_TO_SUPPORTED_PROP_VALUES.get(outputType)?.unlockConditions ?? [];
 
     if (!unlockConditions.every(uC => allowedUnlockConditionTypes.includes(uC.type))) {
-        const unlockConditionNames = UNLOCK_CONDITION_TYPE_NAMES.filter(
-            (uC, index) => allowedUnlockConditionTypes.includes(index)
-        );
+        const unlockConditionNames = getNamesByTypes(allowedUnlockConditionTypes, UNLOCK_CONDITION_TYPE_NAMES);
 
         failValidation(`${outputName} unlock condition type of an unlock condition must define one of the following types: ${unlockConditionNames.join(", ")}.`);
     }
@@ -248,9 +245,10 @@ function validateFeatureAllowedTypes(
     const allowedFeatureTypes = OUTPUT_TYPE_TO_SUPPORTED_PROP_VALUES.get(outputType)?.features ?? [];
 
     if (!features.every(feature => allowedFeatureTypes.includes(feature.type))) {
-        const unlockConditionNames = FEATURE_TYPE_NAMES.filter((feature, index) => allowedFeatureTypes.includes(index));
+        const featureNames = getNamesByTypes(allowedFeatureTypes, FEATURE_TYPE_NAMES);
 
-        failValidation(`${outputName} feature type of a feature must define one of the following types: ${unlockConditionNames.join(", ")}.`);
+
+        failValidation(`${outputName} feature type of a feature must define one of the following types: ${featureNames.join(", ")}.`);
     }
 }
 
@@ -269,9 +267,27 @@ function validateImmutableFeatureAllowedTypes(
     const allowedFeatureTypes = OUTPUT_TYPE_TO_SUPPORTED_PROP_VALUES.get(outputType)?.immutableFeatures ?? [];
 
     if (!immutableFeatures.every(feature => allowedFeatureTypes.includes(feature.type))) {
-        const unlockConditionNames = FEATURE_TYPE_NAMES.filter((feature, index) => allowedFeatureTypes.includes(index));
+        const featureNames = getNamesByTypes(allowedFeatureTypes, FEATURE_TYPE_NAMES);
 
-        failValidation(`${outputName} feature type of an Immutable Feature must define one of the following types: ${unlockConditionNames.join(", ")}.`);
+        failValidation(`${outputName} feature type of an Immutable Feature must define one of the following types: ${featureNames.join(", ")}.`);
     }
 }
 
+/**
+ * Get list of names by types.
+ * @param types List of types to get the names for.
+ * @param typesToNames Types to names map.
+ * @returns Array of names.
+ */
+function getNamesByTypes(types: number[], typesToNames: Map<number, string>) {
+    const names: string[] = [];
+
+    for (const type of types) {
+        const name = typesToNames.get(type);
+        if (name) {
+            names.push(name);
+        }
+    }
+
+    return names;
+}

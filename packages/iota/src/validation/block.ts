@@ -4,7 +4,7 @@ import type { HexEncodedString } from "../models/hexEncodedTypes";
 import type { IBlock } from "../models/IBlock";
 import type { INodeInfoProtocol } from "../models/info/INodeInfoProtocol";
 import { validatePayload } from "./payloads/payloads";
-import { failValidation, IValidationResult } from "./result";
+import { failValidation, IValidationResult } from "./validationUtils";
 
 /**
  * The minimum count of parents in block.

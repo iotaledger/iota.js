@@ -9,8 +9,7 @@ import { SENDER_FEATURE_TYPE } from "../../models/features/ISenderFeature";
 import { ITagFeature, TAG_FEATURE_TYPE } from "../../models/features/ITagFeature";
 import type { ITypeBase } from "../../models/ITypeBase";
 import { validateAddress } from "../addresses/addresses";
-import { failValidation } from "../result";
-import { validateAscendingOrder, validateDistinct } from "../validationUtils";
+import { failValidation, validateAscendingOrder, validateDistinct } from "../validationUtils";
 
 /**
  * The maximum length of a metadata binary representation.
@@ -83,8 +82,8 @@ function validateTagFeature(tagFeature: ITagFeature) {
         failValidation("Tag feature tag field must be larger than zero.");
     }
 
-    if ((tagFeature.tag.length / 2) > MAX_TAG_LENGTH) {
+    const tag = HexHelper.stripPrefix(tagFeature.tag);
+    if ((tag.length / 2) > MAX_TAG_LENGTH) {
         failValidation("Tag length must not be larger than max tag length.");
     }
 }
-
