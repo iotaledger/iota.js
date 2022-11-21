@@ -71,7 +71,18 @@ describe("Feature validation", () => {
                 data: ""
             };
 
-        expect(() => validateFeature(feature)).toThrow("Metadata feature data field must be larger than zero.");
+        expect(() => validateFeature(feature)).toThrow("Metadata feature data field must be greater than zero.");
+    });
+
+    test("should fail when  metadata feature data field length is greater than Max Metadata Length", () => {
+        const data = "0".repeat(2 * 8194);
+        const feature: IMetadataFeature =
+            {
+                type: METADATA_FEATURE_TYPE,
+                data: "0x".concat(data)
+            };
+
+        expect(() => validateFeature(feature)).toThrow("Metadata length must not be greater than Max Metadata Length.");
     });
 
     test("should fail when tag feature tag field equal to zero", () => {
@@ -81,7 +92,18 @@ describe("Feature validation", () => {
             tag: ""
         };
 
-        expect(() => validateFeature(feature)).toThrow("Tag feature tag field must be larger than zero.");
+        expect(() => validateFeature(feature)).toThrow("Tag feature tag field must be greater than zero.");
+    });
+
+    test("should fail when tag feature tag field length greater than Max Tag Length", () => {
+        const tag = "0".repeat(2 * 66);
+        const feature: ITagFeature =
+            {
+                type: TAG_FEATURE_TYPE,
+                tag: "0x".concat(tag)
+            };
+
+        expect(() => validateFeature(feature)).toThrow("Tag length must not be greater than Max Tag Length.");
     });
 });
 
