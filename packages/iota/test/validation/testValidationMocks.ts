@@ -75,7 +75,7 @@ export const mockTaggedDataPayload: ITaggedDataPayload = {
  */
 export const mockTransactionEssence: ITransactionEssence = {
     type: TRANSACTION_ESSENCE_TYPE,
-    networkId: "123",
+    networkId: "13256342792583820190",
     inputs: [
         {
             type: UTXO_INPUT_TYPE,

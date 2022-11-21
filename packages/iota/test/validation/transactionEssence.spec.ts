@@ -5,22 +5,29 @@ import { UTXO_INPUT_TYPE } from "../../src/models/inputs/IUTXOInput";
 import { BASIC_OUTPUT_TYPE } from "../../src/models/outputs/IBasicOutput";
 import { TREASURY_OUTPUT_TYPE } from "../../src/models/outputs/ITreasuryOutput";
 import { ADDRESS_UNLOCK_CONDITION_TYPE } from "../../src/models/unlockConditions/IAddressUnlockCondition";
-import { validateInputs } from "../../src/validation/inputs/inputs";
-import { validateOutputs } from "../../src/validation/outputs/outputs";
 import { validateTransactionEssence } from "../../src/validation/transactionEssence";
 import { cloneTransactionEssence } from "./testUtils";
 import { mockTransactionEssence, protocolInfoMock, mockMaxDistintNativeTokens } from "./testValidationMocks";
 
 describe("Transaction Essence validation", () => {
+    it("should pass with valid transaction Essence", () => {
+        const txEssence = cloneTransactionEssence(mockTransactionEssence);
+
+        expect(() => validateTransactionEssence(txEssence, protocolInfoMock)).not.toThrowError();
+    });
+
     it("should fail when network id does not match the current network id", () => {
-        expect(() => validateTransactionEssence(mockTransactionEssence, protocolInfoMock)).toThrow("Network ID must match the value of the current network.");
+        const txEssence = cloneTransactionEssence(mockTransactionEssence);
+        txEssence.networkId = "1251235";
+
+        expect(() => validateTransactionEssence(txEssence, protocolInfoMock)).toThrow("Network ID must match the value of the current network.");
     });
 
     it("should fail when input count is out of bounds", () => {
         const txEssence = cloneTransactionEssence(mockTransactionEssence);
         txEssence.inputs = [];
 
-        expect(() => validateInputs(txEssence.inputs)).toThrow("Inputs count must be between 1 and 128.");
+        expect(() => validateTransactionEssence(txEssence, protocolInfoMock)).toThrow("Inputs count must be between 1 and 128.");
     });
 
     it("should fail when transaction id and transaction output index pairs are not distinct", () => {
@@ -31,7 +38,7 @@ describe("Transaction Essence validation", () => {
             transactionOutputIndex: 2
         });
 
-        expect(() => validateInputs(txEssence.inputs)).toThrow("Each pair of Transaction Id and Transaction Output Index must be unique in the list of inputs.");
+        expect(() => validateTransactionEssence(txEssence, protocolInfoMock)).toThrow("Each pair of Transaction Id and Transaction Output Index must be unique in the list of inputs.");
     });
 
     it("should fail when transaction output index is out of bounds", () => {
@@ -42,14 +49,14 @@ describe("Transaction Essence validation", () => {
             transactionOutputIndex: 129
         });
 
-        expect(() => validateInputs(txEssence.inputs)).toThrow("Transaction Output Index must be between 0 and 128.");
+        expect(() => validateTransactionEssence(txEssence, protocolInfoMock)).toThrow("Transaction Output Index must be between 0 and 128.");
     });
 
     it("should fail with outputs count must be greater then zero and less then 129", () => {
         const txEssence = cloneTransactionEssence(mockTransactionEssence);
         txEssence.outputs = [];
 
-        expect(() => validateOutputs(txEssence.outputs, protocolInfoMock)).toThrow("Outputs count must be between 1 and 128.");
+        expect(() => validateTransactionEssence(txEssence, protocolInfoMock)).toThrow("Outputs count must be between 1 and 128.");
     });
 
     it("should fail with sum of all outputs amount exceeds maximum total supply", () => {
@@ -70,7 +77,7 @@ describe("Transaction Essence validation", () => {
             features: []
         });
 
-        expect(() => validateOutputs(txEssence.outputs, protocolInfoMock)).toThrow("The sum of all outputs amount field must be less then 1450896407249092.");
+        expect(() => validateTransactionEssence(txEssence, protocolInfoMock)).toThrow("The sum of all outputs amount field must be less then 1450896407249092.");
     });
 
     it("should fail with distinct native tokens count exceeds maximum native tokens count", () => {
@@ -91,7 +98,7 @@ describe("Transaction Essence validation", () => {
             features: []
         });
 
-        expect(() => validateOutputs(txEssence.outputs, protocolInfoMock)).toThrow("The count of all distinct native tokens present in outputs must be less then 64.");
+        expect(() => validateTransactionEssence(txEssence, protocolInfoMock)).toThrow("The count of all distinct native tokens present in outputs must be less then 64.");
     });
 
     it("should fail with output type doesnot match with Basic, Alias, Foundry or NFT", () => {
@@ -101,7 +108,6 @@ describe("Transaction Essence validation", () => {
             amount: "123456"
         });
 
-        expect(() => validateOutputs(txEssence.outputs, protocolInfoMock)).toThrow("Output Type must be one of the following: Basic, Alias, Foundry and NFT.");
+        expect(() => validateTransactionEssence(txEssence, protocolInfoMock)).toThrow("Output Type must be one of the following: Basic, Alias, Foundry and NFT.");
     });
 });
-

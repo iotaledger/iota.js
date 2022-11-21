@@ -63,12 +63,12 @@ export function validateFeature(feature: FeatureTypes) {
  */
 function validateMetadataFeature(metadataFeature: IMetadataFeature) {
     if (metadataFeature.data.length === 0) {
-        failValidation("Metadata feature data field must be larger than zero.");
+        failValidation("Metadata feature data field must be greater than zero.");
     }
 
     const data = HexHelper.stripPrefix(metadataFeature.data);
     if ((data.length / 2) > MAX_METADATA_LENGTH) {
-        failValidation("Metadata length must not be larger than max metadata length.");
+        failValidation("Metadata length must not be greater than Max Metadata Length.");
     }
 }
 
@@ -79,11 +79,11 @@ function validateMetadataFeature(metadataFeature: IMetadataFeature) {
  */
 function validateTagFeature(tagFeature: ITagFeature) {
     if (tagFeature.tag.length === 0) {
-        failValidation("Tag feature tag field must be larger than zero.");
+        failValidation("Tag feature tag field must be greater than zero.");
     }
 
     const tag = HexHelper.stripPrefix(tagFeature.tag);
     if ((tag.length / 2) > MAX_TAG_LENGTH) {
-        failValidation("Tag length must not be larger than max tag length.");
+        failValidation("Tag length must not be greater than Max Tag Length.");
     }
 }
