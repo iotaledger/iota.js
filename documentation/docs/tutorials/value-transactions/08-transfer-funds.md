@@ -1,3 +1,21 @@
+---
+description: "Transfer funds using the iota.js library: prepare the input and outputs, submit the block and check your results."
+image: /img/client_banner.png
+keywords:
+
+- tutorial
+- origin address
+- ed25519 format
+- destination address
+- output
+- new output
+- unlock conditions
+- transactions payload
+- transactions essence
+- output id
+- public key
+
+---
 # Transfer Funds
 
 This example uses the following addresses declared as constants, but you should use
@@ -26,15 +44,15 @@ You will need to take the following steps to transfer funds:
     2. [Provide the unlock conditions for such new outputs](#provide-the-unlock-conditions)
     3. [Create a transaction payload](#create-a-transaction-payload), by wrapping the inputs and outputs into a
        [transaction essence](#create-a-transaction-essence).
-    4. [Sign the transaction essence](#sign-the-transaction-essence) with the corresponding private key so that those
-       inputs can be unlocked.
+    4. [Sign the transaction essence](#sign-the-transaction-essence) with the corresponding private key so those inputs
+       can be unlocked.
     5. Attach a transaction payload (essence + unlock conditions) into a block and [submit the block](#submit-the-block)
        .
 
 ## Prepare the Input
 
-In this example we will consume the output that holds the initial
-funds [requested from the testnet Faucet](07-request-funds-from-the-faucet.md). As
+In this example, we will consume the output that holds the initial
+funds [requested from the testnet Faucet](06-request-funds-from-the-faucet.md). As
 the unit of measurement is the Glow, you should use a `BigInt` data type to perform arithmetic operations. In this
 case, the transferred value is `50000` Glow.
 
@@ -121,8 +139,8 @@ outputs.push(remainderBasicOutput);
 
 **Where**:
 
-* The amount of funds will be the total funds of the original input minus the amount now hold by the new output.
-* The unlock condition in this case will still be `ADDRESS_UNLOCK_CONDITION_TYPE`, but it will correspond to the
+* The number of funds will be the total funds of the original input minus the amount now held by the new output.
+* The unlock condition, in this case, will still be `ADDRESS_UNLOCK_CONDITION_TYPE`, but it will correspond to the
   origin Ed25519 address.
 
 ### Create a Transaction Payload
@@ -178,11 +196,11 @@ const transactionPayload: ITransactionPayload = {
 };
 ```
 
-The signature unlock is composed by the **public key** corresponding to the source address (not the
+The signature unlock is composed of the **public key** corresponding to the source address (not the
 hash) and the signature represented in hex format. The node receiving the transaction needs the public key to properly
 verify the attached signature.
 
-It is important that you note *for each input* there should be one unlock in the transaction payload. If you need to
+You must note that *for each input* there should be one unlock in the transaction payload. If you need to
 unlock other
 inputs with the same signature, then you should
 use [`IReferenceUnlock`](../../references/client/interfaces/IReferenceUnlock) (
@@ -192,7 +210,7 @@ see [Sweep Outputs To Reduce Deposits](10-sweep-outputs-to-reduce-deposits.md)).
 
 In order the transaction to be attached to the Tangle, you will need to add it to a block.
 You can retrieve the parents for the block using
-the [`SingleNodeClient.tips()`](../../references/client/classes/SingleNodeClient#tips) function, or you can leave it
+the [`SingleNodeClient.tips()`](../../references/client/classes/SingleNodeClient#tips) function or you can leave it
 empty if you are using the [`NeonPowProvider`](../../references/pow-neon/classes/NeonPowProvider).
 
 ```typescript
@@ -210,15 +228,201 @@ console.log(blockId);
 
 ## Check the Results
 
-If you have transferred the funds succesfully, you should have:
+If you have transferred the funds successfully, you have:
 
-* Created a new block identified by a certain `Block Id` (Block Ids are `32` bytes long i.e. `256` bit).
+* Created a new block identified by a certain `Block Id` (Block Ids are `32` bytes long, i.e. `256` bit).
 * Create a new transaction identified by a `transaction Id` (Transaction Ids are `32` bytes long).
-* Created two new outputs on the ledger, one associated to each address and identified by their corresponding ID (Output
-  Ids are `34` bytes long).
+* Created two new outputs on the ledger, one associated with each address and identified by their corresponding ID (
+  Output Ids are `34` bytes long).
 * After the transaction is confirmed, the funds of the origin address will be `999.95 SMR` and the funds of the
   destination address will be `0.05 SMR` (`50,000 Glow`) as `1 SMR` is `10^6` (`1M`) Glow.
 
 You can now check the balance of both addresses using
 the [Shimmer Testnet Explorer](https://explorer.shimmer.network/testnet).
 
+## Putting It All Together
+
+By this point in the tutorial, your `send-value-transactions.ts`file should look something like this:
+
+```typescript
+import {Bip32Path, Bip39, Blake2b, Ed25519} from "@iota/crypto.js";
+import {
+    ADDRESS_UNLOCK_CONDITION_TYPE,
+    BASIC_OUTPUT_TYPE,
+    Bech32Helper, DEFAULT_PROTOCOL_VERSION,
+    ED25519_ADDRESS_TYPE, ED25519_SIGNATURE_TYPE,
+    Ed25519Address,
+    Ed25519Seed,
+    generateBip44Address,
+    IBasicOutput, IBlock,
+    IKeyPair, ISignatureUnlock,
+    ITransactionEssence, ITransactionPayload,
+    IUTXOInput,
+    serializeTransactionEssence, SIGNATURE_UNLOCK_TYPE,
+    SingleNodeClient,
+    TRANSACTION_ESSENCE_TYPE, TRANSACTION_PAYLOAD_TYPE,
+    TransactionHelper
+} from "@iota/iota.js";
+import {Converter} from "@iota/util.js";
+import {NeonPowProvider} from "@iota/pow-neon.js";
+import {Converter, WriteStream} from "@iota/util.js";
+
+// Default entropy length is 256
+const randomMnemonic = Bip39.randomMnemonic();
+
+console.log("Seed phrase:", randomMnemonic);
+
+const masterSeed = Ed25519Seed.fromMnemonic(randomMnemonic);
+
+const NUM_ADDR = 6;
+const addressGeneratorAccountState = {
+    accountIndex: 0,
+    addressIndex: 0,
+    isInternal: false
+};
+const paths: string[] = [];
+for (let i = 0; i < NUM_ADDR; i++) {
+    const path = generateBip44Address(addressGeneratorAccountState);
+    paths.push(path);
+
+    console.log(`${path}`);
+}
+
+
+const keyPairs: IKeyPair[] = [];
+
+for (const path of paths) {
+    // Master seed was generated previously
+    const addressSeed = masterSeed.generateSeedFromPath(new Bip32Path(path));
+    const addressKeyPair = addressSeed.keyPair();
+    keyPairs.push(addressKeyPair);
+
+    console.log(Converter.bytesToHex(addressKeyPair.privateKey, true));
+    console.log(Converter.bytesToHex(addressKeyPair.publicKey, true));
+}
+
+const publicAddresses: { ed25519: string, bech32: string }[] = [];
+
+for (const keyPair of keyPairs) {
+    const ed25519Address = new Ed25519Address(keyPair.publicKey);
+    // Address in bytes
+    const ed25519AddressBytes = ed25519Address.toAddress();
+    // Conversion to BECH32
+    const bech32Addr = Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, ed25519AddressBytes, "rms");
+
+    const publicAddress = {
+        ed25519: Converter.bytesToHex(ed25519AddressBytes, true),
+        bech32: bech32Addr
+    };
+    publicAddresses.push(publicAddress);
+
+    console.log(publicAddress);
+}
+
+const API_ENDPOINT = "https://api.testnet.shimmer.network";
+const client = new SingleNodeClient(API_ENDPOINT, {powProvider: new NeonPowProvider()});
+const protocolInfo = async () => {
+    await client.protocolInfo();
+}
+
+console.log(protocolInfo);
+
+const sourceAddress = "0x1f3df4a2c6e785cf61bac23c68363fc226c2268cc03175e07b84c01f370dcd11";
+const sourceAddressBech32 = "rms1qq0nma9zcmnctnmphtprc6pk8lpzds3x3nqrza0q0wzvq8ehphx3znqy4vh";
+const sourceAddressPublicKey = "0xb549f7f8be80eb101ec5d4ea5be2c2e5aaed110ab12941550456c5e5c1e83ff0f7a2e789c9fd56d44d856fd45389e7b44dac1428a31be42de86ab902be5ae2f9";
+const sourceAddressPrivateKey = "0xf7a2e789c9fd56d44d856fd45389e7b44dac1428a31be42de86ab902be5ae2f9";
+
+const destAddress = "0xb94bf2aa9c30ada6690a98b11c1e75f30871621e8f076e73e97d8360aee5a71b";
+
+const consumedOutputId = "0xcba9a6616df8e8e323d8203ea5d1a42e2e7c64dc9ead6b59f5d26bdc301efa540000";
+const outputDetails = await client.output(consumedOutputId);
+const totalFunds = bigInt(outputDetails.output.amount);
+
+const amountToSend = bigInt("50000");
+
+const inputs: IUTXOInput[] = [];
+
+inputs.push(TransactionHelper.inputFromOutputId(consumedOutputId));
+
+
+const outputs: IBasicOutput[] = [];
+
+const basicOutput: IBasicOutput = {
+    type: BASIC_OUTPUT_TYPE,
+    amount: amountToSend.toString(),
+    nativeTokens: [],
+    unlockConditions: [
+        {
+            type: ADDRESS_UNLOCK_CONDITION_TYPE,
+            address: {
+                type: ED25519_ADDRESS_TYPE,
+                pubKeyHash: destAddress
+            }
+        }
+    ],
+    features: []
+};
+
+// The remaining output that remains in the origin address
+const remainderBasicOutput: IBasicOutput = {
+    type: BASIC_OUTPUT_TYPE,
+    amount: totalFunds.minus(amountToSend).toString(),
+    nativeTokens: [],
+    unlockConditions: [
+        {
+            type: ADDRESS_UNLOCK_CONDITION_TYPE,
+            address: {
+                type: ED25519_ADDRESS_TYPE,
+                pubKeyHash: sourceAddress
+            }
+        }
+    ],
+    features: []
+};
+
+outputs.push(basicOutput);
+outputs.push(remainderBasicOutput);
+
+const inputsCommitment = TransactionHelper.getInputsCommitment([outputDetails.output]);
+
+const transactionEssence: ITransactionEssence = {
+    type: TRANSACTION_ESSENCE_TYPE,
+    networkId: protocolInfo.networkId,
+    inputs,
+    inputsCommitment,
+    outputs
+};
+
+const wsTsxEssence = new WriteStream();
+serializeTransactionEssence(wsTsxEssence, transactionEssence);
+const essenceFinal = wsTsxEssence.finalBytes();
+
+const essenceHash = Blake2b.sum256(essenceFinal);
+
+const privateKey = Converter.hexToBytes(sourceAddressPrivateKey);
+const signatureUnlock: ISignatureUnlock = {
+    type: SIGNATURE_UNLOCK_TYPE,
+    signature: {
+        type: ED25519_SIGNATURE_TYPE,
+        publicKey: sourceAddressPublicKey,
+        signature: Converter.bytesToHex(Ed25519.sign(privateKey, essenceHash), true)
+    }
+};
+
+const transactionPayload: ITransactionPayload = {
+    type: TRANSACTION_PAYLOAD_TYPE,
+    essence: transactionEssence,
+    unlocks: [signatureUnlock]
+};
+
+const block: IBlock = {
+    protocolVersion: DEFAULT_PROTOCOL_VERSION,
+    parents: [],
+    payload: transactionPayload,
+    nonce: "0",
+};
+
+const blockId = await client.blockSubmit(block);
+
+console.log(blockId);
+```

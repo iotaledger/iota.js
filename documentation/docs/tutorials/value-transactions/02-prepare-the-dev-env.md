@@ -29,6 +29,13 @@ To run the code in this tutorial, you will need the following:
   at [https://api.testnet.shimmer.network](https://api.testnet.shimmer.network).
 * (Optional) A TypeScript compiler and related packages
 
+## (optional) Download the Code
+
+You can [download the tutorials codebase](code_samples/tutorials/value-transactions/iota.js-value-transactions-tutorial.zip)
+to follow while you read the next sections. After you have unpacked the `.rar` file to a directory of your choice.
+
+## Create Your package.json file
+
 You can create your `package.json` file from the example below and place it in your projects base directory:
 
 ```json

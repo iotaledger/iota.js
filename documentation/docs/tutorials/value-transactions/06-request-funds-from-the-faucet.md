@@ -1,4 +1,4 @@
-## Request Funds from the Testnet Faucet
+# Request Funds from the Testnet Faucet
 
 Once you have [generated a set of addresses](04-generate-addresses.md), you will need some funds to experiment with
 value
