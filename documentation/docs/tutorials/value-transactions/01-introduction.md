@@ -1,11 +1,9 @@
 # Stardust for iota.js: Value Transactions
 
-In this series, you will This series of how-to pages is intended to Javascript developers that want to get familiar
-with:
-
-* the structure and functionality of transactions in Stardust (the IOTA protocol version that enables
-  the [Shimmer network](https://shimmer.network))
-* [iota.js](https://github.com/iotaledger/iota.js) primitives to issue those transactions
+This tutorial will guide you as you get acquainted with the structure and functionality of transactions in
+IOTA's [Stardust protocol](https://wiki.iota.org/shimmer/introduction/welcome) in
+the [Shimmer network](https://shimmer.network) using [iota.js](https://github.com/iotaledger/iota.js) primitives to
+issue value transactions.
 
 ## Introduction
 
