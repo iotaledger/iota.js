@@ -5,7 +5,7 @@ receive new outputs. Addresses are derived from a public key and their associate
 corresponding private key. As with Firefly wallets, you can generate multiple addresses from an initial master secret 
 (*seed phrase*), and, from that point on, use a hierarchical deterministic method to derive multiple addresses.
 
-## Generate a Seed Phrase and Ed25519 Seed
+## Generate a Seed Phrase and Ed25519 Master Seed
 
 ### Generate a Random Mnemonic Seed Phrase
 

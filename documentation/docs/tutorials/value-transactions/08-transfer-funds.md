@@ -21,7 +21,7 @@ const destAddress = "0xbc9a935...";
 You will need to take the following steps to transfer funds:
 
 1. [Prepare the input](#prepare-the-input) by selecting the output to be consumed and turn into a transaction input.
-3. [Prepare the outputs](#prepare-the-outputs)
+2. [Prepare the outputs](#prepare-the-outputs)
     1. [Determine the new outputs that will be generated](#define-the-output-type)
     2. [Provide the unlock conditions for such new outputs](#provide-the-unlock-conditions)
     3. [Create a transaction payload](#create-a-transaction-payload), by wrapping the inputs and outputs into a
