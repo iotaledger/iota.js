@@ -20,9 +20,9 @@ import bigInt from "big-integer";
 import fetch from "node-fetch";
 import { randomBytes } from "node:crypto";
 
-
-const API_ENDPOINT = "https://api.alphanet.iotaledger.net/";
-const FAUCET = "https://faucet.alphanet.iotaledger.net/api/enqueue" 
+const EXPLORER = "https://explorer.shimmer.network/testnet";
+const API_ENDPOINT = "https://api.testnet.shimmer.network/";
+const FAUCET = "https://faucet.testnet.shimmer.network/api/enqueue";
 
 // If running the node locally
 // const API_ENDPOINT = "http://localhost:14265/";
@@ -159,7 +159,7 @@ async function run() {
     // 5.Create transaction essence
     const transactionEssence: ITransactionEssence = {
         type: TRANSACTION_ESSENCE_TYPE,
-        networkId: protocolInfo.networkId,
+        networkId: TransactionHelper.networkIdFromNetworkName(protocolInfo.networkName),
         inputs: [input], 
         inputsCommitment,
         outputs: [basicOutput, remainderBasicOutput],
@@ -202,7 +202,7 @@ async function run() {
     
     // 9. Submit block with pow
     console.log("Calculating PoW, submitting block...");
-    const blockId = await client.blockSubmit(block);
+    const blockId = await client.blockSubmit(block, true);
     console.log("Submitted blockId is: ", blockId);
 }
 

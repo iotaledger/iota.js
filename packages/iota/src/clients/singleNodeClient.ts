@@ -235,14 +235,6 @@ export class SingleNodeClient implements IClient {
             nonce: blockPartial.nonce ?? "0"
         };
 
-        if (validate && protocolInfo) {
-            const validation = validateBlock(block, protocolInfo);
-
-            if (validation.error) {
-                throw new Error(validation.error);
-            }
-        }
-
         const writeStream = new WriteStream();
         serializeBlock(writeStream, block);
         let blockBytes = writeStream.finalBytes();
@@ -275,6 +267,14 @@ export class SingleNodeClient implements IClient {
             block.nonce = nonce.toString();
         }
 
+        if (validate && protocolInfo) {
+            const validation = validateBlock(block, protocolInfo);
+
+            if (validation.error) {
+                throw new Error(validation.error);
+            }
+        }
+
         const response = await this.fetchJson<IBlock, IBlockIdResponse>(this._coreApiPath, "post", "blocks", block);
 
         return response.blockId;
@@ -289,6 +289,7 @@ export class SingleNodeClient implements IClient {
      */
     public async blockSubmitRaw(
             block: Uint8Array,
+            validate?: boolean,
             powInterval?: number,
             maxPowAttempts: number = 40
         ): Promise<string> {
@@ -298,17 +299,23 @@ export class SingleNodeClient implements IClient {
             );
         }
 
+        let protocolInfo: INodeInfoProtocol | undefined;
+
+        if (this._powProvider || validate) {
+            protocolInfo = await this.protocolInfo();
+        }
+
         block[0] = this._protocolVersion;
 
         if (this._powProvider && ArrayHelper.equal(block.slice(-8), SingleNodeClient.NONCE_ZERO)) {
-            const protocolInfo = await this.protocolInfo();
+            // const protocolInfo = await this.protocolInfo();
 
             let nonce: string = "0";
             for (let i = 0; i <= maxPowAttempts; i++) {
                 // for last attempt let the pow run without interval
                 nonce = (i === maxPowAttempts)
-                    ? await this._powProvider.pow(block, protocolInfo.minPowScore)
-                    : await this._powProvider.pow(block, protocolInfo.minPowScore, powInterval);
+                    ? await this._powProvider.pow(block, protocolInfo?.minPowScore ?? 0)
+                    : await this._powProvider.pow(block, protocolInfo?.minPowScore ?? 0, powInterval);
                 if (nonce === "0") {
                     const rs = new ReadStream(block);
                     const blockObject = deserializeBlock(rs);
@@ -325,6 +332,16 @@ export class SingleNodeClient implements IClient {
             }
 
             BigIntHelper.write8(bigInt(nonce), block, block.length - 8);
+        }
+
+        if (validate && protocolInfo) {
+            const rs = new ReadStream(block);
+            const blockObject = deserializeBlock(rs);
+            const validation = validateBlock(blockObject, protocolInfo);
+
+            if (validation.error) {
+                throw new Error(validation.error);
+            }
         }
 
         const response = await this.fetchBinary<IBlockIdResponse>(this._coreApiPath, "post", "blocks", block);
