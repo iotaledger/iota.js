@@ -1,6 +1,21 @@
+---
+description: "Prepare a development environment to run the value transactions in iota.js tutorial."
+image: /img/client_banner.png
+keywords:
+
+- tutorial
+- Node.js 16
+- auxiliary library
+- proof of work
+- pow
+- shimmer
+- testnet node
+
+---
+
 # Prepare Your Development Environment
 
-In order to run the code in this tutorial you will need:
+To run the code in this tutorial, you will need the following:
 
 * [Node.js 16](https://nodejs.org/en/blog/release/v16.16.0/).
 * The [`@iota/iota.js`](https://www.npmjs.com/package/@iota/iota.js) library
@@ -8,12 +23,13 @@ In order to run the code in this tutorial you will need:
     * [`@iota/crypto.js`](https://www.npmjs.com/package/@iota/crypto.js)
     * [`@iota/util.js`](https://www.npmjs.com/package/@iota/util.js).
     * [`@iota/pow-neon.js`](https://www.npmjs.com/package/@iota/pow-neon.js) to run Proof of Work (PoW). Alternatively,
-      you can spin up your own node the PoW remotely.
+      you can spin up your own node to run the PoW remotely.
+
 * Access to a Stardust Node (Hornet 2.0.0). You can use the Shimmer testnet Nodes
   at [https://api.testnet.shimmer.network](https://api.testnet.shimmer.network).
 * (Optional) A TypeScript compiler and related packages
 
-You can create your `package.json` file from the example below:
+You can create your `package.json` file from the example below and place it in your projects base directory:
 
 ```json
 {
@@ -34,4 +50,21 @@ You can create your `package.json` file from the example below:
     "@types/node": "18.7.23"
   }
 }
+```
+
+After you have created the `package.json` file, you can install all the necessary dependencies by running the following
+command from the same directory:
+
+```bash
+npm install
+```
+
+## Troubleshooting
+
+If you are getting any errors during the installation process please make sure your system is
+using [Node.js 16](https://nodejs.org/en/blog/release/v16.16.0/). You can check your node version by running the
+following command:
+
+```bash
+node -v
 ```
