@@ -9,6 +9,7 @@ import { serializeOutput } from "../binary/outputs/outputs";
 import { MAX_TAG_LENGTH } from "../binary/payloads/taggedDataPayload";
 import { serializeTransactionEssence } from "../binary/transactionEssence";
 import { SingleNodeClient } from "../clients/singleNodeClient";
+import { TransactionHelper } from "../index-browser";
 import { ED25519_ADDRESS_TYPE } from "../models/addresses/IEd25519Address";
 import { DEFAULT_PROTOCOL_VERSION, IBlock } from "../models/IBlock";
 import type { IClient } from "../models/IClient";
@@ -62,9 +63,14 @@ export async function sendAdvanced(
     const localClient = typeof client === "string" ? new SingleNodeClient(client) : client;
 
     const protocolInfo = await localClient.protocolInfo();
+    const networkId = TransactionHelper.networkIdFromNetworkName(protocolInfo.networkName);
 
     const transactionPayload = buildTransactionPayload(
-        protocolInfo.networkId, inputsAndSignatureKeyPairs, outputs, taggedData);
+        networkId,
+        inputsAndSignatureKeyPairs,
+        outputs,
+        taggedData
+    );
 
     const block: IBlock = {
         protocolVersion: DEFAULT_PROTOCOL_VERSION,
@@ -73,7 +79,12 @@ export async function sendAdvanced(
         nonce: "0"
     };
 
-    const blockId = await localClient.blockSubmit(block, powInterval, maxPowAttempts);
+    const blockId = await localClient.blockSubmit(
+            block,
+            false,
+            powInterval,
+            maxPowAttempts
+        );
 
     return {
         blockId,

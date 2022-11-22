@@ -32,7 +32,7 @@ ___
 
 ### tag
 
-• **tag**: `string`
+• `Optional` **tag**: `string`
 
 The tag to use to categorize the data.
 
@@ -40,6 +40,6 @@ ___
 
 ### data
 
-• **data**: `string`
+• `Optional` **data**: `string`
 
 The index data.

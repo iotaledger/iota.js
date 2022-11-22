@@ -1,9 +1,9 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import { ED25519_SIGNATURE_TYPE } from "../../src/models/signatures/IEd25519Signature";
-import { SIGNATURE_UNLOCK_TYPE } from "../../src/models/unlocks/ISignatureUnlock";
-import { validateTransactionPayload } from "../../src/validation/payloads/payloads";
-import { mockTransactionPayload, protocolInfoMock } from "./testValidationMocks";
+import { ED25519_SIGNATURE_TYPE } from "../../../src/models/signatures/IEd25519Signature";
+import { SIGNATURE_UNLOCK_TYPE } from "../../../src/models/unlocks/ISignatureUnlock";
+import { validateTransactionPayload } from "../../../src/validation/payloads/payloads";
+import { mockTransactionPayload, protocolInfoMock } from "../testValidationMocks";
 
 describe("Transaction payload validation", () => {
     it("should fail when unlock counts and input counts in transaction are not the same", () => {

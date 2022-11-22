@@ -1,10 +1,9 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import { ArrayHelper, Blake2b } from "@iota/crypto.js";
+import { ArrayHelper } from "@iota/crypto.js";
 import { BigIntHelper, Converter, ReadStream, WriteStream } from "@iota/util.js";
 import bigInt from "big-integer";
 import { deserializeBlock, MAX_BLOCK_LENGTH, MAX_NUMBER_PARENTS, serializeBlock } from "../binary/block";
-import type { IMilestonePayload } from "../index-browser";
 import type { IBlockIdResponse } from "../models/api/IBlockIdResponse";
 import type { IMilestoneUtxoChangesResponse } from "../models/api/IMilestoneUtxoChangesResponse";
 import type { IOutputMetadataResponse } from "../models/api/IOutputMetadataResponse";
@@ -17,10 +16,13 @@ import { DEFAULT_PROTOCOL_VERSION, IBlock } from "../models/IBlock";
 import type { IBlockMetadata } from "../models/IBlockMetadata";
 import type { IClient } from "../models/IClient";
 import type { INodeInfo } from "../models/info/INodeInfo";
+import type { INodeInfoProtocol } from "../models/info/INodeInfoProtocol";
 import type { IRoutesResponse } from "../models/info/IRoutesResponse";
 import type { IPeer } from "../models/IPeer";
 import type { IPowProvider } from "../models/IPowProvider";
 import type { ITreasury } from "../models/ITreasury";
+import type { IMilestonePayload } from "../models/payloads/IMilestonePayload";
+import { validateBlock } from "../validation/block";
 import { ClientError } from "./clientError";
 import type { SingleNodeClientOptions } from "./singleNodeClientOptions";
 
@@ -81,32 +83,6 @@ export class SingleNodeClient implements IClient {
      * @internal
      */
     private readonly _headers?: { [id: string]: string };
-
-    /**
-     * Cached protocol info.
-     * @internal
-     */
-    private _protocol?: {
-        /**
-         * The human friendly name of the network on which the node operates on.
-         */
-        networkName: string;
-
-        /**
-         * The network id as a hex encoded 64 bit number.
-         */
-        networkId: string;
-
-        /**
-         * The human readable part of bech32 addresses.
-         */
-        bech32Hrp: string;
-
-        /**
-         * The minimum score required for PoW.
-         */
-        minPowScore: number;
-    };
 
     /**
      * The protocol version for blocks.
@@ -216,6 +192,7 @@ export class SingleNodeClient implements IClient {
      * @param blockPartial.parents The parent block ids.
      * @param blockPartial.payload The payload contents.
      * @param blockPartial.nonce The nonce for the block.
+     * @param validate Should the block be validated.
      * @param powInterval The time in seconds that pow should work before aborting.
      * @param maxPowAttempts The number of times the pow should be attempted.
      * @returns The blockId.
@@ -227,20 +204,23 @@ export class SingleNodeClient implements IClient {
             payload?: IBlock["payload"];
             nonce?: string;
         },
+        validate?: boolean,
         powInterval?: number,
         maxPowAttempts: number = 40
     ): Promise<HexEncodedString> {
         blockPartial.protocolVersion = this._protocolVersion;
+        let protocolInfo: INodeInfoProtocol | undefined;
+
+        if (this._powProvider || validate) {
+            protocolInfo = await this.protocolInfo();
+        }
 
         let minPowScore = 0;
         if (this._powProvider) {
             // If there is a local pow provider and no networkId or parent block ids
             // we must populate them, so that the they are not filled in by the
             // node causing invalid pow calculation
-            if (this._protocol === undefined) {
-                await this.populateProtocolInfoCache();
-            }
-            minPowScore = this._protocol?.minPowScore ?? 0;
+            minPowScore = protocolInfo?.minPowScore ?? 0;
 
             if (!blockPartial.parents || blockPartial.parents.length === 0) {
                 const tips = await this.tips();
@@ -254,6 +234,14 @@ export class SingleNodeClient implements IClient {
             payload: blockPartial.payload,
             nonce: blockPartial.nonce ?? "0"
         };
+
+        if (validate && protocolInfo) {
+            const validation = validateBlock(block, protocolInfo);
+
+            if (validation.error) {
+                throw new Error(validation.error);
+            }
+        }
 
         const writeStream = new WriteStream();
         serializeBlock(writeStream, block);
@@ -313,15 +301,14 @@ export class SingleNodeClient implements IClient {
         block[0] = this._protocolVersion;
 
         if (this._powProvider && ArrayHelper.equal(block.slice(-8), SingleNodeClient.NONCE_ZERO)) {
-            if (this._protocol === undefined) {
-                await this.populateProtocolInfoCache();
-            }
+            const protocolInfo = await this.protocolInfo();
+
             let nonce: string = "0";
             for (let i = 0; i <= maxPowAttempts; i++) {
                 // for last attempt let the pow run without interval
                 nonce = (i === maxPowAttempts)
-                    ? await this._powProvider.pow(block, this._protocol?.minPowScore ?? 0)
-                    : await this._powProvider.pow(block, this._protocol?.minPowScore ?? 0, powInterval);
+                    ? await this._powProvider.pow(block, protocolInfo.minPowScore)
+                    : await this._powProvider.pow(block, protocolInfo.minPowScore, powInterval);
                 if (nonce === "0") {
                     const rs = new ReadStream(block);
                     const blockObject = deserializeBlock(rs);
@@ -515,18 +502,10 @@ export class SingleNodeClient implements IClient {
      * Get the protocol info from the node.
      * @returns The protocol info.
      */
-    public async protocolInfo(): Promise<{
-        networkName: string;
-        networkId: string;
-        bech32Hrp: string;
-        minPowScore: number;
-    }> {
-        if (this._protocol === undefined) {
-            await this.populateProtocolInfoCache();
-        }
+    public async protocolInfo(): Promise<INodeInfoProtocol> {
+        const info = await this.info();
 
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        return this._protocol!;
+        return info.protocol;
     }
 
     /**
@@ -552,25 +531,6 @@ export class SingleNodeClient implements IClient {
         const response = await this.fetchWithTimeout("get", route);
 
         return response.status;
-    }
-
-    /**
-     * Populate the info cached fields.
-     * @internal
-     */
-    private async populateProtocolInfoCache(): Promise<void> {
-        if (this._protocol === undefined) {
-            const info = await this.info();
-
-            const networkIdBytes = Blake2b.sum256(Converter.utf8ToBytes(info.protocol.networkName));
-
-            this._protocol = {
-                networkName: info.protocol.networkName,
-                networkId: BigIntHelper.read8(networkIdBytes, 0).toString(),
-                bech32Hrp: info.protocol.bech32Hrp,
-                minPowScore: info.protocol.minPowScore
-            };
-        }
     }
 
     /**

@@ -124,6 +124,9 @@
 - [SIGNATURE\_UNLOCK\_TYPE](api.md#signature_unlock_type)
 - [CONFLICT\_REASON\_STRINGS](api.md#conflict_reason_strings)
 - [ED25519\_SEED\_TYPE](api.md#ed25519_seed_type)
+- [MIN\_PARENTS\_COUNT](api.md#min_parents_count)
+- [MAX\_PARENTS\_COUNT](api.md#max_parents_count)
+- [MAX\_METADATA\_LENGTH](api.md#max_metadata_length)
 
 ### Functions
 
@@ -284,6 +287,30 @@
 - [logUnlockCondition](api.md#logunlockcondition)
 - [milestoneIdFromMilestonePayload](api.md#milestoneidfrommilestonepayload)
 - [blockIdFromMilestonePayload](api.md#blockidfrommilestonepayload)
+- [validateAddress](api.md#validateaddress)
+- [validateBlock](api.md#validateblock)
+- [validateParents](api.md#validateparents)
+- [validateFeatures](api.md#validatefeatures)
+- [validateFeature](api.md#validatefeature)
+- [validateInputs](api.md#validateinputs)
+- [validateInput](api.md#validateinput)
+- [validateNativeTokens](api.md#validatenativetokens)
+- [validateNativeToken](api.md#validatenativetoken)
+- [validateAliasOutput](api.md#validatealiasoutput)
+- [validateBasicOutput](api.md#validatebasicoutput)
+- [validateFoundryOutput](api.md#validatefoundryoutput)
+- [validateNftOutput](api.md#validatenftoutput)
+- [validateOutputs](api.md#validateoutputs)
+- [validateOutput](api.md#validateoutput)
+- [validatePayload](api.md#validatepayload)
+- [validateTransactionPayload](api.md#validatetransactionpayload)
+- [validateTaggedDataPayload](api.md#validatetaggeddatapayload)
+- [validateSimpleTokenScheme](api.md#validatesimpletokenscheme)
+- [validateTransactionEssence](api.md#validatetransactionessence)
+- [validateTxEssencePayload](api.md#validatetxessencepayload)
+- [validateUnlockConditions](api.md#validateunlockconditions)
+- [validateUnlockCondition](api.md#validateunlockcondition)
+- [validateUnlocks](api.md#validateunlocks)
 
 ### Interfaces
 
@@ -1248,6 +1275,30 @@ ___
 • `Const` **ED25519\_SEED\_TYPE**: `number` = `1`
 
 The global type for the seed.
+
+___
+
+### MIN\_PARENTS\_COUNT
+
+• `Const` **MIN\_PARENTS\_COUNT**: `number` = `1`
+
+The minimum count of parents in block.
+
+___
+
+### MAX\_PARENTS\_COUNT
+
+• `Const` **MAX\_PARENTS\_COUNT**: `number` = `8`
+
+The maximum count of parents in block.
+
+___
+
+### MAX\_METADATA\_LENGTH
+
+• `Const` **MAX\_METADATA\_LENGTH**: `number` = `8192`
+
+The maximum length of a metadata binary representation.
 
 ## Functions
 
@@ -4421,6 +4472,546 @@ Compute a blockId from a milestone payload.
 `string`
 
 The blockId of the block with the milestone payload.
+
+___
+
+### validateAddress
+
+▸ **validateAddress**(`address`): `void`
+
+Validate address.
+
+**`Throws`**
+
+Error if the validation fails.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `address` | [`AddressTypes`](api.md#addresstypes) | The Address to validate. |
+
+#### Returns
+
+`void`
+
+___
+
+### validateBlock
+
+▸ **validateBlock**(`block`, `protocolInfo`): `IValidationResult`
+
+Validates a block.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `block` | [`IBlock`](interfaces/IBlock.md) | The block to validate. |
+| `protocolInfo` | [`INodeInfoProtocol`](interfaces/INodeInfoProtocol.md) | The Protocol Info. |
+
+#### Returns
+
+`IValidationResult`
+
+The validation result.
+
+___
+
+### validateParents
+
+▸ **validateParents**(`parents`): `void`
+
+Validate parent ids.
+
+**`Throws`**
+
+Error if the validation fails.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `parents` | `string`[] | The parentIds to validate. |
+
+#### Returns
+
+`void`
+
+___
+
+### validateFeatures
+
+▸ **validateFeatures**(`features?`): `void`
+
+Validate output features.
+
+**`Throws`**
+
+Error if the validation fails.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `features?` | [`FeatureTypes`](api.md#featuretypes)[] | The Features to validate. |
+
+#### Returns
+
+`void`
+
+___
+
+### validateFeature
+
+▸ **validateFeature**(`feature`): `void`
+
+Validate output feature.
+
+**`Throws`**
+
+Error if the validation fails.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `feature` | [`FeatureTypes`](api.md#featuretypes) | The Feature to validate. |
+
+#### Returns
+
+`void`
+
+___
+
+### validateInputs
+
+▸ **validateInputs**(`inputs`): `void`
+
+Validate inputs.
+
+**`Throws`**
+
+Error if the validation fails.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `inputs` | [`IUTXOInput`](interfaces/IUTXOInput.md)[] | The inputs to validate. |
+
+#### Returns
+
+`void`
+
+___
+
+### validateInput
+
+▸ **validateInput**(`input`): `void`
+
+Validate an input.
+
+**`Throws`**
+
+Error if the validation fails.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `input` | [`IUTXOInput`](interfaces/IUTXOInput.md) | The input to validate. |
+
+#### Returns
+
+`void`
+
+___
+
+### validateNativeTokens
+
+▸ **validateNativeTokens**(`nativeTokens?`): `void`
+
+Validate native tokens.
+
+**`Throws`**
+
+Error if the validation fails.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `nativeTokens?` | [`INativeToken`](interfaces/INativeToken.md)[] | The Native Tokens to validate. |
+
+#### Returns
+
+`void`
+
+___
+
+### validateNativeToken
+
+▸ **validateNativeToken**(`nativeToken`): `void`
+
+Validate a native token.
+
+**`Throws`**
+
+Error if the validation fails.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `nativeToken` | [`INativeToken`](interfaces/INativeToken.md) | The Native Token to validate. |
+
+#### Returns
+
+`void`
+
+___
+
+### validateAliasOutput
+
+▸ **validateAliasOutput**(`aliasOutput`, `protocolInfo`): `void`
+
+Validate an alias output.
+
+**`Throws`**
+
+Error if the validation fails.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `aliasOutput` | [`IAliasOutput`](interfaces/IAliasOutput.md) | The object to validate. |
+| `protocolInfo` | [`INodeInfoProtocol`](interfaces/INodeInfoProtocol.md) | The Protocol Info. |
+
+#### Returns
+
+`void`
+
+___
+
+### validateBasicOutput
+
+▸ **validateBasicOutput**(`basicOutput`, `protocolInfo`): `void`
+
+Validate a basic output.
+
+**`Throws`**
+
+Error if the validation fails.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `basicOutput` | [`IBasicOutput`](interfaces/IBasicOutput.md) | The basic output to validate. |
+| `protocolInfo` | [`INodeInfoProtocol`](interfaces/INodeInfoProtocol.md) | The Protocol Info. |
+
+#### Returns
+
+`void`
+
+___
+
+### validateFoundryOutput
+
+▸ **validateFoundryOutput**(`foundryOutput`, `protocolInfo`): `void`
+
+Validate a foundry output.
+
+**`Throws`**
+
+Error if the validation fails.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `foundryOutput` | [`IFoundryOutput`](interfaces/IFoundryOutput.md) | The output to validate. |
+| `protocolInfo` | [`INodeInfoProtocol`](interfaces/INodeInfoProtocol.md) | The Protocol Info. |
+
+#### Returns
+
+`void`
+
+___
+
+### validateNftOutput
+
+▸ **validateNftOutput**(`nftOutput`, `protocolInfo`): `void`
+
+Validate an nft output.
+
+**`Throws`**
+
+Error if the validation fails.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `nftOutput` | [`INftOutput`](interfaces/INftOutput.md) | The NFT output to validate. |
+| `protocolInfo` | [`INodeInfoProtocol`](interfaces/INodeInfoProtocol.md) | The Protocol Info. |
+
+#### Returns
+
+`void`
+
+___
+
+### validateOutputs
+
+▸ **validateOutputs**(`outputs`, `protocolInfo`): `void`
+
+Validate outputs.
+
+**`Throws`**
+
+Error if the validation fails.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `outputs` | [`OutputTypes`](api.md#outputtypes)[] | The outputs to validate. |
+| `protocolInfo` | [`INodeInfoProtocol`](interfaces/INodeInfoProtocol.md) | The Protocol Info. |
+
+#### Returns
+
+`void`
+
+___
+
+### validateOutput
+
+▸ **validateOutput**(`output`, `protocolInfo`): `void`
+
+Validate an output entry point.
+
+**`Throws`**
+
+Error if the validation fails.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `output` | [`OutputTypes`](api.md#outputtypes) | The output to validate. |
+| `protocolInfo` | [`INodeInfoProtocol`](interfaces/INodeInfoProtocol.md) | The Protocol Info. |
+
+#### Returns
+
+`void`
+
+___
+
+### validatePayload
+
+▸ **validatePayload**(`payload`, `protocolInfo`): `void`
+
+Validate any payload entrypoint.
+
+**`Throws`**
+
+Error if the validation fails.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `payload` | `undefined` \| [`PayloadTypes`](api.md#payloadtypes) | The payload to validate. |
+| `protocolInfo` | [`INodeInfoProtocol`](interfaces/INodeInfoProtocol.md) | The Protocol Info. |
+
+#### Returns
+
+`void`
+
+___
+
+### validateTransactionPayload
+
+▸ **validateTransactionPayload**(`transactionPayload`, `protocolInfo`): `void`
+
+Validate a transaction payload.
+
+**`Throws`**
+
+Error if the validation fails.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `transactionPayload` | [`ITransactionPayload`](interfaces/ITransactionPayload.md) | The transaction payload to validate. |
+| `protocolInfo` | [`INodeInfoProtocol`](interfaces/INodeInfoProtocol.md) | The Protocol Info. |
+
+#### Returns
+
+`void`
+
+___
+
+### validateTaggedDataPayload
+
+▸ **validateTaggedDataPayload**(`taggedDataPayload`): `void`
+
+Validate a tagged data payload.
+
+**`Throws`**
+
+Error if the validation fails.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `taggedDataPayload` | [`ITaggedDataPayload`](interfaces/ITaggedDataPayload.md) | The tagged data payload to validate. |
+
+#### Returns
+
+`void`
+
+___
+
+### validateSimpleTokenScheme
+
+▸ **validateSimpleTokenScheme**(`tokenScheme`): `void`
+
+Validate simple token scheme.
+
+**`Throws`**
+
+Error if the validation fails.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `tokenScheme` | [`ISimpleTokenScheme`](interfaces/ISimpleTokenScheme.md) | The scheme to validate. |
+
+#### Returns
+
+`void`
+
+___
+
+### validateTransactionEssence
+
+▸ **validateTransactionEssence**(`transactionEssence`, `protocolInfo`): `void`
+
+Validate a transaction essence.
+
+**`Throws`**
+
+Error if the validation fails.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `transactionEssence` | [`ITransactionEssence`](interfaces/ITransactionEssence.md) | The Transaction Essence to validate. |
+| `protocolInfo` | [`INodeInfoProtocol`](interfaces/INodeInfoProtocol.md) | The Protocol Info. |
+
+#### Returns
+
+`void`
+
+___
+
+### validateTxEssencePayload
+
+▸ **validateTxEssencePayload**(`payload`): `void`
+
+Validate transaction essence payload.
+
+**`Throws`**
+
+Error if the validation fails.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `payload` | [`ITaggedDataPayload`](interfaces/ITaggedDataPayload.md) | The tagged data payload. |
+
+#### Returns
+
+`void`
+
+___
+
+### validateUnlockConditions
+
+▸ **validateUnlockConditions**(`unlockConditions`, `amount?`, `rentStructure?`): `void`
+
+Validate output unlock conditions.
+
+**`Throws`**
+
+Error if the validation fails.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `unlockConditions` | [`UnlockConditionTypes`](api.md#unlockconditiontypes)[] | The Unlock Conditions to validate. |
+| `amount?` | `string` | The output amount that owns unlock conditions. |
+| `rentStructure?` | [`IRent`](interfaces/IRent.md) | The rent cost parameters. |
+
+#### Returns
+
+`void`
+
+___
+
+### validateUnlockCondition
+
+▸ **validateUnlockCondition**(`unlockCondition`, `amount?`, `rentStructure?`): `void`
+
+Validate output unlock condition.
+
+**`Throws`**
+
+Error if the validation fails.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `unlockCondition` | [`UnlockConditionTypes`](api.md#unlockconditiontypes) | The Unlock Condition to validate. |
+| `amount?` | `string` | The output amount that owns unlock conditions. |
+| `rentStructure?` | [`IRent`](interfaces/IRent.md) | The rent cost parameters. |
+
+#### Returns
+
+`void`
+
+___
+
+### validateUnlocks
+
+▸ **validateUnlocks**(`unlocks`): `void`
+
+Validate unlocks.
+
+**`Throws`**
+
+Error if the validation fails.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `unlocks` | [`UnlockTypes`](api.md#unlocktypes)[] | The unlocks to validate. |
+
+#### Returns
+
+`void`
 
 ## Type Aliases
 

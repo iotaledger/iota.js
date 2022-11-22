@@ -1,6 +1,7 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import type { IMilestonePayload } from "../index-browser";
+import type { INodeInfoProtocol } from "../models/info/INodeInfoProtocol";
+import type { IMilestonePayload } from "../models/payloads/IMilestonePayload";
 import type { IMilestoneUtxoChangesResponse } from "./api/IMilestoneUtxoChangesResponse";
 import type { IOutputMetadataResponse } from "./api/IOutputMetadataResponse";
 import type { IOutputResponse } from "./api/IOutputResponse";
@@ -206,27 +207,7 @@ export interface IClient {
      * Get the protocol info from the node.
      * @returns The protocol info.
      */
-    protocolInfo(): Promise<{
-        /**
-         * The human friendly name of the network on which the node operates on.
-         */
-        networkName: string;
-
-        /**
-         * The network id as a string encoded 64 bit number.
-         */
-        networkId: string;
-
-        /**
-         * The human readable part of bech32 addresses.
-         */
-        bech32Hrp: string;
-
-        /**
-         * The minimum score required for PoW.
-         */
-        minPowScore: number;
-    }>;
+    protocolInfo(): Promise<INodeInfoProtocol>;
 
     /**
      * Extension method which provides request methods for plugins.

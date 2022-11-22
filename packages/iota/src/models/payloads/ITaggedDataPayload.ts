@@ -15,10 +15,10 @@ export interface ITaggedDataPayload extends ITypeBase<5> {
     /**
      * The tag to use to categorize the data.
      */
-    tag: HexEncodedString;
+    tag?: HexEncodedString;
 
     /**
      * The index data.
      */
-    data: HexEncodedString;
+    data?: HexEncodedString;
 }

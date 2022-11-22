@@ -1,12 +1,12 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import { ED25519_ADDRESS_TYPE } from "../../src/models/addresses/IEd25519Address";
-import { TAG_FEATURE_TYPE } from "../../src/models/features/ITagFeature";
-import { SIMPLE_TOKEN_SCHEME_TYPE } from "../../src/models/tokenSchemes/ISimpleTokenScheme";
-import { STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE } from "../../src/models/unlockConditions/IStateControllerAddressUnlockCondition";
-import { validateFoundryOutput } from "../../src/validation/outputs/foundryOutput";
-import { cloneFoundryOutput } from "./testUtils";
-import { mockFoundryOutput, protocolInfoMock } from "./testValidationMocks";
+import { ED25519_ADDRESS_TYPE } from "../../../src/models/addresses/IEd25519Address";
+import { TAG_FEATURE_TYPE } from "../../../src/models/features/ITagFeature";
+import { SIMPLE_TOKEN_SCHEME_TYPE } from "../../../src/models/tokenSchemes/ISimpleTokenScheme";
+import { STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE } from "../../../src/models/unlockConditions/IStateControllerAddressUnlockCondition";
+import { validateFoundryOutput } from "../../../src/validation/outputs/foundryOutput";
+import { cloneFoundryOutput } from "../testUtils";
+import { mockFoundryOutput, protocolInfoMock } from "../testValidationMocks";
 
 describe("Foundry output validation", () => {
     it("should pass with valid foundry output", () => {

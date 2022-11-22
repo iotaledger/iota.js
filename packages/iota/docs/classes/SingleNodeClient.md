@@ -206,7 +206,7 @@ ___
 
 ### blockSubmit
 
-▸ **blockSubmit**(`blockPartial`, `powInterval?`, `maxPowAttempts?`): `Promise`<`string`\>
+▸ **blockSubmit**(`blockPartial`, `validate?`, `powInterval?`, `maxPowAttempts?`): `Promise`<`string`\>
 
 Submit block.
 
@@ -219,6 +219,7 @@ Submit block.
 | `blockPartial.parents?` | `string`[] | `undefined` | The parent block ids. |
 | `blockPartial.payload?` | [`IMilestonePayload`](../interfaces/IMilestonePayload.md) \| [`ITaggedDataPayload`](../interfaces/ITaggedDataPayload.md) \| [`ITransactionPayload`](../interfaces/ITransactionPayload.md) | `undefined` | The payload contents. |
 | `blockPartial.nonce?` | `string` | `undefined` | The nonce for the block. |
+| `validate?` | `boolean` | `undefined` | Should the block be validated. |
 | `powInterval?` | `number` | `undefined` | The time in seconds that pow should work before aborting. |
 | `maxPowAttempts` | `number` | `40` | The number of times the pow should be attempted. |
 
@@ -659,13 +660,13 @@ ___
 
 ### protocolInfo
 
-▸ **protocolInfo**(): `Promise`<{ `networkName`: `string` ; `networkId`: `string` ; `bech32Hrp`: `string` ; `minPowScore`: `number`  }\>
+▸ **protocolInfo**(): `Promise`<[`INodeInfoProtocol`](../interfaces/INodeInfoProtocol.md)\>
 
 Get the protocol info from the node.
 
 #### Returns
 
-`Promise`<{ `networkName`: `string` ; `networkId`: `string` ; `bech32Hrp`: `string` ; `minPowScore`: `number`  }\>
+`Promise`<[`INodeInfoProtocol`](../interfaces/INodeInfoProtocol.md)\>
 
 The protocol info.
 

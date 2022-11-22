@@ -1,13 +1,13 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import { ED25519_ADDRESS_TYPE } from "../../src/models/addresses/IEd25519Address";
-import { ISSUER_FEATURE_TYPE } from "../../src/models/features/IIssuerFeature";
-import { TAG_FEATURE_TYPE } from "../../src/models/features/ITagFeature";
-import { STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE } from "../../src/models/unlockConditions/IStateControllerAddressUnlockCondition";
-import { STORAGE_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE } from "../../src/models/unlockConditions/IStorageDepositReturnUnlockCondition";
-import { validateBasicOutput } from "../../src/validation/outputs/basicOutput";
-import { cloneBasicOutput } from "./testUtils";
-import { mockBasicOutput, protocolInfoMock } from "./testValidationMocks";
+import { ED25519_ADDRESS_TYPE } from "../../../src/models/addresses/IEd25519Address";
+import { ISSUER_FEATURE_TYPE } from "../../../src/models/features/IIssuerFeature";
+import { TAG_FEATURE_TYPE } from "../../../src/models/features/ITagFeature";
+import { STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE } from "../../../src/models/unlockConditions/IStateControllerAddressUnlockCondition";
+import { STORAGE_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE } from "../../../src/models/unlockConditions/IStorageDepositReturnUnlockCondition";
+import { validateBasicOutput } from "../../../src/validation/outputs/basicOutput";
+import { cloneBasicOutput } from "../testUtils";
+import { mockBasicOutput, protocolInfoMock } from "../testValidationMocks";
 
 describe("Basic output validation", () => {
     it("should pass with valid Basic output", () => {

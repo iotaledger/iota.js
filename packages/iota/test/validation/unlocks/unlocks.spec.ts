@@ -1,13 +1,13 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import { MAX_INPUT_COUNT } from "../../src/binary/inputs/inputs";
-import { ED25519_SIGNATURE_TYPE } from "../../src/models/signatures/IEd25519Signature";
-import { ALIAS_UNLOCK_TYPE } from "../../src/models/unlocks/IAliasUnlock";
-import { NFT_UNLOCK_TYPE } from "../../src/models/unlocks/INftUnlock";
-import { REFERENCE_UNLOCK_TYPE } from "../../src/models/unlocks/IReferenceUnlock";
-import { SIGNATURE_UNLOCK_TYPE } from "../../src/models/unlocks/ISignatureUnlock";
-import type { UnlockTypes } from "../../src/models/unlocks/unlockTypes";
-import { validateUnlocks } from "../../src/validation/unlocks/unlocks";
+import { MAX_INPUT_COUNT } from "../../../src/binary/inputs/inputs";
+import { ED25519_SIGNATURE_TYPE } from "../../../src/models/signatures/IEd25519Signature";
+import { ALIAS_UNLOCK_TYPE } from "../../../src/models/unlocks/IAliasUnlock";
+import { NFT_UNLOCK_TYPE } from "../../../src/models/unlocks/INftUnlock";
+import { REFERENCE_UNLOCK_TYPE } from "../../../src/models/unlocks/IReferenceUnlock";
+import { SIGNATURE_UNLOCK_TYPE } from "../../../src/models/unlocks/ISignatureUnlock";
+import type { UnlockTypes } from "../../../src/models/unlocks/unlockTypes";
+import { validateUnlocks } from "../../../src/validation/unlocks/unlocks";
 
 describe("Unlocks validation", () => {
     test("should pass with valid unlocks", () => {

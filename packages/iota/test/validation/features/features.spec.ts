@@ -1,12 +1,12 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import { ED25519_ADDRESS_TYPE } from "../../src/models/addresses/IEd25519Address";
-import type { FeatureTypes } from "../../src/models/features/featureTypes";
-import { IIssuerFeature, ISSUER_FEATURE_TYPE } from "../../src/models/features/IIssuerFeature";
-import { IMetadataFeature, METADATA_FEATURE_TYPE } from "../../src/models/features/IMetadataFeature";
-import { ISenderFeature, SENDER_FEATURE_TYPE } from "../../src/models/features/ISenderFeature";
-import { ITagFeature, TAG_FEATURE_TYPE } from "../../src/models/features/ITagFeature";
-import { validateFeature, validateFeatures } from "../../src/validation/features/features";
+import { ED25519_ADDRESS_TYPE } from "../../../src/models/addresses/IEd25519Address";
+import type { FeatureTypes } from "../../../src/models/features/featureTypes";
+import { IIssuerFeature, ISSUER_FEATURE_TYPE } from "../../../src/models/features/IIssuerFeature";
+import { IMetadataFeature, METADATA_FEATURE_TYPE } from "../../../src/models/features/IMetadataFeature";
+import { ISenderFeature, SENDER_FEATURE_TYPE } from "../../../src/models/features/ISenderFeature";
+import { ITagFeature, TAG_FEATURE_TYPE } from "../../../src/models/features/ITagFeature";
+import { validateFeature, validateFeatures } from "../../../src/validation/features/features";
 
 describe("Feature validation", () => {
     test("should pass with valid features", () => {
