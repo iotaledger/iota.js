@@ -206,7 +206,7 @@ ___
 
 ### blockSubmit
 
-▸ **blockSubmit**(`blockPartial`, `validate?`, `powInterval?`, `maxPowAttempts?`): `Promise`<`string`\>
+▸ **blockSubmit**(`blockPartial`, `powInterval?`, `maxPowAttempts?`, `validate?`): `Promise`<`string`\>
 
 Submit block.
 
@@ -219,9 +219,9 @@ Submit block.
 | `blockPartial.parents?` | `string`[] | `undefined` | The parent block ids. |
 | `blockPartial.payload?` | [`IMilestonePayload`](../interfaces/IMilestonePayload.md) \| [`ITaggedDataPayload`](../interfaces/ITaggedDataPayload.md) \| [`ITransactionPayload`](../interfaces/ITransactionPayload.md) | `undefined` | The payload contents. |
 | `blockPartial.nonce?` | `string` | `undefined` | The nonce for the block. |
-| `validate?` | `boolean` | `undefined` | Should the block be validated. |
 | `powInterval?` | `number` | `undefined` | The time in seconds that pow should work before aborting. |
 | `maxPowAttempts` | `number` | `40` | The number of times the pow should be attempted. |
+| `validate?` | `boolean` | `undefined` | Should the block be validated. |
 
 #### Returns
 
@@ -237,7 +237,7 @@ ___
 
 ### blockSubmitRaw
 
-▸ **blockSubmitRaw**(`block`, `powInterval?`, `maxPowAttempts?`): `Promise`<`string`\>
+▸ **blockSubmitRaw**(`block`, `powInterval?`, `maxPowAttempts?`, `validate?`): `Promise`<`string`\>
 
 Submit block in raw format.
 
@@ -248,6 +248,7 @@ Submit block in raw format.
 | `block` | `Uint8Array` | `undefined` | The block to submit. |
 | `powInterval?` | `number` | `undefined` | The time in seconds that pow should work before aborting. |
 | `maxPowAttempts` | `number` | `40` | The number of times the pow should be attempted. |
+| `validate?` | `boolean` | `undefined` | Should the block be validated. |
 
 #### Returns
 

@@ -81,7 +81,6 @@ export async function sendAdvanced(
 
     const blockId = await localClient.blockSubmit(
             block,
-            false,
             powInterval,
             maxPowAttempts
         );

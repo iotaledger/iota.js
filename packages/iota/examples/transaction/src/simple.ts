@@ -202,7 +202,7 @@ async function run() {
     
     // 9. Submit block with pow
     console.log("Calculating PoW, submitting block...");
-    const blockId = await client.blockSubmit(block, true);
+    const blockId = await client.blockSubmit(block);
     console.log("Submitted blockId is: ", blockId);
 }
 

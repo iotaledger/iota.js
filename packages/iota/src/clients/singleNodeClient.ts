@@ -192,9 +192,9 @@ export class SingleNodeClient implements IClient {
      * @param blockPartial.parents The parent block ids.
      * @param blockPartial.payload The payload contents.
      * @param blockPartial.nonce The nonce for the block.
-     * @param validate Should the block be validated.
      * @param powInterval The time in seconds that pow should work before aborting.
      * @param maxPowAttempts The number of times the pow should be attempted.
+     * @param validate Should the block be validated.
      * @returns The blockId.
      */
     public async blockSubmit(
@@ -204,9 +204,9 @@ export class SingleNodeClient implements IClient {
             payload?: IBlock["payload"];
             nonce?: string;
         },
-        validate?: boolean,
         powInterval?: number,
-        maxPowAttempts: number = 40
+        maxPowAttempts: number = 40,
+        validate?: boolean
     ): Promise<HexEncodedString> {
         blockPartial.protocolVersion = this._protocolVersion;
         let protocolInfo: INodeInfoProtocol | undefined;
@@ -285,13 +285,14 @@ export class SingleNodeClient implements IClient {
      * @param block The block to submit.
      * @param powInterval The time in seconds that pow should work before aborting.
      * @param maxPowAttempts The number of times the pow should be attempted.
+     * @param validate Should the block be validated.
      * @returns The blockId.
      */
     public async blockSubmitRaw(
             block: Uint8Array,
-            validate?: boolean,
             powInterval?: number,
-            maxPowAttempts: number = 40
+            maxPowAttempts: number = 40,
+            validate?: boolean
         ): Promise<string> {
         if (block.length > MAX_BLOCK_LENGTH) {
             throw new Error(

@@ -9,7 +9,6 @@ import { ITaggedDataPayload, TAGGED_DATA_PAYLOAD_TYPE } from "../../models/paylo
 import { ITransactionPayload, TRANSACTION_PAYLOAD_TYPE } from "../../models/payloads/ITransactionPayload";
 import { TREASURY_TRANSACTION_PAYLOAD_TYPE } from "../../models/payloads/ITreasuryTransactionPayload";
 import type { PayloadTypes } from "../../models/payloads/payloadTypes";
-import { MAX_METADATA_LENGTH } from "../../validation/features/features";
 import { validateTransactionEssence } from "../transactionEssence";
 import { validateUnlocks } from "../unlocks/unlocks";
 import { failValidation } from "../validationUtils";
@@ -77,11 +76,6 @@ export function validateTransactionPayload(
 export function validateTaggedDataPayload(
     taggedDataPayload: ITaggedDataPayload
 ) {
-    const data = taggedDataPayload.data ? HexHelper.stripPrefix(taggedDataPayload?.data) : undefined;
-    if (data && data.length / 2 > MAX_METADATA_LENGTH) {
-        failValidation(`Tagged Data Payload data length exceeds the maximum size of ${2 * MAX_METADATA_LENGTH}.`);
-    }
-
     const tag = taggedDataPayload.tag ? HexHelper.stripPrefix(taggedDataPayload?.tag) : undefined;
     if (tag && tag.length / 2 > MAX_TAG_LENGTH) {
         failValidation(`Tagged Data Payload tag length exceeds the maximum size of ${2 * MAX_TAG_LENGTH}.`);
