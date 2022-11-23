@@ -1,17 +1,17 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import { ADDRESS_UNLOCK_CONDITION_TYPE, IAddressUnlockCondition } from "../../src/models/unlockConditions/IAddressUnlockCondition";
-import { EXPIRATION_UNLOCK_CONDITION_TYPE, IExpirationUnlockCondition } from "../../src/models/unlockConditions/IExpirationUnlockCondition";
-import { GOVERNOR_ADDRESS_UNLOCK_CONDITION_TYPE, IGovernorAddressUnlockCondition } from "../../src/models/unlockConditions/IGovernorAddressUnlockCondition";
-import { IImmutableAliasUnlockCondition, IMMUTABLE_ALIAS_UNLOCK_CONDITION_TYPE } from "../../src/models/unlockConditions/IImmutableAliasUnlockCondition";
-import { IStateControllerAddressUnlockCondition, STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE } from "../../src/models/unlockConditions/IStateControllerAddressUnlockCondition";
-import { STORAGE_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE } from "../../src/models/unlockConditions/IStorageDepositReturnUnlockCondition";
-import type { IStorageDepositReturnUnlockCondition } from "../../src/models/unlockConditions/IStorageDepositReturnUnlockCondition";
-import { ITimelockUnlockCondition, TIMELOCK_UNLOCK_CONDITION_TYPE } from "../../src/models/unlockConditions/ITimelockUnlockCondition";
-import type { UnlockConditionTypes } from "../../src/models/unlockConditions/unlockConditionTypes";
-import { validateUnlockCondition, validateUnlockConditions } from "../../src/validation/unlockConditions/unlockConditions";
-import { cloneBasicOutput } from "./testUtils";
-import { mockBasicOutput, protocolInfoMock } from "./testValidationMocks";
+import { ADDRESS_UNLOCK_CONDITION_TYPE, IAddressUnlockCondition } from "../../../src/models/unlockConditions/IAddressUnlockCondition";
+import { EXPIRATION_UNLOCK_CONDITION_TYPE, IExpirationUnlockCondition } from "../../../src/models/unlockConditions/IExpirationUnlockCondition";
+import { GOVERNOR_ADDRESS_UNLOCK_CONDITION_TYPE, IGovernorAddressUnlockCondition } from "../../../src/models/unlockConditions/IGovernorAddressUnlockCondition";
+import { IImmutableAliasUnlockCondition, IMMUTABLE_ALIAS_UNLOCK_CONDITION_TYPE } from "../../../src/models/unlockConditions/IImmutableAliasUnlockCondition";
+import { IStateControllerAddressUnlockCondition, STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE } from "../../../src/models/unlockConditions/IStateControllerAddressUnlockCondition";
+import { STORAGE_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE } from "../../../src/models/unlockConditions/IStorageDepositReturnUnlockCondition";
+import type { IStorageDepositReturnUnlockCondition } from "../../../src/models/unlockConditions/IStorageDepositReturnUnlockCondition";
+import { ITimelockUnlockCondition, TIMELOCK_UNLOCK_CONDITION_TYPE } from "../../../src/models/unlockConditions/ITimelockUnlockCondition";
+import type { UnlockConditionTypes } from "../../../src/models/unlockConditions/unlockConditionTypes";
+import { validateUnlockCondition, validateUnlockConditions } from "../../../src/validation/unlockConditions/unlockConditions";
+import { cloneBasicOutput } from "../testUtils";
+import { mockBasicOutput, protocolInfoMock } from "../testValidationMocks";
 
 describe("Unlock Conditions validation", () => {
     test("should pass with valid unlock conditions", () => {

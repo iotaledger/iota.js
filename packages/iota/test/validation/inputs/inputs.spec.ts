@@ -1,8 +1,8 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import { MAX_INPUT_COUNT, MIN_INPUT_COUNT } from "../../src/binary/inputs/inputs";
-import { IUTXOInput, UTXO_INPUT_TYPE } from "../../src/models/inputs/IUTXOInput";
-import { validateInput, validateInputs } from "../../src/validation/inputs/inputs";
+import { MAX_INPUT_COUNT, MIN_INPUT_COUNT } from "../../../src/binary/inputs/inputs";
+import { IUTXOInput, UTXO_INPUT_TYPE } from "../../../src/models/inputs/IUTXOInput";
+import { validateInput, validateInputs } from "../../../src/validation/inputs/inputs";
 
 describe("Inputs validation", () => {
     test("should pass with valid inputs", () => {

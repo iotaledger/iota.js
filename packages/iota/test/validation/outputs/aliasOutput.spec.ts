@@ -1,17 +1,17 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import { ALIAS_ADDRESS_TYPE } from "../../src/models/addresses/IAliasAddress";
-import { ED25519_ADDRESS_TYPE } from "../../src/models/addresses/IEd25519Address";
-import { ISSUER_FEATURE_TYPE } from "../../src/models/features/IIssuerFeature";
-import { METADATA_FEATURE_TYPE } from "../../src/models/features/IMetadataFeature";
-import { SENDER_FEATURE_TYPE } from "../../src/models/features/ISenderFeature";
-import { TAG_FEATURE_TYPE } from "../../src/models/features/ITagFeature";
-import { GOVERNOR_ADDRESS_UNLOCK_CONDITION_TYPE } from "../../src/models/unlockConditions/IGovernorAddressUnlockCondition";
-import { IMMUTABLE_ALIAS_UNLOCK_CONDITION_TYPE } from "../../src/models/unlockConditions/IImmutableAliasUnlockCondition";
-import { STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE } from "../../src/models/unlockConditions/IStateControllerAddressUnlockCondition";
-import { validateAliasOutput } from "../../src/validation/outputs/aliasOutput";
-import { cloneAliasOutput } from "./testUtils";
-import { mockAliasOutput, protocolInfoMock } from "./testValidationMocks";
+import { ALIAS_ADDRESS_TYPE } from "../../../src/models/addresses/IAliasAddress";
+import { ED25519_ADDRESS_TYPE } from "../../../src/models/addresses/IEd25519Address";
+import { ISSUER_FEATURE_TYPE } from "../../../src/models/features/IIssuerFeature";
+import { METADATA_FEATURE_TYPE } from "../../../src/models/features/IMetadataFeature";
+import { SENDER_FEATURE_TYPE } from "../../../src/models/features/ISenderFeature";
+import { TAG_FEATURE_TYPE } from "../../../src/models/features/ITagFeature";
+import { GOVERNOR_ADDRESS_UNLOCK_CONDITION_TYPE } from "../../../src/models/unlockConditions/IGovernorAddressUnlockCondition";
+import { IMMUTABLE_ALIAS_UNLOCK_CONDITION_TYPE } from "../../../src/models/unlockConditions/IImmutableAliasUnlockCondition";
+import { STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE } from "../../../src/models/unlockConditions/IStateControllerAddressUnlockCondition";
+import { validateAliasOutput } from "../../../src/validation/outputs/aliasOutput";
+import { cloneAliasOutput } from "../testUtils";
+import { mockAliasOutput, protocolInfoMock } from "../testValidationMocks";
 
 describe("Alias output validation", () => {
     it("should pass with valid alias output", () => {

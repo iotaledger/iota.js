@@ -1,8 +1,9 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import { validateTaggedDataPayload } from "../../src/validation/payloads/payloads";
-import { cloneTaggedDataPayload } from "./testUtils";
-import { mockTaggedDataPayload } from "./testValidationMocks";
+import { MAX_TAG_LENGTH } from "../../../src/binary/payloads/taggedDataPayload";
+import { validateTaggedDataPayload } from "../../../src/validation/payloads/payloads";
+import { cloneTaggedDataPayload } from "../testUtils";
+import { mockTaggedDataPayload } from "../testValidationMocks";
 
 describe("Tagged data payload validation", () => {
     it("should pass with valid Tagged Data Payload", () => {
@@ -16,6 +17,6 @@ describe("Tagged data payload validation", () => {
         const tag = "tag".repeat(2 * 64);
         payload.tag = "0x".concat(tag);
 
-        expect(() => validateTaggedDataPayload(payload)).toThrow("Tagged Data Payload tag length exceeds the maximum size of 64.");
+        expect(() => validateTaggedDataPayload(payload)).toThrow(`Tagged Data Payload tag length exceeds the maximum size of ${2 * MAX_TAG_LENGTH}`);
     });
 });

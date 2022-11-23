@@ -1,9 +1,9 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import { ALIAS_ADDRESS_TYPE, IAliasAddress } from "../../src/models/addresses/IAliasAddress";
-import { ED25519_ADDRESS_TYPE, IEd25519Address } from "../../src/models/addresses/IEd25519Address";
-import { INftAddress, NFT_ADDRESS_TYPE } from "../../src/models/addresses/INftAddress";
-import { validateAddress } from "../../src/validation/addresses/addresses";
+import { ALIAS_ADDRESS_TYPE, IAliasAddress } from "../../../src/models/addresses/IAliasAddress";
+import { ED25519_ADDRESS_TYPE, IEd25519Address } from "../../../src/models/addresses/IEd25519Address";
+import { INftAddress, NFT_ADDRESS_TYPE } from "../../../src/models/addresses/INftAddress";
+import { validateAddress } from "../../../src/validation/addresses/addresses";
 
 describe("Address validation", () => {
     test("should pass on a valid ed25519 address", () => {

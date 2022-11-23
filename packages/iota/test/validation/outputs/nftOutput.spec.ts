@@ -1,15 +1,15 @@
 // Copyright 2020 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
-import { ED25519_ADDRESS_TYPE } from "../../src/models/addresses/IEd25519Address";
-import { NFT_ADDRESS_TYPE } from "../../src/models/addresses/INftAddress";
-import { ISSUER_FEATURE_TYPE } from "../../src/models/features/IIssuerFeature";
-import { TAG_FEATURE_TYPE } from "../../src/models/features/ITagFeature";
-import { ADDRESS_UNLOCK_CONDITION_TYPE } from "../../src/models/unlockConditions/IAddressUnlockCondition";
-import { STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE } from "../../src/models/unlockConditions/IStateControllerAddressUnlockCondition";
-import { STORAGE_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE } from "../../src/models/unlockConditions/IStorageDepositReturnUnlockCondition";
-import { validateNftOutput } from "../../src/validation/outputs/nftOutput";
-import { cloneNftOutput } from "./testUtils";
-import { mockNftOutput, protocolInfoMock } from "./testValidationMocks";
+import { ED25519_ADDRESS_TYPE } from "../../../src/models/addresses/IEd25519Address";
+import { NFT_ADDRESS_TYPE } from "../../../src/models/addresses/INftAddress";
+import { ISSUER_FEATURE_TYPE } from "../../../src/models/features/IIssuerFeature";
+import { TAG_FEATURE_TYPE } from "../../../src/models/features/ITagFeature";
+import { ADDRESS_UNLOCK_CONDITION_TYPE } from "../../../src/models/unlockConditions/IAddressUnlockCondition";
+import { STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE } from "../../../src/models/unlockConditions/IStateControllerAddressUnlockCondition";
+import { STORAGE_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE } from "../../../src/models/unlockConditions/IStorageDepositReturnUnlockCondition";
+import { validateNftOutput } from "../../../src/validation/outputs/nftOutput";
+import { cloneNftOutput } from "../testUtils";
+import { mockNftOutput, protocolInfoMock } from "../testValidationMocks";
 
 describe("NFT output validation", () => {
     it("should pass with valid NFT output", () => {
