@@ -32,7 +32,7 @@ To run the code in this tutorial, you will need the following:
 ## (optional) Download the Code
 
 You can [download the tutorials codebase](code_samples/tutorials/value-transactions/iota.js-value-transactions-tutorial.zip)
-to follow while you read the next sections. After you have unpacked the `.rar` file to a directory of your choice.
+to follow while you read the next sections. After you have unpacked the `.zip` file to a directory of your choice.
 
 ## Create Your package.json file
 
