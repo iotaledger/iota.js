@@ -49,23 +49,29 @@ The tutorial's codebase uses several predefined Shimmer addresses and outputs. I
 
 ### Available Commands
 
+#### Generate Addresses
+
+You can run the `generate-addresses` script by running the following command from the example's directory:
+
+```bash
+npm run address
 #### Send a Value Transaction
 
 You can run the `send-value-transaction` script by running the following command from the example's directory:
 
 ```bash
-npm run start
+npm run transaction
 ```
 
-#### Sweep Funds
+#### Sweep Outputs
 
-You can run the `send-value-transaction` script by running the following command from the example's directory:
+You can run the `sweep-outputs` script by running the following command from the example's directory:
 
 ```bash
 npm run sweep
 ```
 
-## Create Your package.json file
+## Create Your package.json File
 
 You can create your `package.json` file from the example below and place it in your projects base directory:
 
