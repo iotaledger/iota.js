@@ -31,8 +31,16 @@ To run the code in this tutorial, you will need the following:
 
 ## (optional) Download the Code
 
-You can [download the tutorials codebase](code_samples/tutorials/value-transactions/iota.js-value-transactions-tutorial.zip)
-to follow while you read the next sections. After you have unpacked the `.zip` file to a directory of your choice.
+You
+can [download the tutorials codebase](https://github.com/iotaledger/iota.js/tree/feat/stardust/packages/iota/examples/shimmer-value-transaction-tutorial)
+to follow while you read the next sections.
+
+:::warning Working Directory
+
+This tutorial use `add working directory here` as a working directory. If you are going to use another directory, you
+will need to update the code accordingly.
+
+:::
 
 ## Create Your package.json file
 
