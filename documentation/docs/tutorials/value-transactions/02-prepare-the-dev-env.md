@@ -35,10 +35,9 @@ You
 can [download the tutorials codebase](https://github.com/iotaledger/iota.js/tree/feat/stardust/packages/iota/examples/shimmer-value-transaction-tutorial)
 to follow while you read the next sections.
 
-:::warning Working Directory
+:::warning Running Code Examples
 
-This tutorial use `add working directory here` as a working directory. If you are going to use another directory, you
-will need to update the code accordingly.
+If you plan on using the provided code example, please read the article [How To Run Code Examples](../../how_tos/run_how_tos.mdx).
 
 :::
 
