@@ -4,7 +4,8 @@
   "version": "1.0.0",
   "scripts": {
     "dist": "tsc",
-    "start": "node dist/index"
+    "start": "node dist/send-value-transactions",
+    "sweep": "node dist/sweep-outputs"
   },
   "dependencies": {
     "@iota/crypto.js": "2.0.0-rc.1",
