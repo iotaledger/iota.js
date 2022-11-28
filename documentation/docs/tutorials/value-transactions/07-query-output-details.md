@@ -112,58 +112,6 @@ import {
 import {Converter} from "@iota/util.js";
 import {NeonPowProvider} from "@iota/pow-neon.js";
 
-// Default entropy length is 256
-const randomMnemonic = Bip39.randomMnemonic();
-
-console.log("Seed phrase:", randomMnemonic);
-
-const masterSeed = Ed25519Seed.fromMnemonic(randomMnemonic);
-
-const NUM_ADDR = 6;
-const addressGeneratorAccountState = {
-    accountIndex: 0,
-    addressIndex: 0,
-    isInternal: false
-};
-const paths: string[] = [];
-for (let i = 0; i < NUM_ADDR; i++) {
-    const path = generateBip44Address(addressGeneratorAccountState);
-    paths.push(path);
-
-    console.log(`${path}`);
-}
-
-
-const keyPairs: IKeyPair[] = [];
-
-for (const path of paths) {
-    // Master seed was generated previously
-    const addressSeed = masterSeed.generateSeedFromPath(new Bip32Path(path));
-    const addressKeyPair = addressSeed.keyPair();
-    keyPairs.push(addressKeyPair);
-
-    console.log(Converter.bytesToHex(addressKeyPair.privateKey, true));
-    console.log(Converter.bytesToHex(addressKeyPair.publicKey, true));
-}
-
-const publicAddresses: { ed25519: string, bech32: string }[] = [];
-
-for (const keyPair of keyPairs) {
-    const ed25519Address = new Ed25519Address(keyPair.publicKey);
-    // Address in bytes
-    const ed25519AddressBytes = ed25519Address.toAddress();
-    // Conversion to BECH32
-    const bech32Addr = Bech32Helper.toBech32(ED25519_ADDRESS_TYPE, ed25519AddressBytes, "rms");
-
-    const publicAddress = {
-        ed25519: Converter.bytesToHex(ed25519AddressBytes, true),
-        bech32: bech32Addr
-    };
-    publicAddresses.push(publicAddress);
-
-    console.log(publicAddress);
-}
-
 const API_ENDPOINT = "https://api.testnet.shimmer.network";
 const client = new SingleNodeClient(API_ENDPOINT, {powProvider: new NeonPowProvider()});
 const protocolInfo = await client.protocolInfo();
@@ -174,4 +122,3 @@ const outputID = "0xcba9a6616df8e8e323d8203ea5d1a42e2e7c64dc9ead6b59f5d26bdc301e
 const outputDetails = await client.output(outputID);
 console.log(outputDetails);
 ```
-
