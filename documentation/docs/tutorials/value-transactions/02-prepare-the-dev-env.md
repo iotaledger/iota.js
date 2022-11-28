@@ -41,6 +41,12 @@ If you plan on using the provided code example, please read the article [How To 
 
 :::
 
+:::warning Shimmer Addresses and Outputs
+
+The tutorial's codebase uses several predefined Shimmer addresses and outputs. If you are going to use other addresses, you will need to update the code accordingly. Likewise, the tutorial codebase assumes a particular state of the addresses and outputs. Before executing the code, please ensure your addresses and outputs are in the expected state.
+
+:::
+
 ### Available Commands
 
 #### Send a Value Transaction

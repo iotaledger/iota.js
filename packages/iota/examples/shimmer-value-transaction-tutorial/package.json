@@ -4,7 +4,8 @@
   "version": "1.0.0",
   "scripts": {
     "dist": "tsc",
-    "start": "node dist/send-value-transactions",
+    "address": "node dist/generate-addresses",
+    "transaction": "node dist/send-value-transactions",
     "sweep": "node dist/sweep-outputs"
   },
   "dependencies": {

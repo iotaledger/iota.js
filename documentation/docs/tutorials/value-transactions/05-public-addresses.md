@@ -72,7 +72,7 @@ functions.
 
 ## Putting It All Together
 
-By this point in the tutorial, your `send-value-transactions.ts`file should look something like this:
+By this point in the tutorial, your `generate-addresses.ts` file should look something like this:
 
 ```typescript
 import {Bip32Path, Bip39} from "@iota/crypto.js";
