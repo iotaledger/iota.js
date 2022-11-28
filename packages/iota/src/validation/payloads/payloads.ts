@@ -31,10 +31,8 @@ export function validatePayload(
                 validateTransactionPayload(payload, protocolInfo);
                 break;
             case MILESTONE_PAYLOAD_TYPE:
-                // Unimplemented
-                break;
             case TREASURY_TRANSACTION_PAYLOAD_TYPE:
-                // Unimplemented
+                // not validated types
                 break;
             case TAGGED_DATA_PAYLOAD_TYPE:
                 validateTaggedDataPayload(payload);

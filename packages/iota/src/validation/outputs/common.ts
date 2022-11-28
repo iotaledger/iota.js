@@ -247,7 +247,6 @@ function validateFeatureAllowedTypes(
     if (!features.every(feature => allowedFeatureTypes.includes(feature.type))) {
         const featureNames = getNamesByTypes(allowedFeatureTypes, FEATURE_TYPE_NAMES);
 
-
         failValidation(`${outputName} feature type of a feature must define one of the following types: ${featureNames.join(", ")}.`);
     }
 }

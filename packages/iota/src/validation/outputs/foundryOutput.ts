@@ -32,8 +32,6 @@ import { validateCommonRules } from "./common";
     }
 
     validateUnlockConditions(foundryOutput.unlockConditions);
-
     validateFeatures(foundryOutput.features);
-
     validateFeatures(foundryOutput.immutableFeatures);
 }
