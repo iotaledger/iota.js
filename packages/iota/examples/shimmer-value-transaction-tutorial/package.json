@@ -1,0 +1,19 @@
+{
+  "name": "tutorial",
+  "type": "module",
+  "version": "1.0.0",
+  "scripts": {
+    "dist": "tsc",
+    "start": "node dist/index"
+  },
+  "dependencies": {
+    "@iota/crypto.js": "2.0.0-rc.1",
+    "@iota/iota.js": "2.0.0-rc.1",
+    "@iota/util.js": "2.0.0-rc.1",
+    "@iota/pow-neon.js": "2.0.0-rc.2"
+  },
+  "devDependencies": {
+    "typescript": "^4.4.3",
+    "@types/node": "18.7.23"
+  }
+}
