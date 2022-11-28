@@ -33,13 +33,31 @@ To run the code in this tutorial, you will need the following:
 
 You
 can [download the tutorials codebase](https://github.com/iotaledger/iota.js/tree/feat/stardust/packages/iota/examples/shimmer-value-transaction-tutorial)
-to follow while you read the next sections.
+to follow while you read the next sections. 
 
 :::warning Running Code Examples
 
 If you plan on using the provided code example, please read the article [How To Run Code Examples](../../how_tos/run_how_tos.mdx).
 
 :::
+
+### Available Commands
+
+#### Send a Value Transaction
+
+You can run the `send-value-transaction` script by running the following command from the example's directory:
+
+```bash
+npm run start
+```
+
+#### Sweep Funds
+
+You can run the `send-value-transaction` script by running the following command from the example's directory:
+
+```bash
+npm run sweep
+```
 
 ## Create Your package.json file
 
