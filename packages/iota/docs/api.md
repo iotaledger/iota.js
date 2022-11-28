@@ -3411,17 +3411,18 @@ ___
 
 ### generateBip44Path
 
-▸ **generateBip44Path**(`accountIndex`, `addressIndex`, `isInternal`): `Bip32Path`
+▸ **generateBip44Path**(`accountIndex`, `addressIndex`, `isInternal`, `coinType?`): `Bip32Path`
 
 Generate a bip44 path based on all its parts.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `accountIndex` | `number` | The account index. |
-| `addressIndex` | `number` | The address index. |
-| `isInternal` | `boolean` | Is this an internal address. |
+| Name | Type | Default value | Description |
+| :------ | :------ | :------ | :------ |
+| `accountIndex` | `number` | `undefined` | The account index. |
+| `addressIndex` | `number` | `undefined` | The address index. |
+| `isInternal` | `boolean` | `undefined` | Is this an internal address. |
+| `coinType` | `number` | `COIN_TYPE_IOTA` | The coin type, default is the IOTA coin type. |
 
 #### Returns
 
@@ -3433,15 +3434,16 @@ ___
 
 ### generateBip44Address
 
-▸ **generateBip44Address**(`generatorState`): `string`
+▸ **generateBip44Address**(`generatorState`, `coinType?`): `string`
 
 Generate addresses based on the account indexing style.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `generatorState` | [`IBip44GeneratorState`](interfaces/IBip44GeneratorState.md) | The address state. |
+| Name | Type | Default value | Description |
+| :------ | :------ | :------ | :------ |
+| `generatorState` | [`IBip44GeneratorState`](interfaces/IBip44GeneratorState.md) | `undefined` | The address state. |
+| `coinType` | `number` | `COIN_TYPE_IOTA` | The coin type, default is the IOTA coin type. |
 
 #### Returns
 
@@ -3841,7 +3843,7 @@ Send a transfer from the balance on the seed.
 | :------ | :------ | :------ |
 | `client` | `string` \| [`IClient`](interfaces/IClient.md) | The client or node endpoint to send the transfer with. |
 | `inputsAndSignatureKeyPairs` | { `input`: [`IUTXOInput`](interfaces/IUTXOInput.md) ; `addressKeyPair`: [`IKeyPair`](interfaces/IKeyPair.md) ; `consumingOutput`: [`OutputTypes`](api.md#outputtypes)  }[] | The inputs with the signature key pairs needed to sign transfers. |
-| `outputs` | { `address`: `string` ; `addressType`: `number` ; `amount`: `BigInteger`  }[] | The outputs to send. |
+| `outputs` | { `address`: `string` ; `addressType`: `number` ; `amount`: `BigInteger` ; `nativeTokens?`: [`INativeToken`](interfaces/INativeToken.md)[] ; `features?`: [`FeatureTypes`](api.md#featuretypes)[]  }[] | The outputs to send. |
 | `taggedData?` | `Object` | Optional tagged data to associate with the transaction. |
 | `taggedData.tag?` | `string` \| `Uint8Array` | Optional tag. |
 | `taggedData.data?` | `string` \| `Uint8Array` | Optional data. |
@@ -3868,7 +3870,7 @@ Build a transaction payload.
 | :------ | :------ | :------ |
 | `networkId` | `string` | The network id we are sending the payload on. |
 | `inputsAndSignatureKeyPairs` | { `input`: [`IUTXOInput`](interfaces/IUTXOInput.md) ; `addressKeyPair`: [`IKeyPair`](interfaces/IKeyPair.md) ; `consumingOutput`: [`OutputTypes`](api.md#outputtypes)  }[] | The inputs with the signature key pairs needed to sign transfers. |
-| `outputs` | { `address`: `string` ; `addressType`: `number` ; `amount`: `BigInteger`  }[] | The outputs to send. |
+| `outputs` | { `address`: `string` ; `addressType`: `number` ; `amount`: `BigInteger` ; `nativeTokens?`: [`INativeToken`](interfaces/INativeToken.md)[] ; `fatures?`: [`FeatureTypes`](api.md#featuretypes)[]  }[] | The outputs to send. |
 | `taggedData?` | `Object` | Optional tagged data to associate with the transaction. |
 | `taggedData.tag?` | `string` \| `Uint8Array` | Optional tag. |
 | `taggedData.data?` | `string` \| `Uint8Array` | Optional index data. |
