@@ -2,6 +2,10 @@
 
 ## 2.0.0-rc.1
 
+* Updated iota.js dependency
+
+## 2.0.0-rc.1
+
 * Stardust release candidate
 
 ## v1.8.6
