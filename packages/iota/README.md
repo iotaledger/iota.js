@@ -9,7 +9,7 @@ Runs in both NodeJS and Browser environments.
 ## Prerequisites
 
 ```shell
-npm install @iota/iota.js@2.0.0-rc.1
+npm install @iota/iota.js@2.0.0-rc.2
 ```
 
 ## Example
