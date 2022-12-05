@@ -5,7 +5,7 @@ This package provides local proof of work multi-threaded for NodeJS, it is still
 ## Install
 
 ```shell
-npm install @iota/pow-node.js@2.0.0-rc.1
+npm install @iota/pow-node.js@2.0.0-rc.2
 ```
 
 ## Usage
