@@ -26,6 +26,7 @@ import { ADDRESS_UNLOCK_CONDITION_TYPE } from "../models/unlockConditions/IAddre
 import { REFERENCE_UNLOCK_TYPE } from "../models/unlocks/IReferenceUnlock";
 import { SIGNATURE_UNLOCK_TYPE } from "../models/unlocks/ISignatureUnlock";
 import type { UnlockTypes } from "../models/unlocks/unlockTypes";
+import { TransactionHelper } from "../utils/transactionHelper";
 
 /**
  * Send a transfer from the balance on the seed.
@@ -66,9 +67,10 @@ export async function sendAdvanced(
     const localClient = typeof client === "string" ? new SingleNodeClient(client) : client;
 
     const protocolInfo = await localClient.protocolInfo();
+    const networkId = TransactionHelper.networkIdFromNetworkName(protocolInfo.networkName);
 
     const transactionPayload = buildTransactionPayload(
-        protocolInfo.networkId,
+        networkId,
         inputsAndSignatureKeyPairs,
         outputs,
         taggedData
@@ -81,7 +83,11 @@ export async function sendAdvanced(
         nonce: "0"
     };
 
-    const blockId = await localClient.blockSubmit(block, powInterval, maxPowAttempts);
+    const blockId = await localClient.blockSubmit(
+            block,
+            powInterval,
+            maxPowAttempts
+        );
 
     return {
         blockId,

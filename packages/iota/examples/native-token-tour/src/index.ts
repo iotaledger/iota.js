@@ -9,9 +9,10 @@ import bigInt from "big-integer";
 import * as console from "console";
 import fetch from "node-fetch";
 
-const EXPLORER = "https://explorer.alphanet.iotaledger.net/alphanet";
-const API_ENDPOINT = "https://api.alphanet.iotaledger.net/";
-const FAUCET = "https://faucet.alphanet.iotaledger.net/api/enqueue" 
+const EXPLORER = "https://explorer.shimmer.network/testnet";
+const API_ENDPOINT = "https://api.testnet.shimmer.network/";
+const FAUCET = "https://faucet.testnet.shimmer.network/api/enqueue" 
+
 
 // If running the node locally
 // const API_ENDPOINT = "http://localhost:14265/";
@@ -1633,7 +1634,7 @@ async function chainTrasactionsViaBlocks(client: lib.SingleNodeClient, txs: Arra
 async function submit(blocks: Array<lib.IBlock>, client: lib.SingleNodeClient) {
     for (let i = 0; i < blocks.length; i++) {
         console.log(`Submitting block ${i+1}...`);
-        const blockId = await client.blockSubmit(blocks[i]);
+        const blockId = await client.blockSubmit(blocks[i], 15, 5, true);
         console.log(`Submitted block ${i+1} blockId is ${blockId}, check out the transaction at ${EXPLORER}/block/${blockId}`);
     }
 }

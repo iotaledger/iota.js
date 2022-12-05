@@ -206,7 +206,7 @@ ___
 
 ### blockSubmit
 
-▸ **blockSubmit**(`blockPartial`, `powInterval?`, `maxPowAttempts?`): `Promise`<`string`\>
+▸ **blockSubmit**(`blockPartial`, `powInterval?`, `maxPowAttempts?`, `validate?`): `Promise`<`string`\>
 
 Submit block.
 
@@ -221,6 +221,7 @@ Submit block.
 | `blockPartial.nonce?` | `string` | `undefined` | The nonce for the block. |
 | `powInterval?` | `number` | `undefined` | The time in seconds that pow should work before aborting. |
 | `maxPowAttempts` | `number` | `40` | The number of times the pow should be attempted. |
+| `validate?` | `boolean` | `undefined` | Should the block be validated. |
 
 #### Returns
 
@@ -236,7 +237,7 @@ ___
 
 ### blockSubmitRaw
 
-▸ **blockSubmitRaw**(`block`, `powInterval?`, `maxPowAttempts?`): `Promise`<`string`\>
+▸ **blockSubmitRaw**(`block`, `powInterval?`, `maxPowAttempts?`, `validate?`): `Promise`<`string`\>
 
 Submit block in raw format.
 
@@ -247,6 +248,7 @@ Submit block in raw format.
 | `block` | `Uint8Array` | `undefined` | The block to submit. |
 | `powInterval?` | `number` | `undefined` | The time in seconds that pow should work before aborting. |
 | `maxPowAttempts` | `number` | `40` | The number of times the pow should be attempted. |
+| `validate?` | `boolean` | `undefined` | Should the block be validated. |
 
 #### Returns
 
@@ -659,13 +661,13 @@ ___
 
 ### protocolInfo
 
-▸ **protocolInfo**(): `Promise`<{ `networkName`: `string` ; `networkId`: `string` ; `bech32Hrp`: `string` ; `minPowScore`: `number`  }\>
+▸ **protocolInfo**(): `Promise`<[`INodeInfoProtocol`](../interfaces/INodeInfoProtocol.md)\>
 
 Get the protocol info from the node.
 
 #### Returns
 
-`Promise`<{ `networkName`: `string` ; `networkId`: `string` ; `bech32Hrp`: `string` ; `minPowScore`: `number`  }\>
+`Promise`<[`INodeInfoProtocol`](../interfaces/INodeInfoProtocol.md)\>
 
 The protocol info.
 

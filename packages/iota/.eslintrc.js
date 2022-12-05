@@ -400,8 +400,9 @@ module.exports = {
         "one-var": ["error", "never"],
         "one-var-declaration-per-line": ["error"],
         "operator-assignment": ["error"],
-        "operator-linebreak": ["error"],
-        "padded-blocks": ["error", "never"],
+        "operator-linebreak": [
+            "error", "after", { "overrides": { "?": "ignore", ":": "ignore" } }
+        ],
         "padding-line-between-statements": ["error"],
         "prefer-arrow-callback": ["error"],
         "prefer-const": ["error"],
