@@ -1634,7 +1634,7 @@ async function chainTrasactionsViaBlocks(client: lib.SingleNodeClient, txs: Arra
 async function submit(blocks: Array<lib.IBlock>, client: lib.SingleNodeClient) {
     for (let i = 0; i < blocks.length; i++) {
         console.log(`Submitting block ${i+1}...`);
-        const blockId = await client.blockSubmit(blocks[i]);
+        const blockId = await client.blockSubmit(blocks[i], 15, 5, true);
         console.log(`Submitted block ${i+1} blockId is ${blockId}, check out the transaction at ${EXPLORER}/block/${blockId}`);
     }
 }
