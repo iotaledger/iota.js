@@ -55,6 +55,8 @@ You can run the `generate-addresses` script by running the following command fro
 
 ```bash
 npm run address
+```
+
 #### Send a Value Transaction
 
 You can run the `send-value-transaction` script by running the following command from the example's directory:
@@ -81,7 +83,9 @@ You can create your `package.json` file from the example below and place it in y
   "version": "1.0.0",
   "scripts": {
     "dist": "tsc",
-    "start": "node dist/index"
+    "address": "node dist/generate-addresses",
+    "transaction": "node dist/send-value-transactions",
+    "sweep": "node dist/sweep-outputs"
   },
   "dependencies": {
     "@iota/crypto.js": "2.0.0-rc.1",
