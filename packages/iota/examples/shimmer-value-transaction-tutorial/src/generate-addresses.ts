@@ -1,5 +1,5 @@
 import { Bip32Path, Bip39 } from "@iota/crypto.js";
-import { Bech32Helper, Ed25519Address, Ed25519Seed, ED25519_ADDRESS_TYPE, generateBip44Address, IKeyPair } from "@iota/iota.js";
+import { Bech32Helper, COIN_TYPE_SHIMMER, Ed25519Address, Ed25519Seed, ED25519_ADDRESS_TYPE, generateBip44Address, IKeyPair } from "@iota/iota.js";
 import { Converter } from "@iota/util.js";
 
 // Default entropy length is 256
@@ -17,7 +17,7 @@ const addressGeneratorAccountState = {
 };
 const paths: string[] = [];
 for (let i = 0; i < NUM_ADDR; i++) {
-    const path = generateBip44Address(addressGeneratorAccountState);
+    const path = generateBip44Address(addressGeneratorAccountState, COIN_TYPE_SHIMMER);
     paths.push(path);
 
     console.log(`${path}`);

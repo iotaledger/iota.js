@@ -51,7 +51,7 @@ inputs.push(TransactionHelper.inputFromOutputId(consumedOutputId2));
 const inputsCommitment = TransactionHelper.getInputsCommitment([output1.output, output2.output]);
 const transactionEssence = {
     type: TRANSACTION_ESSENCE_TYPE,
-    networkId: protocolInfo.networkId,
+    networkId: TransactionHelper.networkIdFromNetworkName(protocolInfo.networkName),
     inputs,
     inputsCommitment,
     outputs: [combinedOutput]

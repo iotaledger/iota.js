@@ -9,3 +9,4 @@ build
 dist
 es
 typings
+.DS_Store
