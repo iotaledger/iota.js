@@ -51,19 +51,23 @@ The tutorial's codebase uses several predefined Shimmer addresses and outputs. I
 
 #### Mint Alias Output
 
-You can run the `mint-new-alias-script` script by running the following command from the example's directory:
+You can run the `mint-new-alias` script by running the following command from the example's directory:
 
 ```bash
-npm run mint
+npm run mint <outputID>
 ```
+
+where `outputID` shall be the ID of the Output that has enough funds to cover the storage deposit of your newly minted Alias. 
 
 #### Transition Alias Output
 
 You can run the `alias-transaction` script by running the following command from the example's directory:
 
 ```bash
-npm run alias-transaction
+npm run alias-transaction <AliasID>
 ```
+
+where `AliasID` is the Alias ID you want to transact with so that it transitions to a new state. 
 
 ## Create Your package.json File
 
@@ -71,11 +75,12 @@ You can create your `package.json` file from the example below and place it in y
 
 ```json
 {
-  "name": "tutorial",
+  "name": "tutorial-alias",
   "version": "1.0.0",
   "scripts": {
     "dist": "tsc",
-    "start": "node dist/index"
+    "mint": "node dist/mint-new-alias",
+    "alias-transaction": "node dist/alias-transaction"
   },
   "dependencies": {
     "@iota/crypto.js": "2.0.0-rc.1",

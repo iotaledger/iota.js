@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "scripts": {
     "dist": "tsc",
-    "mint": "node dist/mint-alias",
+    "mint": "node dist/mint-new-alias",
     "alias-transaction": "node dist/alias-transaction"
   },
   "dependencies": {

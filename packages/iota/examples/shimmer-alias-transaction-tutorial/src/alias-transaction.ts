@@ -24,7 +24,7 @@ const API_ENDPOINT = "https://api.testnet.shimmer.network";
 // The aliasId on the Ledger 
 const aliasId = process.argv[2];
 if (!aliasId) {
-    console.error("Please provide an alias Id to perform transition");
+    console.error("Please provide an alias Id to transact with");
     process.exit(-1);
 }
 
